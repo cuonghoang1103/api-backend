@@ -1,0 +1,1217 @@
+{
+ "ma": "MED201",
+ "sylID": "11303",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11303",
+   "code": "MED201",
+   "name": "New Media Technology_Các loại hình Truyền thông đương đại",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11303",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11303",
+  "Syllabus Name": "New Media Technology_Các loại hình Truyền thông đương đại",
+  "Course Name English": "New Media Technology",
+  "Subject Code": "MED201",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Cooperative Learning,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Description: This course will give you a thorough explanation of how media technologies develop, operate, converge, and affect society in order to think critically about the media and its effects on culture. It provides a comprehensive introduction to today's global media environment and the ongoing developments in technology, culture, and critical theory that continue to transform this rapidly evolving industry and affect your everyday life. Our emphasis is on the social relations of power and connectivity that are shaped by new media as practices of communication. Specific topics that will be explored include: the latest developments and trends in social media, e-publishing, policy changes for Internet governance, online privacy protection, online ad exchanges, the changing video game industry, and much more. By studying this course, students will develop knowledge and skills in creative thinking, communication, collaboration, planning, critical analysis, and digital and ethical citizenship.\n\nTeaching methods: Direct Instruction, Inquiry-based Learning, Cooperative Learning, Case Study Analysis",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose",
+  "Tools": "- Textbook\n\n- Computer",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Media Now: Understanding Media, Culture, and Technology",
+   "Joseph Straubhaar, Robert LaRose, Lucinda Davenport",
+   "Cengage",
+   "2017",
+   "10th",
+   "978-1305950849",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "https://www.brandsvietnam.com/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "https://www.makeitnoise.com/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "https://blog.marketo.com/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "https://blog.hubspot.com/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Identify how media technologies develop, operate, converge, and affect societys in order to develop expertise in creating the type of digital content that is widely in demand"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate the changing process of media and clarify how technology, culture and media career have altered in the era of new media"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Identify career path related to new media technologies that best fits your skills and strengths"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Discover the development of Web and Media in the digital age"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Define the relationship between Public Relations, Advertising and the media in the past and at the moment."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Analyse media and its impact on communication and society."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understand how to apply media ethics, policy and regulatory frameworks to create media content"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation and Preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   "5",
+   "",
+   "LO1, LO2, LO4, LO5, LO6, LO7",
+   "",
+   "1",
+   "",
+   "Based on student's performance in the class",
+   ""
+  ],
+  [
+   "2",
+   "Practice 1",
+   "on-going",
+   "1",
+   "15.0%",
+   "4",
+   "Option 1: 15' Option 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4",
+   "Option 1: The whole class is divided into groups. Each group is assigned to choose one topic relating to books, newspapers or magazines Option 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "1Option 1: 1 Option 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapt ers(3-4).\n\nOption 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1 The whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nOption 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1 The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\n\nPractice 1,2,3,4:\n\nThe whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nThe media product should demonstrate:\n\n• That it is a justifiable representation of the theme selected in class\n\n• The understanding of new media technologies\n\n• The technique of creating multimedia content.\n\n• Basic technical media production skills\n\nThe presentation should:\n\n• Be facilitated in a communicative/commercial way.\n\n• Be analytical of the topical theme.\n\n• Direct the participants toward the generation of another theme.\n\nThe presentation/discussion in class is expected to answer student's questions/wonders about what they are not sure, not very things mentioned in the materials.The teacher will summarise the key points and emphasize what students have to keep in mind while making use of new media technologies.\n\nOption 2:(For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "3",
+   "Practice 2",
+   "on-going",
+   "1",
+   "15.0%",
+   "4",
+   "Option 1: 15' Option 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4",
+   "Option 1: The whole class is divided into groups. Each group is assigned to choose one topic relating to recorded music or radio Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 1 Option 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (5-6).\n\nOption 2:(For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nOption 2:(For Constructivism Approach only): Follow lecturer's proposal.",
+   "Option 1: The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\n\nPractice 1,2,3,4:\n\nThe whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nThe media product should demonstrate:\n\n• That it is a justifiable representation of the theme selected in class\n\n• The understanding of new media technologies\n\n• The technique of creating multimedia content.\n\n• Basic technical media production skills\n\nThe presentation should:\n\n• Be facilitated in a communicative/commercial way.\n\n• Be analytical of the topical theme.\n\n• Direct the participants toward the generation of another theme.\n\nThe presentation/discussion in class is expected to answer student's questions/wonders about what they are not sure, not very things mentioned in the materials.The teacher will summarise the key points and emphasize what students have to keep in mind while making use of new media technologies.\n\nOption 2:(For Constructivism Approach only): Follow lecturer's proposal."
+  ],
+  [
+   "4",
+   "Practice 3",
+   "on-going",
+   "1",
+   "15.0%",
+   "4",
+   "Option 1: 15 Option 2: (For Constructivism Approach only): Follow lecturer's proposal'",
+   "LO1, LO2, LO3, LO4",
+   "Option 1: The whole class is divided into groups. Each group is assigned to choose one topic relating to videos Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 1 Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (7-8).\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\n\nPractice 1,2,3,4:\n\nThe whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nThe media product should demonstrate:\n\n• That it is a justifiable representation of the theme selected in class\n\n• The understanding of new media technologies\n\n• The technique of creating multimedia content.\n\n• Basic technical media production skills\n\nThe presentation should:\n\n• Be facilitated in a communicative/commercial way.\n\n• Be analytical of the topical theme.\n\n• Direct the participants toward the generation of another theme.\n\nThe presentation/discussion in class is expected to answer student's questions/wonders about what they are not sure, not very things mentioned in the materials.The teacher will summarise the key points and emphasize what students have to keep in mind while making use of new media technologies.\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "5",
+   "Practice 4",
+   "on-going",
+   "1",
+   "15.0%",
+   "4",
+   "Option 1: 15' Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Option 1: The whole class is divided into groups. Each group is assigned to choose one topic relating to websites Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 1 Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapter (10).\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\n\nPractice 1,2,3,4:\n\nThe whole class is divided into groups. Each group is assigned to choose one topic relating to the content we have learned to create one media product and deliver one presentation about that media product in front of the class for 15 minutes.\n\nThe media product should demonstrate:\n\n• That it is a justifiable representation of the theme selected in class\n\n• The understanding of new media technologies\n\n• The technique of creating multimedia content.\n\n• Basic technical media production skills\n\nThe presentation should:\n\n• Be facilitated in a communicative/commercial way.\n\n• Be analytical of the topical theme.\n\n• Direct the participants toward the generation of another theme.\n\nThe presentation/discussion in class is expected to answer student's questions/wonders about what they are not sure, not very things mentioned in the materials.The teacher will summarise the key points and emphasize what students have to keep in mind while making use of new media technologies.\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "45'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "Multiple choice",
+   "30",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam Room",
+   "Students are not allowed to use document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the Course and Overview of Course and Requirements\n\nPART 1: MEDIA AND THE INFORMATION AGE\n\n-Chapter 1: The changing media\n\nThe media in our lives\n\nMedia Then/Media Now\n\nTechnologies Demystified: A Digital Media Primer\n\nYour media career: Room at the bottom, room at the top",
+   "Offline",
+   "LO1, LO2, LO3",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "MED201_Phần 1",
+   "Student: Read syllabus\n\nTeacher:",
+   ""
+  ],
+  [
+   "2",
+   "PART 1: MEDIA AND THE INFORMATION AGE\n\nChapter 1: The changing media\n\nThe media in our lives\n\nMedia Then/Media Now\n\nTechnologies Demystified: A Digital Media Primer\n\nYour media career: Room at the bottom, room at the top",
+   "Offline",
+   "LO1, LO2, LO3",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "MED201_Phần 2",
+   "Student: Read syllabus\n\nTeacher:",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: The changing media\n\nMedia & Cultures: A New Balance of Power?",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Read Slides",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: Media and Society\n\nUnderstanding the Media\n\nMedia Then/Media Now\n\nYour Media Career: Media Scholar\n\nMedia & Culture: Postmodernism",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Read Slides",
+   ""
+  ],
+  [
+   "5",
+   "Turorial:\n\nMake it multimedia\n\nGroup Project Guildelines and Individual Assignment Guidelines",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "6",
+   "Turorial:\n\nMake it multimedia\n\nGroup Project Guildelines and Individual Assignment Guidelines",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "7",
+   "Tutorial:\n\nPlanning and costing",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "8",
+   "Tutorial:\n\nDesigning and producing",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "9",
+   "Tutorial\n\nTesting",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "10",
+   "Tutorial\n\nDelivering",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "11",
+   "PART 2: THE MEDIA\n\nChapter 3: Books and Magazines\n\nHistory: The Printing to Digital Evolution\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Work in groups, Present",
+   ""
+  ],
+  [
+   "12",
+   "PART 2: THE MEDIA\n\nChapter 3: Books and Magazines\n\nMedia & Culture: Goodbye, Gutenberg\n\nYour Media Career: Wanted! Writers and Editors!\n\nMedia & Culture: From Print to Digital and Back Again\n\nMedia Literacy",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Work in groups, Present",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 4: Print to Digital Newspapers\n\nHistory: Journalism in the Making",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Work in groups, Present",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 4: Print to Digital Newspapers\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Work in groups, Present",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: Print to Digital Newspapers\n\nMedia & Culture: Occupy Wall Street: News, The Internet, and Social Media\n\nTechnology Demystified: Who’s Tweeting Now?",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4: Print to Digital Newspapers\n\nMedia Literacy: Responsible Reporting\n\nYour media career: Reporting the New that Others Use",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Student: Read Slides, Textbook Chapter",
+   ""
+  ],
+  [
+   "17",
+   "Practice 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "18",
+   "Practice 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 5: Recorded Music\n\nHistory: From Roots to Records\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 5: Recorded Music\n\nMedia & Culture: Black Music: Ripped Off or Revered?\n\nMedia & Culture: Local Natives and the Hard Work of Music",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5: Recorded Music\n\nTechnology Demystified: From the Victrola to AAC\n\nYour Media Career: Musicians, Moguls, Music in Everything Electronic",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 5: Recorded Music\n\nWorld View: How Music Crosses Borders\n\nMedia Literacy: Who controls the music?",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 6: Radio\n\nHistory: How Radio Began\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6: Radio\n\nYour Media Career: Local DJs Decline but Other Forms of Radio Rise\n\nMedia Literacy: The Impact of the Airwaves",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "25",
+   "Practice 2",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "26",
+   "Practice 2",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 7: Film and Home Video\n\nHistory: Golden Moments of Film\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 7: Film and Home Video\n\nYour Media Career: You Ought to Be in Pictures\n\nTechnology Demystified: Entering the Third Dimension",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 7: Film and Home Video\n\nMedia Literacy: Film and Your Society",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 7: Film and Home Video\n\nMedia & Culture: Saving National Production or the New Cultural Imperialism?",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 8: Television\n\nHistory: TV Milestones\n\nMedia Then/Media Now\n\nMedia & Culture: Going by the Numbers",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 8: Television\n\nTechnology Demystified: Inside HDTV\n\nYour Media Career: Video Production\n\nMedia & Culture: Diversity in Television\n\nMedia Literacy: Out of the Wasteland?",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "33",
+   "Practice 3",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "34",
+   "Practice 3",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "35",
+   "Practice 3",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "36",
+   "Practice 3",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 9: The internet\n\nHistory: Spinning the Web\n\nMedia Then/Media Now\n\nTechnology Demystified: Inside the Internet",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 9: The internet\n\nYour media career: Web Developer\n\nMedia & Culture: Media, the Internet, and the Stories We Tell about Ourselves\n\nMedia Literacy: Getting the Most out of the Internet",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 12: The third screen: Smartphones and Tablets\n\nHistory: Better Living Through Telecommunications\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 12: The third screen: Smartphones and Tablets\n\nMedia & Culture: What My Cell Phone Means to Me\n\nTechnology Demystified: How Telephones Work\n\nTechnology Demystified: Whistling Your Computer’s Tune, or How DSL works",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Work in groups, Present",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 12: The third screen: Smartphones and Tablets\n\nTechnology Demystified: How Your Cell Phone Works",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 12: The third screen: Smartphones and Tablets\n\nYour Media Career: Mobile Media Star\n\nMedia Literacy: Service for Everyone?",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 13: Video Games\n\nMedia Then/Media Now\n\nTechnology Demystified: A Look Under the Hood at Game Engines",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 13: Video Games\n\nYour Media Career: Getting Paid to Pay?\n\nMedia & Culture: Video Game as Interactive Film?\n\nMedia Literacy: Spoiling the Fun: Video Game Literacy",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "45",
+   "PART 3: MEDIA ISSUES\n\nChapter 14: Media Usages and Impacts\n\nBashing the Media\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "46",
+   "PART 3: MEDIA ISSUES\n\nChapter 14: Media Usages and Impacts\n\nTechnology Demystified: The Science of Sampling\n\nMedia & Culture: The Active Audience",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 10: Public Relations\n\nHistory: From Press Agentry to Public Relations\n\nMedia then/Media now",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 10: Public Relations\n\nTechnology Trends: Tools for Getting the Job Done\n\nMedia & Culture: Social Media: The New PR Toolbox\n\nMedia Literacy: Making Public Relations Ethical and Effective",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 11: Advertising\n\nHistory: From Handbills to Social Media",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 11: Advertising\n\nMedia Then/Media Now\n\nMedia & Culture: College students rule the Marketplace",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "51",
+   "Practice 4",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "52",
+   "Practice 4",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Read Slides\n\nTextbook Chapter",
+   ""
+  ],
+  [
+   "53",
+   "Practice 4",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion, Exercises.",
+   ""
+  ],
+  [
+   "54",
+   "Practice 4",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion, Exercises.",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 16: Media Ethics\n\nEthical Thinking",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion, Exercises.",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 16: Media Ethics\n\nMedia Then/Media Now\n\nMedia and Culture: Society of Professional Journalist’s Code of Ethics",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion, Exercises.",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 17: Global Communications Media\n\nActing Globally, Regionally, and Nationally\n\nMedia Then/Media Now",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion, Exercises.",
+   ""
+  ],
+  [
+   "58",
+   "Chapter 17: Global Communications Media\n\nWorld View: Soap Operas around the World\n\nTechnology Demystified: A Closed or an Open Internet – The Great Firewall of China\n\nMedia Literacy: Whose World Is It?",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion, Exercises.",
+   ""
+  ],
+  [
+   "59",
+   "Review and Prepare for Final Test",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion",
+   ""
+  ],
+  [
+   "60",
+   "Review and Prepare for Final Test",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1.1",
+   "How would you tell the story of the development of the information society to your parents?"
+  ],
+  [
+   "2",
+   "2",
+   "QN2.1",
+   "Describe what convergence has meant in your life and how it affects you?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.1",
+   "Explain the key features of the digital era and the concept of media convergence."
+  ],
+  [
+   "4",
+   "3",
+   "QN3.2",
+   "What will your future life in the information society be like?"
+  ],
+  [
+   "5",
+   "4",
+   "QN4.1",
+   "Does the SMCR model adequately explain social media?"
+  ],
+  [
+   "6",
+   "11",
+   "QN11.1",
+   "Debate the following proposition: books are an obsolete medium?"
+  ],
+  [
+   "7",
+   "12",
+   "QN12.1",
+   "How has the content of magazines changed over time, and why?"
+  ],
+  [
+   "8",
+   "13",
+   "QN13.1",
+   "What is news for you? And what should be news?"
+  ],
+  [
+   "9",
+   "14",
+   "QN14.1",
+   "Go through your local newspaper-in print, on the Internet, or mobile device and de scribe the objective of each section. How do local newspapers differ from national ones in content?"
+  ],
+  [
+   "10",
+   "15",
+   "QN15.1",
+   "How is recent technology changing the way print media is produced, distributed, and read? Is this a good thing?"
+  ],
+  [
+   "11",
+   "16",
+   "QN16.1",
+   "Why do most people prefer getting their news from a traditional news organization (whether in print or digital) with an editor than searching online or reading a blog?"
+  ],
+  [
+   "12",
+   "20",
+   "QN20.1",
+   "How does the history of popular music help us understand where music is going as a business? As artistic statements? As politics?"
+  ],
+  [
+   "13",
+   "22",
+   "QN22.1",
+   "What can other media industries learn from the challenge digital media and Internet dis tribution created for the music industry?"
+  ],
+  [
+   "14",
+   "23",
+   "QN23.1",
+   "Do you think broadcast radio still plays a positive role in helping people like you learn about new music? If not, what if anything should be done about it?"
+  ],
+  [
+   "15",
+   "23",
+   "QN23.2",
+   "The United States was the first country to turn radio into a commercial medium. What does that tell us about how new media will develop in the United States? How might they be different elsewhere?"
+  ],
+  [
+   "16",
+   "24",
+   "QN24.1",
+   "How does the history of radio help us understand how Internet radio, podcasting, and other audio media are going to develop as commercial forms? As artistic forms?"
+  ],
+  [
+   "17",
+   "27",
+   "QN27.1",
+   "How does the history of film help us understand how movies will develop as they interact or converge with parts of the Internet, like iTunes distribution or Netflix?"
+  ],
+  [
+   "18",
+   "28",
+   "QN28.1",
+   "Do you think that the impact of special effects and other technology on films is positive?"
+  ],
+  [
+   "19",
+   "29",
+   "QN29.1",
+   "Do the new tools help or harm storytelling in film?"
+  ],
+  [
+   "20",
+   "30",
+   "QN30.1",
+   "Does violence in film need to be more tightly controlled?"
+  ],
+  [
+   "21",
+   "31",
+   "QN31.1",
+   "How do you assess your options for future TV viewing? If you had to buy a TV right now that would meet your needs in 2022, what would you buy?"
+  ],
+  [
+   "22",
+   "32",
+   "QN32.1",
+   "Pitch your idea for a YouTube video. Think about what would make it appeal to 18- to 34-year-olds since that is a group that advertisers prize. Make it good if you want to be discovered by Hollywood!"
+  ],
+  [
+   "23",
+   "37",
+   "QN37.1",
+   "What would be the best way to govern the Internet in the future? Why?"
+  ],
+  [
+   "24",
+   "38",
+   "QN38.1",
+   "How do you explain the waning popularity of social media like Facebook among college students?"
+  ],
+  [
+   "25",
+   "38",
+   "QN38.2",
+   "Analyze your online privacy and security practices, and outline a plan for making yourself safer online?"
+  ],
+  [
+   "26",
+   "39",
+   "QN39.1",
+   "Are smartphones and tablets making PCs and TVs obsolete?"
+  ],
+  [
+   "27",
+   "40",
+   "QN40.1",
+   "How has your smartphone changed your life for better? For worse?"
+  ],
+  [
+   "28",
+   "41",
+   "QN41.1",
+   "What will your mobile phone be like in 2020?"
+  ],
+  [
+   "29",
+   "42",
+   "QN42.1",
+   "Now that you know your cell phone is a threat to your privacy, what will you do?"
+  ],
+  [
+   "30",
+   "43",
+   "QN43.1",
+   "Debate the following statement: sexist video games should be banned for children?"
+  ],
+  [
+   "31",
+   "43",
+   "QN43.2",
+   "What should a government do to manage sexual contents?"
+  ],
+  [
+   "32",
+   "45",
+   "QN45.1",
+   "What would you say is the most important effect the media have had on your life?"
+  ],
+  [
+   "33",
+   "45",
+   "QN45.2",
+   "Discuss ways that people can benefit from the media nowsadays?"
+  ],
+  [
+   "34",
+   "46",
+   "QN46.1",
+   "What should the government do to protect children from harmful media content?"
+  ],
+  [
+   "35",
+   "46",
+   "QN46.2",
+   "Is it true that exposure to violent TV harms young children? Explain your answer."
+  ],
+  [
+   "36",
+   "47",
+   "QN47.1",
+   "Why and how has PR become a profession over the years?"
+  ],
+  [
+   "37",
+   "48",
+   "QN48.1",
+   "Let's say a client wants to hire your agency. The only problem is that you don't agree with their ethics. What would you do and why?"
+  ],
+  [
+   "38",
+   "49",
+   "QN49.1",
+   "What were the most important developments that led to the advertising industry of today?"
+  ],
+  [
+   "39",
+   "49",
+   "QN49.2",
+   "What do you think about the roles of social media (Facebook, Tiktok, etc.) in the advertising industry?"
+  ],
+  [
+   "40",
+   "50",
+   "QN50.1",
+   "Advertising receives substantial criticism, so let's accentuate the positive: what are the good things that advertising does for you and for society?"
+  ],
+  [
+   "41",
+   "50",
+   "QN50.2",
+   "What do you think about a concept of \"sustainable advertising\"?"
+  ],
+  [
+   "42",
+   "57",
+   "QN57.1",
+   "What is globalization?"
+  ],
+  [
+   "43",
+   "58",
+   "QN58.1",
+   "Why do people characterize the media relations between countries and cultures in the past 20 years as increasing globalization?"
+  ],
+  [
+   "44",
+   "60",
+   "QN60.1",
+   "What do you think about \"The Great Firewall of China\"?"
+  ]
+ ],
+ "links": [
+  "/download/9205/S/1_MED201_Phần 1.zip",
+  "/download/9205/S/2_MED201_Phần 2.zip"
+ ]
+}

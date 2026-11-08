@@ -1,0 +1,1304 @@
+{
+ "ma": "CSP201m",
+ "sylID": "13399",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13399",
+   "code": "CSP201m",
+   "name": "Content Strategy for Professionals_Xây dựng chiến lược nội dung",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13399",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13399",
+  "Syllabus Name": "Content Strategy for Professionals_Xây dựng chiến lược nội dung",
+  "Course Name English": "Content Strategy for Professionals",
+  "Subject Code": "CSP201m",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Cooperative Learning,Inquiry-Based Learning,Project Based Training,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Description: In this course, student will learn the best ways to engage an audience they want and need by smartly implementing their important, strategic stories and information and by using proven tools and techniques to enhance an audience’s experiences and interest.\n\nStudents will learn how effectively utilize AI to develop, organize and implement a content marketing strategy, analyze and measure the effectiveness of content marketing, write compelling copy, use a strategic framework when writing, and build your professional brand and authority through content marketing.\n\nLecturer will use several teaching methods such as conducting group discussion and sharing field work experiences in the market on top of regular teaching. Students will have the chance to showcase their presentation and media products as well as their thinking process related to this field.",
+  "StudentTasks": "- Students must at least 80% of contact slots in order to be accepted to the final presentation\n\n- Student is responsible to do all exercises, questions, assignments given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FLM at https://flm.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "Computer, text book",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Content Strategy for Professionals Specialization: https://www.coursera.org/specializations/content-strateg.",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "Epic content marketing",
+   "Joe Pulizzi",
+   "Mc Grawhill",
+   "2014",
+   "2nd",
+   "978-0-07-181991-6",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "https://www.coursera.org/projects/prompt-engineering-generative-ai-for-marketing-advertising?utm_medium=sem&utm_source=gg&utm_campaign=B2C_EMEA_ibm-data-science_ibm_FTCOF_professional-certificates_country-GB-country-UK-pmax-nonNRL-within-14d&campaignid=20858198563&adgroupid=&device=c&keyword=&matchtype=&network=x&devicemodel=&adposition=&creativeid=&hide_mobile_promo&gad_source=1&gclid=CjwKCAjw17qvBhBrEiwA1rU9w9aglOEYvhzJhjx-5q95GPxAZTtOBTsNS0ucZOL9XsshJE0vRWhdOxoCNz8QAvD_BwE#testimonials",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Guided Project - Prompt Engineering Generative AI for Marketing & Advertising"
+  ],
+  [
+   "4",
+   "The Screenwriter's Bible, 7th Edition, A Complete Guide to Writing, Formatting, and Selling Your Script",
+   "David Trottier",
+   "Silman-James Press",
+   "2019",
+   "7",
+   "978-1935247210",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the role of Content strategy at all levels of an organization to engage an audience they want and need by smartly implementing their important, strategic stories and information."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand how best to engage your audience by implementing their stories and using proven tools and techniques to enhance an audience’s experience and interests."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Knowledge of manage content once created by learning how best to tell an organization’s “content story” across media platforms using a human-centered design."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Finding actionable ways to grow internal and external audiences, and expand your content’s reach."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Create and implement engaging content across media platforms that the people you want to reach will really value."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Apply the skills you've learned throughout the courses in response to a real challenge facing organizations today."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "CLO1->CLO6",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, students' attitude, preparation, contribution of discussions",
+   ""
+  ],
+  [
+   "2",
+   "Group Project",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "90'",
+   "CLO1->CLO6",
+   "Group Project",
+   "1",
+   "Test the acquainted knowledge which student obtained in the class",
+   "Students are required to form groups of 4 members and create a content channel plan for a selected brand, integrating AI tools at different stages of the process.\n\nThe plan should include:\n\nBusiness Overview\nCustomer Research\nContent Production\nContent Scheduling .\nKeyword Selection & SEO\n\nAction Plan should detail:\n\nThe persona\nThe content goal\nPrimary content type, structure, tone, and editorial plan\nChannel integration\nDesired actions",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms.\n\nEach assignment has a six-day due date, which commences when the lecture provides detailed instructions."
+  ],
+  [
+   "3",
+   "Practice 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "CLO1, CLO2, CLO4, CLO5",
+   "Individual Assignment",
+   "1",
+   "Test the acquainted knowledge which student obtained in the class",
+   "Suggested assignment requirements:\nStudents will be required to create a buyer persona for their most love brand through the lens of theories discussed in class.\n\nThis practice is intended to help students identify basic concepts and principles of content marketing by analysing their insight thought such issues as: its relationship to the brand, brand strategy, brand's targeted audience, and some other characteristics.\n\nWhere possible, students should link their analysis to the course materials, including readings, lecture notes, and screenings.Students will be required to write specific content (content mission, content type, content flatform …) or report based on the topics given out by the lecturers.",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms.\n\nEach assignment has a six-day due date, which commences when the lecture provides detailed instructions."
+  ],
+  [
+   "4",
+   "Practice 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "CLO1 -> CLO6",
+   "Individual Assignment",
+   "1",
+   "Test the acquainted knowledge which student obtained in the class",
+   "Suggested assignment requirements:\nStudents will be required to create content/product using design tool based on the topics given out by the lecturers.\nThe media product is requested to present on social media flatform with external audience's engagement for measurement",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1->CLO6",
+   "Multiple choice questions.",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Closed book exam.\nIn exam rooms",
+   "Students are not allowed to use document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nCourse overview & introduction",
+   "Offline",
+   "",
+   "I",
+   "Course Implementation\n- Syllabus\n- Slides",
+   "CSP201m",
+   "Read syllabus",
+   ""
+  ],
+  [
+   "2",
+   "- Course Introduction\nOverview of course assessment\nAssessment requirements\n- Introduction to Guided Project - Prompt Engineering Generative AI for Marketing & Advertising",
+   "Offline",
+   "CLO1",
+   "I",
+   "Course Implementation\n- Syllabus\n- Slides",
+   "CSP201m",
+   "Read syllabus",
+   ""
+  ],
+  [
+   "3",
+   "Content marketing: definition, history of content marketing",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "#1a.MOOC 1: Content Strategy for Professionals: Engaging Audiences\nWeek 1: Introduction to Content Strategy\n#2. Epic content marketing\nChapter 1: What is content marketing?\nChapter 2: The history of content marketing\nChapter 3: Why content marketing?",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "4",
+   "Content marketing: advantages of content marketing",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "#1a.MOOC 1: Content Strategy for Professionals: Engaging Audiences\nWeek 1: Introduction to Content Strategy\n#2. Epic content marketing\nChapter 1: What is content marketing?\nChapter 2: The history of content marketing\nChapter 3: Why content marketing?",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "5",
+   "Audiences and brand",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "#1a. MOOC 1: Content Strategy for Professionals: Engaging Audiences\nWeek 2: Audiences and Brand\n#2. Epic content marketing\nChapter 4: The business model of content marketing",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "6",
+   "Audiences and brand",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "#1a. MOOC 1: Content Strategy for Professionals: Engaging Audiences\nWeek 2: Audiences and Brand\n#2. Epic content marketing\nChapter 4: The business model of content marketing",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "7",
+   "Audiences and brand: audience persona",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "#2. Epic content marketing\nChapter 10:The Audience Personas",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "8",
+   "Audiences and brand: audience persona\n\n- Use AI to analyze audience persona",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I, T, U",
+   "#2. Epic content marketing\nChapter 10:The Audience Personas",
+   "",
+   "Lecture\nQ&A/ Discussions\nUnderstand Brand Context\nUse AI for Persona Creation\nRefine & Validate AI Output\nReflect",
+   ""
+  ],
+  [
+   "9",
+   "Experiences and Voice: experience",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I, T",
+   "#1a. MOOC 1 : Content Strategy for Professionals: Engaging Audiences\nWeek 3: Experiences and Voice\n#2. Epic content marketing\nChapter 11: Defining the Engagement Cycle",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "10",
+   "Experiences and Voice:engagement cycle",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I, T",
+   "#1a. MOOC 1 : Content Strategy for Professionals: Engaging Audiences\nWeek 3: Experiences and Voice\n#2. Epic content marketing\nChapter 11: Defining the Engagement Cycle",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "11",
+   "Experiences and Voice: content voice",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I, T",
+   "#2. Epic content marketing\nChapter 12: Define your content niche\nChapter 13: The content marketing mission statement",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "12",
+   "Experiences and Voice:content niche",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I, T",
+   "#2. Epic content marketing\nChapter 12: Define your content niche\nChapter 13: The content marketing mission statement",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "13",
+   "Platforms and Design",
+   "Offline",
+   "CLO2, CLO3, CLO5",
+   "I, T",
+   "#1b. MOOC 2: Content Strategy for Professionals: Managing Content\nWeek 1: Platforms and Design\n#2. Epic content marketing\nChapter 14: Building Your Editorial Calendar",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "14",
+   "Platforms and Design",
+   "Offline",
+   "CLO2, CLO3, CLO5",
+   "I, T",
+   "#1b. MOOC 2: Content Strategy for Professionals: Managing Content\nWeek 1: Platforms and Design\n#2. Epic content marketing\nChapter 14: Building Your Editorial Calendar",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "15",
+   "Platforms and Design",
+   "Offline",
+   "CLO2, CLO3, CLO5",
+   "I, T, U",
+   "#2. Epic content marketing\nChapter 15: Managing the content creation process\nChapter 16: Content type",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "16",
+   "Platforms and Design",
+   "Offline",
+   "CLO2, CLO3, CLO5",
+   "I, T, U",
+   "#2. Epic content marketing\nChapter 15: Managing the content creation process\nChapter 16: Content type",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "17",
+   "Platforms and Design",
+   "Offline",
+   "CLO2, CLO3, CLO5",
+   "I, T,U",
+   "#2. Epic content marketing\nChapter 19: the content flatform\nChapter 20: Content channel plan in action",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "18",
+   "- Platforms and Design\n- Answer students's queries related to Guided Project - Prompt Engineering Generative AI for Marketing & Advertising if has\n-- Use AI to generate ideas for Content and calendar",
+   "Offline",
+   "CLO2, CLO3, CLO5",
+   "I, T,U",
+   "#2. Epic content marketing\nChapter 19: the content flatform\nChapter 20: Content channel plan in action",
+   "",
+   "Lecture\nQ&A/ Discussions\nEngage with Platforms\nApply Prompt Engineering\nCritically Assess AI Results\nReflection",
+   ""
+  ],
+  [
+   "19",
+   "Social and Mobile Media",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T",
+   "#1b. MOOC 2: Content Strategy for Professionals: Managing Content\nWeek 2: Social and Mobile Media",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "20",
+   "Social and Mobile Media",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T",
+   "#1b. MOOC 2: Content Strategy for Professionals: Managing Content\nWeek 2: Social and Mobile Media",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "21",
+   "Social and Mobile Media",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T",
+   "#2. Epic content marketing\nChapter 22: Alternative Content Promotion\nTechniques.",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "22",
+   "Feedback on Practice 1/ Practice 1",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Written report",
+   "",
+   "Taking notes on feedbacks/ In-class activites",
+   ""
+  ],
+  [
+   "23",
+   "Feedback on Practice 1/ Practice 1",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Written report",
+   "",
+   "Taking notes on feedbacks/ In-class activites",
+   ""
+  ],
+  [
+   "24",
+   "Feedback on Practice 1/ Practice 1",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Written report",
+   "",
+   "Taking notes on feedbacks/ In-class activites",
+   ""
+  ],
+  [
+   "25",
+   "Social and Mobile Media",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T",
+   "#2. Epic content marketing\nChapter 22: Alternative Content Promotion\nTechniques.",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "26",
+   "Social and Mobile Media",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T,U",
+   "#2. Epic content marketing\nChapter 23: Leveraging a Social Influencer Model\nfor Content Marketing",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "27",
+   "Managing Content and IP",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T,U",
+   "# 1b.MOOC 2: Content Strategy for Professionals: Managing Content\nWeek 3: Managing Content and IP",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "28",
+   "Utilizing Content Trends",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T",
+   "#1c. MOOC 3: Expanding Your Content’s Reach\nWeek 1: Utilizing Content Trends",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "29",
+   "Utilizing Content Trends (cont.)",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T",
+   "#1c. MOOC 3: Expanding Your Content’s Reach\nWeek 1: Utilizing Content Trends",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "30",
+   "Utilizing Content Trends (cont.)\n-- Use AI to generate ideas for Content Trends and and assist their stories",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T, U",
+   "#1c. MOOC 3: Expanding Your Content’s Reach\nWeek 1: Utilizing Content Trends",
+   "",
+   "Lecture\nQ&A/ Discussions\nExplore content trends: identify current media/online trends relevant to brands or social issues.\n\nUse AI for ideation: generate content ideas, campaign hooks, or storytelling directions from AI tools.\n\nAdapt & refine: critically filter AI results, select the most relevant ideas, and develop them into concrete stories (posts, scripts, or visuals).\n\nCollaborate in groups: divide roles (trend research, AI prompt design, story adaptation, visual draft).\n\nPresent output: share AI-assisted content trend ideas as short stories or sample posts; explain how AI contributed.\n\nReflect: discuss strengths, limitations, and ethical issues of AI in content creation (originality, bias, over-reliance).",
+   ""
+  ],
+  [
+   "31",
+   "Idea Developement\n- Creative Brief\n- The big idea\n- Elevator Pitch and Tagline",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T",
+   "#3 The Screenwriter's Bible\nChapter 2: Idea Development",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "32",
+   "Idea Developement\n- Structure of a script\n- Steps to turn an idea into a script\n- Filter and test ideas",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T",
+   "#3 The Screenwriter's Bible\nChapter 2: Idea Development",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "33",
+   "Idea Developement (cont.)\n- Based on an idea, each group practises with steps to develop an idea.\n--- Use AI to generate ideas",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T, U",
+   "#3 The Screenwriter's Bible\nChapter 2: Idea Development",
+   "",
+   "Lecture\nQ&A/ Discussions\nEngage with Platforms\nApply Prompt Engineering\nCritically Assess AI Results\nReflection",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 5: Character development\n'- Character development fro scripts.\n- Building sympathy",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T",
+   "#3 The Screenwriter's Bible\nChapter 5: Character development",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 5: Character development (cont.)\n- Character Arch\n- Develop inner life of charaters",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T",
+   "#3 The Screenwriter's Bible\nChapter 5: Character development",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 5: Character development (cont.)\n- Contradiction and dramatics\n- Villain character\n- Use AI to generate ideas",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "I, T, U",
+   "#3 The Screenwriter's Bible\nChapter 5: Character development",
+   "",
+   "Lecture\nQ&A/ Discussions\nEngage with Platforms\nApply Prompt Engineering\nCritically Assess AI Results\nReflection",
+   ""
+  ],
+  [
+   "37",
+   "Social Networks and Digital Media",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T,U",
+   "#1c. MOOC 3: Expanding Your Content’s Reach\nWeek 2: Social Net works and Digital Media",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "38",
+   "Social Networks and Digital Media",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T,U",
+   "#1c. MOOC 3: Expanding Your Content’s Reach\nWeek 2: Social Net works and Digital Media",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "39",
+   "Interactivity and Gamification",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T,U",
+   "#1c. MOOC 3: Expanding Your Content’s Reach\nWeek 3: Interactivity and Gamification",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "40",
+   "Interactivity and Gamification",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "I, T,U",
+   "#1c. MOOC 3: Expanding Your Content’s Reach\nWeek 3: Interactivity and Gamification",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "41",
+   "Feedback on Practice 2",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "",
+   "Written report",
+   "",
+   "Taking notes on feedbacks/ Q&A",
+   ""
+  ],
+  [
+   "42",
+   "Feedback on Practice 2",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO6",
+   "",
+   "Written report",
+   "",
+   "Taking notes on feedbacks/ Q&A",
+   ""
+  ],
+  [
+   "43",
+   "Visual Communication: Theory and Practice",
+   "Offline",
+   "CLO1 -> CLO6",
+   "I, T,U",
+   "#1d. MOOC 4: Ensuring Your Content's Impact\nWeek 1: Visual Communication: Theory and Practice",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "44",
+   "Visual Communication: Theory and Practice",
+   "Offline",
+   "CLO1 -> CLO6",
+   "I, T,U",
+   "#1d. MOOC 4: Ensuring Your Content's Impact\nWeek 1: Visual Communication: Theory and Practice",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "45",
+   "Social Engagement",
+   "Offline",
+   "CLO1 -> CLO6",
+   "I, T,U",
+   "#1d. MOOC 4: Ensuring Your Content's Impact\nWeek 2: Social Engagement",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "46",
+   "Social Engagement",
+   "Offline",
+   "CLO1 -> CLO6",
+   "I, T,U",
+   "#1d. MOOC 4: Ensuring Your Content's Impact\nWeek 2: Social Engagement",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "47",
+   "Measuring Your Content's Engagement",
+   "Offline",
+   "CLO1 -> CLO6",
+   "I, T,U",
+   "#1d. MOOC 4: Ensuring Your Content's Impact\nWeek 3: Measuring Your Content's Engagement",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "48",
+   "Measuring Your Content's Engagement\n- Use AI to Analyze Content's Engagement",
+   "Offline",
+   "CLO1 -> CLO6",
+   "I, T,U",
+   "#1d. MOOC 4: Ensuring Your Content's Impact\nWeek 3: Measuring Your Content's Engagement",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "49",
+   "Group project and presentation",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Presentation Slides",
+   "",
+   "Group presentation\nQ&A",
+   ""
+  ],
+  [
+   "50",
+   "Group project and presentation",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Presentation Slides",
+   "",
+   "Group presentation\nQ&A",
+   ""
+  ],
+  [
+   "51",
+   "Group project and presentation",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Presentation Slides",
+   "",
+   "Group presentation\nQ&A",
+   ""
+  ],
+  [
+   "52",
+   "Group project and presentation",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Presentation Slides",
+   "",
+   "Group presentation\nQ&A",
+   ""
+  ],
+  [
+   "53",
+   "Group project and presentation",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Presentation Slides",
+   "",
+   "Group presentation\nQ&A",
+   ""
+  ],
+  [
+   "54",
+   "Group project and presentation",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Presentation Slides",
+   "",
+   "Group presentation\nQ&A",
+   ""
+  ],
+  [
+   "55",
+   "The Evolution of Your Epic Story",
+   "Offline",
+   "CLO1",
+   "I, T, U",
+   "#2: Epic content marketing: The Evolution of Your Epic Story",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "56",
+   "The Evolution of Your Epic Story",
+   "Offline",
+   "CLO1",
+   "I, T, U",
+   "#2: Epic content marketing: The Evolution of Your Epic Story",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "57",
+   "The Evolution of Your Epic Story",
+   "Offline",
+   "CLO1",
+   "I, T, U",
+   "#2: Epic content marketing: The Evolution of Your Epic Story",
+   "",
+   "Lecture\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "58",
+   "Course Review/ Revision",
+   "Offline",
+   "CLO1->CLO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ],
+  [
+   "59",
+   "Course Review/ Revision",
+   "Offline",
+   "CLO1->CLO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ],
+  [
+   "60",
+   "Course Review/ Revision",
+   "Offline",
+   "CLO1->CLO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "3",
+   "QN1",
+   "What is Content Strategy? Can you give an example of Content Strategy?"
+  ],
+  [
+   "2",
+   "3",
+   "QN2",
+   "What are John’s three truths in Content Strategy?"
+  ],
+  [
+   "3",
+   "4",
+   "QN1",
+   "What is Content Marketing?"
+  ],
+  [
+   "4",
+   "4",
+   "QN2",
+   "Can you point out differences between Content and Content Marketing?"
+  ],
+  [
+   "5",
+   "5",
+   "QN1",
+   "What is the role of content marketing in today world?"
+  ],
+  [
+   "6",
+   "6",
+   "QN1",
+   "How to convey effectively your company’s message?"
+  ],
+  [
+   "7",
+   "6",
+   "QN2",
+   "How do you ensure that all your content fits within Content Strategy?"
+  ],
+  [
+   "8",
+   "7",
+   "QN1",
+   "What is Business Model? What do you know about business model of content marketing in media company and non-media company?"
+  ],
+  [
+   "9",
+   "7",
+   "QN2",
+   "How may tips should you implement for your company to compete with other competitors?"
+  ],
+  [
+   "10",
+   "8",
+   "QN1",
+   "What are hidden benefits of Content Marketing?"
+  ],
+  [
+   "11",
+   "8",
+   "QN2",
+   "What are the best methods for marketers to get buy-in for new content marketing project?"
+  ],
+  [
+   "12",
+   "9",
+   "QN1",
+   "Why is audience persona important?"
+  ],
+  [
+   "13",
+   "9",
+   "QN2",
+   "How to create an audience persona?"
+  ],
+  [
+   "14",
+   "10",
+   "QN1",
+   "Can you describe an audience persona for a certain company?"
+  ],
+  [
+   "15",
+   "10",
+   "QN2",
+   "What are common mistakes in creating personas?"
+  ],
+  [
+   "16",
+   "11",
+   "QN1",
+   "Why do Experiences matter?"
+  ],
+  [
+   "17",
+   "12",
+   "QN1",
+   "How do Experiences apply to content?"
+  ],
+  [
+   "18",
+   "12",
+   "QN2",
+   "What are tone and voice in writing?"
+  ],
+  [
+   "19",
+   "12",
+   "QN3",
+   "How to put tone and voice into your development of Content Strategy?"
+  ],
+  [
+   "20",
+   "13",
+   "QN1",
+   "How to create a complete content segmentation grid?"
+  ],
+  [
+   "21",
+   "13",
+   "QN2",
+   "What is your opinion about the statement: “The smaller you go with your content niche, the higher the payoff in the long run”?"
+  ],
+  [
+   "22",
+   "14",
+   "QN1",
+   "What is content marketing mission statement? What are components of content marketing mission statement?"
+  ],
+  [
+   "23",
+   "14",
+   "QN2",
+   "What should you do with content marketing mission statement?"
+  ],
+  [
+   "24",
+   "15",
+   "QN1",
+   "How does storytelling change across Multimedia and Platforms?"
+  ],
+  [
+   "25",
+   "15",
+   "QN2",
+   "What is design in Content Strategy and How to evaluate Content Design?"
+  ],
+  [
+   "26",
+   "16",
+   "QN1",
+   "How many components of an editorial calender? And What are they?"
+  ],
+  [
+   "27",
+   "17",
+   "QN1",
+   "How many positions of a basic content marketing? What are their responsibilities?"
+  ],
+  [
+   "28",
+   "17",
+   "QN2",
+   "Why do we need to manage information as a product?"
+  ],
+  [
+   "29",
+   "18",
+   "QN1",
+   "How to manage information as a product?"
+  ],
+  [
+   "30",
+   "18",
+   "QN2",
+   "What are tips for each type of content?"
+  ],
+  [
+   "31",
+   "19",
+   "QN1",
+   "What is Hub and Spoke Model?"
+  ],
+  [
+   "32",
+   "19",
+   "QN2",
+   "Can you observe the Hub and Spoke Model of a certain company/organization?"
+  ],
+  [
+   "33",
+   "20",
+   "QN1",
+   "What are components of content channel plan?"
+  ],
+  [
+   "34",
+   "23",
+   "QN1",
+   "What is social network?"
+  ],
+  [
+   "35",
+   "23",
+   "QN2",
+   "What do you know about Virtual Communities?"
+  ],
+  [
+   "36",
+   "24",
+   "QN1",
+   "Why are message differentiated in connecting to audience?"
+  ],
+  [
+   "37",
+   "24",
+   "QN2",
+   "Can you list some useful tools to connect audience in mobile media?"
+  ],
+  [
+   "38",
+   "25",
+   "QN1",
+   "How many techniques to promote marketing content? What are they?"
+  ],
+  [
+   "39",
+   "26",
+   "QN2",
+   "What are tips for keywords selection to optimize your content marketing SEO?"
+  ],
+  [
+   "40",
+   "26",
+   "QN1",
+   "Which strategy is the best technique to promote content? Why?"
+  ],
+  [
+   "41",
+   "27",
+   "QN1",
+   "Who is considered as an influencer?"
+  ],
+  [
+   "42",
+   "27",
+   "QN2",
+   "What are benefits from using influencer to share content?"
+  ],
+  [
+   "43",
+   "28",
+   "QN1",
+   "Can you give an example of the process of using influencer sharing content?"
+  ],
+  [
+   "44",
+   "28",
+   "QN2",
+   "What is “three circle of content sharing”?"
+  ],
+  [
+   "45",
+   "29",
+   "QN1",
+   "Can you explain in detailed The 5D’s in managing content of organization?"
+  ],
+  [
+   "46",
+   "29",
+   "QN2",
+   "What about legal protection of content (Intellectual Property) ?"
+  ],
+  [
+   "47",
+   "30",
+   "QN1",
+   "What is your about creating content by insource?"
+  ],
+  [
+   "48",
+   "30",
+   "QN2",
+   "What is your about creating content by outsource?"
+  ],
+  [
+   "49",
+   "33",
+   "QN1",
+   "How does content curation impact on increasing traffic to your website’s original content?"
+  ],
+  [
+   "50",
+   "34",
+   "QN1",
+   "How does test for different versions of your content impacting on your audience?"
+  ],
+  [
+   "51",
+   "34",
+   "QN2",
+   "How do leaderboard and badge impacting on audience engagement?"
+  ],
+  [
+   "52",
+   "35",
+   "QN1",
+   "How do websites applying the trend of utilize content “popular” to enhance their activity? Give an example"
+  ],
+  [
+   "53",
+   "35",
+   "QN2",
+   "How do new and emerging content Trends work? Give example for each?"
+  ],
+  [
+   "54",
+   "36",
+   "QN1",
+   "How to create Shareworthy content?"
+  ],
+  [
+   "55",
+   "37",
+   "QN1",
+   "What’s Trend in Social Media nowadays"
+  ],
+  [
+   "56",
+   "37",
+   "QN2",
+   "How to use social trend to build your content’s impact and reach?"
+  ],
+  [
+   "57",
+   "38",
+   "QN1",
+   "What are the best social strategies?"
+  ],
+  [
+   "58",
+   "38",
+   "QN2",
+   "How to track effectively your money investing in social media’s content?"
+  ],
+  [
+   "59",
+   "39",
+   "QN1",
+   "What is definition of interactivity in context of social media?"
+  ],
+  [
+   "60",
+   "40",
+   "QN1",
+   "How many degree of of connectedness, of interactivity with different kinds of screens?"
+  ],
+  [
+   "61",
+   "41",
+   "QN1",
+   "What is the role of visual element in communication nowadays?"
+  ],
+  [
+   "62",
+   "41",
+   "QN2",
+   "What is Gestalt Theory?"
+  ],
+  [
+   "63",
+   "42",
+   "QN1",
+   "How are principles of similarity, closure, promixity, symmetry, contiuation, common fate applied in visual communication?"
+  ],
+  [
+   "64",
+   "42",
+   "QN2",
+   "What are ways implemented in visual communication?"
+  ]
+ ],
+ "links": [
+  "/download/13399/S/1_CSP201m.zip",
+  "/download/13399/S/2_CSP201m.zip"
+ ]
+}

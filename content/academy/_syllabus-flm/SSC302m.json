@@ -1,0 +1,902 @@
+{
+ "ma": "SSC302m",
+ "sylID": "14118",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14118",
+   "code": "SSC302m",
+   "name": "Public Speaking_Nói trước công chúng",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14118",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14118",
+  "Syllabus Name": "Public Speaking_Nói trước công chúng",
+  "Course Name English": "",
+  "Subject Code": "SSC302m",
+  "Learning-Teaching Method": "",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Hours Per Course: 20 sessions\n\n1 session = 135 minutes",
+  "Pre-Requisite": "Passed ENP102/ENP203",
+  "Description": "-Course Objectives:\n\nMaster the art of persuasion through understanding ethos, pathos, and logos.\n\nDevelop strong argumentation and critical thinking skills.\n\nAnalyze and adapt to diverse audiences.\n\nImprove public speaking delivery, including vocal variety, body language, and eye contact.\n\nUtilize research to support persuasive claims.\n\nConstruct persuasive speeches using various organizational patterns.\n\nProvide and receive constructive feedback on persuasive presentations.\n\n-Course Description: This course is designed to equip students with the essential skills to craft and deliver compelling persuasive speeches. Through a combination of theoretical knowledge and practical application, students will learn to analyze audiences, develop strong arguments, and effectively communicate their ideas. The course emphasizes critical thinking, research, and public speaking skills. Students will have the opportunity to practice their persuasive abilities through in-class presentations and receive constructive feedback from peers and the instructor. By the end of the course, students will be confident in their ability to persuade and influence others and equiped students with the soft skills necessary to thrive in today's competitive job market.\n\n-Teaching method: interactive and contructivist approach and/or Project Based Learning",
+  "StudentTasks": "- Attend more than 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfil tasks given by intructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Access the course website (https://fu-edunext.fpt.edu.vn/) for group discussions to contruct knowledge, for practicing and assessment",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "1) On-going assessment\n\n- Assignments: 03*20%: 60%\n\n2) Final Examination (FE) 40%\n\n3) Final Result 100%\n\n4) Completion Criteria:\n\nOn-going assessment >0, Final Exam Score >=4/10 & Final Result >=5/10",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "1. Introduction to Public Speaking\n\n2. Speak to Inform\n\n3. Speak to Persuade",
+   "University of Washington",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "1. https://www.coursera.org/learn/public-speaking?specialization=public-speaking 2. https://www.coursera.org/learn/inform-speech/home/info 3. https://www.coursera.org/learn/persuade-speech/home/info"
+  ],
+  [
+   "2",
+   "The Dynamic of Persuasion",
+   "Richard M. Perloff",
+   "Routledge",
+   "2020",
+   "7th",
+   "9780367185794",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Influence: Science and Practice",
+   "Robert B. Cialdini",
+   "Allyn and Bacon",
+   "2008",
+   "5th",
+   "978-0205609994",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Plan and deliver speeches with a clear introduction, body, and conclusion"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Research and develop engaging content that is relevant to the audience."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Use effective vocal delivery (tone, pace, volume) and body language to enhance their message."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Adjust their speaking style to suit different audiences, contexts and situations."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Respond effectively to questions and challenges."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Use visual aids (e.g., slides, props) to enhance their presentation."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Evaluate their own performance and incorporate feedback to improve."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Work effectively in a team environment and contribute to shared goals"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Take responsibility for their actions and their impact on others."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Adapt to change and embrace new challenges."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "5-7'/student",
+   "CLO 1->7",
+   "Deliver a five- to seven minute speech on a topic of your choosing",
+   "1",
+   "Knowledge and skills in studied content from sessions 1->3",
+   "Students work individually\nStudents are informed and preprared beforehand.\nStudent presents in classroom",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "10 - 15'/group of 2-3 members + QA (5\")",
+   "CLO1->10",
+   "Analyze the potential attitudes people might hold towards real-life scenarios and how those attitudes might serve different functions (e.g., expressing social identity, maintaining group norms, etc.) and present your findings",
+   "1",
+   "Knowledge and skills in studied content from sessions 1->11",
+   "Students work in group of 2->3 members (Students may form their own groups or assigned by teacher)\n\nStudents are informed and preprared beforehand.\n\nStudent presents in classroom",
+   ""
+  ],
+  [
+   "3",
+   "Assignment 3",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "20''/group of 2->3 members",
+   "CLO1->10",
+   "This group project will involve crafting and delivering a persuasive speech on a real-life scenario where someone needs to change a negative behavior.",
+   "1",
+   "Knowledge and skills in studied content from sessions 1->17",
+   "Students work in group of 2->3 (Students may form their own groups or assigned by teacher)\nStudents are informed and preprared beforehand.\nStudent presents in classroom\nChoose a bad habit/bahaviour that is common and relatable to your audience (e.g., procrastination, social media overuse, unhealthy snacking).\nCreate a realistic scenario where a person struggles with this habit and experiences its negative effects.\nFocus on a positive outcome where the person successfully breaks the habit using your proposed plan.",
+   ""
+  ],
+  [
+   "4",
+   "Project",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "~30/group20-25:Presentation5': Q&A",
+   "CLO: 1->10",
+   "Civic engagement project: Students choose a topic (with T's approval) and design a persuasive speech that raises awareness and changes the attitudes, beliefs or behaviors of an intended target audience.",
+   "1",
+   "Knowledge and skills in studied sessions",
+   "by Exam Board\n\nStudents work in group of 2->3 (Students may form their own groups or assigned by teacher)\n\nStudents are informed and preprared beforehand.\n\nIn exam room",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nIntroduction to public Speaking",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "https://www.coursera.org/learn/public-speaking?specialization=public-speaking",
+   "link1-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "2",
+   "Course Introduction\nIntroduction to public Speaking",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "https://www.coursera.org/learn/public-speaking?specialization=public-speaking",
+   "link2-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "3",
+   "Course Introduction\nIntroduction to public Speaking",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "https://www.coursera.org/learn/public-speaking?specialization=public-speaking",
+   "link3-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "4",
+   "Speak to Inform: Module 123",
+   "Offline",
+   "CLO2, 3",
+   "TU",
+   "https://www.coursera.org/learn/inform-speech/home/info",
+   "link4-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "5",
+   "Speak to Inform: Module 123",
+   "Offline",
+   "CLO2, 3",
+   "TU",
+   "https://www.coursera.org/learn/inform-speech/home/info",
+   "link5-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "6",
+   "Speak to Inform: Module 123",
+   "Offline",
+   "CLO2, 3",
+   "TU",
+   "https://www.coursera.org/learn/inform-speech/home/info",
+   "link6-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "7",
+   "Speak to Inform: Module 456",
+   "Offline",
+   "CLO2, 3",
+   "TU",
+   "https://www.coursera.org/learn/inform-speech/home/info",
+   "link7-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "8",
+   "Speak to Inform: Module 456",
+   "Offline",
+   "CLO2, 3",
+   "TU",
+   "https://www.coursera.org/learn/inform-speech/home/info",
+   "link8-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "9",
+   "Speak to Inform: Module 456\nIntroduction to Assignment 1",
+   "Offline",
+   "CLO2, 3",
+   "TU",
+   "https://www.coursera.org/learn/inform-speech/home/info",
+   "link9-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "10",
+   "Speak to Inform: Assignment 1 - Deliver a five- to seven-minute speech on a topic of your choosing",
+   "Offline",
+   "CLO123",
+   "U",
+   "https://www.coursera.org/learn/inform-speech/peer/rftds/informative-speech",
+   "link10-1",
+   "1. Deliver a five- to seven minute speech on a topic in class\n2. Listen to your peers and give 3 feedbacks on three classmates",
+   ""
+  ],
+  [
+   "11",
+   "Speak to Inform: Assignment 1 - Deliver a five- to seven-minute speech on a topic of your choosing",
+   "Offline",
+   "CLO123",
+   "U",
+   "https://www.coursera.org/learn/inform-speech/peer/rftds/informative-speech",
+   "link11-1",
+   "1. Deliver a five- to seven minute speech on a topic in class\n2. Listen to your peers and give 3 feedbacks on three classmates",
+   ""
+  ],
+  [
+   "12",
+   "Speak to Inform: Assignment 1 - Deliver a five- to seven-minute speech on a topic of your choosing",
+   "Offline",
+   "CLO123",
+   "U",
+   "https://www.coursera.org/learn/inform-speech/peer/rftds/informative-speech",
+   "link12-1",
+   "1. Deliver a five- to seven minute speech on a topic in class\n2. Listen to your peers and give 3 feedbacks on three classmates",
+   ""
+  ],
+  [
+   "13",
+   "Speak to Inform: Assignment 1 (Cont) - Deliver a five- to seven-minute speech on a topic of your choosing",
+   "Offline",
+   "CLO123",
+   "U",
+   "https://www.coursera.org/learn/inform-speech/peer/rftds/informative-speech",
+   "link13-1",
+   "1. Deliver a five- to seven-minute speech on a topic in class\n2. Listen to your peers and give 3 feedbacks on three classmates",
+   ""
+  ],
+  [
+   "14",
+   "Speak to Inform: Assignment 1 (Cont) - Deliver a five- to seven-minute speech on a topic of your choosing",
+   "Offline",
+   "CLO123",
+   "U",
+   "https://www.coursera.org/learn/inform-speech/peer/rftds/informative-speech",
+   "link14-1",
+   "1. Deliver a five- to seven-minute speech on a topic in class\n2. Listen to your peers and give 3 feedbacks on three classmates",
+   ""
+  ],
+  [
+   "15",
+   "Speak to Inform: Assignment 1 (Cont) - Deliver a five- to seven-minute speech on a topic of your choosing",
+   "Offline",
+   "CLO123",
+   "U",
+   "https://www.coursera.org/learn/inform-speech/peer/rftds/informative-speech",
+   "link15-1",
+   "1. Deliver a five- to seven-minute speech on a topic in class\n2. Listen to your peers and give 3 feedbacks on three classmates",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 1: Introduction to Persuasion\nI- ntroducing persuasion​\n- Persuasion over time: constancies and changes​\n- Defining persuasion​\n- Persuasion and social media",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises, writing practice",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 1: Introduction to Persuasion\nI- ntroducing persuasion​\n- Persuasion over time: constancies and changes​\n- Defining persuasion​\n- Persuasion and social media",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises, writing practice",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 1: Introduction to Persuasion\nI- ntroducing persuasion​\n- Persuasion over time: constancies and changes​\n- Defining persuasion​\n- Persuasion and social media",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises, writing practice",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 2: Foundation of Persuasion:\n- Defining persuasion\n- Persuasion versus coercion\n- The effects of persuasion",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 2: Foundation of Persuasion:\n- Defining persuasion\n- Persuasion versus coercion\n- The effects of persuasion",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 2: Foundation of Persuasion:\n- Defining persuasion\n- Persuasion versus coercion\n- The effects of persuasion",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4: Attitudes: Definition and Structure\n- Defining attitudes\n- Attitudes, values, and beliefs",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 4: Attitudes: Definition and Structure\n- Defining attitudes\n- Attitudes, values, and beliefs",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4: Attitudes: Definition and Structure\n- Defining attitudes\n- Attitudes, values, and beliefs",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 4: Attitudes: Definition and Structure\n- The structure of attitudes\n- (In)Consistency of attitudes",
+   "Offline",
+   "CLO5",
+   "",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 4: Attitudes: Definition and Structure\n- The structure of attitudes\n- (In)Consistency of attitudes",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 4: Attitudes: Definition and Structure\n- The structure of attitudes\n- (In)Consistency of attitudes",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 6: Attitudes: Functions and Consequences\n- Functional theory of attitudes\n- Functional attitudes and persuasion",
+   "Offline",
+   "CLO6",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 6: Attitudes: Functions and Consequences\n- Functional theory of attitudes\n- Functional attitudes and persuasion",
+   "Offline",
+   "CLO6",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 6: Attitudes: Functions and Consequences\n- Functional theory of attitudes\n- Functional attitudes and persuasion",
+   "Offline",
+   "CLO6",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 6: Attitudes: Functions and Consequences\n- Attitudes and behavior​\n- Models of attitude−behavior relations​\n- Implications for persuasion​",
+   "Offline",
+   "CLO6",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 6: Attitudes: Functions and Consequences\n- Attitudes and behavior​\n- Models of attitude−behavior relations​\n- Implications for persuasion​",
+   "Offline",
+   "CLO6",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 6: Attitudes: Functions and Consequences\n- Attitudes and behavior​\n- Models of attitude−behavior relations​\n- Implications for persuasion​\nIntroduction to Assignment 2",
+   "Offline",
+   "CLO6",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "34",
+   "Assignment 2 (group work)\n- Analyze the potential attitudes people might hold towards real-life scenarios and how those attitudes might serve different functions (e.g., expressing social identity, maintaining group norms, etc.)\n- Present your finding in class",
+   "Offline",
+   "CLO 1->6",
+   "U",
+   "The Dynamic of Persuasion",
+   "",
+   "1. Deliver a 15-minute presentation on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "35",
+   "Assignment 2 (group work)\n- Analyze the potential attitudes people might hold towards real-life scenarios and how those attitudes might serve different functions (e.g., expressing social identity, maintaining group norms, etc.)\n- Present your finding in class",
+   "Offline",
+   "CLO 1->6",
+   "U",
+   "The Dynamic of Persuasion",
+   "",
+   "1. Deliver a 15-minute presentation on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "36",
+   "Assignment 2 (group work)\n- Analyze the potential attitudes people might hold towards real-life scenarios and how those attitudes might serve different functions (e.g., expressing social identity, maintaining group norms, etc.)\n- Present your finding in class",
+   "Offline",
+   "CLO 1->6",
+   "U",
+   "The Dynamic of Persuasion",
+   "",
+   "1. Deliver a 15-minute presentation on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 8: Processing Persuasive Communication\n- Historical foundations​\n- Elaboration Likelihood Model​",
+   "Offline",
+   "CLO7",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 8: Processing Persuasive Communication\n- Historical foundations​\n- Elaboration Likelihood Model​",
+   "Offline",
+   "CLO7",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 8: Processing Persuasive Communication\n- Historical foundations​\n- Elaboration Likelihood Model​",
+   "Offline",
+   "CLO7",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 8: Processing Persuasive Communication\n- Apply Elaboration Likelihood Model​ in real world scenarios\nChapter 11: Fundamental of Message\nStructure​,\nContent​",
+   "Offline",
+   "CLO7, CLO8",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 8: Processing Persuasive Communication\n- Apply Elaboration Likelihood Model​ in real world scenarios\nChapter 11: Fundamental of Message\nStructure​,\nContent​",
+   "Offline",
+   "CLO7, CLO8",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 8: Processing Persuasive Communication\n- Apply Elaboration Likelihood Model​ in real world scenarios\nChapter 11: Fundamental of Message\nStructure​,\nContent​",
+   "Offline",
+   "CLO7, CLO8",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11: Fundamental of Message\nFraming\nLanguage​\nEmotional appeals​\nAssign Projects",
+   "Offline",
+   "CLO9, CLO10",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 11: Fundamental of Message\nFraming\nLanguage​\nEmotional appeals​\nAssign Projects",
+   "Offline",
+   "CLO9, CLO10",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 11: Fundamental of Message\nFraming\nLanguage​\nEmotional appeals​\nAssign Projects",
+   "Offline",
+   "CLO9, CLO10",
+   "ITU",
+   "The Dynamic of Persuasion",
+   "",
+   "Class discussion, group work, pair work, games, exercises",
+   ""
+  ],
+  [
+   "46",
+   "Speak to Persuade\n- designing persuasive speeches\n- examining persuasive speaking through both solid argument and eloquent writing",
+   "Offline",
+   "CLO 1->10",
+   "ITU",
+   "https://www.coursera.org/learn/persuade-speech",
+   "link46-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "47",
+   "Speak to Persuade\n- designing persuasive speeches\n- examining persuasive speaking through both solid argument and eloquent writing",
+   "Offline",
+   "CLO 1->10",
+   "ITU",
+   "https://www.coursera.org/learn/persuade-speech",
+   "link47-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "48",
+   "Speak to Persuade\n- designing persuasive speeches\n- examining persuasive speaking through both solid argument and eloquent writing\nIntroduction to Assignment 3",
+   "Offline",
+   "CLO 1->10",
+   "ITU",
+   "https://www.coursera.org/learn/persuade-speech",
+   "link48-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "49",
+   "Speak to Persuade (Cont)\n- Applying powerful argumentative tools: status quo and stock issues\n- Figuring out what we need to argue (and what we don’t)",
+   "Offline",
+   "CLO 1->10",
+   "ITU",
+   "https://www.coursera.org/learn/persuade-speech",
+   "link49-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "50",
+   "Speak to Persuade (Cont)\n- Applying powerful argumentative tools: status quo and stock issues\n- Figuring out what we need to argue (and what we don’t)",
+   "Offline",
+   "CLO 1->10",
+   "ITU",
+   "https://www.coursera.org/learn/persuade-speech",
+   "link50-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "51",
+   "Speak to Persuade (Cont)\n- Applying powerful argumentative tools: status quo and stock issues\n- Figuring out what we need to argue (and what we don’t)",
+   "Offline",
+   "CLO 1->10",
+   "ITU",
+   "https://www.coursera.org/learn/persuade-speech",
+   "link51-1",
+   "- Watch videos in the link then have group work in class\n- Class discussion, group work, pair work, games, exercises, writing practice & peer review",
+   ""
+  ],
+  [
+   "52",
+   "Assignment 3 (Groupwork)\nDelivering a persuasive speech on a real-life scenario",
+   "Offline",
+   "CLO 1->10",
+   "U",
+   "https://www.coursera.org/learn/persuade-speech",
+   "",
+   "1. Deliver a 20-minute persuasive speech on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "53",
+   "Assignment 3 (Groupwork)\nDelivering a persuasive speech on a real-life scenario",
+   "Offline",
+   "CLO 1->10",
+   "U",
+   "https://www.coursera.org/learn/persuade-speech",
+   "",
+   "1. Deliver a 20-minute persuasive speech on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "54",
+   "Assignment 3 (Groupwork)\nDelivering a persuasive speech on a real-life scenario",
+   "Offline",
+   "CLO 1->10",
+   "U",
+   "https://www.coursera.org/learn/persuade-speech",
+   "",
+   "1. Deliver a 20-minute persuasive speech on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "55",
+   "Assignment 3 (Cont)\nDelivering a persuasive speech on a real-life scenario",
+   "Offline",
+   "CLO 1->10",
+   "U",
+   "https://www.coursera.org/learn/persuade-speech",
+   "",
+   "1. Deliver a 20-minute persuasive speech on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "56",
+   "Assignment 3 (Cont)\nDelivering a persuasive speech on a real-life scenario",
+   "Offline",
+   "CLO 1->10",
+   "U",
+   "https://www.coursera.org/learn/persuade-speech",
+   "",
+   "1. Deliver a 20-minute persuasive speech on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "57",
+   "Assignment 3 (Cont)\nDelivering a persuasive speech on a real-life scenario",
+   "Offline",
+   "CLO 1->10",
+   "U",
+   "https://www.coursera.org/learn/persuade-speech",
+   "",
+   "1. Deliver a 20-minute persuasive speech on a real-life scenario in class\n2. Listen to your peers and give 3 feedbacks on three groups",
+   ""
+  ],
+  [
+   "58",
+   "Project Revision",
+   "Offline",
+   "CLO 1->10",
+   "TU",
+   "",
+   "",
+   "Class discussion, group work",
+   ""
+  ],
+  [
+   "59",
+   "Project Revision",
+   "Offline",
+   "CLO 1->10",
+   "TU",
+   "",
+   "",
+   "Class discussion, group work",
+   ""
+  ],
+  [
+   "60",
+   "Project Revision",
+   "Offline",
+   "CLO 1->10",
+   "TU",
+   "",
+   "",
+   "Class discussion, group work",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

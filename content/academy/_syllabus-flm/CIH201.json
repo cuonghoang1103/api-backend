@@ -1,0 +1,1218 @@
+{
+ "ma": "CIH201",
+ "sylID": "13666",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13666",
+   "code": "CIH201",
+   "name": "Contemporary issues in hotel and tourism management_Các vấn đề đương đại ngành khách sạn, du lịch",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13666",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13666",
+  "Syllabus Name": "Contemporary issues in hotel and tourism management_Các vấn đề đương đại ngành khách sạn, du lịch",
+  "Course Name English": "Contemporary issues in hotel and tourism management",
+  "Subject Code": "CIH201",
+  "Learning-Teaching Method": "Lecture,Problem based learning,Social Constructivism,Presentation,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 105h self-study",
+  "Pre-Requisite": "HMO102",
+  "Description": "This course provides a comprehensive understanding of the evolution, transformation, and future directions of the Hospitality and Tourism industries. It highlights the interconnectedness between traditional issues—such as overtourism, crisis management, destination recovery, and the sharing economy—and emerging innovations driven by Artificial Intelligence (AI), Big Data, and sustainable practices.\n\nStudents will explore how these forces collectively shape management, marketing, and service delivery, as well as their ethical and social implications. Key themes include environmental sustainability, digital transformation, AI in guest experience design, and data-driven decision-making.\n\nThroughout the course, students will engage with AI-based platforms (e.g., ChatGPT, Perplexity AI, Excel Copilot, and Beautiful.ai) to conduct research, analyse data, and present findings through interactive formats. The course emphasizes experiential learning, collaboration, and critical reflection, helping students bridge theory and practice to develop adaptive and future-ready competencies in the global hospitality landscape.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to http://flm.fpt.edu.vn for up-to-date course information>",
+  "Tools": "Internet sources & AI tools ( Students are encouraged to use, Notion AI, SciSpace, and Elicit for self-study, concept explanation, and summarizing trends. For data analysis in hospitality, tools like Excel Copilot, Wolfram Alpha, and ChatGPT Code Interpreter help visualize industry statistics.)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "Academic journals (https://www.tandfonline.com):\n\nJournal of Hospitality and Tourism Technology, International Journal of Hospitality Management, International Journal of Contemporary Hospitality Management, Tourism Management, Journal of Sustainable Tourism, Current Issues in Tourism, Tourism Review, Annals of Tourism Research, International Journal of Tourism Cities, Journal of Destination Marketing & Management.\n\nOnline resources:\n\nhttps://www.unwto.org\n\nhttp://www.leisuretourism.com/\n\nhttps://www.cabi.org\n\nhttps://www.globalwellnesssummit.com\n\nhttps://wttc.org",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Contemporary Tourism: An International Approach (Fifth Edition)",
+   "Chris Cooper, C. Michael Hall",
+   "Goodfellow Publishers",
+   "2022",
+   "5th",
+   "978-1-915097-17-0",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Sustainability in the Hospitality Industry: Principles of Sustainable Operations",
+   "Willy Legrand, Joseph S. Chen, Gabriel C. M. Laeis",
+   "Routledge",
+   "2022",
+   "4th",
+   "9780367532505",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Artificial Intelligence for Smart Technology in the Hospitality and Tourism Industry",
+   "Vinod Kumar Shukla, Amit Verma, Jean Paolo G. Lacap",
+   "Routledge",
+   "2024",
+   "1st",
+   "9781774914908",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Group Evaluation Form for Instructor: https://drive.google.com/drive/folders/1Ewve8owoERs-gmaKt_w9yNBYAaSvkmfV",
+   "Many Sources",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "Group Evaluation Form for Others groups: https://drive.google.com/drive/folders/1Ewve8owoERs-gmaKt_w9yNBYAaSvkmfV",
+   "Many Sources",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "Individual Evaluation Form for Instructor: https://drive.google.com/drive/folders/1Ewve8owoERs-gmaKt_w9yNBYAaSvkmfV",
+   "Many Sources",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "Topics References: https://drive.google.com/drive/u/0/folders/1SXMTSL1wVXFym3pA2LiBpy7wR57PQnE3",
+   "Many Sources",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Research, identify and describe the comtempory issues of tourism and hospitality"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Interpret, discuss and debat the issues with their own arguments"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Select, evaluate reference materials and incorporate them\nappropriately into group work"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Convey understandable information to the audience and convince them with logical reasoning"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Organize interesting activities to convey ideas and concepts"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop independent thinking, analytical capacity and eloquence"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Develop brainstorming, communication, responsibility in team corporation."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Apply basic principles of artificial intelligence (AI) in hospitality and tourism to solve simple problems, and perform essential tasks using AI tools effectively."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group activities",
+   "on-going",
+   "8",
+   "60.0%",
+   ">0",
+   "Option 1: 30'Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "Option 1:Free style actitivities (Seminar, Theory review, Case study review, Workshop, Games, Quizzes, Debat, Role play, Q&A…)Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:8 activites/groupOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "The presentation must cover a specific aspect of the topic mentioned and demonstrate the integration of AI tools (such as ChatGPT, Canva AI, Gemini, Copilot, etc.) to support content creation, data analysis, visualization, or idea development.\n\nOption 2 (For Constructivism Approach only):\nFollow lecturer's proposal, encouraging students to apply AI-assisted exploration and reflection as part of their constructivist learning process.",
+   "Option 1:\nFor each topic, each group (4–6 students) will choose an aspect to introduce in different forms such as presentation, case study, workshop, discussion, quiz, games (crossword puzzles, Q&A..), role play... to convey knowledge to other groups in the class.\nStudents are encouraged to integrate AI tools (e.g., ChatGPT, Canva AI, Gemini, Copilot, or other generative AI applications) to support research, idea generation, content creation, visual design, data visualization, or simulation activities during preparation and presentation.\nWith controversial topics, teams can conduct a 1–1 debate on an issue, optionally using AI to simulate arguments, gather contrasting perspectives, or analyze bias.\n\nEach topic lasts 3–4 slots:\n\nSlot 1: General understanding of topics and topic selection by groups.\n\nSlot 2: Groups work, discuss, and use AI tools for research and content development.\n\nSlots 3–4: Group presentations and peer learning.\n\nScoring recommended (see evaluation forms):\n\n50% by lecturer (50% group, 50% individual)\n\n50% by other groups\n\nOption 2 (For Constructivism Approach only):\nFollow lecturer's proposal, with an emphasis on AI-assisted exploration and reflection, where students co-construct knowledge using digital and AI-supported inquiry tools.",
+   "Option 1:\nIndividual and Team-based\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: During all courseOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1:Each student shoud make at least 1 individual presentation/ case analysis during the course in front of the classOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "NA",
+   "",
+   "Option 1:\nParticipation grade will be given based on students' preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments. Class preparation and pre-reading before lecture will be assessed upon individuals' understanding and ability to answer questions in the class. Individuals will be called up randomly to be assessed.\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Individual\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "3",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "CLO1",
+   "MCQs",
+   "50 MCQs",
+   "All topics",
+   "The final exam accounts for 30% of the total grade, consisting of multiple-choice questions that assess students’ comprehensive understanding of all course topics.\nIt covers both traditional issues (overtourism, crisis management, recovery, sharing economy) and emerging trends (AI, Big Data, sustainability, innovation, and digital transformation) shaping the future of the hospitality and tourism industry.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the course:\n-The course learning outcomes\n-Schedule guidlines: 8 topics\n-Grading structure guidlines\n-Group activities guidlines\n-Teaching and learning method",
+   "Offline",
+   "CLO1,CLO2",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "– Students discuss using AI tools (ChatGPT, facial recognition, robot concierge, etc.)\n– Each student selects 1 hotel/brand applying AI & Prepare a 1-slide showcase.\n\n– Traditional service vs. Smart service: Which offers better guest experience? ( debate activity)\n\n– Design a “Smart Hotel of the Future” (use Canva/AI tools).\n\nReflection Task – Submit a short post on LMS: \"How would I feel staying in an AI-powered hotel?\"",
+   ""
+  ],
+  [
+   "2",
+   "Topic 1: Smart Hospitality: AI Applications in Hotel & Comtemparary in Tourism ( global tourism trends, emerging challenges, and management responses in a changing industry; sustainability, SIT, specialty tourism)",
+   "Offline",
+   "CLO1,CLO2",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "-Make the team, discuss the whole topic and choose a sub-topic or a case study to dig deeper.\n-Identify and describe various AI technologies used in the hospitality industry, demonstrate understanding of how AI innovations influence customer experience and service efficiency, develop critical thinking and teamwork through collaborative idea exchange.",
+   ""
+  ],
+  [
+   "3",
+   "Topic 1 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "-Information research\n-Discuss the selected topic and make the plan for Activity 1.\n-Self-study after class: 5.2h",
+   ""
+  ],
+  [
+   "4",
+   "Topic 1 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "-Information research\n-Discuss the selected topic and make the plan for Activity 1.",
+   ""
+  ],
+  [
+   "5",
+   "Topic 1 (cont)\nActivity 1",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "Activities in class - presentation",
+   ""
+  ],
+  [
+   "6",
+   "Topic 1 (cont)\nActivity 1",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "Activities in class - presentation\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "7",
+   "Topic 1 (cont)\nActivity 1",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "Activities in class - presentation",
+   ""
+  ],
+  [
+   "8",
+   "Topic 1 (cont)\nActivity 1",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "Activities in class - presentation",
+   ""
+  ],
+  [
+   "9",
+   "Topic 2: Tourism and Sustainable Development\n-What is sustainable?\n-What is sustainable development? ( tourism and hospitality)",
+   "Offline",
+   "CLO1,CLO2",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "– Kahoot/Quizizz on SDGs & key concepts.\n\n– Choose one of the 17 SDGs & Analyze how tourism can contribute.\n\n– Compare two green hotels (e.g., Six Senses vs. a local brand).\n\n– Make a poster/pitch for a sustainable tourism campaign using AI tools.\n\nReflection – Write about your lifestyle changes if you were a green traveler.\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "10",
+   "Topic 2: Tourism and Sustainable Development\nThe 17 SGDs?\n-What is sustainable tourism development?\n+Biodiversity\n+Climate Action\n+Global Tourism Plastics Initiative\n+Hotel Energy Solutions\n+Resource Efficiency\n+Travel facilitation\n-Eco tourism",
+   "Offline",
+   "CLO1,CLO2",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "11",
+   "Topic 2 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "-Discuss the selected topic and make the plan for Activity 2",
+   ""
+  ],
+  [
+   "12",
+   "Topic 2 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "-Discuss the selected topic and make the plan for Activity 2\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "13",
+   "Topic 2 (cont)\nActivites 2",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "14",
+   "Topic 2 (cont)\nActivites 2",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "15",
+   "Topic 2 (cont)\nActivites 2",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "16",
+   "Topic 2 (cont)\nActivites 2",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 4,Chapter 10 ; Reference Sustainability in the hospitality industry: Chapter 1.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "17",
+   "Topic 3: Contemporary Tourism Marketing_ Contemporary tourism product ( tourism product, tourism product life cycle, experience economy)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 1; Reference AI for Smart Technology: Chapter 1.",
+   "",
+   "– Group mind map of modern vs traditional marketing.\n\n– Design a tourism product life cycle (TPLC) using a case (e.g., Bana Hills).\n\n– Create 1 Instagram Reel or TikTok marketing a niche product.\n\n– 2-min elevator pitch for a tourism startup using digital storytelling. ( apply AI tools)\n\nQuiz – MCQs on tourism product, marketing funnel, consumer behavior.",
+   ""
+  ],
+  [
+   "18",
+   "Topic 3: Contemporary Tourism Marketing_ Contemporary tourism product ( Comtemporary tourism marketing approaches, marketing thought, social media in tourism, changing consumer behavior in the digital era)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 1 , Chapter 4; Reference AI for Smart Technology: Chapter 1, Chapter 6.",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "19",
+   "Topic 3 (cont)\nActivites 3",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1 , Chapter 4; Reference AI for Smart Technology: Chapter 1, Chapter 6.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "20",
+   "Topic 3 (cont)\nActivites 3",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1 , Chapter 4; Reference AI for Smart Technology: Chapter 1, Chapter 6.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "21",
+   "Topic 3 (cont)\nActivites 3",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1 , Chapter 4; Reference AI for Smart Technology: Chapter 1, Chapter 6.",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "22",
+   "Topic 3 (cont)\nActivites 3",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 1 , Chapter 4; Reference AI for Smart Technology: Chapter 1, Chapter 6.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "23",
+   "Topic 4: Contemporary in tourism product market ( experience economy)",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "– Students analyze a themed tourism product (e.g., Ký ức Hội An).\n\n– Draw a “customer journey map” from booking to review.\n\n– Design an “experiential package” (e.g., wellness, cultural retreat).\n\n– Role-play: Travel agent – Customer – Service provider.\n\n– “What was your most unforgettable travel experience and why?”",
+   ""
+  ],
+  [
+   "24",
+   "Topic 4: Contemporary in tourism product market ( experience economy)",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "Read the text book and discuss casestudy\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "25",
+   "Topic 4 (cont)\nActivites 4",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "26",
+   "Topic 4 (cont)\nActivites 4",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "27",
+   "Topic 4 (cont)\nActivites 4",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "28",
+   "Topic 4 (cont)\nActivites 4",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "-Information research\n-Discuss the selected topic and make the plan for Activity 4",
+   ""
+  ],
+  [
+   "29",
+   "Topic 4 (cont)\nActivites 4",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "30",
+   "Topic 4 (cont)\nActivites 4",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 2 , Chapter 12; Reference AI for Smart Technology: Chapter 7, Chapter 18.",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "31",
+   "Topic 5: Sharing economy & New business model ( case study Airbnb)",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "“Airbnb helps or hurts local culture?” (with real data).\n\n– Build a mockup of a peer-to-peer travel service using Canva/AI.\n\n– Students design Business model canvas for a new sharing economy startup.\n\n– Compare regulations of Airbnb in 2 different countries/cities.\n\nQuiz – MCQs on pros/cons of sharing economy, platformization, trust economy.",
+   ""
+  ],
+  [
+   "32",
+   "Topic 5: Sharing economy & New business model ( The globalising contemporary tourism\nindustry)",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "-Read reference list\n-Make the team, discuss the whole topic and choose a sub-topic or a case study to dig deeper.\n-The aim is that the group will then, by its creative activities, convey the knowledge they have collected on the sub-topic to other members of the class.",
+   ""
+  ],
+  [
+   "33",
+   "Topic 5 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "Read the text book and discuss casestudy\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "34",
+   "Topic 5 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "35",
+   "Topic 5 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "36",
+   "Topic 5 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "37",
+   "Topic 5 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "38",
+   "Topic 5 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 11; Reference AI for Smart Technology: Chapter 3, Chapter 7, Chapter 10.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "39",
+   "Topic 6: AI-driven Data Analytics in Hospitality ( how technology is transforming core hotel functions, strategic decision‑making; consumer behaviour, marketing, operations, IT and analytics)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 12; Reference AI for Smart Technology: Chapter 3, Chapter 11, Chapter 12.",
+   "",
+   "– Watch short video on RMS & RevPAR and discussion.\n\n– Use sample Excel dataset (occupancy, rates) & draw insights.\n\n– Students simulate dynamic pricing using ChatGPT/Excel Copilot.\n\n– Present how hotels can use data analytics in operations (check-in, upselling).\n\n– “Would you trust AI to choose your hotel room?”\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "40",
+   "Topic 6: AI-driven Data Analytics in Hospitality( casestudy)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 12; Reference AI for Smart Technology: Chapter 3, Chapter 11, Chapter 12.",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "41",
+   "Topic 6 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 12; Reference AI for Smart Technology: Chapter 3, Chapter 11, Chapter 12.",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "42",
+   "Topic 6 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 12; Reference AI for Smart Technology: Chapter 3, Chapter 11, Chapter 12.",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "43",
+   "Topic 6 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 12; Reference AI for Smart Technology: Chapter 3, Chapter 11, Chapter 12.",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "44",
+   "Topic 6 (cont)\nActivities",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 12; Reference AI for Smart Technology: Chapter 3, Chapter 11, Chapter 12.",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "45",
+   "Topic 7: Overtourism\n- Definition, concept & Features\n- Benefits of Community Tourism",
+   "Offline",
+   "CLO1,CLO2",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "– Analyze a city facing overtourism (e.g., Venice, Đà Lạt).\n\n– Identify community-based tourism sites in Vietnam.\n\n– “Tourism is good for the community” – Agree or Disagree?\n\nShort Quiz – Concepts of CBT, overtourism, labor redistribution.\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "46",
+   "Topic 7: Overtourism\n- How can develop the community tourism ?\n- Some new concepts of Community Tourism\n- Community Tourism and its impacts on restructuring and redistributing of labor",
+   "Offline",
+   "CLO1,CLO2",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "47",
+   "Topic 7 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "Read the text book and discuss casestudy",
+   ""
+  ],
+  [
+   "48",
+   "Topic 7 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "Read the text book and discuss casestudy\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "49",
+   "Topic 7 (cont)\nActitivies 7",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "50",
+   "Topic 7 (cont)\nActitivies 7",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "51",
+   "Topic 7 (cont)\nActitivies 7",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "52",
+   "Topic 7 (cont)\nActitivies 7",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 11, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 3, Chapter 16",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "53",
+   "Topic 8: Designing the Future Hotel: Technology, Wellness, and Experience & Crisis Management and Tourism Recovery",
+   "Offline",
+   "CLO1,CLO2",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "– Students ideate future hotel features (tech + wellness).\n\n– Analyze hotel response to COVID-19 (Marriott, Accor, etc.).\n\n– Simulate crisis (earthquake, war, data breach) → hotel response.\n\n– Use Beautiful.ai to create “Hotel of 2030” concept deck.\n\n– Students write personal learning summary across 8 topics.",
+   ""
+  ],
+  [
+   "54",
+   "Topic 8: Designing the Future Hotel: Technology, Wellness, and Experience & Crisis Management and Tourism Recovery",
+   "Offline",
+   "CLO1,CLO2",
+   "ITU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "-Read reference list\n-Make the team, discuss the whole topic and choose a sub-topic or a case study to dig deeper.\n-The aim is that the group will then, by its creative activities, convey the knowledge they have collected on the sub-topic to other members of the class.\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "55",
+   "Topic 8 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "-Information research\n-Discuss the selected topic and make the plan for Activity 8\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "56",
+   "Topic 8 (cont)\nGroup discussion and working",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "-Information research\n-Discuss the selected topic and make the plan for Activity 8",
+   ""
+  ],
+  [
+   "57",
+   "Topic 8 (cont)\nActitivies 8",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "Activities in class\nSelf-study after class: 5.2h",
+   ""
+  ],
+  [
+   "58",
+   "Topic 8 (cont)\nActitivies 8",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "Activities in class",
+   ""
+  ],
+  [
+   "59",
+   "Topic 8 (cont)\nActitivies 8",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "Review",
+   ""
+  ],
+  [
+   "60",
+   "Topic 8 (cont)\nActitivies 8",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6, CLO7,CLO8",
+   "TU",
+   "Textbook Contemporary Tourism : Chapter 3,Chapter 13, Chapter 7; Reference Sustainability in the hospitality industry: Chapter 4, Chapter 6; Reference AI for Smart Technology: Chapter 4, Chapter 6, Chapter 14",
+   "",
+   "Review\nSelf-study after class: 5.2h",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "4",
+   "CQ1",
+   "What are the advantages of using AI-powered chatbots over human receptionists in hotels?"
+  ],
+  [
+   "2",
+   "5",
+   "CQ1",
+   "How does facial recognition enhance or threaten guest privacy in hotel operations?"
+  ],
+  [
+   "3",
+   "6",
+   "CQ1",
+   "What ethical concerns arise from voice assistants in guest rooms?"
+  ],
+  [
+   "4",
+   "7",
+   "CQ1",
+   "In what ways can AI personalize guest experiences during a hotel stay?"
+  ],
+  [
+   "5",
+   "8",
+   "CQ1",
+   "How do different generations (Gen Z, Millennials, Boomers) respond to AI in hospitality?"
+  ],
+  [
+   "6",
+   "9",
+   "CQ1",
+   "What are the limitations of AI in handling complex guest service scenarios?"
+  ],
+  [
+   "7",
+   "13",
+   "CQ1",
+   "How can hotels maintain a human touch in a highly automated environment?"
+  ],
+  [
+   "8",
+   "13",
+   "CQ2",
+   "Compare the check-in process in traditional vs. smart hotels."
+  ],
+  [
+   "9",
+   "14",
+   "CQ1",
+   "Which AI tools would you integrate into a boutique hotel with limited staff?"
+  ],
+  [
+   "10",
+   "14",
+   "CQ2",
+   "Design a seamless AI-driven guest journey from booking to check-out."
+  ],
+  [
+   "11",
+   "15",
+   "CQ1",
+   "What are the environmental impacts of traditional hotel operations?"
+  ],
+  [
+   "12",
+   "15",
+   "CQ2",
+   "How can IoT devices help reduce energy and water usage in hotels?"
+  ],
+  [
+   "13",
+   "19",
+   "CQ1",
+   "How do green certifications influence customer booking decisions?"
+  ],
+  [
+   "14",
+   "20",
+   "CQ1",
+   "What are the most cost-effective sustainability practices for small hotels?"
+  ],
+  [
+   "15",
+   "21",
+   "CQ1",
+   "How can hotels balance sustainability with profitability?"
+  ],
+  [
+   "16",
+   "25",
+   "CQ1",
+   "What are the common challenges when implementing green practices in hospitality?"
+  ],
+  [
+   "17",
+   "26",
+   "CQ1",
+   "How do sustainable operations contribute to brand loyalty?"
+  ],
+  [
+   "18",
+   "27",
+   "CQ1",
+   "How is climate change reshaping travel patterns globally?"
+  ],
+  [
+   "19",
+   "28",
+   "CQ1",
+   "What types of destinations are most vulnerable to climate change?"
+  ],
+  [
+   "20",
+   "29",
+   "CQ1",
+   "How can heritage sites adapt to rising sea levels and heat?"
+  ],
+  [
+   "21",
+   "30",
+   "CQ1",
+   "What are some examples of climate-resilient tourism infrastructure?"
+  ],
+  [
+   "22",
+   "34",
+   "CQ1",
+   "What role do tourists play in contributing to carbon emissions?"
+  ],
+  [
+   "23",
+   "35",
+   "CQ1",
+   "How can DMOs encourage low-impact travel behaviors?"
+  ],
+  [
+   "24",
+   "36",
+   "CQ1",
+   "What makes platforms like Airbnb more appealing than traditional hotels?"
+  ],
+  [
+   "25",
+   "37",
+   "CQ1",
+   "How has the rise of Couchsurfing impacted local tourism economies?"
+  ],
+  [
+   "26",
+   "38",
+   "CQ1",
+   "In what ways has the sharing economy disrupted hotel business models?"
+  ],
+  [
+   "27",
+   "39",
+   "CQ1",
+   "What legal and safety concerns do sharing platforms face?"
+  ],
+  [
+   "28",
+   "39",
+   "CQ2",
+   "How can traditional hotels respond to the rise of the sharing economy?"
+  ],
+  [
+   "29",
+   "43",
+   "CQ1",
+   "Compare the customer journey between a guest at a 5-star hotel vs. Airbnb."
+  ],
+  [
+   "30",
+   "43",
+   "CQ2",
+   "What is the economic impact of Grab and ride-sharing on city tourism?"
+  ],
+  [
+   "31",
+   "44",
+   "CQ1",
+   "Propose a new tourism-related service in the sharing economy."
+  ],
+  [
+   "32",
+   "44",
+   "CQ2",
+   "How does trust work in peer-to-peer accommodation?"
+  ],
+  [
+   "33",
+   "45",
+   "CQ1",
+   "Should governments regulate Airbnb more strictly?"
+  ],
+  [
+   "34",
+   "45",
+   "CQ2",
+   "How does predictive analytics improve hotel room pricing?"
+  ],
+  [
+   "35",
+   "45",
+   "CQ3",
+   "What are the core components of a Revenue Management System (RMS)?"
+  ],
+  [
+   "36",
+   "49",
+   "CQ1",
+   "How can hotels use AI to forecast demand and avoid overbooking?"
+  ],
+  [
+   "37",
+   "50",
+   "CQ1",
+   "What external data sources (weather, holidays, events) should RMS integrate?"
+  ],
+  [
+   "38",
+   "51",
+   "CQ1",
+   "How does AI help in managing seasonal pricing strategies?"
+  ],
+  [
+   "39",
+   "52",
+   "CQ1",
+   "What ethical risks exist when AI sets prices in real-time?"
+  ],
+  [
+   "40",
+   "53",
+   "CQ1",
+   "Evaluate the ROI of adopting RMS in a small family-run hotel."
+  ],
+  [
+   "41",
+   "54",
+   "CQ1",
+   "What KPIs should hotels track when using AI for revenue optimization?"
+  ],
+  [
+   "42",
+   "58",
+   "CQ1",
+   "How can data analytics personalize marketing for repeat customers?"
+  ],
+  [
+   "43",
+   "58",
+   "CQ2",
+   "Design a dashboard showing revenue data insights for hotel managers."
+  ],
+  [
+   "44",
+   "59",
+   "CQ1",
+   "What are the visible signs of overtourism in popular cities like Venice or Bali?"
+  ],
+  [
+   "45",
+   "59",
+   "CQ2",
+   "How does overtourism affect local communities’ quality of life?"
+  ],
+  [
+   "46",
+   "60",
+   "CQ1",
+   "What technology can help monitor and manage tourist flow?"
+  ],
+  [
+   "47",
+   "60",
+   "CQ2",
+   "What role does social media play in creating overtourism?"
+  ]
+ ],
+ "links": []
+}

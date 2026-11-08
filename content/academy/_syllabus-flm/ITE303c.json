@@ -1,0 +1,338 @@
+{
+ "ma": "ITE303c",
+ "sylID": "12627",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12627",
+   "code": "ITE303c",
+   "name": "Ethics in IT_Đạo đức trong CNTT",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12627",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12627",
+  "Syllabus Name": "Ethics in IT_Đạo đức trong CNTT",
+  "Course Name English": "Ethics in IT",
+  "Subject Code": "ITE303c",
+  "Learning-Teaching Method": "Blended,Online,Active learning, Discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 50h online + 3h offline + 1h final exam + 96h self-study",
+  "Pre-Requisite": "",
+  "Description": "As machine learning models begin making important decisions based on massive datasets, we need to be aware of their limitations. In this specialization, we will explore the rise of algorithms, fundamental issues of fairness and bias in machine learning, and basic concepts involved in security and privacy of machine learning projects. We'll finish with a study of 3 projects that will allow you to put your new skills into action.",
+  "StudentTasks": "Student must get the certification of Ethics in the Age of AI Specialization from Coursera to be accepted to the final examination",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1. Final Exam included Final Theory Exam (TE): 100%\n\n2. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n3.Completion Criteria: Final TE Score >=4 & (Final TE Score + bonus) >= 5\n\n4. Complete the online courses and get all specialization certifications to be allowed to take Final Exam",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "MOOC 1: Artificial Intelligence Algorithms Models and Limitations",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/ai-algorithm-limitations?specialization=ethics-in-ai"
+  ],
+  [
+   "2",
+   "MOOC 2: Artificial Intelligence Data Fairness and Bias",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/ai-data-bias?specialization=ethics-in-ai"
+  ],
+  [
+   "3",
+   "MOOC 3: Artificial Intelligence Privacy and Convenience",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/ai-privacy-and-convenience?specialization=ethics-in-ai"
+  ],
+  [
+   "4",
+   "MOOC 4: Artificial Intelligence Ethics in Action",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/ai-ethics-analysis?specialization=ethics-in-ai"
+  ],
+  [
+   "5",
+   "Help Articles",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://www.coursera.support/s/article/208280036-Coursera-Code-of-Conduct?language=en_US"
+  ],
+  [
+   "6",
+   "Ethics in the Age of AI Specialization",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "https://www.coursera.org/specializations/ethics-in-ai"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the rise of algorithms, from the most basic to the fully autonomous, and discuss the trajectory of artificial intelligence and the broader implications for society as well"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Explore fundamental issues of fairness and bias in machine learning and many aspects of building more ethical models"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Explore fundamental concepts involved in security and privacy of machine learning projects and affects user privacy and transparency now and in the future while creating useful predictive models."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Able to apply bias and fairness analysis and skills in a real world or a fictional scenario"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 4-5 questions.",
+   "by exam board,\n\nusing computer",
+   "Customized from the quizzes of this specialization.\n\n1st Evaluation: For students who completed & got Coursera's specialization certificates (Option at week 9);\n\n2nd Evaluation: For students who completed & got Coursera's specialization certificates) at week 13;\n\n3rd Evaluation: For students who completed & got Coursera's specialization certificates) at week 14."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Specialization Introduction\n\nArtificial Intelligence Algorithms Models and Limitations\n\n- Define Algorithms and Identify how learning algorithms are used in everyday life\n\n- Identify the basic mechanics of machine learning\n\n- Observe how machine learning is used by companies\n\n- Define Predictive Modeling\n\n- Identify the goals in model accuracy\n\n- Analyze limitations in predictive models\n\n- Identify how models in production can hurt more than help\n\n- Analyze how companies use predictive models",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1, 2 of the course\n\nArtificial Intelligence Algorithms Models and Limitations",
+   ""
+  ],
+  [
+   "2",
+   "- Identify the differences between classic and optimized training datasets\n\n- Demonstrate the concept of training data as a mirror\n\n- Identify potential sacrifices in obtaining accurate models\n\n- Summarize the methodology for building accurate predictive models\n\n- Explain machine learning training and accuracy guidelines",
+   "Online",
+   "CLO1",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 3 of the course Artificial Intelligence Algorithms Models and Limitations",
+   ""
+  ],
+  [
+   "3",
+   "- Summarize moral quandaries with artificial general intelligence\n\n- Describe the economic benefits and consequences of artificial general intelligence\n\n- Contrast current vs future machine learning practices\n\n- Define general vs narrow intelligence\n\n- Analyze the trajectory of machine learning and AI research",
+   "Online",
+   "CLO1",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "- Complete Week 4 of the course Artificial Intelligence Algorithms Models and Limitations",
+   ""
+  ],
+  [
+   "4",
+   "Artificial Intelligence Data Fairness and Bias\n\n- Compare examples of algorithmic fairness\n\n- Identify the constraints of fairness and accuracy in ethical models\n\n- Analyze tradeoffs when choosing who to protect from algorithmic bias\n\n- Compare different measures of parity\n\n- Define fairness in the context of machine learning",
+   "Online",
+   "CLO2",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1 of the course Artificial Intelligence Data Fairness and Bias",
+   ""
+  ],
+  [
+   "5",
+   "Artificial Intelligence Data Fairness and Bias\n\n- Discover auditing model attributes\n\n- Appraise a predictive model for fairness issues\n\n- Identify how to recognize fairness issues and deploy solutions in real-world scenarios\n\n- Define pareto curves and identify where they're used in machine learning\n\n- Explain how to use fairness as a modeling concept",
+   "Online",
+   "CLO2",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 2 of the course Artificial Intelligence Data Fairness and Bias",
+   ""
+  ],
+  [
+   "6",
+   "- Identify the effects of game theory on algorithmic behavior\n\n- Analyze methods to avoid predictive bias\n\n- Examine the ability of algorithms to influence and decide human behavior in biased ways\n\n- Identify potential bias errors in creating model attributes\n\n- Define common sources of bias in data collection",
+   "Online",
+   "CLO2",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "- Complete Week 3 of the course Artificial Intelligence Data Fairness and Bias",
+   ""
+  ],
+  [
+   "7",
+   "Artificial Intelligence Privacy and Convenience\n\n- Define privacy in the context of machine learning\n\n- Define k-anonymity\n\n- Identify issues of privacy in anonymous datasets\n\n- Analyze algorithmic privacy violations\n\nIdentify vulnerabilities in public datasets",
+   "Online",
+   "CLO3",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1 of the course Artificial Intelligence Privacy and Convenience",
+   ""
+  ],
+  [
+   "8",
+   "Artificial Intelligence Privacy and Convenience\n\n- Define data minimization\n\n- Identify ways to maximize privacy and security of datasets\n\n- Define differential privacy\n\n- Summarize techniques used in differential privacy",
+   "Online",
+   "CLO3",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 2 of the course Artificial Intelligence Privacy and Convenience",
+   ""
+  ],
+  [
+   "9",
+   "- Analyze the concepts involved in creating transparent, explainable AI\n\n- Evaluate tradeoffs involved in ethical model production\n\n- Compare explainable models with black box models for trust and accountability\n\n- Formulate an ethical model using privacy and fairness considerations\n\n- Explore how explainable models can improve group outcomes using game theory",
+   "Online",
+   "CLO3",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "- Complete Week 3 of the course Artificial Intelligence Privacy and Convenience",
+   ""
+  ],
+  [
+   "10",
+   "Artificial Intelligence Ethics in Action\n\n- Examining bias in a predictive text model\n\n- Apply bias and fairness analysis skills in a real world scenario",
+   "Online",
+   "CLO4",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1 of the course Artificial Intelligence Ethics in Action",
+   ""
+  ],
+  [
+   "11",
+   "Artificial Intelligence Ethics in Action\n\n- Understanding fairness issues with sensitive predictions\n\n- Apply bias and fairness analysis skills in a real world scenario",
+   "Online",
+   "CLO4",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 2 of the course Artificial Intelligence Ethics in Action",
+   ""
+  ],
+  [
+   "12",
+   "Artificial Intelligence Ethics in Action\n\n- Predicting ethical issues before they arise in model theory\n\n- Apply game theory fairness analysis and skills in a fictional scenario\n\nCourse 4 Review",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "- Complete Week 3 of the course Artificial Intelligence Ethics in Action\n\n- Deadline of Coursera Completion: End of Friday of the week.\n\nAll Students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

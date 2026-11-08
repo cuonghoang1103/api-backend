@@ -1,0 +1,273 @@
+{
+ "ma": "HOD102c",
+ "sylID": "14139",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14139",
+   "code": "HOD102c",
+   "name": "Design History_Lịch sử thiết kế",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14139",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14139",
+  "Syllabus Name": "Design History_Lịch sử thiết kế",
+  "Course Name English": "Design History",
+  "Subject Code": "HOD102c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "2",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 68h online + 3h offline + 1h Final exam + 78 self-study",
+  "Pre-Requisite": "None",
+  "Description": "The course \"History of Design\" explores the formation and evolution of design through various historical periods, from the Stone Age to contemporary movements. Situated at the intersection of art and science, the course provides students with a deep understanding of shifts in style, technology, and aesthetic perspectives over time, fostering an awareness of the cultural and social values that shape design.\nThe course aims to equip students with foundational knowledge of the history and progression of design schools, while encouraging analytical and critical thinking within a historical context. Consequently, students can leverage these historical insights to identify, evaluate, and apply appropriate design elements to their future projects.",
+  "StudentTasks": "1. Join the online course(s) when being invited by the admin.\n2. Enroll in the courses, regularly study the course at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n4. Keep up with online learning progress (bonus will be awarded)\n5. Communicate and discuss in forum\n6. Attend offline sessions in the Campus (Optional)\n7. Must complete the course(s) with certification(s) in order to take the Final Exam at Campus",
+  "Tools": "Computer\nInternet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n2) Theoretical Exam (TE)\n3) Final Result (FR) = min (10, TE + Bonus)\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/design-history#modules",
+   "",
+   "FPT",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Design History (68h)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "(Basic knowledge) Summarize the development process of Design history; Identify and describe the main stakes concerned wwith design styles and movements."
+  ],
+  [
+   "2",
+   "CLO2",
+   "(Research skills) Understand the contexts of the main styles and movements in Design history, which related to important inventions in manufactures, significant events on the market, talented and pioneering designers."
+  ],
+  [
+   "3",
+   "CLO3",
+   "(Critical thinking). Analyze and evaluate critically the records of the past in Design History."
+  ],
+  [
+   "4",
+   "CLO4",
+   "(Communication skills) Study optional cases in Design history, organize and express the individual thoughts clearly and coherently both in orally (presentations) and writing (assignments/essays)"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All LOs",
+   "Multiple choice and case study",
+   "50",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "(Off-line 1.5h)\nIntroduction to the online course Introduction to the general concept of Design: Products, Designers and Design disciplines",
+   "Online, Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "The Story of Design",
+   "",
+   "Enroll in the specialization on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "2",
+   "Course 1: Introduction and the Early Origins of Design\n• Lesson 1: Introduction to the lecturer and the course\n• Lession 2: Design basic and furthermore\n• Lession 3: The Prehistoric Tools of the Three Ages\n• Lession 4: The Ancient world and the birth of mass production\n• Lession 5: Design basic and China’s first emperor and the power of mass production",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "3",
+   "Course 2: Design and Craftsmanship from the Middle Ages to the Eighteenth Century\n• Lesson 1: Medieval inventions and the guild system\n• Lession 2: Design basic and furthermoreRenaissance men: The design thinker, the printer, and the goldsmith\n• Lession 3: Functional wares and basic tools\n• Lession 4: The high style of the eighteenth century: from Chippendale to Adam",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "4",
+   "Course 3: The Age of Reason to a new system of rationalized production\n• Lesson 1: The Enlightenment and Neoclassicism\n• Lession 2: Steam power and the engines of change; Improved materials and precision tooling\n• Lession 3: The Portsmouth Block Mills; Coalbrookdale and Wedgwood\n• Lession 4: Biedermeier and Michael Thonet\n• Lession 5: Eli Whitney: standardization, and interchangeability; Samuel Colt and the art of marketing\n• Lession 6: The American system, from sewing machines to bicycles",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "5",
+   "Course 4: The New Industrial age to the winds of reform\n• Lesson 1: The Legacy of All Nations: From Exhibition to Crystal Palace\n• Lession 2: The Gothic Revival vs. The High Victorian: Honesty in Design\n• Lession 3: From Pre-Raphaelitism to Arts and Crafts: The Vision of William Morris\n• Lession 4: Aesthetic Ideals: Truth, Beauty, and Power in the Age of Christopher Dresser",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "6",
+   "Course 5: The New Art to Art Nouveau\n• Lesson 1: National Romanticism\n• Lession 2: The Arts and Crafts movement in Britain\n• Lession 3: The Arts and Crafts Movement in America\n• Lession 4: The Art Nouveau style\n• Lession 5: Jugendstil\n• Lession 6: The Vienna Secession and the Wiener Werkstatte",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ],
+  [
+   "7",
+   "Course 6: Putting Theory into practice to the American system and Fordism\n• Lesson 1: Adolf Loos, “Ornament and Crime”\n• Lession 2: The Deutscher Werkbund\n• Lession 3: Peter Behrens and AEG\n• Lession 4: Thomas Edison and the birth of the electric age\n• Lession 5: The Wright brothers, Henry Ford and the moving assembly line\n• Lession 6: Design in World War I",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "8",
+   "Course 7: Art Deco and Interpretations of Modern Styles\n• Lesson 1: De Stijl, Russian Constructivism and Weimar Bauhaus\n• Lession 2: The 1925 Paris Exposition: from Art Deco to Modernism; The Maison de Verre and tubular metal\n• Lession 3: The interpretations of Modernism: Scandinavia, British and Italy\n• Lession 4: Art Deco: from boom to bust\n• Lession 5: Moderne in the Design Decade\n• Lession 6: Restyling, planned obsolence, and the world of tomorrow",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "9",
+   "Course 8: Design for war to reconstruction and a spirit of optimism\n• Lesson 1: Home Front Innovations: British and American Design during Wartime\n• Lession 2: Homemaking and the designed American Dream\n• Lession 3: Good design; Anthropometrics and Organic Design\n• Lession 4: The reconstruction of Italy and the flowering of Italian design\n• Lession 5: Good form of the West German and Japanese postwar\n• Lession 6: Postwar Britain and the Scandinavian approaches",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "10",
+   "Course 9: Pop design to rationalism versus craft\n• Lesson 1: The Plastic Age and Design goes Pop\n• Lession 2: Space age vision and Radical Design\n• Lession 3: Eco- awareness and product morality\n• Lession 4: High-Tech, Craft Revival, and Ergonomics\n• Lession 5: Radical Design reemerges\n• Lession 6: The Electronics ages",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the modules/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "11",
+   "Course 10: Postmodernism to universal solutions versus creative individuality.\n• Lesson 1: From Memphis to Creative Salvage: Redefining Postmodern Design\n• Lession 2: Designing for the Future: Philippe Starck, Brand Power, and the Digital Revolution\n• Lession 3: Global Design Icons: The Apple Factor and the Era of Smart Design\n• Lession 4: New Dutch Design - Art, and Innovation\n• Lession 5: Design Art Meets 3D Printing and Sustainability\n• Lession 6: Design in the Age of Artificial Intelligence",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "The Story of Design",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "12",
+   "(Off-line 1.5h)\n• Review Design Timeline\n• Ai in Design\nDeadline of Coursera completion: End of Friday of the week.",
+   "Online, Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "I,T,U",
+   "The Story of Design",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

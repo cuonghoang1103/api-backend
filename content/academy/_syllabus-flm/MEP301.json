@@ -1,0 +1,1127 @@
+{
+ "ma": "MEP301",
+ "sylID": "14489",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14489",
+   "code": "MEP301",
+   "name": "Multimedia Production Project_Dự án sản xuất sản phẩm TTĐPT",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14489",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14489",
+  "Syllabus Name": "Multimedia Production Project_Dự án sản xuất sản phẩm TTĐPT",
+  "Course Name English": "Multimedia Production Project",
+  "Subject Code": "MEP301",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Cooperative Learning,Discussion,Groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 105h self-study",
+  "Pre-Requisite": "AVP201 or MPR201 or SDP201",
+  "Description": "This course will describe five primary stages in a multimedia project and determine the scope of a multimedia project. These may include phases, tasks, costs, timelines, and elements of a multimedia project proposal.\n\nStudents will learn how to apply artificial intelligence (AI) tools and digital technologies to enhance project performance. They will use these tools to optimize content creation, streamline workflows, and improve project management across multimedia projects.\n\nIn addition, this course gives students opportunities to practice working on a real-life project.\n\nThe lecturer will use several teaching methods, such as conducting group discussions and sharing fieldwork experience, in addition to regular teaching. Students will have the chance to present their work as well as their thinking process related to the project.",
+  "StudentTasks": "- Attend at least 80% of class hours to be accepted for the final examination.\n\n- Actively participate in class activities.\n\n- Fulfill tasks given by the instructor after class.\n\n- Use their own laptop in class only for learning purposes.\n\n- Read the textbook in advance\n\n- Access the course website (www.cms.fpt.edu.vn) for up-to-date information, course materials, online support from teachers and other students, and for practices and assessments.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Multimedia: Making it works",
+   "Tay Vaughan",
+   "McGraw-Hill Education",
+   "2014",
+   "9th",
+   "978-0071832885",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Television Production (17th edition)",
+   "Jim Owen",
+   "Routledge",
+   "2019",
+   "17th",
+   "978-0367136338",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "https://www.coursera.org/specializations/ai-for-creative-work, https://www.coursera.org/specializations/chatgpt-excel",
+   "",
+   "coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "https://www.coursera.org/projects/microsoft-copilot-create-a-powerpoint-presentation-using-ai",
+   "",
+   "coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "https://www.coursera.org/projects/create-gantt-chart-lucidchart",
+   "",
+   "coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "https://www.coursera.org/specializations/generative-ai-for-project-managers",
+   "",
+   "coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "https://www.coursera.org/learn/content-creation-with-generative-ai?",
+   "",
+   "coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the five main stages of a multimedia project, the intangible factors affecting production quality, the key team roles with their required skills, and the common hardware/software tools used. Includes guidance on selecting suitable platforms for effective multimedia production."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyze and determine the scope, objectives, target audience, creative strategy, and budget of a multimedia project, examine the intangible elements needed to make good multimedia production"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop a complete project plan with clear phases, tasks, schedules, resource allocation, and a well-defined project scope. Evaluate project requirements such as cost, timeline, workload, and risks necessary for completing a multimedia project."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply multimedia production tools and AI-based tools to optimize workflows and enhance project efficiency."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Evaluate overall quality of the project, delivers the intended message or experience, and fulfills user needs within the defined scope and constraints."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Have accountability, good self-organization, and strong collaborative skills while working with the team on the multimedia project. Contribute actively and communicates effectively to support overall project success."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "in class",
+   "LO1-LO6",
+   "",
+   "N/A",
+   "",
+   "",
+   "Participation grades will be given based on students' preparation, quality of participation, and group performance."
+  ],
+  [
+   "2",
+   "Multimedia Project",
+   "on-going",
+   "1",
+   "50.0%",
+   ">0",
+   "in class and homework",
+   "LO1-LO6",
+   "Group Project",
+   "Report and Presentation",
+   "Test the acquired knowledge which students obtained in the delivered chapters (Chapters 7, 8, 9, 11, 14).",
+   "Weight: 50%\n\nComponents: Presentation (20%) + Report (30%)\n\n- Task Description:\n\nThis assessment includes one group report and one group presentation. It provides students with an opportunity to understand their product and the production process by working on a real-life project. Students are recommended to use AI tools to support idea generation and planning.\n\nBy taking on roles such as director, producer, marketer, etc., this project helps students develop ideas and conduct research related to cost, timeline, target audience, and other elements across different types of multimedia products. Students are also expected to provide visual content and select appropriate media channels to convey their intended message to the target audience.\n\nStudents will work in groups of 3 or 4 to complete this project.\n\nAI tools may be used to enhance workflow efficiency and overall project performance.\n\n- Presentation (20%):\n\nFor the 30-minute presentation, students are required to present the key points from their report to help classmates gain insights into various roles in the production process and understand the challenges associated with each role.\n\nThe presentation must clearly demonstrate the project plan, including: the production timeline, estimated billing rates, strategies to reach the target audience, and the media platforms chosen to deliver the intended message.\n\n- Report (30%:\n\nTitle of the report\n\nProvide an overview of the group project selected during the 10 weeks and explain the rationale for choosing a particular product type (e.g., Website, TVC, Short Film, etc.).\n\nThe report must present the five stages of the production process: ideas, pre-production, production, post-production, and distribution\n\nObservation and Interactions: Explain each stage and describe how and where the research and information were obtained.\n\nReflection: Reflect on your experience working with your teammates, as well as on your production process and your target audience. Discuss key lessons learned throughout the project.\n\nNotes:\n\nDetailed marking criteria for this assessment will be provided by your lecturer.",
+   ""
+  ],
+  [
+   "3",
+   "Personal Reflection",
+   "on-going",
+   "1",
+   "40.0%",
+   ">0",
+   "in class and homework",
+   "LO1, LO2, LO5, LO6",
+   "Individual Project",
+   "Essay and Presentation",
+   "Test the acquired knowledge which students obtained in the delivered chapters (Chapters 7 and 8).",
+   "Type: Essay\n\nWeight: 30%\n\nComponents: Presentation (10%) + Essay (20%)\n\nTask Description:\n\nThis assessment provides students with an opportunity to reflect deeply on their assigned role in the multimedia production process. Students are required to describe their role from an insider’s perspective and reflect on the timeline, responsibilities, interactions with teammates, and research undertaken.\n\nThe task also allows students to identify key roles within the production process and determine which role(s) and characteristics best represent themselves as multimedia practitioners.\n\nPresentation (10%):\n\nFor the 10-minute presentation, students must present the key points discussed in their essay. The presentation should help classmates gain insights into the role(s) you undertook, how you communicated and collaborated with your teammates, how you planned and executed your tasks, advantages and disadvantages associated with your role(s), and your understanding of the overall production process.\n\nYour presentation should clearly convey how you approached your responsibilities and how your role contributed to the team’s workflow.\n\nEssay (20%):\n\nYour reflective essay should illustrate who you are as a member of the production team. Reflecting on your own role will help you better understand yourself, your teammates, and the production workflow within the multimedia industry.\n\nYour reflective essay must include the following sections:\n\n- Title of your essay\n\n- Provide a brief description of the chosen product and identify your role and your teammates’ roles. Include the timeline required to complete your assigned tasks.\n\n- Reflect what you have learnt and identify as member of your group, how this role shapes your thinking and doing\n\nNotes: Detailed marking criteria for this assessment will be provided by your lecturer.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction",
+   "Offline",
+   "",
+   "IT",
+   "- Syllabus",
+   "MEP301_Phần 1",
+   "Student: Read syllabus\nTeacher: Introduction to syllabus, divide students into groups, give instructions on group assignment",
+   ""
+  ],
+  [
+   "2",
+   "Assignment discussion, group arrangement and assignment topic building",
+   "Offline",
+   "",
+   "IT",
+   "- Syllabus",
+   "MEP301_Phần 2",
+   "Student: Read syllabus\nTeacher: Introduction to syllabus, divide students into groups, give instructions on group assignment",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 7: The stages of a multimedia project",
+   "Offline",
+   "LO1",
+   "IT",
+   "Slides Chapter 7; Textbook, 201 - 212",
+   "",
+   "Read Chapter 7; Textbook, 201 - 212\nTeacher: Lecturing, discussion",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 7: The stages of a multimedia project",
+   "Offline",
+   "LO1",
+   "IT",
+   "Slides Chapter 7; Textbook, 201 - 212",
+   "",
+   "Read Chapter 7; Textbook, 201 - 212\nTeacher: Lecturing, discussion",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 7: The Intagibles: Creativity, Organisation, Communication",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Slides Chapter 7; Textbook, 214 - 220",
+   "",
+   "Student: Read Chapter 7; Textbook, 214 - 220\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 7: The Intagibles: Creativity, Organisation, Communication",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Slides Chapter 7; Textbook, 214 - 220",
+   "",
+   "Student: Read Chapter 7; Textbook, 214 - 220\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 7: The Intagibles: Creativity, Organisation, Communication",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Slides Chapter 7; Textbook, 220 - 222",
+   "",
+   "Student: Read Chapter 7; Textbook, 220 - 222\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 7: The Intagibles: Creativity, Organisation, Communication",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Slides Chapter 7; Textbook, 220 - 222",
+   "",
+   "Student: Read Chapter 7; Textbook, 220 - 222\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 7: The Intagibles: Creativity, Organisation, Communication",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Slides Chapter 7; Textbook, 222 - 231",
+   "",
+   "Student: Read Chapter 7; Textbook, 222 - 231\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 7: The Intagibles: Creativity, Organisation, Communication\n- Use AI to optimize brainstorming ideas",
+   "Offline",
+   "LO1, LO2, LO4",
+   "TU",
+   "Slides Chapter 7; Textbook, 222 - 231",
+   "",
+   "Student: Read Chapter 7; Textbook, 222 - 231\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 8: Multimedia Skills",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "Slides Chapter 8; Textbook, 240 - 254",
+   "",
+   "Student: Read Chapter 8; Textbook, 240 - 254\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 8: Multimedia Skills",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "Slides Chapter 8; Textbook, 240 - 254",
+   "",
+   "Student: Read Chapter 8; Textbook, 240 - 254\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 8: Multimedia Skills",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Slides Chapter 8; Textbook, 240 - 254",
+   "",
+   "Student: Read Chapter 8; Textbook, 240 - 254\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 8: Multimedia Skills",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Slides Chapter 8; Textbook, 240 - 254",
+   "",
+   "Student: Read Chapter 8; Textbook, 240 - 254\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 8: Multimedia Skills",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "Slides Chapter 8; Textbook, 240 - 254",
+   "",
+   "Student: Read Chapter 8; Textbook, 240 - 254\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 8: Multimedia Skills",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "Slides Chapter 8; Textbook, 240 - 254",
+   "",
+   "Student: Read Chapter 8; Textbook, 240 - 254\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3",
+   "TU",
+   "Slides Chapter 9; Textbook, 260 - 271",
+   "",
+   "Student: Read Chapter 9; Textbook, 260 - 271\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3",
+   "TU",
+   "Slides Chapter 9; Textbook, 260 - 271",
+   "",
+   "Student: Read Chapter 9; Textbook, 260 - 271\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3",
+   "IT",
+   "Slides Chapter 9; Textbook, 273",
+   "",
+   "Student: Read Chapter 9; Textbook, 273\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3",
+   "IT",
+   "Slides Chapter 9; Textbook, 273",
+   "",
+   "Student: Read Chapter 9; Textbook, 273\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3",
+   "TU",
+   "Slides Chapter 9; Textbook, 274 - 277",
+   "",
+   "Student: Read Chapter 9; Textbook, 274 - 277\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3",
+   "TU",
+   "Slides Chapter 9; Textbook, 274 - 277",
+   "",
+   "Student: Read Chapter 9; Textbook, 274 - 277\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3",
+   "U",
+   "Slides Chapter 8; Textbook, 280 - 287",
+   "",
+   "Student: Read Chapter 8; Textbook, 280 - 287\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3, LO4",
+   "U",
+   "Slides Chapter 8; Textbook, 280 - 287",
+   "",
+   "Student: Read Chapter 8; Textbook, 280 - 287\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3, LO4",
+   "U",
+   "Slides Chapter 8; Textbook, 280 - 287",
+   "",
+   "Student: Read Chapter 8; Textbook, 280 - 287\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3, LO4",
+   "U",
+   "Slides Chapter 8; Textbook, 280 - 287",
+   "",
+   "Student: Read Chapter 8; Textbook, 280 - 287\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 9: Planning and Costing",
+   "Offline",
+   "LO2,LO3, LO4",
+   "IT",
+   "Slides Chapter 8; Textbook, 280 - 287",
+   "",
+   "Student: Slides Chapter 8; Textbook, 280 - 287\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 9: Planning and Costing\nUse AI tools to optimize the planning and costing stage",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "IT",
+   "Slides Chapter 8; Textbook, 280 - 287",
+   "",
+   "Student: Slides Chapter 8; Textbook, 280 - 287\nAI assist build proposal, students modify according to reality, build Giantt diagram, deploy project management documents, complete Proposal (AI supports project proposal layout)\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 11: Content and Talent",
+   "Offline",
+   "LO4, LO5",
+   "TU",
+   "Slides Chapter 11; Textbook, 330 - 351",
+   "",
+   "Student: Read Chapter 11; Textbook, 330 - 351\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 11: Content and Talent",
+   "Offline",
+   "LO4, LO5",
+   "TU",
+   "Slides Chapter 11; Textbook, 330 - 351",
+   "",
+   "Student: Read Chapter 11; Textbook, 330 - 351\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 11: Content and Talent",
+   "Offline",
+   "LO4, LO5",
+   "IT",
+   "Slides Chapter 11; Textbook, 330 - 351",
+   "",
+   "Student: Read Chapter 11; Textbook, 330 - 351\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 11: Content and Talent",
+   "Offline",
+   "LO4, LO5",
+   "IT",
+   "Slides Chapter 11; Textbook, 330 - 351",
+   "",
+   "Student: Read Chapter 11; Textbook, 330 - 351\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 11: Content and Talent",
+   "Offline",
+   "LO4, LO5",
+   "TU",
+   "Slides Chapter 11; Textbook, 330 - 351",
+   "",
+   "Student: Read Chapter 11; Textbook, 330 - 351\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 11: Content and Talent\nUse AI tools to generate content references",
+   "Offline",
+   "LO4, LO5",
+   "TU",
+   "Slides Chapter 11; Textbook, 330 - 351",
+   "",
+   "Student: Read Chapter 11; Textbook, 330 - 351\nUse AI supporting content creation, script and editing. AI supports generating content, images, audio, video.\nTeacher: Lecturing, case study, discussion\nCase study uses AI to create casting concept/ visualize/ present project",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 14: Delivering",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 14; Textbook, 422 - 438",
+   "",
+   "Student: Read Chapter 14; Textbook, 422 - 438\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 14: Delivering",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 14; Textbook, 422 - 438",
+   "",
+   "Student: Read Chapter 14; Textbook, 422 - 438\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 14: Delivering",
+   "Offline",
+   "LO5",
+   "TU",
+   "Slides Chapter 14; Textbook, 422 - 438",
+   "",
+   "Student: Read Chapter 14; Textbook, 422 - 438\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 14: Delivering",
+   "Offline",
+   "LO5",
+   "TU",
+   "Slides Chapter 14; Textbook, 422 - 438",
+   "",
+   "Student: Read Chapter 14; Textbook, 422 - 438\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 14: Delivering",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 14; Textbook, 422 - 438",
+   "",
+   "Student: Read Chapter 14; Textbook, 422 - 438\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 14: Delivering",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 14; Textbook, 422 - 438",
+   "",
+   "Student: Read Chapter 14; Textbook, 422 - 438\nTeacher: Lecturing, case study, discussion",
+   ""
+  ],
+  [
+   "41",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "TU",
+   "Slide chapter 7,8,9,11,14",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "42",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "TU",
+   "Slide chapter 7,8,9,11,14",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "43",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "Slide chapter 7,8,9,11,15",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "44",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "Slide chapter 7,8,9,11,15",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "45",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "46",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "47",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "48",
+   "Presentation: Multimedia Project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Student: Present and submit their group work and presentation\nTeacher: Discussion, collect group report",
+   ""
+  ],
+  [
+   "49",
+   "Course review",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "TU",
+   "Review",
+   "",
+   "Stundent: Review\nTeacher: Review",
+   ""
+  ],
+  [
+   "50",
+   "Course review",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "TU",
+   "Review",
+   "",
+   "Stundent: Review\nTeacher: Review",
+   ""
+  ],
+  [
+   "51",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "IT",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "52",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "IT",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "53",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "TU",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "54",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "TU",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "55",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "U",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "56",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "U",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "57",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "TU",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "58",
+   "Presentation: Personal Reflection",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "TU",
+   "Slide chapter 7,8,9,11,16",
+   "",
+   "Teacher: Discussion, collect individual assignment",
+   ""
+  ],
+  [
+   "59",
+   "Class summary and report submission",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "U",
+   "Review",
+   "",
+   "Student: Review\nTeacher: Review, announce grades of progress test, group assignment and individual assignment",
+   ""
+  ],
+  [
+   "60",
+   "Class summary and report submission",
+   "Offline",
+   "LO1, LO2, LO5, LO6",
+   "U",
+   "Review",
+   "",
+   "Student: Review\nTeacher: Review, announce grades of progress test, group assignment and individual assignment",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "QN1",
+   "What will we learn and do in MEP201?"
+  ],
+  [
+   "2",
+   "3",
+   "QN1",
+   "How are about the rubric of the capstone project?"
+  ],
+  [
+   "3",
+   "4",
+   "QN1",
+   "How is your opinion about some case studies from capstone projects?"
+  ],
+  [
+   "4",
+   "5",
+   "QN1",
+   "How to keep a creativity buring up inside you as long as possible?"
+  ],
+  [
+   "5",
+   "6",
+   "QN1",
+   "How to keep a creativity buring up inside you as long as possible?"
+  ],
+  [
+   "6",
+   "7",
+   "QN1",
+   "What is the difference between terms multimedia, crossmedia and transmedia?"
+  ],
+  [
+   "7",
+   "8",
+   "QN1",
+   "How do you think which skills are highly appreciated by the employers?"
+  ],
+  [
+   "8",
+   "9",
+   "QN1",
+   "How could you been evaluated the capstone project as if you were a member of the evaluation committee?"
+  ],
+  [
+   "9",
+   "10",
+   "QN1",
+   "How to evaluate an idea of the project?"
+  ],
+  [
+   "10",
+   "11",
+   "QN1",
+   "What do you know about research and measurement methods in communication campaign?"
+  ],
+  [
+   "11",
+   "12",
+   "QN1",
+   "What do you know about research and measurement methods in communication campaign?"
+  ],
+  [
+   "12",
+   "17",
+   "QN1",
+   "How about the tips about audience in making multimedia project?"
+  ],
+  [
+   "13",
+   "18",
+   "QN1",
+   "How about the tips about audience in making multimedia project?"
+  ],
+  [
+   "14",
+   "19",
+   "QN1",
+   "How to engage and make the audience participate in our campaign?"
+  ],
+  [
+   "15",
+   "20",
+   "QN1",
+   "How to engage and make the audience participate in our campaign?"
+  ],
+  [
+   "16",
+   "23",
+   "QN1",
+   "How to write a transmedia production bible?"
+  ],
+  [
+   "17",
+   "24",
+   "QN1",
+   "How to write a transmedia production bible?"
+  ],
+  [
+   "18",
+   "25",
+   "QN1",
+   "How to measure and define effectiveness of a campaign?"
+  ],
+  [
+   "19",
+   "26",
+   "QN1",
+   "How do think about the cost effeciency of the communicatin campaign?"
+  ],
+  [
+   "20",
+   "29",
+   "QN1",
+   "What do we can learn from games in making multimedia projects?"
+  ],
+  [
+   "21",
+   "30",
+   "QN1",
+   "What do we can learn from games in making multimedia projects?"
+  ],
+  [
+   "22",
+   "31",
+   "QN1",
+   "What is the difference in writing content for social media and press?"
+  ],
+  [
+   "23",
+   "32",
+   "QN1",
+   "How could you make a trend in content marketing?"
+  ],
+  [
+   "24",
+   "33",
+   "QN1",
+   "What are the four levels of content in a transmedia world?"
+  ],
+  [
+   "25",
+   "34",
+   "QN1",
+   "What are the four levels of content in a transmedia world?"
+  ],
+  [
+   "26",
+   "35",
+   "QN1",
+   "What platforms of delivering multimedia products do you know and the pros and cons of them?"
+  ],
+  [
+   "27",
+   "36",
+   "QN1",
+   "What are the difference bewteen mass media, social media, media, platforms, channels"
+  ],
+  [
+   "28",
+   "37",
+   "QN1",
+   "How to make key design questions for a transmedia project?"
+  ],
+  [
+   "29",
+   "38",
+   "QN1",
+   "How to make key design questions for a transmedia project?"
+  ],
+  [
+   "30",
+   "39",
+   "QN1",
+   "How to evaluate a multimedia project?"
+  ],
+  [
+   "31",
+   "40",
+   "QN1",
+   "How about the tips in making immersive projects?"
+  ],
+  [
+   "32",
+   "48",
+   "QN1",
+   "Which group project is the best?"
+  ],
+  [
+   "33",
+   "55",
+   "QN1",
+   "What is your impression of all you've leaned and done in the MEP201?"
+  ]
+ ],
+ "links": [
+  "/download/13656/S/1_MEP301_Phần 1.zip",
+  "/download/13656/S/2_MEP301_Phần 2.zip"
+ ]
+}

@@ -1,0 +1,911 @@
+{
+ "ma": "KMS301",
+ "sylID": "11099",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11099",
+   "code": "KMS301",
+   "name": "Knowledge management system_Hệ thống quản trị tri thức",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11099",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11099",
+  "Syllabus Name": "Knowledge management system_Hệ thống quản trị tri thức",
+  "Course Name English": "Knowledge management system",
+  "Subject Code": "KMS301",
+  "Learning-Teaching Method": "In-class lecture,Inquiry-based Teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "ITA301, ISM302",
+  "Description": "By the end of this course Students will be able to:\n\na) Knowledge: (what will students know?)\n\n• Understand knowledge and knowledge management\n\n• Understand knowledge management models\n\n• Understand concepts, structure, processes, techniques, and issues related to knowledge management.\n\n• Understand knowledge management tools and applicable situations\n\n• Know how to how to build and manage knowledge management system in the enterprise.\n\nb) Skills: (what will students be able to do?)\n\n• Build and manage knowledge management system in the real-time enterprise",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfil tasks given by intructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (https://flm.fpt.edu.vn/) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "- Microsoft office for documents and presentation.\n\n- Mindmapping tool, visual mapping tools.\n\n- Weka software",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Knowledge Management in Theory and Practice",
+   "Kimiz Dalkir",
+   "The MIT Press",
+   "",
+   "3rd",
+   "978-0262036870",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Knowledge Management Systems and Processes",
+   "Irma Becerra-Fernandez and Rajiv Sabherwal",
+   "Routledge",
+   "",
+   "2nd",
+   "978-0765639158",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Knowledge Management in Practice",
+   "Anthony J. Rhem",
+   "Auerbach Publications",
+   "",
+   "1st",
+   "978-1466562523",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Making Knowledge Management Clickable: Knowledge Management Systems Strategy, Design, and Implementation",
+   "Joseph Hilger, Zachary Wahl",
+   "Springer",
+   "",
+   "1st",
+   "978-3030923846",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Paradigms of Knowledge Management_ With Systems Modelling Case Studies",
+   "Krishna Nath Pandey",
+   "Springer",
+   "",
+   "1st",
+   "978-8132227847",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the importance of knowledge and knowledge management"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand concepts, structure, processes, techniques, and issues related to knowledge management."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop a good understanding of knowledge management models"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand knowledge management tools"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify the appropriate KM tools to elicitiate techniques to build and manage knowledge management system"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand Knowledge Management Strategy and Planning"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understand the arrangements, organization, and evaluation of a knowledge management system"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Be able to build and manage knowledge management system in the enterprise."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Prepare and deliver coherent and structured verbal and written technical reports"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment",
+   "on-going",
+   "2",
+   "40.0%",
+   ">0",
+   "Option 1: 1 week; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "ASM1: LO1, LO2\n\nASM2: LO1, LO2, LO3, LO4,LO5, LO6, LO7, LO8, LO9",
+   "Option 1: Home work; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 1; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Knowledge of KMS and related concepts",
+   "-Teacher step-by-step instructions for implementing and evaluating the final product\n\n-Student select and survey existing knowledge management systems, prepare evaluation reports",
+   ""
+  ],
+  [
+   "2",
+   "Progress Test",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "Option 1: 30 mins; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "PT1: LO1, LO2, LO3, LO4\n\nPT2: LO1, LO2, LO3, LO4,LO5, LO6, LO7, LO8, LO9",
+   "Option 1: Multiple Choice; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 20; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "textbook: Chapter 1-8 (PT1)\n\ntextbook: Chapter 9-14 (PT 2)",
+   "in class, by LMS system",
+   ""
+  ],
+  [
+   "3",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60 minute",
+   "LO1, LO2, LO3, LO4,LO5, LO6, LO7, LO8, LO9",
+   "Multiple Choice",
+   "50",
+   "All subjects in syllabus",
+   "by exam board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Chapter 1 Introduction to Knowledge Management\n\nIntroduction\n\nWhat Is Knowledge?",
+   "Offline",
+   "LO1",
+   "IT",
+   "textbook: Chapter 1",
+   "KMS301",
+   "textbook: Chapter 1",
+   ""
+  ],
+  [
+   "2",
+   "What Is Knowledge Management?",
+   "Offline",
+   "LO1",
+   "TU",
+   "textbook: Chapter 1",
+   "KMS301",
+   "textbook: Chapter 1",
+   ""
+  ],
+  [
+   "3",
+   "History of Knowledge Management",
+   "Offline",
+   "LO1",
+   "TU",
+   "textbook: Chapter 1",
+   "",
+   "textbook: Chapter 1",
+   ""
+  ],
+  [
+   "4",
+   "Why Is KM Important Today?",
+   "Offline",
+   "LO1",
+   "TU",
+   "textbook: Chapter 1",
+   "",
+   "textbook: Chapter 1",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2 Knowledge Management Processes\n\nIntroduction\n\nMajor Approaches to the KM Cycle",
+   "Offline",
+   "LO2",
+   "IT",
+   "textbook: Chapter 2",
+   "",
+   "textbook: Chapter 2",
+   ""
+  ],
+  [
+   "6",
+   "Strategic Implications of the KM Cycle\n\nPractical Considerations for Managing Knowledge",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 2",
+   "",
+   "textbook: Chapter 2",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3 Knowledge Management Models\n\nIntroduction\n\nMajor Theoretical KM Models",
+   "Offline",
+   "LO3",
+   "IT",
+   "textbook: Chapter 3",
+   "",
+   "textbook: Chapter 3",
+   ""
+  ],
+  [
+   "8",
+   "Strategic Implications of KM Models\n\nPractical Implications of KM Models",
+   "Offline",
+   "LO3",
+   "TU",
+   "textbook: Chapter 3",
+   "",
+   "textbook: Chapter 3",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 4 Knowledge Capture and Codification\n\nIntroduction",
+   "Offline",
+   "LO2",
+   "IT",
+   "textbook: Chapter 4",
+   "",
+   "textbook: Chapter 4",
+   ""
+  ],
+  [
+   "10",
+   "Tacit Knowledge Capture",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 4",
+   "",
+   "textbook: Chapter 4",
+   ""
+  ],
+  [
+   "11",
+   "Explicit Knowledge Codification",
+   "Offline",
+   "LO2",
+   "IT",
+   "textbook: Chapter 4",
+   "",
+   "textbook: Chapter 4",
+   ""
+  ],
+  [
+   "12",
+   "Strategic Implications of Knowledge Capture and Codification\n\nPractical Implications of Knowledge Capture and Codification",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 4",
+   "",
+   "textbook: Chapter 4",
+   ""
+  ],
+  [
+   "13",
+   "Assignment 1 Introduction",
+   "Offline",
+   "LO1, LO2, LO3",
+   "TU",
+   "textbook: Chapter 1-3",
+   "",
+   "textbook: Chapter 1-3",
+   ""
+  ],
+  [
+   "14",
+   "Assignment 1 (cnt)",
+   "Offline",
+   "LO1, LO2, LO3",
+   "TU",
+   "textbook: Chapter 1-3",
+   "",
+   "textbook: Chapter 1-3",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5 Knowledge Sharing\n\nIntroduction\n\nThe Social Nature of Knowledge",
+   "Offline",
+   "LO2",
+   "IT",
+   "textbook: Chapter 5",
+   "",
+   "textbook: Chapter 5",
+   ""
+  ],
+  [
+   "16",
+   "Knowledge Networks\n\nSociograms and Social Network Analysis",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 5",
+   "",
+   "textbook: Chapter 5",
+   ""
+  ],
+  [
+   "17",
+   "Knowledge-Sharing Communities\n\nTypes of Communities",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 5",
+   "",
+   "textbook: Chapter 5",
+   ""
+  ],
+  [
+   "18",
+   "Obstacles to Knowledge Sharing\n\nOrganizational Learning and Social Capital",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 5",
+   "",
+   "textbook: Chapter 5",
+   ""
+  ],
+  [
+   "19",
+   "Strategic Implications of Knowledge Sharing\n\nPractical Implications of Knowledge Sharing",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 5",
+   "",
+   "textbook: Chapter 5",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6 Finding Knowledge\n\nIntroduction\n\nKnowledge Application at the Individual Level",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 6",
+   "",
+   "textbook: Chapter 6",
+   ""
+  ],
+  [
+   "21",
+   "Knowledge Application at the Group and Organizational Levels\n\nReal World Applications of KM",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 6",
+   "",
+   "textbook: Chapter 6",
+   ""
+  ],
+  [
+   "22",
+   "Strategic Implications of Knowledge Application\n\nPractical Implications of Knowledge Application",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 6",
+   "",
+   "textbook: Chapter 6",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 7 Organizational Culture\n\nIntroduction\n\nDifferent Types of Cultures",
+   "Offline",
+   "LO2",
+   "IT",
+   "textbook: Chapter 7",
+   "",
+   "textbook: Chapter 7",
+   ""
+  ],
+  [
+   "24",
+   "Organizational Culture Analysis\n\nCulture at the Foundation of KM",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 7",
+   "",
+   "textbook: Chapter 7",
+   ""
+  ],
+  [
+   "25",
+   "Transformation to a Knowledge-Sharing Culture",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 7",
+   "",
+   "textbook: Chapter 7",
+   ""
+  ],
+  [
+   "26",
+   "Strategic Implications of Organizational Culture\n\nPractical Implications of Organizational Culture",
+   "Offline",
+   "LO2",
+   "TU",
+   "textbook: Chapter 7",
+   "",
+   "textbook: Chapter 7",
+   ""
+  ],
+  [
+   "27",
+   "Assignment 1 (cnt)",
+   "Offline",
+   "LO1, LO2, LO3",
+   "TU",
+   "textbook: Chapter 1-7",
+   "",
+   "textbook: Chapter 1-7",
+   ""
+  ],
+  [
+   "28",
+   "Assignment 1 (cnt)",
+   "Offline",
+   "LO1, LO2, LO3",
+   "TU",
+   "textbook: Chapter 1-7",
+   "",
+   "textbook: Chapter 1-7",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 8 Knowledge Management Tools\n\nIntroduction\n\nKnowledge Capture and Creation Tools",
+   "Offline",
+   "LO4",
+   "TU",
+   "textbook: Chapter8",
+   "",
+   "textbook: Chapter8",
+   ""
+  ],
+  [
+   "30",
+   "Visualization Tools and Knowledge Maps",
+   "Offline",
+   "LO4",
+   "TU",
+   "textbook: Chapter 8",
+   "",
+   "textbook: Chapter 8",
+   ""
+  ],
+  [
+   "31",
+   "Knowledge Sharing and Dissemination Tools\n\nKnowledge Acquisition and Application Tools",
+   "Offline",
+   "LO4",
+   "TU",
+   "textbook: Chapter 8",
+   "",
+   "textbook: Chapter 8",
+   ""
+  ],
+  [
+   "32",
+   "Strategic Implications of KM Tools\n\nPractical Implications of KM Tools",
+   "Offline",
+   "LO4, LO5",
+   "TU",
+   "textbook: Chapter 8",
+   "",
+   "textbook: Chapter 8",
+   ""
+  ],
+  [
+   "33",
+   "Progress test 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "TU",
+   "textbook: Chapter 1-8",
+   "",
+   "textbook: Chapter 1-8",
+   ""
+  ],
+  [
+   "34",
+   "Assignment 1 evaluation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "TU",
+   "textbook: Chapter 1-8",
+   "",
+   "textbook: Chapter 1-8",
+   ""
+  ],
+  [
+   "35",
+   "Assignment 1 evaluation (cnt)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "TU",
+   "textbook: Chapter 1-8",
+   "",
+   "textbook: Chapter 1-8",
+   ""
+  ],
+  [
+   "36",
+   "Assignment 1 evaluation (cnt)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "TU",
+   "textbook: Chapter 1-8",
+   "",
+   "textbook: Chapter 1-8",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 9 Knowledge Management Strategy and Planning\n\nIntroduction\n\nDeveloping a Knowledge Management Strategy",
+   "Offline",
+   "LO6",
+   "IT",
+   "textbook: Chapter 9",
+   "",
+   "textbook: Chapter 9",
+   ""
+  ],
+  [
+   "38",
+   "Organizational Maturity Models\n\nGap Analysis",
+   "Offline",
+   "LO6",
+   "TU",
+   "textbook: Chapter 9",
+   "",
+   "textbook: Chapter 9",
+   ""
+  ],
+  [
+   "39",
+   "The KM Strategy Road Map\n\nBalancing Innovation and Organizational Structure",
+   "Offline",
+   "LO6",
+   "TU",
+   "textbook: Chapter 9",
+   "",
+   "textbook: Chapter 9",
+   ""
+  ],
+  [
+   "40",
+   "Types of Knowledge Assets Produced\n\nThe Role of Leadership and Different KM Leadership Styles",
+   "Offline",
+   "LO6",
+   "TU",
+   "textbook: Chapter 9",
+   "",
+   "textbook: Chapter 9",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 10 Evaluating Knowledge Management\n\nIntroduction\n\nKM Return on Investment (ROI) and Metrics",
+   "Offline",
+   "LO7",
+   "IT",
+   "textbook: Chapter 10",
+   "",
+   "textbook: Chapter 10",
+   ""
+  ],
+  [
+   "42",
+   "Measuring the Success of Knowledge Networks",
+   "Offline",
+   "LO7",
+   "TU",
+   "textbook: Chapter 10",
+   "",
+   "textbook: Chapter 10",
+   ""
+  ],
+  [
+   "43",
+   "Assignment 2 Introduction",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "TU",
+   "textbook: Chapter 1-10",
+   "",
+   "textbook: Chapter 1-10",
+   ""
+  ],
+  [
+   "44",
+   "Assignment 2 (cnt)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "TU",
+   "textbook: Chapter 1-10",
+   "",
+   "textbook: Chapter 1-10",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 11 Organizational Learning and Organizational Memory\n\nIntroduction\n\nHow Do Organizations Learn and Remember?\n\nThe Management of Organizational Memory",
+   "Offline",
+   "LO7",
+   "IT",
+   "textbook: Chapter 11",
+   "",
+   "textbook: Chapter 11",
+   ""
+  ],
+  [
+   "46",
+   "Organizational Learning\n\nOrganizational Learning and Organizational Memory Models",
+   "Offline",
+   "LO7",
+   "TU",
+   "textbook: Chapter 11",
+   "",
+   "textbook: Chapter 11",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 12 Knowledge Continuity Management\n\nIntroduction\n\nKnowledge Continuity Management Process",
+   "Offline",
+   "LO7, LO8",
+   "IT",
+   "textbook: Chapter 12",
+   "",
+   "textbook: Chapter 12",
+   ""
+  ],
+  [
+   "48",
+   "A Three-Tiered Approach to Knowledge Continuity\n\nIntergenerational Knowledge Transfer",
+   "Offline",
+   "LO7, LO8",
+   "TU",
+   "textbook: Chapter 12",
+   "",
+   "textbook: Chapter 12",
+   ""
+  ],
+  [
+   "49",
+   "Success Factors for Knowledge Continuity Management\n\nChallenges for Knowledge Continuity Management\n\nConcluding Thought",
+   "Offline",
+   "LO7, LO8",
+   "TU",
+   "textbook: Chapter 12",
+   "",
+   "textbook: Chapter 12",
+   ""
+  ],
+  [
+   "50",
+   "Assignment 2 (cnt)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "TU",
+   "textbook: Chapter 1-10",
+   "",
+   "textbook: Chapter 1-12",
+   ""
+  ],
+  [
+   "51",
+   "Assignment 2 (cnt)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "TU",
+   "textbook: Chapter 1-10",
+   "",
+   "textbook: Chapter 1-12",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 13 The Knowledge Management Team\n\nIntroduction\n\nMajor Categories of KM Roles",
+   "Offline",
+   "LO7, LO8, LO9",
+   "IT",
+   "textbook: Chapter 13",
+   "",
+   "textbook: Chapter 13",
+   ""
+  ],
+  [
+   "53",
+   "KM Roles and Responsibilities within Organizations\n\nThe KM Profession",
+   "Offline",
+   "LO7, LO8, LO9",
+   "TU",
+   "textbook: Chapter 13",
+   "",
+   "textbook: Chapter 13",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 14 Future Challenges for Knowledge Management\n\nIntroduction\n\nIntellectual Property Issues",
+   "Offline",
+   "LO7, LO8, LO9",
+   "IT",
+   "textbook: Chapter 14",
+   "",
+   "textbook: Chapter 14",
+   ""
+  ],
+  [
+   "55",
+   "How to Provide Incentives for Knowledge Sharing\n\nAdditional Challenges for KM",
+   "Offline",
+   "LO7, LO8, LO9",
+   "TU",
+   "textbook: Chapter 14",
+   "",
+   "textbook: Chapter 14",
+   ""
+  ],
+  [
+   "56",
+   "KM and Innovation\n\nWhat’s Next?\n\nConcluding Thought and all review",
+   "Offline",
+   "LO7, LO8, LO9",
+   "TU",
+   "textbook: Chapter 14",
+   "",
+   "textbook: Chapter 14",
+   ""
+  ],
+  [
+   "57",
+   "Progress test 2",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "TU",
+   "textbook: Chapter 9-14",
+   "",
+   "textbook: Chapter 9-14",
+   ""
+  ],
+  [
+   "58",
+   "Assignment 2 evaluation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "TU",
+   "textbook: Chapter 9-14",
+   "",
+   "textbook: Chapter 9-14",
+   ""
+  ],
+  [
+   "59",
+   "Assignment 2 evaluation (cnt)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "TU",
+   "textbook: Chapter 1-14",
+   "",
+   "textbook: Chapter 1-14",
+   ""
+  ],
+  [
+   "60",
+   "Assignment 2 evaluation (cnt)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "TU",
+   "textbook: Chapter 1-14",
+   "",
+   "textbook: Chapter 1-14",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/10227/S/1_KMS301.zip",
+  "/download/10227/S/2_KMS301.zip"
+ ]
+}

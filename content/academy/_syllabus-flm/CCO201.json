@@ -1,0 +1,1237 @@
+{
+ "ma": "CCO201",
+ "sylID": "13652",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13652",
+   "code": "CCO201",
+   "name": "Corporate Communication_Truyền thông doanh nghiệp",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13652",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13652",
+  "Syllabus Name": "Corporate Communication_Truyền thông doanh nghiệp",
+  "Course Name English": "Corporate Communication",
+  "Subject Code": "CCO201",
+  "Learning-Teaching Method": "Lecture, presenting, Social Constructivism, discussion, groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course provides a comprehensive introduction to corporate communications and public relations: it is for anyone with an interest in corporate communication, or anyone seeking to understand the growing importance of communication for corporations. Corporations increasingly need communication to survive, as they need to entertain relations with a variety of stakeholders to prosper. This includes not only external factors to the organization – customers, governments and civil ociety organizations, but also stakeholders within corporations themselves, such as employees, managers and investors.\n\nThe first weeks of the course focus on the basics of corporate communication: what is it, and what are its historical roots? This is important, as it demonstrates how the position of communication is increasingly considered to be managerial function – and as such should be involved in the key decision-making processes. After these introductory weeks, we turn to two core theories of corporate communication: stakeholder theory and corporate identity. These form the basis for much of the more specific and applied topics covered in the following weeks.\n\nIn addition, students will be introduced to the use of AI in corporate communications. This includes how to leverage AI tools for stakeholder analysis, media monitoring, content creation, and campaign evaluation, as well as how to address ethical and cultural considerations when adopting AI. In the last two weeks before the midterm exam, we discuss how corporations can construct communication campaigns – which will be useful as you will be tasked with creating your own communication campaign during the course. Students will also explore how AI can support the design and execution of such campaigns through audience segmentation, trend analysis, and strategic messaging assistance. After the midterm exam, we tackle specific topics of corporate communication, such as employee communications, how corporations interact with media and journalists, and how corporations should communicate in times of crisis.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Corporate Communication: A Guide to Theory and Practice",
+   "Joep P. Cornelissen",
+   "SAGE Publications Ltd",
+   "2020",
+   "6th",
+   "9781526491978",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Corporate Communication: A Guide to Theory and Practice",
+   "Joep P. Cornelissen",
+   "SAGE Publications Ltd",
+   "2020",
+   "6th",
+   "1526491982, 9781526491985",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Corporate Communication: A Guide to Theory and Practice",
+   "Joep P. Cornelissen",
+   "SAGE Publications Ltd",
+   "2017",
+   "5th",
+   "1526411822, 9781526411822",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "https.//hbr.org (Corporate Communication – HBR/ Harvard Business review)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "https.//network.bepress.com (Business and Corporate Communications – open access section)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "Content Creation With Generative AI",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "Prompt Engineering Specialization",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "8",
+   "Corporate Communication: A Guide to Theory and Practice",
+   "Joep P. Cornelissen",
+   "SAGE Publications Ltd",
+   "2023",
+   "7th",
+   "9781529600025",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong các giáo trình (ưu tiên mua sách mới)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Demonstrate a thorough understanding of corporate communication principles and related concepts, including their evolution in the digital and AI-driven era."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Comprehend the skills needed to develop impactful corporate communication strategies and/or convey them persuasively."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop and/or implement effective corporate communication plans."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Adopt a constructivist approach to learning that enhances creativity, critical thinking, and problem-solving skills, while leveraging AI for brainstorming and innovative solutions."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply learned theories and AI tools to address a real-world corporate communication challenge, demonstrating efficiency in completing projects independently or collaboratively, while maintaining ethical behavior, cultural sensitivity, and social responsibility in both human-led and AI-assisted communication practices."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Case Studies",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Follow lecturer'proposal",
+   "CLO1, CLO4, CLO5",
+   "",
+   "",
+   "Case Study Analysis\nStudents will analyze a real-world corporate communication case (e.g., crisis response, CSR campaign, leadership communication, reputation management).\nTask:\n- Identify the key communication challenge(s).\n- Apply corporate communication theories and frameworks to analyze the case.\n- Use AI tools (e.g., ChatGPT, Google Gemini) for supporting tasks such as sentiment analysis, social listening, reputation evalution.\n- Critically evaluate the effectiveness of the adopted strategy.\n- Propose alternative or improved solutions with clear justification.\n\nOption 2 (for the constructivism approach only): Follow the lecturer's proposal.",
+   "Presentation in class",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms.\n\nEach assignment has a six-day due date, which commences when the lecture provides detailed instructions."
+  ],
+  [
+   "2",
+   "Group Project\n(CMM Plan)",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "Presentation: 20 mins per each group\nQ&A: 20 mins per each group",
+   "CLO1->CLO5",
+   "Analyse the lastes communication challenge of a corporate and strategically develop a communication management and measurement plan to response to it.",
+   "",
+   "Possess the ability to: (1) critically identify and analyze a communication challenge; (2) strategically apply relevant concepts and/or theories to develop a CMM plan in response to the situation; 3) Use AI tools for supporting tasks such as stakeholder mapping, competitor scanning, strategic message drafting.",
+   "In class and homework. Written report (50%) & Oral presentation (50%)\nCMM Plan Requirements\n- Executive Summary – overview of communication challenge, objectives, and AI integration highlights.\n- Situation Analysis – SWOT/PESTLE, media/stakeholder audit, AI-assisted sentiment or competitor analysis (validated by human review).\n- Stakeholder Mapping & Target Audiences – AI-assisted clustering (e.g., Brandwatch, Talkwalker, ChatGPT) + team refinement.\n- Communication Goal & SMART Objectives – aligned with corporate strategy.\n- Key Messages – ensure message consistency, multicultural sensitivity, and ethical considerations.\n- Strategies & Tactics (may covering multiple corporate communication domains):\n- Integration & Channel Strategy – how AI supports consistent messaging across touchpoints.\n- Budget & Resource Allocation – realistic planning, noting AI efficiency gains.\n- Evaluation Plan – success indicators (trust, reputation, engagement, stakeholder sentiment), supported by AI dashboards.\n\nDeliverables\n- CMM Report (max 20 pages): Situation analysis, objectives, stakeholder mapping, strategies & tactics, integration and evaluation framework.\n- Presentation Deck: 20 minutes presentation + 20 minutes Q&A.\n- Reflection Section (300–500 words per group): How AI was applied, its benefits, limitations, risks, and ethical considerations.",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms.\n\nEach assignment has a six-day due date, which commences when the lecture provides detailed instructions.\n\nThe project must demonstrate:\n- Strategic alignment with the organization’s vision, values, and positioning.\n- Creative integration across corporate communication functions (internal, external, media, investor, CSR, crisis).\n- Measurable communication impact with KPIs linked to organizational goals.\n- Responsible, transparent use of AI tools in research, message development, stakeholder mapping, and evaluation."
+  ],
+  [
+   "3",
+   "Mid-term test/ quiz",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "35 mins (if applicable)",
+   "CLO1, CLO3",
+   "Multiple choices.",
+   "40 (if applicable)",
+   "Assess the student's knowledge of the course material as of the date of the quiz.",
+   "0.25/ a correct answer",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms."
+  ],
+  [
+   "4",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "in class",
+   "CLO4, CLO5",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, students' attitude, preparation, contribution of discussions",
+   ""
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 mins",
+   "CLO1->CLO3",
+   "Multiple choice questions.",
+   "50",
+   "'The question will cover the lectures, class discussions, activities, exercises, and textbook",
+   "0.20/ a correct answer.\n\nThe final exam will be administered in the examination room.",
+   "Closed-book exam."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "INTRODUCTORY\nINTRODUCTION TO THE COURSE",
+   "Offline",
+   "CLO1",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "CCO201_Phần 1",
+   "Lecture\nActivity: Introduce Yourself\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "2",
+   "INTRODUCTION TO THE COURSE (cont.)",
+   "Offline",
+   "CLO1",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "CCO201_Phần 2",
+   "Lecture\nActivity: Introduce Yourself\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "3",
+   "INTRODUCTION TO THE COURSE (cont.)",
+   "Offline",
+   "CLO1",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nActivity: Introduce Yourself\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "4",
+   "CHAPTER 1: DEFINING CORPORATE COMMUNICATION\nIntroduction\nScope and Definitions",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "5",
+   "Trends in Corporate Communication",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "6",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "7",
+   "CHAPTER 2: CORPORATE COMMUNICATION IN CONTEMPORARY ORGANIZATIONS\nIntroduction\nIntergrated Communication",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "8",
+   "Drivers for Intergrated Communication\nThe Oganization of Coporate Communication",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "9",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "10",
+   "CHAPTER 3: CORPORATE COMMUNICATION IN A CHANGING MEDIA ENVIRONMENT\nIntroduction\nThe New Media Landscape",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "11",
+   "Classifying Social Media\nChallenges and Opportunities",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "12",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "13",
+   "CHAPTER 4: STAKEHOLDER MANAGEMENT AND COMMUNICATION\nIntroduction\nStakeholder Management",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "14",
+   "The Nature of Stakes and Stakeholders\nStakeholder Communication\nStakeholder Engagement",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "15",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "16",
+   "CHAPTER 5: CORPORATE IDENTITY, BRANDING AND CORPORATE REPUTATION\nIntroduction\nCorporate Identity, Image and Reputation",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "17",
+   "Corporate Branding\nAligining Identity, Image and Reputation",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "18",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "19",
+   "CHAPTER 6: COMMUNICATION STRATEGY AND STRATEGIC PLANNING\nIntroduction\nDeveloping a Commununication Strategy",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "20",
+   "Strategic Messaging and Content Platforms\nPlanning and Excuting Communication Programes and Campaigns",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "21",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "22",
+   "CHAPTER 7: RESEARCH AND MEASUREMENT\nIntroduction\nResearch and Evaluation",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "23",
+   "Methods and Measures\nMeasuring Corporate Reputation\nTheories on Measuring the Effects of Communication",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "24",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "25",
+   "CHAPTER 8: MEDIA RELATIONS\nIntroduction\nJournalism and News Organizations",
+   "Offline",
+   "CLO4, CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "26",
+   "The Effects of News Coverage n Corporate Reputatio\nFraming News Stories",
+   "Offline",
+   "CLO4, CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "27",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "28",
+   "REVISON",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "U",
+   "",
+   "",
+   "Revision\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "29",
+   "REVISON",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "U",
+   "",
+   "",
+   "Revision\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "30",
+   "MID-TERM TEST/ QUIZ",
+   "Offline",
+   "CLO1, CLO3",
+   "U",
+   "",
+   "",
+   "Taking a quizz",
+   ""
+  ],
+  [
+   "31",
+   "GROUP PRESENTAION/ EXPERT TALKSHOW",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nor Participate in an expert talkshow held by the lecturer/ Department\nAI component: Students required to report AI integration in their group projects (tools, outputs, limitations).",
+   ""
+  ],
+  [
+   "32",
+   "GROUP PRESENTAION/ EXPERT TALKSHOW",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nor Participate in an expert talkshow held by the lecturer/ Department\nAI component: Students required to report AI integration in their group projects (tools, outputs, limitations).",
+   ""
+  ],
+  [
+   "33",
+   "GROUP PRESENTAION/ EXPERT TALKSHOW",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nor Participate in an expert talkshow held by the lecturer/ Department\nAI component: Students required to report AI integration in their group projects (tools, outputs, limitations).",
+   ""
+  ],
+  [
+   "34",
+   "GROUP PRESENTAION/ EXPERT TALKSHOW",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nor Participate in an expert talkshow held by the lecturer/ Department\nAI component: Students required to report AI integration in their group projects (tools, outputs, limitations).",
+   ""
+  ],
+  [
+   "35",
+   "GROUP PRESENTAION/ EXPERT TALKSHOW",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nor Participate in an expert talkshow held by the lecturer/ Department\nAI component: Students required to report AI integration in their group projects (tools, outputs, limitations).",
+   ""
+  ],
+  [
+   "36",
+   "GROUP PRESENTAION/ EXPERT TALKSHOW",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nor Participate in an expert talkshow held by the lecturer/ Department\nAI component: Students required to report AI integration in their group projects (tools, outputs, limitations).",
+   ""
+  ],
+  [
+   "37",
+   "CHAPTER 9: EMPLOYEE COMMUNICATION\nIntroduction\nDefinding Employee Communication",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "38",
+   "Employee Communication and Organizational Identification\nVoice, Silence and Stimulating Employee Participation",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "39",
+   "Social Media, Networks and Communities of Practice\nCase Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nPresent/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "40",
+   "CHAPTER 10: ISSUES MANAGEMENT\nIntroduction\nDefinding Issues",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "41",
+   "Managing Isuses\nInfluencing Public Policy\nAnti-corporate Activism",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "42",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "43",
+   "CHAPTER 11: CRISIS COMMUNICATION\nIntrocution\nCrisis Management",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "44",
+   "The Impact of a Crisis on Corporte Reputation\nCommunicating about a Crisis",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "45",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nActivity: Introduce Yourself\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "46",
+   "CHAPTER 12: LEADERSHIP AND CHANGE COMMUNICATION\nIntroduction\nDefining Leadership and Change",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "47",
+   "Communicating during a Change\nEffective Leadership Communication",
+   "Offline",
+   "CLO1, CLO4",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "48",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "49",
+   "GROUP PRESENTATION/ GROUP PROJECT/ CMM PLAN",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nAI component: Students required to demonstrate at least 3 AI applications in their project (research, content creation, analysis, evaluation).",
+   ""
+  ],
+  [
+   "50",
+   "GROUP PRESENTATION/ GROUP PROJECT/ CMM PLAN",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nAI component: Students required to demonstrate at least 3 AI applications in their project (research, content creation, analysis, evaluation).",
+   ""
+  ],
+  [
+   "51",
+   "GROUP PRESENTATION/ GROUP PROJECT/ CMM PLAN",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nAI component: Students required to demonstrate at least 3 AI applications in their project (research, content creation, analysis, evaluation).",
+   ""
+  ],
+  [
+   "52",
+   "GROUP PRESENTATION/ GROUP PROJECT/ CMM PLAN",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nAI component: Students required to demonstrate at least 3 AI applications in their project (research, content creation, analysis, evaluation).",
+   ""
+  ],
+  [
+   "53",
+   "GROUP PRESENTATION/ GROUP PROJECT/ CMM PLAN",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nAI component: Students required to demonstrate at least 3 AI applications in their project (research, content creation, analysis, evaluation).",
+   ""
+  ],
+  [
+   "54",
+   "GROUP PRESENTATION/ GROUP PROJECT/ CMM PLAN",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Group presentation\nQ&A/ Discussions\nAI component: Students required to demonstrate at least 3 AI applications in their project (research, content creation, analysis, evaluation).",
+   ""
+  ],
+  [
+   "55",
+   "CHAPTER 13: CORPORATE SOCIAL RESPONSIBILITY (CSR) AND COMMUNITY RELATIONS\nIntrroduction\nDefining Corporate Social Responsibility",
+   "Offline",
+   "CLO1, CLO4, CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "56",
+   "Communicating about Corporate Social Responsibility\nCommunication Relations",
+   "Offline",
+   "CLO1, CLO4, CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Lecture\nEngage in discussions on assigned constructive questions\nQ&A",
+   ""
+  ],
+  [
+   "57",
+   "Case Study\nChapter Summary",
+   "Offline",
+   "CLO1 -> CLO5",
+   "I,T",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Present/ discuss answers to the case study\nQ&A/ Participate in discussions on any relevant topics that may arise",
+   ""
+  ],
+  [
+   "58",
+   "COURSE REVIEW",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "U",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Revision\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "59",
+   "COURSE REVIEW",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "U",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Revision\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "60",
+   "COURSE REVIEW",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "U",
+   "Core and additional reading materials.\nAny other resources recommended by the lecturer",
+   "",
+   "Revision\nQ&A/ Discussions",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "QN2.1",
+   "What are duties of a corporate communication Department?"
+  ],
+  [
+   "2",
+   "2",
+   "QN2.2",
+   "Q2: What are job descriptions and requirements for the following positions:\n1. Employee Communications Specialist\n2. External Communications Specialist (Media Relations)\n3. Event Executive\n4. Brand Executive\n5. Design Executive\n6. Community relations Exec"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.1",
+   "What are 4 periods of historical development of communications and explain why?"
+  ],
+  [
+   "4",
+   "3",
+   "QN3.2",
+   "What are the similarities and differences between PR & Marketing? Why are PR and Marketing should be integrated ?"
+  ],
+  [
+   "5",
+   "3",
+   "QN3.3",
+   "Talk about a media campaign that changed the lifestyle of people: Who implemented it? How was it going? What was the result? And how did it affect people's lifestyle?"
+  ],
+  [
+   "6",
+   "4",
+   "QN4.1",
+   "What factors affect effective communication in the business?"
+  ],
+  [
+   "7",
+   "5",
+   "QN5.1",
+   "What's Traditional Media?"
+  ],
+  [
+   "8",
+   "5",
+   "QN5.2",
+   "What's Social Media? What are opportunities and challenges does new media present for businesses?"
+  ],
+  [
+   "9",
+   "5",
+   "QN5.3",
+   "Compare Traditional and Social Media and suggest how to use 2 types of Media for businesses."
+  ],
+  [
+   "10",
+   "6",
+   "QN6.1",
+   "Distinguish Owned Media, Paid Media and Earned Media? What is the most effective media and explain why?"
+  ],
+  [
+   "11",
+   "8",
+   "QN8.1",
+   "Who are the organization’s stakeholders?"
+  ],
+  [
+   "12",
+   "9",
+   "QN9.1",
+   "What opportunities and challenges are presented to the organization in relation to these stakeholders?"
+  ],
+  [
+   "13",
+   "10",
+   "QN10.1",
+   "In what way can the organization best communicate with these stakeholders and address these stakeholder challenges and opportunities?"
+  ],
+  [
+   "14",
+   "12",
+   "QN12.1",
+   "What is corporate identity ?"
+  ],
+  [
+   "15",
+   "13",
+   "QN13.1",
+   "What are 3 attributes of Corporate identity?"
+  ],
+  [
+   "16",
+   "14",
+   "QN14.1",
+   "How to distinguish Corporate identity, image and reputation?"
+  ],
+  [
+   "17",
+   "15",
+   "QN15.1",
+   "What is the relation between Corporate identity, image and reputation and how to strengthen them?"
+  ],
+  [
+   "18",
+   "16",
+   "QN16.1",
+   "What is process of planning and executing communication programs?"
+  ],
+  [
+   "19",
+   "17",
+   "QN17.1",
+   "How many types of Message Styles? What are they?"
+  ],
+  [
+   "20",
+   "17",
+   "QN12.7",
+   "What are the conditions of using each message styles?"
+  ],
+  [
+   "21",
+   "26",
+   "QN26.1",
+   "How do journalists and media organizations work together?"
+  ],
+  [
+   "22",
+   "27",
+   "QN27.1",
+   "What is the importance of news coverage for corporate reputations?"
+  ],
+  [
+   "23",
+   "27",
+   "QN27.2",
+   "How is the business relationship between CC and journalists"
+  ],
+  [
+   "24",
+   "28",
+   "QN28.1",
+   "What is the Agenda-setting theory and give an Example?"
+  ],
+  [
+   "25",
+   "28",
+   "QN28.2",
+   "What is Framing News Story? Give an example. How an organization avoid frame conflicts with journalist?"
+  ],
+  [
+   "26",
+   "29",
+   "QN29.1",
+   "What do you know about press releases, press conferences, interviews, online newsrooms and media monitoring and media research and give some examples?"
+  ],
+  [
+   "27",
+   "30",
+   "QN30.1",
+   "Why do organizations need to communicate with their employees?"
+  ],
+  [
+   "28",
+   "31",
+   "QN31.1",
+   "Whar are 2 types of Employee communications? What is more important and explain why?"
+  ],
+  [
+   "29",
+   "32",
+   "QN32.1",
+   "Why do Employee communications need to communicate in both side: Downward & Upward?"
+  ],
+  [
+   "30",
+   "32",
+   "QN32.2",
+   "What do you know about the processes leading to organizational silence? How should communicator break the silence?"
+  ],
+  [
+   "31",
+   "33",
+   "QN33.1",
+   "What is the role of community of practices and give an example?"
+  ],
+  [
+   "32",
+   "34",
+   "QN34.1",
+   "How does an issue develop into a crisis and give an example?"
+  ],
+  [
+   "33",
+   "35",
+   "QN35.1",
+   "How important is matrix of stakeholders in communication strategies to deal with each of stakeholders/publics?"
+  ],
+  [
+   "34",
+   "36",
+   "QN36.1",
+   "What are 3 issue-response strategies? How to choose each strategy to apply to communicate in the issue?"
+  ],
+  [
+   "35",
+   "38",
+   "QN38.1",
+   "What is communication crisis for an individual / organization / business? How was that crisis handled?"
+  ],
+  [
+   "36",
+   "38",
+   "QN38.2",
+   "What are the cause of the crisis?"
+  ],
+  [
+   "37",
+   "39",
+   "QN39.1",
+   "What you know about the Crisis matrix? What is the type of this crisis?"
+  ],
+  [
+   "38",
+   "39",
+   "QN39.2",
+   "What are the 12 communication strategies in crisis? What kind of communication strategy was used in your example in question 1? Is that strategy really reasonable yet? What other communication strategy could be used to handle crisis in your example?"
+  ],
+  [
+   "39",
+   "44",
+   "QN44.1",
+   "What do you think about Leadership? What is the role of Leadership during change in an organization?"
+  ],
+  [
+   "40",
+   "45",
+   "QN45.1",
+   "How to Communicate during a change?"
+  ],
+  [
+   "41",
+   "46",
+   "QN46.1",
+   "What are 5 change communication strategies?"
+  ],
+  [
+   "42",
+   "48",
+   "QN48.1",
+   "What is corporate social responsibility? Do you know any performance that strongly impressed you?"
+  ],
+  [
+   "43",
+   "49",
+   "QN49.1",
+   "Why do companies need to perform social responsibility and community relations?"
+  ],
+  [
+   "44",
+   "50",
+   "QN50.1",
+   "What is Corporate Citizenship? How to communicate about Corporate Social Responsibility?"
+  ],
+  [
+   "45",
+   "51",
+   "QN51.1",
+   "What is the role of community relations in business? Tell about 3 periods of community relations?"
+  ]
+ ],
+ "links": [
+  "/download/13454/S/1_CCO201_Phần 1.zip",
+  "/download/13454/S/2_CCO201_Phần 2.zip"
+ ]
+}

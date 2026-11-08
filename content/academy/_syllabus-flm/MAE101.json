@@ -1,0 +1,2014 @@
+{
+ "ma": "MAE101",
+ "sylID": "13137",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13137",
+   "code": "MAE101",
+   "name": "Mathematics for Engineering_Toán cho ngành kỹ thuật",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13137",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13137",
+  "Syllabus Name": "Mathematics for Engineering_Toán cho ngành kỹ thuật",
+  "Course Name English": "",
+  "Subject Code": "MAE101",
+  "Learning-Teaching Method": "Lecture,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "Upon finishing the course, students must acquire:\n\n1. the following knowledge: (ABET a1)\n\n• The basic concepts of single variable calculus: limit, derivative, integral.\n\n• Concepts of linear system of equations, matrix and their applications\n\n• The concepts of vector spaces, basis and dimension, linear transformations and their applications.\n\n• The range of application of calculus and algebra in science, technology, economics & finance...\n\n2. the following skills: (ABET a2)\n\n• Find limit, derivative and integral of functions of single variables;\n\n• Find solutions to linear systems by using row-reduced echelon form, Cramer's Rule, inverse matrix\n\n• Find determinants and inverse of a matrix\n\n• Find linear transformations in R^2 and R^3.\n\n• Find dimensions and bases of vector spaces .\n\n• Apply the concepts of calculus and algebra in solving problems in science, technology, economics & finance, ...",
+  "StudentTasks": "Students must attend at least 80% of contact hours in order to be accepted to the final examination.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Calculus 1",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://openstax.org/details/books/calculus-volume-1"
+  ],
+  [
+   "2",
+   "Calculus 2",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://openstax.org/details/books/calculus-volume-2"
+  ],
+  [
+   "3",
+   "powerpoint in CD + Powerpoint prepared by previous lecturers (PP).",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Student Video Skillbuilder in CD (Video).",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Animation in CD (Animation).",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Computerized tools (for example Maxima http://maxima.sourceforge.net/) (CT)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "7",
+   "Essential Calculus",
+   "James Stewart",
+   "Thomson Brooks/Cole",
+   "",
+   "",
+   "978-0-495-10860-3",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "8",
+   "Calculus for engineers",
+   "Donald Trim",
+   "Prentice Hall,",
+   "",
+   "",
+   "0-13-085603-7",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "9",
+   "Calculus",
+   "Stanley I. Grossman",
+   "",
+   "",
+   "",
+   "0-03-096420-2",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "10",
+   "Linear Algebra with applications",
+   "W.Keith Nicholson,",
+   "Mc Graw Hill Education",
+   "",
+   "",
+   "987-1-259-07299-4.",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "11",
+   "Linear Algebra with Applications",
+   "W. Keith Nicholson",
+   "Lyryx Online Resources",
+   "2021",
+   "2021-A",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://lyryx.com/linear-algebra-applications/"
+  ],
+  [
+   "12",
+   "Coursera - FPT University Private Authored Courses: Linear transformation with python (Guided Project)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Optional practice"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Describe basic properties and find the limit of a function\nLO1.1 Find the domain, range, zeros and analyze the symmetry of the graph; create new functions from old functions.\nLO1.2 Find the slope and write an equation of a line; describe how a function changes under graph translations.\nLO1.3 Compute the limit of a function using graphs and limit laws, including the Squeeze's Theorem.\nLO1.4 Find limits at infinity and infinity limits, and apply in finding asymptotes of a function.\nLO1.5 Identify where a function is continuous; use the Intermedia Value Theorem to show that an equation has a solution."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Calculate derivatives of a function\nLO2.1 Find the average rate of change; identify derivative as the limit of a difference quotient.\nLO2.2 Recognize derivative as the instantaneous velocity and the slope of tangent lines.\nLO2.3 Find derivatives using basic formulas and the sum, difference, product, quotient, chain rules."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Use derivatives to analyze a function and to solve applications\nLO3.1 Use implicit differentiation to find derivatives and to solve related rates problems.\nLO3.2 Find linear approximation of a function; calculate differentials and apply in calculating errors of approximation.\nLO3.3 Apply Rolle's Theorem and Mean Value Theorem to a function; find critical numbers and absolute extrema of a function.\nLO3.4 Identify local extrema, and describe the monotonicity of a function; solve optimization problems.\nLO3.5 Recognize acceleration as second derivative; determine inflection points and describe the concavity of a function.\nLO3.6 Use Newton method to approximate solutions of an equation."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Calculate integrals and find area under the graph of a function\nLO4.1 Use Riemann sums to approximate area; recognize area as a definite integral which is the limit of Riemann sums.\nLO4.2 Apply the Fundamental Theorems of Calculus to find derivatives of integrals, and to evaluate definite integrals.\nLO4.3 Recognize indefinite integrals as anti-derivatives; find integrals using basic formulas and the techniques of substitution and integration by parts.\nLO4.4 Use integration to solve applications and to compute the average value of a function.\nLO4.5 Approximate definite integrals using Midpoint, Trapezoidal and Simpson rules.\nLO4.6 Determine if an improper integral converges."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Solve a system of linear equations using Gaussian elimination\nLO5.1 Identify if a matrix is in echelon forms; carry a matrix into an echelon using row operations; calculate the rank of a matrix.\nLO5.2 Use echelon matrices to solve/describe the solution set of a linear system."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Perform basic operations on matrices and manipulate matrix transformations\nLO6.1 Perform addition, scalar multiplication and transpose of matrices; verify if a matrix is symmetric.\nLO6.2 Multiply two matrices of appropriate sizes; transform between a linear system and a matrix equation.\nLO6.3 Determine the matrix of a linear transformation; use properties of linear transformations in solving problems."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Find the determinant, inverse and diagonalization of a matrix\nLO7.1 Compute the cofactors and the determinant of a matrix; analyze determinants in relation with row/column operations.\nLO7.2 Check if a matrix is invertible; find the adjugate and the inverse of a matrix; use properties of inverses and determinants in solving problems.\nLO7.3 Solve a system of linear equations using inverse matrices or Cramer's rule.\nLO7.4 Find the characteristic polynomial, eigenvalues and eigenvectors to diagonalize a matrix; check if a matrix is diagonalizable."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Manipulate vector operations and linear transformations in R^3.\nLO8.1 Manipulate vector operations; find equations of lines.\nLO8.2 Compute the dot product and the angle between two vectors; find the projection of a vector on another vector and manipulate equations of planes.\nLO8.3 Compute the cross product; analyze areas and volumns in relation with dot and cross products.\nLO8.4 Determine linear transformations in R^3 and discuss applications in computer graphic."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Find the dimension and bases of a subspace\nLO9.1 Determine if a subset of vectors is a subspace; describe the subspace spanned by a set of vectors.\nLO9.2 Check if a set of vectors are independent; determine if a set of vectors form a basis.\nLO9.3 Find a basis and the dimension of a subspace; analyze the rank in relation with the dimension of the column, row and the null space of a matrix.\nLO9.4 Compute dot product and length of vectors; check if a set of vectors are orthogonal or orthonormal; write a vector as a linear combination of an orthogonal basis."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignments/Exercises",
+   "on-going",
+   "3",
+   "30.0%",
+   ">0",
+   "3 hours",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "OP1: Open // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: At least 3/chapter // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Assignment 1 covers Chapters 1, 2, 3, 4 (Vol.1), 1, 3 (Vol.2) - Calculus ; Assignment 2 covers Chapters 1, 2, 3 (Linear algebra) ; Assignment 3 covers Chapters 4, 5 (Linear algebra)",
+   "OP1: Each assignment is divided into two parts: the take-home component counts for no more than 50% of the total grade, and the in-class component counts for at least 50% (this may take the form of a presentation, essay, problem-solving, etc.).\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Students use notebooks for exercises\n\nAssignment 1: LO1, LO2, LO3, LO4\n\nAssignment 2: LO5, LO6, LO7\n\nAssignment 3: LO8, LO9"
+  ],
+  [
+   "2",
+   "Progress Test",
+   "on-going",
+   "3",
+   "30.0%",
+   ">0",
+   "OP1: Test 1: 40'; Test 2&3: 30' // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "OP1: MC or a suitable format // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Test 1: 20 Test 2&3: 15+ At least 5*n questions where n is the number of Chapters covered in the test.+ Structure:• level 1 (knowledge & comprehension): 20%; • level 2 (application & analysis): 60%; • level 3 (synthesis & evaluation): 20% // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Test 1 covers Chapters 1, 2, 3, 4 (Vol.1), 1, 3 (Vol.2) - Calculus ; Test 2 covers Chapters 1, 2, 3 (Linear algebra) ; Test 3 covers Chapters 4, 5 (Linear algebra)",
+   "OP1: by instructor, and by computer\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "",
+   "Computer gradable",
+   "50\n\nStructure:\n\n• level 1: 10%\n\n• level 2: 80%\n\n• level 3: 10%",
+   "All studied chapters. Each studied Chapter contributes 2-8 questions, depending on the number of topics in the Chapter.",
+   "by Exam Board",
+   "~10% of\n\nquestions is a2 objective oriented"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "0 Introduction.\n\n1.1 Review of Functions.\n\n1.2 Basic Classes of Functions",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Textbook Chapter 1\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 1\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "2",
+   "2.1 A Preview of Calculus.\n\n2.2 The Limit of a Functions",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 2\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 2\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "3",
+   "2.3 The Limit Laws\n\n2.4 Continuity",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 2\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 2\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "4",
+   "3.1 Defining the Derivative\n\n3.2 The Derivative as a Function",
+   "Offline",
+   "LO2",
+   "IT",
+   "Textbook Chapter 3\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 3\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "5",
+   "3.3 Differentiation Rule.\n\n3.4 Derivatives as Rates of Change\n\n3.5 Derivatives of Trigonometric Functions",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 3\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 3\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "6",
+   "3.6 The Chain Rule. 3.8 Implicit Differentiation",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 3\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 3\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "7",
+   "3.9 Derivatives of Exponential and Logarithmic Functions",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 3\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 3\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "8",
+   "4.1 Related Rates",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 4\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 4\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "9",
+   "4.2 Linear Approximations and Differentials",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 4\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 4\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "10",
+   "4.3 Maxima and Minima\n\n4.4 The Mean Value Theorem",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 4\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 4\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "11",
+   "4.5 Derivatives and the Shape of a Graph\n\n4.6 Limits at Infinity and Asymptotes",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 4\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 4\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "12",
+   "4.7 Applied Optimization Problems",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 4\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 4\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "13",
+   "4.9 Newton's Method",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 4\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 4\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "14",
+   "4.10 Antiderivatives",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 4\n\n(Calculus Vol. 1)",
+   "",
+   "Exercises Chapter 4\n\n(Calculus Vol. 1)",
+   ""
+  ],
+  [
+   "15",
+   "1.1 Approximating Areas",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook Chapter 1\n\n(Calculus Vol. 2)",
+   "",
+   "Exercises Chapter 1\n\n(Calculus Vol. 2)",
+   ""
+  ],
+  [
+   "16",
+   "1.2 The Definite Integral\n\n1.3 The Fundamental Theorem of Calculus",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook Chapter 1\n\n(Calculus Vol. 2)",
+   "",
+   "Exercises Chapter 1\n\n(Calculus Vol. 2)",
+   ""
+  ],
+  [
+   "17",
+   "1.4 Integration Formulas and the Net Change Theorem",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 1\n\n(Calculus Vol. 2)",
+   "",
+   "Exercises Chapter 1\n\n(Calculus Vol. 2)",
+   ""
+  ],
+  [
+   "18",
+   "1.5 Substitution",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 1\n\n(Calculus Vol. 2)",
+   "",
+   "Exercises Chapter 1\n\n(Calculus Vol. 2)",
+   ""
+  ],
+  [
+   "19",
+   "3.1 Integration by Parts 3.6 Numerical Integration",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3\n\n(Calculus Vol. 2)",
+   "",
+   "Exercises Chapter 3 (Calculus Vol. 2)",
+   ""
+  ],
+  [
+   "20",
+   "3.7 Improper integrals",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3\n\n(Calculus Vol. 2)",
+   "",
+   "Exercises Chapter 3 (Calculus Vol. 2)",
+   ""
+  ],
+  [
+   "21",
+   "Review",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Progress Test 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "23",
+   "1.1 Solutions of Systems of Linear Equations",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 1 (Linear Algebra)",
+   "",
+   "Exercises Chapter 1 (Linear Algebra)",
+   ""
+  ],
+  [
+   "24",
+   "1.1 Elementary Operations",
+   "Offline",
+   "LO5",
+   "TU",
+   "Textbook Chapter 1 (Linear Algebra)",
+   "",
+   "Exercises Chapter 1 (Linear Algebra)",
+   ""
+  ],
+  [
+   "25",
+   "1.2 Gaussian Elimination",
+   "Offline",
+   "LO5",
+   "TU",
+   "Textbook Chapter 1 (Linear Algebra)",
+   "",
+   "Exercises Chapter 1 (Linear Algebra)",
+   ""
+  ],
+  [
+   "26",
+   "1.3 Homogeneous Equations",
+   "Offline",
+   "LO5",
+   "TU",
+   "Textbook Chapter 1 (Linear Algebra)",
+   "",
+   "Exercises Chapter 1 (Linear Algebra)",
+   ""
+  ],
+  [
+   "27",
+   "2.1 Matrix Addition, Scalar Multiplication, and Transposition",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 2 (Linear Algebra)",
+   "",
+   "Exercises Chapter 2 (Linear Algebra)",
+   ""
+  ],
+  [
+   "28",
+   "2.2 Matrix-Vector Multiplication",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 2 (Linear Algebra)",
+   "",
+   "Exercises Chapter 2 (Linear Algebra)",
+   ""
+  ],
+  [
+   "29",
+   "2.2 Matrix Transformations",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 2 (Linear Algebra)",
+   "",
+   "Exercises Chapter 2 (Linear Algebra)",
+   ""
+  ],
+  [
+   "30",
+   "2.3 Matrix multiplication",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 2 (Linear Algebra)",
+   "",
+   "Exercises Chapter 2 (Linear Algebra)",
+   ""
+  ],
+  [
+   "31",
+   "2.4 Matrix Inverses",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 2 (Linear Algebra)",
+   "",
+   "Exercises Chapter 2 (Linear Algebra)",
+   ""
+  ],
+  [
+   "32",
+   "2.4 Properties of Inverses",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 2 (Linear Algebra)",
+   "",
+   "Exercises Chapter 2 (Linear Algebra)",
+   ""
+  ],
+  [
+   "33",
+   "2.6 Linear Transformations",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 2 (Linear Algebra)",
+   "",
+   "Exercises Chapter 2 (Linear Algebra)\n\nOptional Practice:\n\nCoursera - FPT University Private Authored Courses: Linear transformation with Python (Guided Project)",
+   ""
+  ],
+  [
+   "34",
+   "3.1 The Cofactor Expansion",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 3 (Linear Algebra)",
+   "",
+   "Exercises Chapter 3 (Linear Algebra)",
+   ""
+  ],
+  [
+   "35",
+   "3.1 Properties of Determinants",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 3 (Linear Algebra)",
+   "",
+   "Exercises Chapter 3 (Linear Algebra)",
+   ""
+  ],
+  [
+   "36",
+   "3.2 Determinants and Matrix Inverses",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 3 (Linear Algebra)",
+   "",
+   "Exercises Chapter 3 (Linear Algebra)",
+   ""
+  ],
+  [
+   "37",
+   "3.2 Cramer's Rule",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 3 (Linear Algebra)",
+   "",
+   "Exercises Chapter 3 (Linear Algebra)",
+   ""
+  ],
+  [
+   "38",
+   "3.3 Eigenvalues and Eigenvectors",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 3 (Linear Algebra)",
+   "",
+   "Exercises Chapter 3 (Linear Algebra)",
+   ""
+  ],
+  [
+   "39",
+   "3.3 Diagonalization",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 3 (Linear Algebra)",
+   "",
+   "Exercises Chapter 3 (Linear Algebra)",
+   ""
+  ],
+  [
+   "40",
+   "Review",
+   "Offline",
+   "LO5, LO6, LO7",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Progress Test 2",
+   "Offline",
+   "LO5, LO6, LO7",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "4.1 Vectors",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "43",
+   "4.1 Lines in Space",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "44",
+   "4.2 Projections",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "45",
+   "4.2 Planes",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "46",
+   "4.2 Cross Product",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "47",
+   "4.3 More on the Cross Product",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "48",
+   "4.4 Linear Operations on R^3",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "49",
+   "4.4 Transformations of Areas and Volumes",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "50",
+   "4.5 An application in Computer Graphics",
+   "Offline",
+   "LO8",
+   "IT",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   "",
+   "Textbook\n\nChapter 4\n\n(Linear Algebra)",
+   ""
+  ],
+  [
+   "51",
+   "5.1 Subspaces of R^n",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "52",
+   "5.1 Spanning Sets",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "53",
+   "5.2 Linear Independence",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "54",
+   "5.2 Dimension",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "55",
+   "5.3 Dot Product, Length, and Distance",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "56",
+   "5.3 Orthogonal Sets and the Expansion Theorem",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "57",
+   "5.4 Rank of a Matrix",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "58",
+   "5.4 Rank, Nullity, and Linear Systems",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 5 (Linear Algebra)",
+   "",
+   "Exercises Chapter 5 (Linear Algebra)",
+   ""
+  ],
+  [
+   "59",
+   "Review",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Progress Test 3",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1_DN",
+   "Discuss four ways of representing a function. Illustrate your discussion with examples."
+  ],
+  [
+   "2",
+   "1",
+   "CT_CQ1",
+   "Basis functions and the transformations of functions"
+  ],
+  [
+   "3",
+   "1",
+   "HCM_CQ1",
+   "What is a function? Let's give an example. Then, find its domain and range."
+  ],
+  [
+   "4",
+   "2",
+   "CQ1_DN",
+   "Describe several ways in which a limit can fail to exist. Illustrate with sketches."
+  ],
+  [
+   "5",
+   "2",
+   "CT_CQ1",
+   "Explain the relationship between one-sided and two-sided limits."
+  ],
+  [
+   "6",
+   "2",
+   "HCM_CQ2",
+   "Suppose that the graph of f is given. Describe how the graph of the function y=f(x+a) + b can be obtained from the graph of f(x). (where a, b>0)"
+  ],
+  [
+   "7",
+   "3",
+   "CQ1_DN",
+   "What does it mean for f to be continuous at a, continuous on an interval? What can you say about the graph of such a function?"
+  ],
+  [
+   "8",
+   "3",
+   "CT_CQ1",
+   "Describe three kinds of discontinuities."
+  ],
+  [
+   "9",
+   "3",
+   "HCM_CQ3",
+   "What does it mean to say that a line is the vertical asymptote of the curve? Draw curves to illustrate the various possibilities."
+  ],
+  [
+   "10",
+   "3",
+   "HCM_CQ4",
+   "What is the graph of a function? How can you tell whether a given curve is the graph of a function?"
+  ],
+  [
+   "11",
+   "4",
+   "CQ1_DN",
+   "Define the derivative f'(a) . Discuss two ways of interpreting this number."
+  ],
+  [
+   "12",
+   "4",
+   "CT_CQ1",
+   "Describe three conditions for when a function does not have a derivative. Explain the meaning of a higher-order derivative."
+  ],
+  [
+   "13",
+   "4",
+   "HCM_CQ5",
+   "Describe some cases where a function is not differentiable. Illustrate with sketches."
+  ],
+  [
+   "14",
+   "5",
+   "CQ1_DN",
+   "Give several examples of how the derivative can be interpreted as a rate of change in physics, chemistry, biology, economics, or other sciences."
+  ],
+  [
+   "15",
+   "5",
+   "CT_CQ1",
+   "Predict the future population from the present value and the population growth rate."
+  ],
+  [
+   "16",
+   "5",
+   "HCM_CQ6",
+   "If y=f(x) and x varies from a to b, write expressions for the average rate of change of y with respect to x over the interval [a,b]."
+  ],
+  [
+   "17",
+   "6",
+   "CQ1_DN",
+   "Find the equation of the tangent line to the folium of Descartes with equation 2x^3 + 2y^3 − 9xy = 0 at the point (2, 1)."
+  ],
+  [
+   "18",
+   "6",
+   "CT_CQ1",
+   "Recognize the chain rule for a composition of three or more functions."
+  ],
+  [
+   "19",
+   "6",
+   "HCM_CQ7",
+   "What is an implicit function?"
+  ],
+  [
+   "20",
+   "6",
+   "HCM_CQ8",
+   "Explain with examples how implicit differentiation works."
+  ],
+  [
+   "21",
+   "7",
+   "CT_CQ1",
+   "Use logarithmic differentiation to determine the derivative of a function."
+  ],
+  [
+   "22",
+   "7",
+   "HCM_CQ9",
+   "How are derivatives of exponential and logarithmic functions used in real life?"
+  ],
+  [
+   "23",
+   "8",
+   "CQ1_DN",
+   "How to solve a related rates problem? Illustrate with examples."
+  ],
+  [
+   "24",
+   "8",
+   "CT_CQ1",
+   "Use the chain rule to find the rate of change of one quantity that depends on the rate of change of other quantities."
+  ],
+  [
+   "25",
+   "8",
+   "HCM_CQ10",
+   "What is an example of a related rate in reality?"
+  ],
+  [
+   "26",
+   "9",
+   "CQ1_DN",
+   "How to use differentials to approximate the change in the value of the function that results from a small change in the value of the input?"
+  ],
+  [
+   "27",
+   "9",
+   "CT_CQ1",
+   "Describe the linear approximation to a function at a point"
+  ],
+  [
+   "28",
+   "9",
+   "HCM_CQ11",
+   "What is the linearization of an everywhere differential function f?"
+  ],
+  [
+   "29",
+   "9",
+   "HCM_CQ12",
+   "Suppose that f\"(x) < 0 for x near a point. Is the linearization of f at the point an over-approximation or an under-approximation? Why?"
+  ],
+  [
+   "30",
+   "10",
+   "CQ1_DN1",
+   "Explain the difference between an absolute maximum and a local maximum. Illustrate with a sketch."
+  ],
+  [
+   "31",
+   "10",
+   "CQ2_DN1",
+   "State the Mean Value Theorem and give a geometric interpretation."
+  ],
+  [
+   "32",
+   "10",
+   "CT_CQ1",
+   "Define absolute extrema. Explain how to find the critical points of a function over a closed interval. Provide examples."
+  ],
+  [
+   "33",
+   "10",
+   "HCM_CQ13",
+   "If f(x) is continuous on a closed interval, then it is enough to look at the points where f'(x) = 0 in order to find its absolute maxima and minima. Be prepared to justify your answer."
+  ],
+  [
+   "34",
+   "11",
+   "CT_CQ1",
+   "Use concavity and inflection points to explain how the sign of the second derivative affects the shape of a function’s graph."
+  ],
+  [
+   "35",
+   "11",
+   "HCM_CQ14",
+   "What is the vertical/horizontal asymptote of a curve? Illustrate the possibilities by drawing."
+  ],
+  [
+   "36",
+   "11",
+   "HCM_CQ15",
+   "How many horizontal asymptotes can a function have in maximum?"
+  ],
+  [
+   "37",
+   "12",
+   "CT_CQ1",
+   "Set up and solve optimization problems in several applied fields"
+  ],
+  [
+   "38",
+   "12",
+   "HCM_CQ16",
+   "How do you solve applied optimization problems? Let's give an example."
+  ],
+  [
+   "39",
+   "13",
+   "CQ1_DN",
+   "(a) Given an initial approximation x_1 to a root of the equation f(x)=0, explain geometrically, with a diagram, how the second approximation x_2 in Newton’s method is obtained.\n(b) Write an expression for x_2, x_n"
+  ],
+  [
+   "40",
+   "13",
+   "CT_CQ1",
+   "Describe the steps of Newton’s method. Recognize when Newton’s method does not work. Provide examples."
+  ],
+  [
+   "41",
+   "13",
+   "HCM_CQ17",
+   "What is Newton's method? Give examples."
+  ],
+  [
+   "42",
+   "13",
+   "HCM_CQ18",
+   "Does Newton's method always work?"
+  ],
+  [
+   "43",
+   "14",
+   "CQ1_DN",
+   "A metal storage tank with volume V is to be constructed in the shape of a right circular cylinder surmounted by a hemisphere. What dimensions will require the least amount of\nmetal?"
+  ],
+  [
+   "44",
+   "14",
+   "CT_CQ1",
+   "Use antidifferentiation to solve simple initial-value problems"
+  ],
+  [
+   "45",
+   "14",
+   "HCM_CQ19",
+   "What is the antiderivative? Why do we need to find the antiderivative of an integrable function?"
+  ],
+  [
+   "46",
+   "15",
+   "CQ1_DN",
+   "Use six rectangles to find estimates of each type for the\narea under the graph of f(x)= e^(x^2) from x=0 to x=1 .\n(a) L_6(sample points are left endpoints)\n(b) R_6(sample points are right endpoints)"
+  ],
+  [
+   "47",
+   "15",
+   "CT_CQ1",
+   "Compute the left and right Riemann sums—L6 and R6. Provide examples."
+  ],
+  [
+   "48",
+   "15",
+   "HCM_CQ20",
+   "How do you approximate the area under a curve? Let's take an example of the function f(x) = x^2 in the interval [1,2]."
+  ],
+  [
+   "49",
+   "16",
+   "CQ1_DN",
+   "Write the definition of the definite integral of a continuous function from x=a to x=b ."
+  ],
+  [
+   "50",
+   "16",
+   "CT_CQ1",
+   "Use Riemann sums to the approximate area."
+  ],
+  [
+   "51",
+   "16",
+   "HCM_CQ21",
+   "What are definite integrals? Give examples."
+  ],
+  [
+   "52",
+   "16",
+   "HCM_CQ22",
+   "What is the relationship between integrals and anti-derivatives?"
+  ],
+  [
+   "53",
+   "17",
+   "CQ1_DN",
+   "Use the Net Change Theorem to evaluate the net change in function . Illustrate with examples."
+  ],
+  [
+   "54",
+   "17",
+   "CT_CQ1",
+   "Explain the significance of the net change theorem."
+  ],
+  [
+   "55",
+   "17",
+   "HCM_CQ23",
+   "How can we use definite integrals to determine the net change of a quantity?"
+  ],
+  [
+   "56",
+   "18",
+   "CQ1_DN",
+   "How do you use the Substitution Rule?"
+  ],
+  [
+   "57",
+   "18",
+   "CT_CQ1",
+   "When we use the substitution rule and how it is used."
+  ],
+  [
+   "58",
+   "18",
+   "HCM_CQ24",
+   "What is the substitution method for calculating integrals?"
+  ],
+  [
+   "59",
+   "18",
+   "HCM_CQ25",
+   "Give an example of computing integrals by using substitution rule."
+  ],
+  [
+   "60",
+   "19",
+   "CQ1_DN",
+   "Use Midpoint Rule and Trapezoidal Rule to approximate the value of an definite integral."
+  ],
+  [
+   "61",
+   "19",
+   "CQ2_DN1",
+   "Approximate the value of an definite integral by using the Simpson’s Rule."
+  ],
+  [
+   "62",
+   "19",
+   "CT_CQ1",
+   "When we use the integrate by parts rule and how it is used."
+  ],
+  [
+   "63",
+   "19",
+   "HCM_CQ26",
+   "How to prove the integral by parts formula?"
+  ],
+  [
+   "64",
+   "20",
+   "CT_CQ1",
+   "Evaluate an integral over an infinite interval."
+  ],
+  [
+   "65",
+   "20",
+   "HCM_CQ27",
+   "What are improper integrals?"
+  ],
+  [
+   "66",
+   "20",
+   "HCM_CQ28",
+   "What are the real-life applications of improper integrals?"
+  ],
+  [
+   "67",
+   "21",
+   "HCM_CQ29",
+   "What are the types of improper integrals?"
+  ],
+  [
+   "68",
+   "22",
+   "HCM_CQ30",
+   "What is numerical integration with an example? Why do we implement numerical integration?"
+  ],
+  [
+   "69",
+   "23",
+   "CQ1_DN",
+   "How many solutions can a system of linear equations have?"
+  ],
+  [
+   "70",
+   "23",
+   "CT_CQ1",
+   "Show that a system consisting of exactly one linear equation can have no solution, one solution, or infinitely many solutions. Give examples"
+  ],
+  [
+   "71",
+   "23",
+   "HCM_CQ31",
+   "Give example of solving a system of linear equations in real life."
+  ],
+  [
+   "72",
+   "23",
+   "HCM_CQ32",
+   "How many solutions can a system of linear equations have?"
+  ],
+  [
+   "73",
+   "24",
+   "CQ1_DN",
+   "What are elementary row operations? Illustrate with examples."
+  ],
+  [
+   "74",
+   "24",
+   "CT_CQ1",
+   "By examining the possible positions of lines in the plane, show that two equations in two variables can have zero, one, or infinitely many solutions."
+  ],
+  [
+   "75",
+   "24",
+   "HCM_CQ33",
+   "What are elementary operations in linear algebra? Let's give an example."
+  ],
+  [
+   "76",
+   "24",
+   "HCM_CQ34",
+   "What are reduced row echelon matrices?"
+  ],
+  [
+   "77",
+   "25",
+   "CQ1_DN",
+   "How do you solve a linear equation using the Gaussian elimination method?"
+  ],
+  [
+   "78",
+   "25",
+   "CT_CQ1",
+   "Using a series of elementary row operations to carry a matrix to row–echelon form, find the rank of a matrix."
+  ],
+  [
+   "79",
+   "25",
+   "HCM_CQ35",
+   "How does Gaussian elimination work?"
+  ],
+  [
+   "80",
+   "26",
+   "CT_CQ1",
+   "Condition for a homogeneous system to have a nontrivial solution"
+  ],
+  [
+   "81",
+   "26",
+   "HCM_CQ36",
+   "What are homogeneous systems?"
+  ],
+  [
+   "82",
+   "27",
+   "CQ1_DN",
+   "How to find the result of Matrix Addition, Scalar Multiplication, Transposition."
+  ],
+  [
+   "83",
+   "27",
+   "CT_CQ1",
+   "Practicing some matrix operations"
+  ],
+  [
+   "84",
+   "27",
+   "HCM_CQ37",
+   "How do we define addition, scalar multiplication, and transpose operations of matrices?"
+  ],
+  [
+   "85",
+   "27",
+   "HCM_CQ38",
+   "State at least 2 properties of matrix addition."
+  ],
+  [
+   "86",
+   "28",
+   "CT_CQ1",
+   "What is the condition to multiply the matrix by the vector?"
+  ],
+  [
+   "87",
+   "28",
+   "HCM_CQ39",
+   "Can we do the multiplication of any two matrices together?"
+  ],
+  [
+   "88",
+   "28",
+   "HCM_CQ40",
+   "State at least 2 properties of matrix multiplication."
+  ],
+  [
+   "89",
+   "29",
+   "CQ1_DN",
+   "How to use matrix -vector multiplication as Matrix Transformation in R^2."
+  ],
+  [
+   "90",
+   "29",
+   "CT_CQ1",
+   "What is matrix transformation? For example."
+  ],
+  [
+   "91",
+   "29",
+   "HCM_CQ41",
+   "What is the 'matrix transformation'?"
+  ],
+  [
+   "92",
+   "29",
+   "HCM_CQ42",
+   "What is the matrix of reflection on the axis Ox in the Oxy-plane?"
+  ],
+  [
+   "93",
+   "30",
+   "CQ1_DN",
+   "How to multiply two matrices? Illustrate with examples."
+  ],
+  [
+   "94",
+   "30",
+   "CT_CQ1",
+   "How to multiply two matrices? For example. Is it possible to multiply any two matrices together?"
+  ],
+  [
+   "95",
+   "31",
+   "CT_CQ1",
+   "Find matrix inverse. Using matrix transformations to reveal the geometrical meaning of matrix multiplication and inverse."
+  ],
+  [
+   "96",
+   "31",
+   "HCM_CQ43",
+   "When is a square matrix invertible?"
+  ],
+  [
+   "97",
+   "31",
+   "HCM_CQ44",
+   "Suppose A is an invertible matrix, how to find the inverse of A?"
+  ],
+  [
+   "98",
+   "32",
+   "CT_CQ1",
+   "State the properties of inverse matrices, providing examples."
+  ],
+  [
+   "99",
+   "32",
+   "HCM_CQ45",
+   "What are the properties for the inverse existence of a matrix?"
+  ],
+  [
+   "100",
+   "33",
+   "CT_CQ1",
+   "what are linear transformations? State the properties of linear transformations, with examples."
+  ],
+  [
+   "101",
+   "34",
+   "CT_CQ1",
+   "How to find The Cofactor Expansion"
+  ],
+  [
+   "102",
+   "34",
+   "HCM_CQ46",
+   "How to find the (i,j) -cofactor of a matrix?"
+  ],
+  [
+   "103",
+   "34",
+   "HCM_CQ47",
+   "What are (i,j)-cofactors used for?"
+  ],
+  [
+   "104",
+   "35",
+   "CT_CQ1",
+   "How to calculate the determinant and its properties."
+  ],
+  [
+   "105",
+   "35",
+   "HCM_CQ48",
+   "What is the determinant of a square matrix?"
+  ],
+  [
+   "106",
+   "36",
+   "CT_CQ1",
+   "State the relationship formulas between the determinant of a matrix and the inverse matrix."
+  ],
+  [
+   "107",
+   "36",
+   "HCM_CQ49",
+   "Can you find determinant of non square matrices?"
+  ],
+  [
+   "108",
+   "36",
+   "HCM_CQ50",
+   "Give an example of computing the determinant of a matrix by using elementary operations."
+  ],
+  [
+   "109",
+   "37",
+   "CQ1_DN",
+   "How to solve a linear system using Cramer's rule."
+  ],
+  [
+   "110",
+   "37",
+   "CT_CQ1",
+   "How can you use Cramer’s Rule to tell if a system of linear equations has one, zero, or infinitely many solutions?"
+  ],
+  [
+   "111",
+   "37",
+   "HCM_CQ51",
+   "State the Cramer's Rule."
+  ],
+  [
+   "112",
+   "38",
+   "CQ1_DN",
+   "How to find the characteristic equation, the eigenvalues, and bases for the eigenspaces of the matrix."
+  ],
+  [
+   "113",
+   "38",
+   "CT_CQ1",
+   "Find the characteristic polynomial, eigenvalues and eigenvectors of matrix A. Provide examples."
+  ],
+  [
+   "114",
+   "38",
+   "HCM_CQ52",
+   "What is the characteristic polynomial of a matrix?"
+  ],
+  [
+   "115",
+   "38",
+   "HCM_CQ53",
+   "What do we call the root of the characteristic polynomial of a matrix?"
+  ],
+  [
+   "116",
+   "39",
+   "CT_CQ1",
+   "When is a matrix diagonalizable, give an example."
+  ],
+  [
+   "117",
+   "40",
+   "HCM_CQ54",
+   "How to find eigenvalues of a 2x2 matrix? When is it diagonalizable for sure?"
+  ],
+  [
+   "118",
+   "40",
+   "HCM_CQ55",
+   "When do we guarantee a matrix is diagonalizable?"
+  ],
+  [
+   "119",
+   "41",
+   "HCM_CQ56",
+   "What are the applications of diagonalization of a matrix?"
+  ],
+  [
+   "120",
+   "42",
+   "CT_CQ1",
+   "What is the vector space R^n? for example"
+  ],
+  [
+   "121",
+   "42",
+   "HCM_CQ57",
+   "What is the vector space R^n?"
+  ],
+  [
+   "122",
+   "43",
+   "CT_CQ1",
+   "Find the equations of the line. For example."
+  ],
+  [
+   "123",
+   "43",
+   "HCM_CQ58",
+   "How to determine the equation of a line in R^3?"
+  ],
+  [
+   "124",
+   "43",
+   "HCM_CQ59",
+   "Give the vector version of the equation of a line in R^3."
+  ],
+  [
+   "125",
+   "44",
+   "CT_CQ1",
+   "Calculate the distance from the point P to the line in each case and find the point Q on the line closest to P. P(3, 2, -1) line: x = 2 +t, y = 1-t, z = 3 - 2t."
+  ],
+  [
+   "126",
+   "44",
+   "HCM_CQ60",
+   "Let U and V be vectors in R^n and V ≠ 0. What is the projection of U onto V?"
+  ],
+  [
+   "127",
+   "45",
+   "CT_CQ1",
+   "Find equation planes."
+  ],
+  [
+   "128",
+   "45",
+   "HCM_CQ61",
+   "How to define a plane in R^3?"
+  ],
+  [
+   "129",
+   "45",
+   "HCM_CQ62",
+   "Give the vector version of the equation of a plane in R^3."
+  ],
+  [
+   "130",
+   "46",
+   "CT_CQ1",
+   "Show that if the diagonals of a parallelogram are perpendicular, it is necessarily a rhombus."
+  ],
+  [
+   "131",
+   "46",
+   "HCM_CQ63",
+   "What is the major difference between cross product and dot product?"
+  ],
+  [
+   "132",
+   "47",
+   "CT_CQ1",
+   "Find the area of the triangle."
+  ],
+  [
+   "133",
+   "47",
+   "HCM_CQ64",
+   "Why do we use cross products?"
+  ],
+  [
+   "134",
+   "48",
+   "CT_CQ1",
+   "Find the matrix of the operator (reflection, projection, rotation) in R^2/ R^3."
+  ],
+  [
+   "135",
+   "48",
+   "HCM_CQ65",
+   "Give an example of a linear transformation from R^3 to R^2."
+  ],
+  [
+   "136",
+   "48",
+   "HCM_CQ66",
+   "Give an example of a linear transformation from R^3 to R^2 and indicate the matrix of this transformation."
+  ],
+  [
+   "137",
+   "49",
+   "CT_CQ1",
+   "Find the matrix of the rotation in R^3 about the x axis through the angle θ (from the positive y axis to the positive z axis)."
+  ],
+  [
+   "138",
+   "49",
+   "HCM_CQ67",
+   "How is the determinant related to volume?"
+  ],
+  [
+   "139",
+   "50",
+   "CT_CQ1",
+   "What are the applications of transformation in computer graphics? For example."
+  ],
+  [
+   "140",
+   "50",
+   "HCM_CQ68",
+   "What are the applications of transformation in computer graphics?"
+  ],
+  [
+   "141",
+   "50",
+   "HCM_CQ69",
+   "What is the projection matrix of an orthogonal projection along a line?"
+  ],
+  [
+   "142",
+   "51",
+   "CT_CQ1",
+   "When is U a subspace in R^3. For example."
+  ],
+  [
+   "143",
+   "51",
+   "HCM_CQ70",
+   "How to determine whether a subset is a subspace of R^n?"
+  ],
+  [
+   "144",
+   "51",
+   "HCM_CQ71",
+   "Is R^n a subspace of itself?"
+  ],
+  [
+   "145",
+   "52",
+   "CT_CQ1",
+   "How to find a spanning set of a subspace?"
+  ],
+  [
+   "146",
+   "52",
+   "HCM_CQ72",
+   "How to find a finite spanning set of a subspace?"
+  ],
+  [
+   "147",
+   "53",
+   "CQ1_DN",
+   "How do you tell if a vector is linearly independent or dependent?"
+  ],
+  [
+   "148",
+   "53",
+   "CT_CQ1",
+   "How to find a basis of R^4."
+  ],
+  [
+   "149",
+   "53",
+   "HCM_CQ73",
+   "What is linear dependence/ linear independence of a set of vectors?"
+  ],
+  [
+   "150",
+   "54",
+   "CQ1_DN",
+   "How do you find the basis and dimension of a subspace?"
+  ],
+  [
+   "151",
+   "54",
+   "CT_CQ1",
+   "Calculate the dimension of R^4."
+  ],
+  [
+   "152",
+   "54",
+   "HCM_CQ74",
+   "What is the dimension of R^n?"
+  ],
+  [
+   "153",
+   "54",
+   "HCM_CQ75",
+   "How to define the dimension of a subspace of R^n?"
+  ],
+  [
+   "154",
+   "55",
+   "CT_CQ1",
+   "Find the length of the vector, provide example."
+  ],
+  [
+   "155",
+   "55",
+   "HCM_CQ76",
+   "How is the distance between two vectors related to dot product?"
+  ],
+  [
+   "156",
+   "56",
+   "CQ1_DN",
+   "What are orthogonal and orthonormal sets?"
+  ],
+  [
+   "157",
+   "56",
+   "CT_CQ1",
+   "Find the condition for the sets is orthogonal"
+  ],
+  [
+   "158",
+   "56",
+   "HCM_CQ77",
+   "What are orthogonal and orthonormal sets?"
+  ],
+  [
+   "159",
+   "56",
+   "HCM_CQ78",
+   "What is the main benefit of working with orthonormal sets?"
+  ],
+  [
+   "160",
+   "57",
+   "CQ1_DN",
+   "how to find the rank of a matrix?"
+  ],
+  [
+   "161",
+   "57",
+   "CT_CQ1",
+   "Show that the rank does not change when an elementary row or column operation is performed on a matrix."
+  ],
+  [
+   "162",
+   "57",
+   "HCM_CQ79",
+   "How to determine the rank of a matrix in the determinant method?"
+  ],
+  [
+   "163",
+   "58",
+   "CT_CQ1",
+   "Find the relationship between rank of matrix and nullity"
+  ],
+  [
+   "164",
+   "58",
+   "HCM_CQ80",
+   "What is the rank and nullity of a linear transformation?"
+  ],
+  [
+   "165",
+   "58",
+   "HCM_CQ81",
+   "State some relationship between the rank and the nullity of a linear transformation."
+  ],
+  [
+   "166",
+   "59",
+   "HCM_CQ82",
+   "What are positive definite matrices? Give an example."
+  ],
+  [
+   "167",
+   "59",
+   "HCM_CQ83",
+   "If A, B are positive definite matrices, is so A + B?"
+  ],
+  [
+   "168",
+   "60",
+   "HCM_CQ84",
+   "List some applications of calculus and linear algebra in real life."
+  ]
+ ],
+ "links": []
+}

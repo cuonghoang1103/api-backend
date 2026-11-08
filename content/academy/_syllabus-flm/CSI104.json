@@ -1,0 +1,1168 @@
+{
+ "ma": "CSI104",
+ "sylID": "11210",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11210",
+   "code": "CSI104",
+   "name": "Introduction to Computer Science_Nhập môn khoa học máy tính",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11210",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11210",
+  "Syllabus Name": "Introduction to Computer Science_Nhập môn khoa học máy tính",
+  "Course Name English": "Introduction to Computer Science",
+  "Subject Code": "CSI104",
+  "Learning-Teaching Method": "Social Constructivism,Inquiry-Based Learning,In-class lecture, Active Learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor level",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "",
+  "Description": "This course provides an overview of computer Fundamentals. Topics cover all areas of computer science in breadth such as computer organization, network, operating system, data structure , file structure, social and ethical issues.\n\nMajor Instructional Areas\n\n- Introduction to Von Neumann Model and computer components\n\n- Numbering system & data representation\n\n- Different data types and operations on data\n\n- The concepts of computer networking and internet\n\n- Operating system\n\n- Introduction to basic algorithms and algorithms representation\n\n- Introduction to Data structure and File structure\n\n- The concepts of database\n\n- software engineering\n\n- Computing Security & Ethics",
+  "StudentTasks": "\"Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Students are responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the https://flm.fpt.edu.vn for up-to-date course information\"",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Foundations Of Computer Science",
+   "Behrouz Forouzan",
+   "Cengage",
+   "2017",
+   "4th",
+   "978-1-4737-5104-0",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Fundamentals of Information Systems Security",
+   "",
+   "Jones & Bartlett",
+   "2016",
+   "3rd",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Computer architecture : A quantitative approach",
+   "John L. Hennessy, David A Patterson",
+   "Morgan Kaufmann",
+   "2011",
+   "5th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "List the subsystems of a computer and describe the role of these components"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Convert a number from one base to other base( decimal, binary, octal and hexadecimal)"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Describe how different data type is stored inside a computer as bit patterns and operations on data"
+  ],
+  [
+   "4",
+   "CLO4",
+   "List the layers in netwoking and their relationship"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Undestand the role of OS in a computer system"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Define a algorithm and describe tools used to develop algorithms"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Explain how a program in a high-level language is translated into machine language"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Describe the software lifecycle"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Discuss some data structures: Array, Records, Linked list"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Distinguish between text file and binary file and access methods"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Describe and explain operations within a relational database"
+  ],
+  [
+   "12",
+   "CLO12",
+   "Descibe security goals and discuss ethical issues"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group presentation",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "Option 1: 30'/group Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12",
+   "Option 1: .ppt and oral presentation Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "one of the appendices.",
+   "each group selects one topic to present at slot 6 & slot 17 of syllabus; then prepares to present at slot 15 & slot 22",
+   ""
+  ],
+  [
+   "2",
+   "Lab",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "Option 1: 60-90'/each Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: practical exercises Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "technical aspect of studied topics",
+   "Guided by instructor\n\n- Labs are arranged relevant to the chapter theory\n\n- Student must finish labs and submit the results to the lecturer in class.",
+   ""
+  ],
+  [
+   "3",
+   "Progress test",
+   "on-going",
+   "3",
+   "30.0%",
+   ">0",
+   "Option 1: 30'/each Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: MC or suitable format Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 30 Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Test 1: Chaters 1, 2, 3, 4, 5 , 6 Test 2: Chapters 7, 8, 9, 10, 11, 12 Test 3: Chapters 13, 14, 16, 20",
+   "in class, by instructor",
+   "Instruction and schedules for Progress Tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nThe test must be taken right after the last lectures of required material.\n\nInstructor has responsibility to review the test for students after graded"
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choicesMarked by Computer",
+   "60",
+   "concepts, algorithms; all studied Chapters",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the Course\n1.Computer Organization\n1.1 Von Neumann model",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 1, text book\n- Read slides: Part 1-1,\n- EduNext Slot 1 (Q&A)",
+   "CSI104",
+   "Read & Review Slides Part 1-1;\nAnswer Edunext question in slot 1",
+   ""
+  ],
+  [
+   "2",
+   "1.2 Computer generations",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 1, text book\n- Read slides: Part 1-2\n- EduNext Slot 2 (Q&A)",
+   "CSI104",
+   "Read & Review Slides Part 1-2\nAnswer Edunext question in slot 2",
+   ""
+  ],
+  [
+   "3",
+   "1.3 Subsystems and the role of subsystems",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 1&5, text book\n- Read slides: Part 1-3\n- EduNext Slot 2 (Q&A)",
+   "",
+   "Read & Review Slides Part 1-3; 1-4\nAnswer Edunext question in slot 2",
+   ""
+  ],
+  [
+   "4",
+   "1.4 Central Processing Unit",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 1&5, text book\n- Read slides: Part 1-4\n- EduNext Slot 2 (Q&A)",
+   "",
+   "Read & Review Slides Part 1-4\nAnswer Edunext question in slot 2",
+   ""
+  ],
+  [
+   "5",
+   "1.5 Memory: main memory",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 5, text book\n- Read slides: Part 1-5\n- EduNext Slot 3 (Q&A)",
+   "",
+   "Read & Review Slides Part 1-5\nAnswer Edunext question in slot 3",
+   ""
+  ],
+  [
+   "6",
+   "1.5 Memory: cache memory",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 5, text book\n- Read slides: Part 1-5\n- EduNext Slot 3 (Q&A)",
+   "",
+   "Read & Review Slides Part 1-5\nAnswer Edunext question in slot 3",
+   ""
+  ],
+  [
+   "7",
+   "1.6 Input/Output subsystems",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 5, text book\n- Read slides: Part 1-6\n- EduNext Slot 3 (Q&A)",
+   "",
+   "Read & Review Slides Part 1-6\nAnswer Edunext question in slot 3",
+   ""
+  ],
+  [
+   "8",
+   "1.7 Different architectures",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 5, text book\n- Read slides: Part 1-7\n- EduNext Slot 3 (Q&A)",
+   "",
+   "Read & Review Slides Part 1-7\nAnswer Edunext question in slot 3",
+   ""
+  ],
+  [
+   "9",
+   "2. Numbering systems\n2.1 Introduction\n2.2 Positional Number Systems",
+   "Offline",
+   "LO2",
+   "",
+   "- Read Chapter 2, text book\n- Read slides: Part 2\n- EduNext Slot 4 (Q&A)",
+   "",
+   "Read & Review Slides Part 2\nAnswer Edunext question in slot 4",
+   ""
+  ],
+  [
+   "10",
+   "2. Numbering systems\n2.3 Conversion",
+   "Offline",
+   "LO2",
+   "",
+   "- Read Chapter 2, text book\n- Read slides: Part 2\n- EduNext Slot 4 (Q&A)",
+   "",
+   "Read & Review Slides Part 2\nAnswer Edunext question in slot 4",
+   ""
+  ],
+  [
+   "11",
+   "Lab 1: Guide\nIntroduction to presentation 1",
+   "Offline",
+   "LO2",
+   "",
+   "TextBook Chapter 1->7,\nInstructor manuals",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "Lab 1: Guide\nIntroduction to presentation 1",
+   "Offline",
+   "LO2",
+   "",
+   "TextBook Chapter 1->7,\nInstructor manuals",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "3.Data storage and Operations on Data\n3.1 Storing Numbers",
+   "Offline",
+   "LO3",
+   "",
+   "- Read Chapter 3&4, text book\n- Read slides: Part 3\n- EduNext Slot 6 (Q&A)",
+   "",
+   "Read & Review Slides Part 3\nAnswer Edunext question in slot 6",
+   ""
+  ],
+  [
+   "14",
+   "3.Data storage and Operations on Data\n3.2 Storing Text, Media, Image, Video",
+   "Offline",
+   "LO3",
+   "",
+   "- Read Chapter 3&4, text book\n- Read slides: Part 3\n- EduNext Slot 6 (Q&A)",
+   "",
+   "Read & Review Slides Part 3\nAnswer Edunext question in slot 6",
+   ""
+  ],
+  [
+   "15",
+   "3.3 Logic operations",
+   "Offline",
+   "LO3",
+   "",
+   "- Read Chapter 3&4, text book\n- Read slides: Part 3\n- EduNext Slot 7 (Q&A)",
+   "",
+   "Read & Review Slides Part 3\nAnswer Edunext question in slot 7",
+   ""
+  ],
+  [
+   "16",
+   "3.3 Shift, Arithmetic operations",
+   "Offline",
+   "LO3",
+   "",
+   "- Read Chapter 3&4, text book\n- Read slides: Part 3\n- EduNext Slot 7 (Q&A)",
+   "",
+   "Read & Review Slides Part 3\nAnswer Edunext question in slot 7",
+   ""
+  ],
+  [
+   "17",
+   "4. Computer Networks and Internet\n4.1 Overview\n4.1.1 LAN & WAN\n4.1.2 TCP/IP protocol",
+   "Offline",
+   "LO4",
+   "",
+   "- Read Chapter 6, text book\n- Read slides: Part 4\n- EduNext Slot 8 (Q&A)",
+   "",
+   "Read & Review Slides Part 4\nAnswer Edunext question in slot 8",
+   ""
+  ],
+  [
+   "18",
+   "4. Computer Networks and Internet\n4.2 layers in netwoking\nProgress Test 1",
+   "Offline",
+   "LO4",
+   "",
+   "- Read Chapter 6, text book\n- Read slides: Part 4\n- EduNext Slot 8 (Q&A)",
+   "",
+   "Read & Review Slides Part 4\nAnswer Edunext question in slot 8",
+   ""
+  ],
+  [
+   "19",
+   "5. Operating System\n5.1 Introduction\n5.2 Evolution",
+   "Offline",
+   "LO5",
+   "",
+   "- Read Chapter 7, text book\n- Read slides: Part 5\n- EduNext Slot 9 (Q&A)",
+   "",
+   "Read & Review Slides Part 5\nAnswer Edunext question in slot 9",
+   ""
+  ],
+  [
+   "20",
+   "5. Operating System\n5.3 Components of OS: UI, memory manager",
+   "Offline",
+   "LO5",
+   "",
+   "- Read Chapter 7, text book\n- Read slides: Part 5\n- EduNext Slot 9 (Q&A)",
+   "",
+   "Read & Review Slides Part 5\nAnswer Edunext question in slot 9",
+   ""
+  ],
+  [
+   "21",
+   "5. Operating System\n5.3 Components of OS:file manager",
+   "Offline",
+   "LO5",
+   "",
+   "- Read Chapter 7, text book\n- Read slides: Part 5\n- EduNext Slot 9 (Q&A)",
+   "",
+   "Read & Review Slides Part 5\nAnswer Edunext question in slot 9",
+   ""
+  ],
+  [
+   "22",
+   "5. Operating System\n5.3 Components of OS: device manager",
+   "Offline",
+   "LO5",
+   "",
+   "- Read Chapter 7, text book\n- Read slides: Part 5\n- EduNext Slot 9 (Q&A)",
+   "",
+   "Read & Review Slides Part 5\nAnswer Edunext question in slot 9",
+   ""
+  ],
+  [
+   "23",
+   "5. Operating System\n5.3 Components of OS: device manager",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "",
+   "- Read Chapter 7, text book\n- Read slides: Part 5\n- EduNext Slot 9 (Q&A)",
+   "",
+   "Read & Review Slides Part 5\nAnswer Edunext question in slot 9",
+   ""
+  ],
+  [
+   "24",
+   "6. Algorithms\n6.1 Concepts: input, output, processing\n6.2 Three basic constructs",
+   "Offline",
+   "LO6",
+   "",
+   "- Read Chapter 8, text book\n- Read slides: Part 6\n- EduNext Slot 11 (Q&A)",
+   "",
+   "Read & Review Slides Part 6\nAnswer Edunext question in slot 1",
+   ""
+  ],
+  [
+   "25",
+   "6. Algorithms\n6.1 Concepts: input, output, processing\n6.2 Three basic constructs",
+   "Offline",
+   "LO6",
+   "",
+   "- Read Chapter 8, text book\n- Read slides: Part 6\n- EduNext Slot 11 (Q&A)",
+   "",
+   "Read & Review Slides Part 6\nAnswer Edunext question in slot 1",
+   ""
+  ],
+  [
+   "26",
+   "6. Algorithms\n6.1 Concepts: input, output, processing\n6.2 Three basic constructs",
+   "Offline",
+   "LO6",
+   "",
+   "- Read Chapter 8, text book\n- Read slides: Part 6\n- EduNext Slot 11 (Q&A)",
+   "",
+   "Read & Review Slides Part 6\nAnswer Edunext question in slot 1",
+   ""
+  ],
+  [
+   "27",
+   "6.3 Algorithm representation\n6.4 Search Algorithms: linear, binary",
+   "Offline",
+   "LO6",
+   "",
+   "- Read Chapter 8, text book\n- Read slides: Part 6\n- EduNext Slot 12 (Q&A)",
+   "",
+   "Read & Review Slides Part 6\nAnswer Edunext question in slot 2",
+   ""
+  ],
+  [
+   "28",
+   "6.3 Algorithm representation\n6.4 Search Algorithms: linear, binary",
+   "Offline",
+   "LO6",
+   "",
+   "- Read Chapter 8, text book\n- Read slides: Part 6\n- EduNext Slot 12 (Q&A)",
+   "",
+   "Read & Review Slides Part 6\nAnswer Edunext question in slot 2",
+   ""
+  ],
+  [
+   "29",
+   "Presentations 1",
+   "Offline",
+   "LO2",
+   "",
+   "Slide for presentaion",
+   "",
+   "",
+   ""
+  ],
+  [
+   "30",
+   "Presentations 1",
+   "Offline",
+   "LO2",
+   "",
+   "Slide for presentaion",
+   "",
+   "",
+   ""
+  ],
+  [
+   "31",
+   "7. Programming\n7.1 translation",
+   "Offline",
+   "LO7",
+   "",
+   "- Read Chapter 9, text book\n- Read slides: Part 7\n- EduNext Slot 14 (Q&A)",
+   "",
+   "Read & Review Slides Part 7\nAnswer Edunext question in slot 14",
+   ""
+  ],
+  [
+   "32",
+   "7. Programming\n7.2 programming paradigms",
+   "Offline",
+   "LO7",
+   "",
+   "- Read Chapter 9, text book\n- Read slides: Part 7\n- EduNext Slot 14 (Q&A)",
+   "",
+   "Read & Review Slides Part 7\nAnswer Edunext question in slot 14",
+   ""
+  ],
+  [
+   "33",
+   "Lab2: Guide\nIntroduction to presentation 2",
+   "Offline",
+   "LO7",
+   "",
+   "TextBook Chapter 8 ->20,\nInstructor manuals",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Lab2: Guide\nIntroduction to presentation 2",
+   "Offline",
+   "LO7",
+   "",
+   "TextBook Chapter 8 ->20,\nInstructor manuals",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "8.Software engineering\n8.1 The software lifecycle\n8.2 Analysis phase",
+   "Offline",
+   "LO8",
+   "",
+   "- Read Chapter 10, text book\n- Read slides: Part 8\n- EduNext Slot 16 (Q&A)",
+   "",
+   "Read & Review Slides Part 8\nAnswer Edunext question in slot 16",
+   ""
+  ],
+  [
+   "36",
+   "8.Software engineering\n8.1 The software lifecycle\n8.2 Analysis phase\n8.3 Design phase",
+   "Offline",
+   "LO8",
+   "",
+   "- Read Chapter 10, text book\n- Read slides: Part 8\n- EduNext Slot 16 (Q&A)",
+   "",
+   "Read & Review Slides Part 8\nAnswer Edunext question in slot 16",
+   ""
+  ],
+  [
+   "37",
+   "8.4 Implementation phase",
+   "Offline",
+   "LO8",
+   "",
+   "- Read Chapter 10, text book\n- Read slides: Part 8\n- EduNext Slot 17 (Q&A)",
+   "",
+   "Read & Review Slides Part 8\nAnswer Edunext question in slot 17",
+   ""
+  ],
+  [
+   "38",
+   "8.5 Testing phase",
+   "Offline",
+   "LO8",
+   "",
+   "- Read Chapter 10, text book\n- Read slides: Part 8\n- EduNext Slot 17 (Q&A)",
+   "",
+   "Read & Review Slides Part 8\nAnswer Edunext question in slot 17",
+   ""
+  ],
+  [
+   "39",
+   "9. Data structures\n9.1 Arrays\n9.2 Records",
+   "Offline",
+   "LO9",
+   "",
+   "- Read Chapter 11, text book\n- Read slides: Part 9\n- EduNext Slot 18 (Q&A)",
+   "",
+   "Read & Review Slides Part 9\nAnswer Edunext question in slot 18",
+   ""
+  ],
+  [
+   "40",
+   "9. Data structures\n9.3 Linked List",
+   "Offline",
+   "LO9",
+   "",
+   "- Read Chapter 11, text book\n- Read slides: Part 9\n- EduNext Slot 18 (Q&A)",
+   "",
+   "Read & Review Slides Part 9\nAnswer Edunext question in slot 18",
+   ""
+  ],
+  [
+   "41",
+   "9.4 Introduction: Stack, Queue",
+   "Offline",
+   "LO9",
+   "",
+   "- Read Chapter 12, text book\n- Read slides: Part 9\n- EduNext Slot 19 (Q&A)",
+   "",
+   "Read & Review Slides Part 9\nAnswer Edunext question in slot 19",
+   ""
+  ],
+  [
+   "42",
+   "9.4 Introduction: Tree, graph",
+   "Offline",
+   "LO9",
+   "",
+   "- Read Chapter 12, text book\n- Read slides: Part 9\n- EduNext Slot 19 (Q&A)",
+   "",
+   "Read & Review Slides Part 9\nAnswer Edunext question in slot 19",
+   ""
+  ],
+  [
+   "43",
+   "Progress test 2",
+   "Offline",
+   "LO5, LO6, LO7, LO8, LO9",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "Presentation 2",
+   "Offline",
+   "LO7",
+   "",
+   "Slide for presentaion",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "10.File structure\n10.1 Text versus Binary",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 13, text book\n- Read slides: Part 10\n- EduNext Slot 21 (Q&A)",
+   "",
+   "Read & Review Slides Part 10\nAnswer Edunext question in slot 21",
+   ""
+  ],
+  [
+   "46",
+   "10.File structure\n10.2 access methods",
+   "Offline",
+   "LO1",
+   "",
+   "- Read Chapter 13, text book\n- Read slides: Part 10\n- EduNext Slot 21 (Q&A)",
+   "",
+   "Read & Review Slides Part 10\nAnswer Edunext question in slot 21",
+   ""
+  ],
+  [
+   "47",
+   "11. Database\n11.1 Introduction",
+   "Offline",
+   "LO11",
+   "",
+   "- Read Chapter 14, text book\n- Read slides: Part 11\n- EduNext Slot 22 (Q&A)",
+   "",
+   "Read & Review Slides Part 11\nAnswer Edunext question in slot 22",
+   ""
+  ],
+  [
+   "48",
+   "11. Database\n11.2 Database architecture",
+   "Offline",
+   "LO11",
+   "",
+   "- Read Chapter 14, text book\n- Read slides: Part 11\n- EduNext Slot 22 (Q&A)",
+   "",
+   "Read & Review Slides Part 11\nAnswer Edunext question in slot 22",
+   ""
+  ],
+  [
+   "49",
+   "11.3 Database model",
+   "Offline",
+   "LO11",
+   "",
+   "- Read Chapter 14, text book\n- Read slides: Part 11\n- EduNext Slot 23 (Q&A)",
+   "",
+   "Read & Review Slides Part 11\nAnswer Edunext question in slot 23",
+   ""
+  ],
+  [
+   "50",
+   "11.4 The relationship database model",
+   "Offline",
+   "LO11",
+   "",
+   "- Read Chapter 14, text book\n- Read slides: Part 11\n- EduNext Slot 23 (Q&A)",
+   "",
+   "Read & Review Slides Part 11\nAnswer Edunext question in slot 23",
+   ""
+  ],
+  [
+   "51",
+   "11.5 Database design",
+   "Offline",
+   "LO11",
+   "",
+   "- Read Chapter 14, text book\n- Read slides: Part 11\n- EduNext Slot 23 (Q&A)",
+   "",
+   "Read & Review Slides Part 11\nAnswer Edunext question in slot 24",
+   ""
+  ],
+  [
+   "52",
+   "11.6 Guide do practice set (database)",
+   "Offline",
+   "LO11",
+   "",
+   "- Read Chapter 14, text book\n- Read slides: Part 11\n- EduNext Slot 26 (Q&A)",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "12. Security and Ethical Issues\n12.1 Introduction\n12.2 Confidentiality",
+   "Offline",
+   "LO12",
+   "",
+   "- Read Chapter 16 & 20, text book\n- Read slides: Part 12\n- EduNext Slot 27 (Q&A)",
+   "",
+   "Read & Review Slides Part 12\nAnswer Edunext question in slot 24",
+   ""
+  ],
+  [
+   "54",
+   "12. Security and Ethical Issues\n12.3 Ethical Principles",
+   "Offline",
+   "LO12",
+   "",
+   "- Read Chapter 16 & 20, text book\n- Read slides: Part 12\n- EduNext Slot 27 (Q&A)",
+   "",
+   "Read & Review Slides Part 12\nAnswer Edunext question in slot 24",
+   ""
+  ],
+  [
+   "55",
+   "12.4 Privacy",
+   "Offline",
+   "LO12",
+   "",
+   "- Read Chapter 16 & 20, text book\n- Read slides: Part 12\n- EduNext Slot 28 (Q&A)",
+   "",
+   "Read & Review Slides Part 12\nAnswer Edunext question in slot 25",
+   ""
+  ],
+  [
+   "56",
+   "12.5 Hackers",
+   "Offline",
+   "LO12",
+   "",
+   "- Read Chapter 16 & 20, text book\n- Read slides: Part 12\n- EduNext Slot 28 (Q&A)",
+   "",
+   "Read & Review Slides Part 12\nAnswer Edunext question in slot 25",
+   ""
+  ],
+  [
+   "57",
+   "Progress test 3",
+   "Offline",
+   "LO10, LO11, LO12",
+   "",
+   "",
+   "",
+   "Test yourself",
+   ""
+  ],
+  [
+   "58",
+   "Review",
+   "Offline",
+   "All LOs",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Review",
+   "Offline",
+   "All LOs",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Review",
+   "Offline",
+   "All LOs",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "13",
+   "CQ5.1",
+   "How to store the sign of number on computer"
+  ],
+  [
+   "2",
+   "13",
+   "CQ5.2",
+   "Compare and constrast storing text, image, sound and video on computer"
+  ],
+  [
+   "3",
+   "14",
+   "CQ5.3",
+   "What is the difference between logic operation at bit level and pattern level?"
+  ],
+  [
+   "4",
+   "15",
+   "CQ5.4",
+   "What is the difference between an arithmetic operation and a shift operation?"
+  ],
+  [
+   "5",
+   "16",
+   "CQ6.1",
+   "Compare and constrast characteristics LAN and WAN"
+  ],
+  [
+   "6",
+   "17",
+   "CQ6.2",
+   "What is the role of TCP/IP protocol suite and their relationship?"
+  ],
+  [
+   "7",
+   "18",
+   "CQ6.3",
+   "How to transfer data from one computer to another?"
+  ],
+  [
+   "8",
+   "25",
+   "CQ9.1",
+   "Define three constructs: sequence, decision, and repetition. Describe their use in algorithms"
+  ],
+  [
+   "9",
+   "26",
+   "CQ9.2",
+   "What is the UML diagram ? How is a UML diagram related to an algorithm?"
+  ],
+  [
+   "10",
+   "26",
+   "CQ9.3",
+   "How can we write an example of an algorithm by UML diagram?"
+  ],
+  [
+   "11",
+   "27",
+   "CQ9.4",
+   "What is the pseudocode ? How is pseudocode related to an algorithm?"
+  ],
+  [
+   "12",
+   "27",
+   "CQ9.5",
+   "How can we write an example of an algorithm by pseudocode?"
+  ],
+  [
+   "13",
+   "31",
+   "CQ11.1",
+   "How can machine language, assembly language and a high-level language be distinguished?"
+  ],
+  [
+   "14",
+   "31",
+   "CQ11.2",
+   "How can compilation and interpretation be distinguished?"
+  ],
+  [
+   "15",
+   "32",
+   "CQ11.3",
+   "How can four basic computer language paradigms be distinguished?"
+  ],
+  [
+   "16",
+   "32",
+   "CQ11.4",
+   "What are the similarities and differences between a procedural paradigm with an object-oriented paradigm?"
+  ],
+  [
+   "17",
+   "35",
+   "CQ12.1",
+   "What is the software lifecycle in software engineering?"
+  ],
+  [
+   "18",
+   "35",
+   "CQ12.2",
+   "What is the development processes? What are the two most common types of development processes"
+  ],
+  [
+   "19",
+   "36",
+   "CQ12.3",
+   "What is the purpose of the analysis phase? What are two trends in this phase?"
+  ],
+  [
+   "20",
+   "36",
+   "CQ12.4",
+   "What is the purpose of the design phase? What are two trends in this phase?"
+  ],
+  [
+   "21",
+   "37",
+   "CQ13.1",
+   "How can the implementaion phase be described? What are the qualitiy issues in this phase?"
+  ],
+  [
+   "22",
+   "38",
+   "CQ13.2",
+   "What is the purpose of the testing phase? How can glass-box testing and black-box testing be distinguished?"
+  ],
+  [
+   "23",
+   "39",
+   "CQ13.3",
+   "What is an Array as a data structure? How is it used to store a list of data items?"
+  ],
+  [
+   "24",
+   "39",
+   "CQ13.4",
+   "What is a Record as a data structure ? How do you think about Record and Array"
+  ],
+  [
+   "25",
+   "40",
+   "CQ14.1",
+   "How can we write a program using pointers? What are the similarities and differences among arrays, records and linked lists?"
+  ],
+  [
+   "26",
+   "41",
+   "CQ14.2",
+   "What is the concept of an abstract data type (ADT)? What is a Stack?"
+  ],
+  [
+   "27",
+   "41",
+   "CQ14.3",
+   "What is a Queue? What are the differences between Stack and Queue?"
+  ],
+  [
+   "28",
+   "42",
+   "CQ14.4",
+   "What is a General Tree? What is a Binary Tree? What are the differences and similarities between General Tree and Binary Tree?"
+  ],
+  [
+   "29",
+   "42",
+   "CQ14.5",
+   "What is a Binary Search Tree (BST)? What is a Graph? What are the differences and similarities between Tree and Graph?"
+  ],
+  [
+   "30",
+   "43",
+   "CQ15.1",
+   "What is the difference between a text file and a binary file?"
+  ],
+  [
+   "31",
+   "44",
+   "CQ15.2",
+   "How to retrieve information from the file?"
+  ],
+  [
+   "32",
+   "45",
+   "CQ15.3",
+   "How do we operate on a sequential file, an indexed file, or a hashed file?"
+  ],
+  [
+   "33",
+   "46",
+   "CQ16.1",
+   "What is a database?"
+  ],
+  [
+   "34",
+   "47",
+   "CQ16.2",
+   "Why do we need to use architecture in database system?"
+  ],
+  [
+   "35",
+   "48",
+   "CQ16.3",
+   "Identify an advantage that an object-oriented database can have\nover a relational database."
+  ],
+  [
+   "36",
+   "49",
+   "CQ17.1",
+   "What is the purpose of a database model?"
+  ],
+  [
+   "37",
+   "50",
+   "CQ17.2",
+   "How does the relational model provide for data independence?"
+  ],
+  [
+   "38",
+   "51",
+   "CQ17.3",
+   "How do you design a good database?"
+  ],
+  [
+   "39",
+   "52",
+   "CQ18.1",
+   "What are security goals?"
+  ],
+  [
+   "40",
+   "53",
+   "CQ18.2",
+   "How confidentiality can be achieved using symmetric-key and asymmetric-key cipher?"
+  ],
+  [
+   "41",
+   "54",
+   "CQ18.3",
+   "What is the main ideas of aspect security?"
+  ]
+ ],
+ "links": [
+  "/download/9982/S/1_CSI104.zip",
+  "/download/9982/S/2_CSI104.zip"
+ ]
+}

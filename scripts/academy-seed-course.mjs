@@ -38,6 +38,7 @@ import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { withSimulation } from './lib/simulation-block.mjs';
+import { ganMuc0Flm } from './lib/academy-muc0-flm.mjs';
 import { readFileSync } from 'node:fs';
 
 const prisma = new PrismaClient();
@@ -65,7 +66,8 @@ function slugify(text) {
 const TYPES = new Set(['VIDEO', 'QUIZ', 'EXERCISE', 'SOLUTION', 'DOCUMENT']);
 const normType = (t) => (TYPES.has(String(t || '').toUpperCase()) ? String(t).toUpperCase() : 'VIDEO');
 
-const spec = (await import(pathToFileURL(path.resolve(FILE)).href)).default;
+// Mục 0 FLM (_muc0-flm/) + chương slide của trường (_slide-flm/) được ghép vào môn — xem lib.
+const spec = await ganMuc0Flm((await import(pathToFileURL(path.resolve(FILE)).href)).default, FILE);
 console.log(`── academy-seed ${spec.course.courseCode} : ${APPLY ? 'APPLY' : 'DRY'} ──`);
 
 /* 1. Semester (by code) ---------------------------------------------------- */

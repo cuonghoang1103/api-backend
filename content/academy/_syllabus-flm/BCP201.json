@@ -1,0 +1,1037 @@
+{
+ "ma": "BCP201",
+ "sylID": "14306",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14306",
+   "code": "BCP201",
+   "name": "Business Computing_ Công nghệ thông tin trong kinh doanh",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14306",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14306",
+  "Syllabus Name": "Business Computing_ Công nghệ thông tin trong kinh doanh",
+  "Course Name English": "Business Computing",
+  "Subject Code": "BCP201",
+  "Learning-Teaching Method": "Lecture,Practice,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "1. Course Objectives:\n\nThis course provides students with the essential computing foundation for Fintech. The course focuses on developing basic programming skills in Python, SQL to analyze data, manage databases, and perform statistical computing, equipping students with the fundamental tools to solve problems and succeed in the fast-growing FinTech industry. By the end of this course, students will gain the technical proficiency needed to support roles in data-driven financial analysis, algorithmic trading, and financial application development.\n\n2. Course Content:\n\nKey topics include: Fundamentals of Programming and Data Analysis in Business; Fundamentals of Python programming; Fundamentals of R programming; Foundation of SQL for data management; Integrating Python and SQL.\n\n3. Activities and Teaching Methodology:\n\nLectures, hands-on coding sessions, and individual and group projects to practice the application of programming techniques using Python, SQL enabling them to apply their skills in practical, job-oriented scenarios.",
+  "StudentTasks": "- Students must attend more than 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the http://flm.fpt.edu.vn for up-to-date course information",
+  "Tools": "- Internet\n\n- Personal Laptop",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Python Data Analytics with Pandas, NumPy and Matplotlib",
+   "Fabio Nelli",
+   "Pearson.",
+   "2023",
+   "3rd",
+   "9781484295311",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "SQL for Data Analytics: Perform fast and efficient data analysis with the power of SQL",
+   "Upom Malik, Matt Goldwasser, Benjamin Johnston",
+   "Packt Publishing",
+   "2019",
+   "",
+   "9781789807356",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "- PowerPoint Slides",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Describe fundamental programming concepts (variables, data types, control structures) and the role of coding in business analytics."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Collaborate effectively in team-based tasks and communicate coding-based business analysis results in a clear and professional manner."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Perform data import/export operations to load datasets from Excel/CSV files into Python environment."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply conditional logic and loops in Python scripts to automate repetitive financial calculation tasks."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Construct SQL queries using SELECT, WHERE, and ORDER BY clauses to retrieve precise datasets."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Employ Python libraries (NumPy, Pandas) to manipulate tabular data, handling missing values."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Compute key business metrics using SQL aggregation functions (SUM, AVG) and table joins."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Analyze business trends and patterns by interpreting data visualizations generated via Python tools."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Integrate SQL queries within Python scripts to extract and process data, distinguishing their specific roles."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Capstone Project",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "N/A",
+   "All (esp 6, 8, 9)",
+   "Project-based:- Source Code- Report/Slides- Presentation",
+   "",
+   "End-to-End Analysis:Load Data -> Clean -> Analyze (SQL/Python) -> Visualize -> Insight.",
+   "Group Presentation:Groups of 3-5 students present their findings in Session 58,59,60.",
+   "Replaces the \"Speaking\" component in the sample. Tests \"Business Application\"."
+  ],
+  [
+   "2",
+   "Participation & Assignments",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "N/A",
+   "CLO2",
+   "Practical Exercises (Submit code snippets)",
+   "",
+   "All topics from Session 1 to 60",
+   "Submission:Students upload the .ipynb or .py files resulting from \"Student's Task\" in each session.",
+   "Encourages students to complete in-class tasks."
+  ],
+  [
+   "3",
+   "Progress Test",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "60'",
+   "1, 2, 3, 4, 6",
+   "- Up to 2 Coding Problems (Practical)",
+   "",
+   "Python Focus:'- Basic Logic (Flow/Functions)'- NumPy Basics- Pandas (Loading, Filtering)",
+   "",
+   "Taking place at Session 34, 35, 36. Focuses on the ability to write basic scripts."
+  ],
+  [
+   "4",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "10'-20' each",
+   "1, 4, 5, 6, 8",
+   "10-20 MCQs each",
+   "",
+   "- Foundational knowledge of Python, basic data analysis, and visualization concepts",
+   "Computer-based: Students take the test on their laptops under supervision.",
+   "Includes 2 quizzes: Quiz 1 at Session 13 and Quiz 2 at Session 40"
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "90'",
+   "CLO1, CLO3, CLO4, CLO5, CLO6, CLO7, CLO9",
+   "Practical Coding Exam (PE): Solving 3-4 specific data problems.",
+   "",
+   "Comprehensive coverage of Python (Pandas, Matplotlib) and SQL (Select, Group By).",
+   "Individual exam. No internet access allowed (except documentation).",
+   "Format: Given a Dataset (Excel/DB), students must write code to answer specific business questions."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "1. Computational Thinking & Environment Setup\n1.1 The Data Analysis Lifecycle\n1.2 IDE Configuration (Anaconda/Jupyter/VS Code Optional)\n1.3 Python Scripting Basics: Variables, Input/Output\n1.4 Project/Research Paper Introduction",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "- [Nelli]: Review Chapter 1 (Data Analysis)\n- [Nelli]: Read Chapter 2 (Intro - pp. 15-25)\n- Laptop required",
+   "Codebook&Data&FocusMap&Practical Bank",
+   "- Setup development environment\n'- Execute first Python scripts",
+   ""
+  ],
+  [
+   "2",
+   "1. Computational Thinking & Environment Setup\n1.1 The Data Analysis Lifecycle\n1.2 IDE Configuration (Anaconda/Jupyter/VS Code Optional)\n1.3 Python Scripting Basics: Variables, Input/Output\n1.4 Project/Research Paper Introduction",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "- [Nelli]: Review Chapter 1 (Data Analysis)\n- [Nelli]: Read Chapter 2 (Intro - pp. 15-25)\n- Laptop required",
+   "Slides_SS1-30",
+   "- Setup development environment\n'- Execute first Python scripts",
+   ""
+  ],
+  [
+   "3",
+   "1. Computational Thinking & Environment Setup\n1.1 The Data Analysis Lifecycle\n1.2 IDE Configuration (Anaconda/Jupyter/VS Code Optional)\n1.3 Python Scripting Basics: Variables, Input/Output\n1.4 Project/Research Paper Introduction",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "- [Nelli]: Review Chapter 1 (Data Analysis)\n- [Nelli]: Read Chapter 2 (Intro - pp. 15-25)\n- Laptop required",
+   "Slides_SS31-60",
+   "- Setup development environment\n'- Execute first Python scripts",
+   ""
+  ],
+  [
+   "4",
+   "2. Basic Python Programming for Finance\n2.1 Data Analysis Process, Python Data Types and Operators\n2.2 Python Data Structures for Finance: Lists, Tuples, Dictionaries, and Set\n2.3 Guided Practice with Standard Libraries in Simple Business Cases",
+   "Offline",
+   "CLO1",
+   "T",
+   "- [Nelli]: Read Chapter 2 (Data Structures)\n- Review slides: Chapter 2 (Part 1)",
+   "",
+   "- Implement data structures to represent products, customers, or transactions",
+   ""
+  ],
+  [
+   "5",
+   "2. Basic Python Programming for Finance\n2.1 Data Analysis Process, Python Data Types and Operators\n2.2 Python Data Structures for Finance: Lists, Tuples, Dictionaries, and Set\n2.3 Guided Practice with Standard Libraries in Simple Business Cases",
+   "Offline",
+   "CLO1",
+   "T",
+   "- [Nelli]: Read Chapter 2 (Data Structures)\n- Review slides: Chapter 2 (Part 1)",
+   "",
+   "- Implement data structures to represent products, customers, or transactions",
+   ""
+  ],
+  [
+   "6",
+   "2. Basic Python Programming for Finance\n2.1 Data Analysis Process, Python Data Types and Operators\n2.2 Python Data Structures for Finance: Lists, Tuples, Dictionaries, and Set\n2.3 Guided Practice with Standard Libraries in Simple Business Cases",
+   "Offline",
+   "CLO1",
+   "T",
+   "- [Nelli]: Read Chapter 2 (Data Structures)\n- Review slides: Chapter 2 (Part 1)",
+   "",
+   "- Implement data structures to represent products, customers, or transactions",
+   ""
+  ],
+  [
+   "7",
+   "Basic Python Programming for finance (cont)\n3.1 Conditionals for Simple Business Rules\n3.2 Loops and Iteration\n3.3 Organizing Program Logic before Coding (Basic Overview)",
+   "Offline",
+   "CLO4",
+   "T",
+   "- [Nelli]: Read Chapter 2 (Control Flow)\n- Review logic gates",
+   "",
+   "- Construct simple business rules and repetitive calculations",
+   ""
+  ],
+  [
+   "8",
+   "Basic Python Programming for finance (cont)\n3.1 Conditionals for Simple Business Rules\n3.2 Loops and Iteration\n3.3 Organizing Program Logic before Coding (Basic Overview)",
+   "Offline",
+   "CLO4",
+   "T",
+   "- [Nelli]: Read Chapter 2 (Control Flow)\n- Review logic gates",
+   "",
+   "- Construct simple business rules and repetitive calculations",
+   ""
+  ],
+  [
+   "9",
+   "Basic Python Programming for finance (cont)\n3.1 Conditionals for Simple Business Rules\n3.2 Loops and Iteration\n3.3 Organizing Program Logic before Coding (Basic Overview)",
+   "Offline",
+   "CLO4",
+   "T",
+   "- [Nelli]: Read Chapter 2 (Control Flow)\n- Review logic gates",
+   "",
+   "- Construct simple business rules and repetitive calculations",
+   ""
+  ],
+  [
+   "10",
+   "4. Functions & Reusable Scripts\n4.1 Function Definition, Parameters, Return Values, and Scope\n4.2 Standard Libraries (math, datetime) and Simple Modules\n4.3 File Input/Output Basics (.csv, .xlsx, .txt)",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- [Nelli]: Read Chapter 2 (Functions)\n- Review slides: Chapter 2 (Part 3)",
+   "",
+   "- Develop reusable scripts for tax, discount, or interest calculations",
+   ""
+  ],
+  [
+   "11",
+   "4. Functions & Reusable Scripts\n4.1 Function Definition, Parameters, Return Values, and Scope\n4.2 Standard Libraries (math, datetime) and Simple Modules\n4.3 File Input/Output Basics (.csv, .xlsx, .txt)",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- [Nelli]: Read Chapter 2 (Functions)\n- Review slides: Chapter 2 (Part 3)",
+   "",
+   "- Develop reusable scripts for tax, discount, or interest calculations",
+   ""
+  ],
+  [
+   "12",
+   "4. Functions & Reusable Scripts\n4.1 Function Definition, Parameters, Return Values, and Scope\n4.2 Standard Libraries (math, datetime) and Simple Modules\n4.3 File Input/Output Basics (.csv, .xlsx, .txt)",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- [Nelli]: Read Chapter 2 (Functions)\n- Review slides: Chapter 2 (Part 3)",
+   "",
+   "- Develop reusable scripts for tax, discount, or interest calculations",
+   ""
+  ],
+  [
+   "13",
+   "5. Numerical Computing with NumPy\n5.1 Introduction to Array-Oriented Computing\n5.2 Vectorized Operations and Descriptive Statistics\n5.3 Descriptive Statistics using NumPy\n5.4 Quiz 1 (MCQs) - Python Foundation",
+   "Offline",
+   "CLO6",
+   "I, T",
+   "- [Nelli]: Read Chapter 3 (The NumPy Library)\n'- Review matrix concepts\n- Review Sessions 1-5",
+   "",
+   "- Perform vectorized operations on sample business datasets\n'- Complete Quiz 1 (MCQ) covering Python foundations and NumPy basics",
+   ""
+  ],
+  [
+   "14",
+   "5. Numerical Computing with NumPy\n5.1 Introduction to Array-Oriented Computing\n5.2 Vectorized Operations and Descriptive Statistics\n5.3 Descriptive Statistics using NumPy",
+   "Offline",
+   "CLO6",
+   "I, T",
+   "- [Nelli]: Read Chapter 3 (The NumPy Library)\n'- Review matrix concepts\n- Review Sessions 1-5",
+   "",
+   "- Perform vectorized operations on sample business datasets",
+   ""
+  ],
+  [
+   "15",
+   "5. Numerical Computing with NumPy\n5.1 Introduction to Array-Oriented Computing\n5.2 Vectorized Operations and Descriptive Statistics\n5.3 Descriptive Statistics using NumPy",
+   "Offline",
+   "CLO6",
+   "I, T",
+   "- [Nelli]: Read Chapter 3 (The NumPy Library)\n'- Review matrix concepts\n- Review Sessions 1-5",
+   "",
+   "- Perform vectorized operations on sample business datasets",
+   ""
+  ],
+  [
+   "16",
+   "6. Tabular Data Representation (Pandas I)\n6.1 DataFrame Architecture\n6.2 Data Acquisition (CSV, Excel, JSON)\n6.3 Exploratory Data Inspection",
+   "Offline",
+   "CLO3, CLO6",
+   "T",
+   "- [Nelli]: Read Chapter 4 (Pandas Intro) & Ch 5 (I/O)\n- Dataset: corporate_finance.csv",
+   "",
+   "- Import raw business data\n- Assess data schema & structure",
+   ""
+  ],
+  [
+   "17",
+   "6. Tabular Data Representation (Pandas I)\n6.1 DataFrame Architecture\n6.2 Data Acquisition (CSV, Excel, JSON)\n6.3 Exploratory Data Inspection",
+   "Offline",
+   "CLO3, CLO6",
+   "T",
+   "- [Nelli]: Read Chapter 4 (Pandas Intro) & Ch 5 (I/O)\n- Dataset: corporate_finance.csv",
+   "",
+   "- Import raw business data\n- Assess data schema & structure",
+   ""
+  ],
+  [
+   "18",
+   "6. Tabular Data Representation (Pandas I)\n6.1 DataFrame Architecture\n6.2 Data Acquisition (CSV, Excel, JSON)\n6.3 Exploratory Data Inspection",
+   "Offline",
+   "CLO3, CLO6",
+   "T",
+   "- [Nelli]: Read Chapter 4 (Pandas Intro) & Ch 5 (I/O)\n- Dataset: corporate_finance.csv",
+   "",
+   "- Import raw business data\n- Assess data schema & structure",
+   ""
+  ],
+  [
+   "19",
+   "7. Data Selection & Indexing Techniques (Pandas II)\n7.1 Label-based vs. Integer-based Indexing\n7.2 Conditional Filtering & Boolean Masks\n7.3 Sorting & Ranking Algorithms",
+   "Offline",
+   "CLO6",
+   "T",
+   "- [Nelli]: Read Chapter 6 (Data Manipulation)\n- Review Set Theory",
+   "",
+   "- Extract specific business segments (e.g., High Net Worth Individuals)",
+   ""
+  ],
+  [
+   "20",
+   "7. Data Selection & Indexing Techniques (Pandas II)\n7.1 Label-based vs. Integer-based Indexing\n7.2 Conditional Filtering & Boolean Masks\n7.3 Sorting & Ranking Algorithms",
+   "Offline",
+   "CLO6",
+   "T",
+   "- [Nelli]: Read Chapter 6 (Data Manipulation)\n- Review Set Theory",
+   "",
+   "- Extract specific business segments (e.g., High Net Worth Individuals)",
+   ""
+  ],
+  [
+   "21",
+   "7. Data Selection & Indexing Techniques (Pandas II)\n7.1 Label-based vs. Integer-based Indexing\n7.2 Conditional Filtering & Boolean Masks\n7.3 Sorting & Ranking Algorithms",
+   "Offline",
+   "CLO6",
+   "T",
+   "- [Nelli]: Read Chapter 6 (Data Manipulation)\n- Review Set Theory",
+   "",
+   "- Extract specific business segments (e.g., High Net Worth Individuals)",
+   ""
+  ],
+  [
+   "22",
+   "8. Data Transformation & Feature Engineering (Pandas III)\n8.1 Column Operations and Arithmetic\n8.2 Deriving Metrics (KPI Calculation)\n8.3 Type Conversion & Basic Mapping",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- [Nelli]: Read Chapter 6 (Data Manipulation Cont.)\n- Review Financial Formulas",
+   "",
+   "- Create calculated columns and simple business KPIs",
+   ""
+  ],
+  [
+   "23",
+   "8. Data Transformation & Feature Engineering (Pandas III)\n8.1 Column Operations and Arithmetic\n8.2 Deriving Metrics (KPI Calculation)\n8.3 Type Conversion & Basic Mapping",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- [Nelli]: Read Chapter 6 (Data Manipulation Cont.)\n- Review Financial Formulas",
+   "",
+   "- Create calculated columns and simple business KPIs",
+   ""
+  ],
+  [
+   "24",
+   "8. Data Transformation & Feature Engineering (Pandas III)\n8.1 Column Operations and Arithmetic\n8.2 Deriving Metrics (KPI Calculation)\n8.3 Type Conversion & Basic Mapping",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- [Nelli]: Read Chapter 6 (Data Manipulation Cont.)\n- Review Financial Formulas",
+   "",
+   "- Create calculated columns and simple business KPIs",
+   ""
+  ],
+  [
+   "25",
+   "9. Data Quality Management & Wrangling (Pandas IV)\n9.1 Handling Missing Values\n9.2 De-duplication Strategies\n9.3 Data Sanitization & Standardization",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- [Nelli]: Read Chapter 6 (Data Cleaning)\n- Dataset: raw_transactions.xlsx",
+   "",
+   "- Implement a basic data cleaning workflow\n- Validate Data Quality",
+   ""
+  ],
+  [
+   "26",
+   "9. Data Quality Management & Wrangling (Pandas IV)\n9.1 Handling Missing Values\n9.2 De-duplication Strategies\n9.3 Data Sanitization & Standardization",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- [Nelli]: Read Chapter 6 (Data Cleaning)\n- Dataset: raw_transactions.xlsx",
+   "",
+   "- Implement a basic data cleaning workflow\n- Validate Data Quality",
+   ""
+  ],
+  [
+   "27",
+   "9. Data Quality Management & Wrangling (Pandas IV)\n9.1 Handling Missing Values\n9.2 De-duplication Strategies\n9.3 Data Sanitization & Standardization",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- [Nelli]: Read Chapter 6 (Data Cleaning)\n- Dataset: raw_transactions.xlsx",
+   "",
+   "- Implement a basic data cleaning workflow\n- Validate Data Quality",
+   ""
+  ],
+  [
+   "28",
+   "10. Descriptive Analytics & Aggregation (Pandas V)\n10.1 GroupBy and Summary Statistics\n10.2 Pivot-style Summary Tables\n10.3 Basic Merge/Join and Data Integrity Checks",
+   "Offline",
+   "CLO6",
+   "U",
+   "- [Nelli]: Read Chapter 6 (Aggregation)\n- Review Excel Pivot Logic",
+   "",
+   "- Generate summary statistics by business dimensions",
+   ""
+  ],
+  [
+   "29",
+   "10. Descriptive Analytics & Aggregation (Pandas V)\n10.1 GroupBy and Summary Statistics\n10.2 Pivot-style Summary Tables\n10.3 Basic Merge/Join and Data Integrity Checks",
+   "Offline",
+   "CLO6",
+   "U",
+   "- [Nelli]: Read Chapter 6 (Aggregation)\n- Review Excel Pivot Logic",
+   "",
+   "- Generate summary statistics by business dimensions",
+   ""
+  ],
+  [
+   "30",
+   "10. Descriptive Analytics & Aggregation (Pandas V)\n10.1 GroupBy and Summary Statistics\n10.2 Pivot-style Summary Tables\n10.3 Basic Merge/Join and Data Integrity Checks",
+   "Offline",
+   "CLO6",
+   "U",
+   "- [Nelli]: Read Chapter 6 (Aggregation)\n- Review Excel Pivot Logic",
+   "",
+   "- Generate summary statistics by business dimensions",
+   ""
+  ],
+  [
+   "31",
+   "11. Guided Practice & Project Checkpoint\n11.1 End-to-End Mini Workflow: Load -> Clean -> Analyze\n11.2 Project / Research Paper Topic Confirmation\n11.3 Instructor Feedback, Troubleshooting, and Q&A",
+   "Offline",
+   "CLO2,CLO3,CLO6",
+   "T, U",
+   "- Review Sessions 1-10\n'- Review previous datasets",
+   "",
+   "- Complete a mini workflow: load -> clean -> analyze",
+   ""
+  ],
+  [
+   "32",
+   "11. Guided Practice & Project Checkpoint\n11.1 End-to-End Mini Workflow: Load -> Clean -> Analyze\n11.2 Project / Research Paper Topic Confirmation\n11.3 Instructor Feedback, Troubleshooting, and Q&A",
+   "Offline",
+   "CLO2,CLO3,CLO6",
+   "T, U",
+   "- Review Sessions 1-10\n'- Review previous datasets",
+   "",
+   "- Complete a mini workflow: load -> clean -> analyze",
+   ""
+  ],
+  [
+   "33",
+   "11. Guided Practice & Project Checkpoint\n11.1 End-to-End Mini Workflow: Load -> Clean -> Analyze\n11.2 Project / Research Paper Topic Confirmation\n11.3 Instructor Feedback, Troubleshooting, and Q&A",
+   "Offline",
+   "CLO2,CLO3,CLO6",
+   "T, U",
+   "- Review Sessions 1-10\n'- Review previous datasets",
+   "",
+   "- Complete a mini workflow: load -> clean -> analyze",
+   ""
+  ],
+  [
+   "34",
+   "12. Mid-term Progress Assessment\nFocus: Applied Python for Data Analysis",
+   "Offline",
+   "",
+   "U",
+   "- Review Sessions 1-11\n- Laptop with Environment ready",
+   "",
+   "- Solve an applied coding problem",
+   ""
+  ],
+  [
+   "35",
+   "12. Mid-term Progress Assessment\nFocus: Applied Python for Data Analysis",
+   "Offline",
+   "",
+   "U",
+   "- Review Sessions 1-11\n- Laptop with Environment ready",
+   "",
+   "- Solve an applied coding problem",
+   ""
+  ],
+  [
+   "36",
+   "12. Mid-term Progress Assessment\nFocus: Applied Python for Data Analysis",
+   "Offline",
+   "",
+   "U",
+   "- Review Sessions 1-11\n- Laptop with Environment ready",
+   "",
+   "- Solve an applied coding problem",
+   ""
+  ],
+  [
+   "37",
+   "13. Data Visualization Principles (Matplotlib)\n13.1 Visual Encoding of Data\n13.2 Comparative Analysis (Bar/Column Charts)\n13.3 Trend Analysis (Line/Area Charts)",
+   "Offline",
+   "CLO8",
+   "T",
+   "- [Nelli]: Read Chapter 7 (Visualization)\n- Review Chart Types",
+   "",
+   "- Visualize trends and category comparisons",
+   ""
+  ],
+  [
+   "38",
+   "13. Data Visualization Principles (Matplotlib)\n13.1 Visual Encoding of Data\n13.2 Comparative Analysis (Bar/Column Charts)\n13.3 Trend Analysis (Line/Area Charts)",
+   "Offline",
+   "CLO8",
+   "T",
+   "- [Nelli]: Read Chapter 7 (Visualization)\n- Review Chart Types",
+   "",
+   "- Visualize trends and category comparisons",
+   ""
+  ],
+  [
+   "39",
+   "13. Data Visualization Principles (Matplotlib)\n13.1 Visual Encoding of Data\n13.2 Comparative Analysis (Bar/Column Charts)\n13.3 Trend Analysis (Line/Area Charts)",
+   "Offline",
+   "CLO8",
+   "T",
+   "- [Nelli]: Read Chapter 7 (Visualization)\n- Review Chart Types",
+   "",
+   "- Visualize trends and category comparisons",
+   ""
+  ],
+  [
+   "40",
+   "14. Visual Reporting & Dashboarding\n14.1 Plot Customization & Readability\n14.2 Dashboard Layouts (Subplots)\n14.3 Visual Storytelling for Stakeholders\n14.4 Quiz 2 (MCQ) - Data Analysis Foundations",
+   "Offline",
+   "CLO8",
+   "U",
+   "- [Nelli]: Read Chapter 7 (Advanced)\n- Presentation Template\n'- Review Sessions 6-14",
+   "",
+   "- Construct a simple dashboard/story for business reporting\n- Complete Quiz 2 (MCQ) covering Pandas, data cleaning, aggregation, and visualization basics",
+   ""
+  ],
+  [
+   "41",
+   "14. Visual Reporting & Dashboarding\n14.1 Plot Customization & Readability\n14.2 Dashboard Layouts (Subplots)\n14.3 Visual Storytelling for Stakeholders",
+   "Offline",
+   "CLO8",
+   "U",
+   "- [Nelli]: Read Chapter 7 (Advanced)\n- Presentation Template\n'- Review Sessions 6-14",
+   "",
+   "- Construct a simple dashboard/story for business reporting",
+   ""
+  ],
+  [
+   "42",
+   "14. Visual Reporting & Dashboarding\n14.1 Plot Customization & Readability\n14.2 Dashboard Layouts (Subplots)\n14.3 Visual Storytelling for Stakeholders",
+   "Offline",
+   "CLO8",
+   "U",
+   "- [Nelli]: Read Chapter 7 (Advanced)\n- Presentation Template\n'- Review Sessions 6-14",
+   "",
+   "- Construct a simple dashboard/story for business reporting",
+   ""
+  ],
+  [
+   "43",
+   "15. Introduction to RDBMS & Basic SQL Querying\n15.1 Relational Model Concepts\n15.2 Basic Retrieval with SELECT, FROM, and WHERE\n15.3 ORDER BY, LIMIT, and Aliases\n15.4 Basic Write data with INSERT, UPDATE and DELETE",
+   "Offline",
+   "CLO1, CLO5",
+   "I, T",
+   "- [Malik]: Read Chapter 1, 2, 5\n- Install DB Browser for SQLite",
+   "",
+   "- Retrieve basic data from a sample database\n- Execute basic retrieval queries",
+   ""
+  ],
+  [
+   "44",
+   "15. Introduction to RDBMS & Basic SQL Querying\n15.1 Relational Model Concepts\n15.2 Basic Retrieval with SELECT, FROM, and WHERE\n15.3 ORDER BY, LIMIT, and Aliases\n15.4 Basic Write data with INSERT, UPDATE and DELETE",
+   "Offline",
+   "CLO1, CLO5",
+   "I, T",
+   "- [Malik]: Read Chapter 1, 2, 5\n- Install DB Browser for SQLite",
+   "",
+   "- Retrieve basic data from a sample database\n- Execute basic retrieval queries",
+   ""
+  ],
+  [
+   "45",
+   "15. Introduction to RDBMS & Basic SQL Querying\n15.1 Relational Model Concepts\n15.2 Basic Retrieval with SELECT, FROM, and WHERE\n15.3 ORDER BY, LIMIT, and Aliases\n15.4 Basic Write data with INSERT, UPDATE and DELETE",
+   "Offline",
+   "CLO1, CLO5",
+   "I, T",
+   "- [Malik]: Read Chapter 1, 2, 5\n- Install DB Browser for SQLite",
+   "",
+   "- Retrieve basic data from a sample database\n- Execute basic retrieval queries",
+   ""
+  ],
+  [
+   "46",
+   "16. Conditional Data Retrieval\n16.1 Logical Predicates (WHERE Clause)\n16.2 Pattern Matching & Range Filtering\n16.3 Sorting & Result Limiting",
+   "Offline",
+   "CLO5",
+   "T",
+   "- [Malik]: Read Chapter 6\n- Review Logic Operators",
+   "",
+   "- Query datasets based on complex business rules",
+   ""
+  ],
+  [
+   "47",
+   "16. Conditional Data Retrieval\n16.1 Logical Predicates (WHERE Clause)\n16.2 Pattern Matching & Range Filtering\n16.3 Sorting & Result Limiting",
+   "Offline",
+   "CLO5",
+   "T",
+   "- [Malik]: Read Chapter 6\n- Review Logic Operators",
+   "",
+   "- Query datasets based on complex business rules",
+   ""
+  ],
+  [
+   "48",
+   "16. Conditional Data Retrieval\n16.1 Logical Predicates (WHERE Clause)\n16.2 Pattern Matching & Range Filtering\n16.3 Sorting & Result Limiting",
+   "Offline",
+   "CLO5",
+   "T",
+   "- [Malik]: Read Chapter 6\n- Review Logic Operators",
+   "",
+   "- Query datasets based on complex business rules",
+   ""
+  ],
+  [
+   "49",
+   "17. Analytical Queries & Summarization\n17.1 Aggregate Functions in SQL\n17.2 Data Grouping and Having (GROUP BY AND HAVING)\n17.3 Analytical Reporting via SQL",
+   "Offline",
+   "CLO7",
+   "T, U",
+   "- [Malik]: Read Chapter 8\n- Review Aggregation Logic",
+   "",
+   "- Compute Key Performance Indicators directly in SQL",
+   ""
+  ],
+  [
+   "50",
+   "17. Analytical Queries & Summarization\n17.1 Aggregate Functions in SQL\n17.2 Data Grouping and Having (GROUP BY AND HAVING)\n17.3 Analytical Reporting via SQL",
+   "Offline",
+   "CLO7",
+   "T, U",
+   "- [Malik]: Read Chapter 8\n- Review Aggregation Logic",
+   "",
+   "- Compute Key Performance Indicators directly in SQL",
+   ""
+  ],
+  [
+   "51",
+   "17. Analytical Queries & Summarization\n17.1 Aggregate Functions in SQL\n17.2 Data Grouping and Having (GROUP BY AND HAVING)\n17.3 Analytical Reporting via SQL",
+   "Offline",
+   "CLO7",
+   "T, U",
+   "- [Malik]: Read Chapter 8\n- Review Aggregation Logic",
+   "",
+   "- Compute Key Performance Indicators directly in SQL",
+   ""
+  ],
+  [
+   "52",
+   "18. SQL & Python Integration\n18.1 Database Connectivity in Python\n18.2 SQL Extraction -> Python Analysis Workflow\n18.3 Export / Report Workflow",
+   "Offline",
+   "CLO2, CLO9",
+   "U",
+   "- [Malik]: Read Chapter 4 & 7\n- Review Connectivity Code",
+   "",
+   "- Implement a simple end-to-end pipeline: DB -> DataFrame -> report output",
+   ""
+  ],
+  [
+   "53",
+   "18. SQL & Python Integration\n18.1 Database Connectivity in Python\n18.2 SQL Extraction -> Python Analysis Workflow\n18.3 Export / Report Workflow",
+   "Offline",
+   "CLO2, CLO9",
+   "U",
+   "- [Malik]: Read Chapter 4 & 7\n- Review Connectivity Code",
+   "",
+   "- Implement a simple end-to-end pipeline: DB -> DataFrame -> report output",
+   ""
+  ],
+  [
+   "54",
+   "18. SQL & Python Integration\n18.1 Database Connectivity in Python\n18.2 SQL Extraction -> Python Analysis Workflow\n18.3 Export / Report Workflow",
+   "Offline",
+   "CLO2, CLO9",
+   "U",
+   "- [Malik]: Read Chapter 4 & 7\n- Review Connectivity Code",
+   "",
+   "- Implement a simple end-to-end pipeline: DB -> DataFrame -> report output",
+   ""
+  ],
+  [
+   "55",
+   "19. Integrated Practice, Review & Project Workshop\n19.1 Python Review for Business Problems\n19.2 Mini End-to-End Workflow from SQL/CSV to Insight\n19.3 Project Consultation, Code Refinement, and Presentation Rehearsal",
+   "Offline",
+   "CLO2, CLO8, CLO9",
+   "I",
+   "- Review Python and SQL integration materials\n'- Access to previous class materials",
+   "",
+   "- Refine project workflow and rehearse presentation\n'- Revisit weak areas and debug code",
+   ""
+  ],
+  [
+   "56",
+   "19. Integrated Practice, Review & Project Workshop\n19.1 Python Review for Business Problems\n19.2 Mini End-to-End Workflow from SQL/CSV to Insight\n19.3 Project Consultation, Code Refinement, and Presentation Rehearsal",
+   "Offline",
+   "CLO2, CLO8, CLO9",
+   "I",
+   "- Review Python and SQL integration materials\n'- Access to previous class materials",
+   "",
+   "- Refine project workflow and rehearse presentation\n'- Revisit weak areas and debug code",
+   ""
+  ],
+  [
+   "57",
+   "19. Integrated Practice, Review & Project Workshop\n19.1 Python Review for Business Problems\n19.2 Mini End-to-End Workflow from SQL/CSV to Insight\n19.3 Project Consultation, Code Refinement, and Presentation Rehearsal",
+   "Offline",
+   "CLO2, CLO8, CLO9",
+   "I",
+   "- Review Python and SQL integration materials\n'- Access to previous class materials",
+   "",
+   "- Refine project workflow and rehearse presentation\n'- Revisit weak areas and debug code",
+   ""
+  ],
+  [
+   "58",
+   "20. Capstone Project Defense\n20.1 Integrated Business Analysis Presentation\n20.2 Code Review & Methodology Defense\n20.3 Course Wrap-up",
+   "Offline",
+   "All",
+   "U",
+   "- Final Project Deliverables (Code + Deck)",
+   "",
+   "- Present findings to \"Board of Directors\" (Class/Instructor)",
+   ""
+  ],
+  [
+   "59",
+   "20. Capstone Project Defense\n20.1 Integrated Business Analysis Presentation\n20.2 Code Review & Methodology Defense\n20.3 Course Wrap-up",
+   "Offline",
+   "All",
+   "U",
+   "- Final Project Deliverables (Code + Deck)",
+   "",
+   "- Present findings to \"Board of Directors\" (Class/Instructor)",
+   ""
+  ],
+  [
+   "60",
+   "20. Capstone Project Defense\n20.1 Integrated Business Analysis Presentation\n20.2 Code Review & Methodology Defense\n20.3 Course Wrap-up",
+   "Offline",
+   "All",
+   "U",
+   "- Final Project Deliverables (Code + Deck)",
+   "",
+   "- Present findings to \"Board of Directors\" (Class/Instructor)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "Configure the development environment and run a first Python script to verify readiness for course activities."
+  ],
+  [
+   "2",
+   "2",
+   "CQ2",
+   "Use Python data types and collections (e.g., lists, tuples, dictionaries, sets) to represent simple business entities and records."
+  ],
+  [
+   "3",
+   "3",
+   "CQ3",
+   "Apply if-else statements and loops to solve simple business decision and repetition tasks."
+  ],
+  [
+   "4",
+   "4",
+   "CQ4",
+   "Write reusable Python functions and simple modules to perform basic business or financial calculations."
+  ],
+  [
+   "5",
+   "5",
+   "CQ5",
+   "Use NumPy arrays to perform basic numerical operations and summary statistics on business data."
+  ],
+  [
+   "6",
+   "6",
+   "CQ6",
+   "Import data from CSV or Excel files into Pandas and inspect the structure and quality of the dataset."
+  ],
+  [
+   "7",
+   "7",
+   "CQ7",
+   "Filter, select, and sort data in Pandas to answer basic business questions."
+  ],
+  [
+   "8",
+   "8",
+   "CQ8",
+   "Create new calculated columns and simple KPIs from existing variables in a DataFrame."
+  ],
+  [
+   "9",
+   "9",
+   "CQ9",
+   "Clean a dataset by handling missing values, removing duplicates, and standardizing inconsistent formats."
+  ],
+  [
+   "10",
+   "10",
+   "CQ10",
+   "Produce summary tables using GroupBy and Pivot-style operations, and combine related datasets using basic merge/join techniques."
+  ],
+  [
+   "11",
+   "11",
+   "CQ11",
+   "Complete a guided mini workflow from data loading to summary output and reflect on project direction."
+  ],
+  [
+   "12",
+   "13",
+   "CQ12",
+   "Create basic charts to compare categories and show trends in business data using Matplotlib."
+  ],
+  [
+   "13",
+   "14",
+   "CQ13",
+   "Prepare a simple visual report or dashboard to communicate findings to business stakeholders."
+  ],
+  [
+   "14",
+   "15",
+   "CQ14",
+   "Retrieve data from a relational database using basic SQL queries with SELECT, FROM, and WHERE."
+  ],
+  [
+   "15",
+   "16",
+   "CQ15",
+   "Formulate SQL queries with combined conditions and basic JOINs to answer business questions from related tables."
+  ],
+  [
+   "16",
+   "17",
+   "CQ16",
+   "Compute key business metrics and summary reports using SQL aggregate functions, GROUP BY, and HAVING."
+  ],
+  [
+   "17",
+   "18",
+   "CQ17",
+   "Build a simple workflow that extracts data with SQL and processes it in Python for further analysis."
+  ],
+  [
+   "18",
+   "19",
+   "CQ18",
+   "Review and refine an end-to-end business data workflow and justify the chosen steps and tools."
+  ],
+  [
+   "19",
+   "20",
+   "CQ19",
+   "Present and defend the capstone project by explaining the workflow, code choices, teamwork process, and business insights."
+  ]
+ ],
+ "links": [
+  "/download/14306/S/1_Codebook&Data&FocusMap&Practical Bank.zip",
+  "/download/14306/S/2_Slides_SS1-30.zip",
+  "/download/14306/S/3_Slides_SS31-60.zip"
+ ]
+}

@@ -1,0 +1,1517 @@
+{
+ "ma": "MKT304",
+ "sylID": "14486",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14486",
+   "code": "MKT304",
+   "name": "Intergrated Marketing Communications_Truyền thông Marketing tích hợp",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14486",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14486",
+  "Syllabus Name": "Intergrated Marketing Communications_Truyền thông Marketing tích hợp",
+  "Course Name English": "Intergrated Marketing Communications",
+  "Subject Code": "MKT304",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "MKT101/MKG101/MMK101",
+  "Description": "The course aims to provide students a solid foundation on different aspects of advertising and other major integrated marketing communications tools, and the role of these tools in the marketing process. In particular, attention will be given to discussions on (1) understanding the communication processes of consumers and marketers, (2) conducting situation analyses of business and social environments, (3) devising effective creative strategies for achieving marketing objectives, and (4) implementing and evaluating the creative strategy.\nA key feature of this course is the integration of artificial intelligence (AI) tools and applications. Students will explore how to effectively use these tools for brainstorming and editing tasks.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfil tasks given by intructor after class\n- Use their own laptop in class only for learning purpose\n- Read the textbook in advance\n- Access the course website (www.flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Advertising and Promotion: An Integrated Marketing Communications Perspective",
+   "George E. Belch and Michael A. Belch",
+   "Irwin/McGraw-Hill",
+   "2012",
+   "9th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "ISE Advertising and Promotion: An Integrated Marketing Communications Perspective",
+   "George E. Belch, Michael A. Belch",
+   "McGraw-Hill Education",
+   "2021",
+   "12th",
+   "ISBN13: 9781260570991",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 2 quyển. Ưu tiên mua ấn bản mới nhất"
+  ],
+  [
+   "3",
+   "Additional readings on AdAge.com, Harvard Business Review, BusinessWeek",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "ChatGPT for Beginners: Using AI for Market Research\nhttps://www.coursera.org/projects/chatgpt-for-beginners-market-research-ai",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "Coursera guided project Prompt Engineering Generative AI for Marketing & Advertising\nhttps://www.coursera.org/projects/prompt-engineering-generative-ai-for-marketing-advertising",
+   "Coursera Project Network",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the role and practice of marketing within an organization, including theoretical and applied aspects of the marketing discipline"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate proficiency in promotion skills and apply to build an IMC strategy"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand how to develop, analyze, and evaluate strategies and tactical IMC plans and programs and to assess their performance"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply AI in marketing processes, evaluate the efficiency of different AI tools, and critically address ethical risks."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Artificial Intelligence tool using",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "All the course",
+   "LO4",
+   "Guided Project",
+   "",
+   "Students can use AI tools in the group project for brainstorming IMC campaign ideas, developing customer journey maps, generating advertising concepts, headlines, and slogans, and refining writing, proofreading, and presentation design",
+   "Completion of the Coursera Guided Project is compulsory. Upon successful completion, students will earn 10 points",
+   "Student can use AI tools such as Claude, ChatGPT, Gemini, Copilot, Canva AI, Adobe Firefly"
+  ],
+  [
+   "2",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal. OP3 (For Project-Based Learning only): Follow lecturer's proposal.",
+   "",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal. OP3 (For Project-Based Learning only): Follow lecturer's proposal.",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal. OP3 (For Project-Based Learning only): Follow lecturer's proposal.",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments."
+  ],
+  [
+   "3",
+   "Essay Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 40'OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3",
+   "OP1: Essay questions OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Class room",
+   ""
+  ],
+  [
+   "4",
+   "Group Project",
+   "on-going",
+   "1",
+   "35.0%",
+   ">0",
+   "OP1: 10 weeksOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3",
+   "OP1: (An RBL-integrated group project) Students can develop their IMC recommendations based on real-world evidence: using credible secondary sources such as company reports, academic articles, industry reports, marketing databases, or official websites, or collecting primary data: surveys, interviews, observation,etc.OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Maximum length of the group assignment should be 20 pages excluding appendices. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Based on topics of studied units",
+   "Group presentation in class room",
+   "This assignment should have 3 components: a formal presentation, a report and a creative product (ad TVC, print ad or media kit) as part of the communication plan."
+  ],
+  [
+   "5",
+   "Individual assignment",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: at homeOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1",
+   "OP1: An individual work to demonstrate the student's understanding and application of IMC concepts in practice. The topic will be announced by the lecturer in Lecture 2.OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Maximum length of the group assignment should be 5 pages excluding appendices.OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Based on topics of studied units",
+   "Individual assignment submitted in class",
+   "All assignments should be typed and double-spaced with 10-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission"
+  ],
+  [
+   "6",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "OP1: 20' eachOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3",
+   "OP1: Multiple choice questions, Case study exercisesOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Appx. 15OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Quizzes will test for knowledge of subjects in the chapters assigned for that day.",
+   "Class room",
+   "These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 2"
+  ],
+  [
+   "7",
+   "Final exam",
+   "Final exam",
+   "1",
+   "20.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3",
+   "Multiple choice questions. Other types of questions may be included.",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Closed-book exam."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nChapter 1: An Introduction to Integrated Marketing Communications\nThe role of marketing, Promotional mix",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "MKT304_Slide NXB_Chap 1-3",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1 (continue): An Introduction to Integrated Marketing Communications\nIMC process and planning",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "MKT304_SlideNXB_Chap 4-6",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1 (continue): An Introduction to Integrated Marketing Communications\nIMC process and planning\nIntroduction to AI Coursera Guided Project Prompt Engineering Generative AI for Marketing & Advertising",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "MKT304_Slide NXB_Chap 7-9",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: The Role of IMC in the Marketing Process\nMarketing strategy and analysis, Target marketing process, Positioning strategy",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "MKT304_Slide NXB_Chap 10-12",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2 (continue): The Role of IMC in the Marketing Process\nRepositioning strategies, Developing marketing plan program, The role of advertising and promotion",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "MKT304_Slide NXB_Chap 13-15",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2 (continue): The Role of IMC in the Marketing Process\nGroup Project Guildelines and Individual Assignment Guidelines",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "MKT304_Slide NXB_Chap 16-18",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 5: The Communication Process\nThe nature of communication, Basic model of communication, and Analyzing the receiver",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "MKT304_Slide NXB_Chap 19-22",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 5 (continue): The Communication Process\nThe response process, Cognitive processing of communications",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "MKT304_AI Integration Guide_FA25",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 6: Source, Message, and Channel Factors\nSource factors, Choosing a celebrityendorser",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 6 (continue): Source, Message, and Channel Factors\nMessage factors, Channel factors",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 7: Establishing Objectives and Budgeting for the Promotional Program\nDetermine value of IMC objectives, Dagma",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 7 (continue): Establishing Objectives and Budgeting for the Promotional Program\nProblem in setting objectives, Establish and allocate the promotional budget",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 8: Creative strategy - Planning and development",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 8 (continue): Creative strategy - Planning and development",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 9: Creative Strategy - Implementation and Evaluation\nAppeals and Execution styles",
+   "Offline",
+   "LO2",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 9 (continue): Creative Strategy - Implementation and Evaluation\nCreative tatics, Clientevaluation and Approval of creative output",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "17",
+   "Review chapter 1, 2, 5, 6, 7, 8, 9",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "Quiz 1: Chapter 1, 2, 5, 6, 7, 8, 9",
+   "Offline",
+   "LO1, LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Practical excercises\nPractice applying AI for producing creative products",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "20",
+   "Practical excercises\nPractice appying AI for producing creative products",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 10: Media Planning and Strategy\nDeveloping the media plan, Market analysis",
+   "Offline",
+   "LO2",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 10 (continue): Media Planning and Strategy\nEstablish media objectives, Develop and implementing media strategies",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 10 (continue): Media Planning and Strategy\nEvaluation and follow up, Characteristics of media",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 13: Support Media\nTraditional support media, Promotional product marketing",
+   "Offline",
+   "LO2",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 13 (continue): Support Media\nOther traditional support media, Nontraditional support media",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 13 (continue): Support Media\nOther traditional support media, Nontraditional support media",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 19: International Advertising and Promotion\nThe role of international advertising and promotion, Global vs localized advertising",
+   "Offline",
+   "LO2",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 19 (continue): International Advertising and Promotion\nDecision areas in international advertising, Promotion mix of international marketing",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 16: Sales Promotion\nThe growth of sales promotion, CConsumer-oriented sales promotion techniques",
+   "Offline",
+   "LO2, LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 16 (continue): Sales Promotion\nTrade-oriented sales promotion",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 16 (continue): Sales Promotion\nCoordinating sales promotion with advertising, Other IMC tools",
+   "Offline",
+   "LO2, LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 16 (continue): Sales Promotion\nGroup activities (case study, discussion)",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 17: Public Relations, Publicity, and Corporate Advertising\nPublic relation",
+   "Offline",
+   "LO2, LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 17 (continue): Public Relations, Publicity, and Corporate Advertising\nThe process of PR",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 17 (continue): Public Relations, Publicity, and Corporate Advertising\nPublicity",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 17 (continue): Public Relations, Publicity, and Corporate Advertising\nCorporate advertising",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 14: Direct Marketing",
+   "Offline",
+   "LO2, LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Chaper 14 (continue): Direct Marketing\nDirect selling, Evaluating the effectiveness of direct marketing",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 15: The Internet and Interactive Media\nSocial media marketing\nThe internet and IMC",
+   "Offline",
+   "LO2, LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 15 (continue): The Internet and Interactive Media\nMobile, Social media management programs",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 15 (continue): The Internet and Interactive Media\nInternet metrics",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "Review chapter 10, 13, 14, 15, 16, 17, 19",
+   "Offline",
+   "LO2, LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "43",
+   "Quiz 2: Chapter 10, 13, 14, 15, 16, 17, 19",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 20: Regulation of Advertising and Promotion in Vietnam",
+   "Offline",
+   "LO2",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 20 (continue): Regulation of Advertising and Promotion in Vietnam",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 21: Evaluating the Social, Ethical, and Economic Aspects of Advertising and Promotion\nEthic, Social, and ethical critisicism of advertising",
+   "Offline",
+   "LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 21 (continue): Evaluating the Social, Ethical, and Economic Aspects of Advertising and Promotion\nEconomic effects of advertising",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "48",
+   "In-class essay",
+   "Offline",
+   "LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "49",
+   "IMC in Vietnam\nThe role of Ad/PR Agency\nNew trends in IMC in the world and in Vietnam",
+   "Offline",
+   "LO3",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "IMC in Vietnam\nThe role of Ad/PR Agency\nNew trends in IMC in the world and in Vietnam",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "51",
+   "IMC in Vietnam\nThe role of Ad/PR Agency\nNew trends in IMC in the world and in Vietnam",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "52",
+   "Course Revision",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "Course Revision",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "54",
+   "Course Revision",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "55",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "ĐN1",
+   "Discuss the role integrated marketing communications plays in the brand building process. Find an example of a company that has been able to build and maintain its brand identity without relying primarily on mass-media advertising. (L02, LO3)"
+  ],
+  [
+   "2",
+   "1",
+   "ĐN2",
+   "Discuss the opportunities and challenges facing marketers with regard to the use of mobile marketing. Discuss the various ways marketers might send messages to consumers on their mobile phones. (L04)"
+  ],
+  [
+   "3",
+   "1",
+   "CT1",
+   "What is meant by the categorization of touch points into paid, owned, and earned media? Choose a specific company or brand and discuss how it is using these three categories of media?"
+  ],
+  [
+   "4",
+   "2",
+   "ĐN1",
+   "Why are companies such as Procter & Gamble moving away from the use of traditional mass-media advertising and looking for other contact points than can be used to connect with consumers? How can various IMC tools be used by companies such as P&G to build and maintain relationships with their customers? (L05)"
+  ],
+  [
+   "5",
+   "2",
+   "ĐN2",
+   "What is meant by customer contact points? Select a company or brand and discuss the various contact points which marketers can use to reach consumers of this product or service. (L05)"
+  ],
+  [
+   "6",
+   "2",
+   "CT1",
+   "Digital advertising revenue reached $356 billion in the United States in 2020 (Statista, 2021), with Google receiving $54 billion and Facebook receiving $34 billion, which means that nearly 70 percent of the money spent by online advertisers goes to the two companies. Amazon’s digital advertising revenue has been growing rapidly, increasing from $3.3 billion in 2017 to an estimated $15 billion in 2020. Why has each of these companies become so dominant? Discuss their importance to marketers using digital advertising as part of their IMC program."
+  ],
+  [
+   "7",
+   "3",
+   "ĐN1",
+   "Choose a company and discuss how it communicates with its customers in different market segments. (LO1, LO4)."
+  ],
+  [
+   "8",
+   "3",
+   "ĐN2",
+   "The text describes a number of different positioning strategies. Give examples of products and/or brands that utilize each of these different strategies. (LO5)"
+  ],
+  [
+   "9",
+   "3",
+   "CT1",
+   "Discuss the role that IMC assumes in the marketing mix. That is, how is this element of the mix coordinated with pricing, distribution, and product functions?"
+  ],
+  [
+   "10",
+   "4",
+   "ĐN1",
+   "Discuss the difference between demographic and psychographic segmentation. Give examples of companies employing each. (LO4)."
+  ],
+  [
+   "11",
+   "4",
+   "ĐN2",
+   "Packages are now becoming communications tools, serving as advertising vehicles. At the same time, packages are changing the other marketing mix elements as well. Discuss how packages are being used to impact price and distribution strategies as well as promotional strategies. (LO2)"
+  ],
+  [
+   "12",
+   "4",
+   "ĐN3",
+   "Recently, some marketers have noted that it is easier to develop communications programs to Generation X members than Generation Y. Briefly describe the characteristics of Gen X (born between 1965-1978) and Gen Y (1978 to 1986) and whether or not you believe this to be true. (LO3)"
+  ],
+  [
+   "13",
+   "4",
+   "CT1",
+   "As the media environment changes, explain how this impacts the role of advertising and promotion. Why is the IMC process different than it was, say, 20 years ago?"
+  ],
+  [
+   "14",
+   "5",
+   "ĐN1",
+   "Discuss the role of media specialist companies. Why are marketers likely to use a media specialist company to handle their media buying versus the media department of an agency? (L01,2,3)"
+  ],
+  [
+   "15",
+   "5",
+   "ĐN2",
+   "Discuss the pros and cons for a marketer having one company handle all of its marketing communication needs versus using specialized marketing communication firms to handle the various components of the program. (L05, 6)"
+  ],
+  [
+   "16",
+   "5",
+   "ĐN3",
+   "Discuss the reasons why advertising agencies lose accounts. Find an example of a company that changed advertising agencies and identify the factors that led them to switch to another agency. (L04)"
+  ],
+  [
+   "17",
+   "5",
+   "CT1",
+   "Explain what is meant by cognitive dissonance. Why is this concept important to marketers?"
+  ],
+  [
+   "18",
+   "6",
+   "ĐN1",
+   "Why is understanding consumer behavior of such importance to marketers? Give examples of how marketers apply their understanding of consumer behavior to their marketing strategies. (LO1)"
+  ],
+  [
+   "19",
+   "6",
+   "ĐN2",
+   "Consumers experience different forms of problem recognition. Explain each type of problem recognition and give an example of a purchase of this type. (LO2)"
+  ],
+  [
+   "20",
+   "6",
+   "CT1",
+   "Figure 4–1 presents a basic model of consumer decision making. Describe the model, and explain what happens at each step of the process?"
+  ],
+  [
+   "21",
+   "7",
+   "ĐN1",
+   "How might one’s social class influence their consumer behaviors? Give examples of products and/or services that might be influenced by social class standing. (LO5)"
+  ],
+  [
+   "22",
+   "7",
+   "CT1",
+   "Explain the concept of viral marketing and how it relates to word-of-mouth communication. Find an example of a company that used viral marketing successfully and one that encountered problems when using this technique"
+  ],
+  [
+   "23",
+   "8",
+   "ĐN1",
+   "The text discusses the use of cultural anthropology to understand consumer behaviors. Why is it necessary for marketers to use alternative approaches to consumer behavior? (LO6)"
+  ],
+  [
+   "24",
+   "8",
+   "CT1",
+   "Explain what is meant by a central versus peripheral route to persuasion and the factors that might determine when each might be used by consumers in response to an advertisement or other form of marketing communication."
+  ],
+  [
+   "25",
+   "9",
+   "ĐN1",
+   "Why is it important for marketers to set specific objectives for advertising and promotion? What criteria must these objectives meet to be valid? (LO1)."
+  ],
+  [
+   "26",
+   "9",
+   "ĐN2",
+   "What are some of the problems associated with setting communications objectives? How can marketers overcome these problems? Cite examples. (LO4)"
+  ],
+  [
+   "27",
+   "9",
+   "ĐN3",
+   "What are the two key issues that marketers must face in regard to budgeting? Explain the differences and give examples of each. (LO5)"
+  ],
+  [
+   "28",
+   "9",
+   "ĐN4",
+   "There have always been attempts to directly measure the effects of advertising on sales. At the same time, there are many who believe that this is rarely possible. Why is it so difficult to establish a relationship between advertising and sales? (LO3)"
+  ],
+  [
+   "29",
+   "9",
+   "CT1",
+   "Discuss how marketers can use the persuasion matrix shown in Figure 6–1 to plan their integrated marketing communications programs. Choose a TV commercial or print ad and use the persuasion matrix to evaluate how it might influence consumers’ response processes."
+  ],
+  [
+   "30",
+   "10",
+   "ĐN1",
+   "Advertising creativity is viewed as the ability to generate unique and appropriate solutions to communication problems. This definition suggests that a creative ad is one that is novel but also relevant or appropriate. Find an example of an advertisement (either a print ad or TV commercial) that is novel but not necessarily relevant to the product or services Discuss why the client would have approved this ad. (L01)"
+  ],
+  [
+   "31",
+   "10",
+   "ĐN2",
+   "Discuss the role an advertising slogan plays in the development of an advertising campaign as well as some of the factors that should be considered in developing an effective tagline. Find an example of a good tagline as well as one that does not communicate effectively. Discuss the reasons why you view these as either good or bad examples of advertising slogans. (L03)."
+  ],
+  [
+   "32",
+   "10",
+   "ĐN3",
+   "Some advertising creatives argue that the distinction between rational and emotional advertising is irrelevant since nearly all advertising includes aspects of both. Evaluate this argument. (L01)"
+  ],
+  [
+   "33",
+   "10",
+   "ĐN4",
+   "Discuss the role of music in advertising. Find an example of a television commercial that is using a song and discuss the role the music plays in delivering the message. (L03)"
+  ],
+  [
+   "34",
+   "10",
+   "CT1",
+   "Find a celebrity who is currently appearing in an advertising campaign for a particular company or brand and use McCracken’s meaning transfer model (shown in Figure 6–4) to analyze the use of this individual as a spokesperson"
+  ],
+  [
+   "35",
+   "11",
+   "ĐN1",
+   "What is meant by engagement (in media terms)? Explain the relevance of engagement to media planners. (LO1)"
+  ],
+  [
+   "36",
+   "11",
+   "ĐN2",
+   "The chapter discusses some of the many changes taking place in the media environment. Discuss some of the reasons that marketers may be shifting advertising dollars to less traditional media. Does this mean that TV advertising may no longer exist in the future? (LO2)"
+  ],
+  [
+   "37",
+   "11",
+   "ĐN3",
+   "The text lists both internal and external factors that might impact the media strategy. Provide examples of each and discuss how they might impact the media plan. (LO3)"
+  ],
+  [
+   "38",
+   "11",
+   "CT1",
+   "Why are the affordable and arbitrary allocation budgeting methods considered to be very poor budgeting methods?"
+  ],
+  [
+   "39",
+   "12",
+   "ĐN1",
+   "Discuss the advantages and limitations of television as an advertising medium and how these factors affect its use by both major advertisers as well as smaller local companies. (L02)"
+  ],
+  [
+   "40",
+   "12",
+   "ĐN2",
+   "Discuss some of the factors that media buyers should take into consideration when buying advertising time on radio. (L03)"
+  ],
+  [
+   "41",
+   "13",
+   "ĐN1",
+   "Discuss how technological developments such as electronic readers, the iPad and tablet PCs will impact the role of magazines and newspapers as advertising media vehicles. How long do you think it will take for these devices to achieve mass market penetration? (L01, 2)"
+  ],
+  [
+   "42",
+   "13",
+   "ĐN2",
+   "What are the major challenges facing the newspaper industry and the use of newspapers as an advertising medium. How can newspapers respond to these challenges? (L04)"
+  ],
+  [
+   "43",
+   "13",
+   "CT1",
+   "Advertising creativity is viewed as the ability to generate unique and appropriate ideas that can be used as solutions to communication problems. This definition suggests that a creative ad is one that is novel but also relevant or appropriate. Find an example of an advertisement (either a print ad, TV commercial, or online ad/video) that is novel but not necessarily relevant to the product or service. Discuss why the client would have approved this ad."
+  ],
+  [
+   "44",
+   "14",
+   "ĐN1",
+   "Explain why direct marketing has been so successful. Do you see this trend continuing into the future? (LO1)"
+  ],
+  [
+   "45",
+   "14",
+   "ĐN2",
+   "Explain how companies use database marketing. Name some of the companies that may have your information in their database. Explain how this information is used to reach you. (LO2)"
+  ],
+  [
+   "46",
+   "15",
+   "ĐN1",
+   "Describe the various forms of direct response advertising. Discuss some of the reasons for the success of direct response advertising. (LO3)"
+  ],
+  [
+   "47",
+   "15",
+   "ĐN2",
+   "Direct marketers are very good at determining the effectiveness of their programs. Many direct marketers now measure the impact of the program on the consumer funnel. Explain how direct marketers measure effectiveness, and how they now use the consumer funnel for this purpose. (LO4)"
+  ],
+  [
+   "48",
+   "15",
+   "CT1",
+   "The chapter opener discusses how DASANI was able to use creative advertising to reposition the brand and make it the leading brand of bottled water. Evaluate the creative strategy used by the Lambesis Agency for DASANI bottled water as well as the two line extensions, DASANI Drops and DASANI Sparkling. Why have they been effective?"
+  ],
+  [
+   "49",
+   "16",
+   "CT1",
+   "Choose a current advertising campaign and analyze it with respect to the creative guidelines discussed in the last section of the chapter. Identify any areas where you feel the campaign does not meet the guidelines and discuss why this is so."
+  ],
+  [
+   "50",
+   "17",
+   "ĐN1",
+   "Explain how the Internet has changed the practice of public relations. Pick a Web site as an example of this change. (LO1)"
+  ],
+  [
+   "51",
+   "17",
+   "ĐN2",
+   "The growth of Facebook has had a major impact on the way advertisers attempt to reach their customers. Discuss how Facebook has changed the media environment, citing examples. (LO2)"
+  ],
+  [
+   "52",
+   "17",
+   "CT1",
+   "One of the more popular metrics now being used in nontraditional media (Internet, social media, etc.) is engagement. This term has also been used in evaluating traditional media. Explain what is meant by engagement. Is this term being used the same way in referring to both traditional and nontraditional media?"
+  ],
+  [
+   "53",
+   "18",
+   "ĐN1",
+   "Discuss why mobile has become an attractive medium for advertisers. Provide examples of how companies have used mobile. (LO2)"
+  ],
+  [
+   "54",
+   "18",
+   "ĐN2",
+   "One of the fastest growing mediums in regard to advertising expenditures is mobile. Explain why mobile has become so attractive to advertisers. (LO5)"
+  ],
+  [
+   "55",
+   "18",
+   "ĐN3",
+   "A trend among advertisers is to make more use of consumer generated commercials to be placed on You-Tube and similar sites. Discuss some of the advantages and disadvantages of employing this strategy. (LO4)"
+  ],
+  [
+   "56",
+   "18",
+   "CT1",
+   "Discuss some of the advantages of using programmatic media buying. Given that the majority of digital display ads are purchased this way, do you think this will be the only method media buyers use in the future?"
+  ],
+  [
+   "57",
+   "19",
+   "ĐN1",
+   "What are some of the reasons brand managers are allocating more of their promotional budgets to sales promotion rather than media advertising? Do you agree with the critics who argue that the increased use of sale promotion is undermining brand equity for many once-powerful brands? (L01)"
+  ],
+  [
+   "58",
+   "19",
+   "ĐN2",
+   "Evaluate the effectiveness of coupons as a sales promotion tool. How would you respond to critics who argue that they are inefficient since less than 2 percent of coupons are redeemed? (L03)"
+  ],
+  [
+   "59",
+   "19",
+   "ĐN3",
+   "Discuss the role the Internet is playing with regard to sales promotion. Why are many companies moving promotions such as sweepstakes and contests online? (L03)"
+  ],
+  [
+   "60",
+   "19",
+   "CT1",
+   "Discuss the advantages and limitations of television as an advertising medium and how these factors affect its use by major national advertisers as well as smaller local companies"
+  ],
+  [
+   "61",
+   "20",
+   "ĐN1",
+   "What is meant by a sales promotion trap or spiral? Evaluate the promotional war that has developed in the fast-food industry as various competitors promote their 99 cents or dollar menus. What are the options for companies in deciding to participate in the promotional wars? (L05)"
+  ],
+  [
+   "62",
+   "20",
+   "ĐN2",
+   "Discuss the role of sales promotion as part of the promotional mix and how it can be integrated with other marketing communication tools. (L04)"
+  ],
+  [
+   "63",
+   "20",
+   "ĐN3",
+   "What is meant by a sales promotion trap or spiral? Evaluate the promotional war that has developed in the fast-food industry as various competitors promote their 99 cents or dollar menus. What are the options for companies in deciding to participate in the promotional wars? (L05)"
+  ],
+  [
+   "64",
+   "20",
+   "CT1",
+   "Discuss how digital and social media are influencing the way people watch television. What are some of the ways television advertisers can leverage social media to work to their advantage?"
+  ],
+  [
+   "65",
+   "21",
+   "ĐN1",
+   "LO 1. Explain how social networks can both help and hurt companies in regard to publicity. (LO1)"
+  ],
+  [
+   "66",
+   "21",
+   "ĐN2",
+   "LO 2. Why do companies get involved in event sponsorships? Is this an effective strategy? Give examples of event sponsorships that were successful and some that were not. (LO5)"
+  ],
+  [
+   "67",
+   "21",
+   "ĐN3",
+   "LO 3. There is a saying that “any publicity is good publicity”. Discuss what you think about this statement. (LO2)"
+  ],
+  [
+   "68",
+   "21",
+   "CT1",
+   "Discuss the digital disruption that is impacting the traditional print media of newspapers and magazines. Do you think magazine and newspaper publications can respond to these changes and attract and retain readers and in turn advertisers?"
+  ],
+  [
+   "69",
+   "22",
+   "ĐN1",
+   "Explain why it is so difficult to measure the effectiveness of an IMC program that uses multiple program elements. (LO3)"
+  ],
+  [
+   "70",
+   "22",
+   "ĐN2",
+   "Discuss the various types of pretests that advertisers employ. Why do marketers pretest ads? What are some reasons why marketers may not pretest? (LO2)"
+  ],
+  [
+   "71",
+   "22",
+   "ĐN3",
+   "Discuss some of the reasons why some companies decide not to measure the effectiveness their promotional programs. Explain why this may or not be a good strategy. (LO1)"
+  ],
+  [
+   "72",
+   "22",
+   "CT1",
+   "Find a copy of a national newspaper such as USA Today or your local newspaper and analyze the types of companies that are advertising in it and how they vary by section. Why do you think these companies are advertising in this newspaper?"
+  ],
+  [
+   "73",
+   "23",
+   "ĐN1",
+   "The opening vignette to the chapter discusses how many multinational companies want to turn many of their products and services into global brands. Discuss some of the challenges marketers are facing from regional and local brands and how this might impact their efforts to develop strong global brands. (L01, 03)"
+  ],
+  [
+   "74",
+   "23",
+   "ĐN2",
+   "Why are so many multinational companies are expanding into China. What challenges do marketers and advertising agencies face in developing IMC programs for the Chinese market? (L02)"
+  ],
+  [
+   "75",
+   "23",
+   "CT1",
+   "Discuss some recent examples of product placements and/or integrations. Describe the context in which they were used, and how they intended to reach their target markets. Explain where these placements and/or integrations would fit on Hudson’s branded entertainment continuum"
+  ],
+  [
+   "76",
+   "24",
+   "ĐN1",
+   "Explain what is meant by customer relationship management. Discuss why CRM has become such an important practice to marketers (LO1)"
+  ],
+  [
+   "77",
+   "24",
+   "ĐN2",
+   "Discuss how companies have successfully integrated the Internet into their personal selling programs. Provide additional ways this might be done. (LO3)"
+  ],
+  [
+   "78",
+   "24",
+   "CT1",
+   "Digital advertising media seem to be more and more effective, but at the same time, more and more controversial. Explain why both of these situations have arisen."
+  ],
+  [
+   "79",
+   "25",
+   "CT1",
+   "Discuss how global marketers might use the 2022 FIFA World Cup soccer tournament that will be held in Qatar as an integrated marketing communications opportunity. What types of companies are best suited to use the World Cup for a global marketing platform?"
+  ],
+  [
+   "80",
+   "26",
+   "CT1",
+   "Discuss the evolving role of the Internet and other digital and social media in the IMC program of international marketers. How can marketers make effective use of digital and social media in marketing their products and services in various countries?"
+  ],
+  [
+   "81",
+   "30",
+   "CT1",
+   "The chapter opener discusses how many retailers have become overly dependent on discounts and promotions and the problems this has created for them. Discuss some of the reasons retailers have increased their use of discounts and promotions. How might they reduce their dependency on them to drive store traffic and sales?"
+  ],
+  [
+   "82",
+   "31",
+   "CT1",
+   "What is meant by a sales promotion trap or spiral? Find an example of an industry or market where a promotional battle is taking place. What are the options for companies in deciding whether to participate in the promotional war?"
+  ],
+  [
+   "83",
+   "33",
+   "CT1",
+   "What impact do you think the millennial generation will have on cause marketing, issue advertising, and advocacy advertising? Explain your reasoning."
+  ],
+  [
+   "84",
+   "35",
+   "CT1",
+   "Social media have had a profound impact on the power of publicity. Explain what this means and whether you believe it to be true or not. Provide examples to support your position."
+  ],
+  [
+   "85",
+   "37",
+   "CT1",
+   "What is an infomercial? What are some of the reasons that infomercials have been so successful? Which types of products and services do you think are likely to be candidates for successful infomercials?"
+  ],
+  [
+   "86",
+   "38",
+   "CT1",
+   "Explain the role that direct marketing can play in the IMC program. Can direct marketing be used for anything other than a behavioral response? If so, give examples."
+  ],
+  [
+   "87",
+   "41",
+   "CT1",
+   "Explain why some companies seem to be fascinated by digital and social media. What are some of the factors that might support this thinking? What are some that might lead to considering it misdirected?"
+  ],
+  [
+   "88",
+   "42",
+   "CT1",
+   "Discuss the evolving role of the Internet and other digital and social media in the IMC program of international marketers. How can marketers make effective use of digital and social media in marketing their products and services in various countries?"
+  ],
+  [
+   "89",
+   "43",
+   "CT1",
+   "The drive to go viral has resulted in some major marketing mistakes. Explain why marketers are seemingly obsessed with going viral. Then explain some of the consequences that might occur should these efforts fail."
+  ],
+  [
+   "90",
+   "45",
+   "CT1",
+   "Find several examples of advertising claims or slogans that are based on puffery rather than substantiated claims. Discuss whether you feel these advertising claims can be defended on the basis of puffery."
+  ],
+  [
+   "91",
+   "46",
+   "CT1",
+   "What are some of the regulatory issues marketers must take into consideration in developing contest, sweepstakes, and other types of promotions that will be offered online or through social media?"
+  ],
+  [
+   "92",
+   "47",
+   "CT1",
+   "The chapter discusses how many marketers are struggling with their multicultural marketing efforts and suggests that one reason may be the lack of diversity in advertising agencies. What are some of the reasons for the low number of minorities, such as African Americans, working in advertising? How can the industry address this problem?"
+  ],
+  [
+   "93",
+   "49",
+   "CT1",
+   "What are the new trends in IMC in the world and in Vietnam? Give examples?"
+  ]
+ ],
+ "links": [
+  "/download/14486/S/1_MKT304_Slide NXB_Chap 1-3.zip",
+  "/download/14486/S/2_MKT304_SlideNXB_Chap 4-6.zip",
+  "/download/14486/S/3_MKT304_Slide NXB_Chap 7-9.zip",
+  "/download/14486/S/4_MKT304_Slide NXB_Chap 10-12.zip",
+  "/download/14486/S/5_MKT304_Slide NXB_Chap 13-15.zip",
+  "/download/14486/S/6_MKT304_Slide NXB_Chap 16-18.zip",
+  "/download/14486/S/7_MKT304_Slide NXB_Chap 19-22.zip",
+  "/download/14486/S/8_MKT304_AI Integration Guide_FA25.zip"
+ ]
+}

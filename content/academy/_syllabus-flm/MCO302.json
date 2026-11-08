@@ -1,0 +1,1278 @@
+{
+ "ma": "MCO302",
+ "sylID": "13649",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13649",
+   "code": "MCO302",
+   "name": "Intercultural Communication_Truyền thông liên văn hóa",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13649",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13649",
+  "Syllabus Name": "Intercultural Communication_Truyền thông liên văn hóa",
+  "Course Name English": "Intercultural Communication",
+  "Subject Code": "MCO302",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Cooperative Learning,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor level",
+  "Time Allocation": "Study hour (150h)= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course introduces students to the foundational theories and pressing issues in intercultural communication, with a particular focus on how culture and identity shape human interaction. Through a thematic approach and the use of authentic materials, students engage with real-world examples of communication across cultural boundaries—learning not only how meaning is constructed, but also how it can be misunderstood or transformed in diverse contexts.\nAs the course progresses, students build a solid understanding of how cultural frameworks influence perception, behavior, and dialogue. They develop the ability to communicate effectively and ethically across cultures, learning to navigate both verbal and nonverbal cues with sensitivity. Special emphasis is placed on the responsible use of digital tools and AI technologies to support communication and solve problems in multicultural environments.\nBeyond knowledge and skills, the course fosters a mindset of openness and respect. Students are encouraged to reflect critically on their own cultural assumptions, embrace diversity, and approach global interactions with empathy and integrity. By the end of the course, they are not only better communicators, but also more thoughtful participants in an increasingly interconnected world.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfill tasks given by instructor after class\n- Use their own laptop in class only for learning purpose\n- Read the textbook in advance\n- Access the course website (https://flm.fpt.edu.vn/) for up-to-date information and material of the course.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Intercultural Communication in Contexts",
+   "Judith Martin, Thomas Nakayama",
+   "McGraw-Hill Education",
+   "2025",
+   "",
+   "9781265181499",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 3 Giáo trình (ưu tiên mua sách mới)"
+  ],
+  [
+   "2",
+   "Intercultural Communication in Contexts",
+   "By (author) Judith Martin , By (author) Thomas Nakayama",
+   "McGraw-Hill Education",
+   "2021",
+   "8th",
+   "9781265905729",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Intercultural Communication in Contexts",
+   "By (author) Judith Martin , By (author) Thomas Nakayama",
+   "McGraw-Hill Education",
+   "2017",
+   "",
+   "9781259251795",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Wandering Through Vietnamese Culture.",
+   "Hữu Ngọc",
+   "NXB Thế Giới",
+   "2018",
+   "",
+   "9786047701742",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Demonstrate specialised and integrated knowledge of intercultural communication theories, terms, context and power"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Enhance the ability to select and use the appropriate style and means of communication for distinctive cultural groups"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Enhance the ablity to understand people based on their cutural identity"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Enhance the ability to engage sensitively and confidently with individuals, groups, and communities in diverse local, national and cultural contexts"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Develop a critical attitude towards culture identity"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop an attitude of open-mindedness and self-critical reflection with a view to self-improvement"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Enhance the ability to predict the consequences of ethics in intercultural communication"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Conduct a project professionally and ethically while working harmoniously with group members."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Project",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "in class and homework",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO8",
+   "Video producing, written report and oral presentation",
+   "",
+   "Demonstrate the ability to produce video/content with the understanding of intercultural communications. Utilize AI to tools to assist the group project as permitted by the course guidelines.",
+   "In class and home conducted from assinged topic until oral presentation\n\nStudents will work in groups of up to five members to implement this assignment. The assessment, including one video, one group report and one group presentation, provides you with an opportunity to understand your future target audience by experiencing their culture/subculture as an \"\"outsider\"\". As communicators, we want our audience to receive our messages and understand them as we intended them regardless of different culture identity. This project can help you to come up with some ideas to tailor your messages, visual content and pick the media channels you may use to reach your target audiences.\n\nStudents follow below steps to successfully undertake the assignment:\n\nStep 1: Select and Research Your Target Culture/Subculture\n\n- Objective: Understand a culture or subculture that is unfamiliar to your group by exploring it from an outsider’s perspective. Student can use AI to generates ideas.\n\n+ Choose a specific cultural or subcultural group (e.g., immigrants, elderly communities, Gen Z, LGBTQ+, religious minorities, etc.)\n\n+ Conduct research on their values, communication styles, media habits, and cultural norms\n\n+ Identify potential barriers to communication and how cultural identity influences message interpretation by yourself\n\n+ Document your observations, challenges, and insights as outsiders trying to engage with this group by yourself\n\nStep 2: Produce a Video and Write a Group Report\n\n- Objective: Apply your understanding by creating a tailored communication product and analyzing your process.\n\n+ Develop a concept and script for a short video (3–5 minutes) aimed at your chosen audience by yourself\n\n+ Produce the video by yourself: it can be a mock campaign, interview, dramatization, or informative piece\n\n+ Write a group report (approx. 3000–5000 words) by yourself that includes:\n\n1/ Introduction to the target culture/subculture\n\n2/ Summary of your research and engagement process\n\n3/ Key intercultural communication insights\n\n4/ Explanation of how your message, visuals, and media choices were adapted\n\n5/ Reflections on effectiveness and lessons learned\n\nFor the producing of Video, students can use AI for supporting and the reflecting of this use must be mentioned in the report; while making/ writing report should be handled by students themselves.\n\nStep 3: Present to the Class and Showcase Your Work\n\nObjective: Share your findings and creative output with your peers.\n\n'- Prepare a group presentation (20–25 minutes)\n\n- Present your research process, cultural insights, and communication strategy\n\n- Screen your video to the class.",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms."
+  ],
+  [
+   "2",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "in class and homework",
+   "CLO1, CLO3, CLO6, CLO8",
+   "Video producing",
+   "CLO1, CLO3, CLO6, CLO8",
+   "Demonstrate the ability to produce video/content with the understanding of intercultural communications. Utilize AI to tools to assist the group project as permitted by the course guidelines.",
+   "This task invites you to explore your own cultural identity from the insider’s perspective. You’ll create a short video (less than 5 min) that reflects who you are, the culture or subculture you belong to, and how that identity shapes your communication. Importantly, your video should apply at least one intercultural communication theory to demonstrate how you would approach an audience from a different cultural background.\n\nStep 1: Self-Reflection & Cultural Identification (by yourself)\n\n\"- Define your cultural or subcultural identity (e.g., Vietnamese youth, rural community, Buddhist, gamer, student activist, etc.)\n\n- Reflect on your values, traditions, communication style, and shared experiences\n\n- Ask yourself: What makes my culture unique? How do I express it in daily life?\"\n\nStep 2: Choose a Theory to Apply by yourself\n\n\" - Select one intercultural communication theory from the course;\n\n- Use the theory to guide how you would communicate your culture to an outsider audience\n\n- Think about tone, visuals, language, and storytelling techniques that bridge cultural gaps\"\n\nStep 3: Create Your Video by yourself\n\n\"- Length: 3–5 minutes\n\n- Content should include:\n\n- Introduction of your cultural identity\n\n- Key characteristics and values of your group\n\n- How you apply the chosen theory to communicate effectively with outsiders\n\n- Be creative: use narration, interviews, personal stories, music, or symbolic visuals\n\n'- AI tool supporting making the video and effect, sound enhancing must be used in this video-making.\"\n\nStep 4: Submit & Reflect\n\n\"- Submit your video as instructed\n\n- You may be asked to write a short reflection (optional) explaining your creative choices and theory application\"",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms."
+  ],
+  [
+   "3",
+   "Mid-term test/ quizz",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "30 mins (if applicable)",
+   "CLO1, CLO2",
+   "Multiple choices.",
+   "25 (if applicable)",
+   "Assess the student's knowledge of the course material as of the date of the quiz.",
+   "0.4/ a correct answer",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms."
+  ],
+  [
+   "4",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "in class",
+   "CLO8",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, students' attitude, preparation, contribution of discussions",
+   ""
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "Multiple choices questions",
+   "50",
+   "The questions will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "",
+   "Closed book assesments in exam rooms."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introductory\nIntroduction to the course",
+   "Offline",
+   "",
+   "I",
+   "Syllabus",
+   "MCO302_phần 1",
+   "Lecture\nActivity: Introduce Yourself\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "2",
+   "Introduction to the assignment requirements and deadlines",
+   "Offline",
+   "",
+   "I",
+   "Syllabus",
+   "MCO302_Phần 2",
+   "Lecture\nActivity: Introduce Yourself\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Why Study Intercultural Communication? (Part 1)\nThe Self -awareness imperative\nThe Demographic imperative\nUse AI tools to investigate diverse perspectives on the importance of studying intercultural communication.",
+   "Offline",
+   "CLO1, CLO6, CLO7, CLO8",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions\nAI Practice:\nStudents will use AI tools (e.g., Microsoft Copilot, ChatGPT, or other ethical AI platforms) to investigate diverse perspectives on the importance of studying intercultural communication. They will critically evaluate the responses, compare viewpoints, and reflect on how technology itself shapes our understanding of culture.\nInstructions:\n1. Warm-Up Discussion (10 mins): Begin with a brief class conversation: “What do you think intercultural communication means in today’s world?” Encourage students to share personal experiences or examples from media.\n2. AI Exploration (20 mins): In pairs or small groups, students will interact with an AI tool to ask: “Why is it important to study intercultural communication?” They should:\n- Ask follow-up questions to dig deeper (e.g., relevance in business, education, conflict resolution).\n- Request examples from different cultural contexts.\n- Ask the AI to compare perspectives from various regions or disciplines.\n3. Critical Reflection (15 mins): Each group will analyze the AI’s responses:\n- What insights were most surprising or valuable?\n- Did the AI show any bias or cultural assumptions?\n- How did the use of AI enhance or limit their understanding?\n4. Mini-Presentation (10 mins): Groups present their findings and reflections to the class. Encourage them to highlight one key reason they believe intercultural communication should be studied—and whether AI helped clarify or complicate that reason.\n5. Wrap-Up (5 mins): Conclude with a short reflection: “How can we use AI ethically and effectively to learn about culture?”",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Why Study Intercultural Communication? (Part 2)\nThe Economic imperative\nThe Environmental imperative",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: Why Study Intercultural Communication? (Part 3)\nThe Technological imperative\nThe Peace imperative",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1: Why Study Intercultural Communication? (Part 4)\nThe Ethical imperative",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: The History of the Study of Intercultural Communication (Part 1)\nThe Early Development of the Discipline\nPerception and Worldview of the Researcher\nUse AI tools to investigate key moments, figures, and shifts in the development of intercultural communication as an academic field.",
+   "Offline",
+   "CLO1, CLO6, CLO7, CLO8",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions\nAI Practice:\nStudents will use AI tools to investigate key moments, figures, and shifts in the development of intercultural communication as an academic field. They will compare sources, question narratives, and reflect on how history is shaped and presented—especially through digital tools.\nInstructions:\n1. Set the Scene (5 mins):\nBriefly introduce the topic: “Intercultural communication didn’t just appear—it evolved. Let’s find out how.”\n2. AI Inquiry Task (15 mins):\nIn pairs, students will ask an AI tool questions such as:\n- “Who are the pioneers of intercultural communication?”\n- “What global events influenced the rise of this field?”\n- “How has the study of intercultural communication changed over time?” Encourage them to ask follow-ups and challenge the AI:\n- “Can you compare Western and non-Western contributions?”\n- “Are there any overlooked voices in this history?”\n3. Mini Timeline Creation (10 mins): Each pair creates a short timeline (on paper or digitally) highlighting 3–5 key milestones or figures they discovered. They should note:\n- The year or period\n- The contribution or event\n- Why it matters\n4. Quick Share & Reflect (10 mins): Pairs briefly present one surprising or important finding. Then discuss:\n- “Did the AI present a balanced view?”\n- “What did it miss?”\n- “How can we use AI responsibly when studying history?”",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: The History of the Study of Intercultural Communication (Part 2)\nThree approaches to Studying Intercultural Communication",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: The History of the Study of Intercultural Communication (Part 3)\nA Dialectical Approach to Understanding Culture and Communication",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3: Culture, Communication, Context, and Power (part 1)\nWhat is Culture?\nWhat is Communication?",
+   "Offline",
+   "CLO1, CLO2, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3: Culture, Communication, Context, and Power (Part 2)\nThe Relationship Between Culture and Communication",
+   "Offline",
+   "CLO1, CLO2, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3: Culture, Communication, Context, and Power (Part 2)\nThe Relationship Between Communication and Context\nThe Relationship Between Communication and Power",
+   "Offline",
+   "CLO1, CLO2, CLO7",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 4: History and Intercultural Communication (Part 1)\nFrom History to Histories\nHistory, Power, and Intercultural Communication\nUse AI tools to investigate historical events that significantly influenced intercultural communication—whether by fostering understanding or causing conflict.",
+   "Offline",
+   "CLO1, CLO3, CLO5, CLO8",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions\nAI activity:\nStudents will use AI tools to investigate historical events that significantly influenced intercultural communication—whether by fostering understanding or causing conflict. They will analyze how these events shaped communication across cultures and reflect on their relevance today.\nInstructions\n1. Warm-Up Prompt (5 mins): Ask students: “Can you think of a historical event that changed how cultures interact or perceive each other?” Briefly discuss examples like colonization, wars, migration, trade, or diplomacy.\n2. AI Research Task (15–20 mins): In pairs or small groups, students use AI to explore one historical event and answer:\n- What happened, and who was involved?\n- How did it affect intercultural communication—positively or negatively?\n- What lessons can be drawn for today’s global interactions? Suggested events:\n- The Silk Road\n- European colonization of Asia or Africa\n- The Cold War and propaganda\n- Post-WWII international cooperation (e.g., UN formation)\n- Globalization and the rise of digital communication\n3. Mini Poster or Slide (10 mins): Each group creates a quick visual summary (paper or digital) with:\n- Event title and date\n- Cultural groups involved\n- Impact on communication\n- One quote or insight from the AI that helped their analysis\n4. Gallery Walk & Reflection (10 mins): Groups display their posters/slides. Students walk around, read others’ work, and write down:\n- One event they didn’t know about\n- One surprising insight\n- One question they’d like to ask the AI next",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 4: History and Intercultural Communication (Part 2)\nHistory and Identity",
+   "Offline",
+   "CLO1, CLO3, CLO5",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: History and Intercultural Communication (Part 3)\nIntercultural Communication and History",
+   "Offline",
+   "CLO1, CLO3, CLO5",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 5: Identity and Intercultural Communication (Part 1)\nThinking Dialectically About Identity\nIdentity Development Issues",
+   "Offline",
+   "CLO1, CLO3, CLO5",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 5: Identity and Intercultural Communication (Part 2)\nSocial and Cultural Identities",
+   "Offline",
+   "CLO1, CLO3, CLO5",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 5: Identity and Intercultural Communication (Part 3)\nPersonal Identity\nMulticultural People",
+   "Offline",
+   "CLO1, CLO3, CLO5",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 5: Identity and Intercultural Communication (Part 4)\nIdentity, Stereotypes, and Prejudice\nClassroom Activity: “AI and Cultural Stereotypes”",
+   "Offline",
+   "CLO1, CLO3, CLO5, CLO8",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions\n\nClassroom Activity: “AI and Cultural Stereotypes”\n1. Warm-Up Discussion (5 mins):\nAsk students: “Have you ever heard a stereotype about your culture or another culture?” Encourage examples like: “Americans are too direct,” “Japanese are overly formal,” “Vietnamese people are always late.”\n2. AI Investigation (15–20 mins): In pairs or small groups, students choose one cultural stereotype. Using AI, they explore:\n- What is the stereotype?\n- Where does it come from?\n- Is it accurate or problematic?\n- What counterexamples or facts challenge it?\n- How can intercultural communication overcome this stereotype?\nExample prompt for AI: “Why do people think Vietnamese are always late? Is this stereotype accurate or harmful?”\n3. Quick Presentation (10 mins): Each group shares:\n- The stereotype they chose\n- What AI revealed about it\n- Whether they agree or disagree\n- One strategy to challenge the stereotype in real-life communication\n4. Individual Reflection (5 mins): Students write a short response: “One stereotype I used to believe was… After this activity, I now think…”",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 5: Identity and Intercultural Communication (Part 4)\nIdentity and Communication",
+   "Offline",
+   "CLO1, CLO3, CLO5",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5: Identity and Intercultural Communication (Part 4)\nIdentity and Communication (cont.)",
+   "Offline",
+   "CLO1, CLO3, CLO5",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 6: Language and Intercultural Communication (Part 1)\nSocial Science Perspective on Language\nInterpretive Perspective on Language",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 6: Language and Intercultural Communication (Part 2)\nCritical Perspective on Language\nMoving Between Languages",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6: Language and Intercultural Communication (Part 3)\nLanguage and Identity\nLanguage Politics and Policies\nLanguage and Globalization",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "25",
+   "Revision",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Revision/ Review the course content (Chapter 1-6)",
+   ""
+  ],
+  [
+   "26",
+   "Revision and Mid-term test/ Quizz",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Revision/ Review the course content (Chapter 1-6)\n\nAnd/or taking a quizz/ Follow the lecturer's proposal.",
+   ""
+  ],
+  [
+   "27",
+   "Revision and Mid-term test/ Quizz",
+   "Offline",
+   "CLO1->CLO5",
+   "U",
+   "",
+   "",
+   "Revision/ Review the course content (Chapter 1-6)\n\nAnd/or taking a quizz/ Follow the lecturer's proposal.",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 7: Nonverbal Codes and Cultural Space (Part 1)\nThinking Dialectically About Nonverbal Communication: Defining Nonverbal Communication",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 7: Nonverbal Codes and Cultural Space (Part 2)\nThe Universality of Nonverbal Behavior",
+   "Offline",
+   "CLO1, CLO2, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 7: Nonverbal Codes and Cultural Space (Part 3)\nDefining Cultural Space\nClassroom Activity: “Mapping Cultural Spaces with AI”",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO8",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions\nClassroom Activity: “Mapping Cultural Spaces with AI”\n1. Warm-Up Discussion (5 mins): Ask students: “What places feel culturally meaningful to you? Why?” Encourage examples like temples, street markets, coffee shops, family homes, public parks, etc.\n2. AI Exploration Task (15–20 mins): In pairs or small groups, students choose one type of cultural space (e.g., a traditional home, a public square, a religious site, a school, a café). Then they use AI to:\n- Describe how this space functions in one culture\n- Compare it with how a similar space functions in another culture\n- Identify what values or behaviors are reflected in the design and use of the space\n- Reflect on how people communicate differently in these spaces\nExample prompt for AI: “How do traditional homes reflect cultural values in Vietnam compared to Japan?” or “What role do public squares play in Latin American vs. European cultures?”\n3. Mini Presentation (10 mins): Each group presents:\n- The cultural space they chose\n- Key insights from AI\n- One surprising comparison\n- How this space influences communication or identity\n4. Individual Reflection (5 mins): Students write: “A cultural space I feel connected to is… It reflects my identity because…”",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 8: Understanding Intercultural Transitions (Part 1)\nThinking Dialectically About Intercultural Transitions",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 8: Understanding Intercultural Transitions (Part 2)\nTypes of Migrant Groups\nMigrant–Host Relationships",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 8: Understanding Intercultural Transitions (Part 3)\nCultural Adaptation",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 9: Popular Culture and Intercultural Communication (Part 1)\nLearning About Cultures Without Personal Experience\nConsuming and Resisting Popular Culture",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 9: Popular Culture and Intercultural Communication (Part 2)\nRepresenting Cultural Groups",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 9: Popular Culture and Intercultural Communication (Part 3)\nU.S. Popular Culture and Power\nClassroom Activity: “Decoding U.S. Pop Culture with AI”",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO8",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions\nClassroom Activity: “Decoding U.S. Pop Culture with AI”\n1. Warm-Up Discussion (5 mins): Ask students: “What’s one American song, movie, or trend you’ve seen recently? How did it make you feel or think?” Encourage examples like Marvel movies, TikTok dances, hip-hop music, fast food brands, etc.\n2. AI Exploration Task (15–20 mins): In small groups, students choose one element of U.S. pop culture (e.g., Hollywood films, hip-hop, Instagram influencers, fast food chains). Using AI, they investigate:\n- How this element has spread globally\n- How it influences cultural norms, language, fashion, or values in another country\n- Whether this influence is seen as positive, negative, or complex\n- How it connects to the idea of “soft power” (cultural influence as a form of power)\n\nExample prompt for AI: “How has hip-hop culture influenced youth in South Korea?” or “What impact do American fast food brands have on local food culture in Vietnam?”\n3. Mini Debate or Presentation (10 mins): Each group presents:\n- Their chosen pop culture element\n- Key insights from AI\n- One example of cultural influence\n- Their opinion: Is this cultural power empowering or problematic?\n4. Individual Reflection (5 mins): Students write: “One way U.S. pop culture has influenced me is… I think it’s (positive/negative/mixed) because…”",
+   ""
+  ],
+  [
+   "37",
+   "Feedback on Individual Assignment",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Take notes on feedbacks for self-reflection",
+   ""
+  ],
+  [
+   "38",
+   "Feedback on Individual Assignment",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Take notes on feedbacks for self-reflection",
+   ""
+  ],
+  [
+   "39",
+   "Feedback on Individual Assignment",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Take notes on feedbacks for self-reflection",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 10: Culture, Communication, and Intercultural Relationships (Part 1)\nBenefits and Challenges of Intercultural Relationships",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 10: Culture, Communication, and Intercultural Relationships (Part 2)\nThinking Dialectically About Intercultural Relationships",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 10: Culture, Communication, and Intercultural Relationships (Part 3)\nThinking Dialectically About Intercultural Relationships (cont.)\nIntercultural Relationships",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11: Culture, Communication, and Conflict (Part 1)\nCharacteristics of Intercultural Conflict\nThe Social Science Approach to Conflict",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 11: Culture, Communication, and Conflict (Part 2)\nInterpretive and Critical Approaches to Social Conflict",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 11: Culture, Communication, and Conflict (Part 3)\nManaging Intercultural Conflict",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 12: Striving for Engaged and Effective Intercultural Communication (Part 1)\nThe Components of Competence",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 12: Striving for Engaged and Effective Intercultural Communication (Part 2)\nApplying Knowledge About Intercultural Communication",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 12: Striving for Engaged and Effective Intercultural Communication (part 3)\nWhat The Future Holds\nClassroom Activity: “Future Voices: Reimagining Intercultural Communication with AI”",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO8",
+   "I,T",
+   "Textbooks\nAny further additional reading materials if recommended by lecturer",
+   "",
+   "Lecture/ Presentation\nQ&A/ Discussions\n\nClassroom Activity: “Future Voices: Reimagining Intercultural Communication with AI”\n1. Warm-Up Prompt (5 mins)\nAsk students: “How do you think U.S. pop culture will influence global communication in the next 10 years?” Encourage ideas about language, media platforms, fashion, values, and digital norms.\n2. AI Forecasting Task (15–20 mins)\nIn small groups, students choose one domain of U.S. pop culture (e.g., music, film, social media, gaming, fashion). Using AI, they explore:\n- How this domain currently influences intercultural communication\n- What future trends might emerge (e.g., virtual influencers, AI-generated music, global slang)\n- What challenges or opportunities these trends might create for intercultural understanding\n- How we can prepare for more ethical, inclusive, and respectful communication across cultures\n\nExample prompt for AI: “How might U.S. social media trends shape intercultural communication in 2035?” or “What future challenges could arise from the global spread of American pop culture?”\n\n3. Creative Presentation (10 mins)\nEach group presents their “Future Scenario”:\n- A brief story or vision of intercultural communication in 2035\n- Key insights from AI\n- One challenge and one solution for effective communication in that future\n\n4. Reflection & Discussion (5 mins)\nStudents write: “One thing I can do to promote respectful intercultural communication in the future is…” Then share ideas as a class to build a collective “Future Code of Communication.”",
+   ""
+  ],
+  [
+   "49",
+   "Group Report/ Presentation",
+   "Offline",
+   "CLO1->CLO8",
+   "U",
+   "Students' works",
+   "",
+   "Group presentation",
+   ""
+  ],
+  [
+   "50",
+   "Group Report/ Presentation",
+   "Offline",
+   "CLO1->CLO8",
+   "U",
+   "Students' works",
+   "",
+   "Group presentation",
+   ""
+  ],
+  [
+   "51",
+   "Group Report/ Presentation",
+   "Offline",
+   "CLO1->CLO8",
+   "U",
+   "Students' works",
+   "",
+   "Group presentation",
+   ""
+  ],
+  [
+   "52",
+   "Group Report/ Presentation",
+   "Offline",
+   "CLO1->CLO8",
+   "U",
+   "Students' works",
+   "",
+   "Group presentation",
+   ""
+  ],
+  [
+   "53",
+   "Group Report/ Presentation",
+   "Offline",
+   "CLO1->CLO8",
+   "U",
+   "Students' works",
+   "",
+   "Group presentation",
+   ""
+  ],
+  [
+   "54",
+   "Group Report/ Presentation",
+   "Offline",
+   "CLO1->CLO8",
+   "U",
+   "Students' works",
+   "",
+   "Group presentation",
+   ""
+  ],
+  [
+   "55",
+   "Course review",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Textbook(s)",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ],
+  [
+   "56",
+   "Course review",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Textbook(s)",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ],
+  [
+   "57",
+   "Course review",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Textbook(s)",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ],
+  [
+   "58",
+   "Course review",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Textbook(s)",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ],
+  [
+   "59",
+   "Course review",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Textbook(s)",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ],
+  [
+   "60",
+   "Course review",
+   "Offline",
+   "CLO1->CLO7",
+   "U",
+   "Textbook(s)",
+   "",
+   "Revision/ Review the course content",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1.1",
+   "What is the fact that other people should know about me?\n-Name:\n-Your hometown:\n-A memory of student life in FPT University:\n-One thing everyone should know about you:\n-A cultural group/community/organization that you like:\n-Questions you have about MCO206:"
+  ],
+  [
+   "2",
+   "3",
+   "QN3.1",
+   "What is one personal experience in which you understand more about yourself when you communicate people who is very different from you? Describe it."
+  ],
+  [
+   "3",
+   "3",
+   "QN3.2",
+   "Is there any evidence of ethnocentrism within Vietnam's cultural context?"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "Which tendency is more prevanlent in Vietnam's society?\n-Heterogenous or homogenous:\n-Melting Pot or Salad Bowl:"
+  ],
+  [
+   "5",
+   "7",
+   "QN7.1",
+   "Why do we have different perceptions about the same topic?\nDescribe one personal experience in which you and other people have different perception towards one issue, and you realize that both your perception and other perception are valuable to view that issue."
+  ],
+  [
+   "6",
+   "8",
+   "QN8.1",
+   "Is individualism or collectivism more prevalent in Gen Z community in Vietnam?"
+  ],
+  [
+   "7",
+   "8",
+   "QN8.2",
+   "Which key-words do you want to use to describe each approaches of intercultural communication?\n-Social science:\n-Interpretative:\n-Critical:"
+  ],
+  [
+   "8",
+   "9",
+   "QN9.1",
+   "What is the difference as you apply three approaches (social science, interpretative and critical) to analyze the message of this music video? https://youtu.be/9ejEWmCRAYs"
+  ],
+  [
+   "9",
+   "9",
+   "QN9.1",
+   "If you are presentatives of the earth in a galaxy summit, what would you introduce to aliens about the cultural aspects of the earth? (a song, an event, an art piece, food, an achitect site, a form of nature)"
+  ],
+  [
+   "10",
+   "10",
+   "QN10.1",
+   "Which symbols could represent the culture of these groups?\n-Christian:\n-Muslim:\n-Hinduism:"
+  ],
+  [
+   "11",
+   "10",
+   "QN10.2",
+   "What has been changed in term of the look of Sapa nowaday (compare with Sapa before 2010)? How could this change could help us to understand the power of different groups living in Sapa?"
+  ],
+  [
+   "12",
+   "11",
+   "QN11.1",
+   "Which are cultural groups that recently influenced your perception of the world?"
+  ],
+  [
+   "13",
+   "12",
+   "QN12.1",
+   "Which sub-cultural group do you want to investigate for your personal research?\n\nWhat are the core values of this sub-culture group? How are these values expressed through activities, symbols, people…?"
+  ],
+  [
+   "14",
+   "15",
+   "QN15.1",
+   "Is there any personal story that you want to hide or alter when you mention about the past?"
+  ],
+  [
+   "15",
+   "16",
+   "QN16.1",
+   "Based on your knowledge, what is an example for each of these following concept?\n-Absent history:\n-Alter history:"
+  ],
+  [
+   "16",
+   "16",
+   "QN16.2",
+   "How is the identity of the Vietnamese people portrayed in the context of going through a long history of war?"
+  ],
+  [
+   "17",
+   "17",
+   "QN17.1",
+   "What are 3 contexts that reveal 3 different aspect of yourself? How do you communicate in each context?"
+  ],
+  [
+   "18",
+   "18",
+   "QN18.1",
+   "What are labels that society attribute to you or your culture groups?"
+  ],
+  [
+   "19",
+   "18",
+   "QN18.2",
+   "How have the context of economics and politics influenced your identity? (focus on family's financial capacity)"
+  ],
+  [
+   "20",
+   "18",
+   "QN18.3",
+   "What are evidences of young people are resisting \"pattern of success\" that society put into them?"
+  ],
+  [
+   "21",
+   "19",
+   "QN19.1",
+   "Is there any idea that is popular in Vietnamese but you cannot express that idea in English?"
+  ],
+  [
+   "22",
+   "20",
+   "QN20.1",
+   "What are metaphors that you or other people around you use commonly?"
+  ],
+  [
+   "23",
+   "20",
+   "QN20.2",
+   "What are popular slang among young people?"
+  ],
+  [
+   "24",
+   "21",
+   "QN21.1",
+   "What is the cultural group that you/your group intend to investigate?\nWhat theories in the chapter of Language can be applied to this cultural group?"
+  ],
+  [
+   "25",
+   "22",
+   "QN22.1",
+   "How good are you at understanding a person based on his/her nonverbal behavior? Explain."
+  ],
+  [
+   "26",
+   "23",
+   "QN23.1",
+   "Do people have similar facial expressions when they express the same emotion?"
+  ],
+  [
+   "27",
+   "24",
+   "QN24.1",
+   "How has the notion of attractiveness and beauty been changed recently?"
+  ],
+  [
+   "28",
+   "24",
+   "QN24.2",
+   "Is there any form of stereotype, prejudice and discrimination that could be acknowledged in your chosen culture group?"
+  ],
+  [
+   "29",
+   "25",
+   "QN25.1",
+   "How adaptable you are with a new environment?"
+  ],
+  [
+   "30",
+   "26",
+   "QN26.1",
+   "What are possible scenario when you live in a different country?"
+  ],
+  [
+   "31",
+   "31",
+   "QN31.1",
+   "Tell about a movie, TV show, game or celebrity… that made a big impact on you. How has it changed you?"
+  ],
+  [
+   "32",
+   "32",
+   "QN32.1",
+   "What stereotypes, prejudices, discourses can you observe in the mass media?"
+  ],
+  [
+   "33",
+   "33",
+   "QN33.1",
+   "How to resist the impact of popular culture?"
+  ],
+  [
+   "34",
+   "33",
+   "QN33.2",
+   "How has your sub-culture group been portraited by media?"
+  ],
+  [
+   "35",
+   "34",
+   "QN34.1",
+   "What have you learnt from your classmate's personal reflection?"
+  ],
+  [
+   "36",
+   "35",
+   "QN35.1",
+   "What have you learnt from your classmate's personal reflection?"
+  ],
+  [
+   "37",
+   "36",
+   "QN36.1",
+   "What have you learnt from your classmate's personal reflection?"
+  ],
+  [
+   "38",
+   "36",
+   "QN36.2",
+   "What have you learnt from your classmate's personal reflection?"
+  ],
+  [
+   "39",
+   "37",
+   "QN37.1",
+   "What are benefits and challenges of intercultural communication?"
+  ],
+  [
+   "40",
+   "38",
+   "QN38.1",
+   "Why does Asian women usually get married with white men?"
+  ],
+  [
+   "41",
+   "39",
+   "QN39.1",
+   "Why are power and power differentials very important in intercultural relationships?"
+  ],
+  [
+   "42",
+   "40",
+   "QN40.1",
+   "How do people deal with cultural patterns after they married people from different culture groups?"
+  ],
+  [
+   "43",
+   "41",
+   "QN41.1",
+   "Do your family have in important role in your decision to date and/or marriage?"
+  ],
+  [
+   "44",
+   "42",
+   "QN42.1",
+   "Which theories in this chapter could be applied in your research?"
+  ],
+  [
+   "45",
+   "43",
+   "QN43.1",
+   "Are you more likely to save your face or to save other's faces in communication?"
+  ],
+  [
+   "46",
+   "44",
+   "QN44.1",
+   "What are your conflict styles?"
+  ],
+  [
+   "47",
+   "45",
+   "QN45.1",
+   "Why are social conflict significant to the development of society?"
+  ],
+  [
+   "48",
+   "45",
+   "QN45.2",
+   "What is a social movement that insprires you?"
+  ],
+  [
+   "49",
+   "46",
+   "QN46.1",
+   "What are the attitudes and behaviors to make us competent communicators?"
+  ],
+  [
+   "50",
+   "47",
+   "QN47.1",
+   "What are the attitudes and behaviors to make us competent communicators?"
+  ],
+  [
+   "51",
+   "48",
+   "QN48.1",
+   "How can you develop empathy in intercultural communication?"
+  ],
+  [
+   "52",
+   "48",
+   "QN48.2",
+   "How can you develop empathy in intercultural communication?"
+  ],
+  [
+   "53",
+   "49",
+   "QN49.1",
+   "What have you learnt from your classmate's research?"
+  ],
+  [
+   "54",
+   "50",
+   "QN50.1",
+   "What have you learnt from your classmate's research?"
+  ],
+  [
+   "55",
+   "51",
+   "QN51.1",
+   "What have you learnt from your classmate's research?"
+  ],
+  [
+   "56",
+   "52",
+   "QN52.1",
+   "What have you learnt from your classmate's research?"
+  ],
+  [
+   "57",
+   "53",
+   "QN53.1",
+   "What have you learnt from your classmate's research?"
+  ],
+  [
+   "58",
+   "54",
+   "QN54.1",
+   "What have you learnt from your classmate's research?"
+  ]
+ ],
+ "links": [
+  "/download/13649/S/1_MCO302_phần 1.zip",
+  "/download/13649/S/2_MCO302_Phần 2.zip"
+ ]
+}

@@ -1,0 +1,1283 @@
+{
+ "ma": "ISC301",
+ "sylID": "11706",
+ "quyetDinh": "765/QĐ-ĐHFPT dated 07/29/2024",
+ "ungVien": [
+  {
+   "sylID": "11706",
+   "code": "ISC301",
+   "name": "E-Commerce_Thương mại điện tử",
+   "active": true,
+   "approved": true,
+   "decision": "765/QĐ-ĐHFPT dated 07/29/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11706",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11706",
+  "Syllabus Name": "E-Commerce_Thương mại điện tử",
+  "Course Name English": "E-Commerce",
+  "Subject Code": "ISC301",
+  "Learning-Teaching Method": "Social Constructivism,In-class lecture,Inquiry-based Teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "",
+  "Description": "By the end of the course, students will be able to understand:\n\n- E-Commerce and E-Marketplaces\n\n- Internet Consumer Retailing\n\n- Social media and commerce topics\n\n- Business-to-Business E-Commerce\n\n- Other EC Models and Application\n\n- EC Support Services\n\n- EC Strategy and Implementation\n\n- Launching a Successful Online Business",
+  "StudentTasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises and practical given by instructor in class or at home and submit on time.\n\n- Constantly follow https://flm.fpt.edu.vn/ for up-to-date course information.",
+  "Tools": "Technical facility: Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "765/QĐ-ĐHFPT dated 07/29/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "7/29/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Electronic Commerce 2012: A Managerial Perspective",
+   "Efraim Turban, Jae Kyu Lee, Dave King, Judy McKay, Peter Marshall",
+   "Pearson",
+   "2011",
+   "7 ed",
+   "978-0132145381",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Electronic Commerce 2018: A Managerial and Social Networks Perspective",
+   "Turban, E., Outland, J., King, D., Lee, J.K., Liang, T.-P., Turban, D.C.",
+   "Springer",
+   "2018",
+   "9ed",
+   "978-3-319-58714-1",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Defne all types of e-commerce systems and describe their major business and revenue models, drivers, and benefts."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Describe all the major mechanisms that are used in executing e-commerce."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Describe all methods and models of selling products and services online from business to individual customers."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand all online business-to-business activities, including selling, procurement, auctions, and collaboration."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Describe EC activities other than selling online, such as e-government, e-learning/e-- training, e-health, and sharing economy."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Describe the major applications of artifcial intelligence in EC."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Describe social networks, social customers, and social software as facilitators of social commerce."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Describe the landscape of social commerce applications, including social shopping and advertising, social CRM, social entertainment, and crowdsourcing."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Describe social commerce"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Describe the connected e-commerce and Internet of things and its smart applications."
+  ],
+  [
+   "11",
+   "CLO11",
+   "Understand online consumer behavior."
+  ],
+  [
+   "12",
+   "CLO12",
+   "Describe marketing and advertising in the Web environment."
+  ],
+  [
+   "13",
+   "CLO13",
+   "Describe the use of e-payments, including mobile payments, and digital currency in e-commerce."
+  ],
+  [
+   "14",
+   "CLO14",
+   "Understand order fulfllment in e-commerce and its relationship to supply chain management."
+  ],
+  [
+   "15",
+   "CLO15",
+   "Understand e-commerce strategy and describe its process and steps, including justifcation, planning, implementation, and assessment."
+  ],
+  [
+   "16",
+   "CLO16",
+   "Describe the global aspects of e-commerce."
+  ],
+  [
+   "17",
+   "CLO17",
+   "Explain the issues of using e-commerce by small- and medium-sized companies."
+  ],
+  [
+   "18",
+   "CLO18",
+   "Understand the ethical, legal, social, and business environments within which e-commerce operates."
+  ],
+  [
+   "19",
+   "CLO19",
+   "Understand how to Launch a Successful Online Business and EC Projects"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment /Exercice",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "Option 1: at home Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: Open Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "integration of studied knowledge and skills",
+   "guided by instructor\n\nin class, completed by students at home, submitted by deadline",
+   "Students use notebooks for exercises"
+  ],
+  [
+   "2",
+   "Progress Test",
+   "on-going",
+   "3",
+   "30.0%",
+   ">0",
+   "Option 1: 30 minutes Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: MC or a suitable format Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "'Option 1: 30 questions within 30 minutes Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "studied chapters knowledge and skills",
+   "by instructor, and by\n\nsuitable means (computer, paper, oral...)",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "",
+   "Computer gradable",
+   "50",
+   "All chapters; knowledge and skills of E-Commerce;",
+   "by Exam board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course introduction",
+   "Offline",
+   "LO1, LO2",
+   "",
+   "Slide of Chapter 1,\n\nTextbook\n\nReference book.",
+   "ISC301",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "1. Overview of E-Commerce\n\nGuide Exercises",
+   "Offline",
+   "LO1, LO2",
+   "",
+   "Slide of Chapter 1,\n\nTextbook\n\nReference book.",
+   "ISC301",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "3",
+   "Lecture and Exercises Review",
+   "Offline",
+   "LO1",
+   "",
+   "Textbook",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "4",
+   "2.E-Marketplace: structures, mechanisms, economics, and impacts",
+   "Offline",
+   "LO2, LO11",
+   "",
+   "Reference book.",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "5",
+   "2.E-Marketplace: structures, mechanisms, economics, and impacts\n\nGuide Exercises",
+   "Offline",
+   "LO2, LO11",
+   "",
+   "Slide of Chapter 2,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "6",
+   "Lecture and Exercises Review",
+   "Offline",
+   "LO3, LO11",
+   "",
+   "Reference book.",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "7",
+   "3. Retailing in E-Commerce: Product and Servcie",
+   "Offline",
+   "LO3, LO11",
+   "",
+   "Slide of Chapter 3,\n\nTextbook\n\nReference book.",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Quiz 1\n\nGuide Exercises",
+   "Offline",
+   "LO3, LO11",
+   "",
+   "Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "9",
+   "Lecture and Exercises Review",
+   "Offline",
+   "LO3, LO11",
+   "",
+   "Reference book.",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "10",
+   "4.B2B E-Commerce",
+   "Offline",
+   "LO4, LO11",
+   "",
+   "Slide of Chapter 4,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "11",
+   "Guide Exercises",
+   "Offline",
+   "LO4, LO11",
+   "",
+   "Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO4, LO11",
+   "",
+   "Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "13",
+   "5.1 Innovative EC Systems: From E-Government to E-Learning, Collaborative Commerce, and C2C Commerce",
+   "Offline",
+   "LO5, LO11",
+   "",
+   "Slide of Chapter 5, Textbook\n\nReference book.",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "14",
+   "5.1 Innovative EC Systems: From E-Government to E-Learning, Collaborative Commerce, and C2C Commerce\n\nGuide Exercises",
+   "Offline",
+   "LO5, LO11",
+   "",
+   "Slide of Chapter 5,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "15",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO5, LO11",
+   "",
+   "Slide of Chapter 5,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, and selft-review, CMS.",
+   ""
+  ],
+  [
+   "16",
+   "5.2 Innovative EC Systems cont.: E-Health, Sharing Economy, and P2P Commerce\n\nCheck assignment phase 1",
+   "Offline",
+   "LO5",
+   "",
+   "Slide of Chapter 5.2 (Ref),\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "17",
+   "Guide Exercises",
+   "Offline",
+   "LO5",
+   "",
+   "Slide of Chapter 5.2 (Ref),\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "18",
+   "Chapter and Exercises Review\n\nCheck assignment phase 1",
+   "Offline",
+   "LO5",
+   "",
+   "Slide of Chapter 5.2 (Ref),\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "19",
+   "6. Mobile Commerce and Ubiquitous Computing",
+   "Offline",
+   "LO6, LO9",
+   "",
+   "Slide of Chapter 6,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "20",
+   "Guide Exercises",
+   "Offline",
+   "LO6, LO9",
+   "",
+   "Slide of Chapter 6,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "21",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO6, LO9",
+   "",
+   "Slide of Chapter 6,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "22",
+   "7. Social Commerce",
+   "Offline",
+   "LO7, LO9",
+   "",
+   "Slide of Chapter 7,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "23",
+   "Guide Exercises\n\nQuiz 2",
+   "Offline",
+   "LO7, LO9",
+   "",
+   "Slide of Chapter 7,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO7, LO9",
+   "",
+   "Slide of Chapter 7,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "25",
+   "8. Marketing and Advertising in E-Commerce",
+   "Offline",
+   "LO8, LO12, LO11",
+   "",
+   "Slide of Chapter 8\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "26",
+   "8. Marketing and Advertising in E-Commerce\n\nGuide Exercises",
+   "Offline",
+   "LO8, LO12, LO11",
+   "",
+   "Slide of Chapter 8\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "27",
+   "Chapter and Exercises Review",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 09-E-Commerce-Security-and-Fraud-Protection",
+   "Offline",
+   "LO9, LO10, LO12",
+   "",
+   "Slide of Chapter 9 (Ref),\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "29",
+   "9.Intelligent (Smart) E-Commerce\n\nGuide Exercises",
+   "Offline",
+   "LO9, LO10, LO12",
+   "",
+   "Slide of Chapter 9 (Ref),\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "30",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO9, LO10, LO12",
+   "",
+   "Slide of Chapter 9 (Ref),\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "31",
+   "Check Assignment phase 2",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 10-Electronic-Commerce-Payment-Systems",
+   "Offline",
+   "LO10, LO12",
+   "",
+   "Slide of Chapter 10 (Ref),\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "33",
+   "Guide Exercises",
+   "Offline",
+   "LO10, LO12",
+   "",
+   "Slide of Chapter 10 (Ref),\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO10, LO12",
+   "",
+   "Slide of Chapter 10 (Ref),\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 11-Order-Fulfillment-Along-the-Supply-Chain",
+   "Offline",
+   "LO11",
+   "",
+   "Slide of Chapter 11,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "36",
+   "Guide Exercises",
+   "Offline",
+   "LO11",
+   "",
+   "Slide of Chapter 11,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "37",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO11",
+   "",
+   "Slide of Chapter 11,\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "38",
+   "12. EC Strategy, Globalization, and SMEs",
+   "Offline",
+   "LO12",
+   "",
+   "Slide of Chapter 12\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "39",
+   "Guide Exercises",
+   "Offline",
+   "LO12",
+   "",
+   "Slide of Chapter 12\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "40",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO12",
+   "",
+   "Slide of Chapter 12\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 13 Implementing EC Systems From Justification to Successful Performance",
+   "Offline",
+   "LO13",
+   "",
+   "Slide of Chapter 13\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "42",
+   "Guide Exercises",
+   "Offline",
+   "LO13",
+   "",
+   "Slide of Chapter 13\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO13",
+   "",
+   "Slide of Chapter 13\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "44",
+   "Check Assignment phase 3\n\nQuiz 2",
+   "Offline",
+   "",
+   "",
+   "Slide of Chapter 9-13\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 14-E-Commerce-Regulatory-Ethical-And-Social-Environments",
+   "Offline",
+   "LO14",
+   "",
+   "Slide of Chapter 14\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "46",
+   "Guide Exercises",
+   "Offline",
+   "LO14",
+   "",
+   "Slide of Chapter 14\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "47",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO14",
+   "",
+   "Slide of Chapter 14\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 15 Launching a Successful Online Business and EC Projects",
+   "Offline",
+   "LO15",
+   "",
+   "Slide of Chapter 15\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "49",
+   "Guide Exercises",
+   "Offline",
+   "LO15",
+   "",
+   "Slide of Chapter 15\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "50",
+   "Chapter and Exercises Review",
+   "Offline",
+   "LO15",
+   "",
+   "Slide of Chapter 15\n\nTextbook\n\nReference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "51",
+   "Assignment presentation",
+   "Offline",
+   "LO18, LO19",
+   "",
+   "Slide of Chapter 14,15 Textbook Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "52",
+   "Assignment presentation",
+   "Offline",
+   "LO18, LO19",
+   "",
+   "Slide of Chapter 14,15 Textbook Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "53",
+   "Assignment presentation",
+   "Offline",
+   "LO18, LO19",
+   "",
+   "Slide of Chapter 14,15 Textbook Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "54",
+   "Assignment presentation",
+   "Offline",
+   "LO18, LO19",
+   "",
+   "Slide of Chapter 14,15 Textbook Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "55",
+   "Assignment presentation",
+   "Offline",
+   "LO18, LO19",
+   "",
+   "Slide of Chapter 14,15 Textbook Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "56",
+   "Assignment presentation",
+   "Offline",
+   "LO18, LO19",
+   "",
+   "Slide of Chapter 14,15 Textbook Reference book.",
+   "",
+   "Do exercises, practical and selft-review, CMS.",
+   ""
+  ],
+  [
+   "57",
+   "Review",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Quiz 3",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Exam preparation",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Exam preparation",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1.1",
+   "Why is EC needed? When did it appear, what are the necessary conditions for existence? What are the limitations of EC?"
+  ],
+  [
+   "2",
+   "2",
+   "CQ1.2",
+   "Why is B2B e-commerce so essential and successful?"
+  ],
+  [
+   "3",
+   "3",
+   "CQ1.3",
+   "Why do users accept e-commerce companies? Which EC business model is suitable for Vietnam market?"
+  ],
+  [
+   "4",
+   "4",
+   "CQ2.1",
+   "What is the electronic market? List their components?"
+  ],
+  [
+   "5",
+   "4",
+   "CQ2.2",
+   "Why should online negotiation, online auction? What are the advantages and disadvantages of this problem?"
+  ],
+  [
+   "6",
+   "5",
+   "CQ2.3",
+   "What are the risks of using web tools 2.0, 3.0, 4.0? How to limit risk in EC ?"
+  ],
+  [
+   "7",
+   "6",
+   "CQ2.4",
+   "How can we use Facebook and other social networks in our business?"
+  ],
+  [
+   "8",
+   "7",
+   "CQ3.1",
+   "What are the limitations of e-tailing? Where is e-tailing going?"
+  ],
+  [
+   "9",
+   "7",
+   "CQ3.2",
+   "Why do online banking services exist? How to use credit card?"
+  ],
+  [
+   "10",
+   "8",
+   "CQ3.3",
+   "What is the online job market? its benefits and limitations?"
+  ],
+  [
+   "11",
+   "9",
+   "CQ3.4",
+   "How do online real estate services, online stock trading work?"
+  ],
+  [
+   "12",
+   "10",
+   "CQ4.1",
+   "Why are there so many B2B models, explaining the main B2B models?"
+  ],
+  [
+   "13",
+   "10",
+   "CQ4.2",
+   "How does an online exchange exist? describe their main types?"
+  ],
+  [
+   "14",
+   "11",
+   "CQ4.3",
+   "What is Internet Marketing in B2B? detailed explanation including organizational buyer behavior?"
+  ],
+  [
+   "15",
+   "12",
+   "CQ4.4",
+   "Why define the characteristics of the buy-side market in the B2B model?"
+  ],
+  [
+   "16",
+   "13",
+   "CQ5.1",
+   "Why is it necessary to form e-government, what are the activities of e-government, the opportunities of e-government?"
+  ],
+  [
+   "17",
+   "14",
+   "CQ5.2",
+   "How to design the most cost-effective e-government procurement system?"
+  ],
+  [
+   "18",
+   "15",
+   "CQ5.3",
+   "How to implement e-government for citizens, businesses and government activities?"
+  ],
+  [
+   "19",
+   "16",
+   "CQ6.1",
+   "Why do models such as e-learning, virtual universities and e-training exist?"
+  ],
+  [
+   "20",
+   "17",
+   "CQ6.2",
+   "Describe the experience of Mobile commerce applications in banking and financial services?"
+  ],
+  [
+   "21",
+   "18",
+   "CQ6.3",
+   "Why exploit the technological potential and applications of location-based mobile commerce?"
+  ],
+  [
+   "22",
+   "19",
+   "CQ7.1",
+   "What does the Web 2.0 revolution mean? its characteristics and the context of social networks?"
+  ],
+  [
+   "23",
+   "19",
+   "CQ7.2",
+   "What are the possible ethical issues associated with implementing social commerce?"
+  ],
+  [
+   "24",
+   "20",
+   "CQ7.3",
+   "Why should social networks be used in advertising, market research, customer service, practical illustration?"
+  ],
+  [
+   "25",
+   "21",
+   "CQ7.4",
+   "What are the main implementation issues of social commerce (including strategy, security and ROI)? Risks and barriers"
+  ],
+  [
+   "26",
+   "22",
+   "CQ8.1",
+   "Why research the consumer market in EC, who will conduct the research?"
+  ],
+  [
+   "27",
+   "23",
+   "CQ8.2",
+   "What is the method of online advertising on the web, the goal, the strategy?"
+  ],
+  [
+   "28",
+   "24",
+   "CQ8.3",
+   "How does the consumer's online purchase decision process take place"
+  ],
+  [
+   "29",
+   "25",
+   "CQ9.1",
+   "Why is it important to secure information systems with e-commerce? Strategy, budget, plan for security?"
+  ],
+  [
+   "30",
+   "26",
+   "CQ9.2",
+   "What are the security threats of e-commerce? What are security holes and technical attacks?"
+  ],
+  [
+   "31",
+   "27",
+   "CQ9.3",
+   "How to prevent fraud on the Internet? principles of information security."
+  ],
+  [
+   "32",
+   "28",
+   "CQ10.1",
+   "What is the control and defense mechanism? why can't the computer stop in EC?"
+  ],
+  [
+   "33",
+   "28",
+   "CQ10.2",
+   "How to use electronic payment methods such as (e-wallets, credit cards...), solve problems when problems arise?"
+  ],
+  [
+   "34",
+   "29",
+   "CQ10.3",
+   "What payment methods should a B2C website support? Which payment methods should the C2C market use?"
+  ],
+  [
+   "35",
+   "30",
+   "CQ10.4",
+   "Should we outsource our payment gateway service? How secure are electronic payments?"
+  ],
+  [
+   "36",
+   "31",
+   "CQ11.1",
+   "What is the role of support services in EC?"
+  ],
+  [
+   "37",
+   "32",
+   "CQ11.2",
+   "What is the main process of EC order fulfillment? What are the bottlenecks in the order fulfillment process?"
+  ],
+  [
+   "38",
+   "33",
+   "CQ11.3",
+   "Should RFID be used for order fulfillment? why?"
+  ],
+  [
+   "39",
+   "34",
+   "CQ12.1",
+   "What does the CPFR model illustrate? the effect of outsourced support services?"
+  ],
+  [
+   "40",
+   "34",
+   "CQ12.2",
+   "What is the strategic value of EC to the organization?"
+  ],
+  [
+   "41",
+   "35",
+   "CQ12.3",
+   "How should the scope of e-business develop? Why do we need an EC planning process?"
+  ],
+  [
+   "42",
+   "36",
+   "CQ12.4",
+   "How do you manage EC projects? How can EC go global?"
+  ],
+  [
+   "43",
+   "37",
+   "CQ13.1",
+   "How to determine the impact of e-commerce on small and medium-sized businesses?"
+  ],
+  [
+   "44",
+   "38",
+   "CQ13.2",
+   "What investment analysis should we use to justify the EC? Who should proceed with the justification?"
+  ],
+  [
+   "45",
+   "39",
+   "CQ13.3",
+   "What is an outsourcing strategy? Should I choose cloud products for my EC initiatives?"
+  ],
+  [
+   "46",
+   "40",
+   "CQ14.1",
+   "Which strategy should be chosen for supplier selection? Is it possible to predict EC success?"
+  ],
+  [
+   "47",
+   "41",
+   "CQ14.2",
+   "What are the different EC development methods, their benefits and limitations?"
+  ],
+  [
+   "48",
+   "43",
+   "CQ15.1",
+   "What legal and ethical issues should be of major concern to an EC enterprise?"
+  ],
+  [
+   "49",
+   "44",
+   "CQ15.2",
+   "How can intellectual property rights be protected when it comes to digital content?"
+  ],
+  [
+   "50",
+   "45",
+   "CQ15.3",
+   "How is privacy, free speech, defamation and its challenges?"
+  ],
+  [
+   "51",
+   "46",
+   "CQ16.1",
+   "How can a company create opportunities in the global trend toward green EC?"
+  ],
+  [
+   "52",
+   "47",
+   "CQ16.2",
+   "What does it take to create a successful online business? How to oversee the initiation and financing of a startup e-business?"
+  ],
+  [
+   "53",
+   "48",
+   "CQ16.3",
+   "How is e-initiative understood specifically? What should my new business offer sponsors?"
+  ],
+  [
+   "54",
+   "49",
+   "CQ17.1",
+   "Presentation and criticism of Assignment"
+  ],
+  [
+   "55",
+   "50",
+   "CQ17.2",
+   "Presentation and criticism of Assignment"
+  ],
+  [
+   "56",
+   "51",
+   "CQ17.3",
+   "Presentation and criticism of Assignment"
+  ],
+  [
+   "57",
+   "52",
+   "CQ18.1",
+   "Presentation and criticism of Assignment"
+  ],
+  [
+   "58",
+   "53",
+   "CQ18.2",
+   "Presentation and criticism of Assignment"
+  ],
+  [
+   "59",
+   "54",
+   "CQ18.3",
+   "Presentation and criticism of Assignment"
+  ]
+ ],
+ "links": [
+  "/download/10030/S/1_ISC301.zip",
+  "/download/10030/S/2_ISC301.zip"
+ ]
+}

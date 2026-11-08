@@ -1,0 +1,1100 @@
+{
+ "ma": "FBO201",
+ "sylID": "14406",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14406",
+   "code": "FBO201",
+   "name": "Kỹ năng vận hành dịch vụ ẩm thực",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14406",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14406",
+  "Syllabus Name": "Kỹ năng vận hành dịch vụ ẩm thực",
+  "Course Name English": "Food and Beverage Operations",
+  "Subject Code": "FBO201",
+  "Learning-Teaching Method": "Lecture,Demonstration,Roleplay,Presentation,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "HMO102",
+  "Description": "- Main objective: This course aims to equip students with practical operational skills to plan, implement and supervise food and beverage services, manage key resources, and apply standard operating procedures to deliver safe, efficient and guest‑oriented F&B operations in hospitality settings.\n\n- Description: This course examines the managerial and supervisory functions within F&B departments, including menu and service concepts, basic production and service workflows, cost and inventory control, quality, safety and hygiene, and the coordination of front‑ and back‑of‑house activities to meet financial, managerial and guest satisfaction objectives. Students are also expected to utilize contemporary AI tools (namely Gemini, ChatGPT or Copilot) to support industry research, scenario analysis, and the development of concept visuality or practical tasks in a responsible and ethical manner.\n\n-Teaching method: Through lecture, hands-on practice, roleplay, case studies, and simulated operational scenarios.\n\n- Facility and equipment requirement : Depending on the training condition of each campus, the course will be implemented in school lab designed up to 4-5* hotel standard, real hotel or other places, which fully met with requirements.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Students are required to attend with professional grooming standards.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time.\n\n- Students are encouraged to use laptop in class only for learning purpose as well as comply with the time and regulation.",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Food and Beverage Service (10th Edition)",
+   "John Cousins, Dennis Lillicrap, Suzanne Weekes",
+   "Hodder Education",
+   "2020",
+   "10th",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "VTOS - Restaurant",
+   "Vietnam Tourism Operational standard",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain key sectors, structures, functions, and stages of food and beverage operations, and outline key factors of meal experience and customer service."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate professional attributes, technical skills, service conventions, and interpersonal behaviours, including teamwork, discipline, and communication in F&B settings."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply health, safety, and security protocols, and optimize service areas, serviceware for efficient F&B operations."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Describe food production and service methods, demonstrate knowledge of foods, beverages, menu types, basic menu development, and key characteristics of different service styles."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Execute standard operating procedures for different service styles and events, following appropriate service sequences in front‑ and back‑of‑house operations."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Apply basic F&B supervisory knowledge in legal control, sales, pricing, staffing, and performance measures to support operational and financial objectives."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "Sessions 55-60",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Written report and Presentation",
+   "Maximum length of the group assignment should be 10 pages maximum excluding appendices.",
+   "",
+   "Presentation in class and submission via email or anycourse supporting platfrom",
+   "- Four or five students per group.\n- Students are required to develop a restaurant concept, with clear elaboration/demonstration of the service style, production methods, menu, floor plan, equipment & furniture, staffing, etc. Students must also submit a teaser video that could generally visualize the concept and highlight what are signatures of the restaurant.\n- Groups and groups ideas are determined on the third session of the course. Work will be break down into stages and examined during the course. Final work to be submitted prior to the presentation of the topic.All assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission\n- Evaluation will be based on both presentation, teaser video and written report (recommended 20%, 10%, 70% accordingly)"
+  ],
+  [
+   "2",
+   "Group Practice Test",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Sessions 40-45",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Performance in lab",
+   "",
+   "Group Practice Test: chapters 6,10",
+   "With Lab's facilities. Students have 1 week to practice in group since the Practical session.",
+   "- Students are assessed in group of four or five.\n\n- The test is conducted in 6 sessions (2 new slots).\n\n- Students are randomly assigned different restaurant concepts/ types of menus/ courses that required different types of tablewares.\n\n- Each group member plays a role in a restaurant: host, waiter, runner, busser.\n\n- They need to deliver the meal smoothly with harmonious team collaboration."
+  ],
+  [
+   "3",
+   "Individual Practice Test",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Sessions 19-24",
+   "CLO2, CLO3, CLO4",
+   "Performance in lab",
+   "",
+   "Individual Practice Test: chapters 3,4",
+   "With Lab's facilities. Students have 1 week to practice since the Practical session.",
+   "- The test is conducted in 6 sessions (2 new slots).\n\n- Equipment knowledge can be assessed based on table setting activities.\n\n- Menu knowledge: 3 menus & 3 guest characteristics are provided prior to Testing day. During the Test, each student draws 1 menu and 1 guest persona, then perform the role of a waiter/waitress consulting the menu according to guest's preferences.\n\n- Students are encouraged to utilize AI to practice their interaction with guest at home, by inputting different scenarios given in advance.\n\n- The role of guest could be played by lecturer or a student."
+  ],
+  [
+   "4",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "During all course",
+   "All CLOs",
+   "Attendance and class contribution",
+   "",
+   "Based on topics of studied units",
+   "Attendance: FAP's attendance report\nClass participation: teacher's records",
+   "Students must attend more than 80% of contact slots\nAttendance check at any time during course"
+  ],
+  [
+   "5",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "Sessions 25,26,53,54",
+   "Quiz 1: CLO1, CLO2, CLO3, CLO4\nQuiz 2: CLO4, CLO5, CLO6",
+   "Multiple choices,",
+   "20 Questions",
+   "Quiz 1: chapter 1-5\nQuiz 2: chapter 6-11",
+   "Review questions of the previously-studied topics.",
+   ""
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "20.0%",
+   "4",
+   "45'",
+   "CLO1, CLO2, CLO3, CLO4, CLO6",
+   "Multiple choices. Marked by Computer",
+   "30",
+   "The questions will cover the lectures, activities, exercises, and textbook.",
+   "At Lab",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\n\nChapter 1-The foodservice industry\n\n1.1 Sectors of the foodservice industry\n\n1.2 Food and beverage operations",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Student's materials",
+   "",
+   "Read materials before class",
+   "link"
+  ],
+  [
+   "2",
+   "Chapter 1-The foodservice industry\n1.3 The meal experience\n1.4 Customer service\n1.5 Food production methods",
+   "Offline",
+   "CLO1",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1-The foodservice industry\n1.6 Food and beverage service methods\n1.7 Food and beverage personnel",
+   "Offline",
+   "CLO1",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "4",
+   "Instructions of Individual & Group Practice Test\nChapter 2-Staff attributes, skills and knowledge\n2.1 Success in food and beverage service\n2.2 Attributes of food and beverage service personnel",
+   "Offline",
+   "CLO2",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2-Staff attributes, skills and knowledge\n2.3 Key service conventions\n2.4 Essential technical skills",
+   "Offline",
+   "CLO2",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2-Staff attributes, skills and knowledge\n2.5 Interpersonal skills\n2.6 Health, safety and security",
+   "Offline",
+   "CLO2",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3-Food and beverage service areas and equipment\n3.1 Design and purchasing factors\n3.2 Stillroom\n3.3 Hotplate\n3.4 Wash-up\n3.5 Colour and lighting considerations",
+   "Offline",
+   "CLO3",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3-Food and beverage service areas and equipment\n3.6 Bar\n3.7 Furniture\n3.8 Linen\n3.9 Crockery",
+   "Offline",
+   "CLO3",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3-Food and beverage service areas and equipment\n3.10 Tableware (flatware, cutlery and hollow-ware)\n3.11 Glassware\n3.12 Disposables\n3.13 Automatic vending",
+   "Offline",
+   "CLO3",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4-The menu, menu knowledge and accompaniments\n4.1 Purpose of the menu\n4.2 Classic menu sequence\n4.3 Classes of menu\n4.4 Menu development\n4.5 Menu and service knowledge",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4-The menu, menu knowledge and accompaniments\n4.6 Hors d’oeuvres and other appetisers\n4.7 Soups\n4.8 Egg dishes\n4.9 Pasta and rice dishes\n4.10 Fish dishes\n4.11 Meats, poultry and game",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4-The menu, menu knowledge and accompaniments\n4.12 Potatoes, vegetables and salads\n4.13 Cheese\n4.14 Sweets\n4.15 Savouries\n4.16 Dessert (fresh fruit and nuts)",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "'Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "13",
+   "Practical - Table setting and Menu presenting",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "T,U",
+   "'Slides, Textbook",
+   "",
+   "Practice",
+   ""
+  ],
+  [
+   "14",
+   "Practical - Table setting and Menu presenting",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "T,U",
+   "'Slides, Textbook",
+   "",
+   "Practice",
+   ""
+  ],
+  [
+   "15",
+   "Practical - Table setting and Menu presenting",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "T,U",
+   "'Slides, Textbook",
+   "",
+   "Practice",
+   ""
+  ],
+  [
+   "16",
+   "Instructions of Group Assignment\nChapter 5-Beverages - non-alcoholic and alcoholic\n5.1 Tea\n5.2 Coffee\n5.3 Chocolate\n5.4 Other stillroom beverages\n5.5 Checking and cleaning beverage making equipment\n5.6 Non-alcoholic bar beverages (soft drinks)",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "'Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 5-Beverages - non-alcoholic and alcoholic\n5.7 Wine and drinks lists\n5.8 Cocktails and mixed drinks\n5.9 Bitters\n5.10 Wine\n5.11 Spirits\n5.12 Liqueurs",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "'Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 5-Beverages - non-alcoholic and alcoholic\n5.13 Beer\n5.14 Cider and perry\n5.15 Tasting techniques\n5.16 Matching food with wine and other drinks\n5.17 Safe, sensible drinking",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "'Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "19",
+   "Individual Practice Test",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 3,4",
+   ""
+  ],
+  [
+   "20",
+   "Individual Practice Test",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 3,4",
+   ""
+  ],
+  [
+   "21",
+   "Individual Practice Test",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 3,4",
+   ""
+  ],
+  [
+   "22",
+   "Individual Practice Test",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 3,4",
+   ""
+  ],
+  [
+   "23",
+   "Individual Practice Test",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 3,4",
+   ""
+  ],
+  [
+   "24",
+   "Individual Practice Test",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 3,4",
+   ""
+  ],
+  [
+   "25",
+   "Quiz 1- Chapter 1,2,3,4,5",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Review Chapters 1-5",
+   ""
+  ],
+  [
+   "26",
+   "Quiz 1- Chapter 1,2,3,4,5",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "U",
+   "'Slides, Textbook",
+   "",
+   "Review Chapters 1-5",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 6-The service sequence (table service)\n6.1 Taking bookings\n6.2 Preparation for service\n6.3 Taking customer food and beverage orders\n6.4 The order of service\n6.5 Silver service and service enhancements",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "'Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 6-The service sequence (table service)\n6.6 Service of alcoholic beverages\n6.7 Service of non-alcoholic beverages\n6.8 Clearing during service\n6.9 Clearing following service",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "'Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 10-Enhanced service techniques\n10.1 Guéridon service\n10.2 Introduction to carving, jointing and filleting\n10.3 Flambé lamps, Suzette pans and hotplates\n10.4 Hors d’oeuvres and other starters\n10.5 Salads and dressings\n10.6 Soups",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "'Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 10-Enhanced service techniques\n10.7 Hot fish dishes\n10.8 Steaks and meat dishes\n10.9 Meat joints\n10.10 Poultry and game\n10.11 Sweet dishes\n10.12 Fresh fruit",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "31",
+   "Practical - Service sequence (table service)",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Practice by groups",
+   ""
+  ],
+  [
+   "32",
+   "Practical - Service sequence (table service)",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Practice by groups",
+   ""
+  ],
+  [
+   "33",
+   "Practical - Service sequence (table service)",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Practice by groups",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 7-The service sequence (self-service, assisted service and single point service)\n7.1 Service methods\n7.2 Preparation for service\n7.3 The order of service",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 7-The service sequence (self-service, assisted service and single point service)\n7.4 Clearing during service\n7.5 Clearing following service",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 8-The service of breakfast and afternoon tea\n8.1 Breakfast service",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 8-The service of breakfast and afternoon tea\n8.2 Afternoon tea service",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 9-Specialized forms of service\n9.1 Service in situ\n9.2 Floor/room service\n9.3 Lounge service\n9.4 Hospital tray service",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9-Specialized forms of service\n9.5 Home delivery\n9.6 Airline tray service\n9.7 Rail service",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "40",
+   "Group Practice Test - Service Sequence",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 6,10",
+   ""
+  ],
+  [
+   "41",
+   "Group Practice Test - Service Sequence",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 6,10",
+   ""
+  ],
+  [
+   "42",
+   "Group Practice Test - Service Sequence",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 6,10",
+   ""
+  ],
+  [
+   "43",
+   "Group Practice Test - Service Sequence",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 6,10",
+   ""
+  ],
+  [
+   "44",
+   "Group Practice Test - Service Sequence",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 6,10",
+   ""
+  ],
+  [
+   "45",
+   "Group Practice Test - Service Sequence",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Practical Test in Lab\nChapter 6,10",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 11-Event\n11.1 Types of events\n11.2 Event service staff roles",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 11-Event\n11.3 Event administration\n11.4 Event organisation",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 11-Event\n11.5 Weddings\n11.6 Outdoor catering (off-premises catering)",
+   "Offline",
+   "CLO4",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 12-Supervisory aspects of food and beverage service\n12.1 Legal considerations\n12.2 Sales promotion",
+   "Offline",
+   "CLO6",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 12-Supervisory aspects of food and beverage service\n12.3 Customer relations 388\n12.4 Staffing levels, staff organisation and training",
+   "Offline",
+   "CLO6",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 12-Supervisory aspects of food and beverage service\n12.5 Food and beverage pricing\n12.6 Food and beverage revenue control",
+   "Offline",
+   "CLO6",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 12-Supervisory aspects of food and beverage service\n12.7 Beverage control\n12.8 Performance measures",
+   "Offline",
+   "CLO6",
+   "I,T,U",
+   "Slides, Textbook",
+   "",
+   "Read materials before class",
+   ""
+  ],
+  [
+   "53",
+   "Quiz 2 - Chapter 6,7,8,9,10,11",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Review Chapters 6-11",
+   ""
+  ],
+  [
+   "54",
+   "Quiz 2 - Chapter 6,7,8,9,10,11",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "U",
+   "Slides, Textbook",
+   "",
+   "Review Chapters 6-11",
+   ""
+  ],
+  [
+   "55",
+   "Group Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Students' slides",
+   "",
+   "Presentation and Q/A",
+   ""
+  ],
+  [
+   "56",
+   "Group Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Students' slides",
+   "",
+   "Presentation and Q/A",
+   ""
+  ],
+  [
+   "57",
+   "Group Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Students' slides",
+   "",
+   "Presentation and Q/A",
+   ""
+  ],
+  [
+   "58",
+   "Group Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Students' slides",
+   "",
+   "Presentation and Q/A",
+   ""
+  ],
+  [
+   "59",
+   "Group Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Students' slides",
+   "",
+   "Presentation and Q/A",
+   ""
+  ],
+  [
+   "60",
+   "Group Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Students' slides",
+   "",
+   "Presentation and Q/A",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "Chapter 1-The foodservice industry",
+   "How have changes in consumer lifestyles and global trends influenced the development of the modern food and beverage industry?"
+  ],
+  [
+   "2",
+   "2",
+   "Chapter 1-The foodservice industry",
+   "Why do people choose to eat outside their homes, and how do you think F&B businesses adapt to different customer needs and occasions?"
+  ],
+  [
+   "3",
+   "3",
+   "Chapter 1-The foodservice industry",
+   "In what ways do the meal experience and customer expectations vary across different types of foodservice businesses (e.g., café, hotel restaurant vs. cafeteria)?"
+  ],
+  [
+   "4",
+   "4",
+   "Chapter 2-Staff attributes, skills and knowledge",
+   "If you were recruiting staff for a fine-dining restaurant versus a casual café, which attributes and skills would you prioritize, and why?"
+  ],
+  [
+   "5",
+   "5",
+   "Chapter 2-Staff attributes, skills and knowledge",
+   "Describe a scenario where strong interpersonal skills can resolve a critical service issue in F&B operations."
+  ],
+  [
+   "6",
+   "6",
+   "Chapter 2-Staff attributes, skills and knowledge",
+   "Why is adherence to key service conventions essential for both guest satisfaction and operational efficiency in F&B establishments?"
+  ],
+  [
+   "7",
+   "7",
+   "Chapter 3-Food and beverage service areas and equipment",
+   "How would you design an efficient service area for a high-volume banquet? What equipment and layout choices would you prioritize?"
+  ],
+  [
+   "8",
+   "8",
+   "Chapter 3-Food and beverage service areas and equipment",
+   "What factors should be considered when selecting tableware and glassware for a new food and beverage outlet?"
+  ],
+  [
+   "9",
+   "9",
+   "Chapter 3-Food and beverage service areas and equipment",
+   "How does technology integration (e.g., POS, smart equipment) change the operation of modern F&B service areas?"
+  ],
+  [
+   "10",
+   "10",
+   "Chapter 4-The menu, menu knowledge and accompaniments",
+   "How do local culture and customer demographics influence menu design for a new restaurant?"
+  ],
+  [
+   "11",
+   "11",
+   "Chapter 4-The menu, menu knowledge and accompaniments",
+   "Imagine you are launching a menu for a themed event. What steps would you take to ensure the menu sequence and accompaniments create a cohesive guest experience?"
+  ],
+  [
+   "12",
+   "12",
+   "Chapter 4-The menu, menu knowledge and accompaniments",
+   "What is the impact of proper menu knowledge on upselling and overall revenue in food and beverage businesses?"
+  ],
+  [
+   "13",
+   "16",
+   "Chapter 5-Beverages - non-alcoholic and alcoholic",
+   "What are some trends and regulations for F&B businesses who are selling alcohol beverages in Vietnam, and how do F&B outlets respond?"
+  ],
+  [
+   "14",
+   "17",
+   "Chapter 5-Beverages - non-alcoholic and alcoholic",
+   "What safety and service considerations must be observed when offering a diverse selection of alcoholic beverages?"
+  ],
+  [
+   "15",
+   "18",
+   "Chapter 5-Beverages - non-alcoholic and alcoholic",
+   "How can a staff use beverage knowledge to enhance both guest satisfaction and business profitability?"
+  ],
+  [
+   "16",
+   "27",
+   "Chapter 6-The service sequence (table service)",
+   "Imagine a busy dinner service: how would you ensure the smooth coordination of all steps in the classic table service sequence?"
+  ],
+  [
+   "17",
+   "28",
+   "Chapter 6-The service sequence (table service)",
+   "What challenges might arise when shifting from traditional silver service to more contemporary table service styles in a modern restaurant?"
+  ],
+  [
+   "18",
+   "29",
+   "Chapter 10-Enhanced service techniques",
+   "How can the implementation of tableside service techniques (e.g., flambé, carving) enhance the guest experience and restaurant branding?"
+  ],
+  [
+   "19",
+   "30",
+   "Chapter 10-Enhanced service techniques",
+   "When is it appropriate to use enhanced service methods, and what training is essential to perform these techniques effectively?"
+  ],
+  [
+   "20",
+   "34",
+   "Chapter 7-The service sequence (self-service, assisted service and single point service)",
+   "What factors determine the choice between self-service, assisted service, and single point service models in various food and beverage contexts?"
+  ],
+  [
+   "21",
+   "35",
+   "Chapter 7-The service sequence (self-service, assisted service and single point service)",
+   "How might self-service systems be optimized to maintain both speed and quality in a busy food court scenario?"
+  ],
+  [
+   "22",
+   "36",
+   "Chapter 8-The service of breakfast and afternoon tea",
+   "Research and present different breakfast or afternoon tea service styles in different hospitality cultures."
+  ],
+  [
+   "23",
+   "37",
+   "Chapter 8-The service of breakfast and afternoon tea",
+   "What are the key elements of timing and coordination required for successful breakfast or tea service?"
+  ],
+  [
+   "24",
+   "38",
+   "Chapter 9-Specialized forms of service",
+   "How do specialized service forms (e.g., in-room dining, airline catering) require adaptation of traditional F&B procedures?"
+  ],
+  [
+   "25",
+   "39",
+   "Chapter 9-Specialized forms of service",
+   "What innovations in specialized service forms can you propose to improve customer experience in non-traditional settings?"
+  ],
+  [
+   "26",
+   "46",
+   "Chapter 11-Event",
+   "Think of a successful event (wedding, banquet, or conference) you have attended. What details in food, service, and organization made it memorable, and why?"
+  ],
+  [
+   "27",
+   "47",
+   "Chapter 11-Event",
+   "How would you plan the staffing and preparation differently for a banquet with a formal plated meal versus a large buffet reception?"
+  ],
+  [
+   "28",
+   "48",
+   "Chapter 11-Event",
+   "How does the role of communication and coordination between event service staff, kitchen, and sales affect the guest experience during a large-scale function?"
+  ],
+  [
+   "29",
+   "49",
+   "Chapter 12-Supervisory aspects of food and beverage service",
+   "When facing a decline in guest satisfaction scores, what managerial interventions would you prioritize to restore service quality?"
+  ],
+  [
+   "30",
+   "50",
+   "Chapter 12-Supervisory aspects of food and beverage service",
+   "Imagine you have just been promoted to F&B supervisor. What new responsibilities and challenges would you expect to face, and what strategies would you use to motivate and train your team effectively?"
+  ],
+  [
+   "31",
+   "51",
+   "Chapter 12-Supervisory aspects of food and beverage service",
+   "How does the legal environment (e.g., health, safety, licensing) shape the day-to-day responsibilities of F&B supervisors?"
+  ],
+  [
+   "32",
+   "52",
+   "Chapter 12-Supervisory aspects of food and beverage service",
+   "Imagine a situation where food and beverage costs unexpectedly increase. How would you use revenue and cost control tools to protect profitability?"
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/12kAnTXhfU8ir9SUkVe7cvK1KbbSICaRs?usp=sharing"
+ ]
+}

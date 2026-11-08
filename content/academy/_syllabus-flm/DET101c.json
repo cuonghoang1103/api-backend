@@ -1,0 +1,325 @@
+{
+ "ma": "DET101c",
+ "sylID": "13007",
+ "quyetDinh": "857/QĐ-ĐHFPT dated 08/05/2025",
+ "ungVien": [
+  {
+   "sylID": "13007",
+   "code": "DET101c",
+   "name": "Design Thinking_Tư duy thiết kế",
+   "active": true,
+   "approved": true,
+   "decision": "857/QĐ-ĐHFPT dated 08/05/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13007",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13007",
+  "Syllabus Name": "Design Thinking_Tư duy thiết kế",
+  "Course Name English": "Design Thinking",
+  "Subject Code": "DET101c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 50h online + 3h offline + 1h Final exam + 96 self-study",
+  "Pre-Requisite": "None",
+  "Description": "In this course, students are introduced to a comprehensive 14-step process designed to address real-world, human-centered challenges of their own selection. Through a project-based, experiential learning approach, students will develop and demonstrate proficiency in the core competencies of Design Thinking. The curriculum emphasizes the application of key human-centered design tools to facilitate idea generation and foster meaningful engagement with end-users. Furthermore, students will critically engage with six fundamental phases of the design thinking process, examining the associated shifts in cognitive frameworks and skill development required at each stage.",
+  "StudentTasks": "1. Join the online course(s) when being invited by the admin.\n\n2. Enroll in the courses, regularly study the course at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n4. Keep up with online learning progress (bonus will be awarded)\n\n5. Communicate and discuss in forum\n\n6. Attend offline sessions in the Campus (Optional)\n\n7. Must complete the course(s) with certification(s) in order to take the Final Exam at Campus",
+  "Tools": "Computer\n\nInternet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "857/QĐ-ĐHFPT dated 08/05/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) = min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/5/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/uva-darden-design-thinking",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Design Thinking Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/uva-darden-design-thinking-insights-to-inspiration/home/module/1",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Design Thinking: Insights to Inspiration"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/uva-darden-design-thinking-ideas-to-action?specialization=uva-darden-design-thinking",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2: Design Thinking: Ideas to Action"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/uva-darden-design-thinking-discovery-tools?specialization=uva-darden-design-thinking",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Design Thinking: Discovery Tools"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/uva-darden-experiencing-design?specialization=uva-darden-design-thinking",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 4: Experiencing Design: Deepening Your Design Thinking Practice"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Develop advanced subject-matter expertise in media and communication through theoretical and applied learning."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate proficiency in utilizing in-demand communication skills acquired from both academic scholarship and industry practice."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Possess the ability to master media tools and communication methodologies through hands-on, project-based experiences."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Attain a deep and critical understanding of foundational and emerging concepts in media and communication studies."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All LOs",
+   "Multiple choice and case study",
+   "50",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "(Off-line 1.5h)\nIntroduction to the online course DET101c\n[Course 1: Design Thinking: Insights to Inspiration]\n'Module 1: Insights into Design Thinking",
+   "Online, Offline",
+   "CLO1",
+   "I,T",
+   "Course 1: Design Thinking: Insights to Inspiration",
+   "",
+   "Enroll in the specialization on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "2",
+   "[Course 1:Design Thinking: Insights to Inspiration]\nModule 2: Project Planning\nModule 3: What is: project plan, people plan, and research plan",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "Course 1: Design Thinking: Insights to Inspiration",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "3",
+   "[Course 1: Design Thinking: Insights to Inspiration]\n'Module 4: The Innovation Mindset",
+   "Online",
+   "CLO3",
+   "I,T",
+   "Course 1: Design Thinking: Insights to Inspiration",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "4",
+   "[Course 1: Design Thinking: Insights to Inspiration]\n'Module 5: If Anything Were Possible: Extracting Insights and Defining Design Criteria through Field Research Analysis",
+   "Online",
+   "CLO4",
+   "I,T",
+   "Course 1: Design Thinking: Insights to Inspiration",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "5",
+   "[Course 2: Design Thinking: Ideas to Action]\nModule 1: What if: Ideation and Conceptualization\nModule 2: What wows: Hypothesis Testing and Idea Evaluation",
+   "Online",
+   "CLO4",
+   "I,T",
+   "Course 2: Design Thinking: Ideas to Action",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "6",
+   "[Course 2: Design Thinking: Ideas to Action]\nModule 3: What Wows to What Works: From Concept Validation to Practical Application\nModule 4: What Works: Executing and Validating In-Market Experiments",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "Course 2: Design Thinking: Ideas to Action",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ],
+  [
+   "7",
+   "[Course 2: Design Thinking: Ideas to Action]\nModule 5: What's Next?: Reflecting Forward and Sustaining Innovation",
+   "Online",
+   "CLO2",
+   "I,T",
+   "Course 2: Design Thinking: Ideas to Action",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "8",
+   "[Course 3 : Design Thinking: Discovery Tools]\nModule 1: Stakeholder Map: Stakeholder Mapping for Complex Problem Solving\n'Module 2: Jobs to Be Done and Ethnographic Interview Techniques",
+   "Online",
+   "CLO2",
+   "I,T",
+   "Course 3: Design Thinking: Discovery Tools",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "9",
+   "[Course 3 : Design Thinking: Discovery Tools]\nModule 3: Journey Map\n'Module 4: Personas: Utilizing Personas to Identify User Needs and Variations",
+   "Online",
+   "CLO2",
+   "I,T",
+   "Course 3: Design Thinking: Discovery Tools",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "10",
+   "[Course 3 : Design Thinking: Discovery Tools]\nModule 5: Value Chain Analysis",
+   "Online",
+   "CLO1",
+   "I,T",
+   "Course 3: Design Thinking: Discovery Tools",
+   "",
+   "- Watch all videos, read all materials in the modules/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "11",
+   "[Course 4: Experiencing Design: Deepening Your Design Thinking Practice]\nWeek 1: Design thinking exploration via transformation, core practices, cognitive biases, research insights, and immersive learning strategies. Week 2: Investigation of mindset shifts through sensemaking and alignment, supported by scientific principles, practical challenges, and expert interviews. Week 3: Examination of mindset evolution through emergence and imagining, emphasizing cognitive science, practical barriers, and expert design dialogues.",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "Course 4: Experiencing Design: Deepening Your Design Thinking Practice",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "12",
+   "(Off-line 1.5h)\n[Course 4: Experiencing Design: Deepening Your Design Thinking Practice]\nWeek 4: Application of design thinking through experiential learning, organizational integration, reflective practice, and expert perspectives on implementation. Review\nDeadline of Coursera completion: End of Friday of the week.",
+   "Online, Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "I,T,U",
+   "Design Thinking Specialization",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

@@ -1,0 +1,1290 @@
+{
+ "ma": "ERW423",
+ "sylID": "13895",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13895",
+   "code": "ERW423",
+   "name": "Kỹ năng viết nghiên cứu tiếng Anh 2",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13895",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13895",
+  "Syllabus Name": "Kỹ năng viết nghiên cứu tiếng Anh 2",
+  "Course Name English": "English Research Writing Skills 2",
+  "Subject Code": "ERW423",
+  "Learning-Teaching Method": "Coaching,Presenting,Project based learning,Active learning,Cooperative Learning,Discovery Learning,Experiential learning methods,Presentation,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 105 hours self-study (including projects preparation time)",
+  "Pre-Requisite": "Passed ERW413 (hoặc tương đương)",
+  "Description": "Objectives:\n\nThe course is designed to help students develop skills of critical reading, thinking and writing in various academic topics. Through completing a number of authentic projects of reading and writing and through teacher’s guide as well as feedback, students will be able to further their skills, at an advanced level.\n\nDescription\n\nRead, Think and Write 2 focuses on reading and writing in one course to help students read from a writer's viewpoint and write with a reader in mind. It is also designed to engage students in real-world, college-level projects to gain the literacy skills they need to succeed. The course provides detailed knowledge and practice of using sources effectively, avoiding plagiarism as well as writing well-crafted sentences.\n\nTeaching Methods:\n\nThe teaching process includes a variety of methods, from teachers’ side: lectures, guided learning, feedback and corrections and from students’ side: discussions, idea brainstorming and writing, peer corrections and self-corrections.\n\nAssessment scheme:\n\n1) On-going assessment\n\n- Projects 02 55%\n\n- Peer corrections 02*5%. 10%\n\nFinal exam 01 35%\n\n2) Final Result 100%\n\n4) Completion Criteria:\n\na) On-going assessment >0, Each component >0\n\nb) Final Result >=5",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible for doing all exercises and assignments given by instructor in class or at home and submit on time\n\n- Use laptops in class only for learning purposes",
+  "Tools": "Tools: Foxit pdf editor\n\nInternet access\n\nhttps://www.mheducation.com/",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Common Places: Integrated Reading and Writing",
+   "Lisa Hoeffner & Kent Hoeffner",
+   "McGraw Hill Education.",
+   "2019",
+   "2nd",
+   "9781260092431",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "LearnSmart Achieve",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Book-Specific Resources for instructors.",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Read Think Write: True Integration Through Academic Content",
+   "David Rothman & Jilani Warsi",
+   "Pearson",
+   "2019",
+   "1st",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Utilize information sources accurately and effectively following MLA and APA styles.\n1.1. Evaluate whether a source is reliable to be used for academic writing/ research.\n1.2. Generate in-text citations and references accurately following MLA and APA styles."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Modify essays (organization, unity, clarity, format) effectively using reader-based suggestions."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Compose well-crafted sentences (phrases, clauses, word choice, punctuation, mechanics)."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Compose a precise and concise summary from a reading text."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Compose a writing paper in response to an informative text."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Compose a writing paper in response to an argumentative text."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Persuade readers with strong arguments and evidence from reliable sources."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Develop flexibility and respect in pair work."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Peer Correction 1",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "OP1: Read the paper of another pair and correct/ give feedback // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1",
+   "lessons in learned chapters",
+   "*in class, pair work",
+   "correct and give feedback"
+  ],
+  [
+   "2",
+   "Peer Correction 2",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "OP1: Read the paper of another pair and correct/ give feedback // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1",
+   "lessons in learned chapters",
+   "*in class, pair work",
+   "correct and give feedback"
+  ],
+  [
+   "3",
+   "Project 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4",
+   "OP1: Work with a text to create a summary (~300 words)// OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1",
+   "lessons in learned chapters",
+   "*homework; individual work",
+   ""
+  ],
+  [
+   "4",
+   "Project 2",
+   "on-going",
+   "1",
+   "35.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO5, LO7, LO8",
+   "OP1: Work with informative texts and write a paper in response. (~500 words)// OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1",
+   "lessons in learned chapters",
+   "*homework; individual or pair work\n\n*The project is marked 2 times by 2 lecturers, the lecturer of the class and another one from the department (ideally someone who has taught the subject). The average of the 2 markings will be the final result.",
+   "including in-text citations, using MLA or APA styles"
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "35.0%",
+   "4",
+   "90'",
+   "LO1, LO2, LO3, LO6, LO7, LO8",
+   "Write an argument essay in response to particular reading text(s) (400-500 words). Use supporting evidences from the given text.",
+   "1",
+   "lessons in learned chapters",
+   "*400-500 words",
+   "including in-text citations, using MLA or APA styles"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nChapter 12: Using sources",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "ERW422",
+   "*Read Chapter 12 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 12: Using sources (Cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "ERW422",
+   "*Read Chapter 12 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 12: Using sources (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 12: Using sources (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 12: Using sources (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 12: Using sources (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 12: Using sources (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 12: Using sources (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 10: Revising & Editing",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 10 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 10: Revising & Editing (cont)",
+   "Offline",
+   "LO2",
+   "I, T",
+   "",
+   "",
+   "*Read Chapter 10 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 10: Revising & Editing (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 10 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 10: Revising & Editing (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 10 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 10: Revising & Editing (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 10: Revising & Editing (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 11: Three integrated Reading and Writing Projects: Step-to-step guidance",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "IT",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 11: Three integrated Reading and Writing Projects: Step-to-step guidance (Cont)",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "IT",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 11: Three integrated Reading and Writing Projects: Step-to-step guidance (Cont)",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 1",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 11: Three integrated Reading and Writing Projects: Step-to-step guidance (Cont)",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 2",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 1: Working with a text to create a summary: Instructions",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 1",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 11: Three integrated Reading and Writing Projects: Step-to-step guidance (Cont)",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 2",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 1: Working with a text to create a summary: Outlining",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 1",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 1: Working with a text to create a summary: Outlining",
+   "Offline",
+   "",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 2",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 1: Working with a text to create a summary: Developing & Finishing",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 1. Preparer for Project 2",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 1: Working with a text to create a summary: Outlining",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 1. Preparer for Project 3",
+   ""
+  ],
+  [
+   "25",
+   "PROJECT 1 Submission. Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Instructions",
+   "Offline",
+   "LO5, LO7, LO8",
+   "IT",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 2",
+   ""
+  ],
+  [
+   "26",
+   "PROJECT 1 Submission. Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Instructions",
+   "Offline",
+   "LO5, LO7, LO8",
+   "IT",
+   "",
+   "",
+   "*Prepare for Project 3",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Outlining",
+   "Offline",
+   "LO5, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 2",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Outlining",
+   "Offline",
+   "LO5, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 3",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Developing & Finishing",
+   "Offline",
+   "LO5, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 2",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Outlining",
+   "Offline",
+   "LO5, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 3",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 1: Working with a text to create a summary: Revising & Editing",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 2",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Outlining",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 3",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 1: Teacher's feedback",
+   "Offline",
+   "LO1,4",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 2",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Outlining",
+   "Offline",
+   "LO1,4",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 3",
+   ""
+  ],
+  [
+   "35",
+   "PROJECT 2 Submission. Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Revising & Editing",
+   "Offline",
+   "LO1, LO2, LO5, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Peer Corrections on Project 2",
+   ""
+  ],
+  [
+   "36",
+   "PROJECT 2 Submission. Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Revising & Editing",
+   "Offline",
+   "LO1, LO2, LO5, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Peer Corrections on Project 3",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Peer Corrections",
+   "Offline",
+   "LO1, LO2, LO5, LO7, LO8",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 3",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Working with informative texts to create a paper in response: Peer Corrections",
+   "Offline",
+   "LO1, LO2, LO5, LO7, LO8",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 4",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Teacher's feedback",
+   "Offline",
+   "LO1, LO2, LO5, LO7, LO8",
+   "T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 3",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Teacher's feedback",
+   "Offline",
+   "LO1, LO2, LO5, LO7, LO8",
+   "T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 4",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Complete an argument project: Instructions",
+   "Offline",
+   "LO6, LO7, LO8",
+   "IT",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 3",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Teacher's feedback",
+   "Offline",
+   "LO6, LO7, LO8",
+   "IT",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 4",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Complete an argument project: Outlining",
+   "Offline",
+   "LO6, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Project 3",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Teacher's feedback",
+   "Offline",
+   "LO6, LO7, LO8",
+   "TU",
+   "",
+   "",
+   "*Prepare for Project 4",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Complete an argument project: Developing and Finishing",
+   "Offline",
+   "LO6, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 3. Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 2: Teacher's feedback",
+   "Offline",
+   "LO6, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Finish writing project 3. Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "47",
+   "Part 4: Well-crafted sentences: Unit 1",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "48",
+   "Part 4: Well-crafted sentences: Unit 1",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "49",
+   "PROJECT 3 Submission. Part 4: Well-crafted sentences: Unit 2",
+   "Offline",
+   "LO3, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "50",
+   "PROJECT 3 Submission. Part 4: Well-crafted sentences: Unit 2",
+   "Offline",
+   "LO3, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "51",
+   "Part 4: Well-crafted sentences: Unit 3",
+   "Offline",
+   "LO3, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "52",
+   "Part 4: Well-crafted sentences: Unit 3",
+   "Offline",
+   "LO3, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "Read Part 4 before attending the lesson and follow lecturer's instructions.",
+   ""
+  ],
+  [
+   "53",
+   "Part 4: Complete Practice",
+   "Offline",
+   "LO3, LO8",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare to revise Project 3",
+   ""
+  ],
+  [
+   "54",
+   "Part 4: Complete Practice",
+   "Offline",
+   "LO3, LO8",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare to revise Project 4",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Complete an argument project: Editing & Revising",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Prepare for Peer Corrections on Project 3",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Complete an argument project: Editing & Revising",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8",
+   "TU",
+   "",
+   "",
+   "*Prepare for Peer Corrections on Project 4",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Complete an argument project: Peer Corrections",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise project 3",
+   ""
+  ],
+  [
+   "58",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Complete an argument project: Editing & Revising",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise project 4",
+   ""
+  ],
+  [
+   "59",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Teacher's Feedback",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8",
+   "T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise all projects",
+   ""
+  ],
+  [
+   "60",
+   "Chapter 11: Three integrated Reading and Writing Projects: Project 3: Teacher's Feedback",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8",
+   "T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise all projects",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HN_CQ1",
+   "What is a source-based essay? Give examples."
+  ],
+  [
+   "2",
+   "2",
+   "HN_CQ2",
+   "What is bias? What are common types of bias in writing? Give examples."
+  ],
+  [
+   "3",
+   "3",
+   "HN_CQ3",
+   "How to examine for authors' bias and credibility? Why?"
+  ],
+  [
+   "4",
+   "4",
+   "HN_CQ4",
+   "What are sources of bias and credibility? Which is the most common? Why?"
+  ],
+  [
+   "5",
+   "5",
+   "HN_CQ5",
+   "What are the types of quotations in academic writing? Give examples. When and how to use quotations? Give examples."
+  ],
+  [
+   "6",
+   "6",
+   "HN_CQ6",
+   "What are the differences between MLA and APA in-text citation styles? Give examples."
+  ],
+  [
+   "7",
+   "7",
+   "HN_CQ7",
+   "Why do writers use a reference list? Give an example of a reference list in an APA style."
+  ],
+  [
+   "8",
+   "8",
+   "HN_CQ8",
+   "What are common types of plagiarism? Why do writers avoid plagiarism?"
+  ],
+  [
+   "9",
+   "9",
+   "HN_CQ9",
+   "What are organization and unity in writing? Why are they important? Give examples of essays having good organization and unity."
+  ],
+  [
+   "10",
+   "10",
+   "HN_CQ10",
+   "What are the ways to improve organization and unity in students' paragraph and essay writing?"
+  ],
+  [
+   "11",
+   "11",
+   "HN_CQ11",
+   "What are awkward and vague expressions? Give examples. Why do some writers write awkward and vague expressions? How to avoid this?"
+  ],
+  [
+   "12",
+   "12",
+   "HN_CQ12",
+   "What is the recursive writing process? Give examples. Why is this process used in academic writing? Is this process useful to you? Why and why not?"
+  ],
+  [
+   "13",
+   "13",
+   "HN_CQ13",
+   "How to write with clarity in pronoun reference and agreement? Give examples."
+  ],
+  [
+   "14",
+   "14",
+   "HN_CQ14",
+   "What is SMART TRACS in essay editing? Give examples. Do you think it is useful? Why?"
+  ],
+  [
+   "15",
+   "15",
+   "HN_CQ15",
+   "What are interesting points in the article \"Understanding Generational Differences\" (p. 370)? Write a detailed outline of the article."
+  ],
+  [
+   "16",
+   "16",
+   "HN_CQ16",
+   "Write your own summary for the article. Compare and contrast your summary with the sample summary (p. 374). What can you learn from the sample to improve your summary?"
+  ],
+  [
+   "17",
+   "17",
+   "HN_CQ17",
+   "Is writing an outline important before writing an essay? Why? What are psychological constraints? Write an outline for the essay on \"psychological constraints\"."
+  ],
+  [
+   "18",
+   "18",
+   "HN_CQ18",
+   "Write an essay on psychological constraints based on the outline."
+  ],
+  [
+   "19",
+   "19",
+   "HN_CQ19",
+   "Read the essay on psychological constraints (p. 397). What are the similarities and differences between your essay and this essay? What are the interesting points of the sample essay? Why?"
+  ],
+  [
+   "20",
+   "20",
+   "HN_CQ20",
+   "Write an outline for the sample essay \"Psychological Constraints\". Write a summary based on the outline."
+  ],
+  [
+   "21",
+   "21",
+   "HN_CQ21",
+   "Do peer feedback on your friends' works. What can you learn from your friends' summaries?"
+  ],
+  [
+   "22",
+   "22",
+   "HN_CQ22",
+   "Read your friends' feedback and write an improved version of your summary."
+  ],
+  [
+   "23",
+   "23",
+   "HN_CQ23",
+   "What are the important steps and notes to tell younger students about writing a good summary? Give reasons and evidence."
+  ],
+  [
+   "24",
+   "24",
+   "HN_CQ24",
+   "Choose an article related to the lesson's topics and write a summary of about 200-300 words."
+  ],
+  [
+   "25",
+   "25",
+   "HN_CQ25",
+   "What are the main text types? What are informative texts? What are the similarities and differences between an informative and an argumentative text?"
+  ],
+  [
+   "26",
+   "26",
+   "HN_CQ26",
+   "What are the things that often distract you from your main focus? Why are people easily get distracted? Give evidence for your points."
+  ],
+  [
+   "27",
+   "27",
+   "HN_CQ27",
+   "Read the informative text \"Driven to Distraction: Our Wired Generation (p. 406). What are the main points discussed in the text? What are the interesting points or facts from the text? Why? What are the points you agree or disagree with? Why?"
+  ],
+  [
+   "28",
+   "28",
+   "HN_CQ28",
+   "Provide feedback on your peers' writings."
+  ],
+  [
+   "29",
+   "29",
+   "HN_CQ29",
+   "What are some examples of fake news? Why are some people are gullible? Give examples and evidence for your points."
+  ],
+  [
+   "30",
+   "30",
+   "HN_CQ30",
+   "Read the informative text \"A Harsh Truth about Fake News: Some people are Super Gullible\" (p. 410). What are the main points discussed in the text? What are the interesting points or facts from the text? Why? What are the points agree or disagree with? Why?"
+  ],
+  [
+   "31",
+   "31",
+   "HN_CQ31",
+   "Provide feedback on your peers' writings."
+  ],
+  [
+   "32",
+   "32",
+   "HN_CQ32",
+   "Write an informative essay on reasons for the spread of fake news. Use 3-5 MLA in-text citations and references."
+  ],
+  [
+   "33",
+   "33",
+   "HN_CQ33",
+   "What are advantages and disadvantages of children using social media?"
+  ],
+  [
+   "34",
+   "34",
+   "HN_CQ34",
+   "Read the informative text \"The Bad, the Ugly, and the Good of Kids\" Use of Social Media (p. 412). What are the main points discussed in the text? What are the interesting points or facts from the text? Why? What are the points you agree or disagree with? Why?"
+  ],
+  [
+   "35",
+   "35",
+   "HN_CQ35",
+   "Provide feedback on your peers' writings."
+  ],
+  [
+   "36",
+   "36",
+   "HN_CQ36",
+   "Write an essay on negative and positive sides of children using social media. Use 3-5 MLA in-text citations and references."
+  ],
+  [
+   "37",
+   "37",
+   "HN_CQ37",
+   "Is news on Facebook posts credible? Why?"
+  ],
+  [
+   "38",
+   "38",
+   "HN_CQ38",
+   "Read the informative text \"Facebook's False Faces Undermine Its Credibility\" (p. 417). What are the main points discussed in the text? What are the interesting points or facts from the text? Why?/What are the points you agree or disagree with? Why?"
+  ],
+  [
+   "39",
+   "39",
+   "HN_CQ39",
+   "Provide feedback on your peers' writings."
+  ],
+  [
+   "40",
+   "40",
+   "HN_CQ40",
+   "Write an essay on causes and solutions for young people spending a lot of time on Facebook. Use 3-5 APA in-text citations and references."
+  ],
+  [
+   "41",
+   "41",
+   "HN_CQ41",
+   "What is Wal-Mart? What are some characteristics of Wal-Mart? What are the positive and negative opinions of Wal-Mart? Why?"
+  ],
+  [
+   "42",
+   "42",
+   "HN_CQ42",
+   "Read the argumentative texts \"Watching Wal-Mart\" (p. 428) and \"Discussion Case: Wal-Mart (p. 432). What are the main points discussed in the texts? What are the interesting points or facts from the text? Why?/ What are the points you may disagree with? Why?"
+  ],
+  [
+   "43",
+   "43",
+   "HN_CQ43",
+   "Provide feedback on your peers' writings."
+  ],
+  [
+   "44",
+   "44",
+   "HN_CQ44",
+   "Write an essay on negative sides of Wal-Mart. Use 3-5 APA in-text citations and references."
+  ],
+  [
+   "45",
+   "45",
+   "HN_CQ45",
+   "You have to cut the hours of several employees in a supermarket where you work as a manager. One employee protested. What would you do? Why?"
+  ],
+  [
+   "46",
+   "46",
+   "HN_CQ46",
+   "Read the text \"Walmart Cut My Hours. I Protested. They Fired Me.\" (p. 437). What are the main points discussed in the text? What are the interesting points or facts from the text? Why? /What are the points you agree or disagree with the author? Why?"
+  ],
+  [
+   "47",
+   "47",
+   "HN_CQ47",
+   "Well-crafted sentences: What are common mistakes in student writing? Give examples."
+  ],
+  [
+   "48",
+   "48",
+   "HN_CQ48",
+   "Well-crafted sentences: What are the types of English phrases? Give examples."
+  ],
+  [
+   "49",
+   "49",
+   "HN_CQ49",
+   "Well-crafted sentences: What are the types of English clauses? Give examples."
+  ],
+  [
+   "50",
+   "50",
+   "HN_CQ50",
+   "Well-crafted sentences: What are the types of English sentences? Give examples."
+  ],
+  [
+   "51",
+   "51",
+   "HN_CQ51",
+   "Well-crafted sentences: What are English commonly confused words? Make a list with examples."
+  ],
+  [
+   "52",
+   "52",
+   "HN_CQ52",
+   "Well-crafted sentences: What are common types of punctuation used in academic writing and how to use them correctly? Give examples."
+  ],
+  [
+   "53",
+   "53",
+   "HN_CQ53",
+   "As a manager of Wal-Mart, write a response to an essay in response to the text \"Walmart Cut My Hours. I Protested. They Fired Me.\" Use appropriate arguments and evidence."
+  ],
+  [
+   "54",
+   "54",
+   "HN_CQ54",
+   "Provide feedback on your peers' writings."
+  ],
+  [
+   "55",
+   "55",
+   "HN_CQ55",
+   "Read the argumentative texts \"I Worked at Wal-Mart for Two Years and I Actually Really Liked it\" (p. 440) and \"Wal-Mart is Good for the Economy\" (p. 443). What are the main points discussed in the text? What are the interesting points or facts from the text? Why?/ What are the points you agree or disagree with? Why?"
+  ],
+  [
+   "56",
+   "56",
+   "HN_CQ56",
+   "Provide feedback on your peers' writings."
+  ],
+  [
+   "57",
+   "57",
+   "HN_CQ57",
+   "Write an essay on the positive sides of Wal-Mart. Use 3-5 APA in-text citations and references."
+  ],
+  [
+   "58",
+   "58",
+   "HN_CQ58",
+   "Feedback, Presentation and Revisions"
+  ],
+  [
+   "59",
+   "59",
+   "HN_CQ59",
+   "Feedback, Presentation and Revisions"
+  ],
+  [
+   "60",
+   "60",
+   "HN_CQ60",
+   "Feedback, Presentation and Revisions"
+  ]
+ ],
+ "links": [
+  "/download/12877/S/1_ERW422.zip",
+  "/download/12877/S/2_ERW422.zip"
+ ]
+}

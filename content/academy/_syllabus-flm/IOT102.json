@@ -1,0 +1,1001 @@
+{
+ "ma": "IOT102",
+ "sylID": "12400",
+ "quyetDinh": "1363/QĐ-ĐHFPT dated 12/06/2024",
+ "ungVien": [
+  {
+   "sylID": "12400",
+   "code": "IOT102",
+   "name": "Internet of Things_Internet vạn vật",
+   "active": true,
+   "approved": true,
+   "decision": "1363/QĐ-ĐHFPT dated 12/06/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12400",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12400",
+  "Syllabus Name": "Internet of Things_Internet vạn vật",
+  "Course Name English": "Internet of Things",
+  "Subject Code": "IOT102",
+  "Learning-Teaching Method": "Social Constructivism, Inquiry-Based Learning, In-class lecture, Active Learning, Project-based learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 22.5h contact hours + 22.5h online hours + 4.5h final project presentation + 1h final exam + 99.5h self-study",
+  "Pre-Requisite": "",
+  "Description": "This is a 3-credit course. This course has two parts: online and offline.\n\nThe content includes basic concepts and applications of IoT and practical exercises on learning KIT.\n\nStudents are taught how to learn online and practice some parts at home. Q&A sessions, Guidance for important issues, and performance assessments will be conducted in the classroom.",
+  "StudentTasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Student is responsible to learn all VIDEOs (theory) online given by instructor on Syllabus at home.\n\n- Student is responsible to do all LABs given by instructor on Syllabus at home.\n\n- Constantly follow https://flm.fpt.edu.vn/ for up-to-date course information.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1363/QĐ-ĐHFPT dated 12/06/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/6/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Course from Edx",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home"
+  ],
+  [
+   "2",
+   "Course from Edx",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/home"
+  ],
+  [
+   "3",
+   "Free Hardware and IoT Ebooks_ OReilly Media",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "soft copy"
+  ],
+  [
+   "4",
+   "Introduction to Arduino: A piece of cake! by Alan G. Smith, September 30, 2011",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "http://www.introtoarduino.com"
+  ],
+  [
+   "5",
+   "Arduino Documents",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://www.arduino.cc/"
+  ],
+  [
+   "6",
+   "Instructables.com - 20 Unbelievable Arduino Projects",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "soft copy"
+  ],
+  [
+   "7",
+   "IOT102 guide documents (Project guide, Project topics, Rubrics, KITs (basic and advanced)…)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "soft copy"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the concept of IoT and applications."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand the concept of things in IoT."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the Networking in IoT."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand the Securing in IoT."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Select and calculate the electronics components, IoT Programming."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Program IN/OUT Digital with Arduino UNO."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Program Analog Input/Output with Arduino UNO."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Program Sensors/Actuators with Arduino UNO."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Program Communication with Arduino UNO."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Concept planning, Draw and Install simple IoT circuits"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Understand the Arduino UNO and Atmega328 microcontroller architecture."
+  ],
+  [
+   "12",
+   "CLO12",
+   "Know how to use the Simulation Software."
+  ],
+  [
+   "13",
+   "CLO13",
+   "Understand the interrupts on Arduino UNO."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Active learning",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "From start to finish in schedule",
+   "CLO11, CLO12, CLO13",
+   "Private",
+   "N/A",
+   "Students ask good questions, hard work, self study online.",
+   "by instructor",
+   ""
+  ],
+  [
+   "2",
+   "Final Project Presentation",
+   "on-going",
+   "1",
+   "20.0%",
+   "4",
+   "30'/groups",
+   "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+   "Oral",
+   "Committee's comments and questions",
+   "All chapters; knowledge and skills",
+   "The examination is conducted by the exam board. A minimum of two teachers is required for grading the Final Project.\nEach team is allocated 30 minutes for the presentation of their project followed by a Q&A session.\nEvaluation of the final presentation is based on the final report, project demonstration, and Q&A interaction.\nThe grade is determined by averaging the grades given by the two teachers.",
+   "Based on Rubrics"
+  ],
+  [
+   "3",
+   "On-Going Project Assessment",
+   "on-going",
+   "2",
+   "30.0%",
+   ">0",
+   "From start to finish in schedule.",
+   "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+   "Follow lecturer's proposal",
+   "Follow lecturer's proposal",
+   "knowledge and skills",
+   "by instructor",
+   ""
+  ],
+  [
+   "4",
+   "Presentation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: Group. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO01, CLO05",
+   "Option 1: N/A. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "IoT idea/theory",
+   "by instructor",
+   ""
+  ],
+  [
+   "5",
+   "Progress test (Check Practice at home, Exercises, Quiz)",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "Option 1: 30'. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO01, CLO13",
+   "Option 1: Private. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "studied chapters knowledge and skills",
+   "by instructor",
+   ""
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "20.0%",
+   "4",
+   "60'",
+   "CLO01, CLO13",
+   "Computer gradable",
+   "50",
+   "All chapters; knowledge and skills",
+   "by Exam board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction of IoT course\nWhat in the world is the Internet of Things?",
+   "Offline",
+   "CLO01",
+   "",
+   "Slide\nVideo\nGUIDE Of Create an Account_Explore Courses_Quiz on edX.pdf",
+   "IOT102",
+   "Borrow theLearning KIT at the library.\nEnroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home",
+   ""
+  ],
+  [
+   "2",
+   "Arduino (ATmega328p) Architecture",
+   "Offline",
+   "CLO01",
+   "",
+   "Slide\nVideo\nGUIDE Of Create an Account_Explore Courses_Quiz on edX.pdf",
+   "",
+   "Borrow theLearning KIT at the library.\nEnroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home",
+   ""
+  ],
+  [
+   "3",
+   "Lab:\n- Getting Started with Arduino and Genuino UNO\n- Fritzing_building_circuit",
+   "Offline",
+   "CLO10, CLO12",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "4",
+   "The ‘things’ of the Internet of Things?",
+   "Online",
+   "CLO02",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "5",
+   "Networking IoT",
+   "Online",
+   "CLO03",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "6",
+   "Networking IoT (cnt)",
+   "Online",
+   "CLO03",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "7",
+   "Lab:\n- Tinkercad arduino simulator tutorial",
+   "Offline",
+   "CLO10, CLO12",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "8",
+   "Lab:\n- Blink an LED - Digital Write\n- Analog Input - Analog Read",
+   "Offline",
+   "CLO06, CLO07",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "9",
+   "Lab:\n- Fading - Analog Write\nProject Topic Introduction",
+   "Offline",
+   "CLO06, CLO07",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "10",
+   "Programming IoT",
+   "Online",
+   "CLO01",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "11",
+   "Programming IoT (cnt)",
+   "Online",
+   "CLO01",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "12",
+   "Lab:\nPractice at home by the tutorial: Led array effect.",
+   "Online",
+   "CLO06",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "13",
+   "Practice at home Evaluation\nLab:\n- Buttton - Digital Read",
+   "Offline",
+   "CLO06, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "14",
+   "Practice at home Evaluation\nLab:\n- Input Pullup - Serial\n- State Change Detection for push buttons",
+   "Offline",
+   "CLO06, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "15",
+   "Lab:\n- Analog In, Out Serial\n- Photoresistor - Analog Input\nProject Topic Resgistration",
+   "Offline",
+   "CLO05, CLO06, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "16",
+   "Securing IoT",
+   "Online",
+   "CLO04",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "17",
+   "Securing IoT (cnt)",
+   "Online",
+   "CLO04",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT1x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "18",
+   "Lab:\n- Practice at home by the tutorial: Photoresistor - States of lights",
+   "Online",
+   "CLO05, CLO06, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "19",
+   "Lab:\n- Photoresistor - while loop interation",
+   "Offline",
+   "CLO05, CLO06, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "20",
+   "Lab:\n- Ping Ultrasonic Range Finder",
+   "Offline",
+   "CLO05, CLO06, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "21",
+   "Lab:\n- Servo Motor - Sweep\n- Servo Motor - Knob",
+   "Offline",
+   "CLO06, CLO07, CLO08",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "22",
+   "Electrical circuits and electronics",
+   "Online",
+   "CLO05",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "23",
+   "Electrical circuits and electronics (cnt)",
+   "Online",
+   "CLO05",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/home\nFollow the lessons online",
+   ""
+  ],
+  [
+   "24",
+   "Project concept planning",
+   "Online",
+   "CLO05, CLO10",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/home\nFollow the lesson online",
+   ""
+  ],
+  [
+   "25",
+   "Project concept planning (cnt)",
+   "Online",
+   "CLO05, CLO10",
+   "",
+   "Slide\nVideo",
+   "",
+   "Enroll course:\nhttps://learning.edx.org/course/course-v1:CurtinX+IOT2x+2T2018/home\nFollow the lesson online",
+   ""
+  ],
+  [
+   "26",
+   "Presentation",
+   "Offline",
+   "CLO01, CLO02, CLO03, CLO04, CLO05, CLO10",
+   "",
+   "",
+   "",
+   "Presentation about Final Project Planning",
+   ""
+  ],
+  [
+   "27",
+   "Presentation",
+   "Offline",
+   "CLO01, CLO02, CLO03, CLO04, CLO05, CLO10",
+   "",
+   "",
+   "",
+   "Presentation about Final Project Planning",
+   ""
+  ],
+  [
+   "28",
+   "Practice at home Evaluation\nLab:\n- IR Remote",
+   "Offline",
+   "CLO06, CLO07, CLO08",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "29",
+   "Lab:\n- Practice at home by the tutorial: Digital Read - Out Serial",
+   "Online",
+   "CLO05, CLO06, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "30",
+   "Lab:\n- Practice at home by the tutorial: RGB LED Color Mixing (use tinkercad simulator)",
+   "Online",
+   "CLO06, CLO07, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "31",
+   "Lab:\nPractice at home: Advanced Labs related to the Final Project",
+   "Online",
+   "CLO05, CLO06, CLO07, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT, Advanced components",
+   "",
+   "Follow the Advanced Lab guide",
+   ""
+  ],
+  [
+   "32",
+   "Practice at home Evaluation\nLab:\n- Led-7-segment-display",
+   "Offline",
+   "CLO05, CLO06",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "33",
+   "Practice at home Evaluation\nLab:\n- Temperature sensor LM35",
+   "Offline",
+   "CLO05, CLO07, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "34",
+   "Progress test 1",
+   "Offline",
+   "CLO05, CLO06, CLO07, CLO08, CLO09",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "Lab:\n- Practice at home by the tutorial:\nRead ASCII String (use RGB led to indicator)",
+   "Online",
+   "CLO06, CLO07, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "36",
+   "Lab:\n- Practice at home by the tutorial: Smoothing Graph: Send data to the computer and graph it in Processing.",
+   "Online",
+   "CLO07, CLO09, CLO12",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "37",
+   "Lab:\nPractice at home: Advanced Labs related to the Final Project",
+   "Online",
+   "CLO05, CLO06, CLO07, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT, Advanced components",
+   "",
+   "Follow the Advanced Lab guide",
+   ""
+  ],
+  [
+   "38",
+   "Practice at home Evaluation\nLab:\n- LCD Display 1602",
+   "Offline",
+   "CLO05, CLO07, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "39",
+   "Practice at home Evaluation\nLab:\n- SerialEvent",
+   "Offline",
+   "CLO13",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "40",
+   "Practice at home Evaluation\nLab:\n- External Interrupts",
+   "Offline",
+   "CLO13",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "41",
+   "Lab:\nPractice at home by the tutorial: Blink Without Delay",
+   "Online",
+   "CLO06",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "42",
+   "Lab:\nPractice at home by the tutorial: ASCII Table",
+   "Online",
+   "CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "43",
+   "Lab:\nPractice at home: Advanced Labs related to the Final Project",
+   "Online",
+   "CLO05, CLO06, CLO07, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT, Advanced components",
+   "",
+   "Follow the Advanced Lab guide",
+   ""
+  ],
+  [
+   "44",
+   "Block diagram and Flowchart of Final Project",
+   "Online",
+   "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+   "",
+   "",
+   "",
+   "Draw block diagram\nCreate circuit schematic/Hardware inferace/wiring diagram\nDraw flowchart",
+   ""
+  ],
+  [
+   "45",
+   "Practice at home Evaluation\nLab:\n- Timer Interrupts",
+   "Offline",
+   "CLO13",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "46",
+   "On-going project assessment 1",
+   "Offline",
+   "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+   "",
+   "",
+   "",
+   "Present Block diagram, Flowchart",
+   ""
+  ],
+  [
+   "47",
+   "On-going project assessment 1 (cnt)",
+   "Offline",
+   "CLO05, CLO06, CLO07, CLO08, CLO09, CLO10, CLO12",
+   "",
+   "",
+   "",
+   "Present Block diagram, Flowchart",
+   ""
+  ],
+  [
+   "48",
+   "Lab:\nPractice at home by the tutorial: Serial Input",
+   "Online",
+   "CLO09",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "49",
+   "Lab:\nPractice at home by the tutorial: Debounce",
+   "Online",
+   "CLO06",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "50",
+   "Practice at home Evaluation\nLab:\n- Keypad 4x4",
+   "Offline",
+   "CLO06, CLO09, CLO11",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "51",
+   "Practice at home Evaluation\nLab:\n- EEPROM read / write",
+   "Offline",
+   "CLO06, CLO09, CLO11",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "52",
+   "Progress test 2",
+   "Offline",
+   "CLO01-13",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "Lab:\nPractice at home: Advanced Labs related to the Final Project",
+   "Online",
+   "CLO05, CLO06, CLO07, CLO08, CLO09",
+   "",
+   "Tutorial\nLearning KIT, Advanced components",
+   "",
+   "Follow the Advanced Lab guide",
+   ""
+  ],
+  [
+   "54",
+   "Final project report preparation",
+   "Online",
+   "CLO05, CLO06, CLO07, CLO08, CLO09, CLO12",
+   "",
+   "Latex/Overleaf Tutorial online or\nReport template and guildeline provided by instructor",
+   "",
+   "Prepare Final Report using Latex/Overleaf or\nDiscuss with your instructor for the guidance",
+   ""
+  ],
+  [
+   "55",
+   "Practice at home Evaluation\nLab:\n- 8x8 LED Matrix",
+   "Offline",
+   "CLO06, CLO07",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Discuss with your instructor the lessons learned online and the new lesson.",
+   ""
+  ],
+  [
+   "56",
+   "On-going project assessment 2",
+   "Offline",
+   "CLO1, CLO10",
+   "",
+   "",
+   "",
+   "Prepare for final project presentation",
+   ""
+  ],
+  [
+   "57",
+   "On-going project assessment 2 (cnt)",
+   "Offline",
+   "CLO1, CLO10",
+   "",
+   "",
+   "",
+   "Prepare for final project presentation",
+   ""
+  ],
+  [
+   "58",
+   "All labs\nSelf review:\nPractice at home by the tutorial: Team work prepares for the final project",
+   "Online",
+   "",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "59",
+   "All labs\nSelf review: (cnt)\nPractice at home by the tutorial: Team work prepares for the final project",
+   "Online",
+   "",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ],
+  [
+   "60",
+   "All labs\nSelf review:\nPractice at home by the tutorial: Team work prepares for the final project",
+   "Online",
+   "",
+   "",
+   "Tutorial\nLearning KIT",
+   "",
+   "Follow the practice guide",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/12225/S/1_IOT102.zip"
+ ]
+}

@@ -1,0 +1,2936 @@
+{
+ "ma": "ELT402",
+ "sylID": "13471",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13471",
+   "code": "ELT402",
+   "name": "Biên dịch tiếng Anh 2",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13471",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13471",
+  "Syllabus Name": "Biên dịch tiếng Anh 2",
+  "Course Name English": "English Translation 2",
+  "Subject Code": "ELT402",
+  "Learning-Teaching Method": "Lecture, Project Based Learning, Active learning, Cooperative Learning, Discovery Learning, Experiential learning methods, Presentation, Practice, Field trip",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 105 hours self-study (including projects preparation)",
+  "Pre-Requisite": "Passed ELT301/ELT302",
+  "Description": "This course, adopting project-based learning (PBL), equips students with the skills to apply appropriate translation strategies to various contemporary text types, with a strong emphasis on the integration of generative AI/CAT tools throughout the translation process. Students will engage in the interlingual translation of a range of texts—including administrative (e.g., degrees, certificates, contracts), business (e.g., transaction agreements, financial statements), technical, and socio-cultural materials—between Vietnamese and English.\n\nThrough real-world translation tasks and projects that require them to combine traditional translation techniques with AI-powered tools, students will:\n\n- Develop a clear understanding of different text types, formats, and domains;\n\n- Accurately identify and use specialized terminology in administrative, technical, economic, scientific, and socio-cultural contexts;\n\n- Translate various documents and texts from Vietnamese into English and vice versa, using both traditional and AI-supported approaches;\n\n- Critically evaluate and effectively employ AI/CAT tools (e.g., ChatGPT, Google Translate, Matecat, Smartcat, MemoQ) to improve translation quality, consistency, and efficiency.\n\nThis course encourages students to adopt a reflective and ethical approach to AI integration, preparing them for the evolving demands of the translation profession.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptops in class only for learning purposes\n\n- Read the theory in advance\n\n- Use Gen-AI tools/ CAT tools in an appropriate and ethical manner",
+  "Tools": "Google Translate, ChatGPT, DeepL, Smartcat, Matecat, MemoQ, Trados, etc.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Introduction to Translation and Interpreting Studies",
+   "Aline Ferreira (Editor) & John W. Schwieter (Editor)",
+   "Wiley-Blackwell",
+   "2022",
+   "",
+   "9781119685326",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "Tài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về luật",
+   "",
+   "BỘ GIÁO DỤC VÀ ĐÀO TẠO",
+   "2014",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Tài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về luật\n(Phê duyệt kèm theo Quyết định số 3468/QĐ-BGDĐT ngày 06 tháng 9 năm 2014 của Bộ trưởng Bộ Giáo dục và Đào tạo)",
+   "Chủ biên et al.",
+   "BỘ GIÁO DỤC VÀ ĐÀO TẠO",
+   "2014",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://drive.google.com/file/d/1Tf3Fyybs8puDEnp5JGw3zqezIfreh6H2/view?usp=drive_link"
+  ],
+  [
+   "4",
+   "Hướng dẫn kỹ thuật biên dịch tiếng Anh (Anh-Việt, Việt-Anh)",
+   "Nguyễn Quốc Hùng (MA)",
+   "NXB Tổng hợp Hồ Chí Minh",
+   "2012",
+   "",
+   "0000000323779",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Training the Translator",
+   "Paul Kussmaul",
+   "John Benjamins Publishing Company",
+   "1995",
+   "",
+   "9789027216236",
+   "False",
+   "False",
+   "False",
+   "Download online at: https://www.academia.edu/26514605/TRAINING_THE_TRANSLATOR"
+  ],
+  [
+   "6",
+   "http://dichthuatpro.com/cac-bieu-mau-tai-lieu-dich-thuat.html",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "Introducing Translation Studies",
+   "Jeremy Munday",
+   "Routledge",
+   "",
+   "",
+   "978-1-315-69186-2",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "8",
+   "A textbook for Translation",
+   "Peter Newmark",
+   "Prentice Hall International",
+   "",
+   "",
+   "0-13-912593-0",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "9",
+   "https://edition.cnn.com",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "10",
+   "https://news.cengage.com/in-the-news/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "11",
+   "https://vnanet.vn/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "12",
+   "https://www.bbc.com/news",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "13",
+   "Guide on using Gen-AI tools to support translation: https://www.machinetranslation.com/blog/using-ai-to-translate",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "14",
+   "Project-Based Learning and Competence Assessment in Translation Training (pp 207 -228). In Technology Implementation in Second Language Teaching and Translation Studies",
+   "Marı´a Luisa Carrio-Pastor",
+   "Springer",
+   "https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q=Project-Based+Learning+and+Competence+Assessment+in+Translation+Training&btnG=",
+   "2016",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "15",
+   "Adopting Project Based Learning in Translation Class to Facilitate Translator Emergent Competences",
+   "Hariyanto et al.",
+   "https://www.researchgate.net/publication/376171453_Adopting_Project_Based_Learning_in_Translation_Class_to_Facilitate_Translator_Emergent_Competences",
+   "",
+   "2023",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "16",
+   "Overview and challenges of machine translation for contextually appropriate translations",
+   "Naveen & Trojovsky´",
+   "https://www.sciencedirect.com/science/article/pii/S2589004224021035",
+   "",
+   "2024",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "17",
+   "Prompt engineering in translation: How do student translators leverage GenAI tools for translation tasks",
+   "Zhang et al.",
+   "https://www.researchgate.net/publication/392164811_Prompt_engineering_in_translation_How_do_student_translators_leverage_GenAI_tools_for_translation_tasks",
+   "",
+   "2025",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "18",
+   "Optimizing Machine Translation through Prompt Engineering: An Investigation into ChatGPT's Customizability",
+   "Yamada",
+   "https://arxiv.org/abs/2308.01391",
+   "",
+   "2024",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "19",
+   "Guiding Large Language Models to Post-Edit Machine Translation with Error Annotations",
+   "Ki & Carpuat",
+   "https://arxiv.org/abs/2404.07851",
+   "",
+   "2024",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "20",
+   "Training in machine translation post-editing for foreign language students",
+   "Zhang & Torres-Hostench",
+   "https://www.lltjournal.org/item/1012/?utm_source=chatgpt.com",
+   "",
+   "2022",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "21",
+   "An Adaptive Methodology to Overcome Localization Translation Challenges",
+   "Brashi",
+   "https://www.researchgate.net/publication/353339838_An_Adaptive_Methodology_to_Overcome_Localization_Translation_Challenges",
+   "",
+   "2021",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "22",
+   "Towards a definition of transcreation: a systematic literature review",
+   "Díaz-Millón & Olvera-Lobo",
+   "https://doi.org/10.1080/0907676X.2021.2004177",
+   "",
+   "2023",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "enhance student’s linguistic competence in translating administrative documents, and translate those documents with precision, accuracy and consistency."
+  ],
+  [
+   "2",
+   "CLO2",
+   "enhance student’s linguistic competence in translating buisness forms and financial documents , and and translate those documents with precision, accuracy and consistency."
+  ],
+  [
+   "3",
+   "CLO3",
+   "enhance student’s linguistic competence in translating technical documentation, and translate those documents with precision, accuracy and consistency."
+  ],
+  [
+   "4",
+   "CLO4",
+   "analyse and translate a complex using appropriate analytical methods and the ability to synthesise information in socio - cultural news and documents."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Exhibit professional working attitudes, effective communication, and teamwork skills through participation in project-based translation tasks that simulate authentic industry practices."
+  ],
+  [
+   "6",
+   "CLO6",
+   "ethically and critically use Gen-AI tools to enhance translation quality and facilitate translation processes"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Project 1 - Human-generated translation",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "flexible",
+   "LO1-LO5",
+   "Students translate 01 English-Vietnamese text and 01 Vietnamese-English text of administrative, business, financial, technical, socio-cultural issues. The text length is 250 words",
+   "2",
+   "Test the acquainted knowledge and translation skills which student obtained during the courseContent based on topics of studied units",
+   "Classwork, individually",
+   "rubric"
+  ],
+  [
+   "2",
+   "Project 2 - AI-generated translation editing",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "flexible",
+   "All LOs",
+   "Groups are assigned with 02 texts (SL: Vietnamese & English) translated by AI/ CAT tools. The topic revolves administration, business, finance, technology and engineering, and socio-culture.They then fully post-edit the AI/CAT-translated text for a target audience, paying attention to the register, style, terminology and context.Finally, they make a declaration of AI/ CAT use (how, where, and why)",
+   "2",
+   "Test the acquainted knowledge and translation skills, using AI/ CAT tools critically, contextually and ethically(Students are required to evaluate and edit AI-generated translation)",
+   "Homework, in groups of 3-4 students",
+   "rubric"
+  ],
+  [
+   "3",
+   "Project 3 - Integrated project",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "flexible",
+   "All LOs",
+   "(Students are assigned a translation project, either an authentic project or a simulation one, using AI/ CAT toolsGroups of 3-4 with different roles in a project: project manager, AI-human collaborative translators/ editors, chief editor)",
+   "N/A",
+   "Human-in-the-loop editing, project management, cultural literacy, AI ethics",
+   "Homework, in groups of 3-4 students",
+   "rubric"
+  ],
+  [
+   "4",
+   "Translation",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "90'",
+   "All LOs",
+   "Translate texts given on the topics covered from Vietnamese to English and vice versa",
+   "1 E-V text + 1 V-E text: 1. translating part 1 of each text; 2. full post-editing AI's translation for part 2 of each textLength of each text: 250 words + difficulty level.",
+   "Test the acquainted knowledge and translation skills students obtain in the delivered in the course",
+   "",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Session 1: Course Introduction: Specialization in Translation, Literary translation as a form of specialized translation",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Introduction to Translation and Interpreting Studies: pages 131-133, Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "2",
+   "Session 2: ADMINISTRATIVE FORMS & DOCUMENTS: Familiarizing with administrative forms and documents, Translation of administrative forms and documents: ID card, degrees, certificates - Vietnamese into English",
+   "Offline",
+   "LO1",
+   "I, T, U",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "3",
+   "Session 3: Translation of administrative forms: ID card, degrees, certificates - Vietnamese into English (cont.)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "4",
+   "Session 4: Translation of administrative forms: ID card, degrees, certificates - English into Vietnamese",
+   "Offline",
+   "LO1",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "5",
+   "Session 5: Translation of administrative documents: transcripts, decisions - Vietnamese into English",
+   "Offline",
+   "LO1",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "6",
+   "Session 6: Translation of administrative documents: transcripts, decisions - English into Vietnamese",
+   "Offline",
+   "LO1",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "7",
+   "Session 7: Translation of administrative documents: labor contracts - Vietnamese into English",
+   "Offline",
+   "LO1",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "8",
+   "Session 8: Translation of administrative documents: labor contracts - English into Vietnamese",
+   "Offline",
+   "LO1",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "9",
+   "Session 9: LEGAL TRANSLATION, TRANSLATION OF BUSINESS FORMS & DOCUMENTS: Familiarizing with different types of business forms and documents",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Coursebook: page 139, Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "10",
+   "Session 10: Translation of business transaction agreement - Vietnamese into English",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "11",
+   "Session 11: Translation of business transaction agreement - Vietnamese into English (cont.)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "12",
+   "Session 12: Translation of business transaction agreement - English into Vietnamese\nAI-ASSISTED LEARNING OUTCOME: AI vs. CAT tools\nPURPOSE: Differentiate different tools (Machine translation and Computer-assisted translation) and in translation practices",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "13",
+   "Session 13: Translation of financial statement (Statement of Financial Position) - Vietnamese into English",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "14",
+   "Session 14: Translation of financial statement (Statement of Financial Position) - English into Vietnamese",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "15",
+   "Session 15: Translation of financial statements (Statement of Earnings) - Vietnamese into English",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "16",
+   "Session 16: Translation of financial statements (Statement of Earnings) - English into Vietnamese",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "17",
+   "Session 17: Translation of financial statements (Statement of Change in Equity) - Vietnamese into English",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "18",
+   "Session 18: Translation of financial statements (Statement of Change in Equity) - English into Vietnamese",
+   "Offline",
+   "LO2",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "19",
+   "Session 19: Translation of financial statements (Statement of cash-flow) - Vietnamese into English",
+   "Offline",
+   "LO2, LO5",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "20",
+   "Session 20: Translation of financial statements (Statement of cash-flow) - English into Vietnamese\nAI-ASSISTED LEARNING OUTCOME: Professional Post-editing Practice\nPURPOSE: Edit AI translations of different domains into polished, human-quality versions",
+   "Offline",
+   "LO2, LO5",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "21",
+   "Session 21: COMPUTER-AIDED TRANSLATION, TRANSLATION OF TECHNICAL NEWS & DOCUMENTS: Familiarizing with Technical English: Translation of news in information technology",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Introduction to Translation and Interpreting Studies: pages 154 - 161, Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "22",
+   "Session 22: Translation of news in information technology - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "23",
+   "Session 23: Translation of news in information technology - Vietnamese into English (cont.)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "24",
+   "Session 24: Translation of news in information technology - English into Vietnamese",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "25",
+   "Session 25: Translation of news in science - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "26",
+   "Session 26: Translation of news in science - English into Vietnamese\nAI-ASSISTED LEARNING OUTCOME: Terminology Management\nPURPOSE: - build and maintain term bases/glossaries using AI or CAT tools\n- evaluate consistency and terminology accuracy",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "27",
+   "Session 27: Translation of news in food industry - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "28",
+   "Session 28: Translation of news in food industry - English into Vietnamese",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "29",
+   "Session 29: Translation of news in entertainment industry - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "30",
+   "Session 30: Translation of news in entertainment industry - English into Vietnamese",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "31",
+   "Session 31: Medical and Bio-sanitary translation, Translation of news in health care - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "TU",
+   "Introduction to Translation and Interpreting Studies: pages 143 - 144, Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "32",
+   "Session 32: Translation of news in health care - English into Vietnamese\nAI-ASSISTED LEARNING OUTCOME: Style Guide & Tone Adaptation\nPURPOSE: Train AI to match tone and register",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "33",
+   "Session 33: Translation of news in food industry - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "34",
+   "Session 34: Translation of news in food industry - English into Vietnamese",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "35",
+   "Session 35: Translation of technical documents (Information Technology) - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "36",
+   "Session 36: Translation of technical documents (Information Technology) - English into Vietnamese",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "37",
+   "Session 37: Translation of technical documents (Electrical Engineering Technology) - Vietnamese into English",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "38",
+   "Session 38: Translation of technical documents (Electrical Engineering Technology) - English into Vietnamese\nAI-ASSISTED LEARNING OUTCOME: Cultural Adaptation & Localization\nPURPOSE: Localize content & Learn transcreation techniques (creative translation with cultural change)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "39",
+   "Session 39: Translation of technical documents (Automobile Engineering Technology) - Vietnamese into English",
+   "Offline",
+   "LO3, LO5",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "40",
+   "Session 40: Translation of technical documents (Automobile Engineering Technology) - English into Vietnamese",
+   "Offline",
+   "LO3, LO5",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "41",
+   "Session 41: CULTURE, POWER, AND PROFESSIONALISM, TRANSLATION OF SOCIO-CULTURAL NEWS & DOCUMENTS: Familiarizing with socio-cultural news & documents",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Introduction to Translation and Interpreting Studies: pages 221 - 226, Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "42",
+   "Session 42: Translation of socio-cultural news (Social events) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "43",
+   "Session 43: Translation of socio-cultural news (Social events) - Vietnamese into English (cont.)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "44",
+   "Session 44: Translation of socio-cultural news (Social events) - English into Vietnamese\nAI-ASSISTED LEARNING OUTCOME: Translation Project Management\nPURPOSE: Simulate a real-world translation job using AI tools",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "45",
+   "Session 45: Translation of musical texts, Translation of socio-cultural news (Cultural events) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "TU",
+   "Introduction to Translation and Interpreting Studies: pages 147 - 148, Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "46",
+   "Session 46: Translation of socio-cultural news (Cultural events) - English into Vietnamese",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "47",
+   "Session 47: Translation of socio-cultural news (Sport events) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "48",
+   "Session 48: Translation of socio-cultural news (Sport events) - English into Vietnamese",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "49",
+   "Session 49: Translation of socio-cultural news (Diplomatic news) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "50",
+   "Session 50: Translation of socio-cultural news (Diplomatic news) - English into Vietnamese",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "51",
+   "Session 51: Religious translation, Translation of socio-cultural documents (Vietnam- customs &traditions) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "TU",
+   "Introduction to Translation and Interpreting Studies: pages 145 - 146, Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "52",
+   "Session 52: Translation of socio-cultural documents (Vietnam- customs &traditions) - English into Vietnamese",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "53",
+   "Session 53: Translation of socio-cultural documents (Natural values of Vietnam tourism) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "54",
+   "Session 54: Translation of socio-cultural documents (Natural values of Vietnam tourism) - English into Vietnamese",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "55",
+   "Session 55: Translation of socio-cultural documents (Education) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "56",
+   "Session 56: Translation of socio-cultural documents (Education) - English into Vietnamese",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "57",
+   "Session 57: Translation of socio-cultural documents (History) - Vietnamese into English",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "58",
+   "Session 58: Translation of socio-cultural documents (History) - English into Vietnamese",
+   "Offline",
+   "LO4",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "59",
+   "Session 59: Translation of socio-cultural documents ( Tour commentary) - Vietnamese into English",
+   "Offline",
+   "LO4, LO5",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "60",
+   "Session 60: Translation of socio-cultural documents ( Tour commentary) - English into Vietnamese",
+   "Offline",
+   "LO4, LO5",
+   "TU",
+   "Reference books, PPT presentation, other teaching resources provided",
+   "",
+   "Reference books, PPT presentation, other teaching resources provided",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HN_CQ1",
+   "What are typical administrative forms and documents? What are their features?"
+  ],
+  [
+   "2",
+   "1",
+   "HN_CQ2",
+   "Are the administrative forms and documents (foreign versions) similar to Vietnamese versions? How different are they? Compare 2-3 forms."
+  ],
+  [
+   "3",
+   "1",
+   "HN_CQ3",
+   "What are some features of ID cards, Degrees, and Certificates? (Vietnamese versions). How can these be translated into English?"
+  ],
+  [
+   "4",
+   "1",
+   "HN_CQ4",
+   "What are some features of ID cards, Degrees, and Certificates? (English versions). How can these be translated into English?"
+  ],
+  [
+   "5",
+   "1",
+   "HN_CQ5",
+   "What are typical terms used for the translation of ID cards, Degrees, and Certificates? Make a list of Vietnamese terms and their equivalents. Translate the given documents from Vietnamese into English?"
+  ],
+  [
+   "6",
+   "2",
+   "HN_CQ1",
+   "What are typical administrative forms and documents? What are their features?"
+  ],
+  [
+   "7",
+   "2",
+   "HN_CQ2",
+   "Are the administrative forms and documents (foreign versions) similar to Vietnamese versions? How different are they? Compare 2-3 forms."
+  ],
+  [
+   "8",
+   "2",
+   "HN_CQ3",
+   "What are some features of ID cards, Degrees, and Certificates? (Vietnamese versions). How can these be translated into English?"
+  ],
+  [
+   "9",
+   "2",
+   "HN_CQ4",
+   "What are some features of ID cards, Degrees, and Certificates? (English versions). How can these be translated into English?"
+  ],
+  [
+   "10",
+   "2",
+   "HN_CQ5",
+   "What are typical terms used for the translation of ID cards, Degrees, and Certificates? Make a list of Vietnamese terms and their equivalents. Translate the given documents from Vietnamese into English?"
+  ],
+  [
+   "11",
+   "3",
+   "HN_CQ6",
+   "How are the grading systems of Vietnam different from the ones of UK? How can these be translated in dealing with the translation of degree?"
+  ],
+  [
+   "12",
+   "3",
+   "HN_CQ7",
+   "What are requirements for the interpretation of administrative forms and documents?"
+  ],
+  [
+   "13",
+   "3",
+   "HN_CQ8",
+   "Study the given documents. What are the main terms you find? What are their equivalents in Vietnamese? Translate the documents into Vietnamese."
+  ],
+  [
+   "14",
+   "3",
+   "HN_CQ9",
+   "What are typical majors written in university degrees? Make a list of majors trained at Vietnamese universities and find their equivalents in English. Translate some degrees into English."
+  ],
+  [
+   "15",
+   "3",
+   "HN_CQ10",
+   "Select a profile including an ID card, a/some degree(s), a/some certificate(s) (English versions), then translate them into Vietnamese. What problems do you face in selecting equivalents? Do you face any non-equivalents and how these are deal with?"
+  ],
+  [
+   "16",
+   "4",
+   "HN_CQ6",
+   "How are the grading systems of Vietnam different from the ones of UK? How can these be translated in dealing with the translation of degree?"
+  ],
+  [
+   "17",
+   "4",
+   "HN_CQ7",
+   "What are requirements for the interpretation of administrative forms and documents?"
+  ],
+  [
+   "18",
+   "4",
+   "HN_CQ8",
+   "Study the given documents. What are the main terms you find? What are their equivalents in Vietnamese? Translate the documents into Vietnamese."
+  ],
+  [
+   "19",
+   "4",
+   "HN_CQ9",
+   "What are typical majors written in university degrees? Make a list of majors trained at Vietnamese universities and find their equivalents in English. Translate some degrees into English."
+  ],
+  [
+   "20",
+   "4",
+   "HN_CQ10",
+   "Select a profile including an ID card, a/some degree(s), a/some certificate(s) (English versions), then translate them into Vietnamese. What problems do you face in selecting equivalents? Do you face any non-equivalents and how these are deal with?"
+  ],
+  [
+   "21",
+   "5",
+   "HN_CQ11",
+   "What are some features of transcripts? What are some requirements of transcripts translation?"
+  ],
+  [
+   "22",
+   "5",
+   "HN_CQ12",
+   "Study the given transcript. What are the main parts of a transcript? What are the key terms used in the transcript? What are their equivalences? Translate the transcript into English."
+  ],
+  [
+   "23",
+   "5",
+   "HN_CQ13",
+   "What are the main parts of a decision? What are some features related to language, content, format.. of a decision? What are some key terms and their equivalences of a decision?"
+  ],
+  [
+   "24",
+   "5",
+   "HN_CQ14",
+   "Study the given decision by a state agency. What are the key words, phrases and their equivalences? How can these be translated? Translate the given document into English."
+  ],
+  [
+   "25",
+   "5",
+   "HN_CQ15",
+   "Study the given decision by a company What are the key words, phrases and their equivalences? How can these be translated? Translate the given document into English."
+  ],
+  [
+   "26",
+   "6",
+   "HN_CQ11",
+   "What are some features of transcripts? What are some requirements of transcripts translation?"
+  ],
+  [
+   "27",
+   "6",
+   "HN_CQ12",
+   "Study the given transcript. What are the main parts of a transcript? What are the key terms used in the transcript? What are their equivalences? Translate the transcript into English."
+  ],
+  [
+   "28",
+   "6",
+   "HN_CQ13",
+   "What are the main parts of a decision? What are some features related to language, content, format.. of a decision? What are some key terms and their equivalences of a decision?"
+  ],
+  [
+   "29",
+   "6",
+   "HN_CQ14",
+   "Study the given decision by a state agency. What are the key words, phrases and their equivalences? How can these be translated? Translate the given document into English."
+  ],
+  [
+   "30",
+   "6",
+   "HN_CQ15",
+   "Study the given decision by a company What are the key words, phrases and their equivalences? How can these be translated? Translate the given document into English."
+  ],
+  [
+   "31",
+   "7",
+   "HN_CQ16",
+   "What are the main parts of a contract/labor contract? What are the requirements for the translation of a labor contract?"
+  ],
+  [
+   "32",
+   "7",
+   "HN_CQ17",
+   "What are the key terms found in a labor contract? What are their equivalences?"
+  ],
+  [
+   "33",
+   "7",
+   "HN_CQ18",
+   "Study a Vietnamese labor contract. Identify the main words, phrases that need to be translated using the terms. Translate the contract into English."
+  ],
+  [
+   "34",
+   "7",
+   "HN_CQ19",
+   "Study an English business contract. What are the key words, phrases of the contract and their equivlances? Translate the contract into Vietnamese."
+  ],
+  [
+   "35",
+   "7",
+   "HN_CQ20",
+   "What are some rules drawn out for the translation of contracts? Pay special attention to linguistic and syntax features."
+  ],
+  [
+   "36",
+   "8",
+   "HN_CQ16",
+   "What are the main parts of a contract/labor contract? What are the requirements for the translation of a labor contract?"
+  ],
+  [
+   "37",
+   "8",
+   "HN_CQ17",
+   "What are the key terms found in a labor contract? What are their equivalences?"
+  ],
+  [
+   "38",
+   "8",
+   "HN_CQ18",
+   "Study a Vietnamese labor contract. Identify the main words, phrases that need to be translated using the terms. Translate the contract into English."
+  ],
+  [
+   "39",
+   "8",
+   "HN_CQ19",
+   "Study an English business contract. What are the key words, phrases of the contract and their equivlances? Translate the contract into Vietnamese."
+  ],
+  [
+   "40",
+   "8",
+   "HN_CQ20",
+   "What are some rules drawn out for the translation of contracts? Pay special attention to linguistic and syntax features."
+  ],
+  [
+   "41",
+   "9",
+   "HN_CQ21",
+   "What are typical types of business forms and documents?"
+  ],
+  [
+   "42",
+   "9",
+   "HN_CQ22",
+   "What are features of business forms and documents?"
+  ],
+  [
+   "43",
+   "9",
+   "HN_CQ23",
+   "Make a list of business forms and their equivalences in Vietnamese. What are requirements for the translation of these forms?"
+  ],
+  [
+   "44",
+   "9",
+   "HN_CQ24",
+   "Study a given business transaction agreement in Vietnamese. What are the main parts of a business transaction agreement? What are their equivalences in English?"
+  ],
+  [
+   "45",
+   "9",
+   "HN_CQ25",
+   "Translate a given business transaction agreement into English. What problems do you face in the translation? How do you deal with these?"
+  ],
+  [
+   "46",
+   "10",
+   "HN_CQ21",
+   "What are typical types of business forms and documents?"
+  ],
+  [
+   "47",
+   "10",
+   "HN_CQ22",
+   "What are features of business forms and documents?"
+  ],
+  [
+   "48",
+   "10",
+   "HN_CQ23",
+   "Make a list of business forms and their equivalences in Vietnamese. What are requirements for the translation of these forms?"
+  ],
+  [
+   "49",
+   "10",
+   "HN_CQ24",
+   "Study a given business transaction agreement in Vietnamese. What are the main parts of a business transaction agreement? What are their equivalences in English?"
+  ],
+  [
+   "50",
+   "10",
+   "HN_CQ25",
+   "Translate a given business transaction agreement into English. What problems do you face in the translation? How do you deal with these?"
+  ],
+  [
+   "51",
+   "11",
+   "HN_CQ26",
+   "Compare and contrast a Vietnamese transaction agreement and an English one based on some criteria."
+  ],
+  [
+   "52",
+   "11",
+   "HN_CQ27",
+   "Study a given business transaction agreement in English. What are key words, phrases, and terms used in the document? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "53",
+   "11",
+   "HN_CQ28",
+   "Study a given business transaction agreement in English. What are the linguistic and lexis features of the document? Do these features cause troubles for translation? Demonstrate how you translate these."
+  ],
+  [
+   "54",
+   "11",
+   "HN_CQ29",
+   "Study a given business transaction agreement in English. Translate it into Vietnamese. Do you face any problems in the translation? How do you deal with those?"
+  ],
+  [
+   "55",
+   "11",
+   "HN_CQ30",
+   "Which parts of the business transaction agreement do you find the most difficult in translation? How should the difficulties be deal with?"
+  ],
+  [
+   "56",
+   "12",
+   "HN_CQ26",
+   "Compare and contrast a Vietnamese transaction agreement and an English one based on some criteria."
+  ],
+  [
+   "57",
+   "12",
+   "HN_CQ27",
+   "Study a given business transaction agreement in English. What are key words, phrases, and terms used in the document? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "58",
+   "12",
+   "HN_CQ28",
+   "Study a given business transaction agreement in English. What are the linguistic and lexis features of the document? Do these features cause troubles for translation? Demonstrate how you translate these."
+  ],
+  [
+   "59",
+   "12",
+   "HN_CQ29",
+   "Study a given business transaction agreement in English. Translate it into Vietnamese. Do you face any problems in the translation? How do you deal with those?"
+  ],
+  [
+   "60",
+   "12",
+   "HN_CQ30",
+   "Which parts of the business transaction agreement do you find the most difficult in translation? How should the difficulties be deal with?"
+  ],
+  [
+   "61",
+   "13",
+   "HN_CQ31",
+   "What is financial statement? What are typical types of financial statement?"
+  ],
+  [
+   "62",
+   "13",
+   "HN_CQ32",
+   "What are the main part of a financial statement? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "63",
+   "13",
+   "HN_CQ33",
+   "What are the keys terms of a financial statement? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "64",
+   "13",
+   "HN_CQ34",
+   "Study a given financial statement (Statement of Financial Position) in Vietnamese. What are the main parts of the statement? How do you translate them into English?"
+  ],
+  [
+   "65",
+   "13",
+   "HN_CQ35",
+   "Study a given financial statement (Statement of Financial Position) in Vietnamese. What are the main parts of the statement? How do you translate them into English?"
+  ],
+  [
+   "66",
+   "14",
+   "HN_CQ31",
+   "What is financial statement? What are typical types of financial statement?"
+  ],
+  [
+   "67",
+   "14",
+   "HN_CQ32",
+   "What are the main part of a financial statement? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "68",
+   "14",
+   "HN_CQ33",
+   "What are the keys terms of a financial statement? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "69",
+   "14",
+   "HN_CQ34",
+   "Study a given financial statement (Statement of Financial Position) in Vietnamese. What are the main parts of the statement? How do you translate them into English?"
+  ],
+  [
+   "70",
+   "14",
+   "HN_CQ35",
+   "Study a given financial statement (Statement of Financial Position) in Vietnamese. What are the main parts of the statement? How do you translate them into English?"
+  ],
+  [
+   "71",
+   "15",
+   "HN_CQ36",
+   "Study a financial statement (statement of earnings). What are the main parts of the statement? What are the keys terms used? What are their equivalences?"
+  ],
+  [
+   "72",
+   "15",
+   "HN_CQ37",
+   "Compare and contrast a Vietnamese financial statement of earnings. What are some notes that can be drawn out for the translation?"
+  ],
+  [
+   "73",
+   "15",
+   "HN_CQ38",
+   "What will be done with words, phrases, terms appearing in the original document whose equivalences can't be found in Vietnamese?"
+  ],
+  [
+   "74",
+   "15",
+   "HN_CQ39",
+   "Study a financial statement (Statement of earnings). Which parts cause difficulties for translators? How do you deal with those difficulties?"
+  ],
+  [
+   "75",
+   "15",
+   "HN_CQ40",
+   "Study a financial statement (Statement of earnings). Translate the statement into Vietnamese."
+  ],
+  [
+   "76",
+   "16",
+   "HN_CQ36",
+   "Study a financial statement (statement of earnings). What are the main parts of the statement? What are the keys terms used? What are their equivalences?"
+  ],
+  [
+   "77",
+   "16",
+   "HN_CQ37",
+   "Compare and contrast a Vietnamese financial statement of earnings. What are some notes that can be drawn out for the translation?"
+  ],
+  [
+   "78",
+   "16",
+   "HN_CQ38",
+   "What will be done with words, phrases, terms appearing in the original document whose equivalences can't be found in Vietnamese?"
+  ],
+  [
+   "79",
+   "16",
+   "HN_CQ39",
+   "Study a financial statement (Statement of earnings). Which parts cause difficulties for translators? How do you deal with those difficulties?"
+  ],
+  [
+   "80",
+   "16",
+   "HN_CQ40",
+   "Study a financial statement (Statement of earnings). Translate the statement into Vietnamese."
+  ],
+  [
+   "81",
+   "17",
+   "HN_CQ41",
+   "What is the equivalence of Statement of Change in Equity in Vietnamese? What are some key terms used in the statement? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "82",
+   "17",
+   "HN_CQ42",
+   "What are similarities and differences between a Vietnamese statement of change in equity and an English one?"
+  ],
+  [
+   "83",
+   "17",
+   "HN_CQ43",
+   "Study a given statement of change in equity. What are words, phrases whose equivalences can't be found in Vietnamese translated?"
+  ],
+  [
+   "84",
+   "17",
+   "HN_CQ44",
+   "Study a given financial statement. (Statement of change in equity). Translate it into Vietnamese. What lessons do you draw out for the translation of this document?"
+  ],
+  [
+   "85",
+   "17",
+   "HN_CQ45",
+   "Which parts of the statement are more difficult to translate? What are some strategies for the translation of these?"
+  ],
+  [
+   "86",
+   "18",
+   "HN_CQ41",
+   "What is the equivalence of Statement of Change in Equity in Vietnamese? What are some key terms used in the statement? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "87",
+   "18",
+   "HN_CQ42",
+   "What are similarities and differences between a Vietnamese statement of change in equity and an English one?"
+  ],
+  [
+   "88",
+   "18",
+   "HN_CQ43",
+   "Study a given statement of change in equity. What are words, phrases whose equivalences can't be found in Vietnamese translated?"
+  ],
+  [
+   "89",
+   "18",
+   "HN_CQ44",
+   "Study a given financial statement. (Statement of change in equity). Translate it into Vietnamese. What lessons do you draw out for the translation of this document?"
+  ],
+  [
+   "90",
+   "18",
+   "HN_CQ45",
+   "Which parts of the statement are more difficult to translate? What are some strategies for the translation of these?"
+  ],
+  [
+   "91",
+   "19",
+   "HN_CQ46",
+   "What is the equivalence of Statement of Cash flow in Vietnamese? What are the main parts of this kind of statement?"
+  ],
+  [
+   "92",
+   "19",
+   "HN_CQ47",
+   "What are the keys terms of a statement of cash flow? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "93",
+   "19",
+   "HN_CQ48",
+   "What problems translators may face in the translation of cash flow statement? What are strategies to deal with these?"
+  ],
+  [
+   "94",
+   "19",
+   "HN_CQ49",
+   "Study a given statement of cash flow. Translate it into Vietnamese. What lessons do you draw out for the translation of this?"
+  ],
+  [
+   "95",
+   "19",
+   "HN_CQ50",
+   "Study a given statement of cash flow. Translate it into English. What lessons do you draw out for the translation of this?"
+  ],
+  [
+   "96",
+   "20",
+   "HN_CQ46",
+   "What is the equivalence of Statement of Cash flow in Vietnamese? What are the main parts of this kind of statement?"
+  ],
+  [
+   "97",
+   "20",
+   "HN_CQ47",
+   "What are the keys terms of a statement of cash flow? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "98",
+   "20",
+   "HN_CQ48",
+   "What problems translators may face in the translation of cash flow statement? What are strategies to deal with these?"
+  ],
+  [
+   "99",
+   "20",
+   "HN_CQ49",
+   "Study a given statement of cash flow. Translate it into Vietnamese. What lessons do you draw out for the translation of this?"
+  ],
+  [
+   "100",
+   "20",
+   "HN_CQ50",
+   "Study a given statement of cash flow. Translate it into English. What lessons do you draw out for the translation of this?"
+  ],
+  [
+   "101",
+   "21",
+   "HN_CQ51",
+   "What are features of English technical documents?"
+  ],
+  [
+   "102",
+   "21",
+   "HN_CQ52",
+   "What are requirements of translation of English technical documents?"
+  ],
+  [
+   "103",
+   "21",
+   "HN_CQ53",
+   "Which features of English technical documents cause difficulties for translators? What are some strategies to deal with these?"
+  ],
+  [
+   "104",
+   "21",
+   "HN_CQ54",
+   "Study five different documents (news) related information technology. What are the common words, phrases, structures that can be found in these documents? How can these be translated into English?"
+  ],
+  [
+   "105",
+   "21",
+   "HN_CQ55",
+   "What are Vietnamese typical terms related to information technology? What are their equivalences in English?"
+  ],
+  [
+   "106",
+   "22",
+   "HN_CQ51",
+   "What are features of English technical documents?"
+  ],
+  [
+   "107",
+   "22",
+   "HN_CQ52",
+   "What are requirements of translation of English technical documents?"
+  ],
+  [
+   "108",
+   "22",
+   "HN_CQ53",
+   "Which features of English technical documents cause difficulties for translators? What are some strategies to deal with these?"
+  ],
+  [
+   "109",
+   "22",
+   "HN_CQ54",
+   "Study five different documents (news) related information technology. What are the common words, phrases, structures that can be found in these documents? How can these be translated into English?"
+  ],
+  [
+   "110",
+   "22",
+   "HN_CQ55",
+   "What are typical Vietnamese terms related to information technology? What are their equivalences in English?"
+  ],
+  [
+   "111",
+   "23",
+   "HN_CQ56",
+   "Study five different documents (news) related to information technology. What are the common words, phrases, structures that can be found in these documents? How can these be translated into Vietnamese?"
+  ],
+  [
+   "112",
+   "23",
+   "HN_CQ57",
+   "What are typical English terms related to information technology? What are their equivalences in English?"
+  ],
+  [
+   "113",
+   "23",
+   "HN_CQ58",
+   "Summarize an English article related to information technology. What key words and phrases do you find essential for the translation? How do you translate those into Vietnamese. Translate a passage into Vietnamese?"
+  ],
+  [
+   "114",
+   "23",
+   "HN_CQ59",
+   "Summarize an English article related to mobile phone technology. What key words and phrases do you find essential for the translation? How do you translate those into Vietnamese. Translate a passage into Vietnamese?"
+  ],
+  [
+   "115",
+   "23",
+   "HN_CQ60",
+   "Summarize a Vietnamese article related to digital transformation . What key words and phrases do you find essential for the translation? How do you translate those into Vietnamese. Translate a passage into English?"
+  ],
+  [
+   "116",
+   "24",
+   "HN_CQ56",
+   "Study five different documents (news) related to information technology. What are the common words, phrases, structures that can be found in these documents? How can these be translated into Vietnamese?"
+  ],
+  [
+   "117",
+   "24",
+   "HN_CQ57",
+   "What are typical English terms related to information technology? What are their equivalences in English?"
+  ],
+  [
+   "118",
+   "24",
+   "HN_CQ58",
+   "Summarize an English article related to information technology. What key words and phrases do you find essential for the translation? How do you translate those into Vietnamese. Translate a passage into Vietnamese?"
+  ],
+  [
+   "119",
+   "24",
+   "HN_CQ59",
+   "Summarize an English article related to mobile phone technology. What key words and phrases do you find essential for the translation? How do you translate those into Vietnamese. Translate a passage into Vietnamese?"
+  ],
+  [
+   "120",
+   "24",
+   "HN_CQ60",
+   "Summarize a Vietnamese article related to digital transformation . What key words and phrases do you find essential for the translation? How do you translate those into Vietnamese. Translate a passage into English?"
+  ],
+  [
+   "121",
+   "25",
+   "HN_CQ61",
+   "What are some features of science news/ documents?"
+  ],
+  [
+   "122",
+   "25",
+   "HN_CQ62",
+   "What are some problems for translation of science news/ documents? What strategies can be used to translate these?"
+  ],
+  [
+   "123",
+   "25",
+   "HN_CQ63",
+   "Study five different documents (news) related to science. What are the common words, phrases, structures that can be found in these documents? How can these be translated into Vietnamese?"
+  ],
+  [
+   "124",
+   "25",
+   "HN_CQ64",
+   "Study five different documents (news) related to science. What are the common words, phrases, structures that can be found in these documents? How can these be translated into English?"
+  ],
+  [
+   "125",
+   "25",
+   "HN_CQ65",
+   "Summarize an English article related to science. What key words and phrase do you find essential for the translation? How do you translate these into Vietnamese? Translate a passage into Vietnamese."
+  ],
+  [
+   "126",
+   "26",
+   "HN_CQ61",
+   "What are some features of science news/ documents?"
+  ],
+  [
+   "127",
+   "26",
+   "HN_CQ62",
+   "What are some problems for translation of science news/ documents? What strategies can be used to translate these?"
+  ],
+  [
+   "128",
+   "26",
+   "HN_CQ63",
+   "Study five different documents (news) related to science. What are the common words, phrases, structures that can be found in these documents? How can these be translated into Vietnamese?"
+  ],
+  [
+   "129",
+   "26",
+   "HN_CQ64",
+   "Study five different documents (news) related to science. What are the common words, phrases, structures that can be found in these documents? How can these be translated into English?"
+  ],
+  [
+   "130",
+   "26",
+   "HN_CQ65",
+   "Summarize an English article related to science. What key words and phrase do you find essential for the translation? How do you translate these into Vietnamese? Translate a passage into Vietnamese."
+  ],
+  [
+   "131",
+   "27",
+   "HN_CQ66",
+   "Study 5 different English news, topic: Food Industry. What are the common features of food-industry English?"
+  ],
+  [
+   "132",
+   "27",
+   "HN_CQ67",
+   "Study 5 different English news, topic: Food Industry. What are some key terms used in the news? What are their equivalences?"
+  ],
+  [
+   "133",
+   "27",
+   "HN_CQ68",
+   "Summarize an English article, topic: Food Industry. What are some keys terms used in the article? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "134",
+   "27",
+   "HN_CQ69",
+   "Summarize an English article, topic: Food Industry. Translate the article into Vietnamese. What difficulties you face in the translation?"
+  ],
+  [
+   "135",
+   "27",
+   "HN_CQ70",
+   "Summarize a Vietnamese article, topic: Food Industry. What are the key terms used in the article? What are their equivalences? Translate the article into English."
+  ],
+  [
+   "136",
+   "28",
+   "HN_CQ66",
+   "Study 5 different English news, topic: Food Industry. What are the common features of food-industry English?"
+  ],
+  [
+   "137",
+   "28",
+   "HN_CQ67",
+   "Study 5 different English news, topic: Food Industry. What are some key terms used in the news? What are their equivalences?"
+  ],
+  [
+   "138",
+   "28",
+   "HN_CQ68",
+   "Summarize an English article, topic: Food Industry. What are some keys terms used in the article? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "139",
+   "28",
+   "HN_CQ69",
+   "Summarize an English article, topic: Food Industry. Translate the article into Vietnamese. What difficulties you face in the translation?"
+  ],
+  [
+   "140",
+   "28",
+   "HN_CQ70",
+   "Summarize a Vietnamese article, topic: Food Industry. What are the key terms used in the article? What are their equivalences? Translate the article into English."
+  ],
+  [
+   "141",
+   "29",
+   "HN_CQ71",
+   "What are different kinds of entertainment? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "142",
+   "29",
+   "HN_CQ72",
+   "What are some common features of language used in entertainment?"
+  ],
+  [
+   "143",
+   "29",
+   "HN_CQ73",
+   "Study 5 different English news, topic: entertainment. What are key words, phrases do you find in the 5 news? What are their equivalences?"
+  ],
+  [
+   "144",
+   "29",
+   "HN_CQ74",
+   "Summarize an English article about entertainment. What are key words, phrases used in the article? How do you translate these? Translate the article into Vietnamese?"
+  ],
+  [
+   "145",
+   "29",
+   "HN_CQ75",
+   "Summarize a Vietnamese article about entertainment. What are key words, phrases used in the article? How do you translate these? Translate the article into Vietnamese?"
+  ],
+  [
+   "146",
+   "30",
+   "HN_CQ71",
+   "What are different kinds of entertainment? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "147",
+   "30",
+   "HN_CQ72",
+   "What are some common features of language used in entertainment?"
+  ],
+  [
+   "148",
+   "30",
+   "HN_CQ73",
+   "Study 5 different English news, topic: entertainment. What are key words, phrases do you find in the 5 news? What are their equivalences?"
+  ],
+  [
+   "149",
+   "30",
+   "HN_CQ74",
+   "Summarize an English article about entertainment. What are key words, phrases used in the article? How do you translate these? Translate the article into Vietnamese?"
+  ],
+  [
+   "150",
+   "30",
+   "HN_CQ75",
+   "Summarize a Vietnamese article about entertainment. What are key words, phrases used in the article? How do you translate these? Translate the article into Vietnamese?"
+  ],
+  [
+   "151",
+   "31",
+   "HN_CQ76",
+   "What are typical terms used in the field of health care? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "152",
+   "31",
+   "HN_CQ77",
+   "Study 5 different news about health care. What are common things/features do you find in the news? How are these interpreted into Vietnamese?"
+  ],
+  [
+   "153",
+   "31",
+   "HN_CQ78",
+   "What are typical words, phrase, terms used in the news/ writing about vaccine? How are they interpreted into Vietnamese?"
+  ],
+  [
+   "154",
+   "31",
+   "HN_CQ79",
+   "Study 5 different news about vaccines. What are common words, phrases, terms do you find in the news? Translate these news into Vietnamese?"
+  ],
+  [
+   "155",
+   "31",
+   "HN_CQ80",
+   "What typical words, phrases, terms are used in the news about diseases? How are these interpreted into Vietnamese? Translate 5 disease-related news into Vietnamese? Do you face any problems in the translation? How should problems be solved?"
+  ],
+  [
+   "156",
+   "32",
+   "HN_CQ76",
+   "What are typical terms used in the field of health care? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "157",
+   "32",
+   "HN_CQ77",
+   "Study 5 different news about health care. What are common things/features do you find in the news? How are these interpreted into Vietnamese?"
+  ],
+  [
+   "158",
+   "32",
+   "HN_CQ78",
+   "What are typical words, phrase, terms used in the news/ writing about vaccine? How are they interpreted into Vietnamese?"
+  ],
+  [
+   "159",
+   "32",
+   "HN_CQ79",
+   "Study 5 different news about vaccines. What are common words, phrases, terms do you find in the news? Translate these news into Vietnamese?"
+  ],
+  [
+   "160",
+   "32",
+   "HN_CQ80",
+   "What typical words, phrases, terms are used in the news about diseases? How are these interpreted into Vietnamese? Translate 5 disease-related news into Vietnamese? Do you face any problems in the translation? How should problems be solved?"
+  ],
+  [
+   "161",
+   "33",
+   "HN_CQ81",
+   "Based on a given article, topic: food manufacturing industry. What are the key words, phrases, terms, structures used in the article? What are their equivalences?"
+  ],
+  [
+   "162",
+   "33",
+   "HN_CQ82",
+   "Based on a given article, topic: food manufacturing industry. Translate the article into Vietnamese? What problems do you face in the translation? How are these problems solved?"
+  ],
+  [
+   "163",
+   "33",
+   "HN_CQ83",
+   "What may be non-equivalences in food-industry English? What are some strategies to deal with these?"
+  ],
+  [
+   "164",
+   "33",
+   "HN_CQ84",
+   "How do you find about English used in description of food ingredients? Is it easy to find their equivalences? Analyze 5 examples of description of food ingredients and translate these into Vietnamese? Do you find any problems in the translation?"
+  ],
+  [
+   "165",
+   "33",
+   "HN_CQ85",
+   "Summarize an article about Vietnamese cuisines. What are key words, phrases, terms used in the article? What are their equivalences in English. Translate the article into Vietnamese. What problems do you face when translating about cuisines? How are these solved?"
+  ],
+  [
+   "166",
+   "34",
+   "HN_CQ81",
+   "Based on a given article, topic: food manufacturing industry. What are the key words, phrases, terms, structures used in the article? What are their equivalences?"
+  ],
+  [
+   "167",
+   "34",
+   "HN_CQ82",
+   "Based on a given article, topic: food manufacturing industry. Translate the article into Vietnamese? What problems do you face in the translation? How are these problems solved?"
+  ],
+  [
+   "168",
+   "34",
+   "HN_CQ83",
+   "What may be non-equivalences in food-industry English? What are some strategies to deal with these?"
+  ],
+  [
+   "169",
+   "34",
+   "HN_CQ84",
+   "How do you find about English used in description of food ingredients? Is it easy to find their equivalences? Analyze 5 examples of description of food ingredients and translate these into Vietnamese? Do you find any problems in the translation?"
+  ],
+  [
+   "170",
+   "34",
+   "HN_CQ85",
+   "Summarize an article about Vietnamese cuisines. What are key words, phrases, terms used in the article? What are their equivalences in English. Translate the article into Vietnamese. What problems do you face when translating about cuisines? How are these solved?"
+  ],
+  [
+   "171",
+   "35",
+   "HN_CQ86",
+   "What are common features of technical documents? (Books, magazines, journals...)"
+  ],
+  [
+   "172",
+   "35",
+   "HN_CQ87",
+   "What problems do translators face in the translation of these?"
+  ],
+  [
+   "173",
+   "35",
+   "HN_CQ88",
+   "How are technical terms translated? What are the basis for the translation?"
+  ],
+  [
+   "174",
+   "35",
+   "HN_CQ89",
+   "Review a technical book (Information Technology). What are major terms, words, phrases you find in the book? How are these translated?"
+  ],
+  [
+   "175",
+   "35",
+   "HN_CQ90",
+   "Review a technical book (Information Technology). Translate a chapter. Do you find any problems in the translation? How do you solve these problems?"
+  ],
+  [
+   "176",
+   "36",
+   "HN_CQ86",
+   "What are common features of technical documents? (Books, magazines, journals...)"
+  ],
+  [
+   "177",
+   "36",
+   "HN_CQ87",
+   "What problems do translators face in the translation of these?"
+  ],
+  [
+   "178",
+   "36",
+   "HN_CQ88",
+   "How are technical terms translated? What are the basis for the translation?"
+  ],
+  [
+   "179",
+   "36",
+   "HN_CQ89",
+   "Review a technical book (Information Technology). What are major terms, words, phrases you find in the book? How are these translated?"
+  ],
+  [
+   "180",
+   "36",
+   "HN_CQ90",
+   "Review a technical book (Information Technology). Translate a chapter. Do you find any problems in the translation? How do you solve these problems?"
+  ],
+  [
+   "181",
+   "37",
+   "HN_CQ91",
+   "Study a given English article, topic: Electrical Engineering Technology. What are key words, phrases, terms? How are these translated into Vietnamese?"
+  ],
+  [
+   "182",
+   "37",
+   "HN_CQ92",
+   "What problems do translators face in the translation of Electrical Engineering Technology articles, documents? What are requirements for translators?"
+  ],
+  [
+   "183",
+   "37",
+   "HN_CQ93",
+   "Summarize an English article about Electrical Engineering Technology. What key words, phrases, terms used in the article? How do you translate these? Translate a passage. What problems do you face in the translation? How do you deal with those problems?"
+  ],
+  [
+   "184",
+   "37",
+   "HN_CQ94",
+   "What are common features of guide books for electrical equipment? How is the language used in those documents?"
+  ],
+  [
+   "185",
+   "37",
+   "HN_CQ95",
+   "Analyze a guide book for electrical Equipements? Select 2-3 parts to translate them into Vietnamese. What lessons do you draw out after translation?"
+  ],
+  [
+   "186",
+   "38",
+   "HN_CQ91",
+   "Study a given English article, topic: Electrical Engineering Technology. What are key words, phrases, terms? How are these translated into Vietnamese?"
+  ],
+  [
+   "187",
+   "38",
+   "HN_CQ92",
+   "What problems do translators face in the translation of Electrical Engineering Technology articles, documents? What are requirements for translators?"
+  ],
+  [
+   "188",
+   "38",
+   "HN_CQ93",
+   "Summarize an English article about Electrical Engineering Technology. What key words, phrases, terms used in the article? How do you translate these? Translate a passage. What problems do you face in the translation? How do you deal with those problems?"
+  ],
+  [
+   "189",
+   "38",
+   "HN_CQ94",
+   "What are common features of guide books for electrical equipment? How is the language used in those documents?"
+  ],
+  [
+   "190",
+   "38",
+   "HN_CQ95",
+   "Analyze a guide book for electrical Equipements? Select 2-3 parts to translate them into Vietnamese. What lessons do you draw out after translation?"
+  ],
+  [
+   "191",
+   "39",
+   "HN_CQ96",
+   "What are common features of English used in automobile engineering technology?"
+  ],
+  [
+   "192",
+   "39",
+   "HN_CQ97",
+   "What problems translators face when translating automobile English?"
+  ],
+  [
+   "193",
+   "39",
+   "HN_CQ98",
+   "What are typical terms, words, phrases used in automobile English documents? What are their equivalences?"
+  ],
+  [
+   "194",
+   "39",
+   "HN_CQ99",
+   "Study a given English article, topic: Automobile Engineering Technology. What are key words, phrases, terms used in the article? What are their equivalences in Vietnamese? Translate the article into Vietnamese."
+  ],
+  [
+   "195",
+   "39",
+   "HN_CQ100",
+   "What are some strategies in dealing with the translation of automobile English?"
+  ],
+  [
+   "196",
+   "40",
+   "HN_CQ96",
+   "What are common features of English used in automobile engineering technology?"
+  ],
+  [
+   "197",
+   "40",
+   "HN_CQ97",
+   "What problems translators face when translating automobile English?"
+  ],
+  [
+   "198",
+   "40",
+   "HN_CQ98",
+   "What are typical terms, words, phrases used in automobile English documents? What are their equivalences?"
+  ],
+  [
+   "199",
+   "40",
+   "HN_CQ99",
+   "Study a given English article, topic: Automobile Engineering Technology. What are key words, phrases, terms used in the article? What are their equivalences in Vietnamese? Translate the article into Vietnamese."
+  ],
+  [
+   "200",
+   "40",
+   "HN_CQ100",
+   "What are some strategies in dealing with the translation of automobile English?"
+  ],
+  [
+   "201",
+   "41",
+   "HN_CQ101",
+   "Study 5 given socio-cultural news. What are their common features?"
+  ],
+  [
+   "202",
+   "41",
+   "HN_CQ102",
+   "What are some strategies of translating headlines of the news (socio-cultural news)?"
+  ],
+  [
+   "203",
+   "41",
+   "HN_CQ103",
+   "What figures of speech may occur in socio-cultural news? How are they dealt with?"
+  ],
+  [
+   "204",
+   "41",
+   "HN_CQ104",
+   "What are some common features of social events news?"
+  ],
+  [
+   "205",
+   "41",
+   "HN_CQ105",
+   "Study 5 different news about social events. What key words, phrases, terms used in these news? How are they translated into Vietnamese? Translate the news into Vietnamese."
+  ],
+  [
+   "206",
+   "42",
+   "HN_CQ101",
+   "Study 5 given socio-cultural news. What are their common features?"
+  ],
+  [
+   "207",
+   "42",
+   "HN_CQ102",
+   "What are some strategies of translating headlines of the news (socio-cultural news)?"
+  ],
+  [
+   "208",
+   "42",
+   "HN_CQ103",
+   "What figures of speech may occur in socio-cultural news? How are they dealt with?"
+  ],
+  [
+   "209",
+   "42",
+   "HN_CQ104",
+   "What are some common features of social events news?"
+  ],
+  [
+   "210",
+   "42",
+   "HN_CQ105",
+   "Study 5 different news about social events. What key words, phrases, terms used in these news? How are they translated into Vietnamese? Translate the news into Vietnamese."
+  ],
+  [
+   "211",
+   "43",
+   "HN_CQ106",
+   "Study 5 given cultural events news. What are the common features?"
+  ],
+  [
+   "212",
+   "43",
+   "HN_CQ107",
+   "Analyze 10 different headlines of social events. What are the common features? Translate these into Vietnamese? Do you face any problems in the translation of these?"
+  ],
+  [
+   "213",
+   "43",
+   "HN_CQ108",
+   "What figures of speech may be found in the news about social events? What are some strategies in dealing with these?"
+  ],
+  [
+   "214",
+   "43",
+   "HN_CQ109",
+   "Summarize a given English article, topic: social values. What are main words, phrases, terms used in the article? Translate the article into Vietnamese."
+  ],
+  [
+   "215",
+   "43",
+   "HN_CQ110",
+   "Summarize a given Vietnamese article, topic: social events. What are main words, phrases, terms used in the article? Translate the article into English. What are problems in the translation? How are the problems dealt with?"
+  ],
+  [
+   "216",
+   "44",
+   "HN_CQ106",
+   "Study 5 given cultural events news. What are the common features?"
+  ],
+  [
+   "217",
+   "44",
+   "HN_CQ107",
+   "Analyze 10 different headlines of social events. What are the common features? Translate these into Vietnamese? Do you face any problems in the translation of these?"
+  ],
+  [
+   "218",
+   "44",
+   "HN_CQ108",
+   "What figures of speech may be found in the news about social events? What are some strategies in dealing with these?"
+  ],
+  [
+   "219",
+   "44",
+   "HN_CQ109",
+   "Summarize a given English article, topic: social values. What are main words, phrases, terms used in the article? Translate the article into Vietnamese."
+  ],
+  [
+   "220",
+   "44",
+   "HN_CQ110",
+   "Summarize a given Vietnamese article, topic: social events. What are main words, phrases, terms used in the article? Translate the article into English. What are problems in the translation? How are the problems dealt with?"
+  ],
+  [
+   "221",
+   "45",
+   "HN_CQ111",
+   "Study 5 given news of cultural events. How are news of cultural events reported? What are common features of these news?"
+  ],
+  [
+   "222",
+   "45",
+   "HN_CQ112",
+   "What language styles are used in cultural events?"
+  ],
+  [
+   "223",
+   "45",
+   "HN_CQ113",
+   "What problems translators may face in the translation of cultural events?"
+  ],
+  [
+   "224",
+   "45",
+   "HN_CQ114",
+   "Study an English article, topic: cultural events. What key words, phrases, terms are used in the article? How are these translated? Translate the article into Vietnamese."
+  ],
+  [
+   "225",
+   "45",
+   "HN_CQ115",
+   "Study an Vietnamese article, topic: cultural events. What key words, phrases, terms are used in the article? How are these translated? Translate the article into Vietnamese."
+  ],
+  [
+   "226",
+   "46",
+   "HN_CQ111",
+   "Study 5 given news of cultural events. How are news of cultural events reported? What are common features of these news?"
+  ],
+  [
+   "227",
+   "46",
+   "HN_CQ112",
+   "What language styles are used in cultural events?"
+  ],
+  [
+   "228",
+   "46",
+   "HN_CQ113",
+   "What problems translators may face in the translation of cultural events?"
+  ],
+  [
+   "229",
+   "46",
+   "HN_CQ114",
+   "Study an English article, topic: cultural events. What key words, phrases, terms are used in the article? How are these translated? Translate the article into Vietnamese."
+  ],
+  [
+   "230",
+   "46",
+   "HN_CQ115",
+   "Study an Vietnamese article, topic: cultural events. What key words, phrases, terms are used in the article? How are these translated? Translate the article into Vietnamese."
+  ],
+  [
+   "231",
+   "47",
+   "HN_CQ116",
+   "Study 5 different news about sports events. What are the common features of the language used in describing sports events news?"
+  ],
+  [
+   "232",
+   "47",
+   "HN_CQ117",
+   "What are typical terms, words, phrases used in reporting sports events? What are their equivalences?"
+  ],
+  [
+   "233",
+   "47",
+   "HN_CQ118",
+   "Based on the 5 different news about sports events, what are main words, phrases, structures used in describing sports events? What are their equivalences? Translate the 5 news into Vietnamese."
+  ],
+  [
+   "234",
+   "47",
+   "HN_CQ119",
+   "What are some problems in the translation of sports news? How to deal with those problems?"
+  ],
+  [
+   "235",
+   "47",
+   "HN_CQ120",
+   "Study an English article about sports. What are key words, phrases, terms used in the article? What are their equivalences? Translate the article into Vietnamese."
+  ],
+  [
+   "236",
+   "48",
+   "HN_CQ116",
+   "Study 5 different news about sports events. What are the common features of the language used in describing sports events news?"
+  ],
+  [
+   "237",
+   "48",
+   "HN_CQ117",
+   "What are typical terms, words, phrases used in reporting sports events? What are their equivalences?"
+  ],
+  [
+   "238",
+   "48",
+   "HN_CQ118",
+   "Based on the 5 different news about sports events, what are main words, phrases, structures used in describing sports events? What are their equivalences? Translate the 5 news into Vietnamese."
+  ],
+  [
+   "239",
+   "48",
+   "HN_CQ119",
+   "What are some problems in the translation of sports news? How to deal with those problems?"
+  ],
+  [
+   "240",
+   "48",
+   "HN_CQ120",
+   "Study an English article about sports. What are key words, phrases, terms used in the article? What are their equivalences? Translate the article into Vietnamese."
+  ],
+  [
+   "241",
+   "49",
+   "HN_CQ121",
+   "Study 5 different diplomatic news. What are common features of these news?"
+  ],
+  [
+   "242",
+   "49",
+   "HN_CQ122",
+   "What are some requirements of diplomatic news translation?"
+  ],
+  [
+   "243",
+   "49",
+   "HN_CQ123",
+   "What are typical terms, words, phrases used in diplomatic news? What are their equivalences?"
+  ],
+  [
+   "244",
+   "49",
+   "HN_CQ124",
+   "Study an English article, topic: relation between 2 countries. What are key words, phrases used in the article? How do you translate these key words?"
+  ],
+  [
+   "245",
+   "49",
+   "HN_CQ125",
+   "Study an English article, topic: relations between 2 countries. How do you translate the text? What problems do you face in the translation? How do you deal with those problems?"
+  ],
+  [
+   "246",
+   "50",
+   "HN_CQ121",
+   "Study 5 different diplomatic news. What are common features of these news?"
+  ],
+  [
+   "247",
+   "50",
+   "HN_CQ122",
+   "What are some requirements of diplomatic news translation?"
+  ],
+  [
+   "248",
+   "50",
+   "HN_CQ123",
+   "What are typical terms, words, phrases used in diplomatic news? What are their equivalences?"
+  ],
+  [
+   "249",
+   "50",
+   "HN_CQ124",
+   "Study an English article, topic: relation between 2 countries. What are key words, phrases used in the article? How do you translate these key words?"
+  ],
+  [
+   "250",
+   "50",
+   "HN_CQ125",
+   "Study an English article, topic: relations between 2 countries. How do you translate the text? What problems do you face in the translation? How do you deal with those problems?"
+  ],
+  [
+   "251",
+   "51",
+   "HN_CQ126",
+   "Study a Vietnamese article about customs and traditions. What are some features of the language used in the article?"
+  ],
+  [
+   "252",
+   "51",
+   "HN_CQ127",
+   "What words, phrases, structures, terms may be problems for translators? How are these translated?"
+  ],
+  [
+   "253",
+   "51",
+   "HN_CQ128",
+   "What are some non-equivalences that may be found in customs-traditions documents? What are some strategies in dealing with these?"
+  ],
+  [
+   "254",
+   "51",
+   "HN_CQ129",
+   "What figures of speech may be found in an article about customs, traditions? What are strategies to deal with these?"
+  ],
+  [
+   "255",
+   "51",
+   "HN_CQ130",
+   "Translate a given English article about customs and traditions of a country in the world. What are the key words, phrases and their equivalences? Demonstrate how you translate the text."
+  ],
+  [
+   "256",
+   "52",
+   "HN_CQ126",
+   "Study a Vietnamese article about customs and traditions. What are some features of the language used in the article?"
+  ],
+  [
+   "257",
+   "52",
+   "HN_CQ127",
+   "What words, phrases, structures, terms may be problems for translators? How are these translated?"
+  ],
+  [
+   "258",
+   "52",
+   "HN_CQ128",
+   "What are some non-equivalences that may be found in customs-traditions documents? What are some strategies in dealing with these?"
+  ],
+  [
+   "259",
+   "52",
+   "HN_CQ129",
+   "What figures of speech may be found in an article about customs, traditions? What are strategies to deal with these?"
+  ],
+  [
+   "260",
+   "52",
+   "HN_CQ130",
+   "Translate a given English article about customs and traditions of a country in the world. What are the key words, phrases and their equivalences? Demonstrate how you translate the text."
+  ],
+  [
+   "261",
+   "53",
+   "HN_CQ131",
+   "What are common features of the language used in articles, documents about natural values of tourism? How are they translated?"
+  ],
+  [
+   "262",
+   "53",
+   "HN_CQ132",
+   "What are some terms used in documents about natural values of tourism? What are their equivalences?"
+  ],
+  [
+   "263",
+   "53",
+   "HN_CQ133",
+   "Study a given English article about natural values of tourism. What are key words, phrase, terms used in the article? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "264",
+   "53",
+   "HN_CQ134",
+   "Study a given English article about natural values of tourism. Translate the text into Vietnamese. What are some problems and what strategies are used to deal with those problems?"
+  ],
+  [
+   "265",
+   "53",
+   "HN_CQ135",
+   "Study a given Vietnamese article about natural values of tourism. Translate the text into Vietnamese. What are some problems and what strategies are used to deal with those problems?"
+  ],
+  [
+   "266",
+   "54",
+   "HN_CQ131",
+   "What are common features of the language used in articles, documents about natural values of tourism? How are they translated?"
+  ],
+  [
+   "267",
+   "54",
+   "HN_CQ132",
+   "What are some terms used in documents about natural values of tourism? What are their equivalences?"
+  ],
+  [
+   "268",
+   "54",
+   "HN_CQ133",
+   "Study a given English article about natural values of tourism. What are key words, phrase, terms used in the article? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "269",
+   "54",
+   "HN_CQ134",
+   "Study a given English article about natural values of tourism. Translate the text into Vietnamese. What are some problems and what strategies are used to deal with those problems?"
+  ],
+  [
+   "270",
+   "54",
+   "HN_CQ135",
+   "Study a given Vietnamese article about natural values of tourism. Translate the text into Vietnamese. What are some problems and what strategies are used to deal with those problems?"
+  ],
+  [
+   "271",
+   "55",
+   "HN_CQ136",
+   "What are common features of the language used education documents? What are key words, phrases, terms used in English documents about education? What are their equivalences?"
+  ],
+  [
+   "272",
+   "55",
+   "HN_CQ137",
+   "What are English key words, phrases used in documents about education systems? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "273",
+   "55",
+   "HN_CQ138",
+   "Summarize an English article on education problems. What are key words and their equivalences? Translate the article into Vietnamese. How do you deal with some non-equivalences?"
+  ],
+  [
+   "274",
+   "55",
+   "HN_CQ139",
+   "Summarize a Vietnamese article on education problems. What are key words and their equivalences? Translate the article into English. How do you deal with some non-equivalences?"
+  ],
+  [
+   "275",
+   "55",
+   "HN_CQ140",
+   "Summarize an English article on some changes in education. What are key words and phrases and what are their equivalences? Translate the article into Vietnamese."
+  ],
+  [
+   "276",
+   "56",
+   "HN_CQ136",
+   "What are common features of the language used education documents? What are key words, phrases, terms used in English documents about education? What are their equivalences?"
+  ],
+  [
+   "277",
+   "56",
+   "HN_CQ137",
+   "What are English key words, phrases used in documents about education systems? What are their equivalences in Vietnamese?"
+  ],
+  [
+   "278",
+   "56",
+   "HN_CQ138",
+   "Summarize an English article on education problems. What are key words and their equivalences? Translate the article into Vietnamese. How do you deal with some non-equivalences?"
+  ],
+  [
+   "279",
+   "56",
+   "HN_CQ139",
+   "Summarize a Vietnamese article on education problems. What are key words and their equivalences? Translate the article into English. How do you deal with some non-equivalences?"
+  ],
+  [
+   "280",
+   "56",
+   "HN_CQ140",
+   "Summarize an English article on some changes in education. What are key words and phrases and what are their equivalences? Translate the article into Vietnamese."
+  ],
+  [
+   "281",
+   "57",
+   "HN_CQ141",
+   "What are common features of the language used in history documents?"
+  ],
+  [
+   "282",
+   "57",
+   "HN_CQ142",
+   "What are common key words, phrases, structures used in history documents? What are their equivalences?"
+  ],
+  [
+   "283",
+   "57",
+   "HN_CQ143",
+   "What are problems translators may face in the translation of history documents? What are some requirements in the translation of these documents?"
+  ],
+  [
+   "284",
+   "57",
+   "HN_CQ144",
+   "Study a given English history document. What are key words, phrases, structures? What are their equivalences? How do you translate the document into Vietnamese?"
+  ],
+  [
+   "285",
+   "57",
+   "HN_CQ145",
+   "Study a given English history document. What problems do you face in the translation of the given documents? How are those dealt with?"
+  ],
+  [
+   "286",
+   "58",
+   "HN_CQ141",
+   "What are common features of the language used in history documents?"
+  ],
+  [
+   "287",
+   "58",
+   "HN_CQ142",
+   "What are common key words, phrases, structures used in history documents? What are their equivalences?"
+  ],
+  [
+   "288",
+   "58",
+   "HN_CQ143",
+   "What are problems translators may face in the translation of history documents? What are some requirements in the translation of these documents?"
+  ],
+  [
+   "289",
+   "58",
+   "HN_CQ144",
+   "Study a given English history document. What are key words, phrases, structures? What are their equivalences? How do you translate the document into Vietnamese?"
+  ],
+  [
+   "290",
+   "58",
+   "HN_CQ145",
+   "Study a given English history document. What problems do you face in the translation of the given documents? How are those dealt with?"
+  ],
+  [
+   "291",
+   "59",
+   "HN_CQ146",
+   "Study an example of tour commentary. What are some features of the language used in the commentary?"
+  ],
+  [
+   "292",
+   "59",
+   "HN_CQ147",
+   "What problems translators may face in the translation of tour commentary? What strategies are used?"
+  ],
+  [
+   "293",
+   "59",
+   "HN_CQ148",
+   "Study a given tour commentary in Vietnamese on natural place. What are key words, phrases, ,structures used in the commentary? How are these translated into English?"
+  ],
+  [
+   "294",
+   "59",
+   "HN_CQ149",
+   "Study a given tour commentary in Vietnamese on historical place. What are key words, phrases, ,structures used in the commentary? How are these translated into English?"
+  ],
+  [
+   "295",
+   "59",
+   "HN_CQ150",
+   "Study a given tour commentary in Vietnamese on a coach. What are key words, phrases, ,structures used in the commentary? How are these translated into English?"
+  ],
+  [
+   "296",
+   "60",
+   "HN_CQ146",
+   "Study an example of tour commentary. What are some features of the language used in the commentary?"
+  ],
+  [
+   "297",
+   "60",
+   "HN_CQ147",
+   "What problems translators may face in the translation of tour commentary? What strategies are used?"
+  ],
+  [
+   "298",
+   "60",
+   "HN_CQ148",
+   "Study a given tour commentary in Vietnamese on natural place. What are key words, phrases, ,structures used in the commentary? How are these translated into English?"
+  ],
+  [
+   "299",
+   "60",
+   "HN_CQ149",
+   "Study a given tour commentary in Vietnamese on historical place. What are key words, phrases, ,structures used in the commentary? How are these translated into English?"
+  ],
+  [
+   "300",
+   "60",
+   "HN_CQ150",
+   "Study a given tour commentary in Vietnamese on a coach. What are key words, phrases, ,structures used in the commentary? How are these translated into English?"
+  ]
+ ],
+ "links": []
+}

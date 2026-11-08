@@ -1,0 +1,1240 @@
+{
+ "ma": "IPR102",
+ "sylID": "14064",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14064",
+   "code": "IPR102",
+   "name": "Intellectual Property Rights_Luật sở hữu trí tuệ",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14064",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14064",
+  "Syllabus Name": "Intellectual Property Rights_Luật sở hữu trí tuệ",
+  "Course Name English": "Intellectual Property Rights",
+  "Subject Code": "IPR102",
+  "Learning-Teaching Method": "Lecture,Social Constructivism,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course provides fundamental concepts, principles, and rules concerning different types of intellectual property rights relating to graphic design and/or multimedia communication, particularly copyright, trademark, and registered design.\n\nStudents will learn how to apply these principles and rules to protect their intellectual property rights in relation to their graphic design works and/or multimedia communication work.\n\nDuring the course, there are several typical cases regarding intellectual property rights relevant to graphic designs and/or multimedia communication available for students to analyze and discuss.\n\nStudents are also provided with basic skills such as how to acquire intellectual property protection for their creative products, how to avoid infringing on other people's intellectual property rights when creating new works, and how to commercialize their intellectual property rights.\n\nIn addition to common teaching methods such as lectures, brainstorming, and group discussion, the instructor will also use teaching methods specific to law, such as case studies, problem-solving, and moot court exercises.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises and assignments given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Creativity and Copyright: Legal Essentials for Screenwriters and Creative Artists",
+   "John L. Geiger and Howard Suber",
+   "University of California Press",
+   "2019",
+   "1st",
+   "978-0520303539",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Giáo trình Luật Sở hữu trí tuệ Việt Nam",
+   "Trường Đại học Luật Hà Nội",
+   "NXB Công an nhân dân",
+   "",
+   "3rd",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Generative AI: Impact, Considerations, and Ethical Issues"
+  ],
+  [
+   "4",
+   "Intellectual Property Rights for Engineers",
+   "Vivien Irish",
+   "The Institution of Engineering and Technology",
+   "2005",
+   "2nd",
+   "978-0-86341-490-9",
+   "True",
+   "False",
+   "True",
+   "https://library.books24x7.com"
+  ],
+  [
+   "5",
+   "Suggested websites: http://www.wipo.int/portal/en/index.html\nhttp://www.noip.gov.vn/\nhttp://www.cov.gov.vn/cbq/index.php",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the basic rules and doctrines regulating different types of intellectual property rights in connection with graphic design and/or multimedia communication"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply the aforesaid basic rules and doctrines to protect their intellectual property rights relating to their creative works"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand elements of some typical infringements of intellectual property rights in connection with graphic design and/or multimedia communication"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Be able to discover infringement and take action against a person who infringes on their intellectual property rights relating to their design and/or multimedia communication"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Understand legal issues related to licensing"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Apply knowledge to negotiate, draft, and perform licensing agreements to transfer intellectual property rights to others"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Be able to study relevant laws independently to prevent infringement of others’ intellectual property rights"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Understand how to take action against infringers"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "Follow lecturer's proposal",
+   "CLO1, CLO2, CLO5, CLO6, CLO7, CLO8",
+   "Group project",
+   "1",
+   "Knowledge and skills of design rights protection and enforcement",
+   "In class and home conducted from assinged topic until oral presentation\n'- Students will work in teams of 4–5 to research a company, design a brand identity (including logo, color palette, typography, and visual style), and prepare a legal analysis to ensure the proposed identity is free from copyright or trademark conflicts. The final deliverables will include a design portfolio, a written report, and a group presentation.\nPhase 1: Research & Analysis\n'Goal: Understand the company and its branding context.\nTasks:\n- Select or create a company (real or fictional).\n- Research its mission, target audience, competitors, and market positioning.\n- Study other existing brand identities in the same industry.\n- Begin exploring legal frameworks: copyright, trademark, and brand protection.\nAI Applications:\n-Use AI to summarize company profiles and competitor analysis.\n- Ask AI to explain branding trends and legal concepts in simple terms.\n- Generate SWOT analysis or brand positioning maps.\nPhase 2: Design & Report Writing (self-handling by group of students)\nGoal: Create the brand identity and justify its legal safety.\nTasks:\n- Design logo, color palette, typography, and visual style.\n- Prepare mockups (e.g., packaging, website, business cards).\n- Write a report including:\n+ Brand rationale\n+ Legal analysis (trademark search, copyright considerations)\n+ Justification of originality and legal safety.\nPhase 3: Presentation & Defense\nGoal: Pitch the brand identity and defend its legal validity.\nTasks:\n- Deliver a 10-minute group presentation.\n- Explain the design concept and legal analysis.\n- Respond to questions and challenges from peers or instructors.\nAI Applications:\n- Use AI to generate slide outlines and talking points.",
+   "In class and home"
+  ],
+  [
+   "2",
+   "Individual assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "45'",
+   "CLO1, CLO2, CLO7, CLO8",
+   "Essay writing",
+   "1",
+   "Follow lecturer's proposal",
+   "-Students will write an in-class essay that demonstrates their understanding of key legal principles related to Intellectual Property Rights (any perspective as decided by the instructor);\n\n- The essay question will be provided at the time of the test and will reflect a prominent, timely issue in intellectual property\n\nStudents must respond with a well-structured essay that includes:\n\n- A clear thesis or position\n\n- Legal reasoning and relevant examples\n\n- Reflection on fairness, impact, or ethical considerations\n\n- Essays must be written individually, during class time, without external assistance.",
+   ""
+  ],
+  [
+   "3",
+   "Quiz",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "30' in class",
+   "CLO1, CLO2, CLO3, CLO4",
+   "Multiple choices",
+   "30",
+   "Follow lecturer's proposal",
+   "conducted in class on the school's exam platform",
+   "In class"
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choices",
+   "50",
+   "all studied chapters",
+   "Conducted in the exam room, using computer",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to studying methods: textbooks, suggested readings, rules set out by Lecturer, syllabus, assessment, legal reasoning; instruct students how to prepare, complete and submit their individual assignment and group assignment.",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer\n\nOnline material: Coursera course: Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+   "IPR102_Phần 1",
+   "Read Slides; Syllabus, Textbook",
+   ""
+  ],
+  [
+   "2",
+   "Introducing the impact of AI on areas of intellectual property rights and how to ethically employing AI tools in creative industry",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer\n\nOnline material: Coursera course: Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+   "IPR102_Phần 2",
+   "Team up, discussion",
+   ""
+  ],
+  [
+   "3",
+   "Introducing AI tools and general guidance on using these tools in relating to this subjec (group assignment, defense arguments, researching legal issues…)",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer\n\nOnline material: Coursera course: Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+   "",
+   "working in group",
+   ""
+  ],
+  [
+   "4",
+   "Overview of intellectual property law: creation and justification for protecting intellectual property righs, introduction to the sources of intellectual property law;",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "5",
+   "Overview of intellectual property law: types of intellectual property right relevant to graphic designers/multimedia communicators; overlap in IPR protection",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "6",
+   "Overview of intellectual property law: types of intellectual property right relevant to graphic designers/multimedia communicators; overlap in IPR protection",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "7",
+   "What is copyright: the basic concepts and rules regarding copyright, what does copyright protect",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "8",
+   "What is copyright: types of copyright",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "9",
+   "Ownership and duration of copyright (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "10",
+   "Ownership and duration of copyright (Part 2)",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "11",
+   "Moral rights and economic rights in copyright (Part 1)",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "12",
+   "Moral rights and economic rights in copyright (Part 2)",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "13",
+   "Copyright infringement: primary infringement and secondary infringement",
+   "Offline",
+   "CLO3, CLO4",
+   "TU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer\nOnline material: Corsera course: Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot\nCompleting the coursera course of Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+   ""
+  ],
+  [
+   "14",
+   "Copyright infringement: the threat of AI in the domain of copyright protection",
+   "Offline",
+   "CLO3, CLO4",
+   "TU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer\nOnline material: Corsera course: Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot\nCompleting the coursera course of Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+   ""
+  ],
+  [
+   "15",
+   "Exceptions to copyright infringement: Fair dealing",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "16",
+   "Legal liabilities: damages, injunction, criminal liabilities for copyright infringement (Part 1)",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "17",
+   "Legal liabilities: damages, injunction, criminal liabilities for copyright infringement (Part 2)",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "18",
+   "Introduction to Anti - Corruption law in Vietnam",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "19",
+   "Review",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Read textbook",
+   ""
+  ],
+  [
+   "20",
+   "Quiz and/or progress test",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "",
+   "",
+   "Doing quiz",
+   ""
+  ],
+  [
+   "21",
+   "Quiz and/or progress test",
+   "Offline",
+   "CLO3, CLO4",
+   "T, U",
+   "",
+   "",
+   "Doing quiz",
+   ""
+  ],
+  [
+   "22",
+   "What is design right, exceptions to design right?",
+   "Offline",
+   "CLO3, CLO4",
+   "TU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "23",
+   "Design right: ownership of design right",
+   "Offline",
+   "CLO3, CLO4",
+   "TU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "24",
+   "Design right: Infringement on design right",
+   "Offline",
+   "CLO3, CLO4",
+   "TU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "25",
+   "Design right: Infringement on design right and exceptions",
+   "Offline",
+   "CLO1, CLO2",
+   "IT",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "26",
+   "Registered designs: introduction to registered designs, what does a registered design protect",
+   "Offline",
+   "CLO1, CLO2",
+   "IT",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "27",
+   "Registered designs: conditions for protection",
+   "Offline",
+   "CLO4",
+   "IU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "28",
+   "Registered designs: ownership; infringement",
+   "Offline",
+   "CLO4",
+   "IU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "29",
+   "Registered designs: TRIPS and industrial designs",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "30",
+   "Group discussion: Applying design law in the creative content industry to solve problems and cases",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "31",
+   "Group discussion: Applying design law in the creative content industry to solve problems and cases\nLearning progress checking: Responding student's querries about the require coursera course",
+   "Offline",
+   "CLO1, CLO2",
+   "IT",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot\nResponding student's querries about the course and checking their learning progress",
+   ""
+  ],
+  [
+   "32",
+   "Overlap among copyright, design right, and registered design (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "33",
+   "Overlap among copyright, design right, and registered design (Part 2)",
+   "Offline",
+   "CLO1, CLO2",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "34",
+   "Case study & Individual assignment",
+   "Offline",
+   "CLO1, CLO2",
+   "T, U",
+   "",
+   "",
+   "at home assignment before class\nDiscussing, Q&A",
+   ""
+  ],
+  [
+   "35",
+   "Case study & Individual assignment",
+   "Offline",
+   "CLO1, CLO2",
+   "T, U",
+   "",
+   "",
+   "at home assignment before class\nDiscussing, Q&A",
+   ""
+  ],
+  [
+   "36",
+   "Case study & Individual assignment",
+   "Offline",
+   "CLO1, CLO2",
+   "T, U",
+   "",
+   "",
+   "at home assignment before class\nDiscussing, Q&A",
+   ""
+  ],
+  [
+   "37",
+   "Introduction to trademarks, registrable trademarks",
+   "Offline",
+   "CLO1, CLO2",
+   "",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "38",
+   "Introduction to trademarks: trademark clearance, trademark registration",
+   "Offline",
+   "CLO1, CLO2",
+   "",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "39",
+   "Unregistered trademarks (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "40",
+   "Unregistered trademarks (Part 2)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "41",
+   "Famous trademarks (part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "42",
+   "Domain names and trademarks (part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "43",
+   "Domain names and trademarks (Part 2)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "44",
+   "Trademark infringement; passing off (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "45",
+   "Trademark infringement; passing off (Part 2)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "46",
+   "Liabilitiy for trademark infringement (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "47",
+   "Liabilitiy for trademark infringement (Part 2)",
+   "Offline",
+   "LO7, LO8",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "48",
+   "International trademark system (Part 2)",
+   "Offline",
+   "CLO7, CLO8",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "49",
+   "Introduction to IP licensing: the reasons for licensing, subject matters of licensing, types of license",
+   "Offline",
+   "CLO7, CLO8",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "50",
+   "Introduction to IP licensing: financial compensation, and other rules regarding licensing",
+   "Offline",
+   "CLO7, CLO8",
+   "T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "51",
+   "Copyright licenses (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "52",
+   "Copyright licenses (Part 2)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "53",
+   "Trademark licenses (Part 1)",
+   "Offline",
+   "CLO5, CLO6",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "54",
+   "Trademark licenses (Part 2)\nSubmission of corsera corse: Generative AI: Impact, Considerations, and Ethical Issues",
+   "Offline",
+   "CLO5, CLO6",
+   "ITU",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot\nChecking the completion of students about the required corsera course",
+   ""
+  ],
+  [
+   "55",
+   "Group assignment (moot court or presentation)",
+   "Offline",
+   "CLO5, CLO6",
+   "I, T, U",
+   "",
+   "",
+   "at home assignment before class. Presenting, Reviewing",
+   ""
+  ],
+  [
+   "56",
+   "Group assignment (moot court or presentation)",
+   "Offline",
+   "CLO5, CLO6",
+   "I, T, U",
+   "",
+   "",
+   "at home assignment before class. Presenting, Reviewing",
+   ""
+  ],
+  [
+   "57",
+   "Group assignment (moot court or presentation)",
+   "Offline",
+   "CLO5, CLO6",
+   "I, T, U",
+   "",
+   "",
+   "at home assignment before class. Presenting, Reviewing",
+   ""
+  ],
+  [
+   "58",
+   "Review for final exam",
+   "Offline",
+   "CLO5, CLO6",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Presenting, Reviewing",
+   ""
+  ],
+  [
+   "59",
+   "Review for final exam",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CL7, CLO8",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Reviewing, Discussing",
+   ""
+  ],
+  [
+   "60",
+   "Review for final exam",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CL7, CLO8",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Reviewing, Discussing",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "4",
+   "CQ4.1",
+   "Why is it essential to protect intellectual property rights?"
+  ],
+  [
+   "2",
+   "5",
+   "CQ5.1",
+   "What are sources of IPR law in the world?"
+  ],
+  [
+   "3",
+   "5",
+   "CQ5.2",
+   "How do you understand about case law?"
+  ],
+  [
+   "4",
+   "6",
+   "CQ6.1",
+   "What types of IPR are relevant to graphic designers/multimedia communicators?"
+  ],
+  [
+   "5",
+   "6",
+   "CQ6.2",
+   "What is overlap in IPR protection?"
+  ],
+  [
+   "6",
+   "7",
+   "CQ7.1",
+   "Does Copyright protect an idea or a concept?"
+  ],
+  [
+   "7",
+   "7",
+   "CQ7.2",
+   "What are types of copyright?"
+  ],
+  [
+   "8",
+   "8",
+   "CQ8.1",
+   "What are Graphic works protecting by copyright?"
+  ],
+  [
+   "9",
+   "9",
+   "CQ9.1",
+   "Who are authors and copyright owners?"
+  ],
+  [
+   "10",
+   "9",
+   "CQ9.2",
+   "Who owns the combined logo in a commission?"
+  ],
+  [
+   "11",
+   "10",
+   "CQ10.1",
+   "Is copyright forever?"
+  ],
+  [
+   "12",
+   "11",
+   "CQ11.1",
+   "What rights that a copyright's owner can have?"
+  ],
+  [
+   "13",
+   "11",
+   "CQ11.2",
+   "What are moral rights in copyright?"
+  ],
+  [
+   "14",
+   "12",
+   "CQ12.1",
+   "In Le Linh vs Phan Thi, who will have the economic rights?"
+  ],
+  [
+   "15",
+   "13",
+   "CQ13.1",
+   "What is copyright infringement?"
+  ],
+  [
+   "16",
+   "14",
+   "CQ14.1",
+   "Case study: What is the infrigement of the copyright in the given case?"
+  ],
+  [
+   "17",
+   "15",
+   "CQ15.1",
+   "When don't you need permission to use an existing material?"
+  ],
+  [
+   "18",
+   "16",
+   "CQ16.1",
+   "What are legal liabilities for copyright infringement?"
+  ],
+  [
+   "19",
+   "17",
+   "CQ17.1",
+   "Which civil liabilities the copyright's owner can ask in case of Lê Linh & Phan Thị?"
+  ],
+  [
+   "20",
+   "18",
+   "CQ18.1",
+   "What others can take from you?"
+  ],
+  [
+   "21",
+   "18",
+   "CQ18.2",
+   "Is private sector bribery covered by the Vietnam Anti - Corruption law?"
+  ],
+  [
+   "22",
+   "22",
+   "CQ22.1",
+   "What's protected by design right?"
+  ],
+  [
+   "23",
+   "23",
+   "CQ23.1",
+   "What's the difference between copyright and design right in terms of ownership, author, and duration of the right?"
+  ],
+  [
+   "24",
+   "24",
+   "CQ24.1",
+   "Is there any difference between copyright and design right in case of infringement and asking for legal liabilities?"
+  ],
+  [
+   "25",
+   "25",
+   "CQ25.1",
+   "Is there any exception on design right license?"
+  ],
+  [
+   "26",
+   "26",
+   "CQ26.1",
+   "What does a registered design protect?"
+  ],
+  [
+   "27",
+   "27",
+   "CQ27.1",
+   "Can an architect's design be registered as an industrial design?"
+  ],
+  [
+   "28",
+   "28",
+   "CQ28.1",
+   "What's the difference between design right and registered design in term of ownership, author,duration of the right?"
+  ],
+  [
+   "29",
+   "29",
+   "CQ29.1",
+   "Is there any difference between design right and registered design in case of infringment and asking for legal liabilities?"
+  ],
+  [
+   "30",
+   "30",
+   "CQ30.1",
+   "How can an owner register internationally for an industrial design?"
+  ],
+  [
+   "31",
+   "31",
+   "CQ31.1",
+   "Case study: What is the infrigement of design right/ registered design in the assigned case?"
+  ],
+  [
+   "32",
+   "32",
+   "QN32.1",
+   "What are IPRs in a smart phone?"
+  ],
+  [
+   "33",
+   "33",
+   "QN33.1",
+   "What circumstance is overlapping IP protection considered a limitation?"
+  ],
+  [
+   "34",
+   "37",
+   "QN37.1",
+   "What is a trademark and what are trademark functions?"
+  ],
+  [
+   "35",
+   "38",
+   "QN38.1",
+   "When a sign can be deemed registrable to be a trademark?"
+  ],
+  [
+   "36",
+   "39",
+   "QN39.1",
+   "In which way that trademark will be formed?"
+  ],
+  [
+   "37",
+   "40",
+   "QN40.1",
+   "In which case, a sign is protected as a trademark although it is not registered?"
+  ],
+  [
+   "38",
+   "40",
+   "QN40.2",
+   "What is get-up and what does it may include?"
+  ],
+  [
+   "39",
+   "41",
+   "QN41.1",
+   "How to identify a trademark is famous in common law?"
+  ],
+  [
+   "40",
+   "42",
+   "QN42.1",
+   "What is a domain name and can it be a business trademark?"
+  ],
+  [
+   "41",
+   "43",
+   "QN43.1",
+   "What are your critical thoughts about the misuse of domain name can harm trademark and business?"
+  ],
+  [
+   "42",
+   "44",
+   "QN44.1",
+   "What is \"passing-off\" and what is it difference from infringement?"
+  ],
+  [
+   "43",
+   "45",
+   "QN45.1",
+   "Which circumstances can be deem as infringements of registered trademark and what liability can be imposed?"
+  ],
+  [
+   "44",
+   "46",
+   "QN46.1",
+   "When passing off happens, what the owner should prove to protect their trademark?"
+  ],
+  [
+   "45",
+   "47",
+   "QN47.1",
+   "What are the negative effects/ consequences that passing off demonstrates to the business environment."
+  ],
+  [
+   "46",
+   "48",
+   "QN48.1",
+   "Can you describe one of the trademark system that you have known?"
+  ],
+  [
+   "47",
+   "49",
+   "QN49.1",
+   "Why should people license an IPR?"
+  ],
+  [
+   "48",
+   "50",
+   "QN50.1",
+   "Compare the features of each way of acquiring IPRs?"
+  ],
+  [
+   "49",
+   "51",
+   "QN51.1",
+   "Can you describe and analyze a real case about copyright licensing that you have known?"
+  ],
+  [
+   "50",
+   "52",
+   "QN52.1",
+   "When you act on behalf of a singer to negotiate with an author to lease a song, what terms of the contract should you care about most?"
+  ],
+  [
+   "51",
+   "53",
+   "QN53.1",
+   "What are the pros and cons of each type of license?"
+  ],
+  [
+   "52",
+   "54",
+   "QN54.1",
+   "In your opinion, which terms should be improved when you critically analyse the franchising contract as provided?"
+  ]
+ ],
+ "links": [
+  "/download/13383/S/1_IPR102_Phần 1.zip",
+  "/download/13383/S/2_IPR102_Phần 2.zip"
+ ]
+}

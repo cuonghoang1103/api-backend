@@ -1,0 +1,1029 @@
+{
+ "ma": "BFT201",
+ "sylID": "14413",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14413",
+   "code": "BFT201",
+   "name": "Ứng dụng công nghệ trong Ngân hàng số - Tài chính",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14413",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14413",
+  "Syllabus Name": "Ứng dụng công nghệ trong Ngân hàng số - Tài chính",
+  "Course Name English": "Technology Applications in Digital Banking and Finance",
+  "Subject Code": "BFT201",
+  "Learning-Teaching Method": "Lecture,Presentation,discussion,groupwork,Offline",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "1. Course Objectives:\n\nThis course aims to provide learners with a comprehensive understanding of how technology is applied within modern banking systems. Students will explore the historical development of banking technology, key digital infrastructures, and core banking functions such as payments and customer interaction. The course also examines opportunities and risks arising from digital transformation in the financial sector. By the end of the course, learners will be able to analyze banking technology ecosystems and engage effectively with both technical and business stakeholders in the industry.\n\n2. Course Content:\n\nThe course is organised in six blocks. (1) Foundations of digital banking, including the evolution of banking and its technology landscape; (2) Architecture and data, covering core banking systems, databases, and integration technologies; (3) Digital channels, such as internet/mobile banking and customer interaction across platforms; (4) Payments and operations, including card payments, interbank systems, and risk management technologies; (5) Regulation and governance, focusing on compliance, data protection, and technology management; and (6) Future trends in digital banking, supported by an applied project.\n\n3. Activities and Teaching Methodology:\n\nOf the 60 sessions, roughly 40 are guided lectures and case discussions and the remainder are applied workshops, project checkpoints, assessment and review. Workshops ask students to trace transactions end-to-end, read a public banking API portal, audit a real bank's cross-channel journey, map an instant payment flow, and translate a regulatory requirement into technology requirements. All technical content is delivered at conceptual and interpretive level: students read, explain and evaluate architectures and process flows; no programming, configuration or systems administration is required.",
+  "StudentTasks": "- Students must attend more than 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, workshops, assignments and case studies given by instructor in class or at home and submit on time\n\n- Read the assigned textbook sections before each session; sections marked as background reading are self-study and are not assessed in depth\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the http://flm.fpt.edu.vn for up-to-date course information",
+  "Tools": "- FPT University learning material system: https://flm.fpt.edu.vn/\n\n- Personal Laptop\n\n- Microsoft Office (Word, Excel, PowerPoint)\n\n- A free diagramming tool (draw.io, Lucidchart or equivalent) for architecture and journey-mapping workshops\n\n- Publicly available bank/fintech and regulator materials (annual reports, developer/API portals, Open Banking and payment scheme documentation; SBV/NAPAS materials for the Vietnamese context)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "Introduction-level course (code 201, semester 3), no pre-requisite. Content is selected against the course objective rather than covering the textbook exhaustively. Every chapter is classified as Core (taught and assessed), Awareness (context only, lightly assessed) or Self-study (background reading, not assessed) - see the 'Textbook Coverage' sheet. Legacy and telecoms-engineering material (CORBA, CICS internals, SIP/H.323, dialler and workforce-scheduling mechanics) and UK-specific scheme timetables are treated as awareness or worked examples only.",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "The Handbook of Banking Technology",
+   "Tim Walker; Lucian Morris",
+   "John Wiley & Sons",
+   "2021",
+   "1st",
+   "978-1119328018",
+   "True",
+   "False",
+   "False",
+   "main textbook; the schedule follows a selected subset of chapters - see the 'Textbook Coverage' sheet for the Core / Awareness / Self-study classification of every chapter"
+  ],
+  [
+   "2",
+   "Bank 4.0: Banking Everywhere, Never at a Bank",
+   "Brett King",
+   "John Wiley & Sons",
+   "2018",
+   "1st",
+   "978-1119506508",
+   "False",
+   "False",
+   "False",
+   "supplement; short assigned extracts only, used for digital-first business models and customer experience (Topics 1, 19)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Describe the role of technology in the banking and financial services business, including banking products and services in the digital era, the technology inheritance, digital-first banking models and the current banking-fintech landscape."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Explain how a bank works as a technology system, including the core banking platform, database and platform architecture, availability and resilience, single customer view, integration and banking APIs, microservices, and banking data and reporting."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyse digital banking channels and customer journeys - internet and mobile banking, authentication and digital onboarding, branch, ATM and contact centre - against consistency, availability, security and accessibility."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Analyse payment and banking-operations technologies, including card payments, clearing and settlement, interbank payment schemes, payment platform technology, credit operations and fraud detection, and interpret their operational, cost and risk implications."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Evaluate the regulatory, compliance and governance environment of banking technology - payment and data-protection regulation, Open Banking, KYC/AML obligations, operational resilience, the technology function and sourcing - and its impact on technology decisions."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop and present, individually and in teams, a feasible technology-enabled solution to a digital banking or fintech problem, evaluating risks, constraints and the responsible use of data."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group ASM",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "15' presentation + 10' Q&A for each group",
+   "CLO3, CLO4, CLO5, CLO6",
+   "Group project with rubric criteria; report or slide deck, presentation and Q&A",
+   "1",
+   "End-to-end guided project for a selected bank, digital bank or fintech proposition: problem framing and business/technology context; channel and customer-experience design (Ch. 4); payment and banking-operations technology (Ch. 5-7); regulatory, compliance and resilience requirements (Ch. 8-9); a feasible technology-enabled solution with risks, constraints and recommendations.",
+   "ASM content: end-to-end technology solution for a selected bank, digital bank or fintech proposition, covering problem framing, channel and customer-experience design, payment and operations technology, regulatory and resilience requirements, and a feasible solution with risks and recommendations.\nGrouping: groups of 4-5 students, formed in Session 30; each member owns a named section and is assessed on it.\nGrading: 100 points; a group mark is adjusted by individual contribution and Q&A performance.\nPresentation: report or slide deck plus a 15-minute group presentation and 10-minute Q&A; all technical terms and diagrams must be explained in business language.\nLocation: prepared outside class; presented in class in Sessions 58-59.\nParties involved: students, instructor and peer groups; a checkpoint is held in Session 54.",
+   "Released in Session 30, checkpoint in Session 54, finalised in Session 57, presented in Sessions 58-59. Instruction and schedule must be presented in the Course Implementation Plan."
+  ],
+  [
+   "2",
+   "Individual ASM",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Take-home, 4 weeks",
+   "CLO1, CLO2, CLO3, CLO6",
+   "Applied written assignment with rubric criteria; report with architecture and customer-journey diagrams",
+   "1",
+   "Analysis of one approved bank/fintech and one selected digital service: business and technology context (Ch. 1-2); the core platform, integration, data and resilience delivering the service (Ch. 3); the digital channels and customer journey supporting it (Ch. 3 Sec. 3.10-3.11 and Ch. 4); risks and improvement recommendations. Expected level is business-technology interpretation, not technical implementation.",
+   "ASM content: written analysis of one approved bank or fintech and one selected digital service, covering the business and technology context, the technology architecture delivering the service, the digital channels and customer journey, key risks and feasible recommendations.\nGrouping: individual work; no groups.\nGrading: 100 points; sources must be public and cited.\nPresentation: report of 2,000-2,500 words with at least one architecture diagram and one customer-journey diagram; submitted as a single file.\nLocation: take-home; released Session 6, submitted Session 30.\nParties involved: student and instructor; the instructor approves the chosen bank/fintech and marks the report.",
+   "Released in Session 6 and submitted in Session 30. Instruction and schedule must be presented in the Course Implementation Plan."
+  ],
+  [
+   "3",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Continuous, Sessions 1-60",
+   "CLO1-CLO6",
+   "In-class discussion, exercises, case studies and practice-session outputs",
+   "N/A",
+   "All Core content of Chapters 1-10, with emphasis on applied interpretation: reading and explaining banking architecture diagrams, customer journeys, payment flows and regulatory requirements. No programming or system configuration is required.",
+   "Participation scores will be given based on students' class attendance, preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussions, and building upon others’ comments.",
+   "Recorded continuously across Sessions 1-60 and published to students at the end of the semester."
+  ],
+  [
+   "4",
+   "Quiz 1",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "30'",
+   "CLO1, CLO2",
+   "Multiple choices\nMarked by Computer or a suitable format",
+   "20",
+   "Chapter 1; Chapter 2 & Chapter 3",
+   "Closed-book multiple-choice test on the chapters listed in the scope column.\nGrouping: individual.\nGrading: 20 MCQs, 1 point each, marked by computer or a suitable format; each MCQ maps to one CLO only.\nPresentation: on-screen or paper answer sheet; no submission document required.\nLocation: in class, under supervision.\nParties involved: student and instructor; the instructor reviews the test with students after grading.",
+   "Scheduled in Session 23, immediately after the last lecture of the required material. The instructor reviews the test with students after grading."
+  ],
+  [
+   "5",
+   "Quiz 2",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "30'",
+   "CLO2, CLO3, CLO4",
+   "Multiple choices\nMarked by Computer or a suitable format",
+   "20",
+   "Chapter 4; Chapter 5 & Chapter 6",
+   "Closed-book multiple-choice test on the chapters listed in the scope column.\nGrouping: individual.\nGrading: 20 MCQs, 1 point each, marked by computer or a suitable format; each MCQ maps to one CLO only.\nPresentation: on-screen or paper answer sheet; no submission document required.\nLocation: in class, under supervision.\nParties involved: student and instructor; the instructor reviews the test with students after grading.",
+   "Scheduled in Session 41, immediately after the last lecture of the required material. The instructor reviews the test with students after grading."
+  ],
+  [
+   "6",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1-CLO5",
+   "Multiple choices\nMarked by Computer",
+   "50",
+   "Core content of Chapters 1-10 as scheduled",
+   "Comprehensive multiple-choice examination covering the Core content of Chapters 1-10.\nLocation: examination room, arranged by the exam board.\nParties involved: student and exam board.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nChapter 1: Introduction\n1.1 Banking and the Rise of Technology\nActivity: Lecture, Class discussion",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 1, Sec. 1.1\n- Slides: Ch. 1-0, 1-1\n- Syllabus BFT201",
+   "BFT201",
+   "Read Sec. 1.1 before class. List the technology that must exist behind one banking service you use, and share it in the class discussion.",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1 (cont)\n1.2 The Challenges of Technology in Large Banks\n1.3 Navigating This Book\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO1",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 1, Sec. 1.2-1.3\n- Slides: Ch. 1-2, 1-3",
+   "BFT201",
+   "Read Sec. 1.2-1.3. Prepare arguments on why legacy technology makes change slow and expensive in large banks.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 2: The History and Current State of Banking\n2.1 A Brief History of Banking\n2.2 Cash, Gold and Digital Money\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO1",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 2, Sec. 2.1-2.2\n- Slides: Ch. 2-1, 2-2",
+   "",
+   "Read Sec. 2.1-2.2. Complete the exercise explaining how a customer balance exists as a record rather than as cash.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2 (cont)\n2.3 Branch Centrism\n2.4 Banking Consolidation\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO1",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 2, Sec. 2.3-2.4\n- Slides: Ch. 2-3, 2-4\n- Self-study (not assessed): 2.4.1-2.4.3 (consolidation case histories)",
+   "",
+   "Read Sec. 2.3-2.4. Analyse the merger case and list the technology problems a bank merger creates.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2 (cont)\n2.5 The Development of Modern Banking Products and Services\n2.5.1 Banknotes; 2.5.2 Cheques; 2.5.3 Centralised Cheque Clearing; 2.5.5 Wire Transfers and Electronic Payments; 2.5.6 Charge and Credit Cards; 2.5.7 Debit Cards; 2.5.8 Direct Debits\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO1",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 2, Sec. 2.5.1-2.5.3, 2.5.5-2.5.8\n- Slides: Ch. 2-5a\n- Self-study (not assessed): 2.5.4 Traveller's Cheques",
+   "",
+   "Read Sec. 2.5.1-2.5.8. Complete the comparison exercise on who initiates a payment and who carries the risk for each instrument.",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2 (cont)\n2.5 (cont)\n2.5.9 Automated Teller Machines; 2.5.10 SWIFT; 2.5.11 Online and Internet Banking; 2.5.13 Smartcards and Contactless Cards; 2.5.14 Stored Value and Prepaid Cards; 2.5.15 Mobile Banking\nActivity: Lecture, Individual ASM instructions",
+   "Offline",
+   "CLO1, CLO6",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 2, Sec. 2.5.9-2.5.11, 2.5.13-2.5.15\n- Slides: Ch. 2-5b\n- Individual assignment brief and rubric\n- Self-study (not assessed): 2.5.12 Telephone Banking",
+   "",
+   "Read Sec. 2.5.9-2.5.15. Receive the individual assignment brief and select a bank/fintech and a digital service to analyse.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2 (cont)\n2.6 Developments in Banking Technology\n2.6.3 Computers; 2.6.4 Data Centres; 2.6.5 Data Networks; 2.6.6 Batch and Real-time Processing; 2.6.7 Cloud\n2.7 The Challenges of Technology in Banking\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO1",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 2, Sec. 2.6.3-2.6.7, Sec. 2.7\n- Slides: Ch. 2-6, 2-7\n- Self-study (not assessed): 2.6.1 Cheque-sorting Machines; 2.6.2 Electronic Accounting Machines",
+   "",
+   "Read Sec. 2.6.3-2.7. Classify the listed banking activities as batch or real-time and explain the customer impact of each choice.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2 (cont)\n2.8 New Banking Models\n2.10 The Current State of Banking\n2.10.1 Banking Organisations; 2.10.2 Bank Networks and Payment Schemes; 2.10.3 Processors; 2.10.4 Technology in Banks\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO1",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 2, Sec. 2.8, 2.10\n- Slides: Ch. 2-8, 2-10\n- Self-study (not assessed): 2.8.1-2.8.4 (country markets); 2.9 The Impact of the 2008 Banking Crisis",
+   "",
+   "Read Sec. 2.8 and 2.10. Map the ecosystem of a chosen market: banks, challengers, schemes and processors.",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3: An Introduction to Banking Technology\n3.1 Introduction\n3.2 A Model of a Simple Bank\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO2",
+   "I, T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.1-3.2\n- Slides: Ch. 3-1, 3-2",
+   "",
+   "Read Sec. 3.1-3.2. Draw the simple bank model and label customers, accounts, channels and the ledger.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3 (cont)\n3.3 The Core Banking Platform\nActivity: Lecture",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.3\n- Slides: Ch. 3-3",
+   "",
+   "Read Sec. 3.3. Prepare an explanation of what the core platform must guarantee when it posts a transaction.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3 (cont)\n3.3 (cont)\nActivity: Practice - tracing a customer transaction end-to-end",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.2-3.3\n- Slides: Ch. 3-3\n- Practice worksheet: transaction tracing",
+   "",
+   "Trace a transfer from the mobile app to the posted balance, identify every system it touches, and present the flow for discussion.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3 (cont)\n3.4 Database Architectures\nActivity: Lecture",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.4\n- Slides: Ch. 3-4",
+   "",
+   "Read Sec. 3.4. Prepare an explanation, in business terms, of what could go wrong without transaction guarantees.",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3 (cont)\n3.5 Making Platforms Highly Available\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.5\n- Slides: Ch. 3-5\n- Case: a public banking outage",
+   "",
+   "Read Sec. 3.5. Analyse the outage case and identify which resilience measure would have prevented or shortened it.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3 (cont)\n3.6 Platform Architectures\n3.7 Revisiting Our Simple Model of a Bank\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.6-3.7\n- Slides: Ch. 3-6, 3-7",
+   "",
+   "Read Sec. 3.6-3.7. Redraw the bank model with platform layers and explain what each layer contributes.",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3 (cont)\n3.8 Single Customer View\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.8\n- Slides: Ch. 3-8",
+   "",
+   "Read Sec. 3.8. Identify the business problems caused by the absence of a single customer view in a given scenario.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3 (cont)\n3.9 IBM CICS\nActivity: Lecture, Class discussion",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.9 (awareness level)\n- Slides: Ch. 3-9\n- Self-study (not assessed): detailed CICS internals are not required",
+   "",
+   "Read Sec. 3.9 at overview level. Prepare a view on why legacy transaction processing survives and what it prevents a bank from doing.",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 3 (cont)\n3.10 Internet Banking\nActivity: Lecture",
+   "Offline",
+   "CLO2, CLO3",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.10\n- Slides: Ch. 3-10",
+   "",
+   "Read Sec. 3.10. Trace a login-to-transfer journey through the internet banking layers.",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 3 (cont)\n3.11 Customer Authentication\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO2, CLO3",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.11\n- Slides: Ch. 3-11",
+   "",
+   "Read Sec. 3.11. Compare authentication options for a given banking task on friction, cost and fraud risk.",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 3 (cont)\n3.12 Remote Procedure Calls; 3.13 Distributed Objects and CORBA; 3.14 Services; 3.15 Web Services\nActivity: Lecture",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.12-3.15 (awareness level)\n- Slides: Ch. 3-12 to 3-15\n- Self-study (not assessed): CORBA and SOAP/WSDL protocol detail are not required",
+   "",
+   "Read Sec. 3.12-3.15 at overview level. Prepare an explanation of what problem system-to-system integration solves in a bank.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 3 (cont)\n3.16 RESTful Web Services\n3.17 Service-Oriented Architecture\n3.18 An Updated Model of Our Bank\nActivity: Lecture, Practice - reading a public banking API portal",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.16-3.18\n- Slides: Ch. 3-16 to 3-18\n- Public bank developer / Open Banking API portals; practice worksheet",
+   "",
+   "Read Sec. 3.16-3.18. Explore a public banking API portal and explain in business terms what three listed APIs do and what risks they create.",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 3 (cont)\n3.19 Application Processing\n3.20 Microservices\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.19-3.20\n- Slides: Ch. 3-19, 3-20",
+   "",
+   "Read Sec. 3.19-3.20. Compare a monolithic core and a microservices approach for one banking capability.",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 3 (cont)\n3.21 Modern Databases\n3.22 Data Analysis and Reporting\n3.22.1 Analytic Data Models; 3.22.2 Data Analysis Architectures; 3.22.3 Operational Data Stores; 3.22.4 Big Data; 3.22.5 Operational Dashboards and Stream Processing\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 3, Sec. 3.21-3.22\n- Slides: Ch. 3-21, 3-22",
+   "",
+   "Read Sec. 3.21-3.22. Explain how a bank turns transaction data into one management or regulatory report.",
+   ""
+  ],
+  [
+   "23",
+   "Quiz 1\nScope: Chapter 1; Chapter 2; Chapter 3 (Sec. 3.1-3.8)\nActivity: Quiz, Review",
+   "Offline",
+   "CLO1, CLO2",
+   "U",
+   "- Revision of Sessions 1-15\n- Textbook: Ch. 1, Ch. 2, Ch. 3 Sec. 3.1-3.8\n- Slides: Ch. 1 to Ch. 3-8",
+   "",
+   "Take Quiz 1 as required by the instructor, then review the answers and identify personal weak areas.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4: Channels\n4.1 Introduction\n4.2 Branches\n4.3 Branch Technology\nActivity: Lecture, Class discussion",
+   "Offline",
+   "CLO3",
+   "I, T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 4, Sec. 4.1-4.3\n- Slides: Ch. 4-1 to 4-3\n- Self-study (not assessed): 4.4 Post",
+   "",
+   "Read Sec. 4.1-4.3. List the channels of a chosen bank and the customer needs each one still serves.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 4 (cont)\n4.5 Automated Teller Machines\n4.5.1 Basic Arrangement of a Bank's ATMs; 4.5.3 ATM Networks; 4.5.4 Considerations When Deploying ATMs\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO3",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 4, Sec. 4.5.1, 4.5.3-4.5.4\n- Slides: Ch. 4-5\n- Self-study (not assessed): 4.5.2 ATM Hardware, Software and Message Formats (awareness only)",
+   "",
+   "Read Sec. 4.5. Trace an ATM withdrawal from card insertion to the debited account and list the parties involved.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 4 (cont)\n4.6 Telephony; 4.7 Online Chat; 4.8 Video Calling\n4.9 Handling Telephone, Chat and Video Contacts\n4.9.1 The Call Centre Platform; 4.9.3 Handling a Call in the Call Centre; 4.9.5 Computer Telephony Integration; 4.9.6 Interactive Voice Response; 4.9.14 Contact Centre Platforms in the Cloud; 4.9.16 A Modern Contact Centre\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO3",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 4, Sec. 4.6-4.8, 4.9.1, 4.9.3, 4.9.5, 4.9.6, 4.9.14, 4.9.16\n- Slides: Ch. 4-6 to 4-9\n- Self-study (not assessed): 4.9.2, 4.9.4, 4.9.7-4.9.13, 4.9.15, 4.9.17-4.9.18 (SIP, H.323, recording, diallers, workforce scheduling)",
+   "",
+   "Read the listed sections of Sec. 4.6-4.9. Draw the path of an inbound customer contact and redesign a poorly structured IVR menu.",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 4 (cont)\n4.10 Text Messaging\n4.11 Internet\n4.12 Email\n4.13 Mobile\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO3",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 4, Sec. 4.10-4.13\n- Slides: Ch. 4-10 to 4-13\n- Case: a bank mobile app review",
+   "",
+   "Read Sec. 4.10-4.13. Evaluate a bank's mobile app against customer needs, availability and security.",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 4 (cont)\n4.14 Social Media; 4.15 Marketing\n4.16 Cross-channel Considerations and Implications\n4.16.1 Consistency; 4.16.2 Operational Availability and Resilience; 4.16.3 Security; 4.16.4 Heterogeneity of Endpoints; 4.16.5 Accessibility\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO3",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 4, Sec. 4.14-4.16\n- Slides: Ch. 4-14 to 4-16",
+   "",
+   "Read Sec. 4.14-4.16. Identify where a given customer journey breaks when the customer switches channel.",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 4 (cont)\n4.16 (cont)\nActivity: Practice - cross-channel customer journey audit of a real bank",
+   "Offline",
+   "CLO3",
+   "U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 4, Sec. 4.16\n- Slides: Ch. 4-16\n- Audit worksheet; public bank channel and app materials",
+   "",
+   "Audit one real bank journey across channels and report the consistency, availability, security and accessibility gaps found.",
+   ""
+  ],
+  [
+   "30",
+   "Individual ASM submission\nGroup ASM instructions\nActivity: Individual ASM, ASM Instructions",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6",
+   "T, U",
+   "- Individual assignment brief and rubric\n- Group assignment brief and rubric\n- Slides: ASM briefing pack",
+   "",
+   "Submit the individual assignment. Form groups, receive the group assignment brief and propose the group topic for approval.",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 5: Banking Operations\n5.1 Contact Centre\n5.2 Payment Operations\n5.3 Cash Management\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 5, Sec. 5.1-5.3\n- Slides: Ch. 5-1 to 5-3",
+   "",
+   "Read Sec. 5.1-5.3. Map what happens operationally after a customer submits a digital request.",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 5 (cont)\n5.4 Credit Operations\n5.4.1 Retail Credit Application Process; 5.4.2 Small Business Credit Application Process\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 5, Sec. 5.4\n- Slides: Ch. 5-4\n- Case: a digital lending application",
+   "",
+   "Read Sec. 5.4. Trace a retail credit application through decisioning and identify where automation adds value.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 5 (cont)\n5.5 Collections and Recoveries\nActivity: Lecture, Class discussion",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 5, Sec. 5.5\n- Slides: Ch. 5-5",
+   "",
+   "Read Sec. 5.5. Prepare a position on where automation should and should not replace human contact in collections.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 5 (cont)\n5.6 Fraud Services\n5.6.1 Know Your Customer; 5.6.2 Politically Exposed Persons and Sanctioned Entities; 5.6.3 Adverse Media Checks\nActivity: Lecture",
+   "Offline",
+   "CLO4, CLO5",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 5, Sec. 5.6.1-5.6.3\n- Slides: Ch. 5-6a\n- Self-study (not assessed): 5.6.4 Immigration Checklists",
+   "",
+   "Read Sec. 5.6.1-5.6.3. Prepare a list of the data and checks required to onboard a customer compliantly.",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 5 (cont)\n5.6 (cont)\n5.6.5 Fraud Databases; 5.6.6 High-Risk Countries; 5.6.7 Ongoing Monitoring\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 5, Sec. 5.6.5-5.6.7\n- Slides: Ch. 5-6b",
+   "",
+   "Read Sec. 5.6.5-5.6.7. Assess the given customer scenarios and identify which monitoring controls should trigger and why.",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 5 (cont)\n5.6 (cont)\n5.6.8 Transaction Monitoring and Anti-Money Laundering; 5.6.9 Reporting Suspicious Activity; 5.6.10 Tipping Off\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO4, CLO5",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 5, Sec. 5.6.8-5.6.10\n- Slides: Ch. 5-6c",
+   "",
+   "Read Sec. 5.6.8-5.6.10. Work the case and explain how a suspicious transaction is detected, escalated and reported, and what staff must not do.",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 6: Card Payments\n6.1 Types of Card\n6.1.1 Debit Cards; 6.1.2 Prepaid Cards; 6.1.3 Credit Cards; 6.1.4 Charge Cards; 6.1.5 Other Payment Cards\n6.2 Information on a Payment Card\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 6, Sec. 6.1-6.2\n- Slides: Ch. 6-1, 6-2",
+   "",
+   "Read Sec. 6.1-6.2. Compare debit, credit, charge and prepaid cards on funding, risk and customer use.",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 6 (cont)\n6.3 How a Card Payment Works\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 6, Sec. 6.3\n- Slides: Ch. 6-3",
+   "",
+   "Read Sec. 6.3. Sequence the steps of a card authorisation from terminal to issuer and back.",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 6 (cont)\n6.4 Card Payment Networks\n6.5 Other Types of Card Transactions\n6.5.1 Pre-authorisations; 6.5.3 Card-Not-Present Transactions; 6.5.4 PIN-based Authorisation; 6.5.5 Reversals, Refunds and Chargebacks\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 6, Sec. 6.4-6.5\n- Slides: Ch. 6-4, 6-5\n- Self-study (not assessed): 6.5.2 Offline Payments; 6.5.6 Advice Messages",
+   "",
+   "Read Sec. 6.4-6.5. Draw the four-party model and work the chargeback dispute case.",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 6 (cont)\n6.6 Managing Payment Cards\n6.6.1 Channels; 6.6.2 Onboarding and Issuance; 6.6.3 Processing; 6.6.4 Outsourcing of Processing; 6.6.5 Operational Management\nActivity: Lecture, Class discussion",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 6, Sec. 6.6\n- Slides: Ch. 6-6\n- Self-study (not assessed): 6.6.6 Back Office",
+   "",
+   "Read Sec. 6.6. Prepare arguments for and against outsourcing card processing for a small bank.",
+   ""
+  ],
+  [
+   "41",
+   "Quiz 2\nScope: Chapter 3 (Sec. 3.9-3.22); Chapter 4; Chapter 5; Chapter 6\nActivity: Quiz, Review",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "- Revision of Sessions 17-40\n- Textbook: Ch. 3 Sec. 3.9-3.22, Ch. 4, Ch. 5, Ch. 6\n- Slides: Ch. 3-9 to Ch. 6-6",
+   "",
+   "Take Quiz 2 as required by the instructor, then review the answers and identify personal weak areas.",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 7: Payments\n7.1 Introduction\n7.2 Cash\n7.3 Cheques\nActivity: Lecture",
+   "Offline",
+   "CLO4",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 7, Sec. 7.1-7.3\n- Slides: Ch. 7-1 to 7-3\n- Self-study (not assessed): 7.3.1-7.3.4 (cheque types, cheque fraud, cheque management)",
+   "",
+   "Read Sec. 7.1-7.3. Prepare an explanation of the risks and costs a bank carries when handling cash and cheques.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 7 (cont)\n7.4 Direct Credits\n7.5 Clearing and Settlement\n7.6 Interbank Payments\n7.6.1 Batch-oriented Payment Schemes; 7.6.2 Example - Bacs Direct Credits; 7.6.3 Direct Debits; 7.6.4 Example - Bacs Direct Debits\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 7, Sec. 7.4-7.6.4\n- Slides: Ch. 7-4 to 7-6a\n- UK scheme examples are worked examples only",
+   "",
+   "Read Sec. 7.4-7.6.4. Distinguish clearing from settlement in the worked interbank example and map the batch cycle.",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 7 (cont)\n7.6 (cont)\n7.6.5 Message-oriented Payment Schemes; 7.6.6 Payment Instructions; 7.6.7 Payment Message Formats; 7.6.8 Payment Message Addressing; 7.6.9 Other Payment Message Fields; 7.6.10 Example - Faster Payments\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 7, Sec. 7.6.5-7.6.10\n- Slides: Ch. 7-6b\n- ISO 20022 public materials",
+   "",
+   "Read Sec. 7.6.5-7.6.10. Identify the fields a payment message needs and explain what happens when one is wrong.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 7 (cont)\n7.6 (cont)\n7.6.11 High-value Payment Schemes; 7.6.12 Example - CHAPS; 7.6.13 International Payments; 7.6.14 Options for Participating in Payment Schemes; 7.6.15 Hours of Operation\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 7, Sec. 7.6.11-7.6.15\n- Slides: Ch. 7-6c",
+   "",
+   "Read Sec. 7.6.11-7.6.15. Recommend how a small new bank should connect to payment schemes and justify the choice.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 7 (cont)\n7.7 Payment Fraud and Sanctions\n7.8 Payment Reconciliation\n7.9 Payment Technology\n7.9.1 Creating a Payment Instruction; 7.9.2 Processing Interbank Payments; 7.9.3 The Technology Underlying Payment Platforms\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 7, Sec. 7.7-7.9\n- Slides: Ch. 7-7 to 7-9\n- Local instant payment materials for context",
+   "",
+   "Read Sec. 7.7-7.9. Map an instant payment end-to-end, including message, screening, reconciliation and failure handling.",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 8: Regulation, Finance and Compliance\n8.1 Introduction\n8.2 Regulation\n8.2.1 PSD2\nActivity: Lecture, Class discussion",
+   "Offline",
+   "CLO5",
+   "I, T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 8, Sec. 8.1-8.2.1\n- Slides: Ch. 8-1, 8-2a",
+   "",
+   "Read Sec. 8.1-8.2.1. Identify the technology a bank must build to satisfy a given payment regulation requirement.",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 8 (cont)\n8.2 (cont)\n8.2.2 General Data Protection Regulation; 8.2.3 Open Banking and Open Data; 8.2.4 Consequences of Non-compliance\n8.3 Global Standards\n8.4 Working with (and within) Regulation\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO5",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 8, Sec. 8.2.2-8.4\n- Slides: Ch. 8-2b to 8-4\n- Public Open Banking and data protection materials",
+   "",
+   "Read Sec. 8.2.2-8.4. Explain what Open Banking allows a third party to do with customer data and under what consent.",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 8 (cont)\n8.2-8.4 (cont)\nActivity: Practice - turning a regulatory requirement into system, data and control requirements",
+   "Offline",
+   "CLO5, CLO6",
+   "U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 8, Sec. 8.2-8.4\n- Slides: Ch. 8-2 to 8-4\n- Selected regulatory extract; practice worksheet",
+   "",
+   "Convert one regulatory clause into system, data and control requirements, and identify the main cost drivers.",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 8 (cont)\n8.5 Finance Functions - Introduction\n8.6 Finance\n8.6.5 Financial Reporting; 8.6.6 Regulatory Reporting; 8.6.7 Technology and Finance\n8.7 Treasury\n8.7.4 Technology and Treasury\nActivity: Lecture",
+   "Offline",
+   "CLO5",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 8, Sec. 8.5, 8.6.5-8.6.7, 8.7.4\n- Slides: Ch. 8-5 to 8-7\n- Self-study (not assessed): 8.6.1-8.6.4; 8.7.1 Risk Management and Modelling; 8.7.2 Asset and Liability Management; 8.7.3 Treasury Back Office",
+   "",
+   "Read the listed sections of Sec. 8.5-8.7. Prepare an explanation of what data finance and treasury need and where it comes from.",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 8 (cont)\n8.8 Compliance\n8.8.1 History of Compliance; 8.8.2 Promulgation and Tracking of Compliance Objectives and Measures; 8.8.3 Creation of Standards and Tools for Managing Compliance Risk; 8.8.5 Assessment; 8.8.6 Root-Cause Analysis and Enforcement; 8.8.7 Technology and Compliance\nActivity: Lecture, Case study",
+   "Offline",
+   "CLO5",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 8, Sec. 8.8\n- Slides: Ch. 8-8\n- Self-study (not assessed): 8.9 Human Resources; 8.10 Procurement; 8.11 Other Corporate Functions",
+   "",
+   "Read Sec. 8.8. Analyse the control failure case and identify which compliance control should have prevented it.",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 9: The Technology Function\n9.1 Organisation and Governance\n9.3 Cost of Technology\nActivity: Lecture",
+   "Offline",
+   "CLO5",
+   "T",
+   "- Textbook: The Handbook of Banking Technology, Ch. 9, Sec. 9.1, 9.3\n- Slides: Ch. 9-1, 9-3\n- Self-study (not assessed): 9.2 Conway's Law (awareness only)",
+   "",
+   "Read Sec. 9.1 and 9.3. Prepare an explanation of who decides what technology a bank builds and how the spend is justified.",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 9 (cont)\n9.4 Working with the Business - It's about the Service, Not the Technology\n9.5 Service Management\n9.6 Mapping Services to Applications\n9.7 Governing the Application Estate\n9.8 Insourcing and Outsourcing\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO5",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 9, Sec. 9.4-9.8\n- Slides: Ch. 9-4 to 9-8",
+   "",
+   "Read Sec. 9.4-9.8. Map a banking service to the applications supporting it and recommend a sourcing option.",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 9 (cont)\n9.9 Managing the Estate\n9.9.1 The Importance of Standardisation and Order; 9.9.2 The 'Agile' Excuse; 9.9.3 Elements of Standardisation\n9.10 Following the Rules - Regulation, Law and Technology\nActivity: Lecture, Case study, Group ASM checkpoint",
+   "Offline",
+   "CLO5, CLO6",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 9, Sec. 9.9-9.10\n- Slides: Ch. 9-9, 9-10\n- Group assignment checkpoint sheet\n- Self-study (not assessed): 9.9.4 Non-functional Capabilities (awareness only)",
+   "",
+   "Read Sec. 9.9-9.10. Evaluate the application estate case and present group project progress against the checkpoint sheet.",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 10: The Future of Banking\n10.1 Broad Trends\n10.1.1 The Payment Card Industry; 10.1.2 Banks\n10.2 Changing Products, Features and Functions\n10.3 The Future of Payments\n10.3.1 Instant Free Payments Anywhere; 10.3.2 Payment Anti-fraud Measures\nActivity: Lecture, Class discussion",
+   "Offline",
+   "CLO1, CLO5",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 10, Sec. 10.1-10.3\n- Slides: Ch. 10-1 to 10-3\n- Current public sources updating the 2021 view",
+   "",
+   "Read Sec. 10.1-10.3. Take a position on whether one payment trend will change a bank's business model, and defend it.",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 10 (cont)\n10.4 Technology in Operations\n10.5 Regulation\n10.7 The Technology Function\n10.8 A Short Digression on Data\n10.9 Banking Products and Services\n10.9.1 Current Accounts; 10.9.2 Loans; 10.9.3 Mortgages\nActivity: Lecture, Exercises",
+   "Offline",
+   "CLO1, CLO5",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 10, Sec. 10.4-10.5, 10.7-10.9\n- Slides: Ch. 10-4 to 10-9\n- Self-study (not assessed): 10.6 Finance",
+   "",
+   "Read the listed sections of Sec. 10.4-10.9. Redesign one banking product for a fully digital bank and justify the changes.",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 10 (cont)\n10.10 Distributed Ledger Technologies and Cryptocurrencies\n10.10.1 Payments; 10.10.2 Currencies\n10.11 The Future of the Branch\n10.12 Headcount, Skills and Career Progression in the Bank of the Future\nActivity: Lecture, Group ASM finalisation",
+   "Offline",
+   "CLO1, CLO5, CLO6",
+   "T, U",
+   "- Textbook: The Handbook of Banking Technology, Ch. 10, Sec. 10.10-10.12\n- Slides: Ch. 10-10 to 10-12\n- Group assignment rubric and presentation schedule",
+   "",
+   "Read Sec. 10.10-10.12. Assess one DLT or cryptocurrency use case for a bank, and finalise the group report and slides.",
+   ""
+  ],
+  [
+   "58",
+   "Group ASM presentation (Part 1)\nBusiness and technology context, architecture and channel design\nActivity: Presentation",
+   "Offline",
+   "CLO2, CLO3, CLO6",
+   "U",
+   "- Group assignment brief and rubric\n- Group report and slides\n- Peer feedback form",
+   "",
+   "Present the business context, technology architecture and channel design of the group assignment, and answer questions from the lecturer and other groups.",
+   ""
+  ],
+  [
+   "59",
+   "Group ASM presentation (Part 2)\nPayments, operations, regulation, risks and recommendations\nActivity: Presentation",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "U",
+   "- Group assignment brief and rubric\n- Group report and slides\n- Peer feedback form",
+   "",
+   "Present the payments, operations and regulatory analysis and defend the recommendations in the Q&A.",
+   ""
+  ],
+  [
+   "60",
+   "Course review and final exam preparation\nScope: Chapters 1-10\nActivity: Review, Exercises",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "- Revision map by CLO\n- Final exam practice question set\n- Textbook: Ch. 1-10 (Core sections)",
+   "",
+   "Work through the final exam practice questions, review the course by CLO and raise remaining questions with the lecturer.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "Explain why a modern bank is a technology business, and compare an incumbent bank with a digital-first challenger on cost base, technology and customer proposition."
+  ],
+  [
+   "2",
+   "5",
+   "CQ2",
+   "Map a modern banking product or service to the technology and payment infrastructure needed to deliver it."
+  ],
+  [
+   "3",
+   "7",
+   "CQ3",
+   "Explain what a bank inherits from decades of banking technology, and why legacy systems make digital change slow, costly and risky."
+  ],
+  [
+   "4",
+   "8",
+   "CQ4",
+   "Explain the roles of banks, challengers, payment schemes and processors in the current banking ecosystem."
+  ],
+  [
+   "5",
+   "10",
+   "CQ5",
+   "Draw a simple model of a bank and explain what the core banking platform must do to open an account, hold balances and process transactions."
+  ],
+  [
+   "6",
+   "12",
+   "CQ6",
+   "Explain what a banking database must guarantee for a transaction, and evaluate database architecture options for a banking system."
+  ],
+  [
+   "7",
+   "13",
+   "CQ7",
+   "Explain how a bank stays available to its customers and recovers from failure, and assess an outage against those measures."
+  ],
+  [
+   "8",
+   "15",
+   "CQ8",
+   "Explain why a single customer view is difficult to achieve in a bank, and what business problems its absence creates."
+  ],
+  [
+   "9",
+   "17",
+   "CQ9",
+   "Explain why legacy transaction processing survives in banks and what constraints it places on a new digital proposition."
+  ],
+  [
+   "10",
+   "19",
+   "CQ10",
+   "Design a secure authentication and digital onboarding journey that balances customer friction, fraud risk and identity requirements."
+  ],
+  [
+   "11",
+   "21",
+   "CQ11",
+   "Evaluate what a banking or Open Banking API allows a third party to do, and what risks and controls it requires."
+  ],
+  [
+   "12",
+   "23",
+   "CQ12",
+   "Explain how a bank turns transaction data into management and regulatory reporting, and where big data adds value."
+  ],
+  [
+   "13",
+   "25",
+   "CQ13",
+   "Evaluate the role of branch and ATM technology in a digital-first bank, and decide what should be retained, automated or withdrawn."
+  ],
+  [
+   "14",
+   "28",
+   "CQ14",
+   "Design a cross-channel customer journey that remains consistent, available, secure and accessible across mobile, web and assisted channels."
+  ],
+  [
+   "15",
+   "32",
+   "CQ15",
+   "Trace a retail credit application through decisioning, and identify where automation adds most value and most risk."
+  ],
+  [
+   "16",
+   "36",
+   "CQ16",
+   "Explain how a bank uses technology to verify customers, screen against sanctions lists and detect money laundering, and assess the customer-friction trade-off."
+  ],
+  [
+   "17",
+   "38",
+   "CQ17",
+   "Trace a card payment from the terminal to the issuer, and explain the role, revenue and risk of each party in the four-party model."
+  ],
+  [
+   "18",
+   "44",
+   "CQ18",
+   "Compare batch, instant and high-value payment schemes, and explain how a payment instruction is created, addressed, screened and reconciled."
+  ],
+  [
+   "19",
+   "48",
+   "CQ19",
+   "Translate a regulatory requirement such as payment regulation, data protection or Open Banking into concrete technology and data obligations."
+  ],
+  [
+   "20",
+   "57",
+   "CQ20",
+   "Develop and defend a digital banking technology solution that connects the business problem, solution architecture, channels, payments, risks and regulation."
+  ]
+ ],
+ "links": [
+  "/download/14413/S/1_BFT201.zip",
+  "/download/14413/S/2_BFT201.zip"
+ ]
+}

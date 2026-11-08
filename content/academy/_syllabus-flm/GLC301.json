@@ -1,0 +1,1773 @@
+{
+ "ma": "GLC301",
+ "sylID": "14198",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14198",
+   "code": "GLC301",
+   "name": "E-Customs_Khai báo hải quan điện tử",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14198",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14198",
+  "Syllabus Name": "E-Customs_Khai báo hải quan điện tử",
+  "Course Name English": "E-Customs",
+  "Subject Code": "GLC301",
+  "Learning-Teaching Method": "- Offline.- Research-Based Learning (RBL) integration:Selected topics in this course are delivered using a lResearch-Based Learning (RBL) approach. Rather than converting the entire course into a full research-based subject, the course integrates one focused RBL mini-module in Unit 6 (E-Customs Procedures and Documentation), where students investigate declaration errors and documentary inconsistencies, analyze evidence, propose corrective actions, defend their decisions, and reflect on compliance implications. This design supports inquiry-driven learning, evidence-based reasoning, academic defence, and reflective practice while remaining feasible for a technical, application-oriented course in Semester 5.",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course provides specialized and applied knowledge of electronic customs declaration and customs compliance in global logistics and supply chain operations. It equips students with the legal, technical, and procedural foundations required to understand customs administration; apply HS classification (Harmonized System Codes Classification), customs valuation, origin-related preferential treatment, and tariff/tax rules; and prepare and review e-customs declaration logic, supporting documents, and declaration flows for standard import/export and selected customs regimes. Through scenario-based learning, guided discussion, document review, and case analysis grounded in FIATA (International Federation of Freight Forwarders Associations) and VLI (Vietnam Logistics Research and Development Institute) resources, students develop compliance awareness, professional responsibility, and practical decision-making skills relevant to customs, freight forwarding, and international logistics environments.\n\n- AI Tools will be used to support students in:\n\n(1) generating ideas/structures for their speaking notes and slide structure of important topics of the course.\n\n(2) editing the slide set after students have already finished it.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Students are responsible for preparing assigned materials before class, participating actively in in-class discussions and activities, and submitting all individual and group assignments on time.\n\n- Laptops may be used in class only for academic purposes under lecturer guidance.\n\n- Students should access the institutional LMS/portal regularly for announcements, materials, and assignment updates.\n\n- Students are expected to work professionally in group activities and respect academic integrity in all assessed tasks.",
+  "Tools": "Internet; institutional FLM; presentation software; spreadsheet software for practice; AI-supported learning tools as directed by the lecturer",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "AI Policy: Students may use generative AI and other digital tools only as guided by the lecturer for idea generation, concept clarification, drafting support, document checking, and learning enhancement. Any AI use in assessed coursework must be disclosed clearly and students remain fully responsible for the accuracy, legality, and originality of their submissions. AI use is not permitted in quizzes and the final examination unless explicitly authorized. Students must verify AI-generated content against official customs/legal sources and comply with academic integrity standards.",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://eresources.fpt.edu.vn/items/4706/detail",
+   "",
+   "FIATA - VLA - VLI",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "FIATA Diploma in Freight Forwarding – Customs Procedures (course manual)"
+  ],
+  [
+   "2",
+   "Law on Customs 2014 (Vietnam)",
+   "",
+   "National Assembly of Vietnam / Vietnam Customs",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Official legal basis for customs administration and procedures. https://www.customs.gov.vn/"
+  ],
+  [
+   "3",
+   "Law on Export and Import Duties 2016 (Vietnam)",
+   "",
+   "National Assembly of Vietnam / Vietnam Customs",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Official legal basis for tariff and tax determination. https://www.customs.gov.vn/"
+  ],
+  [
+   "4",
+   "Decree 08/2015/NĐ-CP as amended by Decree 59/2018/NĐ-CP",
+   "",
+   "Government of Vietnam",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Detailed regulations on customs procedures, inspection, and supervision. https://www.customs.gov.vn/"
+  ],
+  [
+   "5",
+   "Circular 38/2015/TT-BTC as amended by Circular 39/2018/TT-BTC",
+   "",
+   "Ministry of Finance (Vietnam)",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Operational guidance for customs procedures, valuation, and tax administration. https://www.customs.gov.vn/"
+  ],
+  [
+   "6",
+   "What is the Harmonized System (HS)?",
+   "",
+   "World Customs Organization",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official overview of the HS. https://www.wcoomd.org/en/topics/nomenclature/overview/what-is-the-harmonized-system.aspx"
+  ],
+  [
+   "7",
+   "HS Convention",
+   "",
+   "World Customs Organization",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official HS Convention reference. https://www.wcoomd.org/en/topics/nomenclature/instrument-and-tools/hs_convention.aspx"
+  ],
+  [
+   "8",
+   "HS Nomenclature 2022 Edition",
+   "",
+   "World Customs Organization",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official HS 2022 reference. https://www.wcoomd.org/en/topics/nomenclature/instrument-and-tools/hs-nomenclature-2022-edition.aspx"
+  ],
+  [
+   "9",
+   "WTO Customs Valuation Gateway",
+   "",
+   "World Trade Organization",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official customs valuation reference. https://www.wto.org/english/tratop_e/cusval_e/cusval_e.htm"
+  ],
+  [
+   "10",
+   "Agreement on Implementation of Article VII of GATT 1994",
+   "",
+   "World Trade Organization",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official legal text for customs valuation. https://www.wto.org/english/docs_e/legal_e/20-val_01_e.htm"
+  ],
+  [
+   "11",
+   "Vietnam Customs Portal (English)",
+   "",
+   "Vietnam Customs",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official customs portal and updates. https://www.customs.gov.vn/index.jsp?ngon_ngu=en"
+  ],
+  [
+   "12",
+   "National and ASEAN Single Window",
+   "",
+   "Vietnam Customs",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official Vietnam Customs NSW/ASW reference. https://www.customs.gov.vn/index.jsp?aid=164685&cid=4209&pageId=2281"
+  ],
+  [
+   "13",
+   "ASEAN Single Window",
+   "",
+   "ASEAN Secretariat",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official ASEAN overview. https://asean.org/our-communities/economic-community/asean-single-window/"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the role of customs administration, trade compliance, and the legal-institutional framework governing e-customs operations in Vietnam within the context of global logistics and supply chain management."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply HS classification principles to determine appropriate tariff headings for typical traded goods and justify classification decisions using product information and legal notes."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply customs valuation, origin-related preferential treatment, tariff rules, and tax principles to determine customs value and payable import taxes in common customs scenarios."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Prepare and review the logic, data fields, supporting documents, and procedural steps of electronic customs declarations for standard import/export and selected special customs regimes."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Analyze customs compliance risks, liabilities, documentary errors, penalties, and professional responsibilities of customs declarants, brokers, freight forwarders, and logistics enterprises."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Use digital tools and AI responsibly to support customs learning, document preparation, and professional decision-making while maintaining academic integrity and ethical standards."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation and Interaction:",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "All sessions",
+   "CLO1, CLO5, CLO6",
+   "Discussion questions; constructive participation; scenario discussion\n\nGuided discussion, evidence-based classroom analysis",
+   "N/A",
+   "Units 1–7; preparedness, engagement, critical participation, and professional conduct",
+   "Attendance, preparation, quality of contribution, discussion engagement, and responsiveness to in-class tasks are recorded by the lecturer throughout the course.",
+   ""
+  ],
+  [
+   "2",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "10 weeks",
+   "CLO4, CLO5, CLO6",
+   "Group case study, presentation, and defense\n\nApplied case investigation in customs compliance. Students synthesize evidence, present findings, and defend recommendations in a structured group presentation. The task emphasizes collaborative inquiry, applied analysis, and professional communication.",
+   "1 GA/project",
+   "Units 2–7 with emphasis on e-customs procedure, compliance risk, and applied analysis",
+   "Groups analyze a customs/e-customs or compliance case, submit their work, and present/defend it in Slots 19–20.",
+   ""
+  ],
+  [
+   "3",
+   "Individual Assignment:",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "6 weeks",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Applied individual assignment / worksheet set\n\nApplied individual inquiry task based on the selected RBL-integrated module. Students analyze a customs dossier or declaration-related case, identify errors or inconsistencies, evaluate documentary evidence, propose a corrective action, justify the decision in a short memo, and submit a brief reflection on compliance implications and professional responsibility.",
+   "1 assignment",
+   "Units 3–6: HS classification, valuation, tariff/tax application, declaration logic, and short compliance reflection",
+   "Students complete an individual applied task set requiring analysis, structured answers, and justified customs/logistics reasoning. AI use, if any, must be disclosed.",
+   "Students complete one applied inquiry task,\ninvolving dossier analysis,\nevidence-based error diagnosis,\ncorrective action justification, and short reflection.\n\nOutput IA/ Individual RBL Applied Memo:\n+ case summary\n+ identified error(s)\n+ evidence used\n+ corrective action proposed\n+ justification\n+ short reflection"
+  ],
+  [
+   "4",
+   "Quiz 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "30 minutes",
+   "CLO1, CLO2, CLO5",
+   "Scenario-based MCQ",
+   "20 questions",
+   "Units 1–3: customs administration, legal/control mechanisms, and HS classification; focus on understanding and application",
+   "Conducted in class on the institutional testing platform or equivalent computer-based format; individual and closed-book.",
+   ""
+  ],
+  [
+   "5",
+   "Quiz 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "30 minutes",
+   "CLO3, CLO4, CLO5, CLO6",
+   "Scenario-based MCQ",
+   "20 questions",
+   "Units 4–6: customs valuation, tariff/tax application, and e-customs procedures; focus on application and procedural logic",
+   "Conducted in class on the institutional testing platform or equivalent computer-based format; individual and closed-book.",
+   ""
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Scenario-based MCQ",
+   "50 questions",
+   "Units 1–7 with emphasis on Units 4–7; integrated customs reasoning, procedural logic, and compliance analysis",
+   "Computer-based final test administered under institutional exam conditions; individual, time-limited, and closed-book.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "- Course introduction: course overview, assessment and learning expectations\n\nUNIT 1. CUSTOMS ADMINISTRATION AND TRADE COMPLIANCE\n1.1 Customs in global logistics, trade facilitation, and compliance mindset\n- Customs as trade facilitator and control authority; compliance as an operational issue in logistics",
+   "Offline",
+   "CLO1, CLO5",
+   "I,T,U",
+   "Course outline; FIATA Manual Ch.1 overview; VLI introductory slides",
+   "GLC301_slides PDF",
+   "Before class: preview the course outline and assigned pages. In class: guided discussion on why customs matters in logistics. After class: write a short reflection on customs and supply chains.",
+   ""
+  ],
+  [
+   "2",
+   "1.2 Vietnam Customs administration and key stakeholders\n- Organizational structure, functions, and stakeholder roles",
+   "Offline",
+   "CLO1",
+   "T,U",
+   "FIATA Manual Ch.1; VLI Ch.1 slides",
+   "GL_AI Integration Guide_SP26",
+   "Before class: read assigned materials. In class: stakeholder-mapping activity. After class: complete a stakeholder-role matrix.",
+   ""
+  ],
+  [
+   "3",
+   "1.3 Customs territory, operating locations, and customs-controlled areas\n- Customs territory, operating locations, supervised areas, and logistics implications",
+   "Offline",
+   "CLO1",
+   "T,U",
+   "FIATA Manual Ch.1; legal extracts on customs operating locations",
+   "GLC301_ECUS5VNACCS",
+   "Before class: read assigned materials. In class: concept check + short logistics-location case. After class: summarize how customs location affects procedures.",
+   ""
+  ],
+  [
+   "4",
+   "UNIT 2. CUSTOMS LEGAL FRAMEWORK AND CONTROL MECHANISMS\n2.1 Legal framework for customs operations in Vietnam\n- Law on Customs 2014; Law on Export and Import Duties 2016; Decree 08/2015; Decree 59/2018; Circular 38/2015; Circular 39/2018",
+   "Offline",
+   "CLO1",
+   "T,U",
+   "Selected legal extracts; FIATA Manual Ch.2–3; VLI legal framework slides",
+   "link4-1",
+   "Before class: skim the listed legal texts. In class: legal-framework mapping. After class: complete the legal-map worksheet.",
+   ""
+  ],
+  [
+   "5",
+   "2.2 Customs declarants: rights, obligations, and responsibilities\n- Declarants, customs agents, brokers, and procedural accountability",
+   "Offline",
+   "CLO1, CLO5",
+   "T,U",
+   "FIATA Manual Ch.1–2; VLI customs formalities slides",
+   "",
+   "Before class: read assigned materials. In class: short scenario analysis. After class: complete a declarant-responsibility note.",
+   ""
+  ],
+  [
+   "6",
+   "2.3 Import/export types and customs regimes\n- Major import/export types and selected customs regimes relevant to declaration logic",
+   "Offline",
+   "CLO1, CLO4",
+   "T,U",
+   "FIATA Manual Ch.2 and Ch.5; VLI customs formalities slides",
+   "",
+   "Before class: read assigned materials. In class: regime-comparison activity. After class: fill in the customs-regime matrix.",
+   ""
+  ],
+  [
+   "7",
+   "2.4 Customs inspection, supervision, and control mechanisms\n- Inspection, supervision, control, and post-clearance overview",
+   "Offline",
+   "CLO1, CLO5",
+   "T,U",
+   "FIATA Manual Ch.2; VLI customs formalities slides",
+   "",
+   "Before class: read assigned materials. In class: process tracing. After class: complete control-flow notes.",
+   ""
+  ],
+  [
+   "8",
+   "2.5 Risk management and customs channeling- Risk management principles, channeling, and compliance behavior",
+   "Offline",
+   "CLO1, CLO5",
+   "T,U",
+   "FIATA Manual Ch.2; VLI customs declaration and channeling slides",
+   "",
+   "Before class: read assigned materials. In class: guided discussion + mini case. After class: note implications of green/yellow/red channels.",
+   ""
+  ],
+  [
+   "9",
+   "2.6 Administrative violations, penalties, and appeals\n- Common customs violations, penalties, and appeals in practice",
+   "Offline",
+   "CLO1, CLO5",
+   "T,U",
+   "FIATA Manual Ch.1–2; Decree 128/2020 extracts; VLI penalty-related slides",
+   "",
+   "Before class: read assigned materials. In class: penalty-mapping exercise. After class: complete the risk-and-penalty worksheet.",
+   ""
+  ],
+  [
+   "10",
+   "UNIT 3. HS CLASSIFICATION\n3.1 HS system and nomenclature\n- Purpose, structure, and logic of the Harmonized System",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "FIATA Manual Ch.4; VLI HS slides",
+   "link10-1",
+   "Before class: read the HS overview. In class: concept explanation + structure exercise. After class: summarize the HS hierarchy.",
+   ""
+  ],
+  [
+   "11",
+   "3.2 GRI foundations and legal notes\n- Section notes, chapter notes, heading text, and GRI 1",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "FIATA Manual Ch.4; WCO HS references",
+   "link11-1",
+   "Before class: review assigned notes. In class: guided interpretation practice. After class: complete the GRI 1 note sheet.",
+   ""
+  ],
+  [
+   "12",
+   "3.3 GRI 2 and unfinished/unassembled goods\n- Incomplete goods, unfinished goods, and goods presented unassembled",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "FIATA Manual Ch.4; VLI HS slides",
+   "",
+   "Before class: read assigned examples. In class: example comparison. After class: write a short justification for two sample products.",
+   ""
+  ],
+  [
+   "13",
+   "3.4 GRI 3 for mixtures, composite goods, and sets\n- Essential character and competing headings",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "FIATA Manual Ch.4; VLI HS slides",
+   "",
+   "Before class: review examples. In class: classification discussion. After class: complete an essential-character worksheet.",
+   ""
+  ],
+  [
+   "14",
+   "3.5 GRI 4–6 and subheading logic\n- Residual classification and subheading determination",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "FIATA Manual Ch.4; WCO HS references",
+   "",
+   "Before class: read assigned materials. In class: guided practice. After class: summarize when each rule is used.",
+   ""
+  ],
+  [
+   "15",
+   "3.6 Classification by material, function, and end-use\n- Product information required for sound classification",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "FIATA Manual Ch.4; VLI HS slides",
+   "",
+   "Before class: prepare a product description. In class: attribute-based classification exercise. After class: improve your product description.",
+   ""
+  ],
+  [
+   "16",
+   "3.7 Composite products and multifunctional items\n- Applied logic for difficult classification scenarios",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "FIATA Manual Ch.4; case handouts",
+   "",
+   "Before class: read the case handout. In class: small-group analysis. After class: note the main classification challenge.",
+   ""
+  ],
+  [
+   "17",
+   "3.8 Common misclassification errors and consequences\n- Revenue risk, compliance risk, and documentary consequences",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "FIATA Manual Ch.4; VLI risk examples",
+   "",
+   "Before class: review error examples. In class: error-diagnosis activity. After class: list three prevention measures.",
+   ""
+  ],
+  [
+   "18",
+   "3.9 HS workshop A: consumer goods and retail products",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "Instructor worksheet set",
+   "",
+   "Before class: review the worksheet. In class: classification workshop. After class: revise your answers.",
+   ""
+  ],
+  [
+   "19",
+   "3.10 HS workshop B: industrial, transport, and logistics-related goods",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "Instructor worksheet set",
+   "",
+   "Before class: review the worksheet. In class: classification workshop. After class: revise your answers.",
+   ""
+  ],
+  [
+   "20",
+   "3.11 Advance rulings, disputes, and classification documentation\n- Evidence, product specification, and customs communication",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "FIATA Manual Ch.4; legal extracts on advance rulings",
+   "",
+   "Before class: read assigned materials. In class: documentation review. After class: prepare a classification justification note.",
+   ""
+  ],
+  [
+   "21",
+   "Quiz 1:\n- Scenario-based MCQ quiz covering Units 1–3 (customs foundation, legal-control mechanisms, and HS classification)",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "T,U",
+   "Review notes and assigned readings for Units 1–3",
+   "",
+   "Complete the in-class quiz individually and review feedback after class.",
+   ""
+  ],
+  [
+   "22",
+   "UNIT 4. CUSTOMS VALUATION\n4.1 Customs valuation foundations and WTO framework\n- Purpose, principles, and hierarchy of methods",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "FIATA Manual Ch.3–4; WTO customs valuation references",
+   "link22-1",
+   "Before class: read the valuation overview. In class: concept explanation. After class: summarize the logic of valuation methods.",
+   ""
+  ],
+  [
+   "23",
+   "4.2 Transaction value method\n- Primary method and conditions for acceptance",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "FIATA valuation section; WTO legal text",
+   "link23-1",
+   "Before class: read assigned materials. In class: guided example. After class: identify the conditions for using transaction value.",
+   ""
+  ],
+  [
+   "24",
+   "4.3 Secondary methods I\n- Identical goods and similar goods methods",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "FIATA valuation section; lecturer handout",
+   "",
+   "Before class: read assigned materials. In class: method-comparison exercise. After class: note the differences between identical and similar goods methods.",
+   ""
+  ],
+  [
+   "25",
+   "4.4 Secondary methods II\n- Deductive, computed, and fallback methods",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "FIATA valuation section; lecturer handout",
+   "",
+   "Before class: read assigned materials. In class: method-sequence practice. After class: complete a method-selection worksheet.",
+   ""
+  ],
+  [
+   "26",
+   "4.5 Additions, deductions, and related parties\n- Adjustments and valuation risk in related-party transactions",
+   "Offline",
+   "CLO3, CLO5",
+   "T,U",
+   "FIATA valuation section; VLI valuation slides",
+   "",
+   "Before class: review the adjustment list. In class: adjustment-identification activity. After class: prepare a short related-party risk note.",
+   ""
+  ],
+  [
+   "27",
+   "4.6 Valuation workshop\n- Applied valuation cases and method selection",
+   "Offline",
+   "CLO3, CLO5",
+   "T,U",
+   "Instructor valuation worksheet set",
+   "",
+   "Before class: review the worksheet. In class: applied workshop. After class: revise your answers.",
+   ""
+  ],
+  [
+   "28",
+   "UNIT 5. TARIFF AND IMPORT TAXATION\n5.1 Customs tariff structure and duty types\n- MFN, preferential, special preferential, and duty categories",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "FIATA Manual Ch.3; VLI tax slides",
+   "",
+   "Before class: read assigned materials. In class: tariff-structure mapping. After class: summarize the major tariff categories.",
+   ""
+  ],
+  [
+   "29",
+   "5.2 Origin-related preferential treatment and C/O basics\n- Origin in customs context and documentary relevance for tariffs",
+   "Offline",
+   "CLO3, CLO4",
+   "T,U",
+   "VLI origin section; relevant legal extracts",
+   "",
+   "Before class: review assigned materials. In class: origin-preference discussion. After class: prepare a short note on the role of C/O.",
+   ""
+  ],
+  [
+   "30",
+   "5.3 Import duty calculation basics\n- Tax base, taxable value, and basic import duty formula",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "FIATA Manual Ch.3; VLI tax slides",
+   "",
+   "Before class: read assigned materials. In class: simple duty-calculation exercise. After class: complete practice questions.",
+   ""
+  ],
+  [
+   "31",
+   "5.4 VAT and other taxes in customs context\n- VAT calculation and selected tax-related considerations",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "FIATA Manual Ch.8; VLI tax slides",
+   "",
+   "Before class: review the VAT section. In class: guided calculation. After class: complete the worksheet.",
+   ""
+  ],
+  [
+   "32",
+   "5.5 Trade remedies and integrated tax application\n- Anti-dumping, countervailing, safeguard duties, and integrated tax scenarios",
+   "Offline",
+   "CLO3, CLO5",
+   "T,U",
+   "FIATA Manual Ch.3; instructor scenario handout",
+   "",
+   "Before class: read assigned materials. In class: scenario-based discussion. After class: complete the integrated tax scenario.",
+   ""
+  ],
+  [
+   "33",
+   "5.6 Tariff and tax workshop\n- Integrated application practice for customs taxation",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "Instructor worksheet set",
+   "",
+   "Before class: review the worksheet. In class: applied workshop. After class: revise your answers.",
+   ""
+  ],
+  [
+   "34",
+   "UNIT 6. E-CUSTOMS PROCEDURES AND DOCUMENTATION\n6.1 E-customs ecosystem and digital customs environment\n- E-customs, National Single Window, ASEAN Single Window, and digital customs context",
+   "Offline",
+   "CLO4, CLO6",
+   "T,U",
+   "VLI declaration slides; Vietnam Customs NSW/ASW references",
+   "link34-1",
+   "Before class: review the assigned materials. In class: ecosystem mapping. After class: summarize the role of NSW/ASW in customs digitalization.",
+   ""
+  ],
+  [
+   "35",
+   "6.2 VNACCS overview and electronic declaration logic\n- Core system logic, data flow, and declaration structure",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "VLI declaration slides; FIATA Ch.2 and Ch.5",
+   "",
+   "Before class: read assigned materials. In class: guided walkthrough. After class: complete a VNACCS logic note.",
+   ""
+  ],
+  [
+   "36",
+   "6.3 Customs dossiers and supporting documents\n- Required documents, documentary logic, and document matching",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "FIATA Ch.2 and Ch.5; VLI dossier slides",
+   "",
+   "Before class: read assigned materials. In class: dossier-identification activity. After class: prepare a document checklist.",
+   ""
+  ],
+  [
+   "37",
+   "6.4 E-customs flow for standard import shipments\n- Sequence, control points, and documentary requirements",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "VLI declaration slides; FIATA Ch.5",
+   "",
+   "Before class: review the import flow. In class: process tracing. After class: summarize the import declaration flow.",
+   ""
+  ],
+  [
+   "38",
+   "6.5 E-customs flow for export shipments and selected customs regimes\n- Export declaration logic and selected regimes",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "VLI declaration slides; FIATA Ch.5",
+   "",
+   "Before class: review the export flow. In class: comparison activity. After class: complete the flow-comparison note.",
+   ""
+  ],
+  [
+   "39",
+   "6.6 Declaration data fields and customs codes\n- Key data fields, coding logic, and common data-quality issues",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "VLI declaration slides; lecturer handout",
+   "",
+   "Before class: review assigned materials. In class: data-field exercise. After class: correct sample declaration data.",
+   ""
+  ],
+  [
+   "40",
+   "6.7 Channeling, inspection, and release decisions\n- Green/yellow/red channels, inspection, and release logic within e-customs",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "VLI declaration slides; FIATA Ch.2",
+   "",
+   "Before class: read assigned materials. In class: channel-decision discussion. After class: note the implications for logistics operations.",
+   ""
+  ],
+  [
+   "41",
+   "6.8 Supplementary declaration, amendment, and cancellation\n- Corrective procedures and documentary follow-up",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "VLI declaration slides; FIATA Ch.5",
+   "",
+   "Before class: review the corrective procedures. In class: error-correction walkthrough. After class: complete an amendment/cancellation scenario.",
+   ""
+  ],
+  [
+   "42",
+   "6.9 Special customs dossiers and selected special cases\nDiagnosing declaration errors – problem framing",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Printed or digital dossier pack\n\nError Identification Sheet\n\nInitial RQ/Hypothesis Note template\n\nClass slides / note-taking sheet",
+   "",
+   "Before class: review the assigned dossier pack and identify potentially inconsistent fields or documents.\nIn class: work in pairs/groups to examine the dossier, identify errors or inconsistencies, formulate an initial research question, and propose a preliminary hypothesis.\n\nAfter class: submit an Initial Error Identification Sheet and a short Preliminary RQ/Hypothesis Note.",
+   ""
+  ],
+  [
+   "43",
+   "6.10 E-customs document review workshop\nDiagnosing declaration errors – evidence analysis",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Dossier pack from Session 42\n\nCompleted Error Identification Sheet\n\nError Analysis Matrix\n\nCorrective Action Decision Table",
+   "",
+   "Before class: review the preliminary notes from Session 42.\n\nIn class: complete the Error Analysis Matrix,\nidentify the decisive evidence for each issue, and justify the most appropriate corrective route.\n\nAfter class: submit the completed Error Analysis Matrix and Corrective Action Decision Table.",
+   ""
+  ],
+  [
+   "44",
+   "6.11 Common declaration errors, amendment logic, and corrective actions\nDiagnosing declaration errors – defence and reflection",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Finalized Error Analysis Matrix\n\nCorrective Action Decision Table",
+   "",
+   "Before class: prepare to defend your corrective-action recommendation.\n\nIn class: present and defend your case diagnosis, respond to peer/instructor questions, and refine your conclusion.\n\nAfter class: submit a short Individual Corrective Action Memo and a Reflection Note on compliance risk and professional responsibility.",
+   ""
+  ],
+  [
+   "45",
+   "Quiz 2:\n- Scenario-based MCQ quiz covering Units 4–6 (valuation, taxation, and e-customs procedures)",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "T,U",
+   "Review notes and assigned readings for Units 4–6",
+   "",
+   "After class: submit the completed Error Analysis Matrix and Corrective Action Decision Table.",
+   ""
+  ],
+  [
+   "46",
+   "UNIT 7. COMPLIANCE RISK, LIABILITY AND DIGITALIZATION\n7.1 Freight forwarder liability and customs brokerage\n- Responsibilities, brokerage functions, and role boundaries",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "FIATA Ch.6; VLI customs responsibility slides",
+   "",
+   "Before class: read assigned materials. In class: responsibility mapping. After class: prepare a short note on brokerage liability.",
+   ""
+  ],
+  [
+   "47",
+   "7.2 Compliance risk mapping for logistics firms\n- Identifying procedural, documentary, tax, and declaration risks",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "FIATA Ch.6 and Ch.8; lecturer risk template",
+   "",
+   "Before class: review the risk template. In class: risk-mapping activity. After class: complete the compliance-risk matrix.",
+   ""
+  ],
+  [
+   "48",
+   "7.3 Fraud, misdeclaration, and professional ethics\n- Fraud patterns, ethics, and professional judgment in customs work",
+   "Offline",
+   "CLO5, CLO6",
+   "T,U",
+   "FIATA Ch.1, Ch.6, Ch.8; case handout",
+   "",
+   "Before class: read the case handout. In class: ethics discussion. After class: write a short ethical reflection.",
+   ""
+  ],
+  [
+   "49",
+   "7.4 International conventions and frameworks I\n- Kyoto Convention, HS Convention, GATT/WTO customs valuation framework",
+   "Offline",
+   "CLO1, CLO5",
+   "T,U",
+   "FIATA Ch.7; WCO/WTO references",
+   "",
+   "Before class: review assigned references. In class: framework overview. After class: summarize why international standards matter.",
+   ""
+  ],
+  [
+   "50",
+   "7.5 International conventions and frameworks II\n- ATA, TIR, CITES, Bali TFA, RCEP, and ASEAN facilitation linkages",
+   "Offline",
+   "CLO1, CLO5",
+   "T,U",
+   "FIATA Ch.7; ASEAN/WCO references",
+   "",
+   "Before class: review assigned references. In class: small-group comparison. After class: identify one convention most relevant to logistics practice.",
+   ""
+  ],
+  [
+   "51",
+   "7.6 Other duties of customs administration\n- Licences, veterinary/phytosanitary control, intellectual property, counterfeit, and related control roles",
+   "Offline",
+   "CLO1, CLO5",
+   "T,U",
+   "FIATA Ch.8; VLI supplementary slides",
+   "",
+   "Before class: read assigned materials. In class: issue-mapping exercise. After class: summarize one non-tariff control area.",
+   ""
+  ],
+  [
+   "52",
+   "7.7 AI and digital tools in customs work\n- Opportunities, limitations, and use cases for customs learning and practice",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "Lecturer AI-use guide; selected demonstrations",
+   "",
+   "Before class: review the AI-use guide. In class: guided demonstration and discussion. After class: note one useful and one risky AI application.",
+   ""
+  ],
+  [
+   "53",
+   "7.8 Ethics, data integrity, and responsible AI use\n- Verification, accountability, confidentiality, and academic/professional integrity",
+   "Offline",
+   "CLO5, CLO6",
+   "T,U",
+   "Lecturer AI-use guide; institutional integrity guidance",
+   "",
+   "Before class: review assigned guidance. In class: data-integrity discussion. After class: prepare a short responsible-AI statement.",
+   ""
+  ],
+  [
+   "54",
+   "7.9 Final integrated review and exam preparation\n- Course integration, review of difficult points, and examination guidance",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "T,U",
+   "Full course review set",
+   "",
+   "Before class: review all units. In class: integrated review and Q&A. After class: prepare for the final examination.",
+   ""
+  ],
+  [
+   "55",
+   "Group Assignment Presentation\n- GA Presentation Round 1\n- Selected groups present their e-customs/customs compliance case analysis and receive peer feedback",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "T,U",
+   "Group presentation files; peer feedback form",
+   "",
+   "Presenting groups deliver their case analysis and defense. Non-presenting groups ask questions and complete peer feedback forms.",
+   ""
+  ],
+  [
+   "56",
+   "Group Assignment Presentation\n- GA Presentation Round 1 (continued)\n- Case discussion, Q&A, and feedback consolidation",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "T,U",
+   "Group presentation files; peer feedback form",
+   "",
+   "Students continue presentation, questioning, and feedback. After class: groups refine key takeaways.",
+   ""
+  ],
+  [
+   "57",
+   "Group Assignment Presentation\n- GA Presentation Round 1 wrap-up\n- Lecturer synthesis of strengths, gaps, and professional lessons",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "T,U",
+   "Peer feedback notes",
+   "",
+   "Students reflect on the common strengths and weaknesses observed in group work.",
+   ""
+  ],
+  [
+   "58",
+   "Group Assignment Presentation\n- GA Presentation Round 2\n- Remaining groups present their e-customs/customs compliance case analysis and receive peer feedback",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "T,U",
+   "Group presentation files; peer feedback form",
+   "",
+   "Presenting groups deliver their case analysis and defense. Non-presenting groups ask questions and complete peer feedback forms.",
+   ""
+  ],
+  [
+   "59",
+   "Group Assignment Presentation\n- GA Presentation Round 2 (continued)\n- Case discussion, Q&A, and feedback consolidation",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "T,U",
+   "Group presentation files; peer feedback form",
+   "",
+   "Students continue presentation, questioning, and feedback. After class: groups revise their learning notes.",
+   ""
+  ],
+  [
+   "60",
+   "Group Assignment Presentation\n- Course closing and reflective debrief\n- Final reflections on customs competence, compliance, and readiness for practice",
+   "Offline",
+   "CLO5, CLO6",
+   "T,U",
+   "Course reflection prompt",
+   "",
+   "Students complete a short reflective debrief and connect course learning to future practice.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1 - Session 1",
+   "How does the content of Session 1 (1.1 Customs in global logistics, trade facilitation, and compliance mindset) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ2 - Session 1",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 1 (1.1 Customs in global logistics, trade facilitation, and compliance mindset) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "3",
+   "2",
+   "CQ1 - Session 2",
+   "How does the content of Session 2 (1.2 Vietnam Customs administration and key stakeholders) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "4",
+   "2",
+   "CQ2 - Session 2",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 2 (1.2 Vietnam Customs administration and key stakeholders) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "5",
+   "3",
+   "CQ1 - Session 3",
+   "How does the content of Session 3 (1.3 Customs territory, operating locations, and customs-controlled areas) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "6",
+   "3",
+   "CQ2 - Session 3",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 3 (1.3 Customs territory, operating locations, and customs-controlled areas) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "7",
+   "4",
+   "CQ1 - Session 4",
+   "How does the content of Session 4 (2.1 Legal framework for customs operations in Vietnam) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "8",
+   "4",
+   "CQ2 - Session 4",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 4 (2.1 Legal framework for customs operations in Vietnam) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "9",
+   "5",
+   "CQ1 - Session 5",
+   "How does the content of Session 5 (2.2 Customs declarants: rights, obligations, and responsibilities) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "10",
+   "5",
+   "CQ2 - Session 5",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 5 (2.2 Customs declarants: rights, obligations, and responsibilities) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "11",
+   "6",
+   "CQ1 - Session 6",
+   "How does the content of Session 6 (2.3 Import/export types and customs regimes) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "12",
+   "6",
+   "CQ2 - Session 6",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 6 (2.3 Import/export types and customs regimes) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "13",
+   "7",
+   "CQ1 - Session 7",
+   "How does the content of Session 7 (2.4 Customs inspection, supervision, and control mechanisms) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "14",
+   "7",
+   "CQ2 - Session 7",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 7 (2.4 Customs inspection, supervision, and control mechanisms) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "15",
+   "8",
+   "CQ1 - Session 8",
+   "How does the content of Session 8 (2.5 Risk management and customs channeling) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "16",
+   "8",
+   "CQ2 - Session 8",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 8 (2.5 Risk management and customs channeling) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "17",
+   "9",
+   "CQ1 - Session 9",
+   "How does the content of Session 9 (2.6 Administrative violations, penalties, and appeals) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "18",
+   "9",
+   "CQ2 - Session 9",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 9 (2.6 Administrative violations, penalties, and appeals) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "19",
+   "10",
+   "CQ1 - Session 10",
+   "How does the content of Session 10 (3.1 HS system and nomenclature) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "20",
+   "10",
+   "CQ2 - Session 10",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 10 (3.1 HS system and nomenclature) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "21",
+   "11",
+   "CQ1 - Session 11",
+   "How does the content of Session 11 (3.2 GRI foundations and legal notes) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "22",
+   "11",
+   "CQ2 - Session 11",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 11 (3.2 GRI foundations and legal notes) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "23",
+   "12",
+   "CQ1 - Session 12",
+   "How does the content of Session 12 (3.3 GRI 2 and unfinished/unassembled goods) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "24",
+   "12",
+   "CQ2 - Session 12",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 12 (3.3 GRI 2 and unfinished/unassembled goods) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "25",
+   "13",
+   "CQ1 - Session 13",
+   "How does the content of Session 13 (3.4 GRI 3 for mixtures, composite goods, and sets) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "26",
+   "13",
+   "CQ2 - Session 13",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 13 (3.4 GRI 3 for mixtures, composite goods, and sets) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "27",
+   "14",
+   "CQ1 - Session 14",
+   "How does the content of Session 14 (3.5 GRI 4–6 and subheading logic) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "28",
+   "14",
+   "CQ2 - Session 14",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 14 (3.5 GRI 4–6 and subheading logic) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "29",
+   "15",
+   "CQ1 - Session 15",
+   "How does the content of Session 15 (3.6 Classification by material, function, and end-use) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "30",
+   "15",
+   "CQ2 - Session 15",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 15 (3.6 Classification by material, function, and end-use) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "31",
+   "16",
+   "CQ1 - Session 16",
+   "How does the content of Session 16 (3.7 Composite products and multifunctional items) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "32",
+   "16",
+   "CQ2 - Session 16",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 16 (3.7 Composite products and multifunctional items) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "33",
+   "17",
+   "CQ1 - Session 17",
+   "How does the content of Session 17 (3.8 Common misclassification errors and consequences) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "34",
+   "17",
+   "CQ2 - Session 17",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 17 (3.8 Common misclassification errors and consequences) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "35",
+   "18",
+   "CQ1 - Session 18",
+   "How does the content of Session 18 (3.9 HS workshop A: consumer goods and retail products) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "36",
+   "18",
+   "CQ2 - Session 18",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 18 (3.9 HS workshop A: consumer goods and retail products) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "37",
+   "19",
+   "CQ1 - Session 19",
+   "How does the content of Session 19 (3.10 HS workshop B: industrial, transport, and logistics-related goods) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "38",
+   "19",
+   "CQ2 - Session 19",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 19 (3.10 HS workshop B: industrial, transport, and logistics-related goods) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "39",
+   "20",
+   "CQ1 - Session 20",
+   "How does the content of Session 20 (3.11 Advance rulings, disputes, and classification documentation) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "40",
+   "20",
+   "CQ2 - Session 20",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 20 (3.11 Advance rulings, disputes, and classification documentation) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "41",
+   "21",
+   "CQ1 - Session 21",
+   "Which two or three concepts from the sessions leading to Session 21 are most likely to be confused in a scenario-based quiz, and how would you distinguish them clearly?"
+  ],
+  [
+   "42",
+   "21",
+   "CQ2 - Session 21",
+   "If a scenario-based MCQ in Session 21 combines legal logic, procedure, and risk implications, what reasoning steps should be followed before selecting an answer?"
+  ],
+  [
+   "43",
+   "22",
+   "CQ1 - Session 22",
+   "How does the content of Session 22 (4.1 Customs valuation foundations and WTO framework) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "44",
+   "22",
+   "CQ2 - Session 22",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 22 (4.1 Customs valuation foundations and WTO framework) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "45",
+   "23",
+   "CQ1 - Session 23",
+   "How does the content of Session 23 (4.2 Transaction value method) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "46",
+   "23",
+   "CQ2 - Session 23",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 23 (4.2 Transaction value method) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "47",
+   "24",
+   "CQ1 - Session 24",
+   "How does the content of Session 24 (4.3 Secondary methods I) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "48",
+   "24",
+   "CQ2 - Session 24",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 24 (4.3 Secondary methods I) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "49",
+   "25",
+   "CQ1 - Session 25",
+   "How does the content of Session 25 (4.4 Secondary methods II) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "50",
+   "25",
+   "CQ2 - Session 25",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 25 (4.4 Secondary methods II) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "51",
+   "26",
+   "CQ1 - Session 26",
+   "How does the content of Session 26 (4.5 Additions, deductions, and related parties) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "52",
+   "26",
+   "CQ2 - Session 26",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 26 (4.5 Additions, deductions, and related parties) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "53",
+   "27",
+   "CQ1 - Session 27",
+   "How does the content of Session 27 (4.6 Valuation workshop) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "54",
+   "27",
+   "CQ2 - Session 27",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 27 (4.6 Valuation workshop) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "55",
+   "28",
+   "CQ1 - Session 28",
+   "How does the content of Session 28 (5.1 Customs tariff structure and duty types) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "56",
+   "28",
+   "CQ2 - Session 28",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 28 (5.1 Customs tariff structure and duty types) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "57",
+   "29",
+   "CQ1 - Session 29",
+   "How does the content of Session 29 (5.2 Origin-related preferential treatment and C/O basics) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "58",
+   "29",
+   "CQ2 - Session 29",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 29 (5.2 Origin-related preferential treatment and C/O basics) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "59",
+   "30",
+   "CQ1 - Session 30",
+   "How does the content of Session 30 (5.3 Import duty calculation basics) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "60",
+   "30",
+   "CQ2 - Session 30",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 30 (5.3 Import duty calculation basics) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "61",
+   "31",
+   "CQ1 - Session 31",
+   "How does the content of Session 31 (5.4 VAT and other taxes in customs context) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "62",
+   "31",
+   "CQ2 - Session 31",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 31 (5.4 VAT and other taxes in customs context) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "63",
+   "32",
+   "CQ1 - Session 32",
+   "How does the content of Session 32 (5.5 Trade remedies and integrated tax application) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "64",
+   "32",
+   "CQ2 - Session 32",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 32 (5.5 Trade remedies and integrated tax application) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "65",
+   "33",
+   "CQ1 - Session 33",
+   "How does the content of Session 33 (5.6 Tariff and tax workshop) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "66",
+   "33",
+   "CQ2 - Session 33",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 33 (5.6 Tariff and tax workshop) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "67",
+   "34",
+   "CQ1 - Session 34",
+   "How does the content of Session 34 (6.1 E-customs ecosystem and digital customs environment) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "68",
+   "34",
+   "CQ2 - Session 34",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 34 (6.1 E-customs ecosystem and digital customs environment) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "69",
+   "35",
+   "CQ1 - Session 35",
+   "How does the content of Session 35 (6.2 VNACCS overview and electronic declaration logic) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "70",
+   "35",
+   "CQ2 - Session 35",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 35 (6.2 VNACCS overview and electronic declaration logic) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "71",
+   "36",
+   "CQ1 - Session 36",
+   "How does the content of Session 36 (6.3 Customs dossiers and supporting documents) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "72",
+   "36",
+   "CQ2 - Session 36",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 36 (6.3 Customs dossiers and supporting documents) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "73",
+   "37",
+   "CQ1 - Session 37",
+   "How does the content of Session 37 (6.4 E-customs flow for standard import shipments) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "74",
+   "37",
+   "CQ2 - Session 37",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 37 (6.4 E-customs flow for standard import shipments) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "75",
+   "38",
+   "CQ1 - Session 38",
+   "How does the content of Session 38 (6.5 E-customs flow for export shipments and selected customs regimes) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "76",
+   "38",
+   "CQ2 - Session 38",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 38 (6.5 E-customs flow for export shipments and selected customs regimes) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "77",
+   "39",
+   "CQ1 - Session 39",
+   "How does the content of Session 39 (6.6 Declaration data fields and customs codes) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "78",
+   "39",
+   "CQ2 - Session 39",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 39 (6.6 Declaration data fields and customs codes) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "79",
+   "40",
+   "CQ1 - Session 40",
+   "How does the content of Session 40 (6.7 Channeling, inspection, and release decisions) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "80",
+   "40",
+   "CQ2 - Session 40",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 40 (6.7 Channeling, inspection, and release decisions) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "81",
+   "41",
+   "CQ1 - Session 41",
+   "How does the content of Session 41 (6.8 Supplementary declaration, amendment, and cancellation) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "82",
+   "41",
+   "CQ2 - Session 41",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 41 (6.8 Supplementary declaration, amendment, and cancellation) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "83",
+   "42",
+   "CQ1 - Session 42",
+   "Which inconsistency in the dossier appears most significant, and why does it matter for declaration logic or compliance risk?"
+  ],
+  [
+   "84",
+   "42",
+   "CQ2 - Session 42",
+   "What additional evidence or clarification is needed before deciding whether the issue can be corrected routinely or may create a substantive customs compliance problem?"
+  ],
+  [
+   "85",
+   "43",
+   "CQ1 - Session 43",
+   "Which corrective route is the most defensible in this case—amendment, supplementary declaration, cancellation, or no correction—and what evidence supports that choice?"
+  ],
+  [
+   "86",
+   "43",
+   "CQ2 - Session 43",
+   "At what point does a dossier or declaration problem move from a technical/data-entry issue to a compliance risk that may affect the declarant or logistics firm?"
+  ],
+  [
+   "87",
+   "44",
+   "CQ1 - Session 44",
+   "How should a customs declarant justify a corrective-action decision when the available documentary evidence is incomplete, inconsistent, or commercially ambiguous?"
+  ],
+  [
+   "88",
+   "44",
+   "CQ2 - Session 44",
+   "How can digital tools or AI support the review of declaration errors, and where should professional judgment remain decisive?"
+  ],
+  [
+   "89",
+   "45",
+   "CQ1 - Session 45",
+   "Which two or three concepts from the sessions leading to Session 45 are most likely to be confused in a scenario-based quiz, and how would you distinguish them clearly?"
+  ],
+  [
+   "90",
+   "45",
+   "CQ2 - Session 45",
+   "If a scenario-based MCQ in Session 45 combines legal logic, procedure, and risk implications, what reasoning steps should be followed before selecting an answer?"
+  ],
+  [
+   "91",
+   "46",
+   "CQ1 - Session 46",
+   "How does the content of Session 46 (7.1 Freight forwarder liability and customs brokerage) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "92",
+   "46",
+   "CQ2 - Session 46",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 46 (7.1 Freight forwarder liability and customs brokerage) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "93",
+   "47",
+   "CQ1 - Session 47",
+   "How does the content of Session 47 (7.2 Compliance risk mapping for logistics firms) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "94",
+   "47",
+   "CQ2 - Session 47",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 47 (7.2 Compliance risk mapping for logistics firms) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "95",
+   "48",
+   "CQ1 - Session 48",
+   "How does the content of Session 48 (7.3 Fraud, misdeclaration, and professional ethics) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "96",
+   "48",
+   "CQ2 - Session 48",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 48 (7.3 Fraud, misdeclaration, and professional ethics) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "97",
+   "49",
+   "CQ1 - Session 49",
+   "How does the content of Session 49 (7.4 International conventions and frameworks I) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "98",
+   "49",
+   "CQ2 - Session 49",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 49 (7.4 International conventions and frameworks I) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "99",
+   "50",
+   "CQ1 - Session 50",
+   "How does the content of Session 50 (7.5 International conventions and frameworks II) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "100",
+   "50",
+   "CQ2 - Session 50",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 50 (7.5 International conventions and frameworks II) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "101",
+   "51",
+   "CQ1 - Session 51",
+   "How does the content of Session 51 (7.6 Other duties of customs administration) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "102",
+   "51",
+   "CQ2 - Session 51",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 51 (7.6 Other duties of customs administration) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "103",
+   "52",
+   "CQ1 - Session 52",
+   "How does the content of Session 52 (7.7 AI and digital tools in customs work) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "104",
+   "52",
+   "CQ2 - Session 52",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 52 (7.7 AI and digital tools in customs work) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "105",
+   "53",
+   "CQ1 - Session 53",
+   "How does the content of Session 53 (7.8 Ethics, data integrity, and responsible AI use) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "106",
+   "53",
+   "CQ2 - Session 53",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 53 (7.8 Ethics, data integrity, and responsible AI use) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "107",
+   "54",
+   "CQ1 - Session 54",
+   "How does the content of Session 54 (7.9 Final integrated review and exam preparation) influence customs decision-making or logistics operations in practice?"
+  ],
+  [
+   "108",
+   "54",
+   "CQ2 - Session 54",
+   "What compliance risk, documentary risk, or operational error could arise if the concepts in Session 54 (7.9 Final integrated review and exam preparation) are misunderstood or applied incorrectly?"
+  ],
+  [
+   "109",
+   "55",
+   "CQ1 - Session 55",
+   "What is the strongest professional insight demonstrated in the presentations of Session 55, and why is it valuable for customs or logistics practice?"
+  ],
+  [
+   "110",
+   "55",
+   "CQ2 - Session 55",
+   "Which weakness or gap observed in Session 55 should be corrected first if this were a real customs compliance project, and how would you improve it?"
+  ],
+  [
+   "111",
+   "56",
+   "CQ1 - Session 56",
+   "What is the strongest professional insight demonstrated in the presentations of Session 56, and why is it valuable for customs or logistics practice?"
+  ],
+  [
+   "112",
+   "56",
+   "CQ2 - Session 56",
+   "Which weakness or gap observed in Session 56 should be corrected first if this were a real customs compliance project, and how would you improve it?"
+  ],
+  [
+   "113",
+   "57",
+   "CQ1 - Session 57",
+   "What is the strongest professional insight demonstrated in the presentations of Session 57, and why is it valuable for customs or logistics practice?"
+  ],
+  [
+   "114",
+   "57",
+   "CQ2 - Session 57",
+   "Which weakness or gap observed in Session 57 should be corrected first if this were a real customs compliance project, and how would you improve it?"
+  ],
+  [
+   "115",
+   "58",
+   "CQ1 - Session 58",
+   "What is the strongest professional insight demonstrated in the presentations of Session 58, and why is it valuable for customs or logistics practice?"
+  ],
+  [
+   "116",
+   "58",
+   "CQ2 - Session 58",
+   "Which weakness or gap observed in Session 58 should be corrected first if this were a real customs compliance project, and how would you improve it?"
+  ],
+  [
+   "117",
+   "59",
+   "CQ1 - Session 59",
+   "What is the strongest professional insight demonstrated in the presentations of Session 59, and why is it valuable for customs or logistics practice?"
+  ],
+  [
+   "118",
+   "59",
+   "CQ2 - Session 59",
+   "Which weakness or gap observed in Session 59 should be corrected first if this were a real customs compliance project, and how would you improve it?"
+  ],
+  [
+   "119",
+   "60",
+   "CQ1 - Session 60",
+   "What is the strongest professional insight demonstrated in the presentations of Session 60, and why is it valuable for customs or logistics practice?"
+  ],
+  [
+   "120",
+   "60",
+   "CQ2 - Session 60",
+   "Which weakness or gap observed in Session 60 should be corrected first if this were a real customs compliance project, and how would you improve it?"
+  ]
+ ],
+ "links": [
+  "/download/14198/S/1_ GLC301_slides PDF.zip",
+  "/download/14198/S/2_GL_AI Integration Guide_SP26.zip",
+  "/download/14198/S/3_GLC301_ECUS5VNACCS.zip"
+ ]
+}

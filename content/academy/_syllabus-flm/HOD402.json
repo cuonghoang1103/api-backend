@@ -1,0 +1,1513 @@
+{
+ "ma": "HOD402",
+ "sylID": "14447",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14447",
+   "code": "HOD402",
+   "name": "Ethical Hacking and Offensive Security_Thâm nhập thử và phòng thủ",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14447",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14447",
+  "Syllabus Name": "Ethical Hacking and Offensive Security_Thâm nhập thử và phòng thủ",
+  "Course Name English": "Ethical Hacking and Offensive Security",
+  "Subject Code": "HOD402",
+  "Learning-Teaching Method": "Lecture,Project based learning,Active learning,Social Constructivism,Practice, Discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "ITE303 or ITE302c",
+  "Description": "The digital landscape is evolving at an unprecedented rate with unknown threats lurking around every corner. Cybersecurity resilience in the modern world cannot be just an addon - it's a necessity. Organizations must build cybersecurity resilience, and offensive security professionals like Ethical Hackers and Penetration Testers can help proactively discover unknown threats and address them before cybercriminals do.\n\nTarget Audience This course is designed to prepare learners with the Ethical Hacker skillset. Learners will become proficient in the art of scoping, executing, and reporting on vulnerability assessments, while recommending mitigation strategies. By using an engaging gamified narrative throughout the course, with real-world inspired hands-on practice labs, learners develop essential workforce readiness skills to lay a solid foundation in offensive security.\n\nAfter completing this course, learners can enter cybersecurity careers, either on the offensive security side as ethical hackers or penetration testers, or on the defensive security side by understanding the mindset and tactics of threat actors, while implementing security controls and monitoring, analyzing, and responding to current security threats.",
+  "StudentTasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Students are responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the http://flm.fpt.edu.vn for up-to-date course information\n\n- Students must complete all assignments on the Cisco Networking Academy (https://skillsforall.com/) with a result of at least 75%.",
+  "Tools": "Internet, basic tools for ethical hacking (VMWare, Kali Linux, Wireshark, Nmap, …)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "1) On-going Assessment\n\n+ 02 Progress Test: 20%\n\n+ Project: 30%\n\n+ 12 Labs: 20%\n\n2) 1 Final Exam: 30%\n\n3) Completion criteria: Every on-going assessment component > 0, Final Result >=5, Average Lab Score >= 4 & Final Exam Score >=4",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "CEH v12 Certified Ethical Hacker Study Guide with 750 Practice Test Questions",
+   "Ric Messier",
+   "Sybex",
+   "2023",
+   "1st",
+   "978-1394186921",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Cisco Ethical Hacker Slide\nhttps://skillsforall.com/course/ethical-hacker?courseLang=en-US",
+   "Cisco",
+   "Cisco",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Hacking Exposed 7: Network Security Secrets and Solutions",
+   "Stuart McClure, Joel Scambray, George Kurtz",
+   "McGraw-Hill Education",
+   "2012",
+   "7th",
+   "978-0071780285",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Hands-On Ethical Hacking and Network Defense (4th)",
+   "Rob Wilson, Michael Simpson, Nicholas Antill",
+   "Cengage Learning",
+   "2022",
+   "4th",
+   "978-0357509753",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the importance of methodological ethical hacking and penetration testing."
+  ],
+  [
+   "2",
+   "CLO10",
+   "Apply incident response models to manage network security incidents."
+  ],
+  [
+   "3",
+   "CLO2",
+   "Create penetration testing preliminary documents."
+  ],
+  [
+   "4",
+   "CLO3",
+   "Perform information gathering and vulnerability scanning activities."
+  ],
+  [
+   "5",
+   "CLO4",
+   "Explain how social engineering attacks succeed."
+  ],
+  [
+   "6",
+   "CLO5",
+   "Explain how to exploit wired and wireless network vulnerabilities."
+  ],
+  [
+   "7",
+   "CLO6",
+   "Explain how to exploit application-based vulnerabilities."
+  ],
+  [
+   "8",
+   "CLO7",
+   "Explain how to exploit cloud, mobile, and IoT security vulnerabilities."
+  ],
+  [
+   "9",
+   "CLO8",
+   "Explain how to perform post-exploitation activities; Create a penetration testing report; Classify pentesting tools by use case."
+  ],
+  [
+   "10",
+   "CLO9",
+   "Evaluate network security alerts; Analyze network intrusion data to identify compromised hosts and vulnerabilities."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "LAB",
+   "on-going",
+   "12",
+   "20.0%",
+   "4",
+   "60'",
+   "CLO1-CLO10",
+   "Home work, class",
+   "1",
+   "- cover content 5,6,7,8",
+   "each lab focuses on the session topic",
+   ""
+  ],
+  [
+   "2",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "10'-30'",
+   "CLO1-CLO5",
+   "Multiple choices\nMarked by Computer or a suitable format",
+   "30",
+   "- cover content 1,2,3,4,5",
+   "in class, by instructor",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "10'-30'",
+   "CLO6-CLO10",
+   "Multiple choices\nMarked by Computer or a suitable format",
+   "30",
+   "- cover content 6,7,8,9,10",
+   "in class, by instructor",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Project",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1-CLO10",
+   "Home work, class",
+   "1",
+   "- costudents' active learning attitude during the course;\ndiscipline and communication",
+   "Each group receives a research topic and reports at the end of the term",
+   ""
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choices\nMarked by Computer",
+   "50",
+   "Studied all of course's Material",
+   "Studied all of course's Material",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Module 1: Introduction to Ethical Hacking and Penetration Testing\n1.1 Understanding Ethical Hacking and Penetration Testing\nIntroduction to the Project",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Syllabus, textbook, resources, Slide module 1",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "2",
+   "1.2 Exploring Penetration Testing Methodologies\n1.3 Building Your Own Lab",
+   "Offline",
+   "CLO1",
+   "TU",
+   "Slide module 1",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "3",
+   "LAB 1",
+   "Offline",
+   "CLO1",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 1",
+   ""
+  ],
+  [
+   "4",
+   "LAB 1(cont)",
+   "Offline",
+   "CLO1",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 1",
+   ""
+  ],
+  [
+   "5",
+   "Project : Group and topic register + Divide class into 3-5 groups + Group select the interesting topic\nStudents form groups of 3–5 members in Session 5 to initiate the ethical hacking project. Groups establish roles (e.g., reconnaissance lead, exploit developer, report writer) and set collaboration protocols to ensure effective teamwork throughout the project.",
+   "Offline",
+   "CLO1",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion,",
+   ""
+  ],
+  [
+   "6",
+   "Module 2: Planning and Scoping a Penetration Testing Assessment\n2.1 Comparing and Contrasting Governance, Risk, and Compliance Concepts",
+   "Offline",
+   "CLO2",
+   "IT",
+   "textbook, resources, Slide module 2",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "7",
+   "Module 2:(cont)\n2.2 Explaining the Importance of Scoping and Organizational or Customer Requirements\n2.3 Demonstrating an Ethical Hacking Mindset by Maintaining Professionalism and Integrity",
+   "Offline",
+   "CLO2",
+   "IT",
+   "textbook, resources, Slide module 2",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "8",
+   "LAB 2: Lab_Pre-Engagement_Scope_and_Planning",
+   "Offline",
+   "CLO2",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 2",
+   ""
+  ],
+  [
+   "9",
+   "Module 3: Information Gathering and Vulnerability Scanning\n3.1 Performing Passive Reconnaissance\n3.2 Performing Active Reconnaissance",
+   "Offline",
+   "CLO3",
+   "IT",
+   "textbook, resources, Slide module 3",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "10",
+   "Module 3: (cont)\n3.3 Understanding the Art of Performing Vulnerability Scans\n3.4 Understanding How to Analyze Vulnerability Scan Results",
+   "Offline",
+   "CLO3",
+   "IT",
+   "textbook, resources, Slide module 3",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "11",
+   "LAB 3",
+   "Offline",
+   "CLO3",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 3",
+   ""
+  ],
+  [
+   "12",
+   "LAB 3: (cont)",
+   "Offline",
+   "CLO3",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 3",
+   ""
+  ],
+  [
+   "13",
+   "Groups discuss and work on group topics\n\nGroups select a project topic in Session 5, choosing from: a simulated penetration test in a lab environment, a case study of a real-world ethical hacking incident, or development of a custom penetration testing tool. The problem definition outlines the target system, scenario, or case study context, specifying objectives like identifying vulnerabilities or analyzing attack impacts.",
+   "Offline",
+   "CLO3",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion,",
+   ""
+  ],
+  [
+   "14",
+   "LAB 4:\n4.1-Lab_Advanced_Searches\n4.2-Lab-Packet_Crafting_with_Scapy\n4.3-Lab_Network_Sniffing_with_Wireshark",
+   "Offline",
+   "CLO3",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 4",
+   ""
+  ],
+  [
+   "15",
+   "LAB 5:\n5.1-Lab-Vulnerability_Scanning_with-Kali_Tools\n5.2-Lab-Investigate_Vulnerability_Information_Sources",
+   "Offline",
+   "CLO3",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 5",
+   ""
+  ],
+  [
+   "16",
+   "LAB 5: (cont)\n5.1-Lab-Vulnerability_Scanning_with-Kali_Tools\n5.2-Lab-Investigate_Vulnerability_Information_Sources",
+   "Offline",
+   "CLO3",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 5",
+   ""
+  ],
+  [
+   "17",
+   "Module 4: Social Engineering Attacks\n4.1 Pretexting for an Approach and Impersonation\n4.2 Social Engineering Attacks",
+   "Offline",
+   "CLO4",
+   "IT",
+   "textbook, resources, Slide module 4",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "18",
+   "Module 4: (cont)\n4.3 Physical Attacks\n\nConduct thorough research leveraging Modules 1–3 (e.g., ethical hacking concepts, penetration testing methodologies, reconnaissance techniques). Use resources like textbooks, OWASP guidelines, and NIST standards to understand the chosen topic’s technical and ethical scope.",
+   "Offline",
+   "CLO4",
+   "TU",
+   "textbook, resources, Slide module 4",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "19",
+   "Module 4: (cont)\n4.4 Social Engineering Tools\n4.5 Methods of Influence",
+   "Offline",
+   "CLO4",
+   "IT",
+   "textbook, resources, Slide module 4",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "20",
+   "LAB 6:\n6.1-Lab_Explore_the_Social_Engineer_Toolkit_(SET)",
+   "Offline",
+   "CLO4",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 6",
+   ""
+  ],
+  [
+   "21",
+   "LAB 6: (cont)\n6.2-Lab_Using_the_Browser_Exploitation_Framework_(BeEF)",
+   "Offline",
+   "CLO4",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 6",
+   ""
+  ],
+  [
+   "22",
+   "Module 5: Exploiting Wired and Wireless Networks\n5.1 Exploiting Network-Based Vulnerabilities",
+   "Offline",
+   "CLO5",
+   "IT",
+   "textbook, resources, Slide module 5",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "23",
+   "Module 5: Exploiting Wired and Wireless Networks (Cont)\n5.2 Exploiting Wireless Vulnerabilities\nQuiz1",
+   "Offline",
+   "CLO5",
+   "IT",
+   "textbook, resources, Slide module 5",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "24",
+   "LAB 7:\n7.1-Lab_On-Path_Attacks_with_Ettercap\n7.2-Lab_Scanning_for_SMB_Vulnerabilities_with_enum4linux",
+   "Offline",
+   "CLO5",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 7",
+   ""
+  ],
+  [
+   "25",
+   "Groups discuss and work on group topics\n\nPerform reconnaissance (passive and active, per Module 3) to identify attack surfaces and vulnerabilities. Document potential threats (e.g., network-based, application-based, or social engineering attacks) and assess their risks using frameworks like NIST or CompTIA PenTest+.",
+   "Offline",
+   "CLO5",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion,",
+   ""
+  ],
+  [
+   "26",
+   "Module 6: Exploiting Application-Based Vulnerabilities\n6.1 Overview of Web Application-Based Attacks for Security Professionals and the OWASP Top 10\n6.2 How to Build Your Own Web Application Lab",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "27",
+   "Module 6: Exploiting Application-Based Vulnerabilities (cont)\n6.3 Understanding Business Logic Flaws\n6.4 Understanding Injection-Based Vulnerabilities",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "28",
+   "Module 6: Exploiting Application-Based Vulnerabilities (cont)\n6.5 Exploiting Authentication-Based Vulnerabilities\n6.6 Exploiting Authorization-Based Vulnerabilities\n\nDesign a penetration testing strategy or tool, aligned with Modules 3–6. For simulations, plan reconnaissance, scanning, and exploitation phases (e.g., using Kali Linux tools). For case studies, outline analytical approaches. For tool development, design scripts for tasks like vulnerability scanning or exploit automation.",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "29",
+   "Module 6: Exploiting Application-Based Vulnerabilities (cont)\n6.7 Understanding Cross-Site Scripting (XSS) Vulnerabilities",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "30",
+   "Module 6: Exploiting Application-Based Vulnerabilities (cont)\n6.8 Understanding Cross-Site Request Forgery (CSRF/XSRF) and Server-Side Request Forgery Attacks",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "31",
+   "Module 6: Exploiting Application-Based Vulnerabilities (cont)\n6.9 Understanding Clickjacking",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "32",
+   "Module 6: Exploiting Application-Based Vulnerabilities (cont)\n6.10 Exploiting File Inclusion Vulnerabilities",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "33",
+   "Module 6: Exploiting Application-Based Vulnerabilities (cont)\n6.11 Exploiting Insecure Code Practices",
+   "Offline",
+   "CLO6",
+   "IT",
+   "textbook, resources, Slide module 6",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "34",
+   "LAB 8:\n8.1-Lab-Web_Vulnerability_Scanning\n8.2-Lab-Using_the_GVM_Vulnerability_Scanner",
+   "Offline",
+   "CLO6",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 8",
+   ""
+  ],
+  [
+   "35",
+   "LAB 9:\n9.1-Lab-Injection_Attacks\n9.2-Lab-Using_Password_Tools",
+   "Offline",
+   "CLO6",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 9",
+   ""
+  ],
+  [
+   "36",
+   "LAB 9: (cont)\n9.3-Lab-Cross_Site_Scripting",
+   "Offline",
+   "CLO6",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 9",
+   ""
+  ],
+  [
+   "37",
+   "Groups discuss and work on group topics\n\nUse AI tools in to brainstorm attack vectors, generate code snippets (e.g., for reconnaissance or exploit scripts), or structure findings. Critically evaluate AI outputs for accuracy and relevance, documenting the validation process (e.g., cross-referencing with OWASP or testing in a lab environment).",
+   "Offline",
+   "CLO6",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion,",
+   ""
+  ],
+  [
+   "38",
+   "Module 7: Cloud, Mobile, and IoT Security\n7.1 Researching Attack Vectors and Performing Attacks on Cloud Technologies",
+   "Offline",
+   "CLO7",
+   "IT",
+   "textbook, resources, Slide module 7",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "39",
+   "Module 7: Cloud, Mobile, and IoT Security (cont)\n7.2 Explaining Common Attacks and Vulnerabilities Against Specialized Systems",
+   "Offline",
+   "CLO7",
+   "IT",
+   "textbook, resources, Slide module 7",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "40",
+   "Module 8: Performing Post-Exploitation Techniques\n8.1 Creating a Foothold and Maintaining Persistence After Compromising a System",
+   "Offline",
+   "CLO8",
+   "IT",
+   "textbook, resources, Slide module 8",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "41",
+   "Module 8: Performing Post-Exploitation Techniques (cont)\n8.2 Understanding How to Perform Lateral Movement, Detection Avoidance, and Enumeration\n\nExecute the project: conduct penetration tests (e.g., exploiting XSS, SQL injection, or network vulnerabilities), analyze case studies with detailed attack breakdowns, or develop and test custom tools. Document all steps, including tools used (e.g., SET, BeEF, Wireshark) and outcomes.",
+   "Offline",
+   "CLO8",
+   "IT",
+   "textbook, resources, Slide module 8",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "42",
+   "Module 9: Reporting and Communication\n9.1 Comparing and Contrasting Important Components of Written Reports\n9.2 Analyzing the Findings and Recommending the Appropriate Remediation Within a Report",
+   "Offline",
+   "CLO8",
+   "IT",
+   "textbook, resources, Slide module 9",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "43",
+   "Module 9: Reporting and Communication (cont)\n9.3 Explaining the Importance of Communication During the Penetration Testing Process\n9.4 Explaining Post-Report Delivery Activities",
+   "Offline",
+   "CLO8",
+   "IT",
+   "textbook, resources, Slide module 9",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "44",
+   "Lab 10:\n10.1-Lab-Explore_PenTest_Reports\n10.2-Lab–Recommend_Remediation_Based_on_Findings",
+   "Offline",
+   "CLO8",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 10",
+   ""
+  ],
+  [
+   "45",
+   "Groups discuss and work on group topics\n\nDraft an 8–12 page report covering the scenario overview, vulnerability assessment, exploitation/mitigation strategies, and AI usage reflection. Conduct peer reviews within the group to refine technical accuracy, clarity, and alignment with standards like OWASP or NIST, as per Module 9.",
+   "Offline",
+   "CLO8",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion,",
+   ""
+  ],
+  [
+   "46",
+   "Module 10: Tools and Code Analysis\n10.1 Understanding the Basic Concepts of Scripting and Software Development",
+   "Offline",
+   "CLO8",
+   "IT",
+   "textbook, resources, Slide module 10",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "47",
+   "Module 10: Tools and Code Analysis (cont)\n10.2 Understanding the Different Use Cases of Penetration Testing Tools and Analyzing Exploit Code",
+   "Offline",
+   "CLO8",
+   "IT",
+   "textbook, resources, Slide module 10",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "48",
+   "LAB 11:\n11.1-Lab–Analyze_Exploit_Code",
+   "Offline",
+   "CLO8",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 11",
+   ""
+  ],
+  [
+   "49",
+   "LAB 11: (cont)\n11.2-Lab–Analyze_Automation_Code",
+   "Offline",
+   "CLO8",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 11",
+   ""
+  ],
+  [
+   "50",
+   "Module 11: Cryptography\n11.1 Understanding Cryptography Basics\n11.2 Understanding Symmetric and Asymmetric Algorithms",
+   "Offline",
+   "CLO9",
+   "IT",
+   "textbook, resources, Slide module 11",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "51",
+   "Module 11. Cryptography (cont.)\n11.3 Components of PKI\n11.4 Understanding Cryptography Attacks",
+   "Offline",
+   "CLO9",
+   "IT",
+   "textbook, resources, Slide module 11",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "52",
+   "LAB 12",
+   "Offline",
+   "CLO9",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 12",
+   ""
+  ],
+  [
+   "53",
+   "Lab 12(cont)\nReport the progress of Project\n\nFinalize the report, incorporating peer feedback and ensuring compliance with ethical hacking standards. Prepare a 10–15 minute presentation with slides and, if applicable, live demos (e.g., tool execution or attack simulation), focusing on key findings and remediation strategies.",
+   "Offline",
+   "CLO9",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion",
+   ""
+  ],
+  [
+   "54",
+   "Module 12 Network. Protection Systems\n12.1 Understanding Routers\n12.2 Understanding Firewalls",
+   "Offline",
+   "CLO10",
+   "IT",
+   "textbook, resources, Slide module 12",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "55",
+   "Module 12 Network. Protection Systems (cont.)\n12.3 Understanding Intrusion Detection and Prevention Systems\n12.3 Understanding Honeypots",
+   "Offline",
+   "CLO10",
+   "IT",
+   "textbook, resources, Slide module 12",
+   "",
+   "Read Materials, Discussion, Review Lecture",
+   ""
+  ],
+  [
+   "56",
+   "Groups discuss and work on group topics\n\nDeliver the presentation, allocating 8–10 minutes for slides or demos and 5 minutes for Q&A. Peers will question technical details, ethical considerations, and mitigation approaches. Assessment criteria include communication clarity, technical depth, teamwork, and ability to defend findings, per Module 9.",
+   "Offline",
+   "CLO10",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion",
+   ""
+  ],
+  [
+   "57",
+   "Groups discuss and work on group topics",
+   "Offline",
+   "CLO10",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Read Materials, Discussion",
+   ""
+  ],
+  [
+   "58",
+   "Group Present: Final report the Project",
+   "Offline",
+   "CLO10",
+   "U",
+   "Module Slides, Lab Manual",
+   "",
+   "Review Lab 15",
+   ""
+  ],
+  [
+   "59",
+   "Group Present: Final report the Project (Cont)",
+   "Offline",
+   "CLO1-CLO10",
+   "U",
+   "Project report and demo",
+   "",
+   "Groups present their topics",
+   ""
+  ],
+  [
+   "60",
+   "Course Review",
+   "Offline",
+   "CLO1-CLO10",
+   "",
+   "Module 1-12",
+   "",
+   "review and prepare to FE",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "What is ethical hacking?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ2",
+   "What is penetration testing?"
+  ],
+  [
+   "3",
+   "2",
+   "CQ1",
+   "What are common penetration testing methodologies?"
+  ],
+  [
+   "4",
+   "2",
+   "CQ2",
+   "How to build your own penetration testing lab?"
+  ],
+  [
+   "5",
+   "3",
+   "CQ1",
+   "What are the objectives of Lab 1?"
+  ],
+  [
+   "6",
+   "3",
+   "CQ2",
+   "How to set up virtual machines for ethical hacking labs?"
+  ],
+  [
+   "7",
+   "4",
+   "CQ1",
+   "What are the objectives of Lab 1? (cont.)"
+  ],
+  [
+   "8",
+   "4",
+   "CQ2",
+   "How to troubleshoot common issues in penetration testing labs?"
+  ],
+  [
+   "9",
+   "5",
+   "CQ1",
+   "How to select and register a group project topic in ethical hacking?"
+  ],
+  [
+   "10",
+   "6",
+   "CQ1",
+   "and compliance concepts in penetration testing."
+  ],
+  [
+   "11",
+   "7",
+   "CQ1",
+   "Why is scoping important in a penetration testing assessment?"
+  ],
+  [
+   "12",
+   "7",
+   "CQ2",
+   "How to demonstrate an ethical hacking mindset?"
+  ],
+  [
+   "13",
+   "8",
+   "CQ1",
+   "What are pre-engagement activities in penetration testing?"
+  ],
+  [
+   "14",
+   "8",
+   "CQ2",
+   "How to define the scope and plan for a penetration test?"
+  ],
+  [
+   "15",
+   "9",
+   "CQ1",
+   "What is passive reconnaissance?"
+  ],
+  [
+   "16",
+   "10",
+   "CQ1",
+   "How to perform vulnerability scanning?"
+  ],
+  [
+   "17",
+   "11",
+   "CQ1",
+   "How to use tools for active reconnaissance?"
+  ],
+  [
+   "18",
+   "12",
+   "CQ1",
+   "How to analyze vulnerability scan results? (cont.)"
+  ],
+  [
+   "19",
+   "13",
+   "CQ1",
+   "How to apply information gathering to group project topics?"
+  ],
+  [
+   "20",
+   "14",
+   "CQ1",
+   "How to perform advanced searches for reconnaissance?"
+  ],
+  [
+   "21",
+   "15",
+   "CQ1",
+   "How to conduct vulnerability scanning with Kali tools?"
+  ],
+  [
+   "22",
+   "15",
+   "CQ2",
+   "What are key sources for investigating vulnerabilities?"
+  ],
+  [
+   "23",
+   "16",
+   "CQ1",
+   "How to conduct vulnerability scanning with Kali tools? (cont.)"
+  ],
+  [
+   "24",
+   "16",
+   "CQ2",
+   "What are key sources for investigating vulnerabilities? (cont.)"
+  ],
+  [
+   "25",
+   "17",
+   "CQ1",
+   "What are common social engineering attacks?"
+  ],
+  [
+   "26",
+   "18",
+   "CQ1",
+   "Explain physical attacks in social engineering."
+  ],
+  [
+   "27",
+   "19",
+   "CQ1",
+   "What tools are used for social engineering?"
+  ],
+  [
+   "28",
+   "20",
+   "CQ1",
+   "How does the Social Engineer Toolkit (SET) work?"
+  ],
+  [
+   "29",
+   "21",
+   "CQ1",
+   "How to use the Browser Exploitation Framework (BeEF)?"
+  ],
+  [
+   "30",
+   "22",
+   "CQ1",
+   "What are network-based vulnerabilities?"
+  ],
+  [
+   "31",
+   "25",
+   "CQ1",
+   "How to apply network exploitation concepts to group projects?"
+  ],
+  [
+   "32",
+   "26",
+   "CQ1",
+   "What is the OWASP Top 10?"
+  ],
+  [
+   "33",
+   "27",
+   "CQ1",
+   "What are business logic flaws?"
+  ],
+  [
+   "34",
+   "27",
+   "CQ2",
+   "Explain injection-based vulnerabilities."
+  ],
+  [
+   "35",
+   "28",
+   "CQ1",
+   "Explain authentication-based vulnerabilities."
+  ],
+  [
+   "36",
+   "28",
+   "CQ2",
+   "Explain authorization-based vulnerabilities."
+  ],
+  [
+   "37",
+   "29",
+   "CQ1",
+   "What is cross-site scripting (XSS)?"
+  ],
+  [
+   "38",
+   "29",
+   "CQ2",
+   "How does XSS work?"
+  ],
+  [
+   "39",
+   "29",
+   "CQ3",
+   "How to defend against XSS attacks?"
+  ],
+  [
+   "40",
+   "30",
+   "CQ1",
+   "What is cross-site request forgery (CSRF)?"
+  ],
+  [
+   "41",
+   "30",
+   "CQ2",
+   "What is server-side request forgery (SSRF)?"
+  ],
+  [
+   "42",
+   "30",
+   "CQ3",
+   "How to prevent CSRF and SSRF attacks?"
+  ],
+  [
+   "43",
+   "31",
+   "CQ1",
+   "Explain clickjacking attacks."
+  ],
+  [
+   "44",
+   "32",
+   "CQ1",
+   "What are file inclusion vulnerabilities?"
+  ],
+  [
+   "45",
+   "33",
+   "CQ1",
+   "What are insecure code practices?"
+  ],
+  [
+   "46",
+   "33",
+   "CQ2",
+   "How to exploit insecure code practices?"
+  ],
+  [
+   "47",
+   "34",
+   "CQ1",
+   "How to perform web vulnerability scanning?"
+  ],
+  [
+   "48",
+   "34",
+   "CQ2",
+   "How to use the GVM vulnerability scanner?"
+  ],
+  [
+   "49",
+   "35",
+   "CQ1",
+   "How to perform injection attacks?"
+  ],
+  [
+   "50",
+   "36",
+   "CQ1",
+   "How to demonstrate cross-site scripting attacks?"
+  ],
+  [
+   "51",
+   "37",
+   "CQ1",
+   "How to incorporate application-based vulnerabilities into group projects?"
+  ],
+  [
+   "52",
+   "37",
+   "CQ2",
+   "What ethical considerations apply to exploiting vulnerabilities in projects?"
+  ],
+  [
+   "53",
+   "38",
+   "CQ1",
+   "What are attack vectors in cloud technologies?"
+  ],
+  [
+   "54",
+   "38",
+   "CQ2",
+   "How to perform attacks on cloud technologies?"
+  ],
+  [
+   "55",
+   "39",
+   "CQ1",
+   "What are common attacks on mobile systems?"
+  ],
+  [
+   "56",
+   "39",
+   "CQ2",
+   "What are vulnerabilities in IoT systems?"
+  ],
+  [
+   "57",
+   "40",
+   "CQ1",
+   "How to create a foothold after compromising a system?"
+  ],
+  [
+   "58",
+   "40",
+   "CQ2",
+   "How to maintain persistence in post-exploitation?"
+  ],
+  [
+   "59",
+   "41",
+   "CQ1",
+   "Explain lateral movement and detection avoidance."
+  ],
+  [
+   "60",
+   "42",
+   "CQ1",
+   "What are the important components of penetration testing reports?"
+  ],
+  [
+   "61",
+   "43",
+   "CQ1",
+   "Why is communication important during penetration testing?"
+  ],
+  [
+   "62",
+   "43",
+   "CQ2",
+   "What are post-report delivery activities?"
+  ],
+  [
+   "63",
+   "43",
+   "CQ3",
+   "How to recommend remediation based on findings?"
+  ],
+  [
+   "64",
+   "44",
+   "CQ1",
+   "How to explore penetration testing reports?"
+  ],
+  [
+   "65",
+   "44",
+   "CQ2",
+   "How to recommend remediation based on findings? (cont.)"
+  ],
+  [
+   "66",
+   "44",
+   "CQ3",
+   "What are best practices for report writing in penetration testing?"
+  ],
+  [
+   "67",
+   "45",
+   "CQ1",
+   "How to integrate reporting into group projects?"
+  ],
+  [
+   "68",
+   "45",
+   "CQ2",
+   "What communication strategies are effective for penetration testing projects?"
+  ],
+  [
+   "69",
+   "46",
+   "CQ1",
+   "What are basic concepts of scripting for penetration testing?"
+  ],
+  [
+   "70",
+   "46",
+   "CQ2",
+   "Explain software development concepts relevant to pentesters."
+  ],
+  [
+   "71",
+   "47",
+   "CQ1",
+   "What are use cases for penetration testing tools?"
+  ],
+  [
+   "72",
+   "47",
+   "CQ2",
+   "How to analyze exploit code?"
+  ],
+  [
+   "73",
+   "47",
+   "CQ3",
+   "What tools are used for code analysis in penetration testing?"
+  ],
+  [
+   "74",
+   "48",
+   "CQ1",
+   "How to analyze exploit code in a lab setting?"
+  ],
+  [
+   "75",
+   "48",
+   "CQ2",
+   "What steps are involved in dissecting exploit code?"
+  ],
+  [
+   "76",
+   "48",
+   "CQ3",
+   "What debuggers are useful for exploit analysis?"
+  ],
+  [
+   "77",
+   "49",
+   "CQ1",
+   "How to analyze automation code for penetration testing?"
+  ],
+  [
+   "78",
+   "49",
+   "CQ2",
+   "What is the role of automation in penetration testing?"
+  ],
+  [
+   "79",
+   "50",
+   "CQ1",
+   "What are the basics of cryptography?"
+  ],
+  [
+   "80",
+   "50",
+   "CQ2",
+   "Explain symmetric and asymmetric algorithms."
+  ],
+  [
+   "81",
+   "51",
+   "CQ1",
+   "What are the components of Public Key Infrastructure (PKI)?"
+  ],
+  [
+   "82",
+   "51",
+   "CQ2",
+   "Explain common cryptography attacks."
+  ],
+  [
+   "83",
+   "52",
+   "CQ1",
+   "How to perform cryptography-related tasks in the lab?"
+  ],
+  [
+   "84",
+   "52",
+   "CQ2",
+   "How to demonstrate cryptography attacks?"
+  ],
+  [
+   "85",
+   "53",
+   "CQ1",
+   "How to demonstrate cryptography attacks? (con't)"
+  ],
+  [
+   "86",
+   "54",
+   "CQ1",
+   "Explain the role of routers and firewalls in network protection."
+  ],
+  [
+   "87",
+   "57",
+   "CQ1",
+   "How to integrate network protection systems into group projects?"
+  ],
+  [
+   "88",
+   "57",
+   "CQ2",
+   "What are intrusion detection and prevention systems (IDS/IPS)?"
+  ],
+  [
+   "89",
+   "58",
+   "CQ1",
+   "What are intrusion detection and prevention systems (IDS/IPS)? (con't)"
+  ],
+  [
+   "90",
+   "58",
+   "CQ2",
+   "What key elements should be included in a project presentation?"
+  ],
+  [
+   "91",
+   "59",
+   "CQ1",
+   "How to handle Q&A during project presentations?"
+  ],
+  [
+   "92",
+   "59",
+   "CQ2",
+   "What lessons can be learned from group projects?"
+  ],
+  [
+   "93",
+   "59",
+   "CQ3",
+   "How to reflect on ethical aspects of penetration testing projects?"
+  ],
+  [
+   "94",
+   "60",
+   "CQ1",
+   "What are the key concepts covered in the course?"
+  ],
+  [
+   "95",
+   "60",
+   "CQ2",
+   "What are the main takeaways from ethical hacking and penetration testing?"
+  ],
+  [
+   "96",
+   "60",
+   "CQ3",
+   "How to prepare for CompTIA PenTest+ certification?"
+  ]
+ ],
+ "links": []
+}

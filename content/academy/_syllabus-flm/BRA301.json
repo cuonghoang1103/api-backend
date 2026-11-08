@@ -1,0 +1,1266 @@
+{
+ "ma": "BRA301",
+ "sylID": "13808",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13808",
+   "code": "BRA301",
+   "name": "Brand Management_Quản trị thương hiệu",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13808",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13808",
+  "Syllabus Name": "Brand Management_Quản trị thương hiệu",
+  "Course Name English": "Brand Management",
+  "Subject Code": "BRA301",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Cooperative Learning,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor level",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "MKT101 or MMK101 or MKG101 or CCO201",
+  "Description": "This course is designed to develop knowledge, skills, and perspectives to support the application of managing products and developing brand strategies in the marketing area. It helps students to gain insights into the role of product and brand management in gaining and maintaining customer loyalty. Students are encouraged to make effective use of AI-powered tools to support their assignments. These technologies can assist in research, idea generation, content organization, and campaign planning, helping them focus more on strategic thinking and creativity in brand management.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Strategic Brand Management: Building, Measuring, and Managing Brand Equity.",
+   "Kevin Lane Keller, Vanitha Swaminathan",
+   "Pearson",
+   "2019",
+   "",
+   "ISBN-10: 1292314966, ISBN-13: 978-1292314969",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "What Great Brands Do: The Seven Brand-Building Principles That Separate The Best From The Rest",
+   "Denise Lee Yohn",
+   "Wiley",
+   "2014",
+   "",
+   "ISBN-10 ‏ : ‎ 111861125X, ISBN-13 ‏ : ‎ 978-1118611258",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Xây Dựng Thương Hiệu Từ Những Viên Gạch Đầu Tiên",
+   "Brand & Bricks",
+   "NXB Lao Động",
+   "",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Demonstrate understanding of brands and brand management theories"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply analytical thinking skills in a brand management context."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Evaluate how a brand management system can capture customer mindset and market performance"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Develop strategies and tactics to build, measure and manage brand equity."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Enhance student ability to plan, evaluate and communicate brand strategies"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop a critical attitude towards brand management"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Enhance the ability to predict the consequences of ethics in brand equity"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Brand Analysis and Audit",
+   "on-going",
+   "1",
+   "25.0%",
+   ">0",
+   "in class and homework",
+   "LO1, LO2, LO3, LO4, LO6, CLO7",
+   "Report + PresentationTask Description:Students will work in groups of 4 or 5 and immerse themselves in an extensive analysis of a specific brand as well as the company that owns it. As this is an extensive analysis, it will involve qualitative and quantitative research, and literature/market/industry review. Students are encouraged to select a brand for which public information is readily available. Brand managers, research managers and C-level executives are supposed to be the target audience for the brand audit report. Accordingly, the report should have multiple components including Brand History and Overview, Key Challenges Facing Brand, Brand Inventory, Brand Exploratory and maybe, Brand Resonance Pyramid. Presentation:For the 20-minute presentation, you are required to showcase all of your key points mentioned in your report in front of your classmates to help them gain insights into the brand you have chosen. Report: Include the following sections in your report1. Brand History and Overview Summarize the evolution of the brand, including its past and present positioning.2.Key Challenges Facing Brand Explain the key challenges facing the brand and lay the foundation for the brand audit focus and outcomes.3. Brand Inventory: Brief description/summary of each item 4. Brand Exploratory: Focus Group Insights 5. Reflections and Recommendations Generate marketing recommendations that address specific branding issues.6. Appendices Notes: Students are required to:1. Obtain formal approval from their lecturer for their selected topic before beginning the assignment.2. Use AI tools to research the industry and product category of their chosen brand by:• Synthesizing and aggregating industry information• Writing a brief summary of key findings• Demonstrating comprehensive understanding of the industry prior to topic consultation• Including a clear acknowledgment of AI tool usage in the report3. Note that while AI tools may be used to gain industry insights: • Students must acknowledge all AI-generated information in their reports.• Students must demonstrate their ability to conduct the brand audit independently.• The use of AI tools is required but will not be graded separately; the quality of their completed work will be assessed as a whole.Each student will need to conduct at least one interview/survey (choice of person interviewed to be approved by the instructor) and include the full transcript of the interview in the annex section of the report.An example of a completed brand audit appears in the textbook.",
+   "1",
+   "Test the acquainted knowledge which student obtained in the delivered chapters (1-10).",
+   "Rubric: Brand Audit Group Assignment\n\n1. Report (65%)\n\na. Brand History and Overview (10%)\n\nClear and concise summary of the brand’s evolution.\n\nDemonstrates understanding of brand’s past/present positioning and relevance.\n\nb. Key Challenges Facing the Brand (10%)\n\nIdentifies critical, evidence-based challenges.\n\nProvides clear link to why these challenges matter for the audit.\n\nc. Brand Inventory (10%)\n\nComprehensive and organized review of brand elements (logo, slogan, packaging, distribution, communications, etc.).\n\nBalanced qualitative and quantitative details.\n\nd. Brand Exploratory (15%)\n\nQuality of primary research (e.g., focus group, survey, interviews).\n\nInsightfulness of findings (e.g., customer perceptions, associations, experiences).\n\nIntegration of findings into the brand’s situation.\n\ne. Reflections and Recommendations (10%)\n\nCreative, realistic, and well-argued recommendations.\n\nDirectly address the brand challenges.\n\nShow originality, feasibility, and alignment with brand positioning.\n\nf. Literature / Market / Industry Review (5%)\n\nIncorporation of credible secondary sources (academic + industry)\n\nShows evidence of both qualitative & quantitative research.\n\ng. Organization, Formatting, Appendices (5%)\n\nProfessional structure (executive summary, headings, flow).\n\nAppendices (focus group transcript, charts, tables) add value.\n\nAPA/Harvard citation style correct.\n\n2. Presentation (25%)\n\na. Content & Key Insights (10%)\n\nCovers all main sections of the report concisely.\n\nHighlights major insights and challenges clearly.\n\nb. Delivery & Engagement (5%)\n\nSpeakers are confident, organized, and balanced in group contribution.\n\nSlides are professional, clear, and visually engaging.\n\nc. Audience Relevance (5%)\n\nTailored for brand managers, executives, classmates.\n\nFocused on decision-making insights rather than just description.\n\nd. Time Management & Q&A (5%)\n\nStays within 20-minute limit.\n\nHandles Q&A professionally and knowledgeably.\n\n3. Effective usage of AI tools (10%)\n\nStudents will explain how they have utilized various AI-powered tools in their assignment.",
+   "Students can use AI tools/ AI-based sytems to gain a more comprehensive understanding of the industry; however, they are strongly advised to double-check all outputs. Additionally, they must demonstrate the ability to conduct a brand audit independently. Students' works will be assessed according to a rubric provided by the lecturer\n\nThe mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "2",
+   "Brand Campaign",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "in class and homework",
+   "LO1 => LO7",
+   "Report + PresentationTask Description:Based on their Brand Audit, students will continue working with their teammates again to create one brand campaign in order to address brand’s challenges and embrace brand image. The brand campaign should follow brand voice guidelines and is able to highlight thoroughly the brand personality of the organization. For this assessment, students will practise with and apply the brand strategy model and methods to a real world brand of your choosing. Students will learn the difference between brand campaign strategies and other types of campaign strategies. Presentation:For the 20-minute presentation, you are required to showcase all of your key points mentioned in your report in front of your classmates.Your presentation should showcase how we are able to increase brand awareness and brand equity by using the right strategies, content and media platforms.Report:Students will apply all of the knowledge they have gained so far to create a simulated campaign again with the purpose of enhancing brand awareness and brand equity. The structure of the report will be revealed and modified during the class based on the brands the students choose to focus on.",
+   "1",
+   "Option1: Test the acquainted knowledge which student obtained in the delivered chapters (11-14).Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Rubric: Brand Campaign Plan Assignment (Option 1: Report + Presentation)\n\n1. Report (65%)\n\na. Campaign Strategy & Alignment (15%)\n\nClear articulation of campaign objectives (awareness, equity, positioning).\n\nStrong alignment between campaign goals and the brand’s challenges, image, and personality.\n\nDistinguishes a brand campaign strategy from other campaign types.\n\nb. Application of Brand Strategy Models (15%)\n\nEffective use of models (e.g., Keller’s CBBE, Aaker’s brand identity model, resonance pyramid).\n\nShows how theory is translated into actionable strategy.\n\nDemonstrates understanding of brand equity concepts.\n\nc. Creativity & Brand Voice (10%)\n\nCampaign reflects brand personality and adheres to brand voice guidelines.\n\nInnovative ideas, engaging storytelling, and fresh approaches.\n\nRealistic yet distinctive in positioning the brand.\n\nd. Content & Media Plan (10%)\n\nClear articulation of proposed content types (visuals, messaging, storytelling).\n\nJustification of chosen media platforms (digital, social, traditional).\n\nIntegration across platforms for consistency and reach.\n\ne. Feasibility & Recommendations (10%)\n\nCampaign plan is realistic given resources (time, budget, context).\n\nRecommendations are actionable and defendable.\n\nRisks and limitations considered.\n\nf. Report Structure & Research Support (5%)\n\nLogical, professional structure (executive summary, sections, flow).\n\nEvidence from qualitative/quantitative data, industry sources, or case examples.\n\nCorrect referencing (APA/Harvard).\n\n2. Presentation (30%)\n\na. Content & Insight Delivery (10%)\n\nHighlights the key elements of the campaign strategy.\n\nShows how the campaign enhances brand awareness and equity.\n\nClear link to research and theory.\n\nb. Creativity & Engagement (10%)\n\nPresentation design is engaging, professional, and on-brand.\n\nDelivery captures audience interest and communicates brand personality.\n\nStrong group collaboration with balanced participation\n\nc. Relevance & Audience Tailoring (5%)\n\nTailored for an executive-level audience (brand managers, C-suite).\n\nFocuses on decision-making insights and practical outcomes.\n\nd. Time Management & Q&A (5%)\n\nPresentation flows well and stays within 20 minutes.\n\nQ&A handled confidently, showing strong grasp of the material.\n\n3. Effective usage of AI tools (5%)\n\nStudents will explain how they have utilized various AI-powered tools in their assignment.",
+   "The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "3",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "in class",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, students' attitude, preparation, contribution of discussions"
+  ],
+  [
+   "4",
+   "Quizz",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "35 mins",
+   "LO1 => LO4",
+   "Multiple choice questions. 0.25/ a correct answer",
+   "40",
+   "Test the acquainted knowledge which student obtained in the delivered chapters up to the exam date.",
+   "",
+   "According to the predetermined LOs, lecturers have the flexibility to choose assignment forms."
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 mins",
+   "LO1, LO3, LO4, LO5, LO6, LO7",
+   "Multiple choice",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Closed-book exam",
+   "Exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course overview & introduction; overview of course assessment.",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, PPT presentation, and other resources",
+   "BRA301_Phấn 1",
+   "Discussion.",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Brands & Brand Management",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "BRA301_Phần 2",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Brands & Brand Management",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Brands & Brand Management",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Customer Based Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: Customer Based Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Customer Based Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Customer Based Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3: Brand Resonance & Brand Value Chain",
+   "Offline",
+   "LO1, LO6",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3: Brand Resonance & Brand Value Chain",
+   "Offline",
+   "LO1, LO6",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3: Brand Resonance & Brand Value Chain",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "12",
+   "Group Project Guildelines and Individual Assignment Guidelines\nTutorial: online portfolio\nUse AI to develop a brand campaign",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources\nFollow lecturer's guidance of using AI:\n- Read the assignment carefully\n- Write a clear prompt for the AI. Students can use AI tools for market research, audience segmentation, developing key messages, message testing and content creation.\n- Reflect on how AI helped with building a brand campaign",
+   "",
+   "Discussion.",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 4: Choosing Brand Elements to Build Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 4: Choosing Brand Elements to Build Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: Choosing Brand Elements to Build Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4: Choosing Brand Elements to Build Brand Equity",
+   "Offline",
+   "LO1, LO6",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "17",
+   "Case study: Brand Element Analysis",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "18",
+   "Case study: Brand Element Analysis",
+   "Offline",
+   "LO1, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "19",
+   "Read at home, discuss in class on below:\nChapter 5: Designing Brand Marketing Programs",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "20",
+   "Read at home, discuss in class on below:\nChapter 5: Designing Brand Marketing Programs",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "21",
+   "Read at home, discuss in class on below:\nChapter 6: Integrating Marketing Communications to Build Brand Equity",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "22",
+   "Read at home, discuss in class on below:\nChapter 6: Integrating Marketing Communications to Build Brand Equity",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "23",
+   "Read at home, discuss in class on below:\nChapter 7: Leveraging Secondary Brand Associations to Build Brand Equity",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "24",
+   "Read at home, discuss in class on below:\nChapter 7: Leveraging Secondary Brand Associations to Build Brand Equity",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 8: Developing a Brand Equity Measurement and Management System",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8: Developing a Brand Equity Measurement and Management System",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "27",
+   "Chaper 9: Measuring Sources of Brand Equity: Capturing Customer Mind-Set",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "28",
+   "Chaper 9: Measuring Sources of Brand Equity: Capturing Customer Mind-Set",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "29",
+   "Requirements for Brand Audits & Brand Campaigns as Group Projects",
+   "Offline",
+   "LO1, LO2, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "30",
+   "Quizz",
+   "Offline",
+   "LO1, LO2, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "31",
+   "Chaper 10: Measuring Outcomes of Brand Equity: Capturing Market Performance",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "32",
+   "Chaper 10: Measuring Outcomes of Brand Equity: Capturing Market Performance",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 11: Designing and Implementing Branding Architecture Strategies",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 11: Designing and Implementing Branding Architecture Strategies",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "35",
+   "Group Debate: Online porfolio",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "36",
+   "Group Debate: Online porfolio",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "37",
+   "Assessment: Brand Analysis and Audit",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "38",
+   "Assessment: Brand Analysis and Audit",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "39",
+   "Assessment: Brand Analysis and Audit",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "40",
+   "Assessment: Brand Analysis and Audit",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "41",
+   "Assessment: Brand Analysis and Audit",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "42",
+   "Assessment: Brand Analysis and Audit",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 12: Introducing and Naming New Products and Brand Extensions",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 12: Introducing and Naming New Products and Brand Extensions",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 13: Managing Brands Over Time",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 13: Managing Brands Over Time",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "47",
+   "Guest Speaker: How to make your audiences know, trust and love your brand",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "ITU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "48",
+   "Guest Speaker: How to make your audiences know, trust and love your brand",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "ITU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 14: Managing Brands Over Geographic Boundaries and Market Segment",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 14: Managing Brands Over Geographic Boundaries and Market Segment",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 15: Closing Observations",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 15: Closing Observations",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Discussion, Exercises.",
+   ""
+  ],
+  [
+   "53",
+   "Revision",
+   "Offline",
+   "LO1, LO2, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "54",
+   "Revision",
+   "Offline",
+   "LO1, LO2, LO6, LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "55",
+   "Assessment: Brand Campaign",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "56",
+   "Assessment: Brand Campaign",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "57",
+   "Assessment: Brand Campaign",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "58",
+   "Assessment: Brand Campaign",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "59",
+   "Assessment: Brand Campaign",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ],
+  [
+   "60",
+   "Assessment: Brand Campaign",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "IT",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Exercises.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1.1",
+   "What is a Brand? Which elements does it include?How do you contrast a brand and a product?"
+  ],
+  [
+   "2",
+   "1",
+   "QN1.2",
+   "Why is brand important to the organizations and customers? Give examples."
+  ],
+  [
+   "3",
+   "2",
+   "QN2.1",
+   "Can anything be branded?"
+  ],
+  [
+   "4",
+   "3",
+   "QN3.1",
+   "Why is branding so important to the services and digital brands?"
+  ],
+  [
+   "5",
+   "3",
+   "QN3.2",
+   "Why couldn't we simply consider the \"best-known\" brand as the strongest ones?"
+  ],
+  [
+   "6",
+   "4",
+   "QN4.1",
+   "Which challenges and opportunities has the technology given to the brand management?"
+  ],
+  [
+   "7",
+   "4",
+   "QN4.2",
+   "What do you think of the new branding challenges and opportunities that were listed in the chapter? Can you think of any other issues?"
+  ],
+  [
+   "8",
+   "5",
+   "QN5.1",
+   "What is the Customer Based Brand Equity?"
+  ],
+  [
+   "9",
+   "5",
+   "QN5.2",
+   "What are the possible associations with the Apple brand name? And with Bphone brand name? What are the differences?"
+  ],
+  [
+   "10",
+   "6",
+   "QN6.1",
+   "Why do we have to do the competitive analysis after the market segmentation?"
+  ],
+  [
+   "11",
+   "7",
+   "QN7.1",
+   "What is the difference between the brand image and the brand imagery?"
+  ],
+  [
+   "12",
+   "8",
+   "QN8.1",
+   "What are the differences between brand mantra & slogan? Give Examples"
+  ],
+  [
+   "13",
+   "9",
+   "QN9.1",
+   "Please analyze the brand resonance model in your personal branding"
+  ],
+  [
+   "14",
+   "17",
+   "QN17.1",
+   "How to test the brand-building ability of a brand element?"
+  ],
+  [
+   "15",
+   "18",
+   "QN18.1",
+   "What would an ideal brand element be like?"
+  ],
+  [
+   "16",
+   "18",
+   "QN18.2",
+   "What are brand names, URLs, Logos & Symbols, Characters in Brand elements? Give examples of the bad and good brand names, URLs, Logos & Symbols, Characters"
+  ],
+  [
+   "17",
+   "20",
+   "QN20.1",
+   "What are the benefits of a brand character for the brand?"
+  ],
+  [
+   "18",
+   "20",
+   "QN20.2",
+   "What is the difference between the slogan and the tagline?"
+  ],
+  [
+   "19",
+   "21",
+   "QN21.1",
+   "What are Slogans, Jingles & Packaging in Brand elements? Give examples of the bad and good Slogans, Jingles & Packaging"
+  ],
+  [
+   "20",
+   "22",
+   "QN22.1",
+   "Why is it preferable for a brand to have multiple brand elements instead of a single one?"
+  ],
+  [
+   "21",
+   "23",
+   "QN23.1",
+   "Have you had any experience with a brand that has done a great job with relationship marketing (permission marketing, mass customization and one-to-one marketing) and experiential marketing? What did the brand do? Why was it effective? Could others learn from that?"
+  ],
+  [
+   "22",
+   "23",
+   "QN23.2",
+   "How to build the product, price & channel strategies?"
+  ],
+  [
+   "23",
+   "24",
+   "QN24.1",
+   "Why is managing customers post-purchase extremely important to e-commerce?"
+  ],
+  [
+   "24",
+   "24",
+   "QN24.2",
+   "What are the benefits of price stability?"
+  ],
+  [
+   "25",
+   "25",
+   "QN25.1",
+   "Why is it preferable for a brand to have multiple communications?"
+  ],
+  [
+   "26",
+   "25",
+   "QN25.2",
+   "What are the advantages and disadvantages of each Marketing Communication Options? Give examples of each Marketing Communication Options"
+  ],
+  [
+   "27",
+   "26",
+   "QN26.1",
+   "Which potential risks can the promotion pose to the overall branding strategy?"
+  ],
+  [
+   "28",
+   "26",
+   "QN26.2",
+   "What are the advantage(s) and disadvantage(s) of IMC options' audience overlap?"
+  ],
+  [
+   "29",
+   "27",
+   "QN27.1",
+   "In case of Tiki and Ha Anh Tuan singer's partnership, which customer knowledge of the secondary entity does the brand want to be transferred? Did they succeed?"
+  ],
+  [
+   "30",
+   "28",
+   "QN28.1",
+   "What are the potential advantages and disadvantages of co-branding?"
+  ],
+  [
+   "31",
+   "28",
+   "QN28.2",
+   "What are potential risks of licensing?"
+  ],
+  [
+   "32",
+   "28",
+   "QN28.3",
+   "What are potential difficulties in employing celebrity endorsement? Any examples?"
+  ],
+  [
+   "33",
+   "29",
+   "QN29.1",
+   "Pick a brand. Can you assemble a brand inventory for it."
+  ],
+  [
+   "34",
+   "30",
+   "QN30.1",
+   "Why do marketers need a Brand Equity Measurement and Management System?"
+  ],
+  [
+   "35",
+   "31",
+   "QN31.1",
+   "What types of Qualitative Research Techniques? Give examples"
+  ],
+  [
+   "36",
+   "31",
+   "QN31.2",
+   "What types of Quanlitative Research Techniques? Give examples"
+  ],
+  [
+   "37",
+   "32",
+   "QN32.1",
+   "Which questions can we use in the Free Association research technique?"
+  ],
+  [
+   "38",
+   "32",
+   "QN32.2",
+   "What are the advantages and disadvantages of ethnographic research?"
+  ],
+  [
+   "39",
+   "33",
+   "QN33.1",
+   "What are the advantages and disadvantages of the brand-based comparative approaches?"
+  ],
+  [
+   "40",
+   "37",
+   "QN37.1",
+   "What are the Corporate Branding?"
+  ],
+  [
+   "41",
+   "37",
+   "QN37.2",
+   "What is the brand vision of Starbucks coffee? How does it affect the brand positioning and boundaries?"
+  ],
+  [
+   "42",
+   "38",
+   "QN38.1",
+   "Why does a firm introduce multiple brands in a category?"
+  ],
+  [
+   "43",
+   "38",
+   "QN38.2",
+   "In which circumstances should a firm consider to change its corporate name?"
+  ],
+  [
+   "44",
+   "39",
+   "QN39.1",
+   "Why can brand extension(s) facilitate new-product acceptance?"
+  ],
+  [
+   "45",
+   "40",
+   "QN40.1",
+   "What are the disadvantages of brand extensions?"
+  ],
+  [
+   "46",
+   "41",
+   "QN41.1",
+   "When does a firm need to reinforce its brands? How can they reinforce?"
+  ],
+  [
+   "47",
+   "41",
+   "QN41.2",
+   "What is the most important consideration in reinforcing brands over time?"
+  ],
+  [
+   "48",
+   "42",
+   "QN42.1",
+   "When does a firm need to revitalize its brand(s)? How can they revitalize?"
+  ],
+  [
+   "49",
+   "42",
+   "QN42.2",
+   "Which challenges do marketers have to face in managing brands over time?"
+  ],
+  [
+   "50",
+   "47",
+   "QN47.1",
+   "Why are marketers more interested in regional marketing today than previously?"
+  ],
+  [
+   "51",
+   "47",
+   "QN47.2",
+   "Why is marketing to different ethnic groups an effective strategy?"
+  ],
+  [
+   "52",
+   "48",
+   "QN48.1",
+   "What are the advantages and disadvantages of developing a standardized global marketing program?"
+  ],
+  [
+   "53",
+   "49",
+   "QN49.1",
+   "Why should a brand focus on global markets?"
+  ],
+  [
+   "54",
+   "49",
+   "QN49.2",
+   "What are the advantages and disadvantages of expanding internationally?"
+  ],
+  [
+   "55",
+   "50",
+   "QN50.1",
+   "Based on Starbuck case study. Could you assess the extent to which the brand is marketed on a standardized versus customized basis?"
+  ],
+  [
+   "56",
+   "50",
+   "QN50.2",
+   "How aware are the products of the origin country different products you own?"
+  ],
+  [
+   "57",
+   "53",
+   "QN53.1",
+   "What are the benefits of the brand equity to a brand?"
+  ],
+  [
+   "58",
+   "54",
+   "QN54.1",
+   "How to create a strong brand?"
+  ],
+  [
+   "59",
+   "54",
+   "QN54.2",
+   "What do you think makes a strong brand? Can you add any criteria to the list provided?"
+  ]
+ ],
+ "links": [
+  "/download/13412/S/1_BRA301_Phấn 1.zip",
+  "/download/13412/S/2_BRA301_Phần 2.zip"
+ ]
+}

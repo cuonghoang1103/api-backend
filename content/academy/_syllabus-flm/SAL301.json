@@ -1,0 +1,1255 @@
+{
+ "ma": "SAL301",
+ "sylID": "14196",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14196",
+   "code": "SAL301",
+   "name": "Professional Selling and Management_Kỹ năng bán hàng chuyên nghiệp",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14196",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14196",
+  "Syllabus Name": "Professional Selling and Management_Kỹ năng bán hàng chuyên nghiệp",
+  "Course Name English": "Professional Selling and Management",
+  "Subject Code": "SAL301",
+  "Learning-Teaching Method": "Lecture,Presentation,constructivism",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "MKT101",
+  "Description": "Learners will get accustomed to different valuable sales techniques, which guide them to prepare for sales activities, create better relationship with customers, utilize IT in sales management and deal with key accounts of their business.\nAs for sales perspectives, the course brings about the important roles of sales in company's marketing strategy, and helps learners shape their own sales strategy for any kind of given products.\nBesides, four chapters in sales environment will also help learners consider various significant issues inside and outside their daily tasks such as, sales setting, customer behaviours, legal aspects and selling internationally.",
+  "StudentTasks": "- 80% attendance is required.\n- Students are expected to finish all the homework and prepare carefully for their next lessons. No late homework or submit on behalf of someone else will be accepted.\n- With possible written assignments, students may use the work of others – textbooks, journal articles, the Internet and other sources to study and to prepare their assignments. In that case, they need to cite these sources in Harvard Referencing style.\n- Take part in the final exam",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "Recommend AI Perplexity, Chat GPT… and CRM Flatform (Notion/Excel).",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "The Selling and Sales Management",
+   "David Jobber, Geoffrey Lancaster",
+   "Pearson Education Limited",
+   "2015",
+   "10th",
+   "978-1292078007",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "The Selling and Sales Management",
+   "David Jobber, Geoffrey Lancaster",
+   "Pearson",
+   "2019",
+   "11th edition",
+   "9781292205021",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong hai sách. Ưu tiên mua ấn bản mới nhất.\nSách phiên bản 11th thì chương 11 \"Direct marketing\" được đổi tên chương là \"Multi-channel selling\" (Direct MKT làm một nội dung nhỏ bên trong)"
+  ],
+  [
+   "3",
+   "The Selling and Sales Management",
+   "David Jobber, Geoffrey Lancaster",
+   "Pearson Education Limited",
+   "2011",
+   "8th",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the importance of selling skills and sales planning process"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand target customers' behaviors, sales settings and international selling"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Master selling techniques and develop personal selling skills"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand how to manage the key accounts"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Best utilize relationship selling and direct marketing"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Apply Internet and IT advancements in selling and sales management"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: All lecture\nOP2: OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "OP1: Online attendance status check\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Required attendance of students:\n- Lecture\n- In class discussion\n- Pay attention to class mates' presentation",
+   ""
+  ],
+  [
+   "2",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "'- Report with hard and soft versions",
+   "Groups will not have to present in front of the class, but lecturer can choose some excellent works to introduce to their classmates."
+  ],
+  [
+   "3",
+   "Individual Assignment 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "- Report with hard and soft versions\n- Prepare the slide fro presentations (if being requested by lecturer)",
+   "Around five (05) students will be chosen randomly to present their works in front of the class. They will have a better chance to share their work and let the others give them valuable suggestions."
+  ],
+  [
+   "4",
+   "Individual Assignment 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "- Report with hard and soft versions\n- Prepare the slide for presentations (if being requested by lecturer)",
+   "Around five (05) students will be chosen randomly to present their works in front of the class. They will have a better chance to share their work and let the others give them valuable suggestions."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "20.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choice questions",
+   "Multiple choice: 50",
+   "MPC questions will be drawn from the test bank/textbook contents.\nEssay questions should cover the topics studied in the class and relevant application in reality.",
+   "Exam room",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "",
+   "",
+   "",
+   "SAL301",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1. Development and role of selling in marketing",
+   "Offline",
+   "",
+   "",
+   "",
+   "SAL301",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1. Development and role of selling in marketing (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "4",
+   "Individual Assignment 1\nGuidelines & Discussions #1:\nPractice on Role of sales (5%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Online guidelines reading\nQuestions listing",
+   ""
+  ],
+  [
+   "5",
+   "Individual Assignment 1\nGuidelines & Discussions #1:\nPractice on Buyer behaviours (15%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Online guidelines reading\nQuestions listing",
+   ""
+  ],
+  [
+   "6",
+   "Group Assignment\nGuidelines & Discussions #1:\nPractice on International Selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Online guidelines reading\nQuestions listing",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2. Sales strategies\n- Sales and Marketing planning",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2. Sales strategies (cont)\n- The planning process",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2. Sales strategies (cont)\n- Establishing marketing plans",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2. Sales strategies (cont)\n- The place of selling in the marketing plan",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3. Consumer and organizational buyer behaviour\n- Differences between consumer and organizational buying",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3. Consumer and organizational buyer behaviour (cont)\n- Consumer buyer behaviour",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3. Consumer and organizational buyer behaviour (cont)\n- Organizational buyer behaviour",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3. Consumer and organizational buyer behaviour (cont)\n- Purchasing practice and Relationship Management",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4. Sales settings",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4. Sales settings (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "17",
+   "Individual Assignment 1\nGuidelines & Discussions #2:\nPractice on Role of sales (5%) and on Buyer behaviours (15%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Assignment implementing\nQuestions listing for discussions",
+   ""
+  ],
+  [
+   "18",
+   "Individual Assignment 1\nGuidelines & Discussions #2:\nPractice on Role of sales (5%) and on Buyer behaviours (15%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Assignment implementing\nQuestions listing for discussions",
+   ""
+  ],
+  [
+   "19",
+   "Individual Assignment 1\nGuidelines & Discussions #2:\nPractice on Role of sales (5%) and on Buyer behaviours (15%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Assignment implementing\nQuestions listing for discussions",
+   ""
+  ],
+  [
+   "20",
+   "Individual Assignment 1\nGuidelines & Discussions #2:\nPractice on Role of sales (5%) and on Buyer behaviours (15%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Assignment implementing\nQuestions listing for discussions",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5. International selling",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 5. International selling (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "23",
+   "Group Assignment\nGuidelines & Discussions #2:\nPractice on International Selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling\nQuestions listing",
+   ""
+  ],
+  [
+   "24",
+   "Group Assignment\nGuidelines & Discussions #2:\nPractice on International Selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling\nQuestions listing",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7. Sales responsibilities and preparation",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 7. Sales responsibilities and preparation (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 11. Multi-channel selling",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 11. Multi-channel selling ( Cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 11. Multi-channel selling ( Cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 11. Multi-channel selling ( Cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 8. Personal selling skills\n- Introduction",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 8. Personal selling skills (cont)\n- The openning\n- Need and problem identification",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 8. Personal selling skills (cont)\n- The presentation and demonstration\n- Dealing with objections",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 8. Personal selling skills (cont)\n- Negotiation",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 8. Personal selling skills (cont)\n- Closing the sales\n- Follow-up",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 8. Personal selling skills (cont)\n- Conclusion",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "37",
+   "Individual Assignment 2\nGuidelines & Discussions #1:\nPractice on Personal selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Online guidelines reading\nQuestions listing",
+   ""
+  ],
+  [
+   "38",
+   "Individual Assignment 2 (cont)\nGuidelines & Discussions #1:\nPractice on Personal selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Online guidelines reading\nQuestions listing",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9. Key account management",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 9. Key account management (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 9. Key account management (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 9. Key account management (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "43",
+   "Group Assignment\nGuidelines & Discussions #3:\nPractice on International Selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling\nQuestions listing",
+   ""
+  ],
+  [
+   "44",
+   "Group Assignment (cont)\nGuidelines & Discussions #3:\nPractice on International Selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling\nQuestions listing",
+   ""
+  ],
+  [
+   "45",
+   "Group Assignment\nGuidelines & Discussions #3:\nPractice on International Selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling\nQuestions listing",
+   ""
+  ],
+  [
+   "46",
+   "Group Assignment (cont)\nGuidelines & Discussions #3:\nPractice on International Selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling\nQuestions listing",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 10. Relationship selling",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 10. Relationship selling (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 10. Relationship selling (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 10. Relationship selling (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 12. Internet and IT applications in selling and sales management",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 12. Internet and IT applications in selling and sales management",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 12. Internet and IT applications in selling and sales management",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 12. Internet and IT applications in selling and sales management",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Textbook reading\nQuestions listing",
+   ""
+  ],
+  [
+   "55",
+   "Individual Assignment 2\nGuidelines & Discussions #2:\nPractice on Personal selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling and submitting\nQuestions listing",
+   ""
+  ],
+  [
+   "56",
+   "Individual Assignment 2\nGuidelines & Discussions #2:\nPractice on Personal selling (20%)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling and submitting\nQuestions listing",
+   ""
+  ],
+  [
+   "57",
+   "Group Assignment Presentation",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling and submitting\nQuestions listing",
+   ""
+  ],
+  [
+   "58",
+   "Group Assignment Presentation (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling and submitting\nQuestions listing",
+   ""
+  ],
+  [
+   "59",
+   "Group Assignment Presentation (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling and submitting\nQuestions listing",
+   ""
+  ],
+  [
+   "60",
+   "Group Assignment Presentation (cont)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Implementation materials and evidences compiling and submitting\nQuestions listing",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT1",
+   "Discuss the place of selling in the marketing mix"
+  ],
+  [
+   "2",
+   "2",
+   "CT1",
+   "How does the role of selling tend to differ between: (a) industrial products; and (b) consumer products?"
+  ],
+  [
+   "3",
+   "3",
+   "CT1",
+   "Differentiate between product, production, sales and marketing orientation"
+  ],
+  [
+   "4",
+   "4",
+   "CT1",
+   "Give reasons as to why the shape of the curve of the product life-cycle is similar to that of the adoption of innovations curve."
+  ],
+  [
+   "5",
+   "5",
+   "CT1",
+   "Discuss the issues to which the two statements give rise: (a) ‘Marketing is satisfying customer needs at a profit.’ (b) ‘Marketing is the process of creating unnecessary needs and wants.’"
+  ],
+  [
+   "6",
+   "6",
+   "CT1",
+   "Does the fact that selling is included as part of the promotional mix weaken or strengthen its role as a sub-element of marketing?"
+  ],
+  [
+   "7",
+   "7",
+   "CT1",
+   "Explain the differences between marketing strategies and sales strategies"
+  ],
+  [
+   "8",
+   "8",
+   "CT1",
+   "What is the relationship between objectives, strategies and tactics?"
+  ],
+  [
+   "9",
+   "9",
+   "CT1",
+   "What is the relationship between SWOT analysis and the TOWS matrix?"
+  ],
+  [
+   "10",
+   "10",
+   "CT1",
+   "What do you understand by the setting of sales objectives in the context of the marketing planning process? Give three examples of sales objectives for an organisation of your choice."
+  ],
+  [
+   "11",
+   "11",
+   "CT1",
+   "Compare and contrast the ways in which consumers and organisations buy products and services."
+  ],
+  [
+   "12",
+   "12",
+   "CT1",
+   "Of what practical importance is the study of organisational buyer behaviour to the personal selling function?"
+  ],
+  [
+   "13",
+   "13",
+   "CT1",
+   "Explain what is meant by the ‘decision-making unit’ (DMU). Why is identifying the DMU particularly difficult when selling to public sector organisations?"
+  ],
+  [
+   "14",
+   "14",
+   "CT1",
+   "What are the main stages in the decision-making process in organisational buyer behaviour?"
+  ],
+  [
+   "15",
+   "15",
+   "CT1",
+   "Setting objectives: Sufficient and according to MART criteria?"
+  ],
+  [
+   "16",
+   "16",
+   "CT1",
+   "Determining operations necessary to meet objectives: W + H?"
+  ],
+  [
+   "17",
+   "17",
+   "CT1",
+   "Organising for action: What model does the sales department organize, and how many employees? Income policy"
+  ],
+  [
+   "18",
+   "18",
+   "CT1",
+   "What is meant by the USP? How is it of use to the salesperson?"
+  ],
+  [
+   "19",
+   "19",
+   "CT1",
+   "How can sales promotion techniques be used to help the sales effort?"
+  ],
+  [
+   "20",
+   "20",
+   "CT1",
+   "Value analysis is a useful tool that can lead to significant reductions in costs of production. Using appropriate illustrations explain how this can positively assist an organisation’s salespeople."
+  ],
+  [
+   "21",
+   "21",
+   "CT1",
+   "Explain the meaning of ‘push’ and ‘pull’ promotional techniques. How can each help the salesperson to plan sales more effectively?"
+  ],
+  [
+   "22",
+   "22",
+   "CT1",
+   "How does the role of an export agent differ from the role of an export salesperson?"
+  ],
+  [
+   "23",
+   "23",
+   "CT1",
+   "What are the differences that should be considered when international sales managers draw up their export plans?"
+  ],
+  [
+   "24",
+   "24",
+   "CT1",
+   "In what ways does the international sales environment differ from the typical sales environment in the domestic market? What additional considerations need to be made by sales managers to adapt to the international environment?"
+  ],
+  [
+   "25",
+   "25",
+   "CT1",
+   "What considerations should be taken into account when deciding on the amount of prospecting a salesperson should do?"
+  ],
+  [
+   "26",
+   "26",
+   "CT1",
+   "The primary task of a sales representative is to sell the company’s products and services. What additional tasks do you feel a salesperson might undertake and how will it affect their selling role?"
+  ],
+  [
+   "27",
+   "27",
+   "CT1",
+   "Compare the strengths and weaknesses of direct mail and telemarketing"
+  ],
+  [
+   "28",
+   "28",
+   "CT1",
+   "What are the stages of managing a direct marketing campaign? Why is the concept of lifetime value of a customer important when designing a campaign?"
+  ],
+  [
+   "29",
+   "29",
+   "CT1",
+   "Give an account of sales situations where direct personal selling is likely to be more effective than"
+  ],
+  [
+   "30",
+   "30",
+   "CT1",
+   "Using appropriate examples, explain the role of direct response advertising within the overall marketing communications mix."
+  ],
+  [
+   "31",
+   "31",
+   "CT1",
+   "If the product is right and the sales presentation is right, there is no need to close the sale. Discuss."
+  ],
+  [
+   "32",
+   "32",
+   "CT1",
+   "Discuss the ways in which a salesperson can attempt to identify buyer needs."
+  ],
+  [
+   "33",
+   "33",
+   "CT1",
+   "List and discuss four characteristics of an effective sales presentation or demonstration."
+  ],
+  [
+   "34",
+   "34",
+   "CT1",
+   "Cite and discuss examples of a close under each of: summarise and ask for order, alternative choice, concession close, objection close"
+  ],
+  [
+   "35",
+   "35",
+   "CT1",
+   "Negotiation is an important part of the sales process, but it is sometimes said that this is a different skill to other skills needed by sales communicators. Are there any situations in which a case can be made to separate this element from the sales process so it is dealt with by different people?"
+  ],
+  [
+   "36",
+   "36",
+   "CT1",
+   "List some personal selling skills for an industry of your choice"
+  ],
+  [
+   "37",
+   "39",
+   "CT1",
+   "Discuss the differences between the characteristics of low- and high-value sales."
+  ],
+  [
+   "38",
+   "40",
+   "CT1",
+   "What are the key skills required of a key account manager?"
+  ],
+  [
+   "39",
+   "41",
+   "CT1",
+   "What is global account management? What competencies are required and do they differ from those required of the key account manager?"
+  ],
+  [
+   "40",
+   "42",
+   "CT1",
+   "Discuss some of the major developments in selling and sales management and the implications of these for the process of key account management."
+  ],
+  [
+   "41",
+   "43",
+   "CT1",
+   "Customer relationship management (CRM) and key account management (KAM) are two separate elements of the sales process. Explain how the two might be interrelated."
+  ],
+  [
+   "42",
+   "44",
+   "CT1",
+   "Discussions #3: Practice on International Selling (20%)"
+  ],
+  [
+   "43",
+   "45",
+   "CT1",
+   "Discussions #3: Practice on International Selling (20%)"
+  ],
+  [
+   "44",
+   "46",
+   "CT1",
+   "Discussions #3: Practice on International Selling (20%)"
+  ],
+  [
+   "45",
+   "47",
+   "CT1",
+   "Discuss the implications of the move towards relationship marketing in organisational buying/selling situations in the context of how this might change the role of selling."
+  ],
+  [
+   "46",
+   "48",
+   "CT1",
+   "Describe the key elements of a customer care programme that would be appropriate in a manufacturing or service environment with which you are familiar"
+  ],
+  [
+   "47",
+   "49",
+   "CT1",
+   "How is a relationship marketing approach different to conventional transactional marketing?"
+  ],
+  [
+   "48",
+   "50",
+   "CT1",
+   "Explain the difference between internal marketing and external relationship marketing. How are they interconnected?"
+  ],
+  [
+   "49",
+   "51",
+   "CT1",
+   "Choose five technological changes that have impacted on selling and sales management. What effect do they have on selling and sales management practices?"
+  ],
+  [
+   "50",
+   "52",
+   "CT1",
+   "What is e-commerce? E-commerce can take place at four levels. Discuss each of the four levels."
+  ],
+  [
+   "51",
+   "53",
+   "CT1",
+   "Discuss four ways that the internet has affected selling and sales management practices."
+  ],
+  [
+   "52",
+   "54",
+   "CT1",
+   "What is customer relationship management? Describe how a salesforce automation company like Salesforce.com can help you manage customer relationships more effectively"
+  ],
+  [
+   "53",
+   "55",
+   "CT1",
+   "Using specific examples to illustrate the points being made, distinguish between the ‘intranet’ and the ‘extranet’ and explain how these two systems are used in a marketing context."
+  ],
+  [
+   "54",
+   "56",
+   "CT1",
+   "How can a company that engages in e-marketing reduce the perceived risk that might be inherent in the mind of a new customer in a website transaction?"
+  ],
+  [
+   "55",
+   "57",
+   "CT1",
+   "Group Assignment Presentation and discussion"
+  ],
+  [
+   "56",
+   "58",
+   "CT1",
+   "Group Assignment Presentation and discussion"
+  ],
+  [
+   "57",
+   "59",
+   "CT1",
+   "Group Assignment Presentation and discussion"
+  ],
+  [
+   "58",
+   "60",
+   "CT1",
+   "Group Assignment Presentation and discussion"
+  ]
+ ],
+ "links": [
+  "/download/14196/S/1_SAL301.zip",
+  "/download/14196/S/2_SAL301.zip"
+ ]
+}

@@ -1,0 +1,1078 @@
+{
+ "ma": "ECO102",
+ "sylID": "12815",
+ "quyetDinh": "437/QĐ-ĐHFPT dated 04/25/2025",
+ "ungVien": [
+  {
+   "sylID": "12815",
+   "code": "ECO102",
+   "name": "Business Environment_Môi trường Kinh Doanh",
+   "active": true,
+   "approved": true,
+   "decision": "437/QĐ-ĐHFPT dated 04/25/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12815",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12815",
+  "Syllabus Name": "Business Environment_Môi trường Kinh Doanh",
+  "Course Name English": "Business Environment",
+  "Subject Code": "ECO102",
+  "Learning-Teaching Method": "Lecture,Presenting,Offline",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor of Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Objective:\n\nThe main Objective of The course is to improve economic literacy as well as critical thinking and problem solving skills to explain and predict economic issues\n\n-Description:\n\nEconomics is The study of how The society manages its scarce resources. Economics has been divided into The subcategories of microeconomics and macroeconomics. While macroeconomics studies aggregate issues related to national and international economic activities, this course - microeconomics - focuses on The behavior of individual economic agents. microeconomics studies how households (or individuals), business (or firms, enterprises) and The government make decisions, given scarcity of resources. It also studies The interactions among those market members and how these interactions have impacts on their economic benefits and The economy. Because most of these activities occur in The markets, this course also focuses on how The markets work.",
+  "StudentTasks": "+ Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n\n+ Read textbooks and other materials in advance before class\n\n+ Access the course website (http://flm.fpt.edu.vn) for up-to-date information and materials of the course, for online supports from teachers and other students, and for practicing and assessment.\n\n+ Actively participate in class activities\n\n+ Complete all homework assignments and other tasks given by the instructor\n\n+ Use personal laptop in class only for learning purposes\n\n+ Don’t have private conversations or arrive at class late, which can disrupt the learning environment of the class",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "437/QĐ-ĐHFPT dated 04/25/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/25/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "AE Principles of Economics",
+   "N. Gregory Mankiw",
+   "Cengage",
+   "2020",
+   "9th",
+   "SBN-13: 9789814915342 | ISBN-10: 9814915343",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 quyển. Ưu tiên mua version mới nhất."
+  ],
+  [
+   "2",
+   "Principles of Economics (International Edition)",
+   "Mankiw, N. G.,",
+   "South-Western CENGAGE Learning",
+   "2018",
+   "8th",
+   "",
+   "True",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Principles of Economics (International Edition)",
+   "Mankiw, N. G.,",
+   "South-Western CENGAGE Learning",
+   "2012",
+   "6th",
+   "ISBN13 978-0-538-45342-4",
+   "True",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Principles of Microeconomics (International Edition)",
+   "Mankiw, N. G.",
+   "South-Western Cengage Learning",
+   "2009",
+   "5th",
+   "",
+   "False",
+   "False",
+   "False",
+   "Sách nguồn mở"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Discuss the theory of supply and demand"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Recognize the influences of market equilibrium and disequilibrium"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Describe the theory of supply and demand in real-life scenarios"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify the tools and strategies to understand supply and demand applications"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Understand consumer and producer behavior"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand macroeconomic variables"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Analyze the influences of aggregate demand and aggregate supply"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Understand how the government policies affect individuals, firms, and society."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Understand how the fiscal and monetary policies affect macroeconomy."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Show self-reliance when working independently and collaboratively."
+  ],
+  [
+   "11",
+   "CLO11",
+   "Demonstrate ethical awareness and reflection in business context."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "CLO 10,11",
+   "",
+   "",
+   "",
+   "in class, by instructor",
+   "Participation scores will be given based on students' class attendance, preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussions, and building upon others’ comments."
+  ],
+  [
+   "2",
+   "Group assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "30 min",
+   "CLO 1,2,3,4,5,6,7,8,9,10,11",
+   "Presentation and Q&A",
+   "1,2,3 questions",
+   "Follow the instructor's guide",
+   "in class, by instructor",
+   "The PPT slides and written report of the presentation must be sent to the instructor before deadlines. Each group presentation will take place in appx. 15 minutes. The Q&A session will follow for about 10 minutes."
+  ],
+  [
+   "3",
+   "Individual assignment",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "3-4 days",
+   "CLO 1,2,3,4,5,6,7,8,9,10,11",
+   "Exercise",
+   "4,5",
+   "Individual Assignment 1 covers chapters 1 to 6; Individual Assignment 2 covers chapters 7 to 12",
+   "Approach 1: homework exercises\n\nApproach 2: constructive questions, guided by instructor",
+   "In some particular sessions, homework assignments will be given to students. The exercises in these assignments will cover subjects from the session when the previous assignment is handed. Students are required to do individually at home and submit to the instructor according to the deadlines."
+  ],
+  [
+   "4",
+   "Quiz",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "30-45 min",
+   "CLO 1,2,3,4,5,6,7,8,9",
+   "MC",
+   "20-30",
+   "Quiz 1 covers chapters 1 to 4; Quiz 2 covers chapters 5 to 8",
+   "in class, by instructor",
+   "These quizzes are organized in the beginning of some sessions and informed to students in advance. Students have time at home for preparation. Students are not allowed to use books or documents in any form during the quizzes."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 min",
+   "CLO 1,2,3,4,5,6,7,8,9",
+   "MC",
+   "50",
+   "all chapters",
+   "by exam board,\nusing computer",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Chapter 1: Principles of Demand and Supply: Definition of market",
+   "Offline",
+   "1,4,10",
+   "I,T",
+   "slide and textbook",
+   "ECO102_slide theo sylla from SU25_Chap 1-4",
+   "read relevant slides/textbook section before class",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Principles of Demand and Supply: Demand Curve",
+   "Offline",
+   "1,4,10",
+   "T,U",
+   "slide and textbook",
+   "ECO102_slide theo sylla from SU25_Chap 5 to 8",
+   "read relevant slides/textbook section before class",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Principles of Demand and Supply: Supply Curve",
+   "Offline",
+   "1,4,10",
+   "T,U",
+   "slide and textbook",
+   "ECO102_slide theo sylla fromSU25_chap 9 to 12",
+   "read relevant slides/textbook section before class",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Demand curve: Factors affecting Demand Curve",
+   "Offline",
+   "1,4,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: Principles of Demand and Supply: Factors affecting Supply Curve\nPractice",
+   "Offline",
+   "1,4,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: Price elasticity of Demand: Definition and formula",
+   "Offline",
+   "1,4,5,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Factors affecting price elasticity of demand",
+   "Offline",
+   "1,4,5,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Implication of price elasticity of demand",
+   "Offline",
+   "1,4,5,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Price elasticity of Supply",
+   "Offline",
+   "1,4,5,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3: Price ceiling/ Price floor",
+   "Offline",
+   "1,4,5,6,9,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3: Tax",
+   "Offline",
+   "1,4,5,6,9,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3: Market efficiency",
+   "Offline",
+   "1,4,5,6,9,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: Consumer surplus, Producer Surplus, Total surplus",
+   "Offline",
+   "1,4,5,6,9,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3: Deadweightloss",
+   "Offline",
+   "1,4,5,6,9,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: Budget constraint",
+   "Offline",
+   "1,4,5,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4: Indifference curve",
+   "Offline",
+   "1,4,5,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 4: Optimal Bundle",
+   "Offline",
+   "1,4,5,6,10",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "18",
+   "Practice",
+   "Offline",
+   "1,2,5,10",
+   "U",
+   "slide; extra practice questions if any",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "19",
+   "Quiz 1",
+   "Offline",
+   "",
+   "U",
+   "slide and textbook",
+   "",
+   "review 4 relevant chapters before the quiz date",
+   ""
+  ],
+  [
+   "20",
+   "Handout of Individual Assignment 1 (chapters 1- 6)\n\nChapter 5. Producer decision: production cost",
+   "Offline",
+   "CLO 5",
+   "U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5: Marginal product of labor, catchup effect, FC, VC, TC",
+   "Offline",
+   "5,6,8",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 5: AFC, AVC, ATC. Practice",
+   "Offline",
+   "5",
+   "U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "23",
+   "Practice",
+   "Offline",
+   "5,10",
+   "slide and textbook",
+   "slide and textbook",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6. Producer decision: Competition\n① Profit maximization, 2: market structure; 3: perfect vs imperfect competition",
+   "Offline",
+   "1,2,5",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "25",
+   "Perfect competition",
+   "Offline",
+   "1,2,5",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "26",
+   "Imperfect competition: Monopolistic competition",
+   "Offline",
+   "1,2,5",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "27",
+   "Imperfect competition: Oligopoly",
+   "Offline",
+   "1,2,5",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 7. Measuring National Income; 1:Economic income and expenditure, 2: GDP definition and measurement",
+   "Offline",
+   "6",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "29",
+   "Components of GDP",
+   "Offline",
+   "6",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "30",
+   "Practice",
+   "Offline",
+   "6,10, 11",
+   "U",
+   "slide and textbook",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 8. Inflation and Unemployment, ① Consumer price index (CPI), \"- How the consumer price index is calculated\n- Inflation rate\"",
+   "Offline",
+   "6,8",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "32",
+   "② Correction of economic variables for the effect of inflation; - Dollar figures from different times', '- Fisher effect: real interest rate and nominal interest rate",
+   "Offline",
+   "6",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "33",
+   "③ Unemployment rate\n'- Working-age population and labor force\n- Measuring unemployment rate",
+   "Offline",
+   "6",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "34",
+   "Submission of Individual Assignment 1\n\nPractice",
+   "Offline",
+   "CLO 6,10, 11",
+   "U",
+   "slide; extra practice questions if any",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "35",
+   "Quiz 2 (chapters 5, 6, 7, and 8)\n\nHandout of Individual Assignment 2 (chapters 7-12)",
+   "Offline",
+   "CLO 5,6,10, 11",
+   "U",
+   "slide and textbook",
+   "",
+   "review 4 relevant chapters before the quiz date",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 9: Financial system: interest rate, Saving and Investment; - Financial market (bond, stock)/ financial intermediary",
+   "Offline",
+   "3,4",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "37",
+   "`- Interest rate; - Saving: supply curve",
+   "Offline",
+   "4",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "38",
+   "`- Investment: demand curve, saving investment equilibrium",
+   "Offline",
+   "3",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 10: Money Supply, Money Demand; - Money Supply: Regulated by the Central Bank using OMO",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "40",
+   "- Quantity theory: MV = PY",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "41",
+   "Money Demand: Definition; Factors affecting Money Demand (Y,r, P), liquidity preference theory",
+   "Offline",
+   "3,4,5,6,10,11",
+   "",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "42",
+   "Practice",
+   "Offline",
+   "3,4,5,6,10,11",
+   "U",
+   "slide; extra practice questions if any",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11: AD – AS",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "44",
+   "- AD curve. Why AD curve slopes downward\n- LRAS curve: Yn = A F(L, H, K, N)",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "45",
+   "- SRAS curve: sticky wage\n- General equilibrium",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "46",
+   "- Shocks to the equilibrium",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "47",
+   "- Return to equilibrium\n- Stagflation",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 12: Monetary and fiscal policy",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "49",
+   "- Expansionary/contractionary monetary policy",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "50",
+   "Expansionary/contractionary fiscal policy: multiplier/crowding out effect",
+   "Offline",
+   "3,4,5,6,10,11",
+   "T,U",
+   "slide and textbook",
+   "",
+   "review previous section; read relevant materials for the current section",
+   ""
+  ],
+  [
+   "51",
+   "Practice\n\nSubmission of Individual Assignment 2",
+   "Offline",
+   "CLO 1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "slide; extra practice questions if any",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "52",
+   "Practice",
+   "Offline",
+   "CLO 1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "slide; extra practice questions if any",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "53",
+   "Practice",
+   "Offline",
+   "CLO 1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "slide; extra practice questions if any",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "54",
+   "Practice",
+   "Offline",
+   "CLO 1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "slide; extra practice questions if any",
+   "",
+   "do practice questions in advance (if any)",
+   ""
+  ],
+  [
+   "55",
+   "Group Presentation",
+   "Offline",
+   "CLO 1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "",
+   "",
+   "present or listen to other groups presenting",
+   ""
+  ],
+  [
+   "56",
+   "Group Presentation",
+   "Offline",
+   "1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "",
+   "",
+   "present or listen to other groups presenting",
+   ""
+  ],
+  [
+   "57",
+   "Group Presentation",
+   "Offline",
+   "1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "",
+   "",
+   "present or listen to other groups presenting",
+   ""
+  ],
+  [
+   "58",
+   "Group Presentation",
+   "Offline",
+   "1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "",
+   "",
+   "present or listen to other groups presenting",
+   ""
+  ],
+  [
+   "59",
+   "Group Presentation",
+   "Offline",
+   "1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "",
+   "",
+   "present or listen to other groups presenting",
+   ""
+  ],
+  [
+   "60",
+   "Course Review",
+   "Offline",
+   "1,2,3,4,5,6,7,8,9,10,11",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "Give three examples of important trade-offs that you face in your life"
+  ],
+  [
+   "2",
+   "2",
+   "CQ1",
+   "“An increase in the demand for notebooks raises the quantity of notebooks demanded but not the quantity supplied.” Is this statement true or false? Explain."
+  ],
+  [
+   "3",
+   "2",
+   "CQ2",
+   "Does a change in consumers’ tastes lead to a movement along the demand curve or to a shift in the demand curve? Does a change in price lead to a movement along the demand curve or to a shift in the demand curve? Explain your answers."
+  ],
+  [
+   "4",
+   "3",
+   "CQ1",
+   "Beer and pizza are complements because they are often enjoyed together. When the price of beer rises, what happens to the supply, demand, quantity supplied, quantity demanded, and price in the market for pizza?"
+  ],
+  [
+   "5",
+   "3",
+   "CQ2",
+   "What are the supply schedule and the supply curve, and how are they related? Why does the supply curve slope upward?"
+  ],
+  [
+   "6",
+   "3",
+   "CQ3",
+   "Does a change in producers’ technology lead to a movement along the supply curve or to a shift in the supply curve? Does a change in price lead to a movement along the supply curve or to a shift in the supply curve?"
+  ],
+  [
+   "7",
+   "10",
+   "CQ1",
+   "Give an example of a price ceiling and an example of a price floor."
+  ],
+  [
+   "8",
+   "10",
+   "CQ2",
+   "How does a tax on a good affect the price paid by buyers, the price received by sellers, and the quantity sold?"
+  ],
+  [
+   "9",
+   "10",
+   "CQ3",
+   "Explain why economists usually oppose price controls."
+  ],
+  [
+   "10",
+   "11",
+   "CQ1",
+   "Suppose the government removes a tax on buyers of a good and levies a tax of the same size on sellers of the good. How does this change in tax policy affect the price that buyers pay sellers for this good, the amount buyers are out of pocket (including any tax payments they make), the amount sellers receive (net of any tax payments they make), and the quantity of the good sold?"
+  ],
+  [
+   "11",
+   "11",
+   "CQ2",
+   "What determines how the burden of a tax is divided between buyers and sellers? Why?"
+  ],
+  [
+   "12",
+   "11",
+   "CQ3",
+   "If the government places a $500 tax on luxury cars, will the price paid by consumers rise by more than $500, less than $500, or exactly $500? Explain."
+  ],
+  [
+   "13",
+   "13",
+   "CQ1",
+   "Explain how buyers’ willingness to pay, consumer surplus, and the demand curve are related."
+  ],
+  [
+   "14",
+   "13",
+   "CQ2",
+   "Explain how sellers’ costs, producer surplus, and the supply curve are related."
+  ],
+  [
+   "15",
+   "13",
+   "CQ3",
+   "An early freeze in California sours the lemon crop. Explain what happens to consumer surplus in the market for lemons. Explain what happens to consumer surplus in the market for lemonade. Illustrate your answers with diagrams."
+  ],
+  [
+   "16",
+   "28",
+   "CQ1",
+   "Explain why an economy’s income must equal its expenditure."
+  ],
+  [
+   "17",
+   "28",
+   "CQ2",
+   "Which contributes more to GDP—the production of an economy car or the production of a luxury car? Why?"
+  ],
+  [
+   "18",
+   "29",
+   "CQ1",
+   "The government purchases component of GDP does not include spending on transfer payments such as Social Security. Thinking about the definition of GDP, explain why transfer payments are excluded."
+  ],
+  [
+   "19",
+   "29",
+   "CQ2",
+   "Why do economists use real GDP rather than nominal GDP to gauge economic well-being?"
+  ],
+  [
+   "20",
+   "31",
+   "CQ1",
+   "Which do you think has a greater effect on the CPI: a 10 percent increase in the price of chicken or a 10 percent increase in the price of caviar? Why?"
+  ],
+  [
+   "21",
+   "31",
+   "CQ2",
+   "Over a long period of time, the price of a candy bar rose from $0.20 to $1.20. Over the same period, the CPI rose from 150 to 300. Adjusted for overall inflation, how much did the price of the candy bar change?"
+  ],
+  [
+   "22",
+   "32",
+   "CQ1",
+   "Would you rather live in a nation with a high level of GDP and a low growth rate or in a nation with a low level of GDP and a high growth rate?"
+  ]
+ ],
+ "links": [
+  "/download/12815/S/1_ECO102_slide theo sylla from SU25_Chap 1-4.zip",
+  "/download/12815/S/2_ECO102_slide theo sylla from SU25_Chap 5 to 8.zip",
+  "/download/12815/S/3_ECO102_slide theo sylla fromSU25_chap 9 to 12.zip"
+ ]
+}

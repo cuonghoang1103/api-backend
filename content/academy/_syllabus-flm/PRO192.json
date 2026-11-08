@@ -1,0 +1,1244 @@
+{
+ "ma": "PRO192",
+ "sylID": "12038",
+ "quyetDinh": "1286/QĐ-ĐHFPT dated 11/22/2024",
+ "ungVien": [
+  {
+   "sylID": "12038",
+   "code": "PRO192",
+   "name": "Object-Oriented Programming_Lập trình hướng đối tượng",
+   "active": true,
+   "approved": true,
+   "decision": "1286/QĐ-ĐHFPT dated 11/22/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12038",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12038",
+  "Syllabus Name": "Object-Oriented Programming_Lập trình hướng đối tượng",
+  "Course Name English": "Object-Oriented Programming",
+  "Subject Code": "PRO192",
+  "Learning-Teaching Method": "Social Constructivism,In-class lecture,Inquiry-based Teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 85' practical exam + 104h self-study",
+  "Pre-Requisite": "Pass PRF192",
+  "Description": "-This subject introduces the student to object-oriented programming. The student learns to build reusable objects, encapsulate data and logic within a class, inherit one class from another and implement polymorphism.\n\n- Compose technical documentation of a Java program using internal comments\n\n- Adhere to object-oriented programming principles including encapsulation, polymorphism and inheritance when writing program code\n\n- Trace the execution of Java program logic to determine what a program does or to validate the correctness of a program",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises given by instructor in class or at home and submit on time.\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FU FLM at https://flm.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "Text Book\n\n'NetBean x.x\n\nInternet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1286/QĐ-ĐHFPT dated 11/22/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/22/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Java 8 Specification\n\nhttps://docs.oracle.com/javase/specs/jvms/se8/html/jvms-1.html#jvms-1.1",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "Core Java, Volum 1: Fundamentals",
+   "Cay Horstmann",
+   "Pearson",
+   "2018",
+   "11th",
+   "978-0135166307",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Core Java, Volum 2: Advanced features",
+   "Cay Horstmann",
+   "Pearson",
+   "2019",
+   "11th",
+   "978-0135166314",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Object-Oriented Programming using Java (website (offline): Học liệu do FU biên soạn)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the concepts of object oriented (OO) programs to solve problems and fundamentals of object-oriented programming in Java"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Practice basic Java language syntax and semantics to write Java programs and use concepts such as variables, conditional and iterative execution methods"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Uses streams to read and write data from/to different types of sources/targets"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Discuss the benefits and the use of JAVA’s Exceptional handling mechanism"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify classes, objects, members of a class and relationships among them needed for a specific problem"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Explain the concept and demonstrates the use of Polymorphism, Encapsulation, Abstraction and Inheritance in java"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Discuss the principles and the use of abstract classes and interfaces in java"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Understand and implement a complete program using object array"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Explain the principles and the use of some (java collections) abstract data types (list, set, map)"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Option 1: 28 slots; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "All subjects in syllabus",
+   "in class, by teacher",
+   ""
+  ],
+  [
+   "2",
+   "Lab",
+   "on-going",
+   "6",
+   "10.0%",
+   ">0",
+   "Option 1: 90'/each; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "in class, by teacher",
+   ""
+  ],
+  [
+   "3",
+   "Practical Exam",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "85'",
+   "LO1->LO9",
+   "",
+   "",
+   "",
+   "By exam board",
+   ""
+  ],
+  [
+   "4",
+   "Progress Test",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "Option 1: 30'/each; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Option 1: Multiple choices Marked by Computer or a suitable format; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 20/each; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "in class, by LMS system",
+   "Instruction and schedules for Progress Tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has responsibility to review the test for students after graded."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'/each",
+   "LO1->LO9",
+   "Multiple choices\n\nMarked by Computer",
+   "50",
+   "All subjects in syllabus",
+   "By Exam Board",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Chapter 1: Introduction\n\n1.1 Welcome to Object-Oriented",
+   "Offline",
+   "CLO1",
+   "I",
+   "Textbook, slides",
+   "link1-1",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "2",
+   "1.2 Object Terminology and Installation JDK - IDE",
+   "Offline",
+   "CLO1",
+   "",
+   "Textbook, slides",
+   "link2-1",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 2: Basic Java language\n\n2.1 Basic Java language: Variable, data type",
+   "Offline",
+   "CLO2",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "4",
+   "2.1 Basic Java language: Control statements",
+   "Offline",
+   "CLO2",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "5",
+   "2.1 Basic Java language: Method - function- Parameter passing",
+   "Offline",
+   "CLO2",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "6",
+   "2.1 Basic Java language: Array, ArrayList",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "7",
+   "2.1 Basic Java language: String, StringBuffer",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "8",
+   "2.2 Input and Output (Standard I/O)",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "9",
+   "2.2 Input and Output (Standard I/O) - cont'd",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "10",
+   "Lab 1 assistance",
+   "Offline",
+   "CLO2,CLO3",
+   "U",
+   "lab's questions",
+   "",
+   "lab's questions",
+   ""
+  ],
+  [
+   "11",
+   "Lab 1 assistance",
+   "Offline",
+   "CLO2,CLO4",
+   "U",
+   "lab's questions",
+   "",
+   "lab's questions",
+   ""
+  ],
+  [
+   "12",
+   "2.4 Dynamic Memory",
+   "Offline",
+   "CLO4",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: OOP\n\n3.1 OOP concept",
+   "Offline",
+   "CLO5",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "14",
+   "3.2 Data abstraction - concept and technic",
+   "Offline",
+   "CLO5",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "15",
+   "3.3 Class definition: data and function members",
+   "Offline",
+   "CLO5",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "16",
+   "3.4 Encapsulation",
+   "Offline",
+   "CLO5, CLO6",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "17",
+   "Lab 2 assistance",
+   "Offline",
+   "CLO5, CLO7",
+   "U",
+   "Lab's questions",
+   "",
+   "Lab's questions",
+   ""
+  ],
+  [
+   "18",
+   "Lab 2 assistance",
+   "Offline",
+   "CLO5, CLO8",
+   "U",
+   "Lab's questions",
+   "",
+   "Lab's questions",
+   ""
+  ],
+  [
+   "19",
+   "3.5 Inheritance: Inheritance introduction",
+   "Offline",
+   "CLO5,CLO6",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "20",
+   "3.6 Inheritance: Derived Classes",
+   "Offline",
+   "CLO5,CLO7",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "21",
+   "Lab 3 assistance",
+   "Offline",
+   "CLO5,CLO8",
+   "U",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "22",
+   "Lab 3 assistance",
+   "Offline",
+   "CLO5,CLO9",
+   "U",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "23",
+   "3.7 Polymorphism: Polymorphism concepts",
+   "Offline",
+   "CLO7",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "24",
+   "3.8 Override and overriden methods",
+   "Offline",
+   "CLO7",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "25",
+   "Lab 4 assistance",
+   "Offline",
+   "CLO7",
+   "U",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "26",
+   "Lab 4 assistance",
+   "Offline",
+   "CLO7",
+   "U",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 4: Abstract class - Interface\n\n4.1 Abstract class",
+   "Offline",
+   "CLO7",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "28",
+   "4.1 Abstract class - con't",
+   "Offline",
+   "CLO7",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "29",
+   "4.2 Interface",
+   "Offline",
+   "CLO7",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "30",
+   "4.2 Interface - cont'd",
+   "Offline",
+   "CLO7",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 5:\n\n5.1 Error & Exception Concepts",
+   "Offline",
+   "CLO4",
+   "",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "32",
+   "5.2 Handling Exception",
+   "Offline",
+   "CLO4",
+   "",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "33",
+   "Progress test 1+ workshop evaluation",
+   "Offline",
+   "CLO1,CLO2,CLO3,CLO4,CLO5,CLO6,CLO7",
+   "",
+   "Textbook, slides,assignment's questions",
+   "",
+   "Textbook, slides,assignment's questions",
+   ""
+  ],
+  [
+   "34",
+   "Progress test 1+ workshop evaluation",
+   "Offline",
+   "CLO1,CLO2,CLO3,CLO4,CLO5,CLO6,CLO7",
+   "I,T",
+   "Textbook, slides,assignment's questions",
+   "",
+   "Textbook, slides,assignment's questions",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 6: Array of Objects\n\n6. Basic Operators: add, update, remove, sort, find",
+   "Offline",
+   "CLO8",
+   "IT",
+   "Textbook, slides, lab's questions",
+   "",
+   "Textbook, slides, lab's questions",
+   ""
+  ],
+  [
+   "36",
+   "Array of Objects:\n\n6. Basic Operators: add, update, remove, sort, find - cont'd",
+   "Offline",
+   "CLO9",
+   "IT",
+   "Textbook, slides, lab's questions",
+   "",
+   "Textbook, slides, lab's questions",
+   ""
+  ],
+  [
+   "37",
+   "Array of Objects:\n\n6. Basic Operators: add, update, remove, sort, find - cont'd",
+   "Offline",
+   "CLO9",
+   "IT",
+   "Textbook, slides, lab's questions",
+   "",
+   "Textbook, slides, lab's questions",
+   ""
+  ],
+  [
+   "38",
+   "Array of Objects:\n\n6. Basic Operators: add, update, remove, sort, find - cont'd",
+   "Offline",
+   "CLO9",
+   "IT",
+   "Textbook, slides, lab's questions",
+   "",
+   "Textbook, slides, lab's questions",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 7: Collections in Java:\n\n7.1 Overview",
+   "Offline",
+   "CLO9",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "40",
+   "7.2 List",
+   "Offline",
+   "CLO9",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "41",
+   "7.3 Set",
+   "Offline",
+   "CLO9",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "42",
+   "7.3 Set",
+   "Offline",
+   "CLO9",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "43",
+   "7.4 Map",
+   "Offline",
+   "CLO9",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "44",
+   "7.4 Map",
+   "Offline",
+   "CLO9",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "45",
+   "Lab 5 assistance",
+   "Offline",
+   "CLO4,CLO5,CLO6,CLO7",
+   "U",
+   "Lab's questions",
+   "",
+   "Lab's questions",
+   ""
+  ],
+  [
+   "46",
+   "Lab 5 assistance",
+   "Offline",
+   "CLO4,CLO5,CLO6,CLO7",
+   "U",
+   "Lab's questions",
+   "",
+   "Lab's questions",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 8: Input and Output (File I/O)",
+   "Offline",
+   "CLO4, CLO5, CLO6, CLO7, CLO8",
+   "IT",
+   "Textbook, slides, assignment's questions",
+   "",
+   "Textbook, slides, assignment's questions",
+   ""
+  ],
+  [
+   "48",
+   "8. Input and Output (File I/O) - cont't",
+   "Offline",
+   "CLO4, CLO5, CLO6, CLO7, CLO8",
+   "IT",
+   "Textbook, slides, assignment's questions",
+   "",
+   "Textbook, slides, assignment's questions",
+   ""
+  ],
+  [
+   "49",
+   "8. Input and Output (File I/O) - cont't",
+   "Offline",
+   "CLO4, CLO5, CLO6, CLO7, CLO8",
+   "IT",
+   "Textbook, slides, assignment's questions",
+   "",
+   "Textbook, slides, assignment's questions",
+   ""
+  ],
+  [
+   "50",
+   "8. Input and Output (File I/O) - cont't",
+   "Offline",
+   "CLO4, CLO5, CLO6, CLO7, CLO8",
+   "IT",
+   "Textbook, slides, assignment's questions",
+   "",
+   "Textbook, slides, assignment's questions",
+   ""
+  ],
+  [
+   "51",
+   "Lab 6 assistance",
+   "Offline",
+   "CLO9",
+   "T,U",
+   "lab's questions",
+   "",
+   "lab's questions",
+   ""
+  ],
+  [
+   "52",
+   "Lab 6 assistance",
+   "Offline",
+   "CLO9",
+   "T,U",
+   "lab's questions",
+   "",
+   "lab's questions",
+   ""
+  ],
+  [
+   "53",
+   "Progress test 2+ workshop evaluation",
+   "Offline",
+   "CLO8, CLO9",
+   "U",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "54",
+   "Progress test 2+ workshop evaluation",
+   "Offline",
+   "CLO8, CLO9",
+   "U",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "55",
+   "Assignment Evaluation",
+   "Offline",
+   "",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "56",
+   "Assignment Evaluation",
+   "Offline",
+   "",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Textbook, slides",
+   ""
+  ],
+  [
+   "57",
+   "Review",
+   "Offline",
+   "All LOs",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Review",
+   "Offline",
+   "All LOs",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Review",
+   "Offline",
+   "All LOs",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Review",
+   "Offline",
+   "All LOs",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1.1",
+   "Programming Language and Programming Paradigm Hints: What is a programming language? Lists at least 2 programming languages? What is a programming paradigm? Lists at least 2 programming paradigms?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ1.2",
+   "Structured Programming Paradigm Hints: What are characteristics of Structured Programming Paradigm (review Programming Fundamentals (PRF))? What problems does the PRF solve? What problems is difficult for the PRF to solve?"
+  ],
+  [
+   "3",
+   "2",
+   "CQ1.3",
+   "Object-oriented Programming (OOP) Paradigm Hints: What are the pros and cons of OOP over PRF? Look up the code available to illustrate to highlight this difference."
+  ],
+  [
+   "4",
+   "2",
+   "CQ1.4",
+   "What are the concepts of major features in OOP (Abstraction, Encapsulation, Inheritance, Polymorphism)? Hints: Concept in the real world. Example. Concept in the programming"
+  ],
+  [
+   "5",
+   "3",
+   "CQ1.5",
+   "How may Data types can be use? Why we need variables? Which operators can we use in Java? Hints for Data type, variable, operators (logic, bitwise …) List of data types Variable naming Convert data type (auto, command) Syntax and example Scope of variable Evaluating Expressions and Operator Precedence"
+  ],
+  [
+   "6",
+   "4",
+   "CQ2.1",
+   "What are basic statements in Java? What are their usecase and syntax? Hints: Selection (If else, Switch case) Loop (for, while, do..while)"
+  ],
+  [
+   "7",
+   "5",
+   "CQ2.2",
+   "What are Array and String types? When we use them? What are their syntax? Hints for Array and String type Syntax and example"
+  ],
+  [
+   "8",
+   "6",
+   "CQ2.3",
+   "What are the basic input output? Give examples Hints for Input/output data (keyboard, screen): Library Syntax and example"
+  ],
+  [
+   "9",
+   "7",
+   "CQ3.1",
+   "What are streams? Describe about Input output stream? Hints: Concept Input/Output stream"
+  ],
+  [
+   "10",
+   "8",
+   "CQ3.2",
+   "How to access an manage directories and files, text files? Hints: Syntax and example to access"
+  ],
+  [
+   "11",
+   "9",
+   "CQ3.3",
+   "Whar are Binary files? Hints: Syntax and example to access"
+  ],
+  [
+   "12",
+   "10",
+   "CQ4.1",
+   "How to distinguish Text, UTF, and Unicode files? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "13",
+   "12",
+   "CQ4.2",
+   "What is exception? Hints: What is an exception? Why do we use exception? Where do we use exception?"
+  ],
+  [
+   "14",
+   "13",
+   "CQ5.1",
+   "How to use try catch – finally blocks? Hints: Syntax and example"
+  ],
+  [
+   "15",
+   "14",
+   "CQ5.2",
+   "What are throw, throws? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "16",
+   "15",
+   "CQ5.3",
+   "When do we need assertion? Hints for Assertions: Concept, Use Case Syntax and example"
+  ],
+  [
+   "17",
+   "17",
+   "CQ6.1",
+   "What are Class and Object? How to distinguish them? Hints for Class and Object: Class, Object in the real world Class, Object in programming Class vs. Object."
+  ],
+  [
+   "18",
+   "18",
+   "CQ6.2",
+   "What are constructor methods? Hints: Concept. Use case Syntax and code example Implement case? How many constructors should be implemented? What should we will write in constructor’s body?"
+  ],
+  [
+   "19",
+   "19",
+   "CQ7.1",
+   "What “this” keyword means? Hints: Concept Use case Syntax and code example"
+  ],
+  [
+   "20",
+   "20",
+   "CQ7.2",
+   "What is UML? Hints: Defines the symbols used in UML Explain an existing class diagram Build a class diagram"
+  ],
+  [
+   "21",
+   "21",
+   "CQ7.3",
+   "What are member methods? Hints: Concept. Use case, Syntax and code example, Implement case? What should we will write in member method’s body"
+  ],
+  [
+   "22",
+   "22",
+   "CQ8.1",
+   "How to distinguish member functions vs. Constructors? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "23",
+   "23",
+   "CQ8.2",
+   "What are Parameter and Argument? Hints: Concept, Example"
+  ],
+  [
+   "24",
+   "24",
+   "CQ8.3",
+   "How many access levels in OOP? What are they? Hints: List access levels? Explain why and why not for class and each class member form? Syntax and code example for each situation"
+  ],
+  [
+   "25",
+   "26",
+   "CQ9.1",
+   "What is Inheritance in OOP? Hints: Use case Syntax and example"
+  ],
+  [
+   "26",
+   "27",
+   "CQ9.2",
+   "What should we concern when casting? Hints: How instance object variable casting? instance object variables vs. primitive data type variables"
+  ],
+  [
+   "27",
+   "28",
+   "CQ10.1",
+   "What is “instanceof” operator? Hints: Use case Syntax and example"
+  ],
+  [
+   "28",
+   "29",
+   "CQ10.2",
+   "How to distinguish superclass and Subclass? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "29",
+   "30",
+   "CQ10.3",
+   "What are access levels between members of Superclass, Subclass, and from the instance object? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "30",
+   "31",
+   "CQ11.1",
+   "How the parent constructor called? (from instance object, from subclass) Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "31",
+   "32",
+   "CQ11.2",
+   "What are differences between “this” and “super” Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "32",
+   "34",
+   "CQ12.1",
+   "What is abstract class? Hints: Concept Syntax and example Abstract class vs. normal class"
+  ],
+  [
+   "33",
+   "35",
+   "CQ12.2",
+   "What are members of abstract class? Hints: List member types in an abstract class Use case Syntax and code example Which can / cannot be member of abstract class? Why?"
+  ],
+  [
+   "34",
+   "36",
+   "CQ12.3",
+   "What are access levels in abstract class? Hints: Are public, protected, private and default can / cannot set to the abstract class and its members? Syntax and code example."
+  ],
+  [
+   "35",
+   "37",
+   "CQ13.1",
+   "What are anonymous class and nest class? Hints: Anonymous Class (Concept, Use case, Syntax and example) Nest Class (Concept, Use case, Syntax and example)"
+  ],
+  [
+   "36",
+   "38",
+   "CQ13.2",
+   "What is interface? Hints: Concept Syntax and example"
+  ],
+  [
+   "37",
+   "39",
+   "CQ13.3",
+   "What are Interface members? Hints: List member types in an interface Default method Use case Syntax and code example Which can / cannot be member of interface? Why?"
+  ],
+  [
+   "38",
+   "40",
+   "CQ14.1",
+   "What are differences among Interface, Abstract Class and Class? Hints: Use case Syntax and code example"
+  ],
+  [
+   "39",
+   "41",
+   "CQ14.2",
+   "Terms and definitions in java OOP? Hints: Static, abstract, finally, public, private, protected …. Use case and example"
+  ],
+  [
+   "40",
+   "42",
+   "CQ14.3",
+   "What is Polymorphism? Hints: Concept, Use Case"
+  ],
+  [
+   "41",
+   "43",
+   "CQ15.1",
+   "What is Overloading? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "42",
+   "44",
+   "CQ15.2",
+   "What is Overriding? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "43",
+   "47",
+   "CQ16.1",
+   "What are Array of Objects? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "44",
+   "48",
+   "CQ16.2",
+   "What are differences between Array of Objects vs. Array Variables? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "45",
+   "49",
+   "CQ17.1",
+   "What are differences between Array Arguments vs. Array Parameters? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "46",
+   "51",
+   "CQ17.2",
+   "How to input an object into a file? Hints for Object input File Concept, Use Case Syntax and example"
+  ],
+  [
+   "47",
+   "52",
+   "CQ18.1",
+   "How to get an object from a file? Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "48",
+   "56",
+   "CQ19.1",
+   "What is Collection? Hints: Concept, Structure Use case Syntax and example"
+  ],
+  [
+   "49",
+   "57",
+   "CQ19.2",
+   "What is List? Hints: Concept, Structure Use case Syntax and example List of method help you to control a list"
+  ],
+  [
+   "50",
+   "58",
+   "CQ20.1",
+   "What is Set? Hints: Concept, Structure Use case Syntax and example List of method help you to control a set"
+  ],
+  [
+   "51",
+   "59",
+   "CQ20.2",
+   "What are differences between Set and List Hints: Concept, Use Case Syntax and example"
+  ],
+  [
+   "52",
+   "60",
+   "CQ20.3",
+   "What are differences among Map, Set and List? Hints: Concept, Use Case Syntax and example"
+  ]
+ ],
+ "links": []
+}

@@ -1,0 +1,345 @@
+{
+ "ma": "WDU202c",
+ "sylID": "12530",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12530",
+   "code": "WDU202c",
+   "name": "UI/UX Design _ Thiết kế trải nghiệm người dùng",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12530",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12530",
+  "Syllabus Name": "UI/UX Design _ Thiết kế trải nghiệm người dùng",
+  "Course Name English": "UI/UX Design",
+  "Subject Code": "WDU202c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 82 h online study + 3 h offline + 1h exam + 64h self-study",
+  "Pre-Requisite": "None",
+  "Description": "The UI/UX Design Specialization brings a design-centric approach to user interface and user experience design, and offers practical, skill-based instruction centered around a visual communications perspective, rather than on one focused on marketing or programming alone. In this sequence of four courses, students will summarize and demonstrate all stages of the UI/UX development process, from user research to defining a project’s strategy, scope, and information architecture, to developing sitemaps and wireframes. Students’ll learn current best practices and conventions in UX design and apply them to create effective and compelling screen-based experiences for websites or apps.\n\nFinal Exam is included of Final Theory Exam (TE) & Final Practical Exam (PE): 100%\n\nStudents who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\nCondition to pass: TE>=4 and PE>=4 and FR = (TE+PE)/2 + bonus >=5",
+  "StudentTasks": "1. Student must get the certification of UI/UX Design Specialization specialization specialization from Coursera to be accepted to the final examination.\n\n2. Complete the online course to be allowed to take Final Exam",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/ui-ux-design",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: UI / UX Design Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/visual-elements-user-interface-design",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 01: Visual Elements of User Interface Design"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/ux-design-fundamentals",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 02: UX Design Fundamentals"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/web-design-strategy",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 03: Web Design: Strategy and Information Architecture"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/web-design-wireframes-prototypes",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 04: Web Design: Wireframes to Prototypes"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain underlying concepts and principles related to UI/UX design"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply the key formal elements of clear, consistent, and intuitive UI design to the to the design of a static screen-based interface"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply current best practices and conventions in UX design and employ the fundamental principles of how UX design functions to shape an audience's experience of a given body of content"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Define the strategy and scope of the site, as well as develope its information architecture and overall structure"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply the UX research to actual user interfaces: the creation of wireframes, high-fidelity mockups, and clickable prototypes"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "PE",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "120'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "",
+   "",
+   "All studied courses.",
+   "by Exam Board",
+   "Final Exam: Week 13"
+  ],
+  [
+   "2",
+   "TE",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Computer gradable",
+   "50",
+   "All studied courses. Each module of course contributes 2-3 questions.",
+   "by Exam Board",
+   "Final Exam: Week 13"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Specialization Introduction (Offline 1)\n\nVisual Elements of User Interface Design\n\n- Course Overview\n\n- What IS a user interface anyway?\n\n- Introduction to User Interface Design\n\n- Interface Conventions\n\n- Approaches to Screen-based UI\n\n- Formal Elements of Interface Design\n\n- Introduction and Project Brief\n\n- Define the Look and Feel",
+   "Offline,Online",
+   "LO1, LO2",
+   "IT",
+   "MOOC 01: Visual Elements of User Interface Design",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "2",
+   "Visual Elements of User Interface Design\n\n- Active Elements of Interface Design\n\n- Static to Active\n\n- Composing Interaction\n\n- Points of Interaction\n\n- Create a Sample Pattern Library",
+   "Online",
+   "LO1, LO2",
+   "IT",
+   "MOOC 01: Visual Elements of User Interface Design",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "Visual Elements of User Interface Design\n\n- Create a Sample Pattern Library\n\n- Composing the Elements of Interface Design\n\n- Hierarchy and Composition\n\n- Putting it all together",
+   "Online",
+   "LO1, LO2",
+   "IT",
+   "MOOC 01: Visual Elements of User Interface Design",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "4",
+   "UX Design Fundamentals\n\n- Course Overview\n\n- Ideation, Articulation, Development\n\n- Ideation\n\n- User Research\n\n- Naming and Mission\n\n- Plan Your App",
+   "Online",
+   "LO1, LO3",
+   "IT",
+   "MOOC 02: UX Design Fundamentals",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "5",
+   "UX Design Fundamentals\n\n- Usability\n\n- Working with Wireframes 1\n\n- Working with Wireframes 2\n\n- Working with Wireframes 3\n\n- Setting the Visual Direction\n\n- Feeling Real\n\n- Making a Prototype using Adobe XD\n\n- Create a Clickable Prototype\n\n- Next Steps",
+   "Online",
+   "LO1, LO3",
+   "IT",
+   "MOOC 02: UX Design Fundamentals",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "6",
+   "Web Design: Strategy and Information Architecture\n\n- Course Introduction\n\n- The User Experience Process\n\n- Defining User Experience\n\n- The UX Process\n\n- Waterfall vs. Agile\n\n- Web vs. App\n\n- Developing your Project Idea\n\n- Asking Good Questions: Determining Strategy\n\n- Research\n\n- Defining Needs and Audiences\n\n- Preparing your Strategy\n\n- Bonus Material",
+   "Online",
+   "LO1, LO4",
+   "",
+   "MOOC 03: Web Design: Strategy and Information Architecture",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "7",
+   "Web Design: Strategy and Information Architecture\n\nWhat is in and What is Out: Outlining Scope\n\n- Content and Functionality Requirements\n\n- Outlining Your Scope\n\n- Bonus Material\n\n- Getting your Ducks in a Row: The Sitemap\n\n- Introduction to Sitemaps\n\n- Sitemapping\n\n- Sitemap Testing with Treejack\n\n- Creating Your Sitemap\n\n- Next Steps",
+   "Online",
+   "LO1, LO4",
+   "IT",
+   "MOOC 03: Web Design: Strategy and Information Architecture",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "8",
+   "Web Design: Wireframes to Prototypes\n\n- Course Overview\n\n- Not Getting Caught up in the Details: Wireframes\n\n- Introduction to Wireframes\n\n- Responsive Design\n\n- Navigation Systems\n\n- Common Design Patterns\n\n- Homepage Content Strategies\n\n- Build Your Wireframes",
+   "Online",
+   "LO1, LO5",
+   "IT",
+   "MOOC 04: Web Design: Wireframes to Prototypes",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "9",
+   "Web Design: Wireframes to Prototypes\n\n- Finally, Make it Beautiful: The Mockup Phase\n\n- Introduction to Visual Mockups\n\n- Design Principles and Whitespace\n\n- Web Typography\n\n- Web History, Skeuomorphs & Flat Design\n\n- Moodboards\n\n- Create Your Mockups\n\n- Bonus Content",
+   "Online",
+   "LO1, LO5",
+   "IT",
+   "MOOC 04: Web Design: Wireframes to Prototypes",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "10",
+   "Web Design: Wireframes to Prototypes\n\n- An Excursion to Codelandia\n\n- Welcome to Codelandia\n\n- Is coding important?\n\n- Refine Your Mockups\n\n- Bonus Material",
+   "Online",
+   "LO1, LO5",
+   "TU",
+   "MOOC 04: Web Design: Wireframes to Prototypes",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "11",
+   "Web Design: Wireframes to Prototypes\n\n- Putting it all Together: Final Presentation\n\n- Making Clickable Mockups\n\n- Clickable Prototypes\n\n- Dark Patterns\n\n- Final Project Submission",
+   "Online",
+   "LO1, LO5",
+   "TU",
+   "MOOC 04: Web Design: Wireframes to Prototypes",
+   "",
+   "'- Watch all videos, read all materials in the MOOC\n\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "12",
+   "'Review Spec\n\nDeadline of Coursera Completion: End of Friday of the week.",
+   "Offline,Online",
+   "LO1, LO5",
+   "T",
+   "Spec",
+   "",
+   "'- All students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

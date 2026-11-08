@@ -1,0 +1,1224 @@
+{
+ "ma": "RMB301",
+ "sylID": "12391",
+ "quyetDinh": "1363/QĐ-ĐHFPT dated 12/06/2024",
+ "ungVien": [
+  {
+   "sylID": "12391",
+   "code": "RMB301",
+   "name": "Business Research Methods_Phương pháp nghiên cứu",
+   "active": true,
+   "approved": true,
+   "decision": "1363/QĐ-ĐHFPT dated 12/06/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12391",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12391",
+  "Syllabus Name": "Business Research Methods_Phương pháp nghiên cứu",
+  "Course Name English": "Business Research Methods",
+  "Subject Code": "RMB301",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course introduces students to a number of research methods useful for academic and professional investigations of business practices. By examining the applications, strengths, and weaknesses of methodologies drawn from both the qualitative and quantitative traditions, this course permits an understanding of the various steps involved in designing and executing a research project so that students will be able to conduct their research later.\n\nA key feature of this course is the integration of artificial intelligence (AI) tools and applications. Students learn to use theses tools to :\n\n- support generating and refining research topics,\n\n- assist in content suggestions,\n\n- assist in answering questions on Edunext, in-class discussions, and identifying credible sources.\n\n- supports summarizing and concluding research findings through data-driven insights and structured templates.",
+  "StudentTasks": "Students need to\n\n- Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (http://flm.fpt.edu.vn) for up-to-date information and materials of the course, for online supports from teachers and other students, and for practicing and assessment.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1363/QĐ-ĐHFPT dated 12/06/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/6/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Research Methods for Business Students",
+   "Mark N.K. Saunders, Philip Lewis, and Adrian Thornhill",
+   "Pearson",
+   "2019",
+   "8th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Hướng dẫn làm khóa luận tốt nghiệp đại học hệ chính quy khối ngành kinh tế và các biểu mẫu chấm điểm tại các syllabus GRI491, GRH491, GRT491 hoặc GRP490 (ban hành kèm theo quyết định số 870/QĐ-ĐHFPT ngày 06/08/2021)",
+   "",
+   "",
+   "2021",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Research Methods for Business Students",
+   "Mark N.K. Saunders, Philip Lewis, and Adrian Thornhill",
+   "Financial Times Press",
+   "2012",
+   "6th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Coursera - FPT University Private Authored Courses: Guided Project - Basic data analysis using SPSS",
+   "",
+   "",
+   "2022",
+   "1st",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "Introductory econometrics: A modern approach",
+   "Jeffrey M. Wooldridge",
+   "South-Western Cengage learning",
+   "2012",
+   "5th or newer",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Research Methods for Business Students",
+   "Mark N.K. Saunders, Philip Lewis, and Adrian Thornhill",
+   "Pearson",
+   "2024",
+   "9th edition",
+   "",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 ấn bản. Ưu tiên ấn bản mới nhất"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Write a literature review that synthesises and evaluates literature in a specific topic area to justify a research questions"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply appropriate research design and methods to address a specific research question and acknowledge the ethical implications of the research"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop a research proposal as the basis for a thesis"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Present and defend a research proposal"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "",
+   "OP1: Each student should make at least 1 individual presentation during the course in front of the class.\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "",
+   "",
+   "Participation scores will be given based on students' class attendance, preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussions, and building upon others’ comments. Class participation accounts for 15% of the final score."
+  ],
+  [
+   "2",
+   "Group Assignment 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "OP1: The class should be divided into 4 or 6 groups. Each group will choose a business/management problem to formulate a research topic and corresponding research questions/objectives. The report should include research topic, research rationale, and research questions/objectives. OP2 (For Constructivism Approach only): Follow lecturer's proposal OP3: Complete the Guided Project -Basic data analysis using SPSS",
+   "OP1: Maximum length of the assignment should be 2 pages excluding appendices OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Combination of all relevant acquired knowledge, and research and written skills",
+   "For presentation, the instructor will make a random order of group presentations. All individuals need to give feedback to other groups' presentation.",
+   "All assignments should be typed and double-spaced with 12-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission. Assignment score for each student should be based on: (1) Group Assignment Report (50%); (2) individual presentation, Q&A on Group report or individual feedback to other groups' presentations (50%). Group Assignment 1 accounts for 10% of the final score."
+  ],
+  [
+   "3",
+   "Group Assignment 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "",
+   "",
+   "OP1: Based on results of Group Assignment 1, students will continue to write literature review and theoretical framework for their research topic. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Maximum length of the assignment should be 15 pages excluding appendices OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Combination of all relevant acquired knowledge, and research and written skills",
+   "For presentation, the instructor will make a random order of group presentations. All individuals need to give feedback to other groups' presentation.",
+   "All assignments should be typed and double-spaced with 12-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission. Assignment score for each student should be based on: (1) Group Assignment Report (50%); (2) individual presentation, Q&A on Group report or individual feedback to other groups' presentations (50%). Group Assignment 2 accounts for 20% of the final score."
+  ],
+  [
+   "4",
+   "Group Assignment 3",
+   "on-going",
+   "1",
+   "25.0%",
+   ">0",
+   "",
+   "",
+   "OP1: Based on results of Group Assignment 1 and Group Assignment 2, students will complete their research proposal. The final report will include contents of Group Assignments 1 & 2 plus sections on proposed research methods, research scope, and thesis structure. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Maximum length of the assignment should be 20 pages excluding appendices OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Combination of all relevant acquired knowledge, and research and written skills",
+   "For presentation, the instructor will make a random order of group presentations. All individuals need to give feedback to other groups' presentation.",
+   "All assignments should be typed and double-spaced with 12-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission. Assignment score for each student should be based on: ((1) Group Assignment Report (50%); (2) individual presentation and Q&A on Group report or individual feedback to other groups' presentations (50%). Group Assignment 3 accounts for 25% of the final score."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choice",
+   "50 multiple choice questions",
+   "The questions will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Students are not allowed to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "IT",
+   "- Syllabus\n\n- Textbook\n\n- Slide",
+   "RMB301",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Business and management research, reflective diaries and the purpose of this book",
+   "Offline",
+   "LO1",
+   "TU",
+   "Text book, Chapter 1\n\nSlide, Chapter 1",
+   "RMB301",
+   "- Read Textbook Chapter 1\n\n- Read Slide Chapter 1",
+   ""
+  ],
+  [
+   "3",
+   "Group Formation\n\nGroup Assignment Guidelines",
+   "Offline",
+   "LO1, LO2, LO3",
+   "TU",
+   "- Textbook Chapter 1\n\n- Slide Chapter 1",
+   "",
+   "Follow teacher's instruction for Group Assignment",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: Formulating and clarifying the research topic [Practice: 1 period(s)]",
+   "Offline",
+   "LO1",
+   "TU",
+   "Text book Chapter 2\n\nSlide Chapter 2",
+   "",
+   "Read textbook Chapter 2\n\nRead slide Chapter 2\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 3: Critically reviewing the literature",
+   "Offline",
+   "LO1",
+   "TU",
+   "Text book Chapter 3\n\nSlide Chapter 3",
+   "",
+   "Read textbook Chapter 3\n\nRead slide Chapter 3\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 3: Critically reviewing the literature (cont.)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Text book Chapter 3\n\nSlide Chapter 3",
+   "",
+   "Read text book Chapter 3\n\nRead slide Chapter 3\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3: Critically reviewing the literature (cont.)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Text book Chapter 3\n\nSlide Chapter 3",
+   "",
+   "Read Text book Chapter 3\n\nRead Slide Chapter 3\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "8",
+   "Practice",
+   "Offline",
+   "LO1",
+   "U",
+   "Textbook\n\nSlide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 4: Understanding research philosophies and approaches",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 4\n\nSlide Chapter 4",
+   "",
+   "Read Textbook Chapter 4\n\nRead Slide Chapter 4\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4: Understanding research philosophies and approaches (cont.)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 4\n\nSlide Chapter 4",
+   "",
+   "Read Textbook Chapter 4\n\nRead Slide Chapter 4\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4: Understanding research philosophies and approaches (cont.)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 4\n\nSlide Chapter 4",
+   "",
+   "Read Textbook Chapter 4\n\nRead Slide Chapter 4\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "12",
+   "Practice",
+   "Offline",
+   "LO2",
+   "U",
+   "Textbook\n\nSlide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5: Formulating the research design",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 5\n\nSlide Chapter 5",
+   "",
+   "Read Textbook Chapter 5\n\nRead Slide Chapter 5\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5: Formulating the research design (cont.)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 5\n\nSlide Chapter 5",
+   "",
+   "Read Textbook Chapter 5\n\nRead Slide Chapter 5\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5: Formulating the research design (cont.)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 5\n\nSlide Chapter 5",
+   "",
+   "Read Textbook Chapter 5\n\nRead Slide Chapter 5\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "16",
+   "Practice",
+   "Offline",
+   "LO2",
+   "U",
+   "Textbook and slide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "17",
+   "Review, Progress Report & Discussion",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slide",
+   "",
+   "Review, practice, discussion",
+   ""
+  ],
+  [
+   "18",
+   "Review, Progress Report & Discussion",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slilde",
+   "",
+   "Review, practice, discussion",
+   ""
+  ],
+  [
+   "19",
+   "Submission of Group Assignment 1\n\nChapter 6: Negotiating access and research ethics",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slide",
+   "",
+   "GA 1 Ready\n\nPreparation for GA 1 Presentation",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6: Negotiating access and research ethics (cont.) & Practice",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 6\n\nSlide Chapter 6",
+   "",
+   "Read Textbook Chapter 6\n\nRead Slide Chapter 6\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "21",
+   "Presentation of Group Assignment 1\n\n[Practice: 4 period(s)]",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slide\n\nGA1 report\n\nGA1 slide",
+   "",
+   "Present GA1",
+   ""
+  ],
+  [
+   "22",
+   "Presentation of Group Assignment 1\n\n[Practice: 4 period(s)]",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slide\n\nGA1 report\n\nGA1 slide",
+   "",
+   "Present GA1",
+   ""
+  ],
+  [
+   "23",
+   "Presentation of Group Assignment 1\n\n[Practice: 4 period(s)]",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slide\n\nGA1 report\n\nGA1 slide",
+   "",
+   "Present GA1",
+   ""
+  ],
+  [
+   "24",
+   "Presentation of Group Assignment 1\n\n[Practice: 4 period(s)]",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slide\n\nGA1 Report\n\nGA1 Slide",
+   "",
+   "Present GA1",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7: Selecting samples",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 7\n\nSlide Chapter 7",
+   "",
+   "Read textbook Chapter 7\n\nRead slide Chapter 7",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 7: Selecting samples (cont.)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 7\n\nSlide Chapter 7",
+   "",
+   "Read textbook Chapter 5\n\nRead slide Chapter 5",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 7: Selecting samples (cont.)",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook Chapter 7\n\nSlide Chapter 7",
+   "",
+   "Read textbook Chapter 7\n\nRead slide Chapter 7",
+   ""
+  ],
+  [
+   "28",
+   "[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook Chapter 7\n\nSlide Chapter 7",
+   "",
+   "Practice",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 8: Using secondary data",
+   "Offline",
+   "LO5",
+   "TU",
+   "Textbook Chapter 8\n\nSlide Chapter 8",
+   "",
+   "Read Textbook Chapter 8\n\nRead Slide Chapter 8",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 8: Using secondary data\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 8\n\nSlide Chapter 8",
+   "",
+   "Read textbook Chapter 8\n\nRead slide Chapter 8\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 9: Collecting primary data through observation",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 9\n\nSlide Chapter 9",
+   "",
+   "Read textbook Chapter 9\n\nRead slide Chapter 9",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 9: Collecting primary data through observation\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 9\n\nSlide Chapter 9",
+   "",
+   "Read textbook Chapter 9\n\nRead slide Chapter 9\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10: Collecting primary data using semi-structured, in-depth and group interviews",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 10\n\nSlide Chapter 10",
+   "",
+   "Read textbook Chapter 10\n\nRead slide Chapter 10",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 10: Collecting primary data using semi-structured, in-depth and group interviews\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 10\n\nSlide Chapter 10",
+   "",
+   "Read textbook Chapter 10\n\nRead slide Chapter 10\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 11: Collecting primary data using questionnaires",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 11\n\nSlide Chapter 11",
+   "",
+   "Read textbook Chapter 11\n\nRead slide Chapter 11",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 11: Collecting primary data using questionnaires (cont.)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 11\n\nSlide Chapter 11",
+   "",
+   "Read textbook Chapter 11\n\nRead slide Chapter 11",
+   ""
+  ],
+  [
+   "37",
+   "[Practice: 1 period(s)]",
+   "Offline",
+   "LO2",
+   "U",
+   "Textbook, Slide",
+   "",
+   "Practice",
+   ""
+  ],
+  [
+   "38",
+   "Submission of Group Assignment 2\n\nChapter 11: Collecting primary data using questionnaires",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 11\n\nSlide Chapter 11",
+   "",
+   "GA 1 Ready\n\nPreparation for GA 1 Presentation",
+   ""
+  ],
+  [
+   "39",
+   "Presentation of Group Assignment 2\n\n[Practice: 6 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook and slide\n\nGA report\n\nGA slide",
+   "",
+   "Present GA2",
+   ""
+  ],
+  [
+   "40",
+   "Presentation of Group Assignment 2\n\n[Practice: 6 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook and slide\n\nGA report\n\nGA slide",
+   "",
+   "Present GA2",
+   ""
+  ],
+  [
+   "41",
+   "Presentation of Group Assignment 2\n\n[Practice: 6 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slide\n\nGA report\n\nGA slide",
+   "",
+   "Present GA2",
+   ""
+  ],
+  [
+   "42",
+   "Presentation of Group Assignment 2\n\n[Practice: 6 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slide\n\nGA report\n\nGA slide",
+   "",
+   "Present GA2",
+   ""
+  ],
+  [
+   "43",
+   "Presentation of Group Assignment 2\n\n[Practice: 6 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slide\n\nGA2 report\n\nGA2 slide",
+   "",
+   "Present GA2",
+   ""
+  ],
+  [
+   "44",
+   "Presentation of Group Assignment 2\n\n[Practice: 6 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slide\n\nGA2 report\n\nGA2 slide",
+   "",
+   "Present GA2",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 12: Analysing quantitative data",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 12\n\nSlide Chapter 12",
+   "",
+   "Read textbook Chapter 12\n\nRead slide Chapter 12",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 12: Analysing quantitative data (cont.)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 12\n\nSlide Chapter 12",
+   "",
+   "Read textbook Chapter 12\n\nRead slide Chapter 12",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 12: Analysing quantitative data (cont.)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 12\n\nSlide Chapter 12",
+   "",
+   "Read textbook Chapter 12\n\nRead slide Chapter 12",
+   ""
+  ],
+  [
+   "48",
+   "[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook and slide",
+   "",
+   "Practice",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 13: Analysing qualitative data",
+   "Offline",
+   "LO3",
+   "U",
+   "Texbook Chapter 13\n\nSlide Chapter 13",
+   "",
+   "Read textbook Chapter 13\n\nRead slide Chapter 13",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 13: Analysing qualitative data (cont.)",
+   "Offline",
+   "Lo3",
+   "TU",
+   "Textbook Chapter 13\n\nSlide Chapter 13",
+   "",
+   "Read textbook Chapter 13\n\nRead slide Chapter 13",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 13: Analysing qualitative data (cont.)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 13\n\nSlide Chapter 13",
+   "",
+   "Read textbook Chapter 13\n\nRead slide Chapter 13",
+   ""
+  ],
+  [
+   "52",
+   "[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook and slide",
+   "",
+   "Do practice",
+   ""
+  ],
+  [
+   "53",
+   "Submission of Group Assignment 3\n\nChapter 14: Writing and presenting your project report",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 14\n\nSlide Chapter 14",
+   "",
+   "GA 3 Ready\n\nPreparation for GA 3 Presentation",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 14: Writing and presenting your project report (cont.)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 14\n\nSlide Chapter 14",
+   "",
+   "Read textbook Chapter 14\n\nRead slide Chapter 14",
+   ""
+  ],
+  [
+   "55",
+   "[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "U",
+   "Textbook Chapter 14\n\nSlide Chapter 14",
+   "",
+   "Do practice",
+   ""
+  ],
+  [
+   "56",
+   "Presentation of Group Assignment 3\n\n[Practice: 5 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "GA3 report\n\nGA3 slide",
+   "",
+   "Present GA3",
+   ""
+  ],
+  [
+   "57",
+   "Presentation of Group Assignment 3\n\n[Practice: 5 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "GA3 report\n\nGA3 slide",
+   "",
+   "Present GA3",
+   ""
+  ],
+  [
+   "58",
+   "Presentation of Group Assignment 3\n\n[Practice: 5 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "GA3 report\n\nGA3 slide",
+   "",
+   "Present GA3",
+   ""
+  ],
+  [
+   "59",
+   "Presentation of Group Assignment 3\n\n[Practice: 5 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "GA3 report\n\nGA3 slide",
+   "",
+   "Present GA3",
+   ""
+  ],
+  [
+   "60",
+   "Presentation of Group Assignment 3\n\n[Practice: 5 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "GA3 report\n\nGA3 slilde",
+   "",
+   "Present GA3",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "ĐN1",
+   "What are the key differences between basic and applied research (and consultancy)?"
+  ],
+  [
+   "2",
+   "2",
+   "ĐN2",
+   "Discussing the research questions and research objectives?"
+  ],
+  [
+   "3",
+   "2",
+   "ĐN3",
+   "What is your research scope?"
+  ],
+  [
+   "4",
+   "3",
+   "ĐN1",
+   "Who are your target respondences?"
+  ],
+  [
+   "5",
+   "3",
+   "ĐN2",
+   "Discussing to choose a research topic and clarify these relevant questions for your topic"
+  ],
+  [
+   "6",
+   "4",
+   "ĐN1",
+   "How long will you conduct the research?"
+  ],
+  [
+   "7",
+   "4",
+   "ĐN2",
+   "What are the resources or conditions you need for the research?"
+  ],
+  [
+   "8",
+   "5",
+   "ĐN1",
+   "Explain the related theories of your topic"
+  ],
+  [
+   "9",
+   "6",
+   "ĐN1",
+   "Search from secondary sources at least five relavant reports which relate to your topic"
+  ],
+  [
+   "10",
+   "6",
+   "ĐN2",
+   "Together with your colleagues, decide on the extent to which a set of research ideas constitute a 'good research topic' according to the checklist in Box 2.2."
+  ],
+  [
+   "11",
+   "7",
+   "ĐN1",
+   "What are the advantages and disadvantages in using an expert panel of stakeholders to assist in determining a review question?"
+  ],
+  [
+   "12",
+   "7",
+   "ĐN2",
+   "Why is it important to apply inclusion and exclusion criteria when deciding which publications to include in a Systematic Review?"
+  ],
+  [
+   "13",
+   "7",
+   "ĐN3",
+   "Description of onion research"
+  ],
+  [
+   "14",
+   "9",
+   "ĐN1",
+   "Dishtinghuise the differences between primary and secondary data"
+  ],
+  [
+   "15",
+   "9",
+   "ĐN2",
+   "What is the research framework?"
+  ],
+  [
+   "16",
+   "10",
+   "ĐN1",
+   "Explain the meaning of hypothesis in research?"
+  ],
+  [
+   "17",
+   "10",
+   "ĐN2",
+   "Explain the differences among the research philosophies"
+  ],
+  [
+   "18",
+   "10",
+   "ĐN3",
+   "Comparison of four research philosophies in business and management research"
+  ],
+  [
+   "19",
+   "11",
+   "ĐN1",
+   "Compare the following 3 approaches: Deduction, induction and abduction"
+  ],
+  [
+   "20",
+   "11",
+   "ĐN2",
+   "To what extent is the documentary inductive, deductive or abductive in its use of data?"
+  ],
+  [
+   "21",
+   "13",
+   "ĐN1",
+   "You are about to embark on a year-long study of customer service training for sales assistants in two supermarket companies. The purpose of the research is to compare the way in which the training develops and its effectiveness. What measures would you need to take in the research design stage to ensure that your results were valid?"
+  ],
+  [
+   "22",
+   "13",
+   "ĐN2",
+   "What is the Causal research?"
+  ],
+  [
+   "23",
+   "14",
+   "ĐN1",
+   "What is the descriptive research?"
+  ],
+  [
+   "24",
+   "14",
+   "ĐN2",
+   "What is the exploratory research?"
+  ],
+  [
+   "25",
+   "15",
+   "ĐN1",
+   "Discussing the differences between quantitative and qualitaty research"
+  ],
+  [
+   "26",
+   "25",
+   "ĐN1",
+   "Explain the sample and populations in research"
+  ],
+  [
+   "27",
+   "25",
+   "ĐN2",
+   "What is sampling frame?"
+  ],
+  [
+   "28",
+   "26",
+   "ĐN1",
+   "Why do you chose sample in stead of population for your research?"
+  ],
+  [
+   "29",
+   "27",
+   "ĐN1",
+   "Compare probability sampling methods/"
+  ],
+  [
+   "30",
+   "27",
+   "ĐN2",
+   "Explain the probability and non-probability sampling methods"
+  ],
+  [
+   "31",
+   "29",
+   "ĐN1",
+   "Compare non-probability sampling methods"
+  ],
+  [
+   "32",
+   "31",
+   "ĐN1",
+   "Explain nominal, ordinal, interval and ratio scales"
+  ],
+  [
+   "33",
+   "31",
+   "ĐN2",
+   "What are differences among nominal, ordinal, interval and ratio scales?"
+  ],
+  [
+   "34",
+   "32",
+   "ĐN1",
+   "What is questionare?"
+  ],
+  [
+   "35",
+   "32",
+   "ĐN2",
+   "What are questionare meanings for research?"
+  ],
+  [
+   "36",
+   "33",
+   "ĐN3",
+   "Explain the qualitative data collecting methods"
+  ],
+  [
+   "37",
+   "34",
+   "ĐN1",
+   "Discuss the advantages and disadvantages of qualitative data collecting methods"
+  ],
+  [
+   "38",
+   "34",
+   "ĐN2",
+   "Discuss popular mistakes when you create questions for questionaire?"
+  ],
+  [
+   "39",
+   "35",
+   "ĐN1",
+   "Explain the quantitative data collecting methods"
+  ],
+  [
+   "40",
+   "35",
+   "ĐN2",
+   "Discuss the advantages and disadvantages of quantitative data collecting methods"
+  ],
+  [
+   "41",
+   "36",
+   "ĐN1",
+   "In what circumstances would you choose to use a delivery and collection questionnaire rather than a postal questionnaire? Give reasons for your answer."
+  ],
+  [
+   "42",
+   "44",
+   "ĐN1",
+   "What are the meanings of central tendency analysis in research?"
+  ],
+  [
+   "43",
+   "45",
+   "ĐN1",
+   "Explain the mean, mode, median"
+  ],
+  [
+   "44",
+   "45",
+   "ĐN2",
+   "What are the meanings of central dispersion analysis in research?"
+  ],
+  [
+   "45",
+   "46",
+   "ĐN1",
+   "Explain the range, variance and standard deviation"
+  ],
+  [
+   "46",
+   "46",
+   "ĐN2",
+   "Explain the meaning of hypothesis testing in research"
+  ],
+  [
+   "47",
+   "47",
+   "ĐN1",
+   "Explain the meaning of colleration analysis in research"
+  ],
+  [
+   "48",
+   "48",
+   "ĐN1",
+   "Explain the meaning of regression analysis in research"
+  ]
+ ],
+ "links": [
+  "/download/4473/S/1_RMB301.zip",
+  "/download/4473/S/2_RMB301.zip"
+ ]
+}

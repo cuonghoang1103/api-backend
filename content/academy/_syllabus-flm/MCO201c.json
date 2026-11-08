@@ -1,0 +1,299 @@
+{
+ "ma": "MCO201c",
+ "sylID": "12568",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12568",
+   "code": "MCO201c",
+   "name": "Transmedia Storytelling_Thuật kể chuyện đa phương tiện",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12568",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12568",
+  "Syllabus Name": "Transmedia Storytelling_Thuật kể chuyện đa phương tiện",
+  "Course Name English": "Transmedia Storytelling",
+  "Subject Code": "MCO201c",
+  "Learning-Teaching Method": "online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 50h online + 3h offline + 1h Final exam + 96h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course facilitates students' comprehension of the impact of transmedia storytelling on engaging and influencing audiences. Students will gain expertise in creating, distributing, and participating in cohesive stories across various traditional and digital channels—for purposes including entertainment, marketing, and social activism. Ultimately, learners will proficiently create and communicate their own transmedia narratives across diverse media channels.",
+  "StudentTasks": "1. Join the online course(s) when being invited by the admin.\n\n2. Enroll in the courses., regularly study the course at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend offline sessions in the Campus (Optional)\n\n6. Must complete the course(s) with certification(s) in order to take the Final Exam at Campus",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/transmedia-storytelling",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Transmedia Storytelling: Narrative worlds, emerging technologies, and global audiences (24h)"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/communicate-with-impact",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2: Storytelling and influencing: Communicate with impact (15h)"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/brand-and-content-marketing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Storytelling in Branding and Content Marketing (11h)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand and acquire the capability to develop transmedia storytelling strategies for diverse, engaging narratives."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate proficiency in effectively engaging with and understanding diverse audiences in storytelling contexts."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Demonstrate the capacity to create cohesive user experiences across multiple digital platforms"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Possess the ability to ultilise emerging technologies for effective story dissemination."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "All LOs",
+   "Multiple choice",
+   "50",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "(Off-line 1.5h)\nIntroduction to the online course MCO201c\n[Course 1: Transmedia Storytelling: Narrative worlds, emerging technologies, and global audiences]\n'Module 1: What is transmedia storytelling?",
+   "Online, Offline",
+   "CLO1",
+   "I,T",
+   "Syllabus MCO201c\nhttps://www.coursera.org/learn/transmedia-storytelling",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "2",
+   "[Course 1: Transmedia Storytelling: Narrative worlds, emerging technologies, and global audiences]\nModule 2: Creative ideas generation - Building a storyworld\nModule 3: Understanding a transmedia audience",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "https://www.coursera.org/learn/transmedia-storytelling",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "3",
+   "[Course 1: Transmedia Storytelling: Narrative worlds, emerging technologies, and global audiences]\n'Module 4: Transmedia user experience",
+   "Online",
+   "CLO3",
+   "I,T",
+   "https://www.coursera.org/learn/transmedia-storytelling",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "4",
+   "[Course 1: Transmedia Storytelling: Narrative worlds, emerging technologies, and global audiences]\nModule 5: Using creative technologies\nModule 6: Stories from Industry - Professionals' career journeys and advice",
+   "Online",
+   "CLO4",
+   "I,T",
+   "https://www.coursera.org/learn/transmedia-storytelling",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "5",
+   "[Course 1: Transmedia Storytelling: Narrative worlds, emerging technologies, and global audiences]\nModule 5: Using creative technologies\nModule 6: Stories from Industry - Professionals' career journeys and advice",
+   "Online",
+   "CLO4",
+   "I,T",
+   "https://www.coursera.org/learn/transmedia-storytelling",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "6",
+   "[Course 2: Storytelling and influencing: Communicate with impact]\nModule 1: The necessary art of persuasion: Understanding what matters to your audience\n'Module 2: Telling your story: Developing a dramatic narrative",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "https://www.coursera.org/learn/communicate-with-impact",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ],
+  [
+   "7",
+   "[Course 2: Storytelling and influencing: Communicate with impact]\nModule 3: Connecting with people: Developing authenticity and building rapport\n'Module 4: Talk the talk: creating impressions and guiding influential conversations",
+   "Online",
+   "CLO2",
+   "I,T",
+   "https://www.coursera.org/learn/communicate-with-impact",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "8",
+   "[Course 2: Storytelling and influencing: Communicate with impact]\nModule 5: Painful truth: dealing with objections and overcoming resistance\n'Module 6: Winning over hearts and minds: How to pitch a brilliant idea",
+   "Online",
+   "CLO2",
+   "I,T",
+   "https://www.coursera.org/learn/communicate-with-impact",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "9",
+   "[Course 2: Storytelling and influencing: Communicate with impact]\nModule 5: Painful truth: dealing with objections and overcoming resistance\n'Module 6: Winning over hearts and minds: How to pitch a brilliant idea",
+   "Online",
+   "CLO2",
+   "I,T",
+   "https://www.coursera.org/learn/communicate-with-impact",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "10",
+   "[Course 3: Storytelling in Branding and Content Marketing]\nModule 1: Why is branded content better than traditional advertising?\nModule 2: The rise of branded content: How to create quality journalism",
+   "Online",
+   "CLO1",
+   "I,T",
+   "https://www.coursera.org/learn/brand-and-content-marketing#modules",
+   "",
+   "- Watch all videos, read all materials in the modules/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "11",
+   "[Course 3: Storytelling in Branding and Content Marketing]\nModule 3: Connecting with the audience through unique, memorable stories\nModule 4: Creating a story for your brand",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "https://www.coursera.org/learn/brand-and-content-marketing#modules",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "12",
+   "[Course 3: Storytelling in Branding and Content Marketing]\nModule 5: The capstone project\n\nReview Course 1,2,3\nDeadline of the coursera completion: End of Friday of the week.",
+   "Online, Offline",
+   "CLO1, CLO2",
+   "U",
+   "Course 1,2,3",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

@@ -1,0 +1,1154 @@
+{
+ "ma": "CCM301",
+ "sylID": "13398",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13398",
+   "code": "CCM301",
+   "name": "Crisis Communications Management_Quản trị truyền thông khủng hoảng",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13398",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13398",
+  "Syllabus Name": "Crisis Communications Management_Quản trị truyền thông khủng hoảng",
+  "Course Name English": "Crisis Communications Management",
+  "Subject Code": "CCM301",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Cooperative Learning,groupwork,Offline",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor level",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "CCO201 or MKT304 or IMC301c or IMC301",
+  "Description": "This course covers crisis communication theory, crisis management approaches, classic cases and the influence of culture on crisis communication. This course will introduce the definitions of crisis and how they come about, the importance of the Enterprise Risk Management framework in crisis prevention and preparation, and how we can recognise and address crises in case they happen. This course focuses on the role of communications throughout the crisis management process, as well as how to utilise media relations and social media to prevent and/or respond to crises.\n\nApart from learning academic theories, students will have opportunities to apply their acquired knowledge & skills in analysing a real-world case study, as well as developing a industry-facing crisis communication plan for an organisation (\"client\") and self-organising an accompanied simulated media conference to address a crisis of that organisation. Throughout that, students will be equipped with practical experience and skills to be ready for their future career path in the communications field.\n\nFinally, students can also use AI to assist their practices and assignemnts.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course websites (https://flm.fpt.edu.vn) for up-to-date information and material of the course.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Khủng hoảng không bắt đầu từ truyền thông",
+   "Lê Quốc Vinh",
+   "RIO Book; Nhà xuất bản Dân Trí",
+   "2024",
+   "1st",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Ongoing Crisis Communication: Planning, Managing, and Responding",
+   "W. Timothy Coombs",
+   "SAGE",
+   "2019",
+   "5th",
+   "ISBN-10: 1544331959, ISBN-13: 978-1544331959",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Ongoing Crisis Communication: Planning, Managing, and Responding",
+   "W. Timothy Coombs",
+   "",
+   "2019",
+   "",
+   "9781071816646",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 3 Giáo trình. Ưu tiên mua mã ISBN: 9781071816646"
+  ],
+  [
+   "4",
+   "Ongoing Crisis Communication: Planning, Managing, and Responding (International Edition)",
+   "Timothy Coombs,",
+   "SAGE",
+   "2019",
+   "",
+   "9781544328690",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Quản trị khủng bố trực tuyến và xử lý khủng hoảng truyền thông hiệu quả",
+   "Phan Minh Cường",
+   "NXB Tổng Hợp TPHCM",
+   "2018",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Identify organisational, industrial and environmental challenges and disasters"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate an understanding of the concepts, theories and practice of issues management and crisis communication."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Utilize AI to analyse and develop strategies for organisational issues using the theories, models and methods of issues management and crisis communication"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Gain the capacity to critique organisational and industrial responses to issues and crises in terms of attitude and ethics"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Develop a critical attitude towards crisis communications management"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Identify and apply ethical standards of practice when dealing with issues management and crisis communication"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Skills in analysis and problem solving; AI Literacy and Responsible Communication; Proficient in presentation and teamwork skills; positive contributing attitude in the class and groupworks"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Case Study Essay",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Follow lecturer's",
+   "CLO2, CLO4, CLO5, CLO7",
+   "Evaluative",
+   "1",
+   "Test the acquainted knowledge which student obtained in the delivered chapters (Chapter 1, 6, 7, 8)",
+   "Individual Assessment (At home)\nType: Essay\nWeight: 15%\nLength: 1,500-2,000 words\nTask Description:\nChoose from the list of crisis case studies provided by the lecturer before and analyse one organisational crisis.\nYour essay will include an overview of the crisis, a description of the organisation, a crisis timeline, actions and responses taken, a media analysis, stakeholder impacts, lessons learned, recommendations, and use appropriate matrix/models.\nThe essay should address the criteria as outlined in the assessment task and rubric mentioned during the class.\nStudents should use a mix of scholarly references, media coverage and organisational materials, as well as applying AI-tools to collect information and analyze the chosen crisis.",
+   ""
+  ],
+  [
+   "2",
+   "Class Participation and Preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "CLO7",
+   "",
+   "",
+   "",
+   "Based on student's performance",
+   ""
+  ],
+  [
+   "3",
+   "Crisis Group Project",
+   "on-going",
+   "1",
+   "25.0%",
+   ">0",
+   "Follow lecturer's",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "The whole class is divided into groups. Each group is assigned to make one crisis communication plan",
+   "1",
+   "Test the acquainted knowledge and skills which student obtained in the delivered chapters (Chapter 1-8, with an emphasis on Chapter 2-5)",
+   "Group Assessment\nType: Crisis Communication Plan (At Home) + Presentation (In the class)\nWeight: 25%\nTask Description:\nStudents working within a small group setting of 4-6 students to select one organisation in Vietnam, which must be accepted by the lecturer, then propose a crisis communication plan for that organisation. The plan must showcase all knowledge the students have gained in the class, and be delivered as a final report to their chosen organisation.\nAI Application: Students have to demonstrate their capability of applying AI tool (ChatGPT, Claude.ai, etc...) in preparing templates in the crisis communication plan, which include (but aren't limited to) prewritten news release(s) and media alert.\n\nPresentation: For the 15-minute presentation, each group have to showcase all of your key points mentioned in your report in front of your classmates.\n\nNotes:\nThe detailed structure of a crisis communication plan could be found in the textbook (Chapter 5)\nFurther details of the crisis communication plan will be provided in class. The detailed marking criteria for this assessment will be provided to you by your lecturer.",
+   "The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "4",
+   "Simulated Media Conference",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Follow lecturer's",
+   "CLO2, CLO3, CLO6, CLO7",
+   "The whole class is divided into groups. Each group is assigned to create one simulated media conference.",
+   "1",
+   "Test the acquainted knowledge and skills which student obtained in the delivered chapters (Chapter 4-7)",
+   "Group Assessment\nType: Simulated Media Conference (In the class)\nWeight: 20%\n\nBased on your crisis communication plan, each group will prepare for a media conference based on the scenario which will respond to a simulated crisis of your chosen organisation. Your media statement should be no more than 15 minutes in total and will be followed by a 15-minute Q&A from the “journalist” members of the class.\nBefore the media conference, your group have to prepare:\n1. a media alert\n2. a media kit, including the press release (to be delivered at the conference)\n3. a one-page summary of key message\nAI Application: Students have to demonstrate their capability of applying AI tool (ChatGPT, Claude.ai, etc...) in preparing the above-mentioned documents.\n\nNotes:\nFurther details of the media conference will be provided in class. The detailed marking criteria for this assessment will be provided to you by your lecturer.",
+   "The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO6",
+   "Multiple choice questions",
+   "50",
+   "The questions will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Closed-book exam",
+   "Exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course overview & introduction; overview of course assessment.",
+   "Offline",
+   "CLO5",
+   "I, T",
+   "- Textbooks\n- Slides: Course overview & introduction\n- Syllabus",
+   "CCM301_phần 1",
+   "- Participate in class activities: ask questions.\n- Read the syllabus",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: A Need for More Crisis Management Knowledge",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 1\n- Slides: Chapter 1",
+   "CCM301_Phần 2",
+   "- Read the main textbook: chapter 1\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: A Need for More Crisis Management Knowledge",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "T,U",
+   "- Main Textbook: chapter 1\n- Slides: Chapter 1",
+   "",
+   "- Read the main textbook: chapter 1\n- Participate in class activities: discuss the topic",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: A Need for More Crisis Management Knowledge",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 1\n- Slides: Chapter 1",
+   "",
+   "- Read the main textbook: chapter 1\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: A Need for More Crisis Management Knowledge",
+   "Offline",
+   "CLO1, CLO2, CLO5, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 1\n- Slides: Chapter 1\n- Materials (case studies) on Internet",
+   "",
+   "- Form temporary groups of 4-6 students\n- Participate in class activities: analyse a recent case study based on the models in the main textbook",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1: A Need for More Crisis Management Knowledge\nClass discussion about Case Study Essay",
+   "Offline",
+   "CLO1, CLO2, CLO5, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 1\n- Slides: Chapter 1\n- Materials (case studies) on Internet",
+   "",
+   "- Participate in class activities: analyse a recent case study based on the models in the main textbook (cont')\n- Present their key findings in the class\n- Ask questions about Case Study Essay assignment",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Risk as the Foundation for Crisis Management and Crisis Communication",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 2\n- Slides: Chapter 2",
+   "",
+   "- Read the main textbook: chapter 2\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Risk as the Foundation for Crisis Management and Crisis Communication",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO5",
+   "T,U",
+   "- Main Textbook: chapter 2\n- Slides: Chapter 2",
+   "",
+   "- Read the main textbook: chapter 2\n- Participate in class activities: discuss the topic (1)",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Risk as the Foundation for Crisis Management and Crisis Communication",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 2\n- Slides: Chapter 2",
+   "",
+   "- Read the main textbook: chapter 2\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2: Risk as the Foundation for Crisis Management and Crisis Communication",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO5",
+   "T,U",
+   "- Main Textbook: chapter 2\n- Slides: Chapter 2",
+   "",
+   "- Read the main textbook: chapter 2\n- Participate in class activities: discuss the topic (2)",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 2: Risk as the Foundation for Crisis Management and Crisis Communication",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 2\n- Slides: Chapter 2",
+   "",
+   "- Read the main textbook: chapter 2\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 2: Risk as the Foundation for Crisis Management and Crisis Communication",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO5",
+   "T,U",
+   "- Main Textbook: chapter 2\n- Slides: Chapter 2",
+   "",
+   "- Read the main textbook: chapter 2\n- Participate in class activities: discuss the topic (3)",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: The Crisis Mitigation Process: Building Crisis Resistant Organizations",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 3\n- Slides: Chapter 3",
+   "",
+   "- Read the main textbook: chapter 3\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3: The Crisis Mitigation Process: Building Crisis Resistant Organizations",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 3\n- Slides: Chapter 3\n- Google Search",
+   "",
+   "- Read the main textbook: chapter 3\n- Practice exercise that applies the theory",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3: The Crisis Mitigation Process: Building Crisis Resistant Organizations",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 3\n- Slides: Chapter 3\n- Google Search",
+   "",
+   "- Read the main textbook: chapter 3\n- Participate in class activities: discuss the exercise",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3: The Crisis Mitigation Process: Building Crisis Resistant Organizations",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 3\n- Slides: Chapter 3",
+   "",
+   "- Read the main textbook: chapter 3\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 3: The Crisis Mitigation Process: Building Crisis Resistant Organizations",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 3\n- Slides: Chapter 3\n- Google Search",
+   "",
+   "- Read the main textbook: chapter 3\n- Practice exercise that applies the theory",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 3: The Crisis Mitigation Process: Building Crisis Resistant Organizations",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 3\n- Slides: Chapter 3\n- Google Search",
+   "",
+   "- Read the main textbook: chapter 3\n- Participate in class activities: discuss the exercise",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 4: Crisis Preparing: Part I",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 4\n- Slides: Chapter 4",
+   "",
+   "- Read the main textbook: chapter 4\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 4: Crisis Preparing: Part I",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 4\n- Slides: Chapter 4\n- Google Search",
+   "",
+   "- Form temporary groups of 4-6 students\n- Practice group exercise that applies the theory",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 4: Crisis Preparing: Part I",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 4\n- Slides: Chapter 4\n- Google Search",
+   "",
+   "- Practice group exercise that applies the theory (cont')\n- Present the result in the class",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4: Crisis Preparing: Part I",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 4\n- Slides: Chapter 4",
+   "",
+   "- Read the main textbook: chapter 4\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 4: Crisis Preparing: Part I",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 4\n- Slides: Chapter 4",
+   "",
+   "- Read the main textbook: chapter 4\n- Participate in class activities: discuss the topic",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4: Crisis Preparing: Part I",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 4\n- Slides: Chapter 4",
+   "",
+   "- Read the main textbook: chapter 4\n- Practice Media Training",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 5: Crisis Preparing: Part II",
+   "Offline",
+   "CLO1, CLO2, CLO5, CLO6",
+   "I,T",
+   "- Main Textbook: chapter 5\n- Slides: Chapter 5",
+   "",
+   "- Read the main textbook: chapter 5\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 5: Crisis Preparing: Part II",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 5\n- Slides: Chapter 5",
+   "",
+   "- Read the main textbook: chapter 5\n- Form temporary groups of 4-6 students\n- Practice group exercise that applies the theory",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 5: Crisis Preparing: Part II",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 5\n- Slides: Chapter 5",
+   "",
+   "- Read the main textbook: chapter 5\n- Practice group exercise that applies the theory (cont')\n- Present the result in the class",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 5: Crisis Preparing: Part II",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 5\n- Slides: Chapter 5",
+   "",
+   "- Read the main textbook: chapter 5\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 5: Crisis Preparing: Part II",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 5\n- Slides: Chapter 5\n- AI tools for writing assistance",
+   "",
+   "- Read the main textbook: chapter 5\n- Try to apply AI tools to prepare a news release",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 5: Crisis Preparing: Part II\nClass discussion about Group Assessments",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 5\n- Slides: Chapter 5",
+   "",
+   "- Read the main textbook: chapter 5\n- Ask questions about Group Assessments\n- Form groups for the Group Assessments",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 6: Recognizing Crises",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 6\n- Slides: Chapter 6",
+   "",
+   "- Read the main textbook: chapter 6\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 6: Recognizing Crises",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 6\n- Slides: Chapter 6",
+   "",
+   "- Read the main textbook: chapter 6\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 6: Recognizing Crises",
+   "Offline",
+   "CLO2, CLO3, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 6\n- Slides: Chapter 6",
+   "",
+   "- Read the main textbook: chapter 6\n- Participate in class activities: discuss the topic",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 7: Crisis Responding",
+   "Offline",
+   "CLO1, CLO2, CLO5, CLO6",
+   "I,T",
+   "- Main Textbook: chapter 7\n- Slides: Chapter 7",
+   "",
+   "- Read the main textbook: chapter 7\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 7: Crisis Responding",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 7\n- Slides: Chapter 7",
+   "",
+   "- Read the main textbook: chapter 7\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 7: Crisis Responding",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "T,U",
+   "- Main Textbook: chapter 7\n- Slides: Chapter 7",
+   "",
+   "- Read the main textbook: chapter 7\n- Participate in class activities: discuss the topic",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 7: Crisis Responding",
+   "Offline",
+   "CLO1, CLO2, CLO5, CLO6",
+   "I,T",
+   "- Main Textbook: chapter 7\n- Slides: Chapter 7",
+   "",
+   "- Read the main textbook: chapter 7\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 7: Crisis Responding",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO5, CLO6, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 7\n- Slides: Chapter 7",
+   "",
+   "- Read the main textbook: chapter 7\n- Form temporary groups of 4-6 students\n- Practice group exercise that applies the theory",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 7: Crisis Responding",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO5, CLO6, CLO7",
+   "T,U",
+   "- Main Textbook: chapter 7\n- Slides: Chapter 7",
+   "",
+   "- Read the main textbook: chapter 7\n- Practice group exercise that applies the theory (cont')\n- Present the result in the class",
+   ""
+  ],
+  [
+   "40",
+   "Guest Speaker (online/offline). In special situations, the seminar/group discussion can be replaced with the consent of the subject leader.",
+   "Offline/online",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "I,T,U",
+   "Presentation Notes",
+   "",
+   "- Take notes from Guest Speaker's Presentation\n- Discuss with Guest Speaker",
+   ""
+  ],
+  [
+   "41",
+   "Guest Speaker (online/offline). In special situations, the seminar/group discussion can be replaced with the consent of the subject leader.",
+   "Offline/online",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "I,T,U",
+   "Presentation Notes",
+   "",
+   "- Take notes from Guest Speaker's Presentation\n- Discuss with Guest Speaker",
+   ""
+  ],
+  [
+   "42",
+   "Guest Speaker (online/offline). In special situations, the seminar/group discussion can be replaced with the consent of the subject leader.",
+   "Offline/online",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "I,T,U",
+   "Presentation Notes",
+   "",
+   "- Take notes from Guest Speaker's Presentation\n- Discuss with Guest Speaker",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 8: Postcrisis Concerns",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "- Main Textbook: chapter 8\n- Slides: Chapter 8",
+   "",
+   "- Read the main textbook: chapter 8\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 8: Postcrisis Concerns",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "T,U",
+   "- Main Textbook: chapter 8\n- Slides: Chapter 8",
+   "",
+   "- Read the main textbook: chapter 8\n- Participate in class activities: answer questions.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 8: Postcrisis Concerns",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "T,U",
+   "- Main Textbook: chapter 8\n- Slides: Chapter 8\n- Google Search",
+   "",
+   "- Read the main textbook: chapter 8\n- Participate in class activities: discuss the topic",
+   ""
+  ],
+  [
+   "46",
+   "Crisis Group Project - Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "U",
+   "Students' Presentation Slide",
+   "",
+   "- Present the groupwork\n- Q&A with lecturer & other groups\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "47",
+   "Crisis Group Project - Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "U",
+   "Students' Presentation Slide",
+   "",
+   "- Present the groupwork\n- Q&A with lecturer & other groups\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "48",
+   "Crisis Group Project - Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "U",
+   "Students' Presentation Slide",
+   "",
+   "- Present the groupwork\n- Q&A with lecturer & other groups\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "49",
+   "Crisis Group Project - Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "U",
+   "Students' Presentation Slide",
+   "",
+   "- Present the groupwork\n- Q&A with lecturer & other groups\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "50",
+   "Crisis Group Project - Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "U",
+   "Students' Presentation Slide",
+   "",
+   "- Present the groupwork\n- Q&A with lecturer & other groups\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "51",
+   "Crisis Group Project - Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "U",
+   "Students' Presentation Slide",
+   "",
+   "- Present the groupwork\n- Q&A with lecturer & other groups\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "52",
+   "Simulated Media Conference",
+   "Offline",
+   "CLO2, CLO3, CLO6, CLO7",
+   "U",
+   "- Media kit, including the press releases (to be delivered at the conference)\n- Briefing book for the spokesperson",
+   "",
+   "- Organise the Simulated Media Conference\n- Q&A with “journalist” members of the class\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "53",
+   "Simulated Media Conference",
+   "Offline",
+   "CLO2, CLO3, CLO6, CLO7",
+   "U",
+   "- Media kit, including the press releases (to be delivered at the conference)\n- Briefing book for the spokesperson",
+   "",
+   "- Organise the Simulated Media Conference\n- Q&A with “journalist” members of the class\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "54",
+   "Simulated Media Conference",
+   "Offline",
+   "CLO2, CLO3, CLO6, CLO7",
+   "U",
+   "- Media kit, including the press releases (to be delivered at the conference)\n- Briefing book for the spokesperson",
+   "",
+   "- Organise the Simulated Media Conference\n- Q&A with “journalist” members of the class\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "55",
+   "Simulated Media Conference",
+   "Offline",
+   "CLO2, CLO3, CLO6, CLO7",
+   "U",
+   "- Media kit, including the press releases (to be delivered at the conference)\n- Briefing book for the spokesperson",
+   "",
+   "- Organise the Simulated Media Conference\n- Q&A with “journalist” members of the class\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "56",
+   "Simulated Media Conference",
+   "Offline",
+   "CLO2, CLO3, CLO6, CLO7",
+   "U",
+   "- Media kit, including the press releases (to be delivered at the conference)\n- Briefing book for the spokesperson",
+   "",
+   "- Organise the Simulated Media Conference\n- Q&A with “journalist” members of the class\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "57",
+   "Simulated Media Conference",
+   "Offline",
+   "CLO2, CLO3, CLO6, CLO7",
+   "U",
+   "- Media kit, including the press releases (to be delivered at the conference)\n- Briefing book for the spokesperson",
+   "",
+   "- Organise the Simulated Media Conference\n- Q&A with “journalist” members of the class\n- Take feedback & revise the groupwork (if any)",
+   ""
+  ],
+  [
+   "58",
+   "Revision",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO6",
+   "T,U",
+   "- Textbooks\n- Slides: all chapters\n- Syllabus",
+   "",
+   "- Re-read notes, slides and textbooks\n- Ask and answer questions\n- Discuss among students",
+   ""
+  ],
+  [
+   "59",
+   "Revision",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO6",
+   "T,U",
+   "- Textbooks\n- Slides: all chapters\n- Syllabus",
+   "",
+   "- Re-read notes, slides and textbooks\n- Ask and answer questions\n- Discuss among students",
+   ""
+  ],
+  [
+   "60",
+   "Revision",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO6",
+   "T,U",
+   "- Textbooks\n- Slides: all chapters\n- Syllabus",
+   "",
+   "- Re-read notes, slides and textbooks\n- Ask and answer questions\n- Discuss among students",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "QN1.1",
+   "What are the differences among a crisis, a disaster and an incident?"
+  ],
+  [
+   "2",
+   "3",
+   "QN2.1",
+   "What are the negative or undesirable outcomes of a crisis?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3. 1",
+   "What are the similarities among 3 below-mentioned models?\n- Fink’s (1986) four-stage model\n- Mitroff’s (1994) five-stage model\n- Basic three-stage model"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "What dose it mean to say a risk can develop into a crisis?"
+  ],
+  [
+   "5",
+   "5",
+   "QN5.1",
+   "Could you identify the stages of a crisis of your choice based on 3 distinguished models?"
+  ],
+  [
+   "6",
+   "6",
+   "QN6.1",
+   "Why bother differentiating between crises and paracrises?"
+  ],
+  [
+   "7",
+   "7",
+   "QN7.1",
+   "What value do you see in the OODA Loop for crisis management and crisis communication?"
+  ],
+  [
+   "8",
+   "8",
+   "QN8.1",
+   "Do you agree or disagree with the idea that a crisis is perceptual?"
+  ],
+  [
+   "9",
+   "9",
+   "QN9.1",
+   "What are 3 management functions of the Enterprise Risk Management (ERM)?"
+  ],
+  [
+   "10",
+   "10",
+   "QN10.1",
+   "What dose it mean to say a risk can develop into a crisis?"
+  ],
+  [
+   "11",
+   "11",
+   "QN11.1",
+   "What is reputation? How does it relate to crisis management?"
+  ],
+  [
+   "12",
+   "12",
+   "QN12.1",
+   "What are primary and secondary stakeholders of an enterprise?"
+  ],
+  [
+   "13",
+   "13",
+   "QN13.1",
+   "How can a risk become an issue, an issue become a risk, a risk threaten reputation, or an issue threaten reputation? How do you see these three functions being interrelated?"
+  ],
+  [
+   "14",
+   "14",
+   "QN14.1",
+   "Why should managers bother identifying red flags?"
+  ],
+  [
+   "15",
+   "15",
+   "QN15.1",
+   "Could you list down some issue management sources to scan?"
+  ],
+  [
+   "16",
+   "16",
+   "QN16.1",
+   "Does it make sense to distinguish between traditional websites and social media, or should we treat all online communication channels and platforms the same?"
+  ],
+  [
+   "17",
+   "17",
+   "QN17.1",
+   "What is the formula to assess each Crisis Threat?"
+  ],
+  [
+   "18",
+   "18",
+   "QN18.1",
+   "How is social media changing crisis prevention efforts?"
+  ],
+  [
+   "19",
+   "19",
+   "QN19.1",
+   "What strategies can be used in response to the stakeholders' challenges?"
+  ],
+  [
+   "20",
+   "20",
+   "QN20.1",
+   "Why could you consider paracrises both risks and opportunities?"
+  ],
+  [
+   "21",
+   "21",
+   "QN21.1",
+   "What barriers are there to getting an accurate diagnosis of an organization’s vulnerabilities? What can be done to overcome those barriers?"
+  ],
+  [
+   "22",
+   "22",
+   "QN22.1",
+   "How to create a crisis portfolio?"
+  ],
+  [
+   "23",
+   "23",
+   "QN23.1",
+   "Why may a Crisis Management Team not be the best place for a CEO during a crisis?"
+  ],
+  [
+   "24",
+   "24",
+   "QN24.1",
+   "What are media-specific tasks of the spokesperson?"
+  ],
+  [
+   "25",
+   "25",
+   "QN25.1",
+   "What are the values of the Crisis Management Plan?"
+  ],
+  [
+   "26",
+   "26",
+   "QN26.1",
+   "What are the main components of a Crisis Management Plan?"
+  ],
+  [
+   "27",
+   "27",
+   "QN27.1",
+   "Why should a team care about mass notification?"
+  ],
+  [
+   "28",
+   "28",
+   "QN28.1",
+   "How might faithholders help an organization in crisis?"
+  ],
+  [
+   "29",
+   "33",
+   "QN33.1",
+   "What factors play a role in developing an appealing crisis frame?"
+  ],
+  [
+   "30",
+   "35",
+   "QN35.1",
+   "What are some common information-processing problems?"
+  ],
+  [
+   "31",
+   "39",
+   "QN39.1",
+   "Why shouldn't an organisation remain silent when a crisis happens?"
+  ],
+  [
+   "32",
+   "42",
+   "QN42.1",
+   "What is the distinctiveness of the Situational Crisis Communication Theory (SCCT)?"
+  ],
+  [
+   "33",
+   "43",
+   "QN43.1",
+   "Could you list down some common crisis communication strategies?"
+  ],
+  [
+   "34",
+   "44",
+   "QN44.1",
+   "What are the dangers associated with using a denial strategy?"
+  ],
+  [
+   "35",
+   "45",
+   "QN45.1",
+   "Why does auto-communication help to unite internal and external crisis communication efforts?"
+  ],
+  [
+   "36",
+   "51",
+   "QN51.1",
+   "Why is an actual crisis a “tremendous opportunity for learning”?"
+  ]
+ ],
+ "links": [
+  "/download/13398/S/1_CCM301_phần 1.zip",
+  "/download/13398/S/2_CCM301_Phần 2.zip"
+ ]
+}

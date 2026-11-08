@@ -1,0 +1,1194 @@
+{
+ "ma": "HOA102",
+ "sylID": "13352",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13352",
+   "code": "HOA102",
+   "name": "Art History_Lịch sử mỹ thuật VN &TG",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13352",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13352",
+  "Syllabus Name": "Art History_Lịch sử mỹ thuật VN &TG",
+  "Course Name English": "Art History",
+  "Subject Code": "HOA102",
+  "Learning-Teaching Method": "Lecture,Field trip,Social Constructivism,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course provides knowledge of Art History: Through the course of Art History, students are equipped with the knowledge of the establishment circumstances, the development process, the specialties of the arts and famous artists of the World and Vietnam Fine Arts from primitive to modern.\nThe course also introduces typical art centers in Asia such as India, China and Japan to help students have an overview of the world's fine arts, especially outstanding artistic achievements. . ....\n\nThis course also provides some basic skills such as research methods, critical thinking, and mind mapping in the study of art history. In addition, this subject requires teamwork skills, oral presentation and paint skills in the process of assessment.",
+  "StudentTasks": "1. Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n2. Actively participate in class activities\n3. Fulfill tasks given by instructor after class\n4. Use their own laptop in class only for learning purpose\n5. Read the textbook in advance\n6. Access the course website (https://flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "\"Art - a visual history\", Robert Cumming (2020), Publisher: DK, London, England, U.K.",
+   "Robert Cumming",
+   "DK",
+   "2020",
+   "1st edition",
+   "9780744023671",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "A History of Western art",
+   "Laurie Schneider Adams",
+   "McGraw-Hill Education; USA.",
+   "2010",
+   "5th",
+   "9780077560102",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Art Beyond The West",
+   "Michael Kampen O’riley",
+   "Pearson Education",
+   "2014",
+   "",
+   "ISBN-13: 978-0-205-88789-7 (pbk. : alk. paper), ISBN-10: 0-205-88789-9 (pbk. : alk. paper)",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Lịch sử Mỹ thuật Việt Nam. Mã số: 01.01.388/1001, Nhà xuất bản Đại học Sư phạm.",
+   "Phạm Thị Chỉnh",
+   "Đại học Sư phạm",
+   "2013",
+   "5th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "(Basic Knowledge) Summarize the development process of Art History; Identify and describe the major holdings related to fine art style and movement, avant-garde artists."
+  ],
+  [
+   "2",
+   "CLO2",
+   "(Research Skills) - Understand the context of the major styles and movements in Art History, in relation to socio-cultural, economic, political, religious..., talented and avant-garde artists."
+  ],
+  [
+   "3",
+   "CLO3",
+   "(Critical Thinking) Analyze and evaluate critically the meanings and descriptions of works of art from different periods of the past in Art History."
+  ],
+  [
+   "4",
+   "CLO4",
+   "(Communication Skills): Study optional cases in Art History, organize and express the individual thoughts clearly and coherently both in orally (presentations) and writing (assignments/essays)."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Be aware of what is aesthetics of visual art and understand the stages of aesthetic awareness in art history"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Evaluate manual and/or digital art works, media and materials appropriately to produce creative ways solutions for specific cultural and technical contexts."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Having a professional style in arts activity. Love to research in art history."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Students have a proficient in presentation and teamworks."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "01 Practice exercises after visiting 02 museums",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: in class Option 2: (For Constructivism Approach only): Follow lecturer's",
+   "LO1, LO2, LO3, LO5, LO6",
+   "Option 1: Essay\nOption 2: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1: Essay Option 2: (For Constructivism Approach only): Follow lecturer's",
+   "Chapter I-VI/ Part 2",
+   "Essay exercise: Each team choose a work, author, or period of art observed during an extracurricular activity to analyze and criticize to clarify the aesthetic value and characteristics of Vietnamese art.\nStudents are allowed to use AI tools during the assignment.\n\nFormal Requirements – Museum Visit Essay\n1. Length & Format\n\nLength: 1200–1500 words (excluding references).\nFormat: Word or PDF.\nFont: Times New Roman or Arial, size 12, line spacing 1.5.\nMargins: A4 paper, 2.5 cm on all sides.\nPage numbers: Bottom right corner.\n\n2. Structure of the Essay\nTitle Page: Include the student’s full name, class, instructor’s name, course title, and submission date.\nIntroduction (≈10–15% of essay)\nBody (≈70–75% of essay)\nConclusion (≈10–15% of essay)\nReferences: Use APA 7th edition citation style (minimum of 3 scholarly sources, including books, journal articles, or reliable academic resources).\n\n3. Academic Requirements\nProper in-text citations are used whenever ideas, data, or information are used.\nNo plagiarism (similarity < 20%).\nThe essay should demonstrate:\nKnowledge of Vietnamese art.\nAbility to analyze, compare, and evaluate.\nCritical thinking and academic writing skills.\nSubmitiob format:\nEssay - Format Files: word/PDF\nA.i. Usage log: Format Files: .docx/PDF",
+   "A.i. Usage log: Students are encouraged to use it during their assignments. If used, an explanation must be submitted according to the following requirements: (State AI tools: Name, role, and stage of use; adhere to AI ethics and technical principles.\nAnalyze support: Specify the level of AI contribution (e.g., search, image generation, content editing, visualization).\nSelf-assess: Assess the balance between team/individual contributions and AI, ensuring humans play a central role.\nGroup size: 5-7 people"
+  ],
+  [
+   "2",
+   "Group Project 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: in class and homework Option 2: (For Constructivism Approach only): Follow lecturer's",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "Option 1: Research-based & Applied Assignment\nOption 2: (For Constructivism Approach only): Follow lecturer's.",
+   "Option 1: 1; Opttion 2: 1 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Chapter VII-Part 1",
+   "Option 1: 'Presentation in class;\nEach team needs to create a promotional product (video, presentation, or art book is also recommended ). - Choose an idea - Compose contents - Making video, presentation, or art book (3 weeks) Result: - Video/presentation/art book promoting any product - Present about video/presentation/art explaining the psychological applications the group used in the video/presentation/art. Allows the use of AI-powered tools\nSubmitiob format:\nOption 1: Slides/ artbook - Format Files: PPT/PDF; Video - Format: Mp4\nA.i. Usage log: Format Files: .docx/PDFOption 2: (For Constructivism Approach only): Follow lecturer's proposal\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The trainer is the one who decides the group project subject.\nThe mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\nGroup size: 5-7 people\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal\nA.i. Usage log: Students are encouraged to use it during their assignments. If used, an explanation must be submitted according to the following requirements: (State AI tools: Name, role, and stage of use; adhere to AI ethics and technical principles.\nAnalyze support: Specify the level of AI contribution (e.g., search, image generation, content editing, visualization).\nSelf-assess: Assess the balance between team/individual contributions and AI, ensuring humans play a central role."
+  ],
+  [
+   "3",
+   "Group Project 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: in class and homework Option 2: (For Constructivism Approach only): Follow lecturer's",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "Option 1: Research-based & Applied Assignment\nOption 2: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1: 1 Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Chapter III;IV-Part 2",
+   "Option 1: 'Presentation in class;\nEach team needs to create a promotional product (video, presentation, or art book is also recommended ). - Choose an idea - Compose contents - Making video, presentation, or art book (3 weeks) Result: - Video/presentation/art book promoting any product - Present about video/presentation/art explaining the psychological applications the group used in the video/presentation/art. Allows the use of AI-powered tools\nSubmition format:\nOption 1:\nSlides/ artbook - Format Files: PPT/PDF; Video - Format: Mp4\nA.i. Usage log: Format Files: .docx/PDF\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The trainer is the one who decides the group project subject.\nThe mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\nGroup size: 5-7 people\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal\nA.i. Usage log: Students are encouraged to use it during their assignments. If used, an explanation must be submitted according to the following requirements: (State AI tools: Name, role, and stage of use; adhere to AI ethics and technical principles.\nAnalyze support: Specify the level of AI contribution (e.g., search, image generation, content editing, visualization).\nSelf-assess: Assess the balance between team/individual contributions and AI, ensuring humans play a central role."
+  ],
+  [
+   "4",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Week 1- 10 in class",
+   "LO1- LO8",
+   "practical exercises",
+   "",
+   "Scope of Knowledge and skills from studied topics",
+   "Class room",
+   "Based on class attitudes and participation"
+  ],
+  [
+   "5",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: Week 5 in class Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO2, LO3, LO4",
+   "Option 1: Research-based & Applied Assignment\nOption 2: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1: 1; Opttion 2: 1; Option 3: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Chapter I-VIII/ Part 1",
+   "Option 1: 'Option 1: Individual exercise\nEach student chooses a 20th-century art Style (e.g., Cubism, Surrealism, Abstract Expressionism, Pop Art, etc.). Then, take inspiration from the chosen style to create a new artwork (digital or hand-drawn).\n\nNotes/Requirements:\n- Explain the characteristics of the style: Describe the key characteristics, techniques, themes, and visual elements of the chosen style.\n- Analyze your creative process: Clarify how you applied the chosen style to your work (e.g., composition, use of color, symbolism, technique).\n- Use of AI-assisted tools is allowed: You may use AI to assist your creative process (e.g., creating references, visualizing concepts, experimenting with composition), but the final work must reflect your originality and critical judgment\nSubmition format:\nOption 1: Artwork - Format Files: JPG/ JPEG/ GIF/ PNG\nA.i. Usage log: Format Files: .docx/PDF\n\nOption 2: .Create a quiz of 45- 60 multiple-choice questions\nNotes/Requirement\n1. Description: Student groups (5-6 students in large groups or 2-3 students in small groups)\na. Use AI to create multiple-choice questions from the assigned chapters\n● Number: 20–30 questions.\n● Level distribution:\nRecognition: about 9–13 questions. (name, time, place, author, work, style, material...)\nComprehension: about 9–14 questions. (stylistic characteristics, historical-social context, meaning of work, comparison of movements...)\nApplication/Analysis: about 2–3 questions (relating the work to the historical context, analyzing the influence of style, identifying style through images, explaining why the work is typical...)\nb. Each question must have 4 answer options, and 1 correct answer is clearly marked.\nc. Make sure the questions:\n● Correct knowledge, closely follow the content of the assigned chapter, assigned documents\n● Concise, clear, reasonable answers.\n● Images used are in the document\nSubmition format:\nOption 1: Slides - Format Files: PPT/PDF\nA.i. Usage log: Format Files: .docx/PDF\nIndividual: 45-60'\"\n- Student must finish progress test 1 and submit the result to the lecturer in class.\n\nOption 3: (For Constructivism Approach only): Follow lecturer's proposal",
+   "A.i. Usage log: Students are encouraged to use it during their assignments. If used, an explanation must be submitted according to the following requirements: (State AI tools: Name, role, and stage of use; adhere to AI ethics and technical principles.\nAnalyze support: Specify the level of AI contribution (e.g., search, image generation, content editing, visualization).\nSelf-assess: Assess the balance between team/individual contributions and AI, ensuring humans play a central role."
+  ],
+  [
+   "6",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: Week 10 in class Option 2: (For Constructivism Approach only): Follow lecturer's",
+   "LO4, LO5",
+   "Option 1: Multiple choicesMarked by Computer\nOption 2: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1: Multiple choice (< 20 questions) or essay (1-2 questions) or 1 practice painting simulated art styles on paper, computer or wood. Individual: 1 Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Chapter I-VI/ Part 2",
+   "'Option 1: '- Guided by instructor. \"Multiple choice (< 20 questions) or essay (1-2 questions), or painting (1 work)\nIndividual: 45-60'\"\n- Student must finish progress test 1 and submit the result to the lecturer in class.\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "7",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "Multiple choice",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "\"Students are not allowed to use document/information in any form in exam room\n\""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "PART 1- WORLD HISTORY OF ART\nCourse Introduction",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "1. Course Introduction ('History of Western art\", Page 1-12)\n2.Timelines of World History of Art\n- M.book 1: Page 04 - 05\n- Read Introduction and Chapter I\n- Read slides: Introduction and Chapter I",
+   "HOA102",
+   "-Review Introduction Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook",
+   ""
+  ],
+  [
+   "2",
+   "I. Early Art - 3000 BCE-1300 CE",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I,T",
+   "1. Early Art\n2. Ancient Egypt (c.3000-300 BCE)\n3. The Early Aegean world (c.2000-500 BCE)\n4. Classical Greece (c. 500-300 BCE)\n5. Hellenistic Greek Art (c.300 - 1BCE)\n6. Imperial Rome - c.27bBCE - c.300 CE\n7. Late Roman and early Christian art - c.300 - 450 CE\n\n- M.book 1: Page: 06-21\n- Read Introduction and Chapter I\n- Read slides: Introduction and Chapter I",
+   "HOA102",
+   "- Review Chapter I Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "3",
+   "I. Early Art - 3000 BCE-1300 CE",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I,T",
+   "1. Early Art\n2. Ancient Egypt (c.3000-300 BCE)\n3. The Early Aegean world (c.2000-500 BCE)\n4. Classical Greece (c. 500-300 BCE)\n5. Hellenistic Greek Art (c.300 - 1BCE)\n6. Imperial Rome - c.27bBCE - c.300 CE\n7. Late Roman and early Christian art - c.300 - 450 CE\n\n- M.book 1: Page: 06-21\n- Read Introduction and Chapter I\n- Read slides: Introduction and Chapter I",
+   "",
+   "- Review Chapter I Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "4",
+   "I. Early Art - 3000 BCE-1300 CE\n\nII. The Gothic and Early Renaissance c.1300-1500",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "8. Byzantine art - 500-1200\n9. Celtic, Saxon, and Viking art - c.600 - 900\n10. Medieval art of Nothern Europe - c.800-1000\n11.Romanesque and early\n\nGothic art.1. Gothic Art\n\n- M.book 1: Page 12-43\n- Read Chapter II\n- Read slides: Chapter II",
+   "",
+   "-Review Chapter 2 Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "5",
+   "I. Early Art - 3000 BCE-1300 CE\n\nII. The Gothic and Early Renaissance c.1300-1500",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "8. Byzantine art - 500-1200\n9. Celtic, Saxon, and Viking art - c.600 - 900\n10. Medieval art of Nothern Europe - c.800-1000\n11.Romanesque and early\n\nGothic art.1. Gothic Art\n\n- M.book 1: Page 12-43\n- Read Chapter II\n- Read slides: Chapter II",
+   "",
+   "-Review Chapter 2 Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "6",
+   "I. Early Art - 3000 BCE-1300 CE\n\nII. The Gothic and Early Renaissance c.1300-1500",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "8. Byzantine art - 500-1200\n9. Celtic, Saxon, and Viking art - c.600 - 900\n10. Medieval art of Nothern Europe - c.800-1000\n11.Romanesque and early\n\nGothic art.1. Gothic Art\n\n- M.book 1: Page 12-43\n- Read Chapter II\n- Read slides: Chapter II",
+   "",
+   "-Review Chapter 2 Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "7",
+   "II. The Gothic and Early Renaissance c.1300-1500\n\nIII. High Renaissance and Mannerism - c. 1500-1600",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "2. The early Renaissance - 15th century\n3. The Northern Renaissance (c.1420-1520)\n\n1.The High Renaissance - c.1500-1527, M.book 1: Page 80-97\n2. Mannerism -c. 1520-1600\n- M.book 1: Page 44-113\n- Read Chapter III\n- Read slides: Chapter III",
+   "",
+   "-Review Chapter III Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "8",
+   "II. The Gothic and Early Renaissance c.1300-1500\n\nIII. High Renaissance and Mannerism - c. 1500-1600",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "2. The early Renaissance - 15th century\n3. The Northern Renaissance (c.1420-1520)\n\n1.The High Renaissance - c.1500-1527, M.book 1: Page 80-97\n2. Mannerism -c. 1520-1600\n- M.book 1: Page 44-113\n- Read Chapter III\n- Read slides: Chapter III",
+   "",
+   "-Review Chapter III Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "9",
+   "IV. The Baroque Era – c. 1600-1700",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. The Baroque - c.1590-1700\n2. Dutch Realism - 1600\nM.book 1: Page 114-161\n- Read Chapter IV\n- Read slides: Chapter IV",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "10",
+   "IV. The Baroque Era – c. 1600-1700",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. The Baroque - c.1590-1700\n2. Dutch Realism - 1600\nM.book 1: Page 114-161\n- Read Chapter IV\n- Read slides: Chapter IV",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "11",
+   "V. From Rococo to Neoclassicism – c. 1700-1800",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. The Rococo c. 1700-1800\n2. The English Landcape Tradition - 18 Th century\n3. Neoclassicism - 1770 - 1830\nM.book 1: Page 162 - 197\n- Read Chapter V\n- Read slides: Chapter V",
+   "",
+   "-Review Chapter V Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "12",
+   "V. From Rococo to Neoclassicism – c. 1700-1800",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. The Rococo c. 1700-1800\n2. The English Landcape Tradition - 18 Th century\n3. Neoclassicism - 1770 - 1830\nM.book 1: Page 162 - 197\n- Read Chapter V\n- Read slides: Chapter V",
+   "",
+   "-Review Chapter V Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "13",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. Romantisism - 18Th and 19Th centuris\n2. The Academies 1562 - Last 19th century",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "14",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. Romantisism - 18Th and 19Th centuris\n2. The Academies 1562 - Last 19th century",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "15",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "3. The Pre-Raphaetites - 19th centuty\n4. Realism c.1855-1900",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "16",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "3. The Pre-Raphaetites - 19th centuty\n4. Realism c.1855-1900",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "17",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "5. Impressionism - 1860-1880s\n\n6. Symbolism and Aestheticism - late 19th century",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "18",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "5. Impressionism - 1860-1880s\n\n6. Symbolism and Aestheticism - late 19th century",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "19",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "7. Post-Impressionism - Late 19th/Early 20th century\n8. Secession and Art Nouveau 19th/Early 20th century\n\nM.book 1: Page 198 - 269\n- Read Chapter VI\n- Read slides: Chapter VI",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "20",
+   "VI. Romantic and Academic Art - a.1800-1900",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "7. Post-Impressionism - Late 19th/Early 20th century\n8. Secession and Art Nouveau 19th/Early 20th century\n\nM.book 1: Page 198 - 269\n- Read Chapter VI\n- Read slides: Chapter VI",
+   "",
+   "-Review Chapter IV Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "21",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "T,U",
+   "1. Les Fauves\n2. Expressionism and Abstraction - early 20th century\n- M.book 1: Page 270-287\n\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "22",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "T,U",
+   "1. Les Fauves\n2. Expressionism and Abstraction - early 20th century\n- M.book 1: Page 270-287\n\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "23",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "T,U",
+   "- Cubism - 1907-1918\n- M.book 1: Page 288-317\n\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "24",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "T,U",
+   "- Cubism - 1907-1918\n- M.book 1: Page 288-317\n\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "25",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "T,U",
+   "3. Surrealism - 1920s-1930s\n4. Abstract Expressionism - late 1940s -1950s\n- M.book 1: Page 318-358\n\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "26",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "T,U",
+   "3. Surrealism - 1920s-1930s\n4. Abstract Expressionism - late 1940s -1950s\n- M.book 1: Page 318-358\n\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "27",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "",
+   "5. Pop Art - 1950s-1960s\n6. The last 50 year 1970 onward\n- M.book 1: Page 359-400\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "28",
+   "Group Project 1\nVII. Modernism – c. 1900-1970",
+   "Offline",
+   "LO1 - LO8",
+   "",
+   "5. Pop Art - 1950s-1960s\n6. The last 50 year 1970 onward\n- M.book 1: Page 359-400\nPresentation of Students",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "29",
+   "VIII. Asian Art (China, Japan, India)",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. China,\n2. Japan,\n3. India\n- Main book 2: Page 183-211\n- Read Chapter VI\n- Read slides: Chapter VI",
+   "",
+   "-Review Chapter VIII Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "30",
+   "VIII. Asian Art (China, Japan, India)",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. China,\n2. Japan,\n3. India\n- Main book 2: Page 183-211\n- Read Chapter VI\n- Read slides: Chapter VI",
+   "",
+   "-Review Chapter VIII Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "31",
+   "VIII. Asian Art (China, Japan, India)",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. China,\n2. Japan,\n3. India\n- Main book 2: Page 183-211\n- Read Chapter VI\n- Read slides: Chapter VI",
+   "",
+   "-Review Chapter VIII Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "32",
+   "FINAL REVIEWS; Q&A\nPROGRESS TEST 1 (in 30 minutes)",
+   "Offline",
+   "LO1 => LO7",
+   "T, U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ],
+  [
+   "33",
+   "PROGRESS TEST 1 (in 30 minutes)",
+   "Offline",
+   "LO1 => LO7",
+   "T, U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ],
+  [
+   "34",
+   "PART 2 - HISTORY OF VIETNAM ART\nI. Vietnamese arts in primitive times and in the time of national construction",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. Vietnamese arts in primitive period\n- M.book 3: Page 09-20\n- Read Chapter I\n- Read slides: Chapter I",
+   "",
+   "-Review Chapter I Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "35",
+   "PART 2 - HISTORY OF VIETNAM ART\nI. Vietnamese arts in primitive times and in the time of national construction",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "1. Vietnamese arts in primitive period\n- M.book 3: Page 09-20\n- Read Chapter I\n- Read slides: Chapter I",
+   "",
+   "-Review Chapter I Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "36",
+   "I. Vietnamese arts in primitive times and in the time of national construction",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "2. Vietnamese arts in the period of national construction\n- M.book 3: Page 21-37\n- Read Chapter 1\n- Read slides: Chapter 1",
+   "",
+   "-Review Chapter I Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "37",
+   "I. Vietnamese arts in primitive times and in the time of national construction",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "2. Vietnamese arts in the period of national construction\n- M.book 3: Page 21-37\n- Read Chapter 1\n- Read slides: Chapter 1",
+   "",
+   "-Review Chapter I Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "38",
+   "II. Art of the independent national feudal period",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "T, U",
+   "1. Lý Dynasty art (1009 - 1225)\n- M.book 3: Page 39- 61\n2. Trần Dynasty art (1226 - 1400)\n- M.book 3: Page 62- 82\n- Read chapter II\n- Read slides: Chapter 2",
+   "",
+   "-Review Chapter II Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabusn",
+   ""
+  ],
+  [
+   "39",
+   "II. Art of the independent national feudal period",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "T, U",
+   "1. Lý Dynasty art (1009 - 1225)\n- M.book 3: Page 39- 61\n2. Trần Dynasty art (1226 - 1400)\n- M.book 3: Page 62- 82\n- Read chapter II\n- Read slides: Chapter 2",
+   "",
+   "-Review Chapter II Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabusn",
+   ""
+  ],
+  [
+   "40",
+   "II. Art of the independent national feudal period",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "T, U",
+   "3. Early Lê Dynasty art (1427 - 1527)\n- M.book 3: Page 83- 98\n4. Lê Trung Hưng Dynasty art (1593-1789)\n- Read chapter II\n- Read slides: Chapter II\n- M.book 3: Page 99-124",
+   "",
+   "-Review Chapter II Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabusn",
+   ""
+  ],
+  [
+   "41",
+   "II. Art of the independent national feudal period",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "T, U",
+   "3. Early Lê Dynasty art (1427 - 1527)\n- M.book 3: Page 83- 98\n4. Lê Trung Hưng Dynasty art (1593-1789)\n- Read chapter II\n- Read slides: Chapter II\n- M.book 3: Page 99-124",
+   "",
+   "-Review Chapter II Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabusn",
+   ""
+  ],
+  [
+   "42",
+   "II. Art of the independent national feudal period",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "T, U",
+   "5. Tây Sơn Dynasty art (1789 - 1802)\n'M.book 3: Page 124-125\n6. Nguyễn Dynasty art (1802 - 1885)\n- Read chapter II\n- Read slides: Chapter II\n- 'M.book 3: Page 139- 154",
+   "",
+   "-Review Chapter II Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabusn",
+   ""
+  ],
+  [
+   "43",
+   "II. Art of the independent national feudal period",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "T, U",
+   "5. Tây Sơn Dynasty art (1789 - 1802)\n'M.book 3: Page 124-125\n6. Nguyễn Dynasty art (1802 - 1885)\n- Read chapter II\n- Read slides: Chapter II\n- 'M.book 3: Page 139- 154",
+   "",
+   "-Review Chapter II Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabusn",
+   ""
+  ],
+  [
+   "44",
+   "Group Project 2\nIII. Vietnamese Arts from 1885 - 1945",
+   "Offline",
+   "LO1 => LO8",
+   "I, T",
+   "1. Social circumstances and the establishment of the Indochina Fine Arts College\nM.book 3: Page 155- 161\n2.Development of Vietnamese arts during the French colonial period\n- Read Chapter III\n- Read slides: Chapter III\n- M.book 3: Page 162- 180",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "45",
+   "Group Project 2\nIII. Vietnamese Arts from 1885 - 1945",
+   "Offline",
+   "LO1 => LO8",
+   "I, T",
+   "1. Social circumstances and the establishment of the Indochina Fine Arts College\nM.book 3: Page 155- 161\n2.Development of Vietnamese arts during the French colonial period\n- Read Chapter III\n- Read slides: Chapter III\n- M.book 3: Page 162- 180",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "46",
+   "Group Project 2\nIV. Vietnamese Arts from 1945 to present",
+   "Offline",
+   "LO1 => LO8",
+   "I, T",
+   "1. Vietnamese Arts from 1945 to 1954\n2. Vietnamese Arts from 1954 to 1975",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "47",
+   "Group Project 2\nIV. Vietnamese Arts from 1945 to present",
+   "Offline",
+   "LO1 => LO8",
+   "I, T",
+   "1. Vietnamese Arts from 1945 to 1954\n2. Vietnamese Arts from 1954 to 1975",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "48",
+   "Group Project 2\nIV. Vietnamese Arts from 1945 to present",
+   "Offline",
+   "LO1 => LO8",
+   "I, T",
+   "3. Vietnamese Arts from 1975 to present\n- Read chapter IV\n- Read slides: Chapter IV\n- M.book 3: Page 181- 220",
+   "",
+   "Participate in class's activities: asks questions, answer questions. - Read the syllabus\n- Read main textbook\n- Prepare indivisual tools\n\n- Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "49",
+   "Extracurricular learning.",
+   "Offline",
+   "LO1, LO2, LO3,LO5 LO6, LO7",
+   "I, T, U",
+   "- Visiting the History Museum and the Fine Arts Museum\n\n- Practical exercise",
+   "",
+   "All knowledge learned.",
+   ""
+  ],
+  [
+   "50",
+   "Extracurricular learning.",
+   "Offline",
+   "LO1, LO2, LO3,LO5 LO6, LO7",
+   "I, T, U",
+   "- Visiting the History Museum and the Fine Arts Museum\n\n- Practical exercise",
+   "",
+   "All knowledge learned.",
+   ""
+  ],
+  [
+   "51",
+   "Extracurricular learning.",
+   "Offline",
+   "LO1, LO2, LO3,LO5 LO6, LO7",
+   "I, T, U",
+   "- Visiting the History Museum and the Fine Arts Museum\n\n- Practical exercise",
+   "",
+   "All knowledge learned.",
+   ""
+  ],
+  [
+   "52",
+   "Extracurricular learning.",
+   "Offline",
+   "LO1, LO2, LO3,LO5 LO6, LO7",
+   "I, T, U",
+   "- Visiting the History Museum and the Fine Arts Museum\n\n- Practical exercise",
+   "",
+   "All knowledge learned.",
+   ""
+  ],
+  [
+   "53",
+   "Extracurricular learning.",
+   "Offline",
+   "LO1, LO2, LO3,LO5 LO6, LO7",
+   "I, T, U",
+   "- Visiting the History Museum and the Fine Arts Museum\n\n- Practical exercise",
+   "",
+   "All knowledge learned.",
+   ""
+  ],
+  [
+   "54",
+   "Extracurricular learning.",
+   "Offline",
+   "LO1, LO2, LO3,LO5 LO6, LO7",
+   "I, T, U",
+   "- Visiting the History Museum and the Fine Arts Museum\n\n- Practical exercise",
+   "",
+   "All knowledge learned.",
+   ""
+  ],
+  [
+   "55",
+   "V. Introducing some typical works of Vietnam Modern Arts",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "Introducing some typical works of Vietnam Modern Arts\n- Read chapter V\n- Read slides: Chapter V\n- M.book 3: Page 221- 266",
+   "",
+   "-Review Chapter V Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "56",
+   "V. Introducing some typical works of Vietnam Modern Arts",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I, T",
+   "Introducing some typical works of Vietnam Modern Arts\n- Read chapter V\n- Read slides: Chapter V\n- M.book 3: Page 221- 266",
+   "",
+   "-Review Chapter V Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "57",
+   "VI. Vietnamese folk paintings",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I,T",
+   "1. Origin and birth of Vietnamese folk paintings\n2. Some main lines of paintings: folk paintings of Đông Hồ, Hàng Trống, Kim Hoàng, Làng Sình\n- Read chapter VI\n- Read slides: Chapter VI\n- M.book 3: Page 267-291",
+   "",
+   "-Review Chapter VI Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "58",
+   "VI. Vietnamese folk paintings",
+   "Offline",
+   "LO1, LO3, LO5, LO6",
+   "I,T",
+   "1. Origin and birth of Vietnamese folk paintings\n2. Some main lines of paintings: folk paintings of Đông Hồ, Hàng Trống, Kim Hoàng, Làng Sình\n- Read chapter VI\n- Read slides: Chapter VI\n- M.book 3: Page 267-291",
+   "",
+   "-Review Chapter VI Discussion. - Participate in class's activities: asks questions, answer questions. - Read the syllabus",
+   ""
+  ],
+  [
+   "59",
+   "FINAL REVIEWS; Q&A\nPROGRESS TEST 2 (in 30 minutes)",
+   "Offline",
+   "LO1 => LO7",
+   "T,U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ],
+  [
+   "60",
+   "PROGRESS TEST 2 (in 30 minutes)",
+   "Offline",
+   "LO1 => LO7",
+   "T,U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1.1",
+   "What's so special about Egyptian art?"
+  ],
+  [
+   "2",
+   "2",
+   "QN2.1",
+   "Why is Greek art so important?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.1",
+   "What are the differences between ancient and medieval art?"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "Why is the Renaissance period so important in the development of Western art?"
+  ],
+  [
+   "5",
+   "5",
+   "QN5.1",
+   "What are the differences in art between high Renaissance and Mannerism?"
+  ],
+  [
+   "6",
+   "6",
+   "QN6.1",
+   "Which were the greatest paintings of the Renaissance?"
+  ],
+  [
+   "7",
+   "10",
+   "QN10.1",
+   "What are the characteristics of the Baroque style of art?"
+  ],
+  [
+   "8",
+   "11",
+   "QN11.1",
+   "What are the differences in art between Baroque and Mannerism art?"
+  ],
+  [
+   "9",
+   "12",
+   "QN12.1",
+   "What are the differences in art between Baroque and Rococo?"
+  ],
+  [
+   "10",
+   "13",
+   "QN13.1",
+   "What are the differences in art between Rococo and Neoclassicism ?"
+  ],
+  [
+   "11",
+   "14",
+   "QN14.1",
+   "What does the term \"Academic\" art mean?"
+  ],
+  [
+   "12",
+   "15",
+   "QN15.1",
+   "What are the characteristics of Romantic Art?"
+  ],
+  [
+   "13",
+   "16",
+   "QN16.1",
+   "What are the characteristics of Pre-Raphaelites?"
+  ],
+  [
+   "14",
+   "17",
+   "QN17.1",
+   "Why was Impressionism so influential in the development of modern art?"
+  ],
+  [
+   "15",
+   "18",
+   "QN18.1",
+   "What are the characteristics of Post-Impressionism art - Late 19th/Early 20th century"
+  ],
+  [
+   "16",
+   "19",
+   "QN19.1",
+   "What are the characteristics of Les Fauves?"
+  ],
+  [
+   "17",
+   "20",
+   "QN20.1",
+   "What are the characteristics of Expressionism and Abstraction - early 20th century"
+  ],
+  [
+   "18",
+   "21",
+   "QN21.1",
+   "What are the meaning and significance of Cubism?"
+  ],
+  [
+   "19",
+   "22",
+   "QN22.1",
+   "What are the characteristics of Surrealism from 1920s to1930s"
+  ],
+  [
+   "20",
+   "23",
+   "QN23.1",
+   "What are the characteristics of Abstract Expressionism?"
+  ],
+  [
+   "21",
+   "24",
+   "QN24.1",
+   "What are the characteristics of Surrealism from 1920s to 1930s?"
+  ],
+  [
+   "22",
+   "25",
+   "QN25.1",
+   "What are the characteristics of Pop Art from 1950s to 1960s?"
+  ],
+  [
+   "23",
+   "26",
+   "QN26.1",
+   "What are the characteristics of Art from 1970s to now?"
+  ],
+  [
+   "24",
+   "27",
+   "QN27.1",
+   "What are the characteristics of Asian art (China Art, Japan Art, India Art)"
+  ],
+  [
+   "25",
+   "34",
+   "QN34.1",
+   "What are the characteristics of Vietnamese prehistoric art?"
+  ],
+  [
+   "26",
+   "35",
+   "QN35.1",
+   "What are the characteristics of Dong Son Art?"
+  ],
+  [
+   "27",
+   "36",
+   "QN36.1",
+   "What's special about Ngoc Lu bronze drums?"
+  ],
+  [
+   "28",
+   "37",
+   "QN37.1",
+   "What influences did the social context have on the development of art in the Ly Dynasty?"
+  ],
+  [
+   "29",
+   "38",
+   "QN38.1",
+   "What are the differences in art between the art of the Ly Dynasty and the Tran Dynasty?"
+  ],
+  [
+   "30",
+   "39",
+   "QN39.1",
+   "What are the special features of the art of dragons in the early Le Dynasty?"
+  ],
+  [
+   "31",
+   "40",
+   "QN40.1",
+   "What are the special features of the art of dragons in the Le Trung Hung Dynasty?"
+  ],
+  [
+   "32",
+   "41",
+   "QN41.1",
+   "What are the visual characteristics of Vietnamese communal house sculpture from 16th to 18th century?"
+  ],
+  [
+   "33",
+   "42",
+   "QN42.1",
+   "What are the outstanding artistic achievements of the Tay Son period?"
+  ],
+  [
+   "34",
+   "46",
+   "QN46.1",
+   "What influences did the social context have on the development of art in the Nguyen Dynasty? (1802-1885)"
+  ],
+  [
+   "35",
+   "47",
+   "QN47.1",
+   "What influences did the social context have on the development of art in the Nguyen Dynasty? (1885-1945)"
+  ],
+  [
+   "36",
+   "48",
+   "QN48.1",
+   "What influences did the social context have on the development of Vietnam art from 1925 to 1945?"
+  ],
+  [
+   "37",
+   "55",
+   "QN55.1",
+   "What are the characteristics of Vietnamese fine Arts from 1945 to 1975?"
+  ],
+  [
+   "38",
+   "56",
+   "QN56.1",
+   "Who are the best known modern artists in Vietnam from 1945 to 1975? Introducing some of their typical works."
+  ],
+  [
+   "39",
+   "57",
+   "QN57.1",
+   "What are the characteristics of folk paintings found in the works of Dong Ho, Hang Trong, Kim Hoan, and Sinh Village?"
+  ]
+ ],
+ "links": [
+  "/download/13352/S/1_HOA102.zip",
+  "/download/13352/S/2_HOA102.zip"
+ ]
+}

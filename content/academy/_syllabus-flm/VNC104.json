@@ -1,0 +1,1444 @@
+{
+ "ma": "VNC104",
+ "sylID": "13353",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13353",
+   "code": "VNC104",
+   "name": "Vietnamese Culture _ Cơ sở văn hóa Việt Nam",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13353",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13353",
+  "Syllabus Name": "Vietnamese Culture _ Cơ sở văn hóa Việt Nam",
+  "Course Name English": "Vietnamese Culture",
+  "Subject Code": "VNC104",
+  "Learning-Teaching Method": "Lecture,Presenting,Field trip,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course is designed to provide students with a understanding of the foundations and the dimensions of Vietnamese culture, origin, characteristic; pay particular attention to the relationship between Vietnamese culture and the present-day life of the Vietnamese people and to the different elements of the culture which are under the social structures, belief systems, literature, arts, customs, etc... Topics mainly include: (1) the foundations of Vietnamese civilization: its geography, language, and history; (2) the core concepts in Vietnamese thoughts and religions: Aninism, Taoism, Buddhism, Confucianism, Catholicism, the new sects religion;...(3) Literature (4) Society and Life, including education, the role of women, Vietnamese food, festivals and leisure activities ; (5) Arts and Architecture (6) Vietnamese performing arts like Ca trù, Tuồng, Hát Bội...\n-Teaching method: Presentation, Discussion, teamwork, critical thinking, field-trip.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time.\n- Use laptop in class only for learning purpose.\n- Promptly access to the FLM at https://flm.fpt.edu.vn for up-to-date course information.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Cơ sở văn hoá Việt Nam",
+   "Trần Quốc Vượng",
+   "NXB Giáo dục Hà Nội",
+   "2006",
+   "8th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Cơ sở văn hoá Việt Nam.",
+   "Trần Ngọc Thêm",
+   "NXB Giáo dục Hà Nội",
+   "2000",
+   "2rd",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Vietnam - Culture Smart!: The Essential Guide to Customs & Culture",
+   "Geoffrey Murray",
+   "Kuperard",
+   "2021",
+   "3rd",
+   "9781857338348",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Vietnam: Tradition and Change",
+   "Huu Ngoc",
+   "The Gioi",
+   "2018",
+   "2nd",
+   "9786047724314",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 Giáo trình. Ưu tiên chọn mã ISBN: 9786043657463 (do nhà xuất bản đề xuất mới)"
+  ],
+  [
+   "5",
+   "Vietnam: Tradition and Change",
+   "Huu Ngoc",
+   "The Gioi",
+   "2018",
+   "2nd",
+   "9786043657463",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 Giáo trình. Ưu tiên chọn mã ISBN: 9786043657463 (do nhà xuất bản đề xuất mới)"
+  ],
+  [
+   "6",
+   "Wandering through Vietnamese culture",
+   "Huu Ngoc",
+   "The Gioi",
+   "2017",
+   "5th",
+   "9786047701742",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the foundations and dimensions of Vietnamese culture. Interpret and absorb the essence of Vietnamese culture."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Explain Vietnam's history and the change of Vietnamese culture over the different historical periods."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyze cultural phenomena."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Evaluate the problem from the cultural perspective, aesthetic creation and thriving for success in the globalization context."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Developing essential skills in building or constructing a typical product reflecting cultural aspects."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Having a professional attitude, critical thinking and teamwork."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Project",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Week 5-8",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Option 1: Research-based & Applied Assignment\nOption 2: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1: 1; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Chapter 1-6; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Each team needs to create a Timeline of Vietnamese Cultural History (following the timeline from the founding of the country to the present) –\nPresentation: In-class presentation of 25–30 minutes, followed by 5–10 minutes Q&A.\nAI usage: AI tools are allowed (for research, analysis, slide design, images, charts, etc.), but the final work must demonstrate critical thinking, creativity, and originality.\nSubmission format:\n• 01 visual product: timeline infographic (can be presented using Canva, PowerPoint, Notion, Miro, etc.) - format file: JPEG/PNG/PDF\n• 01 description: explaining the implementation process, reflecting on the role of AI support - format file: Word/PDF",
+   "The lecturer is the one who decides the group project subject.\nThe mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\nGroup size: 3-7 people\nA.i. Usage log: Students are encouraged to use it during their assignments. If used, an explanation must be submitted according to the following requirements: (State AI tools: Name, role, and stage of use; adhere to AI ethics and technical principles.\nAnalyze support: Specify the level of AI contribution (e.g., search, image generation, content editing, visualization).\nSelf-assess: Assess the balance between team/individual contributions and AI, ensuring humans play a central role.\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Individual Assignment 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: Week 2-4;Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Option 1: Essay\nOption 2: Research-based & Applied Assignment\nOption 3: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1: 1; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Chapter 1-2; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Class room/or outside;\nEssay Exercise: Based on the content of the field trip, group students create an Essay introducing Vietnamese cultural characteristics...\nFormal Requirements – Essay exercise:\n1. Length & Format\nLength: 1200–1500 words (excluding references).\nFormat: Word or PDF.\nFont: Times New Roman or Arial, size 12, line spacing 1.5.\nMargins: A4 paper, 2.5 cm on all sides.\nPage numbers: Bottom right corner.\n\n2. Structure of the Essay\nTitle Page: Include the student’s full name, class, instructor’s name, course title, and submission date.\nIntroduction (≈10–15% of essay)\nBody (≈70–75% of essay)\nConclusion (≈10–15% of essay)\nReferences: Use APA 7th edition citation style (minimum of 3 scholarly sources, including books, journal articles, or reliable academic resources).\n\n3. Academic Requirements\nProper in-text citations are used whenever ideas, data, or information are used.\nNo plagiarism (similarity < 20%).\n\nAI usage: AI tools are allowed (for research, analysis, slide design, images, charts, etc.), but the final work must demonstrate critical thinking, creativity, and originality.\nSubmission format:\nEssay - Format Files: Word/PDF\nA.i. Usage log: Format Files: .docx/PDF\n\nOption 2: Based on the content of the field trip, students in the group create a product (e.g., video, artwork) that introduces Vietnamese cultural characteristics...\nSubmission format:\nOption 1: Artwork - Format Files: JPG/ JPEG/ GIF/ PNG - Video: MP4\nA.i. Usage log: Format Files: .docx/PDF",
+   "The lecturer is the one who decides the individual assignment question; A.i. Usage log: Students are encouraged to use it during their assignments. If used, an explanation must be submitted according to the following requirements: (State AI tools: Name, role, and stage of use; adhere to AI ethics and technical principles.\nAnalyze support: Specify the level of AI contribution (e.g., search, image generation, content editing, visualization).\nSelf-assess: Assess the balance between team/individual contributions and AI, ensuring humans play a central role."
+  ],
+  [
+   "3",
+   "Individual Assignment 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Week 7-9; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Option 1: Essay\nOption 2: Research-based & Applied Assignment\nOption 3: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1:1; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Chapter 7-8; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Class room/or outside;\nEssay Exercise: Based on the content of the field trip, group students create an Essay introducing Vietnamese cultural characteristics...\nFormal Requirements – Essay exercise:\n1. Length & Format\nLength: 1200–1500 words (excluding references).\nFormat: Word or PDF.\nFont: Times New Roman or Arial, size 12, line spacing 1.5.\nMargins: A4 paper, 2.5 cm on all sides.\nPage numbers: Bottom right corner.\n\n2. Structure of the Essay\nTitle Page: Include the student’s full name, class, instructor’s name, course title, and submission date.\nIntroduction (≈10–15% of essay)\nBody (≈70–75% of essay)\nConclusion (≈10–15% of essay)\nReferences: Use APA 7th edition citation style (minimum of 3 scholarly sources, including books, journal articles, or reliable academic resources).\n\n3. Academic Requirements\nProper in-text citations are used whenever ideas, data, or information are used.\nNo plagiarism (similarity < 20%).\n\nAI usage: AI tools are allowed (for research, analysis, slide design, images, charts, etc.), but the final work must demonstrate critical thinking, creativity, and originality.\nSubmission format:\nEssay - Format Files: Word/PDF\nA.i. Usage log: Format Files: .docx/PDF\n\nOption 2: Based on the content of the field trip, students in the group create a product (e.g., video, artwork) that introduces Vietnamese cultural characteristics...\nSubmission format:\nOption 1: Artwork - Format Files: JPG/ JPEG/ GIF/ PNG - Video: MP4\nA.i. Usage log: Format Files: .docx/PDF",
+   "Option 1: The lecturer is the one who decides the individual assignment question; Option 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "4",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Week 1- 10",
+   "LO1-L06",
+   "",
+   "",
+   "",
+   "",
+   "Based on class attitudes and participation"
+  ],
+  [
+   "5",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: Week 5; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Option 1: Research-based & Applied Assignment\nOption 2: (For Constructivism Approach only): Follow lecturer's",
+   "Option 1: 10; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Chapter 1-4; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Create a set of graphic or communication products (e.g., 4-6 illustrations or game characters/ 1 set of packaging/infographic/video...) to introduce Vietnamese cultural characteristics.\n- Use of AI-assisted tools is allowed: You may use AI to assist your creative process (e.g., creating references, visualizing concepts, experimenting with composition), but the final work must reflect your originality and critical judgment.\n- Presentation: In-class presentation of 15–20 minutes, followed by 5 minutes Q&A.\nSubmission format:\n- Slides/ Poster - Format Files: PPT/PDF; Video - Format: MP4\nA.i. Usage log: Format Files: .docx/PDF\nOption 2: Multiple choice (< 20 questions) or essay (1-2 questions)\nIndividual: 45-60';\nOption 3: (For Constructivism Approach only): Follow lecturer's proposal",
+   "The lecturer is the one who decides the test progress questions;\nA.i. Usage log: Students are encouraged to use it during their assignments. If used, an explanation must be submitted according to the following requirements: (State AI tools: Name, role, and stage of use; adhere to AI ethics and technical principles.\nAnalyze support: Specify the level of AI contribution (e.g., search, image generation, content editing, visualization).\nSelf-assess: Assess the balance between team/individual contributions and AI, ensuring humans play a central role."
+  ],
+  [
+   "6",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: Week 9; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Option 1: Test is based on the main content of the chapter; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 10; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Chapter 5-8; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Multiple choice (< 20 questions) or essay (1-2 questions)\nIndividual: 45-60';\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The lecturer is the one who decides the test progress questions.\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "7",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1-L06",
+   "Multiple choice",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Students are not allowed to use document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Chapter 1. The Vietnamese Identify\nLand, people and language",
+   "Offline",
+   "CLO1, CLO2",
+   "IT",
+   "Chapter 1.\n- Read slides: Chapter 1",
+   "VNC104",
+   "Review Chapter 1\nDiscussion.",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1. The Vietnamese Identify\nLand, people and language",
+   "Offline",
+   "LO1-L02",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p03-25, p287-290. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 1",
+   "VNC104",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1. The Vietnamese Identify\nLand, people and language",
+   "Offline",
+   "CLO1, CLO2",
+   "IT",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p03-25, p287-290. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 1",
+   "",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1. The Vietnamese Identify\nLand, people and language",
+   "Offline",
+   "LO1-L02",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p03-25, p287-290. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 1",
+   "",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2. A brief History of Vietnam",
+   "Offline",
+   "LO1-L02",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p27-38, p291-300. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 2",
+   "",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2. A brief History of Vietnam",
+   "Offline",
+   "LO1-L02",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p27-38, p291-300. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 2",
+   "",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2. A brief History of Vietnam",
+   "Offline",
+   "LO1-L02",
+   "I,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p27-38, p291-300. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 2",
+   "",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2. A brief History of Vietnam",
+   "Offline",
+   "LO1-L02",
+   "I,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p27-38, p291-300. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 2",
+   "",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2. A brief History of Vietnam",
+   "Offline",
+   "LO1-L02",
+   "I,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p27-38, p291-300. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 1.\n- Read slides: Chapter 2",
+   "",
+   "Review Chapter 2\nDiscussion.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3. Religion and Rituals",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p38 - 41, p61-88. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 2,3\n- Read slides: Chapter 3",
+   "",
+   "Review Chapter 3\nDiscussion.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3. Religion and Rituals",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p38 - 41, p61-88. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 2,3\n- Read slides: Chapter 3",
+   "",
+   "Review Chapter 3\nDiscussion.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3. Religion and Rituals",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p38 - 41, p61-88, p233-237. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 2,3\n- Read slides: Chapter 3",
+   "",
+   "Review Chapter 3\nDiscussion.",
+   ""
+  ],
+  [
+   "13",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "The lecturer organized a field trip to Chapter 2 for students in one of the following museums:\n-National Historical Museum\n-Vietnam History Museum\n- Da Nang Museum, Can Tho Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 1: Students do extra-curricular harvest reports.\nStudents choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "14",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "The lecturer organized a field trip to Chapter 2 for students in one of the following museums:\n-National Historical Museum\n-Vietnam History Museum\n- Da Nang Museum, Can Tho Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 1: Students do extra-curricular harvest reports.\nStudents choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "15",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "The lecturer organized a field trip to Chapter 2 for students in one of the following museums:\n-National Historical Museum\n-Vietnam History Museum\n- Da Nang Museum, Can Tho Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 1: Students do extra-curricular harvest reports.\nStudents choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "16",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "The lecturer organized a field trip to Chapter 2 for students in one of the following museums:\n-National Historical Museum\n-Vietnam History Museum\n- Da Nang Museum, Can Tho Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 1: Students do extra-curricular harvest reports.\nStudents choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "17",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "The lecturer organized a field trip to Chapter 2 for students in one of the following museums:\n-National Historical Museum\n-Vietnam History Museum\n- Da Nang Museum, Can Tho Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 1: Students do extra-curricular harvest reports.\nStudents choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "18",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "The lecturer organized a field trip to Chapter 2 for students in one of the following museums:\n-National Historical Museum\n-Vietnam History Museum\n- Da Nang Museum, Can Tho Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 1: Students do extra-curricular harvest reports.\nStudents choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 3. Religion and Rituals",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p38 - 41, p61-88, p233-237. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 2,3\n- Read slides: Chapter 3",
+   "",
+   "Review Chapter 3\nDiscussion.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 3. Religion and Rituals",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p38 - 41, p61-88. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 2,3\n- Read slides: Chapter 3",
+   "",
+   "Review Chapter 3\nDiscussion.",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 3. Religion and Rituals",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p38 - 41, p61-88. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 2,3\n- Read slides: Chapter 3",
+   "",
+   "Review Chapter 3\nDiscussion.",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4. Vietnamese Literarture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p133 - 167, (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 6\n- Read slides: Chapter 4",
+   "",
+   "Review Chapter 4\nDiscussion.",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 4. Vietnamese Literarture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p133 - 167, (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 6\n- Read slides: Chapter 4",
+   "",
+   "Review Chapter 4\nDiscussion.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4. Vietnamese Literarture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p133 - 167, (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 6\n- Read slides: Chapter 4",
+   "",
+   "Review Chapter 4\nDiscussion.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 4. Vietnamese Literarture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p133 - 167, (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 6\n- Read slides: Chapter 4",
+   "",
+   "Review Chapter 4\nDiscussion.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 4. Vietnamese Literarture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p133 - 167, (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 6\n- Read slides: Chapter 4",
+   "",
+   "Review Chapter 4\nDiscussion.",
+   ""
+  ],
+  [
+   "27",
+   "Review Chapter 1-4\nProgress test 1",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "Read chapter 1-4",
+   "",
+   "Review Chapter 1-4",
+   ""
+  ],
+  [
+   "28",
+   "Progress test 1",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "Read chapter 1-4",
+   "",
+   "Review Chapter 1-4",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 5. Art and Architecture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p13-25, p61-88, p176-180, p194-198.\n- Read slides: Chapter 5",
+   "",
+   "Review Chapter 5\nDiscussion.",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 5. Art and Architecture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p13-25, p61-88, p176-180, p194-198.\n- Read slides: Chapter 5",
+   "",
+   "Review Chapter 5\nDiscussion.",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 5. Art and Architecture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p13-25, p61-88, p176-180, p194-198.\n- Read slides: Chapter 5",
+   "",
+   "Review Chapter 5\nDiscussion.",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 5. Art and Architecture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p13-25, p61-88, p176-180, p194-198.\n- Read slides: Chapter 5",
+   "",
+   "Review Chapter 5\nDiscussion.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 5. Art and Architecture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p13-25, p61-88, p176-180, p194-198.\n- Read slides: Chapter 5",
+   "",
+   "Review Chapter 5\nDiscussion.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 5. Art and Architecture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p13-25, p61-88, p176-180, p194-198.\n- Read slides: Chapter 5",
+   "",
+   "Review Chapter 5\nDiscussion.",
+   ""
+  ],
+  [
+   "35",
+   "Group Project: Guide students to do Group project.\nStudent divided into 5 - 7 group size.\nPrepare the project ideas and plan.",
+   "Offline",
+   "LO1-L06",
+   "I,U",
+   "- Read the request of group project.\n- Read chapter 2-5\n- Design a project plan",
+   "",
+   "Draff the idea of group project.\nDiscussion. - Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 6. Food and drink",
+   "Offline",
+   "LO1,-L04",
+   "T,U",
+   "- Read (1) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 5\n- Read slides: Chapter 6",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 6. Food and drink",
+   "Offline",
+   "LO1,-L04",
+   "T,U",
+   "- Read (1) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 5\n- Read slides: Chapter 6",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 6. Food and drink",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 5\n- Read slides: Chapter 6",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 7. Values & Attitudes\nFamily, Gender and Youth Culture",
+   "Offline",
+   "LO1-L04",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p248- 254. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 4\n- Read slides: Chapter 7",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 7. Values & Attitudes\nFamily, Gender and Youth Culture",
+   "Offline",
+   "LO1-L04",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p248- 254. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 4\n- Read slides: Chapter 7",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 7. Values & Attitudes\nFamily, Gender and Youth Culture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p248- 254. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 4\n- Read slides: Chapter 7",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 7. Values & Attitudes\nFamily, Gender and Youth Culture",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p248- 254. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 4\n- Read slides: Chapter 7",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 8. Festivals and Leisure Activities",
+   "Offline",
+   "LO1-L04",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p215- 218. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 3\n- Read slides: Chapter 8",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 8. Festivals and Leisure Activities",
+   "Offline",
+   "LO1-L04",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p215- 218. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 3\n- Read slides: Chapter 8",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 8. Festivals and Leisure Activities",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p215- 218. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 3\n- Read slides: Chapter 8",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 8. Festivals and Leisure Activities",
+   "Offline",
+   "LO1-L04",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p215- 218. (2) Geoffrey Murray (2021), Vietnam - Culture Smart!: The Essential Guide to Customs & Culture, Kuperard: Chapter 3\n- Read slides: Chapter 8",
+   "",
+   "Student's Seminar and Presentation",
+   ""
+  ],
+  [
+   "47",
+   "Review Chapter 5-8\nProgress test 2",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "Read chapter 5-8",
+   "",
+   "Review Chapter 5-8",
+   ""
+  ],
+  [
+   "48",
+   "Progress test 2",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "Read chapter 5-8",
+   "",
+   "Review Chapter 5-8",
+   ""
+  ],
+  [
+   "49",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "",
+   "The lecturer organized a field trip for students in one of the following places:\n-Chinatown\n- Ao dai Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 2: Students do extra-curricular harvest reports.\nEssay exercise: Students choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "50",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "",
+   "The lecturer organized a field trip for students in one of the following places:\n-Chinatown\n- Ao dai Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 2: Students do extra-curricular harvest reports.\nEssay exercise: Students choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "51",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "",
+   "The lecturer organized a field trip for students in one of the following places:\n-Chinatown\n- Ao dai Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 2: Students do extra-curricular harvest reports.\nEssay exercise: Students choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "52",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "",
+   "The lecturer organized a field trip for students in one of the following places:\n-Chinatown\n- Ao dai Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 2: Students do extra-curricular harvest reports.\nEssay exercise: Students choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "53",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "",
+   "The lecturer organized a field trip for students in one of the following places:\n-Chinatown\n- Ao dai Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 2: Students do extra-curricular harvest reports.\nEssay exercise: Students choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "54",
+   "Field-trip",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "",
+   "The lecturer organized a field trip for students in one of the following places:\n-Chinatown\n- Ao dai Museum\nOr teacher's recommendation.",
+   "",
+   "Individual Assignment 2: Students do extra-curricular harvest reports.\nEssay exercise: Students choose a phenomenon, an observed symbol in the extracurricular session to point out the characteristics of Vietnamese culture.\nRequirements: 1. Students choose a phenomenon, 1 cultural symbol observed in extracurricular activities.\n2. From there, analyzing to see the basic characteristics of the culture in Vietnam.\nEvaluation criteria: + Choose a good phenomenon or symbol: 2/10 + Analyze well and point out the characteristics: 6/10 + The layout of the article is scientific, clear and coherent: 2/10",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 9. Culture and the Arts",
+   "Offline",
+   "LO1-L06",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p171-191.\n- Read slides: Chapter 9",
+   "",
+   "Review Chapter 9\nDiscussion.",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 9. Culture and the Arts",
+   "Offline",
+   "LO1-L06",
+   "I,T",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p171-191.\n- Read slides: Chapter 9",
+   "",
+   "Review Chapter 9\nDiscussion.",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 9. Culture and the Arts",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p171-191.\n- Read slides: Chapter 9",
+   "",
+   "Review Chapter 9\nDiscussion.",
+   ""
+  ],
+  [
+   "58",
+   "Chapter 9. Culture and the Arts",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "- Read (1) Huu Ngọc (2018), Vietnam: Tradition and Change, The gioi Pulishers: p171-191.\n- Read slides: Chapter 9",
+   "",
+   "Review Chapter 9\nDiscussion.",
+   ""
+  ],
+  [
+   "59",
+   "COURSE REVIEW",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ],
+  [
+   "60",
+   "COURSE REVIEW",
+   "Offline",
+   "LO1-L06",
+   "T,U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "GD_QN1.1",
+   "When did Culture appear? What are the basic characteristics of Culture?"
+  ],
+  [
+   "2",
+   "1",
+   "GD_QN46.1",
+   "Which traditional festivals are the most significant scale of Vietnamese people?"
+  ],
+  [
+   "3",
+   "1",
+   "GD_QN47.1",
+   "What are some typical folk games in Vietnam?"
+  ],
+  [
+   "4",
+   "1",
+   "CQ1",
+   "What are the typical features of the geography and climate in Vietnam?"
+  ],
+  [
+   "5",
+   "1",
+   "CQ2",
+   "What are important to notice in the origins of the modern Vietnamese people?"
+  ],
+  [
+   "6",
+   "2",
+   "GD_QN2.1",
+   "What languages have been spoken in Vietnam through historical periods?"
+  ],
+  [
+   "7",
+   "2",
+   "GD_QN48.1",
+   "What influences of foreign cultures have had a strong impact on young Vietnamese people?"
+  ],
+  [
+   "8",
+   "2",
+   "CQ1",
+   "What are the different names given to Vietnamese lands throughout the history? Where did those names derive from?"
+  ],
+  [
+   "9",
+   "3",
+   "GD_QN3.1",
+   "What makes Vietnamese language special?"
+  ],
+  [
+   "10",
+   "3",
+   "GD_QN55.1",
+   "What kinds of traditional musical instruments do Vietnam have?"
+  ],
+  [
+   "11",
+   "3",
+   "CQ1",
+   "What are the writing systems that the Viet have been used through historical periods?What are the illustrations of the use of each writing system in each historical period?"
+  ],
+  [
+   "12",
+   "4",
+   "GD_QN56.1",
+   "What are some typical traditional performing arts in Vietnam?"
+  ],
+  [
+   "13",
+   "4",
+   "CQ1",
+   "What makes Vietnamese language special?"
+  ],
+  [
+   "14",
+   "5",
+   "GD_QN57.1",
+   "How is water puppetry performed?"
+  ],
+  [
+   "15",
+   "5",
+   "CQ1",
+   "What are the most noticeable events during the Era of Chinese Domination and the Independent Monarchies?"
+  ],
+  [
+   "16",
+   "6",
+   "CQ1",
+   "What are the most noticeable events or changes under the Later Le Dynasty and the Nguyen Dynasty?"
+  ],
+  [
+   "17",
+   "7",
+   "CQ1",
+   "What were the main events after the French colonialists invaded our country from the end of the 19th century to 1945?"
+  ],
+  [
+   "18",
+   "8",
+   "CQ1",
+   "What are the most noticeable events during the First and the Second Indochina War?"
+  ],
+  [
+   "19",
+   "9",
+   "GD_QN4.1",
+   "What dynasties did the Vietnamese state go through?"
+  ],
+  [
+   "20",
+   "9",
+   "CQ1",
+   "What are the challenges and important decisions that have been found when Vietnam has become The Socialist Republic?"
+  ],
+  [
+   "21",
+   "10",
+   "GD_QN5.1",
+   "What are the characteristics and achievements of prehistoric and prehistoric Vietnamese culture?"
+  ],
+  [
+   "22",
+   "10",
+   "CQ1",
+   "How are the beliefs in Animism specified?"
+  ],
+  [
+   "23",
+   "11",
+   "GD_QN6.1",
+   "What are the characteristics and achievements of Vietnamese culture in the first millennium AD?"
+  ],
+  [
+   "24",
+   "11",
+   "CQ1",
+   "What are the main changes in the development of Buddhism since it first entered Viet lands?"
+  ],
+  [
+   "25",
+   "12",
+   "CQ1",
+   "What are the differences between Taoism and Confucianism?"
+  ],
+  [
+   "26",
+   "19",
+   "GD_QN10.1",
+   "What are the characteristics and achievements of Vietnamese culture in the self-governing Dai Viet era?"
+  ],
+  [
+   "27",
+   "19",
+   "CQ1",
+   "How did Catholicsm develop in Vietnam?"
+  ],
+  [
+   "28",
+   "20",
+   "GD_QN11.1",
+   "What are the characteristics and cultural achievements under Dai Nam period?"
+  ],
+  [
+   "29",
+   "20",
+   "CQ1",
+   "What are the indigenous religions in Vietnam? How were they born?"
+  ],
+  [
+   "30",
+   "21",
+   "GD_QN12.1",
+   "What are the characteristics and cultural achievements from 1945-1957?"
+  ],
+  [
+   "31",
+   "21",
+   "CQ1",
+   "How does religion influence modern Vietnamese families?"
+  ],
+  [
+   "32",
+   "22",
+   "GD_QN16.1",
+   "What are the indigenous religions in Vietnam?"
+  ],
+  [
+   "33",
+   "22",
+   "CQ1",
+   "Where were works of folk tradition originated?"
+  ],
+  [
+   "34",
+   "23",
+   "GD_QN17.1",
+   "How does the belief on Mother Goddess influence Vietnamese lives from the past to present?"
+  ],
+  [
+   "35",
+   "23",
+   "CQ1",
+   "What are the notable literary works in Chinese chacracters and Vernacular characters?"
+  ],
+  [
+   "36",
+   "24",
+   "CQ1",
+   "What are some drastic changes in literary works during the colonial period in Vietnam?"
+  ],
+  [
+   "37",
+   "25",
+   "CQ1",
+   "How do literary works created by different groups of intellectuals differ regarding literary styles and themes during the nineteenth and twentieth centuries?"
+  ],
+  [
+   "38",
+   "26",
+   "GD_QN18.1",
+   "By what way did Buddhism enter Vietnam?"
+  ],
+  [
+   "39",
+   "26",
+   "CQ1",
+   "How did Vietnamese literary works help in changing history in terms of promoting awareness?"
+  ],
+  [
+   "40",
+   "27",
+   "GD_QN19.1",
+   "How did Catholicism enter and develop in Vietnam?"
+  ],
+  [
+   "41",
+   "29",
+   "CQ1",
+   "What are some precolonial arts that has become prevalent during this period?"
+  ],
+  [
+   "42",
+   "30",
+   "GD_QN20.1",
+   "What are Confucianisms a cultural category in Vietnam?"
+  ],
+  [
+   "43",
+   "30",
+   "CQ1",
+   "What are the interesting details of the process of creating lacquered items from colors to popular designs?"
+  ],
+  [
+   "44",
+   "31",
+   "GD_QN26.1",
+   "What are the characteristics of Vietnamese folklore?"
+  ],
+  [
+   "45",
+   "31",
+   "CQ1",
+   "What are some differences in style between pre-colonial paintings to modern paintings with French influence in Vietnam? Give examples of notable Vietnamese works of these types of paintings."
+  ],
+  [
+   "46",
+   "32",
+   "GD_QN21.1",
+   "What famous literary works did Vietnam have during the feudal period?"
+  ],
+  [
+   "47",
+   "32",
+   "CQ1",
+   "What are the 3 different categories of Vietnamese architecture that were based on their functions? Provide details."
+  ],
+  [
+   "48",
+   "33",
+   "GD_QN26.1",
+   "Name some famous villages that have become well know in their work of arts from the pre-colonial period up to the present."
+  ],
+  [
+   "49",
+   "33",
+   "CQ1",
+   "What are some common materials used in the construction and the design in Vietnamese religious architecture?"
+  ],
+  [
+   "50",
+   "34",
+   "CQ1",
+   "What are some common materials used in the construction and the design in Vietnamese traditional house?"
+  ],
+  [
+   "51",
+   "36",
+   "GD_QN27.1",
+   "Describe the process of creating lacquer paintings?"
+  ],
+  [
+   "52",
+   "36",
+   "CQ1",
+   "What are the countries that had influences on Vietnamese dishes enjoyed in the past and present? Give some illustrations."
+  ],
+  [
+   "53",
+   "37",
+   "GD_QN28.1",
+   "Describe the process of creating silk paintings?"
+  ],
+  [
+   "54",
+   "37",
+   "CQ1",
+   "There are numerous etiquette observed during a meal. What are some common etiquette observed during the pre-colonial time?"
+  ],
+  [
+   "55",
+   "38",
+   "GD_QN29.1",
+   "Describe the process of creating wood carvings?"
+  ],
+  [
+   "56",
+   "38",
+   "CQ1",
+   "What are the different food choices among poor people, rich people, and vegetarians during the pre-colonial times??"
+  ],
+  [
+   "57",
+   "39",
+   "GD_QN30.1",
+   "Name some differences in style between pre-colonial paintings to modern paintings with French influence in Vietnam. ?"
+  ],
+  [
+   "58",
+   "39",
+   "CQ1",
+   "What are the responsibilities of a clan leader for the family during the pre-colonial period?"
+  ],
+  [
+   "59",
+   "40",
+   "GD_QN37.1",
+   "What are the types of traditional Vietnamese architecture?"
+  ],
+  [
+   "60",
+   "40",
+   "CQ1",
+   "What are three values and customs that centered around Vietnamese ethos? Provide details."
+  ],
+  [
+   "61",
+   "41",
+   "GD_QN38.1",
+   "What are the characteristics of Indochina architecture in Vietnam?"
+  ],
+  [
+   "62",
+   "41",
+   "CQ1",
+   "What are some responsibilities a male member of the family must perform to make sure of the continuance of the lineage?"
+  ],
+  [
+   "63",
+   "42",
+   "CQ1",
+   "What are some important changes in the family in times of war?"
+  ],
+  [
+   "64",
+   "43",
+   "CQ1",
+   "What are the distinct differences between the Gregorian calendar and the Lunar calendar?"
+  ],
+  [
+   "65",
+   "44",
+   "CQ1",
+   "Which traditional festivals are the most significant scale of Vietnamese people?"
+  ],
+  [
+   "66",
+   "45",
+   "CQ1",
+   "How are types of folk games vary in three different regions of Vietnam?"
+  ],
+  [
+   "67",
+   "46",
+   "CQ1",
+   "What are some important changes in sports and leisure in contemporary Vietnam?"
+  ],
+  [
+   "68",
+   "48",
+   "GD_QN39.1",
+   "What are the culinary characteristics of Vietnamese people?"
+  ],
+  [
+   "69",
+   "49",
+   "GD_QN40.1",
+   "How have Vietnamese people taken advantage of the natural environment in their culinary Culture?"
+  ],
+  [
+   "70",
+   "50",
+   "GD_QN41.1",
+   "Name a few countries and their influences to the Vietnamese dishes enjoyed in the past and present."
+  ],
+  [
+   "71",
+   "51",
+   "GD_QN42.1",
+   "What life cycle rituals are essential to Vietnamese people?"
+  ],
+  [
+   "72",
+   "52",
+   "GD_QN43.1",
+   "What is the basic structure of the Vietnamese family?"
+  ],
+  [
+   "73",
+   "55",
+   "GD_QN44.1",
+   "What are the most popular old-fashioned customs in Vietnam?"
+  ],
+  [
+   "74",
+   "55",
+   "CQ1",
+   "What are the types of musical performances in three different regions of Vietnam?"
+  ],
+  [
+   "75",
+   "56",
+   "GD_QN45.1",
+   "What are the distinct differences between the Roman calendar to the Lunar calendar that governs how pre-colonial Vietnamese celebrate holidays?"
+  ],
+  [
+   "76",
+   "56",
+   "CQ1",
+   "What are the different traditional musical instruments of Vietnamese people? Describe them."
+  ],
+  [
+   "77",
+   "57",
+   "CQ1",
+   "What are traditional and modern theater performances? Provide details."
+  ],
+  [
+   "78",
+   "58",
+   "CQ1",
+   "How could water puppets be manipulated and performed?"
+  ]
+ ],
+ "links": [
+  "/download/13353/S/1_VNC104.zip",
+  "/download/13353/S/2_VNC104.zip"
+ ]
+}

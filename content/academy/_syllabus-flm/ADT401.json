@@ -1,0 +1,1136 @@
+{
+ "ma": "ADT401",
+ "sylID": "13377",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13377",
+   "code": "ADT401",
+   "name": "Mobility Applications Design 2 _ Thiết kế ứng dụng cho các thiết bị di động 2",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13377",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13377",
+  "Syllabus Name": "Mobility Applications Design 2 _ Thiết kế ứng dụng cho các thiết bị di động 2",
+  "Course Name English": "Mobility Applications Design 2",
+  "Subject Code": "ADT401",
+  "Learning-Teaching Method": "Lecture,Practice, Discussion, Group work",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 105h self-study",
+  "Pre-Requisite": "ADH301",
+  "Description": "This course aims to provide student understanding on techniques, tools and skills to do a practical application design project. To study this course, student must have basic knowledge related to Interaction and UX Design, understanding principles and agile process applied in a mobile design project. In this course, student will perform a design project individually and have to work with programmer to transform an idea to a product. They will learn how to do from a research to design and implement an application project. They will learn about how to run a study of domain interested, how to make use-case list and draw flow diagram. They will be taught about the way to write a proposal for a project. In design phase, there are alot of things student must aware about, so they will be taught about them including rules, principles and good practices such as Realism, Fitts's Law, Animation, Speed and etc.. Testing techniques such as A/B Testing, Usability Testing will also be explained in this course. Student will be evaluated according to how his/her applied knowledge gained from this course to the course's project.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Follow instructions from teachers in class\n- Actively participate in class activities\n- Fulfill tasks given by instructor after class\n- Read the textbook in advance\n- Access the course website (www.cms.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.\n- Complete course's Portfolio with full contents of exercises and submit to the teacher 1 day after the course",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "A Project Guide to UX Design - For User Experience Designers in the field or in the making",
+   "Russ Unger and Carolyn Chandler",
+   "PeachPit Press",
+   "2009",
+   "978-0-321-60737-9",
+   "978-0-321-60737-9",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Design For Use - Create Usable Interfaces for Applications and the Web",
+   "Lukas Mathis - The Pragmatic Programmers",
+   "LLC",
+   "2011",
+   "",
+   "978-1-680-50160-5",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Essential Mobile Interaction Design - Perfecting Interface Design in Mobile Apps",
+   "Cameron Banga and Josh Weinhold",
+   "Pearson",
+   "2014",
+   "",
+   "978-0-321-96157-0",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Interaction Design - Beyond Human Computer Interaction",
+   "Jenny Preece, Helen Sharp, Yvonne Rogers",
+   "Wiley",
+   "2019",
+   "5th",
+   "9781119547259",
+   "False",
+   "False",
+   "True",
+   "https://library.books24x7.com/toc.aspx?bookid=146076"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Discuss key aspects of mobile application design and development, including process stages, platform differences, and user interaction models."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Conduct domain-specific research to identify real user problems and develop a research-backed proposal for a mobile application solution."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Create sketches and paper prototypes to explore and communicate early-stage design ideas and user flows."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Build interactive digital prototypes using up-to-date design tools (e.g., Figma, ProtoPie, Framer, or similar), representing realistic app behavior."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Enhance design solutions by applying UI/UX principles, mobile-specific best practices, and visual design guidelines."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Explain and apply evaluation methods in the implementation phase, including usability testing, A/B testing, and remote testing techniques."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Conduct usability testing on mobile prototypes, gather feedback, and derive actionable insights to improve the product."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Manage project tasks collaboratively throughout the full mobile app design process, including coordination with developers and team members."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Present the design process and outcome effectively through well-structured documentation, visual storytelling presentations."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "2 Weeks (Week 1 - 2)",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO9",
+   "Practical Exercise",
+   "",
+   "Conduct Litertature review in order to Identify potential problems, technologies and other solutions on market",
+   "Conduct Literature review to understand the chosen domain, identify potentials problems from users, technologies research and competitor research",
+   "GroupWork Submission:\n- Report in A4 format (PDF)\n- AI declaration and Log"
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "1 Week (Week 6)",
+   "CLO3, CLO4",
+   "Practical Exercise",
+   "",
+   "Propose Information Architecture for a full solutions",
+   "Propose IA and user flows for full app that can present the whole data flow and hierachy of the app",
+   "GroupWork Submission:\n- Report in 16:9 format (PDF)"
+  ],
+  [
+   "3",
+   "Attendance and Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "10 weeks",
+   "-",
+   "-",
+   "-",
+   "-",
+   "Attendance Percentage and Attitude in class\n- Teacher gives marks on student's Class participation and preparation only after the Portfolio submission.",
+   ""
+  ],
+  [
+   "4",
+   "Project Phase 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "4 Weeks (Week 1 - 4)",
+   "CLO1, CLO2, CLO3, CLO6, CLO7",
+   "Practical Exercise",
+   "",
+   "Conduct desk research and field research to identify user problems of a domain\nUnderstand how technologies and a mobile application can enhance user experience and solve the problems",
+   "Conduct Desk Research and Field Research to identify user problems from a domain",
+   "GroupWork Submission:\n- Report in A4 format (PDF)\n- AI declaration and Log"
+  ],
+  [
+   "5",
+   "Project Phase 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "3 Weeks (Week 5 - 7)",
+   "CLO3, CLO4, CLO5, CLO7",
+   "Practical Exercise",
+   "",
+   "Ideate and propose features. Using tools like IA, user flows and wireframes to demontrate ideas.\nConduct usability testing to verify solutions",
+   "Ideate ideas to solve the solutions. Develop wireframes and conduct usability testing to verify solutions",
+   "GroupWork Submission:\n- Report in 16:9 format (PDF)\n- Testing Results (.xls or PDF)\n- Wireframes (.fig)"
+  ],
+  [
+   "6",
+   "Project Phase 3",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "3 Weeks (Week 7 - 10)",
+   "CLO4,CLO5,CLO7,CLO8,CLO9",
+   "Practical Exercise",
+   "",
+   "Finalize UI for the solutions\nPresent case study",
+   "Finalize UI. Conduct Heuristic evaluation with expertises and present case studies",
+   "GroupWork Submission:\n- Report in A4 format (PDF)\n- Design files (.fig)\n- AI declaration and Log"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Topic 1 : Run a Study in the interest domain (Chapter 1-3)",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "- Text book - Chapter 1-3\n- Reference 3. Chapter 6 - 85-111\n- PPT Slides\n- Lecturer's material",
+   "ADT401_Phần 1",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "2",
+   "Topic 1 : Introducing Domain 01: Social Network",
+   "Offline",
+   "LO1, LO2",
+   "",
+   "Text book - Chapter 1-3\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "ADT401_Phần 2",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "3",
+   "Study the domain and Analyze data from the study",
+   "Offline",
+   "LO2, LO8",
+   "U",
+   "Text book - Chapter 1-3\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "4",
+   "Study the domain and Analyze data from the study",
+   "Offline",
+   "LO2, LO8",
+   "U",
+   "Text book - Chapter 1-3\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "5",
+   "Market Research on Domain 01",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "Text book - Chapter 1-3\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "6",
+   "User Research on Domain 01",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "Text book - Chapter 1-3\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "7",
+   "Topic 2: Activity-Centered Design approach (Chapter 4-7)",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "- Text book - Chapter 4-7\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "8",
+   "Design Process Retro",
+   "Offline",
+   "LO1, LO2",
+   "",
+   "'- Text book - Chapter 4-7\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "9",
+   "Make use case list and flow diagrams",
+   "Offline",
+   "LO2, LO8",
+   "U",
+   "- Text book - Chapter 4-7\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "10",
+   "Make use case list and flow diagrams",
+   "Offline",
+   "LO2, LO8",
+   "U",
+   "- Text book - Chapter 4-7\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "11",
+   "Introducing Domain 02: Mobile Games",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 4-7\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "12",
+   "Market Research on Domain 02",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 4-7\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "13",
+   "User Research on Domain 02",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 4-7\n- Reference 1. Chapter 6 - section 4 - P.182-195\n- Reference 3. Chapter 4\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "14",
+   "Topic 3: Card Sorting technique and Mental Model (Chapter 8-9)",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "- Text book - Chapter 8-9\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "15",
+   "Topic 3: Data Analysis",
+   "Offline",
+   "LO1, LO2",
+   "",
+   "- Text book - Chapter 8-9\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "16",
+   "Introducing proposal structure",
+   "Offline",
+   "LO2, LO8",
+   "U",
+   "- Text book - Chapter 8-9\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "17",
+   "Write proposal of the application",
+   "Offline",
+   "LO2, LO8",
+   "U",
+   "- Text book - Chapter 8-9\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "18",
+   "Introducing Domain 03: Public Transport",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 8-9\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "19",
+   "Running Researach for Domain 03",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 8-9\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "20",
+   "Topic 4: Sketching and Prototyping techniques (Chapter 10-11)",
+   "Offline",
+   "LO1, LO3",
+   "TU",
+   "- Text book - Chapter 10-11\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "21",
+   "Generate Sketching and Prototypes\nProgress Test 1 (lecturer self-organize)",
+   "Offline",
+   "LO4, LO8, LO1",
+   "U",
+   "- Text book - Chapter 10-11\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "22",
+   "Evaluation Phase 1 of the project",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Text book - Chapter 10-11\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "23",
+   "Class Pitching: Group Project Introduction",
+   "Offline",
+   "",
+   "",
+   "- Text book - Chapter 10-11\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "24",
+   "Introducing Domain 04: Healthcare & Health Tech",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 10-11\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "25",
+   "Running Researach for Domain 04",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 10-11\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "26",
+   "Topic 5: Realism, Natural User Interfaces and Fitts's Law (Chapter 12-14)",
+   "Offline",
+   "LO1, LO5, LO8",
+   "T",
+   "- Text book - Chapter 12-14\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "27",
+   "UX Principles for Mobile Application",
+   "Offline",
+   "LO2, LO8",
+   "",
+   "- Text book - Chapter 12-14\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "28",
+   "Design Practice: Class Domain 01/02/03/04",
+   "Offline",
+   "LO1, LO5, LO8",
+   "",
+   "- Text book - Chapter 12-14\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "29",
+   "Introducing Domain 05: Fintech",
+   "Offline",
+   "LO5",
+   "",
+   "- Text book - Chapter 12-14\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "30",
+   "Running Researach for Domain 05",
+   "Offline",
+   "LO5",
+   "U",
+   "- Text book - Chapter 12-14\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "31",
+   "Improve the Prototype by knowledge from topic 5",
+   "Offline",
+   "LO5",
+   "U",
+   "- Text book - Chapter 12-14\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "32",
+   "Topic 6: Animations, Consistency and Discoverability (Chapter 15-17)",
+   "Offline",
+   "LO1, LO5, LO8",
+   "T",
+   "- Text book - Chapter 15-17\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "33",
+   "UI Definition for Project Design",
+   "Offline",
+   "LO1, LO5, LO8",
+   "",
+   "- Text book - Chapter 15-17\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "34",
+   "Project Scenario",
+   "Offline",
+   "LO1, LO5, LO8",
+   "",
+   "- Text book - Chapter 15-17\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "35",
+   "Improve the Prototype by knowledge from topic 6 and working with programer to develop application prototype",
+   "Offline",
+   "LO5",
+   "U",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "36",
+   "Progress Test 2 (lecturer self-organize)",
+   "Offline",
+   "LO1",
+   "",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Progress Test 2 (lecturer self-organize)",
+   "Offline",
+   "LO1",
+   "",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Topic 7: Don't interrupt, Offer Undo and Modes, Have Options, Hierachies, Space, Time… (Chapter 18-22)",
+   "Offline",
+   "LO5, LO8",
+   "T",
+   "- Text book - Chapter 18-22\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "39",
+   "Introduce Project Flow: userflows, screenflow, sitemap, screenmap",
+   "Offline",
+   "LO5, LO8",
+   "",
+   "- Text book - Chapter 18-22\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "40",
+   "Evaluation Phase 2 of the project",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Text book - Chapter 18-22\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "41",
+   "Class Pitching: Group Project Research Report",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Text book - Chapter 18-22\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "42",
+   "Class Pitching: Group Project Research Report",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Text book - Chapter 18-22\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "43",
+   "Topic 8: Speed, Avoiding Features, Removing Features, Learning from Video Games (Chapter 23-26)",
+   "Offline",
+   "LO5, LO8",
+   "T",
+   "- Text book - Chapter 23-26\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "44",
+   "Class Activity: another Design of the product",
+   "Offline",
+   "LO5, LO8",
+   "",
+   "- Text book - Chapter 23-26\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "45",
+   "Topic 9: Guerilla Usability Testing, Usability Testing, Testing in Person and Remote Testing (Chapter 26-30)",
+   "Offline",
+   "LO6, LO8",
+   "U",
+   "- Text book - Chapter 26-30\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "46",
+   "Define Test Audience and Test Plan",
+   "Offline",
+   "LO6, LO8",
+   "",
+   "- Text book - Chapter 26-30\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "47",
+   "Improve the prototype by knowledge from Topic 7,8 and working with programer to develop application prototype",
+   "Offline",
+   "LO5",
+   "U",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "48",
+   "Topic 10: How not to test, User Error is Design Error, A/B Testing, Collect Usage data, Dealing with User Feedback\n(Chapter 31-35)",
+   "Offline",
+   "LO6, LO8",
+   "T",
+   "- Text book - Chapter 31-35\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "49",
+   "Test Result Analysis & Breakdown",
+   "Offline",
+   "LO6, LO8",
+   "",
+   "- Text book - Chapter 31-35\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "50",
+   "Introducing Domain 06: Workplace",
+   "Offline",
+   "LO5",
+   "",
+   "- Text book - Chapter 31-35\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "51",
+   "Running Researach for Domain 06",
+   "Offline",
+   "LO5",
+   "",
+   "- Text book - Chapter 31-35\n- PPT Slides\n- Lecturer's material",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "52",
+   "Improve the prototype by knowledge from Topic 7,8 and working with programer to develop application prototype",
+   "Offline",
+   "LO7",
+   "U",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "53",
+   "Improve the prototype by knowledge from Topic 7,8 and working with programer to develop application prototype",
+   "Offline",
+   "LO7",
+   "U",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "54",
+   "Improve the prototype by knowledge from Topic 7,8 and working with programer to develop application prototype",
+   "Offline",
+   "LO7",
+   "U",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "55",
+   "Improve the prototype by knowledge from Topic 7,8 and working with programer to develop application prototype",
+   "Offline",
+   "LO7",
+   "U",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "56",
+   "Progress Test 3 (Examination Department organize)",
+   "Offline",
+   "LO1",
+   "U",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Evaluation Phase 3 of the Project",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Class Pitching: Group Project Final Report",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "59",
+   "Class Pitching: Group Project Final Report",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "60",
+   "Class Pitching: Group Project Final Report",
+   "Offline",
+   "LO8, LO9",
+   "",
+   "- Reference 2. Chapter 7 - P127-149",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1",
+   "In yỏur point of view, what is the interaction design?"
+  ],
+  [
+   "2",
+   "2",
+   "QN1",
+   "What are the differences between design-led and user-led?"
+  ],
+  [
+   "3",
+   "3",
+   "QN1",
+   "Why we should use user-led in making product from scratch?"
+  ],
+  [
+   "4",
+   "4",
+   "QN1",
+   "What is your design process that you will follow in order to run your project?"
+  ],
+  [
+   "5",
+   "5",
+   "QN1",
+   "What is your design process that you will follow in order to run your project?"
+  ],
+  [
+   "6",
+   "6",
+   "QN1",
+   "What is your design process that you will follow in order to run your project?"
+  ],
+  [
+   "7",
+   "9",
+   "QN1",
+   "What are the similarities/differences between user experience and game feeling?"
+  ],
+  [
+   "8",
+   "10",
+   "QN1",
+   "What is the user-flow for a digital game?"
+  ],
+  [
+   "9",
+   "11",
+   "QN1",
+   "What is the user-flow for a digital game?"
+  ],
+  [
+   "10",
+   "12",
+   "QN1",
+   "What is your game idea? Sketch several screens to show the main flow of it?"
+  ],
+  [
+   "11",
+   "13",
+   "QN1",
+   "What is your game idea? Sketch several screens to show the main flow of it?"
+  ],
+  [
+   "12",
+   "14",
+   "QN1",
+   "What kind of typo and branding you will use for your game idea? Provide several hifi based on the screen flow above?"
+  ],
+  [
+   "13",
+   "15",
+   "QN1",
+   "How to conduct a digital technology product analysis?"
+  ],
+  [
+   "14",
+   "16",
+   "QN1",
+   "How can you apply sensemaking process to build your wireframe?"
+  ],
+  [
+   "15",
+   "17",
+   "QN1",
+   "How to design a product focusing on social issue?"
+  ],
+  [
+   "16",
+   "24",
+   "QN1",
+   "What can you do to improve your hifi supporting disable people?"
+  ],
+  [
+   "17",
+   "25",
+   "QN1",
+   "What is your approach for developing your idea?"
+  ],
+  [
+   "18",
+   "26",
+   "QN1",
+   "What are your product continuous experience?"
+  ],
+  [
+   "19",
+   "30",
+   "QN1",
+   "What are the limitation of your wireframe? How can you improve it?"
+  ],
+  [
+   "20",
+   "31",
+   "QN1",
+   "What are the limitation of your wireframe? How can you improve it?"
+  ],
+  [
+   "21",
+   "33",
+   "QN1",
+   "What are the limitation of your wireframe? How can you improve it?"
+  ],
+  [
+   "22",
+   "34",
+   "QN1",
+   "What are the limitation of your wireframe? How can you improve it?"
+  ],
+  [
+   "23",
+   "45",
+   "QN1",
+   "What are your test methods? Please provide the criteria with the test plans?"
+  ],
+  [
+   "24",
+   "46",
+   "QN1",
+   "What are your test methods? Please provide the criteria with the test plans?"
+  ],
+  [
+   "25",
+   "49",
+   "QN1",
+   "What are your test methods? Please provide the criteria with the test plans?"
+  ],
+  [
+   "26",
+   "52",
+   "QN1",
+   "What is your project branding and typography? How can it make user feel better?"
+  ],
+  [
+   "27",
+   "53",
+   "QN1",
+   "What is your project branding and typography? How can it make user feel better?"
+  ],
+  [
+   "28",
+   "54",
+   "QN1",
+   "What is your project branding and typography? How can it make user feel better?"
+  ],
+  [
+   "29",
+   "60",
+   "QN1",
+   "What make your idea stand out comparing to your teammate's hifi and actual products in the market?"
+  ],
+  [
+   "30",
+   "60",
+   "QN2",
+   "What make your idea stand out comparing to your teammate's hifi and actual products in the market?"
+  ],
+  [
+   "31",
+   "60",
+   "QN3",
+   "What make your idea stand out comparing to your teammate's hifi and actual products in the market?"
+  ]
+ ],
+ "links": [
+  "/download/13377/S/1_ADT401_Phần 1.zip",
+  "/download/13377/S/2_ADT401_Phần 2.zip"
+ ]
+}

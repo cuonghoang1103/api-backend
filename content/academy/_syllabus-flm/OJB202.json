@@ -1,0 +1,359 @@
+{
+ "ma": "OJB202",
+ "sylID": "11795",
+ "quyetDinh": "1286/QĐ-ĐHFPT dated 11/22/2024",
+ "ungVien": [
+  {
+   "sylID": "11795",
+   "code": "OJB202",
+   "name": "On-the-job training_Đào tạo trong môi trường thực tế",
+   "active": true,
+   "approved": true,
+   "decision": "1286/QĐ-ĐHFPT dated 11/22/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11795",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11795",
+  "Syllabus Name": "On-the-job training_Đào tạo trong môi trường thực tế",
+  "Course Name English": "On-the-job training",
+  "Subject Code": "OJB202",
+  "Learning-Teaching Method": "",
+  "NoCredit": "10",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "14 weeks (560h)",
+  "Pre-Requisite": "Sinh viên đạt 90% tổng số tín chỉ trước kỳ OJT (không tính GDTC và chương trình định hướng)\n\nStudents attained 90% of the total credits prior to the OJT term (excluding Physical Education and OTP Programs)",
+  "Description": "Sinh viên làm quen với môi trường thực tế. Có cái nhìn toàn diện về các kiến thức, kỹ năng, thái độ cần có trong một doanh nghiệp. Sinh viên thích ứng, hình thành khả năng chủ động trong môi trường đa chiều.\n\nSinh viên đến quan sát và học việc tại một doanh nghiệp trong các lĩnh vực liên quan đến ngành đào tạo, trải qua quá trình làm việc thực tế với chương trình và nội dung được Trường Đại học FPT và công ty thống nhất từ trước, sinh viên có cơ hội áp dụng các kiến thức và kỹ năng đã học, học hỏi, đề ra các mục tiêu cũng như chuyên ngành hẹp sẽ theo học sau thực tập.\n\nStudents get acquainted with the real working environment. Have a comprehensive understanding of the required knowledge, skills and attitudes in an enterprise. Be able to adapt and be proactive in a multi-dimensional environment.\n\nStudents come to an enterprise in fields related to their studies and do an internship, experiencing a real work process under a plan previously accorded by FPT University and the enterprise. Students have the opportunity to apply the knowledge and skills that they've gained at university, capture more learnings, set goals for next steps and make the choice of their academic concentration at the end of the internship.",
+  "StudentTasks": "'- Tham gia thực tập với tinh thần nghiêm túc.\n\n- Thực hiện các công việc được giao từ đơn vị thực tập.\n\n- Tham gia các hoạt động liên quan tới công việc thực tập.\n\n- Hoàn thành các công việc đánh giá, báo cáo trong quá trình thực tập\n\nSeriously participate in the internship.\n\nPerform tasks assigned by the Internship Unit.\n\nParticipate in internship-related activities.\n\nComplete intership evaluation and internship report.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1286/QĐ-ĐHFPT dated 11/22/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/22/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Guideline for internship management\n\n(07.04PL - HDCV Quan ly thuc tap)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "Business survey on student interns\n\n(07.16BMĐHFE10- Khảo sát doanh nghiệp về sinh viên thực tập)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Evaluation of the students' OJT performance\n\n(Phiếu đánh giá sinh viên kỳ OJT)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Student survey on the internship\n\n(07.17BMĐHFE10- Khao sat sinh vien ve ky thuc tap)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Kiến thức và kỹ năng ngành. Sinh viên được củng cố và vận dụng kiến thức, kỹ năng đã học ở trường. Nắm bắt được các yếu tố bên trong và bên ngoài ảnh hưởng đến hoạt động kinh doanh của doanh nghiệp. Vận dụng linh hoạt các kiến thức và các công cụ đã học để thực hiện công việc được giao. (PLO8,9)\nProfessional knowledge and skills. Students can enhance and apply knowledge and skills that have been learned at university. Be able to understand the internal and external factors that affect the business activities of the enterprise. Flexibly apply the knowledge and tools that have been learned to perform assigned tasks. (PLO8,9)"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Kỹ năng mềm. Sinh viên hình thành kỹ năng giải quyết vấn đề, thực hành tư duy phản biện, thực hành sử dụng ngoại ngữ trong công việc. Có khả năng giao tiếp, khả năng làm việc nhóm, có tác phong phù hợp với môi trường doanh nghiệp. (PLO2,3)\nSoft skills. Students develop problem-solving skills, practice critical thinking and use foreign languages at work. Be able to communicate and work in teams, have a suitable style for the business environment. (PLO2,3)"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Thái độ, trách nhiệm và tự chủ. Sinh viên có nhận thức đúng đắn về nghề nghiệp, ý thức học tập và rèn luyện. Có thái độ làm việc nghiêm túc, tôn trọng văn hóa doanh nghiệp, tuân thủ các qui định, qui chế tại nơi làm việc. (PLO5,10)\nAttitude, responsibility and self-control. Students have proper awareness of profession, learning and training. Have a serious working attitude, respect organizational culture, comply with the regulations at the workplace. (PLO5,10)"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Kiến thức và kỹ năng chuyên môn / Professional knowledge and skills",
+   "on-going",
+   "1",
+   "40.0%",
+   "4",
+   "",
+   "LO1",
+   "",
+   "NA",
+   "",
+   "Doanh nghiệp thực hiện đánh giá câu hỏi về Kiến thức, kỹ năng ngành tại biểu mẫu ĐHFPT gửi\n\nThe enterprise evaluates students' Professional knowledge and skills based on the form of FPT University",
+   ""
+  ],
+  [
+   "2",
+   "Kỹ năng mềm / Soft skills",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "",
+   "LO2",
+   "",
+   "NA",
+   "",
+   "Doanh nghiệp thực hiện đánh giá câu hỏi về Kỹ năng mềm tại biểu mẫu ĐHFPT gửi\n\nThe enterprise evaluates students' Soft skills based on the form of FPT University",
+   ""
+  ],
+  [
+   "3",
+   "Thái độ / Attitude",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "",
+   "LO3",
+   "",
+   "NA",
+   "",
+   "Doanh nghiệp thực hiện đánh giá câu hỏi về Thái độ tại biểu mẫu ĐHFPT gửi\n\nThe enterprise evaluates students' Attitudes based on the form of FPT University",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Thực tập tuần 1\n\nOn-the-job training week 1",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "-Sinh viên đến doanh nghiệp nơi được bố trí thực tập\n\nStudents go to the internship unit\n\nSinh viên nhận và thực hiện nhiệm vụ tuần 1\n\nStudents receive and perform tasks of week 1\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "2",
+   "Thực tập tuần 2\n\nOn-the-job training week 2",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 2\n\nStudents receive and perform tasks of week 2\n\n'-Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "3",
+   "Thực tập tuần 3\n\nOn-the-job training week 3",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 3\n\nStudents receive and perform tasks of week 3\n\n'-Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "4",
+   "Thực tập tuần 4\n\nOn-the-job training week 4",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 4\n\nStudents receive and perform tasks of week 4\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "5",
+   "Thực tập tuần 5\n\nOn-the-job training week 5",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 5\n\nStudents receive and perform tasks of week 5\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "6",
+   "Thực tập tuần 6\n\nOn-the-job training week 6",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 6\n\nStudents receive and perform tasks of week 6\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "7",
+   "Thực tập tuần 7\n\nOn-the-job training week 7",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 7\n\nStudents receive and perform tasks of week 7\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "8",
+   "Thực tập tuần 8\n\nOn-the-job training week 8",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 8\n\nStudents receive and perform tasks of week 8\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "9",
+   "Thực tập tuần 9\n\nOn-the-job training week 9",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "'Sinh viên nhận và thực hiện nhiệm vụ tuần 9\n\nStudents receive and perform tasks of week 9\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "10",
+   "Thực tập tuần 10\n\nOn-the-job training week 10",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "- Ref [3]: Phiếu khảo sát sinh viên về kỳ thực tập\n\nRef [3]: Student survey on the internship\n\n'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "-Sinh viên điền phiếu đánh giá về kỳ thực tập\n\nStudents fill in the evaluation form about the internship period\n\n'Sinh viên nhận và thực hiện nhiệm vụ tuần 10\n\n'Students receive and perform tasks of week 10",
+   ""
+  ],
+  [
+   "11",
+   "Thực tập tuần 11\n\nOn-the-job training week 11",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "'Sinh viên nhận và thực hiện nhiệm vụ tuần 11\n\nStudents receive and perform tasks of week 11\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "12",
+   "Thực tập tuần 12\n\nOn-the-job training week 12",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 12\n\nStudents receive and perform tasks of week 12\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "13",
+   "Thực tập tuần 13\n\nOn-the-job training week 13",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "'Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "Sinh viên nhận và thực hiện nhiệm vụ tuần 13\n\nStudents receive and perform tasks of week 13\n\n'- Sinh viên feedback với cơ sở đào tạo về doanh nghiệp nếu có phát sinh vấn đề (hình thức linh hoạt).\n\nStudents give feedback to the training institution about the enterprise if there are problems (to be flexible).",
+   ""
+  ],
+  [
+   "14",
+   "Thực tập tuần 14\n\nOn-the-job training week 14",
+   "Offline",
+   "LO1, LO2, LO3",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên nhận và thực hiện nhiệm vụ tuần 14.\n\nStudents receive and perform tasks of week 14\n\nSinh viên kết thúc kỳ thực tập\n\nStudents finish the internship period",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

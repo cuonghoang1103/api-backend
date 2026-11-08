@@ -1,0 +1,325 @@
+{
+ "ma": "HOM301c",
+ "sylID": "12542",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12542",
+   "code": "HOM301c",
+   "name": "Hotel Revenue Management_Quản trị doanh thu khách sạn",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12542",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12542",
+  "Syllabus Name": "Hotel Revenue Management_Quản trị doanh thu khách sạn",
+  "Course Name English": "Hotel Revenue Management",
+  "Subject Code": "HOM301c",
+  "Learning-Teaching Method": "Online,Lecture,Project based learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Online: 58 hours+ 2 slots offline (optional)+109 hours self study",
+  "Pre-Requisite": "HMO101 or HMO102",
+  "Description": "This Specialization covers the basics of hotel demand management, distribution, and revenue management. You’ll learn how e-commerce intermediaries such as online travel agencies are impacting the already-complex hospitality sector, and you’ll explore tools and techniques that will help you effectively market hospitality services and maximize business revenue in this new global industry landscape. In the final Capstone Project, you’ll evaluate the importance of hotel branding in business success through a hands-on, real-world case study. During the sessions, you will hear from senior hotel industry executives commenting on distribution, revenue and demand management issues. We will also interview two leading Online Travel Agents on how to maximise online business for your property, and have partnered with Duetto and SnapShot, two leading hospitality industry companies, to gain access to cutting edge knowledge, thus insuring that the competencies that you gain will make you operational immediately as well as bang up to date on industry trends.\n\nNote: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.",
+  "StudentTasks": "Access the specialization on Coursera and complete all courses' requirements to earn a certificate of completion for the specialization, in order to be qualified for the Final Exam.",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/hotel-management",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Spec: Hotel Management: Distribution, Revenue and Demand Management Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/hotel-management-project",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 4: Hôtel “De l'étoile” - a hotel in crisis?"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/demandmanagement",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 3: Demand management: Breaking down today’s commercial silos"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/fundamentals-of-revenue-management",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 2: The Fundamentals of Revenue Management: The Cornerstone of Revenue Strategy"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/hotel-distribution",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 1: https://www.coursera.org/learn/hotel-distribution"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand how to manage an increasingly complex network of traditional and web based channels of hotel sector."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Provide a core understanding of the fundamentals of revenue management, which ties into the larger picture of revenue strategy."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the journey from long-term asset development through to short-term profit tactics and how commercial teams can align themselves throughout the organisation."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand how to apply the knowledge you have gained about distribution, revenue and demand management to a ‘real’ world case."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "LO1, LO2, LO3, LO4",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 3-4 questions.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course 1: The fundamentals of hotel distribution\n\nModule 1: Setting the scene\n\nLesson 1: MOOC introduction\n\nLesson 2: Historical evolution\n\nLesson 3: The hotel business value chain\n\nLesson 4: Franchise and Management agreements\n\nLesson 5: Growth and the value of branded hotel chains\n\nLesson 6: Hotels as economic units\n\nLesson 7: Introduction to revenue management\n\nLesson 8: Trends and challenges\n\nLesson 9: Wrap-up and conclusion\n\nModule 2: A deep dive into hotel distribution\n\nLesson 1: Why hotel distribution?\n\nLesson 2: The origins of hotel distribution\n\nLesson 3: The web revolution\n\nLesson 4: Working with the OTAs\n\nLesson 5: OTA Business Model\n\nLesson 6: The brand.com site\n\nLesson 7: The forgotten majority: traditional channels\n\nLesson 8: The distribution cost puzzle\n\nLesson 9: The true cost of brand.com\n\nLesson 10: The price parity paradox\n\nLesson 11: Magnificent Meta-Search\n\nLesson 12: Disruption in the market place?\n\nCourse Review - Offline (optional)",
+   "Online,Offline",
+   "LO1",
+   "IT",
+   "Course 1: The fundamentals of hotel distribution",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Participate in the offline class (optional)",
+   ""
+  ],
+  [
+   "2",
+   "Module 3: Direct distribution: the key to hotel success\nLesson 1: Introduction\nLesson 2: Deciding what you want\nLesson 3: Registering your domain name\nLesson 4: Content\nLesson 5: What is good hotel content?\nLesson 6: Creating your web pages\nLesson 7: Selecting a good hosting solution\nLesson 8: Introduction to online marketing\nLesson 9: Organic search engine marketing\nLesson 10: Paid search engine marketing\nLesson 11: Email Marketing\nLesson 12: Display Advertising\nLesson 13: Affiliate marketing\nLesson 14: Social Media Marketing\nLesson 15: Using Analytics for customer insight\nLesson 16: Wrap-up and conclusion",
+   "Online",
+   "LO1",
+   "T",
+   "Course 1: The fundamentals of hotel distribution",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "3",
+   "Module 4: How to manage your OTA\nLesson 1: Working With Online Travel Agents\nLesson 2: Why OTA's?\nLesson 3: Reach\nLesson 4: The Billboard Effectt\nLesson 5: Pay-per-Performance\nLesson 6: Reactivity\nLesson 7: Market Information\nLesson 8: Introduction\nLesson 9: Photos\nLesson 10: Content\nLesson 11: User Reviews\nLesson 12: Competitive Rates\nLesson 13: Manage Availability\nLesson 14: How should a hotel work with Expedia?\nLesson 15: How should a hotel work with Booking.com?\nLesson 16: Conclusion",
+   "Online",
+   "LO1",
+   "T",
+   "Course 1: The fundamentals of hotel distribution",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "4",
+   "Course 2: The Fundamentals of Revenue Management: The Cornerstone of Revenue Strategy\n\nModule 1: Getting Started with Revenue Management\nLesson 1: Welcome back!\nLesson 2: Fundamentals of Revenue Management: The Cornerstone of Revenue Strategy\nLesson 3: EDC and the importance of Revenue Management\nLesson 4: History of Revenue Management\nLesson 5: Shift in consumer behavior\nLesson 6: Overview of Revenue Management\nLesson 7: Introduction to Segmentation\nLesson 8: Introduction to Forecasting and Budgeting\nLesson 9: Introduction to Pricing\nLesson 10: How Revenue Management can increase Bottom line\nLesson 11: Effective Yielding",
+   "Online",
+   "LO2",
+   "T",
+   "Course 2: The Fundamentals of Revenue Management: The Cornerstone of Revenue Strategy",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "5",
+   "Module 2: Introduction to Segmentation\nLesson 1: Overview of Segmentation\nLesson 2: What is Segmentation?\nLesson 3: Evolution in Segmentation1\nLesson 4: Evolution in Segmentation2\nLesson 5: Types of Segmentation\nLesson 6: Strategic Segmentation\nLesson 7: Considerations of Determining Segmentation\nLesson 8: Re-segmentation Process\nLesson 9: Industry Best Practices\nModule 3: Introduction to Forecasting & Budgeting\nLesson 1: Introduction to forecasting and budgeting\nLesson 2:Basic terminology\nLesson 3: What is Forecasting?\nLesson 4: Why Forecast?\nLesson 5: Start with Reservation and Market Data\nLesson 6: Competitor Pricing & Online Review Data\nLesson 7: Air Traffic and Weather Data\nLesson 8: Revenue System vs Excel\nLesson 9: Evaluating Forecast accuracy\nLesson 10: Budgeting\nLesson 11: Best Practices",
+   "Online",
+   "LO2",
+   "T",
+   "Course 2: The Fundamentals of Revenue Management: The Cornerstone of Revenue Strategy",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "6",
+   "Module 4:Introduction to Pricing\nLesson 1: Overview and Basic Vocabulary\nLesson 2: Hotel Pricing Strategies\nLesson 3: How to increase Rates\nLesson 4: Seven most common Pricing mistakes\nLesson 5: BAR vs Open Pricing\nLesson 6: Revenue Strategy: key to optimizing profit\nLesson 7: Conclusion",
+   "Online",
+   "LO2",
+   "T",
+   "Course 2: The Fundamentals of Revenue Management: The Cornerstone of Revenue Strategy",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "7",
+   "Course 3: Demand management: Breaking down today’s commercial silos\n\nModule 1: Asset Management\nLesson 1: Welcome back!\nLesson 2: Introduction\nLesson 3: Introduction\nLesson 4: The Asset Management Triangle\nLesson 5: Development and Planning\nLesson 6: Types of Management\nLesson 7:Construction and (Pre)opening\nLesson 8: Operation and Asset Management and Budgeting\nLesson 9: Asset Cycle\nLesson 10: Valuation\nLesson 11: Exit Strategy\nLesson 12: Conclusion\nLesson 13: Q&A",
+   "Online",
+   "LO3",
+   "T",
+   "Course 3: Demand management: Breaking down today’s commercial silos",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "8",
+   "Module 2: Demand Generation\n\nLesson 1: Introduction\n\nLesson 2: Product Offering\n\nLesson 3: Price Value Theory\n\nLesson 4: Segmentation\n\nLesson 5: Creating a Pricing Strategy\n\nLesson 6: Pricing by Segment\n\nLesson 7: Business Mix\n\nLesson 8: Technology and Distribution\n\nLesson 9: Cost of Distribution and Acquisition\n\nLesson 10: Conclusion\n\nLesson 11: Q&A",
+   "Online",
+   "LO3",
+   "T",
+   "Course 3: Demand management: Breaking down today’s commercial silos",
+   "",
+   "Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "9",
+   "Module 3: Online Marketing\n\nLesson 1: Introduction\n\nLesson 2: The customer journey\n\nLesson 3: Make the hotel stand out\n\nLesson 4: Capture the visitors on your website\n\nLesson 5: Emotion\n\nLesson 6: Navigation and Reviews\n\nLesson 7: Third party and intermediary optimization: OTAs\n\nLesson 8: Third party and intermediary optimization: other channels of distribution\n\nLesson 9: The Net Contribution Approach\n\nLesson 10: Advertising Attribution Model\n\nLesson 11: Q&A\n\nModule 4: Revenue Management\n\nLesson 1: Introduction\n\nLesson 2: Why is Revenue Management Important?\n\nLesson 3:Revenue Management Bingo\n\nLesson 4: Demand Optimization\n\nLesson 5: Data Collection and Aggregation\n\nLesson 6: Analysis I: Benchmarking\n\nLesson 7: Analysis II: Booking Curves\n\nLesson 8: Analysis: Forecasting\n\nLesson 9: Decisions\n\nLesson 10: Profit Decision Making\n\nLesson 11: Conclusion\n\nLesson 12: Q&A\n\nLesson 13: Conclusion\n\nLesson 14: Wrap-Up",
+   "Online",
+   "LO3",
+   "T",
+   "Course 3: Demand management: Breaking down today’s commercial silos",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "10",
+   "Course 4: Hôtel “De l'étoile” - a hotel in crisis?\n\nModule 1: Situational analysis\nLesson 1: Introduction to the capstone project: Peter O'Connor\nLesson 2: Situational Analysis: Peter O'Connor\nLesson 3: First Interview with Greg Sayer, Owner of the hotel\nLesson 4: Interview with Gabriella Bidewell, General Manager\nLesson 5: Discussion between Sally Smith and Fred Adam, Revenue Mangers\nLesson 6: Set up by Peter O'Connor and reaction from the owner of the hotel about this analysis",
+   "Online",
+   "LO4",
+   "T",
+   "Course 4: Hôtel “De l'étoile” - a hotel in crisis?",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the project",
+   ""
+  ],
+  [
+   "11",
+   "Module 2: Questionning the brand?\nLesson 1: Reaction of the owner about your analysis of the brand and presentation of the possible options by Peter O'Connor\nModule 3: Recommendations to the board Family\nLesson 1: Implement your idea operationally:Peter O'Connor",
+   "Online",
+   "LO4",
+   "T",
+   "Course 4: Hôtel “De l'étoile” - a hotel in crisis?",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the project",
+   ""
+  ],
+  [
+   "12",
+   "Module 4: Implementation of the strategy\n\nLesson 1: Wrap up: Peter O'Connor\n\nReview - Offline (optional)\n\nDeadline of Coursera completion: End of Friday of the week",
+   "Online,Offline",
+   "LO4",
+   "T",
+   "Course 4: Hôtel “De l'étoile” - a hotel in crisis?",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the project\n\n- Review - Offline (optional)\n\n- Deadline of Coursera completion: End of Friday of the week",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

@@ -1,0 +1,1310 @@
+{
+ "ma": "IBI101",
+ "sylID": "13459",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13459",
+   "code": "IBI101",
+   "name": "Introduction to International Business_Nhập môn kinh doanh quốc tế",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13459",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13459",
+  "Syllabus Name": "Introduction to International Business_Nhập môn kinh doanh quốc tế",
+  "Course Name English": "Introduction to International Business",
+  "Subject Code": "IBI101",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Introduction to International Business is designed to equip students with a comprehensive understanding of the fundamental principles and practices of conducting business in a globalized economy. It explores the dynamic interplay of socio-cultural, economic, technological, and political-legal factors that shape the international business environment. Students will gain insights into the strategies and techniques for entering and operating in foreign markets, including trade policies, global supply chains, and cross-border management. A key feature of this course is the integration of artificial intelligence (AI) tools and applications, enabling students to analyze international market trends, optimize decision-making processes, and develop innovative solutions to real-world business challenges. By the end of the course, students will be prepared to navigate the complexities of international business with a forward-thinking, technology-driven approach.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (www.flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "Websites:\n\nhttp://globaledge.msu.edu/\n\nwww.doingbusiness.org\n\nhttps://www.weforum.org/\n\nhttp://www.tradeport.org/index.php\n\nwww.myownbusiness.org/s13/index.html\n\nwww.wto.org",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "International Business - Competing in the Global Marketplace Global",
+   "Charles W. L. Hill",
+   "McGraw-Hill",
+   "2022",
+   "14th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/ai-for-everyone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/introduction-to-ai",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "https://www.coursera.org/specializations/ai-foundations-for-everyone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Recognize the key issues of globalization, and the national differences in political, economic, legal systems and culture"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate understanding about the ethical, corporate social responsibility, and sustainability faced by international business, and explaination how global managers can incorporate such issues into their decision making"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Demonstrate understanding about the global trade and investment environment in which international business occurs"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Describe characteristics of the foreign exchange market, different theories relating to exchange rate and how to manage foreign exchange risks"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify the different global strategies and entry modes that firms use to compete in the global marketplace"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Explain how firms can perform their key functions including global production, global supply chain management, global marketing, global research and development to compete and succeed in the international business environment"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Evaluate external environment of a specific foreign market"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Propose the suitable entry mode for a specific company to enter foreign market."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Demonstrate attitude to adapt to differences and complex issues in doing international business"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Apply AI to analyze global market trends and consumer sentiment, optimize solutions, and critically address bias, risks, and ethical responsibilities."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "in class, by instructor",
+   "Participation grade will be given based on students' preparation, and extent of their performance in taking part in the in-class activities."
+  ],
+  [
+   "2",
+   "Group Presentation",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "* The whole class is divided into groups from 4 to 6 students. * Each group is assigned by the lecturer to do a topic.* Each group will deliver their presentation in front of the class in 45 minutes (including Q&A and evaluation of lecturer)Time: 45'/group",
+   "",
+   "* The lecturer can select topic(s) in any chapter in the course. * The assignment should require the students to demonstrate their acquainted knowledge which student obtained in the delivered chapters, and their ability to apply such knowledge in giving recommendations/proposal.",
+   "in class, by instructor",
+   "The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "3",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "40'",
+   "CLO1, CLO2",
+   "Multiple choicesMarked by Computer or a suitable format",
+   "40",
+   "Cover Chapter 1, 2, 3, 4, 5",
+   "in class, by instructor",
+   ""
+  ],
+  [
+   "4",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "40'",
+   "CLO3, CLO4",
+   "Multiple choicesMarked by Computer or a suitable format",
+   "40",
+   "Cover Chapter 7, 8, 9, 10",
+   "in class, by instructor",
+   ""
+  ],
+  [
+   "5",
+   "Progress Test 3",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "40'",
+   "CLO5, CLO6",
+   "Multiple choicesMarked by Computer or a suitable format",
+   "40",
+   "Cover Chapter 13, 15, 17, 18",
+   "in class, by instructor",
+   ""
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "by exam board,\n\nusing computer",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction\n\nChapter 1. Globalization",
+   "Offline",
+   "LO1",
+   "IT",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch1",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   "link"
+  ],
+  [
+   "2",
+   "Introduction\n\nChapter 1. Globalization (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101_AI Integration Guide_FA25",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1. Globalization (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1. Globalization (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2. National Differences in Political, Economic, and Legal Systems",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch2",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2. National Differences in Political, Economic, and Legal Systems (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3. National Differences in Economic Development",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch3",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3. National Differences in Economic Development (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 4. Differences in Culture",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch4",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4. Differences in Culture (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4. Differences in Culture (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4. Differences in Culture (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5. Ethics, Corporate Social Responsibility and Sustainability",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch5",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5. Ethics, Corporate Social Responsibility and Sustainability (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5. Ethics, Corporate Social Responsibility and Sustainability (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 5. Ethics, Corporate Social Responsibility and Sustainability (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "17",
+   "Review Chapter 1, 2, 3, 4, 5",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Review knowledge in previous chapters",
+   ""
+  ],
+  [
+   "18",
+   "Progress Test 1",
+   "Offline",
+   "LO1, 2",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 7: Government Policy and International trade",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch7",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 7: Government Policy and International trade (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 7: Government Policy and International trade (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 7: Government Policy and International trade (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 8: Foreign Direct Investment",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch8",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 8: Foreign Direct Investment (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 8: Foreign Direct Investment (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8: Foreign Direct Investment (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 9: Regional Economic Integration",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch9",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 9: Regional Economic Integration (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 9: Regional Economic Integration (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 9: Regional Economic Integration (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 10. The Foreign Exchange Market",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch10",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 10. The Foreign Exchange Market (cont)",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10. The Foreign Exchange Market (cont)",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 10. The Foreign Exchange Market (cont)",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "35",
+   "Review Chapter 7, 8, 9, 10",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Review knowledge in previous chapters",
+   ""
+  ],
+  [
+   "36",
+   "Review and Progress Test 2",
+   "Offline",
+   "LO3, LO4",
+   "T, U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 13: The Strategy of International Business",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch13",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 13: The Strategy of International Business (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 13: The Strategy of International Business (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 13: The Strategy of International Business (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Give presentation on a specific topic in the chapter\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 15. Entering Developed and Emerging Markets",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch15",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 15. Entering Developed and Emerging Markets (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 15. Entering Developed and Emerging Markets (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 15. Entering Developed and Emerging Markets (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 17: Global Production and Supply Chain Management",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch17",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 17: Global Production and Supply Chain Management (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 17: Global Production and Supply Chain Management (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 17: Global Production and Supply Chain Management (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read materials for further understanding\n\n* Do in-lesson quizzes\n\n* Discuss key concepts",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 18. Global Marketing and Business Analytics",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "IBI101ch18",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 18. Global Marketing and Business Analytics (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 18. Global Marketing and Business Analytics (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 18. Global Marketing and Business Analytics (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Textbooks, PPT presentation, and other resources",
+   "",
+   "* Read case study and discuss related questions\n\n* Do in-lesson quizzes",
+   ""
+  ],
+  [
+   "53",
+   "Review Chapter 13, 15, 17, 18",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Review knowledge in previous chapters",
+   ""
+  ],
+  [
+   "54",
+   "Progress Test 3",
+   "Offline",
+   "LO5, 6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "55",
+   "Group presentation",
+   "Offline",
+   "LO1, 5, 7, 8, 9,10",
+   "U",
+   "",
+   "",
+   "* Giving presentation on the topic assigned by the lecture before\n\n* Q&A session",
+   ""
+  ],
+  [
+   "56",
+   "Group presentation",
+   "Offline",
+   "LO1, 5, 7, 8, 9,10",
+   "U",
+   "",
+   "",
+   "* Giving presentation on the topic assigned by the lecture before\n\n* Q&A session",
+   ""
+  ],
+  [
+   "57",
+   "Group presentation",
+   "Offline",
+   "LO1, 5, 7, 8, 9,10",
+   "U",
+   "",
+   "",
+   "* Giving presentation on the topic assigned by the lecture before\n\n* Q&A session",
+   ""
+  ],
+  [
+   "58",
+   "Group presentation",
+   "Offline",
+   "LO1, 5, 7, 8, 9,10",
+   "U",
+   "",
+   "",
+   "* Giving presentation on the topic assigned by the lecture before\n\n* Q&A session",
+   ""
+  ],
+  [
+   "59",
+   "Group presentation",
+   "Offline",
+   "LO1, 5, 7, 8, 9,10",
+   "U",
+   "",
+   "",
+   "* Giving presentation on the topic assigned by the lecture before\n\n* Q&A session",
+   ""
+  ],
+  [
+   "60",
+   "Group presentation",
+   "Offline",
+   "LO1, 5, 7, 8, 9,10",
+   "U",
+   "",
+   "",
+   "* Giving presentation on the topic assigned by the lecture before\n\n* Q&A session",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT1.1",
+   "Why Do We Need Global Institutions?"
+  ],
+  [
+   "2",
+   "2",
+   "CT1.2",
+   "What Does Globalization Mean For Firms?"
+  ],
+  [
+   "3",
+   "2",
+   "CT1.3",
+   "What Is A Multinational Enterprise?"
+  ],
+  [
+   "4",
+   "3",
+   "CT1.4",
+   "How Does Globalization Affect Jobs And Income?"
+  ],
+  [
+   "5",
+   "3",
+   "CT1.5",
+   "How Is Globalization Affecting The World’s Poor?"
+  ],
+  [
+   "6",
+   "4",
+   "CT2.1",
+   "How Does The Global Marketplace Affect Managers?"
+  ],
+  [
+   "7",
+   "5",
+   "CT2.2",
+   "Explain how Collectivism vs. Individualism"
+  ],
+  [
+   "8",
+   "5",
+   "CT2.3",
+   "What are 4 forms of totalitarianism?"
+  ],
+  [
+   "9",
+   "6",
+   "CT2.4",
+   "What are 3 main legal systems?"
+  ],
+  [
+   "10",
+   "7",
+   "CT3.1",
+   "What Determines A Country’s Level Of Economic Development?"
+  ],
+  [
+   "11",
+   "8",
+   "CT3.2",
+   "What Does The Changing Economy Mean For Managers?"
+  ],
+  [
+   "12",
+   "8",
+   "CT3.3",
+   "What Is The Nature Of Economic Transformation?"
+  ],
+  [
+   "13",
+   "9",
+   "CT3.3",
+   "How Are Culture, Society, And The Nation-State Related?"
+  ],
+  [
+   "14",
+   "10",
+   "CT4.1",
+   "What are the determinants of Culture?"
+  ],
+  [
+   "15",
+   "10",
+   "CT4.2",
+   "Differences between caste system and class system?"
+  ],
+  [
+   "16",
+   "11",
+   "CT4.3",
+   "How Does Culture Impact The Workplace?"
+  ],
+  [
+   "17",
+   "11",
+   "CT4.4",
+   "What are the elements of Hofstede’s dimensions of culture?"
+  ],
+  [
+   "18",
+   "12",
+   "CT4.5",
+   "What Do Cultural Differences Mean For Managers?"
+  ],
+  [
+   "19",
+   "13",
+   "CT5.1",
+   "Which Ethical Issues Are Most Relevant To International Firms?"
+  ],
+  [
+   "20",
+   "14",
+   "CT5.2",
+   "How Are Ethics Relevant To Environmental Regulations?"
+  ],
+  [
+   "21",
+   "15",
+   "CT5.3",
+   "Why do managers behave unethically?"
+  ],
+  [
+   "22",
+   "15",
+   "CT5.4",
+   "What are the differences among 6 philosophical approaches to ethics?"
+  ],
+  [
+   "23",
+   "16",
+   "CT6.1",
+   "What Are The Straw Men Approaches To Business Ethics?"
+  ],
+  [
+   "24",
+   "19",
+   "CT7.1",
+   "What are the instruments of trade policy?"
+  ],
+  [
+   "25",
+   "19",
+   "CT7.2",
+   "What are the differences between Import Quotas and Voluntary Export Restraints?"
+  ],
+  [
+   "26",
+   "20",
+   "CT7.3",
+   "Why does governments sometimes intervene in international trade?"
+  ],
+  [
+   "27",
+   "21",
+   "CT7.4",
+   "When Should Governments Avoid Using Trade Barriers?"
+  ],
+  [
+   "28",
+   "22",
+   "CT8.1",
+   "What Do Trade Barriers Mean For Managers?"
+  ],
+  [
+   "29",
+   "23",
+   "CT8.2",
+   "What Are The Patterns Of FDI?"
+  ],
+  [
+   "30",
+   "23",
+   "CT8.3",
+   "How Does FDI Benefit\nThe Host Country?"
+  ],
+  [
+   "31",
+   "24",
+   "CT8.4",
+   "How Does FDI Benefit\nThe Home Country?"
+  ],
+  [
+   "32",
+   "25",
+   "CT9.1",
+   "How Does Government\nInfluence FDI?"
+  ],
+  [
+   "33",
+   "26",
+   "CT9.2",
+   "How Do International\nInstitutions Influence FDI?"
+  ],
+  [
+   "34",
+   "27",
+   "CT9.3",
+   "What are 5 levels of Regional Economic Integration? Give example for each level"
+  ],
+  [
+   "35",
+   "28",
+   "CT10.1",
+   "What Limits Efforts At Integration?"
+  ],
+  [
+   "36",
+   "29",
+   "CT10.2",
+   "Why are countries in favor of Regional Integration?"
+  ],
+  [
+   "37",
+   "29",
+   "CT10.3",
+   "What Is The European Union?"
+  ],
+  [
+   "38",
+   "30",
+   "CT10.4",
+   "What Is The Andean Community?"
+  ],
+  [
+   "39",
+   "31",
+   "CT11.1",
+   "What are the 2 strategies to reduce translation and transaction exposure?"
+  ],
+  [
+   "40",
+   "32",
+   "CT11.2",
+   "What are the 2 strategies to reduce translation and transaction exposure?"
+  ],
+  [
+   "41",
+   "33",
+   "CT11.3",
+   "How do businesses insuring against foreign exchange risk?"
+  ],
+  [
+   "42",
+   "37",
+   "CT13.1",
+   "How Can Firms Increase Profits Through International Expansion?"
+  ],
+  [
+   "43",
+   "37",
+   "CT13.2",
+   "How Can Firms Leverage Their Products And Competencies?"
+  ],
+  [
+   "44",
+   "38",
+   "CT13.3",
+   "What are 5 causes regarding pressures for local responsiveness?"
+  ],
+  [
+   "45",
+   "39",
+   "CT13.4",
+   "What are 4 strategies to compete in the international markets?"
+  ],
+  [
+   "46",
+   "40",
+   "CT14.1",
+   "How Does Strategy Evolve?"
+  ],
+  [
+   "47",
+   "41",
+   "CT14.2",
+   "Which foreign markets should firms enter? Why?"
+  ],
+  [
+   "48",
+   "42",
+   "CT14.3",
+   "What are the pros and cons of licensing and franchising?"
+  ],
+  [
+   "49",
+   "43",
+   "CT15.1",
+   "Which is better between greenfield venture and M&A?"
+  ],
+  [
+   "50",
+   "44",
+   "CT15.2",
+   "What makes strategics alliances successful?"
+  ],
+  [
+   "51",
+   "45",
+   "CT15.3",
+   "Why Are Technological Factors Important?"
+  ],
+  [
+   "52",
+   "46",
+   "CT16.1",
+   "What Is The Strategic Role Of Foreign Factories?"
+  ],
+  [
+   "53",
+   "47",
+   "CT16.2",
+   "What are the differences between supply chain & logistics? What is reserve logistics?"
+  ],
+  [
+   "54",
+   "48",
+   "CT16.3",
+   "What are the differences between Just in time & Just in case inventory?"
+  ],
+  [
+   "55",
+   "49",
+   "CT17.1",
+   "Which Distribution Strategy Should A Firm Choose?"
+  ],
+  [
+   "56",
+   "50",
+   "CT17.2",
+   "Explain the differences between Fragmented retail system & Concentrated retail system"
+  ],
+  [
+   "57",
+   "51",
+   "CT17.3",
+   "Explain Push vs. Pull Strategies."
+  ]
+ ],
+ "links": [
+  "/download/9127/S/1_IBI101ch1.zip",
+  "https://feedu-my.sharepoint.com/:f:/g/personal/thuytt5_fe_edu_vn/ErPtkyPfv_lJp2I0W9JgrFwBSq3WEC_lTvNCzQSiQsr6_A?e=z0IfWG",
+  "/download/13456/S/2_IBI101_AI Integration Guide_FA25.zip",
+  "/download/9127/S/5_IBI101ch2.zip",
+  "/download/9127/S/7_IBI101ch3.zip",
+  "/download/9127/S/9_IBI101ch4.zip",
+  "/download/9127/S/13_IBI101ch5.zip",
+  "/download/9127/S/19_IBI101ch7.zip",
+  "/download/9127/S/23_IBI101ch8.zip",
+  "/download/9127/S/27_IBI101ch9.zip",
+  "/download/9127/S/31_IBI101ch10.zip",
+  "/download/9127/S/37_IBI101ch13.zip",
+  "/download/9127/S/41_IBI101ch15.zip",
+  "/download/9127/S/45_IBI101ch17.zip",
+  "/download/9127/S/49_IBI101ch18.zip"
+ ]
+}

@@ -1,0 +1,1471 @@
+{
+ "ma": "IAP301",
+ "sylID": "11198",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11198",
+   "code": "IAP301",
+   "name": "Policy Development in Information Assurance_Phát triển chính sách ATTT",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11198",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11198",
+  "Syllabus Name": "Policy Development in Information Assurance_Phát triển chính sách ATTT",
+  "Course Name English": "Policy Development in Information Assurance",
+  "Subject Code": "IAP301",
+  "Learning-Teaching Method": "Lecture,Active learning,Social Constructivism,Practice, Discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "IAA202",
+  "Description": "This course delivers a logical sequence of discussions about major concepts and issues related to information assurance policy implementation. Organizational objectives,, threats, risk mitigation and cost-benefit analysis will be explored. The student will utilize industry accepted methodologies to create practical security policy that will communicate the organization’s asset protection objectives.",
+  "StudentTasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Students are responsible to do all exercises, assignments and labs given by instructor in class or at home and submit in time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FPTU LMS at https://flm.fpt.edu.vn/",
+  "Tools": "Internet access, MS Office 2007 or higher, Adobe PDF reader.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Security Policies and Implementation Issues\n\n(online: http://library.books24x7.com/toc.aspx?bookid=69823)",
+   "Rob Johnson",
+   "Jones and Bartlett Learnin",
+   "2015",
+   "2nd",
+   "9781284055993",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "https://jblcourses.com/moodle/course_01.html,\n\nhttps://is4550at077.foliotek.me/home",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Computer Security Handbook",
+   "Seymour Bosworth, M.E. Kabay, Eric Whyne",
+   "John Wiley & Sons",
+   "2014",
+   "6th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Protecting Controlled Unclassified Information in Nonfederal Systems and Organizations",
+   "Ron Ross, Patrick Viscuso, Gary Guissanie, Kelley Dempsey, Mark Riddle",
+   "NIST Special Publication",
+   "2016",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Information Security Policy Development for Compliance: ISO/IEC 27001, NIST SP 800-53, HIPAA Standard, PCI DSS V2.0, and AUP V5.0",
+   "Barry L. Williams",
+   "CRC Press",
+   "2013",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Identify the role of an ISS (Information Systems Security) policy framework in overcoming business challenges."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyze how security policies help mitigate risks and support business processes in various domains in the IT infrastructure."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Describe the components and basic requirements for creating a security policy framework."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Describe the different methods, roles, responsibilities, and accountabilities of personnel, along with the governance and compliance of security policy framework."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Describe the different ISS policies associated with the User Domain."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Describe the different ISS policies associated with the IT infrastructure."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Describe the different ISS policies associated with risk management."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Describe the different ISS policies associated with IRTs (Incident Response Teams)."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Describe different issues related to implementing and enforcing ISS policies."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Describe the different issues related to defining, tracking, monitoring, reporting, automating, and organizing compliance systems and emerging technologies."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Presentation",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Option 1: 15’-20’/each Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: practical exercise Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Team-present a topic chosen among 10 Discussions and Assignments",
+   ""
+  ],
+  [
+   "2",
+   "Lab",
+   "on-going",
+   "10",
+   "30.0%",
+   "4",
+   "Option 1: 60-90' Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: practical exercises Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: N/A; Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "technical aspect of studied topics",
+   "Guided by instructor\n\n- 10 Labs are arranged relevant to the chapter theory\n\n- Student must finish labs and submit the results to the lecturer in class.\n\n- An average point of all labs could be evaluated and published to students at the end of the semester",
+   ""
+  ],
+  [
+   "3",
+   "Midterm Progress Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: 30'-40' Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: Multiple choices Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 20-25 Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "cover Lectures 1-5",
+   "in class, by instructor",
+   "Instruction and schedules for Progress Test must be presented in the Course Implementation Plan approved by director of the campus.\n\nThe test must be taken right after the last lectures of required material.\n\nInstructor has responsibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Participation in Discussions",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "N/A",
+   "",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "Multiple choices\n\nMarked by Computer",
+   "40-50",
+   "concepts, algorithms;\n\nall studied Chapters",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Lecture 1. Information Assurance Policy Management\n\n- ISS and information assurance in organizations\n\n- ISS policies and their importance in organizations\n\n- Four information security controls",
+   "Offline",
+   "LO1",
+   "T",
+   "Syllabus\n\nChapters 1, 2, 3\n\nSlide and Lecture Note\n\nLabs Requirement",
+   "mat1",
+   "Explain Labs, Assignment and Group Presentation Requirements\n\nRead Chapters 1-3\n\nStudy and Review Lecture 1",
+   ""
+  ],
+  [
+   "2",
+   "Lecture 1. Information Assurance Policy Management (cont)\n\n- Business drivers that create the need for ISS policy framework\n\n- U.S. compliancy laws and industry standards",
+   "Offline",
+   "LO1",
+   "T",
+   "Syllabus\n\nChapters 1, 2, 3\n\nSlide and Lecture Note\n\nLabs Requirement",
+   "mat2",
+   "Explain Labs, Assignment and Group Presentation Requirements\n\nRead Chapters 1-3\n\nStudy and Review Lecture 1",
+   ""
+  ],
+  [
+   "3",
+   "Discussion 1: Importance of Security Policies",
+   "Offline",
+   "LO1",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "mat3",
+   "Discuss themes for the Group Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "4",
+   "Assignment 1: Security Policies Overcoming Business Challenges",
+   "Offline",
+   "LO1",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "mat4",
+   "Discuss themes for the Group Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "5",
+   "Lab 1: Craft an Organization-Wide Security Management Policy for Acceptable Use",
+   "Offline",
+   "LO1",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 1",
+   ""
+  ],
+  [
+   "6",
+   "Lab 1: Craft an Organization-Wide Security Management Policy for Acceptable Use (cont)",
+   "Offline",
+   "LO1",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 2",
+   ""
+  ],
+  [
+   "7",
+   "Lecture 2. Risk Mitigation and Business Support Processes\n\n- Business challenges in each IT domain\n\n- Risk mitigation in seven IT domains\n\n- Organizational hurdles to policy implementation",
+   "Offline",
+   "LO2",
+   "T",
+   "Chapters 4, 5\n\nSlide and Lecture Note",
+   "",
+   "Read Chapters 4-5\n\nStudy and Review Lecture 2",
+   ""
+  ],
+  [
+   "8",
+   "Lecture 2. Risk Mitigation and Business Support Processes\n\n- Policy implementation issues related to humans in the workplace\n\n- Executive management",
+   "Offline",
+   "LO2",
+   "T",
+   "Chapters 4, 5\n\nSlide and Lecture Note",
+   "",
+   "Read Chapters 4-5\n\nStudy and Review Lecture 3",
+   ""
+  ],
+  [
+   "9",
+   "Discussion 2: Risk Mitigation",
+   "Offline",
+   "LO2",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Discuss and form Teams with Leaders for the Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "10",
+   "Assignment 2: Good Policy Implementation",
+   "Offline",
+   "LO2",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Discuss and form Teams with Leaders for the Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "11",
+   "Assignment 2: Good Policy Implementation (cont)",
+   "Offline",
+   "LO2",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Discuss and form Teams with Leaders for the Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "12",
+   "Assigned Reading (or a Guest Speaker): - How will Brexit affect the cyber-security industry in UK and Europe?\n\n- The Social Dilemma of Self-Driving Cars\n\n- ISO/IEC27001 for Mobile Devices, Access Controls",
+   "Offline",
+   "LO2",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Discuss and form Teams with Leaders for the Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "13",
+   "Lab 2: Develop an Organization-Wide Policy Framework Implementation Plan",
+   "Offline",
+   "LO2",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 2",
+   ""
+  ],
+  [
+   "14",
+   "Lab 2: Develop an Organization-Wide Policy Framework Implementation Plan (cont)",
+   "Offline",
+   "LO2",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 3",
+   ""
+  ],
+  [
+   "15",
+   "Lecture 3. Policies, Standards, Procedures, and Guidelines\n\n- Key building blocks of security policy framework\n\n- Types of documents for a security policy framework",
+   "Offline",
+   "LO3",
+   "T",
+   "Chapters 6, 7, ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapters 6, 7, ref.[3]\n\nStudy and Review Lecture 3",
+   ""
+  ],
+  [
+   "16",
+   "Lecture 3. Policies, Standards, Procedures, and Guidelines\n\n- Information systems security (ISS) and information assurance considerations\n\n- Process to create a security policy framework\n\n- Best practices for policy management and maintenance",
+   "Offline",
+   "LO3",
+   "T",
+   "Chapters 6, 7, ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapters 6, 7, ref.[3]\n\nStudy and Review Lecture 4",
+   ""
+  ],
+  [
+   "17",
+   "Discussion 3: Business Considerations",
+   "Offline",
+   "LO3",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Review Assignment",
+   ""
+  ],
+  [
+   "18",
+   "Assignment 3: Security Policy Frameworks",
+   "Offline",
+   "LO3",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Review Assignment",
+   ""
+  ],
+  [
+   "19",
+   "Lab 3: Define an Information Systems Security Policy Framework for an IT Infrastructure",
+   "Offline",
+   "LO3",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 3",
+   ""
+  ],
+  [
+   "20",
+   "Lab 3: Define an Information Systems Security Policy Framework for an IT Infrastructure",
+   "Offline",
+   "LO3",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 4",
+   ""
+  ],
+  [
+   "21",
+   "Lecture 4. Information Systems Security Policy Framework\n\n- Different methods and best practices for approaching a security policy framework\n\n- Importance of defining roles, responsibilities, and accountability for personnel",
+   "Offline",
+   "LO4",
+   "T",
+   "Chapter 8 and ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapter 8 and ref.[3]\n\nStudy and Review Lecture 4",
+   ""
+  ],
+  [
+   "22",
+   "Lecture 4. Information Systems Security Policy Framework\n\n- Separation of duties (SOD)\n\n- Importance of governance and compliance",
+   "Offline",
+   "LO4",
+   "T",
+   "Chapter 8 and ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapter 8 and ref.[3]\n\nStudy and Review Lecture 5",
+   ""
+  ],
+  [
+   "23",
+   "Discussion 4: Separation of Duties (SOD)",
+   "Offline",
+   "LO4",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Review Assignment",
+   ""
+  ],
+  [
+   "24",
+   "Assignment 4: Security Policy Creation",
+   "Offline",
+   "LO4",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Review Assignment",
+   ""
+  ],
+  [
+   "25",
+   "Lab 4: Craft a Layered Security Management Policy - Separation of Duties",
+   "Offline",
+   "LO4",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 4",
+   ""
+  ],
+  [
+   "26",
+   "Lab 4: Craft a Layered Security Management Policy - Separation of Duties (cont)",
+   "Offline",
+   "LO4",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 5",
+   ""
+  ],
+  [
+   "27",
+   "Lecture 5. User Policies\n\n- Reasons for governing users with policies\n\nRegular and privileged users\n\n- Acceptable use policy (AUP) and privileged-level access agreement (PAA)",
+   "Offline",
+   "LO5",
+   "T",
+   "Chapter 9 and ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapter 9 and ref.[3]\n\nStudy and Review Lecture 5",
+   ""
+  ],
+  [
+   "28",
+   "Lecture 5. User Policies\n\n- Security awareness policy (SAP)\n\nDifferences between public and private user domain policies",
+   "Offline",
+   "LO5",
+   "T",
+   "Chapter 9 and ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapter 9 and ref.[3]\n\nStudy and Review Lecture 6",
+   ""
+  ],
+  [
+   "29",
+   "Discussion 5: Best Practices for User Policies",
+   "Offline",
+   "LO5",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Discuss and choose themes for the Group Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "30",
+   "Assignment 5: Create User Policy\n\nAssigned Reading: - Ultrasound theft results in data breach at health care company Kaiser Permanente, Second Circuit rules in favor of Microsoft, gov't can't force access to email on Irish server (SC Magazine, July 2016)\n\n- Office of Budget and Management: Federal Cybersecurity Workforce Strategy (July 2016)",
+   "Offline",
+   "LO5",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Discuss and choose themes for the Group Presentation\n\nReview Assignment",
+   ""
+  ],
+  [
+   "31",
+   "Lab 5: Craft an Organization-Wide Security Awareness Policy",
+   "Offline",
+   "LO5",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 5",
+   ""
+  ],
+  [
+   "32",
+   "Lab 5: Craft an Organization-Wide Security Awareness Policy (cont)",
+   "Offline",
+   "LO5",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 6",
+   ""
+  ],
+  [
+   "33",
+   "Review for Midterm",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "Slides and Lecture 1-5 Notes\n\nProgress Test Guide",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Midterm Progress Test",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "Slides and Lecture 1-5 Notes\n\nProgress Test Guide",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "Lecture 6. IT Infrastructure Security Policies\n\n- Policies unique to the workstation domain\n\n- Policies associated with local area network (LAN) and wide area network (WAN) domains",
+   "Offline",
+   "LO6",
+   "T",
+   "Chapter 10 and ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapter 10 and ref.[3]\n\nStudy and Review Lecture 6",
+   ""
+  ],
+  [
+   "36",
+   "Lecture 6. IT Infrastructure Security Policies\n\n- Policies related to telecommunications\n\n- Policies specific to remote access, systems, and applications\n\n- Differences between public and private IT infrastructure security policies",
+   "Offline",
+   "LO6",
+   "T",
+   "Chapter 10 and ref.[3]\n\nSlide and Lecture Note",
+   "",
+   "Read Chapter 10 and ref.[3]\n\nStudy and Review Lecture 7",
+   ""
+  ],
+  [
+   "37",
+   "Discussion 6: IT Infrastructure Security Policies",
+   "Offline",
+   "LO6",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Review Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "38",
+   "Assignment 6: IT Infrastructure Policies\n\nAssigned Reading: Cyber Attack on Ukrainian Power Grid",
+   "Offline",
+   "LO6",
+   "U",
+   "Slide and Lecture Note\n\nInternet Resources",
+   "",
+   "Review Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "39",
+   "Lab 6: Define a Remote Access Policy to Support Remote Healthcare Clinics",
+   "Offline",
+   "LO6",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 6",
+   ""
+  ],
+  [
+   "40",
+   "Lab 6: Define a Remote Access Policy to Support Remote Healthcare Clinics (cont)",
+   "Offline",
+   "LO6",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 7",
+   ""
+  ],
+  [
+   "41",
+   "Lecture 7. IA Policies Associated with Risk Management\n\nDiscussion 7: Fear of Hacking Survey",
+   "Offline",
+   "LO7",
+   "TU",
+   "Chapter 11 and ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapter 11 and ref.[3]\n\nStudy and Review Lecture 7\n\nReview Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "42",
+   "Assignment 7: Risk Management in a Business Model",
+   "Offline",
+   "LO7",
+   "TU",
+   "Chapter 11 and ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapter 11 and ref.[3]\n\nStudy and Review Lecture 7\n\nReview Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "43",
+   "Lab 7: Identify Necessary Policies for Business Continuity – BIA & Recovery Time Objectives, Focusing on Three Additional Security Requirements Identified in ref.[3]:\n\nIncident Response (3.6), Risk Assessment (3.11), Security Assessment (3.12)",
+   "Offline",
+   "LO7",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 7",
+   ""
+  ],
+  [
+   "44",
+   "Lab 7: Identify Necessary Policies for Business Continuity – BIA & Recovery Time Objectives, Focusing on Three Additional Security (cont) Requirements Identified in ref.[3]:\n\nIncident Response (3.6), Risk Assessment (3.11), Security Assessment (3.12)",
+   "Offline",
+   "LO7",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 8",
+   ""
+  ],
+  [
+   "45",
+   "Lecture 8. Incident Response Team Policies\n\nDiscussion 8: Support Services",
+   "Offline",
+   "LO8",
+   "TU",
+   "Chapter 12 and ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapter 12 and ref.[3]\n\nStudy and Review Lecture 8\n\nReview Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "46",
+   "Assigned Reading: - Illinois hospital chain to pay record $5.5M for exposing data about millions of patients\n\n- Famed hacker creates new ratings system for software",
+   "Offline",
+   "LO8",
+   "TU",
+   "Chapter 12 and ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapter 12 and ref.[3]\n\nStudy and Review Lecture 8\n\nReview Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "47",
+   "Lab 8: Craft a Security or Computer Incident Response Policy – CIRT Response Team",
+   "Offline",
+   "LO8",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 8",
+   ""
+  ],
+  [
+   "48",
+   "Lab 8: Craft a Security or Computer Incident Response Policy – CIRT Response Team (cont)",
+   "Offline",
+   "LO8",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 9",
+   ""
+  ],
+  [
+   "49",
+   "Lecture 9. Implementing and Maintaining an IT Security Policy Framework\n\nDiscussion 9: Information Dissemination - How to Educate Employees",
+   "Offline",
+   "LO9",
+   "TU",
+   "Chapters 13, 14 and ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapters 13, 14 and ref.[3]\n\nStudy and Review Lecture 9\n\nReview Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "50",
+   "Assignment 9: Policy Monitoring and Enforcement Strategy",
+   "Offline",
+   "LO9",
+   "TU",
+   "Chapters 13, 14 and ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapters 13, 14 and ref.[3]\n\nStudy and Review Lecture 9\n\nReview Assignment\n\nPrepare for the Group Presentation",
+   ""
+  ],
+  [
+   "51",
+   "Lab 9: Assess and Audit an Existing IT Security Policy Framework Definition",
+   "Offline",
+   "LO9",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 9",
+   ""
+  ],
+  [
+   "52",
+   "Lab 9: Assess and Audit an Existing IT Security Policy Framework Definition (cont)",
+   "Offline",
+   "LO9",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 10",
+   ""
+  ],
+  [
+   "53",
+   "Lecture 10. Automated Policy Compliance Systems\n\nDiscussion 10: Tracking, Monitoring, and Reporting",
+   "Offline",
+   "LO10",
+   "TU",
+   "Chapter 15, ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapter 15, ref.[3]\n\nStudy, Review Lecture 10\n\nReview Assignment\n\nFinalize Materials for the Group Presentation",
+   ""
+  ],
+  [
+   "54",
+   "Assignment 10: Automated Policy Compliance Systems (Software Evaluation Criteria spreadsheet)\n\nAssigned Reading: Ransomware as a service business booming and growing, Settlement expected for 50M Home Depot customers (SC Magazine, Aug. 2016)",
+   "Offline",
+   "LO10",
+   "TU",
+   "Chapter 15, ref.[3]\n\nSlide and Lecture Note\n\nInternet Resources",
+   "",
+   "Read Chapter 15, ref.[3]\n\nStudy, Review Lecture 10\n\nReview Assignment\n\nFinalize Materials for the Group Presentation",
+   ""
+  ],
+  [
+   "55",
+   "Lab 10: Align an IT Security Policy Framework to the 7 Domains of a Typical IT Infrastructure",
+   "Offline",
+   "LO10",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 10",
+   ""
+  ],
+  [
+   "56",
+   "Lab 10: Align an IT Security Policy Framework to the 7 Domains of a Typical IT Infrastructure (cont)",
+   "Offline",
+   "LO10",
+   "U",
+   "Slide and Lecture Note\n\nLab Manual",
+   "",
+   "Practice and Review Lab 11",
+   ""
+  ],
+  [
+   "57",
+   "Group Assignment Presentation: a Topic Chosen among 10 Discussions and Assignments",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "U",
+   "Group Presentation Materials",
+   "",
+   "Team-present the chosen topic",
+   ""
+  ],
+  [
+   "58",
+   "Group Assignment Presentation: a Topic Chosen among 10 Discussions and Assignments (cont)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "U",
+   "Group Presentation Materials",
+   "",
+   "Team-present the chosen topic",
+   ""
+  ],
+  [
+   "59",
+   "Course Review",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "U",
+   "All Slides and Lecture Notes",
+   "",
+   "Review the course",
+   ""
+  ],
+  [
+   "60",
+   "Course Review (cont)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "U",
+   "All Slides and Lecture Notes",
+   "",
+   "Review the course",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "What is information systems security?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ2",
+   "How does information assurance play an important role in securing information?"
+  ],
+  [
+   "3",
+   "1",
+   "CQ3",
+   "What are information systems security policies? And, How do they differ from standards and procedures?"
+  ],
+  [
+   "4",
+   "2",
+   "CQ1",
+   "Why are security policies important to business operations?"
+  ],
+  [
+   "5",
+   "2",
+   "CQ2",
+   "How do business changes affect policies?"
+  ],
+  [
+   "6",
+   "2",
+   "CQ3",
+   "What it means to maintain compliance"
+  ],
+  [
+   "7",
+   "3",
+   "CQ1",
+   "When are information systems security policies needed?"
+  ],
+  [
+   "8",
+   "3",
+   "CQ2",
+   "Why is enforcing, and winning acceptance for, security policies challenging?"
+  ],
+  [
+   "9",
+   "3",
+   "CQ3",
+   "What is Acceptable Use Policy?"
+  ],
+  [
+   "10",
+   "4",
+   "CQ1",
+   "What are the seven domains of a typical IT infrastructure?"
+  ],
+  [
+   "11",
+   "4",
+   "CQ2",
+   "How do security policies mitigate risk within the seven domains?"
+  ],
+  [
+   "12",
+   "4",
+   "CQ3",
+   "What are various organizational structures?"
+  ],
+  [
+   "13",
+   "5",
+   "CQ1",
+   "What are the different methods of building access control?"
+  ],
+  [
+   "14",
+   "5",
+   "CQ2",
+   "Why is executive management support important?"
+  ],
+  [
+   "15",
+   "5",
+   "CQ3",
+   "Why is support from human resources policies important?"
+  ],
+  [
+   "16",
+   "6",
+   "CQ1",
+   "How to overcome user apathy?"
+  ],
+  [
+   "17",
+   "6",
+   "CQ2",
+   "How does an entrepreneurial approach affect productivity and efficiency?"
+  ],
+  [
+   "18",
+   "7",
+   "CQ1",
+   "How do security policies influence roles, responsibilities, and accountability?"
+  ],
+  [
+   "19",
+   "7",
+   "CQ2",
+   "What happens when policy fulfillment isn't part of the job description?"
+  ],
+  [
+   "20",
+   "7",
+   "CQ3",
+   "Why is it important to find the right measure of employee performance and accountability in implementing security policies?"
+  ],
+  [
+   "21",
+   "8",
+   "CQ1",
+   "What is an IT security policy framework?"
+  ],
+  [
+   "22",
+   "8",
+   "CQ2",
+   "What is a program framework policy or charter?"
+  ],
+  [
+   "23",
+   "8",
+   "CQ3",
+   "Which principles and concepts are important in the design of policy?"
+  ],
+  [
+   "24",
+   "9",
+   "CQ1",
+   "How to organize the contents of an IT policy framework?"
+  ],
+  [
+   "25",
+   "9",
+   "CQ2",
+   "What to consider when implementing the policy and standards librar?"
+  ],
+  [
+   "26",
+   "9",
+   "CQ3",
+   "What is the importance of the policy change control board?"
+  ],
+  [
+   "27",
+   "10",
+   "CQ1",
+   "Which business factors should you consider when building a policy framework?"
+  ],
+  [
+   "28",
+   "10",
+   "CQ2",
+   "Which information assurance factors and objectives to consider?"
+  ],
+  [
+   "29",
+   "10",
+   "CQ3",
+   "What are best practices for policies and standards maintenance?"
+  ],
+  [
+   "30",
+   "10",
+   "CQ4",
+   "What are some case studies and examples of IT policy framework development?"
+  ],
+  [
+   "31",
+   "11",
+   "CQ1",
+   "How to choose an IT security policy framework?"
+  ],
+  [
+   "32",
+   "11",
+   "CQ2",
+   "Why is separation of duties within an organization important?"
+  ],
+  [
+   "33",
+   "12",
+   "CQ1",
+   "How to set roles, responsibilities, and accountabilities for personnel?"
+  ],
+  [
+   "34",
+   "12",
+   "CQ2",
+   "What are best practices for IT security policy framework approaches?"
+  ],
+  [
+   "35",
+   "13",
+   "CQ1",
+   "What does a structured approach to security policy governance and compliance entail?"
+  ],
+  [
+   "36",
+   "13",
+   "CQ2",
+   "What are some case studies and examples of IT security policy framework approaches?"
+  ],
+  [
+   "37",
+   "15",
+   "CQ1",
+   "What are acceptable use policies (AUPs)?"
+  ],
+  [
+   "38",
+   "15",
+   "CQ2",
+   "What is the significance of a privileged-level access agreement (PAA)?"
+  ],
+  [
+   "39",
+   "15",
+   "CQ3",
+   "What are security awareness policies (SAPs)?"
+  ],
+  [
+   "40",
+   "16",
+   "CQ1",
+   "What are best practices for User Domain policies?"
+  ],
+  [
+   "41",
+   "16",
+   "CQ2",
+   "What is the difference between least access privileges and best fit access privileges?"
+  ],
+  [
+   "42",
+   "16",
+   "CQ3",
+   "What are some case studies and examples of User Domain policies?"
+  ],
+  [
+   "43",
+   "18",
+   "CQ1",
+   "What is the basic anatomy of an infrastructure policy?"
+  ],
+  [
+   "44",
+   "18",
+   "CQ2",
+   "What are IT Infrastructure Secuirty Policies used for?"
+  ],
+  [
+   "45",
+   "18",
+   "CQ3",
+   "Which polices are related to IT Infrastructure Security?"
+  ],
+  [
+   "46",
+   "19",
+   "CQ1",
+   "What are common Workstation Domain policies"
+  ],
+  [
+   "47",
+   "19",
+   "CQ2",
+   "What are common LAN Domain policies?"
+  ],
+  [
+   "48",
+   "19",
+   "CQ3",
+   "What are common LAN-to-WAN Domain policies?"
+  ],
+  [
+   "49",
+   "19",
+   "CQ4",
+   "What are common WAN Domain policies?"
+  ],
+  [
+   "50",
+   "19",
+   "CQ5",
+   "What are common Remote Access Domain policies?"
+  ],
+  [
+   "51",
+   "19",
+   "CQ6",
+   "What are common System/Application Domain policies?"
+  ],
+  [
+   "52",
+   "20",
+   "CQ1",
+   "What are common telecommunications policies related to the IT infrastructure?"
+  ],
+  [
+   "53",
+   "20",
+   "CQ2",
+   "What are some IT infrastructure security policy best practices?"
+  ],
+  [
+   "54",
+   "20",
+   "CQ3",
+   "What are some case studies and examples of IT infrastructure security policies?"
+  ],
+  [
+   "55",
+   "21",
+   "CQ1",
+   "What are data classification policies?"
+  ],
+  [
+   "56",
+   "21",
+   "CQ2",
+   "What are data handling policies?"
+  ],
+  [
+   "57",
+   "21",
+   "CQ3",
+   "Which business risks are related to information systems?"
+  ],
+  [
+   "58",
+   "21",
+   "CQ4",
+   "What is a risk and control self-assessment (RCSA)? And, why is it important?"
+  ],
+  [
+   "59",
+   "22",
+   "CQ1",
+   "What is Business Continuity?"
+  ],
+  [
+   "60",
+   "22",
+   "CQ2",
+   "What are Recovery Time Objectives?"
+  ],
+  [
+   "61",
+   "22",
+   "CQ3",
+   "What are best practices for risk management policies?"
+  ],
+  [
+   "62",
+   "22",
+   "CQ4",
+   "What are some case studies and examples of risk management policies?"
+  ],
+  [
+   "63",
+   "23",
+   "CQ1",
+   "What is an incident response policy?"
+  ],
+  [
+   "64",
+   "23",
+   "CQ2",
+   "How to classify incidents?"
+  ],
+  [
+   "65",
+   "23",
+   "CQ3",
+   "What is a response team charter?"
+  ],
+  [
+   "66",
+   "23",
+   "CQ4",
+   "Who is responsible for actions during an incident?"
+  ],
+  [
+   "67",
+   "23",
+   "CQ5",
+   "Which procedures must be followed to respond to an incident?"
+  ],
+  [
+   "68",
+   "24",
+   "CQ1",
+   "What best practices to follow for incident response policies?"
+  ],
+  [
+   "69",
+   "24",
+   "CQ2",
+   "What are business impact analysis (BIA) policies?"
+  ],
+  [
+   "70",
+   "24",
+   "CQ3",
+   "How do business continuity plan (BCP) policies protect information?"
+  ],
+  [
+   "71",
+   "24",
+   "CQ4",
+   "How do disaster recovery plan (DRP) policies protect information?"
+  ],
+  [
+   "72",
+   "25",
+   "CQ1",
+   "What does a simplified implementation process look like?"
+  ],
+  [
+   "73",
+   "25",
+   "CQ2",
+   "What's involved in employee awareness and training?"
+  ],
+  [
+   "74",
+   "25",
+   "CQ3",
+   "How to educate employees through proper dissemination of information?"
+  ],
+  [
+   "75",
+   "25",
+   "CQ4",
+   "Who is responsible for IT security policy enforcement?"
+  ],
+  [
+   "76",
+   "25",
+   "CQ5",
+   "What rights does an organization has to monitor user actions?"
+  ],
+  [
+   "77",
+   "26",
+   "CQ1",
+   "What policy implementation issues should you anticipate?"
+  ],
+  [
+   "78",
+   "26",
+   "CQ2",
+   "What are the roles of governance and monitoring in security policy implementation?"
+  ],
+  [
+   "79",
+   "26",
+   "CQ3",
+   "Which best practices to follow when implementing IT security policies?"
+  ],
+  [
+   "80",
+   "26",
+   "CQ4",
+   "What are some case studies and examples of successful IT security policy implementations?"
+  ],
+  [
+   "81",
+   "27",
+   "CQ1",
+   "What is a baseline definition for information systems security?"
+  ],
+  [
+   "82",
+   "27",
+   "CQ2",
+   "How to track, monitor, and report IT security baseline definitions and policy compliance?"
+  ],
+  [
+   "83",
+   "27",
+   "CQ3",
+   "What does automating IT security policy compliance involves?"
+  ],
+  [
+   "84",
+   "27",
+   "CQ4",
+   "What are some compliance technologies and solutions are?"
+  ],
+  [
+   "85",
+   "28",
+   "CQ1",
+   "What are best practices for IT security policy compliance monitoring?"
+  ],
+  [
+   "86",
+   "28",
+   "CQ2",
+   "What are some case studies and examples of successful IT security policy compliance monitoring?"
+  ]
+ ],
+ "links": [
+  "/download/10028/S/1_mat1.zip",
+  "/download/10028/S/2_mat2.zip",
+  "/download/10028/S/3_mat3.zip",
+  "/download/10028/S/4_mat4.zip"
+ ]
+}

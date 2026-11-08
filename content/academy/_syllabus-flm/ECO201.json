@@ -1,0 +1,965 @@
+{
+ "ma": "ECO201",
+ "sylID": "14481",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14481",
+   "code": "ECO201",
+   "name": "International Economics_Kinh tế quốc tế",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14481",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14481",
+  "Syllabus Name": "International Economics_Kinh tế quốc tế",
+  "Course Name English": "International Economics",
+  "Subject Code": "ECO201",
+  "Learning-Teaching Method": "Lecture, Presentation, Group Work, Project-based learning, Research-based learning, Social Constructivism",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "ECO121",
+  "Description": "This course will study the economic relations among nations through analyzing the exchange of goods, services as well as the linkages between trade, labor and capital movements, international fragmentation of production, economic well-being and the income distribution and to identify and critically examine policy implications of these linkages. Besides that, the course provides students both classical and modern theories of international trade in goods and services, as well as empirical research on trade . A substantial fraction of the course is dedicated to examination of efficient trade policies. This course also covers the balance of payments, exchange rates and open-economy macroeconomics.",
+  "StudentTasks": "- Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfill tasks given by instructor after class\n- Use their own laptop in class only for learning purpose\n- Read the textbook in advance\n- Access the course website (http://flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Exchange Rates and International Finance,",
+   "Copeland L.",
+   "",
+   "2014",
+   "6th edition",
+   "9780273786047",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "International Economics: Theory and Policy",
+   "Paul R. Krugman, Maurice Obstfeld, Marc Melitz",
+   "Pearson",
+   "2017",
+   "11th Edition",
+   "978-0134519579",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "International Trade: Theory and Policy, Global Edition",
+   "Paul R. Krugman, Maurice Obstfeld, Marc Melitz",
+   "Pearson",
+   "2022",
+   "Global Edition, 12th",
+   "9781292417233",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 2 ấn bản. Ưu tiên mua ấn bản mới nhất"
+  ],
+  [
+   "4",
+   "Websites:\nhttp://www.trungtamwto.vn/\nhttp://chongbanphagia.vn/\nhttp://www.tbtvn.org/\nhttp://www.wto.org/\nhttp://www.asean.org/\nhttp://unctad.org/\nhttp://europa.eu/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Recognize the overview of world trade, cause of trade, the pattern of word trade, the way of word trade has evolved over time"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Identify the the main Traditional Models of International Trade"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the Imperfect Competition and New Theories of International Trade"
+  ],
+  [
+   "4",
+   "CLO4",
+   "State the linkages between trade, labor and capital movements, international fragmentation of production, economic well-being and the income distribution and to identify and critically examine policy implications of these linkages"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify International factor mobility"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Analyze instruments and consequences of trade policy measures"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Discuss the political economy of Trade Policy: the motivation for protectionist policies, examples of current trade agreements, Recent controversies in trade policy and trade retaliation, Trade policy in developing countries, links between trade and the environment."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Understand the exchange Rates, Price Levels and Money"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Analyze clearly the intertemporal approach to current account, balance of payments and the trade balance;"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Demonstrate the global capital market: performance and policy problems"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Identify the idea of optimum currency areas"
+  ],
+  [
+   "12",
+   "CLO12",
+   "Demonstrate the understanding of Growth, Crises and International Speculation"
+  ],
+  [
+   "13",
+   "CLO13",
+   "Link theoretical foundation to practical issues/implications"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' preparation, quantity as well as group performance"
+  ],
+  [
+   "2",
+   "Group Presentation",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "90'",
+   "LO2, LO3, LO4, LO5, LO6, LO7",
+   "Option 1: about the chosen topic infront of the class in 45 minutes. The teacher will summarise the key points. The presentation/discussion in class is expected to answer student's questions/wonders about what they are not sure, not very things mentioned in the materials.",
+   "",
+   "Option 1: Based on the first twelve chapters of this course (cover both classical and modern theories of international trade as well as examine the efficient of trade policies)\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "3",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "40'",
+   "LO2, LO4",
+   "Option 1: Multiple choiceOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 50 questions",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (1-6).\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: Teacher is allowed to select which unit content (topic or learning outcome) to focus on each examination session."
+  ],
+  [
+   "4",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "40'",
+   "LO3, LO5, LO6, LO7",
+   "Option 1: Multiple choiceOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 50 questions",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (7-13).\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: Teacher is allowed to select which unit content (topic or learning outcome) to focus on each examination session."
+  ],
+  [
+   "5",
+   "Progress Test 3",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "40'",
+   "LO8, LO9",
+   "Option 1: Multiple choiceOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 50 questions",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (14-20).\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: Teacher is allowed to select which unit content (topic or learning outcome) to focus on each examination session."
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "Multiple choice\n50 questions.",
+   "",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction\nChapter 1. Introduction\n- What is international economics about?\n- International Economics: Trade and Money\nChapter 2. World Trade: An overview",
+   "Offline",
+   "LO1",
+   "IT",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "ECO201_Progress Test Guidance",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "2",
+   "What is international economics about?\nInternational Economics: Trade and Money\nChapter 2. World Trade: An overview",
+   "Offline",
+   "LO2",
+   "IT",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "ECO201_Slide NXB",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 2. World Trade: An overview, with some real-world data (GDP and trade share in manufacturing vs. services)",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 3. Labor Productivity and Comparative Advantage: The Ricardian Model (cont)",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "ECO201_Slide FPTU_part 1",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 3. Labor Productivity and Comparative Advantage: The Ricardian Model (cont)",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "ECO201_Slide FPTU_part 2",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 3. Labor Productivity and Comparative Advantage: The Ricardian Model (cont). Country Example: The clothing industry in Bangladesh vs. China",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3. Labor Productivity and Comparative Advantage: The Ricardian Model (cont)",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3. Labor Productivity and Comparative Advantage: The Ricardian Model (cont)",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "9",
+   "Data Analysis: Comparing national wage rates vs. productivity using WDI data.",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4. Specific Factors and Income Distribution",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4. Specific Factors and Income Distribution (cont)",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4. Specific Factors and Income Distribution (cont)",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 4. Specific Factors and Income Distribution (cont)",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 4. Specific Factors and Income Distribution (cont)",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "15",
+   "Case Study: The Trump Trade War and its impact on manufacturing employment.",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 5. Resources and Trade: The Heckscher-Ohlin Model",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 5. Resources and Trade: The Heckscher-Ohlin Model (cont)",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 5. Resources and Trade: The Heckscher-Ohlin Model (cont)",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 5. Resources and Trade: The Heckscher-Ohlin Model (cont)",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 5. Resources and Trade: The Heckscher-Ohlin Model (cont)",
+   "Offline",
+   "LO2",
+   "U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "21",
+   "Applied Theory in real-world data: Long-run income distribution and the Heckscher-Ohlin theorem",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "22",
+   "Review and Progress Test 1",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "23",
+   "Review and Progress Test 1",
+   "Offline",
+   "LO2, LO4",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6. The Standard Trade Model (cont)",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 6. The Standard Trade Model (cont)",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 6. The Standard Trade Model (cont)",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 6. The Standard Trade Model (cont)",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "28",
+   "Data Lab: Using WDI to track the evolution of the Terms of Trade for the U.S. and Mexico. Discussion of \"Immiserizing Growth\" in commodity-dependent nations.",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "29",
+   "Narative: External economies of scale and attempts to protect the potential in developing countries\nChapter 7. External Economies of Scale and the International Location of Production\nChapter 11. Trade Policy in Developing Countries",
+   "Offline",
+   "LO3, LO5, LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "30",
+   "Narative: External economies of scale and attempts to protect the potential in developing countries\nChapter 7. External Economies of Scale and the International Location of Production\nChapter 11. Trade Policy in Developing Countries",
+   "Offline",
+   "LO3, LO5, LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 7. External Economies of Scale and the International Location of Production\nChapter 11. Trade Policy in Developing Countries",
+   "Offline",
+   "LO3, LO5, LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 7. External Economies of Scale and the International Location of Production\nChapter 11. Trade Policy in Developing Countries",
+   "Offline",
+   "LO3, LO5, LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 9. The Instruments of Trade Policy",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 9. The Instruments of Trade Policy (cont)",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 9. The Instruments of Trade Policy (cont)",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "36",
+   "Policy Lab: Analysis of tariffs, quotas, and TRQs: real-world examples",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "37",
+   "WTO Dispute Settlement: some real-world examples",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "38",
+   "Narative:Political Economy of Trade and its controversies\nChapter 10: The Political Economy of Trade Policy\nChapter 12: Controversies in Trade Policy",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "39",
+   "Narative:Political Economy of Trade and its controversies\nChapter 10: The Political Economy of Trade Policy\nChapter 12: Controversies in Trade Policy",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "40",
+   "Case Study: Brexit—economic and political motivations for withdrawal from a customs union",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "41",
+   "Progress Test 2",
+   "Offline",
+   "LO3, LO5, LO6, LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 13. National Income Accounting and the Balance of Payments",
+   "Offline",
+   "LO9",
+   "U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 13. National Income Accounting and the Balance of Payments",
+   "Offline",
+   "LO9",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 14. Exchange Rates and the Foreign Exchange Market: An Asset Approach (cont)",
+   "Offline",
+   "LO8",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 14. Exchange Rates and the Foreign Exchange Market: An Asset Approach (cont).",
+   "Offline",
+   "LO8",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "46",
+   "Financial Lab: Calculating returns on assets and the Carry Trade (Australian Dollar vs. Yen)\n. Analysis of Japanese \"Abenomics\" and its impact on the Yen.",
+   "Offline",
+   "LO8, LO9",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 20 Financial Globalization: Opportunity and Crisis",
+   "Offline",
+   "",
+   "U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 20 Financial Globalization: Opportunity and Crisis (cont)",
+   "Offline",
+   "LO10",
+   "U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "49",
+   "Applied Analysis: The financial linkages among open economies in the Covid-19 outbreaks.",
+   "Offline",
+   "LO10",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 21. Optimum Currency Areas and the Euro (cont)",
+   "Offline",
+   "LO11",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 21. Optimum Currency Areas and the Euro (cont)",
+   "Offline",
+   "LO11",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 22. Developing Countries: Growth, Crisis, and Reform (cont)",
+   "Offline",
+   "LO12",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 22. Developing Countries: Growth, Crisis, and Reform (cont). Examples: WDI growht rates over times for selected countries",
+   "Offline",
+   "LO12",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "54",
+   "Review and Progress Test 3",
+   "Offline",
+   "LO8, LO9, LO10, LO11, LO12",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "55",
+   "Group presentation",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6, LO7",
+   "T,U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "56",
+   "Group presentation",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6, LO7",
+   "U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "57",
+   "Group presentation",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6, LO7",
+   "U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "58",
+   "Group presentation",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6, LO7",
+   "U",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "59",
+   "Group presentation",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6, LO7",
+   "",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ],
+  [
+   "60",
+   "Group presentation",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6, LO7",
+   "",
+   "Do exercises, self - review, assignment, Additional reading following chapter",
+   "",
+   "Textbooks, internet and other resources",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/14481/S/1_ECO201_Progress Test Guidance.zip",
+  "/download/14481/S/2_ECO201_Slide NXB.zip",
+  "/download/14481/S/4_ECO201_Slide FPTU_part 1.zip",
+  "/download/14481/S/5_ECO201_Slide FPTU_part 2.zip"
+ ]
+}

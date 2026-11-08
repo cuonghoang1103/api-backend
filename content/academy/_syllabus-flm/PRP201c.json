@@ -1,0 +1,366 @@
+{
+ "ma": "PRP201c",
+ "sylID": "12556",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12556",
+   "code": "PRP201c",
+   "name": "Python programming_Lập trình Python",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12556",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12556",
+  "Syllabus Name": "Python programming_Lập trình Python",
+  "Course Name English": "Python programming",
+  "Subject Code": "PRP201c",
+  "Learning-Teaching Method": "Blended,Online,Inquiry-based Teaching, Active Learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 60h online + 3h offline + 1h TE + 2h PE + 84h self-study",
+  "Pre-Requisite": "Recommend to have knowledge of basic programming in advance",
+  "Description": "This course will introduce fundamental programming concepts including data structures, networked application program interfaces, and databases, using the Python programming language. In the Capstone Project, students’ll use the technologies learned throughout the course to design and create your own applications for data retrieval, processing, and visualization.",
+  "StudentTasks": "- Student must get the certification of Python for Everybody specialization from Coursera to be accepted to the final examination",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "Assessment scheme:\n\n1. Complete the online course to be allowed to take Final Exam\n\n2. Final Exam is included of Final Theory Exam (TE) & Final Practical Exam (PE): 100%\n\n3. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n4. Completion Criteria: Final TE Score >=4 & Final PE Score >=4 & FR >= 5\n\n(FR = min(10, (Final TE Score + Final PE Score)/2 + bonus)",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/python-data-visualization?specialization=python",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 5: Capstone: Retrieving, Processing, and Visualizing Data with Python"
+  ],
+  [
+   "2",
+   "https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Help Articles"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/specializations/python",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Python for Everybody Specialization"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/python?specialization=python",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 1: Programming for Everybody (Getting Started with Python)"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/python-data?specialization=python",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 2: Python Data Structures"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/python-network-data?specialization=python",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 3: Using Python to Access Web Data"
+  ],
+  [
+   "7",
+   "https://www.coursera.org/learn/python-databases?specialization=python",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 4: Using Databases with Python"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the basics of programming computers using Python"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand fundamental programming concepts such as data structures"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Create your own applications for data retrieval and processing"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Describe the basics of the Structured Query Language (SQL) and database design"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final Exam (PE)",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "120'",
+   "",
+   "",
+   "N/A",
+   "All studied courses",
+   "by Exam Board",
+   "Customized from the Assignment & Capstone Project of this specialization"
+  ],
+  [
+   "2",
+   "Final Exam (TE)",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "60'",
+   "",
+   "Computer gradable",
+   "50",
+   "All studied courses. Each module of course contributes 3-5 questions.",
+   "by Exam Board",
+   "Customized from the quizzes of this specialization."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Specialization Introduction\nGetting started with Python\n- Why we Program?\n- Installing and Using Python\n- Variables and Expressions\nOffline 1: Introduction to the online course PRP201c",
+   "Offline,Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)\nAll students should participate in offline slot (if any question)",
+   ""
+  ],
+  [
+   "2",
+   "Getting started with Python\n- Conditional Code\n- Functions\n- Loops and Iteration",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "Python Data Structures\n- Strings\n- Installing and Using Python (for writing Python programs)\n- Files",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "4",
+   "Python Data Structures\n- Lists\n- Dictionaries\n- Tuples\n- Graduation",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "5",
+   "Using Python to Access Web Data\n- Getting Started\n- Regular Expressions",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "6",
+   "Using Python to Access Web Data\n- Networks and Sockets\n- Programs that Surf the Web",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "7",
+   "Using Python to Access Web Data\n- Web Services and XML\n- JSON and the REST Architecture",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "8",
+   "Using Databases with Python\n- Object Oriented Python\n- Basic Structured Query Language",
+   "Online",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "9",
+   "Using Databases with Python\n- Data Models and Relational SQL\n- Many-to-Many Relationships in SQL\n- Databases and Visualization",
+   "Online",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "10",
+   "Capstone: Retrieving, Processing, and Visualizing Data with Python",
+   "Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "11",
+   "Capstone: Retrieving, Processing, and Visualizing Data with Python",
+   "Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "12",
+   "Final Project Peer Review Evaluation\nSpecialization Wrap-Up\nOffline 2: Review Python for Everybody Specialization",
+   "Offline,Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed\nAll students should participate in review slot (if any question)\nDeadline of Coursera completion: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

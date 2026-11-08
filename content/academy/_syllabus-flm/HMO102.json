@@ -1,0 +1,1815 @@
+{
+ "ma": "HMO102",
+ "sylID": "13204",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13204",
+   "code": "HMO102",
+   "name": "Introduction to Tourism & Hospitality industry_Tổng quan ngành Du lịch & Khách sạn",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13204",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13204",
+  "Syllabus Name": "Introduction to Tourism & Hospitality industry_Tổng quan ngành Du lịch & Khách sạn",
+  "Course Name English": "Introduction to Tourism & Hospitality industry",
+  "Subject Code": "HMO102",
+  "Learning-Teaching Method": "Lecture,Presentation,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "-Objective: To provide a basic understanding of the hospitality and tourism industry by tracing the industry's growth, development, issues facing, and future trends\n\n-Description: The course addresses the tourism and hospitality industry's structure, scope, and measurement. The students will be exposed to the roles of industry business players and governments. This course addresses the knowledge and skill needed for students to understand the development of the hospitality and tourism industry and its challenges.",
+  "StudentTasks": "- Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purposes\n\n- Read the textbook in advance\n\n- Access the course website (http://flm.fpt.edu.vn) for up-to-date information and material of the course, for online support from teachers and other students, and for practicing and assessment.",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Introduction to Hospitality GE",
+   "John R. Walker",
+   "Pearson Publisher",
+   "2017",
+   "7th",
+   "9781292157597",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Introduction to Hospitality GE, 8th edition",
+   "John R.Walker",
+   "Pearson",
+   "2021",
+   "8th",
+   "9781292330235",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 2 ấn bản. Ưu tiên mua ấn bản mới nhất"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Describe the definition, charateristics of the hospitality and tourism industry"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Describe and classify different hotel businesses"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Identify main duties and responsibilities of the room division function (operations)"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Describe the duties and responsibilities of the food and beverage function (operations)"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Classify wine, beer, spirits, nonalcoholic beverages and describe bar & beverage operations."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Classify and differentiate characteristics of the restaurant business"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Describe restaurant operations and its functional areas."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Outline and distinguish different managed services."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Explain the importance of tourism and describe key impacts on tourism organizations."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Identify future trends in the hospitality and tourism industry (Chapter 10-13)"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: During all course\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: Each student shoud make at least 1 individual presentation, case analysis during the course in front of the class. Topics will be varied based on the topics in the textbook.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "",
+   "",
+   "Option 1: Participation grade will be given based on students' preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments. Class preparation and pre-reading before lecture will be assessed upon individuals' understanding and ability to answer questions in the class. Individuals will be called up randomly to be assessed."
+  ],
+  [
+   "2",
+   "Group assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "Option 1:\n\nSubmit session 26, Present on session 27,28,29\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4 LO5, LO6, LO7 LO8, LO9, LO10",
+   "Option 1: Four or five students per group. Groups and groups ideas are determined on the third session of the course. Work will be break down into stages and examined during the course. Final work to be submitted prior to the presentation of the topic.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Minimum length of the group assignment should be 10 pages, excluding appendices Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Based on topics of studied units\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Group presentation in class room\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: All assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission\n\nEvaluation will be based on both presentation and written report (reccommded 30%, 70% accordingly)"
+  ],
+  [
+   "3",
+   "Individual assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: Session 24\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4 LO5, LO6, LO7 LO8, LO9, LO10",
+   "Option 1: You will be given a practical exercise or a case study to demonstrate your analytical ability as well as your insight understanding of the hospitality industry discussed and studied during the course. The topics will be given out in the first week of the course. You are expected to apply brainstorming, critical thinking skills rather than reviewing the literature or textbook. Assignments with only revision of the case or literature indicates poor analytical understanding and will experience serious reduction of the marks. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Follow lecturer's proposal",
+   "Option 1: Based on the given exercise or case study at the beginning of the course.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: All assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission; Individual assignments are expected to be submitted in the middle of the course."
+  ],
+  [
+   "4",
+   "Quizzes",
+   "on-going",
+   "3",
+   "15.0%",
+   ">0",
+   "Option 1:\n\n- Session 9- Session 16- Session 26\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4\n\nLO5, LO6, LO7\n\nLO8, LO9, LO10",
+   "Option 1: Multiple choice, exercises or essay questions\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Appx. 15 Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Quizzes will test for knowledge of subjects in the chapter assigned for that day.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Class room\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 3"
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4 LO5, LO6, LO7 LO8, LO9, LO10",
+   "Multiple choice . Other types of questions may be included.",
+   "50",
+   "The questions/ exercises will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "-Course Overview\n\n-Introduction to AI Integration in the course\n\n-Release of Individual Assignment Topics\n\n-Introductory Tour (1–2 Days, Optional): Visit local attractions, hotels, and travel agencies to gain insights into the hospitality and tourism industry.",
+   "Offline",
+   "LO1",
+   "",
+   "Textbook, Slides",
+   "HMO102",
+   "Read PowerPoint slides and the textbook before the lecture",
+   "link"
+  ],
+  [
+   "2",
+   "Chapter 1 - Introducing Hospitality\n\n- Hospitality through the Ages\n\n- The Interrelated Nature of Hospitality and Tourism\n\n- Characteristics of the Hospitality Industry",
+   "Offline",
+   "LO1",
+   "",
+   "Textbook, Slides",
+   "HMO102",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1 - Introducing Hospitality (cont)\n\n- Sustainable Hosptality\n\n- Success in Service",
+   "Offline",
+   "LO1",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1 - Introducing Hospitality (cont)\n\n- Trends in Hospitality and Tourism",
+   "Offline",
+   "LO1",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "5",
+   "Defining group and group's projects\n\nTeams Assigned\n\nTeams Select Ideas",
+   "Offline",
+   "LO1",
+   "",
+   "Textbook, Slides",
+   "",
+   "Various ideas are open to discussion by team members",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2 - The Hotel Business\n\n- Hotel Development and Ownership\n\n- Hotel Development",
+   "Offline",
+   "LO2",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2 - The Hotel Business (cont) - Classification of Hotels",
+   "Offline",
+   "LO2",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2 - The Hotel Business (cont)\n\n- Best, Biggest, and Most Unusual Hotels and Chains\n\n- Sustainable and Green Lodging",
+   "Offline",
+   "LO2",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2 - The Hotel Business (cont)\n\n- Trends in Hotel development and management",
+   "Offline",
+   "LO2",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3 - Rooms Division Operations\n\n- The Functions and Departments of a Hotel\n\n- Management Structure",
+   "Offline",
+   "LO3",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3 - Rooms Division Operations (cont)\n\n- Role of the Hotel General Manager\n\n- The Departments: rooms devision, front office, night auditor, revenue management",
+   "Offline",
+   "LO3",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3 - Rooms Division Operations(Cont)\n\n- Reservations\n\n- Communications CBX or PBX\n\n- Guest Services/ Uniformed Services",
+   "Offline",
+   "LO3",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3 - Rooms Division Operations(Cont)\n\n- Concierge\n\n- Housekeeping\n\n- Sustainable Lodging",
+   "Offline",
+   "LO3",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3 - Rooms Division Operations(Cont)\n\n- Security/Loss Prevention\n\n- Trends in Hotel and Rooms\n\nDivision Operations",
+   "Offline",
+   "LO3",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: Food and Beverage Operations\n\n- Food and Beverage Management\n\n- Kitchen\n\n- Food Outlets",
+   "Offline",
+   "LO4",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4: Food and Beverage Operations (cont)\n\n- Bars\n\n- Stewarding Department\n\n- Catering Department\n\n- Room Service/In-Room Dining",
+   "Offline",
+   "LO4",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "17",
+   "Quiz 1",
+   "Offline",
+   "LO4",
+   "",
+   "",
+   "",
+   "Quiz 1 : Chapter 1,2,3,4",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 5: Beverages (cont)\n\n- Wines\n\n+ Light Wine\n\n+ Sparkling wine\n\n+ Fortified Wines\n\n+ Aromatic Wines\n\n+Making Wine\n\n+ Matching Wine with Food",
+   "Offline",
+   "LO5",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 5: Beverages (cont)\n\n- Beer\n\n+ The brewing Process\n\n+ Organic and craft beers, Microbreweries,\n\nand brewpubs",
+   "Offline",
+   "LO5",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 5: Beverages (cont)\n\n- Spirits\n\n+ Whisky\n\n+ White Spirit\n\n+ Cocktail\n\n- Nonalcoholic Beverages\n\n+ Nonalcoholic beer\n\n+ Coffee\n\n+ Tea\n\n+ Carbonated soft drinks and energy drinks",
+   "Offline",
+   "LO5",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5: Beverages (cont)\n\n- Bar and Beverage Operations\n\n+ Bar setup\n\n+ Inventory control",
+   "Offline",
+   "LO5",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 6: The Restaurant Business\n\n- The restaurant business\n\nClassical Cuisine",
+   "Offline",
+   "LO6",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 6: The Restaurant Business (cont)\n\nFood Trends and Practices\n\n- Developing a Restaurant\n\n- Sustainable Restaurants",
+   "Offline",
+   "LO6",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6: The Restaurant Business (cont)\n\n- Menu Planning\n\n- Classifications of Restaurants",
+   "Offline",
+   "LO6",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7: Restaurant Management\n\n- Front of the House\n\n+ Restaurant Forecasting\n\n+ Service\n\n+ Suggestive Selling\n\n+ Front of the House Restaurant Systems\n\n+ Back of the House Restaurant Systems",
+   "Offline",
+   "LO7",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 7: Restaurant Management (cont)\n\n- Back of the house\n\n+ Food Production\n\n+ Kitchen",
+   "Offline",
+   "LO7",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 7: Restaurant Operations (cont)\n\n- Back of the house (cont)\n\n+ Management involvement and Follow-up\n\n+ Employee Recognition\n\n+ Purchasing\n\n+ Storing + Receiving\n\n+ Budgeting\n\n+ Restaurant accounting",
+   "Offline",
+   "LO7",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 7: Restaurant Operations (cont)\n\n- Lease and Controllable Expenses\n\n- Restaurant Manager Job Analysis",
+   "Offline",
+   "LO7",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 8: Managed Services\n\n- Airlines and Airports\n\n- Military\n\n- Elementary and Secondary Schools",
+   "Offline",
+   "LO8",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 8: Managed Services (cont)\n\n- Colleges and Universities\n\n- Health Care Facilities\n\n- Business and Industry (B&I)\n\n- Leisure and Recreation",
+   "Offline",
+   "LO8",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "31",
+   "Quiz 2",
+   "Offline",
+   "LO8",
+   "",
+   "",
+   "",
+   "Quiz 2: Chapter 5.6.7.8",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 9: Tourism\n\n- What Is Tourism?\n\n- Benefits of Tourism",
+   "Offline",
+   "LO9",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 9: Tourism (cont)\n\n- The Five Ages of Tourism\n\n+ Pre–industrial Revolution\n\n+ The railway age\n\n+ The automobile age\n\n+ The jet aircraft age\n\n+ The cruise ship age",
+   "Offline",
+   "LO9",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 9: Tourism (cont)\n\n- The Economic Impact of Tourism\n\n- Promoters of Tourism",
+   "Offline",
+   "LO9",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 9: Tourism (cont)\n\n- Business Travel\n\n- Social and Cultural Impact of Tourism\n\n- Ecotourism",
+   "Offline",
+   "LO9",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 10: Recreation, Attractions\n\nand Clubs\n\n- Recreation, Leisure, and Wellness\n\n- Government-Sponsored Recreation",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 10: Recreation, Attractions\n\nand Clubs (cont)\n\n- Commercial Recreation - Attractions\n\n- Regional Theme Parks",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 10: Recreation, Attractions\n\nand Clubs (cont)\n\n- Animal Attractions\n\n- Historic Places and Sites",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 10: Recreation, Attractions and Clubs (cont)\n\n- Museums\n\n- Performance Arts",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 10: Recreation, Attractions and Clubs (cont)\n\n- Destinations\n\n- Managing Attractions\n\n- Clubs",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 10: Recreation, Attractions and Clubs (cont)\n\n- Sustainable Golf Course Management\n\n- Noncommercial Recreation",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 11: Gaming Entertainment\n\n- Working in a Casino Resort\n\n- Sustainability in gaming Entertainment\n\n- Career Information",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11: Gaming Entertainment (cont)\n\n- Working in a Casino Resort\n\n- Sustainability in gaming Entertainment\n\n- Career Information",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 12: Meetings, Conventions,\n\nand Expositions\n\n- Development of the Meetings, Conventions, and Expositions Industry\n\n- Size and Scope of the Industry",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 12: Meetings, Conventions,\n\nand Expositions (cont)\n\n- Key Players in the Industry\n\n- Types of Meetings, Conventions, and Expositions",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 12: Meetings, Conventions,\n\nand Expositions (Cont)\n\n- Historical Associations",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 12: Meetings, Conventions,\n\nand Expositions (Cont)\n\n- Venues for Meetings,\n\nConventions, and Expositions",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 12: Meetings, Conventions,\n\nand Expositions (Cont)\n\n-Career information",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "49",
+   "Quiz 3 - Individual assignment submission",
+   "Offline",
+   "LO10",
+   "",
+   "",
+   "",
+   "Quiz 3: Chapter 9, 10, 11, 12",
+   ""
+  ],
+  [
+   "50",
+   "Group Assignment submission\n\nChapter 13: Special Events\n\n- What Event Planners Do\n\n- Challenges and Tools for Event Planners and Managers",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "51",
+   "Group Assignment submission\n\nChapter 13: Special Events (cont)\n\n- Classification of Special Events",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 13: Special Events (cont)\n\n- Required Skills and Abilities for Event Management",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 13: Special Events (cont)\n\n- Special Event Organizations\n\n- The Special Events Job Market",
+   "Offline",
+   "LO10",
+   "",
+   "Textbook, Slides",
+   "",
+   "Read powerpoint slides and textbook before lecture",
+   ""
+  ],
+  [
+   "54",
+   "Presentation day",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Presentation of final project\n\n• Limit presentations to 15 minutes.\n\n• Limit Q&A to 7-10 minutes (alternate, 1 question per judge).\n\n• Hold feedback until the end for everyone.",
+   ""
+  ],
+  [
+   "55",
+   "Presentation day",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Presentation of final project\n\n• Limit presentations to 15 minutes.\n\n• Limit Q&A to 7-10 minutes (alternate, 1 question per judge).\n\n• Hold feedback until the end for everyone.",
+   ""
+  ],
+  [
+   "56",
+   "Presentation day",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Presentation of final project\n\n• Limit presentations to 15 minutes.\n\n• Limit Q&A to 7-10 minutes (alternate, 1 question per judge).\n\n• Hold feedback until the end for everyone.",
+   ""
+  ],
+  [
+   "57",
+   "Presentation day",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Presentation of final project\n\n• Limit presentations to 15 minutes.\n\n• Limit Q&A to 7-10 minutes (alternate, 1 question per judge).\n\n• Hold feedback until the end for everyone.",
+   ""
+  ],
+  [
+   "58",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "3",
+   "CT1",
+   "What is sustainability? Give an example"
+  ],
+  [
+   "2",
+   "3",
+   "CT2",
+   "Explain why service in the hospitality industry is so important. Give an example from your own experience as a guest, if possible."
+  ],
+  [
+   "3",
+   "3",
+   "HCM1",
+   "What is sustainability? Give an example"
+  ],
+  [
+   "4",
+   "3",
+   "HCM2",
+   "Why is sustainability important to the environment?"
+  ],
+  [
+   "5",
+   "3",
+   "HCM3",
+   "What are the 4 types of sustainability?"
+  ],
+  [
+   "6",
+   "4",
+   "HCM1",
+   "why service in the hospitality industry is so important?"
+  ],
+  [
+   "7",
+   "4",
+   "HCM2",
+   "Give an example from your own experience as a guest?"
+  ],
+  [
+   "8",
+   "6",
+   "CT1",
+   "What are Franchising, referral associations and Management Contracts."
+  ],
+  [
+   "9",
+   "6",
+   "CT2",
+   "What are some of the benefits and drawbacks to being a franchisee"
+  ],
+  [
+   "10",
+   "6",
+   "HCM1",
+   "What are Franchising?"
+  ],
+  [
+   "11",
+   "6",
+   "HCM2",
+   "What are the 4 types of franchising?"
+  ],
+  [
+   "12",
+   "6",
+   "HCM3",
+   "What are some of the benefits and drawbacks to being a franchisee"
+  ],
+  [
+   "13",
+   "7",
+   "CT1",
+   "How many ways to the rating classification of a hotel?"
+  ],
+  [
+   "14",
+   "7",
+   "CT2",
+   "How the different concepts of hotel (airport, resort and casino) can successfully take care the needs of business and leisure travelers"
+  ],
+  [
+   "15",
+   "7",
+   "HCM1",
+   "How many ways to the rating classification of a hotel?"
+  ],
+  [
+   "16",
+   "7",
+   "HCM2",
+   "What are the 3 types of hotel ownership?"
+  ],
+  [
+   "17",
+   "8",
+   "CT1",
+   "What are the characteristics of your favorite hotels?"
+  ],
+  [
+   "18",
+   "8",
+   "CT2",
+   "What are the differences between timeshare and codontels?"
+  ],
+  [
+   "19",
+   "8",
+   "HCM1",
+   "Distinctive features that characterize an excellent hotel."
+  ],
+  [
+   "20",
+   "8",
+   "HCM2",
+   "What are the differences between timeshare and codontels?"
+  ],
+  [
+   "21",
+   "9",
+   "CT1",
+   "Which trends that you feel will have the biggest impact on the future of the global hospitality industry."
+  ],
+  [
+   "22",
+   "9",
+   "HCM1",
+   "What trends are affecting the future of the hospitality industry? Why?"
+  ],
+  [
+   "23",
+   "10",
+   "CT1",
+   "How many departments in the hotel management structure?"
+  ],
+  [
+   "24",
+   "10",
+   "HCM1",
+   "How many departments in the hotel management structure?"
+  ],
+  [
+   "25",
+   "11",
+   "CT1",
+   "What are the duties and responsibilities of General Manager?"
+  ],
+  [
+   "26",
+   "11",
+   "CT2",
+   "What is revenue management and which ratios to control the hotel's revenue?"
+  ],
+  [
+   "27",
+   "11",
+   "HCM1",
+   "What are the duties and responsibilities of General Manager?"
+  ],
+  [
+   "28",
+   "11",
+   "HCM2",
+   "What is revenue management and which ratios to control the hotel's revenue?"
+  ],
+  [
+   "29",
+   "11",
+   "HCM3",
+   "What are 3 strategies that you would use to manage and control revenue?"
+  ],
+  [
+   "30",
+   "12",
+   "CT1",
+   "What functions do the Property Management Systems (PMS) perform?"
+  ],
+  [
+   "31",
+   "12",
+   "CT2",
+   "What security measures are taken to protect guests and their property?"
+  ],
+  [
+   "32",
+   "12",
+   "HCM1",
+   "What funHCMions do the Property Management Systems (PMS) perform?"
+  ],
+  [
+   "33",
+   "12",
+   "HCM2",
+   "What security measures are taken to protect guests and their property?"
+  ],
+  [
+   "34",
+   "13",
+   "CT1",
+   "Describe the responsibilities of the housekeeping department as they relate to the guest experience\nand the rooms division?"
+  ],
+  [
+   "35",
+   "13",
+   "HCM1",
+   "Describe the responsibilities of the housekeeping department as they relate to the guest experience\nand the rooms division?"
+  ],
+  [
+   "36",
+   "13",
+   "HCM2",
+   "What are the 3 important things in housekeeping?"
+  ],
+  [
+   "37",
+   "14",
+   "CT1",
+   "Which trends that you feel will have the biggest impact on the Hotel and Room Division Operation?"
+  ],
+  [
+   "38",
+   "14",
+   "HCM1",
+   "Which trends that you feel will have the biggest impact on the Hotel and Room Division Operation?"
+  ],
+  [
+   "39",
+   "15",
+   "CT1",
+   "What are the duties and responsibilities of Food & Beverage Manager?"
+  ],
+  [
+   "40",
+   "15",
+   "CT2",
+   "What is a contribution margin?"
+  ],
+  [
+   "41",
+   "15",
+   "HCM1",
+   "What are the duties and responsibilities of Food & Beverage Manager?"
+  ],
+  [
+   "42",
+   "15",
+   "HCM2",
+   "What is a contribution margin?"
+  ],
+  [
+   "43",
+   "16",
+   "CT1",
+   "What is the difference between banquets and catering?"
+  ],
+  [
+   "44",
+   "16",
+   "CT2",
+   "What are the various styles used when setting up a meeting room? Give\nexamples of when each style might be used."
+  ],
+  [
+   "45",
+   "16",
+   "HCM1",
+   "What is the difference between banquets and catering?"
+  ],
+  [
+   "46",
+   "16",
+   "HCM2",
+   "What are the various styles used when setting up a meeting room? Give\nexamples of when each style might be used."
+  ],
+  [
+   "47",
+   "20",
+   "CT1",
+   "Describe the various spirits."
+  ],
+  [
+   "48",
+   "20",
+   "CT2",
+   "Why have nonalcoholic drinks increased in popularity?"
+  ],
+  [
+   "49",
+   "20",
+   "HCM1",
+   "Describe the 06 spirits."
+  ],
+  [
+   "50",
+   "20",
+   "HCM2",
+   "Why have nonalcoholic drinks increased in popularity?"
+  ],
+  [
+   "51",
+   "21",
+   "CT1",
+   "Which currently trends in Beverages?"
+  ],
+  [
+   "52",
+   "21",
+   "CT2",
+   "How is inventory control conducted?"
+  ],
+  [
+   "53",
+   "21",
+   "HCM1",
+   "Which currently trends in Beverages?"
+  ],
+  [
+   "54",
+   "21",
+   "HCM2",
+   "How is inventory control conducted?"
+  ],
+  [
+   "55",
+   "21",
+   "HCM3",
+   "Bar set up?"
+  ],
+  [
+   "56",
+   "22",
+   "CT1",
+   "Discuss the significance of classical cuisine."
+  ],
+  [
+   "57",
+   "22",
+   "HCM1",
+   "Discuss the significance of classical cuisine."
+  ],
+  [
+   "58",
+   "23",
+   "CT1",
+   "What are the different characteristics of franchise, chain, and independent restaurants? Give an example."
+  ],
+  [
+   "59",
+   "23",
+   "HCM1",
+   "What are the different characteristics of franchise, chain, and independent restaurants? Give an example."
+  ],
+  [
+   "60",
+   "24",
+   "CT1",
+   "Name the different classifications of restaurants, and give examples\nof each."
+  ],
+  [
+   "61",
+   "24",
+   "CT2",
+   "What are some characteristics of your most favorite restaurant types?"
+  ],
+  [
+   "62",
+   "24",
+   "HCM1",
+   "Name the different classifications of restaurants, and give examples\nof each."
+  ],
+  [
+   "63",
+   "24",
+   "HCM2",
+   "What are some characteristics of your most favorite restaurant types?"
+  ],
+  [
+   "64",
+   "24",
+   "HCM3",
+   "Menu planning?"
+  ],
+  [
+   "65",
+   "25",
+   "CT1",
+   "What are the purposes of restaurant forecasting and how restaurants forecast their business?"
+  ],
+  [
+   "66",
+   "25",
+   "CT2",
+   "What is the suggestive selling?"
+  ],
+  [
+   "67",
+   "25",
+   "HCM1",
+   "What are the purposes of restaurant forecasting and how restaurants forecast their business?"
+  ],
+  [
+   "68",
+   "25",
+   "HCM2",
+   "What is the suggestive selling?"
+  ],
+  [
+   "69",
+   "27",
+   "CT1",
+   "Outline back-of-the-house operations."
+  ],
+  [
+   "70",
+   "27",
+   "CT2",
+   "What are the operating ratios in restaurant management?"
+  ],
+  [
+   "71",
+   "27",
+   "HCM1",
+   "Outline back-of-the-house operations."
+  ],
+  [
+   "72",
+   "27",
+   "HCM2",
+   "What are the operating ratios in restaurant management?"
+  ],
+  [
+   "73",
+   "29",
+   "CT1",
+   "How many types of managed services?"
+  ],
+  [
+   "74",
+   "29",
+   "CT2",
+   "Why would companies use contract management?"
+  ],
+  [
+   "75",
+   "29",
+   "HCM1",
+   "How many types of managed services?"
+  ],
+  [
+   "76",
+   "29",
+   "HCM2",
+   "Why would companies use contract management?"
+  ],
+  [
+   "77",
+   "30",
+   "CT1",
+   "What are the advantages and disadvantages of foodservice in the leisure and recreation segment?"
+  ],
+  [
+   "78",
+   "30",
+   "CT2",
+   "What are the differences between managed services operations and commercial food services?"
+  ],
+  [
+   "79",
+   "30",
+   "HCM1",
+   "What are the advantages and disadvantages of foodservice in the leisure and recreation segment?"
+  ],
+  [
+   "80",
+   "30",
+   "HCM2",
+   "What are the differences between managed services operations and commercial food services?"
+  ],
+  [
+   "81",
+   "32",
+   "CT1",
+   "What Is Tourism?"
+  ],
+  [
+   "82",
+   "32",
+   "CT2",
+   "What are benefits of Tourism?"
+  ],
+  [
+   "83",
+   "32",
+   "HCM1",
+   "What Is Tourism?"
+  ],
+  [
+   "84",
+   "32",
+   "HCM2",
+   "What are benefits of Tourism?"
+  ],
+  [
+   "85",
+   "33",
+   "CT1",
+   "How does the historical impact of transportation on tourism?"
+  ],
+  [
+   "86",
+   "33",
+   "CT2",
+   "How is the importance of the hub and spoke system on airline travel?"
+  ],
+  [
+   "87",
+   "33",
+   "HCM1",
+   "How does the historical impact of transportation on tourism?"
+  ],
+  [
+   "88",
+   "33",
+   "HCM2",
+   "How is the importance of the hub and spoke system on airline travel?"
+  ],
+  [
+   "89",
+   "34",
+   "CT1",
+   "Describe at least three ways in which tourism has a significant economic impact upon society."
+  ],
+  [
+   "90",
+   "34",
+   "CT2",
+   "What are the differences between tour operators and travel agencies?"
+  ],
+  [
+   "91",
+   "34",
+   "HCM1",
+   "Describe at least three ways in which tourism has a significant economic impaHCM upon society."
+  ],
+  [
+   "92",
+   "34",
+   "HCM2",
+   "What are the differences between tour operators and travel agencies?"
+  ],
+  [
+   "93",
+   "35",
+   "CT1",
+   "What are the similars and differences between ecotourism and sustainable tourism?"
+  ],
+  [
+   "94",
+   "35",
+   "HCM1",
+   "What are the similars and differences between ecotourism and sustainable tourism?"
+  ],
+  [
+   "95",
+   "35",
+   "HCM2",
+   "What are the social and cultural impacts of tourism in the host country?"
+  ],
+  [
+   "96",
+   "36",
+   "CT1",
+   "What is the relationship of recreation and leisure to wellness?"
+  ],
+  [
+   "97",
+   "36",
+   "CT2",
+   "Explain the origins and extent of government-sponsored recreation."
+  ],
+  [
+   "98",
+   "36",
+   "HCM1",
+   "What is the relationship of recreation and leisure to wellness?"
+  ],
+  [
+   "99",
+   "36",
+   "HCM2",
+   "Explain the origins and extent of government-sponsored recreation."
+  ],
+  [
+   "100",
+   "37",
+   "CT1",
+   "What are the differences between commercial and noncommercial recreation?"
+  ],
+  [
+   "101",
+   "37",
+   "CT2",
+   "Discuss your favorite theme park with your class. Explain why it is your favorite."
+  ],
+  [
+   "102",
+   "37",
+   "HCM1",
+   "What are the differences between commercial and noncommercial recreation?"
+  ],
+  [
+   "103",
+   "37",
+   "HCM2",
+   "Discuss your favorite theme park with your class. Explain why it is your favorite."
+  ],
+  [
+   "104",
+   "38",
+   "CT1",
+   "Name at least two regional theme parks and discuss similarities and distinctive differences."
+  ],
+  [
+   "105",
+   "38",
+   "CT2",
+   "What were the first historic sites visited in recorded history?"
+  ],
+  [
+   "106",
+   "38",
+   "HCM1",
+   "Name at least two regional theme parks and discuss similarities and distinHCMive differences."
+  ],
+  [
+   "107",
+   "38",
+   "HCM2",
+   "What were the first historic sites visited in recorded history?"
+  ],
+  [
+   "108",
+   "39",
+   "CT1",
+   "Why are theaters, concerts, musicals, and comedy shows regaining importance?"
+  ],
+  [
+   "109",
+   "39",
+   "HCM1",
+   "Why are theaters, concerts, musicals, and comedy shows important today?"
+  ],
+  [
+   "110",
+   "40",
+   "CT1",
+   "What is a type of your favorite club and their function?"
+  ],
+  [
+   "111",
+   "40",
+   "CT2",
+   "What are differences between the purpose of a theme park and the purpose of clubs?"
+  ],
+  [
+   "112",
+   "40",
+   "HCM1",
+   "What is a type of your favorite club and their funHCMion?"
+  ],
+  [
+   "113",
+   "40",
+   "HCM2",
+   "What are differences between the purpose of a theme park and the purpose of clubs?"
+  ],
+  [
+   "114",
+   "41",
+   "CT1",
+   "Describe the operations of a country club."
+  ],
+  [
+   "115",
+   "41",
+   "CT2",
+   "What is the recreation and leisure trend?"
+  ],
+  [
+   "116",
+   "41",
+   "HCM1",
+   "Describe the operations of a country club."
+  ],
+  [
+   "117",
+   "41",
+   "HCM2",
+   "What is the recreation and leisure trend?"
+  ],
+  [
+   "118",
+   "42",
+   "CT1",
+   "What are the differences between gaming and gambling?"
+  ],
+  [
+   "119",
+   "42",
+   "CT2",
+   "Explain the growth in casino gaming since the 1970s."
+  ],
+  [
+   "120",
+   "42",
+   "HCM1",
+   "What are the differences between gaming and gambling?"
+  ],
+  [
+   "121",
+   "42",
+   "HCM2",
+   "Explain the growth in casino gaming since the 1970s."
+  ],
+  [
+   "122",
+   "42",
+   "HCM3",
+   "How has theatre impacted the world?"
+  ],
+  [
+   "123",
+   "43",
+   "CT1",
+   "How are hotel operations in a gaming entertainment business different from hotel operations in a nongaming environment?"
+  ],
+  [
+   "124",
+   "43",
+   "CT2",
+   "What is the Gaming Entertainment Industry trend?"
+  ],
+  [
+   "125",
+   "43",
+   "HCM1",
+   "How are hotel operations in a gaming entertainment business different from hotel operations in a nongaming environment?"
+  ],
+  [
+   "126",
+   "43",
+   "HCM2",
+   "What is the Gaming Entertainment Industry trend?"
+  ],
+  [
+   "127",
+   "44",
+   "HCM1",
+   "What is the difference between meetings expositions and conventions?"
+  ],
+  [
+   "128",
+   "44",
+   "HCM2",
+   "What are conventions examples?"
+  ],
+  [
+   "129",
+   "45",
+   "CT1",
+   "Who are the major players in the convention industry?"
+  ],
+  [
+   "130",
+   "45",
+   "CT2",
+   "What are the different types of meetings, conventions, and expositions?"
+  ],
+  [
+   "131",
+   "45",
+   "HCM1",
+   "Who are the major players in the convention industry?"
+  ],
+  [
+   "132",
+   "45",
+   "HCM2",
+   "What are the different types of meetings, conventions, and expositions?"
+  ],
+  [
+   "133",
+   "47",
+   "CT1",
+   "What are three different types venues for meetings, conventions, and expositions?"
+  ],
+  [
+   "134",
+   "47",
+   "HCM1",
+   "What are three different types venues for meetings, conventions, and expositions?"
+  ],
+  [
+   "135",
+   "50",
+   "CT1",
+   "What are the differences between a daily event and a special event?"
+  ],
+  [
+   "136",
+   "50",
+   "CT2",
+   "What are the principle responsibilities of an event planner?"
+  ],
+  [
+   "137",
+   "50",
+   "HCM1",
+   "What are the differences between a daily event and a special event?"
+  ],
+  [
+   "138",
+   "50",
+   "HCM2",
+   "What are the principle responsibilities of an event planner?"
+  ],
+  [
+   "139",
+   "51",
+   "CT1",
+   "What events continue to lead the industry in terms of event business?"
+  ],
+  [
+   "140",
+   "51",
+   "CT2",
+   "What are the key skills that a person entering the charity event category must possess?"
+  ],
+  [
+   "141",
+   "51",
+   "HCM1",
+   "What events continue to lead the industry in terms of event business?"
+  ],
+  [
+   "142",
+   "51",
+   "HCM2",
+   "What are the key skills that a person entering the charity event category must possess?"
+  ],
+  [
+   "143",
+   "52",
+   "CT1",
+   "Define the process of negotiation."
+  ],
+  [
+   "144",
+   "52",
+   "CT2",
+   "What do the skills and abilities need for successful event management?"
+  ],
+  [
+   "145",
+   "52",
+   "HCM1",
+   "Define the process of negotiation."
+  ],
+  [
+   "146",
+   "52",
+   "HCM2",
+   "What do the skills and abilities need for successful event management?"
+  ],
+  [
+   "147",
+   "53",
+   "CT1",
+   "What is the Special Events Industry trend?"
+  ],
+  [
+   "148",
+   "53",
+   "CT2",
+   "Identify the main professional organizations and associations involved in the special events industry."
+  ],
+  [
+   "149",
+   "53",
+   "HCM1",
+   "What is the Special Events Industry trend?"
+  ],
+  [
+   "150",
+   "53",
+   "HCM2",
+   "Identify the main professional organizations and associations involved in the special events industry."
+  ]
+ ],
+ "links": [
+  "/download/4382/S/1_HMO102.zip",
+  "Guidance on AI activities, teaching methods, and assessment strategies: https://drive.google.com/drive/folders/1e4Z-_xtyWw8sQ5qY5pAL2Rd9vRVCAf9m?usp=sharing",
+  "/download/4382/S/2_HMO102.zip"
+ ]
+}

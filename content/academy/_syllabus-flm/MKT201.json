@@ -1,0 +1,1333 @@
+{
+ "ma": "MKT201",
+ "sylID": "13448",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13448",
+   "code": "MKT201",
+   "name": "Consumer Behavior _Hành vi người tiêu dùng",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13448",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13448",
+  "Syllabus Name": "Consumer Behavior _Hành vi người tiêu dùng",
+  "Course Name English": "Consumer Behavior",
+  "Subject Code": "MKT201",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "MKT101",
+  "Description": "Main objectives:\nThis course is designed to provide students with essential and working knowledge of the terminology and concepts in the field of consumer behavior and a better understanding of how consumers make choices and how their choices ultimately affect their well-being. After taking this class, the students should all be able to:\n(1) Understand basic concepts and major research that has relevance to consumer behaviour\n(2) Integrate these concepts into a framework that can be applied to the analysis of the individual consumer and the market\n(3) Analyse and understand consumer's decision making process\n(4) Apply consumer behaviour in the development and implementation of marketing tactics and strategies.\n\nDescription:\nThis course will review concepts, issues, and methods applicable to the study of consumer behavior. It is divided into 4 main parts: (1) Psychological characteristics of consumers; (2) Social and external factors influencing consumer behavior; (3) The role of sub-culture and culture; and (4) Consumer decision-making process.\nClass discussions, case study analysis , practical activities, along with group projects and quizzes will provide the basis for the learning environment in the classroom.\nThe assignment requires students to integrate AI throughout the project, leveraging it for ideation, structuring, content generation, and analysis. The primary level of using AI is \"AI Task Completion, Human Evaluation\", with creative aspects edging into the \"Full AI\", as students rely on AI to achieve creative outputs collaboratively while critically engaging with its results.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfill tasks given by instructor after class\n- Use their own laptop in class only for learning purpose\n- Read the textbook in advance",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Consumer Behavior: Buying, Having, and Being",
+   "Solomon, Michael R",
+   "Pearson",
+   "2019",
+   "13th",
+   "ISBN: 9781292318103",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 quyển. Ưu tiên mua version mới nhất"
+  ],
+  [
+   "2",
+   "Consumer Behavior: Buying, Having, and Being",
+   "Solomon, Michael R",
+   "Pearson",
+   "2017",
+   "12th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Consumer Behavior: Buying, Having, and Being",
+   "Solomon, Michael R",
+   "Pearson",
+   "2011",
+   "9th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Harvard Business Review",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "http://www.pearsonglobaleditions.com/Sitemap/Solomon/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/generative-ai-prompt-engineering-for-everyone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "https://www.coursera.org/projects/prompt-engineering-generative-ai-for-marketing-advertising",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "8",
+   "Instructor Manual with questions, answers, exercises, PPT, Test Bank, Video with guidelines",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "To define the conception of consumer behavior and reveal its importance in the context of marketing"
+  ],
+  [
+   "2",
+   "CLO2",
+   "To identify factors that influence consumer behavior"
+  ],
+  [
+   "3",
+   "CLO3",
+   "To examine the consumer decision making process"
+  ],
+  [
+   "4",
+   "CLO4",
+   "To describe the target market and determine the positioning strategy according to consumer characteristics and behavior"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply AI in marketing processes, evaluate the efficiency of different AI tools, and critically address ethical risks."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "OP1: Participation in class discussionIn-class Exercises; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "0",
+   "",
+   "Class room",
+   "OP1:Participation grade will be given based on students' preparation and participation in classroom. Quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments; OP2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Essay Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 40'; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4",
+   "OP1: Essay questions ; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "1-3",
+   "OP1: The question will cover the lectures, class discussions, activities, exercises, and textbook.; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Class room",
+   ""
+  ],
+  [
+   "3",
+   "Group Project",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO5",
+   "OP1: A group of four or five students will choose a product or service of a real company in Vietnam and conduct a research to analyse target consumer's behaviour in buying this particular product/service. In order to report on this topic, the group has to implement a secondary research and a primary research in a form of survey or focus group. Option 2: A group of students will plan and implement a campaign to change the public’s attitude towards a product/service/company or a concept. Your group will have to narrow down your topic to a specific target audience and a specific issue. The campaign has to be executed by your group during the time of the course MKT201; Students will apply AI tools to conduct market research, analyze customer insights, segment customers, personalize marketing strategies, and create an AI-generated advertising campaign. This assignment integrates AI-based analysis with marketing principles to understand consumer behavior.OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Each group has to submit a 2-page Project Proposal and a Final Report of maximum 3000 words excluding appendix. Evidence of work must be provided in the Report Appendix. Detailed information about the Report and Presentation's structure and requirement will be provided in the first week of class. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Application of consumer behavior theories in marketing and real-life works. Students will experience the practical application of AI tools in marketing. They will gain insights into how AI shapes consumer behavior and advertising strategies. They will critically reflect on AI’s role and its implications for marketing ethics.OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Evaluation will be based on the presentation, the written report, and individual performance (e.g., through interviews or individual questions).\nOP2 (For Constructivism Approach only): Follow lecturer's proposal\nAll options: Refer to the AI Integration Guide document for AI skill assessment.",
+   "A deduction of 10% of the assignment mark will be applied for each day of late submission."
+  ],
+  [
+   "4",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "LO1, LO2",
+   "OP1: Individual students will work on a case study or an article, in which they will critically review and apply consumer behavior concepts to analyze 1-2 key issues depicted in that case study or article. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Depending on the assignment format. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Research skills, consumer behavior concepts and frameworks, application of theories in analysis. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Individual writing assignment; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 1500 word essay; OP2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "5",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "15' each",
+   "LO1, LO2, LO3, LO4",
+   "OP1: Multiple choice questions, Case study exercises; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1:~15 questions; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Quizzes will test for knowledge of subjects in the chapter assigned for that day. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Class room",
+   "OP1: These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 4\nOP2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4",
+   "Multiple choice. Other types of questions may be included.",
+   "~ 50 questions",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to Consumer Behavior",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT201",
+   "Instructor Manual, Teacher's Resource",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Buying, Having and Being\n- Consumer behavior: People in the Marketplace\n- Consumers are different! How we divide them up\n- Marketing's impact on consumer\n- What does it mean to consume?",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT201",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Buying, Having and Being\n- The global \"always-on\" consumer\n- Consumer behavior as a field of study\n- Consumer trends: Keep ahead to keep up",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT201",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "4",
+   "Introduction to AI in Consumer Behavior: What is AI and how is it transforming marketing?",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT201",
+   "Presentation on AI in Marketing",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Consumer and Social Well-Being\n- Business ethics and consumer rights\n- Consumer's rights and Product satisfaction",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT201 AI Integration Guide_FA25",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: Consumer and Social Well-Being\n- Major policy issues relevant to consumer behavior\n- The dark side of consumer behavior",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "7",
+   "AI in Consumer Insights: Market Research Automation and Ethical Considerations",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "Market research case studies using AI",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3: Perception\n- Sensation\n- The stages of perception\nIndividual Assignment Guidelines",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3: Perception\n- Personal selection factors\n- Stimulus organization",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4: Learning and Memory\n- How do we learn?",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4: Learning and Memory\n- Cognitive learning theory\n- Memory",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "12",
+   "Group Project Guideline\nCustomer Segmentation and Personalization Using AI",
+   "Offline",
+   "LO1, LO2",
+   "I,T",
+   "",
+   "",
+   "Sample personas created with AI tools",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5: Motivation and Affect\n- The motivation process: Why ask why?",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5: Motivation and Affect\n- Affect\n- Consumer involvement",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5: Motivation and Affect\n- Case study: Motivating the KonMari way",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "Review materials",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 6: The Self: Mind, Gender, and Body\n- The self\n- Gender identity",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 6: The Self: Mind, Gender, and Body\n- The body as product",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 6: The Self: Mind, Gender, and Body\n- The body as product",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "19",
+   "AI in Action: Hands-on Workshop for the Group Assignment",
+   "Offline",
+   "LO1, LO2",
+   "I,T,U",
+   "",
+   "",
+   "Step-by-step guide for assignment tasks",
+   ""
+  ],
+  [
+   "20",
+   "Reflection on AI and Consumer Behavior",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Presentation on ethical implications of AI",
+   ""
+  ],
+  [
+   "21",
+   "Quiz 1: cases/exercises: Chapter 1-6",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 7: Personality, Lifestyles and Values\n- Personality - Brand Personality",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Review materials",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 7: Personality, Lifestyles and Values\n- Lifestyles and Consumer identity - Psychographics - Values",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 7: Personality, Lifestyles and Values\n- Lifestyles and Consumer identity - Psychographics - Values",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 8: Attitudes and Persuasive Communications\n- The power of attitudes",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8: Attitudes and Persuasive Communications\n- How do we form attitudes?",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 8: Attitudes and Persuasive Communications\n- Persuasion: How do marketers change attitudes?\n- Case study: Anti-smoking advertising - Can you be scared into quitting?",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 9: Decision Making\nGroup Project - Proposal",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 9: Decision Making\nGroup Project - Proposal",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "Review materials",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 9: Decision Making\n- What's your problem?- Cognitive decision making",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 9: Decision Making\n- Habitual decision making - Priming and Nudging",
+   "Offline",
+   "LO1, LO2",
+   "T,U",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 10: Buying, Using and Disposing\n- Situation effects on Consumer behavior",
+   "Offline",
+   "LO1, LO2",
+   "T,U",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10: Buying, Using and Disposing\n- The shopping experience",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 10: Buying, Using and Disposing\n- Ownership and the Sharing Economy",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 10: Buying, Using and Disposing\n- Postpurchase satisfaction and Disposal",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 11: Groups and Social Media\n- Groups - Collect Decíion Making: How groups influence what we buy",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 11: Groups and Social Media\n- The intimate corporation: family decision making - Word - of - mouth communicaton",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 11: Groups and Social Media\n- The intimate corporation: family decision making - Word - of - mouth communicaton",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 11: Groups and Social Media\n- Opinion Leadership - Social Media: The horizontal revolution\nIndividual Assignment Submission",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 14: Culture\n- Cultural systems - Cultural stories and ceremonies",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 14: Culture\n- Sacred and Profance consumption - The Diffusion of Innovation",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 14: Culture\n- The Fashion System - Global consumer culture",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "43",
+   "Revision Chapter 7-14",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "44",
+   "Revision Chapter 7-14",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "45",
+   "Quiz 2: Chapter 7-14",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 12: Income and social Class\n- Income and Consumer identity",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 12: Income and social Class\n- Social class and Consumer identity",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 12: Income and social Class\n- Status symbols and social capital",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 13: Subcultures\n- Ethic and Racial subcultures",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 13: Subcultures\n- Subcultural stereotypes",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 13: Subcultures\n- Religious subcultures",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 13: Subcultures\n- The family unit and age subcultures",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 13: Subcultures\n- Place-based subcultures",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "54",
+   "Essay Test",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "55",
+   "COURSE REVIEW",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "56",
+   "GROUP PROJECT PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "57",
+   "GROUP PROJECT PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "58",
+   "GROUP PROJECT PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "59",
+   "GROUP PROJECT PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ],
+  [
+   "60",
+   "GROUP PROJECT PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "",
+   "",
+   "Read materials\nbefore class",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT1.1",
+   "Please providing your full understanding of the meaning of the word \"Consumer Behavior\"?"
+  ],
+  [
+   "2",
+   "2",
+   "CT1.2",
+   "Please describing the impact Marketing on consumer? An Example?"
+  ],
+  [
+   "3",
+   "3",
+   "CT1.3",
+   "What does it mean to consume?"
+  ],
+  [
+   "4",
+   "4",
+   "CT2.1",
+   "Please describing Business ethics and consumer rights? An Example?"
+  ],
+  [
+   "5",
+   "5",
+   "CT2.2",
+   "The economics of information perspective argues that advertising is important. Why?"
+  ],
+  [
+   "6",
+   "6",
+   "CT2.3",
+   "Why should companies encourage consumers to complain? How can this benefit the business?"
+  ],
+  [
+   "7",
+   "7",
+   "CT3.1",
+   "What is greenwashing? Is it ethical? Are consumers likely to be convinced?"
+  ],
+  [
+   "8",
+   "8",
+   "CT3.2",
+   "What is LOHAS, and how is it significant to marketers?"
+  ],
+  [
+   "9",
+   "9",
+   "CT3.3",
+   "What is hedonic consumption? provide an example."
+  ],
+  [
+   "10",
+   "10",
+   "CT4.1",
+   "Why is Weber’s Law a challenge for green marketers?"
+  ],
+  [
+   "11",
+   "11",
+   "CT4.2",
+   "Does subliminal perception work? Why or why not?"
+  ],
+  [
+   "12",
+   "12",
+   "CT4.3",
+   "How do you identify a product’s object, sign (or symbol), and interpretant?"
+  ],
+  [
+   "13",
+   "13",
+   "CT5.1",
+   "What is the difference between an unconditioned stimulus and a conditioned stimulus?"
+  ],
+  [
+   "14",
+   "14",
+   "CT5.2",
+   "Advertisers like to use celebrities and well"
+  ],
+  [
+   "15",
+   "15",
+   "CT5.3",
+   "How do different types of reinforcement enhance learning? How does the strategy of frequency marketing relate to conditioning?"
+  ],
+  [
+   "16",
+   "16",
+   "CT6.1",
+   "How does learning new information make it more likely that we’ll forget things we’ve already learned?"
+  ],
+  [
+   "17",
+   "17",
+   "CT6.2",
+   "What is motivation and why is this idea so important to marketers?"
+  ],
+  [
+   "18",
+   "18",
+   "CT6.3",
+   "What are some of the key problems with Maslow’s hierarchy of needs?"
+  ],
+  [
+   "19",
+   "19",
+   "CT7.1",
+   "What is the difference between a mood and an emotion?"
+  ],
+  [
+   "20",
+   "20",
+   "CT7.2",
+   "What are some strategies marketers can use to increase consumers’ involvement with their products?"
+  ],
+  [
+   "21",
+   "21",
+   "CT7.3",
+   "Please describing Gender identity? An Example?"
+  ],
+  [
+   "22",
+   "22",
+   "CT8.1",
+   "Please describing The body as product? An Example?"
+  ],
+  [
+   "23",
+   "23",
+   "CT8.2",
+   "Please giving an example about the Personality and Brand Personality?"
+  ],
+  [
+   "24",
+   "24",
+   "CT8.3",
+   "Please giving an example about the Lifestyles and Consumer identity, Psychographics and Values?"
+  ],
+  [
+   "25",
+   "25",
+   "CT9.1",
+   "How can an attitude play an ego"
+  ],
+  [
+   "26",
+   "26",
+   "CT9.2",
+   "According to balance theory, how can we tell if a triad is balanced or unbalanced? How can consumers restore balance to an unbalanced triad?\""
+  ],
+  [
+   "27",
+   "27",
+   "CT9.3",
+   "What is source credibility, and what are two factors that influence our decision as to whether a source is credible?"
+  ],
+  [
+   "28",
+   "28",
+   "CT10.1",
+   "When is it best to present a two"
+  ],
+  [
+   "29",
+   "29",
+   "CT10.2",
+   "Please giving an example about The power of attitudes?"
+  ],
+  [
+   "30",
+   "30",
+   "CT10.3",
+   "How do we form attitudes?"
+  ],
+  [
+   "31",
+   "31",
+   "CT11.1",
+   "How do marketers change attitudes?"
+  ],
+  [
+   "32",
+   "32",
+   "CT11.2",
+   "For Anti-smoking advertising, can you be scared into quitting? Why?"
+  ],
+  [
+   "33",
+   "33",
+   "CT11.3",
+   "What are steps involved in the model of cognitive decision making?"
+  ],
+  [
+   "34",
+   "34",
+   "CT12.1",
+   "What is the difference between a superordinate category, a basic level category, and a subordinate category?"
+  ],
+  [
+   "35",
+   "35",
+   "CT12.2",
+   "What is the difference between a noncompensatory and a compensatory decision rule? Give one example of each."
+  ],
+  [
+   "36",
+   "36",
+   "CT12.3",
+   "In terms of temporal factors, what does slow or fast mean?"
+  ],
+  [
+   "37",
+   "37",
+   "CT13.1",
+   "What is time poverty, and how can it influence our purchase decisions?"
+  ],
+  [
+   "38",
+   "38",
+   "CT13.2",
+   "What are involved in a consumption situation?"
+  ],
+  [
+   "39",
+   "39",
+   "CT13.3",
+   "How do business models in the sharing economy differ from traditional purchase processes?"
+  ],
+  [
+   "40",
+   "40",
+   "CT14.1",
+   "What is the difference between recycling and lateral cycling?"
+  ],
+  [
+   "41",
+   "41",
+   "CT14.2",
+   "What are some (three) types of social power? give an example of each."
+  ],
+  [
+   "42",
+   "42",
+   "CT14.3",
+   "What is buzz building, and how does it work?"
+  ],
+  [
+   "43",
+   "43",
+   "CT15.1",
+   "What is an opinion leader? Give three reasons why they are powerful influences on consumers’ opinions."
+  ],
+  [
+   "44",
+   "44",
+   "CT15.2",
+   "How do you find a suitable opinion leader?"
+  ],
+  [
+   "45",
+   "45",
+   "CT15.3",
+   "What is culture? What are three dimensions that social scientists use to describe a culture and give an example of each."
+  ],
+  [
+   "46",
+   "46",
+   "CT16.1",
+   "What is a ritual? What are three kinds of rituals and provide an example of each."
+  ],
+  [
+   "47",
+   "47",
+   "CT16.2",
+   "What are the differences among fashion, a fashion, and in fashion?"
+  ],
+  [
+   "48",
+   "48",
+   "CT16.3",
+   "What is the difference between a fad, a fashion, and classic fashion life cycle?"
+  ],
+  [
+   "49",
+   "49",
+   "CT17.1",
+   "What is discretionary income?. How does consumer confidence influence consumer behavior?"
+  ],
+  [
+   "50",
+   "50",
+   "CT17.2",
+   "What are the main motivators in purchasing a status symbol?"
+  ],
+  [
+   "51",
+   "51",
+   "CT17.3",
+   "Is it true that religious, cultural, or traditional events impact consumption?"
+  ],
+  [
+   "52",
+   "52",
+   "CT18.1",
+   "What is the FLC, and why is it important to marketers?"
+  ],
+  [
+   "53",
+   "53",
+   "CT18.2",
+   "Please giving an example about Ethic and Racial subcultures?"
+  ],
+  [
+   "54",
+   "54",
+   "CT18.3",
+   "Please giving an example about Subcultural stereotypes?"
+  ],
+  [
+   "55",
+   "55",
+   "CT19.1",
+   "Please giving an example about Religious subcultures?"
+  ],
+  [
+   "56",
+   "56",
+   "CT19.2",
+   "Please giving an example about The family unit and age subcultures?"
+  ],
+  [
+   "57",
+   "57",
+   "CT19.3",
+   "Please giving an example about Place-based subcultures?"
+  ],
+  [
+   "58",
+   "58",
+   "CT20.1",
+   "What is the meaning of the customer behavior analysis in business activities? Why is this analysis so important?"
+  ]
+ ],
+ "links": [
+  "/download/13448/S/1_MKT201.zip",
+  "/download/13448/S/2_MKT201.zip",
+  "/download/13448/S/3_MKT201.zip",
+  "/download/13448/S/4_MKT201.zip",
+  "/download/13448/S/5_MKT201 AI Integration Guide_FA25.zip"
+ ]
+}

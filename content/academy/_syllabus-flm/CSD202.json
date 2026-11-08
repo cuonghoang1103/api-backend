@@ -1,0 +1,951 @@
+{
+ "ma": "CSD202",
+ "sylID": "13160",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13160",
+   "code": "CSD202",
+   "name": "Data structures and algorithms (C++)_Cấu trúc dữ liệu và giải thuật (C++)",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13160",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13160",
+  "Syllabus Name": "Data structures and algorithms (C++)_Cấu trúc dữ liệu và giải thuật (C++)",
+  "Course Name English": "Data structures and algorithms (C++)",
+  "Subject Code": "CSD202",
+  "Learning-Teaching Method": "In-class lecture, Inquiry-based Teaching, Social Constructivism",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 85' practical exam + 102.6h self-study",
+  "Pre-Requisite": "Chuyên ngành BIT_IC: PRF193;\nChuyên ngành BIT_AS: PCP291",
+  "Description": "\"This course provides students in the Automotive Software and Intergrated Circuir Engineering field with a solid foundation in fundamental data structures and algorithms, focusing on applications in embedded and control systems used in vehicles. Topics include methods for efficiently storing, accessing, and processing data using structures such as linked lists, stacks, queues, trees, graphs, and hash tables; and algorithms for sorting, searching, and traversing trees and graphs.\nSpecial emphasis is placed on real-world automotive applications such as sensor data processing, engine queue management, pathfinding and mapping, and task scheduling in real-time embedded systems.\"",
+  "StudentTasks": "- Students must attend more than 80% of contact sessions in order to be accepted to the final examination.\n- Student is responsible to do all exercises given by instructor in class or at home and submit on time\n- Promptly access to the FU CMS at http://cmshn.fpt.edu.vn for up-to-date course information\n- Promptly access to the EduNext system at https://fu-edunext.fpt.edu.vn for all activity.",
+  "Tools": "- Internet\n- C language utility (ex.DevC++ 6.3)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Data Structures and Algorithms in C++",
+   "Adam Drozdek",
+   "Cengage Learning",
+   "2013",
+   "4th Edition",
+   "978-1133608424",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Data Structures and Algorithm Analysis in C++",
+   "Mark Allen Weiss",
+   "Pearson",
+   "2014",
+   "4th edition",
+   "978-0273769385",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Problem Solving with C++",
+   "Walter Savitch",
+   "Pearson",
+   "2017",
+   "10 edition",
+   "978-0134448282",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "DSA Tutorial - Learn Data Structures and Algorithms",
+   "N/A",
+   "N/A",
+   "N/A",
+   "N/A",
+   "N/A",
+   "False",
+   "False",
+   "True",
+   "https://www.geeksforgeeks.org/dsa/dsa-tutorial-learn-data-structures-and-algorithms/"
+  ],
+  [
+   "5",
+   "C++ reference",
+   "N/A",
+   "N/A",
+   "N/A",
+   "N/A",
+   "N/A",
+   "False",
+   "False",
+   "True",
+   "https://en.cppreference.com/"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Overview fundamental Object-Oriented Programming (OOP) concepts such as encapsulation, inheritance, and polymorphism in C++"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Complexity and Performance Analysis:\n1. Understand and apply asymptotic analysis (Big-O, Ω, and Θ notation) to evaluate algorithm efficiency.\n2. Differentiate between best-case, average-case, and worst-case complexity scenarios."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Be able to understand and apply Linked Lists and Dynamic Data Structures:\nImplement singly linked lists, doubly linked lists, circular lists in C++"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Be able to understand Stacks, Queues, and Their Applications"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Be able to understand recursion its applications"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Be able to understand Sorting and Searching Algorithms"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understandable and applicable Trees and Binary Search Trees (BSTs)\n1. Construct and manipulate binary search trees (BSTs), including insertion, deletion, and traversal.\n2. Implement self-balancing trees (AVL trees, splay trees, and red-black trees) to maintain optimal performance.\n3: Use heaps and priority queues for efficient data storage and retrieval."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Be able to understand and apply Graph theory"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Be able to understand Hashing and Efficient Data Retrieval"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Be able to understand Data Compression"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Be able to understand String Matching Algorithms"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment",
+   "on-going",
+   "3",
+   "20.0%",
+   "1",
+   "Option 1: at home\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "ASS1: CLO1, CLO2, CLO3\nASS2: CLO4, CLO5, CLO6\nASS3: CLO7, CLO8, CLO9, CLO10, CLO11",
+   "Homework, mini-projects, and optionally the constructivist approach as proposed by the lecturer.",
+   "by instructor",
+   "ASS1: CLO1, CLO2, CLO3\nASS2: CLO4, CLO5, CLO6\nASS3: CLO7, CLO8, CLO9, CLO10, CLO11",
+   "Individual or team work, guided by instructor, submission by a given deadline",
+   "Instructor has responsible for guiding students in carrying out the task"
+  ],
+  [
+   "2",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: 20'-40'\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Option 1: essay or multiple choice\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "3-8 for each CLOx",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "in class, by instructor",
+   "Progress test must be taken right after the last lectures of required material.\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: 20'-40'\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO6, CLO7, CLO8, CLO9, CLO10, CLO11",
+   "Option 1: essay or multiple choice\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "3-8 for each CLOx",
+   "CLO6, CLO7, CLO8, CLO9, CLO10, CLO11",
+   "in class, by instructor",
+   "Progress test must be taken right after the last lectures of required material.\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "All CLOs",
+   "Multiple choices\nMarked by Computer",
+   "50",
+   "All topics",
+   "by exam board,\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ],
+  [
+   "5",
+   "Practical exam",
+   "PE",
+   "1",
+   "30.0%",
+   "2",
+   "85'",
+   "All CLOs",
+   "Preferable to be marked by scripts",
+   "2-4 small problems",
+   "Problem(s) to solve by programming (CLO3, CLO4, CLO5, CLO6, CLO7, CLO8)",
+   "supervised by proctor(s) sent by exam board",
+   "Automatic or manual evaluating"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "",
+   "I",
+   "",
+   "CSD202",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Object-Oriented Programming: Encapsulation/Inheritance",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slide Chapter 1, exercises & practical examples, text book",
+   "CSD202",
+   "Review Slide Chapter 1, exercises & practical examples, text book",
+   ""
+  ],
+  [
+   "3",
+   "Object-Oriented Programming Polymorphism",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slide Chapter 1, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 1, exercises & practical examples, text book",
+   ""
+  ],
+  [
+   "4",
+   "Structure and Pointer in C++",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slide Chapter 1, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 1, exercises & practical examples, text book",
+   ""
+  ],
+  [
+   "5",
+   "Random Access File",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slide Chapter 1, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 1, exercises & practical examples, text book",
+   ""
+  ],
+  [
+   "6",
+   "Exercices",
+   "Offline",
+   "CLO1",
+   "U",
+   "Slide Chapter 1, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 1, exercises & practical examples, text book",
+   ""
+  ],
+  [
+   "7",
+   "Linked list",
+   "Offline",
+   "CLO2, CLO3",
+   "TU",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "8",
+   "Singly linked list - Continue",
+   "Offline",
+   "CLO2, CLO3",
+   "TU",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "9",
+   "Singly linked list - Continue",
+   "Offline",
+   "CLO2, CLO3",
+   "TU",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "10",
+   "Singly linked list - Continue",
+   "Offline",
+   "CLO2, CLO3",
+   "TU",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "11",
+   "Singly linked list (class approach)",
+   "Offline",
+   "CLO2, CLO3",
+   "TU",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "12",
+   "Singly linked list (class approach)",
+   "Offline",
+   "CLO2, CLO3",
+   "TU",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "13",
+   "Doubly linked list - Circular Lists",
+   "Offline",
+   "CLO4",
+   "T",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "14",
+   "Doubly linked list - Circular Lists - Continue",
+   "Offline",
+   "CLO4",
+   "T",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "15",
+   "Lists in the Standard Template Library",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I",
+   "Slide Chapter 2, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 2, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "16",
+   "Stack - Queue - Priority Queues",
+   "Offline",
+   "CLO2, CLO4",
+   "TU",
+   "Slide Chapter 3, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 3, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "17",
+   "Stacks Queue and Priority Queue in the Standard Template Library",
+   "Offline",
+   "CLO2, CLO4",
+   "T",
+   "Slide Chapter 3, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 3, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "18",
+   "Guideline Assignment 1 (Linked list)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "ITU",
+   "Slide Chapter 1,2,3, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 1-3, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "19",
+   "Sorting - Elementary Sorting Algorithms",
+   "Offline",
+   "CLO5, CLO6",
+   "TU",
+   "Slide Chapter 4, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 4, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "20",
+   "Decision Trees",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slide Chapter 4, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 4, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "21",
+   "Efficient Sorting Algorithms",
+   "Offline",
+   "CLO5, CLO6",
+   "TU",
+   "Slide Chapter 4, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 4, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "22",
+   "Implementation - Efficient Sorting Algorithms",
+   "Offline",
+   "CLO5, CLO6",
+   "TU",
+   "Slide Chapter 4, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 4, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "23",
+   "Review",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Slide Chapter 1,2,3, 4, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 1-4, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "24",
+   "Review",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Slide Chapter 1,2,3, 4, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 1-4, exercises & practical examples, text book.\nDo assignment 1.",
+   ""
+  ],
+  [
+   "25",
+   "Introduction to Trees, Binary Trees, and Binary Search Trees",
+   "Offline",
+   "CLO7",
+   "TU",
+   "Slide Chapter 5_Tree01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree01, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "26",
+   "Implementing Binary Search Trees (BST)",
+   "Offline",
+   "CLO2, CLO7",
+   "TU",
+   "Slide Chapter 5_Tree01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree01, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "27",
+   "Searching a Binary Search Tree",
+   "Offline",
+   "CLO2, CLO7",
+   "TU",
+   "Slide Chapter 5_Tree01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree01, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "28",
+   "Tree Traversal",
+   "Offline",
+   "CLO2, CLO7",
+   "T",
+   "Slide Chapter 5_Tree01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree01, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "29",
+   "Deletion - Delete by Copying",
+   "Offline",
+   "CLO2, CLO7",
+   "TU",
+   "Slide Chapter 5_Tree01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree01, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "30",
+   "Deletion - Delete by Merging",
+   "Offline",
+   "CLO2, CLO7",
+   "TU",
+   "Slide Chapter 5_Tree01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree01, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "31",
+   "Balancing a Tree - Rotation",
+   "Offline",
+   "CLO7",
+   "TU",
+   "Slide Chapter 5_Tree02, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree02, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "32",
+   "Heap - Treap",
+   "Offline",
+   "CLO7",
+   "T",
+   "Slide Chapter 5_Tree02, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 5_Tree02, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "33",
+   "Review Exercises\nGuideline Assignment 2 (Tree)",
+   "Offline",
+   "",
+   "TU",
+   "Slide Chapter 4&5, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 4&5, exercises & practical examples, text book.\nDo assignment 1&2.",
+   ""
+  ],
+  [
+   "34",
+   "Assignment 1 evaluation",
+   "Offline",
+   "",
+   "U",
+   "Review Assignment 1",
+   "",
+   "Present Assignment 1",
+   ""
+  ],
+  [
+   "35",
+   "Assignment 1 evaluation",
+   "Offline",
+   "",
+   "U",
+   "Review Assignment 1",
+   "",
+   "Present Assignment 1",
+   ""
+  ],
+  [
+   "36",
+   "Progress test 1",
+   "Offline",
+   "",
+   "U",
+   "Progress test 1",
+   "",
+   "Progress test 1",
+   ""
+  ],
+  [
+   "37",
+   "Graphs - Graph Representation",
+   "Offline",
+   "CLO8",
+   "T",
+   "Slide Chapter 6_Graph01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph01, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "38",
+   "Graph Traversals - implementation",
+   "Offline",
+   "CLO8",
+   "TU",
+   "Slide Chapter 6_Graph01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph01, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "39",
+   "Shortest Paths - implementation",
+   "Offline",
+   "CLO8",
+   "TU",
+   "Slide Chapter 6_Graph01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph01, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "40",
+   "Shortest Paths - implementation - cont.",
+   "Offline",
+   "CLO8",
+   "TU",
+   "Slide Chapter 6_Graph01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph01, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "41",
+   "Cycle Detection",
+   "Offline",
+   "CLO8",
+   "T",
+   "Slide Chapter 6_Graph01, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph01, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "42",
+   "Spanning Trees",
+   "Offline",
+   "CLO8",
+   "T",
+   "Slide Chapter 6_Graph02, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph02, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "43",
+   "Connectivity",
+   "Offline",
+   "CLO8",
+   "T",
+   "Slide Chapter 6_Graph02, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph02, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "44",
+   "Eulerian and Hamiltonian Graphs",
+   "Offline",
+   "CLO8",
+   "T",
+   "Slide Chapter 6_Graph02, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph02, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "45",
+   "Implementation - Connectivity and Eulerian graph",
+   "Offline",
+   "CLO8",
+   "TU",
+   "Slide Chapter 6_Graph02, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph02, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "46",
+   "Graph Coloring",
+   "Offline",
+   "CLO8",
+   "T",
+   "Slide Chapter 6_Graph02, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6_Graph02, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "47",
+   "Review",
+   "Offline",
+   "CLO8",
+   "T",
+   "Slide Chapter 6, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 6, exercises & practical examples, text book.\nDo assignment 2&3.",
+   ""
+  ],
+  [
+   "48",
+   "Assignment 2 evaluation",
+   "Offline",
+   "",
+   "U",
+   "Review Assignment 1",
+   "",
+   "Present Assignment 1",
+   ""
+  ],
+  [
+   "49",
+   "Assignment 2 evaluation",
+   "Offline",
+   "",
+   "U",
+   "Review Assignment 1",
+   "",
+   "Present Assignment 1",
+   ""
+  ],
+  [
+   "50",
+   "Assignment 2 evaluation - Guideline Assignment 3 (Graph)",
+   "Offline",
+   "",
+   "U",
+   "Review Assignment 1",
+   "",
+   "Present Assignment 1",
+   ""
+  ],
+  [
+   "51",
+   "Hashing - Hash Functions",
+   "Offline",
+   "CLO9",
+   "T",
+   "Slide Chapter 7, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 7, exercises & practical examples, text book.\nDo assignment 3.",
+   ""
+  ],
+  [
+   "52",
+   "Collision Resolution - Deletion",
+   "Offline",
+   "CLO9",
+   "T",
+   "Slide Chapter 7, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 7, exercises & practical examples, text book.\nDo assignment 3.",
+   ""
+  ],
+  [
+   "53",
+   "Perfect Hash Functions - Rehashing - Hash Functions for Extendible Files",
+   "Offline",
+   "CLO9",
+   "T",
+   "Slide Chapter 7, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 7, exercises & practical examples, text book.\nDo assignment 3.",
+   ""
+  ],
+  [
+   "54",
+   "Data Compression - Conditions for Data Compression",
+   "Offline",
+   "CLO10",
+   "T",
+   "Slide Chapter 8, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 8, exercises & practical examples, text book.\nDo assignment 3.",
+   ""
+  ],
+  [
+   "55",
+   "Huffman Coding - Run-Length Encoding",
+   "Offline",
+   "CLO10",
+   "T",
+   "Slide Chapter 8, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 8, exercises & practical examples, text book.\nDo assignment 3.",
+   ""
+  ],
+  [
+   "56",
+   "Ziv-Lempel Code",
+   "Offline",
+   "CLO10",
+   "T",
+   "Slide Chapter 8, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 8, exercises & practical examples, text book.\nDo assignment 3.",
+   ""
+  ],
+  [
+   "57",
+   "String Matching Reviews",
+   "Offline",
+   "CLO11",
+   "T",
+   "Slide Chapter 8, exercises & practical examples, text book",
+   "",
+   "Review Slide Chapter 8, exercises & practical examples, text book.\nDo assignment 3.",
+   ""
+  ],
+  [
+   "58",
+   "Assignment 3 evaluation",
+   "Offline",
+   "",
+   "U",
+   "Review Assignment 1",
+   "",
+   "Present Assignment 1",
+   ""
+  ],
+  [
+   "59",
+   "Assignment 3 evaluation",
+   "Offline",
+   "",
+   "U",
+   "Review Assignment 1",
+   "",
+   "Present Assignment 1",
+   ""
+  ],
+  [
+   "60",
+   "Assignment 3 evaluation - Progress Test 2",
+   "Offline",
+   "",
+   "U",
+   "Progress Test 2",
+   "",
+   "Progress Test 2",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/13160/S/1_CSD202.zip",
+  "/download/13160/S/2_CSD202.zip"
+ ]
+}

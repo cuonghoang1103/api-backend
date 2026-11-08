@@ -1,0 +1,1246 @@
+{
+ "ma": "IBF301",
+ "sylID": "12817",
+ "quyetDinh": "437/QĐ-ĐHFPT dated 04/25/2025",
+ "ungVien": [
+  {
+   "sylID": "12817",
+   "code": "IBF301",
+   "name": "International Finance_Tài chính quốc tế",
+   "active": true,
+   "approved": true,
+   "decision": "437/QĐ-ĐHFPT dated 04/25/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12817",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12817",
+  "Syllabus Name": "International Finance_Tài chính quốc tế",
+  "Course Name English": "International Finance",
+  "Subject Code": "IBF301",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "FIN202",
+  "Description": "The course provides a conceptual framework within which the key financial decisions of the multinational firm can be analyzed.\n\nTopics covered include multinational firms and globalisation; foreign direct investment; political risk; foreign exchange markets; currency derivatives (currency options and forward contracts); measuring and managing transaction exposure.\n\nStudents are required to use AI tools to assist in conducting research, analysing data, and generating content, including making outlines, refining texts, analysing financial dimensions, or creating visual aids.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments given by instructors in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FU CMS at http://flm.fpt.edu.vn for up-to-date course information",
+  "Tools": "- Textbook and all learning materials provided on FLM: https://flm.fpt.edu.vn/\n\n- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "437/QĐ-ĐHFPT dated 04/25/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/25/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "International Financial Management",
+   "Cheol S. Eun and Bruce G. Resnick",
+   "McGraw-hill/Irwin",
+   "2020",
+   "9th",
+   "9781260013870",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "PowerPoint Slides",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Instructor's Resource Manual",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Test bank (Test gen and Doc. file)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "International Financial Management",
+   "Jeff Madura",
+   "Cengage Learning",
+   "2018",
+   "13th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "The Economist, Financial Times, Global Finance, etc",
+   "Suggested link:\n\n(1) The Economist: https://www.economist.com\n\n(2) Financial Times: https://www.ft.com/\n\n(3) Global Finance: https://www.gfmag.com/",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "7",
+   "International Financial Management",
+   "Cheol S. Eun and Bruce G. Resnick",
+   "McGraw-hill/Irwin",
+   "2018",
+   "8th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "8",
+   "ISE International Financial Management",
+   "Cheol S. Eun and Bruce G. Resnick",
+   "Mc Grawhill",
+   "2020",
+   "9th",
+   "ISBN: 9781260575316",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 ấn bản. Ưu tiên mua ấn bản mới nhất."
+  ],
+  [
+   "9",
+   "AI in office\n\nhttps://www.coursera.org/learn/copy-of-generative-ai-essentials-for-educators/",
+   "",
+   "Coursera - FPT",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "10",
+   "Ethics of Artificial Intelligence https://www.coursera.org/learn/ethics-of-artificial-intelligence",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "11",
+   "AI foundations for everyone\n\nhttps://www.coursera.org/specializations/ai-foundations-for-everyone#courses",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Discuss the financial operations of a firm within the international environment."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Demonstrate basic understanding of foreign exchange market, exchange rate and currency risk exposure."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply key hedging techniques to manage currency risks of international projects."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Demonstrate the ability to produce a clear oral report and/or academic written report, which follows research ethic, that applies understanding of key concepts in international finance."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Practice ability to interract and cooperate effectively with others in the conduct of business."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "During the course",
+   "LO1, LO2, LO3, LO4, LO5",
+   "",
+   "NA",
+   "Option 1:\n\n- Individual Attendance: weight 30% of class participation mark\n\nSuggestion: Students must attend more than 80% of contact slots in order to be accepted to the final examination. Any absence will reduce 0.5 point per time.\n\n- Individual Participation in case study discussion sessions. weight 70% of class participation mark\n\nSuggestion: Bonus 0.2-0.5 point per correct/good opinion in case study discussion. Lecturer should add mark rubic when providing case study.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:\n\nin class, by instructor\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "2",
+   "Group assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "During the course",
+   "LO1, LO2, LO3, LO4, LO5",
+   "OP 1: Analysis, reports and presentationOP2 (For Constructivism Approach only): Questions or Activities proposed by lecturer",
+   "OP1:Case studyOP2 (For Constructivism Approach only):Follow lecturer's proposal",
+   "Comprehensive reading, understanding issues, presenting problems,Personal qualities: Individual responsibility, self-esteem, sociability, self-management, and integrity. Cover all studied chaptersAny plagiarism will be resulted in a failure of assignment",
+   "Option 1:\n\n- Guided by instructor\n\n- Example of group assignment: Groups of students are assigned a topic relating to capital budgeting/ hedging. Students are expected to write up a professional report that describes their methodology with clear adjustment of their choice of models, findings and discussion and implications. Finally, students need to present their work in class to instructors and other groups. Report are graded to groups and presentation is graded on individual.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:\n\nDuration should be 4 to 6 weeks\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "3",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "During the course",
+   "LO1, LO2, LO3, LO4, LO5",
+   "OP1: Discussion, Analysis, reports OP2 (For Constructivism Approach only): Questions or Activities proposed by lecturer",
+   "OP1:Case studyOP2 (For Constructivism Approach only):Follow lecturer's proposal",
+   "Comprehensive reading, understanding issues, presenting problems,Personal qualities: Individual responsibility, self-esteem, sociability, self-management, and integrity. Cover all studied chaptersAny plagiarism will be resulted in a failure of assignment",
+   "Option 1:\n\n- Guided by instructor\n\n- Examples of assignment design: provide case studies in the textbook prior to practice session of each chapter for discussion and analysis.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:\n\nDuration should be 2 to 3 weeks\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "4",
+   "Quiz",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "30' for each quiz",
+   "LO1, LO2, LO3, LO4, LO5",
+   "OP 1: Multiple choices.Marked by Computer or a suitable formatOP2 (For Constructivism Approach only): Questions or Activities proposed by lecturer",
+   "OP1:- Multiple choice: 20 questions. OP2 (For Constructivism Approach only):Follow lecturer's proposal\"",
+   "Option 1:- Integration of studied knowledge and skills of chapters assigned- Select from all covered chapters during the course. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:\n\nin class, by instructor\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:\n\nInstruction and schedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5",
+   "Multiple choicesMarked by Computer",
+   "50 multiple questions",
+   "All topics, knowledge, skills covered in the classes",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "",
+   "I",
+   "'- Syllabus",
+   "IBF301",
+   "'- Read syllabus",
+   ""
+  ],
+  [
+   "2",
+   "Chap 1: Globalization and Multinational Corporations\n\nWhat’s Special about International Finance?\n\nGoals for International Financial Management,\n\nGlobalization of the World Economy: Major Trends and Developments\n\nMultinational Corporations",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 1\n\n- Slides: Chapter 1\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "IBF301",
+   "- Read textbook Chapter 1\n\n- Read slides: Chapter 1\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "3",
+   "Chap 1: Globalization and Multinational Corporations\n\nWhat’s Special about International Finance?\n\nGoals for International Financial Management,\n\nGlobalization of the World Economy: Major Trends and Developments\n\nMultinational Corporations",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 1\n\n- Slides: Chapter 1\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 1\n\n- Read slides: Chapter 1\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "4",
+   "Chap 2: International Monetary System\n\nEvolution of the International Monetary System\n\nBretton Woods System: 1945–1972\n\nThe Flexible Exchange Rate Regime: 1973–Present\n\nThe Current Exchange Rate Arrangements\n\nEuropean Monetary System\n\nThe Euro and the European Monetary Union\n\nThe Mexican Peso Crisis\n\nThe Asian Currency Crisis\n\nThe Argentine Peso Crisis\n\nFixed versus Flexible Exchange Rate Regimes",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 2\n\n- Slides: Chapter 2\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 2\n\n- Read slides: Chapter 2\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "5",
+   "Chap 2: International Monetary System\n\nEvolution of the International Monetary System\n\nBretton Woods System: 1945–1972\n\nThe Flexible Exchange Rate Regime: 1973–Present\n\nThe Current Exchange Rate Arrangements\n\nEuropean Monetary System\n\nThe Euro and the European Monetary Union\n\nThe Mexican Peso Crisis\n\nThe Asian Currency Crisis\n\nThe Argentine Peso Crisis\n\nFixed versus Flexible Exchange Rate Regimes",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 2\n\n- Slides: Chapter 2\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 2\n\n- Read slides: Chapter 2\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "6",
+   "Tutorial: Chap 1 & 2\n\n- Solve questions and problems;\n\n- Case study discussion\n\nIndividual Assignment - Requirement release",
+   "Offline",
+   "LO1, LO4, LO5",
+   "U",
+   "- Textbook Chapter 1 & Chap 2\n\n- Slides: Chapter 1 & Chap 2\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 1 & Chap 2\n\n- Read slides: Chapter 1 & Chap 2\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "7",
+   "Tutorial: Chap 1 & 2\n\n- Solve questions and problems;\n\n- Case study discussion\n\nIndividual Assignment - Requirement release",
+   "Offline",
+   "LO1, LO4, LO5",
+   "U",
+   "- Textbook Chapter 1 & Chap 2\n\n- Slides: Chapter 1 & Chap 2\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 1 & Chap 2\n\n- Read slides: Chapter 1 & Chap 2\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "8",
+   "Chap 3: Balance of Payment\n\nBalance-of-Payments Accounting\n\nBalance-of-Payments Accounts\n\nThe Balance-of-Payments Identity\n\nBalance-of-Payments Trends in Major Countries",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 3\n\n- Slides: Chapter 3\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 3\n\n- Read slides: Chapter 3\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "9",
+   "Chap 3: Balance of Payment\n\nBalance-of-Payments Accounting\n\nBalance-of-Payments Accounts\n\nThe Balance-of-Payments Identity\n\nBalance-of-Payments Trends in Major Countries",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 3\n\n- Slides: Chapter 3\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 3\n\n- Read slides: Chapter 3\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "10",
+   "Chap 3: Balance of Payment (continue)\n\nBalance-of-Payments Accounting\n\nBalance-of-Payments Accounts\n\nThe Balance-of-Payments Identity\n\nBalance-of-Payments Trends in Major Countries",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 3\n\n- Slides: Chapter 3\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 3\n\n- Read slides: Chapter 3\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "11",
+   "Tutorial: Chap 3\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO1, LO4, LO5",
+   "U",
+   "- Textbook Chapter 3\n\n- Slides: Chapter 3\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 3\n\n- Read slides: Chapter 3\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "12",
+   "Tutorial: Chap 3\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO1, LO4, LO5",
+   "U",
+   "- Textbook Chapter 3\n\n- Slides: Chapter 3\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 3\n\n- Read slides: Chapter 3\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "13",
+   "Tutorial: Chap 3\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO1, LO4, LO5",
+   "U",
+   "- Textbook Chapter 3\n\n- Slides: Chapter 3\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 3\n\n- Read slides: Chapter 3\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "14",
+   "Review tutorial chapter 1,2,3",
+   "Offline",
+   "LO1, LO4, LO5",
+   "T,U",
+   "- Textbook Chapter 3\n\n- Slides: Chapter 3\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 3\n\n- Read slides: Chapter 3\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "15",
+   "Chap 4: Corporate Governance Around the World\n\nThe Agency Problem\n\nRemedies for the Agency Problem\n\nLaw and Corporate Governance\n\nConsequences of Law\n\nCorporate Governance Reform",
+   "Offline",
+   "LO1",
+   "",
+   "- Textbook Chapter 4\n\n- Slides: Chapter 4\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 4\n\n- Read slides: Chapter 4\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "16",
+   "Chap 4: Corporate Governance Around the World\n\nThe Agency Problem\n\nRemedies for the Agency Problem\n\nLaw and Corporate Governance\n\nConsequences of Law\n\nCorporate Governance Reform",
+   "Offline",
+   "LO1",
+   "",
+   "- Textbook Chapter 4\n\n- Slides: Chapter 4\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 4\n\n- Read slides: Chapter 4\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "17",
+   "Chap 5: The Market for Foreign Exchange\n\nFunction and Structure of the FX Market\n\nThe Spot Market\n\nThe Forward Market\n\nPractice: Case study discussion",
+   "Offline",
+   "LO2",
+   "TU",
+   "- Textbook Chapter 5\n\n- Slides: Chapter 5\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 5\n\n- Read slides: Chapter 5\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "18",
+   "Chap 5: The Market for Foreign Exchange\n\nFunction and Structure of the FX Market\n\nThe Spot Market\n\nThe Forward Market\n\nPractice: Case study discussion",
+   "Offline",
+   "LO2",
+   "TU",
+   "- Textbook Chapter 5\n\n- Slides: Chapter 5\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 5\n\n- Read slides: Chapter 5\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "19",
+   "Chap 5: The Market for Foreign Exchange (continue)\n\nFunction and Structure of the FX Market\n\nThe Spot Market\n\nThe Forward Market\n\nPractice: Case study discussion",
+   "Offline",
+   "LO2",
+   "TU",
+   "- Textbook Chapter 5\n\n- Slides: Chapter 5\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 5\n\n- Read slides: Chapter 5\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "20",
+   "Tutorial: Chap 5\n\n- Solve questions and problems;\n\n- Case study discussion\n\nGroup Assignment - Requirement release",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 5\n\n- Slides: Chapter 5\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 5\n\n- Read slides: Chapter 5\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "21",
+   "Tutorial: Chap 5\n\n- Solve questions and problems;\n\n- Case study discussion\n\nGroup Assignment - Requirement release",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 5\n\n- Slides: Chapter 5\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 5\n\n- Read slides: Chapter 5\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "22",
+   "Tutorial: Chap 5\n\n- Solve questions and problems;\n\n- Case study discussion\n\nGroup Assignment - Requirement release",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 5\n\n- Slides: Chapter 5\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 5\n\n- Read slides: Chapter 5\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "23",
+   "Chap 6: International Parity Relationships and Forecasting Foreign Exchange Rates\n\nInterest Rate Parity\n\nPurchasing Power Parity\n\nFisher Effects\n\nForecasting Exchange Rates\n\nPractice: Case study discussion",
+   "Offline",
+   "LO2",
+   "TU",
+   "- Textbook Chapter 6\n\n- Slides: Chapter 6\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 6\n\n- Read slides: Chapter 6\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "24",
+   "Chap 6: International Parity Relationships and Forecasting Foreign Exchange Rates\n\nInterest Rate Parity\n\nPurchasing Power Parity\n\nFisher Effects\n\nForecasting Exchange Rates\n\nPractice: Case study discussion",
+   "Offline",
+   "LO2",
+   "TU",
+   "- Textbook Chapter 6\n\n- Slides: Chapter 6\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 6\n\n- Read slides: Chapter 6\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "25",
+   "Tutorial: Chap 6\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 6\n\n- Slides: Chapter 6\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 6\n\n- Read slides: Chapter 6\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "26",
+   "Tutorial: Chap 6\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 6\n\n- Slides: Chapter 6\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 6\n\n- Read slides: Chapter 6\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "27",
+   "Tutorial: Chap 6\n\nQuiz 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "Textbook and slides covering Chap 1,3,5 and 6",
+   "",
+   "Review Chap 1,3,5 and 6",
+   ""
+  ],
+  [
+   "28",
+   "Review Quiz 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "Textbook and slides covering Chap 1,3,5, and 6",
+   "",
+   "Review Chap 1,3,5 and 6",
+   ""
+  ],
+  [
+   "29",
+   "Chap 7: Futures and Options on Foreign Exchange\n\nFutures Contracts: Some Preliminaries\n\nCurrency Futures Markets\n\nBasic Currency Futures Relationships\n\nOptions Contracts: Some Preliminaries\n\nCurrency Options Markets\n\nCurrency Futures Options\n\nBasic Option-Pricing Relationships at Expiration\n\nNote: provide case study",
+   "Offline",
+   "LO2",
+   "T",
+   "- Textbook Chapter 7\n\n- Slides: Chapter 7\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 7\n\n- Read slides: Chapter 7\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "30",
+   "Chap 7: Futures and Options on Foreign Exchange\n\nFutures Contracts: Some Preliminaries\n\nCurrency Futures Markets\n\nBasic Currency Futures Relationships\n\nOptions Contracts: Some Preliminaries\n\nCurrency Options Markets\n\nCurrency Futures Options\n\nBasic Option-Pricing Relationships at Expiration\n\nNote: provide case study",
+   "Offline",
+   "LO2",
+   "T",
+   "- Textbook Chapter 7\n\n- Slides: Chapter 7\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 7\n\n- Read slides: Chapter 7\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "31",
+   "Chap 7: Futures and Options on Foreign Exchange (continue)\n\nFutures Contracts: Some Preliminaries\n\nCurrency Futures Markets\n\nBasic Currency Futures Relationships\n\nOptions Contracts: Some Preliminaries\n\nCurrency Options Markets\n\nCurrency Futures Options\n\nBasic Option-Pricing Relationships at Expiration\n\nNote: provide case study",
+   "Offline",
+   "LO2",
+   "T",
+   "- Textbook Chapter 7\n\n- Slides: Chapter 7\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 7\n\n- Read slides: Chapter 7\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "32",
+   "Tutorial: Case study discussion",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "Tutorial: Case study discussion",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Tutorial: Chap 7\n\n- Solve questions and problems;\n\n- Case study discussion\n\nIndividual Assignment Submission",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 7\n\n- Slides: Chapter 7\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 7\n\n- Read slides: Chapter 7\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "35",
+   "Tutorial: Chap 7\n\n- Solve questions and problems;\n\n- Case study discussion\n\nIndividual Assignment Submission",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 7\n\n- Slides: Chapter 7\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 7\n\n- Read slides: Chapter 7\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "36",
+   "Tutorial: Chap 7\n\n- Solve questions and problems;\n\n- Case study discussion\n\nIndividual Assignment Submission",
+   "Offline",
+   "LO2,LO4, LO5",
+   "U",
+   "- Textbook Chapter 7\n\n- Slides: Chapter 7\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 7\n\n- Read slides: Chapter 7\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "37",
+   "Chap 8: Management of Transaction Exposure\n\nThree types of Exposure\n\nForward Market Hedge\n\nOption Market Hedge\n\nHedging Foreign Currency Payables\n\nCorss-hedging Minor Currency Exposure\n\nHedging Contingent Exposure\n\nHedging recurrent with Swap contract\n\nShould the firm Hedge?\n\nWhat risk management products do firms use?\n\nNote: provide case study",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 8\n\n- Slides: Chapter 8\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 8\n\n- Read slides: Chapter 8\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "38",
+   "Chap 8: Management of Transaction Exposure\n\nThree types of Exposure\n\nForward Market Hedge\n\nOption Market Hedge\n\nHedging Foreign Currency Payables\n\nCorss-hedging Minor Currency Exposure\n\nHedging Contingent Exposure\n\nHedging recurrent with Swap contract\n\nShould the firm Hedge?\n\nWhat risk management products do firms use?\n\nNote: provide case study",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 8\n\n- Slides: Chapter 8\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 8\n\n- Read slides: Chapter 8\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "39",
+   "Chap 8: Management of Transaction Exposure (continue)\n\nThree types of Exposure\n\nForward Market Hedge\n\nOption Market Hedge\n\nHedging Foreign Currency Payables\n\nCorss-hedging Minor Currency Exposure\n\nHedging Contingent Exposure\n\nHedging recurrent with Swap contract\n\nShould the firm Hedge?\n\nWhat risk management products do firms use?\n\nNote: provide case study",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 8\n\n- Slides: Chapter 8\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 8\n\n- Read slides: Chapter 8\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;",
+   ""
+  ],
+  [
+   "40",
+   "Tutorial: Chap 8\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO3, LO4, LO5",
+   "U",
+   "- Textbook Chapter 8\n\n- Slides: Chapter 8\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 8\n\n- Read slides: Chapter 8\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "41",
+   "Tutorial: Chap 8\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO3, LO4, LO5",
+   "U",
+   "- Textbook Chapter 8\n\n- Slides: Chapter 8\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 8\n\n- Read slides: Chapter 8\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "42",
+   "Tutorial: Chap 8\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO3, LO4, LO5",
+   "U",
+   "- Textbook Chapter 8\n\n- Slides: Chapter 8\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 8\n\n- Read slides: Chapter 8\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "43",
+   "Tutorial: Assignment - Guidance",
+   "Offline",
+   "All LOs",
+   "U",
+   "Textbook, reference documents and assignment instruction",
+   "",
+   "- List questions for any problems during assignment preparation and send email to lecturer prior to this slot.",
+   ""
+  ],
+  [
+   "44",
+   "Tutorial: Assignment (cont)/Review tutorial chapters",
+   "Offline",
+   "All LOs",
+   "U",
+   "Textbook, reference documents and assignment instruction",
+   "",
+   "- List questions for any problems during assignment preparation and send email to lecturer prior to this slot.",
+   ""
+  ],
+  [
+   "45",
+   "Chap 9: Management of Economic Exposure\n\nHow to Measure Economic Exposure\n\nOperating Exposure: Definition\n\nIllustration of Operating Exposure\n\nDeterminants of Operating Exposure\n\nManaging Operating Exposure",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 9\n\n- Slides: Chapter 9\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 9\n\n- Read slides: Chapter 9\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   ""
+  ],
+  [
+   "46",
+   "Chap 9: Management of Economic Exposure\n\nHow to Measure Economic Exposure\n\nOperating Exposure: Definition\n\nIllustration of Operating Exposure\n\nDeterminants of Operating Exposure\n\nManaging Operating Exposure",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 9\n\n- Slides: Chapter 9\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 9\n\n- Read slides: Chapter 9\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   ""
+  ],
+  [
+   "47",
+   "Tutorial: Chap 9\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO3, LO4, LO5",
+   "U",
+   "- Textbook Chapter 9\n\n- Slides: Chapter 9\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 9\n\n- Read slides: Chapter 9\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   ""
+  ],
+  [
+   "48",
+   "Tutorial: Chap 9\n\n- Solve questions and problems;\n\n- Case study discussion",
+   "Offline",
+   "LO3, LO4, LO5",
+   "U",
+   "- Textbook Chapter 9\n\n- Slides: Chapter 9\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 9\n\n- Read slides: Chapter 9\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   ""
+  ],
+  [
+   "49",
+   "Chap 10: Management of Translation Exposure\n\nTranslation Methods\n\nFinancial Accounting Standards Board Statement 8\n\nFinancial Accounting Standards Board Statement 52\n\nManagement of Translation Exposure",
+   "Offline",
+   "LO3, LO4, LO5",
+   "TU",
+   "- Textbook Chapter 10\n\n- Slides: Chapter 10\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 10\n\n- Read slides: Chapter 10\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "50",
+   "Chap 10: Management of Translation Exposure\n\nTranslation Methods\n\nFinancial Accounting Standards Board Statement 8\n\nFinancial Accounting Standards Board Statement 52\n\nManagement of Translation Exposure",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T,U",
+   "- Textbook Chapter 10\n\n- Slides: Chapter 10\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 10\n\n- Read slides: Chapter 10\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "51",
+   "Tutorial: Chap 10\n\n- Solve questions and problems;\n\n- Case study discussion\n\nGroup Assignment Submission",
+   "Offline",
+   "LO3, LO4, LO5",
+   "U",
+   "- Textbook Chapter 10\n\n- Slides: Chapter 10\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 10\n\n- Read slides: Chapter 10\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "52",
+   "Tutorial: Chap 10\n\n- Solve questions and problems;\n\n- Case study discussion\n\nGroup Assignment Submission",
+   "Offline",
+   "LO3, LO4, LO5",
+   "U",
+   "- Textbook Chapter 10\n\n- Slides: Chapter 10\n\n- Reference book and other journals (The Economist, Financial Times, Global Finance, etc)",
+   "",
+   "- Read textbook Chapter 10\n\n- Read slides: Chapter 10\n\n- Read Reference book and other journals (The Economist, Financial Times, Global Finance, etc)\n\n- Prepare mini cases;\n\n- Working in group",
+   ""
+  ],
+  [
+   "53",
+   "Tutorial: Course Revision",
+   "Offline",
+   "All LOs",
+   "T,U",
+   "All covered chapters",
+   "",
+   "Review all covered chapters",
+   ""
+  ],
+  [
+   "54",
+   "Tutorial: Course Revision (cont)",
+   "Offline",
+   "All LOs",
+   "T,U",
+   "All covered chapters",
+   "",
+   "Review all covered chapters",
+   ""
+  ],
+  [
+   "55",
+   "Quiz 2",
+   "Offline",
+   "All LOs",
+   "U",
+   "All covered chapters",
+   "",
+   "Review all covered chapters",
+   ""
+  ],
+  [
+   "56",
+   "Review Quiz 2",
+   "Offline",
+   "All LOs",
+   "TU",
+   "All covered chapters",
+   "",
+   "Review all covered chapters",
+   ""
+  ],
+  [
+   "57",
+   "Group presentation",
+   "Offline",
+   "All LOs",
+   "U",
+   "- Group Assignement instruction and report;\n\n- All contents in covered chapters",
+   "",
+   "- Review all covered chapters;\n\n- Prepare for Q&A",
+   ""
+  ],
+  [
+   "58",
+   "Group presentation",
+   "Offline",
+   "All LOs",
+   "U",
+   "- Group Assignement instruction and report;\n\n- All contents in covered chapters",
+   "",
+   "- Review all covered chapters;\n\n- Prepare for Q&A",
+   ""
+  ],
+  [
+   "59",
+   "Group presentation",
+   "Offline",
+   "All LOs",
+   "U",
+   "- Group Assignement instruction and report;\n\n- All contents in covered chapters",
+   "",
+   "- Review all covered chapters;\n\n- Prepare for Q&A",
+   ""
+  ],
+  [
+   "60",
+   "Group presentation",
+   "Offline",
+   "All LOs",
+   "U",
+   "- Group Assignement instruction and report;\n\n- All contents in covered chapters",
+   "",
+   "- Review all covered chapters;\n\n- Prepare for Q&A",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "ĐN1.1",
+   "How is international financial management different from domestic financial management?"
+  ],
+  [
+   "2",
+   "3",
+   "ĐN1.2",
+   "Discuss the major trends that have prevailed in international business during the last two decades."
+  ],
+  [
+   "3",
+   "4",
+   "ĐN2.1",
+   "Suppose that the pound is pegged to gold at 6 pounds per ounce, whereas the franc is pegged to gold at 12 francs per ounce. This, of course, implies that the equilibrium exchange rate should be two francs per pound. If the current market exchange rate is 2.2 francs per pound, how would you take advantage of this situ- ation? What would be the effect of shipping costs?"
+  ],
+  [
+   "4",
+   "5",
+   "ĐN2.2",
+   "Comment on the proposition that the Bretton Woods system was programmed to an eventual demise."
+  ],
+  [
+   "5",
+   "6",
+   "ĐN2.3",
+   "Explain how special drawing rights (SDRs) are constructed. Also, discuss the cir- cumstances under which the SDRs were created."
+  ],
+  [
+   "6",
+   "8",
+   "ĐN3.1",
+   "Why would it be useful to examine a country’s balance-of-payments data?"
+  ],
+  [
+   "7",
+   "9",
+   "ĐN3.2",
+   "Comment on the following statement: “Since the United States imports more than it exports, it is necessary for the United States to import capital from foreign coun- tries to finance its current account deficits.”"
+  ],
+  [
+   "8",
+   "9",
+   "ĐN3.3",
+   "Discuss the possible strengths and weaknesses of SDRs versus the dollar as the main reserve currency. Do you think the SDR should or could replace the U.S. dollar as the main global reserve currency?"
+  ],
+  [
+   "9",
+   "10",
+   "ĐN4.1",
+   "Please answer Problem 1 in the textbook"
+  ],
+  [
+   "10",
+   "11",
+   "ĐN4.2",
+   "Mini Case: Mexico’s Balance-of-Payments Problem"
+  ],
+  [
+   "11",
+   "12",
+   "ĐN4.3",
+   "Mini Case: Mexico’s Balance-of-Payments Problem"
+  ],
+  [
+   "12",
+   "15",
+   "ĐN5.1",
+   "The majority of major corporations are franchised as public corporations. Discuss the key strength and weakness of the “public corporation.” When do you think the public corporation as an organizational form is unsuitable?"
+  ],
+  [
+   "13",
+   "16",
+   "ĐN6.1",
+   "Following corporate scandals and failures in the United States and abroad, there has been a growing demand for corporate governance reform. What should be the key objectives of corporate governance reform? What kinds of obstacles can thwart reform efforts?"
+  ],
+  [
+   "14",
+   "17",
+   "ĐN6.2",
+   "A CAD/$ bank trader is currently quoting a small figure bid-ask of 35–40, when the rest of the market is trading at CAD1.3436–CAD1.3441. What is implied about the trader’s beliefs by his prices?"
+  ],
+  [
+   "15",
+   "18",
+   "ĐN6.3",
+   "Over the past five years, the exchange rate between the British pound and the U.S. dollar, $/£, has changed from about 1.90 to about 1.45. Would you agree that over this five-year period, British goods have become cheaper for buyers in the United States?"
+  ],
+  [
+   "16",
+   "19",
+   "ĐN7.1",
+   "Using the American term quotes from Exhibit 5.4, calculate a cross-rate matrix for the euro, Swiss franc, Japanese yen, and British pound so that the resulting trian- gular matrix is similar to the portion above the diagonal in Exhibit 5.6."
+  ],
+  [
+   "17",
+   "20",
+   "ĐN7.2",
+   "A bank is quoting the following exchange rates against the dollar for the Swiss franc and the Australian dollar: SFr/$ = 1.5960–70 , A$/$ = 1.7225–35. An Australian firm asks the bank for an A$/SFr quote. What cross-rate would the bank quote?"
+  ],
+  [
+   "18",
+   "21",
+   "ĐN7.3",
+   "Please answer Problem 12 in the textbook (Part 1)"
+  ],
+  [
+   "19",
+   "22",
+   "ĐN8.1",
+   "Please answer Problem 12 in the textbook (Part 2)"
+  ],
+  [
+   "20",
+   "23",
+   "ĐN8.2",
+   "Discuss the implications of interest rate parity for exchange rate determination."
+  ],
+  [
+   "21",
+   "24",
+   "ĐN8.3",
+   "Discuss the implications of the deviations from purchasing power parity for coun- tries’ competitive positions in the world market."
+  ],
+  [
+   "22",
+   "24",
+   "ĐN8.4",
+   "Suppose that the treasurer of IBM has an extra cash reserve of $100,000,000 to invest for six months. The six-month interest rate is 8 percent per annum in the United States and 7 percent per annum in Germany. Currently, the spot exchange rate is €1.01 per dollar and the six-month forward exchange rate is €0.99 per dollar. The treasurer of IBM does not wish to bear any exchange risk. Where should he or she invest to maximize the return?"
+  ],
+  [
+   "23",
+   "25",
+   "ĐN9.1",
+   "Please answer Problem 2 in the textbook"
+  ],
+  [
+   "24",
+   "26",
+   "ĐN9.2",
+   "Please answer Problem 3 in the textbook"
+  ],
+  [
+   "25",
+   "29",
+   "ĐN10.1",
+   "Explain the basic differences between the operation of a currency forward market and a futures market."
+  ],
+  [
+   "26",
+   "30",
+   "ĐN10.2",
+   "Why are most futures positions closed out through a reversing trade rather than held to delivery?"
+  ],
+  [
+   "27",
+   "31",
+   "ĐN11.1",
+   "Assume today’s settlement price on a CME EUR futures contract is $1.3140/EUR. You have a short position in one contract. Your performance bond account currently has a balance of $1,700. The next three days’ settlement prices are $1.3126, $1.3133, and $1.3049. Calculate the changes in the performance bond account from daily marking-to-market and the balance of the performance bond account after the third day."
+  ],
+  [
+   "28",
+   "32",
+   "ĐN11.2",
+   "MINI CASE: The Options Speculator (Part 1)"
+  ],
+  [
+   "29",
+   "33",
+   "ĐN11.3",
+   "MINI CASE: The Options Speculator (Part 2)"
+  ],
+  [
+   "30",
+   "34",
+   "ĐN12.1",
+   "Assume that the Japanese yen is trading at a spot price of 92.04 cents per 100 yen. Further assume that the premium of an American call (put) option with a striking price of 93 is 2.10 (2.20) cents. Calculate the intrinsic value and the time value of the call and put options."
+  ],
+  [
+   "31",
+   "35",
+   "ĐN12.2",
+   "Assume the spot Swiss franc is $0.7000 and the six-month forward rate is $0.6950. What is the minimum price that a six-month American call option with a strik- ing price of $0.6800 should sell for in a rational market? Assume the annualized sixmonth Eurodollar rate is 3.5 percent."
+  ],
+  [
+   "32",
+   "37",
+   "ĐN14.1",
+   "How would you define transaction exposure? How is it different from economic exposure?"
+  ],
+  [
+   "33",
+   "38",
+   "ĐN14.2",
+   "Discuss and compare the costs of hedging by forward contracts and options contracts."
+  ],
+  [
+   "34",
+   "39",
+   "ĐN14.3",
+   "Should a firm hedge? Why or why not?"
+  ],
+  [
+   "35",
+   "40",
+   "ĐN15.1",
+   "Please answer Problem 2 in the textbook (part 1)"
+  ],
+  [
+   "36",
+   "41",
+   "ĐN15.2",
+   "Please answer Problem 2 in the textbook (part 2)"
+  ],
+  [
+   "37",
+   "45",
+   "ĐN16.1",
+   "Suppose that your company has an equity position in a French firm. Discuss the condition under which dollar/euro exchange rate uncertainty does not constitute exchange exposure for your company."
+  ],
+  [
+   "38",
+   "46",
+   "ĐN17.1",
+   "General Motors exports cars to Spain, but the strong dollar against the euro hurts sales of GM cars in Spain. In the Spanish market, GM faces competition from Italian and French car makers, such as Fiat and Renault, whose operating curren- cies are the euro. What kind of measures would you recommend so that GM can maintain its market share in Spain?"
+  ],
+  [
+   "39",
+   "47",
+   "ĐN17.2",
+   "Please answer Problem 1 in the textbook"
+  ],
+  [
+   "40",
+   "48",
+   "ĐN17.3",
+   "Please answer Problem 3 in the textbook"
+  ]
+ ],
+ "links": [
+  "/download/9151/S/1_IBF301.zip",
+  "/download/9151/S/2_IBF301.zip"
+ ]
+}

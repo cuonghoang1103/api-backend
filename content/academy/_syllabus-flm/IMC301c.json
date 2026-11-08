@@ -1,0 +1,338 @@
+{
+ "ma": "IMC301c",
+ "sylID": "12763",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12763",
+   "code": "IMC301c",
+   "name": "Intergrated Marketing Communication in Digital World_Chiến lược truyền thông marketing tích hợp",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12763",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12763",
+  "Syllabus Name": "Intergrated Marketing Communication in Digital World_Chiến lược truyền thông marketing tích hợp",
+  "Course Name English": "Intergrated Marketing Communication in Digital World",
+  "Subject Code": "IMC301c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 64h online + 3h offline + 1h Final exam +82h self-study",
+  "Pre-Requisite": "None",
+  "Description": "In this Specialization we will delve into the marketing mix and the skill-set needed to implement successful marketing strategies. This course primarily focuses on implementation so you can immediately apply the lessons learned to your work or to a business idea that you are thinking of taking to market. After completing the four courses, you will be able to take part in the Capstone Project where you will have the opportunity to put into practice what you have learned in this specialization by running a real product through the marketing mix.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend offline sessions in the Campus (Optional)\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/marketing-mix",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Marketing Mix Implementation Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/brand-management?specialization=marketing-mix",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Brand and Product Management (12h)"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/pricing-strategy?specialization=marketing-mix",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2:Course 2: Pricing Strategy (13h)"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/channel-management?specialization=marketing-mix",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Channel Management and Retailing (10h)"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/integrated-marketing-communications?specialization=marketing-mix",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 4: Integrated Marketing Communications: Advertising, Public Relations, Digital Marketing and more (10h)"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/marketing-mix-capstone?specialization=marketing-mix",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 5: Marketing Mix Implementation Capstone (19h)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Summarize the roles and practice of marketing including the roles and relationships between the IMC tools."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Clearly present the methodologies, IMC tools and IMC planning process."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyze and evaluate strategies, tactical IMC plans and programs."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Build and develop strategies, tactical IMC plans and programs, and able to assess their performance."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 phút",
+   "All LOs",
+   "Multiple choice and case study",
+   "50",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "(Off-line 1.5h)\nIntroduction to the online course MKT304c\n'Course 1:Brand and Product Management\nModule 1: Launching new products and the challenge of managing their life-cycle\nModule 2: Developing compelling brands that inspire your most critical stakeholders and impact your bottom line.\nModule 3: Knowing how to communicate your offering: Brand architecture & naming.",
+   "Online, Offline",
+   "CLO1, CLO2",
+   "I,T",
+   "Course 1:Brand and Product Management",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "2",
+   "Course 1:Brand and Product Management\nModule 4: Building your brand portfolio.\nModule 5: Translating your brand into compelling customer experiences.\nModule 6: Equipping and engaging employees to deliver on the brand promise",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "Course 1:Brand and Product Management",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "Course 2: Pricing Strategy\nModule 1: Demand Curve and Pricing\nModule 2: Determining Willingness to Pay",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "'Course 2: Pricing Strategy",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "4",
+   "Course 2: Pricing Strategy\nModule 3: Playing the Pricing Piano or Price Discrimination\nModule 4: Pricing Psychology",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "'Course 2: Pricing Strategy",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "5",
+   "Course 3: Channel Management and Retailing\nModule 1: Distrubution Channel Planning and Management: Why are they so important?\nModule 2: Distribution Channels and Their Involving Landscape\nModule 3: The Retail Strategy and Marketing Mix\nModule 4: Retailing Without Frontiers: New Trend in Retailing",
+   "Online",
+   "CLO1, CLO2",
+   "I,T",
+   "'Course 3: Channel Management and Retailing",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "6",
+   "Course 4: Integrated Marketing Communications: Advertising, Public Relations, Digital Marketing and more\nModule 1: What is IMC? IMC Planning Background\nModule 2: IMC Planning Process",
+   "online",
+   "CLO1,CLO2",
+   "U",
+   "Course 4: Integrated Marketing Communications: Advertising, Public Relations, Digital Marketing and more",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "7",
+   "Course 4: Integrated Marketing Communications: Advertising, Public Relations, Digital Marketing and more\nModule 3: Advertising Management & Design\nModule 4: Marketing Communication Mix",
+   "online",
+   "CLO1,CLO2",
+   "U",
+   "Course 4: Integrated Marketing Communications: Advertising, Public Relations, Digital Marketing and more",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "8",
+   "Course 5: Marketing Mix Implementation Capstone\nModule 1: Introduction to the capstone and the Testla Motor's case study\nModule 2: Brand and product management decision\nModule 3: Pricing strategy decicions",
+   "Online",
+   "CLO2, CLO3, CLO4",
+   "I,T",
+   "'Course 5: Marketing Mix Implementation Capstone",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "9",
+   "Course 5: Marketing Mix Implementation Capstone\nModule 4: Channel management and retailing decisions",
+   "Online",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Course 5: Marketing Mix Implementation Capstone",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "10",
+   "Course 5: Marketing Mix Implementation Capstone\nModule 5: Integrated marketing communication decisions and final deliverable",
+   "Online",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Course 5: Marketing Mix Implementation Capstone",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "11",
+   "Course 5: Marketing Mix Implementation Capstone\nModule 5: Integrated marketing communication decisions and final deliverable",
+   "Online",
+   "CLO2, CLO3, CLO4",
+   "U",
+   "'Course 5: Marketing Mix Implementation Capstone",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "12",
+   "Review Course 1,2,3,4,5\n(Off-line 1.5h)\nDeadline of Coursera Completion: End of Friday of the week.",
+   "Offline",
+   "Alls CLO",
+   "U",
+   "'Course 5: Marketing Mix Implementation Capstone",
+   "",
+   "- All students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

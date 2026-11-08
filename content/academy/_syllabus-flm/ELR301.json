@@ -1,0 +1,937 @@
+{
+ "ma": "ELR301",
+ "sylID": "13754",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13754",
+   "code": "ELR301",
+   "name": "Research Methods_Phương pháp nghiên cứu",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13754",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13754",
+  "Syllabus Name": "Research Methods_Phương pháp nghiên cứu",
+  "Course Name English": "Research Methods_Phương pháp nghiên cứu",
+  "Subject Code": "ELR301",
+  "Learning-Teaching Method": "Lecture,Coaching,Seminar,Workshop,Presenting,Demonstration,Active learning,Inquiry-Based Learning,Discovery Learning,Inquiry-based Teaching,Presentation,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 105 hours self-study (including assessment, projects and assignments preparation time)",
+  "Pre-Requisite": "ERW421/ERW422",
+  "Description": "This course provides a comprehensive foundation in research design and proposal writing, guiding students in developing the conceptual understanding and practical skills necessary to craft a sound research proposal. Students will explore the philosophical underpinnings and methodological distinctions among qualitative, quantitative, and mixed methods approaches, integrating this knowledge into the formulation of coherent research designs. Emphasis is placed on conducting a literature review, articulating theoretical frameworks, writing purpose statements, formulating research questions or hypotheses, and developing appropriate research methodologies aligned with qualitative, quantitative, or mixed methods designs.\n\nThrough hands-on writing activities, students apply critical thinking to construct the key elements of both quantitative and qualitative research proposals. Generative AI tools (e.g., ChatGPT, Google NotebookLM) are integrated to enhance writing quality and streamline research processes, with strong emphasis on ethical and responsible use. The course also nurtures a positive research attitude by fostering integrity, transparency, and accountability in anticipating and addressing ethical issues throughout the research process.",
+  "StudentTasks": "<- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n< - Actively participate in class activities >\n\n< - Fulfill tasks given by instructor after class >\n\n< - Use their own laptops in class only for learning purpose >\n\n< - Read the textbook in advance >\n\n< - Access the course website for up-to-date information and material of the course, for online support from teachers and other students, and for practicing and assessment. >\n\n< - Use Gen-AI tools appropriately and ethically to enhance writing quality and speed up research processes>",
+  "Tools": "Gen-AI tools such as ChatGPT, NotebookLM, Grok 3",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Additional materials, including videos, quizzes, and sample research proposals and tools, are available at: https://edge.sagepub.com/creswellrd5e",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Publication manual of the American Psychological Association",
+   "",
+   "American Psychological Association",
+   "2009",
+   "6th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Research design: Qualitative, quantitative, and mixed methods approaches",
+   "Creswell, J. W., & Creswell, J. D.",
+   "Thousand Oaks",
+   "2018",
+   "5th",
+   "9781506386706",
+   "True",
+   "True",
+   "False",
+   "https://library.books24x7.com/toc.aspx?bookid=42741"
+  ],
+  [
+   "4",
+   "Utilizing AI Tools in Academic Research Writing",
+   "",
+   "IGI Global",
+   "2024",
+   "1st",
+   "",
+   "False",
+   "False",
+   "False",
+   "https://www.amazon.com/Utilizing-Tools-Academic-Research-Writing/dp/B0CPPYWSSM"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Describe the conceptual aspects of research methods"
+  ],
+  [
+   "2",
+   "CLO10",
+   "Integrate knowledge and awareness of qualitative, quantitative, and mixed methods approaches into developing a research design"
+  ],
+  [
+   "3",
+   "CLO11",
+   "Appropriately use Gen-AI tools (e.g., ChatGPT and Google NotebookLM) to enhance writing quality and facilitate research processes"
+  ],
+  [
+   "4",
+   "CLO2",
+   "Describe the process of conducting a literature review"
+  ],
+  [
+   "5",
+   "CLO3",
+   "Compare and contrast the use of theory in qualitative, quantitative, and mixed methods research"
+  ],
+  [
+   "6",
+   "CLO4",
+   "Recognize the elements of an introduction to a research study"
+  ],
+  [
+   "7",
+   "CLO5",
+   "Be able to draft a purpose statement"
+  ],
+  [
+   "8",
+   "CLO6",
+   "Be able to draft research questions and hypotheses"
+  ],
+  [
+   "9",
+   "CLO7",
+   "Apply critical thinking skills to write the key elements of a quantitative research proposal"
+  ],
+  [
+   "10",
+   "CLO8",
+   "Apply critical thinking skills to write the key elements of a qualitative research proposal"
+  ],
+  [
+   "11",
+   "CLO9",
+   "Show commitment to ethical research practices by valuing integrity and responsibility in anticipating and addressing ethical concerns."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Progress Test 1",
+   "quiz",
+   "1",
+   "10.0%",
+   ">0",
+   "40'",
+   "LO1, LO2, LO3",
+   "OP1: Multiple Choice // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "30",
+   "Test the acquainted knowledge which student obtained in the delivered chapers",
+   "In-class test",
+   "Teacher is allowed to select which unit content (topic or learning outcome) to focus on each examination session."
+  ],
+  [
+   "2",
+   "Progress Test 2",
+   "quiz",
+   "1",
+   "10.0%",
+   ">0",
+   "40'",
+   "LO4, LO5, LO6",
+   "OP1: Multiple Choice // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "30",
+   "Test the acquainted knowledge which student obtained in the delivered chapers",
+   "In-class test",
+   "Teacher is allowed to select which unit content (topic or learning outcome) to focus on each examination session."
+  ],
+  [
+   "3",
+   "Proposal Outline",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "at-home",
+   "",
+   "OP1: Proposal outline // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "N/A",
+   "Test student's ability to apply knowledge and techniques obtained in the delivered units to compose a research proposal",
+   "Students will submit a research proposal outline. The proposal will be submitted in sections per the instructions given in class. Students will be given feedback prior to submitting the final full proposal.",
+   ""
+  ],
+  [
+   "4",
+   "Proposal Writing",
+   "on-going",
+   "1",
+   "40.0%",
+   "4",
+   "at-home",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11",
+   "OP1: Written assignment // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Test student's ability to apply knowledge and techniques obtained in the delivered units to compose a research proposal",
+   "Individual written proposal – the final product",
+   ""
+  ],
+  [
+   "5",
+   "Proposal Defense",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "15' per student",
+   "All LOs",
+   "Presentation",
+   "1",
+   "Test student's ability to apply knowledge and techniques obtained in the delivered units to compose a research proposal",
+   "Individual presentation - defense of the proposal\nOne examiner. Marking rubric and report are provided.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction + Guidelines on Gen-AI tools (ChatGPT, NotebookLM) in research writing",
+   "Offline",
+   "CLO1, CLO11",
+   "I",
+   "Student’s Book (hardcopy) & Online resources + https://research-and-innovation.ec.europa.eu/document/download/2b6cf7e5-36ac-41cb-aab5-0d32050143dc_en?filename=ec_rtd_ai-guidelines.pdf",
+   "link1-1",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "2",
+   "PART I. PRELIMINARY CONSIDERATIONS Chapter 1. The Selection of a Research Approach\n+ Guidelines on Gen-AI tools (ChatGPT, NotebookLM) in research writing (cont)",
+   "Offline",
+   "CLO1, CLO11",
+   "ITU",
+   "Student’s Book (hardcopy) & Online resources + https://research-and-innovation.ec.europa.eu/document/download/2b6cf7e5-36ac-41cb-aab5-0d32050143dc_en?filename=ec_rtd_ai-guidelines.pdf",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1. The Selection of a Research Approach (cont.) +\nDemonstration and discussion of how to use ChatGPT (feedback, Deep Research, references, information generation) and NotebookLM to help write content with citations more efficiently and accurately (information generation, information summary, citations, sources, FAQs, Study guide)",
+   "Offline",
+   "CLO1, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources +\nhttps://tesl-ej.org/wordpress/issues/volume28/ej112/ej112int/",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1. The Selection of a Research Approach (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO1, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1. The Selection of a Research Approach (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO1, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1. The Selection of a Research Approach (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO1, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2. Review of the Literature + Demonstration of how to use Gen-AI tools to facilitate the writing of the literature review",
+   "Offline",
+   "CLO2, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2. Review of the Literature (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO2, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2. Review of the Literature (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO2, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2. Review of the Literature (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO2, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 2. Review of the Literature (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO2, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 2. Review of the Literature (cont.) with support of Gen-AI tools +\nStudents' reports and evaluations of Gen-AI tools in writing literature review",
+   "Offline",
+   "CLO2, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3. The Use of Theory with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO3, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3. The Use of Theory (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO3, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3. The Use of Theory (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO3, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3. The Use of Theory (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO3, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 3. The Use of Theory (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO3, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 3. The Use of Theory (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO3, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "19",
+   "Review",
+   "Offline",
+   "CLO1->CLO3",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "20",
+   "Progress Test 1",
+   "Offline",
+   "CLO1->CLO3",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 4. Writing Strategies and Ethical Considerations with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO9, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4. Writing Strategies and Ethical Considerations (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO9, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 4. Writing Strategies and Ethical Considerations (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO9, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4. Writing Strategies and Ethical Considerations (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO9, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "25",
+   "PART II. DESIGNING RESEARCH\nChapter 5. The Introduction + Demonstration of how to use Gen-AI tools to facilitate the writing of the introduction",
+   "Offline",
+   "CLO4, CLO11",
+   "ITU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "26",
+   "PART II. DESIGNING RESEARCH Chapter 5. The Introduction (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO4, CLO11",
+   "ITU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 5. The Introduction (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO4, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 5. The Introduction (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO4, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 5. The Introduction (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO4, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 5. The Introduction (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO4, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 6. The Purpose Statement with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO5, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 6. The Purpose Statement (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO5, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 6. The Purpose Statement (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO5, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 6. The Purpose Statement (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO5, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 7. Research Questions and Hypotheses with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO6, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 7. Research Questions and Hypotheses (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO6, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 7. Research Questions and Hypotheses (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO6, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 7. Research Questions and Hypotheses (cont.) +\n+\nStudents' reports and evaluations of Gen-AI tools in writing introduction",
+   "Offline",
+   "CLO6, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "39",
+   "Review",
+   "Offline",
+   "CLO4->CLO6, CLO9",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "40",
+   "Progress Test 2",
+   "Offline",
+   "CLO4->CLO6, CLO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 8. Quantitative Methods with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO7, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 8. Quantitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO7, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 8. Quantitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO7, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 8. Quantitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO7, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 8. Quantitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO7, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 8. Quantitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO7, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 9. Qualitative Methods with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO8, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 9. Qualitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO8, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 9. Qualitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO8, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 9. Qualitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO8, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 9. Qualitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO8, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 9. Qualitative Methods (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO8, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 10. Mixed Methods Procedure with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO10, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 10. Mixed Methods Procedure (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO10, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 10. Mixed Methods Procedure (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO10, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 10. Mixed Methods Procedure (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO10, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 10. Mixed Methods Procedure (cont.) with support of Gen-AI tools (feedback, information generation, sources)",
+   "Offline",
+   "CLO10, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "58",
+   "Chapter 10. Mixed Methods Procedure (cont.) with support of Gen-AI tools +\nStudents' reports and evaluations of Gen-AI tools in writing the methodology",
+   "Offline",
+   "CLO10, CLO11",
+   "TU",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "Coursebook, PPT presentation, other teaching resources provided",
+   ""
+  ],
+  [
+   "59",
+   "Progress Test 3",
+   "Offline",
+   "CLO1->CLO10",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Submission of Research Proposal",
+   "Offline",
+   "CLO1->CLO11",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "https://drive.google.com/drive/folders/13-ucriyaH4kkWmZgtSrEraNzle3dUlei?usp=sharing"
+ ]
+}

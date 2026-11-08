@@ -1,0 +1,359 @@
+{
+ "ma": "OJE202",
+ "sylID": "10151",
+ "quyetDinh": "808/QĐ-ĐHFPT dated 08/03/2023",
+ "ungVien": [
+  {
+   "sylID": "10151",
+   "code": "OJE202",
+   "name": "On-The-Job Training - Đào tạo trong môi trường thực tế",
+   "active": true,
+   "approved": true,
+   "decision": "808/QĐ-ĐHFPT dated 08/03/2023"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=10151",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "10151",
+  "Syllabus Name": "On-The-Job Training - Đào tạo trong môi trường thực tế",
+  "Course Name English": "",
+  "Subject Code": "OJE202",
+  "Learning-Teaching Method": "Offline",
+  "NoCredit": "10",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "14 tuần ~ 560 giờ\n\n14 weeks ~ 560 hours",
+  "Pre-Requisite": "Sinh viên đạt 90% tổng số tín chỉ từ kỳ 1-kỳ 5 (không tính GDTC, GDQP)\n\nStudents attained 90% of the total credits from semester 1-semester 5 (excluding Physical Education PHE_COM* and Military Program)",
+  "Description": "OJT cho sinh viên cơ hội trải nghiệm môi trường làm việc thực tế, giúp sinh viên nắm được mục tiêu, yêu cầu của công việc thực tập giúp hình thành định hướng chuyên ngành nghề nghiệp cho việc lựa chọn combo nghề nghiệp kỳ sau.\n\nOJT offers students an opportunity to experience the real working environment, helping students realize objectives and requirements of the practicum. Thus, it helps orientate students in choosing their future careers and selecting appropriate study combo for the coming semesters.\n\nSinh viên được gửi đến doanh nghiệp trong các lĩnh vực liên quan đến ngành đào tạo, trải qua quá trình làm việc thực tế với chương trình và nội dung được Trường Đại học FPT và công ty thống nhất từ trước, sinh viên có cơ hội áp dụng các kiến thức và kỹ năng đã học, học hỏi, đề ra các mục tiêu cũng như chuyên ngành hẹp sẽ theo học sau thực tập.\n\nStudents are sent to an enterprise in fields related to their studies and do an internship, experiencing a real work process under a plan previously accorded by FPT University and the enterprise. Students have an opportunity to apply the knowledge and skills that they've gained at university, capture more learnings, set goals for next steps and make the choice of their academic concentration at the end of the practicum.",
+  "StudentTasks": "- Tham gia thực tập với tinh thần nghiêm túc.\n\nSeriously participate in the internship.\n\n- Thực hiện các công việc được giao từ đơn vị thực tập.\n\nPerform tasks assigned by the Internship Unit.\n\n- Tham gia các hoạt động liên quan tới công việc thực tập.\n\nParticipate in internship-related activities.\n\n- Hoàn thành các công việc đánh giá, báo cáo trong quá trình thực tập\n\nComplete intership evaluation and internship report.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "808/QĐ-ĐHFPT dated 08/03/2023",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/3/2023"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Tài liệu Mô tả quá trình quản lý thực tập\n\n(Quy trình 03.2qtdh11 - MTQT Quan ly OJT)\n\nGuideline for the internship management",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Provided by the Academic Department"
+  ],
+  [
+   "2",
+   "Phiếu đánh giá sinh viên kỳ OJT\n\nOJT students evaluation form",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Provided by the Academic Department"
+  ],
+  [
+   "3",
+   "Phiếu đánh giá của sinh viên về nơi thực tập\n\n(biểu mẫu 03.44-BM/ĐH/HDCV/FPTU)\n\nStudents survey on the enterprise",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Provided by the Academic Department"
+  ],
+  [
+   "4",
+   "Tài liệu liên quan đến công tác thực tập\n\nEnterprise's materials",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "Provided by the Enterprise"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Kiến thức và kỹ năng ngành:\nSinh viên rèn luyện, thực hành vận dụng và phân tích các tình huống công việc bằng các kiến thức và kỹ năng chuyên môn đã học. Sinh viên hoàn thành các công việc được giao, và có thể có thể có các sáng tạo, ý tưởng mới trông công việc.\nProfessional knowledge and skills:\nStudents practice and apply and analyse the tasks and work scenarios with the acquired knowledge and skills.Students can complete the assigned tasks and are able to innovate and propose new ideas for the job."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Kỹ năng mềm:\nSinh viên rèn luyện và thực hành các kỹ năng mềm liên quan đến tư duy phản biện, giải quyết vấn đề; kỹ năng và khả năng giao tiếp hợp tác, làm việc độc lập và theo nhóm.\nSoft skills:\nStudents practice and apply soft-skills related to critical thininking, problem-solving, communication and corporation, working independently or working in group."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Thái độ, trách nhiệm và tự chủ:\nSinh viên hình thành nhận thức và có thái độ đúng đắn về nghề nghiệp, có ý thức tích cực và nghiêm túc trong công việc, tôn trọng văn hoá doanh nghiệp, tuân thủ kỷ luật lao động và chấp hành các điều lệ và quy định của doanh nghiệp.\nAttitude, responsibility and self-control.\nStudents establish proper awareness of and attitudes about the profession, have positive mindsets and serious working attitudes. Students respect organizational culture, comply with the regulations at the workplace."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Kiến thức và kỹ năng chuyên môn\n\nProfessional knowledge and skills",
+   "on-going",
+   "1",
+   "40.0%",
+   "4",
+   "",
+   "LO1",
+   "",
+   "",
+   "",
+   "Doanh nghiệp thực hiện đánh giá câu hỏi về Kiến thức, kỹ năng ngành tại biểu mẫu ĐHFPT gửi\n\nThe enterprise evaluates students' Professional knowledge and skills based on the form of FPT University",
+   ""
+  ],
+  [
+   "2",
+   "Kỹ năng mềm\n\nSoft skills",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "",
+   "LO2",
+   "",
+   "",
+   "",
+   "Doanh nghiệp thực hiện đánh giá câu hỏi về Kỹ năng mềm tại biểu mẫu ĐHFPT gửi\n\nThe enterprise evaluates students' Soft skills based on the form of FPT University",
+   ""
+  ],
+  [
+   "3",
+   "Thái độ\n\nAttitude",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "",
+   "LO3",
+   "",
+   "",
+   "",
+   "Doanh nghiệp thực hiện đánh giá câu hỏi về Thái độ tại biểu mẫu ĐHFPT gửi\n\nThe enterprise evaluates students' Attitudes based on the form of FPT University",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Thực tập tuần 1\n\nOn-the-job training week 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên cơ sở tiếp nhận, làm quen với môi trường mới và bắt đầu công việc.\n\n- Sinh viên thực hiện công việc tuần 1\n\nStudents receive and perform tasks of week 1",
+   ""
+  ],
+  [
+   "2",
+   "Thực tập tuần 2\n\nOn-the-job training week 2",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 2\n\nStudents receive and perform tasks of week 2",
+   ""
+  ],
+  [
+   "3",
+   "Thực tập tuần 3\n\nOn-the-job training week 3",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 3\n\nStudents receive and perform tasks of week 3",
+   ""
+  ],
+  [
+   "4",
+   "Thực tập tuần 4\n\nOn-the-job training week 4",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 4\n\nStudents receive and perform tasks of week 4",
+   ""
+  ],
+  [
+   "5",
+   "Thực tập tuần 5+B10\n\nOn-the-job training week 5",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 5\n\nStudents receive and perform tasks of week 5",
+   ""
+  ],
+  [
+   "6",
+   "Thực tập tuần 6\n\nOn-the-job training week 6",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 6\n\nStudents receive and perform tasks of week 6",
+   ""
+  ],
+  [
+   "7",
+   "Thực tập tuần 7\n\nOn-the-job training week 7",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 7\n\nStudents receive and perform tasks of week 7",
+   ""
+  ],
+  [
+   "8",
+   "Thực tập tuần 8\n\nOn-the-job training week 8",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 8\n\nStudents receive and perform tasks of week 8",
+   ""
+  ],
+  [
+   "9",
+   "Thực tập tuần 9\n\nOn-the-job training week 9",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 9\n\nStudents receive and perform tasks of week 9",
+   ""
+  ],
+  [
+   "10",
+   "Thực tập tuần 10\n\nOn-the-job training week 10",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "- Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks\n\n- Phiếu đánh giá nơi thực tập\n\nStudents survey on the enterprise\n\n(ref [3]: Phiếu đánh giá của sinh viên về nơi thực tập - biểu mẫu 03.44-BM/ĐH/HDCV/FPTU)",
+   "",
+   "- Sinh viên thực hiện công việc tuần 10\n\nStudents receive and perform tasks of week 10\n\n- Sinh viên thực hiện đánh giá về nơi thực tập lần 1 vào đầu tháng thứ 3 của kỳ thực tập.\n\nStudents' 1st evaluation on the entership (beginning of the 3rd month of the intership)",
+   ""
+  ],
+  [
+   "11",
+   "Thực tập tuần 11\n\nOn-the-job training week 11",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 11\n\nStudents receive and perform tasks of week 11",
+   ""
+  ],
+  [
+   "12",
+   "Thực tập tuần 12\n\nOn-the-job training week 12",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 12\n\nStudents receive and perform tasks of week 12",
+   ""
+  ],
+  [
+   "13",
+   "Thực tập tuần 13\n\nOn-the-job training week 13",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks",
+   "",
+   "- Sinh viên thực hiện công việc tuần 13\n\nStudents receive and perform tasks of week 13",
+   ""
+  ],
+  [
+   "14",
+   "Thực tập tuần 14\n\nOn-the-job training week 14",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "- Tài liệu liên quan đến công việc được giao\n\nDocuments related to the assigned tasks\n\n- Phiếu đánh giá nơi thực tập\n\nStudents survey on the enterprise\n\n(ref [3]: Phiếu đánh giá của sinh viên về nơi thực tập - biểu mẫu 03.44-BM/ĐH/HDCV/FPTU)",
+   "",
+   "- Sinh viên thực hiện công việc tuần 14\n\nStudents receive and perform tasks of week 14",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

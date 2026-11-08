@@ -1,0 +1,1196 @@
+{
+ "ma": "SCM201",
+ "sylID": "13598",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13598",
+   "code": "SCM201",
+   "name": "Supply Chain Management_Quản lý chuỗi cung ứng",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13598",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13598",
+  "Syllabus Name": "Supply Chain Management_Quản lý chuỗi cung ứng",
+  "Course Name English": "Supply Chain Management",
+  "Subject Code": "SCM201",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "A supply chain is comprised of all the parties involved in fulfilling a customer request. The integrated management of this network is a critical determinant of success in today’s competitive environment.\n\nSupply chain management is the systemic, strategic coordination of the traditional business functions within a particular company and across businesses within a supply chain, for the purpose of improving the long-term performance of the individual companies and the supply chain as a whole. The major supply chain processes include planning, sourcing, making or converting, fulfillment, and relationships management. The major dimensions for evaluating the performance of supply chain processes and activities are time, cost, quality and compliance. This course covers the major activities of companies involved in profitably coordinating supply and demand in the marketplace to deliver consumer value.",
+  "StudentTasks": "<- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n< - Actively participate in class activities >\n\n< - Fulfill tasks given by instructor after class >\n\n< - Use their own laptop in class only for learning purpose and under request of instructor >\n\n< - Read the textbook in advance >\n\n< - Access the course website (www.flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment. >",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Purchasing and Supply Chain Management",
+   "Robert M. Monczka, Robert B. Handfield, Larry C. Giunipero, James L. Patterson",
+   "Cengage Learning",
+   "2016",
+   "6th",
+   "9781285869681",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "AE Purchasing and Supply Chain Management",
+   "Robert M. Monczka, Robert B. Handfield, Larry C. Giunipero, James L. Patterson",
+   "Cengage",
+   "2020",
+   "7th",
+   "ISBN-13: 9789814922821",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 2 ấn bản. Ưu tiên mua ấn bản mới nhất"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand basic terminology and supply chain operations in the context of today’s business environment"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Align the supply management and enterprise objectives"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply methods relating to time, quality and costs in order to improve the efficiency of purchasing process and increase the\ncompetitiveness of the supply chain"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Recognise the supplier selection process and apply the Six Sigma in supplier quality management"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Recognize the important relationship between inventory management and delivering the perfect customer order"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Apply lean and just in time thinking within a supply chain"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Explain the importance of collaboration and integration within supply chains, and be able to account for different\ntools for this"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Explain the purchasing function’s field of responsibility"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Explain different models and strategies for purchasing"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Describe purchasing work from a total cost perspective"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Analyse a purchasing process and suggest improvements"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Essay test",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "\"OP1: 45 mins - 60 minsOP2 (For Constructivism Approach only): Follow lecturer's proposal\"",
+   "LO11, LO1, LO2, LO3, LO4, LO5, LO12, LO1, LO2, LO3, LO4, LO13, LO1, LO2, LO3, LO4, LO5, LO16, LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO19, LO1, LO2, LO3, LO4",
+   "OP1: Comprehensive exercises cover mainly chapter 11, 12, 13, 16,19OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Integration of studied knowledge and skills of chapters covered so far",
+   "As solution",
+   ""
+  ],
+  [
+   "2",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "\"OP1: 4 weeksOP2 (For Constructivism Approach only): Follow lecturer's proposal\"",
+   "",
+   "OP1: Case study - Report and Presentation in class (end of the course)OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Thinking creatively, making decisions, solving problems,Personal qualities: Individual responsibility, self-esteem, sociability, self-management, and integrity.",
+   "- By instructor\n\n- Group's mark considered as related individual's mark",
+   ""
+  ],
+  [
+   "3",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "\"OP1: 4 weeksOP2 (For Constructivism Approach only): Follow lecturer's proposal\"",
+   "",
+   "OP1: 1,500 word - reportOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Integration of studied knowledge and skills",
+   "By instructor",
+   ""
+  ],
+  [
+   "4",
+   "Progress Test 1,2,3",
+   "on-going",
+   "3",
+   "30.0%",
+   ">0",
+   "OP1: 30 mins - 45 minsOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5",
+   "OP1: Multiple choice questions and/or exercisesOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Integration of studied knowledge and skills of chapters covered so far",
+   "As solution",
+   "These quizzes will be given at various times during class (beginning, middle or end)."
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "Multiple choice questions (45-50). Multiple choice questions cover all chapters",
+   "",
+   "",
+   "Integration of studied knowledge and skills of chapters covered in the subject",
+   "By Exam board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Chapter 1. Introduction to Purchasing and Supply Chain Management\n\n1.1 Why Purchasing Is Important\n\n1.2 Understanding the Language of Purchasing and Supply Chain Management",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "SCM201_PPT Chap 1 2 4 6",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1. Introduction to Purchasing and Supply Chain Management (cont.)\n\n1.3 Achieving Purchasing and Supply Chain Benefits\n\n1.4 The Supply Chain Umbrella\n\n1.5 Four Enablers of Purchasing and Supply Chain Management",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "SCM201 PPT Chap 7 8 9 11",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 2. The Purchasing Process\n\n2.1 Purchasing Objectives\n\n2.2 Purchasing Responsibilities",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "SCM201 Chap 12 13 16 19",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2. The Purchasing Process (cont.)\n\n2.3 E-Procurement and the Procure to Pay Process",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2. The Purchasing Process (cont.)\n\n2.4 Types of Purchases",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2. The Purchasing Process (cont.)\n\n2.5 Improving the Purchasing Process",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 4. Supply Management Integration for competitive advantAge\n\n4.1 Integration: What Is It?\n\n4.2 Internal Integration",
+   "Offline",
+   "LO1, LO2, LO3",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 4. Supply Management Integration for competitive advantAge (cont.)\n\n4.3 External Integration",
+   "Offline",
+   "LO1, LO2, LO3",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 4. Supply Management Integration for competitive advantAge (cont.)\n\n4.4 The Critical Role of Cross-Functional Sourcing Teams",
+   "Offline",
+   "LO1, LO2, LO3",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4. Supply Management Integration for competitive advantAge (cont.)\n\n4.5 Integrating Supply Management, Engineering, and Suppliers to Develop New Products and Services",
+   "Offline",
+   "LO1, LO2, LO3",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "11",
+   "Practice Chap 2, 4\n\nRelease and Guidelines on Individual assignment",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "12",
+   "PROGRESS TEST 1: Cover Chap 1, 2, 4",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 6. CATEGORY STRATEGY DEVELOPMENT\n\n6.1 Aligning Supply Management and Enterprise Objectives\n\n6.2 What Is a Category Strategy?",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 6. CATEGORY STRATEGY DEVELOPMENT (cont.)\n\n6.3 Category Strategy Development (Strategic Sourcing)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 6. CATEGORY STRATEGY DEVELOPMENT (cont.)\n\n6.4 Types of Supply Management Strategies",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 6. CATEGORY STRATEGY DEVELOPMENT (cont.)\n\n6.5 Evolving Sourcing Strategies",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 7. SUPPLIER EVALUATION AND SELECTION\n\n7.1 The Supplier Evaluation and Selection Process",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 7. SUPPLIER EVALUATION AND SELECTION (cont.)\n\n7.2 Key Supplier Evaluation Criteria",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 7. SUPPLIER EVALUATION AND SELECTION (cont.)\n\n7.3 Developing a Supplier Evaluation and Selection Survey",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 7. SUPPLIER EVALUATION AND SELECTION (cont.)\n\n7.4 Reducing Supplier Evaluation and Selection Cycle Time",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "21",
+   "Practice Chap 7",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "22",
+   "Release and Guidelines on Group assignment",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 8. SUPPLIER QUALITY MANAGEMENT\n\n8.1 Overview of Supplier Quality Management",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 8. SUPPLIER QUALITY MANAGEMENT (cont.)\n\n8.2 Factors Affecting Supply Management’s Role in Managing Supplier Quality",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 8. SUPPLIER QUALITY MANAGEMENT (cont.)\n\n8.3 Supplier Quality Management Using a Total Quality Management Perspective",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8. SUPPLIER QUALITY MANAGEMENT (cont.)\n\n8.4 Pursuing Six Sigma Supplier Quality",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "27",
+   "Review Chap 6, 7, 8",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "28",
+   "PROGRESS TEST 2: Cover Chap 6, 7, 8",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 9. SUPPLIER MANAGEMENT AND DEVELOPMENT: CREATING A WORLD-CLASS SUPPLY BASE\n\n9.1 Supplier Performance Measurement",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 9. SUPPLIER MANAGEMENT AND DEVELOPMENT: CREATING A WORLD-CLASS SUPPLY BASE (cont.)\n\n9.2 Rationalization and Optimization: Creating a Manageable Supply Base",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 9. SUPPLIER MANAGEMENT AND DEVELOPMENT: CREATING A WORLD-CLASS SUPPLY BASE (cont.)\n\n9.3 Supplier Development: A Strategy for Improvement",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 9. SUPPLIER MANAGEMENT AND DEVELOPMENT: CREATING A WORLD-CLASS SUPPLY BASE (cont.)\n\n9.4 Overcoming the Barriers to Supplier Development",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 11. STRATEGIC COST MANAGEMENT\n\n11.1 A Structured Approach to Cost Reduction\n\n11.2 Price Analysis",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 11. STRATEGIC COST MANAGEMENT (cont.)\n\n11.3 Cost Analysis Techniques",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 11. STRATEGIC COST MANAGEMENT (cont.)\n\n11.4 Total Cost of Ownership",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 11. STRATEGIC COST MANAGEMENT (cont.)\n\n11.5 Collaborative Approaches to Cost Management",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "37",
+   "Practice Chap 11",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "38",
+   "Practice Chap 11 (cont.)",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 12. PURCHASING AND SUPPLY CHAIN ANALYSIS: TOOLS AND TECHNIQUES\n\n12.1 Project Management\n\n12.2 Learning-Curve Analysis",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 12. PURCHASING AND SUPPLY CHAIN ANALYSIS: TOOLS AND TECHNIQUES (cont.)\n\n12.3 Value Analysis/Value Engineering\n\n12.4 Process Mapping",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 13. NEGOTIATION\n\n13.1 What Is Negotiation?\n\n13.2 Negotiation Framework",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 13. NEGOTIATION (cont.)\n\n13.3 Negotiation Planning\n\n13.4 Power in Negotiation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "43",
+   "Review Chap 9, 11, 12, 13",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "44",
+   "PROGRESS TEST 3: Cover Chap 9, 11, 12, 13",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 16. LEAN SUPPLY CHAIN MANAGEMENT\n\n16.1 Understanding Supply Chain Inventory",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 16. LEAN SUPPLY CHAIN MANAGEMENT (cont.)\n\n16.2 The Right Reasons for Investing in Inventory\n\n16.3 The Wrong Reasons for Investing in Inventory",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 16. LEAN SUPPLY CHAIN MANAGEMENT (cont.)\n\n16.4 Creating the Lean Supply Chain",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 16. LEAN SUPPLY CHAIN MANAGEMENT (cont.)\n\n16.5 Approaches for Managing Inventory Investment\n\n16.6 Delivering the Perfect Customer Order",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "49",
+   "Practice Chap 16",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "50",
+   "Practice Chap 16 (cont.)",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 19. PERFORMANCE MEASUREMENT AND EVALUATION\n\n19.1 Purchasing and Supply Chain Performance Measurement and Evaluation\n\n19.2 Purchasing and Supply Chain Performance Measurement Categories",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 19. PERFORMANCE MEASUREMENT AND EVALUATION (cont.)\n\n19.3 Developing a Performance Measurement and Evaluation System\n\n19.4 Performance Benchmarking: Comparing Against the Best\n\n19.5 A Summary of Purchasing Measurement and Evaluation Characteristics",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "T",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Do exercises, self-review, case study, additional reading following chapter",
+   ""
+  ],
+  [
+   "53",
+   "Course Revision",
+   "Offline",
+   "",
+   "T, U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Discussion and question",
+   ""
+  ],
+  [
+   "54",
+   "Course Revision (cont.)",
+   "Offline",
+   "",
+   "T, U",
+   "Book, Powerpoint, case study, teaching notes, solution.",
+   "",
+   "Discussion and question",
+   ""
+  ],
+  [
+   "55",
+   "Essay Test",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "Report submission",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Group presentation",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Group presentation and discussion",
+   ""
+  ],
+  [
+   "58",
+   "Group presentation",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Group presentation and discussion",
+   ""
+  ],
+  [
+   "59",
+   "Group presentation",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Group presentation and discussion",
+   ""
+  ],
+  [
+   "60",
+   "Group presentation",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Group presentation and discussion",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "ĐN1.1",
+   "You produce and sell a physical product. Draw a roadmap to describe its movement from sources to customers."
+  ],
+  [
+   "2",
+   "1",
+   "ĐN1.2",
+   "What are similarities and differences between supply chains and value chains?"
+  ],
+  [
+   "3",
+   "2",
+   "ĐN1.3",
+   "What are roles of purchasing department?"
+  ],
+  [
+   "4",
+   "3",
+   "ĐN1.4",
+   "How can purchasing contribute for an organization?"
+  ],
+  [
+   "5",
+   "4",
+   "ĐN2.1",
+   "“I do all of my shopping online at Shopee—Can I do the same at work?”"
+  ],
+  [
+   "6",
+   "5",
+   "ĐN2.2",
+   "In group, layout a P2P process for a self-chosen demand."
+  ],
+  [
+   "7",
+   "5",
+   "ĐN2.3",
+   "In your opinion, which stage in P2P process is the most important for companies?"
+  ],
+  [
+   "8",
+   "6",
+   "ĐN2.4",
+   "In your P2P, which documents are needed for each stage of P2P Process?"
+  ],
+  [
+   "9",
+   "7",
+   "ĐN3.1",
+   "Which departments need to work with purchasing department?"
+  ],
+  [
+   "10",
+   "8",
+   "ĐN3.2",
+   "Describe the types of information and data that supply management may share with different internal and external functions?"
+  ],
+  [
+   "11",
+   "9",
+   "ĐN3.3",
+   "What are the barriers to integration? How can they be overcome?"
+  ],
+  [
+   "12",
+   "9",
+   "ĐN3.4",
+   "What is cross-functional sourcing team? What are its benefits and potential drawbacks?"
+  ],
+  [
+   "13",
+   "13",
+   "ĐN5.1",
+   "Choose a company, visit their website and see how they categorize their product. List all the reasons why that company need to classify their goods/services?"
+  ],
+  [
+   "14",
+   "14",
+   "ĐN5.2",
+   "How to conduct a Spend analysis?"
+  ],
+  [
+   "15",
+   "15",
+   "ĐN5.3",
+   "What are types of Supply Management strategy? Please give an example for each type."
+  ],
+  [
+   "16",
+   "15",
+   "ĐN5.4",
+   "When conducting researc, what are some advantages and disadvantages of the different types of information you might obtain from the internet?"
+  ],
+  [
+   "17",
+   "16",
+   "ĐN6.1",
+   "Describe a Supplier Evaluation and Selection Process. using practical example in your answer."
+  ],
+  [
+   "18",
+   "17",
+   "ĐN6.2",
+   "In which ways should the company evaluate their potential suppliers?"
+  ],
+  [
+   "19",
+   "18",
+   "ĐN6.3",
+   "How can we reduce Supplier Evaluation and Selection cycle time?"
+  ],
+  [
+   "20",
+   "18",
+   "ĐN6.4",
+   "Discuss a situation in which a purchaser might select a supplier that is having financial difficulties?"
+  ],
+  [
+   "21",
+   "19",
+   "ĐN7.1",
+   "What are Seven wastes? Take examples."
+  ],
+  [
+   "22",
+   "20",
+   "ĐN7.2",
+   "How can we eliminate wastes and establish continuous Improvement?"
+  ],
+  [
+   "23",
+   "21",
+   "ĐN7.3",
+   "Describe Six sigma Supplier Quality. Take an example."
+  ],
+  [
+   "24",
+   "21",
+   "ĐN7.4",
+   "What are the differences between ISO standards and MBNQA?"
+  ],
+  [
+   "25",
+   "22",
+   "ĐN8.1",
+   "Assume you are the Chief Purchasing Officer at a manufacturer of mobile cellular devices; develop a plan to manage the risks in your supply base"
+  ],
+  [
+   "26",
+   "25",
+   "ĐN9.1",
+   "Which techniques should be use in Supplier Measurement?"
+  ],
+  [
+   "27",
+   "26",
+   "ĐN9.2",
+   "How can we create a manageable supply base?"
+  ],
+  [
+   "28",
+   "27",
+   "ĐN9.3",
+   "How to overcome the barriers to supplier development?"
+  ],
+  [
+   "29",
+   "27",
+   "ĐN9.4",
+   "What is the role of the Q adjustment factor in the SPI calculation"
+  ],
+  [
+   "30",
+   "28",
+   "ĐN10.1",
+   "Describe cost structure of a chosen product."
+  ],
+  [
+   "31",
+   "29",
+   "ĐN10.2",
+   "Among Market-Driven Pricing Models, which one is the most profitable for seller?"
+  ],
+  [
+   "32",
+   "31",
+   "ĐN11.1",
+   "Among Project planning and control techniques, which techniques is the most powerful?"
+  ],
+  [
+   "33",
+   "33",
+   "ĐN11.3",
+   "What are the purpose of Quantity discount analysis?"
+  ],
+  [
+   "34",
+   "33",
+   "ĐN11.4",
+   "What are the major differences in working on projects, as opposed to general work in most purchasing environment?"
+  ],
+  [
+   "35",
+   "34",
+   "ĐN12.1",
+   "Why is negotiation such an important part of the purchasing process?"
+  ],
+  [
+   "36",
+   "35",
+   "ĐN12.2",
+   "Develop a profile of a skilled or effective negotiator"
+  ],
+  [
+   "37",
+   "36",
+   "ĐN12.3",
+   "What are likely to be the most important sources of power in a buyer-seller negotiator?"
+  ],
+  [
+   "38",
+   "36",
+   "ĐN12.4",
+   "Describe a negotiation situation, Which negotiating power should we use?"
+  ],
+  [
+   "39",
+   "40",
+   "ĐN14.1",
+   "In practical, what are considered as \"inventory\"?"
+  ],
+  [
+   "40",
+   "41",
+   "ĐN14.2",
+   "What are inventory-related cost?"
+  ],
+  [
+   "41",
+   "42",
+   "ĐN14.3",
+   "What are the right reasons to invest in inventory?"
+  ],
+  [
+   "42",
+   "42",
+   "ĐN14.4",
+   "What are the wrong reasons to invest in inventory?"
+  ],
+  [
+   "43",
+   "46",
+   "ĐN16.1",
+   "Why would a firm want to measure supplier performance? Describe the kinds of measures that can be used to measure supplier performance."
+  ],
+  [
+   "44",
+   "47",
+   "ĐN16.2",
+   "What are the three types of performance benchmarking? Which type is most commonly used by the purchasing function?"
+  ],
+  [
+   "45",
+   "48",
+   "ĐN16.3",
+   "What is required to establish a balanced scorecard to measure purchasing and supply performance?"
+  ],
+  [
+   "46",
+   "48",
+   "ĐN16.4",
+   "What are the benefits of calculating the total cost of ownership associated with carrying physical inventory?"
+  ]
+ ],
+ "links": [
+  "/download/13598/S/1_SCM201_PPT Chap 1 2 4 6.zip",
+  "/download/13598/S/2_SCM201 PPT Chap 7 8 9 11.zip",
+  "/download/13598/S/3_SCM201 Chap 12 13 16 19.zip"
+ ]
+}

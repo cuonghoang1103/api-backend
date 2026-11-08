@@ -1,0 +1,343 @@
+{
+ "ma": "ENW492c",
+ "sylID": "12645",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12645",
+   "code": "ENW492c",
+   "name": "Academic Writing Skills_Kỹ năng viết học thuật",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12645",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12645",
+  "Syllabus Name": "Academic Writing Skills_Kỹ năng viết học thuật",
+  "Course Name English": "",
+  "Subject Code": "ENW492c",
+  "Learning-Teaching Method": "",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "84 hours online study + 3 hrs offline (2 slots) + 1hr exam + 62 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "The skills taught in this Specialization will empower you to succeed in any college-level course or professional field. You’ll learn to conduct rigorous academic research and to express your ideas clearly in an academic format. In the final Capstone Project, all the knowledge that you’ve gained over the span of these courses will culminate into an academic research paper on an issue of your choice.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assgnments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend off-line sessions in the Campus (Optional)\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (PE)\n\n3) Final Result (FR) =min (10, PE + Bonus)\n\n4) Completion Criteria: PE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/academic-english",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Academic English: Writing Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/grammar-punctuation",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 01: Grammar and Punctuation"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/getting-started-with-essay-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 02: Getting Started with Essay Writing"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/advanced-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 03: Advanced Writing"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/introduction-to-research-for-essay-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 04: Introduction to Research for Essay Writing"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/academic-writing-capstone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 05: Project: Writing a Research Paper"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "After completing this course, students will be able to:\n- identify the correct verb tenses to use\n- use commas effectively\n- utilize several different sentence types\n- write more effectively in English"
+  ],
+  [
+   "2",
+   "CLO2",
+   "After completing this course, students will be able to:\n- create effective thesis statements for essays\n- plan and write compare/contrast, cause/effect, and argument essays\n- write well-developed body paragraphs"
+  ],
+  [
+   "3",
+   "CLO3",
+   "After completing this course, students will be able to:\n- plan and write a more sophisticated argument essay\n- identify plagiarism and explain how to prevent it\n- read and analyze several articles to form students' own opinion on a topic\n- make connections between several articles\n- form thesis statements from students' readings\n- use sources effectively when writing an essay"
+  ],
+  [
+   "4",
+   "CLO4",
+   "After completing this course, students will be able to:\n- choose appropriate research topics for college classes\n- write detailed outlines for research papers\n- find and evaluate reliable sources for research papers\n- take notes for research\n- use academic style and tone\n- document sources by creating a Works Cited list in MLA format\n- avoid plagiarism"
+  ],
+  [
+   "5",
+   "CLO5",
+   "In this capstone project, students will:\n- conduct research on an academic topic of their own choice\n- create an outline for the research paper\n- write a short annotated bibliography\n- write a 7-8 page research paper\n- use MLA In-text Citations and MLA Works Cited Page correctly"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam PE",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "~100'",
+   "All LOs",
+   "MCQ, short answers, Writing",
+   "5-10 MCQ Reading; 1 Writing",
+   "All spec. content",
+   "Part 1: Reading ~20-40' (30%)\n\n*Analyse an argumentative or a comparative or a cause and effect essay\n\n*'Review a search paper and answer questions (about thesis statement, ideas, paraphrase, reference, etc.)\n\nPart 2: Writing - 60' (70%)\n\nWrite 350-400 words on a given topic",
+   "1) The Reading test must clearly cite all sources, and the citations must be authentic and reliable.\n\n2) Students will take the Writing test first, followed by the Reading test.\n\n3) The Writing test must have different topics from those in the Reading test."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course ENW492c\n\nMOOC 1:\n\n- Week 1: Course Introduction\n\n- Week 2: Verb Tenses and Conjunctions\n\n- Week 3: Compound and Complex Sentences",
+   "Offline",
+   "CLO1",
+   "",
+   "Online",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n\n- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "2",
+   "MOOC 1:\n\n- Week 4: More Commas, Parallel Structure, and Sentence Variety\n\nMOOC 2:\n\n- Week 1: Course Introduction\n\n- Week 2: Essay Writing",
+   "Online",
+   "CLO1, CLO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- all Students should participate in review slot (if any question)",
+   ""
+  ],
+  [
+   "3",
+   "MOOC 2:\n\n- Week 3: Writing Compare/Contrast Essays",
+   "Online",
+   "CLO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises.\n\n- Complete assignment: Compare/Contrast Essay Peer Review\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "4",
+   "MOOC 2:\n\n- Week 4: Writing Cause/Effect Essays",
+   "Online",
+   "CLO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises.\n\n- Complete assignment: Cause/Effect Essay Peer Review\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "5",
+   "MOOC 2:\n\n- Week 5: Writing Argument Essays",
+   "Online",
+   "CLO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n'- Finish: Practice Exercises.\n\n'- Complete assignment: Argument Essay Peer Review\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "6",
+   "MOOC 3:\n\n- Week 1: Course Introduction\n\n- Week 2: Advanced Argument Essays",
+   "Online",
+   "CLO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignment: Advanced Argument Essay Peer Review\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "7",
+   "MOOC3:\n\n- Week 3: Avoiding Plagiarism\n\n- Week 4: Synthesis Essay\n\n- Week 5: Documented Essay",
+   "Online",
+   "CLO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n'- Finish: Practice Exercises and Quiz\n\n'- Complete assignments: Synthesis Essay Peer Review and Documented Essay Peer Review\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "8",
+   "MOOC 4\n\n- Week 1: Course introduction and Introduction to Research\n\n- Week 2: Doing research and Planning the paper",
+   "Online",
+   "CLO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Complete assignments: Annotated Bibliography Assignment feedback; Thesis Statement for research paper;\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "9",
+   "MOOC 4\n\n- Week 3: Language for research writing\n\n- Week 4: More on citing sources and formatting",
+   "Online",
+   "CLO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n'- Complete assignment: Using statistics for writing peer review.\n\nNOTE: You can only review others' assignments when you have submitted yours.I10",
+   ""
+  ],
+  [
+   "10",
+   "MOOC 5:\n- Week 1:Getting Started\n- Week 2: Research and Annotated Bibliography",
+   "Online",
+   "CLO5",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises, Quiz and assignment",
+   ""
+  ],
+  [
+   "11",
+   "MOOC 5:\n\n- Week 3: First Draft and Introduction Paragraph",
+   "Online",
+   "CLO5",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz and assignment\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "12",
+   "MOOC 5:\n\n- Week 4: The Rough Draft\n\nMOOC 5:\n\n- Week 5: Revise and Rewrite\n\n- Week 6: The Final Draft\n\nReview MOOC 1, 2, 3, 4, 5",
+   "Online,Offline",
+   "CLO5",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n'- Finish: Practice Exercises and Quiz and assignment\n\nNOTE: You can only review assignments when you have submited yours.\n\nDeadline of Course Completion: End of Friday of the week.\n\n- All Students should participate in review slot(if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

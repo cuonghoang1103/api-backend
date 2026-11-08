@@ -1,0 +1,1279 @@
+{
+ "ma": "CAA201",
+ "sylID": "14073",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14073",
+   "code": "CAA201",
+   "name": "Communications and advertising_Nguyên lý truyền thông và quảng cáo",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14073",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14073",
+  "Syllabus Name": "Communications and advertising_Nguyên lý truyền thông và quảng cáo",
+  "Course Name English": "Communications and advertising",
+  "Subject Code": "CAA201",
+  "Learning-Teaching Method": "Lecture,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "'- Objective: The course aims to provide students a solid foundation on different aspects of advertising and other major integrated marketing communications tools, and the role of these tools in the marketing process.\n\n- Description: In particular, attention will be given to discussions on (1) understand basic marketing communication and advertising related terms (2) understanding the communication processes, (3) understand creative process and creative choice (4) conducting research materials for creative work, (5) devising effective creative strategies for achieving marketing communication objectives, and (6) implementing and evaluating the creative strategy.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfil tasks given by intructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (https://flm.fpt.edu.vn/) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Advertising & IMC: Principles and Practice",
+   "Sandra Moriarty, Nancy Mitchell, William D. Wells",
+   "Pearson",
+   "2018",
+   "11th",
+   "9781292262062",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 Giáo trình (ưu tiên mua Giáo trình mới)"
+  ],
+  [
+   "2",
+   "Harvard Business Review, BusinessWeek, Neisen Vietnam Market Report",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "http://www.pearsonhighered.com/educator/product/Advertising-IMC-Principles-and-Practice/9780133506884.page",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Advertising & IMC: Principles and Practice",
+   "Sandra Moriarty, Nancy Mitchell, William D. Wells",
+   "Pearson",
+   "2014",
+   "10th",
+   "'9781292017396",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 giáo trinh (Ưu tiên mua GT mới)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the basic elements of Advertising, Integrated Marketing Communication and its role in the marketing process"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand strategic planning stages including marketing strategy, communication strategy, creative strategy, media strategy and their relationship."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the research method, data in the marketing process"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand advertising audiences' (consumer) behaviour and able to identify them using segmentation, targeting and profiling"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Understand the creative side and promotinal writing languages"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand different advertising mediums requirement and its essential"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Demonstrate ability to apply Advertising, PR concepts to analyse and solve real-world situations."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Apply different tools for researching, planning, executing and presenting advertising campaigns"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Develop basic communication and media materials such as marketing copy, press release and online content."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Apply theories and practices to discuss useful criteria for evaluating IMC effectiveness"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Quiz 2",
+   "quiz",
+   "1",
+   "5.0%",
+   ">0",
+   "30",
+   "LO2, LO3, LO4, LO5, LO8, LO9",
+   "Option 1: Multiple choice questions, Case study exercises; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:20 questions for quiz or 01 case study; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Quizzes will test for knowledge of subjects in the chapters assigned for that day. Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: in class\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 3\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Group Project and presentation",
+   "on-going",
+   "1",
+   "35.0%",
+   ">0",
+   "60'",
+   "LO8, LO10",
+   "Option 1: This is a group-based project that involves the pitch and presentation of an advertising solution for a company. The group consists of 4-6 members. Group members have to work closely throughout the semester and give a formal presentation by the end of the course; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Maximum length of the group assignment should be 20 pages excluding appendices. Presentation: 20-30 minutes and Q&A 10 minutes ; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: (Based on topics of studied unitsOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Group presentation in class\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: This assignment should have 3 components: a formal presentation (Using slides), a report (Word) and a creative product (ad TVC, print ad or media kit) as part of the communication plan.\n\nAll assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission\n\nEvaluation will be based on both presentation, written report and creative product (reccommended 50%, 30% and 20% accordingly)\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "3",
+   "Individual assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Option 1: Take-home; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO10",
+   "Option 1: An individual work to demonstrate the student's understanding and application of Advertising & Marcom concepts in practice. The topic will be announced by the lecturer in the class Or Guided project on coursera ; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:Maximum length of the individual assignment should be 10 pages excluding appendices. Or Guided project on coursera ; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Based on topics of studied units Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Ongoing reflective journal\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Reflective journal: Reflective journal maintained weekly halfway throughout the unit. This can be in the form of a paper diary, a peer review or an online blog.\n\nOr Guided project on coursera (Choose 1 of them)\n\nCourse 1: Get started with Facebook Audience Insights ( Link: https://www.coursera.org/programs/fptu-summer-2023-lsica/projects/get-started-facebook-audience-insights)\n\nCourse 2: Understanding the average Facebook User ( Link: https://www.coursera.org/learn/understanding-the-average-facebook-user/home/week/1)\n\nA deduction of 10% of the assignment mark will be applied for each day of late submission\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "4",
+   "Quiz 1",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "30",
+   "LO1, LO2, LO7, LO8",
+   "Option 1: Multiple choice questions, Case study exercises; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 20 questions for quiz or 01 case study; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Quizzes will test for knowledge of subjects in the chapters assigned for that day. Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: in class\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 3\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "5",
+   "Quiz 3",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "30",
+   "LO1, LO6, LO7, LO8, LO9",
+   "Option 1: Multiple choice questions, Case study exercises; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:20 questions for quiz or 01 case study; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Quizzes will test for knowledge of subjects in the chapters assigned for that day. Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: in class\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 3\n\nOption 2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "Multiple choice questions. Other types of questions may be included.",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Closed-book exam."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to studying methods: textbooks, suggested readings, rules set out by Lecturer, syllabus, assessment, legal reasoning; instruct students how to prepare, complete and submit their individual assignments",
+   "Offline",
+   "LO1",
+   "IT",
+   "Read syllabus",
+   "CAA201",
+   "ask question (if any)",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1:Strategic brand Communication (Part 1)\n\nThe marketing foundation",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Slides Chapter 1; Textbook: part 1, chapter 1.1",
+   "CAA201",
+   "Read Slides Chapter 1; Read Textbook: part 1, chapter 1.1\n\nDiscussion",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1:Strategic brand Communication (Part 2)\n\nDiscusion: Marketing mix",
+   "Offline",
+   "LO1, LO2, LO8",
+   "ITU",
+   "Slides Chapter 1; Textbook: part 1, chapter 1.1",
+   "",
+   "Read: Slides Chapter 1; Read: Textbook: part 1, chapter 1.1\n\nDiscussion",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1:Strategic brand Communication (part 3)\n\nIntegrated Marketing Communication",
+   "Offline",
+   "LO1, LO2, LO8",
+   "ITU",
+   "Slides Chapter 1; Textbook: part 1, chapter 1.2",
+   "",
+   "Read: Slides Chapter 1; Read: Textbook: part 1, chapter 1.2\n\nDiscussion",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1:Strategic brand Communication (Part 4)\n\nPractise: Branding billings",
+   "Offline",
+   "LO1, LO2, LO8",
+   "ITU",
+   "Slides Chapter 1; Textbook: part 1, chapter 1.2",
+   "",
+   "Read: Slides Chapter 1; Read: Textbook: part 1 Chapter 1.2;\n\nDiscussion",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: Advertising (Part 1)\n\nThe practice of advertising\n\nEvolution of the Key Concepts of Advertising",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Slides Chapter 2; Textbook: part 1, chapter 2.1",
+   "",
+   "Read: Slides Chapter 2; Read: Textbook: part 1, chapter 2.1",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Advertising (Part 2)\n\nFormulate the brand's image, personality, positioning, added value, meaning.\n\nDisscuss the IMC's effect to create and communicate the above brand meaning aspects",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Slides Chapter 2; Textbook: part 1, chapter 2.2",
+   "",
+   "Read: Slides Chapter 2; Read: Textbook: part 1, chapter 2.2",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Advertising (Part 3)\n\nThe advertising world",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "Slides Chapter 2; Textbook: part 1, chapter 2.3",
+   "",
+   "Read: Slides Chapter 2; Read: Textbook: part 1, chapter 2.3",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Advertising (Part 4)\n\nChange in the Practice of Advertising",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "Slides Chapter 2; Textbook: part 1, chapter 2.4",
+   "",
+   "Read: Slides Chapter 2; Read: Textbook: part 1, chapter 2.4",
+   ""
+  ],
+  [
+   "10",
+   "Quiz 1: Chapter 1, 2",
+   "Offline",
+   "LO1, LO7",
+   "ITU",
+   "Slides Chapter 1 & 2; Textbook: part 1, chapter 1 & 2",
+   "",
+   "Read: Slides Chapter 1 & 2; Textbook: part 1, chapter 1 & 2",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 8: Strategic Planning (Part 1)",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Slides Chapter 8; Textbook: part 2, chapter 8.1",
+   "",
+   "Read: Slides Chapter 8; Read: Textbook: part 2, chapter 8.1",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 8: Strategic Planning (Part 2)",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Slides Chapter 8; Textbook: part 2, chapter 8.2",
+   "",
+   "Read: Slides Chapter 8; Read: Textbook: part 2, chapter 8.2",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 6: Strategic research (Part 1)\n\nThe research process",
+   "Offline",
+   "LO3",
+   "IT",
+   "Slides Chapter 6 Textbook: part 2, chapter 6.1",
+   "",
+   "Read: Slides Chapter 6 Read Textbook: part 2, chapter 6.1",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 6: Strategic research (Part 2)\n\nThe research process",
+   "Offline",
+   "LO3",
+   "IT",
+   "Slides Chapter 6 Textbook: part 2, chapter 6.1",
+   "",
+   "Read: Slides Chapter 6 Read Textbook: part 2, chapter 6.1",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 6: Strategic research (Part 3)\n\nChoose methods and Collect data",
+   "Offline",
+   "LO3",
+   "IT",
+   "Slides Chapter 6 Textbook: part 2, chapter 6.2",
+   "",
+   "Read Slides Chapter 6 Read Textbook: part 2, chapter 6.2",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 6: Strategic research (part 4)\n\nChoose methods and Collect data",
+   "Offline",
+   "LO3",
+   "IT",
+   "Slides Chapter 6 Textbook: part 2, chapter 6.2",
+   "",
+   "Read Slides Chapter 6 Read Textbook: part 2, chapter 6.2",
+   ""
+  ],
+  [
+   "17",
+   "Group Project and Presentation Guideline\n\nIndividual assignment Guideline or Guided project on coursera",
+   "Offline",
+   "LO3",
+   "IT",
+   "Syllabus",
+   "",
+   "Read syllabus\n\ndiscussion",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 7: Segmenting and Targeting the Audience (Part 1)\n\nFactor influences Consumer Decisions",
+   "Offline",
+   "LO4",
+   "IT",
+   "Slides Chapter 7 Textbook: part 2, chapter 7.1",
+   "",
+   "Read : Slides Chapter 7 Read Textbook: part 2, chapter 7.1",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 7: Segmenting and Targeting the Audience (Part 2)\n\nSegmenting markets and targeting audiences",
+   "Offline",
+   "LO4",
+   "IT",
+   "Slides Chapter 7 Textbook: part 2, chapter 7.2",
+   "",
+   "Read : Slides Chapter 7 Read Textbook: part 2, chapter 7.2",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 7: Segmenting and Targeting the Audience (part 3)\n\nProfiling markets and target audiences",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Slides Chapter 7 Textbook: part 2, chapter 7.3",
+   "",
+   "Read Slides Chapter 7; Read Textbook: part 2, chapter 7.3",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 7: Segmenting and Targeting the Audience (Part 4)\n\nCustomer insight and account planning",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Slides Chapter 7 Textbook: part 2, chapter 7.3 and 8.3",
+   "",
+   "Read Slides Chapter 7; Read Textbook: part 2, chapter 7.3 and 8.3",
+   ""
+  ],
+  [
+   "22",
+   "Tutorial\n\nProfiling exercise to find& describe customer of several brands.\n\nOR Outside class activity: Customer hunt (Hunt the most fitting customer in real life for a brand)\n\nRead at home, discuss in class on good & bad practice on Chapter 5",
+   "Offline",
+   "LO4, LO8",
+   "TU",
+   "Suggested reading, online research\n\nSlide chapter 5\n\nText book: part 2, chapter 5",
+   "",
+   "Suggested reading, online research\n\nSlide chapter 5\n\nText book: part 2, chapter 5",
+   ""
+  ],
+  [
+   "23",
+   "Tutorial\n\nProfiling exercise to find& describe customer of several brands.\n\nOR Outside class activity: Customer hunt (Hunt the most fitting customer in real life for a brand)\n\nRead at home, discuss in class on good & bad practice on Chapter 5",
+   "Offline",
+   "LO4, LO8",
+   "TU",
+   "Suggested reading, online research\n\nSlide chapter 5\n\nText book: part 2, chapter 5",
+   "",
+   "Suggested reading, online research\n\nSlide chapter 5\n\nText book: part 2, chapter 5",
+   ""
+  ],
+  [
+   "24",
+   "Tutorial\n\nProfiling exercise to find& describe customer of several brands.\n\nOR Outside class activity: Customer hunt (Hunt the most fitting customer in real life for a brand)\n\nRead at home, discuss in class on good & bad practice on Chapter 5",
+   "Offline",
+   "LO4, LO8",
+   "TU",
+   "Suggested reading, online research\n\nSlide chapter 5\n\nText book: part 2, chapter 5",
+   "",
+   "Suggested reading, online research\n\nSlide chapter 5\n\nText book: part 2, chapter 5",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 9: The Creative Side (Part 1)\n\nRole of creativity in IMC",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 9 Textbook: part 3, chapter 9.1",
+   "",
+   "Read Slides Chapter 9 Read Textbook: part 3, chapter 9.1",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 9: The Creative Side (Part 2)\n\nCreative thinking",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 9 Textbook: part 3, chapter 9.2",
+   "",
+   "Read Slides Chapter 9 Read Textbook: part 3, chapter 9.2",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 9: The Creative side (Part 3)\n\nKey message strategy approaches",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Slides Chapter 9 Textbook: part 3, chapter 9.3",
+   "",
+   "Read Slides Chapter 9 Read Textbook: part 3, chapter 9.3",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 9: The Creative side (Part 4)\n\nIssues affect the management of creative strategy and its implementation?",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Slides Chapter 9 Textbook: part 3, chapter 9.4",
+   "",
+   "Read Slides Chapter 9 Read Textbook: part 3, chapter 9.4",
+   ""
+  ],
+  [
+   "29",
+   "Tutorial:\n\nDevelop creative concept for a creative brief of a brand",
+   "Offline",
+   "LO5, LO9",
+   "TU",
+   "Suggested reading, online research",
+   "",
+   "Suggested reading, online research",
+   ""
+  ],
+  [
+   "30",
+   "Quiz 2: Chapter 6, 7, 8, 9",
+   "Offline",
+   "LO5, LO9",
+   "TU",
+   "Suggested reading, online research",
+   "",
+   "Suggested reading, online research",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 10: Promotional Writing (Part 1)",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 10 Textbook: part 3, chapter 10",
+   "",
+   "Read Slides Chapter 10; Read Textbook: part 3, chapter 10",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 10: Promotional Writing (Part 2)",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 10 Textbook: part 3, chapter 10",
+   "",
+   "Read Slides Chapter 10; Read Textbook: part 3, chapter 10",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10: Promotional Writing (Part 3)",
+   "Offline",
+   "LO5",
+   "IT",
+   "Slides Chapter 10 Textbook: part 3, chapter 10",
+   "",
+   "Read Slides Chapter 10; Read Textbook: part 3, chapter 10",
+   ""
+  ],
+  [
+   "34",
+   "Tutorial:\n\nBased on an existing creative concept, write copy for different types of media\n\nOR Adapting a foreign/ international concept for Vietnamese market",
+   "Offline",
+   "LO5, LO9",
+   "IT",
+   "Suggested reading, online research",
+   "",
+   "Suggested reading, online research",
+   ""
+  ],
+  [
+   "35",
+   "Tutorial:\n\nBased on an existing creative concept, write copy for different types of media\n\nOR Adapting a foreign/ international concept for Vietnamese market",
+   "Offline",
+   "LO5, LO9",
+   "IT",
+   "Suggested reading, online research",
+   "",
+   "Suggested reading, online research",
+   ""
+  ],
+  [
+   "36",
+   "Read at home, discuss in class on good & bad practice:\n\nChapter 12: Media basics",
+   "Offline",
+   "LO6",
+   "TU",
+   "Slides Chapter 12,13,14 Textbook: part 4, chapter 12,13, 14",
+   "",
+   "Read Slides Chapter 12,13,14; Read Textbook: part 4, chapter 12,13,14",
+   ""
+  ],
+  [
+   "37",
+   "Read at home, discuss in class on good & bad practice:\n\nChapter 13: Paid Media",
+   "Offline",
+   "LO6",
+   "TU",
+   "Slides Chapter 12,13,14 Textbook: part 4, chapter 12,13, 14",
+   "",
+   "Read Slides Chapter 12,13,14; Read Textbook: part 4, chapter 12,13,14",
+   ""
+  ],
+  [
+   "38",
+   "Read at home, discuss in class on good & bad practice:\n\nChapter 14: Owned, Interactive, and Earned media\n\nSubmission of Individual Assignment or Coursera's Guided project certification",
+   "Offline",
+   "LO6",
+   "TU",
+   "Slides Chapter 12,13,14 Textbook: part 4, chapter 12,13, 14",
+   "",
+   "Read Slides Chapter 12,13,14; Read Textbook: part 4, chapter 12,13,14",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 11: Visual Communication (Part 1)\n\nRole of visual communication",
+   "Offline",
+   "LO6, LO7",
+   "IT",
+   "Slides Chapter 11 Textbook: part 3, chapter 11.1",
+   "",
+   "read Slides Chapter 11 read Textbook: part 3, chapter 11.1",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 11: Visual Communication (Part 2)\n\nThe basics of design (The designer's toolkit)",
+   "Offline",
+   "LO6, LO7",
+   "IT",
+   "Slides Chapter 11 Textbook: part 3, chapter 11.2",
+   "",
+   "read Slides Chapter 11 read Textbook: part 3, chapter 11.2",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 11: Visual Communication (Part 3)\n\nEssential of Production of Print, Video Production, Web Design Consideration",
+   "Offline",
+   "LO6, LO7",
+   "IT",
+   "Slides Chapter 11 Textbook: part 3, chapter 11.3",
+   "",
+   "read Slides Chapter 11 read Textbook: part 3, chapter 11.3",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 15: Media Planning and Negotiation (Part 1)\n\nMedia buying and negotiation work",
+   "Offline",
+   "LO6, LO7",
+   "IT",
+   "Slides Chapter 15 Textbook: part 4, chapter 15.3 and 15.4",
+   "",
+   "Read Slides Chapter 15\n\nRead Textbook: part 4, chapter 15.3 and 15.4",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 15: Media Planning and Negotiation (Part 2)\n\nMedia buying and negotiation work",
+   "Offline",
+   "LO6, LO7",
+   "IT",
+   "Slides Chapter 15 Textbook: part 4, chapter 15.3 and 15.4",
+   "",
+   "Read Slides Chapter 15\n\nRead Textbook: part 4, chapter 15.3 and 15.4",
+   ""
+  ],
+  [
+   "44",
+   "Tutorial:\n\nMedia planning workshop: Media Planner Worksheet, Campaign Budget & Media metrix calculation for a company",
+   "Offline",
+   "LO6, LO7",
+   "ITU",
+   "Suggested reading, online research",
+   "",
+   "Suggested reading, online research",
+   ""
+  ],
+  [
+   "45",
+   "Tutorial:\n\nMedia planning workshop: Media Planner Worksheet, Campaign Budget & Media metrix calculation for a company",
+   "Offline",
+   "LO6, LO7",
+   "ITU",
+   "Suggested reading, online research",
+   "",
+   "Suggested reading, online research",
+   ""
+  ],
+  [
+   "46",
+   "Submission of group assignment report GROUP PRESENTATION",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "47",
+   "GROUP PRESENTATION",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "48",
+   "GROUP PRESENTATION",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "49",
+   "GROUP PRESENTATION",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "GROUP PRESENTATION",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "51",
+   "GROUP PRESENTATION",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "52",
+   "GROUP PRESENTATION",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "COURSE REVIEW (Chapter 1,2,6,7,8,9, 10,11,15, 17)",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "54",
+   "COURSE REVIEW (Chapter 1,2,6,7,8,9, 10,11,15, 17)",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 17: Evaluating IMC Effectiveness (Part 1)\n\nBrand communication impact",
+   "Offline",
+   "LO1, LO10",
+   "ITU",
+   "Slides Chapter 17\n\nTextbook: part 5, chapter 17.1",
+   "",
+   "Read Slides Chapter 17\n\nRead Textbook: part 5, chapter 17.1",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 17: Evaluating IMC Effectiveness (Part 2)\n\nEvaluating the IMC Message",
+   "Offline",
+   "LO1, LO10",
+   "ITU",
+   "Slides Chapter 17\n\nTextbook: part 5, chapter 17.2",
+   "",
+   "Read Slides Chapter 17\n\nRead Textbook: part 5, chapter 17.2",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 17: Evaluating IMC Effectiveness (Part 3)\n\nEvaluating the performance of Various IMC Tools",
+   "Offline",
+   "LO1, LO10",
+   "ITU",
+   "Slides Chapter 17\n\nTextbook: part 5, chapter 17.3",
+   "",
+   "Read Slides Chapter 17\n\nRead Textbook: part 5, chapter 17.3",
+   ""
+  ],
+  [
+   "58",
+   "Chapter 17: Evaluating IMC Effectiveness (Part 4)\n\nEvaluating the Peformance of Media Vehicles",
+   "Offline",
+   "LO1, LO10",
+   "TU",
+   "Slides Chapter 17\n\nTextbook: part 5, chapter 17.5",
+   "",
+   "Read Slides Chapter 17\n\nRead Textbook: part 5, chapter 17.5",
+   ""
+  ],
+  [
+   "59",
+   "Quiz 3: 10, 11,15, 17",
+   "Offline",
+   "LO1, LO10",
+   "TU",
+   "Suggested reading, online research",
+   "",
+   "Suggested reading, online research",
+   ""
+  ],
+  [
+   "60",
+   "COURSE REVIEW",
+   "Offline",
+   "LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1.1",
+   "What is the definition of marketing"
+  ],
+  [
+   "2",
+   "2",
+   "QN2.1",
+   "Where does marketing communication fit within the operation of a marketing program?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.1",
+   "What is the marketing mix and how does the Mix send messages?"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "Who are the KEY players in marketing mix?"
+  ],
+  [
+   "5",
+   "5",
+   "QN5.1",
+   "What is integrated marketing communication?"
+  ],
+  [
+   "6",
+   "6",
+   "QN6.1",
+   "What do the world \"brand\" mean to you? How could we build a brand?"
+  ],
+  [
+   "7",
+   "7",
+   "QN7.1",
+   "How have the key concepts of marketing communication developed over time?"
+  ],
+  [
+   "8",
+   "8",
+   "QN8.1",
+   "What was Barack Obama’s central argument during the 2008 campaign? What was Donald Trump’s core message during the 2016 campaign? Who were the insurgent candidates during the 2016 presidential primaries? Who were the establishment candidates? And how did their messages and central arguments differ?"
+  ],
+  [
+   "9",
+   "9",
+   "QN9.1",
+   "How is the industry organized – key players, types of agencies, and jobs within agencies?"
+  ],
+  [
+   "10",
+   "10",
+   "QN10.1",
+   "What are the future of advertising?"
+  ],
+  [
+   "11",
+   "11",
+   "QN11.1",
+   "Which is the most important thing in strategic planning?"
+  ],
+  [
+   "12",
+   "12",
+   "QN12.1",
+   "How are the levels of strategic planning connected?"
+  ],
+  [
+   "13",
+   "13",
+   "QN13.1",
+   "Which one is the most important in strategic research? And why?"
+  ],
+  [
+   "14",
+   "14",
+   "QN14.1",
+   "Which is the most appropriate method in primary research?"
+  ],
+  [
+   "15",
+   "15",
+   "QN15.1",
+   "How Do You Get Insights into Consumer Behavior?"
+  ],
+  [
+   "16",
+   "16",
+   "QN16.1",
+   "How Do You Get Insights into Consumer Behavior?"
+  ],
+  [
+   "17",
+   "17",
+   "QN17.1",
+   "How do you think about the idea \"Knowing what to say is far more important to the way you saying thing\"?"
+  ],
+  [
+   "18",
+   "18",
+   "QN18.1",
+   "How do you profile target audiences for a segmentation?"
+  ],
+  [
+   "19",
+   "19",
+   "QN19.1",
+   "How do you profile target audiences for a segmentation?"
+  ],
+  [
+   "20",
+   "20",
+   "QN20.1",
+   "How do you profile target audiences for a segmentation?"
+  ],
+  [
+   "21",
+   "21",
+   "QN21.1",
+   "What are segmentation of your most love brand?"
+  ],
+  [
+   "22",
+   "22",
+   "QN22.1",
+   "What are segmentation of your most love brand?"
+  ],
+  [
+   "23",
+   "23",
+   "QN23.1",
+   "What kind of people are needed in a creative team, for example, in an multimedia production?"
+  ],
+  [
+   "24",
+   "24",
+   "QN24.1",
+   "What kind of people are needed in a creative team, for example, in a communication campaign?"
+  ],
+  [
+   "25",
+   "25",
+   "QN25.1",
+   "Is creativity a science or art?"
+  ],
+  [
+   "26",
+   "26",
+   "QN26.1",
+   "What are the important parts of a creative brief?"
+  ],
+  [
+   "27",
+   "27",
+   "QN27.1",
+   "What are key message strategy approach for your new brand or for a FMCG brand?"
+  ],
+  [
+   "28",
+   "28",
+   "QN28.1",
+   "What if Chevys Fresh Mex’s commercials were as fresh as its food? For your information, Chevys Fresh Mex makes its dishes from scratch everyday so that consumers have something truly fresh"
+  ],
+  [
+   "29",
+   "29",
+   "QN29.1",
+   "How to write for various media?"
+  ],
+  [
+   "30",
+   "30",
+   "QN30.1",
+   "How to write for various media?"
+  ],
+  [
+   "31",
+   "31",
+   "QN31.1",
+   "How do you get a single message to resonate with 1 million people in one countries, socioeconomic backgrounds, and cultures?"
+  ],
+  [
+   "32",
+   "32",
+   "QN32.1",
+   "How do you get a single message to resonate with 1 million people from different countries, socioeconomic backgrounds, and cultures?"
+  ],
+  [
+   "33",
+   "33",
+   "QN33.1",
+   "How do you get a single message to resonate with 1 million people from different countries, socioeconomic backgrounds, and cultures?"
+  ],
+  [
+   "34",
+   "34",
+   "QN34.1",
+   "Can you give and analyse 3 ads which are visually creative in your opinion? (link to target audience & brand image)?"
+  ],
+  [
+   "35",
+   "35",
+   "QN35.1",
+   "What is the role of visual communication in advertising?"
+  ],
+  [
+   "36",
+   "36",
+   "QN36.1",
+   "How can we define layout and composition, and what’s the difference between the two?"
+  ],
+  [
+   "37",
+   "37",
+   "QN37.1",
+   "How are art and color reproduced in print advertising?"
+  ],
+  [
+   "38",
+   "38",
+   "QN38.1",
+   "What are the steps in planning and producing video?"
+  ],
+  [
+   "39",
+   "39",
+   "QN39.1",
+   "What are the steps in planning and producing audio file?"
+  ],
+  [
+   "40",
+   "40",
+   "QN40.1",
+   "What are the basic techniques of Web design?"
+  ],
+  [
+   "41",
+   "41",
+   "QN41.1",
+   "What is the writer’s role in brand communication?"
+  ],
+  [
+   "42",
+   "42",
+   "QN42.1",
+   "What is a media plan?"
+  ],
+  [
+   "43",
+   "43",
+   "QN43.1",
+   "What is a media plan?"
+  ],
+  [
+   "44",
+   "44",
+   "QN44.1",
+   "What is the role of media research in developing media plans?"
+  ],
+  [
+   "45",
+   "45",
+   "QN45.1",
+   "What is current trends in media planning and buying?"
+  ],
+  [
+   "46",
+   "46",
+   "QN46.1",
+   "What is current trends in media planning and buying?"
+  ],
+  [
+   "47",
+   "53",
+   "QN53.1",
+   "What are the key characteristics of some main media vehicle? Give an example to express your idea."
+  ],
+  [
+   "48",
+   "54",
+   "QN54.1",
+   "What are the key characteristics of some main media vehicle? Give an example to express your idea."
+  ],
+  [
+   "49",
+   "55",
+   "QN55.1",
+   "What role do campaign objectives play in the measurement of campaign success?"
+  ],
+  [
+   "50",
+   "56",
+   "QN56.1",
+   "What role do campaign objectives play in the measurement of campaign success?"
+  ],
+  [
+   "51",
+   "57",
+   "QN57.1",
+   "What are the key ways in which post-campaign evaluation is conducted?"
+  ],
+  [
+   "52",
+   "58",
+   "QN58.1",
+   "What are the key ways in which post-campaign evaluation is conducted?"
+  ],
+  [
+   "53",
+   "59",
+   "QN59.1",
+   "What are some key challenges faced in evaluating IMC effectiveness?"
+  ],
+  [
+   "54",
+   "60",
+   "QN60.1",
+   "What are some key challenges faced in evaluating IMC effectiveness?"
+  ]
+ ],
+ "links": [
+  "/download/6131/S/1_CAA201.zip",
+  "/download/6131/S/2_CAA201.zip"
+ ]
+}

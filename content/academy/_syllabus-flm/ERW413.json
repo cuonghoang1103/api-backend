@@ -1,0 +1,1283 @@
+{
+ "ma": "ERW413",
+ "sylID": "13894",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13894",
+   "code": "ERW413",
+   "name": "Kỹ năng viết nghiên cứu tiếng Anh 1",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13894",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13894",
+  "Syllabus Name": "Kỹ năng viết nghiên cứu tiếng Anh 1",
+  "Course Name English": "English Research Writing Skills 1",
+  "Subject Code": "ERW413",
+  "Learning-Teaching Method": "Lecture,Coaching,Presenting,Active learning,Cooperative Learning,Experiential learning methods,Project Based Training,Student-centered theory,Presentation,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "Passed EAW301 (hoặc môn tương đương) & ECR301 (hoặc môn tương đương)",
+  "Description": "Objectives:\n\nThe course is designed to help students develop skills of critical reading, thinking and writing in various academic topics. Through interacting actively with texts of different kinds, students will be able to read, think and write better, at an upper-intermediate level.\n\nDescription\n\nRead, Think & Write 1 focuses on reading and writing in one course to help students read from a writer's viewpoint and write with a reader in mind. It is also designed to provide a systematic introduction to and an in-depth analysis of how to integrate reading and writing skills. The course provides a cohesive instructional framework to accelerate college readiness through unique resources.\n\nTeaching Methods:\n\nThe teaching process includes a variety of methods, from teachers’ side: lectures, guided learning, feedback and corrections and from students’ side: discussions, idea brainstorming and writing and self-study.\n\nAssessment scheme:\n\n1) Assessment\n\n- Assignments 04*15% 60%\n\n- Final Exam 01*40%. 40%\n\n2) Final Result 100%\n\n3) Completion Criteria:\n\na) On-going assessment >0, Each component >0; Final exam >= 4\n\nb) Final Result >=5",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments, and labs given by instructor in class or at home and submit on time\n\n- Use laptops in class only for learning purposes",
+  "Tools": "Tools: Foxit pdf editor\n\nInternet access\n\nhttps://www.mheducation.com/",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Common Places: Integrated Reading and Writing",
+   "Lisa Hoeffner & Kent Hoeffner",
+   "McGraw Hill Education.",
+   "2019",
+   "2nd",
+   "9781260092431",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "LearnSmart Achieve",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Book-Specific Resources for instructors.",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Read Think Write: True Integration Through Academic Content",
+   "David Rothman & Jilani Warsi",
+   "Pearson",
+   "2019",
+   "1st",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "LO1",
+   "Develop emotional intelligence and critical thinking; characterize and integrate the awareness of emotional intelligence and critical thinking into writing practice\nLO1.1 develop emotional intelligence and apply it to writing\nLO1.2 think critically and understand how critical thinking affects reading and writing skills\nLO1.3 identify features that boost successful writing."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Annotate texts and develop vocabulary\nLO2.1 use reading to improve writing\nLO2.2 develop annotation skills\nLO2.3 develop vocabulary.\""
+  ],
+  [
+   "3",
+   "CLO3",
+   "Preview texts and work with assigned writing topics\nLO3.1 use pre-reading strategies effectively\nLO3.2 work with assigned writing topics\nLO3.3 develop and narrow a topic for an essay\nLO3.4 use pre-writing stategies to generate ideas."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify main ideas and compose effective thesis statements\nLO4.1 identify topic sentences and implied main ideas in paragraphs\nLO4.2 identify (implied) main ideas in essays\nLO4.3 compose effective thesis statements."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify and use supporting details for main ideas\nLO5.1 recognize major supporting points and supporting details in texts\nLO5.2 use outlining or graphic organizers to identify major supporting points and supporting details\nLO5.3 use specific supporting details in writing."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Identify and analyze text purposes and text patterns\nLO6.1 identify the purpose of a text\nLO6.2 connect purposes and text patterns\nLO6.3 recognize, analyze and use narration/ definition/ illustration/ classification/ comparison-contrast/ cause-effect/ process analysis/ argument/ and mixed patterns in reading and writing."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Organize, draft and summarize texts for writing\nLO7.1 Identify common strategies for ordering information\nLO7.2 use information-ordering strategies in writing\nLO7.3 use outlines and graphic organizers to analyze a text's organization\nLO7.4 use outline to draft essays and to write detailed/brief summaries\nLO7.5 write paraphrases."
+  ],
+  [
+   "8",
+   "CLO8",
+   "write titles, introductions and conclusions effectively\nLO8.1 analyze and create title\nLO8.2 read, analyze and create introductions\nLO8.3 read, analyze and create conclusions."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Identify, analyze and use inferrences as well as tones\nLO9.1 use details and common knowledge to make sound inferences\nLO9.2 draw accurate inferences from visuals\nLO9.3 analyze tone in texts\nLO9.4 choose an appropriate tone for writing assignment\nLO9.5 analyze figurative language to make accurate inferences\nLO9.6 use figurative language in writing."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO1, LO2",
+   "OP1: *Answer ONE question in the \"Additional Assignments\" part at the end of chapter 1-2 or similar questions assigned by teacher // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1 or 2",
+   "lessons in learned chapters",
+   "*homework; individual/pair work",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO3, LO4",
+   "OP1: *Answer ONE question in the \"Additional Assignments\" part at the end of chapter 3-4 or similar questions assigned by teacher // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1 or 2",
+   "lessons in learned chapters",
+   "*homework; individual/pair work",
+   ""
+  ],
+  [
+   "3",
+   "Assignment 3",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO5, LO6",
+   "OP1: *Answer ONE question in the \"Additional Assignments\" part at the end of chapter 5-6 or similar questions assigned by teacher // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1 or 2",
+   "lessons in learned chapters",
+   "*homework; individual/pair work",
+   ""
+  ],
+  [
+   "4",
+   "Assignment 4",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO7, LO8",
+   "OP1: *Answer ONE question in the \"Additional Assignments\" part at the end of chapter 7-8 or similar questions assigned by teacher // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "1 or 2",
+   "lessons in learned chapters",
+   "*homework; individual work",
+   ""
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "Read a given text and write a complete essay of 350-400 words in response to the text. Use supporting evidences from the given text.",
+   "1",
+   "lessons in learned chapters",
+   "",
+   "no materials are allowed"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\n\nChapter 1: Emotional Intelligence and Your Pathway to Success",
+   "Offline",
+   "LO1",
+   "IT",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "ERW412",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "2",
+   "Course Introduction\n\nChapter 1: Emotional Intelligence and Your Pathway to Success (cont)",
+   "Offline",
+   "LO1",
+   "IT",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "ERW412",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Emotional Intelligence and Your Pathway to Success (cont)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Emotional Intelligence and Your Pathway to Success (cont)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: Emotional Intelligence and Your Pathway to Success (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 2 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1: Emotional Intelligence and Your Pathway to Success (cont)",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 2 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Annotating Texts and Developing Vocabulary",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 2 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Annotating Texts and Developing Vocabulary (cont)",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 2 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Annotating Texts and Developing Vocabulary (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 2 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2: Annotating Texts and Developing Vocabulary (cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 2 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 2: Annotating Texts and Developing Vocabulary (cont) + Assignment 1",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 3 adequately before attending the lesson. Do assignment 1",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 2: Annotating Texts and Developing Vocabulary (cont) + Assignment 1",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 3 adequately before attending the lesson. Do assignment 1",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: Previewing Texts and Working with Topics",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 3 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3: Previewing Texts and Working with Topics (cont)",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 3 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3: Previewing Texts and Working with Topics (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 3 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3: Previewing Texts and Working with Topics (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 3 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 3: Previewing Texts and Working with Topics (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 3: Previewing Texts and Working with Topics (cont)",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 4: Main Ideas",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 4: Main Ideas (cont)",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 4: Main Ideas (cont)",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4: Main Ideas (cont)",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 4: Main Ideas (cont) + Assignment 2",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson. Do assignment 2",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4: Main Ideas (cont) + Assignment 2",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson. Do assignment 2",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 5: Support for Main Ideas",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 5: Support for Main Ideas (cont)",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 5: Support for Main Ideas (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 5: Support for Main Ideas (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 5: Support for Main Ideas (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 5: Support for Main Ideas (cont)",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 6: Text Purposes and Text Patterns",
+   "Offline",
+   "LO6",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 6: Text Purposes and Text Patterns (cont)",
+   "Offline",
+   "LO6",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 6: Text Purposes and Text Patterns (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 6: Text Purposes and Text Patterns (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 6: Text Purposes and Text Patterns (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 6: Text Purposes and Text Patterns (cont)",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 6: Text Purposes and Text Patterns (cont) + Assignment 3",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson. Do assignment 3",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 6: Text Purposes and Text Patterns (cont) + Assignment 3",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson. Do assignment 3",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 7: Organizing, Drafting, and Summarizing",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 7: Organizing, Drafting, and Summarizing (cont)",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 7: Organizing, Drafting, and Summarizing (cont)",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 7: Organizing, Drafting, and Summarizing (cont)",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 7: Organizing, Drafting, and Summarizing (cont)",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 7: Organizing, Drafting, and Summarizing (cont)",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 8: Titles, Introductions and Conclusions",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 8: Titles, Introductions and Conclusions (cont)",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 8: Titles, Introductions and Conclusions (cont)",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 8: Titles, Introductions and Conclusions (cont)",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 8: Titles, Introductions and Conclusions (cont) + Assignment 4",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson. Do assignment 4",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 8: Titles, Introductions and Conclusions (cont) + Assignment 4",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson. Do assignment 4",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 9: Inferences and Tone",
+   "Offline",
+   "LO9",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 9: Inferences and Tone (cont)",
+   "Offline",
+   "LO9",
+   "I, T",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 9: Inferences and Tone (cont)",
+   "Offline",
+   "LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 9: Inferences and Tone (cont)",
+   "Offline",
+   "LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 9: Inferences and Tone (cont)",
+   "Offline",
+   "LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 9: Inferences and Tone (cont)",
+   "Offline",
+   "LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "57",
+   "TOTAL CONSOLIDATION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "58",
+   "TOTAL CONSOLIDATION (Cont)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "59",
+   "Final Revision",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "60",
+   "Final Revision (Cont)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student’s Book (hardcopy) & LearnSmart Achieve (Online resources)",
+   "",
+   "*Revise lessons",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "3",
+   "CQ1_HN",
+   "What are typical emotional responses and their consequences?"
+  ],
+  [
+   "2",
+   "4",
+   "CQ1_HN",
+   "What are causes of emotional responses?"
+  ],
+  [
+   "3",
+   "5",
+   "CQ1_HN",
+   "What are the best ways to control emotions?"
+  ],
+  [
+   "4",
+   "6",
+   "CQ1_HN",
+   "Why is reading important for a student to become a better writer?"
+  ],
+  [
+   "5",
+   "7",
+   "CQ1_HN",
+   "What are the values of anotating, highlighting and using dictionaries when reading for writing?"
+  ],
+  [
+   "6",
+   "8",
+   "CQ1_HN",
+   "Write an essay in which you discuss the character traits that drove Douglass to become literate. Discuss at least three character traits and their effects on Douglass's life."
+  ],
+  [
+   "7",
+   "9",
+   "CQ1_HN",
+   "Write an essay in which you discuss the character traits that drove Douglass to become literate. Discuss at least three character traits and their effects on Douglass's life."
+  ],
+  [
+   "8",
+   "10",
+   "CQ1_HN",
+   "Write an essay in which you discuss the character traits that drove Douglass to become literate. Discuss at least three character traits and their effects on Douglass's life."
+  ],
+  [
+   "9",
+   "11",
+   "CQ1_HN",
+   "Using Douglass's essay and your ow life experiences, reflect on these questions: What were the effects of hardship on Douglass? What have been the effects of hardship in your life? Write at least 3 paragraphs."
+  ],
+  [
+   "10",
+   "12",
+   "CQ1_HN",
+   "Using Douglass's essay and your ow life experiences, reflect on these questions: What were the effects of hardship on Douglass? What have been the effects of hardship in your life? Write at least 3 paragraphs."
+  ],
+  [
+   "11",
+   "13",
+   "CQ1_HN",
+   "Using Douglass's essay and your ow life experiences, reflect on these questions: What were the effects of hardship on Douglass? What have been the effects of hardship in your life? Write at least 3 paragraphs."
+  ],
+  [
+   "12",
+   "14",
+   "CQ1_HN",
+   "What are pre-reading strategies? Why are they important?"
+  ],
+  [
+   "13",
+   "15",
+   "CQ1_HN",
+   "Choose a current event or an issue that is important for your classmates to consider and write an informative essay about it."
+  ],
+  [
+   "14",
+   "16",
+   "CQ1_HN",
+   "What are the prewriting strategies and why are they important?"
+  ],
+  [
+   "15",
+   "17",
+   "CQ1_HN",
+   "Using Kendra's essay as a model, write your own essay about the topic of happiness. Follow the same process of Kendra used to plan, draft, revise, and edit her essay."
+  ],
+  [
+   "16",
+   "18",
+   "CQ1_HN",
+   "Make a list of your assumptions about your strengths and weaknesses as a learner. Note any subjects about which you have thought, \"I'm just ot good at that.\" Next, think of a skill you found difficult at one time but later came to master. Write a paragraph explaining how you learned the skill. Finally, write a paragraph about whether you believe you can learn one of the weak subjects or skills you listed earlier. In your paragraph, explain the reasons for your beliefs."
+  ],
+  [
+   "17",
+   "19",
+   "CQ1_HN",
+   "Make a list of your assumptions about your strengths and weaknesses as a learner. Note any subjects about which you have thought, \"I'm just ot good at that.\" Next, think of a skill you found difficult at one time but later came to master. Write a paragraph explaining how you learned the skill. Finally, write a paragraph about whether you believe you can learn one of the weak subjects or skills you listed earlier. In your paragraph, explain the reasons for your beliefs."
+  ],
+  [
+   "18",
+   "20",
+   "CQ1_HN",
+   "How to identify topic sentences and (implied) main ideas in reading passages? Why are identifying topic sentences and (implied) main ideas important?"
+  ],
+  [
+   "19",
+   "21",
+   "CQ1_HN",
+   "How to identity the (implied) thesis statement in an essay?"
+  ],
+  [
+   "20",
+   "22",
+   "CQ1_HN",
+   "What are differences between thesis statements and topic sentences. Give examples."
+  ],
+  [
+   "21",
+   "23",
+   "CQ1_HN",
+   "Reread Xavier's assignment from \"Using Models to Practice Composing.\" Use prewriting to think about situations in which a person could benefit fro using pretending as a coping strategy. Choose one of those situations, and use prewriting method to determine ways in which pretending might be advantageous and disadvantageous. Use prewriting to write a thesis statement and compose topic sentences for body paragraphs. Plan as many paragraphs as you need to support your thesis statement. Using Xavier's essay as a model, write a complete essay, including an introduction paragraph, body paragraphs, and a conclusion paragraph. Use the thesis statement and topic sentences you have already composed."
+  ],
+  [
+   "22",
+   "24",
+   "CQ1_HN",
+   "Reread Xavier's assignment from \"Using Models to Practice Composing.\" Use prewriting to think about situations in which a person could benefit fro using pretending as a coping strategy. Choose one of those situations, and use prewriting method to determine ways in which pretending might be advantageous and disadvantageous. Use prewriting to write a thesis statement and compose topic sentences for body paragraphs. Plan as many paragraphs as you need to support your thesis statement. Using Xavier's essay as a model, write a complete essay, including an introduction paragraph, body paragraphs, and a conclusion paragraph. Use the thesis statement and topic sentences you have already composed."
+  ],
+  [
+   "23",
+   "25",
+   "CQ1_HN",
+   "Peer review the essay on advantages and disadvantages of pretending and write a final version."
+  ],
+  [
+   "24",
+   "26",
+   "CQ1_HN",
+   "How to recognize major supporting points and supporting details in texts? Why is this skill important?"
+  ],
+  [
+   "25",
+   "27",
+   "CQ1_HN",
+   "Create an outline or graphic organizer for the essay \"The Footprint That Does Not Fade.\" Use the outline or graphic organizer presented in this chapter as a model."
+  ],
+  [
+   "26",
+   "28",
+   "CQ1_HN",
+   "Why is using transitions in writing important?"
+  ],
+  [
+   "27",
+   "29",
+   "CQ1_HN",
+   "Use Sienna's work a a model, generate ideas and outline for an essay on a rite of passage you have experienced. Look at Practice 6, pages 140 and the instruction at the end of page 145 for more information."
+  ],
+  [
+   "28",
+   "30",
+   "CQ1_HN",
+   "Peer review the essay and write the final version."
+  ],
+  [
+   "29",
+   "31",
+   "CQ1_HN",
+   "Peer review the essay and write the final version."
+  ],
+  [
+   "30",
+   "32",
+   "CQ1_HN",
+   "How to identify the purposes of texts? Why is this skill important?"
+  ],
+  [
+   "31",
+   "33",
+   "CQ1_HN",
+   "Do the writing Practice page 159."
+  ],
+  [
+   "32",
+   "34",
+   "CQ1_HN",
+   "How to recognize text patterns? Why is this skill important?"
+  ],
+  [
+   "33",
+   "35",
+   "CQ1_HN",
+   "Do the practice on page 170 on using definition in your writing."
+  ],
+  [
+   "34",
+   "36",
+   "CQ1_HN",
+   "Do the practices on pages 177, 178 on analyzing an illustration text."
+  ],
+  [
+   "35",
+   "37",
+   "CQ1_HN",
+   "Do the practice on pages 185, 187 on using clasification in your writing."
+  ],
+  [
+   "36",
+   "38",
+   "CQ1_HN",
+   "Do the practices on pages 194, 196 on using comparision-contrast in your writing."
+  ],
+  [
+   "37",
+   "39",
+   "CQ1_HN",
+   "Do the practices on pages 203, 205 on using cause and effect in your writing."
+  ],
+  [
+   "38",
+   "40",
+   "CQ1_HN",
+   "Do the practices on pages 211, 212 on using process analysis in your writing."
+  ],
+  [
+   "39",
+   "41",
+   "CQ1_HN",
+   "How to order information in writing? Why is this skill important?"
+  ],
+  [
+   "40",
+   "42",
+   "CQ1_HN",
+   "Do the practices on pages 235, 236 on ordering information in your writing."
+  ],
+  [
+   "41",
+   "43",
+   "CQ1_HN",
+   "Why is using outlines and graphic organizers important in writing?"
+  ],
+  [
+   "42",
+   "44",
+   "CQ1_HN",
+   "Do the practice 4 on page 246 on drafting body paragraph from an outine."
+  ],
+  [
+   "43",
+   "45",
+   "CQ1_HN",
+   "How to create effective titles in writing? Why is including a title in writing important?"
+  ],
+  [
+   "44",
+   "46",
+   "CQ1_HN",
+   "Do the practices on pages 259, 260 on working with titles of texts."
+  ],
+  [
+   "45",
+   "47",
+   "CQ1_HN",
+   "Do the practices on pages 259, 260 on working with titles of texts."
+  ],
+  [
+   "46",
+   "48",
+   "CQ1_HN",
+   "How to create effective introductions? Why is an effective introduction important?"
+  ],
+  [
+   "47",
+   "49",
+   "CQ1_HN",
+   "Do the practices 3-8 on pages 262-269 on writing introductions."
+  ],
+  [
+   "48",
+   "50",
+   "CQ1_HN",
+   "Do the practices 3-8 on pages 262-269 on writing introductions."
+  ],
+  [
+   "49",
+   "51",
+   "CQ1_HN",
+   "Do the practice 11 on pages 274 on writing a conclusion."
+  ],
+  [
+   "50",
+   "52",
+   "CQ1_HN",
+   "Do the practice 11 on pages 274 on writing a conclusion."
+  ],
+  [
+   "51",
+   "53",
+   "CQ1_HN",
+   "How to make sound inferences? Why is this skill important?"
+  ],
+  [
+   "52",
+   "54",
+   "CQ1_HN",
+   "Do the practices 1-5 on pages 295-303 on making inferences."
+  ],
+  [
+   "53",
+   "55",
+   "CQ1_HN",
+   "How to analyze tone in texts? Why is this skill important?"
+  ],
+  [
+   "54",
+   "56",
+   "CQ1_HN",
+   "Do the practice 6 on page 307 on identifying tone to make accurate inferences."
+  ],
+  [
+   "55",
+   "57",
+   "CQ1_HN",
+   "Final presentation and feedbacks from your peers"
+  ],
+  [
+   "56",
+   "58",
+   "CQ1_HN",
+   "Final presentation and feedbacks from your peers"
+  ],
+  [
+   "57",
+   "59",
+   "CQ1_HN",
+   "Final presentation and feedbacks from your peers"
+  ],
+  [
+   "58",
+   "60",
+   "CQ1_HN",
+   "Final presentation and feedbacks from your peers"
+  ]
+ ],
+ "links": [
+  "/download/12883/S/1_ERW412.zip",
+  "/download/12883/S/2_ERW412.zip"
+ ]
+}

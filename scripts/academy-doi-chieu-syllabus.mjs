@@ -16,6 +16,7 @@
  */
 import fs from 'fs';
 import path from 'path';
+import { ganMuc0Flm } from './lib/academy-muc0-flm.mjs';
 
 const args = process.argv.slice(2);
 const val = (k) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
@@ -31,7 +32,12 @@ function chuCuaMon(spec) {
   };
   di(spec.sections);
   di(spec.course);
-  return p.join('\n');
+  const tho = p.join('\n');
+  // Thêm bản CHỮ HIỂN THỊ (bỏ thẻ, giải mã &amp; …): chữ trường in "A & B" hay xuống dòng nằm trong HTML
+  // dạng "A &amp; B" / "A<br>B" — so chuỗi thô sẽ báo oan "thiếu đầu điểm".
+  const hien = tho.replace(/<br\s*\/?>/gi, ' ').replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ');
+  return tho + '\n' + hien;
 }
 
 /** Bỏ dấu cách/xuống dòng để so "có nhắc tới hay không" mà không kẹt định dạng. */
@@ -96,7 +102,7 @@ function doiChieu(ma, spec, syl) {
     for (const isbn of hang.match(/97[89][\d-]{10,}/g) || [])
       if (!chuChat.includes(nenChat(isbn))) loi.push(`thiếu ISBN ${isbn}`);
     for (const url of hang.match(/https?:\/\/[^\s|]+/g) || [])
-      if (!chu.includes(url.replace(/[.,)]$/, ''))) loi.push(`thiếu link giáo trình ${url}`);
+      if (!chu.includes(url.replace(/[.,;:)\]]+$/, ''))) loi.push(`thiếu link giáo trình ${url}`);
   }
 
   // ── 6. Kế hoạch buổi: mọi buổi phải được phủ ──
@@ -183,7 +189,7 @@ let hong = 0;
 for (const { ma, syl } of viec) {
   const f = `content/academy/${ma}.mjs`;
   if (!fs.existsSync(f)) { console.log(`✗ ${ma}: chưa có ${f}`); hong++; continue; }
-  const spec = (await import(path.resolve(f))).default;
+  const spec = await ganMuc0Flm((await import(path.resolve(f))).default, f);
   const kq = doiChieu(ma, spec, syl);
   const nhan = kq.loi.length ? '✗' : (kq.canhBao.length ? '!' : '✓');
   console.log(`${nhan} ${ma.padEnd(9)} ${String(kq.soBai).padStart(3)} bài · FLM: ${kq.soBuoi} buổi, ${kq.soCLO} CLO`);

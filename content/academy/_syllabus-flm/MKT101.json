@@ -1,0 +1,1266 @@
+{
+ "ma": "MKT101",
+ "sylID": "13458",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13458",
+   "code": "MKT101",
+   "name": "Marketing Principles_Nguyên lý Marketing",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13458",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13458",
+  "Syllabus Name": "Marketing Principles_Nguyên lý Marketing",
+  "Course Name English": "Marketing Principles",
+  "Subject Code": "MKT101",
+  "Learning-Teaching Method": "Lecture,Presenting,Project based learning,Social Constructivism,Presentation,Offline",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "The course is designed to provide students with a strong foundation in marketing based on five key activities: (1) identifying customer needs, (2) providing customers with the right products or service to meet their needs, (3) assuring availability to customers through the right distribution channels, (4) using promotional activities in ways that motivate purchase as effectively as possible, (5) setting an appropriate price that maximizes firm profitability while maintaining customer satisfaction.\n\nThe Principle of Marketing course (Philip Kotler) integrates AI tools as supportive instruments for idea generation, document organization, and the practical application of marketing concepts. Students will employ AI for brainstorming, content structuring, creation of marketing materials, and basic analytics, while retaining full responsibility for ensuring originality, critical evaluation, and refinement of their work. The course also equips students to assess the strengths and limitations of AI-generated outputs and to identify ethical risks such as plagiarism and bias.\n\nTools Utilized:\n\n- lmarena AI: For generating marketing-related data and insights.\n\n- Statista: For accessing statistical data and market research.\n\n- ChatGPT: For idea generation, structuring documents, and simulating real-life marketing scenarios.\n\n- Canva: For creating visual marketing materials like infographics, templates, and videos.\n\nThe assessment methods have been reformed to more accurately reflect students’ actual competencies. Learners are evaluated through oral examinations, presentations, group debates, and the assessment of submitted products, as well as through their selection of prompts, which demonstrate their thinking process, revisions, and interactions with AI feedback.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (www.flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Principles of Marketing",
+   "Kotler, Philip and Armstrong, Gary",
+   "Pearson",
+   "2020",
+   "18th Edition",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Principles of Marketing: A global perspective",
+   "Kotler, Philip and Armstrong, Gary",
+   "Pearson",
+   "2009",
+   "",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Principles of Marketing",
+   "Philip Kotler and Gary Armstrong",
+   "Prentice Hall",
+   "2012",
+   "14th ed",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Principles of Marketing",
+   "Kotler, Philip and Armstrong, Sridhar Balasubramanian",
+   "Pearson",
+   "2023",
+   "GE 19th",
+   "9781292449364",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 4 ấn bản. Ưu tiên mua ấn bản mới nhất."
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/generative-ai-prompt-engineering-for-everyone",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "https://www.coursera.org/projects/prompt-engineering-generative-ai-for-marketing-advertising",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Demonstrate understanding of marketing terminology and concepts"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Identify wants and environmental factors that shape marketing activities for certain target markets"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Demonstrate knowledge of the individual components of a marketing mix"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Demonstrate knowledge of key business communication strategies within the marketing field"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify the organizational processes involved in the planning, implementation and control of marketing activities"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understanding basic characteristic of B2B and B2C marketing."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understanding the differences of goods and service characteristic in marketing"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Apply AI to maketing tasks with an awareness of its benefits, limitations and ethical risks"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments.",
+   ""
+  ],
+  [
+   "2",
+   "Essay Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 40'\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO3, LO5, LO6, LO7",
+   "OP1: Essay questions\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Follow lecturer's proposal",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Class room",
+   ""
+  ],
+  [
+   "3",
+   "Group assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "OP1: A group of four or five students will choose a real company to write on selected marketing issues in that company. Based on the theories acquired from this course, give your group’s recommendations to improve the company's marketing effectiveness. The input for the assignment must be based on your observation, direct interviews with managers and staff of that company, and the company's documents. OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Maximum length of the group assignment should be 10 pages excluding appendices OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Based on topics of studied units. Students should demonstrate their capability of using various AI tools (lmarena AI, Statista, ChatGPT, Canva,...) for idea generation, document organization, and the practical application of marketing concepts.",
+   "For option 1: Evaluation will be based on the presentation, the written report, and individual performance (e.g., through interviews or individual questions), in order to accurately reflect students’ actual competencies.\n\nAll options: AI skill evaluation (20% of the assignment mark) is based on students’ originality, their ability to critically evaluate and refine their work, as well as their capacity to assess the strengths and limitations of AI-generated outputs and to identify ethical risks such as plagiarism and bias.",
+   "All options: Students should keep all prompts and output, and acknowledge and cite AI created content.\n\nA deduction of 10% of the assignment mark will be applied for each day of late submission."
+  ],
+  [
+   "4",
+   "Individual Writing Assignment",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "OP1: Individual students will choose one of three topics relating to marketing to write about. By using references from the textbook and other sources, students will outline the key aspects of this topic, identify a real-world example, and discuss how marketing principles can be applied to produce a positive outcome.\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Maximum length of the individual assignment should be 5 pages excluding appendices\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Based on topics of studied units",
+   "Individual assignment submitted in class",
+   "All assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission"
+  ],
+  [
+   "5",
+   "Quizzes",
+   "on-going",
+   "4",
+   "20.0%",
+   ">0",
+   "OP1: 20' each\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5",
+   "OP1: Multiple choice questions, Case study exercises\n\nOP2: Questions or Activities",
+   "OP1: ~20 questions\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Quizzes will test for knowledge of subjects in the chapters which have been taught.",
+   "Class room",
+   "These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 4. Quizzes can contain Multiple Choice questions."
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "Multiple choice, apr. 50 questions. Other types of questions may be included.",
+   "",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction",
+   "Offline",
+   "LO1",
+   "IT",
+   "Student's book, CMS",
+   "MKT101",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Marketing: Creating and Capturing Customer Value",
+   "Offline",
+   "LO1",
+   "T,U",
+   "Student's book, CMS",
+   "MKT101",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Marketing: Creating and Capturing Customer Value (cont.)",
+   "Offline",
+   "LO1",
+   "T,U",
+   "Case-study reviewing, CMS",
+   "MKT101 AI Integration Guide_FA25",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "Group task: Case on Marketing changing landscape and Discussion\n\n(Case should be designed to cover the overall trends of changes in Marketing environment nowadays)",
+   "Offline",
+   "LO1",
+   "T,U",
+   "Case-study reviewing, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 3: Analyzing the Marketing Environment",
+   "Offline",
+   "LO1",
+   "T,U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 3: Analyzing the Marketing Environment\n\nIndividual Assignment Guidelines",
+   "Offline",
+   "LO1",
+   "T,U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Group task: Analyzing Marketing environment of a specific company\n\n(Some groups can be required to present)",
+   "Offline",
+   "LO2",
+   "U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 4: Managing Marketing Information to Gain Customer Insights",
+   "Offline",
+   "LO6",
+   "IT",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 4: Managing Marketing Information to Gain Customer Insights",
+   "Offline",
+   "LO6",
+   "IT",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4: Managing Marketing Information to Gain Customer Insights\n\nQuiz 1 (C.1-C.4)",
+   "Offline",
+   "LO6",
+   "IT",
+   "Student's book, CMS",
+   "",
+   "Quiz 1",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 5: Consumer Markets and Consumer Buyer Behavior",
+   "Offline",
+   "LO6",
+   "IT",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 5: Consumer Markets and Consumer Buyer Behavior",
+   "Offline",
+   "LO6",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5: Consumer Markets and Consumer Buyer Behavior; Review Quiz 1",
+   "Offline",
+   "LO6",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "Review Quiz 1",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 6: Business Markets and Business Buyer Behavior\n\n(Quickly run through chapter 6's contents while the format is nearly like the chapter 5's to allocate time for the Quiz 1)",
+   "Offline",
+   "LO6",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 6: Business Markets and Business Buyer Behavior",
+   "Offline",
+   "LO6",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "16",
+   "Group task: Analyze the decision-making process of a specific company in buying some materials as input to its production. (Discuss the learning outcomes of the cases with students)",
+   "Offline",
+   "LO6",
+   "TU",
+   "Case-study reviewing, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 7: Customer-Driven Marketing Strategy: Creating Value for Target Customers",
+   "Offline",
+   "LO6",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 7: Customer-Driven Marketing Strategy: Creating Value for Target Customers",
+   "Offline",
+   "LO6",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 7: Customer-Driven Marketing Strategy: Creating Value for Target Customers",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 8: Products, Services, and Brands: Building Customer Value\n\n(Focus on Products, not Services and Branding because they are so abstract to the students)",
+   "Offline",
+   "LO1, LO2, LO4, LO6",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 8: Products, Services, and Brands: Building Customer Value",
+   "Offline",
+   "LO1, LO2, LO4, LO6",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 9: New Product Development and Product Life-Cycle Strategies;\n\nQuiz 2 (C.5-C.7)",
+   "Offline",
+   "LO6",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "Quiz 2",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 9: New Product Development and Product Life-Cycle Strategies",
+   "Offline",
+   "LO6",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 9: New Product Development and Product Life-Cycle Strategies",
+   "Offline",
+   "LO6",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "25",
+   "Group task: Developing a new product to launch into the market & Presenting\n\n(Lead the students to develop the new products as if they were about to set up a new idea of business)",
+   "Offline",
+   "LO6",
+   "IT",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 10: Pricing: Understanding and Capturing Customer Value\n\n(Only instruct the students on What is a Price & Major Pricing Strategies. Other contents can be used as topics of further discussion)",
+   "Offline",
+   "LO6",
+   "IT",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 10: Pricing: Understanding and Capturing Customer Value",
+   "Offline",
+   "LO7",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "Review Quiz 2",
+   "Offline",
+   "LO1, LO2, LO4, LO6, LO7",
+   "T",
+   "Student's book, CMS",
+   "",
+   "Review Quiz 2",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 11: Pricing Strategies",
+   "Offline",
+   "LO3, LO7",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 11: Pricing Strategies",
+   "Offline",
+   "LO3, LO7",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 12: Marketing Channels: Delivering Customer Value\n\n(Do not need to mention the Public Policy and Distribution Decisions part. The rest should be closely instructed)\n\nQuiz 3 (C.8-C.11)",
+   "Offline",
+   "LO3, LO6, LO7",
+   "TU",
+   "",
+   "",
+   "Quiz 3",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 12: Marketing Channels: Delivering Customer Value",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 12: Marketing Channels: Delivering Customer Value",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Review Quiz 3",
+   "Offline",
+   "LO3, LO6, LO7",
+   "",
+   "",
+   "",
+   "Review Quiz 3",
+   ""
+  ],
+  [
+   "35",
+   "Group task: Based on the major types of retailers and wholesalers in Chapter 13, identify the ones which exist in Vietnam market; then, name a successful example of each and explain their success. (One slot for retailing and one for wholesaling)",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "36",
+   "(One slot for retailing and one for wholesaling)",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 14: Communicating Customer Value: Integrated Marketing Communications Strategy",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 14: Communicating Customer Value: Integrated Marketing Communications Strategy",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 14: Communicating Customer Value: Integrated Marketing Communications Strategy",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "40",
+   "Group assignment guidelines",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 15: Advertising and PR\n\nIndividual Assignment Submission",
+   "Offline",
+   "LO3, LO5, LO6, LO7",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 15: Advertising and PR",
+   "Offline",
+   "LO3, LO5, LO6, LO7",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "43",
+   "Essay test",
+   "Offline",
+   "LO3, LO5, LO6, LO7",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 16: Personal Selling and Sales Promotion",
+   "Offline",
+   "LO4",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "Essay",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 16: Personal Selling and Sales Promotion",
+   "Offline",
+   "LO4",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Quiz 4 (C.12-C.16)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Quiz 4",
+   ""
+  ],
+  [
+   "47",
+   "Guest speaker",
+   "Offline",
+   "LO4",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "48",
+   "Guest speaker",
+   "Offline",
+   "LO4",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "49",
+   "Review essay test",
+   "Offline",
+   "LO4",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "Review Quiz 4",
+   "Offline",
+   "LO4",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "Review 4",
+   ""
+  ],
+  [
+   "51",
+   "Group report submission",
+   "Offline",
+   "LO4",
+   "I,T",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "52",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "54",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "55",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "GROUP PRESENTATION AND REPORT SUBMISSION",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "U",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Feedback on Individual Assignment",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "TU",
+   "Student's book, CMS",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "1.1",
+   "“Many people think of marketing as selling & advertising”. What is your opinion on this statement? Let's analyze the difference between marketing and selling?"
+  ],
+  [
+   "2",
+   "3",
+   "1.2",
+   "Marketing is creating and capturing customer value. Let's analyze the marketing process for creating and capturing customer value in a business company"
+  ],
+  [
+   "3",
+   "4",
+   "1.3",
+   "Discuss the concept of customer relationship management. Why is it essential that a business incorporates this in its operations?"
+  ],
+  [
+   "4",
+   "5",
+   "3.1",
+   "Which factors belong to the macro environment, what is the purpose of the company to analyze these factors? Give examples to demonstrate?"
+  ],
+  [
+   "5",
+   "6",
+   "3.2",
+   "Explain how changes in the demographic and economic environments in Vietnam affect marketing decisions for a particular business?"
+  ],
+  [
+   "6",
+   "7",
+   "3.3",
+   "Discuss how companies can react to the marketing environment"
+  ],
+  [
+   "7",
+   "9",
+   "4.1",
+   "Analyze the sequence of work that needs to be done to implement a marketing research project for a business company"
+  ],
+  [
+   "8",
+   "10",
+   "4.2",
+   "Let's analyze the difference between secondary data and primary data? Give examples for each type?"
+  ],
+  [
+   "9",
+   "10",
+   "4.3",
+   "Please suggest a sampling method to have a sample size of 100 samples from a total of 500 students (in which: 200 Business Administration students, 150 Languages students and 150 IT students). It is required that each member have an equal chance of being selected and that the sample contains enough students from the 3 majors mentioned."
+  ],
+  [
+   "10",
+   "11",
+   "5.1",
+   "What are the major factors that influence your buying behavior when you: 1. buy a car and 2. buy clothes online?"
+  ],
+  [
+   "11",
+   "12",
+   "5.2",
+   "How is your buying decision behavior different when you buy a motorbike and when you buy a book at the bookstore?"
+  ],
+  [
+   "12",
+   "13",
+   "5.3",
+   "What are the stages in the buyer decision process you usually go through when you buy something? Are the stages the same for all buying decisions?"
+  ],
+  [
+   "13",
+   "13",
+   "5.4",
+   "Why should innovating firm research the characteristics of innovators and early adopters in their product categories and direct marketing efforts toward them?"
+  ],
+  [
+   "14",
+   "14",
+   "6.1",
+   "Why are the risks much higher in Boeing's business of selling airplanes to airlines?"
+  ],
+  [
+   "15",
+   "14",
+   "6.2",
+   "Company X is considering to hire an event organizing agency to organize their end-of-year party. Who are the participants in this business decision process?"
+  ],
+  [
+   "16",
+   "14",
+   "6.3",
+   "What are some major factors that influence Company X in the decision to buy raw materials for their manufacturing activities?"
+  ],
+  [
+   "17",
+   "15",
+   "6.4",
+   "What are some stages that Company X should go through to come to the decision of buying office supplies for the company? Are those stages different if Company X is looking to buy some raw materials for manufacturing?"
+  ],
+  [
+   "18",
+   "17",
+   "7.1",
+   "Explain some ways Samsung can segment their smartphone market. Give examples."
+  ],
+  [
+   "19",
+   "17",
+   "7.2",
+   "What are the levels of market targeting? Which level of marketing targeting Samsung chooses for their smartphone business?"
+  ],
+  [
+   "20",
+   "18",
+   "7.3",
+   "In your opinion, what is Samsung's positioning in the smartphone market? How can positioning bring about competitive advantages for the company?"
+  ],
+  [
+   "21",
+   "18",
+   "7.4",
+   "What are the possible value propositions on which a company might position\nits products? If you are a new company in Vietnam trying to compete in the smartphone market, what would be your value position?"
+  ],
+  [
+   "22",
+   "20",
+   "8.1",
+   "What are some types of consumer products? How are marketing considerations different for these types of consumer products?"
+  ],
+  [
+   "23",
+   "20",
+   "8.2",
+   "If you are a new company in the Vietnamese marketing selling packaged food, what are the decisions that you will have to make regarding your product?"
+  ],
+  [
+   "24",
+   "21",
+   "8.3",
+   "What are the differences between product mix width, length, consistency, and depth?"
+  ],
+  [
+   "25",
+   "21",
+   "8.4",
+   "How are services different from products? How is marketing for services different from marketing for products?"
+  ],
+  [
+   "26",
+   "21",
+   "8.5",
+   "If you are a new company in Vietnam with a business in providing private, customized tours around Vietnam, what would the major brand strategy decisions that you would make in order to build your brand?"
+  ],
+  [
+   "27",
+   "26",
+   "10.1",
+   "How important is pricing to the firm's performance?"
+  ],
+  [
+   "28",
+   "26",
+   "10.2",
+   "An Armani black T-shirt costs $275, whereas a similar one from Gap or H&M costs $14.9 and $7.9 respectivly. Customers who purchase Armani T-shirt are paying for a T-shrit made of 70 percent nylon, 25 percent polyester, and 5 percent elastane, whereas the Gap and H&M shrits are made mainly of cotton. True, the Armani T is a bit more stylishly cut than the other two and sports a “Made in Italy” label, but how does it command a $275.00 price tag? How can Armani set such high price that customers are willing to pay? What are the differences among the pricing approaches used by Armani, and H&M and Gap?"
+  ],
+  [
+   "29",
+   "26",
+   "10.3",
+   "Why is it difficult for firms to employ value-based pricing?"
+  ],
+  [
+   "30",
+   "26",
+   "10.4",
+   "Why is copst-plus pricing still being employed by several companies despite of its limitations?"
+  ],
+  [
+   "31",
+   "27",
+   "10.5",
+   "Why does a company need to consider competitor's prices when setting price?"
+  ],
+  [
+   "32",
+   "27",
+   "10.6",
+   "In fall 2013, Apple introduced iPhone 5c which is lower-priced iPhone model. iPhone 5c featured a plastic case and was available in various colors; the price was about $100 lower than the new iPhone 5s. The iphone 5c targeted to consumers in the emerging markets who could not afford a higher-priced models (5, 5s). But in fact, the price of 5c is much higher than several alternatives in the market. What factors did impact the pricing decision of Apple on the 5c?"
+  ],
+  [
+   "33",
+   "29",
+   "11.1",
+   "A high-tech company is about to introduce a new portable mixed reality device to individual market. The pricing manager is considering between two new product pricing strategy and he ask for your advice. What should you tell him?"
+  ],
+  [
+   "34",
+   "29",
+   "11.2",
+   "How can companies maximise their profits on the total product mix by pricing?"
+  ],
+  [
+   "35",
+   "30",
+   "11.3",
+   "How can companies adjust their pricing strategies for various customer differences and changing situation? Find real-life examples to illustrate each strategy."
+  ],
+  [
+   "36",
+   "30",
+   "11.4",
+   "When and how should a company change its price?"
+  ],
+  [
+   "37",
+   "30",
+   "11.5",
+   "Imaging that your direct competior is running program that decreases its product prices. How should a company response to the price change by a competitor?"
+  ],
+  [
+   "38",
+   "31",
+   "12.1",
+   "Why do companies use marketing channels? What are the functions these channels perform?"
+  ],
+  [
+   "39",
+   "31",
+   "12.2",
+   "How do channel members interact and organize to perform the work of the channel?"
+  ],
+  [
+   "40",
+   "31",
+   "12.3",
+   "How does the advanced of technology change the channel organization?"
+  ],
+  [
+   "41",
+   "36",
+   "14.1",
+   "Why is new IMC important in the current market?"
+  ],
+  [
+   "42",
+   "37",
+   "14.2",
+   "In the Vietnam market, there are too many advertising popping up on social media platform. How do you evaluate this phenomenon?, and how does it affect consumers?"
+  ],
+  [
+   "43",
+   "38",
+   "14.3",
+   "If this phenomenon (social media advertising) was continuing, how do you see the future of IMC via social media?"
+  ],
+  [
+   "44",
+   "45",
+   "15.1",
+   "Investigate the current advertising industry in Vietnam and compare it to the Korean commercial industry, then offers recommendations for Vietnamese businesses in doing advertising."
+  ],
+  [
+   "45",
+   "46",
+   "15.2",
+   "Why public relation is one of the most powerful tools to help the firm in terms of doing IMC as well as standing out from the competition? Find evidence to support your point of view."
+  ],
+  [
+   "46",
+   "47",
+   "15.3",
+   "Why is buzz marketing so powerful?"
+  ],
+  [
+   "47",
+   "51",
+   "16.1",
+   "How do sale person build and maintain profitable relationship with customers? Give examples for your case."
+  ],
+  [
+   "48",
+   "52",
+   "16.2",
+   "How can personality affect on the handling objection? Give examples to demonstrate your point of view."
+  ],
+  [
+   "49",
+   "53",
+   "16.3",
+   "List the occations when business can do promotion and explain why cannot promtion be usually applied?"
+  ]
+ ],
+ "links": [
+  "/download/4369/S/1_MKT101.zip",
+  "/download/4369/S/2_MKT101.zip",
+  "/download/13270/S/3_MKT101 AI Integration Guide_FA25.zip"
+ ]
+}

@@ -1,0 +1,868 @@
+{
+ "ma": "SAP341",
+ "sylID": "11534",
+ "quyetDinh": "402/QĐ-ĐHFPT dated 04/22/2024",
+ "ungVien": [
+  {
+   "sylID": "11534",
+   "code": "SAP341",
+   "name": "SAP Application Development with ABAP_Phát triển ứng dụng SAP với ABAP",
+   "active": true,
+   "approved": true,
+   "decision": "402/QĐ-ĐHFPT dated 04/22/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11534",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11534",
+  "Syllabus Name": "SAP Application Development with ABAP_Phát triển ứng dụng SAP với ABAP",
+  "Course Name English": "SAP Application Development with ABAP",
+  "Subject Code": "SAP341",
+  "Learning-Teaching Method": "In-class lecture,Inquiry-based Teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "PRO192, SAP311",
+  "Description": "This course covering basis programming with ABAP, high-level programming language developed by SAP, primarily used for building and customizing business applications within the SAP ecosystem. The students will learn from the basis (ABAP's syntax, data types, control structures, object-oriented programming) to advanced concepts (modulization, performance optimization...) of ABAP, ensuring a solid foundation and practical expertise ... Through interactive exercises, and hands-on projects, students will get familiar with developing SAP application in real-world scenarios.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FU LMS at http://flm.fpt.edu.vn for up-to-date course information",
+  "Tools": "- Internet\n\n- SAP4 Hana Development",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "402/QĐ-ĐHFPT dated 04/22/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/22/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "SAP Training Materials",
+   "SAP",
+   "SAP",
+   "",
+   "4.1",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the fundamental concepts and principles of ABAP programming, including data types, variables, and basic structures."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Use the ABAP Worchbench tools to create and maintain programs, function modules, and classes."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Use the Open SQL commands to read and write data, fetch and manipulate data from SAP database tables."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply object-oriented programming concepts, such as classes, objects, inheritance, and polymorphism in ABAP."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Understand techniques to build reusable, reliable and efficient programs."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Use frameworks, libraries and protocols to create enterprise-ready web applications in an efficient way"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Apply the learned concepts in real-world programming assignments and projects."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Develop professional working style, good teamwork skills and compliance with the production process."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "End-term Presentation",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "15-20 mins/group",
+   "All CLOs",
+   "Slides presentation\n\nand\n\nWritten report",
+   "NA",
+   "concepts, algorithms;\n\nall studied units",
+   "in class, by instructor",
+   "- 3-5 students/group\n\n- Students synthesize and present all knowledge they have learned, as well as review the mistakes they have made during practical sessions.\n\n-Each student has to give their an individual presentation.\n\n-Written report/slides by group."
+  ],
+  [
+   "2",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "all the course",
+   "CLO8",
+   "NA",
+   "NA",
+   "NA",
+   "",
+   "Students must attend more than 80% of contact slots\n\nAttendance check at any time during course"
+  ],
+  [
+   "3",
+   "Progress Test",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "30 mins",
+   "- PT1: CLO1-CLO5\n\n- PT2: CLO5-CLO7",
+   "Multiple choices\n\nor Short question(s)",
+   "30",
+   "concepts, algorithms;\n\nall studied units\n\n- PT1: Unit 1-7\n\n- PT2: Unit 8-14",
+   "in class, by instructor",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "CLO1-CLO7",
+   "Multiple choices\n\nMarked by Computer",
+   "50",
+   "concepts, algorithms;\n\nall studied units",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Unit 1: SAP Application Development\n\nLecture\n\nKick-off class\n\nIntroduction",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "SAP Application Development\n\n29 slides",
+   "SAP341",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "2",
+   "Unit 1: SAP Application Development\n\nLecture",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "SAP Application Development\n\n29 slides",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "3",
+   "Unit 1: SAP Application Development\n\nExercise",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Introduction to SAP Programming",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "4",
+   "Unit 2: Introduction to ABAP\n\nLecture",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Introduction to ABAP",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "5",
+   "Unit 2: Introduction to ABAP\n\nLecture",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Introduction to ABAP",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "6",
+   "Unit 2: Development of a first program\n\nExercise",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Development of a first program",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "7",
+   "Unit 3: Basic Concepts\n\nLecture",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Basic Concepts",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "8",
+   "Unit 3: Basic Concepts\n\nLecture",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Basic Concepts",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "9",
+   "Unit 3: Basic Concepts\n\nExercise",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Basic Concepts",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "10",
+   "Unit 3: Basic Concepts\n\nExercise",
+   "Offline",
+   "CLO1, CLO2",
+   "T,U",
+   "Basic Concepts",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "11",
+   "Unit 4: Database Access\n\nLecture",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "Database Access",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "12",
+   "Unit 4: Database Access\n\nLecture",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "Database Access",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "13",
+   "Unit 4: Database Access\n\nExercise",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "Database Access",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "14",
+   "Unit 4: Database Access\n\nExercise",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "Database Access",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "15",
+   "Unit 5: Dynamic Programs\n\nLecture",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Dynamic Programs",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "16",
+   "Unit 5: Dynamic Programs\n\nLecture",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Dynamic Programs",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "17",
+   "Unit 5: Dynamic Programs\n\nExercise",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Dynamic Programs",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "18",
+   "Unit 5: Dynamic Programs\n\nExercise",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Dynamic Programs",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "19",
+   "Unit 6: Modularization\n\nLecture",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Modularization",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "20",
+   "Unit 6: Modularization\n\nLecture",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Modularization",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "21",
+   "Unit 6: Modularization\n\nExercise",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Modularization",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "22",
+   "Unit 6: Modularization\n\nExercise",
+   "Offline",
+   "CLO4, CLO5",
+   "T,U",
+   "Modularization",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "23",
+   "Unit 7: ABAP Objects\n\nLecture",
+   "Offline",
+   "CLO1, CLO4",
+   "T,U",
+   "ABAP Objects",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "24",
+   "Unit 7: ABAP Objects\n\nLecture",
+   "Offline",
+   "CLO1, CLO4",
+   "T,U",
+   "ABAP Objects",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "25",
+   "Unit 7: ABAP Objects\n\nExercise",
+   "Offline",
+   "CLO1, CLO4",
+   "T,U",
+   "ABAP Objects",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "26",
+   "Unit 7: ABAP Objects\n\nExercise\n\nProgress test 1",
+   "Offline",
+   "CLO1, CLO4",
+   "T,U",
+   "ABAP Objects",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "27",
+   "Unit 8: Lock Concept\n\nLecture",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Lock Concept",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "28",
+   "Unit 8: Lock Concept\n\nLecture",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Lock Concept",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "29",
+   "Unit 8: Lock Concept\n\nExercise",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Lock Concept",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "30",
+   "Unit 8: Lock Concept\n\nExercise",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Lock Concept",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "31",
+   "Unit 9: Exceptions\n\nLecture",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Exceptions",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "32",
+   "Unit 9: Exceptions\n\nLecture",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Exceptions",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "33",
+   "Unit 9: Exception Handling\n\nExercise",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Exception Handling",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "34",
+   "Unit 9: Exception Handling\n\nExercise",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Exception Handling",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "35",
+   "Unit 10: HTML5 CSS JavaScript\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "HTML5 CSS JavaScript",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "36",
+   "Unit 10: HTML5 CSS JavaScript\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "HTML5 CSS JavaScript",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "37",
+   "Unit 10: HTML5 CSS JavaScript\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "HTML5 CSS JavaScript",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "38",
+   "Unit 10: HTML5 CSS JavaScript\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "HTML5 CSS JavaScript",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "39",
+   "Unit 11: SAPUI5\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "SAPUI5",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "40",
+   "Unit 11: SAPUI5\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "SAPUI5",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "41",
+   "Unit 11: SAPUI5\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "SAPUI5",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "42",
+   "Unit 11: SAPUI5\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "SAPUI5",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "43",
+   "Unit 12: OData Services\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "OData Services",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "44",
+   "Unit 12: OData Services\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "OData Services",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "45",
+   "Unit 12: OData Services\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "OData Services",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "46",
+   "Unit 12: OData Services\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "OData Services",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "47",
+   "Unit 13: Fiori\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "Fiori",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "48",
+   "Unit 13: Fiori\n\nLecture",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "Fiori",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "49",
+   "Unit 13: Fiori\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "Fiori",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "50",
+   "Unit 13: Fiori\n\nExercise",
+   "Offline",
+   "CLO6",
+   "T,U",
+   "Fiori",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "51",
+   "Unit 14: Analytical Apps Developemnt\n\nLecture",
+   "Offline",
+   "CLO7",
+   "T,U",
+   "Analytical Apps Developemnt",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "52",
+   "Unit 14: Analytical Apps Developemnt\n\nLecture",
+   "Offline",
+   "CLO7",
+   "T,U",
+   "Analytical Apps Developemnt",
+   "",
+   "-Read slides before the course",
+   ""
+  ],
+  [
+   "53",
+   "Unit 14: Analytical App Development\n\nExercise",
+   "Offline",
+   "CLO7",
+   "T,U",
+   "Analytical App Development",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "54",
+   "Unit 14: Analytical App Development\n\nExercise\n\nProgress Test 2",
+   "Offline",
+   "CLO7",
+   "T,U",
+   "Analytical App Development",
+   "",
+   "-Read slides before the course\n\n-Do exercises as requested by the teacher",
+   ""
+  ],
+  [
+   "55",
+   "SAP Project Application Development Workshop",
+   "Offline",
+   "All CLos",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "SAP Project Application Development Workshop",
+   "Offline",
+   "All CLos",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "SAP Project Application Development Workshop",
+   "Offline",
+   "All CLos",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "End-term-presentation\n\nGroup Presentation",
+   "Offline",
+   "AlLL CLOs",
+   "T,U",
+   "",
+   "",
+   "-Group Presentation",
+   ""
+  ],
+  [
+   "59",
+   "End-term-presentation\n\nGroup Presentation",
+   "Offline",
+   "AlLL CLOs",
+   "T,U",
+   "",
+   "",
+   "-Group Presentation",
+   ""
+  ],
+  [
+   "60",
+   "End-term-presentation\n\nGroup Presentation",
+   "Offline",
+   "AlLL CLOs",
+   "T,U",
+   "",
+   "",
+   "-Group Presentation",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/9934/S/1_SAP341.zip"
+ ]
+}

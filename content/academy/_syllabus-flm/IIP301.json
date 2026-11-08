@@ -1,0 +1,2093 @@
+{
+ "ma": "IIP301",
+ "sylID": "12378",
+ "quyetDinh": "1363/QĐ-ĐHFPT dated 12/06/2024",
+ "ungVien": [
+  {
+   "sylID": "12378",
+   "code": "IIP301",
+   "name": "International Payment_Thanh toán quốc tế",
+   "active": true,
+   "approved": true,
+   "decision": "1363/QĐ-ĐHFPT dated 12/06/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12378",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12378",
+  "Syllabus Name": "International Payment_Thanh toán quốc tế",
+  "Course Name English": "International Payment",
+  "Subject Code": "IIP301",
+  "Learning-Teaching Method": "Lecture,Problem based learning,Presentation,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course is designed to provide students with a deep understanding of international payment including: parties to the international payment transaction; four primary payment methods: documentary letters of credit, documentary collections, pre-payment and credit transactions with detail description of documentary letters of credit (both standard and special letters of credit) and documentary collections; payment currency; ... It also covers: foreign exchange (forward contracts); documents used in trade; Letter of credit application and instructions; trade terms (Incoterms 2020); Cyber transaction on the Internet.\n\nTopics mainly include: (1) Key Issues in International Payments. (2) Buyer and the Seller. (3) Basic Terms of Payment (4) Foreign Exchange (5) Various trade terms (Incoterms 2010). (6) Drafts and Acceptances. (7) Documentary Collections. (8) Documentary Credits. (9) Document and Document Checklists. (10) Cyberpayments.\n\nAI Tools will be used to support students in\n\n(1) generating ideas/structures for their speaking notes and slide structure of 4 important topics of the course: Incoterms, International contract, Documentary Collection, and Documentary Credits; and for their group presentation topic.\n\n(2) editing the slide set after students have already finished it.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1363/QĐ-ĐHFPT dated 12/06/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/6/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "A Short Course in International Payments",
+   "Edward G. Hinkelman",
+   "World Trade Press",
+   "",
+   "5th",
+   "978-1-60780-057-6",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "IIP301-AI Use Guidelines",
+   "FPTU",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "True",
+   "False",
+   "Available at Schedule sheet"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the key concepts of international trade and international payment"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Distinguish international payment with domestic payment"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the business concerns of the buyer and seller and how these concerns affect decisions relating to which payment method is used in an international transaction."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify the key factors in determining the payment method"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Distinguish international payment methods"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand and analyze the currency in international payment and foreign exchange risk."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Identify the drafting of a contract, performance or modification of contractual obligations, resolution of disputes, and enforcement of judgments or orders."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Distinguish the before finalize a contract."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Understand the formal definition of draft, acceptances, holding or discounting acceptances."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Introduce the parties to a documentary collection, describe process and analyze advantages and disadvantages of documentary collection"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Utilize URC 522 to a documentary collection"
+  ],
+  [
+   "12",
+   "CLO12",
+   "Categorize three types of collections"
+  ],
+  [
+   "13",
+   "CLO13",
+   "Perceive the important principles regarding the role of banks"
+  ],
+  [
+   "14",
+   "CLO14",
+   "Discuss about notes, tips, and cautions for sellers, buyers and banks"
+  ],
+  [
+   "15",
+   "CLO15",
+   "Classify types of credits basic"
+  ],
+  [
+   "16",
+   "CLO16",
+   "Utilize UCP600 to a documentary credits"
+  ],
+  [
+   "17",
+   "CLO17",
+   "Understand regarding the role of banks in documentary credits and settlement by payment"
+  ],
+  [
+   "18",
+   "CLO18",
+   "Understand and distinguish the standard credits"
+  ],
+  [
+   "19",
+   "CLO19",
+   "Understand and distinguish the special letters of credit"
+  ],
+  [
+   "20",
+   "CLO20",
+   "Discuss about notes, tips, and cautions for sellers, buyers and banks in documentary credits"
+  ],
+  [
+   "21",
+   "CLO21",
+   "Understand and construct documents (commercial invoice, bill of lading, insurance document, certificate of origin, packing list, inspection certificate...)"
+  ],
+  [
+   "22",
+   "CLO22",
+   "Apply document checklists"
+  ],
+  [
+   "23",
+   "CLO23",
+   "Define cyberpayments, electronic commerce, secure electronic transaction standards."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "Option 1: Participation grade will be given based on students' preparation, quantity as well as group performance"
+  ],
+  [
+   "2",
+   "Group Presentation",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: 90'\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16, LO17, LO18, LO19",
+   "",
+   "",
+   "Option 1: Based on the taught chapters of this course (cover both classical and modern theories of international trade as well as examine the efficient of trade policies)\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "Option 1: The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "3",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: 40'\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "Option 1: Multiple choice\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 30-40 questions",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: IOS",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (1-6)."
+  ],
+  [
+   "4",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: 40'\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16",
+   "Option 1: Multiple choice\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 30-40 questions",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: IOS",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (7-10)"
+  ],
+  [
+   "5",
+   "Progress Test 3",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: 40'\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO17, LO18, LO19",
+   "Option 1: Multiple choice\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 30-40 questions",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: IOS",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters (11-13)"
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16, LO17, LO18, LO19, LO20, LO21, LO22, LO23",
+   "Multiple choice",
+   "50 questions.",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction",
+   "Offline",
+   "",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "IIP301_Chaps 1 to 5",
+   "Teacher's Presentation, Discussion/Edunext, Exercises. Group Formation",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Key Issues in International Payments",
+   "Offline",
+   "LO1, LO2",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "IIP301_Chaps 6 and 8 to 11",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Key Issues in International Payments (cont)",
+   "Offline",
+   "LO1, LO2",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "IIP301_Chaps 12 to 17",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: Introducing the Buyer and the Seller",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Introducing the Buyer and the Seller (cont)",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 3: Introducing the Basic Terms of Payment",
+   "Offline",
+   "LO4",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3: Introducing the Basic Terms of Payment (cont)",
+   "Offline",
+   "LO4",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3. Introducing the Basic Terms of Payment (cont)",
+   "Offline",
+   "LO4",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 4. Foreign Exchange Basics",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4. Foreign Exchange Basics (cont)",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4. Foreign Exchange Basics (cont)",
+   "Offline",
+   "LO6",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 5: Contract Basics",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5: Contract Basics (cont)",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5: Contract Basics (cont)",
+   "Offline",
+   "LO7",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 6: Incoterms 2020",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 6: Incoterms 2020 (cont)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 6: Incoterms 2020 (cont)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 6: Incoterms 2020 (cont)",
+   "Offline",
+   "LO8",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 6: Incoterms 2020 (cont)",
+   "Offline",
+   "LO8",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6: Incoterms 2020 (cont)",
+   "Offline",
+   "LO8",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "21",
+   "Review and Progress Test 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 8: Drafts and Acceptances",
+   "Offline",
+   "LO9",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 8: Drafts and Acceptances (cont)",
+   "Offline",
+   "LO9",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 8: Drafts and Acceptances (cont)",
+   "Offline",
+   "LO9",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 8: Drafts and Acceptances (cont)",
+   "Offline",
+   "LO9",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8: Drafts and Acceptances (cont)",
+   "Offline",
+   "LO9",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 9: Documentary Collections",
+   "Offline",
+   "LO10, LO11",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 9: Documentary Collections (cont)",
+   "Offline",
+   "LO10, LO11",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 9: Documentary Collections (cont)",
+   "Offline",
+   "LO12, LO13",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 9: Documentary Collections (cont)",
+   "Offline",
+   "LO12, LO13",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 9: Documentary Collections (cont)",
+   "Offline",
+   "LO14",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 9: Documentary Collections (cont)",
+   "Offline",
+   "LO14",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10: Documentary Credits, Part 1",
+   "Offline",
+   "LO15, LO16",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 10: Documentary Credits, Part 1 (cont)",
+   "Offline",
+   "LO15, LO16",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 10: Documentary Credits, Part 1 (cont)",
+   "Offline",
+   "LO15, LO16",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 10: Documentary Credits, Part 1 (cont)",
+   "Offline",
+   "LO15, LO16",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "37",
+   "Review and Progress Test 2",
+   "Offline",
+   "LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "38",
+   "Group Presentation",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "39",
+   "Group Presentation",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "40",
+   "Group Presentation",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "41",
+   "Group Presentation",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 11: Documentary Credits, Part 2",
+   "Offline",
+   "LO17",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11: Documentary Credits, Part 2 (cont)",
+   "Offline",
+   "LO17",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 12: Documentary Credits, Part 3",
+   "Offline",
+   "LO18",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 12: Documentary Credits, Part 3 (cont)",
+   "Offline",
+   "LO18",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 13: Documentary Credits, Part 4",
+   "Offline",
+   "LO19",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 13: Documentary Credits, Part 4 (cont)",
+   "Offline",
+   "LO19",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 14: Documentary Credits, Part 5",
+   "Offline",
+   "LO20",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "49",
+   "Review and Progress Test 3",
+   "Offline",
+   "LO17, LO18, LO19",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 14: Documentary Credits, Part 5 (cont)",
+   "Offline",
+   "LO20",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 14: Documentary Credits, Part 5 (cont)",
+   "Offline",
+   "LO20",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 16: Documents",
+   "Offline",
+   "LO21",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 16: Documents (cont)",
+   "Offline",
+   "LO21",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 16: Documents (cont)",
+   "Offline",
+   "LO22",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 16: Documents (cont)",
+   "Offline",
+   "LO22",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 17: Document Checklists",
+   "Offline",
+   "LO22",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 17: Document Checklists (cont)",
+   "Offline",
+   "LO22",
+   "U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "58",
+   "Chapter 18:Cyberpayments",
+   "Offline",
+   "LO23",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "59",
+   "Chapter 18:Cyberpayments (cont)",
+   "Offline",
+   "LO23",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ],
+  [
+   "60",
+   "Review session",
+   "Offline",
+   "",
+   "T,U",
+   "Textbooks, workbooks, PPT presentation, and other resources",
+   "",
+   "Teacher's Presentation, Discussion/Edunext, Exercises.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HCM1",
+   "What are the common payment methods in international trade that you know of?"
+  ],
+  [
+   "2",
+   "1",
+   "HCM2",
+   "Who are the parties mostly involved in international trade?"
+  ],
+  [
+   "3",
+   "1",
+   "HCM3",
+   "What are the concerns of the parties, related to international payment?"
+  ],
+  [
+   "4",
+   "1",
+   "HCM4",
+   "Which concern is most likely be significant for each party? Explain with examples"
+  ],
+  [
+   "5",
+   "1",
+   "HCM5",
+   "Which payment method would be appropriate in terms of the party's significant concern?"
+  ],
+  [
+   "6",
+   "1",
+   "CT1",
+   "Which kinds of risks can happen related to international payment?"
+  ],
+  [
+   "7",
+   "2",
+   "HCM1",
+   "What are the most (or the best) detailed concerns of each party in international trade?"
+  ],
+  [
+   "8",
+   "2",
+   "HCM2",
+   "Compared to previously-discussed concern, which additional issue could arise from each party's interests in trade?"
+  ],
+  [
+   "9",
+   "2",
+   "HCM3",
+   "What would happen to the disadvantage of each party if the issues are not resolved? Provided explain with examples"
+  ],
+  [
+   "10",
+   "2",
+   "HCM4",
+   "How the party resolve each issue in case such arise?"
+  ],
+  [
+   "11",
+   "2",
+   "HCM5",
+   "Which last resorts the importer have in case issues are unresolved?"
+  ],
+  [
+   "12",
+   "2",
+   "HCM6",
+   "Which last resorts the exporter have in case issues are unresolved?"
+  ],
+  [
+   "13",
+   "2",
+   "HCM7",
+   "Comparing the parties' concerns, which issue could appear to be more important than others? Provided explain with examples"
+  ],
+  [
+   "14",
+   "2",
+   "HCM8",
+   "Why are there issues that matter more to one party than the other?"
+  ],
+  [
+   "15",
+   "2",
+   "CT1",
+   "Who is the Buyer or Seller in international trade?"
+  ],
+  [
+   "16",
+   "2",
+   "DN1",
+   "Who are the parties mostly involved in international trade?"
+  ],
+  [
+   "17",
+   "2",
+   "DN2",
+   "Which concern is most likely be significant for each party? Explain with examples."
+  ],
+  [
+   "18",
+   "3",
+   "HCM1",
+   "What are the common international payment methods?"
+  ],
+  [
+   "19",
+   "3",
+   "HCM2",
+   "Which are the characteristics of each payment method? Provided examples for the characteristics"
+  ],
+  [
+   "20",
+   "3",
+   "HCM3",
+   "According to the security and risk criteria, which among the payment method offer advantages for the importer? Why? Establish arguments with practical evidence"
+  ],
+  [
+   "21",
+   "3",
+   "HCM4",
+   "According to the security and risk criteria, which among the payment method offer advantages for the exporter? Why? Establish arguments with practical evidence"
+  ],
+  [
+   "22",
+   "3",
+   "HCM5",
+   "For each payment method, which questions to be addressed in concern of the importer?"
+  ],
+  [
+   "23",
+   "3",
+   "HCM6",
+   "How would you suggest to resolve these questions for importer?"
+  ],
+  [
+   "24",
+   "3",
+   "HCM7",
+   "For each payment method, which questions to be addressed in concern of the exporter?"
+  ],
+  [
+   "25",
+   "3",
+   "HCM8",
+   "How would you suggest to resolve these questions for exporter?"
+  ],
+  [
+   "26",
+   "3",
+   "HCM9",
+   "Besides the payment method presented, what are other methods that you may know? Present a few characteristics"
+  ],
+  [
+   "27",
+   "3",
+   "HCM10",
+   "Why it is said the L/C is the most common payment method for international trade?"
+  ],
+  [
+   "28",
+   "3",
+   "HCM11",
+   "For specific domestic trades, which methods would commonly proposed by the buyer/seller?"
+  ],
+  [
+   "29",
+   "3",
+   "HCM12",
+   "Regarding each concern of the parties in trade (from previous chapter), which payment method could resolve their concerns?"
+  ],
+  [
+   "30",
+   "4",
+   "HCM1",
+   "What are the common international payment methods?"
+  ],
+  [
+   "31",
+   "4",
+   "HCM2",
+   "Which are the characteristics of each payment method? Provided examples for the characteristics"
+  ],
+  [
+   "32",
+   "4",
+   "HCM3",
+   "According to the security and risk criteria, which among the payment method offer advantages for the importer? Why? Establish arguments with practical evidence"
+  ],
+  [
+   "33",
+   "4",
+   "HCM4",
+   "According to the security and risk criteria, which among the payment method offer advantages for the exporter? Why? Establish arguments with practical evidence"
+  ],
+  [
+   "34",
+   "4",
+   "HCM5",
+   "For each payment method, which questions to be addressed in concern of the importer?"
+  ],
+  [
+   "35",
+   "4",
+   "HCM6",
+   "How would you suggest to resolve these questions for importer?"
+  ],
+  [
+   "36",
+   "4",
+   "HCM7",
+   "For each payment method, which questions to be addressed in concern of the exporter?"
+  ],
+  [
+   "37",
+   "4",
+   "HCM8",
+   "How would you suggest to resolve these questions for exporter?"
+  ],
+  [
+   "38",
+   "4",
+   "HCM9",
+   "Besides the payment method presented, what are other methods that you may know? Present a few characteristics"
+  ],
+  [
+   "39",
+   "4",
+   "HCM10",
+   "Why it is said the L/C is the most common payment method for international trade?"
+  ],
+  [
+   "40",
+   "4",
+   "HCM11",
+   "For specific domestic trades, which methods would commonly proposed by the buyer/seller?"
+  ],
+  [
+   "41",
+   "4",
+   "HCM12",
+   "Regarding each concern of the parties in trade (from previous chapter), which payment method could resolve their concerns?"
+  ],
+  [
+   "42",
+   "4",
+   "DN1",
+   "According to the security and risk criteria, which among the payment method offer advantages for the importer? Why? Establish arguments with practical evidence"
+  ],
+  [
+   "43",
+   "4",
+   "DN2",
+   "According to the security and risk criteria, which among the payment method offer advantages for the exporter? Why? Establish arguments with practical evidence"
+  ],
+  [
+   "44",
+   "5",
+   "HCM1",
+   "What are the issues related to foreign exchange market?"
+  ],
+  [
+   "45",
+   "5",
+   "HCM2",
+   "What is hedging? Why need to consider hedging in international trade?"
+  ],
+  [
+   "46",
+   "5",
+   "HCM3",
+   "What are the common hedging approach?"
+  ],
+  [
+   "47",
+   "5",
+   "HCM4",
+   "In which scenario, each hedging method would be appropriate?"
+  ],
+  [
+   "48",
+   "5",
+   "HCM5",
+   "Hedging is not fail-safe. Which risks could arise from hedging for each party?"
+  ],
+  [
+   "49",
+   "5",
+   "HCM6",
+   "How each hedging method could protect trader from foreign exchange risks? Provided explanation/evidence which party benefit from different scenarios of exchange risks"
+  ],
+  [
+   "50",
+   "5",
+   "DN1",
+   "What is hedging? Why need to consider hedging in international trade?"
+  ],
+  [
+   "51",
+   "5",
+   "DN2",
+   "Should the companies use hedging for all the international transactions? Which risks could arise from hedging every transactions?"
+  ],
+  [
+   "52",
+   "5",
+   "CT1",
+   "How many kinds of common hedging in international financial management?"
+  ],
+  [
+   "53",
+   "6",
+   "HCM1",
+   "Why are contracts important in international trade?"
+  ],
+  [
+   "54",
+   "6",
+   "HCM2",
+   "What issues considered in contracts?"
+  ],
+  [
+   "55",
+   "6",
+   "HCM3",
+   "How to balance parties' interest from contract provisions?"
+  ],
+  [
+   "56",
+   "6",
+   "HCM4",
+   "What are the basic contract provisions?"
+  ],
+  [
+   "57",
+   "6",
+   "HCM5",
+   "Which issues could arise from international contracts?"
+  ],
+  [
+   "58",
+   "6",
+   "HCM6",
+   "In case of contract dispute, how would the parties resolve?"
+  ],
+  [
+   "59",
+   "6",
+   "HCM7",
+   "When does buyer have claims against seller? How would they resolve?"
+  ],
+  [
+   "60",
+   "6",
+   "HCM8",
+   "When does seller have claims against buyer? How would they resolve?"
+  ],
+  [
+   "61",
+   "6",
+   "HCM9",
+   "What is each party's last resort in case of dispute?"
+  ],
+  [
+   "62",
+   "6",
+   "DN1",
+   "Should the companies use hedging for all the international transactions? Which risks could arise from hedging every transactions?"
+  ],
+  [
+   "63",
+   "6",
+   "DN2",
+   "How to balance parties' interest from contract provisions?"
+  ],
+  [
+   "64",
+   "7",
+   "HCM1",
+   "Why contracts important in international trade?"
+  ],
+  [
+   "65",
+   "7",
+   "HCM2",
+   "What issues considered in contracts?"
+  ],
+  [
+   "66",
+   "7",
+   "HCM3",
+   "How to balance parties' interest from contract provisions?"
+  ],
+  [
+   "67",
+   "7",
+   "HCM4",
+   "What are the basic contract provisions?"
+  ],
+  [
+   "68",
+   "7",
+   "HCM5",
+   "Which issues could arise from international contracts?"
+  ],
+  [
+   "69",
+   "7",
+   "HCM6",
+   "In case of contract dispute, how would the parties resolve?"
+  ],
+  [
+   "70",
+   "7",
+   "HCM7",
+   "When does buyer have claims against seller? How would they resolve?"
+  ],
+  [
+   "71",
+   "7",
+   "HCM8",
+   "When does seller have claims against buyer? How would they resolve?"
+  ],
+  [
+   "72",
+   "7",
+   "HCM9",
+   "What is each party's last resort in case of dispute?"
+  ],
+  [
+   "73",
+   "8",
+   "HCM1",
+   "What is Incoterms? Why they important in international trade?"
+  ],
+  [
+   "74",
+   "8",
+   "HCM2",
+   "Why are Incoterms need to be considered for international payment?"
+  ],
+  [
+   "75",
+   "8",
+   "HCM3",
+   "What are the differences between Incoterms version?"
+  ],
+  [
+   "76",
+   "8",
+   "HCM4",
+   "When to use each Incoterm considering the parties' costs and risks?"
+  ],
+  [
+   "77",
+   "8",
+   "HCM5",
+   "How to decide the Incoterm for different payment methods?"
+  ],
+  [
+   "78",
+   "8",
+   "HCM6",
+   "How to decide the Incoterm for contract provisions?"
+  ],
+  [
+   "79",
+   "8",
+   "HCM7",
+   "Which Incoterm benefit to the buyer/importer? In which scenario?"
+  ],
+  [
+   "80",
+   "8",
+   "DN1",
+   "What is Incoterms? Why they are important in international trade?"
+  ],
+  [
+   "81",
+   "9",
+   "HCM1",
+   "What is Incoterms? Why they important in international trade?"
+  ],
+  [
+   "82",
+   "9",
+   "HCM2",
+   "Why are Incoterms need to be considered for international payment?"
+  ],
+  [
+   "83",
+   "9",
+   "HCM3",
+   "What are the differences between Incoterms version?"
+  ],
+  [
+   "84",
+   "9",
+   "HCM4",
+   "When to use each Incoterm considering the parties' costs and risks?"
+  ],
+  [
+   "85",
+   "9",
+   "HCM5",
+   "How to decide the Incoterm for different payment methods?"
+  ],
+  [
+   "86",
+   "9",
+   "HCM6",
+   "How to decide the Incoterm for contract provisions?"
+  ],
+  [
+   "87",
+   "9",
+   "HCM7",
+   "Which Incoterm benefit to the buyer/importer? In which scenario?"
+  ],
+  [
+   "88",
+   "9",
+   "HCM8",
+   "Which Incoterm benefit to the seller/exporter? In which scenario?"
+  ],
+  [
+   "89",
+   "10",
+   "HCM1",
+   "What is Incoterms? Why they important in international trade?"
+  ],
+  [
+   "90",
+   "10",
+   "HCM2",
+   "Why are Incoterms need to be considered for international payment?"
+  ],
+  [
+   "91",
+   "10",
+   "HCM3",
+   "What are the differences between Incoterms version?"
+  ],
+  [
+   "92",
+   "10",
+   "HCM4",
+   "When to use each Incoterm considering the parties' costs and risks?"
+  ],
+  [
+   "93",
+   "10",
+   "HCM5",
+   "How to decide the Incoterm for different payment methods?"
+  ],
+  [
+   "94",
+   "10",
+   "HCM6",
+   "How to decide the Incoterm for contract provisions?"
+  ],
+  [
+   "95",
+   "10",
+   "HCM7",
+   "Which Incoterm benefit to the buyer/importer? In which scenario?"
+  ],
+  [
+   "96",
+   "10",
+   "HCM8",
+   "Which Incoterm benefit to the seller/exporter? In which scenario?"
+  ],
+  [
+   "97",
+   "10",
+   "DN1",
+   "Which Incoterm benefit to the buyer/importer? In which scenario?"
+  ],
+  [
+   "98",
+   "10",
+   "DN2",
+   "Which Incoterm benefit to the seller/exporter? In which scenario?"
+  ],
+  [
+   "99",
+   "11",
+   "HCM1",
+   "What is draft?"
+  ],
+  [
+   "100",
+   "11",
+   "HCM2",
+   "How is draft related to international payment?"
+  ],
+  [
+   "101",
+   "11",
+   "HCM3",
+   "What are the differences between types of drafts?"
+  ],
+  [
+   "102",
+   "11",
+   "HCM4",
+   "When to use draft for payment?"
+  ],
+  [
+   "103",
+   "11",
+   "HCM5",
+   "What are the differences between drafts and cheques?"
+  ],
+  [
+   "104",
+   "11",
+   "HCM6",
+   "How is draft use in payment cycle for each party? Draw the procedure for draft payment"
+  ],
+  [
+   "105",
+   "11",
+   "HCM7",
+   "What is clean acceptance?"
+  ],
+  [
+   "106",
+   "11",
+   "HCM8",
+   "What is endorsement?"
+  ],
+  [
+   "107",
+   "12",
+   "HCM1",
+   "What is draft?"
+  ],
+  [
+   "108",
+   "12",
+   "HCM2",
+   "How is draft related to international payment?"
+  ],
+  [
+   "109",
+   "12",
+   "HCM3",
+   "What are the differences between types of drafts?"
+  ],
+  [
+   "110",
+   "12",
+   "HCM4",
+   "When to use draft for payment?"
+  ],
+  [
+   "111",
+   "12",
+   "HCM5",
+   "What are the differences between drafts and cheques?"
+  ],
+  [
+   "112",
+   "12",
+   "HCM6",
+   "How is draft use in payment cycle for each party? Draw the procedure for draft payment"
+  ],
+  [
+   "113",
+   "12",
+   "HCM7",
+   "What is clean acceptance?"
+  ],
+  [
+   "114",
+   "12",
+   "HCM8",
+   "What is endorsement?"
+  ],
+  [
+   "115",
+   "13",
+   "HCM1",
+   "What is collection?"
+  ],
+  [
+   "116",
+   "13",
+   "HCM2",
+   "Why collection considered important method in international payment?"
+  ],
+  [
+   "117",
+   "13",
+   "HCM3",
+   "What are the differences between collection and credits?"
+  ],
+  [
+   "118",
+   "13",
+   "HCM4",
+   "What are the different collection methods?"
+  ],
+  [
+   "119",
+   "13",
+   "HCM5",
+   "In which scenario the buyer prefer the collection as payment method?"
+  ],
+  [
+   "120",
+   "13",
+   "HCM6",
+   "In which scenario the seller prefer the collection as payment method?"
+  ],
+  [
+   "121",
+   "13",
+   "HCM7",
+   "How to resolve certain risks arise from collection cycle?"
+  ],
+  [
+   "122",
+   "13",
+   "HCM8",
+   "Which cautions the parties need to consider in collection method?"
+  ],
+  [
+   "123",
+   "13",
+   "HCM9",
+   "Why collection could be disadvantage to the buyer? (Risks) How to overcome disadvantage?"
+  ],
+  [
+   "124",
+   "13",
+   "HCM10",
+   "Why collection could be disadvantage to the seller? (Risks) How to overcome disadvantage?"
+  ],
+  [
+   "125",
+   "13",
+   "DN1",
+   "When to use sight draft for payment?"
+  ],
+  [
+   "126",
+   "13",
+   "DN2",
+   "When to use time draft for payment?"
+  ],
+  [
+   "127",
+   "14",
+   "HCM1",
+   "What is collection?"
+  ],
+  [
+   "128",
+   "14",
+   "HCM2",
+   "Why collection considered important method in international payment?"
+  ],
+  [
+   "129",
+   "14",
+   "HCM3",
+   "What are the differences between collection and credits?"
+  ],
+  [
+   "130",
+   "14",
+   "HCM4",
+   "What are the different collection methods?"
+  ],
+  [
+   "131",
+   "14",
+   "HCM5",
+   "In which scenario the buyer prefer the collection as payment method?"
+  ],
+  [
+   "132",
+   "14",
+   "HCM6",
+   "In which scenario the seller prefer the collection as payment method?"
+  ],
+  [
+   "133",
+   "14",
+   "HCM7",
+   "How to resolve certain risks arise from collection cycle?"
+  ],
+  [
+   "134",
+   "14",
+   "HCM8",
+   "Which cautions the parties need to consider in collection method?"
+  ],
+  [
+   "135",
+   "14",
+   "HCM9",
+   "Why collection could be disadvantage to the buyer? (Risks) How to overcome disadvantage?"
+  ],
+  [
+   "136",
+   "14",
+   "HCM10",
+   "Why collection could be disadvantage to the seller? (Risks) How to overcome disadvantage?"
+  ],
+  [
+   "137",
+   "15",
+   "HCM1",
+   "What are the differences between collection and credits?"
+  ],
+  [
+   "138",
+   "15",
+   "HCM2",
+   "How letter of credit used in international trade?"
+  ],
+  [
+   "139",
+   "15",
+   "HCM3",
+   "What are the parties and procedures involved in letter of credit?"
+  ],
+  [
+   "140",
+   "15",
+   "HCM4",
+   "As the buyer to international trade, how would you execute the letter of credit as payment method?"
+  ],
+  [
+   "141",
+   "15",
+   "HCM5",
+   "As the seller to international trade, how would you execute the letter of credit as payment method?"
+  ],
+  [
+   "142",
+   "16",
+   "HCM1",
+   "What are the differences between collection and credits?"
+  ],
+  [
+   "143",
+   "16",
+   "HCM2",
+   "How letter of credit used in international trade?"
+  ],
+  [
+   "144",
+   "16",
+   "HCM3",
+   "What are the parties and procedures involved in letter of credit?"
+  ],
+  [
+   "145",
+   "16",
+   "HCM4",
+   "As the buyer to international trade, how would you execute the letter of credit as payment method?"
+  ],
+  [
+   "146",
+   "16",
+   "HCM5",
+   "As the seller to international trade, how would you execute the letter of credit as payment method?"
+  ],
+  [
+   "147",
+   "16",
+   "DN1",
+   "In which scenario the buyer/seller prefer the collection as payment method?"
+  ],
+  [
+   "148",
+   "16",
+   "DN2",
+   "Which cautions the parties need to consider in collection method? How to resolve certain risks arise from collection cycle?"
+  ],
+  [
+   "149",
+   "17",
+   "HCM1",
+   "What is the difference between utilization and settlement?"
+  ],
+  [
+   "150",
+   "17",
+   "HCM2",
+   "Is there any differences in the settlement process of L/C?"
+  ],
+  [
+   "151",
+   "18",
+   "HCM1",
+   "In case of L/C discrepancies, what are the concerns of each party?"
+  ],
+  [
+   "152",
+   "18",
+   "HCM2",
+   "Why L/C could be disadvantage to the buyer? (Risks) How to overcome disadvantage?"
+  ],
+  [
+   "153",
+   "18",
+   "HCM3",
+   "Why L/C could be disadvantage to the seller? (Risks) How to overcome disadvantage?"
+  ],
+  [
+   "154",
+   "18",
+   "DN1",
+   "What are the differences between collection and credits?"
+  ],
+  [
+   "155",
+   "19",
+   "HCM1",
+   "What are the different types of L/C? Identify charactistics of each type of L/C"
+  ],
+  [
+   "156",
+   "19",
+   "HCM2",
+   "When it would be advantage for the buyer to use standard and special L/C?"
+  ],
+  [
+   "157",
+   "19",
+   "HCM3",
+   "When it would be advantage for the seller to use standard and special L/C?"
+  ],
+  [
+   "158",
+   "20",
+   "HCM1",
+   "What are the different types of L/C? Identify charactistics of each type of L/C"
+  ],
+  [
+   "159",
+   "20",
+   "HCM2",
+   "When it would be advantage for the buyer to use standard and special L/C?"
+  ],
+  [
+   "160",
+   "20",
+   "HCM3",
+   "When it would be advantage for the seller to use standard and special L/C?"
+  ],
+  [
+   "161",
+   "21",
+   "HCM1",
+   "What are the different types of L/C? Identify charactistics of each type of L/C"
+  ],
+  [
+   "162",
+   "21",
+   "HCM2",
+   "When it would be advantage for the buyer to use standard and special L/C?"
+  ],
+  [
+   "163",
+   "21",
+   "HCM3",
+   "When it would be advantage for the seller to use standard and special L/C?"
+  ],
+  [
+   "164",
+   "22",
+   "HCM1",
+   "Why documents important in international payment?"
+  ],
+  [
+   "165",
+   "22",
+   "HCM2",
+   "What are the different required documents in international trade? Describe each type of document"
+  ],
+  [
+   "166",
+   "22",
+   "HCM3",
+   "How each party would be responsible for the documents in international trade?"
+  ],
+  [
+   "167",
+   "22",
+   "HCM4",
+   "Related to each document, what are included in caution checklists for each party?"
+  ],
+  [
+   "168",
+   "23",
+   "HCM1",
+   "Why documents important in international payment?"
+  ],
+  [
+   "169",
+   "23",
+   "HCM2",
+   "What are the different required documents in international trade? Describe each type of document"
+  ],
+  [
+   "170",
+   "23",
+   "HCM3",
+   "How each party would be responsible for the documents in international trade?"
+  ],
+  [
+   "171",
+   "23",
+   "HCM4",
+   "Related to each document, what are included in caution checklists for each party?"
+  ],
+  [
+   "172",
+   "24",
+   "HCM1",
+   "Why documents important in international payment?"
+  ],
+  [
+   "173",
+   "24",
+   "HCM2",
+   "What are the different required documents in international trade? Describe each type of document"
+  ],
+  [
+   "174",
+   "24",
+   "HCM3",
+   "How each party would be responsible for the documents in international trade?"
+  ],
+  [
+   "175",
+   "24",
+   "HCM4",
+   "Related to each document, what are included in caution checklists for each party?"
+  ],
+  [
+   "176",
+   "24",
+   "DN1",
+   "What are the different types of L/C? Identify charactistics of each type of L/C"
+  ],
+  [
+   "177",
+   "25",
+   "HCM1",
+   "What is cyber payment?"
+  ],
+  [
+   "178",
+   "25",
+   "HCM2",
+   "What are the differences of cyber payment from other payment methods?"
+  ],
+  [
+   "179",
+   "25",
+   "CT1",
+   "How many classes to secure electronic transaction standards (SET)? And What are their purposes?"
+  ],
+  [
+   "180",
+   "25",
+   "CT2",
+   "How many parties involved in cypertransactions?"
+  ],
+  [
+   "181",
+   "27",
+   "DN1",
+   "Why documents important in international payment?"
+  ],
+  [
+   "182",
+   "27",
+   "DN2",
+   "What are the most important documents in every international transactions?"
+  ],
+  [
+   "183",
+   "30",
+   "DN1",
+   "What are the differences of cyber payment from other payment methods?"
+  ]
+ ],
+ "links": [
+  "/download/10639/S/1_IIP301_Chaps 1 to 5.zip",
+  "/download/10639/S/2_IIP301_Chaps 6 and 8 to 11.zip",
+  "/download/10639/S/3_IIP301_Chaps 12 to 17.zip"
+ ]
+}

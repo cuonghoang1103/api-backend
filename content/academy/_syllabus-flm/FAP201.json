@@ -1,0 +1,1287 @@
+{
+ "ma": "FAP201",
+ "sylID": "13853",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13853",
+   "code": "FAP201",
+   "name": "FPGA Programming_Lập trình FPGA",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13853",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13853",
+  "Syllabus Name": "FPGA Programming_Lập trình FPGA",
+  "Course Name English": "FPGA Programming",
+  "Subject Code": "FAP201",
+  "Learning-Teaching Method": "Social Constructivism, In-class lecture, Inquiry-based Teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "DIC201",
+  "Description": "- Introduction to FPGA, comparison of FPGA with other technologies such as microcontrollers and ASICs, FPGA programming languages: Verilog and VHDL, and common applications of FPGA.\n\n- Approach models and terms such as: entity, architecture, process statements, behavioral modeling, sequential processing, parallel processing...\n\n- Explore and utilize FPGA programming instructions: libraries, entity descriptions, architecture descriptions, data objects, data types, data conversion, operators, data attributes, signal attributes, subprograms and packages, sequential processing instructions, parallel processing instructions...\n\n- Use hardware and software tools to execute the design process: testing (testbench), synthesis, place and route, run simulation, waveform analysis, debugging...\n\n- Execute design projects such as: combinational logic circuits, flip-flop, counters, registers, shifters, shift registers, encoding and decoding, demultiplexers and multiplexers, memory, state machine, communication...",
+  "StudentTasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises given by instructor in class or at home and submit on time.\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the https://flm.fpt.edu.vn/ for up-to-date course information.",
+  "Tools": "- Intenet\n\n- Textbook\n\n- FPGA Tools, Kit and Simulator software",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "1) On-going Assessment\n\n- 2 Progress Tests: 20%\n\n- 6 Lab: 30%\n\n- Interview: 10%\n\n2) 1 Final Exam: 40%\n\n3) Final Result: 100%\n\nCompletion Criteria:\n\n1) Progress Tests > 0\n\n2) Lab > 0\n\n3) Final Exam Score >= 4 & Final Result >= 5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Getting Started with FPGAs: Digital Circuit Design, Verilog, and VHDL for Beginners",
+   "Russell Merrick",
+   "No Starch Press",
+   "2024",
+   "1st",
+   "978-1-7185-0294-9",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "VHDL : Programming By Example",
+   "Douglas L. Perry",
+   "McGraw Hill",
+   "2004",
+   "4th",
+   "978-0471720928",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "RTL Hardware Design Using VHDL: Coding for Efficiency, Portability, and Scalability",
+   "Pong P. Chu",
+   "John Wiley & Sons",
+   "2006",
+   "1st",
+   "978-0071409544",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the concept of FPGA, its key features, and its role in engineering applications.\nDifferentiate between other hardware tools such as Microcontrollers, ASICs, and FPGA. Evaluate and select the appropriate tool for each design scenario. Analyze system requirements to decide whether to use FPGA or another solution."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand how the Look-Up Table (LUT) operates in FPGA, including performing Boolean algebra and replacing dedicated logic gates in hardware design: the role and working principle of LUTs in FPGA, learn how LUTs perform Boolean algebra to handle logical operations, analyze and design logic systems using LUTs instead of traditional logic gates, apply LUTs to optimize hardware designs."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand how Flip-Flops, a fundamental component of FPGA, operate, including storing state to provide the device with memory of previous events: the role and working principle of Flip-Flops in FPGA, learn how Flip-Flops store state to create internal memory within FPGA, design and implement logic systems using Flip-Flops to store states, analyze how Flip-Flops manage states in sequential circuit designs."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Learn how to write testbenches to simulate FPGA designs, verify code functionality, identify bugs, and understand abnormal behaviors in the system: the role of testbenches in simulating and testing FPGA designs, how simulations can be used to investigate code behavior and detect errors, write testbenches to test and simulate the functionality of FPGA designs, analyze simulation results to identify bugs and improve designs."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Learn how to create basic building blocks common to FPGA designs, including multiplexers, demultiplexers, shift registers, FIFO, and other memory structures, as well as how to combine them to solve complex problems: the working principles of common modules, how to use and combine these building blocks in FPGA designs, design and implement basic building blocks in FPGA to address real-world problems, integrate FPGA modules to create solutions for complex issues."
+  ],
+  [
+   "6",
+   "CLO6",
+   "How to expand the FPGA build process, including details about synthesis, the place and route stage, recognizing timing errors, how to avoid them, and how to safely cross between clock domains within FPGA designs: the synthesis and place-and-route process in FPGA design, timing errors and how to prevent, analyze and resolve timing errors in FPGA designs, safe transitions between clock domains to ensure system reliability."
+  ],
+  [
+   "7",
+   "CLO7",
+   "How to use the state machine, a common model for tracking logical flow through a sequence of events in FPGA: the concept and operational principles of state machines, use state machines to manage logical flow in FPGA designs, design and implement state machines and create interactive applications"
+  ],
+  [
+   "8",
+   "CLO8",
+   "How to utilize essential FPGA components beyond LUT and flip-flop: understand the functions and roles such as block RAM, DSP block, and PLL, apply strategies to effectively utilize FPGA components in design, develop solutions that optimize FPGA resources to meet system requirements."
+  ],
+  [
+   "9",
+   "CLO9",
+   "How to work with numbers and implement mathematical operations in FPGA: the differences between signed and unsigned numbers, fixed-point numbers, floating-point numbers, apply mathematical operations to solve technical problems, design and implement algorithms using signed, unsigned, fixed-point, and floating-point numbers."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Learn to explore the input/output (I/O) capabilities: understand the I/O capabilities and function, the pros and cons of various types of I/O interfaces, apply knowledge of different I/O interfaces to design systems compatible with FPGA."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Interview",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Follow lecturer's proposal.",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "By instructor",
+   "By instructor",
+   "Knowledge of all labs",
+   "- In class.\n\n- By instructor",
+   "Instructor directly gives student question related to labs then student answer."
+  ],
+  [
+   "2",
+   "Lab",
+   "on-going",
+   "6",
+   "30.0%",
+   ">0",
+   "Option 1: At home. Option 2: (For Constructivism Approach only): Follow lecturer's proposal.",
+   "CLO1-CLO7",
+   "Option 1: A problem similar to real one; Option 2: (For Constructivism Approach only): Follow lecturer's proposal.",
+   "Option 1: 1; Option 2: (For Constructivism Approach only): Follow lecturer's proposal.",
+   "CLO1-CLO7",
+   "- In class.\n\n- By instructor",
+   "Instructor has resposibility to review the Lab for students after graded."
+  ],
+  [
+   "3",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "- Option 1: 20'-40'.\n- Option 2 (For Constructivism Approach only): Follow lecturer'sproposal.",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "- Option 1: essay or multiple choice.\n- Option 2: (For Constructivism Approach only): Follow lecturer's proposal.",
+   "- Option 1: 20-40 if multiple choice.\n- Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "- CLO1 - CLO5.\n- Number of questions: 3-8 for each LOx.",
+   "- In class.\n- By instructor",
+   "Progress test must be taken right after the last lectures of required material. Instructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "- Option 1: 20'-40'.\n- Option 2 (For Constructivism Approach only): Follow lecturer'sproposal.",
+   "CLO1, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "- Option 1: essay or multiple choice.\n- Option 2: (For Constructivism Approach only): Follow lecturer's proposal.",
+   "- Option 1: 20-40 if multiple choice.\n- Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "- CLO1, CLO6 - CLO10.\n- Number of questions: 3-8 for each LOx.",
+   "- In class.\n- By instructor",
+   "Progress test must be taken right after the last lectures of required material. Instructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "Multiple choices marked by computer",
+   "50",
+   "Concepts, technologies, structures, data structures, algorithms, design models... All studied slides.",
+   "- By exam board.\n- Using computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nChapter 1: Meet The FPGA\n1.1. A Brief History of FPGAs\n1.2. Popular FPGA Applications",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Course Implementation:\n- Text book, Slides: chapter 1\n- Exercises and sample practical examples",
+   "FAP201",
+   "- Read documents, slides: Chapter 1",
+   ""
+  ],
+  [
+   "2",
+   "1.3. Comparing Common Digital Logic Components\n1.3.1. FPGAs vs. Microcontrollers\n1.3.2. FPGAs vs. ASICs",
+   "Offline",
+   "CLO1",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 1\n- Exercises and sample practical examples",
+   "FAP201",
+   "- Read documents, slides: Chapter 1",
+   ""
+  ],
+  [
+   "3",
+   "1.3.3. FPGAs vs. Microcontrollers vs. ASICs\n1.4. Verilog and VHDL",
+   "Offline",
+   "CLO1",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 1\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 1",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: Hardware and Tool\n2.1. Choosing an FPGA Development Board\n2.2. Requirements\n2.3. Setting Up Development Environment",
+   "Offline",
+   "CLO1",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 2\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 2\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "5",
+   "Lab01_Wiring Switches to LEDs",
+   "Offline",
+   "CLO1",
+   "TU",
+   "Lab01",
+   "",
+   "Lab01",
+   ""
+  ],
+  [
+   "6",
+   "Lab01_Wiring Switches to LEDs",
+   "Offline",
+   "CLO1",
+   "TU",
+   "Lab01",
+   "",
+   "Lab01",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3: Boolean Algebra and The Look-Up Table\n3.1. Logic Gates and Their Truth Tables\n3.2. Combining Gates with Boolean Algebra\n3.3. The Look-Up Table",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 3\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 3\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "8",
+   "Review Lab01\nLab02_Lighting an LED with Logic Gates",
+   "Offline",
+   "CLO1, CLO2",
+   "TU",
+   "Lab02",
+   "",
+   "Lab02",
+   ""
+  ],
+  [
+   "9",
+   "Lab02_Lighting an LED with Logic Gates",
+   "Offline",
+   "CLO1, CLO2",
+   "TU",
+   "Lab02",
+   "",
+   "Lab02",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4: Storing State With The Flip-Flop\n4.1. How a Flip-Flop Works\n4.1.1. The Clock Signal\n4.1.2. A Flip-Flop in Action\n4.1.3. A Chain of Flip-Flops",
+   "Offline",
+   "CLO1, CLO3",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 4\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 4\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "11",
+   "4.2. Combinational Logic vs Sequential Logic\n4.3. The Dangers of Latches",
+   "Offline",
+   "CLO1, CLO3",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 4\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 4\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "12",
+   "4.4. Resetting a Flip-Flop\n4.5. Look-Up Tables and Flip-Flops on a Real FPGA",
+   "Offline",
+   "CLO1, CLO3",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 4\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 4\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "13",
+   "Review Lab02\nLab03_Lighting an LED with Logic Gates",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "TU",
+   "Lab03",
+   "",
+   "Lab03",
+   ""
+  ],
+  [
+   "14",
+   "Lab03_Lighting an LED with Logic Gates",
+   "Offline",
+   "CLO1, CLO3",
+   "TU",
+   "Lab03",
+   "",
+   "Lab03",
+   ""
+  ],
+  [
+   "15",
+   "Lab03_Lighting an LED with Logic Gates",
+   "Offline",
+   "CLO1, CLO3",
+   "TU",
+   "Lab03",
+   "",
+   "Lab03",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 5: Testing Code With Simulation\n5.1. Why Simulation Matters",
+   "Offline",
+   "CLO1, CLO4",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 5\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 5\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "17",
+   "5.2. FPGA Simulation Tools\n5.3. The Testbench",
+   "Offline",
+   "CLO1, CLO4",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 5\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 5\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "18",
+   "5.3.1. Writing a Testbench\n5.3.2. Running a Testbench and Viewing Waveforms",
+   "Offline",
+   "CLO1, CLO4",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 5\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 5\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "19",
+   "Review Lab03\nLab04_Debouncing a Switch",
+   "Offline",
+   "CLO1, CLO3, CLO4",
+   "TU",
+   "Lab04",
+   "",
+   "Lab04",
+   ""
+  ],
+  [
+   "20",
+   "Lab04_Debouncing a Switch",
+   "Offline",
+   "CLO1, CLO4",
+   "TU",
+   "Lab04",
+   "",
+   "Lab04",
+   ""
+  ],
+  [
+   "21",
+   "Lab04_Debouncing a Switch",
+   "Offline",
+   "CLO1, CLO4",
+   "TU",
+   "Lab04",
+   "",
+   "Lab04",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 6: Common FPGA Modules\n6.1. Multiplexers and Demultiplexers\n6.1.1. Implementing a Multiplexer\n6.1.2. Implementing a Demultiplexer",
+   "Offline",
+   "CLO1, CLO5",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 6\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 6\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "23",
+   "6.2. The Shift Register\n6.2.1. Delaying Data",
+   "Offline",
+   "CLO1, CLO5",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 6\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 6\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "24",
+   "6.2.2. Converting Between Serial and Parallel Data\n6.2.3. Creating a Linear Feedback Shift Register",
+   "Offline",
+   "CLO1, CLO5",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 6\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 6\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "25",
+   "Review Lab04\nLab05_Selectively Blinking an LED",
+   "Offline",
+   "CLO1, CLO4, CLO5",
+   "TU",
+   "Lab05",
+   "",
+   "Lab05",
+   ""
+  ],
+  [
+   "26",
+   "Lab05_Selectively Blinking an LED",
+   "Offline",
+   "CLO1, CLO5",
+   "TU",
+   "Lab05",
+   "",
+   "Lab05",
+   ""
+  ],
+  [
+   "27",
+   "Lab05_Selectively Blinking an LED",
+   "Offline",
+   "CLO1, CLO5",
+   "TU",
+   "Lab05",
+   "",
+   "Lab05",
+   ""
+  ],
+  [
+   "28",
+   "6.3. Random Access Memory\n6.3.1. A RAM Implementation\n6.3.2. RAM on an FPGA",
+   "Offline",
+   "CLO1, CLO5",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 6\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 6\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "29",
+   "6.4. FIFO: First In, First Out\n6.4.1. Input and Output Signals\n6.4.2. A FIFO Implementation",
+   "Offline",
+   "CLO1, CLO5",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 6\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 6\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "30",
+   "Progress Test 1",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Progress Test 1",
+   "",
+   "Progress Test 1",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 7: Synthesis, Place and Route, and Crossing Clock Domains\n7.1. Synthesis\n7.1.1. Notes, Warnings, and Errors\n7.1.2. Non-synthesizable Code",
+   "Offline",
+   "CLO1, CLO6",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 7\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 7\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "32",
+   "7.2. Place and Route\n7.2.1. Constraints\n7.2.2. Timing Errors",
+   "Offline",
+   "CLO1, CLO6",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 7\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 7\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "33",
+   "7.3. Crossing Clock Domains\n7.3.1. Crossing from Slower to Faster\n7.3.2. Crossing from Faster to Slower\n7.3.3. Using a FIFO\n7.3.4. Addressing Timing Errors",
+   "Offline",
+   "CLO1, CLO6",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 7\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 7\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 8: The State Machine\n8.1. States, Transitions, and Events",
+   "Offline",
+   "CLO1, CLO7",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 8\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 8\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "35",
+   "8.2. Implementing a State Machine\n8.2.1. Using Two always or process Blocks",
+   "Offline",
+   "CLO1, CLO7",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 8\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 8\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "36",
+   "8.2.2. Using One always or process Block\n8.2.3. Testing the Design\n8.3. State Machine Best Practices",
+   "Offline",
+   "CLO1, CLO7",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 8\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 8\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "37",
+   "Lab06_Creating a Memory Game",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "TU",
+   "Lab06",
+   "",
+   "Lab06",
+   ""
+  ],
+  [
+   "38",
+   "Lab06_Creating a Memory Game",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "TU",
+   "Lab06",
+   "",
+   "Lab06",
+   ""
+  ],
+  [
+   "39",
+   "Lab06_Creating a Memory Game",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "TU",
+   "Lab06",
+   "",
+   "Lab06",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 9: Useful FPGA Primitives\n9.1. How to Create Primitives\n9.1.1. Instantiation\n9.1.2. The GUI Approach",
+   "Offline",
+   "CLO1, CLO8",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 9\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 9\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "41",
+   "9.2. The Block RAM\n9.2.3. Features and Limitations\n9.2.4. Creation",
+   "Offline",
+   "CLO1, CLO8",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 9\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 9\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "42",
+   "9.3. The Digital Signal Processing Block\n9.3.1. Analog vs. Digital Signals",
+   "Offline",
+   "CLO1, CLO8",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 9\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 9\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "43",
+   "9.3.2. Common DSP Tasks\n9.3.3. Features",
+   "Offline",
+   "CLO1, CLO8",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 9\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 9\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "44",
+   "9.3.4. Creation\n9.4. The Phase-Locked Loop",
+   "Offline",
+   "CLO1, CLO8",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 9\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 9\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "45",
+   "9.4.1. How It Works\n9.4.2. Creation",
+   "Offline",
+   "CLO1, CLO8",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 9\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 9\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 10: Number and Math\n10.1. Numerical Data Types\n10.1.1. Representing Signed vs. Unsigned Values\n10.1.2. Taking the Two’s Complement\n10.1.3. Sizing Signals Appropriately\n10.1.4. Converting Between Types in VHDL",
+   "Offline",
+   "CLO1, CLO9",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 10\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 10\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "47",
+   "10.2. Performing Mathematical Operations\n10.2.1. Addition\n10.2.2. Subtraction\n10.2.3. Multiplication\n10.2.4. Multiplication by Powers of 2\n10.2.5. Division",
+   "Offline",
+   "CLO1, CLO9",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 10\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 10\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "48",
+   "10.3. How FPGAs Implement Math Operations\n10.4. Working with Decimals\n10.4.1. Adding and Subtracting with Fixed Point\n10.4.2. Multiplying with Fixed Point",
+   "Offline",
+   "CLO1, CLO9",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 10\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 10\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "49",
+   "Review Lab06",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "TU",
+   "Lab06",
+   "",
+   "Lab06",
+   ""
+  ],
+  [
+   "50",
+   "Review Lab06",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "TU",
+   "Lab06",
+   "",
+   "Lab06",
+   ""
+  ],
+  [
+   "51",
+   "Review Lab06",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "TU",
+   "Lab06",
+   "",
+   "Lab06",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 11: Getting Data In and Out With I/O and Serdes\n11.1. Working with GPIO Pins\n11.1.1. I/O Buffers\n11.1.2. Electrical Characteristics",
+   "Offline",
+   "CLO1, CLO10",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 11\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 11\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "53",
+   "11.1.3. Faster Data Transmission with Double Data Rate\n11.2. SerDes\n11.2.1. Parallel vs. Serial Communication",
+   "Offline",
+   "CLO1, CLO10",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 11\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 11\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "54",
+   "11.2.2. Self-Clocking Signals\n11.2.3. How SerDes Works",
+   "Offline",
+   "CLO1, CLO10",
+   "T",
+   "Course Implementation:\n- Text book, Slides: chapter 11\n- Exercises and sample practical examples",
+   "",
+   "- Read documents, slides: Chapter 11\n- Complete exercises and self-assess.",
+   ""
+  ],
+  [
+   "55",
+   "Progress Test 2",
+   "Offline",
+   "CLO1, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "U",
+   "Progress Test 2",
+   "",
+   "Progress Test 2",
+   ""
+  ],
+  [
+   "56",
+   "Peer to Peer Valuation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "TU",
+   "All Labs",
+   "",
+   "Answer lecturer's questions",
+   ""
+  ],
+  [
+   "57",
+   "Peer to Peer Valuation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "TU",
+   "All Labs",
+   "",
+   "Answer lecturer's questions",
+   ""
+  ],
+  [
+   "58",
+   "Peer to Peer Valuation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "TU",
+   "All Labs",
+   "",
+   "Answer lecturer's questions",
+   ""
+  ],
+  [
+   "59",
+   "Peer to Peer Valuation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "TU",
+   "All Labs",
+   "",
+   "Answer lecturer's questions",
+   ""
+  ],
+  [
+   "60",
+   "Peer to Peer Valuation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "TU",
+   "All Labs",
+   "",
+   "Answer lecturer's questions",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1.1",
+   "How does the architecture of an FPGA differ from traditional hardware tools, and why is it considered \"reconfigurable\"?"
+  ],
+  [
+   "2",
+   "2",
+   "CQ1.2",
+   "In what scenarios would an FPGA outperform a microcontroller, and when would a microcontroller be the better choice?"
+  ],
+  [
+   "3",
+   "3",
+   "CQ1.3",
+   "How does the design process for ASICs differ from FPGAs, and why are ASICs preferred for mass production?"
+  ],
+  [
+   "4",
+   "4",
+   "CQ2.1",
+   "Compare and contrast the programmability, scalability, and performance of FPGAs with other hardware tools like GPUs or CPUs."
+  ],
+  [
+   "5",
+   "5",
+   "CQ2.2",
+   "What are the similarities and differences between VHDL and Verilog in terms of syntax, hardware description capabilities, and scalability? In which scenarios should VHDL be preferred over Verilog and vice versa?"
+  ],
+  [
+   "6",
+   "6",
+   "CQ2.3",
+   "For complex designs such as processors or System-on-Chip (SoC), do VHDL and Verilog perform well? Discuss the scalability, maintainability, and performance of both languages in large-scale projects."
+  ],
+  [
+   "7",
+   "7",
+   "CQ3.1",
+   "How does a Look-Up Table (LUT) in an FPGA operate at a fundamental level, and how does it differ from traditional logic gates in terms of functionality and flexibility?"
+  ],
+  [
+   "8",
+   "8",
+   "CQ3.2",
+   "What are the key considerations when designing a logic system using LUTs instead of traditional logic gates? How does the use of LUTs impact the scalability and reconfigurability of the design?"
+  ],
+  [
+   "9",
+   "9",
+   "CQ3.3",
+   "In what ways can LUTs be used to optimize hardware designs in terms of area, power, and performance? Provide examples of specific design scenarios where LUTs offer significant advantages."
+  ],
+  [
+   "10",
+   "10",
+   "CQ4.1",
+   "Why are Flip-Flops considered a fundamental component of FPGA architecture? How do they enable the FPGA to store state and provide memory for previous events?"
+  ],
+  [
+   "11",
+   "11",
+   "CQ4.2",
+   "How do Flip-Flops work at a hardware level? Explain their dependency on clock signals and how they differ from combinational logic elements."
+  ],
+  [
+   "12",
+   "12",
+   "CQ4.3",
+   "What are setup time, hold time, and propagation delay in Flip-Flops? How do these constraints affect the reliability and performance of FPGA designs?"
+  ],
+  [
+   "13",
+   "13",
+   "CQ5.1",
+   "How do Flip-Flops handle clock domain crossing in FPGA designs? What challenges arise, and how can designers address them?"
+  ],
+  [
+   "14",
+   "14",
+   "CQ5.2",
+   "Beyond basic state storage, what advanced applications of Flip-Flops exist in FPGA design, such as pipelining, counters, or shift registers?"
+  ],
+  [
+   "15",
+   "15",
+   "CQ5.3",
+   "How do Flip-Flops behave differently in synchronous versus asynchronous circuit designs? What are the advantages and challenges of using Flip-Flops in each case?"
+  ],
+  [
+   "16",
+   "16",
+   "CQ6.1",
+   "What are the key components of a testbench? How do input stimulus, expected output, and monitoring mechanisms work together in a testbench?"
+  ],
+  [
+   "17",
+   "17",
+   "CQ6.2",
+   "How can you generate meaningful input stimulus for testbenches? Discuss the use of random, directed, and constrained-random stimulus generation."
+  ],
+  [
+   "18",
+   "18",
+   "CQ6.3",
+   "How can simulations be used to detect and isolate bugs in FPGA designs? What types of errors are most commonly identified during simulation?"
+  ],
+  [
+   "19",
+   "19",
+   "CQ7.1",
+   "What techniques can be used to analyze simulation waveforms and results to identify abnormal behaviors or design flaws?"
+  ],
+  [
+   "20",
+   "20",
+   "CQ7.2",
+   "What strategies can be employed to debug abnormal behaviors in FPGA designs using testbenches? Provide examples of common debugging techniques."
+  ],
+  [
+   "21",
+   "21",
+   "CQ7.3",
+   "What is the difference between functional simulation and timing simulation in FPGA design? How do testbenches adapt to each type of simulation?"
+  ],
+  [
+   "22",
+   "22",
+   "CQ8.1",
+   "How does a multiplexer work, and what are its primary applications in FPGA designs? Provide examples of how multiplexers can be used to route data effectively."
+  ],
+  [
+   "23",
+   "23",
+   "CQ8.2",
+   "What are the key differences between multiplexers and demultiplexers? How can demultiplexers be used in FPGA designs to distribute data to multiple destinations?"
+  ],
+  [
+   "24",
+   "24",
+   "CQ8.3",
+   "What are the main types of shift registers (e.g., serial-in serial-out, serial-in parallel-out), and how are they commonly used in FPGA applications?"
+  ],
+  [
+   "25",
+   "25",
+   "CQ9.1",
+   "What is the purpose of FIFO (First-In-First-Out) memory in FPGA designs? Discuss its role in handling data buffering and synchronization between different clock domains."
+  ],
+  [
+   "26",
+   "26",
+   "CQ9.2",
+   "What are the challenges of designing multiplexers in FPGA? How can you optimize their performance and resource utilization?"
+  ],
+  [
+   "27",
+   "27",
+   "CQ9.3",
+   "How can shift registers be used in real-world applications, such as serial-to-parallel conversion or data storage? Provide examples of their implementation in FPGA designs."
+  ],
+  [
+   "28",
+   "28",
+   "CQ10.1",
+   "How can you optimize the resource utilization of basic building blocks like multiplexers and FIFOs to fit within the constraints of an FPGA device?"
+  ],
+  [
+   "29",
+   "29",
+   "CQ10.2",
+   "What are the key timing considerations when designing and combining basic building blocks in FPGA? How can you ensure proper synchronization between modules?"
+  ],
+  [
+   "30",
+   "30",
+   "CQ10.3",
+   "What trade-offs need to be considered when selecting and designing basic building blocks for FPGA, such as speed, power consumption, and resource usage?"
+  ],
+  [
+   "31",
+   "31",
+   "CQ11.1",
+   "How do the synthesis and place-and-route processes work in FPGA design? Why are these stages critical in transitioning from design code to actual hardware implementation?"
+  ],
+  [
+   "32",
+   "32",
+   "CQ11.2",
+   "What are the common challenges encountered during the synthesis process in FPGA design? How can HDL code be optimized to achieve better performance during synthesis?"
+  ],
+  [
+   "33",
+   "33",
+   "CQ11.3",
+   "What techniques can be applied to avoid timing errors in FPGA designs, such as optimizing the critical path and using proper constraints?"
+  ],
+  [
+   "34",
+   "34",
+   "CQ12.1",
+   "What is a state machine, and why is it a common model for managing logical flow in FPGA designs? Discuss the differences between Mealy and Moore state machines."
+  ],
+  [
+   "35",
+   "35",
+   "CQ12.2",
+   "How do state machines operate in FPGA designs? What are the key components (states, transitions, inputs, and outputs) that define their functionality?"
+  ],
+  [
+   "36",
+   "36",
+   "CQ12.3",
+   "How do state machines differ from traditional sequential logic? When should you choose to use a state machine instead of other logic structures in FPGA design?"
+  ],
+  [
+   "37",
+   "37",
+   "CQ13.1",
+   "What techniques can be used to optimize state machines for FPGA implementation? Discuss strategies for reducing resource usage and improving timing performance."
+  ],
+  [
+   "38",
+   "38",
+   "CQ13.2",
+   "How can state machines be used to manage complex logical flows in FPGA designs? Discuss strategies for breaking down large state machines into smaller, modular components."
+  ],
+  [
+   "39",
+   "39",
+   "CQ13.3",
+   "How does the timing of state transitions affect the performance and reliability of a state machine in FPGA? What techniques can be used to ensure proper timing?"
+  ],
+  [
+   "40",
+   "40",
+   "CQ14.1",
+   "What is the role of Block RAM (BRAM) in FPGA, and how does it differ from distributed RAM? In what scenarios is BRAM most beneficial?"
+  ],
+  [
+   "41",
+   "41",
+   "CQ14.2",
+   "What are DSP blocks in FPGA, and why are they critical for high-performance arithmetic operations? Discuss their typical applications."
+  ],
+  [
+   "42",
+   "42",
+   "CQ14.3",
+   "What is the role of Phase-Locked Loops (PLLs) in FPGA designs? How do they help in clock management and synchronization?"
+  ],
+  [
+   "43",
+   "43",
+   "CQ15.1",
+   "How can designers balance the utilization of LUTs, flip-flops, BRAM, and DSP blocks to maximize FPGA performance and minimize resource waste?"
+  ],
+  [
+   "44",
+   "44",
+   "CQ15.2",
+   "How can BRAM and DSP blocks be configured to handle high-throughput data processing applications, such as video encoding or cryptography?"
+  ],
+  [
+   "45",
+   "45",
+   "CQ15.3",
+   "How can FPGA components like BRAM and DSP blocks be effectively integrated with external components such as DDR memory or ADC/DAC modules?"
+  ],
+  [
+   "46",
+   "46",
+   "CQ16.1",
+   "What are the key differences between signed and unsigned numbers in FPGA design? When should each type be used, and what are the implications for hardware resource usage?"
+  ],
+  [
+   "47",
+   "47",
+   "CQ16.2",
+   "What are the advantages and disadvantages of using fixed-point, floating-point numbers in FPGA designs? In which cases are they necessary?"
+  ],
+  [
+   "48",
+   "48",
+   "CQ16.3",
+   "What are overflow and underflow in numerical operations, and how can they be managed or mitigated in FPGA designs?"
+  ],
+  [
+   "49",
+   "49",
+   "CQ17.1",
+   "How do floating-point operations differ from fixed-point operations in terms of implementation complexity and resource utilization on FPGA?"
+  ],
+  [
+   "50",
+   "50",
+   "CQ17.2",
+   "What are the challenges of mixing signed and unsigned numbers in arithmetic operations, and how can these challenges be addressed?"
+  ],
+  [
+   "51",
+   "51",
+   "CQ17.3",
+   "How can fixed-point and floating-point numbers be applied in signal processing applications such as filtering, FFT, or convolution?"
+  ],
+  [
+   "52",
+   "52",
+   "CQ18.1",
+   "What are the common types of I/O in FPGA? What is their role in enabling communication between the FPGA and external devices?"
+  ],
+  [
+   "53",
+   "53",
+   "CQ18.2",
+   "How do I/O standards (such as LVDS, LVCMOS, SSTL) work, and how do you choose the right standard for a specific application?"
+  ],
+  [
+   "54",
+   "54",
+   "CQ18.3",
+   "How do high-speed I/O interfaces (such as SerDes, PCIe, or Ethernet) operate in FPGA? What challenges are associated with implementing them?"
+  ],
+  [
+   "55",
+   "55",
+   "CQ19.1",
+   "What are the pros and cons of common I/O interfaces such as GPIO, UART, SPI, I2C, and CAN when integrated with FPGA?"
+  ],
+  [
+   "56",
+   "56",
+   "CQ19.2",
+   "How do high-speed interfaces (e.g., PCIe, SerDes) compare to low-speed interfaces (e.g., I2C, UART) in terms of performance and FPGA resource usage?"
+  ],
+  [
+   "57",
+   "57",
+   "CQ19.3",
+   "What I/O interfaces are commonly used to communicate with external memory (e.g., DDR, SRAM), and what challenges need to be addressed?"
+  ],
+  [
+   "58",
+   "58",
+   "CQ20.1",
+   "How does FPGA compare to RISC-V or custom processors in terms of adaptability and hardware-software co-design capabilities? What are the strengths and limitations of each approach?"
+  ],
+  [
+   "59",
+   "59",
+   "CQ20.2",
+   "What makes FPGAs a strong candidate for AI acceleration compared to GPUs or TPUs? How do the reconfigurable nature and low latency of FPGAs impact AI workloads?"
+  ],
+  [
+   "60",
+   "60",
+   "CQ20.3",
+   "How do FPGAs address the challenges of edge computing, such as power constraints, real-time processing, and adaptability? How do they compare to ASICs and SoCs in this domain?"
+  ]
+ ],
+ "links": [
+  "/download/13853/S/1_FAP201.zip",
+  "/download/13853/S/2_FAP201.zip"
+ ]
+}

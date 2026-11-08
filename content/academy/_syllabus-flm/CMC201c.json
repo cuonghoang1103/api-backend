@@ -1,0 +1,341 @@
+{
+ "ma": "CMC201c",
+ "sylID": "12605",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12605",
+   "code": "CMC201c",
+   "name": "Creative Writing_Sản xuất nội dung sáng tạo",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12605",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12605",
+  "Syllabus Name": "Creative Writing_Sản xuất nội dung sáng tạo",
+  "Course Name English": "Creative Writing",
+  "Subject Code": "CMC201c",
+  "Learning-Teaching Method": "online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 55 hours online + 3 hrs offline + 1,5hr exam + 90.5h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This specialization explores three key genres of creative writing: short story, narrative essay, and memoir. You will learn the techniques used by skilled writers to craft compelling stories with memorable characters, engaging settings, and fresh descriptive styles. You will also analyze and provide constructive feedback on peer writing. In the Capstone project, you will draft, revise, and complete an original story in the genre of your choice. Through four courses, each focusing on a specific aspect of writing and taken in any order, you will enhance your writing skills, refine your ability to critique others' work, and draw inspiration from the literature you already enjoy reading.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend offline sessions in the Campus (Optional)\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students get 1 bonus point for all courses completed before the deadline. Otherwise, no bonus points will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/craft-of-plot?specialization=creative-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC1:The Craft of Plot"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/craft-of-character?specialization=creative-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC2:The Craft of Character"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/craft-of-setting-and-description?specialization=creative-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC3: The Craft of Setting and Description"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/craft-of-style?specialization=creative-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC4: The Craft of Style,"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/story-writing-project",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC5:Your Story: Capstone"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/specializations/creative-writing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Creative Writing"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand and demostrate how to develop the craft of plot."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Develop the craft of Character"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop the craft of Setting and Description"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Develop the Craft of Style"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "90 mins",
+   "CLO1,CLO2, CLO3, CLO4",
+   "Essay",
+   "2",
+   "All 5 MOOCs",
+   "For the final exam, students answer two questions: one theoretical question and one practical question.\n\nFor the practical question, students are asked to apply all skills they have learned in the course to create a story of minimum 400 words, either fiction or nonfiction. The topic of the story is given by the exam board. The exam topics will revolve around the areas previously covered.\n\nThe story should involve a plot, character, setting and description and show their style. The writing must include the following elements:\n\n1. A clear plot structure: with beginning, development, climax, and resolution.\n\n2. Well-developed, consistent, and memorable characters.\n\n3. A vividly described setting in terms of time and space, rich in sensory detail.\n\n4. Use of creative language that reflects a personal and distinctive writing style.",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course (Off-line 1.5h)\nModule 1 (MOOC 1):\nUnit 1:\n- Welcome\n- Introduction to the craft of plot\n- What is plot?\n- How does plot shape a narrative?\n- What makes a strong plot?\n- How is plot different from a story?\nUnit 2:\n- What story structure is?\n- How to sequence the events in your plot?",
+   "online, Offline",
+   "CLO1",
+   "I,T",
+   "'MOOC1:The Craft of Plot",
+   "CMC201c",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "2",
+   "Module 2 (MOOC 1):\nUnit 3:\n- What is a scene?\n- How does a scene move plot forward?\n- How to difference between telling and showing.\n-The five key elements each scene should have.\nUnit 4: 3h\n- How to edit and revise work.\n- There are a twenty-one point checklist on what to do once you have a completed first draft.",
+   "online",
+   "CLO1",
+   "I,T",
+   "'MOOC1:The Craft of Plot",
+   "CMC201c",
+   "'- Watch all videos, read all materials in the module\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "Module 1 (MOOC 2):\nUnit 1:\n- Introduction to The Craft of Character.\n- What happens in the writer's mind before any words are written on the paper?\n- Discuss desire.\n- Conclude about discovering Characters from Your Life and Elsewhere\nUinit 2:\n- How to Creating Characters on the Page\n- Discuss how the plot.",
+   "Online",
+   "CLO2",
+   "I,T",
+   "MOOC2:The Craft of Character",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "4",
+   "Module 2 (MOOC 2):\nUnit 3:\n- How do we lead a reader to a world that feels real?\n- Discuss in this module considerations involved in planning for these realities.\nUnit 4:\n- How to set your characters free.. and give them somewhere to go.",
+   "Online",
+   "CLO2",
+   "I,T",
+   "MOOC2:The Craft of Character",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "5",
+   "Module1 (MOOC3):\nUnit 1:\n- Introduction to The Craft of Setting and Description.\n- Why Description Matters\nWriting a great short story is like conveying a dream.\nUnit 2:\n- How to pack your fiction with \"vitamin-rich\" detail.\n- Discuss in this module",
+   "Online",
+   "CLO3",
+   "",
+   "MOOC3: The Craft of Setting and Description",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "6",
+   "Module 2 (MOOC3):\nUnit 3:\n- How to create settings both familiar and unfamiliar to you, while avoiding common missteps.\n- Guided through several meditation exercises as you practice \"imaginative research\".\nUnit 4:\n- How to pack your fiction with \"vitamin-rich\" detail.\n- Discuss in this module",
+   "Online",
+   "CLO3",
+   "I,T",
+   "MOOC3: The Craft of Setting and Description",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "7",
+   "Module 1 (MOOC 4):\nUnit 1:\n- Introduction to The Craft of Style\n- How to stylistic difficulty of any prose writer, being clear.\n- Discuss in this module\nUnit 2:\n- How to the use of nouns and verbs.",
+   "Online",
+   "CLO4",
+   "I,T",
+   "MOOC4: The Craft of Style,",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "8",
+   "Module 2 (MOOC 4):\nUnit 3:\n- Know how to use words to create humor, clarity, cleanliness\n- Discuss in this module\nUnit 4:\n- Understand how to express ideas in the form of physical things in a narrative world.",
+   "Online",
+   "CLO4",
+   "I,T",
+   "MOOC4: The Craft of Style,",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "9",
+   "Module 1 (MOOC 5):\nUnit 1:\n- Introduction to Capstone & Researching the Current State\nUnit 4:\n- How to give good critique.\n- Present a sample story and sample workshop.\n- Write critiques of three of your fellow students’ work while they are busy critiquing yours.",
+   "Online",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "MOOC5:Your Story: Capstone",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "10",
+   "Module 2 (MOOC 5):\n- Using Critique and Sanding\n- Rewriting and Publication\n- Finish the final version of your story",
+   "Online",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "MOOC5:Your Story: Capstone",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "11",
+   "Module 2 (MOOC 5):\n- Using Critique and Sanding\n- Rewriting and Publication\n- Finish the final version of your story",
+   "Online",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "MOOC5:Your Story: Capstone",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board self assessment, assignment",
+   ""
+  ],
+  [
+   "12",
+   "Review MOOC 1,2,3,4 (1,5h)\nDeadline of coursera completion: End of Friday of the week.",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I,T",
+   "Creative Writing",
+   "",
+   "- All Students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/12605/S/1_CMC201c.zip",
+  "/download/12605/S/2_CMC201c.zip"
+ ]
+}

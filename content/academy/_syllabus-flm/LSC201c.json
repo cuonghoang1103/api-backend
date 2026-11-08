@@ -1,0 +1,330 @@
+{
+ "ma": "LSC201c",
+ "sylID": "13008",
+ "quyetDinh": "857/QĐ-ĐHFPT dated 08/05/2025",
+ "ungVien": [
+  {
+   "sylID": "13008",
+   "code": "LSC201c",
+   "name": "Leading Sustainable Community Transformation_Phát triển cộng đồng bền vững",
+   "active": true,
+   "approved": true,
+   "decision": "857/QĐ-ĐHFPT dated 08/05/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13008",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13008",
+  "Syllabus Name": "Leading Sustainable Community Transformation_Phát triển cộng đồng bền vững",
+  "Course Name English": "Leading Sustainable Community Transformation",
+  "Subject Code": "LSC201c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 50h online + 3h offline + 1h Final exam + 96 self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course aims to lay the groundwork for addressing complex problems, engaging stakeholders, and offering tools for collecting and analyzing data to tackle community transformation challenges in a comprehensive way. Learners will have the chance to draft a proposal based on systems thinking principles, describe and visualize the system and its components relevant to a specific project focus, apply systems thinking and project management concepts, and collaborate with stakeholders to assess and identify community needs.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n4. Keep up with online learning progress (bonus will be awarded)\n\n5. Communicate and discuss in forum\n\n6. Attend offline sessions in the Campus (Optional)\n\n7. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "Computer\n\nInternet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "857/QĐ-ĐHFPT dated 08/05/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/5/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/sustainable-transformation",
+   "Joel Hartter",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Spec: ''Leading Sustainable Community Transformation Specialization (27h)"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/systems-mindset/home/week/1",
+   "Joel Hartter",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Developing a Systems Mindset (9h)"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/effective-engagement/home/week/1",
+   "Joel Hartter",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2: Strategies for Effective Engagement (9h)"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/transforming-communities/home/welcome",
+   "Joel Hartter",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Transforming Communities (9h)"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/business-for-good-fundamentals-of-corporate-responsibility",
+   "Ioannis Ioannou",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course: ''Business for Good: Fundamentals of Corporate Responsibility (23h)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Apply systems thinking to identify and analyze complex community challenges, integrating sustainability into project planning."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Master data collection and analysis techniques, to inform evidence-based decision-making for community transformation initiatives."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop comprehensive project proposals using systems mapping and stakeholder analysis to address identified needs effectively."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Evaluate community transformation strategies through the lens of sustainability leadership, considering economic, social, and environmental impacts to drive long-term value creation."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Collaborate effectively in cross-functional teams to achieve shared transformation goals."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All LOs",
+   "Multiple choice and case study",
+   "50",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course LSC201c (Off-line 1.5h)\n(Spec: Leading Sustainable Community Transformation Specialization)\nCourse 1: Developing a Systems Mindset\nModule 1: Introduction to Systems Mindsets\n- Introduction\n- Adopting a Systems Minds\n- End of Module Assessment",
+   "Offline, Online",
+   "CLO1",
+   "I,T",
+   "https://www.coursera.org/learn/systems-mindset/home/week/1",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module\n- Finish quiz: Progress Quiz, Applying a Systems Mindset, End of Module Assessmen",
+   ""
+  ],
+  [
+   "2",
+   "(Spec: Leading Sustainable Community Transformation Specialization)\nCourse 1: Developing a Systems Mindset\nModule 2: Operationalizing Systems Thinking\n- Introduction\n- Beginning to Engage\n- Assessment",
+   "Online",
+   "CLO1",
+   "I,T",
+   "https://www.coursera.org/learn/systems-mindset/home/week/1",
+   "",
+   "- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, Talk About Bias and Positionality",
+   ""
+  ],
+  [
+   "3",
+   "(Spec: Leading Sustainable Community Transformation Specialization)\nCourse 1: Developing a Systems Mindset\nModule 3: Understanding a Community\n- Custom, Culture, and Legacy\n- Stakeholder Engagement\n- Assessment\n- Developing a Systems Mindset Case Studies\n- Final Assignment",
+   "Online",
+   "CLO3",
+   "I,T",
+   "https://www.coursera.org/learn/systems-mindset/home/week/1",
+   "",
+   "- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz\n- Review and discuss about the lesson\n- Develop a Project Proposal\n- Final Assignment",
+   ""
+  ],
+  [
+   "4",
+   "(Spec: Leading Sustainable Community Transformation Specialization)\nCourse 2 : Strategies for Effective Engagement\nModule 1: Introduction to Strategies for Effective Engagement\nModule 2: Systems Mapping and Analysis",
+   "Online",
+   "CLO2",
+   "I,T",
+   "https://www.coursera.org/learn/effective-engagement/home/week/1",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz, discussion board, self assessment, assignment",
+   ""
+  ],
+  [
+   "5",
+   "(Spec: Leading Sustainable Community Transformation Specialization)\nCourse 2: Strategies for Effective Engagement\nModule 3: Systems Mapping",
+   "Online",
+   "CLO3",
+   "I,T, U",
+   "https://www.coursera.org/learn/effective-engagement/home/week/1",
+   "",
+   "'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz\n- Reviewing Survey Questions\n- Creating a System Map",
+   ""
+  ],
+  [
+   "6",
+   "(Spec: Leading Sustainable Community Transformation Specialization)\nCourse 3: Transforming Communities\nModule 1: Sustainability and Resilience\nModule 2: Needs Assessment and Asset Mapping",
+   "Online",
+   "CLO4",
+   "I,T",
+   "https://www.coursera.org/learn/transforming-communities/home/welcome",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz,\n- Write assignment and Review others assessment",
+   ""
+  ],
+  [
+   "7",
+   "(Spec: Leading Sustainable Community Transformation Specialization)\nCourse 3: Transforming Communities\nModule 3: Systems Thinking for Change",
+   "Online",
+   "CLO5",
+   "I,T",
+   "https://www.coursera.org/learn/transforming-communities/home/welcome",
+   "",
+   "- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz\n- Final Project\n- Discussion of the assignment",
+   ""
+  ],
+  [
+   "8",
+   "(Course: Business for Good: Fundamentals of Corporate Responsibility)\nModule 1: The Sustainability Challenge\nModule 2: The Sustainability Advantage",
+   "Online",
+   "CLO1",
+   "I,T",
+   "https://www.coursera.org/learn/business-for-good-fundamentals-of-corporate-responsibility",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz\n- Do exercise and have discussion",
+   ""
+  ],
+  [
+   "9",
+   "(Course: Business for Good: Fundamentals of Corporate Responsibility)\nModule 3 & Module 4: Sustainability Leadership in Action",
+   "Online",
+   "CLO5",
+   "I,T",
+   "https://www.coursera.org/learn/business-for-good-fundamentals-of-corporate-responsibility",
+   "",
+   "- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz\n- Do exercise and have discussion",
+   ""
+  ],
+  [
+   "10",
+   "(Course: Business for Good: Fundamentals of Corporate Responsibility)\nModule 5: Sustainable Pathways to Value Creation",
+   "Online",
+   "CLO4,",
+   "I,T",
+   "https://www.coursera.org/learn/business-for-good-fundamentals-of-corporate-responsibility",
+   "",
+   "- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz\n- Do exercise and have discussion",
+   ""
+  ],
+  [
+   "11",
+   "(Course: Business for Good: Fundamentals of Corporate Responsibility)\nModule 6: The Roadmap to Sustainability",
+   "Online",
+   "CLO5",
+   "I,T",
+   "https://www.coursera.org/learn/business-for-good-fundamentals-of-corporate-responsibility",
+   "",
+   "- Watch all videos, read all materials in the module\n- Finish quiz: Summative Quiz\n- Complete 2 exercises and write 3 discussion posts",
+   ""
+  ],
+  [
+   "12",
+   "Review\nDeadline of Coursera completion: End of Friday of the week.",
+   "Offline, Online",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I,T,U",
+   "-https://www.coursera.org/specializations/sustainable-transformation\n- https://www.coursera.org/learn/business-for-good-fundamentals-of-corporate-responsibility",
+   "",
+   "- All Students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

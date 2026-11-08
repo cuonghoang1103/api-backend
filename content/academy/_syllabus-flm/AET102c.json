@@ -1,0 +1,278 @@
+{
+ "ma": "AET102c",
+ "sylID": "12639",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12639",
+   "code": "AET102c",
+   "name": "Aesthetic_Mỹ học đại cương",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12639",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12639",
+  "Syllabus Name": "Aesthetic_Mỹ học đại cương",
+  "Course Name English": "Aesthetic",
+  "Subject Code": "AET102c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "2",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 60h online + 3h offline + 1h Final exam + 86h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course provides an introduction to aesthetic and the phylosophy of arts for students and provides them with the knowledge and skills to communicate their ideas and processes in a visual form more effectively. As a means of questioning and applying fundamental theories, concepts and techniques, students conduct research and produce practical projects. The course examines the basic elements of visual communication and how context shapes visual forms production and reception.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend offline sessions in the Campus (Optional)\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE+ Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/aet102c/home/module/1",
+   "",
+   "FPT",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Spec: Aesthetic - AET102c"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understanding - initial awareness and ability to evaluate art and aesthetics within different cultural and historical contexts"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyzing the influence of cultural and historical contexts on the development of aesthetic values and practices"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Exploring the formation and development of different aesthetic movements and their influence on contemporary art and design"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Developing an understanding of how aesthetic preferences shape human perception and emotional responses"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Applying aesthetic theories and principles to evaluate the effectiveness of visual elements in art and design"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "All LOs",
+   "Multiple choice",
+   "50",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "(Off-line 1.5h)\nIntroduction to the online course\nMODULE 1: Introduction\nLesson 1: Introduction to the course\nLesson 2: Aesthetics and the Philosophy of Art, An Extremely Brief\nLesson 3: On art and beauty\nLesson 4: The Middle Ages and The modern period",
+   "Online, Offline",
+   "CLO1, CLO2",
+   "I",
+   "MODULE 1: Introduction",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "2",
+   "MODULE 2: Defining Art\nLesson 1: Fountain (1917)\nLesson 2: On definitions and\nLesson 3: Art as representation\nLesson 4: Art as form\nLesson 5: Art as expression\nLesson 6: Art and aesthetic function\nLesson 7: On not defining art\nLesson 8: Art and the artworld\nLesson 9: Art and art history",
+   "Online",
+   "CLO3, CLO4",
+   "I,T",
+   "MODULE 2, 3",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "MODULE 3: Interpretation and Intention\nLesson 1: Last leaf (2011)\nLesson 2: On Interpretation\nLesson 3: The Romantics\nLesson 4: Anti-intentionalism\nLesson 5: Post structuralism\nLesson 6: Intentionalism revisited\nLesson 7: Hypothetical intentionalism\nLesson 8: The Patchwork Theory",
+   "Online",
+   "CLO3, CLO4",
+   "I,T",
+   "MODULE 2, 3",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "4",
+   "MODULE 4: Aesthetic Properties and Evaluation\nLesson 1: Black square (1915)\nLesson 2: On evaluation\nLesson 3: The search for objective beauty\nLesson 4: Taste\nLesson 5: Aesthetic Properties\nLesson 6: Contextualism\nLesson 7: The value of art",
+   "Online",
+   "CLO3, CLO4, CLO5",
+   "I,T,U",
+   "MODULE 4",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "5",
+   "MODULE 5: The Ontology of Art\nLesson 1: Alabama Tenant Farmer Wife (1936)\nLesson 2: On Ontology\nLesson 3: Artworks as a physical object\nLesson 4: Singular and multiple artworks",
+   "Online",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "MODULE 5",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "6",
+   "MODULE 5: The Ontology of Art\nLesson 5: Types and tokens\nLesson 6: Constructivism\nLesson 7: Mental works and action types",
+   "Online",
+   "CLO1, CLO2, CLO5",
+   "I,T",
+   "MODULE 5",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "7",
+   "MODULE 6: Emotions and the Arts\nLesson 1: The Exorcist (1973)\nLesson 2: On art and emotion\nLesson 3: The paradox of fiction\nLesson 4: The problem of tragedy",
+   "Online",
+   "CLO3, CLO5",
+   "I,T",
+   "MODULE 6",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "8",
+   "MODULE 7: Art and Morality\nLesson 1: Helena (2000)\nLesson 2: On ethics and aesthetics\nLesson 3: Radical moralism and autonomism\nLesson 4: Moderate moralism and autonomism\nLesson 5: Arts funding and censorship",
+   "Online",
+   "CLO2, CLO5",
+   "I",
+   "MODULE 7",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "9",
+   "MODULE 8: Art, Aesthetics and Identity\nLesson 1: The Good Earth (1932) and The Good Earth (1937)\nLesson 2: Artistic exclusion\nLesson 3: Aesthetic exclusion",
+   "Online",
+   "CLO4, CLO5",
+   "I,T",
+   "MODULE 8",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "10",
+   "MODULE 8: Art, Aesthetics and Identity\nLesson 3: Aesthetic exclusion\nLesson 4: Authenticity and appropriation\nLesson 5: Our bodies, ourselves",
+   "Online",
+   "CLO4, CLO5",
+   "I,T",
+   "MODULE 8",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "11",
+   "MODULE 9: Aesthetics Without Art\nLesson 1: Mr Blobby\nLesson 2: On beauty and nature\nLesson 3: Natural aesthetics\nLesson 4: Environmental aesthetics\nLesson 5: Everyday aesthetics",
+   "Online",
+   "CLO3, CLO4",
+   "I",
+   "MODULE 9",
+   "",
+   "- Watch all videos, read all materials in the course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "12",
+   "Deadline of coursera completion: End of Friday of the week.\nCourse review\n(Off-line 1.5h)",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "MODULE 1,2,3,4,5,6,7,8,9",
+   "",
+   "- All students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

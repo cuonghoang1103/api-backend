@@ -1,0 +1,1391 @@
+{
+ "ma": "LAW102",
+ "sylID": "13718",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13718",
+   "code": "LAW102",
+   "name": "Business Law and Ethics Fundamentals_Luật và Đạo đức kinh doanh",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13718",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13718",
+  "Syllabus Name": "Business Law and Ethics Fundamentals_Luật và Đạo đức kinh doanh",
+  "Course Name English": "Business Law and Ethics Fundamentals",
+  "Subject Code": "LAW102",
+  "Learning-Teaching Method": "Lecture,Project based learning,Problem based learning,Social Constructivism,Presentation,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Description: This course addresses the basic concept of business law in the business environment. The course highlights the basic legal and regulatory requirements by which people and companies conduct business activities. It appreciates the complexities, ambiguities, and many areas of the law in undertaking business. Furthermore, it will focus on business ethics, which emphasizes the appropriate behaviors and treatments of business entities in global and local contexts.\n\nObjectives: Upon completing this course, student can demonstrate knowledge about the legal system and basic principles of business law as well as the relationship between ethics and regulations in the business environment. Students can compare the legal requirements and legal provisions of managing companies in the US and Vietnam and then ethically evaluate the application of laws in business transactions. Students are expected to be able to identify essential solutions for business disputes in compliance with applicable laws.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by the instructor after class\n\n- Use their own laptop in class only for learning purposes\n\n- Read the textbook in advance\n\n- Keep in touch with the lecturer regularly for up-to-date information and material of the course, for online support from teachers and other students, and for practicing and assessment.",
+  "Tools": "- Textbook and all learning materials provided on FLM: flm.fpt.edu.vn/\n\n- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Law for Business",
+   "John Ashcroft, Katherine Ashcroft, Martha Patterson",
+   "Cengage Publication",
+   "2018",
+   "19th",
+   "ISBN 13 9781305654921",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 2 ấn bản 17th hoặc 19th. Ưu tiên mua ấn bản mới nhất"
+  ],
+  [
+   "2",
+   "Business Ethics\n\nhttps://openstax.org/details/books/business-ethics",
+   "Byars, Stephen M. and Stanberry, Kurt",
+   "Openstax",
+   "2018",
+   "2nd",
+   "ISBN-10: 1-947172-57-3",
+   "True",
+   "False",
+   "True",
+   "Giáo trình nguồn mở, không cần mua bản cứng"
+  ],
+  [
+   "3",
+   "Luat Kinh te chuyen khao",
+   "Nguyễn Thị Dung và Tập Thể giảng viên Bộ môn Luật Thương Mại Đại Học Luật Hà Nội",
+   "NXB Lao động",
+   "2017",
+   "1st",
+   "ISBN 978-604-59-8210-5",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Tài Liệu Giảng Dạy Về Phòng, Chống Tham Nhũng Dùng Cho Các Trường Đại Học, Cao Đẳng Không Chuyên về Luật",
+   "TS. Nguyễn Văn Hương Phần, PGS.TS. Trần Hữu Tráng, TS. Bùi Kiên Điện, TS. Hoàng Văn Hùng",
+   "Bộ Giáo dục và Đào tạo",
+   "2014",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.studocu.com/vn/document/truong-dai-hoc-cong-nghe-thong-tin-va-truyen-thong-viet-han/database-system-assignment-9-relational-database-design-cont/giang-day-ve-pctn-dung-cho-cac-truong-dh-cd-khong-chuyen-ve-luat-15-39-16-646/20774832"
+  ],
+  [
+   "5",
+   "Law for Business",
+   "John D. Ashcroft, Jane E. Ashcroft",
+   "Cengage",
+   "2010",
+   "17th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "LO1. Describe the legal system, legal environment and basic principles of business law"
+  ],
+  [
+   "2",
+   "CLO2",
+   "LO2. Define the relationships of ethics and law in business"
+  ],
+  [
+   "3",
+   "CLO3",
+   "LO3. Describe the current law and regulations in corporation"
+  ],
+  [
+   "4",
+   "CLO4",
+   "LO4. Describe the current law and regulations applied to business transactions"
+  ],
+  [
+   "5",
+   "CLO5",
+   "LO5. Apply ethic consideration in business context"
+  ],
+  [
+   "6",
+   "CLO6",
+   "LO6. Apply current law, rules, and regulations related to settling business disputes"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Have a sense of discipline, professional manners and a high respect of the law"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Demonstrate an ethical attitude in conducting business"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "No question",
+   "OP1: Students are asked to participate in class discussions and activities as well as answer questions from Lecturer or actively raise the questions.\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Essay Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 60' in class; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO2, CLO3, CLO4",
+   "OP1: essays questions; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 3; OP2: OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Length: 60 minutesStructure: 01 Short answer: law or ethics; and 01 Case study: law or ethics. Any plagiarism will be resulted in a failure of assignmentOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Group assignments",
+   "on-going",
+   "3",
+   "25.0%",
+   ">0",
+   "",
+   "CLO2, CLO3, CLO5, CLO6",
+   "OP1: Presentation; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "OP1: Guideline: on session 1 Moot court: are held respectively on session: 28,29,30,31 (moot court 1); 40,41,42,43 (moot court 2); 54,55,56,57 (moot court 3). 1. Cases for Moot court: U.S case, assigned by Lecturer. 2. Preparation: Costume and Equipments are taken at Administrative Department and preserved by Students till the last moot court. 3. Groups: 06. Two groups will represent for DEFENDANT and PLAINTIFF respectively to work together on 01 moot court with 01 case. Each group comprises of 4 students at least. 4. Language: English mainly. 5. Participants in 01 moot court: all lawyers in 2 moot court-groups, 01 chairman of JURIES and 03 JUDGES (elected by Lecturer in non-moot court groups). 6. Steps to hold a moot court: 6.1. Arrangement of court room, get ready on gowns. 6.2. Plaintiff and Defendant present FACT of the case (play, video, ppt) 6.3. Juries and Judges make questions regarding the FACT. 6.4. Plaintiff and defendant making a debate regarding ISSUES of the case. Judges can make questions to clear down the argument. 6.5. After debate, Juries make questions regarding all the ISSUES. 6.6. Decision of Judges and Juries: Juries votes for the winner with ballot. Judges decides the stronger group. Judges and Chairman of Juries give the comment for weakness and strength of both sides. 6.7. Results: decided by Voting of Juries and Decision of Judges. If they are opposite to each other. The Lecturer will decide. Further guidance, please refer to INDIVIDUAL AND ASSIGNMENT GUIDELINE attached to Course Implementation Plan Submit report: as requested by the lecturer for every moot court OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "Individual assignment",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "N/A",
+   "CLO2, CLO3, CLO5, CLO6",
+   "OP1: Case study; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "0",
+   "OP1: Student will be asked to summary and comments on one Vietnamese /US case study: at or other relevant like website of the Vietnamese Supreme People's Court https://congbobanan.toaan.gov.vn or https://law.justia.com/cases/ of US cases). Guideline: on session 1. Register with lecturer on session 18 Summit final report: on session 37 Any plagiarism will be resulted in a failure of assignment OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Content:\n\na. Assignment information:\n\n· Title\n\n· Case number\n\n· Case date\n\n· Total word-count\n\nb. Main body:\n\n1.1. Background of the case\n\n· Court\n\n· Plaintiff\n\n· Defendant\n\n· Short overview of the case\n\n1.2. Issue and parties’ opinions\n\n· Plaintiff\n\n· Defendant\n\n1.3. Holding of the court\n\n1.4. Self - analysis and opinion (comparison if any)\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "5",
+   "TUTORIALS and Quiz(s)",
+   "on-going",
+   "3",
+   "15.0%",
+   ">0",
+   "OP1: 20'; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO2, CLO3, CLO5, CLO6",
+   "OP1: MCQ; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 15-20 for each quizz; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: QUIZZES are carried out at the end of each Part, being in form of Multiple choice questions. Questions may be covered one or all Chapters within respective Part.OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "MCQsStructure: 50 US law",
+   "50",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "INTRODUCTION TO STUDYING METHOD\n\n(Law textbooks of Vietnam and U.S; explanation of studying U.S law mainly and basic principles of Vietnamese law counterpart; allocations of each law for final exam; essential references or legal documents of Vietnamese law; teaching method and syllabus and slides on CMS...)\n\nASSIGNMENT GUIDELINE\n\nIndividual Assignment: Vietnamese Case study involving commerce, trade, corporation or contract on congbobanan, website of the Vietnamese Supreme People's Court or vibonline). Further guidance, refer to Grading Structure\n\nGroup Assignment: U.S case study assigned by Lecturer. Further Guidance, refer to Grading Structure",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Accessing FLM portal for the detail course requirements",
+   "LAW102",
+   "Group formation",
+   ""
+  ],
+  [
+   "2",
+   "PART 1 - FUNDAMENTAL KNOWLEDGE ABOUT BUSINESS LAWS\n\nUnit 1 - INTRODUCTION TO LAW AND ETHICS\n\n1.1 Law and objectives of law\n\n1.2 Introduction to the legal systems in the world and our legal system",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Chap 1 - INTRODUCTION TO LAW AND ETHICS in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921",
+   "LAW102",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "3",
+   "Unit 1 - INTRODUCTION TO LAW AND ETHICS (continue)\n\n1.3 Sources of law\n\n1.4 Ethics: Ethical judgment, ethical principles and business ethics",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Chap 1 - INTRODUCTION TO LAW AND ETHICS in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nREADING REFERENCE:Luat Kinh te chuyen khao, NXB Lao động, 2018: Chương IV - Nguồn cơ bản luật kinh tế. Chương II - Nội dung cơ bản của Luật Kinh tế",
+   "LAW102",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "4",
+   "UNIT 2 - COURT AND COURT PROCEDURE\n\n2.1 Function of the courts",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Chap 2 - COURT AND COURT PROCEDURE in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nREADING REFERENCE: Luat Kinh te chuyen khao, NXB Lao động, 2018: Chương 17 -Tổng quan về giải quyết tranh chấp",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "5",
+   "UNIT 2- COURT AND COURT PROCEDURE (continue)\n\n2.2 Jurisdiction of courts\n\n2.3 Classification of courts",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Chap 2 - COURT AND COURT PROCEDURE in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nREADING REFERENCE: Luat Kinh te chuyen khao, NXB Lao động, 2018: Chương 17 -Tổng quan về giải quyết tranh chấp",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "6",
+   "UNIT 2- COURT AND COURT PROCEDURE (continue)\n\n2.3 Classification of courts (continued)",
+   "Offline",
+   "CLO1",
+   "",
+   "Chap 2 - COURT AND COURT PROCEDURE in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nREADING REFERENCE: Luat Kinh te chuyen khao, NXB Lao động, 2018: Chương 17 -Tổng quan về giải quyết tranh chấp",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "7",
+   "Unit 3 - TORT\n\n3.1 Tort: Intentional and negligence torts",
+   "Offline",
+   "CLO1, CLO3, CLO6, CLO7",
+   "IT",
+   "Chapter 3 - TORT in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nREADING REFERENCE: Bộ Luật dân sự (2015)- Chương XX: Về: các điều kiện làm phát sinh trách nhiệm bồi thường thiệt hại ngoài hợp đồng.",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "8",
+   "Unit 3 - TORT (continue)\n\n3.2 Business tort and product liability",
+   "Offline",
+   "CLO1, CLO3, CLO6, CLO7",
+   "IT",
+   "Chapter 3 - TORT in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nREADING REFERENCE: Bộ Luật dân sự (2015)- Chương XX: Về: các điều kiện làm phát sinh trách nhiệm bồi thường thiệt hại ngoài hợp đồng.",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "9",
+   "Unit 4 - PERSONAL PROPERTY AND NATURE OF REAL PROPERTY\n\n4.1 Personal property",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Chapter 14 - Personal property and chapter 41 - Nature of real property in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921",
+   "",
+   "Read the relevant chapter. Prepare for the quiz",
+   ""
+  ],
+  [
+   "10",
+   "Unit 4 - PERSONAL PROPERTY AND NATURE OF REAL PROPERTY (continue)\n\n4.2 Nature of Real Property",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Chapter 14 - Personal property and chapter 41 - Nature of real property in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921",
+   "",
+   "Read the relevant chapter. Prepare for the quiz",
+   ""
+  ],
+  [
+   "11",
+   "TUTORIAL1 (Cont.)\n\nFor Part 1 (Unit 1 - 4)",
+   "Offline",
+   "CLO1, CLO3",
+   "TU",
+   "",
+   "",
+   "Presenting and prepare for the quiz",
+   ""
+  ],
+  [
+   "12",
+   "TUTORIAL1 (Cont.)\n\nFor Part 1 (Unit 1-4)",
+   "Offline",
+   "CLO1, CLO3",
+   "TU",
+   "",
+   "",
+   "Presenting and prepare for the quiz",
+   ""
+  ],
+  [
+   "13",
+   "QUIZ 1 (in form of multiple choices: to cover one or more chapters among Unit 1-4",
+   "Offline",
+   "CLO1, CLO3",
+   "TU",
+   "",
+   "",
+   "Prepare the PC and work on Quiz",
+   ""
+  ],
+  [
+   "14",
+   "QUIZ 1 (in form of multiple choices: to cover one or more chapters among Unit 1-4",
+   "Offline",
+   "CLO1, CLO3",
+   "TU",
+   "",
+   "",
+   "Prepare the PC and work on Quiz",
+   ""
+  ],
+  [
+   "15",
+   "PART 2 - BUSINESS TRANSACTION AND CONTRACT\n\nUnit 5: NATURE AND CLASSES OF CONTRACT\n\n5.1 Definition of contract and valid requirements\n\n5.2 classification of contracts",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Chapter 5 - NATURE AND CLASSES OF CONTRACT in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "16",
+   "Unit 5: NATURE AND CLASSES OF CONTRACT (continue)\n\n5.3 Capacity to contract with cases of minor, intoxicated people and mentally incompetent people\n\n5.4 Formal requirements with UCC",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Relevant chapter in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition\n\nChapter 7: Capacity to contract with cases of \"Minors, Intoxicated people and Mentally incompetent people\" when giving content of \"Competent party\" in \"A requirement for a contract\" .\n\nChapter 17: Formalities of contract when giving content of \"Formal requirements\" in \"A requirement for a contract\").",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "17",
+   "Unit 6 - OFFER AND ACCPETANCE\n\n6.1 Requirement for a valid offer\n\n6.2 Process of forming a contract with offer and acceptance: invitation to make offer and duration of the offer",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Relevant chapter (chapter 6) in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition\n\nReading: Luat Kinh te chuyen khao, NXB Lao động, 2018: Chương 15 - Pháp luật về hợp đồng",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "18",
+   "Unit 6 - OFFER AND ACCPETANCE (continue)\n\n6.3 Process of forming a contract with offer and acceptance: The acceptance and counteroffer\n\nREGISTER TOPIC OF INDIVIDUAL ASSIGNMENT",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Relevant chapter (chapter 6) in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition\n\nReading: Luat Kinh te chuyen khao, NXB Lao động, 2018: Chương 15 - Pháp luật về hợp đồng",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any\n\nRegistering topic for individual assignment",
+   ""
+  ],
+  [
+   "19",
+   "Unit 7 - THIRD PARTIES AND CONTRACTS\n\n7.1 Involving a third party: Creditor beneficiary, assignment, delegation.",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Chapter 12 - THIRD PARTIES AND CONTRACTS in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nREADING REFERENCE: Bộ Luật Dân Sự (2015): Chương IX: Đại diện",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "20",
+   "Unit 7 - THIRD PARTIES AND CONTRACTS (continue)\n\n7.2 Joint, Several, and Joint and Several Contracts",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Relevant chapter in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "21",
+   "Unit 8 - TERMINATION OF CONTRACTS\n\n8.1 Methods by which contracts are terminated: Termination by performance",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Relevant chapter about TERMINATION OF CONTRACTS in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "22",
+   "Unit 8 - TERMINATION OF CONTRACTS (continue)\n\n8.2 Methods by which contracts are terminated: Termination by force majeure, by breach of one party.",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Relevant chapter about TERMINATION OF CONTRACTS in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "23",
+   "Unit 8 - TERMINATION OF CONTRACTS (continue)\n\n8.3 Difference between termination and recession.",
+   "Offline",
+   "CLO4",
+   "TU",
+   "Relevant chapter in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "24",
+   "TUTORIAL2\n\nFor Part 2 (Unit 5-8)",
+   "Offline",
+   "CLO4",
+   "TU",
+   "",
+   "",
+   "Presenting and prepare for the quiz",
+   ""
+  ],
+  [
+   "25",
+   "TUTORIAL2\n\nFor Part 2 (Unit 5-8)",
+   "Offline",
+   "CLO4",
+   "TU",
+   "",
+   "",
+   "Presenting and prepare for the quiz",
+   ""
+  ],
+  [
+   "26",
+   "QUIZ 2 (in form of multiple choices: to cover one or more chapters among Unit 5-8",
+   "Offline",
+   "CLO6",
+   "TU",
+   "",
+   "",
+   "Prepare the PC and work on Quiz",
+   ""
+  ],
+  [
+   "27",
+   "QUIZ 2 (in form of multiple choices: to cover one or more chapters among Unit 5-8",
+   "Offline",
+   "CLO6",
+   "U",
+   "",
+   "",
+   "Prepare the PC and work on Quiz",
+   ""
+  ],
+  [
+   "28",
+   "GROUP PRESENTATION 1 (Mootcourt 1)\n\n(for applying cases regarding issues of formation of contract )",
+   "Offline",
+   "CLO6",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "29",
+   "GROUP PRESENTATION 1 (Mootcourt 1)\n\n(for applying cases regarding issues of formation of contract )",
+   "Offline",
+   "CLO6",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "30",
+   "GROUP PRESENTATION 1 (Mootcourt 1)\n\n(for applying cases regarding issues of formation of contract )",
+   "Offline",
+   "CLO6",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "31",
+   "GROUP PRESENTATION 1 (Mootcourt 1)\n\n(for applying cases regarding issues of formation of contract )",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921",
+   "",
+   "Instructor Manual, Teacher's Resource, CD for instructor",
+   ""
+  ],
+  [
+   "32",
+   "PART 3 - BUSINESS ORGANZATION AND STRUCTURE\n\nUnit 9 - INTRODUCTION TO BUSINESS ORGANIZATION\n\n9.1 Sole proprietorship (liability of members, legal entities status, conditions for formation)\n\n9.2 Partnership (liability of members, legal entities status, conditions for formation)",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Relevant chapter (chapter 31 and chapter 32) in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "33",
+   "Unit 9 - INTRODUCTION TO BUSINESS ORGANIZATION (continue)\n\n9.3 Corporation (liability of members, legal entities status, conditions for formation)",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nReading: Luat Kinh te chuyen khao, NXB Lao động, 2018: Phần 2, Chương 2-5",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "34",
+   "Unit 10 - NATURE OF CORPORATION\n\n10.1 Process to form a corporation, liability for the contract made by promoter\n\n10.2 Classification",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Relevant chapter (chap 34) in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "35",
+   "Unit 10 - NATURE OF CORPORATION (continue)\n\n10.3 Issuance of stock, Articles of incorporation and power of a corporation",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Chap 34 in John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nLuat Kinh te chuyen khao, NXB Lao động, 2018: Chương 4 - Công ty cổ phần.",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "36",
+   "Unit 11 - OWNERSHIP OF CORPORATION\n\n11.1 Share, stock, shareholder, dividend, stock certificate",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Chapter 35 in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "37",
+   "Unit 11 - OWNERSHIP OF CORPORATION (continue)\n\n11.2 Common share, preferred share (cumulative, non-cumulative).\n\nSUBMISSION OF FINAL REPORT OF INDIVIDUAL ASSIGNMENT",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "John D. Ashcroft, Jane E. Ashcroft, 2018, Law for Business, 19th edition, Cengage Publication, ISBN 13 9781305654921\n\nLuat Kinh te chuyen khao, NXB Lao động, 2018\n\nREADING: Chương 4 - Công ty cổ phần. (Cont.)",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any\n\nSubmit individual assignment",
+   ""
+  ],
+  [
+   "38",
+   "Unit 12 - MANAGEMENT AND DISSOLUTION OF A CORPORATION\n\n12.1 Shareholder's Meeting\n\n12.2 Rights of shareholders",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Chapter 36 in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "39",
+   "Unit 12 - MANAGEMENT AND DISSOLUTION OF A CORPORATION (continue)\n\n12.3 Board of Directors, Officers and their liabilities\n\n12.4: Cumulative voting.",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Relevant chapter (i.e chap 36) in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition\n\nReading:Luat Kinh te chuyen khao, NXB Lao động, 2018 - Chương 4 - Công ty cổ phần (cont.)",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "40",
+   "GROUP PRESENTATION 2 (Mootcourt 2)\n\n( for applying cases regarding issues of business organization )",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "41",
+   "GROUP PRESENTATION 2 (Mootcourt 2)\n\n( for applying cases regarding issues of business organization )",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "42",
+   "GROUP PRESENTATION 2 (Mootcourt 2)\n\n( for applying cases regarding issues of business organization )",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "43",
+   "GROUP PRESENTATION 2 (Mootcourt 2)\n\n( for applying cases regarding issues of business organization )",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "44",
+   "TUTORIAL3\n\nFor Part 3 (Unit 9-12)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6",
+   "U",
+   "",
+   "",
+   "Presenting and prepare for essay",
+   ""
+  ],
+  [
+   "45",
+   "TUTORIAL3\n\nFor Part 3 (Unit 9-12)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6",
+   "U",
+   "",
+   "",
+   "Presenting and prepare for essay",
+   ""
+  ],
+  [
+   "46",
+   "Essay test (Cover Unit 9-12)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6",
+   "U",
+   "",
+   "",
+   "Prepare PC for essay test",
+   ""
+  ],
+  [
+   "47",
+   "Essay test (Cover Unit 9-12)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6",
+   "IT",
+   "",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "48",
+   "PART 4 - ETHICS IN DOING BUSINESS\n\nUnit 13 - WARRANTIES AND CONSUMER PROTECTION\n\n13.1 Express warranty\n\n13.2 Implied warranty and seller's opinions,",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "IT",
+   "Chapter 19 in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "49",
+   "Unit 13 - WARRANTIES AND CONSUMER PROTECTION (continue)\n\n13.3 Infringement, aganist encumbrances, normal use, particular use.\n\n13.4 Product liability",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "IT",
+   "Relevant chapter in John D. Ashcroft, Jane E. Ashcroft, 2010, Law for Business, 17th edition\n\nREADING: Bộ Luật Dân sự (2015)- Điều 446 đến 449: Nghĩa vụ bảo hành.\n\nLuật Bảo vệ Người tiêu dùng (2010): Về: giới thiệu phạm vi, đối tượng điều chỉnh.",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "50",
+   "Unit 14 - ADOPTING A STAKEHOLDER ORIENTATION\n\n14.1 Stakeholder definition\n\n14.2 Views on business responsibility",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "IT",
+   "Section 3, part 3.1 in Byars, Stephen M. and Stanberry, Kurt, \"Business Ethics\" (2018). Open Access Textbooks",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "51",
+   "Unit 15 - WEIGHING STAKEHOLDER CLAIMS\n\n15.1 Stakeholder claims\n\n15.2 Approaches to stakeholder claims",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "IT",
+   "Section 3.2 in Byars, Stephen M. and Stanberry, Kurt, \"Business Ethics\" (2018). Open Access Textbooks",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "52",
+   "Unit 16 - ETHICAL DECISION-MAKING AND PRIORITIZING SKATEHOLDERS\n\n16.1 Stakeholder management\n\n16.2 Stakeholder prioritization and management\n\n16.3 Corruption: definition, causes and consequences in business environment",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "",
+   "Section 3.3 in Byars, Stephen M. and Stanberry, Kurt, \"Business Ethics\" (2018). Open Access Textbooks\n\nTài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về Luật",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "53",
+   "Unit 17 - CORPORATE SOCIAL RESPONSIBILITY\n\n17.1 CSR\n\n17.2 The benefits of CSR\n\n17.3 Business responsibility in anti corruption",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "U",
+   "Section 3.4 in Byars, Stephen M. and Stanberry, Kurt, \"Business Ethics\" (2018). Open Access Textbooks\n\nTài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về Luật",
+   "",
+   "Read the relevant chapter, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "54",
+   "GROUP PRESENTATION 3 (Mootcourt 3)\n\n( Part of Tutorial: for applying regulations on business ethics)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "55",
+   "GROUP PRESENTATION 3 (Mootcourt 3)\n\n( Part of Tutorial: for applying regulations on business ethics)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "56",
+   "GROUP PRESENTATION 3 (Mootcourt 3)\n\n( Part of Tutorial: for applying regulations on business ethics)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "57",
+   "GROUP PRESENTATION 3 (Mootcourt 3)\n\n( Part of Tutorial: for applying regulations on business ethics)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "U",
+   "",
+   "",
+   "Prepare slides, group report and presentation. Submit the assignment if requested",
+   ""
+  ],
+  [
+   "58",
+   "TUTORIAL4\n\nFor Part 3 (Unit 13-17) (Chapter 19 of Business law, Chapter 3 of business ethic)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "TU",
+   "",
+   "",
+   "Presenting and prepare for the quiz",
+   ""
+  ],
+  [
+   "59",
+   "QUIZ 3 (in form of multiple choices: to cover one or more chapters among Unit 13-17 (Chapter 19 of Business law, Chapter 3 of business ethic)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "U",
+   "",
+   "",
+   "Prepare the PC and work on Quiz",
+   ""
+  ],
+  [
+   "60",
+   "QUIZ 3 (in form of multiple choices: to cover one or more chapters among Unit 13-17 (Chapter 19 of Business law, Chapter 3 of business ethic)",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO6, CLO7, CLO8",
+   "U",
+   "",
+   "",
+   "Prepare the PC and work on quiz",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT1",
+   "What is law? And what is business law?"
+  ],
+  [
+   "2",
+   "1",
+   "ĐN1",
+   "Define common law and civil law"
+  ],
+  [
+   "3",
+   "2",
+   "CT1",
+   "Why should we study business law and ethics?"
+  ],
+  [
+   "4",
+   "2",
+   "ĐN1",
+   "Why do we need to study US and EU law?"
+  ],
+  [
+   "5",
+   "3",
+   "CT1",
+   "Why do we need laws to exist in society?"
+  ],
+  [
+   "6",
+   "3",
+   "ĐN1",
+   "Why do courts in common law generally take the judicial precedents into account in decision-making process?"
+  ],
+  [
+   "7",
+   "4",
+   "CT1",
+   "What are the four sources of U.S. law?"
+  ],
+  [
+   "8",
+   "5",
+   "CT1",
+   "What is the chief function of the courts?"
+  ],
+  [
+   "9",
+   "5",
+   "ĐN1",
+   "The classifiation of Vietnamese court system?"
+  ],
+  [
+   "10",
+   "6",
+   "CT1",
+   "What is the basic procedure for a jury trial?"
+  ],
+  [
+   "11",
+   "6",
+   "ĐN1",
+   "What are procudures for a typical court according to Vietnamese procedural laws?"
+  ],
+  [
+   "12",
+   "7",
+   "CT1",
+   "What is personal property? Give an example."
+  ],
+  [
+   "13",
+   "7",
+   "ĐN1",
+   "Give some examples of intentional and negligence torts"
+  ],
+  [
+   "14",
+   "8",
+   "CT1",
+   "What is real property? Give an example."
+  ],
+  [
+   "15",
+   "9",
+   "CT1",
+   "What are personal property and real property?"
+  ],
+  [
+   "16",
+   "9",
+   "ĐN1",
+   "How can a property be acquired?"
+  ],
+  [
+   "17",
+   "10",
+   "CT1",
+   "What is a bailment? Give three examples."
+  ],
+  [
+   "18",
+   "10",
+   "ĐN1",
+   "what are the differences between a fee simple estate and a life estate?"
+  ],
+  [
+   "19",
+   "11",
+   "CT1",
+   "What is ownership of property? Give an example."
+  ],
+  [
+   "20",
+   "12",
+   "CT1",
+   "What is a contract?"
+  ],
+  [
+   "21",
+   "13",
+   "CT1",
+   "Are there any types of contracts and how they differ from agreements?"
+  ],
+  [
+   "22",
+   "14",
+   "CT1",
+   "What is a quasi contract?"
+  ],
+  [
+   "23",
+   "15",
+   "CT1",
+   "What are the basic requirements for making a valid contract?"
+  ],
+  [
+   "24",
+   "15",
+   "ĐN1",
+   "What are the factors determining the enforceability of an agreement ?"
+  ],
+  [
+   "25",
+   "16",
+   "CT1",
+   "What is the difference between 'OFFER' and 'INVITATION TO OFFER'?"
+  ],
+  [
+   "26",
+   "16",
+   "ĐN1",
+   "Is an agreement a contract?"
+  ],
+  [
+   "27",
+   "17",
+   "CT1",
+   "How long is an offer open for acceptance?"
+  ],
+  [
+   "28",
+   "17",
+   "ĐN1",
+   "What makes an offer valid legally?"
+  ],
+  [
+   "29",
+   "18",
+   "CT1",
+   "What is it called when one party to a contract transfers the contract in its entirely to another?"
+  ],
+  [
+   "30",
+   "18",
+   "ĐN1",
+   "Please provide some instances of invitations to make an offer"
+  ],
+  [
+   "31",
+   "19",
+   "CT1",
+   "When a novation occurs, who is liable for performance under the contract?"
+  ],
+  [
+   "32",
+   "19",
+   "ĐN1",
+   "How can a person who is not a party to a contract enforce that contract agreement ?"
+  ],
+  [
+   "33",
+   "20",
+   "CT1",
+   "What is the difference between an assignment of a contract and the delegation of duties under it?"
+  ],
+  [
+   "34",
+   "20",
+   "ĐN1",
+   "What are the conditions for a person to legally assigns his right to personal services in particular and different services in general?"
+  ],
+  [
+   "35",
+   "21",
+   "CT1",
+   "What is the requirements for terminating a contract by performance?"
+  ],
+  [
+   "36",
+   "21",
+   "ĐN1",
+   "What if one party intentionally modify conditions in an agreement without the consent of the other party?"
+  ],
+  [
+   "37",
+   "22",
+   "CT1",
+   "What are the circumstances that discharge a contract by operation of law?"
+  ],
+  [
+   "38",
+   "23",
+   "CT1",
+   "What is a breach of contract is and the potential remedies for breach?"
+  ],
+  [
+   "39",
+   "24",
+   "CT1",
+   "What are the advantages and the most serious disadvantages of a sole proprietorship?"
+  ],
+  [
+   "40",
+   "25",
+   "CT1",
+   "For what purposes may a partnership be formated?"
+  ],
+  [
+   "41",
+   "26",
+   "CT1",
+   "What are the reasons why the limited liability company is an important form of business organization?"
+  ],
+  [
+   "42",
+   "30",
+   "CT1",
+   "What are the advantages and the most serious disadvantages of a sole proprietorship?"
+  ],
+  [
+   "43",
+   "31",
+   "CT1",
+   "For what purposes may a partnership be formated?"
+  ],
+  [
+   "44",
+   "32",
+   "CT1",
+   "What are the reasons why the limited liability company is an important form of business organization?"
+  ],
+  [
+   "45",
+   "32",
+   "ĐN1",
+   "How many persons can participate in a sole proprietorship?"
+  ],
+  [
+   "46",
+   "33",
+   "CT1",
+   "How are the different classifications and kinds of corporations?"
+  ],
+  [
+   "47",
+   "33",
+   "ĐN1",
+   "Define a limited liability partnership"
+  ],
+  [
+   "48",
+   "34",
+   "CT1",
+   "What does the law frequently require to be included in a corporation's name?"
+  ],
+  [
+   "49",
+   "34",
+   "ĐN1",
+   "Define a corporation’s articles of incorporation and their importance"
+  ],
+  [
+   "50",
+   "35",
+   "CT1",
+   "What powers does a corporation have in addition to incidental or express power?"
+  ],
+  [
+   "51",
+   "36",
+   "CT1",
+   "How do the stockholders managed and controlled a corporation?"
+  ],
+  [
+   "52",
+   "36",
+   "ĐN1",
+   "How can a person acquire ownership of a corporation’s stock in US law?"
+  ],
+  [
+   "53",
+   "37",
+   "CT1",
+   "What are the rights of stockholders?"
+  ],
+  [
+   "54",
+   "37",
+   "ĐN1",
+   "Define some incentives for preferred stockholders"
+  ],
+  [
+   "55",
+   "38",
+   "CT1",
+   "How does a corporation complete its dissolution?"
+  ],
+  [
+   "56",
+   "38",
+   "ĐN1",
+   "How is a quorum determined?"
+  ],
+  [
+   "57",
+   "39",
+   "ĐN1",
+   "What are the differences between a merger and a consolidation?"
+  ],
+  [
+   "58",
+   "46",
+   "CT1",
+   "What is a warranty? Distinguish between express and implied warranties."
+  ],
+  [
+   "59",
+   "47",
+   "CT1",
+   "Which the warranties that apply to all sellers and those that apply only to merchants?"
+  ],
+  [
+   "60",
+   "48",
+   "CT1",
+   "How does the law use the various means to provide consumer protection?"
+  ],
+  [
+   "61",
+   "48",
+   "ĐN1",
+   "How can an express warranty created?"
+  ],
+  [
+   "62",
+   "49",
+   "CT1",
+   "Who are the stakeholders of corporation?"
+  ],
+  [
+   "63",
+   "49",
+   "ĐN1",
+   "Explain the difference between an implied warranty and an express warranty"
+  ],
+  [
+   "64",
+   "50",
+   "CT1",
+   "How do stakeholders ethical decision-making and prioritizing?"
+  ],
+  [
+   "65",
+   "50",
+   "ĐN1",
+   "Define some ethical responsibility of a company towards its stakeholders"
+  ],
+  [
+   "66",
+   "51",
+   "CT1",
+   "What is corporate social responsibility (CSR)?"
+  ],
+  [
+   "67",
+   "51",
+   "ĐN1",
+   "Why do stakeholders'claims need to be taken into consideration when a company makes decisions?"
+  ],
+  [
+   "68",
+   "52",
+   "CT1",
+   "Why the corporate social responsibility is “good” for business? Explain reason and give an example?"
+  ],
+  [
+   "69",
+   "52",
+   "ĐN1",
+   "Define three theoretical approaches to considering stakeholder claims"
+  ],
+  [
+   "70",
+   "53",
+   "ĐN1",
+   "Define four kinds of responsibility in CSR"
+  ],
+  [
+   "71",
+   "59",
+   "CT1",
+   "What outputs do you feel you have achieved through this course?"
+  ],
+  [
+   "72",
+   "60",
+   "CT1",
+   "What recommendations do you have for studying and teaching Business Law and Ethics?"
+  ]
+ ],
+ "links": [
+  "/download/10275/S/1_LAW102.zip",
+  "/download/10275/S/2_LAW102.zip",
+  "/download/10275/S/3_LAW102.zip"
+ ]
+}

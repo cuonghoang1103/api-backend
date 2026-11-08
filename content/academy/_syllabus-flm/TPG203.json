@@ -1,0 +1,1091 @@
+{
+ "ma": "TPG203",
+ "sylID": "13864",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13864",
+   "code": "TPG203",
+   "name": "Basic typography & Layout _ Đồ họa chữ và bố cục cơ bản",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13864",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13864",
+  "Syllabus Name": "Basic typography & Layout _ Đồ họa chữ và bố cục cơ bản",
+  "Course Name English": "Basic typography & Layout",
+  "Subject Code": "TPG203",
+  "Learning-Teaching Method": "Lecture,Presenting,Practice,discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor level",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 105h self-study",
+  "Pre-Requisite": "GDF101 or GDF201 or IPD201",
+  "Description": "This course will cover the history, theory and practice of letterforms and\n\ntypography as they apply to graphics, advertising and other areas of design and\n\nvisual communication. Projects cover typography history, principles of\n\ntypography, letter structure, typeface selection, fundamentals of computer\n\ntypesetting.",
+  "StudentTasks": "Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (www.cms.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.\n\n- Complete course's Portfolio with full contents of exercises and submit to the teacher 1 day after the course.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Khám phá Typography - Exploring Typography",
+   "Tova Rabinowitz",
+   "NXB Bách Khoa Hà Nội",
+   "2015",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Thinking with Type: A Critical Guide for Designers, Writers, Editors, & Students",
+   "Ellen Lupton",
+   "",
+   "2010",
+   "Second Edition",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Typographic Design: Form and Communication",
+   "Rob Carter",
+   "Wiley",
+   "2014",
+   "6th",
+   "978-1-118-71576-5",
+   "True",
+   "False",
+   "True",
+   "Link: https://library.books24x7.com"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Classify typographic styles by period, noting key traits and contexts."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Explain typeface anatomy and how proportions, stroke dynamics, and metrics/spacing affect legibility and readability."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Evaluate typographic approaches for a given goal and their impact on meaning and hierarchy."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Design brief-fit typographic solutions with appropriate pairing, hierarchy/grid/rhythm, and correct specs."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Use technology tools and AI tools effectively across the typography workflow with responsible disclosure and verification."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group present",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "in class and homework",
+   "CLO1, CLO2, CLO3, CLO5",
+   "Group Present",
+   "1",
+   "Group PresentTypeface Research. Students work in groups. Apply typographic theory with research methods (including responsible AI) to study one selected typeface: trace its history and development, profile the designer/foundry, analyze anatomy and features, review applications, and compare with other related typefaces using clear criteria.",
+   "in class, by instructor",
+   "Work in Group (3-4 students/group)\n\nThe evaluation will consider the following criteria: Research dossier & context (20%). Anatomy & legibility analysis (20%), Applications & usage guidelines (20%), Comparative critique (20%), Slide design & presentation (storytelling + Q&A) (20%). Students deliver a slide presentation with full documentation of the research process (AI Use Log) and present a counter-argument in Q&A."
+  ],
+  [
+   "2",
+   "Participation all activities during class time",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "60 sessions",
+   "CLO5",
+   "",
+   "",
+   "",
+   "- Participation grade will be given based on students' attendance, preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments.\n- Lecturer give marks on student's student's Class participation and preparation only after the Portfolio submission.",
+   ""
+  ],
+  [
+   "3",
+   "Practice 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "in class and homework",
+   "CLO2, CLO3, CLO4",
+   "Practice",
+   "1",
+   "Dissect one base typeface: document its key anatomy and metrics, then design a new typeface with a concise brief (purpose/voice), a minimum glyph set (A–Z, a–z, 0–9, punctuation; Vietnamese demo encouraged), defined metrics & spacing, and a specimen (one-page showcase of a typeface).",
+   "in class, by instructor",
+   "Individual work. The evaluation will consider the following criteria: Brief & research plan(20%). System definition (20%), Core making / prototyping (30%), Integration & iteration(20%), Final presentation & documentation (10%). Students report on assignment progress within the specified time, present research and work plan."
+  ],
+  [
+   "4",
+   "Practice 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "in class and homework",
+   "CLO3, CLO4, CLO5",
+   "Practice",
+   "1",
+   "Students apply the instructor-approved typeface (your Practice 1 font or an existing face) to design assigned artifacts. Build a coherent typographic system (scales, hierarchy, spacing, grid), test readability/accessibility across media, and justify choices.",
+   "in class, by instructor",
+   "Individual work. The evaluation will consider the following criteria: Brief & research plan(20%). System definition (20%), Core making / prototyping (30%), Integration & iteration(20%), Final presentation & documentation (10%). Students report on assignment progress within the specified time, present research and work plan."
+  ],
+  [
+   "5",
+   "Practice 3",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "in class and homework",
+   "CLO3, CLO4, CLO5",
+   "Practice",
+   "1",
+   "Students create a typographic work grounded in meaningful content (poetry, excerpts, slogans, etc.), translating that meaning into a structured typographic composition/system with hierarchy, rhythm, and an expressive voice, while also demonstrating application and material experimentation.",
+   "in class, by instructor",
+   "Individual work. The evaluation will consider the following criteria: Brief & research plan(20%). System definition (20%), Core making / prototyping (30%), Integration & iteration(20%), Final presentation & documentation (10%). Students report on assignment progress within the specified time, present research and work plan."
+  ],
+  [
+   "6",
+   "Practice 4",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "in class and homework",
+   "CLO3, CLO4, CLO5",
+   "Practice",
+   "1",
+   "Design a communication poster for an instructor-defined goal (event/brand/product/service) with a typography-first approach. Build a clear type hierarchy, grid, rhythm, and real-world readability; imagery is optional and supportive.",
+   "in class, by instructor",
+   "Individual work. The evaluation will consider the following criteria: Brief & research plan(20%). System definition (20%), Core making / prototyping (30%), Integration & iteration(20%), Final presentation & documentation (10%). Students report on assignment progress within the specified time, present research and work plan."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Typography course brief introduction\nFocus on lecture:\n- What is typography?",
+   "Offline",
+   "LO1",
+   "I",
+   "syllabus, textbook, slide",
+   "TPG203_Phần 1",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "2",
+   "Typography course brief introduction\nFocus on lecture:\n- Typography in design.",
+   "Offline",
+   "LO1",
+   "I",
+   "syllabus, textbook, slide",
+   "TPG203_Phần 2",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "3",
+   "The evolution of typogarphy\nFocus on lecture:\n- From the origins of writing to Gutenberg’s invention of movable\ntype: 3150 BCE–1450 CE\n- Typography from Gutenberg to the\nnineteenth century: 1450–1800 CE\n\nAI skills for research\n- AI tools to support research",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Textbook: page 1 - page 30",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials\n- Discuss ethical issues related to using AI in research\n- Practice guided AI tools.",
+   ""
+  ],
+  [
+   "4",
+   "The evolution of typogarphy\nFocus on lecture:\n\n- The nineteenth century and the Industrial Revolution:1800–1899 CE\n- Typography in the twentieth century: 1900–2000\n- A new century and millennium\nbegin: 2000 CE",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Textbook: page 1 - page 30",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "5",
+   "Group present - Brief introduction",
+   "Offline",
+   "LO1, LO2",
+   "I",
+   "Textbook: page 1 - page 30",
+   "",
+   "Group discussion",
+   ""
+  ],
+  [
+   "6",
+   "Group presentation",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook: page 1 - page 30",
+   "",
+   "students / group\n- 10 - 15 minute / each presentation\n\n- Follow by the lecture: \"The evolution of Typography\n- Group of 3 students select 1 popular typeface; research (history, designer, characteristics, type family, application) and presentation (slides all information)",
+   ""
+  ],
+  [
+   "7",
+   "Group presentation",
+   "Offline",
+   "LO1, LO3",
+   "U",
+   "Textbook: page 1 - page 30",
+   "",
+   "group presentation",
+   ""
+  ],
+  [
+   "8",
+   "Group presentation",
+   "Offline",
+   "LO1, LO4",
+   "U",
+   "Textbook: page 1 - page 30",
+   "",
+   "group presentation",
+   ""
+  ],
+  [
+   "9",
+   "Group presentation",
+   "Offline",
+   "LO1, LO3",
+   "U",
+   "Textbook: page 1 - page 30",
+   "",
+   "group presentation",
+   ""
+  ],
+  [
+   "10",
+   "Group presentation",
+   "Offline",
+   "LO1, LO4",
+   "U",
+   "Textbook: page 1 - page 30",
+   "",
+   "group presentation",
+   ""
+  ],
+  [
+   "11",
+   "The anatomy of typography",
+   "Offline",
+   "LO1, LO2",
+   "I, T",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "12",
+   "Classification of typefaces",
+   "Offline",
+   "LO1, LO2",
+   "I, T",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "13",
+   "Practice # 1",
+   "Offline",
+   "LO1, LO2",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "Practice #1\n\n- Follow the lecture: \"Anatomy of type\"\n- Create a new typeface by combine the integral elements of the letters.\n- Individual work\n- Reference sample materials.\n- Work in class",
+   ""
+  ],
+  [
+   "14",
+   "Practice # 1",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "15",
+   "Practice # 1",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "16",
+   "Practice # 1",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "17",
+   "Practice # 1",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "18",
+   "Practice # 1",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "19",
+   "Practice # 1",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Textbook: page 31 - page 48",
+   "",
+   "Final Practice #1\n- Review and grade",
+   ""
+  ],
+  [
+   "20",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "Practice # 2 - Create a dropcap letter\n\n- A letter: Create a dropcap letter (example: first letter in the student's name) by illustration skill.\n- Individual work\n- Reference sample materials.\n- Work in class",
+   ""
+  ],
+  [
+   "21",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "22",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "23",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "24",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "25",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "26",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "27",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "28",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "29",
+   "Practice # 2",
+   "Offline",
+   "LO2, LO3",
+   "T, U",
+   "Textbook: page 31 - page 48",
+   "",
+   "Final Practice #2\n- Review and grade",
+   ""
+  ],
+  [
+   "30",
+   "Legibility\n- Basic principles of legibility.",
+   "Offline",
+   "LO2, LO3, LO4",
+   "I, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "31",
+   "Legibility\n- Legibility and digital typography",
+   "Offline",
+   "LO2, LO3, LO4",
+   "I, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "32",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "Practice #3 - Words meaning\n\n- Create a word (verb, adjective…) by typographic design, focus on idea development.\n- Individual work\n- Reference sample materials.\n- Work in class",
+   ""
+  ],
+  [
+   "33",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "34",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "35",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "36",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "37",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "38",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "39",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "40",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "41",
+   "Practice #3",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T, U",
+   "Textbook: page 49 - page 86",
+   "",
+   "Final Practice #3\n- Review and grade",
+   ""
+  ],
+  [
+   "42",
+   "Typography in Time and Motion:\n- Background\n- Using type in time-based media",
+   "Offline",
+   "LO3, LO4, LO5",
+   "I, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "43",
+   "Typography in Time and Motion:\n- How type change & move",
+   "Offline",
+   "LO3, LO4, LO5",
+   "I, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "44",
+   "Typography in Time and Motion:\n- Legibility\n- Expression",
+   "Offline",
+   "LO3, LO4, LO5",
+   "I, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Participate in class's activities: asks questions, answer questions.\n- Read the syllabus\n- Read student's materials",
+   ""
+  ],
+  [
+   "45",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "Practice #4 : Type motion\n\n- Create a motion word (verb, adjective, quote…) by typographic design, focus on idea development. Any basic motion skills acceppted (Adobe Photoshop Gif, stop motion, Adobe After Effect…)\n- Individual work\n- Reference sample materials.\n- Work in class",
+   ""
+  ],
+  [
+   "46",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "47",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "48",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "49",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "50",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "51",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "52",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "53",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "54",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "55",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "56",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "57",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "58",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "59",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "- Individual work\n- Work in class",
+   ""
+  ],
+  [
+   "60",
+   "Practice #4",
+   "Offline",
+   "LO3, LO4, LO5",
+   "T, U",
+   "Textbook: page 155 - page 170",
+   "",
+   "Final Practice #4\n- Review and grade",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1",
+   "What is the history of writing development through the stages?"
+  ],
+  [
+   "2",
+   "2",
+   "QN1",
+   "The writing of the Vietnamese people and the world has changed over time. What are those changes? Why did writing evolve?"
+  ],
+  [
+   "3",
+   "3",
+   "QN1",
+   "What is the Typography?"
+  ],
+  [
+   "4",
+   "4",
+   "QN1",
+   "Why classify typefaces?"
+  ],
+  [
+   "5",
+   "5",
+   "QN1",
+   "What is the difference between a font and typeface?"
+  ],
+  [
+   "6",
+   "6",
+   "QN1",
+   "How many typefaces are there? Analysis of basic typefaces. Give some illustrative examples."
+  ],
+  [
+   "7",
+   "7",
+   "QN1",
+   "What is spacing around letters?"
+  ],
+  [
+   "8",
+   "8",
+   "QN1",
+   "If the text is playing the role of conveying information and content, what will be the role of typography?"
+  ],
+  [
+   "9",
+   "9",
+   "QN1",
+   "Decipher the difference between Serif and Sans-serif?"
+  ],
+  [
+   "10",
+   "10",
+   "QN1",
+   "What is the role of typography in graphic design?"
+  ],
+  [
+   "11",
+   "11",
+   "QN1",
+   "\"Serif is more complicated, requiring more stroke and effort than san serif. However, the serif came before the san serif for a period of time. Could you explain why?"
+  ],
+  [
+   "12",
+   "12",
+   "QN1",
+   "Why did writing evolve? Why did languages evolve to be written and read and not just spoken and listened to?"
+  ],
+  [
+   "13",
+   "13",
+   "QN1",
+   "What is the history of a font set development through the stages? (group selection)"
+  ],
+  [
+   "14",
+   "14",
+   "QN1",
+   "Investigate and explore an typeface from the list given below. Choose a theme for your notebook: Futura, Helvetica, Bodoni, Times New Roman, Palatino. What elements of the font create consistency through the font? (group selection)"
+  ],
+  [
+   "15",
+   "15",
+   "QN1",
+   "How many designers built this font set? How? (group selection)"
+  ],
+  [
+   "16",
+   "16",
+   "QN1",
+   "How does typography affect brand identity design?"
+  ],
+  [
+   "17",
+   "19",
+   "QN1",
+   "Why do different Typefaces deliver different emotions even though they are being used to describe the same context?"
+  ],
+  [
+   "18",
+   "25",
+   "QN1",
+   "What is a magazine?"
+  ],
+  [
+   "19",
+   "26",
+   "QN1",
+   "What types of periodicals and thematic magazines are available on the market today?"
+  ],
+  [
+   "20",
+   "27",
+   "QN1",
+   "How does typography affect magazine design?"
+  ],
+  [
+   "21",
+   "31",
+   "QN1",
+   "Why is it important that you learn the anatomy of typography?"
+  ],
+  [
+   "22",
+   "37",
+   "QN1",
+   "What are the ingredients in the book cover?"
+  ],
+  [
+   "23",
+   "38",
+   "QN1",
+   "What is Drop Cap? How does the word Drop Cap play a role in book design through the stages?"
+  ],
+  [
+   "24",
+   "39",
+   "QN1",
+   "How important are fonts in book cover design? Give some illustrative examples."
+  ],
+  [
+   "25",
+   "43",
+   "QN1",
+   "Why is it important that you learn the anatomy of typography?"
+  ],
+  [
+   "26",
+   "49",
+   "QN1",
+   "What is a typography poster?"
+  ],
+  [
+   "27",
+   "50",
+   "QN1",
+   "How does typography affect typography poster design?"
+  ],
+  [
+   "28",
+   "51",
+   "QN1",
+   "In a specific application, why a font must be selected carefully in order to be considered more suitable than others?"
+  ],
+  [
+   "29",
+   "52",
+   "QN1",
+   "How does Kinetic involve and affect the development of Typography, also with Graphic design?"
+  ]
+ ],
+ "links": [
+  "/download/13665/S/1_TPG203_Phần 1.zip",
+  "/download/13665/S/2_TPG203_Phần 2.zip"
+ ]
+}

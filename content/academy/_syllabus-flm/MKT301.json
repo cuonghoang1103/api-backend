@@ -1,0 +1,1295 @@
+{
+ "ma": "MKT301",
+ "sylID": "12387",
+ "quyetDinh": "1363/QĐ-ĐHFPT dated 12/06/2024",
+ "ungVien": [
+  {
+   "sylID": "12387",
+   "code": "MKT301",
+   "name": "Marketing Research_Nghiên cứu Marketing",
+   "active": true,
+   "approved": true,
+   "decision": "1363/QĐ-ĐHFPT dated 12/06/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12387",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12387",
+  "Syllabus Name": "Marketing Research_Nghiên cứu Marketing",
+  "Course Name English": "Marketing Research",
+  "Subject Code": "MKT301",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "MKT101",
+  "Description": "The course is to introduce the student to the field of marketing research which serves a central basis for marketing decision making. This course covers the basic concepts in measurement, research design, data collection, data analysis and presentation of findings.\n\nAI supports idea suggestion by providing comprehensive information about the fields and topics that students are interested in for research assignments in the field of marketing.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfil tasks given by intructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (www.flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "AI tools",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1363/QĐ-ĐHFPT dated 12/06/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/6/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Essentials of Marketing Research",
+   "Hair, Wolfinbarger, Ortinau, and Bush",
+   "McGraw Hill",
+   "2010",
+   "2nd",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Essentials of Marketing Research",
+   "Hair, Wolfinbarger, Ortinau, and Bush",
+   "McGraw Hill",
+   "2013",
+   "3rd",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Coursera - FPT University Private Authored Courses: Guided Project - Basic data analysis using SPSS",
+   "",
+   "",
+   "2022",
+   "1st",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Essentials of Marketing Research",
+   "Hair, Wolfinbarger, Ortinau, and Bush",
+   "McGraw Hill",
+   "2023",
+   "6th",
+   "9781266261503",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 ấn bản. Ưu tiên ấn bản mới nhất"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "To apply the process of marketing research and its different processes"
+  ],
+  [
+   "2",
+   "CLO2",
+   "To able to identify sources of information"
+  ],
+  [
+   "3",
+   "CLO3",
+   "To understand different research methods and able to apply selected research methods"
+  ],
+  [
+   "4",
+   "CLO4",
+   "To able to analyze and interpret both qualitative and quantitative data"
+  ],
+  [
+   "5",
+   "CLO5",
+   "To conduct and analyze a focus group discussion"
+  ],
+  [
+   "6",
+   "CLO6",
+   "To build a simple questionnaire from a web-based survey administration site"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments."
+  ],
+  [
+   "2",
+   "Essay Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 40'\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "OP1: essay questions\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Class room",
+   ""
+  ],
+  [
+   "3",
+   "Individual Presentation of Milestones",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: Max: 10' each group\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "OP1: Individual Presentation\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Presentation in class.\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "4 Milestones of the project\n\n1 member of the group will be assigned to present each milestone. There might be two students if the group has more than 4 members.",
+   "Class room presentation",
+   "Each member of the group will be assign to present with 1 specific part of the 4 milestones.\n\nThe purpose of the milestone presentations is to check the progress of the project.\n\nBased on the content of the milestone presentation, feedback will be given to the whole group on the project so that they can improve their performance in the final presentation\n\nThe assessment will be conducted individually and individual marks are given to the presenters base on the students' performance during their presentation and their overall understanding, contribution of the group project"
+  ],
+  [
+   "4",
+   "Project Final Presentation and Report",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "OP1: 20 mins presentation\n\n& 3000 word report\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "OP1: Group presentation with the evaluation from the industry and the lecturer (15%)\n\nThe final written report (15%)\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Presentation: max 20 mins\n\nGroup written report: up to 3000 words",
+   "Group presentation in class room\n\nand Final report submitted on the last slot",
+   "The presentation (15%) will be evaluated either by the business and the Lecturer. The mark is given based on both the depth and width of the goal achievement of the research project, the feasibility of the recommendations and the presentation skills. The language of this presentation might be either in Vietnamese or in English as it is easier for the industry to evaluate.\n\nThe written report (10%) is marked by the instructor based on the research project, the feasibility of the recommendations and the overall presentation of the report . A copy of this written report will be sent to the business also. The language for this report must be in English"
+  ],
+  [
+   "5",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "OP1: 20' eachOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3",
+   "Multiple choice questions, Case study exercises",
+   "OP1: Appx. 20 OP2 (For Constructivism Approach only): Follow lecturer's proposal OP3: Replace Quiz 2 by completing the Guided Project - Basic data analysis using SPSS",
+   "Quizzes will test the knowledge of subjects in the chapters assigned for that day.",
+   "Class room",
+   "These quizzes will be given at various times during class (beginning, middle or end) depending on the lecturer. Total number of quizzes: 2"
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Multiple choice questions. Other types of questions may be included at the discretion of the Lecturer",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "This is a closed-book exam."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "IT",
+   "Syllabus, Textbook, slide, Guidelines for Individual Assignment",
+   "MKT301",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Marketing Research for Managerial Decision Making Guidelines for Group Project",
+   "Offline",
+   "LO1",
+   "IT",
+   "Textbook, slide,",
+   "MKT301",
+   "Read textbook and slide in advance\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 2: The Marketing Research Process and Proposals",
+   "Offline",
+   "LO1",
+   "IT",
+   "Textbook, slide",
+   "",
+   "Read textbook and slide in advance\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "4",
+   "Projects: Identify problem and Design Research",
+   "Offline",
+   "LO1",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Follow teacher's instruction",
+   ""
+  ],
+  [
+   "5",
+   "Industry Visits",
+   "Offline",
+   "LO1",
+   "ITU",
+   "",
+   "",
+   "Follow teacher's instruction",
+   ""
+  ],
+  [
+   "6",
+   "Industry Visits",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "",
+   "Follow teacher's instruction",
+   ""
+  ],
+  [
+   "7",
+   "Tutorial 1: Writing Marketing Research Proposals",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook\n\nSlide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "8",
+   "Tutorial 1: Writing Marketing Research Proposals",
+   "Offline",
+   "LO1",
+   "U",
+   "Textbook\n\nSlide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "9",
+   "Quiz 1: Chapter 1,2",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3: Secondary Data, Literature Reviews, and Hypotheses",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Textbook\n\nSlide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "11",
+   "Tutorial 2: Secondary Data, Literature Reviews, and Hypotheses",
+   "Offline",
+   "LO2",
+   "IT",
+   "Textbook\n\nSlide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "12",
+   "Tutorial 2: Secondary Data, Literature Reviews, and Hypotheses",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "13",
+   "Project Milestone1: Research Proposal, Secondary Data and Literature review",
+   "Offline",
+   "LO1, LO2",
+   "U",
+   "Textbook and slide",
+   "",
+   "PM1 ready",
+   ""
+  ],
+  [
+   "14",
+   "Project Milestone1: Research Proposal, Secondary Data and Literature review",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "Textbook and slide",
+   "",
+   "PM1 ready",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: Exploratory and Observational",
+   "Offline",
+   "LO3",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4: Research Designs and Data Collection Approaches",
+   "Offline",
+   "LO3",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "17",
+   "Tutorial 3: Exploratory and Observational Research Designs and Data Collection Approaches",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "18",
+   "Tutorial 3: Exploratory and Observational Research Designs and Data Collection Approaches",
+   "Offline",
+   "LO3",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 9: Qualitative Data Analysis",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 9: How to implement Qualitative research",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "21",
+   "Tutorial 4: Exercise on Qualitative Data Analysis",
+   "Offline",
+   "LO3",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "22",
+   "Tutorial 4: Exercise on Qualitative Data Analysis",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook and slide",
+   "",
+   "Do practice and assignment",
+   ""
+  ],
+  [
+   "23",
+   "Project Milestone 2:\n\nExploratory research result",
+   "Offline",
+   "LO2, LO3",
+   "IT",
+   "Textbook and slide",
+   "",
+   "PM2 Ready",
+   ""
+  ],
+  [
+   "24",
+   "Project Milestone 2:\n\nExploratory research result",
+   "Offline",
+   "LO2, LO3",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "PM2 Ready",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 5: Descriptive",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 5: Causal Research Designs",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "27",
+   "Quiz 2: Chapter 3,4,9",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 6: Sampling Theory and Methods",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 7: Measurement",
+   "Offline",
+   "LO4",
+   "U",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 7: Scaling",
+   "Offline",
+   "LO4",
+   "U",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "31",
+   "Tutorial 5: Sampling and\n\nMeasurement",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "32",
+   "Tutorial 5: Sampling and\n\nMeasurement",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 8: Designing the Questionnaire",
+   "Offline",
+   "LO6",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 8: Designing the Questionnaire",
+   "Offline",
+   "LO6",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "35",
+   "Tutorial 6: Designing the Questionnaire",
+   "Offline",
+   "LO6",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "36",
+   "Tutorial 6: Designing the Questionnaire",
+   "Offline",
+   "LO6",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "37",
+   "Project Milestone 3: Descriptive\n\nand Causal Research Design,\n\nSampling Method Questionnaire",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "TU",
+   "Textbook and slide",
+   "",
+   "PM3 ready",
+   ""
+  ],
+  [
+   "38",
+   "Project Milestone 3: Descriptive\n\nand Causal Research Design,\n\nSampling Method Questionnaire",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "U",
+   "Textbook and slide",
+   "",
+   "PM3 ready",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 10: Preparing Data\n\nfor Quantitative Analysis",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 10: Preparing Data\n\nfor Quantitative Analysis",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "41",
+   "Tutorial 7- Preparing the Data",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "42",
+   "Tutorial 7- Preparing the Data",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11: Basic Data Analysis for Quantitative Research",
+   "Offline",
+   "LO4",
+   "U",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 11: Basic Data Analysis for Quantitative Research",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "45",
+   "Essay Test\n\nTutorial 8: Basic Data Analysis for Quantitative Research",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "46",
+   "Essay Test\n\nTutorial 8: Basic Data Analysis for Quantitative Research",
+   "Offline",
+   "LO4",
+   "U",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 12: Examining Relationships in Quantitative Research",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 12: Examining Relationships in Quantitative Research",
+   "Offline",
+   "LO4",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "49",
+   "Tutorial 9: Examining Relationships in Qualitative Research",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "50",
+   "Tutorial 9: Examining Relationships in Qualitative Research",
+   "Offline",
+   "LO4",
+   "U",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide\n\nDo practice and assignment",
+   ""
+  ],
+  [
+   "51",
+   "Project Milestone 4: Data Analysis - Preliminary Findings",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbook and slide",
+   "",
+   "PM4 ready",
+   ""
+  ],
+  [
+   "52",
+   "Project Milestone 4: Data Analysis - Preliminary Findings",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "TU",
+   "Textbook and slide",
+   "",
+   "PM4 ready",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 13: Communicating Marketing Research Findings & Course Review",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 13: Communicating Marketing Research Findings & Course Review",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "Textbook and slide",
+   "",
+   "Read textbook and slide in advance",
+   ""
+  ],
+  [
+   "55",
+   "Project Final Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "I,LT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "Project Final Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Project Final Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Project Final Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Project Final Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Project Final Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT1",
+   "Provide three examples of how marketing research helps marketing personnel make sound managerial decisions."
+  ],
+  [
+   "2",
+   "2",
+   "CT1",
+   "What are the advantages and disadvantages for companies maintaining an internal marketing research department? What advantages and disadvantages can be attributed to the hiring of an external marketing research supplier?"
+  ],
+  [
+   "3",
+   "3",
+   "CT1",
+   "In the business world of the 21st century, will it be possible to make critical marketing decisions without marketing research? Why or why not?"
+  ],
+  [
+   "4",
+   "4",
+   "CT1",
+   "How are management decision makers and information researchers alike? How are they different? How might the differences be reduced between these two types of professionals?"
+  ],
+  [
+   "5",
+   "5",
+   "CT1",
+   "Discussing to choose a research topic and clarify these relevant questions for your topic?"
+  ],
+  [
+   "6",
+   "6",
+   "CT1",
+   "Discussing the research questions and research objectives?"
+  ],
+  [
+   "7",
+   "7",
+   "CT1",
+   "What is your research scope?"
+  ],
+  [
+   "8",
+   "8",
+   "CT1",
+   "Who are your target respondences?"
+  ],
+  [
+   "9",
+   "9",
+   "CT1",
+   "What are the research problems of your topic?"
+  ],
+  [
+   "10",
+   "10",
+   "CT1",
+   "What characteristic separates secondary data from primary data? What are three sources of secondary data?"
+  ],
+  [
+   "11",
+   "11",
+   "CT1",
+   "Explain why a company should use all potential sources of secondary data before initiating primary data collection procedures"
+  ],
+  [
+   "12",
+   "12",
+   "CT1",
+   "What are the various reasons to conduct a literature review?"
+  ],
+  [
+   "13",
+   "13",
+   "CT1",
+   "What are relationships? What is a positive relationship? What is a negative relationship? Give an example of a positive and a negative relationship"
+  ],
+  [
+   "14",
+   "14",
+   "CT1",
+   "What is the difference between a parameter and a sample statistic?"
+  ],
+  [
+   "15",
+   "15",
+   "CT1",
+   "What are the major differences between quantitative researcher have to develop and implement each type of design?"
+  ],
+  [
+   "16",
+   "16",
+   "CT1",
+   "Compare and contrast the unique characteristics, main research objectives, and advantages/disadvantages of the in-depth and focus group interviewing techniques."
+  ],
+  [
+   "17",
+   "17",
+   "CT1",
+   "What are the characteristics of a good focus group moderator? What is the purpose of a moderator’s guide"
+  ],
+  [
+   "18",
+   "18",
+   "CT1",
+   "What are the advantages and disadvantages of ethnography as compared to other qualitative techniques?"
+  ],
+  [
+   "19",
+   "19",
+   "CT1",
+   "How are quantitative and qualitative data analysis different?"
+  ],
+  [
+   "20",
+   "20",
+   "CT1",
+   "Describe the three steps in qualitative data analysis and explain how and why these steps are iterative"
+  ],
+  [
+   "21",
+   "21",
+   "CT1",
+   "How do you build theory in qualitative analysis?"
+  ],
+  [
+   "22",
+   "22",
+   "CT1",
+   "What are the different kinds of data displays? Give some specific examples of how they may be used in qualitative data analysis"
+  ],
+  [
+   "23",
+   "23",
+   "CT1",
+   "What are some of threats to drawing credible conclusions in qualitative data analysis?"
+  ],
+  [
+   "24",
+   "24",
+   "CT1",
+   "What are the various ways that credibility can be established in qualitative analysis?"
+  ],
+  [
+   "25",
+   "25",
+   "CT1",
+   "Identify and discuss the advantages and disadvantages of using quantitative survey research methods to collect primary data in marketing research"
+  ],
+  [
+   "26",
+   "26",
+   "CT1",
+   "Explain the major differences between in-home interviews and mall-intercept interviews. Make sure you include their advantages and disadvantages"
+  ],
+  [
+   "27",
+   "27",
+   "CT1",
+   "What are the advantages and disadvantages associated with online surveys?"
+  ],
+  [
+   "28",
+   "28",
+   "CT1",
+   "Why do many research studies place heavy emphasis on correctly defining a target population rather than a total population?"
+  ],
+  [
+   "29",
+   "29",
+   "CT1",
+   "What is measurement?"
+  ],
+  [
+   "30",
+   "30",
+   "CT1",
+   "Among the four basic levels of scales, which one provides the researcher with the most information?"
+  ],
+  [
+   "31",
+   "31",
+   "CT1",
+   "Explain the main differences between interval and ratio scale measurements"
+  ],
+  [
+   "32",
+   "32",
+   "CT1",
+   "What are the major differences between ordinal and interval scales? In your response include an example of each type of scale"
+  ],
+  [
+   "33",
+   "33",
+   "CT1",
+   "Discuss the advantages and disadvantages of using unstructured (open-ended) and structured (closedended) questions in developing an online, selfadministered survey instrument"
+  ],
+  [
+   "34",
+   "34",
+   "CT1",
+   "Explain the role of a questionnaire in the research process. What should be the role of the client during the questionnaire development process?"
+  ],
+  [
+   "35",
+   "35",
+   "CT1",
+   "What makes a question bad? Develop three examples of bad questions. Then, using the information in Exhibit 8.4, rewrite your examples so they could be\njudged as good questions"
+  ],
+  [
+   "36",
+   "36",
+   "CT1",
+   "Discuss the value of a good questionnaire design."
+  ],
+  [
+   "37",
+   "37",
+   "CT1",
+   "Unless needed for screening purposes, why shouldn’t demographic questions be asked up front in questionnaires?"
+  ],
+  [
+   "38",
+   "38",
+   "CT1",
+   "Discuss the main benefits of including a brief introductory section in questionnaires."
+  ],
+  [
+   "39",
+   "39",
+   "CT1",
+   "Briefly describe the process of data validation. Specifically discuss the issues of fraud, screening, procedure, completeness, and courtesy"
+  ],
+  [
+   "40",
+   "40",
+   "CT1",
+   "What are the differences between data validation, data editing, and data coding?"
+  ],
+  [
+   "41",
+   "41",
+   "CT1",
+   "Explain the differences between developing codes for open-ended questions and for closed-ended questions"
+  ],
+  [
+   "42",
+   "42",
+   "CT1",
+   "What is the purpose of a simple one-way tabulation? How does this relate to a one-way frequency table?"
+  ],
+  [
+   "43",
+   "43",
+   "CT1",
+   "Explain the difference between the mean, the median, and the mode."
+  ],
+  [
+   "44",
+   "44",
+   "CT1",
+   "Why and how would you use Chi-square and t-tests in hypothesis testing?"
+  ],
+  [
+   "45",
+   "45",
+   "CT1",
+   "Why and when would you want to use ANOVA in marketing research?"
+  ],
+  [
+   "46",
+   "46",
+   "CT1",
+   "What will ANOVA tests not tell you, and how can you overcome this problem?"
+  ],
+  [
+   "47",
+   "47",
+   "CT1",
+   "Explain the difference between testing for significant differences and testing for association"
+  ],
+  [
+   "48",
+   "48",
+   "CT1",
+   "Explain the difference between association and causation"
+  ],
+  [
+   "49",
+   "49",
+   "CT1",
+   "What is covariation? How does it differ from correlation?"
+  ],
+  [
+   "50",
+   "50",
+   "CT1",
+   "What are the differences between univariate and bivariate statistical techniques?"
+  ],
+  [
+   "51",
+   "51",
+   "CT1",
+   "What is regression analysis? When would you use it?"
+  ],
+  [
+   "52",
+   "52",
+   "CT1",
+   "What is the difference between simple regression and multiple regression?"
+  ],
+  [
+   "53",
+   "53",
+   "CT1",
+   "What are the primary objectives of the marketing research report? Briefly discuss each objective and why it is important"
+  ],
+  [
+   "54",
+   "54",
+   "CT1",
+   "In the context of the marketing research report, what is the primary goal of the executive summary?"
+  ],
+  [
+   "55",
+   "55",
+   "CT1",
+   "What is the primary purpose of the research methodsand-procedures section of a marketing research report?"
+  ],
+  [
+   "56",
+   "56",
+   "CT1",
+   "What are conclusions and recommendations included in your marketing research report?"
+  ],
+  [
+   "57",
+   "57",
+   "CT1",
+   "What are conclusions and recommendations included in your marketing research report?"
+  ],
+  [
+   "58",
+   "58",
+   "CT1",
+   "What are conclusions and recommendations included in your marketing research report?"
+  ],
+  [
+   "59",
+   "59",
+   "CT1",
+   "What are conclusions and recommendations included in your marketing research report?"
+  ],
+  [
+   "60",
+   "60",
+   "CT1",
+   "What are conclusions and recommendations included in your marketing research report?"
+  ]
+ ],
+ "links": [
+  "/download/4367/S/1_MKT301.zip",
+  "/download/4367/S/2_MKT301.zip"
+ ]
+}

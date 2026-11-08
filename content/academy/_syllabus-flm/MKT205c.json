@@ -1,0 +1,361 @@
+{
+ "ma": "MKT205c",
+ "sylID": "13593",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13593",
+   "code": "MKT205c",
+   "name": "International Marketing_Marketing quốc tế",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13593",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13593",
+  "Syllabus Name": "International Marketing_Marketing quốc tế",
+  "Course Name English": "International Marketing",
+  "Subject Code": "MKT205c",
+  "Learning-Teaching Method": "Online,Lecture,Project based learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 50h online + 3h offline (optional) + 1h Final exam + 96 self-study",
+  "Pre-Requisite": "MKT101 or MKG101 or MMK101 or IBI101",
+  "Description": "This Specialization covers marketing concepts but, more importantly, emphasizes the need by companies and individuals to think openly across international markets and industries for new ideas or expansion. This is summarized as \"Cross Country & Cross Industry\" Innovation, or CCCI in short. The first two courses will establish the core foundations and then the last three courses will elaborate on major global industry clusters: course 3 on B2B, course 4 on Healthcare and Hospitality, and course 5 on Sports and Entertainment. The capstone will require learners to develop a new product using knowledge learned from at least 2 industries.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assgnments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend off-line sessions in the Campus (Optional)\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/international-marketing",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Spec: International Marketing & Cross Industry Growth Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/international-vertical-marketing-capstone-project",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 6: International Marketing & Cross Industry Growth Capstone Project"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/international-entertainment-sports-marketing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 5: International Entertainment and Sports Marketing"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/healthcare-marketing-hospitality-management",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 4: International Hospitality & Healthcare Services Marketing"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/b2b-marketing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 3: International B2B (Business to Business) Marketing"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/international-marketing-entry-execution",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 2: International Marketing Entry and Execution"
+  ],
+  [
+   "7",
+   "https://www.coursera.org/learn/intro-international-marketing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 1: Intro to International Marketing"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the basic foundations of international marketing and be able to explain how companies can grow by going abroad or sourcing ideas/expanding into other countries or industries."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand consumer science investigation, B2C marketing, International Marketing Entry, Targeting, Positioning, International Product, International Promotion, International Place and International Price"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the differentiating aspects of business to business (B2B) marketing that can be contrasted to traditional business to consumer (B2C) marketing"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand the unique characteristics of both hospitality and healthcare services sector."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Understand the characteristics and marketing strategies related to two key global industries, sports and entertainment."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Be able to apply what you have learned during the 16 weeks of the 5 courses"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 3-4 questions.",
+   "by Exam Board",
+   "Final Result (FR) = min (10, TE + Bonus)"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Module 1: What is Marketing?\n\nLesson 1: Introduction to Specialization\n\nLesson 2: 1.1 Introduction to Course\n\nLesson 3: 1.2 What is Marketing?\n\nLesson 4: 1.3 What is Marketing Execution?\n\nLesson 5: 1.4 Cross Cultural Analysis Platforms\n\nLesson 6: 1.5 LG Interview (Jeongseok Lee)\n\nModule 2: What is Marketing Strategy?\n\nLesson 1: 2.1 What is Marketing Strategy?\n\nLesson 2: 2.2 VSA\n\nLesson 3: 2.3 Transing\n\nLesson 4: 2.4 Cross Industry Innovation\n\nLesson 5: 2.5 LG Interview (Siwan Ryu)\n\nLesson 6: 2.6 Luxury Marketing Interview H. Lee",
+   "Online",
+   "LO1",
+   "T",
+   "Course 1: Intro to International Marketing",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "2",
+   "Module 3: What is Branding?\n\nLesson 1: 3.1 What is Branding?\n\nLesson 2: 3.2 International Branding Strategy\n\nLesson 3: 3.3 Cross Industry Branding\n\nLesson 4: 3.4 ASIANA COBRA part1\n\nLesson 5: 3.5 ASIANA COBRA part2\n\nLesson 6: Instructor's Thank You\n\nReview Course 1",
+   "Online,Offline",
+   "LO1",
+   "TU",
+   "Course 1: Intro to International Marketing",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Offline (optional)",
+   ""
+  ],
+  [
+   "3",
+   "Module 1: B2C (Business to Consumer) Marketing\n\nLesson 1: Introduction to Specialization\n\nLesson 2: 1.1 Introduction to Course\n\nLesson 3: 1.2 CSI in International Marketing\n\nLesson 4: 1.3 B2C Marketing\n\nLesson 5: 1.4 Interview B2C\n\nLesson 6: 1.5 Targeted Mini VSA\n\nLesson 7: 1.6 Marketing to Bottom of Pyramid\n\nModule 2: Entry, Targeting and Positioning\n\nLesson 1: 2.1 Market Landing\n\nLesson 2: 2.2 Market Targeting\n\nLesson 3: 2.3 Market Positioning\n\nLesson 4: 2.4 Self Positioning\n\nLesson 5: 2.5 Interview Phil Zerrillo\n\nModule 3: Marketing Mix and Cross Country & Cross Industry Growth\n\nLesson 1: 3.1 Product Marketing\n\nLesson 2: 3.2 Promotion Marketing\n\nLesson 3: 3.3 Place Marketing\n\nLesson 4: 3.4 Price Marketing",
+   "Online",
+   "LO2",
+   "T",
+   "Course 2: International Marketing Entry and Execution",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "4",
+   "Module 4: 7S of International Marketing Innovation\n\nLesson 1: 4.1 7S Innovation Marketing\n\nLesson 2: 4.2 S1: Social Marketing\n\nLesson 3: 4.3 S2: Small Marketing\n\nLesson 4: 4.4 S3: Simple Marketing\n\nLesson 5: 4.5 S4: Skip Marketing\n\nLesson 6: 4.6 S5: Sports Marketing\n\nLesson 7: 4.7 S6: Screen Marketing\n\nLesson 8: 4.8 S7: Set Marketing\n\nLesson 9: Instructor's Thank You",
+   "Online",
+   "LO2",
+   "TU",
+   "Course 2: International Marketing Entry and Execution",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "5",
+   "Module 1: What is B2B Marketing?\n\nLesson 1: Introduction to Specialization\n\nLesson 2: 1.1 Introduction to Course\n\nLesson 3: 1.2 What is B2B Marketing? Part1\n\nLesson 4: 1.3 What is B2B Marketing? Part2\n\nLesson 5: 1.4 B2B: Push & Pull and the 4W’s Approach\n\nLesson 6: 1.5 Expert B2B Interview with Alex Teo and Prasanna Meduri Part1\n\nLesson 7: 1.6 Expert B2B Interview with Alex Teo and Prasanna Meduri Part2",
+   "Online",
+   "LO3",
+   "T",
+   "Course 3: International B2B (Business to Business) Marketing",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "6",
+   "Module 2: B2B Marketing Mix\n\nLesson 1: 2.1 B2B: Product Marketing Part1\n\nLesson 2: 2.2 B2B: Product Marketing Part2\n\nLesson 3: 2.3 B2B: Price Marketing Part1\n\nLesson 4: 2.4 B2B: Price Marketing Part2\n\nLesson 5: 2.5 B2B: Promotion Marketing Part1\n\nLesson 6: 2.6 B2B: Promotion Marketing Part2\n\nLesson 7: 2.7 B2B: Place Marketing Part1\n\nLesson 8: 2.8 B2B: Place Marketing Part2\n\nModule 3: B2B Cross Country and Cross Industry Growth\n\nLesson 1: 3.1 B2B: Cross Country Growth Part1\n\nLesson 2: 3.2 B2B: Cross Country Growth Part2\n\nLesson 3: 3.3 B2B: Cross Industry Growth Part1\n\nLesson 4: 3.4 B2B: Cross Industry Growth Part2\n\nLesson 5: 3.5 Expert Interview with Rolls Royce International (Dr. Alex Jun) Part1\n\nLesson 6: 3.6 Expert Interview with Rolls Royce International (Dr. Alex Jun) Part2\n\nLesson 7: 3.7 Expert Interview with ThyssenKrupp (Mr. Wayne Park)\n\nLesson 8: Instructor's Thank You",
+   "Online",
+   "LO3",
+   "T",
+   "Course 3: International B2B (Business to Business) Marketing",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "7",
+   "Module 1: What is unique about managing a service business?\n\nLesson 1: 1.1. Harnessing Cross Country & Cross Industry Innovation Skills\n\nLesson 2: 1.2. Introduction to service businesse\n\nLesson 3: 1.3. Unique characteristics of service businesses: 01. Customer participation\n\nLesson 4: 1.4. Unique characteristics of service businesses: 02. Simultaneity\n\nLesson 5: 1.5. Unique characteristics of service businesses: 03. Perishability\n\nLesson 6: 1.6. Unique characteristics of service businesses: 04. Intangibility\n\nLesson 7: 1.7. Unique characteristics of service businesses: 05. Heterogeneity",
+   "Online",
+   "LO4",
+   "T",
+   "Course 4: International Hospitality & Healthcare Services Marketing",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "8",
+   "Module 2: How to successfully market a hospitality business?\n\nLesson 1: 2.1. Introduction to the hospitality industry\n\nLesson 2: 2.2. Common characteristics among the hospitality businesses\n\nLesson 3: 2.3. Unique marketing approaches in the hospitality industry : Variable pricing\n\nLesson 4: 2.4. Challenges in moving from fixed pricing to variable pricing\n\nLesson 5: 2.5. Variable pricing strategies: Premium pricing & target discounting\n\nModule 3: How to successfully market a healthcare business?\n\nLesson 1: 3.1. Healthcare service industry & its unique marketing approaches\n\nLesson 2: 3.2. Evolvement of healthcare management focus\n\nLesson 3: 3.3. Examples of successful patient experience management: Shouldice Hospital\n\nLesson 4: 3.4. Key elements of design in experience management: Interaction\n\nLesson 5: 3.5. Examples of successful patient experience management: Kameda Medical Center\n\nLesson 6: 3.6. Key elements of design in experience management: Facility\n\nLesson 7: 3.7. Healthcare innovation\n\nLesson 8: 3.8. Review: Healthcare service industry & its unique marketing approaches\n\nLesson 9: 3.9. Expert Interview with Severance Hospital",
+   "Online",
+   "LO4",
+   "TU",
+   "Course 4: International Hospitality & Healthcare Services Marketing",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "9",
+   "Module 1: Sports Marketing\n\nLesson 1: Introduction to Specialization\n\nLesson 2: 1.1 Introduction to Course\n\nLesson 3 1.2 What is Sports Marketing Part 1\n\nLesson 4: 1.3 What is Sports Marketing Part 2\n\nLesson 5: 1.4 Fan Marketing\n\nLesson 6: 1.5 Influence Marketing: Sports\n\nLesson 7: 1.6 Storytelling in Sports Marketing\n\nLesson 8: 1.7 Sports Sponsorship Part 1\n\nLesson 9: 1.8 Sports Sponsorship Part 2\n\nLesson 10: 1.9 Expert Interview with John Davis, Duke University\n\nLesson 11: 1.10 Expert Interview with Josh Mora, Full Sail University\n\nModule 2: Entertainment Marketing\n\nLesson 1: 2.1 What is Entertainment Marketing?\n\nLesson 2: 2.2 Show Business Marketing\n\nLesson 3: 2.3 Creating Creative Content Part\n\nLesson 4: 2.4 Creating Creative Content Part\n\nLesson 5: 2.5 Virtual Reality and Over the Top Part 1\n\nLesson 6: 2.6 Virtual Reality and Over the Top Part 2\n\nLesson 7: 2.7 Entertainment Branding Part 1\n\nLesson 8: 2.8 Entertainment Branding Part 2\n\nLesson 9: 2.9 Viral Marketing\n\nLesson 10: 2.10 Expert Interview with Woo Jin Kim, YG Entertainment",
+   "Online",
+   "CLO5",
+   "T",
+   "Course 5: International Entertainment and Sports Marketing",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Module 3: Cross Country & Cross Industry Innovation in Sports and Entertainment Marketing\n\nLesson 1: 3.1 Cross Country Sports10m\n\nLesson 2: 3.2 Cross Country Entertainment Part 1\n\nLesson 3: 3.3 Cross Country Entertainment Part 2\n\nLesson 4: 3.4 Cross Industry Sports\n\nLesson 1: 3.5 Cross Industry Entertainment Part 1\n\nLesson 5: 3.6 Cross Industry Entertainment Part 2\n\nLesson 6: 3.7 Interview with Jörg Dietzel, Audi Part 1\n\nLesson 7: 3.8 Interview with Jörg Dietzel, Audi Part 2\n\nLesson 8: 3.9 Interview with HyeongKeun Kang, adidas Part 1\n\nLesson 9: 3.10 Interview with HyeongKeun Kang, adidas Part 2\n\nLesson 10: Instructor's Thank You",
+   "Online",
+   "CLO5",
+   "TU",
+   "Course 5: International Entertainment and Sports Marketing",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the project",
+   ""
+  ],
+  [
+   "11",
+   "Module 1: Introduction to Capstone and Guidelines Using Exemplar Case\n\nLesson 1: Introduction to Specialization\n\nLesson 2: International Marketing & Cross Industry Growth Capstone\n\nLesson 3: Guidelines for using the exemplar case: Yuhan Kimberly.\n\nLesson 4: Expert Interview with Lorenzo Swank, CEO Pixio\n\nLesson 5: A tip for the capstone project from Prof. Sunmee Choi\n\nModule 2: Milestone 1: Situation Analysis\n\nLesson 1: Milestone 1: Situation Analysis Intro\n\nLesson 2: Situation Analysis: Noon Nopi, Vision & Strategy\n\nLesson 3: Situation Analysis: Omni Branding & SFU Analysis",
+   "Online",
+   "CLO6",
+   "T",
+   "Course 6: International Marketing & Cross Industry Growth Capstone Project",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the project",
+   ""
+  ],
+  [
+   "12",
+   "Module 3: Milestone 2: Marketing Mix Analysis\n\nLesson 1: Milestone 2: Marketing Mix Analysis Intro\n\nLesson 2: Marketing Mix Analysis: Product & Promotion\n\nLesson 3: Marketing Mix Analysis: Price & Place\n\nModule 4: Milestone 3: Cross Country Innovation\n\nLesson 1: Milestone 3: Cross Country Innovation Intro\n\nLesson 2: Innovating Across Borders: Key Decisions\n\nLesson 3: Innovating Across Borders: Marketing Mix Modifications\n\nModule 5: Milestone 4: Cross Industry Innovation\n\nLesson 1: Milestone 4: Cross Industry Innovation Intro\n\nLesson 2: Innovating Across Industries: Key Decisions\n\nLesson 3: Innovating Across Industries: Marketing Mix Modifications\n\nModule 6: Final Project Peer Review Evaluation and Specialization Wrap-Up\n\nLesson 1: Final Thoughts\n\nReview",
+   "Online, Offline",
+   "CLO6",
+   "T",
+   "Course 6: International Marketing & Cross Industry Growth Capstone Project",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the project\n\n- Deadline of Spec Completion: End of Friday of the week\n\n- Offline slot (optional)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

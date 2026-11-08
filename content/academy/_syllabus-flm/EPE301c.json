@@ -1,0 +1,338 @@
+{
+ "ma": "EPE301c",
+ "sylID": "12768",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12768",
+   "code": "EPE301c",
+   "name": "Professional Ethics_Đạo đức trong công việc",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12768",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12768",
+  "Syllabus Name": "Professional Ethics_Đạo đức trong công việc",
+  "Course Name English": "",
+  "Subject Code": "EPE301c",
+  "Learning-Teaching Method": "",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "47 hours online study + 3 hrs offline + 1 hr exam + 99 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "This Specialization is intended to prepare students with professional skills in the workplace.\n\nThrough four courses, students will explore the use of emotional and social intelligence, practice a formula for problem solving, cultivate a growth mindset, and build skills related to adaptability and resilience in an ever-changing environment. These skills show up in business relationships and communication and ultimately impact professional effectiveness. Students will be able to demonstrate sound judgment by engaging in critical thinking to reach decisions and solve problems independently. Students will be able to develop a competitive advantage by learning, adapting, and harnessing insights from past endeavors. Students will assess your own expectations in their current or anticipated work roles and settings, and how those may align with or differ from what is required by employers and other stakeholders now and in the future.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend off-line sessions in the Campus (Optional)\n\n6. Must complete all MOOCs of spec. and additional learning with certification in order to take the Final Exam at Campus",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/professional-skills-for-the-workplace",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Professional Skills for the Workplace Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/emotional-and-social-intelligence",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 01: Emotional and Social Intelligence"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/critical-thinking-skills-for-professionals",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 02: Critical Thinking Skills for the Professional"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/growth-mindset",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 03: The Growth Mindset"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/adaptability-and-resiliency",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 04: Adaptability and Resiliency"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/ethics-of-artificial-intelligence",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Additional learning - Course: Ethics of Artificial Intelligence"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "After completing this course, students will be able to:\n- explain the value of emotional and social intelligence for professional success\n- assess current emotional and social intelligence skills\n- understand, use and manage emotions through the Foundational 4 Quadrants of Emotional and Social Intelligence (ESI)\n- understand how stress can impact application of emotional and social intelligence skills, and reflect upon needed actions to take to create connections and build relationships for greater professional effectiveness."
+  ],
+  [
+   "2",
+   "CLO2",
+   "After completing this course, students will be able to:\n- apply critical thinking skills to complex problems.\n- apply a model for solving problems and pose questions to further understanding of specific problems."
+  ],
+  [
+   "3",
+   "CLO3",
+   "After completing this course, students will be able to:\n- analyze beliefs and actions that contribute to a growth mindset within an organization.\n- evaluate opportunites to increasingly develop a growth mindset.\n- apply practices that foster growth mindset within an organization."
+  ],
+  [
+   "4",
+   "CLO4",
+   "After completing this course, students will be able to:\n- define the concepts of adaptability and resilience\n- apply knowledge and tools to become more adaptable and resilient in their workplace and life."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All Los",
+   "MCQ",
+   "60",
+   "All spec. content",
+   "EOS",
+   "By the exam board"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course EPE301c\n\nMOOC 1:\n\nWeek 1: Introduction to Emotional and Social Awareness - ESI",
+   "Online,Offline",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n\n- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "2",
+   "MOOC 1:\n\n- Week 2: Self-Management\n\n- Week 3:Social Awareness and Empathy",
+   "Online",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "3",
+   "MOOC 1:\n\nWeek 4: Relationship Management",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "4",
+   "MOOC 2:\n\nWeek 1: Getting Started and Introduction to Problem Solving\n\nWeek 2: Brainstorming and Analyzing Options",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz",
+   ""
+  ],
+  [
+   "5",
+   "MOOC 2:\n\nWeek 3: Recommending and Engaging Feedback\n\nAdditional learning: Ethics of Artificial Intelligence\n\nModule 1: Ethics, AI and Responsibility.",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz",
+   ""
+  ],
+  [
+   "6",
+   "Additional learning: Ethics of Artificial Intelligence\n\nModule 2: Case-studies, examples and ethical frameworks\n\nModule 3: Issues and challenges",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz",
+   ""
+  ],
+  [
+   "7",
+   "Additional learning: Ethics of Artificial Intelligence\n\nModule 4: Governance and policies",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises.",
+   ""
+  ],
+  [
+   "8",
+   "MOOC 3:\n\n- Week 1: Getting Started and Foundations of Growth Mindset\n\n- Week 2: Internal & External Roadblocks to Growth Mindset",
+   "Online",
+   "LO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz",
+   ""
+  ],
+  [
+   "9",
+   "MOOC3:\n\n- Week 3: Organizational Mindset - Deep Dive",
+   "Online",
+   "LO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz",
+   ""
+  ],
+  [
+   "10",
+   "MOOC3:\n\n- Week4: Dealing With Setbacks and Failures",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz",
+   ""
+  ],
+  [
+   "11",
+   "MOOC 4\n\nWeek 1: Adaptability and Resilience\n\nWeek 2: Building Self-Awareness",
+   "Online",
+   "LO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "12",
+   "MOOC 4\n\nWeek 3: Creating An Action Plan\n\nMOOC 4\n\nWeek 4: Implementing Your Plan\n\nReview MOOC 1, 2, 3, 4",
+   "Online,Offline",
+   "LO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\nDeadline of Course Completion: End of Friday of the week.\n\n- All Students should participate in review slot(if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

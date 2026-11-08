@@ -1,0 +1,1304 @@
+{
+ "ma": "TTM201",
+ "sylID": "13226",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13226",
+   "code": "TTM201",
+   "name": "Tourism and Travel Management_Quản trị du lịch và lữ hành",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13226",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13226",
+  "Syllabus Name": "Tourism and Travel Management_Quản trị du lịch và lữ hành",
+  "Course Name English": "Tourism and Travel Management",
+  "Subject Code": "TTM201",
+  "Learning-Teaching Method": "Lecture,Presentation,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "HMO102",
+  "Description": "The general objective of the course is to elucidate the intricate relationships existing between travel, transport and tourism and their functioning.\n\nThe course focuses on introduction of tourism in general; its links with travel, air transport; airline operation and management; airport functioning; the role played by land and water transportation in tourism; the way the travel industry products are distributed; the value being added during the process of tour operation; functioning and management of tour operation businesses; and the nuances of tour guide. The course also deals with the demand and supply factors, influencing factors, impacts of information technology in travel intermediation and impacts of mass travel and tourism.\n\nLecturing is the main teaching method in the theory part. However, the lecturer is required to provide relevant practical and hands-on experiences by using case studies or sharing personal experiences. The learners are encouraged to actively participate in lectures by active and student-centered teaching methods such as reciprocal questioning, games, rotating chair group discussions, rountable meeting or by self-learning and preparations before the lecture, Practical training sessions are organized to allow the learners to develop their initial skills and behaviors on the tourism and travel occupational/ opereational standards. Furthermore the group assignment project will strengthen leaners' technical and soft skills such as research, team work, leadership, problem solving, work planning and scheduling, presentation and so on.",
+  "StudentTasks": "- Class attendance is mandatory. Attending at least 80% of class hours in order to be accepted to the final examination\n\n- Be actively participate in class activities such as Q & A, group works, practical exercises, field works, presentation, etc.\n\n- Fulfill tasks given by the instructor, including the group assignment project and practical training sessions\n\n- Use their own laptop and smartphone in class only for learning purposes and when requested\n\n- Read the textbooks, other reading documents and do homework in advance\n\n- Access the course page on the selected education management platforms like Zoom, MS Teams, Google Class or Moodle for up-to-date information and material of the course, for online supports from teachers and other students and for assessment.",
+  "Tools": "- Internet (Google Search, websites, You Tube)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Tourism, Transport and Travel Management",
+   "M.R. Dileep",
+   "Routledge",
+   "2019",
+   "1st",
+   "9781138557444",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "VTOS - Tour operations (TO)",
+   "HRD in Tourism Program",
+   "VNAT",
+   "2009",
+   "1st",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "VTOS - Travel operations (TA)",
+   "HRD in Tourism Program",
+   "VNAT",
+   "2009",
+   "1st",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "VTOS - Tour guide (TG)",
+   "HRD in Tourism Program",
+   "VNAT",
+   "2009",
+   "1st",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Identify and narrate the concept of tourism, the evolution and the nuances of the tourism industry"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Identify and describe the role, types and elements of multimodal transport in the context of tourism"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Identify and explain the role, types, functions and organization of travel intermediaries in tourism"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify and explain the role, types, functions and organization of tour operators in tourism"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply skills and techniques in performing fundamental tasks of operational staffs in transport and travel businesses"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Construct, develop ethics, professionalism and spirit of self-study and life-long learning in the transport and travel careers"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Practice and apply work skills including foreign language, communication, analytics, critical thinking, creativity and innovation, team work and problem solving"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "30'/group\n\nPresentations in slot: 28,29,30",
+   "All Los",
+   "'Group presentation & Written report",
+   "",
+   "All chapters",
+   "Each group of 4-5 students will choose a real company in tourism/travel sector to learn about the aspects: organizational structure, operation systems, services provided, customer segment, their partners....\n\nEach group will make an in-class PowerPoint presentation of about 30 minutes.",
+   "All assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission or every 350 words over/ below the limit (see below).\n\nThe report and presentation should follow this format: (1) structure and background of firm; (2) description of their current situation; (3) analysis of the business operational practices; (4) conclusions and recommendations; (5) references; (6) annex. Word limit: 3,500 words +/- 10%.\n\nEvaluation will be based on both presentation and written report.\n\nSpecific contact details of the interviewees including phone number, addresses, website and questions must be submitted in the Annex.\n\nAny plagiarism will be resulted in a failure of assignment"
+  ],
+  [
+   "2",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "At home",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Essay, Short questions…",
+   "",
+   "Learned topics, knowledge, skills covered in the classes",
+   "Follow the instructor's proposal",
+   "Any plagiarism will be resulted in a failure of assignment"
+  ],
+  [
+   "3",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "During all sessions",
+   "LO6",
+   "Each student shoud make at least 1 individual presentation/ case analysis during the course in front of the class",
+   "",
+   "",
+   "Participation grade will be given based on students' preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments. Class preparation and pre-reading before lecture will be assessed upon individuals' understanding and ability to answer questions in the class. Individuals will be called up randomly to be assessed.",
+   "Individual"
+  ],
+  [
+   "4",
+   "Quizzes (3)",
+   "on-going",
+   "3",
+   "15.0%",
+   ">0",
+   "35-40' in class",
+   "Quiz 1: LO1,LO2, LO6, LO7\n\nQuiz 2: LO3, LO4, LO5, LO6, LO7\n\nQuiz 3: LO3, LO4, LO5, LO6, LO7",
+   "MCQs",
+   "25-30 MCQs",
+   "Quiz 1: Chapter 1,2,3\n\nQuiz 2: Chapter 4,5,6,7\n\nQuiz 3: Chapter 8,9,10,11",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "All Los",
+   "Multiple choices\n\nMarked by Computer",
+   "50 MCQs",
+   "All studied chapters",
+   "By exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones.\n\nNot allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "-Course Overview\n\n-Introduction to AI Integration in the course\n\n- Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects\n\n-Introduction",
+   "Offline",
+   "LO1, LO6, LO7",
+   "IT",
+   "-Textbook Chapter 1\n\n-Slides",
+   "TTM201",
+   "Download learning materials and ask relevant questions.",
+   "link"
+  ],
+  [
+   "2",
+   "Orientation and Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects (Cont.)\n\n-Travel the fundamental element of tourism\n\n-Tourism: the concept and definitions",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 1\n\n-Slides",
+   "TTM201",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects (Cont.)\n\n-Traveller, visitor, excursionist and tourist\n\n-Basic classifications of tourism",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 1\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects (Cont.)\n\n-Evolution of tourism\n\n-Tourism industry: the structure and components",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 1\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects (Cont.)\n\n-Transport: elements, types and linkages\n\n-Tourism and transport: the interrelationship",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 2\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects (Cont.)\n\n-Role of transport in tourism\n\n-Factors influencing tourist transport selection",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 2\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects (Cont.)\n\n-Environmental impacts of aviation\n\n-Economic impacts of tourism",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 17\n\n-Slides",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 1: Travel and tourism, transport: an introduction, impacts and prospects (Cont.)\n\n-Social consequences\n\n-Cultural & Environmental impacts of tourism",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 17\n\n-Slides",
+   "",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "Group assigmnent and Individual assignment guidelines",
+   "Offline",
+   "LO1, LO6, LO7",
+   "I,T",
+   "-Textbook\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2: Air Transport & Airline management\n\n-History of air transportation\n\n-Types of aviation\n\n-Air transportation system",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 3\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 2: Air Transport & Airline management (Cont.)\n\n-International regulations\n\n-Standardization in air transportation\n\n-Safety and security",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 3\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 2: Air Transport & Airline management (Cont.)\n\n-Introduction\n\n-Airline industry\n\n-Characteristics\n\n-Airline consumers and tourists",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 6\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 2: Air Transport & Airline management (Cont.)\n\n-Airline product\n\n-Types of airlines\n\n-Major airline functions",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 6\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 2: Air Transport & Airline management (Cont.)\n\n-Passenger processing andf flight operation\n\n-Classes of service",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 6\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class\n\n- Extra reading (optional) Chapter 4&5",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 2: Air Transport & Airline management (Cont.)\n\n-Airline personnel and organization\n\n-Common industry pratices\n\n-Marketing mix in airlines",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 6\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class\n\n- Extra reading (optional) Chapter 4&5",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3: Land and water transportation\n\n-Introduction\n\n-Road transportation and tourism\n\n-Motor coach tourism",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 7\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 3: Land and water transportation (Cont.)\n\n-Automobiles and tourism\n\n-Car rental",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 7\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 3: Land and water transportation (Cont.)\n\n-Rail transport\n\n-Rail tourism",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 7\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 3: Land and water transportation (Cont.)\n\n-Venice Simplon Orient Express\n\n-Blue Train",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 7\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 3: Land and water transportation (Cont.)\n\n-Water transportation and tourism\n\n-Cruise tourism\n\n-Trends in cruise tourism",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 8\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 3: Land and water transportation (Cont.)\n\n-Types of cruises\n\n-Cruise destinations\n\n-Demand and supply",
+   "Offline",
+   "LO2, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 8\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "22",
+   "Review (chapter 1,2,3)",
+   "Offline",
+   "LO1, LO2, LO6, LO7",
+   "I,T,U",
+   "-Textbook\n\n-Slides",
+   "",
+   "Review and Quiz 1",
+   ""
+  ],
+  [
+   "23",
+   "Quiz 1 (chapter 1,2,3)",
+   "Offline",
+   "LO1, LO2, LO6, LO7",
+   "I,T,U",
+   "-Textbook\n\n-Slides",
+   "",
+   "Review and Quiz 1",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4:Travel intermediaries\n\n-Distribution channels\n\n-Tourism distribution\n\n-Functions of distribution channels in toursim",
+   "Offline",
+   "LO3, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 9\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 4:Travel intermediaries (Cont.)\n\n-Levels of distribution\n\n-Intermediarires in tourism\n\n-Types of tourism intermediaries",
+   "Offline",
+   "LO3, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 9\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 5: Travel agency management\n\n-Travel agency: different perspectives\n\n-Types of travel agencires",
+   "Offline",
+   "LO3, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 10\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 5: Travel agency management (Cont.)\n\n-Functions and activities of travel agents\n\n-Organization and management",
+   "Offline",
+   "LO3, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 10\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 6: Travel distribution systems\n\n-Electronic distribution\n\n-New distribution capability\n\n-Computer reservation systems",
+   "Offline",
+   "LO3, LO4, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 11\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 6: Travel distribution systems (Cont.)\n\n-Evolution and growth of CRS , GDS\n\n-CRS and infomation bases strategies",
+   "Offline",
+   "LO3, LO4, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 11\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 6: Travel distribution systems (Cont.)\n\n-Global distribution systems\n\n-Airline reservation systems\n\n-Online travel agents\n\n-Mobile travel agents",
+   "Offline",
+   "LO3, LO4, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 11\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 6: Travel distribution systems (Cont.)\n\n-Destination information systems\n\n-Other online intermediaries\n\n-Hospitality distribution",
+   "Offline",
+   "LO3, LO4, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 11\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 7: The business of tour operations\n\n-Tour operation: the concept\n\n-Reason for starting a tour operation business\n\n-Evolution of tour operation",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "ITU",
+   "'-Textbook Chapter 12\n\n-Slides",
+   "",
+   "'-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 7: The business of tour operations (Cont.)\n\n-Tour operation: the product, supplier and customers\n\n-Types of tour operators",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "ITU",
+   "'-Textbook Chapter 12\n\n-Slides",
+   "",
+   "'-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 7: The business of tour operations (Cont.)\n\n-Contributions and benefits of tour operation\n\n-Tour operation and risks",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "ITU",
+   "'-Textbook Chapter 12\n\n-Slides",
+   "",
+   "'-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 7: The business of tour operations (Cont.)\n\n-Organizational structure\n\n-Business environments and influence",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "ITU",
+   "'-Textbook Chapter 12\n\n-Slides",
+   "",
+   "'-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "36",
+   "Review (chapter 4,5,6,7)",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "-Textbook\n\n-Slides",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Quiz 2 (chapter 4,5,6,7)",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "-Textbook\n\n-Slides",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Discuss and case study",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "39",
+   "Discuss and case study (Cont.)",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "40",
+   "Field trip: Visit a travel agency TO/TA",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Field trip: Visit a travel agency TO/TA",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "Field trip: Visit a travel agency TO/TA",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "43",
+   "Individual Assignment Submission\n\nChapter 8: Package tours\n\n-Tour classification\n\n-Business tours",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "-Textbook Chapter 13\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 8: Package tours (Cont.)\n\n-Package tours\n\n-Elements of a package tour",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "-Textbook Chapter 13\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 8: Package tours (Cont.)\n\n-Package tour: planning and designing\n\n-Itinerary preaparation",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "-Textbook Chapter 13\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 8: Package tours (Cont.)\n\n-Capacity planning and negociation\n\n-Costing and pricing",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "-Textbook Chapter 13\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 9: Tour marketing\n\n-Tour brochures\n\n-Market segmentation and target market\n\n-Tourist buying behaviour and the role of tour operators",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "\"-Textbook Chapter 14\n\n-Slides\"",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 9: Tour marketing (Cont.)\n\n-Image, branding and positioning\n\n-Marketing mix\n\n-Distribution system",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "\"-Textbook Chapter 14\n\n-Slides\"",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 10: Pretour preparations\n\n-Tour booking and administration\n\n-Travel documents\n\n-Tour manager briefing",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 15\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 10: Pretour preparations (Cont.)\n\n-Pre-departure meeting\n\n-Deparrture procedure at the airport",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 15\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 11: Managing the tour\n\n-Arrival procedures\n\n-Handling emergencies\n\n-Post-tour activities",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 16\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 11: Managing the tour (Cont.)\n\n-Overseas tour representatives\n\n-Tour guiding\n\n-Need of quality and customer satisfaction",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook Chapter 16\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "53",
+   "Review (chapter 8,9,10,11)",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "54",
+   "Quiz 3 (chapter 8,9,10,11)",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "55",
+   "Review course",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "56",
+   "Review course",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7",
+   "I,T",
+   "-Textbook\n\n-Slides",
+   "",
+   "-Read Textbook, Slides before class",
+   ""
+  ],
+  [
+   "57",
+   "Group presentation\n\nWritten report submission",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "",
+   "",
+   "Present & discuss",
+   ""
+  ],
+  [
+   "58",
+   "Group presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "",
+   "",
+   "Present & discuss",
+   ""
+  ],
+  [
+   "59",
+   "Group presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "",
+   "",
+   "Present & discuss",
+   ""
+  ],
+  [
+   "60",
+   "Group presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "I,T,U",
+   "",
+   "",
+   "Present & discuss",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "CT1",
+   "What is the definition of tourism?"
+  ],
+  [
+   "2",
+   "2",
+   "CT2",
+   "How to distinguish tourist from other travellers?"
+  ],
+  [
+   "3",
+   "3",
+   "CT1",
+   "Write down the major conditions that make a traveller a tourist."
+  ],
+  [
+   "4",
+   "3",
+   "CT2",
+   "Distinguish between inbound and outbound tourism, citing examples."
+  ],
+  [
+   "5",
+   "4",
+   "CT1",
+   "How would you conceptualize the tourism industry?"
+  ],
+  [
+   "6",
+   "4",
+   "CT2",
+   "What are the components of the tourism industry?"
+  ],
+  [
+   "7",
+   "5",
+   "CT1",
+   "How are tourism and transportation interrelationship?"
+  ],
+  [
+   "8",
+   "6",
+   "CT1",
+   "What is the role of transport in tourism?"
+  ],
+  [
+   "9",
+   "6",
+   "CT2",
+   "What factors influence tourist transport selection?"
+  ],
+  [
+   "10",
+   "7",
+   "CT1",
+   "What are the environmental impacts of air transportation?"
+  ],
+  [
+   "11",
+   "7",
+   "CT2",
+   "What are the economic impacts of tourism?"
+  ],
+  [
+   "12",
+   "8",
+   "CT1",
+   "What are the major social impacts of tourism?"
+  ],
+  [
+   "13",
+   "8",
+   "CT2",
+   "What are the major cultural impacts of tourism?"
+  ],
+  [
+   "14",
+   "10",
+   "CT1",
+   "What is the difference between civil aviation and general aviation?"
+  ],
+  [
+   "15",
+   "10",
+   "CT2",
+   "What are the elements of the air transportation system?"
+  ],
+  [
+   "16",
+   "12",
+   "CT1",
+   "What role does the aviation industry play in tourism?"
+  ],
+  [
+   "17",
+   "12",
+   "CT2",
+   "What are the characteristics of the airline industry?"
+  ],
+  [
+   "18",
+   "13",
+   "CT1",
+   "What is the difference between full service carriers and low cost carriers?"
+  ],
+  [
+   "19",
+   "13",
+   "CT2",
+   "What are major airline functions?"
+  ],
+  [
+   "20",
+   "14",
+   "CT1",
+   "How are the three service classes: First Class, Business Class, Economy Class different?"
+  ],
+  [
+   "21",
+   "16",
+   "CT1",
+   "What is the advantage of road transport ?"
+  ],
+  [
+   "22",
+   "16",
+   "CT2",
+   "What types of coach tours are there?"
+  ],
+  [
+   "23",
+   "17",
+   "CT1",
+   "Why do tourists favor the car for holidays?"
+  ],
+  [
+   "24",
+   "18",
+   "CT1",
+   "What types of rail tourism are there?"
+  ],
+  [
+   "25",
+   "20",
+   "CT1",
+   "What is the definition of cruise tourism?"
+  ],
+  [
+   "26",
+   "20",
+   "CT2",
+   "What is the current trend of cruise tourism?"
+  ],
+  [
+   "27",
+   "21",
+   "CT1",
+   "What are the classifications of Cruises?"
+  ],
+  [
+   "28",
+   "24",
+   "CT1",
+   "What are the elements of a distribution system?"
+  ],
+  [
+   "29",
+   "24",
+   "CT2",
+   "What is the function of the distribution channel in tourism?"
+  ],
+  [
+   "30",
+   "25",
+   "CT1",
+   "What are the functions of tourism intermediaries?"
+  ],
+  [
+   "31",
+   "25",
+   "CT2",
+   "What are the types of tourism intermediaries?"
+  ],
+  [
+   "32",
+   "26",
+   "CT1",
+   "What are the different types of travel agents?"
+  ],
+  [
+   "33",
+   "27",
+   "CT1",
+   "What are the functions and activities of a travel agency?"
+  ],
+  [
+   "34",
+   "28",
+   "CT1",
+   "Online intermediaries in different ways? For example."
+  ],
+  [
+   "35",
+   "29",
+   "CT1",
+   "What are the information - based strategies of CRSs?"
+  ],
+  [
+   "36",
+   "30",
+   "CT1",
+   "What are the main functions of GDS?"
+  ],
+  [
+   "37",
+   "30",
+   "CT2",
+   "What are the components of an airline system?"
+  ],
+  [
+   "38",
+   "32",
+   "CT1",
+   "What is a tour, tour operation and a tour operator?"
+  ],
+  [
+   "39",
+   "32",
+   "CT2",
+   "What is the reason to start a tour operator business?"
+  ],
+  [
+   "40",
+   "33",
+   "CT1",
+   "What are the five product levels of tour operators?"
+  ],
+  [
+   "41",
+   "33",
+   "CT2",
+   "What are the types of tour operators?"
+  ],
+  [
+   "42",
+   "34",
+   "CT1",
+   "What are the benefits of tour operation for tourist?"
+  ],
+  [
+   "43",
+   "34",
+   "CT2",
+   "What are the risks of tour operator?"
+  ],
+  [
+   "44",
+   "43",
+   "CT1",
+   "What is the difference between FIT and GIT?"
+  ],
+  [
+   "45",
+   "43",
+   "CT2",
+   "What is the difference between long - haul and short - haul tours?"
+  ],
+  [
+   "46",
+   "44",
+   "CT1",
+   "What is A package tour?"
+  ],
+  [
+   "47",
+   "44",
+   "CT2",
+   "What elements does a package tour include?"
+  ],
+  [
+   "48",
+   "45",
+   "CT1",
+   "What are the determining factors in choosing a destination for GIT?"
+  ],
+  [
+   "49",
+   "45",
+   "CT2",
+   "What are the guidelines for preparing the itinerary?"
+  ],
+  [
+   "50",
+   "47",
+   "CT1",
+   "What is the importance of tour brochures?"
+  ],
+  [
+   "51",
+   "47",
+   "CT2",
+   "What is the reason for decision making and purchasing of tour operators products?"
+  ],
+  [
+   "52",
+   "48",
+   "CT1",
+   "What mediums are used for advertising by tour operators nowadays?"
+  ],
+  [
+   "53",
+   "48",
+   "CT2",
+   "What is the difference between one-level distribution, two-level systems?"
+  ],
+  [
+   "54",
+   "49",
+   "CT1",
+   "When sending invoices or bills, make sure they contain what?"
+  ],
+  [
+   "55",
+   "49",
+   "CT2",
+   "What should be handed over to the tour manager to ensure an efficient tour?"
+  ],
+  [
+   "56",
+   "49",
+   "CT3",
+   "What is the role of the tour manager?"
+  ],
+  [
+   "57",
+   "50",
+   "CT1",
+   "What is the major objectives of a pre-tour meeting?"
+  ],
+  [
+   "58",
+   "50",
+   "CT2",
+   "What are the notes for departure procedures at the airport?"
+  ],
+  [
+   "59",
+   "51",
+   "CT1",
+   "How to manage the emergencies on a tour?"
+  ],
+  [
+   "60",
+   "51",
+   "CT2",
+   "What are the usual post-tour activities?"
+  ],
+  [
+   "61",
+   "52",
+   "CT1",
+   "What is the difference between tour guide, interpreter and tour manager?"
+  ],
+  [
+   "62",
+   "52",
+   "CT2",
+   "What is the role of the guide and traits/qualities of a tour guide?"
+  ],
+  [
+   "63",
+   "52",
+   "CT3",
+   "What is the challenges of tour guiding?"
+  ]
+ ],
+ "links": [
+  "/download/4854/S/1_TTM201.zip",
+  "Guidance on AI activities, teaching methods, and assessment strategies: https://drive.google.com/drive/folders/1BNbJLUrw_WkjZpDrO80JegegwFv8umCs?usp=sharing",
+  "/download/4854/S/2_TTM201.zip"
+ ]
+}

@@ -1,0 +1,1264 @@
+{
+ "ma": "OSG203",
+ "sylID": "12944",
+ "quyetDinh": "857/QĐ-ĐHFPT dated 08/05/2025",
+ "ungVien": [
+  {
+   "sylID": "12944",
+   "code": "OSG203",
+   "name": "Operating System_Hệ điều hành",
+   "active": true,
+   "approved": true,
+   "decision": "857/QĐ-ĐHFPT dated 08/05/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12944",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12944",
+  "Syllabus Name": "Operating System_Hệ điều hành",
+  "Course Name English": "Operating System",
+  "Subject Code": "OSG203",
+  "Learning-Teaching Method": "Social Constructivism,In-class lecture,Inquiry-based Teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "",
+  "Description": "At the end of this course, students will be able to:\n1.Background Knowledge: (ABET e)\n- Understand the role and functions of an operating system.\n- Grasp important OS concepts such as kernels, file systems, and process management.\n- Comprehend the mechanisms of operating systems, including memory hierarchy and CPU roles.\n- Identify and analyze main problems and challenges in operating systems.\n2.Practical Skills: (ABET k)\n- Use basic and advanced shell commands in a Linux system fluently.\n- Develop proficiency in shell scripting on Linux.\n- Address and solve key operating system problems through practical exercises and simulations.\n3.Information Searching, Reading, and Selection Skills: (ABET i)\n- Efficiently search for, read, and select relevant information related to operating systems and Linux.\n4.Teamwork, Documentation, and Presentation Skills: (ABET g)\n- Work effectively in groups to complete projects.\n- Document and present findings and solutions clearly and professionally.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n- Student is responsible to do all exercises given by instructor in class or at home and submit on time\n- Use laptop in class only for learning purpose\n- Promptly access to the FU LMS https://flm.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "- Internet\n- Linux (CentOS, Ubuntu) operating system server and/or client",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "857/QĐ-ĐHFPT dated 08/05/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/5/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Linux with Operating System Concepts",
+   "Richard Fox",
+   "Chapman and Hall/CRC",
+   "2021",
+   "2nd Edition",
+   "9781032063454",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Modern Operating Systems",
+   "Andrew S. Tanenbaum,\nHerbert Bos",
+   "Pearson",
+   "2014",
+   "4th Edition",
+   "9780133591620",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Operating System Concepts",
+   "Abraham Silberschatz, Peter Baer Galvin, Greg Gagne",
+   "John Wiley & Sons, Inc.",
+   "2018",
+   "10th Edition",
+   "9781119320913",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Grasp the core concepts of operating systems, including the kernel, process management, memory management, and file systems."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand how operating systems manage resources within the context of Linux."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Utilize the command line to operate and administer the Linux system."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Master regular expressions and shell scripting to automate tasks and manage system operations."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Develop advanced practical skills in Linux system administration."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Learn and implement basic security solutions on Linux systems."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Configure and understand TCP/IP networking protocols."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Set up and manage services on Linux systems."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Use AI, standard tools and techniques to manage, maintain, and troubleshoot Linux systems."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Lab",
+   "on-going",
+   "4",
+   "20.0%",
+   ">0",
+   "in lab session",
+   "CLO1 - CLO9",
+   "Practical exercises",
+   "N/A",
+   "Technical aspects of studied topics.",
+   "Guided by instructor",
+   "The lab report content can be obtained from the lab manual, the lab templates, or created by the instructor to align with the chapters."
+  ],
+  [
+   "2",
+   "Progress test",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "30' - 60'",
+   "CLO1 - CLO8",
+   "Multiple choices marked by computer or a suitable format",
+   "10 - 60 (At least 10*n questions, where n is the number of chapters covered in the test.)",
+   "Current chapter(s).\nEach progress test covers at least 01 chapter and at most 06 chapter, and overall they must cover all learned chapters of the course.",
+   "In class/remote, by instructor",
+   "Instructions and schedules for progress tests must be included in the course implementation plan, which requires approval from the campus director.\nProgress tests should be administered immediately following the last lectures covering the required material.\nInstructors are responsible for reviewing the graded tests with students."
+  ],
+  [
+   "3",
+   "Project",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "~30'/group",
+   "CLO1 - CLO9",
+   "N/A",
+   "N/A",
+   "Students can either choose a topic themselves or refer to a list of topics suggested by lecturers.",
+   "Prepare at home, work in groups, and present during class hours",
+   "25 minutes/group (maximum) + 5 minutes Q&A"
+  ],
+  [
+   "4",
+   "TE",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choices marked by computer or a suitable format",
+   "50",
+   "Concepts, algorithms, operations;\nAll chapters from 1 to 12; more than 70% new questions (for the current semester);",
+   "By exam board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Chapter 1 Linux: What, Why, Who and When, and How\n1.1 Introduction\n1.2 What Is Linux?\n1.2.1 Early Operating Systems\n1.2.2 The Operating System Kernel\n1.2.3 Other Operating System Components\n1.2.4 So, What Is Linux?\n1.3 Why Use Linux?",
+   "Offline",
+   "CLO1,\nCLO2",
+   "I",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 1 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 01",
+   ""
+  ],
+  [
+   "2",
+   "1.4 Who Developed Linux and When?\n1.4.1 The Birth and Development of Unix\n1.4.2 GNU\n1.4.3 Enter Linus Torvalds\n1.4.4 The Open-Source Community\n1.5 How Do You Use Linux?\n1.5.1 Installing Debian Linux",
+   "Offline",
+   "CLO1,\nCLO2",
+   "IT",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 1 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 01",
+   ""
+  ],
+  [
+   "3",
+   "1.5.2 Installing CentOS Linux\n1.5.3 Installing Ubuntu Linux (student's task)\n1.5.4 Installing Linux Mint\n1.5.5 An Introduction to the Shell and Command Line\n1.6 Chapter Review (reading)\nReview Questions (reading)",
+   "Offline",
+   "CLO1,\nCLO2",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 1 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 01",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2 Bash\n2.1 Introduction\n2.2 Entering Linux Commands\n2.2.1 Simple Linux Commands\n2.2.2 Commands with Options and Parameters\n2.3 Forms of Linux Help\n2.3.1 man Pages\n2.3.2 Other Forms of Command-Line Help\n2.4 Bash Features\n2.4.1 Recalling Commands through the History List\n2.4.2 Shell Variables\n2.4.3 Aliases",
+   "Offline",
+   "CLO3",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 2 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 02",
+   ""
+  ],
+  [
+   "5",
+   "2.4.4 Command-Line Editing\n2.4.5 Redirection\n2.4.6 Other Useful Bash Features\n2.5 Tailoring Our Environment\n2.6 vi\n2.6.1 vi Commands\n2.6.2 An Example to Illustrate How to Use vi\n2.7 Interpreters\n2.7.1 Interpreters in Programming Languages\n2.7.2 Interpreters in Shells\n2.7.3 The Bash Interpreter\n2.8 Chapter Review (reading)\nReview Questions (reading)\nReview Lab 01",
+   "Offline",
+   "CLO3",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 2 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 02",
+   ""
+  ],
+  [
+   "6",
+   "Project : Divide student groups and assign the topic of \"AI for Linux Administration\"",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "Textbook/References\nSlides\nLab Manual\nTutorial Project",
+   "",
+   "Research Internet/Textbook/References at home in advance",
+   ""
+  ],
+  [
+   "7",
+   "Guide and grade Lab 01",
+   "Offline",
+   "CLO1,\nCLO2,\nCLO3",
+   "TU",
+   "Tutorial Labs\nLab Templates",
+   "",
+   "Do Lab",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3 Linux File Commands\n3.1 Introduction\n3.2 Storage Terminology\n3.3 Filename Specification\n3.3.1 The Path\n3.3.2 Filename Arguments with Paths\n3.3.3 The PATH Variable\n3.3.4 Specifying Filenames with Wildcards",
+   "Offline",
+   "CLO2,\nCLO3",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 3 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 03",
+   ""
+  ],
+  [
+   "9",
+   "3.4 File Commands\n3.4.1 Directory Commands\n3.4.2 File Movement and Copy Commands\n3.4.3 File Deletion Commands\n3.4.4 Creating and Deleting Directories\n3.4.5 Text file Viewing Commands\n3.4.6 File Comparison Commands\n3.4.7 File Manipulation Commands\n3.4.8 Miscellaneous but Useful File Commands",
+   "Offline",
+   "CLO2,\nCLO3",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 3 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 03",
+   ""
+  ],
+  [
+   "10",
+   "3.5 Permissions\n3.5.1 What Are Permissions?\n3.5.2 Altering Permissions from the Command Line\n3.5.3 Altering Permissions from the GUI\n3.5.4 Advanced Permissions\n3.6 Hard and Symbolic Links",
+   "Offline",
+   "CLO2,\nCLO3",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 3 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 03",
+   ""
+  ],
+  [
+   "11",
+   "3.7 Locating Files\n3.7.1 Search Using the File Browser\n3.7.2 The find Command\n3.7.3 Other Means of Locating Files\n3.8 Secondary Storage Devices\n3.8.1 The Hard Disk Drive\n3.8.2 Magnetic Tape\n3.8.3 Optical Discs\n3.8.4 Flash Memory Drives\n3.8.5 Device Drivers",
+   "Offline",
+   "CLO2,\nCLO3",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 3 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 03",
+   ""
+  ],
+  [
+   "12",
+   "3.9 File Compression\n3.9.1 Types of File Compression\n3.9.2 The Lempel–Ziv Algorithms for Lossless Compression\n3.9.3 Other Lossless Compression Algorithms\n3.9.4 Compression and Decompression Programs in Linux\n3.10 Chapter Review (reading)\nReview Questions (reading)",
+   "Offline",
+   "CLO2,\nCLO3",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 3 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 03",
+   ""
+  ],
+  [
+   "13",
+   "Project: Work on group topics and report project progress",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "Tutorial Project",
+   "",
+   "Discuss, report",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 4 Managing Processes\n4.1 Introduction\n4.2 Forms of Process Management\n4.2.1 Single-Process Execution\n4.2.2 Concurrent Processing\n4.2.3 Interrupt Handling\n4.3 Starting, Pausing and Resuming Processes\n4.3.1 Ownership of Running Processes\n4.3.2 Launching Processes from the Command Line\n4.3.3 Suspending and Resuming Processes from the Command Line",
+   "Offline",
+   "CLO1,\nCLO2,\nCLO3",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 4 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 04",
+   ""
+  ],
+  [
+   "15",
+   "4.4 Monitoring Processes\n4.4.1 GUI Monitoring Tools\n4.4.2 Command-Line Monitoring Tools\n4.5 Managing Process Priority",
+   "Offline",
+   "CLO1,\nCLO2,\nCLO3",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 4 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 04",
+   ""
+  ],
+  [
+   "16",
+   "4.6 Process Termination\n4.6.1 Orphans and Zombies\n4.6.2 Killing Processes\n4.6.3 Shutting Down Linux\n4.7 A Look at System Resources\n4.7.1 Memory and Virtual Memory\n4.7.2 Linux Commands to Inspect System Resources\n4.8 Chapter Review (reading)\nReview Questions (reading)",
+   "Offline",
+   "CLO1,\nCLO2,\nCLO3",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 4 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 04",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 5 Regular Expressions\n5.1 Introduction\n5.2 Metacharacters\n5.2.1 Controlling Repeated Characters through *, + and ?\n5.2.2 Using and Modifying the . Metacharacter\n5.2.3 Controlling Where a Pattern Matches\n5.2.4 Matching from a List of Options\n5.2.5 Matching Characters That Must Not Appear\n5.2.6 Matching Metacharacters Literally\n5.2.7 More Precisely Controlling Repetition\n5.2.8 Selecting between Sequences\n5.3 Examples",
+   "Offline",
+   "CLO3,\nCLO4",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 5 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 05",
+   ""
+  ],
+  [
+   "18",
+   "5.4 grep\n5.4.1 Using egrep\n5.4.2 Useful egrep Options\n5.4.3 Examples: Searching the Linux Dictionary\n5.4.4 Using egrep to Control the Output of Other Linux Commands\n5.5 sed\n5.5.1 Basic sed Syntax\n5.5.2 Placeholders\n5.5.3 Other sed Capabilities",
+   "Offline",
+   "CLO2,\nCLO3,\nCLO4",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 5 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 05",
+   ""
+  ],
+  [
+   "19",
+   "5.6 awk\n5.6.1 awk Condition-Action Pairs\n5.6.2 BEGIN and END Sections\n5.6.3 Other Forms of Control\n5.6.4 awk Command Line Options and Arguments\n5.6.5 Non-File Input to awk\n5.7 Chapter Review (reading)\nReview Questions (reading)\nReview Lab 02",
+   "Offline",
+   "CLO2,\nCLO3,\nCLO4",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 5 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 05",
+   ""
+  ],
+  [
+   "20",
+   "Guide and grade Lab 02",
+   "Offline",
+   "CLO2,\nCLO3,\nCLO4",
+   "TU",
+   "Tutorial Labs\nLab Templates",
+   "",
+   "Do Lab",
+   ""
+  ],
+  [
+   "21",
+   "Progress Test 01 and Review",
+   "Offline",
+   "CLO1,\nCLO2,\nCLO3,\nCLO4",
+   "TU",
+   "Textbook/References\nSlides",
+   "",
+   "Read chapters 1 to 5 in the textbook\nResearch Internet/Textbook/References at home in advance",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 6 Shell Scripting\n6.1 Introduction\n6.2 Simple Scripting\n6.2.1 Scripts of Linux Instructions\n6.2.2 Running Scripts\n6.2.3 Scripting Errors",
+   "Offline",
+   "CLO3,\nCLO4,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 6 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 06",
+   ""
+  ],
+  [
+   "23",
+   "6.3 Variables, Assignments and Parameters\n6.3.1 Bash Variables\n6.3.2 Assignment Statements\n6.3.3 Executing Linux Commands from within Assignment Statements\n6.3.4 Arithmetic Operations in Assignment Statements\n6.3.5 String Operations Using expr\n6.3.6 Command-Line Parameters",
+   "Offline",
+   "CLO3,\nCLO4,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 6 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 06",
+   ""
+  ],
+  [
+   "24",
+   "6.4 Input and Output\n6.4.1 Output with echo\n6.4.2 Input with read\n6.5 Selection Statements\n6.5.1 Conditions for Strings and Integers\n6.5.2 File Conditions\n6.5.3 The if-then and if-then-else Statements\n6.5.4 Nested Statements\n6.5.5 Case Statement\n6.5.6 Conditions Outside of Selection Statements",
+   "Offline",
+   "CLO3,\nCLO4,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 6 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 06",
+   ""
+  ],
+  [
+   "25",
+   "6.6 Loops\n6.6.1 Conditional Loops\n6.6.2 Counter-Controlled Loops\n6.6.3 Iterator Loops\n6.6.4 Using the seq Command to Generate a List\n6.6.5 The while read Statement",
+   "Offline",
+   "CLO3,\nCLO4,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 6 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 06",
+   ""
+  ],
+  [
+   "26",
+   "6.7 Arrays\n6.7.1 Declaring and Initializing Arrays\n6.7.2 Accessing Array Elements and Entire Arrays\n6.7.3 Example Scripts Using Arrays\n6.8 String Manipulation\n6.8.1 Substrings Revisited\n6.8.2 String Regular Expression Matching",
+   "Offline",
+   "CLO3,\nCLO4,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 6 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 06",
+   ""
+  ],
+  [
+   "27",
+   "6.9 Functions\n6.9.1 Defining Bash Functions\n6.9.2 Using Functions\n6.9.3 Functions and Variables\n6.9.4 exit and return Statements\n6.10 Chapter Review (reading)\nReview Questions (reading)",
+   "Offline",
+   "CLO3,\nCLO4,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 6 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 06",
+   ""
+  ],
+  [
+   "28",
+   "Project: Work on group topics and report project progress",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "Tutorial Project",
+   "",
+   "Discuss, report",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 7 User Accounts\n7.1 Introduction\n7.2 Creating Accounts and Groups\n7.2.1 Creating User and Group Accounts through the GUI\n7.2.2 Creating User and Group Accounts from the Command Line\n7.2.3 Creating a Large Number of User Accounts\n7.3 Managing Users and Groups\n7.4 Password Management\n7.4.1 Automatically Generating Passwords\n7.4.2 Managing Passwords",
+   "Offline",
+   "CLO2,\nCLO3,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 7 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 07",
+   ""
+  ],
+  [
+   "30",
+   "7.5 PAM and Enforcing Strong Passwords\n7.6 Establishing Common User Resources\n7.6.1 Populating User Home Directories with Initial Files\n7.6.2 Initial User Settings and Defaults\n7.7 The sudo Command",
+   "Offline",
+   "CLO2,\nCLO3,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 7 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 07",
+   ""
+  ],
+  [
+   "31",
+   "7.8 SELinux\n7.8.1 SELinux Components\n7.8.2 A Closer Look at Contexts\n7.8.3 Rules\n7.9 Establishing User and Group Policies",
+   "Offline",
+   "CLO5,\nCLO6",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 7 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 07",
+   ""
+  ],
+  [
+   "32",
+   "7.10 Chapter Review (reading)\nReview Questions (reading)\nReview Lab 03",
+   "Offline",
+   "CLO2,\nCLO3,\nCLO5,\nCLO6",
+   "T",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 7 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 07",
+   ""
+  ],
+  [
+   "33",
+   "Guide and grade Lab 03",
+   "Offline",
+   "CLO2,\nCLO3,\nCLO5,\nCLO6",
+   "TU",
+   "Tutorial Labs\nLab Templates",
+   "",
+   "Do Lab",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 8 Administering Linux File Systems\n8.1 Introduction\n8.2 Storage Access\n8.2.1 Disk Storage and Blocks\n8.2.2 Block Indexing Using a File Allocation Table\n8.2.3 Other Disk Storage Details\n8.2.4 File Storage and Object Storage\n8.3 Linux Files\n8.3.1 Files versus Directories\n8.3.2 Non-File File Types\n8.3.3 Links as File Types\n8.3.4 Reviewing the File Types",
+   "Offline",
+   "CLO2,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 8 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 08",
+   ""
+  ],
+  [
+   "35",
+   "8.4 The inode\n8.4.1 inode Metadata\n8.4.2 inode Pointers\n8.4.3 Linux Commands to Inspect inodes and Files",
+   "Offline",
+   "CLO2,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 8 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 08",
+   ""
+  ],
+  [
+   "36",
+   "8.5 Partitions and File Systems\n8.5.1 Why Partition?\n8.5.2 Viewing the Available Partitions\n8.5.3 Creating Partitions\n8.5.4 Repartitioning\n8.5.5 Using a Logical Volume Manager to Partition\n8.5.6 Adding a Disk Drive",
+   "Offline",
+   "CLO2,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 8 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 08",
+   ""
+  ],
+  [
+   "37",
+   "8.6 Administrative File System Tasks\n8.6.1 Mounting and Unmounting File Systems\n8.6.2 Remote File Systems\n8.6.3 Establishing Quotas on a File System\n8.6.4 Miscellaneous Administrative File System Commands",
+   "Offline",
+   "CLO2,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 8 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 08",
+   ""
+  ],
+  [
+   "38",
+   "8.7 Linux Top-Level Directories\n8.7.1 Root (/) Partition Directories\n8.7.2 The /etc Directory\n8.7.3 The /boot, /home and /var Directories\n8.7.4 Virtual File System Directories\n8.8 Chapter Review (reading)\nReview Questions (reading)",
+   "Offline",
+   "CLO2,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 8 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 08",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9 System Initialization and Services\n9.1 Introduction\n9.2 Booting the Computer\n9.2.1 Volatile and Non-Volatile Memory\n9.2.2 The Boot Process\n9.2.3 The Linux Boot Process\n9.2.4 Loading and Running the Linux Kernel",
+   "Offline",
+   "CLO2,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 9 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 09",
+   ""
+  ],
+  [
+   "40",
+   "9.3 Initialization of the Linux Operating System\n9.3.1 Target Unit Files\n9.3.2 Service Unit Files\n9.3.3 Other Unit File Types\n9.3.4 Modifying System Initialization",
+   "Offline",
+   "CLO2,\nCLO5",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 9 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 09",
+   ""
+  ],
+  [
+   "41",
+   "9.4 Linux Services\n9.4.1 What Are Services?\n9.4.2 An Examination of Signification Linux Services\n9.5 Using systemctl",
+   "Offline",
+   "CLO2,\nCLO5,\nCLO8",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 9 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 09",
+   ""
+  ],
+  [
+   "42",
+   "9.6 Configuration Files\n9.6.1 Non-Service Configuration Files\n9.6.2 Configuring rsyslog\n9.6.3 Configuring nfs\n9.6.4 Configuring logrotate\n9.6.5 Configuring auditd\n9.7 Chapter Review (reading)\nReview Questions (reading)",
+   "Offline",
+   "CLO2,\nCLO5,\nCLO9",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 9 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 09",
+   ""
+  ],
+  [
+   "43",
+   "Project: Work on group topics and report project progress",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "Tutorial Project",
+   "",
+   "Discuss, report",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 10 Network Configuration\n10.1 Introduction\n10.2 Computer Networks and TCP/IP\n10.2.1 Network Connection Devices\n10.2.2 The TCP/IP Protocol Stack\n10.2.3 Ports\n10.2.4 IPv6\n10.2.5 Domains, the Domain Name System and Host Names",
+   "Offline",
+   "CLO7",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 10 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 10",
+   ""
+  ],
+  [
+   "45",
+   "10.3 Linux NetworkManager Service and Related Services and Files\n10.3.1 NetworkManager\n10.3.2 Other Network Services of Note\n10.3.3 Establishing DNS Access",
+   "Offline",
+   "CLO7,\nCLO8",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 10 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 10",
+   ""
+  ],
+  [
+   "46",
+   "10.4 Obtaining IP Addresses\n10.4.1 Configuring Our Interface Device(s)\n10.4.2 Setting Up a DHCP Server",
+   "Offline",
+   "CLO7,\nCLO8",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 10 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 10",
+   ""
+  ],
+  [
+   "47",
+   "10.5 Network Programs\n10.5.1 The ip Program\n10.5.2 Remote Access and File Transfer Programs\n10.5.3 Network Inspection Programs\n10.5.4 Address Resolution Programs",
+   "Offline",
+   "CLO7,\nCLO8",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 10 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 10",
+   ""
+  ],
+  [
+   "48",
+   "10.6 The Linux Firewall\n10.6.1 The firewalld Service\n10.6.2 The Firewall Configuration GUI Tool\n10.6.3 firewall-cmd\n10.6.4 ufw\n10.7 Chapter Review (reading)\nReview Questions (reading)\nReview Lab 04",
+   "Offline",
+   "CLO6",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 10 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 10",
+   ""
+  ],
+  [
+   "49",
+   "Guide and grade Lab 04",
+   "Offline",
+   "CLO6,\nCLO7,\nCLO8",
+   "TU",
+   "Tutorial Labs\nLab Templates",
+   "",
+   "Do Lab",
+   ""
+  ],
+  [
+   "50",
+   "Progress Test 02 and Review",
+   "Offline",
+   "CLO6,\nCLO7,\nCLO8",
+   "TU",
+   "Textbook/References\nSlides",
+   "",
+   "Read chapters 6 to 10 in the textbook\nFocus on 1.1\nResearch Internet/Textbook/References at home in advance",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 11 Software Installation and Maintenance\n11.1 Introduction\n11.2 Software Maintenance Terminology\n11.2.1 Types of Programming Languages\n11.2.2 Types of Software\n11.2.3 Types of Software Licenses\n11.2.4 Types of Software Management\n11.3 Installation and Maintenance from a Software Store\n11.3.1 Red Hat Software GUI\n11.3.2 Debian Mint Software GUI\n11.3.3 Ubuntu Software Center\nReview Project",
+   "Offline",
+   "CLO5,\nCLO9",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 11 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 11",
+   ""
+  ],
+  [
+   "52",
+   "11.4 rpm and dpkg\n11.4.1 rpm\n11.4.2 dpkg\n11.5 dnf/yum and apt\nReview Project",
+   "Offline",
+   "CLO5,\nCLO9",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 11 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 11",
+   ""
+  ],
+  [
+   "53",
+   "11.6 Installation of Source Code\n11.6.1 Obtaining Installation Packages\n11.6.2 Extracting from the Archive\n11.6.3 Running the configure Script\n11.6.4 The make Step and the makefile\n11.6.5 The make install Step\nReview Project",
+   "Offline",
+   "CLO5,\nCLO9",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 11 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 11",
+   ""
+  ],
+  [
+   "54",
+   "11.7 The gcc Compiler\n11.7.1 Preprocessing\n11.7.2 Lexical Analysis and Syntactic Parsing\n11.7.3 Semantic Analysis, Compilation and Optimization\n11.7.4 Linking\n11.7.5 Using gcc\n11.8 Software Documentation\n11.9 Chapter Review (reading)\nReview Questions (reading)\nReview Project",
+   "Offline",
+   "CLO5,\nCLO9",
+   "TU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 11 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 11",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 12 Maintaining and Troubleshooting Linux\n12.1 Introduction\n12.2 File System Integrity: Backups, RAID and Encryption\n12.2.1 Backups: Why, How and When\n12.2.2 RAID for File System Integrity\n12.2.3 Encryption and Encryption Programs\n12.3 Task Scheduling\n12.3.1 at and atd\n12.3.2 crontab and crond\n12.4 System Monitoring\n12.4.1 Operating System Issues That Degrade Performance\nReview Project",
+   "Offline",
+   "CLO5,\nCLO9",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 12 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 12",
+   ""
+  ],
+  [
+   "56",
+   "12.4.2 Processor and Process System Monitoring Tools\n12.4.3 Memory System Monitoring Tools\n12.4.4 I/O System Monitoring Tools\n12.5 Log Files\n12.5.1 rsyslogd- Created Log Files\n12.5.2 auditd Logs\n12.5.3 Examining the Log Files\n12.5.4 journald\n12.6 Troubleshooting\n12.7 Chapter Review (reading)\nReview Questions (reading)\nReview Project",
+   "Offline",
+   "CLO5,\nCLO9",
+   "ITU",
+   "Textbook/References\nSlides\nLab Manual",
+   "",
+   "Read chapter 12 in the textbook\nResearch Internet/Textbook/References at home in advance\nDo practice the Lab Manual 12",
+   ""
+  ],
+  [
+   "57",
+   "Project: Group presentation",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "Tutorial Project",
+   "",
+   "Do Present",
+   ""
+  ],
+  [
+   "58",
+   "Project: Group presentation",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "Tutorial Project",
+   "",
+   "Do Present",
+   ""
+  ],
+  [
+   "59",
+   "Project: Group presentation",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "Tutorial Project",
+   "",
+   "Do Present",
+   ""
+  ],
+  [
+   "60",
+   "Course Review",
+   "Offline",
+   "CLO1 - CLO9",
+   "U",
+   "",
+   "",
+   "Read all of chapters in the textbook\nResearch Internet/Textbook/References at home in advance",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1.1",
+   "Why is understanding the history and components of Linux important for modern computing"
+  ],
+  [
+   "2",
+   "1",
+   "CQ1.2",
+   "How does the Linux kernel differ from other operating system kernels in terms of functionality and design"
+  ],
+  [
+   "3",
+   "2",
+   "CQ1.3",
+   "What are the primary advantages of Linux that make it a preferred choice for servers and developers"
+  ],
+  [
+   "4",
+   "2",
+   "CQ1.4",
+   "How did GNU's tools and philosophies shape the Linux operating system?"
+  ],
+  [
+   "5",
+   "3",
+   "CQ1.5",
+   "How can mastering the shell and command line enhance productivity for Linux users?"
+  ],
+  [
+   "6",
+   "4",
+   "CQ2.1",
+   "Why is Bash considered a fundamental tool for Linux users, and how does it differ from other shells?"
+  ],
+  [
+   "7",
+   "4",
+   "CQ2.2",
+   "How can using commands with options and parameters make task automation in Bash more efficient?"
+  ],
+  [
+   "8",
+   "4",
+   "CQ2.3",
+   "How can redirection (e.g., input, output, and error redirection) be leveraged for advanced file manipulation in Bash?"
+  ],
+  [
+   "9",
+   "5",
+   "CQ2.4",
+   "What are some effective ways to customize the Bash environment to match specific workflow needs?"
+  ],
+  [
+   "10",
+   "5",
+   "CQ2.5",
+   "Why is “vi” still relevant today, and what advantages does it offer as a text editor for command-line users?"
+  ],
+  [
+   "11",
+   "8",
+   "CQ3.1",
+   "True/false: The file is the smallest physical unit stored within the file space."
+  ],
+  [
+   "12",
+   "9",
+   "CQ3.2",
+   "Why might you not want to have blank spaces in filenames in Linux?"
+  ],
+  [
+   "13",
+   "10",
+   "CQ3.3",
+   "What is the difference between . and .. ?"
+  ],
+  [
+   "14",
+   "11",
+   "CQ3.4",
+   "Is the command mv foo1.txt foo2.txt a movement or a renaming operation? How do you know?"
+  ],
+  [
+   "15",
+   "12",
+   "CQ3.5",
+   "How does the -i option differ between cp and rm?"
+  ],
+  [
+   "16",
+   "14",
+   "CQ4.1",
+   "Compare a program and a process. Why do we need two different terms to describe them?"
+  ],
+  [
+   "17",
+   "14",
+   "CQ4.2",
+   "Which form of process management would you find in early personal computers?"
+  ],
+  [
+   "18",
+   "15",
+   "CQ4.3",
+   "Batch processing comes closest to which of these forms of processing, single tasking, preemptive multitasking or multiprocessing?"
+  ],
+  [
+   "19",
+   "15",
+   "CQ4.4",
+   "What does the timer count? What happens if the timer reaches 0?"
+  ],
+  [
+   "20",
+   "16",
+   "CQ4.5",
+   "What does the CPU need to store and restore during a context switch?"
+  ],
+  [
+   "21",
+   "17",
+   "CQ5.1",
+   "What is the difference between [0-9]+ and [0-9]*?"
+  ],
+  [
+   "22",
+   "17",
+   "CQ5.2",
+   "What is the difference between [0-9]? and [0-9]+?"
+  ],
+  [
+   "23",
+   "18",
+   "CQ5.3",
+   "What is the difference between [0-9] and [^0-9]?"
+  ],
+  [
+   "24",
+   "18",
+   "CQ5.4",
+   "How would .* be interpreted? How would .+ be interpreted?"
+  ],
+  [
+   "25",
+   "19",
+   "CQ5.5",
+   "Is there any difference between [0-9] and [[:digit:]]?"
+  ],
+  [
+   "26",
+   "22",
+   "CQ6.1",
+   "How can make this script more robust by handling potential errors and unexpected input gracefully?"
+  ],
+  [
+   "27",
+   "23",
+   "CQ6.2",
+   "Is there a more efficient or readable way to perform this repetitive task or complex logic using built-in shell commands or utilities?"
+  ],
+  [
+   "28",
+   "24",
+   "CQ6.3",
+   "How can parameterize this script to make it more reusable and adaptable to different scenarios?"
+  ],
+  [
+   "29",
+   "25",
+   "CQ6.4",
+   "How can I improve the maintainability and clarity of this script for myself and others who might need to understand or modify it in the future?"
+  ],
+  [
+   "30",
+   "26",
+   "CQ6.5",
+   "How can I test this script thoroughly to ensure it behaves as expected in various situations and edge cases?"
+  ],
+  [
+   "31",
+   "29",
+   "CQ7.1",
+   "Why is it important to differentiate between root, user, and software accounts in a Linux system? Discuss the potential risks of improper management of these accounts."
+  ],
+  [
+   "32",
+   "30",
+   "CQ7.2",
+   "Why is it crucial to enforce strong password policies in a Linux environment? Discuss the theoretical framework behind password strength and its impact on overall system security."
+  ],
+  [
+   "33",
+   "31",
+   "CQ7.3",
+   "Discuss the role and importance of Pluggable Authentication Modules (PAM) in Linux. How do PAMs enhance security and flexibility in managing authentication methods?"
+  ],
+  [
+   "34",
+   "32",
+   "CQ7.4",
+   "How would you modify the ‘useradd’ command to create a new user with a non-default home directory and a specified shell?"
+  ],
+  [
+   "35",
+   "32",
+   "CQ7.5",
+   "Describe a scenario where you would need to use the ‘chage’ command in Linux. What options would you use to enforce a password change policy for a specific user?"
+  ],
+  [
+   "36",
+   "34",
+   "CQ8.1",
+   "Describe the role of an inode within Linux file systems. What metadata does an inode store, and why is this information critical for file system operations?"
+  ],
+  [
+   "37",
+   "35",
+   "CQ8.2",
+   "Theoretically, why might an administrator choose to use multiple partitions on a Linux system? What are the benefits of partitioning a disk in terms of system security and data management?"
+  ],
+  [
+   "38",
+   "36",
+   "CQ8.3",
+   "Compare the file allocation table (FAT) system to the inode-based system used in Linux. What are the benefits of using inodes over FAT, particularly in terms of file access and system performance?"
+  ],
+  [
+   "39",
+   "37",
+   "CQ8.4",
+   "Explain the significance of journaling in file systems like ext4 and XFS. How does journaling enhance data integrity and system reliability after crashes or power failures?"
+  ],
+  [
+   "40",
+   "38",
+   "CQ8.5",
+   "Explain the differences and use cases for block storage, file storage, and object storage within a Linux environment. How does each impact system performance and scalability?"
+  ],
+  [
+   "41",
+   "39",
+   "CQ9.1",
+   "How can you verify and analyze each stage of the Linux boot process to identify potential failures?"
+  ],
+  [
+   "42",
+   "40",
+   "CQ9.2",
+   "If your system fails to boot and only displays a GRUB prompt, what steps would you take to manually boot into Linux?"
+  ],
+  [
+   "43",
+   "42",
+   "CQ9.3",
+   "How can you use journalctl and dmesg to troubleshoot boot issues and identify failing services?"
+  ],
+  [
+   "44",
+   "42",
+   "CQ9.4",
+   "What are the practical differences between systemd targets, and how can you switch between them to recover from boot failures?"
+  ],
+  [
+   "45",
+   "42",
+   "CQ9.5",
+   "How can you modify the GRUB2 configuration to add a custom kernel parameter, and what impact might it have on system performance or security?"
+  ],
+  [
+   "46",
+   "44",
+   "CQ10.1",
+   "Briefly describe the two models TCP/IP and OSI and discuss the differences between the two?"
+  ],
+  [
+   "47",
+   "45",
+   "CQ10.2",
+   "Describe “ports” in computer networks, list port numbers of some common network services, and state how to list the status of network ports on Linux operating system?"
+  ],
+  [
+   "48",
+   "46",
+   "CQ10.3",
+   "What are the functions of the following network programs, and discuss and explain in detail how one of them works: curl, dig, ftp, host, ifstat, ip, nc, nmap, nslookup, ping, ss, ssh, sftp, traceroute, wget"
+  ],
+  [
+   "49",
+   "47",
+   "CQ10.4",
+   "Distinguish between types of IP addresses: static addresses, dynamic addresses and how to configure these two types of addresses on Linux operating system. What type of address is your computer currently using?"
+  ],
+  [
+   "50",
+   "48",
+   "CQ10.5",
+   "Discuss the firewall services on your Linux operating system, analyze the advantages and disadvantages of two types of firewall services: graphical interface and command line?"
+  ],
+  [
+   "51",
+   "51",
+   "CQ11.1",
+   "Discuss the similarities, differences, advantages, and disadvantages of the following software-related solutions on Linux operating systems: rpm, dpkg, dnf/yum, apt to install, upgrade and remove software."
+  ],
+  [
+   "52",
+   "52",
+   "CQ11.2",
+   "Discuss the similarities and differences between Windows and Linux operating systems in software installation, and point out some advantages and disadvantages of the two platforms."
+  ],
+  [
+   "53",
+   "53",
+   "CQ11.3",
+   "Discuss the similarities and differences between Windows and Linux operating systems in providing assistance to users while using software."
+  ],
+  [
+   "54",
+   "54",
+   "CQ11.4",
+   "Make a list of the software currently installed and used on your personal computer and discuss whether all of it is necessary?"
+  ],
+  [
+   "55",
+   "54",
+   "CQ11.5",
+   "Discuss the types of software licenses on Linux operating systems and compare them with other operating systems such as Windows, MacOS."
+  ],
+  [
+   "56",
+   "55",
+   "CQ12.1",
+   "Assume you back up your hard disk every week. Is there a reason to retain a week- old backup when you replace it with the next week’s backup? If so, why?"
+  ],
+  [
+   "57",
+   "55",
+   "CQ12.2",
+   "What is the advantage of using incremental backups rather than full backups? What is the disadvantage of using incremental backups?"
+  ],
+  [
+   "58",
+   "55",
+   "CQ12.3",
+   "You have three tapes to store backups on. You plan to put a full backup on one tape and then incremental backups on the other two tapes doing the incremental backups every other day. You estimate that you can place 4 incremental backups on each tape. How many days will it be before you run out of tapes and must overwrite the full backup on the first tape?"
+  ],
+  [
+   "59",
+   "56",
+   "CQ12.4",
+   "RAID 1 is the most expensive because it uses 50% of the storage space for redundancy. Which level would be the second most expensive? Which level is the cheapest?"
+  ],
+  [
+   "60",
+   "56",
+   "CQ12.5",
+   "As the system administrator, you have decided to disallow user zappaf from using at. How do you enforce this?"
+  ]
+ ],
+ "links": []
+}

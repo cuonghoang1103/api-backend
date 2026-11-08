@@ -1,0 +1,1809 @@
+{
+ "ma": "SSB201",
+ "sylID": "11499",
+ "quyetDinh": "402/QĐ-ĐHFPT dated 04/22/2024",
+ "ungVien": [
+  {
+   "sylID": "11499",
+   "code": "SSB201",
+   "name": "Advanced Business Communication_Kỹ năng giao tiếp nâng cao trong kinh doanh",
+   "active": true,
+   "approved": true,
+   "decision": "402/QĐ-ĐHFPT dated 04/22/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11499",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11499",
+  "Syllabus Name": "Advanced Business Communication_Kỹ năng giao tiếp nâng cao trong kinh doanh",
+  "Course Name English": "Advanced Business Communication",
+  "Subject Code": "SSB201",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "SSG103/SSG104",
+  "Description": "This course addresses the fundamental elements of communication in business environment to equip learners with essential communication tools to ensure success for both individuals and organization.\n\nUpon the completion of this course, the learners will be able to:\n\n(1) communicate effectively in writing the basic and practical business correspondence including emails and letters to internal and external customers (peers, subordinates, superiors, customers, partners, suppliers, and other stakeholders.\n\n(2) communicate effectively in speaking in different business contexts including socialization, staff meetings, meetings with customers and partners where the learners may play the role of participants or presenters. (3) successfully present their ideas of major research/problem solving in form of business report and presentation.\n\n(4) personalize their communication style to enhance communicative effects and leave good impresson on readers/audience\n\n(5) communicate effectively in job preparation",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "402/QĐ-ĐHFPT dated 04/22/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/22/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Business communication for success",
+   "Anonymous",
+   "University of Minnesota i",
+   "2015",
+   "2th",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://open.umn.edu/opentextbooks/textbooks/8"
+  ],
+  [
+   "2",
+   "Intercultural Business Communication",
+   "Lillian H. Chaney & Jeanette S. Martin",
+   "Pearson",
+   "2014",
+   "6th",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://idoc.pub/documents/intercultural-business-communication-d47evvqe12n2"
+  ],
+  [
+   "3",
+   "Design thinking",
+   "Bridget McGraw, Julie Joslin",
+   "www.oercommons.org",
+   "2017",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.oercommons.org/authoring/1686-design-thinking-for-11th-graders/view?fbclid=IwAR3Lw-xvHH_52xn9YrGyG-1Z29wzpMJCLoLrZnp_8nVTULqioiwmHkcuq44"
+  ],
+  [
+   "4",
+   "'- PowerPoint Slides",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain principles of design thinking and applications to business"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand concepts of business communication and how to deliver the message to the audience"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Evaluate the effectiveness of writing"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply how to write effectively"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Explain and apply business presentation."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Remember intrapersonal and Interpersonal Business Communication"
+  ],
+  [
+   "7",
+   "CLO7",
+   "State how routine and negative communications"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Understand cross-cultural and international business communications"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Analyse business etiquette"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Understand the business and Social Customs"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Create the business communication skills into a project."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group asm 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 90'\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO11",
+   "OP1: Presentation: Present the plan of the group's business or communication project (from slot 1 & 2).\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 1\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "technical aspect of studied topics",
+   "as required by syllabus",
+   "Prepare the presentation with PPT\n\nOnce the plan is approved by the instructor, students must work on this project plan throughout the course of their studies to practice the skills of this subject and report the results of the project at the end of the course in group asm 3"
+  ],
+  [
+   "2",
+   "Group asm 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 90'\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO4-LO10",
+   "OP1: practical exercises\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal\"",
+   "OP1: 1\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "technical aspect of studied topics",
+   "guided by instructor",
+   ""
+  ],
+  [
+   "3",
+   "Group asm 3",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "OP1: 180'\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO11",
+   "OP1: Present the implementation results of the project plan are presented in asm 1\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal\"",
+   "OP1: 1\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "technical aspect of studied topics",
+   "as required by syllabus",
+   "Prepare the presentation with PPT"
+  ],
+  [
+   "4",
+   "Individual asm",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: 40-60'\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO4-LO11",
+   "OP1: guided by instructor\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 1-2 questions\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal\"",
+   "technical aspect of studied topics",
+   "guided by instructor",
+   ""
+  ],
+  [
+   "5",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: in class\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "discussion participation and attendance",
+   "guided by instructor",
+   ""
+  ],
+  [
+   "6",
+   "Quizzes (2)",
+   "on-going",
+   "2",
+   "15.0%",
+   ">0",
+   "OP1: 45-60'\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1-LO10",
+   "OP1: Multiple choices or Essay on EOS or a suitable software\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal\"",
+   "1-2 questions for essay\n\nOr 40-50 questions for quiz",
+   "Quiz 1 (chapter 1-8)\n\nQuiz 2 (chapter 9-12)",
+   "guided by instructor",
+   ""
+  ],
+  [
+   "7",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "All LOs",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "concepts;\n\nall studied chapters",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Getting started:\n\nPrinciples of design thinking and applications to business.",
+   "Offline",
+   "LO1",
+   "ITU",
+   "- Read openbook & handbook: Design thinking\n\n- Read slides \"Getting started\": 1",
+   "SSB201",
+   "Reading\n\nReview \"Getting started\": 1",
+   ""
+  ],
+  [
+   "2",
+   "Getting started (cont.):\n\nApply to design a plan for a small business or communication project",
+   "Offline",
+   "LO1",
+   "ITU",
+   "- Read openbook & handbook: Design thinking\n\n- Read slides \"Getting started\": 1",
+   "SSB201",
+   "Reading\n\nReview \"Getting started\": 1",
+   ""
+  ],
+  [
+   "3",
+   "Getting started (cont.):\n\nApply to design a plan for a small business or communication project by small groups (5 - 7 students).",
+   "Offline",
+   "LO1",
+   "ITU",
+   "- Read openbook & handbook: Design thinking\n\n- Read slides: \"Getting started\": 1, 2",
+   "",
+   "Reading\n\nReview \"Getting started\": 1, 2",
+   ""
+  ],
+  [
+   "4",
+   "Getting started (cont.):\n\nApply to design a plan for a small business or communication project by small groups (5 - 7 students).",
+   "Offline",
+   "LO1",
+   "ITU",
+   "- Read openbook & handbook: Design thinking\n\n- Read slides: \"Getting started\": 1, 2",
+   "",
+   "Reading\n\nReview \"Getting started\": 1, 2",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1. Effective bussiness Communication\n\nWhy Is It Important to Communicate Well?\n\nWhat Is Communication?",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 1, Business communication for success\n\n- Read slides: Chapter 1",
+   "",
+   "Reading\n\nReview Chapter 1",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1. Effective bussiness Communication (cont.)\n\nCommunication in Context\n\nYour Responsibilities as a Communicator\n\nDiscussion",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 1, Business communication for success\n\n- Read slides: Chapter 1",
+   "",
+   "Reading\n\nReview Chapter 1",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Delivering Your Message\n\nWhat Is Language?\n\nMessages\n\nPrinciples of Verbal Communication Language Can be an Obstacle to Communication",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 2, Business communication for success\n\n'- Read slides: Chapter 2",
+   "",
+   "Reading\n\nReview Chapter 2",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Delivering Your Message (cont.)\n\nEmphasis Strategies\n\nImproving Verbal Communication\n\nActivity",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 2, Business communication for success\n\n'- Read slides: Chapter 2",
+   "",
+   "Reading\n\nReview Chapter 2",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Delivering Your Message (cont.)\n\nPractice chapter 2",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 2, Business communication for success\n\n'- Read slides: Chapter 2",
+   "",
+   "Reading\n\nReview Chapter 2",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2: Delivering Your Message (cont.)\n\nPractice chapter 2 (cont.)",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 2, Business communication for success\n\n'- Read slides: Chapter 2",
+   "",
+   "Reading\n\nReview Chapter 2",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3: Understanding Your Audience\n\nSelf-Understanding Is Fundamental to Communication\n\nPerception\n\nDifferences in Perception",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 3, Business communication for success\n\n'- Read slides: Chapter 3",
+   "",
+   "Reading\n\nReview Chapter 3",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3: Understanding Your Audience (cont.)\n\nGetting to Know Your Audience\n\nListening and Reading for Understanding\n\nDiscussion",
+   "Offline",
+   "LO2",
+   "ITU",
+   "- Read Chapter 3, Business communication for success\n\n'- Read slides: Chapter 3",
+   "",
+   "Reading\n\nReview Chapter 3",
+   ""
+  ],
+  [
+   "13",
+   "Group ASM 1:\n\nPresentation: Present the plan of the group's business or communication project (from slot 1 & 2).\n\nNote: Once the plan is approved by the instructor, students must work on this project plan throughout the course of their studies to practice the skills of this subject.",
+   "Offline",
+   "LO1, LO2, LO3, LO11",
+   "U",
+   "- Read openbook & handbook: Design thinking\n\n- Read slides: \"Getting started\": 1, 2, chapter 1, 2, 3",
+   "",
+   "Reading\n\nReview \"Getting started\": 1, 2, chapter 1, 2, 3",
+   ""
+  ],
+  [
+   "14",
+   "Group ASM 1 (cont.):\n\nPresentation: Present the plan of the group's business or communication project (from slot 1 & 2).\n\nNote: Once the plan is approved by the instructor, students must work on this project plan throughout the course of their studies to practice the skills of this subject.",
+   "Offline",
+   "LO1, LO2, LO3, LO11",
+   "U",
+   "- Read openbook & handbook: Design thinking\n\n- Read slides: \"Getting started\": 1, 2, chapter 1, 2, 3",
+   "",
+   "Reading\n\nReview \"Getting started\": 1, 2, chapter 1, 2, 3",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: Effective Business Writing\n\nOral versus Written Communication\n\nHow Is Writing Learned?\n\nGood Writing",
+   "Offline",
+   "LO3",
+   "ITU",
+   "- Read Chapter 4, Business communication for success\n\n'- Read slides: Chapter 4",
+   "",
+   "Reading\n\nReview Chapter 4",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4: Effective Business Writing (cont.)\n\nStyle in Written Communication\n\nPrinciples of Written Communication\n\nOvercoming Barriers to Effective Written Communication Discussion",
+   "Offline",
+   "LO3",
+   "ITU",
+   "- Read Chapter 4, Business communication for success\n\n'- Read slides: Chapter 4",
+   "",
+   "Reading\n\nReview Chapter 4",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 4: Effective Business Writing (cont.)\n\nPractice",
+   "Offline",
+   "LO3",
+   "ITU",
+   "- Read Chapter 4, Business communication for success\n\n'- Read slides: Chapter 4",
+   "",
+   "Reading\n\nReview Chapter 4",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 4: Effective Business Writing (cont.)\n\nPractice (cont.)",
+   "Offline",
+   "LO3",
+   "ITU",
+   "- Read Chapter 4, Business communication for success\n\n'- Read slides: Chapter 4",
+   "",
+   "Reading\n\nReview Chapter 4",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 5: Writing\n\nOrganization\n\nWriting Style",
+   "Offline",
+   "LO4",
+   "ITU",
+   "- Read Chapter 6, Business communication for success\n\n'- Read slides: Chapter 5",
+   "",
+   "Reading\n\nReview Chapter 5",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 5: Writing (cont.)\n\nMaking an Argument\n\nParaphrase and Summary versus Plagiarism",
+   "Offline",
+   "LO4",
+   "ITU",
+   "- Read Chapter 6, Business communication for success\n\n'- Read slides: Chapter 5",
+   "",
+   "Reading\n\nReview Chapter 5",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5: Writing (cont.)\n\nPractice chapter 4 & 5",
+   "Offline",
+   "LO4",
+   "ITU",
+   "- Read Chapter 4 & 6, Business communication for success\n\n'- Read slides: Chapter 4, 5",
+   "",
+   "Reading\n\nReview Chapter 4, 5",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 5: Writing (cont.)\n\nPractice chapter 4 & 5 (cont.)",
+   "Offline",
+   "LO4",
+   "ITU",
+   "- Read Chapter 4 & 6, Business communication for success\n\n'- Read slides: Chapter 4, 5",
+   "",
+   "Reading\n\nReview Chapter 4, 5",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 6. Developing Business Presentations\n\nBefore You Choose a Topic\n\nChoosing a Topic\n\nFinding Resources",
+   "Offline",
+   "LO5",
+   "U",
+   "- Read Chapter 10, Business communication for success\n\n'- Read slides: Chapter 6",
+   "",
+   "Reading\n\nReview Chapter 6",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6. Developing Business Presentations (cont.)\n\nMyths and Realities of Public Speaking\n\nOvercoming Obstacles in Your Presentation",
+   "Offline",
+   "LO5",
+   "U",
+   "- Read Chapter 10, Business communication for success\n\n'- Read slides: Chapter 6",
+   "",
+   "Reading\n\nReview Chapter 6",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7. Business Presentations in Action\n\nSound Bites and Quotables\n\nTelephone/VoIP Communication\n\nMeetings\n\nCelebrations: Toasts and Roasts\n\nMedia Interviews",
+   "Offline",
+   "LO5",
+   "ITU",
+   "- Read Chapter 15, Business communication for success\n\n'- Read slides: chapter 7",
+   "",
+   "Reading\n\nReview Chapter 7",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 7. Business Presentations in Action (cont.)\n\nIntroducing a Speaker\n\nPresenting or Accepting an Award\n\nServing as Master of Ceremonies\n\nViral Messages\n\nDiscussion",
+   "Offline",
+   "LO5",
+   "ITU",
+   "- Read Chapter 15, Business communication for success\n\n'- Read slides: chapter 7",
+   "",
+   "Reading\n\nReview Chapter 7",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 7. Business Presentations in Action (cont.)\n\nPrepare presentation topics provided by lecturer",
+   "Offline",
+   "LO5",
+   "ITU",
+   "- Read Chapter 15, Business communication for success\n\n'- Read slides: Chapter 7",
+   "",
+   "Reading\n\nReview Chapter 7",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 7. Business Presentations in Action (cont.)\n\nPrepare presentation topics provided by lecturer (cont.)",
+   "Offline",
+   "LO5",
+   "ITU",
+   "- Read Chapter 15, Business communication for success\n\n'- Read slides: Chapter 7",
+   "",
+   "Reading\n\nReview Chapter 7",
+   ""
+  ],
+  [
+   "29",
+   "Practice chapter 6 & 7:\n\nPresentation topics provided by lecturer",
+   "Offline",
+   "LO5",
+   "ITU",
+   "- Read Chapter 15, Business communication for success\n\n'- Read slides: Chapter 7",
+   "",
+   "Reading\n\nReview Chapter 7",
+   ""
+  ],
+  [
+   "30",
+   "Practice chapter 6 & 7 (cont.):\n\nPresentation topics provided by lecturer (cont.)",
+   "Offline",
+   "LO5",
+   "ITU",
+   "- Read Chapter 15, Business communication for success\n\n'- Read slides: Chapter 7",
+   "",
+   "Reading\n\nReview Chapter 7",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 8: Intrapersonal and Interpersonal Business Communication\n\nIntrapersonal Communication\n\nSelf-Concept and Dimensions of Self",
+   "Offline",
+   "LO6",
+   "ITU",
+   "- Read Chapter 16, Business communication for success\n\n'- Read slides: chapter 8",
+   "",
+   "Reading\n\nReview Chapter 8",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 8: Intrapersonal and Interpersonal Business (cont.) Interpersonal Needs\n\nConflict in the Work Environment\n\nDiscussion",
+   "Offline",
+   "LO6",
+   "ITU",
+   "- Read Chapter 16, Business communication for success\n\n'- Read slides: chapter 8",
+   "",
+   "Reading\n\nReview Chapter 8",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 8: Intrapersonal and Interpersonal Business Communication (cont.)\n\nDiscussion and practice",
+   "Offline",
+   "LO6",
+   "ITU",
+   "- Read Chapter 16, Business communication for success\n\n'- Read slides: chapter 8",
+   "",
+   "Reading\n\nReview Chapter 8",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 8: Intrapersonal and Interpersonal Business Communication (cont.)\n\nDiscussion and practice (cont.)",
+   "Offline",
+   "LO6",
+   "ITU",
+   "- Read Chapter 16, Business communication for success\n\n'- Read slides: chapter 8",
+   "",
+   "Reading\n\nReview Chapter 8",
+   ""
+  ],
+  [
+   "35",
+   "Quiz 1: chapter 1-8",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "Read Chapter 1-8\n\n'- Read slides: 1-8",
+   "",
+   "Reading\n\nReview Chapter 1-8",
+   ""
+  ],
+  [
+   "36",
+   "Review: Quiz 1 (chapter 1-8)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "Read Chapter 1-8\n\n'- Read slides: 1-8",
+   "",
+   "Reading\n\nReview Chapter 1-8",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 9. Negative News and Crisis Communication\n\nDelivering a negative news and message",
+   "Offline",
+   "LO7",
+   "ITU",
+   "- Read Chapter 17, Business communication for success\n\n'- Read slides: Chapter 9",
+   "",
+   "Reading\n\nReview Chapter 9",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 9. Negative News and Crisis Communication (cont.)\n\nCrisis Communication Plan\n\nPress Conferences",
+   "Offline",
+   "LO7",
+   "ITU",
+   "- Read Chapter 17, Business communication for success\n\n'- Read slides: Chapter 9",
+   "",
+   "Reading\n\nReview Chapter 9",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9. Negative News and Crisis Communication (cont.)\n\nPractice Chapter 9",
+   "Offline",
+   "LO7",
+   "ITU",
+   "- Read Chapter 17, Business communication for success\n\n'- Read slides: Chapter 9",
+   "",
+   "Reading\n\nReview Chapter 9",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 9. Negative News and Crisis Communication (cont.)\n\nPractice Chapter 9 (cont.)",
+   "Offline",
+   "LO7",
+   "ITU",
+   "- Read Chapter 17, Business communication for success\n\n'- Read slides: Chapter 9",
+   "",
+   "Reading\n\nReview Chapter 9",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 10. The Nature of Intercultural Communication\n\nGlobalization, Glocalization, and Grobalization\n\nCulture\n\nEnculturation",
+   "Offline",
+   "LO8",
+   "ITU",
+   "- Read Chapter 1: Intercultural business communication\n\n- Read slides: Chapter 10",
+   "",
+   "Reading\n\nReview Chapter 10",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 10. The Nature of Intercultural Communication (cont.)\n\nMultinational Management Orientations\n\nDiscussion",
+   "Offline",
+   "LO8",
+   "ITU",
+   "- Read Chapter 1: Intercultural business communication\n\n- Read slides: Chapter 10",
+   "",
+   "Reading\n\nReview Chapter 10",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 11. Global Etiquette\n\nIntroductions, Greetings, and handshakes\n\nBusiness card exchange\n\nPosition and status\n\nElectronic com. Etiquette",
+   "Offline",
+   "LO9",
+   "ITU",
+   "- Read Chapter 8: Intercultural business communication\n\n- Read slides: Chapter 11",
+   "",
+   "Reading\n\nReview Chapter 11",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 11. Global Etiquette (cont.)\n\nDining practices\n\nTipping\n\nGifting\n\nTravel Etiquette",
+   "Offline",
+   "LO9",
+   "ITU",
+   "- Read Chapter 8: Intercultural business communication\n\n- Read slides: Chapter 11",
+   "",
+   "Reading\n\nReview Chapter 11",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 11. Global Etiquette (cont.)\n\nPractice: Presentation about Global Etiquette by small group.",
+   "Offline",
+   "LO9",
+   "ITU",
+   "- Read Chapter 8: Intercultural business communication\n\n- Read slides: chapter 11",
+   "",
+   "Reading\n\nReview Chapter 11",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 11. Global Etiquette (cont.)\n\nPractice: Presentation about Global Etiquette by small group (cont.)",
+   "Offline",
+   "LO9",
+   "ITU",
+   "- Read Chapter 8: Intercultural business communication\n\n- Read slides: chapter 11",
+   "",
+   "Reading\n\nReview Chapter 11",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 11. Global Etiquette (cont.)\n\nPractice: Presentation about Global Etiquette by small group.",
+   "Offline",
+   "LO9",
+   "U",
+   "- Read Chapter 8: Intercultural business communication\n\n- Read slides: Chapter 11",
+   "",
+   "Reading\n\nReview Chapter 11",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 11. Global Etiquette (cont.)\n\nPractice: Presentation about Global Etiquette by small group (cont.)",
+   "Offline",
+   "LO9",
+   "U",
+   "- Read Chapter 8: Intercultural business communication\n\n- Read slides: Chapter 11",
+   "",
+   "Reading\n\nReview Chapter 11",
+   ""
+  ],
+  [
+   "49",
+   "Practice:\n\nStudents organize the implementation of programs from the project at Group asm 1 (for example, organizing events, recording media videos...)\n\n(Can be done online or offline, inside or outside)",
+   "Offline",
+   "LO11",
+   "U",
+   "- Read Chapter 1-11: Intercultural business communication\n\n- Read slides: Chapter 1- 11",
+   "",
+   "Reading\n\nReview Chapter 1-11",
+   ""
+  ],
+  [
+   "50",
+   "Practice (cont.):\n\nStudents organize the implementation of programs from the project at Group asm 1 (for example, organizing events, recording media videos...)\n\n(Can be done online or offline, inside or outside)",
+   "Offline",
+   "LO11",
+   "U",
+   "- Read Chapter 1-11: Intercultural business communication\n\n- Read slides: Chapter 1- 11",
+   "",
+   "Reading\n\nReview Chapter 1-11",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 12. Business and Social Customs\n\nVerbal expressions\n\nMale/female relationship in workplace equality\n\nHumor in business\n\nSuperstitions and taboos\n\nDress and Appearance",
+   "Offline",
+   "LO10",
+   "ITU",
+   "- Read Chapter 9: Intercultural business communication\n\n- Read slides: Chapter 12",
+   "",
+   "Reading\n\nReview Chapter 12",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 12. Business and Social Customs (cont.)\n\nCustoms Associated with Holidays\n\nffice Customs and Practices\n\nOffice customs and practices\n\nCustomary Demeanor/Behavior\n\nSpecial Foods and Consumption Taboos",
+   "Offline",
+   "LO10",
+   "ITU",
+   "- Read Chapter 9: Intercultural business communication\n\n- Read slides: Chapter 12",
+   "",
+   "Reading\n\nReview Chapter 12",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 12. Business and Social Customs (cont.)\n\nPractice",
+   "Offline",
+   "LO10",
+   "ITU",
+   "- Read Chapter 9: Intercultural business communication\n\n- Read slides: chapter 12",
+   "",
+   "Reading\n\nReview Chapter 12",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 12. Business and Social Customs (cont.)\n\nPractice (cont.)",
+   "Offline",
+   "LO10",
+   "ITU",
+   "- Read Chapter 9: Intercultural business communication\n\n- Read slides: chapter 12",
+   "",
+   "Reading\n\nReview Chapter 12",
+   ""
+  ],
+  [
+   "55",
+   "Group ASM 3: The final report of group project: Present the implementation results of the project plan are presented in asm 1",
+   "Offline",
+   "LO11",
+   "U",
+   "- Read Chapter 1 -12\n\n- Read slides: Chapter 1-12",
+   "",
+   "Reading\n\nReview Chapter 1 - 12",
+   ""
+  ],
+  [
+   "56",
+   "Group ASM 3: The final report of group project (cont.): Present the implementation results of the project plan are presented in asm 1",
+   "Offline",
+   "LO11",
+   "U",
+   "- Read Chapter 1 -12\n\n- Read slides: Chapter 1-12",
+   "",
+   "Reading\n\nReview Chapter 1 - 12",
+   ""
+  ],
+  [
+   "57",
+   "Group ASM 3: The final report of group project (cont.): Present the implementation results of the project plan are presented in asm 1",
+   "Offline",
+   "LO11",
+   "U",
+   "- Read Chapter 1 -12\n\n- Read slides: Chapter 1-12",
+   "",
+   "Reading\n\nReview Chapter 1 - 12",
+   ""
+  ],
+  [
+   "58",
+   "Group ASM 3: The final report of group project (cont.): Present the implementation results of the project plan are presented in asm 1",
+   "Offline",
+   "LO11",
+   "U",
+   "- Read Chapter 1 -12\n\n- Read slides: Chapter 1-12",
+   "",
+   "Reading\n\nReview Chapter 1 - 12",
+   ""
+  ],
+  [
+   "59",
+   "Quiz 2 (chapter 9-12)",
+   "Offline",
+   "LO1-L11",
+   "TU",
+   "- Read Chapter 1 -12\n\n- Read slides: Chapter 1-12",
+   "",
+   "Reading\n\nReview Chapter 1 - 12",
+   ""
+  ],
+  [
+   "60",
+   "Review course",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11",
+   "TU",
+   "- Read Chapter 1 -12\n\n- Read slides: Chapter 1-12",
+   "",
+   "Reading\n\nReview Chapter 1 - 12",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT1.1",
+   "What is design thinking in business? Cite some examples of successful businesses which use design thinking Principles to drive good results?"
+  ],
+  [
+   "2",
+   "1",
+   "CT1.2",
+   "How many steps are there in the Design Thinking Process? Define at least 2 steps?"
+  ],
+  [
+   "3",
+   "1",
+   "HN1.1",
+   "Describe different stages that you carried for the social project in SSG104 course. Compare with Design thinking theory (what are the similarities and differences?)"
+  ],
+  [
+   "4",
+   "2",
+   "CT1.3",
+   "How can design thinking help you to have a good start in business or a start up?"
+  ],
+  [
+   "5",
+   "2",
+   "HN1.2",
+   "In your opinion, to produce and bring a new product to market, what work has the business done?\n(Can be further explained by selecting a specific product)"
+  ],
+  [
+   "6",
+   "3",
+   "CT1.4",
+   "Choose a topic for the project and outline the basic contents according to the design thinking process."
+  ],
+  [
+   "7",
+   "3",
+   "HN1.3",
+   "Choose a topic for the project and outline the basic contents according to the design thinking process."
+  ],
+  [
+   "8",
+   "4",
+   "CT2.1",
+   "How often do you use sticky notes in study? What are the benefits of using sticky notes to brainstorm in the classroom or at work?"
+  ],
+  [
+   "9",
+   "4",
+   "HN2.1",
+   "How can design thinking help you have a good start in buidling a new business or a start up?"
+  ],
+  [
+   "10",
+   "5",
+   "CT2.2",
+   "Are you an introvert or an extrovert? In your opinion, how important is communication in daily life in general and in business in particular?"
+  ],
+  [
+   "11",
+   "5",
+   "CT2.3",
+   "What is business communication & why do you need it?"
+  ],
+  [
+   "12",
+   "5",
+   "HN2.2",
+   "Describe a communication process that you observed when you communicate with friends/family members/co-workers/…"
+  ],
+  [
+   "13",
+   "5",
+   "HN2.3",
+   "How is business communication different from day-to-day communication? How important is Business communication to business activities?"
+  ],
+  [
+   "14",
+   "6",
+   "CT2.4",
+   "Due to the covid-19 pandemic, is there any disturbance in communication in business and study today? And how has that made communication transformative?"
+  ],
+  [
+   "15",
+   "6",
+   "CT2.5",
+   "What are your responsibilities as a communicator?"
+  ],
+  [
+   "16",
+   "6",
+   "HN2.4",
+   "Watch the video clip provided below:\nhttps://drive.google.com/drive/folders/1V_k7NjGUL4arId3xyTpcL8AIkSb5NeCJ?usp=sharing\nWhat are the components contributing to this conversation?"
+  ],
+  [
+   "17",
+   "7",
+   "CT3.1",
+   "Take your time to travel around the world online, try to find out how many countries use English as the main language today? Then compare the differences of English in the following countries: USA, Australia, UK, Scotland and Singapore (You can choose a few more countries as well)?"
+  ],
+  [
+   "18",
+   "7",
+   "CT3.2",
+   "Why is it important to deliver your message clearly?"
+  ],
+  [
+   "19",
+   "7",
+   "HN3.1",
+   "Talk about one of your successful communication experiences which motivated others; an unsuccessful communication experience that causes misunderstanding or conflict.\nFrom the above 2 experiences, what conclusions can you draw in using language to communicate?"
+  ],
+  [
+   "20",
+   "8",
+   "CT3.3",
+   "Talk about one of your successful communication experiences which motivated others; an unsuccessful communication experience that causes misunderstanding or conflict. From the above 2 experiences, what conclusions can you draw in using language to communicate?"
+  ],
+  [
+   "21",
+   "8",
+   "CT3.4",
+   "Give at least 2 examples for each type of words below: - Cliche - Slang - Jarrgon How does each form of language above interfere with the communication process? (if we use them excessively?)"
+  ],
+  [
+   "22",
+   "8",
+   "HN3.2",
+   "Using a dictionary that gives word origins, such as the American Heritage College Dictionary, Merriam Webster’s Collegiate Dictionary, or the New Oxford American Dictionary, find at least ten English words borrowed from other languages. Are these words still appropriate for today's use? Explain why a language has to borrowed words and phrases from other languages?"
+  ],
+  [
+   "23",
+   "8",
+   "HN3.3",
+   "Find at least ten Vietnamese words borrowed from other languages. Are these words still appropriate for today's use? Explain why a language has to borrowed words and phrases from other languages?"
+  ],
+  [
+   "24",
+   "9",
+   "CT3.5",
+   "How to improve verbal communication?"
+  ],
+  [
+   "25",
+   "9",
+   "HN3.4",
+   "Give at least 2 examples for each type of words below:\n- Cliche\n- Slang\n- Jarrgon\nHow does each form of language above interfere with the communication process? (if we use them excessively?)"
+  ],
+  [
+   "26",
+   "10",
+   "CT4.1",
+   "From your viewpoint, how do you think thought influences the use of language? Write a one- to two-page explanation."
+  ],
+  [
+   "27",
+   "10",
+   "HN4.1",
+   "Give at least 2 examples for each type of words below:\n- Sexist\n- Racist\n- Euphemism\n- Doublespeak.\nHow does each form of language above interfere with the communication process? (if we use them excessively?)"
+  ],
+  [
+   "28",
+   "11",
+   "CT4.2",
+   "What is self-concept? Define yourself in 5 words and then introduce who you are by using these 5 words to your classmates.?"
+  ],
+  [
+   "29",
+   "11",
+   "CT4.3",
+   "Define what is perception? Give at least 2 examples of this concept based on your actual experience?"
+  ],
+  [
+   "30",
+   "11",
+   "HN4.2",
+   "What is self-concept? Describe the factors that contribute to self-concept."
+  ],
+  [
+   "31",
+   "11",
+   "HN4.3",
+   "Define yourself in 5 words and then compare with those that your classmates would use to define you. From that comparison, what do you think about different perception between individuals?"
+  ],
+  [
+   "32",
+   "12",
+   "CT4.4",
+   "Why understanding your audience is important?"
+  ],
+  [
+   "33",
+   "12",
+   "CT4.5",
+   "Think of a new group you have joined, or a new activity you have become involved in. Did the activity or group have an influence on your perceptions? Explain the effects to your classmates?"
+  ],
+  [
+   "34",
+   "12",
+   "HN4.4",
+   "If you were asked to get the attention of your peers, what image or word would you choose and why?\nIf you were asked to get the attention of someone like yourself, what image or word would you choose and why?"
+  ],
+  [
+   "35",
+   "13",
+   "CT5.1",
+   "What are pros and cons of written communication?"
+  ],
+  [
+   "36",
+   "13",
+   "HN5.1",
+   "Presentation: Present the plan of the group's business or communication project (from slot 1&2)"
+  ],
+  [
+   "37",
+   "14",
+   "CT5.2",
+   "According to your experience, spoken language vs written language, which is more difficult? State why?"
+  ],
+  [
+   "38",
+   "14",
+   "CT5.3",
+   "Read the business section of your local newspaper or another daily paper. Write a one-page summary of the news that makes the most impression on you. Review your summaries and compare them with those of your classmates"
+  ],
+  [
+   "39",
+   "14",
+   "HN5.2",
+   "Presentation: Present the plan of the group's business or communication project (from slot 1&2) (cont.)"
+  ],
+  [
+   "40",
+   "15",
+   "CT5.4",
+   "How to improve your business writing?"
+  ],
+  [
+   "41",
+   "15",
+   "HN5.3",
+   "Explain how written communication is similar to oral communication, and how it is different"
+  ],
+  [
+   "42",
+   "16",
+   "CT6.1",
+   "Choose a product (should be a simple product), then write a letter persuading consumers to buy your product (you act as a seller) in 5 sentences. After the discussion time is up, the lecturer can call a few students to read the letter out to convince the audience to buy your product?"
+  ],
+  [
+   "43",
+   "16",
+   "CT6.2",
+   "Describe some common barriers to written communication and how to overcome them."
+  ],
+  [
+   "44",
+   "16",
+   "HN6.1",
+   "Read the business section of your local newspaper or another daily paper. Define which style of written communication that news used.\nWrite a half-page summary of the news that makes the most impression on you. Review your summaries and provide some information about rhetorical elements or cognate strategies that you used (if any)"
+  ],
+  [
+   "45",
+   "17",
+   "CT6.3",
+   "What styles in written communication are there?"
+  ],
+  [
+   "46",
+   "17",
+   "CT6.4",
+   "Read the business section of your local newspaper or another daily paper. Write a one-page summary of the news that makes the most impression on you. Review your summaries and compare them with those of your classmates"
+  ],
+  [
+   "47",
+   "17",
+   "HN6.2",
+   "Based on your own experience, what is the most difficult challenge when you write to communicate in formal situations?"
+  ],
+  [
+   "48",
+   "18",
+   "CT6.5",
+   "Describe some common barriers to written communication and how to overcome them."
+  ],
+  [
+   "49",
+   "18",
+   "HN6.3",
+   "Describe some common barriers to written communication and how to overcome them."
+  ],
+  [
+   "50",
+   "19",
+   "CT7.1",
+   "To what extent do you understand \"reflect consideration of the audience\", which is one of the general purposes in business writing?"
+  ],
+  [
+   "51",
+   "19",
+   "CT7.2",
+   "How many principles in organizing business writing? Can you name one and explain?"
+  ],
+  [
+   "52",
+   "19",
+   "HN7.1",
+   "Find an example of informal writing and write a formal version. Please share with your classmates"
+  ],
+  [
+   "53",
+   "20",
+   "CT7.3",
+   "What functions does organization serve in a document?"
+  ],
+  [
+   "54",
+   "20",
+   "HN7.2",
+   "Have you ever encountered or witnessed any plagiarism situation? Share your experience with your classmates (what kind of writing it was? which type of plagiarism detection software you used? What did you to to fix that work?)"
+  ],
+  [
+   "55",
+   "21",
+   "CT7.4",
+   "Find an example of a poor sentence or a spelling or grammar error that was published online or in print and share your finding with the class."
+  ],
+  [
+   "56",
+   "21",
+   "HN7.3",
+   "Find a case where plagiarism or misrepresentation had consequences in the business world. Share your findings and discuss with classmates."
+  ],
+  [
+   "57",
+   "22",
+   "CT8.1",
+   "How do you summarize and paraphrase to avoid plagiarism?"
+  ],
+  [
+   "58",
+   "22",
+   "HN8.1",
+   "ACTIVITY: Write a cover letter or Statement of purpose"
+  ],
+  [
+   "59",
+   "23",
+   "CT8.2",
+   "Find a case where plagiarism or misrepresentation had consequences in the business world. Share your findings and discuss with classmates"
+  ],
+  [
+   "60",
+   "23",
+   "CT8.3",
+   "How much is enough in a presentation interms of: time and content?"
+  ],
+  [
+   "61",
+   "23",
+   "HN8.2",
+   "Activity: Prepare your own presentation\nStep 1: Define your audience. Choose a random topic of your preference to make a presentation for them (base on 5 different purposes of speech and 5 criteria in slide 9)\nStep 2: Provide the list of ideas you plan to discuss in your presentation in two cases: 15 min presentation vs 60 min presentation\nStep 3: With each idea, provide at least 1 source of information you would use (paper, website,...). Explain why you choose those sources"
+  ],
+  [
+   "62",
+   "24",
+   "CT8.4",
+   "How is ethnocentrism important in the real practice of business presentation?"
+  ],
+  [
+   "63",
+   "24",
+   "CT8.5",
+   "What did you do to overcome the obstacles in your presentation?"
+  ],
+  [
+   "64",
+   "24",
+   "HN8.3",
+   "How can a persuasive speech be ethical? Explain your opinion and give some examples. Compare and share in class."
+  ],
+  [
+   "65",
+   "25",
+   "CT9.1",
+   "Can you create a sound bite from an article on any newspaper published today?"
+  ],
+  [
+   "66",
+   "25",
+   "CT9.2",
+   "How to make a successful sound bite?"
+  ],
+  [
+   "67",
+   "25",
+   "HN9.1",
+   "Come up with a new product or service that you find potential and appealing. Try to come up with several sound bites, slogans, or quotes that meet all four criteria. You may refer to some sales materials or interviews of similar product/service as a source for this exercise, and if you pull a quote from an online interview, please post the link when you complete your assignment. Discuss how the sound bite, slogan, or quote meets all four criteria in your response."
+  ],
+  [
+   "68",
+   "26",
+   "CT9.3",
+   "What are essential elements of a meeting agenda? Which ones are the most important?"
+  ],
+  [
+   "69",
+   "26",
+   "CT9.4",
+   "What is roast? define your understanding and give one example?"
+  ],
+  [
+   "70",
+   "26",
+   "HN9.2",
+   "Consider the following scenario. Your large company is opening a new office in a new town and you have been designated to be part of the team that will be on the front lines. You want to establish goodwill, but also recognize that, being an outsider, you and your company may not be welcomed with open arms by the local business community. Your company produces a product and provides a service (feel free to choose; a coffee shop for example) that is currently offered in the town, but your organization perceives room for market growth as well as market share. Describe how you would handle relations with the local media. Compare your ideas with those of a classmate."
+  ],
+  [
+   "71",
+   "27",
+   "CT9.5",
+   "Find one example of an award acceptance speech that you perceive as particularly ineffective. Indicate why and share the link. Compare with classmates"
+  ],
+  [
+   "72",
+   "27",
+   "HN9.3",
+   "Find one example of an award acceptance speech that you perceive as particularly ineffective. Indicate\nwhy and share the link. Compare with classmates."
+  ],
+  [
+   "73",
+   "28",
+   "CT10.1",
+   "What makes a communication message viral?"
+  ],
+  [
+   "74",
+   "28",
+   "HN10.1",
+   "What motivates you to pay attention? Make a list of five ideas, images, or words that attract your attention. Post and compare with classmates."
+  ],
+  [
+   "75",
+   "29",
+   "CT10.2",
+   "What motivates you to pay attention? Make a list of five ideas, images, or words that attract your attention. Post and compare with classmates."
+  ],
+  [
+   "76",
+   "29",
+   "CT10.3",
+   "If you are allowed to describe yourself in less than 20 words, how do you describe?"
+  ],
+  [
+   "77",
+   "30",
+   "CT10.4",
+   "Analyze the three hallmark rules of interviews"
+  ],
+  [
+   "78",
+   "30",
+   "CT10.5",
+   "Imagine you are in a job interview. How would you describe your strengths and weaknesses?"
+  ],
+  [
+   "79",
+   "31",
+   "CT11.1",
+   "What is difference between interpersonal and intrapersonal?"
+  ],
+  [
+   "80",
+   "31",
+   "CT11.2",
+   "What topic that you often communicate with yourself? What situation is it?"
+  ],
+  [
+   "81",
+   "31",
+   "HN11.1",
+   "Take a few minutes and visualize what you would like your life to be like a year from now, or five years from now. Do you think this visualization exercise will influence your actions and decisions in the future? Compare your thoughts with those of your classmates."
+  ],
+  [
+   "82",
+   "32",
+   "CT11.3",
+   "Can you think of a job or career that would be a good way for you to express yourself? Are you pursuing that job or career? Why or why not? Discuss your answer with a classmate"
+  ],
+  [
+   "83",
+   "32",
+   "HN11.2",
+   "Can you think of a job or career that would be a good way for you to express yourself? Are you pursuing that job or career? Why or why not? Discuss your answer with a classmate."
+  ],
+  [
+   "84",
+   "33",
+   "CT11.4",
+   "Analysis of Schutz's theory of interpersonal needs"
+  ],
+  [
+   "85",
+   "33",
+   "HN11.3",
+   "Think of two or more different situations and how you might express your personal needs differently from one situation to the other. Have you observed similar variations in personal needs in other people from one situation to another? Discuss your thoughts with a classmate."
+  ],
+  [
+   "86",
+   "34",
+   "CT12.1",
+   "What is environmental conflict in the work place?"
+  ],
+  [
+   "87",
+   "34",
+   "HN12.1",
+   "Can you think of a time when a conflict led to a new opportunity, better understanding, or other positive result? If not, think of a past conflict and imagine a positive outcome. Write a two- to three-paragraph description of what happened, or what you imagine could happen. Share your results with a classmate"
+  ],
+  [
+   "88",
+   "35",
+   "CT12.2",
+   "What are some principles of conflict?"
+  ],
+  [
+   "89",
+   "35",
+   "HN12.2",
+   "Review Chap 1 - 8.\nWhat part of these chapter impressed you the most? Why?"
+  ],
+  [
+   "90",
+   "35",
+   "HN12.3",
+   "What part of these chapter was the hardest for you? What do you need prepare to practice this content in life in the best way?"
+  ],
+  [
+   "91",
+   "36",
+   "CT12.3",
+   "How to manage and resolve conflict in the workplace?"
+  ],
+  [
+   "92",
+   "36",
+   "CT12.4",
+   "Think of a past conflict and imagine a positive outcome. Write a two- to three-paragraph description of what happened, or what you imagine could happen. Share your results with a classmate"
+  ],
+  [
+   "93",
+   "37",
+   "CT13.1",
+   "In the seven goals of delivering negative news, which one do you think is the most important one and why?"
+  ],
+  [
+   "94",
+   "37",
+   "CT13.2",
+   "What is bad news in communication?"
+  ],
+  [
+   "95",
+   "37",
+   "HN13.1",
+   "Sales have decreased for two consecutive quarters at your business. You have been instructed to inform your sales team that their hours, and base pay, will be reduced by 20 percent. While you may have a few members of your sales team that are underperforming, you want to retain the entire team. Write a negative news message in a direct or indirect approach informing your sales team of the news."
+  ],
+  [
+   "96",
+   "38",
+   "CT13.3",
+   "Do you think negative news can create any oppotunity to your organization? Can you give one example in the real course of bussiness?"
+  ],
+  [
+   "97",
+   "38",
+   "CT13.4",
+   "What are types of business communication?"
+  ],
+  [
+   "98",
+   "38",
+   "HN13.2",
+   "When people don’t know what to do in a crisis situation, what happens? How can Group address probable challenges before the crisis occurs? Discuss Group ideas with classmates."
+  ],
+  [
+   "99",
+   "39",
+   "CT13.5",
+   "Locate a crisis communication online and review it. Share and compare with classmates"
+  ],
+  [
+   "100",
+   "39",
+   "HN13.3",
+   "As a case study, research one crisis that involves your area of training or career field. What communication issues were present and how did they affect the response to the crisis? Compare your results with classmates."
+  ],
+  [
+   "101",
+   "40",
+   "CT14.1",
+   "What is a press conference why is it important?"
+  ],
+  [
+   "102",
+   "40",
+   "HN14.1",
+   "Locate a crisis communication online and review it. Share and compare with classmates"
+  ],
+  [
+   "103",
+   "41",
+   "CT14.2",
+   "Why is it important to think beyond ourselves as individuals in intercultural interaction?"
+  ],
+  [
+   "104",
+   "41",
+   "CT14.3",
+   "What is the purpose of intercultural communication?"
+  ],
+  [
+   "105",
+   "41",
+   "HN14.2",
+   "Ask members of the Group who is from another culture each other to discuss how cultural norms and rules in his or her culture States."
+  ],
+  [
+   "106",
+   "42",
+   "CT14.4",
+   "What are barriers to communication?"
+  ],
+  [
+   "107",
+   "42",
+   "CT14.5",
+   "Ask members of the Group who is from another culture each other to discuss how cultural norms and rules in his or her culture States."
+  ],
+  [
+   "108",
+   "42",
+   "HN14.3",
+   "Analyze a multinational corporation’s annual report and determine where it is producing and selling goods and what the profit margins of those goods are compared to other multinational firms."
+  ],
+  [
+   "109",
+   "43",
+   "CT15.1",
+   "Why is business card etiquette important?"
+  ],
+  [
+   "110",
+   "43",
+   "CT15.2",
+   "what should you do when you receive a business card?"
+  ],
+  [
+   "111",
+   "43",
+   "HN15.1",
+   "How do introductions vary between the Vietnam and other cultures?"
+  ],
+  [
+   "112",
+   "44",
+   "CT15.3",
+   "How are position and status may have an impact on the success of intercultural communication encounters?"
+  ],
+  [
+   "113",
+   "44",
+   "HN15.2",
+   "Identify some guidelines for proper telephone etiquette"
+  ],
+  [
+   "114",
+   "45",
+   "CT15.4",
+   "What are some cultural differences in gift-giving practices? What gifts are considered appropri\u0002ate for a person from the United States to give to someone in another culture?"
+  ],
+  [
+   "115",
+   "45",
+   "HN15.3",
+   "How are gender and age related to position and status in Viet nam"
+  ],
+  [
+   "116",
+   "46",
+   "CT16.1",
+   "Explain how women in business are treated differ\u0002ently in the United States and Mexico"
+  ],
+  [
+   "117",
+   "46",
+   "CT16.2",
+   "How do businesses use different cultures?"
+  ],
+  [
+   "118",
+   "46",
+   "HN16.1",
+   "Research the dining practices of such countries as Zimbabwe, Samoa, and Tanzania; write a one-page summary identifying major differences between din\u0002ing practices in the United States and these countries"
+  ],
+  [
+   "119",
+   "47",
+   "CT16.3",
+   "Research the tipping practices of a European and an Asian country of your choice and make a com\u0002parison with tipping practices in the United States. Report your findings to the class."
+  ],
+  [
+   "120",
+   "47",
+   "HN16.2",
+   "Research the gift-giving practices of one of the following countries and make a brief report to the class: Japan, Taiwan, Egypt, Argentina, or Germany. Include appropriate and inappropriate gifts and other related information, such as gift presentation and reciprocation"
+  ],
+  [
+   "121",
+   "48",
+   "CT16.4",
+   "In what countries is business dress similar to that worn in the United States & Viet nam"
+  ],
+  [
+   "122",
+   "48",
+   "HN16.3",
+   "Research the tipping practices of a European and an Asian country of your choice and make a com\u0002parison with tipping practices in the United States. Report your findings to the class."
+  ],
+  [
+   "123",
+   "49",
+   "CT17.1",
+   "Practice: Students organize the implementation of programs from the project at Group asm 1 (for example, organizing events, recording media videos...) Can be done online or offline, inside or outside)"
+  ],
+  [
+   "124",
+   "49",
+   "CT17.2",
+   "What are some guidelines for tipping appropri\u0002ately? How do tipping customs vary?"
+  ],
+  [
+   "125",
+   "49",
+   "HN17.1",
+   "Practice:\nStudents organize the implementation of programs from the project at Group asm 1 (for example, organizing events, recording media videos...)\n\nCan be done online or offline, inside or outside)"
+  ],
+  [
+   "126",
+   "50",
+   "CT17.3",
+   "Identify some verbal expressions used in the United States that when translated literally have little meaning and are confusing to persons for whom English is a second language?."
+  ],
+  [
+   "127",
+   "50",
+   "HN17.2",
+   "Practice:\nStudents organize the implementation of programs from the project at Group asm 1 (for example, organizing events, recording media videos...)\n\nCan be done online or offline, inside or outside)"
+  ],
+  [
+   "128",
+   "51",
+   "CT17.4",
+   "What do you think about Male/female relationship in workplace equality in Vietnam?"
+  ],
+  [
+   "129",
+   "51",
+   "HN17.3",
+   "Explain how women in business are treated differ\u0002ently in the United States and Mexico"
+  ],
+  [
+   "130",
+   "52",
+   "CT18.1",
+   "List some religious taboos associated with food consumption in a culture of the United States or a culture of your choice"
+  ],
+  [
+   "131",
+   "52",
+   "CT18.2",
+   "What superstitions related to numbers are held by people of the United States and China?"
+  ],
+  [
+   "132",
+   "52",
+   "HN18.1",
+   "In what countries is business dress similar to that worn in the United States & Viet nam"
+  ],
+  [
+   "133",
+   "53",
+   "CT18.3",
+   "Identify some rules for appropriate behavior in public places in the United States?"
+  ],
+  [
+   "134",
+   "53",
+   "CT18.4",
+   "Describe how hiring/firing practices of the United States and Japan differ"
+  ],
+  [
+   "135",
+   "53",
+   "HN18.2",
+   "Search online for holidays celebrated by a coun\u0002try of your choice (other than those listed in the text). Choose one or two holidays celebrated by the people of the country selected. Prepare a one\u0002page abstract summarizing how the holiday(s) is celebrated, including such activities as parades, dancing, and parties. Also include special foods associated with the celebration"
+  ],
+  [
+   "136",
+   "54",
+   "CT18.5",
+   "What guidelines for business dress should women observe in cultures other than their own?"
+  ],
+  [
+   "137",
+   "54",
+   "HN18.3",
+   "List some religious taboos associated with food consumption in a culture of the United States or a culture of your choice"
+  ],
+  [
+   "138",
+   "60",
+   "HN20.1",
+   "What part of these chapter impressed you the most? Why?"
+  ],
+  [
+   "139",
+   "60",
+   "HN20.2",
+   "What part of these chapter was the hardest for you? What do you need prepare to practice this content in life in the best way?"
+  ]
+ ],
+ "links": [
+  "/download/4361/S/1_SSB201.zip",
+  "/download/4361/S/2_SSB201.zip"
+ ]
+}

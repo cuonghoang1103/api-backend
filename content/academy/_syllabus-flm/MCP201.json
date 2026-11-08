@@ -1,0 +1,915 @@
+{
+ "ma": "MCP201",
+ "sylID": "14432",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14432",
+   "code": "MCP201",
+   "name": "Microcontroller Programming_Lập trình vi điều khiển",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14432",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14432",
+  "Syllabus Name": "Microcontroller Programming_Lập trình vi điều khiển",
+  "Course Name English": "Microcontroller Programming",
+  "Subject Code": "MCP201",
+  "Learning-Teaching Method": "In-class lecture, Active Learning, Social Constructivism, Project-Based Learning,",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "PRF193",
+  "Description": "Hands-on Embedded Systems Development: Learn to implement real-world embedded system projects on microcontrollers (using both simulation environments and physical hardware) with the STM32Cube HAL library and STM32CubeIDE.\nPeripheral Mastery & ARM Architecture: Master the core architecture of the ARM Cortex-M processor. Develop and refine C/C++ source code to build diverse applications (signal generators, temperature monitoring systems, audio players, and user interfaces) by leveraging Digital/Analog I/O, Interrupts, Timers, and Pulse-Width Modulation (PWM). Gain hands-on proficiency in analyzing and deploying serial communication protocols—SPI, UART, and I2C—while evaluating their advantages and limitations in embedded environments.\nReal-Time Operating Systems (RTOS): Explore the core characteristics of RTOS and multitasking mechanisms on microcontrollers. Students will directly apply Threads, Mutexes, Semaphores, and Interrupts to design a complete multitasking system, effectively resolving resource contention issues.\nPractical Engineering Skills: Prototype embedded systems using the ST Nucleo-F401RE (ST Nucleo-F411RE) development board and cost-effective components. Enhance hardware-level C/C++ programming mindsets by immediately applying theory to practice. Master the end-to-end hardware development workflow alongside professional debugging and troubleshooting techniques.",
+  "StudentTasks": "\"- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n- Student is responsible to do all exercises and practical given by instructor in class or at home and submit on time. Do quizzes during class.\n- Students must regularly check the Learning Management System (http://flm.fpt.edu.vn and ehttps://fu-edunext.fpt.edu.vn/home) for official announcements, schedule updates, and course materials.\"",
+  "Tools": "Specific Tools:\n1. Hardware & Training Kits\n- Development Board: ST Nucleo-F401RE (powered by the ARM Cortex-M4 core).\n- Programmer & Debugger: On-board ST-Link/V2 debugger, supporting the SWD (Serial Wire Debug) protocol.\n\n2. Software Development Environment\n- Primary IDE: STM32CubeIDE (fully replaces Keil Studio Cloud and Mbed Studio). This is the industry-standard IDE for C/C++ development on ST microcontrollers.\n- Simulation Software: Wokwi (a free, web-based open-source simulator supporting STM32 boards and various peripherals) or other debugging/simulation tools recommended by the instructor.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "A Beginner’s Guide to Designing Embedded System Applications on Arm Cortex-M Microcontrollers",
+   "Ariel Lutenberg, Pablo Gomez, Eric Pernia",
+   "ARM Education Media",
+   "2022",
+   "",
+   "9781911531418",
+   "True",
+   "False",
+   "True",
+   "https://www.arm.com/resources/education/books/designing-embedded-systems"
+  ],
+  [
+   "2",
+   "Getting started with STM32: STM32 step-by-step",
+   "STMicroelectronics",
+   "STMicroelectronics",
+   "2026",
+   "",
+   "N/A",
+   "False",
+   "False",
+   "True",
+   "https://wiki.st.com/stm32mcu/wiki/STM32StepByStep:Getting_started_with_STM32_:_STM32_step_by_step"
+  ],
+  [
+   "3",
+   "Getting started with STM32 system peripherals",
+   "STMicroelectronics",
+   "STMicroelectronics",
+   "2026",
+   "",
+   "N/A",
+   "False",
+   "False",
+   "True",
+   "https://wiki.st.com/stm32mcu/wiki/Getting_started_with_STM32_system_peripherals"
+  ],
+  [
+   "4",
+   "STM32 Programming Tutorials & Projects",
+   "Khaled Magdy",
+   "DeepBlueMbedded",
+   "N/A",
+   "",
+   "N/A",
+   "False",
+   "False",
+   "True",
+   "https://deepbluembedded.com/stm32-arm-programming-tutorials/"
+  ],
+  [
+   "5",
+   "STM32 Tutorials",
+   "Arun Rawat",
+   "ControllersTech",
+   "N/A",
+   "",
+   "N/A",
+   "False",
+   "False",
+   "True",
+   "https://controllerstech.com/category/stm32/"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the fundamentals of an embedded system and discover the ARM architecture and microcontrollers."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand the characteristics of microcontrollers and embedded systems, including their components, benefits, and constraints."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the industry-standard ARM-based microcontroller architecture, its features, and programming models."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Develop working embedded prototypes using the STM32 HAL library, FreeRTOS, the ST Nucleo-F401RE board (or ST Nucleo-F411RE board), and low-cost peripherals."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply knowledge of digital and analog I/O programming on STM32 microcontrollers."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Implement interrupts to control peripherals using the STM32 HAL library."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Develop applications incorporating timers and Pulse Width Modulation (PWM) using the STM32 HAL library."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Evaluate serial communication protocols used in embedded systems (UART, SPI, and I2C), including their benefits and limitations."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Understand Real-Time Operating Systems (FreeRTOS) and how they facilitate multitasking in embedded systems."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Implement real-world embedded system projects on the STM32 Nucleo board using FreeRTOS, with proper task synchronization (Mutex/Semaphore)."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment/Lab",
+   "on-going",
+   "2",
+   "30.0%",
+   ">0",
+   "At home and in schedule",
+   "All CLOs",
+   "Mini-project",
+   "By instructor",
+   "Assignment/Lab1: Covering knowledge from Chapter 1 to Chapter 4\nAssignment/Lab2: Covering knowledge from Chapter 4 to Chapter 5\nAssignment/Lab3: Covering knowledge from Chapter 5 to Chapter 7\nAssignment/Lab4: Covering knowledge from Chapter 6 to Chapter 8\nAssignment/Lab5: Covering knowledge from Chapter 5 to Chapter 9\nAssignment/Lab6: Covering knowledge from Chapter 8 to Chapter 10",
+   "Supervised by instructor",
+   "Pre-Lab (Mandatory):\n- Setup project in STM32CubeIDE & configure .ioc file.\n- Write HAL logic in C/C++ and ensure zero compilation errors.\n\nIn-Lab:\n- Connect STM32 Nucleo-F401RE(or STM32 Nucleo-F411RE board) to hardware & flash code.\n- Test physical system behavior and clear the instructor Q&A session.\n- The instructor will evaluate and grade the student's lab work. Each student must have at least two lab grades."
+  ],
+  [
+   "2",
+   "Project",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "At home and in schedule",
+   "All CLOs",
+   "Presentation",
+   "By instructor",
+   "All chapters; knowledge and skills (Hardware Demo)",
+   "Supervised by instructor",
+   ""
+  ],
+  [
+   "3",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "All CLOs",
+   "Multiple choice",
+   "50",
+   "All chapters; knowledge and skills",
+   "By Exam board",
+   "The exam questions must be updated"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Overview",
+   "Offline",
+   "CLO1, CLO2",
+   "IT",
+   "Books, Slide Chapter 1",
+   "MCP201",
+   "Read Slide Chapter 1",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Introduction to Embedded Systems\n1.1. CPUs vs. MCUs vs. Embedded Systems",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Books, Slide Chapter 1",
+   "",
+   "Read Slide Chapter 1",
+   ""
+  ],
+  [
+   "3",
+   "1.2. Examples of Embedded Systems\n1.3. Options for Building Embedded Systems",
+   "Offline",
+   "CLO1, CLO2",
+   "IT",
+   "Books, Slide Chapter 1",
+   "",
+   "Read Slide Chapter 1",
+   ""
+  ],
+  [
+   "4",
+   "1.4. Features of Embedded Systems\n1.5. Building Embedded Systems",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Books, Slide Chapter 1",
+   "",
+   "Read Slide Chapter 1",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: ARM Cortex-M4 Processor Architecture\n2.1. What is Arm architecture?\n2.2. Arm processor families",
+   "Offline",
+   "CLO1, CLO3",
+   "IT",
+   "Books, Slide Chapter 2",
+   "",
+   "Read Slide Chapter 2",
+   ""
+  ],
+  [
+   "6",
+   "2.3. Arm Cortex-M series\n2.4. Cortex-M4 processor",
+   "Offline",
+   "CLO3",
+   "T",
+   "Books, Slide Chapter 2",
+   "",
+   "Read Slide Chapter 2",
+   ""
+  ],
+  [
+   "7",
+   "2.5. Arm processors vs. Arm architectures\n2.6. Processor overview",
+   "Offline",
+   "CLO3",
+   "T",
+   "Books, Slide Chapter 2",
+   "",
+   "Read Slide Chapter 2",
+   ""
+  ],
+  [
+   "8",
+   "2.7. Block diagram\n2.8. Registers",
+   "Offline",
+   "CLO3",
+   "T",
+   "Books, Slide Chapter 2",
+   "",
+   "Read Slide Chapter 2",
+   ""
+  ],
+  [
+   "9",
+   "2.9. ALU, Pipeline and Instruction Execution",
+   "Offline",
+   "CLO3",
+   "T",
+   "Books, Slide Chapter 2",
+   "",
+   "Read Slide Chapter 2",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3: Memory Mapping & Address Space\n3.1. Memory Map of STM32",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Books, Slide Chapter 3",
+   "",
+   "Read Slide Chapter 3",
+   ""
+  ],
+  [
+   "11",
+   "3.2. Instruction Cycles and Bus Architecture",
+   "Offline",
+   "CLO3",
+   "T",
+   "Books, Slide Chapter 3",
+   "",
+   "Read Slide Chapter 3",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4: STM32CubeIDE & HAL Library\n4.1. Introduction to STM32CubeIDE",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Books, Slide Chapter 4",
+   "",
+   "Read Slide Chapter 4",
+   ""
+  ],
+  [
+   "13",
+   "4.2. STM32CubeMX Configuration & Code Generation",
+   "Offline",
+   "CLO4",
+   "T",
+   "Books, Slide Chapter 4",
+   "",
+   "Read Slide Chapter 4",
+   ""
+  ],
+  [
+   "14",
+   "4.3. CMSIS-CORE & HAL Driver Architecture",
+   "Offline",
+   "CLO4",
+   "T",
+   "Books, Slide Chapter 4",
+   "",
+   "Read Slide Chapter 4",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5: Digital I/O (GPIO)\n5.1. Bare-metal Register Manipulation",
+   "Offline",
+   "CLO5",
+   "IT",
+   "Books, Slide Chapter 5",
+   "",
+   "Read Slide Chapter 5",
+   ""
+  ],
+  [
+   "16",
+   "5.2. HAL API for GPIO",
+   "Offline",
+   "CLO5",
+   "T",
+   "Books, Slide Chapter 5",
+   "",
+   "Read Slide Chapter 5",
+   ""
+  ],
+  [
+   "17",
+   "Lab 1",
+   "Offline",
+   "CLO5",
+   "TU",
+   "Lab 1 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "18",
+   "Lab 1",
+   "Offline",
+   "CLO5",
+   "TU",
+   "Lab 1 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "19",
+   "Lab 1 Review & Q&A",
+   "Offline",
+   "CLO5",
+   "TU",
+   "Lab 1 tutorials",
+   "",
+   "Submit Assignment/Lab 1",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6: Interrupts & NVIC\n6.1. External Interrupts (EXTI)",
+   "Offline",
+   "CLO6",
+   "IT",
+   "Books, Slide Chapter 6",
+   "",
+   "Read Slide Chapter 6",
+   ""
+  ],
+  [
+   "21",
+   "6.2. NVIC Configuration and Priority",
+   "Offline",
+   "CLO6",
+   "T",
+   "Books, Slide Chapter 6",
+   "",
+   "Read Slide Chapter 6",
+   ""
+  ],
+  [
+   "22",
+   "6.3. Interrupt Service Routine (ISR)",
+   "Offline",
+   "CLO6",
+   "T",
+   "Books, Slide Chapter 6",
+   "",
+   "Read Slide Chapter 6",
+   ""
+  ],
+  [
+   "23",
+   "6.4. Race Condition Concepts",
+   "Offline",
+   "CLO6",
+   "T",
+   "Books, Slide Chapter 6",
+   "",
+   "Read Slide Chapter 6",
+   ""
+  ],
+  [
+   "24",
+   "Lab 2",
+   "Offline",
+   "CLO6",
+   "TU",
+   "Lab 2 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "25",
+   "Lab 2",
+   "Offline",
+   "CLO6",
+   "TU",
+   "Lab 2 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "26",
+   "Lab 2 Review & Q&A",
+   "Offline",
+   "CLO6",
+   "TU",
+   "Lab 2 tutorials",
+   "",
+   "Submit Assignment/Lab 2",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 7: Timers & PWM\n7.1. Hardware Timer Configuration",
+   "Offline",
+   "CLO7",
+   "IT",
+   "Books, Slide Chapter 7",
+   "",
+   "Read Slide Chapter 7",
+   ""
+  ],
+  [
+   "28",
+   "7.2. Pulse-Width Modulation (PWM) Theory",
+   "Offline",
+   "CLO7",
+   "T",
+   "Books, Slide Chapter 7",
+   "",
+   "Read Slide Chapter 7",
+   ""
+  ],
+  [
+   "29",
+   "Project Kick-off & Requirements",
+   "Offline",
+   "CLO4, CLO10",
+   "TU",
+   "Project tutorials",
+   "",
+   "Register Topic",
+   ""
+  ],
+  [
+   "30",
+   "Project Topic Registration & Team Formation",
+   "Offline",
+   "CLO10",
+   "TU",
+   "Project tutorials",
+   "",
+   "Submit Design",
+   ""
+  ],
+  [
+   "31",
+   "Project Design – Task Decomposition",
+   "Offline",
+   "CLO10",
+   "TU",
+   "Project tutorials",
+   "",
+   "Implement Project",
+   ""
+  ],
+  [
+   "32",
+   "Lab 3",
+   "Offline",
+   "CLO7",
+   "TU",
+   "Lab 3 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "33",
+   "Lab 3",
+   "Offline",
+   "CLO7",
+   "TU",
+   "Lab 3 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "34",
+   "Lab 3 Review & Q&A",
+   "Offline",
+   "CLO7",
+   "TU",
+   "Lab 3 tutorials",
+   "",
+   "Submit Assignment/Lab 3",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 8: Analog I/O (ADC)\n8.1. Quantization and Vref",
+   "Offline",
+   "CLO5",
+   "T",
+   "Books, Slide Chapter 8",
+   "",
+   "Read Slide Chapter 8",
+   ""
+  ],
+  [
+   "36",
+   "8.2. ADC Multi-channel & Scan Mode",
+   "Offline",
+   "CLO5",
+   "T",
+   "Books, Slide Chapter 8",
+   "",
+   "Read Slide Chapter 8",
+   ""
+  ],
+  [
+   "37",
+   "8.3. DMA for ADC Data Transfer",
+   "Offline",
+   "CLO5",
+   "T",
+   "Books, Slide Chapter 8",
+   "",
+   "Read Slide Chapter 8",
+   ""
+  ],
+  [
+   "38",
+   "8.4. Signal Filtering (Moving Average)",
+   "Offline",
+   "CLO5",
+   "T",
+   "Books, Slide Chapter 8",
+   "",
+   "Read Slide Chapter 8",
+   ""
+  ],
+  [
+   "39",
+   "Lab 4",
+   "Offline",
+   "CLO5",
+   "TU",
+   "Lab 4 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "40",
+   "Lab 4",
+   "Offline",
+   "CLO5",
+   "TU",
+   "Lab 4 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "41",
+   "Lab 4 Review & Q&A",
+   "Offline",
+   "CLO5",
+   "TU",
+   "Lab 4 tutorials",
+   "",
+   "Submit Assignment/Lab 4",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 9: Serial Communication\n9.1. UART Protocol",
+   "Offline",
+   "CLO8",
+   "IT",
+   "Books, Slide Chapter 9",
+   "",
+   "Read Slide Chapter 9",
+   ""
+  ],
+  [
+   "43",
+   "9.2. SPI Protocol",
+   "Offline",
+   "CLO8",
+   "T",
+   "Books, Slide Chapter 9",
+   "",
+   "Read Slide Chapter 9",
+   ""
+  ],
+  [
+   "44",
+   "9.3. I2C Protocol",
+   "Offline",
+   "CLO8",
+   "T",
+   "Books, Slide Chapter 9",
+   "",
+   "Read Slide Chapter 9",
+   ""
+  ],
+  [
+   "45",
+   "Lab 5",
+   "Offline",
+   "CLO8",
+   "TU",
+   "Lab 5 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "46",
+   "Lab 5",
+   "Offline",
+   "CLO8",
+   "TU",
+   "Lab 5 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "47",
+   "Lab 5 Review & Q&A",
+   "Offline",
+   "CLO8",
+   "TU",
+   "Lab 5 tutorials",
+   "",
+   "Submit Assignment/Lab 5",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 10: FreeRTOS\n10.1. Introduction to RTOS vs while(1)",
+   "Offline",
+   "CLO9",
+   "IT",
+   "Books, Slide Chapter 10",
+   "",
+   "Read Slide Chapter 10",
+   ""
+  ],
+  [
+   "49",
+   "10.2. Task Creation and Scheduling",
+   "Offline",
+   "CLO9",
+   "T",
+   "Books, Slide Chapter 10",
+   "",
+   "Read Slide Chapter 10",
+   ""
+  ],
+  [
+   "50",
+   "10.3. Mutex – Protecting Shared Resources",
+   "Offline",
+   "CLO9",
+   "T",
+   "Books, Slide Chapter 10",
+   "",
+   "Read Slide Chapter 10",
+   ""
+  ],
+  [
+   "51",
+   "10.4. Semaphore and Queue",
+   "Offline",
+   "CLO9",
+   "T",
+   "Books, Slide Chapter 10",
+   "",
+   "Read Slide Chapter 10",
+   ""
+  ],
+  [
+   "52",
+   "10.5. Deadlock Concepts and Avoidance",
+   "Offline",
+   "CLO9",
+   "T",
+   "Books, Slide Chapter 10",
+   "",
+   "Read Slide Chapter 10",
+   ""
+  ],
+  [
+   "53",
+   "Lab 6",
+   "Offline",
+   "CLO9",
+   "U",
+   "Lab 6 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "54",
+   "Lab 6",
+   "Offline",
+   "CLO9",
+   "U",
+   "Lab 6 tutorials",
+   "",
+   "Completing the Assignment/Lab",
+   ""
+  ],
+  [
+   "55",
+   "Lab 6 Review & Q&A",
+   "Offline",
+   "CLO9",
+   "U",
+   "Lab 6 tutorials",
+   "",
+   "Submit Assignment/Lab 6",
+   ""
+  ],
+  [
+   "56",
+   "Project Demonstration + Q&A + Course Wrap-up",
+   "Offline",
+   "CLO4 - CLO10",
+   "U",
+   "Project tutorials",
+   "",
+   "Presentation",
+   ""
+  ],
+  [
+   "57",
+   "Project Demonstration + Q&A + Course Wrap-up",
+   "Offline",
+   "CLO4 - CLO10",
+   "U",
+   "Project tutorials",
+   "",
+   "Presentation",
+   ""
+  ],
+  [
+   "58",
+   "Project Demonstration + Q&A + Course Wrap-up",
+   "Offline",
+   "CLO4 - CLO10",
+   "U",
+   "Project tutorials",
+   "",
+   "Presentation",
+   ""
+  ],
+  [
+   "59",
+   "Project Demonstration + Q&A + Course Wrap-up",
+   "Offline",
+   "CLO4 - CLO10",
+   "U",
+   "Project tutorials",
+   "",
+   "Presentation",
+   ""
+  ],
+  [
+   "60",
+   "Project Demonstration + Q&A + Course Wrap-up",
+   "Offline",
+   "CLO4 - CLO10",
+   "U",
+   "Project tutorials",
+   "",
+   "Presentation",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/14432/S/1_MCP201.zip"
+ ]
+}

@@ -1,0 +1,1937 @@
+{
+ "ma": "MAD101",
+ "sylID": "13144",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13144",
+   "code": "MAD101",
+   "name": "Toán rời rạc",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13144",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13144",
+  "Syllabus Name": "Toán rời rạc",
+  "Course Name English": "Discrete mathematics",
+  "Subject Code": "MAD101",
+  "Learning-Teaching Method": "Lecture,Project based learning,Problem based learning,Social Constructivism",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "Upon finishing the course, students must acquire:\n1. the following knowledge: (ABET a.1)\n• Concepts of logical expressions & predicate logic.\n• The method of induction and recursive definition.\n• Concepts of algorithms, recursive algorithms, the complexity.\n• Recurrence relations and divide-and-conquer algorithms.\n• Application of integers and congruence in information technology.\n• Set structure and map, counting principles and combinatorics concepts.\n• The terminologies and properties of graphs & trees & weighted graphs.\n• The applications of graphs, trees and weighted graphs in information technology.\n\n2. the following skills: (ABET a.2)\n• Manipulate logical expressions & produce equivalent logical expressions.\n• Produce proof of simple mathematical propositions, including applying induction method.\n• Evaluate complexity of algorithms.\n• Solving simple congruence equations.\n• Apply counting techniques in evaluating various set cardinalities.\n• Solve counting problems, apply in analyze algorithms.\n• Apply graph’s algorithms to solve problems related to graph theory.",
+  "StudentTasks": "Students must attend at least 80% of contact hours in order to be accepted to the final examination.",
+  "Tools": "- Testbank for ST1.\n- Powerpoint image in CD + Powerpoint prepared by previous lecturers (PP).\n- Computerized tools (for example C programming tools, Maxima http://maxima.sourceforge.net/) (CT)\n- Teaching Suggestion and Applications of Discrete Mathematics for ST1 (TS).",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Adam Drozdek. Data structure and Algorithms in Java. 3rd Edition.",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Computerized tools (for example C programming tools, Maxima http://maxima.sourceforge.net/) (CT)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Discrete Mathematics and its applications",
+   "Kenneth Rosen",
+   "Mc.Graw Hill, IE",
+   "2007",
+   "Ed.7 (or 6)",
+   "978-0073383095",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Powerpoint image in CD + Powerpoint prepared by previous lecturers (PP)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Teaching Suggestion and Applications of Discrete Mathematics for ST1 (TS)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Testbank for ST1",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Manipulate logical expressions and use logic for inference\nLO1.1 Determine the truth value of a proposition; check if two propositions are equivalent; translate between logical expressions and sentences for propositional logic.\nLO1.2 Determine the truth value of a proposition; check if two propositions are equivalent; translate between logical expressions and sentences for predicate logic.\nLO1.3 Manipulate logical expressions with nested quantifiers.\nLO1.4 Recognize the inference rules used in a valid statemment; use inference rules to draw conclusions; check if a statement is valid."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Perform basic operations on sets, functions and sequences\nLO2.1 Distinguish basic terminologies in set theory; find the power set and cartersian product; represent a subset using binary bits.\nLO2.2 Perform operations on sets; check if two sets are equal.\nLO2.3 Determine if a given rule represents a function; perform operations on functions and manipulate functions inlvolving the floor and the ceiling functions.\nLO2.4 Determine if a function is one-to-one, onto or a bijection, and describe how these properties can be used to compare two sets.\nLO2.5 Find a formula for a sequence; evaluate a finite sum with a possible use of special summations."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyze basic algorithms written in pseudo codes and determine their complexities\nLO3.1 Determine if a procedure is an algorithm; work out basic algorithms written in pseudocodes including searching, sorting and greedy algorithms.\nLO3.2 Find big-O, big-Omega and big-Theta estimates of a function; describe complexity of an algorithm."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Discuss applications of modular arithmetic and analyze algorithms on integers\nLO4.1 Perform integer division and modular arithmetic; apply congruence in generating pseudorandom numbers and in cryptology.\nLO4.2 Find the base b expansion of an integer; perform binary operations and modular exponentiation on integers.\nLO4.3 Check if a number is prime and find prime factorization of an integer; find greatest common divisor and least common multiple."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Use induction and recursive definition to prove a statement or to describe an object, and write recursive algorithms\nLO5.1 Prove mathematical statements by induction.\nLO5.2 Manipulate sequences and sets defined by recursion.\nLO5.3 Work out recursive algorithms, including the mergesort algorithm; distinguish between iterative and recursive algorithms."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Solve counting problems\nLO6.1 Use basic rules for counting\nLO6.2 Use recurrence relations for counting, including divide-and-conquer recurrence relations."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Analyze the structure of a graph and find shortest paths in a weighted graph\nLO7.1 Classify and describe a graph; use hand-shaking theorem to analyze a graph; identify special graphs including bipartite graphs.\nLO7.2 Represent a graph using incidence and adjacency matrices; determine if two graphs are isomorphic.\nLO7.3 Check connectivity of a graph and identify its connected components; count paths in a graph.\nLO7.4 Determine if a graph has Euler/Hamilton paths/circuits; find Euler and Hamilton paths/circuits in a graph.\nLO7.5 Run Dijsktra's algorithm to determine the shortest paths and the shortest distance in a weighted graph."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Analyze the structure of a tree and describe algorithms using trees\nLO8.1 Check if a graph is a tree, and identify basic terminologies of a tree; use properties of m-ary trees to solve problems.\nLO8.2 Build binary search trees and decision trees; analyze complexities of algorithms described using binary search trees and decision trees.\nLO8.3 Recognize and construct prefix codes; build optimal trees using Huffman coding.\nLO8.4 Traverse a tree and use tree traversal to generate notations; evaluate prefix and postfix expressions.\nLO8.5 Run Depth-first search and Breadth-first search algorithms to find spanning trees\nLO8.6 Find minimum spanning trees using Prim, Kruskal,... algorithms"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Progress Test",
+   "quiz",
+   "3",
+   "30.0%",
+   ">0",
+   "30 minutes",
+   "PT 1: LO1, LO2, LO6\nPT 2: LO3, LO4, LO5, LO6\nPT 3: LO7, LO8",
+   "OP1: MC or a suitable format // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "15 questions within 30 minutes",
+   "PT 1: Chapter 1, Chapter 2, Chapter 5\nPT 2: Chapter 3, Chapter 4, Chapter 7\nPT 3: Chapter 9, Chapter 10",
+   "OP1: by instructor, and by suitable means (computer, paper, oral...)\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Instruction and schedules for Progress tests must be presented in the Course Implementation Plan approved by the director of the campus.\nProgress test must be taken right after the last lectures of the required material.\nInstructor has responsibility to review the test for students after graded.\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Assignments/Exercises",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "at home/in class",
+   "Assignment 1: LO1, LO2, LO6\nAssignment 2: LO3, LO4, LO5, LO6",
+   "OP1: Open // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "At least 5/ chapter",
+   "Assignment 1: Chapter 1, Chapter 2, Chapter 5\nAssignment 2: Chapter 3, Chapter 4, Chapter 7",
+   "OP1: Each assignment is divided into two parts: the take-home component counts for no more than 50% of the total grade, and the in-class component counts for at least 50% (this may take the form of a presentation, essay, problem-solving, etc.).\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Students use\nnotebooks for\nexercises"
+  ],
+  [
+   "3",
+   "Programming Assignment",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "at home/in class",
+   "LO3, LO4, LO7, LO8",
+   "OP1: Open // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "At least 1/ chapter",
+   "Chapter 3, Chapter 4, Chapter 9, Chapter 10",
+   "Students are expected to write codes to implement algorithms including, but not restricted to, those covered in the scope.\nInstructor may combine with other in-class assessment methods to grade the computer assignment, in which the work (source files,...) should accounts for up to 50% of the total grade.",
+   "Students use notebooks and coding tools for exercises"
+  ],
+  [
+   "4",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "",
+   "Computer gradable",
+   "50",
+   "All studied chapters. At least 6 questions/chapter",
+   "by Exam Board",
+   "~10% of\nquestions is a2 objective oriented"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "0 Introduction\n1.1 Propositional Logic (1.1 and 1.2, skip the topic on Logic Circuits)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 1",
+   "MAD101_Part1",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "2",
+   "1.2 Propositional Equivalences (1.3, skip the topic on Satisfiability)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 1",
+   "MAD101_Part2",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "3",
+   "1.3 Predicates (1.4)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 1",
+   "",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "4",
+   "1.3 Quantifiers",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 1",
+   "",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "5",
+   "1.4 Nested Quantifiers (1.5)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 1",
+   "",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "6",
+   "1.4 Nested Quantifiers (1.5) (cont.)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 1",
+   "",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "7",
+   "1.5 Rules of Inference (1.6)",
+   "Offline",
+   "LO1",
+   "TU",
+   "Textbook Chapter 1",
+   "",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "8",
+   "1.5 Rules of Inference (1.6) (cont.)",
+   "Offline",
+   "LO1",
+   "IT",
+   "Textbook Chapter 1",
+   "",
+   "Exercises Chapter 1",
+   ""
+  ],
+  [
+   "9",
+   "2.1 Introduction to sets",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2",
+   ""
+  ],
+  [
+   "10",
+   "2.2 Set operations",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2",
+   ""
+  ],
+  [
+   "11",
+   "2.3 Functions (2.3, skip the topic on Partial Functions)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2",
+   ""
+  ],
+  [
+   "12",
+   "2.3 Functions (2.3, skip the topic on Partial Functions) (cont.)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2",
+   ""
+  ],
+  [
+   "13",
+   "2.4 Sequences and Summations (2.4, skip the topic on Recurrence relations)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2",
+   ""
+  ],
+  [
+   "14",
+   "2.4 Sequences and Summations (2.4, skip the topic on Recurrence relations) (cont.)",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2",
+   ""
+  ],
+  [
+   "15",
+   "5.1 Basic Counting Principles (6.1)",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 5",
+   "",
+   "Exercises Chapter 5",
+   ""
+  ],
+  [
+   "16",
+   "5.1 Basic Counting Principles (6.1) (continued)",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 5",
+   "",
+   "Exercises Chapter 5",
+   ""
+  ],
+  [
+   "17",
+   "Review",
+   "Offline",
+   "LO1, LO2, LO6",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "Progress Test 1",
+   "Offline",
+   "LO1, LO2, LO6",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "3.1 Algorithms",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "20",
+   "3.2 The Growth of Functions",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "21",
+   "3.3 Complexity of Algorithms (3.3, skip the topics on Matrix multiplication, Algorithmic Paradigms)",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "22",
+   "3.4 The Integers and Division (4.1, 4.5, and the topic on Classical Cryptography 4.6)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "23",
+   "3.4 The Integers and Division (4.1, 4.5, and the topic on Classical Cryptography 4.6) (cont.)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "24",
+   "3.5 Primes and Greatest Common Divisors (4.3)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "25",
+   "3.5 Primes and Greatest Common Divisors (4.3) (cont.)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "26",
+   "3.6 Intergers and Algorithms (4.2)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "27",
+   "3.6 Intergers and Algorithms (4.2) (cont.)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "28",
+   "3.6 Intergers and Algorithms (4.2) (cont.)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3",
+   ""
+  ],
+  [
+   "29",
+   "4.1 Mathematical Induction (5.1)",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4",
+   ""
+  ],
+  [
+   "30",
+   "4.2 Strong Induction (5.2)",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4",
+   ""
+  ],
+  [
+   "31",
+   "4.3 Recursive Definitions and Structural Induction (5.3)",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4",
+   ""
+  ],
+  [
+   "32",
+   "4.3 Recursive Definitions and Structural Induction (5.3) (cont.)",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4",
+   ""
+  ],
+  [
+   "33",
+   "4.4 Recursive Algorithms (5.4)",
+   "Offline",
+   "LO5",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4",
+   ""
+  ],
+  [
+   "34",
+   "4.4 Recursive Algorithms (5.4) (cont.)",
+   "Offline",
+   "LO5",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4",
+   ""
+  ],
+  [
+   "35",
+   "7.1 Recurrence Relations (8.1, skip the topic on Dynamic programming)",
+   "Offline",
+   "LO6",
+   "TU",
+   "Textbook Chapter 7",
+   "",
+   "Exercises Chapter 7",
+   ""
+  ],
+  [
+   "36",
+   "7.3 Divide-and-Conquer Algorithms and Recurrence Relations (8.3)",
+   "Offline",
+   "LO6",
+   "IT",
+   "Textbook Chapter 7",
+   "",
+   "Exercises Chapter 7",
+   ""
+  ],
+  [
+   "37",
+   "Review",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Progress Test 2",
+   "Offline",
+   "LO3, LO4, LO5, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "9.1 Graphs and Graph Models (10.1)",
+   "Offline",
+   "LO7",
+   "I",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "40",
+   "9.2 Graph Terminology and Special Types of Graphs",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "41",
+   "9.3 Representing Graphs and Graph Isomorphism (10.3)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "42",
+   "9.3 Representing Graphs and Graph Isomorphism (10.3) (cont.)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "43",
+   "9.4 Connectivity (10.4)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "44",
+   "9.4 Connectivity (10.4) (cont.)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "45",
+   "9.5 Euler and Hamilton Paths (10.5)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "46",
+   "9.5 Euler and Hamilton Paths (10.5) (cont.)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "47",
+   "9.6 Shortest-Path Problems (10.6)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "48",
+   "9.6 Shortest-Path Problems (10.6) (cont.)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9",
+   ""
+  ],
+  [
+   "49",
+   "10.1 Introduction to Trees (11.1)",
+   "Offline",
+   "LO8",
+   "IT",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "50",
+   "10.1 Introduction to Trees (11.1) (cont.)",
+   "Offline",
+   "LO8",
+   "IT",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "51",
+   "10.2 Applications of Trees (11.2)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "52",
+   "10.2 Applications of Trees (11.2) (cont.)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "53",
+   "10.3 Tree Traversal (11.3)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "54",
+   "10.3 Tree Traversal (11.3) (cont.)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "55",
+   "10.4 Spanning Trees (11.4)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "56",
+   "10.4 Spanning Trees (11.4) (cont.)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "57",
+   "10.5 Minimum Spanning Trees (11.5)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "58",
+   "10.5 Minimum Spanning Trees (11.5) (cont.)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10",
+   ""
+  ],
+  [
+   "59",
+   "Review",
+   "Offline",
+   "LO7, LO8",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Progress Test 3",
+   "Offline",
+   "LO7, LO8",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT_CQ1",
+   "What are the types of propositional logic?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ1_HCM",
+   "List as many logical operators as possible. Give examples that use operators you listed."
+  ],
+  [
+   "3",
+   "2",
+   "CT_CQ1",
+   "What does it mean for two propositions to be logically equivalent?\nDescribe the different ways to show that two compound propositions are logically equivalent."
+  ],
+  [
+   "4",
+   "2",
+   "CQ1_HCM",
+   "How do we define the concept 'logical equivalence' in propositional logic? Let's give examples."
+  ],
+  [
+   "5",
+   "2",
+   "CQ2_HCM",
+   "Give two examples using De Morgan laws."
+  ],
+  [
+   "6",
+   "3",
+   "CT_CQ1",
+   "How to understand the universal and existential quantifications of a predicate P(x)? What are their negations?"
+  ],
+  [
+   "7",
+   "3",
+   "CQ1_HCM",
+   "What is the main different between a predicate and a proposition? Illustrate your statement by examples."
+  ],
+  [
+   "8",
+   "4",
+   "CQ1_DN",
+   "What are two most important quantifiers? How is Demorgan's law in predicate logic understood?"
+  ],
+  [
+   "9",
+   "4",
+   "CT_CQ1",
+   "What is the precedence of quantifiers?"
+  ],
+  [
+   "10",
+   "4",
+   "CQ1_HCM",
+   "In what case is the value of the proposition ∀xP(x) false? Give counterexamples."
+  ],
+  [
+   "11",
+   "5",
+   "CQ1_DN",
+   "What are two most important quantifiers? How is Demorgan's law in predicate logic understood?"
+  ],
+  [
+   "12",
+   "5",
+   "CT_CQ1",
+   "What is the difference between the quantification ∃x∀yP(x, y) and ∀y∃xP(x, y), where P(x, y) is a predicate? Give an example of a predicate P(x, y) such that they have different truth values?"
+  ],
+  [
+   "13",
+   "5",
+   "CQ1_HCM",
+   "Let P(x, y) be a predicate. Give an instance that makes the truth value of the propositions ∃x∀yP(x, y) and ∀y∃xP(x, y) true/false."
+  ],
+  [
+   "14",
+   "6",
+   "CQ1_DN",
+   "What are two most important quantifiers? How is Demorgan's law in predicate logic understood?"
+  ],
+  [
+   "15",
+   "6",
+   "CT_CQ1",
+   "How to negate a statement involving nested quantifiers? Give examples."
+  ],
+  [
+   "16",
+   "6",
+   "CQ1_HCM",
+   "What is the negation of ∃x∀y(P(x, y) --> Q(x,y))? Give examples in English statements."
+  ],
+  [
+   "17",
+   "6",
+   "CQ2_HCM",
+   "Give examples of translation between English statements and logical expressions."
+  ],
+  [
+   "18",
+   "7",
+   "CT_CQ1",
+   "Describe what is meant by a valid argument in propositional logic and show that the argument “If the earth is flat, then you can sail off the edge of the earth,” “You cannot sail off the edge of the earth,” therefore, “The earth is not flat” is a valid argument"
+  ],
+  [
+   "19",
+   "7",
+   "CQ1_HCM",
+   "List some rules of inference. Use them to give your own valid arguments."
+  ],
+  [
+   "20",
+   "8",
+   "CT_CQ1",
+   "Use rules of inference to show that if the premises “All zebras have stripes” and “Mark is a zebra” are true, then the conclusion “Mark has stripes” is true."
+  ],
+  [
+   "21",
+   "8",
+   "CQ1_HCM",
+   "For each of these arguments, determine whether \u001dit is correct or incorrect, and explain why. Give your correction to obtain a valid one.\na) Every computer science major takes discrete mathematics. Natasha is taking discrete mathematics.\nTherefore, Natasha is a computer science major.\nb) Everyone who eats granola every day is healthy. Linda is not healthy. Therefore, Linda does not eat granola every day."
+  ],
+  [
+   "22",
+   "9",
+   "CT_CQ1",
+   "Explain what it means for one set to be a subset of another set. How do you prove that one set is a subset of another set?"
+  ],
+  [
+   "23",
+   "9",
+   "CQ1_HCM",
+   "Explain the concepts: sets, infinite sets, subsets of a set, power set of a set. Give examples."
+  ],
+  [
+   "24",
+   "9",
+   "CQ2_HCM",
+   "List some set operators with examples. What do we mean by 'symmetric difference' in set theory?"
+  ],
+  [
+   "25",
+   "10",
+   "CQ1_DN",
+   "How are two or more sets combined? What are the important properties of functions?"
+  ],
+  [
+   "26",
+   "10",
+   "CT_CQ1",
+   "What are the union, intersection, difference, and symmetric difference of the set of positive integers and the set of odd integers?"
+  ],
+  [
+   "27",
+   "10",
+   "CQ1_HCM",
+   "Is it possible that A is an element of A, where A is a set? Give examples."
+  ],
+  [
+   "28",
+   "10",
+   "CQ2_HCM",
+   "How do we represent sets in computers? Give examples for illustration."
+  ],
+  [
+   "29",
+   "11",
+   "CQ1_DN",
+   "How are two or more sets combined? What are the important properties of functions?"
+  ],
+  [
+   "30",
+   "11",
+   "CT_CQ1",
+   "Give some examples of functions from the set of positive integers to the set of positive integers being:\n1) both one-to-one and onto\n2) one-to-one but not onto\n3) onto but not not one-to-one\n4) neither one-to-one nor onto"
+  ],
+  [
+   "31",
+   "11",
+   "CQ1_HCM",
+   "What are functions? one-to-one functions? How many one-to-one functions are from a set of three elements to itself?"
+  ],
+  [
+   "32",
+   "12",
+   "CQ1_DN",
+   "How are two or more sets combined? What are the important properties of functions?"
+  ],
+  [
+   "33",
+   "12",
+   "CT_CQ1",
+   "When does a function have an inverse?"
+  ],
+  [
+   "34",
+   "12",
+   "CQ1_HCM",
+   "When is a function called bijection and what is its inverse?"
+  ],
+  [
+   "35",
+   "13",
+   "CT_CQ1",
+   "For each of the following lists of integers, provide a simple formula or rule that generates the terms of an integer sequence that begins with the given list. Assuming that your formula or rule is correct, determine the next three terms of the sequence.\n(a) 3, 6, 11, 18, 27, 38, 51, 66, 83, 102, ...\n(b) 15, 8, 1, −6, −13, −20, −27, ...\n(c) 1, 10, 11, 100, 101, 110, 111, 1000, 1001, 1010, 1011, ...\n(d) 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, ..."
+  ],
+  [
+   "36",
+   "13",
+   "CQ1_HCM",
+   "Give your analysis to know what the 50th term is.\n1, 2, 3, 3, 4, 5, 5, 5, 6, 7, 7, 7, 7, …"
+  ],
+  [
+   "37",
+   "13",
+   "CQ2_HCM",
+   "What is a geometric progression? Give an example."
+  ],
+  [
+   "38",
+   "14",
+   "CT_CQ1",
+   "How to evaluate the double sum?"
+  ],
+  [
+   "39",
+   "14",
+   "CQ1_HCM",
+   "What is the sum of the first 50 terms of the following sequence\n1, 2, 3, 3, 4, 5, 5, 5, 6, 7, 7, 7, 7, …?"
+  ],
+  [
+   "40",
+   "14",
+   "CQ2_HCM",
+   "Can infinite sets be countable? Why or why not?"
+  ],
+  [
+   "41",
+   "15",
+   "CT_CQ1",
+   "Calculate the number of one-to-one functions from a set S to a set T, where S and T are finite sets of various sizes. Can you determine a formula for the number of such functions?"
+  ],
+  [
+   "42",
+   "16",
+   "CQ1_DN",
+   "How to locate an element in an ordered list? What is commonly used to describe the growth of a function?"
+  ],
+  [
+   "43",
+   "17",
+   "CQ1_DN",
+   "How to locate an element in an ordered list? What is commonly used to describe the growth of a function?"
+  ],
+  [
+   "44",
+   "17",
+   "CT_CQ1",
+   "What is the difference between an algorithm and a computer program?"
+  ],
+  [
+   "45",
+   "17",
+   "CQ1_HCM",
+   "Give at least 3 different algorithms to compute 1+2+3+…+n for positive integer n."
+  ],
+  [
+   "46",
+   "17",
+   "CQ2_HCM",
+   "Give an algorithm that the number of basic comparisons does not depend on the size of input."
+  ],
+  [
+   "47",
+   "18",
+   "CQ1_DN",
+   "How to locate an element in an ordered list? What is commonly used to describe the growth of a function?"
+  ],
+  [
+   "48",
+   "18",
+   "CT_CQ1",
+   "What is big-O notation used for?"
+  ],
+  [
+   "49",
+   "18",
+   "CQ1_HCM",
+   "Give at least 3 different algorithms to compute 1+2+3+…+n for positive integer n. Compute the number of additions used in each algorithm."
+  ],
+  [
+   "50",
+   "19",
+   "CT_CQ1",
+   "How can the efficiency of an algorithm be analyzed?"
+  ],
+  [
+   "51",
+   "19",
+   "CQ2_HCM",
+   "Show that log(n!) is O(nlogn)."
+  ],
+  [
+   "52",
+   "20",
+   "CT_CQ1",
+   "Let n and d be positive integers. How many positive integers not exceeding n are divisible by d?"
+  ],
+  [
+   "53",
+   "20",
+   "CQ1_HCM",
+   "Is it possible to use only paper and pencil to calculate 3^2023 mod 78? Give your solution if any."
+  ],
+  [
+   "54",
+   "21",
+   "CT_CQ1",
+   "Define what it means for a and b to be congruent modulo m?"
+  ],
+  [
+   "55",
+   "21",
+   "CQ1_HCM",
+   "Explain how to encrypt the message 'HAPPY' using modular arithmetic with the encryption function f(p) = (p + 7) mod 26."
+  ],
+  [
+   "56",
+   "21",
+   "CQ2_HCM",
+   "Is the function f(p) = (13p + 7) mod 26 good for encoding? Why or why not?"
+  ],
+  [
+   "57",
+   "22",
+   "CQ1_DN",
+   "How many ways are there to find the greatest common divisor of two numbers? What are the algorithms for adding and mutiplying integers using their base b expansions?"
+  ],
+  [
+   "58",
+   "22",
+   "CT_CQ1",
+   "Describe a procedure for finding the prime factorization of an integer"
+  ],
+  [
+   "59",
+   "22",
+   "CQ1_HCM",
+   "Why are primes important in cryptography?"
+  ],
+  [
+   "60",
+   "23",
+   "CQ1_DN",
+   "How many ways are there to find the greatest common divisor of two numbers? What are the algorithms for adding and mutiplying integers using their base b expansions?"
+  ],
+  [
+   "61",
+   "23",
+   "CT_CQ1",
+   "Describe some ways to find the greatest common divisor of two integers. When does each method work best?"
+  ],
+  [
+   "62",
+   "23",
+   "CQ1_HCM",
+   "Give examples to illustrate that if r = a mod b then gcd(a, b) = gcd(b, r)."
+  ],
+  [
+   "63",
+   "23",
+   "CQ2_HCM",
+   "Explain the Euclidean algorithm via examples."
+  ],
+  [
+   "64",
+   "24",
+   "CQ1_DN",
+   "How many ways are there to find the greatest common divisor of two numbers? What are the algorithms for adding and mutiplying integers using their base b expansions?"
+  ],
+  [
+   "65",
+   "24",
+   "CT_CQ1",
+   "Describe a procedure for converting decimal (base 10) expansions of integers into a base n (n>1) expansions and vice versa."
+  ],
+  [
+   "66",
+   "24",
+   "CQ1_HCM",
+   "Give an example to explain how to find a binary format of a positive integer."
+  ],
+  [
+   "67",
+   "24",
+   "CQ2_HCM",
+   "Can an integer have base 3 expansion? Give an example."
+  ],
+  [
+   "68",
+   "25",
+   "CT_CQ1",
+   "Describe an algorithm for finding the difference of two binary expansions?"
+  ],
+  [
+   "69",
+   "25",
+   "CQ1_HCM",
+   "Explain ALGORITHM 3 Multiplication of Integers. (page 266, K. Rosen 7th Ed.)"
+  ],
+  [
+   "70",
+   "26",
+   "CT_CQ1",
+   "How can we find 3^2022 mod 99 using only paper and pencil?"
+  ],
+  [
+   "71",
+   "26",
+   "CQ1_HCM",
+   "How can we compute 7^333 mod 555 using Fast Modular Exponentiation algorithm? How fast is this algorithm?"
+  ],
+  [
+   "72",
+   "27",
+   "CT_CQ1",
+   "Can you use the principle of mathematical induction to find a formula for the sum of the first n terms of a sequence?"
+  ],
+  [
+   "73",
+   "27",
+   "CQ1_HCM",
+   "Give an example of a recursive algorithm."
+  ],
+  [
+   "74",
+   "27",
+   "CQ2_HCM",
+   "Use mathematical induction to prove the correctness of a recursive algorithm of computing n!"
+  ],
+  [
+   "75",
+   "28",
+   "CT_CQ1",
+   "Which amounts of money can be formed using just two dollar bills and five-dollar bills?"
+  ],
+  [
+   "76",
+   "28",
+   "CQ1_HCM",
+   "Use strong induction to prove that every amount of postage of 12 cents or more can be formed using just 4-cent and 5-cent stamps."
+  ],
+  [
+   "77",
+   "29",
+   "CT_CQ1",
+   "Give a recursive definition of a^n, where a is a nonzero real number and n is a nonnegative integer?"
+  ],
+  [
+   "78",
+   "29",
+   "CQ1_HCM",
+   "Give at least two recursive definitions for the sequence {a_n} with n>0: 0, 5, 0, 5, 0, 5, …"
+  ],
+  [
+   "79",
+   "30",
+   "CT_CQ1",
+   "Give a recursive definition of the set of positive integers that are multiples of 5."
+  ],
+  [
+   "80",
+   "30",
+   "CQ1_HCM",
+   "List five elements of the set of all strings generated from {a, b}."
+  ],
+  [
+   "81",
+   "30",
+   "CQ2_HCM",
+   "Use a recursive definition to define the set of all strings generated from {a, b}."
+  ],
+  [
+   "82",
+   "31",
+   "CQ1_DN",
+   "Can we solve a problem by reducing it to an instance of the same problem with smaller input? What are the basic rules of counting?"
+  ],
+  [
+   "83",
+   "31",
+   "CT_CQ1",
+   "Describe a recursive algorithm for\n1) computing n!\n2) computing a^n\n3) computing the greatest common divisor of two positive integers.\n4) linear searching the value x in a subsequence of the sequence {a_n}.\n5) binary searching the value x in an increasingly ordered subsequence of the sequence {a_n}."
+  ],
+  [
+   "84",
+   "31",
+   "CQ1_HCM",
+   "Write recursive versions of linear search algorithm."
+  ],
+  [
+   "85",
+   "31",
+   "CQ2_HCM",
+   "Write recursive versions of binary search algorithm."
+  ],
+  [
+   "86",
+   "32",
+   "CQ1_DN",
+   "Can we solve a problem by reducing it to an instance of the same problem with smaller input? What are the basic rules of counting?"
+  ],
+  [
+   "87",
+   "32",
+   "CT_CQ1",
+   "Estimate the number of comparisons used to merge two ordered lists in the analysis of the merge sort."
+  ],
+  [
+   "88",
+   "32",
+   "CQ1_HCM",
+   "Write an interactive algorithm and a recursive algorithm to find the Fibonacci numbers. Which algorithm uses fewer comparisons?"
+  ],
+  [
+   "89",
+   "33",
+   "CQ1_DN",
+   "Can we solve a problem by reducing it to an instance of the same problem with smaller input? What are the basic rules of counting?"
+  ],
+  [
+   "90",
+   "33",
+   "CT_CQ1",
+   "What is the difference between: a) The sum rule and product rule? b) The permutation and combination?"
+  ],
+  [
+   "91",
+   "33",
+   "CQ1_HCM",
+   "State the principle of inclusion-exclusion. Give an example where this principle applies."
+  ],
+  [
+   "92",
+   "33",
+   "CQ2_HCM",
+   "State the principle of inclusion-exclusion for three sets."
+  ],
+  [
+   "93",
+   "34",
+   "CQ1_DN",
+   "How recurrence relations can be used to solve counting problems? How to use these divide-and-conquer recurrence relations to estimate the complexity of these algorithms?"
+  ],
+  [
+   "94",
+   "34",
+   "CT_CQ1",
+   "Explain how the principle of inclusion–exclusion can be used to count the number of onto functions from a set with m elements to a set with n elements."
+  ],
+  [
+   "95",
+   "34",
+   "CQ1_HCM",
+   "How many bit strings of length six do not have two consecutive 1s or three consecutive 0s?"
+  ],
+  [
+   "96",
+   "35",
+   "CQ1_DN",
+   "How recurrence relations can be used to solve counting problems? How to use these divide-and-conquer recurrence relations to estimate the complexity of these algorithms?"
+  ],
+  [
+   "97",
+   "35",
+   "CT_CQ1",
+   "Explain how the Fibonacci numbers are used to find a recurrence relation for the number of bit strings of length n not containing two consecutive 1s."
+  ],
+  [
+   "98",
+   "35",
+   "CQ1_HCM",
+   "State the product rule for counting. Give 3 examples."
+  ],
+  [
+   "99",
+   "35",
+   "CQ2_HCM",
+   "Give examples of counting problems which can be solved by using tree diagrams."
+  ],
+  [
+   "100",
+   "36",
+   "CQ1_DN",
+   "How recurrence relations can be used to solve counting problems? How to use these divide-and-conquer recurrence relations to estimate the complexity of these algorithms?"
+  ],
+  [
+   "101",
+   "36",
+   "CT_CQ1",
+   "Explain how to find f(b^k) (where k is a positive integer) if f(n) satisfies the divide-and-conquer recurrence relation f(n) = af (n/b) + g(n) whenever b divides the positive integer n"
+  ],
+  [
+   "102",
+   "36",
+   "CQ1_HCM",
+   "Given f(n) = 2f(n/2) + n when n is an integer divisible by 2 and f(1) = 1. Can we compute the exact value of f(1024)? Why or why not? How do we estimate the growth of f(n)?"
+  ],
+  [
+   "103",
+   "37",
+   "CT_CQ1",
+   "Derive divide-and-conquer recurrence relations for the number of comparisons used in: binary search; locating the maximum element in a sequence. Give big-O estimates for the number of comparisons needed by these algorithm."
+  ],
+  [
+   "104",
+   "39",
+   "CT_CQ1",
+   "Explain how to model different aspects of a computer network or airline routes."
+  ],
+  [
+   "105",
+   "39",
+   "CQ1_HCM",
+   "List some models of graphs in the real world."
+  ],
+  [
+   "106",
+   "39",
+   "CQ2_HCM",
+   "Explain the concepts: degree, in/out-degree, adjacency and incident."
+  ],
+  [
+   "107",
+   "40",
+   "CQ1_DN",
+   "What are the number of vertices and edges of several classes of simple graphs often used in many applications? How to represent graphs?"
+  ],
+  [
+   "108",
+   "40",
+   "CT_CQ1",
+   "What is the relationship between the sum of the degrees of the vertices in an undirected graph and the number of edges in this graph?"
+  ],
+  [
+   "109",
+   "40",
+   "CQ1_HCM",
+   "Describe some special simple graphs Kn, Cn, Wn"
+  ],
+  [
+   "110",
+   "40",
+   "CQ2_HCM",
+   "Describe some special simple graphs Qn, Km;n."
+  ],
+  [
+   "111",
+   "41",
+   "CQ1_DN",
+   "What are the number of vertices and edges of several classes of simple graphs often used in many applications? How to represent graphs?"
+  ],
+  [
+   "112",
+   "41",
+   "CT_CQ1",
+   "How to represent graphs in several different ways?"
+  ],
+  [
+   "113",
+   "41",
+   "CQ1_HCM",
+   "How to generate the adjacency matrix and incidence matrix from a given graph, and vice versa?"
+  ],
+  [
+   "114",
+   "41",
+   "CQ2_HCM",
+   "Highlights the difference between adjacency matrix and incidence matrix."
+  ],
+  [
+   "115",
+   "42",
+   "CQ1_DN",
+   "What are the number of vertices and edges of several classes of simple graphs often used in many applications? How to represent graphs?"
+  ],
+  [
+   "116",
+   "42",
+   "CT_CQ1",
+   "How to determine whether two graphs are isomorphic?"
+  ],
+  [
+   "117",
+   "42",
+   "CQ1_HCM",
+   "Give an example of two non-isomorphic graphs that have the same number of nodes, edges and degree sequences."
+  ],
+  [
+   "118",
+   "43",
+   "CT_CQ1",
+   "When is there always a path between two vertices in the graph?"
+  ],
+  [
+   "119",
+   "43",
+   "CQ1_HCM",
+   "What is the length of the longest simple circuit in Kn, Wn?"
+  ],
+  [
+   "120",
+   "44",
+   "CT_CQ1",
+   "How can paths and circuits help to determine whether two graphs are isomorphic?"
+  ],
+  [
+   "121",
+   "44",
+   "CQ1_HCM",
+   "What are cut vertices and cut edges?"
+  ],
+  [
+   "122",
+   "44",
+   "CQ2_HCM",
+   "Explain the difference between strongly connected and weakly connected. Illustrate them by graphs."
+  ],
+  [
+   "123",
+   "45",
+   "CT_CQ1",
+   "Describe the famous Konigsberg bridge problem and explain how to rephrase it in terms of an Euler circuit."
+  ],
+  [
+   "124",
+   "45",
+   "CQ1_HCM",
+   "What are Euler Circuits/Paths? What is the indication that a given graph has an Euler Circuit/Path?"
+  ],
+  [
+   "125",
+   "45",
+   "CQ2_HCM",
+   "Can L. Euler solve the Seven Bridges of Königsberg Problem?"
+  ],
+  [
+   "126",
+   "46",
+   "CQ1_DN",
+   "How to find a shortest path between two vertices in a weighted graph using a greedy approach? Can we solve the traveling salesman problem with a backtracking technique?"
+  ],
+  [
+   "127",
+   "46",
+   "CT_CQ1",
+   "Give some properties of a simple graph that imply that it has a Hamilton circuit."
+  ],
+  [
+   "128",
+   "46",
+   "CQ1_HCM",
+   "In a weighted graph, assume that the weights of the edges are different. Is the shortest path between two vertices unique? Show your claim by using examples."
+  ],
+  [
+   "129",
+   "47",
+   "CQ1_DN",
+   "How to find a shortest path between two vertices in a weighted graph using a greedy approach? Can we solve the traveling salesman problem with a backtracking technique?"
+  ],
+  [
+   "130",
+   "47",
+   "CT_CQ1",
+   "Describe Dijkstra’s algorithm for finding the shortest path in a weighted graph between two vertices."
+  ],
+  [
+   "131",
+   "47",
+   "CQ1_HCM",
+   "Use Djikstra's algorithm to find the shortest path and also its length from a source vertex to a sink vertex in a weighted graph. Describe each iteration of the algorithm in detail."
+  ],
+  [
+   "132",
+   "47",
+   "CQ2_HCM",
+   "Does Google Map use Djikstra's algorithm?"
+  ],
+  [
+   "133",
+   "48",
+   "CQ1_DN",
+   "How to find a shortest path between two vertices in a weighted graph using a greedy approach? Can we solve the traveling salesman problem with a backtracking technique?"
+  ],
+  [
+   "134",
+   "48",
+   "CT_CQ1",
+   "Draw a weighted graph with at least 8 vertices and 12 edges. Use Dijkstra’s algorithm to find the shortest\npath between two vertices of your choice in the graph."
+  ],
+  [
+   "135",
+   "48",
+   "CQ1_HCM",
+   "Explain why the exhausted technique cannot be used to solve the TSP (Traveling Salesman Problem) when the number of nodes is large."
+  ],
+  [
+   "136",
+   "49",
+   "CT_CQ1",
+   "Draw a rooted tree with at least 10 vertices, where the degree of each vertex does not exceed 3. Identify the root, the parent of each vertex, the children of each vertex, the internal vertices, the leaves, the level of each vetex, and the height of tree."
+  ],
+  [
+   "137",
+   "49",
+   "CQ1_HCM",
+   "Give some tree models that are commonly used in the real world."
+  ],
+  [
+   "138",
+   "49",
+   "CQ2_HCM",
+   "Explain the concepts parent, child, leaf, internal nodes, descendants, and ancestors used in graph theory."
+  ],
+  [
+   "139",
+   "50",
+   "CT_CQ1",
+   "How many edges does a tree with n vertices have? How many vertices and leaves does a full m-ary tree have if it has i internal vertices? How many leaves can an m-ary tree of height h have?"
+  ],
+  [
+   "140",
+   "50",
+   "CQ1_HCM",
+   "A full binary tree has L leaves. How high can this tree be? If the number of nodes is given by n, then what are the maximum and minimum heights of a binary tree?"
+  ],
+  [
+   "141",
+   "51",
+   "CT_CQ1",
+   "What is a binary search tree? Describe an algorithm for constructing a binary search tree, and form a binary search tree for the words: vireo, warbler, egret, grosbeak, nuthatch, and kingfisher."
+  ],
+  [
+   "142",
+   "51",
+   "CQ1_HCM",
+   "Build a binary search tree for the words enology, phrenology, campanology, ornithology, ichthyology, limnology, alchemy, and astrology using alphabetical order. How many comparisons are needed to locate/find or insert/add the word “limnology” in the search tree?"
+  ],
+  [
+   "143",
+   "52",
+   "CQ1_DN",
+   "How to code a text using a prefix tree? What is the algorithm to convert from an expression from infix form to postfix one?"
+  ],
+  [
+   "144",
+   "52",
+   "CT_CQ1",
+   "What is a prefix code? How can a prefix code be represented by a binary tree?"
+  ],
+  [
+   "145",
+   "52",
+   "CQ1_HCM",
+   "Use the Huffman coding algorithm to encode a letter given the frequencies A: 0.1 B: 0.13 C: 0.22 D: 0.25 E: 0.30."
+  ],
+  [
+   "146",
+   "52",
+   "CQ2_HCM",
+   "What is the main benefit of Huffman coding algorithm?"
+  ],
+  [
+   "147",
+   "53",
+   "CQ1_DN",
+   "How to code a text using a prefix tree? What is the algorithm to convert from an expression from infix form to postfix one?"
+  ],
+  [
+   "148",
+   "53",
+   "CT_CQ1",
+   "Describe preorder, inorder, and postorder tree traversal. Give some examples of preorder, postorder, and inorder\ntraversal of some binary trees of your choice with at least 10 vertices."
+  ],
+  [
+   "149",
+   "53",
+   "CQ1_HCM",
+   "Build a binary search tree for the words enology, phrenology, campanology, ornithology, ichthyology, limnology, alchemy, and astrology using alphabetical order. Using pre-order traversal to give the order of the words afterward."
+  ],
+  [
+   "150",
+   "54",
+   "CQ1_DN",
+   "How to code a text using a prefix tree? What is the algorithm to convert from an expression from infix form to postfix one?"
+  ],
+  [
+   "151",
+   "54",
+   "CT_CQ1",
+   "Give as many examples as possible for representing some expressions of your choice in prefix and postfix notations."
+  ],
+  [
+   "152",
+   "54",
+   "CQ1_HCM",
+   "Give two different infix expressions that have the same calculating result after applying in-order traversal to the binary expression trees."
+  ],
+  [
+   "153",
+   "54",
+   "CQ2_HCM",
+   "What are main benefits of prefix and postfix forms?"
+  ],
+  [
+   "154",
+   "55",
+   "CQ1_DN",
+   "How many ways to build a spanning tree for a connected simple graph? Can we use greedy approachs to design algorithms for finding minimum spanning trees?"
+  ],
+  [
+   "155",
+   "55",
+   "CT_CQ1",
+   "What is a spanning tree of a simple graph? Which simple graphs have spanning trees? Describe at least two different applications that require that a spanning tree of a simple graph be found."
+  ],
+  [
+   "156",
+   "55",
+   "CQ1_HCM",
+   "What are spanning trees?"
+  ],
+  [
+   "157",
+   "55",
+   "CQ2_HCM",
+   "How many edges must be removed from a connected graph with n vertices and m edges to produce a spanning tree?"
+  ],
+  [
+   "158",
+   "56",
+   "CQ1_DN",
+   "How many ways to build a spanning tree for a connected simple graph? Can we use greedy approachs to design algorithms for finding minimum spanning trees?"
+  ],
+  [
+   "159",
+   "56",
+   "CT_CQ1",
+   "Describe depth-first search and breadth-first search algorithms for finding a spanning tree in a simple graph, and illustrate how they work for some graphs of your choice with at least eight vertices and 15 edges."
+  ],
+  [
+   "160",
+   "56",
+   "CQ1_HCM",
+   "Consider the DFS (Depth First Search) and BFS (Breadth First Search) algorithms to construct a spanning tree with the same root for a connected graph. Which \u001dalgorithm will produce a higher tree?"
+  ],
+  [
+   "161",
+   "57",
+   "CQ1_DN",
+   "How many ways to build a spanning tree for a connected simple graph? Can we use greedy approachs to design algorithms for finding minimum spanning trees?"
+  ],
+  [
+   "162",
+   "57",
+   "CT_CQ1",
+   "What is a minimum spanning tree of a connected weighted graph? Describe at least two different applications that require that a minimum spanning tree of a connected\nweighted graph be found."
+  ],
+  [
+   "163",
+   "57",
+   "CQ1_HCM",
+   "What are minimum spanning trees?"
+  ],
+  [
+   "164",
+   "57",
+   "CQ2_HCM",
+   "Give real-life examples of the problem of finding the minimum spanning tree."
+  ],
+  [
+   "165",
+   "58",
+   "CT_CQ1",
+   "Describe Kruskal’s algorithm and Prim’s algorithm for finding minimum spanning trees and illustrate how Kruskal’s algorithm and Prim’s algorithm are used to find a minimum spanning tree, using a weighted graph with at least eight vertices and 15 edges."
+  ],
+  [
+   "166",
+   "58",
+   "CQ1_HCM",
+   "Illustrate step by step how Kruskal’s algorithm and Prim’s algorithm are used to find a minimum spanning tree, using a weighted graph with at least 6 vertices and 9 edges."
+  ]
+ ],
+ "links": [
+  "/download/13144/S/1_MAD101_Part1.zip",
+  "/download/13144/S/2_MAD101_Part2.zip"
+ ]
+}

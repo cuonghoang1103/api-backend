@@ -1,0 +1,970 @@
+{
+ "ma": "HCM202",
+ "sylID": "14634",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14634",
+   "code": "HCM202",
+   "name": "Ho Chi Minh Ideology - Tư tưởng Hồ Chí Minh",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14634",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14634",
+  "Syllabus Name": "Ho Chi Minh Ideology - Tư tưởng Hồ Chí Minh",
+  "Course Name English": "",
+  "Subject Code": "HCM202",
+  "Learning-Teaching Method": "Lecture, Presentation and implementation guidelines for a creative product",
+  "NoCredit": "2",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Thời gian học (100h) = 22.5 giờ học trên lớp (30 tiết) + 1 giờ thi cuối kỳ + 3 giờ học trên Coursera + 1 buổi học thực tế (triển lãm, tham quan thực tế, v.v) + 66.5 giờ tự học\n\nStudy hours (100h) = 22.5 contact hours (30 sessions) + 1 hour final exam + 3 hours on Coursera + 1 day of experiential learning (exhibition, field trip, etc.) + 66.5 hours self-study",
+  "Pre-Requisite": "MLN111, MLN122",
+  "Description": "Giới thiệu/Mô tả môn học: Tư tưởng Hồ Chí Minh là kết tinh của truyền thống hàng nghìn năm dựng nước và giữ nước của dân tộc Việt Nam. Trên nền tảng đó, tư tưởng Hồ Chí Minh đã gạn lọc các hạt giống trí tuệ của phương Đông, phương Tây, vận dụng sáng tạo và phát triển chủ nghĩa Mác - Lênin vào điều kiện cụ thể của nước ta. Khái quát lại bản chất khoa học này, Đảng ta khẳng định: Tư tưởng Hồ Chí Minh là một hệ thống quan điểm toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam, kết quả của sự vận dụng và phát triển sáng tạo chủ nghĩa Mác - Lênin vào điều kiện cụ thể của nước ta, kế thừa và phát triển các giá trị truyền thống tốt đẹp của dân tộc, tiếp thu tinh hoa văn hoá nhân loại. Mục tiêu của tư tưởng Hồ Chí Minh là hướng tới giải phóng dân tộc - giải phóng xã hội - giải phóng giai cấp - giải phóng con người. Do đó, tư tưởng Hồ Chí Minh là tài sản tinh thần vô cùng to lớn và quý giá của Đảng và dân tộc ta, mãi mãi soi đường cho sự nghiệp cách mạng của nhân dân ta giành thắng lợi.\n\nCourse Introduction / Description: Ho Chi Minh Ideology is the crystallization of the thousand-year-old traditions of national construction and defense of the Vietnamese people. On that basis, Ho Chi Minh Ideology has selectively absorbed the intellectual quintessence of the East and the West, and creatively applied and developed Marxism-Leninism to the specific conditions of Vietnam. Summarizing this scientific nature, our Party affirms: Ho Chi Minh Ideology is a comprehensive and profound system of views on fundamental issues of the Vietnamese revolution, the result of the creative application and development of Marxism-Leninism to the specific conditions of our country, inheriting and developing the fine traditional values of the nation, and absorbing the cultural quintessence of humanity. Its goal aims at national liberation, social liberation, class liberation, and human liberation. Therefore, Ho Chi Minh Ideology is an immensely large and precious spiritual asset of our Party and nation, forever illuminating the path for our people's revolutionary cause to achieve victory.\n\nMục tiêu môn học:\n\n- Về kiến thức: Sinh viên hiểu được những kiến thức cơ bản về khái niệm, nguồn gốc, quá trình hình thành và phát triển tư tưởng Hồ Chí Minh; những nội dung cơ bản về tư tưởng Hồ Chí Minh; sự vận dụng của Đảng Cộng sản Việt Nam trong cách mạng dân tộc dân chủ nhân dân và trong cách mạng xã hội chủ nghĩa.\n\n- Về kỹ năng: Hình thành cho sinh viên khả năng tư duy độc lập, phân tích, đánh giá, vận dụng sáng tạo tư tưởng Hồ Chí Minh vào giải quyết các vấn đề trong thực tiễn đời sống, học tập và công tác.\n\n- Về thái độ: Sinh viên được nâng cao bản lĩnh chính trị, yêu nước, trung thành với mục tiêu, lý tưởng độc lập dân tộc gắn liền chủ nghĩa xã hội; nhận thức được vai trò, giá trị của tư tưởng Hồ Chí Minh đối với Đảng và dân tộc Việt Nam; thấy được trách nhiệm của bản thân trong việc học tập, rèn luyện để góp phần vào xây dựng và bảo vệ Tổ quốc.\n\nCourse Objectives:\n\n- Knowledge: Students understand the basic concepts, origins, formation, and development of Ho Chi Minh Ideology; the core contents of Ho Chi Minh Ideology; and its application by the Communist Party of Vietnam in the people’s democratic revolution and in the socialist revolution.\n\n- Skills: Students develop the ability to think independently, analyze, evaluate, and creatively apply Ho Chi Minh Ideology to solve practical problems in daily life, academic work, and professional activities.\n\n- Attitudes: Students strengthen political courage and patriotism, remain loyal to the goal and ideal of national independence associated with socialism; recognize the role and value of Ho Chi Minh Ideology for the Party and the Vietnamese nation; and understand their personal responsibility in learning and self-improvement to contribute to national construction and defense.\n\nNội dung môn học: Học phần bao gồm 6 chương, cung cấp cho sinh viên kiến thức cơ bản về Khái niệm, đối tượng, phương pháp nghiên cứu và ý nghĩa học tập môn tư tưởng Hồ Chí Minh; Về cơ sở, quá trình hình thành và phát triển tư tưởng Hồ Chí Minh; Tư tưởng Hồ Chí Minh về: Độc lập dân tộc và chủ nghĩa xã hội; Đảng Cộng sản Việt Nam và Nhà nước của nhân dân, do nhân dân, vì nhân dân; Đại đoàn kết dân tộc và đoàn kết quốc tế; Văn hóa, đạo đức, con người.\n\nContent of the course: The course consists of 6 chapters, providing students with basic knowledge on Concept, object of study, research methodology, and significance of studying Ho Chi Minh Ideology; Basis, formation, and development process of Ho Chi Minh Ideology; Ho Chi Minh Ideology on: National independence and socialism; the Communist Party of Vietnam and the State of the people, by the people, for the people; Great national unity and international solidarity; Culture, ethics, and human beings.\n\nPhương pháp dạy học: Thuyết giảng và kết hợp trình chiếu các slide bài giảng. Hướng dẫn, giao bài tập đề tài theo nhóm. Tổ chức và hướng dẫn sinh viên thảo luận nhóm, thuyết trình và thực hiện sản phẩm sáng tạo (tham khảo và ứng dụng phần mềm AI một cách có trách nhiệm).\n\nTeaching methods: Giving lectures and slide presentations. Guiding and assigning group projects. Organizing and guiding students in group discussions, presentations, and the development of creative products (with the responsible and ethical use of AI tools).",
+  "StudentTasks": "Nhiệm vụ của sinh viên:\n\n- Tham gia tối thiểu 80% thời lượng môn học và tham dự đủ các buổi lên lớp, thảo luận theo quy định.\n\n- Phải có Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị) do Bộ Giáo dục và Đào tạo ban hành.\n\n- Phải nghiên cứu giáo trình trước, chuẩn bị các ý kiến để đề xuất khi nghe giảng. Chuẩn bị thảo luận và đọc, sưu tầm các tư liệu có liên quan đến nội dung môn học.\n\n- Thực hiện đầy đủ các yêu cầu của giảng viên khi học trên lớp cũng như các chủ đề sinh viên tự chuẩn bị trước khi đến lớp.\n\n- Chỉ sử dụng máy tính xách tay trong lớp cho mục đích học tập.\n\n- Ứng dụng AI một cách có trách nhiệm, đạo đức trong quá trình học tập và thực tiễn.\n\nStudent's Tasks:\n\n- Attend at least 80% of class hours and participate in discussions as required.\n\n- Own the Ho Chi Minh's thought (Sửa lại từ sai lệch chính trị \"Ho Chi Minh Ideology\") textbook (for non-majors in political theory - Nâng cấp học thuật từ cụm \"non-politics majored students\") issued by the Ministry of Education and Training.\n\n- Study the textbook in advance, prepare ideas to propose during lectures. Prepare for discussions and read, collect materials related to the course content.\n\n- Fulfill tasks given by the instructor in class as well as topics required to be prepared (Sửa lại ngữ pháp cho chuẩn mực từ cụm \"needed to prepare\") in advance.\n\n- Use laptops in class only for learning purposes.\n\n- Apply AI responsibly and ethically in both learning and practice.",
+  "Tools": "Internet, pdf reader and AI-based learning tools (for responsible use, recommended as supplementary support)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "1) Progress test + Assignment: 70%\n\n- Participation: 10%\n\n- 1 Progress test: 20%\n\n- Assignment: 40%\n\n2) Final Exam: 30%\n\n3) Final result: 100%\n\n4) Completion Criteria:\n\nEvery on-going assessment component > 0, Final Result >=5 & Final Exam Score >=4\n\nStudents must obtain a Course Completion Certificate from Coursera to be eligible for the final exam",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Giáo trình Tư tưởng Hồ Chí Minh, dùng cho sinh viên bậc đại học hệ chuyên ngành lý luận chính trị\nHo Chi Minh ideology textbook for politics majored students",
+   "Bộ Giáo dục và Đào tạoMinistry of Education and Training",
+   "Nhà xuất bản Chính trị quốc gia sự thậtTruth National Political Publishing House",
+   "2021",
+   "1",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Giáo trình Tư tưởng Hồ Chí Minh, dùng cho sinh viên bậc đại học hệ không chuyên ngành lý luận chính trị\nHo Chi Minh ideology textbook for non-politics majored students",
+   "Bộ Giáo dục và Đào tạoMinistry of Education and Training",
+   "Nhà xuất bản Chính trị quốc gia sự thậtTruth National Political Publishing House",
+   "2021",
+   "1",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Hồ Chí Minh toàn tập\n\nThe Selected Works of Ho Chi Minh",
+   "Hồ Chí MinhHo Chi Minh",
+   "Nhà xuất bản Chính trị quốc giaNational Political Publishing House",
+   "2011",
+   "1",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://hochiminh.vn/tac-pham-cua-ho-chi-minh/ho-chi-minh-toan-tap?categoryId=102001160"
+  ],
+  [
+   "4",
+   "Kiên quyết, kiên trì đấu tranh phòng, chống tham nhũng, tiêu cực, góp phần xây dựng Đảng và Nhà nước ta ngày càng trong sạch, vững mạnh",
+   "Tổng Bí thư Nguyễn Phú Trọng",
+   "Nhà xuất bản Chính trị quốc gia Sự thật",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://tulieuvankien.dangcongsan.vn/van-kien-tu-lieu-ve-dang/book/sach-chinh-tri/kien-quyet-kien-tri-dau-tranh-phong-chong-tham-nhung-tieu-cuc-gop-phan-xay-dung-dang-va-nha-nuoc-ta-ngay-cang-trong-sach-436"
+  ],
+  [
+   "5",
+   "Tài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về luật\n(Phê duyệt kèm theo Quyết định số 3468/QĐ-BGDĐT ngày 06 tháng 9 năm 2014 của Bộ trưởng Bộ Giáo dục và Đào tạo)",
+   "Chủ biên et al.",
+   "BỘ GIÁO DỤC VÀ ĐÀO TẠO",
+   "2014",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://drive.google.com/file/d/1Tf3Fyybs8puDEnp5JGw3zqezIfreh6H2/view?usp=sharing"
+  ],
+  [
+   "6",
+   "Hồ Chí Minh - Biên niên tiểu sử\n\nHo Chi Minh - A Chronological Biography",
+   "",
+   "NXB Chính trị quốc gia Sự thật",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://tulieuvankien.dangcongsan.vn/c.-mac-ph.-angghen-v.-i.-lenin-ho-chi-minh/ho-chi-minh/tieu-su-cuoc-doi-va-su-nghiep/bien-nien-tieu-su"
+  ],
+  [
+   "7",
+   "Khóa học Coursera: Tư tưởng Hồ Chí minh",
+   "Trường Đại Học FPT - FPT University",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Hiểu được những kiến thức cơ bản về khái niệm, đối tượng, nguồn gốc, phương pháp nghiên cứu và ý nghĩa của môn học tư tưởng Hồ Chí Minh\nUnderstand the basic knowledge of the concepts, objectives, origins, research methods, and significance of the Ho Chi Minh Thought course"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Phân tích được bối cảnh lịch sử Việt Nam từ cuối thế kỷ XIX đến thế kỷ XXI, nguồn gốc, cơ sở, quá trình hình thành và phát triển tư tưởng Hồ Chí Minh. Hiểu được sự vận dụng của Đảng Cộng sản Việt Nam trong cách mạng dân tộc dân chủ nhân dân và trong cách mạng xã hội chủ nghĩa\nAnalyze the historical context of Vietnam from the late 19th century to the 21st century, as well as the origins, basis, formation, and development of Ho Chi Minh Thought. Understand the Communist Party of Vietnam’s application of Ho Chi Minh Thought in the people’s democratic revolution and the socialist revolution"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Nắm được về hệ thống quan điểm tư tưởng Hồ Chí Minh về các vấn đề độc lập dân tộc và chủ nghĩa xã hội, đại đoàn kết dân tộc và đoàn kết quốc tế, xây dựng Đảng và Nhà nước, đạo đức, văn hóa, con người\nUnderstanding Ho Chi Minh's system of ideological views on national independence and socialism, the great unity bloc and international solidarity, the construction of the Party and State, ethics, culture, people"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Hiểu được vai trò nền tảng lý luận của Chủ nghĩa Mác-Lênin, tư tưởng Hồ Chí Minh đối với đường lối của Đảng, Nhà nước.\nUnderstand the role of Marxism-Leninism and Ho Chi Minh's ideology as the ideological foundation for Vietnamese Communist Party and State's guidelines"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Phân tích được sự kế thừa, phát triển các quan điểm của chủ nghĩa Mác-Lênin trong tư tưởng Hồ Chí Minh\nAnalyze the inheritance and development of Marxist-Leninism Ho Chi Minh's ideology"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Hình thành khả năng làm việc nhóm, tư duy độc lập, phân tích đánh giá; tìm kiếm tài liệu liên quan đến môn học và trình bày được nội dung của các tài liệu này, đồng thời biết ứng dụng các công cụ AI một cách có đạo đức để hỗ trợ quá trình tìm kiếm, phân tích và trình bày\nDevelop students’ ability to work in teams, think independently, and analyze and evaluate; search for course-related materials and present their content; and ethically apply AI tools to support searching, analysis, and presentation"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Củng cố tinh thần yêu nước, có ý thức trách nhiệm công dân, ý thức kỷ luật, thái độ nghề nghiệp đúng đắn, ham tìm hiểu, học tập suốt đời và thích ứng với những thay đổi liên tục của công nghệ và xã hội. Nâng cao bản lĩnh chính trị, trung thành với mục tiêu, lý tưởng độc lập dân tộc gắn liền chủ nghĩa xã hội\nStrengthen patriotism, cultivate a sense of civic responsibility, discipline, and proper professional attitude; foster curiosity, lifelong learning, and adaptability to continuous technological and social changes. Enhance political resilience and loyalty to the goals and ideals of national independence combined with socialism."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Hình thành thái độ, tác phong làm việc chuyên nghiệp, phương pháp khoa học, có khả năng cập nhật kiến thức mới một cách chủ động\nDevelop professional attitude and working style, have scientific methods, be able to proactively update new knowledge"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Xây dựng khả năng vận dụng những kiến thức đã học để giải quyết những vấn đề kinh tế, chính trị, văn hóa xã hội theo quan điểm của Đảng và nhà nước Build the ability to apply learned knowledge to solve economic, political, socio-cultural issues from the perspective of the Party and the State."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Vận dụng và học tập, làm theo tư tưởng đạo đức phong cách Hồ Chí Minh, có ý thức phấn đấu trong thực tiễn đời sống, học tập và công tác\nApply, study, and follow Ho Chi Minh’s thought, ethics, and style; and demonstrate a proactive attitude in practical life, learning, and work."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment",
+   "on-going",
+   "2",
+   "40.0%",
+   ">0",
+   "Phụ thuộc theo hình thức kiểm tra đánh giá của giảng viênDepending on the instructor’s chosen form of assessment",
+   "LO1-L10",
+   "Bài thuyết trình và sản phẩm sáng tạo, bài thuyết trình, v.v…Presentation with creative product, presentation,etc.…",
+   "Phụ thuộc theo hình thức kiểm tra đánh giá của giảng viênDepending on the instructor’s chosen form of assessment",
+   "Kiến thức và kỹ năng trong phạm vi chương 2,3, 4, 5, 6 Cover chapter 2,3, 4, 5, 6",
+   "Bài thuyết trình và sản phẩm sáng tạo, bài thuyết trình,v.v… (Giảng linh hoạt lựa chọn hình thức kiểm tra đánh giá phù hợp)\n\nPresentation with a creative product, presentation, etc. (the instructor may flexibly choose the appropriate form of assessment)",
+   "Sinh viên làm thuyết trình và sản phẩm sáng tạo, thuyết trình,v.v tuỳ theo sĩ số lớp và điều kiện cơ sở\n\nDepending on class size and institutional conditions, students may be assessed through a presentation with a creative product, a presentation, etc."
+  ],
+  [
+   "2",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "LO1-L10",
+   "Đề xuất của giảng viên\nTeachers' proposal",
+   "",
+   "",
+   "Trong lớp học\nin class",
+   "Sinh viên vắng không quá 20%\nAbsent no more than 20% of class hours"
+  ],
+  [
+   "3",
+   "Progress test",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "20'",
+   "LO1, LO2, LO3, LO4, LO5, LO7, LO8, LO9, LO10",
+   "Câu hỏi trắc nghiệm dạng đúng sai, câu hỏi trắc nghiệm dạng nhiều lựa chọn.\nYes-no questions, Multiple choice questions",
+   "20- 25",
+   "Progress test: Kiến thức trong phạm vi chương 1, 2, 3, 4, 5 (LO1, LO2, LO3, LO4, LO5, LO7, LO8, LO9, LO10)\nProgress tests: cover chapter 1, 2, 3, 4, 5 (LO1, LO2, LO3, LO4, LO5, LO7, LO8, LO9, LO10)",
+   "Trong lớp học\nin class",
+   "Sinh viên không được sử dụng tài liệu.\nStudents are not allowed to use materials."
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1-L10",
+   "Câu hỏi trắc nghiệm dạng đúng sai, câu hỏi trắc nghiệm dạng nhiều lựa chọn.\nYes-no questions, Multiple choice questions",
+   "60",
+   "Tất cả 6 chương (Chương 1: 5 câu, chương 2:10 câu, chương 3: 10 câu, chương 4: 10 câu, chương 5: 10 câu, chương 6: 15 câu)\nAll 6 chapters included (Chapter 1: 5 questions, chapter 2: 10 questions, chapter 3: 10 questions, chapter 4: 10 questions, chapter 5: 10 questions, chapter 6: 15 questions)",
+   "Phòng Khảo thí tổ chức\nby Office of Assessment",
+   "Sinh viên không được sử dụng tài liệu.\nStudents are not allowed to use materials."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Giới thiệu môn học và tổ chức lớp\nĐịnh hướng sử dụng AI trong học tập",
+   "Offline",
+   "LO6, LO8",
+   "TU",
+   "",
+   "link1-1",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.",
+   ""
+  ],
+  [
+   "2",
+   "Chương I: Khái niệm, đối tượng, phương pháp nghiên cứu và ý nghĩa học tập môn Tư tưởng Hồ Chí Minh\nI. Khái niệm tư tưởng Hồ Chí Minh\nII. Đối tượng nghiên cứu",
+   "Offline",
+   "LO1, LO4, LO5, LO8, LO10",
+   "TU",
+   "Đọc trước giáo trình Tư tưởng Hồ Chí Minh từ trang 7 đến trang 20",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.",
+   ""
+  ],
+  [
+   "3",
+   "Chương I: Khái niệm, đối tượng, phương pháp nghiên cứu và ý nghĩa học tập môn Tư tưởng Hồ Chí Minh\nIII. Phương pháp nghiên cứu\nIV. Ý nghĩa của việc học tập môn học tư tưởng Hồ Chí Minh",
+   "Offline",
+   "LO1, LO4, LO5, LO8, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 20 đến trang 31",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.",
+   ""
+  ],
+  [
+   "4",
+   "Chương II: Cơ sở, quá trình hình thành và phát triển tư tưởng Hồ Chí Minh\nI. Cơ sở hình thành tư tưởng Hồ Chí Minh",
+   "Offline",
+   "LO2, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 32 đến trang 49",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.",
+   ""
+  ],
+  [
+   "5",
+   "Chương II: Cơ sở, quá trình hình thành và phát triển tư tưởng Hồ Chí Minh\nII. Quá trình hình thành và phát triển tư tưởng Hồ Chí Minh\nAssignment",
+   "Offline",
+   "LO2, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 50 đến trang 64",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.",
+   ""
+  ],
+  [
+   "6",
+   "Chương II: Cơ sở, quá trình hình thành và phát triển tư tưởng Hồ Chí Minh\nIII. Giá trị tư tưởng Hồ Chí Minh\n1. Đối với cách mạng Việt Nam\n2. Đối với sự phát triển tiến bộ của nhân loại\nAssignment",
+   "Offline",
+   "LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 65 đến trang 72",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.",
+   ""
+  ],
+  [
+   "7",
+   "Chương III: Tư tưởng Hồ Chí Minh về độc lập dân tộc và chủ nghĩa xã hội\nI. Tư tưởng Hồ Chí Minh về độc lập dân tộc\n1. Vấn đề độc lập dân tộc\nAssignment\n\nChapter III: Ho Chi Minh ideology on national independence and socialism\nI. Ho Chi Minh ideology on national independence\n1. The issue of national independence\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 73 đến trang 80\n\nRead Ho Chi Minh ideology textbook from page 73 to 80 in advance link",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "8",
+   "Chương III: Tư tưởng Hồ Chí Minh về độc lập dân tộc và chủ nghĩa xã hội\nI. Tư tưởng Hồ Chí Minh về độc lập dân tộc\n2. Về cách mạng giải phóng dân tộc\nAssignment\n\nChapter III: Ho Chi Minh ideology on national independence and socialism\nI. Ho Chi Minh ideology on national independence\n2. About the national liberation revolution\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 80 đến trang 92\n\nRead Ho Chi Minh ideology textbook from page 80 to 92 in advance link",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "9",
+   "Chương III: Tư tưởng Hồ Chí Minh về độc lập dân tộc và chủ nghĩa xã hội\nII. Tư tưởng Hồ Chí Minh về chủ nghĩa xã hội và xây dựng chủ nghĩa xã hội ở Việt Nam\n1. Tư tưởng Hồ Chí Minh về chủ nghĩa xã hội\n2. Tư Tưởng Hồ Chí Minh về xây dựng chủ nghĩa xã hội ở Việt Nam\nAssignment\n\nChapter III: Ho Chi Minh ideology on national independence and socialism\nII. Ho Chi Minh ideology on socialism and the road of transition to socialism in Vietnam\n1. Ho Chi Minh ideology on Socialism\n2. Ho Chi Minh ideology on building socialism in Vietnam\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 92 đến trang 108\nRead Ho Chi Minh ideology textbook from page 92 to 108 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "10",
+   "Chương III: Tư tưởng Hồ Chí Minh về độc lập dân tộc và chủ nghĩa xã hội\nII. Tư tưởng Hồ Chí Minh về chủ nghĩa xã hội và xây dựng chủ nghĩa xã hội ở Việt Nam\n3. Tư tưởng Hồ Chí Minh về thời kì quá độ lên chủ nghĩa xã hội ở Việt Nam\nAssignment\n\nChapter III: Ho Chi Minh ideology on national independence and socialism\nII. Ho Chi Minh ideology on socialism and the road of transition to socialism in Vietnam\n3. Ho Chi Minh ideology on the transition to socialism in Vietnam\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 108 đến trang 114\n\nRead Ho Chi Minh ideology textbook from page 108 to 114 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "11",
+   "Chương III: Tư tưởng Hồ Chí Minh về độc lập dân tộc và chủ nghĩa xã hội\nIII. Tư tưởng Hồ Chí Minh về mối quan hệ giữa độc lập dân tộc và chủ nghĩa xã hội\nAssignment\n\nChapter III: Ho Chi Minh ideology on national independence and socialism\nIII. Apply Ho Chi Minh ideology on the relationship between national independence and socialism\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 114 đến trang 118\n\nRead Ho Chi Minh ideology textbook from page 114 to 118 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "12",
+   "Chương III: Tư tưởng Hồ Chí Minh về độc lập dân tộc và chủ nghĩa xã hội\nIV. Vận dụng tư tưởng Hồ Chí Minh về độc lập dân tộc gắn liền với chủ nghĩa xã hội trong sự nghiệp cách mạng Việt Nam giai đoạn hiện nay\nAssignment\n\nChapter III: Ho Chi Minh ideology on national independence and socialism\nIV. Apply Ho Chi Minh ideology on national independence associated with socialism in the current revolutionary practices of Vietnam\nAssignment",
+   "Offline",
+   "LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 118 đến trang 122\n\nRead Ho Chi Minh ideology textbook from page 118 to 122 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "13",
+   "Thực hành tự học trên nền tảng Coursera: Module 2 - Bài 1\n1. Xem Video: Hướng dẫn module và định hướng ôn tập\n2. Tài liệu đọc bắt buộc: Tóm tắt trọng tâm Chương 1, Chương 2 và Chương 3 của môn học (Tài liệu đọc PDF)\n\nCoursera Self-Directed Study: Module 2 - Lesson 1\n1. Watch Video: Module Introduction and Review Orientation\n2. Required Reading: Core Summary of Chapters 1, 2, and 3 of the Course (PDF)",
+   "Online",
+   "LO1,\nLO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "ITU",
+   "Tài liệu học tập Học phần HCM202 tại Module 2 - Bài 1 trên Coursera\n\nHCM202 Course Materials for Module 2 - Lesson 1 on Coursera",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\nTài liệu khóa học HCM202 trên Coursera.\n\nHo Chi Minh Ideology Textbook (for non-political theory major university students), National Political Publishing House for Truth, 2021.\nHCM202 course materials on Coursera.",
+   ""
+  ],
+  [
+   "14",
+   "Chương IV: Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam và Nhà nước của nhân dân, do nhân dân, vì nhân dân\n\nI. Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam\n\n1. Tính tất yếu và vai trò lãnh đạo của Đảng Cộng sản Việt Nam\n\nAssignment\n\nChapter IV: Ho Chi Minh ideology on the Communist Party of Vietnam and the State of the people, by the people, for the people\n\nI. Ho Chi Minh ideology on the Communist Party of Vietnam\n\n1. The inevitability and leadership role of the Communist Party of Vietnam\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 126 đến trang 141\n\nRead Ho Chi Minh ideology textbook from page 126 to 141 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "15",
+   "Chương IV: Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam và Nhà nước của dân, do dân và vì dân\n\nI. Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam\n\n2. Đảng phải trong sạch, vững mạnh\n\nAssignment\n\nChapter IV: Ho Chi Minh ideology on the Communist Party of Vietnam and the State of the people, by the people, for the people\n\nI. Ho Chi Minh ideology on the Communist Party of Vietnam\n\n2. Party must be clean and strong\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 126 đến trang 141\n\nRead Ho Chi Minh ideology textbook from page 126 to 141 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "16",
+   "Chương IV: Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam và Nhà nước của dân, do dân và vì dân\n\nII. Tư tưởng Hồ Chí Minh về Nhà nước của dân, do dân, vì dân\n\n1. Nhà nước dân chủ\n\n2. Nhà nước pháp quyền\n\nAssignment\n\nChapter IV: Ho Chi Minh ideology on the Communist Party of Vietnam and the State of the people, by the people, for the people\n\nII. Ho Chi Minh ideology on the State of the people, by the people, for the people\n\n1. Democratic State\n\n2. The rule of law\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 142 đến trang 157\n\nRead Ho Chi Minh ideology textbook from page 142 to 157 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "17",
+   "Chương IV: Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam và Nhà nước của dân, do dân và vì dân\n\nII. Tư tưởng Hồ Chí Minh về Nhà nước của dân, do dân, vì dân\n\n3. Nhà nước trong sạch, vững mạnh\n\nAssignment\n\nChapter 4: Ho Chi Minh ideology on the Communist Party of Vietnam and the State of the people, by the people, for the people\n\nII. Ho Chi Minh ideology on the State of the people, by the people, for the people\n\n3. The state is clean and strong\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 157 đến trang 164\n\nRead Ho Chi Minh ideology textbook from page 157 to 164 in advance link",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "18",
+   "Chương IV: Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam và Nhà nước của dân, do dân và vì dân\n\nIII. Vận dụng tư tưởng Hồ Chí Minh vào công tác xây dựng Đảng và xây dựng nhà nước\n\n1. Xây dựng Đảng thật sự trong sạch, vững mạnh\n\n2. Xây dựng nhà nước\n\nAssignment\n\nChapter IV: Ho Chi Minh ideology on the Communist Party of Vietnam and the State of the people, by the people, for the people\n\nIII. Apply Ho Chi Minh ideology in building the Communist Party and the State\n\n1. Building a really clean and strong Party\n\n2. State construction\n\nAssignment",
+   "Offline",
+   "LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 164 đến trang 168\n\nRead Ho Chi Minh ideology textbook from page 164 to 166 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "19",
+   "Thực hành tự học trên nền tảng Coursera: Module 1 - Bài 1\n\nTài liệu đọc bắt buộc: Tư tưởng Hồ Chí Minh về tham nhũng: Khái niệm, đặc điểm, nguồn gốc và tác hại của tham nhũng (Tài liệu đọc PDF)\n\nCoursera Self-Directed Study: Module 1 - Lesson 1\n\nRequired Reading: Ho Chi Minh Ideology on Corruption: Concept, Characteristics, Origins, and Harmful Effects of Corruption (Reading PDF)",
+   "Online",
+   "LO3, LO6, LO7, LO9, LO10",
+   "ITU",
+   "Tài liệu học tập Học phần HCM202 tại Module 1 - Bài 1 trên Coursera\n\nHCM202 Course Materials for Module 1 - Lesson 1 on Coursera",
+   "",
+   "Tài liệu khóa học HCM202 trên Coursera.\n\nHCM202 course materials on Coursera.",
+   ""
+  ],
+  [
+   "20",
+   "Chương IV: Tư tưởng Hồ Chí Minh về Đảng Cộng sản Việt Nam và Nhà nước của dân, do dân và vì dân\n\nIII. Vận dụng tư tưởng Hồ Chí Minh vào công tác xây dựng Đảng và xây dựng nhà nước\n\n3. Phòng, chống tham nhũng góp phần củng cố niềm tin của nhân dân vào chế độ và pháp luật\n\nChapter IV: Ho Chi Minh Ideology on the Communist Party of Vietnam and the State of the people, by the people and for the people\n\nIII. Applying Ho Chi Minh Ideology to the construction of the Party and the state\n\n3. Anti-corruption contributes to strengthening people's confidence in the regime and the law.",
+   "Offline",
+   "LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình Tài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về luật từ trang 51 - trang 52\n\nRead in advance the textbook of anti-corruption teaching materials for non-law universities and colleges from page 51 to page 52",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nTài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về luật\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.\n\nTeaching materials on anti-corruption for non-law universities and colleges",
+   ""
+  ],
+  [
+   "21",
+   "Thực hành tự học trên nền tảng Coursera: Module 1 - Bài 2, 3\n\n1. Xem Video (Module 1 - Bài 2): Tư tưởng Hồ Chí Minh về phòng, chống tham nhũng - Thực tiễn và Trách nhiệm của thế hệ trẻ\n\n2. Hoàn thành Module 1 - Bài 3: Bài trắc nghiệm ngắn (Mini Quiz) kết thúc Module\n\nCoursera Self-Directed Study: Module 1 - Lessons 2, 3\n\n1. Watch Video (Module 1 - Lesson 2): Ho Chi Minh Ideology on the Prevention and Combat of Corruption - Practical Realities and the Responsibility of the Younger Generation\n\n2. Complete Module 1 - Lesson 3: End-of-Module Mini Quiz",
+   "Online",
+   "LO3, LO6, LO7, LO9, LO10",
+   "ITU",
+   "Tài liệu học tập Học phần HCM202 tại Module 1 - Bài 2,3 trên Coursera\n\nHCM202 Course Materials for Module 1 - Lesson 2,3 on Coursera",
+   "",
+   "Tài liệu khóa học HCM202 trên Coursera.\n\nHCM202 course materials on Coursera.",
+   ""
+  ],
+  [
+   "22",
+   "Chương V: Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế\n\nI. Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc\n\n1. Vai trò của đại đoàn kết toàn dân tộc\n\n2. Lực lượng của khối đại đoàn kết toàn dân tộc\n\nAssignment\n\nChapter V: Ho Chi Minh ideology on the great unity bloc and international solidarity\n\nI. Ho Chi Minh ideology on the great unity bloc\n\n1. The role of great national unity\n\n2. The force of the great national unity bloc\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 169 đến trang 174\n\nRead Ho Chi Minh ideology textbook from page 169 to 174 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "23",
+   "Chương V: Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế\n\nI. Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc\n\n3. Điều kiện để xây dựng khối đại đoàn kết toàn dân tộc\n\n4. Hình thức, nguyên tắc tổ chức của khối đại đoàn kết toàn dân tộc - Mặt trận dân tộc thống nhất\n\n5. Phương thức xây dựng khối đại đoàn kết dân tộc\n\nAssignment\n\nChapter V: Ho Chi Minh ideology on the great unity bloc and international solidarity\n\nI. Ho Chi Minh ideology on the great unity bloc\n\n3. Conditions for building a great national unity block\n\n4. Form and organizational principles of the great national unity bloc - United National Front\n\n5. How to build a great national unity block\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 174 đến trang 184\n\nRead Ho Chi Minh ideology textbook from page 174 to 184 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "24",
+   "Chương V: Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế\n\nII. Tư tưởng Hồ Chí Minh về đại đoàn kết quốc tế\n\n1. Sự cần thiết phải đoàn kết quốc tế\n\nAssignment\n\nChapter V: Ho Chi Minh ideology on the great unity bloc and international solidarity\n\nII. Ho Chi Minh ideology on international solidarity\n\n1. The need for international solidarity\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 184 đến trang 188\n\nRead Ho Chi Minh ideology textbook from page 184 to 188 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "25",
+   "Chương V: Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế\n\nII. Tư tưởng Hồ Chí Minh về đại đoàn kết quốc tế\n\n2. Lực lượng đoàn kết quốc tế và hình thức tổ chức\n\n3. Nguyên tắc đoàn kết quốc tế\n\nAssignment\n\nChapter V: Ho Chi Minh ideology on the great unity bloc and international solidarity\n\nII. Ho Chi Minh ideology on international solidarity\n\n2. International Solidarity Forces and Organizational Forms\n\n3. Principle of international solidarity\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 188 đến trang 197\n\nRead Ho Chi Minh ideology textbook from page 188 to 197 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "26",
+   "Chương V: Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế\n\nIII. Vận dụng tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế trong giai đoạn hiện nay\n\n1. Quán triệt tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế trong hoạch định chủ trương, đường lối của Đảng\n\n2. Xây dựng khối đại đoàn kết toàn dân tộc trên nền tảng liên minh công - nông - trí dưới sự lãnh đạo của Đảng\n\nAssignment\n\nChapter V: Ho Chi Minh ideology on the great unity bloc and international solidarity\n\nIII. Apply Ho Chi Minh ideology on the great unity bloc and international solidarity in the current practices\n\n1. Thoroughly grasping Ho Chi Minh's ideology on great national unity and international solidarity in planning the Party's guidelines and lines\n\n2. Building the great national unity block on the basis of the alliance of workers - farmers - wisdom under the leadership of the Party\n\nAssignment",
+   "Offline",
+   "LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 198 đến trang 202\n\nRead Ho Chi Minh ideology textbook from page 198 to 202 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "27",
+   "Chương V: Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế\n\nIII. Vận dụng tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế trong giai đoạn hiện nay\n\n3. Đại đoàn kết toàn dân tộc phải kết hợp với đoàn kết quốc tế\n\nAssignment\n\nProgress Test\n\nChapter V: Ho Chi Minh ideology on the great unity bloc and international solidarity\n\nIII. Apply Ho Chi Minh ideology on the great unity bloc and international solidarity in the current practices\n\n3. Great national unity must be combined with international solidarity\n\nAssignment\n\nProgress Test",
+   "Offline",
+   "LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 202 đến trang 204\n\nRead Ho Chi Minh ideology textbook from page 202 to 204 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "28",
+   "Chương VI: Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người\n\nI. Tư tưởng Hồ Chí Minh về văn hóa\n\nAssignment\n\nChapter VI: Ho Chi Minh ideology on culture, human\n\nI. Ho Chi Minh ideology on culture\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 205 đến trang 218\n\nRead Ho Chi Minh ideology textbook from page 205 to 218 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "29",
+   "Chương VI: Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người\n\nII. Tư tưởng Hồ Chí Minh về đạo đức\n\nAssignment\n\nChapter VI: Ho Chi Minh ideology on culture, human\n\nII. Ho Chi Minh ideology on human\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 218 đến trang 240\n\nRead Ho Chi Minh ideology textbook from page 218 to 240 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "30",
+   "Chương VI: Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người\n\nIII. Tư tưởng Hồ Chí Minh về con người\n\nAssignment\n\nChapter VI: Ho Chi Minh ideology on culture, human\n\nIII. Build Vietnamese culture and human according to Ho Chi Minh ideology\n\nAssignment",
+   "Offline",
+   "LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 241 đến trang 248\n\nRead Ho Chi Minh ideology textbook from page 241 to 248 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "31",
+   "Chương VI: Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người\n\nIV. Xây dựng văn hóa, đạo đức, con người Việt Nam hiện nay theo tư tưởng Hồ Chí Minh\n\n1. Xây dựng và phát triển văn hoá, con người\n\nAssignment\n\nChapter VI: Ho Chi Minh ideology on culture, human\n\nIV. Building the current Vietnamese culture, morality and people according to Ho Chi Minh ideology\n\n1. Building and developing culture and people\n\nAssignment",
+   "Offline",
+   "LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 248 đến trang 255\n\nRead Ho Chi Minh ideology textbook from page 248 to 255 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "32",
+   "Chương VI: Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người\n\nIV. Xây dựng văn hóa, đạo đức, con người Việt Nam hiện nay theo tư tưởng Hồ Chí Minh\n\n2. Xây dựng đạo đức cách mạng\n\nAssignment\n\nChapter VI: Ho Chi Minh ideology on culture, human\n\nIV. Building the current Vietnamese culture, morality and people according to Ho Chi Minh ideology\n\n2. Building revolutionary morality\n\nAssignment",
+   "Offline",
+   "LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Đọc trước giáo trình tư tưởng Hồ Chí Minh từ trang 255 đến trang 265\n\nRead Ho Chi Minh ideology textbook from page 255 to 265 in advance",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "33",
+   "Tổng kết chương I, II, III, IV, V, VI\n\nSummary of chapters I, II, III, IV, V, VI",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "TU",
+   "Tổng kết những kiến thức quan trọng của toàn bộ môn học\n\nSummarize the important knowledge of the entire subject",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nĐề cương bài giảng của giảng viên.\n\nHo Chi Minh ideology 2021 textbook,\n\nLecture outline of the lecturer.",
+   ""
+  ],
+  [
+   "34",
+   "Thực hành tự học trên nền tảng Coursera: Module 2 - Bài 2, 3\n\nHoàn thành Module 2 - Bài 2 và làm bài Kiểm tra tổng kết ở Bài 3\n\nCoursera Self-Directed Study: Module 2 - Lessons 2, 3\n\nComplete Module 2 - Lesson 2 and take the Final Quiz in Lesson 3",
+   "Online",
+   "LO1,LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "ITU",
+   "Tài liệu khóa học HCM202 tại Module 2 - Bài 2, 3 trên Coursera.\n\nHCM202 course materials at Module 2 - Lesson 2, 3 on Coursera",
+   "",
+   "Giáo trình Tư tưởng Hồ Chí Minh (dành cho bậc đại học hệ không chuyên lý luận chính trị), NXB Chính trị quốc gia Sự thật), năm 2021.\n\nTài liệu khóa học HCM202 trên Coursera.\n\nHo Chi Minh Ideology Textbook (for non-political theory major university students), National Political Publishing House for Truth, 2021.\n\nHCM202 course materials on Coursera.",
+   ""
+  ],
+  [
+   "35",
+   "Buổi học thực tế (tham quan, trải nghiệm thực tế, triển lãm, v.v)",
+   "Offline",
+   "LO1,LO2, LO3, LO4, LO6, LO7, LO8, LO9, LO10",
+   "U",
+   "Theo lựa chọn triển khai thực tế của lớp học.",
+   "",
+   "Theo lựa chọn triển khai thực tế của lớp học.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "CQ1.1",
+   "Vì sao nói: “Tư tưởng Hồ Chí Minh là tài sản tinh thần vô cùng to lớn và quý giá của Đảng và dân tộc ta mãi mãi soi đường cho sự nghiệp cách mạng của nhân dân ta giành thắng lợi”?"
+  ],
+  [
+   "2",
+   "3",
+   "CQ1.2",
+   "Bằng cách nào để sinh viên có thể thực hành đạo đức cách mạng, chống chủ nghĩa cá nhân, chống “giặc nội xâm” để lập thân, lập nghiệp, sống có ích cho xã hội, yêu và làm những điều thiện, ghét và tránh cái xấu, cái ác; nâng cao lòng tự hào về đất nước Việt Nam, về chế độ chính trị xã hội chủ nghĩa, về Hồ Chí Minh, về Đảng Cộng sảnViệt Nam?"
+  ],
+  [
+   "3",
+   "3",
+   "CQ1.3",
+   "Hãy chứng minh tư tưởng Hồ Chí Minh mang tầm vóc thời đại?"
+  ],
+  [
+   "4",
+   "4",
+   "CQ2.1",
+   "Những nguyên nhân chủ quan và khách quan nào dẫn tới việc nhà Nguyễn để nước ta trở thành thuộc địa của Pháp?"
+  ],
+  [
+   "5",
+   "4",
+   "CQ2.2",
+   "“Năm 1923, nhà thơ, nhà báo nổi tiếng người Xô Viết O.Mandenxtam gặp Nguyễn Ái Quốc lúc này 33 tuổi ở Moskva, O.Mandenxtam đã đánh giá Nguyễn Ái Quốc là một người phương Đông lịch sự, là biểu hiện cho một nền văn hóa của tương lai: “Từ Nguyễn Ái Quốc tỏa ra một thứ văn hóa, không phải văn hóa châu Âu, mà có lẽ là một nền văn hóa của tương lai. Từ trong giọng nói đầm ấm, thanh cao của Người, chúng ta như nghe thấy ngày mai, như thấy viễn cảnh trời yên biển lặng của tình hữu ái bao la toàn thế giới mênh mang như nước đại dương”. Theo bạn, vì sao nhà báo người Xô Viết lại có nhận xét như vậy về Nguyễn Ái Quốc?"
+  ],
+  [
+   "6",
+   "5",
+   "CQ2.3",
+   "Sự sáng tạo của Nguyễn Ái Quốc trong hành trình tìm đường cứu nước đầu thế kỷ XX so với những bậc tiền bối đi trước như Phan Bội Châu, Phan Chu Trinh là gì?"
+  ],
+  [
+   "7",
+   "5",
+   "CQ2.4",
+   "Anh hùng tạo thời thế hay thời thế tạo anh hùng đúng với cuộc đời và sự nghiệp của Hồ Chí Minh?"
+  ],
+  [
+   "8",
+   "6",
+   "CQ2.5",
+   "Anh chị hãy phản bác luận điệu của các các thế lực thù địch cho rằng tư tưởng Hồ Chí Minh đã lỗi thời, lạc hậu và không còn phù hợp với sự phát triển của Việt Nam và thời đại mới?"
+  ],
+  [
+   "9",
+   "7",
+   "CQ3.1",
+   "Theo Anh/Chị quan điểm nào trong tư tưởng Hồ Chí Minh về độc lập dân tộc là:“lẽ sống, là học thuyết của Hồ Chí Minh, là nguồn sức mạnh làm nên chiến thắng của nhân dân Việt Nam, đồng thời cũng là nguồn động viên đối với các dân tộc bị áp bức trên thế giới ”? Hãy minh chứng?"
+  ],
+  [
+   "10",
+   "8",
+   "CQ3.2",
+   "Hãy chứng minh tính sáng tạo trong tư tưởng Hồ Chí Minh về cách mạng giải phóng dân tộc?"
+  ],
+  [
+   "11",
+   "8",
+   "CQ3.3",
+   "Tại sao trong quá trình ra đi tìm đường cứu nước Hồ Chí Minh đã từ chối con đường cách mạng tư sản để đi theo con đường cách mạng vô sản? Ý nghĩa của sự lựa chọn này đối với cách mạng Việt Nam?"
+  ],
+  [
+   "12",
+   "8",
+   "CQ3.4",
+   "Hồ Chí Minh quan niệm:‘có dân là có tất cả, trên đời này không gì quý bằng dân, được lòng dân thì được tất cả, mất lòng dân thì mất tất cả”. Anh/Chị hiểu như thế nào về luận điểm trên?"
+  ],
+  [
+   "13",
+   "9",
+   "CQ3.5",
+   "Hồ Chí Minh khẳng định: “Muốn xây dựng chủ nghĩa xã hội, trước hết cần có những con người xã hội chủ nghĩa”. Anh/Chị vận dụng quan điểm trên như thế nào để trở thành con người xã hội chủ nghĩa?"
+  ],
+  [
+   "14",
+   "9",
+   "CQ4.1",
+   "Sức hấp dẫn của chủ nghĩa xã hội là gì? Hãy minh chứng?"
+  ],
+  [
+   "15",
+   "10",
+   "CQ4.2",
+   "Theo chủ tịch Hồ Chí Minh, thời kỳ quá độ lên chủ nghĩa xã hội ở Việt Nam sẽ bỏ qua chủ nghĩa Tư bản. Như vậy có đốt cháy giai đoạn hay không? Vì sao?"
+  ],
+  [
+   "16",
+   "11",
+   "CQ4.3",
+   "Theo Hồ Chí Minh thì “Độc lập dân tộc gắn liền với chủ nghĩa xã hội”. Vì sao?"
+  ],
+  [
+   "17",
+   "12",
+   "CQ4.4",
+   "Theo chủ tịch Hồ Chí Minh, Chủ nghĩa xã hội là xu thế tất yếu của thời đại và phù hợp với lợi ích của nhân dân Việt Nam. Tuy nhiên, hiện nay có rất ít nước định hướng đi theo Chủ nghĩa xã hội. Quan điểm của Anh/Chị như thế nào về vấn đề trên?"
+  ],
+  [
+   "18",
+   "12",
+   "CQ4.5",
+   "Độc lập dân tộc gắn liền với Chủ nghĩa xã hội – Sự lựa chọn phù hợp xu thế phát triển của thời đại, khát vọng thiêng liêng của dân tộc Việt Nam? Anh/chị hiểu như thế nào?"
+  ],
+  [
+   "19",
+   "14",
+   "CQ5.1",
+   "Vì sao Hồ Chí Minh coi trọng yếu tố \"Phong trào yêu nước\" cho sự ra đời của Đảng Cộng Sản Việt Nam?"
+  ],
+  [
+   "20",
+   "14",
+   "CQ5.2",
+   "Bằng những sự kiện lịch sử hãy chứng minh: Sự lãnh đạo của Đảng là yếu tố hàng đầu đưa cách mạng Việt Nam đi từ thắng lợi này đến thắng lợi khác?"
+  ],
+  [
+   "21",
+   "15",
+   "CQ5.3",
+   "Hồ Chí Minh khẳng định: Đảng sẵn sàng vui vẻ làm trâu ngựa, làm tôi tớ trung thành của Nhân dân [Hồ Chí Minh toàn tập, tập 10, trang 184,185]. Anh/chị nhận định như thế nào khi một số cán bộ đảng viên thoái hóa, biến chất hiện nay?"
+  ],
+  [
+   "22",
+   "16",
+   "CQ5.5",
+   "\"Bảy xin hiến pháp ban hành; Trăm điều phải có thần linh pháp quyền\". Anh/chị hiểu thế nào về nhận định này của Hồ Chí Minh?"
+  ],
+  [
+   "23",
+   "17",
+   "CQ6.1",
+   "Theo Hồ Chí Minh để xây dựng nhà nước trong sạch vững mạnh thì đội ngũ cán bộ đảng viên cần phải có những yêu cầu gì? Cho ví dụ?"
+  ],
+  [
+   "24",
+   "17",
+   "CQ6.2",
+   "Chủ tịch Hồ Chí Minh đặc biệt chú trọng đấu tranh chống bệnh đặc quyền, đặc lợi, tham ô, lãng phí, quan liêu tiêu cực trong bộ máy Nhà nước như thế nào? Lấy dẫn chứng thực tế để làm rõ?"
+  ],
+  [
+   "25",
+   "18",
+   "CQ6.3",
+   "Trong bối cảnh hiện nay, những vấn đề gì trong công tác xây dựng Đảng đòi hỏi chúng ta cần đặc biệt quan tâm?"
+  ],
+  [
+   "26",
+   "18",
+   "CQ6.4",
+   "Tiếp thu tư tưởng Hồ Chí Minh về Nhà nước. Hiện nay việc xây dựng Nhà nước ngang tầm nhiệm vụ trong giai đoạn cách mạng mới cần bảo đảm những nội dung nào? Cho ví dụ làm rõ?"
+  ],
+  [
+   "27",
+   "18",
+   "CQ6.5",
+   "Anh/chị nêu sự kế thừa và phát triển tư tưởng Hồ Chí Minh về xây dựng Nhà nước vì dân trong Văn kiện Đại hội Đảng toàn quốc lần thứ XIII của Đảng thể hiện như thế nào?"
+  ],
+  [
+   "28",
+   "22",
+   "CQ7.1",
+   "Theo các bạn, vì sao Hồ Chí Minh luôn coi \"đoàn kết là sức mạnh, là then chốt của thành công\" trong sự nghiệp cách mạng giải phóng dân tộc và xây dựng đất nước?"
+  ],
+  [
+   "29",
+   "22",
+   "CQ7.2",
+   "Theo các bạn, khi xác định chủ thể của khối đại đoàn kết dân tộc, vì sao Hồ Chí Minh không lựa chọn chỉ đoàn kết trong giai cấp công nhân mà xác định là toàn thể nhân dân Việt Nam? Điều này có đi ngược lại với lý luận quan điểm \"Vô sản toàn thế giới, đoàn kết lại\" của Mác - Ăngghen không?"
+  ],
+  [
+   "30",
+   "23",
+   "CQ7.3",
+   "Vì sao Hồ Chí Minh lại luôn luôn quan tâm, xây dựng mặt trận dân tộc thống nhất? ý nghĩa của việc này là gì?"
+  ],
+  [
+   "31",
+   "23",
+   "CQ7.4",
+   "Mối quan hệ giữa đoàn kết và dân chủ trong tư tưởng Hồ Chí Minh là gì? Các bạn có thể vận dụng về mối quan hệ này để thực hiện các hoạt động teamwork của mình như thế nào?"
+  ],
+  [
+   "32",
+   "23",
+   "CQ7.5",
+   "Hồ Chí Minh có chỉ ra “Dân vận khéo thì việc gì cũng thành công”, theo các bạn vì sao chúng ta phải thực hiện tốt công tác dân vận? Điều này đã được thể hiện ở đâu, như thế nào trong tư tưởng Hồ Chí Minh"
+  ],
+  [
+   "33",
+   "24",
+   "CQ8.1",
+   "Phân tích những quan điểm cơ bản của Hồ Chí Minh về sự cần thiết phải xây dựng đoàn kết quốc tế. Ý nghĩa của việc kết hợp sức mạnh dân tộc với sức mạnh thời đại trong thực tiễn cách mạng Việt Nam hiện nay?"
+  ],
+  [
+   "34",
+   "25",
+   "CQ8.2",
+   "Làm rõ các nguyên tắc đoàn kết quốc tế trong tư tưởng Hồ Chí Minh. Bằng những dẫn chứng từ thực tiễn chống đại dịch Covid-19 hãy làm sáng tỏ sức mạnh của đoàn kết quốc tế."
+  ],
+  [
+   "35",
+   "25",
+   "CQ8.4",
+   "Trong thư gửi các đơn vị bộ đội có nhiệm vụ tác chiến ở Thượng Lào ngày 3-4-1953: “Lần này là lần đầu tiên, các chú nhận một nhiệm vụ quan trọng và vẻ vang như nhiệm vụ này, tức là giúp nhân dân nước bạn. Mà giúp nhân dân nước bạn tức là mình tự giúp mình”.\nHãy sưu tầm những luận cứ (câu chuyện, điển hình, thước phim) từ thực tế chống đại dịch Covid-19 để làm sáng tỏ phương châm “giúp nhân dân nước bạn tức là mình tự giúp mình” trong tư tưởng đoàn kết của Hồ Chí Minh."
+  ],
+  [
+   "36",
+   "26",
+   "CQ8.3",
+   "Vận dụng tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế trong giai đoạn hiện nay cần quán triệt những nội trọng tâm nào? Vì sao đại đoàn kết toàn dân tộc phải kết hợp với đoàn kết quốc tế?"
+  ],
+  [
+   "37",
+   "27",
+   "CQ8.5",
+   "Đọc sự tổng kết sau:\nNgày 22-10-1963, trong cuộc họp của Bộ Chính trị bàn về vấn đề quan hệ quốc tế của Đảng, Chủ tịch Hồ Chí Minh đề nghị: “Chủ trương của Đảng ta là đoàn kết và làm cầu nối trong việc đoàn kết quốc tế”. Nhận thức rõ tầm quan trọng của đoàn kết quốc tế trong tư tưởng Hồ Chí Minh, ở thời kỳ đổi mới, bằng việc xác định đúng các dòng chảy của thế giới trong xu thế toàn cầu hóa và hội nhập quốc tế, Đảng và Nhà nước ta đã chủ trương thực hiện chính sách đối ngoại rộng mở, đa phương hóa, đa dạng hóa, chủ động, tích cực hội nhập quốc tế và cụ thể hóa vào trong chủ trương, đường lối qua các kỳ đại hội: Việt Nam “muốn là bạn với tất cả các nước trong cộng đồng thế giới” của Đại hội VII (năm 1991), “sẵn sàng là bạn, là đối tác tin cậy của các nước trong cộng đồng quốc tế” của Đại hội IX (năm 2001), “là bạn, đối tác tin cậy và là thành viên có trách nhiệm trong cộng đồng quốc tế” của Đại hội XI (năm 2011).\nYêu cầu:\n- Giới thiệu khái quát các thành tựu hội nhập quốc tế để làm sáng tỏ khát vọng của Chủ tịch Hồ Chí Minh và mong muốn của dân tộc Việt Nam trong đoàn kết quốc tế là “làm bạn với tất cả mọi nước dân chủ và không gây thù oán với một ai”."
+  ],
+  [
+   "38",
+   "28",
+   "CQ9.1",
+   "Hãy làm rõ những giá trị của khái niệm văn hóa trong tư tưởng Hồ Chí Minh."
+  ],
+  [
+   "39",
+   "28",
+   "CQ9.2",
+   "Tại Đại hội Văn hóa toàn quốc lần thứ nhất, ngày 24/11/1946, Chủ tịch Hồ Chí Minh nêu một luận điểm quan trọng: “Văn hóa soi đường cho quốc dân đi”, nhằm nhấn mạnh vai trò định hướng, dẫn dắt của văn hóa đối với sự phát triển của cách mạng và của cả dân tộc. Từ quan điểm đó của Người yêu cầu: - Khái quát những nội dung căn bản nhất để làm rõ nội dung văn hóa soi đường cho quốc dân đi. - Liên hệ thực tiễn để chỉ ra những biểu hiện tiêu cực trong văn hóa đời sống hiện nay."
+  ],
+  [
+   "40",
+   "28",
+   "CQ9.3",
+   "Tiến sĩ M. Admad, Giám đốc UNESCO khu vực Châu Á Thái Bình Duơng: “Hồ Chí Minh đã thành công trong việc liên kết nhiều sắc thái văn hoá vào một nền văn hóa Việt Nam duy nhất. Người làm được việc này nhờ sự hiểu biết sâu sắc và tôn trọng những đặc điểm văn hóa khác nhau”.\nBằng các dẫn chứng cụ thể về sự kế thừa những giá trị văn hóa trong tư tưởng Hồ Chí Minh để làm rõ cho quan điểm nêu trên."
+  ],
+  [
+   "41",
+   "29",
+   "CQ5.4",
+   "Hãy nêu những cách để rèn luyện được đức tính giản dị, khiêm tốn trong cuộc sống? Liên hệ bản thân?"
+  ],
+  [
+   "42",
+   "29",
+   "CQ9.4",
+   "Khi luận bàn chữ Kiệm, Hồ Chí Minh viết: “Nước ta có 20 triệu người, nhiều bù ít, mỗi người mỗi ngày ăn 700 gam gạo, mỗi tháng là 21 kilô gam. Nếu một ngày mỗi người chỉ tiết kiệm nửa bát cơm (việc đó rất dễ, ai cũng làm được), thì mỗi tháng cả nước sẽ tiết kiệm được 20 triệu kilô gạo, nghĩa là đủ nuôi một triệu chiến sĩ trong một tháng… Kết quả của Cần cộng với kết quả của Kiệm là: bộ đội sẽ đầy đủ, nhân dân sẽ ấm no, kháng chiến sẽ mau thắng lợi, kiến quốc sẽ mau thành công, nước ta sẽ mau giàu mạnh ngang hàng với các nước tiên tiến trên thế giới”.\n- Kết hợp với luận về chữ “Cần”, chữ “Kiệm” của Người. Anh (Chị) hãy đề ra các giải pháp thực hành chữ “Cần”, chữ “Kiệm” trong thực tiễn học tập của sinh viên hiện nay. Luận giải vì sao, Bác luôn đặt cần đi đôi với kiệm?"
+  ],
+  [
+   "43",
+   "29",
+   "CQ9.5",
+   "Triết lý con người và đạo đức, xoay quanh một câu hỏi lớn - Ở đời và làm người phải như thế nào? Với Bác, “Muốn hướng dẫn nhân dân, mình phải làm mực thước cho người ta bắt chước”, “Một tấm gương sống còn có giá trị hơn một trăm bài diễn văn tuyên truyền”. Từ quan điểm của Bác và liên hệ với thực tiễn để trình bày quan điểm của anh, chị về vấn đề này."
+  ],
+  [
+   "44",
+   "30",
+   "CQ10.3",
+   "Trong Thư gửi đồng bào và cán bộ xã Nam Liên (nay là xã Kim Liên, huyện Nam Đàn, tỉnh Nghệ An) Hồ Chí Minh nói: “Tư tưởng bảo thủ là như những sợi dây cột chân cột tay người ta, phải vất nó đi. Muốn tiến bộ thì phải có tinh thần mạnh dạn, dám nghĩ dám làm”. Kết hợp với quan điểm của Người, bằng hành văn rõ ràng, trong sáng hãy viết bài luận ngắn trình bày:\n- Những quan điểm bảo thủ đang cố hữu trong bạn và cách mà bạn \"vất nó đi\".\n- Thực trạng và giải pháp nào cho vấn đề “tinh thần mạnh dạn, dám nghĩ dám làm” trong giới trẻ hiện nay."
+  ],
+  [
+   "45",
+   "30",
+   "CQ10.4",
+   "Phân tích những quan điểm chủ yếu trong tư tưởng Hồ Chí Minh về xây dựng con người mới. Sinh viên cần phải làm gì để phát huy tính tích cực, chủ động trong việc rèn luyện, phát triển năng lực tư duy?"
+  ],
+  [
+   "46",
+   "31",
+   "CQ10.1",
+   "Nhằm xây dựng và phát triển văn hóa, con người Việt Nam đáp ứng yêu cầu phát triển bền vững đất nước Đại hội XII của Đảng đã khái quát các nhiệm vụ cụ thể nào?"
+  ],
+  [
+   "47",
+   "31",
+   "CQ10.2",
+   "Tại Hội nghị nghiên cứu lịch sử Đảng của Ban Tuyên giáo Trung ương, Bác Hồ đã nói “Nếu không chịu khó học thì không tiến bộ được... Xã hội càng đi tới, công việc càng nhiều, máy móc càng tinh xảo. Mình mà không chịu học thì lạc hậu, mà lạc hậu là bị đào thải, tự mình đào thải mình”.\nKết hợp với quan điểm của Người, bằng hành văn rõ ràng, trong sáng Anh (Chị) hãy trình bày quan điểm của mình về tầm quan trọng của việc học tập, rèn luyện trong môi trường học tập giáo dục Đại học và đề ra các giải pháp cho việc học tập hiệu quả trong thực tế sinh viên hiện nay."
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/1CXun-a8RbmtyG688cPd3cweXGzsBJKjG?usp=drive_link"
+ ]
+}

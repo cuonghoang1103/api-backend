@@ -1,0 +1,1227 @@
+{
+ "ma": "FIN406",
+ "sylID": "13802",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13802",
+   "code": "FIN406",
+   "name": "Financial Risk Management _ Quản trị rủi ro tài chính",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13802",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13802",
+  "Syllabus Name": "Financial Risk Management _ Quản trị rủi ro tài chính",
+  "Course Name English": "Financial Risk Management",
+  "Subject Code": "FIN406",
+  "Learning-Teaching Method": "Lecture,Presenting,Project based learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "MAS202 and FIN402",
+  "Description": "Financial Risk Management course explains all aspects of financial risk and financial institution regulation, helping you better understand the financial markets—and their potential dangers. Inside, you’ll learn the different types of risk, how and where they appear in different types of institutions, and how the regulatory structure of each institution affects risk management practices.",
+  "StudentTasks": "* Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n* Student is responsible to do all exercises, assignments given by instructors in class or at home and submit on time\n\n* Use laptop in class only for learning purpose\n\n* Promptly access to http://flm.fpt.edu.vn for up-to-date course information",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Risk Management and Financial Institutions, Decision-Making, and Markets",
+   "John C. Hull",
+   "Wiley",
+   "2010",
+   "6th",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Articulate applicability of conduct risk in various types of financial institutions, its drivers and mitigation techniques"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Classify and comprehend core risk measurement and management tools to a variety of risks faced by institutions"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Evaluate key risks applicable to financial institutions using core risk measurement tools"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Evaluate the effectiveness of the risk monitoring frameworks used by financial institutions"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify and articulate the key aspects of Basel (II, and III) framework and the shortcomings of the Basel Frameworks."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Shows self-reliance when working independently and collaboratively"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Demonstrate ethical awareness and reflection in business context"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "All sessions",
+   "",
+   "Discussion questions and Constructive questions",
+   "",
+   "",
+   "Classroom",
+   "Participation grade will be given based on students' preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments."
+  ],
+  [
+   "2",
+   "Essay Test",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "45 minutes",
+   "LO1, LO2, LO3, LO4, LO5",
+   "Essay questions covering both qualitative and quantitative aspects of the learning materials",
+   "Number of questions will depend on the lengths and difficulty levels of each question given by the lecturer.",
+   "Part 1,2,3,4,5,6,7",
+   "Classroom",
+   "_ Closed-book test.\n\n_ Students are allowed to bring calculators, pens, pencils, erasers, and blank papers into classroom.\n\n_ Any proof of cheating during the test will result in grade 0 for the students.\n\n_ Essay test grade will be given based on the correctness and clarity of student's answers and explanation."
+  ],
+  [
+   "3",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "4-5 weeks",
+   "LO1, LO2, LO3, LO4, LO5",
+   "_ Quantitative questions require students to collect data and perform detailed analyses in excel format with formulas.\n\n_ Qualitative and discussion questions require students to provide their own assessment and judgement with detailed explanation in their answers.",
+   "Number of questions will depend on the lengths and difficulty levels of each question given by the lecturer.",
+   "Part 1,2,3,4,5,6,7",
+   "Take-Home and Classroom",
+   "_ Groups present their work on their assigned dates\n\n_ Groups must submit their reports in time (on or before the given deadline).If groups submit late without a legit reason, then all members of the groups will receive a grade 0 for the assignment.\n\n_ Group reports will not exceed 20 pages in length (Max 5000 words, typed, double-spaced, excluding Works Cited page).\n\n_ Any proof of plagarism will result in grade 0 for the assignment for all members of the groups.\n\n_ Group assignment grade will be given based on the quality of the presentation and report with regard to the correctness and clarity of the calculations, answers and explantion, as well as students' ability in addressing questions and concerns raised by their peers and the lecturer."
+  ],
+  [
+   "4",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "2-3 weeks",
+   "LO1, LO2, LO3",
+   "_ Quantitative questions require students to collect data and perform detailed analyses in excel format with formulas.\n\n_ Qualitative and discussion questions require students to provide their own assessment and judgement with detailed explanation in their answers.",
+   "Number of questions will depend on the lengths and difficulty levels of each question given by the lecturer.",
+   "Part 1,2",
+   "Take-Home",
+   "_ Students must submit their individual reports in time (on or before the given deadline).If students submit late without a legit reason, then students will receive a grade 0 for the assignment.\n\n_ Students' individual reports will not exceed 10 pages in length (1,500 to 2,000 words, typed, double-spaced, excluding Works Cited page).\n\n_ Any proof of plagarism will result in grade 0 for the assignment.\n\n_ Individual assignment grade will be given based on the quality of the report with regard to the correctness and clarity of the calculations, answers and explantion."
+  ],
+  [
+   "5",
+   "Mid-term test",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "45 minutes",
+   "LO1, LO2, LO3",
+   "Multiple-choice, True-False; Short-answer Questions covering both qualitative and quantitative aspects of the learning materials.",
+   "Number of questions will depend on the lengths and difficulty levels of each question given by the lecturer.",
+   "Part 1,2",
+   "Classroom",
+   "_ Closed-book test.\n\n_ Students are allowed to bring calculators, pens, pencils, erasers, and blank papers into classroom.\n\n_ Any proof of cheating during the test will result in grade 0 for the students.\n\n_ Mid-term grade will be given based on the correctness and clarity of student's answers."
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "LO1, LO2, LO3, LO4, LO5",
+   "Multiple - choice questions",
+   "50",
+   "All chapters and learning materials covered in the course.",
+   "Classroom",
+   "_ Closed-book exam.\n\n_ Students are allowed to bring calculators, pens, pencils, erasers, and blank papers into classroom.\n\n_ Any proof of cheating during the test will result in grade 0 for the students."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "- Course overview\n\n- Introduction to AI Integration\n\n- Chapter 1: Introduction: Risk-Return Trade-offs\n\n1.1. Risk vs Return for Investors\n\n1.2. The Efficient Frontier",
+   "Offline",
+   "LO1",
+   "IT",
+   "- Syllabus\n\n- Textbook Chapter 1\n\n- Slide Chapter 1\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "FIN406",
+   "- Read Syllabus\n\n- Read Textbook Chapter 1\n\n- Read Slide Chapter 1\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   "link"
+  ],
+  [
+   "2",
+   "Chapter 1: Introduction: Risk-Return Trade-offs\n\n1.3. The Capital Asset Pricing Model\n\n1.4. Arbitrage Pricing Theory",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 1\n\n- Slide Chapter 1\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "FIN406",
+   "- Read Textbook Chapter 1\n\n- Read Slide Chapter 1\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1 (continued)\n\n1.5. Risk vs Return for Companies\n\n1.6. Risk Management by Financial Institutions\n\n1.7. Credit Ratings",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 1\n\n- Slide Chapter 1\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "FIN406",
+   "- Read Textbook Chapter 1\n\n- Read Slide Chapter 1\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "4",
+   "PART 1: FINANCIAL INSTITUTIONS\n\nChapter 2: Banks\n\n2.1. Commercial Banking\n\n2.2. The Capital Requirements of a Small Commercial Bank\n\n2.3. Deposit Insurance",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 2\n\n- Slide Chapter 2\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 2\n\n- Read Slide Chapter 2\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2 (continued)\n\n2.4. Investment Banking\n\n2.5. Securities Trading\n\n2.6. Potential Conflicts of Interest in Banking\n\n2.7. Todays Large Banks\n\n2.8. The Risks Facing Banks",
+   "Offline",
+   "LO1, LO2",
+   "T",
+   "- Textbook Chapter 2\n\n- Slide Chapter 2\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 2\n\n- Read Slide Chapter 2\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 3: Insurance Companies and Pension Plans\n\n3.1. Life Insurance\n\n3.2. Annuity Contract\n\n3.3. Mortality Tables\n\n3.4. Longevity and Mortality Risk\n\n3.5. Property - Casualty Insurance\n\n3.6. Health Insurance",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 3\n\n- Slide Chapter 3\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 3\n\n- Read Slide Chapter 3\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3 (continued)\n\n3.7. Moral Hazard and Adverse Selection\n\n3.8. Reinsurance\n\n3.9. Capital Requirement",
+   "Offline",
+   "LO1, LO2",
+   "T",
+   "- Textbook Chapter 3\n\n- Slide Chapter 3\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 3\n\n- Read Slide Chapter 3\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3 (continued)\n\n3.10. The Risks Facing Insurance Companies\n\n3.11. Regulation",
+   "Offline",
+   "LO1, LO2",
+   "T",
+   "- Textbook Chapter 3\n\n- Slide Chapter 3\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 3\n\n- Read Slide Chapter 3\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 4: Fund Managers\n\n4.1. Mutual Funds\n\n4.2. Exchange-Traded Funds\n\n4.3. Active vs Passive Management\n\n4.4. Regulation",
+   "Offline",
+   "LO1, LO2",
+   "T",
+   "- Textbook Chapter 4\n\n- Slide Chapter 4\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 4\n\n- Read Slide Chapter 4\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4 (continued)\n\n4.5. Hedge Funds\n\n4.6. Hedge Fund Strategies\n\n4.7. Hedge Fund Performance",
+   "Offline",
+   "LO1",
+   "T",
+   "- Textbook Chapter 4\n\n- Slide Chapter 4\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 4\n\n- Read Slide Chapter 4\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "11",
+   "Practice and Review Chapter 2; 3; 4",
+   "Offline",
+   "LO1, LO2",
+   "T",
+   "- Textbook Chapter 3 and 4\n\n- Slide Chapter 3 and 4\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "12",
+   "PART 2: FINANCIAL MARKETS\n\nChapter 5: Financial Instruments\n\n5.1. Long and Short Positions in Assets\n\n5.2. Derivative Markets",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 5\n\n- Slide Chapter 5\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 5\n\n- Read Slide Chapter 5\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5: Financial Instruments\n\n5.3. Plain Vanilla Derivatives\n\n5.4. Non - Traditional Derivatives",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 5\n\n- Slide Chapter 5\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 5\n\n- Read Slide Chapter 5\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5 (continued)\n\n5.5. Exotic Options and Structured Products\n\n5.6. Risk Management Challenges",
+   "Offline",
+   "LO3",
+   "I",
+   "- Textbook Chapter 5\n\n- Slide Chapter 5\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 5\n\n- Read Slide Chapter 5\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 7: Securitization and the Global Financial Crisis\n\n7.1. The U.S. Housing Markets\n\n7.2. Securitization\n\n7.3. The Losses",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 7\n\n- Slide Chapter 7\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 7\n\n- Read Slide Chapter 7\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 7 (continued)\n\n7.4. What went wrong?\n\n7.5. Lessons from the Crisis",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 7\n\n- Slide Chapter 7\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 7\n\n- Read Slide Chapter 7\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "17",
+   "Practice and Review Chapter 5; 7",
+   "Offline",
+   "LO3",
+   "T",
+   "- Textbook Chapter 5 and 7\n\n- Slide Chapter 5 and 7\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 8: Volatility\n\n8.1. Definition of Volatility\n\n8.2. Implied Volatilities",
+   "Offline",
+   "LO2, LO3",
+   "T",
+   "- Textbook Chapter 8\n\n- Slide Chapter 8\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 8\n\n- Read Slide Chapter 8\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 8 (continued)\n\n8.3. Are daily Percentage Changes in Financial Variables Normal?\n\n8.4. The Power Law",
+   "Offline",
+   "LO2, LO3",
+   "T",
+   "- Textbook Chapter 8\n\n- Slide Chapter 8\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 8\n\n- Read Slide Chapter 8\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "20",
+   "Individual Assignment Handout",
+   "Offline",
+   "LO1, LO2, LO3",
+   "U",
+   "All chapters covered",
+   "",
+   "Review all chapters covered",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 10: Valuation and Scenario Analysis\n\n10.1. Volatility and Asset Prices\n\n10.2. Risk - Neutral Valuation",
+   "Offline",
+   "LO2, LO3",
+   "T",
+   "- Textbook Chapter 10\n\n- Slide Chapter 10\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 10\n\n- Read Slide Chapter 10\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 10(continued)\n\n10.3. Scenario Analysis\n\n10.4. When Both Worlds Have To Be Used",
+   "Offline",
+   "LO2, LO3",
+   "T",
+   "- Textbook Chapter 10\n\n- Slide Chapter 10\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 10\n\n- Read Slide Chapter 10\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 10(continued)\n\n10.5. The Calculations in Practice",
+   "Offline",
+   "LO2, LO3",
+   "I",
+   "- Textbook Chapter 10\n\n- Slide Chapter 10\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 10\n\n- Read Slide Chapter 10\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "24",
+   "Practice and Review Chapter 8; 10",
+   "Offline",
+   "LO2, LO3",
+   "T",
+   "- Textbook Chapter 8 and 10\n\n- Slide Chapter 8 and 10\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "25",
+   "Mid-term Test",
+   "Offline",
+   "LO1, LO2, LO3",
+   "",
+   "All chapters covered",
+   "",
+   "Do closed-book test.",
+   ""
+  ],
+  [
+   "26",
+   "PART 3: MARKET RISK\n\nChapter 11: Value at Risk and Expected Shortfall\n\n11.1. Definition of VaR\n\n11.2. Examples of the Calculation of VaR\n\n11.3. A Drawback of VaR",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 11\n\n- Slide Chapter 11\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 11\n\n- Read Slide Chapter 11\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 11 (continued)\n\n11.4. Expected Shortfall\n\n11.5. Coherent Risk Measures",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 11\n\n- Slide Chapter 11\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 11\n\n- Read Slide Chapter 11\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 11(continued)\n\n11.6. Choices of Parameters for VaR and ES\n\n11.7. Aggregating VaR and ES",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 11\n\n- Slide Chapter 11\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 11\n\n- Read Slide Chapter 11\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "29",
+   "Group assignment handout",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "U",
+   "All chapters covered",
+   "",
+   "Review all chapters covered",
+   ""
+  ],
+  [
+   "30",
+   "Practice and Review Chapter 11",
+   "Offline",
+   "LO2, LO3, LO4",
+   "U",
+   "- Textbook Chapter 11\n\n- Slide Chapter 11\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 14: Interest Rate Risk\n\n14.1. Types of Rates\n\n14.2. Calculating Risk Measures",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 14\n\n- Slide Chapter 14\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 14\n\n- Read Slide Chapter 14\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 14 (continued)\n\n14.4. The Management of Interest Income\n\n14.5. Duration\n\n14.6. Convexity",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 14\n\n- Slide Chapter 14\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 14\n\n- Read Slide Chapter 14\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 14 (continued)\n\n14.7. Generalization",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 14\n\n- Slide Chapter 14\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 14\n\n- Read Slide Chapter 14\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 16: Scenario Analysis and Stress Testing\n\n16.1. Generating the Scenarios",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 16\n\n- Slide Chapter 16\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 16\n\n- Read Slide Chapter 16\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 16(continued)\n\n16.2. Regulation\n\n16.3. What to do with the results",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 16\n\n- Slide Chapter 16\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 16\n\n- Read Slide Chapter 16\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 16 (continued)\n\nCase studies:\n\n- Long-Term Capital Management (LTCM)'s big loss.\n\n-Traffic Light Options",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 16\n\n- Slide Chapter 16\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 16\n\n- Read Slide Chapter 16\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "37",
+   "Practice and Review Chapter 14; 16",
+   "Offline",
+   "LO2, LO3, LO4",
+   "U",
+   "- Textbook Chapter 14 and 16\n\n- Slide Chapter 14 and 16\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "38",
+   "PART 4: CREDIT RISK\n\nChapter 17: Estimating Default Probability\n\n17.1. Credit Ratings\n\n17.2. Historical Default Probabilities\n\nSubmission of Individual Assignment",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 17\n\n- Slide Chapter 17\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 17\n\n- Read Slide Chapter 17\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 17 (continued)\n\n17.3. Recovery Rate\n\n17.4. Credit Default Swap",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 17\n\n- Slide Chapter 17\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 17\n\n- Read Slide Chapter 17\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 17: Estimating Default Probability\n\n17.5. Credit spread\n\n17.6. Estimating Default Probabilities from Credit Spreads.",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 17\n\n- Slide Chapter 17\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 17\n\n- Read Slide Chapter 17\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "41",
+   "Practice and Review Chapter 17",
+   "Offline",
+   "LO2, LO3, LO4",
+   "U",
+   "- Textbook Chapter 17\n\n- Slide Chapter 17\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "42",
+   "PART 5: OTHER RISKS\n\nChapter 20: Operational Risk\n\n20.1. Defining Operational Risk\n\n20.2. Categorization of Operational Risk",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 20\n\n- Slide Chapter 20\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 20\n\n- Read Slide Chapter 20\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 21: Liquidity Risk\n\n21.1. Liquidity Trading Risk\n\n21.2. Liquidity Funding Risk",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 21\n\n- Slide Chapter 21\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 21\n\n- Read Slide Chapter 21\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 23: Climate Risk, ESG, and Sustainability\n\n23.1. Climate Risk\n\n23.2. ESG\n\n23.3. Sustainability",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T",
+   "- Textbook Chapter 23\n\n- Slide Chapter 23\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 23\n\n- Read Slide Chapter 23\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "45",
+   "Practice and Review Chapter 20; 21; 23",
+   "Offline",
+   "LO2, LO3, LO4",
+   "U",
+   "- Textbook Chapter 20, 21, and 23\n\n- Slide Chapter 20, 21, and 23\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "46",
+   "PART 6: REGULATION\n\nChapter 25: Basel I, Basel II, and Solvency II\n\n25.1. The reasons for Regulating Banks\n\n25.2. Bank Regulation Pre-1988",
+   "Offline",
+   "LO4, LO5",
+   "T",
+   "- Textbook Chapter 25\n\n- Slide Chapter 25\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 25\n\n- Read Slide Chapter 25\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 25 (Continued)\n\n25.3. The 1988 BIS Accord\n\n25.4. The G-30 Policy Recommendations",
+   "Offline",
+   "LO4, LO5",
+   "T",
+   "- Textbook Chapter 25\n\n- Slide Chapter 25\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 25\n\n- Read Slide Chapter 25\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 25: (Continued)\n\n25.7. Basel II",
+   "Offline",
+   "LO4, LO5",
+   "T",
+   "- Textbook Chapter 25\n\n- Slide Chapter 25\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 25\n\n- Read Slide Chapter 25\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 26: Basel II.5; Basel III; and other post-crisis Changes\n\n26.2. Basel III",
+   "Offline",
+   "LO4, LO5",
+   "T",
+   "- Textbook Chapter 26\n\n- Slide Chapter 26\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 26\n\n- Read Slide Chapter 26\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "50",
+   "Practice and Review Chapter 25; 26",
+   "Offline",
+   "LO4, LO5",
+   "U",
+   "- Textbook Chapter 25 and 26\n\n- Slide Chapter 25 ad 26\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Solve questions and problems in the textbook\n\n- Discuss business snapshots in the textbook",
+   ""
+  ],
+  [
+   "51",
+   "PART 7: OTHER TOPICS\n\nChapter 30: Risk Management Mistakes to Avoid\n\n30.1. Risk Limits\n\n30.2. Managing the Trading Room\n\n30.3. Liquidity Risk",
+   "Offline",
+   "LO3, LO4",
+   "T",
+   "- Textbook Chapter 30\n\n- Slide Chapter 30\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 30\n\n- Read Slide Chapter 30\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 30 (Continued)\n\n30.4. Lessons for Nonfinancial Corporations\n\n30.5. A Final Point",
+   "Offline",
+   "LO3, LO4",
+   "T",
+   "- Textbook Chapter 30\n\n- Slide Chapter 30\n\n- Other Journals (The Economist, The Financial Times, The Risk Magazine if available)",
+   "",
+   "- Read Textbook Chapter 30\n\n- Read Slide Chapter 30\n\n- Read other journals (The Economist, The Financial Times, The Risk Magazine if available).",
+   ""
+  ],
+  [
+   "53",
+   "Final Essay Test",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "",
+   "All chapters covered",
+   "",
+   "Do closed-book test.",
+   ""
+  ],
+  [
+   "54",
+   "Course revision",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "All chapters covered",
+   "",
+   "Review all chapters covered",
+   ""
+  ],
+  [
+   "55",
+   "Course revision",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "All chapters covered",
+   "",
+   "Review all chapters covered",
+   ""
+  ],
+  [
+   "56",
+   "Group presentation and Report Submission",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "- All chapters covered\n\n- Group assignment instruction and report",
+   "",
+   "- Review all chapters covered\n\n- Present and prepare for Q&A session\n\n- Hand in group report",
+   ""
+  ],
+  [
+   "57",
+   "Group presentation and Report Submission",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "- All chapters covered\n\n- Group assignment instruction and report",
+   "",
+   "- Review all chapters covered\n\n- Present and prepare for Q&A session\n\n- Hand in group report",
+   ""
+  ],
+  [
+   "58",
+   "Group presentation and Report Submission",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "- All chapters covered\n\n- Group assignment instruction and report",
+   "",
+   "- Review all chapters covered\n\n- Present and prepare for Q&A session\n\n- Hand in group report",
+   ""
+  ],
+  [
+   "59",
+   "Group presentation and Report Submission",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "- All chapters covered\n\n- Group assignment instruction and report",
+   "",
+   "- Review all chapters covered\n\n- Present and prepare for Q&A session\n\n- Hand in group report",
+   ""
+  ],
+  [
+   "60",
+   "Group presentation and Report Submission",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "U",
+   "- All chapters covered\n\n- Group assignment instruction and report",
+   "",
+   "- Review all chapters covered\n\n- Present and prepare for Q&A session\n\n- Hand in group report",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HN1",
+   "“Arbitrage pricing theory is an extension of the capital asset pricing model.”Explain this statement."
+  ],
+  [
+   "2",
+   "2",
+   "HN2",
+   "“The capital structure decision of a company is a trade-off between bankruptcy costs and the tax advantages of debt.” Explain this statement."
+  ],
+  [
+   "3",
+   "3",
+   "HN3",
+   "What is meant by risk aggregation and risk decomposition? Which requires an in depth understanding of individual risks? Which requires a detailed knowledge of the correlations between risks?"
+  ],
+  [
+   "4",
+   "4",
+   "HN1",
+   "What is meant by net interest income?"
+  ],
+  [
+   "5",
+   "4",
+   "HN2",
+   "What risks does a bank take if it funds long-term loans with short-term deposits?"
+  ],
+  [
+   "6",
+   "5",
+   "HN3",
+   "Explain the terms “private placement” and “public offering.”What is the difference between “best efforts” and “firm commitment” for a public offering?"
+  ],
+  [
+   "7",
+   "7",
+   "HN1",
+   "Why do property-casualty insurance companies hold more capital than life insur\u0002ance companies?"
+  ],
+  [
+   "8",
+   "7",
+   "HN2",
+   "Explain what is meant by “loss ratio” and “expense ratio” for a property-casualty insurance company. “If an insurance company is profitable, it must be the case that the loss ratio plus the expense ratio is less than 100%.” Discuss this statement."
+  ],
+  [
+   "9",
+   "8",
+   "HN3",
+   "An insurance company decides to offer individuals insurance against losing their\njobs. What problems is it likely to encounter?"
+  ],
+  [
+   "10",
+   "10",
+   "HN1",
+   "What is a mutual fund’s (a) front-end load and (b) back-end load?"
+  ],
+  [
+   "11",
+   "10",
+   "HN2",
+   "Explain how an exchange-traded fund that tracks an index works. What are the advantages of an exchange-traded fund over (a) an open-end mutual fund and (b) a closed-end mutual fund?"
+  ],
+  [
+   "12",
+   "10",
+   "HN3",
+   "What is the difference between the geometric mean and the arithmetic mean of a set of numbers? Why is the difference relevant to the reporting of mutual fund returns?"
+  ],
+  [
+   "13",
+   "13",
+   "HN1",
+   "Explain carefully the difference between hedging, speculation, and arbitrage."
+  ],
+  [
+   "14",
+   "13",
+   "HN2",
+   "What is the difference between entering into a long forward contract when the forward price is $50 and taking a long position in a call option with a strike price of $50?"
+  ],
+  [
+   "15",
+   "14",
+   "HN3",
+   "Explain carefully the difference between selling a call option and buying a put option"
+  ],
+  [
+   "16",
+   "16",
+   "HN1",
+   "Why did mortgage lenders frequently not check on information in the mortgage application during the 2000 to 2007 period?"
+  ],
+  [
+   "17",
+   "16",
+   "HN2",
+   "Why do you think the increase in house prices during the 2000 to 2007 period is referred to as a bubble?"
+  ],
+  [
+   "18",
+   "16",
+   "HN3",
+   "What is a waterfall in a securitization?"
+  ],
+  [
+   "19",
+   "19",
+   "HN1",
+   "The volatility of an asset is 2% per day. What is the standard deviation of the percentage price change in three days?"
+  ],
+  [
+   "20",
+   "19",
+   "HN2",
+   "Why do traders assume 252 rather than 365 days in a year when using volatilities?"
+  ],
+  [
+   "21",
+   "19",
+   "HN3",
+   "What is implied volatility? What does it mean if different options on the same\nasset have different implied volatilities?"
+  ],
+  [
+   "22",
+   "22",
+   "HN1",
+   "Explain why it is sometimes necessary to work in both the real world and the risk\u0002neutral world when carrying out a scenario analysis to determine a confidence interval for the value of a portfolio in one year."
+  ],
+  [
+   "23",
+   "22",
+   "HN2",
+   "Explain the meaning of mean reversion."
+  ],
+  [
+   "24",
+   "23",
+   "HN3",
+   "Explain Girsanov’s theorem."
+  ],
+  [
+   "25",
+   "28",
+   "HN1",
+   "What is the difference between expected shortfall and VaR? What is the theoret\u0002ical advantage of expected shortfall over VaR?"
+  ],
+  [
+   "26",
+   "28",
+   "HN2",
+   "Explain what is meant by bunching?"
+  ],
+  [
+   "27",
+   "28",
+   "HN3",
+   "A fund manager announces that the fund’s one-month 95% VaR is 6% of the size of the portfolio being managed. You have an investment of $100,000 in the fund. How do you interpret the portfolio manager’s announcement"
+  ],
+  [
+   "28",
+   "31",
+   "HN1",
+   "Why are U.S. Treasury rates significantly lower than other rates that are close to risk free?"
+  ],
+  [
+   "29",
+   "32",
+   "HN2",
+   "Explain how an overnight indexed swap works."
+  ],
+  [
+   "30",
+   "33",
+   "HN3",
+   "Explain why the LIBOR-OIS spread is a measure of stress in financial markets."
+  ],
+  [
+   "31",
+   "35",
+   "HN1",
+   "Explain three different ways that scenarios can be generated for stress testing."
+  ],
+  [
+   "32",
+   "35",
+   "HN2",
+   "What is reverse stress testing? How is it used?"
+  ],
+  [
+   "33",
+   "35",
+   "HN3",
+   "Why might the regulatory environment lead to a financial institution underesti mating the severity of the scenarios it considers?"
+  ],
+  [
+   "34",
+   "40",
+   "HN1",
+   "How many different ratings does Moody’s use for investment-grade companies? What are they?"
+  ],
+  [
+   "35",
+   "40",
+   "HN2",
+   "How many different ratings does S&P use for investment-grade companies? What are they?"
+  ],
+  [
+   "36",
+   "40",
+   "HN3",
+   "How are recovery rates usually defined?"
+  ],
+  [
+   "37",
+   "42",
+   "HN1",
+   "Discuss how moral hazard and adverse selection are handled in car insurance."
+  ],
+  [
+   "38",
+   "42",
+   "HN2",
+   "Give two ways Sarbanes–Oxley affects the CEOs of public companies."
+  ],
+  [
+   "39",
+   "42",
+   "HN3",
+   "When is a trading loss classified as a market risk and when is it classified as an operational risk?"
+  ],
+  [
+   "40",
+   "43",
+   "HN1",
+   "What was the transparency problem in the subprime crisis of 2007?"
+  ],
+  [
+   "41",
+   "43",
+   "HN2",
+   "An asset is quoted bid 50, offer 55.What does this mean? What is the proportional bid–offer spread?"
+  ],
+  [
+   "42",
+   "43",
+   "HN3",
+   "Why is it beneficial to the liquidity of markets for traders to follow diverse trading\nstrategies?"
+  ],
+  [
+   "43",
+   "44",
+   "HN1",
+   "What are the main types of climate risk? What are their roles in modern investment strategies?"
+  ],
+  [
+   "44",
+   "44",
+   "HN2",
+   "What is ESG Investing? Discuss the pros and cons of ESG investing."
+  ],
+  [
+   "45",
+   "44",
+   "HN3",
+   "Why Sustainability if an important factor in modern investment strategies?"
+  ],
+  [
+   "46",
+   "47",
+   "HN1",
+   "“When a steel company goes bankrupt, other companies in the same industry benefit because they have one less competitor. But when a bank goes bankrupt other banks do not necessarily benefit.” Explain this statement."
+  ],
+  [
+   "47",
+   "47",
+   "HN2",
+   "“The existence of deposit insurance makes it particularly important for there to be regulations on the amount of capital banks hold.” Explain this statement"
+  ],
+  [
+   "48",
+   "47",
+   "HN3",
+   "Banks sometimes use what is referred to as regulatory arbitrage to reduce their\ncapital. What do you think this means?"
+  ],
+  [
+   "49",
+   "49",
+   "HN1",
+   "Explain how the leverage ratio differs from the usual capital ratios calculated by regulators."
+  ],
+  [
+   "50",
+   "49",
+   "HN2",
+   "Explain how the liquidity coverage ratio and the net stable funding ratio are defined."
+  ],
+  [
+   "51",
+   "49",
+   "HN3",
+   "Explain how CoCo bonds work. Why are they attractive to (a) banks and (b) regulators?"
+  ],
+  [
+   "52",
+   "52",
+   "HN1",
+   "Explain why market transparency is important."
+  ],
+  [
+   "53",
+   "52",
+   "HN2",
+   "Explain the differences between a hedger and a speculator with respect to their risk appetite."
+  ],
+  [
+   "54",
+   "52",
+   "HN3",
+   "Why is it necessary to separate the front, middle, and back office?"
+  ]
+ ],
+ "links": [
+  "/download/10263/S/1_FIN406.zip",
+  "https://drive.google.com/drive/folders/1VUNGwtIwrKysmmEZ1q866Fv7NJEfAzwW?usp=sharing",
+  "/download/10263/S/2_FIN406.zip",
+  "/download/10263/S/3_FIN406.zip"
+ ]
+}

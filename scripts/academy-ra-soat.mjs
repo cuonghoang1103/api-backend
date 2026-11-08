@@ -22,6 +22,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { ganMuc0Flm } from './lib/academy-muc0-flm.mjs';
 const dir = 'content/academy';
 const RE_ENT = /&(amp|lt|gt|quot|#39|nbsp);/;
 const loi = { entTitle: [], codeNoLang: [], mermaidSai: [], rong: [], titleDai: [], slugDai: [], shortDai: [], dupSlug: [], undef: [], objObj: [], secKhongTitle: [] };
@@ -33,7 +34,7 @@ for (const f of fs.readdirSync(dir).sort()) {
   let m;
   try { m = await import(path.resolve(dir, f)); } catch (e) { loi.rong.push(f + ' KHÔNG NẠP ĐƯỢC: ' + e.message.slice(0, 60)); continue; }
   nap++;
-  const s = m.default || m.spec || m;
+  const s = await ganMuc0Flm(m.default || m.spec || m, path.join(dir, f));
   const c = s.course || s;
   const ma = f.replace('.mjs', '');
   soMon++;

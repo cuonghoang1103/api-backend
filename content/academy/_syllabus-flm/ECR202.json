@@ -1,0 +1,1622 @@
+{
+ "ma": "ECR202",
+ "sylID": "11335",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11335",
+   "code": "ECR202",
+   "name": "Kỹ năng đọc tư duy phản biện tiếng Anh",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11335",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11335",
+  "Syllabus Name": "Kỹ năng đọc tư duy phản biện tiếng Anh",
+  "Course Name English": "Critical Reading in English",
+  "Subject Code": "ECR202",
+  "Learning-Teaching Method": "Lecture,Coaching,Presenting,Active learning,Discovery Learning,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Advanced",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1.5 hours final exam + 103.5 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "Students develop and apply critical reading skills through the analysis of texts taken from authentic sources (journals, newspapers, magazines and websites) and a variety of academic disciplines. Students are encouraged to develop their comprehension, while at the same time forming a reasoned assessment of the effectiveness and validity of the text.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfil tasks given by instructor after class\n\n- Use their own laptops in class only for learning purposes",
+  "Tools": "Tools: Foxit pdf editor\n\nInternet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "1) On-going assessment\n\n- Assignments: 04*15%: 60%\n\n2) Final Examination (FE) 40%\n\n3) Final Result 100%\n\n4) Completion Criteria:\n\n- On-going assessment >0, Final Exam Score >=4/10 & Final Result >=5/10",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Critical Reading - English for Academic Purposes, Pearson (2015)\n\n(For teachers:\n\n+ My eLab Documents\n\n+ For teacher: http://gsi.berkeley.edu/media/Reading.pdf (Teaching Critical Reading))",
+   "",
+   "Pearson",
+   "2015",
+   "",
+   "9782761356541",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Critical Thinking, Reading, and Writing - A Brief Guide to Argument, 8th Edition (soft copy) - Bedford/St. Martin’s",
+   "Bedford/St. Martin’s",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Mindscapes: Critical Reading Skills and Strategies",
+   "",
+   "Cengage Learning",
+   "",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "English Newspapers/ Journals",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "http://www.bbc.co.uk/learningenglish/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "https://www.heraldsun.com.au/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "https://vietnamnews.vn/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "8",
+   "Ted Talks",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "LO1",
+   "Use different reading strategies for different tasks, identify what critical reading is (and what it is not); understand the importance of critical reading skill; make questions and find answers as you read critically; differentiate between critical reading and other reading strategies; Develop and integrate criticality into reading practices."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Evaluate whether or not a text is academic; describe the peer-review process works; evaluate why peer-reviewed texts are preferable for academic study; understand the importance of the publication date of a text"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyze the importance of knowing something about the author of a text and the people quoted by the author; recognize and reason bias"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify the author’s stance; how the author’s intended audience influences the text; why the author’s purpose is important"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Distinguish facts from opinions"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Evaluate conclusions drawn from author experience; recognize the steps of the scientific method; evaluate important information as reading reports of empirical research"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Identify and evaluate evidence not based on author experience: anecdotes, visual items, statistics and quotations from others; how authors try to persuade readers using no evidence at all; how to evaluate these kinds of evidence"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Analyze the importance of considering the text in its broader context; recognize a school of thought and understand the importance of knowing the schools of thought in your area of study; how to approach a text that presents an opinion or theory very different from anything else you have read"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Explain why it is important to ask yourself whether the text supports your own experiences; why it can be difficult to do this"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Analyze the key components of a critical review; differentiate between a critical review and a research essay; structure a critical review"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignments",
+   "on-going",
+   "4",
+   "60.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "\"Assignment 1: LO1-LO3 Option1: Teacher can choose written format (recommended below) or spoken format (specified by class teacher) Based on your reading of the texts in chapters 2 and 3 as well as your own research into these topics, write a short response to the following prompt. You can choose either topic1 or 2 1. Meat is an essential part of a healthy diet. Do you agree or disagree? 2. Sports are about more than just winning and losing; issues related to values and ethics also need consideration. Discuss with reference to one sport or sporting event. Option2: (For Constructivism Approach only): Follow lecturer's proposal Assignment 2: LO4-LO5 Option1: Teacher can choose written format (recommended below) or spoken format (specified by class teacher) Based on your reading of the texts in chapter 4 and 5 as well as your own research into these topics, write a short response to the following prompt. You can choose either topic1 or 2 1. How can we solve the energy crisis? Compare and evaluate two or more possible? 2. What qualities, skills and personal characteristics should successful leaders have? Option2: (For Constructivism Approach only): Follow lecturer's proposal Assignment 3: LO6-LO7 Option1: Teacher can choose written format (recommended below) or spoken format (specified by class teacher) Based on your reading of the texts in chapters 6 and 7 as well as your own research into these topics, write a short response to the following prompt. You can choose either topic1 or 2 1. Technology is a key component of education in the twenty-first century. Discuss. 2. There is a strong connection between design of the environment and at work or in school. Discuss Option2: (For Constructivism Approach only): Follow lecturer's proposal Assignment 4: LO8-LO9 Option1: Teacher can choose written format (recommended below) or spoken format (specified by class teacher) Based on your reading of the texts in chapters 8 and 9 as well as your own research into these topics, write a short response to the following prompt. You can choose either topic1 or 2 1. What is the relationship between the wealth of a country, its economic policies and the happiness of its citizens? 2. What is the value of social networks? Option2: (For Constructivism Approach only): Follow lecturer's proposal \"",
+   "Option1: 200~250 wordsOption2:Teacher's proposal",
+   "Knowledge and skills in studied chapter(s)",
+   "Option1:\n\n* homework or in class\n\n*Peer feedback (optional): write a paragraph that analyzes the extent to which the essay did or did not meet your expectations. Were you persuaded by the\n\nevidence? Why or why not?\n\nOption2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "15%\n\nTeacher selects appropriate assessment types according to the applied teaching method"
+  ],
+  [
+   "2",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "70'",
+   "All LOs",
+   "MCQ, gap filling, short answer questions, writing",
+   "10 reading comprehension questions, 4 critical questions and 1 text response (150-200 words)",
+   "Knowledge and skills in studied chapter(s)",
+   "in exam room, using computer or papers",
+   "The exam \bincludes 2 parts:\n\n1. Reading comprehension, 30%, 10 questions\n\n2. Critical reading, 70%, 2 parts\n\n+ Critical questions, 20%, 4 questions\n\n+ Text response, 50%, 1 writing (150-200 words)\n\nUse 1-2 texts, 600-700 words"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "I",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1- Myth or Reality\n\nCritical Reading: an Overview",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "3",
+   "Reading 1: Igopogo: The Monster of Lake Simcoe (1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "4",
+   "Reading 1: Igopogo: The Monster of Lake Simcoe (2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "5",
+   "Reading 2: The Call of the Weird: In Praise of Cryptobiologists (1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "6",
+   "Reading 2: The Call of the Weird: In Praise of Cryptobiologists (2)\n\n-Analysis and Discussion\n\n-Going Further",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2-What Is the Best Way to Eat?\n\n*Where and When was the text published?\n\n*Reading 1: The Caveman Diet (1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "8",
+   "Reading 1: The Caveman Diet (2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO2",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "9",
+   "Reading 2: There’s No Reason to Eat Animals (1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "10",
+   "Reading 2: There’s No Reason to Eat Animals(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO2",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "11",
+   "Reading 3 Obesity: A Public Health Failure(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "12",
+   "Reading 3 Obesity: A Public Health Failure(2)\n\n-Analysis and Discussion\n\n-Going Further",
+   "Offline",
+   "LO2",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3-The Values of Sport\n\n*Who is the Author?\n\nReading 1: MMA for Kids: Teaching Violence, or Values?(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "14",
+   "Reading 1: MMA for Kids: Teaching Violence, or Values?(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO3",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "15",
+   "Reading 2 Sports Doping Should Be Legal and Controlled(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "16",
+   "Reading 2 Sports Doping Should Be Legal and Controlled(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO3",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "17",
+   "Reading 3: Why the Olympics Are a Lot Like The Hunger Games(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "18",
+   "Reading 3: Why the Olympics Are a Lot Like The Hunger Games(2)\n\n-Analysis and Discussion\n\n-Going Further\n\n*Assignment 1",
+   "Offline",
+   "LO3",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 4 - Approaches to the Global Energy Crisis\n\n*Stance\n\n*Reading 1: Panda Poop Power Promising for Biofuel Production(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "20",
+   "Reading 1: Panda Poop Power Promising for Biofuel Production(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "21",
+   "Reading 2: Living Off-Grid(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "22",
+   "Reading 2: Living Off-Grid(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "23",
+   "Reading 3: Adverse Health Effects of Industrial Wind Turbines(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "24",
+   "Reading 3: Adverse Health Effects of Industrial Wind Turbines(2)\n\n-Analysis and Discussion\n\nGoing Further",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 5 - Leaders and Leader\n\n*Fact or Opinion?\n\n*Reading 1: Top Ten Qualities that Make a Great Leader(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "26",
+   "Reading 1: Top Ten Qualities that Make a Great Leader(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "27",
+   "Reading 2: Why We Need Quiet, Introverted Leaders(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "28",
+   "Reading 2: Why We Need Quiet, Introverted Leaders(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "29",
+   "Reading 3: MIA: Women in the Executive Suite(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "30",
+   "Reading 3: MIA: Women in the Executive Suite(2)\n\n-Analysis and Discussion\n\n-Going Further\n\n*Assignment 2",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 6 -Technology in Education\n\n*The Author's Evidence\n\nReading 1: Swimming against the Tide of PowerPoint(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "32",
+   "Reading 1: Swimming against the Tide of PowerPoint(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "33",
+   "Reading 2: Students Want More Mobile Devices in Classroom(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "34",
+   "Reading 2: Students Want More Mobile Devices in Classroom(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "35",
+   "Reading 3: Facebook as a Formal Instructional Environment(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "36",
+   "Reading 3: Facebook as a Formal Instructional Environment(2)\n\n-Analysis and Discussion\n\n-Going Further",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 7 -Design and Productivity\n\n*Other kinds of Evidence\n\nReading 1: Ancient Chinese Wisdom for the Modern Workplace(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO7",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "38",
+   "Reading 1: Ancient Chinese Wisdom for the Modern Workplace(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "39",
+   "Reading 2: Sitting Too Long Is Bad for You, but a Treadmill Desk Left Me Cold(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO7",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "40",
+   "Reading 2: Sitting Too Long Is Bad for You, but a Treadmill Desk Left Me Cold(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "41",
+   "Reading 3: Workstation Design for Organizational Productivity(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO7",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "42",
+   "Reading 3: Workstation Design for Organizational Productivity(2)\n\n-Analysis and Discussion\n\n-Going Further\n\n*Assignment 3",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 8 Inequality, Wealth and Happines\n\n*The Context of a Text\n\nReading 1: Can Money Buy Happiness? An Examination of Happiness Economics(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO8",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "44",
+   "Reading 1: Can Money Buy Happiness? An Examination of Happiness Economics(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO8",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "45",
+   "Reading 2: Denmark Is Considered the Happiest Country. You’ll Never Guess Why.(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO8",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "46",
+   "Reading 2: Denmark Is Considered the Happiest Country. You’ll Never Guess Why(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO8",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "47",
+   "Reading 3: Is Bhutan the Happiest Place in the World?(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO8",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "48",
+   "Reading 3: Is Bhutan the Happiest Place in the World?(2)\n\n-Analysis and Discussion\n\n-Going Further",
+   "Offline",
+   "LO8",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 9-Social Networks: A Magic Number?\n\n*Your connection to the text\n\nReading 1: A Magic Number?(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO9",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "50",
+   "Reading 1: A Magic Number?(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO9",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "51",
+   "Reading 2: Is Dunbar’s Friend-Limiting Number Still Relevant in the Facebook Era?(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO9",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "52",
+   "Reading 2: Is Dunbar’s Friend-Limiting Number Still Relevant in the Facebook Era?(2)\n\n-Analysis and Discussion",
+   "Offline",
+   "LO9",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "53",
+   "Reading 3: Social Networks: A Learning Tool for Teams?(1)\n\n-Before You Read\n\n-Key Vocabulary\n\n-Check Your Understanding",
+   "Offline",
+   "LO9",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "54",
+   "Reading 3: Social Networks: A Learning Tool for Teams?(2)\n\n-Analysis and Discussion\n\n-Going Further\n\n*Assignment 4",
+   "Offline",
+   "LO9",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 10-Looking at the Stars\n\n*How to write a Critical Review",
+   "Offline",
+   "LO10",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "56",
+   "Reading 1: Why It’s Important to Look at the Stars—Literally(1)\n\n-Before your read\n\n-Key Vocabulary\n\n-Check your understanding",
+   "Offline",
+   "LO10",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "57",
+   "Reading 1: Why It’s Important to Look at the Stars—Literally(2)\n\n-Anaysis and Discussion\n\n-Your Critical Review",
+   "Offline",
+   "LO10",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "58",
+   "Reading 2: Does Mars Have Rights?(1)\n\n-Before your read\n\n-Key Vocabulary\n\n-Check your understanding",
+   "Offline",
+   "LO10",
+   "TU",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "59",
+   "Reading 2: Does Mars Have Rights?(2)\n\n-Anaysis and Discussion\n\n-Your Critical Review\n\n-Going Further",
+   "Offline",
+   "LO10",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ],
+  [
+   "60",
+   "Vocabulary Test 2\n\nRevision",
+   "Offline",
+   "LO10",
+   "U",
+   "",
+   "",
+   "Prepare the readings adequately on their own as well as study key vocabulary before attending the lesson",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HCM_CQ1.1",
+   "\"Don’t believe in everything you read on the internet just because there's a picture with a quote next to it\" (Abraham Lincoln). To what extent do you agree or disagree with that saying? Explain and provide examples from your own reading experience."
+  ],
+  [
+   "2",
+   "1",
+   "HN_CQ1",
+   "What do you understand by the word \"myth\"? Do an Internet search about well-known myths from around the world or in Vietnam and share the myth that you are most interested in with your team.\nImagine you are reading an article that tells you that the myth you have talked to your team is actually true. Do you believe it? What questions might you ask about the article?"
+  ],
+  [
+   "3",
+   "2",
+   "HCM_CQ1.2",
+   "How do you understand the term \"critical reading\" based on what you have learned in the lecture and from your own reading experience?"
+  ],
+  [
+   "4",
+   "2",
+   "HN_CQ2",
+   "Reading 1: before reading\nDo Internet searches about one of the following creatures: 1) Loch Ness monster, 2) Chupacabra, and 3) yeti. Share what you've known to your team.\nCan you think of any other creatures whose existence is uncertain?\nThe reading is about a strange creature that is said to live in the waters of a lake north of Toronto, Ontario. Name six things you'd like to find out."
+  ],
+  [
+   "5",
+   "3",
+   "HCM_CQ1.3",
+   "Have you known/heard about a mysterious creature in your culture? If yes, to what extent do you believe in the existence of that creature? Explain"
+  ],
+  [
+   "6",
+   "3",
+   "HN_CQ3",
+   "Reading 1: after reading. Discuss questions 1-8 (pp. 12-13)."
+  ],
+  [
+   "7",
+   "4",
+   "HCM_CQ2.1",
+   "After finish reading the article, do you believe in the existence of Igopogo? Use evidence/facts from the reading article to support your answer."
+  ],
+  [
+   "8",
+   "4",
+   "HN_CQ4",
+   "Reading 2: before reading\nWhy do you think scientists might be attracted to the study of mysterious animal like Igopogo, the Loch Ness monter and other?\nWhat could be gained from attempting to find one of these creatures?\nThe subtitle of this reading is \"In Praise of Cryptobiologists\". Why do you think the author might want to write an article with this title? What might he say?"
+  ],
+  [
+   "9",
+   "5",
+   "HCM_CQ2.2",
+   "Some people believe that there is much of value to be gained in pursuit of mythological creatures. What is your opinion on that idea? Explain your answer and provide examples from your knowledge and experience"
+  ],
+  [
+   "10",
+   "5",
+   "HN_CQ5",
+   "Reading 2: after reading Discuss questions 1-6 (p. 17)."
+  ],
+  [
+   "11",
+   "6",
+   "HCM_CQ2.3",
+   "What is the author's purpose when he writes the article with the title \"\"In Praise of Cryptobiologists\"?"
+  ],
+  [
+   "12",
+   "6",
+   "HN_CQ6",
+   "Choose one of the following creatures and carry out some online research about your creature. You will present your findings to the class.\nChupacabra, Loch Ness monster, Mongolian death worm, Bigfoot, Sewer alligator."
+  ],
+  [
+   "13",
+   "7",
+   "HCM_CQ3.1",
+   "How could you distinguish between academic and non-academic sources based on your own experience?"
+  ],
+  [
+   "14",
+   "7",
+   "HN_CQ7",
+   "Reading 1: before reading\nHow much do you know about prehistoric people? Share your idea about the way they lived.\nThis reading is about a diet that is based on the way prehistoric people ate. What do you think this diet includes? What might be excluded?\nWhat do you think might be some health benefit of following a prehistoric diet?"
+  ],
+  [
+   "15",
+   "8",
+   "HCM_CQ3.2",
+   "Compare the paleodiet to a modern diet you are familiar with. (Students are encouraged to use graphic organizers to illustrate their points)"
+  ],
+  [
+   "16",
+   "8",
+   "HN_CQ8",
+   "Reading 1: after reading\nWhy do you think paleodiet is so popular today? How do you personally feel about paleodiet?\nWhich readers do you think might be interested in this diet and might want to try it? Which readers do you think might be skeptical?\nHow do you feel about the paleodiet? Could you happily eat this way? Are you interested in trying it? Why, or why not?"
+  ],
+  [
+   "17",
+   "9",
+   "HCM_CQ3.3",
+   "How do you anticipate a vegetarian would react to Reading 1 about the paleodiet?"
+  ],
+  [
+   "18",
+   "9",
+   "HN_CQ9",
+   "Reading 2: before reading\nWhat reasons do vegetarian people give for followign a vegetarian diet?\nHow common do you think vegetarianism is around he world? How popular is vegetarianism in Vietnam?\nHow do you think a vegetarian might respond to the previous reading about the paleodiet?"
+  ],
+  [
+   "19",
+   "10",
+   "HCM_CQ4.1",
+   "Are you pro-meat or anti-meat? Explain and justify your answer using facts/evidence from the reading and your own experience"
+  ],
+  [
+   "20",
+   "10",
+   "HN_CQ10",
+   "Reading 2: after reading Discuss questions 1-4 (p. 37)."
+  ],
+  [
+   "21",
+   "11",
+   "HCM_CQ4.2",
+   "How could you determine whether the article \"Obesity: A public health failure?\" is from an academic or non-academic source?"
+  ],
+  [
+   "22",
+   "11",
+   "HN_CQ11",
+   "Reading 3: before reading\nIs obesity a problem in parts of the world you are familiar with? If so, why do you think this is?\nWho should be responsible for solving the problem of obesity: individuals, school, government, doctors or someone else?\nLook at the reading passage \"Obesity: a public health failure\" on pages 38-42. In what way does it immediately seem different from the previous two readingss in this chapter? Give three differences."
+  ],
+  [
+   "23",
+   "12",
+   "HCM_CQ4.3",
+   "How would the article \"Obesity: A public health failure?\" differ from Reading 1 and Reading 2 in this chapter? Give the explanation for your answer."
+  ],
+  [
+   "24",
+   "12",
+   "HN_CQ12",
+   "Reading 3: after reading Discuss questions 1-4, part B (p.45)."
+  ],
+  [
+   "25",
+   "13",
+   "HCM_CQ5.1",
+   "How might the author's biases influence their articles? Provide one example from your own reading experience"
+  ],
+  [
+   "26",
+   "13",
+   "HN_CQ13",
+   "What sport have you been involved in? What have you learned from taking part in these sports?\nWhat values do you think are associated with sports activities?\nWhat are some popular controversial issues in sports?"
+  ],
+  [
+   "27",
+   "14",
+   "HCM_CQ5.2",
+   "Do you think the article \"MMA for kids: Teaching violence, or values?\" is biased? Explain your answer."
+  ],
+  [
+   "28",
+   "14",
+   "HN_CQ14",
+   "Reading 1: after reading\nDo you think the article itself is biased? Has the writer adequately presented both sides of the argument, or does he favour one side? Explain your answer.\nDo you think MMA are dangerous, or do you think there is no real difference between MMA and other martial arts such as karate or tae kwon do? Why?"
+  ],
+  [
+   "29",
+   "15",
+   "HCM_CQ5.3",
+   "Do you approve or oppose the inclusion of MMA in school curricula? Explain your stance using evidence from the reading and your experience"
+  ],
+  [
+   "30",
+   "15",
+   "HN_CQ15",
+   "Reading 2: before reading\nWhat do you understand by the term \"doping\"? Can you think of any famous cases of doing in sports?\nHow do you think the sports world should deal with doping?\n\"Doping is a serious problem. Athletes caught doping should be banned for a ong period of ime, or even for life\". To what extent do you agree with this statement?"
+  ],
+  [
+   "31",
+   "16",
+   "HCM_CQ6.1",
+   "Who might agree and disagree with the author's opinion that sports doping should be legal and controlled? Explain your answers."
+  ],
+  [
+   "32",
+   "16",
+   "HN_CQ16",
+   "Reading 2: after reading Discuss questions 1-7, part B (pp. 64-65)."
+  ],
+  [
+   "33",
+   "17",
+   "HCM_CQ6.2",
+   "Discuss the benefits and drawbacks of an athlete's participation in the Olympics. Use facts and/or examples from your knowledge and experience to support your answers."
+  ],
+  [
+   "34",
+   "17",
+   "HN_CQ17",
+   "Reading 3: before reading\nDo you enjoy watching the Olympics on television? Why, or why not?\nWhat do you think the long-term effects of participating in the Olympics might be for athletes? Think about both positive and negative effects.\nDo an Internet search and read about the movie \"The Hunger Games\". Can you imagine why the author might think the Olympics are like The Hunger Games?"
+  ],
+  [
+   "35",
+   "18",
+   "HCM_CQ6.3",
+   "Why may the author believe that the Olympics are comparable to The Hunger Games?"
+  ],
+  [
+   "36",
+   "18",
+   "HN_CQ18",
+   "Reading 3: after reading Discuss questions 1-6 (p. 71)"
+  ],
+  [
+   "37",
+   "19",
+   "HCM_CQ7.1",
+   "How crucial are the article's standpoint and intended audience to its writing style? Use the article \"Panda poop power promising for biofuel production\" as a reference for your answer."
+  ],
+  [
+   "38",
+   "19",
+   "HN_CQ19",
+   "What do you understand by the term \"global energy crisis\"?\nWhat are fossil fuels? What are alternative forms of energy? Which alternative forms of energy are you familiar with?\nDo you think authors who say the solution to the energy crisis lies in alternative forms of energy are correct? Why, or why not?"
+  ],
+  [
+   "39",
+   "20",
+   "HCM_CQ7.2",
+   "How would you respond to the opinion that off-grid living is an effective solution to the world energy crisis?"
+  ],
+  [
+   "40",
+   "20",
+   "HN_CQ20",
+   "Reading 1: after reading Discuss questions 1-4 (p. 82)"
+  ],
+  [
+   "41",
+   "21",
+   "HCM_CQ7.3",
+   "What are the pros and cons of living off the grid, in your opinion? Use facts/evidence from the article to support your amswers."
+  ],
+  [
+   "42",
+   "21",
+   "HN_CQ21",
+   "Reading 2: before reading\n\"Living off-grid\" means living without access to energy from power companies. The reading is about a couple who decided to live off-grid. What would you like to find out about them and about their decision? Write five questions.\nIn addition to saving energy, what do you think are advantages and disadvantages of off-grid living?"
+  ],
+  [
+   "43",
+   "22",
+   "HCM_CQ8.1",
+   "How would you convince people to adopt the \"off-grid living\" lifestyle?"
+  ],
+  [
+   "44",
+   "22",
+   "HN_CQ22",
+   "Reading 2: after reading Discuss questions 1-7 (p. 87)"
+  ],
+  [
+   "45",
+   "23",
+   "HCM_CQ8.2",
+   "To what extent do you agree with the article's conclusions regarding the effects of wind turbines? Explain your answer and provide relevant examples from your knowledge or experience."
+  ],
+  [
+   "46",
+   "23",
+   "HN_CQ23",
+   "Reading 3: before reading\nWhat do you know about wind turbines? Share your information with your group.\nOne of the authors of the article titled \"Advere health effects of industrial wind turbines\" is a doctor. What might you expect a doctor to think about alternative energy?\nHow might an academic paper address the topic of alternative energy differenly from a newspaper or magazine article?"
+  ],
+  [
+   "47",
+   "24",
+   "HCM_CQ8.3",
+   "According to your group, what is the most effective alternative energy resource for resolving the energy crisis? Provide evidence and details from your expertise and experience to support your group's response."
+  ],
+  [
+   "48",
+   "24",
+   "HN_CQ24",
+   "Reading 3: after reading Discuss questions 1-6 (pp. 95-96)"
+  ],
+  [
+   "49",
+   "25",
+   "HCM_CQ9.1",
+   "What do you consider to be the top 10 characteristics of a great leader? Provide examples of exceptional international leaders to support your choices."
+  ],
+  [
+   "50",
+   "25",
+   "HN_CQ25",
+   "What do you think are the essential skills needed to succeed in the business world?\nThink of some people who have been very successful in the business world (for example, Bill Gates, Steve Jobs and Mark Zuckerberg). What personal qualities do you associate them with?\nDo an Internet search for members of minority groups who have risen to leadership positions in their countries. How does society benefit from having diversity among its leaders?"
+  ],
+  [
+   "51",
+   "26",
+   "HCM_CQ9.2",
+   "How would you distinguish between a leader and a manager? Use facts and examples from the reading and/or your own experience to support your response."
+  ],
+  [
+   "52",
+   "26",
+   "HN_CQ26",
+   "Reading 1: after reading Discuss questions 1-4 (pp. 108-109)"
+  ],
+  [
+   "53",
+   "27",
+   "HCM_CQ9.3",
+   "Would you prefer to work for an introvert or an extrovert leader? Explain your choice"
+  ],
+  [
+   "54",
+   "27",
+   "HN_CQ27",
+   "Reading 2: before reading\nWhat is the difference between an introvert and an extrovert?\nCan you think of any leaders who are introverts or extroverts?\nWhy do you think the writer might think we need quiet, introverted leaders? What advantages might introverts have over extrovert in leadership roles?"
+  ],
+  [
+   "55",
+   "28",
+   "HCM_CQ10.1",
+   "Why have historically there been more prominent male leaders than female leaders? Include facts and examples from the reading and/or your own understanding to support your answer."
+  ],
+  [
+   "56",
+   "28",
+   "HN_CQ28",
+   "Reading 2: after reading Discuss questions 1-5 (pp. 113-114)"
+  ],
+  [
+   "57",
+   "29",
+   "HCM_CQ10.2",
+   "What challenges might women face in pursuing leadership roles when compared to men?"
+  ],
+  [
+   "58",
+   "29",
+   "HN_CQ29",
+   "Reading 3: before reading\nWhat special characteristics can women bring to leadership roles in companies and other organizations?\nWhat challenges might women face in pursuing leadership roles?\nWhich professions do you think might be underpresented by women in leadership roles? Why might this be the case?"
+  ],
+  [
+   "59",
+   "30",
+   "HCM_CQ10.3",
+   "Mary Slaughter recommends women not to switch occupations too frequently, but also not to remain in the same position for too long. What do you think of her recommendation? Provide explanation and relevant examples to support your answers."
+  ],
+  [
+   "60",
+   "30",
+   "HN_CQ30",
+   "Reading 3: after reading Discuss questions 1-8 (pp. 119-120)"
+  ],
+  [
+   "61",
+   "31",
+   "HCM_CQ11.1",
+   "What are the benefits and drawbacks of employing technology in education?"
+  ],
+  [
+   "62",
+   "31",
+   "HN_CQ31",
+   "How has education changed since the arrival of the computer era? Do you think PowerPoint is useful for students who want to understand the lectures well? Why or why not?\nYou are going to read an article titled \"Swimming againt the Tide of PowerPoint\". What is 'tide'? What do you think the title of this reading mean?\nHow have your educational experiences been different from those of your parentss' generation?\nWhat are advantages and disadvantages of using computer technology in education?"
+  ],
+  [
+   "63",
+   "32",
+   "HCM_CQ11.2",
+   "To what extent do you agree or disagree with the author's assertion that he enjoys improvising during his lectures?"
+  ],
+  [
+   "64",
+   "32",
+   "HN_CQ32",
+   "Reading 1: After reading\nDo you think the author's reason for eschewing PowerPoint are good one? Why?\nWhat do you imagine the author's student might think about his teaching style? Which students might welcome his approach? Which students might disagree with it?\nHow do you respond to the author's statement that he likes to improvide in his lecturers? Is improvision a useful technique in education?\nWould you like to take a course with thi kind of profesor? Why or why not?"
+  ],
+  [
+   "65",
+   "33",
+   "HCM_CQ11.3",
+   "Do you believe mobile devices facilitate student learning? Explain your answers and provide relevant examples from your knowledge and experience."
+  ],
+  [
+   "66",
+   "33",
+   "HN_CQ33",
+   "Reading 2: Before reading\nDo you own a laptop, smartphone or tablet? If so, have you ever used it for educational purposes? What was the result?\nDo you think mobile devices help student to learn? If so, which students benefit the most? If not, why not?\nWhich do you prefer - learning with a mobile device or learning with a traditional book? Why?"
+  ],
+  [
+   "67",
+   "34",
+   "HCM_CQ12.1",
+   "After finishing the Reading 2, do you think that the number of participants in this study is sufficient enough for providing reliable data? Explain your answers"
+  ],
+  [
+   "68",
+   "34",
+   "HN_CQ34",
+   "Reading 2: After reading\nWho were the participants in this study? Do you think this number is large enough to provide reliable data? What does the text tell you about these participant? What other information would you like to know about them?\nWas this research quantitative or qualitative? What are the advantages of the type of the research chosen? What are the disadvantage?\nThis research was carried out in the US. To what extent are these results generalizable to other part of the world?"
+  ],
+  [
+   "69",
+   "35",
+   "HCM_CQ12.2",
+   "How should university lecturers integrate social media into their classroom? Justify your position."
+  ],
+  [
+   "70",
+   "35",
+   "HN_CQ35",
+   "Reading 3: Before reading\nDo you think Facebook can be used as a learning tool? Why or why not?\nTo what extent should university and college professors incorporate social media into their instruction? Explain your opinion."
+  ],
+  [
+   "71",
+   "36",
+   "HCM_CQ12.3",
+   "Reading 3:How well do your personal experiences align with the author's conclusion?"
+  ],
+  [
+   "72",
+   "36",
+   "HN_CQ36",
+   "Reading 3: After reading\nWhy did the author decide to carry out this study?\nDescribe the author's research methodology. Would you have done anyting differently? Why?\nThe author recognizes that the number of participants in the study is \"very small\". What do you think would be an optimal number of participants in this type of study?\nIf you have used social media tools for educational purposes, how do the author's conclusions compare with your own experiences?\nWhat is the purpose of the author's statement in the \"Conclusions\" section that \"the findings cannot be generalized\" (line 254)? Why not?\nWhat do you think future research by this author could focus on?\nWould you personally like to use Facebook in your academic studie, or do you prefer to keep Facebook for personal use only? Explain your answer."
+  ],
+  [
+   "73",
+   "37",
+   "HCM_CQ13.1",
+   "How significant are the anecdotes, visuals, figures, and quotations utilised in the text as evidence?"
+  ],
+  [
+   "74",
+   "37",
+   "HN_CQ37",
+   "Reading 1\nDo an Internet search about \"feng shui\". Share your information with your group.\n\"If you change your living and studying space in some way, you will experience improvements in your life\". Do you agree or disagree with this idea?"
+  ],
+  [
+   "75",
+   "38",
+   "HCM_CQ13.2",
+   "Do Internet search about FENGSHUI. How have the principles of this art been incorporated into your culture?"
+  ],
+  [
+   "76",
+   "38",
+   "HN_CQ38",
+   "Reading 1: after reading Discuss questions 1-8 (pp. 157-158)"
+  ],
+  [
+   "77",
+   "39",
+   "HCM_CQ13.3",
+   "Discuss the benefits and drawbacks of utilising a treadmill desk using information from the reading and your personal experiences."
+  ],
+  [
+   "78",
+   "39",
+   "HN_CQ39",
+   "Reading 2: before reading\nHave you ever suffered any negative effects from sitting too long?\nWhat workspace features would you recommend in order to improve health and productivity?\nDo an Internet search for pictures of treadmill desks. What advantages and disadvantages do you think these desks might have?"
+  ],
+  [
+   "79",
+   "40",
+   "HCM_CQ14.1",
+   "What types of evidence are employed in Reading 2? How effective are they? Explain."
+  ],
+  [
+   "80",
+   "40",
+   "HN_CQ40",
+   "Reading 2: After reading Discuss questions 1-6 (pp. 162-163)"
+  ],
+  [
+   "81",
+   "41",
+   "HCM_CQ14.2",
+   "Do you prefer working in a traditional or open-plan office? Explain your decision."
+  ],
+  [
+   "82",
+   "41",
+   "HN_CQ41",
+   "Reading 3: Before reading Do an Internet search for pictures of open-plan offices. What are advantages this kind of design?"
+  ],
+  [
+   "83",
+   "42",
+   "HCM_CQ14.3",
+   "How might the workstation design affect employees' productivity? Explain your response using facts and examples from the reading and/or your own knowledge."
+  ],
+  [
+   "84",
+   "42",
+   "HN_CQ42",
+   "Reading 3: After reading\nWhat recommenndation would you make to anyone responible for deigning a new office space?\nWhat problems do workers in open-plan office have? How might these problems be addressed?"
+  ],
+  [
+   "85",
+   "43",
+   "HCM_CQ15.1",
+   "According to you, what variables impact the happiness of an individual and a nation? Explain"
+  ],
+  [
+   "86",
+   "43",
+   "HN_CQ43",
+   "Why do you think some countries are much richer than others? What are some contributing factors to the relative wealth of a country?\nWhat are the three most important in determining the happiness of a country? Why do you think so?"
+  ],
+  [
+   "87",
+   "44",
+   "HCM_CQ15.2",
+   "Based on the information provided in Reading 1, what recommendations would you make to the Vietnamese government and to your friends?"
+  ],
+  [
+   "88",
+   "44",
+   "HN_CQ44",
+   "Reading 1: After reading\nExplain in your own words the meaning of \"diminishing marginal return\". Give some examples.\nTo what extent should governments make economic policies based on this kind of research Why?\nBased on the information in this article, what recommendations would you personally make to the government of Vietnam and your friends and family?"
+  ],
+  [
+   "89",
+   "45",
+   "HCM_CQ15.3",
+   "How much do you agree with the United Nations' six factors for a happy nation? Explain."
+  ],
+  [
+   "90",
+   "45",
+   "HN_CQ45",
+   "Reading 2: Before reading\nWhat do you know about the country of Denmark?\nIt is stated that Denmark is the happiest country in the world. What do you think are the reasons? Explain.\nIs it realistic to measure the happiness of various countries? What factors do you think should be considered when trying to do so? Why?"
+  ],
+  [
+   "91",
+   "46",
+   "HCM_CQ16.1",
+   "What characteristics do the 10 happiest nations (Denmark, Norway, Switzerland, Netherland, Sweden, Canada, Finland, Austria, Iceland, Australia) have in common? Use textual evidence and personal experience to support your response."
+  ],
+  [
+   "92",
+   "46",
+   "HN_CQ46",
+   "Reading 2: After reading\nThe ten happiest countries are Denmark, Norway, Switzerland, Netherland, Sweden, Canada, Finland, Austria, Iceland, Australia. Which of their common features do you think are related to happinest? Why?\nWhat light is shed on the subject of happiness economics by the naming of Denmark as the world's happiest country? Can other countries learn anything from the example of Denmark?"
+  ],
+  [
+   "93",
+   "47",
+   "HCM_CQ16.2",
+   "How does the happiness of Bhutan differ from that of Denmark? Explain your response using facts and examples from the two readings and/or your own knowledge."
+  ],
+  [
+   "94",
+   "47",
+   "HN_CQ47",
+   "Reading 3: Before reading\nWhat do you know about Bhutan and its GDP?\nDo you expect people in Bhutan to be generally happy or unhappy? Why? What might contribute to their happiness or to their lack of happiness?"
+  ],
+  [
+   "95",
+   "48",
+   "HCM_CQ16.3",
+   "What could be learned from Bhutan's approach to achieving national success?"
+  ],
+  [
+   "96",
+   "48",
+   "HN_CQ48",
+   "Reading 3: After reading\nWhat is your opinion about the four pillars of GNH (Gross National Happiness). Are their any factor that could be added to this list? Why?\nIt could be said that Bhutan has focue on happiness at the expense of investment in roads, electricity and other necessary improvements to the country's infratructure. How do you think a member of Bhutanese government would respond to this?\nHave the Bhutanese formulated a new approach to measuring successs? What, if anything, could world governments and economists learn from Bhutan's approach o national success?"
+  ],
+  [
+   "97",
+   "49",
+   "HCM_CQ17.1",
+   "How has the Internet altered social interaction?"
+  ],
+  [
+   "98",
+   "49",
+   "HN_CQ49",
+   "How is a friend different from an acquaintance, colleague or a classmate? How do you know when someone has become a friend?\nIn what way(s) has the Internet changed the nature of socializing? Do you think these changes are positive or negative?"
+  ],
+  [
+   "99",
+   "50",
+   "HCM_CQ17.2",
+   "To what extent do you agree with the following statement: \"In the end, a touch in the real world is worth a thousand words in the virtual world.\" Explain your answer and include examples from your knowledge and experience"
+  ],
+  [
+   "100",
+   "50",
+   "HN_CQ50",
+   "Reading 1: After reading\n\"What bonds the community together is a common sense of obligation, reciprocity and trust\". To what extent do you agree or disagree with this statement? Explain.\n\"The fact that social networks in our urganized world are fragmented and geographically distributed means that there is less to bind us into the baric of our local community. We don't even know most of the people we pass in the street.\" Do you agree or disagree with this idea? Explain."
+  ],
+  [
+   "101",
+   "51",
+   "HCM_CQ17.3",
+   "Do you believe that \"Dunbar's number\" is still relevant these days? Include facts and examples from the reading and/or your own understanding to support your answer."
+  ],
+  [
+   "102",
+   "51",
+   "HN_CQ51",
+   "Reading 2: Before reading\nThe title of this reading asks: \"Is Dunbar's friend-limiting number still relevant in this Facebook era?\" What do you predict the answer to this question will be? Why?\nDescribe your own involvement with social media such as Facebook and friends there."
+  ],
+  [
+   "103",
+   "52",
+   "HCM_CQ18.1",
+   "What have you learned from the experiment conducted by the author?"
+  ],
+  [
+   "104",
+   "52",
+   "HN_CQ52",
+   "Reading 2: After reading\nWhy do you think people add \"friends\" on social media that they don't know personally? How do you respond to \"friend\" requests from strangers?\nDo you think the author's experiment was a waste of time, or do you think it taught him a useful lesson? Explain your answer.\nWrite a response to the following message \"I only have fifty-eight friends on Facebook. I feel like a social failure.\""
+  ],
+  [
+   "105",
+   "53",
+   "HCM_CQ18.2",
+   "Compare the generation of \"digital natives\" to prior generations. Explain your response using facts and examples from the reading and/or your own knowledge."
+  ],
+  [
+   "106",
+   "53",
+   "HN_CQ53",
+   "Reading 3: Before reading\nWhat do you understand by the term \"digital native\"? Do you think you are a digital native? Why, or why not?\nHow is the workplace different for today's graduates than it was for their parent?\nWhat work-related skills might digital natives have that their parents' generation does not have?"
+  ],
+  [
+   "107",
+   "54",
+   "HN_CQ54",
+   "Reading 3: after reading\nThe authors say: \"…as these 'Generation Y' individuals grow into the managerss and chief executive officers of tomorrow, they will be uniquely placed to take on the challenges of virtual teams (lines 117 to 121). a) If you consider yourself to be a digital native, do you agree that your use of social media has given you an advantage in the workplace? Why or why not? b) If you do not consider yourself to be a digital native, do you feel that you are disadvantged in today's workplace? Why, or why not?\nDo you think universities and colleges should modify their courses to prepare students better for a career in which they might have to work virtually with people in different parts of the world? If so, in what ways could this happen? If not, why not?"
+  ],
+  [
+   "108",
+   "55",
+   "HN_CQ55",
+   "Should space exploration be prioritized by governments? If so, why?\nDo an Internet search about the early days of space exploration in the time of the Cold War. What has changed since that time? What has stayed the same?\nIs there a role for private enterprises in space exploration Why, or why not?"
+  ],
+  [
+   "109",
+   "56",
+   "HN_CQ56",
+   "Reading 1: before reading\nHave you ever looked up the starts and wondered about life and the universe? What questions have you asked?\n\"Why spend so much money sending satellites into space when people around the world are starving?\" How would you answer this question?\nCan you think of any specific technological items we now have on Earth a a result of space exploration?"
+  ],
+  [
+   "110",
+   "57",
+   "HN_CQ57",
+   "Reading 1: after reading Discuss questions 1-10 (pp. 235-236)."
+  ],
+  [
+   "111",
+   "58",
+   "HN_CQ58",
+   "Reading 2: before reading\nDo you believe that, in your lifetime, people will travel to Mars ad even establish a colony there? Why, or why not?\nWhat could the human race gain by changing conditions on Mars to make the planet suitable for humans to live there? What might be the drawback of doing this?\nWould you be interested in travelling to Mars? What kinds of people do you think would be best suited to this endeavour?"
+  ],
+  [
+   "112",
+   "59",
+   "HN_CQ59",
+   "Reading 2: After reading Discuss questions 1-10 (pp. 240-241)."
+  ],
+  [
+   "113",
+   "60",
+   "HN_CQ60",
+   "Reading 2: After reading Discuss questions 1-10 (pp. 240-241)."
+  ]
+ ],
+ "links": []
+}

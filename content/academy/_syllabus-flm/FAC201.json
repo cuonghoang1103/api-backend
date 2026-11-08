@@ -1,0 +1,964 @@
+{
+ "ma": "FAC201",
+ "sylID": "14510",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14510",
+   "code": "FAC201",
+   "name": "Kế toán tài chính",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14510",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14510",
+  "Syllabus Name": "Kế toán tài chính",
+  "Course Name English": "Financial Accounting",
+  "Subject Code": "FAC201",
+  "Learning-Teaching Method": "Lecture,Problem based learning,Presentation,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "ACC101",
+  "Description": "-Main objective: This course equips students with:\n\n(1) Understanding the Regulatory and Conceptual Frameworks\n\n(2) Practical Preparation of Financial Statements\n\n(3) Advanced Group Accounting and Consolidation\n\n(4) Analysis and Interpretation of Financial Data\n\n(5) Specialized and Simplified Reporting\n\n-Description: Students will master the conceptual and regulatory frameworks of IFRS alongside the practical skills needed to prepare individual and consolidated financial statements.They will develop technical expertise in applying standards to complex areas including revenue recognition, taxation, and group accounting. Furthermore, learners acquire the ability to evaluate an entity's financial health and investment potential by synthesizing cash flow trends, earnings metrics, and segmental performance to support economic decision-making. Finally, students gain insight into specialized reporting environments, including hyperinflationary economies and the IFRS for SMEs standard.\n\n-Teaching method: The course applies diverse pedagogical approaches such as lectures, analytical discussions, presentation skills, collaborative group work, case studies, problem-based learning. Assessment is integrated through applied exercises, situational analysis, and teamwork performance.",
+  "StudentTasks": "- Students must attend more than 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (http://flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "International Financial Reporting: A Practical Guide",
+   "Alan Melville",
+   "Pearson.",
+   "2025",
+   "9rd",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "- PowerPoint Slides",
+   "Alan Melville",
+   "Pearson.",
+   "2025",
+   "9rd",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "- Instructor’s Manual (pdf)",
+   "Alan Melville",
+   "Pearson.",
+   "2025",
+   "9rd",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Financial Accounting and Reporting",
+   "Jamie Elliott ConsultantBarry & Elliott Consultant",
+   "Pearson.",
+   "2024",
+   "20rd",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "CLO-based Assessment Guide & Rubrics",
+   "FPTU",
+   "",
+   "FA26",
+   "1st",
+   "",
+   "True",
+   "False",
+   "True",
+   "See link URL"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the IASB regulatory and conceptual frameworks, while applying relevant standards for the presentation of financial statements, the selection of accounting policies, and the correction of accounting errors"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Outline specific IFRS/IAS requirements for the recognition and measurement of key financial elements, including non-current assets, revenue, and financial instruments"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Construct consolidated financial statements for groups of companies, performing accurate calculations for goodwill, intra-group eliminations, and non-controlling interests"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Perform evaluating an entity's financial health and investment potential by synthesizing cash flow trends, earnings metrics, and segmental performance to support economic decision-making"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Critique the impact of specialized reporting areas, such as deferred taxation, leases, and potential dilution of earnings, on an entity’s perceived financial health and valuation"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Integrate professional objectivity and ethical responsibility when applying international standards to ensure financial reports provide a \"true and fair view\" for external stakeholders"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation and Preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "",
+   "",
+   "",
+   "",
+   "Participation scores will be given based on students' class attendance, preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussions, and building upon others’ comments."
+  ],
+  [
+   "2",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "Report and Presentation in class (end of the course);",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "Select a listed corporation to audit its compliance with IFRS standards (leveraging AI support). Subsequently, perform an appraisal to facilitate corporate restructuring or M&A decision-making. Based on the restructuring or M&A advisory, prepare pro-forma consolidated financial statements incorporating advanced technical adjustments;",
+   "Case study",
+   "Thinking creatively, making decisions, solving problems,Personal qualities: Individual responsibility, self-esteem, sociability, self-management, and integrity.",
+   "in class, by instructor",
+   ""
+  ],
+  [
+   "3",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "at home;",
+   "CLO1, CLO2, CLO5, CLO6",
+   "Each student is assigned a listed company and Act as a Forensic Accountance to appraise the 'integrity' (reliability and compliance) of an assigned entity’s reported net assets by synthesizing IFRS principles (Chapters 1,2,3,4,5,6,7,8,9,10,11) with AI-driven data extraction and 'What-If' policy simulations or- Case study; -",
+   "Report",
+   "Integration of studied knowledge and skills",
+   "By instructor",
+   "Students must select different statements from different companies"
+  ],
+  [
+   "4",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "In class (30 minutes);",
+   "CLO1, CLO2",
+   "Multiple choice questions or calculation Quiz 1: Chapter 1 - 8; CLO1-CLO2Quiz 2: Chapter 9 - 16; CLO2",
+   "20 Multiple choice questions or calculation;",
+   "Integration of studied knowledge and skills",
+   "in class, by instructor",
+   ""
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Multiple choice questions (50).Multiple choice questions cover all chapters and CLOs: CLO1, CLO2, CLO3, CLO4, CLO5",
+   "50MCQs",
+   "Integration of studied knowledge and skills of chapters covered in the subject",
+   "By Exam board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Overview\n\nIntroduction to AI Integration into the Course\n\nPart 1 Introduction to Financial Reporting\n\nChapter 1: The Regulatory Framework\n\n1.1 The need for regulation\n\n1.2 Sources of regulation\n\n1.3 Generally accepted accounting practice\n\n1.4 The IASB standard-setting process\n\n1.5 The purpose of accounting standards\n\n1.6 Worldwide use of international standards\n\n- Review Chapter 1\n\n- Exercise Activities:Chapter 1",
+   "Offline",
+   "CLO1, CLO6",
+   "ITU",
+   "-Syllabus\n\n- Book, Powerpoint, case study teaching notes, solution",
+   "FAC201",
+   "- Review syllabus;\n\n- Analyze the consequences of unregulated reporting on economic decision-making.\n\n- Identify specific regulatory bodies and legal requirements across various jurisdictions.\n\n- Compare characteristics of \"Big GAAP\" (Full IFRS) vs. \"Little GAAP\" (IFRS for SMEs) to understand reporting tiers;\n\n- Solve problems",
+   "link"
+  ],
+  [
+   "2",
+   "Chapter 2: The IASB Conceptual Frameworks\n2.1 Purpose and status of the IASB Conceptual Framework\n2.2 Objective of general purpose financial reporting\n2.3 Qualitative characteristics of financial information.\n2.4 Elements of financial statements.\n2.5 Recognition of the elements of financial statements.\n2.6 Measurement of the elements of financial statements.",
+   "Offline",
+   "CLO1, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "FAC201",
+   "- Evaluate how management stewardship and resource efficiency are accurately reflected in general-purpose financial reports.\n- Categorize complex real-world items as assets or liabilities by applying strict definitions and the “substance over form” concept.\n- Execute materiality judgements and select the most appropriate measurement bases for different reporting scenarios to ensure information is relevant and reliable.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 2: The IASB Conceptual Frameworks\n2.7 Financial statements and the reporting entity\n2.8 Presentation of Financial Statements\n2.9 Concepts of capital and capital maintenance\n2.10 Discounting and present value\n- Review Chapter 2\n- Exercise Activities:Chapter 2",
+   "Offline",
+   "CLO1, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Evaluate how an entity's financial position and performance reports accurately reflect the effectiveness of management's stewardship of economic resources;\n- Execute profit calculations under various capital maintenance concepts (Nominal, General Purchasing Power, and Physical) to identify capital depletion risks;\n-Practice discounting techniques to determine the current value of future cash flows, establishing the base for complex technical adjustments and valuations;\n- Solve problems",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 3: Presentation of financial statements\n3.1 Components of financial statements\n3.2 General features\n3.3 Structure and content of financial statements\n3.4 The statement of financial position\n3.5 The statement of comprehensive income\n3.6 The statement of changes in equity\n3.7 The notes to the financial statements",
+   "Offline",
+   "CLO1, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "-Demonstrate the classification of financial statement elements, specifically clarifying the criteria for current versus non-current assets and liabilities .\n- Explain and apply general features such as the accrual basis, going concern assumption, and materiality in report preparation\n- Prepare accurate primary statements (Statement of Financial Position, Statement of Comprehensive Income, and Statement of Changes in Equity) that provide a fair presentation of an entity's financial health",
+   ""
+  ],
+  [
+   "5",
+   "\"Chapter 3: Presentation of financial statements\n3.8 Interim financial reporting\n3.9 Management commentary\n3.10 Making materiality judgements\n- Review Chapter 3\n- Exercise Activities: Chapter 3\nChapter 4: Accounting Policies, Estimates and Errorss\n4.1 Accounting policies selection",
+   "Offline",
+   "CLO1, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Identify and apply the reporting requirements for interim periods, ensuring consistency in accounting policies between interim and annual reports;\n- Appraise narrative reports to determine if they provide a faithful representation of management’s stewardship and the entity’s long-term financial health;\n- Execute materiality judgements by identifying potentially material information and assessing whether its omission could influence the decisions of primary users;\n- Identify material accounting policy information required for disclosure in the notes;\n- Solve problems",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 4: Accounting Policies, Estimates and Errors\n4.2 Accounting estimates\n4.3 Prior period errors\n- Review Chapter 4\n- Exercise Activities: Chapter 4",
+   "Offline",
+   "CLO1, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Execute retrospective restatements and restate opening balances for prior period errors;\n- Solve problems",
+   ""
+  ],
+  [
+   "7",
+   "Part 2 Financial Reporting in Practice\nChapter 5: Property, plant and equipment\n5.1 Definition of property, plant and equipment\n5.2 Recognition of property, plant and equipment\n5.3 Initial measurement of property, plant and equipment",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Determine the cost of PPE including delivery, installation, and dismantling estimates",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 5: Property, plant and equipment\n5.4 Subsequent measurement of property, plant and equipment",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Record journal entries for revaluations and transfers from revaluation reserve to retained earnings",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 5: Property, plant and equipment\n5.5 Depreciation",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Calculate depreciation and review residual values/useful lives annually",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 5: Property, plant and equipment\n5.6 Borrowing costs",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Calculate the amount of interest to be capitalised using weighted average rates",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 5: Property, plant and equipment\n5.7 Investment Property",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Classify real-world assets into IAS 16 or IAS 40 categories based on the entity's business model.\n- Measure initial cost, including legal fees and property transfer taxes.\n- Execute year-end adjustments for fair value changes and determine the impact on the company's reported profit for the period.\n- Identify the circumstances under which the cost model must be used as a fallback if fair value cannot be determined reliably",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 5: Property, plant and equipment\n5.8 IFRS 13 Fair Value Measurement\n- Review Chapter 5\n- Exercise Activities: Chapter 5",
+   "Offline",
+   "CLO2, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Distinguish between Level 1 (quoted prices), Level 2 (observable inputs), and Level 3 (unobservable inputs) in valuation reports.\n- Apply present value (discounting) techniques to perform an \"income approach\" valuation for a non-current asset.\n- Utilize AI support to extract and summarize fair value hierarchy disclosures from the notes of a listed corporation's annual report.\n- Evaluate the reliability of an entity's reported net assets by assessing the \"valuation techniques\" described in their financial notes .\n-Solve problems",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 6: Intangible assets\n6.1 Definition of an intangible asset\n6.2 Initial recognition and measurement of intangible assets",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Identify and categorize non-physical assets (e.g., patents, software) based on IAS 38 criteria\nDistinguish research from development and measure costs eligible for capitalisation",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 6: Intangible assets\n6.3 Subsequent measurement of intangible assets\n6.4 Amortisation of intangible assets\n6.5 Derecognition",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Perform amortisation for finite-life assets and prepare schedules for subsequent measurement",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 6: Intangible assets\n6.6 Goodwill\n6.7 IFRS3 Business Combinations",
+   "Offline",
+   "CLO2, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Determine the cost of purchased goodwill to facilitate M&A decision-making and Group Assignment reporting",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 6: Intangible assets\n- Review Chapter 6\n- Exercise Activities: Chapter 6",
+   "Offline",
+   "CLO2, CLO6",
+   "U",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Solve problems",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 7: Impairment of assets\n7.1 Indications of impairment",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Identify signs of impairment (e.g., physical damage, market decline)",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 7: Impairment of assets\n7.2 Recoverable amount\n7.3 Recognition and measurement of an impairment loss",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Calculate Value in Use by discounting projected future cash flows. Measure the impairment loss and prepare the necessary journal entries to adjust asset carrying amounts",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 7: Impairment of assets\n7.4 Cash-generating units\n7.5 Reversal of impairment losses\n- Review Chapter 7\n- Exercise Activities: Chapter 7",
+   "Offline",
+   "CLO2, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Allocate impairment losses to assets within a CGU, prioritizing goodwill elimination;\n-Assess whether conditions have improved to justify a reversal of past losses\n- Solve problems",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 8: Non-current assets held for sale and discontinued operations\n8.1 Classification of non - curent assets as Held for Sale",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Identify \"highly probable\" sale scenarios and reclassify non-current assets as current",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 8: Non-current assets held for sale and discontinued operations\n8.2 Measurement of non - curent assets as Held for Sale",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Measure disposal groups and recognize impairment losses/subsequent gains",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 8: Non-current assets held for sale and discontinued operations\n8.3 Discontinued operations\n- Individual Assignment Release\n- Review Chapter 8\n- Exercise Activities: Chapter 8",
+   "Offline",
+   "CLO2, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "-Draft the SOCI ensuring post-tax discontinued results are shown as a single line\n-Download assignment brief; Ask clarifying questions on scope\n\n- Solve problems",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 9: Leases\n9.1 Definition of a lease\nQuiz 1",
+   "Offline",
+   "CLO2, CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Identify if a contract contains a lease based on benefits and direction of use;\n- Complete the quiz.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 9: Leases\n9.2 Lease accounting by lessees",
+   "Offline",
+   "CLO2, CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Measure initial ROU cost and depreciate it over the shorter of lease term or useful life",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 9: Leases\n9.3 Lease accounting by lessors",
+   "Offline",
+   "CLO2, CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Account for finance lease receivables and recognize operating lease income",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 9: Leases\n9.4. Sale and Leaseback\n- Review Chapter 9\n- Exercise Activities: Chapter 9",
+   "Offline",
+   "CLO2, CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Measure the ROU asset and calculate profit restricted to the rights transferred;\n- Solve problems",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 10: Inventories\n10.1 Cost of inventories\n10.2 Inventory Cost formulas",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Perform inventory valuation using allowed formulas for interchangeable items",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 10: Inventories\n10.3 Net Realisable Value (NRV)\n- Review Chapter 10\n- Exercise Activities: Chapter 10",
+   "Offline",
+   "CLO2, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\" - Calculate NRV by deducting completion and selling costs from estimated price;\n- Solve problems",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 11: Financial instruments\n11.1 Definitions\n11.2 Classification of financial instruments\n11.3 Recognition and measurement\n11.4 Initial measurement of financial assets and liabilities\n11.5 Subsequent measurement of financial assets",
+   "Offline",
+   "CLO2, CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Classify redeemable preference shares and separate compound instruments",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 11: Financial instruments\n11.6 The effective Interest Method\n11.7 Subsequent measurement of financial liabilities\n- Review Chapter11\n- Exercise Activities: Chapter11",
+   "Offline",
+   "CLO2, CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\" - Prepare amortisation schedules and calculate interest for financial liabilities,\n- Exercise Activities",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 12: Provisions and events after the reporting period\n12.1 Provision Recognition",
+   "Offline",
+   "CLO1, CLO2, CLO5, CLO6",
+   "U, IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"\n- Evaluate scenarios to determine if a provision, contingency, or nothing is recognized",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 12: Provisions and events after the reporting period\n12.2 Measurement of Provisions",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Calculate provision amounts and account for the \"unwinding\" of discounts",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 12: Provisions and events after the reporting period\n12.3 Application of the recognition and measurement rules\n12.4 Contingent liabilities and contingent assets\n12.5 Events after the reporting period\n- Review Chapter 12\n- Exercise Activities: Chapter 12",
+   "Offline",
+   "CLO2, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "'- Calculate net costs for fulfilling onerous contracts and evaluate business scenarios to identify constructive obligations for restructuring;\n- Classify contingent liabilities, contingent assets and post-year-end events (e.g., bankruptcy, fire, dividends) and prepare required financial adjustments or material event disclosures;\n- Solve problems",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 13: Revenue from contracts with customers\n13.1 Purpose and scope of IFRS15\n13.2 The five-step model\n13.3 Identifying the contract\n13.4 Identifying performance obligations\n13.5 Determining the transaction price\n13.6 Allocating the transaction price",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Identify contracts, performance obligations, and determine the transaction price.\n- Calculate allocated prices for bundled products and account for discounts;",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 13: Revenue from contracts with customers\n13.7 Satisfaction of performance obligations\n13.8 Contract costs\n13.9 Guidance to the application of IFRS 15",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Measure progress towards satisfaction of obligations and calculate contract asset or liability balances for the Statement of Financial Position;\n- Evaluate business cases to determine control transfer and apply specific guidance to account for variable consideration and returns;",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 13: Revenue from contracts with customers\n\n- Review Chapter 13\n- Exercise Activities: Chapter 13",
+   "Offline",
+   "CLO2, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Solve problems",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 14: Employee benefits\n14.1 Short-term employee benefits\n14.2 Other long-term employee benefits\n14.3 Termination benefits",
+   "Offline",
+   "CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Calculate liabilities for unused accumulating paid absences (holiday/sick leave).\n- Identify legal versus constructive obligations for bonus and profit-sharing payments.\n- Apply undiscounted measurement rules for benefits settled within 12 months",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 14: Employee benefits\n14.4 Post-employment benefits;\n14.5 Accounting for defined contribution plans;\n14.6 Accounting for defined benefit plans",
+   "Offline",
+   "CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Record basic contribution expenses and liabilities for DC plans.\n- Reconcile the DBO using current service cost, interest cost, and actuarial adjustments.\n- Compute the net defined benefit liability or asset for presentation in the Statement of Financial Position",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 14: Employee benefits\n14.7: Share-based Payments\n- Review Chapter 14\n- Exercise Activities: Chapter14",
+   "Offline",
+   "CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Measure the total fair value of options at the grant date.\n- Calculate the annual expense to be recognized in profit or loss based on shifting retention estimates.\n- Perform the transfer of equity balances when share options are exercised or forfeited;\n-Solve problems",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 15: Taxation in financial statements\n15.1 Current tax",
+   "Offline",
+   "CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Calculate tax expense including adjustments for previous year under/overestimates",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 15: Taxation in financial statements\n15.2 Tax base concept (IAS 12)",
+   "Offline",
+   "CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Calculate tax bases and identify taxable vs. deductible temporary differences",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 15: Taxation in financial statements\n15.3 Deferred tax\n15.4 IAS12 requirements with regard to deferred tax\n- Review Chapter 15\n- Exercise Activities: Chapter 15",
+   "Offline",
+   "CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Calculate the deferred tax balance and account for movements through profit or loss;\n-Solve problems",
+   ""
+  ],
+  [
+   "43",
+   "- Individual Assignment Submission\nChapter 16: Statement of cash flows\n16.1 Cash and cash equivalents\n16.2 Classification of cash flows by activity\n16.3 Interest, dividends and taxes",
+   "Offline",
+   "CLO1, CLO2, CLO4, CLO5,CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Submit final individual assignment report.\n- Distinguish between cash and cash equivalents by assessing maturity dates and risks of value changes;\n-Categorize specific business transactions (e.g., equipment purchases, loan repayments, or customer receipts) into the correct activity type;\n- Reconcile the total cash and cash equivalents reported in the statement of cash flows with the corresponding items in the statement of financial position;\n-Apply consistent classification for interest and dividends based on the entity's accounting policy and disclose them as separate line items in the statement of cash flows;\n-Calculate cash paid for taxes by performing a reconciliation between the tax expense in the statement of comprehensive income and the opening/closing tax liabilities in the statement of financial position;",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 16: Statement of cash flows\n16.4 Reporting cash flows from operating activities\n- Review Chapter 16\n- Exercise Activities: Chapter 16\n- Quiz 2",
+   "Offline",
+   "CLO1, CLO4",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Execute the conversion from accrual-based profit to cash-based operations using the Indirect Method by adjusting for non-cash expenses, gains/losses on disposals, and changes in working capital;\n- Derive gross cash flows for the Direct Method by adjusting revenue and cost figures with their corresponding statement of financial position balances;\n-Solve problems;\n- Complete the Quiz 2",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 17: Financial reporting in hyperinflationary economics\n17.1 Historical cost accounting and its weaknesses\n17.2 Strengths of historical cost accounting\n17.3 Alternatives to historical cost accounting\n17.4 Hyperinflationary economies\n17.5 Restatement of financial statements\n- Review Chapter 17\n- Exercise Activities: Chapter 17",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Identify hyperinflationary triggers in economic data and evaluate how inflation distorts key ratios like ROCE.\n- Apply price indexes to restate assets and calculate the gain/loss on the net monetary position",
+   ""
+  ],
+  [
+   "46",
+   "Part 3 Consolidated Financial Statements\nChapter 18: Groups of companies (1)\n18.1 Requirement to prepare consolidated financial statements\n18.2 Group statement of financial position at date of acquisition\n18.3 Group statement of financial position in subsequent years\n18.4 Partly-owned subsidiaries\n18.5 Preference shares",
+   "Offline",
+   "CLO3, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Draft a consolidated Statement of Financial Position (SFP) at acquisition.\n- Calculate goodwill impairment and measure NCI for the equity section.\n-Solve problems",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 18: Groups of companies (1)\n18.6 Elimination of intra-group balances;\n18.7 Unrealised profits\n18.8 Reporting period and accounting policies\n- Review Chapter 18\n- Exercise Activities: Chapter 18",
+   "Offline",
+   "CLO3, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Identify cash or goods in transit and adjust group balances.\n- Compute the provision for unrealised profit (PURP) and adjust group inventory values in the SFP",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 19: Groups of companies (2)\n19.1 Group Statement of Comprehensive Income (SOCI);\n19.2 Group Statement of Changes in Equity (SCE);",
+   "Offline",
+   "CLO3, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "-Construct a Group SOCI and Group SCE.",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 19: Groups of companies (2)\n19.3 Subsidiary acquired part way through an accounting period.\nReview Chapter 19\nExercise Activities: Chapter 19\nChapter 20: Associates and joint arrangements\n20.1 Associates and significant influence",
+   "Offline",
+   "CLO3, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Apportion subsidiary profits into pre- and post-acquisition components to exclude pre-acquisition results;\n- Solve problems\n- Identify associates within corporate structures by applying the 20% power threshold and evaluating the existence of significant influence",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 20: Associates and joint arrangements\n20.1 Associates and significant influence\n20.2 The equity method\n20.3 Application of the equity method\n20.4 Joint arrangements\nReview Chapter 20\nExercise Activities: Chapter 20",
+   "Offline",
+   "CLO3, CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Apply the Equity Method to record initial investments at cost and calculate adjustments for post-acquisition profits, OCI, and dividends.\n- Distinguish between accounting for joint operations (recognizing share of assets/liabilities) and joint ventures (using the Equity Method)\n- Solve problems",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 21: Related parties and changes in foreign exchange rates\n21.1 Related parties\n21.2 Definition of related party and related party transaction\n21.3 Disclosures required by IAS24\n21.4 Foreign exchange accounting\n21.5 Reporting foreign currency transactions",
+   "Offline",
+   "CLO3, CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Identify related parties within complex corporate structures and draft disclosure notes for material transactions to ensure group transparency and integrity.\n- Record individual foreign currency transactions and calculate exchange differences arising from the subsequent measurement of monetary items at the closing rate.",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 21: Related parties and changes in foreign exchange rates\n21.6 Translation to a presentation currency\n- Review Chapter 21\n- Exercise Activities: Chapter 21",
+   "Offline",
+   "CLO3, CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Translate foreign Statement of Financial Position (SFP) and Statement of Comprehensive Income (SOCI) figures and reconcile the resulting exchange difference in the foreign exchange reserve.\n'- Solve problems",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 23: Earnings per share\n23.1 Significance of EPS\n23.2 Calculation of basic EPS\n23.3 Shares issued during the accounting period\n23.4 Bonus issues\n23.5 Rights issues\n23.6 Calculation of diluted EPS",
+   "Offline",
+   "CLO3, CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"- Calculate basic EPS by determining the weighted average number of ordinary shares outstanding.\n- Apply retrospective adjustments for bonus elements in share issues and restate previous period figures.\n- Compute diluted EPS to reveal the potential future reduction in earnings for shareholders from dilutive instruments",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 23: Earnings per share\n23.6 Calculation of diluted EPS\n- Review Chapter 23\n- Exercise Activities: chapter23",
+   "Offline",
+   "CLO3, CLO5, CLO6",
+   "ITU",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\"Compute diluted EPS to reveal the potential future reduction in earnings for shareholders from dilutive instruments\n- Solve problems",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 24: Segmental Analysis\n24.1 Operating segments\n24.2 Reportable segments",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "IT",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "\" -Identify distinct business components using internal management structures.\n- Calculate quantitative thresholds to verify reporting integrity and transparency",
+   ""
+  ],
+  [
+   "56",
+   "Group Assignment Release\n- Review Chapter 24\n- Exercise Activities: Chapter 24",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "U",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "- Discussing with team members\n\n-Solve problems",
+   ""
+  ],
+  [
+   "57",
+   "Course Revision",
+   "Offline",
+   "CLO1, CLO2, CLO3,CLO4,CLO5,CLO6",
+   "U",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Identify weak areas; Practice past exam questions.",
+   ""
+  ],
+  [
+   "58",
+   "Group Assignment Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3,CLO4,CLO5,CLO6",
+   "U",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Present group findings; Critique other groups constructively.",
+   ""
+  ],
+  [
+   "59",
+   "Group Assignment Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3,CLO4,CLO5,CLO6",
+   "U",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Present group findings; Critique other groups constructively.",
+   ""
+  ],
+  [
+   "60",
+   "Group Assignment Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3,CLO4,CLO5,CLO6",
+   "U",
+   "Book, Powerpoint, case study teaching notes, solution",
+   "",
+   "Present group findings; Critique other groups constructively.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "Critique reporting integrity by simulating aggressive versus conservative impairment impacts on net assets"
+  ],
+  [
+   "2",
+   "1",
+   "CQ2",
+   "Compare financial ratio outcomes under alternative accounting treatments to evaluate investor decision-making"
+  ],
+  [
+   "3",
+   "2",
+   "CQ3",
+   "Use AI tools to extract and contrast competitor disclosures, assessing economic substance over form"
+  ],
+  [
+   "4",
+   "3",
+   "CQ4",
+   "Construct pro-forma consolidated statements for mid-year M&A scenarios, adjusting for goodwill and NCI"
+  ],
+  [
+   "5",
+   "4",
+   "CQ5",
+   "Assess if management reporting choices prioritize investor transparency or obscure business risks"
+  ]
+ ],
+ "links": [
+  "/download/14372/S/1_FAC201.zip",
+  "https://drive.google.com/drive/folders/12kAnTXhfU8ir9SUkVe7cvK1KbbSICaRs?usp=sharing",
+  "/download/14372/S/2_FAC201.zip"
+ ]
+}

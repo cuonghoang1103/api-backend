@@ -1,0 +1,1219 @@
+{
+ "ma": "PRE301",
+ "sylID": "13651",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13651",
+   "code": "PRE301",
+   "name": "Public Relations principles and strategies_Chiến lược quan hệ công chúng",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13651",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13651",
+  "Syllabus Name": "Public Relations principles and strategies_Chiến lược quan hệ công chúng",
+  "Course Name English": "Public Relations principles and strategies",
+  "Subject Code": "PRE301",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Cooperative Learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "CCO201",
+  "Description": "This course helps students answer three essential questions: What is public relations, why do we do it, and how do we do it? It introduces the tools and techniques necessary for effective public relations practice and explores the critical steps in the public relations planning process, which is central to both the study and practice of the field. Additionally, the course introduces students to AI tools that enhance the quality of their work, enabling them to improve decision-making, streamline communication strategies, and stay ahead in a rapidly evolving PR landscape.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the https://flm.fpt.edu.vn/gui/Home for up-to-date course information",
+  "Tools": "- Textbook\n\n- Computer",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Exploring Public Relations and Management Communication",
+   "Ralph Tench & Stephen Waddington",
+   "Pearson",
+   "2020",
+   "5th",
+   "978-1-292-32176-9",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "http://nguyendinhthanh.com",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "PUBLIC RELATIONS",
+   "Tom Kelleher",
+   "Oxford University Press, USA",
+   "2020",
+   "2th",
+   "9780190925109",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Public Relations and Online Engagement: Audiences, Fandom and Influencers",
+   "Amber L. Hutchins, Natalie T. J. Tindall",
+   "Routledge",
+   "2021",
+   "",
+   "978-0-429-32709-4",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Public Relations: Strategies and Tactics",
+   "WILCOX & CAMERON",
+   "Pearson",
+   "2015",
+   "11th",
+   "9781292056586",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Public Relations: Strategies and Tactics",
+   "WILCOX & CAMERON",
+   "Pearson",
+   "2025",
+   "",
+   "9781292483252",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 Giáo trình (ưu tiên mua sách mới)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the history, basic concepts, principles of effective public relations, and the main theories of public relations across the business, government and not-for-profit sectors"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Develop and execute a public relations campaign that responds to the need of the organization, using appropriate (AI) tools, tactics and writing skills."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Enhance the skills to communicate effectively to different audiences"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify, analyse and evaluate strategic public relations campaigns across a wide range of media and communication disciplines"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Evaluate how team roles and processes contribute to team performance"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Identify how to act ethically and professionally, and be accountable when conducting a professional communication campaign"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Agumentive Essay",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "in class",
+   "CLO1, CLO2, CLO4, CLO6",
+   "Essay",
+   "1",
+   "",
+   "Type: Individual Report (with mandatory in-class)\n\nLength: 2,500–3,000 words (excluding appendices, figures, and references)\n\nThis assignment requires students to research, critically analyze, and apply AI tools to a specific PR topic, chosen from the list provided. (\n\nThe objective is to deepen understanding of PR concepts, frameworks, and best practices, while exploring how AI can assist in planning, execution, and evaluation.\n\nStudents must use AI in class to create a tangible output (e.g., press release draft, stakeholder map, crisis simulation Q&A, message testing results).\n\nThe topic assigned by the lecturer\n\nChoose one from the following essay topics:\n\nTopic 1: AI-Enhanced Press Release Production\n\nObjective: Develop a consistent press kit (press release, spokesperson quotes...).\n\nIn-Class AI room:\n\nUse a 200–300-word brief; generate a draft press release with AI, then manually fact-check and edit.\n\nDeliverable: Completed press kit + side-by-side comparison of AI draft vs. final version + fact-check criteria.\n\nTopic 2: Eersonalized Media Pitches with AI\n\nObjective: Tailor pitches to individual journalists based on beat and interests.\n\nIn-Class AI Lab:Input 3 journalist profiles/ Media Channels ; use AI to write 3 subject lines + 1 tailored email pitch per journalist;\n\nDeliverable: Pitch set + personalization rationale + ethical compliance checklist.\n\nTopic 3: AI-Powered Stakeholder Mapping\n\nObjective: Segment and prioritize stakeholders based on influence and interest.\n\nIn-Class:\n\nProvide a list of sample stakeholders; use AI to cluster and assign strategies based on a Power/Interest grid.\n\nDeliverable: Stakeholder map + key messages per group + engagement plan.",
+   "The essay topics should be updated or different at least 30% to the previous ones."
+  ],
+  [
+   "2",
+   "Class Participation and Preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "in class",
+   "CLO6",
+   "",
+   "",
+   "",
+   "Based on student's performance;",
+   ""
+  ],
+  [
+   "3",
+   "PR Campaign",
+   "on-going",
+   "1",
+   "40.0%",
+   ">0",
+   "in class and homework",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Group Report",
+   "1",
+   "",
+   "Duration: 4 Weeks\n\nType: Group Project (Max 5 members)\n\nDeliverables: Written Report / Campaign Proposal + Presentation\n\nTask Description:\n\nTask Description\n\nStudents will work as if they are part of a public relations agency tasked with creating and delivering a comprehensive PR campaign for a real-life organization’s product, service, or NGO cause.\n\nEach group will either:\n\n1. Work with a real client – meet face-to-face, take a campaign brief, and develop industry-ready PR materials.\n\n2. Select from a provided list of current issues and associated organizations, then design a campaign addressing the chosen issue.\n\n3. Organize an event for an NGO (Combo 2 – event execution + media communication).\n\nThe campaign must demonstrate strategic thinking, creativity, and measurable impact, and must integrate AI tools in the planning or execution stage (e.g., AI-assisted audience analysis, media content creation, sentiment monitoring, risk assessment).\n\n---\n\nCampaign Proposal Requirements (Minimum)\n\n1. Executive Summary – concise overview of the campaign’s concept, objectives, and expected impact.\n\n2. Situation Analysis – including SWOT/PESTLE, media audit, and AI-generated or AI-assisted insights (must be verified for accuracy).\n\n3. Target Audience & Key Stakeholders – supported by stakeholder mapping; AI tools can be used for segmentation and persona development.\n\n4. Campaign Goal – broad, overarching aim.\n\n5. SMART Objectives – specific, measurable, achievable, relevant, time-bound.\n\n6. Key Messages – clear, consistent, and aligned with the brand voice.\n\n7. Strategies & Tactics – using PR frameworks (e.g., PESO model), including:\n\nElectronic/Interactive Media Kit (press releases, photographs, glossaries, fact sheets, FAQs, executive profiles, videos).\n\nPrint Materials (posters, flyers).\n\nDigital Media Platforms (blogs, social media, newsletters, e-magazines).\n\nEvent execution and promotional elements.\n\n8. Risk Analysis – including AI-generated scenario testing (optional) and contingency planning.\n\n9. Budget – realistic, justified allocations.\n\n10. Evaluation Plan – measurement and KPIs\n\n---\n\nExecution Phase\n\nMay include PR materials, events, influencer partnerships, media outreach, social media activations, and stakeholder engagement activities.\n\nAI tools may be used to design creative assets, automate scheduling, or analyze campaign performance—but must be transparently reported.\n\n---\n\nNotes\n\nStudents must demonstrate strong knowledge of PR theories and their application to real-world scenarios.\n\nCampaign planning and execution should reflect critical thinking, creativity, and ethical responsibility.\n\nStudents may choose to focus on one PR dimension:\n\nCorporate PR\n\nBranding PR Activities\n\nPersonal PR\n\nPublic Interest PR\n\nAI is to be treated as a support tool—human strategy and decision-making remain central. All AI outputs must be fact-checked before inclusion.",
+   "The mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark."
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Multiple choice questions",
+   "50",
+   "",
+   "The questions will cover the lectures, class discussions, activities, exercises, and textbook.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nCourse overview & introduction\nOverview of course assessment",
+   "Offline",
+   "CLO1",
+   "I",
+   "- Syllabus\n- Slides",
+   "PRE301_Phần 1",
+   "Read syllabus",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Defining Public Relations (Part 1)",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "Slides Chapter 1;\n\nTextbook Chapter 1",
+   "PRE301_Phần 2",
+   "Read Slides Chapter 1;\nTextbook Chapter 1;",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Defining Public Relations (Part 2)\nDiscussion 1: Principled Public Relations Management",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "Slides Chapter 1 (Part 2);\nReference book 1 Chapter 1",
+   "",
+   "Read Slides Chapter 1;\nReference book 1 Chapter 1\nDiscussion\nQ&A",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Defining Public Relations (Part 3)\nDiscussion 1: Principled Public Relations Management",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "Slides Chapter 1;\nReference book 1 Chapter 1;\nTextbook Chapter 1",
+   "",
+   "Read Slides Chapter 1;\nTextbook 1 Chapter 1\nRefences book 1 Chapter 1\nDiscussion\nQ&A",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: The Evolution and History of Public Relations (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Slides Chapter 2;\nTextbook Chapter 2;",
+   "",
+   "Read Slides Chapter 2;\nTextbook Chapter 2;\nDiscussion\nQ&A",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: The Evolution and History of Public Relations (Part 2)\nDiscussion 2: Public Relations Model through the Ages",
+   "Offline",
+   "LO1, LO2",
+   "T",
+   "Slides Chapter 2;\nTextbook Chapter 2;\nReference book 1 Chapter 2",
+   "",
+   "Read Slides Chapter 2;\nTextbook Chapter 2;\nReference book 1 Chapter 2",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: The Evolution and History of Public Relations (Part 3)\nDiscussion 3: Working with media",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Slides Chapter 2;\nTextbook Chapter 2;\nReference book 2 Chapter 2",
+   "",
+   "Read Slides Chapter 2;\nTextbook Chapter 2;\nReference book 1 Chapter 2",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3: Ethical Considerations and the Role of Professional Bodies (Part 1)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6",
+   "T",
+   "Slides Chapter 3;\nTextbook Chapter 3;",
+   "",
+   "Read Slides Chapter 3;\nTextbook Chapter 3;",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3: Ethical Considerations and the Role of Professional Bodies (Part 2)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6",
+   "T",
+   "Slides Chapter 3;\nTextbook Chapter 3;",
+   "",
+   "Read Slides Chapter 3;\nTextbook Chapter 3;",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4: The context of public relations (Part 1)\nDiscussion 4: Community and society: CSR",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "T",
+   "Reference book 2: Chapter 5",
+   "",
+   "Read Slides reference book 2: Chapter 5\nDiscussion\nQ & A",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4: The context of public relations (Part 2)\nDiscussion 5: Intercultural and multicultural context of public relations",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "T",
+   "Reference book 2: Chapter 6",
+   "",
+   "Read Slides reference book 2: Chapter 5\nDiscussion\nQ & A",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4: The context of public relations (Part 3)\nDiscussion 6 : Disinformation, fake news and social reality",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Reference book 2: Chapter 11",
+   "",
+   "Read Slides reference book 2: Chapter 11\nDiscussion\nQ & A",
+   ""
+  ],
+  [
+   "13",
+   "Argumentive Essay Introduction\n\nIntroduction to AI tools for PR content creation\nGuidance on how to adopt AI tools for PR content creation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Syllabus, textbook and reference book",
+   "",
+   "Discussion, Q & A\n\nLearn & Apply Essay Structure\nUse AI for Ideation\nRefine & Customize\nPeer Collaboration\nPresent & Reflect",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5: The Role and Scope of Research in Public Relations (Part 1)",
+   "Offline",
+   "CLO2",
+   "T",
+   "Slides Chapter 5;\nTextbook Chapter 5",
+   "",
+   "Read Slides Chapter 5;\nTextbook Chapter 5\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5: The Role and Scope of Research in Public Relations (Part 2)",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Slides Chapter 5;\nTextbook Chapter 5",
+   "",
+   "Read Slides Chapter 5;\nTextbook Chapter 5\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "16",
+   "Case study",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Slides Chapter 5;\nTextbook Chapter 5",
+   "",
+   "Read Slides Chapter 5;\nTextbook Chapter 5\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 6: The Public Relations Process (Part 1)",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Slides Chapter 6;\nTextbook Chapter 6",
+   "",
+   "Read Slides Chapter 6;\nTextbook Chapter 6\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 6: The Public Relations Process (Part 2)",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Slides Chapter 6;\nTextbook Chapter 6",
+   "",
+   "Read Slides Chapter 6;\nTextbook Chapter 6\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "19",
+   "Case study",
+   "Offline",
+   "CLO1, CLO2",
+   "T",
+   "Slides Chapter 6;\nTextbook Chapter 6",
+   "",
+   "Read Slides Chapter 6;\nTextbook 6\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 7: Communication Concepts and Practice in Public Relations (Part 1)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "T",
+   "Slides Chapter 7;\nTextbook Chapter 7",
+   "",
+   "Read Slides Chapter 7;\nTextbook Chapter 7\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 7: Communication Concepts and Practice in Public Relations (Part 2)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "T",
+   "Slides Chapter 7;\nTextbook Chapter 7",
+   "",
+   "Read Slides Chapter 7;\nTextbook Chapter 7\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 7: Communication Concepts and Practice in Public Relations (Part 2)",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "T",
+   "Slides Chapter 7;\nTextbook Chapter 7",
+   "",
+   "Read Slides Chapter 7;\nTextbook Chapter 7\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "23",
+   "Discussion 7: Implementation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Reference book 1 Chapter 7",
+   "",
+   "Read Reference book 1 Chapter 7\nTextbook Chapter 7",
+   ""
+  ],
+  [
+   "24",
+   "Group assignment: PR Campaign Introduction & Requirements",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Syllabus, textbook and reference book",
+   "",
+   "Read materials carefully\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 8: Evaluation and Measurement of Public Relations Programs (Part 1)",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 8;\nTextbook Chapter 8",
+   "",
+   "Read Slides Chapter 8;\nTextbook Chapter 8\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8: Evaluation and Measurement of Public Relations Programs (Part 2)",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 8;\nTextbook Chapter 8",
+   "",
+   "Read Slides Chapter 8;\nTextbook Chapter 8\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 8: Evaluation and Measurement of Public Relations Programs (Part 3)",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 8;\nTextbook Chapter 8",
+   "",
+   "Read Slides Chapter 8;\nTextbook Chapter 8\nDiscussion, Q & A",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 9: Public Opinion: Role, Scope, and Implications (Part 1)",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Chapter 9;\nTextbook Chapter 9",
+   "",
+   "Read Slides Chapter 9;\nTextbook Chapter 9",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 9: Public Opinion: Role, Scope, and Implications (Part 2)",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Chapter 9;\nTextbook Chapter 9",
+   "",
+   "Read Slides Chapter 9;\nTextbook Chapter 9",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 9: Public Opinion: Role, Scope, and Implications (Part 3)",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Chapter 9;\nTextbook Chapter 9",
+   "",
+   "Read Slides Chapter 9;\nTextbook Chapter 9",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 10: Conflict Management and Crisis Communication (part 1)",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Chapter 10;\nTextbook Chapter 10",
+   "",
+   "Read Slides Chapter 10;\nTextbook Chapter 10",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 10: Conflict Management and Crisis Communication (Part 2)",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Chapter 10;\nTextbook Chapter 10",
+   "",
+   "Read Slides Chapter 10;\nTextbook Chapter 10",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10: Conflict Management and Crisis Communication (Part 3)",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Chapter 10;\nTextbook Chapter 10",
+   "",
+   "Read Slides Chapter 10;\nTextbook Chapter 10",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 11: Audiences",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Chapter 11;\nTextbook Chapter 11",
+   "",
+   "Read Slides Chapter 11;\nTextbook Chapter 11",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 11: Audiences\nDiscussion 8: Public relations and the consumer",
+   "Offline",
+   "CLO5, CLO6",
+   "T",
+   "Slides Reference book 2 Chapter 18\nReference book 2 Chapter 18",
+   "",
+   "Read Slides Reference book 2 Chapter 18;\nReference book 2 Chapter 18\nDiscussion\nQ & A",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 13: Internet and Social Media: Role & Scope in Public Relations",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 13;\nTextbook Chapter 13",
+   "",
+   "Read Slides Chapter 13;\nTextbook Chapter 13",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 13: Internet and Social Media: Role & Scope in Public Relations",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 13;\nTextbook Chapter 13",
+   "",
+   "Read Slides Chapter 13;\nTextbook Chapter 13",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 13: Internet and Social Media: Role & Scope in Public Relations",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 13;\nTextbook Chapter 13",
+   "",
+   "Read Slides Chapter 13;\nTextbook Chapter 13",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 14: Media Relations Management: Print Media",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 14;\nTextbook Chapter 14",
+   "",
+   "Read Slides Chapter 14;\nTextbook Chapter 14",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 14: Media Relations Management: Print Media",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 14;\nTextbook Chapter 14",
+   "",
+   "Read Slides Chapter 14;\nTextbook Chapter 14",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 14: Media Relations Management: Print Media",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 14;\nTextbook Chapter 14",
+   "",
+   "Read Slides Chapter 14;\nTextbook Chapter 14",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 15: Media Relations Management: Electronic Media",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 15;\nTextbook Chapter 15",
+   "",
+   "Read Slides Chapter 15;\nTextbook Chapter 15",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 15: Media Relations Management: Electronic Media",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 15;\nTextbook Chapter 15",
+   "",
+   "Read Slides Chapter 15;\nTextbook Chapter 15",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 15: Media Relations Management: Electronic Media",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 15;\nTextbook Chapter 15",
+   "",
+   "Read Slides Chapter 15;\nTextbook Chapter 15",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 16: Event Management",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 16;\nTextbook Chapter 16",
+   "",
+   "Read Slides Chapter 16;\nTextbook Chapter 16",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 16: Event Management",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 16;\nTextbook Chapter 16",
+   "",
+   "Read Slides Chapter 16;\nTextbook Chapter 16",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 16: Event Management",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 16;\nTextbook Chapter 16",
+   "",
+   "Read Slides Chapter 16;\nTextbook Chapter 16",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 17: Communicating Corporate Affairs",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 17;\nTextbook Chapter 17",
+   "",
+   "Read Slides Chapter 17;\nTextbook Chapter 17",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 18: Public Relations in Entertainment, Sports, and Tourism\nDeadline PR Campaign report",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 18;\nTextbook Chapter 18",
+   "",
+   "Read Slides Chapter 18;\nTextbook Chapter 18",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 19: Public Relations in Government",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 19;\nTextbook Chapter 19",
+   "",
+   "Read Slides Chapter 19;\nTextbook Chapter 19",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 20: Global Public Relations in an Interdependent World",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 20;\nTextbook Chapter 20",
+   "",
+   "Read Slides Chapter 20;\nTextbook Chapter 20",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 21: Public Relations in Non-Profit, Health, and Education Sectors",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "T",
+   "Slides Chapter 21;\nTextbook Chapter 21",
+   "",
+   "Read Slides Chapter 21;\nTextbook Chapter 21",
+   ""
+  ],
+  [
+   "53",
+   "Revision",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources if any",
+   "",
+   "Revision/ Q&A",
+   ""
+  ],
+  [
+   "54",
+   "Revision",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Textbooks, workbooks, PPT presentation, and other resources if any",
+   "",
+   "Revision/ Q&A",
+   ""
+  ],
+  [
+   "55",
+   "PR Campaign Pitch Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "'- Syllabus\n- Slides",
+   "",
+   "Group presentation on the assignment\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "56",
+   "PR Campaign Pitch Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Student's slides",
+   "",
+   "Group presentation on the assignment\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "57",
+   "PR Campaign Pitch Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Student's slides",
+   "",
+   "Group presentation on the assignment\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "58",
+   "PR Campaign Pitch Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Student's slides",
+   "",
+   "Present",
+   ""
+  ],
+  [
+   "59",
+   "PR Campaign Pitch Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "'- Syllabus\n- Slides",
+   "",
+   "Group presentation on the assignment\nQ&A/ Discussions",
+   ""
+  ],
+  [
+   "60",
+   "PR Campaign Pitch Presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "'- Syllabus\n- Slides",
+   "",
+   "Group presentation on the assignment\nQ&A/ Discussions",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1.1",
+   "Could you distinguish between PR and journalism?"
+  ],
+  [
+   "2",
+   "2",
+   "QN2.1",
+   "Could you distinguish between PR and advertising?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.1",
+   "Could you distinguish between PR and marketing?"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "Could you analyse a PR campaign against the PR definitions' keywords?"
+  ],
+  [
+   "5",
+   "5",
+   "QN5.1",
+   "Could you list down some public relations tactics used in Vietnam during the ancient times?"
+  ],
+  [
+   "6",
+   "6",
+   "QN6.1",
+   "What are Grunig and Hunt's four models of public relations?"
+  ],
+  [
+   "7",
+   "8",
+   "QN8.1",
+   "Can you give some examples of unethical PR campaign?"
+  ],
+  [
+   "8",
+   "9",
+   "QN9.1",
+   "What are the consequences of unethical PR campaign?"
+  ],
+  [
+   "9",
+   "9",
+   "QN9.2",
+   "How to reduce such unethical activities in the society?"
+  ],
+  [
+   "10",
+   "11",
+   "QN11.1",
+   "How do you think about the role and functions of a public relations department?"
+  ],
+  [
+   "11",
+   "12",
+   "QN12.1",
+   "What is the difference between working in a department and working in a firm?"
+  ],
+  [
+   "12",
+   "12",
+   "QN12.2",
+   "What is the importance of research in public relations planning?"
+  ],
+  [
+   "13",
+   "16",
+   "QN16.1",
+   "How to determine the best method of reaching respondents?"
+  ],
+  [
+   "14",
+   "17",
+   "QN17.1",
+   "What are two approaches to planning?"
+  ],
+  [
+   "15",
+   "18",
+   "QN18.1",
+   "How many elements of a plan? Can you Describe the essentials of each element of a plan?"
+  ],
+  [
+   "16",
+   "20",
+   "QN20.1",
+   "What are five stages of how individuals adopt a new product or idea?"
+  ],
+  [
+   "17",
+   "21",
+   "QN21.1",
+   "How to identify communication objectives of a campaign?"
+  ],
+  [
+   "18",
+   "21",
+   "QN21.2",
+   "What is the purpose of evaluation?"
+  ],
+  [
+   "19",
+   "25",
+   "QN25.1",
+   "How to distinguish the measurement of different communication components?"
+  ],
+  [
+   "20",
+   "26",
+   "QN26.1",
+   "What are the most widely used methods for measuring & evaluating public relations efforts?"
+  ],
+  [
+   "21",
+   "27",
+   "QN27.1",
+   "How important is the implications of public opinion for public relations?"
+  ],
+  [
+   "22",
+   "27",
+   "QN27.2",
+   "What is the crucial role of opinion leaders in public discourse?"
+  ],
+  [
+   "23",
+   "28",
+   "QN28.1",
+   "Can you show some key theories explaining the role of mass media?"
+  ],
+  [
+   "24",
+   "29",
+   "QN29.1",
+   "what are key factors in persuasion? how to Identify major considerations in conducting ethical persuasive campaigns?"
+  ],
+  [
+   "25",
+   "30",
+   "QN30.1",
+   "How important is the role of public relations in managing conflict?"
+  ],
+  [
+   "26",
+   "31",
+   "QN31.2",
+   "What are two basic principles of strategic conflict management?"
+  ],
+  [
+   "27",
+   "32",
+   "QN32.1",
+   "Why is the issues management process considered as a key public relations contribution?"
+  ],
+  [
+   "28",
+   "32",
+   "QN32.2",
+   "How close is the relationship between the conflict stance and the communication strategy?"
+  ],
+  [
+   "29",
+   "33",
+   "QN33.1",
+   "How many important steps to deal with a crisis as it occurs?"
+  ],
+  [
+   "30",
+   "33",
+   "QN33.2",
+   "How to define reputation and the role public relations plays in image repair?"
+  ],
+  [
+   "31",
+   "37",
+   "QN37.1",
+   "How to make public relations campaigns directed to specific audiences?"
+  ],
+  [
+   "32",
+   "38",
+   "QN38.1",
+   "What are the characteristics of various age groups?"
+  ],
+  [
+   "33",
+   "38",
+   "QN38.2",
+   "What are the characteristics of various lifestyle groups?"
+  ],
+  [
+   "34",
+   "44",
+   "QN44.1",
+   "How to organize and design an effective website?"
+  ],
+  [
+   "35",
+   "44",
+   "QN44.2",
+   "Can you show some way to use social media and networking as public relations tactics?"
+  ],
+  [
+   "36",
+   "44",
+   "QN44.3",
+   "What do you think about the potential of mobile-enabled content to reach future audiences?"
+  ],
+  [
+   "37",
+   "47",
+   "QN47.1",
+   "How to write a standard or multimedia news release?"
+  ],
+  [
+   "38",
+   "47",
+   "QN47.2",
+   "What are the components of a good publicity photo?"
+  ],
+  [
+   "39",
+   "47",
+   "QN47.3",
+   "How to prepare media kits, media advisories, and fact sheets?"
+  ],
+  [
+   "40",
+   "48",
+   "QN48.1",
+   "What is the difference between strategy of product placement on television shows and Printed Media?"
+  ],
+  [
+   "41",
+   "48",
+   "QN48.2",
+   "How to prepare video news releases?"
+  ],
+  [
+   "42",
+   "49",
+   "QN49.1",
+   "Have you ever organise a meeting? Can you tell about the logistics that an organizer should prepare for a meeting?"
+  ],
+  [
+   "43",
+   "49",
+   "QN49.2",
+   "What are the multiple aspects of organizing a convention?"
+  ],
+  [
+   "44",
+   "49",
+   "QN49.3",
+   "How many basic elements of a trade show should an organizer understand?"
+  ],
+  [
+   "45",
+   "49",
+   "QN49.4",
+   "How to make promotional events attract attention of audience?"
+  ],
+  [
+   "46",
+   "53",
+   "QN53.1",
+   "What are the work of public relations personnel in the tourism industry? Can you describe them?"
+  ],
+  [
+   "47",
+   "54",
+   "QN54.1",
+   "How important is the major role of NGOs in shaping public opinion?"
+  ],
+  [
+   "48",
+   "54",
+   "QN54.2",
+   "How do the variety of nonprofit organizations rely on public relations to achieve their goals?"
+  ]
+ ],
+ "links": [
+  "/download/13450/S/1_PRE301_Phần 1.zip",
+  "/download/13450/S/2_PRE301_Phần 2.zip"
+ ]
+}

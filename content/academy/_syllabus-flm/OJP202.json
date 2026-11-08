@@ -1,0 +1,385 @@
+{
+ "ma": "OJP202",
+ "sylID": "5007",
+ "quyetDinh": "796/QĐ-ĐHFPT dated 07/21/2021",
+ "ungVien": [
+  {
+   "sylID": "5007",
+   "code": "OJP202",
+   "name": "On-the-job Training/Đào tạo trong môi trường thực tế",
+   "active": true,
+   "approved": true,
+   "decision": "796/QĐ-ĐHFPT dated 07/21/2021"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=5007",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "5007",
+  "Syllabus Name": "On-the-job Training/Đào tạo trong môi trường thực tế",
+  "Course Name English": "",
+  "Subject Code": "OJP202",
+  "Learning-Teaching Method": "Active learning,Cooperative Learning,Student-centered theory,Practice,discussion,groupwork",
+  "NoCredit": "10",
+  "Degree Level": "Cử nhân (bachelor)",
+  "Time Allocation": "14 weeks, 560 hours",
+  "Pre-Requisite": "Hoàn thành 90% tổng số tín chỉ từ học kì 1 đến học kì 5 (không tính phần Giáo dục Quốc phòng và Giáo dục thể chất)",
+  "Description": "Vị trí môn học trong Chương trình: Là một giai đoạn học tập, trải nghiệm thực tế tại doanh nghiệp. Môn học được triển khai sau khi sinh viên đã được trang bị kiến thức thực hành tiếng ở giai đoạn trung cấp (gần đạt chuẩn tương đương N2), được trang bị các kiến thức và kĩ năng cơ bản trong giao tiếp với đối tác Nhật Bản, về đất nước và văn hoá Nhật Bản. Trên các cơ sở này, sinh viên tập sự giao lưu, rèn luyện theo định hướng rèn luyện nghề nghiệp trong môi trường thực tế.\n\nMục tiêu của môn học:\n\n- Giúp sinh viên áp dụng các kiến thức, kĩ năng thực hành tiếng vào thực tế giao tiếp và làm việc với đối tác Nhật (hoặc có yếu tố liên quan đến Nhật Bản) giúp rèn luyện tinh thần, thái độ làm việc nghiêm túc, tính kỉ luật và lao động chuyên nghiệp, bước đầu tạo dựng và phát triển các mối quan hệ xã hội cho nghề nghiệp sau khi tốt nghiệp.\n\n- Qua môi trường thực tế, củng cố các kiến thức tiếng một cách vững vàng để học tiếp các môn học chuyên sâu của ngành học trong nửa cuối giai đoạn đào tạo tại trường, trong đó, có việc xác nhận khả năng, chí hướng để giúp lựa chọn tốt hơn các môn học trong các combo theo từng định hướng nghề nghiệp cho tương lai.\n\nHình thức triển khai:\n\nSinh viên được đào tạo thực hành tại các cơ quan, tổ chức, doanh nghiệp ... đã có kí kết với Nhà trường, có sự kết hợp chặt chẽ giữa đơn vị tiếp nhận đào tạo và đại diện Nhà trường (Phòng Công tác sinh viên). Tại môi trường thực tế, sinh viên được giao nhiệm vụ, có người trực tiếp quản lí, theo dõi, đánh giá về tinh thần, thái độ cũng như khả năng làm việc của sinh viên. Kết thúc môn học, sinh viên được nhận chứng chỉ hoàn thành khoá học (03.22-BM/ĐH/HDCV/FPTU) và có phản hồi về môi trường làm việc (03.44-BM/ĐH/HDCV/FPTU).",
+  "StudentTasks": "- Cố gắng nỗ lực để rèn luyện tốt trong môi trường thực tế.\n\n- Hoàn thành các công việc (được quản lí trực tiếp giao) một cách nghiêm túc, luôn học hỏi để hoàn thiện bản thân trong môi trường thực tế.\n\n- Giao lưu tốt với đồng nghiệp, phát huy tối đa kiến thức, kĩ năng thực hành tiếng, khả năng làm việc nhóm và kiếm nghiệm thực tế các kiến thức, kĩ năng được học trong môi trường giảng đường vào thực tiễn.\n\n- Chuẩn bị nền tảng kiến thức, kinh nghiệm, điều kiện tốt hơn cho việc tiếp tục học tập tại trường và hoàn hành tốt các môn học tiếp theo, chuẩn bị cơ sở cho công việc, nghề nghiệp sau khi tốt nghiệp.\n\n- Tự đánh giá về bản thân đồng thời có ý kiến phản hồi với Nhà trường về điều kiện, môi trường được đào tạo. (03.44-BM/ĐH/HDCV/FPTU)",
+  "Tools": "- Theo tinh thần OJT, môn học không sử dụng Giáo trình.\n\n- Tại các đơn vị tiếp nhận, sinh viên có thể được cung cấp thêm thêm các tài liệu, tư liệu,..bổ sung kiến thức có liên quan đến lĩnh vực được đào tạo, rèn luyện.\n\n- Ngoài ra, sinh viên cần tận dụng thêm các nguồn học liệu mở, các kiến thức bổ trợ cho nghề nghiệp được đăng tải trên các trang mạng liên quan để bổ sung thêm kiến thức, thông tin, tăng hiệu quả cho công tác học tập và rèn luyện.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "796/QĐ-ĐHFPT dated 07/21/2021",
+  "IsApproved": "True",
+  "Note": "1) Quá trình đào tạo của sinh viên được theo dõi, quản lí và đánh giá của đơn vị tiếp nhận qua 3 giai đoạn:\n\n- Cơ sở lấy xác nhận của doanh nghiệp về việc tiếp nhận sinh viên thực tập trong thời gian 1 tháng tính từ thời điểm học kỳ OJT bắt đầu.\n\n- Cơ sở lấy đánh giá của doanh nghiệp về OJT của sinh viên vào tuần cuối của tháng thứ 2 và lấy ý kiến đánh giá của sinh viên về nơi thực tập vào đầu tháng thứ 3 của kỳ thực tập.\n\n- Cơ sở tiến hành lấy ý kiến đánh giá của doanh nghiệp về kết quả thực tập của sinh viên trong tháng cuối cùng của học kỳ OJT.\n\n2) Chứng chỉ hoàn thành khoá học được cấp cho sinh viên muộn nhất 3 tháng sau kết thúc học kì OJT. (theo mẫu 03.22-BM/ĐH/HDCV/FPTU)",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "7/21/2021"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Hướng dẫn quản lý thực tập\n\n(07.04PL - HDCV Quan ly thuc tap)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "Phiếu khảo sát doanh nghiệp về sinh viên thực tập\n\n(07.16BMĐHFE10- Khảo sát doanh nghiệp về sinh viên thực tập)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Phiếu Khảo sát sinh viên về kỳ thực tập\n\n(07.17BMĐHFE10- Khao sat sinh vien ve ky thuc tap)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Phiếu đánh giá sinh viên kỳ OJT",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "Tài liệu bổ trợ cho công tác đào tạo do từng đơn vị tiếp nhận cung cấp (nếu có)",
+   "Tài liệu nội bộ của đơn vị tiếp nhận",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Các trang web có liên quan đến công việc đảm nhiệm tại đơn vị thực tập",
+   "Tài liệu phổ biến theo từng ngành nghề thực tập",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Kiến thức, kĩ năng chuyên môn:\nVận dụng được các kiến thức, kĩ năng đã học để hoàn thành tốt công việc được giao.\n(専門知識を仕事によく応用でき、 仕事が効率的に実施できた）"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Kĩ năng mềm:\nCó khả năng nắm bắt và xử lí tình huống trong công việc, sử dụng được tiếng Anh cho công việc khi cần thiết\n(受入期間の文化や仕事に対する順応性があり、英語知識をいかせ、常に適切な処理方法が適用できた、等）"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Thái độ với công việc:\nTuân thủ kỉ luật, có tác phong làm việc nghiêm túc, có tinh thần phối hợp làm việc nhóm ...\n( 仕事への態度:勤勉さ・時間厳守・チームワーキング等）"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Kĩ năng mềm:",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "560",
+   "LO2",
+   "Các tình huống cu thể trong công việc",
+   "Các nhiệm vụ cụ thể cần giải quyết",
+   "Các kiến thức mềm, các kĩ năng được học trong môi trường đại học và khả năng thích ứng của từng sinh viên",
+   "Theo đặc thù của từng loại công việc. và yêu cầu của nơi thực tập, được phản ánh vào Phiếu đánh giá Sinh viên (03.18-BM/ĐH/HDCV/FPTU- có chỉnh sửa mới)",
+   ""
+  ],
+  [
+   "2",
+   "Kiến thức, kĩ năng chuyên môn:",
+   "on-going",
+   "1",
+   "40.0%",
+   "4",
+   "560",
+   "LO1",
+   "Các nhiệm vụ cụ thể được giao cho sinh viên theo trên cơ sở kiến thức và kĩ năng ngành có được",
+   "Các yếu tố cấu thành từng nhiệm vụ",
+   "Các kiến thức thực hành tiếng và kiến thức kĩ năng chuyên ngành (văn hóa, ngôn ngữ...) được đào tạo từ học kì 1 ~ học kì 5 trong nội dung của Chương trình học",
+   "Theo đặc thù của từng loại công việc của của nơi thực tập, được phản ánh vào Phiếu đánh giá Sinh viên (03.18-BM/ĐH/HDCV/FPTU- có chỉnh sửa mới)",
+   ""
+  ],
+  [
+   "3",
+   "Thái độ với công việc:",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "560",
+   "LO3",
+   "Các quy định, qui chế tai nơi làm việc",
+   "Các thành phần cụ thể của từng qui định, qui chế",
+   "Dựa trên xác nhận của người trực tiếp quản lí và theo phong cách làm việc, qui định của đơn vị tiếp nhận",
+   "Theo phong cách và đặc thù của từng nơi tiếp nhận, được phản ánh vào Phiếu đánh giá Sinh viên (03.18-BM/ĐH/HDCV/FPTU- có chỉnh sửa mới)",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Sinh viên đến cơ sở tiếp nhận, làm quen với môi trường mới, nhận việc, bắt đầu triển khai giai đoạn thực tập tại đơn vị và thực hành rèn luyện nghề nghiệp từ người trực tiếp quản lí, hướng dẫn.",
+   "Offline",
+   "1",
+   "1",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "2",
+   "Sinh viên chính thức làm việc theo nhiệm vụ được giao, người trực tiếp quản lí bước đầu cùng làm việc, giao việc, và hướng dẫn cụ thể, giải đáp các thắc mắc (nếu có) của sinh viên.",
+   "Offline",
+   "2",
+   "2",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "3",
+   "Sinh viên tiếp tục làm việc theo nhiệm vụ được giao dưới sự hướng dẫn của người trực tiếp quản lí.",
+   "Offline",
+   "3",
+   "3",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "4",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "4",
+   "4",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "5",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "5",
+   "5",
+   "LO2, LO3",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "6",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "6",
+   "6",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "7",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "7",
+   "7",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "8",
+   "Sinh viên làm việc theo nhiệm vụ được giao\n\nPhía đơn vị tiếp nhận báo cáo về công tác tiếp nhận, tinh hình thực tế tại nơi làm việc, tinh thần, thái độ, khả năng thích ứng của sinh viên trong môi trường đào tạo thực tế (03.18-BM/ĐH/HDCV/FPTU).",
+   "Offline",
+   "8",
+   "8",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "9",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "10",
+   "10",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).\n\n- Ref [3]: Phiếu khảo sát sinh viên về kỳ thực tập",
+   ""
+  ],
+  [
+   "10",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "9",
+   "9",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "11",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "11",
+   "11",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "12",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "12",
+   "12",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "13",
+   "Sinh viên làm việc theo nhiệm vụ được giao.",
+   "Offline",
+   "13",
+   "13",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ],
+  [
+   "14",
+   "Tổng kết công tác nơi làm việc, đánh giá chung của dơn vị và ý kiến của sinh viên về giai đoạn thực tập.",
+   "Offline",
+   "14",
+   "14",
+   "LO1, LO2, LO3,",
+   "",
+   "Tài liệu bổ trợ do đơn vị tiếp nhận cung cấp (nếu có) và các tài liệu tra cứu trên mạng (tùy tình hình cụ thể của từng sinh viên và từng nhóm làm việc).",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

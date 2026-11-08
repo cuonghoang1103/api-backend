@@ -1,0 +1,1138 @@
+{
+ "ma": "SDP201",
+ "sylID": "13695",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13695",
+   "code": "SDP201",
+   "name": "Sound Production_Sản xuất âm thanh",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13695",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13695",
+  "Syllabus Name": "Sound Production_Sản xuất âm thanh",
+  "Course Name English": "Sound Production",
+  "Subject Code": "SDP201",
+  "Learning-Teaching Method": "Lecture,Presenting,Social Constructivism,Practice,Discussion,Groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 105h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course provides an introduction to the fundamental techniques and principles needed for working with audio devices (microphones, mixers, etc.) and audio-editing applications such as Adobe Audition. Students will learn how to record audio, perform voice-over, create foley, and edit and mix sound for various media formats, including short films, animated films, TVCs, and viral videos.\nAs a multimedia course, students will develop an understanding of sound aesthetics, musicality, vocal performance, and critical listening. Through regular listening exercises and class critiques, students will enhance their ability to analyze and evaluate sound in different media products.\nThe course also introduces students to AI tools that support audio processing and voice simulation (text-to-speech), helping them optimize their workflow during production.\nObjective: Upon completing this course, students will be able to create soundtracks for movies, TVCs, animated films, and other media products, and effectively use AI tools such as text-to-speech engines and Adobe Audition’s AI-powered features.",
+  "StudentTasks": "- Students must attend at least 80% of total class hours to be eligible for the final examination.\n- Actively participate in all class activities.\n- Complete all tasks assigned by the instructor after class.\n- Use personal laptops only for learning purposes during class time.\n- Read the textbook in advance before each session.",
+  "Tools": "- Internet\n- Adobe Audition",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Recording and Producing Audio for Media, Cengage Learning",
+   "Stanley R. Alten",
+   "Pearson.",
+   "2012",
+   "",
+   "9781435460652",
+   "True",
+   "False",
+   "True",
+   "Link: https://library.books24x7.com/toc.aspx?bookid=42741"
+  ],
+  [
+   "2",
+   "Websites:\n- https://www.youtube.com/watch?v=s8uIFlfo4rc&list=PLF323DDC21E6DC960\n- https://www.lynda.com/learning-paths/Audio-Music/produce-audio-for-film-and-video-projects\n- https://www.lynda.com/learning-paths/Video/become-a-video-production-crewmember\n- https://www.udemy.com/adobe-audition-cc-audio-production-course-basics-to-expert",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Generative AI Content Creation: https://www.coursera.org/learn/generative-ai-content-creation?msockid=3a69b956ec2d6e9d05b7a8feed3f6f5",
+   "Coursera",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the technical principles of audio production workflows and equipment, and relate these principles to the effective use of digital audio production tools."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyze sounds elements used in media products, such as cartoons, short films, TVC, and viral videos, to understand and evaluate the aesthetic and functions of sound."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply sound theories, methods, and technical equipment to perform audio correction, editing, and mixing tasks in Adobe Audition."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Use audio effects in Adobe Audition and apply AI tools to optimize efficiency in audio production across various media formats, including podcasts, cartoons, films, TVCs, and viral videos."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Design and produce audio for complete media products, and evaluate the quality, clarity, and effectiveness of the edited sound through appropriate effects and production techniques in Adobe Audition."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Demonstrate a professional working attitude, autonomy in task execution, and effective teamwork when performing sound design, editing, and production activities."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "in class and homework",
+   "CLO1, CLO2, CLO3",
+   "Individual project",
+   "Essay and presentation",
+   "Lecturer assesses students’ TVC sound design developed in class. Students must complete a 1-minute TVC sound.",
+   "- Record and process sound effects\n\n- Harmonize and mix audio elements for a TVC",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "25.0%",
+   ">0",
+   "in class and homework",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "Individual project",
+   "Essay and presentation",
+   "Lecturer assesses students’ animated film sound design developed in class. Students must complete a 10-second animated film sound.",
+   "- Record and process sound effects\n\n- Harmonize and mix audio for an animated film",
+   ""
+  ],
+  [
+   "3",
+   "Final Project",
+   "on-going",
+   "1",
+   "45.0%",
+   ">0",
+   "in class and homework",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Group project",
+   "Report and presentation",
+   "Lecturer assesses students’ film sound design developed in class. Students must complete a 10-second film sound.",
+   "- Record and process sound effects\n\n- Harmonize and mix audio for a film\n\n- Apply corrections, effects, and sound aesthetics",
+   ""
+  ],
+  [
+   "4",
+   "Participation & Preparation & Practice",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "in class",
+   "CLO6",
+   "",
+   "",
+   "Evaluation based on learners’ preparation, class interaction, and completion of practice tasks.",
+   "Recording and processing sound effects in class activities.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the Course and Overview of Course and Requirements",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "IT",
+   "- Read Chapter 1\n- Read slides: Chapter 1",
+   "SDP201",
+   "Review Chapter 1\nDiscussion.",
+   ""
+  ],
+  [
+   "2",
+   "PART I: PRINCIPLES\nChapter 1: Sound and Hearing\n- The Importance of Sound in Production",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "IT",
+   "- Read Chapter 1\n- Read slides: Chapter 1",
+   "SDP201",
+   "Review Chapter 1\nDiscussion.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Sound and Hearing\n- The Sound Wave\n- Frequency and Pitch\n- Amplitude and Loudness\n- Frequency and Loudness\n- Velocity\n- Wavelength",
+   "Offline",
+   "CLO1, CLO2",
+   "I,T",
+   "Read slide chapter 1",
+   "",
+   "Review Chapter 1\nDiscussion, Exercises.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Sound and Hearing\n- Acoustical Phase\n- Timbre\n- Sound Envelope\n- The Healthy Ear\n- Hearing Loss",
+   "Offline",
+   "CLO1, CLO2",
+   "I,T",
+   "Read slide chapter 1",
+   "",
+   "Review Chapter 1\nDiscussion, Exercises.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Acoustics and Psychoacoustics\n- Direct, Early, and Reverberant Sound\n- Matching Acoustics to Program Material",
+   "Offline",
+   "CLO1, CLO2",
+   "I,T",
+   "Read slide: Chapter 2",
+   "",
+   "Review Chapter 2",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: Acoustics and Psychoacoustics\n- Studio Design\n- Control Room Design\n- Ergonomics",
+   "Offline",
+   "CLO1, CLO2",
+   "I,T",
+   "Read slide: Chapter 2",
+   "",
+   "Review Chapter 2",
+   ""
+  ],
+  [
+   "7",
+   "PART II: TECHNOLOGY\nChapter 4: Microphones\n- Operating Principles\n- General Transducer Performance Characteristics\n- Directional Characteristics\n- Sound Response",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Review chapter 4\nDo questions and problems at the end of the chapter 1",
+   "",
+   "Review Chapter 4",
+   ""
+  ],
+  [
+   "8",
+   "PART II: TECHNOLOGY\nChapter 4: Microphones\n- Microphone Modeler\n- Special-Purpose Microphones\n- Wireless Microphone System\n- Microphone Accessories\n- Microphone Care",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Review chapter 4\nDo questions and problems at the end of the chapter 1",
+   "",
+   "Review Chapter 4",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 6: Recording\n- Skip Navigation Links\n- Expand\n- Digital Audio\n- Technologies and Formats",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "- Read chapter 6\n- Read slides: Chapter 6",
+   "",
+   "Review Chapter 6",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 6: Recording\n- Tapeless Recording Systems\n- Removable-Media Recording Systems",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I,T",
+   "- Read chapter 6\n- Read slides: Chapter 6",
+   "",
+   "Review Chapter 6",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 6: Recording\n- Digital Audio Workstations\n- Digital Audio Networking",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Read slides: chapter 6",
+   "",
+   "- Review Chapter 6",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 6: Recording\n- Digital Audio on Digital Videotape\n- Audio on Film. Introduction to some audio software. Adobe Audition\n- Introduce some text-to-speech AI tools",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 6",
+   "",
+   "- Review Chapter 6\n- Practice text-to-speech Tools - compare to human-voice recording",
+   ""
+  ],
+  [
+   "13",
+   "Progress Test 1",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Read slides: chapter 9",
+   "",
+   "- Review Chapter 9",
+   ""
+  ],
+  [
+   "14",
+   "PART 3: PRODUCTION\nChapter 9: Sound and the Speaking Voice\n- Frequency Range\n- Sound Level\n- Distribution of Spectral Content\n- Influences of Nonverbal Speech on Meaning\n- Basic Considerations in Miking Speech",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Read slides: chapter 9",
+   "",
+   "- Review Chapter 9",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 10: Voice-Overs and Narration\n- Voice Acting",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Read slides: chapter 10",
+   "",
+   "- Review Chapter 10",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 10: Voice-Overs and Narration\n- Recording Voice-Overs\n- Narration",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Read slides: chapter 10",
+   "",
+   "- Review Chapter 10",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 11: Dialogue\n- Recording Dialogue in Multi- and Single-Camera Production\n- Recording Dialogue in the Field",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Read slides: chapter 11",
+   "",
+   "- Review Chapter 11",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 11: Dialogue\n- How Directors Can Help the Audio Crew\n- Production Recording and the Sound Editor\n- Automated Dialogue Replacement",
+   "Offline",
+   "CLO1, CLO2, CLO3",
+   "I, T, U",
+   "Read slides: chapter 11",
+   "",
+   "- Review Chapter 11",
+   ""
+  ],
+  [
+   "19",
+   "Progress Test 2",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 20",
+   "",
+   "- Review Chapter 20",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 20: Editing\n- Digital Editing\n- Basic Functions in Digital Editing\n- General Editing Guidelines\n- Introduce some AI sound processing tools",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 20",
+   "",
+   "- Review Chapter 20\n-Practice voice-processing AI Tools",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 20: Editing\n- Organizing the Edit Tracks\n- File Naming\n- Drive Management\n- Differences Between Editing Sound and Editing Picture",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 20",
+   "",
+   "- Review Chapter 20",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 20: Editing\n- Editing Speech\n- Editing Dialogue",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 20",
+   "",
+   "- Review Chapter 20",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 20: Editing\n- Editing Sound Effects\n- Editing Music",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 20",
+   "",
+   "- Review Chapter 20",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 20: Editing\n- Transitions\n- Listening Fatigue\n- Use AI Tools to optimize voice footage",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 20",
+   "",
+   "- Review Chapter 20\n- Practice generate sound footages by AI Tools",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 21: Mixing: An Overview\n- Maintaining Aesthetic Perspective",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 21",
+   "",
+   "- Review Chapter 21",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 21: Mixing: An Overview\n- Mixing for Various Media\n- Mixing Versus Layering",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 21",
+   "",
+   "- Review Chapter 21",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 21: Mixing: An Overview\n- Metering",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 21",
+   "",
+   "- Review Chapter 21",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 21: Mixing: An Overview\n- Mixing and Editing",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 21",
+   "",
+   "- Review Chapter 21",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 22: Music Mixdown\n- Preparing for the Mixdown\n- Signal Processing\n- Spatial Imaging of Music in Stereo and Surround Sound",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 22",
+   "",
+   "- Review Chapter 22",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 22: Music Mixdown\n- Basic Equipment for Mixing Surround Sound\n- Mixing for Surround Sound\n- Aesthetic Considerations in Surround-Sound Mixing",
+   "Offline",
+   "CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Read slides: chapter 22",
+   "",
+   "- Review Chapter 22",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 14: Sound Design\n- Sound Design and the Sound Designer\n- “Ears”\n- Elements of Sound Structure and Their Effects on Perception\n- The Visual Ear\n- Functions of Sound in Relation to Picture",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T, U",
+   "Read slides: chapter 14",
+   "",
+   "- Review Chapter 14",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 14: Sound Design - Strategies in Designing Sound\n- Designing Sound for Mobile Media",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T, U",
+   "Read slides: chapter 14",
+   "",
+   "- Review Chapter 14",
+   ""
+  ],
+  [
+   "33",
+   "Chapter: Foley\n- Overview\n- The Foley Stage\n- The Foley Artist",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T, U",
+   "Read slides: chapter 14",
+   "",
+   "- Review Chapter 14",
+   ""
+  ],
+  [
+   "34",
+   "Chapter: Foley\n- Footsteps\n- Props",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T, U",
+   "Read slides: chapter 14",
+   "",
+   "- Review Chapter 14",
+   ""
+  ],
+  [
+   "35",
+   "Chapter: Foley\n- The Foley Mixer",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 14",
+   "",
+   "- Review Chapter 14",
+   ""
+  ],
+  [
+   "36",
+   "Chapter: Foley\n- Foley Editing",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 14",
+   "",
+   "- Review Chapter 14",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 15: Sound Effects\n- Contextual Sound\n- Narrative Sound",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 15",
+   "",
+   "- Review Chapter 15",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 15: Sound Effects\n- Functions of Sound Effects",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 15",
+   "",
+   "- Review Chapter 15",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 15: Sound Effects\n- Producing Sound Effects",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 15",
+   "",
+   "- Review Chapter 15",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 15: Sound Effects\n- Live Sound Effects\n- Electronically Generated Sound Effects",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 15",
+   "",
+   "- Review Chapter 15",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 15: Sound Effects\n- Organizing a Sound-Effect Library",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 15",
+   "",
+   "- Review Chapter 15",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 15: Sound Effects\n- Spotting",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "I, T,U",
+   "Read slides: chapter 15",
+   "",
+   "- Review Chapter 15",
+   ""
+  ],
+  [
+   "43",
+   "Group presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "",
+   "",
+   "'- Do the presentation",
+   ""
+  ],
+  [
+   "44",
+   "Group presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "",
+   "",
+   "'- Do the presentation",
+   ""
+  ],
+  [
+   "45",
+   "Group presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "",
+   "",
+   "'- Do the presentation",
+   ""
+  ],
+  [
+   "46",
+   "Group presentation",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "",
+   "",
+   "'- Do the presentation",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 16: Music Underscoring\n- Uses of Music in a Production\n- Music Characteristics\n- Functions of Music Underscoring\n- Music in Spot Announcements",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 16",
+   "",
+   "- Review Chapter 16",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 16: Music Underscoring\n- Creative Considerations in Underscoring\n- Approaches to Underscoring",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 16",
+   "",
+   "- Review Chapter 16",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 16: Music Underscoring\n- Prerecorded Music Libraries\n- Customized Music Programs\n- Customized Musical Instrument Programs",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 16",
+   "",
+   "- Review Chapter 16",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 16: Music Underscoring\n- Copyright and Licenses\n- Using Music from Commercial Recordings\n- Using Music from Sample CDs and the Internet\n- Organizing a Music Library",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 16",
+   "",
+   "- Review Chapter 16",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 17: Audio for Interactive Media\n- Interactive Media",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 17",
+   "",
+   "- Review Chapter 17",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 17: Audio for Interactive Media\n- Designing Audio for Interactivity\n- System Resources",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 17",
+   "",
+   "- Review Chapter 17",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 17: Audio for Interactive Media\n- The Production Process",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 17",
+   "",
+   "- Review Chapter 17",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 17: Audio for Interactive Media\n- Example of a Video Game Sequence\n- Debugging\n- User Playback",
+   "Offline",
+   "CLO4, CLO5, CLO6",
+   "I, T,U",
+   "Read slides: chapter 17",
+   "",
+   "- Review Chapter 17",
+   ""
+  ],
+  [
+   "55",
+   "Individual presentation",
+   "Offline",
+   "CLO1-CLO6",
+   "U",
+   "",
+   "",
+   "- Do the presentation",
+   ""
+  ],
+  [
+   "56",
+   "Individual presentation",
+   "Offline",
+   "CLO1-CLO6",
+   "U",
+   "",
+   "",
+   "- Do the presentation",
+   ""
+  ],
+  [
+   "57",
+   "Individual presentation",
+   "Offline",
+   "CLO1-CLO6",
+   "U",
+   "",
+   "",
+   "- Do the presentation",
+   ""
+  ],
+  [
+   "58",
+   "Individual presentation",
+   "Offline",
+   "CLO1-CLO6",
+   "U",
+   "",
+   "",
+   "- Do the presentation",
+   ""
+  ],
+  [
+   "59",
+   "Individual presentation",
+   "Offline",
+   "CLO1-CLO6",
+   "U",
+   "",
+   "",
+   "- Do the presentation",
+   ""
+  ],
+  [
+   "60",
+   "Individual presentation",
+   "Offline",
+   "CLO1-CLO6",
+   "U",
+   "",
+   "",
+   "- Do the presentation",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "QN2.1",
+   "What do we learn in SDP201?"
+  ],
+  [
+   "2",
+   "3",
+   "QN3.1",
+   "How about the assessment in SDP201?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.2",
+   "How do you think about the criteria of excellent marks in SDP201?"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "Describing The Healthy Ear"
+  ],
+  [
+   "5",
+   "5",
+   "QN5.1",
+   "How to reduce the noise and unwanted sounds in the rooms?"
+  ],
+  [
+   "6",
+   "5",
+   "QN6.1",
+   "What is the difference between sound reflection, diffusion and absorption?"
+  ],
+  [
+   "7",
+   "7",
+   "QN7.1",
+   "What are the pollarn patterns of microphones in the smartphones?"
+  ],
+  [
+   "8",
+   "8",
+   "QN8.1",
+   "Are the more expensive mobile phones better for sound recording than the cheap ones?"
+  ],
+  [
+   "9",
+   "9",
+   "QN9.1",
+   "The tips when using mobile phones for audio recording?"
+  ],
+  [
+   "10",
+   "10",
+   "QN10.1",
+   "How to reduce the noise while and after recording?"
+  ],
+  [
+   "11",
+   "11",
+   "QN11.1",
+   "Do we need any special application for recording on smartphone and why?"
+  ],
+  [
+   "12",
+   "12",
+   "QN12.1",
+   "What are the types of recording devices on the market?"
+  ],
+  [
+   "13",
+   "12",
+   "QN14.1",
+   "Can you tell us some important notes on recording voice using Adobe Audition?"
+  ],
+  [
+   "14",
+   "16",
+   "QN16.1",
+   "What have you learned from clips instructions on Adobe Audition?"
+  ],
+  [
+   "15",
+   "17",
+   "QN17.1",
+   "What have you learned from clips instructions on Adobe Audition?"
+  ],
+  [
+   "16",
+   "18",
+   "QN18.1",
+   "How to define the quality of a sound recording?"
+  ],
+  [
+   "17",
+   "20",
+   "QN20.1",
+   "What are the differences in sounds used in cartoons, short films, TVC?"
+  ],
+  [
+   "18",
+   "21",
+   "QN21.1",
+   "The process of noise reduction in a recording using Adobe Audition?"
+  ],
+  [
+   "19",
+   "22",
+   "QN22.1",
+   "How about some tips of the changing pitch in Adobe Audition?"
+  ],
+  [
+   "20",
+   "23",
+   "QN23.1",
+   "How do we edit a vocal?"
+  ],
+  [
+   "21",
+   "24",
+   "QN24.1",
+   "Can we use Adobe Audition to change the pitch of voice and how to do it?"
+  ],
+  [
+   "22",
+   "24",
+   "QN24.2",
+   "How about some tips of adjusting EQ and reverberatiton for vocal in Adobe Audition?"
+  ],
+  [
+   "23",
+   "25",
+   "QN25.1",
+   "How do we define a successful mixing sound?"
+  ],
+  [
+   "24",
+   "26",
+   "QN26.1",
+   "Can you hear the difference between analog, digital linear and compressed sound examples?"
+  ],
+  [
+   "25",
+   "27",
+   "QN27.1",
+   "What are the popular audio formats?"
+  ],
+  [
+   "26",
+   "28",
+   "QN28.1",
+   "What are the audio compression standards? How does compression affect sound quality?"
+  ],
+  [
+   "27",
+   "29",
+   "QN29.1",
+   "How about the tips in desining sounds for mobile media?"
+  ],
+  [
+   "28",
+   "30",
+   "QN30.1",
+   "Why and how do we create an immensive world in our projects?"
+  ],
+  [
+   "29",
+   "34",
+   "QN34.1",
+   "What is the difference between foley and sound ambience?"
+  ],
+  [
+   "30",
+   "35",
+   "QN35.1",
+   "How can we remove vocal from the sound file using Adobe Audition?"
+  ],
+  [
+   "31",
+   "36",
+   "QN36.1",
+   "What are the names of common types of sound effects?"
+  ],
+  [
+   "32",
+   "47",
+   "QN47.1",
+   "Who is a music producer? Name 5 famous music composers that you knew."
+  ],
+  [
+   "33",
+   "47",
+   "QN47.2",
+   "For what the limitor and compressor is using?"
+  ],
+  [
+   "34",
+   "48",
+   "QN48.1",
+   "What is the difference between audio and music production?"
+  ],
+  [
+   "35",
+   "52",
+   "QN52.1",
+   "What are the tips for designing audio for interactive media?"
+  ],
+  [
+   "36",
+   "53",
+   "QN53.1",
+   "Analyze of some examples of audio in interactive media?"
+  ],
+  [
+   "37",
+   "54",
+   "QN54.1",
+   "What can you tell about the sound in gaming?"
+  ],
+  [
+   "38",
+   "55",
+   "QN55.1",
+   "What are common sound systems?"
+  ],
+  [
+   "39",
+   "55",
+   "QN55.2",
+   "How to treat acoustic in room well?"
+  ],
+  [
+   "40",
+   "56",
+   "QN56.1",
+   "How will you evaluate a sound project?"
+  ],
+  [
+   "41",
+   "58",
+   "QN58.1",
+   "What can you tell about the sound in one of individual projects?"
+  ]
+ ],
+ "links": [
+  "/download/13695/S/1_SDP201.zip",
+  "/download/13695/S/2_SDP201.zip"
+ ]
+}

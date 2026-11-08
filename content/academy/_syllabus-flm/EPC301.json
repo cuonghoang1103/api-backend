@@ -1,0 +1,1185 @@
+{
+ "ma": "EPC301",
+ "sylID": "11343",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11343",
+   "code": "EPC301",
+   "name": "Persuasive Communication_Giao tiếp để thuyết phục",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11343",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11343",
+  "Syllabus Name": "Persuasive Communication_Giao tiếp để thuyết phục",
+  "Course Name English": "",
+  "Subject Code": "EPC301",
+  "Learning-Teaching Method": "Workshop,Presenting,Roleplay,Project based learning,Problem based learning,Active learning,Cooperative Learning,Experiential learning methods,Project Based Training,Presentation,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 0.5 hour final exam + 104.5 hours self-study",
+  "Pre-Requisite": "Passed ERW411 and SSC302c and SSG103 or SSG104",
+  "Description": "Objectives:\n\nThe course is designed to help undergraduate students to grasp the key concepts and practices of persuasive communication today. Through real-life situations as well as authentic materials, students will be able to develop their communication and persuasion skills.\n\nDescription\n\nEPC301 provides students with a comprehensive yet accessible overview of the study and practice of persuasive communication. It also demonstrates how theories and research illuminate and adapt to the present digital era, with continued attention to ethical implications and today’s big topics. The course includes up-to-date definitions of key terms in the field as they relate to present-day practice; an integration of persuasion theories and the ubiquity of online influence; new examples and cases to illustrate persuasive communication’s approach to health campaigns, attitudes, communicator appeals, dissonance, and ethics; and a thorough reflection of the most current scholarship in the field.\n\nTeaching Methods:\n\nThe teaching & learning process includes a variety of methods:\n\nFrom teachers’ side: lectures, guided learning, feedback and corrections; From students’ side: discussions, presentations, research, writing and self-study.\n\nAssessment scheme:\n\n1) On-going assessment\n\n- Assignments 02*20% 40%\n\n- Presentation 01*20% 20%\n\n2) Final examination (Project): 40%\n\n3) Final Result 100%\n\n4) Completion Criteria:\n\na) On-going assessment >0, Each component >0\n\nb) Final examination: >=4\n\nc) Final Result >=5",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises and assignments given by instructor in class or at home and submit on time\n\n- Use laptops in class only for learning purposes",
+  "Tools": "Tools: Foxit pdf editor\n\nInternet access\n\nwww.routledge.com/cw/perloff",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "The Dynamics of Persuasion: Communication and Attitudes in the Twenty-First Century",
+   "Richard M. Perloff",
+   "Routledge",
+   "2020",
+   "7th",
+   "9780367185794",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Online Resources",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Influence: Science and Practice",
+   "Robert B. Cialdini",
+   "Allyn and Bacon",
+   "2008",
+   "5th",
+   "978-0205609994",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand key concepts related to persuation\nLO1.1 understand the constancies and changes of persuasion\nLO1.2 recognize the features of persuasion\nLO1.3 identify the differences between persuasion and coercion\nLO1.4 understand persuasive communication effects\nLO1.5 identify the requirements of an ethical persuader"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand the definition and structure of attitudes\nLO2.1 understand the concept and characteristics of attitudes\nLO2.2 identify the structure of attitudes\nLO2.3 recognize the relationship between attitude structure and persuasion"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Recognize the power of strong attitudes\nLO3.1 understand the concept of strong attitudes\nLO3.2 recognize the effects of strong attitudes"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify the functions and consequences of attitudes\nLO4.1 understand the functions of attitudes\nLO4.2 identify the relationship between attitudes and behavior\nLO4.3 judge consistencies: gray areas and ethical issues"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply different methods to measure attitudes\nLO5.1 use questionnaires to measure attitudes\nLO5.2 use indirect methods to measure attitudes\nLO5.3 understand pitfalls in attitude measurement\nLO5.4 ask good questions regarding attitude measurement"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Process persuasive communications\nLO6.1 understand historical foundations and ELM principles\nLO6.2 recognize peripheral processing and central processing"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understand the communicator"
+  ],
+  [
+   "8",
+   "LO8",
+   "Run a communicative campaign and develop flexibility and respect in team work"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Understand the fundamentals of the message\nLO9.1 identify the message structure\nLO9.2 identify the message content\nLO9.3 use effective language in the message"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Recognize the emotional message appeals: fear and guilt"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "",
+   "LO1-LO5",
+   "OP1: *T assigns students a topic/ question. Students work individually and record a 5-minute talk, trying to persuade listeners. Upload the video to Youtube for T' to mark.\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 1\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "lessons in learned chapters",
+   "OP1: *homework; individual work\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "",
+   "LO6-LO9",
+   "OP1: *T assigns students a topic/ question. Students work individually, prepare information at home and present a 5-minute talk in class, trying to persuade listeners.\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 1\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "lessons in learned chapters",
+   "OP1: *homework; pair work\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "audiences will ask Qs. S will answer Qs."
+  ],
+  [
+   "3",
+   "Presentation",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "",
+   "LO2-LO10",
+   "OP1: *T assigns 1 group 1 topic/question in 1 chapter. Students read the chapter, do research, prepare Slides and present information.\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 1, 20--30 mins per group\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "lessons in learned chapters",
+   "OP1: *pair or group of 3\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "throughout the course"
+  ],
+  [
+   "4",
+   "Project",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "",
+   "LO1-LO10",
+   "Civic engagement project: Students choose a topic (with T's approval) and design a persuasive campaign that raises awareness and changes the attitudes, beliefs or behaviors of an intended target audience.",
+   "1, 30 mins per pair/ group",
+   "lessons in learned chapters",
+   "*pair or group of 3. Students present their campaign in front of teachers and some other audiences in the form of a TED TALK show.",
+   "audiences will ask Qs. S will answer Qs."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction Chapter 1: Introduction to Persuasion",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Introduction to Persuasion (cont)_Goals of studying persuasion",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Introduction to Persuasion (cont)_Persuasion over time",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Introduction to Persuasion (cont)_Persuasion and social media",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 1 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Foundations of Persuasion_Differences between Persuation and Coercion + Understanding persuasive communication effects",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 2 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 3: Historical, Scientific, and Ethical Foundations_Becoming an ethical persuader",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 3 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 4: Attitudes: Definition and Structure_ Defining Attitudes; Attitudes, Values, and Beliefs",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 4: Attitudes: Definition and Structure (cont)_The structure of Attitudes + (In)consistency of Attitudes",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "9",
+   "Presentation 1 suggested",
+   "Offline",
+   "LO1-LO3",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 4 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "10",
+   "Assign assignment 1: A 5-minute Talk (video recording)",
+   "Offline",
+   "LO1-LO3",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Prepare for Assignment 1",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 5: The power of our passions: theory and research on strong attitudes_Defining strong Attitudes; Strong Attitudes vs. Persuasion",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 5: The power of our passions: theory and research on strong attitudes (cont)_Defining strong Attitudes; Strong Attitudes vs. Persuasion",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5: The power of our passions: theory and research on strong attitudes (cont)_Social Judgement Theory and Accessibility Theory",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson. Submit assignnment 1",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5: The power of our passions: theory and research on strong attitudes (cont)_Implicit Attitudes and Neuroscience",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 5 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "15",
+   "Feedback on Assignment 1",
+   "Offline",
+   "LO1-LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Listen to the lecturer's feedback and get experiences",
+   ""
+  ],
+  [
+   "16",
+   "Feedback on Assignment 1",
+   "Offline",
+   "LO1-LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Listen to the lecturer's feedback and get experiences",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 6: Attitudes: Functions and Consequences_Functional theory of Attitudes; Presentation 2 suggested",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 6: Attitudes: Functions and Consequences (cont)_Functional Attitudes and Persuasion",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 6: Attitudes: Functions and Consequences (cont)_Attitudes and Behavior",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6: Attitudes: Functions and Consequences (cont)_Models of Attitudes_behavior relations + Implications for Persuasion",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "21",
+   "Presentation 2 suggested",
+   "Offline",
+   "LO1-LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 6 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "22",
+   "Assign Assignment 2: Mini-talk",
+   "Offline",
+   "LO1-LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Prepare for Assignment 2",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 7: Attitude Measurement_Questionnaire measures of Attitudes",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 7: Attitude Measurement (cont)_Pitfalls in Attitude measurement",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7: Attitude Measurement (cont)_Policy implications",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 7: Attitude Measurement (cont)_Asking good questions + Indirect methods to measure Attitudes",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 7 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "27",
+   "Mini-talk. Assignment 2 performance + Feedback",
+   "Offline",
+   "LO1-LO5",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Perform Assignment 2",
+   ""
+  ],
+  [
+   "28",
+   "Mini-talk. Assignment 2 performance + Feedback (cont)",
+   "Offline",
+   "LO1-LO5",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Perform Assignment 2",
+   ""
+  ],
+  [
+   "29",
+   "Mini-talk. Assignment 2 performance + Feedback (cont)",
+   "Offline",
+   "LO1-LO5",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Perform Assignment 2",
+   ""
+  ],
+  [
+   "30",
+   "Mini-talk. Assignment 2 performance + Feedback (cont)",
+   "Offline",
+   "LO1-LO5",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Perform Assignment 2",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 8: Processing persuasive communications_Historical foundation: Yale model, Cognitive response model, and innoculation theory",
+   "Offline",
+   "LO6",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 8: Processing persuasive communications (cont)_Elaboration Likelihood model",
+   "Offline",
+   "LO6",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 8: Processing persuasive communications (cont)_Peripheral and central processing in action",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 8: Processing persuasive communications (cont)_Multiple functions postulate",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 8: Processing persuasive communications (cont)_Heuristic - Systematic model",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 8: Processing persuasive communications (cont)_Unimodel",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 8 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 9: \"Who says it\": Source Factors in Persuasion_Charisma and communicator characteristic",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 9: \"Who says it\": Source Factors in Persuasion (cont)_Authority",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9: \"Who says it\": Source Factors in Persuasion (cont)_Milgram study",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 9: \"Who says it\": Source Factors in Persuasion (cont)_Milgram study replication",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 9 adequately before attending the lesson.",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 16: Health Communication Campaigns_Nature of Communication campaigns",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 16 adequately before attending the lesson. Prepare project.",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 16: Health Communication Campaigns (cont)_How campaigns work: theoretical perspectives",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 16 adequately before attending the lesson. Prepare project.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 16: Health Communication Campaigns (cont)_Campaign Effects",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 16 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 16: Health Communication Campaigns (cont)_Two real campaigns",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 16 adequately before attending the lesson. Prepare project.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 16: Health Communication Campaigns (cont)_Values and Ethics",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 16 adequately before attending the lesson. Prepare project.",
+   ""
+  ],
+  [
+   "46",
+   "Assign Projects",
+   "Offline",
+   "LO1-LO8",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Attend the class and follow the lecturer's instructions",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 11: Fundamentals of the Message_Sidedness, conclusion drawing, and order of presentation",
+   "Offline",
+   "LO9",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 11: Fundamentals of the Message (cont)_Evidence vs. Narrative",
+   "Offline",
+   "LO9",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 11: Fundamentals of the Message (cont)_Framing",
+   "Offline",
+   "LO9",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 11: Fundamentals of the Message (cont)_Language",
+   "Offline",
+   "LO9",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 11: Fundamentals of the Message (cont)_Emotional appeals",
+   "Offline",
+   "LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 11: Fundamentals of the Message (cont)_Wrap-up",
+   "Offline",
+   "LO9",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 11 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 12: Emotional message appeals: fear and guilt_Emotions",
+   "Offline",
+   "LO10",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 12: Emotional message appeals: fear and guilt (cont)_Fear appeals, inducing fear",
+   "Offline",
+   "LO10",
+   "I, T",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 12: Emotional message appeals: fear and guilt (cont)_Theory of fear appeals",
+   "Offline",
+   "LO10",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 12: Emotional message appeals: fear and guilt (cont)_Guilt",
+   "Offline",
+   "LO10",
+   "T, U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Read Chapter 12 adequately before attending the lesson",
+   ""
+  ],
+  [
+   "57",
+   "Project revision",
+   "Offline",
+   "LO1-LO10",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Revise lessons. Prepare projects",
+   ""
+  ],
+  [
+   "58",
+   "Project revision",
+   "Offline",
+   "LO1-LO11",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Revise lessons. Prepare projects",
+   ""
+  ],
+  [
+   "59",
+   "Project revision",
+   "Offline",
+   "LO1-LO12",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Revise lessons. Prepare projects",
+   ""
+  ],
+  [
+   "60",
+   "Project revision",
+   "Offline",
+   "LO1-LO13",
+   "U",
+   "Student’s Book (hardcopy) & Online resources",
+   "",
+   "*Revise lessons. Prepare projects",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "CQ1_CT",
+   "What are the goals of studying persuasion?"
+  ],
+  [
+   "2",
+   "3",
+   "CQ1_CT",
+   "What have been changing in persuasion?"
+  ],
+  [
+   "3",
+   "4",
+   "CQ1_CT",
+   "What are the key ways today's persuasion differs from previous eras? Provide illustrations."
+  ],
+  [
+   "4",
+   "5",
+   "CQ1_CT",
+   "What are the differences between persuasion and coercion? Provide illustrations."
+  ],
+  [
+   "5",
+   "5",
+   "CQ2_CT",
+   "What are the three different persuasive communication effects (Miller, 1998)? Provide illustrations."
+  ],
+  [
+   "6",
+   "6",
+   "CQ1_CT",
+   "What are the requirements of an ethical persuader?"
+  ],
+  [
+   "7",
+   "7",
+   "CQ1_CT",
+   "What are the characteristics of Attitudes?"
+  ],
+  [
+   "8",
+   "7",
+   "CQ2_CT",
+   "What are values and beliefs?"
+  ],
+  [
+   "9",
+   "8",
+   "CQ1_CT",
+   "Why are attitudes not always internally consistent?"
+  ],
+  [
+   "10",
+   "11",
+   "CQ1_CT",
+   "What are strong attitudes?"
+  ],
+  [
+   "11",
+   "13",
+   "CQ1_CT",
+   "How do strong attitudes influence message evaluations and judgments of communications?"
+  ],
+  [
+   "12",
+   "14",
+   "CQ1_CT",
+   "What are implicit attitudes?"
+  ],
+  [
+   "13",
+   "14",
+   "CQ2_CT",
+   "What is Priming?"
+  ],
+  [
+   "14",
+   "17",
+   "CQ1_CT",
+   "What are the functions of attitudes?"
+  ],
+  [
+   "15",
+   "18",
+   "CQ1_CT",
+   "What is the connection between Attitudes and Persuasion?"
+  ],
+  [
+   "16",
+   "19",
+   "CQ1_CT",
+   "What are the characteristics of the Person and Attitude?"
+  ],
+  [
+   "17",
+   "20",
+   "CQ1_CT",
+   "What do you understand about the Reasoned Action Model?"
+  ],
+  [
+   "18",
+   "20",
+   "CQ2_CT",
+   "What is the role of the Reasoned Action Model in Persuasion?"
+  ],
+  [
+   "19",
+   "23",
+   "CQ1_CT",
+   "What are the similarities and differences among Likert Scale, Guttman Scale and Semantic Differential?"
+  ],
+  [
+   "20",
+   "24",
+   "CQ1_CT",
+   "Identify pitfalls from your classmates' questionnaire."
+  ],
+  [
+   "21",
+   "25",
+   "CQ1_CT",
+   "What are the policy implications from the way questions are worded or framed?"
+  ],
+  [
+   "22",
+   "26",
+   "CQ1_CT",
+   "What are the suggestions for writing good questions?"
+  ],
+  [
+   "23",
+   "26",
+   "CQ2_CT",
+   "What are the Indirect methods to measure attitudes?"
+  ],
+  [
+   "24",
+   "31",
+   "CQ1_CT",
+   "Compare Yale Attitude Change Approach and Cognitive Response Approach. What approach does Elaboration Likelihood Model (ELM) apply?"
+  ],
+  [
+   "25",
+   "32",
+   "CQ1_CT",
+   "How does ELM apply the approach?"
+  ],
+  [
+   "26",
+   "33",
+   "CQ1_CT",
+   "What are the principles and the processings of the ELM model?"
+  ],
+  [
+   "27",
+   "34",
+   "CQ1_CT",
+   "What are the mutiple functions of message features?"
+  ],
+  [
+   "28",
+   "35",
+   "CQ1_CT",
+   "What is the Heuristic-Systematic model?"
+  ],
+  [
+   "29",
+   "36",
+   "CQ1_CT",
+   "What is the Unimodel?"
+  ],
+  [
+   "30",
+   "37",
+   "CQ1_CT",
+   "What are three fundamental communicator characteristics? Illustrate with specific examples of communicators."
+  ],
+  [
+   "31",
+   "38",
+   "CQ1_CT",
+   "Analyze the Classic Milgram Study in order to explain the process by which Authority influences attitudes."
+  ],
+  [
+   "32",
+   "40",
+   "CQ1_CT",
+   "How is the Milgram study replication?"
+  ],
+  [
+   "33",
+   "41",
+   "CQ1_CT",
+   "Discuss the nature of communication campaigns and its major models."
+  ],
+  [
+   "34",
+   "42",
+   "CQ1_CT",
+   "What are the illustrations for three different models of campaigns?"
+  ],
+  [
+   "35",
+   "43",
+   "CQ1_CT",
+   "What makes campaigns succeed?"
+  ],
+  [
+   "36",
+   "43",
+   "CQ2_CT",
+   "What makes campaigns fail?"
+  ],
+  [
+   "37",
+   "44",
+   "CQ1_CT",
+   "Analyze one specific example of a health communication campaign in your country."
+  ],
+  [
+   "38",
+   "45",
+   "CQ1_CT",
+   "How important are values and ethics? What are the key, value-based issues that face health campaign practitioners?"
+  ],
+  [
+   "39",
+   "47",
+   "CQ1_CT",
+   "What are one-sided messages and two-sided messages? When should we use one-sided messages and two-sided messages?"
+  ],
+  [
+   "40",
+   "48",
+   "CQ1_CT",
+   "Which one is more effective, evidence or narrative? Explain why."
+  ],
+  [
+   "41",
+   "49",
+   "CQ1_CT",
+   "How important is Priming? Give illustrations."
+  ],
+  [
+   "42",
+   "50",
+   "CQ1_CT",
+   "Discuss the effectiveness of metaphors and language intensity to the message."
+  ],
+  [
+   "43",
+   "51",
+   "CQ1_CT",
+   "Discuss the effects of speech rate on persuasion."
+  ],
+  [
+   "44",
+   "53",
+   "CQ1_CT",
+   "What is fear? What is fear appeal? Give examples of ads or messages that use fear appeals."
+  ],
+  [
+   "45",
+   "54",
+   "CQ1_CT",
+   "What are two misconceptions about fear appeals? Give illustrations."
+  ],
+  [
+   "46",
+   "55",
+   "CQ1_CT",
+   "What are three reasons that people harbor the illusion of invulnerability (unrealistic optimism)? Give illustrations."
+  ]
+ ],
+ "links": []
+}

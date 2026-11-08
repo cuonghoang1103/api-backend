@@ -1,0 +1,1338 @@
+{
+ "ma": "MMP201",
+ "sylID": "13394",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13394",
+   "code": "MMP201",
+   "name": "Media Psychology_Tâm lý học truyền thông",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13394",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13394",
+  "Syllabus Name": "Media Psychology_Tâm lý học truyền thông",
+  "Course Name English": "Media Psychology",
+  "Subject Code": "MMP201",
+  "Learning-Teaching Method": "Presentation, Disscussion, teamwork, critical thinking.",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "'This course examines a wide range of psychological theories, processes, and principles within the context of mass communication. Students will learn how psychological frameworks can be applied to analyze media content and audience behavior, while also exploring how artificial intelligence tools are transforming media creation, consumption, and research. Key issues covered include politics, sex, violence, advertising, music, sports, and the use of AI-based media technologies. The course also investigates how experiences with both traditional and AI-generated media influence knowledge acquisition, shape attitudes, and drive behavior.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FLM at https://flm.fpt.edu.vn/ for up-to-date course information.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "A Cognitive Psychology of Mass Communication",
+   "Fred W. Sanborn",
+   "Routledge",
+   "2022",
+   "8th",
+   "9780367713553",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 3 Giáo trình (ưu tiên mua Giáo trình mới)"
+  ],
+  [
+   "2",
+   "A Cognitive Psychology of Mass Communication",
+   "Richard Jackson Harris, Fred W. Sanborn",
+   "Routledge",
+   "2013",
+   "6th",
+   "978-0415537056",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 3 Giáo trình (ưu tiên mua Giáo trình mới)"
+  ],
+  [
+   "3",
+   "A Cognitive Psychology of Mass Communication (chọn 1 trong 2 GT)",
+   "Richard Jackson Harris, Fred W. Sanborn",
+   "Routledge",
+   "2019",
+   "7th",
+   "9781138046276",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 3 Giáo trình (ưu tiên mua Giáo trình mới)"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/chatgpt-advanced-data-analysis",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "ChatGPT Advanced Data Analysis (10h)"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the changing media landscape"
+  ],
+  [
+   "2",
+   "CLO10",
+   "Understand and evaluate about effects of sex in the media to people."
+  ],
+  [
+   "3",
+   "CLO11",
+   "Analyse Socially Positive Media and Understand responding to Media: Getting Our Two Cents In"
+  ],
+  [
+   "4",
+   "CLO2",
+   "Explain the types of research methodologies that have been used to study media and Identify mass communication from a psychological perspective"
+  ],
+  [
+   "5",
+   "CLO3",
+   "Explain and apply psychological theories used in mass communication's research"
+  ],
+  [
+   "6",
+   "CLO4",
+   "Apply and create about psychological application in sport, music."
+  ],
+  [
+   "7",
+   "CLO5",
+   "State and evaluate the issue of group portrayals in the media"
+  ],
+  [
+   "8",
+   "CLO6",
+   "Analyse the world as created by advertising, including techniques of persuasion, the psychology of deceptive advertising, subliminal advertising, the emergence of advertising in new places"
+  ],
+  [
+   "9",
+   "CLO7",
+   "Analyse how the media’s coverage of news affects our understanding of and attitudes to events in the world"
+  ],
+  [
+   "10",
+   "CLO8",
+   "State how politicians manipulate media coverage to convey their own intended reality"
+  ],
+  [
+   "11",
+   "CLO9",
+   "Explain media violence, including induced fear, modeling, catharsis, desensitization, and the cultivation of fear"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Project",
+   "on-going",
+   "1",
+   "25.0%",
+   ">0",
+   "Week 6-7",
+   "CLO1-->CLO6",
+   "(Recommended):Each team (5–7 members) will create a promotional product (a video is strongly recommended).Tasks: Select an idea relevant to media psychology and applicable to real-life communication contexts. (By yourself: teams must brainstorm and agree on a topic without relying on AI to decide for them.)Develop core content that demonstrates the application of psychological theories (e.g., persuasion, emotional appeal, audience behavior). (By yourself: students must identify and explain the theories, and write the main message/argument.)Produce a video (1–4 minutes) promoting a product, service, or social message. Prepare a presentation (PowerPoint or equivalent) explaining:- The video content. - The psychological applications used. (By yourself: students must analyze and justify the use of theories.)- Reflections on how digital tools supported the project.",
+   "1",
+   "This project assesses students’ ability to apply psychological theories of media (persuasion, emotional appeal, audience behavior) to real-life communication contexts, while demonstrating skills in idea development, script writing, video production, teamwork, and oral presentation. Students must independently analyze and justify the use of theories, create original content, and communicate their work clearly in class.",
+   "Group Project Grading Criteria (Total = 100%)\n\n- Theoretical Understanding (20%): Demonstrates accurate application of media psychology concepts and theories relevant to the project.\n\n- Research & Analysis (20%): Provides systematic and logical research/analysis to support project ideas and outcomes.\n\n- AI Application (15%): Effectively uses AI tools (e.g., idea generation, media content analysis, audience insights) and integrates AI results meaningfully and ethically.\n\n- Project Execution (15%): Demonstrates quality, clarity, and feasibility in the project plan, implementation, and outputs.\n\n- Teamwork & Collaboration (10%): Shows equal contribution, collaboration, and problem-solving within the group.\n\n- Critical Evaluation (10%): Reflects critically on project strengths, limitations, and the role of AI in enhancing the work.\n\n- Creativity, Presentation, Q&A (10%): Delivers an engaging, original, and well-structured presentation of the final project.",
+   ""
+  ],
+  [
+   "2",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Week 8-9",
+   "CLO3, CLO7, CLO8 CLO9",
+   "Based on the content of Chapters 7 & 8, each student will write an analytical article or essay (1,000–1,500 words) examining a political issue or a current event in a specific country.Tasks: Apply relevant media psychology theories from the chapters. (By yourself: identify, explain, and connect the theories to your chosen case.)Gather and organize evidence from multiple media sources to support your analysis.Write the full article or essay with clear argumentation and logical flow. (By yourself: draft the introduction and conclusion in your own words.)Reflect on the strengths and limitations of media coverage in shaping public understanding of the issue. (By yourself: provide your own critical reflections and conclusions.)Explain how you used AI tools (if any) to support your work and critically assess the usefulness and limits of this support.Option 2 (Constructivism Approach only): Follow the lecturer’s proposed topic and guidelines.",
+   "1 .",
+   "This assignment evaluates students’ understanding of media psychology theories from Chapters 7 & 8 and their ability to apply these theories to real-world political or current events. It also develops skills in critical analysis, evidence evaluation, academic writing, and independent reflection on media coverage.",
+   "Grading Criteria (Total = 100%)\n\n- Theoretical Understanding (25%): Accurate application of theories from Chapters 7 & 8 (e.g., agenda-setting, framing, political communication).\n\n- Research & Analysis (20%): Logical, well-structured argument supported by evidence and media examples.\n\n- AI Application (15%): Effective and ethical use of AI tools for summarization, sentiment analysis, or framing analysis; integrates AI results meaningfully.\n\n- Critical Evaluation (20%): Reflects critically on political/media influence and AI’s role in shaping analysis.\n\n- Organization & Writing Quality (10%): Clear, coherent structure, proper citations, and academic style.\n\n- Grammar & Spelling (10%)",
+   "Based on the predetermined learning outcomes (LOs), lecturers may select appropriate forms of assessment at their discretion."
+  ],
+  [
+   "3",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Week 1-10",
+   "",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, students' attitude, preparation, contribution of discussions.\n\nParticipation are graded on a scale of 0-10, precise to one digit after the decimal, which include:\n\n(a) 3 points: Completion of the Coursera course listed in the materials section is compulsory for all students. Upon successful completion (within the first 6 weeks ONLY), students will earn 3 points for their individual assignments.\n\n(b) 7 points: Evaluation of the remaining portion (with a maximum of 7 points) will be contingent upon their works, aligned with the following requirements.",
+   ""
+  ],
+  [
+   "4",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Week 3",
+   "CLO1, CLO2, CLO3, CLO4",
+   "Multiple-choice and true/false questions",
+   "40",
+   "Test the acquainted knowledge which student obtained in the delivered chapters (Chapter 1 – Chapter 4).",
+   "",
+   "Based on the predetermined learning outcomes (LOs), lecturers may choose appropriate forms of assessment at their discretion."
+  ],
+  [
+   "5",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Week 10",
+   "CLO5->CLO10",
+   "Multiple-choice and true/false questions",
+   "40",
+   "Test the acquainted knowledge which student obtained in the delivered chapters (Chapter 5-11).",
+   "",
+   "Based on the predetermined learning outcomes (LOs), lecturers may choose appropriate forms of assessment at their discretion."
+  ],
+  [
+   "6",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "CLO1 -> CLO6",
+   "Multiple choice",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Students are not allowed to use documents/information in any form in exam rooms."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction.\nChapter 1. Mass Communication in Our Wired Society: The Changing Media Landscape\n\nI. Prevalence of Mass Communication",
+   "offline",
+   "LO1",
+   "I,T",
+   "- Read Chapter 1, textbook\n- Read slides: Chapter 1",
+   "MMP201_Phần 1",
+   ".Read chapter 1 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1. Mass Communication in Our Wired Society: The Changing Media Landscape\nII. What Is Mass Communication?",
+   "offline",
+   "LO1",
+   "IT",
+   "- Read Chapter 1\n- Read slides: Chapter 1\n- https://www.coursera.org/learn/ethics-of-artificial-intelligence",
+   "MMP201_Phần 2",
+   ".Read chapter 1 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1. Mass Communication in Our Wired Society: The Changing Media Landscape\n\nIII. The Media of Mass Communication\n- Media Use",
+   "offline",
+   "LO1",
+   "I,T",
+   "- Read Chapter 1\n- Read slides: Chapter 1",
+   "",
+   ".Read chapter 1 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1. Mass Communication in Our Wired Society: The Changing Media Landscape\n\nIII. The Media of Mass Communication\n- Media Use (cont.)",
+   "offline",
+   "LO1",
+   "I,T",
+   "- Read Chapter 1\n- Read slides: Chapter 1",
+   "",
+   ".Read chapter 1 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2. Research and Theory in Mass Communication: How Are Media Studied Scientifically\n\nI. Media Research Frameworks",
+   "offline",
+   "LO2",
+   "I,T",
+   "- Read Chapter 2\n- Read slides: Chapter 2",
+   "",
+   ".Read chapter 2 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2. Research and Theory in Mass Communication: How Are Media Studied Scientifically\n\nII.Theories of Mass Communication",
+   "offline",
+   "LO2",
+   "I,T",
+   "- Read Chapter 2\n- Read slides: Chapter 2",
+   "",
+   ".Read chapter 2 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2. Research and Theory in Mass Communication: How Are Media Studied Scientifically\n\nII. Theories of Mass Communication (cont.)",
+   "offline",
+   "LO2",
+   "I,T",
+   "- Read Chapter 2\n- Read slides: Chapter 2",
+   "",
+   ".Read chapter 2 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "8",
+   "- Chapter 2. Research and Theory in Mass Communication: How Are Media Studied Scientifically\n\nII. Theories of Mass Communication (cont.)\n- Introduction to ChatGPT Advanced Data Analysis (Coursera)",
+   "offline",
+   "LO2",
+   "IU",
+   "- Read Chapter 2\n- Read slides: Chapter 2\n- https://www.coursera.org/learn/chatgpt-advanced-data-analysis",
+   "",
+   ".Read chapter 2 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3. The Psychology of Mass Communication\nI. Children’s Distinctive Use of Media",
+   "offline",
+   "LO3",
+   "T,U",
+   "- Read Chapter 3\n- Read slides: Chapter 3",
+   "",
+   ".Read chapter 3 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3. The Psychology of Mass Communication\nII. Information Extraction and Memory in Children and adults",
+   "offline",
+   "LO3",
+   "T,U",
+   "- Read Chapter 3\n- Read slides: Chapter 3",
+   "",
+   ".Read chapter 3 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3. The Psychology of Mass Communication (cont)\n\nIII. Cognitive Components of the Media Experience",
+   "offline",
+   "LO3",
+   "T,U",
+   "- Read Chapter 3\n- Read slides: Chapter 3",
+   "",
+   ".Read chapter 3 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3. The Psychology of Mass Communication\n\nIV. Media as Perceived Reality",
+   "offline",
+   "LO3",
+   "T,U",
+   "- Read Chapter 3\n- Read slides: Chapter 3",
+   "",
+   ".Read chapter 3 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 4. Emotions and Media: Music and sports as Exemplars\n\nI. The Emotional side of experiencing media",
+   "offline",
+   "LO4",
+   "T,U",
+   "- Read Chapter 4\n- Read slides: Chapter 4",
+   "",
+   ".Read chapter 4 of one of textbooks 1, 2.\n.Or read chapter 6 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 4. Emotions and Media: Music and sports as Exemplars\n\nII. Media and a few specific Emotions",
+   "offline",
+   "LO4",
+   "T,U",
+   "- Read Chapter 4\n- Read slides: Chapter 4",
+   "",
+   ".Read chapter 4 of one of textbooks 1, 2.\n.Or read chapter 6 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4. Emotions and Media: Music and sports as Exemplars\n\nIII. Mood management\nEmotional exemplar 1: Music",
+   "offline",
+   "LO4",
+   "T,U",
+   "- Read Chapter 4\n- Read slides: Chapter 4",
+   "",
+   ".Read chapter 4 of one of textbooks 1, 2.\n.Or read chapter 6 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4. Emotions and Media: Music and sports as Exemplars\n\nIII. Mood management (cont.)\nEmotional exemplar 2: Sport",
+   "offline",
+   "LO4",
+   "T,U",
+   "- Read Chapter 4\n- Read slides: Chapter 4",
+   "",
+   ".Read chapter 4 of one of textbooks 1, 2.\n.Or read chapter 6 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "17",
+   "Progress test 1",
+   "offline",
+   "LO1-O4",
+   "U",
+   "- Read Chapter 1- 4\n- Read slides: Chapter 1- 4",
+   "",
+   "Review Chapter 1- 4",
+   ""
+  ],
+  [
+   "18",
+   "Progress test 1",
+   "offline",
+   "LO1-O4",
+   "U",
+   "- Read Chapter 1- 4\n- Read slides: Chapter 1- 4",
+   "",
+   "Review Chapter 1- 4",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 5. Media Portrayals of Groups: Distorted Social Mirrors\n\nI. Portrayals of the Sexes",
+   "offline",
+   "LO5",
+   "I,T",
+   "- Read Chapter 5\n- Read slides: Chapter 5",
+   "",
+   ".Read chapter 5 of one of textbooks 1, 2.\n.Or read chapter 4 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 5. Media Portrayals of Groups: Distorted Social Mirrors\n\nII. Families",
+   "offline",
+   "LO5",
+   "T,U",
+   "- Read Chapter 5\n- Read slides: Chapter 5",
+   "",
+   ".Read chapter 5 of one of textbooks 1, 2.\n.Or read chapter 4 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5. Media Portrayals of Groups: Distorted Social Mirrors\n\nIII. Portrayals of Minority",
+   "offline",
+   "LO5",
+   "T,U",
+   "- Read Chapter 5\n- Read slides: Chapter 5",
+   "",
+   ".Read chapter 5 of one of textbooks 1, 2.\n.Or read chapter 4 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 5. Media Portrayals of Groups: Distorted Social Mirrors\nIV. Others",
+   "offline",
+   "LO5",
+   "TU",
+   "- Read Chapter 5\n- Read slides: Chapter 5",
+   "",
+   ".Read chapter 5 of one of textbooks 1, 2.\n.Or read chapter 4 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "23",
+   "- Review from chapter 1 to 5.\n- Answer students's queries related to ChatGPT Advanced Data Analysis (Coursera) if has",
+   "offline",
+   "LO1-LO5",
+   "TU",
+   "- Read Chapter 5\n- Read slides: Chapter 5\n-https://www.coursera.org/learn/chatgpt-advanced-data-analysis",
+   "",
+   "Review Chapter 5\nDiscussion.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6. Advertising: Baiting, Catching, and Reeling Us In\n\nI. Historical Background\nII. Types of Ads",
+   "offline",
+   "LO6",
+   "I,T",
+   "- Read Chapter 6\n- Read slides: Chapter 6",
+   "",
+   ".Read chapter 6 of one of textbooks 1, 2.\n.Or read chapter 5 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 6. Advertising: Baiting, Catching, and Reeling Us In\n\nIII. Psychological Appeals in Advertising",
+   "offline",
+   "LO6",
+   "I,T",
+   "- Read Chapter 6\n- Read slides: Chapter 6",
+   "",
+   ".Read chapter 6 of one of textbooks 1, 2.\n.Or read chapter 5 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 6. Advertising: Baiting, Catching, and Reeling Us In\n\nIV. A Theoretical Model\nV. Deceptive Advertising",
+   "offline",
+   "LO6",
+   "I,T",
+   "- Read Chapter 6\n- Read slides: Chapter 6",
+   "",
+   ".Read chapter 6 of one of textbooks 1, 2.\n.Or read chapter 5 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 6. Advertising: Baiting, Catching, and Reeling Us In\n\nVI. Advertising to Children\nVII. Advertising in New Places",
+   "offline",
+   "LO6",
+   "T,U",
+   "- Read Chapter 6\n- Read slides: Chapter 6",
+   "",
+   ".Read chapter 6 of one of textbooks 1, 2.\n.Or read chapter 5 of the textbook 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "28",
+   "Group Project: Guide students to do Group project.\nStudent divided into 5 - 7 group size.\nPrepare the project ideas and plan.",
+   "offline",
+   "LO1-LO6",
+   "I,U",
+   "- Read the request of group project.\n- Read chapter 2-5\n- Design a project plan",
+   "",
+   "Draff the idea of group project.\nDiscussion.",
+   ""
+  ],
+  [
+   "29",
+   "Group Project: Guide students to do Group project.\n\nPrepare the project ideas and plan (cont.)",
+   "offline",
+   "LO1-LO6",
+   "I,U",
+   "- Read the request of group project.\n- Read chapter 2-5\n- Design a project plan",
+   "",
+   "Draff the idea of group project.\nDiscussion.",
+   ""
+  ],
+  [
+   "30",
+   "Group Project (continues): Proceed as a group project",
+   "offline",
+   "LO1-LO6",
+   "I,U\n(indoor or outside).",
+   "The product is a media video",
+   "",
+   "Discussion and working in group.",
+   ""
+  ],
+  [
+   "31",
+   "Group Project (continues): Proceed as a group project",
+   "offline",
+   "LO1-LO6",
+   "I,U\n(indoor or outside).",
+   "The product is a media video",
+   "",
+   "Discussion and working in group.",
+   ""
+  ],
+  [
+   "32",
+   "Group Project (continues): Proceed as a group project",
+   "offline",
+   "LO1-LO6",
+   "I,U\n(indoor or outside).",
+   "The product is a media video",
+   "",
+   "Discussion and working in group.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 7. News: Setting an Agenda About the World\n\nTelevision News History and Trends\nInternet news trends?\nWhat Is News?",
+   "offline",
+   "LO7",
+   "I,T",
+   "- Read Chapter 7\n- Read slides: Chapter 7",
+   "",
+   ".Read chapter 7 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 7. News: Setting an Agenda About the World\n\nI. Primary Characteristics of a Newsworthy Event",
+   "offline",
+   "LO7",
+   "I,T",
+   "- Read Chapter 7\n- Read slides: Chapter 7",
+   "",
+   ".Read chapter 7 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 7. News: Setting an Agenda About the World\n\nII. Secondary Characteristics of a Newsworthy Event",
+   "offline",
+   "LO7",
+   "I,T",
+   "- Read Chapter 7\n- Read slides: Chapter 7",
+   "",
+   ".Read chapter 7 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 7. News: Setting an Agenda About the World\n\nIII. News Media as Creating a Perceived Reality\nIV. Effects of News Coverage",
+   "offline",
+   "LO7",
+   "I,T",
+   "- Read Chapter 7\n- Read slides: Chapter 7",
+   "",
+   ".Read chapter 7 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "37",
+   "Group Project: Presenting project results",
+   "offline",
+   "LO1-LO6",
+   "I,U",
+   "A media video of group project\nA PPT to present about that product.",
+   "",
+   "Prepare slides and video.\nDiscussion.",
+   ""
+  ],
+  [
+   "38",
+   "Group Project (continues): Presenting project results",
+   "offline",
+   "LO1-LO6",
+   "I,U",
+   "A media video of group project\nA PPT to present about that product.",
+   "",
+   "Prepare slides and video.\nDiscussion.",
+   ""
+  ],
+  [
+   "39",
+   "Group Project (continues): Presenting project results",
+   "offline",
+   "LO1-LO6",
+   "I,U",
+   "A media video of group project\nA PPT to present about that product.",
+   "",
+   "Prepare slides and video.\nDiscussion.",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 8. Politics: Using News and Advertising to Win Elections\n\nI. Closing the Distance between the Candidate and the Public",
+   "offline",
+   "LO8",
+   "I,T",
+   "- Read Chapter 8\n- Read slides: Chapter 8",
+   "",
+   ".Read chapter 8 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 8. Politics: Using News and Advertising to Win Elections\n\nII. New Coverage of Political Campaigns",
+   "offline",
+   "LO8",
+   "I,T",
+   "- Read Chapter 8\n- Read slides: Chapter 8",
+   "",
+   ".Read chapter 8 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 8. Politics: Using News and Advertising to Win Elections\n\nIII. Candidates’ Use of News Media\nIV. Case Study: Press Coverage of the 2000 U.S. Presidential Election",
+   "offline",
+   "LO8",
+   "I,T",
+   "- Read Chapter 8\n- Read slides: Chapter 8",
+   "",
+   ".Read chapter 8 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 8. Politics: Using News and Advertising to Win Elections\n\nV. Political Advertising",
+   "offline",
+   "LO8",
+   "T,U",
+   "- Read Chapter 8\n- Read slides: Chapter 8",
+   "",
+   ".Read chapter 8 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 9. Violence: Watching All That Mayhem Really Matters\n\nI. Effects of Media Violence",
+   "offline",
+   "LO9",
+   "I,T",
+   "- Read Chapter 9\n- Read slides: Chapter 9",
+   "",
+   ".Read chapter 9 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 9. Violence: Watching All That Mayhem Really Matters\n\nII.Who Watches Media Violence and Why?",
+   "offline",
+   "LO9",
+   "T,U",
+   "- Read Chapter 9\n- Read slides: Chapter 9",
+   "",
+   ".Read chapter 9 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 9. Violence: Watching All That Mayhem Really Matters\n\nIII. Longitudinal Studies\nIV. Violent Video Games",
+   "offline",
+   "LO9",
+   "T,U",
+   "- Read Chapter 9\n- Read slides: Chapter 9",
+   "",
+   ".Read chapter 9 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 9. Violence: Watching All That Mayhem Really Matters\n\nV. Helping Children Deal with Violent Media",
+   "offline",
+   "LO9",
+   "T,U",
+   "- Read Chapter 9\n- Read slides: Chapter 9",
+   "",
+   ".Read chapter 9 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "48",
+   "Individual Assignment",
+   "offline",
+   "LO7-LO9",
+   "T,U",
+   "Read chapter 7-9\nThe product is an article",
+   "",
+   "Review Chapter 7-9",
+   ""
+  ],
+  [
+   "49",
+   "Individual Assignment",
+   "offline",
+   "LO7-LO9",
+   "T,U",
+   "Read chapter 7-9\nThe product is an article",
+   "",
+   "Review Chapter 7-9",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 10. Sex: Is Tuning In Turning Us On?: Sexuality through a Media Lens\n\nI. The Nature of Sex in Media",
+   "offline",
+   "LO10",
+   "I,T",
+   "- Read Chapter 10\n- Read slides: Chapter 10",
+   "",
+   ".Read chapter 10 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 10. Sex: Is Tuning In Turning Us On?: Sexuality through a Media Lens\n\nII. Effects of Viewing Media Sex",
+   "offline",
+   "LO10",
+   "I,T",
+   "- Read Chapter 10\n- Read slides: Chapter 10",
+   "",
+   ".Read chapter 10 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 10. Sex: Is Tuning In Turning Us On?: Sexuality through a Media Lens\n\nII. Effects of Viewing Media Sex (cont.)",
+   "offline",
+   "LO10",
+   "I,T",
+   "- Read Chapter 10\n- Read slides: Chapter 10",
+   "",
+   ".Read chapter 10 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 10. Sex: Is Tuning In Turning Us On?: Sexuality through a Media Lens\nIII. Sexual Violence",
+   "offline",
+   "LO10",
+   "T,U",
+   "- Read Chapter 10\n- Read slides: Chapter 10",
+   "",
+   ".Read chapter 10 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 11. Socially Positive Media: Teaching Good Things to Children (and the Rest of Us)\n\nI. Prosocial Children’s Television",
+   "offline",
+   "LO11",
+   "I,T",
+   "- Read Chapter 11\n- Read slides: Chapter 11",
+   "",
+   ".Read chapter 11 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 11. Socially Positive Media: Teaching Good Things to Children (and the Rest of Us)\n\nII. Media Use in Social Marketing\nIII. Entertainment-Education Media",
+   "offline",
+   "LO11",
+   "I,T",
+   "- Read Chapter 11\n- Read slides: Chapter 11",
+   "",
+   ".Read chapter 11 of one of textbooks 1, 2 or 3.\n.Discussion.",
+   ""
+  ],
+  [
+   "56",
+   "Progress test 2",
+   "offline",
+   "LO5-LO10",
+   "T,U",
+   "Read chapter 5-11",
+   "",
+   "Review Chapter 5-11",
+   ""
+  ],
+  [
+   "57",
+   "Progress test 2",
+   "offline",
+   "LO5-LO10",
+   "T,U",
+   "Read chapter 5-11",
+   "",
+   "Review Chapter 5-11",
+   ""
+  ],
+  [
+   "58",
+   "COURSE REVIEW",
+   "offline",
+   "LO1==>LO11",
+   "T,U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ],
+  [
+   "59",
+   "COURSE REVIEW",
+   "offline",
+   "LO1==>LO11",
+   "T,U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ],
+  [
+   "60",
+   "COURSE REVIEW",
+   "offline",
+   "LO1==>LO11",
+   "T,U",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1.1",
+   "How many types of mass communication? Find a program and compare the form and content of information posted through different types of media."
+  ],
+  [
+   "2",
+   "2",
+   "CQ2.1",
+   "What makes Mass Communication “Mass”?"
+  ],
+  [
+   "3",
+   "3",
+   "CQ3.1",
+   "How do you compare the frequency of using different types of mass media by age?"
+  ],
+  [
+   "4",
+   "4",
+   "CQ4.1",
+   "What are the qualities of the Internet which make it well-suited for mass media?"
+  ],
+  [
+   "5",
+   "5",
+   "CQ5.1",
+   "How many categories that media are studied scientifically? How many ways of looking at media by examining?"
+  ],
+  [
+   "6",
+   "6",
+   "CQ6.1",
+   "How many general classes of measurable effects of media? Examples"
+  ],
+  [
+   "7",
+   "7",
+   "CQ7.1",
+   "How can we determined the strength of media effects? Case: Compare the influence of children's violent behavior from parents and community with violent media. Which has a greater influence on the level of violent behavior of children?"
+  ],
+  [
+   "8",
+   "8",
+   "CQ8.1",
+   "How many specific theories guide mass communication research? Examples?"
+  ],
+  [
+   "9",
+   "9",
+   "CQ9.1",
+   "How does distinctive use of media affect children?"
+  ],
+  [
+   "10",
+   "10",
+   "CQ10.1",
+   "How do the information from the media extracted differ between children and adults? Examples"
+  ],
+  [
+   "11",
+   "11",
+   "CQ11.1",
+   "How many cognitive components are involved in our experience of media?"
+  ],
+  [
+   "12",
+   "11",
+   "CQ11.2",
+   "In Close-up 3.3, how did cognitive psychology help actors learn lines?"
+  ],
+  [
+   "13",
+   "12",
+   "CQ12.1",
+   "What is the parasocial media relationship? Provide examples and identify pros and cons?"
+  ],
+  [
+   "14",
+   "13",
+   "CQ13.1",
+   "Why do we suppose that media offer us vicarious emotional experience? Examples to illustrate it"
+  ],
+  [
+   "15",
+   "14",
+   "CQ14.1",
+   "How is humour expressed in different countries and its factor?"
+  ],
+  [
+   "16",
+   "15",
+   "CQ15.1",
+   "What is the impact of music on human behavior?\nHow is the impact of the MV \"There's no one at all\" by Son Tung to listeners based on the theory of communication cultivation (roughly translated as planting thought seeds) introduced by George Gerbner in 1969?"
+  ],
+  [
+   "17",
+   "16",
+   "CQ16.1",
+   "Why do people seek to consume sports media, and what is the nature of that experience psychologically?"
+  ],
+  [
+   "18",
+   "16",
+   "CQ16.2",
+   "How does empathy enhance our enjoyment in media?"
+  ],
+  [
+   "19",
+   "16",
+   "CQ16.3",
+   "What do you think about this statement: \"Television has changed sports in a myriad of ways \"?"
+  ],
+  [
+   "20",
+   "19",
+   "CQ19.1",
+   "How may media portrayals of females be actually harmful to females, who encounter such portrayals?"
+  ],
+  [
+   "21",
+   "19",
+   "CQ19.2",
+   "What are the effects of media gender stereotyping? Example."
+  ],
+  [
+   "22",
+   "20",
+   "CQ20.1",
+   "How are families portrayed on television? Compare to real life."
+  ],
+  [
+   "23",
+   "21",
+   "CQ21.1",
+   "How does the model of the Four Stages of Minority Portrayals apply in the case of minorities?"
+  ],
+  [
+   "24",
+   "22",
+   "CQ22.1",
+   "How is:\n- Sexual Minorities\n- Older Adults\n- Persons with Physical or Psychological Disabilities and Disorders\n- Portrayals of people of Fail and Religion\n- Portrayals of Occupations\nportraited in the video? (each group will present and show a video respectively)"
+  ],
+  [
+   "25",
+   "23",
+   "CQ 23.1",
+   "In your own experiences with media, how do you think Vietnam is usually portrayed to the world? Give an example."
+  ],
+  [
+   "26",
+   "24",
+   "CQ 24.1",
+   "What is the most direct purpose of an advertisement?"
+  ],
+  [
+   "27",
+   "25",
+   "CQ 25.1",
+   "Case study (chosen by the group): 1. How did the producer develop the idea? (What story did they tell us? What needs, desires, emotions, thoughts, associations, attitudes… did they seem to provoke?) 2. What are the psychological appeals used in this advertisement?"
+  ],
+  [
+   "28",
+   "26",
+   "CQ 26.1",
+   "How many stages are there in Ad processing?"
+  ],
+  [
+   "29",
+   "27",
+   "CQ 27.1",
+   "What are three distinct markets for children? What is your opinion about ethics in advertising to children?"
+  ],
+  [
+   "30",
+   "27",
+   "CQ 27.2",
+   "What is product placement? Give an example (real or hypothetical) of product placement that might be used in a movie. Do you think that product placement is ethical? Explain/defend your position."
+  ],
+  [
+   "31",
+   "28",
+   "CQ28.1",
+   "What are you intending to do in your project?"
+  ],
+  [
+   "32",
+   "29",
+   "CQ29.1",
+   "How is your idea relevant to the requirements of the project?"
+  ],
+  [
+   "33",
+   "30",
+   "CQ30.1",
+   "To what extent does your idea reflect the psychological aspect?"
+  ],
+  [
+   "34",
+   "31",
+   "CQ31.1",
+   "What is the creative perspective in your idea?"
+  ],
+  [
+   "35",
+   "32",
+   "CQ32.1",
+   "How is your plan to conduct your idea?"
+  ],
+  [
+   "36",
+   "33",
+   "CQ33.1",
+   "What is news and what is hard news? With so much media available now, what is the main source that adults can primarily get the news?"
+  ],
+  [
+   "37",
+   "34",
+   "CQ34.1",
+   "What are the primary characteristics of a newsworthy event? Find one news, analyse why that news is regarded newsworthy and identify the positive and negative sides of every characteristic."
+  ],
+  [
+   "38",
+   "35",
+   "CQ35.1",
+   "What are the secondary characteristics of a newsworthy event? Present your understanding and the requirements of \"sound bites\""
+  ],
+  [
+   "39",
+   "36",
+   "CQ36.1",
+   "How news media can create a perceived reality and how to facilitate this process?"
+  ],
+  [
+   "40",
+   "37",
+   "CQ37.1",
+   "What are your project ideas?"
+  ],
+  [
+   "41",
+   "38",
+   "CQ38.1",
+   "How the ideas are translated in to your products?"
+  ],
+  [
+   "42",
+   "39",
+   "CQ39.1",
+   "What kind of appeal did you used to enhance your product?"
+  ],
+  [
+   "43",
+   "40",
+   "CQ40.1",
+   "What can help Western politicians can shorten the distance between him/her and the public? Give an example about this and demonstrate the role of media use."
+  ],
+  [
+   "44",
+   "41",
+   "CQ41.1",
+   "Compare and contrast what are heavily and lightly covered on media in political campaigns?"
+  ],
+  [
+   "45",
+   "42",
+   "CQ42.1",
+   "What news media strategy is the most frequently used by candidates and why?"
+  ],
+  [
+   "46",
+   "43",
+   "CQ43.1",
+   "What was the media strategy that politicians employed to communicate with the public?\nWhat are the positive/ negative sides of that employment?"
+  ],
+  [
+   "47",
+   "44",
+   "CQ44.1",
+   "What are some problems with researches on the media violence effect?"
+  ],
+  [
+   "48",
+   "44",
+   "CQ44.2",
+   "What are your opinions about watching media violence frequently makes us become more aggressive and act more violently?"
+  ],
+  [
+   "49",
+   "44",
+   "CQ44.3",
+   "Which effects of media violence can explain why we seem to increasingly indifferent to violence in real life?"
+  ],
+  [
+   "50",
+   "45",
+   "CQ45.1",
+   "What makes a person enjoy watching media violence?"
+  ],
+  [
+   "51",
+   "46",
+   "CQ46.1",
+   "What are common violent elements in video games? Could you give some examples to illustrate each case?"
+  ],
+  [
+   "52",
+   "46",
+   "CQ46.2",
+   "What are the common known effects of game violence on children? Could you give some real life examples that you have observed or experienced yourself?"
+  ],
+  [
+   "53",
+   "47",
+   "CQ47.1",
+   "How could we protect children from the negative effects of violent media? What are the pros and cons of each given solution?"
+  ],
+  [
+   "54",
+   "50",
+   "CQ50.1",
+   "What are different forms of sexual content in media?"
+  ],
+  [
+   "55",
+   "50",
+   "CQ50.2",
+   "How has mass media portrayal of sexuality in Vietnam been changed throughout history? Could you find evidences for comparison?"
+  ],
+  [
+   "56",
+   "51",
+   "CQ51.1",
+   "What are common myths about sexuality that the media creates? What are the possible consequences of these?"
+  ],
+  [
+   "57",
+   "52",
+   "CQ52.1",
+   "What can be the advantage of watching media sex?"
+  ],
+  [
+   "58",
+   "53",
+   "CQ53.1",
+   "How is sex violence portrayed in various forms of media (news, movies, pornography, television, social media...)?"
+  ],
+  [
+   "59",
+   "53",
+   "CQ53.2",
+   "What is the possible link between media sex and sex crime?"
+  ],
+  [
+   "60",
+   "54",
+   "CQ54.1",
+   "What are the main purposes and messages of a television show for children in Vietnam? How does it impact on child audiences and what are your recommendations to make it well-suited for children?"
+  ],
+  [
+   "61",
+   "55",
+   "CQ55.1",
+   "What are the various challenges for social marketing?"
+  ],
+  [
+   "62",
+   "55",
+   "CQ55.2",
+   "What are the necessary conditions for an effective social marketing campaign in Vietnam ịn these circumstances:\n1. Quit smoking\n2. Safe sex\n3. Respect for traditional values\n4. Smart Internet user"
+  ],
+  [
+   "63",
+   "55",
+   "CQ55.3",
+   "What are some examples of entertainment-education media in Vietnam? Could you analyse the educational aspects of these program?"
+  ]
+ ],
+ "links": [
+  "/download/13394/S/1_MMP201_Phần 1.zip",
+  "/download/13394/S/2_MMP201_Phần 2.zip"
+ ]
+}

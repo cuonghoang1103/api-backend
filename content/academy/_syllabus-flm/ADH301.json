@@ -1,0 +1,1154 @@
+{
+ "ma": "ADH301",
+ "sylID": "13376",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13376",
+   "code": "ADH301",
+   "name": "Mobility Applications Design 1 _Thiết kế ứng dụng cho các thiết bị di động 1",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13376",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13376",
+  "Syllabus Name": "Mobility Applications Design 1 _Thiết kế ứng dụng cho các thiết bị di động 1",
+  "Course Name English": "Mobility Applications Design 1",
+  "Subject Code": "ADH301",
+  "Learning-Teaching Method": "Lecture,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 105h self-study",
+  "Pre-Requisite": "WDU201 or WMT201 or WDU202c",
+  "Description": "This course aimed to provide students knowledge related to Interaction and UX Design in mobility world including smartphone devices and other wearable ones. In this course, student will be taught the common principles which dominates on mobile interface design in general. Specified principles corresponding three popular mobile platforms such as Android, iOS and Windows are going to be discussed, too. An agile for researching and designing Interaction and UX in mobility will also be introduced and applied through out this course. At the end of this course, student will obtain practical experience via a three phase projects in which they have to apply learned principles. A high fidelity prototype tools and paper prototype techniques will be explained in this course.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Follow instructions from teachers in class\n- Actively participate in class activities\n- Fulfill tasks given by instructor after class\n- Read the textbook in advance\n- Access the course website (https://flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.\n- Complete course's Portfolio with full contents of exercises and submit to the teacher 1 day after the course",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Don’t Make Me Think, Revisited - A Common Sense Approach to Web Usability",
+   "Steve Krug",
+   "New Riders",
+   "2013",
+   "3rd Edition",
+   "978-0-321-96551-6",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Interaction Design: Beyond Human-Computer Interaction",
+   "Helen Sharp , Jennifer Preece , Yvonne Rogers",
+   "Wiley",
+   "2019",
+   "5th Edition",
+   "9781119547259",
+   "True",
+   "False",
+   "True",
+   "GT này có trong trang: https://library.books24x7.com/toc.aspx?bookid=146076"
+  ],
+  [
+   "3",
+   "Designed for Use: Create Usable Interfaces for Applications and the Web",
+   "Jenny Preece, Helen Sharp, Yvonne Rogers",
+   "The Pragmatic Programmers, LLC",
+   "2011",
+   "1st edition",
+   "978-1-93435-675-3",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Essential Mobile Interaction Design - Perfecting Interface Design in Mobile Apps",
+   "Cameron Banga and Josh Weinhold",
+   "Addison-Wesley Professional",
+   "2014",
+   "1st edition",
+   "978-0-321-96157-0",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "https://webdesign.tutsplus.com",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the core principles of interaction and user experience (UX) design in mobile and wearable contexts, including smartphones, smartwatches, and other responsive platforms."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Identify and analyze platform-specific UI/UX guidelines (e.g., Android, iOS, and others) and adapt design approaches accordingly."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Conduct UX and visual research to gather user needs, identify design patterns, and explore visual languages that inform concept development and design directions."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply the obtained knowledge to implement a research and designing process for a real product."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Investigate and analyze technologies relevant to the product context (e.g., APIs, sensors, databases), and propose practical solutions that define how data is processed and how user actions flow through the system."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Design and prototype digital products by expressing distinctive visual concepts through both low- and high-fidelity prototypes using up-to-date design tools and systems."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Evaluate user experience through usability testing and user feedback, and refine solutions through improvement cycles, focusing on consistency, performance, and emotional impact."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "1 week (Week 1)",
+   "CLO1, CLO2",
+   "Practical Exercise",
+   "",
+   "Understand Laws of UX and describe how they are being applied in real world products.\nAnalyze different parts of UI and effects to understand how to create UI effects",
+   "Group Work: Student Conduct Research about all Laws of UX with real-world examples analysis.\nIndividual Work: Copy UI",
+   "GroupWork Subission: Report in 16:9 format (PDF)\nIndividual Submission: Design file (.fig)"
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "1 week (Week 2)",
+   "CLO1, CLO2",
+   "Practical Exercise",
+   "",
+   "Understand and analyze details in each UI styles and how they are being applied in real world products\nUtilize understanding about styles to create different styles for a button",
+   "Group Work: Student Conduct Research about 5 differents latest UI trend with real-world examples analysis.\nIndividual Work: Design 20 buttons in 20 styles",
+   "GroupWork Submission: Report in 16:9 format (PDF)\nIndividual Submission: Design file (.fig)"
+  ],
+  [
+   "3",
+   "Assignment 3",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "1 week (Week 5 - 6)",
+   "CLO3, CLO5",
+   "Practical Exercise",
+   "",
+   "Conduct visual research to propose moodboard\nPropose UI concept according to moodboard",
+   "Individual Work: Conduct Visual Research, Propose moodboard and a UI Concept for the mobile applications of group project",
+   "IndividualWork Submission:\n- Report in 16:9 format (PDF)\n- Design file (.fig)"
+  ],
+  [
+   "4",
+   "Attendance and Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "10 weeks",
+   "",
+   "-",
+   "-",
+   "-",
+   "Option 1:\nAttendance Percentage and Attitude in class\n- Teacher gives marks on student's Class participation and preparation only after the Portfolio submission.\nOption 2: Follow lecturer'proposal",
+   ""
+  ],
+  [
+   "5",
+   "Project Phase 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "2.5 weeks (Week 3 - 4 - 5)",
+   "CLO3,CLO4,CLO5,CLO6,CLO7",
+   "Practical Exercise",
+   "",
+   "Conduct technologies research to ideate features for assigned persona",
+   "Group of students can choose a persona with a concept of mobile applications that have been prepared by lecturers. Students will discuss to choose topic, Conduct technology research & ideate functions for assigned persona to come up with wireflows for the mobile applications",
+   "Groupwork Submission:\n- Report in 16:9 Format (PDF)\n- Testing Results (.xls or PDF)\n- Wireframes (.fig)"
+  ],
+  [
+   "6",
+   "Project Phase 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "2 weeks (Week 6 - 7 - 8)",
+   "CLO3, CLO6",
+   "Practical Exercise",
+   "",
+   "Design UI concept by conducting visual research",
+   "Discuss and define Moodboard and concept for UI concept of group project from individual assignment 3 of each members",
+   "Groupwork Submission:\n- Report in 16:9 Format (PDF)\n- Design (.fig)"
+  ],
+  [
+   "7",
+   "Project Phase 3",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "2.5 weeks (Week 8 - 9 -10)",
+   "CLO6",
+   "Practical Exercise",
+   "",
+   "Develop full UI for the applications based on the concepts with consistency and scalability",
+   "Finalize UI with interactive prototypes for the whole mobile applications with defined design system\nSubmit case study",
+   "Groupwork Submission:\n- Report in 16:9 Format (PDF)\n- Design (.fig)"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Overall Principles",
+   "Offline",
+   "LO1",
+   "T",
+   "'Main topic:\nMain Textbook. Chapter 1 - Section 1.6 - P.20-29\n\nSuggested Reading:\nReference 2. Chapter 1\nReference 3. Chater 1 - P.10-19\n\n'https://medium.com/blueprint-by-intuit/native-mobile-app-design-overall-principles-and-common-patterns-26edee8ced10",
+   "ADH301_Phần 1",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "2",
+   "Fundamental Design Principles",
+   "Offline",
+   "LO1",
+   "T",
+   "'Main topic:\nMain Textbook. Chapter 1 - Section 1.6 - P.20-29\n\nSuggested Reading:\nReference 2. Chapter 1\nReference 3. Chater 1 - P.10-19\n\n'https://medium.com/blueprint-by-intuit/native-mobile-app-design-overall-principles-and-common-patterns-26edee8ced10",
+   "ADH301_Phần 2",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "3",
+   "Common Patterns, and Interface Guidelines",
+   "Offline",
+   "LO1",
+   "T",
+   "'Main topic:\nMain Textbook. Chapter 1 - Section 1.6 - P.20-29\n\nSuggested Reading:\nReference 2. Chapter 1\nReference 3. Chater 1 - P.10-19\n\n'https://medium.com/blueprint-by-intuit/native-mobile-app-design-overall-principles-and-common-patterns-26edee8ced10",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "4",
+   "Practice: UX Design Journal",
+   "Offline",
+   "LO1",
+   "T",
+   "'Main topic:\nMain Textbook. Chapter 1 - Section 1.6 - P.20-29\n\nSuggested Reading:\nReference 2. Chapter 1\nReference 3. Chater 1 - P.10-19\n\n'https://medium.com/blueprint-by-intuit/native-mobile-app-design-overall-principles-and-common-patterns-26edee8ced10",
+   "",
+   "Class Practice",
+   ""
+  ],
+  [
+   "5",
+   "Paper Prototype Basic Principles",
+   "Offline",
+   "LO5",
+   "T",
+   "'Main topic:\nMain Textbook. Chapter 10,11 - P.95-107\n\nSuggested Reading:\n'https://material.io/design/introduction",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "6",
+   "Class Practice: Paper Prototype",
+   "Offline",
+   "LO5",
+   "T",
+   "Main topic:\nMain Textbook. Chapter 10,11 - P.95-107\n\nSuggested Reading:\n'https://material.io/design/introduction",
+   "",
+   "Class Practice",
+   ""
+  ],
+  [
+   "7",
+   "Paper Prototype on Figma/ Adobe XD/ Sketch App",
+   "Offline",
+   "LO5",
+   "T",
+   "Main topic:\nMain Textbook. Chapter 10,11 - P.95-107\n\nSuggested Reading:\n'https://material.io/design/introduction",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "8",
+   "Class Practice: Paper Prototype on Design Tool (Tutor Topic)",
+   "Offline",
+   "LO5",
+   "T",
+   "Main topic:\nMain Textbook. Chapter 10,11 - P.95-107\n\nSuggested Reading:\n'https://material.io/design/introduction",
+   "",
+   "Class Practice",
+   ""
+  ],
+  [
+   "9",
+   "Introducing Figma/ Adobe XD components & Principles",
+   "Offline",
+   "LO5",
+   "T",
+   "Main topic:\nMain Textbook. Chapter 10,11 - P.95-107\n\nSuggested Reading:\n'https://material.io/design/introduction",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "10",
+   "Guide to use Figma/ Adobe XD for making prototype",
+   "Offline",
+   "LO5",
+   "U",
+   "Main topic:\nMain Textbook. Chapter 2\n\n'Suggested Reading\n\nhttps://www.invisionapp.com/inside-design/designing-in-the-material-style-without-just-copying-google/",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "11",
+   "Style guidelines for Android (1 -> 10)",
+   "Offline",
+   "LO5",
+   "U",
+   "Main topic:\nMain Textbook. Chapter 2\n\n'Suggested Reading\n\nhttps://www.invisionapp.com/inside-design/designing-in-the-material-style-without-just-copying-google/",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "12",
+   "UI/UX Principles for Android",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\n\n'https://developer.android.com/design/get-started/principles.html\n\nSuggested Reading:\nReference 5. P.252-255",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "13",
+   "Style guidelines for iOS (1 -> 15)",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\n\n'https://developer.android.com/design/get-started/principles.html\n\nSuggested Reading:\nReference 5. P.252-255",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "14",
+   "UI/UX Principles for iOS",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\nMain Textbook. Chapter 2\n\nSuggested Reading:\nReference 4. P.255-259\n\n'https://developer.apple.com/design/human-interface-guidelines/ios/overview/themes/",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "15",
+   "Introducing Microsoft Fluent Design & Microsoft Design Vision",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\nMain Textbook. Chapter 2\n\nSuggested Reading:\nReference 4. P.255-259\n\n'https://developer.apple.com/design/human-interface-guidelines/ios/overview/themes/",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "16",
+   "UI/UX Principles for Windows Phone",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\nMain Textbook. Chapter 2\n\nSuggested Reading:\nhttps://www.microsoft.com/design/fluent/#/",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "17",
+   "Introducing wearable devices & its benefits",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\nMain Textbook. Chapter 2\n\nSuggested Reading:\nhttps://www.microsoft.com/design/fluent/#/",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "18",
+   "UI/UX Principles for Wearable Devices",
+   "Offline",
+   "LO2",
+   "I",
+   "'Main Topic:\nMain Textbook. Chapter 2\n\nSuggested Reading:\n\n'https://www.uxpin.com/studio/blog/think-small-applying-ui-design-principles-to-wearables/\n\nhttps://xd.adobe.com/ideas/principles/app-design/5-things-ux-designers-need-know-designing-wearables/",
+   "",
+   "Review\nDiscussion",
+   ""
+  ],
+  [
+   "19",
+   "Research, Design, Implementation: Design Process for Mobility",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\nMain Textbook. P.15-16\nMain Textbook. Chapter 6\n'Suggested Reading:\nReference 2. Chapter 8 - P.239-276",
+   "",
+   "Recall the Agile process for mobility design",
+   ""
+  ],
+  [
+   "20",
+   "Research, Design, Implementation: Design Thinking Retro",
+   "Offline",
+   "LO2",
+   "T",
+   "'Main Topic:\nMain Textbook. P.15-16\nMain Textbook. Chapter 6\n'Suggested Reading:\nReference 2. Chapter 8 - P.239-276",
+   "",
+   "Recall the Agile process for mobility design",
+   ""
+  ],
+  [
+   "21",
+   "Research, Design, Implementation: Introducing Agile",
+   "Offline",
+   "LO4",
+   "T",
+   "'Main Topic:\nMain Textbook. P.15-16\nMain Textbook. Chapter 6\n'Suggested Reading:\nReference 2. Chapter 8 - P.239-276",
+   "",
+   "Recall the Agile process for mobility design",
+   ""
+  ],
+  [
+   "22",
+   "Class Practice: Planning for Agile Sprint",
+   "Offline",
+   "LO4",
+   "T",
+   "'Main Topic:\nMain Textbook. P.15-16\nMain Textbook. Chapter 6\n'Suggested Reading:\nReference 2. Chapter 8 - P.239-276",
+   "",
+   "Class Practice",
+   ""
+  ],
+  [
+   "23",
+   "First Sprint : Plan for the mobile application product",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "24",
+   "First Sprint : Plan for the mobile application product",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "25",
+   "First Sprint : Project Definition",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "26",
+   "First Sprint : Desk research",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "27",
+   "First Sprint : Market research",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "28",
+   "First Sprint : Competitor Analysis",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "29",
+   "First Sprint : Interview & Observation",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "30",
+   "First Sprint : Data analysis",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "31",
+   "First Sprint : Persona Creation & Empathy Mapping",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "32",
+   "First Sprint : Persona Creation & Empathy Mapping",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "33",
+   "Class Pitching: Student introducing idea",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "34",
+   "Class Pitching: Student introducing idea",
+   "Offline",
+   "LO4",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "35",
+   "Progress Test 1 (Lecturer self-organize)",
+   "Offline",
+   "",
+   "",
+   "'Main Topic:\nMain Textbook. Chapter 3,6,9\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "",
+   ""
+  ],
+  [
+   "36",
+   "Second Sprint : Design a product for a specified target platform",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Second Sprint : Define journey map/ user scenario",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "38",
+   "Second Sprint : Define target platform & define UX",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "39",
+   "Second Sprint : Define style guidelines",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "40",
+   "Second Sprint : Usability Testing Methods",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "41",
+   "Second Sprint : UX testing method & Create Test Plan",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "42",
+   "Second Sprint : UX testing method & Create Test Plan",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "43",
+   "Second Sprint : Class Usability Testing Practice",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "44",
+   "Second Sprint : Class UX Laboratory Testing Practice",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "45",
+   "Second Sprint : Heuristic Testing",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "46",
+   "Class Pitching 02: Project Pitching about style guidelines, design method, user research",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "47",
+   "Class Pitching 02: Project Pitching about style guidelines, design method, user research",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "48",
+   "Class Pitching 02: Project Pitching about style guidelines, design method, user research",
+   "Offline",
+   "LO5, LO7",
+   "U",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "49",
+   "Progress Test 2 (Lecturer self-organize)",
+   "Offline",
+   "",
+   "",
+   "Main Topic:\n\nMain Textbook. Chapter 6\n\nSuggested Reading:\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "Third Sprint : Design another version for another platform which is different with the first product",
+   "Offline",
+   "LO6, LO7",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 11,14,15\nSuggested Reading:\nReference 2. Chapter 6\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "51",
+   "Third Sprint : Dark/Light Mode Design Breakdown",
+   "Offline",
+   "LO6, LO7",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 11,14,15\nSuggested Reading:\nReference 2. Chapter 6\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "52",
+   "Third Sprint : A/B Testing Introducing",
+   "Offline",
+   "LO6, LO7",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 11,14,15\nSuggested Reading:\nReference 2. Chapter 6\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "53",
+   "Third Sprint : Expand User Scenarios",
+   "Offline",
+   "LO6, LO7",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 11,14,15\nSuggested Reading:\nReference 2. Chapter 6\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "54",
+   "Third Sprint : Design Finalization",
+   "Offline",
+   "LO6, LO7",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 11,14,15\nSuggested Reading:\nReference 2. Chapter 6\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "55",
+   "Third Sprint : Build MVP on Figma/Adobe XD",
+   "Offline",
+   "LO6, LO7",
+   "U",
+   "'Main Topic:\nMain Textbook. Chapter 11,14,15\nSuggested Reading:\nReference 2. Chapter 6\n\n'http://hackingui.com/design/design-sprint/\n\nhttps://www.interaction-design.org/literature/topics/design-sprint",
+   "",
+   "Review\nDiscussion\nClass Practice",
+   ""
+  ],
+  [
+   "56",
+   "Progress Test 3 (Examination Department organize)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Progress Test 3 (Examination Department organize)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Class Pitching 03: Final Product Introducing",
+   "Offline",
+   "LO6, LO7",
+   "U",
+   "",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "59",
+   "Class Pitching 03: Final Product Introducing",
+   "Offline",
+   "LO6, LO8",
+   "U",
+   "",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ],
+  [
+   "60",
+   "Class Pitching 03: Final Product Introducing",
+   "Offline",
+   "LO6, LO9",
+   "U",
+   "",
+   "",
+   "Class Presentation, Discussion",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1",
+   "What is experience? Example of experience in daily life?"
+  ],
+  [
+   "2",
+   "1",
+   "QN2",
+   "What is user experience? The different between aging user and gen x y z using smart phone?"
+  ],
+  [
+   "3",
+   "2",
+   "QN1",
+   "Mapping - the recycle bin from real life to digital? Example of other digital mapping?"
+  ],
+  [
+   "4",
+   "2",
+   "QN2",
+   "Feedback - should we use sound as a tool to notify user?"
+  ],
+  [
+   "5",
+   "3",
+   "QN1",
+   "External consistency vs interconsistency?"
+  ],
+  [
+   "6",
+   "3",
+   "QN2",
+   "Physical affordance vs digital affordance? Example of it?"
+  ],
+  [
+   "7",
+   "3",
+   "QN3",
+   "Now using 7 fundamental principlés of interaction design to describe an app, starting from purpose of use and the progress of using it. What is the app you will use? What is your purpose?"
+  ],
+  [
+   "8",
+   "4",
+   "QN1",
+   "What is your favourite screen transition? Purpose of using it?"
+  ],
+  [
+   "9",
+   "5",
+   "QN1",
+   "What different between iOS guidelines and Android guidelines?"
+  ],
+  [
+   "10",
+   "6",
+   "QN1",
+   "What is the relationship between fundamental principles of interaction design and interface guideline?"
+  ],
+  [
+   "11",
+   "7",
+   "QN1",
+   "What are the differences between :Sketching vs wireframe vs paper?"
+  ],
+  [
+   "12",
+   "10",
+   "QN1",
+   "How to make a good feedback with login - welcome - signup screens?"
+  ],
+  [
+   "13",
+   "11",
+   "QN1",
+   "What is your first function for your application? How can user complete their goal?"
+  ],
+  [
+   "14",
+   "12",
+   "QN1",
+   "What is User Centered Design? And Design thinking in student's example, such as: making event or making idea?"
+  ],
+  [
+   "15",
+   "13",
+   "QN1",
+   "Lean process? What is lean? What is MVP?"
+  ],
+  [
+   "16",
+   "14",
+   "QN1",
+   "How to empathise with interviewees?"
+  ],
+  [
+   "17",
+   "15",
+   "QN1",
+   "Data analysis: what is affinity diagram and mapping? How to make it? What is common sense?"
+  ],
+  [
+   "18",
+   "16",
+   "QN1",
+   "WHO: Who is your target audience(s)? Detailing about these preferences such as: age, bio etc..."
+  ],
+  [
+   "19",
+   "17",
+   "QN1",
+   "WHAT: What problem(s) you are solving? How can it make your (WHO) be better?"
+  ],
+  [
+   "20",
+   "18",
+   "QN1",
+   "WHERE: Where is your market? How can you make money? How can you be different comparing to your competitor(s)?"
+  ],
+  [
+   "21",
+   "25",
+   "QN1",
+   "How did you conduct your user research? What are the outstanding points of your persona"
+  ],
+  [
+   "22",
+   "26",
+   "QN1",
+   "How to make a good hifi prototype? What kind of UI(s) you will bring into your product?"
+  ],
+  [
+   "23",
+   "27",
+   "QN1",
+   "What make people buy new mobile phone because of the camera hardware?"
+  ],
+  [
+   "24",
+   "30",
+   "QN1",
+   "Based on age ranges of users, which range(s) love using online dating app?"
+  ],
+  [
+   "25",
+   "31",
+   "QN1",
+   "What is the future of the mobile phone in your POV?"
+  ],
+  [
+   "26",
+   "32",
+   "QN1",
+   "What are the basic experience that your application should have? Explained it with detail scenario?"
+  ],
+  [
+   "27",
+   "43",
+   "QN1",
+   "What is your test plan? What type of tests you will use to validate your simulation?"
+  ],
+  [
+   "28",
+   "44",
+   "QN1",
+   "What criterias that you will set into you’re a/B test plan?"
+  ],
+  [
+   "29",
+   "45",
+   "QN1",
+   "What criterias that you will set into you’re heuristic test plan?"
+  ],
+  [
+   "30",
+   "46",
+   "QN1",
+   "What criterias that you will set into you’re usability test plan?"
+  ],
+  [
+   "31",
+   "60",
+   "QN1",
+   "What make your idea stand out comparing to your teammate's hifi and actual products in the market?"
+  ]
+ ],
+ "links": [
+  "/download/13376/S/1_ADH301_Phần 1.zip",
+  "/download/13376/S/2_ADH301_Phần 2.zip"
+ ]
+}

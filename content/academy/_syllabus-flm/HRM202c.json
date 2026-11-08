@@ -1,0 +1,348 @@
+{
+ "ma": "HRM202c",
+ "sylID": "13032",
+ "quyetDinh": "857/QĐ-ĐHFPT dated 08/05/2025",
+ "ungVien": [
+  {
+   "sylID": "13032",
+   "code": "HRM202c",
+   "name": "Human Resource Management_Quản trị nhân sự",
+   "active": true,
+   "approved": true,
+   "decision": "857/QĐ-ĐHFPT dated 08/05/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13032",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13032",
+  "Syllabus Name": "Human Resource Management_Quản trị nhân sự",
+  "Course Name English": "Human Resource Management",
+  "Subject Code": "HRM202c",
+  "Learning-Teaching Method": "Online,Offline",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 91h online + 3h offline (optional) + 1h Final exam + 55h self-study",
+  "Pre-Requisite": "MGT101 or MGT103 or MKG101",
+  "Description": "This course is derived from the Coursera Specialization \"HRIC Human Resource Associate Professional Certificate.\"\n\nHuman Resource (HR) professionals are crucial to an organization's success, playing an essential role in recruitment and management of right candidates and talents, policy development, and fostering a positive work environment. Pursuing a career in HR enables individuals to significantly contribute to an organization's overall achievements.\n\nThis program is meticulously designed to prepare aspiring HR professionals. It encompasses five modules, offering a diverse array of engaging videos, interactive activities, assessments, and peer-reviewed projects aimed at enhancing professional expertise and providing a comprehensive understanding of Human Resource Management (HRM) fundamentals.\n\nUpon completion of this program, students will understand how to:\n\n- Recruit, select, and onboard new employees effectively.\n\n- Develop and implement employee policies and procedures that align with organizational objectives.\n\n- Foster a positive work culture and enhance employee engagement.\n\n- Understand and navigate legal and ethical considerations in HR.\n\nGraduates of this program will receive a certificate from Coursera and gain the requisite knowledge and skills to excel in the HR field. Additionally, they will be prepared to undertake the HRCI Associate Professional in Human Resources (aPHR) certification exam, distinguishing themselves as qualified HR professionals.",
+  "StudentTasks": "This Course is based on the Coursera Specialization \"HRIC Human Resource Associate Professional Certificate\"\n\nStudents have to:\n\n- complete the course on Coursera platform prior to deadline.\n\n- attend offline sessions scheduled on FAP for instruction and guidance (optional)",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "857/QĐ-ĐHFPT dated 08/05/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Final Exam (FE) = Theoretical Exam (TE)\n\n3) Final Result (FR) = min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/5/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/professional-certificates/hrci-human-resource-associate#courses",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Spec: HRIC Human Resource Associate Professional Certificate"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/talent-acquisition?specialization=hrci-human-resource-associate",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Talent Acquisition"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/learning-and-development?specialization=hrci-human-resource-associate",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2: Learning and Development"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/compensation-and-benefits?specialization=hrci-human-resource-associate",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Compensation and Benefits"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/employee-relations?specialization=hrci-human-resource-associate",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 4: Employee Relations"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/compliance-and-risk-management?specialization=hrci-human-resource-associate",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 5: Compliance and Risk Management"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the significance and practices of talent management, including recruitment, selection and onboarding."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Create career development plan for an employee, and training and development plan for the organization"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Determine compensation and benefit structure based on best practices and motivational theories"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply effective employee relation management skills using vision, mission, core values, ethics codes, company handbook, and effective employee communications"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply effective performance management and performance appraisal skills"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand importance of compliance and risk management, and the role of HRM in Organizational Restructuring and Business Continuity"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Multiple choices. Marked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 9-11 questions.",
+   "By exam board\n\nThe questions will cover content delivered in 5 courses of the specialization.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the specialization\n\nCourse 1: Talent Acquisition (1)\n\nModule 1: Introduction to the program\nLession 1: Course overview and syllabus\nLession 2: Forcasting and Evaluating Workforce Needs\nLession 3: Job Design and Legislation\nGraded Quiz 1\n\nModule 2: How to get started in Talent Acquisition\nLession 1: Job analysis and Job descriptions\nLession 2: Recruiting and Tracking Applicants\nGraded Quiz 2",
+   "Online, offline",
+   "CLO1",
+   "ITU",
+   "Spec: HRIC Human Resource Associate Professional Certificate\n\nCourse 1: Talent Acquisition",
+   "",
+   "- See the syllabus of all 5 courses in the specialization\n- Participate in introduction slot (optional)\n- Watch the videos\n- Read the materials\n- Do all the quizzes (both practice and graded ones)\n- Complete and submit all assignments (both practice and peer-graded ones)",
+   ""
+  ],
+  [
+   "2",
+   "Course 1: Talent Acquisition (2)\n\nModule 3: Talent Acquisition Life Cycle\n\nLession 1: Talent Sourcing\n\nLession 2: Screening and Interviewing Candidates\n\nLession 3: Evaluating Prospective Employees\n\nGraded Quiz 3\n\nModule 4: Negotiation and Onboarding\n\nLession 1: Negotiations\n\nLession 2: Onboarding\n\nLession 3: Employee Retention\n\nLession 4: Career Support\n\nGraded Quiz 4\n\nPeer-graded Assignment: Talent Acquisition",
+   "Online",
+   "CLO1",
+   "IU",
+   "Course 1: Talent Acquisition",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "3",
+   "Course 2: Learning and Development (1)\n\nModule 1: Introduction to Learning and Development\nLession 1: Introduction to the Program\nLession 2: Introduction to Career Development\nLession 3: Career Development Tools\nGraded Quiz 1\n\nModule 2: Structure and Design of Learning\nLession 1: Learning Models\nLession 2: Types of Training\nLession 3: Learning Styles\nGraded Assignment: Structure and Design of Learning",
+   "Online",
+   "CLO2",
+   "IU",
+   "Course 2: Learning and Development",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "4",
+   "Course 2: Learning and Development (2)\n\nModule 3: Implementation and Evaluation of Training and Development\n\nLession 1: Training Delivery Method\n\nLession 2: Evaluating Training programs\n\nLession 3: Learning Metrics\n\nGraded Quiz 2\n\nModule 4: Learning Delivery, Application and Evaluation\n\nLession 1: Monitoring training programs\n\nLession 2: Design a training experience\n\nLession 3: Career Support\n\nGraded Quiz 3",
+   "Online",
+   "CLO2",
+   "TU",
+   "Course 2: Learning and Development",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "5",
+   "Course 3: Compensation and Benefits (1)\n\nModule 1: Introduction to Compensation and Benefits\nLession 1: Introduction to the program\nLession 2: Compensation systems\nLession 3: Wages and Differential pay\nGraded Quiz 1\n\nModule 2: Organization Structure and Compensation Strategy\nLession 1: Compensation considerations\nLession 2: Wage equity\nLession 3: Pay for performance and incentives\nGraded Quiz 2",
+   "Online",
+   "CLO3",
+   "IU",
+   "Course 3: Compensation and Benefits",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "6",
+   "Course 3: Compensation and Benefits (2)\n\nModule 3: Benefits\n\nLession 1: Introduction to benefits\n\nLession 2: Healthcare as benefits\n\nLession 3: Family-oriented benefits\n\nLession 4: Retirement plans\n\nGraded Quiz 3\n\nModule 4: Payroll and Benefit Technology and Design\n\nLession 1: Payroll\n\nLession 2: Human Resource Information system\n\nLession 3: Data Storage and Reporting\n\nLession 4: Claims processing\n\nGraded Quiz 4",
+   "Online",
+   "CLO3",
+   "IU",
+   "Course 3: Compensation and Benefits",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "7",
+   "Course 4: Employee Relations (1)\n\nModule 1: Introduction to Employee Relations\n\nLession 1: Introduction to the program\n\nLession 2: Mission, Vision, and Values\n\nLession 3: Company Ethics\n\nLession 4: The Company Handbooks and Emloyee Communications\n\nGraded Quiz 1\n\nModule 2: Employee Engagement\n\nLession 1: Creating an inclusive culture\n\nLession 2: Inclusion initiatives\n\nLession 3: Evaluating Employee engagement\n\nGraded Quiz 2\n\nPeer-graded Assignment: Setting the stage for your company's culture",
+   "Online",
+   "CLO4",
+   "IU",
+   "Course 4: Employee Relations",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "8",
+   "Course 4: Employee Relations (2)\n\nModule 3: Performance Management\nLession 1: Peformance Management introduction\nLession 2: Perfomance Appraisal\nLession 3: Workplace Discipline and Termination\nLession 4: Workplace Conflict\nGraded Quiz 3",
+   "Online",
+   "CLO4, CLO5",
+   "IU",
+   "Course 4: Employee Relations",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "9",
+   "Course 4: Employee Relations (3)\n\nModule 4: Business Continuity\n\nLession 1: Human Resources Management\n\nLession 2: Organizational Structures\n\nLession 3: HR Record Keeping\n\nLession 4: Career Support\n\nGraded Quiz 4",
+   "Online",
+   "CLO6",
+   "IU",
+   "Course 4: Employee Relations",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "10",
+   "Course 5: Compliance and Risk Management (1)\n\nModule 1: Introduction to Compliance and risk management\n\nLession 1: Introduction to the program\n\nLession 2: Introduction to Risk management\n\nLession 3: Introduction to Compliance\n\nGraded Quiz 1\n\nModule 2: Hiring and Employee Relations Regulations\n\nLession 1: Legal compliance\n\nLession 2: Employee Relations compliance and risk management\n\nGraded Quiz 2",
+   "Online",
+   "CLO6",
+   "TU",
+   "Course 5: Compliance and Risk Management",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "11",
+   "Course 5: Compliance and Risk Management (2)\n\n'Module 3: Health and Safety regulations\nLession 1: HR and Workplace health and safety\nLession 2: HR and Workplace Harzard and threats\nLession 3: Harassment in the workplace\nGraded Quiz 3\n\nModule 4: Compliance Strategy and implementation\nLession 1: The role of Human resources in Organizational restructuring\nLession 2: The role of Human resources in Business Continuity\nGraded Quiz 4",
+   "Online",
+   "CLO6",
+   "IU",
+   "Course 5: Compliance and Risk Management",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "12",
+   "Course 5: Compliance and Risk Management (3)\n\nModule 5: Compliance and risk management training\n\nLession 1: Risk management policies and procedures\n\nLession 2: Formal Risk management procedures\n\nLession 3: Career Support and Exam information\n\nGraded Quiz 5",
+   "Online, offline",
+   "CLO6",
+   "TU",
+   "Course 5: Compliance and Risk Management",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Complete the Spec. Deadline: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

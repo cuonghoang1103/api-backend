@@ -1,0 +1,1572 @@
+{
+ "ma": "EAW212",
+ "sylID": "11333",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11333",
+   "code": "EAW212",
+   "name": "Viết tiếng Anh học thuật 1",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11333",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11333",
+  "Syllabus Name": "Viết tiếng Anh học thuật 1",
+  "Course Name English": "Academic English Writing 1",
+  "Subject Code": "EAW212",
+  "Learning-Teaching Method": "Lecture,Presenting,Active learning,Cooperative Learning,Discovery Learning,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Advanced",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "Advance in Academic Writing helps students write assignments in academic English. Advance integrates active and critical reading, critical thinking, academic vocabulary building, academic writing style, and effective sentence structure and grammar around authentic academic texts. As students respond to these texts, they are taken through the research and writing processes they will need to master to succeed in their respective fields of study.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfil tasks given by instructor after class\n\n- Use their own laptop in class only for learning purposes",
+  "Tools": "Tools: Foxit pdf editor\n\nInternet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "1) On-going assessment\n\n- Assignments 04*15% 60%\n\n2) Final Examination (FE) 40%\n\n3) Final Result 100%\n\n4) Completion Criteria:\n\nOn-going assessment >0, Final Exam Score >=4/10 & Final Result >=5/10",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Advance in Academic Writing 1- English for Academic Purposes\n\n+ ST: Student’s Book (hardcopy or EText and My ELAB)\n\n+ For Teacher: My ELAB Documents",
+   "",
+   "Pearson.",
+   "2019",
+   "",
+   "9782761396752",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Longman Academic Writing Series 4 - Pearson",
+   "",
+   "Pearson.",
+   "",
+   "(fifth Edition)",
+   "9780134663326",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "*Identify 6 stages of the writing process ; * apply four strategies for learning vocabulary; *identify nouns and noun phrases; *learn about parallel structure; * write an exploratory paragraph following 6 stages of the writing process"
+  ],
+  [
+   "2",
+   "CLO2",
+   "* Explain past, present, and future tenses; use four strategies for learning vocabulary; identify features of informal style; *write about critical thinking; * learn about assessing the reliability of sources; *write personal narratives about your past, present, and future tenses"
+  ],
+  [
+   "3",
+   "CLO3",
+   "*Distinguish opinion from fact; *support argument with reasons, examples, and evidence; *apply language of opinion, argument, and concession in the writing; *present a closing position; *corporate APA, MLA in-text citation; *write an argumentative paragraph using personal language"
+  ],
+  [
+   "4",
+   "CLO4",
+   "*Write topic sentences and keep paragraphs unified; identify logical fallacies;* write compound and complex sentences; use Latinate verbs in academic writing* rewrite a paragraph to avoid logical fallacies"
+  ],
+  [
+   "5",
+   "CLO5",
+   "*Distinguish three more key features of paragraphs: coherence, cohesion, and concluding sentences; *apply conjunctive adverbs and reference words in the writing; * write relative clauses and participle phrases; identify logical fallacies based on generalization; *write 2 paragraphs: one presenting the positive sides of a given topic, one presenting the negative aspects"
+  ],
+  [
+   "6",
+   "LO6",
+   "*Recognize plagiarism and quote directly; *integrate their awareness of plagiarism into writing practice; *apply language of attribution, reporting verbs, and passive voice; *corporate citation in the writing; * write two paragraphs with at least 2 citations from a reliable academic source, incorporate the author's ideas by paraphrasing one and directly quoting the other"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignments",
+   "on-going",
+   "4",
+   "60.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "OP1: Assignment 1: LO1-LO2. Write an exploratory paragraph ~400words Assignment 2: LO3-LO4 Write an argumentative paragraph. Types of questions: Agree/Disagree or Why…? or Yes/No question… ~200words (Note: evidence or in-text citations should be included) Assignment 3: LO5 Write an argumentative paragraph. Types of questions: To what extent…? Pros & Cons…~200words (Note: evidence or in-text citations should be included) Assignment 4: LO6 Write 2 paragraphs: one presenting the positive sides of a topic, and one presenting the negative aspects.~300words // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "4",
+   "Knowledge and skills in studied chapter(s)",
+   "* homework\n\n~400 words/paragraph",
+   "15"
+  ],
+  [
+   "2",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "40'",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Write ONE paragraph of 150-200 words about a topic",
+   "2",
+   "Knowledge and skills in studied chapter(s)",
+   "in the exam room, using a computer or papers\n\n~150-200 words",
+   "Paragraph type:\n\n- opinion\n\n- positive/negative trend"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\n\nChapter 1: The Writing Process",
+   "Offline",
+   "LO1",
+   "ITU",
+   "",
+   "",
+   "*Read chapter 1 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "2",
+   "Handbook: Unit 1\n\nAppendix 1",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read key grammar ((Part 5: Unit 1) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: The Writing Process",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read chapter 1 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "4",
+   "Handbook: Unit 1\n\nAppendix 1",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read key grammar ((Part 5: Unit 1) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: The Writing Process",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read chapter 1 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "6",
+   "Handbook: Unit 1\n\nAppendix 1",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read key grammar ((Part 5: Unit 1) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 1: The Writing Process",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read chapter 1 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "8",
+   "Handbook: Unit 1\n\nAppendix 1",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read key grammar ((Part 5: Unit 1) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 1: The Writing Process",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read chapter 1 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "10",
+   "Handbook: Unit 1\n\nAppendix 1",
+   "Offline",
+   "LO1",
+   "TU",
+   "",
+   "",
+   "*Read key grammar ((Part 5: Unit 1) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 2: Making Time Connections in Writing",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read chapter 2 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "12",
+   "Handbook: Unit 2",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 2) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 2: Making Time Connections in Writing",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read chapter 2 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "14",
+   "Handbook: Unit 2",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 2) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 2: Making Time Connections in Writing",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read chapter 2 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "16",
+   "Handbook: Unit 2",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 2) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 2: Making Time Connections in Writing",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read chapter 2 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "18",
+   "Handbook: Unit 2",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 2) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 2: Making Time Connections in Writing",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read chapter 2 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "20",
+   "Handbook: Unit 2",
+   "Offline",
+   "LO2",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 2) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "21",
+   "Assignment 1",
+   "Offline",
+   "LO3",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 3: Develop your arguments",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read chapter 3 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 3: Develop your arguments\n\nHandbook: Unit 3",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read chapter 3 adequately as well as study key grammar (Part 5: Unit 3) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "24",
+   "Handbook: Unit 3\n\nAppendix 2",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 3) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 3: Develop your arguments",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read chapter 3 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "26",
+   "Handbook: Unit 3\n\nAppendix 2",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 3) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 3: Develop your arguments",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read chapter 3 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "28",
+   "Handbook: Unit 3\n\nAppendix 2",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 3) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 3: Develop your arguments",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read chapter 3 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "30",
+   "Handbook: Unit 3\n\nAppendix 2",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 3) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 4: Paragraphs: Topic Sentences and Unity",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read chapter 4 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "32",
+   "Handbook: Unit 4\n\nAppendix 3",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 4) and vocabulary at home before attending the lesson\n\n*Do exercise on My Elab",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 4: Paragraphs: Topic Sentences and Unity",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read chapter 4 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "34",
+   "Handbook: Unit 4\n\nAppendix 3",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 4) and vocabulary at home before attending the lesson\n\n*Do exercise on My Elab",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 4: Paragraphs: Topic Sentences and Unity",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read chapter 4 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "36",
+   "Handbook: Unit 4",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 4) and vocabulary at home before attending the lesson\n\n*Do exercise on My Elab",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 4: Paragraphs: Topic Sentences and Unity",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read chapter 4 adequately at home before attending the lesson\n\n*Do exercise on My Elab",
+   ""
+  ],
+  [
+   "38",
+   "Handbook: Unit 4",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 4) and vocabulary at home before attending the lesson\n\n*Do exercise on My Elab",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 4: Paragraphs: Topic Sentences and Unity",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read chapter 4 adequately at home before attending the lesson\n\n*Do exercise on My Elab",
+   ""
+  ],
+  [
+   "40",
+   "Handbook: Unit 4",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 4) and vocabulary at home before attending the lesson\n\n*Do exercise on My Elab",
+   ""
+  ],
+  [
+   "41",
+   "Assignment 2",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 5: Paragraphs: Coherence,Cohesion, and Concluding Sentences\n\nHandbook: Unit 5",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read chapter 5 adequately as well as study key grammar (Part 5: Unit 5) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 5: Paragraphs: Coherence,Cohesion, and Concluding Sentences",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read chapter 5 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "44",
+   "Handbook: Unit 5",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 5) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 5: Paragraphs: Coherence,Cohesion, and Concluding Sentences",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read chapter 5 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "46",
+   "Handbook: Unit 5",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 5) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 5: Paragraphs: Coherence,Cohesion, and Concluding Sentences",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read chapter 5 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "48",
+   "Handbook: Unit 5",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 5) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 5: Paragraphs: Coherence,Cohesion, and Concluding Sentences",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read chapter 5 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "50",
+   "Handbook: Unit 5",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 5) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "51",
+   "Assignment 3\n\nChapter 6: Incorporating others' ideas",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read chapter 6 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "52",
+   "Handbook: Unit 6",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 6) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 6: Incorporating others' ideas",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read chapter 6 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "54",
+   "Handbook: Unit 6",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 6) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 6: Incorporating others' ideas",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read chapter 6 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "56",
+   "Handbook: Unit 6",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 6) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "57",
+   "Chapter 6: Incorporating others' ideas",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read chapter 6 adequately at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "58",
+   "Handbook: Unit 6",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read key grammar (Part 5: Unit 6) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "59",
+   "Chapter 6: Incorporating others' ideas\n\nHandbook: Unit 6",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "*Read chapter 6 adequately as well as study key grammar (Part 5: Unit 6) and vocabulary at home before attending the lesson\n\n*Do exercises on My Elab",
+   ""
+  ],
+  [
+   "60",
+   "Assignment 4",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "DN_CQ1",
+   "What is academic writing? How can students improve academic writing? What are the challenges in learning academic writing?"
+  ],
+  [
+   "2",
+   "1",
+   "HN_CQ1",
+   "What is academic writing? Why do students have difficulty with academic writing?"
+  ],
+  [
+   "3",
+   "2",
+   "DN_CQ2",
+   "Why should students understand audience, genre and purpose? How can these elements help improve students' academic writing?"
+  ],
+  [
+   "4",
+   "2",
+   "DN_CQ3",
+   "Write a writing question based on your understanding of topic, focus and task."
+  ],
+  [
+   "5",
+   "2",
+   "HN_CQ2",
+   "What can be done to improve students' academic writing?"
+  ],
+  [
+   "6",
+   "3",
+   "DN_CQ4",
+   "What are the benefits of searching online before writing? How do students find reliable sources online?"
+  ],
+  [
+   "7",
+   "3",
+   "HN_CQ3",
+   "Why do students have to understand audience, genre and purpose before writing?"
+  ],
+  [
+   "8",
+   "4",
+   "DN_CQ5",
+   "Read the passage \"Students' Accounts of Their First-Year Undergraduate Academic Writing Experience: Implication for the Use of the CEFR\" and identify the good features of Academic Writing."
+  ],
+  [
+   "9",
+   "4",
+   "HN_CQ4",
+   "Provide an example of a writing question and analyze its topic, focus and task. Why do students have to understand your topic, focus and task before writing?"
+  ],
+  [
+   "10",
+   "5",
+   "DN_CQ6",
+   "What are the vocabulary strategies? Give examples. Use these strategies to comprehend the article \"History of Fuel Cell Vehicles\"."
+  ],
+  [
+   "11",
+   "5",
+   "HN_CQ5",
+   "Should students search for information online before writing? Why? What are advantages and disadvantages of searching information online before writing?"
+  ],
+  [
+   "12",
+   "6",
+   "DN_CQ7",
+   "Write about your strengths and weaknesses as an academic writer. What should you do to overcome the weaknesses and improve your academic writing. Brainstorms the ideas before writing."
+  ],
+  [
+   "13",
+   "6",
+   "HN_CQ6",
+   "Read the passage \"Students' accounts of their first-year undergraduate academic writing experience: implications for the use of the CEFR\" and answers the following questions: What are features of good academic writing? What should students do to do well in academic writing?"
+  ],
+  [
+   "14",
+   "7",
+   "DN_CQ8",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "15",
+   "7",
+   "HN_CQ7",
+   "Write about your strengths and weaknesses as an academic writer. Write a plan to improve your academic writing."
+  ],
+  [
+   "16",
+   "8",
+   "DN_CQ9",
+   "Write five sentences containing general noun phrases and five sentences containing specific noun phrases. Use both countable and uncountable nouns."
+  ],
+  [
+   "17",
+   "8",
+   "HN_CQ8",
+   "Present your strengths and weaknesses in academic writing and the plan for improvement."
+  ],
+  [
+   "18",
+   "9",
+   "DN_CQ10",
+   "Research the History of a steam engine, use past tenses to write about its history: How was it invented? Who was the inventor? How was it used?"
+  ],
+  [
+   "19",
+   "9",
+   "HN_CQ9",
+   "Present your strengths and weaknesses in academic writing and the plan for improvement."
+  ],
+  [
+   "20",
+   "10",
+   "DN_CQ11",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "21",
+   "10",
+   "HN_CQ10",
+   "Present your strengths and weaknesses in academic writing and the plan for improvement."
+  ],
+  [
+   "22",
+   "11",
+   "DN_CQ12",
+   "Use present and future tenses to write about the present utilization of electric cars and their development potential in the future."
+  ],
+  [
+   "23",
+   "11",
+   "HN_CQ11",
+   "What are common verb tenses used in academic writing? Why? Why do students have to use of correct tenses in academic writing?"
+  ],
+  [
+   "24",
+   "12",
+   "DN_CQ13",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "25",
+   "12",
+   "HN_CQ12",
+   "What are the differences between formal language and informal language? Why should informal language be avoided in academic writing?"
+  ],
+  [
+   "26",
+   "13",
+   "DN_CQ14",
+   "What are the differences between formal language and informal language? Which language should be used in academic writing? Give examples of formal and informal languages."
+  ],
+  [
+   "27",
+   "13",
+   "HN_CQ13",
+   "What is critical thinking in academic writing? Why should students think critically in their writing?"
+  ],
+  [
+   "28",
+   "14",
+   "DN_CQ15",
+   "How important is critical thinking skill? Do you think you are a critical thinker? Write a paragraph about your critical thinking abilities, and methods to improve critical thinking skill."
+  ],
+  [
+   "29",
+   "14",
+   "HN_CQ14",
+   "Why do students have to refer to multiple sources for their writing? How to assess the reliablity of sources? Why do students have to assess the reliability of sources?"
+  ],
+  [
+   "30",
+   "15",
+   "DN_CQ16",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "31",
+   "15",
+   "HN_CQ15",
+   "Should diesel vehicles be banned from cities? Combine your ideas with those you find from other sources to present about this question."
+  ],
+  [
+   "32",
+   "16",
+   "DN_CQ17",
+   "Why is it important to refer to multiple sources in academic writing? How to assess the reliability of academic sources? What if the sources students access are not reliable?"
+  ],
+  [
+   "33",
+   "16",
+   "HN_CQ16",
+   "Write paragraphs to answer the question of whether diesel vehicles should be banned from cities."
+  ],
+  [
+   "34",
+   "17",
+   "DN_CQ18",
+   "Write five examples of opinions and five examples of facts. How should facts and opinions presented in academic writing?"
+  ],
+  [
+   "35",
+   "17",
+   "HN_CQ17",
+   "Present your writing and give feedbacks"
+  ],
+  [
+   "36",
+   "18",
+   "DN_CQ19",
+   "How important are effective arguments in academic writing?"
+  ],
+  [
+   "37",
+   "18",
+   "HN_CQ18",
+   "Present your writing and give feedbacks"
+  ],
+  [
+   "38",
+   "19",
+   "DN_CQ20",
+   "How to strengthen the arguments? What are counter-arguments?"
+  ],
+  [
+   "39",
+   "19",
+   "HN_CQ19",
+   "Write paragraphs to answer the question of whether diesel vehicles should be banned from cities."
+  ],
+  [
+   "40",
+   "20",
+   "DN_CQ21",
+   "Add reasons, examples and counter-arguments to the unsupported argument \"Higher education should be free of charge\""
+  ],
+  [
+   "41",
+   "20",
+   "HN_CQ20",
+   "Present your writing and give feedbacks"
+  ],
+  [
+   "42",
+   "21",
+   "DN_CQ22",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "43",
+   "21",
+   "HN_CQ21",
+   "Present your writing and give feedbacks"
+  ],
+  [
+   "44",
+   "22",
+   "DN_CQ23",
+   "What is the purpose of a closing position? Add a closing position to the paragraph about whether international students should pay more tuition fee than domestic students on page 31."
+  ],
+  [
+   "45",
+   "22",
+   "HN_CQ22",
+   "What are differences between facts and opinions? Give examples for your answers."
+  ],
+  [
+   "46",
+   "23",
+   "DN_CQ24",
+   "Analyze how an argument is developed in the paragraph about whether universities should be required to learn a foreign language before graduating on page 32."
+  ],
+  [
+   "47",
+   "23",
+   "HN_CQ23",
+   "Why are effective arguments important in academic writing? How to develop effective arguments? Give examples."
+  ],
+  [
+   "48",
+   "24",
+   "DN_CQ25",
+   "Revisit your writing on \"Higher education should be free of charge\" and elaborate it with language of opinion, arguments and concession."
+  ],
+  [
+   "49",
+   "24",
+   "HN_CQ24",
+   "What are some ways to support arguments? Give examples."
+  ],
+  [
+   "50",
+   "25",
+   "DN_CQ26",
+   "What is inference? Why do readers need to infer the intended meaning from the reading sources? Read the excerpt \"Conclusions\" by Andrea Ohidy and use inference to understand it."
+  ],
+  [
+   "51",
+   "25",
+   "HN_CQ25",
+   "Write support for the argument that international students should (not) pay higher tuition fees than domestic students."
+  ],
+  [
+   "52",
+   "26",
+   "DN_CQ27",
+   "Write 10 independent clauses and 10 dependent clauses. Share them with a peer, and explain to each other why they are independent or dependent clauses."
+  ],
+  [
+   "53",
+   "26",
+   "HN_CQ26",
+   "Present your writing and give feedbacks for your peers"
+  ],
+  [
+   "54",
+   "27",
+   "DN_CQ28",
+   "Write a paragraph about the benefits of having an academic writing course at university. Include at least two in-text citations (APA citation style)."
+  ],
+  [
+   "55",
+   "27",
+   "HN_CQ27",
+   "Present your writing and give feedbacks for your peers"
+  ],
+  [
+   "56",
+   "28",
+   "DN_CQ29",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "57",
+   "28",
+   "HN_CQ28",
+   "What is inference? Why do students need to infer the intended meaning correctly from sources? Give examples of intended meanings and your inferences."
+  ],
+  [
+   "58",
+   "29",
+   "DN_CQ30",
+   "What is a topic sentence? How important is the topic sentence in a paragraph? What are some common mistakes in writing a topic sentence? Practice writing a topic sentence for the paragraph \"The Impact of 'Recreational Genetics'\"."
+  ],
+  [
+   "59",
+   "29",
+   "HN_CQ29",
+   "Write 10 independent clauses and 10 dependent clauses on the topic tuition fees for higher education."
+  ],
+  [
+   "60",
+   "30",
+   "DN_CQ31",
+   "What is a paragraph unity? Give examples"
+  ],
+  [
+   "61",
+   "30",
+   "HN_CQ30",
+   "Write about advantages of making academic writing courses compulsory for all first-year students. Use APA citation style in your writing."
+  ],
+  [
+   "62",
+   "31",
+   "DN_CQ32",
+   "How important is active reading skill in academic writing? What are some techniques in active reading? Give examples."
+  ],
+  [
+   "63",
+   "31",
+   "HN_CQ31",
+   "Present your writing and give feedbacks for your peers"
+  ],
+  [
+   "64",
+   "32",
+   "DN_CQ33",
+   "What are logical fallacies? What are logical fallacies of cause and effect? How can writers avoid logical fallacies of cause and effect?"
+  ],
+  [
+   "65",
+   "32",
+   "HN_CQ32",
+   "Present your writing and give feedbacks for your peers"
+  ],
+  [
+   "66",
+   "33",
+   "DN_CQ34",
+   "What are Latinate verbs in academic writing? Why should these verbs be used in academic writing? Give examples."
+  ],
+  [
+   "67",
+   "33",
+   "HN_CQ33",
+   "Write about disadvantages of studying in a foreign country. Use MLA citation style in your writing."
+  ],
+  [
+   "68",
+   "34",
+   "DN_CQ35",
+   "Write a paragraph using simple, compound and complex sentences to answer whether you want to have an ancestry test."
+  ],
+  [
+   "69",
+   "34",
+   "HN_CQ34",
+   "What is a topic sentence? Why do students have to write topic sentences for their writing? How to write topic sentences? Give examples."
+  ],
+  [
+   "70",
+   "35",
+   "DN_CQ36",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "71",
+   "35",
+   "HN_CQ35",
+   "What is paragraph unity? Give examples."
+  ],
+  [
+   "72",
+   "36",
+   "DN_CQ37",
+   "What is coherence? What are some coherence strategies? Identify the coherence strategy in paragraphs on page 56 and 57."
+  ],
+  [
+   "73",
+   "36",
+   "HN_CQ36",
+   "Why do academic writers have to develop active reading skills?"
+  ],
+  [
+   "74",
+   "37",
+   "DN_CQ38",
+   "What is cohesion? How to make your writing cohesive? Add words or phrases to make the paragraph \"Plastic Waste in Oceans\" cohesive."
+  ],
+  [
+   "75",
+   "37",
+   "HN_CQ37",
+   "What are logical fallacies of cause and effect? Why should academic writers avoid logical fallacies of cause and effect?"
+  ],
+  [
+   "76",
+   "38",
+   "DN_CQ39",
+   "What is a concluding sentence? What are four techniques to write a concluding sentence? Add a concluding sentence to the paragraph \"Microbeads and Pollution\"."
+  ],
+  [
+   "77",
+   "38",
+   "HN_CQ38",
+   "Write around 10 simple sentences, 10 compound sentences and 10 complex sentences on the topic genetics."
+  ],
+  [
+   "78",
+   "39",
+   "DN_CQ40",
+   "What are paragraph features? Revisit a paragraph that you completed in previous tasks and analyze its paragraph features."
+  ],
+  [
+   "79",
+   "39",
+   "HN_CQ39",
+   "What are latinate verbs? Give examples. Why should students use latinate verbs in their academic writing?"
+  ],
+  [
+   "80",
+   "40",
+   "DN_CQ41",
+   "Write a paragraph about the effects of water pollution. Use conjunctive adverbs and reference words in that paragraph."
+  ],
+  [
+   "81",
+   "40",
+   "HN_CQ40",
+   "Rewrite the paragraph about genetic ancestry tests to avoid logical fallacies of cause and effect and any other weak argumentation."
+  ],
+  [
+   "82",
+   "41",
+   "DN_CQ42",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "83",
+   "41",
+   "HN_CQ41",
+   "Do you want to do an ancestry test? Why?"
+  ],
+  [
+   "84",
+   "42",
+   "DN_CQ43",
+   "How important is it for academic writers to shift from informal style to formal style? How to do it? Give examples."
+  ],
+  [
+   "85",
+   "42",
+   "HN_CQ42",
+   "What is coherence? How to make a paragraph coherent?"
+  ],
+  [
+   "86",
+   "43",
+   "DN_CQ44",
+   "Write a paragraph of 200 words about the effects of plastic pollution on the environment using relative clauses and participle phrases."
+  ],
+  [
+   "87",
+   "43",
+   "HN_CQ43",
+   "What is cohesion? How to make a paragraph cohesive?"
+  ],
+  [
+   "88",
+   "44",
+   "DN_CQ45",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "89",
+   "44",
+   "HN_CQ44",
+   "Why should academic writers use concluding sentences? How to write concluding sentences?"
+  ],
+  [
+   "90",
+   "45",
+   "DN_CQ46",
+   "What are logical fallacies based on generalization? How to avoid logical fallacies on this?"
+  ],
+  [
+   "91",
+   "45",
+   "HN_CQ45",
+   "What are conjuntive adverbs and reference words? To what extent should students use conjunctive adverbs and referene words in their academic writing?"
+  ],
+  [
+   "92",
+   "46",
+   "DN_CQ47",
+   "Write a paragraph of 200 words about the role of plastics in modern life."
+  ],
+  [
+   "93",
+   "46",
+   "HN_CQ46",
+   "Why do students have to shift style from informal to formal in academic writing? How to do so? Give examples."
+  ],
+  [
+   "94",
+   "47",
+   "DN_CQ48",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "95",
+   "47",
+   "HN_CQ47",
+   "Write 10 relative clauses and 10 participle phrases on the topic \"plastic pollution\"."
+  ],
+  [
+   "96",
+   "48",
+   "DN_CQ49",
+   "What are academic integrity and plagiarism? Why is academic integrity important in academic writing? Why should students avoid plagiarism in academic writing? How to do so?"
+  ],
+  [
+   "97",
+   "48",
+   "HN_CQ48",
+   "What are logical fallacies of generalization? Give examples. Why should students avoid logical fallacies of generalization in academic writing? How to do so?"
+  ],
+  [
+   "98",
+   "49",
+   "DN_CQ50",
+   "What is paraphrasing? What are some paraphrasing techniques? Give examples."
+  ],
+  [
+   "99",
+   "49",
+   "HN_CQ49",
+   "Write paragraphs about negative sides of the use of plastic products in daily life. Pay attention to coherence and cohesion, use formal style, use relative clauses and participle phrases and avoid logical fallacies of generalization."
+  ],
+  [
+   "100",
+   "50",
+   "DN_CQ51",
+   "What is patch writing? How to avoid patchwriting? Give examples."
+  ],
+  [
+   "101",
+   "50",
+   "HN_CQ50",
+   "Write paragraphs about positive sides of the use of plastic products in daily life. Pay attention to coherence, cohesion and formal style; use relative clauses and participle phrases, and avoid logical fallacies of generalization."
+  ],
+  [
+   "102",
+   "51",
+   "DN_CQ52",
+   "What are direct quotations? When are direct quotations used in academic writing? How to incorporate direct quotations effectively? Give examples of direct quotations (APA and MLA Styles)."
+  ],
+  [
+   "103",
+   "51",
+   "HN_CQ51",
+   "What are academic integrity and plagiarism? Why do students have to ensure academic integrity and avoid plagiarism? How to do so?"
+  ],
+  [
+   "104",
+   "52",
+   "DN_CQ53",
+   "Write a paragraph about a random topic. Add at least two citations from reliable sources. Incorporate the author's ideas by paraphrasing one and directly quoting the other. Use either APA style or MLA style."
+  ],
+  [
+   "105",
+   "52",
+   "HN_CQ52",
+   "What is paraphrasing? How to paraphrase effectively? Give examples of effective paraphrasing."
+  ],
+  [
+   "106",
+   "53",
+   "DN_CQ54",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "107",
+   "53",
+   "HN_CQ53",
+   "What are direct quotations? How to use direct quotations effectively? Give examples of effective direct quotations."
+  ],
+  [
+   "108",
+   "54",
+   "DN_CQ55",
+   "Why should students use language of attribution and reporting verbs in academic writing? Analyze language of attribution in the paragraph \"Effects of Space Travel on Human DNA\"."
+  ],
+  [
+   "109",
+   "54",
+   "HN_CQ54",
+   "What is patch writing? How to avoid patchwriting? Give examples."
+  ],
+  [
+   "110",
+   "55",
+   "DN_CQ56",
+   "What are reporting verbs? Why should students use reporting verbs in academic writing? Give examples."
+  ],
+  [
+   "111",
+   "55",
+   "HN_CQ55",
+   "Write four paragraphs about academic writing, with two using direct quotations with APA style and two using MLA style."
+  ],
+  [
+   "112",
+   "56",
+   "DN_CQ57",
+   "What are straw man fallacy, ad homiem fallacy and ad polulum fallacy? Give examples. How to avoid them in academic writing?"
+  ],
+  [
+   "113",
+   "56",
+   "HN_CQ56",
+   "Why should students use language of attribution and reporting verbs in academic writing? Give examples of effective uses of language of attribution and reporting verbs."
+  ],
+  [
+   "114",
+   "57",
+   "DN_CQ58",
+   "Write a paragraph of 200 words about the causes of plastic pollution. You must use passive voice in your paragraph."
+  ],
+  [
+   "115",
+   "57",
+   "HN_CQ57",
+   "What are straw man fallacy, ad homiem fallacy and ad polulum fallacy? Give examples."
+  ],
+  [
+   "116",
+   "58",
+   "DN_CQ59",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "117",
+   "58",
+   "HN_CQ58",
+   "Write paragraphs about plastic waste. Add citations from reliable academic sources. Incorporate the authors' ideas by paraphrasing and direct quotations. Use appropriate reporting verbs, format APA or MLA in in-text citations correctly and write a reference list."
+  ],
+  [
+   "118",
+   "59",
+   "DN_CQ60",
+   "Write two paragraphs: one about the difficulties in learning academic writing and the other about how to improve academic writing skill. Use all the knowledge obtained in the course to write effective paragraphs."
+  ],
+  [
+   "119",
+   "59",
+   "HN_CQ59",
+   "Present your writing and give feedbacks for your peers"
+  ],
+  [
+   "120",
+   "60",
+   "DN_CQ61",
+   "Exchange your writing with a peer and give feedbacks"
+  ],
+  [
+   "121",
+   "60",
+   "HN_CQ60",
+   "Present your writing and give feedbacks for your peers"
+  ]
+ ],
+ "links": []
+}

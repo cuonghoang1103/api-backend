@@ -1,0 +1,1150 @@
+{
+ "ma": "PRU221m",
+ "sylID": "9345",
+ "quyetDinh": "1189/QĐ-ĐHFPT dated 12/22/2022",
+ "ungVien": [
+  {
+   "sylID": "9345",
+   "code": "PRU221m",
+   "name": "Object-Oriented Programming for Unity Games _Lập trình hướng đối tượng cho Unity Games",
+   "active": true,
+   "approved": true,
+   "decision": "1189/QĐ-ĐHFPT dated 12/22/2022"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=9345",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "9345",
+  "Syllabus Name": "Object-Oriented Programming for Unity Games _Lập trình hướng đối tượng cho Unity Games",
+  "Course Name English": "",
+  "Subject Code": "PRU221m",
+  "Learning-Teaching Method": "Project based learning,Active learning,In-class lecture",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "PRU211m",
+  "Description": "This course is a course that builds on the knowledge included in the C# Programming for Unity Game Development Specialization, so the course assumes you have the prerequisite knowledge from the PRU211m. You should make sure you have that knowledge, either by taking those previous courses or from personal experience, before tackling this course. You should make sure you have that knowledge, either by taking those courses or from personal experience, before tackling this course. Throughout this course you'll build on your foundational C# and Unity knowledge by developing more robust games with better object-oriented designs using file input and output, inheritance and polymorphism, event handling and various data structures and design patterns.\n\nData structures and design patterns are both general programming and software architecture topics that span all software, not just games. Although we'll discuss these ideas in the game domain, they also apply if you're writing a web app in ASP.NET, building a tool using WinForms, or any other software you decide to build.",
+  "StudentTasks": "- Students must attend more than 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FU CMS at https://lms-hcmuni.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "- Internet\n\n- Visual Studio 2019 or later (C# programming language)\n\n- Unity",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1189/QĐ-ĐHFPT dated 12/22/2022",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: 60%:\n\n04 Progress test: 20%\n\n02 Project: 40%\n\n2) Final Exam: 40%\n\n3) Final Result: 100%\n\nCompletion Criteria:\n\n1) Average Progress test score > 0\n\n2) Average Project score >=5\n\n2) Final Exam score >=4 & Final Result >= 5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/22/2022"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/intermediate-object-oriented-programming-unity-games/home/welcome",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/data-structures-design-patterns/home/welcome",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Beginning C# Programming with Unity Visual Studio Edition",
+   "A.T. Chamillard",
+   "Burning Teddy",
+   "2016",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "eBook"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Able to use and implement exception handlers"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Able to read and write a text file"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Able to use and develop inheritance"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Able to develop game functionality using events and event handlers"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Able to develop a full menu system in a game"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Able to build a game that use event manager and event handling."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Able to build a game that use a single game audio source for all sound effects."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Able to describe how to implement a generic class"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Able to develop a class that implements an interface"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Able to complete algorithm analysis and use different data structures in developing games with Unity Games"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Able to describe the Component pattern and how it relates to the Unity engine"
+  ],
+  [
+   "12",
+   "CLO12",
+   "Able to describe how the event managers implement the Mediator pattern"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Project",
+   "on-going",
+   "2",
+   "40.0%",
+   "5",
+   "21 days",
+   "",
+   "Theory presentation or project",
+   "",
+   "technical aspect of studied topics",
+   "- Guided by instructor\n\n- Application or Theory\n\n- Work in group",
+   ""
+  ],
+  [
+   "2",
+   "Quiz",
+   "on-going",
+   "4",
+   "20.0%",
+   ">0",
+   "30'",
+   "",
+   "Multiple choices\n\nMarked by Computer",
+   "20",
+   "concepts, algorithms;\n\nall studied chapters",
+   "by exam board,\n\nusing computer",
+   ""
+  ],
+  [
+   "3",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choices\n\nMarked by Computer",
+   "50",
+   "concepts, algorithms;\n\nall studied chapters",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "",
+   "",
+   "Slide, Video (Link download học liệu: https://drive.google.com/drive/folders/18ehh52Mx6TfGrMwjktH8Kw036p2CrKOj?usp=sharing)",
+   "",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Module 1: Exceptions and File IO",
+   "Offline",
+   "CLO1, CLO2",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "3",
+   "Module 1: Exceptions and File IO",
+   "Offline",
+   "CLO1, CLO2",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "4",
+   "Module 1: Exceptions and File IO",
+   "Offline",
+   "CLO1, CLO2",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "5",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "6",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "7",
+   "Group Project 1 Introduction",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Group Project 1 Introduction",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "Module 2: Inheritance and Polymorphism",
+   "Offline",
+   "CLO3",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "10",
+   "Module 2: Inheritance and Polymorphism",
+   "Offline",
+   "CLO3",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "11",
+   "Module 2: Inheritance and Polymorphism",
+   "Offline",
+   "CLO3",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "12",
+   "Module 2: Inheritance and Polymorphism",
+   "Offline",
+   "CLO3",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "13",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "14",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "15",
+   "Quiz 1",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "16",
+   "Module 3: Event Handling and Menus",
+   "Offline",
+   "CLO4, CLO5",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "17",
+   "Module 3: Event Handling and Menus",
+   "Offline",
+   "CLO4, CLO5",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "18",
+   "Module 3: Event Handling and Menus",
+   "Offline",
+   "CLO4, CLO5",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "19",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "20",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "21",
+   "Module 4: Feed the Teddies",
+   "Offline",
+   "CLO6, CLO7",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "22",
+   "Module 4: Feed the Teddies",
+   "Offline",
+   "CLO6, CLO7",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "23",
+   "Module 4: Feed the Teddies",
+   "Offline",
+   "CLO6, CLO7",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "24",
+   "Module 4: Feed the Teddies",
+   "Offline",
+   "CLO6, CLO7",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "25",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "26",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "27",
+   "Check Group Project 1",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do presentation",
+   ""
+  ],
+  [
+   "28",
+   "Check Group Project 1",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do presentation",
+   ""
+  ],
+  [
+   "29",
+   "Check Group Project 1",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do presentation",
+   ""
+  ],
+  [
+   "30",
+   "Check Group Project 1",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do presentation",
+   ""
+  ],
+  [
+   "31",
+   "Group Project 2 Introduction",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "32",
+   "Group Project 2 Introduction",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "Quiz 2",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Module 5: Dynamic Arrays and Algorithm Analysis",
+   "Offline",
+   "CLO8, CLO9, CLO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "35",
+   "Module 5: Dynamic Arrays and Algorithm Analysis",
+   "Offline",
+   "CLO8, CLO9, CLO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "36",
+   "Module 5: Dynamic Arrays and Algorithm Analysis",
+   "Offline",
+   "CLO8, CLO9, CLO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "37",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "Module 6: Linked Lists and Graphs",
+   "Offline",
+   "LO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "40",
+   "Module 6: Linked Lists and Graphs",
+   "Offline",
+   "LO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "41",
+   "Module 6: Linked Lists and Graphs",
+   "Offline",
+   "LO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "42",
+   "Module 6: Linked Lists and Graphs",
+   "Offline",
+   "LO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "43",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "Quiz 3",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Module 7: Stacks, Queues, and Trees",
+   "Offline",
+   "LO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "47",
+   "Module 7: Stacks, Queues, and Trees",
+   "Offline",
+   "LO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "48",
+   "Module 7: Stacks, Queues, and Trees",
+   "Offline",
+   "LO10",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "49",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do Lab Exercise",
+   ""
+  ],
+  [
+   "50",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "51",
+   "Module 8: Design Patterns",
+   "Offline",
+   "CLO11, CLO12",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "52",
+   "Module 8: Design Patterns",
+   "Offline",
+   "CLO11, CLO12",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "53",
+   "Module 8: Design Patterns",
+   "Offline",
+   "CLO11, CLO12",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "54",
+   "Module 8: Design Patterns",
+   "Offline",
+   "CLO11, CLO12",
+   "",
+   "Slide, Video",
+   "",
+   "Read Slide\n\nWatch Video\n\nDo quizzes and assignments (if any)",
+   ""
+  ],
+  [
+   "55",
+   "Quiz 4",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Do quiz 4\n\nDo Lab Exercise",
+   ""
+  ],
+  [
+   "56",
+   "Lab Exercise",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Check Group Project 2",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Check Group Project 2",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Check Group Project 2",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Check Group Project 2",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "4",
+   "CQ2.1",
+   "What are exceptions? Why use Exception?"
+  ],
+  [
+   "2",
+   "5",
+   "CQ2.2",
+   "What types of exceptions are there? Give an illustrative example."
+  ],
+  [
+   "3",
+   "6",
+   "CQ2.3",
+   "What is Stream? Why use stream in reading and writing files? Give an illustrative example."
+  ],
+  [
+   "4",
+   "7",
+   "CQ3.1",
+   "What is PlayerPrefs Class? Why use it? How to use it? Give an illustrative example."
+  ],
+  [
+   "5",
+   "8",
+   "CQ3.2",
+   "On the game screen, the teddybears are blue and purple, when the fish eats any color fish, the screen will display the statistics of the number of fish that have been eaten. How to solve the above problem?"
+  ],
+  [
+   "6",
+   "9",
+   "CQ3.3",
+   "How to store parameters in the game during play?"
+  ],
+  [
+   "7",
+   "10",
+   "CQ4.1",
+   "What is Inheritance? Explain the concept of superclass, subclass? How to use inheritance effectively in Unity programming?"
+  ],
+  [
+   "8",
+   "11",
+   "CQ4.2",
+   "How to solve Exercise 4? What can be learned from this concept?"
+  ],
+  [
+   "9",
+   "12",
+   "CQ4.3",
+   "What is polymorphism? build a list of 3 family members where one is a FamilyMember, one is a Geek, and one is a Gamer."
+  ],
+  [
+   "10",
+   "16",
+   "CQ6.1",
+   "Build the BankAccount, CheckingAccount and SavingsAccount classes as described. What meaning is drawn between the Inheritance and Fields relationship?"
+  ],
+  [
+   "11",
+   "17",
+   "CQ6.2",
+   "In Exercise 5, how do I fulfill the requirements of this exercise?"
+  ],
+  [
+   "12",
+   "18",
+   "CQ6.3",
+   "In Exercise 6, how do I fulfill the requirements of this exercise?"
+  ],
+  [
+   "13",
+   "19",
+   "CQ7.1",
+   "What Are Delegates? How to customize behaviors with delegates?"
+  ],
+  [
+   "14",
+   "20",
+   "CQ7.2",
+   "How to build a game by specifying behaviours for balls, here are requirements like 4 different coloured balls with red balls moving left, green balls moving right, blue balls moving up, and yellow balls moving down?"
+  ],
+  [
+   "15",
+   "21",
+   "CQ7.3",
+   "What are Events and Event Handling? How to build events for the fish eat bear game? Need to determine the fish will eat at the beginning, and each time the score will increase."
+  ],
+  [
+   "16",
+   "25",
+   "CQ9.1",
+   "What are Events and Event HanWhat is UnityEvent and UnityAction? How can I use it in the game?"
+  ],
+  [
+   "17",
+   "26",
+   "CQ9.2",
+   "How to use UnityEvent and UnityAction in the fish-eating bear game problems?"
+  ],
+  [
+   "18",
+   "27",
+   "CQ9.3",
+   "What are Menu Buttons? In what situations are menu buttons usually used? To create a menu for the user to choose to start playing the game or exit the game, how will we do it?"
+  ],
+  [
+   "19",
+   "28",
+   "CQ10.1",
+   "What are Exception Handlers? How to use exceptions in game? What is the purpose of using exceptions in the game?"
+  ],
+  [
+   "20",
+   "29",
+   "CQ10.2",
+   "Feed the Teddies game: How to create a menu, where the user can choose the difficulty of the game like Easy, Medium or Hard to determine how smart the teddy bears are, how fast they move and how fast they spawn?"
+  ],
+  [
+   "21",
+   "30",
+   "CQ10.3",
+   "Feed the Teddies game: After the user selects the level of the game, the player moves the burger avatar around the screen, shooting fries at the teddy bear. How to handle the above problem?"
+  ],
+  [
+   "22",
+   "31",
+   "CQ11.1",
+   "Continuing with this game, teddy bears are not able to defend themselves, however, the player can be affected by colliding with teddy bears or bullets from teddy bears. When the game is over, either due to the player running out of health or due to game time running out, the player will know if they have hit a new high. How to handle the above problem?"
+  ],
+  [
+   "23",
+   "32",
+   "CQ11.2",
+   "Feed the Teddies game: When the game finishes, either because the player ran out of health or because the game timer expired, the player discovers whether or not they just achieved a new high score. How to handle the above problem?"
+  ],
+  [
+   "24",
+   "33",
+   "CQ11.3",
+   "Feed the Teddies game: With the functions in the game, how many test cases will we define and how will the testing take place?"
+  ],
+  [
+   "25",
+   "34",
+   "CQ12.1",
+   "What is a Data Structure? What is the effect of using data structures in the game?"
+  ],
+  [
+   "26",
+   "35",
+   "CQ12.2",
+   "What is Abstract Base Class and An Unordered Concrete Class? What is the difference between these 2 classes?"
+  ],
+  [
+   "27",
+   "36",
+   "CQ12.3",
+   "How to solve exercise 9 and 10?"
+  ],
+  [
+   "28",
+   "37",
+   "CQ13.1",
+   "What is Computational and Asymptotic Complexity? How does this affect the game?"
+  ],
+  [
+   "29",
+   "38",
+   "CQ13.2",
+   "What are Ω and Θ Notations? How will they be implemented? And what is their difference? Give some example."
+  ],
+  [
+   "30",
+   "39",
+   "CQ13.3",
+   "What is Asymptotic Complexity? How to determine Asymptotic bounds? Give some examples."
+  ],
+  [
+   "31",
+   "40",
+   "CQ14.1",
+   "What are Linked Lists? What are the benefits of using a linked list in Unity?"
+  ],
+  [
+   "32",
+   "41",
+   "CQ14.2",
+   "What are Singly Linked Lists? What are the benefits of using a linked list? How to implement singly linked lists?"
+  ],
+  [
+   "33",
+   "46",
+   "CQ16.1",
+   "What are graphs? What are the benefits of using graphs in Unity?"
+  ],
+  [
+   "34",
+   "47",
+   "CQ16.2",
+   "What are some ways to represent graphs? What are the pros and cons of each representation?"
+  ],
+  [
+   "35",
+   "48",
+   "CQ16.3",
+   "How to implement a basic graph?"
+  ],
+  [
+   "36",
+   "49",
+   "CQ17.1",
+   "What are stack? What are the basic functions in the stack? What are the benefits of using stack? How to implement a stack?"
+  ],
+  [
+   "37",
+   "50",
+   "CQ17.2",
+   "What are queue? What are the basic functions in the queue? What are the benefits of using stacks? How to implement a stack?"
+  ],
+  [
+   "38",
+   "51",
+   "CQ17.3",
+   "What are tree? What are the basic functions in the tree? What are the benefits of using tree? How to implement a tree?"
+  ],
+  [
+   "39",
+   "52",
+   "CQ18.1",
+   "What are Doubly Linked Lists? What are the benefits of using a linked list? How to implement doubly linked lists?"
+  ],
+  [
+   "40",
+   "53",
+   "CQ18.2",
+   "Describe the Component pattern and how it relates to the Unity engine?"
+  ],
+  [
+   "41",
+   "54",
+   "CQ18.3",
+   "Describe how the event managers we've discussed implement the Mediator pattern?"
+  ]
+ ],
+ "links": []
+}

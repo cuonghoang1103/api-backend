@@ -1,0 +1,1135 @@
+{
+ "ma": "PFD201",
+ "sylID": "13364",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13364",
+   "code": "PFD201",
+   "name": "Photography for Designer _ Nhiếp ảnh",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13364",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13364",
+  "Syllabus Name": "Photography for Designer _ Nhiếp ảnh",
+  "Course Name English": "Photography for Designer",
+  "Subject Code": "PFD201",
+  "Learning-Teaching Method": "Lecture,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 105h self-study",
+  "Pre-Requisite": "None",
+  "Description": "'-Objective:\nBy the end of the course, students will learn the basic knowledge of photography include:\n+ Foundational history of photography.\n+ Visual language and aesthetics of photography.\nAt the end of the course, students will be able to:\n+ Complete an final album including story, style, composition, lighting, concept and aesthetics values\n+ Have many practical experiences.\n- Description: In this course, students will learn about: Foundational history of photography; Classification of photography.\nGreatest photographers; Structure of camera; Camera operation; Foundational composition and visual language of photography; Handling post-production; Aesthetic in photography.",
+  "StudentTasks": "'- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time.\n- Use laptop in class only for learning purpose.\n- Promptly access to the FLM at https://flm.fpt.edu.vn/ for up-to-date course information.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "A Short Course in Photography: Digital",
+   "Jim Stone and Barbara London",
+   "Pearson",
+   "2014",
+   "3rd Edition",
+   "ISBN-10: 0-205-99825-9 ISBN-13: 978-0-205-99825-8",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 GIáo trình"
+  ],
+  [
+   "2",
+   "A Short Course in Photography: Digital",
+   "Jim Stone and Barbara London,",
+   "Pearson,",
+   "2018",
+   "4th",
+   "9780134525815",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 GIáo trình"
+  ],
+  [
+   "3",
+   "Căn bản kỹ thuật nhiếp ảnh",
+   "Bùi Minh Sơn",
+   "",
+   "2012",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "'https://www.youtube.com/user/BHPhotoVideoProAudio/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "https://www.youtube.com/user/CamCrunch/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "'https://www.youtube.com/user/SLRlounge",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "Kỹ thuật ánh sáng trong nhiếp ảnh",
+   "nhiều tác giả",
+   "NXB Thông Tấn",
+   "2012",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the history and theory of photography, the relationship between photography and visual disciplines, and its influence on culture."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand both advanced digital and analog camera operations with the understanding of formats, exposure in photography, depth of field, shutter speed, and illustrate proper placement of plane of focus."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Illustration of advanced visual literacy skills by utilizing sophisticated compositional properties and visual qualities of a photographic image"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Demonstrate the ability to recognize and control both natural and studio lighting with emphasis on the quality, quantity, direction of light and the resulting effect of light on the photographic image, and ability to determine what type of studio lighting equipment is necessary to properly light various types of objects, people, spaces, and locations."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Manipulate, manage, archive digital images and control the transition of image color, tone and value from screen to printed image."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Organize, edit, and evaluate a professional quality portfolio of photographic work that demonstrates creative problem solving skill and effective communication."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Having a positive attitude and a professional working style"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "LO7",
+   "",
+   "",
+   "",
+   "Option 1: Student actively participate in class and making Portfolio; Option 2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "2",
+   "Pratice 1",
+   "on-going",
+   "1",
+   "25.0%",
+   ">0",
+   "1 week",
+   "LO2, LO3, LO4, LO5",
+   "Portrait Photography: Applying Camera Operation and Studio Lighting Techniques",
+   "3 photos",
+   "Knowledge: Understanding of cameras, studio lighting equipment and accessories, and principles of composition and portrait lighting.\nSkills: Ability to operate a DSLR camera and to apply studio lighting setups flexibly for portrait photography.",
+   "1. Set up studio lights, accessories, and camera settings\n2. Select subjects and apply appropriate lighting\n3. Capture, select, and edit images\n4. On-site submission",
+   "Submission file:\n- Original images (RAW), edited images (JPG).\n- Submit in class\nIn-class work:\n- Execute in class"
+  ],
+  [
+   "3",
+   "Pratice 2",
+   "on-going",
+   "1",
+   "50.0%",
+   ">0",
+   "3 weeks",
+   "LO2, LO3, LO4, LO5, LO6",
+   "Visual Storytelling: Meeting Technical, Compositional, and Content Requirements; Demonstrating the Ability to Organize Images into a Narrative",
+   "25-30 photos",
+   "Knowledge: Understanding how to organize captured images into a coherent and meaningful visual story.\nSkills:\n- Proficient operation of the camera.\n- Ability to capture motion effectively and apply natural light flexibly under varying weather conditions.",
+   "1. Project registration\n2. Project analysis\n3. Photography session\n4. Submission of images and review\n5. Supplementary shooting\n6. Organizing images into a narrative\n7. Online submission",
+   "Submission file:\n- Project document: topic, explaination (.docx)\n- Photo outline (.docx)\n- Original images (RAW), Image Organization and Storytelling File (jpg).\n- Submission online\nIn-class work:\n- Project review"
+  ],
+  [
+   "4",
+   "Research & Presentation",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "1 week",
+   "LO1",
+   "Presentation: Demonstrating Research Skills and Knowledge of Photography History, with Focus on an Assigned Photographer",
+   "presentation",
+   "Knowledge of Photography History, with Focus on an Assigned Photographer\nSkills:\n- Research and Presentation Skills\n- Skills in Using AI for Research and Presentation",
+   "1. Receive research topic\n2. Group work organization: assign research and presentation tasks to each member\n3.Slide submission\n4. Presentation and Q&A",
+   "Submission file:\n- Slide (pdf or pptx).\n- Development step or AI Usage report (pdf or docx).\nIn-class work:\n- Presentation\n- Peer and instructor feedback on the presentation."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Chapter 10:\n- History of the World Photography",
+   "Offline",
+   "LO1",
+   "I",
+   "'Slides and reference documents\n- Read Chapter 10\n- Read slides: Chapter 1",
+   "PFD201_Phần 1",
+   "Study from given books and materials",
+   ""
+  ],
+  [
+   "2",
+   "The main styles of worldwide photographers",
+   "Offline",
+   "LO1",
+   "I",
+   "- Slides and reference documents\n- Read Chapter 10\n- Read slides: Chapter 1",
+   "PFD201_Phần 2",
+   "Read syllabus, main textbook, slide",
+   ""
+  ],
+  [
+   "3",
+   "The most influential worldwide photographers",
+   "Offline",
+   "LO1",
+   "I",
+   "'Slides and reference documents\n- Read Chapter 10\n- Read slides: Chapter 1",
+   "",
+   "Students choose a famous photographer to research and prepare the presentation file\n(class activity)",
+   ""
+  ],
+  [
+   "4",
+   "Students' presentation and review",
+   "Offline",
+   "LO1",
+   "I",
+   "'Slides and reference documents\n- Read Chapter 10\n- Read slides: Chapter 1",
+   "",
+   "Student: Students choose a famous photographer to research and prepare the presentation file\n(class activity)",
+   ""
+  ],
+  [
+   "5",
+   "Students' presentation and review",
+   "Offline",
+   "LO1",
+   "I",
+   "'Slides and reference documents\n- Read Chapter 10\n- Read slides: Chapter 1",
+   "",
+   "Student: group's presentation\n(class activity)",
+   ""
+  ],
+  [
+   "6",
+   "Students' presentation and review",
+   "Offline",
+   "LO1",
+   "I",
+   "Slides and reference documents\n- Read Chapter 10\n- Read slides: Chapter 1",
+   "",
+   "Student: group's presentation\n(class activity)",
+   ""
+  ],
+  [
+   "7",
+   "Students' presentation and review",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "'Slides and reference documents\n- Read Chapter 1,2\n- Read slides: Chapter 2,3",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control",
+   ""
+  ],
+  [
+   "8",
+   "Students' presentation and review",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "'Slides and reference documents\n- Read Chapter 1,2\n- Read slides: Chapter 2,3",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control",
+   ""
+  ],
+  [
+   "9",
+   "Students' presentation and review",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "Slides and reference documents\n- Read Chapter 1,2\n- Read slides: Chapter 2,3",
+   "",
+   "Student: Use personal camera & lens, smart phones with DSLR control\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "10",
+   "Photography accessories: What you really needs?",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "'Slides and reference documents\n- Read Chapter 1,2\n- Read slides: Chapter 2,3",
+   "",
+   "Student: Use personal camera & lens, smart phones with DSLR control",
+   ""
+  ],
+  [
+   "11",
+   "First practice with DSRL camera technique",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "'Slides and reference documents\n- Read Chapter 1,2\n- Read slides: Chapter 2,3",
+   "",
+   "Student: Use personal camera & lens, smart phones with DSLR control",
+   ""
+  ],
+  [
+   "12",
+   "First practice with DSRL camera technique",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "'Slides and reference documents\n- Read Chapter 1,2\n- Read slides: Chapter 2,3",
+   "",
+   "Student:Each student shoot at least 12 photos. It requires to use 3 different iso, speed and aperture (class activity) and at three different time in a day (homework)\nTeacher: Lecture/Tutorial",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: Light and Exposure",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "'Slides and reference documents\n- Read Chapter 3\n- Read slides: Chapter 4",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3: Light and Exposure",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "'Slides and reference documents\n- Read Chapter 3\n- Read slides: Chapter 4",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "15",
+   "Pratice time - Students take photos outdoor - the shooting location was assigned by the lecturer",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "'Slides and reference documents\n- Read Chapter 3\n- Read slides: Chapter 4",
+   "",
+   "Student:Topic: Compositions.\nEach student shoot at least 12 photos.It requires to use different photography compositions, and use Leading Lines as a Great Composition Tool\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "16",
+   "Pratice time - Students take photos outdoor - the shooting location was assigned by the lecturer",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "syllabus, textbook, slide",
+   "",
+   "",
+   ""
+  ],
+  [
+   "17",
+   "Pratice time - Review & Discussion in class",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "Pratice time - Review & Discussion in class",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 8: Using Light",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 8\n- Read slides: Chapter 5",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "20",
+   "Using Light",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 8\n- Read slides: Chapter 5",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "21",
+   "Practice time:\n- Directional / Diffused Light (sunlight)",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 8\n- Read slides: Chapter 5",
+   "",
+   "Student:Topic Product Photography\nEach student shoot at least 12 photos (class activity)\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "22",
+   "Practice time:\n- Directional / Diffused Light (sunlight)",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 8\n- Read slides: Chapter 5",
+   "",
+   "Student:Topic Product Photography\nEach student shoot at least 12 photos (class activity)\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "23",
+   "Practice time:\n- Review & Discussion in class",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 8\n- Read slides: Chapter 5",
+   "",
+   "Student:Choose 1 photo to make a product poster (class activity)\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "24",
+   "Practice time:\n- Review & Discussion in class",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 8\n- Read slides: Chapter 5",
+   "",
+   "Student:Choose 1 photo to make a product poster (class activity)\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 9: Introduction to Studio Lighting Equipment; Guidance on Portrait Lighting in the Studio",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 9\n- Read slides: Chapter 6",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "26",
+   "Practical Exercise: Studio Portrait Lighting and Photography (Individual) — Review",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 9\n- Read slides: Chapter 6",
+   "",
+   "Student:Use personal camera & lens, smart phones with DSLR control\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "27",
+   "Practical Exercise: Studio Portrait Lighting and Photography (Individual) — Review",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 9\n- Read slides: Chapter 6",
+   "",
+   "Student:Topic: Street Photography.\nEach student shoot at least 12 photos.\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "28",
+   "Practical Exercise: Studio Portrait Lighting and Photography (Individual) — Review",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 9\n- Read slides: Chapter 6",
+   "",
+   "Student:Topic: Street Photography.\nEach student shoot at least 12 photos.\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "29",
+   "Practical Exercise: Studio Portrait Lighting and Photography (Individual) — Review",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 9\n- Read slides: Chapter 6",
+   "",
+   "Student:Topic: Street Photography.\nReview & Discussion\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "30",
+   "Practical Exercise: Studio Portrait Lighting and Photography (Individual) — Review",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 9\n- Read slides: Chapter 6",
+   "",
+   "Student:Topic: Street Photography.\nReview & Discussion\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "31",
+   "Practice time 1 (at campus studio): Practicing Studio lighting",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "Slides and reference documents\n- Review Chapter 2,3\n- Read Practice 1 (.docx file)",
+   "",
+   "Student:Topic: Portrait\nEach student shoot at least 12 photos.\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "32",
+   "Practice time 1 (at campus studio): Practicing Studio lighting",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Review Chapter 2,3\n- Read Practice 1 (.docx file)",
+   "",
+   "Student:Topic: Portrait\nEach student shoot at least 12 photos.\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "33",
+   "Practice time 1 (at campus studio): Practicing Studio lighting",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Review Chapter 2,3\n- Read Practice 1 (.docx file)",
+   "",
+   "Student:Topic: Portrait\nReview & Discussion\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "34",
+   "Practice time 1 (at campus studio): Practicing Studio lighting",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Review Chapter 2,3\n- Read Practice 1 (.docx file)",
+   "",
+   "Student:Topic: Portrait\nEach student shoot at least 12 photos.\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "35",
+   "Practice time 1 (at campus studio): Practicing Studio lighting",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Review Chapter 2,3\n- Read Practice 1 (.docx file)",
+   "",
+   "Student:'Do a Handmade Photobook at home and submit the complete work in week 8\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "36",
+   "Practice time 1 (at campus studio): Practicing Studio lighting",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Review Chapter 2,3\n- Read Practice 1 (.docx file)",
+   "",
+   "Student:Topic: Portrait\nEach student shoot at least 12 photos.\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "37",
+   "Photography concepts",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 4,5\n- Read slides: Chapter 7,8",
+   "",
+   "Student:Use personal laptop, LR or Photoshop for editing image\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "38",
+   "Guidelines for Product Photography in the Studio",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "'Slides and reference documents\n- Review Chapter 2,3\n- Read Practice 1 (.docx file)",
+   "",
+   "Student:Topic: Portrait\nEach student shoot at least 12 photos.\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "39",
+   "Guidelines for Product Photography in the Studio",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 6,7\n- Read slides: Chapter 9,10",
+   "",
+   "Student:Use personal laptop, LR or Photoshop for editing image\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "40",
+   "Guidelines for Product Photography in the Studio",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 6,7\n- Read slides: Chapter 9,10",
+   "",
+   "Student:Use personal laptop, LR or Photoshop for editing image\nTeacher:Lecture/Tutorial",
+   ""
+  ],
+  [
+   "41",
+   "Pratice time: using Photoshop or Lightroom for editing photos",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 6,7\n- Read slides: Chapter 9,10",
+   "",
+   "Student:Use personal laptop, LR or Photoshop for editing image\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "42",
+   "Pratice time: using Photoshop or Lightroom for editing photos",
+   "Offline",
+   "LO2, LO3, LO4, LO5",
+   "ITU",
+   "Slides and reference documents\n- Read Chapter 6,7\n- Read slides: Chapter 9,10",
+   "",
+   "Student:Use personal laptop, LR or Photoshop for editing image\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "43",
+   "Practice time 2 - Guidance on selecting, analyzing, and carrying out a photography project",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Choose a themed project and capture unique images that follow a certain framework or style\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "44",
+   "Practice time 2 - Guidance on selecting, analyzing, and carrying out a photography project",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Choose a themed project and capture unique images that follow a certain framework or style\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "45",
+   "Practice time 2 - Guidance on selecting, analyzing, and carrying out a photography project",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Use camera & lens, smart phones with DSLR control\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "46",
+   "Practice time 2 - Students choose subject and location, and review with Instructor",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Choose a themed project and capture unique images that follow a certain framework or style\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "47",
+   "Practice time 2 - Students choose subject and location, and review with Instructor",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Use camera & lens, smart phones with DSLR control\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "48",
+   "Practice time 2 - Students choose subject and location, and review with Instructor",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Use camera & lens, smart phones with DSLR control\nTeacher:Discussion",
+   ""
+  ],
+  [
+   "49",
+   "Practice time 2 - Review photographs taken by students",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Complete the project, make sure to create a photobook with photos that were edited by Photoshop or Lightroom\nTeacher:Approval: layout of the final Asm photobook",
+   ""
+  ],
+  [
+   "50",
+   "Practice time 2 - Review photographs taken by students",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Complete the project, make sure to create a photobook with photos that were edited by Photoshop or Lightroom\nTeacher:Approval: layout of the final Asm photobook",
+   ""
+  ],
+  [
+   "51",
+   "Practice time 2 - Review photographs taken by students",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Complete the project, make sure to create a photobook with photos that were edited by Photoshop or Lightroom\nTeacher:Teacher's Discussion",
+   ""
+  ],
+  [
+   "52",
+   "Practice time 2 - Review photographs taken by students",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Complete the project, make sure to create a photobook with photos that were edited by Photoshop or Lightroom\nTeacher:Teacher's Discussion",
+   ""
+  ],
+  [
+   "53",
+   "Practice time 2 - Review photographs taken by students",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Complete the project, make sure to create a photobook with photos that were edited by Photoshop or Lightroom\nTeacher:Teacher's Discussion",
+   ""
+  ],
+  [
+   "54",
+   "Practice time 2 - Review photographs taken by students",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "ITU",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Complete the project, make sure to create a photobook with photos that were edited by Photoshop or Lightroom\nTeacher:Teacher's Discussion",
+   ""
+  ],
+  [
+   "55",
+   "Practice time 2 - Guidance on organizing and presenting photographic images to construct a visual story.",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Printing products & presentation & final evaluation\nTeacher:Final evaluation",
+   ""
+  ],
+  [
+   "56",
+   "Practice time 2 - Guidance on organizing and presenting photographic images to construct a visual story.",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Printing products & presentation & final evaluation\nTeacher:Final evaluation",
+   ""
+  ],
+  [
+   "57",
+   "Practice time 2 - Guidance on organizing and presenting photographic images to construct a visual story.",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Printing products & presentation & final evaluation\nTeacher:Final evaluation",
+   ""
+  ],
+  [
+   "58",
+   "Practice time 2 - Review final work and Grading",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Printing products & presentation & final evaluation\nTeacher:Final evaluation",
+   ""
+  ],
+  [
+   "59",
+   "Practice time 2 - Review final work and Grading",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student: Printing products & presentation & final evaluation\nTeacher: Final evaluation",
+   ""
+  ],
+  [
+   "60",
+   "Practice time 2 - Review final work and Grading",
+   "Offline",
+   "LO2, LO3, LO4, LO5, LO6",
+   "",
+   "'Slides and reference documents\n- Read Practice 2 (.docx file)",
+   "",
+   "Student:Printing products & presentation & final evaluation\nTeacher:Final evaluation",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "QN2.1",
+   "What is the Art of Photography? Distinguish the difference between the art of photography and the art of painting?"
+  ],
+  [
+   "2",
+   "3",
+   "QN3.1",
+   "How many major styles are there in the art of photography worldwide?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.2",
+   "How many major periods in the history of world photography are there?"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "Is it necessary to put content or meaning into the photo?"
+  ],
+  [
+   "5",
+   "4",
+   "QN4.2",
+   "How many main directions of light are there in photography?"
+  ],
+  [
+   "6",
+   "5",
+   "QN5.1",
+   "In Vietnamese, what do the names \"Nhiep Anh Gia\" and \"Tho Chup Anh\" mean? Distinguish between \"Nhiep Anh Gia\" and \"Tho Chup Anh\"?"
+  ],
+  [
+   "7",
+   "6",
+   "QN6.1",
+   "How many influential photographers do you know around the world?"
+  ],
+  [
+   "8",
+   "7",
+   "QN7.1",
+   "Difference between DSLR and SLR cameras?"
+  ],
+  [
+   "9",
+   "8",
+   "QN8.1",
+   "Why are digital cameras more commonly used than film cameras?"
+  ],
+  [
+   "10",
+   "9",
+   "QN9.1",
+   "What important accessories does a professional photographer need?"
+  ],
+  [
+   "11",
+   "10",
+   "QN10.1",
+   "What is a DSLR camera? How to identify a DSLR camera?"
+  ],
+  [
+   "12",
+   "11",
+   "QN11.1",
+   "How does a DSLR camera work?"
+  ],
+  [
+   "13",
+   "12",
+   "QN12.1",
+   "What and how should you use DSLR camera modes?"
+  ],
+  [
+   "14",
+   "13",
+   "QN13.1",
+   "What is the relationship between Aperture, Shutter speed and ISO?"
+  ],
+  [
+   "15",
+   "14",
+   "QN14.1",
+   "How to avoid taking too dark or light photos on camera?"
+  ],
+  [
+   "16",
+   "15",
+   "QN15.1",
+   "What is camera Exposure? How to set Exposure on a camera?"
+  ],
+  [
+   "17",
+   "16",
+   "QN16.1",
+   "RAW vs JPEG - Which image format is better and why?"
+  ],
+  [
+   "18",
+   "17",
+   "QN17.1",
+   "What is the main factor affecting the depth of field?"
+  ],
+  [
+   "19",
+   "18",
+   "QN18.1",
+   "Why are your photos blurry and how to avoid it?"
+  ],
+  [
+   "20",
+   "19",
+   "QN19.1",
+   "How do you capture nice light for an object that moves a lot?"
+  ],
+  [
+   "21",
+   "20",
+   "QN20.1",
+   "What photography studio lighting is the best?"
+  ],
+  [
+   "22",
+   "21",
+   "QN21.1",
+   "What is the difference between studio light and natural light?"
+  ],
+  [
+   "23",
+   "25",
+   "QN25.1",
+   "What skills are required to use personal camera & lens, smartphones with DSLR control?"
+  ],
+  [
+   "24",
+   "26",
+   "QN26.1",
+   "How can one do classification in photography? What about street photography?"
+  ],
+  [
+   "25",
+   "27",
+   "QN27.1",
+   "How To Do Street Photography? What cameras and equipment? Tips?"
+  ],
+  [
+   "26",
+   "37",
+   "QN37.1",
+   "Why is colour grading important?"
+  ],
+  [
+   "27",
+   "38",
+   "QN38.1",
+   "Mistakes when starting to image Editing?"
+  ],
+  [
+   "28",
+   "39",
+   "QN39.1",
+   "How do you thoughts when edit image?"
+  ],
+  [
+   "29",
+   "49",
+   "QN49.3",
+   "What is a good photo?"
+  ],
+  [
+   "30",
+   "50",
+   "QN50.1",
+   "How do you use photos to speak to different audiences?"
+  ],
+  [
+   "31",
+   "51",
+   "QN51.1",
+   "How do you inspire your audience with the photos you take?"
+  ]
+ ],
+ "links": [
+  "/download/13364/S/1_PFD201_Phần 1.zip",
+  "/download/13364/S/2_PFD201_Phần 2.zip"
+ ]
+}

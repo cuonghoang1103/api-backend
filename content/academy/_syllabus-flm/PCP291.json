@@ -1,0 +1,937 @@
+{
+ "ma": "PCP291",
+ "sylID": "12658",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12658",
+   "code": "PCP291",
+   "name": "C++ Programming_Lập trình C++",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12658",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12658",
+  "Syllabus Name": "C++ Programming_Lập trình C++",
+  "Course Name English": "C++ Programming",
+  "Subject Code": "PCP291",
+  "Learning-Teaching Method": "Problem based learning, Active Learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "PRF192",
+  "Description": "This course equips students with knowledge of the C++ programming language from basic to advanced,\n*) Basics\n- C++ Keywords, C++ Variable Types, Lvalues and Rvalues, Operators in C++, Strings, Arrrays, Pointerts, C++ References, C++ Basic Input/Output ...\n- OOP\n*) Advance:\nC/C++ Standard Template Libaries, Files/streaming ,Exception, template, multithread, smartpointer, etc.",
+  "StudentTasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n- Student is responsible to do all assigned exercises given by instructor in class or at home and submit on time.\n- Use laptop in class only for learning purpose.\n- Promptly access to the https://flm.fpt.edu.vn/ for up-to-date course information.",
+  "Tools": "Tools:\n- Dev-CPP (version 6.3)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "MOOC: Introduction to Object Oriented Programming (C++)",
+   "Chris Szalwinski",
+   "Seneca College.",
+   "N/A",
+   "N/A",
+   "N/A",
+   "True",
+   "False",
+   "True",
+   "https://intro2oop.sdds.ca/"
+  ],
+  [
+   "2",
+   "C++ Primer",
+   "Stanley B. Lippman, José Lajoie, Barbara E. Moo",
+   "Addison-Wesley",
+   "2012",
+   "5th Edition",
+   "978-0321714114",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Beginning C++ Programming",
+   "Richard Grimes",
+   "Packt Publishing Ltd",
+   "9-Jul-05",
+   "2nd Edition",
+   "978-1787124943",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand and apply fundamental concepts of C++ programming to develop basic computational solutions"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Effectively manage memory and organize data using advanced C++ programming techniques"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Write modular, reusable, and efficient C++ programs using advanced programming techniques and standard libraries."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply object-oriented programming principles and techniques in C++ to design robust, modular, and maintainable software solutions."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply advanced C++ programming features and file handling techniques to develop flexible and efficient software solutions."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "at home",
+   "",
+   "Option 1: a problem similar to real one; Option 2: Follow lecturer's proposal",
+   "Option 1: N/A; Option 2: Follow lecturer's proposal",
+   "problem(s) to solve by programming using CLO1 - CLO5",
+   "Individual or team work, guided by instructor, submission by a given deadline",
+   ""
+  ],
+  [
+   "2",
+   "Lab",
+   "on-going",
+   "5",
+   "10.0%",
+   ">0",
+   "at home or on class room",
+   "",
+   "Option 1: practical exercises; Option 2: Follow lecturer's proposal",
+   "Option 1: N/A; Option 2: Follow lecturer's proposal",
+   "Lab 1: CLO1\nLab 2: CLO2\nLab 3: CLO3\nLab 4: CLO4\nLab 5: CLO5",
+   "Teachers support tutorials and students do them by themselves",
+   "A lab will be evaluated at the class"
+  ],
+  [
+   "3",
+   "Practical Exam",
+   "on-going",
+   "1",
+   "30.0%",
+   "2",
+   "85'",
+   "",
+   "Preferable to be marked by scripts",
+   "1-2 problems",
+   "problem(s) to solve by programming using CLO1 - CLO4",
+   "supervised by proctor(s) sent by exam board",
+   "Automatic or manual evaluating"
+  ],
+  [
+   "4",
+   "Progress test",
+   "on-going",
+   "2",
+   "15.0%",
+   ">0",
+   "20'-40'",
+   "",
+   "Option 1: essay or multiple choice; Option 2: Follow lecturer's proposal",
+   "Option 1: 15-30 if multiple choice; Option 2: Follow lecturer's proposal",
+   "PT1: CLO1 - CLO3; PT2: CLO4 - CLO5; Number of questions: 3-8 for each CLOx",
+   "supervised by instructor",
+   "Progress test must be taken right after the last lectures of required material.\n\nInstructor has responsibility to review the test for students after graded."
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "",
+   "multiple choice",
+   "50",
+   "questions distribution: CLO1: 2 - 3; CLO2: 5 - 10; CLO3: 8 - 10; CLO4: 8 - 10; CLO5: 8 - 10. More than 70% new questions (for the current semester);",
+   "supervised by proctor(s) sent by exam board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to C++ and Development Environment",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Slides - Slot 1 - Introduction to C++ and Basic Syntax",
+   "PCP291",
+   "Hands-on exercises:\n- Write a “Hello, World!” program.\n- Modify the program to print user-inputted text.",
+   ""
+  ],
+  [
+   "2",
+   "Program Structure and Compilation Process",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Slides - Slot 1 - Introduction to C++ and Basic Syntax",
+   "",
+   "Hands-on exercises:\n- Debug and fix syntax errors in a provided C++ program.\n- Use cout and cin for basic input/output operations.",
+   ""
+  ],
+  [
+   "3",
+   "Data Types, Variables, and Constants",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Slides - Slot 1 - Introduction to C++ and Basic Syntax",
+   "",
+   "Hands-on exercises:\n- Declare variables and perform basic arithmetic operations.\n- Use constants to store fixed values.",
+   ""
+  ],
+  [
+   "4",
+   "Operators and Expressions",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Slides - Slot 2 - Operators, Expressions, and Basic I/O",
+   "",
+   "Hands-on exercises:\n- Write a program to calculate the area of a rectangle.\n- Implement logical expressions for simple decision-making.",
+   ""
+  ],
+  [
+   "5",
+   "Type Conversion and Precedence",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Slides - Slot 2 - Operators, Expressions, and Basic I/O",
+   "",
+   "Hands-on exercises:\n- Predict and fix unexpected results due to operator precedence.\n- Implement explicit type conversion using static_cast<>.",
+   ""
+  ],
+  [
+   "6",
+   "Basic Input and Output Operations",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Slides - Slot 2 - Operators, Expressions, and Basic I/O",
+   "",
+   "Hands-on exercises:\n- Create a basic calculator using arithmetic operators.\n- Read and print user information (name, age, and city).",
+   ""
+  ],
+  [
+   "7",
+   "Conditional Statements",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Slides - Slot 3 - Control Structures - Decision Making and Loops",
+   "",
+   "Hands-on exercises:\n- Write a program to check if a number is even or odd.\n- Implement a grading system using switch-case.",
+   ""
+  ],
+  [
+   "8",
+   "Looping Constructs & Nested Loops and Logical Flow",
+   "Offline",
+   "CLO1",
+   "ITU",
+   "Slides - Slot 3 - Control Structures – Decision Making and Loops",
+   "",
+   "Hands-on exercises:\n- Write a program to print the first N Fibonacci numbers.\n- Implement a countdown timer using loops.\n- Implement a simple multiplication table generator.\n- Write a program to print a pyramid pattern using *.",
+   ""
+  ],
+  [
+   "9",
+   "Lab 1",
+   "Offline",
+   "CLO1",
+   "",
+   "Lab's questions",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Understanding Arrays",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 4 - Arrays and Pointer Fundamentals",
+   "",
+   "Hands-on exercises:\n- Find the maximum and minimum values in an array.\n- Reverse an array.",
+   ""
+  ],
+  [
+   "11",
+   "Introduction to Pointers",
+   "Offline",
+   "CLO2",
+   "IT",
+   "Slides - Slot 4 - Arrays and Pointer Fundamentals",
+   "",
+   "Hands-on exercises:\n- Swap two numbers using pointers.\n- Implement a function to reverse an array using pointers.",
+   ""
+  ],
+  [
+   "12",
+   "Pointers and Arrays in Depth",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 4 - Arrays and Pointer Fundamentals",
+   "",
+   "Hands-on exercises:\n- Implement a function that returns a pointer to the largest element in an array.\n- Demonstrate pointer-based iteration through a two-dimensional array.",
+   ""
+  ],
+  [
+   "13",
+   "Dynamic Memory Allocation",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 5 - Dynamic Memory Allocation & Advanced Pointer Usage",
+   "",
+   "Hands-on exercises:\n- Create a dynamic array and fill it with user input.\n- Implement a simple dynamic list with manual memory allocation.",
+   ""
+  ],
+  [
+   "14",
+   "Memory Management & Avoiding Errors",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 5 - Dynamic Memory Allocation & Advanced Pointer Usage",
+   "",
+   "Hands-on exercises:\n- Demonstrate a scenario where a memory leak occurs, then fix it.\n- Implement a function that safely reallocates an array.",
+   ""
+  ],
+  [
+   "15",
+   "Dynamic Multi-Dimensional Arrays",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 5 - Dynamic Memory Allocation & Advanced Pointer Usage",
+   "",
+   "Hands-on exercises:\n- Implement a dynamically allocated matrix and perform basic operations.\n- Develop a simple memory-efficient data storage system.",
+   ""
+  ],
+  [
+   "16",
+   "Structs in C++",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 6 - Structs, Unions, and Complex Data Organization",
+   "",
+   "Hands-on exercises:\n- Define a Student struct and store multiple students' information.\n- Sort an array of structs based on GPA.",
+   ""
+  ],
+  [
+   "17",
+   "Unions and Differences from Structs",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 6 - Structs, Unions, and Complex Data Organization",
+   "",
+   "Hands-on exercises:\n- Implement a union to store either an integer or a float in minimal memory.",
+   ""
+  ],
+  [
+   "18",
+   "Nested Structs and Data Organization",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 6 - Structs, Unions, and Complex Data Organization",
+   "",
+   "Hands-on exercises:\n- Define a Library struct where each book has multiple authors.\n- Write and read struct data from a file.",
+   ""
+  ],
+  [
+   "19",
+   "Advanced Memory Management Techniques",
+   "Offline",
+   "CLO2",
+   "ITU",
+   "Slides - Slot 7 - Memory Management and Performance Optimization",
+   "",
+   "Hands-on exercises:\n- Implement a program that dynamically allocates and deallocates memory efficiently.",
+   ""
+  ],
+  [
+   "20",
+   "Smart Pointers and RAII\nPerformance Optimization and Best Practices",
+   "Offline",
+   "CLO2",
+   "IT",
+   "Slides - Slot 7 - Memory Management and Performance Optimization",
+   "",
+   "Hands-on exercises:\n- Convert a raw pointer-based program to use smart pointers.\n- Analyze and optimize a sample C++ program for better memory efficiency.",
+   ""
+  ],
+  [
+   "21",
+   "Lab 2",
+   "Offline",
+   "CLO2",
+   "",
+   "Lab's questions",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Functions and Modular Programming",
+   "Offline",
+   "CLO3",
+   "ITU",
+   "Slides - Slot 8 - Functions, Overloading, and Template Programming",
+   "",
+   "Hands-on exercises:\n- Implement a function to calculate the factorial of a number.\n- Create a function to find the greatest common divisor (GCD) using recursion.",
+   ""
+  ],
+  [
+   "23",
+   "Function Overloading and Default Parameters",
+   "Offline",
+   "CLO3",
+   "ITU",
+   "Slides - Slot 8 - Functions, Overloading, and Template Programming",
+   "",
+   "Hands-on exercises:\n- Implement an overloaded function for calculating areas of different shapes.\n- Use default parameters for flexible function behavior.",
+   ""
+  ],
+  [
+   "24",
+   "Template Programming",
+   "Offline",
+   "CLO3",
+   "ITU",
+   "Slides - Slot 8 - Functions, Overloading, and Template Programming",
+   "",
+   "Hands-on exercises:\n- Implement a function template for finding the maximum of two values.\n- Create a simple class template for handling an array of any data type.",
+   ""
+  ],
+  [
+   "25",
+   "Variable Scope and Lifetime",
+   "Offline",
+   "CLO3",
+   "ITU",
+   "Slides - Slot 9 - Scope, Namespaces, and Visibility Rules",
+   "",
+   "Hands-on exercises:\n- Demonstrate variable scope using static and global variables.\n- Implement a program that manages variables across multiple files.",
+   ""
+  ],
+  [
+   "26",
+   "Namespaces for Code Organization",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Slides - Slot 9 - Scope, Namespaces, and Visibility Rules",
+   "",
+   "Hands-on exercises:\n- Implement a program using multiple namespaces for different modules.\n- Use namespace to organize a library system.",
+   ""
+  ],
+  [
+   "27",
+   "Visibility and Encapsulation",
+   "Offline",
+   "CLO3",
+   "I",
+   "Slides - Slot 9 - Scope, Namespaces, and Visibility Rules",
+   "",
+   "Hands-on exercises:\n- Implement encapsulation in a C++ class with getter/setter functions.\n- Control access to class members in a real-world scenario.",
+   ""
+  ],
+  [
+   "28",
+   "Overview of Standard Library (STL) & Common Containers",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Slides - Slot 10 - Introduction to STL Containers & Algorithms",
+   "",
+   "Hands-on exercises:\n- Implement a dynamic list using std::vector.\n- Store and retrieve key-value pairs using std::map.",
+   ""
+  ],
+  [
+   "29",
+   "STL Algorithms & Iterators",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Slides - Slot 10 - Introduction to STL Containers & Algorithms",
+   "",
+   "Hands-on exercises:\n- Sort and search elements in a std::vector.\n- Implement a simple contact management system using std::map.",
+   ""
+  ],
+  [
+   "30",
+   "Introduction to STL Containers",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Slides - Slot 10 - Introduction to STL Containers & Algorithms",
+   "",
+   "Hands-on exercises:\n- Implement a task manager using std::queue.\n- Demonstrate stack-based undo functionality.",
+   ""
+  ],
+  [
+   "31",
+   "Lambda Functions & STL Algorithms",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Slides - Slot 11 - Introduction to STL Features & Optimization",
+   "",
+   "Hands-on exercises:\n- Use lambda functions to apply transformations on a std::vector.\n- Implement custom sorting criteria using lambdas.",
+   ""
+  ],
+  [
+   "32",
+   "STL Performance Considerations & Optimization.\nReal-World STL Applications.",
+   "Offline",
+   "CLO3",
+   "IT",
+   "Slides - Slot 11 - Introduction to STL Features & Optimization",
+   "",
+   "Hands-on exercises:\n- Optimize an existing program by choosing the right STL container.\n- Implement a high-performance data processing application using STL.\n- Develop a student record system using map, vector, and STL algorithms.\n- Implement a real-time event processing system using queue and priority_queue.",
+   ""
+  ],
+  [
+   "33",
+   "Lab 3\nProgress Test 1",
+   "Offline",
+   "CLO1; 2; 3",
+   "",
+   "Lab's questions",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Introduction to OOP Concepts",
+   "Offline",
+   "CLO4",
+   "I",
+   "Slides - Slot 12 - Introduction to Object-Oriented Programming (OOP) & Encapsulation",
+   "",
+   "Hands-on exercises:\n- Define a Car class with attributes (brand, model, year).\n- Create and manipulate objects from the class.",
+   ""
+  ],
+  [
+   "35",
+   "Encapsulation & Data Hiding",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 12 - Introduction to Object-Oriented Programming (OOP) & Encapsulation",
+   "",
+   "Hands-on exercises:\n- Implement encapsulation in a BankAccount class with private balance.\n- Use constructors to initialize object values.",
+   ""
+  ],
+  [
+   "36",
+   "Working with Member Functions",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 12 - Introduction to Object-Oriented Programming (OOP) & Encapsulation",
+   "",
+   "Hands-on exercises:\n- Create a Student class with static member to count students.\n- Implement a method to update object attributes dynamically.",
+   ""
+  ],
+  [
+   "37",
+   "Basics of Inheritance",
+   "Offline",
+   "CLO4",
+   "IT",
+   "Slides - Slot 13 - Inheritance - Code Reusability & Hierarchical Design",
+   "",
+   "Hands-on exercises:\n- Create a Person class and inherit Student and Teacher from it.\n- Demonstrate different access levels in inheritance.",
+   ""
+  ],
+  [
+   "38",
+   "Types of Inheritance & Constructor Calls",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 13 - Inheritance - Code Reusability & Hierarchical Design",
+   "",
+   "Hands-on exercises:\n- Implement multi-level inheritance (Animal → Mammal → Dog).\n- Use constructor chaining to initialize derived class attributes.",
+   ""
+  ],
+  [
+   "39",
+   "Function Overriding & Virtual Functions",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 13 - Inheritance - Code Reusability & Hierarchical Design",
+   "",
+   "Hands-on exercises:\n- Create a Shape class with draw() method and override it in Circle and Rectangle.\n- Implement runtime polymorphism using pointers to base class.",
+   ""
+  ],
+  [
+   "40",
+   "Operator Overloading",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 14 - Polymorphism & Special Member Functions",
+   "",
+   "Hands-on exercises:\n- Overload + operator to add two Complex numbers.\n- Implement << and >> operators for easy input/output.",
+   ""
+  ],
+  [
+   "41",
+   "Copy Constructor & Move Constructor",
+   "Offline",
+   "CLO4",
+   "I",
+   "Slides - Slot 14 - Polymorphism & Special Member Functions",
+   "",
+   "Hands-on exercises:\n- Demonstrate object copying with copy constructor.\n- Optimize memory using move constructor.",
+   ""
+  ],
+  [
+   "42",
+   "Virtual Destructors & Smart Pointers",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 14 - Polymorphism & Special Member Functions",
+   "",
+   "Hands-on exercises:\n- Demonstrate object destruction in polymorphic class hierarchy.\n- Convert raw pointer-based code to use unique_ptr.",
+   ""
+  ],
+  [
+   "43",
+   "Basics of Exception Handling",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 15 - Exception Handling & Robust Application Design",
+   "",
+   "Hands-on exercises:\n- Implement division by zero exception handling.\n- Handle invalid user input in a number conversion program.",
+   ""
+  ],
+  [
+   "44",
+   "Handling Multiple Exceptions & Custom Exceptions, Exception Safety",
+   "Offline",
+   "CLO4",
+   "ITU",
+   "Slides - Slot 15 - Exception Handling & Robust Application Design",
+   "",
+   "Hands-on exercises:\n- Implement exception handling for array index out of bounds.\n- Create a BankTransaction class with a custom exception for insufficient balance.\n- Use RAII for managing dynamic memory safely.",
+   ""
+  ],
+  [
+   "45",
+   "Lab 4",
+   "Offline",
+   "CLO4",
+   "",
+   "Lab's questions",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Introduction to File I/O & Text File Handling",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 16 - Text File Handling & Basic File Operations",
+   "",
+   "Hands-on exercises:\n- Write a program to store and retrieve student records from a text file.\n- Implement a simple logging system that appends messages to a file.",
+   ""
+  ],
+  [
+   "47",
+   "Advanced Text File Operations",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 16 - Text File Handling & Basic File Operations",
+   "",
+   "Hands-on exercises:\n- Develop a contact book where users can add and search contacts.\n- Implement a CSV parser to read structured text data.",
+   ""
+  ],
+  [
+   "48",
+   "File Handling Best Practices & Debugging",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 16 - Text File Handling & Basic File Operations",
+   "",
+   "Hands-on exercises:\n- Optimize file reading operations for better efficiency.\n- Identify and fix common file handling errors in sample code.",
+   ""
+  ],
+  [
+   "49",
+   "Binary File Handling Basics",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 17 - Binary File Handling & File Processing",
+   "",
+   "Hands-on exercises:\n- Implement a program to store and retrieve employee records in binary format.\n- Demonstrate random access file operations (seekg, seekp, tellg, tellp).",
+   ""
+  ],
+  [
+   "50",
+   "File Processing – Searching, Updating, and Deleting",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 17 - Binary File Handling & File Processing",
+   "",
+   "Hands-on exercises:\n- Implement a basic student management system that allows adding, updating, and deleting records.\n- Create a binary-based inventory system that maintains product details.",
+   ""
+  ],
+  [
+   "51",
+   "Optimizing File Processing",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 17 - Binary File Handling & File Processing",
+   "",
+   "Hands-on exercises:\n- Implement a file-based caching system to reduce read/write overhead.\n- Optimize an existing file handling program for better performance.",
+   ""
+  ],
+  [
+   "52",
+   "Preprocessor Directives",
+   "Offline",
+   "CLO5",
+   "IT",
+   "Slides - Slot 18 - Preprocessor Directives & Type Conversions",
+   "",
+   "Hands-on exercises:\n- Implement header guards to prevent multiple inclusions.\n- Use #define macros for constant expressions and debugging.",
+   ""
+  ],
+  [
+   "53",
+   "Type Casting and Type Conversion Operators",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 18 - Preprocessor Directives & Type Conversions",
+   "",
+   "Hands-on exercises:\n- Implement custom type conversion for a Temperature class (Celsius ↔ Fahrenheit).\n- Use dynamic_cast for safe downcasting in an OOP hierarchy.",
+   ""
+  ],
+  [
+   "54",
+   "Best Practices for Type Safety & Optimization",
+   "Offline",
+   "CLO5",
+   "I",
+   "Slides - Slot 18 - Preprocessor Directives & Type Conversions",
+   "",
+   "Hands-on exercises:\n- Optimize memory usage by choosing appropriate data types for calculations.\n- Debug a program with incorrect type conversions and apply correct casting.",
+   ""
+  ],
+  [
+   "55",
+   "Smart Pointers for Memory Safety",
+   "Offline",
+   "CLO5",
+   "IT",
+   "Slides - Slot 19 - Smart Pointers, Multithreading, and Lambda Expressions",
+   "",
+   "Hands-on exercises:\n- Convert raw pointer-based memory management to smart pointers.\n- Demonstrate circular reference issues and solve them using weak_ptr.",
+   ""
+  ],
+  [
+   "56",
+   "Multithreading for Parallel Processing",
+   "Offline",
+   "CLO5",
+   "I",
+   "Slides - Slot 19 - Smart Pointers, Multithreading, and Lambda Expressions",
+   "",
+   "Hands-on exercises:\n- Implement multithreading to execute multiple tasks in parallel.\n- Use mutex to prevent race conditions in shared data.",
+   ""
+  ],
+  [
+   "57",
+   "Lambda Expressions & Functional Programming",
+   "Offline",
+   "CLO5",
+   "ITU",
+   "Slides - Slot 19 - Smart Pointers, Multithreading, and Lambda Expressions",
+   "",
+   "Hands-on exercises:\n- Use lambda functions for dynamic sorting and filtering.\n- Implement a callback mechanism using function pointers and lambdas.",
+   ""
+  ],
+  [
+   "58",
+   "Lab 5",
+   "Offline",
+   "CLO5",
+   "",
+   "Lab's questions",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Progress Test 2",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Assignment Evaluation",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1.1",
+   "What is C programming language, and what are its primary uses?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ1.2",
+   "What are the basic structure and syntax of a C program?"
+  ],
+  [
+   "3",
+   "1",
+   "CQ1.3",
+   "What does the #include preprocessor directive do?"
+  ],
+  [
+   "4",
+   "2",
+   "CQ2.1",
+   "What is the purpose of the main() function in a C program?"
+  ],
+  [
+   "5",
+   "2",
+   "CQ2.2",
+   "How do you comment your code in C?"
+  ],
+  [
+   "6",
+   "2",
+   "CQ2.3",
+   "What is the significance of semicolons in C?"
+  ]
+ ],
+ "links": [
+  "/download/12658/S/1_PCP291.zip"
+ ]
+}

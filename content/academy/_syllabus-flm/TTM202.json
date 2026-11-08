@@ -1,0 +1,1270 @@
+{
+ "ma": "TTM202",
+ "sylID": "13232",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13232",
+   "code": "TTM202",
+   "name": "Destination Management and Marketing_Quản trị điểm đến và Marketing",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13232",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13232",
+  "Syllabus Name": "Destination Management and Marketing_Quản trị điểm đến và Marketing",
+  "Course Name English": "Destination Management and Marketing",
+  "Subject Code": "TTM202",
+  "Learning-Teaching Method": "Lecture,Presentation,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "TTM201, TTG201",
+  "Description": "-Course objectives: The subject is aimed at providing a vital and comprehensive understanding of destination marketing and management\n\n-Description: Managing destinations is an area of growing importance as tourism regions compete to provide unique experiences and exceptional value to visitors. Principles and concepts of building strong destinations are explored to assist future tourism professionals in establishing stronger regional & international tourism organizations while responding to the needs and wants of community residents.\n\n-Teaching method: Basic input will be given by the lecturer in order to initiate discussions on the relevant topics. Therefore, students are required to prepare the reading material in advance. In class, short group works will take place. This should further stimulate discussion between students and allow them to immediately apply theoretical knowledge to mini-case studies. Additionally, discussion should allow students to reflect on observations of tourist destinations and identify linkages with management and marketing activities.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments, and labs given by the instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purposes\n\n- Access the course website (http://flm.fpt.edu.vn) for up-to-date information and material of the course, for online support from teachers and other students, and for practicing and assessment.",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Marketing and managing tourism destinations",
+   "Alastair M. Morrison",
+   "Routledge",
+   "2019",
+   "2nd",
+   "978-1-138-89729-8",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Marketing and Managing Tourism Destinations",
+   "Alastair M. Morrison",
+   "Routledge",
+   "2023",
+   "3rd",
+   "9781032380698",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 2 ấn bản. Ưu tiên mua ấn bản mới nhất"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "To examine and differentiate the key concepts and roles of marketing and management of destinations"
+  ],
+  [
+   "2",
+   "CLO2",
+   "To identify the stakeholders in destination management, the types of destination management organisations and the relationships they are in"
+  ],
+  [
+   "3",
+   "CLO3",
+   "To assess the nature and process of planning and research for destination management and marketing"
+  ],
+  [
+   "4",
+   "CLO4",
+   "To appreciate the key concerns in developing destination product"
+  ],
+  [
+   "5",
+   "CLO5",
+   "To highlight and develop the leadership, partnership and governance in destination management"
+  ],
+  [
+   "6",
+   "CLO6",
+   "To clarify the need for and the procedure of visitor management"
+  ],
+  [
+   "7",
+   "CLO7",
+   "To discuss the concept and the steps to build destination positioning, image, branding and intergrated marketing communications"
+  ],
+  [
+   "8",
+   "CLO8",
+   "To be able to build a comprehensive plan for marketing and management of a destination"
+  ],
+  [
+   "9",
+   "CLO9",
+   "To appreciate and develop a professional and critical attitude towards the job of destination marketing and management"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: During all courses; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "",
+   "",
+   "",
+   "OP1:Participation grade will be given based on students' preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments. Class preparation and pre-reading before lecture will be assessed upon individuals' understanding and ability to answer questions in the class. Individuals will be called up randomly to be assessed.\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "2",
+   "Group project",
+   "on-going",
+   "1",
+   "25.0%",
+   ">0",
+   "OP1: Slots 28, 29, 30; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "OP1: Written report and presentation; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Written report: no limitation of wordsPresentation: 30 mins; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: All chapters; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Students are going to work in group of 4-6 students, each of which picks up 1 tourism destination in Vietnam. Basing on a situation analysis of the destination together with market trend analysis, the group has to develop a one-year management and marketing plan for that destination. Students have to submit both written and oral forms of the report\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "3",
+   "Individual ASM",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "OP1: 10-15' each student in class; dividing into 3 sessions; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "OP1: Oral presentation; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Presentation; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Every chapter; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: In class presentation: each student will be in charge of one chapter (the lecturer will allocate the chapter to each student). She/he is asked to give her/his reflective review of the theories in that chapter by different ways: a concept map/a video/ a poster/real examples/case study or a game. Then the student will have to present in front of the class to help the whole class to get a good understanding of the chapter. Depending on the class size, lecturer can be flexible to decide how many students will work on the same chapter. But they will have to work independently and with seperated parts.\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Individual ASM submission before Tests\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "4",
+   "Tests (2)",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "OP1: 30' in classTest 1: Slot 10Test 2: Slot 20 ; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO6",
+   "OP1: Multiple choicesquestionsEssay, Short questions; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 25 MCQ or 5 short answer questions/test; OP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1:\n\nTest 1: Chapter 1 - 4\n\nTest 2: Chapter 5 - 9\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "In class, by instructors",
+   "OP1: The marking will be based on the understanding and application of the theory (theory review)\n\nTest 1: LO1, LO2, LO3\n\nTest 2: LO4 - LO6\n\nOP2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "MCs",
+   "50 questions",
+   "All chapters",
+   "In class, on computer",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "-Course Overview\n\n-Introduction to AI Integration into the Course\n\n-Topic 1: Introduction to destination management and marketing concepts and roles\n\nIntroduce the course",
+   "Offline",
+   "CLO1",
+   "IT",
+   "- Review TTM201\n\n- Read Chapter 1\n\n- Read slides",
+   "TTM202",
+   "Download learning materials and ask relevant questions.",
+   "link"
+  ],
+  [
+   "2",
+   "Individual assignment guide",
+   "Offline",
+   "",
+   "I",
+   "- Review TTM201\n\n- Read Chapter 1\n\n- Read slides",
+   "TTM202",
+   "Review Chapter 1\n\nDiscussion",
+   ""
+  ],
+  [
+   "3",
+   "Topic 1 (cont'd)\n\n1. Explain the characteristics of a tourism destination.\n\n2. Define destination management and destination marketing.\n\n3. Identify and explain the roles of destination management.\n\n4. Differentiate between destination management and destination marketing.",
+   "Offline",
+   "LO1, LO9",
+   "T",
+   "Review chapter 1",
+   "",
+   "Review Chapter 1\n\nDiscussion",
+   ""
+  ],
+  [
+   "4",
+   "Topic 1 (cont'd)\n\n5. Categorize the stakeholders in destination management into groups.\n\n6. Explain the 10 As of successful destinations.\n\n7. Provide a definition of destination governance and identify the strengths of the public and private sectors.\n\n8. Describe the types of destination management organizations at different geographic levels.",
+   "Offline",
+   "LO1, LO9",
+   "T",
+   "Review chapter 1",
+   "",
+   "Review Chapter 1\n\nDiscussion",
+   ""
+  ],
+  [
+   "5",
+   "Topic 2: Destination planning\n\n1. Describe the history and influences on tourism planning for destinations.\n\n2. Explain the benefits that come from doing long-term tourism planning.\n\n3. Detail the desired outcomes from completing a tourism plan for a destination.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 2\n\n- Read slides",
+   "",
+   "Review Chapter 2\n\nDiscussion",
+   ""
+  ],
+  [
+   "6",
+   "Topic 2 (cont'd)\n\n4. Identify the contents of a tourism plan for a destination.\n\n5. Elaborate on the different geographic levels for destination tourism planning.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 2\n\n- Read slides",
+   "",
+   "Review Chapter 2\n\nDiscussion",
+   ""
+  ],
+  [
+   "7",
+   "Topic 2 (cont'd)\n\n6. Explain the tourism planning process for destination management.\n\n7. Differentiate between strategic planning and visioning.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 2\n\n- Read slides",
+   "",
+   "Review Chapter 2\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "8",
+   "Topic 2 (cont'd)\n\n8. Provide a step-by-step explanation of destination visioning.\n\n9. Pinpoint the advantages of using tourism planning toolkits.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 2\n\n- Read slides",
+   "",
+   "Review Chapter 2\n\nDiscussion",
+   ""
+  ],
+  [
+   "9",
+   "Topic 3: Destination marketing planning\n\n1. Explain the key destination marketing professional principles.\n\n2. Describe the different levels of goals and objectives in the destination marketing planning process.\n\n3. Differentiate between a vision and a mission.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 3\n\n- Read slides",
+   "",
+   "Review Chapter 3\n\nDiscussion",
+   ""
+  ],
+  [
+   "10",
+   "Topic 3 (cont'd)\n\n4. Identify the meaning of the components of the PRICE model.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 2\n\n- Read slides",
+   "",
+   "Review Chapter 2\n\nDiscussion",
+   ""
+  ],
+  [
+   "11",
+   "Topic 3 (cont'd)\n\n5. Provide a detailed explanation of the steps in the destination marketing system (DMS).\n\n6. Describe the contents of a destination marketing plan.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 3\n\n- Read slides",
+   "",
+   "Review Chapter 3\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "12",
+   "Topic 3 (cont'd)\n\n7. Give an explanation of each of the 8 Ps of destination marketing.\n\n8. Explain how key result areas (KRAs) and key performance indicators (KPIs) are used to measure the marketing performance of destination management organizations (DMOs).",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 3\n\n- Read slides",
+   "",
+   "Review Chapter 3\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "13",
+   "Topic 4: Destination management research\n\n1. Explain the contributions of research to destination management.\n\n2. Describe the components of a destination management research agenda.\n\n3. Discuss the steps in the destination management research process.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 4\n\n- Read slides",
+   "",
+   "Review Chapter 4\n\nDiscussion",
+   ""
+  ],
+  [
+   "14",
+   "Topic 4 (cont'd)\n\n4. Define and differentiate between primary and secondary research.\n\n5. Detail the procedures for analyzing existing markets in visitor profile studies.\n\n6. Explain how a destination conducts a potential market analysis.\n\n7. Describe the techniques for doing destination image research.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 4\n\n- Read slides",
+   "",
+   "Review Chapter 4\n\nDiscussion",
+   ""
+  ],
+  [
+   "15",
+   "Topic 4 (cont'd)\n\n8. Elaborate on the importance of gathering resident attitudes and opinions about tourism.\n\n9. Pinpoint the types of research projects that are done in a destination audit.\n\n10. Describe the research approaches for measuring economic impact.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "T",
+   "- Read Chapter 4\n\n- Read slides",
+   "",
+   "Review Chapter 4\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "16",
+   "Topic 4 (cont'd)\n\n11. Delineate procedures for completing competitive research.\n\n12. Explain performance measurement in destination management.\n\n13. Outline the elements of a destination management research plan.\n\n14. Identify criteria for selecting research vendors.",
+   "Offline",
+   "LO3, LO8, LO9",
+   "I,T",
+   "- Read Chapter 4\n\n- Read slides",
+   "",
+   "Review Chapter 4\n\nDiscussion",
+   ""
+  ],
+  [
+   "17",
+   "Individual assignment: Individual presentations 1",
+   "Offline",
+   "LO1-LO3",
+   "U",
+   "Review Chapter 1-4",
+   "",
+   "Review Chapter 1-4\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "18",
+   "Individual assignment: Individual presentations 1 (cont'd)",
+   "Offline",
+   "LO1-LO3",
+   "U",
+   "Review Chapter 1-4",
+   "",
+   "Review Chapter 1-4\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "19",
+   "Topic 1 - 4 Review and Test 1",
+   "Offline",
+   "LO1 - LO3",
+   "T",
+   "Review Chapter 1-4",
+   "",
+   "Review Chapter 1-4\n\nDiscussion and Test",
+   ""
+  ],
+  [
+   "20",
+   "Group assignment guide 1",
+   "Offline",
+   "LO1-LO3",
+   "I",
+   "Review Chapter 1-4",
+   "",
+   "Review Chapter 1-4\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "21",
+   "Topic 5: Destination product development\n\n1. Define the destination product and identify its components.\n\n2. Discuss principles of destination product development including sustainable tourism.\n\n3. Explain the Tourism Area Life Cycle Model and how this impacts the destination product.\n\n4. Describe the continuum of DMO involvement in product development.\n\n5. Differentiate between hard and soft product development.",
+   "Offline",
+   "LO4, LO8, LO9",
+   "T",
+   "- Read Chapter 5\n\n- Read slides",
+   "",
+   "Review Chapter 5\n\nDiscussion",
+   ""
+  ],
+  [
+   "22",
+   "Topic 5 (cont'd)\n\n6. Explain the importance and dimensions of destination quality.\n\n7. Elaborate on product development strategy models and how they are applied to destination product development.\n\n8. Identify the physical products in a destination and explain how potential development projects are analyzed.\n\n9. Describe the roles of visitor information centres (VICs).",
+   "Offline",
+   "LO4, LO8, LO9",
+   "T",
+   "- Read Chapter 5\n\n- Read slides",
+   "",
+   "Review Chapter 5\n\nDiscussion",
+   ""
+  ],
+  [
+   "23",
+   "Topic 5 (cont'd)\n\n10. Define accessible tourism and explain its importance in destination development.\n\n11. Identify different types of tourism signage.\n\n12. Elaborate on the types of strategies and programmes that a DMO can offer to enhance human resource development.\n\n13. Explain the roles and benefits of packaging and what the DMO can do to encourage greater packaging.",
+   "Offline",
+   "LO4, LO8, LO9",
+   "T",
+   "- Read Chapter 5\n\n- Read slides",
+   "",
+   "Review Chapter 5\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "24",
+   "Topic 5 (cont'd)\n\n14. Pinpoint the different forms of programming in which a destination can engage and how a DMO can encourage event, festival, and activity programmes.\n\n15. Define experience design and identify the characteristics of effectively crafted visitor experiences.\n\n16. Explain the roles of interpretation for a destination.",
+   "Offline",
+   "LO4, LO8, LO9",
+   "T",
+   "- Read Chapter 5\n\n- Read slides",
+   "",
+   "Review Chapter 5\n\nDiscussion",
+   ""
+  ],
+  [
+   "25",
+   "Topic 6: Destination leadership, governance and partnership\n\n1. Define the terms destination partnership and team building.\n\n2. Discuss how partnerships contribute to the accomplishment of the other roles of destination management.\n\n3. Describe the relationship between destination governance and destination partnerships.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 6 and 8\n\n- Read slides",
+   "",
+   "Review Chapter 6 and 8\n\nDiscussion",
+   ""
+  ],
+  [
+   "26",
+   "Topic 6 (cont'd)\n\n4. Explain the benefits of destination partnerships.\n\n5. Discuss the potential partners for DMOs.\n\n6. Elaborate on how a DMO identifies potential partners.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 6 and 8\n\n- Read slides",
+   "",
+   "Review Chapter 6 and 8\n\nDiscussion",
+   ""
+  ],
+  [
+   "27",
+   "Topic 6 (cont'd)\n\n7. Explain the concept of public–private partnerships (PPPs) and their advantages.\n\n8. Pinpoint and explain the barriers and challenges in forming destination partnerships.\n\n9. Identify the types of partnerships into which DMOs can enter.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 6 and 8\n\n- Read slides",
+   "",
+   "Review Chapter 6 and 8\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "28",
+   "Topic 6 (cont'd)\n\n10. Describe the ingredients of a successful destination partnership.\n\n11. Explain how a DMO performs as a destination team builder.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 6 and 8\n\n- Read slides",
+   "",
+   "Review Chapter 6 and 8\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "29",
+   "Topic 7: Destination community and stakeholder relationships and involvement\n\n1. Explain the importance of community relationships and involvement to destination management.\n\n2. Describe the reasons and benefits of having positive relationships with local community residents.\n\n3. Discuss the activities included in managing the relationships and involvement of local community residents.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 7\n\n- Read slides",
+   "",
+   "Review Chapter 7\n\nDiscussion",
+   ""
+  ],
+  [
+   "30",
+   "Topic 7 (cont'd)\n\n4. Define the term stakeholders.\n\n5. Pinpoint varying strategies for relationship management with different groups of stakeholders.\n\n6. Identify and describe the tourism sector stakeholders in a destination.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 7\n\n- Read slides",
+   "",
+   "Review Chapter 7\n\nDiscussion",
+   ""
+  ],
+  [
+   "31",
+   "Topic 7 (cont'd)\n\n7. Elaborate upon the activities that a DMO should use to maintain positive relationships with and involvement of tourism sector stakeholders.\n\n8. Discuss the reasons for having DMO membership programmes.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 7\n\n- Read slides",
+   "",
+   "Review Chapter 10\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "32",
+   "Topic 7 (cont'd)\n\n9. Describe the activities in DMO relationships with and involvement of members.\n\n10. Review the benefits that DMOs provide to members.\n\n11. Explain the important considerations with DMO boards of directors.",
+   "Offline",
+   "LO2, LO5, LO8, LO9",
+   "T",
+   "- Read Chapter 7\n\n- Read slides",
+   "",
+   "Review Chapter 7\n\nDiscussion",
+   ""
+  ],
+  [
+   "33",
+   "Topic 8: Visitor management\n\n1. Define destination leadership and destination coordination.\n\n2. Explain the key leadership functions of DMOs.\n\n3. Briefly describe different leadership theories and approaches.\n\n4. Review servant leadership and explain why it is appropriate for destination management.\n\n5. Define corporate social responsibility (CSR) and how it is applied in destination management.",
+   "Offline",
+   "LO6, LO8, LO9",
+   "T",
+   "- Read Chapter 9\n\n- Read slides",
+   "",
+   "Review Chapter 11\n\nDiscussion",
+   ""
+  ],
+  [
+   "34",
+   "Topic 8 (cont'd)\n\n6. Elaborate on ethical codes and practices for DMOs and their leaders.\n\n7. Discuss the ‘silo effect’ and its presence in the tourism sector and destinations.\n\n8. Explain destination coordination and how DMOs accomplish coordination.\n\n9. Review the links from destination leadership and coordination to governance.\n\n10. Define the term destination governance and identify the dimensions of governance.",
+   "Offline",
+   "LO6, LO8, LO9",
+   "T",
+   "- Read Chapter 9\n\n- Read slides",
+   "",
+   "Review Chapter 11\n\nDiscussion",
+   ""
+  ],
+  [
+   "35",
+   "Topic 8 (cont'd)\n\n11. Describe accountability and the actions required of a DMO to demonstrate it is accountable.\n\n12. Explain the concept of transparency and how this applies to a DMO.\n\n13. Identify the ways in which DMOs can measure performance.",
+   "Offline",
+   "LO6, LO8, LO9",
+   "T",
+   "- Read Chapter 9\n\n- Read slides",
+   "",
+   "Review Chapter 11\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "36",
+   "Topic 8 (cont'd)\n\n14. Explain how DMO organizational structures are related to destination governance.\n\n15. Discuss the different funding mechanisms and sources available for DMOs.\n\n16. Define bylaws and how they affect destination governance.\n\n17. Review how the chairpersons of boards of directors can be influential in DMO governance.\n\n18. Identify and review the types of risk to which DMOs and destinations are exposed and how they should handle risk management.",
+   "Offline",
+   "LO6, LO8, LO9",
+   "T",
+   "- Read Chapter 9\n\n- Read slides",
+   "",
+   "Review Chapter 11\n\nDiscussion",
+   ""
+  ],
+  [
+   "37",
+   "Individual assignment: Individual presentations 2",
+   "Offline",
+   "LO4-LO6",
+   "U",
+   "Review Chapter 5-9",
+   "",
+   "Review Chapter 1-4\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "38",
+   "Individual assignment: Individual presentations 2 (cont'd)",
+   "Offline",
+   "",
+   "U",
+   "Review Chapter 5-9",
+   "",
+   "Review Chapter 1-4\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "39",
+   "Topic 5 - 8 Review and Test 2",
+   "Offline",
+   "LO4 - LO6",
+   "T,U",
+   "Review Chapter 5-9",
+   "",
+   "Review Chapter 5-9\n\nDiscussion and Test",
+   ""
+  ],
+  [
+   "40",
+   "Group assignment guide 2",
+   "Offline",
+   "",
+   "I",
+   "Review Chapter 5-9",
+   "",
+   "Review Chapter 1-4\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "41",
+   "Topic 9: Destination branding\n\n1. Define visitor management.\n\n2. Explain the ADVICE model for visitor management.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 10\n\n- Read slides",
+   "",
+   "Review Chapter 10\n\nDiscussion",
+   ""
+  ],
+  [
+   "42",
+   "Topic 9 (cont'd)\n\n3. Describe the reasons for and benefits from visitor management.\n\n4. Review resource protection and conservation from the visitor management perspective.\n\n5. Detail the procedures in visitor planning, monitoring and management.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 10\n\n- Read slides",
+   "",
+   "Review Chapter 10\n\nDiscussion",
+   ""
+  ],
+  [
+   "43",
+   "Topic 9 (cont'd)\n\n6. Elaborate on the importance and steps required to assure visitor safety and security within destinations.\n\n7. Detail the procedures for crisis and disaster management for destinations.\n\n8. Explain the provision of visitor interpretation, education and information.\n\n9. Review visitor expectations, experiences, enjoyment and satisfaction.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 10\n\n- Read slides",
+   "",
+   "Review Chapter 10\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "44",
+   "Topic 9 (cont'd)\n\n10. Describe the need to monitor and manage visitor behaviour.\n\n11. Explain the application of yield management to destinations.\n\n12. Identify other reasons for visitor management efforts.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 10\n\n- Read slides",
+   "",
+   "Review Chapter 10\n\nDiscussion",
+   ""
+  ],
+  [
+   "45",
+   "Topic 10: Destination integrated marketing communications\n\n1. Explain the positioning–image–branding approach and define these three interconnected concepts.\n\n2. Discuss the relationships among destination positioning, image and branding.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 11, 12\n\n- Read slides",
+   "",
+   "Review Chapter 11, 12\n\nDiscussion",
+   ""
+  ],
+  [
+   "46",
+   "Topic 10 (cont'd)\n\n3. Identify and describe the importance and benefits of destination branding.\n\n4. Elaborate upon the major challenges in implementing destination branding.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 11, 12\n\n- Read slides",
+   "",
+   "Review Chapter 11, 12\n\nDiscussion",
+   ""
+  ],
+  [
+   "47",
+   "Topic 10 (cont'd)\n\n5. Pinpoint why destination brands sometimes fail.\n\n6. Review the characteristics of a good destination brand.\n\n7. Explain the classic concepts of branding.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 11, 12\n\n- Read slides",
+   "",
+   "Review Chapter 11, 12\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "48",
+   "Topic 10 (cont'd)\n\n8. Outline and describe the steps to be followed in destination branding.\n\n9. Describe the brand promise concept.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 11, 12\n\n- Read slides",
+   "",
+   "Review Chapter 11, 12\n\nDiscussion",
+   ""
+  ],
+  [
+   "49",
+   "Topic 11: Destination markets\n\n1. Describe the elements of the basic model of communications.\n\n2. Define integrated marketing communications and explain the benefits that DMOs derive by following this approach.\n\n3. Identify and elaborate upon each of the major components of integrated marketing communications.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 13, 14, 15, 16\n\n- Read slides",
+   "",
+   "Review Chapter 13 - 16\n\nDiscussion",
+   ""
+  ],
+  [
+   "50",
+   "Topic 11 (cont'd)\n\n4. Explain the importance and roles of advertising in promoting a destination.\n\n5. Describe how personal selling is essential for DMOs in securing business from specific market segments and identify the roles of personal selling in destination marketing.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 13, 14, 15, 16\n\n- Read slides",
+   "",
+   "Review Chapter 13 - 16\n\nDiscussion",
+   ""
+  ],
+  [
+   "51",
+   "Topic 11 (cont'd)\n\n6. Review why public relations and publicity are required for a DMO to build and maintain relationships with its multiple publics.\n\n7. Identify a DMOs’ internal and external publics.\n\n8. Point out the roles played by sales promotion and merchandising for DMOs.\n\n9. Describe the different sales promotion and merchandising techniques.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 13, 14, 15, 16\n\n- Read slides",
+   "",
+   "Review Chapter 13 - 16\n\nDiscussion",
+   ""
+  ],
+  [
+   "52",
+   "Topic 11 (cont'd)\n\n10. Identify the main digital marketing techniques and venues.\n\n11. Explain the concept of crowdsourcing and the different ways that this concept can be applied in destination integrated marketing communications.\n\n12. Elaborate on the relationship between movies and films and destination marketing and development.\n\n13. Review the concept of theme and event years as a basis for DMO integrated marketing communications.\n\n14. Discuss the steps involved in the planning, implementation and evaluation of an integrated marketing communications (IMC) campaign.",
+   "Offline",
+   "LO7, LO8, LO9",
+   "T",
+   "- Read Chapter 13, 14, 15, 16\n\n- Read slides",
+   "",
+   "Review Chapter 13 - 16\n\nDiscussion",
+   ""
+  ],
+  [
+   "53",
+   "Individual assignment: Individual presentations 3",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "Review Chapter 10 - 16",
+   "",
+   "Review Chapter 10 - 16\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "54",
+   "Individual assignment: Individual presentations 3 (cont'd)",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "Review Chapter 10 - 16",
+   "",
+   "Review Chapter 10 - 16\n\nPresentation and discussion",
+   ""
+  ],
+  [
+   "55",
+   "Group project presentation 1",
+   "Offline",
+   "All LOs",
+   "U",
+   "Review all chapters",
+   "",
+   "Review all chapters\n\nDiscussion",
+   ""
+  ],
+  [
+   "56",
+   "Group project presentation 1 (cont'd)",
+   "Offline",
+   "All LOs",
+   "U",
+   "Review all chapters",
+   "",
+   "Review all chapters\n\nDiscussion",
+   ""
+  ],
+  [
+   "57",
+   "Group project presentation 2",
+   "Offline",
+   "All LOs",
+   "U",
+   "Review all chapters",
+   "",
+   "Review all chapters\n\nDiscussion",
+   ""
+  ],
+  [
+   "58",
+   "Group project presentation 2 (cont'd)",
+   "Offline",
+   "All LOs",
+   "U",
+   "Review all chapters",
+   "",
+   "Review all chapters\n\nDiscussion",
+   ""
+  ],
+  [
+   "59",
+   "Revision\n\nGroup assignment submission",
+   "Offline",
+   "All LOs",
+   "T,U",
+   "All chapters",
+   "",
+   "Review All chapters\n\nDiscussion",
+   ""
+  ],
+  [
+   "60",
+   "Revision\n\nGroup assignment submission (cont'd)",
+   "Offline",
+   "All LOs",
+   "T,U",
+   "All chapters",
+   "",
+   "Review All chapters\n\nDiscussion",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CT1.1",
+   "What is the destination marketing?"
+  ],
+  [
+   "2",
+   "2",
+   "CT1.2",
+   "How many roles of destination management are there? What are they?"
+  ],
+  [
+   "3",
+   "3",
+   "CT1.3",
+   "How many Influences on Tourism Planning are there? What are they?"
+  ],
+  [
+   "4",
+   "3",
+   "CT1.4",
+   "What is the key destination marketing professional principles?"
+  ],
+  [
+   "5",
+   "3",
+   "CT1.5",
+   "What is primary research in destination management research?"
+  ],
+  [
+   "6",
+   "4",
+   "CT2.1",
+   "How many steps in Analysis of Potential Development Projects are there? What are they?"
+  ],
+  [
+   "7",
+   "5",
+   "CT2.2",
+   "What is DMO leadership?"
+  ],
+  [
+   "8",
+   "6",
+   "CT3.1",
+   "How many stakeholder relationship management strategies recommended based on Threat Matrix are there? What are they?"
+  ],
+  [
+   "9",
+   "7",
+   "CT3.2",
+   "What is the definition of Visitor management?"
+  ],
+  [
+   "10",
+   "8",
+   "CT3.3",
+   "What is the 4Rs process?"
+  ],
+  [
+   "11",
+   "9",
+   "CT4.1",
+   "When marketing destinations, what professional principles should be followed"
+  ],
+  [
+   "12",
+   "9",
+   "CT4.2",
+   "Vision and mission of destination marketing, examples!"
+  ],
+  [
+   "13",
+   "10",
+   "CT4.3",
+   "Provide an explanation of the steps in the destination marketing system (DMS)."
+  ],
+  [
+   "14",
+   "11",
+   "CT4.4",
+   "Detail the components of the PRICE model."
+  ],
+  [
+   "15",
+   "12",
+   "CT4.5",
+   "Describe the contents of a destination marketing plan."
+  ],
+  [
+   "16",
+   "13",
+   "CT5.1",
+   "Elaborate on the evaluation of DMO marketing performance."
+  ],
+  [
+   "17",
+   "13",
+   "CT5.2",
+   "When analyzing the potential market, how will the destination do?"
+  ],
+  [
+   "18",
+   "14",
+   "CT6.1",
+   "What are the forms for destination marketing?"
+  ],
+  [
+   "19",
+   "15",
+   "CT6.2",
+   "Do destinations need to survey tourists and local residents? Why?"
+  ],
+  [
+   "20",
+   "16",
+   "CT6.3",
+   "Outline the elements of a destination management research plan."
+  ],
+  [
+   "21",
+   "17",
+   "CT7.1",
+   "Describe the research approaches for measuring economic impact."
+  ],
+  [
+   "22",
+   "18",
+   "CT7.2",
+   "Define the destination product and identify its components. Differentiate between hard and soft product development."
+  ],
+  [
+   "23",
+   "18",
+   "CT7.3",
+   "What’s destination product development including sustainable tourism."
+  ],
+  [
+   "24",
+   "19",
+   "CT7.4",
+   "Explain the Tourism Area Life Cycle model and how it impacts destination product development."
+  ],
+  [
+   "25",
+   "20",
+   "CT7.5",
+   "Elaborate on product development strategy models and how they are applied to destination product development."
+  ],
+  [
+   "26",
+   "21",
+   "CT8.1",
+   "Elaborate on the types of strategies and programmes that a DMO can offer to enhance human resource development."
+  ],
+  [
+   "27",
+   "21",
+   "CT8.2",
+   "What are the relationships between partners in destination development? Define destination leadership and destination coordination."
+  ],
+  [
+   "28",
+   "22",
+   "CT9.1",
+   "Explain the key leadership functions of DMOs."
+  ],
+  [
+   "29",
+   "23",
+   "CT9.2",
+   "Describe the relationship between destination governance and destination partnerships."
+  ],
+  [
+   "30",
+   "24",
+   "CT9.3",
+   "Define corporate social responsibility (CSR) and how it is applied in destination management."
+  ],
+  [
+   "31",
+   "25",
+   "CT10.1",
+   "Explain how DMO organizational structures are related to destination governance."
+  ],
+  [
+   "32",
+   "26",
+   "CT10.2",
+   "Explain the importance of community relationships and involvement to destination management."
+  ],
+  [
+   "33",
+   "27",
+   "CT10.3",
+   "Pinpoint varying strategies for relationship management with different groups of stakeholders."
+  ],
+  [
+   "34",
+   "28",
+   "CT11.1",
+   "Identify and describe the tourism sector stakeholders in a destination."
+  ],
+  [
+   "35",
+   "29",
+   "CT11.2",
+   "Why does a travel destination need agencies and communities to get involved?"
+  ],
+  [
+   "36",
+   "30",
+   "CT11.3",
+   "Define the term stakeholder"
+  ],
+  [
+   "37",
+   "31",
+   "CT12.1",
+   "The let's cite a few cases of tourist areas and attractions that have coordinated with the community to manage destinations"
+  ],
+  [
+   "38",
+   "32",
+   "CT12.2",
+   "Explain the ADVICE model for visitor management. Describe the reasons for and benefits from visitor management."
+  ],
+  [
+   "39",
+   "33",
+   "CT12.3",
+   "Detail the procedures in visitor planning, monitoring and management."
+  ],
+  [
+   "40",
+   "34",
+   "CT13.1",
+   "Elaborate on the importance and steps required to assure visitor safety and security within destinations."
+  ],
+  [
+   "41",
+   "35",
+   "CT13.2",
+   "Detail the procedures for crisis and disaster management for destinations."
+  ],
+  [
+   "42",
+   "36",
+   "CT14.1",
+   "Describe the need to monitor and manage visitor behaviour. Explain the application of yield management to destinations."
+  ],
+  [
+   "43",
+   "36",
+   "CT14.2",
+   "Discuss the relationships among destination positioning, image and branding."
+  ],
+  [
+   "44",
+   "37",
+   "CT14.3",
+   "Identify and describe the importance and benefits of destination branding."
+  ],
+  [
+   "45",
+   "38",
+   "CT14.4",
+   "Pinpoint why destination brands sometimes fail. Review the characteristics of a good destination brand."
+  ],
+  [
+   "46",
+   "39",
+   "CT15.1",
+   "Outline and describe the steps to be followed in destination branding."
+  ],
+  [
+   "47",
+   "39",
+   "CT15.2",
+   "Describe the brand promise concept."
+  ],
+  [
+   "48",
+   "40",
+   "CT15.3",
+   "Describe the elements of the basic model of communications. Define integrated marketing communications, and explain the benefits that DMOs derive by following this approach."
+  ],
+  [
+   "49",
+   "41",
+   "CT16.1",
+   "Explain the importance and roles of advertising in promoting a destination."
+  ],
+  [
+   "50",
+   "42",
+   "CT16.2",
+   "Review why public relations and publicity are required for a DMO to build and maintain relationships with its multiple publics"
+  ],
+  [
+   "51",
+   "43",
+   "CT16.3",
+   "Point out the roles played by sales promotion and merchandising for DMOs."
+  ],
+  [
+   "52",
+   "44",
+   "CT17.1",
+   "Identify the main components of digital marketing."
+  ],
+  [
+   "53",
+   "45",
+   "CT17.2",
+   "Review social media and how they are used by DMOs."
+  ],
+  [
+   "54",
+   "46",
+   "CT17.3",
+   "Describe people's motivations in visiting tourism destinations for leisure trips."
+  ],
+  [
+   "55",
+   "47",
+   "CT18.1",
+   "Identify and explain the factors that affect people's selection of destinations."
+  ],
+  [
+   "56",
+   "48",
+   "CT18.2",
+   "Elaborate on market segmentation in tourism and the main ways of classifying people into distinct groups."
+  ],
+  [
+   "57",
+   "49",
+   "CT18.3",
+   "Review the recent market trends in tourism."
+  ],
+  [
+   "58",
+   "50",
+   "CT18.4",
+   "Explain the benefits of domestic tourism."
+  ],
+  [
+   "59",
+   "51",
+   "CT18.5",
+   "Elaborate upon the recent trends and prospects for domestic tourism."
+  ],
+  [
+   "60",
+   "52",
+   "CT18.6",
+   "Describe some major segments of domestic tourism. Elaborate on the trends and prospects for international tourism arrivals."
+  ]
+ ],
+ "links": [
+  "/download/4822/S/1_TTM202.zip",
+  "Guidance on AI activities, teaching methods, and assessment strategies: https://drive.google.com/drive/folders/1BNbJLUrw_WkjZpDrO80JegegwFv8umCs?usp=sharing",
+  "/download/4822/S/2_TTM202.zip"
+ ]
+}

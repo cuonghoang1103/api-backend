@@ -1,0 +1,1223 @@
+{
+ "ma": "ACC101",
+ "sylID": "14030",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14030",
+   "code": "ACC101",
+   "name": "Principles of Accounting_Nguyên lý kế toán",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14030",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14030",
+  "Syllabus Name": "Principles of Accounting_Nguyên lý kế toán",
+  "Course Name English": "Principles of Accounting",
+  "Subject Code": "ACC101",
+  "Learning-Teaching Method": "Lecture,Social Constructivism,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Main objectives:\n\nUpon completion of this course, students should:\n\n1. Have clear understanding of ideas, principles, and techniques of accounting\n\n2. Have the knowledge and tools to better understand business performance issues, and the decisions and problems faced by managers;\n\n3. Understand the important role of accounting and finance in all organizations, in all jobs, and its link with the development of increasingly sophisticated IT systems.\n\nSpecific objectives :\n\n1. Recognize and organize accounting transactions\n\n2. Classify and calculate correctly in terms of revenue, cost, profit or loss in an account\n\n3. Be able to prepare comprehensive and accurate financial statements\n\nDescription:\n\nThe main content is structured into twelve chapters covering Financial Accounting, Management Accounting, and Business Finance.\n\nTopics include: business transaction, financial statement format and analysis, inventory and accounts receivable, type of assets and liabilities, costing classification, master budget and capital budgeting\n\nA key feature of this course is the integration of artificial intelligence (AI) tools and applications, which enable students to constructivist questions while maintaining their critical thinking and originality.",
+  "StudentTasks": "- Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance\n\n- Access the course website (http://flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "AI foundations for everyone\n\nhttps://www.coursera.org/specializations/ai-foundations-for-everyone#courses",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "AI Fundamentals\n\nhttps://www.coursera.org/learn/google-ai-fundamentals",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Ethics of Artificial Intelligence https://www.coursera.org/learn/ethics-of-artificial-intelligence",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Fundamental accounting principles",
+   "John J. Wild, Winston Kwok, Sundar Venkatesh",
+   "McGraw Hill",
+   "",
+   "3rd",
+   "9789814923378",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong ba sách. Ưu tiên ấn bản mới nhất."
+  ],
+  [
+   "5",
+   "Fundamental accounting principles",
+   "Wild, Larson, Chiappetta",
+   "Mc Graw-Hill",
+   "2013",
+   "",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Principles of Accounting",
+   "Wild, Shaw, & Chiappetta",
+   "McGraw Hill",
+   "2009",
+   "",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Develop and understand the nature and purpose of financial statements in relationship to decision making"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Develop the ability to use the fundamental accounting equation to analyze the effect of business transactions on an organization’s accounting records and financial statements"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop the ability to use accounting concepts, principles, and frameworks to analyze and effectively communicate information to a variety of audiences"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understanding Value Added Tax and updating on Vietnamese accounting policy."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Being able to develop an accounting budget"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Shows self-reliance when working independently and collaboratively"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "LO6",
+   "",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments."
+  ],
+  [
+   "2",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "OP1: Presentation in class and report submission; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO2, LO3, LO4, LO6",
+   "OP1: Group problem solving: Suggestion: Using knowledge so far to find out the problem in financial management of any company at home or abroad, give explanation and find out the lesson behind ; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Comprehensive exercise applying a business event; OP2: (For Constructivism Approach only): Follow lecturer's proposal Report of 1500-2000 words",
+   "OP1: Thinking creatively, making decisions, solving problems,Personal qualities: Individual responsibility, self-esteem, sociability, self-management, and integrity. OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Either given by instructor or students are free to choose business cases\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "3",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "OP1:At home and report submission; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO6",
+   "OP1: Suppose you are starting a new business in merchandise industry. Based on transaction analysis, prepare General Journal for the first month of operating. Produce Income statement and Balance sheet in good form. (All necessary formats provided by Instructor); OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Report of 1000-1500 words. OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Integration of studied knowledge and skillsOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Students are free to create business activities\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "4",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "OP1: In class (30 minutes); OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3",
+   "OP1: Multiple choice questions or calculation ; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: 15 Multiple choice questions or calculation; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Integration of studied knowledge and skills\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: As solution\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "LO1, LO2, LO3, LO4, LO5",
+   "Multiple choice",
+   "Multiple choice of 50 questions from question bank",
+   "Comprehensive understanding chapters so far",
+   "By Exam board",
+   "Not allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "-Course Overview\n\n-Introduction to AI Integration into the Course\n\nChapter 1: Accounting in business\n\n1. Importance of accounting",
+   "Offline",
+   "LO1",
+   "IT",
+   "Book, Powerpoint",
+   "ACC101_Chapter 8-11",
+   "Review syllabus; Set up AI accounts; Explore course software.",
+   "link"
+  ],
+  [
+   "2",
+   "Chapter 1: Accounting in business (cont)\n2. Fundamental of accounting",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Book, Powerpoint",
+   "ACC101_Chapter1-7",
+   "Discuss real-world accounting scandals/ethics in groups.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Accounting in business (cont)\n3. Transaction analysis and the accounting equation",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Identify accounts and classify them into the three categories.\nPractice analyzing 10+ basic business transactions.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Accounting in business (cont)\n4. Financial statements",
+   "Offline",
+   "LO1",
+   "IT",
+   "Book, Powerpoint",
+   "",
+   "Draft a basic Income Statement and Balance Sheet.",
+   ""
+  ],
+  [
+   "5",
+   "Exercise Activities: Chapter 1\nAbout Business Transaction",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Solve complex transaction analysis problems in class.",
+   ""
+  ],
+  [
+   "6",
+   "Exercise Activities: Chapter 1 (cont)\nAbout Business Transaction",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Solve complex transaction analysis problems in class.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Analyzing and recording transaction\n1. Analyzing and recording process",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Correct mistakes in previous exercises; Master the \"T-account\".",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Analyzing and recording transaction (cont)\n2. Analyzing and processing transaction",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Memorize the \"Increase/Decrease\" rules for all account types.",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Analyzing and recording transaction (cont)\n3. Trial balance",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Practice Journalizing and Posting to Ledger accounts.",
+   ""
+  ],
+  [
+   "10",
+   "Individual Assignment Release",
+   "Offline",
+   "LO2",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Download assignment brief; Ask clarifying questions on scope.",
+   ""
+  ],
+  [
+   "11",
+   "Exercise Activities: Chapter 2\nAbout Trial Balance",
+   "Offline",
+   "LO2",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Prepare a Trial Balance; Locate errors when debits & credits.",
+   ""
+  ],
+  [
+   "12",
+   "Exercise Activities (cont): Chapter 2\nAbout Trial Balance",
+   "Offline",
+   "LO2",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Complete a full set of Ch2 practice problems.",
+   ""
+  ],
+  [
+   "13",
+   "Quiz1 (chapters 1,2)",
+   "Offline",
+   "LO1, LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Review Ch1-2; Complete the quiz within the time limit.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3 : Adjusting accounts and preparing financial statement\n1. The accounting period",
+   "Offline",
+   "LO1, LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Define accounting period",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3 : Adjusting accounts (cont)\n2. Accrual basic vs. cash basis",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Analyze why Net Income differs under the two methods.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3 : Adjusting accounts (cont)\n3. Adjusting account",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Record adjusting entries for supplies and insurance.",
+   ""
+  ],
+  [
+   "17",
+   "Exercise Activities: Chapter 3 about Adjusting process",
+   "Offline",
+   "LO2",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Record adjusting entries for wages and interest.",
+   ""
+  ],
+  [
+   "18",
+   "Exercise Activities (cont): Chapter 3 about Adjusting process",
+   "Offline",
+   "LO2",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Perform the full adjusting process for a mock business.",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 4: Accounting cycle\n1. Work sheet as a tool",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Populate a worksheet with Unadjusted TB and Adjustments.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 4: Accounting cycle (cont)\n2. Closing process",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Record and post closing entries to the Ledger.",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 4: Accounting cycle (cont)\n3. Accounting cycle",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Create a flowchart of the accounting cycle from memory.",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4: Accounting cycle (cont)\n4. Preparing financial statement",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Prepare a classified Balance Sheet and Income Statement.",
+   ""
+  ],
+  [
+   "23",
+   "Exercise Activities: Chapter 4\nAbout Closing process and preparing Financial statement",
+   "Offline",
+   "LO3",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Work through a comprehensive Ch4 exercise set.",
+   ""
+  ],
+  [
+   "24",
+   "Exercise Activities (cont): Chapter 4\nAbout Closing process and preparing Financial statement",
+   "Offline",
+   "LO3",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Prepare a Post-Closing Trial Balance.",
+   ""
+  ],
+  [
+   "25",
+   "Quiz 2 (Chapter 3,4)",
+   "Offline",
+   "LO2, LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Review Ch3-4; Complete the quiz.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 5: Accounting for Merchandising operations 1. Merchandising Activities\n2. Accounting for Merchandise purchase",
+   "Offline",
+   "LO2, LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Record purchase transactions including discounts and returns.",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 5: Accounting for Merchandising operations (cont)\n3. Accounting for Merchandise sales",
+   "Offline",
+   "LO3, LO5",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Record sales transactions; Handle Sales Returns & Allowances.",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 5: Accounting for Merchandising operations (cont)\n4. Completing the Accounting cycle\n5. Financial statement formats",
+   "Offline",
+   "LO3, LO5",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Calculate Gross Profit and Operating Expenses.",
+   ""
+  ],
+  [
+   "29",
+   "Exercise Activities: Chapter 5\nAbout Accounting for Merchandising operations",
+   "Offline",
+   "LO3, LO5",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Present progress on assignments; Solve merchandising problems.",
+   ""
+  ],
+  [
+   "30",
+   "Individual Assignment Submission",
+   "Offline",
+   "LO2, LO3, LO5",
+   "T,U",
+   "Book, Powerpoint",
+   "",
+   "Submit final individual assignment report.",
+   ""
+  ],
+  [
+   "31",
+   "Group Assignment Release\nChapter 6: Accounting Inventories (current assets)\n1. Inventory basic",
+   "Offline",
+   "LO1, LO2",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Discussing with team members; Research the assigned company.",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 6: Accounting Inventories (current assets)\n2. Internal costing under a perpetual system",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Determine which items should be included in inventory.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 6: Accounting Inventories (current assets)\n3. Valuing inventory at LCM",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Calculate Ending Inventory and COGS using 3 methods.",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 6: Accounting Inventories (current assets) (Cont)\n3. Valuing inventory at LCM",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Apply LCM to various inventory categories.",
+   ""
+  ],
+  [
+   "35",
+   "Exercise Activities: Chapter 6",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Analyze how an overstatement in inventory affects profit.",
+   ""
+  ],
+  [
+   "36",
+   "Exercise Activities (cont): Chapter 6",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Complete Ch6 exercise set; Defend choice of costing method.",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 8: Cash and Internal Controls\n1. Control of Cash\n2. Banking activities as controls (Bonus - optional)",
+   "Offline",
+   "LO3, LO5",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "List internal control weaknesses in a given business case.",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 8 (cont): Cash and Internal Controls\n3. Cashflow statement",
+   "Offline",
+   "LO3, LO5",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Classify various cash transactions into the 3 categories.",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9: Accounting receivable:\n1. Accounting receivable",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Record Bad Debt Expense using Percent of Sales/Receivables.",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 9: Accounting receivable (cont):\n2. Notes receivable",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Record the receipt, honoring, and dishonoring of notes.",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 9 (cont): Accounting receivable:\n3. Disposing of receivables",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Calculate the cost of factoring and record the entries.",
+   ""
+  ],
+  [
+   "42",
+   "Exercise Activities: Chapter 9 about Accounting receivable",
+   "Offline",
+   "LO3, LO5",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Prepare an Aging Schedule and record adjusting entries.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 10: Plant assets, natural resources and intangibles\n1. Plant assets",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Determine which costs to capitalize vs. which to expense.",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 10 (cont): Plant assets, natural resources and intangibles\n1. Plant assets",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Calculate and record depreciation for Year 1 and 2.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 10 (cont): Plant assets, natural resources and intangibles\n2. Natural resource",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Compare the impact of accelerated vs. straight-line dep.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 10 (cont): Plant assets, natural resources and intangibles\n2. Natural resource",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Calculate depletion expense based on extraction units.",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 10 (cont): Plant assets, natural resources and intangibles\n3. Intangibles assets",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Record amortization; Explain why Goodwill is not amortized.",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 10 (cont): Plant assets, natural resources and intangibles\n3. Intangibles assets",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Record the disposal of a plant asset at a gain/loss.",
+   ""
+  ],
+  [
+   "49",
+   "Exercise Activities: Chapter 10 about Plant assets, natural resources and intangibles",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Book, Powerpoint",
+   "",
+   "Solve problems involving purchase, dep., and sale of assets.",
+   ""
+  ],
+  [
+   "50",
+   "Exercise Activities: Chapter 10 about Plant assets, natural resources and intangibles",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Book, Powerpoint",
+   "",
+   "Solve problems involving purchase, dep., and sale of assets.",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 11: Current liabilities and Payroll\nAccounting\n1. Characteristic of liabilities\n2. Known liabilities",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Book, Powerpoint",
+   "",
+   "Classify various debt obligations.",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 11 (cont): Current liabilities and Payroll\nAccounting\n1. Characteristic of liabilities\n2. Known liabilities",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Calculate interest on short-term notes and record entries.",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 11 (cont): Current liabilities and Payroll\nAccounting\n3. Payroll Liabilities",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Calculate a payroll register",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 11 (cont): Current liabilities and Payroll\nAccounting\n4. Estimated Liabilities\n5. Contingencies and Analysis",
+   "Offline",
+   "LO3",
+   "T",
+   "Book, Powerpoint",
+   "",
+   "Decide whether to Record, Disclose, or Ignore a contingency.",
+   ""
+  ],
+  [
+   "55",
+   "Introduction to VAT in Vietnammese Accounting System",
+   "Offline",
+   "LO4",
+   "T,U",
+   "Book, Powerpoint",
+   "",
+   "Calculate VAT payable vs. VAT deductible (Input/Output).",
+   ""
+  ],
+  [
+   "56",
+   "Course Revision",
+   "Offline",
+   "LO4",
+   "T,U",
+   "Book, Powerpoint",
+   "",
+   "Identify weak areas; Practice past exam questions.",
+   ""
+  ],
+  [
+   "57",
+   "Course Revision",
+   "Offline",
+   "LO4",
+   "T,U",
+   "Book, Powerpoint",
+   "",
+   "Identify weak areas; Practice past exam questions.",
+   ""
+  ],
+  [
+   "58",
+   "Group Assignment Presentation",
+   "Offline",
+   "LO2, LO3, LO5",
+   "T,U",
+   "Book, Powerpoint",
+   "",
+   "Present group findings; Answer technical questions.",
+   ""
+  ],
+  [
+   "59",
+   "Group Assignment Presentation (cont)",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Present group findings; Critique other groups constructively.",
+   ""
+  ],
+  [
+   "60",
+   "Group Assignment Presentation (cont)",
+   "Offline",
+   "",
+   "U",
+   "Book, Powerpoint",
+   "",
+   "Final presentations; Reflect on learning outcomes.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "ĐN1",
+   "Why is accounting important to business?"
+  ],
+  [
+   "2",
+   "1",
+   "ĐN2",
+   "Why is accounting called as “the language of business”?"
+  ],
+  [
+   "3",
+   "2",
+   "ĐN1",
+   "Why ethics are crucial to accounting? Give examples."
+  ],
+  [
+   "4",
+   "2",
+   "ĐN2",
+   "How is revenue recognition principle needed?"
+  ],
+  [
+   "5",
+   "3",
+   "ĐN1",
+   "Explain the relation between return and risk?"
+  ],
+  [
+   "6",
+   "4",
+   "ĐN1",
+   "Why do accounting errors occur?"
+  ],
+  [
+   "7",
+   "4",
+   "ĐN2",
+   "Why a transaction should be recorded first in a journal?"
+  ],
+  [
+   "8",
+   "5",
+   "ĐN1",
+   "How is a note payable different from account payable?"
+  ],
+  [
+   "9",
+   "5",
+   "ĐN2",
+   "How is a Trial Balance prepared?"
+  ],
+  [
+   "10",
+   "6",
+   "ĐN1",
+   "Why does the recordkeeper prepare a trial balance?"
+  ],
+  [
+   "11",
+   "7",
+   "ĐN1",
+   "The prepared insurance account has a $6,000 debit balance to start the year and no insurance payments were made during the year. A review of insurance policies and payments shows that $2,000 of unexpired insurance remains at its December 31 year end. How is adjusting entry record at December 31?"
+  ],
+  [
+   "12",
+   "7",
+   "ĐN2",
+   "Why are adjusting entries necessary?"
+  ],
+  [
+   "13",
+   "8",
+   "ĐN1",
+   "What is the difference between adjusting entries and correcting entries?"
+  ],
+  [
+   "14",
+   "8",
+   "ĐN2",
+   "The company collected $36,000 rent in advance on September 1, debiting Cash and crediting Unearned Rent Revenue. The tenant was paying 12 months rent in advance and occupancy began September 1. How is adjusting entry recorded at December 31?"
+  ],
+  [
+   "15",
+   "9",
+   "ĐN1",
+   "How is accrual accounting improving financial statement?"
+  ],
+  [
+   "16",
+   "10",
+   "ĐN1",
+   "What is the difference between temporary accounts and permanent accounts?"
+  ],
+  [
+   "17",
+   "10",
+   "ĐN2",
+   "Why are temporary accounts closed each period?"
+  ],
+  [
+   "18",
+   "11",
+   "ĐN1",
+   "If a post-closing trial balance include a Depreciation Expense account, explain whether an errors has occurred?"
+  ],
+  [
+   "19",
+   "11",
+   "ĐN2",
+   "How is unearned revenue classified on the balance sheet?"
+  ],
+  [
+   "20",
+   "12",
+   "ĐN1",
+   "How are financial statements effected by the choice of using reserving entries?"
+  ],
+  [
+   "21",
+   "30",
+   "ĐN1",
+   "A company paid $150,000, plus a 6% commission and $4,000 in closing costs for a property. The property included land appraised at $87,500, land improvements appraised at $35,000, and a building appraised at $52,500. What should be the allocation of this property's costs in the company's accounting records?"
+  ],
+  [
+   "22",
+   "31",
+   "ĐN1",
+   "A company purchased property for $100,000. The property included a building, a parking lot, and land. The building was appraised at $62,000; the land at $45,000, and the parking lot at $18,000. Land should be recorded in the accounting records with an allocated cost of:"
+  ],
+  [
+   "23",
+   "31",
+   "ĐN2",
+   "What is the name of a method that charges the same amount of expense to each period of the asset's useful life?"
+  ],
+  [
+   "24",
+   "32",
+   "ĐN1",
+   "What is the name of a method that allocates an equal portion of the total depreciable cost for a plant asset to each unit produced?"
+  ],
+  [
+   "25",
+   "32",
+   "ĐN2",
+   "A company purchased a delivery van for $23,000 with a salvage value of $3,000 on September 1, 2008. It has an estimated useful life of 5 years. Using the straight-line method, how much depreciation expense should the company recognize on December 31, 2008?"
+  ],
+  [
+   "26",
+   "33",
+   "ĐN1",
+   "A company purchased a cash register on January 1 for $5,400. This register has a useful life of 10 years and a salvage value of $400. What would be the depreciation expense for the second-year of its useful life using the double-declining-balance method?"
+  ],
+  [
+   "27",
+   "34",
+   "ĐN1",
+   "A company purchased a rope braiding machine for $190,000. The machine has a useful life of 8 years and a residual value of $10,000. It is estimated that the machine could produce 750,000 units of climbing rope over its useful life. In the first year, 105,000 units were produced. In the second year, production increased to 109,000 units. Using the units-of-production method, what is the amount of depreciation that should be recorded for the second year?"
+  ],
+  [
+   "28",
+   "34",
+   "ĐN2",
+   "An asset's book value is $36,000 on January 1, 2008. The asset is being depreciated $500 per month using the straight-line method. Assuming the asset is sold on July 1, 2009 for $25,000, the company should record a loss or gain?"
+  ],
+  [
+   "29",
+   "35",
+   "ĐN1",
+   "A company purchased a tract of land for its natural resources at a cost of $1,500,000. It expects to mine 2,000,000 tons of ore from this land. The salvage value of the land is expected to be $250,000. The depletion expense per ton of ore?"
+  ],
+  [
+   "30",
+   "35",
+   "ĐN2",
+   "A company purchased a mineral deposit for $800,000. It expects this property to produce 1,200,000 tons of ore and to have a salvage value of $50,000. In the current year, the company mined and sold 90,000 tons of ore. Its depletion expense for the current period equals ?"
+  ],
+  [
+   "31",
+   "36",
+   "ĐN1",
+   "What is depreciation of plant assets? What are the factors to consider in computing depreciation?"
+  ],
+  [
+   "32",
+   "37",
+   "ĐN1",
+   "A machine was purchased for $37,000 and depreciated for five years on a straight-line basis under the assumption it would have a ten-year life and a $1,000 salvage value. At the beginning of the machine's sixth year it was recognized the machine had three years of remaining life instead of five and that at the end of the remaining three years its salvage value would be $1,600. What amount of depreciation should be recorded in each of the machine's remaining three years?"
+  ],
+  [
+   "33",
+   "37",
+   "ĐN2",
+   "A company purchased a machine for $75,000 that was expected to last 6 years and to have a salvage value of $6,000. At the beginning of the machine's fourth year the company decided that the machine's estimated useful life should be revised to a total of 10 years instead of 6 years. Also, the salvage value was re-estimated to be $5,500. Straight-line depreciation was used throughout the machine's life. Calculate the depreciation expense for the fourth year of the machine's useful life."
+  ],
+  [
+   "34",
+   "38",
+   "ĐN1",
+   "A company purchased a machine on January 1 of the current year for $750,000. Calculate the annual depreciation expense for each year of the machine's life (estimated at 5 years or 20,000 hours, with a salvage value of $75,000). During the machine's 5-year life its hourly usage was: 3,000; 4,000; 5,000; 5,000; and 3,000 hours."
+  ],
+  [
+   "35",
+   "38",
+   "ĐN2",
+   "On November 1, Carter Company signed a 120-day, 10% note payable, with a face value of $9,000. What is the adjusting entry for the accrued interest at December 31 on the note?"
+  ],
+  [
+   "36",
+   "39",
+   "ĐN1",
+   "A company had a beginning balance in retained earnings of $43,000. It had net income of $6,000 and paid out cash dividends of $5,625 in the current period. The ending balance in retained earnings equals:"
+  ],
+  [
+   "37",
+   "40",
+   "ĐN1",
+   "A company has 500 shares of $50 par value preferred stock outstanding, and the call price of its preferred stock is $60 per share. It also has 20,000 shares of common stock outstanding, and the total value of its stockholders' equity is $680,000. The company's book value per common share equals:"
+  ],
+  [
+   "38",
+   "40",
+   "ĐN2",
+   "Identify and describe the two main components of stockholders' equity?"
+  ],
+  [
+   "39",
+   "41",
+   "ĐN1",
+   "Explain the composition of retained earnings and identify the special items that are reported in it."
+  ],
+  [
+   "40",
+   "41",
+   "ĐN2",
+   "Explain how to calculate the price-earnings ratio and describe how it is used in analysis of a company's financial condition and performance."
+  ],
+  [
+   "41",
+   "42",
+   "ĐN1",
+   "Explain how to compute dividend yield and discuss how it is used in analysis of a company's financial condition."
+  ],
+  [
+   "42",
+   "43",
+   "ĐN1",
+   "Explain how to compute book value per share and discuss how it can be used to analyze the financial condition of a corporation."
+  ],
+  [
+   "43",
+   "43",
+   "ĐN2",
+   "Explain the preparation of journal entries to record the issuance of par value, stated value, and no-par value common stock."
+  ],
+  [
+   "44",
+   "44",
+   "ĐN1",
+   "What are the journal entries recorded for cash dividends on the declaration date, the date of record, and the payment date?"
+  ],
+  [
+   "45",
+   "44",
+   "ĐN2",
+   "What is a stock split? How is a stock split different from a stock dividend?"
+  ],
+  [
+   "46",
+   "45",
+   "ĐN1",
+   "Explain the difference between a large stock dividend and a small stock dividend. In addition, explain how to record these two types of stock dividends."
+  ]
+ ],
+ "links": [
+  "/download/14030/S/1_ACC101_Chapter 8-11.zip",
+  "https://drive.google.com/drive/folders/1VUNGwtIwrKysmmEZ1q866Fv7NJEfAzwW?usp=sharing",
+  "/download/14030/S/2_ACC101_Chapter1-7.zip"
+ ]
+}

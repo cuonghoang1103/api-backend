@@ -1,0 +1,1943 @@
+{
+ "ma": "IBS301m",
+ "sylID": "12375",
+ "quyetDinh": "1363/QĐ-ĐHFPT dated 12/06/2024",
+ "ungVien": [
+  {
+   "sylID": "12375",
+   "code": "IBS301m",
+   "name": "International Business Strategy_Chiến lược kinh doanh quốc tế",
+   "active": true,
+   "approved": true,
+   "decision": "1363/QĐ-ĐHFPT dated 12/06/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12375",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12375",
+  "Syllabus Name": "International Business Strategy_Chiến lược kinh doanh quốc tế",
+  "Course Name English": "International Business Strategy",
+  "Subject Code": "IBS301m",
+  "Learning-Teaching Method": "Blended,Lecture",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 105h self-study",
+  "Pre-Requisite": "IBI101",
+  "Description": "This Course is based on the Coursera Specialization \"Business Strategy\", which covers both the dynamics and the global aspects of strategic management. Students will learn how to evaluate industry evolution, build and sustain competitive advantage, formulate and assess business strategies, and align efforts to organizational strategy.\n\nThe course is divided into two parts. In the first part, students will develop their ability to think strategically, analyze the competitive environment, and recommend firm positioning and value creation. The course will explore the underlying theory and frameworks that provide the foundations of a successful business strategy and provide the tools students need to understand that strategy: SWOT, Competitor, Environmental, Five Forces, and Capabilities Analyses, as well as Strategy Maps.\n\nIn the second part, students will advance their strategic analysis skills, by learning the tools to analyze strategy across time (competitive dynamics), industries (corporate strategy), geographies (international strategy), and institutions (non-market strategy). The course will introduce the tools students need to complete a comprehensive evaluation and understand the strategy dynamics of an industry: Competitive Lifecycle, Internationalization and Stakeholder Analyses, and Diversification Matrices.\n\nA key feature of this course is the integration of artificial intelligence (AI) tools and applications, enabling students to generate ideas or structure for their analysis and assist with editing and enhancing clarity while maintaining the student's critical thingking and originality.",
+  "StudentTasks": "- Must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FU CMS at http://flm.fpt.edu.vn for up-to-date course information",
+  "Tools": "- Internet connexion, laptop",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1363/QĐ-ĐHFPT dated 12/06/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/6/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Foundations of Business Strategy\n\n'https://www.coursera.org/learn/uva-darden-foundations-business-strategy",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "Advanced Business Strategy\n\nhttps://www.coursera.org/learn/uva-darden-advanced-business-strategy?specialization=business-strategy",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "IBS301m-AI Use Guidelines",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "True",
+   "False",
+   "Available at Schedule sheet"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Make use of the SWOT, competitor and environmental analysis tools"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Assess an industry's structure and how the competitive dynamics in an industry affect profitability"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Create a capabilities analysis and apply this analysis in decision making"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Analyze the advantages and disadvantages of four generic competitive positions"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Define the dynamics of competition, the competitive life cycle, and strategies to survive and thrive through industry disruption"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Explain internationalization strategies, how, where and when to enter foreign markets, and foreign direct investment"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Explain how businesses compete across industries, the value of being in different markets, and the right degree of diversification"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Assess stakeholder management and understand how engaging with non capital stakeholders can create value"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "1,2,3,4",
+   "Option 1: written report\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 1\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test students' ability to understand and apply the skills and knowledge of the delivered units",
+   "",
+   "Option 1: Coursera-based\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "5,6,7,8",
+   "Option 1: written report\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 1\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test students' ability to understand and apply the skills and knowledge of the delivered units",
+   "",
+   "Option 1: Coursera-based\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "3",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "Option 1: 1\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test students' ability to understand and apply the skills and knowledge of the delivered units",
+   "",
+   "Option 1: Participation grade will be given based on students' preparation, quantity as well as group performance\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "4",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "45",
+   "1,2,3,4",
+   "Option 1: multiple choice\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 40\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters.",
+   "",
+   "Option 1: Teacher is allowed to select which unit content (topic or learning outcome) to focus on each examination session. The questions are based on the Coursera quizzes.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "5",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "45",
+   "5,6,7,8",
+   "Option 1: multiple choice\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 40\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Test the acquainted knowledge which student obtained in the delivered chapters.",
+   "",
+   "Option 1: Teacher is allowed to select which unit content (topic or learning outcome) to focus on each examination session. The questions are based on the Coursera quizzes.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "6",
+   "Final project group presentation",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "17-20",
+   "1,2,3,4,5,6,7,8",
+   "Case study",
+   "1",
+   "Test students' ability to understand and apply the skills and knowledge of the delivered units",
+   "",
+   "Students are divided into groups of up to 5 people to work on a real-life case study (selected by the students and approved by the instructor)"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\n\nCourse 1: Foundations of Business Strategy\n\nIntroduction to Strategic Analysis",
+   "Offline",
+   "LO1",
+   "",
+   "Coursera materials:\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/home/week/1\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/supplement/7zMIt/course-requirements\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/supplement/66qMQ/get-to-know-your-classmates\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/supplement/Cqem9/using-the-discussion-forums",
+   "",
+   "- Read materials\n\n- Provide introduction to the course as a whole\n\n- Introduce students to the format of the course\n\n- Students are divided into groups of up to 5 people to work on the final project\n\n- Introduce students to the format and requirements of the final project",
+   ""
+  ],
+  [
+   "2",
+   "Reading: Course Overview\n\nReading: Course Requirements\n\nReading: Get to know your classmates\n\nReading: Using the Discussion Forums",
+   "Offline",
+   "LO1",
+   "",
+   "Coursera materials:\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/home/week/1\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/supplement/7zMIt/course-requirements\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/supplement/66qMQ/get-to-know-your-classmates\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/supplement/Cqem9/using-the-discussion-forums",
+   "",
+   "- Read materials\n\n- Provide introduction to the course as a whole\n\n- Introduce students to the format of the course\n\n- Students are divided into groups of up to 5 people to work on the final project\n\n- Introduce students to the format and requirements of the final project",
+   ""
+  ],
+  [
+   "3",
+   "Lessons\n\nVideo: An introduction to strategic analysis\n\nVideo: Strategic Analysis\n\nVideo: The strategist's challenge",
+   "Offline",
+   "LO1",
+   "",
+   "https://www.coursera.org/learn/uva-darden-foundations-business-strategy/lecture/tkSkY/an-introduction-to-strategic-analysis\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/lecture/2U1pb/strategic-analysis\n\nhttps://www.coursera.org/learn/uva-darden-foundations-business-strategy/lecture/nHh81/the-strategists-challenge",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "4",
+   "Video: Fundamental Principle of Business Strategy\n\nVideo: Competitive Markets",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "5",
+   "Video: A little calculus\n\nVideo: Two perspectives on economic rents",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "6",
+   "Video: Module Lessons\n\nTools:\n\nVideo: Strategist's toolkit: SWOT",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "7",
+   "Video: Strategist's toolkit: Competitor Analysis\n\nVideo: Strategist's toolkit: Environmental Analysis",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "8",
+   "Case study: Google Inc: Buy, Sell, or Hold?\n\nCase Study Debrief: Video: Google Case study debrief",
+   "Offline",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "9",
+   "Course 1: Foundations of Business Strategy\n\nAnalyzing Industry Structure Lessons\n\nVideo: Analyzing Industry Structure\n\nVideo: Threat of Entry, Part 1",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "10",
+   "Video: Threat of Entry, Part 2\n\nVideo: Threat of Substitutes",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "11",
+   "Video:\n\nBarganining Power of Buyers, Part 1\n\nBargaining Power of Buyers, Part 2\n\nBargaining Power of Suppliers",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "12",
+   "Intensity of Rivalry\n\nModule lessons\n\nGroup submit selection of company for the final project to instructor to be approved",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "13",
+   "Tools\n\nVideo: Strategist's toolkit: 5 forces analysis",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "14",
+   "Case study: Redhook Brewing Company\n\nVideo: Redhook Brewing company case study debrief",
+   "Offline",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "15",
+   "Course 1: Foundation of Business Strategy\n\nAnalyzing Firm Capabilities\n\nLessons\n\nVideo: Analyzing Firm Capabilities",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "16",
+   "Video: Value Chain\n\nVideo: Alignment",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "17",
+   "Video: Sustainability: Imitation\n\nVideo: Sustainability: Durability",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "18",
+   "Video:\n\nBuilding Capabilities\n\nModule Lessons",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "19",
+   "Tools\n\nVideo: Strategist's Toolkit: Capabilities Analysis",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "20",
+   "Case study: Apple (Computer) Inc\n\nCase study Debrief: Video Apple Case study debrief",
+   "Offline",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "21",
+   "Course 1: Foundations of Business Strategy\n\nDetermining Competitive Position Lessons\n\nVideo:\n\nDetermining Competitive Positioning",
+   "Offline",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "22",
+   "Video:\n\nGeneric Competitive Positions, Part 1\n\nGeneric Competitive Positions, Part 2",
+   "Offline",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "23",
+   "Video:\n\nMapping Competitive Positions\n\nWhich position is best?",
+   "Offline",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "24",
+   "Video: Module lessons\n\nTools\n\nVideo: Strategist's toolkit: Strategy maps",
+   "Offline",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "25",
+   "Case study: Piaggio",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "26",
+   "Submit Course 1 Assignment\n\nReview",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "",
+   "",
+   "",
+   "Complete the assignment according to the instructions on Coursera. Then, submit the work to the instructor to be graded.",
+   ""
+  ],
+  [
+   "27",
+   "Progress Test 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "",
+   "",
+   "",
+   "-Take the test in-class",
+   ""
+  ],
+  [
+   "28",
+   "Course 2: Advanced Business Strategy\n\nCourse Introduction\n\nDynamic Strategy\n\nReading: Course Overview\n\nReading: Course Requirements\n\nReading: Get to know your classmates\n\nReading: Using the Discussion Forums",
+   "Offline",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "29",
+   "Lessons:\n\nVideo:\n\nIntroduction to strategy over time\n\nThe dynamic capabilities perspective",
+   "Offline",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "30",
+   "Video:\n\nIntroduction to the competitive life cycle\n\nCompetitive life cycle: common patterns",
+   "Offline",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "31",
+   "Video:\n\nWhy incumbent firms fail or survive\n\nCompetitive life cycle analysis",
+   "Offline",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "32",
+   "Video: Module lessons\n\nTools: Strategist's toolkit: Competitive life cycle analysis",
+   "Offline",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "33",
+   "Case study: Reading: Sony Playstation 4: Aim and fire\n\nCase study debrief: Video: Sony Playstation 4 Case Debrief",
+   "Offline",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "34",
+   "Course 2: Advanced Business Strategy\n\nInternational Strategy\n\nLessons\n\nVideo: Introduction to International Strategy",
+   "Offline",
+   "LO6",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "35",
+   "Video:\n\nPatterns of Internationalization\n\nWhere to compete",
+   "Offline",
+   "LO6",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "36",
+   "Video\n\nEntering Foreign Markets: Exporting\n\nEntering foreign markets: Licensing and Alliances",
+   "Offline",
+   "LO6",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "37",
+   "Entering foreign markets: Foreign direct investment\n\nForeign direct investment: Entry mode",
+   "Offline",
+   "LO6",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "38",
+   "Module lessons\n\nTools:\n\nVideo: strategist's tookit: Internationalization Analysis",
+   "Offline",
+   "LO6",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "39",
+   "Case study: Reading: Orascom Telecom Holding: Wind and Weather",
+   "Offline",
+   "LO6",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "40",
+   "Course 2: Advanced Business Strategy\n\nDiversification Strategy\n\nLessons\n\nVideo:\n\nIntroduction to competing across industries",
+   "Offline",
+   "LO7",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "41",
+   "Video:\n\nFinancial reasons to diversify\n\nOperational reasons to diversify\n\nStrategic reasons to diversify",
+   "Offline",
+   "LO7",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "42",
+   "Video:\n\nWhy firms exist: theory of the firm\n\nLimits on firm scope",
+   "Offline",
+   "LO7",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "43",
+   "Video:\n\nThe right degree of diversification\n\nModule lessons",
+   "Offline",
+   "LO7",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "44",
+   "Tools\n\nVideo: Strategist's toolkit: Diversification Matrices",
+   "Offline",
+   "LO7",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "45",
+   "Case study: Reading: Walt Disney Co: Mickey Mouse or Media Mammoth?\n\nVideo: Walt Disney Co Case Debrieft",
+   "Offline",
+   "LO7",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "46",
+   "Course 2: Advanced Business Strategy\n\nStakeholder Strategy\n\nLessons:\n\nVideo: Introduction to Stakeholder Strategy\n\nCreating value for stakeholders",
+   "Offline",
+   "LO8",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "47",
+   "Video:\n\nAligning key stakeholders\n\nAligning secondary stakeholders",
+   "Offline",
+   "LO8",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "48",
+   "Video:\n\nValue creation and your values\n\nModule lessons",
+   "Offline",
+   "LO8",
+   "",
+   "",
+   "",
+   "- Watch/rewatch videos\n\n- Read materials/transcripts for further understanding\n\n- Do in-lesson quizzes\n\n- Discuss key concepts",
+   ""
+  ],
+  [
+   "49",
+   "Tools\n\nVideo: Strategist’s Toolkit: Stakeholder Analysis",
+   "Offline",
+   "LO8",
+   "",
+   "",
+   "",
+   "Complete the assignment according to the instructions on Coursera. Then, submit the work to the instructor to be graded.",
+   ""
+  ],
+  [
+   "50",
+   "Case study: Reading\n\nGE Healthcare in India: An (Ultra) Sound Strategy?\n\nCase study Debrief: Video: GE Healthcare India Case Debrief",
+   "Offline",
+   "LO8",
+   "",
+   "",
+   "",
+   "- Read materials/transcripts for further understanding\n\n- Work on case study",
+   ""
+  ],
+  [
+   "51",
+   "Submit Course 2 Assignment\n\nReview",
+   "Offline",
+   "LO5, LO6, LO7, LO8",
+   "",
+   "",
+   "",
+   "- Review key concepts introduced throughout the course",
+   ""
+  ],
+  [
+   "52",
+   "Progress Test 2",
+   "Offline",
+   "LO5, LO6, LO7, LO9",
+   "",
+   "",
+   "",
+   "-Take the test in-class",
+   ""
+  ],
+  [
+   "53",
+   "Review and Preparation for Final Project",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "- Submit presentation outline to instructor for review and feedback",
+   ""
+  ],
+  [
+   "54",
+   "Review and Preparation for Final Project",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "- Submit presentation outline to instructor for review and feedback",
+   ""
+  ],
+  [
+   "55",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO6",
+   "",
+   "",
+   "",
+   "Students conduct the presentation in groups of 3 to 5",
+   ""
+  ],
+  [
+   "56",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO7",
+   "",
+   "",
+   "",
+   "Students conduct the presentation in groups of 3 to 5",
+   ""
+  ],
+  [
+   "57",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "",
+   "",
+   "",
+   "Students conduct the presentation in groups of 3 to 5",
+   ""
+  ],
+  [
+   "58",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO9",
+   "",
+   "",
+   "",
+   "Students conduct the presentation in groups of 3 to 5",
+   ""
+  ],
+  [
+   "59",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "",
+   "",
+   "",
+   "Students conduct the presentation in groups of 3 to 5",
+   ""
+  ],
+  [
+   "60",
+   "Final Project Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO9",
+   "",
+   "",
+   "",
+   "Students conduct the presentation in groups of 3 to 5",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "3",
+   "CT1",
+   "What is the definition of business strategy? Where can we find the business strategy of a firm? Is it important for assessing the viability of a business strategy?"
+  ],
+  [
+   "2",
+   "3",
+   "CT2",
+   "Can you describe a simple strategy Schema (how many steps? What is the main issue of each step?)"
+  ],
+  [
+   "3",
+   "3",
+   "ĐN1",
+   "How to conduct a strategic analysis?"
+  ],
+  [
+   "4",
+   "3",
+   "ĐN2",
+   "How to do strategic analysis effectively? Give an example"
+  ],
+  [
+   "5",
+   "4",
+   "CT1",
+   "What is strategic analysis? Who will do that?"
+  ],
+  [
+   "6",
+   "4",
+   "CT2",
+   "What is strategist's challenge? How to briefly understand the strategist challenge?"
+  ],
+  [
+   "7",
+   "4",
+   "ĐN1",
+   "Why business strategy is important?"
+  ],
+  [
+   "8",
+   "4",
+   "ĐN2",
+   "How does the competitive market work? Give an example"
+  ],
+  [
+   "9",
+   "5",
+   "CT1",
+   "What is the definition of fundamental principle of business strategy?"
+  ],
+  [
+   "10",
+   "5",
+   "CT2",
+   "How do you understand the economic profit? And how to measure it?"
+  ],
+  [
+   "11",
+   "5",
+   "ĐN1",
+   "Use the two perspectives on economic rents, choose a company/industry and find out the company position in the market. Explain"
+  ],
+  [
+   "12",
+   "5",
+   "ĐN2",
+   "Why the two perspectives on economic rents are importantt for company/industry?"
+  ],
+  [
+   "13",
+   "6",
+   "CT1",
+   "How a market can be regarded as competitive market? If a competitive market exist in the real world?"
+  ],
+  [
+   "14",
+   "6",
+   "CT2",
+   "How to calculate profits in a simple calculus?"
+  ],
+  [
+   "15",
+   "6",
+   "CT3",
+   "What are the two perspective on economic rents?"
+  ],
+  [
+   "16",
+   "6",
+   "ĐN1",
+   "What is the role of strategist toolkit?"
+  ],
+  [
+   "17",
+   "6",
+   "ĐN2",
+   "Choose a company, use SWOT model and explain the current situation of the company's competitive market."
+  ],
+  [
+   "18",
+   "7",
+   "CT1",
+   "What is the SWOT analysis? What SWOT stands for? And how useful SWOT is?"
+  ],
+  [
+   "19",
+   "7",
+   "CT2",
+   "What is competitor analysis? How can it be used in the real world?"
+  ],
+  [
+   "20",
+   "7",
+   "ĐN1",
+   "Choose a company, use competitor analysis model and explain the current situation of the company's competitive market."
+  ],
+  [
+   "21",
+   "7",
+   "ĐN2",
+   "Analyze the current environment of the selected company and explain why."
+  ],
+  [
+   "22",
+   "8",
+   "CT1",
+   "What is the environmental analysis?"
+  ],
+  [
+   "23",
+   "8",
+   "CT2",
+   "What components that we can considered in environmental analysis? Name 3 of them?"
+  ],
+  [
+   "24",
+   "8",
+   "CT3",
+   "Should we combine two or all of strategist's toolkits (SWOT, competitor and environmental analysis)? Why?"
+  ],
+  [
+   "25",
+   "8",
+   "ĐN1",
+   "Based on the case of Google, choose a company and find out the current situation of that company. Compare with Google case and explain."
+  ],
+  [
+   "26",
+   "9",
+   "CT1",
+   "What is the fundamental principle of business strategy?"
+  ],
+  [
+   "27",
+   "9",
+   "CT2",
+   "What is the principle of industry structure? How to analyse the industry structure?"
+  ],
+  [
+   "28",
+   "9",
+   "ĐN1",
+   "Show and analyze the selected company's structure"
+  ],
+  [
+   "29",
+   "9",
+   "ĐN2",
+   "Choose a company and analyze the threat of new entry. Explain"
+  ],
+  [
+   "30",
+   "10",
+   "CT3",
+   "What is the threat of enty?"
+  ],
+  [
+   "31",
+   "10",
+   "CT1",
+   "What can be regrded as Competitive advantages of business?"
+  ],
+  [
+   "32",
+   "10",
+   "CT2",
+   "Can you define the retalitation in international business? What type of retaliation we may have?"
+  ],
+  [
+   "33",
+   "10",
+   "CT4",
+   "Can you provide an example of the threat of substitutes?"
+  ],
+  [
+   "34",
+   "10",
+   "ĐN1",
+   "Choose a company and analyze the threat of substitutes. Explain"
+  ],
+  [
+   "35",
+   "11",
+   "CT1",
+   "What is the bargaining power of buyers? Can you make an example about this?"
+  ],
+  [
+   "36",
+   "11",
+   "CT2",
+   "When will the buyers have less power? And when will they have more power?"
+  ],
+  [
+   "37",
+   "11",
+   "ĐN1",
+   "Select one industry. For the chosen industry, evaluate bargaining power of buyers and bargaining of power suppliers based on Porter's five forces model. Explain why."
+  ],
+  [
+   "38",
+   "11",
+   "ĐN2",
+   "When Bargaining Power of Buyers stronger?"
+  ],
+  [
+   "39",
+   "12",
+   "CT1",
+   "How do you understand the price discrimination?"
+  ],
+  [
+   "40",
+   "12",
+   "CT2",
+   "When will the suppliers are less of threat?"
+  ],
+  [
+   "41",
+   "12",
+   "ĐN1",
+   "Analyze the intensity of rivalry of a choosen company/industry. Explain"
+  ],
+  [
+   "42",
+   "13",
+   "CT1",
+   "What is the five forces analysis?"
+  ],
+  [
+   "43",
+   "13",
+   "ĐN1",
+   "Why 5 forces analysis is important for company? Give an example"
+  ],
+  [
+   "44",
+   "14",
+   "CT1",
+   "What five forces analysis can offer to us?"
+  ],
+  [
+   "45",
+   "14",
+   "CT2",
+   "What are the purposes of five forces analysis?"
+  ],
+  [
+   "46",
+   "14",
+   "ĐN1",
+   "Select one industry. For the chosen industry, evaluate the rivalry among competitors based on Porter's five forces model. Explain why."
+  ],
+  [
+   "47",
+   "14",
+   "ĐN2",
+   "Select one industry. For the chosen industry, evaluate the rivalry among complementors based on Porter's five forces model. Explain why."
+  ],
+  [
+   "48",
+   "15",
+   "CT1",
+   "How many steps in analyzing your firm's capabilities?"
+  ],
+  [
+   "49",
+   "15",
+   "CT2",
+   "What is the value chain? How does it works?"
+  ],
+  [
+   "50",
+   "15",
+   "ĐN1",
+   "What is factors belong to firm capability?"
+  ],
+  [
+   "51",
+   "15",
+   "ĐN2",
+   "Select a company, find out the important capabilities and explain why?"
+  ],
+  [
+   "52",
+   "16",
+   "CT1",
+   "What is the difference between the intenal alignment and external alignment?"
+  ],
+  [
+   "53",
+   "16",
+   "CT2",
+   "What is business sustainability? What are dimentions mearsuring sustainability?"
+  ],
+  [
+   "54",
+   "16",
+   "ĐN1",
+   "Why value chain is important? Give an example"
+  ],
+  [
+   "55",
+   "16",
+   "ĐN2",
+   "How do you use the value chain? Explain"
+  ],
+  [
+   "56",
+   "16",
+   "ĐN3",
+   "Select a company/industry, show the Value Chain Alignment of that company/industry and analyze it."
+  ],
+  [
+   "57",
+   "17",
+   "CT1",
+   "What is durability?"
+  ],
+  [
+   "58",
+   "17",
+   "CT2",
+   "What are the challenges to business durability?"
+  ],
+  [
+   "59",
+   "17",
+   "ĐN1",
+   "Choose a company/industry, what have company done for sustainability? Analyze it."
+  ],
+  [
+   "60",
+   "17",
+   "ĐN2",
+   "Why does company choose imitation strategy for sustainability? Give an example"
+  ],
+  [
+   "61",
+   "17",
+   "ĐN3",
+   "Why does company choose durability strategy for sustainability? Give an example"
+  ],
+  [
+   "62",
+   "18",
+   "CT1",
+   "What are the sources to capabilities?"
+  ],
+  [
+   "63",
+   "18",
+   "CT2",
+   "Define 2 alternative that you can use to build your firm capabilities?"
+  ],
+  [
+   "64",
+   "18",
+   "ĐN1",
+   "How to build capabilities for firm sustainability?"
+  ],
+  [
+   "65",
+   "19",
+   "CT1",
+   "What is capability analysis?"
+  ],
+  [
+   "66",
+   "19",
+   "CT2",
+   "What are the purpose of capability analysis?"
+  ],
+  [
+   "67",
+   "19",
+   "ĐN1",
+   "List strategist tool kit for analyzing capabilities"
+  ],
+  [
+   "68",
+   "19",
+   "ĐN2",
+   "In order to evaluate the way of creating the customers’ value, how does the company use the capabilities analysis to reach it?"
+  ],
+  [
+   "69",
+   "20",
+   "CT1",
+   "Can your demonstrate an example where we need capability analysis in business making decision?"
+  ],
+  [
+   "70",
+   "20",
+   "CT2",
+   "List strategist tool kit for analyzing capabilities"
+  ],
+  [
+   "71",
+   "20",
+   "ĐN1",
+   "Analyze the Apple case, how has Apple used the capabilities for competitive advantage? Explain"
+  ],
+  [
+   "72",
+   "20",
+   "ĐN2",
+   "Choose a company, analyze company's capabilities for sustainability and competitive advantage. Explain"
+  ],
+  [
+   "73",
+   "21",
+   "CT1",
+   "How to determined your business competition in the market?"
+  ],
+  [
+   "74",
+   "21",
+   "CT2",
+   "What is the idea of generic competitive positions?"
+  ],
+  [
+   "75",
+   "21",
+   "ĐN1",
+   "Why does company need to determine the competitive position? Give an example"
+  ],
+  [
+   "76",
+   "21",
+   "ĐN2",
+   "How to determine competitive position on market? (Focus on the selected company)"
+  ],
+  [
+   "77",
+   "22",
+   "CT1",
+   "What is the competitive scope and how to identify?"
+  ],
+  [
+   "78",
+   "22",
+   "CT2",
+   "Present an example of cost leadership strategy?"
+  ],
+  [
+   "79",
+   "22",
+   "ĐN1",
+   "Choose a company, analyze the competitive position of that company in the market. Explain"
+  ],
+  [
+   "80",
+   "22",
+   "ĐN2",
+   "Compare the competitive position of analyzed company with others. Explain why."
+  ],
+  [
+   "81",
+   "23",
+   "CT1",
+   "How to map the competitive elements in your business strategy?"
+  ],
+  [
+   "82",
+   "23",
+   "CT2",
+   "What are the advantages of mapping competitive positions?"
+  ],
+  [
+   "83",
+   "23",
+   "ĐN1",
+   "How to determine catergories for axises on Map"
+  ],
+  [
+   "84",
+   "23",
+   "ĐN2",
+   "Why do you choose these critical factors to analyze the firm’s strategy?"
+  ],
+  [
+   "85",
+   "24",
+   "CT1",
+   "Which positions are best after mapping your competitive positions?"
+  ],
+  [
+   "86",
+   "24",
+   "CT2",
+   "How to determine catergories for axises on Map"
+  ],
+  [
+   "87",
+   "24",
+   "ĐN1",
+   "Write strategy map for selected project"
+  ],
+  [
+   "88",
+   "24",
+   "ĐN2",
+   "Draw the strategy roadmap to the specific industry. Explain this strategy roadmap."
+  ],
+  [
+   "89",
+   "25",
+   "CT1",
+   "What defined your business positions in the matket?"
+  ],
+  [
+   "90",
+   "25",
+   "CT2",
+   "Present your understanding about the strategic maps? How can it help in making business decision?"
+  ],
+  [
+   "91",
+   "25",
+   "ĐN1",
+   "Analyze the Piaggio case, what do you find out from this case? Explain"
+  ],
+  [
+   "92",
+   "25",
+   "ĐN2",
+   "Compare the selected company with Piaggio case, what do you find out from this comparison? Explain"
+  ],
+  [
+   "93",
+   "26",
+   "CT1",
+   "Can you demonstrate an examples of using strategic map in making decision?"
+  ],
+  [
+   "94",
+   "26",
+   "CT2",
+   "Write strategy map for selected project"
+  ],
+  [
+   "95",
+   "28",
+   "ĐN1",
+   "What is Dynamic Strategy course?"
+  ],
+  [
+   "96",
+   "28",
+   "ĐN2",
+   "Choose a specific industry/company and figure out the strategy of that industry/company. Explain why does that industry/company uses that strategy to reach a competitive advantage?"
+  ],
+  [
+   "97",
+   "29",
+   "CT1",
+   "Describe some of the difficulties existing companies often face when they are faced with new technologies disrupting their markets?"
+  ],
+  [
+   "98",
+   "29",
+   "CT2",
+   "Suggest some solutions that can help companies deal with these disruptions and analyze which disruptions they may have to endure?"
+  ],
+  [
+   "99",
+   "29",
+   "ĐN1",
+   "Why dynamic strategy is important for company/industry? Give an example"
+  ],
+  [
+   "100",
+   "30",
+   "CT1",
+   "How useful are the fundamentals of business strategy to companies that have fallen on hard times after a period of great success?"
+  ],
+  [
+   "101",
+   "30",
+   "CT2",
+   "In your opinion, the view \"Past success does not guarantee future success\" is the right or wrong argument about the current market volatility?"
+  ],
+  [
+   "102",
+   "30",
+   "ĐN1",
+   "List competitive life cycle stage?"
+  ],
+  [
+   "103",
+   "31",
+   "CT1",
+   "How do you understand the Competitive Life Cycle? What is its application in practice?"
+  ],
+  [
+   "104",
+   "31",
+   "CT2",
+   "Why in today's business environment, the phase of experimentation and trying new things, is often led by small business companies?"
+  ],
+  [
+   "105",
+   "31",
+   "ĐN1",
+   "How is the importance of each strategic phase with the company’s strategic direction?"
+  ],
+  [
+   "106",
+   "32",
+   "CT1",
+   "Why do we often see today's companies fail in the face of disruption to competition, technology, and new business models?"
+  ],
+  [
+   "107",
+   "32",
+   "CT2",
+   "Describe the possible effects of the competitive life cycle on established companies and their future success? Give an example of a typical case?"
+  ],
+  [
+   "108",
+   "32",
+   "ĐN1",
+   "How to evaluate competition in different life cycle stage?"
+  ],
+  [
+   "109",
+   "33",
+   "CT1",
+   "Please tell how many stages in the competitive life cycle? Describe and give examples of these stages?"
+  ],
+  [
+   "110",
+   "33",
+   "CT2",
+   "PlayStation 4: Aim and Fire\" abridged case study. Who do you think will win in the next generation of the home video game industry? Why?"
+  ],
+  [
+   "111",
+   "33",
+   "ĐN1",
+   "Choose a specific industry then determine which phase of the industry’s current situation? Explain why."
+  ],
+  [
+   "112",
+   "34",
+   "CT1",
+   "PlayStation 4: Aim and Fire\" abridged case study. What factors contribute to a competitor becoming the market leader? To what extent does being a first mover matter?"
+  ],
+  [
+   "113",
+   "34",
+   "CT2",
+   "PlayStation 4: Aim and Fire\" abridged case study. What features and capabilities should Sony incorporate into the Sony PlayStation 4 in your opinion? Is Sony's decision to launch the PS4 in December 2013 well timed?"
+  ],
+  [
+   "114",
+   "34",
+   "ĐN1",
+   "Why does firms enter foreign market?"
+  ],
+  [
+   "115",
+   "35",
+   "CT1",
+   "Describe a trend that you feel is important to your international business strategy in the near future?"
+  ],
+  [
+   "116",
+   "35",
+   "CT2",
+   "Describe the benefits and disadvantages of an internationalization strategy for a company or organization to enter a foreign market and compete there?"
+  ],
+  [
+   "117",
+   "35",
+   "ĐN1",
+   "Why does the company join the international market?"
+  ],
+  [
+   "118",
+   "36",
+   "CT1",
+   "Describe the benefits and disadvantages of an internationalization strategy for a foreign company or organization to enter our country's market and compete there?"
+  ],
+  [
+   "119",
+   "36",
+   "CT2",
+   "Once you've decided where you want to enter, the foreign market you want to expand into, you now have a really important question, which is how are you going to enter that market?"
+  ],
+  [
+   "120",
+   "36",
+   "ĐN1",
+   "Why exporting is important for company? Give an example"
+  ],
+  [
+   "121",
+   "36",
+   "ĐN2",
+   "What is disadvantageous of Licensing ?"
+  ],
+  [
+   "122",
+   "37",
+   "CT1",
+   "Please tell us once you have decided on the foreign market you want to enter and compete in, how will you enter that market?"
+  ],
+  [
+   "123",
+   "37",
+   "CT2",
+   "Please indicate the strengths and weaknesses of the two Licensing and Alliances approaches?"
+  ],
+  [
+   "124",
+   "37",
+   "ĐN1",
+   "In order to expand the market to be global, how does the company do to be successful?"
+  ],
+  [
+   "125",
+   "37",
+   "ĐN2",
+   "Why FDI is important for company/industry? Give an example"
+  ],
+  [
+   "126",
+   "38",
+   "CT1",
+   "Please describe the different ways an organization can approach foreign direct investment? Give specific examples of these approaches."
+  ],
+  [
+   "127",
+   "38",
+   "CT2",
+   "Describe a few different ways an organization can approach foreign direct investment?"
+  ],
+  [
+   "128",
+   "38",
+   "ĐN1",
+   "Use any firm and analyze its international strategy"
+  ],
+  [
+   "129",
+   "39",
+   "CT1",
+   "Please tell me what is the purpose of the Internationalization Analysis tool?"
+  ],
+  [
+   "130",
+   "39",
+   "CT2",
+   "Practice your business strategy skills as you consider the \"Orascom Telecom Holding: Wind and Weather\" abridged case. Why would M&A be a viable strategy for expansion in the telecom industry? Why go outside one’s home-country borders"
+  ],
+  [
+   "131",
+   "39",
+   "ĐN1",
+   "Which current international strategy is used by the company? Describe and explain."
+  ],
+  [
+   "132",
+   "40",
+   "CT1",
+   "Practice your business strategy skills as you consider the \"Orascom Telecom Holding: Wind and Weather\" abridged case. How would you characterize OTH’s historical M&A strategy and its acquisition approach? What are the main characteristics?"
+  ],
+  [
+   "133",
+   "40",
+   "CT2",
+   "Practice your business strategy skills as you consider the \"Orascom Telecom Holding: Wind and Weather\" abridged case. What are the potential problems with OTH’s investment approach?"
+  ],
+  [
+   "134",
+   "40",
+   "ĐN1",
+   "List of diversification strategy?"
+  ],
+  [
+   "135",
+   "41",
+   "CT1",
+   "Please tell me how important it is for the business to position itself, and in many markets?"
+  ],
+  [
+   "136",
+   "41",
+   "CT2",
+   "Discuss why your company can diversify?"
+  ],
+  [
+   "137",
+   "41",
+   "ĐN1",
+   "Why does company refer to have the business strategy is as diversified co-operation?"
+  ],
+  [
+   "138",
+   "42",
+   "CT1",
+   "In your opinion, how many key areas can you organize the reasons that your company wants to diversify?"
+  ],
+  [
+   "139",
+   "42",
+   "CT2",
+   "List of diversification strategy?"
+  ],
+  [
+   "140",
+   "42",
+   "ĐN1",
+   "What is reason why firm exist industry"
+  ],
+  [
+   "141",
+   "43",
+   "CT1",
+   "Please indicate the pros and cons of the Diversification Matrix derived from a matrix developed by McKinsey and General Electric?"
+  ],
+  [
+   "142",
+   "43",
+   "CT2",
+   "Practice your business strategy skills as you consider the \"Walt Disney Co: Mickey Mouse or Media Mammoth?\" case. What are Disney’s capabilities and to what extent do they provide a sustainable competitive advantage?"
+  ],
+  [
+   "143",
+   "43",
+   "ĐN1",
+   "Figure out the current situation of a specific company that they are in diversification and unrelated diversification. Explain why."
+  ],
+  [
+   "144",
+   "44",
+   "CT1",
+   "Practice your business strategy skills as you consider the \"Walt Disney Co: Mickey Mouse or Media Mammoth?\" case. Disney claims that its business segments are well-integrated, well-connected businesses. What is the glue that holds these businesses together? How does each of these businesses add value to the other businesses in the enterprise?"
+  ],
+  [
+   "145",
+   "44",
+   "CT2",
+   "Practice your business strategy skills as you consider the \"Walt Disney Co: Mickey Mouse or Media Mammoth?\" case. Based on your analysis, which businesses would you recommend that Disney invest in and which should they divest (if any)?"
+  ],
+  [
+   "146",
+   "44",
+   "ĐN1",
+   "How to evaluate porfolio of firm effectively?"
+  ],
+  [
+   "147",
+   "44",
+   "ĐN2",
+   "Choose a specific industry and determine their standard strategy and explain why are they in that current standard strategy for a business unit?"
+  ],
+  [
+   "148",
+   "45",
+   "CT1",
+   "Please indicate the pros and cons of the Diversification Matrix derived from a matrix developed by McKinsey and General Electric?"
+  ],
+  [
+   "149",
+   "45",
+   "CT2",
+   "Practice your business strategy skills as you consider the \"Walt Disney Co: Mickey Mouse or Media Mammoth?\" case. What are Disney’s capabilities and to what extent do they provide a sustainable competitive advantage?"
+  ],
+  [
+   "150",
+   "45",
+   "ĐN1",
+   "Explain the case of Walt Disney Co: Mickey Mouse or Media Mammoth. Compare with the case of selected company and explain"
+  ],
+  [
+   "151",
+   "45",
+   "ĐN2",
+   "Explain the case of Walt Disney Co Case Debrieft. Compare with the case of selected company and explain"
+  ],
+  [
+   "152",
+   "46",
+   "CT1",
+   "Practice your business strategy skills as you consider the \"Walt Disney Co: Mickey Mouse or Media Mammoth?\" case. Disney claims that its business segments are well-integrated, well-connected businesses. What is the glue that holds these businesses together? How does each of these businesses add value to the other businesses in the enterprise?"
+  ],
+  [
+   "153",
+   "46",
+   "CT2",
+   "Practice your business strategy skills as you consider the \"Walt Disney Co: Mickey Mouse or Media Mammoth?\" case. Based on your analysis, which businesses would you recommend that Disney invest in and which should they divest (if any)?"
+  ],
+  [
+   "154",
+   "46",
+   "ĐN1",
+   "How do we creating Value for Stakeholders?"
+  ],
+  [
+   "155",
+   "47",
+   "CT1",
+   "Give examples of stakeholder strategies, or what is commonly referred to as stakeholder management?"
+  ],
+  [
+   "156",
+   "47",
+   "CT2",
+   "The goal of an effective strategy is to create value. It is to find, and occupy, and defend a valuable competitive position that allows you to create that value. Please tell me, who does your company create that value for? Who benefits?"
+  ],
+  [
+   "157",
+   "47",
+   "ĐN1",
+   "Determine which value is created for stakeholders of a specific industry and explain why."
+  ],
+  [
+   "158",
+   "48",
+   "CT1",
+   "In your opinion, what are the stakeholders of an organization? Give specific examples?"
+  ],
+  [
+   "159",
+   "48",
+   "CT2",
+   "How do we creating Value for Stakeholders?"
+  ],
+  [
+   "160",
+   "48",
+   "ĐN1",
+   "Apply value chain for specific firm. Analyze and explain"
+  ],
+  [
+   "161",
+   "49",
+   "CT1",
+   "In your opinion, in which case do the secondary stakeholders of an organization play an important role that strongly influences an organization's strategy?"
+  ],
+  [
+   "162",
+   "49",
+   "CT2",
+   "According to you, the secondary stakeholders of an organization can create significant institutional pressures to companies in any case? Give specific examples?"
+  ],
+  [
+   "163",
+   "49",
+   "ĐN1",
+   "Use strategy's toolkit as stakeholder analysis, analyze the stakeholders of a specific company and explain"
+  ],
+  [
+   "164",
+   "50",
+   "CT1",
+   "Please tell us what do you value as an organization? What is your mission? What's your purpose? What is the way you do business?"
+  ],
+  [
+   "165",
+   "50",
+   "CT2",
+   "Apply value chain for specific firm"
+  ],
+  [
+   "166",
+   "50",
+   "ĐN1",
+   "Explain the case of GE Healthcare in India: An (Ultra) Sound Strategy. Compare with the case of selected company and explain"
+  ],
+  [
+   "167",
+   "51",
+   "CT1",
+   "Please indicate that the stakeholder analysis is first and foremost to better understand who your stakeholders are and what tools do your business organizations usually use?"
+  ],
+  [
+   "168",
+   "51",
+   "CT2",
+   "Practice your business strategy skills as you consider the \"GE Healthcare in India: An (Ultra)Sound Strategy?\" abridged case. How should Raja think about the situation? What are the most important considerations for him to weigh? How should they factor into his course of action?"
+  ],
+  [
+   "169",
+   "52",
+   "CT1",
+   "Practice your business strategy skills as you consider the \"GE Healthcare in India: An (Ultra)Sound Strategy?\" abridged case. Who are the key stakeholder groups, and how would you characterize their various perspectives? What would each stakeholder like to see GE do in this case?"
+  ]
+ ],
+ "links": []
+}

@@ -1,0 +1,330 @@
+{
+ "ma": "MSM201c",
+ "sylID": "14392",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14392",
+   "code": "MSM201c",
+   "name": "Meta social media marketing Management_Quản trị chiến dịch tiếp thị truyền thông xã hội toàn diện",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14392",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14392",
+  "Syllabus Name": "Meta social media marketing Management_Quản trị chiến dịch tiếp thị truyền thông xã hội toàn diện",
+  "Course Name English": "Meta social media marketing Management",
+  "Subject Code": "MSM201c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h online + 3h offline + 1h Final exam + 101 self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course provides a comprehensive introduction to digital marketing, with a particular focus on major social media platforms such as Facebook, Instagram, LinkedIn, YouTube, TikTok, and others. It aims to equip students with the fundamental knowledge, skills, and tools required to build and grow engaging online communities, as well as to strategically develop and successfully execute effective social media advertising campaigns.",
+  "StudentTasks": "1. Join the online course(s) when being invited by the admin.\n2. Enroll in the courses., regularly study the course at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assignments... as required\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n4. Keep online learning progress promptly (bonus will be awarded)\n5. Communicate and discuss in forum\n6. Attend offline sessions in the Campus (Optional)\n7. Must complete the course(s) with certification(s) in order to take the Final Exam at Campus",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n2) Theoretical Exam (TE)\n3) Final Result (FR) =min (10, TE + Bonus)\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/social-media-marketing-practice",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Social Media Marketing in Practice Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/social-media-digital-marketing-fundamentals?specialization=social-media-marketing-practice",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Social Media and Digital Marketing Fundamentals"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/social-media-social-content-strategy?specialization=social-media-marketing-practice",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2: Social Media and Social Content Strategy"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/facebook-instagram-snapchat-marketing?specialization=social-media-marketing-practice",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Facebook, Instagram, and Snapchat Marketing"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/twitter-linkedin-youtube-marketing?specialization=social-media-marketing-practice",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 4: Twitter, LinkedIn, and YouTube Marketing"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Analyze social media and advertising metrics to inform data-driven decisions and campaign improvement."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Develop audience-focused social media strategies to build engagement, community growth, and platform presence across major social media channels."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Design targeted social media advertising campaigns to achieve specified marketing objectives."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Create engaging social media content that aligns with brand identity, communication goals, and platform requirements."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Demonstrate self-directed learning and adaptability in response to changes in social media technologies, platforms, and practices."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 phút",
+   "CLO1->CLO4",
+   "Multiple choice and case study",
+   "50",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "(Off-line 1.5h)\nIntroduction to the online course\nCourse 1: Social Media and Digital Marketing Fundamentals\nModule 1: Digital Marketing Landscape",
+   "Online, Offline",
+   "CLO1",
+   "I,T",
+   "Course 1: Social Media and Digital Marketing Fundamentals",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n'- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "2",
+   "Course 1: Social Media and Digital Marketing Fundamentals\nModule 1: Digital Marketing Landscape (cont.)",
+   "Online",
+   "CLO1",
+   "I,T",
+   "Course 1: Social Media and Digital Marketing Fundamentals",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "3",
+   "Course 1: Social Media and Digital Marketing Fundamentals\nModule 2: Digital Marketing Principles",
+   "Online",
+   "CLO1",
+   "I,T",
+   "Course 1: Social Media and Digital Marketing Fundamentals",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "4",
+   "Course 1: Social Media and Digital Marketing Fundamentals\nModule 3: Content Marketing for Social",
+   "Online",
+   "CLO1",
+   "I,T",
+   "Course 1: Social Media and Digital Marketing Fundamentals",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "5",
+   "Course 2: Social Media and Social Content Strategy\nModule 1: Social Media and Business Strategy",
+   "Online",
+   "CLO2",
+   "I,T",
+   "Course 2: Social Media and Social Content Strategy",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "6",
+   "Course 2: Social Media and Social Content Strategy\nModule 2: Social Media Platforms for Business",
+   "Online",
+   "CLO2",
+   "I,T",
+   "Course 2: Social Media and Social Content Strategy",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ],
+  [
+   "7",
+   "Course 2: Social Media and Social Content Strategy\nModule 3: Social Content Strategy and Promotion",
+   "Online",
+   "CLO2",
+   "I,T",
+   "Course 2: Social Media and Social Content Strategy",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "8",
+   "Course 3: Facebook, Instagram, and Snapchat Marketing\nModule 1: Facebook Marketing Fundamentals\nModule 2: Facebook Ads and Marketing",
+   "Online",
+   "CLO3, CLO5",
+   "I,T",
+   "Course 3: Facebook, Instagram, and Snapchat Marketing",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "9",
+   "Course 3: Facebook, Instagram, and Snapchat Marketing\nModule 3: Instagram and Snapchat - Social Apps\nModule 4: Instagram and Snapchat Marketing",
+   "Online",
+   "CLO3, CLO5",
+   "I,T",
+   "Course 3: Facebook, Instagram, and Snapchat Marketing",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "10",
+   "Course 4: Twitter, LinkedIn, and YouTube Marketing\nModule 1: Twitter Marketing\nModule 2: LinkedIn and Social Selling",
+   "Online",
+   "CLO4, CLO5",
+   "I,T",
+   "Course 4: Twitter, LinkedIn, and YouTube Marketing",
+   "",
+   "- Watch all videos, read all materials in the modules/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "11",
+   "Course 4: Twitter, LinkedIn, and YouTube Marketing\nModule 3: YouTube and Social Video Marketing",
+   "Online",
+   "CLO4, CLO5",
+   "I,T",
+   "Course 4: Twitter, LinkedIn, and YouTube Marketing",
+   "",
+   "- Watch all videos, read all materials in the module/ course\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if there are any)",
+   ""
+  ],
+  [
+   "12",
+   "Review\nDeadline of Coursera completion: End of Friday of the week.",
+   "Online, Offline",
+   "CLO1->CLO5",
+   "I,T,U",
+   "Social Media Marketing in Practice Specialization",
+   "",
+   "- It is expected that all students engage in the review session and contribute to any debates that may occur.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

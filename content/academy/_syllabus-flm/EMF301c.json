@@ -1,0 +1,325 @@
+{
+ "ma": "EMF301c",
+ "sylID": "13765",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13765",
+   "code": "EMF301c",
+   "name": "Electromagnetic Field Theory and Microwave Fundamental_Lý thuyết trường điện từ và siêu cao tần",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13765",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13765",
+  "Syllabus Name": "Electromagnetic Field Theory and Microwave Fundamental_Lý thuyết trường điện từ và siêu cao tần",
+  "Course Name English": "Electromagnetic Field Theory and Microwave Fundamental",
+  "Subject Code": "EMF301c",
+  "Learning-Teaching Method": "Online, Active learning, Inquiry-based Teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 78h online + 3h offline + 1h final exam + 68 h self-study",
+  "Pre-Requisite": "SDI101m",
+  "Description": "This course provides foundational knowledge of classical electrodynamics for students in electrical engineering, electronics, and telecommunications. It introduces the essential laws and principles governing electromagnetic fields, including Maxwell’s equations, the behavior of electric and magnetic fields, and methods for analyzing electromagnetic phenomena in various media. The specialization emphasizes mathematical rigor, physical intuition, and problem-solving skills. Students will explore topics such as radiation, waveguides, antennas, electromagnetic energy flow, and field interactions with matter. Through conceptual explanations and applied exercises, learners develop the ability to analyze, model, and interpret real-world electromagnetic phenomena used in modern technologies including communication systems, high-frequency circuits, and advanced materials.",
+  "StudentTasks": "Student must get the certification from Coursera to be accepted to the final examination",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "1. Complete the online course to be allowed to take Final Exam\n2. Final Exam is included of Final Theory Exam (TE): 100%\n3. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n4. Completion Criteria: Final TE Score >=4 & FR >= 5\nFR = Final TE Score + bonus",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Electrodynamics Specialization",
+   "Seungbum Hong",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/programs/fpt-faculty-learning-program-fall-2025-xr9bi/specializations/electrodynamics"
+  ],
+  [
+   "2",
+   "MOOC 01: Electrodynamics: An Introduction",
+   "Seungbum Hong",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/electrodynamics-introduction?specialization=electrodynamicso"
+  ],
+  [
+   "3",
+   "MOOC 02: Electrodynamics: Analysis of Electric Fields",
+   "Seungbum Hong",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/electrodynamics-analysis-of-electric-fields?specialization=electrodynamics"
+  ],
+  [
+   "4",
+   "MOOC 03: Electrodynamics: Electric and Magnetic Fields",
+   "Seungbum Hong",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/electrodynamics-electric-magnetic-fields?specialization=electrodynamics"
+  ],
+  [
+   "5",
+   "MOOC 04: Electrodynamics: In-depth Solutions for Maxwell’s Equations",
+   "Seungbum Hong",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/electrodynamics-solutions-maxwells-equations?specialization=electrodynamics"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understanding fundamental principles of electromagnetism supported by essential mathematical tools to analyze and visualize electrostatic phenomena"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply symmetry-based and analytical methods to calculate electric fields, and explain the concepts of susceptibility, polarization, dielectrics, and dipole formation in electromagnetic systems."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply concepts and solutions from electric field analysis to magnetostatics, interpret Maxwell’s equations within this context, and explain how electromotive force, magnetic energy, and introductory quantum-mechanical principles relate to practical electromagnetic systems and device operation."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Use Maxwell’s equations to derive and analyze electromagnetic wave behavior, apply relativistic corrections to moving-charge problems, and understand how AC circuit components influence circuit operation."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Theoretical Exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4",
+   "Multiple choices.\nMarked by Computer",
+   "50",
+   "All studied courses.\nEach course contributes 10-15 questions.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Offline 1:\nIntroduction to the online course EMF301c.\nMOOC 1: Electrodynamics: An Introduction:\nModule 1: Introduction and basics of electrostatics",
+   "Offline,Online",
+   "LO1",
+   "ITU",
+   "https://www.coursera.org/learn/electrodynamics-introduction?specialization=electrodynamics",
+   "",
+   "- See the syllabus of all 4 courses in the SPEC\n- Participate in introduction slot (optional)\n- Watch the videos\n- Read the materials\n- Do all the quizzes.\n- Complete and submit all assignments.",
+   ""
+  ],
+  [
+   "2",
+   "MOOC 1: Electrodynamics: An Introduction:\nModule 2: Introduction to Differential Calculus of Vector Fields.\nModule 3: Introduction to Vector Integral Calculus",
+   "Online",
+   "LO1",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-introduction?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "MOOC 1: Electrodynamics: An Introduction:\nModule 4: Introduction to Electrostatic Solutions.\nModule 5: The Application of Gauss' Law.",
+   "Online",
+   "LO1",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-introduction?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "4",
+   "MOOC 2: Electrodynamics: Analysis of Electric Fields:\nModule 1: The Electric Field in Various Circumstances\nModule 2: The Electric Field in Various Circumstances (cont'd).",
+   "Online",
+   "LO2",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-analysis-of-electric-fields?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "5",
+   "MOOC 2: Electrodynamics: Analysis of Electric Fields:\nModule 3: Electrostatic Energy.\nModule 4: Introduction to Dielectrics.",
+   "Online",
+   "LO2",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-analysis-of-electric-fields?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "6",
+   "MOOC 2: Electrodynamics: Analysis of Electric Fields:\nModule 5: Introduction to Dielectrics (cont'd).",
+   "Online",
+   "LO2",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-analysis-of-electric-fields?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "7",
+   "MOOC 3: Electrodynamics: Electric and Magnetic Fields\nModule 1: Electrostatic Analogs.\nModule 2: Magnetostatics.",
+   "Online",
+   "LO3",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-electric-magnetic-fields?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "8",
+   "MOOC 3: Electrodynamics: Electric and Magnetic Fields\nModule 3: The Magnetic Field in Various Situations\nModule 4: Assessing the Vector Potential",
+   "Online",
+   "LO3",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-electric-magnetic-fields?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "9",
+   "MOOC 3: Electrodynamics: Electric and Magnetic Fields\nModule 5: Induced Currents.",
+   "Online",
+   "LO3",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-electric-magnetic-fields?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "10",
+   "MOOC 4: Electrodynamics: In-depth Solutions for Maxwell’s Equations\nModule 1: The Laws of Induction.\nModule 2: The Maxwell Equations\nModule 3: Maxwell's Equations in Free Space",
+   "Online",
+   "LO4",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-solutions-maxwells-equations?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "11",
+   "MOOC 4: Electrodynamics: In-depth Solutions for Maxwell’s Equations\nModule 4: Maxwell's Equations with Currents and Charges.\nModule 5: Introduction to Alternating Circuits",
+   "Online",
+   "LO4",
+   "U",
+   "https://www.coursera.org/learn/electrodynamics-solutions-maxwells-equations?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "12",
+   "MOOC 4: Electrodynamics: In-depth Solutions for Maxwell’s Equations\nModule 6: Final Project\nOffline 2: Review",
+   "Offline,Online",
+   "LO4",
+   "TU",
+   "https://www.coursera.org/learn/electrodynamics-solutions-maxwells-equations?specialization=electrodynamics",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)\nDeadline of Coursera completion: End of Friday of the week.\nAll students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

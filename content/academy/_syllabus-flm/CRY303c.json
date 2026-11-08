@@ -1,0 +1,353 @@
+{
+ "ma": "CRY303c",
+ "sylID": "12624",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12624",
+   "code": "CRY303c",
+   "name": "Applied Cryptography_Mật mã ứng dụng",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12624",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12624",
+  "Syllabus Name": "Applied Cryptography_Mật mã ứng dụng",
+  "Course Name English": "Applied Cryptography",
+  "Subject Code": "CRY303c",
+  "Learning-Teaching Method": "Blended,Online,Active learning, Discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 35h online + 3h offline + 1h final exam + 2h practical exam + 109h self-study",
+  "Pre-Requisite": "MAD101",
+  "Description": "This course is an introduction to applied cryptography and its relationship to secure systems. Students will learn making, breaking codes and ciphers. They can have a good understanding of major concepts in applied cryptography: plain text, encryption, cipher text, block ciphers, decryption, public-key cryptosystems, hash functions, digital signatures, authentication, key management, and cryptographic protocols as a part of securing digital systems.",
+  "StudentTasks": "- Student must get the certification of Applied Cryptography Specialization from Coursera to be accepted to the final examination",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1. Complete the online course to be allowed to take Final Exam\n\n2. Final Exam is included of Final Theory Exam (TE) & Final Practical Exam (PE): 100%\n\n3.Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n4. Completion Criteria: Final TE Score >=4 & Final PE Score >=4 & ((Final TE Score + Final PE Score)/2 + bonus) >= 5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "SPEC: Applied Cryptography Specialization",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/specializations/applied-crypto"
+  ],
+  [
+   "2",
+   "Help Articles",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct"
+  ],
+  [
+   "3",
+   "MOOC 1: Cryptography and Information Theory",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/crypto-info-theory?specialization=applied-crypto"
+  ],
+  [
+   "4",
+   "MOOC 2: Symmetric Cryptography",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/symmetric-crypto?specialization=applied-crypto"
+  ],
+  [
+   "5",
+   "MOOC 3: Asymmetric Cryptography and Key Management",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/asymmetric-crypto?specialization=applied-crypto"
+  ],
+  [
+   "6",
+   "MOOC 4: Cryptographic Hash and Integrity Protection",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/cryptographic-hash-integrity-protection?specialization=applied-crypto"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain cryptography from the information-theoretical perspectives and discuss the pratical aspects of modern cryptography."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand basic techniques and algorithms of symmetric cryptography via classical and modern symmetric ciphers"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the basic principles of asymmetric (or public key) cryptography including the RSA cipher algorithm, the Diffie-Hellman key exchange, and problems with key distribution and key management."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand the important role of cryptographic hash functions in modern cryptography and their applications in integrity protection."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "PE",
+   "practical exam",
+   "1",
+   "50.0%",
+   "4",
+   "120'",
+   "",
+   "",
+   "N/A",
+   "All studied courses.",
+   "by Exam Board",
+   "Customized from the quizzes of this specialization.\n\n1st Evaluation: For students who completed & got Coursera's specialization certificates (Option at week 10 or 11);\n\n2nd Evaluation: For students who completed & got Coursera's specialization certificates) at week 13;\n\n3rd Evaluation: For students who completed & got Coursera's specialization certificates) at week 14."
+  ],
+  [
+   "2",
+   "TE",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "60'",
+   "",
+   "Computer gradable",
+   "50",
+   "All studied courses. Each module of course contributes 2-3 questions.",
+   "by Exam Board",
+   "Customized from the quizzes of this specialization.\n\n1st Evaluation: For students who completed & got Coursera's specialization certificates (Option at week 9);\n\n2nd Evaluation: For students who completed & got Coursera's specialization certificates) at week 13;\n\n3rd Evaluation: For students who completed & got Coursera's specialization certificates) at week 14."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Specialization Introduction\n\nCryptography and Information Theory\n\n- Cryptography Terminology\n\n- Kerckhoff's Principle\n\n- Deterministic vs. Random\n\n- Information Entropy",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "Study the course\n\nCryptography and Information Theory",
+   ""
+  ],
+  [
+   "2",
+   "Specialization Introduction\n\nCryptography and Information Theory\n\n- Cryptography Terminology\n\n- Kerckhoff's Principle\n\n- Deterministic vs. Random\n\n- Information Entropy\n\nCourse 1 (Week 1, 2) Review",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "Complete Week 1, 2 of the course\n\nCryptography and Information Theory",
+   ""
+  ],
+  [
+   "3",
+   "Review Basic Integer Operations and Algorithms of Elementary Number Theory from MAD101 (prime numbers, modular arithmetic, multiplicative inverses, the extended Euclidean algorithm, modular exponentiation)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "All Students should participate in offline slot\n\n(Offlline 2:\n\nReview Basic Integer Operations and Algorithms of Elementary Number Theory from MAD101)",
+   ""
+  ],
+  [
+   "4",
+   "Cryptography and Information Theory\n\n- Brute Force Attack\n\n- Cryptanalysis\n\n- Side-Channel Attack\n\n- Course 1 (Week 3, 4)",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "Complete Week 3,4 of the course\n\nCryptography and Information Theory",
+   ""
+  ],
+  [
+   "5",
+   "Symmetric Cryptography\n\n- Substitution and Caesar Cipher\n\n- Natural Language Redundancy\n\n- Rail Fence Cipher\n\n- Permutation Cipher Security\n\n- Product Cipher\n\nReview Basic Facts and Algorithms of Advanced Number Theory: Eulier's Totient Theorem, Chinese Remainder Theorem, and Primality Testing (Trial Division, Fermat Theorem, and the Miller-Rabin Algorithm)",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "Complete Week 1, 2 of the course Symmetric Cryptography",
+   ""
+  ],
+  [
+   "6",
+   "Review Finite Field Arithmetic: basic operations, primitive root, discrete logarithm, polynomials with coefficients in GF(2^8)",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "Review Finite Field Arithmetic",
+   ""
+  ],
+  [
+   "7",
+   "Symmetric Cryptography\n\n- Block Cipher vs. Stream Cipher\n\n- DES Security\n\n- Double-DES and Meet-in-the-Middle Attack\n\n- Triple DES\n\n- Advanced Encryption Standard (AES)\n\n- Block Cipher",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "Complete Week 3,4,5 of the course Symmetric Cryptography",
+   ""
+  ],
+  [
+   "8",
+   "Asymmetric Cryptography and Key Management\n\n- Asymmetric Encryption for Message Confidentiality\n\n- Digital Signature for Authentication\n\n- RSA Encryption and Decryption\n\n- Security of RSA",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "Complete Week 1, 2 of the course Asymmetric Cryptography and Key Management",
+   ""
+  ],
+  [
+   "9",
+   "Asymmetric Cryptography and Key Management\n\n- Discrete Logarithm\n\n- Diffie-Hellman Key-Exchange Protocol\n\n- Man-in-the-Middle Attack",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "Complete Week 3 of the course\n\nAsymmetric Cryptography and Key Management",
+   ""
+  ],
+  [
+   "10",
+   "Asymmetric Cryptography and Key Management\n\n- Key Distribution Approaches\n\n- Public-Key Certificate and Public-Key Infrastructure (PKI)",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "Complete Week 4 of the course\n\nAsymmetric Cryptography and Key Management",
+   ""
+  ],
+  [
+   "11",
+   "Cryptographic Hash and Integrity Protection\n\n- Hash Function\n\n- Cryptographic Hash Function Security\n\n- Hash Chain\n\n- S/Key: One-Time Password\n\n- Cryptocurrency and Bitcoin",
+   "Online",
+   "LO4",
+   "",
+   "",
+   "",
+   "Complete Week 1, 2 of the course Cryptographic Hash and Integrity Protection.",
+   ""
+  ],
+  [
+   "12",
+   "Cryptographic Hash and Integrity Protection\n\n- Message Authentication Code (MAC)\n\n- Brute-Force Attack on MAC\n\n- Digital Signature Properties Beyond Message Authentication\n\n- Digital Signature Requirements\n\nCourse 4 Review",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "- Complete Week 3, 4 of the course Cryptographic Hash and Integrity Protection.\n\nDeadline of Coursera Completion: End of Friday of the week.\n\nAll Students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

@@ -1,0 +1,358 @@
+{
+ "ma": "NLP301c",
+ "sylID": "12549",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12549",
+   "code": "NLP301c",
+   "name": "Natural Language Processing_Xử lý ngôn ngữ tự nhiên",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12549",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12549",
+  "Syllabus Name": "Natural Language Processing_Xử lý ngôn ngữ tự nhiên",
+  "Course Name English": "Natural Language Processing",
+  "Subject Code": "NLP301c",
+  "Learning-Teaching Method": "Blended,Online,Active learning, Discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 121h online + 3h offline + 1h TE + 2h PE + 23h self-study",
+  "Pre-Requisite": "AIL30x and (PRP201c or PFP191)",
+  "Description": "Natural Language Processing (NLP) uses algorithms to understand and manipulate human language. This technology is one of the most broadly applied areas of machine learning. As AI continues to expand, so will the demand for professionals skilled at building models that analyze speech and language, uncover contextual patterns, and produce insights from text and audio.\n\nBy the end of this Specialization, students will be ready to design NLP applications that perform question-answering and sentiment analysis, create tools to translate languages and summarize text, and even build chatbots.",
+  "StudentTasks": "Student must get the certification of Natural Language Processing Specialization from Coursera to be accepted to the final examination",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1. Complete the online course to be allowed to take Final Exam\n\n2. Final Exam is included of Final Theory Exam (TE) & Final Practical Exam (PE): 100%\n\n3. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n4. Completion Criteria: Final TE Score >=4 & Final PE Score >=4 & FR >= 5\n\n(FR = min(10, (Final TE Score + Final PE Score)/2 + bonus)",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/classification-vector-spaces-in-nlp?specialization=natural-language-processing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 1: Natural Language Processing with Classification and Vector Spaces"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/probabilistic-models-in-nlp?specialization=natural-language-processing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 2: Natural Language Processing with Probabilistic Models"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/sequence-models-in-nlp?specialization=natural-language-processing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 3: Natural Language Processing with Sequence Models"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/attention-models-in-nlp?specialization=natural-language-processing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 4: Natural Language Processing with Attention Models"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/specializations/natural-language-processing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Natural Language Processing Specialization"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Use logistic regression, naïve Bayes, and word vectors to implement sentiment analysis, complete analogies, and translate words."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Use locality sensitive hashing for approximate nearest neighbors."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Use dynamic programming, hidden Markov models, and word embeddings to autocorrect misspelled words, autocomplete partial sentences, and identify part-of-speech tags for words."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Use dense and recurrent neural networks, LSTMs, GRUs, and Siamese networks in TensorFlow and Trax to perform advanced sentiment analysis, text generation, named entity recognition, and to identify duplicate questions."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Use encoder-decoder, causal, and self-attention to perform advanced machine translation of complete sentences, text summarization, question-answering and to build chatbots."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "PE",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "120'",
+   "",
+   "",
+   "",
+   "All studied courses.",
+   "by Exam Board",
+   "Customized from the Assignment of this specialization"
+  ],
+  [
+   "2",
+   "TE",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "60'",
+   "",
+   "Computer gradable",
+   "60",
+   "All studied courses. Each module of course contributes 2-3 questions.",
+   "by Exam Board",
+   "Customized from the quizzes of this specialization"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Specialization Introduction\nNatural Language Processing with Classification and Vector Spaces\n- Sentiment Analysis with Logistic Regression\nOffline 1: Introduction to the online course NLP301c",
+   "Offline,Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)\nAll students should participate in offline slot (if any question)",
+   ""
+  ],
+  [
+   "2",
+   "- Sentiment Analysis with Naïve Bayes",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "- Vector Space Models",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "4",
+   "- Machine Translation and Document Search",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "5",
+   "Natural Language Processing with Probabilistic Models:\n- Autocorrect\n- Part of Speech Tagging and Hidden Markov Models",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "6",
+   "- Autocomplete and Language Models",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "7",
+   "- Word embeddings with neural networks",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "8",
+   "Natural Language Processing with Sequence Models:\n'- Neural Networks for Sentiment Analysis\n- Recurrent Neural Networks for Language Modeling",
+   "Online",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "9",
+   "- Recurrent Neural Networks for Language Modeling\n- LSTMs and Named Entity Recognition",
+   "Online",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "10",
+   "- Siamese Networks\nNatural Language Processing with Attention Models:\n- Neural Machine Translation",
+   "Online",
+   "LO4",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "11",
+   "- Text Summarization\n- Question Answering",
+   "Online",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "12",
+   "- Chatbot\nOffline 2: Review Natural Language Processing Specialization",
+   "Offline,Online",
+   "LO5",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed\nDeadline of Coursera completion: End of Friday of the week.\nAll students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

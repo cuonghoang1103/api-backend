@@ -1,0 +1,1192 @@
+{
+ "ma": "PST202",
+ "sylID": "13365",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13365",
+   "code": "PST202",
+   "name": "Perspective_Phối cảnh",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13365",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13365",
+  "Syllabus Name": "Perspective_Phối cảnh",
+  "Course Name English": "Perspective",
+  "Subject Code": "PST202",
+  "Learning-Teaching Method": "Lecture,Social Constructivism,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None.",
+  "Description": "Perspective is a subject that helps students draw third dimention objects on a flat surface like the image when we look at the object in real life. Perspective drawing is concerned with achieving a sense of space, of depth and of the third dimension, within the limits of the flat drawing surface. Students can use the rules of perspective in sketching, finding ideas and creativity in designing.For those concerned with freehand perspective is provided all the important printciples, insights and \"shortcuts\" necessary for effective drawing and life sketching. Essentially, perspective drawing deals with this appearance of things, i.e., with how three dimensional reality \"look\" and how it is best drawn on two dimensional surface as a canvas, sketch pad, or illustration board.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n- Use laptop in class only for learning purpose\n- Promptly access to the FU CMS at http://cms.fpt.edu.vn for up-to-date course information",
+  "Tools": "- Internet, computer\n- Paper A4, A3, Drawing tools\n-Computer for drawing and presentation.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Basic Perspective Drawing: A Visual Approach",
+   "John Montague",
+   "Wiley",
+   "2013",
+   "6th",
+   "ISBN-10 ‏ : ‎ 9781118134146 ISBN-13 ‏ : ‎ 978-1118134146",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Luật phối cảnh",
+   "Phạm Công Thành",
+   "Mỹ Thuật",
+   "",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Perspective Drawing Handbook",
+   "Joseph D'Amelio",
+   "Dover Publications",
+   "2004",
+   "",
+   "ISBN 10:0486432084, ISBN 13: 9780486432083.",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Perspective make easy",
+   "Ernest R. NorLing",
+   "Dover Publications",
+   "1999",
+   "",
+   "ISBN-10 ‏ : ‎ 9780486404738 ISBN-13 ‏ : ‎ 978-0486404738",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the basic rules, concept of perspective"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand How we see for perspective drawing and Why appearance differs from reality theory, concept of Picture plane, Cone of Vision. Understand concept of Vanishing points and eyes level, how to find vanishing point, eyes level on the picture plane, vanishing point of specical lines."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Classify types of perspective: One point perspective, two point perspective, three point perspective. Know about concept and application of four, five, six, perspective. Understand and be able to draw one, two, three points perspective of objects with the determined size"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply AI tools to generate references and suggestions for perspective drawings, while ensuring originality and accuracy. Having a positive attitude and a professional working style"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Classify shade and shadow.Be able to draw shade and shadow of objects with sunlight source and Local point Sources of light to draw pictures."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand concept of Reflection. Be able to draw water, mirror reflections of perspective drawing"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understand Method of perspective sketching , such as:\n- Draw perspective of objects from simple shape.\n-How to determine heights, depths and widths of objects in perspective\n-Use Diagonals to divide to equal spacing and determine the center point of objects\n-Dividing a Surface into Unequal Space and Equal Space by using a measuring line and special vanishing point.\nApply perspective drawing methods to draw sketches."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Lab 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "270' in class",
+   "LO2, LO3",
+   "- Students choose 3 of the basic shapes here: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout. The shapes must be determined size.\n-Draw one-point, two-point, three-point perspective of the this layout with the determined size.",
+   "1",
+   "- Knowledge: One point perspective, two point perspective, three point perspective\n- Skills: Create a drawing of one, two, three points perspective of objects with the determined size.",
+   "1. Students choose a setting includes shapes: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout and determined size. Discuss with instructor about the relevance of the decision.\n2. Students draw one-point, two-point, three-point perspective with determined size.\n3. Students can use AI generated images or existing image for reference.",
+   "Submission Files:\n- Final document including drawing of one, two, three points perspective of objects, with clear presentation every main steps of drawing. (PDF)\n- Original drawing files if required\n- Students submit works in class if work is done by hand drawing.\nIn-class work:\n- Peer and instructor feedback on drawings."
+  ],
+  [
+   "2",
+   "Lab 3",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "270' in class",
+   "LO5",
+   "Students draw shade and shadow of the perspective drawing in Lab 2 with parallel Light rays (sunlight) and Local point Sources of light",
+   "1",
+   "- Knowledge: understand and classify shades, shadows, and type of light sources.\n- Skill: draw shade and shadow of objects with sunlight source and Local point Sources of light to draw pictures.",
+   "1. Students use the result of Lab 2 and choose the type and location of light sources applied into the setting. Discuss with instructor about the relevance of the decision.\n2. Students draw shade and shadow with parallel Light rays (sunlight) and Local point Sources of ligh\n3. Students can use AI generated images or existing image for reference.",
+   "Submission Files:\n- Final document including drawing of shades and shadows with clear presentation of steps of drawing (PDF).\n- Students submit works in class if work is done by hand drawing.\nIn-class work:\n- Peer and instructor feedback on drawings."
+  ],
+  [
+   "3",
+   "Lab 4",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "150' in class",
+   "LO6",
+   "Students draw perspective of water reflections and mirror reflections for Lab 2",
+   "1",
+   "- Knowledge: Understand concept of Reflection.\n- Skill: Be able to draw water, mirror reflections of perspective drawing",
+   "1. Students use the result of Lab 2 and choose the type and location deflection surface. Discuss with instructor about the relevance of the decision.\n2. Students draw water reflection and mirror reflection.\n3. Students can use AI generated images or existing image for reference.",
+   "Submission Files:\n- Final document including drawing of shades and shadows with clear presentation of steps of drawing (PDF).\n- Students submit works in class if work is done by hand drawing.\nIn-class work:\n- Peer and instructor feedback on drawings."
+  ],
+  [
+   "4",
+   "Lab 5.1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "150' in class",
+   "LO3, LO5, LO6, LO7",
+   "Students are required to complete perspective drawings by hand on paper. The instructor will provide a floor plan and an elevation of a space with figures, and students must create the corresponding perspective view (one-point, two-point, or three-point) as instructed, including cast shadows and reflections.",
+   "1",
+   "- Understand Method of perspective sketching , such as:+ Draw perspective of objects from simple shape. + How to determine heights, depths and widths of objects in perspective+ Use Diagonals to divide to equal spacing and determine the center point of objects+ Dividing a Surface into Unequal Space and Equal Space by using a measuring line and special vanishing point.- Understand the concept reflection and shades and shadows.- Apply perspective drawing methods and knowledge to draw sketches.",
+   "1. Students use pens, pencils, and rulers to draw a perpective sketch on A3 paper.\n\n2. Submit the drawing in class.",
+   "Submission Files:\n\n- Students' work on paper"
+  ],
+  [
+   "5",
+   "Lab 5.2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "450' in class",
+   "LO4, LO7",
+   "Students draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "1",
+   "- Understand Method of perspective sketching , such as:\n+ Draw perspective of objects from simple shape.\n+ How to determine heights, depths and widths of objects in perspective\n+ Use Diagonals to divide to equal spacing and determine the center point of objects\n+ Dividing a Surface into Unequal Space and Equal Space by using a measuring line and special vanishing point.\n- Apply perspective drawing methods to draw sketches, and develop to a sequence of pictures represent a story.",
+   "1. Students can choose an existing script or create a new one for the story of lab 5. AI tools can be used to generate a script. Discuss with instructor about the relevance of the outcome.\n2. Develop sketches with the script. Students can use AI to generate pictures following the script as reference for the work. Discuss with instructor.\n3. Students finish the final result, revision log, AI usage log, and submit in class",
+   "Submission Files:\n- Final document including drawing of shades and shadows with clear presentation of steps of drawing (PDF).\n- Students submit works in class if work is done by hand drawing.\n- Document containing all development steps, including AI Usage Report: Screenshots or notes showing prompt input, AI-generated references/script output suggestion, with a reflection of how they supported final work (.docx/PDF)\nIn-class work:\n- Presentation of the script analysis and stoyboard based on chosen script.\n- Peer and instructor feedback on scripts, sketches, and references.\n- Drafting and revising drawings during In-class sessions."
+  ],
+  [
+   "6",
+   "Lab1",
+   "on-going",
+   "1",
+   "5.0%",
+   ">0",
+   "150' in class",
+   "LO1, LO2",
+   "Take photographs, find and analyze the perspective elements in the photographs, like vanishing point, eyes level, vanishing point of specical lines. Explain why appearance differs from reality theory.",
+   "1",
+   "- Knowledge: Understand the basic rules, concept of perspective. Understand why appearance differs from reality theory, understand concept of Vanishing points and eyes level, how to find vanishing point, eyes level on the picture plane, vanishing point of specical lines.\n- Skills: Analyze pictures for perspective fundamentals and basic concepts",
+   "1. Students take a number of photographs following instruction in the area. Students may use AI generated pictures or existing pictures for reference. Discuss with the instrcutor about the relevance of the photographs taken.\n2. Students choose suitable pictures and analyze the perspective elements in the photographs, edit and highline the perspective elements using digital drawing tools like Adobe Illustrator.\n3. Combine unedited and edited pictures into a report.",
+   "Submission Files:\n- Final document including the original photographs, analyzed photographs, and additional analysis if needed.\n- Original drawing files if required (PDF).\nIn-class work:\n- Peer and instructor feedback on photographs and analysis drawing."
+  ],
+  [
+   "7",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "in class",
+   "LO4",
+   "",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, students' attitude, preparation, contribution of discussions",
+   ""
+  ],
+  [
+   "8",
+   "Final exam",
+   "Final exam",
+   "1",
+   "20.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "concepts, algorithms; all studied chapters",
+   "by exam board,\n\nusing computer",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction-Fundamentals\n-Concept of Perspective\n-Reality and appearance\n-How we see for perspective",
+   "Offline",
+   "LO1",
+   "IT",
+   "Perspective drawing handbook:\n- Read Chapter 1-4\nRead slides: Chapter 1-4",
+   "PST202_Phần 1",
+   "Review Chapter 1-4\n. Discussion",
+   ""
+  ],
+  [
+   "2",
+   "Course Introduction-Fundamentals\n-How we see for perspective drawing -Why appearance differs from reality theory",
+   "Offline",
+   "LO1",
+   "IT",
+   "Perspective drawing handbook:\n- Read Chapter 1-4\nRead slides: Chapter 1-4",
+   "PST202_Phần 2",
+   "Review Chapter 1-4\n. Discussion",
+   ""
+  ],
+  [
+   "3",
+   "Perspective projection system\n-Picture plane\n-Cone of Vision\n-Center visual ray",
+   "Offline",
+   "LO1, LO2",
+   "I, T",
+   "Read slide chapter 3-4\nPerspective drawing handbook: -Read Chapter 3-4",
+   "",
+   "Review Chapter 1-3\nDiscussion\n.",
+   ""
+  ],
+  [
+   "4",
+   "Perspective projection system\n-View point\n- Vanishing points and eyes level\n- How to find vanishing point, eyes level on the picture plane, vanishing point of specical lines.",
+   "Offline",
+   "LO1, LO2",
+   "I, T",
+   "Read slide chapter 3-4\nPerspective drawing handbook: -Read Chapter 3-4",
+   "",
+   "Review Chapter 1-3\nDiscussion\n.",
+   ""
+  ],
+  [
+   "5",
+   "Lab1:\nStudents take photographs, find and analyze the perspective elements in the photographs, like vanishing point, eyes level, vanishing point of specical lines. Explain why appearance differs from reality theory",
+   "Offline",
+   "LO1, LO2,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 1-5\nRead slide: Chapter 1-5\nDrawing tools, AI tools for generating images",
+   "",
+   "Review Chapter 1-5\nReview Lab 1\nDiscussion, Exercises",
+   ""
+  ],
+  [
+   "6",
+   "Lab1:\nStudents take photographs, find and analyze the perspective elements in the photographs, like vanishing point, eyes level, vanishing point of specical lines. Explain why appearance differs from reality theory",
+   "Offline",
+   "LO1, LO2,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 1-5\nRead slide: Chapter 1-5\nDrawing tools, AI tools for generating images",
+   "",
+   "Review Chapter 1-5\nReview Lab 1\nDiscussion, Exercises",
+   ""
+  ],
+  [
+   "7",
+   "Lab1: (Cont.)\nStudents take photographs, find and analyze the perspective elements in the photographs, like vanishing point, eyes level, vanishing point of specical lines. Explain why appearance differs from reality theory.",
+   "Offline",
+   "LO1, LO2,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 1-5\nRead slide: Chapter 1-5\nDrawing tools, AI tools for generating images",
+   "",
+   "Review Chapter 1-5\nReview Lab 1\nDiscussion, Exercises",
+   ""
+  ],
+  [
+   "8",
+   "Lab1: (Cont.)\nStudents take photographs, find and analyze the perspective elements in the photographs, like vanishing point, eyes level, vanishing point of specical lines. Explain why appearance differs from reality theory.",
+   "Offline",
+   "LO1, LO2,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 1-5\nRead slide: Chapter 1-5\nDrawing tools, AI tools for generating images",
+   "",
+   "Review Chapter 1-5\nReview Lab 1\nDiscussion, Exercises",
+   ""
+  ],
+  [
+   "9",
+   "One-point, two-point, three-point perspective\n-Drawing the cube prerequisite to understanding perspective.",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Read slide chapter 6-9\nPerspective drawing handbook: -Read Chapter 6-9",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "10",
+   "One-point, two-point, three-point perspective\n- Classify types of perspective: One point perspective, two point perspective, three point perspective.",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Read slide chapter 6-9\nPerspective drawing handbook: -Read Chapter 6-9",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "11",
+   "Drawing steps for One-point perspective",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Read slide chapter 6-9\nPerspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "12",
+   "Drawing steps for One-point perspective",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Read slide chapter 6-9\nPerspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "13",
+   "Drawing steps for Two-point perspective",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Read slide chapter 6-9\nPerspective drawing handbook: -Read Chapter 6-9\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "14",
+   "Drawing steps for Two-point perspective",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Read slide chapter 6-9\nPerspective drawing handbook: -Read Chapter 6-9\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "15",
+   "Drawing steps for Three-point perspective",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Read slide chapter 6-9\nPerspective drawing handbook: -Read Chapter 6-9\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "16",
+   "Drawing steps for Three-point perspective",
+   "Offline",
+   "LO3",
+   "T,U",
+   "Read slide chapter 6-9\nPerspective drawing handbook: -Read Chapter 6-9\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "17",
+   "Four, Five,Six Point Perspective\n- Concept and application of Four, Five, Six Perspective",
+   "Offline",
+   "LO3",
+   "I",
+   "Computer, Internet\nDrawing instruments, paper A3",
+   "",
+   "Research into this topic on Web.\nDiscussion",
+   ""
+  ],
+  [
+   "18",
+   "Four, Five,Six Point Perspective\n- Concept and application of Four, Five, Six Perspective",
+   "Offline",
+   "LO3",
+   "I",
+   "Computer, Internet\nDrawing instruments, paper A3",
+   "",
+   "Research into this topic on Web.\nDiscussion",
+   ""
+  ],
+  [
+   "19",
+   "Lab 2:\n- Students choose 3 of the basic shapes here: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout. The shapes must be determined size.\n-Draw one-point, two-point, three-point perspective of the this layout with the determined size.",
+   "Offline",
+   "LO2, LO3,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 6-9\nReview Lab 2\nDiscussion, Exercises\nDraw one-point perspective for the exercise\n.",
+   ""
+  ],
+  [
+   "20",
+   "Lab 2:\n- Students choose 3 of the basic shapes here: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout. The shapes must be determined size.\n-Draw one-point, two-point, three-point perspective of the this layout with the determined size.",
+   "Offline",
+   "LO2, LO3,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 6-9\nReview Lab 2\nDiscussion, Exercises\nDraw one-point perspective for the exercise\n.",
+   ""
+  ],
+  [
+   "21",
+   "Lab 2:(cont.)\n- Students choose 3 of the basic shapes here: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout. The shapes must be determined size.\n-Draw one-point, two point, three-point perspective of the this layout with the determined size..",
+   "Offline",
+   "LO2, LO3,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 6-9\nReview Lab 2\nDiscussion, Exercises.\nDraw two-point perspective for the exercise\n.",
+   ""
+  ],
+  [
+   "22",
+   "Lab 2:(cont.)\n- Students choose 3 of the basic shapes here: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout. The shapes must be determined size.\n-Draw one-point, two point, three-point perspective of the this layout with the determined size..",
+   "Offline",
+   "LO2, LO3,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 6-9\nReview Lab 2\nDiscussion, Exercises.\nDraw two-point perspective for the exercise\n.",
+   ""
+  ],
+  [
+   "23",
+   "Lab 2:(cont.)\n- Students choose 3 of the basic shapes here: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout. The shapes must be determined size.\n-Draw one-point, two-point, three-point perspective of the this layout with the determined size..",
+   "Offline",
+   "LO2, LO3,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 6-9\nReview Lab 2\nDiscussion, Exercises\nDraw three-point perspective for the exercise",
+   ""
+  ],
+  [
+   "24",
+   "Lab 2:(cont.)\n- Students choose 3 of the basic shapes here: Rectangular cuboid, cylinder, prism, sphere, cone and arrange them into a good layout. The shapes must be determined size.\n-Draw one-point, two-point, three-point perspective of the this layout with the determined size..",
+   "Offline",
+   "LO2, LO3,",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 6-9\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 6-9\nReview Lab 2\nDiscussion, Exercises\nDraw three-point perspective for the exercise",
+   ""
+  ],
+  [
+   "25",
+   "Shade and shadow\n-Concept shade, shadow, light source, light rays,shade line.",
+   "Offline",
+   "LO5",
+   "TU",
+   "Read slide chapter 10\nPerspective drawing handbook: -Read Chapter 14\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "26",
+   "Shade and shadow\n-How to pick a spot for light source to draw shade and shadow",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook: -Read Chapter 14\nDrawing tools, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "27",
+   "-Shade and shadow created by Parallel Light Rays ( Sunlight)",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook: -Read Chapter 14\nDrawing instruments, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "28",
+   "- Application of Sketches",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook: -Read Chapter 14\nDrawing instruments, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "29",
+   "Shade and shadow created by Local Point Sources of Light",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook: -Read Chapter 14\nDrawing instruments, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "30",
+   "- Application of Sketches",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook: -Read Chapter 14\nDrawing instruments, paper A3",
+   "",
+   "Review Chapter 6-9\nDiscussion",
+   ""
+  ],
+  [
+   "31",
+   "Lab3:\nStudents draw shade and shadow of the perspective drawing in Lab 2 with parallel Light rays (sunlight) and Local point Sources of light",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook:\nReview chapter 10\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 14\nReview Lab 3\nDiscussion, Exercises\nDraw shade and shadow of one point perspective.",
+   ""
+  ],
+  [
+   "32",
+   "Lab3:\nStudents draw shade and shadow of the perspective drawing in Lab 2 with parallel Light rays (sunlight) and Local point Sources of light",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook:\nReview chapter 10\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 14\nReview Lab 3\nDiscussion, Exercises\nDraw shade and shadow of one point perspective.",
+   ""
+  ],
+  [
+   "33",
+   "Lab3:(cont.)\nStudents draw shade and shadow of the perspective drawing in Lab 2 with parallel Light rays (sunlight) and Local point Sources of light. (cont.)",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook:\nReview chapter 10\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 14\nReview Lab 3\nDiscussion, Exercises\nDraw shade and shadow of two point perspective",
+   ""
+  ],
+  [
+   "34",
+   "Lab3:(cont.)\nStudents draw shade and shadow of the perspective drawing in Lab 2 with parallel Light rays (sunlight) and Local point Sources of light. (cont.)",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook:\nReview chapter 10\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 14\nReview Lab 3\nDiscussion, Exercises\nDraw shade and shadow of two point perspective",
+   ""
+  ],
+  [
+   "35",
+   "Lab3:(cont.)\nStudents draw shade and shadow of the perspective drawings in Lab 2 with parallel Light rays (sunlight) and Local point Sources of light. (cont.)",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook:\nReview chapter 10\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 14\nReview Lab 3\nDiscussion, Exercises\nDraw shade and shadow of three point perspective",
+   ""
+  ],
+  [
+   "36",
+   "Lab3:(cont.)\nStudents draw shade and shadow of the perspective drawings in Lab 2 with parallel Light rays (sunlight) and Local point Sources of light. (cont.)",
+   "Offline",
+   "LO5",
+   "T,U",
+   "Read slide chapter 10\nPerspective drawing handbook:\nReview chapter 10\nDrawing tools, paper A3, or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Chapter 14\nReview Lab 3\nDiscussion, Exercises\nDraw shade and shadow of three point perspective",
+   ""
+  ],
+  [
+   "37",
+   "Reflection\n-Concept of Reflection\n-How to draw water reflections\n-How to draw mirror reflections",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Read slide chapter 11\nPerspective Make Easy\nReview pages: 169-173",
+   "",
+   "Perspective Make Easy, pages 169-173\nSlide: Chapter 11\nDiscussion",
+   ""
+  ],
+  [
+   "38",
+   "-How to draw water reflections\n-How to draw mirror reflections",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Read slide chapter 11\nPerspective Make Easy\nReview pages: 169-173",
+   "",
+   "Perspective Make Easy, pages 169-173\nSlide: Chapter 11\nDiscussion",
+   ""
+  ],
+  [
+   "39",
+   "Lab4:\nStudents continue to draw perspective of water reflections and mirror reflections for Lab2\"",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 11\nDrawing tools, paper A3 or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Perspective Make Easy, pages 169-173\nSlide: Chapter 11\nDiscussion, Exercises\nDraw perspective of water reflection in Lab2",
+   ""
+  ],
+  [
+   "40",
+   "Lab4:\nStudents continue to draw perspective of water reflections and mirror reflections for Lab2\"",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 11\nDrawing tools, paper A3 or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Perspective Make Easy, pages 169-173\nSlide: Chapter 11\nDiscussion, Exercises\nDraw perspective of water reflection in Lab2",
+   ""
+  ],
+  [
+   "41",
+   "Lab4: (cont.)\nStudents continue to draw perspective of water reflections and mirror reflections for Lab2",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 11\nDrawing tools, paper A3 or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Perspective Make Easy, pages 169-173\nSlide: Chapter 11\nDiscussion, Exercises\nDraw perspective of mirror reflection in Lab2",
+   ""
+  ],
+  [
+   "42",
+   "Lab4: (cont.)\nStudents continue to draw perspective of water reflections and mirror reflections for Lab2",
+   "Offline",
+   "LO6",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 11\nDrawing tools, paper A3 or computer for drawing, AI tools for generating images.",
+   "",
+   "Review Perspective Make Easy, pages 169-173\nSlide: Chapter 11\nDiscussion, Exercises\nDraw perspective of mirror reflection in Lab2",
+   ""
+  ],
+  [
+   "43",
+   "Perspective Sketching - freehand drawing techniques\n- Draw perspective of objects from simple shapes.\n-Determining heights, depths and widths of objects in perspective",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Read slide chapter 12\nPerspective drawing handbook: -Read Chapter 10-13\nDrawing tools, paper A3",
+   "",
+   "Review slide chapter 12\nPerspective drawing handbook:\n-Read Chapter 10-13\nDiscussion",
+   ""
+  ],
+  [
+   "44",
+   "Perspective Sketching - freehand drawing techniques\n- Draw perspective of objects from simple shapes.\n-Determining heights, depths and widths of objects in perspective",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Read slide chapter 12\nPerspective drawing handbook: -Read Chapter 10-13\nDrawing tools, paper A3",
+   "",
+   "Review slide chapter 12\nPerspective drawing handbook:\n-Read Chapter 10-13\nDiscussion",
+   ""
+  ],
+  [
+   "45",
+   "-Finding center point by diagonals\n-Equal Spacing by Diagonals",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Read slide chapter 12\nPerspective drawing handbook: -Read Chapter 10-13\nDrawing tools, paper A3",
+   "",
+   "Review slide chapter 12\nPerspective drawing handbook:\n-Read Chapter 10-13\nDiscussion",
+   ""
+  ],
+  [
+   "46",
+   "-Dividing a Surface into Equal Space by using a measuring line and special vanishing point\n-Dividing a Surface into Unequal Space by using a measuring line and special vanishing point",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Read slide chapter 12\nPerspective drawing handbook: -Read Chapter 10-13\nDrawing tools, paper A3",
+   "",
+   "Review slide chapter 12\nPerspective drawing handbook:\n-Read Chapter 10-13\nDiscussion",
+   ""
+  ],
+  [
+   "47",
+   "-Determining depths and widths of room interiors by measuring Line method\n-Another Way of getting depths: The sliding ruler and diagonals method.",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Read slide chapter 12\nPerspective drawing handbook: -Read Chapter 10-13\nDrawing tools, paper A3",
+   "",
+   "Review slide chapter 12\nPerspective drawing handbook:\n-Read Chapter 10-13\nDiscussion",
+   ""
+  ],
+  [
+   "48",
+   "-Drawing Equal-Sized but Unequally\n-Spaced Element- Vanishing point of Diagonal Method",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Read slide chapter 12\nPerspective drawing handbook: -Read Chapter 10-13\nDrawing tools, paper A3",
+   "",
+   "Review slide chapter 12\nPerspective drawing handbook:\n-Read Chapter 10-13\nDiscussion",
+   ""
+  ],
+  [
+   "49",
+   "Lab 5.1:\nStudents are required to complete perspective drawings by hand on paper. The instructor will provide a floor plan and an elevation of a space with figures, and students must create the corresponding perspective view (one-point, two-point, or three-point) as instructed, including cast shadows and reflections.",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Drawing tools: pen, pencil, ruler,...; paper A3",
+   "",
+   "Use method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "50",
+   "Lab 5.1:\nStudents are required to complete perspective drawings by hand on paper. The instructor will provide a floor plan and an elevation of a space with figures, and students must create the corresponding perspective view (one-point, two-point, or three-point) as instructed, including cast shadows and reflections.",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Drawing tools: pen, pencil, ruler,...; paper A3",
+   "",
+   "Use method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "51",
+   "Lab 5.1:\nStudents are required to complete perspective drawings by hand on paper. The instructor will provide a floor plan and an elevation of a space with figures, and students must create the corresponding perspective view (one-point, two-point, or three-point) as instructed, including cast shadows and reflections.",
+   "Offline",
+   "LO7",
+   "T,U",
+   "Drawing tools: pen, pencil, ruler,...; paper A3",
+   "",
+   "Use method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "52",
+   "Lab 5.2:\nStudents draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "Offline",
+   "LO4, LO7",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 10-13\nDrawing tools, paper A4\nor computer for drawing and presentation.\nGenerative AI for script and images",
+   "",
+   "Review Chapter 10-13\nReview Lab 5.2\nDiscussion, Exercises\nUse method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "53",
+   "Lab 5.2:\nStudents draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "Offline",
+   "LO4, LO7",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 10-13\nDrawing tools, paper A4\nor computer for drawing and presentation.\nGenerative AI for script and images",
+   "",
+   "Review Chapter 10-13\nReview Lab 5.2\nDiscussion, Exercises\nUse method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "54",
+   "Lab 5.2: (cont.)\nStudents draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "Offline",
+   "LO4, LO7",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 10-13\nDrawing tools, paper A4\nor computer for drawing and presentation.\nGenerative AI for script and images",
+   "",
+   "Review Chapter 10-13\nReview Lab 5.2\nDiscussion, Exercises\nUse method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "55",
+   "Lab 5.2: (cont.)\nStudents draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "Offline",
+   "LO4, LO7",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 10-13\nDrawing tools, paper A4\nor computer for drawing and presentation.\nGenerative AI for script and images",
+   "",
+   "Review Chapter 10-13\nReview Lab 5.2\nDiscussion, Exercises\nUse method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "56",
+   "Lab 5.2: (cont.)\nStudents draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "Offline",
+   "LO4, LO7",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 10-13\nDrawing tools, paper A4\nor computer for drawing and presentation.\nGenerative AI for script and images",
+   "",
+   "Review Chapter 10-13\nReview Lab 5.2\nDiscussion, Exercises\nUse method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "57",
+   "Lab 5.2: (cont.)\nStudents draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "Offline",
+   "LO4, LO7",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 10-13\nDrawing tools, paper A4\nor computer for drawing and presentation.\nGenerative AI for script and images",
+   "",
+   "Review Chapter 10-13\nReview Lab 5.2\nDiscussion, Exercises\nUse method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "58",
+   "Lab 5.2: (cont.)\nStudents draw 10-12 pictures that represent a story. Use the methods of perspective sketching and one point, two point, three point perspective on these pictures.",
+   "Offline",
+   "LO4, LO7",
+   "T,U",
+   "Perspective drawing handbook:\nReview chapter 10-13\nDrawing tools, paper A4\nor computer for drawing and presentation.\nGenerative AI for script and images",
+   "",
+   "Review Chapter 10-13\nReview Lab 5.2\nDiscussion, Exercises\nUse method of perspective sketching to draw pictures",
+   ""
+  ],
+  [
+   "59",
+   "Revise all chapters and prepare for the final exam.",
+   "Offline",
+   "",
+   "",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ],
+  [
+   "60",
+   "Revise all chapters and prepare for the final exam.",
+   "Offline",
+   "",
+   "",
+   "Review all chapters",
+   "",
+   "Review all chapters",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "QN1.1",
+   "How does perspective drawing mean to your project?"
+  ],
+  [
+   "2",
+   "2",
+   "QN2.1",
+   "What is your plan for your final project?"
+  ],
+  [
+   "3",
+   "3",
+   "QN3.1",
+   "Which is the best angle in perspective?"
+  ],
+  [
+   "4",
+   "4",
+   "QN4.1",
+   "How are required elements represented on an image?"
+  ],
+  [
+   "5",
+   "5",
+   "QN5.1",
+   "How to operate a team?"
+  ],
+  [
+   "6",
+   "6",
+   "QN6.1",
+   "How are the perspective elements shown in an image?"
+  ],
+  [
+   "7",
+   "7",
+   "QN7.1",
+   "Why are there differences between reality and theory?"
+  ],
+  [
+   "8",
+   "8",
+   "QN8.1",
+   "How to draw one-point perspective ?"
+  ],
+  [
+   "9",
+   "9",
+   "QN9.1",
+   "What are similarities and differences between one-point perspective with two-point perspective?"
+  ],
+  [
+   "10",
+   "10",
+   "QN10.1",
+   "What are similarities and differences between two-point perspective with three-point perspective?"
+  ],
+  [
+   "11",
+   "11",
+   "QN11.1",
+   "How to draw an object in the room with the one-point perspective method?"
+  ],
+  [
+   "12",
+   "12",
+   "QN12.1",
+   "What are the steps taken?"
+  ],
+  [
+   "13",
+   "13",
+   "QN13.1",
+   "How to draw an object in the room with the two-point perspective method?"
+  ],
+  [
+   "14",
+   "14",
+   "QN14.1",
+   "What are the steps taken?"
+  ],
+  [
+   "15",
+   "15",
+   "QN15.1",
+   "How to draw an object in the room with the three-point perspective method?"
+  ],
+  [
+   "16",
+   "16",
+   "QN16.1",
+   "What are the steps taken?"
+  ],
+  [
+   "17",
+   "17",
+   "QN17.1",
+   "Are there four-point, five-point or six-point pespective in reality? Why?"
+  ],
+  [
+   "18",
+   "18",
+   "QN18.1",
+   "What are the advantages and disadvantages of multi point perspective?"
+  ],
+  [
+   "19",
+   "22",
+   "QN22.1",
+   "How to draw a one-point, two-point, three-point perspective of a custom shape layout with a specified size? cube with side 4cm"
+  ],
+  [
+   "20",
+   "25",
+   "QN23.1",
+   "What are the differences between shade and shadow? Illustrate?"
+  ],
+  [
+   "21",
+   "26",
+   "QN24.1",
+   "What is the significance of light source in drawing the perspective of a shadow?"
+  ],
+  [
+   "22",
+   "28",
+   "QN28.1",
+   "Are shadows in perspective drawings really necessary? Explain?"
+  ],
+  [
+   "23",
+   "30",
+   "QN29.1",
+   "How to draw a random object in a room with clear shadow using sunlight?"
+  ],
+  [
+   "24",
+   "32",
+   "QN30.1",
+   "Draw a perspective of a street with shadow, shade, sunlight and parallel light rays?"
+  ],
+  [
+   "25",
+   "36",
+   "QN37.1",
+   "Are sketching in perspective drawings really necessary? Explain?"
+  ],
+  [
+   "26",
+   "38",
+   "QN38.1",
+   "How are required elements represented on an image?"
+  ],
+  [
+   "27",
+   "38",
+   "QN38.2",
+   "What are the differences between water reflection and mirror reflection?"
+  ],
+  [
+   "28",
+   "40",
+   "QN43.1",
+   "Illustrate?"
+  ],
+  [
+   "29",
+   "43",
+   "QN44.1",
+   "What does perspective sketching-freehand drawing? Does perspective sketching-freehand drawing need to apply the basic knowledge of perspective?"
+  ],
+  [
+   "30",
+   "44",
+   "QN45.1",
+   "Illustrate basic geometrical perspectives with perspective sketching-freehand drawing techniques?"
+  ],
+  [
+   "31",
+   "46",
+   "QN46.1",
+   "Draw a perspective of a room demontrating special point, combined with visual art with illusions?"
+  ],
+  [
+   "32",
+   "47",
+   "QN47.1",
+   "Develope the abovementioned sketchand add random sized objects to reflect space depth?"
+  ],
+  [
+   "33",
+   "50",
+   "QN48.1",
+   "Create a short story with 15 screens?"
+  ],
+  [
+   "34",
+   "52",
+   "QN52.1",
+   "Combine methods of perspective sketching to tell a story?"
+  ],
+  [
+   "35",
+   "54",
+   "QN53.1",
+   "How to operate a team?"
+  ],
+  [
+   "36",
+   "59",
+   "QN54.1",
+   "How is the process done? What are advantages and challenges in the process?"
+  ],
+  [
+   "37",
+   "60",
+   "QN60.1",
+   "Draw a perspective showing your creativity based on perspective methods you have learnt?"
+  ]
+ ],
+ "links": [
+  "/download/13365/S/1_PST202_Phần 1.zip",
+  "/download/13365/S/2_PST202_Phần 2.zip"
+ ]
+}

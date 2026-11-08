@@ -1,0 +1,392 @@
+{
+ "ma": "SAP490",
+ "sylID": "14222",
+ "quyetDinh": "444/QĐ-ĐHFPT dated 04/23/2026",
+ "ungVien": [
+  {
+   "sylID": "14222",
+   "code": "SAP490",
+   "name": "SAP Interdisciplinary Capstone Project_Đồ án liên ngành SAP",
+   "active": true,
+   "approved": true,
+   "decision": "444/QĐ-ĐHFPT dated 04/23/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14222",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14222",
+  "Syllabus Name": "SAP Interdisciplinary Capstone Project_Đồ án liên ngành SAP",
+  "Course Name English": "SAP Interdisciplinary Capstone Project",
+  "Subject Code": "SAP490",
+  "Learning-Teaching Method": "Inquiry-based Teaching,Experiential learning methods,Project Based Training",
+  "NoCredit": "10",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (500h)\n\n= 33.75h contact hours (1newslot/week*15week) + 1.5h capstone project defense + 464.75h self-study",
+  "Pre-Requisite": "o Pass SAP331 (BA), SAP341 (IT)\n\no Complete (*) other subjects of combo SAP and PMG20xc (x = 1, 2)\n\no Chuyên ngành BIT_SE: SWP391\n\no Chuyên ngành BIT_IS: ISP392\n\no Pass OJT202/OJB202 (not apply to international students)\n\no Pass 80% of total credits (PHE_COM* and OJT excluded)\n\n(*): GPA must be greater than or equal to 4.",
+  "Description": "The SAP inter-disciplinary capstone project provides IT and BA students with important skills and initial experiences in participating in the SAP projects. With the team size of 3-5 members (*), student can apply knowledges and skills they have learned to the real current projects, including:\n\n- Understand the lifecycle of a SAP project\n\n- Know what to do in each phase of the project\n\n- Understand the terminology used in the project lifecycle\n\n- Practice teamwork and how to interact with colleagues in a project implementation process\n\n- Ensure the proper implementation of quality requirements and schedule\n\n- Do troubleshooting\n\nAll the documents in the project implementation process and the progress reports are required to write in English.\n\n(*): Unless impossible, the team should consist of IT and BA students with a recommended IT to BA student ratio of 3:2. In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer.",
+  "StudentTasks": "# Choose appropriate project and form group.\n\n# Divide and schedule work among members.\n\n# Attend all scheduled meeting with supervisor.\n\n# Produce document and product according to project requirement and member work share.\n\n# Defend work in front of examination board, showing both project results and individual responsibility.\n\n# In case of cheating found, the whole team is not allow to defend.\n\n# Students are required to attend at least 80% of scheduled meetings with their supervisor(s) to be eligible for the thesis or capstone defense.",
+  "Tools": "Appropriate tools for design and implementation.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "444/QĐ-ĐHFPT dated 04/23/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/23/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Graduated Regulation (Quy che tot nghiep)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "Bản mềm, tài liệu xây dựng bởi FU"
+  ],
+  [
+   "2",
+   "Project Templates (Report1-Report3)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "Bản mềm, tài liệu xây dựng bởi FU"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Identify and analyze problems as well as develope and discusse possible solutions."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Configure the enterprise structure and business processes for involved modules in SAP"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Implement the solutions, including testing verification in SAP system."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply project management principles to SAP project."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Write a professional research report."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop professional working style, good teamwork skills, communication skills (including presentation skills) and compliance with the production process"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Report 1",
+   "on-going",
+   "1",
+   "10.0%",
+   "2",
+   "During the CP Progress",
+   "CLO1, CLO3, CLO4, CLO5, CLO6",
+   "Report",
+   "Topic of CP",
+   "",
+   "Graded by Instructors (Fsoft, FU_IT, FU_BA)",
+   "BA & IT: Problem Statement & Analysis\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer."
+  ],
+  [
+   "2",
+   "Report 2",
+   "on-going",
+   "1",
+   "10.0%",
+   "2",
+   "During the CP Progress",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Report",
+   "Topic of CP",
+   "",
+   "Graded by Instructors (Fsoft, FU_IT, FU_BA)",
+   "BA: Implementation.Configuration\n\nIT: Implementation.Coding\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer."
+  ],
+  [
+   "3",
+   "Report 3",
+   "on-going",
+   "1",
+   "10.0%",
+   "2",
+   "During the CP Progress",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Report",
+   "Topic of CP",
+   "",
+   "Graded by Instructors (Fsoft, FU_IT, FU_BA)",
+   "BA & IT: Implementation.Testing\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer."
+  ],
+  [
+   "4",
+   "Report 4_Final Report",
+   "on-going",
+   "1",
+   "20.0%",
+   "2",
+   "During the CP Progress",
+   "All CLOs",
+   "Report",
+   "Topic of CP",
+   "",
+   "Graded by Instructors (Fsoft, FU_IT, FU_BA)",
+   "BA & IT: Final Report\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer."
+  ],
+  [
+   "5",
+   "Final Project Presentation",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "~ 30 minutes for presentation, ~ 60 minutes for demo and Q&A. Total is 90 minutes.",
+   "All CLOs",
+   "",
+   "CP Project Presentation",
+   "",
+   "+ Document (Report): 50%\n- Problem Statements & Analysis: 15%\n- Configuration: 15% (BA)\n- Coding: 15% (IT)\n- Testing: 15%\n- Writing: 5%\n+ Defense: 50%\n- Presentation: 25%\n- Q&A: 25%",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Team Weekly Meeting:\nGuide Report No.1.1 : Problem Statements",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report1_Problem Statements & Analysis",
+   "SAP490_Tai lieu huong dan",
+   "Prepare Report No.1 (working at Fsoft daily)",
+   ""
+  ],
+  [
+   "2",
+   "Team Weekly Meeting:\nReport No.1.1 Submission",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report1_Problem Statements & Analysis",
+   "SAP490_Test Report Template",
+   "Prepare Report No.1\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "3",
+   "Team Weekly Meeting:\n\nGuide Report No.1.2 : Analysis",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report1_Problem Statements & Analysis",
+   "",
+   "Prepare Report No.1\n\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "4",
+   "Team Weekly Meeting:\nReport No.1.2 Submission",
+   "Offline",
+   "CLO1, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report1_Problem Statements & Analysis",
+   "",
+   "Prepare Report No.1\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "5",
+   "Team Weekly Meeting:\n\nGuide Report No.2: Implementation.Configuration\n\nGuide Report No.2: Implementation.Coding",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report2_Implementation.Configuration\n\nReport2_Implementation.Coding",
+   "",
+   "Prepare Report No.2\n\n(BA: Implementation.Configuration\n\nIT: Report2_Implementation.Coding)\n\n(working at Fsoft daily)\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer.",
+   ""
+  ],
+  [
+   "6",
+   "Team Weekly Meeting:\n\nImplementation.Configuration Phase 1 Plan & Guide\n\nImplementation.Configuration Phase 1 Product Demo\n\nImplementation.Coding Interaction 1 Plan & Guide\n\nImplementation.Coding Interaction 1 Product Demo",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report2_Implementation.Configuration\n\nReport2_Implementation.Coding",
+   "",
+   "Prepare Report No.2\n\nPrepare Report No.2\n\n(BA: Implementation.Configuration\n\nIT: Report2_Implementation.Coding)\n\n(working at Fsoft daily)\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer.",
+   ""
+  ],
+  [
+   "7",
+   "Team Weekly Meeting:\n\nImplementation.Configuration Phase 2 Plan & Guide\n\nImplementation.Configuration Phase 2 Product Demo\n\nImplementation.Coding Interaction 2 Plan & Guide\n\nImplementation.Coding Interaction 2 Product Demo",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report2_Implementation.Configuration\n\nReport2_Implementation.Coding",
+   "",
+   "Prepare Report No.2\n\nPrepare Report No.2\n\n(BA: Implementation.Configuration\n\nIT: Report2_Implementation.Coding)\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer.",
+   ""
+  ],
+  [
+   "8",
+   "Team Weekly Meeting:\n\nImplementation.Configuration Phase 3 Plan & Guide\n\nImplementation.Configuration Phase 3 Product Demo\n\nImplementation.Coding Interaction 3 Plan & Guide\n\nImplementation.Coding Interaction 3 Product Demo\n\nReport No.2 Submision",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report2_Implementation.Configuration\n\nReport2_Implementation.Coding",
+   "",
+   "Prepare Report No.2\n\nPrepare Report No.2\n\n(BA: Implementation.Configuration\n\nIT: Report2_Implementation.Coding)\n\n(working at Fsoft daily)\n\n*Note: In case of only IT students, the team will have to do all the work assigned to BA students under the guidance of BA lecturer.",
+   ""
+  ],
+  [
+   "9",
+   "Team Weekly Meeting:\nGuide Report No.3: Implementation.Testing",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report3_Implementation.Testing",
+   "",
+   "Prepare Report No.3\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "10",
+   "Team Weekly Meeting:\nReport No.3: Implementation.Testing Submission",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report3_Implementation.Testing",
+   "",
+   "Prepare Report No.3\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "11",
+   "Team Weekly Meeting:\nGuide Report No.4: Final Report",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report4_Final Report",
+   "",
+   "Prepare Report No.4\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "12",
+   "Team Weekly Meeting:\nFinalize Report No.4: Final Report",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report4_Final Report",
+   "",
+   "Prepare Report No.4\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "13",
+   "Team Weekly Meeting:\nFinalize Report No.4: Final Report",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report4_Final Report",
+   "",
+   "Prepare Report No.4\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "14",
+   "Team Weekly Meeting:\nReport No.4: Final Report Submission (Includes all the final project documents (completed Reports No. 1-3, both soft copy & hard copy), Software Product, and thesis presentation slide)",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5, CLO6",
+   "TU",
+   "Report4_Final Report",
+   "",
+   "Prepare Report No.4\n(working at Fsoft daily)",
+   ""
+  ],
+  [
+   "15",
+   "Team Weekly Meeting: Practice for Presentation of Capstone Project",
+   "Offline",
+   "All CLOs",
+   "TU",
+   "Report4_Final Report",
+   "",
+   "Practice for Presentation of Capstone Project\n(working at Fsoft daily)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/12403/S/1_SAP490_Tai lieu huong dan.zip",
+  "/download/12403/S/2_SAP490_Test Report Template.zip"
+ ]
+}

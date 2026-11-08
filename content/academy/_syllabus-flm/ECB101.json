@@ -1,0 +1,1316 @@
+{
+ "ma": "ECB101",
+ "sylID": "13843",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13843",
+   "code": "ECB101",
+   "name": "Culture of English-Speaking Countries_Văn hóa các nước nói tiếng Anh",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13843",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13843",
+  "Syllabus Name": "Culture of English-Speaking Countries_Văn hóa các nước nói tiếng Anh",
+  "Course Name English": "",
+  "Subject Code": "ECB101",
+  "Learning-Teaching Method": "Lecture, Presentation, Field trip, Project-based learning, Active learning, Flipped classroom",
+  "NoCredit": "3",
+  "Degree Level": "Advanced",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "* This course is designed to introduce students to significant features of cultural, social, political, and artistic life in modern Britain and different aspects of American cultural and socio-political life such as the American Dream & American identity, race, immigration, religion, and the global transmission of American culture. Students will develop a broader and deeper understanding of various aspects of British and American culture.\n* The course integrates a range of scholarly texts and up-to-date multimedia materials, allowing students to engage critically with key theoretical concepts and their contemporary evolutions in current events.\n* Learning takes place through active class participation, independent study, project-based assignments, group presentations, debates, and creative multimedia tasks (including responsible use of AI tools).\n* Through this course, students will develop academic reading and writing skills, analytical thinking, cultural awareness, teamwork, and oral communication.\n\nAssessment structure:\n1) Ongoing assessment\n- Assignments: 04*15%: 60% (Lecturers wishing to apply PBL may also combine 2 or 3 assignments into 1 project and adjust the weight accordingly)\n- Group Project Essay: 01*20%: 20%\n2) Final Examination (FE) 20%\n3) Final Result 100%\n4) Completion Criteria: Ongoing assessment >0 & Group Project Essay >=4/10, Final Exam Score >=4/10, Final Result >=5/10.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfil tasks given by instructor before and after class\n- Use their own laptop in class only for learning purposes",
+  "Tools": "- Textbooks\n- Multimedia resources\n- Search engines\n- Writing and grammar check tools\n- Digital technology tools to assist learning, information search, and document synthesis\n- APA Style Guide (https://apastyle.apa.org/style-grammar-guidelines/references/examples)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "American Cultural Studies - An introduction to American Culture (student's book)",
+   "Neil Campbell and Alasdair Kean",
+   "Routledge",
+   "2016",
+   "4th",
+   "9781138833142",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "British Culture - An introduction (student's book)",
+   "David P. Christopher",
+   "Routledge",
+   "2015",
+   "3rd",
+   "9780415810852",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Companion websites:\nhttps://routledgetextbooks.com/textbooks/9780415810852/\nhttps://routledgetextbooks.com/textbooks/9781138833142/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Multimedia resources",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "See detail in Schedule (Student Materials)"
+  ],
+  [
+   "5",
+   "Digital technology tools (e.g. AI) for self-study, searching & synthesizing information, visual presentation & design, etc.",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "As guided by lecturer based on most relevant tools available"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Develop a broader and deeper understanding of key aspects of American historical and cultural developments"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Develop a broader and deeper understanding of various aspects of social and cultural context in contemporary Britain"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Identify and describe major concepts related to national identity, race relations, immigration, gender politics, and cultural transmission in American and British societies"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Produce clear, coherent, and well-structured academic essays and oral presentations on a range of topics in English"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Critically appraise a range of materials and integrate additional academic sources to produce informed, evidence-based, and properly referenced analyses"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Apply a range of digital technology tools, including multimedia platforms and AI applications, effectively, critically, and responsibly to support learning"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Develop and refine collaborative working skills by working effectively in groups to plan, research, create, and deliver assignments"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Show autonomy and active engagement by participating constructively in class and taking responsibility for personal learning"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Demonstrate openness, respect, and cultural sensitivity when discussing complex topics such as race, immigration, gender, religion, and national identity"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final Examination",
+   "Final exam",
+   "1",
+   "20.0%",
+   "4",
+   "25' / group (10' presentation; 15' Q&A)",
+   "All LOs",
+   "Group Project Presentation",
+   "Group Presentation",
+   "Knowledge of studied topics and additional research",
+   "In the exam room.\nThe groups must present on their essay (10mn presentation followed by 15mn of Q&A).\nThe marking rubric will be provided to the examiner.\nStudents must answer questions from the examiner individually.",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 1",
+   "Ongoing",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO8, LO9",
+   "Suggested: Individual written assignment at lecturer's discretion (essay, critical thinking questions, MCQs related to key concepts discussed in class, etc.)",
+   "N/A",
+   "Knowledge of studied topics and additional research",
+   "In class",
+   "Flexible time and topics based on lecturer's and students' preference. Lecturers wishing to apply PBL may also combine 2 or 3 assignments into 1 project and adjust the weight accordingly."
+  ],
+  [
+   "3",
+   "Assignment 2",
+   "Ongoing",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO7, LO8, LO9",
+   "Suggested: Individual or group written & oral assignment at lecturer's discretion (report of a field trip, presentation on a specific cultural aspect, brochure of a product, book or film review, etc.)",
+   "N/A",
+   "Knowledge of studied topics and additional research",
+   "In class",
+   "Flexible time and topics based on lecturer's and students' preference. Lecturers wishing to apply PBL may also combine 2 or 3 assignments into 1 project and adjust the weight accordingly."
+  ],
+  [
+   "4",
+   "Assignment 3",
+   "Ongoing",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO7, LO8, LO9",
+   "Suggested: Group oral assignment at lecturer's discretion (debate, role-play, performance, historical event re-enactment, etc.)",
+   "N/A",
+   "Knowledge of studied topics and additional research",
+   "In class",
+   "Flexible time and topics based on lecturer's and students' preference. Lecturers wishing to apply PBL may also combine 2 or 3 assignments into 1 project and adjust the weight accordingly."
+  ],
+  [
+   "5",
+   "Assignment 4",
+   "Ongoing",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO6, LO7, LO8, LO9",
+   "Suggested: Group creative assignment with AI application at lecturer's discretion (e.g. animated video presentations on specific cultural or socio-political topics, etc.)",
+   "N/A",
+   "Knowledge of studied topics and additional research",
+   "In class",
+   "Flexible time and topics based on lecturer's and students' preference. Lecturers wishing to apply PBL may also combine 2 or 3 assignments into 1 project and adjust the weight accordingly."
+  ],
+  [
+   "6",
+   "Group Project Essay",
+   "Ongoing",
+   "1",
+   "20.0%",
+   "4",
+   "N/A",
+   "All LOs",
+   "Group Project Essay",
+   "1 essay of 500 words",
+   "Knowledge of studied topics and additional research",
+   "In groups of 3, students write an analytical essay on a specific question given by lecturer based on a contemporary source document (newspaper articles, educational videos, news reports, Ted Talks, etc.) related to one of the topics discussed in the course. The essay must:\n1) Address the question & topic by referring to specific examples from the source material, drawing on knowledge of studied topics, and researching additional sources to support the analysis.\n2) Use appropriate references in APA style.\nWord count: 500 words\nStudents submit the essay at the end of the course (the last day). The essay is the source for the final exam.\nStudents must also submit the presentation slides for the final exam on the last day of the course. Lecturers will forward the slides to the Exam Department for the final exam presentation.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction:\n\n- Overview of topics covered, learning materials, and grading structure\n\n- Digital technology tools to assist learning, information search, and document synthesis (e.g. Quizizz AI, Grammarly, NotebookLM, and any relevant tools available)\n\n- APA Style Guide (https://apastyle.apa.org/style-grammar-guidelines/references/examples)\n\nIcebreaker games / activities on some of the most popular aspects of American and British cultures.",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "",
+   "link1-1",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Course Introduction:\n- Overview of topics covered, learning materials, and grading structure\n- Digital technology tools to assist learning, information search, and document synthesis (e.g. Quizizz AI, Grammarly, NotebookLM, and any relevant tools available)\n- APA Style Guide (https://apastyle.apa.org/style-grammar-guidelines/references/examples)\nIcebreaker games / activities on some of the most popular aspects of American and British cultures.",
+   "Offline",
+   "LO1, LO2",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Course Introduction:\n- Overview of topics covered, learning materials, and grading structure\n- Digital technology tools to assist learning, information search, and document synthesis (e.g. Quizizz AI, Grammarly, NotebookLM, and any relevant tools available)\n- APA Style Guide (https://apastyle.apa.org/style-grammar-guidelines/references/examples)\nIcebreaker games / activities on some of the most popular aspects of American and British cultures.",
+   "Offline",
+   "LO1, LO2",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "American Culture and Identity: What is the American Dream?\n- Origins and definition\n- American Dream and American Creed\n- Contradictions and limitations\n- Evolution",
+   "Offline",
+   "LO1, LO3, LO6, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* Extract from The Great Gatsby\n* Former President Barack Obama's speech on the American Dream (https://youtu.be/AkcRmvfPhx8?si=w9Xp1IELVbLC5VXz)\n* The Evolution of the American Dream (https://www.thecollector.com/american-dream-evolution/)\n* Is the American dream really dead? (https://www.theguardian.com/inequality/2017/jun/20/is-the-american-dream-really-dead)\n* What does the American dream mean in 2025? (https://www.youtube.com/watch?v=l43hsf-SsH8)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "5",
+   "American Culture and Identity: What is the American Dream?\n- Origins and definition\n- American Dream and American Creed\n- Contradictions and limitations\n- Evolution",
+   "Offline",
+   "LO1, LO3, LO6, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* Extract from The Great Gatsby\n* Former President Barack Obama's speech on the American Dream (https://youtu.be/AkcRmvfPhx8?si=w9Xp1IELVbLC5VXz)\n* The Evolution of the American Dream (https://www.thecollector.com/american-dream-evolution/)\n* Is the American dream really dead? (https://www.theguardian.com/inequality/2017/jun/20/is-the-american-dream-really-dead)\n* What does the American dream mean in 2025? (https://www.youtube.com/watch?v=l43hsf-SsH8)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "6",
+   "American Culture and Identity: What is the American Dream?\n- Origins and definition\n- American Dream and American Creed\n- Contradictions and limitations\n- Evolution",
+   "Offline",
+   "LO1, LO3, LO6, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* Extract from The Great Gatsby\n* Former President Barack Obama's speech on the American Dream (https://youtu.be/AkcRmvfPhx8?si=w9Xp1IELVbLC5VXz)\n* The Evolution of the American Dream (https://www.thecollector.com/american-dream-evolution/)\n* Is the American dream really dead? (https://www.theguardian.com/inequality/2017/jun/20/is-the-american-dream-really-dead)\n* What does the American dream mean in 2025? (https://www.youtube.com/watch?v=l43hsf-SsH8)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "7",
+   "Land of the free? Ethnicity and immigration in the US\n- Immigration as part of the fabric of American identity and the American Dream\n- The American 'melting pot' and its limitations\n- 'The New Colussus' revisited: the new era of border control and immigration restrictions",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 2\n* The New Colussus by Emma Lazarus\n* The Statue of Liberty and Ellis Island (https://www.statueofliberty.org/ellis-island/)\n* Unless you're Native American, you came from someplace else (https://www.youtube.com/watch?v=aiXuEk_CyWs)\n* A Conversation With Native Americans on Race (https://www.youtube.com/watch?v=siMal6QVblE)\n* Maddern, S. W. (2013). Melting pot theory. The encyclopedia of global human migration, 4, 1-4.\n* American Immigration Council (2025). Mass Deportation: Analyzing the Trump Administration’s Attacks on Immigrants, Democracy, and America (https://www.americanimmigrationcouncil.org/report/mass-deportation-trump-democracy/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "8",
+   "Land of the free? Ethnicity and immigration in the US\n- Immigration as part of the fabric of American identity and the American Dream\n- The American 'melting pot' and its limitations\n- 'The New Colussus' revisited: the new era of border control and immigration restrictions",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 2\n* The New Colussus by Emma Lazarus\n* The Statue of Liberty and Ellis Island (https://www.statueofliberty.org/ellis-island/)\n* Unless you're Native American, you came from someplace else (https://www.youtube.com/watch?v=aiXuEk_CyWs)\n* A Conversation With Native Americans on Race (https://www.youtube.com/watch?v=siMal6QVblE)\n* Maddern, S. W. (2013). Melting pot theory. The encyclopedia of global human migration, 4, 1-4.\n* American Immigration Council (2025). Mass Deportation: Analyzing the Trump Administration’s Attacks on Immigrants, Democracy, and America (https://www.americanimmigrationcouncil.org/report/mass-deportation-trump-democracy/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "9",
+   "Land of the free? Ethnicity and immigration in the US\n- Immigration as part of the fabric of American identity and the American Dream\n- The American 'melting pot' and its limitations\n- 'The New Colussus' revisited: the new era of border control and immigration restrictions",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 2\n* The New Colussus by Emma Lazarus\n* The Statue of Liberty and Ellis Island (https://www.statueofliberty.org/ellis-island/)\n* Unless you're Native American, you came from someplace else (https://www.youtube.com/watch?v=aiXuEk_CyWs)\n* A Conversation With Native Americans on Race (https://www.youtube.com/watch?v=siMal6QVblE)\n* Maddern, S. W. (2013). Melting pot theory. The encyclopedia of global human migration, 4, 1-4.\n* American Immigration Council (2025). Mass Deportation: Analyzing the Trump Administration’s Attacks on Immigrants, Democracy, and America (https://www.americanimmigrationcouncil.org/report/mass-deportation-trump-democracy/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "10",
+   "Race in American society: From slavery to Black Lives Matter\n- American history of racial injustice: slavery, segregation, mass incarceration and police violence\n- Black Lives Matter",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 3\n* Slavery to Mass Incarceration (https://eji.org/racial-justice/)\n* Montgomery Bus Boycott (https://www.history.com/articles/montgomery-bus-boycott)\n* Kindred by Olivia Butler (A critical analysis of the novel is available here: https://time.com/6240459/octavia-butler-kindred-human-behavior/)\n* See You Yesterday (A review of the movie can be found here: https://www.theguardian.com/film/2019/may/03/see-you-yesterday-review-poignant-time-travel-caper-is-a-netflix-win)\n* The global impact of George Floyd: How Black Lives Matter protests shaped movements around the world (https://www.cbsnews.com/news/george-floyd-black-lives-matter-impact/)\n* Bryan Stevenson: The Real Reason DEI Programs Failed (https://www.youtube.com/watch?v=wv4EQ-NiwjI) - Full conversation available at https://www.youtube.com/watch?v=1kT_NVj14qw",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "11",
+   "Race in American society: From slavery to Black Lives Matter\n- American history of racial injustice: slavery, segregation, mass incarceration and police violence\n- Black Lives Matter",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 3\n* Slavery to Mass Incarceration (https://eji.org/racial-justice/)\n* Montgomery Bus Boycott (https://www.history.com/articles/montgomery-bus-boycott)\n* Kindred by Olivia Butler (A critical analysis of the novel is available here: https://time.com/6240459/octavia-butler-kindred-human-behavior/)\n* See You Yesterday (A review of the movie can be found here: https://www.theguardian.com/film/2019/may/03/see-you-yesterday-review-poignant-time-travel-caper-is-a-netflix-win)\n* The global impact of George Floyd: How Black Lives Matter protests shaped movements around the world (https://www.cbsnews.com/news/george-floyd-black-lives-matter-impact/)\n* Bryan Stevenson: The Real Reason DEI Programs Failed (https://www.youtube.com/watch?v=wv4EQ-NiwjI) - Full conversation available at https://www.youtube.com/watch?v=1kT_NVj14qw",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "12",
+   "Race in American society: From slavery to Black Lives Matter\n- American history of racial injustice: slavery, segregation, mass incarceration and police violence\n- Black Lives Matter",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 3\n* Slavery to Mass Incarceration (https://eji.org/racial-justice/)\n* Montgomery Bus Boycott (https://www.history.com/articles/montgomery-bus-boycott)\n* Kindred by Olivia Butler (A critical analysis of the novel is available here: https://time.com/6240459/octavia-butler-kindred-human-behavior/)\n* See You Yesterday (A review of the movie can be found here: https://www.theguardian.com/film/2019/may/03/see-you-yesterday-review-poignant-time-travel-caper-is-a-netflix-win)\n* The global impact of George Floyd: How Black Lives Matter protests shaped movements around the world (https://www.cbsnews.com/news/george-floyd-black-lives-matter-impact/)\n* Bryan Stevenson: The Real Reason DEI Programs Failed (https://www.youtube.com/watch?v=wv4EQ-NiwjI) - Full conversation available at https://www.youtube.com/watch?v=1kT_NVj14qw",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "13",
+   "Race in American society: From slavery to Black Lives Matter - Suggested activity:\n- Watch the movie Just Mercy\n- Reflect on the links between the American criminal justice system and American long history of racial injustice",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "Suggested material: Just Mercy",
+   "",
+   "Suggested activity: Assignment based on the movie Just Mercy",
+   ""
+  ],
+  [
+   "14",
+   "Race in American society: From slavery to Black Lives Matter - Suggested activity:\n- Watch the movie Just Mercy\n- Reflect on the links between the American criminal justice system and American long history of racial injustice",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "Suggested material: Just Mercy",
+   "",
+   "Suggested activity: Assignment based on the movie Just Mercy",
+   ""
+  ],
+  [
+   "15",
+   "Race in American society: From slavery to Black Lives Matter - Suggested activity:\n- Watch the movie Just Mercy\n- Reflect on the links between the American criminal justice system and American long history of racial injustice",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "Suggested material: Just Mercy",
+   "",
+   "Suggested activity: Assignment based on the movie Just Mercy",
+   ""
+  ],
+  [
+   "16",
+   "In God we trust? Religion in American life\n- Church and State: the First Amendment\n- American civil religion: the ideal of a non-sectarian, unifying God\n- Religion in American life: the megachurches\n- The growing inseparability between religion and politics: the Christian Right",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 4\n* The complex history of 'In God We Trust' (https://theconversation.com/the-complex-history-of-in-god-we-trust-91117)\n* The Religious Landscape Study (https://www.pewresearch.org/collections/religious-landscape-study/)\n* Lakewood Church (https://www.lakewoodchurch.com/) and Willow Creek Community Church (https://www.willowcreek.org/)\n* The rise of the American megachurches and new challenges to their influence (https://youtu.be/1Dhb_xKs6fI?si=6vEiJchGV5X_xggL)\n* White Christian nationalists are poised to remake America in their image during Trump’s second term (https://edition.cnn.com/2025/01/12/us/white-christian-nationalism-du-mez-cec)\n* Extracts from The Handmaid's Tale",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "17",
+   "In God we trust? Religion in American life\n- Church and State: the First Amendment\n- American civil religion: the ideal of a non-sectarian, unifying God\n- Religion in American life: the megachurches\n- The growing inseparability between religion and politics: the Christian Right",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 4\n* The complex history of 'In God We Trust' (https://theconversation.com/the-complex-history-of-in-god-we-trust-91117)\n* The Religious Landscape Study (https://www.pewresearch.org/collections/religious-landscape-study/)\n* Lakewood Church (https://www.lakewoodchurch.com/) and Willow Creek Community Church (https://www.willowcreek.org/)\n* The rise of the American megachurches and new challenges to their influence (https://youtu.be/1Dhb_xKs6fI?si=6vEiJchGV5X_xggL)\n* White Christian nationalists are poised to remake America in their image during Trump’s second term (https://edition.cnn.com/2025/01/12/us/white-christian-nationalism-du-mez-cec)\n* Extracts from The Handmaid's Tale",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "18",
+   "In God we trust? Religion in American life\n- Church and State: the First Amendment\n- American civil religion: the ideal of a non-sectarian, unifying God\n- Religion in American life: the megachurches\n- The growing inseparability between religion and politics: the Christian Right",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 4\n* The complex history of 'In God We Trust' (https://theconversation.com/the-complex-history-of-in-god-we-trust-91117)\n* The Religious Landscape Study (https://www.pewresearch.org/collections/religious-landscape-study/)\n* Lakewood Church (https://www.lakewoodchurch.com/) and Willow Creek Community Church (https://www.willowcreek.org/)\n* The rise of the American megachurches and new challenges to their influence (https://youtu.be/1Dhb_xKs6fI?si=6vEiJchGV5X_xggL)\n* White Christian nationalists are poised to remake America in their image during Trump’s second term (https://edition.cnn.com/2025/01/12/us/white-christian-nationalism-du-mez-cec)\n* Extracts from The Handmaid's Tale",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "19",
+   "The transmission of American culture\n- The impact of specific areas of American popular culture like music, Hollywood, television, and sports on other societies\n- McDonaldization: homogenization of business and of taste?\n- Local Americanisation: accommodation and resistance\n- The return of protectionism: tariffs and trade wars",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 10\n* Examples of popular American artists, films, television shows, sports (and sportspeople), food, and cultural traditions\n* McDonaldization: How Fast Food Homogenizes Global Taste and Culture (https://spinetimes.pk/mcdonaldization-how-fast-food-homogenizes-global-taste-and-culture/)\n* The McDonaldization of society (https://youtu.be/gCj_VhLgcmY?si=wZHHa5WhOy3kutJ6)\n* Why Starbucks Struggles In Vietnam's $1B Coffee Market (https://www.youtube.com/watch?v=llwyY4BDbfc)\n* Starbucks Vietnam: Why the US chain cannot crack a coffee-loving nation (https://www.bbc.com/news/world-asia-66167222)\n* The False Dilemma Between Protectionism and Free Trade (https://www.tni.org/en/article/the-false-dilemma-between-protectionism-and-free-trade)\n* The populist logic behind Trump’s tariffs (https://blogs.lse.ac.uk/politicsandpolicy/the-populist-logic-behind-trumps-tariffs/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "20",
+   "The transmission of American culture\n- The impact of specific areas of American popular culture like music, Hollywood, television, and sports on other societies\n- McDonaldization: homogenization of business and of taste?\n- Local Americanisation: accommodation and resistance\n- The return of protectionism: tariffs and trade wars",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 10\n* Examples of popular American artists, films, television shows, sports (and sportspeople), food, and cultural traditions\n* McDonaldization: How Fast Food Homogenizes Global Taste and Culture (https://spinetimes.pk/mcdonaldization-how-fast-food-homogenizes-global-taste-and-culture/)\n* The McDonaldization of society (https://youtu.be/gCj_VhLgcmY?si=wZHHa5WhOy3kutJ6)\n* Why Starbucks Struggles In Vietnam's $1B Coffee Market (https://www.youtube.com/watch?v=llwyY4BDbfc)\n* Starbucks Vietnam: Why the US chain cannot crack a coffee-loving nation (https://www.bbc.com/news/world-asia-66167222)\n* The False Dilemma Between Protectionism and Free Trade (https://www.tni.org/en/article/the-false-dilemma-between-protectionism-and-free-trade)\n* The populist logic behind Trump’s tariffs (https://blogs.lse.ac.uk/politicsandpolicy/the-populist-logic-behind-trumps-tariffs/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "21",
+   "The transmission of American culture\n- The impact of specific areas of American popular culture like music, Hollywood, television, and sports on other societies\n- McDonaldization: homogenization of business and of taste?\n- Local Americanisation: accommodation and resistance\n- The return of protectionism: tariffs and trade wars",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 10\n* Examples of popular American artists, films, television shows, sports (and sportspeople), food, and cultural traditions\n* McDonaldization: How Fast Food Homogenizes Global Taste and Culture (https://spinetimes.pk/mcdonaldization-how-fast-food-homogenizes-global-taste-and-culture/)\n* The McDonaldization of society (https://youtu.be/gCj_VhLgcmY?si=wZHHa5WhOy3kutJ6)\n* Why Starbucks Struggles In Vietnam's $1B Coffee Market (https://www.youtube.com/watch?v=llwyY4BDbfc)\n* Starbucks Vietnam: Why the US chain cannot crack a coffee-loving nation (https://www.bbc.com/news/world-asia-66167222)\n* The False Dilemma Between Protectionism and Free Trade (https://www.tni.org/en/article/the-false-dilemma-between-protectionism-and-free-trade)\n* The populist logic behind Trump’s tariffs (https://blogs.lse.ac.uk/politicsandpolicy/the-populist-logic-behind-trumps-tariffs/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "22",
+   "The transmission of American culture - Suggested activities:\n- Using your local environment as a resource, go out with a digital camera and record how the cultural landscape has been American­ised. Examine leisure, retail, fast food outlets, supermarkets, bill­boards and fashion.\n- Take an American product or brand and design an advertising campaign for the Vietnamese market. You can present your ideas in a mind map, drawing, or poster. You need to come up with a slogan that appeals to Vietnamese customers (AI application possible).",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "A range of resources and materials based on students' choice + relevant AI tools",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "23",
+   "The transmission of American culture - Suggested activities:\n- Using your local environment as a resource, go out with a digital camera and record how the cultural landscape has been American­ised. Examine leisure, retail, fast food outlets, supermarkets, bill­boards and fashion.\n- Take an American product or brand and design an advertising campaign for the Vietnamese market. You can present your ideas in a mind map, drawing, or poster. You need to come up with a slogan that appeals to Vietnamese customers (AI application possible).",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "A range of resources and materials based on students' choice + relevant AI tools",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "24",
+   "The transmission of American culture - Suggested activities:\n- Using your local environment as a resource, go out with a digital camera and record how the cultural landscape has been American­ised. Examine leisure, retail, fast food outlets, supermarkets, bill­boards and fashion.\n- Take an American product or brand and design an advertising campaign for the Vietnamese market. You can present your ideas in a mind map, drawing, or poster. You need to come up with a slogan that appeals to Vietnamese customers (AI application possible).",
+   "Offline",
+   "LO1, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "A range of resources and materials based on students' choice + relevant AI tools",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "25",
+   "British Culture: Historical and Social Context\n- Key events in contemporary British politics and society since 1945, focusing on some key years/eras and their socio-political and cultural events",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* Online resources",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "26",
+   "British Culture: Historical and Social Context\n- Key events in contemporary British politics and society since 1945, focusing on some key years/eras and their socio-political and cultural events",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* Online resources",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "27",
+   "British Culture: Historical and Social Context\n- Key events in contemporary British politics and society since 1945, focusing on some key years/eras and their socio-political and cultural events",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* Online resources",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "28",
+   "British Culture: Historical and Social Context\n- Overview of UK elections and political parties\n- A model in crisis: challenges to the 'two-party' system",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* How the General Election works (https://www.youtube.com/watch?v=wDRDS2kiAbE)\n* The two-party system may finally be breaking (https://blogs.lse.ac.uk/politicsandpolicy/the-two-party-system-may-finally-be-breaking/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "29",
+   "British Culture: Historical and Social Context\n- Overview of UK elections and political parties\n- A model in crisis: challenges to the 'two-party' system",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* How the General Election works (https://www.youtube.com/watch?v=wDRDS2kiAbE)\n* The two-party system may finally be breaking (https://blogs.lse.ac.uk/politicsandpolicy/the-two-party-system-may-finally-be-breaking/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "30",
+   "British Culture: Historical and Social Context\n- Overview of UK elections and political parties\n- A model in crisis: challenges to the 'two-party' system",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 1\n* How the General Election works (https://www.youtube.com/watch?v=wDRDS2kiAbE)\n* The two-party system may finally be breaking (https://blogs.lse.ac.uk/politicsandpolicy/the-two-party-system-may-finally-be-breaking/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "31",
+   "British language and literature: A multitude of voices\n- English accents and dialects: regional diversity\n- Language and class in British society\n- Linguistic diversity in contemporary Britain",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 2\n* One woman, 17 British accents (https://www.youtube.com/watch?v=FyyT2jmVPAk)\n* How to do a Cockney accent (https://www.youtube.com/watch?v=j2w1dwQI7e8)\n* Michael Caine: An Accent That Broke Class Barriers (https://www.youtube.com/watch?v=XBjp1oEZcwU)\n* British people still think some accents are smarter than others (https://theconversation.com/british-people-still-think-some-accents-are-smarter-than-others-what-that-means-in-the-workplace-126964)\n* Language, England and Wales: Census 2021 (https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/language/bulletins/languageenglandandwales/census2021)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "32",
+   "British language and literature: A multitude of voices\n- English accents and dialects: regional diversity\n- Language and class in British society\n- Linguistic diversity in contemporary Britain",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 2\n* One woman, 17 British accents (https://www.youtube.com/watch?v=FyyT2jmVPAk)\n* How to do a Cockney accent (https://www.youtube.com/watch?v=j2w1dwQI7e8)\n* Michael Caine: An Accent That Broke Class Barriers (https://www.youtube.com/watch?v=XBjp1oEZcwU)\n* British people still think some accents are smarter than others (https://theconversation.com/british-people-still-think-some-accents-are-smarter-than-others-what-that-means-in-the-workplace-126964)\n* Language, England and Wales: Census 2021 (https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/language/bulletins/languageenglandandwales/census2021)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "33",
+   "British language and literature: A multitude of voices\n- English accents and dialects: regional diversity\n- Language and class in British society\n- Linguistic diversity in contemporary Britain",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 2\n* One woman, 17 British accents (https://www.youtube.com/watch?v=FyyT2jmVPAk)\n* How to do a Cockney accent (https://www.youtube.com/watch?v=j2w1dwQI7e8)\n* Michael Caine: An Accent That Broke Class Barriers (https://www.youtube.com/watch?v=XBjp1oEZcwU)\n* British people still think some accents are smarter than others (https://theconversation.com/british-people-still-think-some-accents-are-smarter-than-others-what-that-means-in-the-workplace-126964)\n* Language, England and Wales: Census 2021 (https://www.ons.gov.uk/peoplepopulationandcommunity/culturalidentity/language/bulletins/languageenglandandwales/census2021)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "34",
+   "British language and literature: A multitude of voices\n- Notable contemporary British writers and their works\n- Multicultural portraits: Literature as reflection of profound social changes and cultural diversity in modern Britain",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 5\n* Excerpts, short stories, and poems from writers such as Salman Rushdie, Bernardine Evaristo, Zadie Smith, Kazuo Ishiguro, Benjamin Zephaniah\n* Zephaniah and his students perform The British (https://www.youtube.com/watch?v=Aq13dvtZjP4)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "35",
+   "British language and literature: A multitude of voices\n- Notable contemporary British writers and their works\n- Multicultural portraits: Literature as reflection of profound social changes and cultural diversity in modern Britain",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 5\n* Excerpts, short stories, and poems from writers such as Salman Rushdie, Bernardine Evaristo, Zadie Smith, Kazuo Ishiguro, Benjamin Zephaniah\n* Zephaniah and his students perform The British (https://www.youtube.com/watch?v=Aq13dvtZjP4)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "36",
+   "British language and literature: A multitude of voices\n- Notable contemporary British writers and their works\n- Multicultural identities: Literature as reflection of profound social changes and cultural diversity in modern Britain",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 5\n* Excerpts, short stories, and poems from writers such as Salman Rushdie, Bernardine Evaristo, Zadie Smith, Kazuo Ishiguro, Benjamin Zephaniah\n* Zephaniah and his students perform The British (https://www.youtube.com/watch?v=Aq13dvtZjP4)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "37",
+   "Immigration and race in contemporary Britain: Legacies of the British Empire\n* Post-war immigration in Britain: The Windrush Generation\n* Anti-immigration and racism: from Enoch Powell to Nigel Farage\n* Islamophobia and asylum protests: the changing faces of racism",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Who are the Windrush generation? (https://www.youtube.com/watch?v=qKJ-iqFmHOQ)\n* My Life as an Immigrant in 1960s Britain (https://www.youtube.com/watch?v=e9fnFii5JEs)\n* Enoch Powell’s ‘Rivers of Blood’ speech: Britain and race in the mid 20th-century (https://www.historyextra.com/period/20th-century/enoch-powell-rivers-blood-speech-what/)\n* Racism never went away – it simply changed shape (https://theconversation.com/racism-never-went-away-it-simply-changed-shape-270325)\n* Stephen Lawrence: Who was he and what happened to him? (https://www.youtube.com/watch?v=vwmLozeg4sg)\n* The Rise in Racial Tension and Growing Anti-immigration Sentiment in the United Kingdom (https://www.humanrightsresearch.org/post/the-rise-in-racial-tension-and-growing-anti-immigration-sentiment-in-the-united-kingdom)\n* Islamophobia: the intensification of racism against Muslim communities in the UK (https://www.runnymedetrust.org/publications/islamophobia-the-intensification-of-racism-against-muslim-communities-in-the-uk)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "38",
+   "Immigration and race in contemporary Britain: Legacies of the British Empire\n* Post-war immigration in Britain: The Windrush Generation\n* Anti-immigration and racism: from Enoch Powell to Nigel Farage\n* Islamophobia and asylum protests: the changing faces of racism",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Who are the Windrush generation? (https://www.youtube.com/watch?v=qKJ-iqFmHOQ)\n* My Life as an Immigrant in 1960s Britain (https://www.youtube.com/watch?v=e9fnFii5JEs)\n* Enoch Powell’s ‘Rivers of Blood’ speech: Britain and race in the mid 20th-century (https://www.historyextra.com/period/20th-century/enoch-powell-rivers-blood-speech-what/)\n* Racism never went away – it simply changed shape (https://theconversation.com/racism-never-went-away-it-simply-changed-shape-270325)\n* Stephen Lawrence: Who was he and what happened to him? (https://www.youtube.com/watch?v=vwmLozeg4sg)\n* The Rise in Racial Tension and Growing Anti-immigration Sentiment in the United Kingdom (https://www.humanrightsresearch.org/post/the-rise-in-racial-tension-and-growing-anti-immigration-sentiment-in-the-united-kingdom)\n* Islamophobia: the intensification of racism against Muslim communities in the UK (https://www.runnymedetrust.org/publications/islamophobia-the-intensification-of-racism-against-muslim-communities-in-the-uk)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "39",
+   "Immigration and race in contemporary Britain: Legacies of the British Empire\n* Post-war immigration in Britain: The Windrush Generation\n* Anti-immigration and racism: from Enoch Powell to Nigel Farage\n* Islamophobia and asylum protests: the changing faces of racism",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Who are the Windrush generation? (https://www.youtube.com/watch?v=qKJ-iqFmHOQ)\n* My Life as an Immigrant in 1960s Britain (https://www.youtube.com/watch?v=e9fnFii5JEs)\n* Enoch Powell’s ‘Rivers of Blood’ speech: Britain and race in the mid 20th-century (https://www.historyextra.com/period/20th-century/enoch-powell-rivers-blood-speech-what/)\n* Racism never went away – it simply changed shape (https://theconversation.com/racism-never-went-away-it-simply-changed-shape-270325)\n* Stephen Lawrence: Who was he and what happened to him? (https://www.youtube.com/watch?v=vwmLozeg4sg)\n* The Rise in Racial Tension and Growing Anti-immigration Sentiment in the United Kingdom (https://www.humanrightsresearch.org/post/the-rise-in-racial-tension-and-growing-anti-immigration-sentiment-in-the-united-kingdom)\n* Islamophobia: the intensification of racism against Muslim communities in the UK (https://www.runnymedetrust.org/publications/islamophobia-the-intensification-of-racism-against-muslim-communities-in-the-uk)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "40",
+   "The British Press\n- Print and broadcast media\n- Distinction between ‘broadsheets’ and ‘tabloids’\n- Press ethics and conduct problems",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 4\n* Examples of Biritish broadcast and print media (TV news channels, broadsheets, and tabloids)\n* News of the World: 10 years since phone-hacking scandal brought down tabloid (https://www.theguardian.com/media/2021/jul/10/news-of-the-world-10-years-since-phone-hacking-scandal-brought-down-tabloid)\n* Press Harassment, IPSO’s Ineffectiveness, and Why We’re No Closer To Fixing It (https://www.media-diversity.org/press-harassment-ipsos-ineffectiveness-and-why-were-no-closer-to-fixing-it/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "41",
+   "The British Press\n- Print and broadcast media\n- Distinction between ‘broadsheets’ and ‘tabloids’\n- Press ethics and conduct problems",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 4\n* Examples of Biritish broadcast and print media (TV news channels, broadsheets, and tabloids)\n* News of the World: 10 years since phone-hacking scandal brought down tabloid (https://www.theguardian.com/media/2021/jul/10/news-of-the-world-10-years-since-phone-hacking-scandal-brought-down-tabloid)\n* Press Harassment, IPSO’s Ineffectiveness, and Why We’re No Closer To Fixing It (https://www.media-diversity.org/press-harassment-ipsos-ineffectiveness-and-why-were-no-closer-to-fixing-it/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "42",
+   "The British Press\n- Print and broadcast media\n- Distinction between ‘broadsheets’ and ‘tabloids’\n- Press ethics and conduct problems",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 4\n* Examples of Biritish broadcast and print media (TV news channels, broadsheets, and tabloids)\n* News of the World: 10 years since phone-hacking scandal brought down tabloid (https://www.theguardian.com/media/2021/jul/10/news-of-the-world-10-years-since-phone-hacking-scandal-brought-down-tabloid)\n* Press Harassment, IPSO’s Ineffectiveness, and Why We’re No Closer To Fixing It (https://www.media-diversity.org/press-harassment-ipsos-ineffectiveness-and-why-were-no-closer-to-fixing-it/)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "43",
+   "British television and cinema\n- Global reach and influence\n- Britain on screen: dark humour, social realism, and multicultural narratives",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapters 7 & 8\n* New research shows 70% of international audiences view British film and TV as high-quality (https://www.bfi.org.uk/news/new-research-british-film-tv-high-quality-screenuk)\n* ScreenUK (https://www.screenuk.org/)\n* Britain on Screen: Working Class Cinema and Social Realism (https://www.youtube.com/watch?v=GiOedt_nFJQ)\n* ‘I love England so much’: From TV to pop, film to fashion, the UK is enjoying a cultural resurgence (https://www.theguardian.com/culture/2025/jul/19/cool-britannia-tv-pop-music-fashion-film-uk-cultural-resurgence)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "44",
+   "British television and cinema\n- Global reach and influence\n- Britain on screen: dark humour, social realism, and multicultural narratives",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapters 7 & 8\n* New research shows 70% of international audiences view British film and TV as high-quality (https://www.bfi.org.uk/news/new-research-british-film-tv-high-quality-screenuk)\n* ScreenUK (https://www.screenuk.org/)\n* Britain on Screen: Working Class Cinema and Social Realism (https://www.youtube.com/watch?v=GiOedt_nFJQ)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "45",
+   "British television and cinema\n- Global reach and influence\n- Britain on screen: dark humour, social realism, and multicultural narratives",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapters 7 & 8\n* New research shows 70% of international audiences view British film and TV as high-quality (https://www.bfi.org.uk/news/new-research-british-film-tv-high-quality-screenuk)\n* ScreenUK (https://www.screenuk.org/)\n* Britain on Screen: Working Class Cinema and Social Realism (https://www.youtube.com/watch?v=GiOedt_nFJQ)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "46",
+   "British popular music and fashion\n- Global reach and influence\n- From Mary Quant to Britpop: Music and fashion as signs of social change",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 10\n* Examples of popular British musical artists or groups and fashion designers\n* Britpop: Bands, Songs, and Facts (https://www.britannica.com/art/alternative-rock)\n* Influential British Designers Who Shaped Fashion History (https://www.thedesignagent.com/blog-posts/influential-british-designers#section-2)\n* ‘I love England so much’: From TV to pop, film to fashion, the UK is enjoying a cultural resurgence (https://www.theguardian.com/culture/2025/jul/19/cool-britannia-tv-pop-music-fashion-film-uk-cultural-resurgence)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "47",
+   "British popular music and fashion\n- Global reach and influence\n- From Mary Quant to Britpop: Music and fashion as signs of social change",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 10\n* Examples of popular British musical artists or groups and fashion designers\n* Britpop: Bands, Songs, and Facts (https://www.britannica.com/art/alternative-rock)\n* Influential British Designers Who Shaped Fashion History (https://www.thedesignagent.com/blog-posts/influential-british-designers#section-2)\n* ‘I love England so much’: From TV to pop, film to fashion, the UK is enjoying a cultural resurgence (https://www.theguardian.com/culture/2025/jul/19/cool-britannia-tv-pop-music-fashion-film-uk-cultural-resurgence)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "48",
+   "British popular music and fashion\n- Global reach and influence\n- From Mary Quant to Britpop: Music and fashion as signs of social change",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 10\n* Examples of popular British musical artists or groups and fashion designers\n* Britpop: Bands, Songs, and Facts (https://www.britannica.com/art/alternative-rock)\n* Influential British Designers Who Shaped Fashion History (https://www.thedesignagent.com/blog-posts/influential-british-designers#section-2)\n* ‘I love England so much’: From TV to pop, film to fashion, the UK is enjoying a cultural resurgence (https://www.theguardian.com/culture/2025/jul/19/cool-britannia-tv-pop-music-fashion-film-uk-cultural-resurgence)",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "49",
+   "British cultural heritage\n- The UK's UNESCO World Heritage Sites\n- Suggested activity: Students to design and create a brochure or a video advertising a UNESCO World Heritage Site in the UK (AI application)",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 12\n* https://whc.unesco.org/en/statesparties/gb\n* Online resources\n* AI design and video-making tools",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "50",
+   "British cultural heritage\n- The UK's UNESCO World Heritage Sites\n- Suggested activity: Students to design and create a brochure or a video advertising a UNESCO World Heritage Site in the UK (AI application)",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 12\n* https://whc.unesco.org/en/statesparties/gb\n* Online resources\n* AI design and video-making tools",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "51",
+   "British cultural heritage\n- The UK's UNESCO World Heritage Sites\n- Suggested activity: Students to design and create a brochure or a video advertising a UNESCO World Heritage Site in the UK (AI application)",
+   "Offline",
+   "LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* Textbook: Chapter 12\n* https://whc.unesco.org/en/statesparties/gb\n* Online resources\n* AI design and video-making tools",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "52",
+   "Gender politics: Feminist movements in the USA and Great Britain\n- The 'first wave: Women's suffrage\n- The 'second wave': The Second Sex and The Feminine Mystique\n- The 'third wave' and beyond: Intersectionality, Me Too, and trans-inclusivity\n- The backlash: male violence against women and reproductive rights under threat",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* American Culture Textbook: Chapter 7\n* Votes for women in Britain (https://www.youtube.com/watch?v=16J96t7k5MQ)\n* The 19th Amendment (https://www.youtube.com/watch?v=a9LmBgY-F5A)\n* How women won the right to vote around the world (https://www.britannica.com/video/history-woman-suffrage-world/-187145)\n* Feminism: The Second Wave (https://www.womenshistory.org/exhibits/feminism-second-wave)\n* The Revolutionary Practice of Black Feminisms (https://nmaahc.si.edu/explore/stories/revolutionary-practice-black-feminisms)\n* Audre Lorde: The Master's Tools Will Never Dismantle the Master's House (https://awpc.cattcenter.iastate.edu/2025/08/28/the-masters-tools-will-never-dismantle-the-masters-house-oct-29-1979/)\n* The urgency of intersectionality (https://www.youtube.com/watch?v=akOe5-UsQ2o)\n* Supreme Court overturns Roe v. Wade, ending right to abortion upheld for decades (https://www.npr.org/2022/06/24/1102305878/supreme-court-abortion-roe-v-wade-decision-overturn)\n* Margaret Atwood: The Court Is Making Gilead Real (https://www.theatlantic.com/ideas/archive/2022/05/supreme-court-roe-handmaids-tale-abortion-margaret-atwood/629833/)\n* UN Women - One in four countries report backlash on women’s rights in 2024 (https://www.unwomen.org/en/news-stories/press-release/2025/03/one-in-four-countries-report-backlash-on-womens-rights-in-2024)\n* UN Women - Facts and figures: Ending violence against women (https://www.unwomen.org/en/articles/facts-and-figures/facts-and-figures-ending-violence-against-women) - Resource regularly updated, to check for the latest figures",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "53",
+   "Gender politics: Feminist movements in the USA and Great Britain\n- The 'first wave: Women's suffrage\n- The 'second wave': The Second Sex and The Feminine Mystique\n- The 'third wave' and beyond: Intersectionality, Me Too, and trans-inclusivity\n- The backlash: male violence against women and reproductive rights under threat",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* American Culture Textbook: Chapter 7\n* Votes for women in Britain (https://www.youtube.com/watch?v=16J96t7k5MQ)\n* The 19th Amendment (https://www.youtube.com/watch?v=a9LmBgY-F5A)\n* How women won the right to vote around the world (https://www.britannica.com/video/history-woman-suffrage-world/-187145)\n* Feminism: The Second Wave (https://www.womenshistory.org/exhibits/feminism-second-wave)\n* The Revolutionary Practice of Black Feminisms (https://nmaahc.si.edu/explore/stories/revolutionary-practice-black-feminisms)\n* Audre Lorde: The Master's Tools Will Never Dismantle the Master's House (https://awpc.cattcenter.iastate.edu/2025/08/28/the-masters-tools-will-never-dismantle-the-masters-house-oct-29-1979/)\n* The urgency of intersectionality (https://www.youtube.com/watch?v=akOe5-UsQ2o)\n* Supreme Court overturns Roe v. Wade, ending right to abortion upheld for decades (https://www.npr.org/2022/06/24/1102305878/supreme-court-abortion-roe-v-wade-decision-overturn)\n* Margaret Atwood: The Court Is Making Gilead Real (https://www.theatlantic.com/ideas/archive/2022/05/supreme-court-roe-handmaids-tale-abortion-margaret-atwood/629833/)\n* UN Women - One in four countries report backlash on women’s rights in 2024 (https://www.unwomen.org/en/news-stories/press-release/2025/03/one-in-four-countries-report-backlash-on-womens-rights-in-2024)\n* UN Women - Facts and figures: Ending violence against women (https://www.unwomen.org/en/articles/facts-and-figures/facts-and-figures-ending-violence-against-women) - Resource regularly updated, to check for the latest figures",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "54",
+   "Gender politics: Feminist movements in the USA and Great Britain\n- The 'first wave: Women's suffrage\n- The 'second wave': The Second Sex and The Feminine Mystique\n- The 'third wave' and beyond: Intersectionality, Me Too, and trans-inclusivity\n- The backlash: male violence against women and reproductive rights under threat",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* American Culture Textbook: Chapter 7\n* Votes for women in Britain (https://www.youtube.com/watch?v=16J96t7k5MQ)\n* The 19th Amendment (https://www.youtube.com/watch?v=a9LmBgY-F5A)\n* How women won the right to vote around the world (https://www.britannica.com/video/history-woman-suffrage-world/-187145)\n* Feminism: The Second Wave (https://www.womenshistory.org/exhibits/feminism-second-wave)\n* The Revolutionary Practice of Black Feminisms (https://nmaahc.si.edu/explore/stories/revolutionary-practice-black-feminisms)\n* Audre Lorde: The Master's Tools Will Never Dismantle the Master's House (https://awpc.cattcenter.iastate.edu/2025/08/28/the-masters-tools-will-never-dismantle-the-masters-house-oct-29-1979/)\n* The urgency of intersectionality (https://www.youtube.com/watch?v=akOe5-UsQ2o)\n* Supreme Court overturns Roe v. Wade, ending right to abortion upheld for decades (https://www.npr.org/2022/06/24/1102305878/supreme-court-abortion-roe-v-wade-decision-overturn)\n* Margaret Atwood: The Court Is Making Gilead Real (https://www.theatlantic.com/ideas/archive/2022/05/supreme-court-roe-handmaids-tale-abortion-margaret-atwood/629833/)\n* UN Women - One in four countries report backlash on women’s rights in 2024 (https://www.unwomen.org/en/news-stories/press-release/2025/03/one-in-four-countries-report-backlash-on-womens-rights-in-2024)\n* UN Women - Facts and figures: Ending violence against women (https://www.unwomen.org/en/articles/facts-and-figures/facts-and-figures-ending-violence-against-women) - Resource regularly updated, to check for the latest figures",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "55",
+   "Gender politics: Feminist movements in the USA and Great Britain\n- The 'first wave: Women's suffrage\n- The 'second wave': The Second Sex and The Feminine Mystique\n- The 'third wave' and beyond: Intersectionality, Me Too, and trans-inclusivity\n- The backlash: male violence against women and reproductive rights under threat",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* American Culture Textbook: Chapter 7\n* Votes for women in Britain (https://www.youtube.com/watch?v=16J96t7k5MQ)\n* The 19th Amendment (https://www.youtube.com/watch?v=a9LmBgY-F5A)\n* How women won the right to vote around the world (https://www.britannica.com/video/history-woman-suffrage-world/-187145)\n* Feminism: The Second Wave (https://www.womenshistory.org/exhibits/feminism-second-wave)\n* The Revolutionary Practice of Black Feminisms (https://nmaahc.si.edu/explore/stories/revolutionary-practice-black-feminisms)\n* Audre Lorde: The Master's Tools Will Never Dismantle the Master's House (https://awpc.cattcenter.iastate.edu/2025/08/28/the-masters-tools-will-never-dismantle-the-masters-house-oct-29-1979/)\n* The urgency of intersectionality (https://www.youtube.com/watch?v=akOe5-UsQ2o)\n* Supreme Court overturns Roe v. Wade, ending right to abortion upheld for decades (https://www.npr.org/2022/06/24/1102305878/supreme-court-abortion-roe-v-wade-decision-overturn)\n* Margaret Atwood: The Court Is Making Gilead Real (https://www.theatlantic.com/ideas/archive/2022/05/supreme-court-roe-handmaids-tale-abortion-margaret-atwood/629833/)\n* UN Women - One in four countries report backlash on women’s rights in 2024 (https://www.unwomen.org/en/news-stories/press-release/2025/03/one-in-four-countries-report-backlash-on-womens-rights-in-2024)\n* UN Women - Facts and figures: Ending violence against women (https://www.unwomen.org/en/articles/facts-and-figures/facts-and-figures-ending-violence-against-women) - Resource regularly updated, to check for the latest figures",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "56",
+   "Gender politics: Feminist movements in the USA and Great Britain\n- The 'first wave: Women's suffrage\n- The 'second wave': The Second Sex and The Feminine Mystique\n- The 'third wave' and beyond: Intersectionality, Me Too, and trans-inclusivity\n- The backlash: male violence against women and reproductive rights under threat",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* American Culture Textbook: Chapter 7\n* Votes for women in Britain (https://www.youtube.com/watch?v=16J96t7k5MQ)\n* The 19th Amendment (https://www.youtube.com/watch?v=a9LmBgY-F5A)\n* How women won the right to vote around the world (https://www.britannica.com/video/history-woman-suffrage-world/-187145)\n* Feminism: The Second Wave (https://www.womenshistory.org/exhibits/feminism-second-wave)\n* The Revolutionary Practice of Black Feminisms (https://nmaahc.si.edu/explore/stories/revolutionary-practice-black-feminisms)\n* Audre Lorde: The Master's Tools Will Never Dismantle the Master's House (https://awpc.cattcenter.iastate.edu/2025/08/28/the-masters-tools-will-never-dismantle-the-masters-house-oct-29-1979/)\n* The urgency of intersectionality (https://www.youtube.com/watch?v=akOe5-UsQ2o)\n* Supreme Court overturns Roe v. Wade, ending right to abortion upheld for decades (https://www.npr.org/2022/06/24/1102305878/supreme-court-abortion-roe-v-wade-decision-overturn)\n* Margaret Atwood: The Court Is Making Gilead Real (https://www.theatlantic.com/ideas/archive/2022/05/supreme-court-roe-handmaids-tale-abortion-margaret-atwood/629833/)\n* UN Women - One in four countries report backlash on women’s rights in 2024 (https://www.unwomen.org/en/news-stories/press-release/2025/03/one-in-four-countries-report-backlash-on-womens-rights-in-2024)\n* UN Women - Facts and figures: Ending violence against women (https://www.unwomen.org/en/articles/facts-and-figures/facts-and-figures-ending-violence-against-women) - Resource regularly updated, to check for the latest figures",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "57",
+   "Gender politics: Feminist movements in the USA and Great Britain\n- The 'first wave: Women's suffrage\n- The 'second wave': The Second Sex and The Feminine Mystique\n- The 'third wave' and beyond: Intersectionality, Me Too, and trans-inclusivity\n- The backlash: male violence against women and reproductive rights under threat",
+   "Offline",
+   "LO1, LO2, LO3, LO6, LO7, LO8, LO9",
+   "ITU",
+   "* American Culture Textbook: Chapter 7\n* Votes for women in Britain (https://www.youtube.com/watch?v=16J96t7k5MQ)\n* The 19th Amendment (https://www.youtube.com/watch?v=a9LmBgY-F5A)\n* How women won the right to vote around the world (https://www.britannica.com/video/history-woman-suffrage-world/-187145)\n* Feminism: The Second Wave (https://www.womenshistory.org/exhibits/feminism-second-wave)\n* The Revolutionary Practice of Black Feminisms (https://nmaahc.si.edu/explore/stories/revolutionary-practice-black-feminisms)\n* Audre Lorde: The Master's Tools Will Never Dismantle the Master's House (https://awpc.cattcenter.iastate.edu/2025/08/28/the-masters-tools-will-never-dismantle-the-masters-house-oct-29-1979/)\n* The urgency of intersectionality (https://www.youtube.com/watch?v=akOe5-UsQ2o)\n* Supreme Court overturns Roe v. Wade, ending right to abortion upheld for decades (https://www.npr.org/2022/06/24/1102305878/supreme-court-abortion-roe-v-wade-decision-overturn)\n* Margaret Atwood: The Court Is Making Gilead Real (https://www.theatlantic.com/ideas/archive/2022/05/supreme-court-roe-handmaids-tale-abortion-margaret-atwood/629833/)\n* UN Women - One in four countries report backlash on women’s rights in 2024 (https://www.unwomen.org/en/news-stories/press-release/2025/03/one-in-four-countries-report-backlash-on-womens-rights-in-2024)\n* UN Women - Facts and figures: Ending violence against women (https://www.unwomen.org/en/articles/facts-and-figures/facts-and-figures-ending-violence-against-women) - Resource regularly updated, to check for the latest figures",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "58",
+   "Course Review and Submission of Group Project Essay and Presentation Slides",
+   "Offline",
+   "LO4, LO5",
+   "ITU",
+   "",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "59",
+   "Course Review and Submission of Group Project Essay and Presentation Slides",
+   "Offline",
+   "LO4, LO5",
+   "ITU",
+   "",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ],
+  [
+   "60",
+   "Course Review and Submission of Group Project Essay and Presentation Slides",
+   "Offline",
+   "LO4, LO5",
+   "ITU",
+   "",
+   "",
+   "Lecture; Discussion; Presentations; Quizzes - at lecturer's discretion",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "4",
+   "CQ2.1",
+   "Which features of the country USA do you find it more interesting? Explain."
+  ],
+  [
+   "2",
+   "5",
+   "CQ2.2",
+   "How does Jay Gatsby from the novel by F. Scott Fitzgerald depict an American identity?"
+  ],
+  [
+   "3",
+   "5",
+   "CQ2.3",
+   "Should there be or not have a distinctive American identity? To what consequences can it lead?"
+  ],
+  [
+   "4",
+   "6",
+   "CQ2.4",
+   "Notice the inaugural address of the US presidents, which of them do you think had the most hope for the country and for the American people? Explain. You may also compare and contrast.\nhttps://www.youtube.com/watch?v=Qszv668rN20 – Bill Clinton https://www.youtube.com/watch?v=JwcR00oGbv0 – Barrack Obama https://www.youtube.com/watch?v=ThtRvBUBpQ4 – Donald Trump https://www.youtube.com/watch?v=Wa9KI4dflY4 - Joe Biden"
+  ],
+  [
+   "5",
+   "7",
+   "CQ3.1",
+   "America as the land of the free; as the land of opportunity: Native Americans, African Americans as well as immigrants from Europe must embrace \"Americannes\" notion for them to be allowed to migrate to the USA. Do you think it would be worth it to extract your own origin to reach your American dream? Why/why not?"
+  ],
+  [
+   "6",
+   "8",
+   "CQ3.2",
+   "What are some examples of how food, business practices, and advertising have changed because of immigration?"
+  ],
+  [
+   "7",
+   "9",
+   "CQ3.3",
+   "What do you think are some of the economic or social disadvantages of immigration in the USA? Discuss."
+  ],
+  [
+   "8",
+   "10",
+   "CQ4.1",
+   "Some have argued that hybridity represents the best hope for America as diverse culture. To what extent do you agree or disagree?"
+  ],
+  [
+   "9",
+   "11",
+   "CQ4.2",
+   "Which metaphor do you think American ethnicity best illustrated ; melting pot, mosaic, salad bowl or other illustration? Explain."
+  ],
+  [
+   "10",
+   "12",
+   "CQ4.3",
+   "How do you think people from the videos survive the migration process?\nGroup 1: https://www.youtube.com/watch?v=DTIDCA7mjZs -\nHow to Illegally Cross the Mexico-US Border\n\nGroup 2: https://www.youtube.com/watch?v=ZWq0v4ucav0 -\nWalking to America with the Migrant Caravan\n\nGroup 3: https://www.youtube.com/watch?v=RSwwO00qeB0 -\nRiding 'The Death Train' to America's border"
+  ],
+  [
+   "11",
+   "13",
+   "CQ5.1",
+   "In God we trust is the official motto of the United States. Also, notice the patriotic songs/national anthem of the USA, have you noticed that most of these songs are related to religion? What can be implied from this notion?\nIMAGE: https://en.wikipedia.org/wiki/In_God_We_Trust\n\nGroup 1: https://www.youtube.com/watch?v=HsdMfWJ7pvA - Ariana Grande performing the National Anthem - Star Spangled Banner\n\nGroup 2: https://www.youtube.com/watch?v=Se1b3yFTVRU – Godbless America Lady Gaga\n\nGroup 3: https://www.youtube.com/watch?v=XnCNHFg9y1Q – God less the USA\n\nGroup 4: https://www.youtube.com/watch?v=8s2DViOOElA - \"This Land Is Your Land\" & \"America, The Beautiful\""
+  ],
+  [
+   "12",
+   "14",
+   "CQ5.2",
+   "Do you think the U.S. government should interfere with how churches operate?"
+  ],
+  [
+   "13",
+   "15",
+   "CQ5.3",
+   "Do you think that secularization is good for the growth of countries?"
+  ],
+  [
+   "14",
+   "16",
+   "CQ6.1",
+   "Which side do you agree with? Defend your answer. (1) Religion is a must if a politician is running for a position in the US Congress. (2) Using the mass media (TV,RADIO,electronic medium,etc) are good initiatives to propagate evangelism in the US."
+  ],
+  [
+   "15",
+   "17",
+   "CQ6.2",
+   "How have non-Christian religions such as Judaism and Islam ﬁtted into a society that has tended to assume that America is a Christian nation above all?"
+  ],
+  [
+   "16",
+   "18",
+   "CQ6.3",
+   "Is there an argument that religion is becoming less important in the United States, and that increasing numbers of the young, in particular, are losing any clear religious affiliation? What might this do for the place of Christianity in America?"
+  ],
+  [
+   "17",
+   "19",
+   "CQ7.1",
+   "With your background knowledge, how would you define gender and sexuality in the US? Is it similar to your country Vietnam? To what extent are they similar or different?"
+  ],
+  [
+   "18",
+   "20",
+   "CQ7.2",
+   "How far would you agree that America is a male-dominated and male-defined society? How about your country Vietnam?"
+  ],
+  [
+   "19",
+   "21",
+   "CQ7.3",
+   "Which American movie/TV series would you believe in having a strong feminism/masculism approach? Discuss briefly. Prepare for a role playing about gender inequality. Any setting is accepted."
+  ],
+  [
+   "20",
+   "22",
+   "CQ8.1",
+   "Discuss the first and second waves of feminism. In what way these movements shape women's rights today?"
+  ],
+  [
+   "21",
+   "23",
+   "CQ8.2",
+   "Sex and the City can be viewed as a “post-feminist” text redeﬁning female identities in complex and varied ways. To what extent do you agree with this idea?"
+  ],
+  [
+   "22",
+   "24",
+   "CQ8.3",
+   "Define the LGBTQ+. What have this group gone through in their fight for legal rights in the US?"
+  ],
+  [
+   "23",
+   "24",
+   "CQ8.4",
+   "How is same sex marriage perceived in Vietnam?"
+  ],
+  [
+   "24",
+   "25",
+   "CQ9.1",
+   "What does \"Americanisation\" mean? Give examples. What effects has it had on people's lives around the globe?"
+  ],
+  [
+   "25",
+   "26",
+   "CQ9.2",
+   "Is Americanisation the same as globalisation? What is the role of the internet in the process of Americanisation?"
+  ],
+  [
+   "26",
+   "27",
+   "CQ9.3",
+   "Looking around you, what are the influences of American culture?"
+  ],
+  [
+   "27",
+   "28",
+   "CQ10.1",
+   "Explore the impact of specific areas of American popular culture like music, Hollywood, television in Vietnam . How have they been resisted or accommodated?"
+  ],
+  [
+   "28",
+   "29",
+   "CQ10.2",
+   "English language acquisition in Vietnam is probably another form of colonization. Should your country Vietnam also adapt and apply the context of “Americanisation”? Is there a possibility that your country Vietnam loses its own identity if you keep on accepting immigrants or foreigners from different countries?"
+  ],
+  [
+   "29",
+   "30",
+   "CQ10.3",
+   "What specific topics from the lessons on American studies had an effect on your judgment as a citizen, as an English major student, and as a person?"
+  ],
+  [
+   "30",
+   "31",
+   "CQ11.1",
+   "What makes British culture? Compare and contrast it with American Culture"
+  ],
+  [
+   "31",
+   "32",
+   "CQ11.2",
+   "Research online to find events across British politics and society, either in the year you were born, or in another year of significance. Which were the most important events of that time? Why do you think these are significant?"
+  ],
+  [
+   "32",
+   "33",
+   "CQ11.3",
+   "Describe the cultural portrait of Britain in 2 periods by researching areas of cultural and artistic interest such as films, television, and poular music. Why were these events significant?"
+  ],
+  [
+   "33",
+   "34",
+   "CQ12.1",
+   "What is the impact that cultural diversity has had and will have on the inhabitants of the United Kingdom? How such cultural diversity has complicated an effort to define “Britishness”?"
+  ],
+  [
+   "34",
+   "35",
+   "CQ12.2",
+   "How has the gender issues transformed from the 1960's till present in the UK?"
+  ],
+  [
+   "35",
+   "36",
+   "CQ12.3",
+   "What are some of the UK pop cultures in recent years? What is your opinion about them?"
+  ],
+  [
+   "36",
+   "37",
+   "CQ13.1",
+   "Identify 3 different dialects in the British language and analyze their differences. What makes regional dialects of English distinctive?"
+  ],
+  [
+   "37",
+   "38",
+   "CQ13.2",
+   "How do people who come from different regions of your country speak differently? What's the best way to learn a language?"
+  ],
+  [
+   "38",
+   "39",
+   "CQ13.3",
+   "What is received pronunciation? What attitudes do people have towards speakers with received pronunciation?"
+  ],
+  [
+   "39",
+   "40",
+   "CQ14.1",
+   "What are taboo words? What about political correctness? Give examples."
+  ],
+  [
+   "40",
+   "41",
+   "CQ14.2",
+   "Having considered some social aspects of language use in Britain, discuss the following: (1) Which is the ‘correct’ or ‘prestige’ accent? (2) What attitudes do people have towards speakers of regional accents and minority languages? (3) Are regional varieties of the national language found in advertising, the mass media and certain types of role in ﬁlms and plays, and what connotations do they carry?"
+  ],
+  [
+   "41",
+   "42",
+   "CQ14.3",
+   "If your ﬁrst language is not English, how has that language been affected by English in recent years? Is diversity and change good for a language? What are the possible advantages and disadvantages?"
+  ],
+  [
+   "42",
+   "43",
+   "CQ15.1",
+   "Why has there been a decline in British newspaper sales? What do you know about British newspapers?"
+  ],
+  [
+   "43",
+   "44",
+   "CQ15.2",
+   "What were the popular pioneers of British newspapers? What impacts have British newspapers had on British society?"
+  ],
+  [
+   "44",
+   "45",
+   "CQ15.3",
+   "How do British newspapers differ from each other?"
+  ],
+  [
+   "45",
+   "46",
+   "CQ16.1",
+   "Why have British magazine sales been in decline despite some stories of current success?"
+  ],
+  [
+   "46",
+   "47",
+   "CQ16.2",
+   "What is the main difference between Women and Men's magazines? What are popular British magazines?"
+  ],
+  [
+   "47",
+   "48",
+   "CQ16.3",
+   "How have British magazines reflected social changes?"
+  ],
+  [
+   "48",
+   "49",
+   "CQ17.1",
+   "Research and describe some interesting information about these British groups:\n1. The Beatles\n2. Queen\n3. Spice Girls\n4. One Direction.\nHow have they influenced Bristish and global music?"
+  ],
+  [
+   "49",
+   "50",
+   "CQ17.2",
+   "Which performers and movements do you consider the most interesting/significant in British pop since the 1960s, and why?"
+  ],
+  [
+   "50",
+   "51",
+   "CQ17.3",
+   "Choose a song or album of a British band or singer with which you are familiar. If you were a critic for a music magazine read by teenagers, how would you write a review for the song/album?"
+  ],
+  [
+   "51",
+   "52",
+   "CQ18.1",
+   "What are teds/mods/skinheads/hippies/punks/raves/subcultures? What are their respective tastes in music and/or fashion?"
+  ],
+  [
+   "52",
+   "53",
+   "CQ18.2",
+   "How has British fashion style changed in the last two decades?"
+  ],
+  [
+   "53",
+   "54",
+   "CQ18.3",
+   "In your opinion, which is the best decade for British fashion style?"
+  ],
+  [
+   "54",
+   "55",
+   "CQ19.1",
+   "_ Why is cultural heritage important? How has exhibition of heritage changed these days? How do you like/dislike the way it is now?"
+  ],
+  [
+   "55",
+   "56",
+   "CQ19.2",
+   "_ What are the two heritage organizations in the UK? In what way are they similar or different? How important are they to the conservation of the UK cultural heritage?"
+  ],
+  [
+   "56",
+   "57",
+   "CQ19.3",
+   "Blue Plaques are permanent signs installed in a public place in the UK to link that location with a historical marker. What suggestions would you recommend to honor Vietnamese notable figures of the past and the buildings in which they lived and worked?"
+  ],
+  [
+   "57",
+   "58",
+   "CQ20.1",
+   "Why was the contryside refered to as \"a kind of rural dream\" in the 19th century in Britain? How is it reflected in British literature and other aspects of British life?"
+  ],
+  [
+   "58",
+   "59",
+   "CQ20.2",
+   "Why were English country houses (stately homes) presented as one of the great icons of British culture? Why is there a need to reconceptualize country houses for new audiences in the 21st century?"
+  ],
+  [
+   "59",
+   "60",
+   "CQ20.3",
+   "How have British music festivals been globalized and commercialized? How do you like/dislike the way they are now?"
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/1vOSIenrjucu5yXDUM6bV57YkbCMUrRRO?usp=sharing"
+ ]
+}

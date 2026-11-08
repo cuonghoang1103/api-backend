@@ -1,0 +1,931 @@
+{
+ "ma": "AIC211",
+ "sylID": "14523",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14523",
+   "code": "AIC211",
+   "name": "AI for Cybersecurity_Trí tuệ nhân tạo cho An ninh mạng",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14523",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14523",
+  "Syllabus Name": "AI for Cybersecurity_Trí tuệ nhân tạo cho An ninh mạng",
+  "Course Name English": "AI for Cybersecurity",
+  "Subject Code": "AIC211",
+  "Learning-Teaching Method": "Offline",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "PFP191, MAE101",
+  "Description": "This course provides foundational knowledge of machine learning (ML) and AI techniques for solving cybersecurity problems. The content focuses on modeling security challenges as machine learning problems, processing and representing cybersecurity data (system logs, network traffic, security events, endpoint telemetry), and building and evaluating models. This ultimately supports the tracking, monitoring, detection, and prevention of cyber threats to protect data and systems.\n\nThe module combines theoretical foundations (basic concepts of supervised/unsupervised learning, classification, regression, anomaly detection, model evaluation, overfitting, and ML pipelines) with hands-on Python labs using popular libraries in the cybersecurity domain (such as scikit-learn and introductory deep learning modules). Students will work with real-world cybersecurity datasets applied to tasks such as Intrusion Detection Systems (IDS), malware classification, phishing URL/email detection, and user/system behavior anomaly detection.\n\nUpon completion of this course, students will be able to:\n\n1. Understand and explain the fundamental concepts of machine learning and how to map them to cybersecurity problems.\n\n2. Design and deploy simple, end-to-end machine learning pipelines: data collection, preprocessing, feature extraction/engineering, training, evaluation, and model improvement for cybersecurity tasks.\n\n3. Apply machine learning techniques to predict attack behaviors, detect vulnerabilities/anomalous activities, and support decision-making in secure system operations.\n\n4. Build a solid foundation for advanced courses in malware analysis, threat hunting, SOC engineering, and AI system security, while gaining practical experience in developing machine learning solutions for digital security.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FU FLM at https://flm.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "- Language: Python 3.11+\n\n- Jupyter notebook\n\n- Google Colab\n\n- Scikit-learn, Numpy, Pandas, Pytorch,…",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "- Lab: 2\n\n- Progress Test: 2\n\n- Group project\n\n- Final Exam",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Machine Learning and Security: Protecting Systems with Data and Algorithms",
+   "Clarence Chio, David Freeman",
+   "O’Reilly",
+   "2018",
+   "1st",
+   "9781491979907",
+   "True",
+   "True",
+   "False",
+   "[Chio2018]"
+  ],
+  [
+   "2",
+   "Introduction to Machine Learning, fourth edition (Adaptive Computation and Machine Learning series)",
+   "Ethem Alpaydin",
+   "The MIT Press",
+   "2020",
+   "4th",
+   "978-0262043793",
+   "False",
+   "False",
+   "False",
+   "[Alpaydin2020]"
+  ],
+  [
+   "3",
+   "ChatGPT for Cybersecurity Cookbook: Learn practical generative AI recipes to supercharge your cybersecurity skills",
+   "Clint Bodungen",
+   "Packt Publishing",
+   "2024",
+   "1st",
+   "978-1805124047",
+   "False",
+   "False",
+   "False",
+   "[Bodungen2023]"
+  ],
+  [
+   "4",
+   "Machine Learning for Cybersecurity Cookbook: Over 80 recipes on how to implement machine learning algorithms for building security systems using Python",
+   "Emmanuel Tsukerman",
+   "Packt Publishing",
+   "2019",
+   "1st",
+   "978-1789614671",
+   "False",
+   "False",
+   "False",
+   "[Tsukerman2019]"
+  ],
+  [
+   "5",
+   "Hands-On Machine Learning for Cybersecurity",
+   "Soma Halder, Sinan Ozdemir",
+   "Packt Publishing",
+   "2018",
+   "1st",
+   "978-1788992282",
+   "False",
+   "False",
+   "False",
+   "[Halder2018]"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the Principles of AI/ML/DL\nGrasp the core concepts, the distinctions between Supervised and Unsupervised Learning, fundamental Neural Network architectures, and the standard workflow for building a foundational machine learning model."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand the Cybersecurity Context\nComprehend how AI is integrated into security architectures and identify specific cybersecurity challenges that are suitable for AI-driven solutions."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply Basic Probability and Statistics\nApply fundamental concepts of probability and statistics to model and analyze cybersecurity data, including estimating the likelihood of attack events and evaluating the reliability and statistical significance of detection results."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply Exploratory Data Analysis (EDA) and Feature Engineering\nUtilize programming tools (Python/Pandas) to collect, explore, and visualize cybersecurity data (such as system logs and network traffic). Execute data preprocessing and feature engineering techniques—including data cleaning, encoding, and feature extraction—to adequately prepare input data for machine learning models."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply Supervised and Unsupervised Learning\nImplement supervised and unsupervised machine learning algorithms to develop models for intrusion detection, malware classification, and anomaly detection."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Apply Deep Learning and NLP for Security\nLeverage Natural Language Processing (NLP) techniques to analyze and detect deceptive content, such as phishing and spam, within text and URLs."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Performance Analysis\n\nAnalyze experimental results using a Confusion Matrix and key performance metrics (Precision, Recall, and F1-score), evaluating the operational impact of False Positives and False Negatives in real-world security environments."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Apply Imbalanced Data Handling\n\nEmploy data preprocessing techniques, such as resampling and class weighting, to resolve challenges associated with imbalanced datasets."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Analyze AI Risks and Apply LLMs in Cybersecurity\n\nAnalyze model vulnerabilities, specifically adversarial attacks, and evaluate emerging threats introduced by Generative AI, such as deepfakes and automated social engineering. Furthermore, apply Large Language Models (LLMs) and agentic AI frameworks to address and resolve complex cybersecurity challenges."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Apply Project Development\nSynthesize acquired knowledge and utilize collaborative teamwork skills to design, implement, and present an end-to-end AI pipeline addressing a real-world cybersecurity problem."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Lab",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "120' - 180'/each",
+   "CLO3, CLO4, CLO5, CLO8",
+   "Practice hands-onDialogue-based assessment with self-directed learning.",
+   "",
+   "technical aspect of studied topics",
+   "Guided by instructor\n\n- 2 Labs\n\n- Student must finish labs and submit the results to the instructor in class.\n\n- Combines dialogue-based assessment with self-directed learning.\n\n- An average point of all labs could be evaluated and published to students at the end of the semester.",
+   "The lab report content can be obtained from the lab manual, or created by the instructor to align with the chapters."
+  ],
+  [
+   "2",
+   "Progress Test",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "60'/each",
+   "Test 1: CLO1, CLO2, CLO3, CLO4, CLO5; Test 2: CLO6, CLO7, CLO8, CLO9",
+   "Multiple choicesMarked by Computer or a suitable format",
+   "50/each",
+   "",
+   "in class, by instructor",
+   "Instruction and schedules for Progress Tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has responsibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Project",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "270'/each",
+   "CLO10",
+   "Practice hands-onDialogue-based assessment with self-directed learning.",
+   "",
+   "",
+   "Supervised by instructor; students work in groups.\n\nCombines dialogue-based assessment with self-directed learning.",
+   "The project content must incorporate the lab manuals, or instructor-created materials that align with those modules."
+  ],
+  [
+   "4",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'/each",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9, CLO10",
+   "discipline and communication skills",
+   "50",
+   "All subjects in syllabus",
+   "Exam room",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Overview of AI/ML for Cybersecurity\n- AI/ML Fundamentals\n\n+ Overview of AI/ML\n\nCore Concepts: Artificial Intelligence (AI) and Machine Learning (ML), including supervised, unsupervised, and semi-supervised learning.\n\n+ Problem Types: Classification, regression, clustering, and anomaly detection.\n\n+ The ML Pipeline: Data collection → Preprocessing → Feature engineering → Modeling → Evaluation → Deployment → Monitoring.\n\n- self learning: detailed algorithms (SVM, Decision Tree, Random Forest, K-Means, ANN); metric formulas (MSE, MAE, Precision, Recall, ROC-AUC); adversarial attacks / XAI / privacy in depth; detailed ML pipeline architecture (further reading; taught in depth in later sessions).",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "[Chio2018] Chapter 1: Why Machine Learning and Security?\nCyber Threat Landscape; What Is Machine Learning?; What Machine Learning Is Not; Real-World Uses of Machine Learning in Security; Limitations of Machine Learning in Security.\n\n[Alpaydin2020] 1 Introduction\n1.1 What Is Machine Learning?; 1.2 Examples of Machine Learning Applications (Classification/Regression/Unsupervised); 1.4 Related Topics (Data Privacy and Security; Model Interpretability and Trust).",
+   "AIC211",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "2",
+   "Overview of AI/ML for Cybersecurity\n\n- Applied AI/ML in Cybersecurity\n\n+ AI/ML in the Cybersecurity Domain\n\nTypical Use Cases:\nIntrusion Detection and Prevention Systems (IDS/IPS) and User and Entity Behavior Analytics (UEBA).\nPhishing and spam detection.\nMalware classification and profiling.\nAnomaly detection in login logs and network traffic.\n+ ML Integration Architecture in SOC/SIEM: Log sources → SIEM → ML model → Alert generation.",
+   "Offline",
+   "CLO2",
+   "T",
+   "[Chio2018] Chapter 1: Why Machine Learning and Security?\nCyber Threat Landscape; What Is Machine Learning?; What Machine Learning Is Not; Real-World Uses of Machine Learning in Security; Limitations of Machine Learning in Security.\n\n[Alpaydin2020] 1 Introduction\n1.1 What Is Machine Learning?; 1.2 Examples of Machine Learning Applications (Classification/Regression/Unsupervised); 1.4 Related Topics (Data Privacy and Security; Model Interpretability and Trust).",
+   "AIC211",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "3",
+   "Overview of AI/ML for Cybersecurity\n- Generative AI and Emerging Threats\n\n+ Introduction to Generative AI / LLMs\n\nDefensive Applications: Utilizing Large Language Models (LLMs) to assist with log analysis and incident report generation.\n\nEmerging Risks: Threat actors using LLMs to generate phishing emails, sophisticated social engineering content, and deepfakes.",
+   "Offline",
+   "CLO2",
+   "T",
+   "[Chio2018] Chapter 1: Why Machine Learning and Security?\nCyber Threat Landscape; What Is Machine Learning?; What Machine Learning Is Not; Real-World Uses of Machine Learning in Security; Limitations of Machine Learning in Security.\n\n[Alpaydin2020] 1 Introduction\n1.1 What Is Machine Learning?; 1.2 Examples of Machine Learning Applications (Classification/Regression/Unsupervised); 1.4 Related Topics (Data Privacy and Security; Model Interpretability and Trust).",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "4",
+   "Probability and Statistics for Machine Learning\n- Foundations of Probability\n\n+ Probability Basics: Understanding sample spaces and events.\n\n+ Core Rules: Addition and multiplication rules.\n\n+ Advanced Concepts: Statistical independence, conditional probability, and Bayes' Theorem.",
+   "Offline",
+   "CLO3",
+   "T",
+   "[Alpaydin2020] Appendix A: Probability\nA.1.1 Axioms of Probability; A.1.2 Conditional Probability\nA.2.1 Probability Distribution and Density Functions; A.2.2 Joint Distribution…; A.2.3 Conditional Distributions; A.2.4 Bayes’ Rule; A.2.5 Expectation; A.2.6 Variance; A.2.7 Weak Law of Large Numbers\nA.3.1 Bernoulli; A.3.2 Binomial; A.3.3 Multinomial; A.3.5 Normal (Gaussian)\n\n[Alpaydin2020] 3 Bayesian Decision Theory: 3.2 Classification; 3.3 Losses and Risks; 3.4 Discriminant Functions.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "5",
+   "Probability and Statistics for Machine Learning\n- Random Variables and Core Distributions\n\n+ Random Variables: Introduction to Probability Mass Function (PMF), Probability Density Function (PDF), and Cumulative Distribution Function (CDF).\n\n+ Multivariate Distributions: Joint, marginal, and conditional distributions.\n\n- self learning: formal proofs of the PMF/PDF/CDF and joint-distribution formulas (class covers intuition only).",
+   "Offline",
+   "CLO3",
+   "T",
+   "[Alpaydin2020] Appendix A: Probability\nA.1.1 Axioms of Probability; A.1.2 Conditional Probability\nA.2.1 Probability Distribution and Density Functions; A.2.2 Joint Distribution…; A.2.3 Conditional Distributions; A.2.4 Bayes’ Rule; A.2.5 Expectation; A.2.6 Variance; A.2.7 Weak Law of Large Numbers\nA.3.1 Bernoulli; A.3.2 Binomial; A.3.3 Multinomial; A.3.5 Normal (Gaussian)\n\n[Alpaydin2020] 3 Bayesian Decision Theory: 3.2 Classification; 3.3 Losses and Risks; 3.4 Discriminant Functions.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "6",
+   "Probability and Statistics for Machine Learning\n- Statistical Moments and Common ML Distributions\n\n+ Moments: Expectation (mean), variance, and covariance/correlation (applied to understand noise, data scaling, and feature dependence).\n\n+ Common ML Distributions: Discrete distributions (Bernoulli, Binomial, Multinomial) and continuous distributions (Gaussian/Normal).",
+   "Offline",
+   "CLO3",
+   "T",
+   "[Alpaydin2020] Appendix A: Probability\nA.1.1 Axioms of Probability; A.1.2 Conditional Probability\nA.2.1 Probability Distribution and Density Functions; A.2.2 Joint Distribution…; A.2.3 Conditional Distributions; A.2.4 Bayes’ Rule; A.2.5 Expectation; A.2.6 Variance; A.2.7 Weak Law of Large Numbers\nA.3.1 Bernoulli; A.3.2 Binomial; A.3.3 Multinomial; A.3.5 Normal (Gaussian)\n\n[Alpaydin2020] 3 Bayesian Decision Theory: 3.2 Classification; 3.3 Losses and Risks; 3.4 Discriminant Functions.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "7",
+   "Probability and Statistics for Machine Learning\n- Estimation and Likelihood\n\n+ Parameter Estimation: Sampling intuition.\n\n+ Likelihood: Maximum Likelihood Estimation (MLE) and Maximum A Posteriori (MAP) estimation, including intuition derived from log-likelihood.\n\n+ Model Fundamentals: Understanding the bias-variance tradeoff.\n\n- self learning: full MLE/MAP / log-likelihood derivation.",
+   "Offline",
+   "CLO3, CLO7",
+   "T",
+   "[Alpaydin2020] 4 Parametric Methods\n4.2 Maximum Likelihood Estimation; 4.3 Evaluating an Estimator: Bias and Variance; 4.7 Tuning Model Complexity: Bias/Variance Dilemma; 4.8 Model Selection Procedures.\n\n[Alpaydin2020] 20 Design and Analysis of Machine Learning Experiments\n20.6 Cross-Validation and Resampling Methods (20.6.1 K-Fold; 20.6.3 Bootstrapping)\n20.7 Measuring Classifier Performance; 20.8 Interval Estimation; 20.9 Hypothesis Testing\n20.11 Comparing Two Classification Algorithms (20.11.1 McNemar; 20.11.2 Paired t-test; 20.11.3 5×2cv paired t-test).\n\n[Chio2018] Chapter 2 → Practical Considerations in Classification: Choosing Thresholds and Comparing Models.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "8",
+   "Probability and Statistics for Machine Learning\n- Statistical Model Evaluation and Confidence Intervals\n\n+ Model Evaluation: Establishing a statistical basis for evaluating and comparing machine learning models.\n\n+ Confidence Intervals: Calculating intervals for key performance metrics such as accuracy, precision, and recall.",
+   "Offline",
+   "CLO3, CLO7",
+   "T",
+   "[Alpaydin2020] 4 Parametric Methods\n4.2 Maximum Likelihood Estimation; 4.3 Evaluating an Estimator: Bias and Variance; 4.7 Tuning Model Complexity: Bias/Variance Dilemma; 4.8 Model Selection Procedures.\n\n[Alpaydin2020] 20 Design and Analysis of Machine Learning Experiments\n20.6 Cross-Validation and Resampling Methods (20.6.1 K-Fold; 20.6.3 Bootstrapping)\n20.7 Measuring Classifier Performance; 20.8 Interval Estimation; 20.9 Hypothesis Testing\n20.11 Comparing Two Classification Algorithms (20.11.1 McNemar; 20.11.2 Paired t-test; 20.11.3 5×2cv paired t-test).\n\n[Chio2018] Chapter 2 → Practical Considerations in Classification: Choosing Thresholds and Comparing Models.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "9",
+   "Probability and Statistics for Machine Learning\n- Resampling Techniques and Hypothesis Testing\n\n+ Resampling Methods: Introduction to bootstrap and permutation techniques.\n\n+ Hypothesis Testing: Basic principles of statistical hypothesis testing applied to machine learning models.\n\n- self learning: permutation test & in-depth Bayesian decision theory; statistical significance testing (moved to appendix).",
+   "Offline",
+   "CLO3, CLO7",
+   "T",
+   "[Alpaydin2020] 4 Parametric Methods\n4.2 Maximum Likelihood Estimation; 4.3 Evaluating an Estimator: Bias and Variance; 4.7 Tuning Model Complexity: Bias/Variance Dilemma; 4.8 Model Selection Procedures.\n\n[Alpaydin2020] 20 Design and Analysis of Machine Learning Experiments\n20.6 Cross-Validation and Resampling Methods (20.6.1 K-Fold; 20.6.3 Bootstrapping)\n20.7 Measuring Classifier Performance; 20.8 Interval Estimation; 20.9 Hypothesis Testing\n20.11 Comparing Two Classification Algorithms (20.11.1 McNemar; 20.11.2 Paired t-test; 20.11.3 5×2cv paired t-test).\n\n[Chio2018] Chapter 2 → Practical Considerations in Classification: Choosing Thresholds and Comparing Models.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "10",
+   "Python for Data Science\n- Basic Python Review\n\n+ Fundamental Concepts: Basic data types, and core data structures (Lists, Dictionaries, Sets).\n\n+ Programming Constructs: Functions, control flow (loops), and importing modules.\n\n- self learning: all basic Python (data types, list/set/dict, loops, functions/lambda/higher-order, modules, small syntax demos) — self-study + entry check.",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "Python docs – The Python Tutorial: An Informal Introduction to Python; More Control Flow Tools; Data Structures; Modules.\n\nNumPy docs – Quickstart: The Basics; Array attributes / indexing / broadcasting (các mục cùng trang Quickstart).\n\npandas docs: 10 minutes to pandas; Intro to data structures (Series/DataFrame); Indexing/Selection.\n\nscikit-learn docs: Getting Started; Preprocessing data; Model selection and evaluation.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "11",
+   "Python for Data Science\n- Introduction to Data Science Libraries\n\n+ Core Ecosystem Overview: Introduction to essential Python libraries for data science, including NumPy, Pandas, Matplotlib/Plotly (for visualization), and scikit-learn (for machine learning).",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "Python docs – The Python Tutorial: An Informal Introduction to Python; More Control Flow Tools; Data Structures; Modules.\n\nNumPy docs – Quickstart: The Basics; Array attributes / indexing / broadcasting (các mục cùng trang Quickstart).\n\npandas docs: 10 minutes to pandas; Intro to data structures (Series/DataFrame); Indexing/Selection.\n\nscikit-learn docs: Getting Started; Preprocessing data; Model selection and evaluation.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "12",
+   "Python for Data Science\n- Data Manipulation and Exploration\n\n+ Working with Pandas: Introduction to the DataFrame object.\n\n+ Basic Data Operations: Utilizing fundamental functions for data exploration and descriptive statistics (e.g., head(), info(), describe(), value_counts()).",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "Python docs – The Python Tutorial: An Informal Introduction to Python; More Control Flow Tools; Data Structures; Modules.\n\nNumPy docs – Quickstart: The Basics; Array attributes / indexing / broadcasting (các mục cùng trang Quickstart).\n\npandas docs: 10 minutes to pandas; Intro to data structures (Series/DataFrame); Indexing/Selection.\n\nscikit-learn docs: Getting Started; Preprocessing data; Model selection and evaluation.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "13",
+   "Supervised Learning for Cybersecurity\n- Formulation for Security Classification\n\n+ Problem Framing: Formulating security challenges as machine learning tasks, focusing on binary and multiclass classification.\n\n+ Data Challenges: Strategies for handling label noise in cybersecurity datasets.\n\n- self learning: label-noise transition matrix & label smoothing (in depth).",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Chio2018] Chapter 2: Classifying and Clustering\nMachine Learning: Problems and Approaches; Machine Learning in Practice: A Worked Example\nTraining Algorithms to Learn → (Model Families; Loss Functions; Optimization)\nPractical Considerations in Classification → (Training Data Construction; Feature Selection; Overfitting and Underfitting; Choosing Thresholds and Comparing Models).\n\n[Alpaydin2020] 2 Supervised Learning\n2.1 Learning a Class from Examples; 2.4 Noise; 2.5 Learning Multiple Classes; 2.7 Model Selection and Generalization.\n\n[Alpaydin2020] 20.7 Measuring Classifier Performance.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "14",
+   "Supervised Learning for Cybersecurity\n- Evaluation Metrics in Security Context\n\n+ Standard Performance Metrics: Utilizing Confusion Matrix, Precision, Recall, F1-score, and ROC-AUC for model assessment.\n\n+ Cost-Sensitive Metrics: Evaluating the operational impact of errors, with a specific emphasis on the high cost of False Positives in Security Operations Center (SOC) environments.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Chio2018] Chapter 2: Classifying and Clustering\nMachine Learning: Problems and Approaches; Machine Learning in Practice: A Worked Example\nTraining Algorithms to Learn → (Model Families; Loss Functions; Optimization)\nPractical Considerations in Classification → (Training Data Construction; Feature Selection; Overfitting and Underfitting; Choosing Thresholds and Comparing Models).\n\n[Alpaydin2020] 2 Supervised Learning\n2.1 Learning a Class from Examples; 2.4 Noise; 2.5 Learning Multiple Classes; 2.7 Model Selection and Generalization.\n\n[Alpaydin2020] 20.7 Measuring Classifier Performance.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "15",
+   "Supervised Learning for Cybersecurity\n- Core Supervised Models - Linear Approaches\n\n+ Prioritizing Common Security Models: Introduction to foundational supervised algorithms.\n\n+ Linear Algorithms: Applying Linear Regression and Logistic Regression to security tasks.\n\n- self learning: Linear Regression (not central to security classification). Kept in depth: Logistic Regression.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Chio2018] Chapter 2 → Supervised Classification Algorithms\nLogistic Regression; Decision Trees; Decision Forests; Support Vector Machines; Naive Bayes; k-Nearest Neighbors; Neural Networks.\n\n[Alpaydin2020] 10 Linear Discrimination: 10.6 Gradient Descent; 10.7 Logistic Discrimination (10.7.1 Two classes; 10.7.2 Multiple classes).\n\n[Alpaydin2020] 9 Decision Trees: 9.2 Univariate Trees (9.2.1 Classification Trees); 9.3 Pruning.\n\n[Alpaydin2020] 14 Kernel Machines: 14.2 Optimal Separating Hyperplane; 14.3 Soft Margin; 14.5 Kernel Trick.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "16",
+   "Supervised Learning for Cybersecurity\n- Core Supervised Models - Tree-Based Methods\n\n+ Tree-Based Algorithms: Understanding and implementing Decision Trees.\n\n+ Ensemble Methods: Advanced techniques using Random Forest and Gradient Boosting Decision Trees (GBDT).\n\n- self learning: XGBoost & Bayesian optimization (GBDT in depth). Kept in depth: Decision Tree, Random Forest.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Chio2018] Chapter 2 → Supervised Classification Algorithms\nLogistic Regression; Decision Trees; Decision Forests; Support Vector Machines; Naive Bayes; k-Nearest Neighbors; Neural Networks.\n\n[Alpaydin2020] 10 Linear Discrimination: 10.6 Gradient Descent; 10.7 Logistic Discrimination (10.7.1 Two classes; 10.7.2 Multiple classes).\n\n[Alpaydin2020] 9 Decision Trees: 9.2 Univariate Trees (9.2.1 Classification Trees); 9.3 Pruning.\n\n[Alpaydin2020] 14 Kernel Machines: 14.2 Optimal Separating Hyperplane; 14.3 Soft Margin; 14.5 Kernel Trick.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "17",
+   "Supervised Learning for Cybersecurity\n- Additional Models and Generalization Concepts\n\n+ Distance and Margin-Based Models: Introduction to Support Vector Machines (SVM) and k-Nearest Neighbors (kNN).\n\n+ Generalization Fundamentals: Understanding model performance issues including overfitting, underfitting, and the bias-variance tradeoff.\n\n- self learning: SVM kernel trick & hinge loss; kNN in depth (class covers 'when to use' only).",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Alpaydin2020] 2.7 Model Selection and Generalization.\n\n[Alpaydin2020] 4.7 Tuning Model Complexity: Bias/Variance Dilemma; 4.8 Model Selection Procedures.\n\n[Alpaydin2020] 20.6 Cross-Validation and Resampling Methods (20.6.1 K-Fold; 20.6.2 5×2cv).\n\n[Chio2018] Chapter 2 → Practical Considerations in Classification: Overfitting and Underfitting; Selecting a Model Family.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "18",
+   "Supervised Learning for Cybersecurity\n- Model Selection and Optimization\n\n+ Regularization: Applying regularization techniques to prevent overfitting.\n\n+ Model Optimization: Utilizing cross-validation and hyperparameter tuning to select and refine the best performing models.\n\n- self learning: Bayesian optimization for hyperparameter tuning (in depth).",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Alpaydin2020] 2.7 Model Selection and Generalization.\n\n[Alpaydin2020] 4.7 Tuning Model Complexity: Bias/Variance Dilemma; 4.8 Model Selection Procedures.\n\n[Alpaydin2020] 20.6 Cross-Validation and Resampling Methods (20.6.1 K-Fold; 20.6.2 5×2cv).\n\n[Chio2018] Chapter 2 → Practical Considerations in Classification: Overfitting and Underfitting; Selecting a Model Family.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "19",
+   "Unsupervised Learning for Cybersecurity\n- Clustering Algorithms for Behavior Grouping\n\n+ Introduction to Clustering: Fundamentals of clustering for behavior grouping.\n\n+ Core Algorithms: Understanding and implementing k-means and hierarchical clustering.\n\n- self learning: Hierarchical Clustering & linkage types; DBSCAN; Gaussian Mixture Model & EM. Kept: k-means.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Alpaydin2020] 7 Clustering: 7.1 Introduction; 7.3 k-Means Clustering; 7.8 Hierarchical Clustering; 7.9 Choosing the Number of Clusters.\n\n[Chio2018] Chapter 2 → Clustering: Clustering Algorithms; Evaluating Clustering Results.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "20",
+   "Unsupervised Learning for Cybersecurity\n- Distance Metrics and Security Applications\n\n+ Distance Metrics: Mathematical foundations including Euclidean and Mahalanobis distances.\n\n+ Cybersecurity Applications: Practical application of clustering to group user/host behaviors and identify malware families.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Alpaydin2020] 7 Clustering: 7.1 Introduction; 7.3 k-Means Clustering; 7.8 Hierarchical Clustering; 7.9 Choosing the Number of Clusters.\n\n[Chio2018] Chapter 2 → Clustering: Clustering Algorithms; Evaluating Clustering Results.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "21",
+   "Unsupervised Learning for Cybersecurity\n- Dimensionality Reduction Concepts\n\n+ Introduction to Dimensionality Reduction: Techniques for data representation.\n\n+ Principal Component Analysis (PCA): Applying PCA to handle high-dimensional system logs and network traffic data.\n\n- self learning: t-SNE, UMAP, ICA. Kept: PCA.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Alpaydin2020] 6 Dimensionality Reduction\n6.3 Principal Component Analysis; 6.6 Singular Value Decomposition and Matrix Factorization; 6.13 t-Distributed Stochastic Neighbor Embedding.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "22",
+   "Unsupervised Learning for Cybersecurity\n- Feature Extraction and Embeddings\n\n+ Feature Engineering: Basic techniques for feature extraction and data embedding in unsupervised learning contexts.\n\n- self learning: Word2Vec/Doc2Vec/FastText; Autoencoder/VAE; Node2Vec/GNN.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Alpaydin2020] 6 Dimensionality Reduction\n6.3 Principal Component Analysis; 6.6 Singular Value Decomposition and Matrix Factorization; 6.13 t-Distributed Stochastic Neighbor Embedding.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "23",
+   "Unsupervised Learning for Cybersecurity\n- Foundations of Anomaly Detection\n\n+ SOC Focus: Introduction to anomaly detection, recognizing it as a primary focus within Security Operations Centers (SOC).\n\n+ Detection Approaches: Exploring statistical anomaly detection alongside distance and density-based methods.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Chio2018] Chapter 3: Anomaly Detection\nWhen to Use Anomaly Detection Versus Supervised Learning; Feature Engineering for Anomaly Detection (Host/Network/Web)\nAnomaly Detection with Data and Algorithms → (Statistical Metrics; Goodness-of-Fit; Unsupervised Machine Learning Algorithms; Density-Based Methods)\nPractical System Design Concerns → (Optimizing for Explainability; Maintainability…; Integrating Human Feedback; Mitigating Adversarial Effects).\n\n[Alpaydin2020] 8 Nonparametric Methods: 8.7 Outlier Detection.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "24",
+   "Unsupervised Learning for Cybersecurity\n- Advanced Anomaly Detection Models\n\n+ Model Implementation: Implementing specific models for anomaly detection, including Isolation Forest, One-class SVM, and Autoencoders (tailored to the students' advanced proficiency level).\n\n- self learning: One-Class SVM & LOF in depth; Autoencoder/VAE. Kept: Isolation Forest (concept).",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Chio2018] Chapter 3: Anomaly Detection\nWhen to Use Anomaly Detection Versus Supervised Learning; Feature Engineering for Anomaly Detection (Host/Network/Web)\nAnomaly Detection with Data and Algorithms → (Statistical Metrics; Goodness-of-Fit; Unsupervised Machine Learning Algorithms; Density-Based Methods)\nPractical System Design Concerns → (Optimizing for Explainability; Maintainability…; Integrating Human Feedback; Mitigating Adversarial Effects).\n\n[Alpaydin2020] 8 Nonparametric Methods: 8.7 Outlier Detection.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "25",
+   "LAB 1: Basic ML for security data.\n- Python + basic dataset processing.\n- Logistic Regression.\n- Decision Tree / Random Forest.\n- Preliminary evaluation using accuracy and confusion matrix.",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO7",
+   "U",
+   "",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "26",
+   "LAB 1: Basic ML for security data.\n- Python + basic dataset processing.\n- Logistic Regression.\n- Decision Tree / Random Forest.\n- Preliminary evaluation using accuracy and confusion matrix.",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO8",
+   "U",
+   "",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "27",
+   "LAB 1: Basic ML for security data.\n- Python + basic dataset processing.\n- Logistic Regression.\n- Decision Tree / Random Forest.\n- Preliminary evaluation using accuracy and confusion matrix.",
+   "Offline",
+   "CLO3, CLO4, CLO5, CLO9",
+   "U",
+   "",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "28",
+   "Security Data and Preprocessing\n- Security Data Sources and Basic Cleaning\n\n+ Security Data Types: Overview of common security data sources, including Operating System (OS) logs, web server logs, firewall/IPS logs, authentication logs, network flow, and endpoint data.\n\n+ Basic Preprocessing: Data cleaning techniques, focusing on removing erroneous rows and handling missing values.\n\n- self learning: duplicate mini-lab on missing-value handling (taught once); N-gram features moved to the NLP session; SMOTE/imbalance moved to the Model Evaluation & Imbalanced Data session.",
+   "Offline",
+   "CLO4, CLO5",
+   "T",
+   "[Chio2018] Chapter 5: Network Traffic Analysis\nFrom Captures to Features; Exploring the Data; Data Preparation.\n\n[Chio2018] Chapter 2 → Practical Considerations: Training Data Construction; Feature Selection.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "29",
+   "Security Data and Preprocessing\n- Data Transformation and Encoding\n\n+ Anomaly Handling: Techniques for processing and handling outliers.\n\n+ Attribute Selection & Scaling: Selecting relevant attributes (e.g., dropping pure IDs and unused timestamps) and applying standardization/scaling for numerical features.\n\n+ Categorical Encoding: Implementing encoding methods for categorical data, such as label encoding and one-hot encoding.\n\n- self learning: duplicate mini-lab on categorical encoding & scaling (taught once); PCA overlaps the Unsupervised session (Session 21).",
+   "Offline",
+   "CLO4, CLO5",
+   "T",
+   "[Chio2018] Chapter 5: Network Traffic Analysis\nFrom Captures to Features; Exploring the Data; Data Preparation.\n\n[Chio2018] Chapter 2 → Practical Considerations: Training Data Construction; Feature Selection.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "30",
+   "Security Data and Preprocessing\n- Feature Engineering for Security Models\n\n+ Fundamental Feature Engineering: Understanding how to transform raw data into features suitable for machine learning models.\n\n+ Behavioral and Aggregated Features: Extracting features such as the number of requests per IP and the frequency of failed logins per user.\n\n+ Contextual Features: Deriving temporal characteristics (e.g., hour, day of the week) and structural features (e.g., URL length, number of special characters, number of subdomains).",
+   "Offline",
+   "CLO4, CLO5",
+   "T",
+   "[Chio2018] Chapter 5: Network Traffic Analysis\nFrom Captures to Features; Exploring the Data; Data Preparation.\n\n[Chio2018] Chapter 2 → Practical Considerations: Training Data Construction; Feature Selection.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "31",
+   "Designing a security data pipeline\n- Pipeline diagram: log → feature → model\n\n+ Log collection → preprocessing → feature engineering → save clean dataset.\n\n- self learning: Kafka/queue internals; exactly-once/at-least-once; backpressure; deep infrastructure scaling; repeated tuning/metrics.",
+   "Offline",
+   "CLO5",
+   "T",
+   "[Chio2018] Chapter 7: Production Systems\nDefining Machine Learning System Maturity and Scalability\nData Quality → (Bias in Datasets; Label Inaccuracy; Missing Data + Solutions)\nModel Quality → (Hyperparameter Optimization; Feedback Loops, A/B Testing of Models; Repeatable and Explainable Results)\nMaintainability → (Checkpointing, Versioning, and Deploying Models)\nMonitoring and Alerting; Security and Reliability.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "32",
+   "Guide students in choosing project topics.",
+   "Offline",
+   "CLO10",
+   "T",
+   "[Chio2018] Chapter 1: Real-World Uses of Machine Learning in Security; Limitations of Machine Learning in Security.\n\nOptional\n\n[Chio2018] Chapter 4: Understanding Malware; Feature Generation; From Features to Classification.\n\n[Chio2018] Chapter 5: Building a Predictive Model to Classify Network Attacks (để chọn đề tài IDS).\n\n[Tsukerman2019] Chapter 6: Phishing URL detection; Botnet traffic detection; Detecting DDoS; Insider threat detection.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "33",
+   "Progress Test 01",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "",
+   "",
+   "Take the test as required by the instructor.",
+   ""
+  ],
+  [
+   "34",
+   "Model Evaluation and Imbalanced Data\n- Confusion Matrix and Core Metrics\n\n+ Detailed Confusion Matrix: In-depth analysis of the confusion matrix structure.\n\n+ Core Metric Calculation: Formulating and interpreting Precision, Recall, and F1-score derived directly from True Positives (TP), False Positives (FP), False Negatives (FN), and True Negatives (TN).\n\n- self learning: Detailed MCC, equation MCC",
+   "Offline",
+   "CLO7, CLO8",
+   "T",
+   "[Alpaydin2020] Chapter 20\n20.7 Measuring Classifier Performance; 20.8 Interval Estimation\n20.10 Assessing a Classification Algorithm’s Performance (20.10.1 Binomial Test; 20.10.2 Approx Normal Test; 20.10.3 t Test)\n20.11 Comparing Two Classification Algorithms (20.11.1 McNemar; 20.11.2 K-Fold CV paired t test).\n\n[Chio2018] Chapter 2 → Practical Considerations: Choosing Thresholds and Comparing Models.\n\n[Halder2018] Chapter 10\nImbalanced data; Handling imbalanced datasets (Under/Over-sampling; SMOTE…);\nInvestigating precision-recall curve and area; Predictions… confusion matrix.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "35",
+   "Model Evaluation and Imbalanced Data\n- The Accuracy Paradox and Advanced Evaluation Curves\n\n+ Accuracy vs. Alternative Metrics: Comparing traditional accuracy against other performance indicators.\n\n+ The Imbalance Pitfall: Understanding why accuracy is a dangerous and misleading metric when evaluating highly imbalanced classes.\n\n+ Performance Visualization: Utilizing Receiver Operating Characteristic - Area Under Curve (ROC-AUC) and Precision-Recall (PR) curves for robust model evaluation.",
+   "Offline",
+   "CLO7, CLO8",
+   "T",
+   "[Alpaydin2020] Chapter 20\n20.7 Measuring Classifier Performance; 20.8 Interval Estimation\n20.10 Assessing a Classification Algorithm’s Performance (20.10.1 Binomial Test; 20.10.2 Approx Normal Test; 20.10.3 t Test)\n20.11 Comparing Two Classification Algorithms (20.11.1 McNemar; 20.11.2 K-Fold CV paired t test).\n\n[Chio2018] Chapter 2 → Practical Considerations: Choosing Thresholds and Comparing Models.\n\n[Halder2018] Chapter 10\nImbalanced data; Handling imbalanced datasets (Under/Over-sampling; SMOTE…);\nInvestigating precision-recall curve and area; Predictions… confusion matrix.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "36",
+   "Model Evaluation and Imbalanced Data\n- Strategies for Imbalanced Datasets\n\n+ Understanding Data Imbalance: Formalizing the class imbalance problem within the context of machine learning.\n\n+ Handling Methodologies: Exploring strategic directions and techniques for resolving imbalanced data issues (such as resampling or algorithmic adjustments).\n\n- self learning: McNemar; paired t-test; advanced sampling variants; duplicate metric code.",
+   "Offline",
+   "CLO7, CLO8",
+   "T",
+   "[Alpaydin2020] Chapter 20\n20.7 Measuring Classifier Performance; 20.8 Interval Estimation\n20.10 Assessing a Classification Algorithm’s Performance (20.10.1 Binomial Test; 20.10.2 Approx Normal Test; 20.10.3 t Test)\n20.11 Comparing Two Classification Algorithms (20.11.1 McNemar; 20.11.2 K-Fold CV paired t test).\n\n[Chio2018] Chapter 2 → Practical Considerations: Choosing Thresholds and Comparing Models.\n\n[Halder2018] Chapter 10\nImbalanced data; Handling imbalanced datasets (Under/Over-sampling; SMOTE…);\nInvestigating precision-recall curve and area; Predictions… confusion matrix.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "37",
+   "Detailed Analysis and Evaluation: The IDS Case Study\n- IDS Paradigms and the Role of ML\n\n+ Signature-based vs. Anomaly-based IDS: Analyzing the specific advantages and disadvantages of each detection approach.\n\n+ Machine Learning Integration: Understanding the distinct roles and applications of machine learning within both signature and anomaly-based systems.\n\n+ Emerging Threats: Addressing the continuous challenge of newly emerging attack vectors (zero-day attacks).\n\n- self learnin: Exploratory Data Analysis, encoding, scalling, correlation; RFE",
+   "Offline",
+   "CLO2, CLO5, CLO7",
+   "T,U",
+   "[Chio2018] Chapter 5 → Building a Predictive Model to Classify Network Attacks\nExploring the Data; Data Preparation; Classification; Supervised Learning; Semi-Supervised Learning; Unsupervised Learning; Advanced Ensembling.\n\nOptional\n\n[Chio2018] Chapter 3: Response and Mitigation; Practical System Design Concerns.\n\n[Halder2018] Chapter 6: Model evaluation; Choosing k for k-means; Normalizing features (nếu có so sánh anomaly-based IDS).",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "38",
+   "Detailed Analysis and Evaluation: The IDS Case Study\n- Model Lifecycle and Non-Technical Evaluation\n\n+ Model Degradation: Understanding the phenomenon where evolving data distributions cause existing models to gradually become obsolete over time.\n\n+ Model Update Strategies: Evaluating implementation strategies for maintaining model accuracy, including periodic retraining and online learning paradigms.\n\n+ Non-Technical Criteria: * Assessing the interpretability (explainability) of the model's results.\n\n+ Evaluating computational resource requirements, specifically comparing real-time processing versus batch processing.\n\n+ Analyzing the complexities of integrating new ML models with existing security infrastructure.\n\n- self learning: SMOTE+ENN; DT/RF theory; ROC/PR theory; Gradient Boosting; exhaustive GridSearch; detailed streaming.",
+   "Offline",
+   "CLO2, CLO5, CLO7",
+   "T,U",
+   "[Chio2018] Chapter 5 → Building a Predictive Model to Classify Network Attacks\nExploring the Data; Data Preparation; Classification; Supervised Learning; Semi-Supervised Learning; Unsupervised Learning; Advanced Ensembling.\n\nOptional\n\n[Chio2018] Chapter 3: Response and Mitigation; Practical System Design Concerns.\n\n[Halder2018] Chapter 6: Model evaluation; Choosing k for k-means; Normalizing features (nếu có so sánh anomaly-based IDS).",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "39",
+   "Detailed Analysis and Evaluation: The IDS Case Study\n- IDS Project Formulation and Design\n\n+ Project Design: Structuring a comprehensive, practical project centered around building an Intrusion Detection System.\n\n+ Objective Definition: Establishing clear operational goals, with a critical focus on navigating the trade-offs between minimizing False Negatives (FN) and minimizing False Positives (FP).\n\n+ Implementation Strategy: Systematically selecting appropriate cybersecurity datasets, engineering robust features, and choosing the optimal models for deployment.",
+   "Offline",
+   "CLO2, CLO5, CLO7",
+   "T,U",
+   "[Chio2018] Chapter 5 → Building a Predictive Model to Classify Network Attacks\nExploring the Data; Data Preparation; Classification; Supervised Learning; Semi-Supervised Learning; Unsupervised Learning; Advanced Ensembling.\n\nOptional\n\n[Chio2018] Chapter 3: Response and Mitigation; Practical System Design Concerns.\n\n[Halder2018] Chapter 6: Model evaluation; Choosing k for k-means; Normalizing features (nếu có so sánh anomaly-based IDS).",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "40",
+   "LAB 2: Security data pipeline + IDS + imbalance\n- Preprocessing and feature engineering security data.\n- Training IDS models (RF/Logistics).\n- Evaluation using multiple metrics.\n- Testing imbalance handling using class_weight/undersampling.",
+   "Offline",
+   "CLO5, CLO8",
+   "U",
+   "",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "41",
+   "LAB 2: Security data pipeline + IDS + imbalance\n- Preprocessing and feature engineering security data.\n- Training IDS models (RF/Logistics).\n- Evaluation using multiple metrics.\n- Testing imbalance handling using class_weight/undersampling.",
+   "Offline",
+   "CLO5, CLO8",
+   "U",
+   "",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "42",
+   "LAB 2: Security data pipeline + IDS + imbalance\n- Preprocessing and feature engineering security data.\n- Training IDS models (RF/Logistics).\n- Evaluation using multiple metrics.\n- Testing imbalance handling using class_weight/undersampling.",
+   "Offline",
+   "CLO5, CLO8",
+   "U",
+   "",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "43",
+   "Basic Deep Learning and NLP for Cybersecurity\n- Text Processing and Feature Extraction\n\n+ The Text Classification Problem: Formulating the challenge of processing text data, specifically targeting spam and phishing classification.\n\n+ Text Preprocessing: Techniques for cleaning and normalizing raw text data.\n\n+ Text Vectorization: Utilizing TF-IDF to transform text into numerical vectors suitable for machine learning algorithms.",
+   "Offline",
+   "CLO6, CLO7",
+   "T",
+   "[Alpaydin2020] 12 Deep Learning\n12.2 How to Train Multiple Hidden Layers (ReLU; Initialization; Backprop…)\n12.4 Regularization (Weight Decay; Dropout)\n12.5 Convolutional Layers (The Idea; Formalization)\n12.7 Learning Sequences (Recurrent Networks; LSTM; GRU).\n\n[Halder2018] Chapter 5\nFeaturization techniques… (TF-IDF; N-grams; Tokenization)\nUsing the Naive Bayes theorem to detect spam; Logistic regression spam filters.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "44",
+   "Basic Deep Learning and NLP for Cybersecurity\n- Classical Machine Learning for NLP and Evaluation\n\n+ Model Training: Implementing and training traditional machine learning algorithms, including Naive Bayes, Logistic Regression, and Support Vector Machines (SVM), on vectorized text data.\n\n+ Performance Evaluation: Assessing model effectiveness using core classification metrics: Precision, Recall, and F1-score.",
+   "Offline",
+   "CLO6, CLO7",
+   "T",
+   "[Alpaydin2020] 12 Deep Learning\n12.2 How to Train Multiple Hidden Layers (ReLU; Initialization; Backprop…)\n12.4 Regularization (Weight Decay; Dropout)\n12.5 Convolutional Layers (The Idea; Formalization)\n12.7 Learning Sequences (Recurrent Networks; LSTM; GRU).\n\n[Halder2018] Chapter 5\nFeaturization techniques… (TF-IDF; N-grams; Tokenization)\nUsing the Naive Bayes theorem to detect spam; Logistic regression spam filters.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "45",
+   "Basic Deep Learning and NLP for Cybersecurity\n- Fundamentals of Deep Learning and Neural Networks\n\n+ Introduction to Neural Networks: Exploring the foundational concepts of Deep Learning.\n\n+ Core Architectures and Mechanisms: Understanding the structure of Multi-Layer Perceptrons (MLP), the role of activation functions, and the mechanics of the backpropagation algorithm.\n\n+ Cybersecurity Applications: Reviewing basic theoretical frameworks and discussing practical directions for applying deep learning to security challenges.",
+   "Offline",
+   "CLO6, CLO7",
+   "T",
+   "[Alpaydin2020] 12 Deep Learning\n12.2 How to Train Multiple Hidden Layers (ReLU; Initialization; Backprop…)\n12.4 Regularization (Weight Decay; Dropout)\n12.5 Convolutional Layers (The Idea; Formalization)\n12.7 Learning Sequences (Recurrent Networks; LSTM; GRU).\n\n[Halder2018] Chapter 5\nFeaturization techniques… (TF-IDF; N-grams; Tokenization)\nUsing the Naive Bayes theorem to detect spam; Logistic regression spam filters.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "46",
+   "Adversarial Machine Learning\n- AML Foundations and Threat Modeling\n\n+ Introduction to AML: Adversarial Machine Learning (AML) within the context of Cybersecurity.\n\n+ ML Threat Modeling: Developing threat models for ML systems in SOC/IDS, focusing on attacker goals, capabilities, and knowledge.\n\n+ Attack Taxonomy by ML Lifecycle:\n\nTraining-time: Poisoning and data contamination attacks, particularly in online learning and feedback loops.\n\nInference-time: Evasion attacks and the generation of adversarial examples.\n\nPost-training: Model extraction/stealing and privacy-focused attacks (including model inversion and membership inference).\n\n+ Security Impacts: Assessing the consequences of attacks, including reduced recall (compromising integrity), increased false positives (compromising availability), and information leakage (compromising privacy).\n\n- self learning: FGSM/PGD formulas; C&W/AutoAttack details; substitute attack implementation; ART/RobustBench versions; TRADES/DUCAT/certified robustness; defensive distillation; long benchmarks/trends.",
+   "Offline",
+   "CLO1, CLO9",
+   "T",
+   "[Chio2018] Chapter 8: Adversarial Machine Learning\nTerminology; Security Vulnerabilities in Machine Learning Algorithms; Attack Transferability\nAttack Technique: Model Poisoning (Example; Attacker Knowledge; Defense…)\nAttack Technique: Evasion Attack (Example; Defense…).\n\nOptional\n[Tsukerman2019] Chapter 8: Secure and Private AI\nTesting the adversarial robustness of neural networks",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "47",
+   "Adversarial Machine Learning\n- Robustness Evaluation and Testing\n\n+ Model Robustness: Evaluating and testing the robustness of machine learning models.\n\n+ Test Set Design: Designing test sets based on specific attacker scenarios, including black-box and gray-box testing approaches.\n\n+ Robustness Metrics: Measuring the degradation of Precision, Recall, and F1-scores when data is subjected to noise or distributional shifts; conducting targeted testing across attack categories (evasion, poisoning, extraction).\n\n+ Case Study: Practical analysis of a specific robustness evaluation scenario.",
+   "Offline",
+   "CLO1, CLO9",
+   "T",
+   "[Chio2018] Chapter 8: Adversarial Machine Learning\nTerminology; Security Vulnerabilities in Machine Learning Algorithms; Attack Transferability\nAttack Technique: Model Poisoning (Example; Attacker Knowledge; Defense…)\nAttack Technique: Evasion Attack (Example; Defense…).\n\nOptional\n[Tsukerman2019] Chapter 8: Secure and Private AI\nTesting the adversarial robustness of neural networks",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "48",
+   "Adversarial Machine Learning\n- Defense-in-Depth Strategies for ML\n\n+ Comprehensive Defense: Implementing defense-in-depth architectures specifically for ML systems.\n\n+ Data-Level Defense: Securing the data pipeline, filtering noise and incorrect labels, and implementing early detection mechanisms for data drift and poisoning signatures.\n\n+ Model-Level Defense: Applying regularization techniques, conceptualizing robust/adversarial training, and performing model calibration.\n\n+ System-Level Defense: Enforcing rate-limiting and query monitoring, maintaining comprehensive logging and auditing, executing controlled retraining processes, and conducting ML-specific red-teaming and penetration testing.",
+   "Offline",
+   "CLO1, CLO9",
+   "T",
+   "[Chio2018] Chapter 8: Adversarial Machine Learning\nTerminology; Security Vulnerabilities in Machine Learning Algorithms; Attack Transferability\nAttack Technique: Model Poisoning (Example; Attacker Knowledge; Defense…)\nAttack Technique: Evasion Attack (Example; Defense…).\n\nOptional\n[Tsukerman2019] Chapter 8: Secure and Private AI\nTesting the adversarial robustness of neural networks",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "49",
+   "LLMs and Agentic AI for Cybersecurity\n- Introduction to LLMs and Agentic AI in Security Operations\n\n+ Overview: The role of LLMs and Agentic AI in cybersecurity, focusing on alert analysis, incident investigation, and response automation.\n\n+ SOC/IR Use Cases: Exploring common applications within Security Operations Centers (SOC) and Incident Response (IR), including alert triage, threat hunting, playbook generation, and automated reporting.\n\n- self learning: Market/model landscape; MoE/GQA/MLA/RoPE/sparse attention; vendor products; long jailbreak lists; repeated training poisoning; detailed EU AI Act; MCP implementation; framework comparison; multi-agent/autonomous SOC; open-vs-closed comparison.",
+   "Offline",
+   "CLO9",
+   "T",
+   "[Bodungen2023] Chapter 1\nCreating an API Key and interacting with OpenAI; Basic Prompting…; Applying ChatGPT Roles…;\nEnhancing Output with Templates…; Sending API Requests and Handling Responses with Python; Using Prompt Variables….\n\n[Bodungen2023] Chapter 7: Threat Monitoring and Detection\nThreat Intelligence Analysis; Real-Time Log Analysis; Building Custom Threat Detection Rules;\nNetwork Traffic Analysis and Anomaly Detection with PCAP Analyzer.\n\nOptional (Agentic / automation / IR use-cases)\n\n[Bodungen2023] Chapter 8: Incident Response\nChatGPT-assisted incident analysis and triage; Generating incident response playbooks;\nAutomated briefing reports and incident timeline reconstruction (+ Notes of caution).\n\n[Bodungen2023] Chapter 9\nLocal threat hunting with Open Interpreter; Implementing local AI models… with LMStudio; Reviewing IR Plans with PrivateGPT.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "50",
+   "LLMs and Agentic AI for Cybersecurity\n- Advanced Prompt Engineering for Security Data\n\n+ Structured Outputs: Designing effective prompts to generate structured outputs (e.g., JSON or schema formats) from LLMs.\n\n+ Log and Alert Processing: Utilizing LLMs to summarize logs and alerts, extract Indicators of Compromise (IoCs), map attacker behaviors to the MITRE ATT&CK framework, and propose actionable remediation steps.",
+   "Offline",
+   "CLO9",
+   "T",
+   "[Bodungen2023] Chapter 1\nCreating an API Key and interacting with OpenAI; Basic Prompting…; Applying ChatGPT Roles…;\nEnhancing Output with Templates…; Sending API Requests and Handling Responses with Python; Using Prompt Variables….\n\n[Bodungen2023] Chapter 7: Threat Monitoring and Detection\nThreat Intelligence Analysis; Real-Time Log Analysis; Building Custom Threat Detection Rules;\nNetwork Traffic Analysis and Anomaly Detection with PCAP Analyzer.\n\nOptional (Agentic / automation / IR use-cases)\n\n[Bodungen2023] Chapter 8: Incident Response\nChatGPT-assisted incident analysis and triage; Generating incident response playbooks;\nAutomated briefing reports and incident timeline reconstruction (+ Notes of caution).\n\n[Bodungen2023] Chapter 9\nLocal threat hunting with Open Interpreter; Implementing local AI models… with LMStudio; Reviewing IR Plans with PrivateGPT.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "51",
+   "LLMs and Agentic AI for Cybersecurity\n- Retrieval-Augmented Generation (RAG) for Security Context\n\n+ RAG Implementation: Deploying Retrieval-Augmented Generation (RAG) models to ground LLM responses in specific security knowledge bases.\n\n+ Contextual Knowledge: Enabling LLMs to answer queries and provide guidance based on internal runbooks, organizational Knowledge Bases (KB), and the MITRE ATT&CK framework.",
+   "Offline",
+   "CLO9",
+   "T",
+   "[Bodungen2023] Chapter 1\nCreating an API Key and interacting with OpenAI; Basic Prompting…; Applying ChatGPT Roles…;\nEnhancing Output with Templates…; Sending API Requests and Handling Responses with Python; Using Prompt Variables….\n\n[Bodungen2023] Chapter 7: Threat Monitoring and Detection\nThreat Intelligence Analysis; Real-Time Log Analysis; Building Custom Threat Detection Rules;\nNetwork Traffic Analysis and Anomaly Detection with PCAP Analyzer.\n\nOptional (Agentic / automation / IR use-cases)\n\n[Bodungen2023] Chapter 8: Incident Response\nChatGPT-assisted incident analysis and triage; Generating incident response playbooks;\nAutomated briefing reports and incident timeline reconstruction (+ Notes of caution).\n\n[Bodungen2023] Chapter 9\nLocal threat hunting with Open Interpreter; Implementing local AI models… with LMStudio; Reviewing IR Plans with PrivateGPT.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "52",
+   "LLMs and Agentic AI for Cybersecurity\n- Building Agentic Workflows and Tool Use\n\n+ Agent Workflows: Developing autonomous agent workflows utilizing \"tool-use\" (function calling) capabilities for specific SOC tasks.\n\n+ Practical Scenario: Designing a simple SOC agent pipeline: initial alert triage, followed by automated querying for additional data, conducting threat intelligence lookups, and finally proposing subsequent investigative steps.",
+   "Offline",
+   "CLO9",
+   "T",
+   "[Bodungen2023] Chapter 1\nCreating an API Key and interacting with OpenAI; Basic Prompting…; Applying ChatGPT Roles…;\nEnhancing Output with Templates…; Sending API Requests and Handling Responses with Python; Using Prompt Variables….\n\n[Bodungen2023] Chapter 7: Threat Monitoring and Detection\nThreat Intelligence Analysis; Real-Time Log Analysis; Building Custom Threat Detection Rules;\nNetwork Traffic Analysis and Anomaly Detection with PCAP Analyzer.\n\nOptional (Agentic / automation / IR use-cases)\n\n[Bodungen2023] Chapter 8: Incident Response\nChatGPT-assisted incident analysis and triage; Generating incident response playbooks;\nAutomated briefing reports and incident timeline reconstruction (+ Notes of caution).\n\n[Bodungen2023] Chapter 9\nLocal threat hunting with Open Interpreter; Implementing local AI models… with LMStudio; Reviewing IR Plans with PrivateGPT.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "53",
+   "LLMs and Agentic AI for Cybersecurity\n- AI Guardrails and Security Risks\n\n+ Identifying Risks: Recognizing the vulnerabilities associated with LLM deployments, including hallucinations and prompt injection attacks initiated via malicious log data.\n\n+ Applying Guardrails: Implementing robust safeguards to protect sensitive data and ensuring accountability through mandatory \"human-in-the-loop\" design principles.",
+   "Offline",
+   "CLO9",
+   "T",
+   "[Bodungen2023] Chapter 1\nCreating an API Key and interacting with OpenAI; Basic Prompting…; Applying ChatGPT Roles…;\nEnhancing Output with Templates…; Sending API Requests and Handling Responses with Python; Using Prompt Variables….\n\n[Bodungen2023] Chapter 7: Threat Monitoring and Detection\nThreat Intelligence Analysis; Real-Time Log Analysis; Building Custom Threat Detection Rules;\nNetwork Traffic Analysis and Anomaly Detection with PCAP Analyzer.\n\nOptional (Agentic / automation / IR use-cases)\n\n[Bodungen2023] Chapter 8: Incident Response\nChatGPT-assisted incident analysis and triage; Generating incident response playbooks;\nAutomated briefing reports and incident timeline reconstruction (+ Notes of caution).\n\n[Bodungen2023] Chapter 9\nLocal threat hunting with Open Interpreter; Implementing local AI models… with LMStudio; Reviewing IR Plans with PrivateGPT.",
+   "",
+   "Read the materials beforehand, attend classes, and fulfill the instructor's requirements.",
+   ""
+  ],
+  [
+   "54",
+   "Progress Test 02",
+   "Offline",
+   "CLO6, CLO7, CLO8, CLO9",
+   "U",
+   "",
+   "",
+   "Take the test as required by the instructor.",
+   ""
+  ],
+  [
+   "55",
+   "Review and present the project\n- Review and evaluate the project, and provide feedback.",
+   "Offline",
+   "CLO10",
+   "U",
+   "",
+   "",
+   "Present the project according to the requirements and answer the questions.",
+   ""
+  ],
+  [
+   "56",
+   "Review and present the project\n- Review and evaluate the project, and provide feedback.",
+   "Offline",
+   "CLO10",
+   "U",
+   "",
+   "",
+   "Present the project according to the requirements and answer the questions.",
+   ""
+  ],
+  [
+   "57",
+   "Review and present the project\n- Review and evaluate the project, and provide feedback.",
+   "Offline",
+   "CLO10",
+   "U",
+   "",
+   "",
+   "Present the project according to the requirements and answer the questions.",
+   ""
+  ],
+  [
+   "58",
+   "Review and present the project\n- Review and evaluate the project, and provide feedback.",
+   "Offline",
+   "CLO10",
+   "U",
+   "",
+   "",
+   "Present the project according to the requirements and answer the questions.",
+   ""
+  ],
+  [
+   "59",
+   "Review and present the project\n- Review and evaluate the project, and provide feedback.",
+   "Offline",
+   "CLO10",
+   "U",
+   "",
+   "",
+   "Present the project according to the requirements and answer the questions.",
+   ""
+  ],
+  [
+   "60",
+   "Review and present the project\n- Review and evaluate the project, and provide feedback.",
+   "Offline",
+   "CLO10",
+   "U",
+   "",
+   "",
+   "Present the project according to the requirements and answer the questions.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/14449/S/1_AIC211.zip",
+  "/download/14449/S/2_AIC211.zip"
+ ]
+}

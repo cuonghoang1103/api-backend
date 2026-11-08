@@ -1,0 +1,1248 @@
+{
+ "ma": "ENH301",
+ "sylID": "11907",
+ "quyetDinh": "862/QĐ-ĐHFPT dated 08/16/2024",
+ "ungVien": [
+  {
+   "sylID": "11907",
+   "code": "ENH301",
+   "name": "Business English for Hospitality - Intermediate_ Tiếng Anh Chuyên ngành Khách sạn - Du lịch Trung cấp 1",
+   "active": true,
+   "approved": true,
+   "decision": "862/QĐ-ĐHFPT dated 08/16/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11907",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11907",
+  "Syllabus Name": "Business English for Hospitality - Intermediate_ Tiếng Anh Chuyên ngành Khách sạn - Du lịch Trung cấp 1",
+  "Course Name English": "Business English for Hospitality - Intermediate",
+  "Subject Code": "ENH301",
+  "Learning-Teaching Method": "Lecture,Seminar",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1.6 hours final exam + 103.4 hours self-study",
+  "Pre-Requisite": "\bNone",
+  "Description": "1. Objectives:\n\n• build confidence in professional skills such as dealing with enquiries, marketing destinations, offering advice, negotiating, writing emails and speaking\n\nto groups\n\n• develop language awareness through an integrated grammar and skills syllabus\n\n• acquire the specialized vocabulary needed by tourism professionals\n\n• practise language skills in realistic Case studies that reflect issues in the tourist\n\nindustry today.\n\n2. Description: English for International Tourism is a three-level series designed to meet the\n\nEnglish language needs of professionals working in the tourism industry and students of tourism in further education.\n\n3. Teaching method: lecture and seminar format\n\n4. Assessment scheme:\n\nOn-going assesment: 50%\n\nFinal examination: 50 %\n\nCompletion Criteria: Every on-going assessment component >0, Each part of the final exam must be >0, Final Exam Score >=4/10 & Final Result >=5/10.",
+  "StudentTasks": "- Student must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the CMS at https://flm.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "862/QĐ-ĐHFPT dated 08/16/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/16/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "English for International Tourism (New Ed.) Inter: Workbook with Answer Key and CD",
+   "Dubicka, Iwona & O'Keeffe, Margaret",
+   "Pearson",
+   "2013",
+   "New Edition",
+   "9781447923855",
+   "False",
+   "True",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "DVD videos & worksheet",
+   "Dubicka, Iwona & O'Keeffe, Margaret",
+   "Pearson",
+   "2013",
+   "New Edition",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Teacher's Book",
+   "Dubicka, Iwona & O'Keeffe, Margaret",
+   "Pearson",
+   "2013",
+   "New Edition",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Intermediate Course Book English for International Tourism New Edition",
+   "Dubicka, Iwona & O'Keeffe, Margaret,",
+   "Pearson",
+   "2013",
+   "New Edition",
+   "9781447923831",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Business Partner - Teacher's Book with Teacher's Portal Access Code B1+",
+   "Margaret O'Keeffe, Iwonna Dubicka, Marjorie Rosenberg",
+   "Pearson",
+   "2018",
+   "",
+   "9781292237190",
+   "False",
+   "True",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "Business Partner - Coursebook & eBook with MyEnglishLab & Digital Resources B1+",
+   "Margaret O'Keeffe, Iwonna Dubicka, Marjorie Rosenberg",
+   "Pearson",
+   "2018",
+   "",
+   "9781292392974",
+   "False",
+   "True",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Use present and past tenses\nUse vocabulary relating to money matters, describing locations\nApply professional skills in marketing\nDesign a tour"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Use modal verbs\nDescribe types of accommodation, facilities and services\nApply professional skills when dealing with complaints\nInvestigate customer complaints"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Use articles in spoken and written language\nDescribe weather, climate, features and attractions\nApply professional skills in offering advice\nDevelop a destination"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Use conditional structures with if\nDescibe geographical features, attractions, activities, works of art\nApply professional skills when speaking to a group\nPlan a coach tour"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Use verb + infinitive or -ing form\nUse vocabulary to describe sectors in niche tourism\nApply professional skills when dealing with figures\nImprove client security"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Use the passive\nUse vocabulary to describe culture, use linking words\nApply professional skills when taking part in meetings\nPresent a proposal"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Use have/get something done\nUse adjectives ending in -ed/-ing\nApply professional skills when making presentations"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Use question forms\nUse vocabulary to dedscribe customer service terms, personal qualities, multi-word verbs\nApply professional skills when handling telephone conversations\nImprove customer service"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Use past perfect\nUse idioms and metaphors\nApply professional skills when socializing and making small talk"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment/Presentation",
+   "on-going",
+   "3",
+   "30.0%",
+   ">0",
+   "30' in class",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "OP1: Suggested1. Write a blog article or an article for a travel magazine2. Write a press release or a report3. Group presentation // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "N/A",
+   "Based on topics of studied units",
+   "Individual work and Group work",
+   ""
+  ],
+  [
+   "2",
+   "Progress Tests",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "60' in class",
+   "LO1, LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10, LO11, LO12, LO13, LO14, LO15, LO16, LO17, LO18, LO19, LO20, LO21, LO22, LO23, LO24, LO25, LO26, LO27, LO28, LO29, LO30, LO31, LO32, LO33, LO34, LO35, LO36, LO37, LO38, LO39, LO40, LO41, LO42, LO5, LO6, LO7, LO8, LO9",
+   "OP1: Multiple Choice, Matching, Gap Filling, Short Answers...// OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "N/A",
+   "Based on topics of studied units",
+   "in class using computer",
+   ""
+  ],
+  [
+   "3",
+   "Final exam",
+   "Final exam",
+   "4",
+   "50.0%",
+   "4",
+   "~100 minutes",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "1. Reading (20%) : 2 reading passages (10-20 questions - 2 points for each question)\n\n20 vocabulary questions (1 point)\n\n2. Listening (10%): 2 recordings 15-20 mins\n\n3. Writing (10%): write an email / a letter / a memo (100-150 words)\n\n4. Speaking (10%) : Individual & panel discussion",
+   "Reading: 10-20\n\nVocabulary: 20\n\nListening: 10-20",
+   "Based on topics of studied units",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student's Book",
+   "link1-1",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   "link"
+  ],
+  [
+   "2",
+   "Unit 1 Selling Dream:Vocabulary",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "3",
+   "Unit 1 Selling Dream:Listening",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "4",
+   "Unit 1 Selling Dream:Grammar",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "5",
+   "Unit 1 Selling Dream: Speaking",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "6",
+   "Unit 1 Selling Dream:Professional Skills",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "7",
+   "Unit 1\n\nSelling Dream: Case Study",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "8",
+   "Unit 3 Accommodation: Reading",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "9",
+   "Unit 3 Accommodation: Vocabulary",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "10",
+   "Unit 3 Accommodation:Listening",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "11",
+   "Unit 3 Accommodation:Grammar",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "12",
+   "Unit 3 Accommodation:Professional Skills",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "13",
+   "Unit 3\n\nAccommodation: Case Study",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "14",
+   "Unit 4 Destination: Reading",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "15",
+   "Unit 4 Destination: Listening",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "16",
+   "Unit 4 Destination: Vocabulary",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "17",
+   "Unit 4 Destination: Grammar",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "18",
+   "Unit 4 Destination: Professional Advice",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "19",
+   "Unit 4 Destination: Case Study",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "20",
+   "Unit 5 Things to do: Reading",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "21",
+   "Unit 5 Things to do:Speaking",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "22",
+   "Unit 5 Things to do:Vocabulary",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "23",
+   "Unit 5 Things to do: Grammar",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "24",
+   "Unit 5 Things to do: Professional Skills",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "25",
+   "Unit 5\n\nThings to do: Case Study",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "26",
+   "Consolidation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "27",
+   "Progress Test 1",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "28",
+   "Unit 6 Niche Tourism: Listening",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "29",
+   "Unit 6 Niche Tourism: Reading",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "30",
+   "Unit 6 Niche Tourism: Vocabulary",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "31",
+   "Unit 6 Niche Tourism: Grammar",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "32",
+   "Unit 6 Niche Tourism: Professional Skills",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "33",
+   "Unit 6\n\nNiche Tourism: Case Study",
+   "Offline",
+   "LO5",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "34",
+   "Unit 7 Cultural Tourism: Reading",
+   "Offline",
+   "LO6",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "35",
+   "Unit 7 Cultural Tourism: Vocabulary",
+   "Offline",
+   "LO6",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "36",
+   "Unit 7 Cultural Tourism: Listening",
+   "Offline",
+   "LO6",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "37",
+   "Unit 7 Cultural Tourism:Grammar",
+   "Offline",
+   "LO6",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "38",
+   "Unit 7 Cultural Tourism: Professional Skills",
+   "Offline",
+   "LO6",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "39",
+   "Unit 7\n\nCuturalTourism: Case Study",
+   "Offline",
+   "LO6",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "40",
+   "Unit 8 Running a Hotel: Reading",
+   "Offline",
+   "LO7",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "41",
+   "Unit 8 Running a Hotel: Vocabulary",
+   "Offline",
+   "LO7",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "42",
+   "Unit 8 Running a Hotel:Listening",
+   "Offline",
+   "LO7",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "43",
+   "Unit 8 Running a Hotel:Grammar",
+   "Offline",
+   "LO7",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "44",
+   "Unit 8 Running a Hotel:Professional Skills",
+   "Offline",
+   "LO7",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "45",
+   "Unit 8 Running a Hotel: Case Study",
+   "Offline",
+   "LO7",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "46",
+   "Unit 9 Customer Service: Listening",
+   "Offline",
+   "LO8",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "47",
+   "Unit 9 Customer Service: Vocabulary",
+   "Offline",
+   "LO8",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "48",
+   "Unit 9 Customer Service: Speaking",
+   "Offline",
+   "LO8",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "49",
+   "Unit 9 Customer Service: Grammar",
+   "Offline",
+   "LO8",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "50",
+   "Unit 9 Customer Service: Professional Skills",
+   "Offline",
+   "LO8",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "51",
+   "Unit 9\n\nCustomer Service: Case Study",
+   "Offline",
+   "LO8",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "52",
+   "Unit 10 Business Travel: Reading",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "53",
+   "Unit 10 Business Travel: Vocabulary",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "54",
+   "Unit 10 Business Travel: Speaking",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "55",
+   "Unit 10 Business Travel:Listening",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "56",
+   "Unit 10 Business Travel: Grammar",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "57",
+   "Unit 10\n\nBusiness Travel: Case Study",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "58",
+   "Consolidation",
+   "Offline",
+   "LO5, LO6, LO7, LO8, LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "59",
+   "Review Unit 1-10",
+   "Offline",
+   "LO5, LO6, LO7, LO8, LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ],
+  [
+   "60",
+   "Progress Test 2",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "ITU",
+   "Student's Book",
+   "",
+   "Read and Listen to the learning materials prior to the class meeting, and join in the discussion/presentation of that reading/listening in small and large groups.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "HCM_CQ1.1",
+   "What does a package holiday include? What benefits does a packacge holiday offer to tourists? Give examples."
+  ],
+  [
+   "2",
+   "3",
+   "HCM_CQ1.2",
+   "What is the marketing mix? Choose a package holiday (from your own knowledge or on the internet) and analysize the marketing mix for it. Which target market does the package cater for best? Why?"
+  ],
+  [
+   "3",
+   "4",
+   "HCM_CQ2.1",
+   "What are some common types of holidays travel agencies usually designed to offer to tourists in Vietnam? What are pros and cons of each? How is each best sold to tourists?"
+  ],
+  [
+   "4",
+   "5",
+   "HCM_CQ2.2",
+   "What types of accomodation and it facilities are on offer to travellers and tourists in Vietnam? Illustrate your points by providing real information."
+  ],
+  [
+   "5",
+   "6",
+   "HCM_CQ2.3",
+   "What are the pros and cons of homestay? Give an example of a youth hostels in Vietnam/your hometown and analyse its strong and weak points. How can it be improved?"
+  ],
+  [
+   "6",
+   "7",
+   "HCM_CQ3.1",
+   "What are the pros and cons of self-catering? Give an example of a youth hostels in a place you know and analyse its strong and weak points. Should it be developed in Vietnam? Why?"
+  ],
+  [
+   "7",
+   "8",
+   "HCM_CQ3.2",
+   "What problems do hotels usually have with their guests? How can they best deal with these complaints? Why are your suggestions effective in dealing with such complaints? Illustarte your points with real examples."
+  ],
+  [
+   "8",
+   "9",
+   "HCM_CQ3.3",
+   "Think of a hotel you know. Discuss the strengths and weaknesses of its customer service. What can be done to improve the weaknesses?"
+  ],
+  [
+   "9",
+   "10",
+   "HCM_CQ4.1",
+   "Develop a destination (Case Study information on pp.38&39). If you are going promote tourism in your country, which particular destination would like to improve and why?"
+  ],
+  [
+   "10",
+   "12",
+   "HCM_CQ4.2",
+   "A foreign friend plans to visit Vietnam and (s)he asks for some recommendations from you. Introduce some must-visit sites with the brief description of natural and climate features, popular activities, the best visitting time or the like."
+  ],
+  [
+   "11",
+   "13",
+   "HCM_CQ5.1",
+   "What are the effects of weather conditions on the travel industry? Give examples of types of weather that cause travel problems in Vietnam."
+  ],
+  [
+   "12",
+   "14",
+   "HCM_CQ5.2",
+   "Find out a tourist attraction site and analyse advatages, disadvantages,threats and opportunities so that visitors and investors come there."
+  ],
+  [
+   "13",
+   "15",
+   "HCM_CQ5.3",
+   "How does geographical features play an important role in making a tourism site attractive to travellers?"
+  ],
+  [
+   "14",
+   "16",
+   "HCM_CQ6.1",
+   "What are the differences between niche tourism and mass tourism? Present two or three niche tourism products that you feel could work in different areas of Vietnam, then explain what each product would entail and how they would benefit the areas where they were available."
+  ],
+  [
+   "15",
+   "17",
+   "HCM_CQ6.2",
+   "What are the challenges in promoting niche tourism in your country? Analyze a particular example."
+  ],
+  [
+   "16",
+   "18",
+   "HCM_CQ6.3",
+   "Case study p.58-59. What are some dangers tourists may face when they are on an adventure holiday? What are 'do' and 'don't' safety tips for these tourists? Why?"
+  ],
+  [
+   "17",
+   "19",
+   "HCM_CQ7.1",
+   "Many Vietnamese travel abroad for medical purposes. Choose a nation which is the destination of many medical tourists from Vietnam and find useful information about it such as numbers of Vietnamese tourists, popular treatments and services, expenses or the like."
+  ],
+  [
+   "18",
+   "20",
+   "HCM_CQ7.2",
+   "What do you think are the top three opportunities for developing cultural tourism in Vietnam? What is the role of cultural tourism in national economic development?"
+  ],
+  [
+   "19",
+   "22",
+   "HCM_CQ8.1",
+   "What niche tourism products would entail and how they would benefit the areas where they were available?"
+  ],
+  [
+   "20",
+   "23",
+   "HCM_CQ8.2",
+   "What are the reasons for the growth in medical and wellness tourism? Why?"
+  ],
+  [
+   "21",
+   "24",
+   "HCM_CQ8.3",
+   "What is cultural tourism? Who are cultural tourists? What are the types of cultural tourists? How are ethey different from othere tourists?"
+  ],
+  [
+   "22",
+   "25",
+   "HCM_CQ9.1",
+   "Discuss advantages and disadvantages a cultural tourist may experience in a tourist attraction in Vietnam. Provide some suggestions to improve the quality of cultural tourism there."
+  ],
+  [
+   "23",
+   "26",
+   "HCM_CQ9.2",
+   "What do you think are the top three opportunities for developing cultural tourism in Vietnam? What is the role of cultural tourism in national economic development?"
+  ],
+  [
+   "24",
+   "27",
+   "HCM_CQ9.3",
+   "What is an effective meeting? Hold a meeting based on the information on page 65 (Choosing a festival)."
+  ],
+  [
+   "25",
+   "28",
+   "HCM_CQ10.1",
+   "Case study on p.66-67"
+  ],
+  [
+   "26",
+   "29",
+   "HCM_CQ10.2",
+   "By whom are hotel standards evaluated? What are the inspection criteria of hotel standards? Explain more on each criterion."
+  ],
+  [
+   "27",
+   "30",
+   "HCM_CQ10.3",
+   "What are the skills and qualities hotel managers/hoteliers need to have?Why?"
+  ],
+  [
+   "28",
+   "32",
+   "HCM_CQ11.1",
+   "What are Kaizen prrinciples? To what extent do you think Kaizen prrinciples are effective in hotel management?"
+  ],
+  [
+   "29",
+   "33",
+   "HCM_CQ11.2",
+   "You are a manager in a hotel/restaurant. You have an order for a party with 25 participants. Note down things you (your hotel/ restaurant) need to do as the preparation for a this party."
+  ],
+  [
+   "30",
+   "34",
+   "HCM_CQ12.1",
+   "What are some common human resources problems in the hotel industry? Suggest some useful ways to improve staff motivation and retention."
+  ],
+  [
+   "31",
+   "35",
+   "HCM_CQ12.2",
+   "What are some common problems in running a hotel in Vietnam? What are your recommended solutions for these problems?"
+  ],
+  [
+   "32",
+   "36",
+   "HCM_CQ12.3",
+   "Choose a particular hotel in Vietnam. What are the hotel's strengths and weaknesses in terms of reservations, room services, and staff? What could be done to improve such weaknesses?"
+  ],
+  [
+   "33",
+   "37",
+   "HCM_CQ13.1",
+   "What are common mistakes that people make when they give a presentation? What are some professional skills about giving presentation?"
+  ],
+  [
+   "34",
+   "38",
+   "HCM_CQ13.2",
+   "You work for an extremely badly run hotel in HCMC. You have three months in which to imporve the situation or it will be closed down. Make a proposal and present some ideas for how to make the hotel efficient. Think about: reservation, staff training, rooms and housekeeping, room service and restaurants, differentiation from the competition, use of technology and target customers."
+  ],
+  [
+   "35",
+   "39",
+   "HCM_CQ13.3",
+   "What are some possible explanations for positive and negative experiences of customer service?"
+  ],
+  [
+   "36",
+   "40",
+   "HCM_CQ14.1",
+   "Why are gestures of good will so important to businesses? What could customer service staff do as a \"gesture of good will' in 4 situations given on p.77?"
+  ],
+  [
+   "37",
+   "42",
+   "HCM_CQ14.2",
+   "What are some employee codes of conduct? How are they effective in helping improve customer service of a hotel?"
+  ],
+  [
+   "38",
+   "43",
+   "HCM_CQ15.1",
+   "Why is customer feedback important for businesses? What are some techniques to get feedback from customers? Choose one technique and design some questions."
+  ],
+  [
+   "39",
+   "44",
+   "HCM_CQ15.2",
+   "What are some skills about telephone etiquette? Work in pairs and do the roleplay given on p.81."
+  ],
+  [
+   "40",
+   "45",
+   "HCM_CQ15.3",
+   "What do you think about reviews of products or services on the internet? Do you consider them when making your own choices?"
+  ],
+  [
+   "41",
+   "46",
+   "HCM_CQ16.1",
+   "Case study on p.82-83"
+  ],
+  [
+   "42",
+   "47",
+   "HCM_CQ16.2",
+   "How do business travellers differ from ordinary ones? Consider the factors mentioned on p.85"
+  ],
+  [
+   "43",
+   "48",
+   "HCM_CQ16.3",
+   "How is business travel in Vietnam now? Why has its business travel decreased and increased?"
+  ],
+  [
+   "44",
+   "49",
+   "HCM_CQ17.1",
+   "What could limit the growth of business travel in Vietnam in the future? What could be done to promote it?"
+  ],
+  [
+   "45",
+   "50",
+   "HCM_CQ17.2",
+   "What are some strategies airlines in Vietnam use to attract business travellers? Why or why not are they effective?"
+  ],
+  [
+   "46",
+   "52",
+   "HCM_CQ18.1",
+   "Find out about a specialist company that offers incentive travel packages to companies? Present your findings to class."
+  ],
+  [
+   "47",
+   "53",
+   "HCM_CQ18.2",
+   "Report on some of the different team-building and corporate event packages available in local businesses, explain which might work best for a start-up tourism business and why."
+  ],
+  [
+   "48",
+   "54",
+   "HCM_CQ18.3",
+   "What can be some solutions to make group work productively and promote each member's strong points?"
+  ],
+  [
+   "49",
+   "55",
+   "HCM_CQ19.1",
+   "Study some successful hotels to find out their shared features of staffs, services, prices and the way they deal with problems. Present your findings to class."
+  ],
+  [
+   "50",
+   "56",
+   "HCM_CQ19.2",
+   "Restaurants or hotels usually run customer loyalty programs to keep customers with them. Study about this kind of programs in your local or in international ones. Present your findings to class."
+  ],
+  [
+   "51",
+   "57",
+   "HCM_CQ19.3",
+   "Design a 5-day package tour for a group of cultural tourists. Present your tour to class."
+  ],
+  [
+   "52",
+   "58",
+   "HCM_CQ20.1",
+   "Restaurants or hotels usually run customer loyalty programs to keep customers with them. Study about this kind of programs in your local or in international ones. Present your findings to class."
+  ],
+  [
+   "53",
+   "59",
+   "HCM_CQ20.2",
+   "Design a 5-day package tour for a group of cultural tourists. Present your tour to class."
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/1QIBVrHOcIX38F3sg9UyHxSA9lLDjRsvp?usp=sharing"
+ ]
+}

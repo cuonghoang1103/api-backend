@@ -1,0 +1,374 @@
+{
+ "ma": "BDT202c",
+ "sylID": "14307",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14307",
+   "code": "BDT202c",
+   "name": "Business Digital Transformation_Chuyển đổi số trong kinh doanh",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14307",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14307",
+  "Syllabus Name": "Business Digital Transformation_Chuyển đổi số trong kinh doanh",
+  "Course Name English": "Business Digital Transformation",
+  "Subject Code": "BDT202c",
+  "Learning-Teaching Method": "Online,Offline",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 55h online + 3h offline (optional) + 1h Final exam + 91h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course is derived from multiple MOOC on Coursera\n\n1. Digital Transformation by Illinois Tech\n\nThis course has 9 modules. Each offers a different perspectives on digital technology in the strategic context. It is designed for leaders focused on implementing new ideas, staying ahead of the competition and aligning their people, data and technology to drive digital transformation. First, we discuss the pace of change, and its impact, implications and opportunities. Traditional businesses need to rethink their underlying assumptions to create new game plans and capture new opportunities in the digital world. This course not only discusses key digital transformation strategies, trends and impacts, but also spends time on how to integrate these into your existing business and execute on those new game plans.\n\n2. Google Cloud Digital Leader Training Professional Certificate\n\nThe Cloud Digital Leader training offers a series of 6 courses that will lay a solid foundation for understanding cloud technology, data, AI/ML, and how these play a pivotal role in digital transformation through Google Cloud products and services. This program can prepare you to take the Google Cloud Digital Leader certification exam administered by Google Cloud. This program is designed to empower you and your team(s) to effectively participate in and contribute to cloud-centric business efforts across your organization. It is ideal for IT professionals, data scientists, software engineers, project managers, decision-makers, leaders, and those seeking the certification. The program explores various core areas, including general cloud and Google Cloud know-how, modernizing company IT infrastructure and applications, and evoking digital transformation through data and AI/ML.\n\nUpon completion, you will be able to recall critical cloud terminologies, recognize Google Cloud products and solutions driving digital transformation, discuss how cloud technology and data can steer innovation within organizations, and identify key changes to leverage Google Cloud products for infrastructure and application modernization.\n\nApplied Learning Project\n\nValidate the newly acquired knowledge through practice and graded assessments at the end of each module. These assessments validate and demonstrate your grasp of the desired learning outcomes.",
+  "StudentTasks": "Students have to:\n\n- complete the courses on Coursera platform prior to deadline.\n\n- attend offline sessions scheduled on FAP for instruction and guidance (optional)",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Final Exam (FE) = Theoretical Exam (TE)\n\n3) Final Result (FR) = min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/illinois-tech-digital-transformation/home/info",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course: Digital Transformation by Illinois Tech"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/digital-transformation-google-cloud/home/info",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 1 Digital Transformation with Google Cloud"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/innovating-with-data-google-cloud",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 2: Exploring Data Transformation with Google Cloud"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/innovating-with-google-cloud-artificial-intelligence",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 3: Innovating with Google Cloud Artificial Intelligence"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/google-cloud-product-fundamentals",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 4: Modernize Infrastructure and Applications with Google Cloud"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/trust-and-security-with-google-cloud",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 5: Trust and Security with Google Cloud"
+  ],
+  [
+   "7",
+   "https://www.coursera.org/learn/understanding-google-cloud-security-and-operations",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 6: Scaling with Google Cloud Operations"
+  ],
+  [
+   "8",
+   "https://www.coursera.org/professional-certificates/google-cloud-digital-leader-training",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Google Cloud Digital Leader Training Professional Certificate"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Learn the core Fundamentals of the Digital Transformation"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Discover how advanced digital technologies can be used for innovation and competitive advantage"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Learn from organizational examples how advanced operations are championed through digital technologies"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Plan work transformation that architech advanced work system"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Appraise business models"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand how digital devices can enable us to think and act differently"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Multiple choices. Marked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 9-11 questions.",
+   "By exam board\nThe questions will cover content delivered in all courses of the specialization.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the specialization\n\nCourse Digital Transformation by Illinois Tech (1)\n\nModule 1: Introduction to Digital Transformation - part 1\nModule 2: Introduction to Digital Transformation - part 2\nModule 3: Digital Transformation through operational excellence",
+   "Online, offline",
+   "CLO1",
+   "ITU",
+   "Course: Digital Transformation by Illinois Tech",
+   "",
+   "- See the syllabus of all 5 courses in the specialization\n- Participate in introduction slot (optional)\n- Watch the videos\n- Read the materials\n- Do all the quizzes (both practice and graded ones)\n- Submit the peer-graded assignment\n- Complete and submit all assignments (both practice and peer-graded ones)",
+   ""
+  ],
+  [
+   "2",
+   "Course Digital Transformation by Illinois Tech (2)\nModule 4: Data's role in digital transformation\nModule 5: Customers and customer ecosystems and digital transformation\nModule 6: Digital transformation through innovation and creating new value",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "IU",
+   "Course: Digital Transformation by Illinois Tech",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "3",
+   "Course Digital Transformation by Illinois Tech (3)\nModule 7: Digital platforms emerge\nModule 8: Digital transformation strategy execution\nModule 9: Summary Course Assessment",
+   "Online",
+   "CLO4, CLO5, CLO6",
+   "IU",
+   "Course: Digital Transformation by Illinois Tech",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "4",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 1 Digital Transformation with Google Cloud\nModule 1: Course introduction\nModule 2: Why cloud technology is transforming business\nModule 3: Fundamental cloud concepts",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "TU",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 1 Digital Transformation with Google Cloud",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "5",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 1 Digital Transformation with Google Cloud\nModule 4: Cloud computing models and shared responsibility\nModule 5: Course summary",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "IU",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 1 Digital Transformation with Google Cloud",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "6",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 2: Exploring Data Transformation with Google Cloud\nModule 1: Course introduction\nModule 2: The value of data\nModule 3: Google Cloud data management solutions",
+   "Online",
+   "CLO1, CLO2, CLO3, CLO4",
+   "",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 2: Exploring Data Transformation with Google Cloud",
+   "",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 2: Exploring Data Transformation with Google Cloud\nModule 4: Making data useful and accessible\nModule 5: Course summary",
+   "Online",
+   "CLO4, CLO5, CLO6",
+   "IU",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 2: Exploring Data Transformation with Google Cloud",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "8",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 3: Innovating with Google Cloud Artificial Intelligence\nModule 1: Course introduction\nModule 2: AI and ML fundamentals\nModule 3: Google Cloud and ML solutions\nModule 4: Course summary",
+   "Online",
+   "CLO3,CLO4, CLO5, CLO6",
+   "IU",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 3: Innovating with Google Cloud Artificial Intelligence",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "9",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 4: Modernize Infrastructure and Applications with Google Cloud\nModule 1: Course introduction\nModule 2: Modernizing infrastructure in the Cloud\nModule 3: Modernizing applications in the Cloud\nModule 4: Course summary",
+   "Online",
+   "CLO3,CLO4, CLO5, CLO6",
+   "IU",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 4: Modernize Infrastructure and Applications with Google Cloud",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "10",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 5: Trust and Security with Google Cloud\nModule 1: Course introduction\nModule 2: Trust and security in the Cloud\nModule 3: Google's trusted infrastructure",
+   "Online",
+   "CLO1, CLO2, CLO3",
+   "IU",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 5: Trust and Security with Google Cloud",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "11",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 5: Trust and Security with Google Cloud\nModule 4: Google Cloud's trust principles and compliance\nModule 5: Course summary\nCourse 6: Scaling with Google Cloud Operations\nModule 1: Course introduction\nModule 2: Financial governance and managing cloud costs",
+   "Online",
+   "CLO4, CLO5, CLO6",
+   "IU",
+   "Google Cloud Digital Leader Training Professional Certificate\nCourse 5: Trust and Security with Google Cloud\nCourse 6: Scaling with Google Cloud Operations",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "12",
+   "Google Cloud Digital Leader Training Professional Certificate\n\nCourse 6: Scaling with Google Cloud Operations\n\nModule 3: Operational excelence and reliability at scale\n\nModule 4: Sustainability with Google Cloud\n\nModule 5: Course summary",
+   "Online, offline",
+   "CLO4, CLO5, CLO6",
+   "TU",
+   "Google Cloud Digital Leader Training Professional Certificate\n\nCourse 6: Scaling with Google Cloud Operations",
+   "",
+   "`- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Complete all MOOCs. Deadline: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

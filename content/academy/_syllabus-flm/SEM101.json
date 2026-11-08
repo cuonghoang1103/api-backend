@@ -1,0 +1,1267 @@
+{
+ "ma": "SEM101",
+ "sylID": "14230",
+ "quyetDinh": "444/QĐ-ĐHFPT dated 04/23/2026",
+ "ungVien": [
+  {
+   "sylID": "14230",
+   "code": "SEM101",
+   "name": "Semantics_Ngữ nghĩa học",
+   "active": true,
+   "approved": true,
+   "decision": "444/QĐ-ĐHFPT dated 04/23/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14230",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14230",
+  "Syllabus Name": "Semantics_Ngữ nghĩa học",
+  "Course Name English": "",
+  "Subject Code": "SEM101",
+  "Learning-Teaching Method": "Lecture,Seminar,Workshop,Active learning,Discovery Learning",
+  "NoCredit": "3",
+  "Degree Level": "Advanced",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1.25 hours final exam + 103.75 hours self-study",
+  "Pre-Requisite": "Passed LTG202 and ENG302c/ENG303 and ENP101/ENP102",
+  "Description": "This course is designed to help introduce to the students the basics of Semantics in a step by step process through Semantics 101. In addition to the Semantics a Coursebook unit outlines, the course is enhanced with supplementary activities corresponding to the Common European Framework of Reference for Languages. The course will help students:\n\n- have a grasp of the basics of Semantics through class discussions and presentations\n\n- discover the use of the basics of Semantics in oral and written communication by conducting collaborative discussions and using AI-assisted tools\n\n- interact confidently with the lecturer and fellow students in dissolving disagreements about their answers during collaborative discussions\n\n- engage in collaborative discussions with the lecturer and fellow students in preparing group presentations and a group project using appropriate language in oral and written communication skills.\n\n- apply semantic theory and AI-assisted tools to investigate meaning phenomena in English language by conducting a group project\n\n- understand and produce academic writing paper that demonstrates theoretical understanding, critical reasoning, and evidence-based argumentation\n\n- develop professional communication and academic presentation skills through group presentations, oral project defense and collaborative discussions\n\n- cultivate students’ awareness of ethical and responsible use of linguistic data, theories, and AI technology\n\nTeaching and Learning Approaches /Pedagogical Approaches\n\n- Direct Instruction\n\n- Constructivist Approach\n\n-Workshop-based Learning\n\n- Inquiry-based Learning\n\n- Case-based Learning\n\n- Practice-based Learning\n\n- Scaffolded Instruction\n\n- Collaborative Learning\n\n- Problem-based Learning\n\n- Project-based Learning\n\n- Digital Literacy Pedagogy\n\nAssessment scheme:\n\nOn-going assessment >0, Final Exam Score >=4/10 & Final Result >=5/10",
+  "StudentTasks": "Be puntual for class\n\nAttend at least 80% of contact slots for being allowed to take the Final Exam\n\nPreview and review the lessons\n\nAnswer exercises before, during, and after class.\n\nComplete and submit homework, assignments, project by the due dates\n\nCollaborate efficiently with groupmates in a group for class discussions, group presentations, and a group project\n\nUse laptops, other technological devices, and AI-assisted tools responsively in class for learning purposes",
+  "Tools": "Coursebook, Teacher's Book, pptx, handouts, internet\n\nTech Tools:\n\n- Grammarly\n\n- ChatGPT/Gemini/Copilot\n\n- https://spacy.io/usage/linguistic-features\n\n- Discourse Analyzer AI Toolkit\n\n- Microsoft Azure Text Analytics\n\n- MonkeyLearn\n\n- Lingtree\n\n- Linguistics Tree Solver",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "444/QĐ-ĐHFPT dated 04/23/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/23/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Lexical Semantics: Cambridge textbooks in Linguistics",
+   "D.A.Cruse",
+   "Cambdridge University Press",
+   "1986 September",
+   "",
+   "9780521276436",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Meaning in English: An Introduction",
+   "Javier Valenzuela",
+   "Cambridge University Press",
+   "2017 April",
+   "",
+   "9781107096370",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Semantics a Coursebook",
+   "James R. Hurford et al",
+   "Cambridge University Press",
+   "2007 April",
+   "2nd ed.",
+   "9780521671873",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Semantics a Coursebook (Answer Key)",
+   "James R. Hurford et al",
+   "Cambridge University Press",
+   "2007 April",
+   "2nd ed.",
+   "9780521671873",
+   "True",
+   "True",
+   "False",
+   "the answer key is inbook detailed in each unit's exercises"
+  ],
+  [
+   "5",
+   "Semantics a Coursebook : Teacher's Resource",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Define and explain the foundational concepts of semantics and recognise their relevance in meaning construction in a language"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyse how referring expressions, predicates, deixis, definiteness, extensions and prototypes operate in English texts or discourse"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyze sense relations and semantic phenomena in English language through structured examples, corpora, and AI-assisted tools"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Use logical formulae and semantic tests to explain ambiguity, entailment, and paraphrase in English sentences"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Integrate semantic knowledge with syntax, pragmatics, and discourse analysis to interpret meaning in communication"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Conduct a small-scale semantic group project that investigates meaning in real-world communication"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Use AI tools collaboratively and responsibly to support inquiry, visualization, and presentation of project outcomes"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Produce a well-organized written paper in English to investigate semantic phenomena by integrating theory, data, and AI-supported analysis"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Deliver an academic oral presentation and defense in English on semantic phenomena with demonstrated critical reasoning, communication, and professionalism"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Demonstrate ethical behavior, intercultural awareness, collaboration, and reflective learning in exploring meaning, and presenting meaning in language"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "15mins/ group",
+   "LOs 1-2",
+   "Follow lecturer's proposal",
+   "Written & presentation",
+   "Lessons and topics learned from Units 1~15 of the Coursebook. Topics are to be chosen by the teacher.",
+   "In class, supervised by the class' instructor.Students will be divided into groups of 4 members. In cases where the total number of students does not allow for equal grouping, teams of three or five members may be formed to accommodate the class size. Each group will present a topic/ unit from the lesson using powerpoints and other visual aids.Topics will be asigned by the instructor.",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "15mins/ group",
+   "LOs 3-4",
+   "Follow lecturer's proposal",
+   "Written & presentation",
+   "Lessons and topics learned from Units 15~27 of the Coursebook.",
+   "In class, supervised by the class' instructor.Students will be divided into groups of 4 members. In cases where the total number of students does not allow for equal grouping, teams of three or five members may be formed to accommodate the class size. Each group will present a topic/ unit from the lesson using powerpoints and other visual aids.Topics will be asigned by the instructor.",
+   ""
+  ],
+  [
+   "3",
+   "Progress tests",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "5-10'/Quiz",
+   "LOs 1-4",
+   "Short answer questions, Multiple Choice, True or False, Fill in the blanks",
+   "20",
+   "Lessons and topics learned from Units 1~27 of the Coursebook.",
+   "In class, supervised by the class' instructor.",
+   ""
+  ],
+  [
+   "4",
+   "Final Project",
+   "Final exam",
+   "2",
+   "50.0%",
+   "4",
+   "20 mins/group",
+   "All LOs",
+   "Project: Written components and Presentation",
+   "",
+   "Lessons and topics learned from Units 1~27 of the Coursebook.",
+   "*by exam board, using computer.\n\n* Written Deliverables: Students must submit all written components of the project to the Examinatin Office by the end of Week 10. The Examinatin Office will then forward the submissions to the teacher responsible for marking the presentation;\n\n*Presentation Delivery: Students will present their project findings in a 20 -minute presentation and 5 minute Q&A during the final examination period.\n\n*Students will be divided into groups of 4 members. In cases where the total number of students does not allow for equal grouping, teams of three or five members may be formed to accommodate the class size",
+   "If a student's project does not meet the required standards, the teacher should provide constructive feedback to guide improvement. This will enable the student to revise both the written component and the presentation, and resubmit their work prior to delivering the updated presentation during the resit examination period"
+  ],
+  [
+   "5",
+   "Final Project - Presentation",
+   "Final exam",
+   "1",
+   "25.0%",
+   "2",
+   "25mins/group",
+   "All LOs",
+   "Presentation",
+   "",
+   "",
+   "Presentation Delivery: Students will present their project findings in a 20 -minute presentation and 5 minute Q&A during the final examination period.\n\n*Students will be divided into groups of 4 members. In cases where the total number of students does not allow for equal grouping, teams of three or five members may be formed to accommodate the class size",
+   ""
+  ],
+  [
+   "6",
+   "Final Project - Written components",
+   "Final exam",
+   "1",
+   "25.0%",
+   "2",
+   "Deadline: Week 10",
+   "All LOs",
+   "Writing",
+   "",
+   "",
+   "Written Deliverables: Students must submit all written components of the project to the Examinatin Office by the end of Week 10. The Examinatin Office will then forward the submissions to the teacher responsible for marking the presentation;",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction + Unit 1. About Semantics pp.01-07",
+   "Offline",
+   "LO1, LO7",
+   "ITU",
+   "Student Coursebook, Online Resource",
+   "link1-1",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "2",
+   "Unit 1. About Semantics (cont.) pp.08-15",
+   "Offline",
+   "LO1, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "3",
+   "Unit 2. Sentences, Utterances and Propositions pp.16-18",
+   "Offline",
+   "LO1, LO7",
+   "ITU",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "4",
+   "Unit 2. Sentences, Utterances and Propositions (cont.) pp.19-25",
+   "Offline",
+   "LO1, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "5",
+   "Unit 3. References and Sense pp.26-29",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "6",
+   "Unit 3. References and Sense (cont.) pp.30-35",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "7",
+   "Unit 4. Referring Expressions pp.36-39: Referring Expression, Indefinite Noun Phrase, Definite Noun Phrase",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "8",
+   "Unit 4. Referring Expressions (cont.) pp.40-44: Opaque Context, Equative Sentence, Exercises",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "9",
+   "Unit 5. Predicates pp.45-49: Predicator, Predicate",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "10",
+   "Unit 5. Predicates (cont.) pp.50-55: Argument, Degree of a predicate, Ellipsis, Identity Relation, Exercises",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "11",
+   "Unit 6. Predicates, Referring Expressions and Universe of Discourse pp.56-61: The relationship between referring expressions and predicates, Generic Sentence",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "12",
+   "Unit 6. Predicates, Referring Expressions and Universe of Discourse pp.62-64: Universe of Discourse, Exercises",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "13",
+   "Unit 7. Deixis and Definiteness pp.65-72: Deitic words (Deitics), Reported Speech, Context",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "14",
+   "Unit 7. Deixis and Definiteness (cont.) pp.73-78: Definiteness, Exercises",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "15",
+   "Unit 8. Words and Things, Extensions and Prototypes pp.79-87: Words and Things, Extensions",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "16",
+   "Unit 8. Words and Things, Extensions and Prototypes (cont.) pp.87-92: Extensions and Prototypes, Exercises",
+   "Offline",
+   "LO1, LO2, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "17",
+   "Unit 9. Sense, Properties and Stereotypes pp.93-98: Sense, Analytic sentence, Contradiction, Synthetic Sentence",
+   "Offline",
+   "LO3, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "18",
+   "Unit 9. Sense, Properties and Stereotypes (cont.) pp.98-104: Set of sufficient conditions, Necessary Condition, Stereotype, Exercises",
+   "Offline",
+   "LO3, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "19",
+   "Unit 10. Sense Relations (1): Identity and Similarity of Sense pp.105-112",
+   "Offline",
+   "LO3, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "20",
+   "Unit 10. Sense Relations (1): Identity and Similarity of Sense (cont.) pp.112-119",
+   "Offline",
+   "LO3, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "21",
+   "Review Unit 1-10",
+   "Offline",
+   "LO1, LO2, LO3, LO7",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "22",
+   "Unit 11. Sense Relations (2): Oppositeness and Dissimilarity of Sense and Ambiguity pp.120-130",
+   "Offline",
+   "LO3, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "23",
+   "Unit 11. Sense Relations (2): Oppositeness and Dissimilarity of Sense and Ambiguity (cont.) pp.130-140",
+   "Offline",
+   "LO3, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "24",
+   "Unit 12. About Logic pp.141-151",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "25",
+   "Assignment 1 Presentation & Feedback",
+   "",
+   "LO7, LO9, LO10",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "26",
+   "Assignment 1 Presentation & Feedback",
+   "",
+   "LO7, LO9, LO10",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "27",
+   "Unit 13. A Notation for Simple Propositions pp.152-158: Logical formula",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "28",
+   "Unit 13. A Notation for Simple Propositions (cont.) pp.159-163: Simple Proposition, Exercises",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "29",
+   "Unit 14. Connectives, And and Or pp.164-168: Logical conjunction (AND), Commutativity of Conjunction",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "30",
+   "Unit 14. Connectives, And and Or pp.169-179: Logical Disjunction (OR), Commutativity of Disjunction, Compositionality of meaning, Exercises",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "31",
+   "Unit 15. More connectives pp.180-184",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "32",
+   "Unit 15. More connectives (cont.) pp.185-193",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "33",
+   "Unit 16. Word meaning: About Dictionaries pp.194-201",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "34",
+   "Unit 16. Word meaning: About Dictionaries (cont.) pp201-204",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "35",
+   "Unit 17. Meaning Postulates pp.205-217",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "36",
+   "Unit 17. Meaning Postulates (cont.)",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "37",
+   "Unit 18. Properties of Predicates pp.218-224",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "38",
+   "Unit 18. Properties of Predicates (cont.)",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "39",
+   "Unit 19. Derivation pp.225-231: Derivation, Morphological process, Zero derivation",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "40",
+   "Unit 19. Derivation (cont.) pp231-243: Inchoative, Causative, Resultative form, Suppletion, Productivity, Exercises",
+   "Offline",
+   "LO4, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "41",
+   "Review Unit 11-18",
+   "Offline",
+   "LO3, LO4, LO7",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "42",
+   "Unit 20. Participant Roles pp.244-251: Agent, Affected, Instrument, Location, Beneficiary (Participant Roles), Grammatical Positions in the sentence",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "43",
+   "Unit 20. Participant Roles (cont.) pp.251-259: Experiencer and Theme (Participant Roles), Role frame of a verb, Exercises",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "44",
+   "Unit 21. Speech Acts pp.260-268",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "45",
+   "Unit 22. Perlocutions and Illocutions pp.269-276: Types of sentence, Perlocutionary Act, Illocutionary Act",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "46",
+   "Unit 22. Perlocutions and Illocutions (cont.) pp.276-280: Propositional Act, Phonic Act, Exercises",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "47",
+   "Unit 23. Felicity and Conditions pp.281-284: Felicity conditions",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "48",
+   "Unit 23. Felicity and Conditions (cont.) pp.284-288: Sincerity Conditions, Exercises",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "49",
+   "Unit 24. Direct and Indirect Illocutions pp.289-293: Direct and Indirect Illocutions",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "50",
+   "Unit 24. Direct and Indirect Illocutions (cont.) pp.294-302: Two types of Illocutionary act, Exercises",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "51",
+   "Unit 25. Propositions and Illocutions pp.303-309: Sentence meaning, Utterance meaning, Propositional Content of a Directive Illocution, Propositional Content of a Commissive Illocution",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "52",
+   "Unit 25. Propositions and Illocutions (cont.) pp.309-313: Primary Illocation indicators, Exercises",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "53",
+   "Unit 26. Conversational Implicature pp.314-322: Inference, Co-operative Principle",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "54",
+   "Unit 26. Conversational Implicature (cont.) 323-326: Cancellation of Implicatures, Exercises",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "55",
+   "Unit 27. Non-literal meaning: Idioms, metaphor, and metonymy pp.327-337: Idioms and metaphors",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "56",
+   "Unit 27. Non-literal meaning: Idioms, metaphor, and metonymy (cont.) pp.338-344: Metonymy, Exercises",
+   "Offline",
+   "LO5, LO7",
+   "I,T,U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "57",
+   "Review unit 19-27",
+   "Offline",
+   "LO4, LO5, LO7",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "58",
+   "Assignment 2 Presentation and Feedback",
+   "Offline",
+   "LO7, LO9, LO10",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "59",
+   "Assignment 2 Presentation and Feedback",
+   "Offline",
+   "LO7, LO9, LO10",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ],
+  [
+   "60",
+   "Project Review",
+   "Offline",
+   "All LOs",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Preview and review the lessons.\nCheck vocabulary for comprehension.\nAnswer the exercises before, during and after the class.\nActively participate in class discussions.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "4",
+   "CQ2.1",
+   "How are an utterance, a sentence, and a proposition different from each other?"
+  ],
+  [
+   "2",
+   "5",
+   "CQ2.2",
+   "What is reference? How many types of reference are there? What are they? Give examples."
+  ],
+  [
+   "3",
+   "6",
+   "CQ2.3",
+   "What is sense? How are reference and sense similar and different?"
+  ],
+  [
+   "4",
+   "7",
+   "CQ3.1",
+   "What is a referring expression? Can the indefinite noun phrase a referring expression?"
+  ],
+  [
+   "5",
+   "8",
+   "CQ3.2",
+   "What is an opaque context? What verbs are typical in opaque contexts? What is an equative sentence? What are features of equative sentences?"
+  ],
+  [
+   "6",
+   "9",
+   "CQ3.3",
+   "What is the predicator? What parts of speech are and are not predicators? What are semantic roles in a sentence? What is a predicate? What is the difference between a predicator and a predicate?"
+  ],
+  [
+   "7",
+   "10",
+   "CQ4.1",
+   "What is the degree of a predicate? Provide examples of sentences based on the degree of the predicates which function as predicators."
+  ],
+  [
+   "8",
+   "11",
+   "CQ4.2",
+   "What is the distinction between predicates and referring expressions?What is a generic sentence? Provide examples."
+  ],
+  [
+   "9",
+   "12",
+   "CQ4.3",
+   "What is the universe of discourse? Provide examples in which the universe of discourse is the real world or fictitious world."
+  ],
+  [
+   "10",
+   "13",
+   "CQ5.1",
+   "Explain the definition of a deictic word and its features. Give examples in sentences."
+  ],
+  [
+   "11",
+   "14",
+   "CQ5.2",
+   "What is the context of utterance? What is the relation between context of utterance and universe of discourse. Explain the definteness of a noun phrase. Give examples."
+  ],
+  [
+   "12",
+   "15",
+   "CQ5.3",
+   "What is the extension of a one-place predicate? Tell the differences among extension, sense and reference. Give an example of extension."
+  ],
+  [
+   "13",
+   "16",
+   "CQ6.1",
+   "What is the difference of extension - prototype - stereotype? Give examples to illustrate."
+  ],
+  [
+   "14",
+   "17",
+   "CQ6.2",
+   "What is analytic sentence? What is synthetic sentence? What is contradiction? Give examples."
+  ],
+  [
+   "15",
+   "18",
+   "CQ6.3",
+   "What are necessary condition and sufficient conditions? Give examples to illustrate how they are different from each other."
+  ],
+  [
+   "16",
+   "19",
+   "CQ7.1",
+   "What is synonym? Provide examples"
+  ],
+  [
+   "17",
+   "20",
+   "CQ7.2",
+   "What is a paraphrase? Provide examples"
+  ],
+  [
+   "18",
+   "21",
+   "CQ7.3",
+   "What is hyponymy? Provide examples"
+  ],
+  [
+   "19",
+   "22",
+   "CQ8.1",
+   "What are three basic types of antonymy? Provide definitions and examples."
+  ],
+  [
+   "20",
+   "23",
+   "CQ8.2",
+   "What is homonymy? What is polysemy? Why is it difficult to draw a clear line between homonymy and polysemy? Provide examples."
+  ],
+  [
+   "21",
+   "24",
+   "CQ8.3",
+   "What is Modus Ponens? Provide one argument that utilizes the Modus Ponens."
+  ],
+  [
+   "22",
+   "25",
+   "CQ9.1",
+   "What is a simple proposition? How is the notation of a simple proposition written? Give examples."
+  ],
+  [
+   "23",
+   "26",
+   "CQ9.2",
+   "Explain the rules of omission in a notation. Give examples."
+  ],
+  [
+   "24",
+   "27",
+   "CQ9.3",
+   "How are the logical formulae with and (&) and or (V) written? Give examples."
+  ],
+  [
+   "25",
+   "28",
+   "CQ10.1",
+   "What are commutavity of disconjunction? What is compositionality of meaning? Provide examples."
+  ],
+  [
+   "26",
+   "29",
+   "CQ10.2",
+   "What are connectives of negation? What logic is described in De Morgan's laws? Provide examples."
+  ],
+  [
+   "27",
+   "30",
+   "CQ10.3",
+   "What are the connectives of implication and connectives of equivalence? Provide examples."
+  ],
+  [
+   "28",
+   "31",
+   "CQ11.1",
+   "What is the difference between a dictionary and an encyclopaedia?"
+  ],
+  [
+   "29",
+   "32",
+   "CQ11.2",
+   "What are types of dictionary? What are technical predicates? Provide examples"
+  ],
+  [
+   "30",
+   "33",
+   "CQ11.3",
+   "What is A MEANING POSTULATE?\nHow do you write meaning postulates for synonyms, hyponymy, and binary antonymy?\nWhat is contradiction? What is anonaly?"
+  ],
+  [
+   "31",
+   "34",
+   "CQ12.1",
+   "Can meaning postulates be used to handle sense relations of all predicates? Why (not)?"
+  ],
+  [
+   "32",
+   "35",
+   "CQ12.2",
+   "What are six sense properties of predicates? Provide examples."
+  ],
+  [
+   "33",
+   "36",
+   "CQ12.3",
+   "What is equivalence relation? Provide examples."
+  ],
+  [
+   "34",
+   "37",
+   "CQ13.1",
+   "Explain the definitions of derivation, morphemes and compound words. What are the processes in a derivation? Explain the processes in a derivation. Give examples."
+  ],
+  [
+   "35",
+   "38",
+   "CQ13.2",
+   "What does an inchoative form denote? What does a causative form denote? What does a resultative form denote? Give examples. When is a derivational process productive?"
+  ],
+  [
+   "36",
+   "40",
+   "CQ14.1",
+   "What are participant roles: AGENT, AFFECTED, INSTRUMENT, BENEFICIARY, THEME & EXPERIENCER? Give examples."
+  ],
+  [
+   "37",
+   "41",
+   "CQ14.2",
+   "What is speech act? What is an act of assertion? What is description fallacy?"
+  ],
+  [
+   "38",
+   "42",
+   "CQ14.3",
+   "What is performative and constative utterance? Give examples to distinguish them."
+  ],
+  [
+   "39",
+   "43",
+   "CQ15.1",
+   "What are sentence types and their functions?\nWhat basic kinds of acts are typically performed by the utterance of declarative, interrogative, and imperative sentences, respectively?\nWhat is the PERLOCUTIONARY ACT? Provide examples"
+  ],
+  [
+   "40",
+   "44",
+   "CQ15.2",
+   "What is the ILLOCUTIONARY ACT? Provide examples.\nWhat is the PHONIC ACT? Provide examples.\nWhat is the PROPOSITIONAL ACT? Provide examples."
+  ],
+  [
+   "41",
+   "45",
+   "CQ15.3",
+   "What are the FELICITY CONDITIONS? Provide examples."
+  ],
+  [
+   "42",
+   "46",
+   "CQ16.1",
+   "What is A SINCERITY CONDITION? Give an example. Why are sincerity conditions classified as a subtype of felicity conditions (and not the other way around)? What is the difference between the two types of conditions? Provide examples."
+  ],
+  [
+   "43",
+   "47",
+   "CQ16.2",
+   "What is the difference between direct and indirect illocutions? Provide examples of each type, and explain briefly why they belong to each type."
+  ],
+  [
+   "44",
+   "48",
+   "CQ16.3",
+   "What is the difference between directive and commissive acts? Provide examples of each type, and explain briefly why they belong to each type."
+  ],
+  [
+   "45",
+   "49",
+   "CQ17.1",
+   "What is the difference between sentence meaning and utterance meaning?Explain the propositional content of a directive illocution. Give example."
+  ],
+  [
+   "46",
+   "50",
+   "CQ17.2",
+   "Explain the propositional content of a commissive illocution. Give example."
+  ],
+  [
+   "47",
+   "51",
+   "CQ17.3",
+   "What is an inference? What is implicature?"
+  ],
+  [
+   "48",
+   "52",
+   "CQ18.1",
+   "How can conversational implicature be cancelled?"
+  ],
+  [
+   "49",
+   "53",
+   "CQ18.2",
+   "What is metaphor? How many types of metaphor are there & what are they? Give examples to illustrate each type."
+  ],
+  [
+   "50",
+   "54",
+   "CQ18.3",
+   "What is metonymy? What are 8 types of metonymy? Give examples to illustrate each type."
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/1sRwj2UQEtr1y__ZheoAkkaVsgo5fnusN?usp=sharing"
+ ]
+}

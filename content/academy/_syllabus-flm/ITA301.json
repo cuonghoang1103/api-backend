@@ -1,0 +1,967 @@
+{
+ "ma": "ITA301",
+ "sylID": "6636",
+ "quyetDinh": "703/QĐ-ĐH-FPT dated 08/17/2022",
+ "ungVien": [
+  {
+   "sylID": "6636",
+   "code": "ITA301",
+   "name": "Information System Analysis and Design_Phân tích và thiết kế HTTT",
+   "active": true,
+   "approved": true,
+   "decision": "703/QĐ-ĐH-FPT dated 08/17/2022"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=6636",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "6636",
+  "Syllabus Name": "Information System Analysis and Design_Phân tích và thiết kế HTTT",
+  "Course Name English": "",
+  "Subject Code": "ITA301",
+  "Learning-Teaching Method": "Project based learning,Active learning,In-class lecture",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "ITA203c, DBI202",
+  "Description": "This course aims to explain to students all aspects of analysis and design an information system. Students will learn how to translate business requirements into information systems that support a company’s strategic objectives. Students will improve their analytical reasoning, critical thinking, and problem-solving skills when they do projects, assignments, and read other support materials in this course. This course is designed to:\n\n- explain about systems analysis and design\n\n- introduce project management concepts early in the systems development process.\n\n- provide multi-method coverage, including a comparison of structured, object-oriented, and agile systems development methods.\n\n- explain how IT supports business requirements in today’s intensely competitive environment.",
+  "StudentTasks": "- Students must attend more than 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises given by instructor in class or at home and submit on time\n\n- Constantly follow announcements on intranet/LMS at http://lms.fpt.edu.vn for up-to-date course information regarding assignment submission and feedback on assignments and project work.",
+  "Tools": "UML and UML graphical drawing tool",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "703/QĐ-ĐH-FPT dated 08/17/2022",
+  "IsApproved": "True",
+  "Note": "1) On-going Assessment\n\n- 3 progress tests: 15 %\n\n- 3 labs : 15%\n\n- 1 system analysis and design project: 35%\n\n2) Final exam (60'): 35%\n\n3) Final Result: 100%\n\nCompletion Criteria:\n\n1) Every on-going assessment component >0\n\n2) Final Exam Score >=4 & Final Result >=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/17/2022"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "AE Systems Analysis and Design",
+   "Scott Tilley, Harry J. Rosenblatt",
+   "Course Technology Cengage Learning, Boston, Massachusetts.",
+   "2019",
+   "Twelfth Edition",
+   "9789814878302",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Modern Systems Analysis and Design",
+   "Joseph S. Valacich và Joey F.Georg",
+   "Pearson",
+   "2016",
+   "Eighth Edition",
+   "978-0134204925",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "System analysis & design - An Object-oriented approach with UML",
+   "Dennis, Wixon, Tegarden",
+   "Wiley",
+   "2020",
+   "Sixth Edition",
+   "978-1119559917",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Software Modeling and Design UML, Use Cases, Patterns, and Software Architectures",
+   "Hassan Gomaa",
+   "Cambridge",
+   "2011",
+   "First Edition",
+   "978-0521764148",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Systems Analysis and Design",
+   "Howard Gould",
+   "bookboon.com",
+   "2016",
+   "First Edition",
+   "978-87-403-1417-5",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Course slides (.pptx)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "7",
+   "Labs & assignment",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "To understand the role of information technology in today’s dynamic business environment."
+  ],
+  [
+   "2",
+   "CLO2",
+   "To be able to analyze the business case"
+  ],
+  [
+   "3",
+   "CLO3",
+   "To understand about project management and how to plan, schedule, monitor, and report on IT projects."
+  ],
+  [
+   "4",
+   "CLO4",
+   "To comprehend the requirements engineering process"
+  ],
+  [
+   "5",
+   "CLO5",
+   "To understand data and process modeling techniques that analysts use to show how the system transforms data into useful information"
+  ],
+  [
+   "6",
+   "CLO6",
+   "To understand object modeling techniques that analysts use to create a logical model"
+  ],
+  [
+   "7",
+   "CLO7",
+   "To be able to do evaluation of alternative solutions and to perform preparation of the system requirements document"
+  ],
+  [
+   "8",
+   "CLO8",
+   "To understand how to design an effective user interface and how to handle data security and control issues"
+  ],
+  [
+   "9",
+   "CLO9",
+   "To enhance the data design skills that are necessary for a systems analyst to construct the physical model of the information system"
+  ],
+  [
+   "10",
+   "CLO10",
+   "To be able to translates the logical design of an information system into a physical blueprint - system architecture"
+  ],
+  [
+   "11",
+   "CLO11",
+   "To understand how to concentrate on quality assurance throughout the activities of application development, coding, testing, documentation, and installation."
+  ],
+  [
+   "12",
+   "CLO12",
+   "To understande systems support and security tasks that continue throughout the useful life of the\nsystem"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Lab",
+   "on-going",
+   "3",
+   "15.0%",
+   ">0",
+   "2 slots/each",
+   "Lab 1 : LO1, LO2, LO3\n\nLab 2: LO4, LO5, LO6, LO7\n\nLab 3: LO 8, LO9, LO10",
+   "Document work and presentation",
+   "1 document/each",
+   "All subjects in syllabus",
+   "in class, by teacher",
+   "Students are working in group of 3 people. Students have to present the result in class"
+  ],
+  [
+   "2",
+   "Progress Test",
+   "on-going",
+   "3",
+   "15.0%",
+   ">0",
+   "30'/each",
+   "Test 1: LO1, LO2, LO3, LO4\n\nTest 2: LO5, LO6, LO7, LO8\n\nTest 3: LO9, LO10, LO11, LO12",
+   "Multiple choices\n\nMarked by Computer or a suitable format",
+   "30/each",
+   "",
+   "in class, by EOS or LMS system",
+   "Instruction and schedules for Progress Tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has responsibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Project",
+   "on-going",
+   "1",
+   "35.0%",
+   ">0",
+   "45'/each",
+   "LO1->LO12",
+   "Documents and implementation code.",
+   "",
+   "All subjects in syllabus",
+   "in class, by teacher",
+   "Students are working in group of 3 people. Students have to present the result in the end of course"
+  ],
+  [
+   "4",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "35.0%",
+   "4",
+   "60'/each",
+   "LO1->LO12",
+   "Multiple choices\n\nMarked by Computer",
+   "50",
+   "All subjects in syllabus",
+   "Exam room",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "I",
+   "Textbook, slides",
+   "ITA301",
+   "Read the syllabus and introduction slide",
+   ""
+  ],
+  [
+   "2",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "I",
+   "Textbook, slides",
+   "ITA301",
+   "Read the syllabus and introduction slide",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Introduction to Systems Analysis and Design",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Read chapter 1 in text book, focus on 1.1 to 1.5",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Introduction to Systems Analysis and Design",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Textbook, slides",
+   "",
+   "Read chapter 1 in text book, focus on 1.1 to 1.5",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: Introduction to Systems Analysis and Design\n\nLab 1: Create a simple project plan\n\nLab 1: Guide for analysis and design project topic selection",
+   "Offline",
+   "LO1, LO2, LO3",
+   "U",
+   "Textbook, slides\n\nProject Ideas List",
+   "",
+   "Read chapter 1 in text book, focus on 1.6 to 1.10\n\nSelect a project topic in group",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1: Introduction to Systems Analysis and Design\n\nLab 1: Create a simple project plan\n\nLab 1: Guide for analysis and design project topic selection",
+   "Offline",
+   "LO1, LO2, LO3",
+   "U",
+   "Textbook, slides\n\nProject Ideas List",
+   "",
+   "Read chapter 1 in text book, focus on 1.6 to 1.10\n\nSelect a project topic in group",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Analyzing the Business Case",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Textbook, slides, project topics",
+   "",
+   "Read chapter 2 in text book, focus on 2.1 to 2.5",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Analyzing the Business Case",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Textbook, slides, project topics",
+   "",
+   "Read chapter 2 in text book, focus on 2.1 to 2.5",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Analyzing the Business Case\n\nLab 1: Guide for analyzing the project's business case",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Textbook, slides, project topics",
+   "",
+   "Read chapter 2 in text book, focus on 2.6 to 2.10\n\nAnalyze and develop project's business case.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2: Analyzing the Business Case\n\nLab 1: Guide for analyzing the project's business case",
+   "Offline",
+   "LO2",
+   "I,T",
+   "Textbook, slides, project topics",
+   "",
+   "Read chapter 2 in text book, focus on 2.6 to 2.10\n\nAnalyze and develop project's business case.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 3: Managing System Projects",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Textbook, slides, business case template",
+   "",
+   "Read chapter 3 in text book, focus on 3.1 to 3.5",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 3: Managing System Projects",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Textbook, slides, business case template",
+   "",
+   "Read chapter 3 in text book, focus on 3.1 to 3.5",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: Managing System Projects\n\nLab 1: Guide for managing the project",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slides, business case template",
+   "",
+   "Read chapter 3 in text book, focus on 3.6 to 3.10\n\nPerform project management tasks for the selected project",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3: Managing System Projects\n\nLab 1: Guide for managing the project",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slides, business case template",
+   "",
+   "Read chapter 3 in text book, focus on 3.6 to 3.10\n\nPerform project management tasks for the selected project",
+   ""
+  ],
+  [
+   "15",
+   "Review the project plan phase result (Lab 1)",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slides, project plan template",
+   "",
+   "Prepare and presentation project plan documents",
+   ""
+  ],
+  [
+   "16",
+   "Review the project plan phase result (Lab 1)",
+   "Offline",
+   "LO3",
+   "U",
+   "Textbook, slides, project plan template",
+   "",
+   "Prepare and presentation project plan documents",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 4: Requirements Engineering",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 4 in text book, focus on 4.1 to 4.5",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 4: Requirements Engineering",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 4 in text book, focus on 4.1 to 4.5",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 4: Requirements Engineering\n\nLab 2: Create a simple software requirement analysis document\n\nLab 2: Guide for requirement engineering in the project",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 4 in text book, focus on 4.6 to 4.10\n\nPerform Requirement Analysis task",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 4: Requirements Engineering\n\nLab 2: Create a simple software requirement analysis document\n\nLab 2: Guide for requirement engineering in the project",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 4 in text book, focus on 4.6 to 4.10\n\nPerform Requirement Analysis task",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 5: Data and Process Modeling",
+   "Offline",
+   "LO5",
+   "U",
+   "Textbook, slides",
+   "",
+   "Read chapter 5 in text book, focus on 5.1 to 5.5",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 5: Data and Process Modeling",
+   "Offline",
+   "LO5",
+   "U",
+   "Textbook, slides",
+   "",
+   "Read chapter 5 in text book, focus on 5.1 to 5.5",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 5: Data and Process Modeling\n\nLab 2: Guide for modeling the project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 5 in text book, focus on 5.6 to 5.10\n\nPerform Data and Process Modeling task",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 5: Data and Process Modeling\n\nLab 2: Guide for modeling the project",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 5 in text book, focus on 5.6 to 5.10\n\nPerform Data and Process Modeling task",
+   ""
+  ],
+  [
+   "25",
+   "Progress Test 1\n\nChapter 6: Object Modeling",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbook, slides, questions",
+   "",
+   "Prepare for the first progress test\n\nRead chapter 6 in text book, focus on 6.1 to 6.10",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 6: Object Modeling",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "U",
+   "Textbook, slides, questions",
+   "",
+   "Prepare for the first progress test\n\nRead chapter 6 in text book, focus on 6.1 to 6.10",
+   ""
+  ],
+  [
+   "27",
+   "Lab 2: Guide for modeling the project",
+   "Offline",
+   "LO6",
+   "U",
+   "Textbook, slides",
+   "",
+   "Perform Logical Object Modeling task",
+   ""
+  ],
+  [
+   "28",
+   "Lab 2: Guide for modeling the project",
+   "Offline",
+   "LO6",
+   "U",
+   "Textbook, slides",
+   "",
+   "Perform Logical Object Modeling task",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 7: Development Strategies",
+   "Offline",
+   "LO7",
+   "U",
+   "Textbook, slides, UML modeling guide",
+   "",
+   "Read chapter 7 in text book, focus on 7.1 to 7.5",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 7: Development Strategies",
+   "Offline",
+   "LO7",
+   "U",
+   "Textbook, slides, UML modeling guide",
+   "",
+   "Read chapter 7 in text book, focus on 7.1 to 7.5",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 7: Development Strategies\n\nLab 2: Guide for development strategies selection",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 7 in text book, focus on 7.6 to 7.10\n\nSelect Development Strategies",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 7: Development Strategies\n\nLab 2: Guide for development strategies selection",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 7 in text book, focus on 7.6 to 7.10\n\nSelect Development Strategies",
+   ""
+  ],
+  [
+   "33",
+   "Review the project analysis phase result (Lab 2)",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "U",
+   "Textbook, slides",
+   "",
+   "Present requirement document",
+   ""
+  ],
+  [
+   "34",
+   "Review the project analysis phase result (Lab 2)",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "U",
+   "Textbook, slides",
+   "",
+   "Present requirement document",
+   ""
+  ],
+  [
+   "35",
+   "Review the project analysis phase result (Lab 2)",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "U",
+   "Textbook, slides",
+   "",
+   "Present requirement document",
+   ""
+  ],
+  [
+   "36",
+   "Review the project analysis phase result (Lab 2)",
+   "Offline",
+   "LO4, LO5, LO6, LO7",
+   "U",
+   "Textbook, slides",
+   "",
+   "Present requirement document",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 8: User Interface Design",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 8 in text book, focus on 8.1 to 8.5",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 8: User Interface Design",
+   "Offline",
+   "LO8",
+   "I, T",
+   "Textbook, slides",
+   "",
+   "Read chapter 8 in text book, focus on 8.1 to 8.5",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 8: User Interface Design\n\nLab 3: Create a simple software design document\n\nLab 3: Guide for User Interface design",
+   "Offline",
+   "LO8, LO9, LO10",
+   "U",
+   "Textbook, slides\n\nArchitecture Design, Database Design, UI/UX Design and Detail Logic Design Skill.",
+   "",
+   "Read chapter 8 in text book, focus on 8.6 to 8.10\n\nDesign the project UI",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 8: User Interface Design\n\nLab 3: Create a simple software design document\n\nLab 3: Guide for User Interface design",
+   "Offline",
+   "LO8, LO9, LO10",
+   "U",
+   "Textbook, slides\n\nArchitecture Design, Database Design, UI/UX Design and Detail Logic Design Skill.",
+   "",
+   "Read chapter 8 in text book, focus on 8.6 to 8.10\n\nDesign the project UI",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 9: Data Design",
+   "Offline",
+   "LO9",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Read chapter 9 in text book, focus on 9.1 to 9.5",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 9: Data Design",
+   "Offline",
+   "LO9",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Read chapter 9 in text book, focus on 9.1 to 9.5",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 9: Data Design\n\nProgress Test 2\n\nLab 3: Guide for Data design",
+   "Offline",
+   "LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Textbook, slides, questions",
+   "",
+   "Read chapter 9 in text book, focus on 9.6 to 9.10\n\nPrepare for the second progress test\n\nDesign the database for the project",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 9: Data Design\n\nLab 3: Guide for Data design",
+   "Offline",
+   "LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Textbook, slides, questions",
+   "",
+   "Read chapter 9 in text book, focus on 9.6 to 9.10\n\nPrepare for the second progress test\n\nDesign the database for the project",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 10: System Architecture",
+   "Offline",
+   "LO10",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Read chapter 10 in text book, focus on 10.1 to 10.5",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 10: System Architecture",
+   "Offline",
+   "LO10",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Read chapter 10 in text book, focus on 10.1 to 10.5",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 10: System Architecture\n\nLab 3: Guide for designing the system architecture",
+   "Offline",
+   "LO10",
+   "U",
+   "Textbook, slides",
+   "",
+   "Read chapter 10 in text book, focus on 10.6 to 10.10\n\nDesign the system architecture for the project",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 10: System Architecture\n\nLab 3: Guide for designing the system architecture",
+   "Offline",
+   "LO10",
+   "U",
+   "Textbook, slides",
+   "",
+   "Read chapter 10 in text book, focus on 10.6 to 10.10\n\nDesign the system architecture for the project",
+   ""
+  ],
+  [
+   "49",
+   "Review the design phase result (Lab 3)",
+   "Offline",
+   "LO8, LO9, LO10",
+   "T",
+   "Textbook, slides",
+   "",
+   "Prepare and present the project's system architecture",
+   ""
+  ],
+  [
+   "50",
+   "Review the design phase result (Lab 3)",
+   "Offline",
+   "LO8, LO9, LO10",
+   "T",
+   "Textbook, slides",
+   "",
+   "Prepare and present the project's system architecture",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 11: Managing Systems Implementation\n\nGuide for managing the implementation of the project",
+   "Offline",
+   "LO11",
+   "U",
+   "Textbook, slides",
+   "",
+   "Read chapter 11 in text book, focus on 11.1, 11.5, 11.6, 11.7 to 11.9\n\nDemonstrate project code for getting feedback",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 11: Managing Systems Implementation\n\nGuide for managing the implementation of the project",
+   "Offline",
+   "LO11",
+   "U",
+   "Textbook, slides",
+   "",
+   "Read chapter 11 in text book, focus on 11.1, 11.5, 11.6, 11.7 to 11.9\n\nDemonstrate project code for getting feedback",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 12: Managing Systems Support and Security",
+   "Offline",
+   "LO12",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Read chapter 12 in the text book focus on 12.1 to 12.5",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 12: Managing Systems Support and Security",
+   "Offline",
+   "LO12",
+   "IT",
+   "Textbook, slides",
+   "",
+   "Read chapter 12 in the text book focus on 12.1 to 12.5",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 12: Managing Systems Support and Security\n\nGuide for managing the security and support in the project\n\nProgress Test 3",
+   "Offline",
+   "LO9, LO10, LO11, LO12",
+   "U",
+   "Textbook, slides, questions",
+   "",
+   "Read chapter 12 in the text book focus on 12.6 to 12.10\n\nPrepare the project's system maintenance and security tasks\n\nPrepare for the third progress test",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 12: Managing Systems Support and Security\n\nGuide for managing the security and support in the project",
+   "Offline",
+   "LO9, LO10, LO11, LO12",
+   "U",
+   "Textbook, slides, questions",
+   "",
+   "Read chapter 12 in the text book focus on 12.6 to 12.10\n\nPrepare the project's system maintenance and security tasks\n\nPrepare for the third progress test",
+   ""
+  ],
+  [
+   "57",
+   "Review project works",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "T",
+   "Textbook, slides",
+   "",
+   "Prepare and present the project final result.",
+   ""
+  ],
+  [
+   "58",
+   "Review project works",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "T",
+   "Textbook, slides",
+   "",
+   "Prepare and present the project final result.",
+   ""
+  ],
+  [
+   "59",
+   "Review project works\n\nCourse Summary",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "T",
+   "Textbook, slides",
+   "",
+   "Prepare and present the project final result.",
+   ""
+  ],
+  [
+   "60",
+   "Review project works\n\nCourse Summary",
+   "Offline",
+   "LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "T",
+   "Textbook, slides",
+   "",
+   "Prepare and present the project final result.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/5449/S/1_ITA301.zip",
+  "/download/5449/S/2_ITA301.zip"
+ ]
+}

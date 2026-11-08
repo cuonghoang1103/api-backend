@@ -1,0 +1,365 @@
+{
+ "ma": "SEP490",
+ "sylID": "14065",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14065",
+   "code": "SEP490",
+   "name": "SE Capstone Project_Đồ án tốt nghiệp KTPM",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14065",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14065",
+  "Syllabus Name": "SE Capstone Project_Đồ án tốt nghiệp KTPM",
+  "Course Name English": "SE Capstone Project",
+  "Subject Code": "SEP490",
+  "Learning-Teaching Method": "Inquiry-based Teaching,Experiential learning methods,Project Based Training",
+  "NoCredit": "10",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (500h)\n\n= 33.75h contact hours (1newslot/week*15week) + 1.5h capstone project defense + 464.75h self-study",
+  "Pre-Requisite": "o Successfully complete (*) below topics:\n\n- Project Management – PMG201c or PMG202c\n\n- Software Architecture and Design – SWD391 or SWD392\n\n- Software development project - SWP391\n\no Pass 60% of total credits of selected combo.\n\no Pass OJT202 (not apply to international students)\n\no Pass 80% of total credits (PHE_COM* and OJT excluded)\n\n(*): GPA must be greater than or equal to 4.",
+  "Description": "The capstone project provides students important skills and initial experiences in participating in the software projects. Student can apply knowledges they have learned to the real current projects include:\n\n- Experiencing across all project phases: requirement, design, coding, testing and release\n\n- Finding out and using the templates and composing documents for each project stage\n\n- Using knowledges of technology that have been taught\n\n- Having the opportunity to research and apply new technologies\n\n- Practicing teamwork and how to interact with colleagues in a project implementation process\n\n- Ensuring the proper implementation of quality requirements and schedule\n\n- Doing troubleshooting\n\nWith the team size of 4-5 members, the output product size are required to be equivalent to 20-25 medium use cases (3-7 transactions for each use case; action buttons on the screen, end user interactions to the software screens/functions or database transactions can be counted as transaction)\n\nThe capstone project provides students, working in groups, with a significant project experience in which they can integrate much of the material they have learned in their program, including matters relating to requirements, design, implementation, human factors, professionalism, and project management. Students should be expected to deliver one or several iterations of a software system, along with all artifacts appropriate to the process model they are using. These would likely include\n\na) Project management Plan (perhaps updated regularly),\n\nb) Software Requirements Specifications (SRS)\n\nc) Software Design Documents (SDD)\n\nd) Test Plan and other Test Documentation (STD)\n\ne) Software package & the user guides (package content, installation guide & user manuals)\n\nAll the documents in the project implementation process and the progress reports are required to write in English.",
+  "StudentTasks": "# Choose appropriate project and form group.\n\n# Divide and schedule work among members.\n\n# Attend all scheduled meeting with supervisor.\n\n# Produce document and product according to project requirement and member work share.\n\n# Defend work infront of examination board, showing both project results and individual responsibility.\n\n# In case of cheating found, the whole team is not allow to defend.\n\n#Students are required to attend at least 80% of scheduled meetings with their supervisor(s) to be eligible for the thesis or capstone defense.",
+  "Tools": "Appropriate tools for design and implementation.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "The Student’s Guide of Capstone Project (SEP490_StudentGuide_2023Fall)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "Bản mềm, tài liệu xây dựng bởi FU"
+  ],
+  [
+   "2",
+   "Graduated Regulation (Quy che tot nghiep)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "Bản mềm, tài liệu xây dựng bởi FU"
+  ],
+  [
+   "3",
+   "Project Templates (on CMS, FLM)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "Bản mềm, tài liệu xây dựng bởi FU"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Use the knowledge of contemporary issues to identify a problem requiring technology intervention and specify the requiments for the proposed solution."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Design a software solution, with consideration of techical & others factors."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Implement the design, including testing verification."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply project management principles to software development project."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Write a professional research report."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Practice oral presentation and inter-personal communications."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Exhibit professional working attitudes"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "On-going Assessment",
+   "on-going",
+   "7",
+   "50.0%",
+   "5",
+   "During the CP Progress",
+   "All LOs",
+   "Report",
+   "Topic of CP",
+   "",
+   "On-going Assessment (OGA):\n\n- Project Introduction (Report 1): 4%\n\n- Project Management Plan (Report 2): 8%\n\n- Software Requirement (Report 3): 16%\n\n- Software Design (Report 4): 18%\n\n- Testing (Report 5): 18%\n\n- User Guides (Report 6): 4%\n\n- Implementation (Report 7): 32%",
+   "require grade >=2 for each part"
+  ],
+  [
+   "2",
+   "Final Project Presentation:",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "~ 30 minutes for presentation, ~ 60 minutes for demo and Q&A. Total is 90 minutes.",
+   "All LOs",
+   "",
+   "CP Project Presentation",
+   "",
+   "Thesis Defense Assessment (TDA):\n\n- Project Introduction: 5%\n\n- Project Management Plan: 5%\n\n- Software Requirement: 15%\n\n- Software Design: 10%\n\n- Testing: 10%\n\n- User Guides: 5%\n\n- Implementation: 35%\n\n- Presentation Skills: 5%\n\n- Q&A: 10%\n\nPresentation mark is given by each member of defence committee for each student on final project presentation. Personal mark is the average of all marks given by members of defence committee.",
+   "One or more specific members of the student team is not allowed to join the thesis defense (and therefore being failed the subject) if he/she has OGA less than 5 or any cheating found from him/her (he/she can't prove they do the software product by him/herself).\n\nBefore thesis defense, the student team must wait until the second round of thesis defense if the whole team has the OGA less than 5/10 OR they are in one of below cases:\n\n(1) The team completes less than 75% use cases functions/screens as submitted (as mentioned in the submitted Report 3, at the end of the week 3) OR there are less than 20 average (3-7 transactions) use cases completed.\n\n(2) The team can't prove the fact that they prepare any of the project reports or the output software package by themselves\n\n(3) There are more than 3 obvious coding-logic defects OR more than 1 show-stopper defects (the defects that prevent end user from completing his/her use case on any software functions) in the submitted software.\n\nThe student(s) has to re-do the capstone project if the above cases occur with the assessments for the second thesis defense OR there is one OGA with grade less than 2/10.\n\nAfter thesis defense, one or more team members are evaluated as failed the capstone project if they are in one of below cases (no matter when the guiding teacher doesn't evaluate that):\n\n(1) Student can't demonstrate any function or use case\n\n(2) Students can't prove the fact that they prepare any of the project reports or the output software by themselves\n\n(3) There are more than 3 obvious coding-logic defects OR more than 1 show-stopper defects (the defects that prevent end user from completing his/her use case on any software functions) in the submitted software."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Discussion on the CP topic, CP Structure,\n\nGuide Report No.1: Introduction\n\nReport No.1 Submission: Project Introduction",
+   "Offline",
+   "",
+   "",
+   "Report 1",
+   "SEP490",
+   "Prepare Report No.1\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "2",
+   "Team Weekly Meeting: CP Topic Review & Group Division\n\nGuide Report No.2: Software Project Management Plan\n\nReport No.2 Submission: Project Plan",
+   "Offline",
+   "",
+   "",
+   "Report 2",
+   "SEP490",
+   "Prepare Report No.2\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "3",
+   "Team Weekly Meeting: Project Plan Review\n\nGuide Report No.3: Software Requirement Specification (SRS)\n\nReport No.3 Submission: Software Requirement (SRS)",
+   "Offline",
+   "",
+   "",
+   "Report 3",
+   "",
+   "Prepare Report No.3\n\nUpdate Project Introduction, Project Plan\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "4",
+   "Team Weekly Meeting: Project & SRS Review\n\nTeam Weekly Meeting: Project Review & Report No.4 Guide\n\nReport No.4 Submission: Software Design (SDD)",
+   "Offline",
+   "",
+   "",
+   "Report 4",
+   "",
+   "Prepare Report No.4\n\nUpdate Project Introduction, Project Plan, and SRS Documents\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "5",
+   "cont.",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "Team Weekly Meeting: Code Iteration 1 Plan & Guide\n\nTeam Weekly Meeting: Code Iteration 1 Product Demo",
+   "Offline",
+   "",
+   "",
+   "Report 5",
+   "",
+   "Prepare Report No.5\n\nUpdate Project Plan, SRS, SDD\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "7",
+   "cont.",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Team Weekly Meeting: Code Iteration 2 Plan & Guide\n\nTeam Weekly Meeting: Code Iteration 2 Product Demo",
+   "Offline",
+   "",
+   "",
+   "Report 5",
+   "",
+   "Prepare Report No.5\n\nUpdate Project Plan, SRS, SDD\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "9",
+   "cont.",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Team Weekly Meeting: Code Iteration 3 Plan & Guide\n\nTeam Weekly Meeting: Code Iteration 3 Product Demo",
+   "Offline",
+   "",
+   "",
+   "Report 5",
+   "",
+   "Prepare Report No.5\n\nUpdate Project Plan, SRS, SDD\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "11",
+   "cont.",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "Team Weekly Meeting: System Test Plan & Guide\n\nTeam Weekly Meeting: Final Package Product Demo\n\nReport No.5 Submission: Software Test Document (STD)",
+   "Offline",
+   "",
+   "",
+   "Report 5",
+   "",
+   "Prepare Report No.5\n\nUpdate Project Plan, SRS, SDD\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "13",
+   "cont.",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "14",
+   "Team Weekly Meeting: Project & Software Package Review\n\nGuide Report No.6: Software User manuals\n\nReport No.6 Submission: Software User Guides",
+   "Offline",
+   "",
+   "",
+   "Report 6",
+   "",
+   "Prepare Report No.6\n\nGuided study: at leat 24 units per week.",
+   ""
+  ],
+  [
+   "15",
+   "Team Weekly Meeting: Practice for Presentation of Capstone Project\n\nReport No.7 Submission: Final Project Report, includes all the final project documents (completed Reports No. 1-6, both soft copy & hard copy), Software Product, and thesis presentation slide",
+   "Offline",
+   "",
+   "",
+   "Report 7",
+   "",
+   "Prepare Final Report & Software Package\n\nPreparation for Final Presentation\n\nGuided study: at leat 24 units per week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "/download/10297/S/1_SEP490.zip",
+  "/download/10297/S/2_SEP490.zip"
+ ]
+}

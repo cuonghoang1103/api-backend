@@ -1,0 +1,1616 @@
+{
+ "ma": "FRS301",
+ "sylID": "11193",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11193",
+   "code": "FRS301",
+   "name": "Digital Forensics_Điều tra số",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11193",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11193",
+  "Syllabus Name": "Digital Forensics_Điều tra số",
+  "Course Name English": "Digital Forensics",
+  "Subject Code": "FRS301",
+  "Learning-Teaching Method": "Lecture,Active learning,Social Constructivism, Discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "NWC202 or NWC203c or NWC204",
+  "Description": "This course addresses the comprehension and application of Digital Forensic Investigations. Students will evaluate and synthesize technical and legal issues in relation to digital evidence. Students will apply various skills and techniques, combined with numerous investigative software tools to analyze seized electronic media. Students subject to background investigation prior to admittance.\n\nAssessment scheme:\n\n1) On-going Assessment\n\n- 01 Midterm Progress Test: 20%\n\n- Participation in Discussions: 10%\n\n- 14 Lab-Projects: 40%\n\n2) 01 Final Exam: 30%\n\n3) Final Result 100%\n\nCompletion Criteria:\n\n1) Every on-going assessment component >0\n\n2) Average Lab Score >= 4\n\n3) Final Exam Score >=4 & Final Result >=5",
+  "StudentTasks": "- Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Students are responsible to do all exercises, assignments and labs given by instructor in class or at home and submit in time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the FPTU LMS at https://flm.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "The Basics of Digital Forensics: The Primer for Getting Started in Digital Forensics\n\n(Online: http://library.books24x7.com/toc.aspx?bookid=78129).",
+   "John Sammons",
+   "Syngress",
+   "2015",
+   "2nd",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "https://samsclass.info/121/121_S13.shtml",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Guide to Computer Forensics and Investigations Processing Digital Evidence",
+   "Bill Nelson, Amelia Phillips, Chris Steuart",
+   "Cengage Learning",
+   "2016",
+   "5th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Digital Forensics Trial Graphics: Teaching the Jury Though Effective Use of Visuals",
+   "John Sammons, Lars Daniel",
+   "Elsevier",
+   "2017",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Digital Forensics Processing and Procedures: Meeting the Requirements of ISO 17020, ISO 17025, ISO 27001 and Best Practice Requirements",
+   "David Watson, Andrew Jones",
+   "Syngress",
+   "2013",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "6",
+   "Lecture slides, Lab-Projects.",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Defining Digital Forensics and examining how it’s being used."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understanding how computers create and store digital information is a perquisite for the study of digital forensics."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Examining digital forensic environment, hardware and software, and standards used on a regular basis, to accredit labs and validate tools."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Collecting digital evidence, establishing a chain of custody, and understanding its major role when admitted into court."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Understanding many of the common Windows artifacts and how they are created."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Examining tools and techniques used to hide or destroy data with the aim to recover digital evidence, deleted files, and the like."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Explaining the legal aspects of digital forensics in searching."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Understanding social networks, e-mail, chat logs, and Internet history representing some of the best evidence."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Understanding how networks are attacked and what role digital forensics plays in not only the response, but in how perpetrators can be traced."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Understanding the underlying technology powering cell phones and GPS units, as well as the potential evidence they could contain."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Lab-Projects",
+   "on-going",
+   "14",
+   "40.0%",
+   "4",
+   "60-90'/each",
+   "",
+   "practical exercises",
+   "N/A",
+   "technical aspect of studied topics",
+   "Guided by instructor\n\n- 14 Lab-Projects are arranged relevant to the chapter theory\n\n- Student must finish labs and submit the results to the lecturer in class.\n\n- An average point of all labs could be evaluated and published to students at the end of the semester.",
+   ""
+  ],
+  [
+   "2",
+   "Midterm Progress Test",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "30'-40'",
+   "",
+   "Multiple choices Marked by Computer or a suitable format",
+   "20-25",
+   "cover Lectures 1-9",
+   "in class, by instructor",
+   "Instruction and schedules for Progress Tests must be presented in the Course Implementation Plan approved by director of the campus. The test must be taken right after the last lectures of required material. Instructor has responsibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Participation in Discussions",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "",
+   "N/A",
+   "",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9, LO10",
+   "Multiple choices",
+   "40-50",
+   "concepts, algorithms; all studied Chapters",
+   "by exam board, using computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Lecture 1. Introduction\n\n1.1 What is Forensic Science?\n\n1.2 What is Digital Forensics?",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "mat1",
+   "Explain Lab-Projects requirements\n\nRead the Chapter\n\nStudy and Review Lecture 1",
+   ""
+  ],
+  [
+   "2",
+   "Lecture 1. Introduction (cont.)\n\n1.3 Uses of Digital Forensics\n\n1.4 Role of the Forensic Examiner in the Judicial System",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "mat2",
+   "Explain Lab-Projects requirements\n\nRead the Chapter\n\nStudy and Review Lecture 1",
+   ""
+  ],
+  [
+   "3",
+   "Lecture 2. Key Technical Concepts\n\n2.1 Basic Computer Operation\n\n2.2 File Extensions and File Signatures",
+   "Offline",
+   "LO2",
+   "T",
+   "",
+   "mat3",
+   "Read the Chapter\n\nStudy and Review Lecture 2",
+   ""
+  ],
+  [
+   "4",
+   "Lecture 2. Key Technical Concepts (cont.)\n\n2.3 Storage and Memory\n\n2.4 Computing Environments",
+   "Offline",
+   "LO2",
+   "T",
+   "",
+   "mat4",
+   "Read the Chapter\n\nStudy and Review Lecture 2",
+   ""
+  ],
+  [
+   "5",
+   "Lecture 3. Key Technical Concepts (cont.)\n\n3.1 Data Types\n\n3.2 File Systems",
+   "Offline",
+   "LO2",
+   "T",
+   "",
+   "mat5",
+   "Read the Chapter\n\nStudy and Review Lecture 3",
+   ""
+  ],
+  [
+   "6",
+   "Lecture 3. Key Technical Concepts (cont.)\n\n3.3 Allocated and Unallocated Space\n\n3.4 How Magnetic Hard Drives Store Data\n\n3.5 Basic Computer Function - Putting It All Together",
+   "Offline",
+   "LO2",
+   "T",
+   "",
+   "mat6",
+   "Read the Chapter\n\nStudy and Review Lecture 3",
+   ""
+  ],
+  [
+   "7",
+   "Lab 1: Preparing a Windows Forensics Environment",
+   "Offline",
+   "LO2",
+   "U",
+   "",
+   "mat7",
+   "Practice and Review Lab 1",
+   ""
+  ],
+  [
+   "8",
+   "Lab 1: Preparing a Windows Forensics Environment (cont.)",
+   "Offline",
+   "LO2",
+   "U",
+   "",
+   "mat8",
+   "Practice and Review Lab 1",
+   ""
+  ],
+  [
+   "9",
+   "Lab 2: Using ProDiscover",
+   "Offline",
+   "LO2",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 2",
+   ""
+  ],
+  [
+   "10",
+   "Lab 2: Using ProDiscover (cont.)",
+   "Offline",
+   "LO2",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 2",
+   ""
+  ],
+  [
+   "11",
+   "Lecture 4. Labs and Tools\n\n3.1 Forensic Laboratories\n\n3.2 Policies and Procedures",
+   "Offline",
+   "LO3",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 4",
+   ""
+  ],
+  [
+   "12",
+   "Lecture 4. Labs and Tools (cont.)\n\n3.3 Quality Assurance\n\n3.4 Digital Forensic Tools\n\n3.5 Accreditation",
+   "Offline",
+   "LO3",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 4",
+   ""
+  ],
+  [
+   "13",
+   "Lab-Project 3: Identifying File Types",
+   "Offline",
+   "LO3",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 3",
+   ""
+  ],
+  [
+   "14",
+   "Lab-Project 3: Identifying File Types (cont.)",
+   "Offline",
+   "LO3",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 3",
+   ""
+  ],
+  [
+   "15",
+   "Lecture 5. Collecting Evidence\n\n4.1 Crime Scenes and Collecting Evidence",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy nad Review Lecture 5",
+   ""
+  ],
+  [
+   "16",
+   "Lecture 5. Collecting Evidence (cont.)\n\n4.2 Documenting the Scene\n\n4.3 Chain of Custody",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy nad Review Lecture 5",
+   ""
+  ],
+  [
+   "17",
+   "Lecture 6. Collecting Evidence (cont.)\n\n5.1 Cloning\n\n5.2 Live System versus Dead System",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 6",
+   ""
+  ],
+  [
+   "18",
+   "Lecture 6. Collecting Evidence (cont.)\n\n5.3 Hashing\n\n5.4 Final Report",
+   "Offline",
+   "LO4",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 6",
+   ""
+  ],
+  [
+   "19",
+   "Lab-Project 4: Viewing Segments and Clusters with a Hex Editor",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 4",
+   ""
+  ],
+  [
+   "20",
+   "Lab-Project 4: Viewing Segments and Clusters with a Hex Editor (cont.)",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 4",
+   ""
+  ],
+  [
+   "21",
+   "Lab-Project 5: Static Image",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 5",
+   ""
+  ],
+  [
+   "22",
+   "Lab-Project 5: Static Image (cont.)",
+   "Offline",
+   "LO4",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 5",
+   ""
+  ],
+  [
+   "23",
+   "Lecture 7. Windows System Artifacts\n\n6.1 Deleted Data\n\n6.2 Hibernation File (Hiberfile.Sys)",
+   "Offline",
+   "LO5",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy nad Review Lecture 7",
+   ""
+  ],
+  [
+   "24",
+   "Lecture 7. Windows System Artifacts (cont.)\n\n6.3 Registry\n\n6.4 Print Spooling\n\n6.5 Recycle Bin",
+   "Offline",
+   "LO5",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy nad Review Lecture 7",
+   ""
+  ],
+  [
+   "25",
+   "Lecture 8. Windows System Artifacts (cont.)\n\n7.1 Metadata\n\n7.2 Thumbnail Cache",
+   "Offline",
+   "LO5",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 8",
+   ""
+  ],
+  [
+   "26",
+   "Lecture 8. Windows System Artifacts (cont.)\n\n7.3 Most Recently Used (MRU)\n\n7.4 Restore Points and Shadow Copy\n\n7.5 Prefetch and Link Files",
+   "Offline",
+   "LO5",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 8",
+   ""
+  ],
+  [
+   "27",
+   "Lab-Project 6: Examining the Registry",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 6",
+   ""
+  ],
+  [
+   "28",
+   "Lab-Project 6: Examining the Registry (cont.)",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 6",
+   ""
+  ],
+  [
+   "29",
+   "Lab-Project 7: Thumbnail Cache",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 7",
+   ""
+  ],
+  [
+   "30",
+   "Lab-Project 7: Thumbnail Cache (cont.)",
+   "Offline",
+   "LO5",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 7",
+   ""
+  ],
+  [
+   "31",
+   "Lectures 9. Antiforensics\n\n8.1 Hiding Data\n\n8.2 Password Attacks",
+   "Offline",
+   "LO6",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 9",
+   ""
+  ],
+  [
+   "32",
+   "Lectures 9. Antiforensics (cont.)\n\n8.3 Steganography\n\n8.4 Data Destruction\n\nRecommended Reading: The Cryptocurrency Enigma",
+   "Offline",
+   "LO6",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 9",
+   ""
+  ],
+  [
+   "33",
+   "Lab-Project 8: Bypassing a BIOS Password",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 8",
+   ""
+  ],
+  [
+   "34",
+   "Lab-Project 8: Bypassing a BIOS Password (cont.)",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 8",
+   ""
+  ],
+  [
+   "35",
+   "Lab-Project 9: Capturing Passwords from RAM on a Mac",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 9",
+   ""
+  ],
+  [
+   "36",
+   "Lab-Project 9: Capturing Passwords from RAM on a Mac (cont.)",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 9",
+   ""
+  ],
+  [
+   "37",
+   "Review for Midterm",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Midterm Progress Test",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "Lectures 10. Legal Aspects of Digital Forensics\n\n9.1 The Fourth Amendment\n\n9.2 Criminal Law - Searches with and without a Warrant",
+   "Offline",
+   "LO7",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 10",
+   ""
+  ],
+  [
+   "40",
+   "Lectures 10. Legal Aspects of Digital Forensics (cont.)\n\n9.3 Electronic Discovery (eDiscovery)\n\n9.4 Expert Testimony\n\nRecommended Reading: Digital Forensics Trial Graphics - Teaching the Jury Though Effective Use of Visuals",
+   "Offline",
+   "LO7",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 10",
+   ""
+  ],
+  [
+   "41",
+   "Lab-Project 10: Static Acquisition with Kali Linux",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 10",
+   ""
+  ],
+  [
+   "42",
+   "Lab-Project 10: Static Acquisition with Kali Linux (cont.)",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 10",
+   ""
+  ],
+  [
+   "43",
+   "Lectures 11. Internet and E-Mail\n\n11.1 Internet Overview\n\n11.2 Web Browsers - Internet Explorer",
+   "Offline",
+   "LO8",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 11",
+   ""
+  ],
+  [
+   "44",
+   "Lectures 11. Internet and E-Mail (cont.)\n\n11.3 E-Mail\n\n11.4 Social Networking Sites",
+   "Offline",
+   "LO8",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 11",
+   ""
+  ],
+  [
+   "45",
+   "Lab-Project 11: Using FTK , or Using Median",
+   "Offline",
+   "LO8",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 11",
+   ""
+  ],
+  [
+   "46",
+   "Lab-Project 11: Using FTK , or Using Median (cont.)",
+   "Offline",
+   "LO8",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 11",
+   ""
+  ],
+  [
+   "47",
+   "Lectures 12. Digital Forensics and Networking\n\n12.1 Network Fundamentals\n\n12.2 Network Security Tools",
+   "Offline",
+   "LO9",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 12",
+   ""
+  ],
+  [
+   "48",
+   "Lectures 12. Digital Forensics and Networking (cont.)\n\n12.3 Network Attacks\n\n12.4 Incident Response\n\n12.5 Network Evidence and Investigations",
+   "Offline",
+   "LO9",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 12",
+   ""
+  ],
+  [
+   "49",
+   "Lab-Project 12: The Sleuth Kit and Autopsy",
+   "Offline",
+   "LO9",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 12",
+   ""
+  ],
+  [
+   "50",
+   "Lab-Project 12: The Sleuth Kit and Autopsy (cont.)",
+   "Offline",
+   "LO9",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 12",
+   ""
+  ],
+  [
+   "51",
+   "Lectures 13. Mobile Device Forensics\n\n13.1 Cellular Networks\n\n13.2 Overview of Cell Phone Operating Systems",
+   "Offline",
+   "LO10",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 13",
+   ""
+  ],
+  [
+   "52",
+   "Lectures 13. Mobile Device Forensics (cont.)\n\n13.3 Cell Phone Evidence",
+   "Offline",
+   "LO10",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 13",
+   ""
+  ],
+  [
+   "53",
+   "Lectures 14. Mobile Device Forensics (cont.)\n\n14.1 Cell Phone Forensic Tools",
+   "Offline",
+   "LO10",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 14",
+   ""
+  ],
+  [
+   "54",
+   "Lectures 14. Mobile Device Forensics (cont.)\n\n14.2 Global Positioning Systems (GPS)\n\nRecommended Reading: Challenges and Concerns",
+   "Offline",
+   "LO10",
+   "T",
+   "",
+   "",
+   "Read the Chapter\n\nStudy and Review Lecture 14",
+   ""
+  ],
+  [
+   "55",
+   "Lab-Project 13: Using Netwitness",
+   "Offline",
+   "LO10",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 13",
+   ""
+  ],
+  [
+   "56",
+   "Lab-Project 13: Using Netwitness (cont.)",
+   "Offline",
+   "LO10",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 13",
+   ""
+  ],
+  [
+   "57",
+   "Lab-Project 14: Finding Items with NetWitness",
+   "Offline",
+   "LO10",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 14",
+   ""
+  ],
+  [
+   "58",
+   "Lab-Project 14: Finding Items with NetWitness (cont.)",
+   "Offline",
+   "LO10",
+   "U",
+   "",
+   "",
+   "Practice and Review Lab 14",
+   ""
+  ],
+  [
+   "59",
+   "Course Review",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Review the course",
+   ""
+  ],
+  [
+   "60",
+   "Course Review (cont.)",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "Review the course",
+   ""
+  ],
+  [
+   "61",
+   "Final Exam",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "What is Forensic Science?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ2",
+   "What is Digital Forensics?"
+  ],
+  [
+   "3",
+   "1",
+   "CQ3",
+   "What is the role of the Forensic Examiner in the Judicial System?"
+  ],
+  [
+   "4",
+   "2",
+   "CQ1",
+   "What is Forensic Science? (cont.)"
+  ],
+  [
+   "5",
+   "2",
+   "CQ2",
+   "What is Digital Forensics? (cont.)"
+  ],
+  [
+   "6",
+   "2",
+   "CQ3",
+   "What is the role of the Forensic Examiner in the Judicial System? (cont.)"
+  ],
+  [
+   "7",
+   "3",
+   "CQ1",
+   "What is File Extensions and File Signatures?"
+  ],
+  [
+   "8",
+   "3",
+   "CQ2",
+   "How computers store data?"
+  ],
+  [
+   "9",
+   "3",
+   "CQ3",
+   "What is the difference between Computer Environments?"
+  ],
+  [
+   "10",
+   "4",
+   "CQ1",
+   "What is File Extensions and File Signatures? (cont.)"
+  ],
+  [
+   "11",
+   "4",
+   "CQ2",
+   "How computers store data? (cont.)"
+  ],
+  [
+   "12",
+   "4",
+   "CQ3",
+   "What is the difference between Computer Environments? (cont.)"
+  ],
+  [
+   "13",
+   "5",
+   "CQ1",
+   "What is Active, Latent, and Archival Data?"
+  ],
+  [
+   "14",
+   "5",
+   "CQ2",
+   "What is the difference between allocated and unallocated space?"
+  ],
+  [
+   "15",
+   "6",
+   "CQ1",
+   "What is Active, Latent, and Archival Data? (cont.)"
+  ],
+  [
+   "16",
+   "6",
+   "CQ2",
+   "What is the difference between allocated and unallocated space? (cont.)"
+  ],
+  [
+   "17",
+   "9",
+   "CQ1",
+   "What is ProDiscover?"
+  ],
+  [
+   "18",
+   "9",
+   "CQ2",
+   "How does ProDiscover work?"
+  ],
+  [
+   "19",
+   "10",
+   "CQ1",
+   "What is ProDiscover? (cont.)"
+  ],
+  [
+   "20",
+   "10",
+   "CQ2",
+   "How does ProDiscover work? (cont.)"
+  ],
+  [
+   "21",
+   "11",
+   "CQ1",
+   "What is the role and organization of forensic Laboratories?"
+  ],
+  [
+   "22",
+   "11",
+   "CQ2",
+   "What is The purpose of Policies and Procedures in Forensic Laboratories?"
+  ],
+  [
+   "23",
+   "11",
+   "CQ3",
+   "What is the Role of Quality Assurance in Forensics?"
+  ],
+  [
+   "24",
+   "12",
+   "CQ1",
+   "What is the role and organization of forensic Laboratories? (cont.)"
+  ],
+  [
+   "25",
+   "12",
+   "CQ2",
+   "What is The purpose of Policies and Procedures in Forensic Laboratories? (cont.)"
+  ],
+  [
+   "26",
+   "12",
+   "CQ3",
+   "What is the Role of Quality Assurance in Forensics? (cont.)"
+  ],
+  [
+   "27",
+   "13",
+   "CQ1",
+   "What is the difference between file extensions and file types?"
+  ],
+  [
+   "28",
+   "13",
+   "CQ2",
+   "How do you identify file types?"
+  ],
+  [
+   "29",
+   "14",
+   "CQ1",
+   "What is the difference between file extensions and file types? (cont.)"
+  ],
+  [
+   "30",
+   "14",
+   "CQ2",
+   "How do you identify file types? (cont.)"
+  ],
+  [
+   "31",
+   "15",
+   "CQ1",
+   "Why do we need document the Scene and the Evidence?"
+  ],
+  [
+   "32",
+   "15",
+   "CQ2",
+   "What is forensic cloning of Evidence?"
+  ],
+  [
+   "33",
+   "16",
+   "CQ1",
+   "Why do we need document the Scene and the Evidence? (cont.)"
+  ],
+  [
+   "34",
+   "16",
+   "CQ2",
+   "What is forensic cloning of Evidence? (cont.)"
+  ],
+  [
+   "35",
+   "17",
+   "CQ1",
+   "How do you deal with Live Systems and Dead Systems?"
+  ],
+  [
+   "36",
+   "17",
+   "CQ2",
+   "Why do we need to use hashing to verify the Integrity of Evidence?"
+  ],
+  [
+   "37",
+   "18",
+   "CQ1",
+   "How do you deal with Live Systems and Dead Systems? (cont.)"
+  ],
+  [
+   "38",
+   "18",
+   "CQ2",
+   "Why do we need to use hashing to verify the Integrity of Evidence? (cont.)"
+  ],
+  [
+   "39",
+   "21",
+   "CQ1",
+   "What is the difference between segments and clusters?"
+  ],
+  [
+   "40",
+   "21",
+   "CQ2",
+   "What is MBR?"
+  ],
+  [
+   "41",
+   "22",
+   "CQ1",
+   "What is the difference between segments and clusters? (cont.)"
+  ],
+  [
+   "42",
+   "22",
+   "CQ2",
+   "What is MBR? (cont.)"
+  ],
+  [
+   "43",
+   "23",
+   "CQ1",
+   "What is Windows Registry?"
+  ],
+  [
+   "44",
+   "23",
+   "CQ2",
+   "How can you find deleted data?"
+  ],
+  [
+   "45",
+   "23",
+   "CQ3",
+   "Metadata: What It Is and How It’s Used"
+  ],
+  [
+   "46",
+   "24",
+   "CQ1",
+   "What is Windows Registry? (cont.)"
+  ],
+  [
+   "47",
+   "24",
+   "CQ2",
+   "How can you find deleted data? (cont.)"
+  ],
+  [
+   "48",
+   "24",
+   "CQ3",
+   "Metadata: What It Is and How It’s Used (cont.)"
+  ],
+  [
+   "49",
+   "25",
+   "CQ1",
+   "What is Metadata?"
+  ],
+  [
+   "50",
+   "25",
+   "CQ2",
+   "How can Thumbnail Cache be used?"
+  ],
+  [
+   "51",
+   "25",
+   "CQ3",
+   "How can you work with Restore Points and Shadow Copies?"
+  ],
+  [
+   "52",
+   "26",
+   "CQ1",
+   "What is Metadata? (cont.)"
+  ],
+  [
+   "53",
+   "26",
+   "CQ2",
+   "How can Thumbnail Cache be used? (cont.)"
+  ],
+  [
+   "54",
+   "26",
+   "CQ3",
+   "How can you work with Restore Points and Shadow Copies? (cont.)"
+  ],
+  [
+   "55",
+   "27",
+   "CQ1",
+   "How does Windows Registry work?"
+  ],
+  [
+   "56",
+   "27",
+   "CQ2",
+   "How can you examine Windows Registry?"
+  ],
+  [
+   "57",
+   "28",
+   "CQ1",
+   "How does Windows Registry work? (cont.)"
+  ],
+  [
+   "58",
+   "28",
+   "CQ2",
+   "How can you examine Windows Registry? (cont.)"
+  ],
+  [
+   "59",
+   "31",
+   "CQ1",
+   "What type of attacks can be used to break encryption?"
+  ],
+  [
+   "60",
+   "31",
+   "CQ2",
+   "What type of techniques can be used to hide and destroy data?"
+  ],
+  [
+   "61",
+   "32",
+   "CQ1",
+   "What type of attacks can be used to break encryption? (cont.)"
+  ],
+  [
+   "62",
+   "32",
+   "CQ2",
+   "What type of techniques can be used to hide and destroy data? (cont.)"
+  ],
+  [
+   "63",
+   "39",
+   "CQ1",
+   "What is the Fourth Amendment?"
+  ],
+  [
+   "64",
+   "39",
+   "CQ2",
+   "How does the Fourth Amendment impact on digital forensics?"
+  ],
+  [
+   "65",
+   "40",
+   "CQ1",
+   "What is the Fourth Amendment? (cont.)"
+  ],
+  [
+   "66",
+   "40",
+   "CQ2",
+   "How does the Fourth Amendment impact on digital forensics? (cont.)"
+  ],
+  [
+   "67",
+   "41",
+   "CQ1",
+   "What is static acquisition?"
+  ],
+  [
+   "68",
+   "41",
+   "CQ2",
+   "Why do you need to do static acquisition?"
+  ],
+  [
+   "69",
+   "42",
+   "CQ1",
+   "What is static acquisition? (cont.)"
+  ],
+  [
+   "70",
+   "42",
+   "CQ2",
+   "Why do you need to do static acquisition? (cont.)"
+  ],
+  [
+   "71",
+   "43",
+   "CQ1",
+   "How does the internet work?"
+  ],
+  [
+   "72",
+   "43",
+   "CQ2",
+   "How do web browsers work and the evidence they can create?"
+  ],
+  [
+   "73",
+   "43",
+   "CQ3",
+   "What evidence can be gathered from email?"
+  ],
+  [
+   "74",
+   "43",
+   "CQ5",
+   "What evidence can be gathered from chat and social networking?"
+  ],
+  [
+   "75",
+   "44",
+   "CQ1",
+   "How does the internet work? (cont.)"
+  ],
+  [
+   "76",
+   "44",
+   "CQ2",
+   "How do web browsers work and the evidence they can create? (cont.)"
+  ],
+  [
+   "77",
+   "44",
+   "CQ3",
+   "What evidence can be gathered from email? (cont.)"
+  ],
+  [
+   "78",
+   "44",
+   "CQ5",
+   "What evidence can be gathered from chat and social networking? (cont.)"
+  ],
+  [
+   "79",
+   "45",
+   "CQ1",
+   "What is FTK tool?"
+  ],
+  [
+   "80",
+   "45",
+   "CQ2",
+   "How does FTK work?"
+  ],
+  [
+   "81",
+   "46",
+   "CQ1",
+   "What is FTK tool? (cont.)"
+  ],
+  [
+   "82",
+   "46",
+   "CQ2",
+   "How does FTK work? (cont.)"
+  ],
+  [
+   "83",
+   "47",
+   "CQ1",
+   "What type of networks do you know?"
+  ],
+  [
+   "84",
+   "47",
+   "CQ2",
+   "How can networks be attacked?"
+  ],
+  [
+   "85",
+   "47",
+   "CQ3",
+   "What type of evidence can be gathered from networks?"
+  ],
+  [
+   "86",
+   "48",
+   "CQ1",
+   "What type of networks do you know? (cont.)"
+  ],
+  [
+   "87",
+   "48",
+   "CQ2",
+   "How can networks be attacked? (cont.)"
+  ],
+  [
+   "88",
+   "48",
+   "CQ3",
+   "What type of evidence can be gathered from networks? (cont.)"
+  ],
+  [
+   "89",
+   "49",
+   "CQ1",
+   "What is the Sleuth Kit and Autopsy?"
+  ],
+  [
+   "90",
+   "49",
+   "CQ2",
+   "How does the Sleuth Kit and Autopsy work?"
+  ],
+  [
+   "91",
+   "50",
+   "CQ1",
+   "What is the Sleuth Kit and Autopsy? (cont.)"
+  ],
+  [
+   "92",
+   "50",
+   "CQ2",
+   "How does the Sleuth Kit and Autopsy work? (cont.)"
+  ],
+  [
+   "93",
+   "51",
+   "CQ1",
+   "How do cellular networks work?"
+  ],
+  [
+   "94",
+   "51",
+   "CQ2",
+   "What type of evidence can be gathered from cellular networks?"
+  ],
+  [
+   "95",
+   "52",
+   "CQ1",
+   "How do cellular networks work? (cont.)"
+  ],
+  [
+   "96",
+   "52",
+   "CQ2",
+   "What type of evidence can be gathered from cellular networks? (cont.)"
+  ],
+  [
+   "97",
+   "53",
+   "CQ1",
+   "What is Global Positioning System?"
+  ],
+  [
+   "98",
+   "53",
+   "CQ2",
+   "What type of evidence can be gathered from GPS?"
+  ],
+  [
+   "99",
+   "54",
+   "CQ1",
+   "What is Global Positioning System? (cont.)"
+  ],
+  [
+   "100",
+   "54",
+   "CQ2",
+   "What type of evidence can be gathered from GPS? (cont.)"
+  ],
+  [
+   "101",
+   "55",
+   "CQ1",
+   "What is the Netwitness tool?"
+  ],
+  [
+   "102",
+   "55",
+   "CQ2",
+   "How can the Netwitness can be used for digital forensic?"
+  ],
+  [
+   "103",
+   "56",
+   "CQ1",
+   "What is the Netwitness tool? (cont.)"
+  ],
+  [
+   "104",
+   "56",
+   "CQ2",
+   "How can the Netwitness can be used for digital forensic? (cont.)"
+  ],
+  [
+   "105",
+   "57",
+   "CQ1",
+   "What is the difference between Netwitness and Wireshark?"
+  ],
+  [
+   "106",
+   "57",
+   "CQ2",
+   "What type of evidence can be gathered from Netwitness?"
+  ],
+  [
+   "107",
+   "58",
+   "CQ1",
+   "What is the difference between Netwitness and Wireshark? (cont.)"
+  ],
+  [
+   "108",
+   "58",
+   "CQ2",
+   "What type of evidence can be gathered from Netwitness? (cont.)"
+  ]
+ ],
+ "links": [
+  "/download/10024/S/1_mat1.zip",
+  "/download/10024/S/2_mat2.zip",
+  "/download/10024/S/3_mat3.zip",
+  "/download/10024/S/4_mat4.zip",
+  "/download/11193/S/5_mat5.zip",
+  "/download/11193/S/6_mat6.zip",
+  "/download/11193/S/7_mat7.zip",
+  "/download/11193/S/8_mat8.zip"
+ ]
+}

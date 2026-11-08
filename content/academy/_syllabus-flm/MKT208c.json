@@ -1,0 +1,361 @@
+{
+ "ma": "MKT208c",
+ "sylID": "13331",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13331",
+   "code": "MKT208c",
+   "name": "Social Media Marketing_Marketing mạng xã hội",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13331",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13331",
+  "Syllabus Name": "Social Media Marketing_Marketing mạng xã hội",
+  "Course Name English": "Social Media Marketing",
+  "Subject Code": "MKT208c",
+  "Learning-Teaching Method": "Online,Lecture,Project based learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 46h online + 3h offline (optional) + 1h Final exam + 100h self-study",
+  "Pre-Requisite": "MKT101 or MKG101",
+  "Description": "The Social Media Marketing Specialization is designed to achieve two objectives. It gives students the social analytics tools, and training to help them become an influencer on social media. The course also gives the knowledge and resources to build a complete social media marketing strategy – from consumer insights to final justification metrics.",
+  "StudentTasks": "Access the specialization on Coursera and complete all courses' requirements to earn a certificate of completion for the specialization, in order to be qualified for the Final Exam.",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/social-media-marketing",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Spec: https://www.coursera.org/specializations/social-media-marketing"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/social-marketing-capstone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 6: Social Marketing Capstone Project"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/business-of-social",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 5: The Business of Social"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/social-imc",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 4: Content, Advertising & Social IMC"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/nurture-market-strategies",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 3: Engagement & Nurture Marketing Strategies"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/importance-of-listening",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 2: The Importance of Listening"
+  ],
+  [
+   "7",
+   "https://www.coursera.org/learn/what-is-social",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 1: What is Social?"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand how to grow your social strategy using effective, proven methodologies."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand the Big Data of social and gain a more complete picture of what can be learned from interactions on social sites."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand two of the most effective social strategies used by organizations today to reach your target consumer markets, and know when it is best to either use or avoid specific social marketing strategies."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand a thoughtful, integrated approach to make content that stands out in our increasingly oversaturated world."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Understand how to transform your organization's social marketing from an untracked investment to an integral part of your company’s marketing strategy, and the legal considerations involved as well as proven performance metrics and management tactics for success."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understand how to use methodologies, tools, and insights you have learned to create a multifaceted plan to assure effective social marketing as an integral part of your business strategy."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 3-4 questions.",
+   "by Exam Board",
+   "Final Result (FR) = min (10, TE + Bonus)"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course 1:\n\nModule 1: What is Social?\n\nLesson 1: Introduction\n\nLesson 2: Course Overview\n\nLesson 3: The Capstone Project\n\nLesson 4: Brief [but Important] Announcement on the IBM Cloud System\n\nModule 2: Social Trends\n\nLesson 1: Surviving the Digital Revolution 2019\n\nLesson 2: Media: From Chaos to Clarity\n\nLesson 3: Media: From Chaos to Clarity 2019 2nd Edition\n\nLesson 4: The Social Media Revolution\n\nLesson 5: Digital Transformation Trends 2019\n\nLesson 6: Identifying Social Trends",
+   "Online",
+   "LO1",
+   "ITU",
+   "Course 1: What is Social?",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "2",
+   "Course 1\n\nModule 3: The Business of Social\n\nLesson 1: Viewing Social\n\nLesson 2: Your Professional Network\n\nLesson 3: Real-Time Social Data\n\nLesson 4: WeFeelFine.org Demo\n\nLesson 5: The Shifting Social Landscape\n\nLesson 6: The Social Pyramid\n\nLesson 7: Developing your Professional Social Media Assets\n\nLesson 8:Targeting Assignment Step by Step\n\nModule 4: Social Overview\n\nLesson 1: The 3 M's of an Effective Content Strategy for Social Media Marketing\n\nLesson 2: The 3 M's of Effective Content Strategy - Focusing on Markets\n\nLesson 3: The 3 M's of Effective Content Strategy - Focusing on Messages\n\nLesson 4: The 3 M's of Effective Content Strategy - Focusing on Media\n\nLesson 5: Social Networks and Communities\n\nLesson 6: Why Social Communities Form\n\nLesson 7: Understanding Social Communities\n\nLesson 8: How to Position Yourself as a Brand Authority\n\nLesson 9: Developing your Social Media Tools for the Networking Assignment\n\nReview Course 1",
+   "Online,Offline",
+   "LO1",
+   "TU",
+   "Course 1: What is Social?",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Participate in Course 1 review slot (optional)",
+   ""
+  ],
+  [
+   "3",
+   "Course2:\n\nModule 1: Big Data\n\nLesson 1: Using Social Data\n\nLesson 2: Social Data Flows from a Single Source\n\nLesson 3: Data Extraction from Social Documents\n\nLesson 4: Accuracy of Text Analysis2m\n\nLesson 5: Data Extraction from Photos and Videos\n\nLesson 6: Accessing and Using the IBM Cloud System\n\nLesson 7: Sign up for Lexalytics Semantria\n\nModule 2: Big Information\n\nLesson 1: Social Media Analytics Overview 2018\n\nLesson 2: Free Influencer Analytics Tools 2018 - Followerwonk, Buzzsumo & Instagram Search\n\nLesson 3: Free Keyword & Pay Per Click Analytics Tools 2018 - KWFinder, Socialert & Google Adwords\n\nLesson 4: Free Hashtag Analytics Tools 2018 - Ritetag, Hashtagify.me & Keyhole.co\n\nLesson 5: Free Search Analytics Tools 2018 - Google Trends, Answer the Public & BoardReader\n\nLesson 6: Free Content Analytics Tools 2018 - Buzzsumo, Mashable, Alltop, Channel Crawler & ListenNotes\n\nLesson 7: Bonus - IBM Institute for Business Value - Free Resource for Technology Information\n\nLesson 8: Social Monitoring\n\nLesson 9: Salesforce Social Studio - formerly Radian6\n\nLesson 10: Social Marketing Toolkit Pt. 1b - Lexalytics Worksheets\n\nLesson 11: Social Marketing Toolkit Pt. 1c - Analyzing Content",
+   "Online",
+   "LO2",
+   "TU",
+   "Course 2: The Importance of Listening",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "4",
+   "Course 2\n\nModule 3: Big Insights\n\nLesson 1: Social Analytics\n\nLesson 2: Transforming Data to Information\n\nLesson 3: IBM Cloud - Assessing your Personality based on your Twitter activities - See Resources for Links to this System\n\nLesson 4: Is.gd is a free link tracking tool\n\nLesson 5: Buffer is a free social media scheduler\n\nLesson 6: Now that you have identified influencers and hashtags, let's start using them!\n\nLesson 7: IBM Cloud Visual Recognition System\n\nLesson 8: IBM Cloud Tone Analyzer\n\nLesson 9: 2.14 Using Social Analytics to grow your professional follower base\n\nModule 4: Real-Time in Action\n\nLesson 1: How Are Big Insights Being Used Today?\n\nLesson 2: Engagement Strategies\n\nLesson 3: Building Social Relationships\n\nLesson 4: Taco Bell War Room\n\nLesson 5: Crisis Management\n\nLesson 6: Social Insights for Content Strategies\n\nReview Course 2",
+   "Online",
+   "LO2",
+   "TU",
+   "Course 2: The Importance of Listening",
+   "",
+   "-Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "5",
+   "Course 3\n\nModule 1: Social Strategy Overview\n\nLesson 1: New Terminology & New Marketing Technologies for 2017\n\nLesson 2: Social Strategies Used by Organizations Today\n\nLesson 3: Engagement Marketing Social Strategy\n\nLesson 4: Engagement Example: Cadbury Dairy Milk\n\nLesson 5: Engagement Example: Old Spice\n\nLesson 6: How Startups and Small Businesses Can Use the Engagement Marketing Social Strategy\n\nModule 2: Engagement Strategy\n\nLesson 1: Effective Media Marketing\n\nLesson 2: Your Content Marketing Strategy\n\nLesson 3: Newsjacking to impact your high value markets\n\nLesson 4: Eventjacking - a \"must\" engagement strategy for start-ups\n\nLesson 5: Developing a 52 week Engagement Marketing Calendar - 2020 Calendar in Resources\n\nLesson 6: Cool Infographics\n\nLesson 7: Infographics for Businesses\n\nLesson 8: Using an Engagement Strategy",
+   "Online",
+   "LO3",
+   "TU",
+   "Course 3: Engagement & Nurture Marketing Strategies",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "6",
+   "Course 3\n\nModule 3: Nurture Marketing Strategy\n\nLesson 1: Embrace Your High-Value Markets\n\nLesson 2: Nurture Marketing Strategy\n\nLesson 3: Nurture Marketing Strategy Examples\n\nLesson 4: Importance of a Landing Page\n\nLesson 5: Real-Time Marketing\n\nLesson 6: Nurture Marketing Programs\n\nLesson 7: Develop a Filter and Focus Blog\n\nLesson 8: Create a Blog Article\n\nLesson 9: Assignment Step by Step\n\nModule 4: Developing a Great Blog\n\nLesson 1: 5 Tips for Effective Blog Posts\n\nLesson 2: Developing an Effective Blog",
+   "Online",
+   "LO3",
+   "TU",
+   "Course 3: Engagement & Nurture Marketing Strategies",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "7",
+   "Course 4:\n\nModule 1: Content Strategy\n\nLesson 1: Importance of Content in Social Marketing\n\nLesson 2: Paid / Owned / Earned Media\n\nModule 2: Advertising\n\nLesson 1: How to Develop Facebook-type Advertising Pt 1\n\nLesson 2: How to Develop Facebook-type Advertising Pt 2\n\nModule 3: Social Integrated Marketing Communications (IMC)\n\nLesson 1: Social IMC Strategy\n\nLesson 2: What is Gamification?\n\nLesson 3: Keep Them Coming Back\n\nLesson 4: Applications for Social IMC Strategy\n\nLesson 5: Social IMC Example: Ridgid Plumber Forum\n\nLesson 6: Social IMC Example: Carling Black Label\n\nLesson 7: Social IMC Example: North Face\n\nLesson 8: Social IMC Example: American Express",
+   "Online",
+   "LO4",
+   "TU",
+   "Course 4: Content, Advertising & Social IMC",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "8",
+   "Course 4\n\nModule 3\n\nLesson 9: Engaging Your High-Value Markets\n\nLesson 10: Rolling Out Your Blog\n\nLesson 11: A/B Split Testing in 4 Easy Steps - Step 1 Building your Testing Grid\n\nLesson 12: Step 2 - Creating your Tracking URLs\n\nLesson 13: Step 3 - Executing Your Plan\n\nLesson 14: Step 4 - Analyzing your Results\n\nModule 4: Measuring Your Social Programs\n\nLesson 1: Three Social Strategies\n\nLesson 2: Measuring Social IMC Programs\n\nLesson 3: Key Performance Indicators\n\nLesson 4: Testing Your Strategies",
+   "Online",
+   "LO4",
+   "TU",
+   "Course 4: Content, Advertising & Social IMC",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "9",
+   "Course 5\n\nModule 1: Legal Considerations\n\nLesson 1: Understanding Data Protection\n\nLesson 2: Security, Privacy, and Governance Pt. 1\n\nLesson 3: Security, Privacy, and Governance Pt. 2\n\nModule 2: Metrics\n\nLesson 1: Managing Social Programs\n\nLesson 2: Identifying Social Successes\n\nLesson 3: A New Model for Marketers\n\nLesson 4: Measuring Engagement\n\nLesson 5: Performance Funnels and KPIs",
+   "Online",
+   "LO5",
+   "TU",
+   "Course 5: The Business of Social",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "10",
+   "Course 5\n\nModule 3: Performance\n\nLesson 1: Developing Your Budget\n\nLesson 2: Justification Metrics\n\nLesson 3: Calculating Performance Metrics\n\nLesson 4: Creating a Pilot Program\n\nModule 4: Management\n\nLesson 1: Program Testing\n\nLesson 2: Program Management\n\nLesson 3: Learn More with Medill IMC\n\nLesson 4: Assessing Your Performance",
+   "Online",
+   "LO5",
+   "TU",
+   "Course 5: The Business of Social",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes",
+   ""
+  ],
+  [
+   "11",
+   "Course 6\n\nModule 1: Capstone Project\n\nLesson 1: Welcome to the Capstone!\n\nLesson 2: How You Will Build Your Social Media Marketing Strategy\n\nLesson 3: Linked Cells in your Social Marketing Planning Worksheets\n\nLesson 4: Your Market Planning Tool\n\nLesson 5: Secondary Research to Start the Process\n\nLesson 6: Defining Your Social Market\n\nModule 2: Selecting a Strategy\n\nLesson 1: Establishing Your Empowering Concept\n\nLesson 2: Selecting Your Strategy\n\nLesson 3: Engagement Marketing\n\nLesson 4: Nurture Marketing\n\nLesson 5: Social IMC\n\nLesson 6: Community Support Sites\n\nLesson 7: March 9, 2016 Online Meetup Recording\n\nLesson 8: June 2, 2016 Online Meetup Recording",
+   "Online",
+   "LO6",
+   "TU",
+   "Course 6: Social Marketing Capstone Project",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the project",
+   ""
+  ],
+  [
+   "12",
+   "Course 6\n\nModule 3: Develop Your Marketing Program\n\nLesson 1: Developing Your Marketing Program\n\nLesson 2: Performance Funnels and KPIs\n\nLesson 3: Creating Your Program's Budget\n\nLesson 4: Justifying Your Program\n\nModule 4: Complete and Submit Your Capstone Projects\n\nLesson 1: Pilot Program\n\nLesson 2: Social Marketing Schedule\n\nLesson 3:Presenting Your Plan\n\nLesson 4: Final Presentation of the Specialization\n\nReview",
+   "Online,Offline",
+   "LO6",
+   "TU",
+   "Course 6: Social Marketing Capstone Project",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the project\n\n- Participate in review slot (optional)\n\n- Deadline of Spec Completion: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

@@ -1,0 +1,1585 @@
+{
+ "ma": "MAS291",
+ "sylID": "13136",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13136",
+   "code": "MAS291",
+   "name": "Statistics & Probability_Xác suất thống kê",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13136",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13136",
+  "Syllabus Name": "Statistics & Probability_Xác suất thống kê",
+  "Course Name English": "",
+  "Subject Code": "MAS291",
+  "Learning-Teaching Method": "Lecture,Project based learning,Problem based learning,Social Constructivism,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "MAE101 or MAC101",
+  "Description": "Upon finishing the course, students must acquire:\n\n1. the following knowledge:(ABET a1)\n\n• The fundamental principles of probability and their applications\n\n• The frequently used probability distributions.\n\n• The basics of descriptive statistics\n\n• The inferences of statistics: parameter estimations, hypothesis testing, regressions & correlations.\n\n2. the following skills: (ABET a2)\n\n• Recognize simple statistical models and applied them to solve engineering problems.\n\n• Use at least one statistical software (Excel, Maxima) for problem solving.\n\n• Self-study skill. (ABET i)",
+  "StudentTasks": "Students must attend at least 80% of contact hours in order to be\n\naccepted to the final examination.",
+  "Tools": "- Internet\n\n- Computerized tools (for example Excel and DDXL add-ons) (CT)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "\"On-going assessment:\n\n• 03 progress tests: 30% (a1, i)\n\n• 02 assignments 20% (a2)\n\n• 01 computer project 15%\n\nFinal Examination 35% (a1, a2)\n\nFinal results 100%\n\nCompletion Criteria: Every on-going assessment component > 0, Final Result >=5 & Final Exam Score >=4 \"",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Montgomery D.C. & Runger G.C., Applied Statistics and Probability for Engineers",
+   "John Wiley & Sons.",
+   "Wiley",
+   "2006",
+   "4th/5th/6th/7th ed.",
+   "9781119718871",
+   "True",
+   "True",
+   "True",
+   "7th ed. ISBN: 9781119718871"
+  ],
+  [
+   "2",
+   "Powerpoint slides (PP).",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Computerized tools (for example Excel and DDXL add-ons) (CT)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Elementary Statistics Using Excel, 3/E,",
+   "Mario F. Triola",
+   "Addison-Wesley",
+   "200",
+   "3rd",
+   "0321365135",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Discuss the roles of statistics in engineering\nLO1.1 Explain the types of reasoning of statistical inference; distinguish mechanistic models and empirical models, statistic and parameter, sample and population.\nLO1.2 Describe the different methods that engineers use to collect data."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Identify sample spaces and events, and use basic rules to calculate the probability of an event\nLO2.1 Describe the sample space and events of an experiment; distinguish continuous and discrete sample spaces; perform operations on events.\nLO2.2 Calculate the probability of an event in a discrete sample space; use addition and complementary rules to find probabilities.\nLO2.3 Calculate conditional probabilities; use multiplication rule, total probability rule and Bayes theorem to find probabilities.\nLO2.4 Determine if two events are independent; use independence to find probabilities.\nLO2.5 Recognize a random variable; distinguish continuous and discrete random variables."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Describe the probability distribution and calculate the mean and variance of a discrete random variable\nLO3.1 Describe a discrete random variable; check if a function is a probability mass function and use it to calculate probability; find the cumulative distribution function of a discrete random variable.\nLO3.2 Compute the mean and variance of a discrete random variable.\nLO3.3 Determine the probability, mean and variance of uniform, binomial, geometric and negative binomial, hypergeometric and Poisson distributions."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Describe the probability distribution and calculate the mean and variance of a continuous random variable\nLO4.1 Describe a continuous random variable; check if a function is a probability density function and use it to calculate probability; find the cumulative distribution function of a continuous random variable.\nLO4.2 Compute the mean and variance of a continuous random variables\nLO4.3 Apply the formulas of continuous uniform distribution and exponential distribution to solve problems.\nLO4.4 Manipulate probabilities of a standard normal distribution using Excel or table of data; standardize a normal distribution.\nLO4.5 Use normal distribution to approximate binomial and Poisson distributions."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Describe data using numerical summaries and visual displays\nLO5.1 Find numeric summaries of data; describe data using stem-and-leaf diagrams, frequency distributions, histograms, time series plots.\nLO5.2 Determine quartiles and construct the box plot for a data; identify outliers."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Discuss sampling distributions and use the Central Limit Theorem to analyze sampling distribution of the means\nLO6.1 Discuss sampling distributions; find the point estimation of a parameter.\nLO6.2 Apply Central Limit Theorem to calculate probabilities regarding the sampling distribution of the means."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Construct confidence intervals for a population parameter/difference of population parameters\nLO7.1 Construct a confidence interval for the population mean/difference of two population means and interpret its meaning; determine the size of the sample to improve the estimation.\nLO7.2 Construct a confidence interval for the population proportion/difference of two population pproportions and interpret its meaning; determine the size of the sample to improve the estimation."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Verify a claim about a population parameter/difference of population parameters using hypothesis testing\nLO8.1 Formulate the two hypotheses; identify critical values, test statistic and compute P-value for a test of hypotheses on population mean/difference of two population means\nLO8.2 Formulate the two hypotheses; identify critical values, test statistic and compute P-value for a test of hypotheses on population proportion/difference of two population proportions\nLO8.3 Identify type of errors in testing hypotheses."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Construct a simple linear regression model\nLO9.1 Compute various sums of squares for a set of data pairs.\nLO9.2 Determine the equation of linear regression and the correlation coefficient; use linear regression to predict future values.\nLO9.3 Perform a hypothesis test in simple linear regression; test the significance of regression using t-test."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "3 hours",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "OP1: Open // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "5--10",
+   "Assignment 1 covers Chapters 1, 2, 3 ; Assignment 2 covers Chapters 4, 6, 7",
+   "OP1: Each assignment is divided into two parts: the take-home component counts for no more than 50% of the total grade, and the in-class component counts for at least 50% (this may take the form of a presentation, essay, problem-solving, etc.).\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Assignment 1: LO1, LO2, LO3\n\nAssignment 2: LO4, LO5, LO6"
+  ],
+  [
+   "2",
+   "Computer Project",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "5 hours",
+   "LO7, LO8, LO9",
+   "OP1: Open // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "N/A",
+   "Computer Project covers Chapter 8, 9, 10, 11",
+   "OP1: Groups of students are required to collect secondary data (topics may be suggested by instructor), form their own questions, and apply learned knowledge and methods of inferential statistics to analyze data and make conclusions about the populations.\n\nGroups are expected to use a statistical software to perform the analysis and present their results to other groups in class.\n\nThe work (slides, source files, etc.) accounts for up to 50% of the grade, while presentation skills and the ability to answer questions account for at least 50%.\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "3",
+   "Progress Test",
+   "on-going",
+   "3",
+   "30.0%",
+   ">0",
+   "30'",
+   "All LOs",
+   "OP1: MC or a suitable format // OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "15",
+   "Chapters introduced",
+   "OP1: by instructor, and by\n\nsuitable means (computer, paper, oral...)\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "OP1: Instruction and schedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nTest 1: LO1, LO2, LO3\n\nTest 2: LO4, LO5, LO6\n\nTest 3: LO7, LO8, LO9\n\nOP2: (For Constructivism Approach only): Follow lecturer's proposal\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "1",
+   "35.0%",
+   "4",
+   "60'",
+   "",
+   "Computer gradable",
+   "50",
+   "All studied chapters\n\n3-10 questions/each.\n\nMore than 70% new questions (for the current semester);",
+   "by Exam Board",
+   "10% of questions is ABET a2-objective oriented"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "The Roles of Statistics in Engineering\n\n1.1 The Engineering Method and Statistical Thinking\n\n1.2 Collecting Engineering Data",
+   "Offline",
+   "LO1",
+   "IT",
+   "Textbook Chapter 1",
+   "",
+   "Exercises Chapter 1\n\nAssignment 1",
+   ""
+  ],
+  [
+   "2",
+   "The Roles of Statistics in Engineering\n\n1.3 Mechanistic and Empirical Models\n\n1.4 Probability and Probability Models",
+   "Offline",
+   "LO1",
+   "IT",
+   "Textbook Chapter 1",
+   "MAS291",
+   "Exercises Chapter 1\n\nAssignment 1",
+   ""
+  ],
+  [
+   "3",
+   "Probability\n\n2.1 Sample Spaces and Events",
+   "Offline",
+   "LO2",
+   "IT",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2\n\nAssignment 1",
+   ""
+  ],
+  [
+   "4",
+   "Probability\n\n2.2 Interpretations of Probability\n\n2.3 Addition Rules",
+   "Offline",
+   "LO2",
+   "IT",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2\n\nAssignment 1",
+   ""
+  ],
+  [
+   "5",
+   "Probability\n\n2.4 Conditional Probability",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2\n\nAssignment 1",
+   ""
+  ],
+  [
+   "6",
+   "Probability\n\n2.5 Multiplication and Total Probability Rules\n\n2.6 Independence",
+   "Offline",
+   "LO2",
+   "TU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2\n\nAssignment 1",
+   ""
+  ],
+  [
+   "7",
+   "Probability\n\n2.7 Bayes' Theorem",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2\n\nAssignment 1",
+   ""
+  ],
+  [
+   "8",
+   "Probability\n\n2.8 Random Variables",
+   "Offline",
+   "LO2",
+   "ITU",
+   "Textbook Chapter 2",
+   "",
+   "Exercises Chapter 2\n\nAssignment 1",
+   ""
+  ],
+  [
+   "9",
+   "Discrete Random Variables and Probability Distribution\n\n3.1 Discrete Random Variables",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "10",
+   "Discrete Random Variables and Probability Distribution\n\n3.2 Probability Distributions and Probability Mass Functions",
+   "Offline",
+   "LO3",
+   "ITU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "11",
+   "Discrete Random Variables and Probability Distribution\n\n3.3 Cumulative Distribution Functions",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "12",
+   "Discrete Random Variables and Probability Distribution\n\n3.4 Mean and Variance of a Discrete Random Varibale",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "13",
+   "Discrete Random Variables and Probability Distribution\n\n3.5 Discrete Uniform Distribution\n\n3.6 Binomial Distribution",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "14",
+   "Discrete Random Variables and Probability Distribution\n\n3.7 Geometric and Negative Binomial Distributions",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "15",
+   "Discrete Random Variables and Probability Distribution\n\n3.8 Hypergeometric Distribution",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "16",
+   "Discrete Random Variables and Probability Distribution\n\n3.9 Poisson Distribution",
+   "Offline",
+   "LO3",
+   "TU",
+   "Textbook Chapter 3",
+   "",
+   "Exercises Chapter 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "17",
+   "Solve questions and problems for Chapters 1 - 3",
+   "Offline",
+   "LO1, LO2, LO3",
+   "",
+   "Textbook Chapters 1 - 3",
+   "",
+   "Exercises Chapters 1 - 3\n\nAssignment 1",
+   ""
+  ],
+  [
+   "18",
+   "Progress Test 1",
+   "Offline",
+   "LO1, LO2, LO3",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Continuous Random Variables and Probability Distribution\n\n4.1 Continuous Random Variables\n\n4.2 Probability Distributions and Probability Density Functions",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "20",
+   "Continuous Random Variables and Probability Distribution\n\n4.3 Cumulative Distribution Functions",
+   "Offline",
+   "LO4",
+   "ITU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "21",
+   "Continuous Random Variables and Probability Distribution\n\n4.4 Mean and Variance of a Continuous Random Variable",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "22",
+   "Continuous Random Variables and Probability Distribution\n\n4.5 Continuous Uniform Distribution",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "23",
+   "Continuous Random Variables and Probability Distribution\n\n4.6 Normal Distribution",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "24",
+   "Continuous Random Variables and Probability Distribution\n\n4.6 Normal Distribution (Cont.)",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "25",
+   "Continuous Random Variables and Probability Distribution\n\n4.7 Normal Approximation to the Binomial and Poisson Distributions",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "26",
+   "Continuous Random Variables and Probability Distribution\n\n4.8 Exponential Distribution",
+   "Offline",
+   "LO4",
+   "TU",
+   "Textbook Chapter 4",
+   "",
+   "Exercises Chapter 4\n\nAssignment 2",
+   ""
+  ],
+  [
+   "27",
+   "Descriptive Statistics\n\n6.1 Numerical Summaries",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 6",
+   "",
+   "Exercises Chapter 6\n\nAssignment 2",
+   ""
+  ],
+  [
+   "28",
+   "Descriptive Statistics\n\n6.2 Stem-and-Leaf Diagrams\n\n6.3 Frequency Distributions and Histograms",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 6",
+   "",
+   "Exercises Chapter 6\n\nAssignment 2",
+   ""
+  ],
+  [
+   "29",
+   "Descriptive Statistics\n\n6.4 Box Plots",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 6",
+   "",
+   "Exercises Chapter 6\n\nAssignment 2",
+   ""
+  ],
+  [
+   "30",
+   "Descriptive Statistics\n\n6.5 Time Sequence Plots",
+   "Offline",
+   "LO5",
+   "IT",
+   "Textbook Chapter 6",
+   "",
+   "Exercises Chapter 6\n\nAssignment 2",
+   ""
+  ],
+  [
+   "31",
+   "Sampling Distributions and Point Estimation of Paramaters\n\n7.1 Point Estimation",
+   "Offline",
+   "LO6",
+   "I",
+   "Textbook Chapter 7",
+   "",
+   "Exercises Chapter 7\n\nAssignment 2",
+   ""
+  ],
+  [
+   "32",
+   "Sampling Distributions and Point Estimation of Paramaters\n\n7.2 Sampling Distributions and the Central Limit Theorem",
+   "Offline",
+   "LO6",
+   "I",
+   "Textbook Chapter 7",
+   "",
+   "Exercises Chapter 7\n\nAssignment 2",
+   ""
+  ],
+  [
+   "33",
+   "Solve questions and problems for Chapters 4, 6, and 7",
+   "Offline",
+   "LO4, LO5, LO6",
+   "",
+   "Textbook Chapters 4, 6, and 7",
+   "",
+   "Exercises Chapters 4, 6, and 7\n\nAssignment 2",
+   ""
+  ],
+  [
+   "34",
+   "Progress Test 2",
+   "Offline",
+   "LO4, LO5, LO6",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "Statistical Intervals for a Single Sample\n\n8.1 Confidence Interval on the Mean of a Normal Distribution, Variance Known",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 8",
+   "",
+   "Exercises Chapter 8\n\nProject",
+   ""
+  ],
+  [
+   "36",
+   "Statistical Intervals for a Single Sample\n\n8.1 Confidence Interval on the Mean of a Normal Distribution, Variance Known (Cont.)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 8",
+   "",
+   "Exercises Chapter 8\n\nProject",
+   ""
+  ],
+  [
+   "37",
+   "Statistical Intervals for a Single Sample\n\n8.2 Confidence Interval on the Mean of a Normal Distribution, Variance Unknown",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 8",
+   "",
+   "Exercises Chapter 8\n\nProject",
+   ""
+  ],
+  [
+   "38",
+   "Statistical Intervals for a Single Sample\n\n8.2 Confidence Interval on the Mean of a Normal Distribution, Variance Unknown (Cont.)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 8",
+   "",
+   "Exercises Chapter 8\n\nProject",
+   ""
+  ],
+  [
+   "39",
+   "Statistical Intervals for a Single Sample\n\n8.4 Large-Sample Confidence Interval for a Population Proportion",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 8",
+   "",
+   "Exercises Chapter 8\n\nProject",
+   ""
+  ],
+  [
+   "40",
+   "Statistical Intervals for a Single Sample\n\n8.4 Large-Sample Confidence Interval for a Population Proportion (Cont.)",
+   "Offline",
+   "LO7",
+   "TU",
+   "Textbook Chapter 8",
+   "",
+   "Exercises Chapter 8\n\nProject",
+   ""
+  ],
+  [
+   "41",
+   "Test of Hypotheses for a Single Sample\n\n9.1 Hypothesis Testing",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9\n\nProject",
+   ""
+  ],
+  [
+   "42",
+   "Test of Hypotheses for a Single Sample\n\n9.1 Hypothesis Testing (Cont.)",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9\n\nProject",
+   ""
+  ],
+  [
+   "43",
+   "Test of Hypotheses for a Single Sample\n\n9.2 Tests on the Mean of a Normal Distribution, Variance Known",
+   "Offline",
+   "LO8",
+   "IT",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9\n\nProject",
+   ""
+  ],
+  [
+   "44",
+   "Test of Hypotheses for a Single Sample\n\n9.2 Tests on the Mean of a Normal Distribution, Variance Known (Cont.)",
+   "Offline",
+   "LO8",
+   "IT",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9\n\nProject",
+   ""
+  ],
+  [
+   "45",
+   "Test of Hypotheses for a Single Sample\n\n9.3 Tests on the Mean of a Normal Distribution, Variance Unknown",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9\n\nProject",
+   ""
+  ],
+  [
+   "46",
+   "Test of Hypotheses for a Single Sample\n\n9.5 Tests on a Population Proportion",
+   "Offline",
+   "LO8",
+   "TU",
+   "Textbook Chapter 9",
+   "",
+   "Exercises Chapter 9\n\nProject",
+   ""
+  ],
+  [
+   "47",
+   "Statistical Inference for Two Samples\n\n10.1 Inference on the Difference in Means of Two Normal Distributions, Variance Known",
+   "Offline",
+   "LO7,LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10\n\nProject",
+   ""
+  ],
+  [
+   "48",
+   "Statistical Inference for Two Samples\n\n10.2 Inference on the Difference in Means of Two Normal Distributions, Variance Unknown",
+   "Offline",
+   "LO7,LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10\n\nProject",
+   ""
+  ],
+  [
+   "49",
+   "Statistical Inference for Two Samples\n\n10.6 Inference on the Two Proportions",
+   "Offline",
+   "LO7,LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10\n\nProject",
+   ""
+  ],
+  [
+   "50",
+   "Statistical Inference for Two Samples\n\n10.6 Inference on the Two Proportions (Cont.)",
+   "Offline",
+   "LO7,LO8",
+   "TU",
+   "Textbook Chapter 10",
+   "",
+   "Exercises Chapter 10\n\nProject",
+   ""
+  ],
+  [
+   "51",
+   "Simple Linear Regression and Correlation\n\n11.1 Empirical Models",
+   "Offline",
+   "LO9",
+   "I",
+   "Textbook Chapter 11",
+   "",
+   "Exercises Chapter 11\n\nProject",
+   ""
+  ],
+  [
+   "52",
+   "Simple Linear Regression and Correlation\n\n11.2 Simple Linear Regression",
+   "Offline",
+   "LO9",
+   "I",
+   "Textbook Chapter 11",
+   "",
+   "Exercises Chapter 11\n\nProject",
+   ""
+  ],
+  [
+   "53",
+   "Simple Linear Regression and Correlation\n\n11.3 Properties of the Least Squares Estimators",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Textbook Chapter 11",
+   "",
+   "Exercises Chapter 11\n\nProject",
+   ""
+  ],
+  [
+   "54",
+   "Simple Linear Regression and Correlation\n\n11.4 Hypothesis Tests in Simple Linear Regression",
+   "Offline",
+   "LO9",
+   "ITU",
+   "Textbook Chapter 11",
+   "",
+   "Exercises Chapter 11\n\nProject",
+   ""
+  ],
+  [
+   "55",
+   "Simple Linear Regression and Correlation\n\n11.8 Correlation",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 11",
+   "",
+   "Exercises Chapter 11\n\nProject",
+   ""
+  ],
+  [
+   "56",
+   "Simple Linear Regression and Correlation\n\n11.8 Correlation (Cont.)",
+   "Offline",
+   "LO9",
+   "TU",
+   "Textbook Chapter 11",
+   "",
+   "Exercises Chapter 11\n\nProject",
+   ""
+  ],
+  [
+   "57",
+   "Project presentation",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "Project",
+   ""
+  ],
+  [
+   "58",
+   "Project presentation (Cont.)",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "Project",
+   ""
+  ],
+  [
+   "59",
+   "Project presentation (Cont.)",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "Project",
+   ""
+  ],
+  [
+   "60",
+   "Progress Test 3",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1_DN",
+   "Statistics is the science of data. What are the basic data collection methods?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ1_HCM",
+   "What are parameters of the population and statistics of a sample?"
+  ],
+  [
+   "3",
+   "1",
+   "CQ2_HCM",
+   "List some commonly used parameters and statistics."
+  ],
+  [
+   "4",
+   "2",
+   "CQ1_DN",
+   "An event is a subset of the sample space of a random experiment. Can we describe new events from combinations of existing events?"
+  ],
+  [
+   "5",
+   "2",
+   "CQ1_HCM",
+   "What are the differences between empirical and mechanistic models?"
+  ],
+  [
+   "6",
+   "3",
+   "CQ1_DN",
+   "Counting the numbers of outcomes in the sample space and various events are used to analyze the random experiments. What are important techniques?"
+  ],
+  [
+   "7",
+   "3",
+   "CQ1_HCM",
+   "Give two different definitions of the concept of events."
+  ],
+  [
+   "8",
+   "4",
+   "CQ1_DN",
+   "For discrete sample spaces S consisting of (equally likely) outcomes, the probability of an event E (a subset of S) equals the sum of the probabilities of the outcomes in E. Can we determine the probability of a joint event from the probabilities of the individual events that comprise it?"
+  ],
+  [
+   "9",
+   "4",
+   "CQ1_HCM",
+   "What are independent events and mutually exclusive events? How do they affect the formula for computing the probabilities of the union event, the intersection event?"
+  ],
+  [
+   "10",
+   "5",
+   "CQ1_DN",
+   "Sometimes probabilities need to be reevaluated as additional information becomes available. Can you give the definition of conditional probabilities and some examples?"
+  ],
+  [
+   "11",
+   "5",
+   "CQ1_HCM",
+   "How to check whether two events are independent?"
+  ],
+  [
+   "12",
+   "6",
+   "CQ1_DN",
+   "Sometimes the probability of an event is given under each of several conditions. With enough of these conditional probabilities, how to recover the probability of the event?"
+  ],
+  [
+   "13",
+   "6",
+   "CQ1_HCM",
+   "What conditions must be fulfilled to be able to use the total probability rule?"
+  ],
+  [
+   "14",
+   "6",
+   "CQ2_HCM",
+   "Give an example that uses the rule of total probability."
+  ],
+  [
+   "15",
+   "7",
+   "CQ1_DN",
+   "Conditional probabilities commonly provide the probability of an event given a condition. But after a random experiment generates an outcome, can we find out the probability that a condition was present given an outcome?"
+  ],
+  [
+   "16",
+   "7",
+   "CQ1_HCM",
+   "Why is Bayes Theorem important for probability?"
+  ],
+  [
+   "17",
+   "8",
+   "CQ1_DN",
+   "The concept of independence is an important relationship between events. Can you give the definition of independence and some examples?"
+  ],
+  [
+   "18",
+   "8",
+   "CQ1_HCM",
+   "What is a random variable? Give some examples."
+  ],
+  [
+   "19",
+   "9",
+   "CQ1_DN",
+   "The probability distribution of a discrete random variable X is a description of the probabilities associated with the possible values of X. How many popular ways to describe a probability distribution?"
+  ],
+  [
+   "20",
+   "9",
+   "CQ1_HCM",
+   "Compare the difference between discrete and continuous variables."
+  ],
+  [
+   "21",
+   "9",
+   "CQ2_HCM",
+   "Give some examples of discrete and continuous variables."
+  ],
+  [
+   "22",
+   "10",
+   "CQ1_HCM",
+   "What is a probability mass function?"
+  ],
+  [
+   "23",
+   "10",
+   "CQ2_HCM",
+   "What is the difference between a probability mass function and a cumulative mass function?"
+  ],
+  [
+   "24",
+   "11",
+   "CQ1_HCM",
+   "How do you find the probability mass function if the cumulative distribution function is given, and vice versa? Give an example to illustrate your claim."
+  ],
+  [
+   "25",
+   "12",
+   "CQ1_DN",
+   "What is the simplest discrete random variable? Can we numerically summarize its probability distribution?"
+  ],
+  [
+   "26",
+   "12",
+   "CQ1_HCM",
+   "Give a table of data showing a car rental company's revenue over the year, what do the expected value and variance represent?"
+  ],
+  [
+   "27",
+   "13",
+   "CQ1_DN",
+   "How to calculate the probability of k successes in a random experiment consists of n Bernoulli trials?"
+  ],
+  [
+   "28",
+   "13",
+   "CQ1_HCM",
+   "Give an example of a binomial random variable that you have seen in high school."
+  ],
+  [
+   "29",
+   "14",
+   "CQ1_DN",
+   "Is negative binomial distribution a generalization of a geometric distribution? Why do we call this distribution a negative binomial distribution?"
+  ],
+  [
+   "30",
+   "14",
+   "CQ1_HCM",
+   "How to distinguish the differences among a binomial, geometric and negative binomial random variable?"
+  ],
+  [
+   "31",
+   "14",
+   "CQ2_HCM",
+   "Give examples of biomial, geometric, and hypergeometric distributions."
+  ],
+  [
+   "32",
+   "15",
+   "CQ1_DN",
+   "In randomly sampling from a batch of items classified as successes or failures, an item may or may not be replaced before the next one is selected. Does it exist or not a general formula for computing probabilities when samples are selected without replacement?"
+  ],
+  [
+   "33",
+   "15",
+   "CQ1_HCM",
+   "When is a random variable called a hypergeometric variable? Show an example."
+  ],
+  [
+   "34",
+   "16",
+   "CQ1_DN",
+   "A widely-used distribution emerges as the number of trials in a binomial experiment (with parameters n, p) increases to infinity while the mean of the distribution remains constant (n increases and p decreases accordingly). What is this?"
+  ],
+  [
+   "35",
+   "16",
+   "CQ1_HCM",
+   "What properties are required to use the Poisson distribution?"
+  ],
+  [
+   "36",
+   "16",
+   "CQ2_HCM",
+   "Give two real life examples for which Poisson distributions are used as models."
+  ],
+  [
+   "37",
+   "17",
+   "CQ1_HCM",
+   "What are the properties required to use the binomial distribution?"
+  ],
+  [
+   "38",
+   "18",
+   "CQ1_HCM",
+   "What is the meaning of the expected value of a variable?"
+  ],
+  [
+   "39",
+   "18",
+   "CQ2_HCM",
+   "Explain how to compute expected value of a random variable by examples."
+  ],
+  [
+   "40",
+   "19",
+   "CQ1_DN",
+   "Because the number of possible values of a continuous random variable X is uncountably infinite, X has a distinctly different distribution from the discrete random variables studied previously. How to describe the probability distribution of X?"
+  ],
+  [
+   "41",
+   "19",
+   "CQ1_HCM",
+   "What makes a function a density function?"
+  ],
+  [
+   "42",
+   "20",
+   "CQ1_HCM",
+   "What is the cumulative distribution function of a continuous random variable and its properties?"
+  ],
+  [
+   "43",
+   "21",
+   "CQ1_DN",
+   "The simplest continuous distribution is analogous to its discrete counterpart. Give some information about it?"
+  ],
+  [
+   "44",
+   "21",
+   "CQ1_HCM",
+   "How do you find the mean of a continuous random variable?"
+  ],
+  [
+   "45",
+   "21",
+   "CQ2_HCM",
+   "How do you find the variance of a continuous random variable?"
+  ],
+  [
+   "46",
+   "22",
+   "CQ1_DN",
+   "Probabilities of intervals can be found by using the cumulative distribution function, the basic rules of probability and the symmetry of the normal distribution. Can you illustrate the method by some examples?"
+  ],
+  [
+   "47",
+   "22",
+   "CQ1_HCM",
+   "What are the characteristics of a continuous uniform distribution?"
+  ],
+  [
+   "48",
+   "23",
+   "CQ1_DN",
+   "We know how to calculate probabilities for standard normal random variables. Can we apply the method to find\nthe probabilities associated with an arbitrary normal random variable?"
+  ],
+  [
+   "49",
+   "23",
+   "CQ1_HCM",
+   "What are the main properties of normal distribution?"
+  ],
+  [
+   "50",
+   "23",
+   "CQ2_HCM",
+   "What is the rule called '68-95-99 rule'?"
+  ],
+  [
+   "51",
+   "24",
+   "CQ1_DN",
+   "For cases in which the number of trials is large, it is difficult to calculate probabilities by using the binomial distribution. How do statisticians deal with this problem?"
+  ],
+  [
+   "52",
+   "24",
+   "CQ1_HCM",
+   "How could you find the area between two values under the normal curve?"
+  ],
+  [
+   "53",
+   "25",
+   "CQ1_DN",
+   "It is known that, there are intimate connections between three distributions of binomial, hypergeometric and Poisson. What are they? Is it possible to use them to approximate hypergeometric and binomial probabilities?"
+  ],
+  [
+   "54",
+   "25",
+   "CQ1_HCM",
+   "What is the difference between a normal distribution and a binomial distribution?"
+  ],
+  [
+   "55",
+   "26",
+   "CQ1_DN",
+   "The Poisson distribution defines a random variable to be the number of events occurring in a fixed interval of time if these events occur with a known constant mean rate and independently of time since the last event. Can we describe the probability distribution of the time between those events?"
+  ],
+  [
+   "56",
+   "26",
+   "CQ1_HCM",
+   "What is the exponential distribution?"
+  ],
+  [
+   "57",
+   "26",
+   "CQ2_HCM",
+   "Where is the exponential distribution used in the real world?"
+  ],
+  [
+   "58",
+   "27",
+   "CQ1_DN",
+   "An important aspect of dealing with data is organizing and summarizing the data. How should we numerically summarize the information in these data?"
+  ],
+  [
+   "59",
+   "27",
+   "CQ1_HCM",
+   "List some ways to measure central tendency. What are the formulas?"
+  ],
+  [
+   "60",
+   "28",
+   "CQ1_DN",
+   "The graphical techniques are very useful in constructing and interpreting visual data displays. What are most popular techniques?"
+  ],
+  [
+   "61",
+   "28",
+   "CQ1_HCM",
+   "How do you construct a table of frequency distribution and the corresponding histogram? Give an illustrative example."
+  ],
+  [
+   "62",
+   "29",
+   "CQ1_HCM",
+   "Is a Box plot used for outlier detection? How do you find them, if possible?"
+  ],
+  [
+   "63",
+   "30",
+   "CQ1_HCM",
+   "Give an example of time series."
+  ],
+  [
+   "64",
+   "30",
+   "CQ2_HCM",
+   "What are the applications of time series analysis in practice?"
+  ],
+  [
+   "65",
+   "31",
+   "CQ1_DN",
+   "One of the most useful theorems in statistics called the central limit theorem. What is this?"
+  ],
+  [
+   "66",
+   "31",
+   "CQ1_HCM",
+   "What is an unbiased and biased estimator? Give an example."
+  ],
+  [
+   "67",
+   "32",
+   "CQ1_DN",
+   "How to use the central limit theorem to determine the point estimate for the proportion?"
+  ],
+  [
+   "68",
+   "32",
+   "CQ1_HCM",
+   "What is the difference between a population distribution and a sampling distribution?"
+  ],
+  [
+   "69",
+   "33",
+   "CQ1_HCM",
+   "Why does the standard error of the sample mean decrease as the sample size, n, increases?"
+  ],
+  [
+   "70",
+   "33",
+   "CQ2_HCM",
+   "What is the formula for calculating the standard error of the sample mean when the sample size is n?"
+  ],
+  [
+   "71",
+   "34",
+   "CQ1_HCM",
+   "In what conditions is the sampling distribution of the sample mean approximately normal?"
+  ],
+  [
+   "72",
+   "35",
+   "CQ1_DN",
+   "There is nothing inherent in the sample mean that provides any information about how close it is to the unknown true mean. Can we produce the interval that contains the true mean of a normal distribution, variance known?"
+  ],
+  [
+   "73",
+   "35",
+   "CQ1_HCM",
+   "Why don't we use 100% confidence in correctly estimating the population parameters?"
+  ],
+  [
+   "74",
+   "36",
+   "CQ1_HCM",
+   "What is the difference between a confidence interval and a confidence level?"
+  ],
+  [
+   "75",
+   "36",
+   "CQ2_HCM",
+   "Analyze the influence of increasing the confidence level to the width of the corresponding confidence interval."
+  ],
+  [
+   "76",
+   "37",
+   "CQ1_DN",
+   "Check the affirmation that \"The general appearance of the t distribution is similar to the standard normal distribution.\""
+  ],
+  [
+   "77",
+   "37",
+   "CQ1_HCM",
+   "What is the t-distribution?"
+  ],
+  [
+   "78",
+   "37",
+   "CQ2_HCM",
+   "When should you use the t-distribution to design a confidence interval estimate for the mean?"
+  ],
+  [
+   "79",
+   "38",
+   "CQ1_DN",
+   "How to construct confidence intervals on the mean of a normal distribution when the sample is small and its variance is unknown?"
+  ],
+  [
+   "80",
+   "38",
+   "CQ1_HCM",
+   "How would you interpret a 95% confidence interval for the mean?"
+  ],
+  [
+   "81",
+   "39",
+   "CQ1_HCM",
+   "When determining the required sample size for a given confidence level and the error, how does the sample size change as we increase/decrease the population proportion?"
+  ],
+  [
+   "82",
+   "40",
+   "CQ1_HCM",
+   "For a fixed sample size, increasing the confidence level will widen (or make it less precise) the confidence interval. Show your opinion about this statement."
+  ],
+  [
+   "83",
+   "41",
+   "CQ1_HCM",
+   "What does P-value mean?"
+  ],
+  [
+   "84",
+   "42",
+   "CQ1_DN",
+   "What is the difference between two approaches used in hypothesis testing: critical value and p-value?"
+  ],
+  [
+   "85",
+   "42",
+   "CQ1_HCM",
+   "What is the difference between a Type I error and a Type II error?"
+  ],
+  [
+   "86",
+   "42",
+   "CQ2_HCM",
+   "How do we calculate a type II error?"
+  ],
+  [
+   "87",
+   "43",
+   "CQ1_HCM",
+   "What is the difference between a one-tailed test and a two-tailed test?"
+  ],
+  [
+   "88",
+   "44",
+   "CQ1_HCM",
+   "What is the test statistic on the mean of a normal distribution with known variance?"
+  ],
+  [
+   "89",
+   "44",
+   "CQ2_HCM",
+   "What is formula for finding the test statistic on the mean of a normal distribution with known variance?"
+  ],
+  [
+   "90",
+   "45",
+   "CQ1_HCM",
+   "When do you use the t-test for testing a hypothesis?"
+  ],
+  [
+   "91",
+   "46",
+   "CQ1_HCM",
+   "How can you use the p-value approach to the Z-test of the hypothesis for the proportion?"
+  ],
+  [
+   "92",
+   "47",
+   "CQ1_HCM",
+   "Which test can be used for the difference between the two means? Why?"
+  ],
+  [
+   "93",
+   "47",
+   "CQ2_HCM",
+   "Give an example of testing the difference between the two means."
+  ],
+  [
+   "94",
+   "48",
+   "CQ1_HCM",
+   "Under what conditions should you use the pooled-variance to test the differences in the means of two independent populations?"
+  ],
+  [
+   "95",
+   "49",
+   "CQ1_HCM",
+   "What are the assumptions for the two samples' proportion test?"
+  ],
+  [
+   "96",
+   "50",
+   "CQ1_HCM",
+   "In two independent populations, what are the similarities and differences between the hypothesis test and the confidence interval estimate for the difference between two proportions?"
+  ],
+  [
+   "97",
+   "51",
+   "CQ1_HCM",
+   "What is the problem setting of simple linear regression?"
+  ],
+  [
+   "98",
+   "51",
+   "CQ2_HCM",
+   "Find some applications of regression in the real world."
+  ],
+  [
+   "99",
+   "52",
+   "CQ1_HCM",
+   "What is a dependent and independent variable? Explain them with examples."
+  ],
+  [
+   "100",
+   "53",
+   "CQ1_HCM",
+   "What is the interpretation of the Y intercept and the slope in the simple linear regression equation?"
+  ],
+  [
+   "101",
+   "54",
+   "CQ1_HCM",
+   "What are the required assumptions of regression analysis?"
+  ],
+  [
+   "102",
+   "54",
+   "CQ2_HCM",
+   "Explain the meaning of the word 'linear' in the concept 'linear regression'."
+  ],
+  [
+   "103",
+   "55",
+   "CQ1_DN",
+   "How to determine whether there is a significant linear relationship between two variables in the population?"
+  ],
+  [
+   "104",
+   "55",
+   "CQ1_HCM",
+   "What is the difference between the sample correlation coefficient and coefficient of determination?"
+  ],
+  [
+   "105",
+   "55",
+   "CQ2_HCM",
+   "Explain the meaning of R^2?"
+  ],
+  [
+   "106",
+   "56",
+   "CQ1_HCM",
+   "Which test statistic is used to test the relationship between two variables?"
+  ],
+  [
+   "107",
+   "57",
+   "CQ1_HCM",
+   "Using the Wage dataset (education on wages) from 57 to 60. Classify the following variable: nearc4, educ, age, black, wage, IQ, married, exper, lwage, and expersq."
+  ],
+  [
+   "108",
+   "58",
+   "CQ1_HCM",
+   "What are the coefficients slope and intercept?"
+  ],
+  [
+   "109",
+   "58",
+   "CQ2_HCM",
+   "Run regression equation of educ on wage, interpret the slope and the intercept from the output."
+  ],
+  [
+   "110",
+   "59",
+   "CQ1_HCM",
+   "Suppose that you examine two models: educ on wage and educ on lwage. Which model is better? Why?"
+  ],
+  [
+   "111",
+   "60",
+   "CQ1_HCM",
+   "You are interested in studying factors affecting wages. Which models should you recommend?"
+  ]
+ ],
+ "links": [
+  "/download/13136/S/2_MAS291.zip"
+ ]
+}

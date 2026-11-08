@@ -1,0 +1,325 @@
+{
+ "ma": "SSC302c",
+ "sylID": "12955",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "12955",
+   "code": "SSC302c",
+   "name": "Advanced Presentation Skills_Kỹ năng thuyết trình nâng cao",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12955",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12955",
+  "Syllabus Name": "Advanced Presentation Skills_Kỹ năng thuyết trình nâng cao",
+  "Course Name English": "",
+  "Subject Code": "SSC302c",
+  "Learning-Teaching Method": "",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "58 hours online study + 3 hrs offline (2 slots) + PE (5 mins/student) + 89 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "The course is designed to enable students to:\n\n- Instruct, develop and deliver presentations and speeches in different levels and styles;\n\n- Build up students confidence and performance as a dynamic speaker;\n\n- Develop voices, movements and gestures to engage audiences while speaking;\n\n- Prepare, develop and deliver effective speeches for a range of purposes, occasions, and audiences;\n\n- Make use of speechwriting techniques with storytelling, argument, style, topic framing, and discussing evidence.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assgnments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend off-line sessions in the Campus (Optional)\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (PE)\n\n3) Final Result (FR) =min (10, PE + Bonus)\n\n4) Completion Criteria: PE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/public-speaking",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Dynamic Public Speaking Specialisation"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/public-speaking",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 01: Introduction to Public Speaking"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/inform-speech",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 02: Speaking to inform: Discussing complext ideas with clear explanations and dynamic slides"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/persuade-speech",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 03: Speaking to persuade: Motivating audiences with solid arguments and moving language"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/speak-to-inspire-ceremonial-motivational-speeches",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 04: Speaking to Inspire: Ceremonial and Motivational Speeches"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Recognize and identify features of Public speaking, and structure and deliver a presentation in strong and confident manner"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Construct and illustrate complex ideas with clear explainations and dynamic slides"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop solid arguments and persuasive language"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Design meaningful and informative speeches"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "5 minutes/ student",
+   "All LOs",
+   "presentation",
+   "1",
+   "All course content",
+   "Deliver a speech of 4-5 minutes long. Students could choose an option from the list:\n\n- informative speeches\n\n- persuasive speeches\n\n- inspirational speeches\n\nStudents present the speech they have done for the online assignments. However, students need to edit content and other details to meet the requirements of the PE.",
+   "Check speech Criteria for details."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course SSC302c\n\nModule 1 (MOOC 1):\n\n- Welcome\n\n- Course and assignment overview\n\n- Rhetoric and how it is used\n\n- Speech and how to deliver an effective speech\n\nModule 2 (MOOC 1):\n\n- Speech rubric\n\n- Key point components\n\n- How to outline and flow a speech\n\n- How to invent, arrange, style and improve key points in a speech",
+   "Online,Offline",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform",
+   ""
+  ],
+  [
+   "2",
+   "Module 3 (MOOC 1):\n\n- How to support and discuss examples in your speech concisely\n\n- How to highlight speech structure and how to revise it\n\n- Practice and remember your speech\n\nModule 4 (MOOC 1):\n\n- Speaking apprehension: what is it, what are the causes and how to reduce it?\n\n- How to control your breath\n\n- How to control and improve your voice when performing",
+   "Online",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "3",
+   "Module 5 (MOOC 1):\n\n- Course review",
+   "Online",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n'- Complete assignment: Key point speech , and review at least 03 other submissions.",
+   ""
+  ],
+  [
+   "4",
+   "Module 1 (MOOC 2):\n\n- Introduction to the Course\n\n- How to address and target your audience\n\n- How to identify, plan and revise goals of a speech\n\n- How to outline key themes of a speech\n\n- How to structure your speech with clear focus, order and time-balanced\n\nModule 2 (MOOC 2):\n\n- How to support your speech with examples and illustrations\n\n- How to get audience understand your ideas\n\n- How to set up an intereseting and clear speech with strong notes\n\n- How to brief and updates ideas\n\n- How to product and design presentations\n\n- How to conduct teaching talks\n\n- How to conduct conference talks",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "5",
+   "Module 3 (MOOC 2):\n\n- Identify purposes of using slides and how slides support speech's arrangement\n\n- How to use text in slides\n\n- How to use images in slides\n\n- How to use video in slides\n\n- How to present with slides\n\n- Problems with slides and how to make slides better\n\nModule 4 ( MOOC2):\n\n- How to demonstrate your credibility\n\n- How to show and perform your passion, knowledge, and godwill\n\n- How to use podiums, microphones and notes in speech\n\n- Techniques to interact with and attract audience",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "6",
+   "Module 5 (MOOC 2):\n\n'- Course review",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n' Finish: Practice Exercises and quiz.\n\n'- Complete assignments:\n\n1. Infomative Speech, and review at G6least 03 other submissions.\n\n2. Infomative Manuscript, and review at least 03 other submissions.",
+   ""
+  ],
+  [
+   "7",
+   "Module 1 (MOOC 3):\n\n- Course and assignment overview\n\n- Get to know about persuasion\n\n- Identify good persuasion and its requirements, involvements and respondence\n\n- Importace of proof\n\n- Stock issues identification and its matters\n\n- Tools to build arguments for and against\n\n- How to record speech videos\n\nModule 2 (MOOC 3):\n\n- Key arrangement concerns of a speech\n\n- Audience response and how to highlight their effiacy\n\n- Arrange stock issues\n\n- How to help audience visualize the cure\n\n- How to change and connect ideas smoothly\n\n- How to use storytelling in speech\n\n- How to validate your argument",
+   "Online",
+   "LO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "8",
+   "Module 3 ( MOOC 3)\n\n- Types of fallacies in a speech and how to avoid them\n\n- How to improve fluency in your ideas and speech performance\n\n- How to enhance your phrases and sounds in speaking\n\nModule 4 ( MOOC 3)\n\n- Why do I say um and how to avoid it?\n\n- Outlook and space preparation for a speech\n\n- How to engage audience and maintain good eye contact\n\n- Find a good model of imitation for you",
+   "Online",
+   "LO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "9",
+   "Module 5 (MOOC 3):\n\n- Course review",
+   "Online",
+   "LO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz.\n\n- Complete assignments:\n\n1. Persuasive Speech, and review at least 03 other submissions.\n\n2. Persuasive Manuscript, and review at least 03 other submissions.",
+   ""
+  ],
+  [
+   "10",
+   "Module 1 (MOOC 4)\n\n- Course and assignment overview\n\n- Ceremonial speeches and its ideas\n\n- Process of speech preparation\n\n- Core values of a speech and how to find and support them\n\n- Stories and their support in presentation\n\n- How to structure and use story effectively\n\n- How to write characters and description in stories\n\nModule 2 ( MOOC 4 )\n\n- Types of arrangement concerns\n\n- How to make topical arrangement\n\n- How to make narrative arrangement\n\n- How to make informative arrangement\n\n- How to begin a speech\n\n- How to make presenting and receiving awards speeches\n\n- How to make an eulogy",
+   "Online",
+   "LO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "11",
+   "Module 3 (MOOC 4)\n\n- Different speech styles and how to use stylistic devices\n\n- Speech tone comparison and analysis\n\n- How to write and edit a manuscript\n\n- How to perform from a manuscript\n\nModule 4 (MOOC 4)\n\n- Memorization and how to do it right\n\n- How to use humor in speeches appropriately\n\n- Techniques for voice improvement",
+   "Online",
+   "LO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "12",
+   "Module 5 (MOOC 4):\n\n- Course overview\n\nReview MOOC 1, 2, 3, 4",
+   "Online,Offline",
+   "LO4",
+   "",
+   "Offline",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and quiz.\n\n- Complete assignments:\n\n1. Ceremonial Speech, and review at least 03 other submissions.\n\n2. Ceremonial Manuscript, and review at least 03 other submissions.\n\nNOTE: Submit your assignments before deadlines. You can only review others' assignments when you have submited yours.\n\nDeadline of Course Completion: End of Friday of the week.\n\n- All Students should participate in review slot(if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

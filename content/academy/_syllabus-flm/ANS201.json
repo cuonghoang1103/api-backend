@@ -1,0 +1,1062 @@
+{
+ "ma": "ANS201",
+ "sylID": "13464",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13464",
+   "code": "ANS201",
+   "name": "Idea & Script Development _Phát triển ý tưởng và kịch bản",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13464",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13464",
+  "Syllabus Name": "Idea & Script Development _Phát triển ý tưởng và kịch bản",
+  "Course Name English": "Idea & Script Development",
+  "Subject Code": "ANS201",
+  "Learning-Teaching Method": "Lecture,Practice,discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor level",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 105h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Description:\nThis course builds the skills to turn ideas into industry-standard scripts for short films and TVCs. Students analyze and apply narrative structure and character arcs; produce a 3–5 minute short-film script and a 30–45 second TVC script/storyboard; and collaborate through critique and pitching. AI tools may support ideation and drafting, but usage must be documented and ethical, with originality and authorship maintained.",
+  "StudentTasks": "'- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfill tasks given by instructor after class\n- Use their own laptop in class only for learning purpose\n- Read the textbook in advance >\n- Access the course website (https://flm.fpt.edu.vn/) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "'- Internet\n- Microsoft word",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Creating Character Arcs: The Masterful Author's Guide to Uniting Story Structure, Plot, and Character Development",
+   "K.M. Weiland",
+   "PenForASword Publishing",
+   "2016",
+   "",
+   "ASIN: 9781944936044",
+   "False",
+   "True",
+   "False",
+   "Chọn quyển 1 trong 2 reference"
+  ],
+  [
+   "2",
+   "Creating Character Arcs: The Masterful Author's Guide to Uniting Story Structure, Plot, and Character Development.",
+   "K.M. Weiland",
+   "PenForASword",
+   "2016",
+   "1st edition",
+   "978-1944936044",
+   "False",
+   "True",
+   "False",
+   "Chọn quyển 1 trong 2 reference"
+  ],
+  [
+   "3",
+   "The Screenwriter's Bible, 7th Edition, A Complete Guide to Writing, Formatting, and Selling Your Script",
+   "David Trottier",
+   "Silman-James Press",
+   "2019",
+   "7th",
+   "978-1935247210",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the role of scripts in film/TVC production pipelines."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyze and apply script structures and methods to transform ideas into scripts."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyze and apply TVC storytelling structures to craft 30–45s concepts."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Develop compelling characters and coherent character arcs appropriate to genre and theme."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Write a complete short-film script (3–5 minutes ≈ 3–5 pages) and a TVC script/storyboard (30–45s) using industry-standard screenplay format (scene headings, action, dialogue, transitions) and iterative revisions."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Integrate AI-enhanced tools for ideation, drafting, and refinement, critically evaluate and document usage to ensure originality, authorship, and ethical compliance."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Work professionally, independently and in teams; meet deadlines, incorporate feedback, and communicate effectively in critiques/pitches."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "CLO6",
+   "",
+   "1",
+   "",
+   "",
+   "Participation grade will be given based on students' attendance, students' attitude, preparation, contribution of discussions"
+  ],
+  [
+   "2",
+   "Practice 1 (individual work): Script for Short Film (3-5 mins)",
+   "on-going",
+   "1",
+   "45.0%",
+   ">0",
+   "270' in class",
+   "CLO1, CLO2, CLO4, CLO5, CLO6",
+   "Write a 3–5 minute short film script that demonstrates idea development, structure, and character building, while practicing storytelling and responsible use of AI for ideation and refinement.",
+   "1",
+   "• Knowledge: Principles of short film scriptwriting, including idea development, narrative structure, and character creation.\n• Skills: Applying storytelling techniques to write a complete short film script (3–5 minutes), developing coherent plots and characters, and using AI responsibly for ideation and refinement.",
+   "1. Presentation_Script Analysis of a Short Animated Film: Choose a short animated film and present an analysis explaining the script’s role, the development of its idea and theme, and its three-act structure.\n2. From Logline to Character Development: Expand a selected logline into a premise/synopsis and a compact character bible. Define goals, conflicts, and clear character arcs that align with the theme and genre. (AI may support ideation/refinement; document usage.)\n3. Script Structure (3-Act Summary): Write a clear outline of the story in three acts (setup, confrontation, resolution. Specify turning points, stakes, and causal links.\n4. Complete Scriptwriting: Write a full 3–5 page screenplay in industry format, revising from feedback and staying consistent with the outline. Submit the final draft with a brief revision log and AI process evidence.",
+   "Submission Files:\n1. Presentation slides for the animated film analysis (PPT/PDF)\n2. Word file containing all development steps (loglines, idea development answers, 3-act structure summary, and character profiles) (.docx)\n3. Final short film script (Word file, 3–5 A4 pages, correct screenplay format with proper margins, font, size, capitalization rules, and appropriate screenplay writing style) (.docx)\n4. AI Usage Report: Screenshots or notes showing AI-generated references/plot suggestions, with a short explanation of how they supported refinement (.docx/PDF)\nIn-Class Work:\n1. Presentation of the script analysis of a chosen short animated film.\n2. Peer and instructor feedback on loglines, 3-act structures, and character designs.\n3. Drafting and revising script sections during In-class sessions."
+  ],
+  [
+   "3",
+   "Practice 2 (team work): TVC Scriptwriting (30-45s)",
+   "on-going",
+   "1",
+   "45.0%",
+   ">0",
+   "270' in class",
+   "CLO1, CLO3, CLO5, CLO6",
+   "Create a 30–45 second TVC script that demonstrates clear structure, effective character design, and a strong brand message. Apply storytelling principles with professionalism, and use AI tools for ideation, storyboarding, demo video creation, or refinement while ensuring originality.",
+   "1",
+   "• Knowledge: Understand 30–45s TVC storytelling and structure, character/arc essentials, and industry-standard script/storyboard conventions and timing.\n• Skills: Turn a brief into a logline/beat sheet and produce an industry-standard TVC script/storyboard with clear structure and characters; use AI for ideation, storyboarding, demo, or refinement while documenting usage and maintaining originality.",
+   "1. Presentation: Brand Research\nConduct a brand research study that analyzes the brand’s history, values, USP, target audience, competitors, and positioning. Use AI tools at the enhanced level to support information synthesis, data analysis, and creative exploration (e.g., generating moodboards, slogans, or initial ideas).\n2. TVC Scriptwriting - TVC Storyboard - Demo video for the TVC\nUsing insights from your Brand Research, create a 30–45s TVC with:\n• Script in industry format (scene headings, action, dialogue/VO, transitions).\n• Storyboard (≈8–12 frames) with captions and timings.\n• Demo/animatic video (30–45s, MP4) showing pacing and key beats.\nAI use: Use AI for ideation, rewrites, shot listing/storyboarding, and demo assembly. Document all AI usage (tools, prompts, sources, edits) and ensure originality and authorship.",
+   "Submission Files:\n1. Brand Research Report: Brand analysis, audience research, competitor analysis, narrative outline, AI usage report (enhanced level) (.docx/PDF)\n2. Final TVC Script (docx/PDF)\n3. AI-generated storyboard and AI Usage Report (.docx/PDF)\n4. AI-Generated Demo Video and AI Usage Report: MP4 file (.mp4), resolution min. 720p.\nIn-Class Work:\n1. Presentation of the script analysis of a chosen short animated film.\n2. Instructor feedback on brand research, TVC structure, and AI usage\n3. Drafting and revising script sections during In-class sessions."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the Course and Overview of Course and Requirements\nPART I: PRINCIPLES\nChapter 1:\n- Summarize procedures to produce a movie",
+   "Offline",
+   "LO1",
+   "IT",
+   "- Read page 19-29 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 1",
+   "ANS201",
+   "Review Chapter 1",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1:\n- Definition of a script\n- Role and importance of a script",
+   "Offline",
+   "LO1",
+   "IT",
+   "- Read page 19-29 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 1",
+   "ANS201",
+   "Review Chapter 1",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1:\n- The diffrence between a script and a literature work\n- What is an original script and an adapted script.",
+   "Offline",
+   "LO1",
+   "I,T",
+   "- Read page 19-29 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 1",
+   "",
+   "Review Chapter 1",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1:\n- Terms used in scripts\n- Method to describe images in scripts\n- What is a cinematography script.",
+   "Offline",
+   "LO1",
+   "IT",
+   "- Read page 19-29 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 1",
+   "",
+   "Review Chapter 1",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1:\n- Students watch a short animation or a short movie attached with original script. | AI: structure extraction & summarization",
+   "Offline",
+   "LO1, LO6",
+   "I,T,U",
+   "- Read page 19-29 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 1 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 1\nDiscussion. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1:\n- Lecturer and students discuss about role of scripts in cinema based on the script\nand short movie.",
+   "Offline",
+   "LO1",
+   "I,T,U",
+   "- Read page 19-29 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 1",
+   "",
+   "Review Chapter 1\nDiscussion.",
+   ""
+  ],
+  [
+   "7",
+   "PART II: FROM IDEA TO SCRIPT\nChapter 2: Idea development\n- Creative Brief | AI: ideation/prompting support",
+   "Offline",
+   "LO2, LO6",
+   "I, T,",
+   "- Read page 157 - 184 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 2 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 2 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Idea development\n\n- The big idea\n- Elevator Pitch and Tagline | AI: ideation/prompting support",
+   "Offline",
+   "LO2, LO6",
+   "I, T,",
+   "- Read page 157 - 184 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 2 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 2 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Idea development\n- Structure of a script | AI: ideation/prompting support",
+   "Offline",
+   "LO2, LO6",
+   "I,T",
+   "- Read page 157 - 184 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 2 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 2 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2: Idea development\n- Steps to turn an idea into a script\n- Filter and test ideas | AI: ideation/prompting support",
+   "Offline",
+   "LO2, LO6",
+   "I,T",
+   "- Read page 157 - 184 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 2 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 2 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 2: Idea development\n- Based on an idea, each group practises with steps to develop an idea. | AI: ideation/prompting support",
+   "Offline",
+   "LO2, LO6",
+   "I, T, U",
+   "- Read page 157 - 184 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 2 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 2\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 2: Idea development\n- Based on an idea, each group practises with steps to develop an idea. | AI: ideation/prompting support",
+   "Offline",
+   "LO2, LO6",
+   "I, T, U",
+   "- Read page 157 - 184 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 2 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 2\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: Script analysis\n- What is a script structure. | AI: outline/beat-sheet assistance",
+   "Offline",
+   "LO2, LO6",
+   "I, T,",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 3 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 3 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3: Script analysis\n- Role of script structure | AI: outline/beat-sheet assistance",
+   "Offline",
+   "LO2, LO6",
+   "I, T,",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 3 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 3 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3: Script analysis\n- Definition of 3 act structure | AI: outline/beat-sheet assistance",
+   "Offline",
+   "LO2, LO6",
+   "I, T,",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 3 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 3 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3: Script analysis\n- Analyze and diagram of a basic 3 act structure. | AI: outline/beat-sheet assistance",
+   "Offline",
+   "LO2, LO6",
+   "I, T,",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 3 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 3 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 3: Script analysis\n- Lecturer choose a movie to discuss and analyze 3 act structure. | AI: outline/beat-sheet assistance",
+   "Offline",
+   "LO2, LO6",
+   "I, T, U",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 3\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 3: Script analysis\n- Lecturer choose a movie to discuss and analyze 3 act structure. | AI: outline/beat-sheet assistance",
+   "Offline",
+   "LO2, LO6",
+   "I, T, U",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 3\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 4: Script analysis\n- 4W method | AI: structure extraction & summarization",
+   "Offline",
+   "LO2, LO6",
+   "I, T",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 4 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 4: Script analysis\n- The 5 Key Turning Points (Michael Hauge)\n- Method to describe images in a script. | AI: structure extraction & summarization",
+   "Offline",
+   "LO2, LO6",
+   "I, T",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 4 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 4: Script analysis\n- 8 basic formats in story telling\n- Some techniques to tell stories\n- Knot tieing and untieing in a script | AI: structure extraction & summarization",
+   "Offline",
+   "LO2, LO6",
+   "I, T",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 4 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4: Script analysis\n- Turning point\n- Guffin technique\n- Method to describe timeline in a script\n- How to write a script in a standard format. | AI: structure extraction & summarization",
+   "Offline",
+   "LO2, LO6",
+   "I, T",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 4 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "23",
+   "Practise 4W method and The 5 Key Turning Points",
+   "Offline",
+   "LO2",
+   "I, T, U",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4",
+   "",
+   "Review Chapter 4\nDiscussion, Exercises.",
+   ""
+  ],
+  [
+   "24",
+   "Practise 4W method and The 5 Key Turning Points",
+   "Offline",
+   "LO2",
+   "I, T, U",
+   "- Read page 53 - 143 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 4",
+   "",
+   "Review Chapter 4\nDiscussion, Exercises.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 5: Character development\n- Character development fro scripts. | AI: character prompts & consistency checks",
+   "Offline",
+   "LO4, LO6",
+   "I, T",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 5 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 5: Character development\n- Building sympathy\n- Develop inner life of charaters | AI: character prompts & consistency checks",
+   "Offline",
+   "LO4, LO6",
+   "I, T",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 5 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 5: Character\n- Character Arch | AI: character prompts & consistency checks",
+   "Offline",
+   "LO4, LO6",
+   "I, T",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 5 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 5: Character\n- Contradiction and dramatics\n- Villain character | AI: character prompts & consistency checks",
+   "Offline",
+   "LO4, LO6",
+   "I, T",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 5 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "29",
+   "Practise Character Development | AI: character prompts & consistency checks",
+   "Offline",
+   "LO4, LO6",
+   "I, T, U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 5\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "30",
+   "Practise Character Development | AI: character prompts & consistency checks",
+   "Offline",
+   "LO4, LO6",
+   "I, T, U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 5\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "31",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T, U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "32",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T, U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "33",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T, U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "34",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T, U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "35",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T,U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "36",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T, U",
+   "- Read page 89 - 120 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 5",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "37",
+   "Individual presentations",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "38",
+   "Individual presentations",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "39",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "40",
+   "Individual presentations",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "41",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "42",
+   "Individual presentations",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 6:\nWhat is TVC\n- Procedures to produce a TVC | AI: 30–45s structure, storyboard & demo support",
+   "Offline",
+   "LO1",
+   "I,T",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 6 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 6 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 6:\nWhat is TVC\n- Roles of TVC in advertisement | AI: 30–45s structure, storyboard & demo support",
+   "Offline",
+   "LO1",
+   "I,T",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 6 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 6 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 7:\n- Roles of a script in TVC | AI: 30–45s structure, storyboard & demo support",
+   "Offline",
+   "LO1",
+   "I,T",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 7 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 7 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 7:\n- Structure of a TVC script | AI: outline/beat-sheet assistance",
+   "Offline",
+   "LO3",
+   "I,T",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 7 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 7 | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 7:\n-Method to convey messages in TVC\n- Creative Method in TVC | AI: 30–45s structure, storyboard & demo support",
+   "Offline",
+   "LO3",
+   "I,T",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 7 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 7\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 7:\n- Produce an effective TVC\n- Practise | AI: 30–45s structure, storyboard & demo support",
+   "Offline",
+   "LO3, LO6",
+   "I,T",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"\n- Read slides: Chapter 7 | AI tools: ChatGPT/Claude (ideation & rewrites); Midjourney/Leonardo/Krea (storyboard frames); Runway Gen-3/Pika (video demo); CapCut (AI editing); ElevenLabs (VO).",
+   "",
+   "Review Chapter 7\nDiscussion, Exercises. | Document AI usage (tools, prompts, edits) when applicable",
+   ""
+  ],
+  [
+   "49",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T,U",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "50",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T,U",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "51",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T,U",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "52",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T,U",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "53",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T,U",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "54",
+   "Personal script assessment",
+   "Offline",
+   "LO5, LO6",
+   "I, T,U",
+   "- Read page 396 - 523 \"The Screenwriter’s Bible\"",
+   "",
+   "Discussion, Exercises",
+   ""
+  ],
+  [
+   "55",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "56",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "57",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "58",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "59",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ],
+  [
+   "60",
+   "Individual presentation",
+   "Offline",
+   "LO7",
+   "U",
+   "",
+   "",
+   "Do the presentation",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "4",
+   "QN4.1",
+   "What are the diffrence between a script and a literature work?"
+  ],
+  [
+   "2",
+   "5",
+   "QN5.1",
+   "What is an original script and an adapted script?"
+  ],
+  [
+   "3",
+   "6",
+   "QN6.1",
+   "What is a cinematography script?"
+  ],
+  [
+   "4",
+   "7",
+   "QN7.1",
+   "What is a screenplays?"
+  ],
+  [
+   "5",
+   "8",
+   "QN8.1",
+   "What is an original screenplays?"
+  ],
+  [
+   "6",
+   "9",
+   "QN9.1",
+   "How are scripts and literary works similar and different?"
+  ],
+  [
+   "7",
+   "10",
+   "QN10.1",
+   "What is an idea development?"
+  ],
+  [
+   "8",
+   "11",
+   "QN11.1",
+   "What's your piece about?"
+  ],
+  [
+   "9",
+   "12",
+   "QN12.1",
+   "How to steps to turn an idea into a script?"
+  ],
+  [
+   "10",
+   "13",
+   "QN13.1",
+   "What's a movie tagline?"
+  ],
+  [
+   "11",
+   "14",
+   "QN14.1",
+   "What is Srcipt analysis?"
+  ],
+  [
+   "12",
+   "15",
+   "QN15.1",
+   "What is a script structure?"
+  ],
+  [
+   "13",
+   "22",
+   "QN22.1",
+   "\"I know there is a planet, on which there is a man with a red face. He never smelled a flower. Never looked at a star. Never loved anyone. he never did anything other than additions calculations. And all day long he kept repeating as he did: \"I am a right man! I am a right man!\", and that made him snobbish. But he's not human, he's a mushroom!\"\nWhat will the script of the above passage look like?"
+  ],
+  [
+   "14",
+   "23",
+   "QN23.1",
+   "What is the 3 act structure?"
+  ],
+  [
+   "15",
+   "24",
+   "QN24.1",
+   "Choose a short film that you know. How do you analyze the 3-act structure of that movie?"
+  ],
+  [
+   "16",
+   "28",
+   "QN28.1",
+   "What impressed you in the film?"
+  ],
+  [
+   "17",
+   "29",
+   "QN29.1",
+   "What is the 4W method?"
+  ],
+  [
+   "18",
+   "30",
+   "QN30.1",
+   "How do you feel 4W method?"
+  ],
+  [
+   "19",
+   "37",
+   "QN37.1",
+   "What is The 5 Key Turning Points (Michael Hauge)"
+  ],
+  [
+   "20",
+   "38",
+   "QN38.1",
+   "How to write a script in a standard format."
+  ],
+  [
+   "21",
+   "39",
+   "QN39.1",
+   "How to build a character for the script?"
+  ],
+  [
+   "22",
+   "43",
+   "QN43.1",
+   "Which character do you like the most?"
+  ],
+  [
+   "23",
+   "44",
+   "QN44.1",
+   "Why do you like this character?"
+  ],
+  [
+   "24",
+   "45",
+   "QN45.1",
+   "What is character used for?"
+  ],
+  [
+   "25",
+   "46",
+   "QN46.1",
+   "What is TVC?"
+  ],
+  [
+   "26",
+   "47",
+   "QN47.1",
+   "Which TVC do you like the most?"
+  ],
+  [
+   "27",
+   "48",
+   "QN48.1",
+   "How is Procedures to produce a TVC?"
+  ],
+  [
+   "28",
+   "52",
+   "QN52.1",
+   "What role does the script play in TVC?"
+  ],
+  [
+   "29",
+   "53",
+   "QN53.1",
+   "How to make TVC successful?"
+  ],
+  [
+   "30",
+   "54",
+   "QN54.1",
+   "What message do you want to convey in the group's tvc"
+  ]
+ ],
+ "links": [
+  "/download/13464/S/1_ANS201.zip",
+  "/download/13464/S/2_ANS201.zip"
+ ]
+}

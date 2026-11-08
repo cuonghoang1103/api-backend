@@ -1,0 +1,1516 @@
+{
+ "ma": "IAO202",
+ "sylID": "13326",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13326",
+   "code": "IAO202",
+   "name": "Information Assurance Overview_Nhập môn An toàn thông tin",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13326",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13326",
+  "Syllabus Name": "Information Assurance Overview_Nhập môn An toàn thông tin",
+  "Course Name English": "Information Assurance Overview",
+  "Subject Code": "IAO202",
+  "Learning-Teaching Method": "Online,Lecture,Active learning,In-class lecture",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "Students should have the following skills and knowledge:\n- PC and internet navigation skills\n- Basic Windows and Linux system concepts\n- Basic understanding of computer networks\n- Binary and Hexadecimal understanding\n- Familiarity with Cisco Packet Tracer",
+  "Description": "This course is designed based on the Cisco CyberOps Associate course.\nThe CyberOps Associate course is designed for Cisco Networking Academy® students who are seeking career-oriented, entry-level security analyst skills. Target students include individuals enrolled in technology degree programs at institutions of higher education and IT professionals who want to pursue a career in the Security Operation Center (SOC). Learners in this course are exposed to all of the foundational knowledge required to detect, analyze, and escalate basic cybersecurity threats using common open-source tools. This course aligns with the Cisco Certified CyberOps Associate (CBROPS) certification. Candidates need to pass the 200-201 CBROPS exam to achieve the Cisco Certified CyberOps Associate certification.",
+  "StudentTasks": "- Students must attend more than 80% of contact sessions in order to be accepted to the final examination.\n- Students are responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n- Use laptop in class only for learning purpose\n- Promptly access to the http://cms.fpt.edu.vn for up-to-date course information\n- Students must complete all assignments on the Cisco Networking Academy (https://www.netacad.com/) with a result of at least 75%.",
+  "Tools": "Baseline Equipment Bundle:\n- PCs\n- Internet connection for lab and student PCs\nStudent PC Software:\n- Oracle VM VirtualBox Manager (version 6.1 or later)\n- CyberOps Workstation VM\n+ Downloadable from the Course\n+ Requires 1 GB RAM, 20 GB Disk Space\n- Security Onion VM\n+ Downloadable from the Course\n+ Requires 4 GB RAM (minimum), 8GB RAM (highly recommended), 20 GB Disk Space",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "46 hands on and paper labs",
+   "Cisco",
+   "Cisco",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "6 Packet Tracer activities",
+   "Cisco",
+   "Cisco",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Cyberops Associate Slides",
+   "Cisco",
+   "Cisco",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "E-Learning Content: 28 modules",
+   "Cisco",
+   "Cisco",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "Videos: 30 videos",
+   "Cisco",
+   "Cisco",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Install virtual machines to create a safe environment for implementing and analyzing cybersecurity threat events."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Explain the role of the Cybersecurity Operations Analyst in the enterprise."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Explain the Windows Operating System features and characteristics needed to support cybersecurity analyses."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Explain the features and characteristics of the Linux Operating System."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Analyze the operation of network protocols and services."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Explain the operation of the network infrastructure; Classify the various types of network attacks."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Use network monitoring tools to identify attacks against network protocols and services."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Explain how to prevent malicious access to computer networks, hosts, and data."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Explain the impacts of cryptography on network security monitoring; Explain how to investigate endpoint vulnerabilities and attacks."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Evaluate network security alerts; Analyze network intrusion data to identify compromised hosts and vulnerabilities."
+  ],
+  [
+   "11",
+   "CLO11",
+   "Apply incident response models to manage network security incidents."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Lab",
+   "on-going",
+   "15",
+   "30.0%",
+   ">0",
+   "45'/each",
+   "LO1->LO11",
+   "",
+   "",
+   "technical aspect of studied topics",
+   "in class, by teacher",
+   ""
+  ],
+  [
+   "2",
+   "Participation in discussions",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "90'/each",
+   "LO1->LO16",
+   "students' active learning attitude during the course;",
+   "",
+   "All subjects in syllabus",
+   "supervised by instructor",
+   ""
+  ],
+  [
+   "3",
+   "Project-Based Assessment",
+   "on-going",
+   "2",
+   "30.0%",
+   ">0",
+   "10'/each",
+   "LO1->LO16",
+   "Group presentation",
+   "",
+   "All subjects in syllabus",
+   "1- Project Implementation\n- Students work individually or in groups to design and develop a small project related to Information Assurance.\n- Possible project types:\n+ Security policy for a specific organization.\n+ Case study analysis of a real-world cyber incident.\n+ Simulation of an attack–defense scenario (e.g., phishing, password cracking, intrusion detection).\n- Students are encouraged to use AI as a supportive tool for brainstorming, structuring reports, and generating alternative solutions. However, they must critically evaluate AI outputs and justify their choices.\n\n2- Project Report\nA written report (8–12 pages) including:\n- Problem Definition: description of the chosen topic or incident.\n- Risk Analysis: identification of vulnerabilities and threats.\n- Proposed Solution: technical or managerial measures, supported by frameworks or standards (e.g., ISO 27001, NIST).\n- AI Usage Reflection: short section explaining how AI was used during the project and how its outputs were verified.\n\n3. Presentation & Defense\n- Each team delivers a 10–15 minute presentation summarizing their work.\n- Format:\n+ 8–10 minutes for presentation (slides, demo, or case study findings).\n+ 5 minutes for defense/Q&A where: Peers ask questions.\n- Assessment criteria: clarity of communication, critical thinking, teamwork, and ability to defend ideas.",
+   "Instruction and schedules for Progress Tests must be presented in the Course Implementation Plan approved by director of the campus.\nProgress test must be taken right after the last lectures of required material.\nInstructor has responsibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'/each",
+   "LO1->LO16",
+   "discipline and communication skills",
+   "50",
+   "All subjects in syllabus",
+   "Exam room",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "1. Course Introduction/The Danger\n1.1 War Stories\n1.2 Threat Actors\n1.3 Threat Impact\n1.4 The Danger Summary",
+   "Offline",
+   "LO1",
+   "TU",
+   "Course Syllabus, Module 1\n1.1.5 Lab Manual\n1.1.6 Lab Manual\n1.2.3 Lab Manual",
+   "",
+   "Read Module 1\npractice Lab 1",
+   ""
+  ],
+  [
+   "2",
+   "1. Course Introduction/The Danger\nLab 1:\n1.1 Installing the Virtual Machines\n1.2 Lab - Cybersecurity Case Studies\n1.3 Learning the Details of Attacks\n1.4 Visualizing the Black Hats",
+   "Offline",
+   "LO1",
+   "TU",
+   "Course Syllabus, Module 1\n1.1.5 Lab Manual\n1.1.6 Lab Manual\n1.2.3 Lab Manual",
+   "",
+   "Read Module 1\npractice Lab 1",
+   ""
+  ],
+  [
+   "3",
+   "2. Fighters in the War Against Cybercrime\n2.1 The Modern Security Operations Center\n2.2 Becoming a Defender\nProject Launch & Team Formation\n- Introduce project requirements, expected deliverables, and grading rubric.\n- Form student teams (3–5 members).\n- Brainstorm possible project topics (e.g., phishing attack simulation, data leakage case study, security policy design).\n- Use AI brainstorming: students ask AI to suggest 5–10 possible topics → select one with instructor approval.",
+   "Offline",
+   "LO1",
+   "TU",
+   "Module 2\n2.2.5 Lab Manual",
+   "",
+   "Read Module 2\npractice Lab 2",
+   ""
+  ],
+  [
+   "4",
+   "2. Fighters in the War Against Cybercrime\n2.3 Fighters in the War Against Cybercrime Summary\n\nLab 2: Becoming a Defender",
+   "Offline",
+   "LO1",
+   "TU",
+   "Module 2\n2.2.5 Lab Manual",
+   "",
+   "Read Module 2\npractice Lab 2",
+   ""
+  ],
+  [
+   "5",
+   "3. The Windows Operating System\n3.1 Windows History\n3.2 Windows Architecture and Operations\n3.3 Windows Configuration and Monitoring\n3.4 Windows Security\n3.5 The Windows Operating System Summary",
+   "Offline",
+   "LO2",
+   "TU",
+   "Module 3\n3.0.3 Lab Manual\n3.2.11 Lab Manual\n3.3.10 Lab Manual\n3.3.11 Lab Manual\n3.3.12 Lab Manual\n3.3.13 Lab Manual",
+   "",
+   "Read Module 3\npractice Lab 3",
+   ""
+  ],
+  [
+   "6",
+   "3. The Windows Operating System\n\nLab 3:\n- Identify Running Processes\n- Exploring Processes, Threads, Handles, and Windows Registry\n- Create User Accounts\n- Using Windows PowerShell\n- Windows Task Manager\n- Monitor and Manage System Resources in Windows",
+   "Offline",
+   "LO2",
+   "TU",
+   "Module 3\n3.0.3 Lab Manual\n3.2.11 Lab Manual\n3.3.10 Lab Manual\n3.3.11 Lab Manual\n3.3.12 Lab Manual\n3.3.13 Lab Manual",
+   "",
+   "Read Module 3\npractice Lab 3",
+   ""
+  ],
+  [
+   "7",
+   "4. Linux Overview\n4.1 Linux Basics\n4.2 Working in the Linux Shell\n4.3 Linux Servers and Clients\n4.4 Basic Server Administration\n4.5 The Linux File System\n4.6 Working with the Linux GUI\n4.7 Working on a Linux Host\n4.8 Linux Basics Summary",
+   "Offline",
+   "LO2",
+   "TU",
+   "Module 4\n4.2.6 Lab Manual\n4.2.7 Lab Manual\n4.3.4 Lab Manual\n4.4.4 Lab Manual\n4.5.4 Lab Manual",
+   "",
+   "Read Module 4\npractice Lab 4",
+   ""
+  ],
+  [
+   "8",
+   "4. Linux Overview\n\nLab 4:\n- Working with Text Files in the CLI\n- Getting Familiar with the Linux Shell\n- Linux Servers\n- Locating Log Files\n- Navigating the Linux Filesystem and Permission Settings",
+   "Offline",
+   "LO2",
+   "TU",
+   "Module 4\n4.2.6 Lab Manual\n4.2.7 Lab Manual\n4.3.4 Lab Manual\n4.4.4 Lab Manual\n4.5.4 Lab Manual",
+   "",
+   "Read Module 4\npractice Lab 4",
+   ""
+  ],
+  [
+   "9",
+   "5. Network Protocols\n5.1 Network Communications Process\n5.2 Communications Protocols\n5.3 Data Encapsulation\n5.4 Network Protocols Summary",
+   "Offline",
+   "LO3, LO4",
+   "TU",
+   "Module 5",
+   "",
+   "Read Module 5\npractice Lab 5",
+   ""
+  ],
+  [
+   "10",
+   "5. Network Protocols\n\nLab 5:\n- Tracing a Route\n- Introduction to Wireshark",
+   "Offline",
+   "LO3, LO4",
+   "TU",
+   "Module 5",
+   "",
+   "Read Module 5\npractice Lab 5",
+   ""
+  ],
+  [
+   "11",
+   "6. Ethernet and Internet Protocol (IP)\n6.1 Ethernet\n6.2 IPv4\n6.3 IP Addressing Basics\n6.4 Types of IPv4 Addresses",
+   "Offline",
+   "LO3, LO4",
+   "TU",
+   "Module 6",
+   "",
+   "Read Module 6",
+   ""
+  ],
+  [
+   "12",
+   "6. Ethernet and Internet Protocol (IP)\n6.5 The Default Gateway\n6.6 IPv6\n6.7 Ethernet and IP Protocol Summary\n\nTopic Selection & Problem Definition\n- Each group defines a clear project scope (problem statement, objectives, research questions).\n- Submit a 1–2 page project proposal.\n- AI can assist in structuring the proposal, but students must critically refine it.\n- Instructor + peers provide feedback.",
+   "Offline",
+   "LO3, LO4",
+   "TU",
+   "Module 6",
+   "",
+   "Read Module 6",
+   ""
+  ],
+  [
+   "13",
+   "7. Connectivity Verification\n7.1 ICMP\n7.2 Ping and Traceroute Utilities",
+   "Offline",
+   "LO5",
+   "TU",
+   "Module 7",
+   "",
+   "Read Module 7",
+   ""
+  ],
+  [
+   "14",
+   "7. Connectivity Verification\n7.3 Connectivity Verification Summary",
+   "Offline",
+   "LO5",
+   "TU",
+   "Module 7",
+   "",
+   "Read Module 7",
+   ""
+  ],
+  [
+   "15",
+   "8.Address Resolution Protocol\n8.1 MAC and IP\n8.2 ARP\n8.3 ARP Issues",
+   "Offline",
+   "LO5",
+   "TU",
+   "Module 8\n8.2.8 Lab Manual",
+   "",
+   "Read Module 8\npractice Lab 6",
+   ""
+  ],
+  [
+   "16",
+   "8.Address Resolution Protocol\n8.4 Address Resolution Protocol Summary\n\nLab 6: Using Wireshark to Examine Ethernet Frames",
+   "Offline",
+   "LO5",
+   "TU",
+   "Module 8\n8.2.8 Lab Manual",
+   "",
+   "Read Module 8\npractice Lab 6",
+   ""
+  ],
+  [
+   "17",
+   "9. The Transport Layer\n9.1 Transport Layer Characteristics\n9.2 Transport Layer Session Establishment\n9.3 Transport Layer Reliability\n9.4 The Transport Layer Summary",
+   "Offline",
+   "LO6",
+   "TU",
+   "Module 9\n9.2.6 Lab Manual\n9.3.8 Lab Manual",
+   "",
+   "Read Module 9\npractice Lab 7",
+   ""
+  ],
+  [
+   "18",
+   "9. The Transport Layer\nLab 7:\n- Using Wireshark to Observe the TCP 3-Way Handshake\n- Exploring Nmap\n\nBackground Research\n- Conduct literature review, collect case studies, and study relevant frameworks (ISO 27001, NIST, OWASP).\n- Deliverable: Annotated bibliography or summary of 5–7 key references.\n- AI can help summarize references, but students need to cross-check reliability.",
+   "Offline",
+   "LO6",
+   "TU",
+   "Module 9\n9.2.6 Lab Manual\n9.3.8 Lab Manual",
+   "",
+   "Read Module 9\npractice Lab 7",
+   ""
+  ],
+  [
+   "19",
+   "10. Network Services\n10.1 DHCP\n10.2 DNS\n10.3 NAT\n10.4 File Transfer and Sharing Services\n10.5 Email\n10.6 HTTP\n10.7 Network Services Summary",
+   "Offline",
+   "LO6",
+   "TU",
+   "Module 10\n10.2.7 Lab Manual\n10.4.3 Lab Manual\n10.6.7 Lab Manual",
+   "",
+   "Read Module 10\npractice Lab 8",
+   ""
+  ],
+  [
+   "20",
+   "10. Network Services\n\nLab 8:\n- Using Wireshark to Examine a UDP DNS Capture\n- Using Wireshark to Examine TCP and UDP Captures\n- Using Wireshark to Examine HTTP and HTTPS Traffic",
+   "Offline",
+   "LO6",
+   "TU",
+   "Module 10\n10.2.7 Lab Manual\n10.4.3 Lab Manual\n10.6.7 Lab Manual",
+   "",
+   "Read Module 10\npractice Lab 8",
+   ""
+  ],
+  [
+   "21",
+   "11. Network Communication Devices\n11.1 Network Devices\n11.2 Wireless Communications",
+   "Offline",
+   "LO5,\nLO6",
+   "TU",
+   "Module 11",
+   "",
+   "Read Module 11",
+   ""
+  ],
+  [
+   "22",
+   "11. Network Communication Devices\n11.3 Network Communication Devices Summary",
+   "Offline",
+   "LO5,\nLO6",
+   "TU",
+   "Module 11",
+   "",
+   "Read Module 11",
+   ""
+  ],
+  [
+   "23",
+   "Review Module 1->11 (Guiding Problems)\nProgress Test 1 (30’) - Module 1-11",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "Module 1-11",
+   "",
+   "Review\nDo progress test 1",
+   ""
+  ],
+  [
+   "24",
+   "Review Module 1->11 (Guiding Problems)\nProgress Test 1 (30’) - Module 1-11 (cont.)\n\nRisk & Threat Analysis\n- Identify vulnerabilities, risks, and possible attack vectors related to the chosen topic.\n- Deliverable: Preliminary Risk Analysis Report (2–3 pages, with threat models or diagrams).\n- AI support: generate threat scenarios, compare with real-world incidents.",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "Module 1-11",
+   "",
+   "Review\nDo progress test 1",
+   ""
+  ],
+  [
+   "25",
+   "12. Network Security Infrastructure\n12.1 Network Topologies\n12.2 Security Devices",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 12",
+   "",
+   "Read Module 12",
+   ""
+  ],
+  [
+   "26",
+   "12. Network Security Infrastructure\n\n12.3 Security Services\n12.4 Network Security Infrastructure Summary",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 12",
+   "",
+   "Read Module 12",
+   ""
+  ],
+  [
+   "27",
+   "13. Attackers and Their Tools\n13.1 Who is Attacking Our Network?\n13.2 Threat Actor Tools",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 13",
+   "",
+   "Read Module 13",
+   ""
+  ],
+  [
+   "28",
+   "13. Attackers and Their Tools\n13.3 Attackers and Their Tools Summary",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 13",
+   "",
+   "Read Module 13",
+   ""
+  ],
+  [
+   "29",
+   "14. Common Threats and Attacks\n14.1 Malware\n14.2 Common Network Attacks - Reconnaissance, Access, and Social Engineering\n14.3 Network Attacks - Denial of Service, Buffer Overflows, and Evasion",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 14\n14.1.11 Lab Manual\n14.28 Lab Manual",
+   "",
+   "Read Module 14\npractice Lab 9",
+   ""
+  ],
+  [
+   "30",
+   "14. Common Threats and Attacks\n14.4 Common Threats and Attacks Summary\n\nLab 9:\n- Anatomy of Malware\n- Social Engineering\n\nWeek 5 – Solution Design\n- Propose technical/managerial solutions.\n- Deliverable: Draft solution framework (diagram, flowchart, or security policy outline).\n- Mid-point check-in presentation (5 minutes/team) for instructor feedback.",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 14\n14.1.11 Lab Manual\n14.28 Lab Manual",
+   "",
+   "Read Module 14\npractice Lab 9",
+   ""
+  ],
+  [
+   "31",
+   "15. Network Monitoring and Tools\n15.1 Introduction to Network Monitoring\n15.2 Introduction to Network Monitoring Tools",
+   "Offline",
+   "LO8",
+   "TU",
+   "Module 15\n15.0.3 Lab Manual",
+   "",
+   "Read Module 15\npractice Lab 10",
+   ""
+  ],
+  [
+   "32",
+   "15. Network Monitoring and Tools\n15.3 Network Monitoring and Tools Summary\n\nLab 10: Class Activity - What's Going On",
+   "Offline",
+   "LO8",
+   "TU",
+   "Module 15\n15.0.3 Lab Manual",
+   "",
+   "Read Module 15\npractice Lab 10",
+   ""
+  ],
+  [
+   "33",
+   "16. Attacking the Foundation\n16.1 IP PDU Details\n16.2 IP Vulnerabilities",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 16",
+   "",
+   "Read Module 16",
+   ""
+  ],
+  [
+   "34",
+   "16. Attacking the Foundation\n16.3 TCP and UDP Vulnerabilities\n16.4 Attacking the Foundation Summary",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 16",
+   "",
+   "Read Module 16",
+   ""
+  ],
+  [
+   "35",
+   "17. Attacking What We Do\n17.1 IP Services\n17.2 Enterprise Services",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 17\n17.1.7 Lab Manual\n17.2.6 Lab Manual\n17.2.7 Lab Manual",
+   "",
+   "Read Module 17\npractice Lab 11",
+   ""
+  ],
+  [
+   "36",
+   "17. Attacking What We Do\n17.3 Attacking What We Do Summary\n\nLab 11:\n- Exploring DNS Traffic\n- Attacking a mySQL Database\n- Reading Server Logs\n\nAI-Supported Evaluation\n- Teams use AI to test and critique their proposed solutions (e.g., ask AI to act as a hacker or auditor).\n- Deliverable: AI Evaluation Log – 1–2 pages explaining what AI suggested and how the team validated/refined it.",
+   "Offline",
+   "LO7",
+   "TU",
+   "Module 17\n17.1.7 Lab Manual\n17.2.6 Lab Manual\n17.2.7 Lab Manual",
+   "",
+   "Read Module 17\npractice Lab 11",
+   ""
+  ],
+  [
+   "37",
+   "18. Understanding Defense\n18.1 Defense-in-Depth\n18.2 Security Policies, Regulations, and Standards",
+   "Offline",
+   "LO8",
+   "TU",
+   "Module 18",
+   "",
+   "Read Module 18",
+   ""
+  ],
+  [
+   "38",
+   "18. Understanding Defense\n\n18.3 Understanding Defense Summary",
+   "Offline",
+   "LO8",
+   "TU",
+   "Module 18",
+   "",
+   "Read Module 18",
+   ""
+  ],
+  [
+   "39",
+   "19. Access Control\n19.1 Access Control Concepts\n19.2 AAA Usage and Operation",
+   "Offline",
+   "LO8",
+   "TU",
+   "Module 19",
+   "",
+   "Read Module 19",
+   ""
+  ],
+  [
+   "40",
+   "19. Access Control\n19.2 AAA Usage and Operation (cont.)\n19.3 Access Control Summary",
+   "Offline",
+   "LO8",
+   "TU",
+   "Module 19",
+   "",
+   "Read Module 19",
+   ""
+  ],
+  [
+   "41",
+   "20. Threat Intelligence\n20.1 Information Sources\n20.2 Threat Intelligence Services",
+   "Offline",
+   "LO9",
+   "TU",
+   "Module 20",
+   "",
+   "Read Module 20",
+   ""
+  ],
+  [
+   "42",
+   "20. Threat Intelligence\n20.2 Threat Intelligence Services (cont.)\n20.3 Threat Intelligence Summary\n\nImplementation / Case Study Detailing\n- Depending on project type:\n- If technical: implement simulation/lab experiment (e.g., phishing email test, password audit).\n- If managerial: develop detailed policy or incident response plan.\n- Deliverable: Progress Report (4–5 pages) with initial results.",
+   "Offline",
+   "LO9",
+   "TU",
+   "Module 20",
+   "",
+   "Read Module 20",
+   ""
+  ],
+  [
+   "43",
+   "21. Cryptography\n21.1 Integrity and Authenticity\n21.2 Confidentiality\n21.3 Public Key Cryptography\n21.4 Authorities and the PKI Trust System\n21.5 Applications and Impacts of Cryptography\n21.6 Public Key Cryptography Summary",
+   "Offline",
+   "LO10",
+   "TU",
+   "Module 21\n21.0.3 Lab Manual\n21.1.6 Lab Manual\n21.2.10 Lab Manual\n21.2.11 Lab Manual\n21.2.12 Lab Manual\n21.4.7 Lab Manual",
+   "",
+   "Read Module 21\npractice Lab 12",
+   ""
+  ],
+  [
+   "44",
+   "21. Cryptography\nLab 12:\n- 21.0.3 Class Activity - Creating Codes\n- 21.1.6 Lab - Hashing Things Out\n- 21.2.10 Lab - Encrypting and Decrypting Data Using OpenSSL\n- 21.2.11 Lab - Encrypting and Decrypting Data Using a Hacker Tool\n- 21.2.12 Lab - Examining Telnet and SSH in Wireshark\n- 21.4.7 Lab - Certificate Authority Stores",
+   "Offline",
+   "LO10",
+   "TU",
+   "Module 21\n21.0.3 Lab Manual\n21.1.6 Lab Manual\n21.2.10 Lab Manual\n21.2.11 Lab Manual\n21.2.12 Lab Manual\n21.4.7 Lab Manual",
+   "",
+   "Read Module 21\npractice Lab 12",
+   ""
+  ],
+  [
+   "45",
+   "22. Endpoint Protection\n22.1 Antimalware Protection\n22.2 Host-Based Intrusion Protection",
+   "Offline",
+   "LO10",
+   "TU",
+   "Module 22",
+   "",
+   "Read Module 22",
+   ""
+  ],
+  [
+   "46",
+   "22. Endpoint Protection\n\n22.3 Application Security\n22.4 Endpoint Protection Summary",
+   "Offline",
+   "LO10",
+   "TU",
+   "Module 22",
+   "",
+   "Read Module 22",
+   ""
+  ],
+  [
+   "47",
+   "23. Endpoint Vulnerability Assessment\n23.1 Network and Server Profiling\n23.2 Common Vulnerability Scoring System (CVSS)\n23.3 Secure Device Management",
+   "Offline",
+   "LO10",
+   "TU",
+   "Module 23",
+   "",
+   "Read Module 23",
+   ""
+  ],
+  [
+   "48",
+   "23. Endpoint Vulnerability Assessment\n\n23.4 Information Security Management Systems\n23.5 Endpoint Vulnerability Assessment Summary\n\nDraft Report & Peer Review\n- Submit first draft report (8–10 pages).\n- Conduct Peer Review: teams exchange drafts, give structured feedback.\n- AI helps generate review checklists or suggest improvements in structure.",
+   "Offline",
+   "LO10",
+   "TU",
+   "Module 23",
+   "",
+   "Read Module 23",
+   ""
+  ],
+  [
+   "49",
+   "24. Technologies and Protocols\n24.1 Monitoring Common Protocols\n24.2 Security Technologies",
+   "Offline",
+   "LO11",
+   "TU",
+   "Module 24",
+   "",
+   "Read Module 24",
+   ""
+  ],
+  [
+   "50",
+   "24. Technologies and Protocols\n\n24.3 Technologies and Protocols Summary",
+   "Offline",
+   "LO11",
+   "TU",
+   "Module 24",
+   "",
+   "Read Module 24",
+   ""
+  ],
+  [
+   "51",
+   "25. Network Security Data\n25.1 Types of Security Data\n25.2 End Device Logs",
+   "Offline",
+   "LO11",
+   "TU",
+   "Module 25",
+   "",
+   "Read Module 25",
+   ""
+  ],
+  [
+   "52",
+   "25. Network Security Data\n\n25.3 Network Logs\n25.4 Network Security Data Summary",
+   "Offline",
+   "LO11",
+   "TU",
+   "Module 25",
+   "",
+   "Read Module 25",
+   ""
+  ],
+  [
+   "53",
+   "26. Evaluating Alerts\n26.1 Sources of Alerts\n26.2 Overview of Alert Evaluation",
+   "Offline",
+   "LO10,\nLO11",
+   "TU",
+   "Module 26\n26.1.7 Lab Manual",
+   "",
+   "Read Module 26\npractice Lab 13",
+   ""
+  ],
+  [
+   "54",
+   "26. Evaluating Alerts\n\n26.3 Evaluating Alerts Summary\n\nLab 13: Snort and Firewall Rules\n\nFinalization & Presentation Prep\n- Revise report based on peer + instructor feedback.\n- Create presentation slides (10–12) with AI assistance for visuals.\n- Practice Q&A with AI generating potential defense questions.",
+   "Offline",
+   "LO10,\nLO11",
+   "TU",
+   "Module 26\n26.1.7 Lab Manual",
+   "",
+   "Read Module 26\npractice Lab 13",
+   ""
+  ],
+  [
+   "55",
+   "Review Module 12-26 (Guiding Problems)\nProgress Test 2 (30’) – Module 2-26",
+   "Offline",
+   "LO7-11",
+   "TU",
+   "Module 12-26",
+   "",
+   "Review\nDo progress test 2",
+   ""
+  ],
+  [
+   "56",
+   "Review Module 12-26 (Guiding Problems)\nProgress Test 2 (30’) – Module 2-26 (cont.)",
+   "Offline",
+   "LO7-11",
+   "TU",
+   "Module 12-26",
+   "",
+   "Review\nDo progress test 2",
+   ""
+  ],
+  [
+   "57",
+   "27. Working with Network Security Data\n27.1 A Common Data Platform\n27.2 Investigating Network Data\n27.3 Enhancing the Work of the Cybersecurity Analyst\n27.4 Working with Network Security Data Summary\n\nFinal Presentation & Defense\n- Each team presents (10–12 minutes) + defense (5 minutes Q&A).\n- Submit Final Report (10–12 pages) + AI Reflection Section (how AI was used, what worked/failed, lessons learned).",
+   "Offline",
+   "LO9,\nLO10",
+   "TU",
+   "Module 27\n27.1.5 Lab Manual\n27.2.9 Lab Manual\n27.2.10 Lab Manual\n27.2.12 Lab Manual\n27.2.14 Lab Manual\n27.2.15 Lab Manual\n27.2.16 Lab Manual",
+   "",
+   "Read Module 27\npractice Lab 14",
+   ""
+  ],
+  [
+   "58",
+   "27. Working with Network Security Data\nLab 14:\n- 27.1.5 Lab - Convert Data into a Universal Format\n- 27.2.9 Lab - Regular Expression Tutorial\n- 27.2.10 Lab - Extract an Executable from a PCAP\n- 27.2.12 Lab - Interpret HTTP and DNS Data to Isolate Threat Actor\n- 27.2.14 Lab - Isolate Compromised Host Using 5-Tuple\n- 27.2.15 Lab - Investigating a Malware Exploit\n- 27.2.16 Lab - Investigating an Attack on a Windows Host",
+   "Offline",
+   "LO9,\nLO10",
+   "TU",
+   "Module 27\n27.1.5 Lab Manual\n27.2.9 Lab Manual\n27.2.10 Lab Manual\n27.2.12 Lab Manual\n27.2.14 Lab Manual\n27.2.15 Lab Manual\n27.2.16 Lab Manual",
+   "",
+   "Read Module 27\npractice Lab 14",
+   ""
+  ],
+  [
+   "59",
+   "28. Digital Forensics and Incident Analysis and Response\n28.1 Evidence Handling and Attack Attribution\n28.2 The Cyber Kill Chain\n28.3 The Diamond Model of Intrusion Analysis",
+   "Offline",
+   "LO11",
+   "TU",
+   "Module 28\n28.4.13 Lab Manual",
+   "",
+   "Read Module 28\npractice Lab 15",
+   ""
+  ],
+  [
+   "60",
+   "28. Digital Forensics and Incident Analysis and Response\n28.4 Incident Response\n28.5 Digital Forensics and Incident Analysis and Response Summary\n\nLab 15: Incident Handling",
+   "Offline",
+   "LO11",
+   "TU",
+   "Module 28\n28.4.13 Lab Manual",
+   "",
+   "Read Module 28\npractice Lab 15",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "Explain why networks and data are attacked"
+  ],
+  [
+   "2",
+   "1",
+   "CQ2",
+   "What is threat actors?"
+  ],
+  [
+   "3",
+   "2",
+   "CQ1",
+   "Explain why networks and data are attacked (cont.)"
+  ],
+  [
+   "4",
+   "2",
+   "CQ2",
+   "What is threat actors? (cont.)"
+  ],
+  [
+   "5",
+   "3",
+   "CQ1",
+   "What technologies do they need to be aware of?"
+  ],
+  [
+   "6",
+   "3",
+   "CQ2",
+   "What types of jobs are available in CyberSecurity?"
+  ],
+  [
+   "7",
+   "4",
+   "CQ1",
+   "What technologies do they need to be aware of? (cont.)"
+  ],
+  [
+   "8",
+   "4",
+   "CQ2",
+   "What types of jobs are available in CyberSecurity? (cont.)"
+  ],
+  [
+   "9",
+   "5",
+   "CQ1",
+   "Explain the security features of the Windows operating system?"
+  ],
+  [
+   "10",
+   "6",
+   "CQ1",
+   "Explain the security features of the Windows operating system? (cont.)"
+  ],
+  [
+   "11",
+   "7",
+   "CQ1",
+   "How many are there the basic components of the Linux?"
+  ],
+  [
+   "12",
+   "7",
+   "CQ2",
+   "How to detect malware on the Linux?"
+  ],
+  [
+   "13",
+   "8",
+   "CQ1",
+   "How many are there the basic components of the Linux?"
+  ],
+  [
+   "14",
+   "8",
+   "CQ2",
+   "How to detect malware on the Linux? (cont.)"
+  ],
+  [
+   "15",
+   "9",
+   "CQ1",
+   "How network protocols work together to allow us to request information and to return that information to us over the network?"
+  ],
+  [
+   "16",
+   "10",
+   "CQ1",
+   "How network protocols work together to allow us to request information and to return that information to us over the network? (cont.)"
+  ],
+  [
+   "17",
+   "11",
+   "CQ1",
+   "How do devices know how to send and receive information within the network, and from the vast internet?"
+  ],
+  [
+   "18",
+   "12",
+   "CQ1",
+   "How do devices know how to send and receive information within the network, and from the vast internet? (cont.)"
+  ],
+  [
+   "19",
+   "13",
+   "CQ1",
+   "How to use the ICMP network connectivity verification tools ping and traceroute?"
+  ],
+  [
+   "20",
+   "14",
+   "CQ1",
+   "How to use the ICMP network connectivity verification tools ping and traceroute? (cont.)"
+  ],
+  [
+   "21",
+   "15",
+   "CQ1",
+   "How the ARP process works?"
+  ],
+  [
+   "22",
+   "15",
+   "CQ2",
+   "What is ARP Spoofing? How to defend this problem?"
+  ],
+  [
+   "23",
+   "16",
+   "CQ1",
+   "How the ARP process works? (cont.)"
+  ],
+  [
+   "24",
+   "16",
+   "CQ2",
+   "What is ARP Spoofing? How to defend this problem? (cont.)"
+  ],
+  [
+   "25",
+   "17",
+   "CQ1",
+   "Explain how transport layer protocols support network communication?"
+  ],
+  [
+   "26",
+   "18",
+   "CQ1",
+   "Explain how transport layer protocols support network communication? (cont.)"
+  ],
+  [
+   "27",
+   "19",
+   "CQ1",
+   "Explain the how NAT works?"
+  ],
+  [
+   "28",
+   "20",
+   "CQ1",
+   "Explain the how NAT works? (cont.)"
+  ],
+  [
+   "29",
+   "21",
+   "CQ1",
+   "How a router determines the best path to use to forward a packet?"
+  ],
+  [
+   "30",
+   "22",
+   "CQ1",
+   "How a router determines the best path to use to forward a packet? (cont.)"
+  ],
+  [
+   "31",
+   "25",
+   "CQ1",
+   "How devices as switch, router and services are used to enhance network security?"
+  ],
+  [
+   "32",
+   "26",
+   "CQ1",
+   "How devices as switch, router and services are used to enhance network security? (cont.)"
+  ],
+  [
+   "33",
+   "27",
+   "CQ1",
+   "Describe the various types of attack tools used by Threat Actors?"
+  ],
+  [
+   "34",
+   "27",
+   "CQ2",
+   "How network threats have evolved?"
+  ],
+  [
+   "35",
+   "28",
+   "CQ1",
+   "Describe the various types of attack tools used by Threat Actors? (cont.)"
+  ],
+  [
+   "36",
+   "28",
+   "CQ2",
+   "How network threats have evolved? (cont.)"
+  ],
+  [
+   "37",
+   "29",
+   "CQ1",
+   "Describe types of malware?"
+  ],
+  [
+   "38",
+   "29",
+   "CQ2",
+   "Explain reconnaissance, access, and social engineering network attacks?"
+  ],
+  [
+   "39",
+   "29",
+   "CQ3",
+   "Explain Denial of Service, buffer overflow, and evasion attacks?"
+  ],
+  [
+   "40",
+   "30",
+   "CQ1",
+   "Describe types of malware? (cont.)"
+  ],
+  [
+   "41",
+   "30",
+   "CQ2",
+   "Explain reconnaissance, access, and social engineering network attacks? (cont.)"
+  ],
+  [
+   "42",
+   "30",
+   "CQ3",
+   "Explain Denial of Service, buffer overflow, and evasion attacks? (cont.)"
+  ],
+  [
+   "43",
+   "31",
+   "CQ1",
+   "Explain the importance of network monitoring? Which tools are we use to monitoring network?"
+  ],
+  [
+   "44",
+   "32",
+   "CQ1",
+   "Explain the importance of network monitoring? Which tools are we use to monitoring network? (cont.)"
+  ],
+  [
+   "45",
+   "33",
+   "CQ1",
+   "How IP vulnerabilities enable network attacks?"
+  ],
+  [
+   "46",
+   "33",
+   "CQ2",
+   "How TCP and UDP vulnerabilities enable network attacks?"
+  ],
+  [
+   "47",
+   "34",
+   "CQ1",
+   "How IP vulnerabilities enable network attacks? (cont.)"
+  ],
+  [
+   "48",
+   "34",
+   "CQ2",
+   "How TCP and UDP vulnerabilities enable network attacks? (cont.)"
+  ],
+  [
+   "49",
+   "35",
+   "CQ1",
+   "How network application vulnerabilities enable network attacks?"
+  ],
+  [
+   "50",
+   "36",
+   "CQ1",
+   "How network application vulnerabilities enable network attacks? (cont.)"
+  ],
+  [
+   "51",
+   "37",
+   "CQ1",
+   "How the defense-in-depth strategy is used to protect networks?"
+  ],
+  [
+   "52",
+   "37",
+   "CQ2",
+   "Explain security policies, regulations, and standards?"
+  ],
+  [
+   "53",
+   "38",
+   "CQ1",
+   "How the defense-in-depth strategy is used to protect networks? (cont.)"
+  ],
+  [
+   "54",
+   "38",
+   "CQ2",
+   "Explain security policies, regulations, and standards? (cont.)"
+  ],
+  [
+   "55",
+   "39",
+   "CQ1",
+   "How can you restrict access within your network?"
+  ],
+  [
+   "56",
+   "39",
+   "CQ2",
+   "How AAA is used to control network access?"
+  ],
+  [
+   "57",
+   "40",
+   "CQ1",
+   "How can you restrict access within your network? (cont.)"
+  ],
+  [
+   "58",
+   "40",
+   "CQ2",
+   "How AAA is used to control network access? (cont.)"
+  ],
+  [
+   "59",
+   "41",
+   "CQ1",
+   "Describe information sources used to communicate emerging network security threats?"
+  ],
+  [
+   "60",
+   "42",
+   "CQ1",
+   "Describe information sources used to communicate emerging network security threats? (cont.)"
+  ],
+  [
+   "61",
+   "43",
+   "CQ1",
+   "How to protect that data and maintain its integrity?"
+  ],
+  [
+   "62",
+   "43",
+   "CQ2",
+   "Explain how cryptographic approaches enhance data confidentiality?"
+  ],
+  [
+   "63",
+   "43",
+   "CQ3",
+   "Explain public key cryptography?"
+  ],
+  [
+   "64",
+   "44",
+   "CQ1",
+   "How to protect that data and maintain its integrity? (cont.)"
+  ],
+  [
+   "65",
+   "44",
+   "CQ2",
+   "Explain how cryptographic approaches enhance data confidentiality? (cont.)"
+  ],
+  [
+   "66",
+   "44",
+   "CQ3",
+   "Explain public key cryptography? (cont.)"
+  ],
+  [
+   "67",
+   "45",
+   "CQ1",
+   "Describes various endpoint protection technologies and methods?"
+  ],
+  [
+   "68",
+   "45",
+   "CQ2",
+   "How a malware analysis website generates a malware analysis report?"
+  ],
+  [
+   "69",
+   "46",
+   "CQ1",
+   "Describes various endpoint protection technologies and methods? (cont.)"
+  ],
+  [
+   "70",
+   "46",
+   "CQ2",
+   "How a malware analysis website generates a malware analysis report? (cont.)"
+  ],
+  [
+   "71",
+   "47",
+   "CQ1",
+   "How CVSS reports are used to describe security vulnerabilities?"
+  ],
+  [
+   "72",
+   "47",
+   "CQ2",
+   "Explain how secure device management techniques are used to protect data and assets?"
+  ],
+  [
+   "73",
+   "47",
+   "CQ3",
+   "How information security management systems are used to protect assets?"
+  ],
+  [
+   "74",
+   "48",
+   "CQ1",
+   "How CVSS reports are used to describe security vulnerabilities? (cont.)"
+  ],
+  [
+   "75",
+   "48",
+   "CQ2",
+   "Explain how secure device management techniques are used to protect data and assets? (cont.)"
+  ],
+  [
+   "76",
+   "48",
+   "CQ3",
+   "How information security management systems are used to protect assets? (cont.)"
+  ],
+  [
+   "77",
+   "49",
+   "CQ1",
+   "Explain the behavior of common network protocols in the context of security monitoring?"
+  ],
+  [
+   "78",
+   "49",
+   "CQ2",
+   "Explain how security technologies affect the ability to monitor common network protocols?"
+  ],
+  [
+   "79",
+   "50",
+   "CQ1",
+   "Explain the behavior of common network protocols in the context of security monitoring? (cont.)"
+  ],
+  [
+   "80",
+   "50",
+   "CQ2",
+   "Explain how security technologies affect the ability to monitor common network protocols? (cont.)"
+  ],
+  [
+   "81",
+   "51",
+   "CQ1",
+   "What types of data are necessary to perform security monitoring?"
+  ],
+  [
+   "82",
+   "51",
+   "CQ2",
+   "What type of information is included in the various log files that are used to capture data for security monitoring?"
+  ],
+  [
+   "83",
+   "52",
+   "CQ1",
+   "What types of data are necessary to perform security monitoring? (cont.)"
+  ],
+  [
+   "84",
+   "52",
+   "CQ2",
+   "What type of information is included in the various log files that are used to capture data for security monitoring? (cont.)"
+  ],
+  [
+   "85",
+   "53",
+   "CQ1",
+   "Explain the process of evaluating alerts?"
+  ],
+  [
+   "86",
+   "54",
+   "CQ1",
+   "Explain the process of evaluating alerts? (cont.)"
+  ],
+  [
+   "87",
+   "57",
+   "CQ1",
+   "Explain how data is prepared for use in a Network Security Monitoring (NSM) system?"
+  ],
+  [
+   "88",
+   "57",
+   "CQ2",
+   "Describe network monitoring tools that enhance workflow management?"
+  ],
+  [
+   "89",
+   "58",
+   "CQ1",
+   "Explain how data is prepared for use in a Network Security Monitoring (NSM) system? (cont.)"
+  ],
+  [
+   "90",
+   "58",
+   "CQ2",
+   "Describe network monitoring tools that enhance workflow management? (cont.)"
+  ],
+  [
+   "91",
+   "59",
+   "CQ1",
+   "Explain the role of digital forensics processes?"
+  ],
+  [
+   "92",
+   "59",
+   "CQ2",
+   "Identify the steps in the Cyber Kill Chain?"
+  ],
+  [
+   "93",
+   "59",
+   "CQ3",
+   "How to classify an intrusion event using the Diamond Model?"
+  ],
+  [
+   "94",
+   "60",
+   "CQ1",
+   "Explain the role of digital forensics processes? (cont.)"
+  ],
+  [
+   "95",
+   "60",
+   "CQ2",
+   "Identify the steps in the Cyber Kill Chain? (cont.)"
+  ],
+  [
+   "96",
+   "60",
+   "CQ3",
+   "How to classify an intrusion event using the Diamond Model? (cont.)"
+  ]
+ ],
+ "links": []
+}

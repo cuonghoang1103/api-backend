@@ -74,3 +74,18 @@ regexes = [
 description = "Khoá IndexNow công khai"
 targetRules = ["generic-api-key"]
 regexes = ['''^cb36d6e5ecc54ce3ded3fbc9fa441682$''']
+
+# ── Tên phần mềm trong syllabus FLM (09/11/2026) ─────────────────────────────
+# Ô "Tools" của syllabus LOD222 ghi "Internet access, Smile/IHotel/Opera Software."
+# — tên các phần mềm quản lý khách sạn mà môn dùng. Rule đoán mò `generic-api-key`
+# trích nhầm `Smile/IHotel/Opera` làm khoá. Dữ liệu này là bản chép NGUYÊN VĂN từ
+# FLM (content/academy/_syllabus-flm/, và Mục 0 sinh từ nó ở _muc0-flm/), sửa chữ là
+# sai lệch với bản trường phát. Miễn trừ ĐÚNG chuỗi này, ĐÚNG rule này, ĐÚNG thư mục
+# academy — mọi chuỗi khác ở đây vẫn bị quét như cũ.
+[[allowlists]]
+description = "Tên phần mềm khách sạn trong syllabus LOD222 — không phải khoá"
+targetRules = ["generic-api-key"]
+# AND: phải TRÙNG CẢ thư mục lẫn đúng chuỗi (mặc định gitleaks là OR ⇒ sẽ miễn trừ cả thư mục).
+condition = "AND"
+paths = ['''content/academy/''']
+regexes = ['''^Smile/IHotel/Opera$''']

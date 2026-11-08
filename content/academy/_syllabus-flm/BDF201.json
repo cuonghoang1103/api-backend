@@ -1,0 +1,943 @@
+{
+ "ma": "BDF201",
+ "sylID": "14477",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14477",
+   "code": "BDF201",
+   "name": "Blockchain and decentralized finance _Công nghệ Blockchain và Tài chính phi tập trung",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14477",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14477",
+  "Syllabus Name": "Blockchain and decentralized finance _Công nghệ Blockchain và Tài chính phi tập trung",
+  "Course Name English": "Blockchain and Decentralized Finance",
+  "Subject Code": "BDF201",
+  "Learning-Teaching Method": "Lecture,Presentation,Practice,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "none",
+  "Description": "This course introduces blockchain technology and its applications in cryptocurrencies and decentralized finance (DeFi). It covers cryptographic primitives (hash functions, digital signatures), blockchain data structures (blocks, Merkle trees), network architecture (nodes, mempool), consensus mechanisms and security (PoW/PoS, forks, double spending, 51% attack), and the evolution from Bitcoin to smart-contract platforms. The DeFi part focuses on financial primitives and protocols such as stablecoins, decentralized exchanges and automated market makers (AMMs), liquidity pools, tokenization and NFTs, governance via DAOs, and key issues in risk management, security, and regulation. Students will practice using wallets, block explorers, and smart-contract sandboxes; analyze real-world DeFi cases and on-chain data; and propose a DeFi/FinTech solution with clear assumptions, risks, and compliance considerations.",
+  "StudentTasks": "Students must attend at least 80% of contact sessions to be eligible for the final assessment. - Complete required readings and pre-class preparation; actively participate in discussions, case analyses, and in-class exercises. Complete and submit all quizzes/assignments/labs/projects on time; contribute fairly and professionally in group work. Follow academic integrity rules (no plagiarism, proper citation, no unauthorized collaboration); use AI tools responsibly and transparently when allowed by the instructor. - Use laptops/tablets in class strictly for learning activities. For hands-on blockchain labs: use testnets/sandbox accounts unless explicitly instructed; do NOT share private keys/seed phrases; follow security best practices.",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "Notes: - Blockchain & DeFi evolve rapidly; readings, examples, and tool versions may be updated during the semester. - The course is for educational purposes only and is NOT investment advice. - Students are not required to use real funds; labs can be completed fully on test networks.",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "BLOCKCHAIN, CRYPTO AND DEFI: Bridging Finance and Technology",
+   "Marco Di Maggio",
+   "John Wiley & Sons",
+   "2024",
+   "1st",
+   "9781394275892",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "DeFi and the Future of Finance",
+   "Campbell R. Harvey; Ashwin Ramachandran; Joey Santoro",
+   "John Wiley & Sons",
+   "2021",
+   "1st",
+   "9781119836018",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain blockchain fundamentals and describe how consensus mechanisms of PoW, PoS prevent double spending and maintain transaction integrity."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Describe the operating principles of Ethereum, smart contracts, gas fee economics, oracles and identify basic scaling approaches (Layer 1 sharding vs. Layer 2 rollups & payment channels)."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Differentiate between stablecoin models and CBDCs, explaining their peg mechanisms and operational and liquidity risks."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Explain core DeFi market mechanisms, including Automated Market Makers, liquidity pools (impermanent loss), DAO governance models, and real-world asset tokenization."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Practice essential Web3 user operations, including setting up and securing non-custodial wallets, key management, executing testnet transactions, and participating in basic DAO voting."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Demonstrate basic DeFi user interactions on testnets and use public blockchain explorers/analytics dashboards to track transactions and protocol metrics."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Presentation",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "20 minutes / group (15m present + 5m Q&A)",
+   "CLO3, CLO4, CLO6",
+   "Face-to-face presentation + Report Submission",
+   "1 Case Study Topic",
+   "In-depth case analysis of a prominent real-world DeFi protocol (e.g., MakerDAO, Uniswap, Compound, Aave) or tokenization model; extracting on-chain metrics via DefiLlama/Etherscan, explaining protocol workflow, and identifying basic operational and liquidity risks.",
+   "Group work (4–5 students). Select an approved protocol, explore its user interface, summarize metrics and risks, submit slides, and present live in class",
+   ""
+  ],
+  [
+   "2",
+   "Practice",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "90'",
+   "CLO5, CLO6",
+   "Practical execution on Testnet + Submit transaction hashes / screenshots",
+   "1 Practical Assignment",
+   "Hands-on execution of essential Web3 and DeFi user operations on zero-cost public testnets: Setting up MetaMask wallet & safely storing the 12-word seed phrase, Requesting free testnet tokens from faucets & executing a peer-to-peer transfer, Looking up transactions, addresses, and gas fees on Etherscan block explorer, Executing a simple token swap on a testnet DEX (Uniswap) & adjusting slippage",
+   "Students complete 4 guided practical exercises in class with step-by-step instructions.",
+   ""
+  ],
+  [
+   "3",
+   "Quiz 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "60'",
+   "CLO1, CLO2",
+   "Multiple choices\nMarked by Computer",
+   "30 questions",
+   "Basic concepts of blockchain, hashing, blocks, P2P networks, PoW/PoS consensus, Bitcoin transactions, Ethereum, smart contracts, gas fees, and scaling ideas",
+   "Conducted in-class via CMS/LMS system during Session.",
+   ""
+  ],
+  [
+   "4",
+   "Quiz 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "60'",
+   "CLO3, CLO4",
+   "Multiple choices\nMarked by Computer",
+   "30 questions",
+   "Basic stablecoin types (fiat-backed, DAI), CBDCs, DApps & DAOs, simple lending concepts, AMM swap principles (x⋅y=k), liquidity pools, and real-world asset tokenization",
+   "Conducted in-class via CMS/LMS system during Session.",
+   ""
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4",
+   "Multiple choices\nMarked by Computer",
+   "50",
+   "Comprehensive assessment of foundational concepts and core mechanisms across Chapters 1 to 9 (Blockchain architecture, PoW/PoS consensus, Smart contracts, Gas fees, Scalability L1/L2, Stablecoins, CBDCs, DAOs, Lending pools, AMM constant product formula, Liquidity pools, and RWAs).",
+   "University centralized computer-based exam organized by the Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction & Chapter 1: 1-1 Blockchain Overview & History",
+   "Offline",
+   "CLO1",
+   "IT",
+   "- Read Course Syllabus\n\n- Read Chapter 1 Marco Di Maggio (pp. 1-10)\n\n- Read slides: Chapter 1-1",
+   "BDF201",
+   "Review Syllabus\n\nReview Chapter 1-1",
+   "link"
+  ],
+  [
+   "2",
+   "Chapter 1: 1-2 Cryptographic Hashing (SHA-256) & Block Anatomy",
+   "Offline",
+   "CLO1",
+   "I, T",
+   "- Read Chapter 1 (pp. 11-20)\n- Read slides: Chapter 1-2",
+   "BDF201",
+   "Review Chapter 1-2\nPractice hash calculation examples",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: 1-3 Merkle Trees, Light Verification & P2P Networks",
+   "Offline",
+   "CLO1",
+   "T",
+   "- Read Chapter 1 (pp. 21-28)\n- Read slides: Chapter 1-3",
+   "",
+   "Review Chapter 1-3\nVerify Merkle tree proofs",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: 1-4 Consensus Mechanics: Proof of Work (PoW) & Mining Economics",
+   "Offline",
+   "CLO1",
+   "T",
+   "- Read Chapter 1 (pp. 29-38)\n- Read slides: Chapter 1-4",
+   "",
+   "Review Chapter 1-4\nAnalyze PoW difficulty adjustment",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 1: 1-5 Proof of Stake (PoS) Basics & Bitcoin Security Threats",
+   "Offline",
+   "CLO1",
+   "T, U",
+   "- Read Chapter 1 (pp. 39-50)\n- Read slides: Chapter 1-5",
+   "",
+   "Review Chapter 1-5\nAnalyze double spending & 51% attack risks",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 1: Workshop 1 - Web3 Wallet Setup & Key Management",
+   "Offline",
+   "CLO5",
+   "T, U",
+   "- Read Workshop Guide 1\n- Install MetaMask Wallet extension",
+   "",
+   "Setup MetaMask wallet, record 12-word seed phrase securely, export public address",
+   ""
+  ],
+  [
+   "7",
+   "Review Chapter 1: Guiding Problems & Lemonade Case Study",
+   "Offline",
+   "CLO1",
+   "U",
+   "- Review Chapter 1\n- Read Case Study: Lemonade Crypto Climate Coalition\n- Do End-of-Chapter 1 Questions",
+   "",
+   "Solve Chapter 1 problems & analyze blockchain in weather insurance",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: 2-1 Ethereum Overview & EVM Account Models",
+   "Offline",
+   "CLO2",
+   "I, T",
+   "- Read Chapter 2 (pp. 57-68)\n- Read slides: Chapter 2-1",
+   "",
+   "Review Chapter 2-1",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: 2-2 Smart Contracts Fundamentals & Token Standards (ERC-20, ERC-721)",
+   "Offline",
+   "CLO2",
+   "I, T",
+   "- Read Chapter 2 (pp. 69-78)\n- Read slides: Chapter 2-2",
+   "",
+   "Review Chapter 2-2\nExplore standard token contract functions",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 2: 2-3 Gas Economics, EIP-1559 Burn Model & Halting Problem",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Read Chapter 2 (pp. 79-88)\n- Read slides: Chapter 2-3",
+   "",
+   "Review Chapter 2-3\nCalculate simple transaction fee (Base fee + Priority fee)",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 2: 2-4 The Oracle Problem & Decentralized Data Feeds (Chainlink)",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Read Chapter 2 (pp. 89-98)\n- Read slides: Chapter 2-4",
+   "",
+   "Review Chapter 2-4\nAnalyze decentralized oracle networks",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 2: Workshop 2 - Exploring Transactions & Gas on Etherscan",
+   "Offline",
+   "CLO5",
+   "T, U",
+   "- Read Workshop Guide 2\n- Open Etherscan (etherscan.io)",
+   "",
+   "Look up wallet addresses, analyze transaction receipts, inspect gas used and token transfers",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 2: 2-5 Smart Contract Vulnerabilities & Account Abstraction",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Read Chapter 2 (pp. 99-106)\n- Read slides: Chapter 2-5",
+   "",
+   "Review Chapter 2-5\nAnalyze the historic The DAO reentrancy exploit",
+   ""
+  ],
+  [
+   "14",
+   "Review Chapter 2: Guiding Problems & Smart Contract Analysis",
+   "Offline",
+   "CLO2",
+   "U",
+   "- Review Chapter 2\n- Do End-of-Chapter 2 Questions",
+   "",
+   "Solve Chapter 2 questions & review gas calculation exercises",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3: 3-1 Scalability Trilemma & Blockchain Scaling Paradigms",
+   "Offline",
+   "CLO2",
+   "I, T",
+   "- Read Chapter 3 (pp. 107-122)\n- Read slides: Chapter 3-1",
+   "",
+   "Review Chapter 3-1",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 3: 3-2 Layer 1 Scaling: Proof of Stake (The Merge), Sharding & Alt-L1",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Read Chapter 3 (pp. 123-140)\n- Read slides: Chapter 3-2",
+   "",
+   "Review Chapter 3-2\nCompare Ethereum PoS with high-throughput chains (Solana)",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 3: 3-3 Layer 2 Scaling: Payment Channels & Bitcoin Lightning Network",
+   "Offline",
+   "CLO2",
+   "T",
+   "- Read Chapter 3 (pp. 141-158)\n- Read slides: Chapter 3-3",
+   "",
+   "Review Chapter 3-3\nAnalyze off-chain payment channel mechanics",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 3: 3-4 Layer 2 Rollups: Optimistic Rollups vs ZK-Rollups & Sidechains",
+   "Offline",
+   "CLO2",
+   "T, U",
+   "- Read Chapter 3 (pp. 159-180)\n- Read slides: Chapter 3-4",
+   "",
+   "Review Chapter 3-4\nCompare Arbitrum/Optimism fraud proofs with zkSync validity proofs",
+   ""
+  ],
+  [
+   "19",
+   "Review Chapter 3: Guiding Problems & Scaling Solutions Summary",
+   "Offline",
+   "CLO1, CLO2",
+   "U",
+   "- Review Chapters 1, 2, 3\n- Do End-of-Chapter 3 Questions",
+   "",
+   "Solve Chapter 3 problems & prepare for Quiz 1 on Chapters 1-3",
+   ""
+  ],
+  [
+   "20",
+   "Progress Assessment: Quiz 1 (Chapters 1, 2, 3)",
+   "Offline",
+   "CLO1, CLO2",
+   "U",
+   "- Review Chapters 1, 2, 3\n- Prepare laptop for online testing",
+   "",
+   "Do Quiz 1 (30 MCQs, 45 minutes)",
+   ""
+  ],
+  [
+   "21",
+   "Quiz 1 Debrief & Chapter 4: 4-1 Stablecoins Overview & Taxonomy",
+   "Offline",
+   "CLO3",
+   "I, T",
+   "- Review Quiz 1 Results\n- Read Chapter 4 (pp. 181-192)\n- Read slides: Chapter 4-1",
+   "",
+   "Review Quiz 1 feedback\nReview Chapter 4-1 (Role of price stability in crypto)",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 4: 4-2 Fiat-Collateralized Stablecoins (USDT, USDC): Reserves & Custody",
+   "Offline",
+   "CLO3",
+   "I, T",
+   "- Read Chapter 4 (pp. 193-202)\n- Read slides: Chapter 4-2",
+   "",
+   "Review Chapter 4-2\nAnalyze 1:1 reserve backing and centralized blacklisting risk",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 4: 4-3 Crypto-Collateralized Stablecoins & Collateral Ratios",
+   "Offline",
+   "CLO3",
+   "T",
+   "- Read Chapter 4 (pp. 203-212)\n- Read slides: Chapter 4-3",
+   "",
+   "Review Chapter 4-3\nCalculate collateralization ratio and liquidation threshold",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 4: 4-4 Algorithmic Stablecoins & Death Spiral Mechanics",
+   "Offline",
+   "CLO3",
+   "T, U",
+   "- Read Chapter 4 (pp. 213-222)\n- Read slides: Chapter 4-4",
+   "",
+   "Review Chapter 4-4\nAnalyze Terra/Luna de-pegging collapse case",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 4: 4-5 Case Study - MakerDAO Protocol (Vaults, DAI & Liquidations)",
+   "Offline",
+   "CLO3",
+   "T, U",
+   "- Read Duke Paper (Section 6.1.1 MakerDAO)\n- Read slides: Chapter 4-5",
+   "",
+   "Analyze MakerDAO Vault generation, DAI minting, and stability fee mechanism",
+   ""
+  ],
+  [
+   "26",
+   "Review Chapter 4: Guiding Problems & Stablecoin Risk Modeling",
+   "Offline",
+   "CLO3",
+   "U",
+   "- Review Chapter 4\n- Do End-of-Chapter 4 Questions",
+   "",
+   "Solve Chapter 4 numerical exercises on collateral ratios and liquidations",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 5: 5-1 Evolution of Money & Motivations for CBDCs",
+   "Offline",
+   "CLO3",
+   "I, T",
+   "- Read Chapter 5 (pp. 223-234)\n- Read slides: Chapter 5-1",
+   "",
+   "Review Chapter 5-1",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 5: 5-2 Wholesale vs Retail CBDC Architectures & Operational Designs",
+   "Offline",
+   "CLO3",
+   "I, T",
+   "- Read Chapter 5 (pp. 235-244)\n- Read slides: Chapter 5-2",
+   "",
+   "Review Chapter 5-2\nCompare single-tier (direct) vs two-tier (intermediated) CBDC models",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 5: 5-3 CBDCs vs Cryptocurrencies & Stablecoins",
+   "Offline",
+   "CLO3",
+   "T",
+   "- Read Chapter 5 (pp. 245-252)\n- Read slides: Chapter 5-3",
+   "",
+   "Review Chapter 5-3\nCompare state-backed currency with permissionless crypto",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 5: 5-4 Monetary Policy Transmission & Bank Disintermediation",
+   "Offline",
+   "CLO3",
+   "T, U",
+   "- Read Chapter 5 (pp. 253-258)\n- Read slides: Chapter 5-4",
+   "",
+   "Review Chapter 5-4\nAnalyze bank disintermediation risk and interest-bearing CBDC models",
+   ""
+  ],
+  [
+   "31",
+   "Review Chapter 5: Guiding Problems & Global CBDC Pilot Projects",
+   "Offline",
+   "CLO3",
+   "U",
+   "- Review Chapter 5\n- Do End-of-Chapter 5 Questions",
+   "",
+   "Solve Chapter 5 questions & discuss real-world CBDC initiatives (e-CNY, Sand Dollar)",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 6: 6-1 DApps Architecture & DeFi vs CeFi Overview",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Read Chapter 6 (pp. 259-270)\n- Read slides: Chapter 6-1",
+   "",
+   "Review Chapter 6-1",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 6: 6-2 DAO Governance Models & Token Voting Mechanisms",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Read Chapter 6 (pp. 271-282)\n- Read slides: Chapter 6-2",
+   "",
+   "Review Chapter 6-2\nAnalyze DAO voting structures (Snapshot, on-chain proposals)",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 6: 6-3 Token Incentives: Staking, Slashing & Governance Risks",
+   "Offline",
+   "CLO4",
+   "T",
+   "- Read Chapter 6 (pp. 283-294)\n- Read slides: Chapter 6-3",
+   "",
+   "Review Chapter 6-3\nAnalyze hostile DAO takeover cases (True Seigniorage Dollar)",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 6: 6-4 Decentralized Lending: Compound & Aave Pooled Markets",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Read Duke Paper (Section 6.1.2 & 6.1.3)\n- Read slides: Chapter 6-4",
+   "",
+   "Analyze interest rate utilization models (kink model) and interest-bearing wrappers (cTokens)",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 6: 6-5 Flash Loans: Uncollateralized Lending & Arbitrage",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Read Duke Paper (Section 4.9 & 6.1.3)\n- Read slides: Chapter 6-5",
+   "",
+   "Analyze atomic transaction execution and zero-capital arbitrage",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 6: Workshop 3 - Participating in DAO Voting on Snapshot",
+   "Offline",
+   "CLO5",
+   "T, U",
+   "- Read Workshop Guide 3\n- Connect wallet to Snapshot.org",
+   "",
+   "Connect MetaMask to Snapshot, explore active DAO spaces, cast a gasless signature vote",
+   ""
+  ],
+  [
+   "38",
+   "Review Chapter 6: Guiding Problems & Lending Rate Calculations",
+   "Offline",
+   "CLO4",
+   "U",
+   "- Review Chapter 6\n- Do End-of-Chapter 6 Questions",
+   "",
+   "Solve Chapter 6 numerical problems on utilization rates and borrow/supply APR",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 7: 7-1 Evolution of Exchanges: Order Book (CEX) vs AMM (DEX)",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Read Chapter 7 (pp. 309-322)\n- Read slides: Chapter 7-1",
+   "",
+   "Review Chapter 7-1",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 7: 7-2 Constant Product Market Makers: x * y = k Formula",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Read Chapter 7 (pp. 323-336)\n- Read slides: Chapter 7-2",
+   "",
+   "Review Chapter 7-2\nDerive constant product invariant x * y = k with sample pool numbers",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 7: 7-3 Pricing Dynamics, Slippage & Trade Execution",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Read Chapter 7 (pp. 337-348)\n- Read slides: Chapter 7-3",
+   "",
+   "Review Chapter 7-3\nCalculate spot price, execution price, and price slippage for sample trades",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 7: 7-4 Case Study - Uniswap Protocol Evolution & Curve",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Read Duke Paper (Section 6.2.1 Uniswap)\n- Read slides: Chapter 7-4",
+   "",
+   "Review Chapter 7-4\nAnalyze Uniswap v3 concentrated liquidity & Curve bonding curve",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 7: Workshop 4 - Executing Token Swaps on Uniswap Testnet",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- Read Workshop Guide 4\n- Access Uniswap Testnet App",
+   "",
+   "Connect wallet, select test token pair, adjust slippage tolerance (0.1% to 1%), execute swap",
+   ""
+  ],
+  [
+   "44",
+   "Review Chapter 7: Guiding Problems & AMM Mathematical Exercises",
+   "Offline",
+   "CLO4",
+   "U",
+   "- Review Chapter 7\n- Do End-of-Chapter 7 Questions",
+   "",
+   "Solve Chapter 7 math exercises on x*y=k pricing and slippage calculation",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 8: 8-1 Liquidity Provision Mechanics & LP Token Distribution",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Read Chapter 8 (pp. 361-372)\n- Read slides: Chapter 8-1",
+   "",
+   "Review Chapter 8-1",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 8: 8-2 Impermanent Loss: Mathematical Derivation & Risks",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Read Chapter 8 (pp. 373-384)\n- Read slides: Chapter 8-2",
+   "",
+   "Review Chapter 8-2\nCalculate Impermanent Loss for various price divergence scenarios (2x, 5x)",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 8: 8-3 Yield Farming, Liquidity Mining & MEV Front-Running",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Read Chapter 8 (pp. 385-398)\n- Read slides: Chapter 8-3",
+   "",
+   "Review Chapter 8-3\nAnalyze sandwich attacks and mempool front-running",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 8: Workshop 5 - Providing Liquidity to an AMM Pool",
+   "Offline",
+   "CLO6",
+   "T, U",
+   "- Read Workshop Guide 5\n- Connect to Uniswap Testnet Pool",
+   "",
+   "Deposit 50/50 test token pair into a liquidity pool, receive LP tokens, track pool share",
+   ""
+  ],
+  [
+   "49",
+   "Review Chapter 8: Guiding Problems & Impermanent Loss Practice",
+   "Offline",
+   "CLO4",
+   "U",
+   "- Review Chapters 4, 5, 6, 7, 8\n- Do End-of-Chapter 8 Questions",
+   "",
+   "Solve Chapter 8 numerical problems on LP net returns & prepare for Quiz 2",
+   ""
+  ],
+  [
+   "50",
+   "Progress Assessment: Quiz 2 (Chapters 4, 5, 6, 7, 8)",
+   "Offline",
+   "CLO3, CLO4",
+   "U",
+   "- Review Chapters 4, 5, 6, 7, 8\n- Prepare laptop for online testing",
+   "",
+   "Do Quiz 2 (30 MCQs, 45 minutes)",
+   ""
+  ],
+  [
+   "51",
+   "Quiz 2 Debrief & Chapter 9: 9-1 Tokenization Fundamentals & Standards",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Review Quiz 2 Results\n- Read Chapter 9 (pp. 399-414)\n- Read slides: Chapter 9-1",
+   "",
+   "Review Quiz 2 feedback\nReview Chapter 9-1 (Asset tokenization principles & standards)",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 9: 9-2 Real World Assets (RWAs) & Wrapped BTC (WBTC)",
+   "Offline",
+   "CLO4",
+   "I, T",
+   "- Read Chapter 9 (pp. 415-430)\n- Read slides: Chapter 9-2",
+   "",
+   "Review Chapter 9-2\nAnalyze WBTC merchant-custodian architecture and RWA legal bridges",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 9: 9-3 Composite Tokens & Asset Management (Set Protocol)",
+   "Offline",
+   "CLO4",
+   "T, U",
+   "- Read Duke Paper (Section 6.4 Tokenization)\n- Read slides: Chapter 9-3",
+   "",
+   "Review Chapter 9-3\nPrepare laptop and testnet wallet for Practice Test",
+   ""
+  ],
+  [
+   "54",
+   "Progress Assessment: Practice Test (90-min Web3 & DEX Testnet Test)",
+   "Offline",
+   "CLO5, CLO6",
+   "U",
+   "- Prepare MetaMask wallet with testnet tokens\n- Review Workshop Guides 1 to 5",
+   "",
+   "Complete 1 Practical Test (90 minutes): Execute wallet setup, testnet transfer, Etherscan lookup, DEX swap, and LP deposit\nSubmit Tx hashes & screenshots",
+   ""
+  ],
+  [
+   "55",
+   "Review Chapter 9: Guiding Problems & RWA Tokenization Cases",
+   "Offline",
+   "CLO4",
+   "U",
+   "- Review Chapter 9\n- Do End-of-Chapter 9 Questions",
+   "",
+   "Solve Chapter 9 questions & finalize group presentation slide deck",
+   ""
+  ],
+  [
+   "56",
+   "Group Project Consultation & Presentation Rehearsal",
+   "Offline",
+   "CLO3, CLO4, CLO6",
+   "U",
+   "- Draft Presentation Slides (.pptx) & Summary Report (.pdf)\n- Project Topic Guidelines",
+   "",
+   "Consult instructor on case study analysis (MakerDAO, Uniswap, Aave, Compound)\nRehearse presentation timing",
+   ""
+  ],
+  [
+   "57",
+   "Progress Assessment: Group Presentation - Session 1 (Teams 1-5)",
+   "Offline",
+   "CLO3, CLO4, CLO6",
+   "U",
+   "- Submit Final Report (.pdf) & Presentation Slides (.pptx)\n- Teams 1 to 5 deliver presentation",
+   "",
+   "Teams 1-5 present (15 mins present + 5 mins Q&A per team)\nAudience participates in Q&A",
+   ""
+  ],
+  [
+   "58",
+   "Progress Assessment: Group Presentation - Session 2 (Teams 6-10)",
+   "Offline",
+   "CLO3, CLO4, CLO6",
+   "U",
+   "- Submit Final Report (.pdf) & Presentation Slides (.pptx)\n- Teams 6 to 10 deliver presentation",
+   "",
+   "Teams 6-10 present (15 mins present + 5 mins Q&A per team)\nAudience participates in Q&A",
+   ""
+  ],
+  [
+   "59",
+   "Course Synthesis: Traditional Finance vs DeFi & Money Legos",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "U",
+   "- Review Chapters 1 to 9\n- Review Duke Paper (Chapter 8: Conclusions)",
+   "",
+   "Synthesize cross-chapter concepts (Composability, Liquidity Network, Disintermediation)",
+   ""
+  ],
+  [
+   "60",
+   "Comprehensive Course Review, Q&A & Final Exam Guidance",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "U",
+   "- Review All Course Materials (Chapters 1-9)\n- Prepare questions for instructor",
+   "",
+   "Participate in Q&A session\nComplete Course Feedback\nPrepare for University Final Exam",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1",
+   "Why isn’t blockchain “just an Excel database”? Identify which properties are essential for DeFi, and justify with one concrete DeFi use case."
+  ],
+  [
+   "2",
+   "1",
+   "CQ2",
+   "In a trustless setting (no bank), how can a digital payment system prevent double spending?"
+  ],
+  [
+   "3",
+   "2",
+   "CQ1",
+   "A single transaction in a block is modified. Why does this matter for scalability and light verification?"
+  ],
+  [
+   "4",
+   "3",
+   "CQ1",
+   "Two miners produce two valid blocks at the same height. Explain how a P2P network resolves this fork. What does “finality” mean for DeFi trades and liquidations?"
+  ],
+  [
+   "5",
+   "4",
+   "CQ1",
+   "Miners/validators spend resources to secure the network. Using incentives, explain why honest behavior can be rational. Under what conditions could attacks become more feasible?"
+  ],
+  [
+   "6",
+   "4",
+   "CQ2",
+   "During congestion, how are transactions selected from the mempool (fees, size, waiting time, validity)?"
+  ],
+  [
+   "7",
+   "4",
+   "CQ3",
+   "What are the impacts on DeFi protocols (DEX swaps, lending, collateral liquidations)? Suggest practical risk mitigations."
+  ],
+  [
+   "8",
+   "4",
+   "CQ4",
+   "A user signs the wrong transaction or approves a malicious smart contract. Why is it hard to reverse on-chain?"
+  ]
+ ],
+ "links": [
+  "/download/14477/S/1_BDF201.zip",
+  "https://drive.google.com/drive/folders/12kAnTXhfU8ir9SUkVe7cvK1KbbSICaRs?usp=sharing",
+  "/download/14477/S/2_BDF201.zip"
+ ]
+}

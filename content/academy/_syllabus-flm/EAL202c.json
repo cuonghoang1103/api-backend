@@ -1,0 +1,325 @@
+{
+ "ma": "EAL202c",
+ "sylID": "14117",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14117",
+   "code": "EAL202c",
+   "name": "Academic English Listening_Nghe tiếng Anh học thuật",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14117",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14117",
+  "Syllabus Name": "Academic English Listening_Nghe tiếng Anh học thuật",
+  "Course Name English": "Academic English Listening",
+  "Subject Code": "EAL202c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "97 hours online study + 3 hrs offline (2 slots) + 1hr exam + 49 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "This specialization covers the listening and speaking skills that non-native English-speaking students need to be successful in English-speaking colleges and universities. Native English-speaking students who would like to increase their chances of success in university courses will also benefit as well anyone interested in improving their listening comprehension skills. Students will learn how to listen to class lectures and take notes more effectively. Students will also improve your speaking skills for common tasks such as class discussions and presentations. In the capstone, students will create a video presentation on an academic topic.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assgnments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend off-line sessions in the Campus\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Online Spec. Learn English: Advanced Academic Listening and Speaking Specialization https://www.coursera.org/specializations/speaklistenenglish",
+   "UCI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "MOOC1: Academic Listening and Note-taking https://www.coursera.org/learn/note-taking",
+   "UCI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "MOOC2: Presentation: Speaking so that People listen https://www.coursera.org/learn/presentations-speaking-so-that-people-listen",
+   "UCI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "MOOC3: Academic Discussions in English https://www.coursera.org/learn/academic-discussion-english",
+   "UCI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "MOOC4: Advanced Speaking and Listening Project https://www.coursera.org/learn/speaking-listening-capstone",
+   "UCI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Know how and use note-taking techniques in listening to lectures.\nCLO1.1 Identify difficulities in listening and note-taking and make it easier\nCLO1.2 Know strategies to identify topics and purposes\nCLO1.3 Listen to main ideas and details, and how to organize them\nCLO1.4 Identify speakers' stance and attitudes"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Construct and deliver effective speeches and presentations\nCLO2.1 Recognize and identify different presentation types and typical structure of a presentation\nCLO2.2 Select what to include and how to organize ideas in a presentation\nCLO2.3 Communicate and present ideas effectively"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Participate and perform well in group discussions\nCLO3.1 Recognize and identify different types of conversations and how to elaborate in academic discussions\nCLO3.2 Interpret people's meaning and express yourselves effectively\nCLO3.3 Maintain smooth discussions with interaction and participation"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Practice acquired skills and techniques to make a presentation on an academic topic\nCLO4.1 Construct interviews to collect data and gather information\nCLO4.2 Plan and outline a presentation\nCLO4.3 Develop your presentation attractive using visual aids"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam - TE",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4",
+   "MCQ, Fillblank, matching",
+   "25-28 (5-7 quesions/ each LO; LOs1-4)",
+   "Whole course content",
+   "by Exam Board",
+   "03 lectures (about 20-25 mins per listening; 40-50 mins for two times of lisitening;5-8' per audio); students are allowed to take notes on paper. Questions are provided while listening.10 mins to answer questions."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course EAL202c\n\nModule 1 (MOOC 1):\n\n- Course introduction and overview\n\n- Lecture objectives, symbols, abbreviations and practice\n\n- Note taking lesson: resources, symbols and practice",
+   "Off-line, Online",
+   "CLO1",
+   "ITU",
+   "MOOC1: Academic Listening and Note-taking https://www.coursera.org/learn/note-taking",
+   "",
+   "- Enroll to the spec on Coursera for FPT University Platform\n\n- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete: Independent Note-taking practice, and review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "2",
+   "Module 2 (MOOC 1):\n\n- Listening strategies\n\n- Language cues\n\n- Common language cues in lectures handout\n\nModule 3 (MOOC 1):\n\n- Listen to important points\n\n- Analyze charts and graphs",
+   "Online",
+   "CLO1",
+   "ITU",
+   "MOOC1: Academic Listening and Note-taking https://www.coursera.org/learn/note-taking",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignments: review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "3",
+   "Module 4 (MOOC 1):\n\n- Identify speaker's stance\n\n- Handle unfamiliar information\n\n- Types of Arguments",
+   "Online",
+   "CLO1",
+   "ITU",
+   "MOOC1: Academic Listening and Note-taking https://www.coursera.org/learn/note-taking",
+   "",
+   "'- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quizz\n\n- Complete Assignments review other submissions.",
+   ""
+  ],
+  [
+   "4",
+   "Module 1 (MOOC 2):\n\n- Types of Presentations\n\n- Presentation structure\n\n- Presentation Introductions\n\nModule 2 (MOOC 2):\n\n- Module introduction\n\n- Develop and organize ideas\n\n- Presentation details\n\n- Presentation conclusions\n\n- Questions in a Presentation",
+   "Online",
+   "CLO2",
+   "ITU",
+   "MOOC2: Presentation: Speaking so that People listen https://www.coursera.org/learn/presentations-speaking-so-that-people-listen",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignments: review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "5",
+   "Module 2 (MOOC 2) - cont\n\n- Module introduction\n\n- Develop and organize ideas\n\n- Presentation details\n\n- Presentation conclusions\n\n- Questions in a Presentation\n\nModule 3 (MOOC 2):\n\n- Rehearse before you present\n\n- Verbal delivery\n\n- Non-verbal delivery\n\n- Stage fright",
+   "Online",
+   "CLO2",
+   "ITU",
+   "MOOC2: Presentation: Speaking so that People listen https://www.coursera.org/learn/presentations-speaking-so-that-people-listen",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignments: review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "6",
+   "Module 4 (MOOC 2):\n\n- Powerpoint tips\n\n- Co-Presenting practice\n\n- Poster tips\n\n- Handouts\"",
+   "Online",
+   "CLO2",
+   "ITU",
+   "MOOC2: Presentation: Speaking so that People listen https://www.coursera.org/learn/presentations-speaking-so-that-people-listen",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quizz\n\n- Complete Assignments review other submissions.",
+   ""
+  ],
+  [
+   "7",
+   "Module 1 (MOOC 3):\n\n- Introduction to Noun clauses\n\n- How to make noun clauses with Question words\n\n- How to make noun clauses with \"if\" and \"whether\"\n\n- How to make noun clauses with \"that\"\n\nModule 2 (MOOC 3):\n\n- Introduction to Reported Speech\n\n- How to reduce Noun clauses to Infinitives\n\n- How to reduce Noun clauses to Gerunds",
+   "Online",
+   "CLO3",
+   "ITU",
+   "MOOC3: Academic Discussions in English https://www.coursera.org/learn/academic-discussion-english",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignments: review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "8",
+   "Module 2 (MOOC 3): - cont\n\n- Introduction to Reported Speech\n\n- How to reduce Noun clauses to Infinitives\n\n- How to reduce Noun clauses to Gerunds\n\nModule 3 ( MOOC 3)\n\n- Interaction\n\n- Constructing conversation\n\n- Agreeing and Disagreeing lecture\"",
+   "Online",
+   "CLO3",
+   "ITU",
+   "MOOC3: Academic Discussions in English https://www.coursera.org/learn/academic-discussion-english",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignments: review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "9",
+   "Module 4 ( MOOC 3)\n\n- Synthesis\n\n- Wrapping Up\n\n- Reflecting on the course\n\nModule 1 (MOOC 4)\n\n- Introduction to the project\n\n- Choose your topic\n\n- Choose background information and resource for topics",
+   "Online",
+   "CLO3, CLO4",
+   "ITU",
+   "MOOC3: Academic Discussions in English https://www.coursera.org/learn/academic-discussion-english",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quizz\n\n- Complete Assignments review other submissions.",
+   ""
+  ],
+  [
+   "10",
+   "Module 2 ( MOOC 4 )\n\n- Write interview questions\n\n- Interview some experts\n\n- Resources for Interviewing\n\nModule 3 (MOOC 4)\n\n- Evaluate the Interview data\n\n- Make an outline\n\n- Resources for planning a presentation\n\n- Find or create images",
+   "Online",
+   "CLO4",
+   "ITU",
+   "MOOC4: Advanced Speaking and Listening Project https://www.coursera.org/learn/speaking-listening-capstone",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignments: review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "11",
+   "Module 4 (MOOC 4):\n\n- Create a PowerPoint or other visual\n\n- Resources for creating visuals\n\nModule 5 (MOOC 4):\n\n- Practice your presentation without, and then with a camera\n\n- Make videos\"\n\n- Review all materials of the project\n\n- Record the presentation\n\n- Submit your project",
+   "Online",
+   "CLO4",
+   "ITU",
+   "MOOC4: Advanced Speaking and Listening Project https://www.coursera.org/learn/speaking-listening-capstone",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\n- Complete assignments: review other submissions.\n\nNOTE: You can only review others' assignments when you have submited yours.",
+   ""
+  ],
+  [
+   "12",
+   "Review MOOC 1, 2, 3, 4",
+   "Off-line",
+   "CLO1, 2, 3, 4",
+   "ITU",
+   "MOOC4: Advanced Speaking and Listening Project https://www.coursera.org/learn/speaking-listening-capstone",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quizz\n\n- Complete Assignments review other submissions.\n\nOnline\n\nDeadline of Course Completion: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

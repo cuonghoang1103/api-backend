@@ -1,0 +1,348 @@
+{
+ "ma": "KLR301c",
+ "sylID": "13089",
+ "quyetDinh": "857/QĐ-ĐHFPT dated 08/05/2025",
+ "ungVien": [
+  {
+   "sylID": "13089",
+   "code": "KLR301c",
+   "name": "Scientific Research Methods_Phương pháp nghiên cứu khoa học",
+   "active": true,
+   "approved": true,
+   "decision": "857/QĐ-ĐHFPT dated 08/05/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13089",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13089",
+  "Syllabus Name": "Scientific Research Methods_Phương pháp nghiên cứu khoa học",
+  "Course Name English": "Scientific Research Methods",
+  "Subject Code": "KLR301c",
+  "Learning-Teaching Method": "Blended Learning, Active learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "150hrs = 117hrs Online study + 3hrs offline (2 slots) + 1hr exam + 29 hrs self-study",
+  "Pre-Requisite": "",
+  "Description": "- Upon finishing the course, students can know the methods to research academic topics such as how to analyze data sets, how to collect the data... so that students can do a research project by themselves.\n\n- \"Quantitative Methods\" course will cover the fundamental principles of science, some history and philosophy of science, research designs, measurement, sampling and ethics. The course is comparable to a university level introductory course on quantitative research methods in the social sciences, but has a strong focus on research integrity. We will use examples from sociology, political sciences, educational sciences, communication sciences and psychology.\n\n- In \"Qualitaty Research Methods\" course you will be introduced to the basic ideas behind the qualitative research in social science. You will learn about data collection, description, analysis and interpretation in qualitative research. Qualitative research often involves an iterative process. We will focus on the ingredients required for this process: data collection and analysis. You won't learn how to use qualitative methods by just watching video's, so we put much stress on collecting data through observation and interviewing and on analysing and interpreting the collected data in other assignments.\n\nObviously, the most important concepts in qualitative research will be discussed, just as we will discuss quality criteria, good practices, ethics, writing some methods of analysis, and mixing methods.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching\n\nvideos, reading materials, taking quizzes, doing assgnments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/enus/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend off-line sessions in the Campus (optional)\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "857/QĐ-ĐHFPT dated 08/05/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment:\n\nStudents who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus points will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/5/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/social-science#courses",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Methods and Statistics in Social Sciences Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/quantitative-methods?specialization=social-science",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 01: Quantitative Methods"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/qualitative-methods?specialization=social-science",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 02: Qualitative Research Methods"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/basic-statistics?specialization=social-science",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 03: Basic Statistics"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/inferential-statistics?specialization=social-science",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 04: Inferential Statistics"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/social-science-capstone?specialization=social-science",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOO 05: Methods and Statistics in Social Science - Final Research Project"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "After completing this course, students will be able to: identify some history and philosophy of science, and practice the research designs, measurement, sampling and ethics."
+  ],
+  [
+   "2",
+   "CLO2",
+   "After completing this course, students will be able to: practice data collection, description, analysis and interpretation in qualitative research"
+  ],
+  [
+   "3",
+   "CLO3",
+   "After completing this course, students will be able to: know the basics of statistics; not just how to calculate them, but also how to evaluate them."
+  ],
+  [
+   "4",
+   "CLO4",
+   "After completing this course, students will be able to: practice inferential statistics are concerned with making inferences based on relations found in the sample, to relations in the population."
+  ],
+  [
+   "5",
+   "CLO5",
+   "In this capstone project, students will: formulate a research hypothesis and design, come up with operationalizations, create manipulation and measurement instruments, collect data, perform statistical analyses and document the results."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Recognize the inportant of the Course Scientific Research Methods, active learning"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final Exam: TE",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "45'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Multiple choice",
+   "30",
+   "All Spec. content",
+   "",
+   "- By the exam board\n\nThe exam must be held in sequence.\n\n- FE: tuần 13\n\n- Re FE: tuần 14"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course KLR301\n\nMOOC 1:\n\n- Week 1:\n\n+ Before we get started...\n\n+ Origins of the scientific method\n\n- Week 2: The Scientific Method\n\n- Week 3: Research Designs",
+   "Online, Offline",
+   "CLO1",
+   "",
+   "Offline 1.5 hours",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n\n- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "2",
+   "MOOC 1:\n\n- Week 4: Measurement\n\n- Week 5: Sampling\n\n- Week 6: Practice, Ethics & Integrity",
+   "Online",
+   "CLO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "3",
+   "MOOC1:\n\n- Week 7: Catch Up\n\n- Week 8: Exam Time!\n\nMOOC 2:\n\n- Week 1: Philosophy of Qualitative Research",
+   "Online",
+   "CLO1, CLO2",
+   "",
+   "Deadline of Course 1 Completion: End of Friday of the week.",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises, Quiz and Exam\n\nDeadline of Course 1 Completion: End of Friday of the week.",
+   ""
+  ],
+  [
+   "4",
+   "MOOC 2:\n\n- Week 2: Observation\n\n- Week 3: Good Practices & Criteria\n\n- Week 4: Qualitative Interviewing",
+   "Online",
+   "CLO2",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "5",
+   "MOOC 2:\n\n- Week 5: Qualitative Analysis\n\n- Week 6: Writing, mixing & ethics\n\n- Week 7: Catch up week",
+   "Online",
+   "CLO2",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "6",
+   "MOOC 2:\n\n- Week 8: Exam week\n\nMOOC 3:\n\n- Week 1:\n\n+ Before we get started...\n\n+ Exploring Data\n\n- Week 2: Correlation and Regression",
+   "Online",
+   "CLO2, CLO3",
+   "",
+   "Deadline of Course 2 Completion: End of Friday of the week.",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Final Exam of MOOC 2\n\nDeadline of Course 2 Completion: End of Friday of the week.",
+   ""
+  ],
+  [
+   "7",
+   "MOOC 3:\n\n- Week 3: Probability\n\n- Week 4: Probability Distributions\n\n- Week 5: Sampling Distributions",
+   "Online",
+   "CLO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "8",
+   "MOOC 3:\n\n- Week 6: Confidence Intervals\n\n- Week 7: Significance Tests\n\n- Week 8: Exam time!",
+   "Online",
+   "CLO3",
+   "",
+   "Deadline of Course 3 Completion: End of Friday of the week.",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Final Exam of MOOC 3\n\nNOTE: Submit your assignment before deadlines. You can only review others' assignments when you have submitted yours.\n\nDeadline of Course 3 Completion: End of Friday of the week.",
+   ""
+  ],
+  [
+   "9",
+   "MOOC 4:\n\n- Week 1:\n\n+ Before we get started...\n\n+ Comparing two groups\n\n- Week 2: Categorical association\n\n- Week 3: Simple regression",
+   "Online",
+   "CLO4",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "10",
+   "MOOC 4:\n\n- Week 4: Multiple regression\n\n- Week 5: Analysis of variance\n\n- Week 6: Non-parametric tests\n\n- Week 7: Exam time!",
+   "Online",
+   "CLO4",
+   "",
+   "Deadline of Course 4 Completion: End of Friday of the week.",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Final Exam of MOOC 4\n\n- NOTE: Submit your assignment before deadlines. You can only review others' assignments when you have submitted yours.\n\n- Deadline of Course 4 Completion: End of Friday of the week.",
+   ""
+  ],
+  [
+   "11",
+   "MOOC 5:\n\n- Week 1:\n\n+ About the Final Research Project\n\n+ Preparing for Milestone 1 - Research topic\n\n+ Milestone 1 - General hypothesis and design\n\n- Week 2: Milestone 2 - Design, operationalizations and expectations\n\n- Week 3: Milestone 3 - Measurement and manipulation material\n\n- Week 4: Milestone 4 - Data collection, methods documentation and analysis plan",
+   "Online",
+   "CLO4, CLO5",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz",
+   ""
+  ],
+  [
+   "12",
+   "MOOC 5:\n\n- Week 5: Milestone 5 - Statistical analysis\n\n- Week 6: Milestone 6 - Report\n\n- Week 7: Putting it all together (catch-up week)\n\n- Week 8: Reflection (catch-up week)",
+   "Online, Offline",
+   "CLO5",
+   "",
+   "Deadline of Coursera Completion: End of Friday of the week.\n\nOffline 1.5 hours",
+   "",
+   "- Watch all videos, and read all materials in the module\n\n- Finish: Practice Exercises and Quiz\n\nNOTE: Submit your assignment before deadlines. You can only review others' assignments when you have submitted yours.\n\nDeadline of Course 5 Completion: End of Friday of the week.\n\n- All Students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

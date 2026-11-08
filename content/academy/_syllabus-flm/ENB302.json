@@ -1,0 +1,1513 @@
+{
+ "ma": "ENB302",
+ "sylID": "13755",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13755",
+   "code": "ENB302",
+   "name": "Viết tiếng Anh trong kinh doanh",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13755",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13755",
+  "Syllabus Name": "Viết tiếng Anh trong kinh doanh",
+  "Course Name English": "Business English Writing",
+  "Subject Code": "ENB302",
+  "Learning-Teaching Method": "Lecture,Coaching,Seminar,Workshop,Presenting,Problem based learning,Active learning,Cooperative Learning,Inquiry-based Teaching,Project Based Training,Practice Lecture, Coaching, Seminar, Workshop, Presenting, Problem-based Learning, Active Learning, Cooperative Learning, Inquiry-based Teaching, Project-based Training, Practice, AI-assisted Writing Practice, AI-supported Peer Review and Feedback.",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "Passed EAW221 or EAW222 or EAW301",
+  "Description": "Objectives:\nThe course is designed to help undergraduate students enhance their business communication via authentic and various written forms such as emails, cover letters, and CVs. With practical tips and detailed guidelines, students will be able to write more effectively and appropriately in business contexts, assuring success in delivering key messages.\nAdditionally, students will be introduced and guided to use AI-powered writing assistants (such as ChatGPT, Grammarly, QuillBot, Microsoft Copilot, and Google Gemini) to support drafting, revising, and analyzing business texts. This helps them leverage technology effectively while maintaining critical judgment and ethical awareness in professional communication.\nDescription\nENB302 addresses a wide-ranging spectrum of business communication with the straightforward seven-step method. These easy-to-follow steps save students time from start to finish, and helpful checklists will boost their confidence in business writing. Students will learn to promote themselves and their ideas clearly and concisely―whether putting together a persuasive project proposal or dealing with daily email. The course also provides comprehensive examples for all the most popular forms of communication, including slide presentations, résumés, cover letters, web copy, and a thorough guide to the art of crafting e-mails and instant messages. Insightful sidebars from experts in various fields demystify the skills of self-editing, creating content, and overcoming writer’s block, and the author’s reference-ready resources on style, punctuation, and grammar will keep students' writing error-free.\nIn addition, the course integrates the use of widely accessible AI tools in Vietnam (e.g., ChatGPT, Grammarly, QuillBot, Microsoft Copilot, and Google Gemini) to enhance writing efficiency, provide instant feedback, and encourage reflective learning. This integration equips students with digital literacy, critical awareness, and ethical understanding of how to use AI responsibly in business communication.\nTeaching Methods:\nThe teaching & learning process includes a variety of methods:\nFrom teachers’ side: lectures, guided learning, feedback and corrections; From students’ side: discussions, reading, research, writing and self-study.\nTo complement these, students will also engage in AI-assisted writing practice (e.g., drafting, paraphrasing, and self-editing with ChatGPT, Grammarly, QuillBot, or Gemini) and AI-supported peer review, ensuring they experience both traditional and technology-enhanced approaches to business writing.\n---------------------------------------------------------\nAI TOOLS:\n1. AI Tools for Brainstorming, Drafting, and Content Generation\n- ChatGPT – used to brainstorm ideas, generate topic outlines, draft professional emails, and create first versions of business documents such as cover letters, proposals, and reports.\n- Microsoft Copilot – assists in drafting content directly within Microsoft Word, PowerPoint, or Outlook, providing context-aware suggestions, formatting, and summaries.\n- Google Gemini – supports brainstorming and idea organization by offering multi-modal inputs (text, image, and document-based prompts) for business-related writing topics.\n2. AI Tools for Revising, Paraphrasing, and Improving Style\n- Grammarly – helps students check grammar, punctuation, tone, and clarity, ensuring their writing is professional and audience-appropriate.\n- QuillBot – assists with paraphrasing, rewording, and sentence restructuring to enhance coherence and fluency.\n- ChatGPT – supports self-editing by providing real-time suggestions for improving tone, structure, and logical flow in business texts.\n3. AI Tools for Analyzing and Reflecting on Writing Quality\n- Grammarly – provides analytics on readability, tone, and engagement, helping students evaluate the clarity and appropriateness of their business communication.\n- QuillBot – allows students to compare original and revised versions to understand how language choices affect clarity and professionalism.\n- Google Gemini / Microsoft Copilot – support text summarization and feedback generation for reflective learning activities.\n- ChatGPT – can be used for AI-supported peer review, where students analyze sample texts or each other’s drafts using guided prompts.\n4. AI Tools for Ethical and Responsible Writing Practices\nAll tools (ChatGPT, Grammarly, QuillBot, Copilot, Gemini) – are integrated under ethical guidelines.\nStudents are taught:\n- how to verify AI-generated content for accuracy,\n- how to maintain originality and academic honesty, and\n- how to apply critical thinking when accepting or rejecting AI suggestions.\nAssessment scheme:\n1) On-going assessment\n- Assignment 01*20% 20%\n- Progress Tests 02*20% 40%\n2) Final Examination: 01*40% 40%\n3) Final Result 100%\n4) Completion Criteria:\na) On-going assessment >0, Each component >0\nb) Final Examination >=4\nc) Final Result >=5",
+  "StudentTasks": "- Students must attend at least 80% of course sessions in order to be accepted to the final examination.\n- Students are responsible to do all exercises, assignments and tasks given by instructor in class or at home and submit them on time\n- Students use laptops in class only for learning purposes",
+  "Tools": "Tools: Foxit pdf editor\nInternet access\nwww.routledge.com/cw/perloff",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "A Practical Guide To Business Writing: Writing In English For Non-Native Speakers",
+   "Khaled Mohamed Al-Maskari",
+   "Wiley",
+   "2012",
+   "1st",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "The Only Business Writing Book You'll Ever Need",
+   "Laura Brown",
+   "W. W. Norton & Company",
+   "2019",
+   "1st",
+   "9780393635324",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO2",
+   "Write effective and appropriate business emails using professional structure, tone, and clarity. Apply AI tools to draft, refine, and check email content for conciseness, politeness, and appropriateness across business situations. (SKILLS)\nLO2.1 Identify the essential elements and structure of professional emails.\nLO2.2 Apply key tips for clear, concise, and professional email writing.\nLO2.3 Compose effective and appropriate business emails for various purposes using AI support where appropriate."
+  ],
+  [
+   "2",
+   "CLO3",
+   "Write professional CVs and cover letters that highlight relevant skills and achievements. Apply AI tools (e.g., Grammarly, QuillBot, ChatGPT, Copilot, or Gemini) to generate drafts, receive feedback, and improve clarity, persuasiveness, and language accuracy. (SKILLS)\nLO3.1 Write professional CVs (résumés) that highlight relevant skills and achievements.\nLO3.2 Write tailored and persuasive cover letters for specific job applications with AI-supported review and enhancement."
+  ],
+  [
+   "3",
+   "CLO4",
+   "Write clear and concise business memos using the correct structure and tone. Apply AI tools to analyze memo organization, coherence, and tone to ensure professional workplace communication. (SKILLS)\nLO4.1 Identify the structure and format of a standard business memo.\nLO4.2 Apply key principles and tips for writing clear and concise memos.\nLO4.3 Compose effective and appropriate memos for workplace communication using AI-assisted drafting or proofreading."
+  ],
+  [
+   "4",
+   "CLO5",
+   "Improve clarity, accuracy, and professionalism in business writing through self-editing and AI-supported feedback. Apply AI tools to overcome writer’s block, refine tone and style, and check for grammatical or lexical errors. (SKILLS)\nLO5.1 Overcome writer’s block and build confidence in business writing using AI brainstorming tools.\nLO5.2 Use appropriate tone, style, and register in professional contexts.\nLO5.3 Avoid common grammatical and lexical errors in business writing with AI-assisted correction.\nLO5.4 Edit and proofread written texts to ensure accuracy and coherence, applying AI feedback critically."
+  ],
+  [
+   "5",
+   "LO1",
+   "Demonstrate understanding and application of the seven-step method in business writing. Apply AI tools (e.g., ChatGPT, Microsoft Copilot, or Google Gemini) to analyze, generate, and refine business texts following the seven-step writing framework. (KNOWLEDGE)\nLO1.1 Get the ask clear.\nLO1.2 Write for the reader.\nLO1.3 Start the writing strong and specific.\nLO1.4 Keep the writing concise.\nLO1.5 Fill in missing content and remove extraneous content.\nLO1.6 Write in plain English.\nLO1.7 Fix wrong or irrelevant information or content."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop professional attitudes toward responsible and ethical business communication, including the appropriate and transparent use of AI-assisted writing tools. (ATTITUDES: Professional Ethics & Responsibility)\nLO6.1 Recognize ethical and privacy concerns when using AI tools in writing.\nLO6.2 Demonstrate respect for academic and professional integrity in AI-supported tasks.\nLO6.3 Apply responsible judgment to balance efficiency and originality in business writing."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Utilize AI-powered writing assistants (ChatGPT, Grammarly, QuillBot, Microsoft Copilot, and Google Gemini) to improve drafting, revising, and self-evaluation of business documents. Apply AI critically for reflective learning and continuous improvement. (SKILLS: Digital Literacy & Reflective Learning)\nLO7.1 Use AI tools to generate, revise, and proofread drafts of business documents.\nLO7.2 Analyze AI feedback to improve coherence, tone, and clarity in business writing.\nLO7.3 Reflect on personal writing progress through comparison between human and AI-assisted revisions."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "1 week",
+   "LO3",
+   "*Write a CV and a cover letter (teacher's own choice of job descriptions)",
+   "2",
+   "lessons in learned chapters",
+   "*homework, individually, PDF or Docx files",
+   ""
+  ],
+  [
+   "2",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "40 minutes",
+   "LO1-LO2",
+   "*Write a 150-word request email (teacher's own choice of topic)",
+   "1Q, ~150 words",
+   "lessons in learned chapters",
+   "*test in class, on papers or on laptops, no materials allowed",
+   ""
+  ],
+  [
+   "3",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "40 minutes",
+   "LO4",
+   "*Write two 100-word memos (teacher's choice of types and topics)",
+   "2, ~100 word/each",
+   "lessons in learned chapters",
+   "*test in class, on papers or on laptops, no materials allowed",
+   ""
+  ],
+  [
+   "4",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "60 minutes",
+   "LO1-LO5",
+   "*Write ONE 150-word memo + ONE 150-word business email",
+   "2",
+   "lessons in learned chapters",
+   "*exam, no materials allowed",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\nTo Write or not to write",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "link1-1",
+   "*Read Step 1 (p.11) pior to the next session",
+   ""
+  ],
+  [
+   "2",
+   "What kind of writer are you?",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 1 (p.11) pior to the next session",
+   ""
+  ],
+  [
+   "3",
+   "The Seven Steps: Step 1: Get the ask clear (p.11)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 2 (p.21) pior to the next session",
+   ""
+  ],
+  [
+   "4",
+   "The Seven Steps: Step 1: Get the ask clear (p.11) (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 2 (p.21) pior to the next session",
+   ""
+  ],
+  [
+   "5",
+   "The Seven Steps: Step 2: Write for your reader (p.21)",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 3 (p.40) pior to the next session",
+   ""
+  ],
+  [
+   "6",
+   "The Seven Steps: Step 2: Write for your reader (p.21) (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 3 (p.40) pior to the next session",
+   ""
+  ],
+  [
+   "7",
+   "The Seven Steps: Step 3: Start strong and specific (p.40)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 4 (p.47) pior to the next session",
+   ""
+  ],
+  [
+   "8",
+   "The Seven Steps: Step 3: Start strong and specific (p.40) (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 4 (p.47) pior to the next session",
+   ""
+  ],
+  [
+   "9",
+   "The Seven Steps: Step 4: Be concise (p.47)",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 5 (p.68) pior to the next session",
+   ""
+  ],
+  [
+   "10",
+   "The Seven Steps: Step 4: Be concise (p.47) (Cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 5 (p.68) pior to the next session",
+   ""
+  ],
+  [
+   "11",
+   "The Seven Steps: Step 5: Fill in missing content, delete extraneous content (p.68)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 6 (p.75) pior to the next session",
+   ""
+  ],
+  [
+   "12",
+   "The Seven Steps: Step 5: Fill in missing content, delete extraneous content (p.68) (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 6 (p.75) pior to the next session",
+   ""
+  ],
+  [
+   "13",
+   "The Seven Steps: Step 6: Write in plain English (p.75)",
+   "Offline",
+   "LO1",
+   "I,T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 7 (p.86) pior to the next session",
+   ""
+  ],
+  [
+   "14",
+   "The Seven Steps: Step 6: Write in plain English (p.75) (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read Step 7 (p.86) pior to the next session",
+   ""
+  ],
+  [
+   "15",
+   "The Seven Steps: Step 7: If something feels wrong, fix it (p.86)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise the lessons",
+   ""
+  ],
+  [
+   "16",
+   "The Seven Steps: Step 7: If something feels wrong, fix it (p.86) (cont)",
+   "Offline",
+   "LO1",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise the lessons",
+   ""
+  ],
+  [
+   "17",
+   "Review the seven-step method + Checklist (p.96)",
+   "Offline",
+   "LO1",
+   "U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.106-113 prior to the next session",
+   ""
+  ],
+  [
+   "18",
+   "Review the seven-step method + Checklist (p.96) (cont)",
+   "Offline",
+   "LO1",
+   "U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.106-113 prior to the next session",
+   ""
+  ],
+  [
+   "19",
+   "The basics and tips of email writing (p.106-109)\nE-mail",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.106-113 prior to the next session",
+   ""
+  ],
+  [
+   "20",
+   "The basics and tips of email writing (p.110-113)\nE-mail",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.106-113 prior to the next session",
+   ""
+  ],
+  [
+   "21",
+   "The basics and tips of email writing :\nHints and Tips for effective E-mails",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.106-113 prior to the next session",
+   ""
+  ],
+  [
+   "22",
+   "The basics and tips of email writing:\nHints and Tips for effective E-mails (cont)",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.106-113 prior to the next session",
+   ""
+  ],
+  [
+   "23",
+   "The basics and tips of email writing:\nThe etiquette of e-mail writing",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.114-116 prior to the next session",
+   ""
+  ],
+  [
+   "24",
+   "The basics and tips of email writing:\nThe etiquette of e-mail writing (cont)",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.114-116 prior to the next session",
+   ""
+  ],
+  [
+   "25",
+   "The request email (p.114)",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "26",
+   "The request email practice",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "27",
+   "Feedback on the request email",
+   "Offline",
+   "LO2",
+   "T,U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.114-116 prior to the next session",
+   ""
+  ],
+  [
+   "28",
+   "The response to the request email (teacher's own material)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.114-116 prior to the next session",
+   ""
+  ],
+  [
+   "29",
+   "Escalate request when a deadline is approaching",
+   "Offline",
+   "LO2",
+   "I, T,U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.123-128 prior to the next session",
+   ""
+  ],
+  [
+   "30",
+   "Escalate request when a deadline is approaching (cont)",
+   "Offline",
+   "LO2",
+   "I, T,U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.123-128 prior to the next session",
+   ""
+  ],
+  [
+   "31",
+   "Creating Visuals",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "32",
+   "Creating Visuals (Cont)",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "33",
+   "Revision for Progress Test 1",
+   "Offline",
+   "LO1-LO2",
+   "U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.166 about CVs prior to the next session",
+   ""
+  ],
+  [
+   "34",
+   "Progress Test 1",
+   "Offline",
+   "LO1-LO2",
+   "U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.166 about CVs prior to the next session",
+   ""
+  ],
+  [
+   "35",
+   "CVs (résumés) - p.166",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.169 about cover letters prior to the next session",
+   ""
+  ],
+  [
+   "36",
+   "CVs (résumés) sample analysis (teacher's own material)",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.169 about cover letters prior to the next session",
+   ""
+  ],
+  [
+   "37",
+   "Cover letter - p.169",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.169 about cover letters prior to the next session",
+   ""
+  ],
+  [
+   "38",
+   "Cover letter sample analysis (teacher's own material)",
+   "Offline",
+   "LO3",
+   "I,T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p.169 about cover letters prior to the next session",
+   ""
+  ],
+  [
+   "39",
+   "Pracitce + Feedback on CVs",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read reference book (CHAPTER 2, Part 1-6) prior to the next session. Do assignment",
+   ""
+  ],
+  [
+   "40",
+   "Pracitce + Feedback on Cover letters. Assignment Announcement",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read reference book (CHAPTER 2, Part 1-6) prior to the next session. Do assignment",
+   ""
+  ],
+  [
+   "41",
+   "Business Memos (reference book - CHAPTER 2) - Format (Part 1-3)",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read reference book (CHAPTER 2, Memo types: To inform and to request) prior to the next session",
+   ""
+  ],
+  [
+   "42",
+   "Business Memos (reference book - CHAPTER 2) - Format (Part 4-6)",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read reference book (CHAPTER 2, Memo types: To inform and to request) prior to the next session",
+   ""
+  ],
+  [
+   "43",
+   "Business Memos (reference book -- CHAPTER 2) - Type: To Inform",
+   "Offline",
+   "LO4",
+   "I, T,U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read reference book (CHAPTER 2, Memo types: to remind + to show appreciation) prior to the next session",
+   ""
+  ],
+  [
+   "44",
+   "Business Memos (reference book -- CHAPTER 2) - Type: To Request - Practice",
+   "Offline",
+   "LO4",
+   "I, T,U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read reference book (CHAPTER 2, Memo types: to remind + to show appreciation) prior to the next session",
+   ""
+  ],
+  [
+   "45",
+   "Feedback on Practice of Slot 21 + Business Memos (reference book - CHAPTER 2): Type: To remind",
+   "Offline",
+   "LO4",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "46",
+   "Feedback on Practice of Slot 21 + Business Memos (reference book - CHAPTER 2): To show appreciation - Practice.",
+   "Offline",
+   "LO4",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "47",
+   "Feedback on Practice",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 188-193 prior to the next session. Submit assignment.",
+   ""
+  ],
+  [
+   "48",
+   "Feedback on Practice (Cont) + Assignment submission",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 188-193 prior to the next session. Submit assignment.",
+   ""
+  ],
+  [
+   "49",
+   "Improve the writing skills (p. 188-190)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 191-201 prior to the next session",
+   ""
+  ],
+  [
+   "50",
+   "Improve the writing skills (p. 191-193)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 191-201 prior to the next session",
+   ""
+  ],
+  [
+   "51",
+   "Use appropriate writing styles (p.197-199)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 205-215 prior to the next session",
+   ""
+  ],
+  [
+   "52",
+   "Use appropriate writing styles (p.200-201)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 205-215 prior to the next session",
+   ""
+  ],
+  [
+   "53",
+   "Avoid grammatical mistakes (p.205-210)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 215-225 prior to the next session",
+   ""
+  ],
+  [
+   "54",
+   "Avoid grammatical mistakes (p.211-215)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Read p. 215-225 prior to the next session",
+   ""
+  ],
+  [
+   "55",
+   "Use punctations correctly (p.219-225)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "56",
+   "Avoid confusing words (p.215)",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons",
+   ""
+  ],
+  [
+   "57",
+   "Revision for Progress Test 2",
+   "Offline",
+   "LO4-5",
+   "U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons. Prepare for FE",
+   ""
+  ],
+  [
+   "58",
+   "Progress Test 2",
+   "Offline",
+   "LO4-5",
+   "U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons. Prepare for FE",
+   ""
+  ],
+  [
+   "59",
+   "Feedback on Assignment",
+   "Offline",
+   "LO1-LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "*Revise lessons. Prepare for FE",
+   ""
+  ],
+  [
+   "60",
+   "FE revision",
+   "Offline",
+   "LO1-LO5",
+   "T, U",
+   "Student’s Book (hardcopy) & reference book (ebook)",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HCM_CQ1.1",
+   "What questions do you ask yourself before writing an email?"
+  ],
+  [
+   "2",
+   "1",
+   "CT_CQ1.1",
+   "What do you ask yourself before writing an email?"
+  ],
+  [
+   "3",
+   "2",
+   "HCM_CQ1.2",
+   "Why do we have to identify ourselves to be either planner or editor?"
+  ],
+  [
+   "4",
+   "2",
+   "CT_CQ1.2",
+   "Why do we have to identify ourselves to be either planner or editor?"
+  ],
+  [
+   "5",
+   "3",
+   "HCM_CQ1.3",
+   "What can do you to clarify your ask?"
+  ],
+  [
+   "6",
+   "3",
+   "CT_CQ1.3",
+   "Step1.What are the ways to get the task clear?"
+  ],
+  [
+   "7",
+   "4",
+   "HCM_CQ2.1",
+   "What did Luc do you get his ask clear?"
+  ],
+  [
+   "8",
+   "4",
+   "CT_CQ2.1",
+   "Step1. What are the steps you are going to do to write an email?\nHints:\n- What is the purpose of writing?\n- What should you do to achieve your writing?\n- What exactly do you want to respond to?\n- What is the point from Luc’s writing? How are they different? Which one is better?\n- How is Harshita’s email writings different? Which clears in mind?\n- If you are writing a problem, will you wait for a solution? Give an example?"
+  ],
+  [
+   "9",
+   "5",
+   "HCM_CQ2.2",
+   "What is the \"you\" attitude?"
+  ],
+  [
+   "10",
+   "5",
+   "CT_CQ2.2",
+   "Step2. Why do you need to understand the reader's point of view?"
+  ],
+  [
+   "11",
+   "6",
+   "HCM_CQ2.3",
+   "How can you identify the information each reader needs?"
+  ],
+  [
+   "12",
+   "6",
+   "CT_CQ2.3",
+   "Step2. a. What questions do you ask yourself before writing? How do answers support your writing effectively? b. How does relationship, information, and attitude influence business communication?\nHints:\nVideo to visualize\n- Relationship: Who is my reader, and what is her relationship to me? Does she have to do what I ask?\n- Information: How much information does my reader have about my topic? How much background do I have to supply to help him understand? What kind of information will appeal to him?\n- Attitude: What is my reader’s likely attitude to what I’m saying? Will she be receptive or resistant? What information do I need to include to persuade her?"
+  ],
+  [
+   "13",
+   "7",
+   "HCM_CQ3.1",
+   "What can you do you quickly capture the readers' attention?"
+  ],
+  [
+   "14",
+   "7",
+   "CT_CQ3.1",
+   "Step 3. How can we write a good opening?\n- Hints:\n- How do you capture your reader’s attention?\n- Let your reader know what’s coming and why it’s important\n- Let your reader know what he’s supposed to do: absorb information, respond, or take some kind of action"
+  ],
+  [
+   "15",
+   "8",
+   "HCM_CQ3.2",
+   "Why is it NOT absolutely necessary to start at the beginning?"
+  ],
+  [
+   "16",
+   "8",
+   "CT_CQ3.2",
+   "Step 3. What is the point from examples in step 3?\nHints:\n- Motivate your reader to continue reading through the end\n- What is the difference among examples? Which example is better? And why?"
+  ],
+  [
+   "17",
+   "9",
+   "HCM_CQ3.3",
+   "What techniques can you use to make your writing concise?"
+  ],
+  [
+   "18",
+   "9",
+   "CT_CQ3.3",
+   "Step 4: Be concise\nWho gets benefits when writing concisely? Explain\nHints:\n- How can your reader benefit when writing concisely?\n- How can you benefit when writing concisely?\n- How can you increase your writing concisely?"
+  ],
+  [
+   "19",
+   "10",
+   "HCM_CQ4.1",
+   "Analyze an email provided by teachers to cut the chaff."
+  ],
+  [
+   "20",
+   "10",
+   "CT_CQ4.1",
+   "Step 4.What can be four tips to cut the chaff of your writing with an example each tip?\nHints:\nWhat are the four tips to cut the chaff? Analyze each example of each tip to see the difference prior and after using tips"
+  ],
+  [
+   "21",
+   "11",
+   "HCM_CQ4.2",
+   "Why too much or too little information can be problematic?"
+  ],
+  [
+   "22",
+   "11",
+   "CT_CQ4.2",
+   "Step 5: Fill in missing content; delete extraneous content\nHow do you get the content right? What can you do to fill in missing content? Delete extraneous content?\nHints:\n- Why focusing too much information or including too little is problematic?\n- What implications do examples illustrate?"
+  ],
+  [
+   "23",
+   "12",
+   "HCM_CQ4.3",
+   "How can you determine the right amount of information for each email?"
+  ],
+  [
+   "24",
+   "12",
+   "CT_CQ4.3",
+   "What are some difficulties writing an formal email?"
+  ],
+  [
+   "25",
+   "13",
+   "HCM_CQ5.1",
+   "How does writing in plain English improve the effectiveness of emails?"
+  ],
+  [
+   "26",
+   "13",
+   "CT_CQ5.1",
+   "Step 6: Write in plain English:- How does plain English affect the effectiveness of writing?"
+  ],
+  [
+   "27",
+   "14",
+   "HCM_CQ5.2",
+   "Analyze an email provided by teachers to make it plainer."
+  ],
+  [
+   "28",
+   "14",
+   "CT_CQ5.2",
+   "a. What mistakes occur in writing?\nb. What ways are there to write in plain English?\nHints:\n- Describe the importance of plain language in any businesses\n- What are the kinds of jargon\n- Why should people write in plainer English"
+  ],
+  [
+   "29",
+   "15",
+   "HCM_CQ5.3",
+   "What are some common email mistakes?"
+  ],
+  [
+   "30",
+   "15",
+   "CT_CQ5.3",
+   "If something feels wrong, fix it:\n-What else should you consider when finished?"
+  ],
+  [
+   "31",
+   "16",
+   "HCM_CQ6.1",
+   "Who should you ask for advice about writing emails?"
+  ],
+  [
+   "32",
+   "16",
+   "CT_CQ6.1",
+   "a.What helps identify what is bothering you?\nb.Choose one of the problems from your draft and fix it.\nHints:\n- What problems can occur in your draft?\n- Should you trust your gut feeling?\n- Should you ask a colleague to give your feedback?"
+  ],
+  [
+   "33",
+   "17",
+   "HCM_CQ6.2",
+   "What are the tips and hints for effective emails?"
+  ],
+  [
+   "34",
+   "17",
+   "CT_CQ6.2",
+   "What are some common email mistakes?"
+  ],
+  [
+   "35",
+   "18",
+   "CT_CQ6.3",
+   "What are tips and hints for effective emails?\nHints:\n- Video to visualize, present and instruct main points of 7- step with clear samples stated to see the core of objectives\n- Discuss and let students practice in details to rewrite with the draft under lecturer’s instructions\n- Summarize students writing and analyze strengths and weaknesses, and give feedback"
+  ],
+  [
+   "36",
+   "19",
+   "HCM_CQ7.1",
+   "In which situation will sending emails the optimal choice?"
+  ],
+  [
+   "37",
+   "19",
+   "CT_CQ7.1",
+   "When is sending an email appropriate?\nHints: Discuss the situations when email is better than other means of communication"
+  ],
+  [
+   "38",
+   "20",
+   "HCM_CQ7.2",
+   "What are the basic parts of an email? What are the criteria for each part?"
+  ],
+  [
+   "39",
+   "20",
+   "CT_CQ7.2",
+   "What are the basic parts in an email?\nHints:\n- What makes a good subject?\n- What should be noticed about recipients?\n- What is a good message like?\n- What is an action statement?\n- What should be included to identify yourself clearly?"
+  ],
+  [
+   "40",
+   "21",
+   "HCM_CQ7.3",
+   "What are the effective tips for writing & sending emails?"
+  ],
+  [
+   "41",
+   "21",
+   "CT_CQ7.3",
+   "Hints and Tips for effective E-mails\n-What are tips for effective e-mails?\nHint: Discuss the tips for effective e-mails"
+  ],
+  [
+   "42",
+   "22",
+   "HCM_CQ8.1",
+   "Which format should you use in writing business emails?"
+  ],
+  [
+   "43",
+   "22",
+   "CT_CQ8.1",
+   "What is included in the format of an e-mail?\nHints: Discuss pieces of information in an e-mail"
+  ],
+  [
+   "44",
+   "23",
+   "HCM_CQ8.2",
+   "What mistakes may senders/receivers make when sending/receiving emails?"
+  ],
+  [
+   "45",
+   "23",
+   "CT_CQ8.2",
+   "The etiquette of email writing\n-What problems might senders have when sending an e-mail?\nHint: Discuss the problems senders have with the content of an e-mail, the recipients and others"
+  ],
+  [
+   "46",
+   "24",
+   "HCM_CQ8.3",
+   "What countermeasure can be used to prevent people from making those mistakes?"
+  ],
+  [
+   "47",
+   "24",
+   "CT_CQ8.3",
+   "a.Why is it etiquette concerned in writing an e-mail?\nHint: Discuss ethical issues relating to senders, recipients, companies and others\nb. What are tips of to observe the etiquette in an e-mail?\nHint: Discuss the language style, the language use and avoidable things in e-mails"
+  ],
+  [
+   "48",
+   "25",
+   "HCM_CQ9.1",
+   "In which situation will you need to write a request email?"
+  ],
+  [
+   "49",
+   "25",
+   "CT_CQ9.1",
+   "Requested Email + practice\n- In what situations do you need to send an e-mail with a request?\nHint: Discuss the situations in which an e-mail with a request is used"
+  ],
+  [
+   "50",
+   "26",
+   "HCM_CQ9.2",
+   "What should be taken into consideration when writing a request email?"
+  ],
+  [
+   "51",
+   "26",
+   "CT_CQ9.2",
+   "What should be considered in the process of writing an e-mail with a request?\nHints:\n● Discuss the five tips for writing an e-mail with a request\n● Discuss why the reader’s attitude should be concerned"
+  ],
+  [
+   "52",
+   "27",
+   "HCM_CQ9.3",
+   "What information that should be included in a request email?"
+  ],
+  [
+   "53",
+   "27",
+   "CT_CQ9.3",
+   "What should be included in an e-mail with a request?\nHint: Discuss the necessary information in the e-mail content"
+  ],
+  [
+   "54",
+   "28",
+   "HCM_CQ10.1",
+   "What strategies should you use in responding to a request email?"
+  ],
+  [
+   "55",
+   "28",
+   "CT_CQ10.1",
+   "When is it necessary to send an e-mail with an escalated request?\nHint: Discuss the situations in which an e-mail with an escalated request is used"
+  ],
+  [
+   "56",
+   "29",
+   "HCM_CQ10.2",
+   "What are the differences between a regular request email and an escalated request email?"
+  ],
+  [
+   "57",
+   "29",
+   "CT_CQ10.2",
+   "What is the difference between an e-mail with a request and the one with an escalated request?\nHint: Discuss the differences between the two types of e-mails"
+  ],
+  [
+   "58",
+   "30",
+   "HCM_CQ10.3",
+   "When is it necessary to used an escalated request email?"
+  ],
+  [
+   "59",
+   "30",
+   "CT_CQ10.3",
+   "What should be done for an e-mail with an escalated request?\nHint: discuss the steps of writing an e-mail with an escalated request"
+  ],
+  [
+   "60",
+   "31",
+   "HCM_CQ11.1",
+   "In which situations should you use visuals instead of text?"
+  ],
+  [
+   "61",
+   "31",
+   "CT_CQ11.1",
+   "Creating Visuals\n-When are graphics used in business emails?\nHint: Discuss the situations when words are not enough and graphics can make the message clearer in a business e-mail"
+  ],
+  [
+   "62",
+   "32",
+   "HCM_CQ11.2",
+   "What are the common types of chart in email?"
+  ],
+  [
+   "63",
+   "32",
+   "CT_CQ11.2",
+   "What are common types of charts used for data?\nHint: Identify the types of charts that are used in business e-mails"
+  ],
+  [
+   "64",
+   "33",
+   "CT_CQ11.3",
+   "What are reminders about including graphics in business e-mails?\nHint: Discuss how graphics are used to accompany language to make clear the e-mail content"
+  ],
+  [
+   "65",
+   "34",
+   "CT_CQ12.1",
+   "CVs (resumés) and sample analysis\n- What is a résumé? What is the format of a résumé?\nHint: Discuss what a résumé is and when it is used\nDiscuss the main parts of a résumé; the length of a résumé"
+  ],
+  [
+   "66",
+   "35",
+   "HCM_CQ12.1",
+   "What is a résumé? What are the main parts of a résumé?"
+  ],
+  [
+   "67",
+   "35",
+   "CT_CQ12.2",
+   "What information should be provided in the résumé?\nHint: Discuss the important information that should be included in the résumé"
+  ],
+  [
+   "68",
+   "36",
+   "HCM_CQ12.2",
+   "What should students take into consideration when writing a résumé?"
+  ],
+  [
+   "69",
+   "36",
+   "CT_CQ12.3",
+   "What is the format of a résumé?"
+  ],
+  [
+   "70",
+   "37",
+   "HCM_CQ13.1",
+   "What information should you include in a cover letter?"
+  ],
+  [
+   "71",
+   "37",
+   "CT_CQ13.1",
+   "Hint: Discuss the main parts of a résumé; the length of a résumé"
+  ],
+  [
+   "72",
+   "38",
+   "HCM_CQ13.2",
+   "What are the differences between a résumé and a cover letter?"
+  ],
+  [
+   "73",
+   "38",
+   "CT_CQ13.2",
+   "What should be included in the content?\nHints:\no Discuss what should be included in the first paragraph and later paragraphs\no Discuss what the focus of the cover letter is"
+  ],
+  [
+   "74",
+   "39",
+   "HCM_CQ13.3",
+   "Why shouldn't you use the same résumé and cover letter for different job applications?"
+  ],
+  [
+   "75",
+   "39",
+   "CT_CQ13.3",
+   "a.Should you use the same cover letter without revision when applying for different job? Why (not)?\nHint: Discuss reasons why a revision of the cover letter is needed\nb.What should be checked before you send the cover letter?\nHint: Discuss what should be observed in the editing process of the final craft"
+  ],
+  [
+   "76",
+   "40",
+   "CT_CQ14.1",
+   "Some companies use specific heading formats for their memos. How is the heading format for memos different from the letterhead?\nHints:\n- Think about the type of communication of each kind (internal? external?)\n- How much information about the company is necessary in each kind? (which is more? which is less?)"
+  ],
+  [
+   "77",
+   "41",
+   "HCM_CQ14.1",
+   "What are the main parts of a memo?"
+  ],
+  [
+   "78",
+   "41",
+   "CT_CQ14.2",
+   "Since a memo is a document typically used for communication within a company, where do you expect to read it?\nHints:\n- Should it be posted on notice boards so everyone can see? On what occasion?\n- Should it be posted on an internal email? On what occasion?"
+  ],
+  [
+   "79",
+   "42",
+   "HCM_CQ14.2",
+   "What are the purposes and functions of using a memo?"
+  ],
+  [
+   "80",
+   "42",
+   "CT_CQ14.3",
+   "What criteria are there for writing subject/ topic in memo?"
+  ],
+  [
+   "81",
+   "43",
+   "HCM_CQ15.1",
+   "What should you do to present many different important points in a memo?"
+  ],
+  [
+   "82",
+   "43",
+   "CT_CQ15.1",
+   "In case there are many important points that need to be addressed in the body of the memo, what’s the best way to present them?\nHints:\n- What are some ways to organize ideas logically and clearly?\n- Is using paragraphs or bullet points or numbers more appropriate?"
+  ],
+  [
+   "83",
+   "44",
+   "HCM_CQ15.2",
+   "What are the differences between a memo and an email?"
+  ],
+  [
+   "84",
+   "44",
+   "CT_CQ15.2",
+   "Should a memo deal with only one topic or a number of different topics?\nHints:\n- Think about the length of a memo\n- What are some problems readers may have reading those unrelated points?\n- In case the points need to be addressed in one single memo, what should they have in common?"
+  ],
+  [
+   "85",
+   "45",
+   "HCM_CQ15.3",
+   "In which situations do you need to write a memo to remind?"
+  ],
+  [
+   "86",
+   "45",
+   "CT_CQ15.3",
+   "Business Memos (Chapter 2 - Reference Book)\n-Why isn’t it necessary to include the salutation line (e.g. Dear Sir/Madam) in a memo?\nHints:\n- Think about the difference in purpose between a memo and letters/emails\n- Is a memo intended for mass communication or interpersonal communication?"
+  ],
+  [
+   "87",
+   "46",
+   "HCM_CQ16.1",
+   "Why do tones have considerable affect towards readers?"
+  ],
+  [
+   "88",
+   "46",
+   "CT_CQ16.1",
+   "Why is there a need to write a formal memo to inform?\nHints:\n- Think about the informal communication network that circulates unofficial information around and its consequences."
+  ],
+  [
+   "89",
+   "47",
+   "CT_CQ16.2",
+   "What are some reasons for not writing the month in figures?\nHints:\n- What is some confusion it may cause?\n- Are there any differences between British style and American style?"
+  ],
+  [
+   "90",
+   "48",
+   "HCM_CQ16.2",
+   "What criteria are there for writing subject lines?"
+  ],
+  [
+   "91",
+   "48",
+   "CT_CQ16.3",
+   "In your view, what difference does it make to readers to include a title (Mr/Ms) of the writer in the signature?\nHints:\n- How easier would it be for you, as a recipient, to identify and address the writer?"
+  ],
+  [
+   "92",
+   "49",
+   "HCM_CQ17.1",
+   "What problems may the word 'this' cause? What solutions can be used to solve those problems?"
+  ],
+  [
+   "93",
+   "49",
+   "CT_CQ17.1",
+   "In your opinion, do readers react to a passive tone and active tone differently or the same?\nHints:\n- What effects does the passive construction create?\n- What effects does the active construction create?"
+  ],
+  [
+   "94",
+   "50",
+   "HCM_CQ17.2",
+   "Why is there a need to use gender-neutral language in buisness writing?"
+  ],
+  [
+   "95",
+   "50",
+   "CT_CQ17.2",
+   "Why is there a need to have a gender-neutral pronoun in the English language?\nHints:\n- Why is it important to specify the gender of the person we’re talking about?\n- Why is the masculine pronoun no longer used to represent gender neutrality?\n- Why does the use of “She/He” instead of “He/She” matter?"
+  ],
+  [
+   "96",
+   "51",
+   "HCM_CQ17.3",
+   "What are some of the most common grammar mistakes in business writing?"
+  ],
+  [
+   "97",
+   "51",
+   "CT_CQ17.3",
+   "Avoid Grammatical Mistakes (Chapter 4-6 Reference Book)\nCQ1: To be considered a sentence, a group of words must have both a subject and a verb. Examine the following:\n“Before the laptop was broken”\nDo you think they have what it takes to be considered a sentence?\nHints:\n- Do they express a complete thought? Why/Why not?\n- What semantic problems do they have?"
+  ],
+  [
+   "98",
+   "52",
+   "HCM_CQ18.1",
+   "What are the causes for pronoun pitfalls?"
+  ],
+  [
+   "99",
+   "52",
+   "CT_CQ18.1",
+   "Use Punctuation Correctly (Chapter 4-6 Reference Book)\nWhy are there so many punctuation marks in a language?\nHints:\n- Think about reading long sentences without any punctuation marks.\n- Do they signal anything beforehand?\n- Why are they silent when reading?"
+  ],
+  [
+   "100",
+   "53",
+   "HCM_CQ18.2",
+   "What problems might misplaced and dangling modifiers cause?"
+  ],
+  [
+   "101",
+   "53",
+   "CT_CQ18.2",
+   "To what extent do you agree that capitalization makes a word look or seem important?\nHints:\n- What are other functions of capitalization?\n- What happens if we use capitals incorrectly?"
+  ],
+  [
+   "102",
+   "54",
+   "HCM_CQ18.3",
+   "What are the differences between using 'that' and 'which' in clauses?"
+  ],
+  [
+   "103",
+   "54",
+   "CT_CQ18.3",
+   "Why do you think most Vietnamese learners have problems with fragments and run-on sentences?\nHints:\n- Comparing the two language systems, what are the main grammatical differences?\n- What are some typical ways Vietnamese learners learn foreign languages?"
+  ],
+  [
+   "104",
+   "55",
+   "HCM_CQ19.1",
+   "Why are punctuation marks important in a language?"
+  ],
+  [
+   "105",
+   "56",
+   "HCM_CQ19.2",
+   "What are some of the most commonly confused words?"
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/16HHPhZjkOr5FSkF6ytFa8Hn5EFWjXdXr?usp=sharing"
+ ]
+}

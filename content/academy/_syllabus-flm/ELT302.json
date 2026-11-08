@@ -1,0 +1,2142 @@
+{
+ "ma": "ELT302",
+ "sylID": "13253",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13253",
+   "code": "ELT302",
+   "name": "Biên dịch tiếng Anh 1",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13253",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13253",
+  "Syllabus Name": "Biên dịch tiếng Anh 1",
+  "Course Name English": "English Translation 1",
+  "Subject Code": "ELT302",
+  "Learning-Teaching Method": "Task-based learning, flipped classroom",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 105 hours self-study (including projects preparation)",
+  "Pre-Requisite": "ENS411 & ENS421 & ENR401 & ENW401 & ENP101 & ENG301\nK15 onward: Passed ERW411 & LTG202",
+  "Description": "This course is designed to build and develop foundational translation skills for 3rd-year English majors, equipping students to confidently translate between English and Vietnamese in both directions. I\nStudents are expected to acquire and apply basic knowledge of theoretical aspects covering from translation methods, translating process, equivalence, and cultural issues... in their translation.\nBy applying the basic theoretical knowledge, students are expected to be able to efficiently handle compiled jobs in a classroom hypothetical environment, maintain and develop basic English language skills in accordance with translation of 4 main types of texts (C1 standard) including: narrative texts,descriptiom texts, discussion texts, and dialogues.\nIn response to the evolving demands of the language services industry, the course integrates the use of AI-based translation tools to help students become proficient in AI-assisted translation and post-editing.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfill tasks given by instructor after class\n- Use their own laptop and tools in class and out of class ethically under the lecturer's instructions\n- Read the textbook in advance",
+  "Tools": "Google Translate, ChatGPT, or DeepL",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Introduction to Translation and Interpreting Studies",
+   "Aline Ferreira (Editor) & John W. Schwieter (Editor)",
+   "Wiley-Blackwell",
+   "2022",
+   "",
+   "9781119685326",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "Tài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về luật",
+   "",
+   "BỘ GIÁO DỤC VÀ ĐÀO TẠO",
+   "2014",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Tài liệu giảng dạy về phòng, chống tham nhũng dùng cho các trường đại học, cao đẳng không chuyên về luật\n(Phê duyệt kèm theo Quyết định số 3468/QĐ-BGDĐT ngày 06 tháng 9 năm 2014 của Bộ trưởng Bộ Giáo dục và Đào tạo)",
+   "Chủ biên et al.",
+   "BỘ GIÁO DỤC VÀ ĐÀO TẠO",
+   "2014",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://drive.google.com/file/d/1Tf3Fyybs8puDEnp5JGw3zqezIfreh6H2/view?usp=drive_link"
+  ],
+  [
+   "4",
+   "Hướng dẫn kỹ thuật biên dịch tiếng Anh (Anh-Việt, Việt-Anh)",
+   "Nguyễn Quốc Hùng (MA)",
+   "NXB Tổng hợp Hồ Chí Minh",
+   "2012",
+   "",
+   "0000000323779",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Training the Translator",
+   "Paul Kussmaul",
+   "John Benjamins Publishing Company",
+   "1995",
+   "",
+   "9789027216236",
+   "False",
+   "False",
+   "False",
+   "Download online at: https://www.academia.edu/26514605/TRAINING_THE_TRANSLATOR"
+  ],
+  [
+   "6",
+   "http://dichthuatpro.com/cac-bieu-mau-tai-lieu-dich-thuat.html",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "Introducing Translation Studies",
+   "Jeremy Munday",
+   "Routledge",
+   "",
+   "",
+   "978-1-315-69186-2",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "8",
+   "A textbook for Translation",
+   "Peter Newmark",
+   "Prentice Hall International",
+   "",
+   "",
+   "0-13-912593-0",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "9",
+   "https://edition.cnn.com",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "10",
+   "https://news.cengage.com/in-the-news/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "11",
+   "https://vnanet.vn/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "12",
+   "https://www.bbc.com/news",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "13",
+   "Error classification and analysis for machine\ntranslation quality assessment",
+   "Popovic",
+   "https://www.researchgate.net/profile/Maja-Popovic-3/publication/325896250_Error_Classification_and_Analysis_for_Machine_Translation_Quality_Assessment/links/5b2b74974585153d2b7b5c77/Error-Classification-and-Analysis-for-Machine-Translation-Quality-Assessment.pdf",
+   "",
+   "2018",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "14",
+   "Code of Ethics for the use of AI in Translation",
+   "Sasmita & Marpaung",
+   "https://www.researchgate.net/publication/388966103_Code_of_Ethics_for_the_use_of_AI_in_Translation",
+   "",
+   "2025",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain key translation theories including translation process, text analysis, language functions, text categories, text types and different translation methods."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Perform basic translation strategies in dealing with non-equivalence at word level and cultural issues so as to translate idioms, fixed expressions, dialogues. (Vietnamese-English and vice-versa)."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Transfer an English text of various text types in on common topics to a natural Vietnamese text by applying an appropriate translation method"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Transfer a Vietnamese text of various text types on common topics into an accurate English text by applying an appropriate translation method"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply basic AI-assisted translation skills by consciously using machine translation tools , performing basic post-editing, evaluating AI outputs for accuracy and appropriateness, and demonstrating responsible and ethical use of AI in translation tasks (mapping with"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Have a professional working attitude and have ability to work in a team."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "flexible",
+   "LO1, LO3, LO4, LO5, LO6",
+   "Part A – Manual Translation: Students translate short texts in class (150–200 words) without AI.\nPart B – AI Draft Translation: Use 1 AI tool to translate the same texts.\nPart C – Reflection Report: compare human vs AI outputs, explain major errors corrected, and discuss what AI did better/ more poorly than humans.",
+   "N/A",
+   "Human translation skills and AI critical exploration",
+   "Classwork and homework, pairs",
+   "Part A: 70%\nPart B and C: 30%"
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "flexible",
+   "LO1, LO2, LO3, LO4,LO5, LO6",
+   "Part A – AI Draft Generation: Students choose 2 culturally rich texts (1 in English and the other in Vietnamese) with teacher's approval and use AI to translate them.\nPart B – Light cultural adaptation: Post-edit them for a specific target audience each text (e.g., American tourists, academic readers), submitting both AI's works and human's edited version.\nPart C – Presentation: Short oral presentation (10 minutes) of outputs and reasoning.",
+   "N/A",
+   "Human-in-the-loop editing, cultural literacy in translation and AI ethics",
+   "Homework, groups of 3-4",
+   "Part A and B: 70%\nPart C: 30%"
+  ],
+  [
+   "3",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "60 minutes",
+   "LO1, LO3, LO4",
+   "Translation of texts given on the topics covered from Vietnamese in to English and vice versa",
+   "~ 150 words/ text",
+   "Test the acquainted knowledge and translation theory students obtain the delivered sessions 1-18",
+   "Paper test sheets",
+   ""
+  ],
+  [
+   "4",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "60 minutes",
+   "LO1, LO2, LO3, LO4, LO5",
+   "Analysis of AI-generated translation works (1 E-V text and 1 V-E text). The analysis addresses the strengths and limitations in AI's works in terms of content transfer, lexical choices, grammatical structure choices and naturalism",
+   "~120 words/ text",
+   "Test the acquainted knowledge and translation theory students obtain the delivered sessions 21-40",
+   "Paper test sheets",
+   ""
+  ],
+  [
+   "5",
+   "Progress Test 3",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "60 minutes",
+   "LO1, LO2, LO3, LO4, LO5",
+   "1 E-V text + 1 V-E text: 1. translating part 1 of each text; 2. post-editing AI's translation for part 2 of each text",
+   "1. English text (~150 words): part 1 English text only (~70 words), part 2 English text + AI-translated Vietnamese text (~70 words)\n2. Vietnamese text (~200 words): part 1 Vietnamese text only (~100 words), part 2 Vietnamese text + AI-translated English text (~100 words)",
+   "Test the acquainted knowledge and translation skills students in the delivered sessions 41-58",
+   "Paper test sheets",
+   "E-V human translation 25%\nV-E human translation: 25%\nE-V Post-editing AI translation: 25%\nV-E Post-editing AI translation: 25%"
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "90 minutes",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "1 E-V text + 1 V-E text: 1. translating part 1 of each text; 2. post-editing AI's translation for part 2 of each text",
+   "1. English text (~200 words): part 1 English text only (~100 words), part 2 English text + AI-translated Vietnamese text (~100 words)\n2. Vietnamese text (~200 words): part 1 Vietnamese text only (~100 words), part 2 Vietnamese text + AI-translated English text (~100 words)",
+   "Test the acquainted knowledge and translation skills and Ai-human collaboration in translation",
+   "eos",
+   "E-V human translation 25%\nV-E human translation: 25%\nE-V Post-editing AI translation: 25%\nV-E Post-editing AI translation: 25%"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Session 1: Course introduction: Introduction of translation: Theories about translation, The disciplines of translation",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Coursebook: pages 23-25, Reference [1]: pages3-10, PPT presentation, other teaching resources provided",
+   "",
+   "1. Coursebook:Introduction to Translation and Interpreting Studies (Aline Ferreira), 2. Theories of Translation by Jenny Williams, 3. A Textbook of Translation by Peter Newmark, 4. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "2",
+   "Session 2 (cont.): Introduction of translation: Mixed mode translation, translation methods",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Coursebook: page 28, Reference [1]: pages3-10, PPT presentation, other teaching resources provided",
+   "",
+   "1. Coursebook:Introduction to Translation and Interpreting Studies (Aline Ferreira), 2. Theories of Translation by Jenny Williams, 3. A Textbook of Translation by Peter Newmark, 4. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "3",
+   "Session 3: Theoretical approaches to the disciplines",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Coursebook: pages 29-35, PPT presentation, other teaching resources provided",
+   "",
+   "1. Coursebook:Introduction to Translation and Interpreting Studies (Aline Ferreira), 2. Theories of Translation by Jenny Williams, 3. A Textbook of Translation by Peter Newmark, 4. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "4",
+   "Session 4: The analysis of a text: Requirements for the analysis of a text",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Reference [1]:pages11-18, PPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "5",
+   "Session 5: The analysis of a text\n- Practice analysing and translating texts",
+   "Offline",
+   "LO1",
+   "ITU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "6",
+   "Session 6 (cont.): The analysis of a text\n- Practice analysing and translating texts",
+   "Offline",
+   "LO1",
+   "ITU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "7",
+   "Session 7: The process of Translating",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Reference [1]: pages 19-38, PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "8",
+   "Session 8: The process of Translating",
+   "Offline",
+   "LO1",
+   "TU",
+   "Reference [1]: pages 19-38, PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "9",
+   "Session 9: The process of Translating\n- Practice applying the process of translating in translation",
+   "Offline",
+   "LO1, LO3, LO4",
+   "ITU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "10",
+   "Session 10: The process of Translating\n- Practice applying the process of translating in translation",
+   "Offline",
+   "LO1, LO3, LO4",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "11",
+   "Session 11: Language functions, text categories and text-types_Theory",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Reference [1]: pages 39-43, PPT presentation, other teaching resources provided",
+   "",
+   "A Textbook of Translation by Peter Newmark",
+   ""
+  ],
+  [
+   "12",
+   "Session 12: Language functions, text categories and text-types_Theory (cont.)\nAI-ASSISTED LEARNING OUTCOME: Understand the role and potential of AI in translation\nPURPOSE: Raising awareness",
+   "Offline",
+   "LO1, LO5, LO6",
+   "ITU",
+   "Reference [1]: pages 39-43, PPT presentation, other teaching resources provided",
+   "",
+   "A Textbook of Translation by Peter Newmark",
+   ""
+  ],
+  [
+   "13",
+   "Session 13: Language functions, text categories and Text-types\n- Practice identifying different text types: narrative , description, discussion, dialogue",
+   "Offline",
+   "LO1, LO3, LO4",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "14",
+   "Session 14: Language functions, text categories and Text-types\n- Practice identifying different text types: narrative , description, discussion, dialogue (cont.)",
+   "Offline",
+   "LO1, LO3, LO4",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "15",
+   "Session 15: Language functions, text categories and Text-types\n- English-Vietnamese translation of narrative texts",
+   "Offline",
+   "LO1, LO3",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "16",
+   "Session 16: Language functions, text categories and Text-types\n- English-Vietnamese translation of narrative texts (cont.)",
+   "Offline",
+   "LO1, LO3",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "17",
+   "Session 17: Language functions, text categories and Text-types\n- Vietnamese-English translation of narrative texts",
+   "Offline",
+   "LO1, LO4",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "18",
+   "Session 18: Language functions, text categories and Text-types\n- Vietnamese-English translation of narrative texts (cont.)",
+   "Offline",
+   "LO1, LO4",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "19",
+   "Session 19: Review 1\nProgress test 1",
+   "Offline",
+   "LO1, LO3, LO4",
+   "TU",
+   "References, PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "20",
+   "Session 20:\nProgress test 1 (cont.)",
+   "Offline",
+   "LO1, LO3, LO4",
+   "TU",
+   "References, PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "21",
+   "Session 21: Translation methods (theory)\n- Word-for-word translation\n- Literal translation\n- Adaptation\n- Free translation\n- Idiomatic translation",
+   "Offline",
+   "LO1, LO2, LO3, LO4",
+   "ITU",
+   "Reference [1]: pages:45-52;\nPPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "22",
+   "Session 22: Specialized Practices in Translation Settings",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "ITU",
+   "Coursebook: pages:107-125; PPT presentation, other teaching resources provided",
+   "",
+   "1. Introduction to Translation and Interpreting Studies (Aline Ferreira)",
+   ""
+  ],
+  [
+   "23",
+   "Session 23: Translation methods\n- Application of different translation methods to English-Vietnamese translation of description texts",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "24",
+   "Session 24: Translation methods\n- Application of different translation methods to English-Vietnamese translation of description texts (cont.)\nAI-ASSISTED LEARNING OUTCOME: Use AI tools to generate and analyze draft translations with students' self-generated prompts\nPURPOSE: Exploring tools",
+   "Offline",
+   "LO1, LO2, LO3, LO5, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "25",
+   "Session 25: Translation methods\n- Application different translation methods to English-Vietnamese translation of description texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "26",
+   "Session 26: Translation methods\n- Application different translation methods to English-Vietnamese translation of description texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "27",
+   "Session 27: Translation methods\n- Application of different translation methods to Vietnamese-English translation of description texts",
+   "Offline",
+   "LO1, LO2, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "28",
+   "Session 28: Translation methods\n- Application of different translation methods to Vietnamese-English translation of description texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "29",
+   "Session 29: Translation methods\n- Application of different translation methods to Vietnamese-English translation of description texts (cont.)\nASSIGNMENT 1 - LO1-3-4-5-6",
+   "Offline",
+   "LO1, LO3, LO4, LO5, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "30",
+   "Session 30: Translation methods\n- Application of different translation methods to Vietnamese-English translation of description texts (cont.)\nASSIGNMENT 1 - LO1-3-4-5-6",
+   "Offline",
+   "LO1, LO3, LO4, LO5, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "31",
+   "Session 31: Translation methods\n- Communicative translation\n- Semantic translation",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Reference [2]: pages:38-57; PPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "32",
+   "Session 32: Translation methods (cont.)\n- Communicative translation\n- Semantic translation",
+   "Offline",
+   "LO1, LO2",
+   "TU",
+   "Reference [2]: pages:38-57; PPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "33",
+   "Session 33: Translation methods\n- Application of different translation methods to English-Vietnamese translation of discussion texts",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "34",
+   "Session 34: Translation methods\n- Application of different translation methods to English-Vietnamese translation of discussion texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "35",
+   "Session 35: Translation methods\n- Application of different translation methods to English-Vietnamese translation of discussion texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO3, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "36",
+   "Session 36: Translation methods\n- Application of different translation methods to English-Vietnamese translation of discussion texts (cont.)\nAI-ASSISTED LEARNING OUTCOMES: Perform basic post-editing of AI-generated texts.\nPURPOSE: Human-in-the-loop editing",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided\nReference [13]",
+   "",
+   "Selected sentences from newspapers\nReference [13]",
+   ""
+  ],
+  [
+   "37",
+   "Session 37: Translation methods\n-Application of different translation methods to Vietnamese-English translation of discussion texts",
+   "Offline",
+   "LO1, LO2, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "38",
+   "Session 38: Translation methods\n-Application of different translation methods to Vietnamese-English translation of discussion texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "39",
+   "Session 39: Translation methods\n-Application of different translation methods to Vietnamese-English translation of discussion texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "40",
+   "Session 40: Translation methods\n-Application of different translation methods to Vietnamese-English translation of discussion texts (cont.)",
+   "Offline",
+   "LO1, LO2, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "41",
+   "Session 41: Review 2\nProgress test 2",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "References, PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "42",
+   "Session 42:\nProgress test 2 (cont.)",
+   "Offline",
+   "LO1-5",
+   "U",
+   "References, PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "43",
+   "Session 43: Strategies for translators - Equivalence and how to achieve it - How to deal with non-equivalence at word level",
+   "Offline",
+   "LO1, LO2",
+   "ITU",
+   "Coursebook: page 37, Reference [3]: pages 19-27 PPT presentation, other teaching resources provided",
+   "",
+   "1. Coursebook: Introduction to Translation and Interpreting Studies (Aline Ferreira), 2. Theories of Translation by Jenny Williams, 3. A Textbook of Translation by Peter Newmark, 4. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "44",
+   "Session 44: Strategies for translators (cont.)\n- How do deal with idioms and fixed expressions\n- How to deal with cove, number and person",
+   "Offline",
+   "LO1, LO2",
+   "ITU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "45",
+   "Session 45: Strategies for translators\n- Application of strategies to translation of idioms, fixed expreessions (English-Vietnamese)\n- Application of strategies to translation of dialogues (English-Vietnamese)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "46",
+   "Session 46: Strategies for translators\n- Application of strategies to translation of idioms, fixed expressions (English-Vietnamese)\n- Application of strategies to translation of dialogues (English-Vietnamese)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "47",
+   "Session 47: Strategies for translators\n- Application of strategies to translation of idioms, fixed expressions (English-Vietnamese)\n- Application of strategies to translation of dialogues (English-Vietnamese)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "48",
+   "Session 48: Strategies for translators\n- Application of strategies to translation of idioms, fixed expressions (English-Vietnamese)\n- Application of strategies to translation of dialogues (English-Vietnamese)\nAI-ASSISTED LEARNING OUTCOME: Adapt AI outputs for cultural and contextual appropriateness.\nPURPOSE: Cultural literacy",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "PPT presentation, other teaching resources provided\nReference [13]",
+   "",
+   "Selected sentences from newspapers\nReference [13]",
+   ""
+  ],
+  [
+   "49",
+   "Session 49: Strategies for translators\n- How to deal with proper names\n- How to deal with non-subject sentences",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "ITU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "50",
+   "Session 50: Translation Regularities: Laws and universals; Strategies for translators (cont.)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "Coursebook: Page 37, Reference [2]: pages 70-84, Refrence [3]: pages 28-30:, PPT presentation, other teaching resources provided",
+   "",
+   "1. Introduction to Translation and Interpreting Studies (Aline Ferreira), 2. Theories of Translation by Jenny Williams, 3. A Textbook of Translation by Peter Newmark, 4. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "51",
+   "Session 51: Strategies for translators\n- Practice of proper names translation\n- Practice of non-subject sentences translation.",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "52",
+   "Session 52: Strategies for translators (cont.)\n- Practice of proper names translation\n- Practice of non-subject sentences translation.",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "53",
+   "Session 53: Translation and Culture\n- Cultural categories\n- Social organization: political and administrative",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "ITU",
+   "Reference [1]: pages 94-103, PPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "54",
+   "Session 54: Translation and Culture (cont.)\n- Cultural categories\n- Social organization: political and administrative",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "1. Theories of Translation by Jenny Williams\n2. A Textbook of Translation by Peter Newmark\n3. Vấn đề về phương pháp trong dịch thuật Anh - Việt by Le Hung Tien",
+   ""
+  ],
+  [
+   "55",
+   "Session 55: Translation and Culture (cont.)\n- Practice",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "56",
+   "Session 56: Translation and Culture (cont.)\n- Practice",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "57",
+   "Session 57: Review 3\nASSIGNMENT 2: LO1-6",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "58",
+   "Session 58: Review 3\nASSIGNMENT 2: LO1-6 (cont.)\nAI-ASSISTED LEARNING OUTCOME: Demonstrate responsible and ethical use of AI in translation.\nPURPOSE: AI Ethics and Reflection",
+   "Offline",
+   "LO1-6",
+   "TU",
+   "PPT presentation, other teaching resources provided\nReference [14]",
+   "",
+   "Selected sentences from newspapers\nReference [14]",
+   ""
+  ],
+  [
+   "59",
+   "Session 59: Progress Test 3",
+   "Offline",
+   "LO1-LO5",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ],
+  [
+   "60",
+   "Session 60: Progress Test 3 (cont.)",
+   "Offline",
+   "LO1-LO5",
+   "TU",
+   "PPT presentation, other teaching resources provided",
+   "",
+   "Selected sentences from newspapers",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HCM_CQ1.1",
+   "How has Translation defined by different scholars? What are the common things\namong those definitions?"
+  ],
+  [
+   "2",
+   "1",
+   "HN_CQ1",
+   "How has Translation defined by different scholars? What are the common things among those definitions?"
+  ],
+  [
+   "3",
+   "1",
+   "CT_CQ1.1",
+   "How has Translation defined by different scholars? What are the common things\namong those definitions?"
+  ],
+  [
+   "4",
+   "2",
+   "HCM_CQ1.2",
+   "How has Translation developed? What's your opinion of current translation?"
+  ],
+  [
+   "5",
+   "2",
+   "HN_CQ2",
+   "How has Translation developed? What's your opinion of current translation?"
+  ],
+  [
+   "6",
+   "2",
+   "CT_CQ1.2",
+   "How has Translation developed? What's your opinion of current translation?"
+  ],
+  [
+   "7",
+   "3",
+   "HCM_CQ1.3",
+   "What are some requirements for the analysis of a text?"
+  ],
+  [
+   "8",
+   "3",
+   "HN_CQ3",
+   "What are some requirements for the analysis of a text?"
+  ],
+  [
+   "9",
+   "3",
+   "CT_CQ1.3",
+   "What are some requirements for the analysis of a text?"
+  ],
+  [
+   "10",
+   "4",
+   "HCM_CQ2.1",
+   "Which factors are more important for the analysis of a text?"
+  ],
+  [
+   "11",
+   "4",
+   "HN_CQ4",
+   "Which factors are more important for the analysis of a text?"
+  ],
+  [
+   "12",
+   "4",
+   "CT_CQ2.1",
+   "Which factors are more important for the analysis of a text?"
+  ],
+  [
+   "13",
+   "5",
+   "HCM_CQ2.2",
+   "What factors (3-4 factors) are used for analyzing a given text (Topic: Social issues)."
+  ],
+  [
+   "14",
+   "5",
+   "HN_CQ5",
+   "What factors (3-4 factors) are used for analyzing a given text (Topic: Social issues)."
+  ],
+  [
+   "15",
+   "5",
+   "CT_CQ2.2",
+   "What factors (3-4 factors) are used for analyzing a given text (Topic: Social issues)."
+  ],
+  [
+   "16",
+   "6",
+   "HCM_CQ2.3",
+   "Based on the factors in CQ4, how is the text translated?"
+  ],
+  [
+   "17",
+   "6",
+   "HN_CQ6",
+   "Based on the factors in CQ4, how is the text translated?"
+  ],
+  [
+   "18",
+   "6",
+   "CT_CQ2.3",
+   "Based on the factors in CQ4, how is the text translated?"
+  ],
+  [
+   "19",
+   "7",
+   "HCM_CQ3.1",
+   "How is each level of translating a text carried out?"
+  ],
+  [
+   "20",
+   "7",
+   "HN_CQ7",
+   "How is each level of translating a text carried out?"
+  ],
+  [
+   "21",
+   "7",
+   "CT_CQ3.1",
+   "How is each level of translating a text carried out?"
+  ],
+  [
+   "22",
+   "8",
+   "HCM_CQ3.2",
+   "How are the four levels of translating (textual level, referential level, cohesive level, level of naturalness) are combined in the process of translation?"
+  ],
+  [
+   "23",
+   "8",
+   "HN_CQ8",
+   "How are the four levels of translating (textual level, referential level, cohesive level, level of naturalness) are combined in the process of translation?"
+  ],
+  [
+   "24",
+   "8",
+   "CT_CQ3.2",
+   "How are the four levels of translating (textual level, referential level, cohesive level, level of naturalness) are combined in the process of translation?"
+  ],
+  [
+   "25",
+   "9",
+   "HCM_CQ3.3",
+   "What are the difficulties in the translation of lexis? How are these be dealt with?"
+  ],
+  [
+   "26",
+   "9",
+   "HN_CQ9",
+   "What are the difficulties in the translation of lexis? How are these be dealt with?"
+  ],
+  [
+   "27",
+   "9",
+   "CT_CQ3.3",
+   "What are the difficulties in the translation of lexis? How are these be dealt with?"
+  ],
+  [
+   "28",
+   "10",
+   "HCM_CQ4.1",
+   "Analyze a given text. Topic: Nationalism in Sports. What factors do you consider in analyzing the text? What steps in the process of translation do you follow? Demonstrate how you translate the text."
+  ],
+  [
+   "29",
+   "10",
+   "HN_CQ10",
+   "Analyze a given text. Topic: Nationalism in Sports. What factors do you consider in analyzing the text? What steps in the process of translation do you follow? Demonstrate how you translate the text."
+  ],
+  [
+   "30",
+   "10",
+   "CT_CQ4.1",
+   "Analyze a given text. Topic: Nationalism in Sports. What factors do you consider in analyzing the text? What steps in the process of translation do you follow? Demonstrate how you translate the text."
+  ],
+  [
+   "31",
+   "11",
+   "HCM_CQ4.2",
+   "What are the differences of 3 main language functions: expressive, informative, and vocative? What language functions cause more problems for translators?"
+  ],
+  [
+   "32",
+   "11",
+   "HN_CQ11",
+   "What are the differences of 3 main language functions: expressive, informative, and vocative? What language functions cause more problems for translators?"
+  ],
+  [
+   "33",
+   "11",
+   "CT_CQ4.2",
+   "What are the differences of 3 main language functions: expressive, informative, and vocative? What language functions cause more problems for translators?"
+  ],
+  [
+   "34",
+   "12",
+   "HCM_CQ4.3",
+   "What are the main expressive text types? How is each type translated?"
+  ],
+  [
+   "35",
+   "12",
+   "HN_CQ12",
+   "What are the main expressive text types? How is each type translated?"
+  ],
+  [
+   "36",
+   "12",
+   "CT_CQ4.3",
+   "What are the main expressive text types? How is each type translated?"
+  ],
+  [
+   "37",
+   "13",
+   "HCM_CQ5.1",
+   "What are the main informative text types? How is each type translated?"
+  ],
+  [
+   "38",
+   "13",
+   "HN_CQ13",
+   "What are the main informative text types? How is each type translated?"
+  ],
+  [
+   "39",
+   "13",
+   "CT_CQ5.1",
+   "What are the main informative text types? How is each type translated?"
+  ],
+  [
+   "40",
+   "14",
+   "HCM_CQ5.2",
+   "What are the main vocative text types? How is each type translated?"
+  ],
+  [
+   "41",
+   "14",
+   "HN_CQ14",
+   "What are the main vocative text types? How is each type translated?"
+  ],
+  [
+   "42",
+   "14",
+   "CT_CQ5.2",
+   "What are the main vocative text types? How is each type translated?"
+  ],
+  [
+   "43",
+   "15",
+   "HCM_CQ5.3",
+   "Based on an expressive text type (a chapter of a novel) in English, what are the characteristics of the text? What are the main points of the chapter? Choose a passage of 500-700 words to translate into Vietnamese."
+  ],
+  [
+   "44",
+   "15",
+   "HN_CQ15",
+   "Based on an expressive text type (a chapter of a novel) in English, what are the characteristics of the text? What are the main points of the chapter? Choose a passage of 500-700 words to translate into Vietnamese."
+  ],
+  [
+   "45",
+   "15",
+   "CT_CQ5.3",
+   "Based on an expressive text type (a chapter of a novel) in English, what are the characteristics of the text? What are the main points of the chapter? Choose a passage of 500-700 words to translate into Vietnamese."
+  ],
+  [
+   "46",
+   "16",
+   "HCM_CQ6.1",
+   "Based on an informative text type (a technical report in English), what are the characteristics of the report? What are the requirements for the translation of the report? Demonstrate how you translate the report?"
+  ],
+  [
+   "47",
+   "16",
+   "HN_CQ16",
+   "Based on an informative text type (a technical report in English), what are the characteristics of the report? What are the requirements for the translation of the report? Demonstrate how you translate the report?"
+  ],
+  [
+   "48",
+   "16",
+   "CT_CQ6.1",
+   "Based on an informative text type (a technical report in English), what are the characteristics of the report? What are the requirements for the translation of the report? Demonstrate how you translate the report?"
+  ],
+  [
+   "49",
+   "17",
+   "HCM_CQ6.2",
+   "Based on a vocative text type ( a propaganda in English), what are the characteristics of the text? What are the requirements for the translation of the text? Demonstrate how you translate the text?"
+  ],
+  [
+   "50",
+   "17",
+   "HN_CQ17",
+   "Based on a vocative text type ( a propaganda in English), what are the characteristics of the text? What are the requirements for the translation of the text? Demonstrate how you translate the text?"
+  ],
+  [
+   "51",
+   "17",
+   "CT_CQ6.2",
+   "Based on a vocative text type ( a propaganda in English), what are the characteristics of the text? What are the requirements for the translation of the text? Demonstrate how you translate the text?"
+  ],
+  [
+   "52",
+   "18",
+   "HCM_CQ6.3",
+   "What are the differences of the 4 text types (narrative, description, discussion, and dialogue)? What are requirements for the translation of each type?)"
+  ],
+  [
+   "53",
+   "18",
+   "HN_CQ18",
+   "What are the differences of the 4 text types (narrative, description, discussion, and dialogue)? What are requirements for the translation of each type?)"
+  ],
+  [
+   "54",
+   "18",
+   "CT_CQ6.3",
+   "What are the differences of the 4 text types (narrative, description, discussion, and dialogue)? What are requirements for the translation of each type?)"
+  ],
+  [
+   "55",
+   "19",
+   "HCM_CQ7.1",
+   "Based on a given text in Vietnamese: analyze the language functions used in the text, identify how to deal with these language functions in the translation, translate the text into English."
+  ],
+  [
+   "56",
+   "19",
+   "HN_CQ19",
+   "Based on a given text in Vietnamese: analyze the language functions used in the text, identify how to deal with these language functions in the translation, translate the text into English."
+  ],
+  [
+   "57",
+   "19",
+   "CT_CQ7.1",
+   "Based on a given text in Vietnamese: analyze the language functions used in the text, identify how to deal with these language functions in the translation, translate the text into English."
+  ],
+  [
+   "58",
+   "20",
+   "HCM_CQ7.2",
+   "Based on a given text in English: analyze the language functions used in the text, identify how to deal with these language functions in the translation, translate the text into Vietnamese."
+  ],
+  [
+   "59",
+   "20",
+   "HN_CQ20",
+   "Based on a given text in English: analyze the language functions used in the text, identify how to deal with these language functions in the translation, translate the text into Vietnamese."
+  ],
+  [
+   "60",
+   "20",
+   "CT_CQ7.2",
+   "Based on a given text in English: analyze the language functions used in the text, identify how to deal with these language functions in the translation, translate the text into Vietnamese."
+  ],
+  [
+   "61",
+   "21",
+   "HCM_CQ7.3",
+   "What are some advantages and disadvantages of word-for-word and literal translation?"
+  ],
+  [
+   "62",
+   "21",
+   "HN_CQ21",
+   "What are some advantages and disadvantages of word-for-word and literal translation?"
+  ],
+  [
+   "63",
+   "21",
+   "CT_CQ7.3",
+   "What are some advantages and disadvantages of word-for-word and literal translation?"
+  ],
+  [
+   "64",
+   "22",
+   "HCM_CQ8.1",
+   "What are some advantages and disadvantages of adaptation and free translation?"
+  ],
+  [
+   "65",
+   "22",
+   "HN_CQ22",
+   "What are some advantages and disadvantages of adaptation and free translation?"
+  ],
+  [
+   "66",
+   "22",
+   "CT_CQ8.1",
+   "What are some advantages and disadvantages of adaptation and free translation?"
+  ],
+  [
+   "67",
+   "23",
+   "HCM_CQ8.2",
+   "What are some difficulties of idiomatic translation? How should it be dealt with in translation?"
+  ],
+  [
+   "68",
+   "23",
+   "HN_CQ23",
+   "What are some difficulties of idiomatic translation? How should it be dealt with in translation?"
+  ],
+  [
+   "69",
+   "23",
+   "CT_CQ8.2",
+   "What are some difficulties of idiomatic translation? How should it be dealt with in translation?"
+  ],
+  [
+   "70",
+   "24",
+   "HCM_CQ8.3",
+   "Based on an given informative text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "71",
+   "24",
+   "HN_CQ24",
+   "Based on an given informative text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "72",
+   "24",
+   "CT_CQ8.3",
+   "Based on an given informative text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "73",
+   "25",
+   "HCM_CQ9.1",
+   "Based on an given expressive text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "74",
+   "25",
+   "HN_CQ25",
+   "Based on an given expressive text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "75",
+   "25",
+   "CT_CQ9.1",
+   "Based on an given expressive text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "76",
+   "26",
+   "HCM_CQ9.2",
+   "Based on an given discussion text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "77",
+   "26",
+   "HN_CQ26",
+   "Based on an given discussion text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "78",
+   "26",
+   "CT_CQ9.2",
+   "Based on an given discussion text in English: what translation methods will be applied to the translation of the text? What key words, phrases, structures will be used in the translation? What are their equivalents? Demonstrate how you will translate the text into Vietnamese."
+  ],
+  [
+   "79",
+   "27",
+   "HCM_CQ9.3",
+   "Review and translate a short story from English into Vietnamese. How do you conduct the translation process?"
+  ],
+  [
+   "80",
+   "27",
+   "HN_CQ27",
+   "Review and translate a short story from English into Vietnamese. How do you conduct the translation process?"
+  ],
+  [
+   "81",
+   "27",
+   "CT_CQ9.3",
+   "Review and translate a short story from English into Vietnamese. How do you conduct the translation process?"
+  ],
+  [
+   "82",
+   "28",
+   "HCM_CQ10.1",
+   "Review and translate a short story from English into Vietnamese. What translation methods do you use? What problems do you face in the translation?"
+  ],
+  [
+   "83",
+   "28",
+   "HN_CQ28",
+   "Review and translate a short story from English into Vietnamese. What translation methods do you use? What problems do you face in the translation?"
+  ],
+  [
+   "84",
+   "28",
+   "CT_CQ10.1",
+   "Review and translate a short story from English into Vietnamese. What translation methods do you use? What problems do you face in the translation?"
+  ],
+  [
+   "85",
+   "29",
+   "HCM_CQ10.2",
+   "Review and translate a short story from English into Vietnamese. How are the problems you face solved?"
+  ],
+  [
+   "86",
+   "29",
+   "HN_CQ29",
+   "Review and translate a short story from English into Vietnamese. How are the problems you face solved?"
+  ],
+  [
+   "87",
+   "29",
+   "CT_CQ10.2",
+   "Review and translate a short story from English into Vietnamese. How are the problems you face solved?"
+  ],
+  [
+   "88",
+   "30",
+   "HCM_CQ10.3",
+   "Review and translate a short story from English into Vietnamese. How do you evaluate the quality of the translated version in comparison with the original version?"
+  ],
+  [
+   "89",
+   "30",
+   "HN_CQ30",
+   "Review and translate a short story from English into Vietnamese. How do you evaluate the quality of the translated version in comparison with the original version?"
+  ],
+  [
+   "90",
+   "30",
+   "CT_CQ10.3",
+   "Review and translate a short story from English into Vietnamese. How do you evaluate the quality of the translated version in comparison with the original version?"
+  ],
+  [
+   "91",
+   "31",
+   "HCM_CQ11.1",
+   "How is Communicative Translation implemented? What are some problems it may cause to translators?"
+  ],
+  [
+   "92",
+   "31",
+   "HN_CQ31",
+   "How is Communicative Translation implemented? What are some problems it may cause to translators?"
+  ],
+  [
+   "93",
+   "31",
+   "CT_CQ11.1",
+   "How is Communicative Translation implemented? What are some problems it may cause to translators?"
+  ],
+  [
+   "94",
+   "32",
+   "HCM_CQ11.2",
+   "How is Semantic Translation implemented? What types of text should be translated with Semantic Translation?"
+  ],
+  [
+   "95",
+   "32",
+   "HN_CQ32",
+   "How is Semantic Translation implemented? What types of text should be translated with Semantic Translation?"
+  ],
+  [
+   "96",
+   "32",
+   "CT_CQ11.2",
+   "How is Semantic Translation implemented? What types of text should be translated with Semantic Translation?"
+  ],
+  [
+   "97",
+   "33",
+   "HCM_CQ11.3",
+   "Based on a discussion text of 800-1000 words in English which has been translated in Vietnamese and published in credible source(s).What translation methods have been used by the author?"
+  ],
+  [
+   "98",
+   "33",
+   "HN_CQ33",
+   "Based on a discussion text of 800-1000 words in English which has been translated in Vietnamese and published in credible source(s).What translation methods have been used by the author?"
+  ],
+  [
+   "99",
+   "33",
+   "CT_CQ11.3",
+   "Based on a discussion text of 800-1000 words in English which has been translated in Vietnamese and published in credible source(s).What translation methods have been used by the author?"
+  ],
+  [
+   "100",
+   "34",
+   "HCM_CQ12.1",
+   "Based on a discussion text of 800-1000 words in English which has been translated in Vietnamese and published in credible source(s).Do you find any problems in the translated version? Suggest some amendments to improve the translation quality\""
+  ],
+  [
+   "101",
+   "34",
+   "HN_CQ34",
+   "Based on a discussion text of 800-1000 words in English which has been translated in Vietnamese and published in credible source(s).Do you find any problems in the translated version? Suggest some amendments to improve the translation quality\""
+  ],
+  [
+   "102",
+   "34",
+   "CT_CQ12.1",
+   "Based on a discussion text of 800-1000 words in English which has been translated in Vietnamese and published in credible source(s).Do you find any problems in the translated version? Suggest some amendments to improve the translation quality\""
+  ],
+  [
+   "103",
+   "35",
+   "HCM_CQ12.2",
+   "Based on a discussion text of 800-1000 words in Vietnamese which has been translated in English and published in credible source(s)\n' What translation methods have been used by the author?"
+  ],
+  [
+   "104",
+   "35",
+   "HN_CQ35",
+   "Based on a discussion text of 800-1000 words in Vietnamese which has been translated in English and published in credible source(s)\n' What translation methods have been used by the author?"
+  ],
+  [
+   "105",
+   "35",
+   "CT_CQ12.2",
+   "Based on a discussion text of 800-1000 words in Vietnamese which has been translated in English and published in credible source(s)\n' What translation methods have been used by the author?"
+  ],
+  [
+   "106",
+   "36",
+   "HCM_CQ12.3",
+   "Based on a discussion text of 800-1000 words in Vietnamese which has been translated in English and published in credible source(s)\n\n' Do you find any problems in the translated version? Suggest some amendments to improve the translation quality\""
+  ],
+  [
+   "107",
+   "36",
+   "HN_CQ36",
+   "Based on a discussion text of 800-1000 words in Vietnamese which has been translated in English and published in credible source(s)\n' Do you find any problems in the translated version? Suggest some amendments to improve the translation quality\""
+  ],
+  [
+   "108",
+   "36",
+   "CT_CQ12.3",
+   "Based on a discussion text of 800-1000 words in Vietnamese which has been translated in English and published in credible source(s)\n\n' Do you find any problems in the translated version? Suggest some amendments to improve the translation quality\""
+  ],
+  [
+   "109",
+   "37",
+   "HCM_CQ13.1",
+   "Consider a given discussion text of 800-1000 words in Vietnamese: What translation methods will be used in the translation of the text?"
+  ],
+  [
+   "110",
+   "37",
+   "HN_CQ37",
+   "Consider a given discussion text of 800-1000 words in Vietnamese: What translation methods will be used in the translation of the text?"
+  ],
+  [
+   "111",
+   "37",
+   "CT_CQ13.1",
+   "Consider a given discussion text of 800-1000 words in Vietnamese: What translation methods will be used in the translation of the text?"
+  ],
+  [
+   "112",
+   "38",
+   "HCM_CQ13.2",
+   "Consider a given discussion text of 800-1000 words in Vietnamese: Demonstrate how you translate the text into English. What problems do you face in the translation?"
+  ],
+  [
+   "113",
+   "38",
+   "HN_CQ38",
+   "Consider a given discussion text of 800-1000 words in Vietnamese: Demonstrate how you translate the text into English. What problems do you face in the translation?"
+  ],
+  [
+   "114",
+   "38",
+   "CT_CQ13.2",
+   "Consider a given discussion text of 800-1000 words in Vietnamese: Demonstrate how you translate the text into English. What problems do you face in the translation?"
+  ],
+  [
+   "115",
+   "39",
+   "HCM_CQ13.3",
+   "Based on a given discussion text of 800-1000 words in English: What language functions are used in the text? What translation methods will be used to translate the text?"
+  ],
+  [
+   "116",
+   "39",
+   "HN_CQ39",
+   "Based on a given discussion text of 800-1000 words in English: What language functions are used in the text? What translation methods will be used to translate the text?"
+  ],
+  [
+   "117",
+   "39",
+   "CT_CQ13.3",
+   "Based on a given discussion text of 800-1000 words in English: What language functions are used in the text? What translation methods will be used to translate the text?"
+  ],
+  [
+   "118",
+   "40",
+   "HCM_CQ14.1",
+   "Based on a given discussion text of 800-1000 words in English: What are some key words, phrases, structures and their equivalents? Demonstrate how you translate the text into Vietnamese?"
+  ],
+  [
+   "119",
+   "40",
+   "HN_CQ40",
+   "Based on a given discussion text of 800-1000 words in English: What are some key words, phrases, structures and their equivalents? Demonstrate how you translate the text into Vietnamese?"
+  ],
+  [
+   "120",
+   "40",
+   "CT_CQ14.1",
+   "Based on a given discussion text of 800-1000 words in English: What are some key words, phrases, structures and their equivalents? Demonstrate how you translate the text into Vietnamese?"
+  ],
+  [
+   "121",
+   "41",
+   "HCM_CQ14.2",
+   "How do text types impact the choice of translation methods? For an informative text, what translation method (s) will be the most suitable?"
+  ],
+  [
+   "122",
+   "41",
+   "HN_CQ41",
+   "How do text types impact the choice of translation methods? For an informative text, what translation method (s) will be the most suitable?"
+  ],
+  [
+   "123",
+   "41",
+   "CT_CQ14.2",
+   "How do text types impact the choice of translation methods? For an informative text, what translation method (s) will be the most suitable?"
+  ],
+  [
+   "124",
+   "42",
+   "HCM_CQ14.3",
+   "Choose a suitable method to translate an informative text (1000 words) from English into Vietnamese."
+  ],
+  [
+   "125",
+   "42",
+   "HN_CQ42",
+   "Choose a suitable method to translate an informative text (1000 words) from English into Vietnamese."
+  ],
+  [
+   "126",
+   "42",
+   "CT_CQ14.3",
+   "Choose a suitable method to translate an informative text (1000 words) from English into Vietnamese."
+  ],
+  [
+   "127",
+   "43",
+   "HCM_CQ15.1",
+   "How to deal with non-equivalence at word level in translation?"
+  ],
+  [
+   "128",
+   "43",
+   "HN_CQ43",
+   "How to deal with non-equivalence at word level in translation?"
+  ],
+  [
+   "129",
+   "43",
+   "CT_CQ15.1",
+   "How to deal with non-equivalence at word level in translation?"
+  ],
+  [
+   "130",
+   "44",
+   "HCM_CQ15.2",
+   "How to deal with idioms, expressions in translation?"
+  ],
+  [
+   "131",
+   "44",
+   "HN_CQ44",
+   "How to deal with idioms, expressions in translation?"
+  ],
+  [
+   "132",
+   "44",
+   "CT_CQ15.2",
+   "How to deal with idioms, expressions in translation?"
+  ],
+  [
+   "133",
+   "45",
+   "HCM_CQ15.3",
+   "How to deal with cove, number, and person in translation?"
+  ],
+  [
+   "134",
+   "45",
+   "HN_CQ45",
+   "How to deal with cove, number, and person in translation?"
+  ],
+  [
+   "135",
+   "45",
+   "CT_CQ15.3",
+   "How to deal with cove, number, and person in translation?"
+  ],
+  [
+   "136",
+   "46",
+   "HCM_CQ16.1",
+   "Based on a given English document. what idioms and fixed expressions are used in the documents? How are these translated into Vietnamese? What strategies are used for the translation? Demonstrate how you translate the whole text."
+  ],
+  [
+   "137",
+   "46",
+   "HN_CQ46",
+   "Based on a given English document. what idioms and fixed expressions are used in the documents? How are these translated into Vietnamese? What strategies are used for the translation? Demonstrate how you translate the whole text."
+  ],
+  [
+   "138",
+   "46",
+   "CT_CQ16.1",
+   "Based on a given English document. what idioms and fixed expressions are used in the documents? How are these translated into Vietnamese? What strategies are used for the translation? Demonstrate how you translate the whole text."
+  ],
+  [
+   "139",
+   "47",
+   "HCM_CQ16.2",
+   "Based on a given Vietnamese document. what idioms and fixed expressions are used in the documents? How are these translated into English? What strategies are used for the translation? Demonstrate how you translate the whole text."
+  ],
+  [
+   "140",
+   "47",
+   "HN_CQ47",
+   "Based on a given Vietnamese document. what idioms and fixed expressions are used in the documents? How are these translated into English? What strategies are used for the translation? Demonstrate how you translate the whole text."
+  ],
+  [
+   "141",
+   "47",
+   "CT_CQ16.2",
+   "Based on a given Vietnamese document. what idioms and fixed expressions are used in the documents? How are these translated into English? What strategies are used for the translation? Demonstrate how you translate the whole text."
+  ],
+  [
+   "142",
+   "48",
+   "HCM_CQ16.3",
+   "Based on an English document. What are some non-equivalences used in the text? How are you going to deal with these? What strategies are used for the translation? Demonstrate how you translate the whole document."
+  ],
+  [
+   "143",
+   "48",
+   "HN_CQ48",
+   "Based on an English document. What are some non-equivalences used in the text? How are you going to deal with these? What strategies are used for the translation? Demonstrate how you translate the whole document."
+  ],
+  [
+   "144",
+   "48",
+   "CT_CQ16.3",
+   "Based on an English document. What are some non-equivalences used in the text? How are you going to deal with these? What strategies are used for the translation? Demonstrate how you translate the whole document."
+  ],
+  [
+   "145",
+   "49",
+   "HCM_CQ17.1",
+   "What are some strategies in dealing with proper names in translation?"
+  ],
+  [
+   "146",
+   "49",
+   "HN_CQ49",
+   "What are some strategies in dealing with proper names in translation?"
+  ],
+  [
+   "147",
+   "49",
+   "CT_CQ17.1",
+   "What are some strategies in dealing with proper names in translation?"
+  ],
+  [
+   "148",
+   "50",
+   "HCM_CQ17.2",
+   "What are some strategies in dealing with non-subject sentences in translation?"
+  ],
+  [
+   "149",
+   "50",
+   "HN_CQ50",
+   "What are some strategies in dealing with non-subject sentences in translation?"
+  ],
+  [
+   "150",
+   "50",
+   "CT_CQ17.2",
+   "What are some strategies in dealing with non-subject sentences in translation?"
+  ],
+  [
+   "151",
+   "51",
+   "HCM_CQ17.3",
+   "Based on a given English text, what proper names are used in the text? How are these dealt with. Demonstrate how you translate the whole text."
+  ],
+  [
+   "152",
+   "51",
+   "HN_CQ51",
+   "Based on a given English text, what proper names are used in the text? How are these dealt with. Demonstrate how you translate the whole text."
+  ],
+  [
+   "153",
+   "51",
+   "CT_CQ17.3",
+   "Based on a given English text, what proper names are used in the text? How are these dealt with. Demonstrate how you translate the whole text."
+  ],
+  [
+   "154",
+   "52",
+   "HCM_CQ18.1",
+   "Based on a given English text, what non-subject sentences are used in the text? How are these dealt with. Demonstrate how you translate the whole text."
+  ],
+  [
+   "155",
+   "52",
+   "HN_CQ52",
+   "Based on a given English text, what non-subject sentences are used in the text? How are these dealt with. Demonstrate how you translate the whole text."
+  ],
+  [
+   "156",
+   "52",
+   "CT_CQ18.1",
+   "Based on a given English text, what non-subject sentences are used in the text? How are these dealt with. Demonstrate how you translate the whole text."
+  ],
+  [
+   "157",
+   "53",
+   "HCM_CQ18.2",
+   "How to deal with cultural categories in translation?"
+  ],
+  [
+   "158",
+   "53",
+   "HN_CQ53",
+   "How to deal with cultural categories in translation?"
+  ],
+  [
+   "159",
+   "53",
+   "CT_CQ18.2",
+   "How to deal with cultural categories in translation?"
+  ],
+  [
+   "160",
+   "54",
+   "HCM_CQ18.3",
+   "How to deal with social organizations in translation?"
+  ],
+  [
+   "161",
+   "54",
+   "HN_CQ54",
+   "How to deal with social organizations in translation?"
+  ],
+  [
+   "162",
+   "54",
+   "CT_CQ18.3",
+   "How to deal with social organizations in translation?"
+  ],
+  [
+   "163",
+   "55",
+   "HCM_CQ19.1",
+   "Based on a 800-1000 word text in English in which religious terms, historical terms, and international terms are used. What are the equivalences of these terms?"
+  ],
+  [
+   "164",
+   "55",
+   "HN_CQ55",
+   "Based on a 800-1000 word text in English in which religious terms, historical terms, and international terms are used. What are the equivalences of these terms?"
+  ],
+  [
+   "165",
+   "55",
+   "CT_CQ19.1",
+   "Based on a 800-1000 word text in English in which religious terms, historical terms, and international terms are used. What are the equivalences of these terms?"
+  ],
+  [
+   "166",
+   "56",
+   "HCM_CQ19.2",
+   "Based on a 800-1000 word text in English in which religious terms, historical terms, and international terms are used. What are the difficulties in the translation of those?"
+  ],
+  [
+   "167",
+   "56",
+   "HN_CQ56",
+   "Based on a 800-1000 word text in English in which religious terms, historical terms, and international terms are used. What are the difficulties in the translation of those?"
+  ],
+  [
+   "168",
+   "56",
+   "CT_CQ19.2",
+   "Based on a 800-1000 word text in English in which religious terms, historical terms, and international terms are used. What are the difficulties in the translation of those?"
+  ],
+  [
+   "169",
+   "57",
+   "HCM_CQ19.3",
+   "Based on a 800-1000 word text in English in which administrative and political terms are used, How are those problems found in CQ56 dealt with?"
+  ],
+  [
+   "170",
+   "57",
+   "HN_CQ57",
+   "Based on a 800-1000 word text in English in which administrative and political terms are used, How are those problems found in CQ56 dealt with?"
+  ],
+  [
+   "171",
+   "57",
+   "CT_CQ19.3",
+   "Based on a 800-1000 word text in English in which administrative and political terms are used, How are those problems found in CQ56 dealt with?"
+  ],
+  [
+   "172",
+   "58",
+   "HCM_CQ20.1",
+   "Based on a 800-1000 word text in English in which administrative and political terms are used, Demonstrate how you translate the whole document."
+  ],
+  [
+   "173",
+   "58",
+   "HN_CQ58",
+   "Based on a 800-1000 word text in English in which administrative and political terms are used, Demonstrate how you translate the whole document."
+  ],
+  [
+   "174",
+   "58",
+   "CT_CQ20.1",
+   "Based on a 800-1000 word text in English in which administrative and political terms are used, Demonstrate how you translate the whole document."
+  ],
+  [
+   "175",
+   "59",
+   "HCM_CQ20.2",
+   "Synthesize information from different sources and write an essay of 1000 words in English. Topic: Culture. You are required to use some idioms, fixed expressions, cultural terms."
+  ],
+  [
+   "176",
+   "59",
+   "HN_CQ59",
+   "Synthesize information from different sources and write an essay of 1000 words in English. Topic: Culture. You are required to use some idioms, fixed expressions, cultural terms."
+  ],
+  [
+   "177",
+   "59",
+   "CT_CQ20.2",
+   "Synthesize information from different sources and write an essay of 1000 words in English. Topic: Culture. You are required to use some idioms, fixed expressions, cultural terms."
+  ],
+  [
+   "178",
+   "60",
+   "HCM_CQ20.3",
+   "Analyze how the essay written in CQ59 will be translated into Vietnamese? Which translation processes, translation methods.. will be applied?"
+  ],
+  [
+   "179",
+   "60",
+   "HN_CQ60",
+   "Analyze how the essay written in CQ59 will be translated into Vietnamese? Which translation processes, translation methods.. will be applied?"
+  ],
+  [
+   "180",
+   "60",
+   "CT_CQ20.3",
+   "Analyze how the essay written in CQ20.2 will be translated into Vietnamese? Which translation processes, translation methods.. will be applied?"
+  ]
+ ],
+ "links": []
+}

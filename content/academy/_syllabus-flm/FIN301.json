@@ -1,0 +1,1191 @@
+{
+ "ma": "FIN301",
+ "sylID": "14260",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14260",
+   "code": "FIN301",
+   "name": "Financial Markets and Institutions_Thị trường tài chính và các định chế tài chính",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14260",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14260",
+  "Syllabus Name": "Financial Markets and Institutions_Thị trường tài chính và các định chế tài chính",
+  "Course Name English": "Financial Markets and Institutions",
+  "Subject Code": "FIN301",
+  "Learning-Teaching Method": "Lecture,Problem based learning,Social Constructivism,Presentation,discussion,groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Course is aimed at study of the fundamentals of financial markets and financial instruments, the features of the formation of modern financial markets, on the practical application of financial instruments, the types of financial institutions and their roles and functions in the financial markets\n\nUpon successful completion, students will have the knowledge and skills to:\n\n* demonstrate a working knowledge of financial terms and concepts analyse how financial markets and instruments operate and how they can be used to achieve economic objectives;\n\n* understand and criticaly engage in profits and risks faced by investors and strategies to control these profits and risks;\n\n* demonstrate the ability to think independently, reflectively and analytically for work in regulating the financial sector, financial institutions or various areas of government.\n\nTopics include: Debt, equity, derivative markets, commercial bank, non-bank operation.",
+  "StudentTasks": "1. Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n\n2. Actively participate in class activities\n\n3. Fulfill tasks given by instructor after class\n\n4. Use their own laptop in class only for learning purposes\n\n5. Read the textbook in advance\n\n6. Access the course website (http://flm.fpt.edu.vn) for up-to-date information and materials of the course, for online supports from teachers and other students, and for practicing and assessment.",
+  "Tools": "- Textbook and all learning materials provided on FLM\n\n- Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Financial Institutions and Markets",
+   "Jeff Madura",
+   "South-Western Cengage Learning",
+   "2025",
+   "14th",
+   "9780357988299",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the basic functions and structures of the major financial markets and financial institutions"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Understand the simple models for determining the pricing and behavior of interest rate, foreign exchange, securities, derivatives"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand the key role of central bank plays in the financial systems and how does central bank conduct monetary policy"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand the regulatory and risk management issues of financial institutions"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Analyze and evaluate the current financial market news and issues and their implications"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Demonstrate the ability to produce a clear oral report and/or academic written report and deliver presentations on topics related to financial markets and institutions"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Practice ability to work as part of an effective team to prepare report and presentation"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "Each student should make at least 1 individual presentation during the course in front of the class. Topics will be varied based on the topics in the textbook. In addition, students are required to do exercises and other activities",
+   "",
+   "",
+   "",
+   "Participation scores will be given based on students' class attendance, preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussions, and building upon others’ comments. Class participation accounts for 10% of the final score."
+  ],
+  [
+   "2",
+   "Essay test",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "In class (45-60 minutes)",
+   "CLO2, CLO3, CLO4, CLO5",
+   "Multiple choice questions and/or Criticial thinking (exercises) questions",
+   "OP 1- Only MCQ: 40-50 questionsOP 2- Only Critical thinking questions/ Exercises : 3-4 question. OP 3- Mix: 15-20 mcqs + 2-3 critical thinking questions/exercises",
+   "Cover chapters 3, 6, 10, 12, 13, 14, 15, 16, 19 in form of:* Only MCQ: 40-50 questions* Only Critical thinking questions/ Exercises : 4-5 question. * Mix: 15-20 mcqs + 2-3 critical thinking questions/exercises",
+   "Paper/computer-based testing",
+   "The questions are representative of chapter materials. Students are required to read the textbook. The Final essay accounts for 15% of the final score."
+  ],
+  [
+   "3",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "OP1: Presentation in class and report submission; OP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO1, CLO2, CLO3, CLO4",
+   "OP1: Group problem solving: It can be composed of different parts like reports, essays, exercises, and bonus points for in-class participation. Reports should cover the current state of Vietnam's financial markets and institutions.\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Specified by instructor",
+   "OP1: Thinking creatively, making decisions, solving problems,Personal qualities: Individual responsibility, self-esteem, sociability, self-management, and integrity.\nOP2: (For Constructivism Approach only): Follow lecturer's proposal",
+   "Stipulated by instructor",
+   "OP1: Either given by instructor or students are free to choose study cases\nOP2: (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "4",
+   "Midterm Test (MT)",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "In class (45-60 minutes)",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Multiple choice questions and/or Criticial thinking (exercises) questions.For example:▪ Part 1 (40%): 20 multiple choice questions in 20 minutes▪ Part 2 (60%): 3 exercises in 30 minutes",
+   "Multiple choice questions and/or Criticial thinking (exercises) questions.For example:▪ Part 1 (40%): 20 multiple choice questions in 20 minutes▪ Part 2 (60%): 3 exercises in 30 minutes",
+   "Chapters covered are 1, 2, 3, 6, 7, 10, 12, 13, 14. There are at least 2 multiple choice questions on each chapter.",
+   "Paper/computer-based testing",
+   "The questions are representative of chapter materials. Students are required to read the textbook. The MT accounts for 15% of the final score."
+  ],
+  [
+   "5",
+   "Progress Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "OP1: In class (30-40 minutes);\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "CLO1, CLO2, CLO3, CLO4",
+   "OP1: Multiple choice questions\nOP2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "20-30 questions in total; cover chapters 1, 2, 3, 6",
+   "Integration of studied knowledge and skills",
+   "Paper/computer-based testing",
+   "The questions are representative of chapter materials. Students are required to read the textbook. The progress test accounts for 10% of the final score."
+  ],
+  [
+   "6",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "Multiple choice questions",
+   "50 MC questions",
+   "there are 2-3 MC questions on each of the chapters 1, 2, 3, 6, 7, 10, 12, 13, 14, 15, 16, 17, 19",
+   "computer-based testing",
+   "Allow to use pocket calculator in the exam room.\n\nNot allow to use any document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "-Course Overview\n\n-Introduction to AI Integration\n\n-Chapter 1: The Role of Financial Markets and Institutions\n\n1.1. Role of financial markets\n\n1.2. Securities traded in financial markets",
+   "Offline",
+   "CLO1",
+   "IT",
+   "Book, Slides",
+   "Slides Chapter 1,2,3,6,7",
+   "- Review the course outline and clarify expectations regarding learning outcomes, assessment, and academic integrity (including AI use).\n\n- Engage in introductory discussions and familiarize themselves with course requirements and digital platforms.\n\n- Begin preparation for the first chapter as assigned.",
+   "link"
+  ],
+  [
+   "2",
+   "Chapter 1: The Role of Financial Markets and Institutions (cont')\n1.3. Role of financial institutions\n1.4. Systemic Risk among Financial Institutions",
+   "Offline",
+   "CLO1",
+   "T",
+   "Book, Slides",
+   "Slides Chapter 10,12,13,14,15",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: The Role of Financial Markets and Institutions (cont')\n1.5. The Emergence of Fintech\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Will Computer Technology Cause Financial Intermediaries to Become Extinct?",
+   "Offline",
+   "CLO1",
+   "T",
+   "Book, Slides",
+   "Slides Chapter 16,17,19,21,22",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: Interest Rate Determination\n\n2.1. Loanable funds theory\n\n2.2. Factors that affect interest rates",
+   "Offline",
+   "CLO2",
+   "TU",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Interest Rate Determination (cont')\n2.3. Forecasting interest rates\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Does a Large Fiscal Budget Deficit Result in Higher Interest Rate?",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 3: Interest Rate Structure\n3.1. Why debt security yields vary\n3.2. Modeling the Yield to be Offered on a Debt Security",
+   "Offline",
+   "CLO2",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3: Interest Rate Structure (cont')\n3.3. A closer look at the term structure",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3: Interest Rate Structure (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Should a Yield Curve Influence a Borrower's Preferred Maturities of a Loan?",
+   "Offline",
+   "CLO2",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "9",
+   "Group Assignment Guidelines",
+   "Offline",
+   "CLO6, CLO7",
+   "U",
+   "",
+   "",
+   "- Review the project objectives, scope, deliverables, timeline, and assessment criteria.\n- Form groups (if not pre-assigned) and establish preliminary roles, communication channels, and a working plan.\n- Seek clarification on expectations, methodology, data requirements, and academic integrity policies (including AI use, if applicable).",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 6: Money Markets\n6.1. Money market securities",
+   "Offline",
+   "CLO3",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 6: Money Markets (cont')\n6.2. Institutional use of money markets",
+   "Offline",
+   "CLO3",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 6: Money Markets (cont')\n6.3. Globalization of money markets",
+   "Offline",
+   "CLO3",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 6: Money Markets (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Should Firms Invest in Money Market Securities?",
+   "Offline",
+   "CLO3",
+   "T",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 7: Bond Markets\n7.1. Background on bonds\n7.2. Treasury and federal agency bonds",
+   "Offline",
+   "CLO3",
+   "U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 7: Bond Markets\n7.3. Municipal bonds\n7.4. Corporate bonds",
+   "Offline",
+   "CLO3",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 7: Bond Markets (cont')\n7.5. Globalization of Bond and Loan Markets\n7.6. Other types of long-term debt securities",
+   "Offline",
+   "CLO3",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 7: Bond Markets (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Should Financial institutions invest in junk bonds?",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "18",
+   "Progress Test (Chapters 1, 2, 3, 6)\n\nAssignment Discussion",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Arrive on time and comply with all examination regulations and integrity requirements.\n\n- Complete the test independently within the allocated time.\n\n- Review performance and identified knowledge gaps following feedback (if provided).",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 10: Stock Offerings and Investor Monitoring\n10.1. Private equity\n10.2. Public equity\n10.3. Initial public offerings",
+   "Offline",
+   "CLO4",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 10: Stock Offerings and Investor Monitoring (cont')\n10.4. Stock offerings and repurchases\n10.5. Stock exchanges\n10.6. Monitoring publicly traded companies",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 10: Stock Offerings and Investor Monitoring (cont')\n10.7. Market for corporate control\n10.8. Globalization of stock markets\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Should a Stock Exchange Enforce Some Governance Standards on the Firms Listed on the Exchange?",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 12: Market Microstructure and Strategies\n12.1. Stock market transactions\n12.2. How stock transactions are executed",
+   "Offline",
+   "CLO4",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 12: Market Microstructure and Strategies (cont')\n12.3. High Frequency Trading\n12.4. Regulation of stock trading\n12.5. Trading international stocks",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 12: Market Microstructure and Strategies (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Is a Market Maker Needed?",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 13: Financial Futures Markets\n13.1. Background on financial futures\n13.2. Interest rate futures contracts",
+   "Offline",
+   "CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 13: Financial Futures Markets (cont')\n13.3. Stock index futures",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 13: Financial Futures Markets (cont')\n13.4. Risk of trading futures contracts\n13.5. Globalization of futures markets",
+   "Offline",
+   "CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 13: Financial Futures Markets (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Has the Futures Market Created More Uncertainty for Stocks?",
+   "Offline",
+   "CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 14: Options Markets\n14.1. Background on options\n14.2. Determinants of stock option premiums",
+   "Offline",
+   "CLO2, CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 14: Options Markets (cont')\n14.3. Speculating with stock options\n14.4. Hedging with stock options",
+   "Offline",
+   "CLO2, CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 14: Options Markets (cont')\n14.5. Options on ETFs and stock indexes\n14.6. Options on futures contracts\n14.7. Options as executive compensation\n14.8. Globalization of options markets",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 14: Options Markets (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: If You Were a Major Shareholder of a Publicly Traded Firm, Would You Prefer That Stock Options Be Traded on That Stock?",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "33",
+   "Midterm Test (Chapters 1, 2, 3, 6, 7, 10, 12, 13, 14) – 2 periods",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Arrive on time and comply with all examination regulations and integrity requirements.\n- Complete the test independently within the allocated time.\n- Review performance and identified knowledge gaps following feedback (if provided).",
+   ""
+  ],
+  [
+   "34",
+   "Midterm Test (Chapters 1, 2, 3, 6, 7, 10, 12, 13, 14) – 2 periods",
+   "Offline",
+   "CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Arrive on time and comply with all examination regulations and integrity requirements.\n- Complete the test independently within the allocated time.\n- Review performance and identified knowledge gaps following feedback (if provided).",
+   ""
+  ],
+  [
+   "35",
+   "Mid-term Review & Practice\n[Practice: 1 period(s)]",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Analyze individual performance and identify conceptual or methodological weaknesses.\n- Engage in discussion by asking clarification questions and reflecting on reasoning errors.\n- Develop an action plan to address identified gaps before subsequent assessments.",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 15: Interest Rate Derivative Markets\n15.1. Background\n15.2. Type of swaps\n15.3. Risks of interest rate swaps",
+   "Offline",
+   "CLO2, CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 15: Interest Rate Derivative Markets (cont')\n15.4. Pricing interest rate swaps\n15.5. Performance of interest rate swaps",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 15: Interest Rate Derivative Markets (cont')\n15.6. Interest rate caps, floors, and collars\n15.7. Credit default swaps\n15.8. Globalization of swap markets",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 15: Interest Rate Derivative Markets (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Should Financial Institutions Engage in Interest Rate Swaps for Speculative Purposes?",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 16: Foreign Exchange Derivative Markets\n16.1. Foreign Exchange Markets and Systems\n16.2. Factors affecting exchange rates",
+   "Offline",
+   "CLO2, CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 16: Foreign Exchange Derivative Markets (cont')\n16.3. Forecasting exchange rates",
+   "Offline",
+   "CLO2, CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 16: Foreign Exchange Derivative Markets (cont')\n16.4. Foreign exchange derivatives\n16.5. International arbitrage",
+   "Offline",
+   "CLO2, CLO5",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 16: Foreign Exchange Derivative Markets (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Do Financial Insstitutions Need to Consider Foreign Exchange Market Conditions When Making Domestic Security Market Decision?",
+   "Offline",
+   "CLO2, CLO5",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 17: Commercial Bank Operations\n17.1. Background on commercial banks\n17.2. Bank sources of funds",
+   "Offline",
+   "CLO3",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 17: Commercial Bank Operations (cont')\n17.3. Uses of funds by banks\n17.4. Off-balance sheet activities\n17.5. International banking",
+   "Offline",
+   "CLO3",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 17: Commercial Bank Operations (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Should Banks Engage in Other Financial Services Besides Banking?",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "47",
+   "Assignment Discussion",
+   "Offline",
+   "",
+   "U",
+   "",
+   "",
+   "- Prepare draft outlines, analytical frameworks, and preliminary findings prior to consultation.\n- Seek clarification on methodology, argument development, data interpretation, and presentation structure.\n- Revise and refine the report and presentation based on feedback received.",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 19: Bank Management\n19.1. Bank goals, strategy, and governance\n19.2. Managing liquidity",
+   "Offline",
+   "CLO4",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 19: Bank Management (cont')\n19.3. Managing interest rate risk\n19.4. Managing credit risk\n19.5. Managing market risk",
+   "Offline",
+   "CLO4",
+   "T",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 19: Bank Management (cont')\n19.6. Integrated bank management\n19.7. Managing risk of international operations",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Complete assigned readings in advance and prepare key questions or reflections.\n- Actively participate in discussions by presenting reasoned arguments, responding to peers, and engaging in constructive debate.\n- Take structured notes and identify areas requiring further clarification or deeper analysis.",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 19: Bank Management (cont')\n\n[Practice: 1 period(s)]\nPoint/ counter-point: Can Bank Failure Be Avoided?",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Book, Slides",
+   "",
+   "- Prepare solutions to assigned questions prior to class.\n- Present and justify answers using appropriate concepts, frameworks, or evidence.\n- Engage in critical discussion by evaluating peer responses and refining their own reasoning.",
+   ""
+  ],
+  [
+   "52",
+   "Essay test (Chapters 15, 16, 17, 19) - 2 periods",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Arrive on time and comply with all examination regulations and integrity requirements.\n- Complete the test independently within the allocated time.\n- Review performance and identified knowledge gaps following feedback (if provided).",
+   ""
+  ],
+  [
+   "53",
+   "Essay test (Chapters 15, 16, 17, 19) - 2 periods",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Arrive on time and comply with all examination regulations and integrity requirements.\n- Complete the test independently within the allocated time.\n- Review performance and identified knowledge gaps following feedback (if provided).",
+   ""
+  ],
+  [
+   "54",
+   "Essay test Review & Practice\n[Practice: 1 period(s)]",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Book, Slides",
+   "",
+   "- Analyze individual performance and identify conceptual or methodological weaknesses.\n- Engage in discussion by asking clarification questions and reflecting on reasoning errors.\n- Develop an action plan to address identified gaps before subsequent assessments.",
+   ""
+  ],
+  [
+   "55",
+   "Course Review & Practice\n[Practice: 2 period(s)]",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Book, Slides",
+   "",
+   "- Review all course materials in advance and identify unresolved questions or weak areas.\n- Actively engage in integrative discussions and applied review exercises.\n- Consolidate notes and refine conceptual linkages in preparation for final assessment.",
+   ""
+  ],
+  [
+   "56",
+   "Course Review & Practice\n[Practice: 2 period(s)]",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Book, Slides",
+   "",
+   "- Review all course materials in advance and identify unresolved questions or weak areas.\n- Actively engage in integrative discussions and applied review exercises.\n- Consolidate notes and refine conceptual linkages in preparation for final assessment.",
+   ""
+  ],
+  [
+   "57",
+   "Group presentation & Report submission",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Book, Slides, Group Reports and Slides",
+   "",
+   "- Deliver the presentation in a clear, structured, and analytically rigorous manner.\n- Demonstrate mastery of the topic through evidence-based arguments and coherent responses during Q&A.\n- Engage respectfully in peer evaluation by posing substantive questions and providing constructive feedback.",
+   ""
+  ],
+  [
+   "58",
+   "Group presentation & Report submission",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Book, Slides, Group Reports and Slides",
+   "",
+   "- Deliver the presentation in a clear, structured, and analytically rigorous manner.\n- Demonstrate mastery of the topic through evidence-based arguments and coherent responses during Q&A.\n- Engage respectfully in peer evaluation by posing substantive questions and providing constructive feedback.",
+   ""
+  ],
+  [
+   "59",
+   "Group presentation & Report submission",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Book, Slides, Group Reports and Slides",
+   "",
+   "- Deliver the presentation in a clear, structured, and analytically rigorous manner.\n- Demonstrate mastery of the topic through evidence-based arguments and coherent responses during Q&A.\n- Engage respectfully in peer evaluation by posing substantive questions and providing constructive feedback.",
+   ""
+  ],
+  [
+   "60",
+   "Group presentation & Report submission",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6",
+   "U",
+   "Book, Slides, Group Reports and Slides",
+   "",
+   "- Deliver the presentation in a clear, structured, and analytically rigorous manner.\n- Demonstrate mastery of the topic through evidence-based arguments and coherent responses during Q&A.\n- Engage respectfully in peer evaluation by posing substantive questions and providing constructive feedback.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "Group 1 - discussion chapter 1",
+   "Explain the meaning of surplus units and deficit units. Provide an example of each. Which types of financial institutions do you deal with? Explain whether you are acting as a surplus unit or a deficit unit in your relationship with each financial institution."
+  ],
+  [
+   "2",
+   "1",
+   "Group 2 - Discussion chapter 1",
+   "Distinguish between primary and secondary markets. Distinguish between money and capital markets."
+  ],
+  [
+   "3",
+   "1",
+   "Group 3 - discussion chapter 1",
+   "Commercial banks use some funds to purchase securities and other funds to make loans. Why are the securities more marketable than the loans in the secondary market?"
+  ],
+  [
+   "4",
+   "2",
+   "Group 1 - discussion chapter 2",
+   "If the federal government planned to expand the space program, how might this change affect interest rates?"
+  ],
+  [
+   "5",
+   "2",
+   "Group 2 - Discussion chapter 2",
+   "What is the difference between the nominal interest rate and the real interest rate? What is the logic behind the implied positive relationship between expected inflation and nominal interest rates?"
+  ],
+  [
+   "6",
+   "2",
+   "Group 3 - discussion chapter 2",
+   "Would increasing the money supply growth place upward or downward pressure on interest rates? Explain in more detail."
+  ],
+  [
+   "7",
+   "3",
+   "Group 1 - Discussion chapter 3",
+   "- Do investors in high tax brackets or those in low tax brackets benefit more from tax-exempt securities? Why?\n\n- At a given point in time, which offers a higher before-tax yield: municipal bonds or corporate bonds? Why?\n\n- Which has the higher after-tax yield? If taxes did not exist, would Treasury bonds offer a higher or lower yield than municipal bonds with the same maturity? Why?"
+  ],
+  [
+   "8",
+   "3",
+   "Group 2 - Discussion chapter 3",
+   "Explain how a yield curve would shift in response to a sudden expectation of rising interest rates, according to the pure expectations theory."
+  ],
+  [
+   "9",
+   "3",
+   "Group 3 - Discussion chapter 3",
+   "If a downward-sloping yield curve is mainly attributed to segmented markets theory, what does that suggest about the demand for and supply of funds in the short-term and long-term maturity markets?"
+  ],
+  [
+   "10",
+   "4",
+   "Group 1 - Discussion & Exercises chapter 6",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers.\n“Money markets are not used to get rich, but to avoid being poor.”\n\n2. Assume an investor purchased a 6-month T-bill with a USD10,000 par value for USD9,000 and sold it 90 days later for USD9,100. What is the yield?\n\n3. A money market security with a par value of USD10,000 sells for USD8,816.60. Given that the security has a maturity of two years, what is the investor’s required rate of return?"
+  ],
+  [
+   "11",
+   "4",
+   "Group 2- Discussion & Exercises chapter 6",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers.\n“Until conditions are more favorable, investors are staying on the sidelines.”\n\n2. A money market security that has a par value of USD10,000 sells for USD8,816.60. Given that the security has a maturity of two years, what is the investor’s required rate of return?\n\n3. You paid USD98,000 for a USD100,000 T-bill maturing in 120 days. If you hold it until maturity, what is the T-bill yield? What is the T-bill discount?"
+  ],
+  [
+   "12",
+   "4",
+   "Group 3 - Discussion & Exercises chapter 6",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers.\n“My portfolio is overinvested in stocks because of the low money market rates.”\n\n2. Commercial Paper Yield Assume an investor purchased six-month commercial paper with a face value of USD1 million for USD940,000. What is the yield?\n\n3. Repurchase Agreement Stanford Corporation arranged a repurchase agreement in which it purchased securities for USD4.9 million and will sell the securities back for USD5 million in 40 days. What is the yield (or repo rate) to Stanford Corporation?"
+  ],
+  [
+   "13",
+   "5",
+   "Group 1 - Discussion chapter 7",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers: “The values of some stocks are dependent on the bond market. When investors are not interested in junk bonds, the values of stocks ripe for leveraged buyouts decline.”\n\n2. Treasury Bond An inflation-indexed Treasury bond has a par value of USD1,000 and a coupon rate of 6 percent. An investor purchases this bond and holds it for one year. During the year, the consumer price index increases by 1 percent every six months. What are the total interest payments that the investor will receive during the year?"
+  ],
+  [
+   "14",
+   "5",
+   "Group 2 - Discussion chapter 7",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers: \"The recent practice in which firms use debt to repurchase some of their stock is a good strategy as long as the firms can withstand the stagnant economy.”\n\n2. Inflation-Indexed Treasury Bond Assume that the U.S. economy experienced deflation during the year and that the consumer price index decreased by 1 percent in the first six months of the year and by 2 percent during the second six months of the year. If an investor had purchased inflation-indexed Treasury bonds with a par value of USD10,000 and a coupon rate of 5 percent, how much would she have received in interest during the year?"
+  ],
+  [
+   "15",
+   "5",
+   "Group 3 - Discussion chapter 7",
+   "1.Interpret the following statements made by Wall Street analysts and portfolio managers: \"Although yields among bonds are related, today’s rumors of a tax cut caused an increase in the yield on municipal bonds, while the yield on corporate bonds declined.”\n\n2.Treasury Bond An inflation-indexed Treasury bond has a par value of USD1,000 and a coupon rate of 6 percent. An investor purchases this bond and holds it for one year. During the year, the consumer price index increases by 1 percent every six months. What are the total interest payments that the investor will receive during the year?"
+  ],
+  [
+   "16",
+   "6",
+   "Group 1 - Discussion chapter 10",
+   "1. What is the danger of issuing too much stock? What is the role of the securities firm that serves as the underwriter, and how can it ensure that the firm does not issue too much stock?\n\n2. Describe a lockup provision and explain why it might be required by the lead underwriter."
+  ],
+  [
+   "17",
+   "6",
+   "Group 2 - Discussion Chapter 10",
+   "1. Why do firms engage in IPOs? What is the amount of the fees that the lead underwriter and its syndicate charge a firm that is going public? Why are there many IPOs in some periods and few IPOs in other periods?\n\n2. What does it mean to “flip” shares? Why would investors want to flip shares?"
+  ],
+  [
+   "18",
+   "6",
+   "Group 3 - Discussion chapter 10",
+   "1. Explain the difference between obtaining funds from a venture capital firm and engaging in an IPO. Explain how the IPO may serve as a means by which the venture capital firm can cash out.\n\n2. Discuss the concept of asymmetric information. Explain why it may motivate firms to repurchase some of their stock."
+  ],
+  [
+   "19",
+   "7",
+   "Group 1 - Questions and applications chapter 12",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers: “Individual investors who purchase stock on margin might as well go to Vegas.”\n\n2. Your friend just told you about a penny stock that he purchased, which increased in price from USD0.10 to USD0.50 per share. You start investigating penny stocks, and after conducting a large amount of research, you find a stock with a quoted price of USD0.05. Upon further investigation, you notice that the ask price for the stock is USD0.08 and that the bid price is USD0.01. Discuss the possible reasons for this wide bid–ask spread."
+  ],
+  [
+   "20",
+   "7",
+   "Group 2 - Questions and applications Chapter 12",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers: “During a major stock market downturn, market makers suddenly are not available.”\n\n2. What are dark pools? How can they help investors accumulate shares without other investors knowing about the trades? Why are dark pools criticized by public stock exchanges? Explain the strategy used by public stock exchanges to compete with dark pools."
+  ],
+  [
+   "21",
+   "7",
+   "Group 3 - Questions and applications Chapter 12",
+   "1. Interpret the following statements made by Wall Street analysts and portfolio managers: “The trading floor may become extinct due to ECNs.”\n\n2. Explain the strategy of high frequency trading firms. Describe the typical time horizon of an investment that is relevant to high frequency traders and explain how it varies from the time horizons of other institutional investors."
+  ],
+  [
+   "22",
+   "8",
+   "Group 1 - Exercises chapter 1-3",
+   "**1. Nominal Rate of Interest**\n\nSuppose the real interest rate is 6 percent and the expected inflation rate is 2 percent. What would you expect the nominal rate of interest to be?\n\n**2. Forward Rate**\n\nAssume that, as of today, the annualized interest rate on a three-year security is 10 percent and the annualized interest rate on a two-year security is 7 percent. Use this information to estimate the one-year forward rate two years from now.\n\n**3. After-Tax Yield**\n\nDetermine how the after-tax yield from investing in a corporate bond is affected by higher tax rates, holding the before-tax yield constant. Explain the logic of this relationship."
+  ],
+  [
+   "23",
+   "8",
+   "Group 2 - Exercises chapter 1-3",
+   "**1. Real Interest Rate**\n\nSuppose that Treasury bills are currently paying 9 percent and the expected inflation rate is 3 percent. What is the real interest rate?\n\n**2. After-Tax Yield**\n\nYou need to choose between investing in a one-year municipal bond with a 7 percent yield and a one-year corporate bond with an 11 percent yield. If your marginal federal income tax rate is 30 percent and no other differences exist between these two securities, which would you invest in?\n\n**3. Commercial Paper Yield**\n\nA corporation is planning to sell its 90-day commercial paper to investors by offering an 8.4 percent yield. If the three-month Treasury bill’s annualized rate is 7 percent, the credit risk premium is estimated to be 0.6 percent, and there is a 0.4 percent tax adjustment, then what is the liquidity premium on the commercial paper?"
+  ],
+  [
+   "24",
+   "8",
+   "Group 3 - Exercises chapter 1-3",
+   "**1. Nominal Rate of Interest**\n\nSuppose the real interest rate is 6 percent and the expected inflation rate is 2 percent. What would you expect the nominal rate of interest to be?\n\n**2. Forward Rate**\n\nAssume that, as of today, the annualized two-year interest rate is 13 percent and the one-year interest rate is 12 percent. Use this information to estimate the one-year forward rate.\n\n**3. Deriving Current Interest Rates**\n\nAssume that interest rates for one-year securities are expected to be 2 percent today, 4 percent one year from now, and 6 percent two years from now. Using only pure expectations theory, what are the current interest rates on two-year and three-year securities?"
+  ],
+  [
+   "25",
+   "9",
+   "Group 1 - Exercises chapter 6-7",
+   "**1. Effective Yield**\n\nA U.S. investor obtains British pounds when the pound is worth USD1.50 and invests in a one-year money market security that provides a yield of 5 percent (in pounds). At the end of one year, the investor converts the proceeds from the investment back to dollars at the prevailing spot rate of USD1.52 per pound. Calculate the effective yield.\n\n**2. Return on NCDs**\n\nPhil purchased an NCD a year ago in the secondary market for USD980,000. The NCD matures today at a price of USD1 million, and Phil received USD45,000 in interest. What is Phil’s return on the NCD?\n\n**3. Inflation-Indexed**\n\nTreasury Bond An inflation-indexed Treasury bond has a par value of USD1,000 and a coupon rate of 6 percent. An investor purchases this bond and holds it for one year. During the year, the consumer price index increases by 1 percent every six months. What are the total interest payments that the investor will receive during the year?"
+  ],
+  [
+   "26",
+   "9",
+   "Group 2 - Exercises chapter 6-7",
+   "**1. T-Bill Discount**\n\nNewly issued three-month T-bills with a par value of USD10,000 sold for USD9,700. Compute the T-bill discount.\n\n**2. Required Rate of Return**\n\nA money market security that has a par value of USD10,000 sells for USD8,816.60. Given that the security has a maturity of two years, what is the investor’s required rate of return?\n\n**3. Inflation-Indexed**\n\nTreasury Bond Assume that the U.S. economy experienced deflation during the year and that the consumer price index decreased by 1 percent in the first six months of the year and by 2 percent during the second six months of the year. If an investor had purchased inflation-indexed Treasury bonds with a par value of USD10,000 and a coupon rate of 5 percent, how much would she have received in interest during the year?"
+  ],
+  [
+   "27",
+   "9",
+   "Group 3 - Exercises chapter 6-7",
+   "**1. Commercial Paper Yield**\n\nAssume an investor purchased six-month commercial paper with a face value of USD1 million for USD940,000. What is the yield?\n\n**2. T-Bill Yield**\n\nThe Treasury is selling 91-day T-bills with a face value of USD10,000 for USD9,900. If the investor holds them until maturity, calculate the yield.\n\n**3. Inflation-Indexed**\n\nTreasury Bond An inflation-indexed Treasury bond has a par value of USD1,000 and a coupon rate of 6 percent. An investor purchases this bond and holds it for one year. During the year, the consumer price index increases by 1 percent every six months. What are the total interest payments that the investor will receive during the year?"
+  ],
+  [
+   "28",
+   "10",
+   "Group 1 - Exercises chapter 10-12",
+   "**1. Spinning and Laddering**\n\nDescribe spinning and laddering in the IPO market. How do you think these actions influence the price of a newly issued stock? Who is adversely affected as a result of these actions?\n\n**2. Buying on Margin**\n\nAssume that Vogl stock is priced at USD50 per share and pays a dividend of USD1 per share. An investor purchases the stock on margin, paying USD30 per share and borrowing the remainder from the brokerage firm at 10 percent annualized interest. If, after one year, the stock is sold at a price of USD60 per share, what is the return to the investor?"
+  ],
+  [
+   "29",
+   "10",
+   "Group 2 - Exercises chapter 10-12",
+   "**1. Dilemma of Stock Analysts**\n\nExplain the dilemma of stock analysts who work for securities firms and assign ratings to large corporations. Why might they prefer not to assign low ratings to weak but large corporations?\n\n**2. Buying on Margin**\n\nAssume that Duever stock is priced at USD80 per share and pays a dividend of USD2 per share. An investor purchases the stock on margin, paying USD50 per share and borrowing the remainder from the brokerage firm at 12 percent annualized interest. If, after one year, the stock is sold at a price of USD90 per share, what is the return to the investor?"
+  ],
+  [
+   "30",
+   "10",
+   "Group 3 - Exercises chapter 10-12",
+   "**1. Limitations of an IPO**\n\nBusinesses valued at less than USD50 million or so rarely go public. Explain the limitations to such businesses if they did go public.\n\n**2. Buying on Margin**\n\nSuppose that you buy a stock for USD48 by paying USD25 and borrowing the remaining USD23 from a brokerage firm at 8 percent annualized interest. The stock pays an annual dividend of USD0.80 per share, and after one year you are able to sell it for USD65. Calculate your return on the stock. Then, calculate the return on the stock if you had used only personal funds to make."
+  ],
+  [
+   "31",
+   "11",
+   "Group 1 - Discussion question (Review Chapter 1-12)",
+   "1. Does a Large Fiscal Budget Deficit Result in Higher Interest Rates?\n\n2. Should Financial Institutions Invest in Junk Bonds?"
+  ],
+  [
+   "32",
+   "11",
+   "Group 2 - Discussion question (Review Chapter 1-12)",
+   "1. Should a Stock Exchange Enforce Some Governance Standards on the Firms Listed on the Exchange?\n\n2. Is a Market Maker Needed?"
+  ],
+  [
+   "33",
+   "11",
+   "Group 3 - Discussion question (Review Chapter 1-12)",
+   "1. Will Computer Technology Cause Financial Intermediaries to Become Extinct?\n\n2. Should Firms Invest in Money Market Securities?"
+  ],
+  [
+   "34",
+   "12",
+   "Group 1 - Discussion and Exercise chapter 13",
+   "**1. Profit from T-Bond Futures**\n\nSpratt Company purchased Treasury bond futures contracts when the quoted price was 93-50. When this position was closed out, the quoted price was 94-75. Determine the profit or loss per contract, ignoring transaction costs.\n\n**2. Interpret the following statements** :\n\n“The existence of financial futures contracts allows our firm to hedge against temporary market declines without liquidating our portfolios.”"
+  ],
+  [
+   "35",
+   "12",
+   "Group 2 - Discussion and Exercise chapter 13",
+   "**1. Interpret the following statements**:\n\n“Given my confidence in the market, I plan to use stock index futures to increase my exposure to market movements.”\n\n**2. Profit from T-Bond Futures**\n\nSuerth Investments, Inc., purchased Treasury bond futures contracts when the quoted price was 95-00. When this position was closed out, the quoted price was 93-60. Determine the profit or loss per contract, ignoring transaction costs."
+  ],
+  [
+   "36",
+   "12",
+   "Group 3 - Discussion and Exercise chapter 13",
+   "**1. Interpret the following statements**:\n\n“We used currency futures to hedge the exchange rate exposure of our international mutual fund focused on German stocks.”\n\n**3. Profit from T-Bond Futures**\n\nToland Company sold Treasury bond futures contracts when the quoted price was 94-00. When this position was closed out, the quoted price was 93-20. Determine the profit or loss per contract, ignoring transaction costs."
+  ],
+  [
+   "37",
+   "13",
+   "Group 2 - Discussion and Exercise chapter 14",
+   "**1. Interpret the following comment**:\n\n“We prefer to use covered call writing to hedge our stock portfolios.”\n\n**2. Put Options on Futures**\n\nPurdue Savings and Loan Association purchased a put option on Treasury bond futures with a September delivery date and an exercise price of 91-16. The put option has a premium of 1-32. Assume that the price of the Treasury bond futures decreases to 88-16. Should Purdue exercise the option or should it let the option expire? What is Purdue’s net gain or loss after accounting for the premium paid on the option?"
+  ],
+  [
+   "38",
+   "13",
+   "Group 1 - Discussion and Exercise chapter 14",
+   "**1. Interpret the following comment**:\n\n“Our firm took a hit because we wrote put options on stocks just before the stock market crash.”\n\n**2. Call Options on Futures**\n\nWisconsin, Inc., purchased a call option on Treasury bond futures at a premium of 2-00. The exercise price is 92-08. If the price of the Treasury bond futures rises to 93-08, should Wisconsin exercise the call option or should it let the option expire? What is Wisconsin’s net gain or loss after accounting for the premium paid on the option?"
+  ],
+  [
+   "39",
+   "13",
+   "Group 3 - Discussion and Exercise chapter 14",
+   "**1. Interpret the following comment** :\n\n“Before hedging our stock portfolio with options on index futures, we search for the index that is most appropriate.”\n\n**2. Call Options on Futures**\n\nDePaul Insurance Company purchased a call option on a stock index futures contract. The option premium is quoted as USD6. The exercise price is 1,430. Assume the index on the futures contract reaches 1,440. Should DePaul exercise the call option or should it let the option expire? What is the net gain or loss to DePaul after accounting for the premium paid for the option (assume the value is measured as $250 times the index)?"
+  ],
+  [
+   "40",
+   "14",
+   "Group 2 - Discussion and Exercise chapter 15",
+   "**1. Interpret the following comment**:\n\n“The regulation of commercial banks, securities firms, and other financial institutions that participate in the swaps market could create a regulatory war.”\n\n**2. Vanilla Swaps**\n\nCleveland Insurance Company has just negotiated a three-year plain vanilla swap in which it will exchange fixed payments of 8 percent for floating payments of LIBOR plus 1 percent. The notional principal is USD50 million. LIBOR is expected to be 7 percent, 9 percent, and 10 percent (respectively) at the end of each of the next three years.\n\na. Determine the net dollar amount to be received (or paid) by Cleveland each year.\n\nb. Determine the dollar amount to be received (or paid) by the counterparty on this interest rate swap each year based on the assumed forecasts of LIBOR."
+  ],
+  [
+   "41",
+   "14",
+   "Group 3 - Discussion and Exercise chapter 15",
+   "**1. Interpret the following comment**:\n\n“As a dealer in interest rate swaps, our bank takes various steps to limit our exposure.”\n\n**2. Interest Rate Floors**\n\nIowa City Bank purchases a three-year interest rate floor for a fee of 2 percent of notional principal valued at USD80 million, with an interest rate floor of 6 percent and LIBOR representing the interest rate index. The bank expects LIBOR to be 6 percent, 5 percent, and 4 percent (respectively) at the end of each of the next three years.\n\na. Determine the initial fee paid, as well as the expected payments to be received by Iowa City if LIBOR moves as forecasted.\n\nb. Determine the dollar amounts to be received (or paid) by the seller of the interest rate floor based on the assumed forecasts of LIBOR."
+  ],
+  [
+   "42",
+   "14",
+   "Group 1 - Discussion and Exercise chapter 15",
+   "**1. Interpret the following comment** :\n\n“The regulation of commercial banks, securities firms, and other financial institutions that participate in the swaps market could create a regulatory war.”\n\n**2. Interest Rate Caps**\n\nNorthbrook Bank purchases a four-year cap for a fee of 3 percent of notional principal valued at USD100 million, with an interest rate ceiling of 9 percent and LIBOR as the index representing the market interest rate. Assume that LIBOR is expected to be 8 percent, 10 percent, 12 percent, and 13 percent (respectively) at the end of each of the next four years.\n\na. Determine the initial fee paid, as well as the expected payments to be received by Northbrook if LIBOR moves as forecasted.\n\nb. Determine the dollar amount to be received (or paid) by the seller of the interest rate cap based on the assumed forecasts of LIBOR."
+  ],
+  [
+   "43",
+   "15",
+   "Group 1 - Discussion and Exercise chapter 16",
+   "**1. Interpret the following statement**:\n\n“Our use of currency futures has completely changed our risk–return profile.”\n\n**2. Currency Futures**\nUse the following information to determine the probability distribution of per unit gains from selling Mexican peso futures.\n\n■■ The spot rate of the peso is USD0.10.\n\n■■ The price of peso futures is USD0.102 per unit.\n\n■■ Your expectation of the peso spot rate at maturity of the futures contract can be found in \"Part 5 - Question for group reports (Chap 13-16)\" in Google Classroom."
+  ],
+  [
+   "44",
+   "15",
+   "Group 2 - Discussion and Exercise chapter 16",
+   "**1. Interpret the following statement**:\n\n“Our use of currency options resulted in an upgrade in our credit rating.”\n\n**2. Currency Call Options**\n\nUse the following information to determine the probability distribution of net gains per unit from purchasing a call option on British pounds.\n\n■■ The spot rate of the British pound is USD1.45.\n\n■■ The premium on the British pound option is USD0.04 per unit.\n\n■■ The exercise price of a British pound option is USD1.46.\n\n■■ Your expectation of the British pound spot rate prior to the expiration of the option can be found in \"Part 5 - Question for group reports (Chap 13-16)\" in Google Classroom."
+  ],
+  [
+   "45",
+   "15",
+   "Group 3 - Discussion and Exercise chapter 16",
+   "**1. Interpret the following statement**:\n\n“Our strategy of using forward contracts to hedge backfired on us.”\n\n**4. Covered Interest Arbitrage**\n\nAssume the following information:\n\n■■ British pound spot rate = USD1.58\n\n■■ British pound one-year forward rate = USD1.58\n\n■■ British one-year interest rate = 11 percent\n\n■■ U.S. one-year interest rate = 9 percent\n\nExplain how U.S. investors could use covered interest arbitrage to lock in a higher yield than 9 percent. What would be their yield? Explain how the spot and forward rates of the pound would change as covered interest arbitrage occurs."
+  ],
+  [
+   "46",
+   "16",
+   "Group 1 - Discussion and Exercise chapter 17",
+   "Interpret the following comments made by Wall Street analysts and portfolio managers.\n\na. “Lower interest rates may reduce the size of banks.”"
+  ],
+  [
+   "47",
+   "16",
+   "Group 2 - Discussion and Exercise chapter 17",
+   "Interpret the following comments made by Wall Street analysts and portfolio managers.\n\nb. “Banks are no longer as limited when competing with other financial institutions for funds targeted for the stock market.”"
+  ],
+  [
+   "48",
+   "16",
+   "Group 3 - Discussion and Exercise chapter 17",
+   "Interpret the following comments made by Wall Street analysts and portfolio managers.\n\nc. “If the demand for loans rises substantially, interest rates will adjust to ensure that commercial banks can accommodate the demand."
+  ]
+ ],
+ "links": [
+  "/download/11436/S/1_Slides Chapter 1,2,3,6,7.zip",
+  "https://drive.google.com/drive/folders/1VUNGwtIwrKysmmEZ1q866Fv7NJEfAzwW",
+  "/download/11436/S/2_Slides Chapter 10,12,13,14,15.zip",
+  "/download/11436/S/3_Slides Chapter 16,17,19,21,22.zip"
+ ]
+}

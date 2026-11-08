@@ -1,0 +1,1398 @@
+{
+ "ma": "ECO121",
+ "sylID": "13599",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13599",
+   "code": "ECO121",
+   "name": "Macroeconomics_Kinh tế vĩ mô",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13599",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13599",
+  "Syllabus Name": "Macroeconomics_Kinh tế vĩ mô",
+  "Course Name English": "Macroeconomic",
+  "Subject Code": "ECO121",
+  "Learning-Teaching Method": "Lecture,Social Constructivism,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "ECO111",
+  "Description": "Economics is the study of how society manages its scarce resources. Economics has been divided into the subcategories of microeconomics and macroeconomics. While microeconomics focuses on the behavior of individual economic agents, this course - macroeconomics - studies how economists measure macroeconomic variables and covers topics such as determination of national output, economic growth, unemployment, inflation, interest rates, and exchange rates. Macroeconomics also discusses and assesses the effectiveness of monetary and fiscal policies under different scenarios.",
+  "StudentTasks": "+ Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n\n+ Read textbooks and other materials in advance before the class\n\n+ Actively participate in class activities\n\n+ Complete all homework assignments and other tasks given by the instructor\n\n+ Use personal laptop in class only for learning purposes\n\n+ Don’t have private conversations or arrive at class late, which can disrupt the learning environment of the class",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Principles of Economics (International Edition)",
+   "Mankiw, N. G.",
+   "South-Western CENGAGE Learning",
+   "2012",
+   "6th",
+   "978-0-538-45342-4",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "For instructors: CD with solutions, PPT, Test Bank",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Principles of Economics (International Edition)",
+   "Mankiw, N. G.",
+   "South-Western CENGAGE Learning",
+   "2018",
+   "8th",
+   "ISBN13 978-1-305-58512-6",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Principles of Microeconomics (International Edition)",
+   "Mankiw, N. G.",
+   "South-Western Cengage Learning",
+   "2009",
+   "5th",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://openlibrary.org/books/OL23174415M/Principles_of_microeconomics"
+  ],
+  [
+   "5",
+   "AE Principles of Economics",
+   "N. Gregory Mankiw",
+   "Cengage",
+   "2020",
+   "9th",
+   "ISBN-13: 9789814915342 | ISBN-10: 9814915343",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 quyển. Nếu mua ưu tiên mua version mới nhất"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Discuss the theory of supply and demand"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Recognize the influences of market equilibrium and disequilibrium"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Describe the theory of supply and demand in real-life scenarios"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify the tools and strategies to understand supply and demand applications"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply CPI and GDP to prices and unemployment"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Review the influences of aggregate demand and aggregate supply"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Shows self-reliance when working independently and collaboratively"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Demonstrate ethical awareness and reflection in business context"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "LO7,LO8",
+   "",
+   "",
+   "",
+   "",
+   "Option 1: Participation scores will be given based on students' class attendance, preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussions, and building upon others’ comments.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Group Assignment (01)",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "15' for each group presentation and 10' for Q&A",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8",
+   "Option 1: Students will be divided into 4-6 groups in the first session. Students could join some in-class activities as members of those groups. Each group will be assigned one topic, or will choose one topic subject to the instructor's approval, which is related to current economic issues in the real world. Students need to apply all comprehensive knowledge of macroeconomics to explain and analyze those issues. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: One topic related to real current economic problems for each group Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: This group presentation will test critical thinking and skills of applying microeconomic theory to explain and predict the economic phenomena in the real world.Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Preparation at home and group presentation in class room\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The PPT slides and written report of the presentation must be sent to the instructor before deadlines. Each group presentation will take place in appx. 15 minutes. The Q&A session will follow for about 10 minutes."
+  ],
+  [
+   "3",
+   "Individual Assignments (02)",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "",
+   "LO2, LO3, LO4, LO7, LO8",
+   "Option 1: Written homework in forms of computation exercises and open problems. Option 2: Questions or Activities proposed by lecturer",
+   "Option 1: not detailledOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Coverage of Individual Assignment 1 is chapters 23, 24, 28, 25, 26 and 29. Coverage of Individual Assignment 2 is chapters 30, 3, 31, 32, 33, and 34. Specific content of each individual assignment is subject to the instructor's decisions. Questions can either be theoretical analysis, computational exercises, or case analysis.Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Do at home and due according to deadlines\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: In some particular sessions, homework assignments will be given to students. The exercises in these assignments will cover subjects from the session when the previous assignment is handed. Students are required to do individually at home and submit to the instructor according to the deadlines. There are 2 assignments, each of them account for 10% of the student's final score."
+  ],
+  [
+   "4",
+   "Quizzes (02)",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "15' each",
+   "LO1, LO2",
+   "Option 1: Multiple choice questions\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 15 Questions.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Quizzes will test for knowledge of subjects in the relevant chapters assigned for quiz days. Coverage of Quiz 1 is chapters 23, 24, 28, and 25. Coverage of Quiz 2 is chapters 26, 29, 30, and 3.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Class room\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: These quizzes are organized in the beginning of some sessions and informed to students in advance. Students have time at home for preparation. Students are not allowed to use books or documents in any form during the quizzes. The content of quizzes will cover all knowledge from the last quiz. The total number of quizzes is 2. Each quiz has 15 questions and accounts for 5% of the final score."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4, LO5, LO6",
+   "Multiple choice questions",
+   "50 multiple choice questions",
+   "",
+   "Exam room",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "-Course Overview\n\n-Introduction to AI Integration into the Course\n\n-Handout of Individual Assignment 1 (Chapters 23, 24, 28, 25, 26, 29)\n\nChapter 23: Measuring A Nation's Income",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "ECOchap1-8",
+   "",
+   "link\n\nlink"
+  ],
+  [
+   "2",
+   "Course Introduction\n\nHandout of Individual Assignment 1 (Chapters 23, 24, 28, 25)\n\nChapter 23: Measuring A Nation's Income",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "ECOchap9-16",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Group Formation\n\nGroup Assignment Guidelines\n\nChapter 23: Measuring A Nation's Income\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO1",
+   "T,U",
+   "",
+   "ECOchap17-24",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "Group Formation\n\nGroup Assignment Guidelines\n\nChapter 23: Measuring A Nation's Income\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO1",
+   "T,U",
+   "",
+   "ECOchap25-32",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 24: Measuring The Cost of Living",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "ECOchap33-36",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 24: Measuring The Cost of Living",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 24: Measuring The Cost of Living\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO1",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 24: Measuring The Cost of Living\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO1",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 28: Unemployment\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 28: Unemployment\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 25: Production and Growth",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 25: Production and Growth",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "Group Topic Discussion\n\nChapter 25: Production and Growth\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "14",
+   "Group Topic Discussion\n\nChapter 25: Production and Growth\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "15",
+   "Progress Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO2, LO3",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "16",
+   "Progress Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO2, LO3",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 26: Saving, Investment, and The Financial System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 26: Saving, Investment, and The Financial System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 26: Saving, Investment, and The Financial System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 26: Saving, Investment, and The Financial System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO3",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "21",
+   "Quiz 1 (Chapters 23, 24, 28, 25) - Chapter 29: The Monetary System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 29: The Monetary System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 29: The Monetary System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "24",
+   "Submission of Individual Assignment 1\n\nHandout of Individual Assignment 2 (Chapters 30, 3, 31, 32, 33, 34)\n\nChapter 29: The Monetary System\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "25",
+   "Review Individual Assignment 1\n\nGroup Topic Finalization\n\nChapter 30: Money Growth and Inflation",
+   "Offline",
+   "LO4",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "26",
+   "Group Topic Finalization\n\nChapter 30: Money Growth and Inflation",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 30: Money Growth and Inflation\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 30: Money Growth and Inflation\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 3: Interdependence and the Gains from Trade",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 3: Interdependence and the Gains from Trade",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 3: Interdependence and the Gains from Trade\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 3: Interdependence and the Gains from Trade\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 31: Open-Economy Macroeconomics: Basic Concepts\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 31: Open-Economy Macroeconomics: Basic Concepts\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 31: Open-Economy Macroeconomics: Basic Concepts\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 31: Open-Economy Macroeconomics: Basic Concepts\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 32: A Macroeconomic Theory of the Open Economy\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 32: A Macroeconomic Theory of the Open Economy\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "Quiz 2 (Chapters 26, 29, 30, 3) Chapter 32: A Macroeconomic Theory of the Open Economy\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 32: A Macroeconomic Theory of the Open Economy\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 32: A Macroeconomic Theory of the Open Economy\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 32: A Macroeconomic Theory of the Open Economy\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 33: Aggregate Demand and Aggregate Supply\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 33: Aggregate Demand and Aggregate Supply\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 33: Aggregate Demand and Aggregate Supply\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 33: Aggregate Demand and Aggregate Supply\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 33: Aggregate Demand and Aggregate Supply\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 33: Aggregate Demand and Aggregate Supply\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 34: The Influence of Monetary and Fiscal Policy on Aggregate Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 34: The Influence of Monetary and Fiscal Policy on Aggregate Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "51",
+   "Submission of Individual Assignment 2\n\nChapter 34: The Influence of Monetary and Fiscal Policy on Aggregate Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 34: The Influence of Monetary and Fiscal Policy on Aggregate Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "Review of Individual Assignment 2\n\nSubmission of Group Assignment\n\nCourse Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "54",
+   "Review of Individual Assignment 2\n\nSubmission of Group Assignment\n\nCourse Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "55",
+   "Course Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "Course Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO3, LO4, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO3, LO4, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO3, LO4, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO3, LO4, LO6",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "DN1",
+   "GDP is defined as the market value of all final goods and services produced within a country in a given period of time. In spite of this definition, some production is left out of GDP. Ex-plain why some final goods and services are not included."
+  ],
+  [
+   "2",
+   "1",
+   "DN2",
+   "Explain why it is the case that the value of intermediate goods produced and sold during the year is not included directly as part of GDP, but the value of intermediate goods produced and not sold is included directly as part of GDP."
+  ],
+  [
+   "3",
+   "2",
+   "DN1",
+   "Since it is counted as investment, why doesn't the purchase of earthmoving equipment from China by a U.S. corporation increase U.S. GDP?"
+  ],
+  [
+   "4",
+   "2",
+   "DN2",
+   "You find that your paycheck for the year is higher this year than last. Does that mean that your real income has increased? Explain carefully."
+  ],
+  [
+   "5",
+   "3",
+   "DN3",
+   "U.S. real GDP is substantially higher today than it was 60 years ago. What does this tell us, and what does it not tell us, about the well-being of U.S. residents?"
+  ],
+  [
+   "6",
+   "4",
+   "DN1",
+   "Which is likely to have the larger effect on the CPI, a 2 percent increase in the price of food or a 3 percent in-crease in the price of diamond rings? Explain."
+  ],
+  [
+   "7",
+   "4",
+   "DN2",
+   "List the three major problems in using the CPI as a measure of the cost of living."
+  ],
+  [
+   "8",
+   "5",
+   "DN1",
+   "Why does the GDP deflator give a different rate of inflation than the CPI?"
+  ],
+  [
+   "9",
+   "5",
+   "DN2",
+   "linda and Kevin meet George, the banker, to work out the details of a mortgage. They all expect that infla-tion will be 2 percent over the term of the loan, and they agree on a nominal interest rate of 6 percent. As it turns out, the inflation rate is 5 percent over the term of the loan.\na. What was the expected real interest rate?\nb. What was the actual real interest rate?\nc. Who benefited and who lost because of the unexpected inflation?"
+  ],
+  [
+   "10",
+   "6",
+   "DN1",
+   "In a simple economy, people consume only 2 goods, food and clothing. The market basket of goods used to compute the CPI consists of 50 units of food and 10 units of clothing.\nFood Clothing\n2002 price per unit $4 $10\n2003 price per unit $6 $20\nDo these price changes affect all consumers to the same extent? Explain."
+  ],
+  [
+   "11",
+   "7",
+   "DN1",
+   "Following the recession of 2001, there was a month in which employment and the unemploy-ment rate both rose. Assuming the computations were correct, how is it possible for both to have increased?"
+  ],
+  [
+   "12",
+   "7",
+   "DN2",
+   "Why have labor-force participation rates for women in the United States increased since World War II while labor-force participation rates for men have decreased?"
+  ],
+  [
+   "13",
+   "8",
+   "DN1",
+   "Most spells of unemployment are short, and most unemployment observed at any given time is long term. How can this be?"
+  ],
+  [
+   "14",
+   "8",
+   "DN2",
+   "Why might a favorable change in the economy, such as technological improvement or a de-crease in the price of imported oil, be associated with an increase in frictional unemployment?"
+  ],
+  [
+   "15",
+   "9",
+   "DN1",
+   "Teenage unemployment is higher than unemployment of people ages 20 and over. Explain why economists would attribute at least part of this difference to minimum-wage laws."
+  ],
+  [
+   "16",
+   "10",
+   "DN1",
+   "Why is productivity related to the standard of living? In your answer be sure to explain what productivity and standard of living mean. Make a list of things that determine labor productiv-ity."
+  ],
+  [
+   "17",
+   "10",
+   "DN2",
+   "What is a production function? Write an equation for a typical production function, and ex-plain what each of the terms represents."
+  ],
+  [
+   "18",
+   "11",
+   "DN1",
+   "What is the difference between human capital and technology?"
+  ],
+  [
+   "19",
+   "11",
+   "DN2",
+   "The catch-up effect says that countries with low income can grow faster than countries with higher income. However, in statistical studies that include many diverse countries we do not observe the catch-up-effect unless we control for other variables that affect productivity. Con-sidering the determinants of productivity, list and explain some things that would tend to pro-hibit or limit a poor country's ability to catch up with the rich ones."
+  ],
+  [
+   "20",
+   "12",
+   "DN1",
+   "In addition to investment in physical and human capital, what other public policies might a country adopt to increase productivity?"
+  ],
+  [
+   "21",
+   "13",
+   "DN1",
+   "What are the basic differences between bonds and stocks?"
+  ],
+  [
+   "22",
+   "13",
+   "DN2",
+   "Which of the two bonds in each example would you expect to generally pay the higher interest rate? Explain why."
+  ],
+  [
+   "23",
+   "14",
+   "DN1",
+   "Suppose that you are a broker and people tell you the following about themselves. What sort of bond would you recommend to each? Defend your choices."
+  ],
+  [
+   "24",
+   "14",
+   "DN2",
+   "In the national income accounting identity showing the equality between national saving and investment, what are the algebraic expressions for private saving and public saving?"
+  ],
+  [
+   "25",
+   "15",
+   "DN1",
+   "Explain why the demand for loanable funds slopes downward and why the supply of loanable funds slopes upward."
+  ],
+  [
+   "26",
+   "16",
+   "DN1",
+   "Economists argue that the move from barter to money increased trade and production. How is this possible?"
+  ],
+  [
+   "27",
+   "16",
+   "DN2",
+   "Are credit cards and debit cards money? What's the difference between credit and debit cards?"
+  ],
+  [
+   "28",
+   "17",
+   "DN1",
+   "What is the difference between commodity money and fiat money? Why do people accept fiat money in trade for goods and services?"
+  ],
+  [
+   "29",
+   "17",
+   "DN2",
+   "What does the text mean by the question, \"Where Is All the Currency?\" How does it answer the question?"
+  ],
+  [
+   "30",
+   "18",
+   "DN1",
+   "What is meant by the term \"lender of last resort?\" In what circumstances might the Fed be a lender of last resort?"
+  ],
+  [
+   "31",
+   "19",
+   "DN1",
+   "Explain the adjustment process in the money market that creates a change in the price level when the money supply increases."
+  ],
+  [
+   "32",
+   "19",
+   "DN2",
+   "Suppose the Fed sells government bonds. Use a graph of the money market to show what this does to the value of money."
+  ],
+  [
+   "33",
+   "20",
+   "DN1",
+   "Using separate graphs, demonstrate what happens to the money supply, money demand, the value of money, and the price level if MS increases?"
+  ],
+  [
+   "34",
+   "20",
+   "DN2",
+   "According to the classical dichotomy, what changes nominal variables? What changes real variables?"
+  ],
+  [
+   "35",
+   "21",
+   "DN1",
+   "Wages and prices are many times higher today than they were 30 years ago, yet people do not work a lot more hours or buy fewer goods. How can this be?"
+  ],
+  [
+   "36",
+   "22",
+   "DN1",
+   "What is the inflation tax, and how might it explain the creation of inflation by a central bank?"
+  ],
+  [
+   "37",
+   "22",
+   "DN2",
+   "Economists agree that increases in the money-supply growth rate increase inflation and that inflation is undesirable. So why have there been hyperinflations and how have they been ended?"
+  ],
+  [
+   "38",
+   "23",
+   "DN1",
+   "Inflation distorts relative prices. What does this mean and why does it impose a cost on society?"
+  ],
+  [
+   "39",
+   "23",
+   "DN2",
+   "Explain the difference between absolute advantage and comparative advantage. Which is more important in determining trade patterns, absolute advantage or comparative advantage? Why?"
+  ],
+  [
+   "40",
+   "24",
+   "DN1",
+   "Julia can fix a meal in 1 hour, and her opportunity cost of one hour is $50. Jacque can fix the same kind of meal in 2 hours, and his opportunity cost of one hour is $20. Will both Julia and Jacque be better off if she pays him $45 per meal to fix her meals? Explain."
+  ],
+  [
+   "41",
+   "25",
+   "DN1",
+   "Mike and Sandy are two woodworkers who both make tables and chairs. In one month, Mike can make 4 tables or 20 chairs, where Sandy can make 6 tables or 18 chairs. Given this, we know that the opportunity cost of 1 chair is"
+  ],
+  [
+   "42",
+   "25",
+   "DN2",
+   "Suppose that Bill, a resident of the U.S., buys software from a company in Japan. Explain why and in what directions this changes U.S. net exports and U.S. net capital outflow."
+  ],
+  [
+   "43",
+   "26",
+   "DN1",
+   "Why are net exports and net capital outflow always equal?"
+  ],
+  [
+   "44",
+   "26",
+   "DN2",
+   "Colonial America had little industry and so had mostly raw materials to export. At the same time, there were many opportunities to purchase capital goods and earn a high rate of return because there was little existing capital so that the marginal product of capital was relatively high. What does this suggest about net exports and net capital outflow in colonial America?"
+  ],
+  [
+   "45",
+   "27",
+   "DN1",
+   "Suppose that a country has $120 billion of national saving, and $80 billion of domestic investment. Is this possible? Where did the other $40 billion of national savings go?"
+  ],
+  [
+   "46",
+   "28",
+   "DN1",
+   "How do the nominal exchange rate and the real exchange rate differ?"
+  ],
+  [
+   "47",
+   "28",
+   "DN2",
+   "How do we find the real exchange rate from the nominal exchange rate?"
+  ],
+  [
+   "48",
+   "29",
+   "DN1",
+   "Suppose a bottle of wine costs 25 euros in France and 20 dollars in the United States. If the exchange rate is 1.25 euros per dollar, what is the real exchange rate?"
+  ],
+  [
+   "49",
+   "29",
+   "DN2",
+   "What is the logic behind the theory of purchasing-power parity?"
+  ],
+  [
+   "50",
+   "30",
+   "DN1",
+   "Suppose that a U.S. dollar buys more gold in Australia than it buys in Russia. What does purchasing-power parity imply should happen?"
+  ],
+  [
+   "51",
+   "31",
+   "DN1",
+   "What does purchasing-power parity imply about the real exchange rate?"
+  ],
+  [
+   "52",
+   "31",
+   "DN2",
+   "According to purchasing-power parity, what is the relationship between changes in price levels between two countries and changes in nominal exchange rates?"
+  ],
+  [
+   "53",
+   "32",
+   "DN1",
+   "Can purchasing-power parity be used to explain the fact that the U.S. dollar has depreciated by more than 50 percent against the German mark between 1970 and 1998, but appreciated by more than 100 percent against the Italian lira during the same period? Defend your answer."
+  ],
+  [
+   "54",
+   "32",
+   "DN2",
+   "Suppose that money supply growth continues to be higher in Turkey than it is in the United States. What does purchasing-power parity imply will happen to the real and to the nominal exchange rate?"
+  ],
+  [
+   "55",
+   "33",
+   "DN1",
+   "Under what circumstances does purchasing-power parity explain how exchange rates are determined, and why is it not completely accurate?"
+  ],
+  [
+   "56",
+   "34",
+   "DN1",
+   "Suppose a lobster supper in Maine costs fewer dollars than a Lobster supper in Paris, France. Explain why this is inconsistent with purchasing-power parity and explain why the inconsistency may exist."
+  ],
+  [
+   "57",
+   "34",
+   "DN2",
+   "Suppose that U.S. investors decide that investment opportunities in African countries have improved. What happens to U.S. net capital outflow? What happens to the U.S. real interest rate?"
+  ],
+  [
+   "58",
+   "35",
+   "DN1",
+   "Explain how the relation between the real exchange rate and net exports explains the downward slope of the demand for foreign-currency exchange curve."
+  ],
+  [
+   "59",
+   "35",
+   "DN2",
+   "How are the identities S = NCO + I and NCO = NX related to the foreign currency exchange market and the loanable funds market?"
+  ],
+  [
+   "60",
+   "36",
+   "DN1",
+   "Explain how an increase in the demand for capital goods in the U.S. can lead to a change in the U.S. exchange rate."
+  ],
+  [
+   "61",
+   "37",
+   "DN1",
+   "Suppose that U.S. citizens start saving more. What does this imply about the supply of loanable funds and the equilibrium real interest rate? What happens to the real exchange rate?"
+  ],
+  [
+   "62",
+   "37",
+   "DN2",
+   "Suppose that the Turkish government budget deficit increases. What curves in the open-economy macroeconomic model shift? Explain why each curve shifts the direction it does."
+  ],
+  [
+   "63",
+   "38",
+   "DN1",
+   "Suppose a presidential candidate promises to increase the government budget surplus and claims that doing so will stop U.S. citizens from investing in foreign companies and increase the value of the dollar. Evaluate this promise."
+  ],
+  [
+   "64",
+   "38",
+   "DN2",
+   "What effect do protectionist policies have on the trade deficit?"
+  ],
+  [
+   "65",
+   "39",
+   "DN1",
+   "Suppose the U.S. government institutes a \"Buy American\" campaign, in order to encourage spending on domestic goods. What effect will this have on the U.S. trade balance?"
+  ],
+  [
+   "66",
+   "40",
+   "DN1",
+   "What do trade policies do to the standard of living?"
+  ],
+  [
+   "67",
+   "40",
+   "DN2",
+   "If a county becomes more likely to default on its bonds, what happens to that country’s interest rate and exchange rate? Explain"
+  ],
+  [
+   "68",
+   "41",
+   "DN1",
+   "What variables besides real GDP tend to decline during recessions? Given the definition of real GDP, argue that declines in these variables are to be expected."
+  ],
+  [
+   "69",
+   "41",
+   "DN2",
+   "What do most economists believe concerning the relation between the price level and real output?"
+  ],
+  [
+   "70",
+   "42",
+   "DN1",
+   "Explain how an increase in the price level changes interest rates. How does this change in interest rates lead to changes in investment and net exports?"
+  ],
+  [
+   "71",
+   "43",
+   "DN1",
+   "Use sticky-wage theory to explain why an increase in the expected price level shifts the aggregate supply curve."
+  ],
+  [
+   "72",
+   "43",
+   "DN2",
+   "Suppose that a decrease in the demand for goods and services pushes the economy into recession. What happens to the price level? If the government does nothing, what ensures that the economy still eventually gets back to the natural rate of output?"
+  ],
+  [
+   "73",
+   "44",
+   "DN1",
+   "What is the difference between monetary policy and fiscal policy?"
+  ],
+  [
+   "74",
+   "44",
+   "DN2",
+   "There are three factors that help explain the slope of the aggregate demand curve. Which two are less important? Why are they less important?"
+  ],
+  [
+   "75",
+   "45",
+   "DN1",
+   "Explain why the interest rate is the opportunity cost of holding currency. What is the benefit of holding currency?"
+  ]
+ ],
+ "links": [
+  "/download/10046/S/1_ECOchap1-8.zip",
+  "Slides: https://drive.google.com/drive/folders/1BoG3cerI1xMcRDCaHD7Td7ox01lnM-Ek?usp=sharing",
+  "Guidance on AI activities, teaching methods, and assessment strategies: https://drive.google.com/drive/folders/1VUNGwtIwrKysmmEZ1q866Fv7NJEfAzwW?usp=sharing",
+  "/download/10046/S/2_ECOchap9-16.zip",
+  "/download/10046/S/3_ECOchap17-24.zip",
+  "/download/10046/S/4_ECOchap25-32.zip",
+  "/download/10046/S/5_ECOchap33-36.zip"
+ ]
+}

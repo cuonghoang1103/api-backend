@@ -1,0 +1,1198 @@
+{
+ "ma": "MKT202",
+ "sylID": "14485",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14485",
+   "code": "MKT202",
+   "name": "Services Marketing Management_Quản Trị Marketing Dịch Vụ",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14485",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14485",
+  "Syllabus Name": "Services Marketing Management_Quản Trị Marketing Dịch Vụ",
+  "Course Name English": "Services Marketing Management",
+  "Subject Code": "MKT202",
+  "Learning-Teaching Method": "Lecture, Presentation, Groupwork, Research-based learning, Project-based learning, Social Constructivism",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "MKT101",
+  "Description": "This course aims to equip students with the knowledge and skills to distinguish services from goods, manage the extended services marketing mix, evaluate strategies for enhanced service performance, improve service processes and quality, and make ethically responsible decisions in service business contexts.\nThe course is designed for undergraduate Business Administration and Marketing students with foundational marketing knowledge. It covers service characteristics, consumer behavior, positioning, the extended marketing mix, service processes, customer experience, relationship management, service recovery, quality, digital services, and emerging technologies. Learning is supported through case studies, discussions, and individual and group assignments.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n- Actively participate in class activities\n- Fulfil tasks given by intructor after class\n- Use their own laptop in class only for learning purpose\n- Read the textbook in advance\n- Access the course website (www.flm.fpt.edu.vn) for up-to-date information and material of the course, for online supports from teachers and other students and for practicing and assessment.",
+  "Tools": "- Generative AI tools (e.g., ChatGPT, Google Gemini, or Microsoft Copilot): For idea generation, scenario analysis, and feedback on proposed solutions. Students must verify AI-generated information and use these tools responsibly.\n- Google Trends: For exploring customer interests and service-related market trends.\n- Google Forms and Google Sheets: For collecting and analyzing customer feedback and survey data.\n- Canva Free: For creating service blueprints, customer journey maps, infographics, and presentations.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Essentials of Services Marketing",
+   "Christopher Lovelock, Jochen Wirtz and Patricia Chew",
+   "Prentice Hall",
+   "2012",
+   "2E",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Essentials of Services Marketing",
+   "Jochen Wirtz, Patricia Chew and Christopher Lovelock",
+   "Pearson",
+   "2017",
+   "3E",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Essentials of Services Marketing",
+   "Jochen Wirtz, Patricia Chew and Christopher Lovelock",
+   "Pearson",
+   "2023",
+   "4E",
+   "9781292425191",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 ấn bản. Ưu tiên mua ấn bản mới nhất"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/generative-ai-prompt-engineering-for-everyone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "To identify the differences between goods and services and the implications for marketing in service industries"
+  ],
+  [
+   "2",
+   "CLO2",
+   "To manage the marketing mix in service industries"
+  ],
+  [
+   "3",
+   "CLO3",
+   "To identify and discuss the different strategic options for enhanced service performance"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understanding service process and management to improve service quality"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Demonstrate ethical awareness and reflection in business context"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class participation and preparation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "",
+   "Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "",
+   "",
+   "Participation grade will be given based on students' preparation, and quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussion, and builds upon others’ comments."
+  ],
+  [
+   "2",
+   "Group assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5",
+   "Option 1: A group of four or five students will choose to undertake a research project applying the theories of services marketing to a real-life service organisation which you are familiar with, for example, an airline, a bank, a hospital, tourist company, etc.\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Maximum length of the group assignment should be 10 pages excluding appendices\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Based on topics of studied units",
+   "Group presentation in class room",
+   "All assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission\nEvaluation will be based on both presentation and written report (reccommended 30%, 70% accordingly)"
+  ],
+  [
+   "3",
+   "Individual assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO5",
+   "Option 1: Students prepare a service diary assignment of your 5 most satisfactory /dissatisfactory service encounters, with both profit and not-for-profit organisations\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Maximum length of the individual assignment should be 5 pages excluding appendices.\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Based on topics of studied units",
+   "Individual assignment submitted in class",
+   "All assignments should be typed and double-spaced with 11-point font, and must be submitted in both soft and hard copy. A deduction of 10% of the assignment mark will be applied for each day of late submission"
+  ],
+  [
+   "4",
+   "Quizzes",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "Option 1: 30' each\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4",
+   "Option 1: Multiple choice questions, Case study exercises\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Appx. 30\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Quizzes will test for knowledge of subjects in the chapters assigned for that day.",
+   "Class room",
+   "These quizzes will be given at various times during class (beginning, middle or end). Total number of quizzes: 2"
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "LO1, LO2, LO3, LO4",
+   "Multiple choice questions. Other types of questions may be included.",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room",
+   "Closed-book exam."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT202_Group and Indi ASM example",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Introduction to Services Marketing\n- Why study service",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT202_AI use guide",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Introduction to Services Marketing\n- What are services\n- Four broad category of services - a process perspective",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "MKT202_Slides Chap 1-15",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 1: Introduction to Services Marketing\n- Service's marketing challenges\n- The extended marketing mix",
+   "Offline",
+   "LO1",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Understanding Service Consumers\n- The Three-Stage Model of Service Consumption\n- Pre-purchase stage",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: Understanding Service Consumers\n- Service encounter stage",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Understanding Service Consumers\n- Post-encounter stage",
+   "Offline",
+   "LO1",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3: Positioning Services in Competitive Markets\n- Four focus strategy\n- Market segmentation",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3: Positioning Services in Competitive Markets\n- Market positioning strategy\n- Using positioning map",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3: Positioning Services in Competitive Markets\n- Case study analysis- company positioning strategy",
+   "Offline",
+   "LO1,LO5",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4: Developing Service Products and Brands\n- The Flower of Service",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4: Developing Service Products and Brands\n- Branding services",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 4: Developing Service Products and Brands\n- New Product development strategy",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "14",
+   "Guidelines for Individual Assignment",
+   "Offline",
+   "LO2, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "15",
+   "Guidelines for Group Assignment",
+   "Offline",
+   "LO2, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 5: Distributing Service Through Physical and Electronic Channels\n- What is being distributed?\n- How should a service be distributed?",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 5: Distributing Service Through Physical and Electronic Channels\n- Place decisions\n- Time decisions",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 5: Distributing Service Through Physical and Electronic Channels\n- Role of intermediaries",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 6: Setting Prices and Implementing Revenue Management\n- Pricing strategy stands on three foundations",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6: Setting Prices and Implementing Revenue Management\n- Revenue Management\n- Designing rate fences",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 6: Setting Prices and Implementing Revenue Management\n- Fairness and ethical concerns in service pricing",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 7: Promoting Services and Educating Customers\n- Integrated Service Marketing Communications\n- Communication objectives",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 7: Promoting Services and Educating Customers\n- Crafting efective service communication message\n- Service marketing communications mix",
+   "Offline",
+   "LO2",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 7: Promoting Services and Educating Customers\n- Communication planning\n- Budgeting\n- Ethical issues",
+   "Offline",
+   "LO2",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 8: Designing Service Processes\n- What is a service process?\n- Flowcharting",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8: Designing Service Processes\n- Service Blueprint\n- Customer participation",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 8: Designing Service Processes\n- Service process redesign\n- Self-service technologies\n- Service robots in the fronline",
+   "Offline",
+   "LO3",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "Quiz 1: Chapter 1 - 8",
+   "Offline",
+   "LO2, LO3, LO4",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 9: Balancing Demand Against and Capacity\n- Understanding demand patterns\n- Managing Capacity",
+   "Offline",
+   "LO3",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 9: Balancing Demand Against and Capacity\n- Managing demand",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 9: Balancing Demand Against and Capacity\n- Waiting lines and Queuing systems\n- Reservation systems",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 10: Crafting the Service Environment\n- Servicescape\n- The purposes of service environments",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10: Crafting the Service Environment\n- The theory behind consumer responses to service environment",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 10: Crafting the Service Environment\n- Dimensions of service environments\n- Servicescape design",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 11: Managing People for Service Advantage\n- Service employees\n- Front-line employees",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 11: Managing People for Service Advantage\n- Cycles of failure, mediocrity, and success",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 11: Managing People for Service Advantage\n- Human Resource Management\n- Service culture, climate, and leadership",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 12: Managing Relationships and Building Loyalty\n- Customer loyalty\n- Wheel of Loyalty",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 12: Managing Relationships and Building Loyalty\n- Building customer loyalty\n- Loyalty strategies",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 12: Managing Relationships and Building Loyalty\n- Customer Relationship Management (CRM)",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 13: Complaint Handling and Service Recovery\n- Customer complaining behavior\n- Customer responses to effective service recovery",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 13: Complaint Handling and Service Recovery\n- Service recovery",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 13: Complaint Handling and Service Recovery\n- Service guarantees",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 14: Improving Service Quality and Productivity\n- What is service quality?\n- Measuring service quality\n- Service quality tools",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 14: Improving Service Quality and Productivity\n- Productivity\n- Measuring productivity\n- Improving service productivity",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 14: Improving Service Quality and Productivity\n- Integration and systematic approaches to improving service quality and productivity",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 15: Build a World-class Service Organization\n- Customer satisfaction and corporate performance",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 15: Build a World-class Service Organization\n- Creating a world-class service organization",
+   "Offline",
+   "LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 15: Build a World-class Service Organization\n- Cost-effective service excellence",
+   "Offline",
+   "LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "Submission of individual assignment",
+   "Offline",
+   "LO4",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "51",
+   "Submission of group assignment report and powerpoint slides",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "52",
+   "Quiz 2: Chapter 9 - 15",
+   "Offline",
+   "LO2, LO3, LO4",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "54",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "55",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "GROUP PRESENTATION & COURSE REVIEW",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "CT1",
+   "“A service is rented rather than owned”. What the statement means and use 2 examples to support your explanation?"
+  ],
+  [
+   "2",
+   "2",
+   "CT2",
+   "What are the four broad categories of services? Provide 2 examples for each of them."
+  ],
+  [
+   "3",
+   "3",
+   "CT1",
+   "How can you evaluate the alternative services in pre-purchase stage? Give examples"
+  ],
+  [
+   "4",
+   "4",
+   "CT1",
+   "What are high-contact services and low-contact services? give examples?"
+  ],
+  [
+   "5",
+   "5",
+   "CT1",
+   "How do the concepts of theater, role theory, and script theory help to provide insights into consumer behavior during the service encounter?"
+  ],
+  [
+   "6",
+   "6",
+   "CT1",
+   "What is service quality? How is it different from customer satisfaction? What are the five dimensions of service quality? How can you measure service quality?"
+  ],
+  [
+   "7",
+   "7",
+   "CT1",
+   "What are the most common bases used in segmentation? Provide examples for each of these bases"
+  ],
+  [
+   "8",
+   "8",
+   "CT1",
+   "Why business need clarify service market target"
+  ],
+  [
+   "9",
+   "8",
+   "CT2",
+   "What are the four focus strategies for services? illustrate them with examples"
+  ],
+  [
+   "10",
+   "11",
+   "CT1",
+   "Why do we need to understand The flower of Service?"
+  ],
+  [
+   "11",
+   "11",
+   "CT2",
+   "Describe the components of a service product. Explain how they are integrated in the context of an overnight hotel stay."
+  ],
+  [
+   "12",
+   "12",
+   "CT1",
+   "Describe the two roles of supplementary services. Explain the distinction between them. Give several examples of each, citing services that you have used recently."
+  ],
+  [
+   "13",
+   "13",
+   "CT1",
+   "Select a service firm that you believe is highly successful and has strong brand equity. How can the service firm build brand equity?"
+  ],
+  [
+   "14",
+   "14",
+   "CT1",
+   "What are the approaches the firms can take to create new services?"
+  ],
+  [
+   "15",
+   "15",
+   "CT1",
+   "What is difference between service distribution and good distribution?"
+  ],
+  [
+   "16",
+   "16",
+   "CT1",
+   "Where should a service facility be located? When should service be delivered?"
+  ],
+  [
+   "17",
+   "16",
+   "CT2",
+   "Why are we need to have intermediaries in service distribution?"
+  ],
+  [
+   "18",
+   "19",
+   "CT1",
+   "Why is the pricing of services more difficult than the pricing of goods? How can the pricing tripod be approached to service pricing be useful in setting a good pricing point for a particular service?"
+  ],
+  [
+   "19",
+   "19",
+   "CT2",
+   "What is best important factors in building price strategy."
+  ],
+  [
+   "20",
+   "19",
+   "CT3",
+   "Describe ethical concern in service price"
+  ],
+  [
+   "21",
+   "22",
+   "CT1",
+   "Explain marketing communication in satisfying customer"
+  ],
+  [
+   "22",
+   "22",
+   "CT2",
+   "Describe challenge of service communication."
+  ],
+  [
+   "23",
+   "24",
+   "CT1",
+   "What are the differences and similarities of the flowchart and bluepriting?"
+  ],
+  [
+   "24",
+   "25",
+   "CT1",
+   "What is role of using blueprinting to document and manage service process"
+  ],
+  [
+   "25",
+   "26",
+   "CT1",
+   "How can customer service processes be redesigned?"
+  ],
+  [
+   "26",
+   "26",
+   "CT2",
+   "Do you think service process redesign in post covid 19 stage"
+  ],
+  [
+   "27",
+   "27",
+   "CT1",
+   "What is meant by productive capacity in services? What actions can firms take to adjust capacity to match demand more closely?"
+  ],
+  [
+   "28",
+   "27",
+   "CT2",
+   "How can firms identify the factors that affect demand for their services? What actions can firms take to adjust demand to match capacity more closely?"
+  ],
+  [
+   "29",
+   "28",
+   "CT1",
+   "Explain how flexible capacity can be created in each of the following situations: (a) a local library, (b) an office-cleaning service."
+  ],
+  [
+   "30",
+   "30",
+   "CT1",
+   "What is the purpose of the service environment?"
+  ],
+  [
+   "31",
+   "31",
+   "CT1",
+   "Describe how Mehrabian-Russell Stimulus-Response Model and Russell’s Model of Affect explain consumer responses to a service environment."
+  ],
+  [
+   "32",
+   "31",
+   "CT2",
+   "What is the relationship or link between Russell’s Model of Affect and the servicescape model? What are the Key Dimensions of Service Environments?"
+  ],
+  [
+   "33",
+   "32",
+   "CT1",
+   "Why are service personnel so important for service firms?"
+  ],
+  [
+   "34",
+   "32",
+   "CT2",
+   "What are the key barriers for firms to break the Cycle of Failure and move into the Cycle of Success? How should an organization trapped in the Cycle of Mediocrity proceed?"
+  ],
+  [
+   "35",
+   "33",
+   "CT1",
+   "Describe the key components of the Service Talent Cycle?"
+  ],
+  [
+   "36",
+   "36",
+   "CT1",
+   "Why is customer loyalty an important driver of profitability for service firms?"
+  ],
+  [
+   "37",
+   "36",
+   "CT2",
+   "How do the various strategies in the Wheel of Loyalty relate to one another?"
+  ],
+  [
+   "38",
+   "37",
+   "CT1",
+   "What is tiering of services? Explain the rationale and strategic implications."
+  ],
+  [
+   "39",
+   "38",
+   "CT1",
+   "What is the CRM? What is the role of CRM in delivering a customer relationship strategy?"
+  ],
+  [
+   "40",
+   "39",
+   "CT1",
+   "What do customers expect the firm to do once they have made a complaint?"
+  ],
+  [
+   "41",
+   "40",
+   "CT1",
+   "What could a firm do to make it easy for dissatisfied customers to complain?"
+  ],
+  [
+   "42",
+   "41",
+   "CT1",
+   "How to design service guarantees?"
+  ],
+  [
+   "43",
+   "42",
+   "CT1",
+   "Think about the last time you experienced a less-than-satisfactory service experience. Did you complain? Why? If you did not complain, explain why not."
+  ],
+  [
+   "44",
+   "44",
+   "CT1",
+   "What are the relationships between service quality, productivity, and profitability?"
+  ],
+  [
+   "45",
+   "45",
+   "CT1",
+   "Identify the gaps that can occur in service quality and the steps that service marketers can take to prevent them."
+  ],
+  [
+   "46",
+   "46",
+   "CT1",
+   "What are tools to analyze and address service quality problems? Give examples"
+  ],
+  [
+   "47",
+   "46",
+   "CT2",
+   "How can you integrate all the tools in a nine-step approach to improve the quality and productivity of customer service processes"
+  ]
+ ],
+ "links": [
+  "/download/14485/S/1_MKT202_Group and Indi ASM example.zip",
+  "/download/14485/S/2_MKT202_AI use guide.zip",
+  "/download/14485/S/3_MKT202_Slides Chap 1-15.zip"
+ ]
+}

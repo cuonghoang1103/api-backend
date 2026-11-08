@@ -1,0 +1,392 @@
+{
+ "ma": "PMG201c",
+ "sylID": "12548",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12548",
+   "code": "PMG201c",
+   "name": "Project management_Quản trị dự án",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12548",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12548",
+  "Syllabus Name": "Project management_Quản trị dự án",
+  "Course Name English": "Project management",
+  "Subject Code": "PMG201c",
+  "Learning-Teaching Method": "Online,Lecture,Project based learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 60h online + 3h offline + 1h TE + 2h PE + 84h self-study",
+  "Pre-Requisite": "None",
+  "Description": "This intensive and hands-on series of courses gives you the skills to ensure your projects are completed on time and on budget while giving the user the product they expect. You will gain a strong working knowledge of the basics of project management and be able to immediately use that knowledge to effectively manage work projects. At the end of the series you will be able to identify and manage the product scope, build a work breakdown structure, create a project plan, create the project budget, define and allocate resources and identify and manage risks, and then you will be able to manage the project development.",
+  "StudentTasks": "- Student must get the certification of Introduction to Project Management Principles and Practices specialization from Coursera to be accepted to the final examination\"",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1. Complete the online course to be allowed to take Final Exam\n\n2. Final Exam is included of Final Theory Exam (TE) & Final Practical Exam (PE): 100%\n\n3. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n4. Completion Criteria: Final TE Score >=4 & Final PE Score >=4 & FR >= 5\n\n(FR = min(10, (Final TE Score + Final PE Score)/2 + bonus)",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "ITPM: Information Technology Project Management",
+   "Kathy Schwalbe",
+   "Cengage Learning",
+   "",
+   "8th",
+   "9781285452340",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "The Project Management Body of Knowledge (PMBOK Guide)",
+   "",
+   "",
+   "",
+   "5th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "SE8: Software Engineering",
+   "Ian Sommerville",
+   "Addison-Wesley",
+   "",
+   "8th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/project-planning",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 1: Initiating and Planning Projects"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/schedule-projects",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 2: Budgeting and Scheduling Projects"
+  ],
+  [
+   "7",
+   "https://www.coursera.org/learn/project-risk-management",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 3: Managing Project Risks and Changes"
+  ],
+  [
+   "8",
+   "https://www.coursera.org/learn/project-management-capstone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 4: Project Management Project"
+  ],
+  [
+   "9",
+   "https://www.coursera.org/specializations/project-management",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Project Management Principles and Practices"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Define project plan"
+  ],
+  [
+   "2",
+   "CLO2",
+   "- Define a project’s scope - Build a work breakdown schedule - Allocate project resources- Create a project budget"
+  ],
+  [
+   "3",
+   "CLO3",
+   "- Define key elements of communications management plan - Identify and manage risks"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Practise to: - Define project plan - Define a project’s scope - Build a work breakdown schedule - Allocate project resources - Create a project budget - Define key elements of communications management plan - Identify and manage risks"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "PE",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "120 phút",
+   "All LOs",
+   "",
+   "no info",
+   "All studied courses.",
+   "by Exam Board",
+   "Customized from the Assignment & Project Capstone of this specialization"
+  ],
+  [
+   "2",
+   "TE",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "60 phút",
+   "All LOs",
+   "Multiple choices. Marked by Computer or a suitable format",
+   "50",
+   "All studied courses. Each module of course contributes 3-5 questions.",
+   "by Exam Board",
+   "Customized from the quizzes of this specialization"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Specialization Introduction\nInitiating and Planning Projects\n- Get Started!\n- What is a project?\n- Get to Know your Stakeholders\nOffline 1: Introduction to the online course PMG201c",
+   "Offline,Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)\nAll students should participate in offline slot (if any question)",
+   ""
+  ],
+  [
+   "2",
+   "Initiating and Planning Projects\n- Scope Matters\n- Authority vs. Influence",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "3",
+   "Initiating and Planning Projects\n- Wrap Up",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "4",
+   "Budgeting and Scheduling Projects\n- Ressource Needs & Quality Management\n- Estimating",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "5",
+   "Budgeting and Scheduling Projects\n- Scheduling\n- Wrap Up",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "6",
+   "Managing Project Risks and Changes\n- Managing Project Risks\n- Change Happens",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "7",
+   "Managing Project Risks and Changes\n- Wrap Up",
+   "Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "8",
+   "Project Management Capstone\n- Get Started!\n- Project Components & Instructions",
+   "Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "9",
+   "Project Management Capstone\n- Project Components & Instructions\n- Content Review",
+   "Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "10",
+   "Project Management Capstone\n- Feedback Peer Review\n- Final Project Assignment Submission\n- Final Project Peer Review Evaluation",
+   "Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "11",
+   "Capstone Project Review & FE Introduction\nProject Management Capstone\n- Final Project Peer Review Evaluation",
+   "Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed)",
+   ""
+  ],
+  [
+   "12",
+   "- Specialization Wrap-Up\nOffline 2: Review Project Management Principles and Practices Specialization (Spec)",
+   "Offline,Online",
+   "All LOs",
+   "",
+   "",
+   "",
+   "- Watch all videos, read all materials in the MOOC\n- Finish quizzes, self-assessment, assignments and take part in discussion boards (if needed) All students should participate in review slot (if any question)\nDeadline of Coursera completion: End of Friday of the week.\nAll students should participate in offline slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

@@ -1,0 +1,343 @@
+{
+ "ma": "EBC301c",
+ "sylID": "14116",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14116",
+   "code": "EBC301c",
+   "name": "Business English Communication_Giao tiếp tiếng Anh trong kinh doanh",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14116",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14116",
+  "Syllabus Name": "Business English Communication_Giao tiếp tiếng Anh trong kinh doanh",
+  "Course Name English": "",
+  "Subject Code": "EBC301c",
+  "Learning-Teaching Method": "",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "124 hours online study + 3 hrs offline (2slots) + 1 hr exam + 22 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "This course aims at shaping students' effective communication skills in professional contexts using English. The course helps students expand their vocabulary, improve both speaking and writing skills in English, and learn terminology and skills which can be applied in different business situations and contexts.\n\n*Assessment scheme:\n\n1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE+ Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assgnments... as required\n\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n\n3. Keep online learning progress promptly (bonus will be awarded)\n\n4. Communicate and discuss in forum\n\n5. Attend off-line sessions in the Campus\n\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2) Theoretical Exam (TE)\n\n3) Final Result (FR) =min (10, TE + Bonus)\n\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/specializations/business-english",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Business English Communication Skills Specialization"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/business-english-intro",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 01: Business English: Networking"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/business-english-meetings",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 02: Business English: Meetings"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/business-english-negotiating",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 03: Business English: Planning & Negotiating"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/learn/business-english-presentations",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 04: Making Presentations"
+  ],
+  [
+   "6",
+   "https://www.coursera.org/learn/business-english-capstone",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 05: Business English: Capstone Project"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Develop vocabulary and customs related to socializing and networking in English and apply them professionally in interaction with business contacts in different situations.\nLO1.1 Evaluate your current level of proficiency in business English communication\nLO1.2 Present relevant information about yourself in a discussion forum\nLO1.3 Develop your networking skills\nLO1.4 Write short emails with appropriate formatting\nLO1.5 Recognize and produce formal and informal language in emails\nLO1.6 Develop vocabulary related to jobs and companies"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Develop vocabulary and skills related to meetings and apply them effectively in on-site meetings and teleconfrences.\nLO2.1 Arrange a meeting through email and by telephone\nLO2.2 List expectations and protocols related to on-site meetings and teleconferences\nLO2.3 State phone numbers, dates, currencies, and sales figures accurately\nLO2.4 Write a proposal with appropriate organization and vocabulary"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop and apply language and strategies for successful negotiations.\nLO3.1 Negotiate strategically in formal and informal settings\nLO3.2 Identify and resolve customer issues after a negotiation has taken place.\nLO3.3 Evaluate and compare services and features of two venues\nLO3.4 Plan a business event using negotiation skills\nLO3.5 Write an announcement for a business event after selecting a venue"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Develop and apply language and techniques to make effective presentations in English.\nLO4.1 Present information in an organized and engaging way\nLO4.2 Use charts and graphs to share data\nLO4.3 Use persuasive language in a presentation"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Demonstrate the competence and ability to use appropriate language in different business contexts.\nLO5.1 Use appropriate vocabulary to write a mini business plan\nLO5.2 Communicate a business plan orally in an organized and engaging presentation"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam - TE",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All Los",
+   "Multiple choices",
+   "60 (15 quesions/ each LO; LOs1-4)",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course EBC301c\n\nModule 1 (MOOC 1):\n\n- Practice introducing yourself and learn some new vocabulary to talk about what you do in your job.",
+   "Online,Offline",
+   "CLO1",
+   "",
+   "Offline",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform\n\n- Watch all videos and read all materials in the module\n\n- Finish: Practice Exercises and quizzes\n\n- Complete assignments:\n\nA Conversation and review your peers\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "2",
+   "Module 2 (MOOC 1):\n\n- Study vocabulary to describe a job, a company and company history\n\nModule 3 (MOOC 1):\n\n- Write professional emails",
+   "Online",
+   "CLO1",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n'- Finish: Practice Exercises and Quizzes\n\n'- Watch all videos and read all materials in the module\n\n'- Finish: Practice Exercises and Quizzes.\n\n'- Complete assignment: Write an email based on a scenario and review your Schedule!E3 assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n'- Complete assignments:\n\n1. Persuade me to move and review your peers' Schedule!F4Schedule!Schedule!G3assignment\n\n2. Describe your job and review your peers' assignment\n\n3. Promoting your company and review your peers' assignment.",
+   ""
+  ],
+  [
+   "3",
+   "Module 4 (MOOC 1):\n\n- How to telephone and make arrangements to meet\n\nModule 5 (MOOC 1):\n\n- How to email to talk about arrangements, make changes, and update.\n\n- Practice with texting.",
+   "Online",
+   "CLO1",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n'- Finish: Practice Exercises.\n\n'- Complete assignments: 1. Making a telephone call and review your peers' assignment.\n\n2. Arrangements to meet and review your peers' assignment.\n\n3. Leaving messages, and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "4",
+   "Module 1 (MOOC 2):\n\n- Learn about different types of meetings and what makes a successful meeting.\n\nModule 2 (MOOC 2):\n\n- Participating in and running meetings in the Language of Meetings",
+   "Online",
+   "CLO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n- Finish: Practice Exercises and Quizzes\n\n- Complete assignments: 1. Writing an agenda and review your peers' assignment.\n\n2. Writing and responding to a meeting announcement and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n- Watch all videos and read all materials in the module\n\n- Finish: Practice Exercises and Quizzes\n\n- Complete assignments: Plan a teleconference and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "5",
+   "Module 3 (MOOC 2):\n\n- How to give a report in a meeting and what to do at the end of the meeting to summarize what has been decided.\n\nModule 4 (MOOC 2):\n\n- How to give a proposal based on the decision of a meeting.",
+   "Online",
+   "CLO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n'- Finish: Practice Exercises and Quizzes\n\n'- Complete assignments: Directing people's attention and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n'- Watch all videos and read all materials in the module\n\n'- Finish: Practice Exercises and Quizzes\n\n'- Complete assignments: 1. Add the missing words, and review your peers' assignment.\n\n2. Create a proposal, and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "6",
+   "Module 1 (MOOC 3):\n\n- How to make request and give information\n\n- How to make comparison before making a final decision\n\nModule 2 ( MOOC 3)\n\n- Overview of negotiations\n\n- How to make a proposal\n\n- How to make a concession during negotiations",
+   "Online",
+   "CLO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n- Finish: Practice Exercises and Quizzes\n\n- Complete assignments: 1. Record and review voicemail message and review your peers' assignment.\n\n2. Email on choice of venues and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n- Watch all videos and read all materials in the module\n\n- Finish: Practice Exercises and Quizzes\n\n- Complete assignment: Write emails in a negotiation and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "7",
+   "Module 3 ( MOOC 3)\n\n- Learn techniques to handle problems\n\nModule 4 ( MOOC 3)\n\n- How to organize and announce events before implementing plans",
+   "Online",
+   "CLO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n'- Finish: Practice Exercises and Quizzes\n\n'- Complete assignments: 1. Voicemail describing a problem and review your peers' assignment.\n\n2. Recording a voicemail following up on a problem and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.I9",
+   ""
+  ],
+  [
+   "8",
+   "Module 1 (MOOC 4)\n- Overview of giving effective presentations\n- Examples of good and bad presentations and what mistakes to avoid\n\nModule 2 ( MOOC 4 )\n- How to use visuals (slides or graphics) to support your presentation\n- How to describe charts and graphs clearly",
+   "Online",
+   "CLO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n- Finish: Practice Exercises and Quizzes\n\n- Watch all videos and read all materials in the module\n- Finish: Practice Exercises and Quizzes",
+   ""
+  ],
+  [
+   "9",
+   "Module 3 (MOOC 4)\n\n- How to use persuasive language in presentations\n\nModule 4 (MOOC 4)\n\n- Prepare and present a short presentation for colleagues",
+   "Online",
+   "CLO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n'- Finish: Practice Exercises and Quizzes\n\n'- Complete assignment: Write a marketing piece and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n'- Watch all videos and read all materials in the module\n\n'- Complete assignment: Final presentation and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "10",
+   "Module 1 (MOOC 5)\n\n- Overview of specialisation and recap of content\n\n- Introduction to finish the Capstone project\n\nModule 2 (MOOC 5)\n\n- Review how to describe a product or service\n\n- Review how to introduce yourself in networking\n\n- Complete a peer review assignment\n\nModule 3 (MOOC 5)\n\n- Review business plans\n\n- Introduce the concept of a mini-business plan for final project\n\nModule 4 (MOOC 5)\n\n- Review marketing ideas financial vocabulary\n\n- Review lectures on making presentations",
+   "Online",
+   "CLO5",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n- Finish practice exercises and quizzes\n\n- Watch all videos and read all materials in the module\n\n- Finish practice exercises and quizzes\n\n- Complete assignment: Your networking introduction and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n- Watch all videos and read all materials in the module\n\n- Finish practice exercises and quizzes\n\n- Complete assignment: Milestone 3: Presentation slides and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n- Watch all videos and read all materials in the module\n\n- Finish practice exercises and quizzes",
+   ""
+  ],
+  [
+   "11",
+   "Module 5 (MOOC 5)\n\n- Review lectures on being persuasive\n\n- Complete a rough raft of your mini business plan\n\nModule 6(MOOC 5)\n\n- Introduction to making short pitches and presentations\n\n- Review examples before making your first practice pitch\n\n- Review lectures on presentations",
+   "Online",
+   "CLO5",
+   "",
+   "Online",
+   "",
+   "- Watch all videos and read all materials in the module\n\n'- Finish practice exercises and quizzes\n\n'- Complete assignment: Milestone 5: First draft of your mini business plan and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.\n\n'- Watch all videos and read all materials in the module\n\n'- Finish practice exercises and quizzes\n\n'- Complete assignment: Rough presentation and review your peers' assignment.\n\nNOTE: You can only review others' assignments when you have submitted yours.",
+   ""
+  ],
+  [
+   "12",
+   "Module 7 (MOOC 5)\n\n- Polish your final mini business plan and presentation\n\nReview MOOC 1, 2, 3, 4, 5",
+   "Offline",
+   "CLO5",
+   "",
+   "Offline",
+   "",
+   "- Watch all videos and read all materials in the module\n\n- Finish practice exercises and quizzes\n\n- Complete assignment: Final mini business plan and presentation and review your peers' assignment.\n\nNOTE: Submit your assignment before deadlines. You can only review others' assignments when you have submitted yours.\n\nDeadline of Course Completion: End of Friday of the week.\n\n- All Students should participate in review slot(if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

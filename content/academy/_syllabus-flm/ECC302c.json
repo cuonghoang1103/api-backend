@@ -1,0 +1,325 @@
+{
+ "ma": "ECC302c",
+ "sylID": "13318",
+ "quyetDinh": "932/QĐ-ĐHFPT dated 08/22/2025",
+ "ungVien": [
+  {
+   "sylID": "13318",
+   "code": "ECC302c",
+   "name": "Cross-cultural Communication_Giao tiếp trong môi trường đa văn hoá",
+   "active": true,
+   "approved": true,
+   "decision": "932/QĐ-ĐHFPT dated 08/22/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13318",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13318",
+  "Syllabus Name": "Cross-cultural Communication_Giao tiếp trong môi trường đa văn hoá",
+  "Course Name English": "",
+  "Subject Code": "ECC302c",
+  "Learning-Teaching Method": "",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "47 hours online study + 3 hrs offline (2 slots) + 1hr exam + 100 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "In this course, students will learn the essential skills to work in and manage multinational and cross-cultural teams. Students will learn from organizational consultants and UC Davis MBA alumni Cleveland Justis and Daniel Student, who have studied, led, and advised cross-cultural teams from a variety of sectors. They will share best practices, research, and tools, as well as first-person narratives from a variety of global leaders. Students will learn how to navigate cultural differences in approaches to accomplishing work that can trip up teams, how to take advantage of the rising opportunities and mitigate the new challenges brought on by virtual multinational collaboration, and how to rise as a cross-cultural leader.\n\nApplied Learning Project\n\nStudents will apply insights about their own cultural experience through a series of discussions and activities throughout the Specialization. They will also have the opportunity to see the responses from others around the world, to share and gain invaluable perspective.",
+  "StudentTasks": "1. Join the online course (spec.) when being invited by the admin.\n2. Enroll in each MOOC of spec., regularly study MOOCs at least 5hrs/week by watching videos, reading materials, taking quizzes, doing assgnments... as required\n3. Respect the Coursera Code of Conduct, at https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct\n3. Keep online learning progress promptly (bonus will be awarded)\n4. Communicate and discuss in forum\n5. Attend off-line sessions in the Campus (Optional)\n6. Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus",
+  "Tools": "Internet",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "932/QĐ-ĐHFPT dated 08/22/2025",
+  "IsApproved": "True",
+  "Note": "1) Ongoing assessment: Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n2) Theoretical Exam (TE)\n3) Final Result (FR) =min (10, TE + Bonus)\n4) Completion Criteria: TE>=4 and FR>=5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/22/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/intro-multinational-cross-cultural-teams?specialization=management-multinational-cross-cultural-teams",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 01: Introduction to Multinational and Cross-Cultural Teams"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/cross-cultural-communication-management?specialization=management-multinational-cross-cultural-teams",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 02: Cross-Cultural Communication and Management"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/cross-cultural-virtual-spaces-teams?specialization=management-multinational-cross-cultural-teams",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 03: Cross-Cultural Virtual Spaces and Teams"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/leadership-in-mulitnational-cross-cultural-teams?specialization=management-multinational-cross-cultural-teams",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "MOOC 04: Leadership in Multinational, Cross-Cultural Teams"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/specializations/management-multinational-cross-cultural-teams",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "SPEC: Management of Multinational and Cross-Cultural Teams Specialization"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the concept of culture, how it affects your approach to work, & the opportunities and challenges in multinational and cross-cultural teams."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Recognize your communication style and understand the role culture plays in communication, co-create a new team \"language\" through collaboration."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Impact cross-cultural communication between in-person and virtual spaces; thinking about time zones, video conferences, & text based interactions."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Explore different models of leadership and understand how the cultural differences in what is expected of leaders affect team performance."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam - TE",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All Los",
+   "Multiple choices",
+   "60 (15 quesions/ each LO; LOs1-4)",
+   "The whole course content.",
+   "by Exam Board",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the online course ECC302c\n\nModule 1 (MOOC 1): Getting Started and Why culture matters",
+   "Online,Offline",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "Enroll to the spec on Coursera for FPT University Platform",
+   ""
+  ],
+  [
+   "2",
+   "Module 2 (MOOC 1): Opportunities and Challenges of Teamwork\nModule 3 (MOOC 1): Opportunities and Challenges of Multinational and Cross-Cultural Teams",
+   "Online",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "3",
+   "Module 3 (MOOC 1) (cont.): Opportunities and Challenges of Multinational and Cross-Cultural Teams\nModule 4 (MOOC 1): Practicing Cross-Cultural Management",
+   "Online",
+   "LO1",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "4",
+   "Module 1 (MOOC 2): Getting Started and How human beings communicate",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "5",
+   "Module 2 (MOOC 2): Cultural Differences in Communication\nModule 3 (MOOC 2): Managing Challenges in Communication in Cross-cultural Teams",
+   "Online",
+   "LO2",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "6",
+   "Module 3 (MOOC 2) (cont.): Managing Challenges in Communication in Cross-cultural Teams\nModule 4 (MOOC 2): Co-creating a new language with your team",
+   "Online",
+   "LO2",
+   "",
+   "online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "7",
+   "Module 1 ( MOOC 3): Getting Started and How virtual spaces change communication",
+   "Online",
+   "LO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "8",
+   "Module 2 ( MOOC 3): How culture shows up in virtual communication\nModule 3 (MOOC 3): Cultural Challenges for Virtual Teams",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "9",
+   "Module 4 (MOOC 3): New Opportunities for Cross-Cultural Teams",
+   "Online",
+   "LO3",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "10",
+   "Module 1 (MOOC 4): Getting Started and What it means to lead",
+   "Online",
+   "LO4",
+   "",
+   "online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "11",
+   "Module 2 (MOOC 4): Challenges that arise from cultural expectation of leadership\nModule 3 (MOOC 4): Becoming a leader for everyone",
+   "Online",
+   "LO4",
+   "",
+   "Online",
+   "",
+   "- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.",
+   ""
+  ],
+  [
+   "12",
+   "Modules 4 (MOOC 4): Leading Towards the future for multinational, cross-cultural teams\nReview MOOC 1, 2, 3, 4",
+   "Online,Offline",
+   "LO4",
+   "",
+   "Online",
+   "",
+   "\"- Watch all videos, and read all materials in the module\n- Finish: Practice Exercises and Quiz.\n- Complete assignments.\n\n- All Students should participate in review slot(if any question)\nDeadline of Course Completion: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

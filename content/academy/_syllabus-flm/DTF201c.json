@@ -1,0 +1,335 @@
+{
+ "ma": "DTF201c",
+ "sylID": "14032",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14032",
+   "code": "DTF201c",
+   "name": "Digital Transformation in Finance Services_Chuyển đổi số trong dịch vụ tài chính",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14032",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14032",
+  "Syllabus Name": "Digital Transformation in Finance Services_Chuyển đổi số trong dịch vụ tài chính",
+  "Course Name English": "Digital Transformation in Finance Services",
+  "Subject Code": "DTF201c",
+  "Learning-Teaching Method": "Online",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 91h online + 3h offline (optional) + 1h Final exam + 55h self-study",
+  "Pre-Requisite": "FIN202",
+  "Description": "This course is adapted from Digital Transformation in Financial Services Specialization on Coursera and is designed to help students understand how digitalization is reshaping finance. As financial products and services become increasingly digital, and customer expectations, competition, and regulation evolve, Finance professionals must master digital strategies, technologies, and business models beyond traditional skills.\n\nBusiness Digital Transformation for Finance comprises four modules that progress from foundational concepts to strategic planning, combining expert lectures, case studies, interactive activities, and a capstone project. The course equips students with both conceptual knowledge and practical tools to participate in or lead digital transformation efforts in financial institutions or fintech firms.\n\nUpon completion, students will be able to:\n• Analyze how digitalization shifts competition in financial services, including the rise of platforms, ecosystems, and new business models.\n• Understand technologies, regulations, and innovations shaping banking, payments, lending, and fintech.\n• Design strategic digital transformation initiatives, including ecosystem strategies, platform models, and fintech collaboration.\n• Evaluate regulatory, governance, and market challenges in a digitally evolving environment.\n• Develop and present a digital transformation plan for a real financial services organization.\n\nGraduates will receive a Coursera certificate and gain the skills needed for digital strategy roles in banking, fintech, insurance, and related sectors. Additionally, students will be prepared to take the CFA Levels I–II. They will be particularly well-equipped with knowledge in fintech, digital innovation, data-driven finance, and emerging industry structures.",
+  "StudentTasks": "This Course is based on the Coursera Specialization \"Digital Transformation in Financial Services Specialization\"\n\nStudents have to:\n- complete the course on Coursera platform prior to deadline.\n- attend offline sessions scheduled on FAP for instruction and guidance (optional)",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/learn/digital-competition-financial-services?specialization=digital-transformation-financial-services",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Digital Competition in Financial Services"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/learn/fintech-transformation-financial-services?specialization=digital-transformation-financial-services",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2: FinTech and the Transformation in Financial Services"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/learn/innovation-strategy-fintech?specialization=digital-transformation-financial-services",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Innovation Strategy: Developing Your Fintech strategy"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/learn/digital-transformation-financial-services-project?specialization=digital-transformation-financial-services",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 4: Digital Transformation of Financial Services - Capstone Project"
+  ],
+  [
+   "5",
+   "https://www.coursera.org/specializations/digital-transformation-financial-services",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Spec: Digital Transformation in Financial Services Specialization"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand key concepts, technologies, and industry trends driving digital transformation in financial services."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyze how digital platforms, ecosystems, and fintech innovations reshape competition and business models."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Evaluate regulatory, governance, and ethical challenges in digital finance."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Apply digital transformation frameworks to improve financial products, operations, or customer experience."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Create strategic digital initiatives aligned with organizational goals."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop and present a comprehensive digital transformation plan for a financial services organization."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Multiple choices. Marked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 9-11 questions.",
+   "By exam board\nThe questions will cover content delivered in all courses of the specialization.",
+   "Final Result (FR) = min (10, TE + Bonus)"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course 1: Digital Competition in Financial Services (1)\n\nModule 1: Digital Competition in Financial Services (Introduction)\n\nModule 2: Digital Platforms\n• Lesson 1: Digitization and Digitalization\n• Lesson 2: The Digital Customer\n• Lesson 3: Changing regulations\n• Lesson 4: Digital Markets\n• Module Assessment",
+   "Online, offline",
+   "CLO1",
+   "ITU",
+   "Spec: Digital Transformation in Financial Services Specialization\n\nCourse 1: Digital Competition in Financial Services",
+   "",
+   "- See the syllabus of all 5 courses in the specialization\n- Participate in introduction slot (optional)\n- Watch the videos\n- Read the materials\n- Do all the quizzes (both practice and graded ones)\n- Complete and submit all assignments (both practice and peer-graded ones)",
+   ""
+  ],
+  [
+   "2",
+   "Course 1: Digital Competition in Financial Services (2)\n\nModule 3: Digital Platforms\n• Lesson 1: Platforms as economic and technical engines\n• Lesson 2: The platform core\n• Lesson 3: Platform complements: The third-party perspective\n• Lesson 4: Managing the platform innovation trajectory\n• Lesson 5: Competition between platforms\n• Module Assessment\n\nModule 4: Digital ecosystems\n• Lesson 1: Digital Business Ecosystems\n• Lesson 2: Cooperation\n• Lesson 3: Ecosystem governance\n• Lesson 4: Technology Ecosystems\n• Module Assessment",
+   "Online",
+   "CLO1",
+   "IU",
+   "Course 1: Digital Competition in Financial Services",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "3",
+   "Course 1: Digital Competition in Financial Services (3)\n\nModule 5: Capstone project: How open is open enough?\n• Lesson 1: Søren Kyhl: Saxo Bank in the Digital Financial Industry\n• Lesson 2: Benny Boye Johansen: OpenAPI and OpenBank\n• Lesson 3: Open Sesame: The Journey Towards an Open Platform Strategy – Saxo Bank\n• Graded Assignment: What should Saxo Bank do, and why?",
+   "Online",
+   "CLO2",
+   "IU",
+   "Course 1: Digital Competition in Financial Services",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "4",
+   "Course 2: FinTech and the Transformation in Financial Services (1)\n\nModule 1: FinTech and the Transformation in Financial Services (Introduction)\n\nModule 2: FinTech Essentials\n• Lesson 1: FinTech\n• Lesson 2: FinTech market\n• Lesson 3: Fintechnologies\n• Lesson 4: Regulation\n• Module Assessment\n\nModule 3: Money and Payments\n• Lesson 1: Money and its history\n• Lesson 2: Money and currencies",
+   "Online",
+   "CLO2",
+   "TU",
+   "Course 2: FinTech and the Transformation in Financial Services",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "5",
+   "Course 2: FinTech and the Transformation in Financial Services (2)\n\nModule 3: Money and Payments (2)\n• Lesson 3: Payment methods\n• Lesson 4: Contemporary payment methods\n• Module Assessment\n\nModule 4: Payment systems\n• Lesson 1: Payment process\n• Lesson 2: Bank payment infrastructure\n• Lesson 3: Country payment infrastructure\n• Lesson 4: Cross-border payment\n• Module Assessment",
+   "Online",
+   "CLO3",
+   "IU",
+   "Course 2: FinTech and the Transformation in Financial Services",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "6",
+   "Course 2: FinTech and the Transformation in Financial Services (3)\n\nModule 5: Lending and crowdfunding\n• Lesson 1: P2P Lending\n• Lesson 2: Crowdfunding\n• Lesson 3: Banks in the future\n• Module Assessment",
+   "Online",
+   "CLO3",
+   "IU",
+   "Course 2: FinTech and the Transformation in Financial Services",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "7",
+   "Course 3: Innovation Strategy: Developing Your Fintech Strategy (1)\n\nModule 1: (Introduction)\n\nModule 2: Competing on technological innovation\n• Lesson 1: The Disintegration of Finance\n• Lesson 2: Disruptive innovation\n• Lesson 3: Hypercompetition\n• Lesson 4: Position your FinTech strategy\n• Module Assessment\n\nModule 3: Organizing your digital innovation (1)\n• Lesson 1: Why is it so hard to innovate?\n• Lesson 2: Innovation enclaves",
+   "Online",
+   "CLO4",
+   "IU",
+   "Course 3: Innovation Strategy: Developing Your Fintech Strategy",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "8",
+   "Course 3: Innovation Strategy: Developing Your Fintech Strategy (2)\n\nModule 3: Organizing your digital innovation (2)\n• Lesson 3: The multi-modal IT organization\n• Lesson 4: Innovating on the digital trace\n• Module Assessment\n\nModule 4: Channeling the smarts of others\n• Lesson 1: Tech acquisitions\n• Lesson 2: Strategic partnerships\n• Lesson 3: Accelerators\n• Lesson 4: Hackathons\n• Module Assessment",
+   "Online",
+   "CLO4, CLO5",
+   "IU",
+   "Course 3: Innovation Strategy: Developing Your Fintech Strategy",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "9",
+   "Course 3: Innovation Strategy: Developing Your Fintech Strategy (3)\n\nModule 5: Capstone project\n• Lesson 1: Danske Bank: State of business\n• Lesson 2: Danske Bank: How to capitalize on digital disruption\n• Lesson 3: Danske Bank: The need for a FinTech strategy\n• Lesson 4: Danske Bank: Leveraging regulation\n• Graded Assignment: Develop a FinTech strategy",
+   "Online",
+   "CLO6",
+   "IU",
+   "Course 3: Innovation Strategy: Developing Your Fintech Strategy",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "10",
+   "Course 4: Digital Transformation of Financial Services - Capstone Project (1)\n\nModule 1: (Introduction)\n\nModule 2: Introduction to the Capstone Project\n• Lesson 1: Introduction to project and cases\n• Lesson 2: Option Saxo Bank\n• Lesson 3: Option Citibank\n• Lesson 4: Option Digital Cash\n• Lesson 5: Option Smart Money\n\nModule 3: Milestone I - Diagnosis",
+   "Online",
+   "CLO6",
+   "TU",
+   "Course 4: Digital Transformation of Financial Services - Capstone Project",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "11",
+   "Course 4: Digital Transformation of Financial Services - Capstone Project (2)\n\nModule 4: Milestone II - Prescription",
+   "Online",
+   "CLO6",
+   "IU",
+   "Course 4: Digital Transformation of Financial Services - Capstone Project",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "12",
+   "Course 4: Digital Transformation of Financial Services - Capstone Project (3)\n\nModule 5: Capstone Project Final Submission",
+   "Online, offline",
+   "CLO6",
+   "TU",
+   "Course 4: Digital Transformation of Financial Services - Capstone Project",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Complete the Spec. Deadline: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

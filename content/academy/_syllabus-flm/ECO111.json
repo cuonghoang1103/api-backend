@@ -1,0 +1,1106 @@
+{
+ "ma": "ECO111",
+ "sylID": "13497",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13497",
+   "code": "ECO111",
+   "name": "Microeconomics_Kinh tế vi mô",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13497",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13497",
+  "Syllabus Name": "Microeconomics_Kinh tế vi mô",
+  "Course Name English": "Microeconomics",
+  "Subject Code": "ECO111",
+  "Learning-Teaching Method": "Lecture,Social Constructivism,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor in Business Administration",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "None",
+  "Description": "Economics is the study of how the society manages its scarce resources. Economics has been divided into the subcategories of microeconomics and macroeconomics. While macroeconomics studies aggregate issues related to national and international economic activities, this course - microeconomics - focuses on the behavior of individual economic agents. Microeconomics studies how households (or individuals), business (or firms, enterprises) and the government make decisions, given scarcity of resources. It also studies the interactions among those market members and how these interactions have impacts on their economic benefits and the economy. Because most of these activities occur in the markets, this course also focuses on how the markets work.",
+  "StudentTasks": "+ Class attendance is strongly encouraged. Attend at least 80% of class hours in order to be accepted to the final examination\n\n+ Read textbooks and other materials in advance before class\n\n+ Actively participate in class activities\n\n+ Complete all homework assignments and other tasks given by the instructor\n\n+ Use personal laptop in class only for learning purposes\n\n+ Don’t have private conversations or arrive at class late, which can disrupt the learning environment of the class",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Principles of Economics",
+   "Mankiw, N. G.",
+   "South-Western CENGAGE Learning",
+   "2011",
+   "6th",
+   "978-0-538-45342-4",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Principles of Economics (International Edition)",
+   "Mankiw, N. G.",
+   "South-Western CENGAGE Learning",
+   "2018",
+   "8th",
+   "978-1-305-58512-6",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Principles of Microeconomics (International Edition)",
+   "Mankiw, N. G.",
+   "South-Western Cengage Learning",
+   "2009",
+   "5th edition",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://openlibrary.org/books/OL23174415M/Principles_of_microeconomics"
+  ],
+  [
+   "4",
+   "AE Principles of Economics",
+   "N. Gregory Mankiw",
+   "Cengage",
+   "2020",
+   "9th",
+   "ISBN-13: 9789814915342 | ISBN-10: 9814915343",
+   "True",
+   "True",
+   "False",
+   "Chọn một trong 3 quyển. Nếu mua ưu tiên mua ấn bản mới nhất"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain why consumers attempt to maximize utility."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Describe long runs and short runs"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Discuss fixed, variable, and total costs"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify the characteristics of microeconomics and its effect consumers, businesses, and owners"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Recognize the three primary forms of elasticity as their impacts on economics"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Review curve analysis and how it reflects consumer demand"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Apply utility theory to the changing world of supply and demand"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Describe cost curves and consumer variables"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Recognize the role of supply and demand in economics, government policies."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Shows self-reliance when working independently and collaboratively"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Demonstrate ethical awareness and reflection in business context"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "LO10, LO11",
+   "",
+   "",
+   "",
+   "",
+   "Option 1:Participation scores will be given based on students' class attendance, preparation, quantity as well as quality of participation in classroom; quality of participation is demonstrated through asking relevant questions, making statements that add to and facilitate class discussions, and building upon others’ comments. Class participation accounts for 14% of the final score.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal"
+  ],
+  [
+   "2",
+   "Group Assignment (01)",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "15' for each group presentation and 10' for Q&A",
+   "LO6, LO7, LO8, LO9, LO10, LO11",
+   "Option 1:Students will be divided into 4-6 groups in the first session. Students could join some in-class activities as members of those groups. Each group will be assigned one topic, or will choose one topic subject to the instructor's approval, which is related to current economic issues in the real world. Students need to apply all comprehensive knowledge of microeconomics to explain and analyze those issues. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: One topic related to real current economic problems for each group Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: This group presentation will test critical thinking and skills of applying microeconomic theory to explain and predict the economic phenomena in the real world.Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Preparation at home and group presentation in class room\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The PPT slides and written report of the presentation must be sent to the instructor before deadlines. Each group presentation will take place in appx. 15 minutes. The Q&A session will follow for about 10 minutes. The Group Assignment accounts for 20% of the final score."
+  ],
+  [
+   "3",
+   "Individual Assignments (02)",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "",
+   "LO3, LO4, LO5, LO6, LO7, LO10, LO11",
+   "Option 1: Written homework in forms of computation exercises and open problems. Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: not detailledOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:Coverage of Individual Assignment 1 is chapters 1, 2, 4, 5, 6, 7, 21. Coverage of Individual Assignment 2 is chapters 13, 14, 15, 16, 17, 10, 11, and 18. Specific content of each individual assignment is subject to the instructor's decisions. Questions can either be theoretical analysis, computational exercises, or case analysis.Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Do at home and due according to deadlines\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: In some particular sessions, homework assignments will be given to students. The exercises in these assignments will cover subjects from the session when the previous assignment is handed. Students are required to do individually at home and submit to the instructor according to the deadlines. There are 02 assignments, each of them will account for 10% of the students' final score."
+  ],
+  [
+   "4",
+   "Quizzes (02)",
+   "on-going",
+   "2",
+   "10.0%",
+   ">0",
+   "15' each",
+   "LO1, LO2, LO3, LO4, LO5",
+   "Option 1: Multiple choice questions Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 15 questions.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1:Quizzes will test for knowledge of subjects in the relevant chapters assigned for quiz days. Coverage of Quiz 1 is chapters 1, 2, 4, 5, and 6. Coverage of Quiz 2 is chapters 7, 21, 13, 14, and 15.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Class room\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Quizzes are organized in the beginning of some sessions and informed to students in advance. Students have time at home for preparation. Students are not allowed to use books or documents in any form during the quizzes. The content of quizzes will cover all knowledge from the last quiz. The total number of quizzes is 2. Each quiz has 15 questions and accounts for 5% of the final score."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "All LOs",
+   "Multiple choice questions",
+   "50",
+   "The questions will cover the lectures, in-class activities, exercises, and textbook materials.",
+   "Exam room",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "-Course Overview\n\n-Introduction to AI Integration into the Course\n\n-Handout of Individual Assignment 1 (Chapters 1, 2, 4, 5, 6, 7, 21)\n\nChapter 1: Ten Principles of Economics",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "ECOchap1-8",
+   "",
+   "link\n\nlink"
+  ],
+  [
+   "2",
+   "Chapter 1: Ten Principles of Economics",
+   "Offline",
+   "LO1",
+   "IT",
+   "",
+   "ECOchap9-16",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Group Formation\n\nGroup Assignment Guidelines\n\nChapter 2: Thinking like An Economist",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "ECOchap17-24",
+   "",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: Thinking like An Economist",
+   "Offline",
+   "LO1",
+   "I,T",
+   "",
+   "ECOchap25-32",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 4: The Market Forces of Supply and Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "I,T,U",
+   "",
+   "ECOchap33-36",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 4: The Market Forces of Supply and Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 4: The Market Forces of Supply and Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 4: The Market Forces of Supply and Demand\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 5: Elasticity and Its Application\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 5: Elasticity and Its Application\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 5: Elasticity and Its Application\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 5: Elasticity and Its Application\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "Group Topic Discussion\n\nChapter 6: Supply, Demand, and Government Policies",
+   "Offline",
+   "LO2, LO3, LO4",
+   "I,T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 6: Supply, Demand, and Government Policies",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 6: Supply, Demand, and Government Policies\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 6: Supply, Demand, and Government Policies\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 7: Consumers, Producers, and the Efficiency of Markets\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 7: Consumers, Producers, and the Efficiency of Markets\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO2, LO3, LO4",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 7: Consumers, Producers, and the Efficiency of Markets\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO4",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 7: Consumers, Producers, and the Efficiency of Markets",
+   "Offline",
+   "LO4",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "21",
+   "Quiz 1 (Chapters 1, 2, 4, 5, 6) - Review\n\nChapter 21: The Theory of Consumer Choice\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 21: The Theory of Consumer Choice\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 21: The Theory of Consumer Choice\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 21: The Theory of Consumer Choice\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO5",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "25",
+   "Submission of Individual Assignment 1\n\nHandout of Individual Assignment 2 (Chapters 13, 14, 15, 16, 17, 10, 11, 18)\n\nGroup Topic Finalization\n\nChapter 13: The Costs of Production",
+   "Offline",
+   "LO6",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 13: The Costs of Production\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 13: The Costs of Production\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 13: The Costs of Production\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 14: Firms in Competitive Markets\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 14: Firms in Competitive Markets\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 14: Firms in Competitive Markets\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 14: Firms in Competitive Markets\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO6",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 15: Monopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 15: Monopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 15: Monopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 15: Monopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 16: Monopolistic Competition\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 16: Monopolistic Competition\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 16: Monopolistic Competition\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 16: Monopolistic Competition\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "41",
+   "Quiz 2 (Chapters 7, 21, 13, 14, 15) - Review\n\nReview of Individual Assignment 2\n\nChapter 17: Oligopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 17: Oligopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 17: Oligopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 17: Oligopoly\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO7",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 10: Externalities\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO8",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 10: Externalities\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO8",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 10: Externalities\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO8",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 11: Public Goods and Common Resources\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO9",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 11: Public Goods and Common Resources\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO9",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 11: Public Goods and Common Resources\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO9",
+   "T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "51",
+   "Submission of Individual Assignment 2\n\nChapter 18: The Markets for the Factors of Production\n\n[Practice: 1 period(s)]",
+   "Offline",
+   "LO9",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "52",
+   "Review\n\nReview of Individual Assignment 2\n\nSubmission of Group Assignment\n\nCourse Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO9",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "Course Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "54",
+   "Course Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "55",
+   "Course Review & Practice\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "I,T,U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Presentation of Group Assignment\n\n[Practice: 2 period(s)]",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "7",
+   "ĐN3.1",
+   "1. Money runs the world! And the money just exists where there is a buyer, seller and exchange of goods, which is called “the market”. What is the market and why is it so important for people?"
+  ],
+  [
+   "2",
+   "7",
+   "ĐN3.2",
+   "2. The market has two components: demand and supply. How was the demand created and how does it change?"
+  ],
+  [
+   "3",
+   "8",
+   "ĐN3.3",
+   "3. The market has two components: demand and supply. How was the supply created and how does it change?"
+  ],
+  [
+   "4",
+   "8",
+   "ĐN3.4",
+   "4. How was the price and the quantity of goods or services in a market set up?"
+  ],
+  [
+   "5",
+   "9",
+   "ĐN3.5",
+   "5. How can we predict the price and quantity of goods to get more benefit?"
+  ],
+  [
+   "6",
+   "10",
+   "ĐN4.1",
+   "Imagine that you now controlled a company/a farm. You must increase the revenue of your company to have a better performance. Using the concept “Elasticity” to find the answer of this below question: 1. Should you increase the price of goods to have more revenue?"
+  ],
+  [
+   "7",
+   "11",
+   "ĐN4.2",
+   "2. Should you produce more quantity to increase the revenue?"
+  ],
+  [
+   "8",
+   "12",
+   "ĐN4.3",
+   "3. How can you get more revenue by the understanding of Elasticity?"
+  ],
+  [
+   "9",
+   "13",
+   "ĐN5.1",
+   "Imagine that now you are the president of our nation. You must make good policies for the people’s living. Give your opinions with this problems:"
+  ],
+  [
+   "10",
+   "13",
+   "ĐN5.2",
+   "1. If the price of necessary things (rice, pork, face marks,..) is too high, should the government set up the limitation of price (maximum price) to help the poor buyer?"
+  ],
+  [
+   "11",
+   "14",
+   "ĐN5.2",
+   "2. If the price of necessary things (rice, pork,….) is too low, should the government set up the limitation of price (minimum price) to protect the producers/farmers?"
+  ],
+  [
+   "12",
+   "14",
+   "ĐN5.4",
+   "3. How does the market change if the government imposes taxes on buyers?"
+  ],
+  [
+   "13",
+   "15",
+   "ĐN5.5",
+   "4. How does Elasticity change Taxes Incidence?"
+  ],
+  [
+   "14",
+   "16",
+   "ĐN6.1",
+   "1. How is the Consumer Surplus measured?"
+  ],
+  [
+   "15",
+   "17",
+   "ĐN6.2",
+   "2. How is the Producer Surplus measured?"
+  ],
+  [
+   "16",
+   "18",
+   "ĐN6.3",
+   "3. How is Market Efficiency (Total Surplus) measured?"
+  ],
+  [
+   "17",
+   "18",
+   "ĐN6.4",
+   "4. Why are Markets usually a good way to organize economic activity?"
+  ],
+  [
+   "18",
+   "25",
+   "ĐN9.1",
+   "In economics, we assume that a firm only wants to have maximum Profit, that equals Revenue minus Cost.The Revenue is so simple to calculate, equal The Price times The Quantity of Goods. But, The Cost is more complex, and hard to calculate. We must try to answer:\n1. How many kinds of Cost in a firm’s production?"
+  ],
+  [
+   "19",
+   "26",
+   "ĐN9.2",
+   "2. How can we reduce the cost, so we can have cheaper products in a market?"
+  ],
+  [
+   "20",
+   "27",
+   "ĐN9.3",
+   "3. Why does Cost directly affect Profit of a company?"
+  ],
+  [
+   "21",
+   "34",
+   "ĐN12.1",
+   "1. What happens if a market (medicine, electricity, water…) has only one seller?"
+  ],
+  [
+   "22",
+   "35",
+   "ĐN12.2",
+   "2. How about the price, quantity, efficiency of a market (medicine, electricity, water…) has only one seller?"
+  ],
+  [
+   "23",
+   "36",
+   "ĐN12.3",
+   "3. How can a government control the only one-seller market?"
+  ],
+  [
+   "24",
+   "37",
+   "ĐN13.1",
+   "1. What happens when a market has many sellers, many buyers, and the products are not identical (books, clothes,…)?"
+  ],
+  [
+   "25",
+   "38",
+   "ĐN13.2",
+   "2. How about the price, quantity, efficiency?"
+  ],
+  [
+   "26",
+   "39",
+   "ĐN13.3",
+   "3. How can the government manage this kind of market?"
+  ]
+ ],
+ "links": [
+  "/download/10044/S/1_ECOchap1-8.zip",
+  "Slides: https://drive.google.com/drive/folders/1BoG3cerI1xMcRDCaHD7Td7ox01lnM-Ek?usp=sharing",
+  "Guidance on AI activities, teaching methods, and assessment strategies: https://drive.google.com/drive/folders/1VUNGwtIwrKysmmEZ1q866Fv7NJEfAzwW?usp=sharing",
+  "/download/10044/S/2_ECOchap9-16.zip",
+  "/download/10044/S/3_ECOchap17-24.zip",
+  "/download/10044/S/4_ECOchap25-32.zip",
+  "/download/10044/S/5_ECOchap33-36.zip"
+ ]
+}

@@ -1,0 +1,1185 @@
+{
+ "ma": "EEC101",
+ "sylID": "13733",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13733",
+   "code": "EEC101",
+   "name": "Introduction to e-commerce_Nhập môn thương mại điện tử",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13733",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13733",
+  "Syllabus Name": "Introduction to e-commerce_Nhập môn thương mại điện tử",
+  "Course Name English": "",
+  "Subject Code": "EEC101",
+  "Learning-Teaching Method": "Lecturing,social constructivism, in-class practice, discussion, groupwork",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n= 45h contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "",
+  "Description": "This course provides a comprehensive examination of the rapidly evolving digital marketplace through the tripartite lens of business, technology, and society. It establishes a theoretical framework for understanding how digital trade mechanisms have revolutionized traditional economic structures and continue to reshape global commerce.\n\nIn this course, students will investigate the foundational elements of the digital economy, ranging from technical infrastructures and security protocols to complex business models. The curriculum requires learners to analyze critical strategies in digital marketing and supply chain management while simultaneously evaluating the ethical, social, and political implications inherent in online commerce. Through this rigorous inquiry, participants engage with the practical realities of online retail, content delivery, and collaborative commerce.\n\nUpon completion, participants will possess the analytical acumen necessary to evaluate diverse e-commerce initiatives and the technical insight required for establishing a robust digital presence. Graduates will emerge equipped with a strategic perspective that integrates commercial innovation with ethical responsibility, preparing them to effectively navigate and lead within the complexities of the global digital trade environment.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n- Student is responsible to do all exercises and assignments given by instructor in class or at home and submit on time\n- Use laptop in class for learning purposes",
+  "Tools": "- Text book and other required reading materials\n- Internet\n- Edunext system (https://edunext.fpt.edu.vn/)\n- Vietnam's legal texts in press, information and communication sectors\n- Corsera course: Generative AI: Impact, Considerations, and Ethical Issues (https://www.coursera.org/learn/generative-ai-ethical-considerations-and-implications#modules)",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "E-commerce 2023-2024: business, technology, society",
+   "Kenneth C. Laudon and Carol G. Traver",
+   "Pearson",
+   "2023",
+   "Global edition 18th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Distinguish the fundamental business models and technological infrastructures of e-commerce to explain how they generate value and competitive advantage in the digital marketplace."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Interpret the essential principles of digital marketing, supply chain management, and online retail strategies to identify their roles in driving business growth and operational efficiency."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Apply basic business analysis frameworks to evaluate the usability, commercial viability, and customer experience of existing e-commerce websites and mobile platforms."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Analyze the managerial implications of security risks and payment systems to propose appropriate non-technical strategies for risk mitigation and consumer trust building."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Cultivate a professional awareness of legal compliance and ethical responsibility to address social and political issues arising within the digital trade environment."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "30.0%",
+   "4",
+   "Week 1 - Week 10",
+   "CLO3, CLO4, CLO5",
+   "Project",
+   "1",
+   "Chapter 1-12 of book E-commerce 2023-2024: business, technology, society (18th edition)",
+   "Group Project: The E-commerce Go-to-Market Strategy\n\nThis group project requires students to simulate the role of a digital management team launching a new product or transitioning an existing physical product into the online marketplace. The objective is to synthesize the theoretical knowledge from the course into a cohesive, actionable business plan. Student groups should select a tangible consumer product and develop a four-stage strategy that covers the lifecycle of an e-commerce transaction, from product conceptualization to post-sales retention.\n\nProject Requirements and Structure\n- Stage 1: Product Selection and Business Model Definition\n- Stage 2: Platform Selection and Infrastructure Strategy\n- Stage 3: Digital Marketing and Customer Acquisition\n- Stage 4: Post-Sales Operations and Customer Retention\n\nDeliverable The group will present their strategy in a 20-minute presentation followed by a Q&A session. The presentation should clearly demonstrate the logical connection between the chosen product, the selected technology, and the managerial decisions made throughout the planning process.",
+   "Each team will discuss in advance with the lecturer about the suitability of the project\n\nThe mark will be given based on each student's performance, not on the whole group's. It means each student will get their own mark.\n\nGroup size: 5-6 members"
+  ],
+  [
+   "2",
+   "Individual assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   "",
+   "90'",
+   "CLO3, CLO4",
+   "Essay question",
+   "1",
+   "Chapter 6 - 8 of book E-commerce 2023-2024: business, technology, society (18th edition)",
+   "In-class conducted;\n\nTime Allotted: 90 Minutes\nFormat: Individual Written Memorandum (500–700 words)\nTitle: Integrated Digital Strategy and Ethics Audit\n\nThis in-class individual assignment requires the student to assume the role of a strategic consultant analyzing a specific e-commerce retailer within a ninety-minute timeframe. The student should first examine the firm's marketing and advertising mechanisms by identifying specific deployments of behavioral targeting or personalization strategies to assess their effectiveness in customer acquisition. Following this analysis, the student should evaluate the integration of social, mobile, and local marketing initiatives to determine how well the firm leverages these platforms for community engagement and seamless user experiences. Concluding the audit, the student should conduct a critical risk assessment regarding information rights and data privacy, utilizing ethical frameworks to recommend strategic improvements that balance commercial objectives with strict consumer protection standards.",
+   ""
+  ],
+  [
+   "3",
+   "Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   "",
+   "Week 1-10",
+   "CLO5",
+   "- In-class performance of student;\n- Case-study participation",
+   "All the course progress",
+   "",
+   "Individual assignments are graded on a scale of 0-10, precise to one digit after the decimal, which will be contingent upon their participation and fulfill the other's requirements of the lecturer (can be homework, inclass excercise...).",
+   "Based on class attitudes and participation"
+  ],
+  [
+   "4",
+   "Quiz",
+   "on-going",
+   "1",
+   "15.0%",
+   "",
+   "40'",
+   "CLO1, CLO2",
+   "Multiple choice questions",
+   "30",
+   "Chapter 1,2,3,4 and 5 of book E-commerce 2023-2024: business, technology, society (18th edition)",
+   "In-class conducted;\n\n'The given question will focus on the main content of the related chapters.",
+   ""
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4",
+   "Multiple choice questions",
+   "50",
+   "The question will cover the lectures, class discussions, activities, exercises, and textbook.",
+   "Exam room conducted.",
+   "Students are not allowed to use document/information in any form in exam room"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduce the general background of this subject, studying methods: textbooks, suggested readings, rules set out by Lecturer, syllabus, assessment;\n\nInstruct students how to prepare, complete and submit their individual assignment and group assignment.",
+   "Offline",
+   "CLO5",
+   "I",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Team up",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1: Introduction to E-Commerce\n1.1 Why Should Study E-commerce\n1.2 Introduction to E-commerce\n1.3 Unique Features of E-commerce Technology",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 1: Introduction to E-Commerce\nWorking in group",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 1: Introduction to E-Commerce\nWorking in group\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "3",
+   "Chapter 1: Introduction to E-Commerce\n1.4 Types of E-commerce\n1.5 E-commerce: A Brief History",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 1: Introduction to E-Commerce\nWorking in group",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 1: Introduction to E-Commerce\nWorking in group\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: E-commerce Business Strategies\n2.1 E-commerce Business Models\n2.2 Major Business-to-Consumer (B2C) Business Models",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 2: E-commerce Business Strategies",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 2: E-commerce Business Strategies\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: E-commerce Business Strategies\n2.3 Major Business-to-Business (B2B) Business Models",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 2: E-commerce Business Strategies",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 2: E-commerce Business Strategies\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: E-commerce Business Strategies\n2.4 How E-commerce Changes Business: Strategy, Structure, and Process",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 2: E-commerce Business Strategies",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 2: E-commerce Business Strategies\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3: E-commerce Infrastructure\n3.1 The Internet: Technology Background\n3.2 Internet Infrastructure and Access",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 3: E-commerce Infrastructure",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 3: E-commerce Infrastructure\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3: E-commerce Infrastructure\n3.3 The Web\n3.4 he Internet and Web: Features and Services",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 3: E-commerce Infrastructure",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 3: E-commerce Infrastructure\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3: E-commerce Infrastructure\n3.5 Mobile Apps",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 3: E-commerce Infrastructure",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 3: E-commerce Infrastructure\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 4: Building an E-commerce Presence\n4.1 Imagine Your E-commerce Presence\n4.2 Building an E-commerce Presence: A Systematic Approach",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 4: Building an E-commerce Presence",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 4: Building an E-commerce Presence\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4: Building an E-commerce Presence\n4.3 Choosing Software\n4.4 Choosing Hardware",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 4: Building an E-commerce Presence",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 4: Building an E-commerce Presence\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4: Building an E-commerce Presence\n4.5 Other E-commerce Site Tools\n4.6 Developing a Mobile Website and Building Mobile Applications",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 4: Building an E-commerce Presence",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 4: Building an E-commerce Presence\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 5: E-commerce Security and Payment Systems\n5.1 The E-commerce Security Environment\n5.2 Security Threats in the E-commerce Environment",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 5: E-commerce Security and Payment Systems",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 5: E-commerce Security and Payment Systems\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 5: E-commerce Security and Payment Systems\n5.2 Security Threats in the E-commerce Environment (continue)\n5.3 Technology Solutions",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 5: E-commerce Security and Payment Systems",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 5: E-commerce Security and Payment Systems\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5: E-commerce Security and Payment Systems\n5.4 Management Policies, Business Procedures, and Public Laws\n5.5 E-commerce Payment Systems",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 5: E-commerce Security and Payment Systems",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 5: E-commerce Security and Payment Systems\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "16",
+   "Review group project",
+   "Offline",
+   "CLO1, CLO2",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 1- 5\n\nLaptop",
+   "",
+   "Reviewing chapter 1-5 and raising questions\nDoing quiz",
+   ""
+  ],
+  [
+   "17",
+   "Review group project",
+   "Offline",
+   "CLO1, CLO2",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 1- 5\nLaptop",
+   "",
+   "Reviewing chapter 1-5 and raising questions\nDoing quiz",
+   ""
+  ],
+  [
+   "18",
+   "Quiz",
+   "Offline",
+   "CLO1, CLO2",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 1- 5\nLaptop",
+   "",
+   "Reviewing chapter 1-5 and raising questions\nDoing quiz",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 6: E-commerce Marketing and Advertising\n6.1 Consumers Online: The Online Audience and Consumer Behavior\n6.2 Digital Commerce Marketing and Advertising Strategies and Tools",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6: E-commerce Marketing and Advertising\n6.3 Online Marketing Technologies\n6.4 Understanding the Costs and Benefits of Online Marketing Communications",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 6: E-commerce Marketing and Advertising\n6.5 Case Study: Programmatic Advertising: Real-Time Marketing",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 6: E-commerce Marketing and Advertising\nAI Practicing - Building an E-commerce marketing and advertising concept",
+   "Offline",
+   "CLO3, CLO4",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising\n\nUsing AI tools to propose a concept of launching a new product on E-commerce platform. Each group will present that concept to the class while other groups will challenges the pros and cons of the proposed marketing concept.",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 6: E-commerce Marketing and Advertising\nAI Practicing - Building an E-commerce marketing and advertising concept",
+   "Offline",
+   "CLO3, CLO4",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising\n\nUsing AI tools to propose a concept of launching a new product on E-commerce platform. Each group will present that concept to the class while other groups will challenges the pros and cons of the proposed marketing concept.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 6: E-commerce Marketing and Advertising\nAI Practicing - Building an E-commerce marketing and advertising concept",
+   "Offline",
+   "CLO3, CLO4",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6: E-commerce Marketing and Advertising\n\nUsing AI tools to propose a concept of launching a new product on E-commerce platform. Each group will present that concept to the class while other groups will challenges the pros and cons of the proposed marketing concept.",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7: Social, Mobile, and Local Marketing\n7.1 Introduction to Social, Mobile, and Local Marketing\n7.2 Social Marketing",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 7: Social, Mobile, and Local Marketing\n7.3 Mobile Marketing\n7.4 Local and Location-based Mobile Marketing",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 7: Social, Mobile, and Local Marketing\n7.5 Case Study: Exchangehunterjumper.com: Building an International Brand with Social Marketing (or any case found in Vietnam which is appropriate)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 7: Social, Mobile, and Local Marketing\nAI Practicing - Approach to Social, Mobile, and Local Customer\nAssigning and guide the group assignment topic",
+   "Offline",
+   "CLO3, CLO4",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing\n\nUsing AI tools to form a strategy to approach a specific group of customer to buost up the sale of a product listed on e-commerce platform. That strategy will be present to the class and other groups will challenge the potentiality of that strategy.",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 7: Social, Mobile, and Local Marketing\nAI Practicing - Approach to Social, Mobile, and Local Customer\nAssigning and guide the group assignment topic",
+   "Offline",
+   "CLO3, CLO4",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing\n\nUsing AI tools to form a strategy to approach a specific group of customer to buost up the sale of a product listed on e-commerce platform. That strategy will be present to the class and other groups will challenge the potentiality of that strategy.",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 7: Social, Mobile, and Local Marketing\nAI Practicing - Approach to Social, Mobile, and Local Customer\nAssigning and guide the group assignment topic",
+   "Offline",
+   "CLO3, CLO4",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 7: Social, Mobile, and Local Marketing\n\nUsing AI tools to form a strategy to approach a specific group of customer to buost up the sale of a product listed on e-commerce platform. That strategy will be present to the class and other groups will challenge the potentiality of that strategy.",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 8: Ethics and Law in E-commerce\n8.1 Understanding Ethical, Social, and Political Issues in E-commerce\n8.2 Privacy and Information Rights",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 8: Ethics and Law in E-commerce",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 8: Ethics and Law in E-commerce\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "32",
+   "Chapter 8: Ethics and Law in E-commerce\n8.3 Intellectual Property Rights\n8.4 Governance\n8.5 Public Safety and Welfare",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 8: Ethics and Law in E-commerce",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 8: Ethics and Law in E-commerce\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 8: Ethics and Law in E-commerce\nCase-study: Case Study: Big Tech Firms: Are They Getting “Too Big”? (or any case found in Vietnam which is appropriate)",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 8: Ethics and Law in E-commerce",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 8: Ethics and Law in E-commerce\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "34",
+   "Review group project (2)",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6 - 8\n\nLaptop",
+   "",
+   "Reviewing chapter 6-8 and conducting in class assignment",
+   ""
+  ],
+  [
+   "35",
+   "Individual assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6 - 8\n\nLaptop",
+   "",
+   "Reviewing chapter 6-8 and conducting in class assignment",
+   ""
+  ],
+  [
+   "36",
+   "Individual assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 6 - 8\n\nLaptop",
+   "",
+   "Reviewing chapter 6-8 and conducting in class assignment",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 9: E-commerce Retail and Services\n9.1 Analyzing the Viability of Online Firms\n9.2 The Retail Sector: Offline and Online",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 9: E-commerce Retail and Services\n9.3 E-commerce in Action: Online Retail Business Models",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9: E-commerce Retail and Services\n9.4 The Service Sector: Offline and Online",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 9: E-commerce Retail and Services\n9.5 Online Financial Services\n9.6 Online Travel Services",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 9: E-commerce Retail and Services\n9.7 Online Job Recruitment and Career Services\n9.8 On-Demand Service Companies",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 9: E-commerce Retail and Services\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 10: Online Media\n10.1 Online Content",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 10: Online Media\n10.2 The Online Publishing Industry",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 10: Online Media\n10.3 The Online Entertainment Industry",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 10: Online Media\n10.4 Creators and User-generated Content",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 10: Online Media\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 11: Online Communities\n11.1 Social Networks and Online Communities",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 11: Online Communities",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 11: Online Communities\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 11: Online Communities\n11.2 Online Auctions",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 11: Online Communities",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 11: Online Communities\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 11: Online Communities\n11.3 E-commerce Portals",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 11: Online Communities",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 11: Online Communities\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 12: B2B E-commerce\n12.1 An Overview of B2B E-commerce",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 12: B2B E-commerce",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 12: B2B E-commerce\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 12: B2B E-commerce\n12.2 The Procurement Process and Supply Chains\n12.3 Trends in Supply Chain Management and Collaborative Commerce",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 12: B2B E-commerce",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 12: B2B E-commerce\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 12: B2B E-commerce\n12.4 B2B E-commerce Marketplaces: The Selling Side of B2B\n12.5 Private B2B Networks",
+   "Offline",
+   "CLO1, CLO2",
+   "I, T",
+   "Slides; Syllabus, and other materials suggested by Lecturer\n\nTextbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 12: B2B E-commerce",
+   "",
+   "Reading: Textbook: E-commerce 2023-2024: business, technology, society (18th edition) - Chapter 12: B2B E-commerce\n\nPresenting, reviewing, discussing, working in group as guided by lecturer",
+   ""
+  ],
+  [
+   "52",
+   "Group assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Product",
+   "",
+   "Presenting/ Discussing/ Debating",
+   ""
+  ],
+  [
+   "53",
+   "Group assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Product",
+   "",
+   "Presenting/ Discussing/ Debating",
+   ""
+  ],
+  [
+   "54",
+   "Group assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Product",
+   "",
+   "Presenting/ Discussing/ Debating",
+   ""
+  ],
+  [
+   "55",
+   "Group assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Product",
+   "",
+   "Presenting/ Discussing/ Debating",
+   ""
+  ],
+  [
+   "56",
+   "Group assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Product",
+   "",
+   "Presenting/ Discussing/ Debating",
+   ""
+  ],
+  [
+   "57",
+   "Group assignment",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "U",
+   "Product",
+   "",
+   "Presenting/ Discussing/ Debating",
+   ""
+  ],
+  [
+   "58",
+   "Review for final exam",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Textbook\nWorking in group\nPresenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "59",
+   "Review for final exam",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO5",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Textbook\nWorking in group\nPresenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ],
+  [
+   "60",
+   "Review for final exam",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO6",
+   "I, T, U",
+   "Slides; Syllabus, Textbook and other materials suggested by Lecturer",
+   "",
+   "Textbook\nWorking in group\nPresenting, Reviewing, Discussing, working in group as stipulated in a standard Constructivism slot",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "4",
+   "CQ4.1",
+   "Why is it essential to protect intellectual property rights?"
+  ],
+  [
+   "2",
+   "5",
+   "CQ5.1",
+   "What are sources of IPR law in the world?"
+  ],
+  [
+   "3",
+   "5",
+   "CQ5.2",
+   "How do you understand about case law)"
+  ],
+  [
+   "4",
+   "6",
+   "CQ6.1",
+   "What types of IPR are relevant to graphic designers/multimedia communicators?"
+  ],
+  [
+   "5",
+   "6",
+   "CQ6.2",
+   "What is overlap in IPR protection?"
+  ],
+  [
+   "6",
+   "7",
+   "CQ7.1",
+   "Does Copyright protect an idea or a concept?"
+  ],
+  [
+   "7",
+   "7",
+   "CQ7.2",
+   "What are types of copyright?"
+  ],
+  [
+   "8",
+   "8",
+   "CQ8.1",
+   "What are Graphic works protecting by copyright?"
+  ],
+  [
+   "9",
+   "9",
+   "CQ9.1",
+   "Who are authors and copyright owners?"
+  ],
+  [
+   "10",
+   "9",
+   "CQ9.2",
+   "Who owns the combined logo in a commission?"
+  ],
+  [
+   "11",
+   "10",
+   "CQ10.1",
+   "Is copyright forever?"
+  ],
+  [
+   "12",
+   "11",
+   "CQ11.1",
+   "Who has the moral rights in the case of Tidy vs Trustees of the Natural History Museum?"
+  ],
+  [
+   "13",
+   "11",
+   "CQ11.2",
+   "What are moral rights in copyright?"
+  ],
+  [
+   "14",
+   "12",
+   "CQ12.1",
+   "Who has the economics right in the case of Cartes-en-Ciel Inc. v. Boutique Elfe Inc.?"
+  ],
+  [
+   "15",
+   "12",
+   "CQ12.2",
+   "What are economic rights in copyright?"
+  ],
+  [
+   "16",
+   "13",
+   "CQ13.1",
+   "What is copyright infringement?"
+  ],
+  [
+   "17",
+   "14",
+   "CQ14.1",
+   "Is there a copyright infringement in the case of Taylor Corporation v. Four Seasons Greetings, LLC?"
+  ],
+  [
+   "18",
+   "15",
+   "CQ15.1",
+   "When don't you need permission to use an existing material?"
+  ],
+  [
+   "19",
+   "16",
+   "CQ16.1",
+   "What are legal liabilities for copyright infringement?"
+  ],
+  [
+   "20",
+   "17",
+   "CQ17.1",
+   "Which civil liabilities the copyright's owner can ask in case of Lê Linh & Phan Thị?"
+  ],
+  [
+   "21",
+   "18",
+   "CQ18.1",
+   "What others can take from you?"
+  ],
+  [
+   "22",
+   "22",
+   "CQ22.1",
+   "What's protected by design right?"
+  ],
+  [
+   "23",
+   "23",
+   "CQ23.1",
+   "What's the difference between copyright and design right in terms of ownership, author, and duration of the right?"
+  ],
+  [
+   "24",
+   "24",
+   "CQ24.1",
+   "Is there any difference between copyright and design right in case of infringement and asking for legal liabilities?"
+  ],
+  [
+   "25",
+   "25",
+   "CQ25.1",
+   "Is there any exception on design right license?"
+  ],
+  [
+   "26",
+   "26",
+   "CQ26.1",
+   "What does a registered design protect?"
+  ],
+  [
+   "27",
+   "27",
+   "CQ27.1",
+   "Can an architect's design be registered as an industrial design?"
+  ],
+  [
+   "28",
+   "28",
+   "CQ28.1",
+   "What's the difference between design right and registered design in term of ownership, author,duration of the right?"
+  ],
+  [
+   "29",
+   "29",
+   "CQ29.1",
+   "Is there any difference between design right and registered design in case of infringment and asking for legal liabilities?"
+  ],
+  [
+   "30",
+   "30",
+   "CQ30.1",
+   "How can an owner register internationally for an industrial design?"
+  ],
+  [
+   "31",
+   "31",
+   "CQ31.1",
+   "Who owns the right in the ABC case (see more details in slides) under UK/ VN/ US law?"
+  ],
+  [
+   "32",
+   "32",
+   "QN32.1",
+   "What are IPRs in a smart phone?"
+  ],
+  [
+   "33",
+   "33",
+   "QN33.1",
+   "What circumstance is overlapping IP protection considered a limitation?"
+  ],
+  [
+   "34",
+   "37",
+   "QN37.1",
+   "What is a trademark and what are trademark functions?"
+  ],
+  [
+   "35",
+   "38",
+   "QN38.1",
+   "When a sign can be deemed registrable to be a trademark?"
+  ],
+  [
+   "36",
+   "39",
+   "QN39.1",
+   "In which way that trademark will be formed?"
+  ],
+  [
+   "37",
+   "40",
+   "QN40.1",
+   "In which case, a sign is protected as a trademark although it is not registered?"
+  ],
+  [
+   "38",
+   "40",
+   "QN40.2",
+   "What is get-up and what does it may include?"
+  ],
+  [
+   "39",
+   "41",
+   "QN41.1",
+   "How to identify a trademark is famous in common law?"
+  ],
+  [
+   "40",
+   "42",
+   "QN42.1",
+   "What is a domain name and can it be a business trademark?"
+  ],
+  [
+   "41",
+   "43",
+   "QN43.1",
+   "From 'One in a Million' case, what are your critical thoughts about the misuse of domain name can harm trademark and business?"
+  ],
+  [
+   "42",
+   "44",
+   "QN44.1",
+   "What is \"passing-off\" and what is it difference from infringement?"
+  ],
+  [
+   "43",
+   "45",
+   "QN45.1",
+   "Which circumstances can be deem as infringements of registered trademark and what liability can be imposed?"
+  ],
+  [
+   "44",
+   "46",
+   "QN46.1",
+   "When passing off happens, what the owner should prove to protect their trademark?"
+  ],
+  [
+   "45",
+   "47",
+   "QN47.1",
+   "Do you agree with the court decision in JackWills v House of Fraser (2014)?"
+  ],
+  [
+   "46",
+   "48",
+   "QN48.1",
+   "Can you describe one of the trademark system that you have known?"
+  ],
+  [
+   "47",
+   "49",
+   "QN49.1",
+   "Why should people license an IPR?"
+  ],
+  [
+   "48",
+   "50",
+   "QN50.1",
+   "Compare the features of each way of acquiring IPRs?"
+  ],
+  [
+   "49",
+   "51",
+   "QN51.1",
+   "Can you describe and analyze a real case about copyright licensing that you have known?"
+  ],
+  [
+   "50",
+   "52",
+   "QN52.1",
+   "When you act on behalf of a singer to negotiate with an author to lease a song, what terms of the contract should you care about most?"
+  ],
+  [
+   "51",
+   "53",
+   "QN53.1",
+   "What are the pros and cons of each type of license?"
+  ],
+  [
+   "52",
+   "54",
+   "QN54.1",
+   "In your opinion, which terms should be improved when you critically analyse the franchising contract as provided?"
+  ]
+ ],
+ "links": []
+}

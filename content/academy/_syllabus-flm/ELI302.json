@@ -1,0 +1,2016 @@
+{
+ "ma": "ELI302",
+ "sylID": "13743",
+ "quyetDinh": "1318/QĐ-ĐHFPT dated 11/27/2025",
+ "ungVien": [
+  {
+   "sylID": "13743",
+   "code": "ELI302",
+   "name": "Phiên dịch tiếng Anh 1",
+   "active": true,
+   "approved": true,
+   "decision": "1318/QĐ-ĐHFPT dated 11/27/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13743",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13743",
+  "Syllabus Name": "Phiên dịch tiếng Anh 1",
+  "Course Name English": "English Interpretation 1",
+  "Subject Code": "ELI302",
+  "Learning-Teaching Method": "Lectures, interactive workshops, AI-enhanced active learning, Field trip, Project Based Training, Peer and self-evaluation using AI feedback tools",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 0.5 hour final exam + 104.5 hours self-study",
+  "Pre-Requisite": "K15-K18: Passed EAL201 & SSC302c & LTG202\nK19: SSC302c & LTG202/LTG301, or SSC302m & LTG202/LTG301\nK20 onward: SSC302m & EAL202c",
+  "Description": "This introductory course provides theoretical and practical training in English-Vietnamese interpretation and vice versa, focusing on consecutive and simultaneous interpreting. Students will develop listening comprehension, memory, note-taking, and delivery skills through authentic materials and real-world tasks.\nThe course also integrates Artificial Intelligence (AI) tools and speech-to-text software to support autonomous learning, feedback generation, and pronunciation improvement.",
+  "StudentTasks": "- Attend at least 80% of contact hours.\n- Participate actively in all class and AI-based exercises.\n- Record and submit self-practice sessions via Edunext.\n- Use AI tools effectively and ethically.\n- Complete all assessments on time.",
+  "Tools": "- TEDEd videos\n- Vietnamese news: VnExpress, Dân Trí, 24h, Tuổi Trẻ, etc.\n- English news: CNN, BBC, Reuters, etc.\n- AI Tools: ChatGPT, Copilot, TTS, YouGlish, Clipto, etc.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1318/QĐ-ĐHFPT dated 11/27/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "11/27/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Hướng dẫn kỹ thuật phiên dịch tiếng Anh (Anh-Việt, Việt-Anh),",
+   "Nguyễn Quốc Hùng (MA),",
+   "NXB Tổng hợp Hồ Chí Minh",
+   "",
+   "",
+   "0000000002450",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Interpretation - Techniques and Exercises, Multilingual Matters",
+   "James Nolan",
+   "",
+   "March 7, 2005",
+   "1st edition",
+   "978-1-85359-790-9",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Introduction to Translation and Interpreting Studies",
+   "Aline Ferreira (Editor) & John W. Schwieter (Editor)",
+   "Wiley-Blackwell",
+   "2022",
+   "",
+   "9781119685326",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "Ted-Ed: (choose clips with no Vietsub provided)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "Vietnamese news: VnExpress, Dân Trí, 24h, Tuổi Trẻ, etc. (choose articles related to education, science, nature, lifestyle, healthcare, etc.)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "English news: CNN, BBC, Reuters, etc. (choose articles related to education, science, nature, lifestyle, healthcare, etc.)",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "AI Tools: ChatGPT, Copilot, YouGlish, Clipto, etc.",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the correlation between a good public speaker and an interpreter."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply preparation techniques and attitudes to handle challenges during interpreting tasks."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Develop a personal note-taking system using traditional and digital tools."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Use strategies to manage complexity and speed in interpreting."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Identify units of meaning and clusters to improve interpreting accuracy."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Use general adverbial clauses appropriately in interpreting practice."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Interpret figures of speech and technical terms accurately."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Apply strategies to interpret quotations, allusions, and transpositions effectively."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Demonstrate teamwork and professional attitudes in interpreting activities."
+  ],
+  [
+   "10",
+   "CLO10",
+   "Integrate interpreting skills across fields using AI tools for practice and feedback."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Field Trip Project",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "flexible",
+   "All LOs",
+   "",
+   "",
+   "Test student's ability to apply knowledge and techniques obtained in all 9 units of the course to interpreting in a business setting.",
+   "Location of teacher's choice",
+   "Teacher is asked to write a field trip proposal with specific details and send it to the person in charge."
+  ],
+  [
+   "2",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "6 minutes/pair",
+   "LO1, LO2, LO3, LO9",
+   "",
+   "N/A",
+   "Test student's ability to apply knowledge and techniques obtained in the delivered units (Units 1-3) to consecutive interpreting.",
+   "In-class test",
+   "The teacher will prepare a text for each student (≈200words, comprised of two parts, one in English [100 words], one in Vietnamese [100 words]), and inform students the topics of those texts in advance. The student shall prepare materials related to the topics to facilitate interpreting performance. On the test day, each pair of students will randomly pick 2 texts and take turns to read and interpret."
+  ],
+  [
+   "3",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "6 minutes/pair",
+   "LO4, LO5, LO6, LO9",
+   "",
+   "N/A",
+   "Test student's ability to apply knowledge and techniques obtained in the delivered units (Units 4-6) to consecutive interpreting.",
+   "In-class test",
+   "The teacher will prepare a text for each student (≈200words, comprised of two parts, one in English [100 words], one in Vietnamese [100 words]), and inform students the topics of those texts in advance. The student shall prepare materials related to the topics to facilitate interpreting performance. On the test day, each pair of students will randomly pick 2 texts and take turns to read and interpret."
+  ],
+  [
+   "4",
+   "Progress Test 3",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "15 minutes/group",
+   "LO7, LO8, LO9",
+   "",
+   "N/A",
+   "Test the student's ability to apply knowledge and techniques obtained in the delivered units (Units 7-9) to simultaneous interpreting.",
+   "In-class test",
+   "The teacher shall prepare 5-6 audio files (≈2minutes/file) relating to several specific topics, of which the students will be informed in advance. On the test day, students will be divided into groups of 4 or 5. All members will be standing at different positions in class, simultaneously listening to the same audio and recording their interpretation using a smartphone. Upon completion, students are asked to send the record to the teacher immediately."
+  ],
+  [
+   "5",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "40.0%",
+   "4",
+   "15 minutes/student",
+   "All LOs",
+   "",
+   "N/A",
+   "Test student's ability to apply knowledge and techniques obtained in all 9 units of the course to consecutive interpreting (both ENG-VIE and VIE-ENG processes). Topics: 1. Education 2. Entertainment 3. Technology 4. Environment/Nature 5. Business, Economics and Finance 6. Tourism 7. Family and Friends 8. Health 9. Culture 10. Arts",
+   "Exam room",
+   "The teacher will prepare a text for each student (≈360-400 words, comprised of two parts, one in English [180-200 words], one in Vietnamese [180-200 words]), and inform students the topics of those texts in advance. The student shall prepare materials related to the topics to facilitate interpreting performance.\nStudents take the exam individually. Students will randomly pick 2 texts, then listen to the audios or to the examiners to read the texts and interpret.\nStudents are allowed to take notes in the exam room."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\n\nUnit 1. INTERPRETING & SPEAKING\n\n- Introduction\n\n- What is Interpreting?\n\n+ Interpreting as a product\n\n+Interpreting as a process\n\n+Interpreting as a service\n\n+ Modes of interpreting\n\n+ Settings and domains of interpreting\n\n+ Interpreter's roles\n\n+ Technology & Interpreting\n\n- Knowledge, Skills, and Abilities of an interpreter\n\n+ Codes of Ethics and Standards of Practice\n\n+Professional Credentials and Qualifications",
+   "Offline",
+   "LO1",
+   "IT",
+   "Coursebook [2] (Introduction to Translation and Interpreting Studies), pages 101-138, PPT presentation, Introduction to AI in interpreting",
+   "link1-1",
+   "Read the equivelant units of each lesson before attending class; use ChatGPT for role analysis; Whisper demo for speech recognition",
+   ""
+  ],
+  [
+   "2",
+   "Unit 1. INTERPRETING & SPEAKING\n- The importance of speaking in interpreting\n- Connection between public speaking and interpreting",
+   "Offline",
+   "LO1",
+   "TU",
+   "Coursebook [1] (Interpretation Techniques and Exercises), Chapter 1 , PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; practice short speeches with YouGlish (intonation & rhythm); use ChatGPT to critique speech clarity",
+   ""
+  ],
+  [
+   "3",
+   "Unit 1 (Cont. )\n- Review the previous lesson\n- Practice consecutive interpreting by using exercises from textbook or other sources",
+   "Offline",
+   "LO1",
+   "TU",
+   "Coursebook [1] `, PPT presentation, other teaching resources provided, Use Whisper to transcribe student recordings for self-review; ChatGPT to reformulate difficult phrases; DeepL to compare translations",
+   "",
+   "Read the equivelant units of each lesson before attending class; Use Whisper to transcribe student recordings for self-review; ChatGPT to reformulate difficult phrases; DeepL to compare translations",
+   ""
+  ],
+  [
+   "4",
+   "Unit 1 (Cont. )\nPractice consecutive interpreting by using exercises from textbook or other sources",
+   "Offline",
+   "LO1",
+   "TU",
+   "Coursebook [1] , PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Use Whisper to transcribe student recordings for self-review; ChatGPT to reformulate difficult phrases; DeepL to compare translations",
+   ""
+  ],
+  [
+   "5",
+   "Unit 1 (Cont. )\nPractice consecutive interpreting by using exercises from textbook or other sources",
+   "Offline",
+   "LO1",
+   "T, U",
+   "Coursebook [1], PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Use Whisper to transcribe student recordings for self-review; ChatGPT to reformulate difficult phrases; DeepL to compare translations",
+   ""
+  ],
+  [
+   "6",
+   "Unit 1 (Cont. )\nPractice consecutive interpreting by using exercises from textbook or other sources",
+   "Offline",
+   "LO1",
+   "TU",
+   "Coursebook [1], PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Use Whisper to transcribe student recordings for self-review; ChatGPT to reformulate difficult phrases; DeepL to compare translations",
+   ""
+  ],
+  [
+   "7",
+   "Unit 2. PREPARATION / ANTICIPATING THE SPEAKER\nReview preparation that the interpreter needs to have before and during the interpreting session.",
+   "Offline",
+   "LO2",
+   "I, T",
+   "Coursebook [1], Chapter 2; Coursebook [2], Pages 157-163, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; brainstorm topics using ChatGPT; create glossaries with DeepL & Linguee; Whisper to record prep talk",
+   ""
+  ],
+  [
+   "8",
+   "Unit 2 (Cont.)\nPractice face-to-face interpreting",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Coursebook [1], Chapter 2; Coursebook [2], Pages 157-163, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class, students record sessions and use Whisper to generate transcripts; AI translation check (DeepL)",
+   ""
+  ],
+  [
+   "9",
+   "Unit 2 (Cont.)\nPractice face-to-face interpreting",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Coursebook [1], Chapter 2; Coursebook [2], Pages 157-163, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class, students record sessions and use Whisper to generate transcripts; AI translation check (DeepL)",
+   ""
+  ],
+  [
+   "10",
+   "Unit 2 (Cont.)\nPractice face-to-face interpreting",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Coursebook [1], Chapter 2; Coursebook [2], Pages 157-163, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class, students record sessions and use Whisper to generate transcripts; AI translation check (DeepL)",
+   ""
+  ],
+  [
+   "11",
+   "Unit 2 (Cont.)\nPractice face-to-face interpreting",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Coursebook [1], Chapter 2; Coursebook [2], Pages 157-163, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class, students record sessions and use Whisper to generate transcripts; AI translation check (DeepL)",
+   ""
+  ],
+  [
+   "12",
+   "Unit 2 (Cont.)\nPractice face-to-face interpreting",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Coursebook [1], Chapter 2; Coursebook [2], Pages 157-163, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class, students record sessions and use Whisper to generate transcripts; AI translation check (DeepL)",
+   ""
+  ],
+  [
+   "13",
+   "Unit 3. Note-taking\n- Review the importance of note-taking skill\n- Review basic guidelines on note-taking",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Coursebook [1], Chapter 18; Coursebook [2], Pages 164-168, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "14",
+   "Unit 3 (Cont.)\nDevelop personal note-taking system",
+   "Offline",
+   "LO3",
+   "I, T",
+   "Coursebook [1], Chapter 18; Coursebook [2], Pages 164-168, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "15",
+   "Unit 3 (Cont.)\n- Practice telephone interpreting",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Coursebook [1], Chapter 18; Coursebook [2], Pages 164-168, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "16",
+   "Unit 3 (Cont.)\n- Practice telephone interpreting",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Coursebook [1], Chapter 18; Coursebook [2], Pages 164-168, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "17",
+   "Unit 3 (Cont.)\n- Practice video conferencing interpreting",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Coursebook [1], Chapter 18; Coursebook [2], Pages 164-168, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "18",
+   "Unit 3 (Cont.)\n- Practice video conferencing interpreting",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Coursebook [1], Chapter 18; Coursebook [2], Pages 164-168, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "19",
+   "PROGRESS TEST 1\nConsecutive Interpreting (ENG-VIE)",
+   "Offline",
+   "LO1, LO2, LO3, LO9",
+   "U",
+   "Topics prepared by the teacher",
+   "",
+   "Optional: use Whisper to transcribe exam practice for peer review",
+   ""
+  ],
+  [
+   "20",
+   "PROGRESS TEST 1\nConsecutive Interpreting (ENG-VIE)",
+   "Offline",
+   "LO1, LO2, LO3, LO9",
+   "U",
+   "Topics prepared by the teacher",
+   "",
+   "Optional: use Whisper to transcribe exam practice for peer review",
+   ""
+  ],
+  [
+   "21",
+   "Unit 4. COMPLEX SYNTAX / COMPRESSION\n- Review the importance of complexity and speed in interpreting.",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Coursebook [1], Chapter 3; Coursebook [2], pages 169-174, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; use YouGlish & TED-ED AI subtitles for live shadowing; Whisper for playback analysis",
+   ""
+  ],
+  [
+   "22",
+   "Unit 4 (Cont.)\nReview several terms and strategies: complex syntax, ambivalent conjunctions, enumerations, de-verbalization, compression, elegant variations, anaphorics, personification, parenthetical phrases.",
+   "Offline",
+   "LO4",
+   "I, T",
+   "Coursebook [1], Chapter 3; Coursebook [2], pages 169-174, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; use YouGlish & TED-ED AI subtitles for live shadowing; Whisper for playback analysis",
+   ""
+  ],
+  [
+   "23",
+   "Unit 4 (Cont.)\n- Practice Conference Interpreting",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Coursebook [1], Chapter 3; Coursebook [2], pages 169-174, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "24",
+   "Unit 4 (Cont.)\n- Practice Conference Interpreting",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Coursebook [1], Chapter 3; Coursebook [2], pages 169-174, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "25",
+   "Unit 4 (Cont.)\n- Practice Conference Interpreting",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Coursebook [1], Chapter 3; Coursebook [2], pages 169-174, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "26",
+   "Unit 4 (Cont.)\n- Practice Conference Interpreting",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Coursebook [1], Chapter 3; Coursebook [2], pages 169-174, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "27",
+   "Unit 5. WORD ORDER / CLUSTERS\n- Review units of meaning",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Coursebook [1], Chapter 4; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Use YouGlish & TED-ED AI subtitles for live shadowing; Whisper for playback analysis",
+   ""
+  ],
+  [
+   "28",
+   "Unit 5 (Cont.)\n- Review two kinds of clusters",
+   "Offline",
+   "LO5",
+   "I, T",
+   "Coursebook [1], Chapter 4; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Use YouGlish & TED-ED AI subtitles for live shadowing; Whisper for playback analysis",
+   ""
+  ],
+  [
+   "29",
+   "Unit 5 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Coursebook [1], Chapter 4; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "30",
+   "Unit 5 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Coursebook [1], Chapter 4; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "31",
+   "Unit 5 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Coursebook [1], Chapter 4; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "32",
+   "Unit 5 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Coursebook [1], Chapter 4; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "33",
+   "Unit 6. GENERAL ADVERBIAL CLAUSES\n- Review the importance of using general adverbial clauses in speech.",
+   "Offline",
+   "LO6",
+   "I, T",
+   "Coursebook [1], Chapter 5; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; practice interpreting political speeches; AI caption analysis (e.g., Whisper) to detect reformulation errors",
+   ""
+  ],
+  [
+   "34",
+   "Unit 6 (Cont.)\n- Review various ways to use general averbial clauses.",
+   "Offline",
+   "LO6",
+   "I, T",
+   "Coursebook [1], Chapter 5; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; practice interpreting political speeches; AI caption analysis (e.g., Whisper) to detect reformulation errors",
+   ""
+  ],
+  [
+   "35",
+   "Unit 6 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Coursebook [1], Chapter 5; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "36",
+   "Unit 6 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Coursebook [1], Chapter 5; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "37",
+   "Unit 6 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Coursebook [1], Chapter 5; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "38",
+   "Unit 6 (Cont.)\n- Practice Broadcast and Media Interpreting",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Coursebook [1], Chapter 5; Coursebook [2], page 175-176, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "39",
+   "PROGRESS TEST 2\nConsecutive Interpreting (VIE-ENG)",
+   "Offline",
+   "LO4, LO5, LO6, LO9",
+   "U",
+   "Topics prepared by the teacher",
+   "",
+   "Optional: Whisper transcript for self-assessment",
+   ""
+  ],
+  [
+   "40",
+   "PROGRESS TEST 2\nConsecutive Interpreting (VIE-ENG)",
+   "Offline",
+   "LO4, LO5, LO6, LO9",
+   "U",
+   "Topics prepared by the teacher",
+   "",
+   "Optional: Whisper transcript for self-assessment",
+   ""
+  ],
+  [
+   "41",
+   "Unit 7. FIGURES OF SPEECH\n- Review definition of a figure of speech",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Coursebook [1], chapter 7; Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; use ChatGPT to explain idioms and metaphors; DeepL to compare cultural equivalents",
+   ""
+  ],
+  [
+   "42",
+   "Unit 7 (Cont.)\n- Practice Business Interpreting",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Coursebook [1], chapter 7; Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "43",
+   "Unit 7 (Cont.)\n- Practice Business Interpreting",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Coursebook [1], chapter 7; Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "44",
+   "Unit 7 (Cont.)\n- Practice Business Interpreting",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Coursebook [1], chapter 7; Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "45",
+   "Unit 8. NUMBERS\n- Review technical measurement and orders of magnitude",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Coursebook [1], Chapter 17, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Whisper to analyze lag (décalage); ChatGPT for self-feedback summary",
+   ""
+  ],
+  [
+   "46",
+   "Unit 8 (Cont.)\n- Review technical measurement and orders of magnitude",
+   "Offline",
+   "LO7",
+   "I, T",
+   "Coursebook [1], Chapter 17, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Whisper to analyze lag (décalage); ChatGPT for self-feedback summary",
+   ""
+  ],
+  [
+   "47",
+   "Unit 8 (Cont.)\n- Review the previous lesson\n- Practice simultaneous interpreting by using exercises from textbook or other sources",
+   "Offline",
+   "LO7",
+   "TU",
+   "Coursebook [1], Chapter 17, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Whisper to analyze lag (décalage); ChatGPT for self-feedback summary",
+   ""
+  ],
+  [
+   "48",
+   "Unit 8 (Cont.)\n- Practice simultaneous interpreting by using exercises from textbook or other sources",
+   "Offline",
+   "LO8",
+   "TU",
+   "Coursebook [1], Chapter 17, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; Whisper to analyze lag (décalage); ChatGPT for self-feedback summary",
+   ""
+  ],
+  [
+   "49",
+   "Unit 9. QUOTATIONS / ALLUSIONS / TRANSPOSITION\n- Review definition of quotation, allusion, and transposition",
+   "Offline",
+   "LO9",
+   "IT",
+   "Coursebook [1], Chapter 12, Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; AI search (ChatGPT or Google Bard) to identify cultural references; verify translation tone via DeepL",
+   ""
+  ],
+  [
+   "50",
+   "Unit 9 (Cont. )\n- Review ways to cope with quotations, allusions, and transposition",
+   "Offline",
+   "LO9",
+   "IT",
+   "Coursebook [1], Chapter 12, Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class; AI search (ChatGPT or Google Bard) to identify cultural references; verify translation tone via DeepL",
+   ""
+  ],
+  [
+   "51",
+   "Unit 9 (Cont. )\n- Practice Business Interpreting",
+   "Offline",
+   "LO9",
+   "TU",
+   "Coursebook [1], Chapter 12, Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "52",
+   "Unit 9 (Cont. )\n- Practice Business Interpreting",
+   "Offline",
+   "LO9",
+   "TU",
+   "Coursebook [1], Chapter 12, Cousebook [2], page 177-180, PPT presentation, other teaching resources provided",
+   "",
+   "Read the equivelant units of each lesson before attending class",
+   ""
+  ],
+  [
+   "53",
+   "PROGRESS TEST 3\nSimultaneous Interpreting (ENG-VIE)",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "Audio files prepared by the teacher",
+   "",
+   "Optional: AI-assisted transcript for review",
+   ""
+  ],
+  [
+   "54",
+   "PROGRESS TEST 3\nSimultaneous Interpreting (ENG-VIE)",
+   "Offline",
+   "LO7, LO8, LO9",
+   "U",
+   "Audio files prepared by the teacher",
+   "",
+   "Optional: AI-assisted transcript for review",
+   ""
+  ],
+  [
+   "55",
+   "FIELD TRIP PROJECT",
+   "Offline",
+   "All LOs",
+   "ITU",
+   "Recording device",
+   "",
+   "Record real-life interpreting practice; use AI tools for performance transcription and reflection report; Class discussion",
+   ""
+  ],
+  [
+   "56",
+   "FIELD TRIP PROJECT",
+   "Offline",
+   "All LOs",
+   "ITU",
+   "Recording device",
+   "",
+   "Record real-life interpreting practice; use AI tools for performance transcription and reflection report; Class discussion",
+   ""
+  ],
+  [
+   "57",
+   "FIELD TRIP PROJECT",
+   "Offline",
+   "All LOs",
+   "ITU",
+   "Recording device",
+   "",
+   "Record real-life interpreting practice; use AI tools for performance transcription and reflection report; Class discussion",
+   ""
+  ],
+  [
+   "58",
+   "FIELD TRIP PROJECT",
+   "Offline",
+   "All LOs",
+   "ITU",
+   "Recording device",
+   "",
+   "Record real-life interpreting practice; use AI tools for performance transcription and reflection report; Class discussion",
+   ""
+  ],
+  [
+   "59",
+   "FIELD TRIP PROJECT",
+   "Offline",
+   "All LOs",
+   "ITU",
+   "Recording device",
+   "",
+   "Record real-life interpreting practice; use AI tools for performance transcription and reflection report; Class discussion",
+   ""
+  ],
+  [
+   "60",
+   "FIELD TRIP PROJECT",
+   "Offline",
+   "All LOs",
+   "ITU",
+   "Recording device",
+   "",
+   "Record real-life interpreting practice; use AI tools for performance transcription and reflection report; Class discussion",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HCM_CQ1.1",
+   "How is Consecutive Interpreting implemented?"
+  ],
+  [
+   "2",
+   "1",
+   "HN_CQ1.1",
+   "What are the differences between Consecutive and Simultaneous Interpreting?"
+  ],
+  [
+   "3",
+   "1",
+   "HN_CQ1.2",
+   "How are Consecutive Interpreting and Simultaneous implemented?"
+  ],
+  [
+   "4",
+   "2",
+   "HCM_CQ1.2",
+   "How is Simultaneous Interpreting implemented?"
+  ],
+  [
+   "5",
+   "2",
+   "HCM_CQ1.3",
+   "What are the differences between Consecutive and Simultaneous Interpreting?"
+  ],
+  [
+   "6",
+   "2",
+   "HN_CQ1.3",
+   "What is the relationship between public speaking and interpreting?"
+  ],
+  [
+   "7",
+   "2",
+   "HN_CQ1.4",
+   "What are the main requirements for public speaking?"
+  ],
+  [
+   "8",
+   "3",
+   "HCM_CQ1.4",
+   "What are the main requirements for public speaking?"
+  ],
+  [
+   "9",
+   "3",
+   "HCM_CQ1.5",
+   "What is the relationship between public speaking and interpreting?"
+  ],
+  [
+   "10",
+   "3",
+   "HN_CQ1.5",
+   "What words, phrases, structures will be used for the interpretation of a presentation about Values of Traditional Education? Make a Vietnamese presentation of 10 minutes about Values of Education. Groups will be paired to present and interpret."
+  ],
+  [
+   "11",
+   "3",
+   "HN_CQ1.6",
+   "What words, phrases, structures will be used for the interpretation of a presentation about Renovation in Education? Make an English presentation of 10 minutes about Renovation in Education. Groups will be paired to present and interpret"
+  ],
+  [
+   "12",
+   "4",
+   "HCM_CQ2.1",
+   "How is Consecutive Interpreting implemented?"
+  ],
+  [
+   "13",
+   "4",
+   "HCM_CQ2.2",
+   "How is Simultaneous Interpreting implemented?"
+  ],
+  [
+   "14",
+   "4",
+   "HN_CQ 2.1",
+   "Analyze a TedTalk about Education. How does the speaker use the public speaking skill in his/her speech? How is this skill related to your interpretation? Demonstrate how you interpret the TedTalk into Vietnamese."
+  ],
+  [
+   "15",
+   "5",
+   "HCM_CQ2.3",
+   "What are the differences between Consecutive and Simultaneous Interpreting?"
+  ],
+  [
+   "16",
+   "5",
+   "HCM_CQ2.4",
+   "What are the main requirements for public speaking?"
+  ],
+  [
+   "17",
+   "5",
+   "HN_CQ2.2",
+   "You are going to interpret a given speech in Vietnamese/English about education in digital age. What words, phrases, structures will be necessary for the interpretation? Demonstrate how you interpret the speech."
+  ],
+  [
+   "18",
+   "6",
+   "HCM_CQ2.5",
+   "What is the relationship between public speaking and interpreting?"
+  ],
+  [
+   "19",
+   "6",
+   "HN_CQ2.3",
+   "What are the main requirements in the interpretation of a meeting (topic: education issues)? Organize a meeting (in Vietnamese or English) discussing one of the problems related to education. Groups will be paired to host and interpret the meeting."
+  ],
+  [
+   "20",
+   "7",
+   "HCM_CQ3.1",
+   "What words, phrases, structures will be used for the interpretation of a presentation about Values of Traditional Education? Make a Vietnamese presentation of 10 minutes about Values of Education."
+  ],
+  [
+   "21",
+   "7",
+   "HCM_CQ3.2",
+   "As interpreters, make necessary preparations related to words, phrases, content-anticipation... to interpret the presentation into English."
+  ],
+  [
+   "22",
+   "7",
+   "HN_CQ3.1",
+   "What necessary preparations does an interpreter need to make before interpretation?"
+  ],
+  [
+   "23",
+   "7",
+   "HN_CQ3.2",
+   "What are the functions of each step? In your opinion, what step is the most important?"
+  ],
+  [
+   "24",
+   "8",
+   "HCM_CQ3.3",
+   "What words, phrases, structures will be used for the interpretation of a presentation about Renovation in Education? Make an English presentation of 10 minutes about Renovation in Education."
+  ],
+  [
+   "25",
+   "8",
+   "HCM_CQ3.4",
+   "As interpreters, make necessary preparations related to words, phrases, content-anticipation... to interpret the presentation into Vietnamese."
+  ],
+  [
+   "26",
+   "8",
+   "HN_CQ3.3",
+   "How can an interpreter anticipate a speaker in interpreting?"
+  ],
+  [
+   "27",
+   "8",
+   "HN_CQ3.4",
+   "How important is the anticipation to interpreters?"
+  ],
+  [
+   "28",
+   "9",
+   "HCM_CQ3.5",
+   "Analyze a TedTalk about Education. How does the speaker use the public speaking skill in his/her speech? How is this skill related to your interpretation? Demonstrate how you interpret the TedTalk into Vietnamese."
+  ],
+  [
+   "29",
+   "9",
+   "HN_CQ3.5",
+   "You are going to interpret a speech in English about history. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "30",
+   "9",
+   "HN_CQ3.6",
+   "You are going to interpret a speech in English about business. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "31",
+   "10",
+   "HCM_CQ4.1",
+   "What words, phrases, structures will be used for the interpretation of a presentation about Values of Traditional Education? Make a Vietnamese presentation of 10 minutes about Values of Education."
+  ],
+  [
+   "32",
+   "10",
+   "HCM_CQ4.2",
+   "As interpreters, make necessary preparations related to words, phrases, content-anticipation... to interpret the presentation into English."
+  ],
+  [
+   "33",
+   "10",
+   "HN_CQ4.1",
+   "How important is in-advance study of the topic to be interpreted? You are going to interpret a TedTalk about Technology. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "34",
+   "11",
+   "HCM_CQ4.3",
+   "What words, phrases, structures will be used for the interpretation of a presentation about Renovation in Education? Make an English presentation of 10 minutes about Renovation in Education."
+  ],
+  [
+   "35",
+   "11",
+   "HCM_CQ4.4",
+   "As interpreters, make necessary preparations related to words, phrases, content-anticipation... to interpret the presentation into Vietnamese."
+  ],
+  [
+   "36",
+   "11",
+   "HN_CQ4.2",
+   "You are going to interpret a TedTalk about Environment. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "37",
+   "12",
+   "HCM_CQ4.5",
+   "Analyze a TedTalk about Education. How does the speaker use the public speaking skill in his/her speech? How is this skill related to your interpretation? Demonstrate how you interpret the TedTalk into Vietnamese."
+  ],
+  [
+   "38",
+   "12",
+   "HN_CQ4.3",
+   "What preparations does an interpreter of public health need to make? You are going to interpret a presentation/speech (Eng.or Vietnamese) on public health, what words, phrases, structures, contents will be useful for your interpretation. Demonstrate how you interpret the presentation."
+  ],
+  [
+   "39",
+   "13",
+   "HCM_CQ5.1",
+   "You are going to interpret a given speech in Vietnamese about education in digital age. What words, phrases, structures will be necessary for the interpretation? Demonstrate how you interpret the speech."
+  ],
+  [
+   "40",
+   "13",
+   "HCM_CQ5.2",
+   "You are going to interpret a given speech in English about education in digital age. What words, phrases, structures will be necessary for the interpretation? Demonstrate how you interpret the speech."
+  ],
+  [
+   "41",
+   "13",
+   "HN_CQ5.1",
+   "What are roles of note-taking in interpreting?"
+  ],
+  [
+   "42",
+   "13",
+   "HN_CQ5.2",
+   "How is the main idea of a speech recognized? You are going to listen to a speech in English on a certain topic. Listen and take notes of the main points. Interpret the speech into Vietnamese."
+  ],
+  [
+   "43",
+   "14",
+   "HCM_CQ5.3",
+   "In order to convey the message as well as the emotion of a public speaker, what should an interpreter do? As a public speaker, make a Vietnamese speech about a controversial issue in education."
+  ],
+  [
+   "44",
+   "14",
+   "HCM_CQ5.4",
+   "What are the main requirements in the interpretation of a meeting (topic: education issues)? Imagine the topics, the words, phrases needed for the meeting. Organize a meeting (in Vietnamese or English) discussing one of the problems related to education."
+  ],
+  [
+   "45",
+   "14",
+   "HN_CQ5.3",
+   "How are the supporting details of a speech recognized and note-taken? You are going to listen to a speech in English about a certain topic. Listen and take notes of the main points and the supporting details of the speech. Interpret the speech into Vietnamese."
+  ],
+  [
+   "46",
+   "14",
+   "HN_CQ5.4",
+   "How are the dates note-taken? You are going to listen to a speech in English about some key events. Listen and take note of the main events (dates, key points)."
+  ],
+  [
+   "47",
+   "15",
+   "HCM_CQ5.5",
+   "What are necessary words, phrases, structures... you need to interpret a Vietnamese speech about a controversial issue in education? Demonstrate how you interpret the speech into English."
+  ],
+  [
+   "48",
+   "15",
+   "HN_CQ5.5",
+   "How should statistics, figures, and number be taken note? You are going to listen to a speech in Vietnamese/English. Listen and take notes of the key number. Interpret the speech into English."
+  ],
+  [
+   "49",
+   "16",
+   "HCM_CQ6.1",
+   "You are going to interpret a given speech in Vietnamese about education in digital age. What words, phrases, structures will be necessary for the interpretation? Demonstrate how you interpret the speech."
+  ],
+  [
+   "50",
+   "16",
+   "HCM_CQ6.2",
+   "You are going to interpret a given speech in English about education in digital age. What words, phrases, structures will be necessary for the interpretation? Demonstrate how you interpret the speech."
+  ],
+  [
+   "51",
+   "16",
+   "HN_CQ6.1",
+   "How should a lecture be note-taken? You are going to listen to a lecture in English. What key points of the lecture will you take note. Demonstrate how you interpret the speech."
+  ],
+  [
+   "52",
+   "17",
+   "HCM_CQ6.3",
+   "In order to convey the message as well as the emotion of a public speaker, what should an interpreter do? As a public speaker, make a Vietnamese speech about a controversial issue in education."
+  ],
+  [
+   "53",
+   "17",
+   "HCM_CQ6.4",
+   "What are the main requirements in the interpretation of a meeting (topic: education issues)? Imagine the topics, the words, phrases needed for the meeting. Organize a meeting (in Vietnamese or English) discussing one of the problems related to education."
+  ],
+  [
+   "54",
+   "17",
+   "HN_CQ6.2",
+   "How should a piece of news be note-taken? You are going to listen to some pieces of news. What keys points of the news you are going to take note. Listen to some pieces of news and demonstrate how you interpret the pieces of news."
+  ],
+  [
+   "55",
+   "18",
+   "HCM_CQ6.5",
+   "What are necessary words, phrases, structures... you need to interpret a Vietnamese speech about a controversial issue in education? Demonstrate how you interpret the speech into English."
+  ],
+  [
+   "56",
+   "18",
+   "HN_CQ6.3",
+   "How should a presentation be note-taken? You are going to listen to a presentation in Vietnamese about main tourist destinations. What key points you are going to take note of? Demonstrate how you interpret the presentation?"
+  ],
+  [
+   "57",
+   "19",
+   "HCM_CQ7.1",
+   "What necessary preparations an interpreter need to make before interpretation?"
+  ],
+  [
+   "58",
+   "19",
+   "HCM_CQ7.2",
+   "How does each preparation help interpreter?"
+  ],
+  [
+   "59",
+   "19",
+   "HN_CQ7.1",
+   "Apply public speaking skill, speaker anticipating skill, and note-taking skills to analyze the necessary steps in the interpretation of a TALK SHOW in English/or Vietnamese about a topic assigned by the lecturer."
+  ],
+  [
+   "60",
+   "20",
+   "HCM_CQ7.3",
+   "How can an interpreter anticipate a speaker in interpreting?"
+  ],
+  [
+   "61",
+   "20",
+   "HCM_CQ7.4",
+   "How important is the anticipation to interpreters?"
+  ],
+  [
+   "62",
+   "20",
+   "HN_CQ7.2",
+   "Take turns to Host and Interpret a TALK SHOW on a topic given by the lecturer."
+  ],
+  [
+   "63",
+   "21",
+   "HCM_CQ7.5",
+   "Which steps of preparation will be the most important for interpreters?"
+  ],
+  [
+   "64",
+   "21",
+   "HN_CQ7.3",
+   "What are some characteristics of complexity and high speed of speech?"
+  ],
+  [
+   "65",
+   "21",
+   "HN_CQ7.4",
+   "What are some strategies to deal with complexity?"
+  ],
+  [
+   "66",
+   "21",
+   "HN_CQ7.5",
+   "What are some strategies to deal with high speed of speech?"
+  ],
+  [
+   "67",
+   "22",
+   "HCM_CQ8.1",
+   "What necessary preparations an interpreter need to make before interpretation?"
+  ],
+  [
+   "68",
+   "22",
+   "HCM_CQ8.2",
+   "How does each preparation help interpreter?"
+  ],
+  [
+   "69",
+   "22",
+   "HN_CQ8.1",
+   "What are strategies for the interpretation of complex syntax, ambivalent conjunctions, enumerations, de-verbalization?"
+  ],
+  [
+   "70",
+   "22",
+   "HN_CQ8.2",
+   "What are strategies for the interpretation of compression, elegant variations, anaphorics, personification, parenthetical phrases?"
+  ],
+  [
+   "71",
+   "23",
+   "HCM_CQ8.3",
+   "How can an interpreter anticipate a speaker in interpreting?"
+  ],
+  [
+   "72",
+   "23",
+   "HCM_CQ8.4",
+   "How important is the anticipation to interpreters?"
+  ],
+  [
+   "73",
+   "23",
+   "HN_CQ8.3",
+   "What are some complex syntax, ambivalent conjunctions in the given English speech? Topic: Politics. How do you interpret these into Vietnamese? Interpret the whole speech into Vietnamese."
+  ],
+  [
+   "74",
+   "24",
+   "HCM_CQ8.5",
+   "Which steps of preparation will be the most important for interpreters?"
+  ],
+  [
+   "75",
+   "24",
+   "HN_CQ8.4",
+   "What complex structures are used in the given speech (English version, topic: Politics)? How are these structures interpreted into Vietnamese? Demonstrate how you interpret the whole text into Vietnamese?"
+  ],
+  [
+   "76",
+   "25",
+   "HCM_CQ9.1",
+   "You are going to interpret a lecture in English about biology (de-extinction). What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "77",
+   "25",
+   "HCM_CQ9.2",
+   "You are going to interpret a lecture in English about zoology. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "78",
+   "25",
+   "HN_CQ9.1",
+   "Analyze a speech made by a well-known speaker (English version). Topic: Sociology: Identify complex structures, find their equivalents in Vietnamese. Demonstrate how you interpret the whole speech into Vietnamese."
+  ],
+  [
+   "79",
+   "26",
+   "HCM_CQ9.3",
+   "You are going to interpret a lecture in English about history. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "80",
+   "26",
+   "HCM_CQ9.4",
+   "You are going to interpret a lecture in English about gene editing. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "81",
+   "26",
+   "HN_CQ9.2",
+   "Analyze a speech made by a well-known speaker (Vietnamese version). Topic: Sociology: Identify complex structures, find their equivalents in English. Demonstrate how you interpret the whole speech into Vietnamese."
+  ],
+  [
+   "82",
+   "27",
+   "HCM_CQ9.5",
+   "You are invited to interpret for a seminar in Vietnamese on Online Education. Anticipate the topics discussed at the seminar. What words, phrases, structures do you need for your interpretation. Demonstrate how you interpret the speeches made at the seminar."
+  ],
+  [
+   "83",
+   "27",
+   "HCM_CQ9.6",
+   "You are going to interpret a lecture in English about biology (de-extinction). What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "84",
+   "27",
+   "HN_CQ9.3",
+   "How can an unit of meaning identified? Why is it important to identify the units of meaning in interpreting? Among the units of meaning, which one(s) are important for interpretation?"
+  ],
+  [
+   "85",
+   "27",
+   "HN_CQ9.4",
+   "What types of language clusters are common in English? How can interpreters base on clusters for their interpretation?"
+  ],
+  [
+   "86",
+   "27",
+   "HN_CQ9.5",
+   "Based on the given speech (English), analyze some clusters used in the speech. Interpret the speech into Vietnamese"
+  ],
+  [
+   "87",
+   "28",
+   "HCM_CQ10.1",
+   "You are going to interpret a lecture in English about zoology. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "88",
+   "28",
+   "HN_CQ10.1",
+   "Analyze a Ted Talk (Technical Topic). What are some language clusters used in the talk? How can these clusters be interpreted into Vietnamese. Demonstrate how you interpret the whole talk into Vietnamese?"
+  ],
+  [
+   "89",
+   "29",
+   "HCM_CQ10.2",
+   "You are going to interpret a lecture in English about history. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "90",
+   "29",
+   "HCM_CQ10.3",
+   "You are going to interpret a lecture in English about gene editing. What words, phrases, structures, contents do you need to prepare for the interpretation? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "91",
+   "29",
+   "HN_CQ10.2",
+   "Analyze a Ted Talk (History Topic). What are some language clusters used in the talk? How can these clusters be interpreted into Vietnamese. Demonstrate how you interpret the whole talk into Vietnamese?"
+  ],
+  [
+   "92",
+   "30",
+   "HCM_CQ10.4",
+   "You are invited to interpret for a seminar in Vietnamese on Online Education. Anticipate the topics discussed at the seminar. What words, phrases, structures do you need for your interpretation. Demonstrate how you interpret the speeches made at the seminar."
+  ],
+  [
+   "93",
+   "30",
+   "HN_CQ10.3",
+   "Analyze a Ted Talk (Religion Topic). What are some language clusters used in the talk? How can these clusters be interpreted into Vietnamese. Demonstrate how you interpret the whole talk into Vietnamese?"
+  ],
+  [
+   "94",
+   "31",
+   "HCM_CQ11.1",
+   "How important is in-advance study of the topic to be interpreted? You are going to interpret a TedTalk about Technology. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "95",
+   "31",
+   "HCM_CQ11.2",
+   "You are going to interpret a TedTalk about Environment. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "96",
+   "31",
+   "HN_CQ11.1",
+   "Analyze a Ted Talk (Climate Change Topic). What are some language clusters used in the talk? How can these clusters be interpreted into Vietnamese. Demonstrate how you interpret the whole talk into Vietnamese?"
+  ],
+  [
+   "97",
+   "32",
+   "HCM_CQ11.3",
+   "You are going to interpret a TedTalk about Science. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "98",
+   "32",
+   "HCM_CQ11.4",
+   "What preparations does an interpreter of business need to make? You are going to interpret a presentation on Business topic (Comparative Advantages of Vietnam Economy), what words, phrases, structures, contents will be useful for your interpretation. Demonstrate how you interpret the presentation."
+  ],
+  [
+   "99",
+   "32",
+   "HN_CQ11.2",
+   "Analyze an English speech (Topic: Economics). What adverbial clauses may be problems for your interpretation? How are you going to interpret these? Demonstrate how you interpret the whole speech."
+  ],
+  [
+   "100",
+   "33",
+   "HCM_CQ11.5",
+   "What preparations does an interpreter of public health need to make? You are going to interpret a presentation on Vaccines, what words, phrases, structures, contents will be useful for your interpretation. Demonstrate how you interpret the presentation."
+  ],
+  [
+   "101",
+   "33",
+   "HN_CQ11.3",
+   "How can general adverbial clause be recognized? What are possible problems in the interpretation of adverbial clauses? What are some strategies to deal with adverbial clauses in interpretation?"
+  ],
+  [
+   "102",
+   "33",
+   "HN_CQ11.4",
+   "Based on a given speech: What are the basic subject-complement structures of the sentences; identify the general adverbial clauses that modify the main verb, then interpret the structures and the speech into Vietnamese."
+  ],
+  [
+   "103",
+   "34",
+   "HCM_CQ12.1",
+   "How important is in-advance study of the topic to be interpreted? You are going to interpret a TedTalk about Technology. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "104",
+   "34",
+   "HCM_CQ12.2",
+   "You are going to interpret a TedTalk about Environment. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "105",
+   "34",
+   "HN_CQ12.1",
+   "Many general adverbial constructions in English begin with the words \"AS\" and \"IN\", for example: as is well known, as we take up, as this committee is well aware, as our mandate requires... Find as many adverbial constructions like those as possible. Make an English speech with selective topics using as many expressions like those as possible. Then, interpret the speech into Vietnamese."
+  ],
+  [
+   "106",
+   "35",
+   "HCM_CQ12.3",
+   "You are going to interpret a TedTalk about Science. What main points do you anticipate to hear from the talk? What other necessary preparations do you make? Demonstrate how you interpret the talk."
+  ],
+  [
+   "107",
+   "35",
+   "HCM_CQ12.4",
+   "What preparations does an interpreter of business need to make? You are going to interpret a presentation on Business topic (Comparative Advantages of Vietnam Economy), what words, phrases, structures, contents will be useful for your interpretation. Demonstrate how you interpret the presentation."
+  ],
+  [
+   "108",
+   "35",
+   "HN_CQ12.2",
+   "Study a Vietnamese speech (Topic: Economics). What problems do interpreters may face when interpreting the speech. What are the key structures and their equivalents? Demonstrate how you interpret the speech."
+  ],
+  [
+   "109",
+   "36",
+   "HCM_CQ12.5",
+   "What preparations does an interpreter of public health need to make? You are going to interpret a presentation on Vaccines, what words, phrases, structures, contents will be useful for your interpretation. Demonstrate how you interpret the presentation."
+  ],
+  [
+   "110",
+   "36",
+   "HN_CQ12.3",
+   "Study a Vietnamese speech (Topic: Vietnam Tourism Attractions). What problems do interpreters may face when interpreting the speech. What are the key structures and their equivalents? Demonstrate how you interpret the speech."
+  ],
+  [
+   "111",
+   "37",
+   "HCM_CQ13.1",
+   "What are roles of note-taking in interpreting?"
+  ],
+  [
+   "112",
+   "37",
+   "HCM_CQ13.2",
+   "How should note-taking be carried out in interpreting?"
+  ],
+  [
+   "113",
+   "37",
+   "HN_CQ13.1",
+   "Study a TED TALK, topic: selective. Identify the adverbial clauses used and suggest how you interpret them and the whole talk."
+  ],
+  [
+   "114",
+   "38",
+   "HCM_CQ13.3",
+   "What are different ways of taking notes of different kinds of speech?"
+  ],
+  [
+   "115",
+   "38",
+   "HCM_CQ13.4",
+   "Listen to a short speech about historical places. What main points can you take notes?"
+  ],
+  [
+   "116",
+   "38",
+   "HN_CQ13.2",
+   "Study a VOA, topic: selective. Identify the adverbial clauses used and suggest how you interpret them and the whole talk."
+  ],
+  [
+   "117",
+   "39",
+   "HCM_CQ13.5",
+   "Listen to a short speech about agriculture . What main points can you take notes?"
+  ],
+  [
+   "118",
+   "39",
+   "HN_CQ13.3",
+   "Review Complex Syntax, Adverbial Clause, Word Clusters. As speakers, consider these factors to put in your Talk Show, topic: assigned by the lecturer. Organize the Talk Show in Vietnamese."
+  ],
+  [
+   "119",
+   "40",
+   "HCM_CQ14.1",
+   "What are roles of note-taking in interpreting?"
+  ],
+  [
+   "120",
+   "40",
+   "HCM_CQ14.2",
+   "How should note-taking be carried out in interpreting?"
+  ],
+  [
+   "121",
+   "40",
+   "HN_CQ14.1",
+   "Take turns to Host and Interpret the Talk Show into English"
+  ],
+  [
+   "122",
+   "41",
+   "HCM_CQ14.3",
+   "What are different ways of taking notes of different kinds of speech?"
+  ],
+  [
+   "123",
+   "41",
+   "HCM_CQ14.4",
+   "Listen to a short speech about historical places. What main points can you take notes?"
+  ],
+  [
+   "124",
+   "41",
+   "HN_CQ14.2",
+   "Study some examples given and draw out the best definition of figures of speech? What are the characteristics of each type of figures of speech?"
+  ],
+  [
+   "125",
+   "41",
+   "HN_CQ14.3",
+   "How are the figures of speech divided? How should each type be interpreted?"
+  ],
+  [
+   "126",
+   "42",
+   "HCM_CQ14.5",
+   "Listen to a short speech about agriculture . What main points can you take notes?"
+  ],
+  [
+   "127",
+   "42",
+   "HN_CQ14.4",
+   "What problems do interpreters face in the interpretation of figures of speech? How should each problem be solved?"
+  ],
+  [
+   "128",
+   "43",
+   "HCM_CQ15.1",
+   "How is the main idea of a speech recognized? You are going to listen to a speech in English about Environmental problems. Listen and take notes of the main points. Interpret the speech into Vietnamese."
+  ],
+  [
+   "129",
+   "43",
+   "HCM_CQ15.2",
+   "How are the supporting details of a speech recognized and note-taken? You are going to listen to a speech in English about animals. Listen and take notes of the main points and the supporting details of the speech. Interpret the speech into Vietnamese."
+  ],
+  [
+   "130",
+   "43",
+   "HN_CQ15.1",
+   "Find some figures of speech in English and demonstrate how you interpret them into Vietnamese? How can you identify their equivalences?"
+  ],
+  [
+   "131",
+   "44",
+   "HCM_CQ15.3",
+   "How are the dates note-taken? You are going to listen to a speech in English about some key events. Listen and take note of the main events (dates, key points)."
+  ],
+  [
+   "132",
+   "44",
+   "HCM_CQ15.4",
+   "How should statistics, figures, and number be taken note? You are going to listen to a speech in Vietnamese about Population Growth. Listen and take notes of the key number. Interpret the speech into English."
+  ],
+  [
+   "133",
+   "44",
+   "HN_CQ15.2",
+   "How are metaphors interpreted from English into Vietnamese? Are there content-similar metaphors between the 2 languages?"
+  ],
+  [
+   "134",
+   "44",
+   "HN_CQ15.3",
+   "Analyze a given speech in English. What metaphors can be found in the speech? How are these interpreted? Demonstrate how you interpret the whole speech."
+  ],
+  [
+   "135",
+   "45",
+   "HCM_CQ15.5",
+   "You are going to listen to a lecture about Business. What main points can you take notes? What supporting ideas for each main points are note-taken? What key numbers, statistics are note-taken? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "136",
+   "45",
+   "HN_CQ15.4",
+   "What types of technical measurement can be found in technical documents?"
+  ],
+  [
+   "137",
+   "45",
+   "HN_CQ15.5",
+   "How can these measures be noted and interpreted into Vietnamese and vice-versa?"
+  ],
+  [
+   "138",
+   "46",
+   "HCM_CQ16.1",
+   "How is the main idea of a speech recognized? You are going to listen to a speech in English about Environmental problems. Listen and take notes of the main points. Interpret the speech into Vietnamese."
+  ],
+  [
+   "139",
+   "46",
+   "HCM_CQ16.2",
+   "How are the supporting details of a speech recognized and note-taken? You are going to listen to a speech in English about animals. Listen and take notes of the main points and the supporting details of the speech. Interpret the speech into Vietnamese."
+  ],
+  [
+   "140",
+   "46",
+   "HN_CQ16.1",
+   "The extra effort required to interpret figures accurately sometimes distracts the interpreter's attention from the numerical concept, the unit of measurement, or the item which the figure refers. How can the practice of reading, recording the given paragraph help interpreters in interpretation? (Paragraph in 3- page 289)"
+  ],
+  [
+   "141",
+   "47",
+   "HCM_CQ16.3",
+   "How are the dates note-taken? You are going to listen to a speech in English about some key events. Listen and take note of the main events (dates, key points)."
+  ],
+  [
+   "142",
+   "47",
+   "HCM_CQ16.4",
+   "How should statistics, figures, and number be taken note? You are going to listen to a speech in Vietnamese about Population Growth. Listen and take notes of the key number. Interpret the speech into English."
+  ],
+  [
+   "143",
+   "47",
+   "HN_CQ16.2",
+   "Analyze a given speech in English (topic: Technical issues). What technical measurements do you find in the given speech? How will these measurements be interpreted into English? Demonstrate how will you interpret the whole speech into Vietnamese."
+  ],
+  [
+   "144",
+   "48",
+   "HCM_CQ16.5",
+   "You are going to listen to a lecture about Business. What main points can you take notes? What supporting ideas for each main points are note-takens? What key numbers, statistics are note-taken? Demonstrate how you interpret the lecture."
+  ],
+  [
+   "145",
+   "48",
+   "HN_CQ16.3",
+   "What are common technical measurements in Vietnamese? What are their equivalents in Vietnamese? Analyze a given speech in Vietnamese (Topic: Technical issues). How are you going to deal with the technical measurements? Demonstrate how you interpret the whole text into English."
+  ],
+  [
+   "146",
+   "49",
+   "HCM_CQ17.1",
+   "How should a lecture be note-taken? You are going to listen to a lecture in English about History. What key points of the lecture will you take note. Demonstrate how you interpret the speech."
+  ],
+  [
+   "147",
+   "49",
+   "HCM_CQ17.2",
+   "How should a piece of news be note-taken? You are going to listen to some pieces of news. What keys points of the news you are going to take note. Demonstrate how you interpret the peices of news."
+  ],
+  [
+   "148",
+   "49",
+   "HN_CQ17.1",
+   "How can quotation be recognized in the source speech? How can this be interpreted into Vietnamese?"
+  ],
+  [
+   "149",
+   "49",
+   "HN_CQ17.2",
+   "How can allusion be recognized in the source speech? How can these be interpreted into Vietnamese?"
+  ],
+  [
+   "150",
+   "49",
+   "HN_CQ17.3",
+   "How can transposition be recognized in the source speech? How can these be interpreted into Vietnamese?"
+  ],
+  [
+   "151",
+   "50",
+   "HCM_CQ17.3",
+   "How should a presentation be note-taken? You are going to listen to a presentation in Vietnamese about main tourist destinations. What key points you are going to take note of? Demontrate how you interpret the presentation?"
+  ],
+  [
+   "152",
+   "50",
+   "HCM_CQ17.4",
+   "You are going to listen to a presentation in English about a product. What key points you are going to take note of? Demontrate how you interpret the presentation?"
+  ],
+  [
+   "153",
+   "50",
+   "HN_CQ17.4",
+   "Analyze a speech in English (Topic: Science). What quotation, allusion, transposition do you recognize? How are you going to deal with those quotations, allusion, transposition? Demonstrate how you interpret the whole speech into Vietnamese."
+  ],
+  [
+   "154",
+   "51",
+   "HCM_CQ17.5",
+   "How should an instruction be note-taken? What main points of an instruction should be note-taken? You are going to listen to an instruction in English, then take notes of the key points. Demonstrate how you are going to interprete the instruction into Vietnamese."
+  ],
+  [
+   "155",
+   "51",
+   "HCM_CQ17.6",
+   "How should a lecture be note-taken? You are going to listen to a lecture in English about History. What key points of the lecture will you take note. Demonstrate how you interpret the speech."
+  ],
+  [
+   "156",
+   "51",
+   "HN_CQ17.5",
+   "Analyze a speech in English (Topic: Humanities). What quotation, allusion, transposition do you recognize? How are you going to deal with those quotations, allusion, transposition? Demonstrate how you interpret the whole speech into Vietnamese."
+  ],
+  [
+   "157",
+   "52",
+   "HCM_CQ18.1",
+   "How should a piece of news be note-taken? You are going to listen to some pieces of news. What keys points of the news you are going to take note. Demonstrate how you interpret the peices of news."
+  ],
+  [
+   "158",
+   "52",
+   "HCM_CQ18.2",
+   "How should a presentation be note-taken? You are going to listen to a presentation in Vietnamese about main tourist destinations. What key points you are going to take note of? Demontrate how you interpret the presentation?"
+  ],
+  [
+   "159",
+   "52",
+   "HN_CQ18.1",
+   "Study a given speech/presentation about Tourism (Vietnamese/English), what kinds of allusion, quotation can be found in the presentation? How are these interpreted? Interpret the presentation into Vietnamese."
+  ],
+  [
+   "160",
+   "53",
+   "HCM_CQ18.3",
+   "You are going to listen to a presentation in English about a product. What key points you are going to take note of? Demontrate how you interpret the presentation?"
+  ],
+  [
+   "161",
+   "53",
+   "HCM_CQ18.4",
+   "How should an instruction be note-taken? What main points of an instruction should be note-taken? You are going to listen to an instruction in English, then take notes of the key points. Demonstrate how you are going to interprete the instruction into Vietnamese."
+  ],
+  [
+   "162",
+   "53",
+   "HN_CQ18.2",
+   "Organize a meeting/ discussion on a given topic by the lecturer. (English/Vietnamese). Consider factors related to figures of speech, quotation, technical measures to put in the discussion."
+  ],
+  [
+   "163",
+   "54",
+   "HCM_CQ18.5",
+   "How can interpreters use the note-taken information to interpret? What can you take notes when listening to a given audio in English about Environmental problems? Based on the note-taken information, demonstrate how you interpret the speech."
+  ],
+  [
+   "164",
+   "54",
+   "HCM_CQ18.6",
+   "What can you take notes of when listenining to a give audio in English about world issues. Based on the note-taken information, demonstrate you interpet the audio."
+  ],
+  [
+   "165",
+   "54",
+   "HN_CQ18.3",
+   "Take turns to host and interpreted the meeting into English/Vietnamese."
+  ],
+  [
+   "166",
+   "55",
+   "HCM_CQ19.1",
+   "Apply public speaking skill, speaker anticipating skill, and note-taking skills to analyze the necessary steps in the interpretation of a TALK SHOW in English/or Vietnamese about History. Demonstrate how you conduct your consecutive interpretation of the TALK SHOW organized by other groups."
+  ],
+  [
+   "167",
+   "56",
+   "HCM_CQ19.2",
+   "Apply public speaking skill, speaker anticipating skill, and note-taking skills to analyze the necessary steps in the interpretation of a TALK SHOW in English/or Vietnamese Business. Demonstrate how you conduct your consecutive interpretation of the TALK SHOW organized by other groups."
+  ],
+  [
+   "168",
+   "56",
+   "HCM_CQ19.3",
+   "Apply public speaking skill, speaker anticipating skill, and note-taking skills to analyze the necessary steps in the interpretation of a TALK SHOW in English/or Vietnamese about Population. Demonstrate how you conduct your consecutive interpretation of the TALK SHOW organized by other groups."
+  ],
+  [
+   "169",
+   "57",
+   "HCM_CQ19.4",
+   "How can interpreters use the note-taken information to interpret? What can you take notes when listening to a given audio in English about Environmental problems? Based on the note-taken information, demonstrate how you interpret the speech."
+  ],
+  [
+   "170",
+   "57",
+   "HCM_CQ19.5",
+   "What can you take notes of when listenining to a give audio in English about world issues. Based on the note-taken information, demonstrate you interpet the audio."
+  ],
+  [
+   "171",
+   "58",
+   "HCM_CQ20.1",
+   "Apply public speaking skill, speaker anticipating skill, and note-taking skills to analyze the necessary steps in the interpretation of a TALK SHOW in English/or Vietnamese about History. Demonstrate how you conduct your consecutive interpretation of the TALK SHOW organized by other groups."
+  ],
+  [
+   "172",
+   "59",
+   "HCM_CQ20.2",
+   "Apply public speaking skill, speaker anticipating skill, and note-taking skills to analyze the necessary steps in the interpretation of a TALK SHOW in English/or Vietnamese Business. Demonstrate how you conduct your consecutive interpretation of the TALK SHOW organized by other groups."
+  ],
+  [
+   "173",
+   "60",
+   "HCM_CQ20.3",
+   "Apply public speaking skill, speaker anticipating skill, and note-taking skills to analyze the necessary steps in the interpretation of a TALK SHOW in English/or Vietnamese about Population. Demonstrate how you conduct your consecutive interpretation of the TALK SHOW organized by other groups."
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/1fqdQbKtFg5j6LOrnpkVwKaCLm0lnJnPp?usp=sharing"
+ ]
+}

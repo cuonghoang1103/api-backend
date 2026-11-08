@@ -1,0 +1,312 @@
+{
+ "ma": "DXE291c",
+ "sylID": "14220",
+ "quyetDinh": "444/QĐ-ĐHFPT dated 04/23/2026",
+ "ungVien": [
+  {
+   "sylID": "14220",
+   "code": "DXE291c",
+   "name": "Digital Ecosystem: From Governance to Business_Hệ sinh thái số: Từ Quản lý đến Kinh doanh",
+   "active": true,
+   "approved": true,
+   "decision": "444/QĐ-ĐHFPT dated 04/23/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14220",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14220",
+  "Syllabus Name": "Digital Ecosystem: From Governance to Business_Hệ sinh thái số: Từ Quản lý đến Kinh doanh",
+  "Course Name English": "Digital Ecosystem: From Governance to Business",
+  "Subject Code": "DXE291c",
+  "Learning-Teaching Method": "online learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "60 hours online + 90 hours seft study",
+  "Pre-Requisite": "None",
+  "Description": "This subject is designed to provide Information Technology (IT) students at FPT University with fundamental knowledge and skills in digital transformation across the following areas: State management and public administration; Business and organizational management; Digital economy and finance; Customer experience and digital marketing. This knowledge and these skills will help students gain a broader understanding of business and management, preparing them to readily apply their specialized IT knowledge to real-world digital transformation projects within organizations and enterprises, and to become the young, pioneering workforce in Vietnam's Digital Transformation in the near future.",
+  "StudentTasks": "Students have to:\n\n- complete the course on Coursera platform prior to deadline.\n\n- Take the appraisal exam at campus",
+  "Tools": "Internet access",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "444/QĐ-ĐHFPT dated 04/23/2026",
+  "IsApproved": "True",
+  "Note": "1. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n2. Completion Criteria: Final TE Score >=4 & FR >= 5 (FR = min(10, (Final TE Score + bonus))",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/23/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "https://www.coursera.org/o/fptuniversity/admin/content/fpt-university-private-authored-courses-uv0qj/collection/uZTLK",
+   "FPT University",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 1: Quản lý nhà nước và hành chính công"
+  ],
+  [
+   "2",
+   "https://www.coursera.org/o/fptuniversity/admin/content/fpt-university-private-authored-courses-uv0qj/collection/uZTLK",
+   "FPT University",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 2: Quản trị doanh nghiệp và tổ chức"
+  ],
+  [
+   "3",
+   "https://www.coursera.org/o/fptuniversity/admin/content/fpt-university-private-authored-courses-uv0qj/collection/uZTLK",
+   "FPT University",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 3: Kinh tế số và tài chính số"
+  ],
+  [
+   "4",
+   "https://www.coursera.org/o/fptuniversity/admin/content/fpt-university-private-authored-courses-uv0qj/collection/uZTLK",
+   "FPT University",
+   "",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "Course 4: Trải nghiệm khách hàng và tiếp thị số"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand and apply fundamental knowledge of public administration management in the context of digital transformation, grasp the current situation and technical infrastructure requirements, recognize the necessity of organizational and management mechanism reforms, as well as develop skills in monitoring and evaluating the effectiveness of digital transformation in public administrative services and delivering public services efficiently."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Develop strategic thinking and leadership skills in the digital environment, from building organizational culture, optimizing processes, managing human resources, to driving innovation and restructuring business models to adapt flexibly to technology and market dynamics."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understand and analyze the concepts of the digital economy, including opportunities, challenges, digital business models, digital markets, and value chains; gain knowledge of digital finance, banking, accounting, and auditing concepts, along with the applications of fintech and AI, while exploring concepts of digital currency, digital assets, blockchain, and decentralized finance."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Understand customer behavior in the digital age, design personalized customer journeys and experiences, and apply MarTech ecosystems and data to optimize marketing activities, while becoming familiar with customer experience metrics and communication decision-making to enhance customer satisfaction and loyalty."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60 mins",
+   "CLO1, CLO2, CLO3, CLO4",
+   "Multiple choices.\nMarked by Computer",
+   "50",
+   "- All studied courses.\n- Each course contributes 10-15 questions.",
+   "- By exam board\n-The questions will cover content delivered in 4 courses of the collection KS57.",
+   "Final Result (FR) = min (10, TE + Bonus)\nFinal exam: week 13\nRe-exam: week 14"
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction to the collection KS57 of the online courses\nCourse 1: Quản lý nhà nước và hành chính công\nModule 1: Tổng quan về quản lý nhà nước\n6 videos:\n- Giới thiệu về các kiểu tổ chức bộ máy nhà nước trên thế giới\n- Giới thiệu tổ chức bộ máy hành chính nhà nước Việt Nam ở trung ương\n- Giới thiệu tổ chức bộ máy hành chính nhà nước Việt Nam ở địa phương\n- Đặc điểm quản lý hành chính nhà nước\n- Nguyên tắc hoạt động của nền hành chính nước Cộng hòa xã hội chủ nghĩa Việt Nam\n- Các hình thức quản lý hành chính nhà nước\n3 readings:\n- Khảo sát trước khóa học\n- Tổ chức bộ máy hành chính nhà nước\n- Quản lý hành chính nhà nước\n2 quizzes:\nModule 2: Chuyển đổi số và các quy định pháp luật về chuyển đổi số\n4 videos:\n- Giới thiệu chung về chuyển đổi số, sự cần thiết và lợi ích của chuyển đổi số\n- Giới thiệu chiến lược quốc gia về chuyển đổi số\n- Các Quy định pháp luật liên quan đến chuyển đổi số áp dụng cho các đối tượng\n- Các quy định pháp luật liên quan đến chuyển đổi số áp dụng cho cơ quan quản lý nhà nước\n2 readings:\n- Những vấn đề cơ bản về chuyển đổi số và chiến lược quốc gia về chuyển đổi số\n- Các quy định pháp luật liên quan đến chuyển đổi số\n2 quizzes",
+   "Online",
+   "CLO1",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- See the syllabus of all 4 courses in the collection KS57\n- Participate in introduction slot (optional)\n- Watch the videos\n- Read the materials\n- Do all the quizzes (both practice and graded ones)\n- Complete and submit all assignments (both practice and peer-graded ones)",
+   ""
+  ],
+  [
+   "2",
+   "Course 1: Quản lý nhà nước và hành chính công\nModule 3: Hạ tầng, nền tảng và kiến trúc công nghệ trong hành chính công số\n11 videos:\nHạ tầng số & Trung tâm dữ liệu Quốc gia\nHạ tầng mạng & Điện toán đám mây ở Việt Nam - Nền tảng cho chuyển đổi số\nCổng Dịch vụ công quốc gia và tích hợp, chia sẻ dữ liệu quốc gia\nHệ thống định danh và xác thực điện tử\nHệ thống quản lý văn bản điện tử (e-Office)\nNền tảng số ngành giáo dục và y tế\nNền tảng số ngành tài chính, ngân hàng và thuế\nNền tảng số ngành công an\nKhung kiến ​​trúc Chính phủ điện tử Việt Nam\nKiến trúc số hóa chính quyền địa phương\nYêu cầu, nguyên tắc và thách thức đối với việc xây dựng hạ tầng nền tảng số nền hành chính công\n5 readings:\nTổng quan về hạ tầng kỹ thuật của nền hành chính quốc gia\nCase study: Đánh giá trải nghiệm của người dân địa phương về một dịch vụ công trực tuyến\nGiới thiệu chung về nền tảng số chuyên ngành trong nền hành chính công\nSự cần thiết phải đổi mới quản lý hành chính công theo hướng thể chế số.\nThực trạng kiến trúc số hóa ở một số chính quyền địa phương hiện nay\n2 quizzes\nModule 4: Phát triển dịch vụ công số và trải nghiệm của người dân\n7 videos:\nHiểu đúng về dịch vụ công, dịch vụ số và dịch vụ công trực tuyến\nNguyên tắc phát triển dịch vụ công số\nHệ thống định danh – xác thực (VNeID)\nCông toán điện tử thanh toán (PayGov)\nCá nhân hóa và tích hợp dịch vụ công trực tuyến\nĐơn giản hóa dịch vụ công trực tuyến và nâng cao trải nghiệm của người dân\nChỉ số mức độ sử dụng và hài lòng của người dân đối với dịch vụ công trực tuyến\n4 readings:\nTổng quan về Cổng dịch vụ công trực tuyến ở Việt Nam\nNhận thức của người dân về dịch vụ công trực tuyến hiện nay\nCase study: Đánh giá trải nghiệm của người dân địa phương về một dịch vụ công trực tuyến\nĐánh giá hiệu quả dịch vụ công trực tuyến của Singapore\n1 quiz",
+   "Online",
+   "CLO1",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "3",
+   "Course 1: Quản lý nhà nước và hành chính công\n\nModule 5: Đổi mới cơ chế quản lý hành chính công trong bối cảnh chuyển đổi số\n6 videos:\nGiới thiệu về thể chế số (định nghĩa, thành phần)\nSo sánh mô hình quản lý hành chính CĐS với mô hình truyền thống\nQuản trị dữ liệu trong quản lý hành chính công\nTư duy đổi mới và kỹ năng tương tác với công nghệ\nCác bước quản trị thay đổi\nGiới thiệu một số mô hình Chính phủ điện tử tiêu biểu\n6 readings:\nSự cần thiết phải đổi mới quản lý hành chính công theo hướng thể chế số.\nVăn hóa tổ chức số: minh bạch, chia sẻ, đổi mới, Chính phủ kiến tạo\nLàm việc từ xa (remote work), mô hình hybrid, quản trị theo kết quả\nĐào tạo, bồi dưỡng và khung năng lực cán bộ, công chức thời đại CĐS\nCase study: Sở Kế hoạch và Đầu tư tỉnh Quảng Ninh – Từ \"thực thi\" sang \"kiến tạo phát triển\"\nHuy động sự tham gia của công viên chức và người dân\n1 quiz\nModule 6: Giám sát và đánh giá hiệu quả chuyển đổi số đối với quản lý hành chính công\n5 videos:\nVai trò của đo lường, đánh giá và giám sát CĐS trong quản lý hành chính công\nIOC- Trung tâm điều hành thông minh\nSự cần thiết phải giám sát và đánh giá theo quy trình\nSử dụng kết quả giám sát để ra quyết định\nMột số khó khăn, thách thức hiện nay trong quản lý hành chính công trực tuyến\n7 readings:\nCác cấp độ đánh giá: đầu vào – đầu ra – kết quả – tác động\nBộ đánh giá chuyển đổi số các cấp (DTI)\nCác chỉ số đánh giá hiệu quả quan trọng cần theo dõi định kỳ\nCase study: Khảo sát mức độ hài lòng của người dân khi sử dụng dịch vụ công trực tuyến tại TP Đà Nẵng\nCác bước trong quy trình giám sát và đánh giá hiệu quả CĐS\nMột số hệ thống hành chính số tiêu biểu (Đà Nẵng, TP. HCM, ...)\nKhảo sát cuối khóa học\n1 quiz",
+   "Online",
+   "CLO1",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "4",
+   "Course 2: Quản trị doanh nghiệp và tổ chức\nModule 1: TƯ DUY LÃNH ĐẠO VÀ QUẢN TRỊ SỐ\n8 videos:\nThay đổi vai trò lãnh đạo trong kỷ nguyên số\nTư duy quản trị số là gì?\nVai trò của lãnh đạo trong chuyển đổi số và ví dụ thực tiễn minh hoạ vai trò của người lãnh đạo trong chuyển đổi số doanh nghiệp\nNhững kỹ năng lãnh đạo số cần trang bị\nCấp độ lãnh đạo số\nThách thức và cách vượt qua\nTổng kết nội dung Module 1 - Tư duy lãnh đạo và Quản trị số\n5 readings:\nKhảo sát trước khóa học\nKhái quát về Module 1 - Mục tiêu cần đạt, cấu trúc triển khai và hình thức đánh giá\nTài liệu đọc Five rules for leading in a Digital World của MIT Management Review\nCase study về tư duy lãnh đạo và quản trị số tại một số công ty lớn\nBài phân tích Building your digital DNA / Lessons from digital leaders của Dellotte\n1 quiz\nModule 2: CHIẾN LƯỢC CHUYỂN ĐỔI SỐ TRONG TỔ CHỨC/DOANH NGHIỆP\n8 videos:\nGiới thiệu về Module 2 - chiến lược chuyển đổi số trong tổ chức/doanh nghiệp\nChuyển đổi số là một chiến lược\nCác thành phần cốt lõi của chiến lược chuyển đổi số\nCác bước xây dựng chiến lược chuyển đổi số\nCác chiến lược phổ biến theo loại hình tổ chức\nCác công cụ hỗ trợ xây dựng chiến lược số\nKPI chiến lược chuyển đổi số\nTổng kết nội dung Module 2 - Chiến lược chuyển đổi số trong doanh nghiệp, tổ chức\n4 readings:\nKhái quát về Module 2 - Mục tiêu cần đạt và cấu trúc triển khai\nTài liệu đọc Digital Transformation is not about Technology của Havard Business Review\nCase study về chiến lược chuyển đổi số ở một doanh nghiệp/tổ chức lớn, ví dụ: Starbucks’ Digital Flywheel\nTài liệu đọc Competing in the Age of AI của Havard Business Review\n1 quiz",
+   "Online",
+   "CLO2",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Participate in Course 2 review slot (optional)",
+   ""
+  ],
+  [
+   "5",
+   "Course 2: Quản trị doanh nghiệp và tổ chức\nModule 3: QUẢN TRỊ MÔ HÌNH KINH DOANH SỐ\n8 videos:\nGiới thiệu về Module Quản trị mô hình kinh doanh số\nMô hình kinh doanh số và các thành phần chính của một mô hình kinh doanh số\nPhân loại mô hình kinh doanh số (part 1)\nPhân loại mô hình kinh doanh số (part 2)\nChuyển đổi mô hình kinh doanh : từ truyền thống đến số hóa\nCác bước chuyển đổi sang mô hình kinh doanh số và một vài lưu ý\nMột vài ứng dụng trong thực tế ngành\nWrap-up and closing : Tóm tắt module, ôn lại một vài nội dung chính\n2 readings:\nMột số mô hình kinh doanh số phổ biến\nXu hướng phát triển mô hình kinh doanh số tại Việt Nam\n1 quiz\nModule 4: QUẢN LÝ VẬN HÀNH & TỰ ĐỘNG HÓA QUY TRÌNH\n11 videos:\nGiới thiệu: Chuyên đề tập trung vào việc ứng dụng công nghệ để tối ưu hóa vận hành nội bộ, từ số hóa quy trình đến tự động hóa bằng các công cụ như ERP, RPA, BPM. Đây là bước đầu tiên trong chuyển đổi số mang lại hiệu quả rõ rệt: giảm lỗi, tăng tốc độ, tiết kiệm chi phí, minh bạch thông tin.\nQuản lý vận hành số là gì?\n5 cấp độ số hóa vận hành\nTổng quan công cụ vận hành\nHướng dẫn cách chọn công cụ phù hợp (No-code/Low-code) dựa trên chi phí, tính dễ dùng, khả năng tích hợp\nTích hợp thông tin qua iPaaS\nCác bước cơ bản của lộ trình triển khai tự động hóa\nThử nghiệm và hiệu chỉnh\nLợi ích của tự động hóa\nỨng dụng thực tế\nWrap-up: Tóm tắt toàn bộ khóa học, ôn lại các khái niệm chính từ 5 lesson trước.\n8 readings:\nTài liệu nghiên cứu\nTài liệu nghiên cứu: \"Xu hướng số hóa quản lý vận hành trong doanh nghiệp hiện đại\"\nTài liệu cơ bản về tự động hóa và tích hợp trong vận hành\nMột trường học chuyển từ nhập điểm thủ công sang dùng RPA – phân tích lợi ích và thách thức\nTài liệu nghiên cứu chuyên sâu: \"Ứng dụng RPA và iPaaS trong tự động hóa vận hành doanh nghiệp\"\nTài liệu hướng dẫn lập kế hoạch tự động hóa\nTài liệu nghiên cứu: \"Tác động của tự động hóa đến hiệu suất doanh nghiệp\"\nVí dụ thực tiễn: Doanh nghiệp áp dụng tự động hóa trong quản lý kho\n1 quiz",
+   "Online",
+   "CLO2",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "6",
+   "Course 2: Quản trị doanh nghiệp và tổ chức\nModule 5: QUẢN TRỊ NHÂN LỰC VÀ VĂN HÓA TỔ CHỨC TRONG THỜI ĐẠI SỐ\n8 videos:\nGiới thiệu về Module Quản trị nhân lực và văn hóa tổ chức trong thời đại số\nNhững thay đổi chính trong tư duy quản trị nhân lực và các yếu tố tác động đến quản trị nhân lực trong thời đại số\nChiến lược quản trị nhân lực trong thời đại số\nCác công cụ quản trị nhân lực trong thời đại số\nVăn hóa tổ chức và tầm quan trọng xây dựng văn hóa tổ chức số\nCác yếu tố tạo nên văn hóa tổ chức số\nCác bước xây dựng văn hóa tổ chức số\nWrap-up and closing : Tóm tắt module, ôn lại một vài nội dung chính\n2 readings:\nNhững thách thức về quản trị nhân lực trong thời đại số\nMột vài thách thức trong xây dựng văn hóa số trên thế giới và tại Việt Nam\n1 quiz\nModule 6: ĐỔI MỚI SÁNG TẠO & QUẢN TRỊ THAY ĐỔI TRONG CHUYỂN ĐỔI SỐ\n8 videos:\nIntroduction: Giới thiệu về chuyển đổi số và vai trò của đổi mới sáng tạo. Overview: Tổng quan về đổi mới sáng tạo và quản trị thay đổi trong chuyển đổi số\nĐổi mới sáng tạo số là gì?\n3 cấp độ đổi mới\nQuản trị thay đổi là gì?\nVai trò trong quản trị thay đổi\n5 bước ADKAR trong quản trị thay đổi​\nỨng dụng thực tiễn ADKAR​\nWrap-up: Tóm tắt khóa học, ôn lại các khái niệm chính từ 4 lesson trước, nhấn mạnh bài học quan trọng.\n6 readings:\nReading: \"Tầm quan trọng của đổi mới sáng tạo trong chuyển đổi số\"\nReading: \"Các cấp độ đổi mới sáng tạo trong kỷ nguyên số\"\nReading: \"Quản trị thay đổi trong chuyển đổi số: Nguyên tắc và thực tiễn\"\nCông cụ và chiến lược vượt qua thách thức trong chuyển đổi số\nCase study: Doanh nghiệp dùng RPA để vượt qua thách thức nhập liệu thủ công\nKhảo sát cuối khóa học\n1 quiz",
+   "Online",
+   "CLO2",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "7",
+   "Course 3: Kinh tế số và tài chính số\n\nModule 1: Tổng quan về Kinh Tế Số\n\n4 videos:\n\nTổng quan về kinh tế số\n\nCác đặc điểm chính của nền kinh tế số\n\nCác khái niệm đo lường số, khung thang đo lường số\n\nCơ hội & Thách thức\n\n4 readings:\n\nKhảo sát trước khóa học\n\nTài liệu tham khảo\n\nNew Reading\n\nNew Reading\n\n3 Quizzes\n\nModule 2: Mô Hình Kinh tế, Thị Trường Số và Chuỗi Giá Trị\n\n9 videos:\n\nCung-cầu\n\nĐầu ra và tăng trưởng - GDP của nền kinh tế\n\nThuế & Thuế quan\n\nCác mô hình tăng trưởng kinh tế phổ biến\n\nNền kinh tế số (digital economy) - Tổng quan và tác động\n\nCác đặc trưng của nền kinh tế số\n\nXu hướng số hoá toàn cầu và các tác động đến chiến lược kinh doanh\n\nChuỗi giá trị toàn cầu (Global Value Chain - GVC)\n\nChuỗi giá trị toàn cầu (gvc) trong kỷ nguyên số\n\n5 readings:\n\nCác ứng dụng của cung-cầu - độ co giãn của giá\n\nCase study: Chiến lược kinh doanh trong môi trường kinh tế số\n\nCase study: Một số đặc trưng của các mô hình kinh doanh số\n\nCase study: Vai trò của các quốc gia trong chuỗi giá trị toàn cầu thời đại số hoá\n\nTài liệu tham khảo.\n\n3 quizzes",
+   "Online",
+   "CLO3",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n\n- Read the materials\n\n- Do the quizzes\n\n- Participate in Course 4 review slot (optional)\n\n- Submit the peer-graded assignment",
+   ""
+  ],
+  [
+   "8",
+   "Course 3: Kinh tế số và tài chính số\nModule 3: Tài chính số (Digital Finance) và Ngân hàng số (Digital Banking)\n5 videos:\nTổng quan về tài chính số\nTổng quan về Fintech\nYếu tố cung cầu trong sự phát triển của Fintech\nTổng quan về ngân hàng số\nKhái niệm AI & Các ứng dụng của AI trong ngân hàng\nModule 4: Kế toán - Kiểm toán Số\n1 readings:\nTài liệu tham khảo\n4 quizzes\nModule 4: Kế toán - Kiểm toán Số\n10 videos:\nKế toán số và chuyển đổi số trong lĩnh vực kế toán\nĐặc điểm kế toán số\nKết nối điện tử ngân hàng\nHóa đơn số & thanh toán điện tử trong nền kinh tế số\nChữ ký số & Chứng nhận điện tử trong nền kinh tế số\nBảng điều khiển tài chính số (Dashboard tài chính)\nGiới thiệu về kiểm toán số\nCác công cụ phổ biến của kiểm toán số\nMục tiêu của quản trị tài chính công trên nền tảng trực tuyến\nCác công cụ quản trị tài chính công trên nền tảng trực tuyến\n3 readings:\nCác công cụ & nền tảng trong kế toán số\nTài liệu tham khảo\nTài chính công kỹ thuật số\nModule 4: Kế toán - Kiểm toán Số\n4 quizzes",
+   "Online",
+   "CLO3",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "9",
+   "Course 3: Kinh tế số và tài chính số\nModule 5: Tiền kỹ thuật số - Tài sản số\n9 videos:\nGiới thiệu về các tài chính phi tập trung\nCơ chế hoạt động (tự động hóa, minh bạch, không thay đổi)\nSự khác biệt của DeFi so với tài chính truyền thống\nRủi ro của DeFi\nCác ứng dụng của công nghệ blockchain trong tài chính\nTài sản số và thị trường đầu tư mới\nBitcoin and Cryptocurrency Technologies_Bitcoin và công nghệ tiền mã hoá\nVí kỹ thuật số và giao dịch tiền số\nPháp lý, an toàn và xu hướng\n2 readings:\nTài liệu tham khảo\nKhảo sát cuối khóa học\n1 quiz\n'Course 4: Trải nghiệm khách hàng và tiếp thị số\nModule 1: Tư duy khách hàng & hành vi số\n3 videos:\nTổng quan hành vi khách hàng qua thời gian\nHành vi trên Website, App, Social\nCác yếu tố ảnh hưởng đến hành vi số\n3 readings:\nHành vi Gen X, Y, Z\nBảng so sánh hành vi theo nền tảng\nMô hình hành vi số (AIDA, 5A, HOOKED)\n3 quizzes",
+   "Online",
+   "CLO3, CLO4",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "10",
+   "Course 4: Trải nghiệm khách hàng và tiếp thị số\nModule 2: Thiết kế Trải nghiệm số\n3 videos:\nCustomer Persona là gì?\nCustomer Journey là gì?\nNguyên tắc thiết kế trải nghiệm hiệu quả\n3 readings:\nThành phần cấu thành Persona\nMô hình hành trình AIDA, 5A\nCông cụ hỗ trợ thiết kế CX (UX tools)\n3 quizzes\nModule 3: Hệ sinh thái Công nghệ CX & Marketing (MarTech)\n3 videos:\nMarTech là gì?\nCông cụ theo từng chức năng Marketing\nỨng dụng công cụ MarTech vào chiến dịch MKT\n2 readings:\nMarTech Stack cơ bản\nBảng phân loại công cụ MarTech\n3 quizzes",
+   "Online",
+   "CLO4",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes\n- Participate in Course 5 review slot (optional)",
+   ""
+  ],
+  [
+   "11",
+   "Course 4: Trải nghiệm khách hàng và tiếp thị số\nModule 4: Quản trị Dữ liệu KH & Phân tích hành vi\n3 videos:\nCác loại dữ liệu: định danh, hành vi, giao dịch\nNguyên tắc thu thập và lưu trữ dữ liệu\nĐọc hiểu insight từ dữ liệu\n2 readings:\nDữ liệu thứ cấp, dữ liệu sơ cấp, dữ liệu định lượng, dữ liệu định tính\n1 quiz\nModule 5: Chiến lược truyền thông số\n3 videos:\nCác bước xây dựng chiến lược\nChọn kênh theo Persona và hành trình KH\nKPI truyền thông: CPM, CTR, ROAS\n2 readings:\nFramework truyền thông số\nBest practice tối ưu nội dung & kênh\n1 quiz",
+   "Online",
+   "CLO4",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Watch the videos\n- Read the materials\n- Do the quizzes",
+   ""
+  ],
+  [
+   "12",
+   "Course 4: Trải nghiệm khách hàng và tiếp thị số\nModule 6: Đo lường trải nghiệm khách hàng & Ra quyết định\n3 videos:\nCác loại dữ liệu: định danh, hành vi, giao dịch\nNguyên tắc thu thập và lưu trữ dữ liệu\nĐọc hiểu insight từ dữ liệu\n2 readings:\nDữ liệu thứ cấp, dữ liệu sơ cấp, dữ liệu định lượng, dữ liệu định tính\nQUẢN LÝ DỮ LIỆU HIỆU QUẢ: DATA GOVERNANCE & DATA QUALITY\n1 quiz\n\nFinal exam",
+   "Online",
+   "CLO4",
+   "ITU",
+   "online on Coursera",
+   "",
+   "- Deadline of all courses completion: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

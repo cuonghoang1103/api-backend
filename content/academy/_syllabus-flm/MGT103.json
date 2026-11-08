@@ -1,0 +1,1242 @@
+{
+ "ma": "MGT103",
+ "sylID": "14193",
+ "quyetDinh": "377/QĐ-ĐHFPT dated 04/09/2026",
+ "ungVien": [
+  {
+   "sylID": "14193",
+   "code": "MGT103",
+   "name": "Introduction to Management_Nhập môn quản lý",
+   "active": true,
+   "approved": true,
+   "decision": "377/QĐ-ĐHFPT dated 04/09/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14193",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14193",
+  "Syllabus Name": "Introduction to Management_Nhập môn quản lý",
+  "Course Name English": "Introduction to Management",
+  "Subject Code": "MGT103",
+  "Learning-Teaching Method": "Lecture,Presentation",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "",
+  "Description": "The course explores and focuses around the managerial functions of management, including planning, organizing, leading and controlling. The course is designed to provide basic knowledge and skills required in management and give students a comprehensive insight into human relations componnents that characterise any managerial roles, regardless of industry or functions. Various aspects of management theories will be examined and linked to current management practice in the world and Vietnam. Learning in the class will be facilitated through the use of interactive tools such as group exercise, case study discussion, role-play/activities, and projects.",
+  "StudentTasks": "- Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities- Fulfill tasks given by instructor after class\n\n- Use their own laptop in class only for learning purpose\n\n- Read the textbook in advance",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "377/QĐ-ĐHFPT dated 04/09/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "AE Fundamentals of Management Ricky",
+   "Ricky Griffin",
+   "Cengage",
+   "2021",
+   "10th",
+   "",
+   "True",
+   "True",
+   "False",
+   "Chọn 1 trong 2 ấn bản. Ưu tiên mua ấn bản mới nhất"
+  ],
+  [
+   "2",
+   "Fundamentals of Management",
+   "Ricky W.Griffin",
+   "Cengage",
+   "2019",
+   "9th",
+   "",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "Essentials of Management",
+   "Adrew.J. DuBrin",
+   "Cengage",
+   "2011",
+   "9th",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Coursera course Ethics of Artificial Intelligence https://www.coursera.org/learn/ethics-of-artificial-intelligence",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Define management, its functions including planning, decision-making, and strategy development processes, and influence of organizational environments."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Describe the basic elements of organization design, encompassing forms, key situational influences, and components involved in designing effective operations systems."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Discuss human resource management practices, including recruitment, development, motivation, and leadership strategies, within the context of environmental factors."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify different types of organizational control mechanisms and analyze their characteristics to determine effectiveness in achieving organizational objectives."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Apply the knowledge and understanding gained from the course to evaluate real-life management situations/dilemma and practices in both local and global business contexts."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Develop leadership and management potential through the integration of theoretical knowledge with practical skills and self-awareness."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understand the ethical and social responsibility issues in real-life management situations."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "",
+   "-",
+   "",
+   "Option 1: While this is a subjective measure, lecturer will try to standardize it as much as possible by tracking your participation in class discussions and activities. To earn the participation point, you must actively and productively engage in group discussion, exercises and homework. Reading in advance is the MUST. Also, arriving late to class causes a distraction and will hurt your participation grade.\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "2",
+   "Essay Test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "Option 1: 60 minutes\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "Option 1: Essay questions. Marked by lecturer\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 2 -3 short essay questions\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Based on topics of studied units\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: In class, by instructor\nInstructor has resposibility to review the test for students after graded.",
+   ""
+  ],
+  [
+   "3",
+   "Group Assignment",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "Option 1: Vary\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "Option 1: A group of four or five students will choose a company to write on one to two management issues or challenges faced by that company. From the theories acquired from this course, give your group’s recommendations to this company for solving those issues or challenges. The input for the assignment must be based on direct interviews of senior managers of that company.\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Maximum length of the group assignment should be 10 pages excluding appendices\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Based on topics of studied units\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: The assignment includes two part: written report and oral presentation\nAll assignments (report and slides) should be typed and double-spaced with 11-point font. A deduction of 10% of the assignment mark will be applied for each day of late submission\nRecommended: 30% for presentation and 70% for the written report.\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "4",
+   "Individual Assignment",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "Option 1: VaryOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7",
+   "Option 1: Student will be asked to complete a written individual assignment. This will give student opportunities to show that you can think analytically and critically about real-life management issues, and apply management theories and concept to analyse those issues. Details on the format, length and other expectations will be provided by lecturer in classFor example: Identify a person in the real life you feel is a great manager. Write a short essay (1,000 words) on why you feel that person is a great manager and what principles he/she applies to manage others. Give your own evaluation of this person as a manager through direct interview, observation and summary of this manager's contribution to the success of the organization.Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Maximum length of the individual assignment should be 5 pages excluding appendicesOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Based on topics of studied unitsOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: All assignments should be typed and double-spaced with 11-point font, and must be submitted via LMS. A deduction of 10% of the assignment mark will be applied for each day of late submission.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "5",
+   "Quiz",
+   "on-going",
+   "3",
+   "15.0%",
+   ">0",
+   "Option 1: 30 minutes eachOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "LO1, LO2, LO3, LO4",
+   "Option 1: Multiple choicesMarked by Computer or a suitable formatOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: 25 MC questions each quiz.Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: Quizzes and exercises will test for knowledge of subjects in the chapters assigned for that day.Option 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   "Option 1: In class, by instructor.\n\nThese quizzes and exercises will be given at various times during class (beginning, middle or end-another good reason to arrive on time). Total number of quizzes: 3.\n\nOption 2 (For Constructivism Approach only): Follow lecturer's proposal",
+   ""
+  ],
+  [
+   "6",
+   "Final Exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "LO1, LO2, LO3, LO4",
+   "Multiple choices. Marked by Computer",
+   "50 MC questions",
+   "",
+   "By exam board,using computer. The exam questions must be updated or different at least 70% to the previous ones.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Introduction about the course and study method. Group Formation.",
+   "Offline",
+   "LO1, LO7",
+   "ITU",
+   "",
+   "MGT103",
+   "Login FLM. Download course materials\n\nGroup formation",
+   ""
+  ],
+  [
+   "2",
+   "Introduction about the course and study method. Group Formation\n\n(Cont.)",
+   "Offline",
+   "LO1, LO7",
+   "ITU",
+   "",
+   "MGT103",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Part 1: Introductionf of Management.\nChapter 1: Understanding the Manager's Job\n1.1 An introduction to Management",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "MGT103_Ethics of AI Course introduction",
+   "Read Chapter 1 before class, prepare the lecturer's requirements for constructive questions if any.",
+   ""
+  ],
+  [
+   "4",
+   "1.1 An introduction to Management (Cont.)",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "MGT103_AI Ethics_required materials_for student",
+   "",
+   ""
+  ],
+  [
+   "5",
+   "1.2 The evolution of Management\n(Do not need to focus on specific advocates of perspectives, being able to understand/grasp the essentials of different perspectives is good enough.)",
+   "Offline",
+   "LO1, LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "6",
+   "1.3 Comtemporary Management Perspectives",
+   "Offline",
+   "LO1, LO5",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: The environments of organizations and Managers\n2.1 The organization's Environments",
+   "Offline",
+   "LO1, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "Read Chapter 2 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "8",
+   "2.2 The international enviroments of Management\nGroup Exercice Chap 2 (optional)",
+   "Offline",
+   "LO1, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "9",
+   "2.3 Organizational culture\nIndividual Assignment Guideline",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "",
+   "Register topic for Individual Assignment",
+   ""
+  ],
+  [
+   "10",
+   "Part 2: Planning\nChapter 3: Planning and Strategic Management 3.1 Summarize the planning proceess\n3.2 Discuss the components of strategy",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "",
+   "Read Chapter 3 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "11",
+   "3.3 How to use SWOT analysis in formulating strategy",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "12",
+   "3.4 Business-level and Coporate Strategy Formulation\nGroup Exercice Chap 3 (optional)",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "13",
+   "3.5 Develop and Implement Tactical Plans\n3.6 Types of Operational Plans",
+   "Offline",
+   "LO1, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "14",
+   "Group Assignment Guideline",
+   "Offline",
+   "LO1, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "Register topic for Group Assignment",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 4: Managing Decision Making\n4.1 Decision Making steps and its types",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "",
+   "Read Chapter 4 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "16",
+   "4.2 Rational Decision Making\n(Do not need to cover Evidence-based management)",
+   "Offline",
+   "LO1, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "17",
+   "4.3 Behavioral Aspects of decision making\nGroup Exercise Chap 4 (optional)",
+   "Offline",
+   "LO1, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "18",
+   "4.4 Group and Team decision making",
+   "Offline",
+   "LO1, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "19",
+   "Quiz 1: Chapter 1,2,3,4\nPart 3: Organizing and Staffing\nChapter 6: Organization Structure and Design\n6.1 Basic Elements of organizations",
+   "Offline",
+   "LO2, LO7",
+   "IT",
+   "",
+   "",
+   "Prepare for the Quiz\nRead Chapter 6 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "20",
+   "6.2 Bureaucratic perpectives on organization design\nGroup Exercise Chap 6 (optional)",
+   "Offline",
+   "LO2, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "21",
+   "6.3 Key situational influences on organization",
+   "Offline",
+   "LO2, LO5, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "22",
+   "6.4 Basic Form of organization design",
+   "Offline",
+   "LO2, LO5, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "23",
+   "6.5 Emerging issues in organization design",
+   "Offline",
+   "LO2, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "24",
+   "Individual and Group Assignment Tutor",
+   "Offline",
+   "LO2, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7: Organization Change and Innovation\n7.1 Nature of organization change",
+   "Offline",
+   "LO2, LO7",
+   "IT",
+   "",
+   "",
+   "Read Chapter 7 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "26",
+   "7.2 Steps in organization change\nGroup Exercise Chap 7 (optional)",
+   "Offline",
+   "LO2, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "27",
+   "7.3 Major areas of organization change\n(Do not need to cover Organization Development)",
+   "Offline",
+   "LO2, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "28",
+   "7.4 Innovation process, forms and company promotion to innovation.",
+   "Offline",
+   "LO2, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 8: Managing Human Resources in Organizations\n8.1 How organizations attract human resources",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "Read Chapter 8 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "30",
+   "8.2 How organizations develop human resources\nGroup Exercise Chap 8 (optional)",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "31",
+   "8.3 How organizations maintain human resources",
+   "Offline",
+   "LO3, LO6, LO7",
+   "T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "32",
+   "8.4 Diversity and Issues in HRM",
+   "Offline",
+   "LO3, LO6, LO7",
+   "T",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "33",
+   "8.5 Issues associated with managing knowledge and contigent and temporary workers",
+   "Offline",
+   "LO3, LO5, LO6, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "34",
+   "Part 4: Leading\nChapter 10: Managing Employee Motivation and Performance\n10.1 Nature of motivation and its perspectives.",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "Read Chapter 10 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "35",
+   "10.1 Nature of motivation and its perspectives (Cont.)",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "36",
+   "10.2 Major content perspectives on motivation",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "37",
+   "10.3 Major process perspectives on motivation",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "38",
+   "10.4 Reinforcement perspectives on motivation",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "39",
+   "10.5 Popular motivational strategies and reward system in motivation",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "40",
+   "Quiz 2: Chapter 6,7,8,10\nChapter 11: Leadership and Influence Process\n11.1 Leadership vs Management",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "Prepare for the Quiz\nRead Chapter 11 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "41",
+   "11.2 Two generic approaches to leadership\nGroup Exercise Chap 11 (optional)",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "42",
+   "11.3 Various approaches to leadership (Situational, related, emerging approaches)",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "43",
+   "11.3 Various approaches to leadership (Situational, related, emerging approaches) (Cont.)",
+   "Offline",
+   "LO3, LO6, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "44",
+   "11.3 Various approaches to leadership (Situational, related, emerging approaches)\n\nIndividual Assignment Submission",
+   "Offline",
+   "LO3, LO5, LO6, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "45",
+   "11.3 Various approaches to leadership (Situational, related, emerging approaches) (Cont.)",
+   "Offline",
+   "LO3, LO5, LO6, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "46",
+   "Part 5: Controlling\nChapter 14: Basic Element of Control\n14.1 Purpose of control",
+   "Offline",
+   "LO4, LO7",
+   "IT",
+   "",
+   "",
+   "Read Chapter 14 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "47",
+   "14.2 Three forms of operations control",
+   "Offline",
+   "LO4, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "48",
+   "14.3 Financial and structure control.",
+   "Offline",
+   "LO4, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "49",
+   "14.4 Relationship between control and strategy",
+   "Offline",
+   "LO4, LO5, LO7",
+   "ITU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 15: Managing Operations, Quality, and Productivity\n15.1 Operation management and its company in designing effective operations system",
+   "Offline",
+   "LO2, LO7",
+   "IT",
+   "",
+   "",
+   "Read Chapter 15 before class, prepare the lecturer's requirements for constructive questions if any",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 15: Managing Operations, Quality, and Productivity\n15.1 Operation management and its company in designing effective operations system (Cont.)\nGroup Exercise Chap 15 (optional)",
+   "Offline",
+   "LO2, LO7",
+   "IT",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "52",
+   "15.2 SCM, TQM in Operation management.\n(Do not cover Organization technology and Productivity)",
+   "Offline",
+   "LO2, LO5, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "53",
+   "15.2 SCM, TQM in Operation management (Cont.).\n(Do not cover Organization technology and Productivity)\n\nGroup Report Submission",
+   "Offline",
+   "LO2, LO5, LO7",
+   "TU",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "54",
+   "Quiz 3: Chapter 11,14,15",
+   "Offline",
+   "LO2, LO3, LO4",
+   "ITU",
+   "",
+   "",
+   "Prepare for the Quiz",
+   ""
+  ],
+  [
+   "55",
+   "Essay Test",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "Prepare for the Essay",
+   ""
+  ],
+  [
+   "56",
+   "Essay Test",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "57",
+   "Group Presentation",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "58",
+   "Group Presentation (Cont.)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "59",
+   "Group Presentation (Cont.)",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "60",
+   "Course Recap",
+   "Offline",
+   "",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "7",
+   "3.1",
+   "You and two other friends have decided to open a restaurant in Ho Chi Minh City; it will be open from 11 AM to 10 PM and closed on Monday to serve lunch and dinner. Each of you is investing one billion Vietnam Dong in the venture. You know that over 50% of small & medium size businesses fail in their first year, so to increase your chances of success, you have decided to analyze the business environment of the F&B business to discover what opportunities and threats you will encounter.\n\nWhat are the components of the external business environment for the F&B industry in Vietnam?"
+  ],
+  [
+   "2",
+   "8",
+   "3.2",
+   "You and two other friends have decided to open a restaurant in Ho Chi Minh City; it will be open from 11 AM to 10 PM and closed on Monday to serve lunch and dinner. Each of you is investing one billion Vietnam Dong in the venture. You know that over 50% of small & medium size businesses fail in their first year, so to increase your chances of success, you have decided to analyze the business environment of the F&B business to discover what opportunities and threats you will encounter.\n\nWhat are the components of the internal business environment for F&B business in Vietnam?\nWhat are the main barriers to entry into the F&B business? Give examples."
+  ],
+  [
+   "3",
+   "9",
+   "3.3",
+   "You and two other friends have decided to open a restaurant in Ho Chi Minh City; it will be open from 11 AM to 10 PM and closed on Monday to serve lunch and dinner. Each of you is investing one billion Vietnam Dong in the venture. You know that over 50% of small & medium size businesses fail in their first year, so to increase your chances of success, you have decided to analyze the business environment of the F&B business to discover what opportunities and threats you will encounter.\n\nAssuming that you want to expand your business to Singapore, what are the trends and levels in international F&B business? How would your business approach internationalization?"
+  ],
+  [
+   "4",
+   "9",
+   "3.4",
+   "You and two other friends have decided to open a restaurant in Ho Chi Minh City; it will be open from 11 AM to 10 PM and closed on Monday to serve lunch and dinner. Each of you is investing one billion Vietnam Dong in the venture. You know that over 50% of small & medium size businesses fail in their first year, so to increase your chances of success, you have decided to analyze the business environment of the F&B business to discover what opportunities and threats you will encounter.\n\nAs a founder of the business, is organizational culture important? Explain with relevant examples. What are the determinants of cultures that you want to cultivate from early of the business?"
+  ],
+  [
+   "5",
+   "9",
+   "3.5",
+   "You and two other friends have decided to open a restaurant in Ho Chi Minh City; it will be open from 11 AM to 10 PM and closed on Monday to serve lunch and dinner. Each of you is investing one billion Vietnam Dong in the venture. You know that over 50% of small & medium size businesses fail in their first year, so to increase your chances of success, you have decided to analyze the business environment of the F&B business to discover what opportunities and threats you will encounter.\n\nBased on the analysis of the business environment and barriers to entry market, identify details steps you would take in the first year to help your new restaurant succeed."
+  ],
+  [
+   "6",
+   "10",
+   "4.1",
+   "What are the differences between goals and its purposes in an organization? Select a specific organization, then find the organizational goals and purposes. In addition, think about your personal goals and evaluate each goal in term of the purpose it serves."
+  ],
+  [
+   "7",
+   "10",
+   "4.2",
+   "What are the components of strategy? Refer to the organization in the previous question, analyze each component in its strategy."
+  ],
+  [
+   "8",
+   "11",
+   "4.3",
+   "Outline and evaluate a hypothetical SWOT analysis of the corporation. Is it easier to assess (environmental opportunities and threats) or (organizational strengths and weaknesses)?"
+  ],
+  [
+   "9",
+   "12",
+   "4.4",
+   "Which strategy - business or corporate level - should a firm develop first? Describe the relationship between a firm’s business- and corporate-level strategies. Which strategic alternative that your organization choose? Explain your choice."
+  ],
+  [
+   "10",
+   "12",
+   "4.5",
+   "What kind of plan, tactical or operational, should be developed first? Why? Does the order really matter, explain why or why not? How tactical plans are implemented in the selected organization (Question 1)? What kind of operational plan that the organization may use or encounter? Which skills do the managers need to develop that plan?"
+  ],
+  [
+   "11",
+   "16",
+   "6.1",
+   "Assuming you are in the role of planning manager of ABC company in the metal manufacturing industry in Thai Nguyen Province. With the recent construction of a brand-new shopping mall in District 1, Ho Chi Minh City, your company has decided to open an entertainment park there. The problem confronting you is that the city already has many entertainment centers that provide different kinds of entertainment activities for kids and adults at all price ranges. In addition, you have the resources to open any business. Your challenge is to decide which type of entertainment center is most likely to succeed as your first step in joining a new industry. What were the top three types of entertainment options developed by your group? Explain the benefits and drawbacks of each choice. What decision have you made regarding the type of entertainment center? Why?"
+  ],
+  [
+   "12",
+   "17",
+   "6.2",
+   "Assuming you are in the role of planning manager of ABC company in the metal manufacturing industry in Thai Nguyen Province. With the recent construction of a brand-new shopping mall in District 1, Ho Chi Minh City, your company has decided to open an entertainment park there. The problem confronting you is that the city already has many entertainment centers that provide different kinds of entertainment activities for kids and adults at all price ranges. In addition, you have the resources to open any business. Your challenge is to decide which type of entertainment center is most likely to succeed as your first step in joining a new industry. What are the types & conditions of decision-making, and how about your decision?"
+  ],
+  [
+   "13",
+   "18",
+   "6.3",
+   "Assuming you are in the role of planning manager of ABC company in the metal manufacturing industry in Thai Nguyen Province. With the recent construction of a brand-new shopping mall in District 1, Ho Chi Minh City, your company has decided to open an entertainment park there. The problem confronting you is that the city already has many entertainment centers that provide different kinds of entertainment activities for kids and adults at all price ranges. In addition, you have the resources to open any business. Your challenge is to decide which type of entertainment center is most likely to succeed as your first step in joining a new industry. Assuming that your decision was a rational decision, did you go through the primary steps in rational decision-making? Give an illustration of the process that you have made. What are the benefits of having rational decision-making?"
+  ],
+  [
+   "14",
+   "18",
+   "6.4",
+   "Assuming you are in the role of planning manager of ABC company in the metal manufacturing industry in Thai Nguyen Province. With the recent construction of a brand-new shopping mall in District 1, Ho Chi Minh City, your company has decided to open an entertainment park there. The problem confronting you is that the city already has many entertainment centers that provide different kinds of entertainment activities for kids and adults at all price ranges. In addition, you have the resources to open any business. Your challenge is to decide which type of entertainment center is most likely to succeed as your first step in joining a new industry. Assuming that you make a decision based on your intuition. What are the behavioral aspects of this decision? What are the limitations of the administrative model?"
+  ],
+  [
+   "15",
+   "18",
+   "6.5",
+   "Assuming you are in the role of planning manager of ABC company in the metal manufacturing industry in Thai Nguyen Province. With the recent construction of a brand-new shopping mall in District 1, Ho Chi Minh City, your company has decided to open an entertainment park there. The problem confronting you is that the city already has many entertainment centers that provide different kinds of entertainment activities for kids and adults at all price ranges. In addition, you have the resources to open any business. Your challenge is to decide which type of entertainment center is most likely to succeed as your first step in joining a new industry. Recall your meeting to prepare for this session to decide on the type of entertainment park in a new shopping mall; what were the benefits and difficulties of team decision-making? For example, if you could redo the meeting, how would you conduct it differently?"
+  ],
+  [
+   "16",
+   "19",
+   "7.1",
+   "Identify basic elements of a specific organization and give examples . What are advantages and disadvantages of each element?"
+  ],
+  [
+   "17",
+   "20",
+   "7.2",
+   "Is the bureaucratic model still suitable for current setting for the selected organization in Question 1? What kinds of organizations could benefit by this model"
+  ],
+  [
+   "18",
+   "21",
+   "7.3",
+   "What are the key situational influences on the organization design? Explain."
+  ],
+  [
+   "19",
+   "21",
+   "7.4",
+   "Describe the basic forms of organization design that characterize many organizations."
+  ],
+  [
+   "20",
+   "21",
+   "7.5",
+   "Identify and describe emerging issues in organization design. How and why does the organization design change today?"
+  ],
+  [
+   "21",
+   "25",
+   "9.1",
+   "You are the Southern sales managers of EuroWindow, which supplies high-quality windows nationwide. Over the last three years, the rate of sales growth has declined. There is increasing evidence that salespeople are primarily servicing large customer accounts and ignoring small accounts to make their jobs easier. In addition, the salespeople need to be dealing promptly with customer questions and complaints, and this inattention has resulted in a drop in after-sales service. You have discussed these issues and are meeting to discuss how to boost sales volume and customer service quality by making some changes in the Sales Department. What are the current issues in the Sales Department and the seriousness of each? In this case, what short- and medium-term changes are needed and why?"
+  ],
+  [
+   "22",
+   "26",
+   "9.2",
+   "You are the Southern sales managers of EuroWindow, which supplies high-quality windows nationwide. Over the last three years, the rate of sales growth has declined. There is increasing evidence that salespeople are primarily servicing large customer accounts and ignoring small accounts to make their jobs easier. In addition, the salespeople need to be dealing promptly with customer questions and complaints, and this inattention has resulted in a drop in after-sales service. You have discussed these issues and are meeting to discuss how to boost sales volume and customer service quality by making some changes in the Sales Department. What are the areas of organizational change in general? Based on the information provided in the case, what areas in EuroWindow do you propose to have changed?"
+  ],
+  [
+   "23",
+   "27",
+   "9.3",
+   "You are the Southern sales managers of EuroWindow, which supplies high-quality windows nationwide. Over the last three years, the rate of sales growth has declined. There is increasing evidence that salespeople are primarily servicing large customer accounts and ignoring small accounts to make their jobs easier. In addition, the salespeople need to be dealing promptly with customer questions and complaints, and this inattention has resulted in a drop in after-sales service. You have discussed these issues and are meeting to discuss how to boost sales volume and customer service quality by making some changes in the Sales Department. Conduct research on the model of change in the textbook. What are the change processes in Sales Department that you would propose? Explain details stages"
+  ],
+  [
+   "24",
+   "27",
+   "9.4",
+   "You are the Southern sales managers of EuroWindow, which supplies high-quality windows nationwide. Over the last three years, the rate of sales growth has declined. There is increasing evidence that salespeople are primarily servicing large customer accounts and ignoring small accounts to make their jobs easier. In addition, the salespeople need to be dealing promptly with customer questions and complaints, and this inattention has resulted in a drop in after-sales service. You have discussed these issues and are meeting to discuss how to boost sales volume and customer service quality by making some changes in the Sales Department. If employees resist change, what are the main reasons, and how to manage it?"
+  ],
+  [
+   "25",
+   "27",
+   "9.5",
+   "You are the Southern sales managers of EuroWindow, which supplies high-quality windows nationwide. Over the last three years, the rate of sales growth has declined. There is increasing evidence that salespeople are primarily servicing large customer accounts and ignoring small accounts to make their jobs easier. In addition, the salespeople need to be dealing promptly with customer questions and complaints, and this inattention has resulted in a drop in after-sales service. You have discussed these issues and are meeting to discuss how to boost sales volume and customer service quality by making some changes in the Sales Department. To remain competitive, you must regularly update and innovate your product. Conduct a study about the current innovation trends in the windows manufacturing industry to propose what to innovate in products and how EuroWindow can boost innovation in the company."
+  ],
+  [
+   "26",
+   "28",
+   "10.1",
+   "What is the environmental context of human resource management, and why is context important in human resource management?"
+  ],
+  [
+   "27",
+   "29",
+   "10.2",
+   "How does an organization attract human resources? Please provide examples."
+  ],
+  [
+   "28",
+   "30",
+   "10.3",
+   "What is the process for developing human resources? What do you think would be the best training method? Why? What conflicts arise from cultural diversity? Please provide examples."
+  ],
+  [
+   "29",
+   "30",
+   "10.4",
+   "Choose an organization and discuss how the organization maintain human resources, including the determination of compensation and benefits and career planning."
+  ],
+  [
+   "30",
+   "30",
+   "10.5",
+   "What are the issues associated with managing knowledge and contingent and temporary workers?"
+  ],
+  [
+   "31",
+   "34",
+   "12.1",
+   "You own a chain of ten shoe-cleaning shops in Ho Chi Minh City. You are concerned about the customer service problems that have been reported in a few stores. However, the employees always provide outstanding customer service with positive attitudes whenever you visit a store, whether for the entire day or just a few hours. During your visit, you observed that the clerks carefully removed dirt from shoes, washed shoelaces by hand, and cleaned difficult materials such as canvas or suede shoes exceptionally well. Nonetheless, during these unscheduled visits, some customers complained about problems with their previous orders; such as improper dirt removal. Some customers even brought their shoes to the store to be redone. In addition, customers also send private messages and even comment on the company fan page that the wait time for services is too long. You and the other store managers are meeting today to address this problem. Identify and describe the major content perspective on motivation in this case. Then, choose one theory and describe the actions that you might take to increase employees' motivation."
+  ],
+  [
+   "32",
+   "35",
+   "12.2",
+   "You own a chain of ten shoe-cleaning shops in Ho Chi Minh City. You are concerned about the customer service problems that have been reported in a few stores. However, the employees always provide outstanding customer service with positive attitudes whenever you visit a store, whether for the entire day or just a few hours. During your visit, you observed that the clerks carefully removed dirt from shoes, washed shoelaces by hand, and cleaned difficult materials such as canvas or suede shoes exceptionally well. Nonetheless, during these unscheduled visits, some customers complained about problems with their previous orders; such as improper dirt removal. Some customers even brought their shoes to the store to be redone. In addition, customers also send private messages and even comment on the company fan page that the wait time for services is too long. You and the other store managers are meeting today to address this problem. What are the major process perspectives on motivation in these stores? Then, choose one theory and describe the actions that you might take to increase employees' motivation."
+  ],
+  [
+   "33",
+   "36",
+   "12.3",
+   "You own a chain of ten shoe-cleaning shops in Ho Chi Minh City. You are concerned about the customer service problems that have been reported in a few stores. However, the employees always provide outstanding customer service with positive attitudes whenever you visit a store, whether for the entire day or just a few hours. During your visit, you observed that the clerks carefully removed dirt from shoes, washed shoelaces by hand, and cleaned difficult materials such as canvas or suede shoes exceptionally well. Nonetheless, during these unscheduled visits, some customers complained about problems with their previous orders; such as improper dirt removal. Some customers even brought their shoes to the store to be redone. In addition, customers also send private messages and even comment on the company fan page that the wait time for services is too long. You and the other store managers are meeting today to address this problem. Describe reinforcement perspectives on motivation. Then, choose one theory and describe the actions that you might take to increase employees' motivation."
+  ],
+  [
+   "34",
+   "36",
+   "12.4",
+   "You own a chain of ten shoe-cleaning shops in Ho Chi Minh City. You are concerned about the customer service problems that have been reported in a few stores. However, the employees always provide outstanding customer service with positive attitudes whenever you visit a store, whether for the entire day or just a few hours. During your visit, you observed that the clerks carefully removed dirt from shoes, washed shoelaces by hand, and cleaned difficult materials such as canvas or suede shoes exceptionally well. Nonetheless, during these unscheduled visits, some customers complained about problems with their previous orders; such as improper dirt removal. Some customers even brought their shoes to the store to be redone. In addition, customers also send private messages and even comment on the company fan page that the wait time for services is too long. You and the other store managers are meeting today to address this problem. What are the popular motivational strategies? Which ones are applicable to the case, and how do you execute them?"
+  ],
+  [
+   "35",
+   "36",
+   "12.5",
+   "You own a chain of ten shoe-cleaning shops in Ho Chi Minh City. You are concerned about the customer service problems that have been reported in a few stores. However, the employees always provide outstanding customer service with positive attitudes whenever you visit a store, whether for the entire day or just a few hours. During your visit, you observed that the clerks carefully removed dirt from shoes, washed shoelaces by hand, and cleaned difficult materials such as canvas or suede shoes exceptionally well. Nonetheless, during these unscheduled visits, some customers complained about problems with their previous orders; such as improper dirt removal. Some customers even brought their shoes to the store to be redone. In addition, customers also send private messages and even comment on the company fan page that the wait time for services is too long. You and the other store managers are meeting today to address this problem. What are the role of reward systems in motivation. Develop a reward system to motivate staff in this scenario."
+  ],
+  [
+   "36",
+   "40",
+   "14.1",
+   "\"Managers and Leaders: Are They Different?; Do organizations need both managers and leaders? Why or why not?"
+  ],
+  [
+   "37",
+   "41",
+   "14.2",
+   "What are generic approaches to leadership? What can managers today learn from these approaches?"
+  ],
+  [
+   "38",
+   "42",
+   "14.3",
+   "What are Situational Theories of Leadership How does Situational Leadership Theory explain leadership?"
+  ],
+  [
+   "39",
+   "42",
+   "14.4",
+   "Distinguish between transformational leadership and charismatic leadership."
+  ],
+  [
+   "40",
+   "42",
+   "14.5",
+   "Describe the subordinate’s characteristics, leader behaviors, and environmental characteristics used in path-goal theory. How do these factors combine to influence motivation?"
+  ],
+  [
+   "41",
+   "46",
+   "16.1",
+   "Assume that you are the operations manager for BeanOi Shop at FPT University. At the beginning of this year, the owner set the daily sales target for your store at ten million Dong. However, you have just noticed that daily sales are only between six and eight million Dong, although the consumption of raw materials is higher. Therefore, it is time to boost shop efficiency by enhancing shop control. Identify the purpose and principle of control in your shop. What are the steps in controlling process in your shop?"
+  ],
+  [
+   "42",
+   "47",
+   "16.2",
+   "Assume that you are the operations manager for BeanOi Shop at FPT University. At the beginning of this year, the owner set the daily sales target for your store at ten million Dong. However, you have just noticed that daily sales are only between six and eight million Dong, although the consumption of raw materials is higher. Therefore, it is time to boost shop efficiency by enhancing shop control. What is the operation control form and how does it work in your shop currently?"
+  ],
+  [
+   "43",
+   "48",
+   "16.3",
+   "Assume that you are the operations manager for BeanOi Shop at FPT University. At the beginning of this year, the owner set the daily sales target for your store at ten million Dong. However, you have just noticed that daily sales are only between six and eight million Dong, although the consumption of raw materials is higher. Therefore, it is time to boost shop efficiency by enhancing shop control. Regarding financial control in the shop, what are the tools for financial control in general and your shop in particular? Is it effective or not? What changes should be made in the finance control?"
+  ],
+  [
+   "44",
+   "48",
+   "16.4",
+   "Assume that you are the operations manager for BeanOi Shop at FPT University. At the beginning of this year, the owner set the daily sales target for your store at ten million Dong. However, you have just noticed that daily sales are only between six and eight million Dong, although the consumption of raw materials is higher. Therefore, it is time to boost shop efficiency by enhancing shop control. What are the characteristics of effective control? Why do people resist control?"
+  ],
+  [
+   "45",
+   "48",
+   "16.5",
+   "Assume that you are the operations manager for BeanOi Shop at FPT University. At the beginning of this year, the owner set the daily sales target for your store at ten million Dong. However, you have just noticed that daily sales are only between six and eight million Dong, although the consumption of raw materials is higher. Therefore, it is time to boost shop efficiency by enhancing shop control. What is your comprehensive plan to overcome people's resistance to control?"
+  ],
+  [
+   "46",
+   "52",
+   "18.1",
+   "Many organizations today have found that operational plans consist of policies and procedures to meet those strategic goals. In this situation, could you please explain why it is important to link operations and organizational strategy?"
+  ],
+  [
+   "47",
+   "52",
+   "18.2",
+   "Where do productivity and quality fit into that relationship? Please provide examples."
+  ],
+  [
+   "48",
+   "53",
+   "18.3",
+   "What is Total Quality Management (TQM)? What are the major characteristics of TQM?"
+  ],
+  [
+   "49",
+   "53",
+   "18.4",
+   "Describe three basic decisions that must be addressed in the design of operations systems. For each decision, what information do managers need to make that decision?"
+  ],
+  [
+   "50",
+   "54",
+   "18.5",
+   "Choose a company and, using SWOT analysis, analyze how to improve its productivity."
+  ]
+ ],
+ "links": [
+  "/download/11474/S/1_MGT103.zip",
+  "/download/11474/S/2_MGT103.zip",
+  "/download/11474/S/3_MGT103_Ethics of AI Course introduction.zip",
+  "/download/13498/S/4_MGT103_AI Ethics_required materials_for student.zip"
+ ]
+}

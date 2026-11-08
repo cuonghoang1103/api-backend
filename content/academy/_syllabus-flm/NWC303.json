@@ -1,0 +1,932 @@
+{
+ "ma": "NWC303",
+ "sylID": "11200",
+ "quyetDinh": "358/QĐ-ĐHFPT dated 04/03/2024",
+ "ungVien": [
+  {
+   "sylID": "11200",
+   "code": "NWC303",
+   "name": "Network Connectivity_Kết nối mạng",
+   "active": true,
+   "approved": true,
+   "decision": "358/QĐ-ĐHFPT dated 04/03/2024"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=11200",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "11200",
+  "Syllabus Name": "Network Connectivity_Kết nối mạng",
+  "Course Name English": "Network Connectivity",
+  "Subject Code": "NWC303",
+  "Learning-Teaching Method": "Blended,Lecture,Active learning,Social Constructivism,Practice",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "NWC204",
+  "Description": "The Cisco Networking Academy® CCNAv7 curriculum is designed for participants who are seeking entry-level jobs in the ICT industry or hope to fulfill prerequisites to pursue more specialized ICT skills. The CCNAv7 curriculum is presented in three courses: Introduction to Networks (ITN), Switching, Routing and Wireless Essentials (SRWE), and Enterprise Networking, Security, and Automation (ENSA). These three courses provide integrated and comprehensive coverage of networking topics including: IP routing and switching fundamentals, network security and services, and network programmability and automation, while providing learners extensive opportunities for hands-on practical experience and career skills development.\n\nThe Switching, Routing and Wireless Essentials (SRWE) course in the CCNA curriculum focuses on switching technologies and router operations that support small-to-medium business networks and includes wireless local area networks (WLANs) and security concepts. Students learn key switching and routing concepts. They can perform basic network configuration and troubleshooting, identify and mitigate LAN security threats, and configure and secure a basic WLAN.",
+  "StudentTasks": "Students must attend at least 80% of contact sessions in order to be accepted to the final examination.\n\n- Students are responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the http://cms.fpt.edu.vn for up-to-date course information\n\n- Students must complete all assignments on the Cisco Networking Academy (https://www.netacad.com/) with a result of at least 75%.",
+  "Tools": "Tools:\n\nBaseline Equipment Bundle:\n\n- 2 x ISR4221/K9 Routers\n\n- 2 x WS-C2960+24TC-L Catalyst switches\n\n- 1 wireless router (generic brand) with WPA2 support\n\n- Ethernet patch cables\n\n- PCs\n\n- Internet connection for lab and student PCs\n\n- Optional equipment for connecting to a WLAN\n\n+ 1 printer or integrated printer/scanner/copier for the class to share\n\n+ Smartphones and tablets are desirable for use with the labs\n\nStudent PC Software:\n\n- Packet Tracer\n\n- Open-source server software:\n\n+ For various services and protocols, such as Telnet, SSH, HTTP, DHCP, FTP, TFTP, etc.\n\n- Tera Term source SSH client software for lab PCs.\n\n- Oracle VirtualBox, most recent version.\n\n- Wireshark version 2.5 or higher.",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "358/QĐ-ĐHFPT dated 04/03/2024",
+  "IsApproved": "True",
+  "Note": "Learners are expected to have the following skills:\n\n- High school reading level\n\n- Basic computer literacy\n\n- Basic PC operating system navigation skills\n\n- Basic internet usage skills",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/3/2024"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "CCNA: Switching, Routing, and Wireless Essentials v7.0 (SRWE) Slides\n\navailable at https://www.netacad.com/",
+   "Cisco",
+   "Cisco",
+   "2021",
+   "7",
+   "",
+   "True",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "2",
+   "E-Learning Content of CCNA - Switching, Routing, and Wireless Essentials Course: 12 modules\n\navailable at https://www.netacad.com/",
+   "Cisco",
+   "Cisco",
+   "2021",
+   "7",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Labs\n\navailable at https://www.netacad.com/",
+   "Cisco",
+   "Cisco",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Configure devices by using security best practices"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Explain how Layer 2 switches forward data"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Implement VLANs and trunking in a switched network"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Explain how STP enables redundancy in a Layer 2 network"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Implement DHCPv4 to operate across multiple LANs"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Configure dynamic address allocation in IPv6 networks"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Explain how vulnerabilities compromise LAN security"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Implement switch security to mitigate LAN attacks."
+  ],
+  [
+   "9",
+   "CLO9",
+   "Explain how WLANs enable network connectivity"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Implement a WLAN using a wireless router and WLC"
+  ],
+  [
+   "11",
+   "CLO11",
+   "Explain how routers use information in packets to make forwarding decisions"
+  ],
+  [
+   "12",
+   "CLO12",
+   "Configure IPv4 and IPv6 static routes"
+  ],
+  [
+   "13",
+   "CLO13",
+   "Troubleshoot static and default route configurations"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Lab",
+   "on-going",
+   "8",
+   "40.0%",
+   ">0",
+   "45'/each",
+   "",
+   "practical exercises",
+   "",
+   "- cover content 1, 2, 4, 5, 7, 9, 11, 12",
+   "Guided by instructor\n\n- 8 Labs\n\n- Student must finish labs and submit the results to the lecturer in class.\n\n- An average point of all labs could be evaluated and published to students at the end of the semester",
+   ""
+  ],
+  [
+   "2",
+   "Participation in discussions",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "90'/each",
+   "CLO1-9",
+   "students' active learning attitude during the course;",
+   "",
+   "All subjects in syllabus",
+   "supervised by instructor",
+   ""
+  ],
+  [
+   "3",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "30'-45'",
+   "CLO1-5",
+   "Multiple choices\n\nMarked by Computer or a suitable format",
+   "30",
+   "- cover content 1,2,3,4,5",
+   "in class, by instructor",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "4",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "30'-45'",
+   "CLO6-11",
+   "Multiple choices\n\nMarked by Computer or a suitable format",
+   "30",
+   "- cover content 6.7,8,9,10,11",
+   "in class, by instructor",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "5",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "CLO1-13",
+   "Multiple choices\n\nMarked by Computer",
+   "50",
+   "concepts, algorithms;\n\nall studied chapters",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Overview\n\nChapter 1. Basic Device Configuration\n\n- Configure a Switch with Initial Settings",
+   "Offline",
+   "CLO 1",
+   "T",
+   "Module: Basic Device Configuration",
+   "link1-1",
+   "Read Chapter: Basic Device Configuration",
+   ""
+  ],
+  [
+   "2",
+   "Course Overview\n\nChapter 1. Basic Device Configuration\n\n- Configure Switch Ports\n\n- Secure Remote Access",
+   "Offline",
+   "CLO 1",
+   "T",
+   "Module: Basic Device Configuration",
+   "link2-1",
+   "Read Chapter: Basic Device Configuration",
+   ""
+  ],
+  [
+   "3",
+   "Course Overview\n\nChapter 1. Basic Device Configuration\n\n- Basic Router Configuration\n\n- Verify Directly Connected Networks",
+   "Offline",
+   "CLO 1",
+   "T",
+   "Module: Basic Device Configuration",
+   "link3-1",
+   "Read Chapter: Basic Device Configuration",
+   ""
+  ],
+  [
+   "4",
+   "Lab 1:\n\n- Basic Switch Configuration\n\n- Configure Basic Router Settings",
+   "Offline",
+   "CLO 1",
+   "U",
+   "1.1.7 Lab - Basic Switch Configuration - ILM\n\n1.6.2 Lab - Configure Basic Router Settings - ILM",
+   "link4-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "5",
+   "Lab 1:\n\n- Basic Switch Configuration\n\n- Configure Basic Router Settings",
+   "Offline",
+   "CLO 1",
+   "U",
+   "1.1.7 Lab - Basic Switch Configuration - ILM\n\n1.6.2 Lab - Configure Basic Router Settings - ILM",
+   "link5-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "6",
+   "Lab 1:\n\n- Basic Switch Configuration\n\n- Configure Basic Router Settings",
+   "Offline",
+   "CLO 1",
+   "U",
+   "1.1.7 Lab - Basic Switch Configuration - ILM\n\n1.6.2 Lab - Configure Basic Router Settings - ILM",
+   "link6-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2: Switching Concepts and VLANs\n\n- Frame Forwarding\n\n- Switching Domains",
+   "Offline",
+   "CLO 2, CLO3",
+   "T",
+   "Module: Switching Concepts and VLANs",
+   "link7-1",
+   "Read Chapter: Switching Concepts and VLANs",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 2: Switching Concepts and VLANs\n\n- Overview of VLANs\n\n- VLANs in a Multi-Switched\n\nEnvironment\n\n- VLAN Configuration",
+   "Offline",
+   "CLO 2, CLO3",
+   "T",
+   "Module: Switching Concepts and VLANs",
+   "link8-1",
+   "Read Chapter: Switching Concepts and VLANs",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 2: Switching Concepts and VLANs\n\n- VLAN Trunks\n\n- Dynamic Trunking Protocol\n\n- Inter-VLAN Routing Operation\n\n- Router-on-a-Stick Inter-VLAN Routing",
+   "Offline",
+   "CLO 2, CLO3",
+   "T",
+   "Module: Switching Concepts and VLANs",
+   "link9-1",
+   "Read Chapter: Switching Concepts and VLANs",
+   ""
+  ],
+  [
+   "10",
+   "Lab 2:\n\n- Configure VLANs and Trunking\n\n- Implement VLANs and Trunking",
+   "Offline",
+   "CLO 2, CLO3",
+   "U",
+   "3.4.6 Lab - Configure VLANs and Trunking - ILM\n\n3.6.2 Lab - Implement VLANs and Trunking - ILM",
+   "link10-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "11",
+   "Lab 2:\n\n- Configure VLANs and Trunking\n\n- Implement VLANs and Trunking",
+   "Offline",
+   "CLO 2, CLO3",
+   "U",
+   "3.4.6 Lab - Configure VLANs and Trunking - ILM\n\n3.6.2 Lab - Implement VLANs and Trunking - ILM",
+   "link11-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "12",
+   "Lab 2:\n\n- Configure VLANs and Trunking\n\n- Implement VLANs and Trunking",
+   "Offline",
+   "CLO 2, CLO3",
+   "U",
+   "3.4.6 Lab - Configure VLANs and Trunking - ILM\n\n3.6.2 Lab - Implement VLANs and Trunking - ILM",
+   "link12-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3: STP\n\n- Purpose of STP\n\n- STP Operations",
+   "Offline",
+   "CLO4",
+   "T",
+   "Module: STP",
+   "link13-1",
+   "Read Chapter: STP",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 3: STP\n\n- Evolution of STP",
+   "Offline",
+   "CLO4",
+   "T",
+   "Module: STP",
+   "link14-1",
+   "Read Chapter: STP",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 3: STP\n\n- Activity: Investigate STP Loop Prevention",
+   "Offline",
+   "CLO4",
+   "T,U",
+   "Module: STP\n\nActivity - 5.1.9 Packet Tracer - Investigate STP Loop Prevention",
+   "link15-1",
+   "Read Chapter: STP",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 4: DHCPv4\n\n- DHCPv4 Concepts\n\n- Configure DHCPv4 Server\n\n- Configure DHCPv4 Client",
+   "Offline",
+   "CLO5",
+   "T",
+   "Module: DHCPv4",
+   "link16-1",
+   "Read Chapter: DHCPv4",
+   ""
+  ],
+  [
+   "17",
+   "Lab 3: Implement DHCPv4",
+   "Offline",
+   "CLO5",
+   "U",
+   "7.4.2 Lab - Implement DHCPv4 - ILM",
+   "link17-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "18",
+   "Lab 3: Implement DHCPv4",
+   "Offline",
+   "CLO5",
+   "U",
+   "7.4.2 Lab - Implement DHCPv4 - ILM",
+   "link18-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 5: SLAAC and DHCPv6\n\nConcepts\n\n- IPv6 Global Unicast Address Assignment\n\n- SLAAC",
+   "Offline",
+   "CLO6",
+   "T",
+   "Module: SLAAC and DHCPv6 Concepts",
+   "link19-1",
+   "Read Chapter: SLAAC and DHCPv6 Concepts",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 5: SLAAC and DHCPv6\n\nConcepts\n\n- DHCPv6\n\n- Configure DHCPv6 Server",
+   "Offline",
+   "CLO6",
+   "T",
+   "Module: SLAAC and DHCPv6 Concepts",
+   "link20-1",
+   "Read Chapter: SLAAC and DHCPv6 Concepts",
+   ""
+  ],
+  [
+   "21",
+   "Progress test 1",
+   "Offline",
+   "CLO1 - CLO5",
+   "U",
+   "Progress test 1",
+   "link21-1",
+   "Do Progress test 1",
+   ""
+  ],
+  [
+   "22",
+   "Lab 4: Configure DHCPv6",
+   "Offline",
+   "CLO6",
+   "U",
+   "8.5.1 Lab - Configure DHCPv6 - ILM",
+   "link22-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "23",
+   "Lab 4: Configure DHCPv6 (Cont.)",
+   "Offline",
+   "CLO6",
+   "U",
+   "8.5.1 Lab - Configure DHCPv6 - ILM",
+   "link23-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "24",
+   "Lab 4: Configure DHCPv6 (Cont.)",
+   "Offline",
+   "CLO6",
+   "U",
+   "8.5.1 Lab - Configure DHCPv6 - ILM",
+   "link24-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 6: LAN Security Concepts\n\n- Endpoint Security\n\n- Access Control",
+   "Offline",
+   "CLO7",
+   "T",
+   "Module: LAN Security Concepts",
+   "link25-1",
+   "Read Chapter: LAN Security Concepts",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 6: LAN Security Concepts\n\n- Layer 2 Security Threats\n\n- MAC Address Table Attack",
+   "Offline",
+   "CLO7",
+   "T",
+   "Module: LAN Security Concepts",
+   "link26-1",
+   "Read Chapter: LAN Security Concepts",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 6: LAN Security Concepts\n\n- LAN Attacks",
+   "Offline",
+   "CLO7",
+   "T",
+   "Module: LAN Security Concepts",
+   "link27-1",
+   "Read Chapter: LAN Security Concepts",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 7: Switch Security Configuration\n\n- Implement Port Security\n\n- Mitigate VLAN Attacks",
+   "Offline",
+   "CLO8",
+   "T",
+   "Module: Switch Security Configuration",
+   "link28-1",
+   "Read Chapter: Switch Security Configuration",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 7: Switch Security Configuration\n\n- Mitigate DHCP Attacks\n\n- Mitigate ARP Attacks",
+   "Offline",
+   "CLO8",
+   "T",
+   "Module: Switch Security Configuration",
+   "link29-1",
+   "Read Chapter: Switch Security Configuration",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 7: Switch Security Configuration\n\n- Mitigate STP Attacks\n\n- Activity: Packet Tracer - Switch Security Configuration",
+   "Offline",
+   "CLO8",
+   "T",
+   "Module: Switch Security Configuration\n\nActivity - 11.6.1 Packet Tracer - Switch Security Configuration",
+   "link30-1",
+   "Read Chapter: Switch Security Configuration",
+   ""
+  ],
+  [
+   "31",
+   "Lab 5: Switch Security Configuration",
+   "Offline",
+   "CLO8",
+   "U",
+   "11.6.2 Lab - Switch Security Configuration - ILM",
+   "link31-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "32",
+   "Lab 5: Switch Security Configuration (Cont.)",
+   "Offline",
+   "CLO8",
+   "U",
+   "11.6.2 Lab - Switch Security Configuration - ILM",
+   "link32-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "33",
+   "Lab 5: Switch Security Configuration (Cont.)",
+   "Offline",
+   "CLO8",
+   "U",
+   "11.6.2 Lab - Switch Security Configuration - ILM",
+   "link33-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 8: WLAN Concepts\n\n- Introduction to Wireless\n\n- Components of WLANs",
+   "Offline",
+   "CLO9",
+   "T",
+   "Module: WLAN Concepts",
+   "link34-1",
+   "Read Chapter: WLAN Concepts",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 8: WLAN Concepts\n\n- WLAN Operation\n\n- CAPWAP Operation\n\n- Channel Management",
+   "Offline",
+   "CLO9",
+   "T",
+   "Module: WLAN Concepts",
+   "link35-1",
+   "Read Chapter: WLAN Concepts",
+   ""
+  ],
+  [
+   "36",
+   "Chapter 8: WLAN Concepts\n\n- WLAN Threats\n\n- Secure WLANs",
+   "Offline",
+   "CLO9",
+   "T",
+   "Module: WLAN Concepts",
+   "link36-1",
+   "Read Chapter: WLAN Concepts",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 9: WLAN Configuration\n\n- Remote Site WLAN Configuration\n\n- Activity: Configure a Wireless Network",
+   "Offline",
+   "CLO10",
+   "T",
+   "Module: WLAN Configuration\n\nActivity: 13.1.10 Packet Tracer - Configure a Wireless Network",
+   "link37-1",
+   "Read Chapter: WLAN Configuration",
+   ""
+  ],
+  [
+   "38",
+   "Chapter 9: WLAN Configuration\n\n- Configure a Basic WLC on the WLC\n\n- Configure a WPA2 Enterprise WLAN on the WLC\n\n- Actitiy: Configure a Basic WLAN on the WLC",
+   "Offline",
+   "CLO10",
+   "T",
+   "Module: WLAN Configuration\n\nActivity: 13.2.7 Packet Tracer - Configure a Basic WLAN on the WLC",
+   "link38-1",
+   "Read Chapter: WLAN Configuration",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 9: WLAN Configuration\n\n- Troubleshoot WLAN Issues\n\n- Activity: Troubleshoot WLAN Issues",
+   "Offline",
+   "CLO10",
+   "T",
+   "Module: WLAN Configuration\n\nActivity: 13.4.5 Packet Tracer - Troubleshoot WLAN Issues",
+   "link39-1",
+   "Read Chapter: WLAN Configuration",
+   ""
+  ],
+  [
+   "40",
+   "Lab 6: Configure a Wireless Network",
+   "Offline",
+   "CLO10",
+   "U",
+   "13.1.11 Lab - Configure a Wireless Network - ILM",
+   "link40-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "41",
+   "Lab 6: Configure a Wireless Network (Cont.)",
+   "Offline",
+   "CLO10",
+   "U",
+   "13.1.11 Lab - Configure a Wireless Network - ILM",
+   "link41-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "42",
+   "Lab 6: Configure a Wireless Network (Cont.)",
+   "Offline",
+   "CLO10",
+   "U",
+   "13.1.11 Lab - Configure a Wireless Network - ILM",
+   "link42-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 10: Routing Concepts\n\n- Path determination\n\n- Packet Forwarding",
+   "Offline",
+   "CLO11",
+   "T",
+   "Module: Routing Concepts",
+   "link43-1",
+   "Read Chapter: Routing Concepts",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 10: Routing Concepts\n\n- Basic Router Configuration review\n\n- IP Routing Table",
+   "Offline",
+   "CLO11",
+   "T",
+   "Module: Routing Concepts",
+   "link44-1",
+   "Read Chapter: Routing Concepts",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 10: Routing Concepts\n\n- Static and Dynamic Routing\n\n- Activity: Basic Router Configuration Review",
+   "Offline",
+   "CLO11",
+   "T",
+   "Module: Routing Concepts\n\nActivity: 14.3.5 Packet Tracer - Basic Router Configuration Review",
+   "link45-1",
+   "Read Chapter: Routing Concepts",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 11: IP Static Routing\n\n- Static Routes\n\n- Configure IP Static Routes",
+   "Offline",
+   "CLO12",
+   "T",
+   "Module: IP Static Routing",
+   "link46-1",
+   "Read Chapter: IP Static Routing",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 11: IP Static Routing\n\n- Configure IP Default Static Routes\n\n- Configure Floating Static Routes\n\n- Configure Static Host Routes",
+   "Offline",
+   "CLO12",
+   "T",
+   "Module: IP Static Routing",
+   "link47-1",
+   "Read Chapter: IP Static Routing",
+   ""
+  ],
+  [
+   "48",
+   "Progress test 2",
+   "Offline",
+   "CLO6 - CL11",
+   "U",
+   "Progress test 2",
+   "link48-1",
+   "Progress test 2",
+   ""
+  ],
+  [
+   "49",
+   "Lab 7: Configure IPv4 and IPv6 Static and Default Routes",
+   "Offline",
+   "CLO11, CLO12",
+   "U",
+   "15.6.2 Lab - Configure IPv4 and IPv6 Static and Default Routes - ILM",
+   "link49-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "50",
+   "Lab 7: Configure IPv4 and IPv6 Static and Default Routes (Cont.)",
+   "Offline",
+   "CLO11, CLO12",
+   "U",
+   "15.6.2 Lab - Configure IPv4 and IPv6 Static and Default Routes - ILM",
+   "link50-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "51",
+   "Lab 7: Configure IPv4 and IPv6 Static and Default Routes (Cont.)",
+   "Offline",
+   "CLO11, CLO12",
+   "U",
+   "15.6.2 Lab - Configure IPv4 and IPv6 Static and Default Routes - ILM",
+   "link51-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 12: Troubleshoot Static and Default Routes\n\n- Packet Processing with Static Routes\n\n- Troubleshoot IPv4 Static and Default Route Configuration",
+   "Offline",
+   "CLO13",
+   "T",
+   "Module: Troubleshoot Static and Default Routes",
+   "link52-1",
+   "Read Chapter: Troubleshoot Static and Default Routes",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 12: Troubleshoot Static and Default Routes\n\n- Packet Processing with Static Routes\n\n- Troubleshoot IPv4 Static and Default Route Configuration",
+   "Offline",
+   "CLO13",
+   "T",
+   "Module: Troubleshoot Static and Default Routes",
+   "link53-1",
+   "Read Chapter: Troubleshoot Static and Default Routes",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 12: Troubleshoot Static and Default Routes\n\n- Packet Processing with Static Routes\n\n- Troubleshoot IPv4 Static and Default Route Configuration",
+   "Offline",
+   "CLO13",
+   "T",
+   "Module: Troubleshoot Static and Default Routes",
+   "link54-1",
+   "Read Chapter: Troubleshoot Static and Default Routes",
+   ""
+  ],
+  [
+   "55",
+   "Lab 8: Troubleshoot IPv4 and IPv6 Static and Default Routes",
+   "Offline",
+   "CLO13",
+   "U",
+   "16.3.2 Lab - Troubleshoot IPv4 and IPv6 Static and Default Routes - ILM",
+   "link55-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "56",
+   "Lab 8: Troubleshoot IPv4 and IPv6 Static and Default Routes (Cont.)",
+   "Offline",
+   "CLO13",
+   "U",
+   "16.3.2 Lab - Troubleshoot IPv4 and IPv6 Static and Default Routes - ILM",
+   "link56-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "57",
+   "Lab 8: Troubleshoot IPv4 and IPv6 Static and Default Routes (Cont.)",
+   "Offline",
+   "CLO13",
+   "U",
+   "16.3.2 Lab - Troubleshoot IPv4 and IPv6 Static and Default Routes - ILM",
+   "link57-1",
+   "Do Lab",
+   ""
+  ],
+  [
+   "58",
+   "Review",
+   "Offline",
+   "CLO1-13",
+   "T,U",
+   "Review",
+   "link58-1",
+   "Review",
+   ""
+  ],
+  [
+   "59",
+   "Review",
+   "Offline",
+   "CLO1-13",
+   "T,U",
+   "Review",
+   "link59-1",
+   "Review",
+   ""
+  ],
+  [
+   "60",
+   "Review",
+   "Offline",
+   "CLO1-13",
+   "T,U",
+   "Review",
+   "link60-1",
+   "Review",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

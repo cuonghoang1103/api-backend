@@ -1,0 +1,1821 @@
+{
+ "ma": "IEI301",
+ "sylID": "14484",
+ "quyetDinh": "1028/QĐ-ĐHFPT dated 08/21/2026",
+ "ungVien": [
+  {
+   "sylID": "14484",
+   "code": "IEI301",
+   "name": "Import Export_Xuất nhập khẩu",
+   "active": true,
+   "approved": true,
+   "decision": "1028/QĐ-ĐHFPT dated 08/21/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14484",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14484",
+  "Syllabus Name": "Import Export_Xuất nhập khẩu",
+  "Course Name English": "Import–Export",
+  "Subject Code": "IEI301",
+  "Learning-Teaching Method": "- Offline/Online learning.\n- Project-Based Learning (PBL): An Integrated Export–Import Transaction Project is developed through staged milestones from opportunity identification to transaction completion, document-pack preparation, presentation, and individual defence.\n- Research-Based Learning (RBL): Students investigate product–market–partner opportunities, market-access conditions, buyer/supplier credibility, regulatory requirements, logistics options, and transaction risks using evidence from the textbook, official sources, and lecturer-approved datasets.\n- Applied learning methods include mini-lectures, transaction mapping, case analysis, numerical workshops, contract drafting, document-pack laboratories, simulations, peer review, project clinics, and professional defence.",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "IBI101",
+  "Description": "This course develops the applied knowledge and professional decision-making skills required to plan, execute, control, and evaluate international export–import transactions. The course follows an end-to-end transaction logic covering international trade conditions; product, market, buyer, supplier, and channel research; export pricing and import landed cost; Incoterms® 2020; international sales and channel agreements; transportation, freight forwarding, cargo insurance and claims; trade documents; foreign-exchange exposure; international payment and trade finance; export–import compliance; import regulations; customs entry, HS classification, customs valuation, rules of origin, tariffs and taxes; trade remedies; intellectual-property protection; and digital trade.\n\nThe course integrates Project-Based Learning and Research-Based Learning through an Integrated Export–Import Transaction Project. Students progressively transform research evidence into a commercially and operationally coherent transaction plan, including costing, quotation, contract, logistics, insurance, payment, compliance, customs, and document-pack outputs. The course emphasizes evidence-based reasoning, cross-document consistency, risk control, ethical conduct, and the ability to present and defend professional decisions.",
+  "StudentTasks": "- Attend at least 80% of contact slots to be eligible for the final examination.\n- Prepare assigned textbook sections, official references, cases, and worksheets before class.\n- Participate actively in discussion, calculation workshops, contract and document laboratories, simulations, peer review, and project clinics.\n- Complete three progress tests, all required individual/in-class tasks, and the Integrated Group Project according to the announced deadlines.\n- Maintain a traceable record of research evidence, assumptions, calculations, sources, project contributions, and document revisions.\n- Present and individually defend the group's transaction decisions and submitted evidence in Slots 19–20.\n- Comply with academic integrity, professional conduct, source-verification, and AI-disclosure requirements.",
+  "Tools": "Internet; institutional LMS/FLM/Edunext; presentation software; spreadsheet software; word-processing software; official trade, customs, tariff, logistics, and legal databases; document templates; AI-supported learning tools as directed by the lecturer",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1028/QĐ-ĐHFPT dated 08/21/2026",
+  "IsApproved": "True",
+  "Note": "AI Policy: Generative AI and other digital tools may be used only as guided by the lecturer for idea generation, research planning, language refinement, document checking, scenario exploration, and learning support. Students must disclose AI use in assessed coursework, verify outputs against the textbook and authoritative sources, and remain fully responsible for accuracy, legality, originality, confidentiality, and professional judgment. AI use is not permitted in progress tests or the final examination unless explicitly authorized.\n\nPBL/RBL evidence and learning products: transaction brief; research evidence matrix; buyer/supplier due-diligence scorecard; channel or sourcing rationale; export-costing/import-landed-cost worksheet; formal quotation or pro forma invoice; Incoterms decision note; draft international sales/purchase contract; logistics and cargo-insurance plan; payment and trade-finance flow; customs and compliance checklist; document pack; risk register; incident-response memorandum; presentation; and individual defence.\n\nCentral project inquiry: How can an exporter or importer design and execute a commercially viable, documentarily consistent, legally compliant, and risk-controlled international transaction for a selected product, partner, and market?\n\nITU coding used in the Schedule: I = Introduce; T = Teach/Practice; U = Utilize/Integrate.",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/21/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Export–Import Theory, Practices, and Procedures",
+   "Belay Seyoum",
+   "Routledge / Taylor & Francis",
+   "2022",
+   "Fourth Edition",
+   "",
+   "True",
+   "True",
+   "False",
+   "Core source for Units 1–10 and Appendices A–P."
+  ],
+  [
+   "2",
+   "Incoterms® 2020",
+   "International Chamber of Commerce",
+   "ICC",
+   "2020",
+   "2020",
+   "",
+   "False",
+   "False",
+   "False",
+   "Official ICC rules for the 11 trade terms. https://iccwbo.org/business-solutions/incoterms-rules/incoterms-2020/"
+  ],
+  [
+   "3",
+   "United Nations Convention on Contracts for the International Sale of Goods (CISG)",
+   "UNCITRAL",
+   "United Nations",
+   "1980",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official convention text. https://uncitral.un.org/en/texts/salegoods/conventions/sale_of_goods/cisg"
+  ],
+  [
+   "4",
+   "Uniform Customs and Practice for Documentary Credits (UCP 600)",
+   "International Chamber of Commerce",
+   "ICC",
+   "2007",
+   "ICC Publication No. 600",
+   "",
+   "False",
+   "False",
+   "False",
+   "Official ICC documentary-credit rules and supporting guidance. https://library.iccwbo.org/content/tfb/RULES/tfb-ucp600-rules.htm"
+  ],
+  [
+   "5",
+   "Uniform Rules for Collections (URC 522)",
+   "International Chamber of Commerce",
+   "ICC",
+   "1995",
+   "ICC Publication No. 522",
+   "",
+   "False",
+   "False",
+   "False",
+   "Official ICC rules for documentary collections. https://2go.iccwbo.org/explore-our-products/ebooks/trade-finance/urc-522-uniform-rules-for-collections-config-1.html"
+  ],
+  [
+   "6",
+   "What is the Harmonized System (HS)?",
+   "World Customs Organization",
+   "WCO",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official WCO overview of the HS. https://www.wcoomd.org/en/topics/nomenclature/overview/what-is-the-harmonized-system.aspx"
+  ],
+  [
+   "7",
+   "Agreement on Implementation of Article VII of GATT 1994 (Customs Valuation Agreement)",
+   "World Trade Organization",
+   "WTO",
+   "1994",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official customs-valuation legal text. https://www.wto.org/english/docs_e/legal_e/cv_e.htm"
+  ],
+  [
+   "8",
+   "Viet Nam National Trade Repository (VNTR)",
+   "Ministry of Industry and Trade of Viet Nam",
+   "MOIT",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official source for cross-border trade rules, procedures, forms, tariffs, and trade agreements in Viet Nam. https://vntr.moit.gov.vn/"
+  ],
+  [
+   "9",
+   "Vietnam Customs Portal",
+   "Vietnam Customs",
+   "General Department of Vietnam Customs",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official customs information and procedural updates. https://www.customs.gov.vn/"
+  ],
+  [
+   "10",
+   "WTO Trade Remedies Resources",
+   "World Trade Organization",
+   "WTO",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official resources on anti-dumping, subsidies/countervailing measures, and safeguards. https://www.wto.org/english/tratop_e/adp_e/adp_e.htm"
+  ],
+  [
+   "11",
+   "Intellectual Property for Business and International Trade",
+   "World Intellectual Property Organization",
+   "WIPO",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official intellectual-property learning resources. https://www.wipo.int/about-ip/en/"
+  ],
+  [
+   "12",
+   "UNCITRAL Model Law on Electronic Commerce",
+   "UNCITRAL",
+   "United Nations",
+   "1996",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Official model-law reference for electronic records and functional equivalence. https://uncitral.un.org/en/texts/ecommerce/modellaw/electronic_commerce"
+  ],
+  [
+   "13",
+   "IEI301 Integrated Export–Import Transaction Project Brief",
+   "IEI301 Course Team",
+   "Internal course material",
+   "",
+   "Current course version",
+   "",
+   "False",
+   "False",
+   "False",
+   "Lecturer-developed project brief, milestones, evidence requirements, report structure, and defence guidance."
+  ],
+  [
+   "14",
+   "IEI301 Costing, Contract, Logistics, Payment, Customs, and Document-Pack Worksheets",
+   "IEI301 Course Team",
+   "Internal course material",
+   "",
+   "Current course version",
+   "",
+   "False",
+   "False",
+   "False",
+   "Lecturer-developed numerical, decision, drafting, and document-audit worksheets aligned with Units 2–10."
+  ],
+  [
+   "15",
+   "IEI301 Unit Slide Decks and Student Handouts",
+   "IEI301 Course Team",
+   "Internal course material",
+   "",
+   "Current course version",
+   "",
+   "False",
+   "False",
+   "False",
+   "Unit-based slides, cases, diagrams, process maps, examples, activities, and student summaries."
+  ],
+  [
+   "16",
+   "Selected official market-access, tariff, origin, customs, banking, carrier, and logistics sources",
+   "Relevant competent authorities and professional institutions",
+   "Various official sources",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "Lecturer-approved current sources selected according to the product, country, route, and transaction case."
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Analyze the international trade environment, trade agreements, market conditions, and product–market–partner information to identify and justify feasible export or import opportunities."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Calculate export prices and import landed costs, prepare commercial quotations, and select and justify appropriate Incoterms® 2020 rules and named places or ports for international transactions."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Draft and evaluate international sales or purchase contracts and selected channel agreements by applying relevant commercial principles, CISG fundamentals, and appropriate allocation of obligations, costs, risks, and remedies."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Design and evaluate transportation, freight-forwarding, cargo-insurance, and claims arrangements appropriate to the goods, route, delivery terms, and transaction risks."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Prepare and audit core export–import documents for accuracy, completeness, and consistency across contract, quotation, shipment, insurance, payment, and customs requirements."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Select and justify international payment, foreign-exchange risk-management, and trade-finance instruments, and identify documentary-credit discrepancies, fraud risks, and appropriate control measures."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Analyze and apply export–import compliance and customs requirements, including trade controls, HS classification, customs valuation, origin, tariffs and taxes, trade remedies, intellectual-property protection, and digital-trade requirements."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Develop, present, and defend an evidence-based, end-to-end export or import transaction project while demonstrating research capability, critical thinking, teamwork, professional communication, ethical judgment, and responsible use of digital and AI tools."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Class Participation and Preparation\n\nIncludes preparation, guided discussion, numerical and documentary workshops, transaction simulations, peer review, project clinics, and professional conduct.",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "All sessions",
+   "CLO1–CLO8",
+   "Constructivist questions; case analysis; calculation/document tasks; professional participation",
+   "N/A",
+   "Units 1–10; readiness, evidence use, reasoning quality, task completion, collaboration, and professional/ethical conduct.",
+   "Attendance and preparation are recorded throughout the course. Quality is assessed through responsiveness, accuracy, evidence-based contribution, workshop performance, peer-review conduct, and follow-through on feedback.",
+   "Students must attend at least 80% of contact slots to be eligible for the final examination."
+  ],
+  [
+   "2",
+   "Group Project",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "10 weeks",
+   "CLO1–CLO8",
+   "Applied group project; document pack; presentation; individual defence",
+   "1 integrated project",
+   "End-to-end Export–Import Transaction Project including research evidence, transaction report, costing, quotation, contract, logistics/insurance plan, payment/finance plan, customs/compliance analysis, document pack, risk response, presentation, and individual defence.\nUnits 1–10; evidence-based opportunity selection and complete transaction design, execution logic, document consistency, risk control, professional communication, teamwork, and ethical accountability.",
+   "Groups complete staged milestones and submit a final project pack. Presentations and individual defence take place in Sessions 55–60. Individual scores may be differentiated based on contribution evidence and defence performance.",
+   "Required outputs include transaction brief, research matrix, partner/channel analysis, costing, quotation, Incoterms note, contract, logistics/insurance plan, payment/finance flow, customs/compliance checklist, document pack, risk register, incident-response memorandum, presentation, and contribution record."
+  ],
+  [
+   "3",
+   "Progress Test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "40 minutes",
+   "CLO1, CLO2",
+   "Scenario-based MCQ and short calculation/decision items",
+   "30-40 questions",
+   "Units 1–2 and foundational export/import costing concepts: trade environment, trade agreements, opportunity research, partner/channel decisions, and basic costing logic.",
+   "Individual, closed-book, computer-based or institution-approved in-class format.",
+   "Administered in Session 12. Questions emphasize interpretation and application rather than recall."
+  ],
+  [
+   "4",
+   "Progress Test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "40 minutes",
+   "CLO2, CLO3, CLO4, CLO5",
+   "Scenario-based MCQ; calculation; contract/logistics/document interpretation",
+   "30-40 questions",
+   "Units 3–5 and foundational Unit 6 concepts: costing, Incoterms® 2020, contract clauses, transportation, freight, cargo risk, insurance, and document functions.",
+   "Individual, closed-book, computer-based or institution-approved in-class format.",
+   "Administered in Session 30. Questions require integrated commercial and operational reasoning."
+  ],
+  [
+   "5",
+   "Progress Test 3",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "40 minutes",
+   "CLO5, CLO6, CLO7",
+   "Scenario-based MCQ; documentary discrepancy; payment/compliance/customs decision items",
+   "30-40 questions",
+   "Units 7–10: FX exposure, payment, collection, documentary credit, trade finance, compliance, import regulations, customs, HS, valuation, origin, trade remedies, and alternative transactions.",
+   "Individual, closed-book, computer-based or institution-approved in-class format.",
+   "Administered in Session 54. Questions emphasize cross-document, risk, and compliance decisions."
+  ],
+  [
+   "6",
+   "Final Exam",
+   "Final",
+   "1",
+   "30.0%",
+   "4",
+   "60 minutes",
+   "CLO1–CLO7",
+   "Case-based and document-based MCQ; numerical and decision scenarios",
+   "50 questions",
+   "Units 1–10 with integrated emphasis on costing/Incoterms, contracts, logistics/insurance, documents, payment/trade finance, compliance, customs, and trade remedies.",
+   "Individual, time-limited, closed-book computer-based final examination under institutional conditions.",
+   "The final examination assesses transferable reasoning and application; it does not directly assess teamwork or oral defence under CLO8."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "UNIT 1. INTERNATIONAL TRADE ENVIRONMENT AND TRANSACTION OVERVIEW\n1.1 Course orientation and the end-to-end export–import transaction\n- Parties, goods, information, documents, money, risk, and regulatory flows",
+   "Offline; PBL/RBL",
+   "CLO1, CLO8",
+   "I",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Introduction and transaction-related overview; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "IEI301_Chap 1-5",
+   "Before class: review the syllabus and project overview. In class: map an international transaction from inquiry to completion. After class: submit an individual transaction-flow reflection.",
+   ""
+  ],
+  [
+   "2",
+   "1.2 Growth, direction, drivers, and disruption of international trade\n- Trade patterns, competitiveness, supply-chain change, and business implications",
+   "Offline; RBL",
+   "CLO1",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Unit source—Textbook Chapters 1–2; lecturer-provided trade-data extract",
+   "IEI301_Chap 6-10",
+   "Before class: read the assigned trade overview. In class: interpret a small trade dataset. After class: write three evidence-based implications for an exporter or importer.",
+   ""
+  ],
+  [
+   "3",
+   "1.3 WTO, regional trade agreements, MFN treatment, preferential access, and project launch\n- Market-access logic and researchable transaction questions",
+   "Offline; PBL/RBL",
+   "CLO1, CLO7, CLO8",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 1–2; IEI301 Integrated Transaction Project Brief and milestone worksheets; VNTR/WTO extracts",
+   "link3-1",
+   "Before class: examine one trade agreement or tariff-preference example. In class: distinguish MFN and preferential treatment and formulate the group project inquiry. After class: submit the proposed product–country–transaction scope.",
+   ""
+  ],
+  [
+   "4",
+   "UNIT 2. PRODUCT, MARKET, PARTNER, AND CHANNEL RESEARCH\n2.1 Export/import readiness and transaction definition\n- Organizational capacity, objectives, resources, and compliance readiness",
+   "Offline; PBL",
+   "CLO1, CLO8",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 3–4 and 17; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: review an exporter/importer profile. In class: conduct a readiness audit. After class: complete the company-and-transaction brief.",
+   ""
+  ],
+  [
+   "5",
+   "2.2 Product–market opportunity screening and research design\n- Demand, competition, product adaptation, barriers, and evidence quality",
+   "Offline; RBL",
+   "CLO1, CLO8",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 4 and 17; market-screening worksheet",
+   "",
+   "Before class: identify three candidate markets/products. In class: build a weighted screening matrix. After class: document indicators, sources, assumptions, and limitations.",
+   ""
+  ],
+  [
+   "6",
+   "2.3 Market access, trade data, and regulatory research\n- Tariffs, non-tariff measures, permits, standards, labelling, and research traceability",
+   "Offline; RBL",
+   "CLO1, CLO7, CLO8",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 2, 4, 16–18; VNTR and official-source worksheet",
+   "link6-1",
+   "Before class: locate official tariff and regulatory information for the selected product. In class: build a market-access evidence matrix. After class: verify and cite each requirement.",
+   ""
+  ],
+  [
+   "7",
+   "2.4 Buyer, importer, exporter, and supplier identification and due diligence\n- Credibility, capacity, commercial fit, sanctions, and transaction red flags",
+   "Offline; PBL/RBL",
+   "CLO1, CLO7, CLO8",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 4, 5, 15 and 17; due-diligence scorecard",
+   "",
+   "Before class: collect evidence on one potential partner. In class: apply a due-diligence scorecard. After class: record unresolved risks and required verification.",
+   ""
+  ],
+  [
+   "8",
+   "2.5 Reactive and proactive import-product selection; international supplier evaluation\n- Quality, service, price, lead time, financial capability, and sourcing risk",
+   "Offline; PBL/RBL",
+   "CLO1, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 17; supplier-evaluation worksheet",
+   "",
+   "Before class: compare reactive and proactive sourcing. In class: evaluate sample suppliers. After class: prepare a supplier shortlist with justification.",
+   ""
+  ],
+  [
+   "9",
+   "2.6 Export channels and import sourcing arrangements\n- Direct/indirect export, agent, distributor, representative, contract manufacturing, and outsourcing\n- Project Milestone 1 clinic",
+   "Offline; PBL",
+   "CLO1, CLO3, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 5 and 17; Appendices N–O; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: identify feasible channel/sourcing options. In class: compare structures and authority, margin, inventory, and control implications. After class: submit Milestone 1.",
+   ""
+  ],
+  [
+   "10",
+   "UNIT 3. EXPORT–IMPORT COSTING, QUOTATION, AND INCOTERMS® 2020\n3.1 Export cost structure and determinants of international price\n- Cost base, margin, competition, demand, exchange rates, and pricing objectives",
+   "Offline",
+   "CLO2",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 7; costing worksheet",
+   "",
+   "Before class: review cost components. In class: classify direct, indirect, transaction, and market costs. After class: construct a preliminary export-cost sheet.",
+   ""
+  ],
+  [
+   "11",
+   "3.2 Import landed cost, price escalation, channel margins, and competitiveness\n- From supplier price to final market price",
+   "Offline; PBL",
+   "CLO2",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 7 and 17; Tables 7.1–7.2 and 17.4; landed-cost worksheet",
+   "",
+   "Before class: review the landed-cost example. In class: calculate total landed cost and price escalation. After class: test the project's commercial viability under two scenarios.",
+   ""
+  ],
+  [
+   "12",
+   "3.3 Progress Test 1 and applied debrief\n- Scope: Units 1–2 and foundational costing concepts",
+   "Offline / CBT",
+   "CLO1, CLO2",
+   "U",
+   "Assigned materials from Sessions 1–11; review guide",
+   "",
+   "Complete the individual closed-book Progress Test 1. After the test: record misconceptions and one corrective learning action.",
+   ""
+  ],
+  [
+   "13",
+   "3.4 Incoterms® 2020: purpose, scope, structure, and limitations\n- Delivery, cost, risk, transport, insurance, and customs responsibilities",
+   "Offline",
+   "CLO2, CLO3",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 7; ICC Incoterms® 2020 reference",
+   "link13-1",
+   "Before class: review the 11 rules. In class: separate delivery/risk from title/payment. After class: complete an Incoterms scope-and-limitations check.",
+   ""
+  ],
+  [
+   "14",
+   "3.5 Rules for any mode of transport\n- EXW, FCA, CPT, CIP, DAP, DPU, and DDP; named place and multimodal/container decisions",
+   "Offline; workshop",
+   "CLO2, CLO4",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 7; Incoterms decision worksheet",
+   "",
+   "Before class: compare any-mode rules. In class: solve delivery/risk/cost cases. After class: justify the rule and exact named place for the project.",
+   ""
+  ],
+  [
+   "15",
+   "3.6 Rules for sea and inland waterway transport; formal quotation workshop\n- FAS, FOB, CFR, and CIF; containerization; quotation validity and assumptions",
+   "Offline; PBL workshop",
+   "CLO2, CLO4, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 7; Appendix P formal quote; quotation worksheet",
+   "",
+   "Before class: review sea rules and quotation fields. In class: prepare and peer-audit a formal quotation. After class: submit costing, Incoterms decision note, and revised quotation.",
+   ""
+  ],
+  [
+   "16",
+   "UNIT 4. INTERNATIONAL SALES CONTRACTS AND CHANNEL AGREEMENTS\n4.1 CISG fundamentals and contract formation\n- Scope, offer, acceptance, counteroffer, oral/written terms, and battle of forms",
+   "Offline",
+   "CLO3",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 8; CISG official text",
+   "link16-1",
+   "Before class: read the assigned CISG overview. In class: identify offer, acceptance, and counteroffer in email sequences. After class: prepare a contract-formation note.",
+   ""
+  ],
+  [
+   "17",
+   "4.2 Core commercial clauses\n- Goods, specifications, quantity/tolerance, price/currency, delivery, shipment, payment, inspection, and documentary requirements",
+   "Offline; workshop",
+   "CLO2, CLO3, CLO5",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 8; Appendix M; clause-drafting worksheet",
+   "",
+   "Before class: review the contract template. In class: draft assigned clauses. After class: test each clause for clarity, measurability, and alignment with the quotation.",
+   ""
+  ],
+  [
+   "18",
+   "4.3 Performance, remedies, force majeure, warranties, liability, governing law, and dispute settlement",
+   "Offline; case-based",
+   "CLO3, CLO7",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 8; Appendix M; selected closing cases",
+   "",
+   "Before class: identify risk-allocation clauses. In class: analyze breach and remedy scenarios. After class: revise the project's risk and dispute clauses.",
+   ""
+  ],
+  [
+   "19",
+   "4.4 Export sales/purchase contract drafting laboratory\n- Integrated drafting from inquiry and quotation to contract",
+   "Offline; PBL workshop",
+   "CLO2, CLO3, CLO5, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 8; Appendix M; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: bring the approved quotation and transaction facts. In class: draft the contract. After class: complete a cross-reference check against costing, Incoterms, and payment assumptions.",
+   ""
+  ],
+  [
+   "20",
+   "4.5 Distributorship agreement\n- Territory, exclusivity, minimum purchases, pricing, IP, warranty, obligations, termination, and force majeure",
+   "Offline; workshop",
+   "CLO3, CLO7",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 5 and Appendix N",
+   "",
+   "Before class: review Appendix N. In class: audit a distributorship agreement. After class: recommend whether the project should use a distributor and specify safeguards.",
+   ""
+  ],
+  [
+   "21",
+   "4.6 Sales representative agreement and channel-agreement comparison\n- Authority, commission, confidentiality, customer ownership, and post-termination obligations\n- Project Milestone 2 clinic",
+   "Offline; PBL",
+   "CLO3, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 5 and Appendix O; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: compare Appendices N and O. In class: decide distributor versus representative. After class: submit Milestone 2 contract/channel outputs.",
+   ""
+  ],
+  [
+   "22",
+   "UNIT 5. TRANSPORTATION, FREIGHT FORWARDING, AND CARGO RISK\n5.1 Transport mode and route selection\n- Product characteristics, lead time, cost, reliability, capacity, security, and sustainability",
+   "Offline",
+   "CLO4",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 6 and 9; mode-selection worksheet",
+   "",
+   "Before class: review mode characteristics. In class: select a mode and route for contrasting cargo cases. After class: prepare a route rationale for the project.",
+   ""
+  ],
+  [
+   "23",
+   "5.2 Ocean transportation, cargo forms, vessels, containerization, and bill-of-lading context",
+   "Offline",
+   "CLO4, CLO5",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 9; selected figures and cases",
+   "",
+   "Before class: review ocean-cargo forms. In class: match cargo, vessel, service, and document type. After class: identify operational and documentary risks.",
+   ""
+  ],
+  [
+   "24",
+   "5.3 Air, road, rail, and multimodal transportation; freight forwarders and NVOCCs",
+   "Offline; case-based",
+   "CLO4, CLO5",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 9; intermediary-comparison worksheet",
+   "",
+   "Before class: review non-ocean modes and intermediary roles. In class: design a multimodal chain and select service providers. After class: document handover points and accountability.",
+   ""
+  ],
+  [
+   "25",
+   "5.4 Freight calculation and transport quotation workshop\n- Weight/measurement, chargeable basis, FCL/LCL considerations, and comparison of alternatives",
+   "Offline; numerical workshop",
+   "CLO2, CLO4",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 9 and Appendix J; freight worksheet",
+   "",
+   "Before class: review freight-calculation examples. In class: calculate and compare freight alternatives. After class: update project costing and route assumptions.",
+   ""
+  ],
+  [
+   "26",
+   "5.5 Cargo risks, loss prevention, carrier liability, and evidence preservation",
+   "Offline; case-based",
+   "CLO4, CLO5, CLO7",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 6 and 9; cargo-risk register",
+   "",
+   "Before class: identify cargo-specific hazards. In class: build a risk-control plan. After class: specify preventive controls and evidence required if loss occurs.",
+   ""
+  ],
+  [
+   "27",
+   "5.6 Marine and air cargo insurance\n- Insurable interest, ICC coverage logic, total/partial loss, general average, and insurance selection",
+   "Offline; workshop",
+   "CLO4",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 6; insurance-comparison tables and general-average example",
+   "",
+   "Before class: compare coverage levels. In class: select insurance and calculate a general-average contribution. After class: justify coverage and insured value.",
+   ""
+  ],
+  [
+   "28",
+   "UNIT 6. INSURANCE CLAIMS AND TRADE DOCUMENTS\n6.1 Cargo claims, notice, survey, mitigation, settlement, and subrogation",
+   "Offline; simulation",
+   "CLO4, CLO5",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 6; cargo-claim checklist",
+   "",
+   "Before class: review claim steps. In class: assemble and sequence a claim file. After class: draft preliminary notice and a claim-evidence checklist.",
+   ""
+  ],
+  [
+   "29",
+   "6.2 Trade-document architecture and functions\n- Commercial, transport, insurance, payment, origin, inspection, and customs documents",
+   "Offline",
+   "CLO5",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 9 and Appendix P; document-purpose matrix",
+   "",
+   "Before class: review sample documents. In class: map issuer, signer, recipient, purpose, and data dependencies. After class: complete the document architecture for the project.",
+   ""
+  ],
+  [
+   "30",
+   "6.3 Progress Test 2 and applied debrief\n- Scope: Units 3–5 and foundational insurance/document concepts",
+   "Offline / CBT",
+   "CLO2, CLO3, CLO4, CLO5",
+   "U",
+   "Assigned materials from Sessions 10–29; review guide",
+   "",
+   "Complete the individual closed-book Progress Test 2. After the test: diagnose one calculation, contract, logistics, or insurance misconception.",
+   ""
+  ],
+  [
+   "31",
+   "6.4 Commercial invoice, pro forma invoice, packing list, and purchase order\n- Required fields, value/quantity logic, and documentary alignment",
+   "Offline; document lab",
+   "CLO5",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 9 and Appendix P; document templates",
+   "",
+   "Before class: inspect sample forms. In class: prepare and cross-check documents. After class: revise project documents and record changes.",
+   ""
+  ],
+  [
+   "32",
+   "6.5 Transport documents\n- Ocean B/L, AWB, inland/through B/L, negotiability, clean/claused status, consignee, notify party, and shipment evidence",
+   "Offline; document lab",
+   "CLO4, CLO5, CLO6",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 9; transport-document cases",
+   "",
+   "Before class: compare B/L and AWB functions. In class: interpret document fields and identify defects. After class: specify the correct transport-document requirements for the project.",
+   ""
+  ],
+  [
+   "33",
+   "6.6 Certificate of origin, insurance certificate, inspection certificate, bill of exchange, and cross-document consistency audit\n- Project document-pack checkpoint",
+   "Offline; PBL document lab",
+   "CLO5, CLO7, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 9 and 18; Appendix P; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: assemble the current project documents. In class: conduct a full consistency audit. After class: submit the corrected document-pack checkpoint and discrepancy log.",
+   ""
+  ],
+  [
+   "34",
+   "UNIT 7. FOREIGN-EXCHANGE RISK, INTERNATIONAL PAYMENT, AND TRADE FINANCE\n7.1 Exchange-rate quotation, transaction exposure, contract currency, and simple hedging",
+   "Offline; numerical",
+   "CLO2, CLO6",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 10; FX worksheet",
+   "",
+   "Before class: review direct/indirect quotations. In class: calculate exposure and compare hedged/unhedged outcomes. After class: recommend a contract currency and control.",
+   ""
+  ],
+  [
+   "35",
+   "7.2 Payment-method risk spectrum\n- Cash in advance, open account, consignment, credit insurance, and negotiation of payment terms",
+   "Offline; case-based",
+   "CLO6",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 11; payment-risk matrix",
+   "",
+   "Before class: compare payment risks. In class: negotiate seller/buyer positions. After class: justify a payment method for the project.",
+   ""
+  ],
+  [
+   "36",
+   "7.3 Documentary collection\n- Parties, collection instruction, D/P, D/A, bank roles, refusal, and URC 522",
+   "Offline; simulation",
+   "CLO5, CLO6",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 11; URC 522 reference; collection-flow worksheet",
+   "link36-1",
+   "Before class: review the collection flow. In class: simulate D/P and D/A. After class: prepare a collection instruction and contingency response.",
+   ""
+  ],
+  [
+   "37",
+   "7.4 Documentary credits\n- Applicant, beneficiary, issuing/advising/confirming banks, credit flow, independence principle, and UCP 600",
+   "Offline; simulation",
+   "CLO5, CLO6",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 11; UCP 600 reference; L/C flow diagram",
+   "link37-1",
+   "Before class: review parties and flows. In class: map goods, documents, and money. After class: specify L/C requirements for the project.",
+   ""
+  ],
+  [
+   "38",
+   "7.5 Strict compliance and documentary-credit discrepancies\n- Classification, correction, waiver, presentation risk, and bank dishonour",
+   "Offline; document lab",
+   "CLO5, CLO6",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 11; Appendix P L/C requirements; discrepancy checklist",
+   "",
+   "Before class: review discrepancy examples. In class: examine a document set against an L/C. After class: prepare a discrepancy report and corrective plan.",
+   ""
+  ],
+  [
+   "39",
+   "7.6 Documentary fraud, collusion, authenticity, and protective controls",
+   "Offline; case-based",
+   "CLO5, CLO6, CLO7",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 11 closing cases; fraud-red-flag worksheet",
+   "",
+   "Before class: review fraud cases. In class: identify red flags and control failures. After class: design seller, buyer, and bank control measures.",
+   ""
+  ],
+  [
+   "40",
+   "7.7 Special credits and guarantees\n- Transferable, back-to-back, revolving, red-clause, deferred-payment, standby L/C; bid and performance guarantees",
+   "Offline; decision workshop",
+   "CLO3, CLO6",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 11; special-credit comparison worksheet",
+   "",
+   "Before class: review special instruments. In class: match instruments to transaction needs. After class: justify whether any special credit or guarantee is required.",
+   ""
+  ],
+  [
+   "41",
+   "7.8 Trade finance\n- Factoring, forfaiting, buyer/supplier credit, receivables finance, export credit insurance, and ECA support",
+   "Offline; case-based",
+   "CLO6",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 13–14; finance-selection worksheet",
+   "",
+   "Before class: compare financing methods. In class: select finance for short-, medium-, and long-term cases. After class: evaluate cost, recourse, maturity, and risk.",
+   ""
+  ],
+  [
+   "42",
+   "7.9 Integrated payment and finance decision laboratory\n- FX, payment, document, credit, and cash-flow coherence\n- Project Milestone 3 clinic",
+   "Offline; PBL",
+   "CLO2, CLO5, CLO6, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 10–14; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: bring contract, payment, and finance assumptions. In class: stress-test the transaction. After class: submit Milestone 3 payment/finance outputs.",
+   ""
+  ],
+  [
+   "43",
+   "UNIT 8. EXPORT–IMPORT COMPLIANCE, ETHICS, IPR, AND DIGITAL TRADE\n8.1 Export controls and restricted-transaction screening\n- Product, destination, end-user, end-use, sanctions, licences, and red flags",
+   "Offline; case-based",
+   "CLO7",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 15; screening worksheet",
+   "",
+   "Before class: review the screening dimensions. In class: screen sample transactions. After class: document unresolved compliance questions for the project.",
+   ""
+  ],
+  [
+   "44",
+   "8.2 Anti-bribery, ethics, third-party due diligence, professional responsibility, and internal controls",
+   "Offline; RBL",
+   "CLO7, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 15; ethics and third-party case",
+   "",
+   "Before class: review the case facts. In class: evaluate conduct, incentives, and controls. After class: draft a short ethics and escalation protocol.",
+   ""
+  ],
+  [
+   "45",
+   "8.3 Intellectual property, counterfeit risks, electronic records, digital trade, and responsible AI\n- TRIPS/IPR awareness, authenticity, functional equivalence, data integrity, and digital-tool governance",
+   "Offline; workshop",
+   "CLO5, CLO7, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 20; WIPO/UNCITRAL references",
+   "link45-1",
+   "Before class: review IPR and e-document principles. In class: analyze counterfeit and e-record cases. After class: add IPR, digital-record, and AI controls to the project.",
+   ""
+  ],
+  [
+   "46",
+   "UNIT 9. IMPORT REGULATION, CUSTOMS ENTRY, HS, VALUATION, AND ORIGIN\n9.1 Import regulations, tariffs, non-tariff measures, permits, specialised inspection, labelling, and admissibility",
+   "Offline; RBL",
+   "CLO1, CLO7",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 16; VNTR and official-source checklist",
+   "link46-1",
+   "Before class: research requirements for the selected product. In class: classify barriers and competent authorities. After class: complete the import-requirement matrix.",
+   ""
+  ],
+  [
+   "47",
+   "9.2 Import entry process and customs-document flow\n- Arrival, declaration, inspection, release, duty payment, post-entry control, customs broker, bonded warehouse, and trade facilitation",
+   "Offline; process workshop",
+   "CLO5, CLO7",
+   "T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 16 and 18; Vietnam Customs/VNTR references",
+   "link47-1",
+   "Before class: review the entry flow. In class: build a process map and responsibility matrix. After class: prepare the project's customs-entry checklist.",
+   ""
+  ],
+  [
+   "48",
+   "9.3 Harmonized System and classification reasoning\n- HS structure, product description, headings, legal notes, and defensible classification logic",
+   "Offline; workshop",
+   "CLO5, CLO7",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 18; WCO HS overview; classification worksheet",
+   "link48-1",
+   "Before class: review HS structure. In class: classify typical goods at an introductory managerial level. After class: prepare the product-description and classification rationale.",
+   ""
+  ],
+  [
+   "49",
+   "9.4 Customs valuation\n- Transaction value, additions, related-party issues, identical/similar goods, deductive value, computed value, and fallback method",
+   "Offline; numerical workshop",
+   "CLO2, CLO7",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 18; WTO Customs Valuation Agreement; valuation worksheet",
+   "link49-1",
+   "Before class: review valuation hierarchy. In class: calculate customs value under sample scenarios. After class: document the valuation basis and evidence for the project.",
+   ""
+  ],
+  [
+   "50",
+   "9.5 Rules of origin, preferential treatment, certificates of origin, and marking\n- Origin criteria, documentary proof, cumulation, direct consignment, and verification risk",
+   "Offline; case-based",
+   "CLO5, CLO7",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 2, 16, and 18; VNTR/FTA origin references",
+   "link50-1",
+   "Before class: review origin concepts. In class: assess preferential eligibility. After class: specify the origin evidence and unresolved verification risks.",
+   ""
+  ],
+  [
+   "51",
+   "9.6 Import duties and taxes; customs broker and warehousing decisions; integrated customs compliance checklist",
+   "Offline; PBL workshop",
+   "CLO2, CLO5, CLO7, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapters 16–18; customs-costing and compliance worksheets; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: assemble tariff, value, origin, and tax inputs. In class: calculate duty/tax and audit customs readiness. After class: submit the project customs/compliance checkpoint.",
+   ""
+  ],
+  [
+   "52",
+   "UNIT 10. TRADE REMEDIES, ALTERNATIVE TRANSACTIONS, AND COURSE INTEGRATION\n10.1 Anti-dumping, countervailing measures, and safeguards\n- Core concepts, material injury, business exposure, and early-warning response",
+   "Offline; case-based",
+   "CLO1, CLO7",
+   "I,T",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 19; WTO trade-remedies resources",
+   "link52-1",
+   "Before class: distinguish the three measures. In class: analyze a trade-remedy scenario. After class: prepare an early-warning and evidence-preservation plan.",
+   ""
+  ],
+  [
+   "53",
+   "10.2 Countertrade and alternative transactions; integrated incident-response clinic\n- Barter, counterpurchase, buy-back, offsets, and response to payment, cargo, customs, or documentary failure",
+   "Offline; PBL simulation",
+   "CLO3, CLO4, CLO5, CLO6, CLO7, CLO8",
+   "T,U",
+   "Seyoum (2022), Export–Import Theory, Practices, and Procedures, 4th ed.: Chapter 12 and integrated closing cases; IEI301 Integrated Transaction Project Brief and milestone worksheets",
+   "",
+   "Before class: review alternative forms and the assigned incident. In class: design a response under constrained payment or transaction failure. After class: submit the risk-incident memorandum.",
+   ""
+  ],
+  [
+   "54",
+   "10.3 Course integration, Progress Test 3, and final project readiness review\n- Scope: Units 7–10; end-to-end transaction coherence",
+   "Offline / CBT; PBL clinic",
+   "CLO5, CLO6, CLO7, CLO8",
+   "U",
+   "Assigned materials from Sessions 34–53; project readiness checklist",
+   "",
+   "Complete the individual closed-book Progress Test 3. After the test: finalize the project readiness checklist and personal defence preparation.",
+   ""
+  ],
+  [
+   "55",
+   "INTEGRATED GROUP PROJECT PRESENTATION AND INDIVIDUAL DEFENCE\n11.1 Project presentations and defence – Session 1",
+   "Offline; assessment",
+   "CLO1–CLO8",
+   "U",
+   "Approved project submission pack; presentation and defence rubric",
+   "",
+   "Present assigned transaction, demonstrate evidence and document consistency, and answer individual defence questions.",
+   ""
+  ],
+  [
+   "56",
+   "11.2 Project presentations and defence – Session 2",
+   "Offline; assessment",
+   "CLO1–CLO8",
+   "U",
+   "Approved project submission pack; presentation and defence rubric",
+   "",
+   "Present assigned transaction, demonstrate evidence and document consistency, and answer individual defence questions.",
+   ""
+  ],
+  [
+   "57",
+   "11.3 Project presentations and defence – Session 3",
+   "Offline; assessment",
+   "CLO1–CLO8",
+   "U",
+   "Approved project submission pack; presentation and defence rubric",
+   "",
+   "Present assigned transaction, demonstrate evidence and document consistency, and answer individual defence questions.",
+   ""
+  ],
+  [
+   "58",
+   "11.4 Project presentations and defence – Session 4",
+   "Offline; assessment",
+   "CLO1–CLO8",
+   "U",
+   "Approved project submission pack; presentation and defence rubric",
+   "",
+   "Present assigned transaction, demonstrate evidence and document consistency, and answer individual defence questions.",
+   ""
+  ],
+  [
+   "59",
+   "11.5 Project presentations and defence – Session 5",
+   "Offline; assessment",
+   "CLO1–CLO8",
+   "U",
+   "Approved project submission pack; presentation and defence rubric",
+   "",
+   "Present assigned transaction, demonstrate evidence and document consistency, and answer individual defence questions.",
+   ""
+  ],
+  [
+   "60",
+   "11.6 Project presentations and defence – Session 6; course closure and professional reflection",
+   "Offline; assessment",
+   "CLO1–CLO8",
+   "U",
+   "Approved project submission pack; presentation and defence rubric; reflection prompt",
+   "",
+   "Complete presentation/defence as assigned and submit an individual reflection on transaction competence, evidence use, ethics, and future development.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "CQ1 - Session 1",
+   "Map the complete journey of one export or import transaction from commercial inquiry to transaction closure. Which flows must remain synchronized, and why?"
+  ],
+  [
+   "2",
+   "1",
+   "CQ2 - Session 1",
+   "At which handover point is the selected transaction most vulnerable to failure, and what evidence would you require to control that risk?"
+  ],
+  [
+   "3",
+   "2",
+   "CQ1 - Session 2",
+   "Using the trade dataset provided, what conclusion about market opportunity is defensible, and what conclusion would overstate the evidence?"
+  ],
+  [
+   "4",
+   "2",
+   "CQ2 - Session 2",
+   "How could a global disruption change both the direction of trade and the transaction design of a firm already committed to a market?"
+  ],
+  [
+   "5",
+   "3",
+   "CQ1 - Session 3",
+   "How does preferential market access change a firm's opportunity assessment without guaranteeing commercial success?"
+  ],
+  [
+   "6",
+   "3",
+   "CQ2 - Session 3",
+   "Formulate a researchable project question that connects a selected product, country, partner, and transaction risk. What evidence would answer it?"
+  ],
+  [
+   "7",
+   "4",
+   "CQ1 - Session 4",
+   "Which dimensions determine whether a firm is genuinely ready to export or import rather than merely interested in doing so?"
+  ],
+  [
+   "8",
+   "4",
+   "CQ2 - Session 4",
+   "If the firm lacks one critical capability, should it postpone the transaction, outsource the function, or redesign the transaction? Defend the choice."
+  ],
+  [
+   "9",
+   "5",
+   "CQ1 - Session 5",
+   "Which criteria should receive the greatest weight in a product–market screening matrix for the selected project, and why?"
+  ],
+  [
+   "10",
+   "5",
+   "CQ2 - Session 5",
+   "How can a technically correct screening model still produce a poor decision?"
+  ],
+  [
+   "11",
+   "6",
+   "CQ1 - Session 6",
+   "Which market-access requirement could most materially alter the project's commercial feasibility, and how will it be verified?"
+  ],
+  [
+   "12",
+   "6",
+   "CQ2 - Session 6",
+   "When sources conflict on a tariff, permit, standard, or labelling rule, what verification hierarchy should the team follow?"
+  ],
+  [
+   "13",
+   "7",
+   "CQ1 - Session 7",
+   "What evidence is sufficient to approve a buyer or supplier for a first transaction, and what evidence remains inconclusive?"
+  ],
+  [
+   "14",
+   "7",
+   "CQ2 - Session 7",
+   "How should due diligence change when price attractiveness conflicts with credit, compliance, or performance risk?"
+  ],
+  [
+   "15",
+   "8",
+   "CQ1 - Session 8",
+   "When is a proactive import-product strategy superior to a reactive opportunity, and what resources does it require?"
+  ],
+  [
+   "16",
+   "8",
+   "CQ2 - Session 8",
+   "Which supplier criterion is most likely to be undervalued by an inexperienced importer, and what failure could result?"
+  ],
+  [
+   "17",
+   "9",
+   "CQ1 - Session 9",
+   "Which channel structure gives the firm the best balance of market control, investment, speed, and risk for the selected transaction?"
+  ],
+  [
+   "18",
+   "9",
+   "CQ2 - Session 9",
+   "How can an unclear distinction between distributor and representative create contractual, tax, customer, or liability problems?"
+  ],
+  [
+   "19",
+   "10",
+   "CQ1 - Session 10",
+   "Which cost items belong in the export quotation but are often omitted or double counted, and how would the error affect the decision?"
+  ],
+  [
+   "20",
+   "10",
+   "CQ2 - Session 10",
+   "How should an exporter choose among cost-based, demand-based, and competitive pricing when their results conflict?"
+  ],
+  [
+   "21",
+   "11",
+   "CQ1 - Session 11",
+   "Trace the selected import product from supplier price to final market price. Which stage creates the greatest price escalation?"
+  ],
+  [
+   "22",
+   "11",
+   "CQ2 - Session 11",
+   "If the landed-cost estimate is commercially unattractive, which assumptions may be changed legitimately without concealing risk?"
+  ],
+  [
+   "23",
+   "12",
+   "CQ1 - Session 12",
+   "Which reasoning error in Progress Test 1 most affected your answer, and what rule or evidence corrects it?"
+  ],
+  [
+   "24",
+   "12",
+   "CQ2 - Session 12",
+   "How will the test feedback change one research, partner, or costing decision in the group project?"
+  ],
+  [
+   "25",
+   "13",
+   "CQ1 - Session 13",
+   "Which obligations are allocated by Incoterms® 2020, and which important contract issues remain outside its scope?"
+  ],
+  [
+   "26",
+   "13",
+   "CQ2 - Session 13",
+   "Why can a transaction use the correct Incoterms rule yet still fail commercially or legally?"
+  ],
+  [
+   "27",
+   "14",
+   "CQ1 - Session 14",
+   "For a containerized multimodal shipment, which any-mode rule best matches the parties' actual control and why?"
+  ],
+  [
+   "28",
+   "14",
+   "CQ2 - Session 14",
+   "How does changing only the named place under the same Incoterms rule alter cost, risk, and operational responsibility?"
+  ],
+  [
+   "29",
+   "15",
+   "CQ1 - Session 15",
+   "When is FOB or CIF unsuitable despite being commercially familiar to the parties?"
+  ],
+  [
+   "30",
+   "15",
+   "CQ2 - Session 15",
+   "Audit the formal quotation: which term, named place, validity, payment, or shipment field creates the greatest ambiguity?"
+  ],
+  [
+   "31",
+   "16",
+   "CQ1 - Session 16",
+   "At what point did a contract form in the assigned communication sequence, and which terms became binding?"
+  ],
+  [
+   "32",
+   "16",
+   "CQ2 - Session 16",
+   "How would the result change if one party's reply added a material delivery, warranty, or payment term?"
+  ],
+  [
+   "33",
+   "17",
+   "CQ1 - Session 17",
+   "Which contract clause converts a commercial expectation into a measurable obligation, and how should it be drafted?"
+  ],
+  [
+   "34",
+   "17",
+   "CQ2 - Session 17",
+   "Find one inconsistency between the quotation and draft contract. Which document should be revised, and why?"
+  ],
+  [
+   "35",
+   "18",
+   "CQ1 - Session 18",
+   "Which remedy is proportionate to the assigned breach, and what evidence is needed before invoking it?"
+  ],
+  [
+   "36",
+   "18",
+   "CQ2 - Session 18",
+   "How can a force-majeure or limitation-of-liability clause become commercially unfair or operationally unusable?"
+  ],
+  [
+   "37",
+   "19",
+   "CQ1 - Session 19",
+   "Which three clauses in the project contract carry the highest transaction risk, and why?"
+  ],
+  [
+   "38",
+   "19",
+   "CQ2 - Session 19",
+   "Does the draft contract tell the same transaction story as the costing, Incoterms note, payment plan, and document requirements?"
+  ],
+  [
+   "39",
+   "20",
+   "CQ1 - Session 20",
+   "Which distributor obligations are necessary to protect market development without creating unrealistic performance requirements?"
+  ],
+  [
+   "40",
+   "20",
+   "CQ2 - Session 20",
+   "How should territory, exclusivity, and minimum purchases interact with termination rights?"
+  ],
+  [
+   "41",
+   "21",
+   "CQ1 - Session 21",
+   "Why should a sales representative normally lack authority to bind the principal, and how is that boundary documented?"
+  ],
+  [
+   "42",
+   "21",
+   "CQ2 - Session 21",
+   "Which channel agreement better fits the project, and what evidence would change the decision?"
+  ],
+  [
+   "43",
+   "22",
+   "CQ1 - Session 22",
+   "Which transport mode best satisfies the cargo and customer requirements when cost, lead time, reliability, and risk conflict?"
+  ],
+  [
+   "44",
+   "22",
+   "CQ2 - Session 22",
+   "How would one change in product characteristics alter the route and transport decision?"
+  ],
+  [
+   "45",
+   "23",
+   "CQ1 - Session 23",
+   "Which cargo form and vessel/service are appropriate for the assigned goods, and what evidence supports the choice?"
+  ],
+  [
+   "46",
+   "23",
+   "CQ2 - Session 23",
+   "How does containerization change handling risk without eliminating carrier or documentary risk?"
+  ],
+  [
+   "47",
+   "24",
+   "CQ1 - Session 24",
+   "Where does responsibility transfer among seller, forwarder, carriers, terminals, and buyer in the designed multimodal chain?"
+  ],
+  [
+   "48",
+   "24",
+   "CQ2 - Session 24",
+   "Which service-provider criterion is more important than the lowest freight rate for this transaction?"
+  ],
+  [
+   "49",
+   "25",
+   "CQ1 - Session 25",
+   "Which freight basis applies to the shipment, and how does the calculation affect the preferred transport option?"
+  ],
+  [
+   "50",
+   "25",
+   "CQ2 - Session 25",
+   "What quotation information must be verified before a seemingly cheaper freight offer can be accepted?"
+  ],
+  [
+   "51",
+   "26",
+   "CQ1 - Session 26",
+   "Which cargo risk should be prevented, transferred, retained, or monitored, and why?"
+  ],
+  [
+   "52",
+   "26",
+   "CQ2 - Session 26",
+   "What evidence should be preserved immediately after loss or damage to protect claims against the carrier or insurer?"
+  ],
+  [
+   "53",
+   "27",
+   "CQ1 - Session 27",
+   "Which insurance coverage best matches the cargo, route, and Incoterms obligation, and what gap remains?"
+  ],
+  [
+   "54",
+   "27",
+   "CQ2 - Session 27",
+   "Who contributes to general average in the case, and how is the contribution calculated?"
+  ],
+  [
+   "55",
+   "28",
+   "CQ1 - Session 28",
+   "Which claim step is most time-critical, and what consequence follows if it is missed?"
+  ],
+  [
+   "56",
+   "28",
+   "CQ2 - Session 28",
+   "How does subrogation affect the insured's dealings with the carrier after the insurer pays the claim?"
+  ],
+  [
+   "57",
+   "29",
+   "CQ1 - Session 29",
+   "Which document proves what, who issues it, and which other documents depend on its data?"
+  ],
+  [
+   "58",
+   "29",
+   "CQ2 - Session 29",
+   "Why is a complete document set still defective when every document appears individually plausible?"
+  ],
+  [
+   "59",
+   "30",
+   "CQ1 - Session 30",
+   "Which contract, logistics, or insurance misconception from Progress Test 2 could create the largest real transaction loss?"
+  ],
+  [
+   "60",
+   "30",
+   "CQ2 - Session 30",
+   "What additional practice will you use to correct that weakness before the document and payment units?"
+  ],
+  [
+   "61",
+   "31",
+   "CQ1 - Session 31",
+   "Which invoice or packing-list field has the strongest effect on customs, payment, and transport consistency?"
+  ],
+  [
+   "62",
+   "31",
+   "CQ2 - Session 31",
+   "How should a commercial invoice reflect discounts, freight, insurance, assists, or separate charges without becoming misleading?"
+  ],
+  [
+   "63",
+   "32",
+   "CQ1 - Session 32",
+   "When does a bill of lading function as receipt, evidence of carriage, and document of title, and how does an AWB differ?"
+  ],
+  [
+   "64",
+   "32",
+   "CQ2 - Session 32",
+   "Which transport-document defect could cause both bank refusal and cargo-delivery difficulty?"
+  ],
+  [
+   "65",
+   "33",
+   "CQ1 - Session 33",
+   "Which fields must be identical or logically consistent across the project document pack, and which may differ legitimately?"
+  ],
+  [
+   "66",
+   "33",
+   "CQ2 - Session 33",
+   "Classify each discrepancy found as data error, contractual inconsistency, payment risk, origin/customs risk, or fraud red flag."
+  ],
+  [
+   "67",
+   "34",
+   "CQ1 - Session 34",
+   "Is the firm exposed to currency appreciation or depreciation, and what is the transaction's cash-flow direction?"
+  ],
+  [
+   "68",
+   "34",
+   "CQ2 - Session 34",
+   "Which control—contract currency, forward cover, pricing adjustment, or natural hedge—best fits the case?"
+  ],
+  [
+   "69",
+   "35",
+   "CQ1 - Session 35",
+   "Which payment method produces the best risk–cost balance for both parties at the current relationship stage?"
+  ],
+  [
+   "70",
+   "35",
+   "CQ2 - Session 35",
+   "What concession could the stronger party offer without giving up unacceptable payment protection?"
+  ],
+  [
+   "71",
+   "36",
+   "CQ1 - Session 36",
+   "Under D/P and D/A, when can the buyer obtain documents or goods, and what risk remains with the exporter?"
+  ],
+  [
+   "72",
+   "36",
+   "CQ2 - Session 36",
+   "What should the collection instruction require if the buyer refuses payment or acceptance?"
+  ],
+  [
+   "73",
+   "37",
+   "CQ1 - Session 37",
+   "Why does a compliant documentary presentation not prove that the goods conform to the sales contract?"
+  ],
+  [
+   "74",
+   "37",
+   "CQ2 - Session 37",
+   "Which bank should bear which role in the proposed L/C structure, and is confirmation justified?"
+  ],
+  [
+   "75",
+   "38",
+   "CQ1 - Session 38",
+   "Which discrepancy is most likely to cause dishonour, and can it be corrected before expiry or presentation deadline?"
+  ],
+  [
+   "76",
+   "38",
+   "CQ2 - Session 38",
+   "When is seeking a waiver commercially reasonable, and what new risk does it create?"
+  ],
+  [
+   "77",
+   "39",
+   "CQ1 - Session 39",
+   "Does the case involve poor performance, documentary fraud, collusion, or an authenticity problem, and why?"
+  ],
+  [
+   "78",
+   "39",
+   "CQ2 - Session 39",
+   "Which control should be performed before shipment rather than after documents reach the bank?"
+  ],
+  [
+   "79",
+   "40",
+   "CQ1 - Session 40",
+   "Which special credit or guarantee solves the assigned transaction need without creating a structurally inappropriate instrument?"
+  ],
+  [
+   "80",
+   "40",
+   "CQ2 - Session 40",
+   "How do transferable credit, assignment of proceeds, and back-to-back credit allocate rights and risks differently?"
+  ],
+  [
+   "81",
+   "41",
+   "CQ1 - Session 41",
+   "Which financing instrument best fits the receivable's amount, tenor, buyer risk, and recourse preference?"
+  ],
+  [
+   "82",
+   "41",
+   "CQ2 - Session 41",
+   "Why might the lowest nominal finance cost be inferior to a higher-cost non-recourse solution?"
+  ],
+  [
+   "83",
+   "42",
+   "CQ1 - Session 42",
+   "Do the contract, currency, payment method, L/C/collection terms, documents, and finance plan form one coherent cash-flow system?"
+  ],
+  [
+   "84",
+   "42",
+   "CQ2 - Session 42",
+   "Which single stress scenario most threatens project liquidity, and what contingency should be added?"
+  ],
+  [
+   "85",
+   "43",
+   "CQ1 - Session 43",
+   "Does the proposed transaction require further export-control or restricted-party review, and what fact triggers it?"
+  ],
+  [
+   "86",
+   "43",
+   "CQ2 - Session 43",
+   "Which screening result can be treated as clearance, and which only indicates that further investigation is needed?"
+  ],
+  [
+   "87",
+   "44",
+   "CQ1 - Session 44",
+   "Which third-party behavior creates the highest bribery or professional-conduct risk in the case?"
+  ],
+  [
+   "88",
+   "44",
+   "CQ2 - Session 44",
+   "How should the firm respond when commercial urgency conflicts with documentation, escalation, or approval controls?"
+  ],
+  [
+   "89",
+   "45",
+   "CQ1 - Session 45",
+   "Which IP or authenticity risk could prevent lawful import/export or damage the firm's market position?"
+  ],
+  [
+   "90",
+   "45",
+   "CQ2 - Session 45",
+   "When should an electronic record be treated as functionally equivalent to paper, and what integrity evidence is required?"
+  ],
+  [
+   "91",
+   "46",
+   "CQ1 - Session 46",
+   "Which import requirement determines admissibility rather than merely increasing cost?"
+  ],
+  [
+   "92",
+   "46",
+   "CQ2 - Session 46",
+   "How will the team prove that the selected permit, inspection, labelling, or standard requirement applies to the exact product?"
+  ],
+  [
+   "93",
+   "47",
+   "CQ1 - Session 47",
+   "At which stage of import entry can an error still be corrected with limited impact, and when does it become a substantive compliance issue?"
+  ],
+  [
+   "94",
+   "47",
+   "CQ2 - Session 47",
+   "Should the importer use a customs broker, bonded warehouse, or another facilitation option, and why?"
+  ],
+  [
+   "95",
+   "48",
+   "CQ1 - Session 48",
+   "Which product facts are legally relevant to HS classification, and which marketing descriptions are insufficient?"
+  ],
+  [
+   "96",
+   "48",
+   "CQ2 - Session 48",
+   "How should the team respond when two plausible headings remain after initial research?"
+  ],
+  [
+   "97",
+   "49",
+   "CQ1 - Session 49",
+   "Which valuation addition or alternative method applies, and what documentary evidence supports it?"
+  ],
+  [
+   "98",
+   "49",
+   "CQ2 - Session 49",
+   "Why is a commercially paid invoice price not automatically the final customs value?"
+  ],
+  [
+   "99",
+   "50",
+   "CQ1 - Session 50",
+   "Does the product qualify for preferential origin, and which requirement is the weakest link in the claim?"
+  ],
+  [
+   "100",
+   "50",
+   "CQ2 - Session 50",
+   "How could a valid certificate of origin still fail to secure preference?"
+  ],
+  [
+   "101",
+   "51",
+   "CQ1 - Session 51",
+   "Calculate the import duty and tax from the approved classification, value, and origin assumptions. Which input is most sensitive?"
+  ],
+  [
+   "102",
+   "51",
+   "CQ2 - Session 51",
+   "Is the project customs-ready, or does one unresolved issue require delaying shipment?"
+  ],
+  [
+   "103",
+   "52",
+   "CQ1 - Session 52",
+   "Is the assigned measure anti-dumping, countervailing, or safeguard action, and what business condition distinguishes it?"
+  ],
+  [
+   "104",
+   "52",
+   "CQ2 - Session 52",
+   "What evidence should an exporter preserve before a trade-remedy investigation begins?"
+  ],
+  [
+   "105",
+   "53",
+   "CQ1 - Session 53",
+   "Which countertrade form best addresses the buyer's hard-currency constraint without creating unmanageable disposal risk?"
+  ],
+  [
+   "106",
+   "53",
+   "CQ2 - Session 53",
+   "Faced with the assigned incident, which action must occur first and which stakeholder must lead it?"
+  ],
+  [
+   "107",
+   "54",
+   "CQ1 - Session 54",
+   "Which Progress Test 3 error reveals the weakest link in your end-to-end transaction reasoning?"
+  ],
+  [
+   "108",
+   "54",
+   "CQ2 - Session 54",
+   "Which final project assumption would you challenge if you were the buyer, bank, carrier, insurer, or customs authority?"
+  ],
+  [
+   "109",
+   "55",
+   "CQ1 - Session 55",
+   "Which project conclusion is supported by the strongest evidence, and which conclusion depends most heavily on assumption?"
+  ],
+  [
+   "110",
+   "55",
+   "CQ2 - Session 55",
+   "How do the costing, Incoterms, contract, logistics, payment, customs, and documents demonstrate one internally consistent transaction?"
+  ],
+  [
+   "111",
+   "56",
+   "CQ1 - Session 56",
+   "What is the most material residual risk in the presented transaction, and why was it accepted rather than eliminated or transferred?"
+  ],
+  [
+   "112",
+   "56",
+   "CQ2 - Session 56",
+   "If the partner rejects the proposed payment or Incoterms term, what alternative preserves the commercial objective with controlled risk?"
+  ],
+  [
+   "113",
+   "57",
+   "CQ1 - Session 57",
+   "Which submitted document is most critical to transaction completion, and what would happen if one field were wrong?"
+  ],
+  [
+   "114",
+   "57",
+   "CQ2 - Session 57",
+   "Which member decision in the project required the greatest professional judgment rather than a textbook rule?"
+  ],
+  [
+   "115",
+   "58",
+   "CQ1 - Session 58",
+   "Where does the project rely on a current legal, tariff, origin, or procedural source, and how was its authority and date verified?"
+  ],
+  [
+   "116",
+   "58",
+   "CQ2 - Session 58",
+   "Which project control would detect fraud, misstatement, or documentary inconsistency earliest?"
+  ],
+  [
+   "117",
+   "59",
+   "CQ1 - Session 59",
+   "How would a cargo loss, customs hold, or L/C discrepancy alter the project's cash flow and completion plan?"
+  ],
+  [
+   "118",
+   "59",
+   "CQ2 - Session 59",
+   "Which alternative market, supplier, route, or channel was rejected, and was the rejection evidence-based?"
+  ],
+  [
+   "119",
+   "60",
+   "CQ1 - Session 60",
+   "What capability did the project demonstrate that a written final exam could not measure adequately?"
+  ],
+  [
+   "120",
+   "60",
+   "CQ2 - Session 60",
+   "If you repeated the transaction, which research, calculation, document, or control would you improve first?"
+  ]
+ ],
+ "links": [
+  "/download/14484/S/1_IEI301_Chap 1-5.zip",
+  "/download/14484/S/2_IEI301_Chap 6-10.zip"
+ ]
+}

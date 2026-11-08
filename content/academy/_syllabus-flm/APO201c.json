@@ -1,0 +1,352 @@
+{
+ "ma": "APO201c",
+ "sylID": "14219",
+ "quyetDinh": "444/QĐ-ĐHFPT dated 04/23/2026",
+ "ungVien": [
+  {
+   "sylID": "14219",
+   "code": "APO201c",
+   "name": "Advanced Python with OOP_Lập trình hướng đối tượng với Python",
+   "active": true,
+   "approved": true,
+   "decision": "444/QĐ-ĐHFPT dated 04/23/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14219",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14219",
+  "Syllabus Name": "Advanced Python with OOP_Lập trình hướng đối tượng với Python",
+  "Course Name English": "Advanced Python with OOP",
+  "Subject Code": "APO201c",
+  "Learning-Teaching Method": "In-class lecture, Social Constructivism, Active Learning",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 47h online + 3h offline + 1h TE + 2h PE + 97h self-study",
+  "Pre-Requisite": "PFP191",
+  "Description": "By the end of this course, students will have a understanding of object-oriented programming (OOP) and be able to apply these principles effectively using Python. This includes the ability to design and implement classes, utilize inheritance and polymorphism, and understand the benefits of encapsulation. Students will gain practical experience in building graphical user interfaces (GUIs) for their applications, enhancing user interaction and visualization. Furthermore, they will delve into the world of concurrent programming, learning how to write multi-process programs that leverage the power of modern processors for increased speed and efficiency. Students will explore the fundamentals of network systems and acquire the skills to develop networked applications, including client-server programs, using socket programming in Python.",
+  "StudentTasks": "Student must get the certification of all MOOCs from Coursera to be accepted to the final examination",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "444/QĐ-ĐHFPT dated 04/23/2026",
+  "IsApproved": "True",
+  "Note": "1. Final Exam included:\n\n- Final Theory Exam (TE): 50%\n\n- Practical Exam (PE): 50%\n\n2. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n3. Final Result (FR): min(10, [(TE + PE) / 2] + Bonus)\n\n4. Completion Criteria: TE Score >=4 & PE score >= 4 & FR >= 5\n\n5. Complete the online courses and get all specialization certifications to be allowed to take Final Exam",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/23/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "MOOC 1: Object-Oriented Programming and GUI with Python",
+   "Arizona State University",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/object-oriented-programming-and-gui-with-python?specialization=python-a-guided-journey-from-introduction-to-application"
+  ],
+  [
+   "2",
+   "MOOC 2: Concurrent and Parallel Programming in Python",
+   "Packt",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/packt-concurrent-and-parallel-programming-in-python-um1n1"
+  ],
+  [
+   "3",
+   "MOOC 3: Using Python to Access Web Data",
+   "University of Michigan",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/python-network-data"
+  ],
+  [
+   "4",
+   "MOOC 4: Basic Data Processing and Visualization",
+   "University of California San Diego",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/basic-data-processing-visualization-python"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understanding the fundamental concepts of object oriented programming"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Learning how to create a graphical user interface with Python."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Understanding the fundamental concepts of concurrent and parallel programming in Python."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Implement threading, multiprocessing, and asynchronous programming techniques with Python"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Know how to use regular expressions to extract data from strings"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Understanding how to leverage AI to create code or regular expressions for data extraction"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Understanding the protocols web browsers use to retrieve documents and web apps and learning how to work with XML and JSON data format."
+  ],
+  [
+   "8",
+   "CLO8",
+   "Understanding the concept of Python Data Products and how to develop a Data Product Strategy"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Know how to clean up and process a dataset using Python Libraries and Toolkits"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Practical Exam (PE)",
+   "practical exam",
+   "1",
+   "50.0%",
+   "4",
+   "80'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9",
+   "",
+   "Manual evaluating",
+   "",
+   "By exam board",
+   "Problem(s) to solve by programming using CLO1 - CLO9"
+  ],
+  [
+   "2",
+   "Final Theoretical Exam (TE)",
+   "Final exam",
+   "1",
+   "50.0%",
+   "4",
+   "60'",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7, CLO8, CLO9",
+   "Multiple choices\nMarked by Computer",
+   "50",
+   "All studied courses.",
+   "by exam board,\nusing computer",
+   "Customized from the quizzes of this specialization."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Object-Oriented Programming and GUI with Python\n- Introduction to object-oriented programming (OOP).\n- Difference between OOP and procedural-oriented programming.\n- Classes and objects.",
+   "Online",
+   "CLO1",
+   "ITU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 1 of the course\nObject-Oriented Programming and GUI with Python",
+   ""
+  ],
+  [
+   "2",
+   "Object-Oriented Programming and GUI with Python (cont.)\n- Implement inheritance and polymorphism into an application.",
+   "Online",
+   "CLO1",
+   "TU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 2 of the course Object-Oriented Programming and GUI with Python",
+   ""
+  ],
+  [
+   "3",
+   "Object-Oriented Programming and GUI with Python (cont.)\n- Build a basic graphical user interface (GUI)\n+ Tkinter\n+ Widgets, Shapes\n+ Handling Event",
+   "Online",
+   "CLO2",
+   "T",
+   "Associated Coursera links",
+   "",
+   "Complete Module 3 of the course Object-Oriented Programming and GUI with Python",
+   ""
+  ],
+  [
+   "4",
+   "Concurrent and Parallel Programming in Python\n- Introduction to threading, multiprocessing, and asynchronous programming concepts.\n- Create practical applications using threading to enhance functionality and performance.",
+   "Online",
+   "CLO3, CLO4",
+   "ITU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 1 of the course\nConcurrent and Parallel Programming in Python",
+   ""
+  ],
+  [
+   "5",
+   "Concurrent and Parallel Programming in Python (cont.)\n- Apply advanced multiprocessing techniques for handling multiple arguments and varying tasks.\n- Implement multiprocessing queues for efficient inter-process communication.",
+   "Online",
+   "CLO4",
+   "TU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 2 of the course\nConcurrent and Parallel Programming in Python",
+   ""
+  ],
+  [
+   "6",
+   "Concurrent and Parallel Programming in Python (cont.)\n- Implement async gather methods and timeouts to handle multiple asynchronous operations.\n- Develop and manage asynchronous tasks for efficient execution.",
+   "Offline",
+   "CLO4",
+   "TU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 3 of the course\nConcurrent and Parallel Programming in Python",
+   ""
+  ],
+  [
+   "7",
+   "Using Python to Access Web Data (cont.)\n- Install Python and a text editor\n- Use regular expressions to extract data from strings\n- Apply AI to extract data",
+   "Online",
+   "CLO5, CLO6",
+   "ITU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 1, 2 of the course Using Python to Access Web Data\n\nRead additional documentation on applying AI to generate regular expressions for specific purposes",
+   ""
+  ],
+  [
+   "8",
+   "Using Python to Access Web Data (cont.)\n- Learn about the protocols that web browsers use to retrieve documents and web applications.\n- Use Python to retrieve data from web sites and APIs over the Internet.\n- Apply AI to extract data",
+   "Online",
+   "CLO6, CLO7",
+   "TU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 3, 4 of the course Using Python to Access Web Data",
+   ""
+  ],
+  [
+   "9",
+   "Using Python to Access Web Data (cont.)\n- Learn how to retrieve and parse XML (eXtensible Markup Language) data.\n- Work with Application Program Interfaces / Web Services using the JavaScript Object Notation (JSON) data format.\n- Apply AI to extract data",
+   "Online",
+   "CLO6, CLO7",
+   "TU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 5, 6 of the course Using Python to Access Web Data",
+   ""
+  ],
+  [
+   "10",
+   "Basic Data Processing and Visualization\n- Understand what a data product consists of\n- Know various examples of real world data products\n- Load formatted datasets such as CSV and JSON.\n- Extract simple statistics from datasets (mean, variance, etc.).",
+   "Online",
+   "CLO8",
+   "ITU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 1, 2 of the course Basic Data Processing and Visualization",
+   ""
+  ],
+  [
+   "11",
+   "Basic Data Processing and Visualization (cont.)\n- Filter and “clean” datasets by removing outliers etc.\n- Identify Python libraries and toolkits fundamental to modern data science\n- Learn how to perform data ingestion with urllib, requests",
+   "Online",
+   "CLO8, CLO9",
+   "TU",
+   "Associated Coursera links",
+   "",
+   "Complete Module 3, 4 of the course Basic Data Processing and Visualization",
+   ""
+  ],
+  [
+   "12",
+   "Basic Data Processing and Visualization (cont.)\nFinal Project\n- Develop data strategy and processes for how data will be generated, collected, and consumed",
+   "Offline",
+   "CLO8, CLO9",
+   "U",
+   "Associated Coursera links",
+   "",
+   "- Complete Module 5 of the course Basic Data Processing and Visualization\n- Deadline of Coursera Completion: End of Friday of the week.\nAll Students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": []
+}

@@ -23,7 +23,8 @@ interface AuthState {
     phone?: string | null;
     socialLinks?: Record<string, string> | null;
   }) => void;
-  logout: () => void;
+  /** `veTrang`: trang chuyển tới sau khi xoá phiên (mặc định `/login`) — `hetPhien.ts` dùng để kèm `?error=session_expired&redirect=…`. */
+  logout: (veTrang?: string) => void;
   setLoading: (loading: boolean) => void;
 }
 
@@ -94,7 +95,7 @@ export const useAuthStore = create<AuthState>()(
        * 5. Clear localStorage / sessionStorage
        * 6. Hard redirect to /login
        */
-      logout: async () => {
+      logout: async (veTrang?: string) => {
         if (typeof window === 'undefined') {
           set({ user: null, token: null, isAuthenticated: false, isLoading: false, isHydrated: true });
           return;
@@ -159,7 +160,7 @@ export const useAuthStore = create<AuthState>()(
         }
 
         // 7. Hard redirect — purges all client-side state buffers
-        window.location.href = '/login';
+        window.location.href = veTrang || '/login';
       },
 
       setLoading: (loading) => set({ isLoading: loading }),

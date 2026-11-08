@@ -116,7 +116,10 @@ function LoginForm() {
   const loginError = searchParams.get('error');
 
   useEffect(() => {
-    if (loginError === 'login_required') {
+    if (loginError === 'session_expired') {
+      // lib/hetPhien.ts: vắng mặt lâu ⇒ cookie phiên hết hạn ⇒ đăng xuất gọn rồi đưa về đây (kèm redirect về trang cũ).
+      toast.info('Phiên đăng nhập đã hết hạn vì lâu bạn chưa vào. Đăng nhập lại là tiếp tục đúng trang đang xem.');
+    } else if (loginError === 'login_required') {
       toast.error('Vui lòng đăng nhập để vào khoá học');
     } else if (loginError === 'not_admin') {
       toast.error('Bạn không có quyền truy cập trang quản trị');

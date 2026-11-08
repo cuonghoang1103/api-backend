@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type AxiosInstance } from 'axios';
+import { lamMoiPhien, xuLyHetPhien } from '@/lib/hetPhien';
 import type { ApiResponse, AuthResponse, NoteFull, ChuongTrinhDaoTao } from '@/types';
 import type { ReactionType, ReactionBreakdown } from '@/types/social';
 
@@ -147,19 +148,9 @@ api.interceptors.request.use((config) => {
 // a Next.js route that re-issues + re-sets the cookie) and then retries
 // the original request. Concurrent 401s share a single in-flight
 // refresh. Auth endpoints are skipped so we never loop on a real logout.
-let refreshInFlight: Promise<boolean> | null = null;
-function refreshSession(): Promise<boolean> {
-  if (!refreshInFlight) {
-    refreshInFlight = fetch('/api/auth/refresh', {
-      method: 'POST',
-      credentials: 'include',
-    })
-      .then((r) => r.ok)
-      .catch(() => false)
-      .finally(() => { refreshInFlight = null; });
-  }
-  return refreshInFlight;
-}
+// 08/11/2026: làm mới chuyển sang `lib/hetPhien.ts › lamMoiPhien` (phân biệt phiên CHẾT THẬT với lỗi mạng) —
+// làm mới hỏng vì phiên chết ⇒ `xuLyHetPhien()` đăng xuất gọn + đưa về /login?error=session_expired&redirect=…
+// thay vì để mọi trang hiện "No authentication token provided" (avatar vẫn hiện như đang đăng nhập).
 
 // ─── Step-up MFA cho admin (04/10/2026) ──────────────────────
 // Backend trả 403 `MFA_REQUIRED` khi admin đã bật MFA mà token chưa có claim
@@ -228,8 +219,9 @@ api.interceptors.response.use(
       !url.includes('/auth/')
     ) {
       original._retried = true;
-      const ok = await refreshSession();
-      if (ok) return api(original);
+      const kq = await lamMoiPhien();
+      if (kq === 'ok') return api(original);
+      if (kq === 'het') void xuLyHetPhien();
     }
     return Promise.reject(error);
   }
@@ -729,7 +721,11 @@ export const notesApi = {
     });
     let res = await goi();
     // Phiên hết hạn: tự làm mới MỘT lần như interceptor của axios rồi gọi lại.
-    if (res.status === 401 && (await refreshSession())) res = await goi();
+    if (res.status === 401) {
+      const kq = await lamMoiPhien();
+      if (kq === 'ok') res = await goi();
+      else if (kq === 'het') void xuLyHetPhien();
+    }
     if (!res.ok || !res.body) {
       let msg = `Máy chủ trả HTTP ${res.status}`;
       try { msg = ((await res.json()) as { message?: string }).message || msg; } catch { /* thân không phải JSON */ }

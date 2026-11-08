@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { authApi } from '@/lib/api';
+import { giaHanPhienNeuCan } from '@/lib/hetPhien';
 
 /**
  * Thin mount-once component that syncs the auth store's user object
@@ -35,6 +36,9 @@ export default function AuthBoot() {
     if (!isHydrated || !isAuthenticated || userId == null) return;
     if (lastSyncedUserId.current === userId) return;
     lastSyncedUserId.current = userId;
+
+    // Gia hạn trượt cookie phiên (tối đa 12 giờ/lần) + phát hiện phiên đã chết ngay lúc mở trang — lib/hetPhien.ts.
+    void giaHanPhienNeuCan();
 
     let cancelled = false;
     authApi

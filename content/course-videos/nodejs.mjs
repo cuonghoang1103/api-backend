@@ -68,14 +68,14 @@ export default {
     'nodejs-7-6-hop-dong-api-voi-du-lieu-that': { yt: '0Ik45qw8KhM', credit: 'fromDev2Dev — Let\'s learn Prisma ORM: migrate in detail (seeding, down migration, production)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/07-postgresql-prisma/07-06-hop-dong-api-voi-du-lieu-that-tron-e2c9852c.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — Xác thực & phân quyền ───────────────────────────────── */
-    'nodejs-8-1-mat-khau-va-bam': { yt: 'uXDnS5PcjCA', credit: 'LearnWebCode — Cookies, Sessions, JSON Web Tokens (JWT) and More 🍪🔐' },
+    'nodejs-8-1-mat-khau-va-bam': { yt: 'uXDnS5PcjCA', credit: 'LearnWebCode — Cookies, Sessions, JSON Web Tokens (JWT) and More 🍪🔐', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/08-xac-thuc-phan-quyen/08-01-mat-khau-va-bam-tron-775e4746.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-8-2-jwt-access-refresh': { yt: 'pkKn8q5AvsY', credit: 'Sheryians Coding School — Complete Authentication System | JWT, Refresh Token, OTP, Logout All Devices', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/08-xac-thuc-phan-quyen/08-02-jwt-access-refresh-tron-c299cbc8.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-8-3-requireauth-phan-quyen': { yt: 'cIZvG3jZP5w', credit: 'WittCode — Express Authentication Cookies and JWTs' },
+    'nodejs-8-3-requireauth-phan-quyen': { yt: 'cIZvG3jZP5w', credit: 'WittCode — Express Authentication Cookies and JWTs', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/08-xac-thuc-phan-quyen/08-03-requireauth-phan-quyen-tron-63e92346.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-8-4-cookie-csrf-thu-hoi': { yt: 'hjTY1Lf21W0', credit: 'Tejas Kumar — CSRF and CORS Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/08-xac-thuc-phan-quyen/08-04-cookie-csrf-thu-hoi-tron-8cc3a7ba.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 9 — Bảo mật ứng dụng ────────────────────────────────────── */
     'nodejs-9-1-header-csp-cors': { yt: '4bQeGUzHpOE', credit: 'ByteMonk — HTTP Secure Headers for Web App Security | CORS, CSP, HSTS and more', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-01-header-csp-cors-tron-cf81d3e0.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-9-2-xss-va-sanitize': { yt: 'v969_M6cWk0', credit: 'Fireship — Ethical Hacking in 100 Seconds // And why do we need CORS?' },
+    'nodejs-9-2-xss-va-sanitize': { yt: 'v969_M6cWk0', credit: 'Fireship — Ethical Hacking in 100 Seconds // And why do we need CORS?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-02-xss-va-sanitize-tron-253bec26.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-9-3-dau-vao-doc-hai': { yt: 'QqHavAYDYKM', credit: 'SBS online classes — helmet.js | Secure Node.js and Express.js APP/API', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-03-dau-vao-doc-hai-tron-d3a46b59.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-9-4-bi-mat-va-phu-thuoc': { yt: 'Wq6yMdt11LM', credit: 'Better Stack — npm installs can hack your laptop (Here\'s how to stop it)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-04-bi-mat-va-phu-thuoc-tron-5762f0cb.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -93,9 +93,9 @@ export default {
 
     /* ── Chương 12 — Redis ──────────────────────────────────────────────── */
     'nodejs-12-1-redis-co-ban': { yt: 'G1rOthIU-uo', credit: 'Fireship — Redis in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-01-redis-co-ban-667485fb.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-12-2-cache-aside': { yt: '8A6s9d0jnWI', credit: 'Software With Shawn — Caching Strategies With Redis' },
+    'nodejs-12-2-cache-aside': { yt: '8A6s9d0jnWI', credit: 'Software With Shawn — Caching Strategies With Redis', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-02-cache-aside-tron-d1a58db6.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-12-3-cau-truc-du-lieu': { yt: 'O_jNJ32s6x8', credit: 'Redis — Intro to Redis Data Structures and Pub/Sub vs Redis Streams - by Dave Nielsen', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-03-cau-truc-du-lieu-tron-f7494c59.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-12-4-nguyen-tu-rate-limit-lock': { yt: 'YcmU24x4KyA', credit: 'Redis — Rate Limiting with Redis' },
+    'nodejs-12-4-nguyen-tu-rate-limit-lock': { yt: 'YcmU24x4KyA', credit: 'Redis — Rate Limiting with Redis', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-04-nguyen-tu-rate-limit-lock-tron-0fcfb845.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-12-5-pubsub-streams': { yt: 'hFNnNVawHhk', credit: 'Sangam Mukherjee — Redis Full Course 2026 | Caching, Rate Limiting, Pub/Sub', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-05-pubsub-streams-tron-e87e949f.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-12-6-van-hanh-production': { yt: 'cK1_csGSFFw', credit: 'Tejav Academy — Distributed Caching Explained | Redis, Cache-Aside & System Design', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-06-van-hanh-production-tron-6452fa5b.mp4' }, defaultVideoTrack: 'VI'},
 

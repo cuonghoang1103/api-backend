@@ -79,6 +79,9 @@ export function validatePasswordStrength(
   return { valid: errors.length === 0, errors };
 }
 
+/** Token ký quá chừng này thì /auth/refresh từ chối (khớp hạn cookie backend_token = 30 ngày). */
+const TUOI_TOI_DA_LAM_MOI_GIAY = 30 * 24 * 60 * 60;
+
 export class AuthService {
   // ─── Credentials Login ──────────────────────────────────
   async login(
@@ -985,7 +988,7 @@ export class AuthService {
    * We verify the signature but IGNORE expiration so a lapsed session
    * can self-heal, then re-validate the account against the DB (so a
    * disabled/locked/deleted user is still rejected). The cookie's own
-   * 7-day TTL bounds how stale a token can be presented here.
+   * TTL (30 days since 08/11/2026) and TUOI_TOI_DA_LAM_MOI_GIAY bound how stale a token can be presented here.
    */
   async refreshToken(oldToken: string): Promise<AuthResponse> {
     let decoded: JwtPayload;
@@ -995,6 +998,13 @@ export class AuthService {
       }) as JwtPayload;
     } catch {
       throw new AppError('Invalid session token', 401, 'INVALID_TOKEN');
+    }
+    // Trần tuổi token (08/11/2026): cookie nay sống 30 ngày và được gia hạn trượt mỗi lần ghé (frontend lib/hetPhien.ts),
+    // nên chặn ở ĐÂY chứ không dựa vào hạn cookie: token được ký quá 30 ngày (hoặc thiếu iat) thì không làm mới nữa —
+    // một token lộ ra không thể được gia hạn mãi. Người dùng thật luôn cầm token ký ≤ 12 giờ… 30 ngày trước.
+    const iat = (decoded as JwtPayload & { iat?: number }).iat;
+    if (typeof iat !== 'number' || Date.now() / 1000 - iat > TUOI_TOI_DA_LAM_MOI_GIAY) {
+      throw new AppError('Session too old — please sign in again', 401, 'SESSION_TOO_OLD');
     }
 
     const user = await prisma.user.findUnique({

@@ -2,8 +2,8 @@
  * Phiên đăng nhập HẾT HẠN THẬT ⇒ đăng xuất gọn, đưa về /login kèm lời nhắc tiếng Việt và đường quay lại.
  *
  * Vì sao có file này (08/11/2026, nhiều người dùng gặp): `auth-storage` (zustand persist) giữ
- * `isAuthenticated = true` trong localStorage VÔ HẠN, còn cookie httpOnly `backend_token` chỉ sống 7 ngày.
- * Vắng mặt quá 7 ngày ⇒ avatar vẫn hiện như đang đăng nhập, nhưng mọi request trả 401
+ * `isAuthenticated = true` trong localStorage VÔ HẠN, còn cookie httpOnly `backend_token` khi ấy chỉ sống 7 ngày (nay 30).
+ * Vắng mặt quá hạn cookie ⇒ avatar vẫn hiện như đang đăng nhập, nhưng mọi request trả 401
  * "No authentication token provided", `/api/auth/refresh` cũng 401 (không còn cookie để làm mới) — và
  * interceptor cũ chỉ `reject` ⇒ thông báo đỏ tiếng Anh ở mọi trang, người dùng tưởng web hỏng và bỏ đi;
  * cách duy nhất là tự bấm Đăng xuất rồi đăng nhập lại.
@@ -38,9 +38,9 @@ const KHOA_GIA_HAN = 'ct_phien_gia_han_luc';
 const CACH_GIA_HAN_MS = 12 * 60 * 60 * 1000;
 
 /**
- * Gia hạn trượt: mỗi lần mở web (tối đa 12 giờ một lần) xin cookie mới 7 ngày ⇒ người vào web ít nhất mỗi tuần
+ * Gia hạn trượt: mỗi lần mở web (tối đa 12 giờ một lần) xin cookie mới 30 ngày ⇒ người vào web ít nhất mỗi tháng
  * một lần KHÔNG BAO GIỜ gặp hết phiên. Trước đây cookie chỉ được cấp lại khi JWT 24 giờ đã hết hạn và một request
- * vừa 401, nên mốc 7 ngày tính từ lần đăng nhập/làm mới cuối, không phải từ lần ghé cuối.
+ * vừa 401, nên mốc hết hạn tính từ lần đăng nhập/làm mới cuối, không phải từ lần ghé cuối.
  * Cookie đã mất từ trước ⇒ biết NGAY lúc mở trang (thay vì ở cú bấm đầu tiên) và đăng xuất gọn.
  */
 export async function giaHanPhienNeuCan(): Promise<void> {
@@ -58,7 +58,7 @@ export async function giaHanPhienNeuCan(): Promise<void> {
 }
 
 /**
- * Gọi `/api/auth/refresh` (route Next cấp lại JWT + đặt lại cookie 7 ngày).
+ * Gọi `/api/auth/refresh` (route Next cấp lại JWT + đặt lại cookie 30 ngày).
  * 'ok' = đã làm mới · 'het' = phiên chết thật (401/403) · 'loi' = mạng/máy chủ trục trặc — KHÔNG đăng xuất vì
  * một lần mất mạng.
  */

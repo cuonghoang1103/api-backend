@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Set the NEW token as an httpOnly cookie (7 days)
+    // Set the NEW token as an httpOnly cookie (30 days)
     const response = NextResponse.json({
       success: true,
       data: { userId, username: data.data?.username, email, role, token },
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24 * 30, // 30 ngày (08/11/2026), gia hạn trượt: lib/hetPhien.ts
       path: "/",
     });
 

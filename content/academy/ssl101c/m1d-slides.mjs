@@ -44,7 +44,7 @@ export default {
 <li><strong>There are exactly THREE techniques, and the exam expects you to name them.</strong> Direct quotation (their words, marked), paraphrase (their idea, your words, same length), summary (their idea, your words, much shorter). Every one of the three requires a citation — that is the point people forget.</li>
 <li><strong>Why it is worth marks and not just etiquette.</strong> Sources are how you show you did the reading. An essay with no sources reads as opinion; an essay that is all quotation reads as a scrapbook. The skill being assessed is <em>proportion</em>: your voice leading, their evidence supporting.</li>
 <li><strong>At FPTU this is immediate.</strong> Report and assignment work in SSG104, SWP391, SWR302 and every capstone requires a reference list. Turnitin-style similarity checking flags copied strings — a paraphrase done properly drops the similarity score, a "paraphrase" that only swaps a few synonyms does not.</li>
-<li><strong>Note the repeated objective block.</strong> Slides 83, 84 and 89 print <em>the same three bullets</em>. That is how this deck signposts a new sub-section, not three different lists. Do not waste memory trying to tell them apart.</li>
+<li><strong>Note the repeated objective block.</strong> Slides 83, 84 and 89 print <em>the same three bullets</em> (only the spelling shifts: 83 has "plagiarizing" and "paraphrasing &amp; summarizing", 84 and 89 have "plagiarising" and "paraphrasing and summarizing"). That is how this deck signposts a new sub-section, not three different lists. Do not waste memory trying to tell them apart.</li>
 </ul>
 <table>
 <tr><th>Technique</th><th>Whose words</th><th>Length vs original</th><th>Citation needed?</th></tr>
@@ -59,7 +59,7 @@ export default {
 <li><strong>Có ĐÚNG BA kỹ thuật, và đề thi bắt bạn gọi tên được.</strong> Trích nguyên văn (chữ của họ, có đánh dấu), diễn giải — paraphrase (ý của họ, chữ của bạn, độ dài xấp xỉ), tóm tắt — summary (ý của họ, chữ của bạn, ngắn hơn nhiều). Cả ba đều PHẢI trích nguồn — đây là chỗ người ta hay quên.</li>
 <li><strong>Vì sao nó ăn điểm chứ không chỉ là phép lịch sự.</strong> Nguồn là bằng chứng bạn đã đọc. Bài không có nguồn đọc như ý kiến cá nhân; bài toàn trích dẫn đọc như một quyển sổ dán. Thứ đang được chấm là TỈ LỆ: giọng bạn dẫn dắt, dẫn chứng của họ đỡ phía sau.</li>
 <li><strong>Ở FPTU dùng được ngay.</strong> Báo cáo và assignment của SSG104, SWP391, SWR302 và mọi đồ án đều đòi danh mục tài liệu. Công cụ kiểu Turnitin bắt các chuỗi chữ trùng — diễn giải đúng cách làm tụt tỉ lệ trùng, còn "diễn giải" kiểu thay vài từ đồng nghĩa thì KHÔNG.</li>
-<li><strong>Để ý khối chuẩn đầu ra bị LẶP.</strong> Slide 83, 84 và 89 in <em>y hệt ba gạch đầu dòng đó</em>. Đây là cách deck báo hiệu sang tiểu mục mới, không phải ba danh sách khác nhau. Đừng tốn trí nhớ phân biệt chúng.</li>
+<li><strong>Để ý khối chuẩn đầu ra bị LẶP.</strong> Slide 83, 84 và 89 in <em>cùng ba gạch đầu dòng đó</em> (chỉ khác chính tả: 83 viết "plagiarizing" và "paraphrasing &amp; summarizing", 84 và 89 viết "plagiarising" và "paraphrasing and summarizing"). Đây là cách deck báo hiệu sang tiểu mục mới, không phải ba danh sách khác nhau. Đừng tốn trí nhớ phân biệt chúng.</li>
 </ul>
 <table>
 <tr><th>Kỹ thuật</th><th>Chữ của ai</th><th>Độ dài so với gốc</th><th>Có phải trích nguồn?</th></tr>
@@ -163,7 +163,7 @@ export default {
 <li><strong>The pointer must match the list entry's first word.</strong> The reader finds the entry by looking up <em>Noda</em> alphabetically. If your in-text citation says one name and the list is alphabetised under another, the pointer is broken — the most common referencing error after simply forgetting the entry.</li>
 <li><strong>The DOI is the part IT students should care about most.</strong> URLs rot; a DOI is a permanent identifier that resolves to the article forever. Pasting <code>10.1371/journal.pone.0054116</code> into a search box, or after <code>https://doi.org/</code>, lands on the paper. Prefer a DOI to any link you copied out of the browser bar.</li>
 <li><strong>Sentence case versus title case is a real mark.</strong> APA article titles take sentence case ("Impact of robotic assistance on…"), while the journal name keeps its own capitalisation (PLoS ONE). Getting this backwards is the classic sign that a reference list was typed by hand in a hurry.</li>
-<li><strong>Connect back to slide 25.</strong> Earlier in this deck the task was to "list part of a journal article" — authors, year, title, journal, volume, issue, pages, DOI. This slide is that anatomy lesson turned into a finished reference. Recognising the parts is what lets referencing software (slides 91–93) do the typing for you.</li>
+<li><strong>Connect back to the journal-article lesson (1.0b, slides 32–33).</strong> A journal reference is built from parts — authors, year, title, journal, volume, issue, pages, DOI — and this slide shows them assembled into a finished reference. Recognising the parts is what lets referencing software (slides 91–93) do the typing for you.</li>
 </ul>
 <p class="dap-an">✅ If an exam asks "what is the in-text citation for a nine-author 2013 paper by Noda and colleagues?" the answer is <strong>(Noda et al., 2013)</strong> — first surname, et al., comma, year. Not all nine names; not the journal; not the DOI.</p>`,
         `<p class="y-chinh">🎯 Một nguồn duy nhất hiện ra ở CẢ HAI dạng cùng lúc. Mục trong <strong>danh mục tài liệu</strong> là bản ghi dài và đầy đủ; <strong>trích dẫn trong bài</strong> là cái con trỏ hai chữ <code>(Noda et al., 2013)</code> đẩy người đọc tới đó. Hãy tập đọc bản dài như một dãy Ô.</p>
@@ -181,7 +181,7 @@ export default {
 <li><strong>Con trỏ phải KHỚP với chữ đầu tiên của mục trong danh mục.</strong> Người đọc tìm mục đó bằng cách tra chữ <em>Noda</em> theo bảng chữ cái. Nếu trích dẫn trong bài ghi một tên mà danh mục lại xếp theo tên khác thì con trỏ gãy — đây là lỗi trích dẫn phổ biến thứ hai, chỉ sau việc quên hẳn mục đó.</li>
 <li><strong>DOI là phần dân CNTT nên quan tâm nhất.</strong> URL mục nát theo thời gian; DOI là định danh vĩnh viễn luôn dẫn về bài báo. Dán <code>10.1371/journal.pone.0054116</code> vào ô tìm kiếm, hoặc sau <code>https://doi.org/</code>, là ra đúng bài. Hãy ưu tiên DOI hơn bất cứ đường dẫn nào chép từ thanh địa chỉ trình duyệt.</li>
 <li><strong>Viết hoa kiểu câu hay kiểu tiêu đề là điểm thật.</strong> APA cho tên bài báo viết hoa kiểu CÂU ("Impact of robotic assistance on…"), còn tên tạp chí giữ cách viết hoa riêng (PLoS ONE). Làm ngược lại là dấu hiệu kinh điển của một danh mục gõ tay lúc vội.</li>
-<li><strong>Nối ngược về slide 25.</strong> Trước đó trong deck có bài tập "liệt kê các thành phần của một bài báo tạp chí" — tác giả, năm, tên bài, tạp chí, tập, số, trang, DOI. Slide này là bài giải phẫu đó biến thành một tài liệu hoàn chỉnh. Nhận ra từng bộ phận chính là thứ cho phép phần mềm quản lý tài liệu (slide 91–93) gõ hộ bạn.</li>
+<li><strong>Nối ngược về bài báo tạp chí (1.0b, slide 32–33).</strong> Một mục tài liệu cho bài báo được ghép từ các phần — tác giả, năm, tên bài, tạp chí, tập, số, trang, DOI — và slide này cho thấy chúng ráp thành một mục hoàn chỉnh. Nhận ra từng bộ phận chính là thứ cho phép phần mềm quản lý tài liệu (slide 91–93) gõ hộ bạn.</li>
 </ul>
 <p class="dap-an">✅ Nếu đề hỏi "trích dẫn trong bài cho bài báo chín tác giả năm 2013 của Noda và cộng sự là gì?" thì đáp án là <strong>(Noda et al., 2013)</strong> — họ đầu tiên, et al., dấu phẩy, năm. Không phải cả chín tên; không phải tên tạp chí; không phải DOI.</p>`],
 
@@ -366,7 +366,7 @@ export default {
 <tr><td><strong>Compatible with</strong></td><td>Windows, OS X and Linux</td><td>Windows, OS X and Linux</td><td>Windows, OS X and Linux</td></tr>
 </table>
 <ul>
-<li><strong>Read the chart by DIFFERENCES, because four rows are identical.</strong> All three generate bibliographies, all three have a Word plug-in, all three are collaborative, all three run on Windows, OS X and Linux. Those rows can never be the answer to "which one…". The rows that actually separate them are <strong>cost, storage, renaming files, and access from anywhere</strong>.</li>
+<li><strong>Read the chart by DIFFERENCES, because several rows give all three a tick.</strong> All three generate bibliographies, all three have a Word plug-in, all three are collaborative, all three run on Windows, OS X and Linux. Those rows can never be the answer to "which one…". The rows that actually separate them are <strong>cost, storage, renaming files, and access from anywhere</strong>.</li>
 <li><strong>The four facts most likely to be tested.</strong> EndNote is the only one that is <em>not free</em>. Mendeley has the <em>most storage</em> (2GB) and is the only one that fully <em>renames files</em>. Zotero has the <em>least storage</em> (300MB) and renames only <em>partly</em>. Learn those four and you can answer almost any question drawn from this chart.</li>
 <li><strong>Only EndNote supports Apple Pages.</strong> Every plug-in row mentions Word for Microsoft and Mac; EndNote alone adds Apple Pages. It is a small detail, which is exactly the kind of thing a multiple-choice writer reaches for.</li>
 <li><strong>Two cells deliberately have no tick.</strong> "Access from anywhere" is ticked for Mendeley only, even though the EndNote and Zotero cells describe syncing and mobile apps. The chart reflects a judgement made at the time it was drawn — report what the chart says, do not silently "fix" it.</li>
@@ -388,7 +388,7 @@ export default {
 <tr><td><strong>Chạy trên</strong></td><td>Windows, OS X và Linux</td><td>Windows, OS X và Linux</td><td>Windows, OS X và Linux</td></tr>
 </table>
 <ul>
-<li><strong>Đọc bảng theo chỗ KHÁC NHAU, vì bốn dòng giống hệt nhau.</strong> Cả ba đều sinh thư mục tài liệu, đều có plug-in Word, đều cộng tác được, đều chạy Windows/OS X/Linux. Những dòng đó không bao giờ là đáp án cho câu "cái nào…". Dòng thật sự tách chúng ra là <strong>chi phí, dung lượng, đổi tên file, và truy cập từ mọi nơi</strong>.</li>
+<li><strong>Đọc bảng theo chỗ KHÁC NHAU, vì nhiều dòng đánh dấu cả ba.</strong> Cả ba đều sinh thư mục tài liệu, đều có plug-in Word, đều cộng tác được, đều chạy Windows/OS X/Linux. Những dòng đó không bao giờ là đáp án cho câu "cái nào…". Dòng thật sự tách chúng ra là <strong>chi phí, dung lượng, đổi tên file, và truy cập từ mọi nơi</strong>.</li>
 <li><strong>Bốn dữ kiện dễ ra đề nhất.</strong> EndNote là cái duy nhất <em>không miễn phí</em>. Mendeley có <em>dung lượng lớn nhất</em> (2GB) và là cái duy nhất <em>đổi tên file</em> trọn vẹn. Zotero có <em>dung lượng nhỏ nhất</em> (300MB) và chỉ đổi tên <em>một phần</em>. Thuộc bốn cái đó là trả lời được gần như mọi câu rút ra từ bảng này.</li>
 <li><strong>Chỉ EndNote hỗ trợ Apple Pages.</strong> Mọi ô ở dòng plug-in đều ghi Word cho Microsoft và Mac; riêng EndNote thêm Apple Pages. Một chi tiết nhỏ, và đó đúng là loại chi tiết người ra đề trắc nghiệm hay với tay lấy.</li>
 <li><strong>Hai ô CỐ Ý không có dấu ✔.</strong> Dòng "truy cập từ mọi nơi" chỉ đánh dấu cho Mendeley, dù ô của EndNote và Zotero vẫn mô tả đồng bộ và app di động. Bảng phản ánh đánh giá tại thời điểm nó được vẽ — hãy thuật đúng cái bảng nói, đừng âm thầm "sửa hộ".</li>
@@ -756,7 +756,7 @@ export default {
 <tr><td>Discussion board post</td><td>Semi-formal, referenced</td><td>Within the week's window</td><td>The whole class, permanently</td></tr>
 <tr><td>Group chat</td><td>Informal</td><td>Minutes to hours</td><td>Teammates</td></tr>
 </table>
-<p class="pitfall">⚠️ Slides 104, 106, 107 and 108 all print these SAME two objectives. They are section markers, not new content — the real material is on the summary slides 105 and 109.</p>`,
+<p class="pitfall">⚠️ Slides 104, 107 and 108 print these same two objectives; slide 106 instead reprints the two objectives of section 5.2 (slide 98) — a slip in the original deck. They are section markers, not new content — the real material is on the summary slides 105 and 109.</p>`,
         `<p class="y-chinh">🎯 Tiểu mục cuối cùng của Mooc 1 mở ra với hai chuẩn đầu ra: <strong>giao tiếp hiệu quả ở các phương thức số khác nhau</strong>, và <strong>tuân theo quy ước phù hợp của từng phương thức giao tiếp</strong>. Slide 104–109 chính là những quy ước đó, đi từng phương thức.</p>
 <ul>
 <li><strong>Từ khoá là "các PHƯƠNG THỨC số khác nhau".</strong> Một email, một bài đăng trên diễn đàn học phần, một tin nhắn chat và một bình luận trong pull request là BỐN phương thức với bốn bộ kỳ vọng khác nhau. Viết cái này bằng giọng của cái kia chính là lỗi mà cả mục này sinh ra để chặn.</li>
@@ -771,7 +771,7 @@ export default {
 <tr><td>Bài đăng diễn đàn</td><td>Bán trang trọng, có trích nguồn</td><td>Trong khung thời gian của tuần</td><td>Cả lớp, vĩnh viễn</td></tr>
 <tr><td>Chat nhóm</td><td>Thân mật</td><td>Vài phút tới vài giờ</td><td>Bạn cùng nhóm</td></tr>
 </table>
-<p class="pitfall">⚠️ Slide 104, 106, 107 và 108 đều in Y HỆT hai chuẩn đầu ra này. Chúng là mốc đánh dấu tiểu mục, không phải nội dung mới — chất liệu thật nằm ở hai slide tóm tắt 105 và 109.</p>`],
+<p class="pitfall">⚠️ Slide 104, 107 và 108 in cùng hai chuẩn đầu ra này; riêng slide 106 lại in hai chuẩn đầu ra của mục 5.2 (slide 98) — lỗi của bộ slide gốc. Chúng là mốc đánh dấu tiểu mục, không phải nội dung mới — chất liệu thật nằm ở hai slide tóm tắt 105 và 109.</p>`],
 
       [105, 'Summary: Communicating Online — two forms, and the rules of netiquette (Shea, 2005)',
         `<p class="y-chinh">🎯 The slide names the <strong>two main forms of digital communication at university</strong> — <strong>emails</strong> and <strong>discussion boards</strong> — and then lists <strong>the rules of netiquette</strong>: remember the human · don't behave differently online · forgive others' mistakes · present yourself well online · respect other people's time · respect other people's privacy.</p>
@@ -811,8 +811,8 @@ export default {
 </ul>
 <p class="meo">💡 Nén sáu luật thành ba cặp: <strong>con người kia</strong> (nhớ tới họ, tha thứ họ) · <strong>bản thân</strong> (cùng một chuẩn, thể hiện tử tế) · <strong>tài nguyên của họ</strong> (thời gian, riêng tư). Dễ tái hiện hơn hẳn lúc căng thẳng phòng thi.</p>`],
 
-      [106, '5.4b Emailing Lecturers — a bad email and a good email, same situation',
-        `<p class="y-chinh">🎯 The objectives repeat, but the topic is the one skill from this MOOC you will use this week: <strong>writing an email to a lecturer</strong>. Below are two emails for the same situation — asking for an extension on an assignment — and everything that separates them.</p>
+      [106, '5.4b Emailing Lecturers (objectives slide — it reprints the two outcomes of 5.2; the two emails below are this lesson\'s own examples)',
+        `<p class="y-chinh">🎯 Slide 106 is only an objectives page — and it reprints the two outcomes of section 5.2 (slide 98), not those of 5.4. The topic is the one skill from this MOOC you will use this week: <strong>writing an email to a lecturer</strong>. Below are two emails written for this lesson (they are NOT on the slide) for the same situation — asking for an extension on an assignment — and everything that separates them.</p>
 <p class="nhan">📧 <strong>Version 1 — the bad email</strong></p>
 <pre>Subject: help
 hi teacher
@@ -861,7 +861,7 @@ Student ID HE170123 - SE1705 - SWP391</pre>
 <li><strong>FPTU specifics.</strong> Use your university email, not a personal one; include your student ID and class code every time; allow 1–3 working days before following up; and if you follow up, reply in the SAME thread rather than starting a new email.</li>
 </ul>
 <p class="dap-an">✅ Minimum checklist for every email to a lecturer: <strong>(1)</strong> specific subject line with course code · <strong>(2)</strong> proper salutation with their name and title · <strong>(3)</strong> your full name, student ID and course/class · <strong>(4)</strong> the request stated briefly and early · <strong>(5)</strong> the relevant reason and any evidence · <strong>(6)</strong> a thank-you · <strong>(7)</strong> a signature block. Seven items, every time.</p>`,
-        `<p class="y-chinh">🎯 Chuẩn đầu ra lặp lại, nhưng chủ đề là kỹ năng của MOOC này mà bạn sẽ dùng ngay tuần nay: <strong>viết email cho giảng viên</strong>. Dưới đây là hai email cho CÙNG một tình huống — xin gia hạn nộp bài — và mọi thứ tách biệt chúng.</p>
+        `<p class="y-chinh">🎯 Slide 106 chỉ là trang chuẩn đầu ra — và nó in lại hai chuẩn đầu ra của mục 5.2 (slide 98), không phải của 5.4. Chủ đề là kỹ năng của MOOC này mà bạn sẽ dùng ngay tuần nay: <strong>viết email cho giảng viên</strong>. Dưới đây là hai email do bài web soạn (KHÔNG có trên slide) cho CÙNG một tình huống — xin gia hạn nộp bài — và mọi thứ tách biệt chúng.</p>
 <p class="nhan">📧 <strong>Bản 1 — email XẤU</strong></p>
 <pre>Subject: help
 hi teacher
@@ -909,8 +909,8 @@ MSSV HE170123 - SE1705 - SWP391</pre>
 </ul>
 <p class="dap-an">✅ Checklist tối thiểu cho mọi email gửi giảng viên: <strong>(1)</strong> tiêu đề cụ thể có mã môn · <strong>(2)</strong> lời chào đàng hoàng, gọi đúng tên và chức danh · <strong>(3)</strong> họ tên đầy đủ, MSSV và môn/lớp · <strong>(4)</strong> nêu yêu cầu NGẮN và SỚM · <strong>(5)</strong> lý do liên quan cùng bằng chứng nếu có · <strong>(6)</strong> lời cảm ơn · <strong>(7)</strong> khối chữ ký. Bảy mục, lần nào cũng đủ.</p>`],
 
-      [107, '5.4c Writing an Email — the anatomy, and a second worked example (asking about a grade)',
-        `<p class="y-chinh">🎯 Same objectives, now on the structure of the email itself. Every academic email has <strong>seven parts</strong>, and each part has one job. Learn the skeleton once and you can write any of them in two minutes.</p>
+      [107, '5.4c Writing an Email (objectives slide — the seven-part anatomy and the second example are this lesson\'s own)',
+        `<p class="y-chinh">🎯 Slide 107 is again only an objectives page (the two outcomes of 5.4a). The structure below is this lesson's own breakdown, not slide content: every academic email has <strong>seven parts</strong>, and each part has one job. Learn the skeleton once and you can write any of them in two minutes.</p>
 <table>
 <tr><th>Part</th><th>Its one job</th><th>Good</th><th>Bad</th></tr>
 <tr><td>Subject line</td><td>Let the reader triage without opening</td><td>"CSI106 - Question about Quiz 3 marking - Le Thi C (HE170456)"</td><td>"question", "urgent!!!", blank</td></tr>
@@ -954,7 +954,7 @@ Student ID HE170456 - SE1706 - CSI106</pre>
 <li><strong>Tone rules that carry everywhere.</strong> No ALL CAPS, no multiple exclamation marks, no "urgent" unless it truly is, no demand for an immediate reply. If you are angry, write the email, save it as a draft, and re-read it tomorrow — it is a permanent record (slide 104).</li>
 </ul>
 <p class="meo">💡 Remember the skeleton with a mnemonic: <strong>Subject · Salutation · Self · Purpose · Proof · Please/Thanks · Signature</strong>. If a multiple-choice question asks which element a student email is missing, it is almost always the student ID/course identification or a meaningful subject line.</p>`,
-        `<p class="y-chinh">🎯 Vẫn chuẩn đầu ra đó, giờ nói về CẤU TRÚC của chính lá email. Mọi email học thuật đều có <strong>BẢY phần</strong>, và mỗi phần làm đúng một việc. Thuộc bộ xương này một lần là viết được bất kỳ lá nào trong hai phút.</p>
+        `<p class="y-chinh">🎯 Slide 107 cũng chỉ là trang chuẩn đầu ra (hai chuẩn đầu ra của 5.4a). Phần CẤU TRÚC lá email dưới đây là cách chia của bài web, không có trên slide: mọi email học thuật đều có <strong>BẢY phần</strong>, và mỗi phần làm đúng một việc. Thuộc bộ xương này một lần là viết được bất kỳ lá nào trong hai phút.</p>
 <table>
 <tr><th>Phần</th><th>Việc duy nhất của nó</th><th>Tốt</th><th>Xấu</th></tr>
 <tr><td>Dòng tiêu đề</td><td>Cho người nhận phân loại mà không cần mở</td><td>"CSI106 - Hỏi về cách chấm Quiz 3 - Le Thi C (HE170456)"</td><td>"hỏi tí", "gấp!!!", để trống</td></tr>

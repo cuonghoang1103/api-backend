@@ -53,9 +53,9 @@ export const b5l23 = [
      </ol>`),
 
   slide(D, 4, 'Opening quotation',
-    `<p class="y-chinh">🎯 "One important key to success is <strong>self-confidence</strong>. An important key to self-confidence is <strong>preparation</strong>." — Arthur Ashe.</p>
+    `<p class="y-chinh">🎯 "One important key to success is <strong>self-confidence</strong>. An important key to self-confidence is <strong>preparation</strong>." — Arthur Ashe, champion tennis player (pictured holding up a trophy).</p>
      <p class="meo">💡 The chain matters for an interview specifically: you cannot decide to feel confident, but you can decide to prepare, and confidence follows from that.</p>`,
-    `<p class="y-chinh">🎯 "Một chìa khoá quan trọng của thành công là <strong>sự tự tin</strong>. Một chìa khoá quan trọng của sự tự tin là <strong>sự chuẩn bị</strong>." — Arthur Ashe.</p>
+    `<p class="y-chinh">🎯 "Một chìa khoá quan trọng của thành công là <strong>sự tự tin</strong>. Một chìa khoá quan trọng của sự tự tin là <strong>sự chuẩn bị</strong>." — Arthur Ashe, nhà vô địch quần vợt (ảnh ông giơ cao chiếc cúp).</p>
      <p class="meo">💡 Chuỗi này đặc biệt đúng với phỏng vấn: bạn không thể quyết định mình sẽ thấy tự tin, nhưng bạn quyết định được việc chuẩn bị, và sự tự tin đi ra từ đó.</p>`),
 
   slide(D, 5, 'Preparing effectively for a job interview',
@@ -139,7 +139,7 @@ export const b5l23 = [
        <li><span class="nhan">Lunch interviews</span> — assessed while the setting looks social.</li>
        <li><span class="nhan">Group interviews</span> — several candidates together.</li>
      </ul>
-     <p class="pitfall co-tieu-de"><strong>Hai kiểu dễ bị đánh giá thấp:</strong> the lunch interview (you are being assessed the whole time, however relaxed it feels) and the group interview (how you treat the other candidates is part of the test — see Lesson 1 on teamwork).</p>`,
+     <p class="pitfall co-tieu-de"><strong>Two types that are easy to underestimate:</strong> the lunch interview (you are being assessed the whole time, however relaxed it feels) and the group interview (how you treat the other candidates is part of the test — see Lesson 1 on teamwork).</p>`,
     `<p class="y-chinh">🎯 Bảy kiểu — chính là phạm vi CQ17.1.</p>
      <ul>
        <li><span class="nhan">Phỏng vấn sàng lọc</span> — vòng lọc đầu, thường ngắn và thiên về dữ kiện.</li>
@@ -231,7 +231,7 @@ export const b5l23 = [
        <li>Describe the <strong>most difficult person</strong> you have worked with. How did you handle it?</li>
        <li>Give an example of a <strong>time management</strong> skill you learned and applied.</li>
      </ol>
-     <p class="pitfall co-tieu-de"><strong>Đây là lý do SSG104 tồn tại:</strong> all five are answered from your group project in this very course — conflict (Lesson 12), leadership and motivation (Lesson 10), and the ten-week schedule. Keep notes while the project runs; you will need them at an interview.</p>`,
+     <p class="pitfall co-tieu-de"><strong>This is why SSG104 exists:</strong> all five are answered from your group project in this very course — conflict (Lesson 12), leadership and motivation (Lessons 10–11), and the ten-week schedule. Keep notes while the project runs; you will need them at an interview.</p>`,
     `<p class="y-chinh">🎯 Năm câu hỏi theo hành vi, và cả năm đều xoay quanh chuyện nhóm.</p>
      <ol>
        <li>Vấn đề lớn nhất bạn gặp trong <strong>dự án nhóm</strong> là gì và bạn xử lý ra sao?</li>
@@ -240,7 +240,7 @@ export const b5l23 = [
        <li>Kể về <strong>người khó làm việc cùng nhất</strong> mà bạn từng gặp. Bạn đã xoay xở thế nào?</li>
        <li>Cho một ví dụ về kỹ năng <strong>quản lý thời gian</strong> bạn học được và đã áp dụng.</li>
      </ol>
-     <p class="pitfall co-tieu-de"><strong>Đây chính là lý do môn SSG104 tồn tại:</strong> cả năm câu đều trả lời được bằng chính dự án nhóm của môn này — xung đột (Bài 12), lãnh đạo và tạo động lực (Bài 10), và lịch mười tuần. Hãy ghi chép trong lúc làm dự án; bạn sẽ cần tới chúng khi đi phỏng vấn.</p>`),
+     <p class="pitfall co-tieu-de"><strong>Đây chính là lý do môn SSG104 tồn tại:</strong> cả năm câu đều trả lời được bằng chính dự án nhóm của môn này — xung đột (Bài 12), lãnh đạo và tạo động lực (Bài 10–11), và lịch mười tuần. Hãy ghi chép trong lúc làm dự án; bạn sẽ cần tới chúng khi đi phỏng vấn.</p>`),
 
   slide(D, 15, 'Unacceptable questions (4)',
     `<p class="y-chinh">🎯 Four questions an interviewer should not ask.</p>
@@ -275,7 +275,7 @@ export const b5l23 = [
        <li>Why should we hire you?</li>
        <li><strong>Do you have any questions for me?</strong></li>
      </ol>
-     <p class="pitfall co-tieu-de"><strong>Câu số 9 không phải câu lịch sự:</strong> having no questions reads as having no interest. Prepare two, and make at least one about the work itself rather than about conditions.</p>`,
+     <p class="pitfall co-tieu-de"><strong>Question 9 is not a courtesy:</strong> having no questions reads as having no interest. Prepare two, and make at least one about the work itself rather than about conditions.</p>`,
     `<p class="y-chinh">🎯 Chín câu hỏi để cùng mổ xẻ trên lớp.</p>
      <ol class="hai-cot">
        <li>Hãy giới thiệu về bản thân</li>
@@ -332,8 +332,8 @@ export const b5l23 = [
      </ul>
      <p class="meo">💡 Nguyên tắc 2 là thứ làm đổi cả câu trả lời: "em muốn công việc này vì nó hợp mục tiêu của em" là nói về mình; "đội của anh chị đang mở rộng sang mảng X và em từng làm Y" là nói về họ.</p>`),
 
-  slide(D, 19, 'End of the course',
-    `<p class="y-chinh">🎯 Final slide of SSG104.</p>
+  slide(D, 19, 'Q&A',
+    `<p class="y-chinh">🎯 Final slide of SSG104: the "Q" and "A" speech bubbles beside a blue banner shape — the end of the course.</p>
      <p><span class="nhan">The five sessions, in five lines</span></p>
      <ol>
        <li>A team is a cohesive, purposeful group, and cooperation is rational when the game repeats.</li>
@@ -343,7 +343,7 @@ export const b5l23 = [
        <li>Your career is a cycle, and the interview questions you will face are about the group work you just did.</li>
      </ol>
      <p class="meo">💡 That last line is the argument of the whole subject: the group project was never only an assignment — it is the evidence you will be asked for.</p>`,
-    `<p class="y-chinh">🎯 Slide cuối cùng của SSG104.</p>
+    `<p class="y-chinh">🎯 Slide cuối của SSG104: hai bong bóng thoại "Q" và "A" cạnh một dải băng xanh — khép lại môn học.</p>
      <p><span class="nhan">Năm buổi học, gói trong năm dòng</span></p>
      <ol>
        <li>Đội là nhóm gắn kết và có mục đích, và hợp tác là hợp lý khi ván chơi còn lặp lại.</li>
@@ -360,8 +360,8 @@ export const b5l23 = [
   ]),
 
   bi(
-    `<h3>✅ The last gap, and the biggest</h3>
-     <p>The syllabus gives sessions 49–51 to interview preparation and Group Assignment 2, and asks CQ17.1–17.6 about interview types and questions. In the old Academy course the word "interview" appeared exactly once, inside the sentence "in every job interview you will be asked about teamwork" — which was true, and was all it said.</p>`,
-    `<h3>✅ Lỗ hổng cuối cùng, và cũng là lỗ hổng lớn nhất</h3>
-     <p>Syllabus dành buổi 49–51 cho phần chuẩn bị phỏng vấn và Group Assignment 2, và hỏi CQ17.1–17.6 về các kiểu phỏng vấn cùng loại câu hỏi. Ở khoá Academy cũ, chữ "phỏng vấn" xuất hiện đúng một lần, trong câu "phỏng vấn xin việc nào bạn cũng sẽ bị hỏi về làm việc nhóm" — câu đó đúng, và đó là tất cả những gì nó nói.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus gives sessions 49–51 to interview preparation and Group Assignment 2, and asks CQ17.1–17.6 about interview types and questions: the seven types on slide 9 and the three categories of question on slides 12–15 are the lists to know.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Đề cương dành buổi 49–51 cho phần chuẩn bị phỏng vấn và Group Assignment 2, và hỏi CQ17.1–17.6 về các kiểu phỏng vấn cùng loại câu hỏi: bảy kiểu ở slide 9 và ba nhóm câu hỏi ở slide 12–15 là những danh sách cần thuộc.</p>`),
 ].join('\n');

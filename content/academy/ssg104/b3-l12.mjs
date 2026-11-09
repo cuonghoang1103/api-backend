@@ -275,7 +275,7 @@ export const b3l12 = [
        <li>Contract negotiations between a union and management are one example.</li>
        <li>If a <strong>win-win</strong> solution can be identified, the chances of an acceptable resolution increase.</li>
      </ul>
-     <p class="meo">💡 This is the "negotiation" half of the lesson title — the word that appeared zero times in the old version of this course.</p>`,
+     <p class="meo">💡 This is the "negotiation" half of the lesson title: the parties sit face to face and work toward a win-win solution.</p>`,
     `<p class="y-chinh">🎯 Chiến lược đầu tiên thực sự động tới chính bất đồng.</p>
      <ul>
        <li>Các bên đối chọi được đưa lại <strong>đối diện nhau</strong> để bàn về những chỗ bất đồng gốc rễ.</li>
@@ -283,7 +283,7 @@ export const b3l12 = [
        <li>Đàm phán hợp đồng giữa công đoàn và ban quản lý là một ví dụ.</li>
        <li>Nếu tìm ra được giải pháp <strong>đôi bên cùng thắng</strong>, khả năng đạt một kết cục chấp nhận được sẽ tăng lên.</li>
      </ul>
-     <p class="meo">💡 Đây chính là nửa "thương lượng" trong tên bài — từ mà phiên bản cũ của khoá học này nhắc tới đúng 0 lần.</p>`),
+     <p class="meo">💡 Đây chính là nửa "thương lượng" trong tên bài: hai bên ngồi đối diện nhau và cùng tìm một giải pháp đôi bên cùng thắng.</p>`),
 
   slide(D, 20, 'Reduction 6–7 — third parties and superordinate goals',
     `<p class="y-chinh">🎯 Two more.</p>

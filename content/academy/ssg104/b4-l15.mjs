@@ -117,14 +117,14 @@ export const b4l15 = [
        <li>The "onion model": we start on a superficial level, and as layers are peeled away we gain knowledge of the other person.</li>
        <li>That knowledge has both <strong>breadth</strong> (how many topics) and <strong>depth</strong> (how personal).</li>
      </ul>
-     <p>The picture is an onion cut open, its layers labelled from the outside in: <strong>behaviours · attitudes · values · personality</strong>.</p>
+     <p>The picture is an onion cut open, with four labels pointing into its layers: <strong>personality · values · attitudes · behaviours</strong>.</p>
      <p class="meo">💡 Relevance to persuasion: you cannot open at the centre of the onion. A request that assumes more closeness than exists reads as presumptuous and gets refused on tone alone.</p>`,
     `<p class="y-chinh">🎯 Altman & Taylor (1973): cách con người đi từ <strong>chuyện phiếm bề mặt tới những lời thân mật, cởi mở</strong>.</p>
      <ul>
        <li>"Mô hình củ hành": ta bắt đầu ở lớp ngoài cùng, và khi bóc dần từng lớp thì hiểu thêm về người kia.</li>
        <li>Sự hiểu ấy có cả <strong>bề rộng</strong> (bao nhiêu chủ đề) lẫn <strong>chiều sâu</strong> (riêng tư tới đâu).</li>
      </ul>
-     <p>Hình minh hoạ là một củ hành bổ đôi, các lớp ghi nhãn từ ngoài vào trong: <strong>behaviours · attitudes · values · personality</strong> (hành vi · thái độ · giá trị · tính cách).</p>
+     <p>Hình minh hoạ là một củ hành bổ đôi, bốn nhãn chỉ vào các lớp: <strong>personality · values · attitudes · behaviours</strong> (tính cách · giá trị · thái độ · hành vi).</p>
      <p class="meo">💡 Liên quan tới thuyết phục: bạn không thể mở lời ngay ở lõi củ hành. Một lời đề nghị giả định mức thân thiết cao hơn thực tế sẽ bị đọc là suồng sã và bị từ chối chỉ vì giọng điệu.</p>`),
 
   slide(D, 10, 'Speaking ethically and avoiding fallacies — seven concepts',

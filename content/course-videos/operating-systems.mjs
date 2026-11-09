@@ -84,6 +84,7 @@ export default {
     'osg202-on-ch8': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/09-he-thong-nhieu-bo-xu-ly/09-03-thuc-hanh-chuong-8-tron-bb9dda5f.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg8-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/09-he-thong-nhieu-bo-xu-ly/09-02-slide-da-may-tinh-phan-tan-tron-d247375c.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg9-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/10-bao-mat/10-02-slide-tan-cong-phong-thu-tron-e4e49c6c.mp4' }, defaultVideoTrack: 'VI'},
-    'osg202-on-ch9': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/10-bao-mat/10-03-thuc-hanh-chuong-9-tron-c7390e00.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-on-ch9': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/10-bao-mat/10-03-thuc-hanh-chuong-9-tron-c7390e00.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-slide-osg10-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-01-slide-unix-linux-tien-trinh-tron-a160b8ff.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

@@ -70,7 +70,7 @@ quiz: { timeLimitSeconds, questions: [{ id, question, options:[4], correctIndex,
 ## 5. Tự kiểm trước khi nộp
 
 ```bash
-node scripts/academy-kiem-tu-soan.mjs --ma <MÃ>      # PHẢI ✓ (title, slug, khuôn song ngữ, quiz, link, LaTeX…)
+node scripts/academy-kiem-tu-soan.mjs --ma <MÃ>      # PHẢI ✓ — KHÔNG được còn dòng '!' (bài mỏng < 450 từ EN, thiếu link, quiz < 8 câu…)
 node scripts/academy-seed-course.mjs --file ./content/academy/<MÃ>.mjs --dry   # phải chạy hết, không lỗi
 ```
 

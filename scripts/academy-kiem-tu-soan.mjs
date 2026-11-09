@@ -63,6 +63,10 @@ for (const ma of ds) {
       if (si > 0 && n < 2) canh.push(`${l.slug}: chỉ ${n} link ngoài`);
       const chu = c.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').length;
       if (si > 0 && chu < 3500) canh.push(`${l.slug}: ngắn (${chu} ký tự cả hai thứ tiếng)`);
+      // Hợp đồng: ~500–900 chữ/thứ tiếng. Đo phần tiếng Anh (đếm từ được); < 450 từ ⇒ bài mỏng, phải viết thêm.
+      const en = (c.match(/<div class="ml-en">([\s\S]*?)<\/div>\s*<div class="ml-vi">/) || [])[1] || '';
+      const tuEn = en.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+      if (si > 0 && tuEn < 450) canh.push(`${l.slug}: mỏng (${tuEn} từ tiếng Anh, cần ≥ 450 — hợp đồng ~500–900)`);
       const mo = (c.match(/<(div|p|ul|ol|li|table|pre|code|h[1-6])\b/g) || []).length, dong = (c.match(/<\/(div|p|ul|ol|li|table|pre|code|h[1-6])>/g) || []).length;
       if (mo !== dong) loi.push(`${l.slug}: thẻ HTML lệch (${mo} mở / ${dong} đóng)`);
     }

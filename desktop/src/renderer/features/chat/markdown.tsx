@@ -374,6 +374,15 @@ function ChayPython({ ma, ngonNgu }: { ma: string; ngonNgu: string }) {
   const { chay, giet, dangChay, tienTrinh } = useSandbox();
   const [kq, datKq] = useState<KetQuaChay | null>(null);
   const [daLuu, datDaLuu] = useState<string | null>(null);
+  /* Nút Chép cho khối Python (09/11/2026) — khối mã thường có từ lâu, khối
+     chạy được thì chưa, nên muốn chép đoạn Python phải bôi đen bằng tay. */
+  const [daChep, datDaChep] = useState(false);
+  const chep = (): void => {
+    void navigator.clipboard.writeText(ma).then(() => {
+      datDaChep(true);
+      setTimeout(() => datDaChep(false), 1500);
+    }).catch(() => { /* chép hỏng thì im */ });
+  };
 
   let html: string;
   try {
@@ -392,6 +401,11 @@ function ChayPython({ ma, ngonNgu }: { ma: string; ngonNgu: string }) {
     <div className="ct-ma">
       <div className="ct-ma-dau">
         <span className="ct-ma-ngonngu">{ngonNgu}</span>
+        <span className="ct-ma-nut">
+        <button type="button" className="ct-ma-chep" onClick={chep} title={dich('Chép')}>
+          {daChep ? <Check size={12} aria-hidden /> : <Copy size={12} aria-hidden />}
+          {daChep ? dich('Đã chép') : dich('Chép')}
+        </button>
         {dangChay ? (
           <button type="button" className="ct-ma-chep" onClick={giet} title={dich('Dừng — giết hẳn tiến trình')}>
             <CircleStop size={12} aria-hidden />
@@ -408,6 +422,7 @@ function ChayPython({ ma, ngonNgu }: { ma: string; ngonNgu: string }) {
             {dich('Chạy')}
           </button>
         )}
+        </span>
       </div>
       <pre><code dangerouslySetInnerHTML={{ __html: html }} /></pre>
 

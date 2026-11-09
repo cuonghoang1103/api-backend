@@ -18,40 +18,33 @@
  * một nút chết. Mở kênh sinh ảnh trong Console của cổng thì mới làm được.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  CircleStop, FolderOpen, FolderPlus, History, MessageSquare, Plus, Send, Trash2, X, Search, BookOpen } from 'lucide-react';
+import { ArrowDown, BookOpen, Menu, Plus, Search } from 'lucide-react';
 import { useAppState } from '../../app-state';
-import { useMoRieng } from '../../components/moRieng';
 import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
 import { catCauDau } from '../odin/hoiOdin';
 import { ManGoi } from './ManGoi';
 import { DangNghi } from './DangNghi';
 import { useSession } from '../../auth/session';
 import { ChuAgent } from './markdown';
-import {
-  DaiDinhKem, DinhKemDaGui, NutDinhKem, ODinhKem, useDinhKem, type TepDinhKem,
-} from './DinhKem';
+import { DinhKemDaGui, useDinhKem, type TepDinhKem } from './DinhKem';
 import { anhKemLai, type LuotChat } from '../../../shared/nguCanhChat';
 import type { AiCucBoTinhTrang } from '../../../shared/ipc';
 import { useDanKhapNoi } from './DinhKemCode';
-import { ChupManHinh, NutChupManHinh } from './ChupManHinh';
-import { NutGoiThoai } from './NutGoiThoai';
-import { NutTinNhan } from './NutTinNhan';
+import { ChupManHinh } from './ChupManHinh';
 /* Kiểu `PhienChat`/`ThuMuc` sống ở `ThanhBenChat` chứ không ở đây: thanh bên
    là chỗ vẽ chúng ra, và hai bản khai trùng nhau thì thêm một trường ở máy chủ
    là phải nhớ sửa hai chỗ — đúng kiểu trôi dạt đã làm vỡ seed hồi 08/08. */
-import { ThanhBenChat, type PhienChat, type ThuMuc } from './ThanhBenChat';
+import { ThanhBenChat, type LocThuMuc, type PhienChat, type ThuMuc } from './ThanhBenChat';
 import { useDich } from '../../i18n';
 import { DaiNgoaiTuyen, NhanMay, useGiaoDienNgoaiTuyen } from './NgoaiTuyen';
-
-/**
- * Bộ lọc thư mục đang chọn.
- *
- * Ba trạng thái, cố ý phân biệt: `null` = xem TẤT CẢ · `'none'` = chỉ những
- * cuộc chưa xếp vào đâu · `<id>` = một thư mục cụ thể. Gộp "tất cả" với "chưa
- * phân loại" là mất đường xem toàn bộ.
- */
-type LocThuMuc = null | 'none' | string;
+/* Giao diện kiểu Claude (09/11/2026) — mọi style mới nằm trong `chatClaude.css`,
+   gói dưới `.ctc-root`; `styles.css` chung (AgentMode dùng) không bị đụng. */
+import './chatClaude.css';
+import { CtcSoan } from './CtcSoan';
+import { CtcDau } from './CtcDau';
+import { HanhDongMay, HanhDongNguoi } from './CtcHanhDong';
+import { MODEL_MAC_DINH, modelHopLe, tenModel, type MaModel } from './CtcChonModel';
+import { useCtcChu } from './CtcChu';
 
 /** Một trang web đã dùng để trả lời. */
 export interface Nguon {
@@ -129,26 +122,37 @@ function TheNguon({ nguon }: { nguon: Nguon[] }) {
 const SO_LUOT_NGU_CANH = 10;
 
 /**
- * Ba bậc model máy chủ mở (`CHAT_MODELS` trong `ai.service.ts`).
- *
- * Trước đây app luôn dùng bậc mặc định và không cho chọn — trong khi web thì
- * có. Bậc Pro/Max là đường đi qua tuyến Anthropic, tức là **chỗ duy nhất xử lý
- * được ảnh + tài liệu tử tế**, nên giấu nó đi là giấu mất nửa giá trị của việc
- * vừa thêm đính kèm.
+ * Model đã chọn được NHỚ qua lần mở app (như Claude). Bốn bậc + nhãn nằm ở
+ * `CtcChonModel.tsx` — ⛔ không bao giờ hiện tên model thật.
  */
-const BAC = [
-  { id: 'cuongmini-3.11', nhan: 'Thường', canPro: false, mo: 'Nhanh, đủ cho hỏi đáp hằng ngày' },
-  { id: 'cuongmini-pro', nhan: 'Pro', canPro: true, mo: 'Suy luận sâu hơn — cần tài khoản Pro' },
-  { id: 'cuongmini-max', nhan: 'Max', canPro: true, mo: 'Mạnh nhất, đọc ảnh và tài liệu — cần Pro' },
-] as const;
+const KHOA_MODEL = 'ctc:model';
+function docModelDaLuu(): string | null {
+  try { return localStorage.getItem(KHOA_MODEL); } catch { return null; }
+}
+function luuModel(id: string): void {
+  try { localStorage.setItem(KHOA_MODEL, id); } catch { /* bộ nhớ bị chặn — chỉ mất phần nhớ */ }
+}
 
 export function ChatMode({ pro }: { pro: boolean }) {
   const { dich, dichP } = useDich();
+  const { c, cP } = useCtcChu();
   const { api } = useSession();
   const { settings, layThamSo, lanDieuHuong, online } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
   const [nhap, datNhap] = useState('');
-  const [bac, datBac] = useState<string>('cuongmini-3.11');
+  const [bac, datBacTho] = useState<MaModel>(() => modelHopLe(docModelDaLuu(), pro));
+  /* `pro` về SAU lần dựng đầu (hỏi máy chủ) ⇒ đọc lại model đã nhớ khi nó đổi. */
+  useEffect(() => { datBacTho(modelHopLe(docModelDaLuu(), pro)); }, [pro]);
+  const datBac = useCallback((id: MaModel) => { datBacTho(id); luuModel(id); }, []);
+  /** Đang sửa tin nhắn người dùng thứ `i` (sửa tại chỗ rồi gửi lại). */
+  const [dangSua, datDangSua] = useState<{ i: number; text: string } | null>(null);
+  /** Ngăn kéo thanh bên (cửa sổ hẹp). */
+  const [ngan, datNgan] = useState(false);
+  /** Người dùng đang ở gần đáy bảng ghi ⇒ chữ mới tự kéo xuống; cuộn lên đọc thì KHÔNG giật. */
+  const [ganDay, datGanDay] = useState(true);
+  const ganDayRef = useRef(true);
+  const [suaTieuDe, datSuaTieuDe] = useState<string | null>(null);
+  const oSoanRef = useRef<HTMLTextAreaElement>(null);
   const [dangChay, datDangChay] = useState(false);
   const [dangCho, datDangCho] = useState(false);
   /**
@@ -180,15 +184,10 @@ export function ChatMode({ pro }: { pro: boolean }) {
    */
   const [phienId, datPhienId] = useState<string | null>(null);
   const [dsPhien, datDsPhien] = useState<PhienChat[]>([]);
-  /* Vào chung sổ "mỗi lúc một tấm" với các tấm bên Lập trình. Tấm này không
-     có nền phủ nên để hook tự lo phần bấm-ra-ngoài (`boc` bọc cả nút lẫn tấm). */
-  const lichSu = useMoRieng('chat:lichsu');
-  const moLichSu = lichSu.mo;
   const [dsThuMuc, datDsThuMuc] = useState<ThuMuc[]>([]);
   const [loc, datLoc] = useState<LocThuMuc>(null);
   /** Thanh bên đang xem KHO LƯU TRỮ thay vì danh sách thường. */
   const [xemLuuTru, datXemLuuTru] = useState(false);
-  const [tenMoi, datTenMoi] = useState('');
   const huyRef = useRef<AbortController | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
   const dk = useDinhKem();
@@ -199,11 +198,28 @@ export function ChatMode({ pro }: { pro: boolean }) {
   useDanKhapNoi(dk.them, pro);
   const [dangChupMan, datDangChupMan] = useState(false);
 
+  /* Tự kéo xuống CHỈ khi người dùng đang ở gần đáy — đang cuộn lên đọc câu cũ
+     mà chữ mới giật màn hình xuống là thứ khó chịu nhất của một khung chat. */
   useEffect(() => {
     const el = cuonRef.current;
+    if (!el || !ganDayRef.current) return;
+    el.scrollTop = el.scrollHeight;
+  }, [luot, dangCho, buocDangChay]);
+
+  const doCuon = useCallback((): void => {
+    const el = cuonRef.current;
     if (!el) return;
-    if (el.scrollHeight - el.scrollTop - el.clientHeight < 120) el.scrollTop = el.scrollHeight;
-  }, [luot, dangCho]);
+    const g = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    ganDayRef.current = g;
+    datGanDay(g);
+  }, []);
+
+  const xuongDay = useCallback((muot = true): void => {
+    const el = cuonRef.current;
+    ganDayRef.current = true;
+    datGanDay(true);
+    el?.scrollTo({ top: el.scrollHeight, behavior: muot ? 'smooth' : 'auto' });
+  }, []);
 
   useEffect(() => {
     if (!dangCho) { datChoGiay(0); return; }
@@ -237,17 +253,16 @@ export function ChatMode({ pro }: { pro: boolean }) {
     } catch { /* chưa đăng nhập hoặc mất mạng */ }
   }, [api]);
 
-  const taoThuMuc = useCallback(async () => {
-    const ten = tenMoi.trim();
+  const taoThuMuc = useCallback(async (tenGoc: string) => {
+    const ten = tenGoc.trim();
     if (!ten || !api) return;
     try {
       await api.request('/api/v1/ai/chat/folders', { method: 'POST', body: { ten } });
-      datTenMoi('');
       await napThuMuc();
     } catch (err) {
       datLoi(dichP('Không tạo được thư mục: {loi}', { loi: (err as Error).message }));
     }
-  }, [api, tenMoi, napThuMuc]);
+  }, [api, napThuMuc]);
 
   const xoaThuMuc = useCallback(async (id: string) => {
     if (!api) return;
@@ -312,8 +327,11 @@ export function ChatMode({ pro }: { pro: boolean }) {
         };
       }));
       datPhienId(id);
-      lichSu.dong();
       datLoi(null);
+      datRoiBac(null);
+      datDangSua(null);
+      ganDayRef.current = true;
+      datGanDay(true);
     } catch (err) {
       datLoi(dichP('Không mở được việc cũ: {loi}', { loi: (err as Error).message }));
     }
@@ -386,35 +404,12 @@ export function ChatMode({ pro }: { pro: boolean }) {
   }, [api, napDsPhien, moPhien]);
 
   /**
-   * QUAY LUI về lượt thứ `i` — bỏ nó và mọi thứ sau nó, đặt lại câu vào ô soạn.
-   *
-   * Cắt ở CẢ HAI nơi: mảng `luot` trên màn hình (đây mới là thứ được gửi làm
-   * ngữ cảnh — xem `history` trong `guiDi`) và bảng tin nhắn ở máy chủ. Chỉ cắt
-   * một nơi thì mở lại cuộc này ngày mai sẽ thấy đoạn tưởng đã bỏ hiện về đủ.
-   */
-  const quayLuiToi = useCallback(async (i: number) => {
-    const l = luot[i];
-    if (!l) return;
-    datLuot((cu) => cu.slice(0, i));
-    datNhap(l.text);
-    if (!api || !phienId) return;
-    try {
-      await api.request(`/api/v1/ai/chat/sessions/${phienId}/cat`, {
-        method: 'POST', body: { tuChiSo: i },
-      });
-      await napDsPhien();
-    } catch (err) {
-      datLoi(dichP('Đã cắt trên màn hình nhưng máy chủ chưa cắt được: {loi}', { loi: (err as Error).message }));
-    }
-  }, [api, luot, phienId, napDsPhien]);
-
-  /**
    * TÁCH NHÁNH từ lượt thứ `i` — cuộc mới dừng ngay TRƯỚC lượt đó, cuộc này
    * giữ nguyên. Bản không phá của quay lui.
    */
   const tachNhanhTu = useCallback(async (i: number) => {
     if (!api || !phienId) {
-      datLoi('Cuộc này chưa được lưu nên chưa tách nhánh được — hãy gửi một câu trước.');
+      datLoi(c('Cuộc này chưa được lưu nên chưa tách nhánh được — hãy gửi một câu trước.'));
       return;
     }
     try {
@@ -434,7 +429,9 @@ export function ChatMode({ pro }: { pro: boolean }) {
     datLuot([]);
     datLoi(null);
     datRoiBac(null);
+    datDangSua(null);
     dk.xoaHet();
+    setTimeout(() => oSoanRef.current?.focus(), 0);
   };
 
   // Rời trang giữa chừng ⇒ cắt kết nối. Không cắt thì stream chạy tiếp tới cùng
@@ -595,9 +592,17 @@ export function ChatMode({ pro }: { pro: boolean }) {
      * sớm hơn đúng bằng thời gian máy đọc chạy.
      */
     onCauDau?: (cau: string) => void,
+    /**
+     * GỬI LẠI (Tạo lại / Sửa tin nhắn): `goc` = hội thoại đã cắt tới TRƯỚC lượt
+     * gửi lại — `luot` trong closure vẫn là bản CŨ vì state React chỉ đổi ở lần
+     * dựng sau. `tep` = đính kèm của chính lượt gốc (còn trong bộ nhớ), để tạo
+     * lại câu hỏi về một ảnh thì model vẫn nhìn thấy ảnh đó. Ô soạn và dải
+     * đính kèm đang dở của người dùng KHÔNG bị xoá.
+     */
+    tuyChon?: { goc: Luot[]; tep: TepDinhKem[] },
   ): Promise<string> => {
     const text = (nhapNgoai ?? nhap).trim();
-    const tep = dk.tep;
+    const tep = tuyChon ? tuyChon.tep : dk.tep;
     // Có đính kèm thì KHÔNG bắt buộc phải gõ chữ — máy chủ cũng cho vậy. Thả
     // một ảnh lỗi vào rồi bấm gửi là một câu hỏi hoàn chỉnh.
     if ((!text && tep.length === 0) || dangChay || !api) return '';
@@ -607,16 +612,24 @@ export function ChatMode({ pro }: { pro: boolean }) {
     let nguonLuot: Nguon[] = [];
     let daBaoCauDau = false;
 
-    const truoc: Luot[] = [...luot, { vai: 'user', text, luc: Date.now(), ...(tep.length ? { tep } : {}) }];
+    const truoc: Luot[] = [
+      ...(tuyChon?.goc ?? luot),
+      { vai: 'user', text, luc: Date.now(), ...(tep.length ? { tep } : {}) },
+    ];
     datLuot(truoc);
+    // Vừa gửi ⇒ luôn kéo xuống đáy, kể cả khi trước đó đang cuộn lên đọc.
+    ganDayRef.current = true;
+    datGanDay(true);
     // Ảnh của lượt này ở dạng data URL — dành cho lối lùi model trên máy khi
     // mất mạng (chỉ nhận `data:image/…`, xem schema `aiCucBo:hoi`).
     const anhCucBo = tep
       .filter((t) => t.loai === 'image' && typeof t.url === 'string' && t.url.startsWith('data:image/'))
       .map((t) => t.url)
       .slice(0, 3);
-    datNhap('');
-    dk.xoaHet();
+    if (!tuyChon) {
+      datNhap('');
+      dk.xoaHet();
+    }
     datLoi(null);
     datRoiBac(null);
     datDangChay(true);
@@ -708,7 +721,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           if (!d.startsWith('data: ')) continue;
           let e: {
             type?: string; text?: string; error?: string; fellBack?: boolean; reason?: string;
-            viec?: string; chu?: string; nguon?: unknown;
+            requested?: string; viec?: string; chu?: string; nguon?: unknown;
           };
           try { e = JSON.parse(d.slice(6)); } catch { continue; }
 
@@ -752,13 +765,16 @@ export function ChatMode({ pro }: { pro: boolean }) {
              * Đó là kiểu hỏng tệ nhất: có câu trả lời, nghe trôi chảy, và sai
              * vì thiếu đúng thứ người dùng vừa gửi. Nên phải nói ra.
              */
-            datRoiBac(
-              e.reason === 'pro_required'
-                ? 'Bậc Pro/Max cần tài khoản Pro. Lượt này đã dùng bậc Thường, và file đính kèm KHÔNG được đọc.'
-                : e.reason === 'claude_not_configured'
-                  ? 'Máy chủ chưa cấu hình bậc cao. Lượt này dùng bậc Thường; file đính kèm không được đọc.'
-                  : 'Bậc cao gặp lỗi nên lượt này rơi về bậc Thường — file đính kèm có thể không được đọc.',
-            );
+            const ten = tenModel(e.requested ?? bac);
+            const thuong = tenModel(MODEL_MAC_DINH);
+            const cau = e.reason === 'pro_required'
+              ? cP('{ten} cần tài khoản Pro — lượt này dùng {thuong}.', { ten, thuong })
+              : e.reason === 'claude_cham_tran'
+                ? cP('{ten} đã chạm hạn mức hôm nay — lượt này dùng {thuong}.', { ten, thuong })
+                : cP('{ten} đang tạm bận — lượt này dùng {thuong}.', { ten, thuong });
+            datRoiBac(tep.length ? cau + c(' File đính kèm có thể không được đọc.') : cau);
+            // Trả bộ chọn về bậc mặc định — để nguyên bậc cao thì lượt sau lại rơi y hệt.
+            datBac(MODEL_MAC_DINH);
           }
           // 'connected' | 'model' | 'reasoning' | 'figure_fix' | 'done' — bản
           // này không dùng tới, bỏ qua im lặng là đúng: thêm khung mới ở máy
@@ -828,15 +844,86 @@ ${kq.chu}`;
     return traLoiDayDu.trim();
   };
 
-  const coGiDeGui = Boolean(nhap.trim()) || dk.tep.length > 0;
+
+  /**
+   * Cắt hội thoại ở MÁY CHỦ từ chỉ số `i` trở đi (`POST …/cat`) — bước đầu của
+   * Tạo lại và Sửa tin nhắn.
+   *
+   * Cắt TRƯỚC rồi mới gửi: gửi trước thì tin mới được lưu rồi bị chính lệnh cắt
+   * xoá mất. Cắt hỏng ⇒ DỪNG, không gửi — gửi tiếp thì mở lại cuộc này sẽ thấy
+   * cả bản cũ lẫn bản mới chồng lên nhau. Cuộc chưa lưu (chưa có phiên) thì
+   * không có gì để cắt ở máy chủ.
+   */
+  const catTu = async (i: number): Promise<boolean> => {
+    if (!api || !phienId) return true;
+    try {
+      await api.request(`/api/v1/ai/chat/sessions/${phienId}/cat`, {
+        method: 'POST', body: { tuChiSo: i },
+      });
+      return true;
+    } catch (err) {
+      datLoi(cP('Không cắt được trên máy chủ: {loi}', { loi: (err as Error).message }));
+      return false;
+    }
+  };
+
+  /** Bỏ tin người dùng thứ `iNguoi` + mọi thứ sau nó, rồi gửi `text` vào đúng chỗ đó. */
+  const guiLaiTu = async (iNguoi: number, text: string): Promise<void> => {
+    const goc = luot[iNguoi];
+    if (!goc || goc.vai !== 'user' || dangChay) return;
+    if (!(await catTu(iNguoi))) return;
+    const nen = luot.slice(0, iNguoi);
+    datLuot(nen);
+    datDangSua(null);
+    void guiDi(text, false, undefined, { goc: nen, tep: goc.tep ?? [] });
+  };
+
+  /** TẠO LẠI câu trả lời thứ `iMay`: gửi lại câu hỏi ngay trước nó. */
+  const taoLai = (iMay: number): void => {
+    let u = iMay - 1;
+    while (u >= 0 && luot[u]?.vai !== 'user') u -= 1;
+    const g = luot[u];
+    if (u < 0 || !g) return;
+    void guiLaiTu(u, g.text);
+  };
+
+  const luuSua = (): void => {
+    if (!dangSua) return;
+    const t = dangSua.text.trim();
+    const g = luot[dangSua.i];
+    if (!t && !g?.tep?.length) return;
+    void guiLaiTu(dangSua.i, t);
+  };
+
+  const phienDangMo = dsPhien.find((p) => p.id === phienId);
+  /* Cuộc vừa tạo chưa có trong danh sách (danh sách nạp lại SAU lượt chạy) ⇒
+     tạm lấy câu hỏi đầu làm tiêu đề, như máy chủ sẽ đặt. */
+  const tieuDe = phienDangMo?.title?.trim()
+    || luot.find((l) => l.vai === 'user')?.text.trim().slice(0, 60)
+    || c('Cuộc chưa đặt tên');
+  const luuTieuDe = (): void => {
+    const t = suaTieuDe?.trim();
+    datSuaTieuDe(null);
+    if (t && phienId && t !== tieuDe) void doiTenPhien(phienId, t);
+  };
+
+  const trong = luot.length === 0;
+  const iCuoi = luot.length - 1;
+  /** Chữ ĐANG chảy về (khác với còn đang chờ chữ đầu). */
+  const dangChayChu = dangChay && !dangCho;
+
+  const thongBao = (
+    <>
+      {loi && <div className="ct-notice ctc-bao" data-tone="err"><span>{loi}</span></div>}
+      {roiBac && <div className="ct-notice ctc-bao" data-tone="warn"><span>{roiBac}</span></div>}
+      {dk.loi && <div className="ct-notice ctc-bao" data-tone="warn"><span>{dk.loi}</span></div>}
+    </>
+  );
 
   return (
-    /* Thanh bên + khung chat nằm CẠNH nhau. Bọc thêm một lớp ở đây chứ không
-       đặt thanh bên ở `ChatPage` như bên Lập trình: mọi trạng thái của danh
-       sách cuộc (đang mở cuộc nào, vừa gửi xong nên phải nạp lại) đều sống
-       trong chính component này. Đưa lên cha thì phải nâng cả cụm state đó
-       lên theo, hoặc nạp một bản sao thứ hai — cả hai đều tệ hơn một cái div. */
-    <div className="ct-chat-doi">
+    /* Thanh bên + khung chat nằm CẠNH nhau trong `.ctc-root`. Mọi trạng thái
+       của danh sách cuộc sống ở đây (chỗ gửi tin) — thanh bên chỉ vẽ và bấm. */
+    <div className="ctc-root" data-ngan={ngan}>
       <ThanhBenChat
         ds={dsPhien}
         dangMo={phienId}
@@ -849,309 +936,223 @@ ${kq.chu}`;
         onLuuTru={(p) => void luuTruPhien(p)}
         onDoiTen={(id, t) => void doiTenPhien(id, t)}
         onTachNhanh={(id) => void tachNhanhPhien(id)}
+        onXepVaoThuMuc={(sid, fid) => void xepVaoThuMuc(sid, fid)}
+        dsThuMuc={dsThuMuc}
+        loc={loc}
+        onLoc={datLoc}
+        onTaoThuMuc={(ten) => void taoThuMuc(ten)}
+        onXoaThuMuc={(id) => void xoaThuMuc(id)}
+        ngan={ngan}
+        onNgan={datNgan}
       />
-    <div
-      className="ct-agent"
-      data-ngoai-tuyen={ngoaiTuyen.nen === 'ngoaiTuyen' ? '1' : undefined}
-      data-keo={dk.dangKeo}
-      /* `onDragEnter` PHẢI có bên cạnh `onDragOver`: thiếu nó thì lớp phủ chỉ
-         hiện khi con trỏ đã rê được một quãng, và cú kéo nhanh-thả-ngay trông
-         như không có gì xảy ra. */
-      onDragEnter={dk.keoVao}
-      onDragOver={dk.keoVao}
-      onDragLeave={dk.keoRa}
-      /* Không Pro thì vẫn NHẬN cú thả rồi nói lý do — bản cũ để `undefined`,
-         tức là hệ điều hành từ chối cú kéo và người dùng không nhận được một
-         chữ nào giải thích. */
-      onDrop={pro ? dk.thaVao : (e) => { e.preventDefault(); dk.keoRa(); dk.datLoi('Đính kèm file cần tài khoản Pro.'); }}
-    >
-      {/* Lớp phủ chỉ hiện khi con trỏ đang MANG FILE — xem `keoVao`. */}
-      {dk.dangKeo && (
-        <div className="ct-dk-phu" data-thieu={!pro}>
-          <span>{pro ? 'Thả file vào đây' : 'Đính kèm file cần tài khoản Pro'}</span>
-        </div>
-      )}
 
-      {/* `display: contents` — bọc để `useMoRieng` biết đâu là "bên trong"
-          (nút VÀ tấm), mà không đẻ thêm một hộp nào trong cột flex này. Đặt ref
-          lên riêng `.ct-chat-thanh` thì tấm nằm NGOÀI, và bấm vào chính tấm sẽ
-          bị tính là bấm ra ngoài ⇒ nó tự đóng ngay khi vừa chạm vào. */}
-      <div className="ct-boc-suot" ref={lichSu.boc}>
-      <div className="ct-chat-thanh">
-        <button type="button" className="ct-agent-icon" data-nut="chatMoi" onClick={chatMoi} title={dich('Bắt đầu cuộc mới')}>
-          <Plus size={14} aria-hidden />
-        </button>
-        <button
-          type="button" className="ct-agent-icon" data-nut="chatLichSu"
-          onClick={() => { lichSu.bat(); void napDsPhien(); }}
-          title={`Cuộc đã lưu (${dsPhien.length})`}
-        >
-          <History size={14} aria-hidden />
-        </button>
-        <span className="ct-chat-chan-chu">
-          {phienId ? 'Đang lưu vào máy chủ' : 'Cuộc mới — sẽ được lưu khi bạn gửi'}
-        </span>
-      </div>
-
-      {moLichSu && (
-        <div className="ct-lichsu" role="dialog" aria-label={dich('Cuộc trò chuyện đã lưu')}>
-          <div className="ct-lichsu-dau">
-            <strong>{dich('Cuộc đã lưu')}</strong>
-            <button type="button" className="ct-agent-icon" onClick={lichSu.dong} aria-label={dich('Đóng')}>
-              <X size={14} aria-hidden />
-            </button>
+      <div
+        className="ctc-main"
+        data-trong={trong}
+        data-ngoai-tuyen={ngoaiTuyen.nen === 'ngoaiTuyen' ? '1' : undefined}
+        data-keo={dk.dangKeo}
+        /* `onDragEnter` PHẢI có bên cạnh `onDragOver`: thiếu nó thì lớp phủ chỉ
+           hiện khi con trỏ đã rê được một quãng. */
+        onDragEnter={dk.keoVao}
+        onDragOver={dk.keoVao}
+        onDragLeave={dk.keoRa}
+        /* Không Pro thì vẫn NHẬN cú thả rồi nói lý do — để `undefined` thì hệ
+           điều hành từ chối cú kéo và người dùng không nhận được chữ nào. */
+        onDrop={pro ? dk.thaVao : (e) => { e.preventDefault(); dk.keoRa(); dk.datLoi(c('Đính kèm file cần tài khoản Pro.')); }}
+      >
+        {dk.dangKeo && (
+          <div className="ct-dk-phu ctc-phu-keo" data-thieu={!pro}>
+            <span>{pro ? c('Thả file vào đây') : c('Đính kèm file cần tài khoản Pro')}</span>
           </div>
-          {/* Dải thư mục. "Tất cả" và "Chưa phân loại" là HAI mục khác nhau —
-              gộp lại là mất đường xem toàn bộ. */}
-          <div className="ct-tm-dai">
-            <button type="button" className="ct-tm-nut" data-chon={loc === null} onClick={() => datLoc(null)}>
-              {dich('Tất cả')}
-            </button>
-            <button type="button" className="ct-tm-nut" data-chon={loc === 'none'} onClick={() => datLoc('none')}>
-              {dich('Chưa phân loại')}
-            </button>
-            {dsThuMuc.map((f) => (
-              <span key={f.id} className="ct-tm-o">
-                <button
-                  type="button" className="ct-tm-nut" data-chon={loc === f.id}
-                  onClick={() => datLoc(f.id)} title={`${f._count?.sessions ?? 0} cuộc`}
-                >
-                  <FolderOpen size={11} aria-hidden />
-                  {f.ten}
-                  {!!f._count?.sessions && <span className="ct-tm-dem">{f._count.sessions}</span>}
-                </button>
-                <button
-                  type="button" className="ct-tm-xoa"
-                  onClick={() => void xoaThuMuc(f.id)}
-                  title={`Xoá thư mục "${f.ten}" — các cuộc bên trong KHÔNG bị xoá, chúng về Chưa phân loại`}
-                  aria-label={`Xoá thư mục ${f.ten}`}
-                >
-                  <X size={10} aria-hidden />
-                </button>
-              </span>
-            ))}
-          </div>
+        )}
 
-          <div className="ct-tm-tao">
+        <header className="ctc-dau-trang">
+          <button
+            type="button" className="ctc-dau-nut ctc-chi-hep"
+            onClick={() => datNgan(true)}
+            aria-label={c('Mở thanh bên')} title={c('Mở thanh bên')}
+          >
+            <Menu size={18} aria-hidden />
+          </button>
+          {phienId && (suaTieuDe !== null ? (
             <input
-              className="ct-td-o"
-              value={tenMoi}
-              placeholder={dich('tên thư mục mới, ví dụ Java…')}
-              maxLength={80}
-              onChange={(e) => datTenMoi(e.target.value)}
+              className="ctc-dau-sua"
+              autoFocus
+              value={suaTieuDe}
+              maxLength={200}
+              onFocus={(e) => e.currentTarget.select()}
+              onChange={(e) => datSuaTieuDe(e.target.value)}
+              onBlur={luuTieuDe}
               onKeyDown={(e) => {
                 if (e.nativeEvent.isComposing) return;
-                if (e.key === 'Enter') { e.preventDefault(); void taoThuMuc(); }
+                if (e.key === 'Enter') { e.preventDefault(); luuTieuDe(); }
+                if (e.key === 'Escape') { e.preventDefault(); datSuaTieuDe(null); }
               }}
             />
-            <button type="button" className="ct-btn ct-mcp-nho" disabled={!tenMoi.trim()} onClick={() => void taoThuMuc()}>
-              <FolderPlus size={12} aria-hidden />
-              {dich('Tạo')}
-            </button>
-          </div>
-
-          {dsPhien.length === 0 ? (
-            <p className="ct-mcp-trong">
-              {loc ? 'Thư mục này chưa có cuộc nào.' : 'Chưa có cuộc nào được lưu.'}
-            </p>
           ) : (
-            <ul className="ct-lichsu-ds">
-              {dsPhien.map((p) => (
-                <li key={p.id} className="ct-lichsu-muc" data-dang={p.id === phienId}>
-                  <button type="button" className="ct-lichsu-mo" onClick={() => void moPhien(p.id)}>
-                    <span className="ct-lichsu-tieude">{p.title?.trim() || 'Cuộc chưa đặt tên'}</span>
-                    {/* ⚠️ KHÔNG dùng `ct-lichsu-phu`: tên đó đã có nghĩa khác —
-                        tấm phủ toàn màn hình (`position:absolute; inset:0`) của
-                        bảng lịch sử agent. Đặt nó lên một dòng chữ biến mỗi
-                        dòng thành một tấm chắn vô hình nuốt mọi cú bấm. */}
-                    <span className="ct-chat-phien-phu">
-                      {p._count?.messages ?? 0} tin · {new Date(p.updatedAt).toLocaleDateString('vi-VN')}
-                      {p.folder && <span className="ct-tm-nhan">{p.folder.ten}</span>}
-                    </span>
-                  </button>
-
-                  {/* Xếp cuộc vào thư mục. Dùng `select` chứ không phải menu tự
-                      vẽ: nó ngắn gọn, hệ điều hành tự lo bàn phím và cuộn, và
-                      không cần một lớp phủ nữa chồng lên bảng lịch sử. */}
-                  {dsThuMuc.length > 0 && (
-                    <select
-                      className="ct-tm-chon"
-                      value={p.folderId ?? ''}
-                      onChange={(e) => void xepVaoThuMuc(p.id, e.target.value || null)}
-                      title={dich('Xếp cuộc này vào thư mục')}
-                    >
-                      <option value="">{dich('— chưa phân loại —')}</option>
-                      {dsThuMuc.map((f) => <option key={f.id} value={f.id}>{f.ten}</option>)}
-                    </select>
-                  )}
-                  <button
-                    type="button" className="ct-dk-bo ct-wt-xoa"
-                    onClick={() => void xoaPhien(p.id)} aria-label={`Xoá ${p.title ?? 'cuộc này'}`}
-                  >
-                    <Trash2 size={11} aria-hidden />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
-      </div>
-
-      <DaiNgoaiTuyen
-        tt={ngoaiTuyen}
-        tenModel={luotCuoi?.cucBo ?? modelCucBoSanSang ?? ''}
-        lyDo={dich('Vào Cài đặt → CuongMini ngoại tuyến để tải model dùng khi không có mạng.')}
-        dangChay={dangChay}
-      />
-      <div className="ct-agent-scroll" ref={cuonRef}>
-        {luot.length === 0 && (
-          <div className="ct-agent-trong">
-            <MessageSquare size={26} aria-hidden className="ct-empty-icon" />
-            <h2>{dich('Hỏi gì cũng được')}</h2>
-            <p className="ct-muted">
-              Kéo thả, dán hoặc bấm 📎 để gửi kèm ảnh và tài liệu (PDF, Word, txt, md, csv).
-            </p>
-          </div>
-        )}
-
-        {luot.map((l, i) => (l.vai === 'user' ? (
-          <div key={i} className="ct-agent-nguoi">
-            <DinhKemDaGui tep={l.tep ?? []} />
-            {l.text}
-            <NutTinNhan
-              text={l.text}
-              {...(l.luc === undefined ? {} : { luc: l.luc })}
-              khoa={dangChay}
-              onQuayLui={() => void quayLuiToi(i)}
-              onTachNhanh={() => void tachNhanhTu(i)}
-            />
-          </div>
-        ) : (
-          /* ⚠️ PHẢI giữ lớp bọc `.ct-agent-may` — `ChuAgent` chỉ dựng phần chữ
-             (`.ct-md`), còn bong bóng, khoảng cách và màu nền là của lớp này.
-             Bỏ nó đi thì markdown vẫn đúng nhưng câu trả lời mất hẳn khung, và
-             nhìn như chữ rơi tự do giữa trang. Giống hệt cách `AgentMode` bọc. */
-          <div key={i} className="ct-agent-may" data-cuc-bo={l.cucBo ? '1' : undefined}>
-            {l.cucBo && <NhanMay ten={l.cucBo} />}
-            <ChuAgent text={l.text} />
-            {l.nguon?.length ? <TheNguon nguon={l.nguon} /> : null}
-          </div>
-        )))}
-
-        {buocDangChay.map((b, i) => (
-          <div key={`b${i}`} className="ct-buoc" data-viec={b.viec}>
-            {b.viec === 'tim' ? <Search size={12} aria-hidden /> : <BookOpen size={12} aria-hidden />}
-            <span>{b.viec === 'tim' ? 'Đang tìm trên web' : 'Đang đọc'}</span>
-            <em>{b.chu}</em>
-          </div>
-        ))}
-        {dangCho && <DangNghi giay={choGiay} />}
-        {loi && <div className="ct-notice" data-tone="err"><span>{loi}</span></div>}
-        {roiBac && <div className="ct-notice" data-tone="warn"><span>{roiBac}</span></div>}
-        {dk.loi && <div className="ct-notice" data-tone="warn"><span>{dk.loi}</span></div>}
-      </div>
-
-      <DaiDinhKem tep={dk.tep} bo={dk.bo} />
-
-      {dangChupMan && (
-        <ChupManHinh
-          onXong={(f) => void dk.them([f])}
-          onDong={() => datDangChupMan(false)}
-        />
-      )}
-
-      {/* Ô soạn = MỘT khung, hàng công cụ ở đáy — cùng cấu trúc với AI Code
-          (03/10/2026): cột hẹp không còn bóp ô chữ giữa sáu cái nút. */}
-      <div className="ct-agent-soan">
-       <div className="ct-agent-soan-khung" data-chay={dangChay}>
-        <textarea
-          className="ct-agent-o"
-          rows={2}
-          value={nhap}
-          placeholder={dich('Nhắn cho trợ lý…  (dán hoặc kéo thả ảnh, PDF, Word)')}
-          onChange={(e) => datNhap(e.target.value)}
-          onPaste={pro ? dk.danVao : undefined}
-          onKeyDown={(e) => {
-            if (e.nativeEvent.isComposing) return; // nhường Enter cho bộ gõ tiếng Việt
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void guiDi(); }
-          }}
-          disabled={dangChay}
-        />
-        <div className="ct-agent-soan-hang">
-        <ODinhKem oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
-        {/* Không Pro ⇒ khoá nút và NÓI RÕ vì sao. Cho bấm rồi để máy chủ lặng
-            lẽ bỏ file là đúng cái bẫy vừa đo được. */}
-        <NutDinhKem onBam={dk.moChonTep} khoa={dangChay || !pro} khongPro={!pro} />
-        {pro && <NutChupManHinh onBam={() => datDangChupMan(true)} khoa={dangChay} />}
-        <span className="ct-agent-soan-dem" aria-hidden />
-        {/* Gọi thoại: giữ để nói, thả ra là gửi thẳng vào khung chat này —
-            nên câu nói nằm lại trong lịch sử, xem lại được như tin nhắn gõ tay. */}
-        {/* Nút NÓI CHUYỆN — mở màn riêng, không phải giữ-để-nói.
-            Giữ-để-nói vẫn còn dùng được cho câu lẻ; nút này dành cho lúc
-            muốn nói chuyện rảnh tay. */}
-        <button
-          type="button"
-          className="ct-nut-goi"
-          data-nut="mogoi"
-          disabled={dangChay}
-          onClick={() => datMoManGoi(true)}
-          title={dich('Nói chuyện — rảnh tay, tự nghe tiếp sau mỗi câu')}
-          aria-label={dich('Mở màn nói chuyện')}
-        >
-          <span className="ct-nut-goi-song">
-            {[0, 1, 2].map((i) => <i key={i} style={{ animationDelay: `${i * 130}ms` }} />)}
-          </span>
-        </button>
-        <NutGoiThoai khoa={dangChay} onNoi={(cau) => guiDi(cau, true)} />
-        {dangChay ? (
-          <button type="button" className="ct-btn ct-agent-dung" onClick={() => huyRef.current?.abort()}>
-            <CircleStop size={14} aria-hidden />
-            {dich('Dừng')}
-          </button>
-        ) : (
-          <button type="button" data-nut="gui" className="ct-btn" onClick={() => void guiDi()} disabled={!coGiDeGui}>
-            <Send size={14} aria-hidden />
-            {dich('Gửi')}
-          </button>
-        )}
-        </div>
-       </div>
-      </div>
-
-      <div className="ct-chat-chan">
-        <div className="ct-noluc" role="group" aria-label={dich('Bậc model')}>
-          {BAC.map((b) => (
             <button
-              key={b.id}
-              type="button"
-              className="ct-noluc-nut"
-              data-chon={b.id === bac}
-              disabled={dangChay || (b.canPro && !pro)}
-              onClick={() => datBac(b.id)}
-              title={b.canPro && !pro
-                ? dichP('{mo} (bạn chưa có Pro)', { mo: dich(b.mo) })
-                : dich(b.mo)}
+              type="button" className="ctc-dau-tieude"
+              onClick={() => datSuaTieuDe(tieuDe)}
+              title={c('Đổi tên')}
             >
-              {dich(b.nhan)}
+              {tieuDe}
             </button>
           ))}
-        </div>
-        <span className="ct-chat-chan-chu">
-          {pro ? 'Tối đa 4 ảnh · 3 tài liệu mỗi lượt' : 'Đính kèm ảnh/tài liệu cần tài khoản Pro'}
-        </span>
-      </div>
+          <span className="ctc-dau-dem" />
+          <button
+            type="button" className="ctc-dau-nut ctc-chi-hep" data-nut="chatMoi"
+            onClick={chatMoi}
+            aria-label={c('Cuộc trò chuyện mới')} title={c('Cuộc trò chuyện mới')}
+          >
+            <Plus size={18} aria-hidden />
+          </button>
+        </header>
 
-      {/* Màn nói chuyện phủ lên trên — đặt CUỐI cây để nó nằm trên mọi thứ
-          mà không phải đấu z-index với thanh công cụ và ô soạn. */}
-      {moManGoi && (
-        <ManGoi
-          hoi={luotGoi}
-          catLoiBangGiong={settings.odinCatLoi !== false}
-          onDong={() => { ngungNoi(); datMoManGoi(false); }}
+        <DaiNgoaiTuyen
+          tt={ngoaiTuyen}
+          tenModel={luotCuoi?.cucBo ?? modelCucBoSanSang ?? ''}
+          lyDo={dich('Vào Cài đặt → CuongMini ngoại tuyến để tải model dùng khi không có mạng.')}
+          dangChay={dangChay}
         />
-      )}
-    </div>
+
+        {!trong && (
+          <div className="ctc-cuon" ref={cuonRef} onScroll={doCuon}>
+            <div className="ctc-cot">
+              {luot.map((l, i) => (l.vai === 'user' ? (
+                dangSua?.i === i ? (
+                  <div key={i} className="ctc-sua">
+                    <textarea
+                      autoFocus
+                      value={dangSua.text}
+                      rows={Math.min(12, Math.max(2, dangSua.text.split('\n').length))}
+                      onChange={(e) => datDangSua({ i, text: e.target.value })}
+                      onKeyDown={(e) => {
+                        if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+                        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); luuSua(); }
+                        if (e.key === 'Escape') { e.preventDefault(); datDangSua(null); }
+                      }}
+                    />
+                    <div className="ctc-sua-nut">
+                      <button type="button" className="ctc-nut-vien" onClick={() => datDangSua(null)}>{c('Huỷ')}</button>
+                      <button
+                        type="button" className="ctc-nut-chinh"
+                        onClick={luuSua}
+                        disabled={dangChay || (!dangSua.text.trim() && !l.tep?.length)}
+                      >
+                        {c('Lưu & gửi')}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div key={i} className="ctc-nguoi">
+                    <div className="ctc-nguoi-bong">
+                      <DinhKemDaGui tep={l.tep ?? []} />
+                      {l.text && <div className="ctc-nguoi-chu">{l.text}</div>}
+                    </div>
+                    <HanhDongNguoi
+                      text={l.text}
+                      {...(l.luc === undefined ? {} : { luc: l.luc })}
+                      khoa={dangChay}
+                      onSua={() => datDangSua({ i, text: l.text })}
+                      onTachNhanh={() => void tachNhanhTu(i)}
+                    />
+                  </div>
+                )
+              ) : (
+                <div
+                  key={i}
+                  className="ctc-may"
+                  data-cuc-bo={l.cucBo ? '1' : undefined}
+                  data-chay={dangChayChu && i === iCuoi}
+                  data-cuoi={i === iCuoi}
+                >
+                  {l.cucBo && <NhanMay ten={l.cucBo} />}
+                  <ChuAgent text={l.text} />
+                  {l.nguon?.length ? <TheNguon nguon={l.nguon} /> : null}
+                  {dangChay && i === iCuoi ? (
+                    <div className="ctc-may-chay"><CtcDau co={20} dangChay /></div>
+                  ) : (
+                    <HanhDongMay
+                      text={l.text}
+                      khoa={dangChay}
+                      cuoi={i === iCuoi}
+                      {...(l.cucBo ? {} : { onTaoLai: () => taoLai(i) })}
+                      dau={i === iCuoi ? <CtcDau co={20} /> : null}
+                    />
+                  )}
+                </div>
+              )))}
+
+              {buocDangChay.map((b, i) => (
+                <div key={`b${i}`} className="ct-buoc ctc-buoc" data-viec={b.viec}>
+                  {b.viec === 'tim' ? <Search size={12} aria-hidden /> : <BookOpen size={12} aria-hidden />}
+                  <span>{b.viec === 'tim' ? c('Đang tìm trên web') : c('Đang đọc')}</span>
+                  <em>{b.chu}</em>
+                </div>
+              ))}
+              {dangCho && (
+                <div className="ctc-cho">
+                  <CtcDau co={20} dangChay />
+                  <DangNghi giay={choGiay} />
+                </div>
+              )}
+              {thongBao}
+            </div>
+          </div>
+        )}
+
+        <div className="ctc-day">
+          {!trong && !ganDay && (
+            <button
+              type="button" className="ctc-xuong"
+              onClick={() => xuongDay()}
+              aria-label={c('Xuống cuối')} title={c('Xuống cuối')}
+            >
+              <ArrowDown size={16} aria-hidden />
+            </button>
+          )}
+          {trong && (
+            <div className="ctc-chao">
+              <CtcDau co={34} />
+              <h1>{c('Chào bạn, hôm nay mình giúp gì?')}</h1>
+            </div>
+          )}
+          {trong && <div className="ctc-day-bao">{thongBao}</div>}
+          <CtcSoan
+            oRef={oSoanRef}
+            nhap={nhap}
+            datNhap={datNhap}
+            onGui={() => void guiDi()}
+            onDung={() => huyRef.current?.abort()}
+            dangChay={dangChay}
+            pro={pro}
+            model={bac}
+            onChonModel={datBac}
+            dk={dk}
+            onChupMan={() => datDangChupMan(true)}
+            onMoGoi={() => datMoManGoi(true)}
+            onNoi={(cau) => guiDi(cau, true)}
+            giuaTrang={trong}
+          />
+          <p className="ctc-luuy">{c('CuongMini có thể nhầm. Hãy kiểm tra lại thông tin quan trọng.')}</p>
+        </div>
+
+        {dangChupMan && (
+          <ChupManHinh
+            onXong={(f) => void dk.them([f])}
+            onDong={() => datDangChupMan(false)}
+          />
+        )}
+
+        {/* Màn nói chuyện phủ lên trên — đặt CUỐI cây để nó nằm trên mọi thứ. */}
+        {moManGoi && (
+          <ManGoi
+            hoi={luotGoi}
+            catLoiBangGiong={settings.odinCatLoi !== false}
+            onDong={() => { ngungNoi(); datMoManGoi(false); }}
+          />
+        )}
+      </div>
     </div>
   );
 }

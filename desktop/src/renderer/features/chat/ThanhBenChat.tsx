@@ -1,30 +1,32 @@
 /**
  * ============================================================
- * THANH BÊN CỦA CHẾ ĐỘ TRÒ CHUYỆN — cuộc đã lưu, nhóm theo thư mục
+ * THANH BÊN CỦA CHẾ ĐỘ TRÒ CHUYỆN — kiểu Claude (09/11/2026)
  * ============================================================
  *
- * Chế độ Lập trình đã có thanh bên từ 19/08; chế độ Trò chuyện thì lịch sử vẫn
- * nằm sau một nút, mở ra là một tấm phủ che mất hội thoại. Người dùng yêu cầu
- * đúng một điều: cho cả hai bên giống nhau.
+ * [Cuộc trò chuyện mới] · ô tìm · thư mục (lọc) · danh sách nhóm theo NGÀY
+ * (Đã ghim / Hôm nay / 7 ngày qua / 30 ngày qua / Cũ hơn) · kho lưu trữ.
+ * Mỗi dòng có menu ⋯ khi rê: Đổi tên (sửa tại chỗ) · Ghim · Chuyển thư mục ·
+ * Tách nhánh · Lưu trữ · Xoá (có hỏi lại).
+ *
+ * Thu gọn (`chatThanhBenGap`) ⇒ còn một dải hẹp hai nút. Cửa sổ hẹp
+ * (`@container ctc` ≤760px, xem `chatClaude.css`) ⇒ thanh bên ẩn, mở bằng nút
+ * ở đầu khung chat thành NGĂN KÉO phủ lên, chọn xong tự đóng.
  *
  * ─── VÌ SAO LÀ COMPONENT "CÂM" ───
- * Nó KHÔNG tự gọi máy chủ. Toàn bộ danh sách cuộc, thư mục và phiên đang mở
- * đều đã sống trong `ChatMode` — nó là chỗ gửi tin, nên nó là chỗ biết cuộc
- * nào vừa được tạo. Cho thanh bên tự nạp một bản sao nữa là dựng lên hai kho
- * cho cùng một sự thật, và kho nào cập nhật trước thì màn hình nhấp nháy theo
- * kho đó. Ở đây chỉ có vẽ và bấm.
+ * Nó KHÔNG tự gọi máy chủ. Danh sách cuộc, thư mục và phiên đang mở đều sống
+ * trong `ChatMode` — chỗ gửi tin, nên là chỗ biết cuộc nào vừa được tạo.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Archive, ArchiveRestore, ChevronLeft, FolderOpen, GitBranch, MessageSquarePlus,
-  Pencil, Pin, PinOff, Search, Trash2,
+  Archive, ArchiveRestore, ChevronLeft, Folder, FolderInput, FolderPlus, GitBranch, MoreHorizontal,
+  PanelLeftClose, PanelLeftOpen, Pencil, Pin, PinOff, Plus, Search, Trash2, X,
 } from 'lucide-react';
 
 import { useAppState } from '../../app-state';
-import { MenuChamDoc, type MucMenu } from './MenuChamDoc';
-import { mauDuAn } from './mauDuAn';
-import { useDich } from '../../i18n';
-import { DaiMoThanhBen, useThanhBenPhu } from './thanhBenHep';
+import { CtcMenu, CtcXacNhan, useCtcMo, type MucCtc } from './CtcMenu';
+import { CtcDau } from './CtcDau';
+import { NHAN_NHOM, nhomTheoNgay } from './CtcNhomNgay';
+import { useCtcChu } from './CtcChu';
 
 export interface ThuMuc {
   id: string;
@@ -46,51 +48,169 @@ export interface PhienChat {
   folder?: { id: string; ten: string; mau: string | null } | null;
 }
 
-const RONG_MIN = 190;
-const RONG_MAX = 460;
-const RONG_MAC_DINH = 250;
+/** `null` = tất cả · `'none'` = chưa phân loại · `<id>` = một thư mục. */
+export type LocThuMuc = null | 'none' | string;
 
-/** "3 phút trước" — mốc tuyệt đối không giúp nhận ra cuộc nào là cuộc nào. */
-function baoLau(iso: string): string {
-  const luc = new Date(iso).getTime();
-  if (!Number.isFinite(luc)) return '';
-  const giay = Math.max(0, (Date.now() - luc) / 1000);
-  if (giay < 60) return 'vừa xong';
-  if (giay < 3600) return `${Math.floor(giay / 60)} phút trước`;
-  if (giay < 86400) return `${Math.floor(giay / 3600)} giờ trước`;
-  if (giay < 172800) return 'hôm qua';
-  return new Date(luc).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
-}
+const RONG_MIN = 220;
+const RONG_MAX = 420;
+const RONG_MAC_DINH = 272;
 
-export function ThanhBenChat({
-  ds, dangMo, xemLuuTru, onXemLuuTru, onMo, onTaoMoi, onXoa, onGhim, onLuuTru, onDoiTen, onTachNhanh,
-}: {
-  ds: PhienChat[];
-  dangMo: string | null;
-  xemLuuTru: boolean;
-  onXemLuuTru: (v: boolean) => void;
+interface HanhDongPhien {
   onMo: (id: string) => void;
-  onTaoMoi: () => void;
   onXoa: (id: string) => void;
   onGhim: (p: PhienChat) => void;
   onLuuTru: (p: PhienChat) => void;
   onDoiTen: (id: string, ten: string) => void;
   onTachNhanh: (id: string) => void;
+  onXepVaoThuMuc: (sid: string, folderId: string | null) => void;
+}
+
+function HangPhien({
+  p, dangMo, xemLuuTru, dsThuMuc, hd, onChonXong,
+}: {
+  p: PhienChat;
+  dangMo: boolean;
+  xemLuuTru: boolean;
+  dsThuMuc: ThuMuc[];
+  hd: HanhDongPhien;
+  onChonXong: () => void;
 }) {
-  const { dich } = useDich();
+  const { c } = useCtcChu();
+  const menu = useCtcMo();
+  const [suaTen, datSuaTen] = useState<string | null>(null);
+  const [hoiXoa, datHoiXoa] = useState(false);
+  const ten = p.title?.trim() || c('Cuộc chưa đặt tên');
+
+  const luuTen = (): void => {
+    const t = suaTen?.trim();
+    datSuaTen(null);
+    if (t && t !== ten) hd.onDoiTen(p.id, t);
+  };
+
+  const muc: MucCtc[] = [
+    { nhan: c('Đổi tên'), icon: <Pencil size={14} aria-hidden />, onChon: () => datSuaTen(ten) },
+    {
+      nhan: p.pinned === true ? c('Bỏ ghim') : c('Ghim'),
+      icon: p.pinned === true ? <PinOff size={14} aria-hidden /> : <Pin size={14} aria-hidden />,
+      onChon: () => hd.onGhim(p),
+    },
+    { nhan: c('Tách nhánh'), icon: <GitBranch size={14} aria-hidden />, onChon: () => hd.onTachNhanh(p.id) },
+    {
+      nhan: xemLuuTru ? c('Bỏ lưu trữ') : c('Lưu trữ'),
+      icon: xemLuuTru ? <ArchiveRestore size={14} aria-hidden /> : <Archive size={14} aria-hidden />,
+      onChon: () => hd.onLuuTru(p),
+    },
+    ...(dsThuMuc.length > 0
+      ? [
+        { loai: 'tieuDe', nhan: c('Chuyển vào thư mục') } as MucCtc,
+        ...dsThuMuc.map((f): MucCtc => ({
+          nhan: f.ten,
+          icon: <Folder size={14} aria-hidden />,
+          chon: p.folderId === f.id,
+          onChon: () => hd.onXepVaoThuMuc(p.id, f.id),
+        })),
+        ...(p.folderId
+          ? [{
+            nhan: c('Bỏ khỏi thư mục'),
+            icon: <FolderInput size={14} aria-hidden />,
+            onChon: () => hd.onXepVaoThuMuc(p.id, null),
+          } as MucCtc]
+          : []),
+      ]
+      : []),
+    { loai: 'vach' },
+    { nhan: c('Xoá'), icon: <Trash2 size={14} aria-hidden />, nguyHiem: true, onChon: () => datHoiXoa(true) },
+  ];
+
+  return (
+    <div className="ctc-hang" data-dangmo={dangMo} data-menu={menu.mo}>
+      {suaTen !== null ? (
+        <input
+          className="ctc-hang-sua"
+          autoFocus
+          value={suaTen}
+          maxLength={200}
+          onFocus={(e) => e.currentTarget.select()}
+          onChange={(e) => datSuaTen(e.target.value)}
+          onBlur={luuTen}
+          onKeyDown={(e) => {
+            if (e.nativeEvent.isComposing) return;   // nhường Enter cho bộ gõ tiếng Việt
+            if (e.key === 'Enter') { e.preventDefault(); luuTen(); }
+            if (e.key === 'Escape') { e.preventDefault(); datSuaTen(null); }
+          }}
+        />
+      ) : (
+        <>
+          <button
+            type="button"
+            className="ctc-hang-mo"
+            onClick={() => { hd.onMo(p.id); onChonXong(); }}
+            onDoubleClick={() => datSuaTen(ten)}
+            title={ten}
+          >
+            <span className="ctc-hang-ten">{ten}</span>
+          </button>
+          <button
+            ref={menu.neo}
+            type="button"
+            className="ctc-hang-menu"
+            onClick={(e) => { e.stopPropagation(); menu.bat(); }}
+            aria-label={c('Thao tác')}
+            title={c('Thao tác')}
+            aria-haspopup="menu"
+            aria-expanded={menu.mo}
+          >
+            <MoreHorizontal size={16} aria-hidden />
+          </button>
+          <CtcMenu mo={menu.mo} onDong={menu.dong} neo={menu.neo} muc={muc} rong={210} nhan={c('Thao tác')} />
+        </>
+      )}
+      {hoiXoa && (
+        <CtcXacNhan
+          tieuDe={c('Xoá cuộc trò chuyện này?')}
+          noiDung={<><strong>{ten}</strong><br />{c('Không thể hoàn tác.')}</>}
+          nhanDongY={c('Xoá')}
+          nhanHuy={c('Huỷ')}
+          onDongY={() => { datHoiXoa(false); hd.onXoa(p.id); }}
+          onHuy={() => datHoiXoa(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+export function ThanhBenChat({
+  ds, dangMo, xemLuuTru, onXemLuuTru, onTaoMoi,
+  dsThuMuc, loc, onLoc, onTaoThuMuc, onXoaThuMuc,
+  ngan, onNgan,
+  ...hd
+}: {
+  ds: PhienChat[];
+  dangMo: string | null;
+  xemLuuTru: boolean;
+  onXemLuuTru: (v: boolean) => void;
+  onTaoMoi: () => void;
+  dsThuMuc: ThuMuc[];
+  loc: LocThuMuc;
+  onLoc: (l: LocThuMuc) => void;
+  onTaoThuMuc: (ten: string) => void;
+  onXoaThuMuc: (id: string) => void;
+  /** Ngăn kéo (cửa sổ hẹp) đang mở. */
+  ngan: boolean;
+  onNgan: (v: boolean) => void;
+} & HanhDongPhien) {
+  const { c } = useCtcChu();
   const { settings, setSetting } = useAppState();
   const [tim, datTim] = useState('');
   const [dangKeo, datDangKeo] = useState(false);
-  const [suaTen, datSuaTen] = useState<{ id: string; ten: string } | null>(null);
-  /* Cột hẹp ⇒ lớp phủ (03/10/2026) — cùng cơ chế với thanh bên AI Code. */
-  const { phuMo, datPhuMo, thanRef } = useThanhBenPhu();
+  const [tenThuMuc, datTenThuMuc] = useState<string | null>(null);
 
   const gap = settings.chatThanhBenGap === true;
   const rong = typeof settings.chatThanhBenRong === 'number'
     ? Math.min(RONG_MAX, Math.max(RONG_MIN, settings.chatThanhBenRong))
     : RONG_MAC_DINH;
 
-  /** Kéo đổi bề rộng — nghe trên WINDOW, xem chú thích cùng chỗ trong ThanhBen. */
+  /** Kéo đổi bề rộng — nghe trên WINDOW để con trỏ chạy nhanh ra ngoài vẫn theo. */
   const keoRef = useRef<{ x: number; rong: number } | null>(null);
   useEffect(() => {
     if (!dangKeo) return;
@@ -108,165 +228,192 @@ export function ThanhBenChat({
     };
   }, [dangKeo, setSetting]);
 
-  const ten = (p: PhienChat): string => p.title?.trim() || 'Cuộc chưa đặt tên';
+  /* Esc đóng ngăn kéo. */
+  useEffect(() => {
+    if (!ngan) return;
+    const phim = (e: KeyboardEvent): void => { if (e.key === 'Escape') onNgan(false); };
+    document.addEventListener('keydown', phim);
+    return () => document.removeEventListener('keydown', phim);
+  }, [ngan, onNgan]);
 
-  /**
-   * Gom nhóm: đã ghim lên đầu, còn lại theo THƯ MỤC.
-   *
-   * `ds` đã được máy chủ lọc theo lưu trữ rồi (`?archived=1`), nên ở đây chỉ
-   * lọc theo ô tìm. Lọc lại lần nữa bằng `archivedAt` là mời một lỗi lệch:
-   * app cũ chưa có trường đó sẽ thấy danh sách trống trơn.
-   */
   const nhom = useMemo(() => {
-    const loc = tim.trim().toLowerCase();
-    const co = ds.filter((p) => !loc || ten(p).toLowerCase().includes(loc));
-    const daGhim = co.filter((p) => p.pinned === true);
-    const m = new Map<string, PhienChat[]>();
-    for (const p of co) {
-      if (p.pinned === true) continue;
-      const k = p.folder?.ten ?? 'Chưa phân loại';
-      const cu = m.get(k);
-      if (cu) cu.push(p); else m.set(k, [p]);
-    }
-    const ra: Array<[string, PhienChat[], boolean]> = [...m.entries()].map(([k, v]) => [k, v, false]);
-    return daGhim.length > 0
-      ? [['Đã ghim', daGhim, true] as [string, PhienChat[], boolean], ...ra]
-      : ra;
+    const q = tim.trim().toLowerCase();
+    const co = q ? ds.filter((p) => (p.title ?? '').toLowerCase().includes(q)) : ds;
+    return nhomTheoNgay(co);
   }, [ds, tim]);
 
-  const luuTen = (): void => {
-    const t = suaTen;
-    datSuaTen(null);
-    if (t) onDoiTen(t.id, t.ten);
+  const taoMoi = (): void => { onTaoMoi(); onNgan(false); };
+  const luuThuMuc = (): void => {
+    const t = tenThuMuc?.trim();
+    datTenThuMuc(null);
+    if (t) onTaoThuMuc(t);
   };
 
-  const mucMenu = (p: PhienChat): MucMenu[] => [
-    {
-      nhan: p.pinned === true ? 'Bỏ ghim' : 'Ghim lên đầu',
-      icon: p.pinned === true ? <PinOff size={13} aria-hidden /> : <Pin size={13} aria-hidden />,
-      onChon: () => onGhim(p),
-    },
-    { nhan: 'Đổi tên', icon: <Pencil size={13} aria-hidden />, onChon: () => datSuaTen({ id: p.id, ten: ten(p) }) },
-    { nhan: 'Tách nhánh', icon: <GitBranch size={13} aria-hidden />, onChon: () => onTachNhanh(p.id) },
-    {
-      nhan: xemLuuTru ? 'Bỏ lưu trữ' : 'Lưu trữ',
-      icon: xemLuuTru ? <ArchiveRestore size={13} aria-hidden /> : <Archive size={13} aria-hidden />,
-      onChon: () => onLuuTru(p),
-    },
-    { nhan: 'Xoá', icon: <Trash2 size={13} aria-hidden />, nguyHiem: true, onChon: () => onXoa(p.id) },
-  ];
-
-  if (gap) {
-    return (
-      <DaiMoThanhBen nhan={dich('Lịch sử trò chuyện')} dem={ds.length} onBam={() => setSetting('chatThanhBenGap', false)} />
-    );
-  }
+  const hienBen = !gap || ngan;
 
   return (
     <>
-    <DaiMoThanhBen nhan={dich('Lịch sử trò chuyện')} chiHep dangMo={phuMo} onBam={() => datPhuMo((v) => !v)} />
-    <aside className="ct-tb" style={{ width: rong }} data-keo={dangKeo} data-phu-mo={phuMo} ref={thanRef}>
-      <div className="ct-tb-dau">
-        <button type="button" className="ct-tb-nut" onClick={onTaoMoi} title={dich('Cuộc mới')}>
-          <MessageSquarePlus size={14} aria-hidden />
-        </button>
-        <div className="ct-tb-tim">
-          <Search size={12} aria-hidden />
-          <input value={tim} placeholder={dich('Tìm cuộc cũ…')} onChange={(e) => datTim(e.target.value)} />
-        </div>
-        <button
-          type="button"
-          className="ct-tb-nut"
-          onClick={() => setSetting('chatThanhBenGap', true)}
-          title={dich('Ẩn thanh bên')}
-          aria-label={dich('Ẩn thanh bên')}
+      {gap && (
+        <nav className="ctc-ray" aria-label={c('Mở thanh bên')}>
+          <button
+            type="button" className="ctc-ray-nut"
+            onClick={() => setSetting('chatThanhBenGap', false)}
+            title={c('Mở thanh bên')} aria-label={c('Mở thanh bên')}
+          >
+            <PanelLeftOpen size={18} aria-hidden />
+          </button>
+          <button
+            type="button" className="ctc-ray-nut" data-moi
+            data-nut="chatMoi"
+            onClick={taoMoi}
+            title={c('Cuộc trò chuyện mới')} aria-label={c('Cuộc trò chuyện mới')}
+          >
+            <Plus size={16} aria-hidden />
+          </button>
+        </nav>
+      )}
+
+      {ngan && <div className="ctc-ben-nen" onPointerDown={() => onNgan(false)} aria-hidden />}
+
+      {hienBen && (
+        <aside
+          className="ctc-ben"
+          style={{ width: rong }}
+          data-keo={dangKeo}
+          data-ngan={ngan}
+          aria-label={c('Cuộc trò chuyện mới')}
         >
-          <ChevronLeft size={14} aria-hidden />
-        </button>
-      </div>
+          <div className="ctc-ben-dau">
+            <span className="ctc-ben-ten"><CtcDau co={18} /> CuongMini</span>
+            <button
+              type="button" className="ctc-ben-icon ctc-chi-rong"
+              onClick={() => setSetting('chatThanhBenGap', true)}
+              title={c('Thu gọn thanh bên')} aria-label={c('Thu gọn thanh bên')}
+            >
+              <PanelLeftClose size={18} aria-hidden />
+            </button>
+            <button
+              type="button" className="ctc-ben-icon ctc-chi-hep"
+              onClick={() => onNgan(false)}
+              title={c('Thu gọn thanh bên')} aria-label={c('Thu gọn thanh bên')}
+            >
+              <X size={18} aria-hidden />
+            </button>
+          </div>
 
-      <div className="ct-tb-ds">
-        {nhom.length === 0 && (
-          <p className="ct-tb-trong">
-            {tim.trim()
-              ? 'Không khớp cuộc nào.'
-              : xemLuuTru ? 'Kho lưu trữ đang trống.' : 'Chưa có cuộc nào được lưu.'}
-          </p>
-        )}
+          <button type="button" className="ctc-ben-moi" data-nut="chatMoi" onClick={taoMoi}>
+            <span className="ctc-ben-moi-icon"><Plus size={14} strokeWidth={2.6} aria-hidden /></span>
+            {c('Cuộc trò chuyện mới')}
+          </button>
 
-        {nhom.map(([nhanNhom, ps, laGhim]) => (
-          <section key={nhanNhom} className="ct-tb-nhom">
-            {/* `data-mau` suy từ TÊN dự án — xem `mauDuAn.ts`. Nhóm ghim giữ
-                màu riêng, vì "đã ghim" là trạng thái chứ không phải dự án. */}
-            <h3 data-mau={laGhim ? 'ghim' : mauDuAn(nhanNhom)}>
-              {laGhim ? <Pin size={11} aria-hidden /> : <FolderOpen size={11} aria-hidden />}
-              {' '}{nhanNhom}
-            </h3>
-            {ps.map((p) => (
-              <div key={p.id} className="ct-tb-muc" data-dangmo={p.id === dangMo}>
-                {suaTen?.id === p.id ? (
-                  /* `autoFocus` cố ý: mở ô đổi tên ra là để gõ ngay. Dự án không
-                     cài plugin jsx-a11y nên đừng thêm chỉ thị tắt rule của nó —
-                     eslint báo lỗi "rule not found" cho chính dòng chỉ thị đó. */
-                  <input
-                    className="ct-tb-doiten"
-                    autoFocus
-                    value={suaTen.ten}
-                    maxLength={200}
-                    onChange={(e) => datSuaTen({ id: p.id, ten: e.target.value })}
-                    onBlur={luuTen}
-                    onKeyDown={(e) => {
-                      if (e.nativeEvent.isComposing) return;   // nhường Enter cho bộ gõ tiếng Việt
-                      if (e.key === 'Enter') { e.preventDefault(); luuTen(); }
-                      if (e.key === 'Escape') { e.preventDefault(); datSuaTen(null); }
-                    }}
-                  />
-                ) : (
-                  <>
-                    <button
-                      type="button"
-                      className="ct-tb-muc-mo"
-                      onClick={() => { onMo(p.id); datPhuMo(false); }}
-                      onDoubleClick={() => datSuaTen({ id: p.id, ten: ten(p) })}
-                      title={`${ten(p)}\n(bấm đúp để đổi tên)`}
-                    >
-                      {p.pinned === true && !laGhim && (
-                        <span className="ct-tb-ghim"><Pin size={10} aria-hidden /></span>
-                      )}
-                      {ten(p)}
-                      <span className="ct-tb-muc-phu">
-                        {p._count?.messages ?? 0} tin · {baoLau(p.updatedAt)}
-                      </span>
+          <label className="ctc-ben-tim">
+            <Search size={15} aria-hidden />
+            <input value={tim} placeholder={c('Tìm cuộc trò chuyện…')} onChange={(e) => datTim(e.target.value)} />
+            {tim && (
+              <button type="button" className="ctc-ben-tim-xoa" onClick={() => datTim('')} aria-label={c('Huỷ')}>
+                <X size={13} aria-hidden />
+              </button>
+            )}
+          </label>
+
+          {/* Thư mục: lọc danh sách (máy chủ lọc theo `folderId`). */}
+          <div className="ctc-tm">
+            <div className="ctc-tm-dau">
+              <span>{c('Thư mục')}</span>
+              <button
+                type="button" className="ctc-ben-icon" data-nho
+                onClick={() => datTenThuMuc('')}
+                title={c('Thư mục mới…')} aria-label={c('Thư mục mới…')}
+              >
+                <FolderPlus size={15} aria-hidden />
+              </button>
+            </div>
+            {tenThuMuc !== null && (
+              <input
+                className="ctc-hang-sua"
+                autoFocus
+                value={tenThuMuc}
+                maxLength={80}
+                placeholder={c('Thư mục mới…')}
+                onChange={(e) => datTenThuMuc(e.target.value)}
+                onBlur={luuThuMuc}
+                onKeyDown={(e) => {
+                  if (e.nativeEvent.isComposing) return;
+                  if (e.key === 'Enter') { e.preventDefault(); luuThuMuc(); }
+                  if (e.key === 'Escape') { e.preventDefault(); datTenThuMuc(null); }
+                }}
+              />
+            )}
+            {dsThuMuc.length > 0 && (
+              <div className="ctc-tm-ds">
+                <button type="button" className="ctc-tm-chip" data-chon={loc === null} onClick={() => onLoc(null)}>
+                  {c('Tất cả')}
+                </button>
+                <button type="button" className="ctc-tm-chip" data-chon={loc === 'none'} onClick={() => onLoc('none')}>
+                  {c('Chưa phân loại')}
+                </button>
+                {dsThuMuc.map((f) => (
+                  <span key={f.id} className="ctc-tm-o" data-chon={loc === f.id}>
+                    <button type="button" className="ctc-tm-chip" data-chon={loc === f.id} onClick={() => onLoc(f.id)}>
+                      <Folder size={12} aria-hidden />
+                      {f.ten}
+                      {!!f._count?.sessions && <span className="ctc-tm-dem">{f._count.sessions}</span>}
                     </button>
-                    <MenuChamDoc muc={mucMenu(p)} nhan={`Thao tác với ${ten(p)}`} />
-                  </>
-                )}
+                    <button
+                      type="button" className="ctc-tm-xoa"
+                      onClick={() => onXoaThuMuc(f.id)}
+                      title={c('Xoá thư mục (các cuộc bên trong về Chưa phân loại)')}
+                      aria-label={c('Xoá thư mục (các cuộc bên trong về Chưa phân loại)')}
+                    >
+                      <X size={11} aria-hidden />
+                    </button>
+                  </span>
+                ))}
               </div>
+            )}
+          </div>
+
+          <div className="ctc-ben-ds">
+            {nhom.length === 0 && (
+              <p className="ctc-ben-trong">
+                {tim.trim()
+                  ? c('Không khớp cuộc nào.')
+                  : xemLuuTru ? c('Kho lưu trữ đang trống.') : c('Chưa có cuộc trò chuyện nào.')}
+              </p>
+            )}
+            {nhom.map((n) => (
+              <section key={n.khoa} className="ctc-nhom">
+                <h3>{n.khoa === 'ghim' && <Pin size={11} aria-hidden />}{c(NHAN_NHOM[n.khoa])}</h3>
+                {n.ds.map((p) => (
+                  <HangPhien
+                    key={p.id}
+                    p={p}
+                    dangMo={p.id === dangMo}
+                    xemLuuTru={xemLuuTru}
+                    dsThuMuc={dsThuMuc}
+                    hd={hd}
+                    onChonXong={() => onNgan(false)}
+                  />
+                ))}
+              </section>
             ))}
-          </section>
-        ))}
-      </div>
+          </div>
 
-      <button
-        type="button"
-        className="ct-tb-kho"
-        onClick={() => onXemLuuTru(!xemLuuTru)}
-        data-dang={xemLuuTru}
-      >
-        {xemLuuTru
-          ? <><ChevronLeft size={12} aria-hidden /> {dich('Về danh sách')}</>
-          : <><Archive size={12} aria-hidden /> {dich('Kho lưu trữ')}</>}
-      </button>
+          <button type="button" className="ctc-ben-kho" onClick={() => onXemLuuTru(!xemLuuTru)} data-dang={xemLuuTru}>
+            {xemLuuTru
+              ? <><ChevronLeft size={14} aria-hidden /> {c('Về danh sách')}</>
+              : <><Archive size={14} aria-hidden /> {c('Kho lưu trữ')}</>}
+          </button>
 
-      <div
-        className="ct-tb-keo"
-        role="separator"
-        aria-orientation="vertical"
-        onPointerDown={(e) => { keoRef.current = { x: e.clientX, rong }; datDangKeo(true); }}
-        onDoubleClick={() => setSetting('chatThanhBenRong', RONG_MAC_DINH)}
-        title={dich('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
-      />
-    </aside>
+          <div
+            className="ctc-ben-keo"
+            role="separator"
+            aria-orientation="vertical"
+            onPointerDown={(e) => { keoRef.current = { x: e.clientX, rong }; datDangKeo(true); }}
+            onDoubleClick={() => setSetting('chatThanhBenRong', RONG_MAC_DINH)}
+          />
+        </aside>
+      )}
     </>
   );
 }

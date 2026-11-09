@@ -53,7 +53,7 @@ export function baoLau(luc: number): string {
   return new Date(luc).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
 }
 
-function NhanThoiGian({ luc }: { luc: number }) {
+export function NhanThoiGian({ luc }: { luc: number }) {
   // Giá trị trả về không dùng tới — nó chỉ để React vẽ lại mỗi 30 giây.
   useSyncExternalStore(dangKy, docNhip, docNhip);
   return <span className="ct-tn-luc">{baoLau(luc)}</span>;

@@ -10,6 +10,7 @@ import { ProgressRing, CardsSkeleton, EmptyState, useLangUser } from '@/componen
 import WordOfTheDay from '@/components/language/WordOfTheDay';
 import { KHOA_CHINH } from '@/lib/khoaChinh';
 import GauChao from '@/components/language/mascot/GauChao';
+import { docVaGhiLanCuoi } from '@/components/language/mascot/trangThaiBip';
 import s from './landing.module.css';
 
 /**
@@ -77,6 +78,20 @@ export default function LanguageLandingPage() {
     return [...daHoc].sort((a, b) => (b.progress!.due - a.progress!.due) || (b.progress!.learned - a.progress!.learned))[0]!;
   }, [languages, isAuthenticated]);
 
+  // 🐼 Trạng thái cho Bíp: số ngày vắng (mốc mở trang gần nhất, localStorage) + chuỗi ngày (practice state của khoá
+  // đang học dở, chỉ khi đăng nhập). Thẻ đến hạn lấy từ chính danh sách ngôn ngữ ở trên.
+  const [vangNgay, setVangNgay] = useState<number | null>(null);
+  const [streak, setStreak] = useState<number | undefined>(undefined);
+  useEffect(() => { setVangNgay(docVaGhiLanCuoi()); }, []);
+  useEffect(() => {
+    if (!isAuthenticated || !hocTiep) return;
+    let alive = true;
+    languageApi.practice(hocTiep.code)
+      .then((r) => { if (alive) setStreak(r.data.data?.state?.streak ?? 0); })
+      .catch(() => {});
+    return () => { alive = false; };
+  }, [isAuthenticated, hocTiep]);
+
   const vao = (code: string) => KHOA_CHINH[code]?.href ?? `/language/${code}`;
   const coKhoa = ds.filter(coNoiDung);
   const sapCoDs = ds.filter((l) => !coNoiDung(l));
@@ -97,17 +112,19 @@ export default function LanguageLandingPage() {
               variant="bip"
               size={240}
               huong="tren"
-              text={hocTiep ? `Chào mừng quay lại! Hôm nay học tiếp ${KHOA_CHINH[hocTiep.code]?.ten ?? hocTiep.name} nhé 🐼` : undefined}
+              tinhHinh={{
+                vangNgay,
+                due: hocTiep?.progress?.due ?? 0,
+                streak,
+                dangNhap: isAuthenticated,
+                tenKhoa: hocTiep ? (KHOA_CHINH[hocTiep.code]?.ten ?? hocTiep.name) : undefined,
+              }}
             />
           </div>
-          <span className={s.eyebrow}><Sparkles size={14} aria-hidden /> My Language</span>
-          <h1 className={s.tieuDe}>
-            Học ngoại ngữ theo <span className={s.nhan}>lộ trình từng ngày</span>
-            <br className={s.ngatLon} /> — từ số 0 đến chứng chỉ.
-          </h1>
+          <span className={s.eyebrow}>My Language</span>
+          <h1 className={s.tieuDe}>Học ngoại ngữ</h1>
           <p className={s.subtitle}>
-            Mỗi ngôn ngữ là một khoá học trọn vẹn: bài theo ngày, slide, nghe – nói – đọc – viết, luyện nhớ bằng thẻ,
-            thi thử từng chặng và gia sư AI giảng kèm.
+            Tiếng Nhật đến <b>JLPT N2</b> · Tiếng Anh đến <b>IELTS</b> · Tiếng Trung đến <b>HSK</b>
           </p>
 
           {!loading && tong.ngonNgu > 0 && (

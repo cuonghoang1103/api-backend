@@ -12,8 +12,8 @@ const D = 's2-l5-6';
 
 export const b2l56 = [
   walkHead(D, 1, 36,
-    'Two lessons in one deck. Bloom\'s six levels (slides 9–11) are the part that shows up in exam questions; the brainstorming technique (slide 36) is the part you will actually use in the group project.',
-    'Hai bài trong một bộ slide. Sáu bậc Bloom (slide 9–11) là phần hay vào đề; kỹ thuật brainstorming (slide 36) là phần bạn thật sự dùng trong dự án nhóm.'),
+    'Two lessons in one deck. Bloom\'s six levels (slides 8–10) are the part that shows up in exam questions; the brainstorming rules and technique (slides 34–35) is the part you will actually use in the group project.',
+    'Hai bài trong một bộ slide. Sáu bậc Bloom (slide 8–10) là phần hay vào đề; quy tắc và kỹ thuật brainstorming (slide 34–35) là phần bạn thật sự dùng trong dự án nhóm.'),
 
   slide(D, 1, 'Thinking and Analysis',
     `<p class="y-chinh">🎯 Title slide for Session II.</p>
@@ -34,7 +34,7 @@ export const b2l56 = [
        <li>Identify the value of creative thinking in education.</li>
        <li>Describe the impact of limitations (such as rules) on creative thinking.</li>
      </ol>
-     <p class="meo">💡 Objective 5 is the counter-intuitive one, and slide 31 answers it: structure <em>helps</em> creativity.</p>`,
+     <p class="meo">💡 Objective 5 is the counter-intuitive one, and slide 28 answers it: structure <em>helps</em> creativity.</p>`,
     `<p class="y-chinh">🎯 Năm mục tiêu; để ý ba trong số đó nói về sáng tạo chứ không phải tư duy nói chung.</p>
      <ol>
        <li>Nhận diện các lối tư duy khác nhau, ví dụ như trong <strong>thang Bloom</strong>.</li>
@@ -43,7 +43,7 @@ export const b2l56 = [
        <li>Chỉ ra giá trị của tư duy sáng tạo trong học tập.</li>
        <li>Mô tả tác động của các giới hạn (như luật lệ) lên tư duy sáng tạo.</li>
      </ol>
-     <p class="meo">💡 Mục tiêu 5 là cái ngược trực giác, và slide 31 trả lời: cấu trúc <em>giúp</em> sáng tạo.</p>`),
+     <p class="meo">💡 Mục tiêu 5 là cái ngược trực giác, và slide 28 trả lời: cấu trúc <em>giúp</em> sáng tạo.</p>`),
 
   slide(D, 4, '1. Patterns of thought',
     `<p class="y-chinh">🎯 Section divider for the first half.</p>`,
@@ -116,7 +116,7 @@ export const b2l56 = [
        <li><span class="nhan">Evaluating</span> — judge, check and critique the value of material for a given purpose.</li>
        <li><span class="nhan">Creating</span> — put parts together into a coherent or unique new whole; reorganise elements into a new pattern through generating, planning or producing.</li>
      </ul>
-     <p class="pitfall co-tieu-de"><strong>Đọc kỹ chữ "for a given purpose":</strong> evaluating is never "is this good?" in the abstract — it is "is this good <em>for this purpose</em>?". That phrase is what makes an evaluation defensible.</p>`,
+     <p class="pitfall co-tieu-de"><strong>Read "for a given purpose" carefully:</strong> evaluating is never "is this good?" in the abstract — it is "is this good <em>for this purpose</em>?". That phrase is what makes an evaluation defensible.</p>`,
     `<p class="y-chinh">🎯 Ba bậc trên cùng.</p>
      <ul>
        <li><span class="nhan">Phân tích</span> — tách tài liệu thành các bộ phận để hiểu rõ hơn cấu trúc tổ chức của nó.</li>
@@ -125,19 +125,13 @@ export const b2l56 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Đọc kỹ cụm "cho một mục đích cho trước":</strong> đánh giá không bao giờ là "cái này tốt không?" chung chung — mà là "cái này tốt <em>cho mục đích này</em> không?". Chính cụm đó làm một đánh giá đứng vững được.</p>`),
 
-  slide(D, 11, "Bloom's taxonomy — the table continued",
-    `<p class="y-chinh">🎯 Continuation of the descriptions table.</p>
-     <p class="meo">💡 Exam tip: you are as likely to be asked "which level is this task?" as "list the levels". Practise by labelling the SSG104 assessments — the quiz sits at remembering/understanding, the group project at creating.</p>`,
-    `<p class="y-chinh">🎯 Phần tiếp của bảng mô tả.</p>
-     <p class="meo">💡 Mẹo thi: câu "nhiệm vụ này thuộc bậc nào?" dễ ra ngang với câu "liệt kê các bậc". Luyện bằng cách gán nhãn cho chính các bài đánh giá của SSG104 — bài quiz nằm ở bậc ghi nhớ/hiểu, còn dự án nhóm nằm ở bậc sáng tạo.</p>`),
-
-  slide(D, 12, '2. Creative thinking skills',
+  slide(D, 11, '2. Creative thinking skills',
     `<p class="y-chinh">🎯 Second half of the deck.</p>
      <p>"Everybody has a creative potential and from the moment you can express this creative potential, you can start changing the world." — Paulo Coelho.</p>`,
     `<p class="y-chinh">🎯 Nửa sau của bộ slide.</p>
      <p>"Ai cũng có tiềm năng sáng tạo, và từ khoảnh khắc bạn biểu đạt được tiềm năng ấy, bạn có thể bắt đầu thay đổi thế giới." — Paulo Coelho.</p>`),
 
-  slide(D, 13, 'Creative thinking — creativity as a skill',
+  slide(D, 12, 'Creative thinking — creativity as a skill',
     `<p class="y-chinh">🎯 The claim that makes this teachable.</p>
      <ul>
        <li>Everyone has creative abilities — those who express them fully and those who express them barely at all.</li>
@@ -155,7 +149,7 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Hệ quả ghi thẳng trên slide: sáng tạo là <em>kỹ năng</em> dạy được và học được, không phải năng khiếu trời cho. Mọi thứ sau slide này đều là kỹ thuật.</p>`),
 
-  slide(D, 14, 'Activity — assess your creative problem-solving skills',
+  slide(D, 13, 'Activity — assess your creative problem-solving skills',
     `<p class="y-chinh">🎯 A graded in-class activity with a concrete procedure.</p>
      <ul>
        <li><span class="nhan">Objective</span> — evaluate your attitude toward problem-solving.</li>
@@ -171,7 +165,7 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Phần dẫn nhập đáng đọc: nó nối sáng tạo với sự linh hoạt và khả năng chịu đựng mơ hồ — hai phẩm chất mà dự án nhóm sẽ thử thách mạnh hơn bất kỳ bài test nào.</p>`),
 
-  slide(D, 15, 'Creative thinking in education (part 1)',
+  slide(D, 14, 'Creative thinking in education (part 1)',
     `<p class="y-chinh">🎯 Seven ordinary college activities that are creative work in disguise.</p>
      <ul>
        <li>Design sample exam questions to test your own knowledge while revising.</li>
@@ -195,7 +189,7 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Cái đầu tiên là cách nâng cấp việc học rẻ nhất trong cả môn này: tự viết câu hỏi thi ép bạn leo thang Bloom từ ghi nhớ lên sáng tạo.</p>`),
 
-  slide(D, 16, 'Creative thinking in education (part 2)',
+  slide(D, 15, 'Creative thinking in education (part 2)',
     `<p class="y-chinh">🎯 Five more, and they are all group activities.</p>
      <ul>
        <li>Join a brainstorming session with fellow musicians on writing a composition together.</li>
@@ -215,7 +209,7 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Để ý điểm chung: cái nào cũng có người nhận thật. Đó là thứ tách một nhiệm vụ sáng tạo khỏi một giấc mơ.</p>`),
 
-  slide(D, 17, 'How to stimulate creative thinking (1–3)',
+  slide(D, 16, 'How to stimulate creative thinking (1–3)',
     `<p class="y-chinh">🎯 Three research-backed methods.</p>
      <ol>
        <li><span class="nhan">Sleep on it</span> — the REM cycle boosts creativity and problem-solving. Keep pen and paper by the bed for nocturnal insights.</li>
@@ -231,7 +225,7 @@ export const b2l56 = [
      </ol>
      <p class="meo">💡 Cả ba cùng một cơ chế: chúng ngắt việc tìm kiếm có chủ ý, và chính lúc đó một liên tưởng khác mới nổi lên được.</p>`),
 
-  slide(D, 18, 'How to stimulate creative thinking (4–6)',
+  slide(D, 17, 'How to stimulate creative thinking (4–6)',
     `<p class="y-chinh">🎯 Three more, and the middle one is uncomfortable on purpose.</p>
      <ol start="4">
        <li><span class="nhan">Keep learning</span> — studying something far from your expertise is especially effective at producing new ways of thinking.</li>
@@ -247,13 +241,13 @@ export const b2l56 = [
      </ol>
      <p class="meo">💡 Ý số 4 chính là lý do môn này có mặt trong chương trình kỹ thuật phần mềm: khoảng cách với ngành của bạn là nguồn sáng tạo, không phải thứ làm bạn xao nhãng.</p>`),
 
-  slide(D, 19, 'A brainstorm of tips — "have lots of ideas"',
+  slide(D, 18, 'A brainstorm of tips — "have lots of ideas"',
     `<p class="y-chinh">🎯 "The best way to have a good idea is to have lots of ideas." — Linus Pauling, double Nobel laureate.</p>
-     <p class="meo">💡 This is the quantity-before-quality rule that the brainstorming technique on slide 36 is built on: generate first, judge later.</p>`,
+     <p class="meo">💡 This is the quantity-before-quality rule that the brainstorming technique on slide 35 is built on: generate first, judge later.</p>`,
     `<p class="y-chinh">🎯 "Cách tốt nhất để có một ý hay là có thật nhiều ý." — Linus Pauling, hai lần Nobel.</p>
-     <p class="meo">💡 Đây là quy tắc số lượng trước chất lượng, nền tảng của kỹ thuật brainstorming ở slide 36: sinh ý trước, phán xét sau.</p>`),
+     <p class="meo">💡 Đây là quy tắc số lượng trước chất lượng, nền tảng của kỹ thuật brainstorming ở slide 35: sinh ý trước, phán xét sau.</p>`),
 
-  slide(D, 20, 'Tips — sensing and thinking',
+  slide(D, 19, 'Tips — sensing and thinking',
     `<p class="y-chinh">🎯 Two of the seven tip families.</p>
      <p><span class="nhan">Sensing</span></p>
      <ul>
@@ -279,7 +273,7 @@ export const b2l56 = [
        <li>Để ý tưởng ủ men; cởi mở với tia sáng khi nó bật lên trong đầu.</li>
      </ul>`),
 
-  slide(D, 21, 'Tips — imagining',
+  slide(D, 20, 'Tips — imagining',
     `<p class="y-chinh">🎯 Five prompts for the imagining stage.</p>
      <ul>
        <li>Brainstorm by generating ideas with a group of people.</li>
@@ -299,7 +293,7 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Hai câu hỏi đó đáng thuộc nguyên văn — chúng là cách nhanh nhất để khởi động lại một buổi thảo luận nhóm đang tắc.</p>`),
 
-  slide(D, 22, 'Tips — speaking and writing',
+  slide(D, 21, 'Tips — speaking and writing',
     `<p class="y-chinh">🎯 Four tips, and the second one is a direct instruction for your assignments.</p>
      <ul>
        <li>Use your own words and your own "voice" when conveying original ideas.</li>
@@ -317,7 +311,7 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Gạch đầu dòng thứ ba là tiêu chí chấm điểm trá hình: một ý không nói được nó thay đổi cái gì thì đọc lên chỉ như chữ độn.</p>`),
 
-  slide(D, 23, 'Tips — drawing',
+  slide(D, 22, 'Tips — drawing',
     `<p class="y-chinh">🎯 Two visual techniques, both named.</p>
      <ul>
        <li><span class="nhan">Mind-mapping</span> — start with a key concept in the centre of the page, then radiate connecting lines and write down every related idea that comes.</li>
@@ -331,27 +325,27 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Sơ đồ tư duy là kỹ thuật nên dùng khi bản đề xuất của nhóm (Bài 7) có quá nhiều ý dở dang mà chưa có cấu trúc.</p>`),
 
-  slide(D, 24, 'Tips — learning, moving, resting',
+  slide(D, 23, 'Tips — learning, moving, resting',
     `<p class="y-chinh">🎯 The last three families, and the shortest one is the most ignored.</p>
      <ul>
        <li><span class="nhan">Learning</span> — find ways to show your personal investment in projects; gather knowledge and do research; have more fun learning.</li>
        <li><span class="nhan">Moving</span> — do physical activity to engage the creative areas of the brain.</li>
        <li><span class="nhan">Resting</span> — take breaks.</li>
      </ul>
-     <p class="meo">💡 "Take breaks" is two words with research behind it (slide 17, point 3). Treat it as method, not as permission.</p>`,
+     <p class="meo">💡 "Take breaks" is two words with research behind it (slide 16, point 3). Treat it as method, not as permission.</p>`,
     `<p class="y-chinh">🎯 Ba nhóm cuối, và nhóm ngắn nhất lại là nhóm bị phớt lờ nhiều nhất.</p>
      <ul>
        <li><span class="nhan">Học</span> — tìm cách thể hiện sự đầu tư cá nhân vào dự án; thu thập kiến thức và nghiên cứu; học vui hơn.</li>
        <li><span class="nhan">Vận động</span> — hoạt động thể chất để đánh thức các vùng sáng tạo của não.</li>
        <li><span class="nhan">Nghỉ</span> — nghỉ giải lao.</li>
      </ul>
-     <p class="meo">💡 "Nghỉ giải lao" chỉ hai chữ nhưng có nghiên cứu đứng sau (slide 17, ý 3). Hãy coi đó là phương pháp, không phải lời cho phép.</p>`),
+     <p class="meo">💡 "Nghỉ giải lao" chỉ hai chữ nhưng có nghiên cứu đứng sau (slide 16, ý 3). Hãy coi đó là phương pháp, không phải lời cho phép.</p>`),
 
-  slide(D, 25, 'Creative thinking — fiction and facts',
+  slide(D, 24, 'Creative thinking — fiction and facts',
     `<p class="y-chinh">🎯 Divider for four myths about creativity, each answered on its own slide.</p>`,
     `<p class="y-chinh">🎯 Slide phân mục cho bốn ngộ nhận về sáng tạo, mỗi cái được trả lời ở một slide riêng.</p>`),
 
-  slide(D, 26, 'Myth 1 — "every problem has only one right answer"',
+  slide(D, 25, 'Myth 1 — "every problem has only one right answer"',
     `<p class="y-chinh">🎯 Fiction vs facts, first pair.</p>
      <p><span class="nhan">Fiction</span> — every problem has only one solution, one right answer.</p>
      <p><span class="nhan">Facts</span></p>
@@ -369,7 +363,7 @@ export const b2l56 = [
        <li>Người khác có thể nghĩ ra lời giải khác — điều đó không làm lời giải của bạn sai hay kém quan trọng.</li>
      </ul>`),
 
-  slide(D, 27, 'Myth 2 — "the best method has already been discovered"',
+  slide(D, 26, 'Myth 2 — "the best method has already been discovered"',
     `<p class="y-chinh">🎯 Second pair, answered with a history lesson.</p>
      <p><span class="nhan">Facts</span> — look at the history of any solution and you will see that improvements and new right answers keep being found.</p>
      <p>The deck's own chain: <em>the ox or horse → the cart → the wagon → the train → the car → the airplane → the jet → the space shuttle</em>. What is the best and last?</p>
@@ -379,7 +373,7 @@ export const b2l56 = [
      <p>Chuỗi ngay trên slide: <em>bò hoặc ngựa → xe kéo → xe thồ → tàu hoả → ô tô → máy bay → phản lực → tàu con thoi</em>. Cái nào là tốt nhất và cuối cùng?</p>
      <p class="meo">💡 Câu hỏi tu từ ấy không có đáp án, và đó chính là điều muốn nói.</p>`),
 
-  slide(D, 28, 'Myth 3 — "creative answers are technologically complex"',
+  slide(D, 27, 'Myth 3 — "creative answers are technologically complex"',
     `<p class="y-chinh">🎯 Third pair.</p>
      <p><span class="nhan">Facts</span></p>
      <ul>
@@ -397,7 +391,7 @@ export const b2l56 = [
      </ul>
      <p class="meo">💡 Phép thử hữu ích cho sinh viên phần mềm: trước khi thiết kế hệ thống, hãy hỏi vấn đề này thực ra có phải chuyện hành vi, chuyện thoả thuận hay chuyện luồng thông tin không.</p>`),
 
-  slide(D, 29, 'Myth 4 — "ideas either come or they don\'t; structure cannot help"',
+  slide(D, 28, 'Myth 4 — "ideas either come or they don\'t; structure cannot help"',
     `<p class="y-chinh">🎯 Fourth pair — and this is objective 5 of the lesson being answered directly.</p>
      <p><span class="nhan">Facts</span></p>
      <ul>
@@ -413,15 +407,15 @@ export const b2l56 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Nhớ cho đề thi:</strong> giới hạn không giết sáng tạo — nó hội tụ sáng tạo. "Thiết kế cái gì cũng được" cho ra ít hơn "thiết kế thứ mà sinh viên năm nhất dùng được trong năm phút".</p>`),
 
-  slide(D, 30, 'Thinking and Analysis (cont.)',
+  slide(D, 29, 'Thinking and Analysis (cont.)',
     `<p class="y-chinh">🎯 Title slide for the continuation of Lesson 6.</p>`,
     `<p class="y-chinh">🎯 Slide tiêu đề cho phần tiếp của Bài 6.</p>`),
 
-  slide(D, 31, 'Chapter outlines — creative thinking skills (cont.)',
+  slide(D, 30, 'Chapter outlines — creative thinking skills (cont.)',
     `<p class="y-chinh">🎯 The second half of the creativity lesson turns to technology and online learning.</p>`,
     `<p class="y-chinh">🎯 Nửa sau của bài sáng tạo chuyển sang công nghệ và học trực tuyến.</p>`),
 
-  slide(D, 32, 'Learning objectives for the continuation (5)',
+  slide(D, 31, 'Learning objectives for the continuation (5)',
     `<p class="y-chinh">🎯 Five more objectives.</p>
      <ol>
        <li>Describe the role of creative thinking skills in problem-solving.</li>
@@ -439,7 +433,7 @@ export const b2l56 = [
        <li>Tự đánh giá mức sẵn sàng dùng công nghệ của bản thân.</li>
      </ol>`),
 
-  slide(D, 33, 'Problem-solving with creative thinking',
+  slide(D, 32, 'Problem-solving with creative thinking',
     `<p class="y-chinh">🎯 The clean separation between the two thinking modes this session teaches.</p>
      <ul>
        <li>Creative problem-solving searches for <strong>new and novel</strong> solutions.</li>
@@ -457,50 +451,72 @@ export const b2l56 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Bẫy thi:</strong> sáng tạo ≠ phản biện. Sáng tạo <em>sinh ra</em>; phản biện <em>phán xét</em>. Bài 8 dạy nửa phản biện, và nhóm làm việc tốt sẽ dùng chúng đúng thứ tự đó.</p>`),
 
-  slide(D, 34, 'Activity — brainstorming a social initiative',
+  slide(D, 33, 'Activity — brainstorming a social initiative',
     `<p class="y-chinh">🎯 A graded group activity, and it rehearses the group project.</p>
      <p><span class="nhan">Task</span> — "Project start-up: Social initiative". In small groups, propose a creative social initiative that solves some problem in our society.</p>
-     <p class="meo">💡 Run it with the technique on the next slide, not as a free-for-all discussion. The difference in output is visible within ten minutes.</p>`,
+     <p class="meo">💡 Run it with the rules and technique on the next two slides, not as a free-for-all discussion. The difference in output is visible within ten minutes.</p>`,
     `<p class="y-chinh">🎯 Một hoạt động nhóm tính điểm, và nó là buổi tập dượt cho dự án nhóm.</p>
      <p><span class="nhan">Đề bài</span> — "Khởi động dự án: Sáng kiến xã hội". Theo nhóm nhỏ, đề xuất một sáng kiến xã hội sáng tạo giải quyết một vấn đề nào đó của xã hội.</p>
-     <p class="meo">💡 Hãy chạy nó bằng kỹ thuật ở slide sau, đừng thảo luận tự do. Khác biệt về kết quả lộ ra chỉ sau mười phút.</p>`),
+     <p class="meo">💡 Hãy chạy nó bằng quy tắc và kỹ thuật ở hai slide sau, đừng thảo luận tự do. Khác biệt về kết quả lộ ra chỉ sau mười phút.</p>`),
 
-  slide(D, 35, 'Brainstorming technique — the six steps',
-    `<p class="y-chinh">🎯 The loop, exactly as drawn: <strong>Start → Ideas generation → Ideas combination → Evaluation & validation → Selection of best ideas → Generate new ideas → End</strong>.</p>
-     <ul>
-       <li><span class="nhan">Generation</span> — quantity first (slide 19: "have lots of ideas"). No judging here.</li>
-       <li><span class="nhan">Combination</span> — merge and build on ideas rather than defending single ones.</li>
-       <li><span class="nhan">Evaluation & validation</span> — only now does critical thinking enter.</li>
-       <li><span class="nhan">Selection</span> — pick the best.</li>
-       <li><span class="nhan">Generate new ideas</span> — the arrow loops back; one pass is rarely enough.</li>
-     </ul>
-     <p class="pitfall co-tieu-de"><strong>Lỗi phổ biến nhất:</strong> evaluating during generation. It stops the flow and, per group polarization (Lesson 3 slide 15), the discussion converges on whoever spoke first.</p>`,
-    `<p class="y-chinh">🎯 Vòng lặp, đúng như hình vẽ: <strong>Bắt đầu → Sinh ý tưởng → Kết hợp ý tưởng → Đánh giá & thẩm định → Chọn ý tốt nhất → Sinh ý mới</strong>.</p>
-     <ul>
-       <li><span class="nhan">Sinh ý</span> — số lượng trước đã (slide 19: "có thật nhiều ý"). Tuyệt đối không phán xét ở bước này.</li>
-       <li><span class="nhan">Kết hợp</span> — ghép và bồi đắp ý tưởng, thay vì bảo vệ từng ý riêng lẻ.</li>
-       <li><span class="nhan">Đánh giá & thẩm định</span> — tới lúc này tư duy phản biện mới được vào.</li>
-       <li><span class="nhan">Chọn lọc</span> — lấy ý tốt nhất.</li>
-       <li><span class="nhan">Sinh ý mới</span> — mũi tên quay vòng; hiếm khi một lượt là đủ.</li>
-     </ul>
-     <p class="pitfall co-tieu-de"><strong>Lỗi phổ biến nhất:</strong> vừa sinh ý vừa phán xét. Nó chặn dòng chảy, và theo hiệu ứng phân cực nhóm (Bài 3 slide 15), cả buổi sẽ hội tụ về ý của người nói đầu tiên.</p>`),
-
-  slide(D, 36, 'End of the brainstorming diagram',
-    `<p class="y-chinh">🎯 Closing slide of the deck.</p>
-     <p><span class="nhan">Self-check</span></p>
+  slide(D, 34, 'Rules of Brainstorming (IDEO U)',
+    `<p class="y-chinh">🎯 Seven rules from IDEO U, the design school — the "law" every brainstorm session runs under.</p>
      <ol>
-       <li>Six Bloom levels in order, and one task placed at each?</li>
-       <li>Why is creativity called a skill rather than a gift (slide 13)?</li>
-       <li>What does structure do to creativity (slide 29)?</li>
-       <li>Which brainstorming step must contain no judgement (slide 35)?</li>
+       <li><span class="nhan">Defer Judgment</span> — no "that won't work" while ideas are coming out.</li>
+       <li><span class="nhan">Encourage Wild Ideas</span> — a crazy idea often leads to a usable one.</li>
+       <li><span class="nhan">Build on the Ideas of Others</span> — say "yes, and…" instead of "no, but…".</li>
+       <li><span class="nhan">Stay Focused on the Topic</span>.</li>
+       <li><span class="nhan">One Conversation at a Time</span> — one person speaks, the others listen.</li>
+       <li><span class="nhan">Be Visual</span> — sketch, use sticky notes, draw on the board.</li>
+       <li><span class="nhan">Go for Quantity</span> — many ideas first; quality comes later (slide 18: "have lots of ideas").</li>
+     </ol>
+     <p class="meo">💡 Read the seven rules aloud at the start of the activity on slide 33. Rules 1 and 3 together are what stop the session from collapsing onto the first idea spoken.</p>`,
+    `<p class="y-chinh">🎯 Bảy quy tắc của IDEO U (trường thiết kế IDEO) — "luật chơi" của mọi buổi brainstorming.</p>
+     <ol>
+       <li><span class="nhan">Defer Judgment — hoãn phán xét</span>: không nói "cái này không được đâu" trong lúc mọi người đang đưa ý.</li>
+       <li><span class="nhan">Encourage Wild Ideas — khuyến khích ý điên rồ</span>: một ý "điên" thường dẫn tới một ý dùng được.</li>
+       <li><span class="nhan">Build on the Ideas of Others — xây tiếp trên ý người khác</span>: nói "đúng rồi, và…" thay vì "không, nhưng…".</li>
+       <li><span class="nhan">Stay Focused on the Topic — bám đúng chủ đề</span>.</li>
+       <li><span class="nhan">One Conversation at a Time — mỗi lúc một người nói</span>: một người nói, những người khác nghe.</li>
+       <li><span class="nhan">Be Visual — trực quan</span>: phác hình, dán giấy nhớ, vẽ lên bảng.</li>
+       <li><span class="nhan">Go for Quantity — nhắm số lượng</span>: nhiều ý trước, chất lượng tính sau (slide 18: "có thật nhiều ý").</li>
+     </ol>
+     <p class="meo">💡 Đọc to bảy quy tắc này lúc bắt đầu hoạt động ở slide 33. Quy tắc 1 và 3 cộng lại chính là thứ giữ cho buổi họp không dồn hết về ý của người nói đầu tiên.</p>`),
+
+  slide(D, 35, 'Brainstorming technique — the five steps',
+    `<p class="y-chinh">🎯 The flow, exactly as the arrows on the slide run: <strong>Start → Ideas generation → Ideas combination → Evaluation & Validation → Generate new ideas → Selection of best ideas → End</strong>.</p>
+     <ul>
+       <li><span class="nhan">Ideas generation</span> — quantity first (slide 18: "have lots of ideas"). No judging here.</li>
+       <li><span class="nhan">Ideas combination</span> — merge and build on ideas rather than defending single ones.</li>
+       <li><span class="nhan">Evaluation & Validation</span> — only now does critical thinking enter: does the idea work, is it feasible?</li>
+       <li><span class="nhan">Generate new ideas</span> — evaluation exposes weak points, so the group produces improved ideas to fix them.</li>
+       <li><span class="nhan">Selection of best ideas</span> — only after that, pick the best and finish.</li>
+     </ul>
+     <p class="pitfall co-tieu-de"><strong>Most common mistake:</strong> evaluating during generation. It stops the flow, and the discussion converges on whoever spoke first — the opposite of IDEO's rule 1 on slide 34.</p>`,
+    `<p class="y-chinh">🎯 Dòng chảy, đúng theo chiều mũi tên trên slide: <strong>Start (bắt đầu) → Ideas generation (sinh ý tưởng) → Ideas combination (kết hợp ý tưởng) → Evaluation & Validation (đánh giá & thẩm định) → Generate new ideas (sinh ý mới) → Selection of best ideas (chọn ý tốt nhất) → End (kết thúc)</strong>.</p>
+     <ul>
+       <li><span class="nhan">Sinh ý tưởng</span> — số lượng trước đã (slide 18: "có thật nhiều ý"). Tuyệt đối không phán xét ở bước này.</li>
+       <li><span class="nhan">Kết hợp ý tưởng</span> — ghép và bồi đắp ý tưởng, thay vì bảo vệ từng ý riêng lẻ.</li>
+       <li><span class="nhan">Đánh giá & thẩm định</span> — tới lúc này tư duy phản biện mới được vào: ý này chạy được không, có khả thi không?</li>
+       <li><span class="nhan">Sinh ý mới</span> — đánh giá làm lộ điểm yếu, nên nhóm sinh thêm ý cải tiến để vá chúng.</li>
+       <li><span class="nhan">Chọn ý tốt nhất</span> — chỉ sau đó mới chọn ý tốt nhất rồi kết thúc.</li>
+     </ul>
+     <p class="pitfall co-tieu-de"><strong>Lỗi phổ biến nhất:</strong> vừa sinh ý vừa phán xét. Nó chặn dòng chảy, và cả buổi sẽ hội tụ về ý của người nói đầu tiên — ngược hẳn quy tắc 1 của IDEO ở slide 34.</p>`),
+
+  slide(D, 36, "It's Q&A time!",
+    `<p class="y-chinh">🎯 Closing slide — time for questions. Self-check before you leave:</p>
+     <ol>
+       <li>Six Bloom levels in order (slide 8), and one task placed at each?</li>
+       <li>Why is creativity called a skill rather than a gift (slide 12)?</li>
+       <li>What does structure do to creativity (slide 28)?</li>
+       <li>Which IDEO rule forbids judging while ideas are coming out (slide 34), and which brainstorming step is the first place judging is allowed (slide 35)?</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Slide kết của bộ này.</p>
-     <p><span class="nhan">Tự kiểm</span></p>
+    `<p class="y-chinh">🎯 Slide kết — giờ hỏi đáp. Tự kiểm trước khi rời lớp:</p>
      <ol>
-       <li>Sáu bậc Bloom theo đúng thứ tự, mỗi bậc gán được một nhiệm vụ chứ?</li>
-       <li>Vì sao sáng tạo được gọi là kỹ năng chứ không phải năng khiếu (slide 13)?</li>
-       <li>Cấu trúc làm gì với sáng tạo (slide 29)?</li>
-       <li>Bước nào của brainstorming tuyệt đối không được có phán xét (slide 35)?</li>
+       <li>Sáu bậc Bloom theo đúng thứ tự (slide 8), mỗi bậc gán được một nhiệm vụ chứ?</li>
+       <li>Vì sao sáng tạo được gọi là kỹ năng chứ không phải năng khiếu (slide 12)?</li>
+       <li>Cấu trúc làm gì với sáng tạo (slide 28)?</li>
+       <li>Quy tắc IDEO nào cấm phán xét lúc đang đưa ý (slide 34), và bước nào của kỹ thuật brainstorming là chỗ đầu tiên được phán xét (slide 35)?</li>
      </ol>`),
 
   books([
@@ -509,8 +525,10 @@ export const b2l56 = [
   ]),
 
   bi(
-    `<h3>✅ What the old course was missing here</h3>
-     <p>The syllabus asks about Bloom's taxonomy (CQ4.3) and the rules of brainstorming (CQ4.4). In the previous version of this Academy course the word "Bloom" appeared zero times, and creative thinking was a single parenthetical clause inside one sentence.</p>`,
-    `<h3>✅ Khoá cũ thiếu gì ở chỗ này</h3>
-     <p>Syllabus hỏi về thang Bloom (CQ4.3) và quy tắc brainstorming (CQ4.4). Ở phiên bản cũ của khoá học này, chữ "Bloom" xuất hiện đúng 0 lần, còn tư duy sáng tạo chỉ là một mệnh đề trong ngoặc nằm trong đúng một câu.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus asks about Bloom's taxonomy (CQ4.3) and the rules of brainstorming (CQ4.4) — know the six levels in order and the seven IDEO rules.</p>
+     <p class="meo">💡 Exam tip: you are as likely to be asked "which level is this task?" as "list the levels". Practise by labelling the SSG104 assessments — the quiz sits at remembering/understanding, the group project at creating.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Syllabus hỏi về thang Bloom (CQ4.3) và quy tắc brainstorming (CQ4.4) — nắm sáu bậc theo đúng thứ tự và bảy quy tắc của IDEO.</p>
+     <p class="meo">💡 Mẹo thi: câu "nhiệm vụ này thuộc bậc nào?" dễ ra ngang với câu "liệt kê các bậc". Luyện bằng cách gán nhãn cho chính các bài đánh giá của SSG104 — bài quiz nằm ở bậc ghi nhớ/hiểu, còn dự án nhóm nằm ở bậc sáng tạo.</p>`),
 ].join('\n');

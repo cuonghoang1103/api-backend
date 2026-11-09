@@ -26,18 +26,18 @@ export const b1l3 = [
   slide(D, 3, 'Learning objectives (4)',
     `<p class="y-chinh">🎯 Four objectives, and each maps to a specific slide later in this deck.</p>
      <ol>
-       <li>Review the evidence that humans have a fundamental <strong>need to belong</strong> (slide 7).</li>
-       <li>Compare the <strong>sociometer model</strong> of self-esteem with the traditional view (discussion Q2, slide 21).</li>
-       <li>Describe how groups <strong>change over time</strong> (Tuckman, slides 14–15).</li>
-       <li>Apply the theory of <strong>groupthink</strong> to a well-known decision-making group (slide 20).</li>
+       <li>Review the evidence that humans have a fundamental <strong>need to belong</strong> (slides 6–7).</li>
+       <li>Compare the <strong>sociometer model</strong> of self-esteem with the traditional view (discussion Q2, slide 20).</li>
+       <li>Describe how groups <strong>change over time</strong> (Tuckman, slides 12–13).</li>
+       <li>Apply the theory of <strong>groupthink</strong> to a well-known decision-making group (slides 17–19, discussion Q6 on slide 21).</li>
      </ol>
      <p class="meo">💡 Objective 4 says "apply", not "define". Expect a case, not a definition question.</p>`,
     `<p class="y-chinh">🎯 Bốn mục tiêu, mỗi cái ứng với một slide cụ thể phía sau.</p>
      <ol>
-       <li>Xem lại bằng chứng cho thấy con người có <strong>nhu cầu thuộc về</strong> mang tính nền tảng (slide 7).</li>
-       <li>So sánh <strong>mô hình sociometer</strong> về lòng tự trọng với quan niệm truyền thống (câu thảo luận 2, slide 21).</li>
-       <li>Mô tả nhóm <strong>thay đổi theo thời gian</strong> ra sao (Tuckman, slide 14–15).</li>
-       <li>Áp dụng lý thuyết <strong>groupthink</strong> vào một nhóm ra quyết định nổi tiếng (slide 20).</li>
+       <li>Xem lại bằng chứng cho thấy con người có <strong>nhu cầu thuộc về</strong> mang tính nền tảng (slide 6–7).</li>
+       <li>So sánh <strong>mô hình sociometer</strong> về lòng tự trọng với quan niệm truyền thống (câu thảo luận 2, slide 20).</li>
+       <li>Mô tả nhóm <strong>thay đổi theo thời gian</strong> ra sao (Tuckman, slide 12–13).</li>
+       <li>Áp dụng lý thuyết <strong>groupthink</strong> vào một nhóm ra quyết định nổi tiếng (slide 17–19, câu thảo luận 6 ở slide 21).</li>
      </ol>
      <p class="meo">💡 Mục tiêu 4 nói "áp dụng", không phải "định nghĩa". Hãy chờ một tình huống, đừng chờ câu hỏi định nghĩa.</p>`),
 
@@ -153,31 +153,47 @@ export const b1l3 = [
      <p>Đội tiến bộ dần theo thời gian khi xây được cách hiểu chung về đội và về những việc họ đang làm.</p>
      <p class="meo">💡 "Hình dung chung" là thứ kiểm được: hỏi riêng hai thành viên xem "xong" nghĩa là gì với nhiệm vụ hiện tại. Trả lời khác nhau = bạn chưa có nó.</p>`),
 
-  slide(D, 12, "Tuckman's group development stages (title)",
-    `<p class="y-chinh">🎯 Divider for the model every student of this subject is expected to know by name.</p>`,
-    `<p class="y-chinh">🎯 Slide phân mục cho mô hình mà sinh viên môn này buộc phải thuộc tên.</p>`),
-
-  slide(D, 13, "Tuckman's five stages",
-    `<p class="y-chinh">🎯 Five stages, in order, drawn as a staircase.</p>
+  slide(D, 12, "Tuckman's group development stages",
+    `<p class="y-chinh">🎯 Five stages, in order, drawn as a staircase — each step carries its own one-line description.</p>
      <ol>
-       <li><span class="nhan">Forming</span> — members meet, stay polite, look for direction.</li>
-       <li><span class="nhan">Storming</span> — differences surface: roles, standards, who decides.</li>
-       <li><span class="nhan">Norming</span> — the group agrees how it will work.</li>
-       <li><span class="nhan">Performing</span> — energy goes into the task instead of into the group.</li>
-       <li><span class="nhan">Adjourning</span> — the group finishes and disbands.</li>
+       <li><span class="nhan">01 Forming</span> — "Beginning of the group. Members know each other and plan for the forming of the group."</li>
+       <li><span class="nhan">02 Storming</span> — "Group members start working and engage each other and struggle for status in the group."</li>
+       <li><span class="nhan">03 Norming</span> — "Members of the group establish rules about how they will achieve their goals."</li>
+       <li><span class="nhan">04 Performing</span> — "Group members reach the decision and decide to implement the plan and to achieve the objective."</li>
+       <li><span class="nhan">05 Adjourning</span> — "As the group project ends, the group dissolves in this phase."</li>
      </ol>
-     <p class="pitfall co-tieu-de"><strong>Bẫy:</strong> many students list only four stages. Adjourning was added later and is the one most often forgotten — and it is exactly the stage your project group will reach in week 10.</p>
+     <p class="pitfall co-tieu-de"><strong>Trap:</strong> many students list only four stages. Adjourning was added later and is the one most often forgotten — and it is exactly the stage your project group reaches at the end of the term.</p>
      <p class="meo">💡 Storming is not failure. A group that never storms usually norms around whatever the loudest member said first.</p>`,
-    `<p class="y-chinh">🎯 Năm giai đoạn, theo thứ tự, vẽ như bậc thang.</p>
+    `<p class="y-chinh">🎯 Năm giai đoạn, theo thứ tự, vẽ như bậc thang — mỗi bậc có một dòng mô tả riêng.</p>
      <ol>
-       <li><span class="nhan">Forming — hình thành</span>: gặp nhau, còn giữ ý, chờ ai đó chỉ hướng.</li>
-       <li><span class="nhan">Storming — sóng gió</span>: khác biệt lộ ra: vai trò, tiêu chuẩn, ai là người quyết.</li>
-       <li><span class="nhan">Norming — định chuẩn</span>: nhóm thống nhất cách làm việc với nhau.</li>
-       <li><span class="nhan">Performing — vận hành</span>: sức lực đổ vào công việc thay vì đổ vào chuyện nội bộ.</li>
-       <li><span class="nhan">Adjourning — giải thể</span>: nhóm hoàn thành và tan.</li>
+       <li><span class="nhan">01 Forming — hình thành</span>: "Nhóm mới bắt đầu. Các thành viên làm quen và lên kế hoạch lập nhóm."</li>
+       <li><span class="nhan">02 Storming — sóng gió</span>: "Các thành viên bắt tay làm, va chạm với nhau và tranh giành vị thế trong nhóm."</li>
+       <li><span class="nhan">03 Norming — định chuẩn</span>: "Các thành viên đặt ra quy tắc về cách cả nhóm sẽ đạt mục tiêu."</li>
+       <li><span class="nhan">04 Performing — vận hành</span>: "Các thành viên đi tới quyết định, triển khai kế hoạch và đạt mục tiêu."</li>
+       <li><span class="nhan">05 Adjourning — giải thể</span>: "Khi dự án nhóm kết thúc, nhóm giải tán ở giai đoạn này."</li>
      </ol>
-     <p class="pitfall co-tieu-de"><strong>Bẫy:</strong> nhiều sinh viên chỉ kể bốn giai đoạn. Adjourning được bổ sung về sau và là cái hay bị quên nhất — mà đó đúng là giai đoạn nhóm dự án của bạn sẽ tới vào tuần 10.</p>
+     <p class="pitfall co-tieu-de"><strong>Bẫy:</strong> nhiều sinh viên chỉ kể bốn giai đoạn. Adjourning được bổ sung về sau và là cái hay bị quên nhất — mà đó đúng là giai đoạn nhóm dự án của bạn sẽ tới vào cuối kỳ.</p>
      <p class="meo">💡 Sóng gió không phải là thất bại. Nhóm không bao giờ sóng gió thường định chuẩn theo đúng câu người nói to nhất phát ra đầu tiên.</p>`),
+
+  slide(D, 13, "Tuckman's stages — the picture version",
+    `<p class="y-chinh">🎯 The same five stages as slide 12, drawn as a rising line of cartoon characters so you can recognise each stage by what the group is <em>doing</em>.</p>
+     <ul>
+       <li><span class="nhan">forming</span> — a pile of characters crowding together, still a heap rather than a team.</li>
+       <li><span class="nhan">storming</span> — some stand around, others kick and wrestle each other.</li>
+       <li><span class="nhan">norming</span> — three stand side by side and talk calmly.</li>
+       <li><span class="nhan">performing</span> — one in a hard hat reads a plan while the others work beside him.</li>
+       <li><span class="nhan">adjourning</span> — a farewell picture: "GOOD BYE CARO! WE WILL MISS U!".</li>
+     </ul>
+     <p class="meo">💡 Exam questions usually describe behaviour, not the stage name ("members argue about who decides…"). Practise naming the stage from the behaviour, exactly as this picture asks you to.</p>`,
+    `<p class="y-chinh">🎯 Vẫn năm giai đoạn của slide 12, nhưng vẽ thành một dãy nhân vật hoạt hình đi lên dần, để bạn nhận ra mỗi giai đoạn qua việc nhóm đang <em>làm</em>.</p>
+     <ul>
+       <li><span class="nhan">forming</span> — một đống nhân vật xúm lại với nhau, vẫn là một đám chứ chưa thành đội.</li>
+       <li><span class="nhan">storming</span> — vài người đứng nhìn, mấy người khác đá nhau, vật nhau.</li>
+       <li><span class="nhan">norming</span> — ba người đứng cạnh nhau, nói chuyện bình tĩnh.</li>
+       <li><span class="nhan">performing</span> — một người đội mũ bảo hộ đọc bản kế hoạch, những người khác làm việc bên cạnh.</li>
+       <li><span class="nhan">adjourning</span> — bức ảnh chia tay: "GOOD BYE CARO! WE WILL MISS U!".</li>
+     </ul>
+     <p class="meo">💡 Câu hỏi thi thường mô tả hành vi chứ không gọi tên giai đoạn ("các thành viên cãi nhau xem ai được quyết…"). Hãy tập gọi tên giai đoạn từ hành vi, đúng như bức tranh này bắt bạn làm.</p>`),
 
   slide(D, 14, 'Making decisions in groups — the promise',
     `<p class="y-chinh">🎯 Three arguments for deciding as a group, and one warning.</p>
@@ -187,7 +203,7 @@ export const b1l3 = [
        <li>So a group's decision <em>should</em> be superior to an individual's.</li>
        <li><span class="nhan">However</span> — groups do not always make good decisions.</li>
      </ul>
-     <p class="meo">💡 The next three slides are the three named ways that promise breaks: polarization, the common knowledge effect, groupthink.</p>`,
+     <p class="meo">💡 The rest of the deck names three ways that promise breaks: group polarization (slide 15), the common knowledge effect (slide 16) and groupthink (slides 17–19).</p>`,
     `<p class="y-chinh">🎯 Ba lập luận ủng hộ quyết định theo nhóm, và một lời cảnh báo.</p>
      <ul>
        <li>Nhóm huy động được nhiều nguồn lực hơn một cá nhân đơn lẻ.</li>
@@ -195,7 +211,7 @@ export const b1l3 = [
        <li>Nên quyết định của nhóm <em>lẽ ra</em> phải tốt hơn quyết định cá nhân.</li>
        <li><span class="nhan">Tuy nhiên</span> — nhóm không phải lúc nào cũng quyết định đúng.</li>
      </ul>
-     <p class="meo">💡 Ba slide tiếp theo chính là ba cách được gọi tên mà lời hứa đó bị vỡ: phân cực, hiệu ứng tri thức chung, và groupthink.</p>`),
+     <p class="meo">💡 Phần còn lại của bộ slide gọi tên ba cách lời hứa đó bị vỡ: phân cực nhóm (slide 15), hiệu ứng tri thức chung (slide 16) và groupthink (slide 17–19).</p>`),
 
   slide(D, 15, 'Group polarization',
     `<p class="y-chinh">🎯 Common sense says groups moderate their members. The evidence says the opposite.</p>
@@ -225,72 +241,86 @@ export const b1l3 = [
      <p><span class="nhan">Hệ quả</span> — nhóm làm kém với những bài toán mà lời giải không hiển nhiên, chỉ tìm ra được nếu chia sẻ thông tin thật rộng.</p>
      <p class="meo">💡 Nước đi hoá giải: trước khi thảo luận, yêu cầu mỗi người viết ra thứ chỉ mình biết. Thảo luận tự nhiên sẽ trôi về phía ai cũng đã biết.</p>`),
 
-  slide(D, 17, 'Groupthink — the four group-level causes',
-    `<p class="y-chinh">🎯 "Groups sometimes make spectacularly bad decisions." Four group-level factors combine to cause it.</p>
+  slide(D, 17, 'Groupthink — what it is',
+    `<p class="y-chinh">🎯 A cartoon meeting plus the definition of groupthink.</p>
+     <p>Around the table the chair asks <em>"So, do we agree?"</em> and every speech bubble says "Yes" or "Agree". But the thought bubbles under the table say <strong>"No"</strong>, <strong>"We're doomed!"</strong>, <strong>"No"</strong>, <strong>"Bad idea!"</strong>.</p>
+     <p><span class="nhan">Definition on the slide</span> — "Groupthink is a phenomenon where people tend to conform with group decisions to avoid feeling outcast, leading to errors in decision making." (the slide prints "confirm"; the intended word is <em>conform</em>, to go along with.)</p>
+     <p class="meo">💡 The gap between what is said aloud and what is thought silently <em>is</em> groupthink. Nobody in the picture is stupid; each one stays quiet to avoid being the odd one out.</p>`,
+    `<p class="y-chinh">🎯 Một cuộc họp vẽ hoạt hình, kèm định nghĩa groupthink.</p>
+     <p>Quanh bàn, người chủ trì hỏi <em>"So, do we agree?"</em> (Vậy ta đồng ý chứ?) và bong bóng lời nói nào cũng là "Yes" hay "Agree". Nhưng bong bóng suy nghĩ dưới gầm bàn lại là <strong>"No"</strong>, <strong>"We're doomed!"</strong> (Toi rồi!), <strong>"No"</strong>, <strong>"Bad idea!"</strong> (Ý tồi!).</p>
+     <p><span class="nhan">Định nghĩa trên slide</span> — "Groupthink là hiện tượng người ta có xu hướng xuôi theo quyết định của nhóm để khỏi cảm thấy bị gạt ra ngoài, dẫn tới sai lầm khi ra quyết định." (slide in chữ "confirm"; ý đúng là <em>conform</em> — xuôi theo.)</p>
+     <p class="meo">💡 Khoảng cách giữa điều nói ra và điều nghĩ thầm <em>chính là</em> groupthink. Không ai trong tranh ngốc cả; ai cũng im lặng để khỏi thành người lạc loài.</p>`),
+
+  slide(D, 18, 'Groupthink — the four group-level causes',
+    `<p class="y-chinh">🎯 "Groups sometimes make spectacularly bad decisions." Four group-level factors combine to cause groupthink.</p>
      <ol>
        <li><span class="nhan">Cohesion</span> — the group values agreement more than accuracy.</li>
        <li><span class="nhan">Isolation</span> — no outside information or challenge reaches it.</li>
        <li><span class="nhan">Biased leadership</span> — the leader states a preference first and the rest align.</li>
        <li><span class="nhan">Decisional stress</span> — time pressure and high stakes cut the search for alternatives short.</li>
      </ol>
-     <p class="pitfall co-tieu-de"><strong>Bẫy:</strong> cohesion appears in this course twice with opposite signs — it is part of the definition of a team (Lesson 1 slide 17) and the first cause of groupthink here. Both are true: cohesion without dissent is the dangerous version.</p>
+     <p class="pitfall co-tieu-de"><strong>Trap:</strong> cohesion appears in this course twice with opposite signs — it is part of the definition of a team (Lesson 1 slide 17) and the first cause of groupthink here. Both are true: cohesion without dissent is the dangerous version.</p>
      <p class="meo">💡 Objective 4 asks you to <em>apply</em> this to a well-known group. Classic cases: the Bay of Pigs decision, the Challenger launch decision.</p>`,
-    `<p class="y-chinh">🎯 "Có lúc nhóm ra những quyết định tồi đến kinh ngạc." Bốn yếu tố cấp nhóm cộng lại gây ra điều đó.</p>
+    `<p class="y-chinh">🎯 "Có lúc nhóm ra những quyết định tồi đến kinh ngạc." Bốn yếu tố cấp nhóm cộng lại gây ra groupthink.</p>
      <ol>
-       <li><span class="nhan">Gắn kết</span> — nhóm coi trọng sự đồng thuận hơn sự chính xác.</li>
-       <li><span class="nhan">Biệt lập</span> — không có thông tin hay phản biện nào từ bên ngoài lọt vào.</li>
-       <li><span class="nhan">Lãnh đạo thiên lệch</span> — người đứng đầu nêu ý muốn trước, phần còn lại đi theo.</li>
-       <li><span class="nhan">Áp lực ra quyết định</span> — gấp gáp và đặt cược lớn khiến việc tìm phương án bị cắt ngắn.</li>
+       <li><span class="nhan">Cohesion — gắn kết</span>: nhóm coi trọng sự đồng thuận hơn sự chính xác.</li>
+       <li><span class="nhan">Isolation — biệt lập</span>: không có thông tin hay phản biện nào từ bên ngoài lọt vào.</li>
+       <li><span class="nhan">Biased leadership — lãnh đạo thiên lệch</span>: người đứng đầu nêu ý muốn trước, phần còn lại đi theo.</li>
+       <li><span class="nhan">Decisional stress — áp lực ra quyết định</span>: gấp gáp và đặt cược lớn khiến việc tìm phương án bị cắt ngắn.</li>
      </ol>
      <p class="pitfall co-tieu-de"><strong>Bẫy:</strong> "gắn kết" xuất hiện hai lần trong môn này với hai dấu ngược nhau — nó nằm trong định nghĩa của đội (Bài 1 slide 17) và là nguyên nhân đầu tiên gây groupthink ở đây. Cả hai đều đúng: gắn kết mà không có tiếng nói trái chiều mới là phiên bản nguy hiểm.</p>
      <p class="meo">💡 Mục tiêu 4 yêu cầu bạn <em>áp dụng</em> vào một nhóm nổi tiếng. Ca kinh điển: quyết định đổ bộ Vịnh Con Lợn, quyết định phóng tàu Challenger.</p>`),
 
-  slide(D, 18, 'You and your groups — discussion questions 1–4',
-    `<p class="y-chinh">🎯 Four questions; here is the material each one wants.</p>
-     <p><span class="nhan">1. Advantages and disadvantages of sociality; why join groups?</span> Use slides 7–9 for the advantages and slide 10 (loafing) plus 15–17 for the costs.</p>
-     <p><span class="nhan">2. Is self-esteem shaped by personality or by the groups you belong to?</span> This is the sociometer question from objective 2: the sociometer model treats self-esteem as a <em>gauge of social acceptance</em> rather than a fixed inner trait.</p>
-     <p><span class="nhan">3. How does membership change self-concept and social identity?</span> Slide 8 — the self becomes a "we".</p>
-     <p><span class="nhan">4. A school self-esteem programme based on the sociometer model?</span> If the gauge reads acceptance, then the programme must change real inclusion, not repeat affirmations.</p>`,
-    `<p class="y-chinh">🎯 Bốn câu hỏi; đây là phần kiến thức mà mỗi câu đang đòi.</p>
-     <p><span class="nhan">1. Lợi và hại của tính xã hội; vì sao người ta nhập nhóm?</span> Dùng slide 7–9 cho phần lợi, slide 10 (ăn theo) cùng 15–17 cho phần giá phải trả.</p>
-     <p><span class="nhan">2. Lòng tự trọng do tính cách hay do nhóm bạn thuộc về định hình?</span> Đây chính là câu hỏi sociometer ở mục tiêu 2: mô hình sociometer coi lòng tự trọng như một <em>đồng hồ đo mức được chấp nhận</em>, chứ không phải một phẩm chất bên trong cố định.</p>
-     <p><span class="nhan">3. Tư cách thành viên đổi cái tôi và bản sắc xã hội ra sao?</span> Slide 8 — cái tôi trở thành "chúng ta".</p>
-     <p><span class="nhan">4. Thiết kế chương trình nâng lòng tự trọng cho trường học theo mô hình sociometer?</span> Nếu đồng hồ đo mức được chấp nhận, thì chương trình phải thay đổi sự hoà nhập thật, chứ không phải lặp lại mấy câu động viên.</p>`),
+  slide(D, 19, 'Groupthink vs breaking groupthink',
+    `<p class="y-chinh">🎯 Two drawings side by side: a closed circle on the left, an open circle on the right.</p>
+     <ul>
+       <li><span class="nhan">Groupthink</span> (solid circle, four people) — "I have an idea!", "I was thinking the same thing", "That was my idea…", "No, it was mine!". Everyone echoes and argues about <em>whose</em> idea it is; nothing new gets in.</li>
+       <li><span class="nhan">Breaking groupthink</span> (dashed circle) — an outsider asks <em>"Did you know about…?"</em> and an arrow carries the new information inside. Reactions: "Thanks, now I got a better idea!", "That's a good one…", "Why didn't we think of that before?", "Where did that come from?".</li>
+     </ul>
+     <p class="meo">💡 The dashed line is the remedy for cause no. 2 (isolation): let outside information and outside people in. In a student project that means showing the draft to another group or to the lecturer <em>before</em> the deadline, not after.</p>`,
+    `<p class="y-chinh">🎯 Hai hình đặt cạnh nhau: bên trái một vòng tròn kín, bên phải một vòng tròn hở.</p>
+     <ul>
+       <li><span class="nhan">Groupthink</span> (vòng liền, bốn người) — "Tôi có ý này!", "Tôi cũng đang nghĩ y vậy", "Ý đó của tôi mà…", "Không, của tôi chứ!". Ai cũng nói theo và cãi nhau xem ý là <em>của ai</em>; không có gì mới lọt vào.</li>
+       <li><span class="nhan">Breaking groupthink — phá groupthink</span> (vòng nét đứt) — một người ngoài hỏi <em>"Did you know about…?"</em> (Các bạn có biết về… không?) và một mũi tên đưa thông tin mới vào trong. Phản ứng: "Cảm ơn, giờ tôi có ý hay hơn!", "Ý đó hay đấy…", "Sao trước giờ mình không nghĩ ra nhỉ?", "Ý đó ở đâu ra vậy?".</li>
+     </ul>
+     <p class="meo">💡 Nét đứt chính là thuốc chữa nguyên nhân số 2 (biệt lập): mở cửa cho thông tin và người bên ngoài. Với dự án sinh viên, nghĩa là đưa bản nháp cho nhóm khác hoặc giảng viên xem <em>trước</em> hạn nộp, chứ không phải sau.</p>`),
 
-  slide(D, 19, 'You and your groups — discussion questions 5–6',
-    `<p class="y-chinh">🎯 Two questions that close the loop back to your own project.</p>
-     <p><span class="nhan">5. What turns a working group into a true team?</span> Slide 11 gives the two ingredients — a shared mental representation of the task, and group unity — and Lesson 1 slide 19 gives interdependence.</p>
-     <p><span class="nhan">6. Have you been in a group that decided badly — were groupthink symptoms present?</span> Check the four causes from slide 17 one by one. Honest answers usually find isolation and decisional stress, not cohesion.</p>`,
-    `<p class="y-chinh">🎯 Hai câu hỏi khép vòng trở lại chính dự án của bạn.</p>
-     <p><span class="nhan">5. Cái gì biến một nhóm làm việc thành một đội thực thụ?</span> Slide 11 cho hai thành tố — hình dung chung về nhiệm vụ và sự thống nhất — còn slide 19 Bài 1 cho yếu tố phụ thuộc lẫn nhau.</p>
-     <p><span class="nhan">6. Bạn từng ở trong nhóm quyết định sai chưa — có triệu chứng groupthink không?</span> Soi lần lượt bốn nguyên nhân ở slide 17. Câu trả lời trung thực thường tìm thấy sự biệt lập và áp lực thời gian, chứ không phải sự gắn kết.</p>`),
+  slide(D, 20, 'You and your groups — discussion questions 1–3',
+    `<p class="y-chinh">🎯 Three questions; here is the material each one wants.</p>
+     <p><span class="nhan">1. What are the advantages and disadvantages of sociality? Why do people often join groups?</span> Use slides 6–9 for the advantages and slide 10 (loafing) plus slides 15–19 for the costs.</p>
+     <p><span class="nhan">2. Is self-esteem shaped by your personality qualities or by the value and qualities of the groups to which you belong?</span> This is the sociometer question from objective 2: the sociometer model treats self-esteem as a <em>gauge of social acceptance</em> rather than a fixed inner trait.</p>
+     <p><span class="nhan">3. In what ways does membership in a group change a person's self-concept and social identity?</span> Slide 8 — the self becomes a "we".</p>`,
+    `<p class="y-chinh">🎯 Ba câu hỏi; đây là phần kiến thức mà mỗi câu đang đòi.</p>
+     <p><span class="nhan">1. Lợi và hại của tính xã hội là gì? Vì sao người ta hay gia nhập nhóm?</span> Dùng slide 6–9 cho phần lợi, slide 10 (ăn theo) cùng slide 15–19 cho phần giá phải trả.</p>
+     <p><span class="nhan">2. Lòng tự trọng do phẩm chất tính cách của bạn hay do giá trị và phẩm chất của các nhóm bạn thuộc về định hình?</span> Đây chính là câu hỏi sociometer ở mục tiêu 2: mô hình sociometer coi lòng tự trọng như một <em>đồng hồ đo mức được chấp nhận</em>, chứ không phải một phẩm chất bên trong cố định.</p>
+     <p><span class="nhan">3. Tư cách thành viên trong nhóm thay đổi hình ảnh bản thân và bản sắc xã hội của một người theo những cách nào?</span> Slide 8 — cái tôi trở thành "chúng ta".</p>`),
 
-  slide(D, 20, 'Discussion questions (cont.)',
-    `<p class="y-chinh">🎯 Continuation slide for the discussion block.</p>
-     <p class="meo">💡 These questions are exactly the shape of the Activity component (15%): answered aloud, in your group, during class.</p>`,
-    `<p class="y-chinh">🎯 Slide tiếp nối phần thảo luận.</p>
-     <p class="meo">💡 Những câu hỏi này đúng dạng của cột Activity (15%): trả lời miệng, trong nhóm, ngay trong giờ.</p>`),
+  slide(D, 21, 'You and your groups — discussion questions 4–6',
+    `<p class="y-chinh">🎯 Three more questions — the last two close the loop back to your own project.</p>
+     <p><span class="nhan">4. What steps would you take to base a self-esteem enrichment program in schools on the sociometer model of self-worth?</span> If the gauge reads acceptance, then the program must change real inclusion (who gets picked, who gets heard), not repeat affirmations.</p>
+     <p><span class="nhan">5. What are the key ingredients to transforming a working group into a true team?</span> Slide 11 gives the two ingredients — a shared mental representation of the task, and group unity — and Lesson 1 slide 19 adds interdependence.</p>
+     <p><span class="nhan">6. Have you ever been part of a group that made a poor decision — were any symptoms of groupthink present?</span> Check the four causes from slide 18 one by one, and ask whether anyone said "yes" aloud while thinking "no" (slide 17).</p>
+     <p class="meo">💡 These questions are exactly the shape of the Activity component (15%): answered aloud, in your group, during class. Write one sentence per question before class — Participation (10%) is graded on what you say, not on what you thought.</p>`,
+    `<p class="y-chinh">🎯 Thêm ba câu nữa — hai câu cuối khép vòng trở lại chính dự án của bạn.</p>
+     <p><span class="nhan">4. Nếu dựa trên mô hình sociometer để làm một chương trình nâng lòng tự trọng cho trường học, bạn sẽ làm những bước nào?</span> Nếu đồng hồ đo mức được chấp nhận, thì chương trình phải thay đổi sự hoà nhập thật (ai được chọn, ai được lắng nghe), chứ không phải lặp lại mấy câu động viên.</p>
+     <p><span class="nhan">5. Thành tố then chốt nào biến một nhóm làm việc thành một đội thực thụ?</span> Slide 11 cho hai thành tố — hình dung chung về nhiệm vụ và sự thống nhất — còn slide 19 Bài 1 thêm yếu tố phụ thuộc lẫn nhau.</p>
+     <p><span class="nhan">6. Bạn từng ở trong nhóm ra quyết định tồi chưa — có triệu chứng groupthink nào không?</span> Soi lần lượt bốn nguyên nhân ở slide 18, và tự hỏi có ai nói "đồng ý" thành tiếng trong khi nghĩ "không" (slide 17) không.</p>
+     <p class="meo">💡 Những câu hỏi này đúng dạng của cột Activity (15%): trả lời miệng, trong nhóm, ngay trong giờ. Viết sẵn mỗi câu một dòng trước khi lên lớp — Participation (10%) chấm theo cái bạn nói ra, không theo cái bạn nghĩ.</p>`),
 
-  slide(D, 21, 'Discussion questions (cont.)',
-    `<p class="y-chinh">🎯 Final discussion slide.</p>
-     <p><span class="nhan">Preparation tip</span> — write one sentence per question before class. Participation is 10% of the subject and it is graded on what you say, not on what you thought.</p>`,
-    `<p class="y-chinh">🎯 Slide thảo luận cuối.</p>
-     <p><span class="nhan">Mẹo chuẩn bị</span> — viết sẵn mỗi câu một dòng trước khi lên lớp. Participation chiếm 10% điểm môn và nó chấm theo cái bạn nói ra, không theo cái bạn nghĩ.</p>`),
-
-  slide(D, 22, 'End of Lesson 3',
-    `<p class="y-chinh">🎯 Self-check.</p>
+  slide(D, 22, "It's Q&A time!",
+    `<p class="y-chinh">🎯 Closing slide — time for your questions. Self-check before you leave:</p>
      <ol>
        <li>Five Tuckman stages, in order, adjourning included?</li>
        <li>Difference between social facilitation and social loafing?</li>
        <li>Why does the hidden profile task defeat groups?</li>
-       <li>Four causes of groupthink?</li>
+       <li>Definition of groupthink, and its four causes?</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Tự kiểm.</p>
+    `<p class="y-chinh">🎯 Slide kết — giờ hỏi đáp. Tự kiểm trước khi rời lớp:</p>
      <ol>
        <li>Năm giai đoạn Tuckman, đúng thứ tự, có cả adjourning chứ?</li>
        <li>Khác nhau giữa social facilitation và social loafing?</li>
        <li>Vì sao nhiệm vụ hồ sơ ẩn đánh bại được nhóm?</li>
-       <li>Bốn nguyên nhân gây groupthink?</li>
+       <li>Định nghĩa groupthink, và bốn nguyên nhân của nó?</li>
      </ol>`),
 
   books([
@@ -299,8 +329,8 @@ export const b1l3 = [
   ]),
 
   bi(
-    `<h3>✅ What changed in this rebuild</h3>
-     <p>The previous Academy lesson covered Tuckman's four stages and nothing else from this deck. Groupthink, group polarization, the common knowledge effect, social loafing and the sociometer model — all named in the syllabus check questions — appeared zero times.</p>`,
-    `<h3>✅ Đợt dựng lại này đã bù gì</h3>
-     <p>Bài cũ trên Academy chỉ có bốn giai đoạn Tuckman và không có gì khác từ bộ slide này. Groupthink, phân cực nhóm, hiệu ứng tri thức chung, social loafing và mô hình sociometer — đều được gọi tên trong câu hỏi ôn của syllabus — xuất hiện đúng 0 lần.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus check questions name groupthink, group polarization, the common knowledge effect, social loafing and the sociometer model — together with Tuckman's five stages, they are the core of this lesson. Learn each one with its definition and one example.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Câu hỏi ôn của syllabus gọi tên groupthink, phân cực nhóm, hiệu ứng tri thức chung, social loafing và mô hình sociometer — cùng với năm giai đoạn Tuckman, đó là lõi của bài này. Học mỗi khái niệm kèm định nghĩa và một ví dụ.</p>`),
 ].join('\n');

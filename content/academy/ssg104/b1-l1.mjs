@@ -361,9 +361,11 @@ export const b1l1 = [
 
   slide(D, 25, 'Elements of a hierarchical structure (diagram)',
     `<p class="y-chinh">🎯 Diagram slide introducing the five layers explained on slides 26–28.</p>
-     <p class="meo">💡 The placeholder Latin ("Vestibulum congue") is template text the lecturer left in; read the labels, ignore the filler.</p>`,
+     <p>Five overlapping circles around the centre label "Elements of a hierarchical structure": <strong>Senior managers</strong>, <strong>Departmental heads</strong>, <strong>Junior managers</strong>, <strong>Groups of junior managers</strong>, <strong>Staff performing similar tasks</strong>.</p>
+     <p class="meo">💡 The circles overlap on purpose: each layer works with the layers next to it. Slide 26 puts the same five elements into top-down order.</p>`,
     `<p class="y-chinh">🎯 Slide sơ đồ, giới thiệu năm tầng sẽ được giải thích ở slide 26–28.</p>
-     <p class="meo">💡 Mấy chữ Latin ("Vestibulum congue") là chữ mẫu của template còn sót lại; đọc phần nhãn, bỏ qua chữ chèn.</p>`),
+     <p>Năm vòng tròn chồng lên nhau quanh nhãn giữa "Elements of a hierarchical structure": <strong>Senior managers</strong> (quản lý cấp cao), <strong>Departmental heads</strong> (trưởng phòng/bộ phận), <strong>Junior managers</strong> (quản lý cấp dưới), <strong>Groups of junior managers</strong> (các nhóm quản lý cấp dưới), <strong>Staff performing similar tasks</strong> (nhân viên làm các việc tương tự nhau).</p>
+     <p class="meo">💡 Các vòng chồng lên nhau là có ý: mỗi tầng làm việc với tầng sát nó. Slide 26 xếp đúng năm thành phần này theo thứ tự từ trên xuống.</p>`),
 
   slide(D, 26, 'Traditional hierarchical structure — the five layers',
     `<p class="y-chinh">🎯 Five layers, each defined by who it reports to.</p>
@@ -566,22 +568,22 @@ export const b1l1 = [
      <p class="meo">💡 Mọi thứ học tới đây đều mô tả <em>cấu trúc</em>. Slide sau chuyển sang <em>hiệu quả</em>, thứ mà riêng cấu trúc không mang lại được.</p>`),
 
   slide(D, 40, 'Systems map of the components influencing team effectiveness',
-    `<p class="y-chinh">🎯 A systems map: effectiveness is not one cause but a web of interacting components.</p>
-     <p><span class="nhan">How to read a systems map</span></p>
+    `<p class="y-chinh">🎯 A systems map: team effectiveness does not come from inside the team alone, it comes from three nested rings of components.</p>
+     <p><span class="nhan">What is drawn on the map</span></p>
      <ul>
-       <li>Each node is a factor (task, size, skills, leadership, environment…).</li>
-       <li>Each arrow is an influence, and influences run in loops, not straight lines.</li>
-       <li>So a single fix — "get a better leader" — rarely moves the outcome by itself.</li>
+       <li><strong>The team</strong> (inner circle) — three overlapping parts: <strong>Task</strong>, <strong>Membership</strong>, <strong>Interaction</strong>.</li>
+       <li><strong>The organization</strong> (big oval around the team) — <strong>Internal customer</strong>, <strong>Organizational culture</strong>, <strong>Other teams</strong>, <strong>Other groups</strong>, the <strong>'Sponsor'</strong>.</li>
+       <li><strong>Outside the organization</strong> — <strong>External customer</strong>, <strong>Other organizations</strong>.</li>
      </ul>
-     <p class="meo">💡 This is the honest answer to slide 39: teams succeed when several components line up, which is why the course spends five sessions on different components instead of one rule.</p>`,
-    `<p class="y-chinh">🎯 Một bản đồ hệ thống: hiệu quả không đến từ một nguyên nhân mà từ một mạng lưới các thành phần tác động lẫn nhau.</p>
-     <p><span class="nhan">Cách đọc bản đồ hệ thống</span></p>
+     <p class="meo">💡 This is the honest answer to slide 39: a team with a clear task, the right members and good interaction can still fail if the sponsor withdraws, the culture punishes risk, or the customer changes the requirement. In your group project the "sponsor" is the lecturer and the "customer" is whoever uses your product.</p>`,
+    `<p class="y-chinh">🎯 Một bản đồ hệ thống: hiệu quả của đội không chỉ đến từ bên trong đội, mà từ ba vòng thành phần lồng nhau.</p>
+     <p><span class="nhan">Trên bản đồ có gì</span></p>
      <ul>
-       <li>Mỗi nút là một yếu tố (nhiệm vụ, quy mô, kỹ năng, lãnh đạo, môi trường…).</li>
-       <li>Mỗi mũi tên là một ảnh hưởng, và ảnh hưởng chạy thành vòng lặp chứ không thành đường thẳng.</li>
-       <li>Nên một cú sửa đơn lẻ — "đổi lấy người lãnh đạo giỏi hơn" — hiếm khi tự nó làm kết quả đổi.</li>
+       <li><strong>Đội</strong> (vòng trong cùng) — ba phần chồng lên nhau: <strong>Task</strong> (nhiệm vụ), <strong>Membership</strong> (thành viên), <strong>Interaction</strong> (tương tác).</li>
+       <li><strong>Tổ chức</strong> (hình bầu dục lớn bao quanh đội) — <strong>Internal customer</strong> (khách hàng nội bộ), <strong>Organizational culture</strong> (văn hoá tổ chức), <strong>Other teams</strong> (các đội khác), <strong>Other groups</strong> (các nhóm khác), <strong>'Sponsor'</strong> (người bảo trợ).</li>
+       <li><strong>Bên ngoài tổ chức</strong> — <strong>External customer</strong> (khách hàng bên ngoài), <strong>Other organizations</strong> (các tổ chức khác).</li>
      </ul>
-     <p class="meo">💡 Đây là câu trả lời trung thực cho slide 39: đội thành công khi nhiều thành phần cùng khớp, và đó là lý do môn học dành năm buổi cho các thành phần khác nhau thay vì đưa một quy tắc.</p>`),
+     <p class="meo">💡 Đây là câu trả lời trung thực cho slide 39: một đội có nhiệm vụ rõ, đúng người và tương tác tốt vẫn có thể thất bại nếu người bảo trợ rút lui, văn hoá tổ chức phạt người dám thử, hoặc khách hàng đổi yêu cầu. Trong dự án nhóm của bạn, "người bảo trợ" là giảng viên, còn "khách hàng" là người dùng sản phẩm của nhóm.</p>`),
 
   slide(D, 41, 'Q&A',
     `<p class="y-chinh">🎯 Closing slide.</p>

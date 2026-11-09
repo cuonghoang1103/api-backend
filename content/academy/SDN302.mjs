@@ -25,11 +25,15 @@ import GS062 from './sdn302/giang/sdn-06-2.mjs';
 import GS071 from './sdn302/giang/sdn-07-1.mjs';
 import GS081 from './sdn302/giang/sdn-08-1.mjs';
 import GS082 from './sdn302/giang/sdn-08-2.mjs';
+// 09/11/2026: slide GỐC của trường = đường học chính (mỗi deck một bài, đứng đầu chương); bài cũ = ⭐ Chuyên sâu.
+import { MUC0, CH1, CH2, CH3, CH4, CH5, CH6, CH8, CS_NOTE } from './sdn302/goc-bai.mjs';
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
     academyType: 'FPT',
     courseCode: 'SDN302',
+    // Seed xếp lại thứ tự bài theo FILE (không xoá gì) — bài 📑 slide gốc đứng đầu mỗi chương, bài ⭐ Chuyên sâu sau.
+    syncOrder: true,
     title: 'Server-Side Development with Node.js, Express & MongoDB',
     slug: 'server-side-development-nodejs-express-mongodb',
     level: 'INTERMEDIATE',
@@ -47,6 +51,7 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn xây gì, kiến trúc back-end Node, điều kiện qua môn & 5 thành phần điểm, chuẩn đầu ra, công cụ, ngân hàng đề tài project, và bí quyết điểm cao.',
       lessons: [
+        ...MUC0,
         {
           title: '0.1 — About SDN302 & the back-end architecture map|||0.1 — Giới thiệu SDN302 & bản đồ kiến trúc back-end',
           slug: 'sdn302-gioi-thieu',
@@ -424,12 +429,13 @@ npm install express mongoose</code></pre></div>
       title: 'Chapter 1 — Node.js foundations|||Chương 1 — Nền tảng Node.js',
       description: 'Mô hình event-driven & non-blocking, event loop, module & npm, và HTTP server thuần.',
       lessons: [
+        ...CH1,
         {
-          title: '1.1 — Node.js, the event loop & modules|||1.1 — Node.js, event loop & module',
+          title: '⭐ Deep dive 1.1 — Node.js, the event loop & modules (run for real)|||⭐ Chuyên sâu 1.1 — Node.js, event loop & module (chạy thật)',
           slug: 'sdn302-1-1-node-event-loop',
           type: 'VIDEO',
           description: 'Single-thread nhưng scalable, bất đồng bộ, event loop, module CommonJS/ESM và npm.',
-          content: `
+          content: `${CS_NOTE['sdn302-1-1-node-event-loop']}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>Node.js: single-threaded, yet highly scalable</h2>
@@ -514,11 +520,11 @@ module.exports = myFunction;
 </div>`,
         },
         {
-          title: '1.2 — APIs, HTTP & a first Node server|||1.2 — API, HTTP & server Node đầu tiên',
+          title: '⭐ Deep dive 1.2 — APIs, HTTP & a first Node server (run for real)|||⭐ Chuyên sâu 1.2 — API, HTTP & server Node đầu tiên (chạy thật)',
           slug: 'sdn302-1-2-http-server',
           type: 'VIDEO',
           description: 'API là gì, cách HTTP hoạt động, và dựng một web server bằng module http thuần.',
-          content: `
+          content: `${CS_NOTE['sdn302-1-2-http-server']}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>APIs, HTTP &amp; the Node HTTP server</h2>
@@ -631,12 +637,13 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
       title: 'Chapter 2 — Express: routing & middleware|||Chương 2 — Express: routing & middleware',
       description: 'Tạo web server Express, định tuyến RESTful, chuỗi middleware (built-in/third-party/custom/error), và Express Generator.',
       lessons: [
+        ...CH2,
         {
-          title: '2.1 — Express routing & your first app|||2.1 — Express routing & app đầu tiên',
+          title: '⭐ Deep dive 2.1 — Express routing, Router & Generator traps|||⭐ Chuyên sâu 2.1 — Express routing, Router & bẫy của Generator',
           slug: 'sdn302-2-1-express-routing',
           type: 'VIDEO',
           description: 'Cài Express, tạo route theo method, route params, và Express Generator scaffold.',
-          content: `${GS021}
+          content: `${CS_NOTE['sdn302-2-1-express-routing']}${GS021}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
@@ -736,11 +743,11 @@ cd myapp &amp;&amp; npm install &amp;&amp; npm start</code></pre></div>
 </div>`,
         },
         {
-          title: '2.2 — Middleware: the heart of Express|||2.2 — Middleware: trái tim của Express',
+          title: '⭐ Deep dive 2.2 — Middleware: the heart of Express|||⭐ Chuyên sâu 2.2 — Middleware: trái tim của Express',
           slug: 'sdn302-2-2-middleware',
           type: 'VIDEO',
           description: 'Chuỗi middleware, next(), các loại (built-in/third-party/custom/error-handling), và thứ tự.',
-          content: `
+          content: `${CS_NOTE['sdn302-2-2-middleware']}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>Middleware — functions in a chain</h2>
@@ -871,12 +878,13 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
       title: 'Chapter 3 — MongoDB & Mongoose|||Chương 3 — MongoDB & Mongoose',
       description: 'NoSQL & document model, CRUD với MongoDB, và Mongoose (schema, model, validation, population).',
       lessons: [
+        ...CH3,
         {
-          title: '3.1 — NoSQL, MongoDB & CRUD|||3.1 — NoSQL, MongoDB & CRUD',
+          title: '⭐ Deep dive 3.1 — MongoDB CRUD & query traps (run for real)|||⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)',
           slug: 'sdn302-3-1-mongodb-crud',
           type: 'VIDEO',
           description: 'Mô hình tài liệu vs bảng quan hệ, collection/document, và bốn thao tác CRUD.',
-          content: `${GS031}
+          content: `${CS_NOTE['sdn302-3-1-mongodb-crud']}${GS031}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
@@ -970,11 +978,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 </div>`,
         },
         {
-          title: '3.2 — Mongoose: schemas, models & population|||3.2 — Mongoose: schema, model & population',
+          title: '⭐ Deep dive 3.2 — Mongoose: validation traps & population (run for real)|||⭐ Chuyên sâu 3.2 — Mongoose: bẫy validation & population (chạy thật)',
           slug: 'sdn302-3-2-mongoose',
           type: 'VIDEO',
           description: 'Định nghĩa schema có validation, tạo model, quan hệ ref, và .populate() để mở rộng tham chiếu.',
-          content: `${GS032}
+          content: `${CS_NOTE['sdn302-3-2-mongoose']}${GS032}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.2</span>
@@ -1062,12 +1070,13 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
       title: 'Chapter 4 — REST API in MVC & templating|||Chương 4 — REST API theo MVC & templating',
       description: 'Ghép Express + Mongoose thành một REST API đầy đủ theo MVC, mã trạng thái đúng, và render view bằng EJS/Handlebars.',
       lessons: [
+        ...CH4,
         {
-          title: '4.1 — A full REST API with Express, Mongoose & MVC|||4.1 — Một REST API đầy đủ với Express, Mongoose & MVC',
+          title: '⭐ Deep dive 4.1 — A full REST API with a service layer (run for real)|||⭐ Chuyên sâu 4.1 — REST API đầy đủ có tầng service (chạy thật)',
           slug: 'sdn302-4-1-rest-mvc',
           type: 'VIDEO',
           description: 'Phân lớp routes → controllers → services → models, mã trạng thái đúng, validation và xử lý lỗi.',
-          content: `${GS041}
+          content: `${CS_NOTE['sdn302-4-1-rest-mvc']}${GS041}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
@@ -1195,11 +1204,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 </div>`,
         },
         {
-          title: '4.2 — Server-side templating with EJS & Handlebars|||4.2 — Templating phía server với EJS & Handlebars',
+          title: '⭐ Deep dive 4.2 — EJS & Handlebars: forms, XSS, the Mongoose trap|||⭐ Chuyên sâu 4.2 — EJS & Handlebars: form, XSS, bẫy Mongoose',
           slug: 'sdn302-4-2-templating',
           type: 'VIDEO',
           description: 'Render HTML từ server bằng EJS và Handlebars, truyền dữ liệu vào view, và khi nào dùng.',
-          content: `${GS042}
+          content: `${CS_NOTE['sdn302-4-2-templating']}${GS042}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.2</span>
@@ -1285,12 +1294,13 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</
       title: 'Chapter 5 — Authentication & security|||Chương 5 — Xác thực & bảo mật',
       description: 'Băm mật khẩu bcrypt, session/cookie, Passport, token JWT, HTTPS, CORS và upload file (Multer).',
       lessons: [
+        ...CH5,
         {
-          title: '5.1 — Passwords, bcrypt, sessions & Passport|||5.1 — Mật khẩu, bcrypt, session & Passport',
+          title: '⭐ Deep dive 5.1 — Passwords, bcrypt, sessions & Passport (run for real)|||⭐ Chuyên sâu 5.1 — Mật khẩu, bcrypt, session & Passport (chạy thật)',
           slug: 'sdn302-5-1-passwords-sessions',
           type: 'VIDEO',
           description: 'Băm mật khẩu an toàn với bcrypt, xác thực bằng session/cookie, và Passport-local.',
-          content: `${GS051}
+          content: `${CS_NOTE['sdn302-5-1-passwords-sessions']}${GS051}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
@@ -1408,11 +1418,11 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 </div>`,
         },
         {
-          title: '5.2 — JWT, HTTPS, CORS & file upload/download|||5.2 — JWT, HTTPS, CORS & upload/download file',
+          title: '⭐ Deep dive 5.2 — JWT, HTTPS, CORS & uploads measured|||⭐ Chuyên sâu 5.2 — JWT, HTTPS, CORS & upload đo thật',
           slug: 'sdn302-5-2-jwt-cors',
           type: 'VIDEO',
           description: 'Token-based auth với JWT, HTTPS an toàn, bật CORS cho client React, và upload file bằng Multer.',
-          content: `${GS052}
+          content: `${CS_NOTE['sdn302-5-2-jwt-cors']}${GS052}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
@@ -1626,12 +1636,13 @@ https.<span class="tok-function">createServer</span>({
       title: 'Chapter 6 — Integrating React & deployment|||Chương 6 — Tích hợp React & triển khai',
       description: 'Nối front-end React với API Node, triển khai server lên hosting, và Backend-as-a-Service (BaaS).',
       lessons: [
+        ...CH6,
         {
-          title: '6.1 — Connect React, deploy & BaaS|||6.1 — Nối React, triển khai & BaaS',
+          title: '⭐ Deep dive 6.1 — Connect React, deploy & three real deploy failures|||⭐ Chuyên sâu 6.1 — Nối React, triển khai & ba lỗi triển khai thật',
           slug: 'sdn302-6-1-react-deploy',
           type: 'VIDEO',
           description: 'Gọi API từ React (axios/fetch), biến môi trường, triển khai lên Render/Railway, và BaaS (CLO7).',
-          content: `${GS061}
+          content: `${CS_NOTE['sdn302-6-1-react-deploy']}${GS061}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
@@ -1701,7 +1712,7 @@ https.<span class="tok-function">createServer</span>({
 </div>`,
         },
         {
-          title: 'Project — the server-side app checklist|||Project — checklist ứng dụng server-side',
+          title: '⭐ Deep dive — Project: the server-side app checklist|||⭐ Chuyên sâu — Project: checklist ứng dụng server-side',
           slug: 'sdn302-project-checklist',
           type: 'VIDEO',
           description: 'Danh sách kiểm hoàn chỉnh cho project server-side theo từng CLO trước khi nộp và thuyết trình.',
@@ -1768,7 +1779,7 @@ https.<span class="tok-function">createServer</span>({
       description: 'Định dạng Practical Exam + Final Exam + Progress Test, code snippet bank, và ngân hàng câu hỏi/vấn đáp theo CLO — kiểu SWP391.',
       lessons: [
         {
-          title: '7.1 — Exam formats, starter snippet & CLO question bank|||7.1 — Định dạng thi, snippet khởi đầu & ngân hàng câu hỏi theo CLO',
+          title: '⭐ Deep dive 7.1 — Exam formats, PE traps, starter snippet & CLO question bank|||⭐ Chuyên sâu 7.1 — Định dạng thi, bẫy PE, snippet khởi đầu & ngân hàng câu hỏi theo CLO',
           slug: 'sdn302-7-1-exam-question-bank',
           type: 'VIDEO',
           description: 'Chiến lược Practical Exam 85 phút, bộ khung code nhớ sẵn, và ngân hàng câu hỏi theo 8 CLO.',
@@ -1916,12 +1927,13 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
       title: 'Chapter 8 — NestJS & Hono (syllabus sessions 49–56) + production hardening|||Chương 8 — NestJS & Hono (buổi 49–56 của giáo trình) + gia cố production',
       description: 'NestJS (buổi 49–54) và Hono (buổi 55–56) là NỘI DUNG CHÍNH THỨC của giáo trình, thuộc CLO2 và nằm trong danh mục tài liệu. Phần ngoài giáo trình ở chương này chỉ là aggregation pipeline và gia cố API cho production.',
       lessons: [
+        ...CH8,
         {
-          title: '8.1 — NestJS, Hono & the aggregation pipeline|||8.1 — NestJS, Hono & aggregation pipeline',
+          title: '⭐ Deep dive 8.1 — NestJS, Hono measured & the aggregation pipeline|||⭐ Chuyên sâu 8.1 — NestJS, Hono đo thật & aggregation pipeline',
           slug: 'sdn302-8-1-nestjs-hono',
           type: 'VIDEO',
           description: 'Vì sao có framework có cấu trúc như NestJS, edge framework Hono, và MongoDB aggregation.',
-          content: `${GS081}
+          content: `${CS_NOTE['sdn302-8-1-nestjs-hono']}${GS081}
 
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
@@ -1977,7 +1989,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 </div>`,
         },
         {
-          title: '8.2 — Production hardening: env, validation, rate limits & indexes|||8.2 — Gia cố production: env, validation, rate limit & index',
+          title: '⭐ Deep dive 8.2 — Production hardening: env, validation, rate limits & indexes|||⭐ Chuyên sâu 8.2 — Gia cố production: env, validation, rate limit & index',
           slug: 'sdn302-8-2-production',
           type: 'VIDEO',
           description: 'Biến một demo thành API bền: env config, validation chặt, rate limiting, index, và logging.',

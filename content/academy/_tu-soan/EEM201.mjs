@@ -103,7 +103,445 @@ const build = (o, L) => {
   h += '<h3>' + T.prac + '</h3><ol>' + o.p.map((p) => '<li>' + p[I] + '<div class="dap-an"><strong>' + T.ans + ':</strong> ' + p[2 + I] + '</div></li>').join('') + '</ol>';
   return h;
 };
-const D = (slug, en, vi, desc, o) => ({ title: en + '|||' + vi, slug, type: 'DOCUMENT', description: desc, content: bi(build(o, 'en'), build(o, 'vi')) });
+// Phần mở rộng (09/11/2026): ví dụ làm từng bước với sự kiện HƯ CẤU, danh sách kiểm, mẫu; số liệu minh hoạ đều là giả định.
+const EXTRA = {};
+EXTRA['eem201-ts-1-1'] = { en: `<h4>Worked mini-case (fictional): sorting a university week into sectors</h4>
+<p>Imagine a fictional university in Vietnam holding "Green Summer Week". Ask of each activity: is it entertainment, an event, or both?</p>
+<ol><li>Step 1 — List the activities: an open-air band night, a career talk by a bank, an esports bracket in the dorm hall, a Spotify playlist shared by the club.</li>
+<li>Step 2 — Test "planned, limited in time and place, gathers people for a purpose". The band night, career talk and esports bracket pass; the shared playlist fails (no place, no gathering), so it is entertainment content but not an event.</li>
+<li>Step 3 — Assign sectors: music, business (a small corporate event), games and esports.</li>
+<li>Step 4 — Note the consequence: each sector brings different suppliers (sound company, bank sponsor, gaming hardware), so the same week needs three different kinds of planning.</li></ol>
+<h4>Checklist: is it an event?</h4>
+<ul><li>Is there a start and end time and a defined place (physical or online)?</li><li>Is there a clear purpose that someone could write in one sentence?</li><li>Do people gather, in person or live online, at the same moment?</li><li>Is someone responsible for planning and for what goes wrong?</li></ul>
+<p>If you answer "no" to the last question, nobody will fix problems on the day, and that is the first thing a professional organiser removes from the plan.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): xếp một tuần hoạt động của trường vào các mảng</h4>
+<p>Giả sử một trường đại học hư cấu ở Việt Nam tổ chức "Tuần lễ Mùa Hè Xanh". Với mỗi hoạt động, hãy hỏi: đây là giải trí, sự kiện, hay cả hai?</p>
+<ol><li>Bước 1 — Liệt kê hoạt động: đêm nhạc ngoài trời của ban nhạc, buổi nói chuyện nghề nghiệp của một ngân hàng, vòng thi esports ở sảnh ký túc xá, danh sách phát nhạc câu lạc bộ chia sẻ.</li>
+<li>Bước 2 — Thử với tiêu chí "có kế hoạch, giới hạn thời gian và địa điểm, quy tụ người vì một mục đích". Đêm nhạc, buổi nói chuyện và vòng thi đều đạt; danh sách phát nhạc thì không (không có địa điểm, không có sự tụ họp), nên nó là nội dung giải trí chứ không phải sự kiện.</li>
+<li>Bước 3 — Gán mảng: âm nhạc, kinh doanh (sự kiện doanh nghiệp nhỏ), game và esports.</li>
+<li>Bước 4 — Ghi hệ quả: mỗi mảng cần nhà cung cấp khác nhau (công ty âm thanh, ngân hàng tài trợ, thiết bị game), nên cùng một tuần phải lập ba kiểu kế hoạch khác nhau.</li></ol>
+<h4>Danh sách kiểm: đây có phải sự kiện không?</h4>
+<ul><li>Có giờ bắt đầu, kết thúc và địa điểm xác định (thật hoặc trực tuyến) không?</li><li>Có mục đích rõ mà ai cũng viết được trong một câu không?</li><li>Mọi người có tụ họp, tại chỗ hoặc trực tuyến cùng lúc, không?</li><li>Có ai chịu trách nhiệm lập kế hoạch và xử lý khi sự cố không?</li></ul>
+<p>Nếu câu trả lời cuối là "không", ngày diễn ra sẽ không ai sửa lỗi, và đó là điều đầu tiên người tổ chức chuyên nghiệp loại bỏ khỏi kế hoạch.</p>`,
+p: [['Is a podcast recording sold as an audio file an event? Explain with the checklist.', 'Một bản ghi podcast bán dạng tệp âm thanh có phải sự kiện không? Giải thích bằng danh sách kiểm.', 'No: it has no shared time or place and nobody gathers. It is entertainment content. A live podcast show with an audience is an event.', 'Không: không có thời gian, địa điểm chung và không ai tụ họp. Đó là nội dung giải trí. Một buổi podcast trực tiếp có khán giả mới là sự kiện.']] };
+
+EXTRA['eem201-ts-1-2'] = { en: `<h4>Worked mini-case (fictional): who gets what from one ticket</h4>
+<p>A fictional promoter, "Sao Mai Live", stages a one-night show for a young pop singer at a rented hall. All figures below are assumed for teaching and are not real data.</p>
+<ol><li>Step 1 — Draw the chain: artist, manager, promoter, venue and production crew, ticketing platform, audience.</li>
+<li>Step 2 — Assume the ticket price is 500,000 VND and the platform keeps a fee of 5% (assumed). The platform's share is 25,000 VND; the remaining 475,000 VND goes to the promoter's account.</li>
+<li>Step 3 — From the 475,000 VND the promoter must pay hall rental, sound and lights, security, the artist fee and marketing. The promoter pays all these costs before the doors open, so the promoter holds the risk.</li>
+<li>Step 4 — Add other lines that do not depend on tickets: a drinks sponsor, merchandise sold in the foyer, food and beverage counters.</li></ol>
+<h4>Revenue-line template</h4>` + tbl(['Revenue line', 'Who controls it', 'Question to ask'], [['Tickets', 'Promoter and platform', 'What is the net amount after fees?'], ['Sponsorship', 'Promoter or event owner', 'What does the sponsor receive in return?'], ['Food and beverage', 'Venue or vendors', 'Is it a commission or the promoter\'s own sales?'], ['Merchandise', 'Artist or promoter', 'Who splits the profit?'], ['Rights and grants', 'Owner or authority', 'Are there conditions or reporting duties?']]) + `<p><strong>Common mistake:</strong> counting gross ticket sales as income. Always subtract platform fees, taxes and refunds, or the budget will look healthier than it is.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): ai nhận gì từ một tấm vé</h4>
+<p>Một đơn vị tổ chức hư cấu, "Sao Mai Live", dựng một đêm diễn cho ca sĩ nhạc pop trẻ tại một hội trường thuê. Mọi con số dưới đây là giả định để dạy học, không phải dữ liệu thật.</p>
+<ol><li>Bước 1 — Vẽ chuỗi: nghệ sĩ, quản lý, nhà tổ chức, địa điểm và đội sản xuất, nền tảng bán vé, khán giả.</li>
+<li>Bước 2 — Giả định giá vé 500.000 đồng và nền tảng giữ phí 5% (giả định). Phần của nền tảng là 25.000 đồng; 475.000 đồng còn lại chuyển cho nhà tổ chức.</li>
+<li>Bước 3 — Từ 475.000 đồng, nhà tổ chức phải trả tiền thuê hội trường, âm thanh ánh sáng, an ninh, cát-xê nghệ sĩ và marketing. Các khoản này phải trả trước khi mở cửa, nên nhà tổ chức gánh rủi ro.</li>
+<li>Bước 4 — Thêm các khoản không phụ thuộc vé: nhà tài trợ đồ uống, quà lưu niệm bán ở sảnh, quầy ăn uống.</li></ol>
+<h4>Mẫu các nguồn thu</h4>` + tbl(['Nguồn thu', 'Ai kiểm soát', 'Câu hỏi cần đặt'], [['Vé', 'Nhà tổ chức và nền tảng', 'Số thực nhận sau phí là bao nhiêu?'], ['Tài trợ', 'Nhà tổ chức hoặc chủ sự kiện', 'Nhà tài trợ nhận lại gì?'], ['Ăn uống', 'Địa điểm hoặc đối tác bán hàng', 'Là hoa hồng hay doanh thu tự bán?'], ['Quà lưu niệm', 'Nghệ sĩ hoặc nhà tổ chức', 'Chia lợi nhuận thế nào?'], ['Bản quyền và tài trợ công', 'Chủ sở hữu hoặc cơ quan', 'Có điều kiện hay nghĩa vụ báo cáo không?']]) + `<p><strong>Lỗi hay gặp:</strong> tính doanh thu vé gộp là thu nhập. Luôn trừ phí nền tảng, thuế và tiền hoàn vé, nếu không ngân sách sẽ trông khoẻ hơn thực tế.</p>`,
+p: [['In the case, which party holds the financial risk and why?', 'Trong tình huống trên, bên nào gánh rủi ro tài chính và vì sao?', 'The promoter, because costs are paid before ticket income is certain.', 'Nhà tổ chức, vì chi phí phải trả trước khi chắc chắn có tiền vé.']] };
+
+EXTRA['eem201-ts-1-3'] = { en: `<h4>Worked mini-case (fictional): is a city festival worth backing?</h4>
+<p>A fictional coastal town, "Bien Xanh", considers a three-day seafood and music festival in the low tourist season. All numbers are assumed.</p>
+<ol><li>Step 1 — State the public goal: lift visitor nights in a quiet month, and show the town's identity.</li>
+<li>Step 2 — Estimate new visitors, not total attendance. Assume 6,000 attendees, of whom 40% (2,400) are outside visitors. Residents' spending only moves money around the town.</li>
+<li>Step 3 — Assume each outside visitor spends 1,200,000 VND on rooms, food and transport. The visitor spending is then 2,400 × 1,200,000 = 2,880,000,000 VND (assumed).</li>
+<li>Step 4 — Compare with the public cost (stage, security, cleaning). If the town spends less than the new money brought in, the case is plausible; add non-money benefits such as pride and media attention.</li>
+<li>Step 5 — Plan the risks: weather, traffic, waste. A good proposal names them before the council asks.</li></ol>
+<h4>Checklist for a public-support proposal</h4>
+<ul><li>Goal linked to tourism, culture or education policy.</li><li>Share of outside visitors, not just total tickets.</li><li>Costs borne by the public and by sponsors.</li><li>Plan for residents: noise, parking, cleaning.</li><li>Report back after the event with real numbers.</li></ul>`,
+vi: `<h4>Tình huống mẫu (hư cấu): có nên hậu thuẫn một lễ hội thành phố?</h4>
+<p>Một thị trấn ven biển hư cấu, "Biển Xanh", cân nhắc tổ chức lễ hội hải sản và âm nhạc ba ngày vào mùa thấp điểm. Mọi con số là giả định.</p>
+<ol><li>Bước 1 — Nêu mục tiêu công: tăng số đêm lưu trú trong tháng vắng khách và quảng bá bản sắc thị trấn.</li>
+<li>Bước 2 — Ước tính khách mới đến, không phải tổng người dự. Giả định 6.000 người dự, trong đó 40% (2.400) là khách từ nơi khác. Chi tiêu của cư dân chỉ chuyển tiền quanh thị trấn.</li>
+<li>Bước 3 — Giả định mỗi khách ngoài chi 1.200.000 đồng cho phòng, ăn uống, đi lại. Khi đó chi tiêu của khách là 2.400 × 1.200.000 = 2.880.000.000 đồng (giả định).</li>
+<li>Bước 4 — So với chi phí công (sân khấu, an ninh, vệ sinh). Nếu thị trấn chi ít hơn số tiền mới mang về thì đề xuất có cơ sở; thêm lợi ích phi tiền như niềm tự hào và truyền thông.</li>
+<li>Bước 5 — Lập kế hoạch rủi ro: thời tiết, giao thông, rác. Một đề xuất tốt nêu sẵn các điều này trước khi hội đồng hỏi.</li></ol>
+<h4>Danh sách kiểm cho đề xuất xin hỗ trợ công</h4>
+<ul><li>Mục tiêu gắn với chính sách du lịch, văn hoá hoặc giáo dục.</li><li>Tỷ lệ khách từ nơi khác, không chỉ tổng số vé.</li><li>Chi phí do nhà nước và nhà tài trợ chịu.</li><li>Phương án cho cư dân: tiếng ồn, chỗ đỗ xe, vệ sinh.</li><li>Báo cáo lại sau sự kiện bằng số liệu thật.</li></ul>`,
+p: [['Why count outside visitors rather than total attendance when estimating economic benefit?', 'Vì sao khi ước tính lợi ích kinh tế phải đếm khách ngoài thay vì tổng số người dự?', 'Residents would spend their money locally anyway; only new money from outside adds to the local economy.', 'Cư dân dù sao cũng chi tiền tại địa phương; chỉ tiền mới từ bên ngoài mới làm tăng kinh tế địa phương.']] };
+
+EXTRA['eem201-ts-2-1'] = { en: `<h4>Worked mini-case (fictional): classifying three events</h4>
+<p>Use the axes of size, purpose, audience, frequency, setting and sector on three fictional events.</p>` + tbl(['Axis', 'A: Campus Music Night', 'B: TechViet Product Launch', 'C: Delta Tourism Expo'], [['Size', 'Local, about 800 (assumed)', 'Small, 150 invited (assumed)', 'Major, several thousand (assumed)'], ['Purpose', 'Entertainment, club identity', 'Brand and sales', 'Trade and promotion'], ['Audience', 'Students', 'Press, partners, customers', 'Companies and public'], ['Frequency', 'Annual', 'One-off', 'Annual'], ['Setting', 'Open-air campus', 'Hotel ballroom', 'Exhibition hall'], ['Sector', 'Music', 'Business', 'MICE']]) + `<ol><li>Step 1 — Fill the table before you design anything.</li><li>Step 2 — Read the consequences: A needs sound, a stage permit and student security; B needs a script, demo equipment and press handling; C needs booth layout, exhibitor contracts and visitor flow.</li><li>Step 3 — Use the class to estimate staff, insurance and budget: a hallmark annual event justifies a permanent team, a one-off does not.</li></ol>
+<p><strong>Common mistakes:</strong> using a single label such as "big event" and forgetting that a small event can be high risk (a rooftop party), or that size alone does not decide the permits.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): phân loại ba sự kiện</h4>
+<p>Dùng các trục quy mô, mục đích, khán giả, tần suất, bối cảnh và mảng cho ba sự kiện hư cấu.</p>` + tbl(['Trục', 'A: Đêm nhạc trường', 'B: Ra mắt sản phẩm TechViet', 'C: Hội chợ du lịch Đồng bằng'], [['Quy mô', 'Địa phương, khoảng 800 (giả định)', 'Nhỏ, 150 khách mời (giả định)', 'Lớn, vài nghìn người (giả định)'], ['Mục đích', 'Giải trí, bản sắc câu lạc bộ', 'Thương hiệu và bán hàng', 'Giao thương và quảng bá'], ['Khán giả', 'Sinh viên', 'Báo chí, đối tác, khách hàng', 'Doanh nghiệp và công chúng'], ['Tần suất', 'Hằng năm', 'Một lần', 'Hằng năm'], ['Bối cảnh', 'Ngoài trời trong trường', 'Phòng tiệc khách sạn', 'Hội trường triển lãm'], ['Mảng', 'Âm nhạc', 'Kinh doanh', 'MICE']]) + `<ol><li>Bước 1 — Điền bảng trước khi thiết kế bất cứ thứ gì.</li><li>Bước 2 — Đọc hệ quả: A cần âm thanh, giấy phép sân khấu và an ninh sinh viên; B cần kịch bản, thiết bị demo và xử lý báo chí; C cần sơ đồ gian hàng, hợp đồng đơn vị trưng bày và dòng khách.</li><li>Bước 3 — Dùng phân loại để ước tính nhân sự, bảo hiểm và ngân sách: sự kiện thường niên danh tiếng đáng có đội cố định, sự kiện một lần thì không.</li></ol>
+<p><strong>Lỗi hay gặp:</strong> dùng một nhãn như "sự kiện lớn" mà quên rằng sự kiện nhỏ vẫn có thể rủi ro cao (tiệc trên sân thượng), và quy mô một mình không quyết định giấy phép.</p>`,
+p: [['Classify a one-off 60-person training workshop on the six axes.', 'Phân loại một buổi tập huấn 60 người, diễn ra một lần, theo sáu trục.', 'Small; learning; employees; one-off; classroom or meeting room; business.', 'Nhỏ; học tập; nhân viên; một lần; phòng học hoặc phòng họp; kinh doanh.']] };
+
+EXTRA['eem201-ts-2-2'] = { en: `<h4>Worked mini-case (fictional): turning a concert into a one-day festival</h4>
+<p>A fictional club, "Hoa Phuong Collective", has a successful 800-guest concert and wants a one-day festival with three stages. List what changes, step by step.</p>
+<ol><li>Step 1 — Identity: write one sentence ("indie music and street food by the river"). Everything else must serve it.</li>
+<li>Step 2 — Site: a concert has one room; a festival is a temporary city with entrances, stages, food area, toilets, first aid, water and a control room.</li>
+<li>Step 3 — Time: draw a stage schedule so that sets do not overlap in a way that creates a crush at one stage.</li>
+<li>Step 4 — Money: add income lines (food vendors, stalls, partners) and expense lines (fencing, generators, waste, welfare) that a concert never had.</li>
+<li>Step 5 — People: multiply staff by the number of zones and add a safety lead with authority.</li></ol>
+<h4>Festival readiness checklist</h4>
+<ul><li>One-sentence identity and target audience.</li><li>Site map with entry, exits, stages, toilets, first aid and water.</li><li>Stage timetable with changeover times.</li><li>Waste, power and noise plan.</li><li>Named safety lead and communication channel.</li></ul>
+<p><strong>Common mistake:</strong> adding stages and acts without checking the site capacity. More lineup does not mean more space.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): biến một buổi hoà nhạc thành lễ hội một ngày</h4>
+<p>Một câu lạc bộ hư cấu, "Hoa Phượng Collective", có buổi hoà nhạc 800 khách thành công và muốn làm lễ hội một ngày với ba sân khấu. Liệt kê từng bước điều gì thay đổi.</p>
+<ol><li>Bước 1 — Bản sắc: viết một câu ("nhạc indie và đồ ăn đường phố bên sông"). Mọi thứ khác phải phục vụ câu đó.</li>
+<li>Bước 2 — Địa điểm: hoà nhạc có một phòng; lễ hội là một thành phố tạm với cổng vào, sân khấu, khu ẩm thực, nhà vệ sinh, y tế, nước và phòng điều hành.</li>
+<li>Bước 3 — Thời gian: vẽ lịch các sân khấu để các suất diễn không chồng khiến đám đông dồn về một sân khấu.</li>
+<li>Bước 4 — Tiền: thêm nguồn thu (gian ăn uống, gian hàng, đối tác) và khoản chi (hàng rào, máy phát điện, rác, chăm sóc khách) mà buổi hoà nhạc chưa từng có.</li>
+<li>Bước 5 — Con người: nhân nhân sự theo số khu vực và thêm một trưởng an toàn có thẩm quyền.</li></ol>
+<h4>Danh sách sẵn sàng cho lễ hội</h4>
+<ul><li>Bản sắc một câu và khán giả mục tiêu.</li><li>Sơ đồ địa điểm có lối vào, lối thoát, sân khấu, vệ sinh, y tế, nước.</li><li>Lịch sân khấu có thời gian chuyển cảnh.</li><li>Kế hoạch rác, điện, tiếng ồn.</li><li>Trưởng an toàn có tên và kênh liên lạc.</li></ul>
+<p><strong>Lỗi hay gặp:</strong> thêm sân khấu và nghệ sĩ mà không kiểm sức chứa địa điểm. Nhiều nghệ sĩ hơn không có nghĩa là có thêm chỗ.</p>`,
+p: [['Name two cost lines a festival has that a single concert in a hall may not.', 'Kể hai khoản chi mà lễ hội có còn buổi hoà nhạc trong hội trường có thể không có.', 'For example fencing and generators; also waste collection and extra welfare services.', 'Ví dụ hàng rào và máy phát điện; cũng có thu gom rác và dịch vụ chăm sóc thêm.']] };
+
+EXTRA['eem201-ts-2-3'] = { en: `<h4>Worked mini-case (fictional): a two-day MICE conference</h4>
+<p>A fictional association plans "ViệtMICE Summit", a two-day conference with an exhibition area. Figures are assumed.</p>
+<ol><li>Step 1 — Define the type: a conference (M and C of MICE) plus a small exhibition (E).</li>
+<li>Step 2 — Define delegates: assume 400 paying delegates and 30 exhibitor booths.</li>
+<li>Step 3 — Split the income: delegate fees, booth fees and sponsors. Delegates expect content quality, Wi-Fi, coffee breaks and networking.</li>
+<li>Step 4 — Plan the programme: keynote, three parallel tracks, lunch, exhibition time, closing. Allow break time between sessions so that rooms can reset.</li>
+<li>Step 5 — Decide hybrid or not: if streaming, a second production team handles cameras and a moderator for online questions.</li></ol>
+<h4>Quick template: sport and community events</h4>` + tbl(['Type', 'Fixed by', 'Key partners', 'Typical risk'], [['Sport', 'Rules and calendar', 'Federation, broadcaster, medics', 'Injury, crowd, weather'], ['Community', 'Social goal', 'Volunteers, local authority', 'Low budget, volunteer shortage'], ['Hybrid', 'Both audiences', 'Streaming crew', 'Network failure']]) + `<p><strong>Common mistake:</strong> treating the online audience as an afterthought. A hybrid event needs its own script, moderator and test.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): hội nghị MICE hai ngày</h4>
+<p>Một hiệp hội hư cấu lên kế hoạch "ViệtMICE Summit", hội nghị hai ngày kèm khu triển lãm. Số liệu là giả định.</p>
+<ol><li>Bước 1 — Xác định loại: hội nghị (M và C của MICE) cộng triển lãm nhỏ (E).</li>
+<li>Bước 2 — Xác định đại biểu: giả định 400 đại biểu trả phí và 30 gian hàng.</li>
+<li>Bước 3 — Chia nguồn thu: phí đại biểu, phí gian hàng và tài trợ. Đại biểu kỳ vọng nội dung tốt, Wi-Fi, giờ giải lao và cơ hội kết nối.</li>
+<li>Bước 4 — Lập chương trình: diễn giả chính, ba luồng song song, bữa trưa, giờ triển lãm, bế mạc. Chừa thời gian giữa các phiên để phòng kịp chuẩn bị lại.</li>
+<li>Bước 5 — Quyết định có hybrid hay không: nếu phát trực tuyến, cần đội sản xuất thứ hai lo máy quay và người điều phối câu hỏi trực tuyến.</li></ol>
+<h4>Mẫu nhanh: sự kiện thể thao và cộng đồng</h4>` + tbl(['Loại', 'Do cái gì quy định', 'Đối tác chính', 'Rủi ro điển hình'], [['Thể thao', 'Luật thi đấu và lịch', 'Liên đoàn, đài phát sóng, y tế', 'Chấn thương, đám đông, thời tiết'], ['Cộng đồng', 'Mục tiêu xã hội', 'Tình nguyện viên, chính quyền địa phương', 'Ngân sách thấp, thiếu tình nguyện viên'], ['Hybrid', 'Cả hai nhóm khán giả', 'Đội phát trực tuyến', 'Mất mạng']]) + `<p><strong>Lỗi hay gặp:</strong> coi khán giả trực tuyến là phần phụ. Sự kiện hybrid cần kịch bản, người điều phối và buổi chạy thử riêng.</p>`,
+p: [['In the case, which two things must be ready for the online audience?', 'Trong tình huống, hai thứ nào phải sẵn sàng cho khán giả trực tuyến?', 'A second production team (cameras, streaming) and a moderator for online questions.', 'Đội sản xuất thứ hai (máy quay, phát trực tuyến) và người điều phối câu hỏi trực tuyến.']] };
+
+EXTRA['eem201-ts-3-1'] = { en: `<h4>Worked mini-case (fictional): mapping stakeholders of a campus music night</h4>
+<ol><li>Step 1 — Brainstorm everyone who affects or is affected: students, the faculty advisor, the dean's office, security, neighbours of the campus, a drinks sponsor, the sound company, the artist, the local police, volunteers.</li>
+<li>Step 2 — Rate each for power (can stop or shape the event) and interest (cares about the outcome). Use high/low only.</li>
+<li>Step 3 — Place them on the grid.</li></ol>` + tbl(['Quadrant', 'Examples', 'Approach'], [['High power, high interest', 'Dean\'s office, sponsor, security lead', 'Manage closely: regular meetings, written agreement'], ['High power, low interest', 'Local police, fire inspector', 'Keep satisfied: send required notices early'], ['Low power, high interest', 'Students, volunteers, artist fans', 'Keep informed: clear updates, FAQ'], ['Low power, low interest', 'Distant residents', 'Monitor: notice if noise complaints grow']]) + `<ol start="4"><li>Step 4 — Note conflicting expectations: the sponsor wants more logos, the artist wants a clean stage, the students want low prices. Write the compromise into the brief.</li></ol>
+<p><strong>Common mistakes:</strong> forgetting neighbours and authorities until they complain, and keeping the grid once and never updating it as the plan changes.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): vẽ bản đồ các bên liên quan của đêm nhạc trường</h4>
+<ol><li>Bước 1 — Liệt kê mọi người ảnh hưởng hoặc bị ảnh hưởng: sinh viên, cố vấn khoa, văn phòng trưởng khoa, bảo vệ, hàng xóm quanh trường, nhà tài trợ đồ uống, công ty âm thanh, nghệ sĩ, công an địa phương, tình nguyện viên.</li>
+<li>Bước 2 — Đánh giá quyền lực (có thể ngăn hoặc định hình sự kiện) và mức quan tâm (quan tâm kết quả). Chỉ dùng cao/thấp.</li>
+<li>Bước 3 — Đặt vào lưới.</li></ol>` + tbl(['Góc', 'Ví dụ', 'Cách tiếp cận'], [['Quyền lực cao, quan tâm cao', 'Văn phòng trưởng khoa, nhà tài trợ, trưởng an ninh', 'Quản lý sát: họp định kỳ, thỏa thuận bằng văn bản'], ['Quyền lực cao, quan tâm thấp', 'Công an địa phương, thanh tra cứu hỏa', 'Giữ hài lòng: gửi thông báo bắt buộc sớm'], ['Quyền lực thấp, quan tâm cao', 'Sinh viên, tình nguyện viên, người hâm mộ', 'Giữ thông tin: cập nhật rõ ràng, trang hỏi đáp'], ['Quyền lực thấp, quan tâm thấp', 'Cư dân ở xa', 'Theo dõi: để ý khi khiếu nại tiếng ồn tăng']]) + `<ol start="4"><li>Bước 4 — Ghi các kỳ vọng mâu thuẫn: nhà tài trợ muốn nhiều logo, nghệ sĩ muốn sân khấu gọn, sinh viên muốn giá thấp. Ghi thoả hiệp vào bản brief.</li></ol>
+<p><strong>Lỗi hay gặp:</strong> quên hàng xóm và cơ quan chức năng cho đến khi họ phàn nàn, và vẽ lưới một lần rồi không cập nhật khi kế hoạch đổi.</p>`,
+p: [['Where would you place a drinks sponsor who pays a lot and checks emails daily?', 'Bạn đặt nhà tài trợ đồ uống chi nhiều và đọc email hằng ngày ở góc nào?', 'High power, high interest: manage closely.', 'Quyền lực cao, quan tâm cao: quản lý sát.']] };
+
+EXTRA['eem201-ts-3-2'] = { en: `<h4>Worked mini-case (fictional): staffing a startup product launch</h4>
+<p>"TechViet" is a fictional company launching an app at a hotel, for 150 invited guests (assumed). Build a team with a small WBS.</p>
+<ol><li>Step 1 — Event lead: one person owns the decisions and the budget.</li>
+<li>Step 2 — Split into areas: content and stage, production (sound, light, screens), guests and registration, marketing and press, finance, safety.</li>
+<li>Step 3 — Break each area into tasks with an owner and a due date.</li>
+<li>Step 4 — Check there is one owner per task, not "everyone".</li></ol>` + tbl(['Area', 'Task', 'Owner role', 'Due (before day)'], [['Content', 'Final script and slides', 'Creative lead', '7 days'], ['Production', 'Sound check and screen test', 'Stage manager', '1 day'], ['Guests', 'Invitations and check-in list', 'Guest coordinator', '14 days'], ['Press', 'Press release and media list', 'PR lead', '10 days'], ['Safety', 'Exit plan and briefing', 'Safety lead', '3 days']]) + `<p>Due dates are illustrative. <strong>Common mistakes:</strong> giving one person three jobs on the day, no deputy for the lead, and volunteers without a briefing or a break.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): bố trí nhân sự cho buổi ra mắt sản phẩm của startup</h4>
+<p>"TechViet" là công ty hư cấu ra mắt ứng dụng tại khách sạn cho 150 khách mời (giả định). Xây đội ngũ cùng WBS nhỏ.</p>
+<ol><li>Bước 1 — Trưởng sự kiện: một người sở hữu quyết định và ngân sách.</li>
+<li>Bước 2 — Chia mảng: nội dung và sân khấu, sản xuất (âm thanh, ánh sáng, màn hình), khách và đăng ký, marketing và báo chí, tài chính, an toàn.</li>
+<li>Bước 3 — Chia mỗi mảng thành đầu việc có người phụ trách và hạn.</li>
+<li>Bước 4 — Kiểm mỗi đầu việc có một người phụ trách, không phải "mọi người".</li></ol>` + tbl(['Mảng', 'Việc', 'Vai phụ trách', 'Hạn (trước ngày diễn)'], [['Nội dung', 'Kịch bản và slide cuối', 'Trưởng sáng tạo', '7 ngày'], ['Sản xuất', 'Thử âm thanh và màn hình', 'Điều phối sân khấu', '1 ngày'], ['Khách', 'Thư mời và danh sách check-in', 'Điều phối khách', '14 ngày'], ['Báo chí', 'Thông cáo và danh sách báo', 'Trưởng PR', '10 ngày'], ['An toàn', 'Sơ đồ thoát hiểm và họp triển khai', 'Trưởng an toàn', '3 ngày']]) + `<p>Hạn chỉ mang tính minh hoạ. <strong>Lỗi hay gặp:</strong> giao một người ba việc trong ngày diễn, trưởng nhóm không có người thay, và tình nguyện viên không được hướng dẫn hay nghỉ giải lao.</p>`,
+p: [['Why is "everyone" a bad owner for a task?', 'Vì sao "mọi người" là người phụ trách tệ cho một đầu việc?', 'When everyone owns it, nobody is accountable and the task is dropped.', 'Khi mọi người cùng phụ trách thì không ai chịu trách nhiệm và việc bị bỏ sót.']] };
+
+EXTRA['eem201-ts-3-3'] = { en: `<h4>Worked mini-case (fictional): contracting a sound supplier</h4>
+<p>The fictional "Hoa Phuong Collective" needs sound and lights for its river festival. Walk through brief, RFP and contract.</p>
+<ol><li>Step 1 — Write a brief: date, site, number of stages, expected audience, technical needs, budget range.</li>
+<li>Step 2 — Send the same RFP to three suppliers and ask for a price, equipment list, crew, insurance, references and a plan for bad weather.</li>
+<li>Step 3 — Compare on a weighted sheet: price 35%, equipment fit 25%, experience 20%, insurance 10%, service 10% (weights assumed).</li>
+<li>Step 4 — Sign a contract that names the date, scope, price, payment dates, cancellation terms, liability and who sets up and removes the equipment.</li></ol>
+<h4>Contract checklist</h4>
+<ul><li>Parties and date.</li><li>Exact scope and deliverables.</li><li>Price, tax and payment schedule.</li><li>Cancellation and change rules.</li><li>Insurance and who is liable for damage.</li><li>Rights for music and images, if any.</li></ul>
+<p>This is a teaching summary, not legal advice; have a qualified person review real contracts. <strong>Common mistake:</strong> agreeing by chat message and discovering on the day that the stage height or power was never written down.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): ký hợp đồng với nhà cung cấp âm thanh</h4>
+<p>"Hoa Phượng Collective" hư cấu cần âm thanh và ánh sáng cho lễ hội ven sông. Đi qua brief, RFP và hợp đồng.</p>
+<ol><li>Bước 1 — Viết brief: ngày, địa điểm, số sân khấu, khán giả dự kiến, yêu cầu kỹ thuật, khung ngân sách.</li>
+<li>Bước 2 — Gửi cùng một RFP cho ba nhà cung cấp, yêu cầu giá, danh sách thiết bị, đội kỹ thuật, bảo hiểm, tham chiếu và phương án khi thời tiết xấu.</li>
+<li>Bước 3 — So sánh trên bảng có trọng số: giá 35%, phù hợp thiết bị 25%, kinh nghiệm 20%, bảo hiểm 10%, dịch vụ 10% (trọng số giả định).</li>
+<li>Bước 4 — Ký hợp đồng nêu ngày, phạm vi, giá, đợt thanh toán, điều khoản huỷ, trách nhiệm và ai lắp dựng, tháo dỡ thiết bị.</li></ol>
+<h4>Danh sách kiểm hợp đồng</h4>
+<ul><li>Các bên và ngày ký.</li><li>Phạm vi và sản phẩm bàn giao chính xác.</li><li>Giá, thuế và lịch thanh toán.</li><li>Quy tắc huỷ và thay đổi.</li><li>Bảo hiểm và ai chịu trách nhiệm hư hại.</li><li>Quyền với âm nhạc và hình ảnh nếu có.</li></ul>
+<p>Đây là tóm tắt để học, không phải tư vấn pháp lý; hợp đồng thật cần người có chuyên môn xem lại. <strong>Lỗi hay gặp:</strong> chốt qua tin nhắn rồi đến ngày diễn mới phát hiện chiều cao sân khấu hay nguồn điện chưa từng được ghi.</p>`,
+p: [['Name three things an RFP should ask suppliers to include.', 'Kể ba thứ mà RFP nên yêu cầu nhà cung cấp nêu.', 'For example price, equipment list, insurance, references or a bad-weather plan.', 'Ví dụ giá, danh sách thiết bị, bảo hiểm, tham chiếu hoặc phương án thời tiết xấu.']] };
+
+EXTRA['eem201-ts-4-1'] = { en: `<h4>Worked mini-case (fictional): from idea to go / no-go</h4>
+<p>Idea: a fictional "Night Market Music Fair" at a university square. Follow the steps with assumed values.</p>
+<ol><li>Step 1 — Concept in 5 W + How: Who (students and neighbours), What (live bands and food stalls), When (a Saturday evening in the dry season), Where (the main square), Why (give student bands a stage and raise funds for a scholarship), How (volunteer team, sponsors, free entry with paid food).</li>
+<li>Step 2 — Write SMART objectives: "Welcome 1,500 visitors (assumed) between 17:00 and 22:00; raise 80,000,000 VND (assumed) for the scholarship; reach a satisfaction score of at least 4 out of 5 in a short survey."</li>
+<li>Step 3 — Feasibility: check the date against exams and holidays, the square's availability, the budget, the safety rules and volunteer numbers.</li>
+<li>Step 4 — Decide: go, no-go or go with conditions, and record who decided and why.</li></ol>` + tbl(['Feasibility area', 'Question', 'Result (example)'], [['Date', 'Does it clash with exams or holidays?', 'Clear'], ['Site', 'Is the square free and large enough?', 'Needs approval'], ['Money', 'Can sponsors and stalls cover the costs?', 'Probable'], ['Safety', 'Can we meet exits and medical needs?', 'Yes with hired medics'], ['People', 'Do we have 40 volunteers?', 'Recruit']]) + `<p><strong>Common mistakes:</strong> objectives such as "make it great"; skipping the feasibility check because the idea is exciting; no written decision, so the team argues again in week six.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): từ ý tưởng đến quyết định đi / không đi</h4>
+<p>Ý tưởng: "Hội chợ đêm âm nhạc" hư cấu tại sân trường. Làm theo các bước với giá trị giả định.</p>
+<ol><li>Bước 1 — Ý tưởng theo 5 W + How: Ai (sinh viên và hàng xóm), Gì (ban nhạc sống và gian ăn uống), Khi nào (một tối thứ Bảy mùa khô), Ở đâu (sân chính), Vì sao (cho ban nhạc sinh viên có sân khấu và gây quỹ học bổng), Thế nào (đội tình nguyện, nhà tài trợ, vào cổng miễn phí, ăn uống trả tiền).</li>
+<li>Bước 2 — Viết mục tiêu SMART: "Đón 1.500 lượt khách (giả định) từ 17:00 đến 22:00; gây quỹ 80.000.000 đồng (giả định) cho học bổng; đạt điểm hài lòng ít nhất 4 trên 5 trong khảo sát ngắn."</li>
+<li>Bước 3 — Tính khả thi: kiểm ngày với lịch thi và lễ, tình trạng sân, ngân sách, quy tắc an toàn và số tình nguyện viên.</li>
+<li>Bước 4 — Quyết định: đi, không đi hoặc đi có điều kiện, và ghi ai quyết định, vì sao.</li></ol>` + tbl(['Mảng khả thi', 'Câu hỏi', 'Kết quả (ví dụ)'], [['Ngày', 'Có trùng lịch thi hoặc lễ không?', 'Ổn'], ['Địa điểm', 'Sân có trống và đủ rộng không?', 'Cần phê duyệt'], ['Tiền', 'Tài trợ và gian hàng có bù được chi phí không?', 'Có khả năng'], ['An toàn', 'Đáp ứng lối thoát và y tế được không?', 'Được, thuê nhân viên y tế'], ['Con người', 'Có 40 tình nguyện viên không?', 'Cần tuyển']]) + `<p><strong>Lỗi hay gặp:</strong> mục tiêu kiểu "làm cho thật hay"; bỏ qua kiểm khả thi vì ý tưởng hấp dẫn; không ghi quyết định nên đến tuần thứ sáu cả nhóm lại cãi lại từ đầu.</p>`,
+p: [['Rewrite "get many people" as a SMART objective for a fictional campus event.', 'Viết lại "có nhiều người" thành mục tiêu SMART cho một sự kiện trường hư cấu.', 'Example: "Reach 800 check-ins between 18:00 and 21:00 on the event day." Any measurable, time-bound version is fine.', 'Ví dụ: "Đạt 800 lượt check-in từ 18:00 đến 21:00 vào ngày diễn." Phiên bản đo được và có hạn là đủ.']] };
+
+EXTRA['eem201-ts-4-2'] = { en: `<h4>Worked mini-case (fictional): a six-step critical path</h4>
+<p>For the fictional "Night Market Music Fair" (event in week 12), these durations are assumed for teaching.</p>` + tbl(['Task', 'Duration (weeks)', 'Depends on'], [['A. Concept and go decision', '2', '—'], ['B. Permit application and approval', '5', 'A'], ['C. Sponsor proposals and contracts', '4', 'A'], ['D. Book sound and stage', '2', 'C'], ['E. Ticket and marketing launch', '3', 'A'], ['F. Volunteer recruitment and briefing', '4', 'A'], ['G. Final setup', '1', 'B, D, E, F']]) + `<ol><li>Step 1 — Trace each route from A to G. A-B-G = 2 + 5 + 1 = 8; A-C-D-G = 2 + 4 + 2 + 1 = 9; A-E-G = 6; A-F-G = 7.</li>
+<li>Step 2 — The longest route is A-C-D-G with 9 weeks. It is the critical path: any delay there delays the event.</li>
+<li>Step 3 — Slack: the permit route has 1 week of slack (9 − 8), marketing has 3 and volunteers 2.</li>
+<li>Step 4 — With 12 weeks available, there are 3 weeks of buffer. Keep them for weather, approvals and illness.</li></ol>
+<p>Note that in this assumed example the permit route is not critical, but it has little slack; if approval takes 6 weeks it becomes critical. Re-check after every change.</p>
+<p><strong>Common mistakes:</strong> counting from today forward without a buffer, forgetting that tasks run in parallel, and never updating the Gantt chart.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): đường găng sáu bước</h4>
+<p>Với "Hội chợ đêm âm nhạc" hư cấu (sự kiện ở tuần 12), các thời lượng dưới đây là giả định để dạy học.</p>` + tbl(['Việc', 'Thời lượng (tuần)', 'Phụ thuộc'], [['A. Ý tưởng và quyết định đi', '2', '—'], ['B. Nộp và chờ duyệt giấy phép', '5', 'A'], ['C. Đề xuất và hợp đồng tài trợ', '4', 'A'], ['D. Đặt âm thanh và sân khấu', '2', 'C'], ['E. Mở bán vé và marketing', '3', 'A'], ['F. Tuyển và hướng dẫn tình nguyện viên', '4', 'A'], ['G. Dựng cuối', '1', 'B, D, E, F']]) + `<ol><li>Bước 1 — Dò từng đường từ A đến G. A-B-G = 2 + 5 + 1 = 8; A-C-D-G = 2 + 4 + 2 + 1 = 9; A-E-G = 6; A-F-G = 7.</li>
+<li>Bước 2 — Đường dài nhất là A-C-D-G với 9 tuần. Đó là đường găng: chậm ở đây là sự kiện chậm.</li>
+<li>Bước 3 — Độ trễ cho phép: đường giấy phép có 1 tuần (9 − 8), marketing có 3 và tình nguyện viên có 2.</li>
+<li>Bước 4 — Có 12 tuần, nên còn 3 tuần đệm. Giữ cho thời tiết, phê duyệt và ốm đau.</li></ol>
+<p>Lưu ý trong ví dụ giả định này đường giấy phép chưa phải đường găng nhưng rất ít độ trễ; nếu duyệt mất 6 tuần thì nó thành đường găng. Hãy kiểm lại sau mỗi thay đổi.</p>
+<p><strong>Lỗi hay gặp:</strong> tính từ hôm nay đi tới mà không chừa đệm, quên rằng các việc chạy song song, và không bao giờ cập nhật biểu đồ Gantt.</p>`,
+p: [['In the table, which task would you start first if the permit usually takes longer than planned, and why?', 'Trong bảng, nếu giấy phép thường lâu hơn dự kiến, bạn bắt đầu việc nào trước và vì sao?', 'The permit (B), because it has the least slack among the routes and an official delay is outside your control.', 'Giấy phép (B), vì đường đó ít độ trễ nhất và sự chậm trễ của cơ quan nằm ngoài tầm kiểm soát của bạn.']] };
+
+EXTRA['eem201-ts-4-3'] = { en: `<h4>Worked mini-case (fictional): scoring three venues</h4>
+<p>A fictional product launch for 150 guests (assumed) compares three venues. Weights and scores are assumed, from 1 (poor) to 5 (excellent).</p>` + tbl(['Criterion (weight)', 'Hotel ballroom', 'Co-working loft', 'University hall'], [['Capacity and layout (30%)', '5', '3', '4'], ['Cost (25%)', '2', '4', '5'], ['Technical support (20%)', '5', '3', '3'], ['Access and parking (15%)', '4', '3', '3'], ['Brand fit (10%)', '4', '5', '2']]) + `<ol><li>Step 1 — Multiply each score by its weight: the ballroom gets 5 × 0.30 + 2 × 0.25 + 5 × 0.20 + 4 × 0.15 + 4 × 0.10 = 1.5 + 0.5 + 1.0 + 0.6 + 0.4 = 4.0.</li>
+<li>Step 2 — The loft scores 0.9 + 1.0 + 0.6 + 0.45 + 0.5 = 3.45 and the hall scores 1.2 + 1.25 + 0.6 + 0.45 + 0.2 = 3.7.</li>
+<li>Step 3 — Choose the highest score, but visit the top two in person and ask about permits, load-in times and cancellation rules.</li></ol>
+<h4>Permit and supplier checklist</h4>
+<ul><li>Which authority approves this activity, and how many weeks does it take?</li><li>What documents are needed (plan, insurance, safety)?</li><li>Backup supplier for sound, catering and security.</li><li>Written confirmation of every promise.</li></ul>
+<p><strong>Lesson from the failure case:</strong> never sell what you cannot yet deliver. <strong>Common mistake:</strong> picking a venue only by price or photos.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): chấm điểm ba địa điểm</h4>
+<p>Một buổi ra mắt sản phẩm hư cấu cho 150 khách (giả định) so sánh ba địa điểm. Trọng số và điểm là giả định, từ 1 (kém) đến 5 (xuất sắc).</p>` + tbl(['Tiêu chí (trọng số)', 'Phòng tiệc khách sạn', 'Gác mái co-working', 'Hội trường trường đại học'], [['Sức chứa và bố trí (30%)', '5', '3', '4'], ['Chi phí (25%)', '2', '4', '5'], ['Hỗ trợ kỹ thuật (20%)', '5', '3', '3'], ['Đi lại và đỗ xe (15%)', '4', '3', '3'], ['Hợp thương hiệu (10%)', '4', '5', '2']]) + `<ol><li>Bước 1 — Nhân điểm với trọng số: phòng tiệc được 5 × 0,30 + 2 × 0,25 + 5 × 0,20 + 4 × 0,15 + 4 × 0,10 = 1,5 + 0,5 + 1,0 + 0,6 + 0,4 = 4,0.</li>
+<li>Bước 2 — Gác mái được 0,9 + 1,0 + 0,6 + 0,45 + 0,5 = 3,45 và hội trường được 1,2 + 1,25 + 0,6 + 0,45 + 0,2 = 3,7.</li>
+<li>Bước 3 — Chọn điểm cao nhất, nhưng đến xem trực tiếp hai nơi đầu và hỏi về giấy phép, giờ vào dựng và quy tắc huỷ.</li></ol>
+<h4>Danh sách kiểm giấy phép và nhà cung cấp</h4>
+<ul><li>Cơ quan nào duyệt hoạt động này và mất bao nhiêu tuần?</li><li>Cần hồ sơ gì (kế hoạch, bảo hiểm, an toàn)?</li><li>Nhà cung cấp dự phòng cho âm thanh, ăn uống, an ninh.</li><li>Xác nhận bằng văn bản cho mọi lời hứa.</li></ul>
+<p><strong>Bài học từ trường hợp thất bại:</strong> đừng bán thứ bạn chưa thể giao. <strong>Lỗi hay gặp:</strong> chọn địa điểm chỉ theo giá hoặc ảnh.</p>`,
+p: [['What is the weighted score of a venue with scores 4, 3, 5, 2, 3 on the five criteria above?', 'Một địa điểm có điểm 4, 3, 5, 2, 3 trên năm tiêu chí trên thì điểm có trọng số là bao nhiêu?', '4 × 0.30 + 3 × 0.25 + 5 × 0.20 + 2 × 0.15 + 3 × 0.10 = 1.2 + 0.75 + 1.0 + 0.3 + 0.3 = 3.55.', '4 × 0,30 + 3 × 0,25 + 5 × 0,20 + 2 × 0,15 + 3 × 0,10 = 1,2 + 0,75 + 1,0 + 0,3 + 0,3 = 3,55.']] };
+
+EXTRA['eem201-ts-5-1'] = { en: `<h4>Worked mini-case (fictional): break-even for a campus music night</h4>
+<p>All figures are assumed for teaching. Fixed costs (stage, sound, security, insurance, marketing) total 60,000,000 VND. Sponsorship and stall fees bring 20,000,000 VND. Ticket price is 150,000 VND and each guest costs 30,000 VND in variable costs (wristband, drink, ticketing fee).</p>
+<ol><li>Step 1 — Unit contribution = price − variable cost = 150,000 − 30,000 = 120,000 VND.</li>
+<li>Step 2 — Fixed costs to cover from tickets = 60,000,000 − 20,000,000 = 40,000,000 VND.</li>
+<li>Step 3 — Break-even attendance = 40,000,000 ÷ 120,000 = 333.3, so 334 paying guests.</li>
+<li>Step 4 — Add a 10% contingency on costs (assumed): fixed costs become 66,000,000, so the cover from tickets is 46,000,000 and the break-even is 46,000,000 ÷ 120,000 = 383.3, so 384 guests.</li>
+<li>Step 5 — With 800 capacity, break-even is about 48% of seats. A cautious plan also tests a low-sales case, for example 50% sold.</li></ol>
+<h4>Budget template rows</h4>` + tbl(['Line', 'Type', 'Estimate', 'Actual', 'Owner'], [['Stage and sound', 'Fixed', '…', '…', 'Production'], ['Security', 'Fixed', '…', '…', 'Safety lead'], ['Wristbands', 'Variable', '…', '…', 'Guest lead'], ['Contingency 10%', 'Reserve', '…', '…', 'Finance']]) + `<p><strong>Common mistake:</strong> leaving out contingency, so a single price rise puts the event in a loss.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): điểm hoà vốn cho đêm nhạc trường</h4>
+<p>Mọi số liệu là giả định để dạy học. Chi phí cố định (sân khấu, âm thanh, an ninh, bảo hiểm, marketing) tổng 60.000.000 đồng. Tài trợ và phí gian hàng mang về 20.000.000 đồng. Giá vé 150.000 đồng và mỗi khách tốn 30.000 đồng chi phí biến đổi (vòng tay, đồ uống, phí bán vé).</p>
+<ol><li>Bước 1 — Phần đóng góp mỗi vé = giá − chi phí biến đổi = 150.000 − 30.000 = 120.000 đồng.</li>
+<li>Bước 2 — Chi phí cố định cần bù bằng vé = 60.000.000 − 20.000.000 = 40.000.000 đồng.</li>
+<li>Bước 3 — Số khách hoà vốn = 40.000.000 ÷ 120.000 = 333,3, tức 334 khách trả tiền.</li>
+<li>Bước 4 — Thêm dự phòng 10% trên chi phí (giả định): chi phí cố định thành 66.000.000, phần cần bù bằng vé là 46.000.000, nên hoà vốn là 46.000.000 ÷ 120.000 = 383,3, tức 384 khách.</li>
+<li>Bước 5 — Với sức chứa 800, hoà vốn khoảng 48% số ghế. Kế hoạch thận trọng còn thử kịch bản bán thấp, ví dụ bán 50%.</li></ol>
+<h4>Dòng mẫu của bảng ngân sách</h4>` + tbl(['Khoản', 'Loại', 'Ước tính', 'Thực tế', 'Phụ trách'], [['Sân khấu và âm thanh', 'Cố định', '…', '…', 'Sản xuất'], ['An ninh', 'Cố định', '…', '…', 'Trưởng an toàn'], ['Vòng tay', 'Biến đổi', '…', '…', 'Trưởng khách'], ['Dự phòng 10%', 'Quỹ dự trữ', '…', '…', 'Tài chính']]) + `<p><strong>Lỗi hay gặp:</strong> bỏ dự phòng, nên chỉ một lần tăng giá là sự kiện lỗ.</p>`,
+p: [['Recompute the break-even if the ticket price is 180,000 VND, other figures as in step 1 to 3.', 'Tính lại điểm hoà vốn nếu giá vé là 180.000 đồng, các số khác như bước 1 đến 3.', 'Contribution = 150,000; 40,000,000 ÷ 150,000 = 266.7, so 267 guests.', 'Đóng góp = 150.000; 40.000.000 ÷ 150.000 = 266,7, tức 267 khách.']] };
+
+EXTRA['eem201-ts-5-2'] = { en: `<h4>Worked mini-case (fictional): designing ticket tiers</h4>
+<p>For the fictional 800-seat campus night, the team must set prices. Figures are assumed.</p>
+<ol><li>Step 1 — Find the floor: from the break-even lesson, the average net price per guest must at least cover the 120,000 VND contribution at about 384 guests.</li>
+<li>Step 2 — Look at comparables: what do similar student nights charge? Ask five students what they would pay.</li>
+<li>Step 3 — Build tiers: early bird 120,000 VND for the first 200 tickets; standard 150,000 VND for 450; on the day 180,000 VND for 100; group of five at 600,000 VND for 50.</li>
+<li>Step 4 — Check the total: 200 × 120,000 = 24,000,000; 450 × 150,000 = 67,500,000; 100 × 180,000 = 18,000,000; 50 × 120,000 = 6,000,000 (the group price, 600,000 for 5 guests, is 120,000 each). Total tickets = 800 and gross revenue = 115,500,000 VND at full sales.</li>
+<li>Step 5 — Subtract platform fees and refunds to get net income.</li></ol>
+<h4>Checklist before the sale opens</h4>
+<ul><li>Fees shown clearly at checkout.</li><li>Refund and transfer policy written.</li><li>Ticket check at the door (QR scan) tested.</li><li>Plan for a sales spike and for fake tickets.</li></ul>
+<p><strong>Common mistake:</strong> pricing early bird too low, so the base tier can never cover costs.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): thiết kế các hạng vé</h4>
+<p>Với đêm nhạc trường 800 chỗ hư cấu, đội phải định giá. Số liệu là giả định.</p>
+<ol><li>Bước 1 — Tìm mức sàn: từ bài hoà vốn, giá thực nhận trung bình mỗi khách tối thiểu phải bù được phần đóng góp 120.000 đồng với khoảng 384 khách.</li>
+<li>Bước 2 — Xem các sự kiện tương đương: các đêm nhạc sinh viên khác bán bao nhiêu? Hỏi năm sinh viên họ chịu trả bao nhiêu.</li>
+<li>Bước 3 — Dựng các hạng: vé sớm 120.000 đồng cho 200 vé đầu; vé thường 150.000 đồng cho 450; vé tại chỗ 180.000 đồng cho 100; nhóm năm người 600.000 đồng cho 50 vé.</li>
+<li>Bước 4 — Kiểm tổng: 200 × 120.000 = 24.000.000; 450 × 150.000 = 67.500.000; 100 × 180.000 = 18.000.000; 50 × 120.000 = 6.000.000 (giá nhóm 600.000 cho 5 khách là 120.000 mỗi người). Tổng vé = 800 và doanh thu gộp = 115.500.000 đồng khi bán hết.</li>
+<li>Bước 5 — Trừ phí nền tảng và hoàn vé để ra thu nhập thực.</li></ol>
+<h4>Danh sách kiểm trước khi mở bán</h4>
+<ul><li>Hiển thị rõ phí ở bước thanh toán.</li><li>Chính sách hoàn và chuyển nhượng vé đã viết.</li><li>Kiểm vé tại cửa (quét QR) đã thử.</li><li>Có kế hoạch cho đợt tăng đột biến và vé giả.</li></ul>
+<p><strong>Lỗi hay gặp:</strong> định giá vé sớm quá thấp, khiến hạng cơ bản không bao giờ bù được chi phí.</p>`,
+p: [['In the case, why must you subtract platform fees before comparing revenue with costs?', 'Trong tình huống, vì sao phải trừ phí nền tảng trước khi so doanh thu với chi phí?', 'The organiser never receives the fee; gross sales overstate the money available.', 'Nhà tổ chức không nhận khoản phí đó; doanh thu gộp làm số tiền khả dụng cao hơn thực tế.']] };
+
+EXTRA['eem201-ts-5-3'] = { en: `<h4>Worked mini-case (fictional): pitching a drinks brand</h4>
+<p>The fictional student festival "Hoa Phuong Fest" approaches a drinks brand. Figures are assumed.</p>
+<ol><li>Step 1 — Research the sponsor: its target (age 18–25), its campaign goals and its competitors. Never offer one brand's exclusivity to two competitors.</li>
+<li>Step 2 — Match benefits: logo on the stage backdrop, a branded drink counter, a sampling zone, mentions by the host and a social media post series.</li>
+<li>Step 3 — Build a ladder: title partner 50,000,000 VND, official partner 25,000,000, supporter 10,000,000 (all assumed).</li>
+<li>Step 4 — Write a one-page proposal: the event, audience numbers (as estimates, labelled), the packages, the activation ideas, and the report you will send afterwards.</li>
+<li>Step 5 — After the event, send photos, attendance, survey results and social figures within two weeks (a suggested standard). Renewal depends on this.</li></ol>
+<h4>Sponsor agreement checklist</h4>
+<ul><li>Exact benefits and exclusivity category.</li><li>Payment dates and in-kind values.</li><li>Approval of logo use.</li><li>What happens if the event is cancelled.</li></ul>
+<p><strong>Common mistakes:</strong> asking for money without offering outcomes, promising numbers you cannot verify, and sending no report afterwards.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): chào tài trợ cho một hãng đồ uống</h4>
+<p>Lễ hội sinh viên hư cấu "Hoa Phượng Fest" tiếp cận một hãng đồ uống. Số liệu là giả định.</p>
+<ol><li>Bước 1 — Nghiên cứu nhà tài trợ: đối tượng (18–25 tuổi), mục tiêu chiến dịch và đối thủ. Đừng bao giờ cho hai đối thủ cùng quyền độc quyền.</li>
+<li>Bước 2 — Ghép quyền lợi: logo trên phông sân khấu, quầy đồ uống mang thương hiệu, khu dùng thử, lời nhắc của MC và loạt bài mạng xã hội.</li>
+<li>Bước 3 — Dựng bậc thang: đối tác chính 50.000.000 đồng, đối tác chính thức 25.000.000, đồng hành 10.000.000 (đều là giả định).</li>
+<li>Bước 4 — Viết đề xuất một trang: sự kiện, số lượng khán giả (là ước tính, ghi rõ), các gói, ý tưởng kích hoạt và báo cáo bạn sẽ gửi sau đó.</li>
+<li>Bước 5 — Sau sự kiện, gửi ảnh, số người dự, kết quả khảo sát và số liệu mạng xã hội trong vòng hai tuần (chuẩn gợi ý). Việc gia hạn phụ thuộc vào đây.</li></ol>
+<h4>Danh sách kiểm thỏa thuận tài trợ</h4>
+<ul><li>Quyền lợi chính xác và nhóm độc quyền.</li><li>Ngày thanh toán và giá trị hiện vật.</li><li>Phê duyệt cách dùng logo.</li><li>Điều gì xảy ra nếu sự kiện bị huỷ.</li></ul>
+<p><strong>Lỗi hay gặp:</strong> xin tiền mà không đưa ra kết quả, hứa con số không kiểm chứng được và không gửi báo cáo sau sự kiện.</p>`,
+p: [['Why should you not sell the same exclusivity category to two competing brands?', 'Vì sao không nên bán cùng một nhóm độc quyền cho hai thương hiệu cạnh tranh?', 'Exclusivity is what the sponsor pays for; selling it twice breaks the agreement and damages trust.', 'Độc quyền chính là thứ nhà tài trợ trả tiền để có; bán hai lần là phá thỏa thuận và mất lòng tin.']] };
+
+EXTRA['eem201-ts-6-1'] = { en: `<h4>Worked mini-case (fictional): a persona and a one-page plan</h4>
+<p>The fictional "Night Market Music Fair" needs a marketing plan. Follow the steps.</p>
+<ol><li>Step 1 — Segment: students living in dorms, students living at home, alumni, neighbours.</li>
+<li>Step 2 — Target: dorm students first, because they can attend after evening classes. Write a persona: "Linh, 20, second-year, shares a room, follows two bands on social media, has about 150,000 VND (assumed) to spend on a night out, decides with friends."</li>
+<li>Step 3 — Position in one sentence: "The free-entry night where your campus bands play and your friends eat together."</li>
+<li>Step 4 — Message: price (free entry), people (your bands), place (the main square), time (Saturday 17:00).</li>
+<li>Step 5 — Fill the one-page plan.</li></ol>` + tbl(['Element', 'Content (example)'], [['Objective', '1,500 visitors (assumed), 80% from campus'], ['Audience', 'Dorm students, alumni'], ['Message', 'Free entry, local bands, street food'], ['Channels', 'Club pages, dorm posters, student groups'], ['Calendar', 'Teaser 4 weeks before, lineup 3 weeks, reminder 1 week, day-of posts'], ['Budget', 'Set as a share of the event budget'], ['Measures', 'Reach, registrations, check-ins']]) + `<p><strong>Common mistakes:</strong> "everyone" as the audience, listing features instead of benefits, and a plan with no measures.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): chân dung khán giả và kế hoạch một trang</h4>
+<p>"Hội chợ đêm âm nhạc" hư cấu cần kế hoạch marketing. Làm theo các bước.</p>
+<ol><li>Bước 1 — Phân khúc: sinh viên ở ký túc xá, sinh viên ở nhà, cựu sinh viên, hàng xóm.</li>
+<li>Bước 2 — Mục tiêu: sinh viên ký túc xá trước, vì họ đến được sau giờ học tối. Viết chân dung: "Linh, 20 tuổi, năm hai, ở chung phòng, theo dõi hai ban nhạc trên mạng xã hội, có khoảng 150.000 đồng (giả định) cho một buổi tối đi chơi, quyết định cùng bạn bè."</li>
+<li>Bước 3 — Định vị trong một câu: "Đêm vào cổng miễn phí, nơi ban nhạc của trường chơi và bạn bè cùng ăn uống."</li>
+<li>Bước 4 — Thông điệp: giá (vào cổng miễn phí), con người (ban nhạc của bạn), nơi chốn (sân chính), giờ (thứ Bảy 17:00).</li>
+<li>Bước 5 — Điền kế hoạch một trang.</li></ol>` + tbl(['Thành phần', 'Nội dung (ví dụ)'], [['Mục tiêu', '1.500 lượt khách (giả định), 80% từ trong trường'], ['Khán giả', 'Sinh viên ký túc xá, cựu sinh viên'], ['Thông điệp', 'Vào cổng miễn phí, ban nhạc địa phương, đồ ăn đường phố'], ['Kênh', 'Trang câu lạc bộ, poster ký túc xá, nhóm sinh viên'], ['Lịch', 'Giới thiệu trước 4 tuần, lộ danh sách 3 tuần, nhắc 1 tuần, đăng bài trong ngày'], ['Ngân sách', 'Đặt theo tỷ lệ trên ngân sách sự kiện'], ['Đo lường', 'Tiếp cận, đăng ký, check-in']]) + `<p><strong>Lỗi hay gặp:</strong> "tất cả mọi người" là khán giả, liệt kê tính năng thay vì lợi ích, và kế hoạch không có chỉ số đo.</p>`,
+p: [['Write a one-sentence positioning for a fictional jazz night aimed at office workers.', 'Viết định vị một câu cho đêm nhạc jazz hư cấu nhắm tới nhân viên văn phòng.', 'Example: "A calm weekday jazz hour right after work, ten minutes from the office." Any clear benefit is accepted.', 'Ví dụ: "Một giờ jazz nhẹ nhàng ngay sau giờ làm, cách văn phòng mười phút." Chấp nhận mọi lợi ích rõ ràng.']] };
+
+EXTRA['eem201-ts-6-2'] = { en: `<h4>Worked mini-case (fictional): a funnel from 20,000 views to 800 tickets</h4>
+<p>Figures are assumed to show the method; real conversion rates vary widely.</p>
+<ol><li>Step 1 — Set the goal: sell 800 tickets in six weeks.</li>
+<li>Step 2 — Work backwards with assumed conversion rates: if 4% of people who visit the ticket page buy, you need 800 ÷ 0.04 = 20,000 page visits. If 10% of those who see a post click through, you need 200,000 impressions (assumed).</li>
+<li>Step 3 — Split the channels: owned (club page, email list), earned (student news, band fans sharing), paid (a small social advert budget).</li>
+<li>Step 4 — Give each channel its own tracking link so that you can see where tickets come from.</li>
+<li>Step 5 — Review weekly and move money to the channel with the lowest cost per ticket.</li></ol>
+<h4>Weekly review template</h4>` + tbl(['Channel', 'Spend', 'Visits', 'Tickets', 'Cost per ticket'], [['Club page', '0', '…', '…', '…'], ['Email list', '0', '…', '…', '…'], ['Paid social', '…', '…', '…', '…'], ['Creators', '…', '…', '…', '…']]) + `<p><strong>Common mistakes:</strong> counting likes as sales, spending the whole budget in week one, and having no ticket link on the post.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): phễu từ 20.000 lượt xem đến 800 vé</h4>
+<p>Số liệu là giả định để minh hoạ phương pháp; tỷ lệ chuyển đổi thực tế rất khác nhau.</p>
+<ol><li>Bước 1 — Đặt mục tiêu: bán 800 vé trong sáu tuần.</li>
+<li>Bước 2 — Tính ngược với tỷ lệ chuyển đổi giả định: nếu 4% người vào trang vé mua, cần 800 ÷ 0,04 = 20.000 lượt vào trang. Nếu 10% người thấy bài đăng bấm vào, cần 200.000 lượt hiển thị (giả định).</li>
+<li>Bước 3 — Chia kênh: sở hữu (trang câu lạc bộ, danh sách email), kiếm được (bản tin sinh viên, fan ban nhạc chia sẻ), trả tiền (ngân sách quảng cáo mạng xã hội nhỏ).</li>
+<li>Bước 4 — Cho mỗi kênh một liên kết theo dõi riêng để biết vé đến từ đâu.</li>
+<li>Bước 5 — Xem lại hằng tuần và chuyển tiền sang kênh có chi phí mỗi vé thấp nhất.</li></ol>
+<h4>Mẫu xem lại hằng tuần</h4>` + tbl(['Kênh', 'Chi', 'Lượt vào', 'Vé', 'Chi phí mỗi vé'], [['Trang câu lạc bộ', '0', '…', '…', '…'], ['Danh sách email', '0', '…', '…', '…'], ['Mạng xã hội trả tiền', '…', '…', '…', '…'], ['Người sáng tạo nội dung', '…', '…', '…', '…']]) + `<p><strong>Lỗi hay gặp:</strong> tính lượt thích là doanh số, dùng hết ngân sách ngay tuần đầu, và bài đăng không có liên kết mua vé.</p>`,
+p: [['Why does each channel need its own tracking link?', 'Vì sao mỗi kênh cần liên kết theo dõi riêng?', 'Otherwise you cannot tell which channel produced tickets and cannot move budget to what works.', 'Nếu không, bạn không biết kênh nào tạo ra vé và không thể chuyển ngân sách sang kênh hiệu quả.']] };
+
+EXTRA['eem201-ts-6-3'] = { en: `<h4>Worked mini-case (fictional): a press release and a first-hour response</h4>
+<p>For the fictional "Hoa Phuong Fest", write one page for the press.</p>
+<ol><li>Step 1 — Headline with the news: "Student bands take the main stage at Hoa Phuong Fest on Saturday".</li>
+<li>Step 2 — First paragraph answers who, what, when, where and why in two sentences.</li>
+<li>Step 3 — One quote from the organiser, one from a band, and one practical block: time, address, free entry, accessibility, contact for the press.</li>
+<li>Step 4 — Attach two photos with credit and a lineup.</li></ol>
+<h4>Crisis template: strong wind stops the show (fictional)</h4>
+<ol><li>Verify: the safety lead and stage manager confirm the facts before anything is posted.</li>
+<li>Protect people: pause the show and use the announcement plan.</li>
+<li>Say it once, in one voice: "The show is paused for safety. Please stay in the square and follow our staff. We will update at 19:30." Put the same text on the stage screen and the social page.</li>
+<li>Update on schedule, even when there is no news.</li>
+<li>After: thank the audience and explain what happened.</li></ol>
+<p><strong>Common mistakes:</strong> several people giving different statements, deleting critical comments, and guessing before verifying.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): thông cáo báo chí và phản ứng trong giờ đầu</h4>
+<p>Với "Hoa Phượng Fest" hư cấu, viết một trang cho báo chí.</p>
+<ol><li>Bước 1 — Tiêu đề nêu tin: "Ban nhạc sinh viên lên sân khấu chính Hoa Phượng Fest vào thứ Bảy".</li>
+<li>Bước 2 — Đoạn đầu trả lời ai, gì, khi nào, ở đâu, vì sao trong hai câu.</li>
+<li>Bước 3 — Một trích dẫn từ nhà tổ chức, một từ ban nhạc, và một khối thực dụng: giờ, địa chỉ, vào cổng miễn phí, hỗ trợ người khuyết tật, đầu mối liên hệ báo chí.</li>
+<li>Bước 4 — Đính kèm hai ảnh có ghi nguồn và danh sách nghệ sĩ.</li></ol>
+<h4>Mẫu xử lý khủng hoảng: gió mạnh làm dừng chương trình (hư cấu)</h4>
+<ol><li>Xác minh: trưởng an toàn và điều phối sân khấu xác nhận sự việc trước khi đăng bất cứ gì.</li>
+<li>Bảo vệ người: tạm dừng chương trình và dùng kế hoạch thông báo.</li>
+<li>Nói một lần, một giọng: "Chương trình tạm dừng vì an toàn. Mời mọi người ở lại trong sân và làm theo nhân viên. Chúng tôi cập nhật lúc 19:30." Đưa cùng nội dung lên màn hình sân khấu và trang mạng xã hội.</li>
+<li>Cập nhật đúng hẹn, kể cả khi chưa có tin mới.</li>
+<li>Sau đó: cảm ơn khán giả và giải thích điều đã xảy ra.</li></ol>
+<p><strong>Lỗi hay gặp:</strong> nhiều người phát biểu khác nhau, xoá bình luận chỉ trích và đoán trước khi xác minh.</p>`,
+p: [['Which five questions must the first paragraph of a press release answer?', 'Đoạn đầu của thông cáo báo chí phải trả lời năm câu hỏi nào?', 'Who, what, when, where and why.', 'Ai, gì, khi nào, ở đâu và vì sao.']] };
+
+EXTRA['eem201-ts-7-1'] = { en: `<h4>Worked mini-case (fictional): a 60-minute run-of-show extract</h4>
+<p>Fictional "Hoa Phuong Fest", main stage, evening. Times are assumed.</p>` + tbl(['Time', 'Cue', 'Who', 'Notes'], [['17:30', 'Doors open', 'Gate lead', 'Bag check running'], ['18:00', 'Host welcomes the crowd', 'Host, stage manager', 'Intro track, house lights down'], ['18:05', 'Band 1 starts (25 min)', 'Sound, lights', 'Cue light 1'], ['18:30', 'Changeover (15 min)', 'Stage crew', 'Host fills time'], ['18:45', 'Band 2 starts (30 min)', 'Sound, lights', 'Safety walk-round'], ['19:15', 'Sponsor message (2 min)', 'Host', 'Script approved']]) + `<ol><li>Step 1 — Check the arithmetic: 18:00 + 5 min + 25 min = 18:30; the changeover ends at 18:45; band 2 ends at 19:15. The sequence fits with no gap.</li>
+<li>Step 2 — Add a "slip rule": if the show is more than 10 minutes late, cut a defined item (for example the sponsor message) rather than the headliner.</li>
+<li>Step 3 — Share the sheet with every department the day before, and hold a 20-minute briefing two hours before doors.</li>
+<li>Step 4 — Rehearse the first and last 10 minutes and the emergency announcement.</li></ol>
+<h4>Load-in and strike checklist</h4>
+<ul><li>Access times for each supplier.</li><li>Power and cable safety checked.</li><li>Strike order and area clean-up owners.</li></ul>
+<p><strong>Common mistakes:</strong> a run of show that exists only in the stage manager's head, no changeover time, and no one assigned to the strike.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): trích kịch bản chạy chương trình 60 phút</h4>
+<p>"Hoa Phượng Fest" hư cấu, sân khấu chính, buổi tối. Giờ là giả định.</p>` + tbl(['Giờ', 'Tín hiệu', 'Ai', 'Ghi chú'], [['17:30', 'Mở cổng', 'Trưởng cổng', 'Đang kiểm tra túi'], ['18:00', 'MC chào khán giả', 'MC, điều phối sân khấu', 'Nhạc mở, tắt đèn khán phòng'], ['18:05', 'Ban 1 bắt đầu (25 phút)', 'Âm thanh, ánh sáng', 'Đèn hiệu 1'], ['18:30', 'Chuyển cảnh (15 phút)', 'Đội sân khấu', 'MC lấp thời gian'], ['18:45', 'Ban 2 bắt đầu (30 phút)', 'Âm thanh, ánh sáng', 'Đi kiểm tra an toàn'], ['19:15', 'Lời nhà tài trợ (2 phút)', 'MC', 'Kịch bản đã duyệt']]) + `<ol><li>Bước 1 — Kiểm phép tính: 18:00 + 5 phút + 25 phút = 18:30; chuyển cảnh xong lúc 18:45; ban 2 kết thúc lúc 19:15. Chuỗi khớp, không có khoảng trống.</li>
+<li>Bước 2 — Thêm "quy tắc trễ": nếu chương trình trễ quá 10 phút, cắt một mục định sẵn (ví dụ lời nhà tài trợ) chứ không cắt nghệ sĩ chính.</li>
+<li>Bước 3 — Chia sẻ bảng cho mọi bộ phận từ hôm trước và họp triển khai 20 phút hai giờ trước khi mở cổng.</li>
+<li>Bước 4 — Tập 10 phút đầu, 10 phút cuối và thông báo khẩn cấp.</li></ol>
+<h4>Danh sách kiểm vào dựng và tháo dỡ</h4>
+<ul><li>Giờ vào của từng nhà cung cấp.</li><li>Kiểm an toàn điện và dây cáp.</li><li>Thứ tự tháo dỡ và người phụ trách dọn khu vực.</li></ul>
+<p><strong>Lỗi hay gặp:</strong> kịch bản chỉ nằm trong đầu điều phối sân khấu, không có thời gian chuyển cảnh và không ai phụ trách tháo dỡ.</p>`,
+p: [['Why is a "slip rule" useful in a run of show?', '"Quy tắc trễ" có ích gì trong kịch bản chạy chương trình?', 'It decides in advance what to cut when the show runs late, so nobody argues under pressure.', 'Nó quyết định trước phần nào bị cắt khi chương trình trễ, nên không ai tranh cãi lúc áp lực.']] };
+
+EXTRA['eem201-ts-7-2'] = { en: `<h4>Worked mini-case (fictional): checking the capacity of a square</h4>
+<p>For the fictional "Hoa Phuong Fest" in a square, figures are assumed for teaching; real limits come from the venue and the authority.</p>
+<ol><li>Step 1 — Measure the usable area: assume the square is 50 m × 40 m = 2,000 m², minus 600 m² for the stage, fences, food stalls and toilets. The usable area is 1,400 m².</li>
+<li>Step 2 — Choose a planning density: assume 2 people per m² for a relaxed crowd and treat higher densities as a warning. Capacity = 1,400 × 2 = 2,800 people (assumed).</li>
+<li>Step 3 — Compare with the expected crowd. If 3,500 are expected, either reduce tickets, add space or split the programme. Do not rely on "people will leave early".</li>
+<li>Step 4 — Check flow: width of entrances and exits. Many people arriving in a short time creates a queue, so open gates early and add lanes.</li>
+<li>Step 5 — Set trigger points: if the count at a gate reaches 90% of the plan, stop entry and tell the control room.</li></ol>
+<h4>Welfare checklist</h4>
+<ul><li>Marked first-aid points and medics.</li><li>Free drinking water and shade.</li><li>Lost-child and lost-property point.</li><li>Accessible route and viewing area.</li><li>A safety lead who can stop the show and a written way to do it.</li></ul>
+<p><strong>Common mistake:</strong> counting only tickets sold and not staff, vendors and guests with free entry.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): kiểm sức chứa của một sân</h4>
+<p>Với "Hoa Phượng Fest" hư cấu tổ chức ở sân, số liệu là giả định để dạy học; giới hạn thật do địa điểm và cơ quan chức năng quy định.</p>
+<ol><li>Bước 1 — Đo diện tích dùng được: giả định sân 50 m × 40 m = 2.000 m², trừ 600 m² cho sân khấu, hàng rào, gian ăn uống và nhà vệ sinh. Diện tích dùng được là 1.400 m².</li>
+<li>Bước 2 — Chọn mật độ lập kế hoạch: giả định 2 người trên m² cho đám đông thoải mái và coi mật độ cao hơn là cảnh báo. Sức chứa = 1.400 × 2 = 2.800 người (giả định).</li>
+<li>Bước 3 — So với đám đông dự kiến. Nếu dự kiến 3.500 người thì giảm vé, thêm không gian hoặc chia chương trình. Đừng dựa vào "mọi người sẽ về sớm".</li>
+<li>Bước 4 — Kiểm dòng người: bề rộng lối vào và lối ra. Nhiều người đến trong thời gian ngắn tạo hàng chờ, nên mở cổng sớm và thêm làn.</li>
+<li>Bước 5 — Đặt ngưỡng kích hoạt: nếu số đếm ở một cổng đạt 90% kế hoạch thì dừng vào và báo phòng điều hành.</li></ol>
+<h4>Danh sách kiểm chăm sóc khách</h4>
+<ul><li>Điểm sơ cứu có biển và nhân viên y tế.</li><li>Nước uống miễn phí và chỗ che nắng.</li><li>Điểm tìm trẻ lạc và đồ thất lạc.</li><li>Lối đi và khu xem cho người khuyết tật.</li><li>Trưởng an toàn có quyền dừng chương trình và cách làm được viết ra.</li></ul>
+<p><strong>Lỗi hay gặp:</strong> chỉ đếm vé đã bán mà quên nhân viên, gian hàng và khách vào cửa miễn phí.</p>`,
+p: [['Compute the planning capacity if the usable area is 900 m² at 2 people per m².', 'Tính sức chứa lập kế hoạch nếu diện tích dùng được là 900 m² với 2 người trên m².', '900 × 2 = 1,800 people (assumed planning figure, not a legal limit).', '900 × 2 = 1.800 người (con số lập kế hoạch giả định, không phải giới hạn pháp lý).']] };
+
+EXTRA['eem201-ts-7-3'] = { en: `<h4>Worked mini-case (fictional): building a risk register</h4>
+<p>Fictional "Hoa Phuong Fest", outdoor evening event. Scores use likelihood (L) and impact (I) from 1 to 5; all scores are assumed.</p>` + tbl(['Risk', 'L', 'I', 'Score', 'Response', 'Owner'], [['Evening storm', '3', '4', '12', 'Check forecast, covered backstage, written stop rule, rain date option', 'Safety lead'], ['Power failure on main stage', '2', '4', '8', 'Backup generator, tested before doors', 'Production'], ['Crowd above plan at the gate', '3', '5', '15', 'Stop-entry trigger, extra lane, announcement', 'Gate lead'], ['Artist late', '2', '3', '6', 'Buffer set, spare act, host fills time', 'Stage manager'], ['Overspend', '3', '3', '9', 'Weekly budget review, 10% contingency', 'Finance']]) + `<ol><li>Step 1 — Brainstorm with every department, not only the leads.</li>
+<li>Step 2 — Score as L × I and sort from the highest: crowd (15), storm (12), overspend (9), power (8), artist (6).</li>
+<li>Step 3 — Name one owner for each and write the response as an action, not a hope.</li>
+<li>Step 4 — Decide in advance who may postpone or cancel, on what condition, and how this is announced.</li>
+<li>Step 5 — Review the register weekly and on the event day.</li></ol>
+<p><strong>Common mistakes:</strong> listing risks without owners, scoring everything as medium, and forgetting that insurance may exclude some causes, so read the policy.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): xây dựng sổ rủi ro</h4>
+<p>"Hoa Phượng Fest" hư cấu, sự kiện ngoài trời buổi tối. Điểm dùng khả năng xảy ra (L) và tác động (I) từ 1 đến 5; mọi điểm là giả định.</p>` + tbl(['Rủi ro', 'L', 'I', 'Điểm', 'Ứng phó', 'Phụ trách'], [['Giông buổi tối', '3', '4', '12', 'Xem dự báo, khu hậu trường có mái, quy tắc dừng bằng văn bản, phương án ngày dự phòng', 'Trưởng an toàn'], ['Mất điện sân khấu chính', '2', '4', '8', 'Máy phát dự phòng, thử trước khi mở cổng', 'Sản xuất'], ['Đám đông vượt kế hoạch ở cổng', '3', '5', '15', 'Ngưỡng dừng vào, thêm làn, thông báo', 'Trưởng cổng'], ['Nghệ sĩ đến muộn', '2', '3', '6', 'Thời gian đệm, tiết mục dự phòng, MC lấp thời gian', 'Điều phối sân khấu'], ['Chi vượt', '3', '3', '9', 'Xem ngân sách hằng tuần, dự phòng 10%', 'Tài chính']]) + `<ol><li>Bước 1 — Động não cùng mọi bộ phận, không chỉ các trưởng nhóm.</li>
+<li>Bước 2 — Chấm điểm L × I và xếp từ cao nhất: đám đông (15), giông (12), chi vượt (9), mất điện (8), nghệ sĩ muộn (6).</li>
+<li>Bước 3 — Gắn một người phụ trách cho từng rủi ro và viết ứng phó thành hành động, không phải hy vọng.</li>
+<li>Bước 4 — Quyết định trước ai được hoãn hoặc huỷ, theo điều kiện nào và thông báo ra sao.</li>
+<li>Bước 5 — Xem lại sổ hằng tuần và trong ngày diễn ra.</li></ol>
+<p><strong>Lỗi hay gặp:</strong> liệt kê rủi ro mà không có người phụ trách, chấm mọi thứ ở mức trung bình, và quên rằng bảo hiểm có thể loại trừ một số nguyên nhân, nên hãy đọc kỹ hợp đồng.</p>`,
+p: [['Score a risk with likelihood 4 and impact 3, then say whether it should be handled before "Artist late" above.', 'Chấm điểm một rủi ro có khả năng 4 và tác động 3, rồi cho biết có nên xử lý trước "Nghệ sĩ đến muộn" ở trên không.', 'Score = 4 × 3 = 12, higher than 6, so handle it first.', 'Điểm = 4 × 3 = 12, cao hơn 6, nên xử lý trước.']] };
+
+EXTRA['eem201-ts-8-1'] = { en: `<h4>Worked mini-case (fictional): scoring a campus festival</h4>
+<p>Results below are invented for teaching. The objectives came from the planning stage: 1,500 visitors, 80,000,000 VND raised and a satisfaction score of at least 4 out of 5.</p>` + tbl(['Objective', 'Target', 'Result', 'Verdict'], [['Visitors', '1,500', '1,320', '88% of target'], ['Funds raised', '80,000,000 VND', '86,000,000 VND', 'Above target'], ['Satisfaction', '4.0 of 5', '4.3 of 5', 'Above target']]) + `<ol><li>Step 1 — ROI for the sponsor-funded part: assume the total event cost was 120,000,000 VND and the benefit counted is 150,000,000 VND (funds plus sponsor value, assumed). ROI = (150,000,000 − 120,000,000) ÷ 120,000,000 = 25%.</li>
+<li>Step 2 — State what you counted as benefit before computing, or the number cannot be compared.</li>
+<li>Step 3 — NPS: from 100 survey answers (assumed), 55 were 9–10 (promoters), 30 were 7–8 (passive) and 15 were 0–6 (detractors). NPS = 55% − 15% = 40.</li>
+<li>Step 4 — Read the open comments: they explain why, for example long food queues.</li></ol>
+<p><strong>Common mistakes:</strong> counting only the good numbers, using ROI without defining benefit, and a survey sent two weeks late when people have forgotten.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): chấm điểm một lễ hội trường</h4>
+<p>Kết quả dưới đây là bịa ra để dạy học. Mục tiêu đến từ khâu lập kế hoạch: 1.500 lượt khách, gây quỹ 80.000.000 đồng và điểm hài lòng ít nhất 4 trên 5.</p>` + tbl(['Mục tiêu', 'Chỉ tiêu', 'Kết quả', 'Nhận định'], [['Lượt khách', '1.500', '1.320', '88% chỉ tiêu'], ['Quỹ gây được', '80.000.000 đồng', '86.000.000 đồng', 'Vượt chỉ tiêu'], ['Hài lòng', '4,0 trên 5', '4,3 trên 5', 'Vượt chỉ tiêu']]) + `<ol><li>Bước 1 — ROI: giả định tổng chi phí sự kiện là 120.000.000 đồng và lợi ích được tính là 150.000.000 đồng (quỹ cộng giá trị tài trợ, giả định). ROI = (150.000.000 − 120.000.000) ÷ 120.000.000 = 25%.</li>
+<li>Bước 2 — Nêu rõ bạn tính gì là lợi ích trước khi tính, nếu không số không so sánh được.</li>
+<li>Bước 3 — NPS: từ 100 phiếu khảo sát (giả định), 55 phiếu 9–10 (người ủng hộ), 30 phiếu 7–8 (trung lập) và 15 phiếu 0–6 (người chê). NPS = 55% − 15% = 40.</li>
+<li>Bước 4 — Đọc các góp ý mở: chúng giải thích lý do, ví dụ hàng chờ đồ ăn dài.</li></ol>
+<p><strong>Lỗi hay gặp:</strong> chỉ đếm số đẹp, dùng ROI mà không định nghĩa lợi ích, và gửi khảo sát trễ hai tuần khi mọi người đã quên.</p>`,
+p: [['Compute NPS if 40 of 80 answers are 9–10 and 20 are 0–6.', 'Tính NPS nếu trong 80 phiếu có 40 phiếu 9–10 và 20 phiếu 0–6.', '40/80 = 50% promoters; 20/80 = 25% detractors; NPS = 25.', '40/80 = 50% người ủng hộ; 20/80 = 25% người chê; NPS = 25.']] };
+
+EXTRA['eem201-ts-8-2'] = { en: `<h4>Worked mini-case (fictional): a one-page post-event summary</h4>
+<p>After "Hoa Phuong Fest" (fictional), the lead writes a one-page summary before the full report. All figures are assumed.</p>
+<ol><li>Step 1 — Open with the result against objectives: visitors 1,320 of 1,500; funds 86,000,000 of 80,000,000 VND; satisfaction 4.3 of 5.</li>
+<li>Step 2 — Budget: planned 120,000,000 VND, actual 118,000,000 VND (assumed), a difference of 2,000,000 VND under. Explain any line that differs by more than 10%.</li>
+<li>Step 3 — Three things that worked (clear gate flow, volunteer briefing, sponsor activation) and three that did not (long food queues, late changeover, no spare phone chargers).</li>
+<li>Step 4 — Lessons with actions: "Add a second food counter; owner: logistics; due: before next planning".</li>
+<li>Step 5 — Thank-you list and the date the sponsor reports are sent.</li></ol>
+<h4>Lessons-learned agenda (45 minutes)</h4>` + tbl(['Minutes', 'Item'], [['0–5', 'Rules: facts, not blame'], ['5–20', 'What went well, with evidence'], ['20–35', 'What to change, with causes'], ['35–45', 'Actions, owners and dates']]) + `<p><strong>Common mistakes:</strong> waiting months to write the report, hiding failures, and storing lessons in a file nobody opens when the next event starts.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): bản tóm tắt một trang sau sự kiện</h4>
+<p>Sau "Hoa Phượng Fest" (hư cấu), trưởng sự kiện viết bản tóm tắt một trang trước báo cáo đầy đủ. Mọi số liệu là giả định.</p>
+<ol><li>Bước 1 — Mở bằng kết quả so với mục tiêu: khách 1.320 trên 1.500; quỹ 86.000.000 trên 80.000.000 đồng; hài lòng 4,3 trên 5.</li>
+<li>Bước 2 — Ngân sách: kế hoạch 120.000.000 đồng, thực tế 118.000.000 đồng (giả định), thấp hơn 2.000.000 đồng. Giải thích mọi khoản lệch quá 10%.</li>
+<li>Bước 3 — Ba điều tốt (dòng người ở cổng, buổi hướng dẫn tình nguyện viên, kích hoạt tài trợ) và ba điều chưa tốt (hàng chờ ăn dài, chuyển cảnh trễ, thiếu sạc điện thoại dự phòng).</li>
+<li>Bước 4 — Bài học kèm hành động: "Thêm quầy ăn thứ hai; phụ trách: hậu cần; hạn: trước kỳ lập kế hoạch sau".</li>
+<li>Bước 5 — Danh sách cảm ơn và ngày gửi báo cáo cho nhà tài trợ.</li></ol>
+<h4>Chương trình họp rút kinh nghiệm (45 phút)</h4>` + tbl(['Phút', 'Mục'], [['0–5', 'Quy tắc: sự kiện, không đổ lỗi'], ['5–20', 'Điều đã tốt, kèm bằng chứng'], ['20–35', 'Điều cần đổi, kèm nguyên nhân'], ['35–45', 'Hành động, người phụ trách và ngày']]) + `<p><strong>Lỗi hay gặp:</strong> chờ nhiều tháng mới viết báo cáo, giấu thất bại, và để bài học trong tệp không ai mở khi sự kiện kế tiếp bắt đầu.</p>`,
+p: [['Name two items that belong in a close-out checklist besides the report.', 'Kể hai mục thuộc danh sách đóng sự kiện ngoài báo cáo.', 'For example final payments to suppliers, return of venue keys or deposit, thank-you messages, archive of files.', 'Ví dụ thanh toán cuối cho nhà cung cấp, trả chìa khoá hoặc tiền cọc địa điểm, tin cảm ơn, lưu trữ hồ sơ.']] };
+
+EXTRA['eem201-ts-8-3'] = { en: `<h4>Worked mini-case (fictional): an ethics and sustainability review</h4>
+<p>Before the fictional "Hoa Phuong Fest" opens ticket sales, the team runs a one-hour review using a short checklist.</p>
+<ol><li>Step 1 — Safety: is capacity honest, are exits clear and is there a person with authority to stop the show? If not, delay sales.</li>
+<li>Step 2 — Honesty: does the advertising promise only what we can deliver (lineup, food, price)? List every claim and a proof for each.</li>
+<li>Step 3 — Fairness: are tickets sold by clear rules, with an accessible area and no hidden fees?</li>
+<li>Step 4 — Privacy: which guest data do we collect, why, who sees it and when do we delete it?</li>
+<li>Step 5 — Integrity: do gifts from suppliers or sponsors affect choices? Record and declare any.</li>
+<li>Step 6 — Sustainability: choose three actions, for example reusable cups with a deposit, sorted waste bins and a list of nearby suppliers, then measure one number (for example kilograms of waste per guest).</li></ol>
+<h4>Career self-check</h4>
+<ul><li>Which role in Chapter 3 would you try first (production, marketing, guest services, finance, safety)?</li><li>Which skill do you need to build in the next semester?</li><li>Which student event can you join to practise it?</li></ul>
+<p><strong>Common mistakes:</strong> greenwashing (claiming green without numbers), collecting data "just in case", and treating ethics as something to fix after a complaint.</p>`,
+vi: `<h4>Tình huống mẫu (hư cấu): rà soát đạo đức và bền vững</h4>
+<p>Trước khi "Hoa Phượng Fest" hư cấu mở bán vé, đội tổ chức họp rà soát một giờ bằng danh sách kiểm ngắn.</p>
+<ol><li>Bước 1 — An toàn: sức chứa có trung thực không, lối thoát có rõ không và có người đủ thẩm quyền dừng chương trình không? Nếu chưa, hoãn mở bán.</li>
+<li>Bước 2 — Trung thực: quảng cáo chỉ hứa điều ta giao được (danh sách nghệ sĩ, đồ ăn, giá) không? Liệt kê mọi cam kết và bằng chứng cho từng cái.</li>
+<li>Bước 3 — Công bằng: vé bán theo quy tắc rõ ràng, có khu tiếp cận và không phí ẩn không?</li>
+<li>Bước 4 — Riêng tư: thu dữ liệu khách nào, để làm gì, ai xem được và khi nào xoá?</li>
+<li>Bước 5 — Liêm chính: quà từ nhà cung cấp hay nhà tài trợ có ảnh hưởng lựa chọn không? Ghi lại và công khai.</li>
+<li>Bước 6 — Bền vững: chọn ba hành động, ví dụ cốc dùng lại có đặt cọc, thùng rác phân loại và danh sách nhà cung cấp gần, rồi đo một con số (ví dụ kilôgam rác trên mỗi khách).</li></ol>
+<h4>Tự đánh giá nghề nghiệp</h4>
+<ul><li>Bạn thử vai nào ở Chương 3 trước (sản xuất, marketing, chăm sóc khách, tài chính, an toàn)?</li><li>Kỹ năng nào cần xây trong học kỳ tới?</li><li>Sự kiện sinh viên nào bạn có thể tham gia để luyện?</li></ul>
+<p><strong>Lỗi hay gặp:</strong> "tẩy xanh" (nói xanh mà không có số liệu), thu dữ liệu "phòng khi cần", và coi đạo đức là thứ sửa sau khi có khiếu nại.</p>`,
+p: [['Give one example of "greenwashing" at an event and how to avoid it.', 'Cho một ví dụ "tẩy xanh" ở sự kiện và cách tránh.', 'Claiming "zero waste" with no measurement. Avoid it by measuring waste and reporting the real number.', 'Tuyên bố "không rác thải" mà không đo. Tránh bằng cách đo rác và báo con số thật.']] };
+
+const D = (slug, en, vi, desc, o) => {
+  const ex = EXTRA[slug];
+  if (ex) o = { ...o, b: [o.b[0] + ex.en, o.b[1] + ex.vi], p: o.p.concat(ex.p || []) };
+  return { title: en + '|||' + vi, slug, type: 'DOCUMENT', description: desc, content: bi(build(o, 'en'), build(o, 'vi')) };
+};
 const Q = (slug, en, vi, qs) => ({ title: en + '|||' + vi, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.',
   quiz: { timeLimitSeconds: 600, questions: qs.map((q, i) => ({ id: 'q' + (i + 1), question: x(q[0]), options: q[1].map(x), correctIndex: q[2], points: 1, explanation: x(q[3]) })) } });
 const SEC = (en, vi, desc, lessons) => ({ title: en + '|||' + vi, description: desc, lessons });

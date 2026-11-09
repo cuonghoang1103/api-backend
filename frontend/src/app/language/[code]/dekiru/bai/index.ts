@@ -60,7 +60,7 @@ function loadGoc(n: number): Promise<Lesson[]> | null {
     case 12: return Promise.all([import('./bai12'), import('./luyenThemB1112')]).then(([m, lt]) => [...m.BAI_12, ...lt.LUYEN_THEM_B12, m.SACH_12]);
     case 13: return Promise.all([import('./bai13'), import('./luyenThemB1314')]).then(([m, lt]) => [...m.BAI_13, ...lt.LUYEN_THEM_B13, m.SACH_13]);
     case 14: return Promise.all([import('./bai14'), import('./luyenThemB1314')]).then(([m, lt]) => [...m.BAI_14, ...lt.LUYEN_THEM_B14, m.SACH_14]);
-    case 15: return import('./bai15').then((m) => [...m.BAI_15, m.SACH_15]);
+    case 15: return Promise.all([import('./bai15'), import('./luyenThemB15')]).then(([m, lt]) => [...m.BAI_15, ...lt.LUYEN_THEM_B15, m.SACH_15]);
     // Bài 16+ (tiếp sau sách → N2, 09/11/2026): một tệp gồm cốt lõi + buổi trên lớp + luyện thêm.
     case 16: return import('./bai16').then((m) => m.BAI_16);
     case 17: return import('./bai17').then((m) => m.BAI_17);

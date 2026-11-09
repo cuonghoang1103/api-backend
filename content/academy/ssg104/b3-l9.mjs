@@ -3,9 +3,8 @@
  *
  * Bám bộ "Session 3_Group _ Team Theory_Lesson 9_Power in Teams and Groups".
  * Syllabus hỏi CQ8.2 "ai dễ bị tác động bởi quyền lực" và CQ8.3 "phát triển
- * quyền lực" — bản Academy cũ chỉ có một bảng 4 dòng về các loại quyền lực,
- * không có power-over/from-within/with, không có power dependencies, không có
- * hướng dẫn dùng quyền lực có đạo đức.
+ * quyền lực". Slide 11–31 đối chiếu ảnh thật 09/11/2026 (slide 11 gộp status +
+ * power, slide 18 biểu đồ hệ quả, slide 20 phân mục, slide 23 có hình phản ứng).
  */
 import { slide, walkHead, books, bi } from './_slides.mjs';
 
@@ -13,8 +12,8 @@ const D = 's3-l9';
 
 export const b3l9 = [
   walkHead(D, 1, 31,
-    'Two frameworks to keep apart: Starhawk\'s three kinds of power (slides 6–9) and French & Raven\'s five bases of power (slides 13–18). Exam questions usually target the five bases.',
-    'Hai khung khái niệm cần tách bạch: ba dạng quyền lực của Starhawk (slide 6–9) và năm nền tảng quyền lực kiểu French & Raven (slide 13–18). Đề thi thường nhắm vào năm nền tảng.'),
+    'Two frameworks to keep apart: Starhawk\'s three kinds of power (slides 6–9) and French & Raven\'s five bases of power (slides 12–17). Exam questions usually target the five bases.',
+    'Hai khung khái niệm cần tách bạch: ba dạng quyền lực của Starhawk (slide 6–9) và năm nền tảng quyền lực kiểu French & Raven (slide 12–17). Đề thi thường nhắm vào năm nền tảng.'),
 
   slide(D, 1, 'Session III — Group & Team Theory',
     `<p class="y-chinh">🎯 Title slide for Session III, which has four lessons: power, leadership and diverse teams, conflict and negotiation, handling stress.</p>`,
@@ -120,19 +119,23 @@ export const b3l9 = [
     `<p class="y-chinh">🎯 Quyền lực và sự áp bức có thể xem như hai hình phản chiếu của nhau — hai mặt của cùng một đồng xu.</p>
      <p class="meo">💡 Khẳng định này nói riêng về power-over: chỗ nào một bên quyết và cưỡng chế thì bên kia trải nghiệm điều đó như một sự trói buộc. Power-with không tạo ra hình phản chiếu ấy.</p>`),
 
-  slide(D, 11, 'Status',
-    `<p class="y-chinh">🎯 <strong>Status</strong> = a person's perceived level of importance or significance within a particular context.</p>
-     <p class="meo">💡 Two words do the work: <em>perceived</em> (it lives in other people's heads) and <em>context</em> (it does not travel — high status in the lab can be zero status in the meeting).</p>`,
-    `<p class="y-chinh">🎯 <strong>Địa vị</strong> = mức độ quan trọng hoặc đáng kể của một người <em>được nhìn nhận</em> trong một bối cảnh cụ thể.</p>
-     <p class="meo">💡 Hai chữ gánh toàn bộ ý: <em>được nhìn nhận</em> (nó sống trong đầu người khác) và <em>bối cảnh</em> (nó không đi theo người — địa vị cao trong phòng lab có thể bằng không trong phòng họp).</p>`),
-
-  slide(D, 12, 'The relationship between power and status',
-    `<p class="y-chinh">🎯 Members with higher status are apt to command greater respect, and to possess more prestige and power, than those with lower status.</p>
+  slide(D, 11, 'Status — and the relationship between power and status',
+    `<p class="y-chinh">🎯 One slide, two definitions, and its caption names the link: <em>Relationship between Power and Status</em>.</p>
+     <ul>
+       <li><strong>Status</strong> can be defined as a person's perceived level of importance or significance within a particular context.</li>
+       <li><strong>Power</strong> — members with higher status are apt to command greater respect and possess more prestige and power than those with lower status.</li>
+     </ul>
+     <p class="meo">💡 Two words carry the definition of status: <em>perceived</em> (it lives in other people's heads) and <em>context</em> (it does not travel — high status in the lab can be zero status in the meeting).</p>
      <p class="meo">💡 "Apt to" is doing careful work: status <em>tends</em> to bring power, it does not define it. A high-status member with no expertise and no control of rewards has influence that evaporates on the first hard question.</p>`,
-    `<p class="y-chinh">🎯 Thành viên có địa vị cao hơn thường được nể trọng hơn, có uy tín và quyền lực nhiều hơn so với người địa vị thấp.</p>
-     <p class="meo">💡 Cụm "thường" được dùng rất cẩn thận: địa vị <em>có xu hướng</em> kéo theo quyền lực, chứ không định nghĩa quyền lực. Người địa vị cao mà không có chuyên môn, không nắm phần thưởng nào thì ảnh hưởng bốc hơi ngay ở câu hỏi khó đầu tiên.</p>`),
+    `<p class="y-chinh">🎯 Một slide, hai định nghĩa, và dòng chú thích gọi tên mối nối: <em>Relationship between Power and Status</em> — quan hệ giữa quyền lực và địa vị.</p>
+     <ul>
+       <li><strong>Địa vị (status)</strong> = mức độ quan trọng hoặc đáng kể của một người <em>được nhìn nhận</em> trong một bối cảnh cụ thể.</li>
+       <li><strong>Quyền lực (power)</strong> — thành viên có địa vị cao hơn thường được nể trọng hơn, có uy tín và quyền lực nhiều hơn so với người địa vị thấp.</li>
+     </ul>
+     <p class="meo">💡 Hai chữ gánh định nghĩa địa vị: <em>được nhìn nhận</em> (nó sống trong đầu người khác) và <em>bối cảnh</em> (nó không đi theo người — địa vị cao trong phòng lab có thể bằng không trong phòng họp).</p>
+     <p class="meo">💡 Chữ "thường" (apt to) được dùng rất cẩn thận: địa vị <em>có xu hướng</em> kéo theo quyền lực, chứ không định nghĩa quyền lực. Người địa vị cao mà không có chuyên môn, không nắm phần thưởng nào thì ảnh hưởng bốc hơi ngay ở câu hỏi khó đầu tiên.</p>`),
 
-  slide(D, 13, 'Bases of power in groups — the five',
+  slide(D, 12, 'Bases of power in groups — the five',
     `<p class="y-chinh">🎯 Five bases, each unpacked on its own slide. This is the list to memorise.</p>
      <ol>
        <li>Referent power</li>
@@ -152,7 +155,7 @@ export const b3l9 = [
      </ol>
      <p class="meo">💡 Cách nhớ: hai cái thuộc về con người (nể phục, chuyên môn), một cái thuộc về vị trí (chính danh), hai cái mang tính đổi chác (cưỡng chế, tưởng thưởng).</p>`),
 
-  slide(D, 14, 'Referent power',
+  slide(D, 13, 'Referent power',
     `<p class="y-chinh">🎯 Person B looks up to or admires person A, and follows A largely because of A's personal qualities, characteristics or reputation.</p>
      <ul>
        <li>A can use referent power to influence B.</li>
@@ -166,7 +169,7 @@ export const b3l9 = [
      </ul>
      <p class="meo">💡 Đây là nền tảng duy nhất không thể phân công được. Nhóm có thể trao cho ai đó thẩm quyền; nhưng không trao được sự ngưỡng mộ.</p>`),
 
-  slide(D, 15, 'Expert power',
+  slide(D, 14, 'Expert power',
     `<p class="y-chinh">🎯 Person A gains power because A has knowledge or expertise relevant to B.</p>
      <ul>
        <li>Professors have power in the classroom because of mastery of a subject.</li>
@@ -180,7 +183,7 @@ export const b3l9 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Bẫy quen thuộc:</strong> quyền lực chuyên môn không chuyển nhượng được. Ý kiến của một lập trình viên giỏi về ngân sách chẳng mang quyền lực chuyên môn nào — dù người ta vẫn hay trao cho nó, và điều đó đáng để bạn để ý trong chính nhóm mình.</p>`),
 
-  slide(D, 16, 'Legitimate power',
+  slide(D, 15, 'Legitimate power',
     `<p class="y-chinh">🎯 Person B submits to A because B feels A has a <strong>right</strong> to exert power in a certain domain (Tjosvold, 1985).</p>
      <ul>
        <li>Legitimate power is really another name for <strong>authority</strong>.</li>
@@ -194,7 +197,7 @@ export const b3l9 = [
      </ul>
      <p class="meo">💡 Vì thế nó sống sót qua việc đổi tính cách, nhưng chết ngay khoảnh khắc cái ghế không còn.</p>`),
 
-  slide(D, 17, 'Coercive power',
+  slide(D, 16, 'Coercive power',
     `<p class="y-chinh">🎯 Based primarily on <strong>fear</strong>: A has power over B because A can administer some form of punishment. Also called punishment power.</p>
      <p><span class="nhan">It does not have to rest on violence</span> — Kipnis (1976): individuals exercise coercive power through "physical strength, verbal facility, or the ability to grant or withhold emotional support", giving them the means to "physically harm, bully, humiliate, or deny love to others".</p>
      <p class="pitfall co-tieu-de"><strong>Đọc kỹ:</strong> "withholding emotional support" counts as coercion. In a student team this is the silent treatment, or excluding someone from the group chat — coercive power without anyone raising their voice.</p>`,
@@ -202,7 +205,7 @@ export const b3l9 = [
      <p><span class="nhan">Nó không nhất thiết dựa trên bạo lực</span> — Kipnis (1976): người ta thực thi quyền lực cưỡng chế qua "sức mạnh thể chất, tài ăn nói, hoặc khả năng ban phát hay rút lại chỗ dựa tinh thần", tạo ra phương tiện để "làm tổn thương thân thể, bắt nạt, hạ nhục, hoặc chối bỏ tình cảm với người khác".</p>
      <p class="pitfall co-tieu-de"><strong>Đọc kỹ:</strong> "rút lại chỗ dựa tinh thần" cũng được tính là cưỡng chế. Trong nhóm sinh viên, đó là chiêu im lặng phớt lờ, hoặc gạt ai đó khỏi nhóm chat — quyền lực cưỡng chế mà chẳng ai phải to tiếng.</p>`),
 
-  slide(D, 18, 'Reward power',
+  slide(D, 17, 'Reward power',
     `<p class="y-chinh">🎯 A has power over B because A controls rewards that B wants.</p>
      <p>Research indicates reward power often raises job performance, as employees see a strong performance-reward contingency (Shetty, 1978).</p>
      <p class="meo">💡 "Contingency" is the key word: the reward must visibly depend on the performance. A reward everyone gets regardless produces no power and no performance.</p>`,
@@ -210,23 +213,45 @@ export const b3l9 = [
      <p>Nghiên cứu cho thấy quyền lực tưởng thưởng thường làm tăng hiệu suất công việc, vì nhân viên thấy rõ mối ràng buộc giữa kết quả và phần thưởng (Shetty, 1978).</p>
      <p class="meo">💡 Chữ then chốt là "ràng buộc": phần thưởng phải phụ thuộc một cách nhìn thấy được vào kết quả. Phần thưởng ai cũng có bất kể làm gì thì không tạo ra quyền lực, cũng không tạo ra hiệu suất.</p>`),
 
-  slide(D, 19, 'Consequences of power — power dependencies',
+  slide(D, 18, 'Consequences of power',
+    `<p class="y-chinh">🎯 A bar chart (Figure 1, Rice University OpenStax — "Employee Reactions to Bases of Power"): how far each source of leader power moves employees along the <strong>continuum of employee cooperation</strong>.</p>
+     <p><span class="nhan">The continuum</span> Resistance → Compliance → Commitment.</p>
+     <ul>
+       <li><strong>Coercion</strong> — the shortest bar: it stops between resistance and compliance.</li>
+       <li><strong>Reward</strong> and <strong>Legitimate</strong> — reach compliance.</li>
+       <li><strong>Expert</strong> and <strong>Referent</strong> — run all the way to commitment.</li>
+     </ul>
+     <p class="meo">💡 Compliance means people do what is asked; commitment means they want the result themselves. The two personal bases are the only ones that reach commitment — a team lead who relies on reward or position gets the work done, but nothing more.</p>`,
+    `<p class="y-chinh">🎯 Một biểu đồ thanh (Figure 1, Rice University OpenStax — "phản ứng của nhân viên với các nền tảng quyền lực"): mỗi nguồn quyền lực của người dẫn dắt đẩy nhân viên đi xa tới đâu trên <strong>dải mức hợp tác của nhân viên</strong>.</p>
+     <p><span class="nhan">Dải hợp tác</span> Kháng cự (resistance) → Tuân thủ (compliance) → Cam kết (commitment).</p>
+     <ul>
+       <li><strong>Cưỡng chế (coercion)</strong> — thanh ngắn nhất: dừng giữa kháng cự và tuân thủ.</li>
+       <li><strong>Tưởng thưởng (reward)</strong> và <strong>chính danh (legitimate)</strong> — tới mức tuân thủ.</li>
+       <li><strong>Chuyên môn (expert)</strong> và <strong>nể phục (referent)</strong> — chạy hết tới mức cam kết.</li>
+     </ul>
+     <p class="meo">💡 Tuân thủ là người ta làm điều được yêu cầu; cam kết là người ta tự muốn có kết quả đó. Chỉ hai nền tảng thuộc về con người mới chạm tới cam kết — trưởng nhóm chỉ dựa vào phần thưởng hay chức danh thì việc vẫn xong, nhưng không hơn.</p>`),
+
+  slide(D, 19, 'Power dependencies',
     `<p class="y-chinh">🎯 Any situation involving power has at least two parties.</p>
      <ol>
        <li>The person attempting to influence others.</li>
        <li>The target or targets of that influence.</li>
      </ol>
      <p><strong>All people are not subject to — or dependent upon — the same bases of power.</strong></p>
-     <p class="meo">💡 That sentence is the answer to CQ8.2. The next three slides give the three reasons why.</p>`,
+     <p class="meo">💡 That sentence is the answer to CQ8.2. Slides 21–23 give the three reasons why.</p>`,
     `<p class="y-chinh">🎯 Mọi tình huống có quyền lực đều có ít nhất hai bên.</p>
      <ol>
        <li>Người đang cố tác động tới người khác.</li>
        <li>Đối tượng hoặc những đối tượng của tác động đó.</li>
      </ol>
      <p><strong>Không phải ai cũng chịu tác động — hay phụ thuộc vào — cùng những nền tảng quyền lực như nhau.</strong></p>
-     <p class="meo">💡 Câu đó chính là đáp án cho CQ8.2. Ba slide tiếp theo đưa ra ba lý do.</p>`),
+     <p class="meo">💡 Câu đó chính là đáp án cho CQ8.2. Slide 21–23 đưa ra ba lý do.</p>`),
 
-  slide(D, 20, "Vulnerability 1 — the subordinate's values",
+  slide(D, 20, 'What causes some people to be vulnerable to power attempts?',
+    `<p class="y-chinh">🎯 Section slide: the question the next three slides answer.</p>`,
+    `<p class="y-chinh">🎯 Slide phân mục: câu hỏi mà ba slide tiếp theo trả lời — vì sao có người dễ bị tác động bởi quyền lực hơn người khác?</p>`),
+
+  slide(D, 21, "Vulnerability 1 — the subordinate's values",
     `<p class="y-chinh">🎯 Person B's values influence how susceptible B is.</p>
      <p><span class="nhan">The slide's example</span> — if an employee places a high value on money and believes the supervisor actually controls pay raises, we expect that employee to be highly susceptible to the supervisor's influence.</p>
      <p class="meo">💡 Two conditions, both required: B must <em>want</em> the thing, and B must <em>believe</em> A controls it. Break either and reward power evaporates.</p>`,
@@ -234,7 +259,7 @@ export const b3l9 = [
      <p><span class="nhan">Ví dụ ngay trên slide</span> — nếu một nhân viên coi trọng tiền bạc và tin rằng sếp thực sự nắm quyền tăng lương, ta trông đợi nhân viên đó rất dễ chịu tác động từ sếp.</p>
      <p class="meo">💡 Hai điều kiện, cần cả hai: B phải <em>muốn</em> thứ đó, và B phải <em>tin</em> rằng A nắm nó. Phá vỡ một trong hai là quyền lực tưởng thưởng bốc hơi.</p>`),
 
-  slide(D, 21, 'Vulnerability 2 — the nature of the relationship',
+  slide(D, 22, 'Vulnerability 2 — the nature of the relationship',
     `<p class="y-chinh">🎯 The relationship between A and B is itself a factor.</p>
      <ul>
        <li>Are A and B peers, or superior and subordinate?</li>
@@ -250,16 +275,19 @@ export const b3l9 = [
      <p>Người làm công việc tạm thời có thể ít thấy cần phải nhượng bộ, vì họ sẽ không giữ vị trí đó lâu.</p>
      <p class="meo">💡 Áp thẳng vào dự án sinh viên mười tuần: ai cũng biết nhóm sẽ tan ở tuần 10, và điều đó lặng lẽ làm yếu mọi nền tảng quyền lực, trừ nể phục và chuyên môn.</p>`),
 
-  slide(D, 22, 'Vulnerability 3 — counterpower',
+  slide(D, 23, 'Vulnerability 3 — counterpower',
     `<p class="y-chinh">🎯 B has other sources of power that buffer the effects of A's power.</p>
      <p><span class="nhan">The slide's example</span> — if B is unionised, the union's power may negate A's influence attempts.</p>
+     <p><span class="nhan">The figure</span> (Figure 2, OpenStax — "Typical Response Patterns in Dyadic Power"): a diagonal line splits the box into <em>Person A's power over B</em> (top) and <em>Person B's counterpower over A</em> (bottom). Person B's response to A's influence runs from <strong>Ignore A</strong> → <strong>Fight A</strong> → <strong>Bargain with A</strong> → <strong>Comply with A</strong> as A's share grows.</p>
      <p class="meo">💡 This is the answer to CQ8.3 in practice: you develop power not only by acquiring a base of your own, but by reducing your dependence on someone else's.</p>`,
     `<p class="y-chinh">🎯 B có những nguồn quyền lực khác làm đệm trước quyền lực của A.</p>
      <p><span class="nhan">Ví dụ trên slide</span> — nếu B có công đoàn, sức mạnh công đoàn có thể vô hiệu hoá các nỗ lực tác động của A.</p>
+     <p><span class="nhan">Hình bên phải</span> (Figure 2, OpenStax — "các kiểu phản ứng điển hình trong quyền lực hai bên"): một đường xiên chia khung thành <em>quyền lực của A với B</em> (phía trên) và <em>quyền lực đối trọng của B với A</em> (phía dưới). Phản ứng của B trước tác động của A đi từ <strong>phớt lờ A</strong> → <strong>chống lại A</strong> → <strong>mặc cả với A</strong> → <strong>tuân theo A</strong> khi phần của A càng lớn.</p>
      <p class="meo">💡 Đây là đáp án thực dụng cho CQ8.3: bạn phát triển quyền lực không chỉ bằng cách tự tạo ra một nền tảng cho mình, mà còn bằng cách giảm sự phụ thuộc vào nền tảng của người khác.</p>`),
 
-  slide(D, 23, 'Uses of power — seven common power tactics',
-    `<p class="y-chinh">🎯 Seven tactics used to influence others in organisations.</p>
+  slide(D, 24, 'Uses of power — seven common power tactics',
+    `<p class="y-chinh">🎯 It is easy to see manifestations of power almost anywhere; there is a wide variety of power-based methods used to influence others. The lesson examines two aspects of the use of power: commonly used <strong>power tactics</strong> (this slide) and the <strong>ethical use</strong> of power (slides 25–29).</p>
+     <p><span class="nhan">Seven common power tactics in organisations</span></p>
      <ul class="hai-cot">
        <li>Controlling access to information</li>
        <li>Controlling access to persons</li>
@@ -270,7 +298,8 @@ export const b3l9 = [
        <li>Coalitions and alliances</li>
      </ul>
      <p class="pitfall co-tieu-de"><strong>Đáng để ý:</strong> "controlling the agenda" and "selective use of objective criteria" look neutral and are the two most common in student groups — whoever writes the meeting list decides what gets discussed, and whoever picks the criteria has already picked the winner.</p>`,
-    `<p class="y-chinh">🎯 Bảy chiến thuật được dùng để tác động tới người khác trong tổ chức.</p>
+    `<p class="y-chinh">🎯 Biểu hiện của quyền lực có thể thấy gần như ở mọi nơi; có rất nhiều cách dựa trên quyền lực để tác động tới người khác. Bài xem xét hai khía cạnh của việc dùng quyền lực: các <strong>chiến thuật quyền lực</strong> thường gặp (slide này) và việc dùng quyền lực <strong>có đạo đức</strong> (slide 25–29).</p>
+     <p><span class="nhan">Bảy chiến thuật quyền lực thường gặp trong tổ chức</span></p>
      <ul class="hai-cot">
        <li>Kiểm soát đường tiếp cận thông tin</li>
        <li>Kiểm soát đường tiếp cận con người</li>
@@ -282,7 +311,7 @@ export const b3l9 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Đáng để ý:</strong> "kiểm soát chương trình nghị sự" và "dùng tiêu chí khách quan một cách chọn lọc" trông rất trung tính và lại là hai chiêu phổ biến nhất trong nhóm sinh viên — ai viết danh mục họp là người quyết cái gì được bàn, còn ai chọn tiêu chí thì đã chọn luôn người thắng.</p>`),
 
-  slide(D, 24, 'Ethical use of referent power',
+  slide(D, 25, 'Ethical use of referent power',
     `<p class="y-chinh">🎯 Guidelines for using referent power well.</p>
      <ul>
        <li>Treat subordinates fairly.</li>
@@ -302,7 +331,7 @@ export const b3l9 = [
      </ul>
      <p class="meo">💡 Nguyên tắc thứ tư nằm hơi gượng cạnh Bài 11 về đội đa dạng — sự giống nhau làm mạnh quyền lực nể phục nhưng thu hẹp phổ góc nhìn. Cả hai đều đúng, và người lãnh đạo giỏi đánh đổi chúng một cách có ý thức.</p>`),
 
-  slide(D, 25, 'Ethical use of expert power',
+  slide(D, 26, 'Ethical use of expert power',
     `<p class="y-chinh">🎯 Six guidelines.</p>
      <ul>
        <li>Promote the image of expertise.</li>
@@ -312,7 +341,7 @@ export const b3l9 = [
        <li>Recognise employee concerns.</li>
        <li>Avoid threatening subordinates' self-esteem.</li>
      </ul>
-     <p class="meo">💡 The last one connects straight back to SEM (Lesson 4 slide 11): expertise displayed badly reads as a threat, and threatened people stop bringing you information.</p>`,
+     <p class="meo">💡 The last one connects straight back to SEM (Lesson 4 slide 12): expertise displayed badly reads as a threat, and threatened people stop bringing you information.</p>`,
     `<p class="y-chinh">🎯 Sáu nguyên tắc.</p>
      <ul>
        <li>Gây dựng hình ảnh chuyên môn.</li>
@@ -322,9 +351,9 @@ export const b3l9 = [
        <li>Ghi nhận mối bận tâm của nhân viên.</li>
        <li>Tránh làm tổn thương lòng tự trọng của cấp dưới.</li>
      </ul>
-     <p class="meo">💡 Điều cuối nối thẳng về mô hình SEM (slide 11 Bài 4): chuyên môn phô ra không khéo sẽ bị đọc thành mối đe doạ, mà người đang thấy bị đe doạ thì thôi mang thông tin đến cho bạn.</p>`),
+     <p class="meo">💡 Điều cuối nối thẳng về mô hình SEM (slide 12 Bài 4): chuyên môn phô ra không khéo sẽ bị đọc thành mối đe doạ, mà người đang thấy bị đe doạ thì thôi mang thông tin đến cho bạn.</p>`),
 
-  slide(D, 26, 'Ethical use of legitimate power',
+  slide(D, 27, 'Ethical use of legitimate power',
     `<p class="y-chinh">🎯 Nine guidelines — the longest list, because authority is the easiest base to misuse.</p>
      <ul class="hai-cot">
        <li>Be cordial and polite</li>
@@ -352,7 +381,7 @@ export const b3l9 = [
      </ul>
      <p class="meo">💡 "Thực thi quyền lực đều đặn" làm nhiều người ngạc nhiên: thẩm quyền không bao giờ dùng tới sẽ ngầm bị coi là không tồn tại, và lần đầu bạn dùng nó sẽ bị cảm nhận như một cú leo thang.</p>`),
 
-  slide(D, 27, 'Ethical use of reward power',
+  slide(D, 28, 'Ethical use of reward power',
     `<p class="y-chinh">🎯 Five guidelines.</p>
      <ul>
        <li>Verify compliance.</li>
@@ -361,7 +390,7 @@ export const b3l9 = [
        <li>Offer rewards desired by subordinates.</li>
        <li>Offer only <strong>credible</strong> rewards.</li>
      </ul>
-     <p class="meo">💡 "Credible" means you can actually deliver it. One undelivered reward destroys the contingency from slide 18 for everything you promise afterwards.</p>`,
+     <p class="meo">💡 "Credible" means you can actually deliver it. One undelivered reward destroys the contingency from slide 17 for everything you promise afterwards.</p>`,
     `<p class="y-chinh">🎯 Năm nguyên tắc.</p>
      <ul>
        <li>Kiểm tra việc thực hiện.</li>
@@ -370,9 +399,9 @@ export const b3l9 = [
        <li>Trao phần thưởng mà cấp dưới thực sự muốn.</li>
        <li>Chỉ hứa những phần thưởng <strong>đáng tin</strong>.</li>
      </ul>
-     <p class="meo">💡 "Đáng tin" nghĩa là bạn thực sự trao được. Một lời hứa thưởng không thực hiện sẽ phá huỷ mối ràng buộc ở slide 18 cho mọi thứ bạn hứa về sau.</p>`),
+     <p class="meo">💡 "Đáng tin" nghĩa là bạn thực sự trao được. Một lời hứa thưởng không thực hiện sẽ phá huỷ mối ràng buộc ở slide 17 cho mọi thứ bạn hứa về sau.</p>`),
 
-  slide(D, 28, 'Ethical use of coercive power',
+  slide(D, 29, 'Ethical use of coercive power',
     `<p class="y-chinh">🎯 Seven guidelines, and they read as constraints rather than techniques.</p>
      <ul>
        <li>Inform subordinates of rules and penalties.</li>
@@ -383,7 +412,7 @@ export const b3l9 = [
        <li>Fit the punishment to the infraction.</li>
        <li><strong>Punish in private.</strong></li>
      </ul>
-     <p class="pitfall co-tieu-de"><strong>Ghi nhớ cặp này:</strong> praise in public, punish in private. Public punishment adds humiliation to the penalty, which is the coercion Kipnis warned about on slide 17.</p>`,
+     <p class="pitfall co-tieu-de"><strong>Ghi nhớ cặp này:</strong> praise in public, punish in private. Public punishment adds humiliation to the penalty, which is the coercion Kipnis warned about on slide 16.</p>`,
     `<p class="y-chinh">🎯 Bảy nguyên tắc, và chúng đọc lên giống ràng buộc hơn là kỹ thuật.</p>
      <ul>
        <li>Cho cấp dưới biết rõ quy định và chế tài.</li>
@@ -394,26 +423,22 @@ export const b3l9 = [
        <li>Phạt tương xứng với lỗi.</li>
        <li><strong>Phạt kín.</strong></li>
      </ul>
-     <p class="pitfall co-tieu-de"><strong>Nhớ theo cặp:</strong> khen nơi đông người, phạt chỗ riêng tư. Phạt công khai là cộng thêm sự hạ nhục vào hình phạt — đúng thứ cưỡng chế mà Kipnis cảnh báo ở slide 17.</p>`),
+     <p class="pitfall co-tieu-de"><strong>Nhớ theo cặp:</strong> khen nơi đông người, phạt chỗ riêng tư. Phạt công khai là cộng thêm sự hạ nhục vào hình phạt — đúng thứ cưỡng chế mà Kipnis cảnh báo ở slide 16.</p>`),
 
-  slide(D, 29, 'Reflection question',
+  slide(D, 30, 'Reflection question',
     `<p class="y-chinh">🎯 Two questions about your own group.</p>
      <ul>
        <li>When you first joined your group, what assumptions did you make about the <strong>status</strong> of different members?</li>
        <li><strong>Where did those assumptions come from?</strong></li>
      </ul>
-     <p class="meo">💡 The second question is the real one. Typical honest sources: who spoke first, who is loudest, who already knows someone, appearance, year of study — none of which is expertise.</p>`,
+     <p class="meo">💡 The second question is the real one. Typical honest sources: who spoke first, who is loudest, who already knows someone, appearance, year of study — none of which is expertise.</p>
+     <p class="meo">💡 Useful follow-up for the group discussion: which base of power does each member actually hold? Most student groups find expert power spread wide and legitimate power held by nobody, which is exactly why role assignment matters.</p>`,
     `<p class="y-chinh">🎯 Hai câu hỏi về chính nhóm bạn.</p>
      <ul>
        <li>Khi mới vào nhóm, bạn đã giả định gì về <strong>địa vị</strong> của từng thành viên?</li>
        <li><strong>Những giả định đó đến từ đâu?</strong></li>
      </ul>
-     <p class="meo">💡 Câu thứ hai mới là câu chính. Những nguồn trung thực thường gặp: ai nói trước, ai nói to nhất, ai quen sẵn người nào, ngoại hình, học năm mấy — không cái nào là chuyên môn cả.</p>`),
-
-  slide(D, 30, 'Reflection (cont.)',
-    `<p class="y-chinh">🎯 Space for the group discussion.</p>
-     <p class="meo">💡 Useful follow-up for a team: which base of power does each member actually hold? Most student groups find expert power spread wide and legitimate power held by nobody, which is exactly why role assignment matters.</p>`,
-    `<p class="y-chinh">🎯 Chỗ dành cho phần thảo luận nhóm.</p>
+     <p class="meo">💡 Câu thứ hai mới là câu chính. Những nguồn trung thực thường gặp: ai nói trước, ai nói to nhất, ai quen sẵn người nào, ngoại hình, học năm mấy — không cái nào là chuyên môn cả.</p>
      <p class="meo">💡 Câu hỏi nối tiếp hữu ích cho nhóm: thực tế mỗi thành viên đang nắm nền tảng quyền lực nào? Phần lớn nhóm sinh viên sẽ thấy quyền lực chuyên môn rải đều còn quyền lực chính danh chẳng thuộc về ai — và đó đúng là lý do phải phân vai rõ ràng.</p>`),
 
   slide(D, 31, 'Q&A',
@@ -440,8 +465,8 @@ export const b3l9 = [
   ]),
 
   bi(
-    `<h3>✅ What this replaces</h3>
-     <p>The old Academy lesson covered power with a four-row table and stopped there. The syllabus check questions ask who is vulnerable to power attempts (CQ8.2) and how power is developed (CQ8.3) — answered here on slides 19–22.</p>`,
-    `<h3>✅ Bài này thay cho cái gì</h3>
-     <p>Bài cũ trên Academy nói về quyền lực bằng đúng một bảng bốn dòng rồi dừng. Câu hỏi ôn của syllabus hỏi ai dễ bị tác động bởi quyền lực (CQ8.2) và phát triển quyền lực ra sao (CQ8.3) — được trả lời ở slide 19–22 tại đây.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus check questions ask who is vulnerable to power attempts (CQ8.2) and how power is developed (CQ8.3) — answered here on slides 19–23, with the consequences chart on slide 18.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Câu hỏi ôn của syllabus hỏi ai dễ bị tác động bởi quyền lực (CQ8.2) và phát triển quyền lực ra sao (CQ8.3) — được trả lời ở slide 19–23, cùng biểu đồ hệ quả ở slide 18.</p>`),
 ].join('\n');

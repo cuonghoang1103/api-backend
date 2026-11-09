@@ -89,13 +89,13 @@ export const b3l1011 = [
   slide(D, 9, 'Leader vs manager — where the power comes from',
     `<p class="y-chinh">🎯 They differ in the type and source of power they exercise.</p>
      <ul>
-       <li><span class="nhan">Managers</span> commonly derive power from the larger organisation — legitimate power (Lesson 9 slide 16).</li>
+       <li><span class="nhan">Managers</span> commonly derive power from the larger organisation — legitimate power (Lesson 9 slide 15).</li>
        <li><span class="nhan">Leaders</span> can use carrots and sticks too, but it is far more common for them to derive power from followers' perception of their <strong>knowledge, personality and attractiveness</strong>, and from the working relationship that has developed.</li>
      </ul>
      <p class="meo">💡 Read that as expert power plus referent power. Lesson 9 and Lesson 10 are the same map drawn twice.</p>`,
     `<p class="y-chinh">🎯 Họ khác nhau ở loại quyền lực và nguồn gốc quyền lực.</p>
      <ul>
-       <li><span class="nhan">Người quản lý</span> thường lấy quyền lực từ tổ chức lớn hơn — tức quyền lực chính danh (slide 16 Bài 9).</li>
+       <li><span class="nhan">Người quản lý</span> thường lấy quyền lực từ tổ chức lớn hơn — tức quyền lực chính danh (slide 15 Bài 9).</li>
        <li><span class="nhan">Người lãnh đạo</span> cũng dùng được củ cà rốt và cây gậy, nhưng phổ biến hơn nhiều là lấy quyền lực từ cách người theo nhìn nhận <strong>kiến thức, tính cách và sức hút</strong> của họ, cùng mối quan hệ làm việc đã hình thành.</li>
      </ul>
      <p class="meo">💡 Hãy đọc đó là quyền lực chuyên môn cộng quyền lực nể phục. Bài 9 và Bài 10 là cùng một tấm bản đồ được vẽ hai lần.</p>`),

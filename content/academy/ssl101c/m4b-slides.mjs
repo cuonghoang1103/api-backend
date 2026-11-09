@@ -631,31 +631,31 @@ export default {
 <p class="meo">💡 Bản đồ mục 3.4: <strong>mục tiêu thì dùng chung · tóm tắt thì không</strong>. 3.4a → bài luận diễn dịch (Title/Intro/Body/Conclusion/References). 3.4b → báo cáo nghiên cứu (IMRD) và báo cáo nghề nghiệp (Opening→Closing).</p>`],
 
       [39, 'Summary: Planning Reports and Proposals (repeat of slide 37, cropped)',
-        `<p class="y-chinh">🎯 <strong>The same slide as 37, printed a second time</strong> — same title, same two report shapes, same citation (Brick, Herke &amp; Wong, 2016; Nesi &amp; Gardner, 2012). The only difference is physical: this print is zoomed in, so the right-hand ends of two lines run off the edge of the frame.</p>
+        `<p class="y-chinh">🎯 <strong>The same slide as 37, printed a second time</strong> — same title, same two report shapes, same citation (Brick, Herke &amp; Wong, 2016; Nesi &amp; Gardner, 2012). The only difference is physical: this print is zoomed in, so the IMRD line runs off the right edge ("Conclusio"), and the Opening line ends right at the edge — its second line, "Processing of data – Closing", is complete.</p>
 <table>
 <tr><th>Line</th><th>Slide 37 (complete)</th><th>Slide 39 (cropped)</th></tr>
 <tr><td>Research report sections</td><td>Introduction – Methodology – Results – <strong>Discussion/Conclusion</strong></td><td>… Results – Discussion/<strong>Conclusio</strong> ← cut off</td></tr>
-<tr><td>Professional report sections</td><td>Opening – Identification of problem – Presentation of data – Processing of data – Closing</td><td>… Presentation of data <strong>–</strong> ← cut off, continues on the next line</td></tr>
+<tr><td>Professional report sections</td><td>Opening – Identification of problem – Presentation of data – Processing of data – Closing</td><td>… Presentation of data <strong>–</strong> ← touches the right edge; the next line still reads Processing of data – Closing</td></tr>
 </table>
 <ul>
-<li><strong>Read the full version, not this one.</strong> If you only ever saw slide 39, you could reasonably believe the fourth IMRD section is called "Conclusio" or that "Processing of data" is missing. It is not — slide 37 shows the whole line.</li>
+<li><strong>Read the full version, not this one.</strong> If you only ever saw slide 39, you could reasonably believe the fourth IMRD section is called "Conclusio". It is not — slide 37 shows the whole line. (All five professional-report sections are still visible on slide 39.)</li>
 <li><strong>Why a duplicate matters for exam prep.</strong> A repeated slide makes a point look more central than it is when you count slide frequency, and it also means the section 3.4b has two summaries and no content slide of its own.</li>
 <li><strong>The ordering problem is now visible.</strong> The deck runs: 3.4a objectives (35) → essay summary (36) → report summary (37) → 3.4b objectives (38) → report summary again (39). The first report summary sits one slide too early.</li>
-<li><strong>Applied at FPTU.</strong> When you build your own revision notes from a deck, deduplicate first and count sections from the complete print. Counting from a cropped slide is how people memorise four professional-report sections instead of five.</li>
+<li><strong>Applied at FPTU.</strong> When you build your own revision notes from a deck, deduplicate first and count sections from the complete print. Counting from a cropped slide is how people end up with a section name like "Conclusio".</li>
 </ul>
 <p class="dap-an">✅ From the complete version: research report = <strong>Introduction – Methodology – Results – Discussion/Conclusion</strong> (4). Professional report = <strong>Opening – Identification of problem – Presentation of data – Processing of data – Closing</strong> (5). Movements: <strong>General–Specific–General</strong> and <strong>General–Specific</strong>.</p>
 <p class="pitfall">⚠️ Do not treat slides 37 and 39 as two different pieces of content in your notes. They are one. The extra frame is a production artefact of the review deck, not a second idea.</p>`,
-        `<p class="y-chinh">🎯 <strong>Đúng slide 37, in lần thứ hai</strong> — cùng tiêu đề, cùng hai hình dạng báo cáo, cùng trích dẫn (Brick, Herke &amp; Wong, 2016; Nesi &amp; Gardner, 2012). Khác biệt duy nhất là vật lý: bản in này bị phóng to nên đuôi phải của hai dòng chạy tràn ra khỏi khung.</p>
+        `<p class="y-chinh">🎯 <strong>Đúng slide 37, in lần thứ hai</strong> — cùng tiêu đề, cùng hai hình dạng báo cáo, cùng trích dẫn (Brick, Herke &amp; Wong, 2016; Nesi &amp; Gardner, 2012). Khác biệt duy nhất là vật lý: bản in này bị phóng to nên dòng IMRD tràn khỏi mép phải ("Conclusio"), còn dòng Opening chạm sát mép — dòng dưới của nó, "Processing of data – Closing", vẫn đủ.</p>
 <table>
 <tr><th>Dòng</th><th>Slide 37 (đầy đủ)</th><th>Slide 39 (bị cắt)</th></tr>
 <tr><td>Mục của báo cáo nghiên cứu</td><td>Introduction – Methodology – Results – <strong>Discussion/Conclusion</strong></td><td>… Results – Discussion/<strong>Conclusio</strong> ← cụt</td></tr>
-<tr><td>Mục của báo cáo nghề nghiệp</td><td>Opening – Identification of problem – Presentation of data – Processing of data – Closing</td><td>… Presentation of data <strong>–</strong> ← cụt, phần còn lại rớt xuống dòng dưới</td></tr>
+<tr><td>Mục của báo cáo nghề nghiệp</td><td>Opening – Identification of problem – Presentation of data – Processing of data – Closing</td><td>… Presentation of data <strong>–</strong> ← chạm sát mép phải; dòng dưới vẫn đủ Processing of data – Closing</td></tr>
 </table>
 <ul>
-<li><strong>Hãy đọc bản đầy đủ, đừng đọc bản này.</strong> Nếu bạn chỉ từng thấy slide 39, bạn hoàn toàn có thể tin rằng mục thứ tư của IMRD tên là "Conclusio", hoặc rằng "Processing of data" không tồn tại. Không phải vậy — slide 37 in trọn cả dòng.</li>
+<li><strong>Hãy đọc bản đầy đủ, đừng đọc bản này.</strong> Nếu bạn chỉ từng thấy slide 39, bạn hoàn toàn có thể tin rằng mục thứ tư của IMRD tên là "Conclusio". Không phải vậy — slide 37 in trọn cả dòng. (Năm mục báo cáo nghề nghiệp thì slide 39 vẫn in đủ.)</li>
 <li><strong>Vì sao một slide bị lặp lại quan trọng với việc ôn thi.</strong> Slide lặp làm một ý trông có vẻ trọng tâm hơn thực tế khi bạn đếm tần suất, và nó cũng khiến mục 3.4b có tới hai slide tóm tắt mà không có slide nội dung nào của riêng mình.</li>
 <li><strong>Bây giờ vấn đề thứ tự hiện rõ.</strong> Deck chạy: mục tiêu 3.4a (35) → tóm tắt bài luận (36) → tóm tắt báo cáo (37) → mục tiêu 3.4b (38) → lại tóm tắt báo cáo (39). Cái tóm tắt báo cáo đầu tiên nằm sớm hơn chỗ của nó đúng một slide.</li>
-<li><strong>Áp dụng ở FPTU.</strong> Khi bạn tự dựng vở ôn từ một bộ slide, hãy KHỬ TRÙNG LẶP trước, và đếm số mục từ bản in đầy đủ. Đếm từ một slide bị cắt chính là cách người ta thuộc BỐN mục báo cáo nghề nghiệp thay vì năm.</li>
+<li><strong>Áp dụng ở FPTU.</strong> Khi bạn tự dựng vở ôn từ một bộ slide, hãy KHỬ TRÙNG LẶP trước, và đếm số mục từ bản in đầy đủ. Chép từ một slide bị cắt chính là cách người ta thuộc một tên mục cụt như "Conclusio".</li>
 </ul>
 <p class="dap-an">✅ Lấy từ bản đầy đủ: báo cáo nghiên cứu = <strong>Introduction – Methodology – Results – Discussion/Conclusion</strong> (4 mục). Báo cáo nghề nghiệp = <strong>Opening – Identification of problem – Presentation of data – Processing of data – Closing</strong> (5 mục). Chuyển động: <strong>Chung–Cụ thể–Chung</strong> và <strong>Chung–Cụ thể</strong>.</p>
 <p class="pitfall">⚠️ Đừng ghi slide 37 và 39 thành hai mẩu nội dung khác nhau trong vở. Chúng là MỘT. Cái khung thừa là lỗi dựng của deck ôn tập, không phải một ý thứ hai.</p>`],

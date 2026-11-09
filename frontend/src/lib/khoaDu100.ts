@@ -17,6 +17,11 @@ export interface KhoaDu100 {
 
 export const KHOA_DU_100: Readonly<Record<string, KhoaDu100>> = Object.freeze({
   // slug khoá ⇒ thông tin kiểm. Chỉ thêm khoá đã kiểm ĐỦ cả bộ (xem đầu tệp).
+  'postgresql': { ngay: '09/11/2026', ghiChu: '86/86 bài có video · Code Lab 80 module · quiz 17 chương · PE/FE/PT' },
+  'introduction-to-databases': { ngay: '09/11/2026', ghiChu: 'DBI202 · slide trường · 102/102 bài có video · Code Lab 102 module · quiz mọi chương · đề PE/FE' },
+  'web-foundations': { ngay: '09/11/2026', ghiChu: '87/87 bài có video · Code Lab 67 module · quiz 14 chương · PE/FE/PT' },
+  'git': { ngay: '09/11/2026', ghiChu: '102/102 bài có video · track Git trên Code Lab · quiz 18 chương · PE/FE/PT' },
+  'data-structures-and-algorithms': { ngay: '09/11/2026', ghiChu: 'CSD201 · slide trường · 114 bài có video · Code Lab 66 module · quiz mọi chương · đề PE/FE' },
 });
 
 export function khoaDu100(slug: string | null | undefined): KhoaDu100 | null {

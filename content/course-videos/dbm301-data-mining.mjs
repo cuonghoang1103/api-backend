@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho DBM301 — Data Mining. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/dbm301-data-mining.mjs
+ */
+export default {
+  courseSlug: "dbm301-data-mining",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "dbm301-flm-b001": { yt: "7rs0i-9nOjo", credit: "IBM Technology — What is Data Mining?" },
+    "dbm301-flm-b003": { yt: "9U8Px7MVJSM", credit: "Prof. Weimao Ke — Getting to Know Your Data" },
+    "dbm301-flm-b005": { yt: "j0tqUBhs-Nc", credit: "Trouble- Free — #8 Data Preprocessing In Data Mining - 4 Steps |DM|" },
+    "dbm301-flm-b006": { yt: "Z9kfK7XZ4Es", credit: "RANJI RAJ — Data Mining & Business Intelligence | Tutorial #4 | Forms Of Data Preprocessing" },
+    "dbm301-flm-b007": { yt: "P8ERBy91Y90", credit: "AltexSoft — How is data prepared for machine learning?" },
+    "dbm301-flm-b008": { yt: "Ys3x2E9WZXQ", credit: "Rushdi Shams — Weka Tutorial 02: Data Preprocessing 101 (Data Preprocessing)" },
+    "dbm301-flm-b009": { yt: "Exe4Dc8FmiM", credit: "WekaMOOC — Data Mining with Weka (1.1: Introduction)" },
+    "dbm301-flm-b010": { yt: "m7kpIBGEdkI", credit: "Brandon Weinberg — Weka Data Mining Tutorial for First Time & Beginner Users" },
+    "dbm301-flm-b011": { yt: "IU5mdqx-uIE", credit: "BioInfoBench — Data Mining Tutorial for Beginners 3 (Data Preprocessing by using Weka Software)" },
+    "dbm301-flm-b013": { yt: "k4tK2ttdSDg", credit: "IBM Technology — What is a Data Warehouse?" },
+    "dbm301-flm-b014": { yt: "oF_2uDb7DvQ", credit: "codebasics — What is ETL | What is Data Warehouse | OLTP vs OLAP" },
+    "dbm301-flm-b015": { yt: "iw-5kFzIdgY", credit: "IBM Technology — OLAP vs  OLTP" },
+    "dbm301-flm-b016": { yt: "yRerKDM1h74", credit: "codebasics — Data Warehouse vs Data Lake vs Data Lakehouse | ETL, OLAP vs OLTP" },
+    "dbm301-flm-b025": { yt: "ZUJ0UT9j2lQ", credit: "Data Expert DE(x) — Association Rules in Data Mining-1: Frequent Pattern Mining - Overview, Basic Concept by Shahzad Ali" },
+    "dbm301-flm-b026": { yt: "GehnEqjj4X8", credit: "雷欧 ®γσ ξηg — DATA MINING   4 Pattern Discovery in Data Mining   1 2  Frequent Patterns and Association Rules" },
+    "dbm301-flm-b027": { yt: "zi_ydmbWfAs", credit: "Mahesh Huddar — #2 Solved Example Apriori Algorithm to find Strong Association Rules Data Mining Machine Learning" },
+    "dbm301-flm-b028": { yt: "guVvtZ7ZClw", credit: "edureka! — Apriori Algorithm Explained | Association Rule Mining | Finding Frequent Itemset | Edureka" },
+    "dbm301-flm-b033": { yt: "_L39rN6gz7Y", credit: "StatQuest with Josh Starmer — Decision and Classification Trees, Clearly Explained!!!" },
+    "dbm301-flm-b034": { yt: "0FLmrC3-P1A", credit: "NS lectures — complete unit 3 classification in data mining || classification || data mining" },
+    "dbm301-flm-b035": { yt: "B0TI2q7wgIQ", credit: "Nathan Kutz — Data Analysis:  Clustering and Classification (Lec. 1, part 1)" },
+    "dbm301-flm-b041": { yt: "tSXCVvBmOQU", credit: "Trouble- Free — #22 Cluster Analysis - Properties, Categories Of Methods |DM|" },
+    "dbm301-flm-b042": { yt: "tROVurcMqKY", credit: "Trouble- Free — #23 Types Of Data In Cluster Analysis |DM|" },
+    "dbm301-flm-b043": { yt: "Se28XHI2_xE", credit: "Decisive Data — 4 Basic Types of Cluster Analysis used in Data Analytics" },
+    "dbm301-flm-b044": { yt: "8QCBl-xdeZI", credit: "numiqo — Hierarchical Cluster Analysis [Simply explained]" },
+    "dbm301-flm-b049": { yt: "aSwQjBS-Osg", credit: "Trouble- Free — 28 Outlier Analysis, Types, Outlier Detection & Techniques |DM|" },
+    "dbm301-flm-b050": { yt: "KFuEAGR3HS4", credit: "codebasics — Outlier detection and removal: z score, standard deviation | Feature engineering tutorial python # 3" },
+    "dbm301-1-1-data": { yt: "GLAK3dF7dfg", credit: "Dave Sullivan — Data Mining Fundamentals" },
+    "dbm301-3-1-preprocessing": { yt: "olZGR0bL6XM", credit: "Constant Learners — Data Mining | Data pre-processing (data cleaning, integration, reduction, transformation)" },
+    "dbm301-4-1-warehouse-olap": { yt: "4NKbZMsddBI", credit: "CSE concepts with Parinita — OLAP Operations in Data Warehouse | Slice Dice Roll-up Drill-down Pivot | Example of location, time" },
+    "dbm301-6-1-association": { yt: "wryiEKQ0XhQ", credit: "Simplilearn — Apriori Algorithm | Association Rule Mining | Finding Frequent Itemset | 2026 | Simplilearn" },
+    "dbm301-6-2-exercise": { yt: "qMQfUy8ndco", credit: "EzzxAk — Association Rule Mining (Part 2) - Support/Confidence/Lift" },
+    "dbm301-8-1-classification": { yt: "O2L2Uv9pdDA", credit: "StatQuest with Josh Starmer — Naive Bayes, Clearly Explained!!!" },
+    "dbm301-10-1-clustering": { yt: "4b5d3muPQmA", credit: "StatQuest with Josh Starmer — StatQuest: K-means clustering" },
+  },
+};

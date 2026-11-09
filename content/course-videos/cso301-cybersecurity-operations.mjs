@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho CSO301 — Cybersecurity Operations. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/cso301-cybersecurity-operations.mjs
+ */
+export default {
+  courseSlug: "cso301-cybersecurity-operations",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "cso301-ts-1-1": { yt: "Ula3TG8QS7g", credit: "IBM Technology — Building a Cybersecurity Framework" },
+    "cso301-ts-1-2": { yt: "OHkWXFheSKM", credit: "IBM Technology — Security Operations Center (SOC) Explained" },
+    "cso301-ts-1-3": { yt: "2pyu5h1jwPk", credit: "Rajneesh Gupta — What is MITRE ATT&CK | How can use MITRE ATT&CK Framework | Cyber Kill-Chain | Rajneesh Gupta" },
+    "cso301-ts-2-1": { yt: "5PKAa6TI82U", credit: "Chris Greer — Hands-On Traffic Analysis with Wireshark - Let's practice!" },
+    "cso301-ts-2-2": { yt: "l7FeR1MIRFY", credit: "TechWithEase — IDS vs IPS vs Firewall #networksecurity #firewall #IPS #IDS" },
+    "cso301-ts-2-3": { yt: "55GaIolVVqI", credit: "IBM Technology — What is Endpoint Detection and Response (EDR)?" },
+    "cso301-ts-3-1": { yt: "tkg2Lw5ijIg", credit: "Professor Messer — Log Management - SY0-601 CompTIA Security+ : 4.3" },
+    "cso301-ts-3-2": { yt: "9RfsRn7m7OE", credit: "IBM Technology — What Is SIEM?" },
+    "cso301-ts-3-3": { yt: "iyH05XwkrxU", credit: "CyberSharks — Cybersecurity Defense Evolution | SIEM, EDR, XDR & SOAR Explained | Cybersecurity Basics" },
+    "cso301-ts-4-1": { yt: "vDygXGJzWCY", credit: "Adam Goss — Cyber Threat Intelligence Explained: A Quick Guide for Beginners" },
+    "cso301-ts-4-2": { yt: "WI3C3stHtcI", credit: "John Hammond — Hunting for Hackers with Sigma Rules" },
+    "cso301-ts-4-3": { yt: "k9c1PBynVpA", credit: "MyDFIR — SOC Alert Triage Explained: What Most Beginners Get Wrong" },
+    "cso301-ts-5-1": { yt: "IRSQEO0koYY", credit: "CyberPlatter — Incident Response Lifecycle | IR Plan | NIST SP 800-61 Security Incident Handling| Cybersecurity" },
+    "cso301-ts-5-2": { yt: "fU_w8Ou9RVg", credit: "Professor Messer — Incident Response Process - SY0-601 CompTIA Security+ : 4.2" },
+    "cso301-ts-6-1": { yt: "UtDWApdO8Zk", credit: "Professor Messer — Digital Forensics - CompTIA Security+ SY0-701 - 4.8" },
+    "cso301-ts-6-2": { yt: "1PAGcPJFwbE", credit: "13Cubed — Introduction to Memory Forensics" },
+    "cso301-ts-7-1": { yt: "Gqpl9xp518M", credit: "Motasem Hamdan — Malware Static Analysis | Part Three | TryHackMe Basic Static Analysis" },
+    "cso301-ts-7-2": { yt: "EF7-S3qZ2wY", credit: "OpenSecurityTraining2 — Dynamic Malware Analysis D3P14 Automated Dynamic Analysis Sandboxes CuckooSandbox Lab PoisonIvy" },
+    "cso301-ts-8-1": { yt: "VNp35Uw_bSM", credit: "IBM Technology — Cybersecurity Threat Hunting Explained" },
+    "cso301-ts-8-2": { yt: "OFR8tPzwk_k", credit: "Shefali Kumari — MITRE ATT&CK framework and THREAT HUNTING scenarios" },
+    "cso301-ts-8-3": { yt: "gpa9QFuou5k", credit: "Professor Messer — Honeypots and Deception - SY0-601 CompTIA Security+ : 2.1" },
+    "cso301-ts-9-1": { yt: "fG7HhqEJbTs", credit: "HackerSploit — Introduction To Vulnerability Scanning" },
+    "cso301-ts-9-2": { yt: "oSyEGkX6sX0", credit: "Red Hat — CVE and CVSS explained | Security Detail" },
+    "cso301-ts-9-3": { yt: "wXoC46Qr_9Q", credit: "Professor Messer — Hardening Techniques - CompTIA Security+ SY0-701 - 2.5" },
+    "cso301-ts-10-1": { yt: "k7ju95jDxFA", credit: "IBM Technology — What is SOAR (Security, Orchestration, Automation & Response)" },
+    "cso301-ts-10-2": { yt: "t-G3ee2qoJk", credit: "All About Security — Red Team Blue Team and purple Team The Ultimate Cybersecurity Framework" },
+    "cso301-ts-10-3": { yt: "n_z8cULSrv4", credit: "SANS Cyber Defense — Metrics on Steroids: Improving SOC Maturity using the SOC-CMM | SANS Cyber Defense Forum 2020" },
+    "cso301-1-1-secops-soc": { yt: "XPC4lSXDfY4", credit: "Lyal Saayman — Intro to Cyber Security Operations (SOC) - Blue vs Red Team - Virtual Lab Building Series: Ep8" },
+    "cso301-2-1-monitoring-siem": { yt: "3JTjVa0IM7o", credit: "Professor Messer — SIEM - CompTIA Security+ SY0-501 - 2.1" },
+    "cso301-4-1-incident-response": { yt: "X2UiMLxRdhE", credit: "Professor Messer — Incident Response - CompTIA Security+ SY0-701 - 4.8" },
+    "cso301-6-1-threat-hunting": { yt: "n97tgFcRZg8", credit: "Prabh Nair — Introduction to  Cyber Threat Hunting : SOC" },
+    "cso301-7-1-vulnerability-management": { yt: "P9xakfmX70c", credit: "Professor Messer — Vulnerability Remediation - CompTIA Security+ SY0-701 - 4.3" },
+    "cso301-8-1-automation-operations": { yt: "_mnxZ1iSUGg", credit: "SANS Institute — Hacking your SOEL: SOC Automation and Orchestration – SANS Security Operations Summit 2018" },
+  },
+};

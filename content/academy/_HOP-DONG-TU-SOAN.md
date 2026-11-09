@@ -78,3 +78,21 @@ node scripts/academy-seed-course.mjs --file ./content/academy/<MÃ>.mjs --dry   
 
 Số chương / bài / quiz · sách chính (kèm ISBN) · số link ngoài đã kiểm · phần nào chưa chắc (nói thẳng).
 KHÔNG commit, KHÔNG deploy — người điều phối gom và kiểm.
+
+---
+
+## 7. CHẾ ĐỘ KHUNG (từ 09/11/2026 chiều — user chốt: đủ khung trước, bài giảng sau)
+
+Môn soạn theo chế độ này ghi dòng đầu tệp: `// CHE-DO: KHUNG`. Mục tiêu: **đủ 100% khung môn** (chương, bài, đúng
+kiến thức) với mỗi bài **dẫn tới nguồn học ngoài đúng chủ đề** — CHƯA viết bài giảng. Rẻ token, viết nhanh.
+
+- Mục 0 (2 bài) như §2 nhưng ngắn: 0.1 giới thiệu + chuẩn đầu ra + khung ⚠️; 0.2 sách/khoá mở (ISBN chỉ khi đã thấy).
+- **8–12 chương, mỗi chương 3–5 bài.** Thứ tự bám giáo trình chuẩn quốc tế của đúng môn (như một syllabus thật).
+- Mỗi bài (song ngữ, khuôn `ml-en`/`ml-vi` như §3): **🎯 Mục tiêu** 2–3 gạch · **📖 Học gì** 60–150 chữ mỗi thứ tiếng
+  (khái niệm then chốt của bài, gạch đầu dòng) · **🔗 Học ở đâu** 2–4 link NGOÀI đúng chủ đề bài (chương sách mở, bài
+  giảng MIT OCW/Stanford/Coursera, tài liệu chính thức, video YouTube chính chủ cụ thể…), mỗi link ghi 1 dòng "đọc/xem
+  phần nào" · **📌 Ý chính** 3 gạch.
+- **Không bắt buộc quiz.** Không cần code chạy thật (không có code thì thôi).
+- Link vẫn phải MỞ THỬ được (curl 200 + tiêu đề đúng chủ đề) — đây là giá trị chính của bài, đừng bịa.
+- Bộ chấm: `academy-kiem-tu-soan.mjs` thấy `CHE-DO: KHUNG` ⇒ bỏ cảnh báo độ dài + không đòi quiz, nhưng mỗi bài phải
+  có ≥ 2 link ngoài.

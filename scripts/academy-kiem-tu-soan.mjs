@@ -21,6 +21,7 @@ for (const ma of ds) {
   if (!fs.existsSync(f)) { console.log(`✗ ${ma}: chưa có ${f}`); hong++; continue; }
   const raw = fs.readFileSync(f, 'utf8');
   if (raw.includes('${')) loi.push('có "${" trong file');
+  const KHUNG = /^\s*\/\/\s*CHE-DO:\s*KHUNG/m.test(raw); // §7 hợp đồng: khung + link, chưa viết bài giảng
   let secs;
   try { secs = (await import(path.resolve(f) + '?t=' + Date.now())).default; } catch (e) { console.log(`✗ ${ma}: không nạp được — ${e.message}`); hong++; continue; }
   if (!Array.isArray(secs) || secs.length < 9) loi.push(`cần Mục 0 + ≥8 chương, đang có ${secs?.length} mục`);
@@ -37,7 +38,8 @@ for (const ma of ds) {
   secs.forEach((s, si) => {
     kiemTitle(s.title, `mục ${si}`);
     const ls = s.lessons || [];
-    if (si > 0 && !ls.some((l) => l.type === 'QUIZ')) loi.push(`chương ${si}: thiếu quiz`);
+    if (si > 0 && !KHUNG && !ls.some((l) => l.type === 'QUIZ')) loi.push(`chương ${si}: thiếu quiz`);
+    if (si > 0 && KHUNG && ls.length < 3) loi.push(`chương ${si}: chế độ khung cần ≥ 3 bài`);
     for (const l of ls) {
       kiemTitle(l.title, l.slug);
       if (!l.slug || !l.slug.startsWith(`${lo}-ts-`) || l.slug.length > 80) loi.push(`slug sai khuôn: ${l.slug}`);
@@ -60,19 +62,19 @@ for (const ma of ds) {
       if (/\\\(|\\\[|\$\$|\\frac|\\sum|\\int/.test(c)) loi.push(`${l.slug}: có LaTeX (web không render)`);
       if (/<script|<style|style=/i.test(c)) loi.push(`${l.slug}: có script/style`);
       const n = (c.match(/href="https?:\/\//g) || []).length; link += n;
-      if (si > 0 && n < 2) canh.push(`${l.slug}: chỉ ${n} link ngoài`);
+      if (si > 0 && n < 2) (KHUNG ? loi : canh).push(`${l.slug}: chỉ ${n} link ngoài`);
       const chu = c.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').length;
-      if (si > 0 && chu < 3500) canh.push(`${l.slug}: ngắn (${chu} ký tự cả hai thứ tiếng)`);
+      if (si > 0 && !KHUNG && chu < 3500) canh.push(`${l.slug}: ngắn (${chu} ký tự cả hai thứ tiếng)`);
       // Hợp đồng: ~500–900 chữ/thứ tiếng. Đo phần tiếng Anh (đếm từ được); < 450 từ ⇒ bài mỏng, phải viết thêm.
       const en = (c.match(/<div class="ml-en">([\s\S]*?)<\/div>\s*<div class="ml-vi">/) || [])[1] || '';
       const tuEn = en.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
-      if (si > 0 && tuEn < 450) canh.push(`${l.slug}: mỏng (${tuEn} từ tiếng Anh, cần ≥ 450 — hợp đồng ~500–900)`);
+      if (si > 0 && !KHUNG && tuEn < 450) canh.push(`${l.slug}: mỏng (${tuEn} từ tiếng Anh, cần ≥ 450 — hợp đồng ~500–900)`);
       const mo = (c.match(/<(div|p|ul|ol|li|table|pre|code|h[1-6])\b/g) || []).length, dong = (c.match(/<\/(div|p|ul|ol|li|table|pre|code|h[1-6])>/g) || []).length;
       if (mo !== dong) loi.push(`${l.slug}: thẻ HTML lệch (${mo} mở / ${dong} đóng)`);
     }
   });
   const nhan = loi.length ? '✗' : (canh.length ? '!' : '✓');
-  console.log(`${nhan} ${ma}: ${secs.length} mục · ${bai} bài · ${quiz} quiz · ${link} link ngoài`);
+  console.log(`${nhan} ${ma}${KHUNG ? ' [khung]' : ''}: ${secs.length} mục · ${bai} bài · ${quiz} quiz · ${link} link ngoài`);
   loi.slice(0, 15).forEach((x) => console.log('    ✗ ' + x));
   canh.slice(0, 8).forEach((x) => console.log('    ! ' + x));
   if (loi.length) hong++;

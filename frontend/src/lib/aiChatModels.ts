@@ -25,10 +25,13 @@ export interface ChatModelOption {
 
 export const DEFAULT_CHAT_MODEL_ID = 'cuongmini-3.11';
 
+// 09/11/2026: thêm Pro 2. Ba bậc trả phí đi cổng Anthropic chính hãng ở backend
+// (`src/services/aiChatChinhHang.ts`) — giao diện CHỈ hiện tên CuongMini.
 export const CHAT_MODELS: ChatModelOption[] = [
-  { id: 'cuongmini-3.11', label: 'CuongMini3.11', desc: 'Nhanh & mượt · mặc định', tier: 'default' },
-  { id: 'cuongmini-pro', label: 'CuongMini Pro', desc: 'Nhanh + chính xác · dùng hằng ngày', tier: 'pro' },
-  { id: 'cuongmini-max', label: 'CuongMini Max', desc: 'Mạnh nhất · toán, code, đọc file', tier: 'max' },
+  { id: 'cuongmini-3.11', label: 'CuongMini 3.11', desc: 'Nhanh · mặc định', tier: 'default' },
+  { id: 'cuongmini-pro', label: 'CuongMini Pro', desc: 'Nhanh, thông minh · việc hằng ngày', tier: 'pro' },
+  { id: 'cuongmini-pro-2', label: 'CuongMini Pro 2', desc: 'Cân bằng · viết, code, phân tích', tier: 'pro' },
+  { id: 'cuongmini-max', label: 'CuongMini Max', desc: 'Mạnh nhất · bài khó, đọc file dài', tier: 'max' },
 ];
 
 export function getChatModel(id: string | undefined): ChatModelOption {

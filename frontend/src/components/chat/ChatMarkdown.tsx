@@ -130,13 +130,13 @@ function CodeBlock({ language, code }: { language: string; code: string }) {
     } catch { /* clipboard blocked — ignore */ }
   };
   return (
-    <div className="my-2 overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0f]">
-      <div className="flex items-center justify-between border-b border-white/[0.06] bg-black/30 px-3 py-1.5">
+    <div className="chat-code my-2 overflow-hidden rounded-xl border border-white/10 bg-[#0a0a0f]">
+      <div className="chat-code-head flex items-center justify-between border-b border-white/[0.06] bg-black/30 px-3 py-1.5">
         <span className="font-mono text-[10px] uppercase tracking-wider text-[#64748b]">{language || 'code'}</span>
         <button
           type="button"
           onClick={copy}
-          className="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] text-[#94a3b8] transition-colors hover:text-[#22d3ee]"
+          className="chat-code-copy inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] text-[#94a3b8] transition-colors hover:text-[#22d3ee]"
           aria-label="Copy code"
         >
           {copied ? <Check size={12} className="text-[#4ade80]" /> : <Copy size={12} />}

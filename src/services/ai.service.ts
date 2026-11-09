@@ -43,10 +43,10 @@ import {
   cosineSimilarity,
   modelGroqConSong,
 } from './aiProviders.js';
-import { claudeChatAvailable, completeClaudeChat, completeViaOpenAiRoute, hasDocument, hasImage, streamClaudeChat, streamViaOpenAiRoute, proModel, maxModel, proMaxTokens, maxMaxTokens, visionModel, type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from './claudeChat.js';
+import { type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from './claudeChat.js';
+import { chatChinhHangSanSang, modelChinhHangCuaBac, maxTokensCuaBac, streamChatChinhHang, type MaBacClaude } from './aiChatChinhHang.js';
 import { goKhoiCheck, kiemHinh, tachHinh, thayHinh, type HinhTrongCauTraLoi } from './figureCheck.js';
 import { isProEffective } from './pro.service.js';
-import { isAnthropicModel } from './llm/gateway.js';
 import { canTimWeb } from './search/canTim.js';
 import { boiCanhHomNay } from './troLy/boiCanhHomNay.js';
 import { luatKyNang, type KyNangTroLy } from './troLy/kyNangTroLy.js';
@@ -101,8 +101,10 @@ export interface ChatModelDef {
 export const DEFAULT_CHAT_MODEL_ID = 'cuongmini-3.11';
 export const CHAT_MODELS: Record<string, ChatModelDef> = {
   'cuongmini-3.11': { id: 'cuongmini-3.11', label: 'CuongMini3.11', tier: 'default' },
-  'cuongmini-pro': { id: 'cuongmini-pro', label: 'CuongMini Pro', tier: 'claude', gatewayModel: proModel, maxTokens: proMaxTokens },
-  'cuongmini-max': { id: 'cuongmini-max', label: 'CuongMini Max', tier: 'claude', gatewayModel: maxModel, maxTokens: maxMaxTokens },
+  /* 09/11/2026: ba bậc Claude đi THẲNG cổng Anthropic chính hãng — xem `aiChatChinhHang.ts` (Haiku 5.5 / Sonnet 5.5 / Opus 5.5). */
+  'cuongmini-pro': { id: 'cuongmini-pro', label: 'CuongMini Pro', tier: 'claude', gatewayModel: () => modelChinhHangCuaBac('cuongmini-pro'), maxTokens: () => maxTokensCuaBac('cuongmini-pro') },
+  'cuongmini-pro-2': { id: 'cuongmini-pro-2', label: 'CuongMini Pro 2', tier: 'claude', gatewayModel: () => modelChinhHangCuaBac('cuongmini-pro-2'), maxTokens: () => maxTokensCuaBac('cuongmini-pro-2') },
+  'cuongmini-max': { id: 'cuongmini-max', label: 'CuongMini Max', tier: 'claude', gatewayModel: () => modelChinhHangCuaBac('cuongmini-max'), maxTokens: () => maxTokensCuaBac('cuongmini-max') },
 };
 function resolveChatModel(id?: string): ChatModelDef {
   return (id && CHAT_MODELS[id]) || CHAT_MODELS[DEFAULT_CHAT_MODEL_ID];
@@ -158,25 +160,6 @@ function taoBoLocCheck(): { day: (c: string) => string; xong: () => string } {
     // Kết thúc mà vẫn kẹt trong khối ⇒ model quên đóng; bỏ luôn phần dở.
     xong(): string { return trongKhoi ? '' : giu; },
   };
-}
-
-/**
- * Mức suy luận cho từng bậc — thứ quyết định người dùng có thấy "đang suy
- * luận" hay không, vì không gửi `reasoning_effort` thì cổng KHÔNG trả về
- * `reasoning_content` nào cả (đo 13/08/2026).
- *
- * Max cao vì đó là bậc dành cho bài khó (toán hình nhiều bước) — thêm token
- * suy luận ở đây là thứ đáng tiền nhất. Pro để `medium`: bậc này bán bằng ĐỘ
- * NHANH (2,4s so với 4,7s), đẩy lên `high` là bỏ mất lý do tồn tại của nó.
- *
- * Tắt hẳn: `AI_CHAT_REASONING=off` (mất luôn dòng "đang suy luận", câu trả
- * lời không đổi). Hoặc ép một mức: `AI_CHAT_REASONING=low|medium|high`.
- */
-function reasoningEffortFor(modelId: string): 'low' | 'medium' | 'high' | undefined {
-  const env = (process.env.AI_CHAT_REASONING || '').trim().toLowerCase();
-  if (env === 'off') return undefined;
-  if (env === 'low' || env === 'medium' || env === 'high') return env;
-  return modelId === 'cuongmini-max' ? 'high' : 'medium';
 }
 
 /** Mutable metadata the route reads to tell the client which model actually
@@ -883,7 +866,7 @@ export class AIService {
    * ⚠️ KHÔNG `await`, và nuốt lỗi: ghi sổ hỏng thì người dùng vẫn phải nhận
    * được câu trả lời họ vừa chờ.
    */
-  private ghiChiPhiChat(context: ChatContext, meta: ChatModelMeta | undefined, cauHoi: string, traLoi: string): void {
+  private ghiChiPhiChat(context: ChatContext, meta: ChatModelMeta | undefined, cauHoi: string, traLoi: string, usdThat?: number): void {
     const userId = context.userId;
     if (!userId) return;   // khách vãng lai: không có ví nào để trừ
     void (async () => {
@@ -916,7 +899,8 @@ export class AIService {
             model,
             inputTokens: vao,
             outputTokens: ra,
-            costUsd: costUsd(model, vao, ra),
+            // Cổng chính hãng trả USD THẬT (sổ anthropic_usage) — dùng nó thay vì ước theo bảng giá cổng.
+            costUsd: typeof usdThat === 'number' && Number.isFinite(usdThat) ? usdThat : costUsd(model, vao, ra),
             success: true,
           },
         });
@@ -1249,115 +1233,60 @@ export class AIService {
     if (meta) { meta.requested = selected.id; meta.effective = selected.id; meta.fellBack = false; }
 
     if (selected.tier === 'claude') {
-      // Pro/Max models are a Pro perk. Non-Pro (incl. guests) silently get the
+      // Pro/Pro 2/Max are a Pro perk. Non-Pro (incl. guests) silently get the
       // default model back + a 'pro_required' signal so the UI reverts the
       // picker and can nudge them to upgrade.
       const allowPro = await isProEffective(context.userId);
+      const lyDo = allowPro ? await chatChinhHangSanSang(context.userId) : null;
       if (!allowPro) {
         if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'pro_required'; }
-      } else if (!claudeChatAvailable()) {
-        if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_not_configured'; }
+      } else if (lyDo) {
+        logger.warn('[web-chat] cổng chính hãng không dùng được — lùi CuongMini 3.11', { lyDo, model: selected.id });
+        if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = `claude_${lyDo}`; }
       } else {
-        // Images + PDFs are a perk of the Pro/Max (Claude) tiers only — attach
-        // them to the current user turn. History stays text-only.
-        // Model nào đọc được PDF gốc thì gửi file gốc; còn lại rút chữ ra trước.
-        // Quyết định theo MODEL, không theo cấu hình — cắm kênh Claude vào là
-        // đường gốc tự quay lại.
-        const tierModel = selected.gatewayModel!();
-        const userContent = await buildUserContent(
-          message,
-          context.images,
-          context.documents,
-          isAnthropicModel(tierModel),
-          docCharBudget(selected.id),
-        );
+        /*
+         * 09/11/2026 — đi THẲNG cổng Anthropic chính hãng (không modelapi/rambo). Ảnh + PDF gửi dạng khối gốc
+         * (cổng chính hãng đọc được PDF); Word/txt rút chữ như cũ. Kiểm hình + vẽ lại (`kiemVaSuaHinh`) cũng đi
+         * cổng chính hãng, cùng model của bậc. Lỗi trước chữ đầu ⇒ lùi CuongMini 3.11 (Groq), báo client `fellBack`.
+         */
+        const userContent = await buildUserContent(message, context.images, context.documents, true, docCharBudget(selected.id));
         const claudeMessages: ClaudeMessage[] = [...history, { role: 'user', content: userContent }];
-        // Lượt có ảnh luôn dùng model nhìn được thật, kể cả khi người dùng chọn
-        // bậc Pro — xem `visionModel()` để biết vì sao (các model kia đoán ảnh
-        // rất tự tin và rất sai).
-        // Trừ bậc Pro: nó cố định ở modelapi bằng `gpt-6-sol` — model đó TỰ
-        // nhìn được ảnh (đo 27/09), còn `visionModel()` là Claude ⇒ sẽ bị lái
-        // sang rambo, trái với chốt "Pro luôn ở modelapi".
-        const gwModel = hasImage(claudeMessages) && selected.id !== 'cuongmini-pro' ? visionModel() : tierModel;
-        const outTokens = selected.maxTokens ? selected.maxTokens() : 8192;
-        // 1) Try REAL streaming — tokens flow immediately (no idle-out, no long
-        //    blank spinner). If it fails BEFORE any token, fall through to the
-        //    non-stream call; if it fails AFTER partial text, keep the partial.
-        //
-        //    Đường chính là tuyến OpenAI của cổng (đã đo chạy thật, nhận ảnh
-        //    đúng chuẩn). Lượt có PDF phải đi tuyến Anthropic vì chỉ ở đó mới
-        //    có khối `document` — dù hiện chưa model nào của khoá này đọc nổi
-        //    PDF, xem ghi chú trong claudeChat.ts.
-        const pdfTurn = hasDocument(claudeMessages);
         let streamed = '';
         const loc = taoBoLocCheck();
         try {
-          const stream = pdfTurn
-            ? streamClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })
-            : streamViaOpenAiRoute({
-                model: gwModel,
-                system: systemPrompt,
-                messages: claudeMessages,
-                maxTokens: outTokens,
-                reasoningEffort: reasoningEffortFor(selected.id),
-              });
-          for await (const part of stream) {
-            // Bước suy luận đi thẳng ra client, KHÔNG cộng vào câu trả lời —
-            // cộng vào là nó vừa lọt vào bong bóng chat vừa được lưu xuống DB.
-            if (typeof part !== 'string') { yield part; continue; }
-            streamed += part;               // BẢN THÔ: còn khối ```check để kiểm hình
-            const hien = loc.day(part);     // BẢN HIỆN: đã nuốt khối ```check
+          const g = streamChatChinhHang({
+            bac: selected.id as MaBacClaude,
+            system: systemPrompt,
+            messages: claudeMessages as Array<{ role: 'user' | 'assistant'; content: string | Array<Record<string, unknown>> }>,
+            userId: context.userId!,
+          });
+          let r = await g.next();
+          while (!r.done) {
+            streamed += r.value;
+            const hien = loc.day(r.value);
             if (hien) yield hien;
+            r = await g.next();
           }
           const conLai = loc.xong();
           if (conLai) yield conLai;
-          // Empty stream (no error but zero tokens) → treat as failure so we
-          // try the non-stream path rather than returning a blank answer.
           if (!streamed.trim()) throw new Error('empty claude stream');
-
-          // ── Kiểm hình bằng SỐ, sai thì bắt vẽ lại ──────────────
-          // Chạy SAU khi chữ đã chảy hết: người dùng đọc lời giải ngay, hình
-          // tự sửa vài giây sau. Kiểm trước rồi mới cho chảy thì họ ngồi nhìn
-          // màn hình trống thêm cả chục giây cho một hình vốn thường đã đúng.
+          const usd = r.value.usd;
+          // Kiểm hình bằng SỐ sau khi chữ đã chảy hết; sai thì vẽ lại (cùng cổng chính hãng).
           let ketQua = goKhoiCheck(streamed);
-          for await (const p of this.kiemVaSuaHinh(streamed, gwModel, systemPrompt)) {
+          for await (const p of this.kiemVaSuaHinh(streamed, r.value.model, systemPrompt, context.userId!)) {
             if (p.loai === 'xong') ketQua = p.text;
             else yield p.phan;
           }
-          if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua); }
+          if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua, usd); }
           return;
         } catch (err) {
           if (streamed) {
-            // Partial answer already shown — save it and stop (don't restart).
-            if (sessionId) { await this.saveAssistantAndTrack(sessionId, streamed, meta); this.ghiChiPhiChat(context, meta, message, streamed); }
-            logger.warn('AIService Claude stream broke mid-answer, kept partial', { model: selected.id });
+            const ketQua = goKhoiCheck(streamed);
+            if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua); }
+            logger.warn('[web-chat] luồng chính hãng gãy giữa chừng — giữ phần đã có', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
             return;
           }
-          logger.warn('AIService Claude streaming failed, trying non-stream', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
-        }
-        // 2) Không stream, cùng tuyến. Giả lập chảy chữ để giao diện không khựng.
-        try {
-          const text = pdfTurn
-            ? await completeClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })
-            : await completeViaOpenAiRoute({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens });
-          for (let i = 0; i < text.length; i += 4) yield text.slice(i, i + 4);
-          if (sessionId && text) { await this.saveAssistantAndTrack(sessionId, text, meta); this.ghiChiPhiChat(context, meta, message, text); }
-          return;
-        } catch (err) {
-          logger.warn('AIService gateway non-stream failed, trying the other route', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
-        }
-        // 3) Đổi tuyến. Người dùng Pro trả tiền cho bậc này — hạ xuống model
-        //    miễn phí là việc cuối cùng mới làm. Lượt có PDF thì hàm tuyến
-        //    OpenAI tự từ chối, nên nó không âm thầm nuốt mất file.
-        try {
-          const text = pdfTurn
-            ? await completeViaOpenAiRoute({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })
-            : await completeClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens });
-          for (let i = 0; i < text.length; i += 4) yield text.slice(i, i + 4);
-          if (sessionId && text) { await this.saveAssistantAndTrack(sessionId, text, meta); this.ghiChiPhiChat(context, meta, message, text); }
-          return;
-        } catch (err) {
-          logger.warn('AIService both gateway routes failed, falling back to default', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
+          logger.warn('[web-chat] cổng chính hãng lỗi trước chữ đầu — lùi CuongMini 3.11', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
           if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_error'; }
           // fall through to Groq default
         }
@@ -1501,6 +1430,7 @@ export class AIService {
     thoText: string,
     model: string,
     systemPrompt: string,
+    userId: number,
   ): AsyncGenerator<{ loai: 'phan'; phan: ChatStreamPart } | { loai: 'xong'; text: string }, void, unknown> {
     const TOI_DA_SUA = 3;
     let text = thoText;
@@ -1535,7 +1465,7 @@ export class AIService {
       };
 
       try {
-        const svgMoi = await this.veLaiHinh(h.svg, loi, model, systemPrompt);
+        const svgMoi = await this.veLaiHinh(h.svg, loi, model, systemPrompt, userId);
         if (!svgMoi) continue;
         const conLai = kiemHinh(svgMoi, h.diemTrongLoiGiai, h.rangBuoc).loi;
         if (conLai.length >= loi.length) {
@@ -1560,6 +1490,7 @@ export class AIService {
     loi: string[],
     model: string,
     systemPrompt: string,
+    userId: number,
   ): Promise<string | null> {
     const yeuCau =
       'Hình SVG dưới đây đã được kiểm lại bằng toạ độ và SAI. Các lỗi đo được:\n\n'
@@ -1570,15 +1501,17 @@ export class AIService {
       + '- Nhớ: viewBox phải chứa TRỌN hình kể cả vành đường tròn; nhãn cách nhau ≥ 14 đơn vị.\n\n'
       + '```svg\n' + svgCu + '\n```';
 
-    const traVe = await completeViaOpenAiRoute({
+    // 09/11/2026: vẽ lại cũng đi cổng Anthropic chính hãng (cùng model của bậc, sổ `web_chat`) — không modelapi.
+    const { goiVanBanChinhHang } = await import('./agent/anthropicChinhHang/dinhTuyen.js');
+    const traVe = (await goiVanBanChinhHang({
       model,
+      hang: 'free',
       system: systemPrompt,
       messages: [{ role: 'user', content: yeuCau }],
       maxTokens: 4000,
-      // Vẽ lại là việc tính toạ độ — cần nghĩ, nhưng đây là lượt phụ nên
-      // không đẩy lên `high` để khỏi kéo dài thêm thời gian chờ.
-      reasoningEffort: 'medium',
-    });
+      userId,
+      viec: 'web_chat',
+    })).text;
 
     const m = /<svg[\s\S]*<\/svg>/.exec(traVe);
     return m ? m[0] : null;

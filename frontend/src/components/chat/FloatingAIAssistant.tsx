@@ -83,6 +83,8 @@ export default function FloatingAIAssistant() {
    || /\/ielts\/(thi-may|the-tu|so-loi)$/.test(pathname ?? '')
    // 📷 Sách gốc có khung gia sư theo trang ở cột phải — robot che ô gõ câu hỏi.
    || pathname?.endsWith('/dekiru/sach-goc')
+   // Chính trang /chat (giao diện kiểu Claude 09/11/2026): robot nổi đè lên nút Gửi/chọn model ở góc phải ô soạn.
+   || pathname === '/chat'
    || hiddenOnMobile,
  );
 

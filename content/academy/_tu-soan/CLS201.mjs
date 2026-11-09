@@ -1035,4 +1035,649 @@ secs.push(SEC('Chapter 10 — Speaking projects and HSK 3 listening formats', 'C
   ]),
 ]));
 
+// ===== Phần mở rộng (bài mỏng → đủ ≥ 450 từ EN): chèn trước Tóm tắt =====
+const MORE = {
+  'cls201-ts-1-1': [`<h3>Going further: finding the focus in a real conversation</h3>
+<p>In natural speech the focus is rarely announced; you infer it from the <em>question the sentence answers</em>. Train this habit: after every sentence you hear, silently ask “which question would produce this answer?” If the answer is 「我骑自行车去。」 the hidden question is <em>how</em> (「你怎么去？」), so the stressed word is 自行车. If the answer is 「我跟朋友去。」 the question is <em>with whom</em>. Two more focus markers are worth knowing: 「连…都…」 (even…) puts the stress on the word between 连 and 都, and 「只有…才…」 (only if… then…) stresses the condition.</p>
+<table><thead><tr><th>Hidden question</th><th>Answer (stress in bold)</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>谁去？</td><td>「<strong>小王</strong>去。」</td><td>Xiǎo Wáng qù.</td><td>Xiao Wang is going.</td></tr>
+<tr><td>在哪儿吃？</td><td>「在<strong>食堂</strong>吃。」</td><td>Zài shítáng chī.</td><td>We eat in the canteen.</td></tr>
+<tr><td>几点开始？</td><td>「<strong>八点</strong>开始。」</td><td>Bā diǎn kāishǐ.</td><td>It starts at eight.</td></tr>
+<tr><td>买了几本？</td><td>「买了<strong>三本</strong>。」</td><td>Mǎi le sān běn.</td><td>I bought three.</td></tr>
+<tr><td>他会不会来？</td><td>「他<strong>连</strong>周末<strong>都</strong>上班。」</td><td>Tā lián zhōumò dōu shàngbān.</td><td>He works even at weekends.</td></tr></tbody></table>
+<p><strong>Mini role-play (speaking).</strong> Work in pairs. Student A asks one of the five questions above, Student B answers with the bold word clearly stressed and the rest light. Then swap and make the answer <em>wrong</em> on purpose (「不对，是<strong>九点</strong>开始。」) so that A hears contrastive stress. Record yourselves and check the pitch range of the stressed syllable.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Which word is stressed in 「我是在图书馆学习的。」 if the question is 「你在哪儿学习的？」<div class="dap-an"><strong>Answer:</strong> 图书馆 (place), because 是…的 marks the place.</div></li><li>Give a short answer to 「你喝茶还是喝咖啡？」 with the correct stress.<div class="dap-an"><strong>Answer:</strong> 「我喝<strong>茶</strong>。」 (or 咖啡); the chosen item is stressed.</div></li></ol>`,
+`<h3>Đi xa hơn: tìm điểm nhấn trong hội thoại thật</h3>
+<p>Trong lời nói tự nhiên, điểm nhấn hiếm khi được “báo trước”; bạn suy ra nó từ <em>câu hỏi mà câu này đang trả lời</em>. Hãy tập thói quen: sau mỗi câu nghe được, tự hỏi thầm “câu hỏi nào sinh ra câu đáp này?”. Nếu đáp là 「我骑自行车去。」 thì câu hỏi ẩn là <em>bằng cách nào</em> (「你怎么去？」), nên từ được nhấn là 自行车. Nếu đáp là 「我跟朋友去。」 thì câu hỏi là <em>đi với ai</em>. Hai dấu hiệu nhấn khác cũng nên biết: 「连…都…」 (đến cả…) nhấn từ nằm giữa 连 và 都, còn 「只有…才…」 (chỉ khi… mới…) nhấn vào điều kiện.</p>
+<table><thead><tr><th>Câu hỏi ẩn</th><th>Câu đáp (in đậm = nhấn)</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>谁去？</td><td>「<strong>小王</strong>去。」</td><td>Xiǎo Wáng qù.</td><td>Tiểu Vương đi.</td></tr>
+<tr><td>在哪儿吃？</td><td>「在<strong>食堂</strong>吃。」</td><td>Zài shítáng chī.</td><td>Ăn ở căng tin.</td></tr>
+<tr><td>几点开始？</td><td>「<strong>八点</strong>开始。」</td><td>Bā diǎn kāishǐ.</td><td>Tám giờ bắt đầu.</td></tr>
+<tr><td>买了几本？</td><td>「买了<strong>三本</strong>。」</td><td>Mǎi le sān běn.</td><td>Mua ba cuốn.</td></tr>
+<tr><td>他会不会来？</td><td>「他<strong>连</strong>周末<strong>都</strong>上班。」</td><td>Tā lián zhōumò dōu shàngbān.</td><td>Anh ấy đến cuối tuần cũng đi làm.</td></tr></tbody></table>
+<p><strong>Nhập vai ngắn (luyện nói).</strong> Làm theo cặp. Bạn A hỏi một trong năm câu trên, bạn B đáp và nhấn rõ từ in đậm, các từ còn lại nhẹ. Sau đó đổi vai và cố tình đáp <em>sai</em> (「不对，是<strong>九点</strong>开始。」) để A nghe nhấn đối chiếu. Hãy ghi âm và kiểm tra biên độ cao độ ở âm tiết được nhấn.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Từ nào được nhấn trong 「我是在图书馆学习的。」 nếu câu hỏi là 「你在哪儿学习的？」<div class="dap-an"><strong>Đáp án:</strong> 图书馆 (nơi chốn), vì 是…的 đánh dấu nơi chốn.</div></li><li>Hãy đáp ngắn cho 「你喝茶还是喝咖啡？」 với trọng âm đúng.<div class="dap-an"><strong>Đáp án:</strong> 「我喝<strong>茶</strong>。」 (hoặc 咖啡); món được chọn là chỗ nhấn.</div></li></ol>`],
+
+  'cls201-ts-1-2': [`<h3>Going further: more reductions and how to train your ear</h3>
+<p>Beyond the reductions in the lesson, native speakers at HSK 3 speed compress many frequent words. The commonest patterns are: 「不知道」 bù zhīdào → <em>bùzhīdao</em> (the middle syllable nearly disappears); 「什么」 shénme → <em>shém</em>; 「怎么样」 zěnmeyàng → <em>zěnmyàng</em>; 「我们」 wǒmen → <em>wǒm</em>; 「那个」 nà ge → <em>nèi ge</em> (also used as a hesitation filler); 「这样」 zhèyàng → <em>zhèiyàng</em>. Neutral-tone syllables become short and low, so the word seems to have lost a syllable. You do not have to <em>produce</em> these at first; you only have to <em>recognise</em> them.</p>
+<table><thead><tr><th>Careful form</th><th>Pinyin</th><th>Fast form</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>我不知道</td><td>wǒ bù zhīdào</td><td>wǒ bùzhdao</td><td>I don't know</td></tr>
+<tr><td>你在做什么？</td><td>nǐ zài zuò shénme?</td><td>nǐ zài zuò shém?</td><td>What are you doing?</td></tr>
+<tr><td>怎么样？</td><td>zěnmeyàng?</td><td>zěmyàng?</td><td>How about it?</td></tr>
+<tr><td>我们走吧</td><td>wǒmen zǒu ba</td><td>wǒm zǒu ba</td><td>Let's go</td></tr>
+<tr><td>一点儿</td><td>yìdiǎnr</td><td>yìdiǎr</td><td>a little</td></tr></tbody></table>
+<p><strong>Listening strategy.</strong> When a word “sounds missing”, do not stop. Keep the rhythm: count the stressed syllables, and let context fill the gap. A useful exercise is dictation in two passes: first write only what you are sure of, then fill the blanks from meaning. <strong>Typical Vietnamese-learner mistake:</strong> expecting each Chinese syllable to be as separate as in Vietnamese, where every syllable is a full, tone-bearing unit; Chinese neutral tones and erhua do not behave that way.</p>
+<p><strong>Mini role-play.</strong> A: 「你吃饭了吗？」 B: 「还没呢，你呢？」 A: 「我也没吃，一起去吧？」 B: 「好啊，去哪儿？」 Say it slowly, then at full speed, and note which syllables shrink.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Transcribe the fast form “wǒm bùzhdao” into careful pinyin.<div class="dap-an"><strong>Answer:</strong> wǒmen bù zhīdào (我们不知道).</div></li><li>Which syllable is weakest in 「什么」?<div class="dap-an"><strong>Answer:</strong> -me (neutral tone, often dropped).</div></li></ol>`,
+`<h3>Đi xa hơn: thêm các kiểu rút gọn và cách luyện tai</h3>
+<p>Ngoài các kiểu rút gọn trong bài, người bản ngữ ở tốc độ HSK 3 còn nén nhiều từ quen thuộc. Phổ biến nhất: 「不知道」 bù zhīdào → <em>bùzhīdao</em> (âm giữa gần như biến mất); 「什么」 shénme → <em>shém</em>; 「怎么样」 zěnmeyàng → <em>zěnmyàng</em>; 「我们」 wǒmen → <em>wǒm</em>; 「那个」 nà ge → <em>nèi ge</em> (cũng dùng như từ đệm khi ngập ngừng); 「这样」 zhèyàng → <em>zhèiyàng</em>. Âm tiết thanh nhẹ trở nên ngắn và thấp, nên từ nghe như mất một âm. Ban đầu bạn chưa cần <em>nói</em> như vậy; chỉ cần <em>nhận ra</em> chúng.</p>
+<table><thead><tr><th>Dạng đầy đủ</th><th>Pinyin</th><th>Dạng nói nhanh</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>我不知道</td><td>wǒ bù zhīdào</td><td>wǒ bùzhdao</td><td>Tôi không biết</td></tr>
+<tr><td>你在做什么？</td><td>nǐ zài zuò shénme?</td><td>nǐ zài zuò shém?</td><td>Bạn đang làm gì?</td></tr>
+<tr><td>怎么样？</td><td>zěnmeyàng?</td><td>zěmyàng?</td><td>Thế nào?</td></tr>
+<tr><td>我们走吧</td><td>wǒmen zǒu ba</td><td>wǒm zǒu ba</td><td>Mình đi thôi</td></tr>
+<tr><td>一点儿</td><td>yìdiǎnr</td><td>yìdiǎr</td><td>một chút</td></tr></tbody></table>
+<p><strong>Chiến lược nghe.</strong> Khi một từ “nghe như mất”, đừng dừng lại. Giữ nhịp: đếm các âm tiết được nhấn và để ngữ cảnh lấp chỗ trống. Bài tập hữu ích là chép chính tả hai lượt: lượt đầu chỉ viết phần chắc chắn, lượt hai điền chỗ trống theo nghĩa. <strong>Lỗi điển hình của người Việt:</strong> mong mỗi âm tiết tiếng Trung tách bạch như tiếng Việt, nơi mỗi âm tiết là một đơn vị đầy đủ mang thanh; thanh nhẹ và âm uốn lưỡi (erhua) của tiếng Trung không hoạt động như thế.</p>
+<p><strong>Nhập vai ngắn.</strong> A: 「你吃饭了吗？」 B: 「还没呢，你呢？」 A: 「我也没吃，一起去吧？」 B: 「好啊，去哪儿？」 Đọc chậm rồi đọc tốc độ thật, ghi lại những âm tiết bị co lại.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Chuyển dạng nhanh “wǒm bùzhdao” sang pinyin đầy đủ.<div class="dap-an"><strong>Đáp án:</strong> wǒmen bù zhīdào (我们不知道).</div></li><li>Âm tiết nào yếu nhất trong 「什么」?<div class="dap-an"><strong>Đáp án:</strong> -me (thanh nhẹ, thường bị lược).</div></li></ol>`],
+
+  'cls201-ts-1-3': [`<h3>Going further: a worked example of chunking</h3>
+<p>Take a 25-syllable sentence that would overwhelm you if heard as a stream: 「我的朋友告诉我，下个星期六学校门口有一个中文歌比赛，参加的人可以得到奖品。」 Chunk it where a native speaker would breathe. The first break comes after the speech verb (「我的朋友告诉我」 — <em>my friend told me</em>), the second after the time word (「下个星期六」), the third after the place (「学校门口」), and the last after the event (「有一个中文歌比赛」). Time, place and event arrive in a fixed order, so each chunk fills one slot in your notes.</p>
+<table><thead><tr><th>Chunk</th><th>Pinyin</th><th>Slot</th></tr></thead><tbody>
+<tr><td>我的朋友告诉我 /</td><td>wǒ de péngyou gàosu wǒ</td><td>source</td></tr>
+<tr><td>下个星期六 /</td><td>xià ge xīngqī liù</td><td>time</td></tr>
+<tr><td>学校门口 /</td><td>xuéxiào ménkǒu</td><td>place</td></tr>
+<tr><td>有一个中文歌比赛 /</td><td>yǒu yí gè Zhōngwén gē bǐsài</td><td>event</td></tr>
+<tr><td>参加的人可以得到奖品</td><td>cānjiā de rén kěyǐ dédào jiǎngpǐn</td><td>result</td></tr></tbody></table>
+<p><strong>Boundary clues.</strong> Pauses typically fall before conjunctions (「但是」「所以」「如果」), after a comma-like topic (「这件事，…」) and before a new subject. Rising pitch plus a short pause often signals “more is coming”; a low, falling end signals the end of the thought. <strong>Typical mistake:</strong> holding a long chunk in memory word by word instead of keeping only its meaning. Summarise each chunk in two or three words and drop the rest.</p>
+<p><strong>Speaking drill.</strong> Read the sentence aloud three times: once word by word, once chunk by chunk with a slash pause, once at natural speed. Then invent a similar sentence about your own weekend.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Where would you put the first pause in 「如果明天下雨，我们就不去爬山了。」?<div class="dap-an"><strong>Answer:</strong> after 下雨 (before 我们), i.e. at the comma.</div></li><li>Name the slot of 「学校门口」 in the example.<div class="dap-an"><strong>Answer:</strong> place.</div></li></ol>`,
+`<h3>Đi xa hơn: ví dụ tách cụm từng bước</h3>
+<p>Hãy lấy một câu 25 âm tiết sẽ làm bạn choáng nếu nghe liền một mạch: 「我的朋友告诉我，下个星期六学校门口有一个中文歌比赛，参加的人可以得到奖品。」 Tách nó ở chỗ người bản ngữ lấy hơi. Chỗ ngắt đầu tiên sau động từ nói (「我的朋友告诉我」 — <em>bạn tôi bảo tôi</em>), thứ hai sau từ chỉ thời gian (「下个星期六」), thứ ba sau nơi chốn (「学校门口」), cuối cùng sau sự kiện (「有一个中文歌比赛」). Thời gian, nơi chốn và sự kiện đến theo thứ tự cố định nên mỗi cụm điền vào một ô trong ghi chú.</p>
+<table><thead><tr><th>Cụm</th><th>Pinyin</th><th>Ô thông tin</th></tr></thead><tbody>
+<tr><td>我的朋友告诉我 /</td><td>wǒ de péngyou gàosu wǒ</td><td>nguồn tin</td></tr>
+<tr><td>下个星期六 /</td><td>xià ge xīngqī liù</td><td>thời gian</td></tr>
+<tr><td>学校门口 /</td><td>xuéxiào ménkǒu</td><td>nơi chốn</td></tr>
+<tr><td>有一个中文歌比赛 /</td><td>yǒu yí gè Zhōngwén gē bǐsài</td><td>sự kiện</td></tr>
+<tr><td>参加的人可以得到奖品</td><td>cānjiā de rén kěyǐ dédào jiǎngpǐn</td><td>kết quả</td></tr></tbody></table>
+<p><strong>Dấu hiệu ranh giới.</strong> Chỗ ngắt thường rơi trước liên từ (「但是」「所以」「如果」), sau chủ đề dạng dấu phẩy (「这件事，…」) và trước chủ ngữ mới. Cao độ lên kèm ngắt ngắn thường báo “còn nữa”; kết thúc thấp và xuống báo hết ý. <strong>Lỗi điển hình:</strong> cố nhớ từng từ của cụm dài thay vì chỉ giữ nghĩa. Hãy tóm mỗi cụm bằng hai ba từ rồi bỏ phần còn lại.</p>
+<p><strong>Bài nói.</strong> Đọc to câu trên ba lần: lần một từng từ, lần hai theo cụm có dấu gạch ngắt, lần ba ở tốc độ tự nhiên. Sau đó tự đặt một câu tương tự về cuối tuần của bạn.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Bạn sẽ ngắt đầu tiên ở đâu trong 「如果明天下雨，我们就不去爬山了。」?<div class="dap-an"><strong>Đáp án:</strong> sau 下雨 (trước 我们), tức ở dấu phẩy.</div></li><li>Nêu ô thông tin của 「学校门口」 trong ví dụ.<div class="dap-an"><strong>Đáp án:</strong> nơi chốn.</div></li></ol>`],
+
+  'cls201-ts-1-4': [`<h3>Going further: a four-week shadowing plan</h3>
+<p>Shadowing works only when it is systematic. Use a plan that raises speed gradually. <strong>Week 1:</strong> choose a 30-second clip at 0.75× speed; listen three times, read the pinyin, then shadow with the text in front of you. <strong>Week 2:</strong> same clip at normal speed, text hidden, and you start speaking one beat behind the speaker. <strong>Week 3:</strong> a new clip; shadow without text, then record yourself and compare tone shapes. <strong>Week 4:</strong> increase to 1.1× speed to build a margin of safety for the exam. Record your voice every week so you can hear progress, which is slow day to day but obvious across a month.</p>
+<table><thead><tr><th>Sentence to shadow</th><th>Pinyin</th><th>Watch for</th></tr></thead><tbody>
+<tr><td>我每天早上七点起床，先喝一杯水。</td><td>Wǒ měitiān zǎoshang qī diǎn qǐchuáng, xiān hē yì bēi shuǐ.</td><td>two chunks; 一杯 → yì bēi</td></tr>
+<tr><td>虽然有点儿累，但是我很开心。</td><td>Suīrán yǒudiǎnr lèi, dànshì wǒ hěn kāixīn.</td><td>pause after 累; contrast</td></tr>
+<tr><td>你能不能再说一遍？</td><td>Nǐ néng bu néng zài shuō yí biàn?</td><td>neutral 不; yí biàn</td></tr>
+<tr><td>别担心，我们一定能赶上火车。</td><td>Bié dānxīn, wǒmen yídìng néng gǎnshàng huǒchē.</td><td>yídìng sandhi; falling end</td></tr></tbody></table>
+<p><strong>Quality check.</strong> After each recording ask three questions: Did my tones rise and fall in the same places? Did I keep the same pauses? Did I finish at the same moment as the speaker? Mark one problem only and fix it in the next round; fixing five things at once fixes none. <strong>Common mistake:</strong> shadowing too difficult material. If you miss more than one word in ten, choose an easier clip.</p>
+<p><strong>Pair task.</strong> One student reads a sentence at speed, the other shadows aloud immediately; swap roles after every four sentences.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Why is the speed raised only in week 4?<div class="dap-an"><strong>Answer:</strong> Accuracy and chunking come first; speed is added once the text is familiar.</div></li><li>How should you read 「一遍」 in 再说一遍?<div class="dap-an"><strong>Answer:</strong> yí biàn (一 changes to second tone before a fourth tone).</div></li></ol>`,
+`<h3>Đi xa hơn: kế hoạch shadowing bốn tuần</h3>
+<p>Shadowing chỉ hiệu quả khi có hệ thống. Hãy dùng kế hoạch tăng tốc dần. <strong>Tuần 1:</strong> chọn đoạn 30 giây ở tốc độ 0,75×; nghe ba lần, đọc pinyin rồi shadow khi vẫn nhìn văn bản. <strong>Tuần 2:</strong> cùng đoạn ấy ở tốc độ thường, giấu văn bản, bắt đầu nói chậm hơn người nói một nhịp. <strong>Tuần 3:</strong> đoạn mới; shadow không văn bản, rồi ghi âm và so sánh hình dạng thanh điệu. <strong>Tuần 4:</strong> tăng lên 1,1× để có biên độ an toàn cho kỳ thi. Mỗi tuần hãy ghi âm giọng mình để nghe được tiến bộ — từng ngày thì chậm nhưng qua một tháng thì rõ rệt.</p>
+<table><thead><tr><th>Câu để shadow</th><th>Pinyin</th><th>Chú ý</th></tr></thead><tbody>
+<tr><td>我每天早上七点起床，先喝一杯水。</td><td>Wǒ měitiān zǎoshang qī diǎn qǐchuáng, xiān hē yì bēi shuǐ.</td><td>hai cụm; 一杯 → yì bēi</td></tr>
+<tr><td>虽然有点儿累，但是我很开心。</td><td>Suīrán yǒudiǎnr lèi, dànshì wǒ hěn kāixīn.</td><td>ngắt sau 累; đối lập</td></tr>
+<tr><td>你能不能再说一遍？</td><td>Nǐ néng bu néng zài shuō yí biàn?</td><td>不 thanh nhẹ; yí biàn</td></tr>
+<tr><td>别担心，我们一定能赶上火车。</td><td>Bié dānxīn, wǒmen yídìng néng gǎnshàng huǒchē.</td><td>yídìng biến điệu; cuối câu xuống</td></tr></tbody></table>
+<p><strong>Kiểm tra chất lượng.</strong> Sau mỗi lần ghi âm hãy hỏi ba điều: Thanh điệu của mình lên xuống đúng chỗ chưa? Mình có giữ đúng các chỗ ngắt không? Mình có kết thúc cùng lúc với người nói không? Chỉ đánh dấu một vấn đề và sửa ở vòng sau; sửa năm thứ cùng lúc thì không sửa được thứ nào. <strong>Lỗi thường gặp:</strong> shadow tài liệu quá khó. Nếu bạn lỡ hơn một từ trong mười từ, hãy chọn đoạn dễ hơn.</p>
+<p><strong>Bài tập cặp.</strong> Một bạn đọc câu ở tốc độ thật, bạn kia shadow thành tiếng ngay lập tức; đổi vai sau mỗi bốn câu.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Vì sao chỉ tăng tốc ở tuần 4?<div class="dap-an"><strong>Đáp án:</strong> Độ chính xác và việc tách cụm đến trước; tốc độ chỉ thêm khi văn bản đã quen.</div></li><li>Đọc 「一遍」 trong 再说一遍 như thế nào?<div class="dap-an"><strong>Đáp án:</strong> yí biàn (一 đổi sang thanh 2 trước thanh 4).</div></li></ol>`],
+  'cls201-ts-2-1': [`<h3>Going further: a note-taking layout and a worked example</h3>
+<p>Divide your page into three columns: <strong>who/what</strong>, <strong>when/where</strong>, <strong>numbers/result</strong>. Write in the fastest form you can read later: pinyin initials, English or Vietnamese words, and symbols. Never write full characters while the audio is still running; a stroke-heavy character costs you the next sentence. Useful symbols: ↑ increase (上升), ↓ decrease (下降), → leads to / then, = same, ≠ different, ? unclear, ✓ agreed, ✗ refused.</p>
+<p>Example audio: 「上个月我们公司有两百三十个客人，这个月有三百个，比上个月多了七十个。」 Your notes might read: <em>cty: tháng trước 230 → tháng này 300 ↑ 70</em>. In Chinese, large numbers are built in units: 两百三十 liǎng bǎi sānshí = 230, 三百 sān bǎi = 300, 七十 qīshí = 70. Remember 「两」 (liǎng) is used before 百, 千, 万 instead of 二.</p>
+<table><thead><tr><th>Hear</th><th>Pinyin</th><th>Write</th></tr></thead><tbody>
+<tr><td>一千五百块</td><td>yì qiān wǔ bǎi kuài</td><td>1500¥</td></tr>
+<tr><td>三分之一</td><td>sān fēn zhī yī</td><td>1/3</td></tr>
+<tr><td>百分之八十</td><td>bǎi fēn zhī bāshí</td><td>80%</td></tr>
+<tr><td>下午三点半</td><td>xiàwǔ sān diǎn bàn</td><td>pm 3:30</td></tr>
+<tr><td>零下五度</td><td>líng xià wǔ dù</td><td>−5°</td></tr></tbody></table>
+<p><strong>Common mistake:</strong> writing every word and falling behind. Decide before listening: which three slots will the question ask for? Note only those.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Write in digits: 「两千零五十」.<div class="dap-an"><strong>Answer:</strong> 2050 (liǎng qiān líng wǔshí).</div></li><li>What does 「百分之二十」 mean?<div class="dap-an"><strong>Answer:</strong> 20%.</div></li></ol>`,
+`<h3>Đi xa hơn: bố cục ghi chú và ví dụ từng bước</h3>
+<p>Chia trang giấy thành ba cột: <strong>ai/việc gì</strong>, <strong>khi nào/ở đâu</strong>, <strong>số liệu/kết quả</strong>. Hãy viết dạng nhanh nhất mà sau này bạn vẫn đọc được: chữ cái đầu pinyin, từ tiếng Anh hoặc tiếng Việt, và ký hiệu. Đừng viết chữ Hán đầy đủ khi âm thanh còn đang chạy; một chữ nhiều nét làm bạn mất câu kế tiếp. Ký hiệu hữu ích: ↑ tăng (上升), ↓ giảm (下降), → dẫn đến / rồi, = giống, ≠ khác, ? chưa rõ, ✓ đồng ý, ✗ từ chối.</p>
+<p>Ví dụ âm thanh: 「上个月我们公司有两百三十个客人，这个月有三百个，比上个月多了七十个。」 Ghi chú của bạn có thể là: <em>cty: tháng trước 230 → tháng này 300 ↑ 70</em>. Trong tiếng Trung, số lớn được ghép theo đơn vị: 两百三十 liǎng bǎi sānshí = 230, 三百 sān bǎi = 300, 七十 qīshí = 70. Nhớ rằng 「两」 (liǎng) dùng trước 百, 千, 万 thay cho 二.</p>
+<table><thead><tr><th>Nghe</th><th>Pinyin</th><th>Ghi</th></tr></thead><tbody>
+<tr><td>一千五百块</td><td>yì qiān wǔ bǎi kuài</td><td>1500¥</td></tr>
+<tr><td>三分之一</td><td>sān fēn zhī yī</td><td>1/3</td></tr>
+<tr><td>百分之八十</td><td>bǎi fēn zhī bāshí</td><td>80%</td></tr>
+<tr><td>下午三点半</td><td>xiàwǔ sān diǎn bàn</td><td>3:30 chiều</td></tr>
+<tr><td>零下五度</td><td>líng xià wǔ dù</td><td>−5°</td></tr></tbody></table>
+<p><strong>Lỗi thường gặp:</strong> viết mọi từ rồi tụt lại phía sau. Hãy quyết định trước khi nghe: câu hỏi sẽ hỏi ba ô nào? Chỉ ghi những ô đó.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Viết bằng chữ số: 「两千零五十」.<div class="dap-an"><strong>Đáp án:</strong> 2050 (liǎng qiān líng wǔshí).</div></li><li>「百分之二十」 nghĩa là gì?<div class="dap-an"><strong>Đáp án:</strong> 20%.</div></li></ol>`],
+
+  'cls201-ts-2-2': [`<h3>Going further: signposts grouped by function</h3>
+<p>Signposts tell you the logical relationship before the details arrive. Group them in five families and listen for the first word of each pair: <strong>cause–result</strong> 因为…所以… (yīnwèi… suǒyǐ…); <strong>concession</strong> 虽然…但是… (suīrán… dànshì…); <strong>condition</strong> 如果…就… (rúguǒ… jiù…) and 只要…就… (zhǐyào… jiù…); <strong>sequence</strong> 先…然后…最后… (xiān… ránhòu… zuìhòu…); <strong>addition/contrast</strong> 不但…而且… (búdàn… érqiě…), 一边…一边… (yìbiān… yìbiān…), 可是 (kěshì), 不过 (búguò). The word after 但是 or 不过 normally carries the speaker's real point, so listen hardest there.</p>
+<table><thead><tr><th>Sentence</th><th>Pinyin</th><th>Real point</th></tr></thead><tbody>
+<tr><td>虽然这家饭馆很便宜，但是不太干净。</td><td>Suīrán zhè jiā fànguǎn hěn piányi, dànshì bú tài gānjìng.</td><td>not clean</td></tr>
+<tr><td>只要你努力，就一定能通过考试。</td><td>Zhǐyào nǐ nǔlì, jiù yídìng néng tōngguò kǎoshì.</td><td>effort is enough</td></tr>
+<tr><td>他不但会说中文，而且说得很好。</td><td>Tā búdàn huì shuō Zhōngwén, érqiě shuō de hěn hǎo.</td><td>speaks very well</td></tr>
+<tr><td>我先去银行，然后去超市，最后回家。</td><td>Wǒ xiān qù yínháng, ránhòu qù chāoshì, zuìhòu huí jiā.</td><td>three stops</td></tr></tbody></table>
+<p><strong>Prediction drill.</strong> Say only the first half and let a partner finish it: 「因为下雨，…」 → 「所以我们没出去。」 Also notice that the first marker is often dropped in speech: 「下雨了，我们没出去」 still means cause–result. <strong>Typical mistake:</strong> hearing 「虽然」 and thinking the whole sentence is positive. The real information follows 「但是」.</p>
+<p><strong>Extra practice.</strong></p><ol><li>In 「我想去，不过没有时间。」 does the speaker go?<div class="dap-an"><strong>Answer:</strong> Probably not; the point after 不过 is no time.</div></li><li>Order: 先…然后…最后… with 吃饭, 看电影, 回家.<div class="dap-an"><strong>Answer:</strong> 先吃饭，然后看电影，最后回家。</div></li></ol>`,
+`<h3>Đi xa hơn: từ báo hiệu xếp theo chức năng</h3>
+<p>Từ báo hiệu cho bạn biết quan hệ logic trước khi chi tiết đến. Hãy nhóm chúng thành năm họ và nghe từ đầu của mỗi cặp: <strong>nguyên nhân–kết quả</strong> 因为…所以… (yīnwèi… suǒyǐ…); <strong>nhượng bộ</strong> 虽然…但是… (suīrán… dànshì…); <strong>điều kiện</strong> 如果…就… (rúguǒ… jiù…) và 只要…就… (zhǐyào… jiù…); <strong>trình tự</strong> 先…然后…最后… (xiān… ránhòu… zuìhòu…); <strong>bổ sung/đối lập</strong> 不但…而且… (búdàn… érqiě…), 一边…一边… (yìbiān… yìbiān…), 可是 (kěshì), 不过 (búguò). Từ sau 但是 hoặc 不过 thường chứa ý chính của người nói, nên hãy nghe kỹ nhất ở đó.</p>
+<table><thead><tr><th>Câu</th><th>Pinyin</th><th>Ý chính</th></tr></thead><tbody>
+<tr><td>虽然这家饭馆很便宜，但是不太干净。</td><td>Suīrán zhè jiā fànguǎn hěn piányi, dànshì bú tài gānjìng.</td><td>không sạch lắm</td></tr>
+<tr><td>只要你努力，就一定能通过考试。</td><td>Zhǐyào nǐ nǔlì, jiù yídìng néng tōngguò kǎoshì.</td><td>chỉ cần cố gắng</td></tr>
+<tr><td>他不但会说中文，而且说得很好。</td><td>Tā búdàn huì shuō Zhōngwén, érqiě shuō de hěn hǎo.</td><td>nói rất giỏi</td></tr>
+<tr><td>我先去银行，然后去超市，最后回家。</td><td>Wǒ xiān qù yínháng, ránhòu qù chāoshì, zuìhòu huí jiā.</td><td>ba điểm dừng</td></tr></tbody></table>
+<p><strong>Bài đoán trước.</strong> Chỉ nói nửa đầu và để bạn cùng nói nốt: 「因为下雨，…」 → 「所以我们没出去。」 Cũng lưu ý rằng từ đánh dấu đầu thường bị lược khi nói: 「下雨了，我们没出去」 vẫn là nguyên nhân–kết quả. <strong>Lỗi điển hình:</strong> nghe 「虽然」 rồi tưởng cả câu mang nghĩa tích cực. Thông tin thật nằm sau 「但是」.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Trong 「我想去，不过没有时间。」 người nói có đi không?<div class="dap-an"><strong>Đáp án:</strong> Nhiều khả năng không; ý chính sau 不过 là không có thời gian.</div></li><li>Sắp xếp: 先…然后…最后… với 吃饭, 看电影, 回家.<div class="dap-an"><strong>Đáp án:</strong> 先吃饭，然后看电影，最后回家。</div></li></ol>`],
+
+  'cls201-ts-2-3': [`<h3>Going further: five common indirect answers</h3>
+<p>Chinese speakers value harmony, so refusals, complaints and disagreements are often softened. The literal words say one thing; the real message is different. Learn the formulas: <strong>1.</strong> 「我考虑一下。」 (Wǒ kǎolǜ yíxià.) = <em>I'll think about it</em>, usually a polite no. <strong>2.</strong> 「有点儿…」 (yǒudiǎnr…) before an adjective signals a complaint: 「有点儿贵」 means <em>too expensive for me</em>. <strong>3.</strong> 「可能不太方便。」 (Kěnéng bú tài fāngbiàn.) = <em>probably not possible</em>. <strong>4.</strong> 「还行。」 (Hái xíng.) = <em>so-so</em>, lukewarm, not praise. <strong>5.</strong> 「改天吧。」 (Gǎitiān ba.) = <em>another day</em>, a soft decline.</p>
+<table><thead><tr><th>A says</th><th>B says</th><th>Pinyin</th><th>Real meaning</th></tr></thead><tbody>
+<tr><td>周末一起去爬山吧？</td><td>我看看吧。</td><td>Wǒ kànkan ba.</td><td>probably no</td></tr>
+<tr><td>这个菜怎么样？</td><td>还可以。</td><td>Hái kěyǐ.</td><td>not great</td></tr>
+<tr><td>你喜欢这件衣服吗？</td><td>颜色有点儿深。</td><td>Yánsè yǒudiǎnr shēn.</td><td>I don't like it</td></tr>
+<tr><td>明天能交报告吗？</td><td>我尽量吧。</td><td>Wǒ jǐnliàng ba.</td><td>not sure I can</td></tr></tbody></table>
+<p><strong>Clues to attitude.</strong> Listen for a pause before the answer, a drawn-out 「嗯…」, a falling tone, and words like 其实 (qíshí, actually), which often introduce the truth. Warm agreement is quick and bright: 「好啊！」. <strong>Typical mistake:</strong> taking 「可以」 or 「还行」 as enthusiastic agreement.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Does 「我考虑一下」 usually mean yes?<div class="dap-an"><strong>Answer:</strong> No, it is a polite way to avoid saying no directly.</div></li><li>What does 「有点儿贵」 imply?<div class="dap-an"><strong>Answer:</strong> The price is a problem for the speaker.</div></li></ol>`,
+`<h3>Đi xa hơn: năm kiểu đáp gián tiếp thường gặp</h3>
+<p>Người Trung Quốc coi trọng sự hài hoà nên lời từ chối, phàn nàn hay phản đối thường được làm mềm. Câu chữ nói một đằng, thông điệp thật là một nẻo. Hãy học các công thức: <strong>1.</strong> 「我考虑一下。」 (Wǒ kǎolǜ yíxià.) = <em>để tôi cân nhắc</em>, thường là lời từ chối lịch sự. <strong>2.</strong> 「有点儿…」 (yǒudiǎnr…) trước tính từ báo hiệu phàn nàn: 「有点儿贵」 nghĩa là <em>đắt quá với tôi</em>. <strong>3.</strong> 「可能不太方便。」 (Kěnéng bú tài fāngbiàn.) = <em>chắc là không tiện</em>. <strong>4.</strong> 「还行。」 (Hái xíng.) = <em>tàm tạm</em>, hờ hững, không phải lời khen. <strong>5.</strong> 「改天吧。」 (Gǎitiān ba.) = <em>để hôm khác</em>, từ chối nhẹ.</p>
+<table><thead><tr><th>A nói</th><th>B nói</th><th>Pinyin</th><th>Ý thật</th></tr></thead><tbody>
+<tr><td>周末一起去爬山吧？</td><td>我看看吧。</td><td>Wǒ kànkan ba.</td><td>nhiều khả năng không</td></tr>
+<tr><td>这个菜怎么样？</td><td>还可以。</td><td>Hái kěyǐ.</td><td>không ngon lắm</td></tr>
+<tr><td>你喜欢这件衣服吗？</td><td>颜色有点儿深。</td><td>Yánsè yǒudiǎnr shēn.</td><td>tôi không thích</td></tr>
+<tr><td>明天能交报告吗？</td><td>我尽量吧。</td><td>Wǒ jǐnliàng ba.</td><td>chưa chắc làm được</td></tr></tbody></table>
+<p><strong>Manh mối về thái độ.</strong> Hãy nghe: ngập ngừng trước khi đáp, tiếng 「嗯…」 kéo dài, thanh điệu đi xuống, và các từ như 其实 (qíshí, thật ra) thường dẫn vào sự thật. Đồng ý nhiệt tình thì nhanh và tươi: 「好啊！」. <strong>Lỗi điển hình:</strong> coi 「可以」 hay 「还行」 là đồng ý hào hứng.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「我考虑一下」 thường có nghĩa là đồng ý không?<div class="dap-an"><strong>Đáp án:</strong> Không, đó là cách lịch sự để tránh nói “không” thẳng.</div></li><li>「有点儿贵」 ngụ ý gì?<div class="dap-an"><strong>Đáp án:</strong> Giá là vấn đề với người nói.</div></li></ol>`],
+
+  'cls201-ts-2-4': [`<h3>Going further: a trap checklist for the exam</h3>
+<p>HSK-style questions are built around traps. Learn to spot their shape. <strong>Number trap:</strong> the speaker says two numbers and the question asks about the second or the difference: 「原来八十块，现在打八折，六十四块。」 (Yuánlái bāshí kuài, xiànzài dǎ bā zhé, liùshísì kuài.) <em>Originally 80, now 20% off, 64.</em> Note that 「八折」 means 80% of the price, not 8% off. <strong>Time trap:</strong> 「本来…，后来…」 (běnlái… hòulái…) means <em>originally… later…</em>; the final plan is the second one. <strong>Negation trap:</strong> 「不是不想，是没时间」 = <em>not that I don't want to; I have no time</em>. <strong>Distractor trap:</strong> the option repeats a word you heard but attaches it to the wrong person or time.</p>
+<table><thead><tr><th>Audio</th><th>Pinyin</th><th>Answer to “when?”</th></tr></thead><tbody>
+<tr><td>会议本来是三点，后来改到四点半。</td><td>Huìyì běnlái shì sān diǎn, hòulái gǎi dào sì diǎn bàn.</td><td>4:30</td></tr>
+<tr><td>我不是昨天来的，是今天早上到的。</td><td>Wǒ bú shì zuótiān lái de, shì jīntiān zǎoshang dào de.</td><td>this morning</td></tr>
+<tr><td>他没去上海，去了广州。</td><td>Tā méi qù Shànghǎi, qù le Guǎngzhōu.</td><td>Guangzhou</td></tr></tbody></table>
+<p><strong>Defence strategy.</strong> Read the options during the pause <em>before</em> the audio and underline what differs between them (numbers, places, people). While listening, cross out options that are contradicted. If you lose a number, use the remaining information (for example 「便宜二十块」) to calculate it back. <strong>Typical mistake:</strong> picking the first number heard. Wait for the sentence to finish.</p>
+<p><strong>Extra practice.</strong></p><ol><li>「现在打七折，原价一百」: how much now?<div class="dap-an"><strong>Answer:</strong> 70 yuan (七折 = 70%).</div></li><li>「我本来想坐飞机，后来决定坐火车。」 What did he take?<div class="dap-an"><strong>Answer:</strong> The train.</div></li></ol>`,
+`<h3>Đi xa hơn: danh sách kiểm bẫy cho kỳ thi</h3>
+<p>Câu hỏi kiểu HSK được dựng quanh các cái bẫy. Hãy học nhận ra hình dạng của chúng. <strong>Bẫy số:</strong> người nói đọc hai số và câu hỏi hỏi số thứ hai hoặc chênh lệch: 「原来八十块，现在打八折，六十四块。」 (Yuánlái bāshí kuài, xiànzài dǎ bā zhé, liùshísì kuài.) <em>Ban đầu 80, nay giảm 20%, còn 64.</em> Lưu ý 「八折」 là còn 80% giá chứ không phải giảm 8%. <strong>Bẫy thời gian:</strong> 「本来…，后来…」 (běnlái… hòulái…) nghĩa là <em>ban đầu… sau đó…</em>; kế hoạch cuối là vế sau. <strong>Bẫy phủ định:</strong> 「不是不想，是没时间」 = <em>không phải không muốn mà là không có thời gian</em>. <strong>Bẫy gây nhiễu:</strong> phương án lặp lại một từ bạn vừa nghe nhưng gán nhầm cho người hoặc thời điểm khác.</p>
+<table><thead><tr><th>Âm thanh</th><th>Pinyin</th><th>Đáp cho “khi nào?”</th></tr></thead><tbody>
+<tr><td>会议本来是三点，后来改到四点半。</td><td>Huìyì běnlái shì sān diǎn, hòulái gǎi dào sì diǎn bàn.</td><td>4:30</td></tr>
+<tr><td>我不是昨天来的，是今天早上到的。</td><td>Wǒ bú shì zuótiān lái de, shì jīntiān zǎoshang dào de.</td><td>sáng nay</td></tr>
+<tr><td>他没去上海，去了广州。</td><td>Tā méi qù Shànghǎi, qù le Guǎngzhōu.</td><td>Quảng Châu</td></tr></tbody></table>
+<p><strong>Chiến lược phòng thủ.</strong> Đọc các phương án trong khoảng lặng <em>trước</em> khi phát âm thanh và gạch chân chỗ khác nhau (số, nơi chốn, người). Khi nghe, gạch bỏ phương án bị mâu thuẫn. Nếu lỡ một số, hãy dùng thông tin còn lại (ví dụ 「便宜二十块」) để tính ngược. <strong>Lỗi điển hình:</strong> chọn số nghe được đầu tiên. Hãy chờ câu nói xong.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「现在打七折，原价一百」: bây giờ bao nhiêu?<div class="dap-an"><strong>Đáp án:</strong> 70 tệ (七折 = 70%).</div></li><li>「我本来想坐飞机，后来决定坐火车。」 Anh ấy đi gì?<div class="dap-an"><strong>Đáp án:</strong> Tàu hoả.</div></li></ol>`],
+  'cls201-ts-3-1': [`<h3>Going further: describing someone so a listener can pick them out</h3>
+<p>A good description moves from general to specific: age and build, then face and hair, then clothes, then personality. In listening tasks the speaker often gives four or five details and the question asks about only one, so practise sorting them. Useful frames: 「他个子很高，大概一米八。」 (He is tall, about 1.80 m); 「她留着长头发，戴着眼镜。」 (She has long hair and wears glasses); 「他看起来很严肃，其实很幽默。」 (He looks serious but is actually funny). Note the pattern 「看起来…，其实…」: the second half is the truth.</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>他三十岁左右，身体很结实。</td><td>Tā sānshí suì zuǒyòu, shēntǐ hěn jiēshi.</td><td>About thirty, strong build.</td></tr>
+<tr><td>她皮肤很白，眼睛大大的。</td><td>Tā pífū hěn bái, yǎnjing dàdà de.</td><td>Fair skin, big eyes.</td></tr>
+<tr><td>我的室友很外向，爱说话。</td><td>Wǒ de shìyǒu hěn wàixiàng, ài shuōhuà.</td><td>My roommate is outgoing and talkative.</td></tr>
+<tr><td>他有点儿害羞，不太爱发言。</td><td>Tā yǒudiǎnr hàixiū, bú tài ài fāyán.</td><td>He is a bit shy and rarely speaks up.</td></tr></tbody></table>
+<p><strong>Speaking task.</strong> Describe a classmate in six sentences using general → specific order; your partner guesses who it is. <strong>Typical mistake:</strong> using 「很」 in every sentence and sounding flat; vary with 「挺…的」, 「非常」, 「有点儿」.</p>
+<p><strong>Extra practice.</strong></p><ol><li>「他看起来很凶，其实很温柔。」 What is he really like?<div class="dap-an"><strong>Answer:</strong> Gentle.</div></li></ol>`,
+`<h3>Đi xa hơn: mô tả sao cho người nghe nhận ra đúng người</h3>
+<p>Một bài mô tả tốt đi từ chung đến riêng: tuổi và vóc dáng, rồi khuôn mặt và tóc, rồi quần áo, rồi tính cách. Trong bài nghe, người nói thường đưa bốn năm chi tiết còn câu hỏi chỉ hỏi một, nên hãy tập sắp xếp chúng. Khung hữu ích: 「他个子很高，大概一米八。」 (Anh ấy cao, khoảng 1,80 m); 「她留着长头发，戴着眼镜。」 (Cô ấy để tóc dài, đeo kính); 「他看起来很严肃，其实很幽默。」 (Anh ấy trông nghiêm nhưng thật ra hài hước). Chú ý mẫu 「看起来…，其实…」: vế sau mới là sự thật.</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>他三十岁左右，身体很结实。</td><td>Tā sānshí suì zuǒyòu, shēntǐ hěn jiēshi.</td><td>Khoảng ba mươi tuổi, thân hình rắn chắc.</td></tr>
+<tr><td>她皮肤很白，眼睛大大的。</td><td>Tā pífū hěn bái, yǎnjing dàdà de.</td><td>Da trắng, mắt to.</td></tr>
+<tr><td>我的室友很外向，爱说话。</td><td>Wǒ de shìyǒu hěn wàixiàng, ài shuōhuà.</td><td>Bạn cùng phòng của tôi hướng ngoại, hay nói.</td></tr>
+<tr><td>他有点儿害羞，不太爱发言。</td><td>Tā yǒudiǎnr hàixiū, bú tài ài fāyán.</td><td>Anh ấy hơi nhút nhát, ít phát biểu.</td></tr></tbody></table>
+<p><strong>Bài nói.</strong> Mô tả một bạn cùng lớp trong sáu câu theo thứ tự chung → riêng; bạn cùng cặp đoán là ai. <strong>Lỗi điển hình:</strong> câu nào cũng dùng 「很」 nên nghe đều đều; hãy thay bằng 「挺…的」, 「非常」, 「有点儿」.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「他看起来很凶，其实很温柔。」 Thật ra anh ấy thế nào?<div class="dap-an"><strong>Đáp án:</strong> Dịu dàng.</div></li></ol>`],
+
+  'cls201-ts-3-2': [`<h3>Going further: a campus announcement and a student dialogue</h3>
+<p>Campus audio comes in two genres: <strong>announcements</strong> (formal, one speaker, key facts such as date, room, deadline) and <strong>student chat</strong> (informal, fast, with fillers like 「那个…」, 「就是…」). Treat them differently. In announcements, list the facts in your notes: 「请注意，明天下午两点，在三号教学楼二〇五教室举行汉语听力考试，请带学生证。」 (Qǐng zhùyì, míngtiān xiàwǔ liǎng diǎn, zài sān hào jiàoxuélóu èr líng wǔ jiàoshì jǔxíng Hànyǔ tīnglì kǎoshì, qǐng dài xuéshēngzhèng.) Facts: tomorrow 2 p.m., building 3, room 205, listening exam, bring student card. Note that room numbers are read digit by digit, with 0 as 「零」 or 「〇」.</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>A</td><td>你选了几门课？</td><td>Nǐ xuǎn le jǐ mén kè?</td><td>How many courses did you pick?</td></tr>
+<tr><td>B</td><td>五门，每周二十个学时。</td><td>Wǔ mén, měi zhōu èrshí ge xuéshí.</td><td>Five, twenty periods a week.</td></tr>
+<tr><td>A</td><td>太多了吧！作业呢？</td><td>Tài duō le ba! Zuòyè ne?</td><td>That's a lot! What about homework?</td></tr>
+<tr><td>B</td><td>每天都有，不过我习惯了。</td><td>Měitiān dōu yǒu, búguò wǒ xíguàn le.</td><td>Every day, but I'm used to it.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> mixing up 「上课」 (attend class), 「下课」 (class ends) and 「放学」 (school finishes for the day). <strong>Role-play:</strong> one student asks about timetable, deadlines and exam format; the other answers from the announcement above.</p>
+<p><strong>Extra practice.</strong></p><ol><li>How is 「三〇二」 read?<div class="dap-an"><strong>Answer:</strong> sān líng èr.</div></li></ol>`,
+`<h3>Đi xa hơn: thông báo trong trường và hội thoại sinh viên</h3>
+<p>Âm thanh ở trường có hai thể loại: <strong>thông báo</strong> (trang trọng, một người nói, nêu sự kiện như ngày, phòng, hạn chót) và <strong>trò chuyện sinh viên</strong> (thân mật, nhanh, có từ đệm như 「那个…」, 「就是…」). Hãy xử lý khác nhau. Với thông báo, liệt kê các dữ kiện vào ghi chú: 「请注意，明天下午两点，在三号教学楼二〇五教室举行汉语听力考试，请带学生证。」 (Qǐng zhùyì, míngtiān xiàwǔ liǎng diǎn, zài sān hào jiàoxuélóu èr líng wǔ jiàoshì jǔxíng Hànyǔ tīnglì kǎoshì, qǐng dài xuéshēngzhèng.) Dữ kiện: mai 2 giờ chiều, nhà 3, phòng 205, thi nghe, mang thẻ sinh viên. Lưu ý số phòng đọc từng chữ số, số 0 đọc 「零」 hoặc 「〇」.</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>A</td><td>你选了几门课？</td><td>Nǐ xuǎn le jǐ mén kè?</td><td>Bạn chọn mấy môn?</td></tr>
+<tr><td>B</td><td>五门，每周二十个学时。</td><td>Wǔ mén, měi zhōu èrshí ge xuéshí.</td><td>Năm môn, mỗi tuần hai mươi tiết.</td></tr>
+<tr><td>A</td><td>太多了吧！作业呢？</td><td>Tài duō le ba! Zuòyè ne?</td><td>Nhiều quá! Còn bài tập?</td></tr>
+<tr><td>B</td><td>每天都有，不过我习惯了。</td><td>Měitiān dōu yǒu, búguò wǒ xíguàn le.</td><td>Ngày nào cũng có, nhưng mình quen rồi.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> nhầm 「上课」 (vào học), 「下课」 (hết tiết) và 「放学」 (tan học). <strong>Nhập vai:</strong> một bạn hỏi về thời khoá biểu, hạn nộp và hình thức thi; bạn kia đáp dựa trên thông báo ở trên.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「三〇二」 đọc thế nào?<div class="dap-an"><strong>Đáp án:</strong> sān líng èr.</div></li></ol>`],
+
+  'cls201-ts-3-3': [`<h3>Going further: comparison patterns at a glance</h3>
+<p>Comparisons appear constantly in HSK 3 listening because they hide the answer in word order. Keep four patterns apart: <strong>A 比 B + adj</strong> (A is more): 「今天比昨天冷。」 Jīntiān bǐ zuótiān lěng. <strong>A 没有 B + adj</strong> (A is not as … as B): 「我没有他高。」 Wǒ méiyǒu tā gāo. <strong>A 跟 B 一样 + adj</strong> (equal): 「这个跟那个一样大。」 Zhège gēn nàge yíyàng dà. <strong>更 / 还</strong> add degree: 「他比我更忙。」 Tā bǐ wǒ gèng máng. To state the size of the gap, put it after the adjective: 「他比我高五厘米。」 Tā bǐ wǒ gāo wǔ límǐ.</p>
+<table><thead><tr><th>Audio</th><th>Pinyin</th><th>Who is higher/more?</th></tr></thead><tbody>
+<tr><td>北京比河内冷多了。</td><td>Běijīng bǐ Hénèi lěng duō le.</td><td>Beijing is far colder</td></tr>
+<tr><td>我没有姐姐聪明。</td><td>Wǒ méiyǒu jiějie cōngming.</td><td>Sister is smarter</td></tr>
+<tr><td>这家比那家贵一点儿。</td><td>Zhè jiā bǐ nà jiā guì yìdiǎnr.</td><td>This one slightly dearer</td></tr>
+<tr><td>他的汉语跟我的差不多。</td><td>Tā de Hànyǔ gēn wǒ de chàbuduō.</td><td>About equal</td></tr></tbody></table>
+<p><strong>Typical mistakes:</strong> (1) saying 「他比我很高」 — never use 很 after 比; (2) hearing 「没有」 and thinking “has none”; with an adjective after it, it is a comparison. Listen for the person named <em>first</em>: in 「我没有姐姐聪明」 the speaker is the less clever one.</p>
+<p><strong>Extra practice.</strong></p><ol><li>「弟弟比我小三岁。」 Who is older?<div class="dap-an"><strong>Answer:</strong> The speaker, by three years.</div></li></ol>`,
+`<h3>Đi xa hơn: tổng hợp các mẫu so sánh</h3>
+<p>So sánh xuất hiện liên tục trong bài nghe HSK 3 vì đáp án nằm ở trật tự từ. Hãy phân biệt bốn mẫu: <strong>A 比 B + tính từ</strong> (A hơn): 「今天比昨天冷。」 Jīntiān bǐ zuótiān lěng. <strong>A 没有 B + tính từ</strong> (A không bằng B): 「我没有他高。」 Wǒ méiyǒu tā gāo. <strong>A 跟 B 一样 + tính từ</strong> (bằng nhau): 「这个跟那个一样大。」 Zhège gēn nàge yíyàng dà. <strong>更 / 还</strong> thêm mức độ: 「他比我更忙。」 Tā bǐ wǒ gèng máng. Muốn nói độ chênh thì đặt sau tính từ: 「他比我高五厘米。」 Tā bǐ wǒ gāo wǔ límǐ.</p>
+<table><thead><tr><th>Âm thanh</th><th>Pinyin</th><th>Ai hơn?</th></tr></thead><tbody>
+<tr><td>北京比河内冷多了。</td><td>Běijīng bǐ Hénèi lěng duō le.</td><td>Bắc Kinh lạnh hơn nhiều</td></tr>
+<tr><td>我没有姐姐聪明。</td><td>Wǒ méiyǒu jiějie cōngming.</td><td>Chị thông minh hơn</td></tr>
+<tr><td>这家比那家贵一点儿。</td><td>Zhè jiā bǐ nà jiā guì yìdiǎnr.</td><td>Quán này đắt hơn chút</td></tr>
+<tr><td>他的汉语跟我的差不多。</td><td>Tā de Hànyǔ gēn wǒ de chàbuduō.</td><td>Gần như bằng nhau</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> (1) nói 「他比我很高」 — không bao giờ dùng 很 sau 比; (2) nghe 「没有」 rồi tưởng “không có”; khi sau nó có tính từ thì đó là so sánh. Hãy nghe người được nêu <em>trước</em>: trong 「我没有姐姐聪明」 người nói là bên kém thông minh hơn.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「弟弟比我小三岁。」 Ai lớn hơn?<div class="dap-an"><strong>Đáp án:</strong> Người nói, hơn ba tuổi.</div></li></ol>`],
+
+  'cls201-ts-3-4': [`<h3>Going further: a ladder of agreement and disagreement</h3>
+<p>Opinions in Chinese are graded. Strong agreement: 「我完全同意。」 (Wǒ wánquán tóngyì.) and 「你说得对。」 (Nǐ shuō de duì.). Partial agreement: 「你说的有道理，不过…」 (Nǐ shuō de yǒu dàolǐ, búguò…). Polite disagreement: 「我的看法不太一样。」 (Wǒ de kànfǎ bú tài yíyàng.) or 「我不这么认为。」 (Wǒ bú zhème rènwéi.). Direct disagreement 「你错了」 is rare and rude. To give your own opinion you can open with 「我觉得…」 (Wǒ juéde…), 「在我看来…」 (Zài wǒ kànlái…), or 「依我看…」 (Yī wǒ kàn…); to give a reason, add 「因为…」.</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>A</td><td>我觉得大学生应该多打工。</td><td>Wǒ juéde dàxuéshēng yīnggāi duō dǎgōng.</td><td>I think students should work more.</td></tr>
+<tr><td>B</td><td>有道理，不过学习更重要。</td><td>Yǒu dàolǐ, búguò xuéxí gèng zhòngyào.</td><td>True, but study matters more.</td></tr>
+<tr><td>A</td><td>可是打工能学到经验啊。</td><td>Kěshì dǎgōng néng xuédào jīngyàn a.</td><td>But work gives experience.</td></tr>
+<tr><td>B</td><td>这一点我同意。</td><td>Zhè yì diǎn wǒ tóngyì.</td><td>I agree on that point.</td></tr></tbody></table>
+<p><strong>Listening tip.</strong> The speaker's final position is usually after 「不过」 or 「但是」. <strong>Typical mistake:</strong> translating “I think” literally as 「我想」, which means <em>I want / I am thinking</em>; use 「我觉得」 for opinions.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Is 「你说的有道理，不过…」 agreement or disagreement?<div class="dap-an"><strong>Answer:</strong> Partial agreement leading to a different view.</div></li></ol>`,
+`<h3>Đi xa hơn: nấc thang đồng ý và phản đối</h3>
+<p>Quan điểm trong tiếng Trung được chia mức. Đồng ý mạnh: 「我完全同意。」 (Wǒ wánquán tóngyì.) và 「你说得对。」 (Nǐ shuō de duì.). Đồng ý một phần: 「你说的有道理，不过…」 (Nǐ shuō de yǒu dàolǐ, búguò…). Phản đối lịch sự: 「我的看法不太一样。」 (Wǒ de kànfǎ bú tài yíyàng.) hoặc 「我不这么认为。」 (Wǒ bú zhème rènwéi.). Phản đối thẳng 「你错了」 hiếm và thô. Để nêu ý kiến, bạn có thể mở bằng 「我觉得…」 (Wǒ juéde…), 「在我看来…」 (Zài wǒ kànlái…) hoặc 「依我看…」 (Yī wǒ kàn…); để nêu lý do, thêm 「因为…」.</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>A</td><td>我觉得大学生应该多打工。</td><td>Wǒ juéde dàxuéshēng yīnggāi duō dǎgōng.</td><td>Mình nghĩ sinh viên nên đi làm thêm nhiều hơn.</td></tr>
+<tr><td>B</td><td>有道理，不过学习更重要。</td><td>Yǒu dàolǐ, búguò xuéxí gèng zhòngyào.</td><td>Có lý, nhưng học quan trọng hơn.</td></tr>
+<tr><td>A</td><td>可是打工能学到经验啊。</td><td>Kěshì dǎgōng néng xuédào jīngyàn a.</td><td>Nhưng đi làm học được kinh nghiệm mà.</td></tr>
+<tr><td>B</td><td>这一点我同意。</td><td>Zhè yì diǎn wǒ tóngyì.</td><td>Điểm này mình đồng ý.</td></tr></tbody></table>
+<p><strong>Mẹo nghe.</strong> Lập trường cuối cùng của người nói thường nằm sau 「不过」 hoặc 「但是」. <strong>Lỗi điển hình:</strong> dịch “tôi nghĩ” thành 「我想」, nghĩa là <em>tôi muốn / tôi đang nghĩ</em>; hãy dùng 「我觉得」 cho ý kiến.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「你说的有道理，不过…」 là đồng ý hay phản đối?<div class="dap-an"><strong>Đáp án:</strong> Đồng ý một phần rồi chuyển sang quan điểm khác.</div></li></ol>`],
+  'cls201-ts-4-1': [`<h3>Going further: telling 过, 了 and 着 apart by ear</h3>
+<p>These three particles look similar in pinyin lists but mean different things, and the question often depends on the difference. <strong>过 (guo)</strong> = the experience happened at some point: 「我去过上海。」 Wǒ qù guo Shànghǎi. (I have been to Shanghai.) The negative is 「没去过」. <strong>了 (le)</strong> = completion or a new situation: 「我吃了早饭。」 Wǒ chī le zǎofàn. (I ate breakfast.) <strong>着 (zhe)</strong> = a continuing state: 「门开着。」 Mén kāi zhe. (The door is open.) Compare 「他穿着红衣服」 (he is wearing red) with 「他穿了红衣服」 (he put on red clothes).</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>What you learn</th></tr></thead><tbody>
+<tr><td>我没吃过北京烤鸭。</td><td>Wǒ méi chī guo Běijīng kǎoyā.</td><td>never tried it</td></tr>
+<tr><td>他昨天买了一本书。</td><td>Tā zuótiān mǎi le yì běn shū.</td><td>bought, completed</td></tr>
+<tr><td>墙上挂着一幅画。</td><td>Qiáng shàng guà zhe yì fú huà.</td><td>a picture hangs there</td></tr>
+<tr><td>她笑着说：“谢谢！”</td><td>Tā xiào zhe shuō: “Xièxie!”</td><td>said while smiling</td></tr></tbody></table>
+<p><strong>Typical mistakes:</strong> adding 了 to every past sentence (past habits take no 了: 「我小时候常常游泳」), and using 了 with 过 together for the same idea. Listen: if you hear 「去过」 you know nothing about a recent trip, only that it happened sometime.</p>
+<p><strong>Extra practice.</strong></p><ol><li>「我没学过日语。」 Does he speak Japanese?<div class="dap-an"><strong>Answer:</strong> Probably not; he has never studied it.</div></li><li>Which particle describes a state in 「灯开着」?<div class="dap-an"><strong>Answer:</strong> 着.</div></li></ol>`,
+`<h3>Đi xa hơn: phân biệt 过, 了 và 着 bằng tai</h3>
+<p>Ba trợ từ này nhìn trong danh sách pinyin thì giống nhau nhưng nghĩa khác, và câu hỏi thường phụ thuộc vào sự khác biệt đó. <strong>过 (guo)</strong> = đã từng trải qua: 「我去过上海。」 Wǒ qù guo Shànghǎi. (Tôi đã từng đến Thượng Hải.) Phủ định là 「没去过」. <strong>了 (le)</strong> = hoàn thành hoặc tình huống mới: 「我吃了早饭。」 Wǒ chī le zǎofàn. (Tôi đã ăn sáng.) <strong>着 (zhe)</strong> = trạng thái đang kéo dài: 「门开着。」 Mén kāi zhe. (Cửa đang mở.) So sánh 「他穿着红衣服」 (anh ấy đang mặc đồ đỏ) với 「他穿了红衣服」 (anh ấy đã mặc đồ đỏ vào).</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Biết được gì</th></tr></thead><tbody>
+<tr><td>我没吃过北京烤鸭。</td><td>Wǒ méi chī guo Běijīng kǎoyā.</td><td>chưa từng thử</td></tr>
+<tr><td>他昨天买了一本书。</td><td>Tā zuótiān mǎi le yì běn shū.</td><td>đã mua xong</td></tr>
+<tr><td>墙上挂着一幅画。</td><td>Qiáng shàng guà zhe yì fú huà.</td><td>có một bức tranh treo</td></tr>
+<tr><td>她笑着说：“谢谢！”</td><td>Tā xiào zhe shuō: “Xièxie!”</td><td>vừa cười vừa nói</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> thêm 了 vào mọi câu quá khứ (thói quen quá khứ không có 了: 「我小时候常常游泳」), và dùng 了 cùng 过 cho một ý. Khi nghe 「去过」 bạn không biết gì về chuyến đi gần đây, chỉ biết nó từng xảy ra.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「我没学过日语。」 Anh ấy nói được tiếng Nhật không?<div class="dap-an"><strong>Đáp án:</strong> Nhiều khả năng không; anh chưa từng học.</div></li><li>Trợ từ nào chỉ trạng thái trong 「灯开着」?<div class="dap-an"><strong>Đáp án:</strong> 着.</div></li></ol>`],
+
+  'cls201-ts-4-2': [`<h3>Going further: duration versus frequency, and where the number goes</h3>
+<p>Duration answers “for how long”, frequency answers “how many times”. Both go <em>after the verb</em>, but they take different words. Duration: 「我学了两年汉语。」 Wǒ xué le liǎng nián Hànyǔ. With an object, repeat the verb or move the object: 「我学汉语学了两年。」 Frequency: 「我去过三次北京。」 Wǒ qù guo sān cì Běijīng. (次 cì for events; 遍 biàn for a complete run-through; 趟 tàng for trips.) Adverbs of frequency sit before the verb: 「他常常迟到」, 「我偶尔看电影」, 「她从来不喝酒」 (never). Habits are often stated with 「每…都…」: 「我每天都跑步。」</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>他每天睡八个小时。</td><td>Tā měitiān shuì bā ge xiǎoshí.</td><td>He sleeps eight hours a day.</td></tr>
+<tr><td>我一个星期上三次课。</td><td>Wǒ yí ge xīngqī shàng sān cì kè.</td><td>I have class three times a week.</td></tr>
+<tr><td>我等了他半个小时。</td><td>Wǒ děng le tā bàn ge xiǎoshí.</td><td>I waited half an hour for him.</td></tr>
+<tr><td>这个电影我看了两遍。</td><td>Zhège diànyǐng wǒ kàn le liǎng biàn.</td><td>I watched this film twice.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> asking “how long” with 「多久」 but answering with a point in time (「三点」). Duration has no 「点」: 「三个小时」. In listening, tell 「一个小时」 (one hour long) from 「一点」 (one o'clock): the first has 个.</p>
+<p><strong>Extra practice.</strong></p><ol><li>「他一个月回三次家。」 How often?<div class="dap-an"><strong>Answer:</strong> Three times a month.</div></li></ol>`,
+`<h3>Đi xa hơn: thời lượng và tần suất, và vị trí của con số</h3>
+<p>Thời lượng trả lời “bao lâu”, tần suất trả lời “mấy lần”. Cả hai đứng <em>sau động từ</em> nhưng dùng từ khác nhau. Thời lượng: 「我学了两年汉语。」 Wǒ xué le liǎng nián Hànyǔ. Khi có tân ngữ, lặp động từ hoặc dời tân ngữ: 「我学汉语学了两年。」 Tần suất: 「我去过三次北京。」 Wǒ qù guo sān cì Běijīng. (次 cì cho sự việc; 遍 biàn cho một lượt trọn vẹn; 趟 tàng cho chuyến đi.) Phó từ tần suất đứng trước động từ: 「他常常迟到」, 「我偶尔看电影」, 「她从来不喝酒」 (không bao giờ). Thói quen hay nói bằng 「每…都…」: 「我每天都跑步。」</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>他每天睡八个小时。</td><td>Tā měitiān shuì bā ge xiǎoshí.</td><td>Anh ấy ngủ tám tiếng mỗi ngày.</td></tr>
+<tr><td>我一个星期上三次课。</td><td>Wǒ yí ge xīngqī shàng sān cì kè.</td><td>Một tuần tôi học ba buổi.</td></tr>
+<tr><td>我等了他半个小时。</td><td>Wǒ děng le tā bàn ge xiǎoshí.</td><td>Tôi đã đợi anh ấy nửa tiếng.</td></tr>
+<tr><td>这个电影我看了两遍。</td><td>Zhège diànyǐng wǒ kàn le liǎng biàn.</td><td>Phim này tôi xem hai lần.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> hỏi “bao lâu” bằng 「多久」 nhưng đáp bằng thời điểm (「三点」). Thời lượng không có 「点」: 「三个小时」. Khi nghe, phân biệt 「一个小时」 (dài một tiếng) với 「一点」 (một giờ): cái đầu có 个.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「他一个月回三次家。」 Tần suất thế nào?<div class="dap-an"><strong>Đáp án:</strong> Ba lần một tháng.</div></li></ol>`],
+
+  'cls201-ts-4-3': [`<h3>Going further: a model story and a retelling frame</h3>
+<p>A short story in Chinese keeps strict order: time words first, then events linked by connectors. Core connectors: 「首先」 (shǒuxiān, first), 「然后」 (ránhòu, then), 「接着」 (jiēzhe, next), 「后来」 (hòulái, later, past only), 「最后」 (zuìhòu, finally), 「突然」 (tūrán, suddenly). Model: 「上星期六我和朋友去爬山。首先我们坐地铁到山脚，然后走了两个小时才到山顶。突然下起了雨，我们只好躲在一个小亭子里。最后雨停了，我们高高兴兴地下山了。」 (Shàng xīngqī liù wǒ hé péngyou qù páshān. Shǒuxiān wǒmen zuò dìtiě dào shānjiǎo, ránhòu zǒu le liǎng ge xiǎoshí cái dào shāndǐng. Tūrán xià qǐ le yǔ, wǒmen zhǐhǎo duǒ zài yí ge xiǎo tíngzi lǐ. Zuìhòu yǔ tíng le, wǒmen gāogāoxìngxìng de xià shān le.)</p>
+<table><thead><tr><th>Step</th><th>Frame</th><th>Pinyin</th></tr></thead><tbody>
+<tr><td>time + people</td><td>上星期六，我和…</td><td>Shàng xīngqī liù, wǒ hé…</td></tr>
+<tr><td>event 1</td><td>首先…</td><td>Shǒuxiān…</td></tr>
+<tr><td>event 2</td><td>然后…，接着…</td><td>Ránhòu…, jiēzhe…</td></tr>
+<tr><td>surprise</td><td>突然…</td><td>Tūrán…</td></tr>
+<tr><td>end + feeling</td><td>最后…，我觉得…</td><td>Zuìhòu…, wǒ juéde…</td></tr></tbody></table>
+<p><strong>Speaking task.</strong> Retell the story in 40 seconds from the five frame words only. <strong>Typical mistake:</strong> starting every sentence with 「我」 and dropping all connectors; learners then sound like a list of facts rather than a story.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Put in order: 最后 / 首先 / 然后.<div class="dap-an"><strong>Answer:</strong> 首先 → 然后 → 最后.</div></li></ol>`,
+`<h3>Đi xa hơn: truyện mẫu và khung kể lại</h3>
+<p>Một câu chuyện ngắn trong tiếng Trung giữ trật tự chặt: từ chỉ thời gian trước, rồi các sự kiện nối bằng liên từ. Liên từ cốt lõi: 「首先」 (shǒuxiān, trước hết), 「然后」 (ránhòu, sau đó), 「接着」 (jiēzhe, tiếp theo), 「后来」 (hòulái, về sau, chỉ quá khứ), 「最后」 (zuìhòu, cuối cùng), 「突然」 (tūrán, đột nhiên). Truyện mẫu: 「上星期六我和朋友去爬山。首先我们坐地铁到山脚，然后走了两个小时才到山顶。突然下起了雨，我们只好躲在一个小亭子里。最后雨停了，我们高高兴兴地下山了。」 (Shàng xīngqī liù wǒ hé péngyou qù páshān. Shǒuxiān wǒmen zuò dìtiě dào shānjiǎo, ránhòu zǒu le liǎng ge xiǎoshí cái dào shāndǐng. Tūrán xià qǐ le yǔ, wǒmen zhǐhǎo duǒ zài yí ge xiǎo tíngzi lǐ. Zuìhòu yǔ tíng le, wǒmen gāogāoxìngxìng de xià shān le.)</p>
+<table><thead><tr><th>Bước</th><th>Khung</th><th>Pinyin</th></tr></thead><tbody>
+<tr><td>thời gian + người</td><td>上星期六，我和…</td><td>Shàng xīngqī liù, wǒ hé…</td></tr>
+<tr><td>sự kiện 1</td><td>首先…</td><td>Shǒuxiān…</td></tr>
+<tr><td>sự kiện 2</td><td>然后…，接着…</td><td>Ránhòu…, jiēzhe…</td></tr>
+<tr><td>bất ngờ</td><td>突然…</td><td>Tūrán…</td></tr>
+<tr><td>kết + cảm xúc</td><td>最后…，我觉得…</td><td>Zuìhòu…, wǒ juéde…</td></tr></tbody></table>
+<p><strong>Bài nói.</strong> Kể lại câu chuyện trong 40 giây chỉ dựa vào năm từ khung. <strong>Lỗi điển hình:</strong> câu nào cũng mở bằng 「我」 và bỏ hết liên từ; người học nghe như một danh sách sự việc chứ không phải câu chuyện.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Sắp xếp: 最后 / 首先 / 然后.<div class="dap-an"><strong>Đáp án:</strong> 首先 → 然后 → 最后.</div></li></ol>`],
+
+  'cls201-ts-4-4': [`<h3>Going further: recognising 把 and 被 in fast speech</h3>
+<p>Both patterns put the affected object <em>before</em> the verb, which surprises learners used to subject–verb–object order. <strong>把 sentence</strong>: Subject + 把 + object + verb + result. 「我把作业做完了。」 Wǒ bǎ zuòyè zuò wán le. (I finished the homework.) The verb is never bare: it needs a result (完, 好, 到), a direction (上, 下), or 了. <strong>被 sentence</strong>: affected thing + 被 + (doer) + verb + result. 「我的手机被他拿走了。」 Wǒ de shǒujī bèi tā ná zǒu le. (My phone was taken by him.) 被 often implies something unpleasant or unexpected. Spoken Chinese also uses 「让」 and 「叫」 in place of 被: 「书让弟弟弄坏了。」</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Who did what?</th></tr></thead><tbody>
+<tr><td>请把门关上。</td><td>Qǐng bǎ mén guān shang.</td><td>request: close the door</td></tr>
+<tr><td>他把钱包丢了。</td><td>Tā bǎ qiánbāo diū le.</td><td>he lost his wallet</td></tr>
+<tr><td>蛋糕被孩子吃光了。</td><td>Dàngāo bèi háizi chī guāng le.</td><td>the kids ate it all</td></tr>
+<tr><td>我被老师表扬了。</td><td>Wǒ bèi lǎoshī biǎoyáng le.</td><td>teacher praised me</td></tr></tbody></table>
+<p><strong>Listening tip.</strong> Spot 把 or 被 first: it tells you the noun that follows is the <em>thing affected</em>, not the doer. After 被, the doer is the next noun. <strong>Typical mistake:</strong> hearing 「蛋糕被孩子吃光了」 and answering that the cake ate; check the order of 被.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Who lost the phone in 「他的手机被小偷偷走了」?<div class="dap-an"><strong>Answer:</strong> He did; the thief took it.</div></li></ol>`,
+`<h3>Đi xa hơn: nhận ra 把 và 被 trong lời nói nhanh</h3>
+<p>Cả hai mẫu đều đặt vật bị tác động <em>trước</em> động từ, điều khiến người quen trật tự chủ–vị–tân bị bất ngờ. <strong>Câu 把</strong>: Chủ ngữ + 把 + tân ngữ + động từ + kết quả. 「我把作业做完了。」 Wǒ bǎ zuòyè zuò wán le. (Tôi đã làm xong bài tập.) Động từ không đứng trơ trọi: cần kết quả (完, 好, 到), hướng (上, 下) hoặc 了. <strong>Câu 被</strong>: vật bị tác động + 被 + (người làm) + động từ + kết quả. 「我的手机被他拿走了。」 Wǒ de shǒujī bèi tā ná zǒu le. (Điện thoại của tôi bị anh ta lấy đi.) 被 thường hàm ý điều không hay hoặc bất ngờ. Khẩu ngữ còn dùng 「让」 và 「叫」 thay cho 被: 「书让弟弟弄坏了。」</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Ai làm gì?</th></tr></thead><tbody>
+<tr><td>请把门关上。</td><td>Qǐng bǎ mén guān shang.</td><td>yêu cầu: đóng cửa lại</td></tr>
+<tr><td>他把钱包丢了。</td><td>Tā bǎ qiánbāo diū le.</td><td>anh ấy làm mất ví</td></tr>
+<tr><td>蛋糕被孩子吃光了。</td><td>Dàngāo bèi háizi chī guāng le.</td><td>bọn trẻ ăn hết</td></tr>
+<tr><td>我被老师表扬了。</td><td>Wǒ bèi lǎoshī biǎoyáng le.</td><td>thầy khen tôi</td></tr></tbody></table>
+<p><strong>Mẹo nghe.</strong> Bắt 把 hoặc 被 trước: nó cho biết danh từ theo sau là <em>vật bị tác động</em>, không phải người làm. Sau 被, người làm là danh từ kế tiếp. <strong>Lỗi điển hình:</strong> nghe 「蛋糕被孩子吃光了」 rồi trả lời là cái bánh ăn; hãy kiểm tra vị trí của 被.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Ai bị mất điện thoại trong 「他的手机被小偷偷走了」?<div class="dap-an"><strong>Đáp án:</strong> Anh ấy; tên trộm đã lấy.</div></li></ol>`],
+
+  'cls201-ts-5-1': [`<h3>Going further: describing how, where and since when</h3>
+<p>A symptom report in Chinese has four slots: <strong>where</strong> it hurts, <strong>what kind</strong> of pain, <strong>since when</strong>, and <strong>what makes it worse</strong>. Frames: 「我头疼」 (Wǒ tóu téng), 「我嗓子很痛」 (Wǒ sǎngzi hěn tòng, sore throat), 「我肚子不舒服」 (Wǒ dùzi bù shūfu), 「我咳嗽，还流鼻涕」 (Wǒ késou, hái liú bítì). Duration: 「已经三天了」 (yǐjīng sān tiān le) — note the final 了 meaning “and still continuing”. Degree: 「有点儿」 (a little), 「很」 (quite), 「特别」 (especially). Fever: 「我发烧了，三十八度五。」 Wǒ fāshāo le, sānshíbā dù wǔ. (38.5 °C.)</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>我从昨天晚上开始拉肚子。</td><td>Wǒ cóng zuótiān wǎnshang kāishǐ lā dùzi.</td><td>diarrhoea since last night</td></tr>
+<tr><td>吃东西以后胃更疼。</td><td>Chī dōngxi yǐhòu wèi gèng téng.</td><td>stomach hurts more after eating</td></tr>
+<tr><td>我浑身没力气。</td><td>Wǒ húnshēn méi lìqi.</td><td>no strength all over</td></tr>
+<tr><td>晚上咳得睡不着。</td><td>Wǎnshang ké de shuì bu zháo.</td><td>coughing too much to sleep</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> using 「我有头疼」 (a literal “I have headache”); say 「我头疼」. <strong>Speaking task:</strong> report one symptom in four short sentences using all four slots.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Say "I have had a sore throat for two days."<div class="dap-an"><strong>Answer:</strong> 我嗓子疼已经两天了。</div></li></ol>`,
+`<h3>Đi xa hơn: mô tả thế nào, ở đâu và từ khi nào</h3>
+<p>Một bản báo triệu chứng bằng tiếng Trung có bốn ô: <strong>đau ở đâu</strong>, <strong>đau kiểu gì</strong>, <strong>từ khi nào</strong> và <strong>điều gì làm nặng thêm</strong>. Khung câu: 「我头疼」 (Wǒ tóu téng), 「我嗓子很痛」 (Wǒ sǎngzi hěn tòng, đau họng), 「我肚子不舒服」 (Wǒ dùzi bù shūfu), 「我咳嗽，还流鼻涕」 (Wǒ késou, hái liú bítì). Thời lượng: 「已经三天了」 (yǐjīng sān tiān le) — chú ý 了 cuối câu nghĩa là “và vẫn đang tiếp diễn”. Mức độ: 「有点儿」 (hơi), 「很」 (khá), 「特别」 (đặc biệt). Sốt: 「我发烧了，三十八度五。」 Wǒ fāshāo le, sānshíbā dù wǔ. (38,5 °C.)</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>我从昨天晚上开始拉肚子。</td><td>Wǒ cóng zuótiān wǎnshang kāishǐ lā dùzi.</td><td>tiêu chảy từ tối qua</td></tr>
+<tr><td>吃东西以后胃更疼。</td><td>Chī dōngxi yǐhòu wèi gèng téng.</td><td>ăn xong dạ dày đau hơn</td></tr>
+<tr><td>我浑身没力气。</td><td>Wǒ húnshēn méi lìqi.</td><td>cả người không có sức</td></tr>
+<tr><td>晚上咳得睡不着。</td><td>Wǎnshang ké de shuì bu zháo.</td><td>ho đến không ngủ được</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> dùng 「我有头疼」 (dịch từng chữ “tôi có đau đầu”); hãy nói 「我头疼」. <strong>Bài nói:</strong> báo một triệu chứng bằng bốn câu ngắn, dùng đủ bốn ô.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Nói “Tôi bị đau họng đã hai ngày rồi.”<div class="dap-an"><strong>Đáp án:</strong> 我嗓子疼已经两天了。</div></li></ol>`],
+
+  'cls201-ts-5-2': [`<h3>Going further: the doctor's question sequence</h3>
+<p>A consultation follows a predictable script, so you can predict each question. (1) Greeting and complaint: 「哪里不舒服？」 Nǎlǐ bù shūfu? (2) Duration: 「多长时间了？」 Duō cháng shíjiān le? (3) Related symptoms: 「发烧吗？咳嗽吗？」 (4) History: 「以前有过这种情况吗？对什么药过敏吗？」 Duì shénme yào guòmǐn ma? (5) Examination: 「张开嘴，说‘啊’。」 Zhāng kāi zuǐ, shuō “à”. (6) Diagnosis: 「你得了感冒。」 (7) Instructions: 「一天三次，饭后吃，一次两片。」 Yì tiān sān cì, fàn hòu chī, yí cì liǎng piàn.</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>医生</td><td>你对什么药过敏吗？</td><td>Nǐ duì shénme yào guòmǐn ma?</td><td>Are you allergic to any drug?</td></tr>
+<tr><td>病人</td><td>我对青霉素过敏。</td><td>Wǒ duì qīngméisù guòmǐn.</td><td>I'm allergic to penicillin.</td></tr>
+<tr><td>医生</td><td>那我给你开别的药，要多喝水。</td><td>Nà wǒ gěi nǐ kāi bié de yào, yào duō hē shuǐ.</td><td>Then I'll prescribe another; drink plenty of water.</td></tr>
+<tr><td>病人</td><td>要不要打针？</td><td>Yào bu yào dǎ zhēn?</td><td>Do I need an injection?</td></tr></tbody></table>
+<p><strong>Listening tip.</strong> Prescription details (how many times, when, how many tablets) are the usual exam target; note them as <em>3× / after meal / 2</em>. <strong>Typical mistake:</strong> confusing 「饭前」 (before meals) with 「饭后」 (after meals).</p>
+<p><strong>Extra practice.</strong></p><ol><li>「一天两次，一次一片」: total tablets per day?<div class="dap-an"><strong>Answer:</strong> Two.</div></li></ol>`,
+`<h3>Đi xa hơn: chuỗi câu hỏi của bác sĩ</h3>
+<p>Buổi khám theo một kịch bản dễ đoán nên bạn có thể đoán trước từng câu hỏi. (1) Chào và hỏi bệnh: 「哪里不舒服？」 Nǎlǐ bù shūfu? (2) Thời gian: 「多长时间了？」 Duō cháng shíjiān le? (3) Triệu chứng liên quan: 「发烧吗？咳嗽吗？」 (4) Tiền sử: 「以前有过这种情况吗？对什么药过敏吗？」 Duì shénme yào guòmǐn ma? (5) Khám: 「张开嘴，说‘啊’。」 Zhāng kāi zuǐ, shuō “à”. (6) Chẩn đoán: 「你得了感冒。」 (7) Dặn dò: 「一天三次，饭后吃，一次两片。」 Yì tiān sān cì, fàn hòu chī, yí cì liǎng piàn.</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>医生</td><td>你对什么药过敏吗？</td><td>Nǐ duì shénme yào guòmǐn ma?</td><td>Bạn dị ứng thuốc nào không?</td></tr>
+<tr><td>病人</td><td>我对青霉素过敏。</td><td>Wǒ duì qīngméisù guòmǐn.</td><td>Tôi dị ứng penicillin.</td></tr>
+<tr><td>医生</td><td>那我给你开别的药，要多喝水。</td><td>Nà wǒ gěi nǐ kāi bié de yào, yào duō hē shuǐ.</td><td>Vậy tôi kê thuốc khác, nhớ uống nhiều nước.</td></tr>
+<tr><td>病人</td><td>要不要打针？</td><td>Yào bu yào dǎ zhēn?</td><td>Có cần tiêm không?</td></tr></tbody></table>
+<p><strong>Mẹo nghe.</strong> Chi tiết kê đơn (mấy lần, khi nào, mấy viên) thường là đích của câu hỏi thi; hãy ghi dạng <em>3× / sau ăn / 2</em>. <strong>Lỗi điển hình:</strong> nhầm 「饭前」 (trước bữa ăn) với 「饭后」 (sau bữa ăn).</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>「一天两次，一次一片」: mỗi ngày tổng cộng mấy viên?<div class="dap-an"><strong>Đáp án:</strong> Hai viên.</div></li></ol>`],
+
+  'cls201-ts-5-3': [`<h3>Going further: giving advice at three strengths</h3>
+<p>Advice has levels. Gentle suggestion: 「你可以…」 (Nǐ kěyǐ…) and 「要不要…？」 (Yào bu yào…?). Normal advice: 「你最好…」 (Nǐ zuìhǎo…, you had better) and 「应该…」 (yīnggāi). Strong warning: 「千万不要…」 (qiānwàn bú yào…, absolutely do not) and 「一定要…」 (yídìng yào…). Healthy-habit vocabulary: 早睡早起 zǎo shuì zǎo qǐ, 锻炼身体 duànliàn shēntǐ, 少吃油腻的东西 shǎo chī yóunì de dōngxi, 多吃蔬菜水果 duō chī shūcài shuǐguǒ, 戒烟 jiè yān (quit smoking).</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Strength</th></tr></thead><tbody>
+<tr><td>你可以每天散步半小时。</td><td>Nǐ kěyǐ měitiān sànbù bàn xiǎoshí.</td><td>gentle</td></tr>
+<tr><td>你最好早点儿睡。</td><td>Nǐ zuìhǎo zǎodiǎnr shuì.</td><td>normal</td></tr>
+<tr><td>千万别熬夜！</td><td>Qiānwàn bié áoyè!</td><td>strong</td></tr>
+<tr><td>不要一边吃饭一边玩手机。</td><td>Bú yào yìbiān chī fàn yìbiān wán shǒujī.</td><td>normal, negative</td></tr></tbody></table>
+<p><strong>Role-play.</strong> A has no energy and often stays up late; B gives three pieces of advice, one gentle, one normal, one strong. <strong>Typical mistake:</strong> using 「要」 alone as advice, which sounds like an order; soften it with 「最好」 or 「可以」.</p>
+<p><strong>Extra practice.</strong></p><ol><li>Which is stronger: 「你最好戒烟」 or 「你一定要戒烟」?<div class="dap-an"><strong>Answer:</strong> 一定要.</div></li></ol>`,
+`<h3>Đi xa hơn: đưa lời khuyên ở ba mức</h3>
+<p>Lời khuyên có nhiều mức. Gợi ý nhẹ: 「你可以…」 (Nǐ kěyǐ…) và 「要不要…？」 (Yào bu yào…?). Khuyên thường: 「你最好…」 (Nǐ zuìhǎo…, tốt nhất là) và 「应该…」 (yīnggāi). Cảnh báo mạnh: 「千万不要…」 (qiānwàn bú yào…, tuyệt đối đừng) và 「一定要…」 (yídìng yào…). Từ vựng thói quen lành mạnh: 早睡早起 zǎo shuì zǎo qǐ, 锻炼身体 duànliàn shēntǐ, 少吃油腻的东西 shǎo chī yóunì de dōngxi, 多吃蔬菜水果 duō chī shūcài shuǐguǒ, 戒烟 jiè yān (bỏ thuốc).</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Mức</th></tr></thead><tbody>
+<tr><td>你可以每天散步半小时。</td><td>Nǐ kěyǐ měitiān sànbù bàn xiǎoshí.</td><td>nhẹ</td></tr>
+<tr><td>你最好早点儿睡。</td><td>Nǐ zuìhǎo zǎodiǎnr shuì.</td><td>thường</td></tr>
+<tr><td>千万别熬夜！</td><td>Qiānwàn bié áoyè!</td><td>mạnh</td></tr>
+<tr><td>不要一边吃饭一边玩手机。</td><td>Bú yào yìbiān chī fàn yìbiān wán shǒujī.</td><td>thường, phủ định</td></tr></tbody></table>
+<p><strong>Nhập vai.</strong> A thiếu năng lượng và hay thức khuya; B đưa ba lời khuyên: một nhẹ, một thường, một mạnh. <strong>Lỗi điển hình:</strong> chỉ dùng 「要」 làm lời khuyên nghe như mệnh lệnh; hãy làm mềm bằng 「最好」 hoặc 「可以」.</p>
+<p><strong>Luyện thêm.</strong></p><ol><li>Câu nào mạnh hơn: 「你最好戒烟」 hay 「你一定要戒烟」?<div class="dap-an"><strong>Đáp án:</strong> 一定要.</div></li></ol>`],
+  'cls201-ts-6-1': [`<h3>Going further: reading a train announcement and buying a ticket</h3>
+<p>Station audio is dense with numbers and fixed phrases. Learn the core ones: 「检票口」 jiǎnpiàokǒu (ticket gate), 「站台」 zhàntái (platform), 「候车室」 hòuchēshì (waiting hall), 「晚点」 wǎndiǎn (delayed), 「正点」 zhèngdiǎn (on time), 「始发站 / 终点站」 shǐfāzhàn / zhōngdiǎnzhàn (departure / terminal), 「改签」 gǎiqiān (change ticket), 「退票」 tuìpiào (refund). A typical announcement: 「各位旅客请注意，开往上海的G七次列车现在开始检票，请到五号检票口。」 (Gèwèi lǚkè qǐng zhùyì, kāi wǎng Shànghǎi de G qī cì lièchē xiànzài kāishǐ jiǎnpiào, qǐng dào wǔ hào jiǎnpiàokǒu.) Facts: destination Shanghai, train G7, boarding now, gate 5. Train numbers are read digit by digit; 「一」 is often read <em>yāo</em> in numbers to avoid confusion with 七.</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>顾客</td><td>我要两张去杭州的票。</td><td>Wǒ yào liǎng zhāng qù Hángzhōu de piào.</td><td>Two tickets to Hangzhou.</td></tr>
+<tr><td>售票员</td><td>几号的？要硬座还是软卧？</td><td>Jǐ hào de? Yào yìngzuò háishi ruǎnwò?</td><td>Which date? Hard seat or soft sleeper?</td></tr>
+<tr><td>顾客</td><td>下周一的，二等座。</td><td>Xià zhōuyī de, èr děng zuò.</td><td>Next Monday, second class.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> missing 「改到」 (changed to) and writing down the old platform. <strong>Extra practice:</strong></p><ol><li>How is "train D312" read?<div class="dap-an"><strong>Answer:</strong> D sān yāo èr (or yī èr).</div></li></ol>`,
+`<h3>Đi xa hơn: nghe thông báo tàu và mua vé</h3>
+<p>Âm thanh ở nhà ga dày đặc con số và cụm cố định. Hãy học các cụm cốt lõi: 「检票口」 jiǎnpiàokǒu (cổng soát vé), 「站台」 zhàntái (sân ga), 「候车室」 hòuchēshì (phòng chờ), 「晚点」 wǎndiǎn (trễ), 「正点」 zhèngdiǎn (đúng giờ), 「始发站 / 终点站」 shǐfāzhàn / zhōngdiǎnzhàn (ga xuất phát / ga cuối), 「改签」 gǎiqiān (đổi vé), 「退票」 tuìpiào (trả vé). Một thông báo điển hình: 「各位旅客请注意，开往上海的G七次列车现在开始检票，请到五号检票口。」 (Gèwèi lǚkè qǐng zhùyì, kāi wǎng Shànghǎi de G qī cì lièchē xiànzài kāishǐ jiǎnpiào, qǐng dào wǔ hào jiǎnpiàokǒu.) Dữ kiện: đi Thượng Hải, tàu G7, bắt đầu soát vé, cổng 5. Số hiệu tàu đọc từng chữ số; 「一」 trong dãy số thường đọc <em>yāo</em> để khỏi lẫn với 七.</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>顾客</td><td>我要两张去杭州的票。</td><td>Wǒ yào liǎng zhāng qù Hángzhōu de piào.</td><td>Tôi lấy hai vé đi Hàng Châu.</td></tr>
+<tr><td>售票员</td><td>几号的？要硬座还是软卧？</td><td>Jǐ hào de? Yào yìngzuò háishi ruǎnwò?</td><td>Ngày mấy? Ghế cứng hay giường nằm mềm?</td></tr>
+<tr><td>顾客</td><td>下周一的，二等座。</td><td>Xià zhōuyī de, èr děng zuò.</td><td>Thứ Hai tuần sau, ghế hạng hai.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> bỏ lỡ 「改到」 (đổi sang) và ghi sân ga cũ. <strong>Luyện thêm:</strong></p><ol><li>“Tàu D312” đọc thế nào?<div class="dap-an"><strong>Đáp án:</strong> D sān yāo èr (hoặc yī èr).</div></li></ol>`],
+
+  'cls201-ts-6-2': [`<h3>Going further: solving problems politely at the front desk</h3>
+<p>Complaints at a hotel follow a formula: state the problem, state what you want, add a polite softener. Problem: 「空调坏了」 (kōngtiáo huài le), 「没有热水」 (méiyǒu rè shuǐ), 「网络连不上」 (wǎngluò lián bu shàng), 「房间太吵了」 (fángjiān tài chǎo le). Request: 「能不能帮我换一个房间？」 (Néng bu néng bāng wǒ huàn yí ge fángjiān?), 「麻烦你找人来修一下」 (Máfan nǐ zhǎo rén lái xiū yíxià). Softeners: 「不好意思」 (bù hǎoyìsi), 「麻烦你」 (máfan nǐ). The receptionist's typical replies: 「马上处理」 (mǎshàng chǔlǐ, right away), 「请稍等」 (qǐng shāo děng), 「给您换一间」.</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>客人</td><td>不好意思，我房间的空调坏了。</td><td>Bù hǎoyìsi, wǒ fángjiān de kōngtiáo huài le.</td><td>Sorry, the air conditioner is broken.</td></tr>
+<tr><td>前台</td><td>真抱歉，我们马上派人去修。</td><td>Zhēn bàoqiàn, wǒmen mǎshàng pài rén qù xiū.</td><td>So sorry, we'll send someone right away.</td></tr>
+<tr><td>客人</td><td>要是修不好，能换房间吗？</td><td>Yàoshi xiū bu hǎo, néng huàn fángjiān ma?</td><td>If it can't be fixed, can I change rooms?</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> sounding commanding with 「你给我换房间」; add 「能不能」 or 「麻烦你」. Check-out phrases: 「退房」 (tuìfáng), 「押金」 (yājīn, deposit), 「发票」 (fāpiào, receipt). <strong>Extra practice:</strong></p><ol><li>Make "No hot water" into a polite request.<div class="dap-an"><strong>Answer:</strong> 不好意思，我房间没有热水，麻烦你找人看一下。</div></li></ol>`,
+`<h3>Đi xa hơn: giải quyết sự cố lịch sự ở quầy lễ tân</h3>
+<p>Phàn nàn ở khách sạn theo công thức: nêu vấn đề, nêu điều muốn, thêm lời làm mềm. Vấn đề: 「空调坏了」 (kōngtiáo huài le), 「没有热水」 (méiyǒu rè shuǐ), 「网络连不上」 (wǎngluò lián bu shàng), 「房间太吵了」 (fángjiān tài chǎo le). Yêu cầu: 「能不能帮我换一个房间？」 (Néng bu néng bāng wǒ huàn yí ge fángjiān?), 「麻烦你找人来修一下」 (Máfan nǐ zhǎo rén lái xiū yíxià). Từ làm mềm: 「不好意思」 (bù hǎoyìsi), 「麻烦你」 (máfan nǐ). Lễ tân hay đáp: 「马上处理」 (mǎshàng chǔlǐ, xử lý ngay), 「请稍等」 (qǐng shāo děng), 「给您换一间」.</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>客人</td><td>不好意思，我房间的空调坏了。</td><td>Bù hǎoyìsi, wǒ fángjiān de kōngtiáo huài le.</td><td>Xin lỗi, máy lạnh phòng tôi hỏng.</td></tr>
+<tr><td>前台</td><td>真抱歉，我们马上派人去修。</td><td>Zhēn bàoqiàn, wǒmen mǎshàng pài rén qù xiū.</td><td>Thành thật xin lỗi, chúng tôi cử người sửa ngay.</td></tr>
+<tr><td>客人</td><td>要是修不好，能换房间吗？</td><td>Yàoshi xiū bu hǎo, néng huàn fángjiān ma?</td><td>Nếu không sửa được, đổi phòng được không?</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> nói kiểu ra lệnh 「你给我换房间」; hãy thêm 「能不能」 hoặc 「麻烦你」. Cụm khi trả phòng: 「退房」 (tuìfáng), 「押金」 (yājīn, tiền cọc), 「发票」 (fāpiào, hoá đơn). <strong>Luyện thêm:</strong></p><ol><li>Biến “Không có nước nóng” thành lời đề nghị lịch sự.<div class="dap-an"><strong>Đáp án:</strong> 不好意思，我房间没有热水，麻烦你找人看一下。</div></li></ol>`],
+
+  'cls201-ts-6-3': [`<h3>Going further: forecasts and how a plan changes</h3>
+<p>Weather audio uses compact forecast language: 「多云转晴」 (duōyún zhuǎn qíng, cloudy turning clear), 「小雨」 (light rain), 「大雨」 (heavy rain), 「气温」 qìwēn (temperature), 「最高气温三十二度，最低气温二十四度」. The key word 「转」 zhuǎn means “changing to”. Delays: 「受大雾影响，航班延误」 (shòu dà wù yǐngxiǎng, hángbān yánwù, flights delayed because of fog), 「取消」 (qǔxiāo, cancelled), 「改期」 (gǎiqī, rescheduled). Plans change with 「改成」, 「推迟到」, 「提前」.</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>明天白天多云，夜里有小雨。</td><td>Míngtiān báitiān duōyún, yèlǐ yǒu xiǎoyǔ.</td><td>Cloudy by day, light rain at night.</td></tr>
+<tr><td>由于台风，比赛推迟到周日。</td><td>Yóuyú táifēng, bǐsài tuīchí dào zhōurì.</td><td>Because of the typhoon, the match is postponed to Sunday.</td></tr>
+<tr><td>航班提前了一个小时起飞。</td><td>Hángbān tíqián le yí ge xiǎoshí qǐfēi.</td><td>The flight takes off one hour earlier.</td></tr>
+<tr><td>我们只好改成室内活动。</td><td>Wǒmen zhǐhǎo gǎi chéng shìnèi huódòng.</td><td>We have to switch to an indoor activity.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> confusing 「推迟」 (later) with 「提前」 (earlier). Note the direction word before writing the new time. <strong>Role-play:</strong> you call a friend to say the hiking trip is moved because of rain and propose an alternative. <strong>Extra practice:</strong></p><ol><li>「会议从三点提前到两点」: new time?<div class="dap-an"><strong>Answer:</strong> 2 o'clock.</div></li></ol>`,
+`<h3>Đi xa hơn: dự báo thời tiết và khi kế hoạch thay đổi</h3>
+<p>Âm thanh thời tiết dùng ngôn ngữ dự báo cô đọng: 「多云转晴」 (duōyún zhuǎn qíng, nhiều mây chuyển nắng), 「小雨」 (mưa nhỏ), 「大雨」 (mưa to), 「气温」 qìwēn (nhiệt độ), 「最高气温三十二度，最低气温二十四度」. Từ then chốt 「转」 zhuǎn nghĩa là “chuyển sang”. Trễ: 「受大雾影响，航班延误」 (shòu dà wù yǐngxiǎng, hángbān yánwù, chuyến bay trễ vì sương mù), 「取消」 (qǔxiāo, huỷ), 「改期」 (gǎiqī, dời ngày). Kế hoạch đổi với 「改成」, 「推迟到」, 「提前」.</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>明天白天多云，夜里有小雨。</td><td>Míngtiān báitiān duōyún, yèlǐ yǒu xiǎoyǔ.</td><td>Ban ngày nhiều mây, đêm có mưa nhỏ.</td></tr>
+<tr><td>由于台风，比赛推迟到周日。</td><td>Yóuyú táifēng, bǐsài tuīchí dào zhōurì.</td><td>Do bão, trận đấu dời sang Chủ nhật.</td></tr>
+<tr><td>航班提前了一个小时起飞。</td><td>Hángbān tíqián le yí ge xiǎoshí qǐfēi.</td><td>Chuyến bay cất cánh sớm một tiếng.</td></tr>
+<tr><td>我们只好改成室内活动。</td><td>Wǒmen zhǐhǎo gǎi chéng shìnèi huódòng.</td><td>Chúng tôi đành đổi sang hoạt động trong nhà.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> nhầm 「推迟」 (muộn hơn) với 「提前」 (sớm hơn). Hãy ghi từ chỉ hướng trước khi ghi giờ mới. <strong>Nhập vai:</strong> bạn gọi cho bạn để báo chuyến leo núi dời vì mưa và đề xuất phương án khác. <strong>Luyện thêm:</strong></p><ol><li>「会议从三点提前到两点」: giờ mới?<div class="dap-an"><strong>Đáp án:</strong> 2 giờ.</div></li></ol>`],
+
+  'cls201-ts-7-1': [`<h3>Going further: talking about a hobby in a paragraph</h3>
+<p>To speak about a hobby for 30 seconds, use a four-step frame: <strong>what</strong> (我喜欢…), <strong>since when / how often</strong> (从…开始, 每…), <strong>why</strong> (因为…), <strong>result or plan</strong> (所以… / 以后想…). Model: 「我喜欢打羽毛球，从高中开始，每个星期打两次。因为打球可以锻炼身体，也可以认识新朋友。以后我想参加学校比赛。」 (Wǒ xǐhuan dǎ yǔmáoqiú, cóng gāozhōng kāishǐ, měi ge xīngqī dǎ liǎng cì. Yīnwèi dǎqiú kěyǐ duànliàn shēntǐ, yě kěyǐ rènshi xīn péngyou. Yǐhòu wǒ xiǎng cānjiā xuéxiào bǐsài.) Verb choice matters: 打 (hit/ball games: 打篮球), 踢 (kick: 踢足球), 游 (swim), 弹 (play string/keys: 弹吉他, 弹钢琴), 唱 (sing).</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>打乒乓球</td><td>dǎ pīngpāngqiú</td><td>play table tennis</td></tr>
+<tr><td>踢足球</td><td>tī zúqiú</td><td>play football</td></tr>
+<tr><td>弹吉他</td><td>tán jítā</td><td>play guitar</td></tr>
+<tr><td>爬山</td><td>pá shān</td><td>go hiking</td></tr>
+<tr><td>拍照</td><td>pāi zhào</td><td>take photos</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> using 「玩」 for everything (「玩足球」); use the specific verb. <strong>Extra practice:</strong></p><ol><li>Which verb goes with 钢琴?<div class="dap-an"><strong>Answer:</strong> 弹 (弹钢琴).</div></li></ol>`,
+`<h3>Đi xa hơn: nói về sở thích thành một đoạn</h3>
+<p>Để nói về sở thích 30 giây, dùng khung bốn bước: <strong>gì</strong> (我喜欢…), <strong>từ khi nào / bao lâu một lần</strong> (从…开始, 每…), <strong>vì sao</strong> (因为…), <strong>kết quả hoặc dự định</strong> (所以… / 以后想…). Mẫu: 「我喜欢打羽毛球，从高中开始，每个星期打两次。因为打球可以锻炼身体，也可以认识新朋友。以后我想参加学校比赛。」 (Wǒ xǐhuan dǎ yǔmáoqiú, cóng gāozhōng kāishǐ, měi ge xīngqī dǎ liǎng cì. Yīnwèi dǎqiú kěyǐ duànliàn shēntǐ, yě kěyǐ rènshi xīn péngyou. Yǐhòu wǒ xiǎng cānjiā xuéxiào bǐsài.) Chọn động từ rất quan trọng: 打 (đánh/bóng: 打篮球), 踢 (đá: 踢足球), 游 (bơi), 弹 (gảy/bấm: 弹吉他, 弹钢琴), 唱 (hát).</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>打乒乓球</td><td>dǎ pīngpāngqiú</td><td>chơi bóng bàn</td></tr>
+<tr><td>踢足球</td><td>tī zúqiú</td><td>đá bóng</td></tr>
+<tr><td>弹吉他</td><td>tán jítā</td><td>chơi guitar</td></tr>
+<tr><td>爬山</td><td>pá shān</td><td>leo núi</td></tr>
+<tr><td>拍照</td><td>pāi zhào</td><td>chụp ảnh</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> dùng 「玩」 cho mọi thứ (「玩足球」); hãy dùng động từ riêng. <strong>Luyện thêm:</strong></p><ol><li>Động từ nào đi với 钢琴?<div class="dap-an"><strong>Đáp án:</strong> 弹 (弹钢琴).</div></li></ol>`],
+
+  'cls201-ts-7-2': [`<h3>Going further: choosing among the modal verbs by ear</h3>
+<p>Six modals, six jobs. <strong>会 huì</strong> = learned skill or future likelihood: 「我会游泳」, 「明天会下雨」. <strong>能 néng</strong> = physical ability or circumstance permits: 「我今天能来」, 「这里能不能停车？」. <strong>可以 kěyǐ</strong> = permission: 「我可以进来吗？」. <strong>想 xiǎng</strong> = would like, wish: 「我想去中国」. <strong>要 yào</strong> = need or firm intention: 「我要买票」. <strong>打算 dǎsuàn</strong> = plan: 「我打算暑假去打工」. Negatives differ: 「不会」 (cannot, never learned), 「不能」 (cannot now), 「不可以 / 不行」 (not allowed), and 「别」 / 「不要」 (don't).</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>我感冒了，不能游泳。</td><td>Wǒ gǎnmào le, bù néng yóuyǒng.</td><td>I have a cold, so I can't swim today.</td></tr>
+<tr><td>我不会游泳。</td><td>Wǒ bú huì yóuyǒng.</td><td>I don't know how to swim.</td></tr>
+<tr><td>这里不可以拍照。</td><td>Zhèlǐ bù kěyǐ pāizhào.</td><td>Photos are not allowed here.</td></tr>
+<tr><td>我打算明年去留学。</td><td>Wǒ dǎsuàn míngnián qù liúxué.</td><td>I plan to study abroad next year.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> using 「会」 for permission or 「能」 for learned skill when the meaning matters: 「我会说中文」 (I can speak Chinese) versus 「我今天不能说话」 (I can't speak today). <strong>Extra practice:</strong></p><ol><li>Which modal fits "May I sit here?"<div class="dap-an"><strong>Answer:</strong> 可以: 我可以坐这儿吗？</div></li></ol>`,
+`<h3>Đi xa hơn: chọn động từ năng nguyện bằng tai</h3>
+<p>Sáu động từ năng nguyện, sáu việc khác nhau. <strong>会 huì</strong> = kỹ năng đã học hoặc khả năng xảy ra: 「我会游泳」, 「明天会下雨」. <strong>能 néng</strong> = khả năng thể chất hoặc hoàn cảnh cho phép: 「我今天能来」, 「这里能不能停车？」. <strong>可以 kěyǐ</strong> = được phép: 「我可以进来吗？」. <strong>想 xiǎng</strong> = muốn: 「我想去中国」. <strong>要 yào</strong> = cần hoặc quyết tâm: 「我要买票」. <strong>打算 dǎsuàn</strong> = dự định: 「我打算暑假去打工」. Phủ định khác nhau: 「不会」 (không biết, chưa học), 「不能」 (lúc này không thể), 「不可以 / 不行」 (không được phép), và 「别」 / 「不要」 (đừng).</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>我感冒了，不能游泳。</td><td>Wǒ gǎnmào le, bù néng yóuyǒng.</td><td>Tôi bị cảm nên hôm nay không bơi được.</td></tr>
+<tr><td>我不会游泳。</td><td>Wǒ bú huì yóuyǒng.</td><td>Tôi không biết bơi.</td></tr>
+<tr><td>这里不可以拍照。</td><td>Zhèlǐ bù kěyǐ pāizhào.</td><td>Ở đây không được chụp ảnh.</td></tr>
+<tr><td>我打算明年去留学。</td><td>Wǒ dǎsuàn míngnián qù liúxué.</td><td>Tôi dự định năm sau đi du học.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> dùng 「会」 cho sự cho phép hay 「能」 cho kỹ năng đã học khi nghĩa quan trọng: 「我会说中文」 (tôi biết nói tiếng Trung) khác 「我今天不能说话」 (hôm nay tôi không nói được). <strong>Luyện thêm:</strong></p><ol><li>Động từ nào hợp với “Tôi ngồi đây được không?”<div class="dap-an"><strong>Đáp án:</strong> 可以: 我可以坐这儿吗？</div></li></ol>`],
+
+  'cls201-ts-7-3': [`<h3>Going further: a complete invitation exchange</h3>
+<p>An invitation has five moves: opening, proposal, response, detail, closing. Proposal: 「周末有空吗？一起去看电影怎么样？」 (Zhōumò yǒu kòng ma? Yìqǐ qù kàn diànyǐng zěnmeyàng?). Warm acceptance: 「好啊，太好了！」 / 「没问题，我很想去。」 Soft decline with reason: 「真不巧，那天我已经有安排了。」 (Zhēn bù qiǎo, nà tiān wǒ yǐjīng yǒu ānpái le.) and counter-offer: 「下周可以吗？」 Details: time, place, meeting point: 「六点在校门口见。」 Closing: 「那就这么说定了！」 (Nà jiù zhème shuō dìng le!, It's settled).</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>A</td><td>这个星期六我过生日，你能来吗？</td><td>Zhège xīngqī liù wǒ guò shēngrì, nǐ néng lái ma?</td><td>It's my birthday on Saturday; can you come?</td></tr>
+<tr><td>B</td><td>真不巧，我要回老家。</td><td>Zhēn bù qiǎo, wǒ yào huí lǎojiā.</td><td>Unlucky, I'm going home.</td></tr>
+<tr><td>A</td><td>那太可惜了。</td><td>Nà tài kěxī le.</td><td>What a pity.</td></tr>
+<tr><td>B</td><td>下次我请你吃饭，算是补过。</td><td>Xià cì wǒ qǐng nǐ chī fàn, suàn shì bǔguò.</td><td>Next time I'll treat you to make up.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> declining with a bare 「不行」, which sounds rude. Always give a reason and, if possible, a counter-offer. <strong>Role-play:</strong> invite your partner to a concert; they decline politely, then accept a new time. <strong>Extra practice:</strong></p><ol><li>Does 「我再看看」 accept the invitation?<div class="dap-an"><strong>Answer:</strong> Not yet; it is undecided, often a soft no.</div></li></ol>`,
+`<h3>Đi xa hơn: một cuộc trao đổi mời trọn vẹn</h3>
+<p>Một lời mời gồm năm bước: mở đầu, đề nghị, phản hồi, chi tiết, kết. Đề nghị: 「周末有空吗？一起去看电影怎么样？」 (Zhōumò yǒu kòng ma? Yìqǐ qù kàn diànyǐng zěnmeyàng?). Nhận lời ấm áp: 「好啊，太好了！」 / 「没问题，我很想去。」 Từ chối nhẹ có lý do: 「真不巧，那天我已经有安排了。」 (Zhēn bù qiǎo, nà tiān wǒ yǐjīng yǒu ānpái le.) và đề nghị khác: 「下周可以吗？」 Chi tiết: giờ, nơi, điểm hẹn: 「六点在校门口见。」 Kết: 「那就这么说定了！」 (Nà jiù zhème shuō dìng le!, Vậy chốt nhé).</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>A</td><td>这个星期六我过生日，你能来吗？</td><td>Zhège xīngqī liù wǒ guò shēngrì, nǐ néng lái ma?</td><td>Thứ Bảy này sinh nhật mình, bạn đến được không?</td></tr>
+<tr><td>B</td><td>真不巧，我要回老家。</td><td>Zhēn bù qiǎo, wǒ yào huí lǎojiā.</td><td>Tiếc quá, mình phải về quê.</td></tr>
+<tr><td>A</td><td>那太可惜了。</td><td>Nà tài kěxī le.</td><td>Vậy tiếc thật.</td></tr>
+<tr><td>B</td><td>下次我请你吃饭，算是补过。</td><td>Xià cì wǒ qǐng nǐ chī fàn, suàn shì bǔguò.</td><td>Lần sau mình mời bạn ăn để bù.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> từ chối cộc lốc 「不行」 nghe thô. Luôn nêu lý do và nếu được thì đề nghị lựa chọn khác. <strong>Nhập vai:</strong> mời bạn cùng cặp đi xem hoà nhạc; bạn từ chối lịch sự, rồi nhận lời một thời điểm mới. <strong>Luyện thêm:</strong></p><ol><li>「我再看看」 có phải nhận lời không?<div class="dap-an"><strong>Đáp án:</strong> Chưa; còn lưng chừng, thường là từ chối nhẹ.</div></li></ol>`],
+
+  'cls201-ts-8-1': [`<h3>Going further: a 60-second self-introduction and likely questions</h3>
+<p>For an internship interview, build your introduction in four sentences: name and school, major, strengths with one example, reason for applying. Model: 「您好，我叫阮明，是越南FPT大学中文专业的三年级学生。我的汉语水平是HSK三级，也会一点儿英语。上学期我参加了学校的翻译社团，帮助中国同学办手续。我很喜欢贵公司的文化，希望能在这里实习，学到更多东西。」 (Nín hǎo, wǒ jiào Ruǎn Míng, shì Yuènán FPT dàxué Zhōngwén zhuānyè de sān niánjí de xuésheng. Wǒ de Hànyǔ shuǐpíng shì HSK sān jí, yě huì yìdiǎnr Yīngyǔ. Shàng xuéqī wǒ cānjiā le xuéxiào de fānyì shètuán, bāngzhù Zhōngguó tóngxué bàn shǒuxù. Wǒ hěn xǐhuan guì gōngsī de wénhuà, xīwàng néng zài zhèlǐ shíxí, xuédào gèng duō dōngxi.)</p>
+<table><thead><tr><th>Question</th><th>Pinyin</th><th>Short answer idea</th></tr></thead><tbody>
+<tr><td>你为什么选择我们公司？</td><td>Nǐ wèishénme xuǎnzé wǒmen gōngsī?</td><td>culture, learning</td></tr>
+<tr><td>你的优点是什么？</td><td>Nǐ de yōudiǎn shì shénme?</td><td>strength + example</td></tr>
+<tr><td>你能每周工作几天？</td><td>Nǐ néng měi zhōu gōngzuò jǐ tiān?</td><td>days, time</td></tr>
+<tr><td>你有什么问题想问我们吗？</td><td>Nǐ yǒu shénme wèntí xiǎng wèn wǒmen ma?</td><td>one real question</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> using 「你」 to the interviewer instead of 「您」, or giving a one-word answer. Use 「您」 and 「贵公司」 (your company, formal). <strong>Extra practice:</strong></p><ol><li>Make a formal "I hope to learn from you".<div class="dap-an"><strong>Answer:</strong> 我希望能向您学习。</div></li></ol>`,
+`<h3>Đi xa hơn: tự giới thiệu 60 giây và các câu hỏi thường gặp</h3>
+<p>Với phỏng vấn thực tập, dựng phần giới thiệu trong bốn câu: tên và trường, ngành học, điểm mạnh kèm một ví dụ, lý do ứng tuyển. Mẫu: 「您好，我叫阮明，是越南FPT大学中文专业的三年级学生。我的汉语水平是HSK三级，也会一点儿英语。上学期我参加了学校的翻译社团，帮助中国同学办手续。我很喜欢贵公司的文化，希望能在这里实习，学到更多东西。」 (Nín hǎo, wǒ jiào Ruǎn Míng, shì Yuènán FPT dàxué Zhōngwén zhuānyè de sān niánjí de xuésheng. Wǒ de Hànyǔ shuǐpíng shì HSK sān jí, yě huì yìdiǎnr Yīngyǔ. Shàng xuéqī wǒ cānjiā le xuéxiào de fānyì shètuán, bāngzhù Zhōngguó tóngxué bàn shǒuxù. Wǒ hěn xǐhuan guì gōngsī de wénhuà, xīwàng néng zài zhèlǐ shíxí, xuédào gèng duō dōngxi.)</p>
+<table><thead><tr><th>Câu hỏi</th><th>Pinyin</th><th>Ý đáp ngắn</th></tr></thead><tbody>
+<tr><td>你为什么选择我们公司？</td><td>Nǐ wèishénme xuǎnzé wǒmen gōngsī?</td><td>văn hoá, học hỏi</td></tr>
+<tr><td>你的优点是什么？</td><td>Nǐ de yōudiǎn shì shénme?</td><td>điểm mạnh + ví dụ</td></tr>
+<tr><td>你能每周工作几天？</td><td>Nǐ néng měi zhōu gōngzuò jǐ tiān?</td><td>số ngày, giờ giấc</td></tr>
+<tr><td>你有什么问题想问我们吗？</td><td>Nǐ yǒu shénme wèntí xiǎng wèn wǒmen ma?</td><td>một câu hỏi thật</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> dùng 「你」 với người phỏng vấn thay vì 「您」, hoặc trả lời một chữ. Hãy dùng 「您」 và 「贵公司」 (quý công ty, trang trọng). <strong>Luyện thêm:</strong></p><ol><li>Nói trang trọng “Tôi hy vọng được học hỏi từ ngài”.<div class="dap-an"><strong>Đáp án:</strong> 我希望能向您学习。</div></li></ol>`],
+
+  'cls201-ts-8-2': [`<h3>Going further: voice-message habits and phone repair phrases</h3>
+<p>WeChat voice messages are fast, informal and full of fillers (「嗯」, 「那个」, 「就是说」), and often leave out the subject. When you listen, play the message twice: first for the main request, second for numbers and times. When you record, keep to one idea per message, speak a little slower than normal, and state key numbers twice: 「我六点到，对，六点。」 On the phone, use repair phrases when the line is bad: 「喂，你能大声一点儿吗？」 (Wéi, nǐ néng dàshēng yìdiǎnr ma?), 「信号不好，我听不清楚」 (xìnhào bù hǎo, wǒ tīng bu qīngchu), 「请再说一遍」 (qǐng zài shuō yí biàn), 「我给你回电话」 (wǒ gěi nǐ huí diànhuà).</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Function</th></tr></thead><tbody>
+<tr><td>喂，请问是王经理吗？</td><td>Wéi, qǐngwèn shì Wáng jīnglǐ ma?</td><td>opening a call</td></tr>
+<tr><td>他现在不在，要我转告吗？</td><td>Tā xiànzài bú zài, yào wǒ zhuǎngào ma?</td><td>offering to pass a message</td></tr>
+<tr><td>我的电话快没电了。</td><td>Wǒ de diànhuà kuài méi diàn le.</td><td>battery is dying</td></tr>
+<tr><td>我先挂了，一会儿给你发微信。</td><td>Wǒ xiān guà le, yíhuìr gěi nǐ fā Wēixìn.</td><td>closing</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> saying 「再见」 and hanging up without confirming time or place. Repeat key facts back: 「那就明天九点，对吗？」 <strong>Extra practice:</strong></p><ol><li>How do you ask someone to repeat louder?<div class="dap-an"><strong>Answer:</strong> 请你大声一点儿，再说一遍。</div></li></ol>`,
+`<h3>Đi xa hơn: thói quen tin nhắn thoại và câu sửa lỗi khi gọi điện</h3>
+<p>Tin nhắn thoại WeChat nhanh, thân mật, đầy từ đệm (「嗯」, 「那个」, 「就是说」) và hay lược chủ ngữ. Khi nghe, phát tin hai lần: lần một lấy yêu cầu chính, lần hai lấy số và giờ. Khi ghi, mỗi tin một ý, nói chậm hơn bình thường một chút và nhắc lại số quan trọng hai lần: 「我六点到，对，六点。」 Khi gọi điện, dùng câu sửa lỗi lúc đường truyền kém: 「喂，你能大声一点儿吗？」 (Wéi, nǐ néng dàshēng yìdiǎnr ma?), 「信号不好，我听不清楚」 (xìnhào bù hǎo, wǒ tīng bu qīngchu), 「请再说一遍」 (qǐng zài shuō yí biàn), 「我给你回电话」 (wǒ gěi nǐ huí diànhuà).</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Chức năng</th></tr></thead><tbody>
+<tr><td>喂，请问是王经理吗？</td><td>Wéi, qǐngwèn shì Wáng jīnglǐ ma?</td><td>mở đầu cuộc gọi</td></tr>
+<tr><td>他现在不在，要我转告吗？</td><td>Tā xiànzài bú zài, yào wǒ zhuǎngào ma?</td><td>đề nghị nhắn lại</td></tr>
+<tr><td>我的电话快没电了。</td><td>Wǒ de diànhuà kuài méi diàn le.</td><td>pin sắp hết</td></tr>
+<tr><td>我先挂了，一会儿给你发微信。</td><td>Wǒ xiān guà le, yíhuìr gěi nǐ fā Wēixìn.</td><td>kết thúc</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> nói 「再见」 rồi cúp máy mà không xác nhận giờ hay nơi. Hãy nhắc lại dữ kiện chính: 「那就明天九点，对吗？」 <strong>Luyện thêm:</strong></p><ol><li>Nhờ người ta nói to hơn và lặp lại thế nào?<div class="dap-an"><strong>Đáp án:</strong> 请你大声一点儿，再说一遍。</div></li></ol>`],
+
+  'cls201-ts-8-3': [`<h3>Going further: requests, status reports and meeting phrases</h3>
+<p>The workplace register is polite but direct. Request with 「能不能…」 or 「请你…」 and a deadline: 「请你周五下班前把报告发给我。」 (Qǐng nǐ zhōuwǔ xiàbān qián bǎ bàogào fā gěi wǒ.) Accept with 「好的，没问题」 or negotiate: 「周五有点儿紧，周一可以吗？」 Report progress in the order <em>done / doing / blocked</em>: 「第一部分已经完成了，第二部分正在做，还缺一些数据。」 (Dì yī bùfen yǐjīng wánchéng le, dì èr bùfen zhèngzài zuò, hái quē yìxiē shùjù.) Meeting phrases: 「今天的议题有三个」 (three agenda items), 「我补充一点」 (I'd like to add something), 「会后发会议纪要」 (minutes after the meeting).</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>主管</td><td>这份资料明天要用，来得及吗？</td><td>Zhè fèn zīliào míngtiān yào yòng, láidejí ma?</td><td>Needed tomorrow; is there time?</td></tr>
+<tr><td>实习生</td><td>今晚我整理好，早上发给您。</td><td>Jīn wǎn wǒ zhěnglǐ hǎo, zǎoshang fā gěi nín.</td><td>I'll finish tonight and send it in the morning.</td></tr>
+<tr><td>主管</td><td>好，有问题随时告诉我。</td><td>Hǎo, yǒu wèntí suíshí gàosu wǒ.</td><td>OK, tell me anytime if there's a problem.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> saying 「我不知道」 to a supervisor; use 「我去确认一下」 (let me check). <strong>Extra practice:</strong></p><ol><li>Politely ask to move a deadline from Friday to Monday.<div class="dap-an"><strong>Answer:</strong> 周五有点儿紧，能不能推迟到周一？</div></li></ol>`,
+`<h3>Đi xa hơn: yêu cầu, báo cáo tiến độ và cụm họp hành</h3>
+<p>Văn phong nơi làm việc lịch sự nhưng thẳng. Yêu cầu bằng 「能不能…」 hoặc 「请你…」 kèm hạn chót: 「请你周五下班前把报告发给我。」 (Qǐng nǐ zhōuwǔ xiàbān qián bǎ bàogào fā gěi wǒ.) Nhận bằng 「好的，没问题」 hoặc thương lượng: 「周五有点儿紧，周一可以吗？」 Báo cáo tiến độ theo thứ tự <em>xong / đang làm / vướng</em>: 「第一部分已经完成了，第二部分正在做，还缺一些数据。」 (Dì yī bùfen yǐjīng wánchéng le, dì èr bùfen zhèngzài zuò, hái quē yìxiē shùjù.) Cụm họp: 「今天的议题有三个」 (ba nội dung), 「我补充一点」 (tôi xin bổ sung), 「会后发会议纪要」 (sau họp gửi biên bản).</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>主管</td><td>这份资料明天要用，来得及吗？</td><td>Zhè fèn zīliào míngtiān yào yòng, láidejí ma?</td><td>Tài liệu này mai cần, kịp không?</td></tr>
+<tr><td>实习生</td><td>今晚我整理好，早上发给您。</td><td>Jīn wǎn wǒ zhěnglǐ hǎo, zǎoshang fā gěi nín.</td><td>Tối nay em sắp xếp xong, sáng gửi anh.</td></tr>
+<tr><td>主管</td><td>好，有问题随时告诉我。</td><td>Hǎo, yǒu wèntí suíshí gàosu wǒ.</td><td>Được, có vấn đề cứ báo tôi bất cứ lúc nào.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> nói 「我不知道」 với cấp trên; hãy nói 「我去确认一下」 (để tôi kiểm tra). <strong>Luyện thêm:</strong></p><ol><li>Xin lịch sự dời hạn từ thứ Sáu sang thứ Hai.<div class="dap-an"><strong>Đáp án:</strong> 周五有点儿紧，能不能推迟到周一？</div></li></ol>`],
+  'cls201-ts-9-1': [`<h3>Going further: festival customs you will hear described</h3>
+<p>Festival audio usually names a date, a food, an activity and a meaning. <strong>Spring Festival</strong> (春节 Chūnjié, first day of the first lunar month): families reunite on New Year's Eve for 「年夜饭」 (niányèfàn), children receive 「红包」 (hóngbāo, red envelopes), people say 「新年快乐」 and 「恭喜发财」 (gōngxǐ fācái). <strong>Mid-Autumn</strong> (中秋节 Zhōngqiūjié, 15th of the eighth lunar month): people eat 「月饼」 (yuèbǐng) and look at the full moon, a symbol of reunion. <strong>Dragon Boat</strong> (端午节 Duānwǔjié, 5th of the fifth lunar month): 「粽子」 (zòngzi) and boat races, remembering the poet Qu Yuan. Dates are given by the lunar calendar: 「农历」 (nónglì) versus 「阳历」 (yánglì).</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>春节前大家都回老家过年。</td><td>Chūnjié qián dàjiā dōu huí lǎojiā guònián.</td><td>Before Spring Festival everyone goes home.</td></tr>
+<tr><td>中秋节晚上全家一起赏月。</td><td>Zhōngqiūjié wǎnshang quánjiā yìqǐ shǎng yuè.</td><td>On Mid-Autumn night the family admires the moon.</td></tr>
+<tr><td>端午节要吃粽子、赛龙舟。</td><td>Duānwǔjié yào chī zòngzi, sài lóngzhōu.</td><td>At Dragon Boat people eat zongzi and race boats.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> mixing up which food belongs to which festival, or forgetting that the dates are lunar. Link each festival to one food and one date in your notes. <strong>Extra practice:</strong></p><ol><li>Which festival is linked to 月饼?<div class="dap-an"><strong>Answer:</strong> Mid-Autumn Festival.</div></li></ol>`,
+`<h3>Đi xa hơn: phong tục lễ hội bạn sẽ nghe mô tả</h3>
+<p>Âm thanh về lễ hội thường nêu ngày, món ăn, hoạt động và ý nghĩa. <strong>Tết Nguyên đán</strong> (春节 Chūnjié, mùng một tháng Giêng âm lịch): cả nhà sum họp đêm giao thừa ăn 「年夜饭」 (niányèfàn), trẻ em nhận 「红包」 (hóngbāo, bao lì xì), người ta chúc 「新年快乐」 và 「恭喜发财」 (gōngxǐ fācái). <strong>Trung Thu</strong> (中秋节 Zhōngqiūjié, 15 tháng Tám âm lịch): ăn 「月饼」 (yuèbǐng) và ngắm trăng tròn, biểu tượng đoàn viên. <strong>Đoan Ngọ</strong> (端午节 Duānwǔjié, mùng 5 tháng Năm âm lịch): 「粽子」 (zòngzi) và đua thuyền rồng, tưởng nhớ thi nhân Khuất Nguyên. Ngày tháng tính theo âm lịch: 「农历」 (nónglì) so với 「阳历」 (yánglì).</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>春节前大家都回老家过年。</td><td>Chūnjié qián dàjiā dōu huí lǎojiā guònián.</td><td>Trước Tết mọi người đều về quê ăn Tết.</td></tr>
+<tr><td>中秋节晚上全家一起赏月。</td><td>Zhōngqiūjié wǎnshang quánjiā yìqǐ shǎng yuè.</td><td>Đêm Trung Thu cả nhà cùng ngắm trăng.</td></tr>
+<tr><td>端午节要吃粽子、赛龙舟。</td><td>Duānwǔjié yào chī zòngzi, sài lóngzhōu.</td><td>Tết Đoan Ngọ ăn bánh ú, đua thuyền rồng.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> nhầm món ăn với lễ hội hoặc quên rằng ngày là âm lịch. Hãy gắn mỗi lễ hội với một món và một ngày trong ghi chú. <strong>Luyện thêm:</strong></p><ol><li>Lễ hội nào gắn với 月饼?<div class="dap-an"><strong>Đáp án:</strong> Tết Trung Thu.</div></li></ol>`],
+
+  'cls201-ts-9-2': [`<h3>Going further: a full host-and-guest script</h3>
+<p>Hospitality has set phrases at every stage. Arrival: host 「欢迎欢迎，快请进！」 (Huānyíng huānyíng, kuài qǐng jìn!); guest 「打扰了」 (dǎrǎo le, sorry to disturb). Gift: guest 「一点儿小礼物，不成敬意」 (yìdiǎnr xiǎo lǐwù, bù chéng jìngyì, a small token); host first refuses 「太客气了，你人来就好」 (tài kèqi le, nǐ rén lái jiù hǎo), then accepts. At the table the host keeps filling your plate: 「多吃点儿，别客气」. Polite refusal: 「我吃饱了，谢谢」, said once or twice before finishing. Toast: 「干杯！」 (gānbēi) or the lighter 「随意」 (suíyì, as you wish). Leaving: 「今天太麻烦你了」 (jīntiān tài máfan nǐ le) and 「慢走」 (màn zǒu, take care) from the host.</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>主人</td><td>来，尝尝这个鱼，我自己做的。</td><td>Lái, chángchang zhège yú, wǒ zìjǐ zuò de.</td><td>Try this fish, I made it myself.</td></tr>
+<tr><td>客人</td><td>真好吃！您的手艺太棒了。</td><td>Zhēn hǎochī! Nín de shǒuyì tài bàng le.</td><td>Delicious! Your cooking is great.</td></tr>
+<tr><td>主人</td><td>哪里哪里，再来一点儿吧。</td><td>Nǎlǐ nǎlǐ, zài lái yìdiǎnr ba.</td><td>Not at all; have some more.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> saying 「谢谢」 to a compliment and nothing else; the modest reply 「哪里哪里」 is expected. <strong>Extra practice:</strong></p><ol><li>What does a host mean by 「随意」 when toasting?<div class="dap-an"><strong>Answer:</strong> Drink as much as you like; no pressure.</div></li></ol>`,
+`<h3>Đi xa hơn: một kịch bản đầy đủ cho chủ nhà và khách</h3>
+<p>Việc tiếp khách có cụm cố định ở mọi giai đoạn. Đến nơi: chủ 「欢迎欢迎，快请进！」 (Huānyíng huānyíng, kuài qǐng jìn!); khách 「打扰了」 (dǎrǎo le, xin lỗi làm phiền). Quà: khách 「一点儿小礼物，不成敬意」 (yìdiǎnr xiǎo lǐwù, bù chéng jìngyì, chút quà mọn); chủ trước hết từ chối 「太客气了，你人来就好」 (tài kèqi le, nǐ rén lái jiù hǎo), rồi mới nhận. Trên bàn ăn, chủ liên tục gắp thêm cho bạn: 「多吃点儿，别客气」. Từ chối lịch sự: 「我吃饱了，谢谢」, nói một hai lần trước khi ăn xong. Nâng ly: 「干杯！」 (gānbēi) hoặc nhẹ hơn 「随意」 (suíyì, tuỳ ý). Ra về: 「今天太麻烦你了」 (jīntiān tài máfan nǐ le) và chủ đáp 「慢走」 (màn zǒu, đi cẩn thận).</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>主人</td><td>来，尝尝这个鱼，我自己做的。</td><td>Lái, chángchang zhège yú, wǒ zìjǐ zuò de.</td><td>Nào, nếm thử món cá này, tôi tự nấu.</td></tr>
+<tr><td>客人</td><td>真好吃！您的手艺太棒了。</td><td>Zhēn hǎochī! Nín de shǒuyì tài bàng le.</td><td>Ngon quá! Tay nghề của bác tuyệt thật.</td></tr>
+<tr><td>主人</td><td>哪里哪里，再来一点儿吧。</td><td>Nǎlǐ nǎlǐ, zài lái yìdiǎnr ba.</td><td>Đâu có, dùng thêm chút nữa nhé.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> chỉ nói 「谢谢」 khi được khen mà không thêm gì; câu khiêm tốn 「哪里哪里」 mới là điều được mong đợi. <strong>Luyện thêm:</strong></p><ol><li>Chủ nói 「随意」 khi nâng ly có nghĩa gì?<div class="dap-an"><strong>Đáp án:</strong> Uống bao nhiêu tuỳ ý, không ép.</div></li></ol>`],
+
+  'cls201-ts-9-3': [`<h3>Going further: a comparison frame for a short talk</h3>
+<p>When you compare Vietnam and China, avoid stereotypes and anchor each point in a concrete fact. Use the frame: topic → similarity → difference → your opinion. Model: 「越南和中国都有春节，都要吃团圆饭，这是相同点。不同的是，越南人过年要吃粽子（bánh chưng），而很多中国北方人吃饺子。我觉得这些习俗都表达了对家人的爱。」 (Yuènán hé Zhōngguó dōu yǒu Chūnjié, dōu yào chī tuányuánfàn, zhè shì xiāngtóng diǎn. Bù tóng de shì, Yuènán rén guònián yào chī zòngzi, ér hěn duō Zhōngguó běifāng rén chī jiǎozi. Wǒ juéde zhèxiē xísú dōu biǎodá le duì jiārén de ài.) Useful words: 相同点 xiāngtóng diǎn (similarity), 不同点 bù tóng diǎn (difference), 而 ér (while, contrast), 相比 xiāngbǐ (in comparison), 习惯 xíguàn (habit), 习俗 xísú (custom).</p>
+<table><thead><tr><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>两国都很重视家庭。</td><td>Liǎng guó dōu hěn zhòngshì jiātíng.</td><td>Both countries value family.</td></tr>
+<tr><td>和中国相比，越南的夏天更热。</td><td>Hé Zhōngguó xiāngbǐ, Yuènán de xiàtiān gèng rè.</td><td>Compared with China, Vietnam's summers are hotter.</td></tr>
+<tr><td>越南人爱喝咖啡，中国人爱喝茶。</td><td>Yuènán rén ài hē kāfēi, Zhōngguó rén ài hē chá.</td><td>Vietnamese love coffee, Chinese love tea.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> overgeneralising with 「所有中国人都…」. Prefer 「很多…」, 「一般…」, 「有的…」, which are more accurate and politer. <strong>Extra practice:</strong></p><ol><li>Soften "All Chinese like tea".<div class="dap-an"><strong>Answer:</strong> 很多中国人喜欢喝茶。</div></li></ol>`,
+`<h3>Đi xa hơn: khung so sánh cho bài nói ngắn</h3>
+<p>Khi so sánh Việt Nam và Trung Quốc, tránh định kiến và neo mỗi ý vào một sự thật cụ thể. Dùng khung: chủ đề → điểm giống → điểm khác → ý kiến của bạn. Mẫu: 「越南和中国都有春节，都要吃团圆饭，这是相同点。不同的是，越南人过年要吃粽子（bánh chưng），而很多中国北方人吃饺子。我觉得这些习俗都表达了对家人的爱。」 (Yuènán hé Zhōngguó dōu yǒu Chūnjié, dōu yào chī tuányuánfàn, zhè shì xiāngtóng diǎn. Bù tóng de shì, Yuènán rén guònián yào chī zòngzi, ér hěn duō Zhōngguó běifāng rén chī jiǎozi. Wǒ juéde zhèxiē xísú dōu biǎodá le duì jiārén de ài.) Từ hữu ích: 相同点 xiāngtóng diǎn (điểm giống), 不同点 bù tóng diǎn (điểm khác), 而 ér (còn, đối lập), 相比 xiāngbǐ (so với), 习惯 xíguàn (thói quen), 习俗 xísú (phong tục).</p>
+<table><thead><tr><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>两国都很重视家庭。</td><td>Liǎng guó dōu hěn zhòngshì jiātíng.</td><td>Hai nước đều coi trọng gia đình.</td></tr>
+<tr><td>和中国相比，越南的夏天更热。</td><td>Hé Zhōngguó xiāngbǐ, Yuènán de xiàtiān gèng rè.</td><td>So với Trung Quốc, mùa hè Việt Nam nóng hơn.</td></tr>
+<tr><td>越南人爱喝咖啡，中国人爱喝茶。</td><td>Yuènán rén ài hē kāfēi, Zhōngguó rén ài hē chá.</td><td>Người Việt thích cà phê, người Trung thích trà.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> khái quát hoá quá mức với 「所有中国人都…」. Nên dùng 「很多…」, 「一般…」, 「有的…」 vừa chính xác hơn vừa lịch sự hơn. <strong>Luyện thêm:</strong></p><ol><li>Làm mềm câu “Tất cả người Trung đều thích trà”.<div class="dap-an"><strong>Đáp án:</strong> 很多中国人喜欢喝茶。</div></li></ol>`],
+
+  'cls201-ts-10-1': [`<h3>Going further: a timed structure and delivery checklist</h3>
+<p>A three-minute talk is about 350–450 Chinese characters at a comfortable pace. Plan it in five blocks with times: opening (20 s), point 1 (50 s), point 2 (50 s), point 3 (40 s), conclusion (20 s). Opening formula: 「大家好，今天我想介绍一下…」 (Dàjiā hǎo, jīntiān wǒ xiǎng jièshào yíxià…). Transitions: 「首先」, 「其次」 (qícì, second), 「另外」 (lìngwài, besides), 「最后」. Conclusion: 「总之…」 (zǒngzhī…, in short), 「谢谢大家，欢迎提问」 (xièxie dàjiā, huānyíng tíwèn). Delivery: look at the audience, speak slightly slower than in conversation, pause at chunk boundaries (Chapter 1), and stress the key word of each point.</p>
+<table><thead><tr><th>Block</th><th>Sentence frame</th><th>Pinyin</th></tr></thead><tbody>
+<tr><td>opening</td><td>今天我想谈谈…</td><td>Jīntiān wǒ xiǎng tántan…</td></tr>
+<tr><td>point 1</td><td>首先，…</td><td>Shǒuxiān, …</td></tr>
+<tr><td>point 2</td><td>其次，…</td><td>Qícì, …</td></tr>
+<tr><td>point 3</td><td>另外，…</td><td>Lìngwài, …</td></tr>
+<tr><td>close</td><td>总之，…谢谢大家。</td><td>Zǒngzhī, … xièxie dàjiā.</td></tr></tbody></table>
+<p><strong>Typical mistakes:</strong> reading a script word for word, speeding up when nervous, and ending with 「就这样」. Practise once with a timer and once recorded; note your longest pause and your filler words (「嗯」, 「那个」) and reduce them. <strong>Extra practice:</strong></p><ol><li>Which word introduces the second point?<div class="dap-an"><strong>Answer:</strong> 其次.</div></li></ol>`,
+`<h3>Đi xa hơn: cấu trúc theo thời gian và bảng kiểm trình bày</h3>
+<p>Bài nói ba phút khoảng 350–450 chữ Hán ở tốc độ thoải mái. Hãy lập kế hoạch năm khối kèm thời gian: mở đầu (20 giây), ý 1 (50 giây), ý 2 (50 giây), ý 3 (40 giây), kết (20 giây). Công thức mở đầu: 「大家好，今天我想介绍一下…」 (Dàjiā hǎo, jīntiān wǒ xiǎng jièshào yíxià…). Chuyển ý: 「首先」, 「其次」 (qícì, thứ hai), 「另外」 (lìngwài, ngoài ra), 「最后」. Kết: 「总之…」 (zǒngzhī…, tóm lại), 「谢谢大家，欢迎提问」 (xièxie dàjiā, huānyíng tíwèn). Trình bày: nhìn khán giả, nói chậm hơn hội thoại một chút, ngắt ở ranh giới cụm (Chương 1) và nhấn từ khoá của mỗi ý.</p>
+<table><thead><tr><th>Khối</th><th>Khung câu</th><th>Pinyin</th></tr></thead><tbody>
+<tr><td>mở đầu</td><td>今天我想谈谈…</td><td>Jīntiān wǒ xiǎng tántan…</td></tr>
+<tr><td>ý 1</td><td>首先，…</td><td>Shǒuxiān, …</td></tr>
+<tr><td>ý 2</td><td>其次，…</td><td>Qícì, …</td></tr>
+<tr><td>ý 3</td><td>另外，…</td><td>Lìngwài, …</td></tr>
+<tr><td>kết</td><td>总之，…谢谢大家。</td><td>Zǒngzhī, … xièxie dàjiā.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> đọc thuộc từng chữ, nói nhanh khi hồi hộp và kết bằng 「就这样」. Hãy tập một lần có bấm giờ và một lần ghi âm; ghi lại chỗ ngắt dài nhất và các từ đệm (「嗯」, 「那个」) rồi giảm bớt. <strong>Luyện thêm:</strong></p><ol><li>Từ nào mở ý thứ hai?<div class="dap-an"><strong>Đáp án:</strong> 其次.</div></li></ol>`],
+
+  'cls201-ts-10-2': [`<h3>Going further: managing a discussion turn by turn</h3>
+<p>In a group discussion, the skill is not talking most but managing turns. Take the floor: 「我先说一下我的看法」 (wǒ xiān shuō yíxià wǒ de kànfǎ). Interrupt politely: 「不好意思，我插一句」 (bù hǎoyìsi, wǒ chā yí jù). Ask for clarification: 「你的意思是…吗？」 (nǐ de yìsi shì… ma?). Build on a partner's point: 「我同意你的看法，另外…」. Pass the turn: 「你呢？你怎么看？」 (nǐ ne? nǐ zěnme kàn?). Summarise: 「我们大家的意见是…」. Integrated role-plays combine skills: for example at a hotel (Chapter 6) you have a problem, call the front desk (Chapter 8) and then explain your plan change to a friend (Chapter 6.3).</p>
+<table><thead><tr><th>Who</th><th>Hanzi</th><th>Pinyin</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>A</td><td>我觉得暑假应该去实习。</td><td>Wǒ juéde shǔjià yīnggāi qù shíxí.</td><td>I think we should intern in summer.</td></tr>
+<tr><td>B</td><td>你的意思是不旅游了吗？</td><td>Nǐ de yìsi shì bù lǚyóu le ma?</td><td>You mean no travelling?</td></tr>
+<tr><td>A</td><td>不是，可以先实习再旅游。</td><td>Bú shì, kěyǐ xiān shíxí zài lǚyóu.</td><td>No, intern first then travel.</td></tr>
+<tr><td>C</td><td>这个办法不错，我同意。</td><td>Zhège bànfǎ búcuò, wǒ tóngyì.</td><td>Good idea; I agree.</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> waiting silently for a perfect sentence. Use fillers deliberately (「这个问题嘛…」) to buy time, and ask a question to pass the turn. <strong>Extra practice:</strong></p><ol><li>How do you ask a partner to clarify?<div class="dap-an"><strong>Answer:</strong> 你的意思是…吗？</div></li></ol>`,
+`<h3>Đi xa hơn: điều phối thảo luận theo từng lượt lời</h3>
+<p>Trong thảo luận nhóm, kỹ năng không phải nói nhiều nhất mà là điều phối lượt lời. Xin lời: 「我先说一下我的看法」 (wǒ xiān shuō yíxià wǒ de kànfǎ). Ngắt lời lịch sự: 「不好意思，我插一句」 (bù hǎoyìsi, wǒ chā yí jù). Hỏi làm rõ: 「你的意思是…吗？」 (nǐ de yìsi shì… ma?). Nối ý bạn: 「我同意你的看法，另外…」. Nhường lời: 「你呢？你怎么看？」 (nǐ ne? nǐ zěnme kàn?). Tóm tắt: 「我们大家的意见是…」. Nhập vai tích hợp kết hợp nhiều kỹ năng: ví dụ ở khách sạn (Chương 6) bạn gặp sự cố, gọi lễ tân (Chương 8) rồi giải thích thay đổi kế hoạch cho bạn bè (Bài 6.3).</p>
+<table><thead><tr><th>Ai</th><th>Hán tự</th><th>Pinyin</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>A</td><td>我觉得暑假应该去实习。</td><td>Wǒ juéde shǔjià yīnggāi qù shíxí.</td><td>Mình nghĩ hè nên đi thực tập.</td></tr>
+<tr><td>B</td><td>你的意思是不旅游了吗？</td><td>Nǐ de yìsi shì bù lǚyóu le ma?</td><td>Ý bạn là không đi du lịch à?</td></tr>
+<tr><td>A</td><td>不是，可以先实习再旅游。</td><td>Bú shì, kěyǐ xiān shíxí zài lǚyóu.</td><td>Không, thực tập trước rồi đi du lịch.</td></tr>
+<tr><td>C</td><td>这个办法不错，我同意。</td><td>Zhège bànfǎ búcuò, wǒ tóngyì.</td><td>Cách này hay, mình đồng ý.</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> im lặng chờ một câu hoàn hảo. Hãy dùng từ đệm có chủ đích (「这个问题嘛…」) để câu giờ, và đặt câu hỏi để nhường lượt. <strong>Luyện thêm:</strong></p><ol><li>Hỏi bạn làm rõ ý như thế nào?<div class="dap-an"><strong>Đáp án:</strong> 你的意思是…吗？</div></li></ol>`],
+
+  'cls201-ts-10-3': [`<h3>Going further: a four-step routine for each question type</h3>
+<p>Whatever the format details (always confirm them on the official HSK site), a routine helps. <strong>Before the audio:</strong> read options and underline contrasts. <strong>During the first play:</strong> note only the slot the options differ on (number, place, person, action). <strong>Between plays or after:</strong> eliminate options that were contradicted; if two remain, choose the one that matches the <em>final</em> statement, since speakers often correct themselves (「不对，是…」). <strong>Never leave a blank:</strong> guess using context, because an unanswered item scores zero. For picture-matching tasks, decide the topic from the first verb you hear; for true/false tasks, remember the statement is a paraphrase, not a copy.</p>
+<table><thead><tr><th>Part</th><th>Skill tested</th><th>Best tactic</th></tr></thead><tbody>
+<tr><td>Short dialogue + picture</td><td>match scene</td><td>catch the first verb and place</td></tr>
+<tr><td>True / false</td><td>paraphrase</td><td>compare meaning, not words</td></tr>
+<tr><td>Short dialogue + question</td><td>detail</td><td>note numbers and negation</td></tr>
+<tr><td>Longer dialogue</td><td>gist and attitude</td><td>listen after 但是 / 不过</td></tr></tbody></table>
+<p><strong>Typical mistake:</strong> stopping to think about one hard item and missing the next three. Mark it, move on, return if time allows. Practise with a real past paper under timed conditions at least twice before the exam. <strong>Extra practice:</strong></p><ol><li>The speaker says 「不对，是三号」. Which date counts?<div class="dap-an"><strong>Answer:</strong> The 3rd (the correction).</div></li></ol>`,
+`<h3>Đi xa hơn: quy trình bốn bước cho mỗi dạng câu hỏi</h3>
+<p>Dù chi tiết định dạng thế nào (luôn xác nhận trên trang HSK chính thức), một quy trình sẽ giúp ích. <strong>Trước khi phát âm thanh:</strong> đọc các phương án và gạch chân chỗ đối lập. <strong>Lần phát đầu:</strong> chỉ ghi ô mà các phương án khác nhau (số, nơi, người, hành động). <strong>Giữa hoặc sau lần phát:</strong> loại phương án bị mâu thuẫn; còn hai thì chọn cái khớp với phát biểu <em>cuối cùng</em>, vì người nói hay tự sửa (「不对，是…」). <strong>Không bao giờ bỏ trống:</strong> hãy đoán theo ngữ cảnh, vì câu không trả lời được 0 điểm. Với dạng ghép tranh, xác định chủ đề từ động từ đầu tiên nghe được; với dạng đúng/sai, nhớ rằng phát biểu là diễn đạt lại chứ không chép nguyên.</p>
+<table><thead><tr><th>Phần</th><th>Kỹ năng</th><th>Chiến thuật tốt nhất</th></tr></thead><tbody>
+<tr><td>Hội thoại ngắn + tranh</td><td>ghép cảnh</td><td>bắt động từ và nơi chốn đầu tiên</td></tr>
+<tr><td>Đúng / sai</td><td>diễn đạt lại</td><td>so nghĩa, không so chữ</td></tr>
+<tr><td>Hội thoại ngắn + câu hỏi</td><td>chi tiết</td><td>ghi số và phủ định</td></tr>
+<tr><td>Hội thoại dài</td><td>ý chính và thái độ</td><td>nghe sau 但是 / 不过</td></tr></tbody></table>
+<p><strong>Lỗi điển hình:</strong> dừng lại nghĩ một câu khó rồi lỡ ba câu sau. Hãy đánh dấu, đi tiếp, quay lại nếu còn thời gian. Luyện đề thật các năm trước có bấm giờ ít nhất hai lần trước kỳ thi. <strong>Luyện thêm:</strong></p><ol><li>Người nói nói 「不对，是三号」. Ngày nào được tính?<div class="dap-an"><strong>Đáp án:</strong> Ngày 3 (lời sửa).</div></li></ol>`],
+
+  'cls201-ts-10-4': [`<h3>Going further: running the mock and keeping an error log</h3>
+<p>Treat the final mock as a rehearsal of the real day. Do it in one sitting, with audio played once only, no pausing and no pinyin. Score the listening part and, separately, record a two-minute speaking sample (self-introduction plus a three-sentence opinion). Then analyse errors in a table, because the pattern matters more than the total: <strong>type</strong> (number, negation, signpost, attitude, speed), <strong>cause</strong> (did not know the word / knew it but missed it at speed / misread the question), and <strong>fix</strong> (vocabulary card, shadowing, strategy rule). Review the log with a partner and set one target for each category.</p>
+<table><thead><tr><th>Error type</th><th>Typical cause</th><th>Fix</th></tr></thead><tbody>
+<tr><td>number / time</td><td>units mixed (两 vs 二, 点 vs 小时)</td><td>number dictation daily</td></tr>
+<tr><td>negation</td><td>missed 不是…是…</td><td>practise contrast pairs</td></tr>
+<tr><td>speed</td><td>reductions not recognised</td><td>shadowing (1.4)</td></tr>
+<tr><td>attitude</td><td>took polite refusal literally</td><td>indirect answers (2.3)</td></tr></tbody></table>
+<p><strong>Speaking self-assessment.</strong> Rate yourself 1–5 on pronunciation, fluency, vocabulary range, grammar accuracy and organisation; ask a partner to rate you too. Compare. <strong>Typical mistake:</strong> only counting the score and not reading the errors. A 70% with a clear error log is more useful than an 85% you cannot explain. <strong>Extra practice:</strong></p><ol><li>If your errors are mostly numbers, what is the best daily drill?<div class="dap-an"><strong>Answer:</strong> Number dictation: prices, dates, times, phone numbers.</div></li></ol>`,
+`<h3>Đi xa hơn: làm bài thi thử và giữ nhật ký lỗi</h3>
+<p>Hãy coi bài thi thử cuối khoá là buổi diễn tập cho ngày thật. Làm một lèo, âm thanh chỉ phát một lần, không tạm dừng và không có pinyin. Chấm phần nghe, và riêng ra, ghi âm mẫu nói hai phút (tự giới thiệu cộng ba câu nêu ý kiến). Sau đó phân tích lỗi trong bảng, vì quy luật quan trọng hơn tổng điểm: <strong>loại lỗi</strong> (số, phủ định, từ báo hiệu, thái độ, tốc độ), <strong>nguyên nhân</strong> (không biết từ / biết nhưng lỡ ở tốc độ nhanh / hiểu sai câu hỏi), và <strong>cách sửa</strong> (thẻ từ vựng, shadowing, quy tắc chiến lược). Xem lại nhật ký cùng bạn và đặt một mục tiêu cho từng nhóm.</p>
+<table><thead><tr><th>Loại lỗi</th><th>Nguyên nhân thường gặp</th><th>Cách sửa</th></tr></thead><tbody>
+<tr><td>số / thời gian</td><td>lẫn đơn vị (两 và 二, 点 và 小时)</td><td>chép chính tả số mỗi ngày</td></tr>
+<tr><td>phủ định</td><td>bỏ lỡ 不是…是…</td><td>luyện cặp đối lập</td></tr>
+<tr><td>tốc độ</td><td>không nhận ra rút gọn</td><td>shadowing (1.4)</td></tr>
+<tr><td>thái độ</td><td>hiểu nghĩa đen lời từ chối lịch sự</td><td>câu đáp gián tiếp (2.3)</td></tr></tbody></table>
+<p><strong>Tự đánh giá phần nói.</strong> Tự chấm 1–5 cho phát âm, độ trôi chảy, vốn từ, độ chính xác ngữ pháp và tổ chức; nhờ bạn chấm giúp rồi so sánh. <strong>Lỗi điển hình:</strong> chỉ đếm điểm mà không đọc lỗi. Được 70% với nhật ký lỗi rõ ràng hữu ích hơn 85% mà bạn không giải thích được. <strong>Luyện thêm:</strong></p><ol><li>Nếu lỗi chủ yếu là số, bài luyện hằng ngày tốt nhất là gì?<div class="dap-an"><strong>Đáp án:</strong> Chép chính tả số: giá tiền, ngày, giờ, số điện thoại.</div></li></ol>`],
+};
+for (const sec of secs) for (const l of sec.lessons) {
+  const m = MORE[l.slug];
+  if (!m || l.type !== 'DOCUMENT') continue;
+  const [en, vi] = m.map(zh);
+  l.content = l.content.replace('<h3>📌 Summary</h3>', en + '\n<h3>📌 Summary</h3>').replace('<h3>📌 Tóm tắt</h3>', vi + '\n<h3>📌 Tóm tắt</h3>');
+}
+
 export default secs;

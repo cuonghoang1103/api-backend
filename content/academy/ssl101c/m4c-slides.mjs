@@ -597,7 +597,7 @@ export default {
 <li><strong>FPTU application.</strong> Put rehearsal in the project schedule as a task with a name and an owner, the same way you schedule a code freeze. "Rehearsal 1: Thursday 19:00, full run with timer" is a task; "we'll practise sometime" is not, and it does not happen.</li>
 </ul>
 <table>
-<tr><th>Sub-section</th><th>Its one outcome</th><th>Where the content is</th></tr>
+<tr><th>Sub-section</th><th>Outcome it maps to (this lesson’s one-to-one reading — the slide prints all three)</th><th>Where the content is</th></tr>
 <tr><td>5.3a</td><td>Visual aids</td><td>Slide 56</td></tr>
 <tr><td>5.3b</td><td>Script &amp; notes</td><td>Slide 58</td></tr>
 <tr><td>5.3c</td><td>Practice/delivery strategies</td><td>Slide 60</td></tr>
@@ -612,7 +612,7 @@ export default {
 <li><strong>Áp vào FPTU.</strong> Hãy đưa buổi tập dượt vào lịch đồ án như một ĐẦU VIỆC có tên và có người chịu trách nhiệm, y như bạn lên lịch code freeze. "Tập lần 1: thứ Năm 19:00, chạy trọn bài có bấm giờ" là một đầu việc; "hôm nào đó tập nhé" thì không phải, và nó sẽ không xảy ra.</li>
 </ul>
 <table>
-<tr><th>Tiểu mục</th><th>Chuẩn đầu ra duy nhất của nó</th><th>Nội dung nằm ở đâu</th></tr>
+<tr><th>Tiểu mục</th><th>Chuẩn đầu ra ứng với nó (cách đọc 1–1 của bài web — slide in cả ba)</th><th>Nội dung nằm ở đâu</th></tr>
 <tr><td>5.3a</td><td>Hình minh hoạ</td><td>Slide 56</td></tr>
 <tr><td>5.3b</td><td>Kịch bản &amp; ghi chú</td><td>Slide 58</td></tr>
 <tr><td>5.3c</td><td>Chiến lược luyện tập/trình bày</td><td>Slide 60</td></tr>
@@ -746,7 +746,7 @@ export default {
 <tr><td>3</td><td>field questions from the audience</td><td><strong>identify your personal presentation style</strong></td></tr>
 </table>
 <ul>
-<li><strong>The swap is not random — it matches the heading.</strong> 5.4b is "<em>Facilitating Audience Interaction</em> &amp; <em>Finding Your Style</em>", in that order, so the bullets have been reordered to run in the same order as the heading's two halves. It is the one repeat in this deck that was actually edited for a reason.</li>
+<li><strong>The swap is not random — it matches the heading.</strong> 5.4b is "<em>Facilitating Audience Interaction</em> &amp; <em>Finding Your Style</em>", in that order, so the bullets have been reordered to run in the same order as the heading's two halves. Of the five repeats in slides 44–64 it is the only one whose ORDER changed, and the change has a reason (slide 53 only swapped “&amp;” for “and”).</li>
 <li><strong>Same three items, different sequence — a classic exam trap.</strong> If a question asks for "the order of the outcomes of section 5.4", the honest answer is that the deck prints two different orders on two slides. Remember the SET of three; be sceptical of any option that insists on one fixed sequence.</li>
 <li><strong>"Facilitating" is a strong verb choice.</strong> Not "handling" questions, not "surviving" them — <em>facilitating</em> interaction means you actively create it. That reframes Q&amp;A from a threat into a part of the presentation you designed, which is exactly what slide 64's first and last bullets propose.</li>
 <li><strong>This is the last objectives page in Mooc 4.</strong> After it, one summary slide closes the module. If you are building revision cards, 63 is a divider and 64 is the payload.</li>
@@ -761,7 +761,7 @@ export default {
 <tr><td>3</td><td>xử lý câu hỏi khán giả</td><td><strong>nhận diện phong cách riêng</strong></td></tr>
 </table>
 <ul>
-<li><strong>Cú đảo này KHÔNG ngẫu nhiên — nó khớp với tiêu đề.</strong> 5.4b là "<em>Facilitating Audience Interaction</em> &amp; <em>Finding Your Style</em>", theo đúng thứ tự đó, nên các gạch đầu dòng đã được sắp lại cho chạy cùng thứ tự với hai nửa của tiêu đề. Đây là bản lặp DUY NHẤT trong deck này thật sự được sửa vì một lý do.</li>
+<li><strong>Cú đảo này KHÔNG ngẫu nhiên — nó khớp với tiêu đề.</strong> 5.4b là "<em>Facilitating Audience Interaction</em> &amp; <em>Finding Your Style</em>", theo đúng thứ tự đó, nên các gạch đầu dòng đã được sắp lại cho chạy cùng thứ tự với hai nửa của tiêu đề. Trong năm bản lặp của dải 44–64, đây là bản duy nhất đổi THỨ TỰ, và đổi có lý do (slide 53 chỉ đổi “&amp;” thành “and”).</li>
 <li><strong>Cùng ba mục, khác trình tự — bẫy thi kinh điển.</strong> Nếu đề hỏi "thứ tự các chuẩn đầu ra của mục 5.4", câu trả lời trung thực là deck in HAI thứ tự khác nhau trên hai slide. Hãy nhớ TẬP HỢP ba mục; và hãy nghi ngờ mọi phương án khăng khăng có một trình tự cố định.</li>
 <li><strong>"Facilitating" là một lựa chọn động từ mạnh.</strong> Không phải "xử lý" câu hỏi, cũng không phải "sống sót" qua chúng — <em>facilitating</em> nghĩa là bạn CHỦ ĐỘNG TẠO RA tương tác. Cách đóng khung đó biến phần hỏi đáp từ một mối đe doạ thành một phần bạn đã THIẾT KẾ của buổi nói — đúng điều mà gạch đầu và gạch cuối của slide 64 đề xuất.</li>
 <li><strong>Đây là trang chuẩn đầu ra cuối cùng của Mooc 4.</strong> Sau nó, một slide tóm tắt khép lại cả mô-đun. Nếu bạn làm thẻ ôn tập, 63 là tấm phân cách còn 64 mới là phần hàng.</li>

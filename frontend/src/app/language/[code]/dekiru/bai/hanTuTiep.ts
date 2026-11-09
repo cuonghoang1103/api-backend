@@ -35,6 +35,7 @@ import { HAN_TU_45 } from './hanTu45';
 import { HAN_TU_46 } from './hanTu46';
 import { HAN_TU_47 } from './hanTu47';
 import { HAN_TU_48 } from './hanTu48';
+import { HAN_TU_49 } from './hanTu49';
 
 export const HAN_TU_TIEP: Record<string, HanTu> = {
   ...HAN_TU_16,
@@ -68,4 +69,5 @@ export const HAN_TU_TIEP: Record<string, HanTu> = {
   ...HAN_TU_46,
   ...HAN_TU_47,
   ...HAN_TU_48,
+  ...HAN_TU_49,
 };

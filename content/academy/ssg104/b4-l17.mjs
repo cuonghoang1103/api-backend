@@ -167,7 +167,7 @@ export const b4l17 = [
        <li>Select the correct channel</li>
        <li>Make sure the information is accurate, ethical and pertinent</li>
      </ol>
-     <p class="meo">💡 Items 7–10 are all about the reader. Half of a planning checklist is research into who will read it — which is why "audience-centred" keeps reappearing.</p>`,
+     <p class="meo">💡 Items 7–10 are all about the reader — four of the twelve, a third of the checklist, is research into who will read it. That is why "audience-centred" keeps reappearing.</p>`,
     `<p class="y-chinh">🎯 Mười hai điều cần kiểm trước khi viết — mục tiêu 2 của bài.</p>
      <ol class="hai-cot">
        <li>Xác định mục đích tổng quát</li>
@@ -183,7 +183,7 @@ export const b4l17 = [
        <li>Chọn đúng kênh truyền đạt</li>
        <li>Bảo đảm thông tin chính xác, có đạo đức và đúng trọng tâm</li>
      </ol>
-     <p class="meo">💡 Mục 7–10 đều nói về người đọc. Một nửa bảng kiểm chuẩn bị là việc tìm hiểu ai sẽ đọc — và đó là lý do cụm "lấy người đọc làm trung tâm" cứ quay lại mãi.</p>`),
+     <p class="meo">💡 Mục 7–10 đều nói về người đọc: bốn trên mười hai mục, tức một phần ba bảng kiểm, là việc tìm hiểu ai sẽ đọc. Đó là lý do cụm "lấy người đọc làm trung tâm" cứ quay lại mãi.</p>`),
 
   slide(D, 11, 'Determining your purpose — general and specific',
     `<p class="y-chinh">🎯 All communication has both, and how well you identify them decides how effective the writing is.</p>

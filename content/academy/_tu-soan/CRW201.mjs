@@ -23,6 +23,7 @@ const L = (slug, title, description, o) => {
     return '<span class="eyebrow">CRW201 · ' + (en ? 'Lesson ' : 'Bài ') + num + '</span>\n'
       + '<h3>' + (en ? 'Lesson goals' : 'Mục tiêu bài') + '</h3>' + ul(g) + '\n'
       + '<h3>' + (en ? 'Lesson' : 'Bài giảng') + '</h3>' + b + '\n'
+      + (E[slug] ? '<h3>' + (en ? 'Going further' : 'Đào sâu') + '</h3>' + E[slug][k - 1] + '\n' : '')
       + (o.tab ? '<h3>' + (en ? 'Characters and words' : 'Bảng chữ và từ') + '</h3>' + tab(en ? ['Hanzi', 'Pinyin', 'Meaning'] : ['Hán tự', 'Pinyin', 'Nghĩa'], o.tab, en ? 2 : 3) + '\n' : '')
       + '<div class="pitfall"><strong>' + (en ? 'Common mistakes.' : 'Lỗi hay gặp.') + '</strong> ' + m + '</div>\n'
       + '<h3>📌 ' + (en ? 'Summary' : 'Tóm tắt') + '</h3>' + ul(s) + '\n'
@@ -172,6 +173,507 @@ const m02 = {
 <li><a href="https://www.yellowbridge.com/chinese/radicals.php" target="_blank" rel="noopener">Bảng bộ thủ YellowBridge</a> và <a href="https://www.chinesetest.cn/" target="_blank" rel="noopener">trang HSK chính thức</a> (định dạng đang được cập nhật — luôn kiểm tra ở đây).</li></ul>
 <div class="callout"><strong>Cách dùng.</strong> Giáo trình lấy từ, Hanzi Writer học thứ tự nét chữ mới, MDBG/Pleco tra chữ lạ, Du Chinese đọc thêm, Chinese Grammar Wiki khi chưa rõ một mẫu câu trong bài. Hãy mua đúng ấn bản nêu trên, hoặc hỏi giảng viên lớp dùng ấn bản nào.</div>`),
 };
+
+// ── Phần "Đào sâu" thêm cho bài mỏng: E[slug] = [html EN, html VI] ──
+const E = {};
+const X = (en, vi, items) => [en + '<h4>More practice</h4>' + prac(items, 0), vi + '<h4>Luyện thêm</h4>' + prac(items, 2)];
+E['crw201-ts-1-2'] = X(
+`<p>Pairs are only part of the system. Single connectors also steer your reading, and each one says something about <em>how much weight</em> the sentence carries.</p>
+<ul><li>{{可是}} and {{不过}} both mean "but", yet {{不过}} is softer: it adds a small reservation ({{这件衣服很好看，不过有点儿贵。}} "Nice, though a bit pricey").</li>
+<li>{{其实}} "actually" corrects what was said before, so the true state of affairs comes <em>after</em> it.</li>
+<li>{{另外}} "in addition" and {{而且}} start a new point; {{总之}} "in short" and {{所以}} begin the conclusion.</li>
+<li>{{结果}} "as a result" announces what really happened, often after a plan: {{我想早点儿起床，结果还是迟到了。}}</li></ul>
+<p>A useful habit: when you meet a signal, stop and say to yourself "this is the setup" or "this is the point". Setups can be skipped on a second look; points must be matched with the question.</p>
+<div class="callout"><p lang="zh">因为明天有考试，所以我今天晚上不出去玩儿了。虽然我有点儿累，但是我还是要复习。只要认真复习，我就一定能考好。</p>
+<p>Yīnwèi míngtiān yǒu kǎoshì, suǒyǐ wǒ jīntiān wǎnshang bù chūqù wánr le. Suīrán wǒ yǒudiǎnr lèi, dànshì wǒ háishi yào fùxí. Zhǐyào rènzhēn fùxí, wǒ jiù yídìng néng kǎo hǎo.</p>
+<p>Because there is an exam tomorrow, I am not going out to play tonight. Although I am a little tired, I still have to review. As long as I review carefully, I will certainly do well.</p></div>
+<p>Analysis: the first sentence gives cause and result; the second is a contrast whose main point ({{还是要复习}}) follows {{但是}}; the third is a condition whose result ({{就一定能考好}}) follows {{就}}.</p>`,
+`<p>Cặp liên từ mới chỉ là một phần. Liên từ đơn cũng điều hướng việc đọc, và mỗi từ cho biết câu đó <em>nặng đến đâu</em>.</p>
+<ul><li>{{可是}} và {{不过}} đều nghĩa là "nhưng", song {{不过}} nhẹ hơn: nó chỉ thêm một chút bảo lưu ({{这件衣服很好看，不过有点儿贵。}} "Đẹp đấy, có điều hơi đắt").</li>
+<li>{{其实}} "thật ra" đính chính điều vừa nói, nên sự thật nằm <em>sau</em> nó.</li>
+<li>{{另外}} "ngoài ra" và {{而且}} mở một ý mới; {{总之}} "tóm lại" và {{所以}} mở đầu phần kết luận.</li>
+<li>{{结果}} "kết quả là" báo điều thật sự đã xảy ra, thường sau một dự định: {{我想早点儿起床，结果还是迟到了。}}</li></ul>
+<p>Một thói quen hữu ích: gặp tín hiệu thì dừng lại tự nhủ "đây là phần dẫn" hoặc "đây là ý chính". Phần dẫn có thể lướt khi đọc lại; ý chính phải đối chiếu với câu hỏi.</p>
+<div class="callout"><p lang="zh">因为明天有考试，所以我今天晚上不出去玩儿了。虽然我有点儿累，但是我还是要复习。只要认真复习，我就一定能考好。</p>
+<p>Yīnwèi míngtiān yǒu kǎoshì, suǒyǐ wǒ jīntiān wǎnshang bù chūqù wánr le. Suīrán wǒ yǒudiǎnr lèi, dànshì wǒ háishi yào fùxí. Zhǐyào rènzhēn fùxí, wǒ jiù yídìng néng kǎo hǎo.</p>
+<p>Vì ngày mai có kỳ thi nên tối nay tôi không ra ngoài chơi nữa. Tuy hơi mệt nhưng tôi vẫn phải ôn bài. Chỉ cần ôn bài nghiêm túc, tôi nhất định sẽ thi tốt.</p></div>
+<p>Phân tích: câu đầu có nguyên nhân và kết quả; câu hai là tương phản, ý chính ({{还是要复习}}) đứng sau {{但是}}; câu ba là điều kiện, kết quả ({{就一定能考好}}) đứng sau {{就}}.</p>`,
+[
+ ['Why is the writer not going out tonight?', 'Because there is an exam tomorrow ({{因为明天有考试}}).', 'Vì sao người viết không ra ngoài tối nay?', 'Vì ngày mai có kỳ thi ({{因为明天有考试}}).'],
+ ['Which half of {{虽然……但是……}} holds the main point in the passage above?', 'The half after {{但是}}: {{我还是要复习}}.', 'Vế nào của {{虽然……但是……}} chứa ý chính trong đoạn trên?', 'Vế sau {{但是}}: {{我还是要复习}}.'],
+ ['Join into one sentence with {{其实}}: Everyone thought he was ill. He was only tired.', '{{大家都以为他生病了，其实他只是累了。}}', 'Nối thành một câu với {{其实}}: Mọi người tưởng anh ấy ốm. Anh ấy chỉ mệt.', '{{大家都以为他生病了，其实他只是累了。}}'],
+]);
+
+E['crw201-ts-1-3'] = X(
+`<p>Inference is not guessing: every inference needs a clue in the text plus ordinary knowledge of the world. At this level three kinds appear in exams.</p>
+<ul><li><strong>Cause from effect:</strong> the text gives the result and you supply the reason (the dog does not eat, so it is probably ill).</li>
+<li><strong>Feeling from action:</strong> {{笑着说}} smiling as she spoke → happy; {{一句话也不说}} not saying a word → upset or shy.</li>
+<li><strong>Place or time from clues:</strong> {{菜单}}, {{服务员}} → a restaurant; {{下课了}} → school; {{天黑了}} → evening.</li></ul>
+<p>Be careful with pronouns when two nouns of the same kind compete. {{小王告诉小李他的手机丢了。}} is ambiguous in Chinese: {{他}} may be Xiao Wang or Xiao Li. In your own writing repeat the name; in reading, use the next sentence to decide.</p>
+<div class="callout"><p lang="zh">今天是姐姐的生日。早上妈妈起得很早，在厨房里忙了很久。晚上，家里来了很多客人，桌子上放着一个大蛋糕。姐姐笑着说：“谢谢大家！”</p>
+<p>Jīntiān shì jiějie de shēngrì. Zǎoshang māma qǐ de hěn zǎo, zài chúfáng li máng le hěn jiǔ. Wǎnshang, jiā li lái le hěn duō kèrén, zhuōzi shang fàng zhe yí gè dà dàngāo. Jiějie xiào zhe shuō: “Xièxie dàjiā!”</p>
+<p>Today is my older sister's birthday. Mum got up very early in the morning and was busy in the kitchen for a long time. In the evening many guests came and a big cake stood on the table. My sister said with a smile, "Thank you all!"</p></div>
+<p>The text never says why Mum was in the kitchen, but {{生日}}, {{客人}} and {{蛋糕}} let you infer that she was cooking for the party. {{笑着}} shows the sister is happy.</p>`,
+`<p>Suy luận không phải là đoán mò: mỗi suy luận cần một manh mối trong văn bản cộng với hiểu biết thông thường. Ở trình độ này đề thi hay gặp ba loại.</p>
+<ul><li><strong>Suy ra nguyên nhân từ kết quả:</strong> văn bản cho kết quả, bạn tự bổ sung lý do (chó không ăn nên chắc bị ốm).</li>
+<li><strong>Suy ra cảm xúc từ hành động:</strong> {{笑着说}} vừa cười vừa nói → vui; {{一句话也不说}} không nói một lời → buồn hoặc ngại.</li>
+<li><strong>Suy ra nơi chốn, thời gian từ manh mối:</strong> {{菜单}}, {{服务员}} → nhà hàng; {{下课了}} → trường học; {{天黑了}} → buổi tối.</li></ul>
+<p>Cẩn thận với đại từ khi có hai danh từ cùng loại. {{小王告诉小李他的手机丢了。}} mơ hồ trong tiếng Trung: {{他}} có thể là Tiểu Vương hoặc Tiểu Lý. Khi viết hãy lặp tên; khi đọc, dùng câu sau để quyết định.</p>
+<div class="callout"><p lang="zh">今天是姐姐的生日。早上妈妈起得很早，在厨房里忙了很久。晚上，家里来了很多客人，桌子上放着一个大蛋糕。姐姐笑着说：“谢谢大家！”</p>
+<p>Jīntiān shì jiějie de shēngrì. Zǎoshang māma qǐ de hěn zǎo, zài chúfáng li máng le hěn jiǔ. Wǎnshang, jiā li lái le hěn duō kèrén, zhuōzi shang fàng zhe yí gè dà dàngāo. Jiějie xiào zhe shuō: “Xièxie dàjiā!”</p>
+<p>Hôm nay là sinh nhật chị gái. Sáng sớm mẹ dậy rất sớm, bận rộn trong bếp rất lâu. Buổi tối nhà có nhiều khách, trên bàn đặt một chiếc bánh kem lớn. Chị cười nói: "Cảm ơn mọi người!"</p></div>
+<p>Văn bản không nói vì sao mẹ ở trong bếp, nhưng {{生日}}, {{客人}} và {{蛋糕}} cho phép suy ra mẹ đang nấu cho bữa tiệc. {{笑着}} cho thấy chị đang vui.</p>`,
+[
+ ['In the birthday text, whose birthday is it, and who is {{姐姐}} thanking?', 'The sister\'s birthday; she thanks everyone ({{大家}}), the guests.', 'Trong đoạn sinh nhật, sinh nhật của ai và {{姐姐}} cảm ơn ai?', 'Sinh nhật của chị gái; chị cảm ơn mọi người ({{大家}}), tức các vị khách.'],
+ ['What can you infer from {{在厨房里忙了很久}}? Name one clue that supports it.', 'Mum was cooking for the party; clues: {{生日}}, {{客人}}, {{蛋糕}}.', 'Từ {{在厨房里忙了很久}} có thể suy ra điều gì? Nêu một manh mối.', 'Mẹ nấu ăn cho bữa tiệc; manh mối: {{生日}}, {{客人}}, {{蛋糕}}.'],
+ ['Why is {{小王告诉小李他的手机丢了}} unclear, and how do you fix it?', '{{他}} could be either person; repeat the name: {{小王告诉小李，小王的手机丢了。}}', 'Vì sao {{小王告诉小李他的手机丢了}} chưa rõ, và sửa thế nào?', '{{他}} có thể là một trong hai người; lặp tên: {{小王告诉小李，小王的手机丢了。}}'],
+]);
+
+E['crw201-ts-1-4'] = X(
+`<p>Characters themselves offer clues. Even when the whole word is new, one component may be familiar. Practise a quick "radical + context" check:</p>
+<ul><li>{{疼}} has {{疒}} (illness): in {{我感冒了，头很疼}} ("I have a cold and my head really hurts") the context confirms "pain".</li>
+<li>{{饺}} has {{饣}} (food), so {{饺子}} is something to eat; {{河}} has {{氵}}, so it concerns water.</li>
+<li>A new word of the type "verb + object" can often be read part by part: {{洗澡}} wash + bathe, {{请假}} ask + leave.</li></ul>
+<div class="callout"><p lang="zh">我昨天感冒了，头很疼，所以没去上课，在家里休息了一天。</p>
+<p>Wǒ zuótiān gǎnmào le, tóu hěn téng, suǒyǐ méi qù shàngkè, zài jiā li xiūxi le yì tiān.</p>
+<p>I had a cold yesterday and my head hurt badly, so I did not go to class and rested at home for a day.</p></div>
+<p>If {{疼}} is unknown, the clues {{感冒}} and {{没去上课}} still tell you that the writer was unwell. That is enough to answer "why did he miss class?".</p>
+<h4>A vocabulary notebook that works</h4>
+<p>After the passage, record each word you looked up in three columns: the word in its original sentence, the pinyin, and a short meaning. Copying the whole sentence keeps the word attached to its use. Review the page after two days, then after a week.</p>`,
+`<p>Bản thân chữ cũng cho manh mối. Dù cả từ là mới, một thành phần có thể đã quen. Hãy tập kiểm tra nhanh "bộ thủ + ngữ cảnh":</p>
+<ul><li>{{疼}} có {{疒}} (bệnh): trong {{我感冒了，头很疼}} ("tôi bị cảm, đầu đau lắm") ngữ cảnh xác nhận nghĩa "đau".</li>
+<li>{{饺}} có {{饣}} (đồ ăn) nên {{饺子}} là thứ để ăn; {{河}} có {{氵}} nên liên quan đến nước.</li>
+<li>Từ mới kiểu "động từ + tân ngữ" thường đọc được từng phần: {{洗澡}} rửa + tắm, {{请假}} xin + nghỉ.</li></ul>
+<div class="callout"><p lang="zh">我昨天感冒了，头很疼，所以没去上课，在家里休息了一天。</p>
+<p>Wǒ zuótiān gǎnmào le, tóu hěn téng, suǒyǐ méi qù shàngkè, zài jiā li xiūxi le yì tiān.</p>
+<p>Hôm qua tôi bị cảm, đầu đau dữ dội nên không đi học, ở nhà nghỉ một ngày.</p></div>
+<p>Nếu chưa biết {{疼}}, hai manh mối {{感冒}} và {{没去上课}} vẫn cho biết người viết không khoẻ. Thế là đủ để trả lời "vì sao anh ấy nghỉ học?".</p>
+<h4>Sổ từ vựng hiệu quả</h4>
+<p>Sau khi đọc xong đoạn, ghi mỗi từ đã tra vào ba cột: từ trong câu gốc, pinyin và nghĩa ngắn. Chép cả câu giúp từ gắn với cách dùng. Xem lại trang đó sau hai ngày, rồi sau một tuần.</p>`,
+[
+ ['Guess the meaning from the pattern: {{售货员}}, {{作家}}, {{读者}}.', 'Salesperson ({{售货}} sell goods + {{员}}); writer ({{作}} write + {{家}}); reader ({{读}} read + {{者}}).', 'Đoán nghĩa từ cấu trúc: {{售货员}}, {{作家}}, {{读者}}.', 'Nhân viên bán hàng ({{售货}} bán hàng + {{员}}); nhà văn ({{作}} viết + {{家}}); độc giả ({{读}} đọc + {{者}}).'],
+ ['Why did the writer miss class?', 'Because of a cold and a headache ({{感冒}}, {{头很疼}}).', 'Vì sao người viết nghỉ học?', 'Vì bị cảm và đau đầu ({{感冒}}, {{头很疼}}).'],
+]);
+
+E['crw201-ts-2-3'] = X(
+`<p>Link each radical with a short memory story and with two or three high-frequency words, and you will recognise characters you have never seen before.</p>
+<ul><li>{{衤}}: {{衬衫}} chènshān "shirt" and {{袜子}} wàzi "socks" both wear the clothes radical, so a stranger such as {{袖}} xiù "sleeve" is probably clothing as well.</li>
+<li>{{石}}: {{碗}} wǎn "bowl" is made of ceramic, a stone-like material. {{破}} pò means broken, as when a stone cracks.</li>
+<li>{{巾}}: {{帽子}} màozi "hat", {{布}} bù "cloth", {{市}} shì "market" — in the modern form of 市 the shape 巾 sits in the lower half.</li>
+<li>{{雨}}: {{雪}}, {{雷}}, {{零}} and {{雾}} wù "fog" are all weather; the rain radical stays on top while the lower part adds sound or detail.</li></ul>
+<div class="callout"><p lang="zh">今天零下三度，下雪了，我戴了帽子，还穿了厚袜子。</p>
+<p>Jīntiān língxià sān dù, xià xuě le, wǒ dài le màozi, hái chuān le hòu wàzi.</p>
+<p>Today it is three degrees below zero and it is snowing; I put on a hat and also thick socks.</p></div>
+<p>Notice the verbs: {{戴}} for things worn on the head or face, {{穿}} for clothes and shoes. Vietnamese uses "đội" and "mang/mặc"; keep the two Chinese verbs apart.</p>`,
+`<p>Gắn mỗi bộ thủ với một câu chuyện nhớ và hai ba từ thông dụng, bạn sẽ nhận ra cả những chữ chưa từng gặp.</p>
+<ul><li>{{衤}}: {{衬衫}} chènshān "áo sơ mi" và {{袜子}} wàzi "tất" đều mang bộ y, nên một chữ lạ như {{袖}} xiù "tay áo" nhiều khả năng cũng thuộc quần áo.</li>
+<li>{{石}}: {{碗}} wǎn "bát" làm bằng gốm, vật liệu giống đá. {{破}} pò nghĩa là vỡ, như đá nứt.</li>
+<li>{{巾}}: {{帽子}} màozi "mũ", {{布}} bù "vải", {{市}} shì "chợ" — ở dạng chữ hiện đại của 市, hình 巾 nằm ở nửa dưới.</li>
+<li>{{雨}}: {{雪}}, {{雷}}, {{零}} và {{雾}} wù "sương mù" đều thuộc thời tiết; bộ mưa luôn ở trên, phần dưới thêm âm hoặc chi tiết.</li></ul>
+<div class="callout"><p lang="zh">今天零下三度，下雪了，我戴了帽子，还穿了厚袜子。</p>
+<p>Jīntiān língxià sān dù, xià xuě le, wǒ dài le màozi, hái chuān le hòu wàzi.</p>
+<p>Hôm nay âm ba độ, tuyết rơi, tôi đội mũ và còn mang tất dày.</p></div>
+<p>Chú ý động từ: {{戴}} dùng cho đồ đội đầu hoặc đeo trên mặt, {{穿}} dùng cho quần áo và giày. Tiếng Việt có "đội", "mang/mặc"; hãy giữ hai động từ Trung Quốc tách biệt.</p>`,
+[
+ ['Which radical do {{袜}}, {{碗}} and {{雪}} contain?', '{{袜}} has {{衤}} (clothes); {{碗}} has {{石}} (stone); {{雪}} has {{雨}} (rain).', 'Các chữ {{袜}}, {{碗}}, {{雪}} chứa bộ nào?', '{{袜}} có {{衤}} (quần áo); {{碗}} có {{石}} (đá); {{雪}} có {{雨}} (mưa).'],
+ ['Fill in {{戴}} or {{穿}}: {{他______着帽子，______着一件红衣服。}}', '{{他戴着帽子，穿着一件红衣服。}}', 'Điền {{戴}} hoặc {{穿}}: {{他______着帽子，______着一件红衣服。}}', '{{他戴着帽子，穿着一件红衣服。}}'],
+]);
+
+E['crw201-ts-2-4'] = X(
+`<p>Three more phonetic families are worth memorising because they contain very common words. Compare the sounds carefully: the tone or the initial consonant often shifts.</p>
+<table><thead><tr><th>Sound part</th><th>Family</th></tr></thead><tbody>
+<tr><td>{{青}} qīng</td><td>{{清}} qīng clear, {{请}} qǐng please, {{情}} qíng feeling, {{晴}} qíng sunny, {{睛}} jīng (in {{眼睛}})</td></tr>
+<tr><td>{{马}} mǎ</td><td>{{妈}} mā mother, {{吗}} ma question particle, {{骂}} mà scold, {{码}} mǎ number</td></tr>
+<tr><td>{{方}} fāng</td><td>{{房}} fáng house, {{放}} fàng put, {{访}} fǎng visit</td></tr>
+</tbody></table>
+<p>The meaning part tells the field: {{氵}} water for {{清}}, {{讠}} speech for {{请}}, {{忄}} heart for {{情}}, {{日}} sun for {{晴}}, {{目}} eye for {{睛}}. So one sound part plus five meaning parts yields five different words.</p>
+<div class="callout"><p lang="zh">今天天气晴，我的心情也很好，请大家放心。</p>
+<p>Jīntiān tiānqì qíng, wǒ de xīnqíng yě hěn hǎo, qǐng dàjiā fàngxīn.</p>
+<p>The weather is sunny today and I am in a good mood too, so please do not worry, everyone.</p></div>
+<p>This one sentence contains {{晴}}, {{情}}, {{请}} and {{放}}: three of them share the {{青}} family. Writing it out by hand is a quick, useful drill.</p>`,
+`<p>Có thêm ba họ thanh phù đáng nhớ vì chứa nhiều từ rất thông dụng. Hãy so sánh âm thật kỹ: thanh điệu hoặc phụ âm đầu thường lệch.</p>
+<table><thead><tr><th>Thanh phù</th><th>Họ chữ</th></tr></thead><tbody>
+<tr><td>{{青}} qīng</td><td>{{清}} qīng trong, {{请}} qǐng xin mời, {{情}} qíng tình cảm, {{晴}} qíng nắng, {{睛}} jīng (trong {{眼睛}})</td></tr>
+<tr><td>{{马}} mǎ</td><td>{{妈}} mā mẹ, {{吗}} ma trợ từ nghi vấn, {{骂}} mà mắng, {{码}} mǎ số</td></tr>
+<tr><td>{{方}} fāng</td><td>{{房}} fáng nhà, {{放}} fàng đặt, {{访}} fǎng thăm</td></tr>
+</tbody></table>
+<p>Phần nghĩa cho biết lĩnh vực: {{氵}} nước trong {{清}}, {{讠}} lời nói trong {{请}}, {{忄}} tim trong {{情}}, {{日}} mặt trời trong {{晴}}, {{目}} mắt trong {{睛}}. Một thanh phù cộng năm phần nghĩa cho ra năm từ khác nhau.</p>
+<div class="callout"><p lang="zh">今天天气晴，我的心情也很好，请大家放心。</p>
+<p>Jīntiān tiānqì qíng, wǒ de xīnqíng yě hěn hǎo, qǐng dàjiā fàngxīn.</p>
+<p>Hôm nay trời nắng, tâm trạng tôi cũng rất tốt, mọi người cứ yên tâm.</p></div>
+<p>Riêng câu này chứa {{晴}}, {{情}}, {{请}} và {{放}}: ba chữ cùng họ {{青}}. Chép tay cả câu là bài tập nhanh và hữu ích.</p>`,
+[
+ ['What sound part do {{清}}, {{请}}, {{情}} share, and which meaning part makes {{请}}?', 'The sound part {{青}}; {{请}} has {{讠}} (speech).', '{{清}}, {{请}}, {{情}} chung thanh phù nào, và bộ nghĩa nào tạo nên {{请}}?', 'Thanh phù {{青}}; {{请}} có bộ {{讠}} (lời nói).'],
+ ['{{睛}} is read jīng, not qīng. What does this show about phonetic families?', 'The sound is only approximate: the initial consonant can differ, so check the dictionary.', '{{睛}} đọc là jīng, không phải qīng. Điều này cho thấy gì về họ thanh phù?', 'Âm chỉ gần đúng: phụ âm đầu có thể khác, nên phải tra từ điển.'],
+]);
+
+E['crw201-ts-4-1'] = X(
+`<p>When a sentence gets long, build it as a <strong>skeleton first</strong>: subject, verb, object. Then hang modifiers in front of the verb, from big to small. This is the opposite of English, where details usually trail behind the verb.</p>
+<ul><li><strong>Time</strong> goes from large to small: {{2026年11月9日上午九点}} (year, month, day, part of day, hour).</li>
+<li><strong>Place</strong> phrases with {{在}}, {{从}}, {{到}} come before the verb: {{我从家到学校走路。}}, {{他在银行工作。}}</li>
+<li><strong>Beneficiary or partner</strong> phrases with {{给}}, {{跟}}, {{和}} also stay in front: {{我给妈妈打电话。}} "I phone Mum", {{我跟老师学汉语。}}</li></ul>
+<div class="callout"><p lang="zh">我每天早上七点从家出发，坐公共汽车去学校。我们八点开始上课，中午十二点在食堂吃饭。</p>
+<p>Wǒ měi tiān zǎoshang qī diǎn cóng jiā chūfā, zuò gōnggòng qìchē qù xuéxiào. Wǒmen bā diǎn kāishǐ shàngkè, zhōngwǔ shí'èr diǎn zài shítáng chīfàn.</p>
+<p>Every morning at seven I leave home and take the bus to school. We start class at eight, and at noon we eat in the canteen.</p></div>
+<p>Check the second clause: subject {{我们}}, time {{八点}}, verb {{开始上课}}; then time {{中午十二点}}, place {{在食堂}}, verb {{吃饭}}. Nothing important sits behind the verb except the object.</p>
+<p>A quick self-test before you hand in any text: underline every verb, then look immediately before it. Whatever answers "when, where, with whom, how" should be there.</p>`,
+`<p>Khi câu dài, hãy dựng <strong>bộ khung trước</strong>: chủ ngữ, động từ, tân ngữ. Sau đó treo các thành phần bổ nghĩa phía trước động từ, từ lớn đến nhỏ. Điều này ngược với tiếng Anh, nơi chi tiết thường đứng sau động từ.</p>
+<ul><li><strong>Thời gian</strong> đi từ lớn đến nhỏ: {{2026年11月9日上午九点}} (năm, tháng, ngày, buổi, giờ).</li>
+<li><strong>Nơi chốn</strong> với {{在}}, {{从}}, {{到}} đứng trước động từ: {{我从家到学校走路。}}, {{他在银行工作。}}</li>
+<li><strong>Đối tượng hoặc người cùng làm</strong> với {{给}}, {{跟}}, {{和}} cũng đứng trước: {{我给妈妈打电话。}} "tôi gọi điện cho mẹ", {{我跟老师学汉语。}}</li></ul>
+<div class="callout"><p lang="zh">我每天早上七点从家出发，坐公共汽车去学校。我们八点开始上课，中午十二点在食堂吃饭。</p>
+<p>Wǒ měi tiān zǎoshang qī diǎn cóng jiā chūfā, zuò gōnggòng qìchē qù xuéxiào. Wǒmen bā diǎn kāishǐ shàngkè, zhōngwǔ shí'èr diǎn zài shítáng chīfàn.</p>
+<p>Mỗi sáng bảy giờ tôi từ nhà xuất phát, đi xe buýt đến trường. Tám giờ chúng tôi bắt đầu học, trưa mười hai giờ ăn ở nhà ăn.</p></div>
+<p>Kiểm tra vế hai: chủ ngữ {{我们}}, thời gian {{八点}}, động từ {{开始上课}}; rồi thời gian {{中午十二点}}, nơi chốn {{在食堂}}, động từ {{吃饭}}. Sau động từ không có gì quan trọng ngoài tân ngữ.</p>
+<p>Tự kiểm nhanh trước khi nộp bài: gạch chân mọi động từ, rồi nhìn ngay phía trước nó. Những gì trả lời "khi nào, ở đâu, với ai, thế nào" phải nằm ở đó.</p>`,
+[
+ ['Rearrange: {{在 / 他 / 医院 / 工作 / 现在}}', '{{他现在在医院工作。}}', 'Sắp xếp: {{在 / 他 / 医院 / 工作 / 现在}}', '{{他现在在医院工作。}}'],
+ ['Rearrange: {{昨天 / 一起 / 我们 / 看电影 / 去}}', '{{我们昨天一起去看电影。}}', 'Sắp xếp: {{昨天 / 一起 / 我们 / 看电影 / 去}}', '{{我们昨天一起去看电影。}}'],
+ ['Correct: {{我吃饭在食堂。}}', '{{我在食堂吃饭。}} The place phrase goes before the verb.', 'Sửa: {{我吃饭在食堂。}}', '{{我在食堂吃饭。}} Cụm chỉ nơi chốn đứng trước động từ.'],
+]);
+
+E['crw201-ts-4-2'] = X(
+`<p>Two more points often appear in compositions. First, <strong>{{着}} in a chain of verbs</strong>: the first verb with {{着}} describes the manner of the second, as in {{他笑着说}} "he said, smiling" and {{站着吃饭}} "eat standing up". Second, <strong>not yet</strong>: use {{还没……呢}} or {{还没……过}} instead of a bare {{不}}.</p>
+<table><thead><tr><th>Meaning</th><th>Pattern</th><th>Example</th></tr></thead><tbody>
+<tr><td>already done</td><td>{{已经……了}}</td><td>{{我已经吃过早饭了。}}</td></tr>
+<tr><td>not yet</td><td>{{还没……(呢)}}</td><td>{{他还没起床呢。}}</td></tr>
+<tr><td>never</td><td>{{从来没……过}}</td><td>{{我从来没去过南京。}}</td></tr>
+<tr><td>manner</td><td>{{V1着V2}}</td><td>{{她哭着跑出去了。}}</td></tr>
+</tbody></table>
+<div class="callout"><p lang="zh">老师笑着走进教室，手里拿着一本书。他问：“你们看过这本书吗？”大家说：“还没看过。”</p>
+<p>Lǎoshī xiào zhe zǒu jìn jiàoshì, shǒu li ná zhe yì běn shū. Tā wèn: “Nǐmen kàn guo zhè běn shū ma?” Dàjiā shuō: “Hái méi kàn guo.”</p>
+<p>The teacher walked into the classroom smiling, a book in his hand. He asked, "Have you read this book?" Everyone said, "Not yet."</p></div>
+<p>Count the aspect markers: {{笑着}} (manner), {{拿着}} (state of holding), {{看过}} (experience). Each one answers a different question, which is why you cannot swap them freely.</p>`,
+`<p>Hai điểm nữa hay xuất hiện trong bài viết. Thứ nhất, <strong>{{着}} trong chuỗi động từ</strong>: động từ đầu có {{着}} mô tả cách thức của động từ sau, như {{他笑着说}} "anh ấy vừa cười vừa nói" và {{站着吃饭}} "đứng ăn cơm". Thứ hai, <strong>chưa</strong>: dùng {{还没……呢}} hoặc {{还没……过}} thay cho {{不}} trơn.</p>
+<table><thead><tr><th>Ý nghĩa</th><th>Mẫu</th><th>Ví dụ</th></tr></thead><tbody>
+<tr><td>đã làm xong</td><td>{{已经……了}}</td><td>{{我已经吃过早饭了。}}</td></tr>
+<tr><td>chưa</td><td>{{还没……(呢)}}</td><td>{{他还没起床呢。}}</td></tr>
+<tr><td>chưa bao giờ</td><td>{{从来没……过}}</td><td>{{我从来没去过南京。}}</td></tr>
+<tr><td>cách thức</td><td>{{V1着V2}}</td><td>{{她哭着跑出去了。}}</td></tr>
+</tbody></table>
+<div class="callout"><p lang="zh">老师笑着走进教室，手里拿着一本书。他问：“你们看过这本书吗？”大家说：“还没看过。”</p>
+<p>Lǎoshī xiào zhe zǒu jìn jiàoshì, shǒu li ná zhe yì běn shū. Tā wèn: “Nǐmen kàn guo zhè běn shū ma?” Dàjiā shuō: “Hái méi kàn guo.”</p>
+<p>Thầy cười bước vào lớp, tay cầm một cuốn sách. Thầy hỏi: "Các em đã đọc cuốn này chưa?" Cả lớp đáp: "Chưa ạ."</p></div>
+<p>Đếm các dấu hiệu thể: {{笑着}} (cách thức), {{拿着}} (trạng thái đang cầm), {{看过}} (kinh nghiệm). Mỗi cái trả lời một câu hỏi khác nhau nên không thể đổi chỗ tuỳ ý.</p>`,
+[
+ ['Negate: {{他吃了早饭。}} (past)', '{{他没吃早饭。}} (no {{了}})', 'Phủ định: {{他吃了早饭。}} (quá khứ)', '{{他没吃早饭。}} (bỏ {{了}})'],
+ ['Answer "not yet" to {{你写完作业了吗？}}', '{{还没写完呢。}}', 'Trả lời "chưa" cho {{你写完作业了吗？}}', '{{还没写完呢。}}'],
+ ['Correct: {{我昨天没去了学校。}}', '{{我昨天没去学校。}} {{没}} and {{了}} do not occur together.', 'Sửa: {{我昨天没去了学校。}}', '{{我昨天没去学校。}} {{没}} và {{了}} không đi cùng nhau.'],
+]);
+
+E['crw201-ts-4-3'] = X(
+`<p>Two complements deserve extra attention because the exam likes them. <strong>The potential complement</strong> says whether an action can be achieved. Affirmative: verb + {{得}} + result ({{看得见}} "can see"); negative: verb + {{不}} + result ({{看不见}} "cannot see"). With a verb alone, add {{了}} (read liǎo): {{吃得了}} "can finish eating", {{去不了}} "cannot go".</p>
+<table><thead><tr><th>Can</th><th>Cannot</th><th>Meaning</th></tr></thead><tbody>
+<tr><td>{{听得懂}}</td><td>{{听不懂}}</td><td>understand by listening</td></tr>
+<tr><td>{{写得好}}</td><td>{{写不好}}</td><td>write well enough</td></tr>
+<tr><td>{{吃得完}}</td><td>{{吃不完}}</td><td>be able to finish eating</td></tr>
+</tbody></table>
+<p>The second point is the <strong>degree complement used for evaluation</strong>. It describes <em>how</em> something is done and always needs {{得}}; adverbs such as {{很}} or {{特别}} come before the adjective, never after it.</p>
+<div class="callout"><p lang="zh">这个字太难了，我写不好。老师说，只要多练习，一定写得好。现在我每天写二十个字，写得越来越整齐了。</p>
+<p>Zhè ge zì tài nán le, wǒ xiě bù hǎo. Lǎoshī shuō, zhǐyào duō liànxí, yídìng xiě de hǎo. Xiànzài wǒ měi tiān xiě èrshí gè zì, xiě de yuè lái yuè zhěngqí le.</p>
+<p>This character is too hard and I cannot write it well. The teacher says that as long as I practise more I will certainly write it well. Now I write twenty characters every day, and my writing is getting neater and neater.</p></div>`,
+`<p>Có hai bổ ngữ đáng chú ý thêm vì đề thi rất thích. <strong>Bổ ngữ khả năng</strong> cho biết một hành động có làm được không. Khẳng định: động từ + {{得}} + kết quả ({{看得见}} "nhìn thấy được"); phủ định: động từ + {{不}} + kết quả ({{看不见}} "không nhìn thấy"). Với động từ đứng một mình, thêm {{了}} (đọc liǎo): {{吃得了}} "ăn xong được", {{去不了}} "không đi được".</p>
+<table><thead><tr><th>Được</th><th>Không được</th><th>Nghĩa</th></tr></thead><tbody>
+<tr><td>{{听得懂}}</td><td>{{听不懂}}</td><td>nghe hiểu</td></tr>
+<tr><td>{{写得好}}</td><td>{{写不好}}</td><td>viết đủ tốt</td></tr>
+<tr><td>{{吃得完}}</td><td>{{吃不完}}</td><td>ăn hết được</td></tr>
+</tbody></table>
+<p>Điểm thứ hai là <strong>bổ ngữ trình độ dùng để đánh giá</strong>. Nó mô tả việc được làm <em>như thế nào</em> và luôn cần {{得}}; phó từ như {{很}} hay {{特别}} đứng trước tính từ, không bao giờ đứng sau.</p>
+<div class="callout"><p lang="zh">这个字太难了，我写不好。老师说，只要多练习，一定写得好。现在我每天写二十个字，写得越来越整齐了。</p>
+<p>Zhè ge zì tài nán le, wǒ xiě bù hǎo. Lǎoshī shuō, zhǐyào duō liànxí, yídìng xiě de hǎo. Xiànzài wǒ měi tiān xiě èrshí gè zì, xiě de yuè lái yuè zhěngqí le.</p>
+<p>Chữ này khó quá, tôi viết không đẹp. Thầy nói chỉ cần luyện nhiều thì nhất định viết đẹp. Bây giờ mỗi ngày tôi viết hai mươi chữ, nét chữ ngày càng ngay ngắn.</p></div>`,
+[
+ ['Say "I cannot understand what he says" with a potential complement.', '{{他说的话我听不懂。}}', 'Nói "tôi không hiểu anh ấy nói gì" bằng bổ ngữ khả năng.', '{{他说的话我听不懂。}}'],
+ ['Correct: {{他说汉语得很好。}}', '{{他说汉语说得很好。}} (repeat the verb)', 'Sửa: {{他说汉语得很好。}}', '{{他说汉语说得很好。}} (lặp động từ)'],
+ ['Is {{他跑得快很}} correct?', 'No. Write {{他跑得很快。}}', '{{他跑得快很}} có đúng không?', 'Không. Viết {{他跑得很快。}}'],
+]);
+
+E['crw201-ts-4-4'] = X(
+`<p>The three patterns can be extended in ways that appear in writing tasks.</p>
+<ul><li><strong>把 with a destination or result noun.</strong> After {{把}} + object the verb is often followed by {{在}} (place), {{到}} (arrival), {{给}} (recipient) or {{成}} (becoming): {{把书放在桌子上}} "put the book on the table", {{把作业交给老师}} "hand the homework to the teacher", {{把这句话翻译成英语}} "translate this sentence into English".</li>
+<li><strong>被 with an unnamed agent.</strong> If the doer is unknown or unimportant, omit it: {{我的自行车被骑走了。}} If you name the agent, keep it right after {{被}}: {{被弟弟拿走了}}.</li>
+<li><strong>比 with a quantity.</strong> The difference goes after the adjective: {{哥哥比我大两岁}}, {{这个比那个贵十块钱}}. For "less than", use {{不如}} ({{我不如他高}}) or {{没有}} ({{我没有他高}}).</li></ul>
+<div class="callout"><p lang="zh">老师把作业发给了我们，我的汉字写得比以前好多了。可是我的练习本被小林借走了，我只好把句子写在一张白纸上。</p>
+<p>Lǎoshī bǎ zuòyè fā gěi le wǒmen, wǒ de Hànzì xiě de bǐ yǐqián hǎo duō le. Kěshì wǒ de liànxíběn bèi Xiǎo Lín jiè zǒu le, wǒ zhǐhǎo bǎ jùzi xiě zài yì zhāng bái zhǐ shang.</p>
+<p>The teacher handed the homework out to us, and my characters are much better than before. But my exercise book was borrowed by Xiao Lin, so I had to write the sentences on a sheet of white paper.</p></div>
+<p>Find the patterns: {{把作业发给我们}} (recipient), {{比以前好多了}} (comparison with {{多了}}), {{被小林借走了}} (agent named), {{把句子写在……上}} (destination).</p>`,
+`<p>Ba mẫu này có thể mở rộng theo những cách hay gặp trong bài viết.</p>
+<ul><li><strong>把 với đích đến hoặc danh từ kết quả.</strong> Sau {{把}} + tân ngữ, động từ thường kèm {{在}} (nơi chốn), {{到}} (đến), {{给}} (người nhận) hoặc {{成}} (trở thành): {{把书放在桌子上}} "đặt sách lên bàn", {{把作业交给老师}} "nộp bài cho thầy", {{把这句话翻译成英语}} "dịch câu này sang tiếng Anh".</li>
+<li><strong>被 với tác nhân không nêu.</strong> Nếu không biết hoặc không quan trọng người làm thì bỏ đi: {{我的自行车被骑走了。}} Nếu nêu tác nhân, đặt ngay sau {{被}}: {{被弟弟拿走了}}.</li>
+<li><strong>比 kèm số lượng.</strong> Phần chênh lệch đứng sau tính từ: {{哥哥比我大两岁}}, {{这个比那个贵十块钱}}. Muốn nói "kém hơn" dùng {{不如}} ({{我不如他高}}) hoặc {{没有}} ({{我没有他高}}).</li></ul>
+<div class="callout"><p lang="zh">老师把作业发给了我们，我的汉字写得比以前好多了。可是我的练习本被小林借走了，我只好把句子写在一张白纸上。</p>
+<p>Lǎoshī bǎ zuòyè fā gěi le wǒmen, wǒ de Hànzì xiě de bǐ yǐqián hǎo duō le. Kěshì wǒ de liànxíběn bèi Xiǎo Lín jiè zǒu le, wǒ zhǐhǎo bǎ jùzi xiě zài yì zhāng bái zhǐ shang.</p>
+<p>Thầy phát bài tập cho chúng tôi, chữ của tôi viết đẹp hơn trước nhiều. Nhưng vở bài tập của tôi bị Tiểu Lâm mượn đi mất, nên tôi đành viết các câu lên một tờ giấy trắng.</p></div>
+<p>Tìm các mẫu: {{把作业发给我们}} (người nhận), {{比以前好多了}} (so sánh với {{多了}}), {{被小林借走了}} (nêu tác nhân), {{把句子写在……上}} (đích đến).</p>`,
+[
+ ['Rewrite with {{把}}: {{我写完了作业。}}', '{{我把作业写完了。}}', 'Viết lại bằng {{把}}: {{我写完了作业。}}', '{{我把作业写完了。}}'],
+ ['My brother is 20 and I am 18. Write it with {{比}}.', '{{哥哥比我大两岁。}}', 'Anh tôi 20 tuổi, tôi 18. Viết bằng {{比}}.', '{{哥哥比我大两岁。}}'],
+ ['Rewrite as a passive: {{小林借走了我的书。}}', '{{我的书被小林借走了。}}', 'Viết lại thành câu bị động: {{小林借走了我的书。}}', '{{我的书被小林借走了。}}'],
+]);
+
+E['crw201-ts-5-1'] = X(
+`<p>Three finer points save marks in handwritten tasks. First, the <strong>dash</strong> {{——}} takes two cells and adds an explanation: {{我的爱好——看书——很便宜。}} Second, the <strong>brackets</strong> {{（ ）}} hold a short note. Third, the closing quotation mark follows the final stop of the speech: {{他说：“我很累。”}}, but when the quotation is part of a longer sentence the stop goes outside: {{他说“我很累”，然后就睡了。}}</p>
+<p>On a computer, check every mark after typing. The most common slip is a half-width English comma that looks thin and touches the next character.</p>
+<div class="callout"><p lang="zh">老师问：“你们周末做什么？”小林说：“我去图书馆借了三本书：《红楼梦》、《西游记》和《骆驼祥子》。”</p>
+<p>Lǎoshī wèn: “Nǐmen zhōumò zuò shénme?” Xiǎo Lín shuō: “Wǒ qù túshūguǎn jiè le sān běn shū: 《Hónglóumèng》, 《Xīyóujì》 hé 《Luòtuo Xiángzi》.”</p>
+<p>The teacher asked, "What do you do at the weekend?" Xiao Lin said, "I went to the library and borrowed three books: Dream of the Red Chamber, Journey to the West and Camel Xiangzi."</p></div>
+<p>Notice the colon before the list, the title marks around each book, and {{、}} is not needed here because {{和}} joins the last two titles; the first comma between titles is {{、}}.</p>`,
+`<p>Ba điểm tinh tế giúp giữ điểm trong bài viết tay. Thứ nhất, <strong>dấu gạch ngang</strong> {{——}} chiếm hai ô và thêm lời giải thích: {{我的爱好——看书——很便宜。}} Thứ hai, <strong>ngoặc đơn</strong> {{（ ）}} chứa ghi chú ngắn. Thứ ba, dấu nháy đóng đứng sau dấu chấm cuối lời nói: {{他说：“我很累。”}}, còn khi câu trích là một phần của câu dài hơn thì dấu chấm ra ngoài: {{他说“我很累”，然后就睡了。}}</p>
+<p>Trên máy tính, hãy kiểm tra mọi dấu sau khi gõ. Lỗi phổ biến nhất là dấu phẩy tiếng Anh nửa chiều rộng, mảnh và dính vào chữ kế bên.</p>
+<div class="callout"><p lang="zh">老师问：“你们周末做什么？”小林说：“我去图书馆借了三本书：《红楼梦》、《西游记》和《骆驼祥子》。”</p>
+<p>Lǎoshī wèn: “Nǐmen zhōumò zuò shénme?” Xiǎo Lín shuō: “Wǒ qù túshūguǎn jiè le sān běn shū: 《Hónglóumèng》, 《Xīyóujì》 hé 《Luòtuo Xiángzi》.”</p>
+<p>Thầy hỏi: "Cuối tuần các em làm gì?" Tiểu Lâm nói: "Em đến thư viện mượn ba cuốn: Hồng lâu mộng, Tây du ký và Lạc đà Tường Tử."</p></div>
+<p>Chú ý dấu hai chấm trước danh sách, dấu tên sách quanh mỗi cuốn; giữa hai tên đầu dùng {{、}}, còn {{和}} nối tên cuối.</p>`,
+[
+ ['Punctuate: {{我喜欢苹果香蕉和西瓜}}', '{{我喜欢苹果、香蕉和西瓜。}}', 'Thêm dấu: {{我喜欢苹果香蕉和西瓜}}', '{{我喜欢苹果、香蕉和西瓜。}}'],
+ ['Which mark belongs around the title of a film?', '{{《 》}}, the title marks.', 'Dấu nào đặt quanh tên một bộ phim?', '{{《 》}}, dấu tên sách.'],
+]);
+
+E['crw201-ts-5-2'] = X(
+`<p>Learners often know the pairs but still write choppy text. Use connectors to <strong>merge</strong> sentences. Start with two short sentences: {{我很累。我还想看电影。}} With a pair of connectors they become {{虽然我很累，但是我还想看电影。}} Now the contrast is explicit and the reader does not have to guess.</p>
+<p>Also learn the <strong>single-word connectors</strong> that join sentences rather than clauses: {{然后}} then, {{后来}} later, {{所以}} so, {{可是}} but, {{而且}} moreover, {{另外}} besides, {{最后}} finally. Choose different ones in neighbouring sentences so the text does not repeat {{然后}} five times.</p>
+<div class="callout"><p lang="zh">我先去超市买菜，然后回家做饭。因为朋友要来，所以我做了四个菜。虽然有点儿累，但是大家吃得很高兴，我也很开心。</p>
+<p>Wǒ xiān qù chāoshì mǎi cài, ránhòu huí jiā zuòfàn. Yīnwèi péngyou yào lái, suǒyǐ wǒ zuò le sì gè cài. Suīrán yǒudiǎnr lèi, dànshì dàjiā chī de hěn gāoxìng, wǒ yě hěn kāixīn.</p>
+<p>I first went to the supermarket to buy food, then went home to cook. Because friends were coming, I made four dishes. Although I was a little tired, everyone ate happily and I was happy too.</p></div>
+<p>Three relations (sequence, cause, contrast) in three sentences, one relation each, as the rule requires.</p>`,
+`<p>Người học thường biết các cặp liên từ nhưng vẫn viết rời rạc. Hãy dùng liên từ để <strong>gộp</strong> câu. Bắt đầu với hai câu ngắn: {{我很累。我还想看电影。}} Với một cặp liên từ chúng thành {{虽然我很累，但是我还想看电影。}} Lúc này sự tương phản đã rõ và người đọc không phải đoán.</p>
+<p>Cũng cần học các <strong>liên từ đơn</strong> nối câu chứ không nối mệnh đề: {{然后}} sau đó, {{后来}} về sau, {{所以}} cho nên, {{可是}} nhưng, {{而且}} hơn nữa, {{另外}} ngoài ra, {{最后}} cuối cùng. Chọn từ khác nhau ở các câu liền kề để văn bản không lặp {{然后}} năm lần.</p>
+<div class="callout"><p lang="zh">我先去超市买菜，然后回家做饭。因为朋友要来，所以我做了四个菜。虽然有点儿累，但是大家吃得很高兴，我也很开心。</p>
+<p>Wǒ xiān qù chāoshì mǎi cài, ránhòu huí jiā zuòfàn. Yīnwèi péngyou yào lái, suǒyǐ wǒ zuò le sì gè cài. Suīrán yǒudiǎnr lèi, dànshì dàjiā chī de hěn gāoxìng, wǒ yě hěn kāixīn.</p>
+<p>Tôi đi siêu thị mua thức ăn trước, rồi về nhà nấu cơm. Vì bạn sắp đến nên tôi nấu bốn món. Tuy hơi mệt nhưng mọi người ăn rất vui, tôi cũng vui.</p></div>
+<p>Ba quan hệ (trình tự, nguyên nhân, tương phản) trong ba câu, mỗi câu một quan hệ, đúng như quy tắc.</p>`,
+[
+ ['Merge with {{因为……所以……}}: {{天气很冷。我穿了厚衣服。}}', '{{因为天气很冷，所以我穿了厚衣服。}}', 'Gộp bằng {{因为……所以……}}: {{天气很冷。我穿了厚衣服。}}', '{{因为天气很冷，所以我穿了厚衣服。}}'],
+ ['Merge with {{不但……而且……}}: {{他会唱歌。他会跳舞。}}', '{{他不但会唱歌，而且会跳舞。}}', 'Gộp bằng {{不但……而且……}}: {{他会唱歌。他会跳舞。}}', '{{他不但会唱歌，而且会跳舞。}}'],
+]);
+
+E['crw201-ts-5-3'] = X(
+`<p>A paragraph also needs a <strong>transition</strong> to the next paragraph when you write more than one. Useful openers: {{另外}} besides, {{除此以外}} apart from this, {{第二天}} the next day, {{最后}} finally. Keep the topic of each paragraph to one idea.</p>
+<p>Check the paragraph by asking three questions: Can a stranger state the topic after reading only the first sentence? Does every middle sentence support that topic? Does the last sentence close without starting a new topic?</p>
+<div class="callout"><p lang="zh">我喜欢在早上学习。早上空气新鲜，教室里很安静，我能很快记住新词。中午以后我常常觉得累，学得就慢了。所以我每天六点起床，先复习汉字，再做练习。</p>
+<p>Wǒ xǐhuan zài zǎoshang xuéxí. Zǎoshang kōngqì xīnxiān, jiàoshì li hěn ānjìng, wǒ néng hěn kuài jìzhù xīn cí. Zhōngwǔ yǐhòu wǒ chángcháng juéde lèi, xué de jiù màn le. Suǒyǐ wǒ měi tiān liù diǎn qǐchuáng, xiān fùxí hànzì, zài zuò liànxí.</p>
+<p>I like to study in the morning. The morning air is fresh, the classroom is quiet and I can remember new words quickly. After noon I often feel tired and learn more slowly. So I get up at six every day, first review characters and then do exercises.</p></div>
+<p>Topic: {{我喜欢在早上学习}}. Support: two reasons, one contrast. Closing: the resulting habit.</p>`,
+`<p>Khi viết nhiều đoạn, mỗi đoạn cần một <strong>câu chuyển</strong> sang đoạn tiếp. Các từ mở hữu ích: {{另外}} ngoài ra, {{除此以外}} ngoài điều này, {{第二天}} hôm sau, {{最后}} cuối cùng. Mỗi đoạn chỉ nên có một ý.</p>
+<p>Kiểm tra đoạn văn bằng ba câu hỏi: Người lạ chỉ đọc câu đầu có nêu được chủ đề không? Mọi câu ở giữa có bổ trợ cho chủ đề đó không? Câu cuối có khép lại mà không mở chủ đề mới không?</p>
+<div class="callout"><p lang="zh">我喜欢在早上学习。早上空气新鲜，教室里很安静，我能很快记住新词。中午以后我常常觉得累，学得就慢了。所以我每天六点起床，先复习汉字，再做练习。</p>
+<p>Wǒ xǐhuan zài zǎoshang xuéxí. Zǎoshang kōngqì xīnxiān, jiàoshì li hěn ānjìng, wǒ néng hěn kuài jìzhù xīn cí. Zhōngwǔ yǐhòu wǒ chángcháng juéde lèi, xué de jiù màn le. Suǒyǐ wǒ měi tiān liù diǎn qǐchuáng, xiān fùxí hànzì, zài zuò liànxí.</p>
+<p>Tôi thích học vào buổi sáng. Không khí buổi sáng trong lành, lớp học yên tĩnh, tôi nhớ từ mới rất nhanh. Sau buổi trưa tôi thường thấy mệt nên học chậm hơn. Vì vậy mỗi ngày tôi dậy lúc sáu giờ, ôn chữ Hán trước rồi mới làm bài tập.</p></div>
+<p>Chủ đề: {{我喜欢在早上学习}}. Bổ trợ: hai lý do và một tương phản. Kết: thói quen rút ra.</p>`,
+[
+ ['Which sentence is the topic sentence in the morning paragraph?', '{{我喜欢在早上学习。}}', 'Câu nào là câu chủ đề trong đoạn về buổi sáng?', '{{我喜欢在早上学习。}}'],
+ ['Write a topic sentence for a paragraph about your family.', 'For example: {{我的家人都很爱运动。}}', 'Viết một câu chủ đề cho đoạn về gia đình bạn.', 'Ví dụ: {{我的家人都很爱运动。}}'],
+]);
+
+E['crw201-ts-5-4'] = X(
+`<p>Cohesion also comes from <strong>repeating key nouns on purpose</strong> when a pronoun would be unclear, and from <strong>synonyms</strong> that avoid monotony: {{老师}} then {{王老师}} then {{他}}. Another device is the <strong>topic chain</strong>: introduce the topic once, then let several clauses comment on it without repeating it.</p>
+<p>Compare the choppy version {{这家店很小。这家店很干净。这家店的菜很好吃。}} with the chained version {{这家店很小，但是很干净，菜也很好吃。}} The second is shorter and sounds natural.</p>
+<div class="callout"><p lang="zh">小林有一只猫，名字叫“雪球”。它全身白色，眼睛是蓝色的，每天都睡在窗边。小林很爱它，下课以后总是马上回家陪它玩儿。</p>
+<p>Xiǎo Lín yǒu yì zhī māo, míngzi jiào “Xuěqiú”. Tā quánshēn báisè, yǎnjing shì lánsè de, měi tiān dōu shuì zài chuāng biān. Xiǎo Lín hěn ài tā, xiàkè yǐhòu zǒngshì mǎshàng huí jiā péi tā wánr.</p>
+<p>Xiao Lin has a cat called Snowball. It is white all over, its eyes are blue, and it sleeps by the window every day. Xiao Lin loves it very much and after class always goes straight home to play with it.</p></div>
+<p>Here {{它}} refers to the cat and the second {{小林}} is repeated deliberately, because the subject changes from the cat back to the person.</p>`,
+`<p>Liên kết còn đến từ việc <strong>cố ý lặp danh từ then chốt</strong> khi đại từ gây mơ hồ, và từ <strong>từ đồng nghĩa</strong> để tránh đơn điệu: {{老师}} rồi {{王老师}} rồi {{他}}. Một cách nữa là <strong>chuỗi chủ đề</strong>: nêu chủ đề một lần, rồi nhiều mệnh đề cùng bình luận về nó mà không lặp lại.</p>
+<p>So sánh bản rời rạc {{这家店很小。这家店很干净。这家店的菜很好吃。}} với bản liền mạch {{这家店很小，但是很干净，菜也很好吃。}} Bản sau ngắn hơn và tự nhiên hơn.</p>
+<div class="callout"><p lang="zh">小林有一只猫，名字叫“雪球”。它全身白色，眼睛是蓝色的，每天都睡在窗边。小林很爱它，下课以后总是马上回家陪它玩儿。</p>
+<p>Xiǎo Lín yǒu yì zhī māo, míngzi jiào “Xuěqiú”. Tā quánshēn báisè, yǎnjing shì lánsè de, měi tiān dōu shuì zài chuāng biān. Xiǎo Lín hěn ài tā, xiàkè yǐhòu zǒngshì mǎshàng huí jiā péi tā wánr.</p>
+<p>Tiểu Lâm có một con mèo tên "Cầu Tuyết". Nó toàn thân màu trắng, mắt xanh, ngày nào cũng ngủ bên cửa sổ. Tiểu Lâm rất yêu nó, tan học luôn về nhà ngay để chơi với nó.</p></div>
+<p>Ở đây {{它}} chỉ con mèo, còn {{小林}} thứ hai được lặp có chủ ý vì chủ ngữ chuyển từ con mèo về người.</p>`,
+[
+ ['Combine: {{这本书很贵。这本书很有意思。}}', '{{这本书很贵，但是很有意思。}}', 'Gộp: {{这本书很贵。这本书很有意思。}}', '{{这本书很贵，但是很有意思。}}'],
+ ['In the cat text, what does {{它}} refer to?', 'The cat, {{雪球}}.', 'Trong đoạn về con mèo, {{它}} chỉ gì?', 'Con mèo, {{雪球}}.'],
+]);
+
+E['crw201-ts-6-2'] = X(
+`<p>Two special situations come up often. <strong>Asking for leave</strong> must say who, when and why, and thank the teacher in advance. <strong>Reporting a problem</strong> (a missed file, a wrong time) should state the facts in a line, then ask for help. Never end with a bare {{怎么办？}} for a teacher; offer your own idea first.</p>
+<div class="callout"><p lang="zh">李老师好！我是汉语二班的阮明。我明天上午发烧，不能去上课，想请一天假。我会请同学把笔记发给我。谢谢老师！</p>
+<p>Lǐ lǎoshī hǎo! Wǒ shì Hànyǔ èr bān de Ruǎn Míng. Wǒ míngtiān shàngwǔ fāshāo, bù néng qù shàngkè, xiǎng qǐng yì tiān jià. Wǒ huì qǐng tóngxué bǎ bǐjì fā gěi wǒ. Xièxie lǎoshī!</p>
+<p>Hello Teacher Li! I am Nguyen Minh from Chinese class 2. I have a fever tomorrow morning and cannot come to class, so I would like to ask for a day's leave. I will ask a classmate to send me the notes. Thank you!</p></div>
+<p>Identity, reason, request, a plan, thanks — five short sentences. Also learn the friend version: {{我明天去不了，帮我请个假，行吗？}}</p>`,
+`<p>Có hai tình huống đặc biệt hay gặp. <strong>Xin nghỉ</strong> phải nói rõ ai, khi nào, vì sao và cảm ơn thầy cô trước. <strong>Báo sự cố</strong> (nhầm tệp, sai giờ) nên nêu sự việc trong một dòng rồi nhờ giúp. Đừng kết thúc bằng một câu {{怎么办？}} trống không với thầy cô; hãy đưa ra cách của mình trước.</p>
+<div class="callout"><p lang="zh">李老师好！我是汉语二班的阮明。我明天上午发烧，不能去上课，想请一天假。我会请同学把笔记发给我。谢谢老师！</p>
+<p>Lǐ lǎoshī hǎo! Wǒ shì Hànyǔ èr bān de Ruǎn Míng. Wǒ míngtiān shàngwǔ fāshāo, bù néng qù shàngkè, xiǎng qǐng yì tiān jià. Wǒ huì qǐng tóngxué bǎ bǐjì fā gěi wǒ. Xièxie lǎoshī!</p>
+<p>Chào thầy Lý! Em là Nguyễn Minh lớp tiếng Trung 2. Sáng mai em bị sốt, không đến lớp được nên xin nghỉ một ngày. Em sẽ nhờ bạn gửi ghi chép. Em cảm ơn thầy!</p></div>
+<p>Danh tính, lý do, đề nghị, kế hoạch, lời cảm ơn — năm câu ngắn. Cũng học bản dành cho bạn: {{我明天去不了，帮我请个假，行吗？}}</p>`,
+[
+ ['Name the five parts of the leave message.', 'Identity, reason, request, plan, thanks.', 'Kể tên năm phần của tin nhắn xin nghỉ.', 'Danh tính, lý do, đề nghị, kế hoạch, cảm ơn.'],
+ ['Make this polite for a teacher: {{告诉我作业。}}', '{{老师，请问今天的作业是什么？麻烦您了。}}', 'Làm lịch sự cho thầy cô: {{告诉我作业。}}', '{{老师，请问今天的作业是什么？麻烦您了。}}'],
+]);
+
+E['crw201-ts-6-3'] = X(
+`<p>Invitations vary with the relationship. To a friend a message is enough: {{周末有空吗？一起去看电影吧！}} To a teacher or an older person use {{请}} and {{您}}: {{老师，下周六我们班想请您参加毕业聚会，您有时间吗？}}</p>
+<p>A good reply to an invitation never leaves the host guessing. Even when you are unsure, say when you will know: {{我这周五告诉你，好吗？}} Two more acceptance frames are {{没问题，到时候见！}} and {{谢谢你想到我，我很高兴去。}}</p>
+<div class="callout"><p lang="zh">小林，谢谢你的邀请！我很想去，可是那天下午我要考试，晚上六点才能结束。我考完试就马上过去，可以吗？</p>
+<p>Xiǎo Lín, xièxie nǐ de yāoqǐng! Wǒ hěn xiǎng qù, kěshì nà tiān xiàwǔ wǒ yào kǎoshì, wǎnshang liù diǎn cái néng jiéshù. Wǒ kǎo wán shì jiù mǎshàng guòqù, kěyǐ ma?</p>
+<p>Xiao Lin, thank you for the invitation! I would love to come, but that afternoon I have an exam which will not finish until six in the evening. I will come over right after the exam, if that is all right.</p></div>
+<p>A partial acceptance: it thanks, explains in one clause, and gives a concrete alternative.</p>`,
+`<p>Lời mời thay đổi theo mối quan hệ. Với bạn, một tin nhắn là đủ: {{周末有空吗？一起去看电影吧！}} Với thầy cô hoặc người lớn tuổi dùng {{请}} và {{您}}: {{老师，下周六我们班想请您参加毕业聚会，您有时间吗？}}</p>
+<p>Câu trả lời tốt không để chủ nhà phải đoán. Dù chưa chắc cũng nên nói khi nào sẽ biết: {{我这周五告诉你，好吗？}} Thêm hai mẫu nhận lời: {{没问题，到时候见！}} và {{谢谢你想到我，我很高兴去。}}</p>
+<div class="callout"><p lang="zh">小林，谢谢你的邀请！我很想去，可是那天下午我要考试，晚上六点才能结束。我考完试就马上过去，可以吗？</p>
+<p>Xiǎo Lín, xièxie nǐ de yāoqǐng! Wǒ hěn xiǎng qù, kěshì nà tiān xiàwǔ wǒ yào kǎoshì, wǎnshang liù diǎn cái néng jiéshù. Wǒ kǎo wán shì jiù mǎshàng guòqù, kěyǐ ma?</p>
+<p>Tiểu Lâm, cảm ơn lời mời của bạn! Mình rất muốn đến, nhưng chiều hôm đó mình thi, sáu giờ tối mới xong. Thi xong mình sẽ qua ngay, được không?</p></div>
+<p>Đây là nhận lời một phần: cảm ơn, giải thích trong một mệnh đề và đưa ra phương án cụ thể.</p>`,
+[
+ ['Write a short invitation to a friend for a film on Sunday at 3 p.m.', 'For example: {{星期天下午三点我们一起去看电影，好吗？}}', 'Viết lời mời ngắn rủ bạn xem phim Chủ nhật lúc 3 giờ chiều.', 'Ví dụ: {{星期天下午三点我们一起去看电影，好吗？}}'],
+ ['What three things should a refusal contain?', 'Thanks, a short reason with an apology, and an alternative.', 'Lời từ chối nên có ba điều gì?', 'Cảm ơn, lý do ngắn kèm xin lỗi, và phương án thay thế.'],
+]);
+
+E['crw201-ts-6-4'] = X(
+`<p>Notices share a vocabulary worth memorising: {{兹通知}} (formal: "hereby notified"), {{请大家准时参加}} "please attend on time", {{如有变化}} "if anything changes", {{特此通知}} "notified accordingly". At HSK 3 you only need the simple version, but you should recognise these when you read.</p>
+<p>A second common short text is the <strong>lost-and-found notice</strong> 寻物启事. It names the item, where and when it was lost, and a contact.</p>
+<div class="callout"><p lang="zh">寻物启事 / 本人昨天下午在图书馆丢了一个黑色的钱包，里面有学生证和一些钱。捡到的同学请联系我，电话：0912345678，谢谢！ 阮明 11月9日</p>
+<p>Xúnwù qǐshì / Běnrén zuótiān xiàwǔ zài túshūguǎn diū le yí gè hēisè de qiánbāo, lǐmiàn yǒu xuéshēngzhèng hé yìxiē qián. Jiǎndào de tóngxué qǐng liánxì wǒ, diànhuà: líng jiǔ yāo èr sān sì wǔ liù qī bā, xièxie! Ruǎn Míng, shíyī yuè jiǔ rì.</p>
+<p>Lost item notice. Yesterday afternoon I lost a black wallet in the library; it holds a student card and some money. Whoever finds it please contact me, phone 0912345678, thank you! Nguyen Minh, 9 Nov.</p></div>
+<p>In phone numbers {{1}} is often read {{yāo}} to avoid confusion with {{7}} ({{qī}}).</p>`,
+`<p>Thông báo có vốn từ chung đáng nhớ: {{兹通知}} (trang trọng: "nay thông báo"), {{请大家准时参加}} "đề nghị mọi người tham dự đúng giờ", {{如有变化}} "nếu có thay đổi", {{特此通知}} "xin thông báo". Ở HSK 3 chỉ cần bản đơn giản, nhưng cần nhận ra các cụm này khi đọc.</p>
+<p>Một văn bản ngắn phổ biến khác là <strong>thông báo tìm đồ</strong> 寻物启事. Nó nêu đồ vật, nơi và lúc mất, và cách liên hệ.</p>
+<div class="callout"><p lang="zh">寻物启事 / 本人昨天下午在图书馆丢了一个黑色的钱包，里面有学生证和一些钱。捡到的同学请联系我，电话：0912345678，谢谢！ 阮明 11月9日</p>
+<p>Xúnwù qǐshì / Běnrén zuótiān xiàwǔ zài túshūguǎn diū le yí gè hēisè de qiánbāo, lǐmiàn yǒu xuéshēngzhèng hé yìxiē qián. Jiǎndào de tóngxué qǐng liánxì wǒ, diànhuà: líng jiǔ yāo èr sān sì wǔ liù qī bā, xièxie! Ruǎn Míng, shíyī yuè jiǔ rì.</p>
+<p>Thông báo tìm đồ. Chiều qua tôi làm mất một chiếc ví đen ở thư viện, bên trong có thẻ sinh viên và ít tiền. Bạn nào nhặt được xin liên hệ, điện thoại 0912345678, cảm ơn! Nguyễn Minh, 9/11.</p></div>
+<p>Trong số điện thoại, {{1}} thường đọc là {{yāo}} để khỏi nhầm với {{7}} ({{qī}}).</p>`,
+[
+ ['What four facts does a lost-item notice give?', 'The item, the place, the time, and a contact.', 'Thông báo tìm đồ nêu bốn thông tin nào?', 'Đồ vật, nơi mất, thời gian mất và cách liên hệ.'],
+ ['Write today\'s date in Chinese form: 9 November 2026.', '{{2026年11月9日}}', 'Viết ngày 9 tháng 11 năm 2026 theo dạng tiếng Trung.', '{{2026年11月9日}}'],
+]);
+
+E['crw201-ts-7-1'] = X(
+`<p>The closing wish deserves a closer look because it is where learners sound unnatural. A formal closing is two lines: {{此致}} on the first line and {{敬礼！}} on the next, both left-aligned or indented as your teacher asks. Between friends use one line, {{祝你一切顺利！}} or {{保重！}}</p>
+<p>Wishes can match the occasion: {{祝你生日快乐}} birthday, {{祝你新年快乐}} New Year, {{祝你考试顺利}} exams, {{祝您身体健康}} (for elders). The signature goes on the right below the wish, and the date goes under it.</p>
+<div class="callout"><p lang="zh">亲爱的小林：你好！下个星期我要考试了，有点儿紧张。你能给我几个学习建议吗？谢谢你！祝你天天开心！ 你的朋友 阮明 2026年11月9日</p>
+<p>Qīn'ài de Xiǎo Lín: Nǐ hǎo! Xià ge xīngqī wǒ yào kǎoshì le, yǒudiǎnr jǐnzhāng. Nǐ néng gěi wǒ jǐ gè xuéxí jiànyì ma? Xièxie nǐ! Zhù nǐ tiāntiān kāixīn! Nǐ de péngyou Ruǎn Míng, èr líng èr liù nián shíyī yuè jiǔ rì.</p>
+<p>Dear Xiao Lin: Hello! Next week I have an exam and I am a bit nervous. Could you give me a few study tips? Thank you! Wishing you happiness every day! Your friend Nguyen Minh, 9 November 2026.</p></div>`,
+`<p>Lời chúc cuối thư đáng xem kỹ vì đó là chỗ người học dễ viết thiếu tự nhiên. Lời kết trang trọng gồm hai dòng: {{此致}} ở dòng một và {{敬礼！}} ở dòng sau, canh lề hoặc thụt đầu dòng theo yêu cầu của thầy cô. Giữa bạn bè dùng một dòng, {{祝你一切顺利！}} hoặc {{保重！}}</p>
+<p>Lời chúc có thể hợp với dịp: {{祝你生日快乐}} sinh nhật, {{祝你新年快乐}} năm mới, {{祝你考试顺利}} thi cử, {{祝您身体健康}} (cho người lớn tuổi). Chữ ký đặt bên phải dưới lời chúc, ngày tháng bên dưới chữ ký.</p>
+<div class="callout"><p lang="zh">亲爱的小林：你好！下个星期我要考试了，有点儿紧张。你能给我几个学习建议吗？谢谢你！祝你天天开心！ 你的朋友 阮明 2026年11月9日</p>
+<p>Qīn'ài de Xiǎo Lín: Nǐ hǎo! Xià ge xīngqī wǒ yào kǎoshì le, yǒudiǎnr jǐnzhāng. Nǐ néng gěi wǒ jǐ gè xuéxí jiànyì ma? Xièxie nǐ! Zhù nǐ tiāntiān kāixīn! Nǐ de péngyou Ruǎn Míng, èr líng èr liù nián shíyī yuè jiǔ rì.</p>
+<p>Tiểu Lâm thân mến: Chào bạn! Tuần sau mình thi, hơi hồi hộp. Bạn cho mình vài lời khuyên học tập được không? Cảm ơn bạn! Chúc bạn ngày nào cũng vui! Bạn của bạn, Nguyễn Minh, 9/11/2026.</p></div>`,
+[
+ ['Which salutation fits a teacher: {{亲爱的老师}} or {{尊敬的老师}}?', '{{尊敬的老师}}; {{亲爱的}} is too intimate.', 'Lời xưng hô nào hợp với thầy cô: {{亲爱的老师}} hay {{尊敬的老师}}?', '{{尊敬的老师}}; {{亲爱的}} quá thân mật.'],
+ ['Write a closing wish for an exam.', '{{祝你考试顺利！}}', 'Viết lời chúc cuối thư cho kỳ thi.', '{{祝你考试顺利！}}'],
+]);
+
+E['crw201-ts-7-2'] = X(
+`<p>When you report news, vary the openers: {{告诉你一个好消息}} "good news", {{最近发生了一件有意思的事}} "something interesting happened", {{我想跟你说说……}} "I would like to tell you about". For thanks, say what you are thanking for: {{谢谢你上次陪我去医院}} sounds sincere, while a bare {{谢谢}} sounds cold.</p>
+<div class="callout"><p lang="zh">小林：告诉你一个好消息，我通过汉语考试了！谢谢你上次教我写汉字，你的方法真的很有用。暑假我打算去北京玩儿，到时候想见你一面，好吗？</p>
+<p>Xiǎo Lín: Gàosu nǐ yí gè hǎo xiāoxi, wǒ tōngguò Hànyǔ kǎoshì le! Xièxie nǐ shàng cì jiāo wǒ xiě Hànzì, nǐ de fāngfǎ zhēn de hěn yǒuyòng. Shǔjià wǒ dǎsuàn qù Běijīng wánr, dào shíhou xiǎng jiàn nǐ yí miàn, hǎo ma?</p>
+<p>Xiao Lin: Good news, I passed the Chinese exam! Thank you for teaching me to write characters last time; your method really works. In the summer holiday I plan to visit Beijing and would like to meet you then, if that is all right.</p></div>`,
+`<p>Khi báo tin, hãy đổi cách mở đầu: {{告诉你一个好消息}} "báo tin vui", {{最近发生了一件有意思的事}} "dạo này có chuyện thú vị", {{我想跟你说说……}} "mình muốn kể với bạn về…". Khi cảm ơn, nói rõ cảm ơn việc gì: {{谢谢你上次陪我去医院}} nghe chân thành, còn {{谢谢}} trơn nghe lạnh.</p>
+<div class="callout"><p lang="zh">小林：告诉你一个好消息，我通过汉语考试了！谢谢你上次教我写汉字，你的方法真的很有用。暑假我打算去北京玩儿，到时候想见你一面，好吗？</p>
+<p>Xiǎo Lín: Gàosu nǐ yí gè hǎo xiāoxi, wǒ tōngguò Hànyǔ kǎoshì le! Xièxie nǐ shàng cì jiāo wǒ xiě Hànzì, nǐ de fāngfǎ zhēn de hěn yǒuyòng. Shǔjià wǒ dǎsuàn qù Běijīng wánr, dào shíhou xiǎng jiàn nǐ yí miàn, hǎo ma?</p>
+<p>Tiểu Lâm: Báo bạn tin vui, mình đã qua kỳ thi tiếng Trung! Cảm ơn bạn lần trước dạy mình viết chữ Hán, cách của bạn thật sự hiệu quả. Kỳ nghỉ hè mình định đi chơi Bắc Kinh, lúc đó muốn gặp bạn một lần, được không?</p></div>`,
+[
+ ['Which sentence thanks specifically: {{谢谢！}} or {{谢谢你上次帮我搬家！}}', 'The second one; it names the help.', 'Câu nào cảm ơn cụ thể: {{谢谢！}} hay {{谢谢你上次帮我搬家！}}', 'Câu thứ hai; nó nêu rõ việc được giúp.'],
+ ['Write a one-sentence plan for next month.', 'For example: {{我打算下个月去看奶奶。}}', 'Viết một câu nêu dự định tháng sau.', 'Ví dụ: {{我打算下个月去看奶奶。}}'],
+]);
+
+E['crw201-ts-7-3'] = X(
+`<p>Two variations are common: asking for <strong>information</strong> and <strong>reporting an absence</strong>. For information give the exact question, then say you have already checked the obvious source: {{我看了学校网站，但是没有找到考试时间。}} Teachers respond faster to a precise question.</p>
+<div class="callout"><p lang="zh">尊敬的老师：您好！我想请问，下个月的汉语考试在哪个教室？我看了学校网站，但是没有找到。麻烦您告诉我，谢谢！学生阮明</p>
+<p>Zūnjìng de lǎoshī: Nín hǎo! Wǒ xiǎng qǐngwèn, xià ge yuè de Hànyǔ kǎoshì zài nǎ ge jiàoshì? Wǒ kàn le xuéxiào wǎngzhàn, dànshì méiyǒu zhǎodào. Máfan nín gàosu wǒ, xièxie! Xuésheng Ruǎn Míng.</p>
+<p>Dear Teacher: Hello! May I ask in which classroom next month's Chinese exam will be held? I looked at the school website but could not find it. Sorry to trouble you; thank you! Student Nguyen Minh.</p></div>
+<p>Compare with an impolite version: {{考试在哪里？告诉我。}} It gives no greeting, no thanks and is a command.</p>`,
+`<p>Hai biến thể thường gặp là hỏi <strong>thông tin</strong> và <strong>báo vắng mặt</strong>. Khi hỏi thông tin, nêu đúng câu hỏi rồi cho biết bạn đã xem nguồn hiển nhiên: {{我看了学校网站，但是没有找到考试时间。}} Thầy cô trả lời nhanh hơn khi câu hỏi chính xác.</p>
+<div class="callout"><p lang="zh">尊敬的老师：您好！我想请问，下个月的汉语考试在哪个教室？我看了学校网站，但是没有找到。麻烦您告诉我，谢谢！学生阮明</p>
+<p>Zūnjìng de lǎoshī: Nín hǎo! Wǒ xiǎng qǐngwèn, xià ge yuè de Hànyǔ kǎoshì zài nǎ ge jiàoshì? Wǒ kàn le xuéxiào wǎngzhàn, dànshì méiyǒu zhǎodào. Máfan nín gàosu wǒ, xièxie! Xuésheng Ruǎn Míng.</p>
+<p>Kính gửi thầy: Chào thầy! Em xin hỏi kỳ thi tiếng Trung tháng sau ở phòng nào ạ? Em đã xem trang web trường nhưng không thấy. Làm phiền thầy cho em biết, em cảm ơn! Sinh viên Nguyễn Minh.</p></div>
+<p>So với bản bất lịch sự: {{考试在哪里？告诉我。}} Không chào, không cảm ơn và là câu ra lệnh.</p>`,
+[
+ ['Why is {{考试在哪里？告诉我。}} impolite?', 'It is a command with no greeting or thanks.', 'Vì sao {{考试在哪里？告诉我。}} bất lịch sự?', 'Vì là câu ra lệnh, không chào và không cảm ơn.'],
+ ['Rewrite politely: {{我明天不来。}}', '{{老师，我明天有事，不能来上课，可以请假吗？}}', 'Viết lại lịch sự: {{我明天不来。}}', '{{老师，我明天有事，不能来上课，可以请假吗？}}'],
+]);
+
+E['crw201-ts-8-1'] = X(
+`<p>To make a narrative vivid, add one <strong>detail of feeling or senses</strong> at the turning point: what you saw, heard or thought. {{天一下子黑了}} "the sky suddenly went dark" or {{我心里很害怕}} "I felt scared inside" lift a bare list of events. Add one sentence of reflection at the end: {{这件事让我知道，出门要带伞。}}</p>
+<div class="callout"><p lang="zh">去年春节，我跟爸爸妈妈回老家。路上堵车，我们走了八个小时。到家的时候，奶奶已经在门口等了很久。她一看见我们，就笑着说：“你们终于回来了！”那一刻，我觉得再累也值得。</p>
+<p>Qùnián Chūnjié, wǒ gēn bàba māma huí lǎojiā. Lùshang dǔchē, wǒmen zǒu le bā gè xiǎoshí. Dào jiā de shíhou, nǎinai yǐjīng zài ménkǒu děng le hěn jiǔ. Tā yí kànjiàn wǒmen, jiù xiào zhe shuō: “Nǐmen zhōngyú huílái le!” Nà yí kè, wǒ juéde zài lèi yě zhídé.</p>
+<p>Last Spring Festival I went back to my hometown with my parents. There was a traffic jam and the journey took eight hours. When we arrived, Grandma had already been waiting at the door for a long time. As soon as she saw us she said with a smile, "You are finally back!" At that moment I felt that however tired I was, it was worth it.</p></div>`,
+`<p>Để bài kể sinh động, hãy thêm một <strong>chi tiết cảm xúc hoặc giác quan</strong> ở chỗ ngoặt: bạn thấy, nghe hay nghĩ gì. {{天一下子黑了}} "trời bỗng tối sầm" hay {{我心里很害怕}} "trong lòng tôi rất sợ" làm bản liệt kê trơ trụi sống động hơn. Thêm một câu suy ngẫm ở cuối: {{这件事让我知道，出门要带伞。}}</p>
+<div class="callout"><p lang="zh">去年春节，我跟爸爸妈妈回老家。路上堵车，我们走了八个小时。到家的时候，奶奶已经在门口等了很久。她一看见我们，就笑着说：“你们终于回来了！”那一刻，我觉得再累也值得。</p>
+<p>Qùnián Chūnjié, wǒ gēn bàba māma huí lǎojiā. Lùshang dǔchē, wǒmen zǒu le bā gè xiǎoshí. Dào jiā de shíhou, nǎinai yǐjīng zài ménkǒu děng le hěn jiǔ. Tā yí kànjiàn wǒmen, jiù xiào zhe shuō: “Nǐmen zhōngyú huílái le!” Nà yí kè, wǒ juéde zài lèi yě zhídé.</p>
+<p>Tết năm ngoái tôi về quê với bố mẹ. Trên đường kẹt xe, chúng tôi đi mất tám tiếng. Lúc đến nhà, bà đã đứng đợi ở cửa rất lâu. Vừa thấy chúng tôi, bà cười nói: "Cuối cùng các con cũng về!" Khoảnh khắc ấy tôi thấy dù mệt đến mấy cũng đáng.</p></div>`,
+[
+ ['Name the six slots of a narrative.', 'When, where/who, what happened, turn, end, feeling.', 'Kể sáu ô của một bài kể chuyện.', 'Khi nào, ở đâu/ai, chuyện gì, ngoặt, kết, cảm xúc.'],
+ ['Which word in the Spring Festival text marks the final arrival?', '{{终于}} "finally" in {{你们终于回来了}}.', 'Từ nào trong đoạn Tết đánh dấu việc cuối cùng cũng về đến?', '{{终于}} "cuối cùng" trong {{你们终于回来了}}.'],
+]);
+
+E['crw201-ts-8-2'] = X(
+`<p>Two upgrades make descriptions richer. Use <strong>reduplicated adjectives</strong> for vivid images: {{高高的}} tall, {{大大的眼睛}} big eyes, {{长长的头发}} long hair; the small {{的}} follows. And use <strong>comparison</strong> to anchor a description: {{他比我高一点儿}} "a bit taller than me".</p>
+<div class="callout"><p lang="zh">我的奶奶今年七十岁，头发白白的，脸上总是带着笑。她很会做饭，每次我回家，她都做我最爱吃的鱼。奶奶家在一个安静的小村子里，门前有一条小河，河边种着很多花。</p>
+<p>Wǒ de nǎinai jīnnián qīshí suì, tóufa báibái de, liǎn shang zǒngshì dài zhe xiào. Tā hěn huì zuòfàn, měi cì wǒ huí jiā, tā dōu zuò wǒ zuì ài chī de yú. Nǎinai jiā zài yí gè ānjìng de xiǎo cūnzi li, ménqián yǒu yì tiáo xiǎo hé, hébiān zhòng zhe hěn duō huā.</p>
+<p>My grandmother is seventy this year, her hair is white and there is always a smile on her face. She cooks well, and every time I go home she makes the fish I love best. Her house is in a quiet little village; in front of the door there is a small river, and many flowers are planted along its bank.</p></div>
+<p>Person and place together: appearance, trait with evidence (the fish), location, details ({{有}} and {{种着}}).</p>`,
+`<p>Hai cách nâng cấp giúp mô tả phong phú hơn. Dùng <strong>tính từ láy</strong> để tạo hình ảnh: {{高高的}} cao cao, {{大大的眼睛}} đôi mắt to, {{长长的头发}} tóc dài; có {{的}} nhỏ theo sau. Và dùng <strong>so sánh</strong> để neo mô tả: {{他比我高一点儿}} "cao hơn tôi chút".</p>
+<div class="callout"><p lang="zh">我的奶奶今年七十岁，头发白白的，脸上总是带着笑。她很会做饭，每次我回家，她都做我最爱吃的鱼。奶奶家在一个安静的小村子里，门前有一条小河，河边种着很多花。</p>
+<p>Wǒ de nǎinai jīnnián qīshí suì, tóufa báibái de, liǎn shang zǒngshì dài zhe xiào. Tā hěn huì zuòfàn, měi cì wǒ huí jiā, tā dōu zuò wǒ zuì ài chī de yú. Nǎinai jiā zài yí gè ānjìng de xiǎo cūnzi li, ménqián yǒu yì tiáo xiǎo hé, hébiān zhòng zhe hěn duō huā.</p>
+<p>Bà tôi năm nay bảy mươi tuổi, tóc bạc trắng, trên mặt lúc nào cũng mỉm cười. Bà nấu ăn giỏi, mỗi lần tôi về, bà đều nấu món cá tôi thích nhất. Nhà bà ở một ngôi làng nhỏ yên tĩnh, trước cửa có con sông nhỏ, ven sông trồng nhiều hoa.</p></div>
+<p>Cả người lẫn nơi chốn: ngoại hình, tính cách kèm dẫn chứng (món cá), vị trí, chi tiết ({{有}} và {{种着}}).</p>`,
+[
+ ['Form a reduplicated phrase for "long hair".', '{{长长的头发}}', 'Tạo cụm tính từ láy cho "tóc dài".', '{{长长的头发}}'],
+ ['Which evidence supports "Grandma cooks well"?', 'She makes the fish I love best every time I go home.', 'Dẫn chứng nào cho thấy "bà nấu ăn giỏi"?', 'Mỗi lần tôi về bà đều nấu món cá tôi thích nhất.'],
+]);
+
+E['crw201-ts-8-3'] = X(
+`<p>For three-word prompts, list the words in a chain first: person + place + feeling. Example prompt: {{生日 / 蛋糕 / 开心}}. A sentence plan: who has the birthday, what do they eat, how do they feel. A written result: {{今天是我的生日，朋友们给我买了一个大蛋糕，我觉得非常开心。}}</p>
+<p>Always read your answer once after writing. Does it use <em>every</em> given word, in the form given? Is it a full sentence? Is there a full stop?</p>
+<div class="callout"><p lang="zh">看图写句子（图：两个孩子在雨中走路，一个人打着伞）。词语：伞。→ 下雨了，哥哥打着伞，送弟弟去学校。</p>
+<p>Kàn tú xiě jùzi (tú: liǎng gè háizi zài yǔ zhōng zǒulù, yí gè rén dǎ zhe sǎn). Cíyǔ: sǎn. → Xià yǔ le, gēge dǎ zhe sǎn, sòng dìdi qù xuéxiào.</p>
+<p>Write a sentence from the picture (two children walking in the rain, one holding an umbrella). Word: umbrella. → It is raining; the older brother holds an umbrella and takes his younger brother to school.</p></div>`,
+`<p>Với đề cho ba từ, hãy xếp các từ thành chuỗi trước: người + nơi chốn + cảm xúc. Ví dụ đề: {{生日 / 蛋糕 / 开心}}. Kế hoạch câu: ai có sinh nhật, ăn gì, cảm thấy thế nào. Bài viết: {{今天是我的生日，朋友们给我买了一个大蛋糕，我觉得非常开心。}}</p>
+<p>Luôn đọc lại một lần sau khi viết. Có dùng <em>mọi</em> từ cho sẵn, đúng dạng không? Có phải câu đầy đủ không? Có dấu chấm không?</p>
+<div class="callout"><p lang="zh">看图写句子（图：两个孩子在雨中走路，一个人打着伞）。词语：伞。→ 下雨了，哥哥打着伞，送弟弟去学校。</p>
+<p>Kàn tú xiě jùzi (tú: liǎng gè háizi zài yǔ zhōng zǒulù, yí gè rén dǎ zhe sǎn). Cíyǔ: sǎn. → Xià yǔ le, gēge dǎ zhe sǎn, sòng dìdi qù xuéxiào.</p>
+<p>Xem tranh viết câu (hai em bé đi bộ dưới mưa, một người cầm ô). Từ: ô. → Trời mưa, anh cầm ô đưa em đến trường.</p></div>`,
+[
+ ['Write a sentence using {{图书馆}} for a picture of a girl reading.', '{{她在图书馆看书。}}', 'Viết câu dùng {{图书馆}} cho tranh cô bé đang đọc sách.', '{{她在图书馆看书。}}'],
+ ['Write two sentences using {{生日 / 蛋糕 / 开心}}.', '{{今天是我的生日，朋友们给我买了一个大蛋糕。我觉得非常开心。}}', 'Viết hai câu dùng {{生日 / 蛋糕 / 开心}}.', '{{今天是我的生日，朋友们给我买了一个大蛋糕。我觉得非常开心。}}'],
+]);
+
+E['crw201-ts-8-4'] = X(
+`<p>When the topic is a choice, a comparison paragraph helps: state which option you prefer, then compare using {{比}}, {{更}} and {{没有}}. Another useful frame is {{一方面……，另一方面……}} "on one hand … on the other", which shows you see both sides.</p>
+<div class="callout"><p lang="zh">我认为学生应该多运动。第一，运动对身体好，经常运动的人不容易生病。第二，运动以后学习更有精神。比如，我每天下课打半个小时球，晚上做作业就不太累。所以我建议大家每天运动。</p>
+<p>Wǒ rènwéi xuésheng yīnggāi duō yùndòng. Dì yī, yùndòng duì shēntǐ hǎo, jīngcháng yùndòng de rén bù róngyì shēngbìng. Dì èr, yùndòng yǐhòu xuéxí gèng yǒu jīngshen. Bǐrú, wǒ měi tiān xiàkè dǎ bàn gè xiǎoshí qiú, wǎnshang zuò zuòyè jiù bú tài lèi. Suǒyǐ wǒ jiànyì dàjiā měi tiān yùndòng.</p>
+<p>I think students should exercise more. First, exercise is good for health and people who exercise often do not fall ill easily. Second, after exercise you study with more energy. For example, I play ball for half an hour after class every day and I am not so tired doing homework in the evening. So I suggest that everyone exercises every day.</p></div>`,
+`<p>Khi đề là một lựa chọn, đoạn so sánh sẽ giúp ích: nêu phương án bạn thích hơn rồi so sánh bằng {{比}}, {{更}} và {{没有}}. Một mẫu khác là {{一方面……，另一方面……}} "một mặt… mặt khác…", cho thấy bạn thấy cả hai phía.</p>
+<div class="callout"><p lang="zh">我认为学生应该多运动。第一，运动对身体好，经常运动的人不容易生病。第二，运动以后学习更有精神。比如，我每天下课打半个小时球，晚上做作业就不太累。所以我建议大家每天运动。</p>
+<p>Wǒ rènwéi xuésheng yīnggāi duō yùndòng. Dì yī, yùndòng duì shēntǐ hǎo, jīngcháng yùndòng de rén bù róngyì shēngbìng. Dì èr, yùndòng yǐhòu xuéxí gèng yǒu jīngshen. Bǐrú, wǒ měi tiān xiàkè dǎ bàn gè xiǎoshí qiú, wǎnshang zuò zuòyè jiù bú tài lèi. Suǒyǐ wǒ jiànyì dàjiā měi tiān yùndòng.</p>
+<p>Tôi cho rằng học sinh nên vận động nhiều hơn. Thứ nhất, vận động tốt cho cơ thể, người thường xuyên vận động không dễ ốm. Thứ hai, sau khi vận động học tập tỉnh táo hơn. Ví dụ, mỗi ngày tan học tôi chơi bóng nửa tiếng nên tối làm bài không mệt lắm. Vì vậy tôi đề nghị mọi người ngày nào cũng vận động.</p></div>`,
+[
+ ['Mark the opinion, two reasons and example in the exercise text.', 'Opinion: {{学生应该多运动}}; reasons: {{第一}}, {{第二}}; example: {{比如}}.', 'Chỉ ra ý kiến, hai lý do và ví dụ trong đoạn về vận động.', 'Ý kiến: {{学生应该多运动}}; lý do: {{第一}}, {{第二}}; ví dụ: {{比如}}.'],
+ ['Add a contrast sentence with {{当然……但是……}} about exercise.', '{{当然，运动很花时间，但是对身体很有好处。}}', 'Thêm câu tương phản với {{当然……但是……}} về vận động.', '{{当然，运动很花时间，但是对身体很有好处。}}'],
+]);
+
+E['crw201-ts-9-1'] = X(
+`<p>Practise with a <strong>weekly routine</strong> so the techniques become habits. Day 1: ten sentence-rearrangement items, timed at 30 seconds each. Day 2: ten fill-in-the-blank items, naming the word class before choosing. Day 3: two short passages with the three-pass method. Day 4: ten missing-hanzi items from your own error log. Day 5: a full mini-test of 10 reading and 5 writing items.</p>
+<p>For the missing-hanzi task, look for the pinyin's meaning in context, then recall the standard form from your notebook. Characters with the same sound are traps: {{在}} and {{再}} are both zài; {{做}} and {{作}} are both zuò. The surrounding words decide.</p>
+<table><thead><tr><th>Item</th><th>Answer</th><th>Why</th></tr></thead><tbody>
+<tr><td>{{我明天(zài)来。}}</td><td>{{再}}</td><td>repeat in the future</td></tr>
+<tr><td>{{他(zài)教室里。}}</td><td>{{在}}</td><td>location</td></tr>
+</tbody></table>`,
+`<p>Hãy luyện theo <strong>lịch tuần</strong> để kỹ thuật thành thói quen. Ngày 1: mười câu sắp xếp từ, mỗi câu 30 giây. Ngày 2: mười câu điền từ, gọi tên từ loại trước khi chọn. Ngày 3: hai đoạn văn ngắn theo phương pháp ba lượt. Ngày 4: mười câu viết chữ Hán còn thiếu lấy từ sổ lỗi của bạn. Ngày 5: bài thi nhỏ gồm 10 câu đọc và 5 câu viết.</p>
+<p>Với dạng viết chữ Hán còn thiếu, hãy tìm nghĩa của pinyin trong ngữ cảnh rồi nhớ lại dạng chuẩn từ sổ tay. Các chữ cùng âm là cái bẫy: {{在}} và {{再}} đều đọc zài; {{做}} và {{作}} đều đọc zuò. Từ xung quanh quyết định.</p>
+<table><thead><tr><th>Câu</th><th>Đáp án</th><th>Vì sao</th></tr></thead><tbody>
+<tr><td>{{我明天(zài)来。}}</td><td>{{再}}</td><td>lặp lại trong tương lai</td></tr>
+<tr><td>{{他(zài)教室里。}}</td><td>{{在}}</td><td>chỉ nơi chốn</td></tr>
+</tbody></table>`,
+[
+ ['Rearrange: {{喜欢 / 我 / 很 / 音乐}}', '{{我很喜欢音乐。}}', 'Sắp xếp: {{喜欢 / 我 / 很 / 音乐}}', '{{我很喜欢音乐。}}'],
+ ['Why must you write hanzi, not pinyin, in the missing-character task?', 'Only the hanzi earns the point.', 'Vì sao phải viết chữ Hán chứ không viết pinyin ở dạng điền chữ?', 'Chỉ chữ Hán mới được điểm.'],
+]);
+
+E['crw201-ts-9-2'] = X(
+`<p>Make the error log specific. A weak entry reads "word order wrong". A strong entry reads: sentence {{我看书在家}}, type word order (place), correction {{我在家看书}}, rule "place phrase before the verb" (lesson 4.1). With specific entries, patterns appear after a month, and the top two types are what you drill next.</p>
+<div class="callout"><p lang="zh">昨天我去了公园，玩得很高兴。我和朋友们打球，还照了很多照片。回家的时候天黑了，所以我们坐了出租车。</p>
+<p>Zuótiān wǒ qù le gōngyuán, wán de hěn gāoxìng. Wǒ hé péngyoumen dǎqiú, hái zhào le hěn duō zhàopiàn. Huí jiā de shíhou tiān hēi le, suǒyǐ wǒmen zuò le chūzūchē.</p>
+<p>Yesterday I went to the park and had a very happy time. I played ball with my friends and also took many photos. When we went home it had got dark, so we took a taxi.</p></div>
+<p>This version is correct. Try the seven passes on it and confirm that each pass finds nothing; this shows you what clean text feels like.</p>`,
+`<p>Hãy ghi sổ lỗi cho cụ thể. Mục yếu chỉ ghi "sai trật tự từ". Mục tốt ghi: câu {{我看书在家}}, loại lỗi trật tự từ (nơi chốn), sửa {{我在家看书}}, quy tắc "cụm nơi chốn đứng trước động từ" (bài 4.1). Với mục cụ thể, sau một tháng sẽ lộ ra quy luật, và hai loại lỗi đầu là phần cần luyện tiếp.</p>
+<div class="callout"><p lang="zh">昨天我去了公园，玩得很高兴。我和朋友们打球，还照了很多照片。回家的时候天黑了，所以我们坐了出租车。</p>
+<p>Zuótiān wǒ qù le gōngyuán, wán de hěn gāoxìng. Wǒ hé péngyoumen dǎqiú, hái zhào le hěn duō zhàopiàn. Huí jiā de shíhou tiān hēi le, suǒyǐ wǒmen zuò le chūzūchē.</p>
+<p>Hôm qua tôi đi công viên và chơi rất vui. Tôi chơi bóng với bạn bè, còn chụp nhiều ảnh. Lúc về nhà trời đã tối nên chúng tôi đi taxi.</p></div>
+<p>Bản này đúng. Hãy thử bảy lượt soát trên nó và xác nhận mỗi lượt không tìm ra lỗi; việc này cho bạn thấy văn bản sạch có cảm giác thế nào.</p>`,
+[
+ ['Correct: {{他比我很高。}}', '{{他比我高。}} (no {{很}} after {{比}})', 'Sửa: {{他比我很高。}}', '{{他比我高。}} (không dùng {{很}} sau {{比}})'],
+ ['Which four columns should an error log have?', 'Sentence, error type, correct form, rule or lesson.', 'Sổ lỗi nên có bốn cột nào?', 'Câu, loại lỗi, dạng đúng, quy tắc hoặc bài học.'],
+]);
 
 // ───────────────────────────── Chương 1 ─────────────────────────────
 const c1 = {

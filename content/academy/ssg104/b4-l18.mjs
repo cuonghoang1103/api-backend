@@ -52,8 +52,8 @@ export const b4l18 = [
      <p class="meo">💡 Dòng thứ hai chính là lý do phải viết ngắn: phần lớn email của bạn được đọc trên màn hình điện thoại, trong lúc đứng, giữa hai việc khác.</p>`),
 
   slide(D, 4, 'How to write an effective email',
-    `<p class="y-chinh">🎯 Divider — thirteen rules follow, on slides 5 to 10.</p>`,
-    `<p class="y-chinh">🎯 Slide phân mục — mười ba quy tắc nằm ở slide 5 tới slide 10.</p>`),
+    `<p class="y-chinh">🎯 Divider (photo of a laptop showing an inbox) — thirteen rules follow, on slides 5 to 11.</p>`,
+    `<p class="y-chinh">🎯 Slide phân mục (ảnh một laptop đang mở hộp thư) — mười ba quy tắc nằm ở slide 5 tới slide 11.</p>`),
 
   slide(D, 5, 'Rule 1 — proper salutations',
     `<p class="y-chinh">🎯 Salutations should demonstrate respect and <strong>avoid mix-ups in case a message is accidentally sent to the wrong recipient</strong>.</p>
@@ -73,8 +73,10 @@ export const b4l18 = [
 
   slide(D, 7, 'Rule 3 — close with a signature',
     `<p class="y-chinh">🎯 Identify yourself by creating a <strong>signature block</strong> that automatically contains your name and business contact information.</p>
+     <p>Example on the slide: "Sincerely, / FALCON ACCOUNTING / <em>(handwritten signature)</em> / (Ms.) Jamie Falcon, President".</p>
      <p class="meo">💡 "Automatically" is the operative word: a signature you have to remember to type is a signature you will forget on the one email that needed it.</p>`,
     `<p class="y-chinh">🎯 Hãy tự giới thiệu bằng một <strong>khối chữ ký</strong> tự động chứa tên và thông tin liên hệ công việc của bạn.</p>
+     <p>Ví dụ trên slide: "Sincerely, / FALCON ACCOUNTING / <em>(chữ ký tay)</em> / (Ms.) Jamie Falcon, President" — lời chào kết, tên công ty, chữ ký, rồi họ tên kèm chức danh.</p>
      <p class="meo">💡 Chữ "tự động" mới là mấu chốt: chữ ký mà bạn phải nhớ gõ tay là chữ ký bạn sẽ quên đúng vào bức email cần nó nhất.</p>`),
 
   slide(D, 8, 'Rules 4–5 — avoid abbreviations, be brief',
@@ -145,12 +147,14 @@ export const b4l18 = [
        <li><span class="nhan">Memo</span> (memorandum, meaning "<strong>reminder</strong>") — normally used for communicating <strong>policies, procedures or related official business within an organisation</strong>.</li>
        <li><span class="nhan">Letter</span> — a brief message sent to a recipient <strong>often outside the organisation</strong>.</li>
      </ul>
+     <p>Beside the text: a card titled "The Memo" with two sliders, <em>Speed</em> and <em>Formality</em>, and "Current Purposes: to communicate within an organization, usually to a large group of people; to broadcast a message (rather than have a conversation)"; below it, a photo of an opened envelope with a letter.</p>
      <p class="pitfall co-tieu-de"><strong>Cách nhớ:</strong> memo = inside, letter = outside. That single line decides format, salutation and tone, and it is the most likely one-mark question in this lesson.</p>`,
     `<p class="y-chinh">🎯 Định nghĩa trả lời CQ14.2.</p>
      <ul>
        <li><span class="nhan">Memo</span> (memorandum, nghĩa là "<strong>lời nhắc</strong>") — thường dùng để truyền đạt <strong>chính sách, quy trình hoặc công việc chính thức bên trong tổ chức</strong>.</li>
        <li><span class="nhan">Thư</span> — thông điệp ngắn gửi tới người nhận <strong>thường ở bên ngoài tổ chức</strong>.</li>
      </ul>
+     <p>Cạnh phần chữ: một thẻ "The Memo" có hai thanh trượt <em>Speed</em> (tốc độ) và <em>Formality</em> (độ trang trọng), kèm "Current Purposes" — giao tiếp bên trong tổ chức, thường tới một nhóm đông người; phát đi một thông điệp (chứ không phải trò chuyện qua lại). Bên dưới là ảnh một phong bì đã mở kèm lá thư.</p>
      <p class="pitfall co-tieu-de"><strong>Cách nhớ:</strong> memo = bên trong, thư = bên ngoài. Đúng một dòng đó quyết định định dạng, lời chào và giọng văn, và là câu hỏi một điểm dễ ra nhất của bài này.</p>`),
 
   slide(D, 14, 'Memo format',
@@ -162,7 +166,8 @@ export const b4l18 = [
        <li><span class="nhan">Subject:</span></li>
      </ul>
      <p>The writer <strong>signs or writes initials near the keyed name</strong> in the heading.</p>
-     <p class="meo">💡 Note what a memo has no room for: a greeting and a sign-off. That absence is the format saying "this is internal business, not correspondence".</p>`,
+     <p class="meo">💡 Note what a memo has no room for: a greeting and a sign-off. That absence is the format saying "this is internal business, not correspondence".</p>
+     <p>On the right, a sample memo: To: All Employees · From: Larry Ogawa, President, University of State · Date: February 14, 2009 · Subject: Future Expenditure Guidelines — then a paragraph stating the decision in its first sentence, three numbered actions, and a short closing paragraph.</p>`,
     `<p class="y-chinh">🎯 Bốn dòng đầu đề mà memo nào cũng dùng.</p>
      <ul>
        <li><span class="nhan">Kính gửi (To):</span></li>
@@ -171,6 +176,7 @@ export const b4l18 = [
        <li><span class="nhan">Về việc (Subject):</span></li>
      </ul>
      <p>Người viết <strong>ký hoặc viết tắt tên mình cạnh phần tên đã đánh máy</strong> trong đầu đề.</p>
+     <p>Bên phải là một memo mẫu: To: All Employees · From: Larry Ogawa, President, University of State · Date: February 14, 2009 · Subject: Future Expenditure Guidelines — rồi một đoạn nêu quyết định ngay từ câu đầu, ba hành động đánh số, và một đoạn kết ngắn.</p>
      <p class="meo">💡 Để ý memo không có chỗ cho lời chào mở đầu và lời chào kết. Chính sự vắng mặt đó là cách định dạng nói rằng "đây là việc nội bộ, không phải thư từ".</p>`),
 
   slide(D, 15, 'How to write effective business memos (5)',
@@ -212,7 +218,7 @@ export const b4l18 = [
        <li>Courtesy copies ("CC")</li>
        <li>Logo / contact information</li>
      </ol>
-     <p class="meo">💡 Two are marked optional (4 and 5). The other thirteen are expected, which is why a letter looks so much more formal than an email carrying the same message.</p>`,
+     <p class="meo">💡 The list marks two as optional (4 and 5); the sample letter on slide 17 also marks Enclosures (13) "optional, if needed". That many fixed parts is why a letter looks so much more formal than an email carrying the same message.</p>`,
     `<p class="y-chinh">🎯 Danh sách mà CQ14.4 hỏi tới.</p>
      <ol class="hai-cot">
        <li>Địa chỉ người gửi</li>
@@ -231,9 +237,49 @@ export const b4l18 = [
        <li>Bản sao gửi kèm ("CC")</li>
        <li>Logo / thông tin liên hệ</li>
      </ol>
-     <p class="meo">💡 Hai mục được đánh dấu tuỳ chọn (4 và 5). Mười ba mục còn lại là bắt buộc, và đó là lý do một bức thư trông trang trọng hơn hẳn email chở cùng nội dung.</p>`),
+     <p class="meo">💡 Danh sách đánh dấu tuỳ chọn hai mục (4 và 5); mẫu thư ở slide 17 còn ghi mục 13 (tài liệu đính kèm) là "tuỳ chọn, nếu cần". Nhiều phần cố định như vậy là lý do một bức thư trông trang trọng hơn hẳn email chở cùng nội dung.</p>`),
 
-  slide(D, 17, 'Strategies for effective letters — the five areas',
+  slide(D, 17, 'Sample business letter — the fifteen elements labelled',
+    `<p class="y-chinh">🎯 A full sample letter in which every line is labelled with its element number (1-inch margins on all sides).</p>
+     <ol class="hai-cot">
+       <li>Return Address (if not in letterhead logo)</li>
+       <li>Date: 01/01/201X</li>
+       <li>Reference — Re: How to write a letter</li>
+       <li>Delivery (optional): USPS Certified Mail #…</li>
+       <li>Recipient Note (optional): Confidential</li>
+       <li>Salutation: Dear Student X:</li>
+       <li>Introduction: the "paperless office" is a myth</li>
+       <li>Body: three reasons hard-copy letters remain</li>
+       <li>Conclusion: letter writing will still be required</li>
+       <li>Close: Sincerely,</li>
+       <li>Signature Line</li>
+       <li>Preparation Line (initials)</li>
+       <li>Enclosures (optional, if needed)</li>
+       <li>Courtesy Copies: cc: …</li>
+       <li>Logo / Contact Information</li>
+     </ol>
+     <p class="meo">💡 Read it against slide 16: same fifteen numbers, now in the place each one occupies on the page.</p>`,
+    `<p class="y-chinh">🎯 Một bức thư mẫu hoàn chỉnh, mỗi dòng ghi số thứ tự thành phần của nó (lề một inch mọi phía).</p>
+     <ol class="hai-cot">
+       <li>Địa chỉ người gửi (nếu giấy không in sẵn logo)</li>
+       <li>Ngày: 01/01/201X</li>
+       <li>Trích yếu — Re: Cách viết một bức thư</li>
+       <li>Chuyển phát (tuỳ chọn): thư bảo đảm số …</li>
+       <li>Ghi chú người nhận (tuỳ chọn): Mật</li>
+       <li>Lời chào: Dear Student X:</li>
+       <li>Mở bài: "văn phòng không giấy" là chuyện hoang đường</li>
+       <li>Thân bài: ba lý do thư giấy vẫn còn</li>
+       <li>Kết luận: viết thư vẫn sẽ là kỹ năng cần</li>
+       <li>Lời chào kết: Sincerely,</li>
+       <li>Dòng chữ ký</li>
+       <li>Dòng người soạn (chữ viết tắt)</li>
+       <li>Tài liệu đính kèm (tuỳ chọn, nếu cần)</li>
+       <li>Bản sao: cc: …</li>
+       <li>Logo / thông tin liên hệ</li>
+     </ol>
+     <p class="meo">💡 Đọc đối chiếu với slide 16: vẫn mười lăm số ấy, giờ nằm đúng chỗ của nó trên trang giấy.</p>`),
+
+  slide(D, 18, 'Strategies for effective letters — the five areas',
     `<p class="y-chinh">🎯 Remember that a letter has five main areas.</p>
      <ol>
        <li><span class="nhan">The heading</span> — establishes the sender, often including address and date.</li>
@@ -253,7 +299,7 @@ export const b4l18 = [
      </ol>
      <p class="meo">💡 Mười lăm thành phần, năm vùng: thành phần là thứ nằm trên trang giấy, còn vùng là thứ người đọc trải nghiệm. Học cả hai — chúng trả lời hai câu hỏi khác nhau.</p>`),
 
-  slide(D, 18, 'To communicate effectively and project a positive image',
+  slide(D, 19, 'To communicate effectively and project a positive image',
     `<p class="y-chinh">🎯 Five requirements, and they apply to all three document types in this lesson.</p>
      <ul>
        <li>Be <strong>clear, concise, specific and respectful</strong>.</li>
@@ -273,20 +319,22 @@ export const b4l18 = [
      </ul>
      <p class="meo">💡 "Mỗi đoạn một ý" là điều dễ kiểm nhất trong năm: rà tay dọc bản nháp và gọi tên ý của từng đoạn. Đoạn nào bạn không gọi được tên thì phải tách ra hoặc cắt bỏ.</p>`),
 
-  slide(D, 19, 'Exercise 1 — draft a letter introducing a product',
-    `<p class="y-chinh">🎯 Create a draft letter introducing a product or service to a new client. Post and share with classmates.</p>
-     <p class="meo">💡 A new client is an <em>external</em> reader, so this is a letter, not a memo — and it needs the full fifteen elements plus a call to action in the conclusion.</p>`,
-    `<p class="y-chinh">🎯 Soạn bản nháp một bức thư giới thiệu sản phẩm hoặc dịch vụ tới khách hàng mới. Đăng lên và chia sẻ với bạn học.</p>
-     <p class="meo">💡 Khách hàng mới là người đọc <em>bên ngoài</em>, nên đây là thư chứ không phải memo — và nó cần đủ mười lăm thành phần cộng với lời kêu gọi hành động ở phần kết.</p>`),
-
-  slide(D, 20, 'Exercise 2 — write a memo about a holiday',
-    `<p class="y-chinh">🎯 Write a memo informing your class that an upcoming holiday will be observed. Post and share with classmates.</p>
-     <p class="meo">💡 Your class is an <em>internal</em> audience, so this is a memo: four-line heading, direct format, main point first. Comparing the two exercises side by side is the point of setting both.</p>`,
-    `<p class="y-chinh">🎯 Viết một memo thông báo cho lớp về một kỳ nghỉ lễ sắp tới. Đăng lên và chia sẻ với bạn học.</p>
-     <p class="meo">💡 Lớp của bạn là người đọc <em>nội bộ</em>, nên đây là memo: đầu đề bốn dòng, bố cục trực tiếp, ý chính lên trước. Đặt hai bài tập cạnh nhau để so sánh chính là dụng ý của đề bài.</p>`),
+  slide(D, 20, 'Exercises (2)',
+    `<p class="y-chinh">🎯 Two exercises on one slide.</p>
+     <ol>
+       <li>Create a draft letter introducing a product or service to a new client. Post and share with classmates.</li>
+       <li>Write a memo informing your class that an upcoming holiday will be observed. Post and share with classmates.</li>
+     </ol>
+     <p class="meo">💡 A new client is an <em>external</em> reader, so exercise 1 is a letter (use the elements on slides 16–17, with a call to action in the conclusion). Your class is an <em>internal</em> audience, so exercise 2 is a memo: four-line heading, direct format, main point first. Comparing the two side by side is the point of setting both.</p>`,
+    `<p class="y-chinh">🎯 Hai bài tập trên cùng một slide.</p>
+     <ol>
+       <li>Soạn bản nháp một bức thư giới thiệu sản phẩm hoặc dịch vụ tới khách hàng mới. Đăng lên và chia sẻ với bạn học.</li>
+       <li>Viết một memo thông báo cho lớp về một kỳ nghỉ lễ sắp tới. Đăng lên và chia sẻ với bạn học.</li>
+     </ol>
+     <p class="meo">💡 Khách hàng mới là người đọc <em>bên ngoài</em>, nên bài 1 là thư (dùng các thành phần ở slide 16–17, kèm lời kêu gọi hành động ở phần kết). Lớp của bạn là người đọc <em>nội bộ</em>, nên bài 2 là memo: đầu đề bốn dòng, bố cục trực tiếp, ý chính lên trước. Đặt hai bài cạnh nhau để so sánh chính là dụng ý của đề bài.</p>`),
 
   slide(D, 21, 'End of Lesson 18',
-    `<p class="y-chinh">🎯 Closing slide.</p>
+    `<p class="y-chinh">🎯 Closing slide — the image is only a large gradient circle, no text.</p>
      <p><span class="nhan">Self-check</span></p>
      <ol>
        <li>Memo or letter — which is internal and which is external?</li>
@@ -294,7 +342,7 @@ export const b4l18 = [
        <li>The four lines of a memo heading?</li>
        <li>Five main areas of a letter, ending with what in the conclusion?</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Slide kết.</p>
+    `<p class="y-chinh">🎯 Slide kết — ảnh chỉ có một vòng tròn màu chuyển sắc, không có chữ.</p>
      <p><span class="nhan">Tự kiểm</span></p>
      <ol>
        <li>Memo hay thư — cái nào nội bộ, cái nào đối ngoại?</li>
@@ -309,8 +357,8 @@ export const b4l18 = [
   ]),
 
   bi(
-    `<h3>✅ What was missing here</h3>
-     <p>The syllabus asks CQ14.2 (memos vs letters) and CQ14.4 (the fifteen parts of a standard business letter). In the old Academy course, email was one sentence, "letter" appeared zero times, and memos existed only inside an anecdote about Amazon.</p>`,
-    `<h3>✅ Chỗ này trước đây thiếu gì</h3>
-     <p>Syllabus hỏi CQ14.2 (memo khác thư) và CQ14.4 (mười lăm phần của một bức thư công việc chuẩn). Ở khoá Academy cũ, email chỉ được một câu, chữ "letter" xuất hiện 0 lần, còn memo chỉ tồn tại trong một giai thoại về Amazon.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus asks CQ14.2 (memos vs letters, slide 13) and CQ14.4 (the fifteen parts of a standard business letter, slides 16–17). Also know the thirteen email rules (slides 5–11), the memo heading (slide 14) and the five areas of a letter (slide 18).</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Syllabus hỏi CQ14.2 (memo khác thư, slide 13) và CQ14.4 (mười lăm phần của một bức thư công việc chuẩn, slide 16–17). Cần nắm thêm mười ba quy tắc email (slide 5–11), đầu đề memo (slide 14) và năm vùng chính của bức thư (slide 18).</p>`),
 ].join('\n');

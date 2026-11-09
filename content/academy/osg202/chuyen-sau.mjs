@@ -15,7 +15,7 @@ registerDeck('cs4', { code: '⭐ CS.4', en: '⭐ Advanced 4 — Async I/O: block
 registerDeck('cs5', { code: '⭐ CS.5', en: '⭐ Advanced 5 — Memory on a real server', vi: '⭐ Chuyên sâu 5 — Bộ nhớ trên server thật', total: 28, w: 1280, h: 720, ver: 'v2' });
 registerDeck('cs6', { code: '⭐ CS.6', en: '⭐ Advanced 6 — Containers = namespaces + cgroups', vi: '⭐ Chuyên sâu 6 — Container = namespace + cgroup', total: 28, w: 1280, h: 720 });
 registerDeck('cs7', { code: '⭐ CS.7', en: '⭐ Advanced 7 — Performance and debugging toolkit', vi: '⭐ Chuyên sâu 7 — Bộ công cụ đo hiệu năng và gỡ lỗi', total: 27, w: 1280, h: 720, ver: 'v3' });
-registerDeck('cs8', { code: '⭐ CS.8', en: '⭐ Advanced 8 — OS interview prep and capstone lab', vi: '⭐ Chuyên sâu 8 — Phỏng vấn hệ điều hành và bài lab tổng hợp', total: 28, w: 1280, h: 720, ver: 'v2' });
+registerDeck('cs8', { code: '⭐ CS.8', en: '⭐ Advanced 8 — OS interview prep and capstone lab', vi: '⭐ Chuyên sâu 8 — Phỏng vấn hệ điều hành và bài lab tổng hợp', total: 28, w: 1280, h: 720, ver: 'v3' });
 
 /* ───────── ⭐ CS.1 — 📑 Slide by slide · Linux processes (1/2): process tree, /proc, fork–exec–wait, exit codes, zombies (slides 1–13) ───────── */
 const L_cs1_1 = {

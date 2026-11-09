@@ -13,8 +13,8 @@ const D = 's2-l8';
 
 export const b2l8 = [
   walkHead(D, 1, 24,
-    'The six questions of logic (slide 9) and the IS / IS NOT table (slide 6) are the two things to memorise; the problem-solving checklist (slide 12) is the one to keep beside you during the project.',
-    'Sáu câu hỏi logic (slide 9) và bảng LÀ / KHÔNG PHẢI (slide 6) là hai thứ cần thuộc; bảng kiểm giải quyết vấn đề (slide 12) là thứ nên để cạnh mình khi làm dự án.'),
+    'The six questions of logic (slide 10) and the IS / IS NOT table (slide 6) are the two things to memorise; the problem-solving checklist (slide 12) is the one to keep beside you during the project.',
+    'Sáu câu hỏi logic (slide 10) và bảng LÀ / KHÔNG PHẢI (slide 6) là hai thứ cần thuộc; bảng kiểm giải quyết vấn đề (slide 12) là thứ nên để cạnh mình khi làm dự án.'),
 
   slide(D, 1, 'Thinking and Analysis (cont.)',
     `<p class="y-chinh">🎯 Title slide — final lesson of Session II.</p>`,
@@ -168,9 +168,9 @@ export const b2l8 = [
 
   slide(D, 11, 'Problem-solving with critical thinking',
     `<p class="y-chinh">🎯 Critical thinking and problem-solving go hand in hand: using <strong>knowledge, facts and data</strong> to solve problems effectively.</p>
-     <p class="meo">💡 Compare with Lesson 5–6 slide 33: creative problem-solving invents options, critical problem-solving chooses between them on evidence. Your project needs both, in that order.</p>`,
+     <p class="meo">💡 Compare with Lesson 5–6 slide 32: creative problem-solving invents options, critical problem-solving chooses between them on evidence. Your project needs both, in that order.</p>`,
     `<p class="y-chinh">🎯 Tư duy phản biện và giải quyết vấn đề đi liền nhau: dùng <strong>kiến thức, dữ kiện và dữ liệu</strong> để giải quyết vấn đề một cách hiệu quả.</p>
-     <p class="meo">💡 So với slide 33 Bài 5–6: giải quyết vấn đề sáng tạo đẻ ra phương án, giải quyết vấn đề phản biện chọn giữa chúng dựa trên bằng chứng. Dự án của bạn cần cả hai, theo đúng thứ tự đó.</p>`),
+     <p class="meo">💡 So với slide 32 Bài 5–6: giải quyết vấn đề sáng tạo đẻ ra phương án, giải quyết vấn đề phản biện chọn giữa chúng dựa trên bằng chứng. Dự án của bạn cần cả hai, theo đúng thứ tự đó.</p>`),
 
   slide(D, 12, 'Three examples of critical thinking to solve a problem',
     `<p class="y-chinh">🎯 The deck's own three cases, and each shows a different move.</p>
@@ -235,18 +235,48 @@ export const b2l8 = [
   slide(D, 15, 'A. Read for understanding using text coding',
     `<p class="y-chinh">🎯 Text coding is a way of <strong>tracking your thinking while reading</strong>.</p>
      <p>With text coding you mark important arguments and key facts as you go.</p>
-     <p class="meo">💡 A simple working scheme: ✓ I already knew this · ! surprising · ? I do not follow · ★ use this in the proposal. The point is not the symbols, it is that you must decide something about every paragraph.</p>`,
+     <p><span class="nhan">The shorthand table on the slide</span> (text coding from PBWorks and Collaborative Learning):</p>
+     <ul>
+       <li><strong>!</strong> — Important</li>
+       <li><strong>L</strong> — Learned something new</li>
+       <li><strong>!</strong> — Big idea surfaced (the slide prints the same mark as "Important")</li>
+       <li><strong>*</strong> — Interesting or important fact</li>
+       <li><strong>?</strong> — Dig deeper</li>
+       <li><strong>✓</strong> — Agree</li>
+       <li><strong>≠</strong> — Disagree</li>
+     </ul>
+     <p class="meo">💡 The point is not the symbols, it is that you must decide something about every paragraph. ✓ and ≠ turn reading into examining arguments (strategy B); ? turns it into questions to ask later.</p>`,
     `<p class="y-chinh">🎯 Mã hoá văn bản là cách <strong>theo dấu suy nghĩ của chính mình trong lúc đọc</strong>.</p>
      <p>Khi mã hoá, bạn đánh dấu ngay các lập luận quan trọng và dữ kiện then chốt.</p>
-     <p class="meo">💡 Một bộ ký hiệu đơn giản dùng được: ✓ điều này mình đã biết · ! bất ngờ · ? chưa hiểu · ★ dùng cho bản đề xuất. Điểm mấu chốt không nằm ở ký hiệu, mà ở chỗ bạn buộc phải quyết định điều gì đó với mỗi đoạn văn.</p>`),
+     <p><span class="nhan">Bảng ký hiệu trên slide</span> (text coding theo PBWorks và Collaborative Learning):</p>
+     <ul>
+       <li><strong>!</strong> — Quan trọng</li>
+       <li><strong>L</strong> — Học được điều mới</li>
+       <li><strong>!</strong> — Lộ ra một ý lớn (slide in cùng ký hiệu với "Quan trọng")</li>
+       <li><strong>*</strong> — Dữ kiện thú vị hoặc quan trọng</li>
+       <li><strong>?</strong> — Cần tìm hiểu sâu hơn</li>
+       <li><strong>✓</strong> — Đồng ý</li>
+       <li><strong>≠</strong> — Không đồng ý</li>
+     </ul>
+     <p class="meo">💡 Điểm mấu chốt không nằm ở ký hiệu, mà ở chỗ bạn buộc phải quyết định điều gì đó với mỗi đoạn văn. ✓ và ≠ biến việc đọc thành soi xét lập luận (chiến lược B); ? biến nó thành câu hỏi để hỏi sau.</p>`),
 
   slide(D, 16, 'B. Examine arguments — the spectrum of authority',
-    `<p class="y-chinh">🎯 Use the <strong>spectrum of authority</strong> strategy to weigh a source.</p>
-     <p><span class="nhan">What the spectrum asks</span> — how close is this source to the evidence? A researcher who ran the study, a journalist reporting it, and a stranger summarising the journalist are not interchangeable.</p>
-     <p class="meo">💡 Connects to question 5 of slide 10 ("Who is saying it?"). Authority is not a yes/no property; it is a distance.</p>`,
-    `<p class="y-chinh">🎯 Dùng chiến lược <strong>phổ quyền uy (spectrum of authority)</strong> để cân một nguồn tin.</p>
-     <p><span class="nhan">Phổ ấy hỏi gì</span> — nguồn này ở gần bằng chứng tới đâu? Nhà nghiên cứu trực tiếp làm thí nghiệm, nhà báo tường thuật lại, và một người lạ tóm tắt bài báo là ba thứ không thay thế cho nhau được.</p>
-     <p class="meo">💡 Nối với câu 5 ở slide 10 ("Ai đang nói điều đó?"). Quyền uy không phải thuộc tính có/không; nó là một khoảng cách.</p>`),
+    `<p class="y-chinh">🎯 Use the <strong>spectrum of authority</strong> strategy to weigh a claim.</p>
+     <p><span class="nhan">What the diagram shows</span> — a colour spectrum of subjects, from <strong>feelings</strong> and <strong>beliefs</strong> at the top, through <strong>culture</strong> and <strong>biology</strong>, down to <strong>physics</strong> and <strong>geometry</strong>.</p>
+     <ul>
+       <li><strong>HOT</strong> end (red arrow, labelled <em>vision</em>): intense, subjective, unreliable, urgent.</li>
+       <li><strong>COLD</strong> end (purple arrow, labelled <em>practicality</em>): timeless, reliable, universal, dull.</li>
+     </ul>
+     <p>The slide links a short video explaining the strategy (youtu.be/9G5xooMN2_c).</p>
+     <p class="meo">💡 Before you accept or reject a claim, place it on the spectrum: a claim about how people feel cannot be checked like a claim in geometry. Connects to question 5 of slide 10 ("Who is saying it?").</p>`,
+    `<p class="y-chinh">🎯 Dùng chiến lược <strong>phổ quyền uy (spectrum of authority)</strong> để cân một khẳng định.</p>
+     <p><span class="nhan">Hình trên slide</span> — một dải màu các lĩnh vực, từ <strong>cảm xúc</strong> và <strong>niềm tin</strong> ở trên, qua <strong>văn hoá</strong> và <strong>sinh học</strong>, xuống <strong>vật lý</strong> và <strong>hình học</strong>.</p>
+     <ul>
+       <li>Đầu <strong>NÓNG</strong> (mũi tên đỏ, ghi <em>vision</em> — tầm nhìn): mãnh liệt, chủ quan, không đáng tin cậy, cấp bách.</li>
+       <li>Đầu <strong>LẠNH</strong> (mũi tên tím, ghi <em>practicality</em> — tính thực tế): bền vững theo thời gian, đáng tin cậy, phổ quát, khô khan.</li>
+     </ul>
+     <p>Slide gắn một video ngắn giải thích chiến lược này (youtu.be/9G5xooMN2_c).</p>
+     <p class="meo">💡 Trước khi tin hay bác một khẳng định, hãy đặt nó lên dải này: một khẳng định về cảm xúc của con người không kiểm được như một khẳng định trong hình học. Nối với câu 5 ở slide 10 ("Ai đang nói điều đó?").</p>`),
 
   slide(D, 17, 'C. Clarify thinking (part 1)',
     `<p class="y-chinh">🎯 Four questions to make your own reasoning visible — to yourself and to others.</p>
@@ -388,8 +418,8 @@ export const b2l8 = [
   ]),
 
   bi(
-    `<h3>✅ What the old course was missing here</h3>
-     <p>Critical thinking used to appear in this Academy course as four words inside one sentence. The six questions of logic, the IS / IS NOT contrast, the problem-solving checklist and the four information-evaluation strategies were all absent.</p>`,
-    `<h3>✅ Khoá cũ thiếu gì ở chỗ này</h3>
-     <p>Tư duy phản biện trước đây xuất hiện trong khoá học này đúng bằng bốn chữ nằm trong một câu. Sáu câu hỏi logic, bảng đối chiếu LÀ / KHÔNG PHẢI, bảng kiểm giải quyết vấn đề và bốn chiến lược đánh giá thông tin đều không có.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The six questions of logic, the IS / IS NOT contrast, the three-step problem-solving checklist and the four information-evaluation strategies are short lists you must be able to name, define and apply.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Sáu câu hỏi logic, bảng đối chiếu LÀ / KHÔNG PHẢI, bảng kiểm giải quyết vấn đề ba bước và bốn chiến lược đánh giá thông tin đều là những danh sách ngắn mà bạn phải gọi tên, định nghĩa và áp dụng được.</p>`),
 ].join('\n');

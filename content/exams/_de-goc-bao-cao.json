@@ -1,0 +1,1340 @@
+{
+ "taoLuc": "2026-11-09T10:33:35.083Z",
+ "mon": {
+  "ACC101": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "ACC302": [
+   "SU26-FE"
+  ],
+  "ACC305": [
+   "SP26-FE"
+  ],
+  "AEE301": [
+   "SP26-FE"
+  ],
+  "AET102c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "AGU301": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "AIC211": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "AIL303m": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "APO201c": [
+   "SU26-FE",
+   "SU26-PE-NO1",
+   "SU26-PE-NO2",
+   "SU26-PE-RE-NO2",
+   "SP26-PE"
+  ],
+  "ASI101": [
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "BCP201": [
+   "SU26-FE-PE-RE",
+   "SU26-PE"
+  ],
+  "BDI302c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "BDT201c": [
+   "SP26-FE-RE"
+  ],
+  "BDT202c": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "BKG303": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "BPS301": [
+   "SU26-FE"
+  ],
+  "BRA301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "CAA201": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "CCM301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "CCO201": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "CEA201": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "CHI121": [
+   "SP26-FE-FER"
+  ],
+  "CHN113": [
+   "SU26-FE-L-RE"
+  ],
+  "CHN123": [
+   "SU26-FE-L-RE"
+  ],
+  "CMC201c": [
+   "SU26-FE-W",
+   "SU26-FE-W-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "COS201": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "CPV301": [
+   "SU26-FE",
+   "SP26-FE-RE"
+  ],
+  "CRY303c": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SU26-PE-02",
+   "SP26-FE-RE",
+   "SP26-PE"
+  ],
+  "CSD201": [
+   "FA26-PE-NO1HCM",
+   "FA26-PE-NO2HCM",
+   "FA26-PE-NO3HCM",
+   "FA26-PE-NO4HCM",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "CSD202": [
+   "FA26-PE-NO10",
+   "FA26-PE-NO1HCM",
+   "FA26-PE-NO8",
+   "FA26-PE-NO9",
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "CSD203": [
+   "FA26-PE-HCM",
+   "FA26-PE-NO1",
+   "FA26-PE-NO1N",
+   "FA26-PE-NO3",
+   "SU26-FE",
+   "SU26-FE-RE",
+   "-FE-SP2026",
+   "-FE-SP2026-RE"
+  ],
+  "CSI106": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-B5-RE"
+  ],
+  "CSP201m": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "CSP202m": [
+   "SU26-FE"
+  ],
+  "DBI202": [
+   "FA26-PE-NO10",
+   "FA26-PE-NO11",
+   "FA26-PE-NO2QN",
+   "FA26-PE-NO7",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "DBM301": [
+   "SU26-FE"
+  ],
+  "DBM302m": [
+   "SP26-FE"
+  ],
+  "DCD301": [
+   "SU26-FE"
+  ],
+  "DET101c": [
+   "SP26-FE-RE"
+  ],
+  "DGT302": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "DIC201": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "DPS201c": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "DSS301": [
+   "SP26-FE"
+  ],
+  "EAL202c": [
+   "SP26-FE"
+  ],
+  "EAW301": [
+   "SU26-WRITING-FE-RE-W"
+  ],
+  "EBS211": [
+   "SU26-FE",
+   "SP26-FE-RE"
+  ],
+  "EBS311": [
+   "SP26-FE"
+  ],
+  "ECO102": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "ECO111": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "-FE-SP2026-RE"
+  ],
+  "ECO121": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "ECO201": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "ECR301": [
+   "SU26-FE-W"
+  ],
+  "EEI101": [
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "ELC201": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "ELT402": [
+   "SU26-FE-RE"
+  ],
+  "EMF301c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "ENM302": [
+   "SU26-FE-B5-L",
+   "SU26-FE-B5-R",
+   "SU26-FE-B5-W",
+   "SU26-FE-W-RE",
+   "SP26-READING-FE-RE-R",
+   "SP26-WRITING-FE-RE-W"
+  ],
+  "ENM402": [
+   "SU26-FE-B5-L",
+   "SU26-FE-L-RE",
+   "SU26-FE-R-RE",
+   "SU26-FE-W-RE",
+   "SU26-LISTENING-B5-RE-L",
+   "SU26-READING-B5-RE-R",
+   "SU26-WRITING-B5-RE-W"
+  ],
+  "ENW492c": [
+   "SU26-FE-R",
+   "SU26-FE-R-RE",
+   "SU26-FE-W",
+   "SU26-FE-W-RE"
+  ],
+  "ENW493c": [
+   "SU26-FE",
+   "SU26-FE-ENW493-RE",
+   "SU26-FE-W",
+   "SU26-FE-W-RE"
+  ],
+  "EVN301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "FAP201": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "FER202": [
+   "FA26-PE",
+   "FA26-PE-HCM",
+   "FA26-PE-NO1",
+   "FA26-PE-NO2",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SP26-FE-B5",
+   "SP26-FE-B5-RE"
+  ],
+  "FGU301": [
+   "SU26-FE"
+  ],
+  "FIM302c": [
+   "SU26-FE-RE"
+  ],
+  "FIN201": [
+   "SU26-FE"
+  ],
+  "FIN202": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-B5-RE"
+  ],
+  "FIN303": [
+   "SU26-FE"
+  ],
+  "FIN402": [
+   "SU26-FE"
+  ],
+  "FRS301": [
+   "SU26-FE",
+   "SP26-FE-RE"
+  ],
+  "GDC301": [
+   "SP26-FE-RE"
+  ],
+  "GLA301": [
+   "SU26-FE"
+  ],
+  "GLC301": [
+   "SU26-FE"
+  ],
+  "GLH301": [
+   "SU26-FE"
+  ],
+  "GLT301": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "GSF301": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "HCM202": [
+   "FA26-FE-C1",
+   "FA26-FE-C2",
+   "FA26-FE-RE",
+   "SU26-FE-B5"
+  ],
+  "HOA102": [
+   "SU26-FE"
+  ],
+  "HOD102c": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "HOD402": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "HRM202c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "HSF302": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SP26-FE-B5",
+   "SP26-PE",
+   "SP26-PE-B5"
+  ],
+  "IAA202": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "IAO202": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "IAP301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "IBC201": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "IBF301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-B5",
+   "SP26-FE-B5-RE"
+  ],
+  "IBI101": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "ICI211": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "IEI301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "IIP301": [
+   "SU26-FE",
+   "SP26-FE-RE"
+  ],
+  "IMC301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "IOT102": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-B5",
+   "SP26-FE-RE"
+  ],
+  "IPR102": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "ISC301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "ISM201": [
+   "SU26-FE",
+   "SP26-FE-RE"
+  ],
+  "ISM302": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "ITA203c": [
+   "SU26-FE",
+   "SP26-FE-RE"
+  ],
+  "ITA301": [
+   "SU26-FE"
+  ],
+  "ITB302c": [
+   "SU26-FE",
+   "SU26-PE",
+   "SP26-FE",
+   "SP26-PE",
+   "SP26-PE-B5"
+  ],
+  "ITE302c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "ITE303c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "JIT401": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "JPD113": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "JPD123": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "JPD133": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "JPD316": [
+   "SU26-FE-L-RE",
+   "SU26-FE-R-RE",
+   "SP26-FE-RE",
+   "SP26-FE-READING"
+  ],
+  "KMS301": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "KOR311": [
+   "SP26-FE-READ",
+   "SP26-WRITING-FE-RE-W"
+  ],
+  "LAE101": [
+   "SU26-FE"
+  ],
+  "LAW102": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "-FE-SP2026",
+   "-FE-SP2026-RE"
+  ],
+  "LIT301": [
+   "SP26-WRITING-FE-RE-W"
+  ],
+  "LOS201": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "MAD101": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "MAE101": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "MAS202": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-B5-RE"
+  ],
+  "MAS291": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "MCE201": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "MCO201c": [
+   "SP26-FE"
+  ],
+  "MCO302": [
+   "SU26-FE",
+   "-FE"
+  ],
+  "MCP201": [
+   "SU26-FE",
+   "SP26-FE-RE"
+  ],
+  "MGT103": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-FERE"
+  ],
+  "MIP201": [
+   "SP26-FE"
+  ],
+  "MKG101": [
+   "SU26-FE",
+   "SU26-FE-585",
+   "SU26-FE-B5",
+   "SU26-FE-B5-1157"
+  ],
+  "MKT101": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "MKT201": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "MKT202": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "MKT205c": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "MKT208c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "MKT301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "MKT304": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "MLN111": [
+   "FA26-FE-C1",
+   "FA26-FE-C2",
+   "FA26-FE-RE",
+   "SU26-FE-B5"
+  ],
+  "MLN122": [
+   "FA26-FE",
+   "FA26-FE-RE",
+   "SU26-FE-B5",
+   "SU26-FE-RE"
+  ],
+  "MLN131": [
+   "FA26-FE-C1",
+   "FA26-FE-C1-RE",
+   "FA26-FE-C2",
+   "SU26-FE-B5"
+  ],
+  "MMA301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "MMK101": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "MMP201": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "MSM201c": [
+   "SP26-FE"
+  ],
+  "NLP301c": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SP26-FE-NO1-PE-RE",
+   "SP26-PE-NO1",
+   "SP26-PE-NO2"
+  ],
+  "NWC203c": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-PE",
+   "SP26-PE"
+  ],
+  "NWC204": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "NWC303": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "OBE102c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "OSG202": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-B5"
+  ],
+  "OSG203": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "PCP291": [
+   "FA26-PE-NO1",
+   "FA26-PE-NO3",
+   "FA26-PE-NO5",
+   "FA26-PE-NO8",
+   "SU26-FE"
+  ],
+  "PFP191": [
+   "FA26-PE-HCM",
+   "FA26-PE-NO10",
+   "FA26-PE-NO5",
+   "FA26-PE-NO6",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-B5-RE"
+  ],
+  "PMG201c": [
+   "SU26-FE",
+   "SU26-FE-FEHCM",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SU26-PE-PEHCM",
+   "SP26-PE",
+   "SP26-PE-NO2"
+  ],
+  "PRC392c": [
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "PRE301": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "PRF192": [
+   "FA26-PE-NO1",
+   "FA26-PE-NO1N",
+   "FA26-PE-NO8",
+   "FA26-PE-NO9",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-B5-RE"
+  ],
+  "PRF193": [
+   "FA26-PE-NO1CT",
+   "FA26-PE-NO3",
+   "FA26-PE-NO4HCM",
+   "FA26-PE-NO9",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "PRJ301": [
+   "FA26-PE-NO5",
+   "FA26-PE-NO6",
+   "FA26-PE-NO7",
+   "FA26-PE-NO8",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "PRJ302": [
+   "FA26-PE-NO1",
+   "FA26-PE-NO1HCM",
+   "FA26-PE-NO3",
+   "FA26-PE-NO8",
+   "SP26-FE-B5"
+  ],
+  "PRM392": [
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "PRM393": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SP26-FE-B5"
+  ],
+  "PRN212": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SU26-PE-B5",
+   "SU26-PE-RE-NO3",
+   "SU26-PE-RE-NO4"
+  ],
+  "PRN222": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE",
+   "SU26-PE-B5-NO5",
+   "SU26-PE-RE-NO2",
+   "SU26-PE-RE-NO3",
+   "SU26-PE-RE-NO4"
+  ],
+  "PRN232": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SU26-PE-B5-NO1",
+   "SU26-PE-B5-NO2",
+   "SU26-PE-B5-RE-NO4",
+   "SU26-PE-RE-NO4",
+   "SP26-FE-B5-PE-NO4-RE"
+  ],
+  "PRO192": [
+   "FA26-PE-NO1HCM",
+   "FA26-PE-NO2",
+   "FA26-PE-NO3N",
+   "FA26-PE-NO6",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE"
+  ],
+  "PRP201c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SU26-PE-NO2",
+   "SU26-PE-RE-NO1",
+   "SU26-PE-RE-NO2",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "PRU213": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "PST202": [
+   "SU26-FE",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "REL301m": [
+   "SU26-FE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "RMB301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "RMB302": [
+   "SU26-FE"
+  ],
+  "RMD301": [
+   "SU26-FE"
+  ],
+  "SAL301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "SAP312": [
+   "SU26-FE"
+  ],
+  "SAP321": [
+   "SP26-FE-RE"
+  ],
+  "SAP341": [
+   "SP26-FE"
+  ],
+  "SBA301": [
+   "SU26-FE",
+   "SU26-PE",
+   "SP26-FE",
+   "SP26-FE-PE-RE",
+   "SP26-PE"
+  ],
+  "SCM201": [
+   "SU26-FE",
+   "SP26-FE"
+  ],
+  "SCM202": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "SCM302": [
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "SDI101m": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "SDN302": [
+   "FA26-PE-NO1",
+   "FA26-PE-NO2",
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-RE",
+   "SU26-PE-B5-NO1",
+   "SU26-PE-B5-NO2",
+   "-FE-SP2026-B5"
+  ],
+  "SPM401": [
+   "SU26-FE",
+   "FA23-FE-RE",
+   "SU23-FE",
+   "SU23-FE-RE"
+  ],
+  "SSA101": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-C2FE",
+   "SP26-FE-RE"
+  ],
+  "SSB201": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
+  ],
+  "SSG104": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-C2FE",
+   "SP26-FE-RE"
+  ],
+  "SSG105": [
+   "SU26-FE",
+   "SU26-FE-RE"
+  ],
+  "SSL101c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "SWD392": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SU26-PE-B5-NO1",
+   "SP26-PE",
+   "SP26-PE-B5"
+  ],
+  "SWE201c": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SP26-FE-RE",
+   "SP26-PE-B5",
+   "SP26-PE-NO1",
+   "SP26-PE-NO2"
+  ],
+  "SWE202c": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SP26-FE-RE",
+   "SP26-PE"
+  ],
+  "SWR302": [
+   "SU26-FE",
+   "SU26-FE-B5",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SU26-PE-B5",
+   "SP26-PE-B5-NO3",
+   "SP26-PE-B5-NO4"
+  ],
+  "SWT301": [
+   "SU26-FE-B5",
+   "SU26-FE-B5-PE-RE",
+   "SU26-FE-B5-RE",
+   "SU26-FE-RE",
+   "SU26-PE",
+   "SU26-PE-B5",
+   "SP26-PE",
+   "SP26-PE-B5"
+  ],
+  "TTM203": [
+   "SP26-FE"
+  ],
+  "VNC104": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "VNR202": [
+   "SU26-FE-B5",
+   "SU26-FE-B5-RE",
+   "SU26-FE-C1",
+   "SU26-FE-RE"
+  ],
+  "WDU202c": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE-NO1",
+   "SU26-PE-NO2",
+   "SP26-FE-RE",
+   "SP26-PE"
+  ],
+  "WDU203c": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE",
+   "SP26-FE-RE"
+  ],
+  "WED201c": [
+   "SU26-FE",
+   "SU26-FE-PE-RE",
+   "SU26-FE-RE",
+   "SU26-PE-NO1",
+   "SU26-PE-NO2",
+   "SU26-PE-RE-NO2",
+   "SP26-FE-RE",
+   "SP26-PE-NO2"
+  ],
+  "WMC201": [
+   "SU26-FE-W",
+   "SU26-FE-W-RE",
+   "SP26-FE-WRITING"
+  ]
+ },
+ "boQua": [
+  {
+   "ma": "ACD301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "ADA201c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "ADS301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "ADY201m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "AID301c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "AIE301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "AIG202c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "AIM301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "AUG301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "BJC201c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "CAM201",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "CES202",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DAP391m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DAT301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DBS401",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DGC301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DMA301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DMS301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DSR301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "DWP301c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "EDT202c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "ELP311c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "ENT403",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "ENT503",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "EPR301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "ETB201c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "EVN201",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "FIM202",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "FIN306c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "FIN307",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "FIN308",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "FRS401c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "GLI201",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "GNS301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "HOD102",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "HRM201c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "IAM302t",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "IAR401c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "IAW301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "IFT201c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "IIV301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "IMA301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "IMO301c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "JDC501",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "JFE301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "KOI401",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "KOR411",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "LAB221c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "LAW201c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "LOD212",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "LOG311",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "LOG321",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "MAI391",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "MED201c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "MKT209m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "MKT309m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "MMS301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "MSS301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "OSP201",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "PDS301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "PMG202c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "RMC301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "SCM301m",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "SEG301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "SLP301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "SYB302c",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "TMG301",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "TRS501",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "TRS601",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "TTS302",
+   "lyDo": "chưa có môn trong content/academy"
+  },
+  {
+   "ma": "WED203c",
+   "lyDo": "chưa có môn trong content/academy"
+  }
+ ]
+}

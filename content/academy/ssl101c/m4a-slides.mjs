@@ -64,21 +64,21 @@ export default {
 <ul>
 <li><strong>This is a different template from the rest of the deck.</strong> Black Arial on flat red, centred, no accent bar, and — decisively — <em>no University of Sydney crest</em>. From slide 5 onwards the crest appears and the font changes. Slides 1–4 were added on top of the Sydney originals to frame a live review session; they are not part of the MOOC itself.</li>
 <li><strong>Why that matters for revision.</strong> Anything that appears only on slides 1–4 is session furniture, not examinable content. The examinable material starts at slide 5 with "2.1a".</li>
-<li><strong>The name of the module is the syllabus.</strong> Mooc 1 was learning, Mooc 2 problem solving, Mooc 3 information. Mooc 4 is <em>communication</em> — everything here is about getting an idea out of your head and into someone else's, in a form that person accepts.</li>
+<li><strong>The name of the module is the syllabus.</strong> Mooc 1 was information &amp; digital literacy, Mooc 2 problem solving, Mooc 3 critical thinking. Mooc 4 is <em>communication</em> — everything here is about getting an idea out of your head and into someone else's, in a form that person accepts.</li>
 <li><strong>"University success" is not a slogan here.</strong> The whole module rests on one claim: the same idea, expressed in the wrong register for the wrong audience, scores badly. Communication is assessed, not assumed.</li>
 <li><strong>Applied at FPTU.</strong> You already live this. The identical sentence "em chưa làm xong phần này" lands very differently in a Zalo group at 11pm, in an email to a lecturer, and in front of a defence panel. Mooc 4 gives you the vocabulary to explain <em>why</em>, and a procedure to choose the right version on purpose.</li>
 </ul>
-<p class="meo">💡 Fix the order once: Mooc 1 learning · Mooc 2 problem solving · Mooc 3 information · Mooc 4 <strong>communication</strong> · Mooc 5 the capstone. Exam questions that name a Mooc number expect you to know which skill sits in which slot.</p>
+<p class="meo">💡 Fix the order once: Mooc 1 information &amp; digital literacy · Mooc 2 problem solving · Mooc 3 critical thinking · Mooc 4 <strong>communication</strong> · Mooc 5 the capstone. Exam questions that name a Mooc number expect you to know which skill sits in which slot.</p>
 <p class="pitfall">⚠️ Do not read "Q&amp;A" on slide 4 as the end of the deck. It is slide 4 of 64 — the review-session frame sits in <em>front</em> of the content, not behind it.</p>`,
         `<p class="y-chinh">🎯 Bìa của Mooc 4, MOOC thứ tư trong năm MOOC bắt buộc phải xong trước khi được vào phòng thi SSL101c: <strong>Communication Skills for University Success</strong> — Kỹ năng giao tiếp để thành công ở đại học.</p>
 <ul>
 <li><strong>Đây là template KHÁC hẳn phần còn lại của deck.</strong> Chữ Arial đen đậm trên nền đỏ phẳng, căn giữa, không có thanh dọc trang trí, và quan trọng nhất — <em>không có huy hiệu University of Sydney</em>. Từ slide 5 trở đi huy hiệu xuất hiện và font đổi hẳn. Slide 1–4 là phần được CHÈN THÊM lên trên bộ gốc Sydney để dựng khung cho một buổi ôn trực tiếp; chúng không thuộc MOOC.</li>
 <li><strong>Vì sao điều đó quan trọng khi ôn.</strong> Thứ gì chỉ xuất hiện ở slide 1–4 là "đồ đạc của buổi học", không phải nội dung thi. Nội dung thi bắt đầu từ slide 5 với mục "2.1a".</li>
-<li><strong>Tên module chính là đề cương.</strong> Mooc 1 là học tập, Mooc 2 là giải quyết vấn đề, Mooc 3 là thông tin. Mooc 4 là <em>giao tiếp</em> — mọi thứ ở đây xoay quanh việc đưa một ý từ đầu bạn sang đầu người khác, dưới dạng mà người đó CHẤP NHẬN.</li>
+<li><strong>Tên module chính là đề cương.</strong> Mooc 1 là thông tin &amp; kỹ năng số, Mooc 2 là giải quyết vấn đề, Mooc 3 là tư duy phản biện. Mooc 4 là <em>giao tiếp</em> — mọi thứ ở đây xoay quanh việc đưa một ý từ đầu bạn sang đầu người khác, dưới dạng mà người đó CHẤP NHẬN.</li>
 <li><strong>"University success" ở đây không phải khẩu hiệu.</strong> Cả module dựa trên một khẳng định: cùng một ý, diễn đạt sai giọng cho sai đối tượng, thì bị điểm thấp. Giao tiếp là thứ ĐƯỢC CHẤM, không phải thứ mặc nhiên có.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Bạn đã sống với chuyện này rồi. Cùng một câu "em chưa làm xong phần này" rơi vào nhóm Zalo lúc 11 giờ đêm, rơi vào email gửi giảng viên, và rơi trước hội đồng bảo vệ — ba kết cục khác nhau hoàn toàn. Mooc 4 cho bạn từ vựng để giải thích VÌ SAO, và một quy trình để chọn đúng phiên bản một cách có chủ đích.</li>
 </ul>
-<p class="meo">💡 Chốt thứ tự một lần cho xong: Mooc 1 học tập · Mooc 2 giải quyết vấn đề · Mooc 3 thông tin · Mooc 4 <strong>giao tiếp</strong> · Mooc 5 tổng kết. Câu hỏi nào gọi tên số hiệu Mooc là đang kiểm tra bạn nhớ kỹ năng nào nằm ở ô nào.</p>
+<p class="meo">💡 Chốt thứ tự một lần cho xong: Mooc 1 thông tin &amp; kỹ năng số · Mooc 2 giải quyết vấn đề · Mooc 3 tư duy phản biện · Mooc 4 <strong>giao tiếp</strong> · Mooc 5 tổng kết. Câu hỏi nào gọi tên số hiệu Mooc là đang kiểm tra bạn nhớ kỹ năng nào nằm ở ô nào.</p>
 <p class="pitfall">⚠️ Đừng đọc chữ "Q&amp;A" ở slide 4 thành "hết deck". Đó là slide 4 trên tổng số 64 — khung buổi ôn nằm PHÍA TRƯỚC nội dung, không phải phía sau.</p>`],
 
       [2, 'Communication Skills for University Success — the four parts of Mooc 4',
@@ -96,7 +96,7 @@ export default {
 <li><strong>Only part 4 is spoken.</strong> Parts 1 and 4 are both oral, but part 1 is <em>dialogue</em> (you respond to others) and part 4 is <em>monologue</em> (you hold the floor). Different skills, different slides.</li>
 <li><strong>Applied at FPTU.</strong> An SWP391 capstone runs exactly these four in order: weekly meetings with the supervisor (part 1) → reading the requirement and planning the report (part 2) → writing the report (part 3) → the defence in front of the panel (part 4). If one of the four is where you always lose marks, you now know which section of this deck to reread.</li>
 </ul>
-<p class="meo">💡 Count hook: <strong>4 parts</strong>, and only ONE of them (the second) has three verbs in its own title — "Interpreting, Researching &amp; Planning". If an exam option offers a fifth part such as "Managing your time", it is imported from Mooc 1, not Mooc 4.</p>
+<p class="meo">💡 Count hook: <strong>4 parts</strong>, and only ONE of them (the second) has three verbs in its own title — "Interpreting, Researching &amp; Planning". If an exam option offers a fifth part such as "Managing your time", it is imported from elsewhere (time management sits in Mooc 2), not Mooc 4.</p>
 <p class="pitfall">⚠️ Do not swap parts 2 and 3. "Interpreting, Researching &amp; Planning" comes BEFORE "Writing". A question asking which comes first in the module is testing exactly this.</p>`,
         `<p class="y-chinh">🎯 Bản đồ của cả module gói trong <strong>BỐN</strong> gạch đầu dòng, và là slide hữu ích nhất deck để định vị bản thân: Tham gia · Hiểu đề–tra cứu–lập kế hoạch · Viết · Thuyết trình.</p>
 <table>
@@ -112,7 +112,7 @@ export default {
 <li><strong>Chỉ phần 4 là nói.</strong> Phần 1 và phần 4 đều bằng miệng, nhưng phần 1 là <em>đối thoại</em> (bạn đáp lại người khác), phần 4 là <em>độc thoại</em> (bạn giữ sân khấu). Kỹ năng khác nhau, slide khác nhau.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Một đồ án SWP391 chạy đúng bốn bước này theo đúng thứ tự: họp hằng tuần với giảng viên hướng dẫn (phần 1) → đọc yêu cầu và lập kế hoạch viết báo cáo (phần 2) → viết báo cáo (phần 3) → bảo vệ trước hội đồng (phần 4). Nếu có một trong bốn chỗ bạn luôn mất điểm, giờ bạn biết phải đọc lại đoạn nào của deck.</li>
 </ul>
-<p class="meo">💡 Mẹo đếm: <strong>4 phần</strong>, và chỉ DUY NHẤT một phần (phần hai) có ba động từ trong chính tiêu đề của nó — "Interpreting, Researching &amp; Planning". Đáp án nào thêm phần thứ năm kiểu "Quản lý thời gian" là nhập lậu từ Mooc 1, không phải Mooc 4.</p>
+<p class="meo">💡 Mẹo đếm: <strong>4 phần</strong>, và chỉ DUY NHẤT một phần (phần hai) có ba động từ trong chính tiêu đề của nó — "Interpreting, Researching &amp; Planning". Đáp án nào thêm phần thứ năm kiểu "Quản lý thời gian" là nhập lậu từ chỗ khác (quản lý thời gian nằm ở Mooc 2), không phải Mooc 4.</p>
 <p class="pitfall">⚠️ Đừng đảo phần 2 với phần 3. "Interpreting, Researching &amp; Planning" đứng TRƯỚC "Writing". Câu hỏi nào hỏi cái nào đến trước trong module là đang kiểm tra đúng chỗ này.</p>`],
 
       [3, 'Describe 3 "take-aways" that you have from the course',
@@ -146,7 +146,7 @@ export default {
 <li><strong>Applied at FPTU.</strong> The end-of-class Q&amp;A, the EduNext forum and the supervisor's office hours are the same rhetorical situation with different media. Write your two questions down <em>during</em> the class — slide 18 will say exactly this — because by the time Q&amp;A arrives you will have forgotten them.</li>
 </ul>
 <p class="dap-an">✅ Đáp án — three questions actually worth asking at the end of a Mooc 4 session: (1) "The summary slide lists six elements of the rhetorical situation but the four analysis slides only use five — which one is dropped, and is it examinable?" (2) "Is a seminar at this university the same thing as a tutorial, since the two slides look almost identical?" (3) "Where in our course outline do I find the marking criteria?" Each names a specific slide or document, so each has a specific answer.</p>
-<p class="meo">💡 Slides 1–4 are the only slides in the whole 64 with no Sydney crest and no section number. That two-part signature — no crest, no "2.x" — is how you tell session furniture from MOOC content at a glance.</p>
+<p class="meo">💡 Slides 1–4 share their own template — bold Arial on flat red, no Sydney crest, no "2.x" section number; from slide 5 the Sydney template takes over. That signature is how you tell session furniture from MOOC content at a glance.</p>
 <p class="pitfall">⚠️ Slide 4 is <strong>not</strong> the end of the deck. The MOOC content starts on the very next slide with "2.1a". Anyone who revises by flicking to the last slide of a section will miss 60 slides.</p>`,
         `<p class="y-chinh">🎯 Hai chữ cái và một dấu &amp; trên một slide trống trơn: buổi học trả sân lại cho sinh viên. Không có nội dung nào để học thuộc ở đây — nhưng có một kỹ năng đang được làm mẫu.</p>
 <ul>
@@ -156,7 +156,7 @@ export default {
 <li><strong>Áp dụng ở FPTU.</strong> Phần hỏi đáp cuối buổi, diễn đàn EduNext và giờ tiếp sinh viên của giảng viên hướng dẫn là CÙNG một tình huống tu từ với ba phương tiện khác nhau. Hãy viết hai câu hỏi của bạn ra ngay TRONG giờ học — slide 18 sẽ nói đúng điều này — vì đến lúc Q&amp;A thì bạn đã quên sạch.</li>
 </ul>
 <p class="dap-an">✅ Đáp án — ba câu hỏi thật sự đáng hỏi ở cuối một buổi Mooc 4: (1) "Slide tóm tắt liệt kê sáu yếu tố của tình huống tu từ nhưng bốn slide phân tích chỉ dùng năm — yếu tố nào bị rụng, và nó có vào thi không?" (2) "Seminar ở trường mình có phải chính là tutorial không, vì hai slide trông gần như y hệt?" (3) "Tiêu chí chấm nằm ở chỗ nào trong đề cương môn học của chúng em?" Mỗi câu đều gọi tên một slide hoặc một tài liệu cụ thể, nên mỗi câu đều có một đáp án cụ thể.</p>
-<p class="meo">💡 Slide 1–4 là những slide DUY NHẤT trong cả 64 slide không có huy hiệu Sydney và không có số hiệu mục. Chữ ký hai phần đó — không huy hiệu, không "2.x" — là cách nhìn một cái là biết đâu là đồ đạc buổi học, đâu là nội dung MOOC.</p>
+<p class="meo">💡 Slide 1–4 dùng chung một mẫu riêng — chữ Arial đậm trên nền đỏ phẳng, không huy hiệu Sydney, không số hiệu mục "2.x"; từ slide 5 deck đổi sang mẫu của Sydney. Chữ ký đó là cách nhìn một cái là biết đâu là đồ đạc buổi học, đâu là nội dung MOOC.</p>
 <p class="pitfall">⚠️ Slide 4 <strong>KHÔNG</strong> phải slide cuối deck. Nội dung MOOC bắt đầu ngay ở slide kế tiếp với mục "2.1a". Ai ôn bài bằng cách lật tới slide cuối của một mục sẽ bỏ sót 60 slide.</p>`],
 
       [5, '2.1a Introduction to Rhetorical Situations (objectives)',
@@ -369,7 +369,7 @@ export default {
 <tr><td>Media</td><td>Face-to-face interaction; whiteboard; handouts</td><td>Face-to-face interaction; whiteboard; handouts; <strong>readings</strong></td></tr>
 </table>
 <ul>
-<li><strong>Three lines differ, two are identical.</strong> Place is word-for-word the same; Media differs by exactly one item ("readings"). Author/Audience swap tutor→lecturer. Purpose is the real difference.</li>
+<li><strong>Three lines differ, one is identical and one nearly so.</strong> Place is word-for-word the same; Media differs by exactly one item ("readings"). Author/Audience swap tutor→lecturer. Purpose is the real difference.</li>
 <li><strong>Problem sets versus readings is the cleanest discriminator.</strong> A tutorial is built around <em>tasks with answers</em>; a seminar is built around <em>texts with arguments</em>. That is why "readings" appears in the seminar's media list and not the tutorial's.</li>
 <li><strong>"Engaging in debate" appears nowhere else in the whole range.</strong> Only seminars ask you to hold a position and defend it. In a tutorial being wrong is a step; in a seminar having no view at all is the failure.</li>
 <li><strong>The lecturer being present raises the stakes.</strong> Same room as a tutorial, higher power distance — the "social and political influences" element again, invisible on the slide but felt by everyone in the room.</li>
@@ -387,7 +387,7 @@ export default {
 <tr><td>Media</td><td>Face-to-face interaction; whiteboard; handouts</td><td>Face-to-face interaction; whiteboard; handouts; <strong>readings</strong></td></tr>
 </table>
 <ul>
-<li><strong>Ba dòng khác nhau, hai dòng y hệt.</strong> Place giống nhau từng chữ; Media chỉ khác đúng một mục ("readings"). Author/Audience đổi tutor→lecturer. Purpose mới là khác biệt thật.</li>
+<li><strong>Ba dòng khác nhau, một dòng y hệt, một dòng gần y hệt.</strong> Place giống nhau từng chữ; Media chỉ khác đúng một mục ("readings"). Author/Audience đổi tutor→lecturer. Purpose mới là khác biệt thật.</li>
 <li><strong>Bài tập so với tài liệu đọc là cách phân biệt sạch nhất.</strong> Tutorial dựng quanh <em>những nhiệm vụ có đáp án</em>; seminar dựng quanh <em>những văn bản có lập luận</em>. Đó là vì sao "readings" xuất hiện trong danh sách media của seminar mà không có ở tutorial.</li>
 <li><strong>Cụm "engaging in debate" không xuất hiện ở bất kỳ đâu khác trong cả dải.</strong> Chỉ seminar mới yêu cầu bạn giữ một lập trường và bảo vệ nó. Ở tutorial, sai là một bước đi; ở seminar, KHÔNG có quan điểm nào mới là thất bại.</li>
 <li><strong>Giảng viên có mặt làm rủi ro tăng lên.</strong> Cùng cái phòng như tutorial, nhưng khoảng cách quyền lực cao hơn — lại là yếu tố "social and political influences", vô hình trên slide nhưng ai ngồi trong phòng cũng cảm được.</li>
@@ -397,7 +397,7 @@ export default {
 <p class="pitfall">⚠️ Cả hai slide đều in "Place: Classroom" và đều in "Face-to-face interaction; whiteboard; handouts". Place và phần lớn Media là VÔ DỤNG để phân biệt — câu hỏi nào chỉ đưa cho bạn hai dòng đó là cố ý không giải được, và đáp án sẽ nằm ở Author hoặc Purpose.</p>`],
 
       [11, 'Assessments — the rhetorical situation where the student is the author',
-        `<p class="y-chinh">🎯 The flip that matters most for your marks: in an assessment <strong>you are the Author</strong> and the staff are the Audience. Three of the five lines answer "Variable", and that is itself the lesson.</p>
+        `<p class="y-chinh">🎯 The flip that matters most for your marks: in an assessment <strong>you are the Author</strong> and the staff are the Audience. Two of the five lines answer "Variable" (Place and Media), and that is itself the lesson.</p>
 <table>
 <tr><th>Element</th><th>The slide's answer (verbatim)</th><th>Why it is written that way</th></tr>
 <tr><td>Author</td><td><strong>Students</strong></td><td>The only context in the four where staff are NOT an author</td></tr>
@@ -408,14 +408,14 @@ export default {
 </table>
 <ul>
 <li><strong>"Demonstrating learning" is the most important phrase on the slide.</strong> An assessment is not a place to express yourself or to explore. It is a place to <em>show</em> that specific learning happened, against criteria someone wrote down in advance. That reframing alone lifts marks.</li>
-<li><strong>Three "Variable"s is a warning, not vagueness.</strong> Place, Media and (partly) Audience change from task to task, so the slide refuses to generalise — and hands you the job. Where do you find the actual values? The course outline. That is why 2.1c comes next.</li>
+<li><strong>Two "Variable"s are a warning, not vagueness.</strong> Place and Media change from task to task (Audience is "Lecturer and/or tutors"), so the slide refuses to generalise — and hands you the job. Where do you find the actual values? The course outline. That is why 2.1c comes next.</li>
 <li><strong>"Responses to set tasks" means the task sets the shape.</strong> Answering a different question well scores zero. This is the hinge to Mooc 4 part 2, "Interpreting… Written Assignments".</li>
 <li><strong>You are now the author — so every element from slide 6 becomes yours to control.</strong> Register, structure, evidence, format: nobody else is producing this text.</li>
 <li><strong>Applied at FPTU.</strong> Before any FPTU assessment, fill in the three variables yourself, in writing: Place (phòng thi / ở nhà / lab), Media (bài viết / thuyết trình / code + báo cáo), Audience (giảng viên môn / hội đồng / cả hai). All three are in the syllabus on FAP, and getting the Media wrong — writing an essay when a demo was required — is the single most expensive mistake in this table.</li>
 </ul>
 <p class="meo">💡 Author line across the four contexts, in order: <strong>lecturer · tutor+students · lecturer+students · students</strong>. Learn that one column and you can rebuild most of slides 8–11 from memory.</p>
 <p class="pitfall">⚠️ Do not read "Variable" as "does not matter". It means "the answer exists but is not on this slide" — and an exam option claiming assessments have no fixed place or media is repeating the slide correctly, while an option claiming assessments are always written is wrong ("may be spoken, written, or multimodal").</p>`,
-        `<p class="y-chinh">🎯 Cú lật quan trọng nhất với điểm số của bạn: trong một bài đánh giá, <strong>BẠN là Author</strong> còn giảng viên là Audience. Ba trên năm dòng trả lời "Variable" (thay đổi), và chính điều đó là bài học.</p>
+        `<p class="y-chinh">🎯 Cú lật quan trọng nhất với điểm số của bạn: trong một bài đánh giá, <strong>BẠN là Author</strong> còn giảng viên là Audience. Hai trên năm dòng trả lời "Variable" (thay đổi) — Place và Media — và chính điều đó là bài học.</p>
 <table>
 <tr><th>Yếu tố</th><th>Câu trả lời của slide (nguyên văn)</th><th>Vì sao lại viết như vậy</th></tr>
 <tr><td>Author</td><td><strong>Students</strong></td><td>Bối cảnh DUY NHẤT trong bốn cái mà giảng viên KHÔNG phải tác giả</td></tr>
@@ -426,7 +426,7 @@ export default {
 </table>
 <ul>
 <li><strong>"Demonstrating learning" là cụm quan trọng nhất trên slide.</strong> Bài đánh giá không phải chỗ để bộc lộ bản thân hay để khám phá. Nó là chỗ để <em>TRƯNG RA</em> rằng một sự học cụ thể đã diễn ra, đối chiếu với các tiêu chí ai đó đã viết sẵn từ trước. Chỉ riêng việc định khung lại như thế đã nâng điểm.</li>
-<li><strong>Ba chữ "Variable" là một lời cảnh báo, không phải sự mơ hồ.</strong> Place, Media và (phần nào) Audience đổi theo từng bài, nên slide từ chối khái quát hoá — và giao việc lại cho bạn. Tìm giá trị thật ở đâu? Đề cương môn học. Đó là lý do 2.1c đến ngay sau.</li>
+<li><strong>Hai chữ "Variable" là một lời cảnh báo, không phải sự mơ hồ.</strong> Place và Media đổi theo từng bài (Audience là "Lecturer and/or tutors"), nên slide từ chối khái quát hoá — và giao việc lại cho bạn. Tìm giá trị thật ở đâu? Đề cương môn học. Đó là lý do 2.1c đến ngay sau.</li>
 <li><strong>"Responses to set tasks" nghĩa là ĐỀ BÀI quy định hình dạng.</strong> Trả lời hay cho một câu hỏi khác thì được không điểm. Đây là bản lề nối sang phần 2 của Mooc 4, "Interpreting… Written Assignments".</li>
 <li><strong>Giờ bạn là tác giả — nên mọi yếu tố ở slide 6 trở thành thứ bạn phải điều khiển.</strong> Giọng văn, bố cục, bằng chứng, định dạng: không còn ai khác tạo ra văn bản này.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Trước mỗi bài đánh giá, tự điền ba biến số đó ra giấy: Place (phòng thi / ở nhà / lab), Media (bài viết / thuyết trình / code kèm báo cáo), Audience (giảng viên môn / hội đồng / cả hai). Cả ba đều nằm trong syllabus trên FAP, và sai ở Media — viết tiểu luận trong khi người ta đòi demo — là sai lầm đắt nhất trong bảng này.</li>
@@ -671,7 +671,7 @@ export default {
 <p class="pitfall">⚠️ Phương pháp Cornell thật, dạy ở nơi khác, có <strong>BA</strong> vùng (cột gợi nhớ, vùng ghi chép, và một dải tóm tắt chạy dọc dưới đáy). Slide này chỉ in <strong>HAI</strong> cột và không có dải tóm tắt. Hãy trả lời theo SLIDE: hai cột. Nếu bạn từng gặp bản ba vùng ở đâu đó thì đừng đem nó đi "sửa" đề thi.</p>`],
 
       [18, 'Note-taking in lectures — four rules',
-        `<p class="y-chinh">🎯 The practical rules that sit on top of the two formats: <strong>four</strong> bullets, three of them carrying a citation, and together they define what a lecture is actually for.</p>
+        `<p class="y-chinh">🎯 The practical rules that sit on top of the two formats: <strong>four</strong> bullets, two of them carrying a citation (rules 1 and 2), and together they define what a lecture is actually for.</p>
 <table>
 <tr><th>#</th><th>The rule (verbatim)</th><th>Citation</th><th>Why it is there</th></tr>
 <tr><td>1</td><td>Take notes on main ideas, processes, arguments, and formulas</td><td>Reinders, Moore, &amp; Lewis, 2008</td><td>FOUR things to capture — and transcription is not one of them</td></tr>
@@ -688,7 +688,7 @@ export default {
 </ul>
 <p class="meo">💡 Count hook: rule 1 lists <strong>four</strong> things to capture, and the slide itself has <strong>four</strong> rules. Two different fours — do not merge them. And three separate sources appear in this area: Reinders/Moore/Lewis 2008, Aish &amp; Tomlinson 2013, Brick/Herke/Wong 2016.</p>
 <p class="pitfall">⚠️ Rule 4 is frequently misremembered as "you do not need to attend if materials are posted" — it says the exact opposite. The words are "as a <em>supplement</em> to your own notes <em>and attendance</em>".</p>`,
-        `<p class="y-chinh">🎯 Những quy tắc thực hành nằm trên hai cái khuôn kia: <strong>BỐN</strong> gạch đầu dòng, ba trong số đó có trích nguồn, và gộp lại chúng định nghĩa buổi lecture thật sự để làm gì.</p>
+        `<p class="y-chinh">🎯 Những quy tắc thực hành nằm trên hai cái khuôn kia: <strong>BỐN</strong> gạch đầu dòng, hai trong số đó có trích nguồn (quy tắc 1 và 2), và gộp lại chúng định nghĩa buổi lecture thật sự để làm gì.</p>
 <table>
 <tr><th>#</th><th>Quy tắc (nguyên văn)</th><th>Trích nguồn</th><th>Vì sao có nó</th></tr>
 <tr><td>1</td><td>Take notes on main ideas, processes, arguments, and formulas</td><td>Reinders, Moore, &amp; Lewis, 2008</td><td>BỐN thứ phải chộp lấy — và chép nguyên văn không nằm trong số đó</td></tr>
@@ -750,7 +750,7 @@ export default {
 <ul>
 <li><strong>The difference is purely typographic.</strong> Nothing conceptual was added when the section changed. This is the second wholesale repeat in the range, after 2.1a ↔ 2.1c, and it confirms the pattern: in this deck, objectives slides are boilerplate.</li>
 <li><strong>Now the mismatch on slide 15 makes sense.</strong> Slide 15's heading named seminars while its objectives named forums — because these objectives were written to cover 2.3a and 2.3b together, then pasted onto both. The forum half of them is delivered here.</li>
-<li><strong>"Online discussion forums" is the only context in this whole range that is written, asynchronous and permanent.</strong> Lectures, tutorials and seminars are all spoken and live. That is the real reason forums need their own section: every element of the rhetorical situation shifts at once — media, place, and the fact that your words stay up.</li>
+<li><strong>"Online discussion forums" are written, asynchronous and permanent.</strong> Lectures, tutorials and seminars are all spoken and live. That is the real reason forums need their own section: every element of the rhetorical situation shifts at once — media, place, and the fact that your words stay up.</li>
 <li><strong>This slide also has the truncated footer.</strong> No crest, and the page label at bottom-right is cut off mid-word. Same export batch as slides 13, 14 and 21.</li>
 <li><strong>Applied at FPTU.</strong> Your forums are EduNext threads, the Coursera discussion boards for this very MOOC, and any class Facebook/Discord group your lecturer reads. Asynchronous means you get something no live context gives you: <em>time to edit before you speak</em>. Permanent means you must use it.</li>
 </ul>
@@ -765,7 +765,7 @@ export default {
 <ul>
 <li><strong>Khác biệt thuần tuý là chuyện chữ nghĩa.</strong> Không có khái niệm nào được thêm vào khi đổi mục. Đây là chỗ lặp nguyên khối thứ hai trong dải, sau 2.1a ↔ 2.1c, và nó xác nhận quy luật: trong deck này, slide mục tiêu là hàng khuôn mẫu.</li>
 <li><strong>Đến đây thì chỗ lệch ở slide 15 mới có lời giải.</strong> Tiêu đề slide 15 gọi tên seminar còn mục tiêu lại gọi tên forum — vì bộ mục tiêu này được viết để bao CẢ 2.3a LẪN 2.3b, rồi dán lên cả hai. Nửa phần forum của chúng được giao ở đây.</li>
-<li><strong>"Online discussion forums" là bối cảnh DUY NHẤT trong cả dải này mang tính viết, bất đồng bộ và lưu vĩnh viễn.</strong> Lecture, tutorial và seminar đều là nói và diễn ra trực tiếp. Đó mới là lý do thật khiến forum cần mục riêng: mọi yếu tố của tình huống tu từ dịch chuyển cùng lúc — phương tiện, nơi chốn, và chuyện lời bạn viết còn nằm đó mãi.</li>
+<li><strong>"Online discussion forums" là bối cảnh VIẾT, bất đồng bộ và lưu vĩnh viễn.</strong> Lecture, tutorial và seminar đều là nói và diễn ra trực tiếp. Đó mới là lý do thật khiến forum cần mục riêng: mọi yếu tố của tình huống tu từ dịch chuyển cùng lúc — phương tiện, nơi chốn, và chuyện lời bạn viết còn nằm đó mãi.</li>
 <li><strong>Slide này cũng mang chân trang bị cụt.</strong> Không huy hiệu, và nhãn số trang ở góc dưới phải bị cắt giữa chừng. Cùng lượt xuất file với slide 13, 14 và 21.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Diễn đàn của bạn là các luồng EduNext, khu thảo luận trên Coursera của chính MOOC này, và mọi nhóm Facebook/Discord lớp mà giảng viên có đọc. Bất đồng bộ nghĩa là bạn có được thứ mà không bối cảnh trực tiếp nào cho: <em>thời gian để sửa trước khi nói</em>. Lưu vĩnh viễn nghĩa là bạn BẮT BUỘC phải dùng thời gian đó.</li>
 </ul>

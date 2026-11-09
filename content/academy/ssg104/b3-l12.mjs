@@ -12,18 +12,16 @@ const D = 's3-l12';
 
 export const b3l12 = [
   walkHead(D, 1, 24,
-    'The definition on slide 3 has three conditions — all three must hold before something counts as conflict. The four-stage model (slides 8–12) and the 4+9 strategies (slides 15–23) are the rest of the lesson.',
-    'Định nghĩa ở slide 3 có ba điều kiện — phải đủ cả ba mới gọi là xung đột. Mô hình bốn giai đoạn (slide 8–12) và bộ 4+9 chiến lược (slide 15–23) là phần còn lại của bài.'),
+    'The definition on slide 3 has three conditions — all three must hold before something counts as conflict. The four-stage model (slides 7–12) and the 4+9 strategies (slides 14–22) are the rest of the lesson.',
+    'Định nghĩa ở slide 3 có ba điều kiện — phải đủ cả ba mới gọi là xung đột. Mô hình bốn giai đoạn (slide 7–12) và bộ 4+9 chiến lược (slide 14–22) là phần còn lại của bài.'),
 
-  slide(D, 1, 'Session III — Group & Team Theory (cont.)',
-    `<p class="y-chinh">🎯 Title slide.</p>`,
-    `<p class="y-chinh">🎯 Slide tiêu đề.</p>`),
+  slide(D, 1, 'Session III — Group & Team Theory (cont.) · 4. Conflict and Cohesion in Groups',
+    `<p class="y-chinh">🎯 Title slide, and it already names the lesson: <strong>4. Conflict and Cohesion in Groups</strong>.</p>
+     <p class="meo">💡 Note the pairing in the title: conflict and <em>cohesion</em> are treated as two sides of the same subject, not as opposites.</p>`,
+    `<p class="y-chinh">🎯 Slide tiêu đề, và nó gọi tên luôn bài học: <strong>4. Conflict and Cohesion in Groups</strong> — xung đột và gắn kết trong nhóm.</p>
+     <p class="meo">💡 Để ý cặp từ trong tiêu đề: xung đột và <em>gắn kết</em> được coi là hai mặt của cùng một chủ đề, không phải hai thứ đối lập.</p>`),
 
-  slide(D, 2, '4. Conflict and Cohesion in Groups',
-    `<p class="y-chinh">🎯 Section divider. Note the pairing in the title: conflict and <em>cohesion</em> are treated as two sides of the same subject, not as opposites.</p>`,
-    `<p class="y-chinh">🎯 Slide phân mục. Để ý cặp từ trong tiêu đề: xung đột và <em>gắn kết</em> được coi là hai mặt của cùng một chủ đề, không phải hai thứ đối lập.</p>`),
-
-  slide(D, 3, 'Learning objectives (5)',
+  slide(D, 2, 'Learning objectives (5)',
     `<p class="y-chinh">🎯 Five objectives.</p>
      <ol>
        <li>Define conflict.</li>
@@ -41,7 +39,7 @@ export const b3l12 = [
        <li>Xác định và áp dụng chiến lược ngăn ngừa hoặc giảm xung đột.</li>
      </ol>`),
 
-  slide(D, 4, 'Definition of conflict — the three conditions',
+  slide(D, 3, 'Definition of conflict — the three conditions',
     `<p class="y-chinh">🎯 Conflict is an <strong>expressed struggle between interdependent parties</strong> over goals they perceive as incompatible, or resources they perceive to be insufficient (Hocker & Wilmot, 2001).</p>
      <ul>
        <li><span class="nhan">First</span> — conflict must be <strong>expressed</strong>. Silent disagreement is not yet conflict.</li>
@@ -57,7 +55,7 @@ export const b3l12 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Đọc kỹ chữ "cho là":</strong> mục tiêu chỉ cần <em>bị nhìn</em> như không tương thích. Nhiều xung đột nhóm tan biến ngay khi có người chịu kiểm tra xem mục tiêu có thực sự chọi nhau không.</p>`),
 
-  slide(D, 5, 'The positive side of conflict',
+  slide(D, 4, 'The positive side of conflict',
     `<p class="y-chinh">🎯 Conflict is not automatically damaging.</p>
      <ul>
        <li>Conflict can <strong>stimulate innovation and change</strong>.</li>
@@ -73,7 +71,7 @@ export const b3l12 = [
      <p>Biểu đồ đi kèm (Brown, 1986) vẽ cường độ xung đột theo kết quả: quá ít xung đột và quá nhiều xung đột đều cho kết quả tồi.</p>
      <p class="meo">💡 Đường hình chữ U ngược đó chính là đáp án cho câu "xung đột tốt hay xấu?" — không cái nào cả; có một mức vừa đủ, và mức đó không phải là con số không.</p>`),
 
-  slide(D, 6, 'Conflict as a stabilising mechanism',
+  slide(D, 5, 'Conflict as a stabilising mechanism',
     `<p class="y-chinh">🎯 Four claims about what conflict does <em>for</em> a relationship.</p>
      <ul>
        <li>Conflict aimed at resolving tension between antagonists is likely to have <strong>stabilising and integrative functions</strong> for the relationship.</li>
@@ -91,7 +89,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 "Thể chế hoá" trong một nhóm sinh viên nghĩa là có sẵn một cách bất đồng đã được thống nhất — buổi rút kinh nghiệm, một quy tắc ra quyết định — trước khi cần tới nó.</p>`),
 
-  slide(D, 7, 'Types of conflict (5)',
+  slide(D, 6, 'Types of conflict (5)',
     `<p class="y-chinh">🎯 Five types, and telling them apart decides which strategy will work.</p>
      <ul>
        <li><span class="nhan">Conflicts of substance</span> — about facts, content, what is true.</li>
@@ -111,19 +109,19 @@ export const b3l12 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Cái bẫy lớn nhất của làm việc nhóm:</strong> xung đột quy trình để lâu không giải sẽ hoá thành xung đột quan hệ. Khi đã thành, bao nhiêu bằng chứng cũng không dàn xếp nổi — nên phải xử lý bất đồng về quy trình từ sớm, và bằng văn bản.</p>`),
 
-  slide(D, 8, 'A model of the conflict process — four stages',
+  slide(D, 7, 'A model of the conflict process — four stages',
     `<p class="y-chinh">🎯 Four stages, in order: <strong>Frustration → Conceptualization → Behavior → Outcome</strong>.</p>
      <p class="meo">💡 The value of the model is that it tells you <em>where</em> you are. Most failed interventions are attempts to fix stage 3 while the real problem sits in stage 1.</p>`,
     `<p class="y-chinh">🎯 Bốn giai đoạn, theo thứ tự: <strong>Bức bối → Định hình nhận thức → Hành vi → Kết cục</strong>.</p>
      <p class="meo">💡 Giá trị của mô hình nằm ở chỗ nó cho biết bạn <em>đang ở đâu</em>. Phần lớn các can thiệp thất bại là vì cố sửa giai đoạn 3 trong khi vấn đề thật nằm ở giai đoạn 1.</p>`),
 
-  slide(D, 9, 'The conflict process (diagram)',
+  slide(D, 8, 'The conflict process (diagram)',
     `<p class="y-chinh">🎯 The same four stages drawn as a flow.</p>
      <p class="meo">💡 Note it is a chain, not a loop — but stage 4 feeds the next episode, as slide 12 explains.</p>`,
     `<p class="y-chinh">🎯 Vẫn bốn giai đoạn đó, vẽ thành dòng chảy.</p>
      <p class="meo">💡 Để ý nó là một chuỗi, không phải vòng lặp — nhưng giai đoạn 4 lại nuôi đợt xung đột tiếp theo, như slide 12 giải thích.</p>`),
 
-  slide(D, 10, 'Stage 1 — Frustration',
+  slide(D, 9, 'Stage 1 — Frustration',
     `<p class="y-chinh">🎯 Conflict situations originate when an individual or group feels <strong>frustration in the pursuit of important goals</strong>.</p>
      <ul>
        <li>Causes are varied: disagreement over performance goals, failure to get a promotion or pay rise, a fight over scarce economic resources, new rules or policies.</li>
@@ -137,7 +135,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Cách dùng thực tế: khi một xung đột có vẻ to hơn nguyên cớ, hãy hỏi mục tiêu nào đang bị chặn. Cuộc cãi vã nhìn thấy được hiếm khi chính là nỗi bức bối.</p>`),
 
-  slide(D, 11, 'Stage 2 — Conceptualization',
+  slide(D, 10, 'Stage 2 — Conceptualization',
     `<p class="y-chinh">🎯 The parties try to understand four things at once.</p>
      <ul>
        <li>The nature of the problem.</li>
@@ -157,7 +155,7 @@ export const b3l12 = [
      <p>Giai đoạn này thực chất là <strong>pha giải quyết vấn đề và hoạch định chiến lược</strong>.</p>
      <p class="pitfall co-tieu-de"><strong>Chỗ hay hỏng:</strong> mục thứ ba thường bị đoán chứ không bao giờ được hỏi. Đoán sai thứ bên kia muốn sẽ biến xung đột nội dung thành xung đột do hiểu lầm khác biệt.</p>`),
 
-  slide(D, 12, 'Stage 3 — Behavior',
+  slide(D, 11, 'Stage 3 — Behavior',
     `<p class="y-chinh">🎯 The parties implement their resolution mode — competing or accommodating — in the hope of resolving the problem.</p>
      <ul>
        <li>The major task is deciding how best to proceed strategically: which tactics to use.</li>
@@ -171,7 +169,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Năm cách này chính là lưới Thomas-Kilmann: mỗi cách là một vị trí trên hai trục — bạn theo đuổi mối quan tâm của mình tới đâu, và theo đuổi mối quan tâm của bên kia tới đâu.</p>`),
 
-  slide(D, 13, 'Stage 4 — Outcome',
+  slide(D, 12, 'Stage 4 — Outcome',
     `<p class="y-chinh">🎯 Both sides judge how far a satisfactory resolution has been achieved — and the slide's warning is the important part.</p>
      <ul>
        <li>Where one party is not satisfied, or only partially satisfied, <strong>the seeds of discontent are sown for a later conflict</strong>.</li>
@@ -187,7 +185,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Vì thế câu "thôi bỏ qua đi" không phải là giải quyết. Giai đoạn 4 dở dang chính là nỗi bức bối khởi động giai đoạn 1 của đợt sau.</p>`),
 
-  slide(D, 14, 'Five modes of resolving conflict',
+  slide(D, 13, 'Five modes of resolving conflict',
     `<p class="y-chinh">🎯 The five modes, with when each is the right choice.</p>
      <ul>
        <li><span class="nhan">Competing</span> — high concern for self, low for the other. Right when the decision is urgent or a principle cannot be traded.</li>
@@ -207,13 +205,13 @@ export const b3l12 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Không có ô nào là "tốt nhất":</strong> sai lầm là chỉ có đúng một chế độ. Người lúc nào cũng nhượng bộ và người lúc nào cũng cạnh tranh đều làm hại nhóm, theo hai chiều ngược nhau.</p>`),
 
-  slide(D, 15, 'Preventing and reducing conflict',
+  slide(D, 14, 'Preventing and reducing conflict',
     `<p class="y-chinh">🎯 Divider: 4 strategies for prevention, 9 for reduction.</p>
      <p class="meo">💡 The asymmetry is the message — prevention is cheap and short, reduction is long and expensive. That is the argument for doing the four first.</p>`,
     `<p class="y-chinh">🎯 Slide phân mục: 4 chiến lược phòng ngừa, 9 chiến lược làm giảm.</p>
      <p class="meo">💡 Chính sự chênh lệch đó là thông điệp — phòng ngừa thì rẻ và ngắn, giảm thiểu thì dài và tốn kém. Đó là lý lẽ để làm bốn cái kia trước.</p>`),
 
-  slide(D, 16, 'Prevention 1–2 — group goals and stable tasks',
+  slide(D, 15, 'Prevention 1–2 — group goals and stable tasks',
     `<p class="y-chinh">🎯 Two of the four preventive strategies.</p>
      <ul>
        <li><span class="nhan">1. Emphasise group goals and effectiveness</span> — focusing on shared goals should prevent goal conflict. If larger goals are emphasised, members are more likely to see the big picture and work together.</li>
@@ -227,7 +225,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Chiến lược 2 là thứ một nhóm sinh viên áp dụng được ngay tuần này: ghi ra ai phụ trách phần nào, và "xong" nghĩa là gì với từng phần.</p>`),
 
-  slide(D, 17, 'Prevention 3–4 — dialogue and avoiding win-lose',
+  slide(D, 16, 'Prevention 3–4 — dialogue and avoiding win-lose',
     `<p class="y-chinh">🎯 The other two.</p>
      <ul>
        <li><span class="nhan">3. Facilitate dialogue</span> — misperception of others' abilities, goals and motivations often causes conflict, so increasing dialogue and sharing information helps eliminate it. As members learn more about one another, suspicions diminish and teamwork becomes possible.</li>
@@ -241,7 +239,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Chiến lược 4 mang tính cấu trúc: nếu chỉ một người có thiết kế được dùng thì bạn đã tự dựng nên thế được-mất. Chia quyết định thành các phần mà mỗi người phụ trách một phần sẽ gỡ bỏ cái khung đó.</p>`),
 
-  slide(D, 18, 'Reduction 1–2 — separation and rules',
+  slide(D, 17, 'Reduction 1–2 — separation and rules',
     `<p class="y-chinh">🎯 The first two of nine, and the slide is honest about their limits.</p>
      <ul>
        <li><span class="nhan">1. Physical separation</span> — useful when the conflicting parties are not working on a joint task or do not need much interaction. It does <strong>not</strong> change attitudes, but it buys time to find a better accommodation.</li>
@@ -255,7 +253,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Cả hai đều là ngăn chặn, không phải hàn gắn. Hữu ích khi hạn chót cận kề và chuyện quan hệ để xử lý sau.</p>`),
 
-  slide(D, 19, 'Reduction 3–4 — integrators and limited interaction',
+  slide(D, 18, 'Reduction 3–4 — integrators and limited interaction',
     `<p class="y-chinh">🎯 Two more.</p>
      <ul>
        <li><span class="nhan">3. Use of integrators</span> — an integrator is assigned a boundary-spanning role between two people or groups, often taking a "shuttle diplomacy" approach: moving between the parties, identifying areas of agreement, and looking for future cooperation.</li>
@@ -269,7 +267,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Trong nhóm sinh viên năm người, người nối nhịp thường là thành viên mà cả hai phía vẫn còn nói chuyện. Gọi tên vai trò đó ra sẽ biến nó thành phương pháp thay vì chuyện tình cờ.</p>`),
 
-  slide(D, 20, 'Reduction 5 — confrontation and negotiation',
+  slide(D, 19, 'Reduction 5 — confrontation and negotiation',
     `<p class="y-chinh">🎯 The first strategy that actually addresses the disagreement itself.</p>
      <ul>
        <li>Competing parties are brought together <strong>face to face</strong> to discuss their basic areas of disagreement.</li>
@@ -287,7 +285,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Đây chính là nửa "thương lượng" trong tên bài — từ mà phiên bản cũ của khoá học này nhắc tới đúng 0 lần.</p>`),
 
-  slide(D, 21, 'Reduction 6–7 — third parties and superordinate goals',
+  slide(D, 20, 'Reduction 6–7 — third parties and superordinate goals',
     `<p class="y-chinh">🎯 Two more.</p>
      <ul>
        <li><span class="nhan">6. Third-party consultation</span> — bring in an outside consultant who understands human behaviour. They serve as a go-between and can <strong>speak more directly to the issues, because they are not a member of the group</strong>.</li>
@@ -301,7 +299,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Mục tiêu cấp cao hơn là mục tiêu mà không bên nào tự với tới được. Đây là công cụ mạnh nhất trong danh sách vì nó thay đổi cấu trúc, không phải thay đổi tâm trạng.</p>`),
 
-  slide(D, 22, 'Reduction 8 — rotation of members',
+  slide(D, 21, 'Reduction 8 — rotation of members',
     `<p class="y-chinh">🎯 By rotating between groups, individuals come to understand the frames of reference, values and attitudes of other members, so communication increases.</p>
      <ul>
        <li>When those rotated are accepted by the receiving group, change in <strong>attitudes as well as behaviour</strong> becomes possible.</li>
@@ -315,7 +313,7 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Nó là một trong hai chiến lược duy nhất của danh sách này làm đổi thái độ chứ không chỉ kìm hành vi — và đó chính là lý do nó chậm.</p>`),
 
-  slide(D, 23, 'Reduction 9 — training',
+  slide(D, 22, 'Reduction 9 — training',
     `<p class="y-chinh">🎯 The final technique on the continuum.</p>
      <ul>
        <li>Outside training experts are retained on a <strong>long-term basis</strong> to help groups develop relatively permanent mechanisms for working together.</li>
@@ -329,23 +327,27 @@ export const b3l12 = [
      </ul>
      <p class="meo">💡 Để ý trật tự của cả chín cách: chúng chạy từ rẻ nhất và hời hợt nhất (tách nhau ra) tới đắt nhất và bền nhất (đào tạo). Chính dải đó là câu trả lời cho "nên dùng chiến lược nào?" — cái rẻ nhất mà vẫn chạm được tới nguyên nhân.</p>`),
 
-  slide(D, 24, 'Review & reflection questions',
+  slide(D, 23, 'Review & reflection questions',
     `<p class="y-chinh">🎯 Five questions, and where the answers live.</p>
      <ul>
-       <li><span class="nhan">Is conflict in groups good or bad? Why?</span> Slide 5 — the inverted-U: both too little and too much harm outcomes.</li>
-       <li><span class="nhan">Identify the types of conflict with examples.</span> Slide 7 — five types.</li>
-       <li><span class="nhan">Which resolution mode do you use?</span> Slide 14 — and notice whether you have more than one.</li>
+       <li><span class="nhan">Is conflict in groups good or bad? Why?</span> Slides 4–5 — the inverted-U: both too little and too much harm outcomes.</li>
+       <li><span class="nhan">Identify the types of conflict with examples.</span> Slide 6 — five types.</li>
+       <li><span class="nhan">Which resolution mode do you use?</span> Slide 13 — and notice whether you have more than one.</li>
        <li><span class="nhan">Which modes have you observed in your current group?</span> Look for avoiding: it is the most common and the least visible.</li>
        <li><span class="nhan">Which strategies could you use in your group?</span> Prevention 2 and 4 first — they are free and they are structural.</li>
      </ul>`,
     `<p class="y-chinh">🎯 Năm câu hỏi, kèm chỗ chứa câu trả lời.</p>
      <ul>
-       <li><span class="nhan">Xung đột trong nhóm tốt hay xấu? Vì sao?</span> Slide 5 — đường chữ U ngược: quá ít và quá nhiều đều hại kết quả.</li>
-       <li><span class="nhan">Nêu các loại xung đột kèm ví dụ.</span> Slide 7 — năm loại.</li>
-       <li><span class="nhan">Bạn hay dùng cách giải quyết nào?</span> Slide 14 — và để ý xem bạn có nhiều hơn một cách không.</li>
+       <li><span class="nhan">Xung đột trong nhóm tốt hay xấu? Vì sao?</span> Slide 4–5 — đường chữ U ngược: quá ít và quá nhiều đều hại kết quả.</li>
+       <li><span class="nhan">Nêu các loại xung đột kèm ví dụ.</span> Slide 6 — năm loại.</li>
+       <li><span class="nhan">Bạn hay dùng cách giải quyết nào?</span> Slide 13 — và để ý xem bạn có nhiều hơn một cách không.</li>
        <li><span class="nhan">Bạn quan sát thấy những cách nào trong nhóm hiện tại?</span> Hãy tìm kiểu né tránh: nó phổ biến nhất và khó thấy nhất.</li>
        <li><span class="nhan">Nhóm bạn có thể dùng chiến lược nào?</span> Phòng ngừa số 2 và số 4 trước — chúng không tốn gì và mang tính cấu trúc.</li>
      </ul>`),
+
+  slide(D, 24, 'Q&A',
+    `<p class="y-chinh">🎯 Closing slide — questions and answers.</p>`,
+    `<p class="y-chinh">🎯 Slide kết — hỏi đáp.</p>`),
 
   books([
     ['wig', 'Chapter 7 — conflict and cohesion in groups', 'Chương 7 — xung đột và gắn kết trong nhóm'],
@@ -353,8 +355,8 @@ export const b3l12 = [
   ]),
 
   bi(
-    `<h3>✅ What this adds to the old lesson</h3>
-     <p>The old Academy lesson handled sources of conflict and the Thomas-Kilmann modes reasonably well, but the word "negotiation" appeared zero times, and neither the four-stage conflict process nor the 4 prevention / 9 reduction strategies were present.</p>`,
-    `<h3>✅ Bài này bù thêm gì so với bài cũ</h3>
-     <p>Bài cũ trên Academy xử lý phần nguồn gốc xung đột và các chế độ Thomas-Kilmann khá ổn, nhưng chữ "thương lượng" xuất hiện đúng 0 lần, và không có cả mô hình xung đột bốn giai đoạn lẫn bộ 4 chiến lược phòng ngừa / 9 chiến lược giảm thiểu.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>Three blocks carry most of the marks: the three conditions in the definition (slide 3), the four-stage conflict process with Thomas's five resolution modes (slides 7–13), and the 4 prevention / 9 reduction strategies (slides 14–22).</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Ba khối mang nhiều điểm nhất: ba điều kiện trong định nghĩa (slide 3), mô hình xung đột bốn giai đoạn cùng năm cách giải quyết của Thomas (slide 7–13), và bộ 4 chiến lược phòng ngừa / 9 chiến lược giảm xung đột (slide 14–22).</p>`),
 ].join('\n');

@@ -353,16 +353,30 @@ export const b5l2122 = [
      <p class="meo">💡 "Xuôi tai" không phải chuyện trang trí: người tuyển dụng đọc thầm trong đầu. Câu nào khó đọc thành tiếng thì cũng khó đọc nhanh.</p>`),
 
   slide(D, 22, 'Example of a student cover letter',
-    `<p class="y-chinh">🎯 A worked example for a student applicant.</p>
-     <p class="meo">💡 Read it for structure, not for sentences to copy. A letter that reads like a template is the thing the previous slide's "genuine interest" is supposed to prevent.</p>`,
-    `<p class="y-chinh">🎯 Một mẫu thư xin việc hoàn chỉnh của sinh viên.</p>
-     <p class="meo">💡 Hãy đọc để lấy cấu trúc, đừng đọc để chép câu. Lá thư nghe như mẫu có sẵn chính là thứ mà "sự quan tâm chân thành" ở slide trước muốn ngăn lại.</p>`),
+    `<p class="y-chinh">🎯 A full sample letter (the writer calls herself a recent college graduate) applying for a graphic design position advertised on Indeed.com. Top to bottom: name and one contact line, date, the recipient's name, title, company and address, "Dear Mr. …:", five paragraphs, "Sincerely,", signature (hard copy letter) and typed name.</p>
+     <ol>
+       <li>Why I am writing: the position, where it was advertised, and why I am a strong candidate (3-D animation software, the Adobe suite).</li>
+       <li>One achievement: the top prize in a student design competition, for an app that lets students learn Japanese characters.</li>
+       <li>A 3.75 GPA, a semester at a university in Japan and conversational Japanese — linked to the studio's collaborations in Japan.</li>
+       <li>Maturity, artistic skills, ability to work with others, Japanese language and culture: "an asset for your studio".</li>
+       <li>Résumé enclosed; "will email you within the next week to see if we can arrange a time to speak further"; thanks.</li>
+     </ol>
+     <p class="meo">💡 Read it for structure, not for sentences to copy. A letter that reads like a template is the thing the previous slide's "genuine interest" is supposed to prevent. Note paragraph 5: it is the "backup action" of slide 28 — the writer says what she will do next.</p>`,
+    `<p class="y-chinh">🎯 Một lá thư mẫu trọn vẹn (người viết tự giới thiệu là vừa tốt nghiệp đại học) ứng tuyển vị trí thiết kế đồ hoạ đăng trên Indeed.com. Từ trên xuống: tên và một dòng liên hệ, ngày, tên, chức danh, công ty, địa chỉ người nhận, "Dear Mr. …:", năm đoạn, "Sincerely,", chữ ký (thư giấy) và tên đánh máy.</p>
+     <ol>
+       <li>Vì sao viết: vị trí, đăng ở đâu, và vì sao mình là ứng viên mạnh (phần mềm hoạt hình 3-D, bộ Adobe).</li>
+       <li>Một thành tích: giải nhất cuộc thi thiết kế của sinh viên, với một ứng dụng giúp sinh viên tự học chữ Nhật.</li>
+       <li>Điểm trung bình 3,75, một học kỳ ở một trường đại học Nhật, giao tiếp được tiếng Nhật — nối với việc studio hợp tác nhiều với Nhật.</li>
+       <li>Sự chín chắn, kỹ năng nghệ thuật, khả năng làm việc với người khác, tiếng và văn hoá Nhật: "một tài sản cho studio của ông".</li>
+       <li>Gửi kèm CV; "sẽ email ông trong tuần tới để xem có thể hẹn thời gian trao đổi thêm không"; lời cảm ơn.</li>
+     </ol>
+     <p class="meo">💡 Hãy đọc để lấy cấu trúc, đừng đọc để chép câu. Lá thư nghe như mẫu có sẵn chính là thứ mà "sự quan tâm chân thành" ở slide trước muốn ngăn lại. Để ý đoạn 5: đó là "hành động dự phòng" của slide 28 — người viết nói rõ mình sẽ làm gì tiếp.</p>`),
 
   slide(D, 23, 'College graduate cover letter example',
-    `<p class="y-chinh">🎯 A second example, for a graduate rather than a current student.</p>
-     <p class="meo">💡 Compare the two: the student letter leans on coursework and activities, the graduate letter on the degree and any internship. Both use the same three-paragraph shape from slide 28.</p>`,
-    `<p class="y-chinh">🎯 Mẫu thứ hai, dành cho người đã tốt nghiệp thay vì sinh viên đang học.</p>
-     <p class="meo">💡 Hãy so hai mẫu: thư sinh viên dựa vào môn học và hoạt động, thư cử nhân dựa vào tấm bằng và kỳ thực tập. Cả hai đều dùng chung khuôn ba đoạn ở slide 28.</p>`),
+    `<p class="y-chinh">🎯 The SAME letter as slide 22 turned into a template: the body paragraphs are identical, and every personal detail is replaced by a placeholder — Your Name, Your Address, Your City, State Zip Code, Your Phone Number, Your Email, Date, Contact Name, Title, Company Name, Address City, State Zip Code, "Dear Mr./Ms. Lastname:", Your Signature (hard copy letter), Typed Name.</p>
+     <p class="meo">💡 Put the two side by side: the template shows which lines of the frame you fill in; the five body paragraphs are the part you must write yourself, about your own position and evidence.</p>`,
+    `<p class="y-chinh">🎯 CHÍNH lá thư ở slide 22, biến thành khuôn mẫu: năm đoạn thân giữ nguyên, còn mọi chi tiết cá nhân được thay bằng chỗ trống — Your Name, Your Address, Your City, State Zip Code, Your Phone Number, Your Email, Date, Contact Name, Title, Company Name, Address City, State Zip Code, "Dear Mr./Ms. Lastname:", Your Signature (hard copy letter), Typed Name.</p>
+     <p class="meo">💡 Đặt hai slide cạnh nhau: khuôn cho thấy những dòng nào của phần khung bạn điền vào; còn năm đoạn thân là phần bạn phải tự viết, về đúng vị trí và bằng chứng của bạn.</p>`),
 
   slide(D, 24, 'LinkedIn as a resource',
     `<p class="y-chinh">🎯 The slide is titled "LinkedIn Cover Letter" and carries one line: "This site contains articles, experts, jobs, and more: get all the professional insights you need on LinkedIn", with the link https://www.linkedin.com/.</p>

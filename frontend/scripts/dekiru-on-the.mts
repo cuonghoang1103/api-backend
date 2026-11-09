@@ -38,7 +38,11 @@ const nhomTen = (h: string) => plain(h).replace(/^\d+[.)]\s*/, '').replace(/\s*[
 const sach = { ...(await load(join(DIR, 'sach.ts'))).SACH, ...(await load(join(DIR, 'sach2.ts'))).SACH_2 };
 const { chenHanLop, HAN_LOP } = await load(join(DIR, 'hanLop.ts'));
 const { HAN_TU } = await load(join(DIR, 'hanTu.ts'));
-const nums = readdirSync(DIR).map((f) => /^bai(\d+)\.ts$/.exec(f)?.[1]).filter(Boolean).map(Number).sort((a, b) => a - b);
+// Chỉ bài ĐÃ có trong bộ nạp index.ts — tệp baiN.ts agent đang soạn dở (chưa export đủ) bị bỏ qua (09/11/2026,
+// cùng luật với course-manifest.mts).
+const BO_NAP = readFileSync(join(DIR, 'index.ts'), 'utf8');
+const nums = readdirSync(DIR).map((f) => /^bai(\d+)\.ts$/.exec(f)?.[1]).filter(Boolean).map(Number)
+  .filter((n) => BO_NAP.includes(`import('./bai${n}')`)).sort((a, b) => a - b);
 
 /** [bài, chỉ số nhóm, từ (markup), loại từ, romaji, nghĩa] */
 const TU: [number, number, string, string, string, string][] = [];

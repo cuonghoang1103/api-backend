@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho CEA103 — Computer Organization and Architecture. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/cea103-computer-organization-and-architecture.mjs
+ */
+export default {
+  courseSlug: "cea103-computer-organization-and-architecture",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "cea103-flm-b002": { yt: "Ol8D69VKX2k", credit: "Neso Academy — Introduction to Computer Organization and Architecture (COA)" },
+    "cea103-flm-b003": { yt: "yMk-VuDYDPU", credit: "Blancaflor Arada — [COMPUTER ORGANIZATION AND ARCHITECTURE] 1 - Basic Concepts and Computer Evolution" },
+    "cea103-flm-b008": { yt: "xbZPRs6DDUk", credit: "H. Keith Edwards — Top Level View of Computer Function and Interconnection (Narrated)" },
+    "cea103-flm-b012": { yt: "Ez_kyBS-y5w", credit: "Neso Academy — Introduction to Cache Memory" },
+    "cea103-flm-b013": { yt: "V_QS1HzJ8Bc", credit: "Neso Academy — Direct Memory Mapping" },
+    "cea103-flm-b014": { yt: "m1dA7D6c3C0", credit: "Gate Smashers — L-3.5: What is Cache Mapping || Cache Mapping techniques || Computer Organisation and Architecture" },
+    "cea103-flm-b015": { yt: "Rh9IFLnQAkw", credit: "venkatesan ramachandran — Internal Memory (Introduction) Ch 5" },
+    "cea103-flm-b017": { yt: "VxYySwbCKec", credit: "TutorialsPoint — Memory Chip Organization" },
+    "cea103-flm-b021": { yt: "IADqAfXgC10", credit: "khairul khairina mustafa — EXTERNAL MEMORY (COMPUTER ORGANIZATION & ARCHITECTURE)" },
+    "cea103-flm-b024": { yt: "Hr7tbmIr0G8", credit: "Engineering Funda — Input Output Organization: Interfacing I/O in Computer Systems and I/O Transfer Modes | COA" },
+    "cea103-flm-b026": { yt: "On2CqM_TVC8", credit: "Dept. of ECE MITMysore — Input / Output Organization _ Accessing I/O Devices / III ECE / M3 / S1" },
+    "cea103-flm-b027": { yt: "26QPDBe-NB8", credit: "CrashCourse — Operating Systems: Crash Course Computer Science #18" },
+    "cea103-flm-b029": { yt: "tfcLaSRV8KI", credit: "Blancaflor Arada — [COMPUTER ORGANIZATION AND ARCHITECTURE] 8 - Operating System Support" },
+    "cea103-flm-b033": { yt: "pNxfo3nlUec", credit: "G K — Instruction Sets: Characteristics and Functions" },
+    "cea103-flm-b038": { yt: "WAO_W6Hpzyk", credit: "Gate Smashers — L-1.13: What is Instruction Format | Understand Computer Organisation with Simple Story" },
+    "cea103-flm-b039": { yt: "L1ung0wil9Y", credit: "MIT OpenCourseWare — 4. Assembly Language & Computer Architecture" },
+    "cea103-flm-b047": { yt: "TWRse5BMCvk", credit: "Farzad Arabikhan — Computer Structure and Function" },
+    "cea103-flm-b048": { yt: "UmYBlFFvRj0", credit: "venkatesan ramachandran — Processor Structure and Functions" },
+    "cea103-flm-b050": { yt: "ZW1gb3h-f9k", credit: "Gate Smashers — L-2.13: RISC vs CISC | Computer Organization & Architecture" },
+    "cea103-flm-b051": { yt: "iGVCcfUE2j8", credit: "Engineering Funda — RISC vs. CISC: Understanding Reduced Instruction Set Computer and Complex Instruction Set Computer" },
+    "cea103-flm-b053": { yt: "IK9OVbj_Ir0", credit: "MIT OpenCourseWare — 21.2.1 Instruction-level Parallelism" },
+    "cea103-flm-b054": { yt: "pbg7rYbWU4w", credit: "Unacademy Computer Science — COA | Parallel Processing, Flynn's Classification & Pipelining | Lec 40 | GATE CSE 2021/22 Exam" },
+    "cea103-flm-b056": { yt: "vhmiSugPlW0", credit: "MIT OpenCourseWare — Lec 18 | MIT 6.189 Multicore Programming Primer, IAP 2007" },
+    "cea103-1-1-data-representation": { yt: "FFDMzbrEXaE", credit: "The Organic Chemistry Tutor — Number Systems Introduction - Decimal, Binary, Octal & Hexadecimal" },
+    "cea103-2-1-digital-logic": { yt: "lumpHzyakVs", credit: "Gedare Bloom — Digital Logic: A Crash Course" },
+    "cea103-3-1-isa": { yt: "9-9z32T-5WU", credit: "Computer Architecture and Organization — Lecture 5 : Instruction Set Architecture" },
+    "cea103-5-1-datapath": { yt: "xAmLwlLExPM", credit: "Dr. Janibul Bashir — Computer organization and architecture -- Processor Design: Data Path and Control Path - Lecture 12a" },
+    "cea103-6-1-pipeline": { yt: "zPmfprtdzCE", credit: "Prof. Dr. Ben H. Juurlink — 1 3 1 Pipelining Principles" },
+    "cea103-7-1-memory-hierarchy": { yt: "zwovvWfkuSg", credit: "Gate Smashers — L-3.1: Memory Hierarchy in Computer Architecture | Access time, Speed, Size, Cost | All Imp Points" },
+    "cea103-8-1-io-performance": { yt: "xBYhHC8_A6o", credit: "Gate Smashers — L-1.4:Types of Buses (Address, Data and Control) in Computer Organization and Architecture" },
+  },
+};

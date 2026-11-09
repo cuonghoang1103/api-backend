@@ -8,7 +8,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
-import GauTruc3D, { type CamXucGau, type VariantGau } from './GauTruc3D';
+import GauBip, { type CamXucGau, type VariantGau } from './GauBip';
 import { MascotBubble } from './MascotBubble';
 import { gauTat, datGauTat, noi, dungNoi, daTuongTac } from './giongGau';
 import { getLine, type Emotion } from '@/lib/mascotData';
@@ -88,7 +88,7 @@ export default function GauChao({
   return (
     <div className={`relative flex ${doc ? 'flex-col-reverse items-center' : huong === 'trai' ? 'flex-row-reverse items-end' : 'flex-row items-end'} gap-2 sm:gap-3 ${className}`}>
       <div className="relative">
-        <GauTruc3D emotion={cam} talking={dangNoi} size={size} variant={variant} vayKey={vayKey} onClick={bam} ariaLabel="Bấm để Bíp nói chuyện" />
+        <GauBip emotion={cam} talking={dangNoi} size={size} variant={variant} vayKey={vayKey} onClick={bam} ariaLabel="Bấm để Bíp nói chuyện" />
         <button
           type="button"
           onClick={doiTat}

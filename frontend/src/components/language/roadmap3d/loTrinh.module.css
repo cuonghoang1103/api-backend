@@ -49,8 +49,10 @@
   font-size: .8rem; font-weight: 850; letter-spacing: .04em; text-transform: uppercase;
   color: #fff; background: var(--c); box-shadow: 0 8px 20px -10px var(--c);
 }
+.gau { position: absolute; left: 0; top: 0; pointer-events: none; will-change: transform; z-index: 1001; }
+.gauBong { position: absolute; left: 50%; bottom: 4%; width: 70%; height: 10%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(ellipse at center, rgba(0,0,0,.28), rgba(0,0,0,0) 70%); }
 .bong {
-  position: absolute; left: 0; top: 0; pointer-events: none; transform: translate(-50%, -100%);
+  position: absolute; left: 0; top: 0; pointer-events: none; transform: translate(-50%, -100%); z-index: 1002;
   transition: opacity .2s ease;
 }
 .goc { position: absolute; left: .75rem; top: .75rem; display: flex; gap: .4rem; flex-wrap: wrap; pointer-events: none; max-width: 70%; }

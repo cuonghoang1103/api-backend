@@ -5,7 +5,8 @@
  * chiếu ra mỗi khung hình (ghi thẳng vào style, không qua state ⇒ không re-render 60 lần/giây).
  */
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { hoTro3D } from '../mascot/GauTruc3D';
+import { hoTro3D } from './hoTro3D';
+import GauBip from '../mascot/GauBip';
 import { MascotBubble } from '../mascot/MascotBubble';
 import type { SanKhauLoTrinh, ViTriChang, ViTriNhan } from './sanKhauLoTrinh';
 import type { ChangLoTrinh, NutLoTrinh } from './loTrinhData';
@@ -35,6 +36,7 @@ export default function LoTrinh3D({
   const nhanRef = useRef<(HTMLButtonElement | null)[]>([]);
   const changRef = useRef<(HTMLSpanElement | null)[]>([]);
   const bongRef = useRef<HTMLDivElement>(null);
+  const gauRef = useRef<HTMLDivElement>(null);
   const nutRef = useRef(nut);
   nutRef.current = nut;
   const [hong, setHong] = useState(false);
@@ -91,12 +93,19 @@ export default function LoTrinh3D({
               el.style.transform = `translate(${r.x.toFixed(1)}px, ${r.y.toFixed(1)}px) translate(-50%, -100%) scale(${ty.toFixed(3)})`;
               el.style.opacity = String(Math.max(0.35, Math.min(1, 2.6 - r.sau * 2)));
               el.style.zIndex = String(Math.round((1 - r.sau) * 1000));
-              if (i === ht && bongRef.current) {
-                bongRef.current.style.display = '';
-                bongRef.current.style.transform = `translate(${r.x.toFixed(1)}px, ${(r.y - 34 * ty).toFixed(1)}px) translate(-50%, -100%)`;
+              if (i === ht) {
+                // Gấu SVG đứng trên bệ (bx/by = chân bệ), co theo độ sâu; bong bóng ngay trên nhãn.
+                if (gauRef.current) {
+                  gauRef.current.style.display = '';
+                  gauRef.current.style.transform = `translate(${r.bx.toFixed(1)}px, ${r.by.toFixed(1)}px) translate(-50%, -92%) scale(${(ty * 1.05).toFixed(3)})`;
+                }
+                if (bongRef.current) {
+                  bongRef.current.style.display = '';
+                  bongRef.current.style.transform = `translate(${r.x.toFixed(1)}px, ${(r.y - 46 * ty).toFixed(1)}px) translate(-50%, -100%)`;
+                }
               }
             }
-            if (ht >= 0 && ds[ht]?.an && bongRef.current) bongRef.current.style.display = 'none';
+            if (ht >= 0 && ds[ht]?.an) { if (bongRef.current) bongRef.current.style.display = 'none'; if (gauRef.current) gauRef.current.style.display = 'none'; }
             for (let i = 0; i < cs.length; i++) {
               const el = changRef.current[i];
               if (!el) continue;
@@ -174,6 +183,12 @@ export default function LoTrinh3D({
                 </button>
               );
             })}
+            {hienTaiIdx >= 0 && (
+              <div ref={gauRef} className={s.gau} style={{ display: 'none' }}>
+                <span className={s.gauBong} aria-hidden />
+                <GauBip emotion={nut.every((x) => x.xong) ? 'cheer' : 'happy'} size={112} nhinTheoTro={false} />
+              </div>
+            )}
             {hienTaiIdx >= 0 && (
               <div ref={bongRef} className={s.bong} style={{ display: 'none' }}>
                 <MascotBubble character="bip" emotion={nut.every((x) => x.xong) ? 'cheer' : 'happy'} text={loiGau} />

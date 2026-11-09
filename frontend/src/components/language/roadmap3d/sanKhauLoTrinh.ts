@@ -10,10 +10,10 @@
  * Vẽ toon, không bóng đổ thật (bóng mềm giả), cây/mây instanced ⇒ ~150 draw call cho 56 bài.
  */
 import * as THREE from 'three';
-import { dungGau, type Gau } from '../mascot/gau3d/dungGau';
 import type { ChangLoTrinh, NutLoTrinh } from './loTrinhData';
 
-export type ViTriNhan = { n: number; x: number; y: number; sau: number; an: boolean };
+/** `bx/by`: chân bệ (chỗ đặt gấu SVG overlay) — chỉ điền cho bài đang học. */
+export type ViTriNhan = { n: number; x: number; y: number; sau: number; an: boolean; bx: number; by: number };
 export type ViTriChang = { idx: number; x: number; y: number; an: boolean };
 
 export interface SanKhauLoTrinh {
@@ -243,17 +243,10 @@ export function taoSanKhauLoTrinh(canvas: HTMLCanvasElement, o: {
   veMay(0);
   scene.add(may);
 
-  /* ── Gấu Bíp ── */
-  const gau: Gau = dungGau({ variant: 'bip', giamChuyenDong: o.giamChuyenDong });
-  gau.nhom.scale.setScalar(0.5);
-  scene.add(gau.nhom);
-  let gauDich = new THREE.Vector3();
+  /* ── Vòng nhịp ở bài đang học (gấu Bíp là SVG overlay do React đặt theo `bx/by`) ── */
   const datGau = () => {
     const i = Math.max(0, nut.findIndex((x) => x.hienTai));
-    gauDich = viTri[i].clone(); gauDich.y += 0.23 + 0.76; // đứng trên bệ (bóng ở y=-1.52×0.5)
-    gau.nhom.position.copy(gauDich);
     vongHienTai.position.copy(viTri[i]); vongHienTai.position.y += 0.26;
-    gau.datCamXuc(nut.every((x) => x.xong) ? 'cheer' : 'happy');
   };
 
   const capNhatNut = (moi: NutLoTrinh[]) => {
@@ -267,7 +260,6 @@ export function taoSanKhauLoTrinh(canvas: HTMLCanvasElement, o: {
     datGau();
   };
   capNhatNut(nut);
-  gau.vay();
 
   /* ── Máy quay ── */
   let tienDo = 0, tienDoMuon = 0;
@@ -341,7 +333,7 @@ export function taoSanKhauLoTrinh(canvas: HTMLCanvasElement, o: {
   doKhung();
 
   /* ── Chiếu nhãn ── */
-  const nhanRa: ViTriNhan[] = nut.map((x) => ({ n: x.n, x: 0, y: 0, sau: 0, an: true }));
+  const nhanRa: ViTriNhan[] = nut.map((x) => ({ n: x.n, x: 0, y: 0, sau: 0, an: true, bx: 0, by: 0 }));
   const changRa: ViTriChang[] = tamChang.map((_, i) => ({ idx: i, x: 0, y: 0, an: true }));
   const chieu = () => {
     const w = wCu, h = hCu;
@@ -353,6 +345,10 @@ export function taoSanKhauLoTrinh(canvas: HTMLCanvasElement, o: {
       tmp.project(camera);
       r.an = tmp.z > 1 || tmp.x < -1.1 || tmp.x > 1.1 || tmp.y < -1.1 || tmp.y > 1.1;
       r.x = (tmp.x * 0.5 + 0.5) * w; r.y = (-tmp.y * 0.5 + 0.5) * h; r.sau = tmp.z;
+      if (nut[i].hienTai) {
+        tmp.copy(viTri[i]); tmp.y += 0.3; tmp.project(camera);
+        r.bx = (tmp.x * 0.5 + 0.5) * w; r.by = (-tmp.y * 0.5 + 0.5) * h;
+      }
     }
     for (let i = 0; i < tamChang.length; i++) {
       const r = changRa[i];
@@ -383,13 +379,9 @@ export function taoSanKhauLoTrinh(canvas: HTMLCanvasElement, o: {
       veMay(t);
       vongHienTai.scale.setScalar(1 + Math.sin(t * 3) * 0.06);
       (vongHienTai.material as THREE.MeshBasicMaterial).opacity = 0.6 + Math.sin(t * 3) * 0.3;
-      gau.nhom.position.y = gauDich.y;
     }
-    const gauDoi = gau.capNhat(dt, { mieng: -1, dangNoi: false, nhinX: Math.sin(t * 0.4) * 0.4, nhinY: 0.1 });
-    // Gấu quay mặt về máy quay một chút.
-    gau.nhom.rotation.y = Math.atan2(camera.position.x - gau.nhom.position.x, camera.position.z - gau.nhom.position.z) * 0.6;
 
-    if (!dangDoi && !gauDoi && !cham) { if (yenTu++ > 60) return; } else yenTu = 0;
+    if (!dangDoi && !cham) { if (yenTu++ > 60) return; } else yenTu = 0;
     renderer.render(scene, camera);
     chieu();
   };
@@ -412,7 +404,6 @@ export function taoSanKhauLoTrinh(canvas: HTMLCanvasElement, o: {
       canvas.removeEventListener('pointermove', onMove);
       canvas.removeEventListener('pointerup', onUp);
       canvas.removeEventListener('pointercancel', onUp);
-      gau.huy();
       scene.traverse((ob) => {
         if (ob instanceof THREE.Mesh) {
           ob.geometry?.dispose?.();

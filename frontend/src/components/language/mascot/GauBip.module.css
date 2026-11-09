@@ -1,0 +1,121 @@
+/*
+ * Chuyển động của gấu Bíp (GauBip.tsx) — thuần CSS trên các nhóm SVG.
+ * Không dùng framer-motion cho SVG: bản 11 chỉ ghi transform sau khi đo getBBox lúc mount, và ở đây nó không đo
+ * ⇒ mọi rotate/scale trên <g> bị bỏ. CSS transform trên SVG cần `transform-box: fill-box` để gốc xoay đúng.
+ * Đơn vị px trong translate = đơn vị user của viewBox (200×200), nên số không phụ thuộc cỡ hiển thị.
+ */
+.svg { display: block; overflow: visible; }
+
+/* ── Thân (gốc: giữa đáy) ── */
+.than { transform-box: fill-box; transform-origin: 50% 96%; transition: transform .55s cubic-bezier(.34, 1.45, .64, 1); }
+.than[data-cam="happy"] { animation: tho 2.8s ease-in-out infinite; }
+.than[data-cam="cheer"] { animation: nhay 2.9s ease-out infinite; }
+.than[data-cam="sad"] { transform: translateY(5px) rotate(-4deg) scale(1.03, .96); }
+.than[data-cam="think"] { transform: rotate(7deg); }
+.than[data-cam="surprised"] { animation: giat .6s ease-out 1 forwards; }
+.than[data-cam="sleep"] { animation: thoNgu 4s ease-in-out infinite; }
+@keyframes tho {
+  0%, 100% { transform: translateY(0) scale(1, 1); }
+  50% { transform: translateY(-2.5px) scale(.985, 1.025); }
+}
+@keyframes nhay {
+  0% { transform: translateY(0) scale(1, 1) rotate(0); }
+  8% { transform: translateY(-28px) scale(.93, 1.12) rotate(-5deg); }
+  18% { transform: translateY(0) scale(1.07, .9) rotate(5deg); }
+  26% { transform: translateY(-16px) scale(.95, 1.08) rotate(-3deg); }
+  34% { transform: translateY(0) scale(1.03, .95) rotate(2deg); }
+  40% { transform: translateY(-6px) scale(.99, 1.03) rotate(0); }
+  46%, 100% { transform: translateY(0) scale(1, 1) rotate(0); }
+}
+@keyframes giat {
+  0% { transform: translate(0, 0) scale(1, 1); }
+  45% { transform: translate(10px, -16px) scale(.9, 1.14) rotate(3deg); }
+  100% { transform: translate(7px, 0) scale(1, 1) rotate(0); }
+}
+@keyframes thoNgu {
+  0%, 100% { transform: translateY(6px) rotate(10deg) scale(1, 1); }
+  50% { transform: translateY(7.5px) rotate(10deg) scale(1, 1.02); }
+}
+
+/* ── Tai (gốc: đáy tai, dính vào đầu) ── */
+.tai { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .45s cubic-bezier(.34, 1.45, .64, 1); }
+.than[data-cam="sad"] .tai, .than[data-cam="sleep"] .tai { transform: translateY(6px); }
+.than[data-cam="happy"] .tai { animation: ve 4.5s ease-in-out infinite; }
+.than[data-cam="happy"] .taiP { animation-delay: .25s; }
+@keyframes ve { 0%, 80%, 92%, 100% { transform: rotate(0); } 86% { transform: rotate(-7deg); } }
+
+/* ── Tay (gốc: vai = đỉnh mẩu tay) ── */
+.tayT, .tayP { transform-box: fill-box; transition: transform .5s cubic-bezier(.34, 1.5, .64, 1); }
+.tayT { transform-origin: 60% 8%; }
+.tayP { transform-origin: 40% 8%; }
+.than[data-cam="cheer"] .tayP { animation: mungP .6s ease-in-out infinite alternate; }
+.than[data-cam="cheer"] .tayT { animation: mungT .6s ease-in-out infinite alternate; }
+.than[data-cam="think"] .tayP { transform: rotate(100deg); }
+.than[data-cam="surprised"] .tayP { transform: rotate(-60deg); }
+.than[data-cam="surprised"] .tayT { transform: rotate(60deg); }
+.than[data-cam="sad"] .tayT { transform: rotate(-8deg); }
+.than[data-cam="sad"] .tayP { transform: rotate(8deg); }
+.tayP.vay { animation: vay 1.6s ease-in-out 1 !important; }
+@keyframes mungP { from { transform: rotate(-130deg); } to { transform: rotate(-150deg); } }
+@keyframes mungT { from { transform: rotate(130deg); } to { transform: rotate(150deg); } }
+@keyframes vay {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-135deg); }
+  40% { transform: rotate(-110deg); }
+  60% { transform: rotate(-145deg); }
+  80% { transform: rotate(-110deg); }
+}
+
+/* ── Mắt ── */
+.mat { transform-box: fill-box; transform-origin: 50% 50%; transition: transform .1s ease, opacity .12s ease; }
+.mat[data-kieu="to"] { transform: scale(1.22); }
+.mat[data-kieu="buon"] { transform: scaleY(.72); }
+.mat[data-nham="1"] { transform: scaleY(.08); }
+.matMo { transition: opacity .12s ease; }
+
+/* ── Bóng dưới chân ── */
+.bong { transform-box: fill-box; transform-origin: 50% 50%; }
+.than[data-cam="cheer"] ~ .bong, .bong[data-cam="cheer"] { animation: bongNhay 2.9s ease-out infinite; }
+@keyframes bongNhay {
+  0%, 46%, 100% { transform: scaleX(1); opacity: .13; }
+  8% { transform: scaleX(.76); opacity: .08; }
+  18% { transform: scaleX(1.02); opacity: .14; }
+  26% { transform: scaleX(.86); opacity: .1; }
+}
+
+/* ── Hiệu ứng ── */
+.sao { transform-box: view-box; animation: saoBay 2.9s ease-out infinite; }
+@keyframes saoBay {
+  0% { transform: translate(100px, 90px) scale(.4) rotate(0); opacity: 1; }
+  12% { transform: translate(calc(100px + var(--dx) * .7), calc(80px + var(--dy) * .7)) scale(1.2) rotate(90deg); opacity: 1; }
+  30%, 100% { transform: translate(calc(100px + var(--dx)), calc(80px + var(--dy))) scale(.9) rotate(160deg); opacity: 0; }
+}
+.le { animation: le 1.6s ease-in infinite; }
+.le2 { animation-delay: .8s; }
+@keyframes le {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateY(36px); opacity: 0; }
+}
+.cham { animation: chamNhay 1.1s ease-in-out infinite; }
+@keyframes chamNhay { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.z { animation: zBay 2.4s ease-out infinite; opacity: 0; }
+@keyframes zBay {
+  0% { transform: translate(0, 8px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translate(8px, -30px); opacity: 0; }
+}
+
+.bam { cursor: pointer; transition: transform .15s ease; }
+.bam:active { transform: scale(.94); }
+
+@media (prefers-reduced-motion: reduce) {
+  .than, .tai, .tayT, .tayP, .bong, .sao, .le, .cham, .z { animation: none !important; }
+  .than[data-cam="sleep"] { transform: translateY(6px) rotate(10deg); }
+  .than[data-cam="surprised"] { transform: translate(7px, 0); }
+  .than[data-cam="cheer"] .tayP { transform: rotate(-135deg); }
+  .than[data-cam="cheer"] .tayT { transform: rotate(135deg); }
+  .sao, .le { display: none; }
+  .z, .cham { opacity: .9; }
+}

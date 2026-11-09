@@ -13,8 +13,8 @@ const D = 's5-l21-22';
 
 export const b5l2122 = [
   walkHead(D, 1, 31,
-    'Two documents, two halves. The résumé half ends with a list of nine things you must NOT put on a CV (slide 14); the cover letter half is built on the AIDA formula (slides 24–27) and a three-paragraph anatomy (slide 29).',
-    'Hai văn bản, hai nửa. Nửa CV kết bằng danh sách chín thứ TUYỆT ĐỐI không đưa vào hồ sơ (slide 14); nửa thư xin việc dựng trên công thức AIDA (slide 24–27) và khung ba đoạn (slide 29).'),
+    'Two documents, two halves. The résumé half ends with a list of nine things you must NOT put on a CV (slide 15) and the résumé activity (slide 16); the cover letter half is built on the AIDA formula (slides 25–27) and a three-paragraph anatomy (slides 28–29).',
+    'Hai văn bản, hai nửa. Nửa CV kết bằng danh sách chín thứ TUYỆT ĐỐI không đưa vào hồ sơ (slide 15) và activity tạo CV (slide 16); nửa thư xin việc dựng trên công thức AIDA (slide 25–27) và khung ba đoạn (slide 28–29).'),
 
   slide(D, 1, 'Résumé & Cover Letter — Session V',
     `<p class="y-chinh">🎯 Title slide.</p>
@@ -49,8 +49,8 @@ export const b5l2122 = [
      <p class="meo">💡 Vì thế phần rà văn phong ở Bài 17 mới quan trọng ở đây: trên một trang giấy, động từ bị chôn và chữ độn lấy mất đúng chỗ bạn cần để đưa bằng chứng.</p>`),
 
   slide(D, 5, '1. Résumé',
-    `<p class="y-chinh">🎯 Section divider, repeating the quotation.</p>`,
-    `<p class="y-chinh">🎯 Slide phân mục, nhắc lại câu trích.</p>`),
+    `<p class="y-chinh">🎯 Section divider, repeating the quotation. The picture is a sample one-page résumé template (yellow header with name and job title, a photo, then Profile and Work experience on the left, Contacts, Education and Skills bars on the right).</p>`,
+    `<p class="y-chinh">🎯 Slide phân mục, nhắc lại câu trích. Hình là một mẫu CV một trang (đầu trang vàng ghi tên và chức danh, ảnh, rồi Profile và Work experience bên trái, Contacts, Education và thanh Skills bên phải).</p>`),
 
   slide(D, 6, 'What is a résumé?',
     `<p class="y-chinh">🎯 Three statements, and the metaphor is the deck's own.</p>
@@ -100,7 +100,7 @@ export const b5l2122 = [
        <li><span class="nhan">Hybrid</span> — skills summary on top, chronological history below.</li>
        <li><span class="nhan">Video, infographic and website résumé</span> — for fields where the format itself demonstrates the skill.</li>
      </ul>
-     <p class="pitfall co-tieu-de"><strong>Cảnh báo về loại thứ tư:</strong> a video or infographic CV shows design skill and hides searchable text. If the employer screens by software, an unusual format can remove you before a human sees it.</p>`,
+     <p class="pitfall co-tieu-de"><strong>A warning about the fourth type:</strong> a video or infographic CV shows design skill and hides searchable text. If the employer screens by software, an unusual format can remove you before a human sees it.</p>`,
     `<p class="y-chinh">🎯 Bốn định dạng CV để chọn.</p>
      <ul>
        <li><span class="nhan">Theo thời gian ngược</span> — mới nhất lên trước. Mặc định, và là thứ phần lớn nhà tuyển dụng trông đợi.</li>
@@ -125,7 +125,7 @@ export const b5l2122 = [
      <p><span class="nhan">Experience</span> — dates of employment · job title · employer · employer's location · <strong>job responsibilities stated using action words and keywords</strong>.</p>
      <p><span class="nhan">Activities / honours / special skills</span> — special skills · computer competence · community service · published works · public presentations · military service · organisation memberships · special interests.</p>
      <p><span class="nhan">References</span> — positive, related to the prospective job and its requirements, with complete and easy-to-use contact information <strong>on a separate sheet</strong>. Who: previous employers, instructors.</p>
-     <p class="pitfall co-tieu-de"><strong>"On a separate sheet" có lý do bảo mật:</strong> referees' phone numbers are other people's personal data. Keep them off the document you send to dozens of companies.</p>`,
+     <p class="pitfall co-tieu-de"><strong>"On a separate sheet" is about privacy:</strong> referees' phone numbers are other people's personal data. Keep them off the document you send to dozens of companies.</p>`,
     `<p class="y-chinh">🎯 Ba khối nữa.</p>
      <p><span class="nhan">Kinh nghiệm</span> — thời gian làm việc · chức danh · nơi làm · địa điểm · <strong>mô tả trách nhiệm bằng động từ hành động và từ khoá</strong>.</p>
      <p><span class="nhan">Hoạt động / khen thưởng / kỹ năng đặc biệt</span> — kỹ năng riêng · năng lực tin học · phục vụ cộng đồng · bài viết đã đăng · các buổi trình bày trước công chúng · nghĩa vụ quân sự · thành viên các tổ chức · mối quan tâm riêng.</p>
@@ -214,7 +214,7 @@ export const b5l2122 = [
        <li>Be excited and optimistic about your prospects</li>
        <li>Keep refining — it is an ongoing project</li>
      </ol>
-     <p class="pitfall co-tieu-de"><strong>Tip 8 nối thẳng về Bài 15:</strong> "reflect only the truth" is the eleven ethical points applied to your own history. An exaggerated CV is the same failure as an exaggerated proposal.</p>`,
+     <p class="pitfall co-tieu-de"><strong>Tip 8 links straight back to Lesson 15:</strong> "reflect only the truth" is the eleven ethical points applied to your own history. An exaggerated CV is the same failure as an exaggerated proposal.</p>`,
     `<p class="y-chinh">🎯 Mười lời khuyên.</p>
      <ol class="hai-cot">
        <li>Nhắm 1–2 trang, khổ giấy thư</li>
@@ -243,7 +243,7 @@ export const b5l2122 = [
        <li>Use abbreviations.</li>
        <li>Leave any spelling mistake — absolutely none are acceptable.</li>
      </ul>
-     <p class="pitfall co-tieu-de"><strong>Điều số 2 là điều nghiêm trọng nhất:</strong> a CV is copied, forwarded and stored by people you never meet. A national ID number on it is an identity-theft risk that no job application needs you to take.</p>`,
+     <p class="pitfall co-tieu-de"><strong>Item 2 is the most serious:</strong> a CV is copied, forwarded and stored by people you never meet. A national ID number on it is an identity-theft risk that no job application needs you to take.</p>`,
     `<p class="y-chinh">🎯 Danh sách cấm. <strong>Không được:</strong></p>
      <ul>
        <li>Nêu <strong>tuổi, giới tính, chiều cao, cân nặng</strong>.</li>
@@ -258,41 +258,43 @@ export const b5l2122 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Điều số 2 là nghiêm trọng nhất:</strong> một bản CV bị sao chép, chuyển tiếp và lưu trữ bởi những người bạn chưa từng gặp. Để số căn cước lên đó là rủi ro bị đánh cắp danh tính mà chẳng đơn xin việc nào đòi bạn phải chịu.</p>`),
 
-  slide(D, 16, 'Your résumé: it\'s like online dating',
-    `<p class="y-chinh">🎯 The deck's closing metaphor for the résumé half.</p>
-     <p class="meo">💡 The comparison earns its place: both are a short, self-written summary read quickly by someone deciding whether to spend more time on you. Both fail for the same two reasons — being generic, and being untrue.</p>`,
-    `<p class="y-chinh">🎯 Phép ví von khép lại nửa CV của bộ slide.</p>
-     <p class="meo">💡 So sánh này xứng đáng có chỗ: cả hai đều là bản tự giới thiệu ngắn, được đọc lướt bởi một người đang quyết xem có nên dành thêm thời gian cho bạn không. Và cả hai đều hỏng vì đúng hai lý do — chung chung, và không thật.</p>`),
-
-  slide(D, 17, 'Activity — create your résumé',
-    `<p class="y-chinh">🎯 A graded activity with a full procedure.</p>
-     <p><span class="nhan">Objectives</span> — compile data on your professional and educational skills; assess the main résumé formats and select one; create a first draft.</p>
+  slide(D, 16, 'Your résumé: it\'s like online dating — Activity: create your résumé',
+    `<p class="y-chinh">🎯 The deck's closing metaphor for the résumé half — "Your Résumé: It's Like Online Dating" — on the same slide as the graded activity <strong>ACTIVITY: CREATE YOUR RÉSUMÉ</strong>.</p>
+     <p class="meo">💡 The comparison earns its place: both are a short, self-written summary read quickly by someone deciding whether to spend more time on you. Both fail for the same two reasons — being generic, and being untrue.</p>
+     <p><span class="nhan">Objectives</span> — compile data reflecting your professional and educational skills and accomplishments; assess the main résumé formats and select one that meets your needs; create a first draft of your professional résumé.</p>
      <p><span class="nhan">Directions</span></p>
      <ol>
-       <li>Compile everything: contact information, summary of skills, work and volunteer experience, education and training.</li>
-       <li>Select one of the résumé builder tools listed in the course.</li>
-       <li>Create your résumé following that site's instructions.</li>
-       <li><strong>Save as a PDF file.</strong></li>
-       <li>Follow your instructor's instructions for submitting.</li>
+       <li>Compile all needed information: contact information, a summary of your skills, work and volunteer experience, education and training (intended degree, professional development activities, certificates, internships…). Optionally a job objective, a brief profile, a branding statement, additional accomplishments and other related experiences.</li>
+       <li>Select one of the résumé builder tools listed in the course's Résumé Writing Resources table.</li>
+       <li>Create your résumé following the instructions at your selected site.</li>
+       <li><strong>Save your document as a PDF file.</strong></li>
+       <li>Follow your instructor's instructions on how to submit your work.</li>
      </ol>
      <p class="meo">💡 Step 4 matters technically: a PDF keeps your layout on someone else's computer. A .docx re-flows and can arrive looking broken.</p>`,
-    `<p class="y-chinh">🎯 Hoạt động tính điểm, có quy trình đầy đủ.</p>
-     <p><span class="nhan">Mục tiêu</span> — gom dữ liệu về kỹ năng nghề nghiệp và học vấn; đánh giá các định dạng CV chính rồi chọn một; dựng bản nháp đầu tiên.</p>
+    `<p class="y-chinh">🎯 Phép ví von khép lại nửa CV của bộ slide — "CV của bạn giống như hẹn hò trên mạng" — nằm chung một slide với hoạt động tính điểm <strong>ACTIVITY: CREATE YOUR RÉSUMÉ</strong>.</p>
+     <p class="meo">💡 So sánh này xứng đáng có chỗ: cả hai đều là bản tự giới thiệu ngắn, được đọc lướt bởi một người đang quyết xem có nên dành thêm thời gian cho bạn không. Và cả hai đều hỏng vì đúng hai lý do — chung chung, và không thật.</p>
+     <p><span class="nhan">Mục tiêu</span> — gom dữ liệu phản ánh kỹ năng và thành tích nghề nghiệp, học vấn; đánh giá các định dạng CV chính rồi chọn một cái hợp với bạn; dựng bản nháp đầu tiên của CV.</p>
      <p><span class="nhan">Các bước</span></p>
      <ol>
-       <li>Gom đủ mọi thứ: thông tin liên hệ, tóm tắt kỹ năng, kinh nghiệm làm việc và tình nguyện, học vấn và đào tạo.</li>
-       <li>Chọn một công cụ dựng CV trong danh sách của môn học.</li>
-       <li>Tạo CV theo hướng dẫn của trang đó.</li>
+       <li>Gom đủ thông tin: liên hệ, tóm tắt kỹ năng, kinh nghiệm làm việc và tình nguyện, học vấn và đào tạo (bằng cấp dự định, hoạt động phát triển chuyên môn, chứng chỉ, thực tập…). Có thể thêm mục tiêu nghề nghiệp, hồ sơ ngắn, câu định vị bản thân, thành tích khác và kinh nghiệm liên quan.</li>
+       <li>Chọn một công cụ dựng CV trong bảng Résumé Writing Resources của môn học.</li>
+       <li>Tạo CV theo hướng dẫn của trang đã chọn.</li>
        <li><strong>Lưu thành file PDF.</strong></li>
        <li>Nộp theo hướng dẫn của giảng viên.</li>
      </ol>
      <p class="meo">💡 Bước 4 quan trọng về mặt kỹ thuật: PDF giữ nguyên bố cục trên máy người khác. File .docx sẽ tự giãn dòng và có thể tới nơi trong tình trạng vỡ hết.</p>`),
 
-  slide(D, 18, '2. Cover letter',
-    `<p class="y-chinh">🎯 Second half of the deck begins.</p>
+  slide(D, 17, '2. Cover letter',
+    `<p class="y-chinh">🎯 Second half of the deck begins. Beside the divider is a sample full-page cover letter: sender block and date, recipient block, salutation, five short paragraphs (the advertised entry-level job, experience, skills, grade-point average and major, a request for a meeting), "Thank you for your consideration", "Sincerely", the name, and a numbered list of enclosures (résumé, portfolio, showreel).</p>
+     <p class="meo">💡 Look at the closing paragraph: it asks for a meeting and gives a way to arrange one — the Action stage of AIDA (slide 27) in a real letter.</p>`,
+    `<p class="y-chinh">🎯 Nửa sau của bộ slide bắt đầu. Cạnh slide phân mục là một lá thư xin việc mẫu trọn trang: khối người gửi và ngày, khối người nhận, lời chào, năm đoạn ngắn (vị trí mới vào nghề được đăng tuyển, kinh nghiệm, kỹ năng, điểm trung bình và chuyên ngành, đề nghị một buổi gặp), "Thank you for your consideration", "Sincerely", tên, và danh sách tài liệu gửi kèm đánh số (CV, portfolio, showreel).</p>
+     <p class="meo">💡 Để ý đoạn cuối: nó đề nghị một buổi gặp và cho cách để hẹn — chính là giai đoạn Action của AIDA (slide 27) trong một lá thư thật.</p>`),
+
+  slide(D, 18, 'Cover letters matter',
+    `<p class="y-chinh">🎯 A quotation beside a photo of a tall pile of papers (credited "woodleywonderworks"):</p>
      <p>"Cover letters matter. When you have to go through a pile of them, they are probably <strong>more important than the résumé itself</strong>."</p>
      <p class="meo">💡 The reason is sorting: when fifty résumés list similar degrees, the letter is the only part that says why <em>this</em> applicant wants <em>this</em> job.</p>`,
-    `<p class="y-chinh">🎯 Nửa sau của bộ slide bắt đầu.</p>
+    `<p class="y-chinh">🎯 Một câu trích cạnh ảnh chồng giấy cao (ghi nguồn "woodleywonderworks"):</p>
      <p>"Thư xin việc rất quan trọng. Khi phải lật qua cả chồng hồ sơ, có lẽ nó còn <strong>quan trọng hơn cả bản CV</strong>."</p>
      <p class="meo">💡 Lý do nằm ở khâu sàng lọc: khi năm mươi bản CV đều liệt kê những tấm bằng na ná nhau, lá thư là phần duy nhất nói được vì sao <em>ứng viên này</em> muốn <em>công việc này</em>.</p>`),
 
@@ -358,14 +360,14 @@ export const b5l2122 = [
 
   slide(D, 23, 'College graduate cover letter example',
     `<p class="y-chinh">🎯 A second example, for a graduate rather than a current student.</p>
-     <p class="meo">💡 Compare the two: the student letter leans on coursework and activities, the graduate letter on the degree and any internship. Both use the same three-paragraph shape from slide 29.</p>`,
+     <p class="meo">💡 Compare the two: the student letter leans on coursework and activities, the graduate letter on the degree and any internship. Both use the same three-paragraph shape from slide 28.</p>`,
     `<p class="y-chinh">🎯 Mẫu thứ hai, dành cho người đã tốt nghiệp thay vì sinh viên đang học.</p>
-     <p class="meo">💡 Hãy so hai mẫu: thư sinh viên dựa vào môn học và hoạt động, thư cử nhân dựa vào tấm bằng và kỳ thực tập. Cả hai đều dùng chung khuôn ba đoạn ở slide 29.</p>`),
+     <p class="meo">💡 Hãy so hai mẫu: thư sinh viên dựa vào môn học và hoạt động, thư cử nhân dựa vào tấm bằng và kỳ thực tập. Cả hai đều dùng chung khuôn ba đoạn ở slide 28.</p>`),
 
   slide(D, 24, 'LinkedIn as a resource',
-    `<p class="y-chinh">🎯 The slide points to LinkedIn for articles, experts and jobs.</p>
+    `<p class="y-chinh">🎯 The slide is titled "LinkedIn Cover Letter" and carries one line: "This site contains articles, experts, jobs, and more: get all the professional insights you need on LinkedIn", with the link https://www.linkedin.com/.</p>
      <p class="meo">💡 This is the "web page profile" from Lesson 20 slide 11 made concrete. Treat the profile as a living résumé: it is the version employers find without you applying.</p>`,
-    `<p class="y-chinh">🎯 Slide giới thiệu LinkedIn như nguồn bài viết, chuyên gia và việc làm.</p>
+    `<p class="y-chinh">🎯 Slide có tiêu đề "LinkedIn Cover Letter" và đúng một dòng: trang này có bài viết, chuyên gia, việc làm và hơn thế — mọi hiểu biết nghề nghiệp bạn cần trên LinkedIn, kèm link https://www.linkedin.com/.</p>
      <p class="meo">💡 Đây chính là "hồ sơ cá nhân trên web" ở slide 11 Bài 20, được cụ thể hoá. Hãy coi hồ sơ đó như một bản CV sống: đó là phiên bản nhà tuyển dụng tìm thấy mà bạn không cần nộp đơn.</p>`),
 
   slide(D, 25, 'An application letter achieves: AIDA',
@@ -413,7 +415,7 @@ export const b5l2122 = [
        <li>Provide easy-to-use contact information.</li>
        <li>Suggest scheduling alternatives.</li>
      </ul>
-     <p class="pitfall co-tieu-de"><strong>Không có phần Action thì lá thư chỉ là lời giới thiệu:</strong> the same failure as an elevator speech without a call for action (Lesson 15 slide 15).</p>`,
+     <p class="pitfall co-tieu-de"><strong>Without the Action stage the letter is only an introduction:</strong> the same failure as an elevator speech without a call for action (Lesson 15 slide 15).</p>`,
     `<p class="y-chinh">🎯 Hai giai đoạn cuối.</p>
      <p><span class="nhan">Mong muốn</span></p>
      <ul>
@@ -460,8 +462,8 @@ export const b5l2122 = [
     `<p class="y-chinh">🎯 Viết một lá thư xin việc: nghĩ xem bạn muốn làm ở đâu, công việc nào bạn thật sự thích và đủ sức làm. Viết nháp, hoàn thiện, rồi chia sẻ với bạn học.</p>
      <p class="meo">💡 Để ý cách diễn đạt — "thích <em>và</em> đủ sức làm". Lá thư nhắm vào công việc bạn không làm nổi sẽ trượt ở tiêu chí Tính chính trực ở slide 21, dù viết hay tới đâu.</p>`),
 
-  slide(D, 31, 'End of Lessons 21–22',
-    `<p class="y-chinh">🎯 Closing slide.</p>
+  slide(D, 31, 'Q&A',
+    `<p class="y-chinh">🎯 Closing slide: two speech bubbles "Q" and "A".</p>
      <p><span class="nhan">Self-check</span></p>
      <ol>
        <li>Four résumé formats, and when the functional one helps?</li>
@@ -469,7 +471,7 @@ export const b5l2122 = [
        <li>AIDA — what belongs in the Action stage?</li>
        <li>The three paragraphs of a cover letter, and what closes the third?</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Slide kết.</p>
+    `<p class="y-chinh">🎯 Slide kết: hai bong bóng thoại "Q" và "A".</p>
      <p><span class="nhan">Tự kiểm</span></p>
      <ol>
        <li>Bốn định dạng CV, và khi nào định dạng theo chức năng có ích?</li>

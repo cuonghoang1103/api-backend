@@ -13,8 +13,8 @@ const D = 's3-l10-11';
 
 export const b3l1011 = [
   walkHead(D, 1, 36,
-    'Two lessons, one deck. Leader vs manager (slides 5–8) and the six cultural dimensions (slides 28–34) are the two blocks worth memorising; the homework list on slide 21 names five leadership theories the syllabus expects you to have read.',
-    'Hai bài trong một bộ slide. Lãnh đạo vs quản lý (slide 5–8) và sáu chiều văn hoá (slide 28–34) là hai khối đáng thuộc; danh sách bài về nhà ở slide 21 gọi tên năm lý thuyết lãnh đạo mà syllabus trông đợi bạn đã đọc.'),
+    'Two lessons, one deck. Leader vs manager (slides 6–9) and the six cultural dimensions (slides 27–33) are the two blocks worth memorising; the homework list on slide 19 names five leadership theories the syllabus expects you to have read.',
+    'Hai bài trong một bộ slide. Lãnh đạo vs quản lý (slide 6–9) và sáu chiều văn hoá (slide 27–33) là hai khối đáng thuộc; danh sách bài về nhà ở slide 19 gọi tên năm lý thuyết lãnh đạo mà syllabus trông đợi bạn đã đọc.'),
 
   slide(D, 1, 'Session III — Group & Team Theory (cont.)',
     `<p class="y-chinh">🎯 Title slide continuing Session III.</p>`,
@@ -110,6 +110,7 @@ export const b3l1011 = [
        <li>The leadership process itself</li>
        <li>The consequences (outcomes)</li>
      </ol>
+     <p><span class="nhan">The diagram</span> (OpenStax, "The Leadership Process"): Leader, Followers and Context at the corners, the leadership process in the middle, and Consequence (e.g. suspicion, trust, dislike, affection) feeding back into the relationship.</p>
      <p class="meo">💡 Any explanation of a leadership failure that names only component 1 is incomplete by this model.</p>`,
     `<p class="y-chinh">🎯 Lãnh đạo là một quá trình: mối quan hệ trao đổi phức tạp, động, được dựng <strong>theo thời gian</strong> giữa người dẫn dắt và người theo, và giữa người dẫn dắt với cả nhóm.</p>
      <p><span class="nhan">Năm thành phần then chốt của mối quan hệ làm việc này</span></p>
@@ -120,6 +121,7 @@ export const b3l1011 = [
        <li>Bản thân quá trình lãnh đạo</li>
        <li>Hệ quả (kết quả)</li>
      </ol>
+     <p><span class="nhan">Sơ đồ bên phải</span> (OpenStax, "The Leadership Process"): người lãnh đạo, người theo và bối cảnh ở các góc, quá trình lãnh đạo ở giữa, còn hệ quả (ví dụ: nghi ngờ, tin tưởng, không ưa, quý mến) quay ngược lại tác động vào mối quan hệ.</p>
      <p class="meo">💡 Mọi lời giải thích cho một thất bại lãnh đạo mà chỉ nêu thành phần số 1 đều là thiếu, theo mô hình này.</p>`),
 
   slide(D, 11, 'The leader',
@@ -346,6 +348,7 @@ export const b3l1011 = [
        <li>Long-term orientation</li>
        <li>Time orientation</li>
      </ol>
+     <p><span class="nhan">The chart on the slide</span> compares Brazil, China, Germany and the United States on Hofstede's six model dimensions (power distance, individualism, masculinity, uncertainty avoidance, long-term orientation, indulgence) — note the chart's sixth bar is indulgence, while the slide's sixth bullet is time orientation (Hall).</p>
      <p class="meo">💡 This is CQ9.1 in the syllabus. Learn the six names first; the country numbers are illustrations, not the point.</p>`,
     `<p class="y-chinh">🎯 Sáu chiều, mỗi chiều một slide kèm biểu đồ bốn quốc gia.</p>
      <ol>
@@ -356,6 +359,7 @@ export const b3l1011 = [
        <li>Định hướng dài hạn</li>
        <li>Định hướng thời gian</li>
      </ol>
+     <p><span class="nhan">Biểu đồ trên slide</span> so Brazil, Trung Quốc, Đức và Mỹ trên sáu chiều của mô hình Hofstede (khoảng cách quyền lực, chủ nghĩa cá nhân, nam tính, né tránh bất định, định hướng dài hạn, indulgence — sự tự do hưởng thụ) — để ý cột thứ sáu của biểu đồ là indulgence, còn gạch đầu dòng thứ sáu của slide là định hướng thời gian (của Hall).</p>
      <p class="meo">💡 Đây chính là CQ9.1 trong syllabus. Hãy thuộc sáu cái tên trước; các con số theo quốc gia chỉ là minh hoạ, không phải trọng tâm.</p>`),
 
   slide(D, 28, 'Power distance',

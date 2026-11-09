@@ -52,20 +52,20 @@ export default {
 <ul>
 <li><strong>Two separate skills, not one.</strong> <em>Naming</em> is about the label on a single file; <em>hierarchy</em> is about where that file sits. You can have perfect names inside a single chaotic folder, or a beautiful tree full of files called <code>Document1.docx</code>. The slide asks for both.</li>
 <li><strong>Why the MOOC puts this next to plagiarism.</strong> Most unintentional plagiarism starts as a filing failure: you saved a downloaded PDF's text into your draft, lost track of which words were yours, and submitted it. Good naming is the cheapest anti-plagiarism tool you own.</li>
-<li><strong>The convention that survives four years.</strong> <code>COURSE_Topic_Author_Year_vN</code> — for example <code>SSL101c_plagiarism_Greetham_2013_v2.pdf</code>. It sorts predictably, it is searchable by any of its parts, and it still tells you what the file is two semesters later.</li>
+<li><strong>The convention is already on slide 55 (3.3a, File Naming).</strong> References: <code>Author surname_Year_Keywords</code> — for example <code>Greetham_2013_plagiarism.pdf</code>. Your own material: date first, written YYYYMMDD, plus the course code and key words — for example <code>20260315_SSL101c_draft2.docx</code>. Both sort predictably, are searchable by any of their parts, and still tell you what the file is two semesters later.</li>
 <li><strong>Applied at FPTU.</strong> You take 6–8 subjects a semester, each with slides, labs, assignments and reference PDFs. A flat <code>Downloads</code> folder is unusable by week 4. Build the tree in week 1, before there is anything in it — after week 6 nobody ever goes back and reorganises.</li>
-<li><strong>Digital literacy, measured.</strong> Mooc 1 defines digital literacy as the ability to find, evaluate, manage and use information. Managing is the step students skip, and it is the one that costs hours later when an assignment asks "where did this figure come from?".</li>
+<li><strong>Information literacy, measured.</strong> Slide 13 (adapted from Bundy, 2004) lists seven steps — identify a need, access, search, evaluate, select, use, and <strong>store</strong> information. Storing is the last step and the one students skip, and it is the one that costs hours later when an assignment asks "where did this figure come from?".</li>
 </ul>
-<p class="meo">💡 Exam hook: the slide number <strong>3.3b</strong> tells you this belongs to section 3.3 <em>Managing information</em>. Section 3.3a (earlier) covered evaluating and storing; 3.3b is the practical half — folders and file names.</p>`,
+<p class="meo">💡 Exam hook: the slide number <strong>3.3b</strong> tells you this belongs to section 3.3 <em>Managing information</em>. Section 3.3a (slides 54–55) covered file naming; 3.3b adds folders — yet its objectives slide still lists both outcomes.</p>`,
         `<p class="y-chinh">🎯 Slide mở đầu một mục, với hai mục tiêu học tập: <strong>dùng quy ước đặt tên file để dán nhãn thông tin hiệu quả</strong>, và <strong>dùng cây thư mục phân cấp để lưu trữ thông tin</strong>. Tìm lại được một nguồn cũng là một phần của nghiên cứu, không phải việc hành chính.</p>
 <ul>
 <li><strong>Hai kỹ năng RIÊNG, không phải một.</strong> <em>Đặt tên</em> nói về cái nhãn dán lên một file; <em>phân cấp</em> nói về chỗ file đó nằm. Bạn có thể đặt tên hoàn hảo mà ném hết vào một thư mục hỗn độn, hoặc dựng một cây rất đẹp nhưng bên trong toàn <code>Document1.docx</code>. Slide đòi CẢ HAI.</li>
 <li><strong>Vì sao MOOC xếp phần này ngay cạnh đạo văn.</strong> Phần lớn đạo văn KHÔNG CỐ Ý bắt đầu từ một lỗi lưu trữ: bạn chép chữ trong PDF tải về vào bản nháp, rồi không còn nhớ đoạn nào là của mình, và nộp. Đặt tên tử tế là công cụ chống đạo văn rẻ nhất bạn có.</li>
-<li><strong>Quy ước sống được bốn năm.</strong> <code>MAMON_ChuDe_TacGia_Nam_vN</code> — ví dụ <code>SSL101c_daovan_Greetham_2013_v2.pdf</code>. Nó sắp xếp đoán được, tìm được theo bất kỳ mảnh nào, và hai học kỳ sau vẫn tự khai nó là cái gì.</li>
+<li><strong>Quy ước đã có sẵn ở slide 55 (3.3a, File Naming).</strong> Tài liệu tham khảo: <code>HọTácGiả_Năm_TừKhoá</code> — ví dụ <code>Greetham_2013_plagiarism.pdf</code>. Tài liệu của chính bạn: ngày đứng ĐẦU, viết YYYYMMDD, kèm mã môn và từ khoá — ví dụ <code>20260315_SSL101c_draft2.docx</code>. Cả hai sắp xếp đoán được, tìm được theo bất kỳ mảnh nào, và hai học kỳ sau vẫn tự khai nó là cái gì.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Mỗi kỳ bạn học 6–8 môn, môn nào cũng có slide, lab, assignment và PDF tham khảo. Thư mục <code>Downloads</code> phẳng lì thì tới tuần 4 là hết dùng được. Dựng cây ngay TUẦN 1, lúc còn chưa có gì trong đó — sau tuần 6 thì không ai quay lại sắp xếp nữa.</li>
-<li><strong>Digital literacy, đo được.</strong> Mooc 1 định nghĩa năng lực số là khả năng TÌM · ĐÁNH GIÁ · QUẢN LÝ · SỬ DỤNG thông tin. "Quản lý" là bước sinh viên hay bỏ qua nhất, và là bước trả giá đắt nhất khi assignment hỏi "cái biểu đồ này lấy từ đâu?".</li>
+<li><strong>Information literacy, đo được.</strong> Slide 13 (phỏng theo Bundy, 2004) kê bảy bước — nhận ra nhu cầu, tiếp cận, tìm kiếm, đánh giá, chọn lọc, sử dụng, và <strong>LƯU TRỮ</strong> thông tin. "Lưu trữ" là bước cuối, là bước sinh viên hay bỏ qua nhất, và là bước trả giá đắt nhất khi assignment hỏi "cái biểu đồ này lấy từ đâu?".</li>
 </ul>
-<p class="meo">💡 Mẹo thi: số hiệu <strong>3.3b</strong> cho biết slide thuộc mục 3.3 <em>Managing information</em>. Mục 3.3a (trước đó) nói về đánh giá và lưu trữ; 3.3b là nửa thực hành — thư mục và tên file.</p>`],
+<p class="meo">💡 Mẹo thi: số hiệu <strong>3.3b</strong> cho biết slide thuộc mục 3.3 <em>Managing information</em>. Mục 3.3a (slide 54–55) nói về đặt tên tệp; 3.3b thêm phần thư mục — nhưng slide mục tiêu của nó vẫn in cả hai mục tiêu.</p>`],
 
       [57, 'Summary: Folder Hierarchies — Clear, Concise, Consistent, Chronological',
         `<p class="y-chinh">🎯 The four rules for a folder hierarchy, and they all start with C — this is a <strong>memorise-the-list</strong> slide, exactly the shape a multiple-choice question likes.</p>
@@ -79,7 +79,7 @@ export default {
 <ul>
 <li><strong>Consistency beats cleverness.</strong> A mediocre convention applied every single time is worth more than a brilliant one applied half the time. The computer sorts by exact characters, so <code>Spring 2026</code> and <code>2026 Spring</code> land in completely different places.</li>
 <li><strong>Chronological first, subject second.</strong> Time is the only dimension that never collides — you take SSL101c once, in one semester. Put year/semester at the top and the tree never needs restructuring.</li>
-<li><strong>Dates inside file names go YYYY-MM-DD.</strong> <code>2026-03-15_draft.docx</code> sorts correctly by name; <code>15-3-2026</code> and <code>Mar15</code> do not. This is not on the slide but it is the single most useful consequence of "consistent".</li>
+<li><strong>Dates inside file names: date first, YYYYMMDD.</strong> That rule is on slide 55 (for your own material). <code>20260315_draft.docx</code> sorts correctly by name; <code>15-3-2026</code> and <code>Mar15</code> do not. It is "consistent" applied to dates.</li>
 <li><strong>Where it pays off at FPTU.</strong> Group projects (SWP391, SWR302) where four people push files to one shared Drive. Agree on the convention in the first meeting or you will spend the last night before the deadline hunting for the newest version.</li>
 </ul>
 <p class="pitfall">⚠️ Trap: the four Cs describe a <strong>folder hierarchy</strong>, and slide 56 separately asked for <strong>file-naming conventions</strong>. A question may ask which of the four is about "organising by semester and year" — that is <em>Chronological</em>, not <em>Consistent</em>.</p>`,
@@ -94,7 +94,7 @@ export default {
 <ul>
 <li><strong>Nhất quán thắng thông minh.</strong> Một quy ước tầm thường mà áp dụng LẦN NÀO CŨNG THẾ thì giá trị hơn một quy ước tuyệt vời áp dụng được nửa số lần. Máy tính sắp xếp theo đúng từng ký tự, nên <code>Spring 2026</code> và <code>2026 Spring</code> rơi vào hai chỗ hoàn toàn khác nhau.</li>
 <li><strong>Thời gian trước, môn học sau.</strong> Thời gian là chiều duy nhất không bao giờ đụng nhau — bạn học SSL101c đúng một lần, trong đúng một kỳ. Đặt năm/kỳ ở tầng trên cùng thì cây không bao giờ phải dựng lại.</li>
-<li><strong>Ngày tháng trong tên file thì viết YYYY-MM-DD.</strong> <code>2026-03-15_draft.docx</code> sắp xếp đúng theo tên; <code>15-3-2026</code> và <code>15Thang3</code> thì không. Điều này không có trên slide nhưng là hệ quả hữu ích nhất của chữ "consistent".</li>
+<li><strong>Ngày tháng trong tên file: ngày đứng đầu, viết YYYYMMDD.</strong> Luật này có ở slide 55 (cho tài liệu của chính bạn). <code>20260315_draft.docx</code> sắp xếp đúng theo tên; <code>15-3-2026</code> và <code>15Thang3</code> thì không. Đó là chữ "consistent" áp vào ngày tháng.</li>
 <li><strong>Nó ăn tiền ở đâu tại FPTU.</strong> Đồ án nhóm (SWP391, SWR302) khi bốn người cùng đẩy file lên một Drive chung. Thống nhất quy ước ngay buổi họp đầu, không thì đêm cuối trước hạn nộp sẽ ngồi mò xem bản nào mới nhất.</li>
 </ul>
 <p class="pitfall">⚠️ Bẫy: bốn chữ C mô tả <strong>CÂY THƯ MỤC</strong>, còn slide 56 hỏi riêng về <strong>QUY ƯỚC ĐẶT TÊN FILE</strong>. Đề có thể hỏi cái nào nói về "sắp theo học kỳ và năm" — đó là <em>Chronological</em>, KHÔNG phải <em>Consistent</em>.</p>`],
@@ -478,7 +478,7 @@ export default {
 <li><strong>"In the academic context" is a real qualifier.</strong> Reusing a colleague's slide deck at work with a nod of thanks is normal; reusing a classmate's paragraph in an assignment is misconduct. The rules are stricter here because the university is certifying <em>your</em> ability, not the team's output.</li>
 <li><strong>Consequences at FPTU, concretely.</strong> Zero on the assessment, a formal record, possible failure of the subject, and for repeat cases disciplinary action up to expulsion. Unlike a low mark, an academic-integrity record follows you.</li>
 <li><strong>Why it is worth real effort here.</strong> Module 4 is the natural home of exam questions: definitions, categories, and a list of what must be referenced — all crisp, all testable. Sections 4.1 and 4.2 alone are likely worth several marks of the 60-minute paper.</li>
-<li><strong>The module has three parts.</strong> 4.1 avoiding plagiarism (slides 72–77) · 4.2 referencing and attributing sources (78–82) · 4.3 incorporating sources — quoting, paraphrasing, summarising (from slide 83 on, outside this walkthrough's range but previewed here where it matters).</li>
+<li><strong>The module has four parts.</strong> 4.1 avoiding plagiarism (slides 72–77) · 4.2 referencing and attributing sources (78–82) · 4.3 incorporating sources — quoting, paraphrasing, summarising (83–90) · 4.4 referencing software (91–93). 4.3 and 4.4 are outside this walkthrough's range but previewed here where it matters.</li>
 </ul>
 <p class="meo">💡 The practical rule that covers 95% of cases, and you can carry it into every exam question: <strong>if the idea or the words are not yours, name whose they are</strong>.</p>`,
         `<p class="y-chinh">🎯 Một module mới mở ra — module 4, và là module nhiều rủi ro nhất của Mooc 1. Hai mục tiêu: <strong>hiểu ĐỊNH NGHĨA đạo văn</strong>, và <strong>hiểu HẬU QUẢ của đạo văn trong bối cảnh học thuật</strong>.</p>
@@ -487,7 +487,7 @@ export default {
 <li><strong>"Trong bối cảnh học thuật" là một giới hạn THẬT.</strong> Dùng lại bộ slide của đồng nghiệp ở công ty kèm một lời cảm ơn là bình thường; dùng lại một đoạn của bạn cùng lớp trong bài tập là vi phạm. Luật ở đây chặt hơn vì trường đang xác nhận năng lực của <em>BẠN</em>, không phải sản phẩm của cả nhóm.</li>
 <li><strong>Hậu quả ở FPTU, cụ thể.</strong> Điểm 0 cho bài đó, một hồ sơ chính thức, có thể trượt môn, và tái phạm thì bị kỷ luật tới mức buộc thôi học. Khác với một điểm số thấp, hồ sơ vi phạm liêm chính học thuật đi theo bạn.</li>
 <li><strong>Vì sao chỗ này đáng bỏ công thật.</strong> Module 4 là mảnh đất tự nhiên của câu hỏi thi: định nghĩa, phân loại, và một danh sách những thứ phải trích nguồn — tất cả đều gọn và đều kiểm tra được. Riêng mục 4.1 và 4.2 nhiều khả năng chiếm vài điểm trong bài thi 60 phút.</li>
-<li><strong>Module có ba phần.</strong> 4.1 tránh đạo văn (slide 72–77) · 4.2 trích dẫn và ghi công nguồn (78–82) · 4.3 đưa nguồn vào bài — quote, paraphrase, summarise (từ slide 83 trở đi, nằm ngoài dải này nhưng vẫn được giới thiệu trước ở chỗ cần thiết).</li>
+<li><strong>Module có bốn phần.</strong> 4.1 tránh đạo văn (slide 72–77) · 4.2 trích dẫn và ghi công nguồn (78–82) · 4.3 đưa nguồn vào bài — quote, paraphrase, summarise (83–90) · 4.4 phần mềm trích dẫn (91–93). 4.3 và 4.4 nằm ngoài dải này nhưng vẫn được giới thiệu trước ở chỗ cần thiết.</li>
 </ul>
 <p class="meo">💡 Quy tắc thực dụng phủ 95% tình huống, và mang thẳng được vào mọi câu hỏi thi: <strong>nếu ý tưởng hoặc câu chữ không phải của bạn thì hãy nêu tên người sở hữu nó</strong>.</p>`],
 
@@ -683,7 +683,7 @@ export default {
 <li><strong>Applied at FPTU.</strong> IT subjects lean IEEE — numbered [1], [2] in the text, reference list in citation order, not alphabetical. That last detail catches people out: an IEEE reference list is ordered by <em>first appearance</em>, and an APA one is ordered <em>alphabetically by author</em>.</li>
 <li><strong>The slide cites its own sources.</strong> "Adapted from: Greetham, 2013; Pears &amp; Shields, 2013" — again the deck modelling its own rule, and note the semicolon separating two sources inside one bracket.</li>
 </ul>
-<p class="pitfall">⚠️ The classic exam question here is a swap: "APA is a referencing <em>system</em>" — FALSE, APA is a <em>style</em>. The three systems are Endnotes, Footnotes and In-text citing, and nothing else. Learn those three as a closed set.</p>`,
+<p class="pitfall">⚠️ The classic exam question here is a swap: "APA is a referencing <em>system</em>" — FALSE, APA is a <em>style</em>. The slide calls Endnotes, Footnotes and In-text citing the three MAIN types of system. Learn those three as a set.</p>`,
         `<p class="y-chinh">🎯 Slide định nghĩa của mục 4.2, và là nguồn câu hỏi thi ưa thích nhất của mục này. <strong>Referencing System (HỆ trích dẫn)</strong> = "bất kỳ bộ quy tắc và hướng dẫn nào cho việc trích dẫn". <strong>Referencing Style (KIỂU trích dẫn)</strong> = "những quy ước, quy tắc và hướng dẫn CỤ THỂ cho việc trích dẫn". <strong>Các loại hệ trích dẫn chính</strong> = <strong>Endnotes, Footnotes, In-text citing</strong>. (Adapted from: Greetham, 2013; Pears &amp; Shields, 2013.)</p>
 <table>
 <tr><th></th><th>System — HỆ</th><th>Style — KIỂU</th></tr>
@@ -699,7 +699,7 @@ export default {
 <li><strong>Áp dụng ở FPTU.</strong> Các môn CNTT nghiêng về IEEE — đánh số [1], [2] trong bài, danh mục tài liệu xếp theo THỨ TỰ XUẤT HIỆN chứ không theo bảng chữ cái. Chi tiết cuối này hay làm người ta vấp: danh mục IEEE xếp theo <em>lần xuất hiện đầu tiên</em>, còn danh mục APA xếp theo <em>thứ tự chữ cái tên tác giả</em>.</li>
 <li><strong>Slide tự ghi nguồn cho chính nó.</strong> "Adapted from: Greetham, 2013; Pears &amp; Shields, 2013" — lại một lần deck làm mẫu đúng quy tắc của mình, và để ý dấu chấm phẩy ngăn hai nguồn trong cùng một cặp ngoặc.</li>
 </ul>
-<p class="pitfall">⚠️ Câu hỏi thi kinh điển ở đây là một cú TRÁO: "APA là một <em>HỆ</em> trích dẫn" — SAI, APA là một <em>KIỂU</em>. Ba HỆ là Endnotes, Footnotes và In-text citing, không có cái nào khác. Học ba cái đó như một tập ĐÓNG.</p>`],
+<p class="pitfall">⚠️ Câu hỏi thi kinh điển ở đây là một cú TRÁO: "APA là một <em>HỆ</em> trích dẫn" — SAI, APA là một <em>KIỂU</em>. Slide gọi Endnotes, Footnotes và In-text citing là ba HỆ CHÍNH (The Main Types). Học ba cái đó như một tập.</p>`],
 
       [80, 'Endnotes Systems — Example Reference List (op. cit. · Ibid. · loc. cit.)',
         `<p class="y-chinh">🎯 A worked endnotes list, and the slide where three Latin abbreviations appear that most students have never met:</p>

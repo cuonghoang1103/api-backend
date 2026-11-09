@@ -142,7 +142,7 @@ export default {
     'nodejs-18-2-to-chuc-ma-nguon': { yt: 'fc6o1gwqZuA', credit: 'Software Developer Diaries — Node.js Project Structure and Architecture Best Practices', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/18-kien-truc/18-02-to-chuc-ma-nguon-ed51ac55.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-18-3-ghep-noi-ranh-gioi': { yt: 'kwehxBDX_o8', credit: 'Milan Jovanović — How I Use The Generic Repository Pattern In Clean Architecture', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/18-kien-truc/18-03-ghep-noi-ranh-gioi-474cf516.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-18-4-monolith-hay-tach': { yt: '3fwRmW8pgWU', credit: 'TechPrep — Monoliths vs Microservices | Explained in 5 Minutes' },
-    'nodejs-18-5-quyet-dinh-kho-dao-nguoc': { yt: 'CnailTcJV_U', credit: 'Dev Mastery — Using Clean Architecture for Microservice APIs in Node.js with MongoDB and Express' },
+    'nodejs-18-5-quyet-dinh-kho-dao-nguoc': { yt: 'CnailTcJV_U', credit: 'Dev Mastery — Using Clean Architecture for Microservice APIs in Node.js with MongoDB and Express', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/18-kien-truc/18-05-quyet-dinh-kho-dao-nguoc-b32602ee.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-18-6-tong-ket-khoa-hoc': { yt: 'bp41nA6UyY4', credit: 'Codevolution — Node.js Tutorial - 64 - Wrapping Up' },
   },
 };

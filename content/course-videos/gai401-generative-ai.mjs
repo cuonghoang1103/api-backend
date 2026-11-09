@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho GAI401 — Generative AI. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/gai401-generative-ai.mjs
+ */
+export default {
+  courseSlug: "gai401-generative-ai",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "gai401-ts-1-1": { yt: "hfIUstzHs9A", credit: "IBM Technology — What are Generative AI models?" },
+    "gai401-ts-1-2": { yt: "IHZwWFHWa-w", credit: "3Blue1Brown — Gradient descent, how neural networks learn | Deep Learning Chapter 2" },
+    "gai401-ts-2-1": { yt: "gHHy2w2agEo", credit: "Machine Learning TV — Language Model Evaluation and Perplexity" },
+    "gai401-ts-2-3": { yt: "SysgYptB198", credit: "DeepLearningAI — C5W3L07 Attention Model Intuition" },
+    "gai401-ts-3-1": { yt: "mMa2PmYJlCo", credit: "Hedu AI by Batool Haider — Visual Guide to Transformer Neural Networks - (Episode 2) Multi-Head & Self-Attention" },
+    "gai401-ts-3-2": { yt: "wjZofJX0v4M", credit: "3Blue1Brown — Transformers, the tech behind LLMs | Deep Learning Chapter 5" },
+    "gai401-ts-3-3": { yt: "wOcbALDw0bU", credit: "Efficient NLP — Which transformer architecture is best? Encoder-only vs Encoder-decoder vs Decoder-only models" },
+    "gai401-ts-3-4": { yt: "o0gkdZBtwEg", credit: "IBM Technology — How KV Cache Speeds Up LLMs for Faster AI Models on GPUs" },
+    "gai401-ts-4-2": { yt: "PZXN7jm9IC0", credit: "Edan Meyer — Chinchilla Explained: Compute-Optimal Massive Language Models" },
+    "gai401-ts-4-3": { yt: "sOPDGQjFcuM", credit: "Maarten Grootendorst — A Visual Guide to Mixture of Experts (MoE) in LLMs" },
+    "gai401-ts-5-1": { yt: "d-tngNnaG4U", credit: "MIT OpenCourseWare — 10: Generative AI – Adapting LLMs with Parameter-Efficient Fine-Tuning" },
+    "gai401-ts-5-2": { yt: "t1caDsMzWBk", credit: "Mark Hennings — LoRA & QLoRA Fine-tuning Explained In-Depth" },
+    "gai401-ts-5-3": { yt: "bbVoDXoPrPM", credit: "Shaw Talebi — Fine-tuning LLMs on Human Feedback (RLHF + DPO)" },
+    "gai401-ts-6-1": { yt: "ojtbHUqw1LA", credit: "Elvis Saravia — Few-Shot Prompting Explained" },
+    "gai401-ts-6-2": { yt: "5-Fv_ZoAwrE", credit: "Analytics Vidhya — Chain of Thought Prompting | Self Consistency Prompting Explained | Prompt Engineering 101" },
+    "gai401-ts-6-3": { yt: "h8gMhXYAv1k", credit: "IBM Technology — What is Tool Calling? Connecting LLMs to Your Data" },
+    "gai401-ts-7-1": { yt: "gl1r1XV0SLw", credit: "IBM Technology — What is a Vector Database? Powering Semantic Search & AI Applications" },
+    "gai401-ts-7-2": { yt: "T-D1OfcDW1M", credit: "IBM Technology — What is Retrieval-Augmented Generation (RAG)?" },
+    "gai401-ts-7-3": { yt: "5drn2DO7gNY", credit: "Jay Alammar — Building LLM Agents with Tool Use" },
+    "gai401-ts-8-1": { yt: "9zKuYvjFFS8", credit: "Arxiv Insights — Variational Autoencoders" },
+    "gai401-ts-8-2": { yt: "EhndHhIvWWw", credit: "Deepia — Diffusion Models: DDPM | Generative AI Animated" },
+    "gai401-ts-8-3": { yt: "w8YQcEd77_o", credit: "Neural Breakdown with AVB — Text to Image Diffusion AI Model from scratch - Explained one line of code at a time!" },
+    "gai401-ts-8-4": { yt: "lOD_EE96jhM", credit: "IBM Technology — What Are Vision Language Models? How AI Sees & Understands Images" },
+    "gai401-ts-9-1": { yt: "aOjgPJ94-aM", credit: "bycloud — 7 Popular LLM Benchmarks Explained [OpenLLM Leaderboard & Chatbot Arena]" },
+    "gai401-ts-9-2": { yt: "trfUBIDeI1Y", credit: "IBM Technology — LLM as a Judge: Scaling AI Evaluation Strategies" },
+    "gai401-ts-10-2": { yt: "cYuesqIKf9A", credit: "IBM Technology — Explained: The OWASP Top 10 for Large Language Model Applications" },
+    "gai401-ts-10-3": { yt: "-OUmHDuaPPA", credit: "AI Lingua — What is LLM Red Teaming? How Generative AI Safety Testing Works" },
+    "gai401-ts-10-4": { yt: "TGCe3FXDgGY", credit: "Amazon Web Services — Generative AI Foundations on AWS | Part 7: Deploying a foundation model" },
+    "gai401-2-1-deep-learning": { yt: "qYNweeDHiyU", credit: "IBM Technology — AI, Machine Learning, Deep Learning and Generative AI Explained" },
+    "gai401-4-1-transformer-attention": { yt: "eMlx5fFNoYc", credit: "3Blue1Brown — Attention in transformers, step-by-step | Deep Learning Chapter 6" },
+    "gai401-5-1-llm": { yt: "LPZh9BOjkQs", credit: "3Blue1Brown — Large Language Models explained briefly" },
+    "gai401-6-1-prompt-finetune": { yt: "zYGDpG-pTho", credit: "IBM Technology — RAG vs Fine-Tuning vs Prompt Engineering: Optimizing AI Models" },
+    "gai401-7-1-image-multimodal": { yt: "x2GRE-RzmD8", credit: "IBM Technology — Diffusion Models for AI Image Generation" },
+  },
+};

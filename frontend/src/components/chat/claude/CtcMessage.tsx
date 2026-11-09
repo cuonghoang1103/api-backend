@@ -13,6 +13,7 @@ import { api } from '@/lib/api';
 import ChatMarkdown from '../ChatMarkdown';
 import ThinkingSteps from '../ThinkingSteps';
 import { NguonCards } from '../NguonCards';
+import { CuongMiniPanda } from './CuongMiniPanda';
 
 function useCopy() {
   const [ok, setOk] = useState(false);
@@ -25,11 +26,10 @@ function useCopy() {
   };
 }
 
-export function CtcMark({ thinking }: { thinking?: boolean }) {
+export function CtcMark({ thinking, size = 28 }: { thinking?: boolean; size?: number }) {
   return (
     <span className="ctc-mark" data-spin={!!thinking}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/favicon.png" alt="CuongMini" />
+      <CuongMiniPanda size={size} state={thinking ? 'thinking' : 'idle'} title="CuongMini" />
     </span>
   );
 }
@@ -176,9 +176,12 @@ export const CtcAssistantMessage = memo(function CtcAssistantMessage({ msg, stre
 
       {msg.nguon?.length ? <NguonCards nguon={msg.nguon} /> : null}
 
+      {/* Đang chảy chữ: linh vật nhún ở đáy câu trả lời (như dấu của Claude). */}
+      {streaming && !empty && <div className="ctc-actions" data-last="true"><CtcMark thinking size={30} /></div>}
+
       {!streaming && !empty && (
         <div className="ctc-actions" data-last={isLast}>
-          {isLast && <span style={{ marginRight: 6, display: 'inline-flex' }}><CtcMark /></span>}
+          {isLast && <span style={{ marginRight: 6, display: 'inline-flex' }}><CtcMark size={30} /></span>}
           <button type="button" className="ctc-icon-btn" data-sm title={ok ? 'Đã chép' : 'Chép'} aria-label="Chép" onClick={() => void copy(msg.content)}>
             {ok ? <Check size={15} /> : <Copy size={15} />}
           </button>

@@ -13,7 +13,10 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { ArrowDown, ChevronDown, Mic, PanelLeftOpen, Pencil, Pin, SquarePen, Trash2, X } from 'lucide-react';
+import {
+  ArrowDown, Check, ChevronDown, Code2, Coffee, FolderKanban, GraduationCap, PanelLeftOpen, PenLine, Pencil, Pin,
+  SquarePen, Trash2, UserRound, X,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { useSession } from 'next-auth/react';
 import { useAuthStore } from '@/store/authStore';
@@ -26,7 +29,12 @@ import { useKeyboardInset } from '@/hooks/useKeyboardInset';
 import { usePro } from '@/hooks/usePro';
 import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import VoiceCallOverlay from '@/components/chat/VoiceCallOverlay';
-import { CtcSidebar, type SessionRow } from '@/components/chat/claude/CtcSidebar';
+import { CtcSidebar, type CtcView, type SessionRow } from '@/components/chat/claude/CtcSidebar';
+import {
+  ArtifactsView, CustomizeView, ProjectView, ProjectsView, RecentsView, ScheduledView, SearchDialog,
+} from '@/components/chat/claude/CtcViews';
+import { CuongMiniPanda } from '@/components/chat/claude/CuongMiniPanda';
+import { thanTuyChinh, useCtcPrefs } from '@/components/chat/claude/ctcPrefs';
 import { CtcComposer, type CtcAttach, type CtcComposerHandle } from '@/components/chat/claude/CtcComposer';
 import { CtcAssistantMessage, CtcUserMessage } from '@/components/chat/claude/CtcMessage';
 import '@/components/chat/claude/claudeChat.css';
@@ -97,7 +105,12 @@ export default function ChatPage() {
 
   // ─── Thư mục ─────────────────────────────────────────────────
   const [folders, setFolders] = useState<ChatFolder[]>([]);
-  const [folderFilter, setFolderFilter] = useState<'all' | 'none' | string>('all');
+  const [view, setView] = useState<CtcView>('chat');
+  const [searchOpen, setSearchOpen] = useState(false);
+  /** Dự án gán cho cuộc trò chuyện MỚI sắp gửi (chọn dưới ô soạn ở màn chào). */
+  const [duAnMoi, setDuAnMoi] = useState<string | null>(null);
+  const duAnMoiRef = useRef<string | null>(null);
+  duAnMoiRef.current = duAnMoi;
   const loadFolders = useCallback(async () => {
     try {
       const res = await aiApi.getChatFolders();
@@ -105,20 +118,25 @@ export default function ChatPage() {
     } catch { /* phụ trợ — không chặn trang */ }
   }, []);
   useEffect(() => { if (isAuthenticated) void loadFolders(); }, [isAuthenticated, loadFolders]);
+  const foldersRef = useRef<ChatFolder[]>([]);
+  foldersRef.current = folders;
+  const loadFoldersRef = useRef(loadFolders);
+  loadFoldersRef.current = loadFolders;
 
   const taoThuMuc = async (ten: string) => {
     try {
       const res = await aiApi.createChatFolder(ten);
       const moi = res.data?.data as ChatFolder;
-      setFolders((c) => (c.some((f) => f.id === moi.id) ? c : [moi, ...c]));
-      setFolderFilter(moi.id);
+      setFolders((c) => (c.some((f) => f.id === moi.id) ? c : [{ ...moi, _count: { sessions: 0 } }, ...c]));
+      setView(`project:${moi.id}`);
     } catch { toast.error('Không tạo được thư mục'); }
   };
   const xoaThuMuc = async (id: string) => {
     try {
       await aiApi.deleteChatFolder(id);
       setFolders((c) => c.filter((f) => f.id !== id));
-      if (folderFilter === id) setFolderFilter('all');
+      setView((v) => (v === `project:${id}` ? 'projects' : v));
+      if (duAnMoiRef.current === id) setDuAnMoi(null);
       setSessions(useChatStore.getState().sessions.map((s) => (s.folderId === id ? { ...s, folderId: null, folder: null } : s)));
       toast.success('Đã xoá thư mục. Các cuộc bên trong vẫn còn.');
     } catch { toast.error('Không xoá được thư mục'); }
@@ -210,13 +228,18 @@ export default function ChatPage() {
 
   const chonPhien = useCallback(async (sessionId: string) => {
     if (isStreaming) abortRef.current?.abort();
+    setView('chat');
+    setSearchOpen(false);
     setCurrentSessionId(sessionId);
     dongNeuHep();
     await fetchHistory(sessionId);
   }, [isStreaming, setCurrentSessionId, fetchHistory, dongNeuHep]);
 
-  const phienMoi = useCallback(() => {
+  const phienMoi = useCallback((duAn: string | null = null) => {
     if (isStreaming) abortRef.current?.abort();
+    setView('chat');
+    setSearchOpen(false);
+    setDuAnMoi(duAn);
     setCurrentSessionId(null);
     setSuggestedPrompts(getContextualPrompts(''));
     setRobotEmotion('idle');
@@ -352,6 +375,7 @@ export default function ChatPage() {
           documents: documents?.length ? documents : undefined,
           documentNames: documentNames?.length ? documentNames : undefined,
           voice: opts?.voice === true,
+          ...thanTuyChinh(useCtcPrefs.getState()),
         }),
       });
       if (!res.ok) {
@@ -451,6 +475,16 @@ export default function ChatPage() {
         }
         setCurrentSessionId(resolvedSessionId);
         setMessages(resolvedSessionId, [...existing, ...localMessages]);
+        // Cuộc mới bắt đầu trong một dự án ⇒ xếp nó vào dự án đó ngay khi máy chủ cấp mã phiên.
+        const duAn = duAnMoiRef.current;
+        if (duAn) {
+          setDuAnMoi(null);
+          void aiApi.moveSessionToFolder(resolvedSessionId, duAn).then(() => {
+            const tm = foldersRef.current.find((f) => f.id === duAn) ?? null;
+            setSessions(useChatStore.getState().sessions.map((x) => (x.sessionId === resolvedSessionId ? { ...x, folderId: duAn, folder: tm } : x)));
+            void loadFoldersRef.current();
+          }).catch(() => toast.error('Không xếp được cuộc trò chuyện vào dự án'));
+        }
         useChatStore.setState((state) => {
           const { [sessionId!]: _bo, ...rest } = state.messages;
           return { messages: rest };
@@ -538,19 +572,91 @@ export default function ChatPage() {
   const userInfo = isAuthenticated && user
     ? { name: user.displayName || user.username || 'Bạn', avatarUrl: user.avatarUrl, isPro }
     : null;
-  const tenGoi = user?.displayName?.split(' ').slice(-1)[0] || user?.username;
+  const tenTuyChinh = useCtcPrefs((st) => st.tenGoi);
+  const tenGoi = tenTuyChinh || user?.displayName?.split(' ').slice(-1)[0] || user?.username;
   const empty = currentMessages.length === 0;
   const lastAiIdx = (() => { for (let i = currentMessages.length - 1; i >= 0; i--) if (currentMessages[i].role === 'assistant') return i; return -1; })();
+
+  // ── Màn chào: chip chủ đề ⇒ mở danh sách gợi ý, bấm gợi ý ⇒ điền vào ô soạn (như claude.ai) ──
+  const [chuDe, setChuDe] = useState<string | null>(null);
+  const CHU_DE = useMemo(() => [
+    { id: 'viet', label: 'Viết', icon: PenLine, goiY: [
+      'Viết email xin nghỉ học gửi thầy cô, lịch sự và ngắn gọn',
+      'Viết phần giới thiệu bản thân cho CV thực tập IT',
+      'Viết lại đoạn văn sau cho mạch lạc và tự nhiên hơn:\n\n',
+      'Soạn bài đăng LinkedIn chia sẻ dự án mình vừa làm xong',
+    ] },
+    { id: 'hoc', label: 'Học', icon: GraduationCap, goiY: [
+      'Giải thích độ phức tạp Big-O bằng ví dụ đời thường',
+      'Lập kế hoạch ôn thi 7 ngày cho môn ',
+      'Tạo 10 câu trắc nghiệm ôn tập về SQL JOIN, kèm đáp án',
+      'So sánh TCP và UDP thật dễ hiểu',
+    ] },
+    { id: 'code', label: 'Code', icon: Code2, goiY: [
+      'Review đoạn code này và chỉ ra lỗi:\n\n',
+      'Viết API REST CRUD bằng Express + Prisma cho bảng Student',
+      'Giải thích khi nào useEffect chạy trong React',
+      'Viết câu SQL lấy top 3 sinh viên điểm cao nhất mỗi lớp',
+    ] },
+    { id: 'song', label: 'Đời sống', icon: Coffee, goiY: [
+      'Gợi ý thực đơn 3 ngày cho sinh viên, tiết kiệm mà đủ chất',
+      'Lên lịch học và làm thêm hợp lý cho một tuần',
+      'Cách chuẩn bị cho buổi phỏng vấn thực tập đầu tiên',
+      'Gợi ý quà sinh nhật dưới 300 nghìn',
+    ] },
+    { id: 'cuong', label: 'Về CuongHoang', icon: UserRound, goiY: suggestedPrompts.slice(0, 4).map((x) => x.prompt) },
+  ], [suggestedPrompts]);
+  const chuDeMo = CHU_DE.find((c) => c.id === chuDe);
+
+  // Chọn dự án cho cuộc mới (dưới ô soạn ở màn chào)
+  const [duAnMenu, setDuAnMenu] = useState(false);
+  const duAnRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!duAnMenu) return;
+    const close = (e: MouseEvent) => { if (duAnRef.current && !duAnRef.current.contains(e.target as Node)) setDuAnMenu(false); };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [duAnMenu]);
+  const duAnDangChon = folders.find((f) => f.id === duAnMoi);
+  const chonDuAn = isAuthenticated ? (
+    <div ref={duAnRef} style={{ position: 'relative' }}>
+      <button type="button" className="ctc-below-btn" onClick={() => setDuAnMenu((v) => !v)} data-on={!!duAnDangChon} aria-haspopup="menu" aria-expanded={duAnMenu}>
+        <FolderKanban size={15} />
+        <span>{duAnDangChon ? duAnDangChon.ten : 'Dự án'}</span>
+        <ChevronDown size={13} />
+      </button>
+      {duAnMenu && (
+        <div className="ctc-menu" style={{ left: 0, top: 'calc(100% + 6px)', minWidth: 230 }} role="menu">
+          <div className="ctc-menu-label">Bắt đầu trong dự án</div>
+          <button type="button" className="ctc-menu-item" onClick={() => { setDuAnMoi(null); setDuAnMenu(false); }}>
+            Không thuộc dự án {!duAnMoi && <Check size={14} style={{ marginLeft: 'auto' }} />}
+          </button>
+          {folders.map((f) => (
+            <button key={f.id} type="button" className="ctc-menu-item" onClick={() => { setDuAnMoi(f.id); setDuAnMenu(false); }}>
+              <FolderKanban size={14} style={f.mau ? { color: f.mau } : undefined} /> {f.ten}
+              {duAnMoi === f.id && <Check size={14} style={{ marginLeft: 'auto' }} />}
+            </button>
+          ))}
+          <div className="ctc-menu-sep" />
+          <button type="button" className="ctc-menu-item" onClick={() => { setDuAnMenu(false); setView('projects'); }}>
+            <FolderKanban size={14} /> Quản lý dự án…
+          </button>
+        </div>
+      )}
+    </div>
+  ) : null;
 
   const composer = (
     <CtcComposer
       ref={composerRef}
-      onSend={(t, a) => { void sendMessage(t, false, a); }}
+      onSend={(t, a) => { setChuDe(null); void sendMessage(t, false, a); }}
       onStop={stopStreaming}
       onVoice={() => setCallOpen(true)}
       isStreaming={isStreaming}
       isPro={isPro}
       autoFocus
+      menuPlacement={empty ? 'down' : 'up'}
+      belowLeft={empty ? chonDuAn : <span className="ctc-disclaimer">CuongMini có thể nhầm. Hãy kiểm tra lại thông tin quan trọng.</span>}
       placeholder={empty ? 'Hôm nay mình giúp gì được cho bạn?' : 'Trả lời CuongMini…'}
     />
   );
@@ -559,20 +665,22 @@ export default function ChatPage() {
     return <div className="ctc" aria-busy="true" />;
   }
 
+  const duAnId = view.startsWith('project:') ? view.slice('project:'.length) : null;
+  const trangPhu = view !== 'chat';
+
   return (
     <div className="ctc" style={keyboardInset > 0 ? { height: `calc(100dvh - ${keyboardInset}px)` } : undefined}>
       <CtcSidebar
         open={sideOpen}
+        view={view}
         sessions={sessions as SessionRow[]}
         currentId={currentSessionId}
         folders={folders}
-        folderFilter={folderFilter}
-        onFolderFilter={setFolderFilter}
-        onCreateFolder={(t) => void taoThuMuc(t)}
-        onDeleteFolder={(id) => void xoaThuMuc(id)}
         onMoveToFolder={(s, f) => void chuyenVaoThuMuc(s, f)}
         onClose={() => doiThanhBen(false)}
-        onNew={phienMoi}
+        onNew={() => phienMoi()}
+        onSearch={() => { setSearchOpen(true); dongNeuHep(); }}
+        onView={(v) => { setView(v); dongNeuHep(); }}
         onSelect={(id) => void chonPhien(id)}
         onRename={(id, t) => void doiTen(id, t)}
         onDelete={(id) => void xoaPhien(id)}
@@ -588,13 +696,13 @@ export default function ChatPage() {
               <button type="button" className="ctc-icon-btn" onClick={() => doiThanhBen(true)} aria-label="Mở thanh bên" title="Mở thanh bên" data-testid="ctc-open-side">
                 <PanelLeftOpen size={18} />
               </button>
-              <button type="button" className="ctc-icon-btn" onClick={phienMoi} aria-label="Cuộc trò chuyện mới" title="Cuộc trò chuyện mới">
+              <button type="button" className="ctc-icon-btn" onClick={() => phienMoi()} aria-label="Cuộc trò chuyện mới" title="Cuộc trò chuyện mới">
                 <SquarePen size={17} />
               </button>
             </>
           )}
 
-          {!empty && currentSession && (
+          {!trangPhu && !empty && currentSession && (
             <div ref={titleRef} style={{ position: 'relative', minWidth: 0 }}>
               {titleEdit !== null ? (
                 <input
@@ -615,6 +723,7 @@ export default function ChatPage() {
                 />
               ) : (
                 <button type="button" className="ctc-title-btn" onClick={() => setTitleMenu((v) => !v)} title={currentSession.title}>
+                  {currentSession.folder?.ten && <span className="ctc-title-proj">{currentSession.folder.ten} /</span>}
                   <span>{currentSession.title || 'Cuộc trò chuyện mới'}</span>
                   <ChevronDown size={14} />
                 </button>
@@ -650,27 +759,57 @@ export default function ChatPage() {
               Chế độ tiết kiệm · thử lại
             </button>
           )}
-          <button type="button" className="ctc-icon-btn" onClick={() => setCallOpen(true)} aria-label="Nói chuyện bằng giọng" title="Nói chuyện bằng giọng">
-            <Mic size={17} />
-          </button>
           <span className="ctc-hide-sm"><QuotaIndicator compact /></span>
         </header>
 
-        {empty ? (
+        {view === 'recents' ? (
+          <div className="ctc-scroll"><RecentsView sessions={sessions as SessionRow[]} onOpen={(id) => void chonPhien(id)} onNew={() => phienMoi()} /></div>
+        ) : view === 'projects' ? (
+          <div className="ctc-scroll"><ProjectsView folders={folders} signedIn={isAuthenticated} onOpen={(id) => setView(`project:${id}`)} onCreate={(t) => void taoThuMuc(t)} /></div>
+        ) : duAnId ? (
+          <div className="ctc-scroll">
+            <ProjectView
+              folder={folders.find((f) => f.id === duAnId)}
+              sessions={sessions as SessionRow[]}
+              onBack={() => setView('projects')}
+              onOpen={(id) => void chonPhien(id)}
+              onStart={() => phienMoi(duAnId)}
+              onDelete={() => void xoaThuMuc(duAnId)}
+            />
+          </div>
+        ) : view === 'artifacts' ? (
+          <div className="ctc-scroll"><ArtifactsView messages={messages} sessions={sessions as SessionRow[]} onOpenChat={(id) => void chonPhien(id)} /></div>
+        ) : view === 'scheduled' ? (
+          <div className="ctc-scroll"><ScheduledView onNew={() => phienMoi()} /></div>
+        ) : view === 'customize' ? (
+          <div className="ctc-scroll"><CustomizeView isPro={isPro} /></div>
+        ) : empty ? (
           <div className="ctc-home">
             <div className="ctc-home-hello">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/favicon.png" alt="" />
+              <CuongMiniPanda size={58} className="ctc-home-panda" />
               <h1>{loiChao(tenGoi)}</h1>
             </div>
             <div className="ctc-dock-inner">{composer}</div>
             <div className="ctc-suggest">
-              {suggestedPrompts.slice(0, 5).map((p) => (
-                <button key={p.id} type="button" onClick={() => void sendMessage(p.prompt)} disabled={isStreaming}>
-                  <span aria-hidden>{p.icon}</span> {p.label}
+              {CHU_DE.filter((c) => c.goiY.length > 0).map((c) => (
+                <button key={c.id} type="button" data-on={chuDe === c.id} onClick={() => setChuDe((v) => (v === c.id ? null : c.id))}>
+                  <c.icon size={15} /> {c.label}
                 </button>
               ))}
             </div>
+            {chuDeMo && (
+              <div className="ctc-suggest-list" role="list">
+                <div className="ctc-suggest-head">
+                  <chuDeMo.icon size={15} /> <span>{chuDeMo.label}</span>
+                  <button type="button" className="ctc-icon-btn" data-sm aria-label="Đóng gợi ý" onClick={() => setChuDe(null)}><X size={14} /></button>
+                </div>
+                {chuDeMo.goiY.map((g) => (
+                  <button key={g} type="button" role="listitem" onClick={() => { composerRef.current?.setText(g); setChuDe(null); }}>
+                    {g.trim()}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         ) : (
           <>
@@ -706,12 +845,21 @@ export default function ChatPage() {
                   </button>
                 )}
                 {composer}
-                <div className="ctc-disclaimer">CuongMini có thể nhầm. Hãy kiểm tra lại thông tin quan trọng.</div>
               </div>
             </div>
           </>
         )}
       </main>
+
+      {searchOpen && (
+        <SearchDialog
+          sessions={sessions as SessionRow[]}
+          messages={messages}
+          onClose={() => setSearchOpen(false)}
+          onOpen={(id) => void chonPhien(id)}
+          onNew={() => phienMoi()}
+        />
+      )}
 
       <AnimatePresence>
         {callOpen && (

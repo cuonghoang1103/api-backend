@@ -6,7 +6,7 @@
  */
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowUp, Check, ChevronDown, FileText, Loader2, Lock, Mic, Paperclip, Plus, Square, X } from 'lucide-react';
+import { ArrowUp, AudioLines, Check, ChevronDown, FileText, Loader2, Lock, Mic, Paperclip, Plus, Square, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL_ID, getChatModel, useChatModelStore } from '@/lib/aiChatModels';
 import {
@@ -17,6 +17,10 @@ export interface CtcAttach { images?: string[]; documents?: string[]; documentNa
 export interface CtcComposerHandle { focus: () => void; setText: (t: string) => void }
 
 interface Props {
+  /** Nội dung bên TRÁI hàng dưới ô soạn (vd. chọn dự án). Model luôn ở bên phải hàng đó. */
+  belowLeft?: React.ReactNode;
+  /** Menu model mở lên (ô soạn ở đáy) hay xuống (màn chào). */
+  menuPlacement?: 'up' | 'down';
   onSend: (text: string, attach?: CtcAttach) => void;
   onStop?: () => void;
   onVoice?: () => void;
@@ -40,7 +44,7 @@ function useClickOutside(open: boolean, ref: React.RefObject<HTMLElement | null>
   }, [open, ref, close]);
 }
 
-export function CtcModelPicker({ isPro, disabled }: { isPro: boolean; disabled?: boolean }) {
+export function CtcModelPicker({ isPro, disabled, placement = 'up' }: { isPro: boolean; disabled?: boolean; placement?: 'up' | 'down' }) {
   const router = useRouter();
   const { modelId, setModelId } = useChatModelStore();
   const [open, setOpen] = useState(false);
@@ -64,7 +68,7 @@ export function CtcModelPicker({ isPro, disabled }: { isPro: boolean; disabled?:
         <ChevronDown size={14} />
       </button>
       {open && (
-        <div className="ctc-menu ctc-model-menu" role="menu">
+        <div className="ctc-menu ctc-model-menu" data-place={placement} role="menu">
           <div className="ctc-menu-label">Chọn model</div>
           {CHAT_MODELS.map((m) => {
             const locked = m.tier !== 'default' && !isPro;
@@ -102,7 +106,7 @@ export function CtcModelPicker({ isPro, disabled }: { isPro: boolean; disabled?:
 }
 
 export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComposer(
-  { onSend, onStop, onVoice, isStreaming, isPro, placeholder = 'Nhắn cho CuongMini…', autoFocus },
+  { onSend, onStop, onVoice, isStreaming, isPro, placeholder = 'Nhắn cho CuongMini…', autoFocus, belowLeft, menuPlacement = 'up' },
   ref,
 ) {
   const router = useRouter();
@@ -194,6 +198,7 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
   const canSend = (!!value.trim() || images.length + docs.length > 0) && !busy;
 
   return (
+    <div className="ctc-comp-wrap">
     <div
       className="ctc-composer"
       data-drag={drag}
@@ -270,16 +275,24 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
           onChange={(e) => { void addFiles(Array.from(e.target.files || [])); e.target.value = ''; }}
         />
         <span className="ctc-comp-spacer" />
-        <CtcModelPicker isPro={isPro} disabled={isStreaming} />
         {isStreaming ? (
           <button type="button" className="ctc-send" data-stop aria-label="Dừng" title="Dừng" onClick={onStop}>
             <Square size={13} fill="currentColor" />
           </button>
-        ) : (
+        ) : canSend || !onVoice ? (
           <button type="button" className="ctc-send" aria-label="Gửi" title="Gửi (Enter)" disabled={!canSend} onClick={submit} data-testid="ctc-send">
             <ArrowUp size={18} strokeWidth={2.4} />
           </button>
+        ) : (
+          <button type="button" className="ctc-voice" aria-label="Nói chuyện bằng giọng" title="Nói chuyện bằng giọng" onClick={onVoice} data-testid="ctc-voice">
+            <AudioLines size={18} />
+          </button>
         )}
+      </div>
+    </div>
+      <div className="ctc-below">
+        <div className="ctc-below-left">{belowLeft}</div>
+        <CtcModelPicker isPro={isPro} disabled={isStreaming} placement={menuPlacement} />
       </div>
     </div>
   );

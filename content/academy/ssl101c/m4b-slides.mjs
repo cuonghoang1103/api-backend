@@ -440,7 +440,7 @@ export default {
 <li><strong>Bullet 3 surviving unchanged is a real claim, not laziness:</strong> every genre ends by focusing research onto arguments. A report full of data that argues nothing still fails.</li>
 <li><strong>Applied at FPTU.</strong> For the SWP391 report, explore = read two similar systems' documentation; plan = fix the section list; refine = hunt the specific benchmark or standard you cite in the design justification.</li>
 </ul>
-<p class="pitfall">⚠️ This is the fourth place in the range where a whole bullet block is reused (25↔29, 31↔33, and later 35↔38, 40↔42). If an exam question quotes a bullet with no section label, check whether the wording says <em>essay</em> or <em>written assignment</em> — that is often the only thing distinguishing the two answer options.</p>
+<p class="pitfall">⚠️ This is the second place in the range where a whole bullet block is reused (after 25↔29; later come 35↔38 and 40↔42). If an exam question quotes a bullet with no section label, check whether the wording says <em>essay</em> or <em>written assignment</em> — that is often the only thing distinguishing the two answer options.</p>
 <p class="meo">💡 Rule of thumb for this deck: <strong>a = essays · b = reports &amp; proposals</strong>, and b-sections say "written assignments" where a-sections say "essays".</p>`,
         `<p class="y-chinh">🎯 Bản sinh đôi phía báo cáo của slide 31: <strong>nghiên cứu để khám phá chủ đề BÀI VIẾT</strong> · <strong>lập kế hoạch có hiểu biết cho CÁC BÀI VIẾT</strong> · <strong>tập trung và tinh chỉnh nghiên cứu để dựng lập luận</strong>. Cùng ba nước đi, danh từ rộng hơn.</p>
 <table>
@@ -455,7 +455,7 @@ export default {
 <li><strong>Việc gạch 3 sống sót nguyên vẹn là một khẳng định thật, không phải lười:</strong> mọi thể loại đều kết thúc bằng việc quy nghiên cứu về lập luận. Một báo cáo đầy dữ liệu mà không lập luận điều gì thì vẫn trượt.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Với báo cáo SWP391: khám phá = đọc tài liệu của hai hệ thống tương tự; lập kế hoạch = chốt danh sách mục; tinh chỉnh = săn đúng cái benchmark hay chuẩn mà bạn sẽ trích trong phần biện minh thiết kế.</li>
 </ul>
-<p class="pitfall">⚠️ Đây là chỗ thứ TƯ trong dải có cả khối bullet bị dùng lại (25↔29, 31↔33, và sau đó 35↔38, 40↔42). Nếu đề trích một gạch đầu dòng mà không ghi tên mục, hãy soi xem chữ là <em>essay</em> hay <em>written assignment</em> — thường đó là thứ duy nhất phân biệt hai phương án.</p>
+<p class="pitfall">⚠️ Đây là chỗ thứ HAI trong dải có cả khối bullet bị dùng lại (sau 25↔29; về sau còn 35↔38 và 40↔42). Nếu đề trích một gạch đầu dòng mà không ghi tên mục, hãy soi xem chữ là <em>essay</em> hay <em>written assignment</em> — thường đó là thứ duy nhất phân biệt hai phương án.</p>
 <p class="meo">💡 Luật bỏ túi cho deck này: <strong>a = bài luận · b = báo cáo &amp; đề xuất</strong>, và mục b nói "written assignments" ở chỗ mục a nói "essays".</p>`],
 
       [34, 'Summary: Conducting research for reports & proposals',
@@ -506,7 +506,7 @@ export default {
 <li><strong>An outline is a contract with yourself.</strong> Each line should be a claim, not a topic — "Scrum ceremonies" is a topic; "small teams drop ceremonies first because the product owner is part-time" is a claim you can actually write a paragraph about.</li>
 <li><strong>Applied at FPTU.</strong> Make your outline a three-column table: claim · evidence/source · approximate word count. If a row has an empty middle column, you have found the paragraph that will fail.</li>
 </ul>
-<p class="pitfall">⚠️ <strong>Slide 38 (3.4b) reprints these three bullets word for word — with no changes at all.</strong> This is the only bullet block in the range that is reused with zero edits, so nothing in the text tells you which section a quoted bullet came from. If the exam asks, use the section title: "Planning Essays" = 3.4a, "Planning Reports &amp; Proposals" = 3.4b.</p>
+<p class="pitfall">⚠️ <strong>Slide 38 (3.4b) reprints these three bullets word for word — with no changes at all.</strong> This is the only learning-outcomes block in the range that is reused with zero edits (slides 37 and 39 are one summary slide printed twice — a different case), so nothing in the text tells you which section a quoted bullet came from. If the exam asks, use the section title: "Planning Essays" = 3.4a, "Planning Reports &amp; Proposals" = 3.4b.</p>
 <p class="meo">💡 Three-word hook for planning: <strong>ORDER · SHAPE · SOURCES</strong>.</p>`,
         `<p class="y-chinh">🎯 Ba mục tiêu cho khâu lập dàn ý: <strong>hiểu các PHƯƠNG ÁN khác nhau để sắp xếp lập luận</strong> · <strong>tạo DÀN Ý cho các loại bài viết khác nhau</strong> · <strong>lên kế hoạch cho TRÍCH DẪN và BẰNG CHỨNG dùng để đỡ lập luận</strong>.</p>
 <table>
@@ -521,7 +521,7 @@ export default {
 <li><strong>Dàn ý là một bản hợp đồng với chính mình.</strong> Mỗi dòng phải là một KHẲNG ĐỊNH, không phải một chủ đề — "các nghi thức Scrum" là chủ đề; "đội nhỏ bỏ nghi thức trước tiên vì product owner làm kiêm nhiệm" mới là khẳng định viết được hẳn một đoạn.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Hãy làm dàn ý thành bảng ba cột: khẳng định · bằng chứng/nguồn · số từ dự kiến. Dòng nào cột giữa để trống thì bạn vừa tìm ra cái đoạn sẽ hỏng.</li>
 </ul>
-<p class="pitfall">⚠️ <strong>Slide 38 (3.4b) in lại đúng ba gạch này, từng chữ một — không sửa gì cả.</strong> Đây là khối bullet duy nhất trong dải bị dùng lại mà KHÔNG chỉnh một chữ, nên không có manh mối nào trong văn bản cho biết một gạch được trích thuộc mục nào. Đề hỏi thì hãy dùng TIÊU ĐỀ mục: "Planning Essays" = 3.4a, "Planning Reports &amp; Proposals" = 3.4b.</p>
+<p class="pitfall">⚠️ <strong>Slide 38 (3.4b) in lại đúng ba gạch này, từng chữ một — không sửa gì cả.</strong> Đây là khối MỤC TIÊU duy nhất trong dải bị dùng lại mà KHÔNG chỉnh một chữ (slide 37 và 39 là một slide tóm tắt in hai lượt — chuyện khác), nên không có manh mối nào trong văn bản cho biết một gạch được trích thuộc mục nào. Đề hỏi thì hãy dùng TIÊU ĐỀ mục: "Planning Essays" = 3.4a, "Planning Reports &amp; Proposals" = 3.4b.</p>
 <p class="meo">💡 Mẹo ba chữ cho khâu lập dàn ý: <strong>THỨ TỰ · HÌNH DẠNG · NGUỒN</strong>.</p>`],
 
       [36, 'Summary: Essays – Deductive arguments',
@@ -742,7 +742,7 @@ export default {
 <li><strong>Applied at FPTU.</strong> Do not judge what a section teaches from its objectives slide in this deck. Read the summary slide first, then work backwards.</li>
 </ul>
 <p class="pitfall">⚠️ Numbering jumps again: <strong>4.2a → 4.2c</strong>. There is no 4.2b slide in this range. Do not assume the deck is complete, and do not assume "4.2c" means you missed something in your own notes.</p>
-<p class="meo">💡 Tally of reused bullet blocks in slides 22–43: <strong>25↔29</strong> (2 of 3 identical) · <strong>31↔33</strong> (1 of 3 identical, 2 reworded) · <strong>35↔38</strong> (3 of 3 identical) · <strong>40↔42</strong> (2 of 4 identical, 2 trimmed). Four pairs — this is a structural feature of the deck, not an accident.</p>`,
+<p class="meo">💡 Tally of reused learning-outcome blocks in slides 22–43 (not counting 37↔39, one summary slide printed twice): <strong>25↔29</strong> (2 of 3 identical) · <strong>31↔33</strong> (1 of 3 identical, 2 reworded) · <strong>35↔38</strong> (3 of 3 identical) · <strong>40↔42</strong> (2 of 4 identical, 2 trimmed). Four pairs — this is a structural feature of the deck, not an accident.</p>`,
         `<p class="y-chinh">🎯 Slide mục tiêu của mục Mạch lạc &amp; Liên kết — và <strong>bốn gạch đầu dòng của nó được bê từ slide 40 sang</strong>: <strong>dùng các kỹ thuật viết nháp sớm cho bài luận</strong> · <strong>dùng ngôn ngữ học thuật phù hợp để soạn các loại bài viết khác nhau</strong> · <strong>tổng hợp nguồn đã nghiên cứu và bằng chứng vào lập luận</strong> · <strong>sắp xếp các bản nháp sớm thành một bản nháp đầu hoàn chỉnh</strong>. Không một dòng nào chứa chữ <em>coherence</em> hay <em>cohesion</em>.</p>
 <table>
 <tr><th>Gạch</th><th>Slide 40 (4.2a Drafting Essays)</th><th>Slide 42 (4.2c Coherence &amp; Cohesion)</th></tr>
@@ -758,7 +758,7 @@ export default {
 <li><strong>Áp dụng ở FPTU.</strong> Với deck này, đừng đánh giá một mục dạy gì qua slide mục tiêu của nó. Hãy đọc slide TÓM TẮT trước, rồi lần ngược lại.</li>
 </ul>
 <p class="pitfall">⚠️ Đánh số lại nhảy: <strong>4.2a → 4.2c</strong>. Không có slide 4.2b nào trong dải này. Đừng cho rằng deck là đầy đủ, và cũng đừng tưởng "4.2c" nghĩa là vở của bạn bị thiếu bài.</p>
-<p class="meo">💡 Kiểm kê các khối bullet bị dùng lại trong slide 22–43: <strong>25↔29</strong> (2/3 giống hệt) · <strong>31↔33</strong> (1/3 giống hệt, 2 dòng đổi chữ) · <strong>35↔38</strong> (3/3 giống hệt) · <strong>40↔42</strong> (2/4 giống hệt, 2 dòng bị cắt chữ). Bốn cặp — đây là ĐẶC TÍNH cấu trúc của deck, không phải tai nạn.</p>`],
+<p class="meo">💡 Kiểm kê các khối mục tiêu bị dùng lại trong slide 22–43 (chưa tính 37↔39 — một slide tóm tắt in hai lượt): <strong>25↔29</strong> (2/3 giống hệt) · <strong>31↔33</strong> (1/3 giống hệt, 2 dòng đổi chữ) · <strong>35↔38</strong> (3/3 giống hệt) · <strong>40↔42</strong> (2/4 giống hệt, 2 dòng bị cắt chữ). Bốn cặp — đây là ĐẶC TÍNH cấu trúc của deck, không phải tai nạn.</p>`],
 
       [43, 'Summary: Coherence and cohesion in essays and reports',
         `<p class="y-chinh">🎯 The definition slide of the whole section, and the cleanest pair of definitions in Mooc 4. <strong>Coherence: does your writing make SENSE?</strong> → <strong>does it answer the question?</strong> · <strong>is the language easy to follow?</strong> · <strong>does your text have a logical order?</strong> (three questions). <strong>Cohesion: does your writing work TOGETHER?</strong> → <strong>word chains</strong> · <strong>pronouns referring forwards and backwards</strong> · <strong>Theme-New structure</strong> · <strong>phrases for conjunction</strong> (four devices). Citation: <strong>(Halliday &amp; Hasan, 1976; Oshima &amp; Hogue, 1991; Sowton, 2012)</strong>.</p>

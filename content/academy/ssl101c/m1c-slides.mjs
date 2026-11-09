@@ -288,7 +288,7 @@ export default {
 <ul>
 <li><strong>Bullet 1 and bullet 2 are the pair students collapse into one.</strong> Organising information is sorting other people's material. Organising thinking is forming your own view. Do only the first and you produce a summary, not an argument — the most common reason a literature review scores low.</li>
 <li><strong>Bullet 3 turns reading back into searching.</strong> Once your themes exist you can see which ones are supported by one weak source and which by five strong ones. That is a targeted search, far cheaper than the broad one you started with.</li>
-<li><strong>Everything orbits the research question.</strong> It appears in all three bullets. Without a stated question there is no criterion for "relevant" and organising is arbitrary.</li>
+<li><strong>Everything orbits the research question.</strong> It is named in the first two bullets, and the third ("develop your arguments") serves it. Without a stated question there is no criterion for "relevant" and organising is arbitrary.</li>
 <li><strong>Applied at FPTU.</strong> Write your research question on one line at the top of the notes document and keep it visible. If you cannot say how a paragraph serves that line, the paragraph is not ready.</li>
 </ul>
 <p class="meo">💡 Three words to carry: <strong>MATERIAL → POSITION → GAPS</strong>. Slide 66 immediately turns these into a four-phase procedure you can actually execute.</p>`,
@@ -302,7 +302,7 @@ export default {
 <ul>
 <li><strong>Bullet 1 và bullet 2 là cặp sinh viên hay gộp làm một.</strong> Sắp xếp thông tin là phân loại vật liệu của người khác. Sắp xếp suy nghĩ là hình thành quan điểm của mình. Chỉ làm cái đầu thì bạn cho ra một bản TÓM TẮT chứ không phải một LẬP LUẬN — lý do phổ biến nhất khiến bài tổng quan tài liệu bị điểm thấp.</li>
 <li><strong>Bullet 3 biến việc đọc trở lại thành việc tìm.</strong> Khi các chủ đề đã hiện ra, bạn thấy chủ đề nào chỉ có một nguồn yếu đỡ và chủ đề nào có năm nguồn mạnh. Đó là một cuộc tìm CÓ ĐÍCH, rẻ hơn nhiều so với cuộc tìm rộng lúc đầu.</li>
-<li><strong>Mọi thứ đều xoay quanh câu hỏi nghiên cứu.</strong> Nó xuất hiện trong cả ba bullet. Không có câu hỏi phát biểu rõ ràng thì không có tiêu chí nào cho chữ "liên quan", và việc sắp xếp trở nên tuỳ tiện.</li>
+<li><strong>Mọi thứ đều xoay quanh câu hỏi nghiên cứu.</strong> Nó được gọi tên ở hai bullet đầu, còn bullet thứ ba ("phát triển lập luận của bạn") phục vụ nó. Không có câu hỏi phát biểu rõ ràng thì không có tiêu chí nào cho chữ "liên quan", và việc sắp xếp trở nên tuỳ tiện.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Viết câu hỏi nghiên cứu thành MỘT dòng ở đầu file ghi chú và luôn để nó trong tầm mắt. Đoạn văn nào bạn không nói được nó phục vụ dòng đó ra sao thì đoạn đó chưa xong.</li>
 </ul>
 <p class="meo">💡 Ba chữ mang theo: <strong>VẬT LIỆU → LẬP TRƯỜNG → LỖ HỔNG</strong>. Slide 66 lập tức biến chúng thành một quy trình bốn phase thực thi được.</p>`],

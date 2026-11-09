@@ -94,7 +94,7 @@ export default {
 <p class="meo">💡 Mẹo nhớ: <strong>TOÀN BÀI → ĐOẠN → TIÊU ĐỀ → HÌNH</strong>. Bốn bậc, từ ngoài vào trong.</p>`],
 
       [45, 'Summary: Polishing and Refining Essays — essay structure, paragraph structure, essay titles (Vogan, cited in Lacchia, 2015)',
-        `<p class="y-chinh">🎯 The summary of 4.3, in <strong>three</strong> headings with two sub-points each: <strong>Essay argument structure</strong> (make sure you've answered the question · check introduction, conclusion &amp; topic sentences) · <strong>Paragraph argument structure</strong> (check for coherence &amp; cohesion · check supporting evidence for arguments) · <strong>Essay titles</strong> (Declarative, Engaging &amp; Focused — <em>Vogan, cited in Lacchia, 2015</em>).</p>
+        `<p class="y-chinh">🎯 The summary of 4.3, in <strong>three</strong> headings — two sub-points under each of the first two, one under essay titles: <strong>Essay argument structure</strong> (make sure you've answered the question · check introduction, conclusion &amp; topic sentences) · <strong>Paragraph argument structure</strong> (check for coherence &amp; cohesion · check supporting evidence for arguments) · <strong>Essay titles</strong> (Declarative, Engaging &amp; Focused — <em>Vogan, cited in Lacchia, 2015</em>).</p>
 <table>
 <tr><th>Heading</th><th>Check 1</th><th>Check 2</th><th>What a failure looks like</th></tr>
 <tr><td>Essay argument structure</td><td>Have you answered the question?</td><td>Introduction, conclusion &amp; topic sentences</td><td>A well-written essay on a slightly different question</td></tr>
@@ -110,7 +110,7 @@ export default {
 </ul>
 <p class="dap-an">✅ Quick exercise — which criterion does each title break? (a) "About databases" → not declarative, not focused. (b) "An exhaustive multi-perspective investigation into contemporary information systems" → not focused, barely engaging. (c) "Indexing strategy" → not declarative. A title passing all three: "Composite indexes cut report latency by half in our sales database".</p>
 <p class="meo">💡 Three-word hook for titles: <strong>D-E-F — Declarative, Engaging, Focused</strong>. And for paragraphs: <strong>coherence = logic, cohesion = glue</strong>.</p>`,
-        `<p class="y-chinh">🎯 Tóm tắt mục 4.3, gồm <strong>BA</strong> đề mục, mỗi đề mục hai ý con: <strong>Cấu trúc lập luận của cả bài</strong> (chắc chắn bạn đã TRẢ LỜI ĐÚNG CÂU HỎI · kiểm mở bài, kết bài &amp; câu chủ đề) · <strong>Cấu trúc lập luận của đoạn</strong> (kiểm tính mạch lạc &amp; tính liên kết · kiểm bằng chứng hỗ trợ cho lập luận) · <strong>Tiêu đề bài viết</strong> (Declarative, Engaging &amp; Focused — <em>Vogan, cited in Lacchia, 2015</em>).</p>
+        `<p class="y-chinh">🎯 Tóm tắt mục 4.3, gồm <strong>BA</strong> đề mục, hai đề mục đầu mỗi đề mục hai ý con, đề mục tiêu đề một ý: <strong>Cấu trúc lập luận của cả bài</strong> (chắc chắn bạn đã TRẢ LỜI ĐÚNG CÂU HỎI · kiểm mở bài, kết bài &amp; câu chủ đề) · <strong>Cấu trúc lập luận của đoạn</strong> (kiểm tính mạch lạc &amp; tính liên kết · kiểm bằng chứng hỗ trợ cho lập luận) · <strong>Tiêu đề bài viết</strong> (Declarative, Engaging &amp; Focused — <em>Vogan, cited in Lacchia, 2015</em>).</p>
 <table>
 <tr><th>Đề mục</th><th>Phép kiểm 1</th><th>Phép kiểm 2</th><th>Hỏng thì trông thế nào</th></tr>
 <tr><td>Cấu trúc lập luận cả bài</td><td>Đã trả lời câu hỏi chưa?</td><td>Mở bài, kết bài &amp; câu chủ đề</td><td>Một bài viết hay về một câu hỏi hơi khác</td></tr>

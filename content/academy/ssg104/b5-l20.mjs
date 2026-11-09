@@ -63,6 +63,7 @@ export const b5l20 = [
        <li><span class="nhan">Maintaining</span> — holding and deepening it.</li>
        <li><span class="nhan">Reinventing</span> — changing direction, often more than once.</li>
      </ol>
+     <p class="meo">💡 The slide itself shows only the five labels as a row of boxes, GROWING → EXPLORING → ESTABLISHING → MAINTAINING → REINVENTING; the one-line descriptions above are this lesson's explanation.</p>
      <p class="meo">💡 The fifth stage is the modern addition and the reason objective 1 matters: a career is now expected to cycle, not to end.</p>`,
     `<p class="y-chinh">🎯 Năm giai đoạn, theo thứ tự.</p>
      <ol>
@@ -72,6 +73,7 @@ export const b5l20 = [
        <li><span class="nhan">Duy trì</span> — giữ và đào sâu chỗ đứng đó.</li>
        <li><span class="nhan">Tái tạo</span> — đổi hướng, thường là hơn một lần.</li>
      </ol>
+     <p class="meo">💡 Bản thân slide chỉ có năm nhãn xếp thành một hàng ô, GROWING → EXPLORING → ESTABLISHING → MAINTAINING → REINVENTING; các dòng giải thích ở trên là phần diễn giải của bài học này.</p>
      <p class="meo">💡 Giai đoạn thứ năm là phần bổ sung của thời hiện đại, và là lý do mục tiêu 1 quan trọng: sự nghiệp bây giờ được trông đợi sẽ quay vòng, chứ không kết thúc.</p>`),
 
   slide(D, 6, 'Career roadmap — four cyclical steps',
@@ -93,9 +95,9 @@ export const b5l20 = [
      <p class="meo">💡 "Chu kỳ" nghĩa là bước 4 quay về bước 1. Mỗi công việc bạn làm đều dạy bạn điều gì đó về chính mình, và điều đó đổi thứ bạn nên khám phá tiếp theo.</p>`),
 
   slide(D, 7, 'Plan, Do, Check, Act',
-    `<p class="y-chinh">🎯 Divider for PDCA — the framework CQ15.7 asks about.</p>
+    `<p class="y-chinh">🎯 Divider for PDCA — the framework CQ15.7 asks about. The picture is a cycle of four curved arrows around a yellow ball: <strong>Plan → Do → Check → Act</strong>, and Act leads back into Plan.</p>
      <p class="meo">💡 PDCA comes from quality management and is applied here to a career. The point of borrowing it is that a career, like a process, improves by measured iteration rather than by one big decision.</p>`,
-    `<p class="y-chinh">🎯 Slide phân mục cho PDCA — khung khái niệm mà CQ15.7 hỏi tới.</p>
+    `<p class="y-chinh">🎯 Slide phân mục cho PDCA — khung khái niệm mà CQ15.7 hỏi tới. Hình là một vòng bốn mũi tên cong quanh quả cầu vàng: <strong>Plan → Do → Check → Act</strong>, và Act lại dẫn về Plan.</p>
      <p class="meo">💡 PDCA vốn từ quản trị chất lượng, ở đây được áp vào sự nghiệp. Ý nghĩa của việc mượn nó là: sự nghiệp, cũng như một quy trình, tiến bộ nhờ lặp lại có đo lường chứ không nhờ một quyết định lớn duy nhất.</p>`),
 
   slide(D, 8, 'PDCA explained',
@@ -145,6 +147,7 @@ export const b5l20 = [
        <li><span class="nhan">Networking contacts</span></li>
        <li><span class="nhan">The Internet</span></li>
      </ul>
+     <p>Beside the list is a screenshot of the FPT University website, page <em>Quan hệ doanh nghiệp</em> (business relations), with news of companies visiting the campus (ViHAT, Cloud Ace, MCV Corporation, American Study) and a menu item for the on-the-job-training semester (OJT).</p>
      <p class="meo">💡 The order is not accidental: the campus centre already exists and is paid for, and networking reaches jobs before they are advertised online.</p>`,
     `<p class="y-chinh">🎯 Ba nguồn lực, theo đúng thứ tự slide nêu.</p>
      <ul>
@@ -152,6 +155,7 @@ export const b5l20 = [
        <li><span class="nhan">Mạng lưới quan hệ</span></li>
        <li><span class="nhan">Internet</span></li>
      </ul>
+     <p>Cạnh danh sách là ảnh chụp trang web Đại học FPT, mục <em>Quan hệ doanh nghiệp</em>, đăng tin các công ty tới thăm trường (ViHAT, Cloud Ace, MCV Corporation, American Study), trên thanh menu có mục Học kỳ tại doanh nghiệp (OJT).</p>
      <p class="meo">💡 Thứ tự này không ngẫu nhiên: trung tâm của trường thì đã có sẵn và học phí đã trả rồi, còn mạng lưới quan hệ chạm tới công việc trước khi nó được đăng tuyển trên mạng.</p>`),
 
   slide(D, 11, 'Resources for the job search (2)',
@@ -162,6 +166,7 @@ export const b5l20 = [
        <li><span class="nhan">Web page profile</span></li>
        <li>Job and career fairs</li>
      </ul>
+     <p>The picture is the poster of an FPT University <strong>Job Fair 2022</strong>, campus Ho Chi Minh City, 12.05.2022, 08:00–16:00.</p>
      <p class="meo">💡 "Web page profile" is the one that works while you sleep: a public profile is the only resource on this list that employers can find without you applying first.</p>`,
     `<p class="y-chinh">🎯 Bốn nguồn nữa.</p>
      <ul>
@@ -170,13 +175,40 @@ export const b5l20 = [
        <li><span class="nhan">Hồ sơ cá nhân trên web</span></li>
        <li>Ngày hội việc làm</li>
      </ul>
+     <p>Hình là áp phích <strong>Job Fair 2022</strong> của Đại học FPT, campus Thành phố Hồ Chí Minh, ngày 12.05.2022, 08:00–16:00.</p>
      <p class="meo">💡 "Hồ sơ trên web" là thứ làm việc cả khi bạn ngủ: đó là nguồn duy nhất trong danh sách này mà nhà tuyển dụng tìm thấy bạn trước khi bạn kịp nộp đơn.</p>`),
 
   slide(D, 12, 'Top skills for the post-COVID era',
-    `<p class="y-chinh">🎯 A slide on which skills the labour market is moving toward.</p>
-     <p class="meo">💡 Whatever the specific list, note what this course has spent ten weeks on: working in groups, communicating, resolving conflict, presenting and writing. Those are the skills that survive changes in technology, which is the argument for a subject like SSG104 existing at all.</p>`,
-    `<p class="y-chinh">🎯 Slide về những kỹ năng mà thị trường lao động đang hướng tới.</p>
-     <p class="meo">💡 Danh sách cụ thể là gì đi nữa, hãy để ý mười tuần qua môn này dạy gì: làm việc nhóm, giao tiếp, hoá giải xung đột, thuyết trình và viết. Đó là những kỹ năng sống sót qua các đợt đổi thay công nghệ — và cũng là lý do tồn tại của một môn như SSG104.</p>`),
+    `<p class="y-chinh">🎯 "Working in the post-COVID era: Top skills for the future" — the World Economic Forum chart <strong>Top 10 skills of 2025</strong> (source: Future of Jobs Report 2020; the slide links safety4sea.com).</p>
+     <ol>
+       <li>Analytical thinking and innovation</li>
+       <li>Active learning and learning strategies</li>
+       <li>Complex problem-solving</li>
+       <li>Critical thinking and analysis</li>
+       <li>Creativity, originality and initiative</li>
+       <li>Leadership and social influence</li>
+       <li>Technology use, monitoring and control</li>
+       <li>Technology design and programming</li>
+       <li>Resilience, stress tolerance and flexibility</li>
+       <li>Reasoning, problem-solving and ideation</li>
+     </ol>
+     <p>The icon colours mark four types of skill: problem-solving (blue: 1, 3, 4, 5, 10), self-management (green: 2, 9), working with people (yellow-green: 6) and technology use and development (purple: 7, 8).</p>
+     <p class="meo">💡 Only two of the ten are technology skills. Note what this course has spent ten weeks on: working in groups, communicating, resolving conflict, presenting and writing. Those are the skills that survive changes in technology, which is the argument for a subject like SSG104 existing at all.</p>`,
+    `<p class="y-chinh">🎯 "Làm việc trong thời hậu COVID: những kỹ năng hàng đầu cho tương lai" — biểu đồ <strong>Top 10 skills of 2025</strong> của Diễn đàn Kinh tế Thế giới (nguồn: Future of Jobs Report 2020; slide dẫn link safety4sea.com).</p>
+     <ol>
+       <li>Tư duy phân tích và đổi mới</li>
+       <li>Học chủ động và chiến lược học tập</li>
+       <li>Giải quyết vấn đề phức tạp</li>
+       <li>Tư duy phản biện và phân tích</li>
+       <li>Sáng tạo, độc đáo và chủ động</li>
+       <li>Lãnh đạo và ảnh hưởng xã hội</li>
+       <li>Sử dụng, giám sát và kiểm soát công nghệ</li>
+       <li>Thiết kế công nghệ và lập trình</li>
+       <li>Kiên cường, chịu áp lực và linh hoạt</li>
+       <li>Lập luận, giải quyết vấn đề và nảy ý tưởng</li>
+     </ol>
+     <p>Màu biểu tượng chia bốn loại kỹ năng: giải quyết vấn đề (xanh dương: 1, 3, 4, 5, 10), tự quản lý bản thân (xanh lá: 2, 9), làm việc với người khác (vàng chanh: 6) và sử dụng, phát triển công nghệ (tím: 7, 8).</p>
+     <p class="meo">💡 Chỉ hai trong mười là kỹ năng công nghệ. Hãy để ý mười tuần qua môn này dạy gì: làm việc nhóm, giao tiếp, hoá giải xung đột, thuyết trình và viết. Đó là những kỹ năng sống sót qua các đợt đổi thay công nghệ — và cũng là lý do tồn tại của một môn như SSG104.</p>`),
 
   slide(D, 13, 'A holistic approach to the labour market',
     `<p class="y-chinh">🎯 The quotation on the slide.</p>
@@ -200,14 +232,14 @@ export const b5l20 = [
      </ol>
      <p class="meo">💡 Trả lời câu 1 bằng bản đồ nghề nghiệp (slide 6) và câu 2 bằng PDCA (slide 8): định vị bằng cách chạy những thử nghiệm nhỏ ngay bây giờ rồi kiểm kết quả, thay vì chờ tốt nghiệp mới bắt đầu.</p>`),
 
-  slide(D, 15, 'Discussion continued',
-    `<p class="y-chinh">🎯 Space for the group discussion of the two questions.</p>
-     <p class="meo">💡 A concrete answer beats an ambitious one. "Join one project outside my coursework this semester and ask for feedback at the end" is a PDCA cycle; "work harder" is not.</p>`,
-    `<p class="y-chinh">🎯 Chỗ dành cho phần thảo luận nhóm về hai câu hỏi.</p>
-     <p class="meo">💡 Câu trả lời cụ thể hơn hẳn câu trả lời đầy tham vọng. "Kỳ này tham gia một dự án ngoài chương trình học và cuối kỳ xin nhận xét" là một vòng PDCA; "cố gắng hơn" thì không.</p>`),
+  slide(D, 15, 'Closing quotation',
+    `<p class="y-chinh">🎯 A photo card with the quotation: "Life has two rules: 1) Never quit. 2) Always remember rule #1."</p>
+     <p class="meo">💡 For the activity on slide 14, a concrete answer beats an ambitious one. "Join one project outside my coursework this semester and ask for feedback at the end" is a PDCA cycle; "work harder" is not.</p>`,
+    `<p class="y-chinh">🎯 Tấm ảnh in câu: "Cuộc đời có hai luật: 1) Không bao giờ bỏ cuộc. 2) Luôn nhớ luật số 1."</p>
+     <p class="meo">💡 Với activity ở slide 14, câu trả lời cụ thể hơn hẳn câu trả lời đầy tham vọng. "Kỳ này tham gia một dự án ngoài chương trình học và cuối kỳ xin nhận xét" là một vòng PDCA; "cố gắng hơn" thì không.</p>`),
 
-  slide(D, 16, 'End of Lesson 20',
-    `<p class="y-chinh">🎯 Closing slide.</p>
+  slide(D, 16, 'Q&A',
+    `<p class="y-chinh">🎯 Closing slide: two speech bubbles "Q" and "A".</p>
      <p><span class="nhan">Self-check</span></p>
      <ol>
        <li>Five stages of career development — which one are you in?</li>
@@ -215,7 +247,7 @@ export const b5l20 = [
        <li>PDCA — what does "check" actually compare?</li>
        <li>Three job-search resources you have not used yet?</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Slide kết.</p>
+    `<p class="y-chinh">🎯 Slide kết: hai bong bóng thoại "Q" và "A".</p>
      <p><span class="nhan">Tự kiểm</span></p>
      <ol>
        <li>Năm giai đoạn phát triển nghề nghiệp — bạn đang ở giai đoạn nào?</li>
@@ -230,8 +262,8 @@ export const b5l20 = [
   ]),
 
   bi(
-    `<h3>✅ What this adds</h3>
-     <p>The syllabus gives session 45 to career development and skills, and asks CQ15.7 about PDCA. The old Academy course had one paragraph saying these skills are your career, with no stages, no roadmap and no PDCA at all.</p>`,
-    `<h3>✅ Bài này bù thêm gì</h3>
-     <p>Syllabus dành buổi 45 cho phát triển nghề nghiệp và kỹ năng nghề, và hỏi CQ15.7 về PDCA. Khoá Academy cũ chỉ có một đoạn nói rằng những kỹ năng này chính là sự nghiệp của bạn, không có giai đoạn, không có bản đồ, và hoàn toàn không có PDCA.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus gives session 45 to career development and skills, and asks CQ15.7 about PDCA (slides 7–8). The five stages (slide 5), the four roadmap steps (slide 6) and the job-search resources (slides 10–11) are the other lists worth knowing by heart.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Đề cương dành buổi 45 cho phát triển nghề nghiệp và kỹ năng nghề, và hỏi CQ15.7 về PDCA (slide 7–8). Năm giai đoạn (slide 5), bốn bước bản đồ nghề nghiệp (slide 6) và các nguồn tìm việc (slide 10–11) là những danh sách khác nên thuộc.</p>`),
 ].join('\n');

@@ -2984,6 +2984,9 @@ code:not(.work-root *) {
 .ct-notes-host {
   height: 100%;
   overflow: hidden;
+  /* Khối chứa cho con `fixed` của trang Notes web — xem `.ct-web-nhung` (09/11/2026). */
+  position: relative;
+  contain: layout paint;
   /*
    * KHÔNG đặt `background` ở đây.
    *
@@ -13582,6 +13585,12 @@ select {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  /* KHỐI CHỨA cho con `fixed` của trang web (09/11/2026): web thêm nền `pointer-events-none fixed inset-0 z-0`
+     cho Tin nhắn (d7dd00e39, 03/11) ⇒ trong app nó tính theo CỬA SỔ và vẽ ĐÈ thanh bên + thanh tiêu đề — người
+     dùng: "app lại lỗi mất thanh menu bên trái". Khung không cuộn ⇒ lớp fixed đứng yên đúng vùng nội dung.
+     Cùng cách `.ct-web-khung` (trang web qua VoWeb) — khung nhúng riêng nào cũng phải có hai dòng này. */
+  position: relative;
+  contain: layout paint;
 }
 
 .ct-web-nhung > * {

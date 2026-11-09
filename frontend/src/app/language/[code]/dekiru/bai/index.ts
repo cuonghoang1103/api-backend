@@ -31,6 +31,8 @@ export function loadBai(n: number): Promise<Lesson[]> | null {
   const them = Promise.all([
     n >= 1 && n <= 4 ? import('./docTo14').then((m) => [({ 1: m.DOC_TO_B1, 2: m.DOC_TO_B2, 3: m.DOC_TO_B3, 4: m.DOC_TO_B4 })[n]!]) : [],
     n === 3 ? import('./thiThu113').then((m) => m.THI_THU_113) : [],
+    // 📽️ Slide bài giảng Nhật 1 theo từng slot JPD113 + slide tổng hợp mỗi bài (slide113.ts).
+    n >= 1 && n <= 3 ? import('./slide113').then((m) => ({ 1: m.SLIDE_113_B1, 2: m.SLIDE_113_B2, 3: m.SLIDE_113_B3 })[n]!) : [],
     // Kiểm tra từng bài đúng form thi (Bài 4–9) + thi cuối kỳ JPD123 đúng form "Speaking Demo" (cuối Bài 7).
     n >= 4 && n <= 9 ? import('./kiemTraBai49').then((m) => (m as unknown as Record<string, Lesson[]>)[`KIEM_TRA_B${n}`]) : [],
     n === 7 ? import('./thiCuoiKy123').then((m) => m.THI_CUOI_KY_123) : [],

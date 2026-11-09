@@ -261,22 +261,24 @@ export const b3l1011 = [
     `<p class="y-chinh">🎯 Bài thứ hai của bộ slide bắt đầu từ đây.</p>`),
 
   slide(D, 21, 'Learning objectives — diversity and conflict',
-    `<p class="y-chinh">🎯 Six objectives, and the last four belong to Lesson 12 on conflict.</p>
+    `<p class="y-chinh">🎯 Seven bullets on the slide, and the last five belong to Lesson 12 on conflict.</p>
      <ol>
        <li>Describe how diversity can enhance decision-making and problem-solving.</li>
        <li>Identify challenges and best practices for working with multicultural teams.</li>
        <li>Define conflict.</li>
        <li>Differentiate between functional and dysfunctional conflict.</li>
-       <li>Recognise various types of conflict in groups; describe the conflict process.</li>
+       <li>Recognise various types of conflict in groups.</li>
+       <li>Describe the conflict process.</li>
        <li>Identify and apply strategies for preventing or reducing conflict.</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Sáu mục tiêu, và bốn cái cuối thuộc về Bài 12 nói về xung đột.</p>
+    `<p class="y-chinh">🎯 Slide có bảy gạch đầu dòng, và năm gạch cuối thuộc về Bài 12 nói về xung đột.</p>
      <ol>
        <li>Mô tả sự đa dạng giúp ra quyết định và giải quyết vấn đề ra sao.</li>
        <li>Chỉ ra thách thức và thực hành tốt khi làm việc trong đội đa văn hoá.</li>
        <li>Định nghĩa xung đột.</li>
        <li>Phân biệt xung đột chức năng và xung đột phi chức năng.</li>
-       <li>Nhận diện các loại xung đột trong nhóm; mô tả quá trình xung đột.</li>
+       <li>Nhận diện các loại xung đột trong nhóm.</li>
+       <li>Mô tả quá trình xung đột.</li>
        <li>Xác định và áp dụng chiến lược ngăn ngừa hoặc giảm xung đột.</li>
      </ol>`),
 

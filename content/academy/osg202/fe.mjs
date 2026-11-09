@@ -1324,7 +1324,7 @@ FE25#25 &nbsp;&nbsp;.95x2 + .05x.99x20 + .05x.01x10ms &nbsp;&nbsp;&nbsp;&nbsp;&n
 <tr><td>hypervisor / VMM / guest / host</td><td>trình ảo hoá / máy ảo khách / máy chủ</td><td>type 1 runs on the hardware, type 2 on a host OS</td></tr>
 </tbody>
 </table>
-<p class="meo">🧠 The full glossary of each chapter is at the end of its 🧪 practice lesson. For this exam, learn the twenty rows above until you can translate them without looking — they appear in more than half of the 1 395 questions.</p>
+<p class="meo">🧠 The full glossary of each chapter is at the end of its 🧪 practice lesson. For this exam, learn the twenty-one rows above until you can translate them without looking — they appear in more than half of the 1 395 questions.</p>
 <h2>📌 Summary</h2>
 <ul>
 <li>FE = 60 minutes, 50 multiple-choice questions in English, 40% of the course, at least 4/10. About 72 seconds per question.</li>
@@ -1363,7 +1363,7 @@ FE25#25 &nbsp;&nbsp;.95x2 + .05x.99x20 + .05x.01x10ms &nbsp;&nbsp;&nbsp;&nbsp;&n
 <tr><td>hypervisor / VMM / guest / host</td><td>trình ảo hoá / máy khách / máy chủ</td><td>loại 1 chạy trên phần cứng, loại 2 trên một HĐH chủ</td></tr>
 </tbody>
 </table>
-<p class="meo">🧠 Bảng thuật ngữ đầy đủ của từng chương nằm cuối bài 🧪 thực hành của chương đó. Cho kỳ thi này, học hai mươi dòng trên tới mức dịch được không cần nhìn — chúng xuất hiện trong hơn một nửa số 1 395 câu.</p>
+<p class="meo">🧠 Bảng thuật ngữ đầy đủ của từng chương nằm cuối bài 🧪 thực hành của chương đó. Cho kỳ thi này, học hai mươi mốt dòng trên tới mức dịch được không cần nhìn — chúng xuất hiện trong hơn một nửa số 1 395 câu.</p>
 <h2>📌 Tóm tắt</h2>
 <ul>
 <li>FE = 60 phút, 50 câu trắc nghiệm tiếng Anh, 40% điểm môn, tối thiểu 4/10. Khoảng 72 giây mỗi câu.</li>

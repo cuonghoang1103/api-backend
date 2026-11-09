@@ -9,6 +9,7 @@ import type { LanguageCard } from '@/types/language';
 import { ProgressRing, CardsSkeleton, EmptyState, useLangUser } from '@/components/language/primitives';
 import WordOfTheDay from '@/components/language/WordOfTheDay';
 import { KHOA_CHINH } from '@/lib/khoaChinh';
+import GauChao from '@/components/language/mascot/GauChao';
 import s from './landing.module.css';
 
 /**
@@ -90,6 +91,15 @@ export default function LanguageLandingPage() {
           transition={{ duration: 0.35 }}
           className={s.hero}
         >
+          {/* 🐼 Gấu Bíp 3D chào khi vào trang — bên phải tiêu đề; bấm vào để nói chuyện. Tải chậm, không chặn trang. */}
+          <div className={s.gau}>
+            <GauChao
+              variant="bip"
+              size={240}
+              huong="tren"
+              text={hocTiep ? `Chào mừng quay lại! Hôm nay học tiếp ${KHOA_CHINH[hocTiep.code]?.ten ?? hocTiep.name} nhé 🐼` : undefined}
+            />
+          </div>
           <span className={s.eyebrow}><Sparkles size={14} aria-hidden /> My Language</span>
           <h1 className={s.tieuDe}>
             Học ngoại ngữ theo <span className={s.nhan}>lộ trình từng ngày</span>

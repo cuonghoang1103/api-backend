@@ -41,6 +41,7 @@ import type { VocabCategory } from '@/types/language';
 import { MascotRow } from '@/components/language/mascot/MascotScene';
 import { dailyMascot, mascotName } from '@/lib/mascotData';
 import { SectionShell, EmptyState, ProgressRing, useLangUser } from '@/components/language/primitives';
+import LoTrinhKhoa, { coLoTrinhKhoa } from '@/components/language/roadmap3d/LoTrinhKhoa';
 
 const ICONS: Record<string, typeof Route> = {
   Type, BookOpen, GraduationCap, Headphones, MessagesSquare, Newspaper, HelpCircle, PenLine, Bot, Route,
@@ -79,6 +80,13 @@ function RoadmapGreeting({ doneCount, total }: { doneCount: number; total: numbe
 
 export default function RoadmapPage() {
   const code = String(useParams().code);
+  // 09/11/2026: ngôn ngữ có KHOÁ CHÍNH (ja → Dekiru, en → IELTS, zh → CH) ⇒ lộ trình 3D dựng thẳng từ các bài
+  // của khoá (components/language/roadmap3d). Ngôn ngữ khác giữ lộ trình kiểu roadmap.sh từ API bên dưới.
+  if (coLoTrinhKhoa(code)) return <LoTrinhKhoa code={code} />;
+  return <RoadmapApi code={code} />;
+}
+
+function RoadmapApi({ code }: { code: string }) {
   const { isAuthenticated } = useLangUser();
   const [data, setData] = useState<Roadmap | null>(null);
   const [loading, setLoading] = useState(true);

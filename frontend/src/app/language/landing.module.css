@@ -24,7 +24,16 @@
 .wrap { position: relative; width: min(100%, 72rem); margin: 0 auto; padding: 2.5rem 1rem 5rem; }
 
 /* ── Đầu trang ── */
-.hero { max-width: 46rem; margin-bottom: 2.25rem; }
+.hero { position: relative; max-width: 46rem; margin-bottom: 2.25rem; }
+/* 🐼 Gấu Bíp 3D (09/11/2026): máy tính rộng — nổi bên phải tiêu đề, ngoài cột chữ 46rem; điện thoại — đứng
+   đầu, căn giữa, nhỏ hơn (canvas tự co theo khối). */
+.gau { display: flex; justify-content: center; margin: -0.5rem 0 0.75rem; }
+@media (max-width: 639px) { .gau { transform: scale(.8); transform-origin: top center; margin-bottom: -2.75rem; } }
+.gau > div > div:last-child { max-width: min(260px, calc(100vw - 2rem)); }
+@media (min-width: 1024px) {
+  .hero { max-width: 72rem; padding-right: 22rem; min-height: 19rem; }
+  .gau { position: absolute; right: 0; top: -1.25rem; margin: 0; width: 21rem; justify-content: center; }
+}
 .eyebrow {
   display: inline-flex; align-items: center; gap: .4rem;
   padding: .3rem .75rem; border-radius: 999px;

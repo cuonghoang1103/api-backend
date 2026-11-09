@@ -69,6 +69,7 @@ function loadGoc(n: number): Promise<Lesson[]> | null {
     case 20: return import('./bai20').then((m) => m.BAI_20);
     case 21: return import('./bai21').then((m) => m.BAI_21);
     case 22: return import('./bai22').then((m) => m.BAI_22);
+    case 23: return import('./bai23').then((m) => m.BAI_23);
     default: return null;
   }
 }

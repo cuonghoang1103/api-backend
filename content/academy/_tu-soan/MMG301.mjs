@@ -103,7 +103,391 @@ const build = (o, L) => {
   h += '<h3>' + T.prac + '</h3><ol>' + o.p.map((p) => '<li>' + p[I] + '<div class="dap-an"><strong>' + T.ans + ':</strong> ' + p[2 + I] + '</div></li>').join('') + '</ol>';
   return h;
 };
-const D = (slug, en, vi, desc, o) => ({ title: en + '|||' + vi, slug, type: 'DOCUMENT', description: desc, content: bi(build(o, 'en'), build(o, 'vi')) });
+// ===== Mở rộng bài mỏng (09/11/2026): tình huống mẫu từng bước trên công ty GIẢ ĐỊNH, số liệu giả định đã tính lại =====
+const EXTRA = {};
+EXTRA['mmg301-ts-1-1'] = {
+en: `<h4>Worked mini-case: Hoa Mai Notebooks (fictional)</h4>
+<p>Hoa Mai is an invented Vietnamese stationery maker. Its paper-notebook sales fell from 500 to 460 million VND in a year. Follow the manager's reasoning step by step.</p>
+<ol><li><strong>Diagnose the orientation.</strong> The founder says, “Our paper is the thickest and smoothest in the country, so students will come back.” That is a product orientation: quality is assumed to be the only thing that matters.</li>
+<li><strong>Ask about the need.</strong> Interviews show students want to “remember lectures and revise quickly before exams”. Many now use tablets and shared slides. The need is note-taking and revision, not paper.</li>
+<li><strong>Redefine the business.</strong> From “we make notebooks” to “we help students study efficiently”. This is the cure for marketing myopia.</li>
+<li><strong>Act holistically.</strong> Relationship: a student community and teacher partners. Integrated: notebooks, a revision-template pack and QR codes to printable summaries, all telling one story. Internal: shop staff trained to ask what the student is studying. Performance: track repeat purchase and the environmental impact of paper.</li></ol>
+<p><strong>Arithmetic check.</strong> 460 ÷ 500 = 0.92, a fall of 8%. To return to 500 million the company needs growth of 500 ÷ 460 − 1 ≈ 8.7%, not 8%, because the base is now smaller. A loss is always a little harder to win back than it looks.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Hoa Mai Notebooks (công ty giả định)</h4>
+<p>Hoa Mai là một nhà sản xuất văn phòng phẩm Việt Nam do chúng ta tưởng tượng ra. Doanh thu vở giấy giảm từ 500 xuống 460 triệu VND trong một năm. Hãy theo dõi lập luận của nhà quản lý từng bước.</p>
+<ol><li><strong>Chẩn đoán định hướng.</strong> Người sáng lập nói: “Giấy của chúng ta dày và mịn nhất nước, nên sinh viên sẽ quay lại.” Đó là định hướng sản phẩm: mặc định chất lượng là thứ duy nhất quan trọng.</li>
+<li><strong>Hỏi về nhu cầu.</strong> Phỏng vấn cho thấy sinh viên muốn “nhớ bài giảng và ôn nhanh trước kỳ thi”. Nhiều bạn đã dùng máy tính bảng và slide chia sẻ. Nhu cầu là ghi chép và ôn tập, không phải tờ giấy.</li>
+<li><strong>Định nghĩa lại ngành kinh doanh.</strong> Từ “chúng tôi làm vở” thành “chúng tôi giúp sinh viên học hiệu quả”. Đây là cách chữa cận thị marketing.</li>
+<li><strong>Hành động toàn diện.</strong> Quan hệ: cộng đồng sinh viên và đối tác là giáo viên. Tích hợp: vở, bộ mẫu ôn tập và mã QR tới bản tóm tắt in được, cùng kể một câu chuyện. Nội bộ: nhân viên cửa hàng được dạy hỏi bạn đang học môn gì. Hiệu quả: theo dõi tỷ lệ mua lại và tác động môi trường của giấy.</li></ol>
+<p><strong>Kiểm tra phép tính.</strong> 460 ÷ 500 = 0,92, tức giảm 8%. Để quay về 500 triệu, công ty cần tăng 500 ÷ 460 − 1 ≈ 8,7%, không phải 8%, vì nền hiện nay nhỏ hơn. Lấy lại phần đã mất luôn khó hơn vẻ bề ngoài.</p>`,
+p: [['Sales fall from 200 to 180 million VND. What growth is needed to recover to 200?','Doanh thu giảm từ 200 xuống 180 triệu VND. Cần tăng bao nhiêu để về lại 200?','200 ÷ 180 − 1 ≈ 11.1% (not the 10% that was lost).','200 ÷ 180 − 1 ≈ 11,1% (không phải 10% đã mất).']]
+};
+EXTRA['mmg301-ts-1-2'] = {
+en: `<h4>Worked mini-case: Sen Việt Tea (fictional)</h4>
+<p>Sen Việt Tea is an invented bottled-tea company. All numbers below are assumed for teaching. It has three lines; place each in the growth-share matrix.</p>
+<table><thead><tr><th>Line</th><th>Our share</th><th>Largest rival</th><th>Relative share</th><th>Market growth</th><th>Box</th></tr></thead><tbody>
+<tr><td>Classic tea</td><td>30%</td><td>20%</td><td>30 ÷ 20 = 1.5</td><td>2%</td><td>Cash cow</td></tr>
+<tr><td>Cold-brew tea</td><td>6%</td><td>24%</td><td>6 ÷ 24 = 0.25</td><td>18%</td><td>Question mark</td></tr>
+<tr><td>Lemon tea</td><td>5%</td><td>25%</td><td>5 ÷ 25 = 0.2</td><td>1%</td><td>Dog</td></tr></tbody></table>
+<ol><li><strong>Pair the SWOT.</strong> Strength: a cash cow with strong distribution. Opportunity: fast-growing cold-brew. SO action: use classic-tea distribution to place cold-brew in the same shops.</li>
+<li><strong>Choose the Ansoff cell.</strong> Cold-brew sold to current shoppers through current channels is product development.</li>
+<li><strong>Write the SMART objective.</strong> Raise cold-brew share from 6% to 9% in Ho Chi Minh City modern trade within 12 months, measured by a retail audit.</li>
+<li><strong>Check the budget.</strong> If the category is worth 400 billion VND, three points of share = 0.03 × 400 = 12 billion VND of sales. At a 35% contribution margin this gives 4.2 billion. If the extra marketing costs 3 billion, the net gain is 4.2 − 3 = 1.2 billion VND.</li></ol>
+<p>The plan is now controllable: a number, a place, a date, a data source and a budget that pays back.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Sen Việt Tea (công ty giả định)</h4>
+<p>Sen Việt Tea là công ty trà đóng chai do chúng ta tưởng tượng. Mọi con số dưới đây là giả định để dạy. Công ty có ba dòng; hãy đặt từng dòng vào ma trận tăng trưởng – thị phần.</p>
+<table><thead><tr><th>Dòng</th><th>Thị phần của ta</th><th>Đối thủ lớn nhất</th><th>Thị phần tương đối</th><th>Tăng trưởng thị trường</th><th>Ô</th></tr></thead><tbody>
+<tr><td>Trà truyền thống</td><td>30%</td><td>20%</td><td>30 ÷ 20 = 1,5</td><td>2%</td><td>Bò sữa</td></tr>
+<tr><td>Trà cold-brew</td><td>6%</td><td>24%</td><td>6 ÷ 24 = 0,25</td><td>18%</td><td>Dấu hỏi</td></tr>
+<tr><td>Trà chanh</td><td>5%</td><td>25%</td><td>5 ÷ 25 = 0,2</td><td>1%</td><td>Chó</td></tr></tbody></table>
+<ol><li><strong>Ghép cặp SWOT.</strong> Điểm mạnh: một “bò sữa” có phân phối tốt. Cơ hội: cold-brew tăng nhanh. Hành động SO: dùng mạng phân phối trà truyền thống để đưa cold-brew vào cùng các cửa hàng.</li>
+<li><strong>Chọn ô Ansoff.</strong> Bán cold-brew cho khách hiện tại qua kênh hiện tại là phát triển sản phẩm.</li>
+<li><strong>Viết mục tiêu SMART.</strong> Nâng thị phần cold-brew từ 6% lên 9% ở kênh siêu thị – cửa hàng hiện đại tại TP.HCM trong 12 tháng, đo bằng khảo sát bán lẻ.</li>
+<li><strong>Kiểm tra ngân sách.</strong> Nếu ngành hàng trị giá 400 tỷ VND, ba điểm thị phần = 0,03 × 400 = 12 tỷ VND doanh thu. Với biên đóng góp 35% được 4,2 tỷ. Nếu marketing thêm tốn 3 tỷ thì lãi ròng là 4,2 − 3 = 1,2 tỷ VND.</li></ol>
+<p>Kế hoạch giờ đã kiểm soát được: có con số, địa điểm, thời hạn, nguồn dữ liệu và ngân sách thu hồi được.</p>`,
+p: [['Your share is 5% and the leader has 20% in a market growing 15%. Relative share and BCG box?','Thị phần của bạn 5%, người dẫn đầu 20%, thị trường tăng 15%. Thị phần tương đối và ô BCG?','5 ÷ 20 = 0.25; high growth with low relative share = question mark: invest to grow or exit.','5 ÷ 20 = 0,25; tăng trưởng cao, thị phần tương đối thấp = dấu hỏi: đầu tư để lớn lên hoặc thoái lui.']]
+};
+EXTRA['mmg301-ts-2-1'] = {
+en: `<h4>Worked mini-case: Cà Phê Hẻm (fictional)</h4>
+<p>Cà Phê Hẻm is an invented chain of 8 cafés in Ho Chi Minh City considering 4 more. Scores are assumed to show the method, not real data.</p>
+<ol><li><strong>Score the five forces from 1 (weak) to 5 (strong pressure).</strong> Rivalry 5, new entrants 4, substitutes 4, buyer power 4, supplier power 2. Total = 5 + 4 + 4 + 4 + 2 = 19 out of 25, average 3.8: the industry is tough, so profit must come from a clear niche, not from price.</li>
+<li><strong>List candidate trends and score them.</strong> Priority = impact (1–5) × likelihood (1–5): delivery-app ordering 4 × 5 = 20; coffee-bean price rise 5 × 3 = 15; green-packaging rules 3 × 4 = 12; remote classes for students 2 × 2 = 4.</li>
+<li><strong>Keep the top three</strong> (20, 15, 12) and drop the last. Each needs a response.</li>
+<li><strong>Write the responses.</strong> Delivery: a pick-up counter and packaging that keeps drinks cold. Beans: test a second supplier and a price-protected blend. Packaging: switch to paper cups and charge a small reusable-cup discount.</li></ol>
+<p>Notice what the method produced: three decisions with owners, not a long list of trends. Also profile the indirect rival: a convenience-store cold coffee competes for the same afternoon break at a lower price, so the café must win on place and experience.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Cà Phê Hẻm (công ty giả định)</h4>
+<p>Cà Phê Hẻm là chuỗi 8 quán cà phê ở TP.HCM do chúng ta tưởng tượng, đang cân nhắc mở thêm 4 quán. Điểm số là giả định để minh hoạ phương pháp, không phải số liệu thật.</p>
+<ol><li><strong>Chấm năm lực lượng từ 1 (yếu) đến 5 (áp lực mạnh).</strong> Cạnh tranh nội bộ 5, đối thủ mới 4, sản phẩm thay thế 4, quyền lực người mua 4, quyền lực nhà cung cấp 2. Tổng = 5 + 4 + 4 + 4 + 2 = 19 trên 25, trung bình 3,8: ngành khắc nghiệt, nên lợi nhuận phải đến từ ngách rõ ràng chứ không từ giá.</li>
+<li><strong>Liệt kê xu hướng và chấm điểm.</strong> Ưu tiên = tác động (1–5) × khả năng xảy ra (1–5): đặt hàng qua app giao đồ ăn 4 × 5 = 20; giá hạt cà phê tăng 5 × 3 = 15; quy định bao bì xanh 3 × 4 = 12; học trực tuyến của sinh viên 2 × 2 = 4.</li>
+<li><strong>Giữ ba xu hướng đầu</strong> (20, 15, 12) và bỏ cái cuối. Mỗi cái cần một phản ứng.</li>
+<li><strong>Viết phản ứng.</strong> Giao hàng: quầy nhận hàng và bao bì giữ lạnh. Hạt cà phê: thử nhà cung cấp thứ hai và công thức pha trộn có bảo vệ giá. Bao bì: chuyển sang ly giấy và giảm giá nhỏ cho khách mang ly riêng.</li></ol>
+<p>Hãy để ý phương pháp cho ra gì: ba quyết định có người phụ trách, không phải danh sách xu hướng dài. Cũng nên lập hồ sơ đối thủ gián tiếp: cà phê lạnh ở cửa hàng tiện lợi tranh cùng giờ nghỉ chiều với giá thấp hơn, nên quán phải thắng bằng địa điểm và trải nghiệm.</p>`,
+p: [['Score two trends: A has impact 5 and likelihood 2; B has impact 3 and likelihood 4. Which first?','Chấm hai xu hướng: A tác động 5, khả năng 2; B tác động 3, khả năng 4. Ưu tiên cái nào?','A = 10, B = 12, so B first. Likelihood matters as much as size of impact.','A = 10, B = 12, nên ưu tiên B. Khả năng xảy ra quan trọng ngang độ lớn tác động.']]
+};
+EXTRA['mmg301-ts-2-2'] = {
+en: `<h4>Worked mini-case: Bánh Nhà Lan (fictional)</h4>
+<p>Bánh Nhà Lan is an invented bakery chain deciding whether to launch a sugar-free line. All figures are assumed.</p>
+<ol><li><strong>Decision.</strong> Launch only if at least 10% of nearby customers would buy weekly.</li>
+<li><strong>Plan.</strong> Secondary data first (public health statements on sugar), then 8 short interviews to learn the words customers use, then a survey.</li>
+<li><strong>Sample.</strong> n = 400 customers at several stores and times, not only weekend mornings. 120 say they would buy weekly: p = 120 ÷ 400 = 30%.</li>
+<li><strong>Error.</strong> When p is not 0.5 use e = 1.96 × √(p × (1 − p) ÷ n) = 1.96 × √(0.21 ÷ 400) = 1.96 × 0.0229 ≈ 0.045, so ±4.5 points: the true figure is probably between 25.5% and 34.5%.</li>
+<li><strong>Adjust for reality.</strong> Stated intention overstates behaviour. Suppose past launches showed only half of those who say “yes” actually buy. Expected buyers = 30% × 0.5 = 15%. With 20,000 customers in the catchment that is about 3,000 weekly buyers.</li>
+<li><strong>Recommendation.</strong> Even the low end (25.5% × 0.5 ≈ 12.8%) passes the 10% rule, so run a 6-week market test in two stores before a full launch, and record the real result.</li></ol>
+<p>Lesson: the margin of error describes sampling noise only. It says nothing about question wording or who was not asked.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Bánh Nhà Lan (công ty giả định)</h4>
+<p>Bánh Nhà Lan là chuỗi tiệm bánh do chúng ta tưởng tượng, đang quyết định có ra dòng bánh không đường hay không. Mọi số liệu là giả định.</p>
+<ol><li><strong>Quyết định.</strong> Chỉ ra mắt nếu ít nhất 10% khách quanh tiệm sẽ mua hằng tuần.</li>
+<li><strong>Kế hoạch.</strong> Dữ liệu thứ cấp trước (khuyến cáo y tế công khai về đường), rồi 8 buổi phỏng vấn ngắn để biết khách dùng từ gì, rồi khảo sát.</li>
+<li><strong>Mẫu.</strong> n = 400 khách ở nhiều tiệm và nhiều khung giờ, không chỉ sáng cuối tuần. 120 người nói sẽ mua hằng tuần: p = 120 ÷ 400 = 30%.</li>
+<li><strong>Sai số.</strong> Khi p khác 0,5 dùng e = 1,96 × √(p × (1 − p) ÷ n) = 1,96 × √(0,21 ÷ 400) = 1,96 × 0,0229 ≈ 0,045, tức ±4,5 điểm: con số thật nhiều khả năng nằm giữa 25,5% và 34,5%.</li>
+<li><strong>Hiệu chỉnh theo thực tế.</strong> Ý định nói ra thường cao hơn hành vi. Giả sử các lần ra mắt trước cho thấy chỉ một nửa người nói “có” thật sự mua. Người mua kỳ vọng = 30% × 0,5 = 15%. Với 20.000 khách trong khu vực, đó là khoảng 3.000 người mua hằng tuần.</li>
+<li><strong>Khuyến nghị.</strong> Ngay cả mức thấp (25,5% × 0,5 ≈ 12,8%) vẫn vượt ngưỡng 10%, nên chạy thử thị trường 6 tuần ở hai tiệm trước khi ra mắt đầy đủ, và ghi lại kết quả thật.</li></ol>
+<p>Bài học: sai số chọn mẫu chỉ mô tả nhiễu do lấy mẫu. Nó không nói gì về cách đặt câu hỏi hay những người chưa được hỏi.</p>`,
+p: [['n = 625 and p = 50%. Margin of error?','n = 625 và p = 50%. Sai số?','1.96 × √(0.25 ÷ 625) = 1.96 × 0.02 ≈ 0.039, about ±3.9 points.','1,96 × √(0,25 ÷ 625) = 1,96 × 0,02 ≈ 0,039, khoảng ±3,9 điểm.']]
+};
+EXTRA['mmg301-ts-2-3'] = {
+en: `<h4>Worked mini-case: Gạo Sạch Xanh (fictional)</h4>
+<p>Gạo Sạch Xanh is an invented online seller of premium rice. All numbers are assumed and each ratio should be checked with research.</p>
+<ol><li><strong>Potential by chain ratio.</strong> 10,000,000 households in target cities × 25% who buy premium rice = 2,500,000; × 40% who shop for groceries online = 1,000,000; × 60% inside delivery zones = 600,000 households. At 1,200,000 VND per household per year, potential = 600,000 × 1,200,000 = 720 billion VND.</li>
+<li><strong>Current share.</strong> Sales are 36 billion, so share = 36 ÷ 720 = 5.0%.</li>
+<li><strong>Set a target.</strong> Next year the market is expected to grow 8% to 720 × 1.08 = 777.6 billion. A 6% share means 0.06 × 777.6 = 46.656 billion in sales. Needed sales growth = 46.656 ÷ 36 − 1 = 29.6%.</li>
+<li><strong>Judge feasibility.</strong> Growing 29.6% in an 8% market is a big gain in share. Ask which lever delivers it: penetration (more new households), loyalty (more orders per household) or price selectivity.</li>
+<li><strong>Forecast next month.</strong> Monthly sales were 3.0, 3.2 and 3.4 billion. The moving average = (3.0 + 3.2 + 3.4) ÷ 3 = 3.2, but sales rise 0.2 per month, so a trend forecast is 3.4 + 0.2 = 3.6. Publish a low case (3.4), base (3.6) and high (3.8).</li></ol>
+<p>Common mistake: using the potential as a sales forecast. Potential is a ceiling under ideal conditions, not a promise.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Gạo Sạch Xanh (công ty giả định)</h4>
+<p>Gạo Sạch Xanh là cửa hàng gạo cao cấp bán trực tuyến do chúng ta tưởng tượng. Mọi số liệu là giả định, mỗi tỷ lệ cần được kiểm bằng nghiên cứu.</p>
+<ol><li><strong>Tiềm năng bằng phương pháp chuỗi tỷ lệ.</strong> 10.000.000 hộ ở các thành phố mục tiêu × 25% mua gạo cao cấp = 2.500.000; × 40% mua thực phẩm trực tuyến = 1.000.000; × 60% nằm trong vùng giao hàng = 600.000 hộ. Với 1.200.000 VND mỗi hộ mỗi năm, tiềm năng = 600.000 × 1.200.000 = 720 tỷ VND.</li>
+<li><strong>Thị phần hiện tại.</strong> Doanh thu là 36 tỷ, nên thị phần = 36 ÷ 720 = 5,0%.</li>
+<li><strong>Đặt mục tiêu.</strong> Năm sau thị trường dự kiến tăng 8% lên 720 × 1,08 = 777,6 tỷ. Thị phần 6% nghĩa là 0,06 × 777,6 = 46,656 tỷ doanh thu. Tăng trưởng doanh thu cần có = 46,656 ÷ 36 − 1 = 29,6%.</li>
+<li><strong>Đánh giá tính khả thi.</strong> Tăng 29,6% trong thị trường tăng 8% là một bước tăng thị phần lớn. Hãy hỏi đòn bẩy nào làm được: thâm nhập (thêm hộ mới), trung thành (thêm đơn mỗi hộ) hay độ nhạy giá.</li>
+<li><strong>Dự báo tháng tới.</strong> Doanh thu các tháng là 3,0; 3,2 và 3,4 tỷ. Trung bình trượt = (3,0 + 3,2 + 3,4) ÷ 3 = 3,2, nhưng doanh thu tăng 0,2 mỗi tháng nên dự báo theo xu hướng là 3,4 + 0,2 = 3,6. Công bố kịch bản thấp (3,4), cơ sở (3,6) và cao (3,8).</li></ol>
+<p>Lỗi hay gặp: dùng tiềm năng làm dự báo doanh thu. Tiềm năng là trần trong điều kiện lý tưởng, không phải lời hứa.</p>`,
+p: [['Market 500 billion growing 10%; you hold 8% and want 9% next year. Sales needed?','Thị trường 500 tỷ tăng 10%; bạn có 8% và muốn 9% năm sau. Cần doanh thu bao nhiêu?','Next market = 550; 9% × 550 = 49.5 billion (this year 40 billion, so +23.75%).','Thị trường sau = 550; 9% × 550 = 49,5 tỷ (năm nay 40 tỷ, tức tăng 23,75%).']]
+};
+EXTRA['mmg301-ts-3-1'] = {
+en: `<h4>Worked mini-case: TechNhà laptop store (fictional)</h4>
+<p>TechNhà is an invented laptop retailer. It notices that two types of customers walk in. All scores are assumed (1–10).</p>
+<ol><li><strong>Score the products.</strong> Laptop X: price 9, battery 6, performance 5. Laptop Y: 6, 8, 7. Laptop Z: 4, 7, 9.</li>
+<li><strong>Students</strong> weigh price 0.5, battery 0.3, performance 0.2. X = 4.5 + 1.8 + 1.0 = 7.3; Y = 3.0 + 2.4 + 1.4 = 6.8; Z = 2.0 + 2.1 + 1.8 = 5.9. Students prefer X.</li>
+<li><strong>Video designers</strong> weigh price 0.1, battery 0.2, performance 0.7. X = 0.9 + 1.2 + 3.5 = 5.6; Y = 0.6 + 1.6 + 4.9 = 7.1; Z = 0.4 + 1.4 + 6.3 = 8.1. Designers prefer Z.</li>
+<li><strong>Map the five stages for a student.</strong> Problem recognition: the old laptop cannot run new software. Search: friends' group chat, review videos, the store site. Evaluation: the score above. Purchase: a delivery fee shown at checkout can still derail it. Post-purchase: a quick set-up guide and a warranty reminder reduce regret.</li>
+<li><strong>Turn it into action.</strong> Shop-floor staff ask the first question (“what will you use it for?”), then show the matching model, and online product pages put the attribute that segment values most at the top.</li></ol>
+<p>Same products, different weights, different winners: this is the practical reason for segmentation in Chapter 4. Weights are not facts; measure them with a survey or conjoint-style questions.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: cửa hàng laptop TechNhà (công ty giả định)</h4>
+<p>TechNhà là nhà bán lẻ laptop do chúng ta tưởng tượng. Cửa hàng nhận thấy có hai loại khách bước vào. Mọi điểm số là giả định (thang 1–10).</p>
+<ol><li><strong>Chấm điểm sản phẩm.</strong> Laptop X: giá 9, pin 6, hiệu năng 5. Laptop Y: 6, 8, 7. Laptop Z: 4, 7, 9.</li>
+<li><strong>Sinh viên</strong> đặt trọng số giá 0,5, pin 0,3, hiệu năng 0,2. X = 4,5 + 1,8 + 1,0 = 7,3; Y = 3,0 + 2,4 + 1,4 = 6,8; Z = 2,0 + 2,1 + 1,8 = 5,9. Sinh viên chọn X.</li>
+<li><strong>Người dựng video</strong> đặt trọng số giá 0,1, pin 0,2, hiệu năng 0,7. X = 0,9 + 1,2 + 3,5 = 5,6; Y = 0,6 + 1,6 + 4,9 = 7,1; Z = 0,4 + 1,4 + 6,3 = 8,1. Nhóm này chọn Z.</li>
+<li><strong>Vẽ năm giai đoạn cho một sinh viên.</strong> Nhận ra vấn đề: laptop cũ không chạy được phần mềm mới. Tìm kiếm: nhóm chat bạn bè, video đánh giá, trang của cửa hàng. Đánh giá: điểm ở trên. Quyết định mua: phí giao hàng hiện ra ở bước thanh toán vẫn có thể phá đơn. Sau mua: hướng dẫn cài đặt nhanh và nhắc bảo hành giúp giảm hối tiếc.</li>
+<li><strong>Chuyển thành hành động.</strong> Nhân viên bán hàng hỏi trước (“bạn dùng để làm gì?”), rồi giới thiệu mẫu phù hợp; trang sản phẩm trực tuyến đặt thuộc tính mà nhóm đó coi trọng nhất lên đầu.</li></ol>
+<p>Cùng sản phẩm, trọng số khác nhau, người thắng khác nhau: đó là lý do thực tế của phân khúc ở Chương 4. Trọng số không phải sự thật có sẵn; hãy đo bằng khảo sát hoặc câu hỏi kiểu conjoint.</p>`,
+p: [['Using the student weights (0.5, 0.3, 0.2), score Laptop Y scoring 6, 8, 7.','Dùng trọng số sinh viên (0,5; 0,3; 0,2), tính điểm Laptop Y với 6, 8, 7.','0.5×6 + 0.3×8 + 0.2×7 = 3.0 + 2.4 + 1.4 = 6.8.','0,5×6 + 0,3×8 + 0,2×7 = 3,0 + 2,4 + 1,4 = 6,8.']]
+};
+EXTRA['mmg301-ts-3-2'] = {
+en: `<h4>Worked mini-case: Đại Phát Machinery (fictional)</h4>
+<p>Đại Phát is an invented firm that sells packaging machines to a noodle factory. Figures are assumed.</p>
+<ol><li><strong>Identify the buying type.</strong> The factory already owns a machine and wants a faster one: a modified rebuy. The incumbent supplier is not safe, and challengers have a door open.</li>
+<li><strong>Map the buying centre.</strong> Initiator: the production manager sees the bottleneck. User: line operators. Influencer: the quality engineer. Decider: the plant director. Approver: the finance director. Buyer: procurement. Gatekeeper: the director's assistant, who controls whose proposal reaches the table.</li>
+<li><strong>Tailor the message.</strong> Operators: training and a trial run. Quality engineer: test data on seal strength. Director: a business case. Finance: total cost of ownership. Procurement: clear delivery dates and payment terms. Assistant: a short, accurate summary that is easy to forward.</li>
+<li><strong>Compute total cost of ownership over 6 years.</strong> Machine P: 480 million purchase + 6 × (36 energy + 12 maintenance) = 480 + 6 × 48 = 768 million. Machine Q: 400 + 6 × (48 + 20) = 400 + 6 × 68 = 808 million.</li>
+<li><strong>Find the payback of the dearer machine.</strong> P costs 80 million more on the invoice but saves 68 − 48 = 20 million a year, so the extra price is recovered in 80 ÷ 20 = 4 years, and over 6 years P is 40 million cheaper.</li></ol>
+<p>Derived demand adds a risk: if the factory's noodle sales fall 10%, its need for new machines can fall much more, so watch the end market, not only the customer.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Cơ khí Đại Phát (công ty giả định)</h4>
+<p>Đại Phát là công ty do chúng ta tưởng tượng, bán máy đóng gói cho một nhà máy mì. Số liệu là giả định.</p>
+<ol><li><strong>Xác định loại mua.</strong> Nhà máy đã có máy và muốn máy nhanh hơn: mua lại có điều chỉnh. Nhà cung cấp cũ không chắc chắn giữ chỗ, đối thủ mới có cửa vào.</li>
+<li><strong>Vẽ trung tâm mua.</strong> Người khởi xướng: quản đốc sản xuất thấy điểm nghẽn. Người dùng: công nhân vận hành. Người ảnh hưởng: kỹ sư chất lượng. Người quyết định: giám đốc nhà máy. Người phê duyệt: giám đốc tài chính. Người mua: phòng thu mua. Người gác cổng: trợ lý giám đốc, người kiểm soát đề xuất nào được đưa lên bàn.</li>
+<li><strong>Điều chỉnh thông điệp.</strong> Công nhân: đào tạo và chạy thử. Kỹ sư chất lượng: số liệu thử độ kín mối hàn. Giám đốc: bản luận chứng kinh doanh. Tài chính: tổng chi phí sở hữu. Thu mua: ngày giao rõ ràng và điều khoản thanh toán. Trợ lý: bản tóm tắt ngắn, chính xác, dễ chuyển tiếp.</li>
+<li><strong>Tính tổng chi phí sở hữu trong 6 năm.</strong> Máy P: 480 triệu mua + 6 × (36 điện + 12 bảo trì) = 480 + 6 × 48 = 768 triệu. Máy Q: 400 + 6 × (48 + 20) = 400 + 6 × 68 = 808 triệu.</li>
+<li><strong>Tìm thời gian hoàn vốn của máy đắt hơn.</strong> P đắt hơn 80 triệu trên hoá đơn nhưng tiết kiệm 68 − 48 = 20 triệu mỗi năm, nên phần chênh được thu hồi sau 80 ÷ 20 = 4 năm; trong 6 năm P rẻ hơn 40 triệu.</li></ol>
+<p>Cầu phái sinh kèm một rủi ro: nếu doanh số mì của nhà máy giảm 10%, nhu cầu máy mới có thể giảm nhiều hơn, nên phải theo dõi thị trường cuối, không chỉ khách hàng.</p>`,
+p: [['Machine P costs 480 million and runs at 48 million per year; machine R costs 520 million and runs at 40 million per year. Which is cheaper over 5 years?','Máy P giá 480 triệu, chạy 48 triệu mỗi năm; máy R giá 520 triệu, chạy 40 triệu mỗi năm. Máy nào rẻ hơn trong 5 năm?','P = 480 + 5×48 = 720; R = 520 + 5×40 = 720. Equal over 5 years; R wins afterwards.','P = 480 + 5×48 = 720; R = 520 + 5×40 = 720. Bằng nhau sau 5 năm; sau đó R có lợi hơn.']]
+};
+EXTRA['mmg301-ts-3-3'] = {
+en: `<h4>Worked mini-case: Ngọt Ngào Cakes (fictional)</h4>
+<p>Ngọt Ngào is an invented online cake shop that takes orders through social media chat. Figures are assumed.</p>
+<ol><li><strong>Pick a segment and a goal.</strong> Office workers ordering a birthday cake for the next day.</li>
+<li><strong>Map the journey.</strong> Aware: a video post. Consider: the photo gallery and reviews. Buy: a chat to confirm the flavour and delivery slot. Receive: the courier. Use: sharing the cake at the party. Recommend: a photo tagged to the shop. The moment of truth is the chat: a slow reply loses the order before the cake is even discussed.</li>
+<li><strong>Read the funnel.</strong> 50,000 video views → 2,500 profile visits (5%) → 500 chat enquiries (20%) → 200 orders (40%). Overall conversion = 200 ÷ 50,000 = 0.4%.</li>
+<li><strong>Test two improvements.</strong> A reply within 5 minutes lifts enquiry-to-order from 40% to 50%: 500 × 0.5 = 250 orders (+50). Better videos lift view-to-visit from 5% to 6%: 3,000 visits × 20% × 40% = 240 orders (+40). Both help; the chat fix is cheaper and hits the moment of truth.</li>
+<li><strong>Measure loyalty.</strong> 150 customers answer the NPS question: 90 promoters (60%), 40 passives (26.7%), 20 detractors (13.3%). NPS = 60 − 13.3 ≈ +47. Phone the detractors to learn the cause and ask passives what would make them recommend.</li></ol>
+<p>Always read NPS beside repeat-purchase rate: a high score with few repeat orders means people like the shop but see no reason to return.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Bánh kem Ngọt Ngào (công ty giả định)</h4>
+<p>Ngọt Ngào là tiệm bánh kem trực tuyến do chúng ta tưởng tượng, nhận đơn qua chat mạng xã hội. Số liệu là giả định.</p>
+<ol><li><strong>Chọn phân khúc và mục tiêu.</strong> Nhân viên văn phòng đặt bánh sinh nhật cho ngày mai.</li>
+<li><strong>Vẽ hành trình.</strong> Biết đến: một video đăng bài. Cân nhắc: bộ ảnh và đánh giá. Mua: chat xác nhận vị bánh và khung giờ giao. Nhận: người giao hàng. Dùng: chia bánh ở buổi tiệc. Giới thiệu: một bức ảnh gắn thẻ tiệm. Khoảnh khắc quyết định là cuộc chat: trả lời chậm là mất đơn trước cả khi bàn đến chiếc bánh.</li>
+<li><strong>Đọc phễu.</strong> 50.000 lượt xem video → 2.500 lượt vào trang (5%) → 500 lượt nhắn hỏi (20%) → 200 đơn (40%). Chuyển đổi chung = 200 ÷ 50.000 = 0,4%.</li>
+<li><strong>Thử hai cải tiến.</strong> Trả lời trong 5 phút nâng tỷ lệ hỏi → đơn từ 40% lên 50%: 500 × 0,5 = 250 đơn (+50). Video tốt hơn nâng tỷ lệ xem → vào trang từ 5% lên 6%: 3.000 lượt × 20% × 40% = 240 đơn (+40). Cả hai đều có ích; sửa khâu chat rẻ hơn và chạm đúng khoảnh khắc quyết định.</li>
+<li><strong>Đo lòng trung thành.</strong> 150 khách trả lời câu hỏi NPS: 90 người ủng hộ (60%), 40 trung lập (26,7%), 20 người phê phán (13,3%). NPS = 60 − 13,3 ≈ +47. Gọi cho nhóm phê phán để biết nguyên nhân, hỏi nhóm trung lập điều gì sẽ khiến họ giới thiệu.</li></ol>
+<p>Luôn đọc NPS cạnh tỷ lệ mua lại: điểm cao mà ít đơn lặp lại nghĩa là khách quý tiệm nhưng không có lý do quay lại.</p>`,
+p: [['A funnel: 80,000 visits, 3% add to cart, 40% of carts pay. If cart-to-pay rises to 50%, how many extra orders?','Phễu: 80.000 lượt vào, 3% thêm vào giỏ, 40% giỏ được thanh toán. Nếu tỷ lệ giỏ → thanh toán lên 50%, thêm bao nhiêu đơn?','Carts = 2,400; orders 960 → 1,200, so +240 orders.','Giỏ = 2.400; đơn 960 → 1.200, tức thêm 240 đơn.']]
+};
+EXTRA['mmg301-ts-4-1'] = {
+en: `<h4>Worked mini-case: Vườn Nhà plant milk (fictional)</h4>
+<p>Vườn Nhà is an invented plant-milk brand. A survey of 600 urban adults was clustered by benefits sought. All figures are assumed.</p>
+<table><thead><tr><th>Segment</th><th>Respondents</th><th>Share</th><th>What they want</th></tr></thead><tbody>
+<tr><td>Health seekers</td><td>240</td><td>240 ÷ 600 = 40%</td><td>Low sugar, clear nutrition facts</td></tr>
+<tr><td>Lactose-intolerant</td><td>120</td><td>20%</td><td>Dairy-free taste that works in coffee</td></tr>
+<tr><td>Trend followers</td><td>150</td><td>25%</td><td>New flavours, shareable look</td></tr>
+<tr><td>Price-driven</td><td>90</td><td>15%</td><td>Lowest price per litre</td></tr></tbody></table>
+<ol><li><strong>Check the total.</strong> 240 + 120 + 150 + 90 = 600, so the clusters cover everyone.</li>
+<li><strong>Size the opportunity.</strong> Assume 3,000,000 urban adults and 240,000 VND of yearly spend per buyer. Health seekers: 40% = 1,200,000 people; if the brand wins 3% that is 36,000 buyers × 240,000 = 8.64 billion VND. Lactose-intolerant: 20% = 600,000; winning 5% gives 30,000 buyers × 240,000 = 7.2 billion VND.</li>
+<li><strong>Apply the five criteria.</strong> Both segments are measurable and substantial. Health seekers are accessible through fitness and nutrition media; the lactose-intolerant through café and clinic partners. Both respond differently to price and message, so they are differentiable and actionable.</li>
+<li><strong>Decide.</strong> Start with health seekers (larger revenue), use “dairy-free” as a proof point that also reaches the second segment, and defer the price-driven group, which would pull the brand towards discounting.</li></ol>
+<p>The percentages come from a sample, so repeat the survey in a second city before building a national plan.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: sữa hạt Vườn Nhà (công ty giả định)</h4>
+<p>Vườn Nhà là thương hiệu sữa hạt do chúng ta tưởng tượng. Khảo sát 600 người lớn ở đô thị được gom nhóm theo lợi ích tìm kiếm. Mọi số liệu là giả định.</p>
+<table><thead><tr><th>Phân khúc</th><th>Số người</th><th>Tỷ trọng</th><th>Họ muốn gì</th></tr></thead><tbody>
+<tr><td>Quan tâm sức khoẻ</td><td>240</td><td>240 ÷ 600 = 40%</td><td>Ít đường, thông tin dinh dưỡng rõ</td></tr>
+<tr><td>Không dung nạp lactose</td><td>120</td><td>20%</td><td>Vị không sữa bò, dùng được với cà phê</td></tr>
+<tr><td>Chạy theo xu hướng</td><td>150</td><td>25%</td><td>Vị mới, bao bì dễ khoe</td></tr>
+<tr><td>Nhạy cảm về giá</td><td>90</td><td>15%</td><td>Giá mỗi lít thấp nhất</td></tr></tbody></table>
+<ol><li><strong>Kiểm tra tổng.</strong> 240 + 120 + 150 + 90 = 600, vậy các nhóm bao phủ toàn bộ mẫu.</li>
+<li><strong>Ước lượng quy mô cơ hội.</strong> Giả sử có 3.000.000 người lớn đô thị và mỗi người mua chi 240.000 VND mỗi năm. Nhóm sức khoẻ: 40% = 1.200.000 người; nếu thương hiệu giành 3% thì có 36.000 người mua × 240.000 = 8,64 tỷ VND. Nhóm không dung nạp lactose: 20% = 600.000; giành 5% được 30.000 người × 240.000 = 7,2 tỷ VND.</li>
+<li><strong>Áp dụng năm tiêu chí.</strong> Cả hai nhóm đều đo được và đủ lớn. Nhóm sức khoẻ tiếp cận qua truyền thông thể hình và dinh dưỡng; nhóm không dung nạp lactose qua quán cà phê và phòng khám đối tác. Hai nhóm phản ứng khác nhau với giá và thông điệp nên khác biệt và hành động được.</li>
+<li><strong>Quyết định.</strong> Bắt đầu với nhóm sức khoẻ (doanh thu lớn hơn), dùng “không sữa bò” làm bằng chứng để chạm cả nhóm thứ hai, và hoãn nhóm nhạy cảm về giá vì sẽ kéo thương hiệu sang giảm giá.</li></ol>
+<p>Các tỷ lệ lấy từ một mẫu, nên hãy lặp lại khảo sát ở thành phố thứ hai trước khi lập kế hoạch toàn quốc.</p>`,
+p: [['A segment is 25% of 2,000,000 buyers; you expect to win 4% at 300,000 VND per year. Revenue?','Một phân khúc chiếm 25% của 2.000.000 người mua; bạn kỳ vọng giành 4% với 300.000 VND mỗi năm. Doanh thu?','500,000 people × 4% = 20,000 buyers × 300,000 = 6 billion VND.','500.000 người × 4% = 20.000 người × 300.000 = 6 tỷ VND.']]
+};
+EXTRA['mmg301-ts-4-3'] = {
+en: `<h4>Worked mini-case: Góc Làm Việc co-working café (fictional)</h4>
+<p>Góc Làm Việc is an invented café-with-desks for freelancers and students. Ratings are assumed averages from 100 target customers on a 1–10 scale.</p>
+<ol><li><strong>Build the perceptual map.</strong> Axes: price (1 low to 10 high) and quietness (1 noisy to 10 quiet). Chain café A: price 8, quiet 7. Street café B: price 3, quiet 2. Library café C: price 5, quiet 4. The upper-left area (low price, high quiet) is empty. A gap is only an opportunity if customers want that spot, so check demand first.</li>
+<li><strong>Test demand.</strong> Of the 100 respondents, 40 say they would use a quiet desk at moderate price at least weekly: 40 ÷ 100 = 40%, enough to justify a pilot.</li>
+<li><strong>Parity and difference.</strong> Parity: decent coffee, wifi, clean toilets. Candidate differences are scored 1–5 on three desirable and three deliverable tests. “Quiet desks”: desirable (relevant 5, distinctive 4, superior 4) average 13 ÷ 3 = 4.3; deliverable (feasible 4, communicable 5, sustainable 3) average 12 ÷ 3 = 4.0. “Cheapest drinks”: desirable (5, 2, 2) average 3.0; deliverable (2, 5, 1) average 2.7. Quiet desks win.</li>
+<li><strong>Write the statement.</strong> For freelancers and students who need to concentrate, Góc Làm Việc is the café-workspace that guarantees a quiet desk and a power socket, because every table is in a no-call zone with sound-absorbing panels.</li>
+<li><strong>Prove it.</strong> Publish the quiet-zone rule, show noise readings, and let first-time visitors test the space.</li></ol>
+<p>A difference that is easy to copy (cheap drinks) is weak; one that rests on how the space is built and run is harder for rivals to match.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: quán cà phê làm việc Góc Làm Việc (công ty giả định)</h4>
+<p>Góc Làm Việc là quán cà phê có bàn làm việc dành cho người làm tự do và sinh viên, do chúng ta tưởng tượng. Điểm đánh giá là trung bình giả định từ 100 khách mục tiêu, thang 1–10.</p>
+<ol><li><strong>Dựng bản đồ nhận thức.</strong> Trục: giá (1 thấp đến 10 cao) và độ yên tĩnh (1 ồn đến 10 yên tĩnh). Chuỗi quán A: giá 8, yên tĩnh 7. Quán vỉa hè B: giá 3, yên tĩnh 2. Quán kiểu thư viện C: giá 5, yên tĩnh 4. Góc trên bên trái (giá thấp, yên tĩnh cao) đang trống. Khoảng trống chỉ là cơ hội nếu khách muốn chỗ đó, nên phải kiểm cầu trước.</li>
+<li><strong>Kiểm cầu.</strong> Trong 100 người, 40 nói sẽ dùng bàn yên tĩnh giá vừa phải ít nhất mỗi tuần: 40 ÷ 100 = 40%, đủ để chạy thử.</li>
+<li><strong>Điểm tương đồng và điểm khác biệt.</strong> Tương đồng: cà phê tạm ổn, wifi, nhà vệ sinh sạch. Các ứng viên khác biệt được chấm 1–5 theo ba tiêu chí “đáng mong muốn” và ba tiêu chí “làm được”. “Bàn yên tĩnh”: đáng mong muốn (liên quan 5, khác biệt 4, vượt trội 4) trung bình 13 ÷ 3 = 4,3; làm được (khả thi 4, truyền đạt được 5, bền vững 3) trung bình 12 ÷ 3 = 4,0. “Đồ uống rẻ nhất”: đáng mong muốn (5, 2, 2) trung bình 3,0; làm được (2, 5, 1) trung bình 2,7. Bàn yên tĩnh thắng.</li>
+<li><strong>Viết câu định vị.</strong> Với người làm tự do và sinh viên cần tập trung, Góc Làm Việc là quán-không gian làm việc đảm bảo có bàn yên tĩnh và ổ điện, vì mọi bàn đều nằm trong khu cấm gọi điện, có tấm hấp thụ âm.</li>
+<li><strong>Chứng minh.</strong> Công bố quy tắc khu yên tĩnh, cho xem số đo tiếng ồn, và cho khách lần đầu dùng thử.</li></ol>
+<p>Khác biệt dễ sao chép (đồ uống rẻ) thì yếu; khác biệt dựa vào cách không gian được xây dựng và vận hành thì đối thủ khó theo kịp.</p>`,
+p: [['A difference scores desirable 5, 4, 3 and deliverable 2, 3, 2. Is it a good choice?','Một điểm khác biệt đạt đáng mong muốn 5, 4, 3 và làm được 2, 3, 2. Có nên chọn không?','Desirable average 4.0 but deliverable average 2.3: attractive but hard to deliver, so improve feasibility first or pick another.','Đáng mong muốn trung bình 4,0 nhưng làm được trung bình 2,3: hấp dẫn nhưng khó thực hiện, nên cải thiện tính khả thi trước hoặc chọn cái khác.']]
+};
+EXTRA['mmg301-ts-5-1'] = {
+en: `<h4>Worked mini-case: Gia Đình An Foods (fictional)</h4>
+<p>Gia Đình An is an invented noodle producer. Its lines: instant noodles (7 items), dry noodles (4 items), sauces (5 items). Figures are assumed.</p>
+<ol><li><strong>Measure the mix.</strong> Width = 3 lines; length = 7 + 4 + 5 = 16 items; average line length = 16 ÷ 3 ≈ 5.3. Consistency is high because every line is used in the same home meal.</li>
+<li><strong>Test a line-filling idea.</strong> A spicy instant-noodle variant is expected to sell 1,500 units a month, but 600 of those are buyers who would otherwise buy the existing flavours. Contribution is 3,000 VND per unit. Net new contribution = (1,500 − 600) × 3,000 = 2.7 million VND. If the variant adds 1.5 million of fixed cost (extra packaging, line changeover), the monthly gain = 2.7 − 1.5 = 1.2 million VND. Accept, and review after three months.</li>
+<li><strong>Test a pruning idea.</strong> Item Z sells 300 units at 2,500 contribution = 750,000 VND a month, but carries 1,000,000 VND of complexity cost (stock, changeovers). Surveys suggest 40% of its buyers (120 units) would switch to another item at 3,000 contribution = 360,000. Removing Z changes profit by −750,000 + 360,000 + 1,000,000 = +610,000 VND a month. Prune it.</li>
+<li><strong>Describe the product levels</strong> for the sauce: core benefit (tasty family meal), basic product (a bottle), expected (safe seal, clear label), augmented (recipe on the label, QR to cooking videos), potential (personalised flavours).</li></ol>
+<p>Both decisions used incremental numbers, not total sales: what changes if we add or drop the item.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Thực phẩm Gia Đình An (công ty giả định)</h4>
+<p>Gia Đình An là nhà sản xuất mì do chúng ta tưởng tượng. Các dòng: mì ăn liền (7 mặt hàng), mì khô (4), nước sốt (5). Số liệu là giả định.</p>
+<ol><li><strong>Đo danh mục.</strong> Chiều rộng = 3 dòng; chiều dài = 7 + 4 + 5 = 16 mặt hàng; độ dài trung bình mỗi dòng = 16 ÷ 3 ≈ 5,3. Tính nhất quán cao vì mọi dòng cùng dùng trong bữa ăn gia đình.</li>
+<li><strong>Thử ý tưởng lấp đầy dòng.</strong> Một vị mì cay dự kiến bán 1.500 đơn vị mỗi tháng, nhưng 600 trong số đó là khách vốn đã mua các vị hiện có. Biên đóng góp 3.000 VND mỗi đơn vị. Đóng góp ròng mới = (1.500 − 600) × 3.000 = 2,7 triệu VND. Nếu vị mới thêm 1,5 triệu chi phí cố định (bao bì, đổi dây chuyền), lãi mỗi tháng = 2,7 − 1,5 = 1,2 triệu VND. Chấp nhận và rà soát sau ba tháng.</li>
+<li><strong>Thử ý tưởng cắt bớt.</strong> Mặt hàng Z bán 300 đơn vị với đóng góp 2.500 = 750.000 VND mỗi tháng, nhưng gánh 1.000.000 VND chi phí phức tạp (tồn kho, đổi dây chuyền). Khảo sát cho thấy 40% người mua (120 đơn vị) sẽ chuyển sang mặt hàng khác với đóng góp 3.000 = 360.000. Bỏ Z làm lợi nhuận thay đổi −750.000 + 360.000 + 1.000.000 = +610.000 VND mỗi tháng. Nên cắt.</li>
+<li><strong>Mô tả các cấp sản phẩm</strong> của nước sốt: lợi ích cốt lõi (bữa cơm gia đình ngon), sản phẩm cơ bản (một chai), mong đợi (nắp kín an toàn, nhãn rõ), gia tăng (công thức trên nhãn, mã QR tới video nấu ăn), tiềm năng (vị cá nhân hoá).</li></ol>
+<p>Cả hai quyết định đều dựa trên số gia tăng, không dựa tổng doanh số: điều gì thay đổi nếu thêm hoặc bỏ mặt hàng đó.</p>`,
+p: [['A new variant sells 2,000 units, 800 taken from existing items, contribution 2,500 per unit, extra fixed cost 2 million. Monthly gain?','Một vị mới bán 2.000 đơn vị, 800 lấy từ mặt hàng cũ, đóng góp 2.500 mỗi đơn vị, chi phí cố định thêm 2 triệu. Lãi mỗi tháng?','(2,000 − 800) × 2,500 = 3,000,000; minus 2,000,000 = +1,000,000 VND.','(2.000 − 800) × 2.500 = 3.000.000; trừ 2.000.000 = +1.000.000 VND.']]
+};
+EXTRA['mmg301-ts-5-2'] = {
+en: `<h4>Worked mini-case: Nha Khoa Sáng dental clinic (fictional)</h4>
+<p>Nha Khoa Sáng is an invented clinic with 6 chairs. All figures are assumed.</p>
+<ol><li><strong>Capacity.</strong> 6 chairs × 8 hours × 2 patients per hour = 96 slots a day. The clinic sees 62 patients, so utilisation = 62 ÷ 96 ≈ 64.6%. Slots between 1 pm and 3 pm are mostly empty, and perishability means each empty slot is revenue lost forever.</li>
+<li><strong>Design an off-peak offer.</strong> Price 600,000 VND; offer 20% off for 1–3 pm = 480,000. Variable cost per patient is 150,000, so contribution is 330,000 at the offer price.</li>
+<li><strong>Forecast honestly.</strong> Suppose 12 more patients come at off-peak, but only 8 are new; 4 moved from peak hours. New patients add 8 × 330,000 = 2,640,000. Shifted patients lose 4 × (600,000 − 480,000) = 480,000. Net = 2,640,000 − 480,000 = 2,160,000 VND a day, and utilisation rises to 70 ÷ 96 ≈ 72.9%.</li>
+<li><strong>Find the biggest quality gap.</strong> The clinic promises “no waiting”, yet patients wait 25 minutes on average. That is the gap between promise and delivery. Fix it with appointment reminders, a clearer process (check-in, X-ray, treatment, payment) and an honest promise such as “seen within 10 minutes of your slot”.</li>
+<li><strong>Add the 7P elements.</strong> People: assistants trained to explain the treatment plan. Process: one-page flow shown on the wall. Physical evidence: clean, calm room, visible sterilisation.</li></ol>
+<p>Service recovery: when a patient waits too long, a quick apology and a free check-up reminder often rebuild more trust than an error-free visit does.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: phòng khám Nha Khoa Sáng (công ty giả định)</h4>
+<p>Nha Khoa Sáng là phòng khám 6 ghế do chúng ta tưởng tượng. Mọi số liệu là giả định.</p>
+<ol><li><strong>Công suất.</strong> 6 ghế × 8 giờ × 2 bệnh nhân mỗi giờ = 96 suất mỗi ngày. Phòng khám tiếp 62 bệnh nhân, nên mức sử dụng = 62 ÷ 96 ≈ 64,6%. Các suất từ 13 giờ đến 15 giờ gần như trống, và do tính không lưu trữ được, mỗi suất trống là doanh thu mất vĩnh viễn.</li>
+<li><strong>Thiết kế ưu đãi giờ thấp điểm.</strong> Giá 600.000 VND; giảm 20% cho khung 13–15 giờ = 480.000. Chi phí biến đổi mỗi bệnh nhân 150.000, nên đóng góp ở giá ưu đãi là 330.000.</li>
+<li><strong>Dự báo trung thực.</strong> Giả sử có thêm 12 bệnh nhân giờ thấp điểm, nhưng chỉ 8 là khách mới; 4 người dời từ giờ cao điểm. Khách mới thêm 8 × 330.000 = 2.640.000. Khách dời giờ làm mất 4 × (600.000 − 480.000) = 480.000. Ròng = 2.640.000 − 480.000 = 2.160.000 VND mỗi ngày, và mức sử dụng tăng lên 70 ÷ 96 ≈ 72,9%.</li>
+<li><strong>Tìm khoảng cách chất lượng lớn nhất.</strong> Phòng khám hứa “không phải chờ”, nhưng bệnh nhân chờ trung bình 25 phút. Đó là khoảng cách giữa lời hứa và thực tế. Sửa bằng nhắc lịch hẹn, quy trình rõ hơn (đăng ký, chụp X-quang, điều trị, thanh toán) và lời hứa trung thực như “được tiếp trong 10 phút kể từ giờ hẹn”.</li>
+<li><strong>Bổ sung các yếu tố 7P.</strong> Con người: trợ lý được đào tạo giải thích kế hoạch điều trị. Quy trình: sơ đồ một trang dán trên tường. Bằng chứng hữu hình: phòng sạch, yên tĩnh, tiệt trùng nhìn thấy được.</li></ol>
+<p>Khắc phục dịch vụ: khi bệnh nhân chờ quá lâu, lời xin lỗi nhanh và nhắc lịch khám miễn phí thường xây lại niềm tin tốt hơn một lần khám không sai sót.</p>`,
+p: [['Capacity 80 slots a day, 52 used. Utilisation, and slots needed to reach 75%?','Công suất 80 suất mỗi ngày, dùng 52. Mức sử dụng, và cần bao nhiêu suất để đạt 75%?','52 ÷ 80 = 65%; 75% × 80 = 60 slots, so 8 more.','52 ÷ 80 = 65%; 75% × 80 = 60 suất, tức thêm 8.']]
+};
+EXTRA['mmg301-ts-5-3'] = {
+en: `<h4>Worked mini-case: Xanh Cold-Pressed Juice (fictional)</h4>
+<p>Xanh is an invented juice startup using a stage-gate process. Costs and counts are assumed.</p>
+<table><thead><tr><th>Stage</th><th>Units</th><th>Cost per unit</th><th>Stage cost</th></tr></thead><tbody>
+<tr><td>Screening ideas</td><td>80</td><td>0.5 million</td><td>40 million</td></tr>
+<tr><td>Concept tests</td><td>20</td><td>5 million</td><td>100 million</td></tr>
+<tr><td>Prototypes</td><td>8</td><td>40 million</td><td>320 million</td></tr>
+<tr><td>Market tests</td><td>4</td><td>150 million</td><td>600 million</td></tr>
+<tr><td>Launches</td><td>2</td><td>600 million</td><td>1,200 million</td></tr></tbody></table>
+<ol><li><strong>Total cost.</strong> 40 + 100 + 320 + 600 + 1,200 = 2,260 million VND for 1 lasting success, so the cost per success is 2,260 million.</li>
+<li><strong>Yields.</strong> Idea-to-success = 1 ÷ 80 = 1.25%; launch-to-success = 1 ÷ 2 = 50%.</li>
+<li><strong>Use the gate.</strong> One of the two launched products had a repeat-purchase rate of 8% in its market test against a target of 25%. If the gate had been enforced, that launch would have been cancelled, saving 600 million: total 1,660 million, a 26.5% reduction (600 ÷ 2,260).</li>
+<li><strong>Place the lasting product on the life cycle.</strong> It is in growth: sales rising fast, so shift the message from awareness to preference, add a family-size bottle and enter supermarkets. Early adopters (gym-goers, office workers) are opinion leaders; reach them first, but do not assume the mainstream wants the same premium price.</li></ol>
+<p>The cheapest place to be wrong is early. Define the pass criteria for each gate before the data arrives, so nobody argues them down afterwards.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Nước ép lạnh Xanh (công ty giả định)</h4>
+<p>Xanh là startup nước ép do chúng ta tưởng tượng, dùng quy trình có cổng kiểm soát. Chi phí và số lượng là giả định.</p>
+<table><thead><tr><th>Giai đoạn</th><th>Số lượng</th><th>Chi phí mỗi đơn vị</th><th>Chi phí giai đoạn</th></tr></thead><tbody>
+<tr><td>Sàng lọc ý tưởng</td><td>80</td><td>0,5 triệu</td><td>40 triệu</td></tr>
+<tr><td>Thử khái niệm</td><td>20</td><td>5 triệu</td><td>100 triệu</td></tr>
+<tr><td>Mẫu thử</td><td>8</td><td>40 triệu</td><td>320 triệu</td></tr>
+<tr><td>Thử thị trường</td><td>4</td><td>150 triệu</td><td>600 triệu</td></tr>
+<tr><td>Ra mắt</td><td>2</td><td>600 triệu</td><td>1.200 triệu</td></tr></tbody></table>
+<ol><li><strong>Tổng chi phí.</strong> 40 + 100 + 320 + 600 + 1.200 = 2.260 triệu VND cho 1 thành công bền vững, nên chi phí mỗi thành công là 2.260 triệu.</li>
+<li><strong>Tỷ lệ chuyển.</strong> Từ ý tưởng đến thành công = 1 ÷ 80 = 1,25%; từ ra mắt đến thành công = 1 ÷ 2 = 50%.</li>
+<li><strong>Dùng cổng kiểm soát.</strong> Một trong hai sản phẩm ra mắt có tỷ lệ mua lại 8% khi thử thị trường, so với mục tiêu 25%. Nếu cổng được thực thi, lần ra mắt đó đã bị huỷ, tiết kiệm 600 triệu: tổng 1.660 triệu, giảm 26,5% (600 ÷ 2.260).</li>
+<li><strong>Đặt sản phẩm thành công lên vòng đời.</strong> Nó đang ở giai đoạn tăng trưởng: doanh số tăng nhanh, nên chuyển thông điệp từ nhận biết sang ưa thích, thêm chai cỡ gia đình và vào siêu thị. Người tiên phong (người tập gym, nhân viên văn phòng) là người dẫn dắt dư luận; tiếp cận họ trước, nhưng đừng cho rằng số đông muốn cùng mức giá cao cấp.</li></ol>
+<p>Nơi rẻ nhất để sai là sớm. Hãy định tiêu chí qua cổng trước khi có dữ liệu để không ai cãi hạ chuẩn sau đó.</p>`,
+p: [['60 ideas, 12 concepts, 4 prototypes, 2 launches, 1 success. Concept-to-success yield?','60 ý tưởng, 12 khái niệm, 4 mẫu thử, 2 lần ra mắt, 1 thành công. Tỷ lệ từ khái niệm đến thành công?','1 ÷ 12 ≈ 8.3%.','1 ÷ 12 ≈ 8,3%.']]
+};
+EXTRA['mmg301-ts-6-2'] = {
+en: `<h4>Worked mini-case: Bánh Mì Que Express (fictional)</h4>
+<p>Bánh Mì Que Express is an invented street-food stall chain deciding whether to cut its price. All figures are assumed.</p>
+<ol><li><strong>Baseline.</strong> Price 15,000 VND, variable cost 9,000, contribution 6,000 (40%). Fixed cost is 45,000,000 a month. Break-even = 45,000,000 ÷ 6,000 = 7,500 units. At the current 10,000 units, profit = 10,000 × 6,000 − 45,000,000 = 15,000,000 VND and the margin of safety = (10,000 − 7,500) ÷ 10,000 = 25%.</li>
+<li><strong>Proposal.</strong> Cut the price to 14,000 (−6.67%). Contribution becomes 14,000 − 9,000 = 5,000.</li>
+<li><strong>Volume needed to keep profit.</strong> To earn the same total contribution, volume must reach 10,000 × 6,000 ÷ 5,000 = 12,000 units, a rise of 20%.</li>
+<li><strong>Estimate what will happen.</strong> If elasticity is −2, volume rises 2 × 6.67% = 13.3%, to 11,333 units. Profit = 11,333 × 5,000 − 45,000,000 = 56,666,667 − 45,000,000 ≈ 11,666,667 VND, lower than 15,000,000.</li>
+<li><strong>Find the threshold.</strong> The cut pays only if elasticity is stronger than 20 ÷ 6.67 = 3.0 in absolute value. Customers of a street snack rarely react that strongly, so keep the price and spend effort on lunch-hour speed and combos instead.</li></ol>
+<p>Revenue would rise from 150,000,000 to 11,333 × 14,000 ≈ 158,666,667, so a revenue-only view would wrongly approve the cut. Judge a price move on contribution, then on competitors' likely response.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Bánh Mì Que Express (công ty giả định)</h4>
+<p>Bánh Mì Que Express là chuỗi quầy ăn vặt do chúng ta tưởng tượng, đang cân nhắc giảm giá. Mọi số liệu là giả định.</p>
+<ol><li><strong>Mốc cơ sở.</strong> Giá 15.000 VND, chi phí biến đổi 9.000, đóng góp 6.000 (40%). Chi phí cố định 45.000.000 mỗi tháng. Hoà vốn = 45.000.000 ÷ 6.000 = 7.500 đơn vị. Với 10.000 đơn vị hiện tại, lợi nhuận = 10.000 × 6.000 − 45.000.000 = 15.000.000 VND và biên an toàn = (10.000 − 7.500) ÷ 10.000 = 25%.</li>
+<li><strong>Đề xuất.</strong> Giảm giá xuống 14.000 (−6,67%). Đóng góp còn 14.000 − 9.000 = 5.000.</li>
+<li><strong>Sản lượng cần để giữ lợi nhuận.</strong> Để có cùng tổng đóng góp, sản lượng phải đạt 10.000 × 6.000 ÷ 5.000 = 12.000 đơn vị, tăng 20%.</li>
+<li><strong>Ước lượng điều sẽ xảy ra.</strong> Nếu độ co giãn là −2, sản lượng tăng 2 × 6,67% = 13,3%, lên 11.333 đơn vị. Lợi nhuận = 11.333 × 5.000 − 45.000.000 = 56.666.667 − 45.000.000 ≈ 11.666.667 VND, thấp hơn 15.000.000.</li>
+<li><strong>Tìm ngưỡng.</strong> Việc giảm giá chỉ có lời nếu độ co giãn mạnh hơn 20 ÷ 6,67 = 3,0 về giá trị tuyệt đối. Khách mua đồ ăn vặt hiếm khi phản ứng mạnh vậy, nên giữ giá và dồn sức vào tốc độ giờ trưa và combo.</li></ol>
+<p>Doanh thu sẽ tăng từ 150.000.000 lên 11.333 × 14.000 ≈ 158.666.667, nên nếu chỉ nhìn doanh thu sẽ phê duyệt nhầm việc giảm giá. Hãy đánh giá thay đổi giá trên đóng góp, rồi trên phản ứng có thể có của đối thủ.</p>`,
+p: [['Price 20,000, variable cost 12,000. How much must volume rise to keep the same total contribution after a cut to 18,000?','Giá 20.000, chi phí biến đổi 12.000. Sản lượng phải tăng bao nhiêu để giữ nguyên tổng đóng góp sau khi giảm còn 18.000?','Contribution falls from 8,000 to 6,000, so volume must rise by 8,000 ÷ 6,000 − 1 = 33.3%.','Đóng góp giảm từ 8.000 xuống 6.000, nên sản lượng phải tăng 8.000 ÷ 6.000 − 1 = 33,3%.']]
+};
+EXTRA['mmg301-ts-7-2'] = {
+en: `<h4>Worked mini-case: Mát Lành Yogurt (fictional)</h4>
+<p>Mát Lành is an invented yogurt brand launching to students in Ho Chi Minh City. All figures are assumed.</p>
+<ol><li><strong>Audience and objective.</strong> Students aged 18–25. Raise unaided awareness from 20% to 35% in 3 months, measured by a tracking survey of 400 students. That is a 15-point gain.</li>
+<li><strong>Message house.</strong> Core idea: “a cool break between classes”. Three proofs: low sugar, cold-chain delivery, a 12,000 VND price. The ad agency, campus sampling team and social-media team all adapt this one house.</li>
+<li><strong>Budget by objective-and-task.</strong> Short video series 120 million; campus sampling of 40,000 cups at 2,000 VND = 80 million; social ads 100 million; student events and PR 50 million. Total = 120 + 80 + 100 + 50 = 350 million VND.</li>
+<li><strong>Compare with the shortcut.</strong> Sales are 8,000 million a year, so 3% of sales would give 240 million. The task-based plan needs 110 million more (350 − 240); the manager must either justify the difference or cut tasks that add least awareness.</li>
+<li><strong>Share of voice.</strong> The category spends 1,400 million in total, so Mát Lành’s share of voice = 350 ÷ 1,400 = 25%. With a market share of 18% this is 7 points higher, which fits a growth plan (a rule of thumb to test).</li>
+<li><strong>Cost per result.</strong> 350 million ÷ 15 awareness points ≈ 23.3 million per point. After the first month, compare each channel on this figure and move money to the cheapest.</li></ol>
+<p>Push and pull together: pull comes from the video and sampling; push comes from a small display incentive for the campus shops that stock the product.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Sữa chua Mát Lành (công ty giả định)</h4>
+<p>Mát Lành là thương hiệu sữa chua do chúng ta tưởng tượng, ra mắt với sinh viên ở TP.HCM. Mọi số liệu là giả định.</p>
+<ol><li><strong>Đối tượng và mục tiêu.</strong> Sinh viên 18–25 tuổi. Nâng độ nhận biết không gợi ý từ 20% lên 35% trong 3 tháng, đo bằng khảo sát theo dõi 400 sinh viên. Đó là mức tăng 15 điểm.</li>
+<li><strong>Ngôi nhà thông điệp.</strong> Ý tưởng cốt lõi: “giờ nghỉ mát lành giữa hai tiết học”. Ba bằng chứng: ít đường, giao hàng chuỗi lạnh, giá 12.000 VND. Đại lý quảng cáo, đội phát mẫu ở trường và đội mạng xã hội cùng điều chỉnh từ ngôi nhà duy nhất này.</li>
+<li><strong>Ngân sách theo mục tiêu và nhiệm vụ.</strong> Loạt video ngắn 120 triệu; phát mẫu ở trường 40.000 ly × 2.000 VND = 80 triệu; quảng cáo mạng xã hội 100 triệu; sự kiện sinh viên và PR 50 triệu. Tổng = 120 + 80 + 100 + 50 = 350 triệu VND.</li>
+<li><strong>So với cách tắt.</strong> Doanh thu 8.000 triệu mỗi năm, nên 3% doanh thu cho 240 triệu. Kế hoạch theo nhiệm vụ cần thêm 110 triệu (350 − 240); nhà quản lý phải biện minh phần chênh hoặc cắt nhiệm vụ đem lại ít nhận biết nhất.</li>
+<li><strong>Thị phần tiếng nói.</strong> Cả ngành chi 1.400 triệu, nên thị phần tiếng nói của Mát Lành = 350 ÷ 1.400 = 25%. Với thị phần 18%, cao hơn 7 điểm, phù hợp kế hoạch tăng trưởng (quy tắc kinh nghiệm cần kiểm chứng).</li>
+<li><strong>Chi phí cho mỗi kết quả.</strong> 350 triệu ÷ 15 điểm nhận biết ≈ 23,3 triệu mỗi điểm. Sau tháng đầu, so sánh từng kênh theo con số này và chuyển tiền sang kênh rẻ nhất.</li></ol>
+<p>Đẩy và kéo cùng nhau: lực kéo đến từ video và phát mẫu; lực đẩy đến từ khoản khuyến khích trưng bày nhỏ cho các cửa hàng gần trường bán sản phẩm.</p>`,
+p: [['Objective-and-task budget: ads 60, events 25, sampling 15 (million VND). Total? If category spend is 500 million, share of voice?','Ngân sách theo nhiệm vụ: quảng cáo 60, sự kiện 25, phát mẫu 15 (triệu VND). Tổng? Nếu cả ngành chi 500 triệu, thị phần tiếng nói?','Total 100 million; 100 ÷ 500 = 20%.','Tổng 100 triệu; 100 ÷ 500 = 20%.']]
+};
+EXTRA['mmg301-ts-7-3'] = {
+en: `<h4>Worked mini-case: Sneaker Phố online shop (fictional)</h4>
+<p>Sneaker Phố is an invented online sneaker shop comparing two campaigns. Average order value is 800,000 VND and contribution margin is 25%, so the break-even ROAS is 1 ÷ 0.25 = 4. All figures are assumed.</p>
+<table><thead><tr><th>Metric</th><th>A: search ads</th><th>B: influencer post</th></tr></thead><tbody>
+<tr><td>Spend</td><td>20 million</td><td>30 million</td></tr>
+<tr><td>Clicks</td><td>8,000 (CPC 2,500)</td><td>4,000 (CPC 7,500)</td></tr>
+<tr><td>Conversion</td><td>2%</td><td>1.5%</td></tr>
+<tr><td>Orders</td><td>8,000 × 0.02 = 160</td><td>4,000 × 0.015 = 60</td></tr>
+<tr><td>CPA</td><td>125,000</td><td>500,000</td></tr>
+<tr><td>Revenue</td><td>160 × 800,000 = 128 million</td><td>60 × 800,000 = 48 million</td></tr>
+<tr><td>ROAS</td><td>6.4</td><td>1.6</td></tr>
+<tr><td>Contribution minus spend</td><td>32 − 20 = +12 million</td><td>12 − 30 = −18 million</td></tr></tbody></table>
+<ol><li><strong>Read the result.</strong> A clears the break-even ROAS of 4 (6.4 &gt; 4); B does not (1.6 &lt; 4).</li>
+<li><strong>Do not stop at last-click.</strong> The influencer post may create awareness that makes later search clicks cheaper. Test it: run the influencer post in one city only and compare search conversion with a control city.</li>
+<li><strong>Fix the cheap parts.</strong> For B, give the creator a unique code, check the audience match, and negotiate payment partly on sales.</li>
+<li><strong>Protect trust.</strong> Disclose the sponsorship, ensure product claims are true, and collect only the data you need.</li></ol>
+<p>A 6.4 ROAS also depends on the margin: if the margin were 12%, break-even ROAS would be 1 ÷ 0.12 ≈ 8.3 and campaign A would lose money.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: cửa hàng giày Sneaker Phố (công ty giả định)</h4>
+<p>Sneaker Phố là cửa hàng giày thể thao trực tuyến do chúng ta tưởng tượng, đang so sánh hai chiến dịch. Giá trị đơn trung bình 800.000 VND và biên đóng góp 25%, nên ROAS hoà vốn là 1 ÷ 0,25 = 4. Mọi số liệu là giả định.</p>
+<table><thead><tr><th>Chỉ số</th><th>A: quảng cáo tìm kiếm</th><th>B: bài của người ảnh hưởng</th></tr></thead><tbody>
+<tr><td>Chi phí</td><td>20 triệu</td><td>30 triệu</td></tr>
+<tr><td>Lượt nhấp</td><td>8.000 (CPC 2.500)</td><td>4.000 (CPC 7.500)</td></tr>
+<tr><td>Tỷ lệ chuyển đổi</td><td>2%</td><td>1,5%</td></tr>
+<tr><td>Đơn hàng</td><td>8.000 × 0,02 = 160</td><td>4.000 × 0,015 = 60</td></tr>
+<tr><td>CPA</td><td>125.000</td><td>500.000</td></tr>
+<tr><td>Doanh thu</td><td>160 × 800.000 = 128 triệu</td><td>60 × 800.000 = 48 triệu</td></tr>
+<tr><td>ROAS</td><td>6,4</td><td>1,6</td></tr>
+<tr><td>Đóng góp trừ chi phí</td><td>32 − 20 = +12 triệu</td><td>12 − 30 = −18 triệu</td></tr></tbody></table>
+<ol><li><strong>Đọc kết quả.</strong> A vượt ROAS hoà vốn 4 (6,4 &gt; 4); B thì không (1,6 &lt; 4).</li>
+<li><strong>Đừng dừng ở last-click.</strong> Bài của người ảnh hưởng có thể tạo nhận biết khiến các lượt nhấp tìm kiếm sau đó rẻ hơn. Hãy thử: chạy bài đó ở một thành phố và so tỷ lệ chuyển đổi tìm kiếm với thành phố đối chứng.</li>
+<li><strong>Sửa những phần rẻ.</strong> Với B, cấp cho người sáng tạo nội dung một mã riêng, kiểm tra độ khớp người xem, và thương lượng trả một phần theo doanh số.</li>
+<li><strong>Bảo vệ niềm tin.</strong> Công khai quảng cáo tài trợ, đảm bảo thông tin sản phẩm đúng, và chỉ thu dữ liệu cần thiết.</li></ol>
+<p>ROAS 6,4 cũng phụ thuộc biên lợi nhuận: nếu biên là 12% thì ROAS hoà vốn là 1 ÷ 0,12 ≈ 8,3 và chiến dịch A sẽ lỗ.</p>`,
+p: [['Spend 10 million, revenue 35 million, margin 30%. ROAS, break-even ROAS, and verdict?','Chi phí 10 triệu, doanh thu 35 triệu, biên 30%. ROAS, ROAS hoà vốn và kết luận?','ROAS 3.5; break-even 1 ÷ 0.3 = 3.33; 3.5 is just above it: contribution 10.5 − 10 = +0.5 million.','ROAS 3,5; hoà vốn 1 ÷ 0,3 = 3,33; 3,5 chỉ vừa vượt: đóng góp 10,5 − 10 = +0,5 triệu.']]
+};
+EXTRA['mmg301-ts-8-1'] = {
+en: `<h4>Worked mini-case: HọcVui language app (fictional)</h4>
+<p>HọcVui is an invented subscription app for learning English. All figures are assumed.</p>
+<ol><li><strong>Unit economics.</strong> Monthly price 120,000 VND at a 70% gross margin gives 84,000 margin per customer per month. Customer acquisition cost (CAC) = 360,000.</li>
+<li><strong>Payback.</strong> 360,000 ÷ 84,000 ≈ 4.3 months.</li>
+<li><strong>Churn and lifetime.</strong> With monthly churn of 8%, expected lifetime = 1 ÷ 0.08 = 12.5 months. Lifetime value (undiscounted) = 84,000 × 12.5 = 1,050,000 VND, so CLV ÷ CAC = 1,050,000 ÷ 360,000 ≈ 2.9.</li>
+<li><strong>Test an improvement.</strong> A study-streak feature cuts churn to 6%. Lifetime = 1 ÷ 0.06 ≈ 16.7 months; CLV = 84,000 ÷ 0.06 = 1,400,000; CLV ÷ CAC ≈ 3.9. That is 350,000 more value per customer without a single extra sign-up.</li>
+<li><strong>Attribute carefully.</strong> A campaign costs 200 million and the dashboard shows 900 million of new subscription revenue in the same weeks. But a control city without the campaign grew 40% of that anyway. Incremental revenue = 900 × (1 − 0.40) = 540 million; at a 70% margin, incremental profit = 378 million; ROMI = (378 − 200) ÷ 200 = 89%. Using the raw 900 would have shown (630 − 200) ÷ 200 = 215%, more than double the truth.</li>
+<li><strong>Build the dashboard.</strong> Choose six metrics with owners and targets: CAC, payback, churn, CLV ÷ CAC, NPS, and ROMI per campaign.</li></ol>
+<p>The pattern: retention is often the cheapest lever, and incremental thinking protects you from flattering numbers.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: ứng dụng ngoại ngữ HọcVui (công ty giả định)</h4>
+<p>HọcVui là ứng dụng học tiếng Anh theo thuê bao do chúng ta tưởng tượng. Mọi số liệu là giả định.</p>
+<ol><li><strong>Kinh tế đơn vị.</strong> Giá 120.000 VND mỗi tháng với biên lợi nhuận gộp 70% cho 84.000 biên mỗi khách mỗi tháng. Chi phí thu hút khách hàng (CAC) = 360.000.</li>
+<li><strong>Hoàn vốn.</strong> 360.000 ÷ 84.000 ≈ 4,3 tháng.</li>
+<li><strong>Tỷ lệ rời bỏ và vòng đời.</strong> Với tỷ lệ rời bỏ 8% mỗi tháng, vòng đời kỳ vọng = 1 ÷ 0,08 = 12,5 tháng. Giá trị vòng đời (chưa chiết khấu) = 84.000 × 12,5 = 1.050.000 VND, nên CLV ÷ CAC = 1.050.000 ÷ 360.000 ≈ 2,9.</li>
+<li><strong>Thử một cải tiến.</strong> Tính năng chuỗi ngày học giảm tỷ lệ rời bỏ xuống 6%. Vòng đời = 1 ÷ 0,06 ≈ 16,7 tháng; CLV = 84.000 ÷ 0,06 = 1.400.000; CLV ÷ CAC ≈ 3,9. Mỗi khách có thêm 350.000 giá trị mà không cần thêm một lượt đăng ký.</li>
+<li><strong>Quy kết cẩn thận.</strong> Một chiến dịch tốn 200 triệu và bảng điều khiển cho thấy 900 triệu doanh thu thuê bao mới trong cùng tuần. Nhưng một thành phố đối chứng không có chiến dịch vẫn tăng bằng 40% con số đó. Doanh thu gia tăng = 900 × (1 − 0,40) = 540 triệu; với biên 70%, lợi nhuận gia tăng = 378 triệu; ROMI = (378 − 200) ÷ 200 = 89%. Nếu dùng nguyên 900 sẽ thấy (630 − 200) ÷ 200 = 215%, hơn gấp đôi sự thật.</li>
+<li><strong>Dựng bảng điều khiển.</strong> Chọn sáu chỉ số có người phụ trách và mục tiêu: CAC, hoàn vốn, tỷ lệ rời bỏ, CLV ÷ CAC, NPS và ROMI cho từng chiến dịch.</li></ol>
+<p>Quy luật: giữ chân khách thường là đòn bẩy rẻ nhất, và tư duy gia tăng bảo vệ bạn khỏi những con số làm đẹp.</p>`,
+p: [['CAC 600,000; monthly margin 100,000; churn 5%. Payback and CLV ÷ CAC?','CAC 600.000; biên mỗi tháng 100.000; tỷ lệ rời bỏ 5%. Hoàn vốn và CLV ÷ CAC?','Payback 6 months; lifetime 20 months, CLV 2,000,000; CLV ÷ CAC ≈ 3.3.','Hoàn vốn 6 tháng; vòng đời 20 tháng, CLV 2.000.000; CLV ÷ CAC ≈ 3,3.']]
+};
+EXTRA['mmg301-ts-8-2'] = {
+en: `<h4>Worked mini-case: Phú Hải Fish Sauce (fictional)</h4>
+<p>Phú Hải is an invented sauce company reviewing the quarter by region and channel. All figures are assumed.</p>
+<ol><li><strong>North region.</strong> Budget 20,000 units at 30,000 VND = 600 million. Actual 21,000 at 28,500 = 598.5 million. Total variance = −1.5 million. Price variance = (28,500 − 30,000) × 21,000 = −31.5 million. Volume variance = (21,000 − 20,000) × 30,000 = +30 million. Check: −31.5 + 30 = −1.5.</li>
+<li><strong>South region.</strong> Budget 30,000 at 30,000 = 900 million. Actual 27,000 at 31,000 = 837 million. Total = −63 million. Price variance = (31,000 − 30,000) × 27,000 = +27 million. Volume variance = (27,000 − 30,000) × 30,000 = −90 million. Check: 27 − 90 = −63.</li>
+<li><strong>Interpret.</strong> The North is almost on budget, but it bought volume with discounts. The South raised the price and lost customers. Both totals look small or explainable, yet the causes are opposite, and each deserves a different follow-up (promotion policy in the North, competitor and stock-out check in the South).</li>
+<li><strong>Profit by channel.</strong> Supermarkets: revenue 400 million − product cost 240 − promotion fees 60 − delivery 20 = 80 million profit (20%). Traditional shops: revenue 300 million − product cost 180 − delivery 45 − promotion 6 = 69 million (69 ÷ 300 = 23%). The smaller channel earns the higher margin once cost-to-serve is counted.</li>
+<li><strong>Contingency.</strong> Write the trigger now: if monthly volume is 10% below plan for two months, freeze new listing fees and move the budget to the best-margin channel.</li></ol>
+<p>A control system should end with named actions, owners and dates, not just a table of variances.</p>`,
+vi: `<h4>Tình huống mẫu từng bước: Nước mắm Phú Hải (công ty giả định)</h4>
+<p>Phú Hải là công ty nước chấm do chúng ta tưởng tượng, đang rà soát quý theo khu vực và kênh. Mọi số liệu là giả định.</p>
+<ol><li><strong>Miền Bắc.</strong> Ngân sách 20.000 đơn vị × 30.000 VND = 600 triệu. Thực tế 21.000 × 28.500 = 598,5 triệu. Chênh lệch tổng = −1,5 triệu. Chênh lệch giá = (28.500 − 30.000) × 21.000 = −31,5 triệu. Chênh lệch lượng = (21.000 − 20.000) × 30.000 = +30 triệu. Kiểm: −31,5 + 30 = −1,5.</li>
+<li><strong>Miền Nam.</strong> Ngân sách 30.000 × 30.000 = 900 triệu. Thực tế 27.000 × 31.000 = 837 triệu. Tổng = −63 triệu. Chênh lệch giá = (31.000 − 30.000) × 27.000 = +27 triệu. Chênh lệch lượng = (27.000 − 30.000) × 30.000 = −90 triệu. Kiểm: 27 − 90 = −63.</li>
+<li><strong>Diễn giải.</strong> Miền Bắc gần sát ngân sách, nhưng mua sản lượng bằng giảm giá. Miền Nam tăng giá và mất khách. Hai tổng số trông nhỏ hoặc giải thích được, nhưng nguyên nhân trái ngược nhau, mỗi nơi cần hành động khác (chính sách khuyến mãi ở miền Bắc; kiểm tra đối thủ và hết hàng ở miền Nam).</li>
+<li><strong>Lợi nhuận theo kênh.</strong> Siêu thị: doanh thu 400 triệu − giá vốn 240 − phí khuyến mãi 60 − giao hàng 20 = lãi 80 triệu (20%). Cửa hàng truyền thống: doanh thu 300 triệu − giá vốn 180 − giao hàng 45 − khuyến mãi 6 = 69 triệu (69 ÷ 300 = 23%). Kênh nhỏ hơn lại có biên cao hơn khi tính chi phí phục vụ.</li>
+<li><strong>Kế hoạch dự phòng.</strong> Viết sẵn ngưỡng kích hoạt: nếu sản lượng tháng thấp hơn kế hoạch 10% trong hai tháng, đóng băng phí lên kệ mới và chuyển ngân sách sang kênh có biên tốt nhất.</li></ol>
+<p>Một hệ thống kiểm soát nên kết thúc bằng hành động có tên, người phụ trách và thời hạn, không chỉ là bảng chênh lệch.</p>`,
+p: [['Budget 5,000 units at 20,000; actual 4,500 at 22,000. Price variance, volume variance, total?','Ngân sách 5.000 đơn vị × 20.000; thực tế 4.500 × 22.000. Chênh lệch giá, lượng và tổng?','Price (22,000 − 20,000) × 4,500 = +9,000,000; volume (4,500 − 5,000) × 20,000 = −10,000,000; total −1,000,000 (99 vs 100 million).','Giá (22.000 − 20.000) × 4.500 = +9.000.000; lượng (4.500 − 5.000) × 20.000 = −10.000.000; tổng −1.000.000 (99 so với 100 triệu).']]
+};
+const D = (slug, en, vi, desc, o0) => { const ex = EXTRA[slug]; const o = ex ? { ...o0, en: o0.en + '\n' + ex.en, vi: o0.vi + '\n' + ex.vi, p: [...o0.p, ...ex.p] } : o0; return { title: en + '|||' + vi, slug, type: 'DOCUMENT', description: desc, content: bi(build(o, 'en'), build(o, 'vi')) }; };
 const Q = (slug, en, vi, qs) => ({ title: en + '|||' + vi, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.',
   quiz: { timeLimitSeconds: 600, questions: qs.map((q, i) => ({ id: 'q' + (i + 1), question: x([q[0], q[1]]), options: q[2].map(x), correctIndex: q[3], points: 1, explanation: x([q[4], q[5]]) })) } });
 const SEC = (en, vi, desc, lessons) => ({ title: en + '|||' + vi, description: desc, lessons });

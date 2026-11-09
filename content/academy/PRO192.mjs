@@ -23,6 +23,7 @@ import l211 from './pro192/lab211.mjs';
 import pt1 from './pro192/pt1.mjs';
 import pt2 from './pro192/pt2.mjs';
 import adv2 from './pro192/adv2.mjs';
+import { QL_n1, QL_n2 } from './pro192/quiz-nang-cao.mjs';
 import fe from './pro192/fe.mjs';
 import cs from './pro192/chuyen-sau.mjs';
 import da from './pro192/du-an.mjs';
@@ -1647,6 +1648,8 @@ students.<span class="tok-function">stream</span>()
 </div>
 `,
         },
+        /* Quiz chương — ./pro192/quiz-nang-cao.mjs */
+        QL_n1,
       ],
     },
     /* ══════════════════ NÂNG CAO 2 — NGUYÊN TẮC THIẾT KẾ (CAPSTONE) ══════════════════ */
@@ -1694,6 +1697,8 @@ students.<span class="tok-function">stream</span>()
         },
         /* 🧩 Bài bổ sung — ./pro192/adv2.mjs */
         ...adv2.extrasEnd,
+        /* Quiz chương — ./pro192/quiz-nang-cao.mjs */
+        QL_n2,
       ],
     },
     /* ⭐ Chuyên sâu — ngoài giáo trình, slide TỰ DỰNG — ./pro192/chuyen-sau.mjs */

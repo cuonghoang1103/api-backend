@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
+import { KHOA_CHINH } from '@/lib/khoaChinh';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import {
@@ -154,6 +155,15 @@ function SkillSection({ title, note, items, code, counts, loading, m, isAi }: {
 export default function LanguageHomePage() {
   const params = useParams();
   const code = String(params.code);
+  const router = useRouter();
+  // 09/11/2026: ngôn ngữ có khoá chính ⇒ vào thẳng lộ trình theo ngày. Trang kỹ năng này chỉ còn khi `?hub=1`
+  // (nút "trang kỹ năng kiểu cũ" trong 🧰 Công cụ của khoá). null = chưa biết (chưa đọc URL).
+  const [xemHub, setXemHub] = useState<boolean | null>(null);
+  useEffect(() => {
+    const coHub = new URLSearchParams(window.location.search).has('hub');
+    if (KHOA_CHINH[code] && !coHub) router.replace(KHOA_CHINH[code].href);
+    else setXemHub(true);
+  }, [code, router]);
   const { isAuthenticated } = useLangUser();
   const [lang, setLang] = useState<LanguageOverview | null>(null);
   const [due, setDue] = useState(0);
@@ -200,6 +210,8 @@ export default function LanguageHomePage() {
   );
   const learnSections = useMemo(() => visible.filter((sec) => !AI_SECTIONS.has(sec.key)), [visible]);
   const aiSections = useMemo(() => visible.filter((sec) => AI_SECTIONS.has(sec.key)), [visible]);
+
+  if (xemHub !== true) return <div className={s.root} aria-busy="true" />;
 
   if (!loading && !lang) {
     return (

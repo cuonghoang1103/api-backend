@@ -108,7 +108,7 @@ export const CH = defineCourse({
   stage: 'ch1',
   storageKey: 'ch-v1',
   title: 'CH · Tiếng Trung từ 0 đến HSK 6',
-  backHref: '/language/zh',
+  backHref: '/language',
   unit: 'Bài',
   shownNum: (n) => n - 1,
   badgeWord: 'Bài',

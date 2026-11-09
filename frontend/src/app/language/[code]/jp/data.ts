@@ -112,7 +112,7 @@ export const JP = defineCourse({
   stage: 'jp1',
   storageKey: 'jp-v1',
   title: 'JP · Tiếng Nhật từ 0 đến N1',
-  backHref: '/language/ja',
+  backHref: '/language',
   unit: 'Bài',
   shownNum: (n) => n - 1,
   badgeWord: 'Bài',

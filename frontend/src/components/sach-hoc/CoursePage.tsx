@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, List, X, Clock, CalendarDays, BookOpen } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, List, X, Clock, CalendarDays, BookOpen, Wrench } from 'lucide-react';
 import api from '@/lib/api';
 import RobotAI from '@/components/academy/RobotAI';
 import { useLangUser } from '@/components/language/primitives';
@@ -23,6 +23,7 @@ const GoiGiaSu = dynamic(() => import('./GoiGiaSu'), { ssr: false });
 const ChaoBuoiSang = dynamic(() => import('./ChaoBuoiSang'), { ssr: false });
 import { daChaoHomNay } from './chaoNgay';
 import { HuanLuyen } from './HuanLuyen';
+import { CongCu } from './CongCu';
 // 📖 Bản sách (in được) — chunk riêng, chỉ tải khi mở ?sach=N.
 const BanSach = dynamic(() => import('./BanSach'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang dựng bản sách…</div> });
 import s from './course.module.css';
@@ -85,6 +86,9 @@ export default function CoursePage({ course, lessonExtra }: {
   const theDayRef = useRef<HTMLDivElement>(null);
   /** Thẻ "Mở đầu · tra cứu · ôn thi": null = mặc định (mở khi đang xem một mục trong đó). */
   const [phuMo, setPhuMo] = useState<boolean | null>(null);
+  /** 🧰 Ngăn Công cụ & tra cứu (mặc định ẩn). */
+  const [congCuMo, setCongCuMo] = useState(false);
+  const dongCongCu = useCallback(() => setCongCuMo(false), []);
   const [sheetOpen, setSheetOpen] = useState(false);
   /**
    * Ẩn cột gia sư trên máy tính (≥1280px) — bài giảng giãn rộng. Nhớ trên máy.
@@ -341,6 +345,9 @@ export default function CoursePage({ course, lessonExtra }: {
                 </button>
               ))}
             </div>
+            <button type="button" className={s.iconBtn} onClick={() => setCongCuMo(true)} title="Công cụ & tra cứu: theo kỹ năng, kho từ, sổ tay, AI…">
+              <Wrench size={16} /><span className={s.btnLabel}>Công cụ</span>
+            </button>
             <button type="button" className={`${s.iconBtn} ${s.tocBtn}`} onClick={() => setTocOpen(true)}>
               <List size={17} /><span className={s.btnLabel}>Mục lục</span>
             </button>
@@ -623,6 +630,7 @@ export default function CoursePage({ course, lessonExtra }: {
         </div>
 
         {/* Thẻ chữ Hán: chạm chữ Hán bất kỳ trong bài (chỉ khoá có dữ liệu chữ Hán). */}
+        <CongCu course={course} mo={congCuMo} dong={dongCongCu} moBai={open} />
         {course.kanji && <KanjiHost course={course} />}
 
         {chaoMo && (

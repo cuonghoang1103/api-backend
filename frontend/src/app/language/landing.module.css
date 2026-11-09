@@ -1,48 +1,78 @@
 /*
- * Trang danh sách ngôn ngữ (/language).
- * Màu chữ/nền đi theo biến theme (--text-*, --bg-*) để đúng cả sáng lẫn tối;
- * màu riêng từng ngôn ngữ (--c) chỉ làm điểm nhấn. Không dùng tiền tố `dark:`.
+ * Trang danh sách ngôn ngữ (/language) — làm lại 09/11/2026 ("nhìn như bản in PDF mặc định, cần chuyên nghiệp hơn").
+ * Màu chữ/nền theo biến theme (--text-*, --bg-*) ⇒ đúng cả sáng lẫn tối; màu từng ngôn ngữ (--c) chỉ là điểm nhấn.
+ * Không dùng tiền tố `dark:`. Chữ không chân (sans) đậm, không serif.
  */
 .root {
+  position: relative;
   min-height: 100vh;
   overflow-x: clip;
-  /* 5rem: thanh điều hướng cao 4rem và trong suốt khi chưa cuộn — sát 4rem là
-     hàng đầu tiên hiện xuyên qua nó. */
   padding-top: 5rem;
   background: var(--bg-primary);
   color: var(--text-primary);
 }
-.wrap { width: min(100%, 64rem); margin: 0 auto; padding: 2rem 1rem 5rem; }
+/* Quầng sáng nhẹ sau phần đầu trang — trang trí, không bắt sự kiện. */
+.nenSang {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 34rem;
+  pointer-events: none;
+  background:
+    radial-gradient(40rem 18rem at 20% 10%, color-mix(in srgb, #8b5cf6 18%, transparent), transparent 70%),
+    radial-gradient(34rem 16rem at 85% 0%, color-mix(in srgb, #ec4899 14%, transparent), transparent 70%);
+}
+.wrap { position: relative; width: min(100%, 72rem); margin: 0 auto; padding: 2.5rem 1rem 5rem; }
 
 /* ── Đầu trang ── */
-.hero { text-align: center; margin-bottom: 2rem; }
-.subtitle { margin: .75rem auto 0; max-width: 42rem; text-wrap: balance; color: var(--text-secondary); line-height: 1.6; }
+.hero { max-width: 46rem; margin-bottom: 2.25rem; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .75rem; border-radius: 999px;
+  font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: #a78bfa; background: color-mix(in srgb, #8b5cf6 14%, transparent);
+  border: 1px solid color-mix(in srgb, #8b5cf6 28%, transparent);
+}
+:global(html:not(.theme-dark)) .eyebrow { color: #6d28d9; }
+.tieuDe {
+  margin: 1rem 0 0;
+  font-family: var(--font-inter, ui-sans-serif, system-ui, sans-serif);
+  font-size: clamp(2rem, 4.6vw, 3.25rem);
+  line-height: 1.12;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  color: var(--text-primary);
+}
+.nhan {
+  background: linear-gradient(90deg, #8b5cf6, #ec4899 55%, #f97316);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ngatLon { display: none; }
+@media (min-width: 768px) { .ngatLon { display: inline; } }
+.subtitle { margin: 1rem 0 0; max-width: 40rem; color: var(--text-secondary); font-size: 1.02rem; line-height: 1.65; }
 .stats {
-  display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem;
-  margin: 1.25rem 0 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem;
+  margin: 1.5rem 0 0; padding: 0; list-style: none; max-width: 40rem;
 }
+@media (min-width: 640px) { .stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .stats li {
-  padding: .35rem .8rem; border-radius: 999px; border: 1px solid var(--border-color);
-  background: var(--bg-card); color: var(--text-secondary); font-size: .8rem;
+  display: flex; flex-direction: column; gap: .1rem;
+  padding: .7rem .9rem; border-radius: .9rem;
+  border: 1px solid var(--border-color); background: color-mix(in srgb, var(--bg-card) 85%, transparent);
 }
-.stats strong { color: var(--text-primary); font-weight: 800; margin-right: .15rem; }
-.actions { display: flex; justify-content: center; margin-top: 1rem; }
-.action {
-  display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .5rem 1rem;
-  background: color-mix(in srgb, #8b5cf6 14%, transparent); color: #a78bfa; font-size: .875rem; font-weight: 600;
-  border: 1px solid color-mix(in srgb, #8b5cf6 30%, transparent); transition: background .18s ease;
-}
-.action:hover { background: color-mix(in srgb, #8b5cf6 24%, transparent); }
-:global(html:not(.theme-dark)) .action { color: #6d28d9; }
+.stats strong { font-size: 1.3rem; font-weight: 850; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.stats span { font-size: .76rem; color: var(--text-muted); }
 
 /* ── Học tiếp ── */
 .tiep {
-  display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem 1.15rem;
-  border-radius: 1.25rem; border: 1px solid color-mix(in srgb, var(--c) 40%, var(--border-color));
-  background: linear-gradient(120deg, color-mix(in srgb, var(--c) 14%, var(--bg-card)), var(--bg-card) 70%);
+  display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; padding: 1.1rem 1.25rem;
+  border-radius: 1.25rem; border: 1px solid color-mix(in srgb, var(--c) 45%, var(--border-color));
+  background: linear-gradient(115deg, color-mix(in srgb, var(--c) 16%, var(--bg-card)), var(--bg-card) 72%);
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.tiep:hover { transform: translateY(-2px); box-shadow: 0 10px 28px color-mix(in srgb, var(--c) 22%, transparent); }
+.tiep:hover { transform: translateY(-2px); box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--c) 45%, transparent); }
 .tiepFlag {
   display: grid; place-items: center; flex: 0 0 3.25rem; height: 3.25rem; border-radius: 1rem;
   background: color-mix(in srgb, var(--c) 18%, var(--bg-surface)); font-size: 1.8rem;
@@ -53,86 +83,76 @@
 .tiepMo { display: inline-flex; align-items: center; gap: .3rem; font-size: .82rem; color: var(--text-secondary); }
 .tiepMo svg { color: #f97316; }
 .tiepNut {
-  display: inline-flex; align-items: center; gap: .35rem; flex-shrink: 0; padding: .55rem .95rem; border-radius: 999px;
-  background: var(--c); color: #fff; font-size: .85rem; font-weight: 700;
+  display: inline-flex; align-items: center; gap: .35rem; flex-shrink: 0; padding: .6rem 1rem; border-radius: 999px;
+  background: var(--c); color: #fff; font-size: .88rem; font-weight: 750;
 }
 
-.wotd { margin-bottom: 2rem; }
-
-/* ── Lưới ngôn ngữ ── */
-.sectionHead { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin-bottom: .85rem; }
-.sectionTitle { font-size: 1.25rem; font-weight: 800; }
-.sectionHint { display: inline-flex; align-items: center; gap: .3rem; color: #f97316; font-size: .82rem; font-weight: 700; }
-.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-
+/* ── Khoá học ── */
+.sectionHead { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1rem; }
+.sectionTitle { font-size: 1.35rem; font-weight: 850; letter-spacing: -0.01em; color: var(--text-primary); }
+.sectionHint { display: inline-flex; align-items: center; gap: .3rem; font-size: .82rem; font-weight: 600; color: #f97316; }
+.grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .card {
-  position: relative; display: flex; min-width: 0; height: 100%; align-items: center; gap: 1rem; padding: 1.1rem 1.15rem;
-  border: 1px solid var(--border-color); border-radius: 1.25rem; background: var(--bg-card); overflow: hidden;
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  position: relative;
+  display: flex; flex-direction: column; gap: .75rem; height: 100%;
+  padding: 1.25rem; border-radius: 1.25rem;
+  border: 1px solid var(--border-color);
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--c) 10%, transparent), transparent 45%),
+    var(--bg-card);
+  overflow: hidden;
+  transition: border-color .2s ease, box-shadow .2s ease;
 }
-/* Vạch màu ngôn ngữ bên trái — nhận ra ngôn ngữ trước cả khi đọc tên. */
 .card::before {
-  content: ''; position: absolute; left: 0; top: 18%; bottom: 18%; width: 3px; border-radius: 0 3px 3px 0;
-  background: var(--c); opacity: .85;
+  content: ''; position: absolute; inset: 0 0 auto 0; height: 4px;
+  background: linear-gradient(90deg, var(--c), color-mix(in srgb, var(--c) 40%, #8b5cf6));
 }
-.card:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--c) 55%, var(--border-color));
-  box-shadow: 0 12px 30px color-mix(in srgb, var(--c) 18%, transparent);
-}
-.card[data-sap-co] { opacity: .62; }
-.card[data-sap-co]:hover { opacity: .9; }
-
+.card:hover { border-color: color-mix(in srgb, var(--c) 55%, var(--border-color)); box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--c) 55%, transparent); }
+.cardTop { display: flex; align-items: center; gap: .85rem; }
 .flag {
-  display: grid; flex: 0 0 3.4rem; place-items: center; height: 3.4rem; border-radius: 1rem;
-  background: color-mix(in srgb, var(--c) 14%, var(--bg-surface)); font-size: 1.9rem;
+  display: grid; place-items: center; flex: 0 0 3rem; height: 3rem; border-radius: .9rem;
+  background: color-mix(in srgb, var(--c) 16%, var(--bg-surface)); font-size: 1.7rem;
 }
-.cardBody { min-width: 0; flex: 1; }
-.cardHead { display: flex; align-items: center; gap: .5rem; min-width: 0; }
-.cardTitle { overflow: hidden; color: var(--text-primary); font-size: 1.1rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
-.cardSub { margin-top: .1rem; color: var(--text-muted); font-size: .8rem; }
-.sapCo {
-  display: inline-flex; align-items: center; gap: .2rem; flex-shrink: 0; padding: .1rem .45rem; border-radius: 999px;
-  background: var(--bg-surface); color: var(--text-muted); font-size: .68rem; font-weight: 700;
+.cardHead { min-width: 0; flex: 1; }
+.cardTitle { font-size: 1.15rem; font-weight: 850; color: var(--text-primary); }
+.cardSub { margin-top: .1rem; font-size: .84rem; font-weight: 600; color: var(--c); }
+.capDo {
+  align-self: flex-start; padding: .2rem .6rem; border-radius: 999px;
+  font-size: .72rem; font-weight: 800; letter-spacing: .02em;
+  color: var(--text-primary); background: color-mix(in srgb, var(--c) 14%, var(--bg-surface));
+  border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
 }
-
-/* Nhãn số liệu: biểu tượng và chữ CÙNG MỘT DÒNG, không bao giờ xuống hàng. */
-.badges { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .6rem; }
+.mota { font-size: .88rem; line-height: 1.55; color: var(--text-secondary); }
+.badges { display: flex; flex-wrap: wrap; gap: .4rem; }
 .badge {
-  display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap;
-  border-radius: 999px; padding: .22rem .55rem; background: var(--bg-surface);
-  color: var(--text-secondary); font-size: .72rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: .3rem; padding: .22rem .55rem; border-radius: .5rem;
+  font-size: .74rem; color: var(--text-secondary); background: var(--bg-surface); border: 1px solid var(--border-color);
 }
-.badge svg { flex-shrink: 0; color: var(--c); }
-.due {
-  display: inline-flex; align-items: center; gap: .3rem; margin-top: .5rem; padding: .22rem .55rem; border-radius: 999px;
-  background: color-mix(in srgb, #f97316 14%, transparent); color: #f97316; font-size: .72rem; font-weight: 700;
+.cardFoot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: .35rem; }
+.due { display: inline-flex; align-items: center; gap: .3rem; font-size: .76rem; font-weight: 600; color: #f97316; }
+.cta {
+  display: inline-flex; align-items: center; gap: .35rem; padding: .5rem .9rem; border-radius: 999px;
+  font-size: .85rem; font-weight: 750; color: #fff; background: var(--c);
+  transition: gap .2s ease;
 }
-.progress { flex: 0 0 auto; color: var(--c); }
+.card:hover .cta { gap: .55rem; }
 
-@media (max-width: 640px) {
-  .root { padding-top: 4.75rem; }
-  .wrap { padding: 1.5rem .85rem 4rem; }
-  .grid { grid-template-columns: 1fr; gap: .75rem; }
-  .card { padding: .95rem 1rem; gap: .75rem; }
-  /* Màn hẹp: cờ và vòng tiến độ nhỏ lại để nhãn số liệu còn chỗ đứng hai cái
-     một hàng — bản đầu để nguyên cỡ, mỗi nhãn rớt xuống một dòng riêng. */
-  .flag { flex-basis: 2.75rem; height: 2.75rem; font-size: 1.5rem; border-radius: .8rem; }
-  /* `ProgressRing` vẽ SVG cỡ cố định không có viewBox ⇒ thu bằng `zoom` (ảnh
-     hưởng cả bố cục, khác `transform`). Safari/Chrome/Firefox 126+ đều hiểu. */
-  .progress { zoom: .78; }
-  .tiep { flex-wrap: wrap; }
-  .tiepNut { width: 100%; justify-content: center; }
+/* ── Dưới: từ của ngày + sổ tay + sắp có ── */
+.duoi { display: grid; gap: 1rem; margin-top: 2rem; grid-template-columns: 1fr; }
+@media (min-width: 900px) { .duoi { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); } }
+.wotd { min-width: 0; }
+.phu { display: flex; flex-direction: column; gap: 1rem; }
+.phuO {
+  display: flex; align-items: center; gap: .8rem; padding: 1rem 1.1rem; border-radius: 1rem;
+  border: 1px solid var(--border-color); background: var(--bg-card); color: #a78bfa;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .card, .tiep, .action { transition: none; }
-  .card:hover, .tiep:hover { transform: none; }
-}
-
-/* App desktop, cửa sổ rộng (04/10/2026): 64rem thành một cột nhỏ giữa hai mảng
-   trống ở 2200px. Chỉ nới trong app (`.ct-web-host`), web giữ nguyên. */
-@media (min-width: 1800px) {
-  :global(.ct-web-host) .wrap { width: min(100%, 86rem); }
-  :global(.ct-web-host) .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
+.phuO:hover { border-color: color-mix(in srgb, #8b5cf6 50%, var(--border-color)); }
+.phuO > span { flex: 1; display: flex; flex-direction: column; }
+.phuO b { font-size: .95rem; color: var(--text-primary); }
+.phuO small { font-size: .78rem; color: var(--text-muted); }
+.sapCoKhoi { padding: 1rem 1.1rem; border-radius: 1rem; border: 1px dashed var(--border-color); }
+.sapCoNhan { display: inline-flex; align-items: center; gap: .3rem; font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.sapCoDs { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+.sapCoChip { padding: .25rem .6rem; border-radius: 999px; font-size: .8rem; color: var(--text-secondary); background: var(--bg-surface); }

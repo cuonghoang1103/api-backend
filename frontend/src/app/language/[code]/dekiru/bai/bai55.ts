@@ -12,9 +12,9 @@
  *                                    (Đề 1 tổng 107 câu = đúng số câu của bảng 問題構成 công bố.)
  *   6. b55-thi-thu-bang-diem       — quy đổi câu đúng → 3 điểm mục /60, điểm đạt 90, điểm liệt 19, A/B/C 参考情報, bảng "sai câu nào ôn Bài nào"
  *                                    (Bài 41–54).
- *   7. b55-on-tap-ngu-phap         — tổng ôn MỌI mẫu N2 Bài 41–54 (bảng theo bài) + 10 nhóm hay bị gài nhầm + 36 câu + 8 câu ghép ★.
- *   8. b55-on-tap-tu-vung-han-tu   — chữ Hán Bài 41–53 theo bài, bẫy đọc, đồng âm khác chữ, 語形成 (tiền tố – hậu tố), 類義語, コロケーション,
- *                                    từ của tin tức & văn bình luận + 36 câu + 20 câu đọc chữ không furigana.
+ *   7. b55-on-tap-ngu-phap         — tổng ôn MỌI mẫu N2 Bài 41–54 (bảng theo bài) + 10 nhóm hay bị gài nhầm + 44 câu (Nhóm D = Bài 54) + 8 câu ghép.
+ *   8. b55-on-tap-tu-vung-han-tu   — chữ Hán Bài 41–54 theo bài, bẫy đọc, đồng âm khác chữ, 語形成 (tiền tố – hậu tố), 類義語, コロケーション,
+ *                                    từ của tin tức & văn bình luận + 42 câu + 22 câu đọc chữ không furigana.
  *   9. b55-de-2                    — Đề thi thử số 2 rút gọn, 48 câu (文字・語彙 14 · 文法 13 · 読解 8 · 聴解 13): email công việc + kính ngữ
  *                                    email (Bài 53), đọc so sánh A↔B, bình luận, nghe tổng hợp (dạng của Bài 54).
  *  10. b55-lo-trinh-sau-khoa       — lộ trình 8 tuần trước ngày thi + luyện tiếp sau khoá (chỉ nêu tên tài liệu, không chép nội dung).
@@ -25,7 +25,9 @@
  * ～おそれがある · ～しかない・～ほかない・～からには・～以上は・～までだ · ～ばかりに・～ことから・～だけに・～だけあって・～ものだから ·
  * ～一方で・～に伴って・～かと思うと・～や否や · ～に比べて・～に反して・～反面・～どころか・～どころではない · ～さえ・～すら・～こそ・
  * ～からこそ・～てこそ・～ものがある・～ことか · ～上で・～面で・である体・～べきだ・～ねばならない · Bài 53 kính ngữ nâng cao trong email ·
- * Bài 54 đọc & nghe tổng hợp N2). Đề CHỈ dùng ngữ pháp / từ / chữ Hán đã học tới Bài 54; chữ được hỏi ở 漢字読み・表記 lấy từ chữ mới của
+ * Bài 54 đọc & nghe tổng hợp N2: đuôi câu chủ trương ～と言えよう・～と言っても過言ではない・～にほかならない・～にすぎない, nhượng bộ →
+ * chủ trương, phủ định một phần ～とは言い切れない, ～とされる; chữ Hán 斜 脈 曖 昧 肯 即 衆 訴 捉 枠 抵 抗 衝 媒 紛 剰 漠 淡 奨 律 干 掘 併 潜 —
+ * đối chiếu với bai54.ts đã xong, bảng ôn + bảng "sai câu nào" trỏ đúng mục b54-…). Đề CHỈ dùng ngữ pháp / từ / chữ Hán đã học tới Bài 54; chữ được hỏi ở 漢字読み・表記 lấy từ chữ mới của
  * Bài 41–53 (hanTu41.ts…hanTu53.ts) ghép với chữ đã học trước đó (kiểm bằng script). Bài 55 KHÔNG dạy chữ Hán mới ⇒ không có hanTu55.ts.
  * Đề, bài đọc, kịch bản nghe: VIẾT MỚI 100%, không chép đề JLPT thật hay sách luyện thi nào (新完全マスター, 総まとめ, 公式問題集…). Chỉ giữ
  * DẠNG đề (số 問題, số câu, thời gian, kiểu lời dẫn) — kiến thức chung. Số liệu, tên công ty, tên sản phẩm là MINH HOẠ (tên giả).
@@ -1270,7 +1272,7 @@ const BANG_DIEM: Lesson = {
         ['42, 49, 52, 54', 'からこそ · ものがある · ことか', 'Bài 51 ④ ⑥ ⑦ (bảng ⑤ ⑧)'],
         ['43, 53', 'Vた＋上で · べきだとは思わない', 'Bài 52 ① ④ (bảng ⑥ ⑦)'],
         ['44', 'ご～くださいますよう、お願い申し上げます', 'Bài 53 ⑤ (bậc thang lời nhờ trong email) + Bài 37 ②'],
-        ['50', 'ところが (từ nối ngược với dự đoán)', 'Bài 38 (từ nối đọc hiểu) + mục **Ôn ngữ pháp** bảng ⑪ (từ nối)'],
+        ['50', 'ところが (từ nối ngược với dự đoán)', 'Bài 38 (từ nối đọc hiểu) + Bài 54 b54-ngu-phap ⑤ (từ nối) + mục **Ôn ngữ pháp** bảng ⑪'],
       ],
     },
     {
@@ -1279,20 +1281,20 @@ const BANG_DIEM: Lesson = {
       head: ['Câu', 'Dạng', 'Ôn ở đâu'],
       rows: [
         ['55, 59', 'email công việc / email thầy cô — ai phải làm gì, hạn nào', 'Bài 53 (email N2: なお・お手数ですが・ご返信には及びません) + Bài 41 (際に) + Bài 42 (を問わず)'],
-        ['56, 58, 66–68', 'ý kiến người viết: 確かに…しかし… · のは～からだ', 'Bài 54 (văn bình luận) + Bài 46 (かねない) + Bài 49 (一方で) + Bài 50 (に比べて)'],
-        ['57', 'thông báo có ngoại lệ (ただし・なお)', 'Bài 54 + Bài 38 (đọc thông báo) — luôn đọc tới dòng CUỐI'],
+        ['56, 58, 66–68', 'ý kiến người viết: 確かに…しかし… · のは～からだ', 'Bài 54 b54-ngu-phap ①② (đuôi câu chủ trương, 確かに～しかし) + b54-doc (短文・中文) + Bài 46 (かねない) + Bài 49 (一方で) + Bài 50 (に比べて)'],
+        ['57', 'thông báo có ngoại lệ (ただし・なお)', 'Bài 54 b54-doc (短文: ngoại lệ sau ただし) + b54-lt-4-doc ① + Bài 38 — luôn đọc tới dòng CUỐI'],
         ['60–62', 'giải thích nguồn gốc / lời khuyên cuối bài', 'Bài 48 (ことから) + Bài 46 (おそれがある・～得る)'],
         ['63–65', 'phỏng vấn — tách lời nhân vật', 'Bài 51 (からこそ, nghề thủ công) + Bài 47 (しかない)'],
-        ['69–70', '統合理解 A ↔ B (điểm chung / khác nhau)', 'Bài 54 (đọc so sánh hai ý kiến) + Bài 52 (べきだ・のではないか)'],
-        ['71–73', '主張理解 — câu chủ đề, cụm "このような"', 'Bài 54 + Bài 52 (cấu trúc 序論・本論・結論)'],
-        ['74–75', '情報検索 — lọc điều kiện', 'Bài 54 + Bài 41 (tin tuyển dụng, インターンシップ)'],
-        ['76–80', '課題理解 — việc đã xong / để sau / người khác làm', 'Bài 54 (nghe N2) + Bài 39 (văn nói)'],
-        ['81–86', 'ポイント理解 — lý do thật ↔ lý do bị phủ định', 'Bài 54 + Bài 31 (～わけじゃない) + Bài 48 (báo cáo nguyên nhân)'],
-        ['87–91', '概要理解 — câu chủ đề, từ lặp, câu kết', 'Bài 54 + Bài 53 (tin nhắn thoại công việc)'],
+        ['69–70', '統合理解 A ↔ B (điểm chung / khác nhau)', 'Bài 54 b54-ngu-phap ⑧ (so sánh hai văn bản) + b54-doc (統合理解) + b54-lt-4-doc ④ + Bài 52 (べきだ)'],
+        ['71–73', '主張理解 — câu chủ đề, cụm "このような"', 'Bài 54 b54-ngu-phap ①④⑦ (đuôi câu, AではなくB, chỉ thị từ こうした・このような) + b54-doc (主張理解) + Bài 52'],
+        ['74–75', '情報検索 — lọc điều kiện', 'Bài 54 b54-doc (情報検索) + b54-lt-4-doc ⑤ + Bài 41 (tin tuyển dụng)'],
+        ['76–80', '課題理解 — việc đã xong / để sau / người khác làm', 'Bài 54 b54-nghe (課題理解) + b54-ngu-phap ⑪ (bẫy đổi ý) + b54-lt-5-nghe ①② + Bài 39'],
+        ['81–86', 'ポイント理解 — lý do thật ↔ lý do bị phủ định', 'Bài 54 b54-nghe (ポイント理解) + b54-ngu-phap ⑩ (văn nói nêu ý kiến) + b54-lt-5-nghe ③④ + Bài 31 + Bài 48'],
+        ['87–91', '概要理解 — câu chủ đề, từ lặp, câu kết', 'Bài 54 b54-nghe (概要理解) + b54-lt-5-nghe ⑤⑥ + Bài 53 (tin nhắn thoại)'],
         ['92, 95, 98', 'đáp lời kính ngữ (拝見・お越しいただく・お越しくださいますよう)', 'Bài 53 + Bài 37'],
         ['93, 96, 97, 99, 101, 102', 'đáp câu có mẫu N2 (手応え・にしては・ことか・どころじゃない・かと思ったら・かねない)', 'Bài 41, 43, 51, 50, 49, 46 — đúng mẫu đó'],
         ['94, 100, 103', 'đáp lời nhờ / giao việc / chúc mừng của người trên', 'Bài 31 ⑦ (わけにはいかない) + Bài 35 + Bài 37'],
-        ['104–107', '統合理解 — ghi chú dạng bảng', 'Bài 54 (nghe tổng hợp) — luyện lại bằng cách tự kẻ bảng'],
+        ['104–107', '統合理解 — ghi chú dạng bảng', 'Bài 54 b54-nghe (統合理解) + b54-buoi-2-nghe + b54-lt-5-nghe ⑧ — luyện lại bằng cách tự kẻ bảng'],
       ],
     },
     {
@@ -1301,6 +1303,7 @@ const BANG_DIEM: Lesson = {
       items: [
         'Sai **≥ 3 câu cùng một Bài** ⇒ mở lại Bài đó, làm lại mục Bài tập + Luyện thêm của Bài đó TRƯỚC khi làm Đề 2.',
         'Mảng nào xếp **C** ⇒ dành gấp đôi thời gian cho mảng đó trong 2 tuần tới (Lộ trình sau khoá có lịch mẫu).',
+        'Sai nhiều ở CẢ 読解 lẫn 聴解 ⇒ học lại Bài 54 theo thứ tự: b54-ngu-phap (①–⑫) → 3 buổi b54-buoi-1-doc / b54-buoi-2-nghe / b54-buoi-3-lam-de → b54-lt-4-doc, b54-lt-5-nghe → b54-kiem-tra.',
         'Giữ lại tờ ghi điểm Đề 1 — so với Đề 2 để thấy mình tiến bộ ở đâu.',
       ],
     },
@@ -1353,7 +1356,7 @@ const NP_TONG_A: Block = {
 
 const NP_TONG_B: Block = {
   t: 'table',
-  caption: 'B. Toàn bộ mẫu ngữ pháp N2 của khoá — Bài 48–53 (Bài 54 = kỹ năng đọc & nghe tổng hợp, không thêm mẫu mới)',
+  caption: 'B. Toàn bộ mẫu ngữ pháp N2 của khoá — Bài 48–54 (Bài 54 = ngôn ngữ của văn bình luận & bài nghe: mục b54-ngu-phap ①–⑫)',
   head: NP_HEAD,
   rows: [
     ['48 ①', '普通形(ナAな・Nである) ＋ **ばかりに** · Vたい ＋ **ばかりに**', 'chỉ vì… mà (hậu quả XẤU, tiếc) · chỉ vì muốn… mà (làm điều vất vả)', '{一言|ひとこと}{言|い}ったばかりに、{彼女|かのじょ}を{怒|おこ}らせてしまった。(Hitokoto itta bakari ni, kanojo o okorasete shimatta.)'],
@@ -1383,6 +1386,12 @@ const NP_TONG_B: Block = {
     ['53 ⑤⑥', '～ていただけますと{幸|さいわ}いです · ご～くださいますよう、お{願|ねが}い{申|もう}し{上|あ}げます · ✗ご～してください', 'bậc thang lời nhờ trong email (từ lịch sự → rất trang trọng)', 'ご{確認|かくにん}いただけますと{幸|さいわ}いです。(Go-kakunin itadakemasu to saiwai desu.)'],
     ['53 ⑦⑧', '～たく{存|ぞん}じます · いたしかねます · ご{期待|きたい}に{沿|そ}えず · {見送|みおく}らせていただく', 'mong muốn (rất trang trọng) · từ chối & xin lỗi bằng văn viết', 'ぜひ{参加|さんか}させていただきたく{存|ぞん}じます。(Zehi sanka sasete itadakitaku zonjimasu.)'],
     ['53 ⑨', '{御社|おんしゃ}(nói) ↔ **{貴社|きしゃ}(viết)** ↔ {弊社|へいしゃ} ↔ {当社|とうしゃ}', 'gọi công ty người khác / công ty mình', '{貴社|きしゃ}の{募集要項|ぼしゅうようこう}を{拝見|はいけん}いたしました。(Kisha no boshuu youkou o haiken itashimashita.)'],
+    ['54 ①', '普通形 ＋ **と{言|い}えよう** · **と{言|い}っても{過言|かごん}ではない** · N ＋ **にほかならない**', 'đuôi câu chủ trương: có thể nói rằng · nói… cũng không quá · chính là (từ mềm → mạnh)', 'これは{時代|じだい}の{変化|へんか}にほかならない。(Kore wa jidai no henka ni hoka naranai.)'],
+    ['54 ①', '普通形・N ＋ **にすぎない**', 'chỉ là… mà thôi (hạ thấp)', 'それは{一部|いちぶ}の{意見|いけん}にすぎない。(Sore wa ichibu no iken ni suginai.)'],
+    ['54 ②', '**{確|たし}かに A。しかし B** · A **とはいえ** B · **{一見|いっけん}** A が、{実|じつ}は B · A **からといって**～わけではない', 'nhượng bộ → chủ trương: ý tác giả = B', '{便利|べんり}になったとはいえ、{課題|かだい}も{多|おお}い。(Benri ni natta to wa ie, kadai mo ooi.)'],
+    ['54 ③', '**{必|かなら}ずしも**～わけではない · **{一概|いちがい}に**～とは{言|い}えない · ～**とは{言|い}い{切|き}れない**', 'phủ định MỘT PHẦN — loại đáp án "nói quá"', '{高|たか}いものが{良|よ}いとは{言|い}い{切|き}れない。(Takai mono ga yoi to wa iikirenai.)'],
+    ['54 ④', 'A **ではなく** B · A **というより** B · **{単|たん}なる** A ではない · {大切|たいせつ}なのは～だ', '"không phải A mà là B" — ý chính là B', '{大切|たいせつ}なのは{結果|けっか}ではなく{過程|かてい}だ。(Taisetsu na no wa kekka de wa naku katei da.)'],
+    ['54 ⑥', '～**とされる** · ～と{言|い}われている · ～という{声|こえ}もある', 'lời người khác / thông tin chung — CHƯA phải ý tác giả', '{朝食|ちょうしょく}は{健康|けんこう}に{良|よ}いとされる。(Choushoku wa kenkou ni yoi to sareru.)'],
   ],
 };
 
@@ -1525,8 +1534,8 @@ const NP_BAY: Block[] = [
 const ON_NGU_PHAP: Lesson = {
   id: 'b55-on-tap-ngu-phap',
   kind: 'review',
-  title: 'Ôn tập N2 · Tổng ôn ngữ pháp — mọi mẫu N2 Bài 41–53, 10 nhóm hay bị gài nhầm + bảng từ nối, 36 câu + 8 câu ghép',
-  goal: 'Nhìn lại một lượt MỌI mẫu ngữ pháp N2 của khoá (mẫu · cách nối · nghĩa · ví dụ · ở Bài nào), nắm chắc 10 nhóm đề N2 hay gài bẫy nhất (thời điểm, phạm vi, so sánh – đánh giá, kết cục, phải – đành, khả năng xấu, nguyên nhân, "một khi đã", đối lập, nhấn mạnh) cùng bảng từ nối, rồi làm 36 câu kiểu 文法形式の判断 + 8 câu ghép để tự kiểm tra.',
+  title: 'Ôn tập N2 · Tổng ôn ngữ pháp — mọi mẫu N2 Bài 41–54, 10 nhóm hay bị gài nhầm + bảng từ nối, 44 câu + 8 câu ghép',
+  goal: 'Nhìn lại một lượt MỌI mẫu ngữ pháp N2 của khoá (mẫu · cách nối · nghĩa · ví dụ · ở Bài nào), nắm chắc 10 nhóm đề N2 hay gài bẫy nhất (thời điểm, phạm vi, so sánh – đánh giá, kết cục, phải – đành, khả năng xấu, nguyên nhân, "một khi đã", đối lập, nhấn mạnh) cùng bảng từ nối, rồi làm 44 câu kiểu 文法形式の判断 (Nhóm D: đuôi câu chủ trương & phủ định một phần của Bài 54) + 8 câu ghép để tự kiểm tra.',
   minutes: 100,
   blocks: [
     {
@@ -1535,7 +1544,7 @@ const ON_NGU_PHAP: Lesson = {
       items: [
         'Đọc lướt bảng A và B, **đánh dấu mẫu nào nhìn vào chưa tự đặt được một câu** → mở lại đúng Bài ghi ở cột đầu (số trong vòng tròn = mục ngữ pháp của Bài đó).',
         'Mười bảng ① – ⑩ là nơi đề N2 "đặt bẫy": mỗi câu 文法形式 thường có 2 đáp án cùng nhóm. N2 bẫy CÁCH NỐI nhiều hơn N3 (Nの＋わりに nhưng N＋にしては; Vます＋かねない nhưng V辞書形＋おそれがある) — học cột "nối" thật kỹ.',
-        'Làm 36 câu (3 nhóm × 12) + 8 câu ghép. Câu sai: đọc giải thích, rồi tự đặt **1 câu mới** bằng mẫu đó và ghi vào sổ.',
+        'Làm 44 câu (3 nhóm × 12 + Nhóm D 8 câu của Bài 54) + 8 câu ghép. Câu sai: đọc giải thích, rồi tự đặt **1 câu mới** bằng mẫu đó và ghi vào sổ.',
       ],
     },
     { t: 'h', text: '1. Toàn bộ mẫu ngữ pháp N2 của khoá' },
@@ -1554,7 +1563,7 @@ const ON_NGU_PHAP: Lesson = {
         '**Việc của khách / người trên** ⇒ tôn kính (ご～ください・お～になる); **việc của mình** ⇒ khiêm nhường (お～いたします・拝見・伺う) — Bài 37, 53.',
       ],
     },
-    { t: 'h', text: '3. Luyện tập — 36 câu kiểu 文法形式の判断' },
+    { t: 'h', text: '3. Luyện tập — 44 câu kiểu 文法形式の判断' },
     MCQ('b55-np-a', 'Nhóm A — Bài 41–45 (12 câu)', [
       QP('（1）{面接|めんせつ}を{受|う}ける（　）、{身|み}だしなみに{気|き}をつけてください。', '{際|さい}は', ['あげく', 'かと{思|おも}うと', 'ばかりに'], 0,
         'Hướng dẫn trang trọng "khi…" ⇒ **V辞書形＋{際|さい}は** (Bài 41 ①). あげく nối Vた; かと{思|おも}うと nối Vた và chỉ quan sát người khác; ばかりに = hậu quả xấu.'),
@@ -1633,6 +1642,24 @@ const ON_NGU_PHAP: Lesson = {
       QP('（36）{誠|まこと}に{申|もう}し{訳|わけ}ございませんが、そのご{依頼|いらい}はお{受|う}け（　）。', 'いたしかねます', ['くださいます', 'になります', 'いただけます'], 3,
         'Từ chối việc mình được nhờ, văn email ⇒ **お{受|う}けいたしかねます** (Bài 46 ③ + Bài 53 ⑧). くださる・になる là tôn kính (việc của người khác); いただけます không mang ý từ chối.'),
     ]),
+    MCQ('b55-np-d', 'Nhóm D — Bài 54: đuôi câu chủ trương, nhượng bộ, phủ định một phần (8 câu)', [
+      QP('（37）この{発見|はっけん}は、{医学|いがく}の{歴史|れきし}を{変|か}えたと{言|い}っても（　）。', '{過言|かごん}ではない', ['{過言|かごん}だ', '{限|かぎ}らない', 'すぎない'], 2,
+        'Khẳng định MẠNH "nói… cũng không quá lời" ⇒ **～と{言|い}っても{過言|かごん}ではない** (Bài 54 — b54-ngu-phap ①). {過言|かごん}だ = "là nói quá" (ngược nghĩa); "{言|い}っても{限|かぎ}らない / すぎない" không phải câu.'),
+      QP('（38）{彼|かれ}の{成功|せいこう}は、{運|うん}がよかったからではない。{長年|ながねん}の{努力|どりょく}の{結果|けっか}に（　）。', 'ほかならない', ['{限|かぎ}らない', '{過言|かごん}ではない', '{言|い}い{切|き}れない'], 0,
+        '"Không gì khác chính là kết quả của nỗ lực" ⇒ **N＋にほかならない** (Bài 54 ①). {過言|かごん}ではない và {言|い}い{切|き}れない cần ～と{言|い}っても／～とは đứng trước — sai dạng sau "{結果|けっか}に".'),
+      QP('（39）これは、あくまで{一部|いちぶ}の{人|ひと}の{意見|いけん}に（　）。', 'すぎない', ['{限|かぎ}る', '{反|はん}する', '{伴|ともな}う'], 3,
+        '**あくまで** + hạ thấp "chỉ là… mà thôi" ⇒ **にすぎない** (Bài 54 ①). に{限|かぎ}る = "…là nhất" (Bài 42); に{反|はん}する (Bài 50), に{伴|ともな}う (Bài 49) sai nghĩa.'),
+      QP('（40）{値段|ねだん}が{高|たか}いからといって、{品質|ひんしつ}がいい（　）。', 'とは{限|かぎ}らない', ['に{違|ちが}いない', 'はずだ', 'にほかならない'], 1,
+        '**～からといって** luôn đi với phủ định MỘT PHẦN ⇒ **とは{限|かぎ}らない／わけではない** (Bài 54 ②③). Ba đáp án kia khẳng định chắc — trái với からといって.'),
+      QP('（41）{確|たし}かにこの{方法|ほうほう}は{便利|べんり}だ。（　）、{費用|ひよう}がかかりすぎるという{問題|もんだい}もある。', 'しかし', ['そのうえ', 'つまり', 'たとえば'], 0,
+        'Khuôn nhượng bộ **{確|たし}かに A。しかし B** — ý tác giả nằm ở B (Bài 54 ②). そのうえ (thêm vào cùng chiều), つまり (nói lại), たとえば (ví dụ) không đảo chiều.'),
+      QP('（42）{彼|かれ}の{話|はなし}は、{一見|いっけん}{正|ただ}しそうに{見|み}える（　）、よく{考|かんが}えると{矛盾|むじゅん}がある。', 'が', ['ので', 'うえに', 'だけに'], 2,
+        '**{一見|いっけん} A が、（{実|じつ}は）B** — "thoạt nhìn A nhưng thật ra B" (Bài 54 ②). ので・だけに là nguyên nhân; うえに cộng thêm cùng chiều.'),
+      QP('（43）{大切|たいせつ}なのは{結果|けっか}（　）、そこに{至|いた}るまでの{過程|かてい}だ。', 'ではなく', ['にしては', 'からこそ', 'ばかりに'], 3,
+        '"Không phải A mà là B" ⇒ **A ではなく B** — ý chính là B (Bài 54 ④). にしては・からこそ・ばかりに không tạo cặp đối lập A ↔ B.'),
+      QP('（44）この{薬|くすり}が{誰|だれ}にでも{効|き}くとは{言|い}い（　）。', '{切|き}れない', ['ほかならない', '{違|ちが}いない', '{限|かぎ}らない'], 1,
+        '"Không thể khẳng định là ai cũng hiệu quả" ⇒ **～とは{言|い}い{切|き}れない** (Bài 54 ③). ほかならない・{違|ちが}いない・{限|かぎ}らない không ghép sau {言|い}い (Vます).'),
+    ]),
     {
       t: 'build',
       id: 'b55-np-ghep',
@@ -1655,7 +1682,7 @@ const ON_NGU_PHAP: Lesson = {
 
 const HAN_THEO_BAI: Block = {
   t: 'table',
-  caption: 'Chữ Hán mới của cấp N2 theo bài (Bài 41–53, ~310 chữ) — mỗi bài 3–4 từ "hay vào đề" để ôn',
+  caption: 'Chữ Hán mới của cấp N2 theo bài (Bài 41–54, ~335 chữ) — mỗi bài vài từ "hay vào đề" để ôn',
   head: ['Bài', 'Chữ mới', 'Từ hay vào đề (đọc)'],
   rows: [
     ['41 Tìm việc', '就 採 志 履 企 契 析 項 挑 魅 秀 柄 極 抱 薦 雇 弊 攻 型 厚 遇 貢 献 獲', '{就職|しゅうしょく} · {採用|さいよう} · {志望|しぼう} · {契約|けいやく} · {魅力|みりょく} · {待遇|たいぐう} · {貢献|こうけん} · {獲得|かくとく} · {弊社|へいしゃ}'],
@@ -1671,6 +1698,7 @@ const HAN_THEO_BAI: Block = {
     ['51 Nhấn mạnh', '陶 彫 鑑 奏 鼓 拍 踊 丸 輝 彩 宝 魂 底 殊 是 非 超 愛 孝 犠 牲 叫 祈 稼 繰', '{陶芸|とうげい} · {鑑賞|かんしょう} · {演奏|えんそう} · {拍手|はくしゅ} · {輝|かがや}く · {特殊|とくしゅ} · {是非|ぜひ} · {犠牲|ぎせい} · {稼|かせ}ぐ · {繰|く}り{返|かえ}す'],
     ['52 Báo cáo', '序 章 構 執 旨 範 括 欄 箇 冒 尾 典 唆 視 堅 潔 該 遍 唱 模 盤 版 倫 刊', '{序論|じょろん} · {構成|こうせい} · {執筆|しっぴつ} · {要旨|ようし} · {範囲|はんい} · {冒頭|ぼうとう} · {出典|しゅってん} · {示唆|しさ} · {簡潔|かんけつ} · {普遍的|ふへんてき}'],
     ['53 Email công việc', '啓 謹 諾 賜 詫 陳 迅 戴 甚 拙 宜 閲 寛 捗 殿 煩 懇 控 仰 氏 裁 赦 憾 賀', '{承諾|しょうだく} · お{詫|わ}び · {迅速|じんそく} · {頂戴|ちょうだい} · {進捗|しんちょく} · {寛大|かんだい} · {懇親会|こんしんかい} · {遺憾|いかん} · {年賀状|ねんがじょう}'],
+    ['54 Đọc & nghe N2', '斜 脈 曖 昧 肯 即 衆 訴 捉 枠 抵 抗 衝 媒 紛 剰 漠 淡 奨 律 干 掘 併 潜', '{斜|なな}め{読|よ}み · {文脈|ぶんみゃく} · {曖昧|あいまい} · {肯定的|こうていてき} · {即座|そくざ}に · {聴衆|ちょうしゅう} · {訴|うった}える · {捉|とら}える · {抵抗|ていこう} · {媒体|ばいたい} · {紛|まぎ}らわしい · {過剰|かじょう}'],
   ],
 };
 
@@ -1750,6 +1778,11 @@ const RUI_GI: Block = {
     ['{抜群|ばつぐん}だ', 'ほかよりずっと{優|すぐ}れている', '50'],
     ['{簡潔|かんけつ}に', '{短|みじか}く、わかりやすく', '52'],
     ['{迅速|じんそく}に', 'すばやく', '53'],
+    ['{一理|いちり}ある', 'ある{程度|ていど}{正|ただ}しい', '54'],
+    ['{若干|じゃっかん}', '{少|すこ}し', '54'],
+    ['さほど～ない', 'それほど～ない', '54'],
+    ['{要|よう}は', 'つまり、{一番|いちばん}{大事|だいじ}なのは', '54'],
+    ['{即座|そくざ}に', 'すぐに', '54'],
   ],
 };
 
@@ -1776,8 +1809,8 @@ const KET_HOP: Block = {
 const ON_TU_HAN: Lesson = {
   id: 'b55-on-tap-tu-vung-han-tu',
   kind: 'review',
-  title: 'Ôn tập N2 · Từ vựng – chữ Hán — chữ Hán Bài 41–53, bẫy đọc, đồng âm, 語形成, 類義語, コロケーション, 36 câu + 20 câu đọc không furigana',
-  goal: 'Ôn lại ~310 chữ Hán mới của cấp N2 theo bài cùng các từ hay vào đề; nắm các bẫy của 漢字読み (trường âm, âm ngắt, âm đục, on ↔ kun, đọc đặc biệt) và 表記 (đồng âm khác chữ, chữ trông giống); học bảng tiền tố – hậu tố cho 語形成, các cặp diễn đạt lại cho 言い換え và các kết hợp từ cố định; rồi làm 36 câu + 20 câu đọc không furigana.',
+  title: 'Ôn tập N2 · Từ vựng – chữ Hán — chữ Hán Bài 41–54, bẫy đọc, đồng âm, 語形成, 類義語, コロケーション, 42 câu + 22 câu đọc không furigana',
+  goal: 'Ôn lại ~335 chữ Hán mới của cấp N2 theo bài cùng các từ hay vào đề; nắm các bẫy của 漢字読み (trường âm, âm ngắt, âm đục, on ↔ kun, đọc đặc biệt) và 表記 (đồng âm khác chữ, chữ trông giống); học bảng tiền tố – hậu tố cho 語形成, các cặp diễn đạt lại cho 言い換え và các kết hợp từ cố định; rồi làm 42 câu + 22 câu đọc không furigana.',
   minutes: 90,
   blocks: [
     {
@@ -1798,7 +1831,7 @@ const ON_TU_HAN: Lesson = {
     GO_KEISEI,
     RUI_GI,
     KET_HOP,
-    { t: 'h', text: '4. Luyện tập — 36 câu' },
+    { t: 'h', text: '4. Luyện tập — 42 câu' },
     MCQ('b55-th-yomi', 'Nhóm 1 — 漢字読み: chọn cách đọc của từ in đậm (12 câu)', [
       QP('（1）{外国人|がいこくじん}に{対|たい}する **偏見** をなくしたい。', 'へんけん', ['へんげん', 'べんけん', 'へんけい'], 0, '**{偏見|へんけん}** (henken — định kiến, Bài 42). 偏 ヘン + 見 ケン — không đục.'),
       QP('（2）{彼|かれ}は{自分|じぶん}の{仕事|しごと}に **誇り** を{持|も}っている。', 'ほこり', ['いのり', 'かおり', 'ほまれ'], 1, '**{誇|ほこ}り** (hokori — niềm tự hào, Bài 45). いのり = {祈|いの}り (Bài 51).'),
@@ -1841,11 +1874,19 @@ const ON_TU_HAN: Lesson = {
       QP('（35）「{口|くち}を{滑|すべ}らせる」に{意味|いみ}が{最|もっと}も{近|ちか}いのはどれか。', '{言|い}ってはいけないことをうっかり{言|い}う', ['{早口|はやくち}で{話|はな}す', '{上手|じょうず}に{嘘|うそ}をつく', '{何|なに}も{言|い}わずに{黙|だま}る'], 2, '**{口|くち}を{滑|すべ}らせる** (Bài 48) = lỡ miệng.'),
       QP('（36）「{裏目|うらめ}に{出|で}る」に{意味|いみ}が{最|もっと}も{近|ちか}いのはどれか。', 'よかれと{思|おも}ってしたことが{悪|わる}い{結果|けっか}になる', ['{予想|よそう}どおりの{結果|けっか}になる', '{隠|かく}していたことが{知|し}られる', '{目立|めだ}たない{人|ひと}が{活躍|かつやく}する'], 3, '**{裏目|うらめ}に{出|で}る** (Bài 50) = phản tác dụng.'),
     ]),
+    MCQ('b55-th-yomi-b54', 'Nhóm 4 — 漢字読み chữ Bài 54 (6 câu)', [
+      QP('（37）{上司|じょうし}の{指示|しじ}が **曖昧** で、{何|なに}をすればいいのかわからない。', 'あいまい', ['あいばい', 'えいまい', 'あいみ'], 0, '**{曖昧|あいまい}** (aimai — mơ hồ, Bài 54): 曖 アイ + 昧 マイ.'),
+      QP('（38）{新|あたら}しい{制度|せいど}には、{社員|しゃいん}の{間|あいだ}に **抵抗** がある。', 'ていこう', ['ていきょう', 'たいこう', 'ていごう'], 2, '**{抵抗|ていこう}** (teikou — sự e ngại, chống cự, Bài 54). たいこう = {対抗|たいこう} (đối kháng) — cùng chữ 抗 nhưng chữ đầu khác.'),
+      QP('（39）{包装|ほうそう}が **過剰** だという{声|こえ}が{増|ふ}えている。', 'かじょう', ['かじょ', 'かんじょう', 'かしょう'], 1, '**{過剰|かじょう}** (kajou — quá mức, Bài 54): 剰 ジョウ (đục, trường âm). かんじょう = {感情|かんじょう} — bẫy âm gần.'),
+      QP('（40）{若者|わかもの}は、{新聞|しんぶん}よりもネットの **媒体** からニュースを{得|え}ている。', 'ばいたい', ['まいたい', 'ばいてい', 'はいたい'], 3, '**{媒体|ばいたい}** (baitai — phương tiện truyền thông, Bài 54): 媒 バイ (đục) + 体 タイ.'),
+      QP('（41）{講演|こうえん}が{終|お}わると、 **聴衆** から{大|おお}きな{拍手|はくしゅ}が{起|お}こった。', 'ちょうしゅう', ['ちょうしゅ', 'きょうしゅう', 'ちょうしょう'], 0, '**{聴衆|ちょうしゅう}** (choushuu — thính giả, Bài 54): 聴 チョウ (Bài 39) + 衆 シュウ ({民衆|みんしゅう}).'),
+      QP('（42）{質問|しつもん}に{対|たい}して、{彼女|かのじょ}は **即座** に{答|こた}えた。', 'そくざ', ['そくさ', 'しょくざ', 'そっざ'], 2, '**{即座|そくざ}に** (sokuza ni — ngay tức khắc, Bài 54): 即 ソク + 座 ザ (đục, như {座席|ざせき}…{正座|せいざ}).'),
+    ]),
     {
       t: 'readkanji',
       id: 'b55-th-doc-kanji',
-      title: 'Đọc KHÔNG furigana — 20 câu (chữ Hán Bài 41–53 + chữ đã học)',
-      note: 'Che phần đáp án, đọc to cả câu rồi bấm hiện cách đọc. Câu nào vấp thì quay lại bảng chữ theo bài ở trên. Mọi chữ Hán trong phần này đều đã học ở Bài 1–53.',
+      title: 'Đọc KHÔNG furigana — 22 câu (chữ Hán Bài 41–54 + chữ đã học)',
+      note: 'Che phần đáp án, đọc to cả câu rồi bấm hiện cách đọc. Câu nào vấp thì quay lại bảng chữ theo bài ở trên. Mọi chữ Hán trong phần này đều đã học ở Bài 1–54.',
       items: [
         { text: '{就職|しゅうしょく}{活動|かつどう}では、{自分|じぶん}の{強|つよ}みを{具体的|ぐたいてき}に{伝|つた}えることが{大切|たいせつ}だ。', ro: 'Shuushoku katsudou de wa, jibun no tsuyomi o gutaiteki ni tsutaeru koto ga taisetsu da.', vi: 'Khi tìm việc, điều quan trọng là truyền đạt cụ thể điểm mạnh của bản thân.' },
         { text: 'この{会社|かいしゃ}は{福利厚生|ふくりこうせい}が{充実|じゅうじつ}している。', ro: 'Kono kaisha wa fukuri kousei ga juujitsu shite iru.', vi: 'Công ty này có chế độ phúc lợi đầy đủ.' },
@@ -1867,6 +1908,8 @@ const ON_TU_HAN: Lesson = {
         { text: '{演奏|えんそう}が{終|お}わると、{会場|かいじょう}から{大|おお}きな{拍手|はくしゅ}が{起|お}こった。', ro: 'Ensou ga owaru to, kaijou kara ookina hakushu ga okotta.', vi: 'Buổi biểu diễn vừa kết thúc, khán phòng vang lên tràng vỗ tay lớn.' },
         { text: 'レポートの{冒頭|ぼうとう}で、{研究|けんきゅう}の{範囲|はんい}を{明確|めいかく}にする。', ro: 'Repooto no boutou de, kenkyuu no han-i o meikaku ni suru.', vi: 'Ở phần đầu bản báo cáo, làm rõ phạm vi nghiên cứu.' },
         { text: '{返信|へんしん}が{遅|おそ}くなりましたことを、{心|こころ}よりお{詫|わ}び{申|もう}し{上|あ}げます。', ro: 'Henshin ga osoku narimashita koto o, kokoro yori owabi moushiagemasu.', vi: 'Tôi thành thật xin lỗi vì đã trả lời muộn.' },
+        { text: 'その{説明|せつめい}は{曖昧|あいまい}で、{説得力|せっとくりょく}に{欠|か}ける。', ro: 'Sono setsumei wa aimai de, settokuryoku ni kakeru.', vi: 'Lời giải thích đó mơ hồ, thiếu sức thuyết phục.' },
+        { text: '{新|あたら}しい{規制|きせい}に{対|たい}しては、{根強|ねづよ}い{抵抗|ていこう}がある。', ro: 'Atarashii kisei ni taishite wa, nezuyoi teikou ga aru.', vi: 'Đối với quy định hạn chế mới, vẫn có sự phản đối dai dẳng.' },
       ],
     },
   ],

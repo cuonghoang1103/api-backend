@@ -175,7 +175,15 @@ export const b2l7c = [
      </ul>
      <p class="meo">💡 Mục cuối nói về khả năng tra cứu: người đọc không tìm ra thông tin liên hệ của bạn trong năm giây thì không thể nói "đồng ý" với bạn.</p>`),
 
-  slide(D, 14, 'Persuasive proposals — solicited vs unsolicited',
+  slide(D, 14, 'Persuasive proposals — brief, often one page',
+    `<p class="y-chinh">🎯 Persuasive proposals are often brief, even limited to one page.</p>
+     <p>The slide backs this with a quote from Adnan Khashoggi, described as a successful multibillionaire (Riley, 2002): <em>"The one-page proposal has been one of the keys to my business success, and it can be invaluable to you too. Few decision-makers can ever afford to read more than one page when deciding if they are interested in a deal or not. This is even more true for people of a different culture or language."</em></p>
+     <p class="meo">💡 Brevity is a courtesy to a busy reader — and to a reader working in a second language. It is also why the draft rule on slide 17 caps your proposal at two pages.</p>`,
+    `<p class="y-chinh">🎯 Đề xuất thuyết phục thường ngắn, thậm chí chỉ gói trong một trang.</p>
+     <p>Slide dẫn lời Adnan Khashoggi, được giới thiệu là một tỷ phú thành đạt (Riley, 2002): <em>"Đề xuất một trang là một trong những chìa khoá thành công trong kinh doanh của tôi, và nó cũng có thể vô giá với bạn. Rất ít người ra quyết định có đủ thời gian đọc quá một trang khi cân nhắc có quan tâm tới một thương vụ hay không. Điều này càng đúng với người thuộc một nền văn hoá hay ngôn ngữ khác."</em></p>
+     <p class="meo">💡 Ngắn gọn là phép lịch sự với người đọc bận rộn — và với người đọc bằng ngôn ngữ thứ hai. Đó cũng là lý do quy định bản nháp ở slide 17 giới hạn đề xuất của bạn trong hai trang.</p>`),
+
+  slide(D, 15, 'Two types of business proposals — solicited vs unsolicited',
     `<p class="y-chinh">🎯 Two types, and they call for different writing.</p>
      <ul>
        <li><span class="nhan">Solicited</span> — you were asked to submit it. The request may be a direct verbal or written one.</li>
@@ -189,13 +197,13 @@ export const b2l7c = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Hệ quả khi viết:</strong> đề xuất được mời thì trả lời từng điểm trong lời mời; đề xuất tự gửi phải chứng minh trước hết là có tồn tại một vấn đề. Lẫn hai kiểu chính là lý do các đề xuất tự gửi bị bỏ qua.</p>`),
 
-  slide(D, 15, 'Sample business proposal',
-    `<p class="y-chinh">🎯 The deck points to a free worked example: the Writing Help Tools Center's sample business proposal.</p>
+  slide(D, 16, 'Sample business proposal',
+    `<p class="y-chinh">🎯 The deck points to a free worked example: the Writing Help Tools Center, a commercial enterprise, offers a clear sample business proposal on its website (writinghelp-central.com).</p>
      <p class="meo">💡 Read a full example before writing your own. Reading the ten sections as a list teaches structure; reading them as one document teaches proportion — which section deserves half a page and which deserves two lines.</p>`,
-    `<p class="y-chinh">🎯 Bộ slide dẫn tới một ví dụ hoàn chỉnh miễn phí: bản đề xuất mẫu của Writing Help Tools Center.</p>
+    `<p class="y-chinh">🎯 Bộ slide dẫn tới một ví dụ hoàn chỉnh miễn phí: Writing Help Tools Center, một đơn vị thương mại, đăng một bản đề xuất mẫu rõ ràng trên trang của họ (writinghelp-central.com).</p>
      <p class="meo">💡 Hãy đọc trọn một ví dụ trước khi tự viết. Đọc mười mục dưới dạng danh sách thì học được cấu trúc; đọc chúng trong một văn bản liền mạch mới học được tỷ lệ — mục nào đáng nửa trang, mục nào chỉ đáng hai dòng.</p>`),
 
-  slide(D, 16, 'Finalize your project proposal — the rules',
+  slide(D, 17, 'Finalize your project proposal — the rules',
     `<p class="y-chinh">🎯 The submission rules, and the second one is a privacy instruction.</p>
      <ul>
        <li>Prepare a draft business proposal in <strong>no more than 2 pages</strong>.</li>
@@ -209,8 +217,8 @@ export const b2l7c = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Đọc kỹ:</strong> giới hạn hai trang và quy định liên hệ giả không phải lời khuyên về văn phong — đó là điều kiện để bài được nhận.</p>`),
 
-  slide(D, 17, 'Closing slide',
-    `<p class="y-chinh">🎯 End of the proposal lesson.</p>
+  slide(D, 18, 'Q&A — end of Lesson 7',
+    `<p class="y-chinh">🎯 The deck closes with a Q&amp;A slide. Before asking your questions, check your draft against this list.</p>
      <p><span class="nhan">Your proposal is ready when</span></p>
      <ol>
        <li>All ten sections exist and each earns its space.</li>
@@ -218,8 +226,9 @@ export const b2l7c = [
        <li>Costs are stated even if they are small.</li>
        <li>Ethos, pathos and logos are all present somewhere.</li>
        <li>It fits in two pages and contains no real contact details.</li>
-     </ol>`,
-    `<p class="y-chinh">🎯 Kết bài về đề xuất.</p>
+     </ol>
+     <p class="meo">💡 Next in the syllabus: session 16–17 critical thinking (Lesson 8), then sessions 19–21 where you present this proposal — that presentation is graded under Group Project part 2.</p>`,
+    `<p class="y-chinh">🎯 Bộ slide khép lại bằng slide Hỏi – đáp. Trước khi đặt câu hỏi, hãy soát bản nháp theo danh sách này.</p>
      <p><span class="nhan">Bản đề xuất của bạn sẵn sàng khi</span></p>
      <ol>
        <li>Đủ mười mục và mục nào cũng xứng với chỗ nó chiếm.</li>
@@ -227,12 +236,7 @@ export const b2l7c = [
        <li>Chi phí được nêu, kể cả khi nhỏ.</li>
        <li>Ethos, pathos và logos đều hiện diện ở đâu đó.</li>
        <li>Gói trong hai trang và không có thông tin liên hệ thật nào.</li>
-     </ol>`),
-
-  slide(D, 18, 'End of Lesson 7',
-    `<p class="y-chinh">🎯 Final slide of the deck.</p>
-     <p class="meo">💡 Next in the syllabus: session 16–17 critical thinking (Lesson 8), then sessions 19–21 where you present this proposal — that presentation is graded under Group Project part 2.</p>`,
-    `<p class="y-chinh">🎯 Slide cuối của bộ này.</p>
+     </ol>
      <p class="meo">💡 Tiếp theo trong syllabus: buổi 16–17 tư duy phản biện (Bài 8), rồi buổi 19–21 bạn thuyết trình chính bản đề xuất này — buổi thuyết trình đó được chấm vào Dự án nhóm phần 2.</p>`),
 
   books([
@@ -242,7 +246,7 @@ export const b2l7c = [
 
   bi(
     `<h3>✅ Privacy rule worth repeating</h3>
-     <p>The lecturer's own instruction on slide 16 — no real contact information in the draft — is the same rule this Academy follows when publishing slides: anything that identifies a real person or business is removed before the material goes online.</p>`,
+     <p>The lecturer's own instruction on slide 17 — no real contact information in the draft — is the same rule this Academy follows when publishing slides: anything that identifies a real person or business is removed before the material goes online.</p>`,
     `<h3>✅ Một quy định về riêng tư đáng nhắc lại</h3>
-     <p>Chỉ dẫn của chính giảng viên ở slide 16 — không dùng thông tin liên hệ thật trong bản nháp — cũng là quy tắc Academy áp dụng khi đăng slide: mọi thứ nhận diện được một con người hay doanh nghiệp có thật đều được gỡ trước khi tài liệu lên mạng.</p>`),
+     <p>Chỉ dẫn của chính giảng viên ở slide 17 — không dùng thông tin liên hệ thật trong bản nháp — cũng là quy tắc Academy áp dụng khi đăng slide: mọi thứ nhận diện được một con người hay doanh nghiệp có thật đều được gỡ trước khi tài liệu lên mạng.</p>`),
 ].join('\n');

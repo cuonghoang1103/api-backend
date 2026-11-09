@@ -20,7 +20,7 @@ export default {
     "sdn302-5-2-jwt-cors": { yt: "mbsmsi7l3r4", credit: "Web Dev Simplified — JWT Authentication Tutorial - Node.js", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/05-02-jwt-https-cors-upload-tron-a91538d9.mp4' }, defaultVideoTrack: 'VI'},
     "sdn302-6-1-react-deploy": { yt: "XxS5srZC3Oc", credit: "CodeWithMasood — How to deploy Node/Express.js app on Render with MongoDB! (Step By Step)" },
     "sdn302-8-1-nestjs-hono": { yt: "wqhNoDE6pb4", credit: "Traversy Media — NestJS Crash Course" },
-    "sdn302-8-2-production": { yt: "DYme1m4RiwI", credit: "Software Developer Diaries — Node.js Security Best Practices: JWT blacklisting, rate limiting, schema validation" },
+    "sdn302-8-2-production": { yt: "DYme1m4RiwI", credit: "Software Developer Diaries — Node.js Security Best Practices: JWT blacklisting, rate limiting, schema validation", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/08-nestjs-hono-production/08-02-gia-co-production-6cb548bb.mp4' }, defaultVideoTrack: 'VI'},
     // YouTube bổ sung 31/10/2026
     'sdn302-cong-cu': { yt: 'bBA9rUdqmgY', credit: 'MongoDB — Getting Started with MongoDB Atlas - A Modern Database!', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/00-gioi-thieu-huong-dan-hoc/00-03-cai-dat-moi-truong-ae3e6b60.mp4' }, defaultVideoTrack: 'VI'},
     'sdn302-project-checklist': { yt: 'ICMnoKxlYYg', credit: 'Dipesh Malvia — JWT Authentication Tutorial With Express & MongoDB | Rest API Project | Node.js for Beginners #10' },

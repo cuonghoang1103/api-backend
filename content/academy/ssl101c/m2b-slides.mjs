@@ -463,7 +463,7 @@ export default {
 <li><strong>"Helps you understand the question" is the exam-relevant line.</strong> It places the rubric squarely inside section 3.1 — <em>understanding the problem</em> — rather than inside some later section about submission. That placement is the point of slides 38–41.</li>
 <li><strong>Consistency cuts both ways.</strong> Because the rubric standardises marking, an excellent piece of work that ignores a criterion still loses those marks. The rubric protects you from an unfair marker and gives you no protection at all against your own omissions.</li>
 <li><strong>Applied at FPTU.</strong> Check the criteria three times: at the start (to plan the sections), at the halfway point (to catch a criterion you have not touched while there is still time), and in the last hour (as a submission checklist). The third check routinely finds 5–10 marks lying on the floor.</li>
-<li><strong>Why the exclamation mark matters.</strong> Nothing else in this deck is shouted. When a MOOC raises its voice once, that sentence tends to become a quiz item.</li>
+<li><strong>Why the exclamation mark matters.</strong> Only two other bullets in this deck end with an exclamation mark (slide 75 “The more different, the better!” and slide 83 “Don’t forget common sense!”). When a MOOC raises its voice, that sentence tends to become a quiz item.</li>
 </ul>
 <p class="meo">💡 Count: <strong>four</strong> bullets — one definition, one benefit for the marker, one benefit for you, one command.</p>`,
         `<p class="y-chinh">🎯 Bốn gạch đầu dòng định nghĩa rubric, khép lại bằng câu DUY NHẤT trong cả mục này mang dấu chấm than: <strong>Set of criteria used to assess item · Creates consistency of marking · Helps you understand the question · Always check the marking criteria!</strong></p>
@@ -479,7 +479,7 @@ export default {
 <li><strong>"Giúp bạn hiểu câu hỏi" mới là dòng dính tới đề thi.</strong> Nó đặt rubric nằm gọn bên trong mục 3.1 — <em>hiểu vấn đề</em> — chứ không phải trong một mục nào đó về chuyện nộp bài. Chính chỗ đặt đó là ý nghĩa của các slide 38–41.</li>
 <li><strong>Tính nhất quán cắt cả hai phía.</strong> Vì rubric chuẩn hoá việc chấm, một bài xuất sắc mà bỏ qua một tiêu chí thì vẫn mất đúng số điểm của tiêu chí đó. Rubric bảo vệ bạn khỏi một người chấm thiên vị, và không bảo vệ bạn chút nào khỏi chính sự bỏ sót của mình.</li>
 <li><strong>Áp dụng ở FPTU.</strong> Kiểm tiêu chí ba lần: lúc bắt đầu (để chia mục), lúc đi được nửa đường (để bắt một tiêu chí chưa đụng tới khi vẫn còn kịp), và trong một giờ cuối (như một checklist nộp bài). Lần kiểm thứ ba thường nhặt được 5–10 điểm đang nằm lăn lóc dưới sàn.</li>
-<li><strong>Vì sao dấu chấm than lại đáng chú ý.</strong> Không có chỗ nào khác trong bộ slide này lên giọng. Khi một MOOC quát lên đúng một lần, câu đó thường trở thành một câu hỏi trắc nghiệm.</li>
+<li><strong>Vì sao dấu chấm than lại đáng chú ý.</strong> Cả bộ slide chỉ có thêm hai gạch đầu dòng kết bằng dấu chấm than (slide 75 “The more different, the better!” và slide 83 “Don’t forget common sense!”). Khi một MOOC lên giọng, câu đó thường trở thành một câu hỏi trắc nghiệm.</li>
 </ul>
 <p class="meo">💡 Đếm: <strong>BỐN</strong> gạch — một định nghĩa, một lợi ích cho người chấm, một lợi ích cho bạn, một mệnh lệnh.</p>`],
 

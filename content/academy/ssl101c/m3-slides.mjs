@@ -196,7 +196,7 @@ export default {
 <li><strong>The word "balanced" carries the fairness requirement.</strong> To reach a balanced judgement you have to give the side you dislike its strongest form. If your essay's counter-argument is a weak version nobody holds, you have built a straw man (slide 9) and your "balance" is decorative.</li>
 <li><strong>At FPTU the definition maps onto a habit you can run in 30 seconds.</strong> Read the requirement → write your first answer → ask "what would have to be true for this to be wrong?" → adjust → commit. The last step is compulsory; a report that lists considerations without concluding scores badly in SWP391 exactly because it never reached a judgement.</li>
 </ul>
-<p class="pitfall">⚠️ Two things this deck leaves untitled — slides 5 and 6 — are the two that carry the definition and the checklist. Do not skip them when revising just because they have no heading to catch your eye.</p>
+<p class="pitfall">⚠️ Two slides this deck leaves untitled — slides 5 and 6 — are the two that carry the definition and the checklist (slides 10, 13, 14 and 15 have no typed heading either). Do not skip them when revising just because they have no heading to catch your eye.</p>
 <p class="meo">💡 Compress the definition to four beats: <strong>question the first thought → weigh both sides → judge → about what I see, hear AND read</strong>.</p>`,
         `<p class="y-chinh">🎯 Một slide <strong>KHÔNG CÓ TIÊU ĐỀ</strong> — chữ bắt đầu ngay dưới hai gạch trang trí. Hai đoạn: câu trả lời đời thường, rồi định nghĩa. <em>"Bạn có thể quyết định mặc áo khoác đi học VÌ dự báo nói trời sẽ mưa."</em> · <em>"Tư duy phản biện là việc CHẤT VẤN những ý nghĩ ĐẦU TIÊN của chúng ta và đi tới một PHÁN ĐOÁN cân bằng hơn, chín chắn hơn về thông tin mà chúng ta đang NHÌN, NGHE và ĐỌC."</em></p>
 <table>
@@ -215,7 +215,7 @@ export default {
 <li><strong>Chữ "cân bằng" gánh yêu cầu CÔNG BẰNG.</strong> Muốn có phán đoán cân bằng, bạn phải trình bày phía mình không thích ở dạng MẠNH NHẤT của nó. Nếu phần phản biện trong bài của bạn là một phiên bản yếu xìu chẳng ai giữ, bạn đã dựng người rơm (slide 9) và cái "cân bằng" kia chỉ là trang trí.</li>
 <li><strong>Ở FPTU, định nghĩa này quy về một thói quen chạy trong 30 giây.</strong> Đọc yêu cầu → viết câu trả lời đầu tiên → hỏi "điều gì phải đúng thì câu này mới SAI?" → điều chỉnh → CHỐT. Bước cuối là bắt buộc; một báo cáo liệt kê đủ cân nhắc mà không kết luận thì bị chấm thấp ở SWP391 chính vì nó chưa bao giờ đi tới một phán đoán.</li>
 </ul>
-<p class="pitfall">⚠️ Hai slide duy nhất của deck không có tiêu đề — slide 5 và 6 — lại chính là hai slide mang định nghĩa và bộ câu hỏi. Đừng vì chúng không có dòng tiêu đề bắt mắt mà lướt qua khi ôn.</p>
+<p class="pitfall">⚠️ Hai slide không có tiêu đề — slide 5 và 6 — lại chính là hai slide mang định nghĩa và bộ câu hỏi (deck còn vài slide khác cũng không có dòng tiêu đề riêng: 10, 13, 14, 15). Đừng vì chúng không có dòng tiêu đề bắt mắt mà lướt qua khi ôn.</p>
 <p class="meo">💡 Nén định nghĩa thành bốn nhịp: <strong>chất vấn ý nghĩ đầu → cân cả hai phía → PHÁN ĐOÁN → về thứ mình NHÌN, NGHE VÀ ĐỌC</strong>.</p>`],
 
       [6, 'No title — the five questions critical thinking asks',

@@ -6,6 +6,9 @@ khung chương ↔ bài theo **giáo trình chuẩn quốc tế** của đúng m
 
 Repo: `/Users/admin/Downloads/api-backend` · File môn (CHỈ ĐỌC, KHÔNG SỬA): `content/academy/<MÃ>.mjs`
 
+⚠️ Nhiều agent chạy CÙNG LÚC: mọi file nháp (phần bài, script kiểm, venv, danh sách link) để trong thư mục RIÊNG
+`$TMPDIR/<mã-thường>-nhap/` — KHÔNG dùng thư mục scratchpad chung (đã có agent bị ghi đè `parts/`, `links1.txt`).
+
 ## 1. Nộp gì
 
 MỘT file `content/academy/_tu-soan/<MÃ>.mjs` — ghép vào môn lúc seed bằng `scripts/lib/academy-muc0-flm.mjs`

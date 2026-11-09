@@ -1999,6 +1999,36 @@ aside ::-webkit-scrollbar-thumb:hover {
   text-align: left;
 }
 
+/* Ma trận trong bài toán (khoá tự soạn MAA102/MLT201…): `<table class="matrix">` hiện như ma trận có ngoặc
+   vuông hai bên, rộng vừa nội dung, không kẻ ô — thay vì bảng kẻ ô kéo kín bề ngang. */
+.rich-content table.matrix {
+  display: inline-table;
+  width: auto;
+  margin: 0.4em 0.3em;
+  vertical-align: middle;
+  border-left: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  border-radius: 0;
+  /* gạch ngang ngắn ở 4 góc ⇒ ngoặc VUÔNG [ ] (vạch thẳng trơn trông như định thức |A|) */
+  background:
+    linear-gradient(currentColor, currentColor) top left / 7px 2px no-repeat,
+    linear-gradient(currentColor, currentColor) bottom left / 7px 2px no-repeat,
+    linear-gradient(currentColor, currentColor) top right / 7px 2px no-repeat,
+    linear-gradient(currentColor, currentColor) bottom right / 7px 2px no-repeat;
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+.rich-content table.matrix td,
+.rich-content table.matrix th {
+  border: 0;
+  padding: 0.15em 0.6em;
+  text-align: center;
+}
+.rich-content table.matrix caption {
+  caption-side: bottom;
+  font-size: 0.8em;
+  color: var(--text-secondary);
+}
+
 .rich-content th {
   background: rgba(255, 255, 255, 0.03);
   color: var(--text-primary);

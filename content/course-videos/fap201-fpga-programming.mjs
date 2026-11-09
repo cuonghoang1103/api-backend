@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho FAP201 — FPGA Programming. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/fap201-fpga-programming.mjs
+ */
+export default {
+  courseSlug: "fap201-fpga-programming",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "fap201-flm-b001": { yt: "gUsHwi4M4xE", credit: "EEVblog — EEVblog #496 - What Is An FPGA?" },
+    "fap201-flm-b002": { yt: "nY2BY2Yr5tU", credit: "Ekeeda — Comparison of TTL and CMOS - Digital Logic and Logic Families - Industrial Electronics" },
+    "fap201-flm-b003": { yt: "AZInaAaDlvE", credit: "EEVblog — EEVblog #635 - FPGA's Vs Microcontrollers" },
+    "fap201-flm-b004": { yt: "wF9vlO-ah-A", credit: "PyroElectro — Hardware Hello World - An Introduction To FPGA And CPLD - PyroEDU" },
+    "fap201-flm-b005": { yt: "l_eo21vHxw0", credit: "nandland — Nandland Go Board Project 1 - Switches and LEDs" },
+    "fap201-flm-b006": { yt: "QyfccW-v6mM", credit: "Ovisign Verilog HDL Tutorials — FPGA project 01 Part1 - Switches to LEDs" },
+    "fap201-flm-b007": { yt: "Usoo2j2TQio", credit: "nandland — Boolean Algebra And LUTs in FPGA" },
+    "fap201-flm-b010": { yt: "lrXjuotxqzE", credit: "nandland — What is a Flip-Flop?  How are they used in FPGAs?" },
+    "fap201-flm-b011": { yt: "SzV4l0_1MCQ", credit: "Neso Academy — Comparison between Combinational and Sequential Circuits" },
+    "fap201-flm-b012": { yt: "_7K-ty3Mffg", credit: "nandland — Nandland Go Board Project 3 - The Flip-Flop (AKA Register)" },
+    "fap201-flm-b017": { yt: "5emTC1ON5jU", credit: "aldecinc — Introduction to FPGA Simulation" },
+    "fap201-flm-b018": { yt: "sGQoBnFcmwc", credit: "aldecinc — Writing a Verilog Testbench" },
+    "fap201-flm-b020": { yt: "zSyc6py964Q", credit: "EsteemPCB Academy — FPGA Development Tutorial | Alinx AX7020 | Switch and Push Button Debouncing using D Flip-Flops" },
+    "fap201-flm-b023": { yt: "AEU9bvpzas8", credit: "nandland — Shift Register in FPGA - VHDL and Verilog Examples" },
+    "fap201-flm-b024": { yt: "myU2x27FIIc", credit: "Techquickie — What's the Difference Between Parallel and Serial?" },
+    "fap201-flm-b026": { yt: "J6TfWjctqIc", credit: "FPGA Works IIIT Sri City — Blinking LED on Artix-7 FPGA | Step-by-Step Verilog Guide" },
+    "fap201-flm-b027": { yt: "iei1EugtQvQ", credit: "Simple Tutorials for Embedded Systems — How to create a Blinking LED on FPGA? | Xilinx FPGA Programming Tutorials" },
+    "fap201-flm-b029": { yt: "GSPIRcBQUVo", credit: "Shepherd Tutorials — Designing a First In First Out (FIFO) in Verilog" },
+    "fap201-flm-b031": { yt: "eyNU6mn_-7g", credit: "nandland — Crossing Clock Domains in an FPGA" },
+    "fap201-flm-b032": { yt: "uTzb4oNcIvQ", credit: "nandland — How to fix Timing Errors in your FPGA design during Place and Route, meeting clock constraints" },
+    "fap201-flm-b033": { yt: "dXU1py-Od1g", credit: "DigiKey — Introduction to FPGA Part 10 - Metastability and Clock Domain Crossing | Digi-Key Electronics" },
+    "fap201-flm-b035": { yt: "E-qEnSp1aCk", credit: "VHDLwhiz.com — How to create a Finite-State Machine in VHDL" },
+    "fap201-flm-b036": { yt: "JXT-4ghebfI", credit: "FPGAs for Beginners — My favourite state machine, always blocks: one or many? and simplifying your SystemVerilog Style!" },
+    "fap201-flm-b041": { yt: "fqUuvwl4QJA", credit: "nandland — What is a Block RAM in an FPGA?" },
+    "fap201-1-1-fpga-architecture": { yt: "lLg1AgA2Xoo", credit: "DigiKey — Introduction to FPGA Part 1 - What is an FPGA? | Digi-Key Electronics" },
+    "fap201-2-1-verilog-basics": { yt: "2IReMT_zjK8", credit: "Visual Electric — The best way to start learning Verilog" },
+    "fap201-4-1-sequential": { yt: "aDOeynqSJls", credit: "Dave Moore — Sequential Logic In Verilog" },
+    "fap201-5-1-fsm": { yt: "hJIST1cEf6A", credit: "Abelardo Pardo — Finite State Machines explained" },
+    "fap201-6-1-testbench": { yt: "msXKWn24TN4", credit: "Phil’s Lab — FPGA Design Tutorial (Verilog, Simulation, Implementation) - Phil's Lab #109" },
+    "fap201-7-1-synthesis-flow": { yt: "V2D4kYfJ5FQ", credit: "FPGATEK — FPGA Design Flow: 7 Essential Steps to Implementing a Circuit on an FPGA" },
+    "fap201-8-1-projects-ip": { yt: "r0SI8rbzJXw", credit: "FPGATEK — How to Use IP Cores in Xilinx ISE" },
+  },
+};

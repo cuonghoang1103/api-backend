@@ -90,5 +90,7 @@ export default {
     'osg202-on-ch10': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-04-thuc-hanh-chuong-10-tron-f28001cc.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg11-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/12-windows/12-01-slide-windows-cau-truc-tron-510e1de2.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg10-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-03-slide-android-tron-02d4bedf.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-slide-osg11-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/12-windows/12-02-slide-windows-ben-trong-tron-0690b63a.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-on-ch11': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/12-windows/12-03-thuc-hanh-chuong-11-tron-c69d46b4.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

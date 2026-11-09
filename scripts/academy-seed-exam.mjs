@@ -16,14 +16,14 @@
  *   } ] }
  *
  * Idempotent: an exam is keyed by (courseId, kind, code). Re-running updates the
- * exam's metadata and REPLACES its questions (clean rebuild). Attempts are kept
- * (they reference examId, not questionId).
+ * exam's metadata and rewrites its questions IN PLACE by position (question i keeps
+ * its id), so user bookmarks / comments / answers that point at question ids survive.
  *
  * Usage:
  *   node scripts/academy-seed-exam.mjs --file ./content/exams/CEA201.mjs --apply
  *   (omit --apply for a dry run)
  */
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -79,33 +79,39 @@ async function main() {
     if (!APPLY) continue;
 
     let exam;
-    if (existing) {
-      exam = await prisma.exam.update({ where: { id: existing.id }, data });
-      await prisma.examQuestion.deleteMany({ where: { examId: exam.id } });
-    } else {
-      exam = await prisma.exam.create({ data });
-    }
+    // Cập nhật TẠI CHỖ theo thứ tự câu (09/11/2026) — trước đây deleteMany rồi tạo lại ⇒ id câu đổi mỗi deploy ⇒
+    // ExamQuestionBookmark (onDelete: Cascade) của người dùng bị xoá sạch sau MỌI deploy, bài làm/bình luận trỏ id cũ.
+    // Nay câu thứ i giữ nguyên id: chỉ ghi đè nội dung; thừa thì xoá đúng phần thừa, thiếu thì tạo thêm.
+    const cu = existing
+      ? await prisma.examQuestion.findMany({ where: { examId: existing.id }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }], select: { id: true } })
+      : [];
+    if (existing) exam = await prisma.exam.update({ where: { id: existing.id }, data });
+    else exam = await prisma.exam.create({ data });
+    const J = (v) => (v === undefined || v === null ? Prisma.DbNull : v);
     let order = 0;
-    for (const q of qs) {
-      await prisma.examQuestion.create({
-        data: {
-          examId: exam.id,
-          kind: q.kind ?? 'MCQ',
-          sortOrder: q.sortOrder ?? order++,
-          points: q.points ?? 1,
-          prompt: q.prompt ?? '',
-          imageUrl: q.imageUrl ?? null,
-          options: q.options ?? undefined,
-          correctIndexes: Array.isArray(q.correctIndexes) ? q.correctIndexes : [],
-          explanation: q.explanation ?? null,
-          language: q.language ?? null,
-          starterCode: q.starterCode ?? null,
-          sampleSolution: q.sampleSolution ?? null,
-          expectedOutput: q.expectedOutput ?? null,
-          rubric: q.rubric ?? undefined,
-          speakingPrompts: q.speakingPrompts ?? undefined,
-        },
-      });
+    for (let i = 0; i < qs.length; i++) {
+      const q = qs[i];
+      const qd = {
+        kind: q.kind ?? 'MCQ',
+        sortOrder: q.sortOrder ?? order++,
+        points: q.points ?? 1,
+        prompt: q.prompt ?? '',
+        imageUrl: q.imageUrl ?? null,
+        options: J(q.options),
+        correctIndexes: Array.isArray(q.correctIndexes) ? q.correctIndexes : [],
+        explanation: q.explanation ?? null,
+        language: q.language ?? null,
+        starterCode: q.starterCode ?? null,
+        sampleSolution: q.sampleSolution ?? null,
+        expectedOutput: q.expectedOutput ?? null,
+        rubric: J(q.rubric),
+        speakingPrompts: J(q.speakingPrompts),
+      };
+      if (cu[i]) await prisma.examQuestion.update({ where: { id: cu[i].id }, data: qd });
+      else await prisma.examQuestion.create({ data: { examId: exam.id, ...qd } });
+    }
+    if (cu.length > qs.length) {
+      await prisma.examQuestion.deleteMany({ where: { id: { in: cu.slice(qs.length).map((x) => x.id) } } });
     }
     console.log(`    ✓ exam #${exam.id} seeded with ${qs.length} question(s)`);
   }

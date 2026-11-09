@@ -79,6 +79,9 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/ielts/so-loi', nap: () => import('@/app/language/[code]/ielts/so-loi/page'), thamSoCo: { code: 'en' } },
   { mau: '/language/:code/dekiru', nap: () => import('@/app/language/[code]/dekiru/page') },
   { mau: '/language/:code/dekiru/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page') },
+  // 09/11/2026: hai trang con của Sách gốc (🎧 bản chép file nghe CD, 🖼️ tài liệu gốc của lớp) — thiếu ⇒ "Không tìm thấy".
+  { mau: '/language/:code/dekiru/sach-goc/nghe', nap: () => import('@/app/language/[code]/dekiru/sach-goc/nghe/page') },
+  { mau: '/language/:code/dekiru/sach-goc/tai-lieu', nap: () => import('@/app/language/[code]/dekiru/sach-goc/tai-lieu/page') },
   /* ── JP & CH — mục riêng dưới IELTS (05/10/2026), cùng bộ khung sách-học. ── */
   { mau: '/language/:code/jp', nap: () => import('@/app/language/[code]/jp/page') },
   { mau: '/language/:code/ch', nap: () => import('@/app/language/[code]/ch/page') },
@@ -86,9 +89,13 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   // 100% Bài giảng trên lớp mà? hãy học theo kiểu trên lớp". Khoá JLPT tự soạn cũ (Bài 0–5) dời về /jp/jlpt.
   { mau: '/jp', nap: () => import('@/app/language/[code]/dekiru/page'), thamSoCo: { code: 'ja' } },
   { mau: '/jp/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/sach-goc/nghe', nap: () => import('@/app/language/[code]/dekiru/sach-goc/nghe/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/sach-goc/tai-lieu', nap: () => import('@/app/language/[code]/dekiru/sach-goc/tai-lieu/page'), thamSoCo: { code: 'ja' } },
   { mau: '/jp/jlpt', nap: () => import('@/app/language/[code]/jp/page'), thamSoCo: { code: 'ja' } },
   { mau: '/jp/tren-lop', nap: () => import('@/app/language/[code]/dekiru/page'), thamSoCo: { code: 'ja' } },
   { mau: '/jp/tren-lop/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/tren-lop/sach-goc/nghe', nap: () => import('@/app/language/[code]/dekiru/sach-goc/nghe/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/tren-lop/sach-goc/tai-lieu', nap: () => import('@/app/language/[code]/dekiru/sach-goc/tai-lieu/page'), thamSoCo: { code: 'ja' } },
   { mau: '/ch', nap: () => import('@/app/language/[code]/ch/page'), thamSoCo: { code: 'zh' } },
 
   /* ── Lộ trình ── */

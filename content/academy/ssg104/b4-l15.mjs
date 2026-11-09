@@ -96,9 +96,11 @@ export const b4l15 = [
      <p class="meo">💡 Câu này tách hai việc mà sinh viên hay gộp làm một. Sự chú ý là lần "bán" thứ nhất; hành động là lần thứ hai, và khó hơn nhiều.</p>`),
 
   slide(D, 7, 'Measurable gain',
-    `<p class="y-chinh">🎯 <strong>Measurable gain</strong> assesses audience response to a persuasive message.</p>
+    `<p class="y-chinh">🎯 <strong>Measurable gain</strong> assesses audience response to a persuasive message (the definition is stated on slide 18).</p>
+     <p>The slide itself is a picture: a scale of five audience positions — <strong>Hostile · Negative · Neutral · Positive · Supporter</strong> — over a ruler, with arrows underneath showing an audience being moved along it, two short steps and one long jump.</p>
      <p class="meo">💡 The practical question it forces: what would count as evidence that this presentation worked? If the answer is "people nodded", you have no measure. If it is "three groups signed up", you do.</p>`,
-    `<p class="y-chinh">🎯 <strong>Mức thu được đo lường được</strong> là cách đánh giá phản ứng của khán giả trước một thông điệp thuyết phục.</p>
+    `<p class="y-chinh">🎯 <strong>Mức thu được đo lường được</strong> là cách đánh giá phản ứng của khán giả trước một thông điệp thuyết phục (định nghĩa này nằm ở slide 18).</p>
+     <p>Bản thân slide là một hình: thang năm vị trí của khán giả — <strong>Hostile · Negative · Neutral · Positive · Supporter</strong> (thù địch · tiêu cực · trung lập · tích cực · ủng hộ) — đặt trên một cây thước, bên dưới có mũi tên cho thấy khán giả được dịch dần trên thang: hai bước ngắn và một bước nhảy dài.</p>
      <p class="meo">💡 Câu hỏi thực tế nó buộc bạn phải trả lời: cái gì được tính là bằng chứng rằng bài này có tác dụng? Nếu đáp án là "mọi người gật đầu" thì bạn chẳng có thước đo nào. Nếu là "ba nhóm đã đăng ký" thì có.</p>`),
 
   slide(D, 8, "Maslow's hierarchy",
@@ -115,12 +117,14 @@ export const b4l15 = [
        <li>The "onion model": we start on a superficial level, and as layers are peeled away we gain knowledge of the other person.</li>
        <li>That knowledge has both <strong>breadth</strong> (how many topics) and <strong>depth</strong> (how personal).</li>
      </ul>
+     <p>The picture is an onion cut open, its layers labelled from the outside in: <strong>behaviours · attitudes · values · personality</strong>.</p>
      <p class="meo">💡 Relevance to persuasion: you cannot open at the centre of the onion. A request that assumes more closeness than exists reads as presumptuous and gets refused on tone alone.</p>`,
     `<p class="y-chinh">🎯 Altman & Taylor (1973): cách con người đi từ <strong>chuyện phiếm bề mặt tới những lời thân mật, cởi mở</strong>.</p>
      <ul>
        <li>"Mô hình củ hành": ta bắt đầu ở lớp ngoài cùng, và khi bóc dần từng lớp thì hiểu thêm về người kia.</li>
        <li>Sự hiểu ấy có cả <strong>bề rộng</strong> (bao nhiêu chủ đề) lẫn <strong>chiều sâu</strong> (riêng tư tới đâu).</li>
      </ul>
+     <p>Hình minh hoạ là một củ hành bổ đôi, các lớp ghi nhãn từ ngoài vào trong: <strong>behaviours · attitudes · values · personality</strong> (hành vi · thái độ · giá trị · tính cách).</p>
      <p class="meo">💡 Liên quan tới thuyết phục: bạn không thể mở lời ngay ở lõi củ hành. Một lời đề nghị giả định mức thân thiết cao hơn thực tế sẽ bị đọc là suồng sã và bị từ chối chỉ vì giọng điệu.</p>`),
 
   slide(D, 10, 'Speaking ethically and avoiding fallacies — seven concepts',
@@ -168,7 +172,7 @@ export const b4l15 = [
      <p class="meo">💡 Điều 5 hay gặp nhất trong bài thuyết trình sinh viên: gắn một đề xuất bình thường vào một lý tưởng lớn lao chẳng dính dáng gì tới nó.</p>`),
 
   slide(D, 12, 'Eleven points for speaking ethically (6–11)',
-    `<p class="y-chinh">🎯 The remaining six prohibitions. <strong>Do not:</strong></p>
+    `<p class="y-chinh">🎯 The remaining six prohibitions (the slide numbers every one of them "6." — read them as 6 to 11). <strong>Do not:</strong></p>
      <ol start="6">
        <li>Deceive your audience by concealing your real purpose, your self-interest, the group you represent, or your position as an advocate.</li>
        <li>Distort, hide or misrepresent the number, scope, intensity or undesirable features of consequences.</li>
@@ -178,7 +182,7 @@ export const b4l15 = [
        <li><strong>Advocate something which you yourself do not believe in.</strong></li>
      </ol>
      <p class="pitfall co-tieu-de"><strong>Điều 10 là điều dễ vi phạm nhất mà không ai để ý:</strong> saying "this will work" when the honest claim is "this is likely to work" is listed here as an ethical failure, not a stylistic one.</p>`,
-    `<p class="y-chinh">🎯 Sáu điều cấm còn lại. <strong>Không được:</strong></p>
+    `<p class="y-chinh">🎯 Sáu điều cấm còn lại (slide đánh số cả sáu là "6." — hiểu là 6 tới 11). <strong>Không được:</strong></p>
      <ol start="6">
        <li>Lừa người nghe bằng cách giấu mục đích thật, giấu lợi ích riêng, giấu nhóm mà mình đại diện, hoặc giấu việc mình đang vận động cho một quan điểm.</li>
        <li>Bóp méo, giấu hoặc trình bày sai về số lượng, phạm vi, mức độ hay những hệ quả bất lợi.</li>
@@ -285,8 +289,8 @@ export const b4l15 = [
      </ul>
      <p class="meo">💡 Với bài 1, hãy trả lời bằng mười một điều đạo đức: nhiều quảng cáo "ăn khách" chính là nhờ vi phạm điều 5 hoặc điều 9, và gọi được tên điều nào mới là phần được chấm.</p>`),
 
-  slide(D, 20, 'End of Lesson 15',
-    `<p class="y-chinh">🎯 Closing slide.</p>
+  slide(D, 20, 'Q&A — end of Lesson 15',
+    `<p class="y-chinh">🎯 Closing slide: a "Q &amp; A" picture.</p>
      <p><span class="nhan">Self-check</span></p>
      <ol>
        <li>Difference between persuasion and motivation?</li>
@@ -294,7 +298,7 @@ export const b4l15 = [
        <li>The five parts of an elevator speech, ending with what?</li>
        <li>What does "measurable gain" ask you to define?</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Slide kết.</p>
+    `<p class="y-chinh">🎯 Slide kết: ảnh "Q &amp; A" — hỏi đáp.</p>
      <p><span class="nhan">Tự kiểm</span></p>
      <ol>
        <li>Khác nhau giữa thuyết phục và tạo động lực?</li>
@@ -309,8 +313,8 @@ export const b4l15 = [
   ]),
 
   bi(
-    `<h3>✅ The gap this fills</h3>
-     <p>The syllabus asks about the elevator speech (CQ12.1). In the old Academy course the phrase appeared zero times, persuasion theory was absent, and the eleven ethical prohibitions — the boundary of what you may do to an audience — were nowhere in the material.</p>`,
-    `<h3>✅ Lỗ hổng được lấp</h3>
-     <p>Syllabus hỏi về elevator speech (CQ12.1). Ở khoá Academy cũ, cụm này xuất hiện đúng 0 lần, phần lý thuyết thuyết phục thì không có, còn mười một điều cấm về đạo đức — ranh giới của những gì bạn được phép làm với người nghe — cũng không có mặt trong tài liệu.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus asks about the elevator speech (CQ12.1, slides 13–16). Also know persuasion vs motivation (slide 18), Maslow's five levels (slide 8) and the eleven ethical prohibitions (slides 11–12) — the boundary of what you may do to an audience.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Syllabus hỏi về elevator speech (CQ12.1, slide 13–16). Cần nắm thêm khác biệt thuyết phục và động lực (slide 18), năm bậc Maslow (slide 8) và mười một điều cấm về đạo đức (slide 11–12) — ranh giới của những gì bạn được phép làm với người nghe.</p>`),
 ].join('\n');

@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho DPY391 — Data Security and Privacy. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/dpy391-data-security-and-privacy.mjs
+ */
+export default {
+  courseSlug: "dpy391-data-security-and-privacy",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "dpy391-ts-1-1": { yt: "EqNe55IzjAw", credit: "IBM Technology — Cybersecurity Architecture: Fundamentals of Confidentiality, Integrity, and Availability" },
+    "dpy391-ts-1-2": { yt: "ZNEPaGFApX4", credit: "How to engage in cyber policy — Privacy and data protection" },
+    "dpy391-ts-1-3": { yt: "VK0GyUSDwQY", credit: "IBM Technology — Cloud Security Risks: Exploring the latest Threat Landscape Report" },
+    "dpy391-ts-1-4": { yt: "3CfRu22_eus", credit: "IBM Technology — Risk & Compliance in Data GRC Architecture" },
+    "dpy391-ts-2-1": { yt: "N8xEgSe5RwE", credit: "IBM Technology — Data Security: Protect your critical data (or else)" },
+    "dpy391-ts-2-2": { yt: "F-hN9m9vSQQ", credit: "UC OIS — Data Classification & Governance" },
+    "dpy391-ts-3-1": { yt: "o_g-M7UBqI8", credit: "Practical Networking — Encryption - Symmetric Encryption vs Asymmetric Encryption - Cryptography - Practical TLS" },
+    "dpy391-ts-3-2": { yt: "_zyKvPvh808", credit: "Practical Networking — Public and Private Keys - Signatures & Key Exchanges - Cryptography - Practical TLS" },
+    "dpy391-ts-3-3": { yt: "71RQaYQ4QSw", credit: "Professor Messer — States of Data - CompTIA Security+ SY0-701 - 3.3" },
+    "dpy391-ts-3-4": { yt: "BqekRTA6VCs", credit: "IBM Technology — Secrets Management: Secure Credentials & Avoid Data Leaks" },
+    "dpy391-ts-4-1": { yt: "L3alw3iXaio", credit: "IBM Technology — What is Multi-Factor Authentication" },
+    "dpy391-ts-4-2": { yt: "PjZH-CO1hX0", credit: "CyberPlatter — Explain Access Control Models| Discretionary DAC, Mandatory MAC, RBAC, Rule, Attribute, Risk based" },
+    "dpy391-ts-4-4": { yt: "UpkqXK0B2E0", credit: "IBM Technology — Cybersecurity Architecture:  Data Security" },
+    "dpy391-ts-5-3": { yt: "gI0wk1CXlsQ", credit: "Simply Explained — Differential Privacy - Simply Explained" },
+    "dpy391-ts-5-4": { yt: "4zrU54VIK6k", credit: "Lex Fridman — Privacy Preserving AI (Andrew Trask) | MIT Deep Learning Series" },
+    "dpy391-ts-6-2": { yt: "E1OoHUWbEjk", credit: "Mike Chapple — CertMike Explains Privacy by Design" },
+    "dpy391-ts-6-3": { yt: "2iPDpV8ojHA", credit: "TEDx Talks — Data Privacy and Consent | Fred Cate | TEDxIndianaUniversity" },
+    "dpy391-ts-6-4": { yt: "C3hio0WkRHg", credit: "OneTrust — Privacy 101: Data Subject Rights" },
+    "dpy391-ts-6-5": { yt: "qIVSMZp7xbs", credit: "OneTrust — Privacy 101: Data Protection Impact Assessment" },
+    "dpy391-ts-7-1": { yt: "n5WJOncaHt4", credit: "In 3 Minutes — Introduction to General Data Protection Regulation(GDPR)" },
+    "dpy391-ts-7-2": { yt: "4J77H0VNP-M", credit: "ProCPR — Privacy and Security Rules | HIPAA Training" },
+    "dpy391-ts-8-2": { yt: "6o7tQiTKxBs", credit: "OneTrust — Privacy 101: Data Breach Notification" },
+    "dpy391-ts-8-3": { yt: "OjMnlizubTU", credit: "Google Cloud Tech — What is Data Loss Prevention (DLP)?" },
+    "dpy391-1-1-security-vs-privacy": { yt: "x3rg8bttldg", credit: "IBM Technology — Security vs. Privacy" },
+    "dpy391-2-1-lifecycle-classification": { yt: "gueJwhFE2PY", credit: "Securiti AI — What is Data Classification? | Types, Importance & Benefits" },
+    "dpy391-4-1-access-control": { yt: "rvZ35YW4t5k", credit: "IBM Technology — Role-based access control (RBAC) vs. Attribute-based access control (ABAC)" },
+    "dpy391-5-1-privacy-principles": { yt: "NcHSD3fWJiQ", credit: "Privacy Kitchen — What are the 7 principles of GDPR?" },
+    "dpy391-6-1-privacy-by-design": { yt: "rbkS728wxkk", credit: "Kickstart Privacy — What is Privacy By Design And Default: Understanding the Concepts" },
+    "dpy391-7-1-compliance-law": { yt: "ev6tQbnI22Q", credit: "University of Maryland Smith School of Business — Introduction to Cybersecurity - Governance Risk and Compliance" },
+    "dpy391-8-1-incident-governance": { yt: "X2UiMLxRdhE", credit: "Professor Messer — Incident Response - CompTIA Security+ SY0-701 - 4.8" },
+  },
+};

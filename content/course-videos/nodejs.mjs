@@ -132,7 +132,7 @@ export default {
     /* ── Chương 17 — Docker & triển khai ────────────────────────────────── */
     'nodejs-17-1-anh-docker': { yt: 'YlVmVO0zAfw', credit: 'Chris Hay — use multi-stage to build super slim node.js docker images..  From 780MB to less than 50MB', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/17-docker-trien-khai/17-01-anh-docker-ed307fb0.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-17-2-cache-tang': { yt: 'V6bLIw3wIx8', credit: 'Depot — Cache Dependencies With Docker Multi-Stage Builds' },
-    'nodejs-17-3-pid-1-tat-em': { yt: '0pQxONR73f8', credit: 'anthonywritescode — why don\'t signals work in docker?' },
+    'nodejs-17-3-pid-1-tat-em': { yt: '0pQxONR73f8', credit: 'anthonywritescode — why don\'t signals work in docker?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/17-docker-trien-khai/17-03-pid-1-tat-em-bb4503dd.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-17-4-bi-mat-cau-hinh': { yt: '4Z0RTSrCpus', credit: 'Eugen Bondarev — Next.js in Docker - How to set environment variables' },
     'nodejs-17-5-deploy-khong-gian-doan': { yt: '-OjPhPV6Rjs', credit: 'Software Developer Diaries — Here\'s how to Gracefully Shutdown your apps (with Node.js examples)' },
     'nodejs-17-6-deploy-hong-quay-lui': { yt: 'eQPYsGrZW_E', credit: 'DevOps & AI Toolkit — Stop Losing Requests! Learn Graceful Shutdown Techniques', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/17-docker-trien-khai/17-06-deploy-hong-quay-lui-tron-bcd7834e.mp4' }, defaultVideoTrack: 'VI'},

@@ -87,6 +87,7 @@ export default {
     'osg202-on-ch9': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/10-bao-mat/10-03-thuc-hanh-chuong-9-tron-c7390e00.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg10-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-01-slide-unix-linux-tien-trinh-tron-a160b8ff.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg10-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-02-slide-linux-bo-nho-io-tep-tron-670b2710.mp4' }, defaultVideoTrack: 'VI'},
-    'osg202-on-ch10': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-04-thuc-hanh-chuong-10-tron-f28001cc.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-on-ch10': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-04-thuc-hanh-chuong-10-tron-f28001cc.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-slide-osg11-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/12-windows/12-01-slide-windows-cau-truc-tron-510e1de2.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

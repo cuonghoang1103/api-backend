@@ -17611,3 +17611,18 @@ model UserFeedback {
   @@index([loai, createdAt(sort: Desc)], map: "idx_gop_y_loai")
   @@map("user_feedback")
 }
+
+/// 📷 Quyền xem Sách gốc / tài liệu gốc / file nghe (RIÊNG TƯ) do admin cấp cho từng tài khoản (09/11/2026).
+/// Người dùng: "cấp quyền xem sách cho vài bạn thân học chung — không phải cho mượn tài khoản admin". Không cho
+/// quyền admin nào khác; thu hồi = xoá dòng. Ngoài bảng này: vai trò ADMIN và env SACH_RIENG_USER_IDS (giữ như cũ).
+model SachRiengQuyen {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique @map("user_id")
+  /// Admin đã cấp
+  capBoiId  Int?     @map("cap_boi_id")
+  /// Ghi chú của admin (vd. "bạn cùng lớp JPD123")
+  ghiChu    String?  @map("ghi_chu") @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("sach_rieng_quyen")
+}

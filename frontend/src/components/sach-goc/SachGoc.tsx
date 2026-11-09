@@ -30,6 +30,7 @@ import {
   TEN_MUC, layHuongDan, layMucLuc, nhanMuc, timTrang, useQuyenSachRieng, type HuongDan, type LoaiMuc, type MucLuc,
 } from './useSachRieng';
 import st from './sachGoc.module.css';
+import { NutCapQuyen } from './CapQuyen';
 
 const NHO_KEY = 'sachgoc:dekiru:trang';
 const SO_TRANG = 304;
@@ -263,6 +264,7 @@ export default function SachGoc() {
             <button type="button" className={cs.iconBtn} onClick={sau} disabled={!p || p >= SO_TRANG} aria-label="Trang sau"><ChevronRight size={20} /></button>
           </div>
           <div className={st.congCu}>
+            <NutCapQuyen />
             <button type="button" className={cs.iconBtn} onClick={() => setZ((v) => Math.max(1, v / 1.25))} disabled={z <= 1} aria-label="Thu nhỏ"><ZoomOut size={17} /></button>
             <span className={st.phanTram}>{Math.round(z * 100)}%</span>
             <button type="button" className={cs.iconBtn} onClick={() => setZ((v) => Math.min(4, v * 1.25))} disabled={z >= 4} aria-label="Phóng to"><ZoomIn size={17} /></button>

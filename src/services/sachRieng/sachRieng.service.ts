@@ -67,9 +67,51 @@ export async function coQuyen(userId: number | undefined): Promise<boolean> {
     where: { id: userId },
     select: { roles: { select: { role: { select: { name: true } } } } },
   });
-  const co = !!u?.roles.some((r) => r.role.name.toUpperCase().replace(/^ROLE_/, '') === 'ADMIN');
+  const laAdmin = !!u?.roles.some((r) => r.role.name.toUpperCase().replace(/^ROLE_/, '') === 'ADMIN');
+  // + tài khoản admin đã CẤP QUYỀN (bảng sach_rieng_quyen, 09/11/2026) — chỉ xem sách riêng, không có quyền admin nào khác.
+  const co = laAdmin || !!(await prisma.sachRiengQuyen.findUnique({ where: { userId }, select: { id: true } }));
   nhoQuyen.set(userId, { co, den: Date.now() + 60_000 });
   return co;
+}
+
+/* ── Admin cấp / thu quyền xem (09/11/2026) ─────────────────────────── */
+
+const CHON_NGUOI = { id: true, username: true, email: true, fullName: true, displayName: true, avatarUrl: true } as const;
+
+/** Danh sách tài khoản được cấp quyền (không gồm admin, không gồm env). */
+export async function dsDuocCap() {
+  const ds = await prisma.sachRiengQuyen.findMany({ orderBy: { createdAt: 'desc' } });
+  const nguoi = await prisma.user.findMany({ where: { id: { in: ds.map((d) => d.userId) } }, select: CHON_NGUOI });
+  const theoId = new Map(nguoi.map((n) => [n.id, n]));
+  return ds.map((d) => ({ ...d, user: theoId.get(d.userId) ?? null }));
+}
+
+/** Tìm tài khoản để cấp quyền (theo tên đăng nhập / email / họ tên), tối đa 10. */
+export async function timNguoi(tu: string) {
+  const q = tu.trim();
+  if (q.length < 2) return [];
+  return prisma.user.findMany({
+    where: { OR: [{ username: { contains: q, mode: 'insensitive' } }, { email: { contains: q, mode: 'insensitive' } }, { fullName: { contains: q, mode: 'insensitive' } }] },
+    select: CHON_NGUOI,
+    take: 10,
+  });
+}
+
+export async function capQuyen(userId: number, capBoiId: number, ghiChu?: string) {
+  const u = await prisma.user.findUnique({ where: { id: userId }, select: { id: true } });
+  if (!u) throw new NotFoundError('Không tìm thấy tài khoản này.');
+  const r = await prisma.sachRiengQuyen.upsert({
+    where: { userId },
+    create: { userId, capBoiId, ghiChu: ghiChu?.slice(0, 200) || null },
+    update: { ghiChu: ghiChu?.slice(0, 200) || null },
+  });
+  nhoQuyen.delete(userId);
+  return r;
+}
+
+export async function thuQuyen(userId: number) {
+  await prisma.sachRiengQuyen.deleteMany({ where: { userId } });
+  nhoQuyen.delete(userId);
 }
 
 export async function chanNeuKhongCoQuyen(userId: number | undefined): Promise<void> {

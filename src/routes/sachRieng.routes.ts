@@ -5,13 +5,17 @@
  * quyết định có HIỆN mục "📷 Sách gốc" không); mọi route dữ liệu còn lại trả
  * 403 cho tài khoản không được phép. Xem services/sachRieng/sachRieng.service.ts.
  */
-import { Router, type Request, type Response } from 'express';
+import { Router, type NextFunction, type Request, type Response } from 'express';
 import { body } from 'express-validator';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { validate } from '../middleware/validate.js';
 import type { ApiResponse } from '../types/index.js';
 import {
   CAC_Y_TRANG, amThanhNghe, anhTaiLieu, anhTrang, bangChepNghe, danhMucTaiLieu, chanNeuKhongCoQuyen, coQuyen, daBat, hoiTrang, huongDanTrang, kiemTrang, mucLuc,
+  dsDuocCap,
+  timNguoi,
+  capQuyen,
+  thuQuyen,
 } from '../services/sachRieng/sachRieng.service.js';
 
 const router = Router();
@@ -23,6 +27,34 @@ router.get('/quyen', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const co = (await coQuyen(req.userId)) && daBat();
     ok(res, { coQuyen: co, sach: co ? ['dekiru'] : [] });
+  } catch (e) { next(e); }
+});
+
+/*
+ * 👥 Admin cấp / thu quyền xem sách riêng cho từng tài khoản (09/11/2026) — "cho vài bạn thân học chung, không
+ * phải cho mượn tài khoản admin". Người được cấp CHỈ xem được /dekiru/* bên dưới, không có quyền admin nào khác.
+ */
+router.get('/admin/quyen', requireAdmin('ROLE_ADMIN'), async (_req, res: Response<ApiResponse>, next) => {
+  try { ok(res, await dsDuocCap()); } catch (e) { next(e); }
+});
+router.get('/admin/tim-nguoi', requireAdmin('ROLE_ADMIN'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try { ok(res, await timNguoi(String(req.query.q ?? '').slice(0, 100))); } catch (e) { next(e); }
+});
+router.post(
+  '/admin/quyen',
+  requireAdmin('ROLE_ADMIN'),
+  [body('userId').isInt({ min: 1 }), body('ghiChu').optional().isString().isLength({ max: 200 })],
+  validate,
+  async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
+    try { ok(res, await capQuyen(Number(req.body.userId), req.userId!, req.body.ghiChu)); } catch (e) { next(e); }
+  },
+);
+router.delete('/admin/quyen/:userId', requireAdmin('ROLE_ADMIN'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.userId);
+    if (!Number.isInteger(id) || id < 1) { res.status(400).json({ success: false, message: 'userId không hợp lệ' } as ApiResponse); return; }
+    await thuQuyen(id);
+    ok(res, { userId: id });
   } catch (e) { next(e); }
 });
 

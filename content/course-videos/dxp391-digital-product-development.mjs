@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho DXP391 — Digital Product Development. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/dxp391-digital-product-development.mjs
+ */
+export default {
+  courseSlug: "dxp391-digital-product-development",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "dxp391-ts-1-1": { yt: "2xqmfhGJjbE", credit: "Digital Skills Mastery — What is a digital product? | Basics of digital product management" },
+    "dxp391-ts-1-3": { yt: "Tj7uKMT9Ih4", credit: "Product Collective (A Mind the Product Community) — Moving to the Product Operating Model, w/ Marty Cagan" },
+    "dxp391-ts-1-4": { yt: "EiUkZ-YB-0k", credit: "McKinsey & Company — The Context for a Digital Transformation Framework | McKinsey & Company" },
+    "dxp391-ts-2-1": { yt: "l7-5x0ra2tc", credit: "Productized — Introduction to Modern Product Discovery - Teresa Torres" },
+    "dxp391-ts-2-2": { yt: "5tVbFfGDQCk", credit: "CareerFoundry — How To Conduct User Interviews Like A Pro (UX Design)" },
+    "dxp391-ts-2-4": { yt: "68ZXwI5L4kY", credit: "HubSpot Marketing — How To Make An Effective Customer Journey Map In 1 Hour (FREE Templates)" },
+    "dxp391-ts-3-1": { yt: "aN36EcTE54Q", credit: "Strategyzer — Value Proposition Canvas Explained" },
+    "dxp391-ts-3-2": { yt: "I8nwNcCfyig", credit: "Optima Training (UK) Limited — Introduction to the Business Model Canvas" },
+    "dxp391-ts-3-4": { yt: "_6pl5GG8RQ4", credit: "Stanford Online — How to Find Product Market Fit - Stanford CS183F: Startup School" },
+    "dxp391-ts-4-1": { yt: "gHGN6hs2gZY", credit: "AJ&Smart — What Is Design Thinking? An Overview" },
+    "dxp391-ts-4-2": { yt: "1ngbdflpK8A", credit: "TheoremOne — Citrusbyte Presents The Design Sprint: A fast start to creating digital products people want" },
+    "dxp391-ts-4-3": { yt: "I5u2QOH18W8", credit: "Grow with Google — Building Low-Fidelity Wireframes and Prototypes | Google UX Design Certificate" },
+    "dxp391-ts-4-4": { yt: "7pAOkWLW1Oo", credit: "Maze — Usability testing 101: Types of usability testing & the benefits | Maze" },
+    "dxp391-ts-5-2": { yt: "502ILHjX9EE", credit: "Henrik Kniberg — Agile Product Ownership in a Nutshell" },
+    "dxp391-ts-5-3": { yt: "zciljkOfDcI", credit: "Mark Robinson Training — Kanban for software in five minutes" },
+    "dxp391-ts-6-1": { yt: "J5N56ALJiGQ", credit: "Productized — Best Practices for Product Roadmap —Jeff Lash" },
+    "dxp391-ts-6-3": { yt: "MV4UViKjJ34", credit: "What Matters — OKRs Explained, with John Doerr" },
+    "dxp391-ts-7-1": { yt: "hbeyCECbLhk", credit: "Modern Software Engineering — Measuring Software Delivery With DORA Metrics" },
+    "dxp391-ts-7-2": { yt: "1er2cjUq1UI", credit: "IBM Technology — What is Continuous Integration?" },
+    "dxp391-ts-7-3": { yt: "p-88GN1WVs8", credit: "ByteByteGo — But What Is Cloud Native Really All About?" },
+    "dxp391-ts-8-1": { yt: "Njys7BpNH6k", credit: "AstroLabs — An Introduction to Product Analytics" },
+    "dxp391-ts-8-2": { yt: "eiIhTbFP0ls", credit: "codebasics — Simple explanation of A/B Testing" },
+    "dxp391-ts-8-3": { yt: "eieefQIVBR0", credit: "Simplilearn — What Is Customer Retention? | Customer Retention Cohort Analysis With Demo | Simplilearn" },
+    "dxp391-ts-9-1": { yt: "11dYx_rW_Ks", credit: "TED Institute — What makes some technology so habit-forming? | Nir Eyal | TED Institute" },
+    "dxp391-ts-9-4": { yt: "1hHMwLxN6EM", credit: "Y Combinator — Michael Seibel - How to Plan an MVP" },
+    "dxp391-1-1-product-lifecycle": { yt: "Fi3_BjVzpqk", credit: "Simplilearn — Introduction To Software Development LifeCycle | What Is Software Development? | Simplilearn" },
+    "dxp391-2-1-discovery": { yt: "dHkb--_BhGI", credit: "Tim Herbig — How to structure your Product Discovery Process" },
+    "dxp391-3-1-pmf": { yt: "p3Bl4XWIBcw", credit: "Productized — A Playbook for Achieving Product Market Fit - Dan Olsen" },
+    "dxp391-4-1-ux-prototyping": { yt: "v1UKB-0EUhQ", credit: "Aliena Cai — Figma UX tutorial for beginners - Prototype" },
+    "dxp391-8-1-gtm-growth": { yt: "hPp5sj37mOA", credit: "Hattie the PMM — What is a Go-To-Market strategy? Fully Explained by an Ex-CMO" },
+  },
+};

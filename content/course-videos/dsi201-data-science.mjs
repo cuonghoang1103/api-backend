@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho DSI201 — Data Science. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/dsi201-data-science.mjs
+ */
+export default {
+  courseSlug: "dsi201-data-science",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "dsi201-ts-1-1": { yt: "RBSUwFGa6Fk", credit: "IBM Technology — What is Data Science?" },
+    "dsi201-ts-2-2": { yt: "-oPuGc05Lxs", credit: "John Watson Rooney — Working With APIs in Python - Pagination and Data Extraction" },
+    "dsi201-ts-2-3": { yt: "jcoJuc5e3RE", credit: "Becoming a Data Scientist — Basic Aggregate Functions in SQL (COUNT, SUM, AVG, MAX, and MIN)" },
+    "dsi201-ts-3-1": { yt: "KW1laBLEiw0", credit: "yuzaR Data Science — Tidy Data and Why We Need It!" },
+    "dsi201-ts-3-2": { yt: "sUAMiAIUhcI", credit: "Global Health with Greg Martin — Understanding missing data and missing values. 5 ways to deal with missing data using R programming" },
+    "dsi201-ts-4-1": { yt: "2Y2l9QJCe6M", credit: "MarinStatsLectures-R Programming & Statistics — Describing Distributions: Center, Spread & Shape | Statistics Tutorial | MarinStatsLectures" },
+    "dsi201-ts-4-2": { yt: "ebEkn-BiW5k", credit: "minutephysics — Simpson's Paradox" },
+    "dsi201-ts-6-1": { yt: "Zi-0rlM4RDs", credit: "deeplizard — Train, Test, & Validation Sets explained" },
+    "dsi201-ts-6-2": { yt: "HdlDYng8g9s", credit: "codebasics — Machine Learning Tutorial Python - 16: Hyper parameter Tuning (GridSearchCV)" },
+    "dsi201-ts-6-3": { yt: "fE_25esn-5U", credit: "Cynthia Rudin — Data Leakage" },
+    "dsi201-ts-7-1": { yt: "Xm2C_gTAl8c", credit: "StatQuest with Josh Starmer — Ridge vs Lasso Regression, Visualized!!!" },
+    "dsi201-ts-7-2": { yt: "yIYKR4sgzI8", credit: "StatQuest with Josh Starmer — StatQuest: Logistic Regression" },
+    "dsi201-ts-7-3": { yt: "_L39rN6gz7Y", credit: "StatQuest with Josh Starmer — Decision and Classification Trees, Clearly Explained!!!" },
+    "dsi201-ts-7-4": { yt: "uV2gdNt2MLc", credit: "Leon Lok — Decision Trees, Random Forests and Gradient Boosting: What's the Difference? (Beginner Data Science)" },
+    "dsi201-ts-8-1": { yt: "ZJXnkpx2O8w", credit: "Lazy Analyst — MSE, RMSE, MAE, MAPE, R-Squared & Adjusted R-Squared | Regression Model Performance Metrics" },
+    "dsi201-ts-8-2": { yt: "pgfga-EhHo4", credit: "StudyPalz — Machine Learning Classification Metrics (Confusion Matrix, Precision, Recall, F1, ROC AUC)" },
+    "dsi201-ts-8-3": { yt: "4jRBRDbJemM", credit: "StatQuest with Josh Starmer — ROC and AUC, Clearly Explained!" },
+    "dsi201-ts-9-1": { yt: "4b5d3muPQmA", credit: "StatQuest with Josh Starmer — StatQuest: K-means clustering" },
+    "dsi201-ts-9-2": { yt: "RDZUdRSDOok", credit: "StatQuest with Josh Starmer — Clustering with DBSCAN, Clearly Explained!!!" },
+    "dsi201-ts-9-3": { yt: "ZgyY3JuGQY8", credit: "IBM Technology — Principal Component Analysis (PCA) Explained: Simplify Complex Data for Machine Learning" },
+    "dsi201-ts-10-1": { yt: "VUvShOEFdQo", credit: "Sebastian Raschka — 13.4.2 Feature Permutation Importance (L13: Feature Selection)" },
+    "dsi201-ts-10-2": { yt: "dEhbS37Kglc", credit: "A Data Odyssey — Partial Dependence (PDPs) and Individual Conditional Expectation (ICE) Plots | Intuition and Math" },
+    "dsi201-ts-11-1": { yt: "MaIfDPuSlw8", credit: "Dave Ebbelaar — Data Science Tutorial - Project Structure" },
+    "dsi201-ts-11-3": { yt: "UbL7VUpv1Bs", credit: "DVCorg — Version Control for Data Science Explained in 5 Minutes (No Code!)" },
+    "dsi201-1-1-ds-process": { yt: "FsSrzmRawUg", credit: "Steve Brunton — Intro to Data Science: What is Data Science?" },
+    "dsi201-2-1-python-numpy-pandas": { yt: "KHoEbRH46Zk", credit: "IBM Technology — NumPy vs Pandas" },
+    "dsi201-3-1-cleaning": { yt: "qxpKCBV60U4", credit: "Mısra Turp — How to Do Data Cleaning (step-by-step tutorial on real-life dataset)" },
+    "dsi201-4-1-eda": { yt: "-o3AxdVcUtQ", credit: "edureka! — Exploratory Data Analysis (EDA) Using Python | Python Data Analysis | Python Training | Edureka" },
+    "dsi201-5-1-visualization": { yt: "MiiANxRHSv4", credit: "Simplilearn — Data Visualization Tutorial For Beginners | Big Data Analytics Tutorial | Simplilearn" },
+    "dsi201-6-1-statistics": { yt: "Lv0xcdeXaGU", credit: "Simplilearn — Statistics For Data Science | Data Science Tutorial | Simplilearn" },
+    "dsi201-7-1-ml-intro": { yt: "h0e2HAPTGF4", credit: "MIT OpenCourseWare — 11. Introduction to Machine Learning" },
+  },
+};

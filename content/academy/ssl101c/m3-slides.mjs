@@ -53,7 +53,7 @@ export default {
   title: '3.0 — Slide by slide: Critical thinking, 5W1H, fallacies, bias and Toulmin (slides 1–15)|||3.0 — Slide bài giảng: Tư duy phản biện, 5W1H, nguỵ biện, thiên kiến và mô hình Toulmin (slide 1–15)',
   slug: 'ssl101c-3-0-slides-tu-duy-phan-bien-5w1h-nguy-bien-thien-kien-toulmin',
   type: 'DOCUMENT',
-  description: 'Toàn bộ 15 slide của Mooc 3 (Critical Thinking Skills for University Success), đọc thẳng từ ảnh slide gốc. Đi từ tình huống "hôm nay trời thế nào" tới định nghĩa tư duy phản biện, năm câu hỏi tra nguồn, bốn lợi ích, bộ 5W1H (bản tiếng Anh và bản tiếng Việt lệch thứ tự nhau), mười hai kỹ năng thế kỷ 21, 28 mẫu câu hỏi phản biện, và khép lại bằng tình huống đạo đức học thuật của Mohammed. Bổ sung ngoài slide những phần đề thi chắc chắn hỏi: diễn dịch/quy nạp/bỏ qua, hợp lệ (valid) so với đúng đắn (sound), bảng mười nguỵ biện phổ biến kèm ví dụ đời sinh viên, bốn thiên kiến nhận thức, và mô hình lập luận Toulmin dựng trọn trên một luận điểm thật.',
+  description: 'Toàn bộ 15 slide của Mooc 3 (Critical Thinking Skills for University Success), đọc thẳng từ ảnh slide gốc. Đi từ tình huống "hôm nay trời thế nào" tới định nghĩa tư duy phản biện, năm câu hỏi tra nguồn, bốn lợi ích, bộ 5W1H (bản tiếng Anh và bản tiếng Việt lệch thứ tự nhau), mười hai kỹ năng thế kỷ 21, 28 mẫu câu hỏi phản biện, và khép lại bằng tình huống đạo đức học thuật của Mohammed. Bổ sung ngoài slide những phần đề thi chắc chắn hỏi: diễn dịch/quy nạp/suy luận giải thích (abduction), hợp lệ (valid) so với đúng đắn (sound), bảng mười nguỵ biện phổ biến kèm ví dụ đời sinh viên, bốn thiên kiến nhận thức, và mô hình lập luận Toulmin dựng trọn trên một luận điểm thật.',
   content: [
     walkHead(D, 1, 15),
     walk(D, [
@@ -147,7 +147,7 @@ export default {
 </table>
 <ul>
 <li><strong>BẢY chuẩn đầu ra, và con số này đúng cỡ đề thi.</strong> Nếu bị hỏi MOOC 3 công bố bao nhiêu learning outcome, đáp án theo slide này là <strong>7</strong>. Đừng để tiêu đề số ít "Learning outcome" dụ bạn chọn "1".</li>
-<li><strong>Đọc chuẩn đầu ra số 4 hai lần — đó là cái mà slide KHÔNG thật sự dạy.</strong> "Các loại lập luận" và "thiên kiến trong lập luận" được nêu tên ở đây rồi không bao giờ xuất hiện lại trong 15 slide. Chính vì thế bài này bổ sung diễn dịch/quy nạp/bỏ qua (slide 8), hợp lệ so với đúng đắn (slide 7), nguỵ biện (slide 9) và thiên kiến nhận thức (slide 10). Đề thi lấy từ MOOC, không lấy từ deck.</li>
+<li><strong>Đọc chuẩn đầu ra số 4 hai lần — đó là cái mà slide KHÔNG thật sự dạy.</strong> "Các loại lập luận" và "thiên kiến trong lập luận" được nêu tên ở đây rồi không bao giờ xuất hiện lại trong 15 slide. Chính vì thế bài này bổ sung diễn dịch/quy nạp/suy luận giải thích (abduction) (slide 8), hợp lệ so với đúng đắn (slide 7), nguỵ biện (slide 9) và thiên kiến nhận thức (slide 10). Đề thi lấy từ MOOC, không lấy từ deck.</li>
 <li><strong>Hai chữ lặp đi lặp lại suốt bảy dòng: "critical thinking" và "argumentation".</strong> Cặp đôi đó chính là cả module thu nhỏ — TƯ DUY là nửa riêng tư, LẬP LUẬN là nửa công khai, nơi suy nghĩ của bạn phải sống sót khi người khác đọc.</li>
 <li><strong>Chuẩn đầu ra 5 là cầu nối ngược về MOOC 1.</strong> "Dùng bằng chứng để chống lưng khẳng định" chỉ có tác dụng nếu bản thân bằng chứng sống sót qua khâu đánh giá nguồn — kiểm tư cách chuyên môn, tính cập nhật và mục đích như MOOC 1 dạy. Một tiểu luận lập luận chặt mà dựng trên một blog vô danh thì vẫn trượt chuẩn 5, logic gọn tới mấy cũng vậy.</li>
 <li><strong>Động từ của bảy chuẩn tạo thành một cái thang.</strong> <em>Hiểu</em> → <em>nhận diện</em> → <em>dùng</em> → <em>áp dụng</em> → <em>thể hiện</em>. Đó là trật tự Bloom, và nó dự báo đề thi: phần lớn câu nằm ở mức hiểu/nhận diện (định nghĩa cái này, kể tên cái kia, cái nào là ví dụ của…), một số ít ở mức áp dụng (cho tình huống này, X nên làm gì — xem slide 15).</li>
@@ -320,7 +320,7 @@ export default {
 </ul>
 <p class="nhan">📌 Beyond the slide — the three kinds of reasoning behind "foundation of science": <strong>deduction · induction · abduction</strong></p>
 <table>
-<tr><th></th><th>Deductive (diễn dịch)</th><th>Inductive (quy nạp)</th><th>Abductive (bỏ qua / suy luận tới lời giải thích tốt nhất)</th></tr>
+<tr><th></th><th>Deductive (diễn dịch)</th><th>Inductive (quy nạp)</th><th>Abductive (suy luận giải thích — suy ra lời giải thích tốt nhất)</th></tr>
 <tr><td>Direction</td><td>General rule → specific case</td><td>Specific cases → general rule</td><td>Observation → the best explanation for it</td></tr>
 <tr><td>If premises are true…</td><td>Conclusion is <strong>guaranteed</strong></td><td>Conclusion is <strong>probable</strong></td><td>Conclusion is <strong>plausible</strong>, and beatable by a better explanation</td></tr>
 <tr><td>Judged by</td><td>Valid / invalid</td><td>Strong / weak</td><td>Best available / not best</td></tr>
@@ -346,9 +346,9 @@ export default {
 <li><strong>Lợi ích 2 sửa hiểu lầm phổ biến nhất của module.</strong> Người ta hình dung tư duy phản biện là kẻ thù của sáng tạo — một bên phá, một bên xây. Slide nói ngược lại, và MOOC 2 cũng đồng ý: phương án sáng tạo xuất hiện ĐÚNG LÚC một giả định cố định bị chất vấn. Hãy chờ câu "tư duy phản biện làm hạn chế sáng tạo — đúng hay sai?". Đáp án là <strong>SAI</strong>.</li>
 <li><strong>Lợi ích 4 là khẳng định lớn nhất trên slide, và nó được nói theo nghĩa đen.</strong> Khoa học chạy được vì mọi khẳng định đều kiểm được và lật được bằng bằng chứng; dân chủ chạy được vì mọi quyết định phải được biện minh công khai và sửa được. Cả hai sụp đổ ngay khoảnh khắc "vì tôi nói thế" được chấp nhận. Đó cũng đúng là chỗ hỏng trong tình huống slide 15, nơi một giáo sư trả lời một lỗi dữ liệu bằng câu "khoa học nó vậy đó".</li>
 </ul>
-<p class="nhan">📌 Bổ sung ngoài slide — ba kiểu suy luận nằm sau chữ "nền tảng của khoa học": <strong>diễn dịch · quy nạp · bỏ qua</strong></p>
+<p class="nhan">📌 Bổ sung ngoài slide — ba kiểu suy luận nằm sau chữ "nền tảng của khoa học": <strong>diễn dịch · quy nạp · suy luận giải thích</strong></p>
 <table>
-<tr><th></th><th>Diễn dịch (deductive)</th><th>Quy nạp (inductive)</th><th>Bỏ qua / suy tới lời giải thích tốt nhất (abductive)</th></tr>
+<tr><th></th><th>Diễn dịch (deductive)</th><th>Quy nạp (inductive)</th><th>Suy luận giải thích — suy ra lời giải thích tốt nhất (abductive)</th></tr>
 <tr><td>Chiều đi</td><td>Quy tắc chung → trường hợp cụ thể</td><td>Các trường hợp cụ thể → quy tắc chung</td><td>Quan sát → lời giải thích tốt nhất cho nó</td></tr>
 <tr><td>Nếu tiền đề đúng thì…</td><td>Kết luận được <strong>BẢO ĐẢM</strong></td><td>Kết luận chỉ <strong>CÓ XÁC SUẤT</strong></td><td>Kết luận <strong>HỢP LÝ</strong>, và bị đánh bại bởi lời giải thích tốt hơn</td></tr>
 <tr><td>Được phán bằng</td><td>Hợp lệ / không hợp lệ</td><td>Mạnh / yếu</td><td>Tốt nhất hiện có / chưa phải tốt nhất</td></tr>
@@ -357,10 +357,10 @@ export default {
 </table>
 <ul>
 <li><strong>Thêm một tiền đề có thể GIẾT một lập luận quy nạp nhưng không bao giờ giết được lập luận diễn dịch.</strong> "Mọi con thiên nga tôi từng thấy đều trắng" chết vào ngày một con thiên nga đen đi ngang; còn "mọi người đều phải chết, Socrates là người" thì không quan sát mới nào làm sứt mẻ được. Tính chất đó — <em>có thể bị bác</em> — là cách sạch nhất để phân biệt quy nạp với diễn dịch.</li>
-<li><strong>Gỡ lỗi chính là suy luận BỎ QUA, và gọi đúng tên nó làm đổi cách bạn gỡ.</strong> Lời giải thích tốt nhất luôn là tạm thời: bạn phải liệt kê các giải thích ĐỐI THỦ và loại chúng, chứ không dừng lại ở câu chuyện đầu tiên nghe lọt tai. Một con bug được "giải thích" bằng một câu chuyện hợp lý mà chưa ai kiểm là suy luận bỏ qua làm ẩu.</li>
+<li><strong>Gỡ lỗi chính là suy luận GIẢI THÍCH (abduction), và gọi đúng tên nó làm đổi cách bạn gỡ.</strong> Lời giải thích tốt nhất luôn là tạm thời: bạn phải liệt kê các giải thích ĐỐI THỦ và loại chúng, chứ không dừng lại ở câu chuyện đầu tiên nghe lọt tai. Một con bug được "giải thích" bằng một câu chuyện hợp lý mà chưa ai kiểm là suy luận giải thích làm ẩu.</li>
 </ul>
-<p class="dap-an">✅ Phân loại nhanh: (a) "Ba bạn cùng lớp bỏ tiết đều rớt, vậy bỏ tiết gây ra rớt môn" → <strong>quy nạp</strong>, và yếu (mẫu bé xíu, cộng thêm một bước nhảy nhân quả — xem slide 9). (b) "Mọi sinh viên dưới 80% chuyên cần bị cấm thi; Minh 70%; vậy Minh bị cấm thi" → <strong>diễn dịch</strong>, hợp lệ. (c) "Server chỉ chậm khi job báo cáo chạy, vậy nhiều khả năng job là nguyên nhân" → <strong>bỏ qua</strong>, và nó phải thắng được các giải thích đối thủ trước khi bạn ra tay.</p>
-<p class="meo">💡 Ba chữ: diễn dịch <strong>BẢO ĐẢM</strong>, quy nạp <strong>KHÁI QUÁT</strong>, bỏ qua <strong>GIẢI THÍCH</strong>. Và bốn lợi ích của slide gói trong bốn từ: <strong>ngôn ngữ · sáng tạo · phản tư · khoa học và dân chủ</strong>.</p>`],
+<p class="dap-an">✅ Phân loại nhanh: (a) "Ba bạn cùng lớp bỏ tiết đều rớt, vậy bỏ tiết gây ra rớt môn" → <strong>quy nạp</strong>, và yếu (mẫu bé xíu, cộng thêm một bước nhảy nhân quả — xem slide 9). (b) "Mọi sinh viên dưới 80% chuyên cần bị cấm thi; Minh 70%; vậy Minh bị cấm thi" → <strong>diễn dịch</strong>, hợp lệ. (c) "Server chỉ chậm khi job báo cáo chạy, vậy nhiều khả năng job là nguyên nhân" → <strong>suy luận giải thích</strong>, và nó phải thắng được các giải thích đối thủ trước khi bạn ra tay.</p>
+<p class="meo">💡 Ba chữ: diễn dịch <strong>BẢO ĐẢM</strong>, quy nạp <strong>KHÁI QUÁT</strong>, abduction <strong>GIẢI THÍCH</strong>. Và bốn lợi ích của slide gói trong bốn từ: <strong>ngôn ngữ · sáng tạo · phản tư · khoa học và dân chủ</strong>.</p>`],
 
       [9, '5W1H Method — the "6 critical questions" poster (and: ten common fallacies)',
         `<p class="y-chinh">🎯 Title <strong>"5W1H Method"</strong> over a pasted colour poster headed <em>"6 critical questions — things to think about when someone has something to say"</em> (critical thinking asylum, Copyright © 2009). Six coloured bands: <strong>who · what · where · when · why · how</strong>, each with two or three sub-questions.</p>
@@ -594,7 +594,7 @@ export default {
 <tr><td>16</td><td>What might happen if you combined … and …?</td><td>Synthesis</td></tr>
 </table>
 <ul>
-<li><strong>Look at how many stems end with "and why" or "explain your reasoning" — 3, 4, 12, 13, 14, 15.</strong> Six of sixteen demand justification explicitly. That is the module's thesis in the shape of a question bank: an answer without a reason does not count.</li>
+<li><strong>Look at how many stems end with "and why" or "Explain your …" (reasoning in 4 and 12, response with examples in 3, thinking in 14) — 3, 4, 12, 13, 14, 15.</strong> Six of sixteen demand justification explicitly. That is the module's thesis in the shape of a question bank: an answer without a reason does not count.</li>
 <li><strong>Number 1 is the master stem, and it is deliberately two-directional.</strong> "For <em>and against</em>" builds the balance slide 5 asked for. If you can only produce evidence for your own side, you have not researched the question, you have defended a conclusion.</li>
 <li><strong>Stem 11 is the empathy move, and it is the hardest to fake.</strong> "Describe X from the perspective of Y" forces you to state a position you may not hold, in its strongest form — the direct antidote to the straw man.</li>
 <li><strong>Beyond the slide: use these as a reading protocol, not a quiz.</strong> Pick three stems, answer them in writing for every paper you read, and keep the answers. By week 5 you have a comparison table nobody else in the class has.</li>
@@ -637,7 +637,7 @@ export default {
 <tr><td>16</td><td>What might happen if you combined … and …?</td><td>Tổng hợp</td></tr>
 </table>
 <ul>
-<li><strong>Hãy đếm xem bao nhiêu mẫu câu kết thúc bằng "and why" hoặc "explain your reasoning" — số 3, 4, 12, 13, 14, 15.</strong> Sáu trên mười sáu câu đòi biện minh một cách công khai. Đó chính là luận đề của cả module, khoác hình dạng một kho câu hỏi: một câu trả lời không kèm lý do thì không được tính.</li>
+<li><strong>Hãy đếm xem bao nhiêu mẫu câu kết thúc bằng "and why" hoặc "Explain your …" (reasoning ở câu 4 và 12, response with examples ở câu 3, thinking ở câu 14) — số 3, 4, 12, 13, 14, 15.</strong> Sáu trên mười sáu câu đòi biện minh một cách công khai. Đó chính là luận đề của cả module, khoác hình dạng một kho câu hỏi: một câu trả lời không kèm lý do thì không được tính.</li>
 <li><strong>Câu số 1 là mẫu câu gốc, và nó CỐ Ý hai chiều.</strong> "Ủng hộ <em>VÀ phản đối</em>" chính là cái cân bằng mà slide 5 đòi. Nếu bạn chỉ moi ra được bằng chứng cho phe mình, bạn chưa nghiên cứu câu hỏi — bạn đang bào chữa cho một kết luận.</li>
 <li><strong>Mẫu 11 là nước đi đồng cảm, và khó giả vờ nhất.</strong> "Mô tả X từ góc nhìn của Y" ép bạn phát biểu một lập trường có thể bạn không giữ, ở dạng MẠNH NHẤT của nó — thuốc giải trực tiếp cho nguỵ biện người rơm.</li>
 <li><strong>Bổ sung ngoài slide: dùng chúng như một QUY TRÌNH ĐỌC, không phải một bài kiểm tra.</strong> Chọn ba mẫu câu, trả lời chúng bằng chữ viết cho mọi bài báo bạn đọc, và giữ lại câu trả lời. Tới tuần 5 bạn có một bảng đối chiếu mà không ai trong lớp có.</li>

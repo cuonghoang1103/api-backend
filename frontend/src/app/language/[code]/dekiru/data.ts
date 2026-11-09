@@ -183,6 +183,8 @@ const OUTLINE: { n: number; title: string }[] = [
   { n: 53, title: 'ビジネスメール — Email công việc · N2: kính ngữ nâng cao, 〜させていただきます' },
   { n: 54, title: '読解・聴解 N2 — Đọc & nghe N2: văn bình luận, so sánh, nghe tổng hợp' },
   { n: 55, title: 'N2 総復習 — Ôn tập & thi thử N2' },
+  // Phụ lục (09/11/2026): kho từ vựng bổ sung theo chủ đề — bù cho đủ mức từ vựng N3 / N2 thường nêu.
+  { n: 56, title: '語彙 N3 — Kho từ vựng N3 bổ sung theo chủ đề (~1.200 từ có câu ví dụ)' },
 ];
 
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({

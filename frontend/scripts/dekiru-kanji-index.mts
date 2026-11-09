@@ -11,6 +11,7 @@
  *   npm run dekiru:kanji          # ghi lại (cũng chạy ở `prebuild`)
  *   npm run dekiru:kanji -- --check  # không ghi; lệch thì exit 1
  */
+import './ts-khong-duoi.mts';
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';

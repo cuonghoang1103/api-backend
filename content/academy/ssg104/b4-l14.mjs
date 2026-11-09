@@ -12,8 +12,8 @@ const D = 's4-l14';
 
 export const b4l14 = [
   walkHead(D, 1, 23,
-    'Session IV turns theory into performance. Eight types of nonverbal communication (slide 6) is the memorisation item; the visual-aid criteria (slide 16) are what your own presentation will be marked against.',
-    'Buổi IV chuyển lý thuyết thành phần trình diễn. Tám loại giao tiếp phi ngôn ngữ (slide 6) là mục cần thuộc; bộ tiêu chí làm slide (slide 16) chính là thứ bài thuyết trình của bạn sẽ bị chấm theo.'),
+    'Session IV turns theory into performance. Eight types of nonverbal communication (slide 5) is the memorisation item; the visual-aid criteria (slide 16) are what your own presentation will be marked against.',
+    'Buổi IV chuyển lý thuyết thành phần trình diễn. Tám loại giao tiếp phi ngôn ngữ (slide 5) là mục cần thuộc; bộ tiêu chí làm slide (slide 16) chính là thứ bài thuyết trình của bạn sẽ bị chấm theo.'),
 
   slide(D, 1, 'Nonverbal delivery — Session IV',
     `<p class="y-chinh">🎯 Title slide. Session IV covers nonverbal delivery, persuasive presentation, meetings, professional writing, email and letters, and reports.</p>
@@ -88,9 +88,9 @@ export const b4l14 = [
      <p class="meo">💡 Hai loại hay bị quên nhất: cận ngôn (giọng điệu, cao độ, tốc độ, quãng ngắt) và vật phẩm. Cả hai đều được quyết trước khi bạn mở miệng.</p>`),
 
   slide(D, 6, 'Space',
-    `<p class="y-chinh">🎯 Illustration of the first type.</p>
+    `<p class="y-chinh">🎯 Illustration of the first type: nested zones around a person, labelled "Intimate, Personal, Social, and Public Space" — the closer the zone, the more personal the relationship.</p>
      <p class="meo">💡 For a presentation, space is a tool: stepping closer signals importance, stepping back gives the audience room to think. Standing in exactly one spot for ten minutes wastes the tool.</p>`,
-    `<p class="y-chinh">🎯 Minh hoạ cho loại thứ nhất.</p>
+    `<p class="y-chinh">🎯 Minh hoạ cho loại thứ nhất: các vùng lồng nhau quanh một người, ghi "Intimate, Personal, Social, and Public Space" (thân mật, cá nhân, xã hội, công cộng) — vùng càng gần, quan hệ càng riêng tư.</p>
      <p class="meo">💡 Với một bài thuyết trình, không gian là công cụ: bước tới gần báo hiệu điều quan trọng, lùi lại cho khán giả khoảng trống để nghĩ. Đứng đúng một chỗ suốt mười phút là phí công cụ đó.</p>`),
 
   slide(D, 7, 'Environment',
@@ -290,7 +290,7 @@ export const b4l14 = [
      <p class="meo">💡 Một giới hạn dùng được: một màu nhấn để làm nổi, một màu trung tính cho chữ. Mỗi màu thêm vào phải tự chứng minh chỗ đứng bằng việc mang một ý nghĩa.</p>`),
 
   slide(D, 20, 'Helpful hints for visual aids',
-    `<p class="y-chinh">🎯 Ten practical rules.</p>
+    `<p class="y-chinh">🎯 Eleven practical rules (six in the left column, five in the right).</p>
      <ul class="hai-cot">
        <li>Keep visual aids simple</li>
        <li>One key idea per slide</li>
@@ -304,7 +304,7 @@ export const b4l14 = [
        <li>Check the room beforehand · have a backup plan</li>
      </ul>
      <p class="pitfall co-tieu-de"><strong>Hai mục cuối là bảo hiểm:</strong> checking the room and having a backup are the only two items that protect you when the projector fails five minutes before a graded presentation.</p>`,
-    `<p class="y-chinh">🎯 Mười quy tắc thực dụng.</p>
+    `<p class="y-chinh">🎯 Mười một quy tắc thực dụng (cột trái sáu, cột phải năm).</p>
      <ul class="hai-cot">
        <li>Giữ slide đơn giản</li>
        <li>Mỗi slide một ý chính</li>
@@ -326,6 +326,7 @@ export const b4l14 = [
        <li><span class="nhan">Enrol an observer</span> — ask someone to watch you specifically and report back.</li>
        <li><span class="nhan">Focus on a specific type of nonverbal communication</span> — improve one channel at a time.</li>
      </ul>
+     <p>The picture under the list is a "NONVERBAL COMMUNICATION" chart with nine labels: haptics, gestures, proxemics, facial expressions, paralinguistics, body language, appearance, eye contact, artifacts.</p>
      <p class="meo">💡 Strategy 3 is why the eight types on slide 5 matter practically: "be better at body language" is not actionable; "keep gestures above the waist this week" is.</p>`,
     `<p class="y-chinh">🎯 Ba chiến lược — và đây chính là mục tiêu 3 của bài.</p>
      <ul>
@@ -333,6 +334,7 @@ export const b4l14 = [
        <li><span class="nhan">Nhờ một người quan sát</span> — nhờ ai đó chuyên nhìn bạn rồi phản hồi lại.</li>
        <li><span class="nhan">Tập trung vào một loại phi ngôn ngữ cụ thể</span> — cải thiện từng kênh một.</li>
      </ul>
+     <p>Hình dưới danh sách là sơ đồ "NONVERBAL COMMUNICATION" với chín nhãn: haptics (đụng chạm), gestures (cử chỉ), proxemics (khoảng cách), facial expressions (nét mặt), paralinguistics (cận ngôn), body language (ngôn ngữ cơ thể), appearance (ngoại hình), eye contact (ánh mắt), artifacts (đồ vật mang theo).</p>
      <p class="meo">💡 Chiến lược 3 là lý do tám loại ở slide 5 có giá trị thực tế: "cải thiện ngôn ngữ cơ thể" thì không làm được; "tuần này giữ cử chỉ trên thắt lưng" thì làm được.</p>`),
 
   slide(D, 22, 'Exercises (3)',
@@ -351,8 +353,8 @@ export const b4l14 = [
      </ol>
      <p class="meo">💡 Bài tập 3 nối thẳng về Bài 11: một cử chỉ chỉ có nghĩa bên trong một nền văn hoá, và đó là lý do sáu chiều văn hoá cùng bài này nằm chung một môn học.</p>`),
 
-  slide(D, 23, 'End of Lesson 14',
-    `<p class="y-chinh">🎯 Closing slide.</p>
+  slide(D, 23, 'Q&A — end of Lesson 14',
+    `<p class="y-chinh">🎯 Closing slide: "Q&amp;A TIME!".</p>
      <p><span class="nhan">Self-check</span></p>
      <ol>
        <li>Eight types of nonverbal communication?</li>
@@ -360,7 +362,7 @@ export const b4l14 = [
        <li>The four criteria for a visual aid?</li>
        <li>Which facial gesture is the single most important?</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Slide kết.</p>
+    `<p class="y-chinh">🎯 Slide kết: "Q&amp;A TIME!" — hỏi đáp.</p>
      <p><span class="nhan">Tự kiểm</span></p>
      <ol>
        <li>Tám loại giao tiếp phi ngôn ngữ?</li>
@@ -375,8 +377,8 @@ export const b4l14 = [
   ]),
 
   bi(
-    `<h3>✅ What the old course had here</h3>
-     <p>One line listing the channels of communication. The eight types (CQ11.1), the speaker's triangle, the three-step gesture and the four visual-aid criteria were all absent — even though a graded presentation is 10% of this subject.</p>`,
-    `<h3>✅ Khoá cũ có gì ở chỗ này</h3>
-     <p>Đúng một dòng liệt kê các kênh giao tiếp. Tám loại phi ngôn ngữ (CQ11.1), tam giác sân khấu, cử chỉ ba bước và bốn tiêu chí công cụ trực quan đều không có — dù một bài thuyết trình tính điểm chiếm 10% điểm môn.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>Know the eight types (CQ11.1, slide 5), the speaker's triangle (slide 9), the three-step gesture (slide 10) and the four visual-aid criteria (slide 16). They are also exactly what you will practise in your group presentations.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Cần nắm tám loại phi ngôn ngữ (CQ11.1, slide 5), tam giác sân khấu (slide 9), cử chỉ ba bước (slide 10) và bốn tiêu chí công cụ trực quan (slide 16). Đó cũng chính là những thứ bạn sẽ luyện trong các bài thuyết trình nhóm.</p>`),
 ].join('\n');

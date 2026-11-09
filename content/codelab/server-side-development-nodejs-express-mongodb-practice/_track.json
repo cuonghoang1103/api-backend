@@ -64,6 +64,12 @@
       "description": "2 đề: Lab 1 · warm-up — what the lab server does on one thread · Lab 1 — Notes API with Node's http module only"
     },
     {
+      "slug": "sdn302-goc-3-1-expressjs",
+      "name": "Slot 3.1 ExpressJS — official slides",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Custom middleware and the custom 404 of slide 11 · The articles router of the slides: route(\"/\") and route(\"/:id\") · ExpressJS slides: middleware types, Generator, semver and two traps"
+    },
+    {
       "slug": "sdn302-2-1-express-routing",
       "name": "2.1 Express routing & your first app",
       "level": "ADVANCED",
@@ -82,10 +88,22 @@
       "description": "2 đề: Lab 2 · warm-up — plan the middleware chain · Lab 2 — Tasks API with Express routing and middleware"
     },
     {
+      "slug": "sdn302-goc-3-3-node-mongodb",
+      "name": "Slot 3.3 NodeJS with MongoDB — official slides",
+      "level": "INTERMEDIATE",
+      "description": "3 đề: Predict the result: the real outputs of Slot 3.3 · The queries of the slides: operators, regex, sort, skip and limit · The mongodb driver from Node: connection, await and $lookup"
+    },
+    {
       "slug": "sdn302-3-1-mongodb-crud",
       "name": "3.1 NoSQL, MongoDB & CRUD",
       "level": "ADVANCED",
       "description": "6 đề: Relational vs document: translate the vocabulary · Embed or reference? The key modelling decision · The four CRUD operations, mongosh style · Query operators: write the filters · Update operators: $inc, $addToSet, $pull and updateMany · The no-schema trap: find and repair inconsistent documents"
+    },
+    {
+      "slug": "sdn302-goc-5-1-population",
+      "name": "Slot 5.1 Mongoose population — official slides",
+      "level": "INTERMEDIATE",
+      "description": "2 đề: Population facts checked for real · Populate the author and the users of the comments"
     },
     {
       "slug": "sdn302-3-2-mongoose",
@@ -104,6 +122,18 @@
       "name": "4.1 A full REST API with Express, Mongoose & MVC",
       "level": "ADVANCED",
       "description": "6 đề: Status codes — the REST vocabulary · MVC layers: who does what, and who may call whom · The create controller, done right (and list) · getById, update, remove: 400 for a bad id, 404 when missing, 204 on delete · The service layer: business rules, no HTTP · Wire the whole API: router → controller → service → model + one error handler"
+    },
+    {
+      "slug": "sdn302-goc-7-ejs",
+      "name": "Slot 7 EJS — official slides",
+      "level": "INTERMEDIATE",
+      "description": "2 đề: EJS tags and EJS vs JSX · The articles page of slide 17, done right"
+    },
+    {
+      "slug": "sdn302-goc-8-handlebars",
+      "name": "Slot 8 Handlebars — official slides",
+      "level": "INTERMEDIATE",
+      "description": "2 đề: Handlebars and express-handlebars, checked for real · A real capitalize helper, #if and #each (slides 9–10)"
     },
     {
       "slug": "sdn302-4-2-templating",

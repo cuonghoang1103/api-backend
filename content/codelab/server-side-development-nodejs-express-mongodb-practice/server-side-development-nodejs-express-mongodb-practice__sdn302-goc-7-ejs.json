@@ -1,0 +1,313 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-goc-7-ejs",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-goc-7-ejs"
+  },
+  "exercises": [
+    {
+      "title": "EJS tags and EJS vs JSX",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "EJS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Questions on slides 5, 6, 11 and 12 of Slot 7.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về slide 5, 6, 11 và 12 của Slot 7.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Re-read the tag table of slide 11.|||Đọc lại bảng thẻ ở slide 11.",
+        "Server-side rendering = HTML is built before it leaves the server.|||Render phía server = HTML được dựng trước khi rời server."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EJS tags and EJS vs JSX\n\nAnswer in the answer panel (no code needed).\n\n1. Which tag prints a value escaped?Thẻ nào in giá trị có thoát?\n2. Where does EJS turn the template into HTML?EJS biến template thành HTML ở đâu?\n3. A template uses <%= user %> but res.render('page', {}) passes no user. Result?Template dùng <%= user %> nhưng res.render('page', {}) không truyền user. Kết quả?\n4. True about EJS vs JSX? (choose all)Đúng về EJS và JSX? (chọn hết)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EJS tags and EJS vs JSX — answer key\n\n1. Which tag prints a value escaped?Thẻ nào in giá trị có thoát?\n   Answer: a) <%= %>\n   = escapes, - prints raw HTML, plain runs code, # is a comment.VI: = thoát, - in HTML thô, không dấu thì chạy code, # là chú thích.\n\n2. Where does EJS turn the template into HTML?EJS biến template thành HTML ở đâu?\n   Answer: c) On the server, before the response is sent\n   The slide says \"client side\" — wrong for EJS; View page source shows finished HTML.VI: Slide ghi \"client side\" — sai với EJS; View page source cho thấy HTML đã hoàn chỉnh.\n\n3. A template uses <%= user %> but res.render('page', {}) passes no user. Result?Template dùng <%= user %> nhưng res.render('page', {}) không truyền user. Kết quả?\n   Answer: c) Rendering fails: \"user is not defined\"\n   Checked with real ejs: ReferenceError \"… is not defined\".VI: Đã kiểm với ejs thật: ReferenceError \"… is not defined\".\n\n4. True about EJS vs JSX? (choose all)Đúng về EJS và JSX? (chọn hết)\n   Answer: a) EJS reuse is by includes/partials, JSX by components + c) EJS uses <% %>, JSX uses { } + d) JSX needs a build step (Babel / Vite)\n   Only the last statement is false.VI: Chỉ câu cuối sai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> &lt;%= %&gt;</p><p>= escapes, - prints raw HTML, plain runs code, # is a comment.</p><p><i>VI: = thoát, - in HTML thô, không dấu thì chạy code, # là chú thích.</i></p></li><li><p><b>c)</b> On the server, before the response is sent</p><p>The slide says \"client side\" — wrong for EJS; View page source shows finished HTML.</p><p><i>VI: Slide ghi \"client side\" — sai với EJS; View page source cho thấy HTML đã hoàn chỉnh.</i></p></li><li><p><b>c)</b> Rendering fails: \"user is not defined\"</p><p>Checked with real ejs: ReferenceError \"… is not defined\".</p><p><i>VI: Đã kiểm với ejs thật: ReferenceError \"… is not defined\".</i></p></li><li><p><b>a)</b> EJS reuse is by includes/partials, JSX by components + <b>c)</b> EJS uses &lt;% %&gt;, JSX uses { } + <b>d)</b> JSX needs a build step (Babel / Vite)</p><p>Only the last statement is false.</p><p><i>VI: Chỉ câu cuối sai.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "e1",
+            "de": "<p>Which tag prints a value <b>escaped</b>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thẻ nào in giá trị <b>có thoát</b>?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "&lt;%= %&gt;"
+              },
+              {
+                "ma": "b",
+                "noiDung": "&lt;%- %&gt;"
+              },
+              {
+                "ma": "c",
+                "noiDung": "&lt;%# %&gt;"
+              },
+              {
+                "ma": "d",
+                "noiDung": "&lt;% %&gt;"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>= escapes, - prints raw HTML, plain runs code, # is a comment.</p><p><i>VI: = thoát, - in HTML thô, không dấu thì chạy code, # là chú thích.</i></p>"
+          },
+          {
+            "ma": "e2",
+            "de": "<p>Where does EJS turn the template into HTML?</p><p style=\"opacity:.75;font-size:.92em\"><i>EJS biến template thành HTML ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the browser after the page loads"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In the build step, like JSX"
+              },
+              {
+                "ma": "c",
+                "noiDung": "On the server, before the response is sent"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In MongoDB"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The slide says \"client side\" — wrong for EJS; View page source shows finished HTML.</p><p><i>VI: Slide ghi \"client side\" — sai với EJS; View page source cho thấy HTML đã hoàn chỉnh.</i></p>"
+          },
+          {
+            "ma": "e3",
+            "de": "<p>A template uses <code>&lt;%= user %&gt;</code> but <code>res.render('page', {})</code> passes no <code>user</code>. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Template dùng <code>&lt;%= user %&gt;</code> nhưng <code>res.render('page', {})</code> không truyền <code>user</code>. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The word undefined is printed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An empty string is printed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rendering fails: \"user is not defined\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "EJS asks the browser for the value"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Checked with real ejs: ReferenceError \"… is not defined\".</p><p><i>VI: Đã kiểm với ejs thật: ReferenceError \"… is not defined\".</i></p>"
+          },
+          {
+            "ma": "e4",
+            "de": "<p>True about EJS vs JSX? (choose all)</p><p style=\"opacity:.75;font-size:.92em\"><i>Đúng về EJS và JSX? (chọn hết)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "EJS reuse is by includes/partials, JSX by components"
+              },
+              {
+                "ma": "b",
+                "noiDung": "EJS runs in the browser like React"
+              },
+              {
+                "ma": "c",
+                "noiDung": "EJS uses &lt;% %&gt;, JSX uses { }"
+              },
+              {
+                "ma": "d",
+                "noiDung": "JSX needs a build step (Babel / Vite)"
+              }
+            ],
+            "dapAn": [
+              [
+                "a",
+                "c",
+                "d"
+              ]
+            ],
+            "nhieu": true,
+            "giaiThich": "<p>Only the last statement is false.</p><p><i>VI: Chỉ câu cuối sai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing &lt;%= and &lt;%-.|||Nhầm &lt;%= với &lt;%-."
+        },
+        {
+          "loi": "Believing EJS runs in the browser.|||Tin rằng EJS chạy trên trình duyệt."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "The articles page of slide 17, done right",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "EJS",
+        "escaping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Write <code>articlesEjs</code> (the content of <code>views/articles.ejs</code>) so that <code>ejs.render(articlesEjs, { articles })</code> produces:</p>\n<pre>&lt;h1&gt;News&lt;/h1&gt;\n&lt;ul&gt;\n  &lt;li&gt;&lt;h2&gt;TITLE&lt;/h2&gt;&lt;p&gt;Date: DATE&lt;/p&gt;&lt;iframe src=\"VIDEO\"&gt;&lt;/iframe&gt;&lt;/li&gt;   (one per article)\n&lt;/ul&gt;</pre>\n<p>and, when the array is empty, <code>&lt;h1&gt;News&lt;/h1&gt;&lt;p&gt;No articles yet&lt;/p&gt;</code> instead of the list. Every value must be <b>escaped</b>, and the <code>src</code> attribute must be in double quotes (the slide left them out). A line <code>&lt;%# … %&gt;</code> comment is allowed — it prints nothing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>&lt;% if (…) { %&gt; … &lt;% } else { %&gt; … &lt;% } %&gt;</code> for the empty state.</li>\n  <li><code>&lt;%= %&gt;</code> for every value, including the URL.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>articlesEjs</code> (nội dung của <code>views/articles.ejs</code>) sao cho <code>ejs.render(articlesEjs, { articles })</code> sinh ra:</p>\n<pre>&lt;h1&gt;News&lt;/h1&gt;\n&lt;ul&gt;\n  &lt;li&gt;&lt;h2&gt;TITLE&lt;/h2&gt;&lt;p&gt;Date: DATE&lt;/p&gt;&lt;iframe src=\"VIDEO\"&gt;&lt;/iframe&gt;&lt;/li&gt;   (mỗi bài một li)\n&lt;/ul&gt;</pre>\n<p>và khi mảng rỗng thì là <code>&lt;h1&gt;News&lt;/h1&gt;&lt;p&gt;No articles yet&lt;/p&gt;</code> thay cho danh sách. Mọi giá trị phải được <b>thoát</b>, và thuộc tính <code>src</code> phải nằm trong nháy kép (slide bỏ quên). Được phép có dòng chú thích <code>&lt;%# … %&gt;</code> — nó không in gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>&lt;% if (…) { %&gt; … &lt;% } else { %&gt; … &lt;% } %&gt;</code> cho trạng thái rỗng.</li>\n  <li><code>&lt;%= %&gt;</code> cho mọi giá trị, kể cả URL.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "a title \"Tom & Jerry <b>forever</b>\"",
+          "output": "<h2>Tom &amp; Jerry &lt;b&gt;forever&lt;/b&gt;</h2>",
+          "explanation": "Escaped, shown as text.|||Đã thoát, hiện thành chữ."
+        }
+      ],
+      "hintsJson": [
+        "Start from the template of slide 17 and fix the two problems.|||Bắt đầu từ template của slide 17 rồi sửa hai chỗ.",
+        "<code>articles.length === 0</code> decides which branch to print.|||<code>articles.length === 0</code> quyết định in nhánh nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const ejs = require('ejs');\n\nconst articlesEjs = `\n<h1>News</h1>\n<ul>\n  <% articles.forEach(article => { %>\n    <li><h2><%- article.title %></h2><p>Date: <%= article.date %></p><iframe src=<%= article.video %>></iframe></li>\n  <% }) %>\n</ul>\n`;\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/views.js",
+          "language": "javascript",
+          "code": "// lib/views.js — PROVIDED by the practice grader. Small, faithful stand-ins for the two template engines of\n// the lesson: EJS (<%= escaped %>, <%- raw %>, <% code %>, <%# comment %>, -%> and <%_ _%> trimming) and\n// Handlebars ({{escaped}}, {{{raw}}}, {{#each}} with @index/@first/@last/this/../, {{#if}}/{{else}},\n// {{#unless}}, {{#with}}, {{! comments }}, registerHelper). Same escaping rules as the real libraries.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(k){\"use strict\";var h=k.__modules,B={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&#34;\",\"'\":\"&#39;\"};function S(e){return e==null?\"\":String(e).replace(/[&<>\"']/g,function(r){return B[r]})}function _(e){for(var r=`var __out = \"\";\nwith (locals || {}) {\n`,n=/<%([_=\\-#]?)([\\s\\S]*?)([-_]?)%>/g,a=0,t,i=!1,u=!1,s=function(o){i&&(o=o.replace(/^\\r?\\n/,\"\"),i=!1),u&&(o=o.replace(/^[ \\t]*\\r?\\n?/,\"\"),u=!1),o&&(r+=\"__out += \"+JSON.stringify(o)+`;\n`)};t=n.exec(e);){var f=e.slice(a,t.index);t[1]===\"_\"&&(f=f.replace(/[ \\t]*$/,\"\")),s(f);var l=t[2];t[1]===\"=\"?r+=\"__out += __esc(\"+l+`);\n`:t[1]===\"-\"?r+=\"__out += ((\"+l+') == null ? \"\" : ('+l+`));\n`:t[1]===\"#\"||(r+=l+`\n`),t[3]===\"-\"&&(i=!0),t[3]===\"_\"&&(u=!0),a=n.lastIndex}s(e.slice(a)),r+=`}\nreturn __out;`;var v=new Function(\"locals\",\"__esc\",r);return function(o){return v(o||{},S)}}var j={render:function(e,r){return _(String(e))(r)},compile:function(e){return _(String(e))},escapeXML:S};h.ejs=j;var H={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\",\"'\":\"&#x27;\",\"`\":\"&#x60;\",\"=\":\"&#x3D;\"};function p(e){this.string=e}p.prototype.toString=p.prototype.toHTML=function(){return String(this.string)};function b(e){return e instanceof p?e.toString():e==null||e===!1?e===!1?\"false\":\"\":String(e).replace(/[&<>\"'`=]/g,function(r){return H[r]})}var c={};function A(e){for(var r=/\\{\\{(~?)(\\{?)([#\\/!>^]?)\\s*([\\s\\S]*?)\\s*(\\}?)(~?)\\}\\}/g,n={kind:\"root\",body:[]},a=[n],t=0,i,u=function(){return a[a.length-1]},s=function(M){var y=u();(y.inElse?y.elseBody:y.body).push(M)};i=r.exec(e);){i.index>t&&s({kind:\"text\",v:e.slice(t,i.index)}),t=r.lastIndex;var f=i[3],l=i[4];if(!(f===\"!\"||/^!/.test(l))){if(f===\"#\"){var v=l.split(/\\s+/),o={kind:\"block\",name:v[0],args:v.slice(1),body:[],elseBody:[],inElse:!1};s(o),a.push(o);continue}if(f===\"/\"){if(u().name!==l)throw new Error(l+\" doesn't match \"+u().name);a.pop();continue}if(f===\"\"&&l===\"else\"&&a.length>1){u().inElse=!0;continue}s({kind:i[2]?\"raw\":\"var\",expr:l})}}if(t<e.length&&s({kind:\"text\",v:e.slice(t)}),a.length>1)throw new Error(\"Parse error: missing {{/\"+u().name+\"}}\");return n}function g(e,r){if(e===\"this\"||e===\".\")return r.self;if(/^\"[\\s\\S]*\"$|^'[\\s\\S]*'$/.test(e))return e.slice(1,-1);if(/^-?\\d+(\\.\\d+)?$/.test(e))return Number(e);if(e===\"true\")return!0;if(e===\"false\")return!1;if(e.charAt(0)===\"@\")return r.data[e.slice(1)];for(var n=r,a=e;a.indexOf(\"../\")===0;)n=n.parent||n,a=a.slice(3);for(var t=a.replace(/^this\\./,\"\").split(\".\"),i=n.self,u=0;u<t.length;u++){if(i==null)return;i=i[t[u]]}return i}function m(e){return!(e==null||e===!1||e===\"\"||e===0||Array.isArray(e)&&e.length===0)}function w(e,r){var n=e.match(/\"[^\"]*\"|'[^']*'|\\S+/g)||[],a=n[0];if(n.length>1||c[a]){var t=c[a];if(!t)throw new Error('Missing helper: \"'+a+'\"');return t.apply(r.self,n.slice(1).map(function(i){return g(i,r)}).concat([{data:r.data,hash:{}}]))}return g(a,r)}function d(e,r){return e.map(function(n){if(n.kind===\"text\")return n.v;if(n.kind===\"var\")return b(w(n.expr,r));if(n.kind===\"raw\"){var a=w(n.expr,r);return a==null?\"\":String(a)}var t=n.args.length?g(n.args[0],r):void 0;if(n.name===\"if\")return d(m(t)?n.body:n.elseBody,r);if(n.name===\"unless\")return d(m(t)?n.elseBody:n.body,r);if(n.name===\"with\")return m(t)?d(n.body,{self:t,parent:r,data:r.data}):d(n.elseBody,r);if(n.name===\"each\"){if(t&&typeof t==\"object\"){var i=Array.isArray(t)?t.map(function(s,f){return f}):Object.keys(t);return i.length?i.map(function(s,f){return d(n.body,{self:t[s],parent:r,data:{index:f,key:s,first:f===0,last:f===i.length-1,root:r.data.root}})}).join(\"\"):d(n.elseBody,r)}return d(n.elseBody,r)}var u=c[n.name];if(!u)throw new Error('Missing helper: \"'+n.name+'\"');return u.apply(r.self,n.args.map(function(s){return g(s,r)}).concat([{fn:function(s){return d(n.body,{self:s,parent:r,data:r.data})},inverse:function(s){return d(n.elseBody,{self:s,parent:r,data:r.data})},data:r.data,hash:{}}]))}).join(\"\")}var E={compile:function(e){var r=A(String(e));return function(n){return d(r.body,{self:n||{},parent:null,data:{root:n}})}},registerHelper:function(e,r){c[e]=r},unregisterHelper:function(e){delete c[e]},SafeString:p,escapeExpression:b};h.handlebars=E,h.hbs=E,h[\"express-handlebars\"]={engine:function(){return function(){}}}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const ejs = require('ejs');\n\n// views/articles.ejs\nconst articlesEjs = `\n<h1>News</h1>\n<%# empty state first, then the list %>\n<% if (articles.length === 0) { %>\n  <p>No articles yet</p>\n<% } else { %>\n  <ul>\n    <% articles.forEach(article => { %>\n      <li><h2><%= article.title %></h2><p>Date: <%= article.date %></p><iframe src=\"<%= article.video %>\"></iframe></li>\n    <% }) %>\n  </ul>\n<% } %>\n`;\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/views.js",
+          "language": "javascript",
+          "code": "// lib/views.js — PROVIDED by the practice grader. Small, faithful stand-ins for the two template engines of\n// the lesson: EJS (<%= escaped %>, <%- raw %>, <% code %>, <%# comment %>, -%> and <%_ _%> trimming) and\n// Handlebars ({{escaped}}, {{{raw}}}, {{#each}} with @index/@first/@last/this/../, {{#if}}/{{else}},\n// {{#unless}}, {{#with}}, {{! comments }}, registerHelper). Same escaping rules as the real libraries.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(k){\"use strict\";var h=k.__modules,B={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&#34;\",\"'\":\"&#39;\"};function S(e){return e==null?\"\":String(e).replace(/[&<>\"']/g,function(r){return B[r]})}function _(e){for(var r=`var __out = \"\";\nwith (locals || {}) {\n`,n=/<%([_=\\-#]?)([\\s\\S]*?)([-_]?)%>/g,a=0,t,i=!1,u=!1,s=function(o){i&&(o=o.replace(/^\\r?\\n/,\"\"),i=!1),u&&(o=o.replace(/^[ \\t]*\\r?\\n?/,\"\"),u=!1),o&&(r+=\"__out += \"+JSON.stringify(o)+`;\n`)};t=n.exec(e);){var f=e.slice(a,t.index);t[1]===\"_\"&&(f=f.replace(/[ \\t]*$/,\"\")),s(f);var l=t[2];t[1]===\"=\"?r+=\"__out += __esc(\"+l+`);\n`:t[1]===\"-\"?r+=\"__out += ((\"+l+') == null ? \"\" : ('+l+`));\n`:t[1]===\"#\"||(r+=l+`\n`),t[3]===\"-\"&&(i=!0),t[3]===\"_\"&&(u=!0),a=n.lastIndex}s(e.slice(a)),r+=`}\nreturn __out;`;var v=new Function(\"locals\",\"__esc\",r);return function(o){return v(o||{},S)}}var j={render:function(e,r){return _(String(e))(r)},compile:function(e){return _(String(e))},escapeXML:S};h.ejs=j;var H={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\",\"'\":\"&#x27;\",\"`\":\"&#x60;\",\"=\":\"&#x3D;\"};function p(e){this.string=e}p.prototype.toString=p.prototype.toHTML=function(){return String(this.string)};function b(e){return e instanceof p?e.toString():e==null||e===!1?e===!1?\"false\":\"\":String(e).replace(/[&<>\"'`=]/g,function(r){return H[r]})}var c={};function A(e){for(var r=/\\{\\{(~?)(\\{?)([#\\/!>^]?)\\s*([\\s\\S]*?)\\s*(\\}?)(~?)\\}\\}/g,n={kind:\"root\",body:[]},a=[n],t=0,i,u=function(){return a[a.length-1]},s=function(M){var y=u();(y.inElse?y.elseBody:y.body).push(M)};i=r.exec(e);){i.index>t&&s({kind:\"text\",v:e.slice(t,i.index)}),t=r.lastIndex;var f=i[3],l=i[4];if(!(f===\"!\"||/^!/.test(l))){if(f===\"#\"){var v=l.split(/\\s+/),o={kind:\"block\",name:v[0],args:v.slice(1),body:[],elseBody:[],inElse:!1};s(o),a.push(o);continue}if(f===\"/\"){if(u().name!==l)throw new Error(l+\" doesn't match \"+u().name);a.pop();continue}if(f===\"\"&&l===\"else\"&&a.length>1){u().inElse=!0;continue}s({kind:i[2]?\"raw\":\"var\",expr:l})}}if(t<e.length&&s({kind:\"text\",v:e.slice(t)}),a.length>1)throw new Error(\"Parse error: missing {{/\"+u().name+\"}}\");return n}function g(e,r){if(e===\"this\"||e===\".\")return r.self;if(/^\"[\\s\\S]*\"$|^'[\\s\\S]*'$/.test(e))return e.slice(1,-1);if(/^-?\\d+(\\.\\d+)?$/.test(e))return Number(e);if(e===\"true\")return!0;if(e===\"false\")return!1;if(e.charAt(0)===\"@\")return r.data[e.slice(1)];for(var n=r,a=e;a.indexOf(\"../\")===0;)n=n.parent||n,a=a.slice(3);for(var t=a.replace(/^this\\./,\"\").split(\".\"),i=n.self,u=0;u<t.length;u++){if(i==null)return;i=i[t[u]]}return i}function m(e){return!(e==null||e===!1||e===\"\"||e===0||Array.isArray(e)&&e.length===0)}function w(e,r){var n=e.match(/\"[^\"]*\"|'[^']*'|\\S+/g)||[],a=n[0];if(n.length>1||c[a]){var t=c[a];if(!t)throw new Error('Missing helper: \"'+a+'\"');return t.apply(r.self,n.slice(1).map(function(i){return g(i,r)}).concat([{data:r.data,hash:{}}]))}return g(a,r)}function d(e,r){return e.map(function(n){if(n.kind===\"text\")return n.v;if(n.kind===\"var\")return b(w(n.expr,r));if(n.kind===\"raw\"){var a=w(n.expr,r);return a==null?\"\":String(a)}var t=n.args.length?g(n.args[0],r):void 0;if(n.name===\"if\")return d(m(t)?n.body:n.elseBody,r);if(n.name===\"unless\")return d(m(t)?n.elseBody:n.body,r);if(n.name===\"with\")return m(t)?d(n.body,{self:t,parent:r,data:r.data}):d(n.elseBody,r);if(n.name===\"each\"){if(t&&typeof t==\"object\"){var i=Array.isArray(t)?t.map(function(s,f){return f}):Object.keys(t);return i.length?i.map(function(s,f){return d(n.body,{self:t[s],parent:r,data:{index:f,key:s,first:f===0,last:f===i.length-1,root:r.data.root}})}).join(\"\"):d(n.elseBody,r)}return d(n.elseBody,r)}var u=c[n.name];if(!u)throw new Error('Missing helper: \"'+n.name+'\"');return u.apply(r.self,n.args.map(function(s){return g(s,r)}).concat([{fn:function(s){return d(n.body,{self:s,parent:r,data:r.data})},inverse:function(s){return d(n.elseBody,{self:s,parent:r,data:r.data})},data:r.data,hash:{}}]))}).join(\"\")}var E={compile:function(e){var r=A(String(e));return function(n){return d(r.body,{self:n||{},parent:null,data:{root:n}})}},registerHelper:function(e,r){c[e]=r},unregisterHelper:function(e){delete c[e]},SafeString:p,escapeExpression:b};h.handlebars=E,h.hbs=E,h[\"express-handlebars\"]={engine:function(){return function(){}}}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>&lt;% %&gt;</code> runs the if and the loop, <code>&lt;%= %&gt;</code> prints escaped values (so <code>&amp;</code> becomes <code>&amp;amp;</code> and tags become text), <code>&lt;%# %&gt;</code> is a comment. Quoting attributes keeps a value with spaces or quotes from breaking out of the attribute.</p>",
+      "solutionExplanationHtmlVi": "<p><code>&lt;% %&gt;</code> chạy if và vòng lặp, <code>&lt;%= %&gt;</code> in giá trị đã thoát (nên <code>&amp;</code> thành <code>&amp;amp;</code> và thẻ thành chữ), <code>&lt;%# %&gt;</code> là chú thích. Đặt thuộc tính trong nháy giúp giá trị có khoảng trắng hay dấu nháy không \"thoát\" ra khỏi thuộc tính.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "lib/views.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One article → one li, src in quotes",
+              "vi": "Một bài → một li, src có nháy"
+            },
+            "goi": "norm(ejs.render(articlesEjs, { articles: articles.slice(0, 1) }))",
+            "chuanBi": "const norm = (h) => String(h).replace(/\\s+/g, ' ').replace(/\\s*(<[^>]+>)\\s*/g, '$1').trim(); const articles = [\n  { id: 1, title: 'Exploring the Hidden Gems of Paris', date: '2023-06-02', video: 'https://www.youtube.com/embed/hLluNp5xlJE' },\n  { id: 2, title: 'Tom & Jerry <b>forever</b>', date: '2023-06-03', video: 'https://www.youtube.com/embed/7R6oAzie4Lc' }];",
+            "mongDoi": "<h1>News</h1><ul><li><h2>Exploring the Hidden Gems of Paris</h2><p>Date: 2023-06-02</p><iframe src=\"https://www.youtube.com/embed/hLluNp5xlJE\"></iframe></li></ul>"
+          },
+          {
+            "moTa": {
+              "en": "No articles → \"No articles yet\"",
+              "vi": "Không có bài → \"No articles yet\""
+            },
+            "goi": "norm(ejs.render(articlesEjs, { articles: [] }))",
+            "chuanBi": "const norm = (h) => String(h).replace(/\\s+/g, ' ').replace(/\\s*(<[^>]+>)\\s*/g, '$1').trim(); const articles = [\n  { id: 1, title: 'Exploring the Hidden Gems of Paris', date: '2023-06-02', video: 'https://www.youtube.com/embed/hLluNp5xlJE' },\n  { id: 2, title: 'Tom & Jerry <b>forever</b>', date: '2023-06-03', video: 'https://www.youtube.com/embed/7R6oAzie4Lc' }];",
+            "mongDoi": "<h1>News</h1><p>No articles yet</p>"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "norm(ejs.render(articlesEjs, { articles }))",
+            "chuanBi": "const norm = (h) => String(h).replace(/\\s+/g, ' ').replace(/\\s*(<[^>]+>)\\s*/g, '$1').trim(); const articles = [\n  { id: 1, title: 'Exploring the Hidden Gems of Paris', date: '2023-06-02', video: 'https://www.youtube.com/embed/hLluNp5xlJE' },\n  { id: 2, title: 'Tom & Jerry <b>forever</b>', date: '2023-06-03', video: 'https://www.youtube.com/embed/7R6oAzie4Lc' }];",
+            "mongDoi": "<h1>News</h1><ul><li><h2>Exploring the Hidden Gems of Paris</h2><p>Date: 2023-06-02</p><iframe src=\"https://www.youtube.com/embed/hLluNp5xlJE\"></iframe></li><li><h2>Tom &amp; Jerry &lt;b&gt;forever&lt;/b&gt;</h2><p>Date: 2023-06-03</p><iframe src=\"https://www.youtube.com/embed/7R6oAzie4Lc\"></iframe></li></ul>",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>&lt;%- article.title %&gt;</code>: the &lt;b&gt; of the title becomes real HTML.|||<code>&lt;%- article.title %&gt;</code>: thẻ &lt;b&gt; trong tiêu đề thành HTML thật."
+        },
+        {
+          "loi": "An empty <code>&lt;ul&gt;&lt;/ul&gt;</code> left on the page when there are no articles.|||Để lại <code>&lt;ul&gt;&lt;/ul&gt;</code> rỗng khi không có bài nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scriptlet",
+          "vi": "thẻ chạy code",
+          "giaiThich": "<% %>"
+        },
+        {
+          "en": "escape",
+          "vi": "thoát ký tự"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "trackSlug": "server-side-development-nodejs-express-mongodb-practice",
+  "moduleSlug": "sdn302-goc-8-handlebars",
+  "lesson": {
+    "course": "server-side-development-nodejs-express-mongodb",
+    "slug": "sdn302-goc-8-handlebars"
+  },
+  "exercises": [
+    {
+      "title": "Handlebars and express-handlebars, checked for real",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Handlebars"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>Questions on slides 6–13 of Slot 8.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or by running the snippet on your own machine), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về slide 6–13 của Slot 8.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy đoạn mã trên máy bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Layouts wrap views; partials are pieces inside views.|||Layout bọc view; partial là mẩu bên trong view.",
+        "Count the braces.|||Đếm số ngoặc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Handlebars and express-handlebars, checked for real\n\nAnswer in the answer panel (no code needed).\n\n1. {{x}} vs {{{x}}} with x = \"<b>hi</b>\":{{x}} và {{{x}}} với x = \"<b>hi</b>\":\n2. With app.engine('handlebars', exphbs.engine()) and no layout file, rendering a view gives…Với app.engine('handlebars', exphbs.engine()) và không có tệp layout, render một view sẽ…\n3. Where does the view go inside a layout file?View được đặt vào đâu trong tệp layout?\n4. With the helperMissing hook of slide 12, {{foo 2 true}} renders…Với hook helperMissing của slide 12, {{foo 2 true}} render ra…\n5. How do you include the partial views/partials/item.handlebars?Chèn partial views/partials/item.handlebars bằng cách nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Handlebars and express-handlebars, checked for real — answer key\n\n1. {{x}} vs {{{x}}} with x = \"<b>hi</b>\":{{x}} và {{{x}}} với x = \"<b>hi</b>\":\n   Answer: a) {{x}} shows the tags as text, {{{x}}} renders bold \"hi\"\n   Two braces escape, three print raw HTML.VI: Hai ngoặc thì thoát, ba ngoặc in HTML thô.\n\n2. With app.engine('handlebars', exphbs.engine()) and no layout file, rendering a view gives…Với app.engine('handlebars', exphbs.engine()) và không có tệp layout, render một view sẽ…\n   Answer: a) 500 — ENOENT … views/layouts/main.handlebars\n   The default layout is main; checked with express-handlebars 7.VI: Layout mặc định là main; đã kiểm với express-handlebars 7.\n\n3. Where does the view go inside a layout file?View được đặt vào đâu trong tệp layout?\n   Answer: b) {{{body}}}\n   Triple braces: the view is already HTML.VI: Ba ngoặc: view đã là HTML.\n\n4. With the helperMissing hook of slide 12, {{foo 2 true}} renders…Với hook helperMissing của slide 12, {{foo 2 true}} render ra…\n   Answer: b) Missing: foo(2,true)\n   Real run matches the slide: Missing: foo(2,true).VI: Chạy thật khớp slide: Missing: foo(2,true).\n\n5. How do you include the partial views/partials/item.handlebars?Chèn partial views/partials/item.handlebars bằng cách nào?\n   Answer: b) {{> item}}\n   The > sign is the partial call; partialsDir tells express-handlebars where to look.VI: Dấu > là lời gọi partial; partialsDir cho express-handlebars biết tìm ở đâu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> {{x}} shows the tags as text, {{{x}}} renders bold \"hi\"</p><p>Two braces escape, three print raw HTML.</p><p><i>VI: Hai ngoặc thì thoát, ba ngoặc in HTML thô.</i></p></li><li><p><b>a)</b> 500 — ENOENT … views/layouts/main.handlebars</p><p>The default layout is main; checked with express-handlebars 7.</p><p><i>VI: Layout mặc định là main; đã kiểm với express-handlebars 7.</i></p></li><li><p><b>b)</b> {{{body}}}</p><p>Triple braces: the view is already HTML.</p><p><i>VI: Ba ngoặc: view đã là HTML.</i></p></li><li><p><b>b)</b> Missing: foo(2,true)</p><p>Real run matches the slide: Missing: foo(2,true).</p><p><i>VI: Chạy thật khớp slide: Missing: foo(2,true).</i></p></li><li><p><b>b)</b> {{> item}}</p><p>The &gt; sign is the partial call; partialsDir tells express-handlebars where to look.</p><p><i>VI: Dấu &gt; là lời gọi partial; partialsDir cho express-handlebars biết tìm ở đâu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "h1",
+            "de": "<p><code>{{x}}</code> vs <code>{{{x}}}</code> with <code>x = \"&lt;b&gt;hi&lt;/b&gt;\"</code>:</p><p style=\"opacity:.75;font-size:.92em\"><i><code>{{x}}</code> và <code>{{{x}}}</code> với <code>x = \"&lt;b&gt;hi&lt;/b&gt;\"</code>:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{{x}} shows the tags as text, {{{x}}} renders bold \"hi\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "{{x}} renders bold \"hi\", {{{x}}} shows the tags as text"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both show the tags as text, escaped the same way"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{{{x}}} is a syntax error and the page fails"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Two braces escape, three print raw HTML.</p><p><i>VI: Hai ngoặc thì thoát, ba ngoặc in HTML thô.</i></p>"
+          },
+          {
+            "ma": "h2",
+            "de": "<p>With <code>app.engine('handlebars', exphbs.engine())</code> and no layout file, rendering a view gives…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với <code>app.engine('handlebars', exphbs.engine())</code> và không có tệp layout, render một view sẽ…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "500 — ENOENT … views/layouts/main.handlebars"
+              },
+              {
+                "ma": "b",
+                "noiDung": "404"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an empty page with 200"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the view without a layout"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The default layout is main; checked with express-handlebars 7.</p><p><i>VI: Layout mặc định là main; đã kiểm với express-handlebars 7.</i></p>"
+          },
+          {
+            "ma": "h3",
+            "de": "<p>Where does the view go inside a layout file?</p><p style=\"opacity:.75;font-size:.92em\"><i>View được đặt vào đâu trong tệp layout?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{{> body}}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{{{body}}}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "&lt;%- body %&gt;"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{{body}}"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Triple braces: the view is already HTML.</p><p><i>VI: Ba ngoặc: view đã là HTML.</i></p>"
+          },
+          {
+            "ma": "h4",
+            "de": "<p>With the helperMissing hook of slide 12, <code>{{foo 2 true}}</code> renders…</p><p style=\"opacity:.75;font-size:.92em\"><i>Với hook helperMissing của slide 12, <code>{{foo 2 true}}</code> render ra…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Missing: foo"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Missing: foo(2,true)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an empty string"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an error"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Real run matches the slide: Missing: foo(2,true).</p><p><i>VI: Chạy thật khớp slide: Missing: foo(2,true).</i></p>"
+          },
+          {
+            "ma": "h5",
+            "de": "<p>How do you include the partial <code>views/partials/item.handlebars</code>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chèn partial <code>views/partials/item.handlebars</code> bằng cách nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{{include item}}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{{> item}}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{{#item}}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "&lt;%- include('item') %&gt;"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The &gt; sign is the partial call; partialsDir tells express-handlebars where to look.</p><p><i>VI: Dấu &gt; là lời gọi partial; partialsDir cho express-handlebars biết tìm ở đâu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using {{body}} in a layout: the whole page shows as escaped text.|||Dùng {{body}} trong layout: cả trang hiện thành chữ đã thoát."
+        },
+        {
+          "loi": "Forgetting the layouts folder.|||Quên thư mục layouts."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "A real capitalize helper, #if and #each (slides 9–10)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Handlebars helper"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "sdn302"
+      ],
+      "problemHtml": "<p>On slide 9 the helper called <code>capitalize</code> uses <code>toUpperCase()</code>, so \"Hello, World!\" becomes \"HELLO, WORLD!\". Write it properly and a template that uses it:</p>\n<ol><li>Register a helper <code>capitalize</code>: first letter upper-case, the rest unchanged (<code>\"hello world\"</code> → <code>\"Hello world\"</code>; empty or missing → <code>\"\"</code>).</li>\n<li><code>homeHbs</code>: <code>&lt;h1&gt;{{capitalize title}}&lt;/h1&gt;</code>, then <code>&lt;p&gt;Welcome, admin!&lt;/p&gt;</code> if <code>isAdmin</code> else <code>&lt;p&gt;Welcome, user!&lt;/p&gt;</code>, then <code>&lt;ul&gt;</code> with one <code>&lt;li&gt;{{this}}&lt;/li&gt;</code> per item of <code>items</code>.</li></ol>\n<p>Export <code>render(data)</code> = <code>Handlebars.compile(homeHbs)(data)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>Handlebars.registerHelper('capitalize', (text) =&gt; …)</code>.</li>\n  <li><code>{{#if isAdmin}} … {{else}} … {{/if}}</code> and <code>{{#each items}} … {{/each}}</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ở slide 9, helper tên <code>capitalize</code> lại dùng <code>toUpperCase()</code>, nên \"Hello, World!\" thành \"HELLO, WORLD!\". Viết lại cho đúng và một template dùng nó:</p>\n<ol><li>Đăng ký helper <code>capitalize</code>: viết hoa chữ cái đầu, phần còn lại giữ nguyên (<code>\"hello world\"</code> → <code>\"Hello world\"</code>; rỗng hoặc không có → <code>\"\"</code>).</li>\n<li><code>homeHbs</code>: <code>&lt;h1&gt;{{capitalize title}}&lt;/h1&gt;</code>, rồi <code>&lt;p&gt;Welcome, admin!&lt;/p&gt;</code> nếu <code>isAdmin</code>, không thì <code>&lt;p&gt;Welcome, user!&lt;/p&gt;</code>, rồi <code>&lt;ul&gt;</code> với mỗi phần tử của <code>items</code> một <code>&lt;li&gt;{{this}}&lt;/li&gt;</code>.</li></ol>\n<p>Export <code>render(data)</code> = <code>Handlebars.compile(homeHbs)(data)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Handlebars.registerHelper('capitalize', (text) =&gt; …)</code>.</li>\n  <li><code>{{#if isAdmin}} … {{else}} … {{/if}}</code> và <code>{{#each items}} … {{/each}}</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "render({ title: \"hello, world!\", isAdmin: true, items: [\"Item1\", \"Item2\"] })",
+          "output": "<h1>Hello, world!</h1><p>Welcome, admin!</p><ul><li>Item1</li><li>Item2</li></ul>",
+          "explanation": "Only the first letter is upper-cased.|||Chỉ chữ cái đầu được viết hoa."
+        }
+      ],
+      "hintsJson": [
+        "<code>text.charAt(0).toUpperCase() + text.slice(1)</code>.",
+        "Inside <code>{{#each}}</code>, <code>{{this}}</code> is the current item.|||Trong <code>{{#each}}</code>, <code>{{this}}</code> là phần tử hiện tại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const Handlebars = require('handlebars');\n\nHandlebars.registerHelper('capitalize', (text) => text.toUpperCase());\n\nconst homeHbs = `<h1>{{capitalize title}}</h1><ul>{{#each items}}<li>{{this}}</li>{{/each}}</ul>`;\n\nconst render = (data) => Handlebars.compile(homeHbs)(data);\nmodule.exports = { render };\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/views.js",
+          "language": "javascript",
+          "code": "// lib/views.js — PROVIDED by the practice grader. Small, faithful stand-ins for the two template engines of\n// the lesson: EJS (<%= escaped %>, <%- raw %>, <% code %>, <%# comment %>, -%> and <%_ _%> trimming) and\n// Handlebars ({{escaped}}, {{{raw}}}, {{#each}} with @index/@first/@last/this/../, {{#if}}/{{else}},\n// {{#unless}}, {{#with}}, {{! comments }}, registerHelper). Same escaping rules as the real libraries.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(k){\"use strict\";var h=k.__modules,B={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&#34;\",\"'\":\"&#39;\"};function S(e){return e==null?\"\":String(e).replace(/[&<>\"']/g,function(r){return B[r]})}function _(e){for(var r=`var __out = \"\";\nwith (locals || {}) {\n`,n=/<%([_=\\-#]?)([\\s\\S]*?)([-_]?)%>/g,a=0,t,i=!1,u=!1,s=function(o){i&&(o=o.replace(/^\\r?\\n/,\"\"),i=!1),u&&(o=o.replace(/^[ \\t]*\\r?\\n?/,\"\"),u=!1),o&&(r+=\"__out += \"+JSON.stringify(o)+`;\n`)};t=n.exec(e);){var f=e.slice(a,t.index);t[1]===\"_\"&&(f=f.replace(/[ \\t]*$/,\"\")),s(f);var l=t[2];t[1]===\"=\"?r+=\"__out += __esc(\"+l+`);\n`:t[1]===\"-\"?r+=\"__out += ((\"+l+') == null ? \"\" : ('+l+`));\n`:t[1]===\"#\"||(r+=l+`\n`),t[3]===\"-\"&&(i=!0),t[3]===\"_\"&&(u=!0),a=n.lastIndex}s(e.slice(a)),r+=`}\nreturn __out;`;var v=new Function(\"locals\",\"__esc\",r);return function(o){return v(o||{},S)}}var j={render:function(e,r){return _(String(e))(r)},compile:function(e){return _(String(e))},escapeXML:S};h.ejs=j;var H={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\",\"'\":\"&#x27;\",\"`\":\"&#x60;\",\"=\":\"&#x3D;\"};function p(e){this.string=e}p.prototype.toString=p.prototype.toHTML=function(){return String(this.string)};function b(e){return e instanceof p?e.toString():e==null||e===!1?e===!1?\"false\":\"\":String(e).replace(/[&<>\"'`=]/g,function(r){return H[r]})}var c={};function A(e){for(var r=/\\{\\{(~?)(\\{?)([#\\/!>^]?)\\s*([\\s\\S]*?)\\s*(\\}?)(~?)\\}\\}/g,n={kind:\"root\",body:[]},a=[n],t=0,i,u=function(){return a[a.length-1]},s=function(M){var y=u();(y.inElse?y.elseBody:y.body).push(M)};i=r.exec(e);){i.index>t&&s({kind:\"text\",v:e.slice(t,i.index)}),t=r.lastIndex;var f=i[3],l=i[4];if(!(f===\"!\"||/^!/.test(l))){if(f===\"#\"){var v=l.split(/\\s+/),o={kind:\"block\",name:v[0],args:v.slice(1),body:[],elseBody:[],inElse:!1};s(o),a.push(o);continue}if(f===\"/\"){if(u().name!==l)throw new Error(l+\" doesn't match \"+u().name);a.pop();continue}if(f===\"\"&&l===\"else\"&&a.length>1){u().inElse=!0;continue}s({kind:i[2]?\"raw\":\"var\",expr:l})}}if(t<e.length&&s({kind:\"text\",v:e.slice(t)}),a.length>1)throw new Error(\"Parse error: missing {{/\"+u().name+\"}}\");return n}function g(e,r){if(e===\"this\"||e===\".\")return r.self;if(/^\"[\\s\\S]*\"$|^'[\\s\\S]*'$/.test(e))return e.slice(1,-1);if(/^-?\\d+(\\.\\d+)?$/.test(e))return Number(e);if(e===\"true\")return!0;if(e===\"false\")return!1;if(e.charAt(0)===\"@\")return r.data[e.slice(1)];for(var n=r,a=e;a.indexOf(\"../\")===0;)n=n.parent||n,a=a.slice(3);for(var t=a.replace(/^this\\./,\"\").split(\".\"),i=n.self,u=0;u<t.length;u++){if(i==null)return;i=i[t[u]]}return i}function m(e){return!(e==null||e===!1||e===\"\"||e===0||Array.isArray(e)&&e.length===0)}function w(e,r){var n=e.match(/\"[^\"]*\"|'[^']*'|\\S+/g)||[],a=n[0];if(n.length>1||c[a]){var t=c[a];if(!t)throw new Error('Missing helper: \"'+a+'\"');return t.apply(r.self,n.slice(1).map(function(i){return g(i,r)}).concat([{data:r.data,hash:{}}]))}return g(a,r)}function d(e,r){return e.map(function(n){if(n.kind===\"text\")return n.v;if(n.kind===\"var\")return b(w(n.expr,r));if(n.kind===\"raw\"){var a=w(n.expr,r);return a==null?\"\":String(a)}var t=n.args.length?g(n.args[0],r):void 0;if(n.name===\"if\")return d(m(t)?n.body:n.elseBody,r);if(n.name===\"unless\")return d(m(t)?n.elseBody:n.body,r);if(n.name===\"with\")return m(t)?d(n.body,{self:t,parent:r,data:r.data}):d(n.elseBody,r);if(n.name===\"each\"){if(t&&typeof t==\"object\"){var i=Array.isArray(t)?t.map(function(s,f){return f}):Object.keys(t);return i.length?i.map(function(s,f){return d(n.body,{self:t[s],parent:r,data:{index:f,key:s,first:f===0,last:f===i.length-1,root:r.data.root}})}).join(\"\"):d(n.elseBody,r)}return d(n.elseBody,r)}var u=c[n.name];if(!u)throw new Error('Missing helper: \"'+n.name+'\"');return u.apply(r.self,n.args.map(function(s){return g(s,r)}).concat([{fn:function(s){return d(n.body,{self:s,parent:r,data:r.data})},inverse:function(s){return d(n.elseBody,{self:s,parent:r,data:r.data})},data:r.data,hash:{}}]))}).join(\"\")}var E={compile:function(e){var r=A(String(e));return function(n){return d(r.body,{self:n||{},parent:null,data:{root:n}})}},registerHelper:function(e,r){c[e]=r},unregisterHelper:function(e){delete c[e]},SafeString:p,escapeExpression:b};h.handlebars=E,h.hbs=E,h[\"express-handlebars\"]={engine:function(){return function(){}}}})(globalThis);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const Handlebars = require('handlebars');\n\n// a REAL capitalize: first letter only\nHandlebars.registerHelper('capitalize', (text) => {\n  if (!text) return '';\n  const s = String(text);\n  return s.charAt(0).toUpperCase() + s.slice(1);\n});\n\nconst homeHbs = `\n<h1>{{capitalize title}}</h1>\n{{#if isAdmin}}\n  <p>Welcome, admin!</p>\n{{else}}\n  <p>Welcome, user!</p>\n{{/if}}\n<ul>\n  {{#each items}}\n    <li>{{this}}</li>\n  {{/each}}\n</ul>\n`;\n\nconst render = (data) => Handlebars.compile(homeHbs)(data);\nmodule.exports = { render };\n"
+        },
+        {
+          "name": "lib/core.js",
+          "language": "javascript",
+          "code": "// lib/core.js — PROVIDED by the practice grader (do not edit: the grader always runs its own copy of this idea).\n// A tiny, in-memory stand-in for the parts of Node.js these exercises use: require(), module.exports,\n// process.env, path, fs (callbacks + promises, with simulated disk delay), events, util.promisify.\n// Everything runs in the browser: there is no real disk, network or database.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(i){\"use strict\";var a={};i.__modules=a,i.process={env:{},version:\"v22.23.3\",platform:\"linux\",argv:[\"node\",\"app.js\"],cwd:function(){return\"/app\"},exit:function(e){var n=new Error(\"process.exit(\"+e+\") was called \\u2014 the server would stop here\");throw n.code=\"PROCESS_EXIT\",n}},i.module={exports:{}},i.exports=i.module.exports,i.__dirname=\"/app\",i.__filename=\"/app/app.js\",i.require=function(e){var n=String(e).replace(/^node:/,\"\");if(Object.prototype.hasOwnProperty.call(a,n))return a[n];var r;throw/^\\.{0,2}\\//.test(n)?r=new Error(\"Cannot find module '\"+e+\"' \\u2014 in this practice everything lives in ONE file (answer.js); write the layers as objects/functions in it.\"):r=new Error(\"Cannot find module '\"+e+\"'\"),r.code=\"MODULE_NOT_FOUND\",r};function p(e){var n=e.charAt(0)===\"/\",r=[];e.split(\"/\").forEach(function(o){!o||o===\".\"||(o===\"..\"?r.length&&r[r.length-1]!==\"..\"?r.pop():n||r.push(\"..\"):r.push(o))});var t=(n?\"/\":\"\")+r.join(\"/\");return t||(n?\"/\":\".\")}var u={sep:\"/\",normalize:p,join:function(){var e=[].slice.call(arguments).filter(function(n){return n!==\"\"});return e.length?p(e.join(\"/\")):\".\"},resolve:function(){var e=\"/app\";return[].slice.call(arguments).forEach(function(n){e=n.charAt(0)===\"/\"?n:e+\"/\"+n}),p(e)},basename:function(e,n){var r=String(e).replace(/\\/+$/,\"\"),t=r.slice(r.lastIndexOf(\"/\")+1);return n&&t.slice(-n.length)===n&&t!==n&&(t=t.slice(0,-n.length)),t},dirname:function(e){var n=String(e).replace(/\\/+$/,\"\"),r=n.lastIndexOf(\"/\");return r<0?\".\":r===0?\"/\":n.slice(0,r)},extname:function(e){var n=u.basename(e),r=n.lastIndexOf(\".\");return r<=0?\"\":n.slice(r)},isAbsolute:function(e){return String(e).charAt(0)===\"/\"}};u.posix=u,a.path=u;var l={};i.__disk={put:function(e,n,r){l[u.resolve(e)]={data:String(n),delay:r==null?20:r}},get:function(e){var n=l[u.resolve(e)];return n?n.data:void 0},del:function(e){delete l[u.resolve(e)]},list:function(){return Object.keys(l).sort()}};function v(e,n){var r=new Error(\"ENOENT: no such file or directory, \"+(n||\"open\")+\" '\"+e+\"'\");return r.code=\"ENOENT\",r.errno=-2,r.syscall=n||\"open\",r.path=e,r}function d(e){return typeof e==\"string\"?e:e&&e.encoding||null}function h(e){return{length:e.length,toString:function(){return e},__buffer:!0}}var f={readFile:function(e,n,r){typeof n==\"function\"&&(r=n,n=null);var t=l[u.resolve(e)],o=d(n);i.setTimeout(function(){t?r(null,o?t.data:h(t.data)):r(v(e))},t?t.delay:5)},readFileSync:function(e,n){var r=l[u.resolve(e)];if(!r)throw v(e);return i.__blockedMs=(i.__blockedMs||0)+r.delay,d(n)?r.data:h(r.data)},writeFile:function(e,n,r,t){typeof r==\"function\"&&(t=r),i.setTimeout(function(){l[u.resolve(e)]={data:String(n),delay:20},t&&t(null)},10)},writeFileSync:function(e,n){l[u.resolve(e)]={data:String(n),delay:20}},existsSync:function(e){return!!l[u.resolve(e)]},unlink:function(e,n){i.setTimeout(function(){var r=u.resolve(e);if(!l[r])return n(v(e,\"unlink\"));delete l[r],n(null)},5)}};f.promises={readFile:function(e,n){return new Promise(function(r,t){f.readFile(e,n,function(o,c){o?t(o):r(c)})})},writeFile:function(e,n){return new Promise(function(r,t){f.writeFile(e,n,function(o){o?t(o):r()})})},unlink:function(e){return new Promise(function(n,r){f.unlink(e,function(t){t?r(t):n()})})}},a.fs=f,a[\"fs/promises\"]=f.promises;function s(){this._ev={}}s.prototype.on=s.prototype.addListener=function(e,n){return(this._ev[e]=this._ev[e]||[]).push(n),this},s.prototype.once=function(e,n){var r=this;function t(){return r.off(e,t),n.apply(r,arguments)}return t.listener=n,this.on(e,t)},s.prototype.off=s.prototype.removeListener=function(e,n){var r=this._ev[e];return r&&(this._ev[e]=r.filter(function(t){return t!==n&&t.listener!==n})),this},s.prototype.emit=function(e){var n=[].slice.call(arguments,1),r=(this._ev[e]||[]).slice();if(e===\"error\"&&!r.length)throw n[0]instanceof Error?n[0]:new Error(\"Unhandled error. (\"+n[0]+\")\");var t=this;return r.forEach(function(o){o.apply(t,n)}),r.length>0},s.prototype.listenerCount=function(e){return(this._ev[e]||[]).length},a.events=s,s.EventEmitter=s,a.util={promisify:function(e){return function(){var n=[].slice.call(arguments),r=this;return new Promise(function(t,o){e.apply(r,n.concat([function(c,m){c?o(c):t(m)}]))})}}},a.dotenv={config:function(){return{parsed:Object.assign({},i.process.env)}}},i.__json=function(e){return e===void 0?void 0:JSON.parse(JSON.stringify(e))},i.__sleep=function(e){return new Promise(function(n){i.setTimeout(n,e)})},i.__pick=function(e,n){var r={};return String(n).split(/[\\s,]+/).filter(Boolean).forEach(function(t){r[t]=e==null?void 0:e[t]}),r}})(globalThis);\n"
+        },
+        {
+          "name": "lib/views.js",
+          "language": "javascript",
+          "code": "// lib/views.js — PROVIDED by the practice grader. Small, faithful stand-ins for the two template engines of\n// the lesson: EJS (<%= escaped %>, <%- raw %>, <% code %>, <%# comment %>, -%> and <%_ _%> trimming) and\n// Handlebars ({{escaped}}, {{{raw}}}, {{#each}} with @index/@first/@last/this/../, {{#if}}/{{else}},\n// {{#unless}}, {{#with}}, {{! comments }}, registerHelper). Same escaping rules as the real libraries.\n// (minified — read the lesson, not this file. The grader loads it before answer.js.)\n(function(k){\"use strict\";var h=k.__modules,B={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&#34;\",\"'\":\"&#39;\"};function S(e){return e==null?\"\":String(e).replace(/[&<>\"']/g,function(r){return B[r]})}function _(e){for(var r=`var __out = \"\";\nwith (locals || {}) {\n`,n=/<%([_=\\-#]?)([\\s\\S]*?)([-_]?)%>/g,a=0,t,i=!1,u=!1,s=function(o){i&&(o=o.replace(/^\\r?\\n/,\"\"),i=!1),u&&(o=o.replace(/^[ \\t]*\\r?\\n?/,\"\"),u=!1),o&&(r+=\"__out += \"+JSON.stringify(o)+`;\n`)};t=n.exec(e);){var f=e.slice(a,t.index);t[1]===\"_\"&&(f=f.replace(/[ \\t]*$/,\"\")),s(f);var l=t[2];t[1]===\"=\"?r+=\"__out += __esc(\"+l+`);\n`:t[1]===\"-\"?r+=\"__out += ((\"+l+') == null ? \"\" : ('+l+`));\n`:t[1]===\"#\"||(r+=l+`\n`),t[3]===\"-\"&&(i=!0),t[3]===\"_\"&&(u=!0),a=n.lastIndex}s(e.slice(a)),r+=`}\nreturn __out;`;var v=new Function(\"locals\",\"__esc\",r);return function(o){return v(o||{},S)}}var j={render:function(e,r){return _(String(e))(r)},compile:function(e){return _(String(e))},escapeXML:S};h.ejs=j;var H={\"&\":\"&amp;\",\"<\":\"&lt;\",\">\":\"&gt;\",'\"':\"&quot;\",\"'\":\"&#x27;\",\"`\":\"&#x60;\",\"=\":\"&#x3D;\"};function p(e){this.string=e}p.prototype.toString=p.prototype.toHTML=function(){return String(this.string)};function b(e){return e instanceof p?e.toString():e==null||e===!1?e===!1?\"false\":\"\":String(e).replace(/[&<>\"'`=]/g,function(r){return H[r]})}var c={};function A(e){for(var r=/\\{\\{(~?)(\\{?)([#\\/!>^]?)\\s*([\\s\\S]*?)\\s*(\\}?)(~?)\\}\\}/g,n={kind:\"root\",body:[]},a=[n],t=0,i,u=function(){return a[a.length-1]},s=function(M){var y=u();(y.inElse?y.elseBody:y.body).push(M)};i=r.exec(e);){i.index>t&&s({kind:\"text\",v:e.slice(t,i.index)}),t=r.lastIndex;var f=i[3],l=i[4];if(!(f===\"!\"||/^!/.test(l))){if(f===\"#\"){var v=l.split(/\\s+/),o={kind:\"block\",name:v[0],args:v.slice(1),body:[],elseBody:[],inElse:!1};s(o),a.push(o);continue}if(f===\"/\"){if(u().name!==l)throw new Error(l+\" doesn't match \"+u().name);a.pop();continue}if(f===\"\"&&l===\"else\"&&a.length>1){u().inElse=!0;continue}s({kind:i[2]?\"raw\":\"var\",expr:l})}}if(t<e.length&&s({kind:\"text\",v:e.slice(t)}),a.length>1)throw new Error(\"Parse error: missing {{/\"+u().name+\"}}\");return n}function g(e,r){if(e===\"this\"||e===\".\")return r.self;if(/^\"[\\s\\S]*\"$|^'[\\s\\S]*'$/.test(e))return e.slice(1,-1);if(/^-?\\d+(\\.\\d+)?$/.test(e))return Number(e);if(e===\"true\")return!0;if(e===\"false\")return!1;if(e.charAt(0)===\"@\")return r.data[e.slice(1)];for(var n=r,a=e;a.indexOf(\"../\")===0;)n=n.parent||n,a=a.slice(3);for(var t=a.replace(/^this\\./,\"\").split(\".\"),i=n.self,u=0;u<t.length;u++){if(i==null)return;i=i[t[u]]}return i}function m(e){return!(e==null||e===!1||e===\"\"||e===0||Array.isArray(e)&&e.length===0)}function w(e,r){var n=e.match(/\"[^\"]*\"|'[^']*'|\\S+/g)||[],a=n[0];if(n.length>1||c[a]){var t=c[a];if(!t)throw new Error('Missing helper: \"'+a+'\"');return t.apply(r.self,n.slice(1).map(function(i){return g(i,r)}).concat([{data:r.data,hash:{}}]))}return g(a,r)}function d(e,r){return e.map(function(n){if(n.kind===\"text\")return n.v;if(n.kind===\"var\")return b(w(n.expr,r));if(n.kind===\"raw\"){var a=w(n.expr,r);return a==null?\"\":String(a)}var t=n.args.length?g(n.args[0],r):void 0;if(n.name===\"if\")return d(m(t)?n.body:n.elseBody,r);if(n.name===\"unless\")return d(m(t)?n.elseBody:n.body,r);if(n.name===\"with\")return m(t)?d(n.body,{self:t,parent:r,data:r.data}):d(n.elseBody,r);if(n.name===\"each\"){if(t&&typeof t==\"object\"){var i=Array.isArray(t)?t.map(function(s,f){return f}):Object.keys(t);return i.length?i.map(function(s,f){return d(n.body,{self:t[s],parent:r,data:{index:f,key:s,first:f===0,last:f===i.length-1,root:r.data.root}})}).join(\"\"):d(n.elseBody,r)}return d(n.elseBody,r)}var u=c[n.name];if(!u)throw new Error('Missing helper: \"'+n.name+'\"');return u.apply(r.self,n.args.map(function(s){return g(s,r)}).concat([{fn:function(s){return d(n.body,{self:s,parent:r,data:r.data})},inverse:function(s){return d(n.elseBody,{self:s,parent:r,data:r.data})},data:r.data,hash:{}}]))}).join(\"\")}var E={compile:function(e){var r=A(String(e));return function(n){return d(r.body,{self:n||{},parent:null,data:{root:n}})}},registerHelper:function(e,r){c[e]=r},unregisterHelper:function(e){delete c[e]},SafeString:p,escapeExpression:b};h.handlebars=E,h.hbs=E,h[\"express-handlebars\"]={engine:function(){return function(){}}}})(globalThis);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A helper moves logic out of the template (Handlebars is logic-less); the template only calls it by name with its argument after a space. <code>#if</code> tests truthiness only, <code>#each</code> loops with <code>this</code>.</p>",
+      "solutionExplanationHtmlVi": "<p>Helper đưa logic ra khỏi template (Handlebars không chứa logic); template chỉ gọi nó theo tên, đối số đặt sau dấu cách. <code>#if</code> chỉ xét đúng/sai, <code>#each</code> lặp với <code>this</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "lib/core.js",
+          "lib/views.js",
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Admin, two items",
+              "vi": "Admin, hai phần tử"
+            },
+            "goi": "norm(module.exports.render({ title: 'hello, world!', isAdmin: true, items: ['Item1', 'Item2'] }))",
+            "chuanBi": "const norm = (h) => String(h).replace(/\\s+/g, ' ').replace(/\\s*(<[^>]+>)\\s*/g, '$1').trim();",
+            "mongDoi": "<h1>Hello, world!</h1><p>Welcome, admin!</p><ul><li>Item1</li><li>Item2</li></ul>"
+          },
+          {
+            "moTa": {
+              "en": "Not admin, empty list",
+              "vi": "Không phải admin, danh sách rỗng"
+            },
+            "goi": "norm(module.exports.render({ title: 'news', isAdmin: false, items: [] }))",
+            "chuanBi": "const norm = (h) => String(h).replace(/\\s+/g, ' ').replace(/\\s*(<[^>]+>)\\s*/g, '$1').trim();",
+            "mongDoi": "<h1>News</h1><p>Welcome, user!</p><ul></ul>"
+          },
+          {
+            "moTa": {
+              "en": "Hidden check 3",
+              "vi": "Kiểm ẩn 3"
+            },
+            "goi": "norm(module.exports.render({ isAdmin: false, items: ['<b>x</b>'] }))",
+            "chuanBi": "const norm = (h) => String(h).replace(/\\s+/g, ' ').replace(/\\s*(<[^>]+>)\\s*/g, '$1').trim();",
+            "mongDoi": "<h1></h1><p>Welcome, user!</p><ul><li>&lt;b&gt;x&lt;/b&gt;</li></ul>",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>toUpperCase()</code> on the whole string — the bug of the slide.|||<code>toUpperCase()</code> cả chuỗi — đúng lỗi của slide."
+        },
+        {
+          "loi": "<code>{{#if isAdmin == true}}</code>: Handlebars has no comparison inside if.|||<code>{{#if isAdmin == true}}</code>: Handlebars không có phép so sánh trong if."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "helper",
+          "vi": "hàm trợ giúp của template"
+        },
+        {
+          "en": "logic-less",
+          "vi": "không chứa logic"
+        }
+      ]
+    }
+  ]
+}

@@ -185,6 +185,7 @@ const OUTLINE: { n: number; title: string }[] = [
   { n: 55, title: 'N2 総復習 — Ôn tập & thi thử N2' },
   // Phụ lục (09/11/2026): kho từ vựng bổ sung theo chủ đề — bù cho đủ mức từ vựng N3 / N2 thường nêu.
   { n: 56, title: '語彙 N3 — Kho từ vựng N3 bổ sung theo chủ đề (~1.200 từ có câu ví dụ)' },
+  { n: 57, title: '語彙 N2 — Kho từ vựng N2 bổ sung theo chủ đề (~1.500 từ có câu ví dụ)' },
 ];
 
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({

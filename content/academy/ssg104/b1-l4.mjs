@@ -58,10 +58,10 @@ export const b1l4 = [
   slide(D, 6, 'Basics — similarity matters',
     `<p class="y-chinh">🎯 We do not compare ourselves with just anyone.</p>
      <p>A professional athlete is far more likely to compare his or her performance against <em>other professionals</em> than against an amateur.</p>
-     <p class="meo">💡 Practical consequence in a class: you feel your mark against your group, not against every student in the country. Slide 20 ("local") turns this into a named factor.</p>`,
+     <p class="meo">💡 Practical consequence in a class: you feel your mark against your group, not against every student in the country. Slides 20–21 ("local") turn this into a named factor.</p>`,
     `<p class="y-chinh">🎯 Ta không so mình với bất kỳ ai.</p>
      <p>Một vận động viên chuyên nghiệp có xu hướng so thành tích với <em>vận động viên chuyên nghiệp khác</em> nhiều hơn hẳn so với dân nghiệp dư.</p>
-     <p class="meo">💡 Hệ quả thực tế trong lớp: bạn cảm nhận điểm của mình so với nhóm mình, chứ không so với mọi sinh viên cả nước. Slide 20 ("local") biến điều này thành một yếu tố có tên.</p>`),
+     <p class="meo">💡 Hệ quả thực tế trong lớp: bạn cảm nhận điểm của mình so với nhóm mình, chứ không so với mọi sinh viên cả nước. Slide 20–21 ("local") biến điều này thành một yếu tố có tên.</p>`),
 
   slide(D, 7, 'Relevance and similarity (Festinger, 1954)',
     `<p class="y-chinh">🎯 The comparison dimension must be <strong>relevant to the self</strong>.</p>
@@ -77,15 +77,29 @@ export const b1l4 = [
        <li><span class="nhan">Upward comparison</span> — with people who are better than us.</li>
        <li><span class="nhan">Downward comparison</span> — with people who are worse off than us.</li>
      </ul>
-     <p class="meo">💡 Neither direction is automatically good or bad. Slide 17 shows the same upward comparison producing a threat for one person and a challenge for another.</p>`,
+     <p class="meo">💡 Neither direction is automatically good or bad. Slides 16–17 show the same upward comparison producing a threat for one person and a challenge for another.</p>`,
     `<p class="y-chinh">🎯 So sánh xã hội đi <strong>hai chiều</strong>.</p>
      <ul>
        <li><span class="nhan">So sánh lên</span> — với người giỏi hơn ta.</li>
        <li><span class="nhan">So sánh xuống</span> — với người kém hơn ta.</li>
      </ul>
-     <p class="meo">💡 Không chiều nào tự nó tốt hay xấu. Slide 17 cho thấy cùng một so sánh lên lại thành mối đe doạ với người này và thành thử thách với người kia.</p>`),
+     <p class="meo">💡 Không chiều nào tự nó tốt hay xấu. Slide 16–17 cho thấy cùng một so sánh lên lại thành mối đe doạ với người này và thành thử thách với người kia.</p>`),
 
-  slide(D, 9, 'Consequences of social comparison (3)',
+  slide(D, 9, 'The effects of social comparison — a 2×2 table',
+    `<p class="y-chinh">🎯 A table crossing the two directions (upward, downward) with two kinds of effect (positive, negative).</p>
+     <ul>
+       <li><span class="nhan">Upward comparison</span> — positive effects: <strong>hope, inspiration</strong>; negative effects: <strong>dissatisfaction, envy</strong>.</li>
+       <li><span class="nhan">Downward comparison</span> — positive effect: <strong>gratitude</strong>; negative effect: <strong>scorn</strong>.</li>
+     </ul>
+     <p class="meo">💡 Every cell is possible, so "upward is bad, downward is good" is wrong. Looking at a stronger classmate's code can inspire you or make you envious; looking at a weaker one can make you grateful for what you have learned or make you look down on them. Slides 16–17 explain what decides which cell you land in.</p>`,
+    `<p class="y-chinh">🎯 Một bảng bắt chéo hai hướng (so sánh lên, so sánh xuống) với hai loại tác động (tích cực, tiêu cực).</p>
+     <ul>
+       <li><span class="nhan">So sánh lên</span> — tích cực: <strong>hy vọng, cảm hứng</strong> (hope, inspiration); tiêu cực: <strong>bất mãn, ghen tị</strong> (dissatisfaction, envy).</li>
+       <li><span class="nhan">So sánh xuống</span> — tích cực: <strong>biết ơn</strong> (gratitude); tiêu cực: <strong>coi thường</strong> (scorn).</li>
+     </ul>
+     <p class="meo">💡 Ô nào cũng có thể xảy ra, nên câu "so sánh lên là xấu, so sánh xuống là tốt" là sai. Nhìn code của bạn cùng lớp giỏi hơn có thể truyền cảm hứng hoặc làm bạn ghen tị; nhìn bạn kém hơn có thể làm bạn biết ơn những gì mình đã học được, hoặc khiến bạn coi thường người ta. Slide 16–17 giải thích điều gì quyết định bạn rơi vào ô nào.</p>`),
+
+  slide(D, 10, 'Consequences of social comparison (3)',
     `<p class="y-chinh">🎯 Three named effects, each with the slide's own example.</p>
      <ul>
        <li><span class="nhan">Impacts self-esteem</span> — having the best final score in a class can raise it considerably.</li>
@@ -101,7 +115,7 @@ export const b1l4 = [
      </ul>
      <p class="meo">💡 Để ý cái thứ ba: tính cạnh tranh dâng lên <em>ở gần đỉnh</em>, không phải ở đáy. Slide 22 giải thích bằng hiệu ứng "gần một chuẩn mốc".</p>`),
 
-  slide(D, 10, 'Consequences — jealousy, regret, or motivation',
+  slide(D, 11, 'Consequences — jealousy, regret, or motivation',
     `<p class="y-chinh">🎯 The same comparison can produce jealousy, regret <em>or</em> motivation.</p>
      <p><span class="nhan">Designed use</span> — lapel stickers and online badges saying "I voted" or "I gave blood" deliberately leverage social comparison to produce positive social outcomes.</p>
      <p class="meo">💡 That is the honest version of this lesson: comparison is a lever, and someone is always pulling it. Better to know which direction you are being pulled.</p>`,
@@ -109,7 +123,7 @@ export const b1l4 = [
      <p><span class="nhan">Cách dùng có chủ đích</span> — huy hiệu cài áo và huy hiệu trực tuyến kiểu "Tôi đã đi bầu" hay "Tôi đã hiến máu" chính là khai thác so sánh xã hội để tạo ra kết quả xã hội tích cực.</p>
      <p class="meo">💡 Đó là phiên bản trung thực của bài học: so sánh là một cái đòn bẩy, và luôn có ai đó đang bẩy nó. Biết mình đang bị bẩy về hướng nào vẫn hơn.</p>`),
 
-  slide(D, 11, 'The Self-Evaluation Maintenance (SEM) model — Tesser, 1988',
+  slide(D, 12, 'The Self-Evaluation Maintenance (SEM) model — Tesser, 1988',
     `<p class="y-chinh">🎯 SEM builds on social comparison theory and adds one variable: <strong>how close you are to the other person</strong>.</p>
      <ul>
        <li>SEM points to psychological forces that help maintain our self-evaluation and self-esteem.</li>
@@ -125,7 +139,7 @@ export const b1l4 = [
      </ul>
      <p class="meo">💡 Dự đoán ngược trực giác: ở chiều mà bạn coi trọng, thành công của <em>bạn thân</em> đe doạ bạn nhiều hơn thành công của người lạ. Hai slide sau chứng minh bằng thực nghiệm.</p>`),
 
-  slide(D, 12, 'The SEM experiment — Tesser & Smith (1980), setup',
+  slide(D, 13, 'The SEM experiment — Tesser & Smith (1980), setup',
     `<p class="y-chinh">🎯 A word game in which participants could receive clues from a partner.</p>
      <ul>
        <li>Clues helped the player guess the correct word.</li>
@@ -141,7 +155,7 @@ export const b1l4 = [
      </ul>
      <p class="meo">💡 Hai yếu tố bắt chéo = bốn điều kiện. Nhận ra thiết kế đó tự nó đã là kỹ năng đáng điểm: nó cho phép bạn nói kết quả dựa trên phép so sánh nào.</p>`),
 
-  slide(D, 13, 'The SEM experiment — results',
+  slide(D, 14, 'The SEM experiment — results',
     `<p class="y-chinh">🎯 The result flips depending on whether the task felt self-relevant.</p>
      <ul>
        <li><span class="nhan">Task = intelligence (self-relevant)</span> — participants gave <strong>harder</strong> clues to a friend than to a stranger. A competitive uptick tied to closeness.</li>
@@ -155,7 +169,7 @@ export const b1l4 = [
      </ul>
      <p class="pitfall co-tieu-de"><strong>Cốt lõi:</strong> ta giúp bạn bè nhiều hơn — trừ đúng chỗ mà thành công của họ sẽ làm lu mờ ta ở thứ ta đã đặt cược bản thân vào.</p>`),
 
-  slide(D, 14, 'SEM in organisations — hiring below your own level',
+  slide(D, 15, 'SEM in organisations — hiring below your own level',
     `<p class="y-chinh">🎯 The uncomfortable organisational prediction of SEM.</p>
      <p>Managers may prefer <strong>sub-optimal candidates</strong> who are unlikely to challenge their standing in the organisation.</p>
      <p class="meo">💡 In your group project the same force appears as: the strongest member quietly keeps the most visible task. Naming the mechanism is how a team defuses it.</p>`,
@@ -163,7 +177,7 @@ export const b1l4 = [
      <p>Người quản lý có thể thích chọn <strong>ứng viên kém tối ưu</strong>, những người ít có khả năng đe doạ vị thế của họ trong tổ chức.</p>
      <p class="meo">💡 Trong dự án nhóm, lực này hiện ra dưới dạng: thành viên mạnh nhất lặng lẽ ôm phần việc dễ thấy nhất. Gọi tên cơ chế chính là cách nhóm vô hiệu hoá nó.</p>`),
 
-  slide(D, 15, 'Individual differences — mastery goals',
+  slide(D, 16, 'Individual differences — mastery goals',
     `<p class="y-chinh">🎯 The effect of comparison depends on personality and individual differences.</p>
      <p>People with <strong>mastery goals</strong> may read an upward comparison not as a threat to the self but as a <em>challenge</em>, and as a hopeful sign that a certain level of performance is reachable.</p>
      <p class="meo">💡 Mastery goal = "I want to get better at this". Performance goal = "I want to look good at this". The first survives an upward comparison; the second does not.</p>`,
@@ -171,7 +185,7 @@ export const b1l4 = [
      <p>Người theo <strong>mục tiêu làm chủ (mastery goal)</strong> có thể đọc một so sánh lên không như mối đe doạ mà như một <em>thử thách</em>, và như dấu hiệu đáng hy vọng rằng mức năng lực ấy là với tới được.</p>
      <p class="meo">💡 Mục tiêu làm chủ = "tôi muốn giỏi lên". Mục tiêu thể hiện = "tôi muốn trông giỏi". Cái đầu sống sót qua một so sánh lên; cái sau thì không.</p>`),
 
-  slide(D, 16, 'Individual differences — fixed vs growth mindset (Dweck, 2007)',
+  slide(D, 17, 'Individual differences — fixed vs growth mindset (Dweck, 2007)',
     `<p class="y-chinh">🎯 The second individual difference, and the course names its author.</p>
      <ul>
        <li><span class="nhan">Fixed mindset</span> — abilities and talents cannot change. An upward comparison therefore threatens the self and brings the negative consequences: competitive behaviour, envy, unhappiness.</li>
@@ -185,7 +199,7 @@ export const b1l4 = [
      </ul>
      <p class="meo">💡 Cùng một sự việc, hai cách đọc, hai kết cục khác nhau. Đây là ý dùng được ngay nhất trong cả bài.</p>`),
 
-  slide(D, 17, 'Situational factors — the four',
+  slide(D, 18, 'Situational factors — the four',
     `<p class="y-chinh">🎯 Four factors, each unpacked on its own slide.</p>
      <ol>
        <li><span class="nhan">Number</span> — how many people you could compare with.</li>
@@ -201,7 +215,7 @@ export const b1l4 = [
        <li><span class="nhan">Ranh giới nhóm xã hội</span> — phép so sánh có vượt qua ranh giới nhóm hay không.</li>
      </ol>`),
 
-  slide(D, 18, 'Number — the N-Effect',
+  slide(D, 19, 'Number — the N-Effect',
     `<p class="y-chinh">🎯 As the number of comparison targets rises, social comparison <strong>decreases</strong>.</p>
      <p><span class="nhan">The slide's race</span> — competitors of similar ability, top 20% win a prize. Do you try harder with 10 runners or 100? The N-Effect (Garcia & Tor, 2009; Tor & Garcia, 2010) says <strong>10</strong>.</p>
      <p>As competitors multiply, comparison — one of the engines of competitive motivation — matters less.</p>
@@ -211,7 +225,7 @@ export const b1l4 = [
      <p>Đối thủ càng đông, so sánh — một trong những động cơ của động lực cạnh tranh — càng ít quan trọng.</p>
      <p class="meo">💡 Ví dụ lớp học ngay trên slide: số người thuyết trình càng nhiều thì bạn càng thấy ít áp lực so sánh.</p>`),
 
-  slide(D, 19, 'Local — we compare near, not far',
+  slide(D, 20, 'Local — we compare near, not far',
     `<p class="y-chinh">🎯 People are more influenced by comparisons that are <strong>local</strong> than by broad, general ones.</p>
      <p><span class="nhan">The height example</span> — you could compare your height with a friend, a group of friends, colleagues, or the average for your city. People generally use the local one.</p>
      <p>So being among the tallest in your circle of friends lifts your self-esteem even if you are among the shortest nationally.</p>
@@ -221,13 +235,13 @@ export const b1l4 = [
      <p>Nên cao nhất trong nhóm bạn bè vẫn nâng lòng tự trọng của bạn, dù xét trên cả nước bạn thuộc nhóm thấp.</p>
      <p class="meo">💡 Đây là lý do đổi môi trường làm đổi hình ảnh bản thân mà không đổi chính bạn: mốc cục bộ mới, vẫn con người cũ.</p>`),
 
-  slide(D, 20, 'Local — comparisons to friends are the most influential',
+  slide(D, 21, 'Local — comparisons to friends are the most influential',
     `<p class="y-chinh">🎯 Among all local comparisons, comparisons to friends weigh the most.</p>
-     <p class="meo">💡 Put this beside the SEM result from slide 13 and you get the lesson's sharpest claim: the people whose success affects you most are the ones closest to you.</p>`,
+     <p class="meo">💡 Put this beside the SEM result from slide 14 and you get the lesson's sharpest claim: the people whose success affects you most are the ones closest to you.</p>`,
     `<p class="y-chinh">🎯 Trong mọi so sánh cục bộ, so với bạn bè là nặng ký nhất.</p>
-     <p class="meo">💡 Đặt cạnh kết quả SEM ở slide 13, ta có khẳng định sắc nhất của bài: những người mà thành công của họ tác động tới bạn nhiều nhất lại chính là những người gần bạn nhất.</p>`),
+     <p class="meo">💡 Đặt cạnh kết quả SEM ở slide 14, ta có khẳng định sắc nhất của bài: những người mà thành công của họ tác động tới bạn nhiều nhất lại chính là những người gần bạn nhất.</p>`),
 
-  slide(D, 21, 'Proximity to a standard',
+  slide(D, 22, 'Proximity to a standard',
     `<p class="y-chinh">🎯 Comparison concerns spike <strong>near a threshold</strong> — a #1 ranking or any qualitative line.</p>
      <p><span class="nhan">Childhood example</span> — shout "first one to the tree is the coolest person in the world" and the children nearest the tree start tugging at each other. Shout "last one there is a rotten egg" and the children in last place do the tugging.</p>
      <p><span class="nhan">Ranking evidence</span> — rivals ranked #2 and #3 are less willing to maximise joint gains if the opponent gains more; rivals ranked #202 and #203 do not mind (Garcia, Tor & Gonzalez, 2006; Garcia & Tor, 2007).</p>
@@ -237,7 +251,7 @@ export const b1l4 = [
      <p><span class="nhan">Bằng chứng từ bảng xếp hạng</span> — đối thủ hạng 2 và 3 ít chịu tối đa hoá lợi ích chung nếu điều đó làm đối phương lợi hơn; đối thủ hạng 202 và 203 thì chẳng bận tâm (Garcia, Tor & Gonzalez, 2006; Garcia & Tor, 2007).</p>
      <p class="meo">💡 Vậy áp lực so sánh không nằm ở thứ hạng tuyệt đối mà ở khoảng cách tới một lằn ranh có ý nghĩa.</p>`),
 
-  slide(D, 22, 'Social category lines',
+  slide(D, 23, 'Social category lines',
     `<p class="y-chinh">🎯 Comparison also happens <strong>between groups</strong>, and it bites hardest across category lines.</p>
      <p><span class="nhan">The prom example</span> — deciding the music by flipping a coin (heads hip-hop, tails pop) is fine while everyone is simply "high school seniors". But if all the boys want hip-hop and all the girls want pop, the coin flip stops being neutral: it now privileges one social category over another (Garcia & Miller, 2007).</p>
      <p class="meo">💡 Same procedure, different meaning, because the line the decision falls on changed. Worth remembering when your group votes on anything.</p>`,
@@ -245,7 +259,7 @@ export const b1l4 = [
      <p><span class="nhan">Ví dụ tiệc prom</span> — quyết định nhạc bằng tung đồng xu (mặt ngửa hip-hop, mặt sấp pop) thì ổn khi tất cả chỉ đơn giản là "học sinh cuối cấp". Nhưng nếu toàn bộ con trai muốn hip-hop còn toàn bộ con gái muốn pop, tung đồng xu thôi trung lập: giờ nó ưu ái một nhóm xã hội hơn nhóm kia (Garcia & Miller, 2007).</p>
      <p class="meo">💡 Vẫn thủ tục đó, ý nghĩa lại khác, vì lằn ranh mà quyết định rơi vào đã đổi. Đáng nhớ mỗi khi nhóm bạn bỏ phiếu chuyện gì đó.</p>`),
 
-  slide(D, 23, 'Related phenomenon — the frog pond effect',
+  slide(D, 24, 'Related phenomenon — the frog pond effect',
     `<p class="y-chinh">🎯 "As a frog, would you rather be in a small pond where you are a big frog, or a large pond where you are a small frog?"</p>
      <p>People generally had a <strong>better academic self-concept</strong> as a big frog in a small pond (top student at a local high school) than as a small frog in a large one (one of many good students at an Ivy League university) — Marsh, Trautwein, Lüdtke & Köller (2008).</p>
      <p class="meo">💡 Note what it does and does not say: it is about self-<em>concept</em>, not about which pond teaches you more. Both halves matter when you pick a place to study or work.</p>`,
@@ -253,7 +267,7 @@ export const b1l4 = [
      <p>Nhìn chung người ta có <strong>hình ảnh học thuật về bản thân tốt hơn</strong> khi làm ếch to trong ao nhỏ (đứng đầu một trường trung học địa phương) so với làm ếch bé trong ao lớn (một trong nhiều sinh viên giỏi ở đại học Ivy League) — Marsh, Trautwein, Lüdtke & Köller (2008).</p>
      <p class="meo">💡 Để ý nó nói gì và không nói gì: nó nói về <em>hình ảnh bản thân</em>, không nói ao nào dạy bạn được nhiều hơn. Cả hai vế đều đáng cân khi chọn chỗ học hoặc chỗ làm.</p>`),
 
-  slide(D, 24, 'Related phenomenon — the Dunning-Kruger effect',
+  slide(D, 25, 'Related phenomenon — the Dunning-Kruger effect',
     `<p class="y-chinh">🎯 The least experienced and least knowledgeable people are <strong>over-confident</strong>.</p>
      <p>They do not know what they do not know, and are therefore more likely to overestimate their own abilities.</p>
      <p class="meo">💡 It belongs in this lesson because the cure is comparison: you cannot gauge your chess ability without someone to measure against — which is exactly the question the next slide opens with.</p>`,
@@ -261,7 +275,7 @@ export const b1l4 = [
      <p>Họ không biết là mình không biết, nên dễ đánh giá năng lực bản thân cao hơn thực tế.</p>
      <p class="meo">💡 Nó nằm trong bài này vì thuốc chữa chính là so sánh: bạn không thể đo trình cờ vua của mình nếu chẳng có ai để đối chiếu — đúng câu hỏi mà slide sau mở đầu.</p>`),
 
-  slide(D, 25, 'Conclusions',
+  slide(D, 26, 'Conclusions',
     `<p class="y-chinh">🎯 The lesson closes by refusing the easy moral.</p>
      <ul>
        <li>Social comparison is a natural psychological tendency with a powerful influence on how we feel and behave.</li>
@@ -269,7 +283,7 @@ export const b1l4 = [
        <li>It has many positive aspects.</li>
        <li>Its engine can provide the push you need to rise to the occasion, raise motivation and make progress toward your goals.</li>
      </ul>
-     <p class="meo">💡 Exam-safe summary: comparison is a mechanism, and its effect depends on direction (slide 8), mindset (slide 16) and situation (slides 18–22).</p>`,
+     <p class="meo">💡 Exam-safe summary: comparison is a mechanism, and its effect depends on direction (slide 8), mindset (slides 16–17) and situation (slides 18–23).</p>`,
     `<p class="y-chinh">🎯 Bài kết lại bằng cách từ chối bài học đạo đức dễ dãi.</p>
      <ul>
        <li>So sánh xã hội là xu hướng tâm lý tự nhiên, ảnh hưởng mạnh tới cách ta cảm nhận và hành xử.</li>
@@ -277,21 +291,17 @@ export const b1l4 = [
        <li>Nó có nhiều mặt tích cực.</li>
        <li>Cỗ máy so sánh có thể cho bạn cú đẩy cần thiết để vươn lên đúng lúc, tăng động lực và tiến tới mục tiêu.</li>
      </ul>
-     <p class="meo">💡 Tóm tắt an toàn khi thi: so sánh là một cơ chế, tác dụng của nó tuỳ hướng (slide 8), tuỳ tư duy (slide 16) và tuỳ tình huống (slide 18–22).</p>`),
+     <p class="meo">💡 Tóm tắt an toàn khi thi: so sánh là một cơ chế, tác dụng của nó tuỳ hướng (slide 8), tuỳ tư duy (slide 16–17) và tuỳ tình huống (slide 18–23).</p>`),
 
-  slide(D, 26, 'Discussion questions',
+  slide(D, 27, 'Discussion questions',
     `<p class="y-chinh">🎯 Three questions, and what each is really testing.</p>
      <p><span class="nhan">1. What do you compare yourself on — and does everyone use the same dimensions?</span> The answer the lesson wants: dimensions differ because relevance to the self differs (slide 7).</p>
-     <p><span class="nhan">2. How can comparisons help you?</span> Use slide 15–16: upward comparison as challenge under a mastery goal or growth mindset.</p>
+     <p><span class="nhan">2. How can comparisons help you?</span> Use slides 16–17: upward comparison as challenge under a mastery goal or growth mindset.</p>
      <p><span class="nhan">3. A time you compared yourself with your own past performance — upward or downward?</span> Comparing with your past self is temporal comparison; label it by whether the past self did better (upward) or worse (downward), and say what it did to your motivation.</p>`,
     `<p class="y-chinh">🎯 Ba câu hỏi, và mỗi câu thực chất đang kiểm cái gì.</p>
      <p><span class="nhan">1. Bạn so mình ở những chiều nào — mọi người có dùng chung các chiều đó không?</span> Câu trả lời bài học muốn nghe: các chiều khác nhau vì mức liên quan tới bản thân khác nhau (slide 7).</p>
-     <p><span class="nhan">2. So sánh giúp được gì cho bạn?</span> Dùng slide 15–16: so sánh lên như một thử thách, dưới mục tiêu làm chủ hoặc tư duy phát triển.</p>
+     <p><span class="nhan">2. So sánh giúp được gì cho bạn?</span> Dùng slide 16–17: so sánh lên như một thử thách, dưới mục tiêu làm chủ hoặc tư duy phát triển.</p>
      <p><span class="nhan">3. Lần bạn so mình với chính thành tích quá khứ của mình — lên hay xuống?</span> So với bản thân trong quá khứ là so sánh theo thời gian; gán nhãn theo việc con người cũ làm tốt hơn (lên) hay kém hơn (xuống), rồi nói nó tác động thế nào tới động lực của bạn.</p>`),
-
-  slide(D, 27, 'Discussion questions (cont.)',
-    `<p class="y-chinh">🎯 Continuation of the discussion block — another Activity-shaped exercise (15% of the subject).</p>`,
-    `<p class="y-chinh">🎯 Phần tiếp của khối thảo luận — lại một bài tập đúng dạng Activity (15% điểm môn).</p>`),
 
   slide(D, 28, 'Q&A',
     `<p class="y-chinh">🎯 Closing slide. Session I is now complete.</p>
@@ -299,7 +309,7 @@ export const b1l4 = [
      <ol>
        <li>A team is a cohesive, purposeful work group (Lesson 1).</li>
        <li>Cooperation is rational only when the game repeats or the situation supports it (Lesson 2).</li>
-       <li>Groups shape identity and can decide badly in four named ways (Lesson 3).</li>
+       <li>Groups shape identity and can decide badly in three named ways — group polarization, the common knowledge effect, groupthink (Lesson 3).</li>
        <li>We measure ourselves against others, and the effect depends on direction, mindset and situation (Lesson 4).</li>
      </ol>`,
     `<p class="y-chinh">🎯 Slide kết. Buổi I tới đây là trọn vẹn.</p>
@@ -307,7 +317,7 @@ export const b1l4 = [
      <ol>
        <li>Đội là một nhóm làm việc gắn kết và có mục đích (Bài 1).</li>
        <li>Hợp tác chỉ hợp lý khi ván chơi lặp lại hoặc khi tình huống nâng đỡ nó (Bài 2).</li>
-       <li>Nhóm nhào nặn bản sắc, và có thể quyết định sai theo bốn cách được gọi tên (Bài 3).</li>
+       <li>Nhóm nhào nặn bản sắc, và có thể quyết định sai theo ba cách được gọi tên — phân cực nhóm, hiệu ứng tri thức chung, groupthink (Bài 3).</li>
        <li>Ta đo mình bằng người khác, và tác động tuỳ hướng so, tuỳ tư duy, tuỳ tình huống (Bài 4).</li>
      </ol>`),
 
@@ -318,7 +328,7 @@ export const b1l4 = [
 
   bi(
     `<h3>✅ Why this lesson matters for your own marks</h3>
-     <p>Three ideas here describe the room you are sitting in: the N-Effect (a big class lowers comparison pressure), the frog pond effect (your self-concept follows your local group), and SEM (a close friend's success stings more). None of them appeared anywhere in the previous version of this course.</p>`,
+     <p>Three ideas here describe the room you are sitting in: the N-Effect (a big class lowers comparison pressure), the frog pond effect (your self-concept follows your local group), and SEM (a close friend's success stings more).</p>`,
     `<h3>✅ Vì sao bài này liên quan trực tiếp tới điểm của bạn</h3>
-     <p>Ba ý ở đây mô tả đúng căn phòng bạn đang ngồi: hiệu ứng N (lớp đông làm giảm áp lực so sánh), hiệu ứng ao làng (hình ảnh bản thân bám theo nhóm cục bộ), và SEM (thành công của bạn thân lại nhói hơn). Không ý nào trong số đó từng xuất hiện ở phiên bản cũ của khoá học này.</p>`),
+     <p>Ba ý ở đây mô tả đúng căn phòng bạn đang ngồi: hiệu ứng N (lớp đông làm giảm áp lực so sánh), hiệu ứng ao làng (hình ảnh bản thân bám theo nhóm cục bộ), và SEM (thành công của bạn thân lại nhói hơn).</p>`),
 ].join('\n');

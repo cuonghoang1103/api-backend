@@ -597,12 +597,12 @@ export default {
 <li><strong>This slide uses the same non-standard template as slide 59.</strong> No Sydney shield, a thin rule at the far left, and a footer reading "…niversity of Sydney" with "Page 1". Both inserted slides happen to be the practical, apply-it openers.</li>
 <li><strong>The Nine Dot Problem is the canonical assumption puzzle.</strong> Nine dots in a 3 by 3 grid. Join all nine using four straight lines, drawn without lifting the pen and without retracing. Almost everybody fails, and everybody fails for the same reason.</li>
 </ul>
-<p class="dap-an">✅ Answer. Label the dots by column and row, with (1,1) at top-left and (3,3) at bottom-right. Line 1: start at (1,1), go through (2,1) and (3,1) and <strong>keep going</strong> to an empty point level with the top row, call it (5,1). Line 2: from there go diagonally down-left through (3,2) and (2,3), continuing to (1,4) — again outside the grid. Line 3: go straight up the left column through (1,3), (1,2), (1,1)… in the standard version, line 3 runs up from (1,4) through (1,3) and (1,2) to (1,1); line 4 then runs diagonally down-right through (2,2) and (3,3). All nine dots are covered by four lines. The solution <strong>only exists outside the square</strong>.</p>
+<p class="dap-an">✅ Answer. Label the dots by column and row, with (1,1) at top-left and (3,3) at bottom-right. Line 1: start at (1,1), go through (2,1) and (3,1) and <strong>keep going</strong> to an empty point level with the top row, call it (4,1). Line 2: from there go diagonally down-left through (3,2) and (2,3), continuing to (1,4) — again outside the grid. Line 3: go straight up the left column through (1,3), (1,2), (1,1)… in the standard version, line 3 runs up from (1,4) through (1,3) and (1,2) to (1,1); line 4 then runs diagonally down-right through (2,2) and (3,3). All nine dots are covered by four lines. The solution <strong>only exists outside the square</strong>.</p>
 <table>
 <tr><th>Unstated assumption</th><th>Was it in the instructions?</th><th>Effect</th></tr>
 <tr><td>The lines must stay inside the square formed by the dots</td><td><strong>No</strong> — nobody ever said it</td><td>This single invented rule makes the puzzle impossible</td></tr>
 <tr><td>Lines must start and end on a dot</td><td>No</td><td>Blocks the overshoot that the solution needs</td></tr>
-<tr><td>Each line must cover exactly three dots</td><td>No</td><td>The real solution has lines covering three, three, three and three — but only because of the overshoot, not by design</td></tr>
+<tr><td>Each line must cover exactly three dots</td><td>No</td><td>In the real solution the four lines pass through three, two, three and three dots (the corner dot (1,1) is crossed twice) — no rule says every line must hit three</td></tr>
 </table>
 <ul>
 <li><strong>The lesson, stated exactly.</strong> The puzzle is not hard; the self-imposed boundary is. This is where the English phrase "think outside the box" comes from — literally this box.</li>
@@ -615,12 +615,12 @@ export default {
 <li><strong>Slide này dùng đúng cái template bất thường của slide 59.</strong> Không khiên Sydney, một vạch mảnh sát mép trái, chân trang ghi "…niversity of Sydney" và "Page 1". Hai slide chèn thêm đều tình cờ là hai slide mở đầu phần THỰC HÀNH.</li>
 <li><strong>Bài Chín Chấm là bài toán giả định kinh điển.</strong> Chín chấm xếp lưới 3 hàng 3 cột. Hãy nối cả chín chấm bằng BỐN đoạn thẳng, vẽ liền tay không nhấc bút và không vẽ đè lại. Gần như ai cũng thất bại, và ai cũng thất bại vì CÙNG một lý do.</li>
 </ul>
-<p class="dap-an">✅ Đáp án. Đánh dấu chấm theo (cột, hàng), (1,1) ở góc trên trái và (3,3) ở góc dưới phải. Đoạn 1: bắt đầu ở (1,1), đi qua (2,1), (3,1) rồi <strong>ĐI TIẾP</strong> tới một điểm trống ngang hàng trên, gọi là (5,1). Đoạn 2: từ đó đi chéo xuống trái qua (3,2) và (2,3), rồi đi tiếp tới (1,4) — lại nằm NGOÀI lưới. Đoạn 3: từ (1,4) đi thẳng lên cột trái qua (1,3), (1,2) tới (1,1). Đoạn 4: từ (1,1) đi chéo xuống phải qua (2,2) và (3,3). Cả chín chấm được phủ bằng bốn đoạn. Lời giải <strong>CHỈ tồn tại ở bên ngoài hình vuông</strong>.</p>
+<p class="dap-an">✅ Đáp án. Đánh dấu chấm theo (cột, hàng), (1,1) ở góc trên trái và (3,3) ở góc dưới phải. Đoạn 1: bắt đầu ở (1,1), đi qua (2,1), (3,1) rồi <strong>ĐI TIẾP</strong> tới một điểm trống ngang hàng trên, gọi là (4,1). Đoạn 2: từ đó đi chéo xuống trái qua (3,2) và (2,3), rồi đi tiếp tới (1,4) — lại nằm NGOÀI lưới. Đoạn 3: từ (1,4) đi thẳng lên cột trái qua (1,3), (1,2) tới (1,1). Đoạn 4: từ (1,1) đi chéo xuống phải qua (2,2) và (3,3). Cả chín chấm được phủ bằng bốn đoạn. Lời giải <strong>CHỈ tồn tại ở bên ngoài hình vuông</strong>.</p>
 <table>
 <tr><th>Giả định ngầm</th><th>Đề bài có nói không?</th><th>Hậu quả</th></tr>
 <tr><td>Các đoạn thẳng phải nằm TRONG hình vuông do chín chấm tạo ra</td><td><strong>KHÔNG</strong> — chưa ai từng nói thế</td><td>Đúng một luật tự bịa này làm bài toán thành vô nghiệm</td></tr>
 <tr><td>Đoạn thẳng phải bắt đầu và kết thúc trên một cái chấm</td><td>Không</td><td>Chặn mất cú vẽ lố ra ngoài mà lời giải cần</td></tr>
-<tr><td>Mỗi đoạn phải phủ đúng ba chấm</td><td>Không</td><td>Lời giải thật có các đoạn phủ ba, ba, ba và ba chấm — nhưng nhờ vẽ lố ra ngoài, chứ không phải do thiết kế</td></tr>
+<tr><td>Mỗi đoạn phải phủ đúng ba chấm</td><td>Không</td><td>Trong lời giải thật, bốn đoạn đi qua lần lượt ba, hai, ba và ba chấm (chấm góc (1,1) được đi qua hai lần) — không có luật nào bắt mỗi đoạn phải phủ đủ ba</td></tr>
 </table>
 <ul>
 <li><strong>Bài học, nói cho chính xác.</strong> Bài toán không khó; cái ranh giới TỰ ÁP ĐẶT mới khó. Đây chính là gốc của thành ngữ tiếng Anh "think outside the box" — đúng nghĩa đen cái hộp này.</li>

@@ -69,7 +69,7 @@ export default {
     'osg202-on-ch5': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/05-vao-ra/05-05-thuc-hanh-chuong-5-tron-33547759.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg6-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/06-be-tac/06-01-slide-be-tac-tron-bd682a4f.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-on-ch6': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/06-be-tac/06-04-thuc-hanh-chuong-6-tron-47d1465a.mp4' }, defaultVideoTrack: 'VI'},
-    'osg202-slide-cs1-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/14-chuyen-sau-hdh-trong-backend/14-01-slide-cs1-tien-trinh-linux-a-c8f33310.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-slide-cs1-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/14-chuyen-sau-hdh-trong-backend/14-01-slide-cs1-tien-trinh-linux-tron-e0df2326.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-ae743a2c.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-ae743a2c.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-tai-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-ae743a2c.mp4' }, defaultVideoTrack: 'VI'},
@@ -92,6 +92,7 @@ export default {
     'osg202-slide-osg10-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/11-unix-linux-android/11-03-slide-android-tron-02d4bedf.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-slide-osg11-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/12-windows/12-02-slide-windows-ben-trong-tron-0690b63a.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-on-ch11': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/12-windows/12-03-thuc-hanh-chuong-11-tron-c69d46b4.mp4' }, defaultVideoTrack: 'VI'},
-    'osg202-on-ch12': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/13-thiet-ke-he-dieu-hanh/13-02-thuc-hanh-chuong-12-tron-a069f705.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-on-ch12': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/13-thiet-ke-he-dieu-hanh/13-02-thuc-hanh-chuong-12-tron-a069f705.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-slide-osg12-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/13-thiet-ke-he-dieu-hanh/13-01-slide-thiet-ke-hdh-tron-7dcf163e.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

@@ -68,7 +68,7 @@ export const b4l19 = [
      <p class="meo">💡 Câu thứ hai đáng nhớ: bạn không chọn loại báo cáo theo độ dài hay theo thói quen, bạn chọn theo việc mà văn bản đó phải làm.</p>`),
 
   slide(D, 6, 'Types of reports and their functions (1–10)',
-    `<p class="y-chinh">🎯 The first ten of eighteen types — this is CQ14.5.</p>
+    `<p class="y-chinh">🎯 The first ten of eighteen types — this is CQ14.5. (The slide prints "Filed study report" — a typo for "Field study report".)</p>
      <ul class="hai-cot">
        <li>Laboratory report</li>
        <li>Research report</li>
@@ -82,7 +82,7 @@ export const b4l19 = [
        <li>Feasibility study</li>
      </ul>
      <p class="meo">💡 Three of these fit a student project directly: a progress report during the ten weeks, a feasibility study for the idea, and a needs assessment to justify that the problem exists.</p>`,
-    `<p class="y-chinh">🎯 Mười loại đầu trong mười tám loại — chính là CQ14.5.</p>
+    `<p class="y-chinh">🎯 Mười loại đầu trong mười tám loại — chính là CQ14.5. (Ảnh in "Filed study report" — gõ nhầm của "Field study report", báo cáo khảo sát thực địa.)</p>
      <ul class="hai-cot">
        <li>Báo cáo thí nghiệm</li>
        <li>Báo cáo nghiên cứu</li>
@@ -254,7 +254,7 @@ export const b4l19 = [
      <p class="meo">💡 "Ít nhất phát hiện chính" là mức sàn: báo cáo mô tả một xu hướng mà không nói mình phát hiện ra điều gì thì đó là bản tóm tắt, không phải báo cáo.</p>`),
 
   slide(D, 16, 'End of Session IV',
-    `<p class="y-chinh">🎯 Session IV complete.</p>
+    `<p class="y-chinh">🎯 Closing slide — the image is a "Q&amp;A" speech-bubble icon. Session IV complete.</p>
      <ol>
        <li>Nonverbal delivery: eight types, and visual aids must be big, clear, simple, consistent (Lesson 14).</li>
        <li>Persuasion has eleven ethical limits and one thirty-second format (Lesson 15).</li>
@@ -263,7 +263,7 @@ export const b4l19 = [
        <li>Email, memo and letter serve different readers (Lesson 18).</li>
        <li>Reports record; their type follows their function; fourteen checks decide their quality (this lesson).</li>
      </ol>`,
-    `<p class="y-chinh">🎯 Buổi IV hoàn tất.</p>
+    `<p class="y-chinh">🎯 Slide kết — ảnh là biểu tượng hai bong bóng thoại "Q&amp;A". Buổi IV hoàn tất.</p>
      <ol>
        <li>Trình bày phi ngôn ngữ: tám loại, và công cụ trực quan phải to, rõ, đơn giản, nhất quán (Bài 14).</li>
        <li>Thuyết phục có mười một giới hạn đạo đức và một khuôn ba mươi giây (Bài 15).</li>

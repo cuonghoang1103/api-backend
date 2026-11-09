@@ -387,8 +387,8 @@ export const b4l17 = [
   ]),
 
   bi(
-    `<h3>✅ What this replaces</h3>
-     <p>The old Academy lesson said business writing should be "clear, concise and professional" and stopped. The syllabus asks about the revision process (CQ13.3); the twelve planning points, four general categories, six specific checks and twelve style revisions were all missing.</p>`,
-    `<h3>✅ Bài này thay cho cái gì</h3>
-     <p>Bài cũ trên Academy nói viết công việc phải "rõ, gọn, chuyên nghiệp" rồi dừng. Syllabus hỏi về quá trình rà soát (CQ13.3); mười hai điểm chuẩn bị, bốn nhóm rà tổng quát, sáu mục kiểm cụ thể và mười hai điểm rà văn phong đều không có.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus asks about the revision process (CQ13.3). Know the twelve-item planning checklist (slide 10), the four general revision categories (slide 13), the six specific checks (slide 15) and the twelve style revisions (slides 17–18), plus the three biases (slide 7) and three fears (slide 9).</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Syllabus hỏi về quá trình rà soát (CQ13.3). Cần nắm bảng kiểm mười hai mục (slide 10), bốn nhóm rà tổng quát (slide 13), sáu mục kiểm cụ thể (slide 15) và mười hai điểm rà văn phong (slide 17–18), cùng ba thiên kiến (slide 7) và ba nỗi sợ (slide 9).</p>`),
 ].join('\n');

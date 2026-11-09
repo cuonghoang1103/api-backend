@@ -1,5 +1,1210 @@
 {
  "ma": "CSD204",
- "khongCo": true,
- "links": []
+ "sylID": "13813",
+ "quyetDinh": "1402/QĐ-ĐHFPT dated 12/12/2025",
+ "ungVien": [
+  {
+   "sylID": "13813",
+   "code": "CSD203",
+   "name": "Data Structures and Algorithm with Python_Cấu trúc dữ liệu và giải thuật với Python",
+   "active": true,
+   "approved": true,
+   "decision": "1402/QĐ-ĐHFPT dated 12/12/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=13813",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "13813",
+  "Syllabus Name": "Data Structures and Algorithm with Python_Cấu trúc dữ liệu và giải thuật với Python",
+  "Course Name English": "Data Structures and Algorithm with Python",
+  "Subject Code": "CSD203",
+  "Learning-Teaching Method": "Inquiry-Based Learning,In-class lecture",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "45h (60 sessions) contact hours + 1h TE + 85' practical exam + 102.6h self-study",
+  "Pre-Requisite": "PFP191",
+  "Description": "This course introduces the basic concepts of data structures and algorithms in data structures with the use of Python. Topics introduced in the course include the basics of algorithm analysis, basic data structures (including stack, queue, linked list, hashtable, tree), recursion and some important applications of these data structures and algorithms.",
+  "StudentTasks": "- Students must attend at least 80% of contact slots in order to be accepted to the final examination.\n\n- Student is responsible to do all exercises, assignments and labs given by instructor in class or at home and submit on time\n\n- Use laptop in class only for learning purpose\n\n- Promptly access to the https://flm.fpt.edu.vn/ for up-to-date course information",
+  "Tools": "- Thonny\n\n- PyCharm\n\n- Visual Studio Code",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "1402/QĐ-ĐHFPT dated 12/12/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "12/12/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Data Structures and Algorithms in Python",
+   "Michael T. Goodrich, Roberto Tamassia, Michael H. Goldwasser",
+   "Wiley",
+   "2013",
+   "1st",
+   "9781118290279",
+   "True",
+   "False",
+   "True",
+   "Sách online (Wiley platform)"
+  ],
+  [
+   "2",
+   "- PowerPoint Slides",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "3",
+   "- Assignments",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "- Labs",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "Data Structures and Algorithms using Python",
+   "Rance D. Necaise",
+   "Wiley",
+   "2011",
+   "1st",
+   "9788126562169",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "Data Structures and Algorithms with Python",
+   "Kent D. Lee Steve Hubbard",
+   "Springer",
+   "2015",
+   "1st",
+   "9783319130712",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "LO1. Describe the list data structure and its’ different way of implementations. Implement the singly linked list."
+  ],
+  [
+   "2",
+   "CLO2",
+   "LO2. Define stack and queue. Describe basic operations and the use of these structures."
+  ],
+  [
+   "3",
+   "CLO3",
+   "LO3. Describe about recursive definitions, algorithms, functions and their implementation and use."
+  ],
+  [
+   "4",
+   "CLO4",
+   "LO4. Explain about general tree, Binary Tree and Binary Search Tree (BST). Implement BST with basic operations."
+  ],
+  [
+   "5",
+   "CLO5",
+   "LO5. Díscuss about graphs and their application. Implement a graph with some basic operations."
+  ],
+  [
+   "6",
+   "CLO6",
+   "LO6 Explain the operation and performance of some basic and advanced sorting alggorithms"
+  ],
+  [
+   "7",
+   "CLO7",
+   "LO7 Explain about hashing and application."
+  ],
+  [
+   "8",
+   "CLO8",
+   "LO8 Describe the Text Processing problem and its’ application. Explain the Huffman, LZW and Run-length encoding Algorithms."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "45",
+   "",
+   "Written test questions",
+   "2",
+   "- cover content 1,2,3,4",
+   "in class, by instructor",
+   "Instructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "45'",
+   "",
+   "Written test questions",
+   "2",
+   "- cover content 5,6,7,8",
+   "in class, by instructor",
+   "Instructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "3",
+   "Practical exam",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "85'",
+   "",
+   "Written test questions",
+   "2",
+   "- cover content 1,2,3,4,5,6,7",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ],
+  [
+   "4",
+   "Progress test 1",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "10'-30'",
+   "",
+   "Multiple choices\n\nMarked by Computer or a suitable format",
+   "30",
+   "- cover content 1,2,3,4",
+   "in class, by instructor",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "5",
+   "Progress test 2",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "10'-30'",
+   "",
+   "Multiple choicesMarked by Computer or a suitable format",
+   "30",
+   "- cover content 5,6,7,8",
+   "in class, by instructor",
+   "Instruction and shedules for Progress tests must be presented in the Course Implementation Plan approved by director of the campus.\n\nProgress test must be taken right after the last lectures of required material.\n\nInstructor has resposibility to review the test for students after graded."
+  ],
+  [
+   "6",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "60'",
+   "",
+   "Multiple choices\n\nMarked by Computer",
+   "50",
+   "concepts, algorithms;\n\nall studied chapters",
+   "by exam board,\n\nusing computer",
+   "The exam questions must be updated or different at least 70% to the previous ones."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction\n\n1.1. Using Arrays\n\n1.2. Singly Linked Lists",
+   "Offline",
+   "CLO1",
+   "IT",
+   "- Slides: Chapter 1\n\nText book:- Chapter 5 page 184 - 224\n\n- Chapter 7 page 256-275",
+   "mat1",
+   "Read Chapter 1,5,7",
+   ""
+  ],
+  [
+   "2",
+   "1.3. Circularly Linked Lists\n\n1.4. Doubly Linked Lists",
+   "Offline",
+   "CLO1",
+   "IT",
+   "- Slides: Chapter 1\n\nText book:- Chapter 5 page 184 - 224\n\n- Chapter 7 page 256-275",
+   "",
+   "Read Chapter 1,5,7",
+   ""
+  ],
+  [
+   "3",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment",
+   "Offline",
+   "CLO 1",
+   "U",
+   "slide chapter 1, 5, 7\n\nLab 1: Lab1_st (.docx file)",
+   "",
+   "Review Chapter 1, 5, 7\n\nDo Lab 1",
+   ""
+  ],
+  [
+   "4",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment (cont.)",
+   "Offline",
+   "CLO 1",
+   "U",
+   "slide chapter 1, 5, 7\n\nLab 1: Lab1_st (.docx file)",
+   "",
+   "Review Chapter 1, 5, 7\n\nDo Lab 1",
+   ""
+  ],
+  [
+   "5",
+   "2.1 Stacks\n\nGuiding Exercises/Assignment",
+   "Offline",
+   "CLO 2",
+   "T\n\nU",
+   "- Slides: Chapter 6\n\n- Text book: Chapter 6 page 228-238",
+   "",
+   "Read Chapter 6\n\nDo Lab 2",
+   ""
+  ],
+  [
+   "6",
+   "2.1 Stacks\n\nGuiding Exercises/Assignment (cont.)",
+   "Offline",
+   "CLO 2",
+   "T\n\nU",
+   "- Slides: Chapter 6\n\n- Text book: Chapter 6 page 228-238",
+   "",
+   "Read Chapter 6\n\nDo Lab 2",
+   ""
+  ],
+  [
+   "7",
+   "2.2 Queues\n\n2.3 Double-Ended Queues (Deque)",
+   "Offline",
+   "CLO 2",
+   "T",
+   "- Slides: Chapter 6\n\n- Text book: Chapter 6 page 239-250",
+   "",
+   "Read Chapter 6\n\nDo Lab 2",
+   ""
+  ],
+  [
+   "8",
+   "2.4 The Priority Queue",
+   "Offline",
+   "CLO 2",
+   "T",
+   "- Slides: Chapter 6\n\n- Text book: Chapter 6 page 239-250",
+   "",
+   "Read Chapter 6\n\nDo Lab 2",
+   ""
+  ],
+  [
+   "9",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment",
+   "Offline",
+   "CLO 2",
+   "U",
+   "- Slides: Chapter 6\n\n- Textbook\n\n- Lab 2: Lab2 (.docx file)",
+   "",
+   "Review Chapter 6\n\nDo Lab 2",
+   ""
+  ],
+  [
+   "10",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment (cont.)",
+   "Offline",
+   "CLO 2",
+   "U",
+   "- Slides: Chapter 6\n\n- Textbook\n\n- Lab 2: Lab2 (.docx file)",
+   "",
+   "Review Chapter 6\n\nDo Lab 2",
+   ""
+  ],
+  [
+   "11",
+   "3.1 Illustrative Examples\n\n3.1.1 The Factorial Function\n\n3.1.2 Binary Search\n\n3.1.3 File Systems\n\n3.2 Analyzing Recursive Algorithms",
+   "Offline",
+   "CLO 3",
+   "T",
+   "- Slides: Chapter 4\n\n- Text book: Chapter 4 page 148 - 180",
+   "",
+   "Read Chapter 4",
+   ""
+  ],
+  [
+   "12",
+   "3.3 Further Examples of Recursion\n\n3.3.1 Linear Recursion\n\n3.3.2 Binary Recursion\n\n3.3.3 Multiple Recursion\n\n3.4 Designing Recursive Algorithms\n\n3.5 Eliminating Tail Recursion",
+   "Offline",
+   "CLO 3",
+   "T",
+   "- Slides: Chapter 4\n\n- Text book: Chapter 4 page 148 - 180",
+   "",
+   "Read Chapter 4",
+   ""
+  ],
+  [
+   "13",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment",
+   "Offline",
+   "CLO 3",
+   "U",
+   "Lab 3: Lab3 (.docx file)",
+   "",
+   "Do Lab 3",
+   ""
+  ],
+  [
+   "14",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment (cont.)",
+   "Offline",
+   "CLO 3",
+   "U",
+   "Lab 3: Lab3 (.docx file)",
+   "",
+   "Do Lab 3",
+   ""
+  ],
+  [
+   "15",
+   "4.1 General Trees\n\n4.1.1 Tree Definitions and Properties\n\n4.1.2 The Tree Abstract Data Type\n\n4.2 Binary Trees - . 317\n\n4.2.1 The Binary Tree Abstract Data Type\n\n4.2.2 Properties of Binary Trees",
+   "Offline",
+   "CLO 4",
+   "T",
+   "- Slides: Chapter 8\n\n- Text book: Chapter 8 page 300 - 310",
+   "",
+   "Read Chapter 8",
+   ""
+  ],
+  [
+   "16",
+   "4.3 Implementing Trees\n\n4.4 Tree Traversal Algorithms",
+   "Offline",
+   "CLO 4",
+   "T",
+   "- Slides: Chapter 8\n\n- Text book: Chapter 8 page 300 - 310",
+   "",
+   "Read Chapter 8",
+   ""
+  ],
+  [
+   "17",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment",
+   "Offline",
+   "CLO 4",
+   "U",
+   "Lab 4: Lab4 (.docx file)\n\n- Text book: Chapter 8 page 300 - 310",
+   "",
+   "Review Chapter 8\n\nDo Lab 4",
+   ""
+  ],
+  [
+   "18",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment (cont.)",
+   "Offline",
+   "CLO 4",
+   "U",
+   "Lab 4: Lab4 (.docx file)\n\n- Text book: Chapter 8 page 300 - 310",
+   "",
+   "Review Chapter 8\n\nDo Lab 4",
+   ""
+  ],
+  [
+   "19",
+   "4.5 Binary Search Trees\n\n4.5.1 Searching Within a Binary Search Tree",
+   "Offline",
+   "CLO 4",
+   "T",
+   "- Slides: Chapter 11\n\n- Text book: Chapter 11 page 460 - 473",
+   "",
+   "Read Chapter 11",
+   ""
+  ],
+  [
+   "20",
+   "4.5.2 Insertions and Deletions",
+   "Offline",
+   "CLO 4",
+   "T",
+   "- Slides: Chapter 11\n\n- Text book: Chapter 11 page 460 - 473",
+   "",
+   "Read Chapter 11",
+   ""
+  ],
+  [
+   "21",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment",
+   "Offline",
+   "CLO 4",
+   "U",
+   "- slide chapter 11\n\n- Lab 4: Lab4 (.docx file)\n\n- Text book: Chapter 11 page 460 - 473",
+   "",
+   "Review Chapter 11\n\nDo Lab 4",
+   ""
+  ],
+  [
+   "22",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment (cont.)",
+   "Offline",
+   "CLO 4",
+   "U",
+   "- slide chapter 11\n\n- Lab 4: Lab4 (.docx file)\n\n- Text book: Chapter 11 page 460 - 473",
+   "",
+   "Review Chapter 11\n\nDo Lab 4",
+   ""
+  ],
+  [
+   "23",
+   "4.6 Balanced Search Trees\n\n4.7 AVL Trees",
+   "Offline",
+   "CLO 4",
+   "T",
+   "- Slides: Chapter 11, 9\n\n- Chapter 11 page 475 - 488\n\n- Chapter 9 page 370 - 384",
+   "",
+   "Read Chapter 9,11",
+   ""
+  ],
+  [
+   "24",
+   "4.8 Heaps",
+   "Offline",
+   "CLO 4",
+   "T",
+   "- Slides: Chapter 11, 9\n\n- Chapter 11 page 475 - 488\n\n- Chapter 9 page 370 - 384",
+   "",
+   "Read Chapter 9,11",
+   ""
+  ],
+  [
+   "25",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment",
+   "Offline",
+   "CLO 4",
+   "U",
+   "- Lab 4: Lab4 (.docx file)",
+   "",
+   "Do Lab 4",
+   ""
+  ],
+  [
+   "26",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignment (cont.)",
+   "Offline",
+   "CLO 4",
+   "U",
+   "- Lab 4: Lab4 (.docx file)",
+   "",
+   "Do Lab 4",
+   ""
+  ],
+  [
+   "27",
+   "Progress test 1 and review",
+   "Offline",
+   "",
+   "U",
+   "- Content 1 - 4\n\n- Text book\n\n- Prgress test 1",
+   "",
+   "Review Content 1 - 4\n\nDo Prgress test 1",
+   ""
+  ],
+  [
+   "28",
+   "Progress test 1 and review (cont.)",
+   "Offline",
+   "",
+   "U",
+   "- Content 1 - 4\n\n- Text book\n\n- Prgress test 1",
+   "",
+   "Review Content 1 - 4\n\nDo Prgress test 1",
+   ""
+  ],
+  [
+   "29",
+   "5.1 Graphs\n\n5.2 Data Structures for Graphs\n\n5.2.1 Edge List Structure\n\n5.2.2 Adjacency List Structure\n\n5.2.3 Adjacency Matrix Structure",
+   "Offline",
+   "CLO 5",
+   "T",
+   "- Slides: Chapter 14\n\n- Text book: Chapter 14 page 620 - 648",
+   "",
+   "Read Chapter 14",
+   ""
+  ],
+  [
+   "30",
+   "5.3 Graph Traversals\n\n5.3.1 Depth-First Search\n\n5.3.3 Breadth-First Search",
+   "Offline",
+   "CLO 5",
+   "T",
+   "- Slides: Chapter 14\n\n- Text book: Chapter 14 page 620 - 648",
+   "",
+   "Read Chapter 14",
+   ""
+  ],
+  [
+   "31",
+   "Progress test and/or Assignmen\n\nReview Exercises\n\nGuiding Exercises/Assignmen",
+   "Offline",
+   "CLO 5",
+   "U",
+   "- slide chapter 14\n\n- Lab 5: Lab5 (.docx file)\n\n- Assignment 1",
+   "",
+   "Review Chapter 14\n\nDo Lab 5\n\nDo - Assignment 1",
+   ""
+  ],
+  [
+   "32",
+   "Progress test and/or Assignmen\n\nReview Exercises\n\nGuiding Exercises/Assignmen (cont.)",
+   "Offline",
+   "CLO 5",
+   "U",
+   "- slide chapter 14\n\n- Lab 5: Lab5 (.docx file)\n\n- Assignment 1",
+   "",
+   "Review Chapter 14\n\nDo Lab 5\n\nDo - Assignment 1",
+   ""
+  ],
+  [
+   "33",
+   "5.4 Shortest Paths\n\n5.4.1 Weighted Graphs",
+   "Offline",
+   "CLO 5",
+   "T",
+   "- Slides: Chapter 14\n\n- Text book: Chapter 14 page 659 - 669",
+   "",
+   "Read Chapter 14",
+   ""
+  ],
+  [
+   "34",
+   "5.4.2 Dijkstra’s Algorithm",
+   "Offline",
+   "CLO 5",
+   "T",
+   "- Slides: Chapter 14\n\n- Text book: Chapter 14 page 659 - 669",
+   "",
+   "Read Chapter 14",
+   ""
+  ],
+  [
+   "35",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen",
+   "Offline",
+   "CLO 5",
+   "U",
+   "- slide chapter 14\n\n- Lab 5: Lab5 (.docx file)",
+   "",
+   "Review Chapter 14\n\nDo Lab 5",
+   ""
+  ],
+  [
+   "36",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen (cont.)",
+   "Offline",
+   "CLO 5",
+   "U",
+   "- slide chapter 14\n\n- Lab 5: Lab5 (.docx file)",
+   "",
+   "Review Chapter 14\n\nDo Lab 5",
+   ""
+  ],
+  [
+   "37",
+   "5.5 Minimum Spanning Trees\n\n5.5.1 Prim-Jarn´ık Algorithm\n\n5.5.2 Kruskal’s Algorithm",
+   "Offline",
+   "CLO 5",
+   "T",
+   "- Slides: Chapter 14\n\n- Text book: Chapter 14 page 670 - 685",
+   "",
+   "Read Chapter 14",
+   ""
+  ],
+  [
+   "38",
+   "5.6. Euler's tour and Euler's cycle",
+   "Offline",
+   "CLO 5",
+   "T",
+   "- Slides: Chapter 14\n\n- Text book: Chapter 14 page 670 - 685",
+   "",
+   "Read Chapter 14",
+   ""
+  ],
+  [
+   "39",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen",
+   "Offline",
+   "CLO 5",
+   "U",
+   "- slide chapter 14\n\n- Lab 5: Lab5 (.docx file)",
+   "",
+   "Review Chapter 14\n\nDo Lab 5",
+   ""
+  ],
+  [
+   "40",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen (cont.)",
+   "Offline",
+   "CLO 5",
+   "U",
+   "- slide chapter 14\n\n- Lab 5: Lab5 (.docx file)",
+   "",
+   "Review Chapter 14\n\nDo Lab 5",
+   ""
+  ],
+  [
+   "41",
+   "6.1 Selection-Sort\n\n6.2 Insertion-Sort",
+   "Offline",
+   "CLO 6",
+   "T",
+   "- Slides: Chapter 9, 12\n\n- Text book: Chapter 9 page 385 -386\n\n- Chapter 12 page 550 - 559",
+   "",
+   "Read Chapter 9, 12",
+   ""
+  ],
+  [
+   "42",
+   "6.3 Bubble-sort\n\n6.4 Quick-Sort",
+   "Offline",
+   "CLO 6",
+   "T",
+   "- Slides: Chapter 9, 12\n\n- Text book: Chapter 9 page 385 -386\n\n- Chapter 12 page 550 - 559",
+   "",
+   "Read Chapter 9, 12",
+   ""
+  ],
+  [
+   "43",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen",
+   "Offline",
+   "CLO 6",
+   "U",
+   "- slide chapter 9, 12\n\n- Lab 6: Lab6 (.docx file)",
+   "",
+   "Review Chapter 9, 12\n\nDo Lab 6",
+   ""
+  ],
+  [
+   "44",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen (cont.)",
+   "Offline",
+   "CLO 6",
+   "U",
+   "- slide chapter 9, 12\n\n- Lab 6: Lab6 (.docx file)",
+   "",
+   "Review Chapter 9, 12\n\nDo Lab 6",
+   ""
+  ],
+  [
+   "45",
+   "6.5 Merge-Sort\n\n6.6 Heap-Sort",
+   "Offline",
+   "CLO 6",
+   "T",
+   "- Slides: Chapter 9, 12\n\n- Text book: Chapter 9 page 370 -388\n\n- Text book: Chapter 12 page 538 - 547",
+   "",
+   "Read Chapter 9, 12",
+   ""
+  ],
+  [
+   "46",
+   "6.7 Linear-Time Sorting: Bucket-Sort and Radix-Sort\n\n6.8 Comparing Sorting Algorithms",
+   "Offline",
+   "CLO 6",
+   "T",
+   "- Slides: Chapter 9, 12\n\n- Text book: Chapter 9 page 370 -388\n\n- Text book: Chapter 12 page 538 - 547",
+   "",
+   "Read Chapter 9, 12",
+   ""
+  ],
+  [
+   "47",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen",
+   "Offline",
+   "CLO 6",
+   "U",
+   "- slide chapter 9, 12\n\n- Lab 6: Lab6 (.docx file)",
+   "",
+   "Review Chapter 9, 12\n\nDo Lab 6",
+   ""
+  ],
+  [
+   "48",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen (cont.)",
+   "Offline",
+   "CLO 6",
+   "U",
+   "- slide chapter 9, 12\n\n- Lab 6: Lab6 (.docx file)",
+   "",
+   "Review Chapter 9, 12\n\nDo Lab 6",
+   ""
+  ],
+  [
+   "49",
+   "7.1 Hash Tables\n\n7.2 Hash Functions\n\n7.3 Collision-Handling",
+   "Offline",
+   "CLO 7",
+   "T",
+   "- Slides: Chapter 10\n\n- Text book: Chapter 10 page 410 - 422",
+   "",
+   "Read Chapter 10",
+   ""
+  ],
+  [
+   "50",
+   "7.4 Load Factors, Rehashing, and Efficiency\n\n7.5 Python Hash Table Implementation",
+   "Offline",
+   "CLO 7",
+   "T",
+   "- Slides: Chapter 10\n\n- Text book: Chapter 10 page 410 - 422",
+   "",
+   "Read Chapter 10",
+   ""
+  ],
+  [
+   "51",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen",
+   "Offline",
+   "CLO 7",
+   "U",
+   "Lab 7: Lab7 (.docx file)",
+   "",
+   "Do Lab 7",
+   ""
+  ],
+  [
+   "52",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen (cont.)",
+   "Offline",
+   "CLO 7",
+   "U",
+   "Lab 7: Lab7 (.docx file)",
+   "",
+   "Do Lab 7",
+   ""
+  ],
+  [
+   "53",
+   "8.1 Abundance of Digitized Text\n\n8.2 Pattern-Matching Algorithms\n\n8.2.1 Brute Force\n\n8.2.2 The Knuth-Morris-Pratt Algorithm",
+   "Offline",
+   "CLO 8",
+   "T",
+   "- Slides: Chapter 13\n\n- Text book: Chapter 13 page 581 -612",
+   "",
+   "Read Chapter 13",
+   ""
+  ],
+  [
+   "54",
+   "8.3 Text Compression\n\n8.3.1 The Huffman Coding Algorithm\n\n8.3.2 The LZW Algorithm\n\n8.3.3 The Run-length Encoding Algorithm",
+   "Offline",
+   "CLO 8",
+   "T",
+   "- Slides: Chapter 13\n\n- Text book: Chapter 13 page 581 -612",
+   "",
+   "Read Chapter 13",
+   ""
+  ],
+  [
+   "55",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen",
+   "Offline",
+   "CLO 8",
+   "U",
+   "slide chapter 13\n\nLab 8: Lab 8 (.docx file)",
+   "",
+   "Review Chapter 13\n\nDo Lab 8",
+   ""
+  ],
+  [
+   "56",
+   "Progress test and/or\n\nReview Exercises\n\nGuiding Exercises/Assignmen (cont.)",
+   "Offline",
+   "CLO 8",
+   "U",
+   "slide chapter 13\n\nLab 8: Lab 8 (.docx file)",
+   "",
+   "Review Chapter 13\n\nDo Lab 8",
+   ""
+  ],
+  [
+   "57",
+   "Course review\n\nPractical Exam",
+   "Offline",
+   "",
+   "I",
+   "Review the course\n\n- Assignment 2",
+   "",
+   "Review the course\n\n- Do Assignment 2",
+   ""
+  ],
+  [
+   "58",
+   "Course review\n\nPractical Exam (cont.)",
+   "Offline",
+   "",
+   "I",
+   "Review the course\n\n- Assignment 2",
+   "",
+   "Review the course\n\n- Do Assignment 2",
+   ""
+  ],
+  [
+   "59",
+   "Progress test 2 and review",
+   "Offline",
+   "",
+   "U, I",
+   "Content 5 - 8\n\nText book\n\nPrgress test 2",
+   "",
+   "Review the course\n\nDo Prgress test 2",
+   ""
+  ],
+  [
+   "60",
+   "Progress test 2 and review (cont.)",
+   "Offline",
+   "",
+   "U, I",
+   "Content 5 - 8\n\nText book\n\nPrgress test 2",
+   "",
+   "Review the course\n\nDo Prgress test 2",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "2",
+   "CQ1",
+   "Please list the advantages of Linked List over Array?"
+  ],
+  [
+   "2",
+   "2",
+   "CQ2",
+   "Please list the advantages of Array over Linked List?"
+  ],
+  [
+   "3",
+   "2",
+   "CQ3",
+   "What are difference between Single, Circularly and Doubly Linked List"
+  ],
+  [
+   "4",
+   "2",
+   "CQ1",
+   "What are difference between Stacks and Queue?"
+  ],
+  [
+   "5",
+   "4",
+   "CQ2",
+   "List the applications of Stack and Queue to specific problems"
+  ],
+  [
+   "6",
+   "4",
+   "CQ3",
+   "What are difference between Queue, Double-Ended Queue and Priority Queue"
+  ],
+  [
+   "7",
+   "4",
+   "CQ1",
+   "What are advantages of Binary Search over Linear Search?"
+  ],
+  [
+   "8",
+   "6",
+   "CQ2",
+   "What are pro and cons of recursion and tail-recursion?"
+  ],
+  [
+   "9",
+   "6",
+   "CQ3",
+   "Lis the application of recursion and tail-recursion to specific problems"
+  ],
+  [
+   "10",
+   "6",
+   "CQ1",
+   "What is Tree?"
+  ],
+  [
+   "11",
+   "8",
+   "CQ2",
+   "What are difference between Binary Tree and Binary Search Tree?"
+  ],
+  [
+   "12",
+   "8",
+   "CQ3",
+   "List the application of BT to specific problems"
+  ],
+  [
+   "13",
+   "8",
+   "CQ1",
+   "How to search value on a BST?"
+  ],
+  [
+   "14",
+   "10",
+   "CQ2",
+   "How to insert value into BST?"
+  ],
+  [
+   "15",
+   "10",
+   "CQ3",
+   "How to delete exist node of BST?"
+  ],
+  [
+   "16",
+   "10",
+   "CQ1",
+   "How to balancing BST?"
+  ],
+  [
+   "17",
+   "12",
+   "CQ2",
+   "What is AVL?"
+  ],
+  [
+   "18",
+   "12",
+   "CQ3",
+   "What is Heaps?"
+  ],
+  [
+   "19",
+   "14",
+   "CQ1",
+   "QWhat is Graphs?"
+  ],
+  [
+   "20",
+   "16",
+   "CQ2",
+   "How to descript the graph on Python?"
+  ],
+  [
+   "21",
+   "16",
+   "CQ3",
+   "What are difference between BFS and DFS?"
+  ],
+  [
+   "22",
+   "16",
+   "CQ1",
+   "How to find the shortest path from node S to node E?"
+  ],
+  [
+   "23",
+   "18",
+   "CQ2",
+   "What is Dijkstra?"
+  ],
+  [
+   "24",
+   "18",
+   "CQ3",
+   "How to find all shortest path from node S to node E?"
+  ],
+  [
+   "25",
+   "18",
+   "CQ1",
+   "How to find minimum spanning trees?"
+  ],
+  [
+   "26",
+   "20",
+   "CQ2",
+   "What is difference between Prim and Kruskal"
+  ],
+  [
+   "27",
+   "20",
+   "CQ3",
+   "What is Euler's tour and Euler's cycle?"
+  ],
+  [
+   "28",
+   "20",
+   "CQ1",
+   "Compare performace between selection, bubble and inser sort?"
+  ],
+  [
+   "29",
+   "22",
+   "CQ2",
+   "What is Quick sort?"
+  ],
+  [
+   "30",
+   "22",
+   "CQ3",
+   "Explain about finding pivot item and partitioning of an array in Quick sort algorithm."
+  ],
+  [
+   "31",
+   "22",
+   "CQ1",
+   "Compare performace between merge, heap and quick sort?"
+  ],
+  [
+   "32",
+   "24",
+   "CQ2",
+   "What is Bucket sort?"
+  ],
+  [
+   "33",
+   "24",
+   "CQ3",
+   "What is radix-sort?"
+  ],
+  [
+   "34",
+   "24",
+   "CQ1",
+   "What is Hash and hash table?"
+  ],
+  [
+   "35",
+   "26",
+   "CQ2",
+   "What is collision and how to solve the problem?"
+  ],
+  [
+   "36",
+   "26",
+   "CQ3",
+   "How to apply hash in Java programming language?"
+  ],
+  [
+   "37",
+   "26",
+   "CQ1",
+   "What is KMP?"
+  ],
+  [
+   "38",
+   "28",
+   "CQ2",
+   "What is Huffman coding?"
+  ],
+  [
+   "39",
+   "28",
+   "CQ3",
+   "Compare between LZW and run-length encoding"
+  ]
+ ],
+ "links": [
+  "/download/6663/S/1_mat1.zip"
+ ],
+ "thamKhao": {
+  "ma": "CSD203",
+  "sylID": "13813",
+  "ten": "Data Structures and Algorithm with Python_Cấu trúc dữ liệu và giải thuật với Python",
+  "lyDo": "trường chưa công bố syllabus cho mã này; dùng syllabus môn cùng tên/cùng môn khác mã"
+ }
 }

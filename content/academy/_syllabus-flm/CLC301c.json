@@ -1,5 +1,331 @@
 {
  "ma": "CLC301c",
- "khongCo": true,
- "links": []
+ "sylID": "12620",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12620",
+   "code": "PRC392c",
+   "name": "Cloud Computing_Điện toán đám mây",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12620",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "12620",
+  "Syllabus Name": "Cloud Computing_Điện toán đám mây",
+  "Course Name English": "Cloud Computing",
+  "Subject Code": "PRC392c",
+  "Learning-Teaching Method": "Online, Blended, Active learning, In-class lecture",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 66h online + 3h offline + 1h final exam + 80h self-study",
+  "Pre-Requisite": "",
+  "Description": "This professional certificate provides the knowledge and skills you need to start building your career in cloud architecture and helps you prepare for the AWS Certified Solutions Architect - Associate exam. You will start by learning key AWS Services for compute, storage, database, networking, monitoring, and security, then dive into how to design architectural solutions, how to create and operate a data lake, and how to prepare for the certification exam.\n\nIn Cloud Technical Essentials course, you’ll design a 3-tier architecture using services like Amazon VPC, Amazon EC2, Amazon RDS with high availability and Elastic Load Balancing following AWS best practices. You’ll upload an architecture diagram laying out your design including the networking layer.\n\nIn Architecting Solutions on AWS course, you’ll use Amazon API Gateway, AWS Lambda, Amazon SQS, Amazon DynamoDB, and Amazon SNS to build a serverless web backend.\n\nIn Introduction to Designing Data Lakes course, you’ll use Amazon S3, Amazon OpenSearch Service, AWS Lambda and Amazon API Gateway to create an Amazon OpenSearch Service Cluster. You’ll also use Amazon S3, Amazon EC2, Amazon Kinesis Data Firehose, Amazon Kinesis Data Analytics, Amazon Elasticsearch Service to create a data ingestion pipeline with the use of high-scale AWS Managed services.\n\nFinally, we present content on all four knowledge domains that are covered in the exam. It's important to understand that on the exam, questions from all domains are presented in random order.",
+  "StudentTasks": "Complete the online courses and get all course certifications to be allowed to take Final Exam",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "1. Final Exam included Final Theory Exam (TE): 100%\n\n2. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n3. Completion Criteria: Final TE Score >=4 & (Final TE Score + bonus) >= 5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "MOOC 1: AWS Cloud Technical Essentials",
+   "Amazon Web Services",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/aws-cloud-technical-essentials"
+  ],
+  [
+   "2",
+   "MOOC 2: Architecting Solutions on AWS",
+   "Amazon Web Services",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/architecting-solutions-on-aws"
+  ],
+  [
+   "3",
+   "MOOC 3: Building Data Lakes on AWS",
+   "Amazon Web Services",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/introduction-to-designing-data-lakes-in-aws/"
+  ],
+  [
+   "4",
+   "MOOC 4: Exam Prep: AWS Certified Solutions Architect - Associate",
+   "Amazon Web Services",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/aws-certified-solutions-architect-associate"
+  ],
+  [
+   "5",
+   "Help Articles",
+   "Coursera",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://www.coursera.support/s/article/208280036-Coursera-Code-of-Conduct?language=en_US"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Make an informed decision about when and how to apply core AWS services for compute, storage, and database to different use cases"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Design architectural solutions, whether designing for cost, performance, and/or operational excellence, to address common business challenges."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Create and operate a data lake in a secure and scalable way, ingest and organize data into the data lake, and optimize performance and costs."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify your strengths and gaps for each domain area, and build strategies for identifying incorrect responses"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Final exam",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All CLOs",
+   "Multiple choicesMarked by Computer",
+   "50",
+   "All studied courses. Each module of course contributes 3-5 questions.",
+   "by exam board,\n\nusing computer",
+   "Customized from the quizzes of this specialization.\n\n1st Evaluation: For students who completed & got Coursera's specialization certificates (Option at week 9);\n\n2nd Evaluation: For students who completed & got Coursera's specialization certificates) at week 13;\n\n3rd Evaluation: For students who completed & got Coursera's specialization certificates) at week 14."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "AWS Cloud Technical Essentials\n\nThis topic introduces you:\n\n- Introduce to this specialization\n\n- You will learn the definition of cloud computing and how to describe the cloud value proposition. You will learn how to differentiate between workloads that run on-premises versus in the cloud, and how to create an AWS account. You will also get an overview of Amazon Web Services, including how to differentiate between AWS Regions and Availability Zones, and the different ways that you can interact with AWS. Finally, you will learn best practices for using AWS Identity and Access Management (IAM)",
+   "Offline",
+   "CLO 1",
+   "I",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1 of the course AWS Cloud Technical Essentials",
+   ""
+  ],
+  [
+   "2",
+   "AWS Cloud Technical Essentials\n\nThis topic teach you:\n\n- Learn how AWS compute services differ from other AWS services. The content for this week covers the basic components of Amazon Elastic Compute Cloud (Amazon EC2) architecture, and how to differentiate between a container and a virtual machine. You will also learn about the features and advantages of using serverless technologies, basic networking concepts, and the features of Amazon Virtual Private Cloud (Amazon VPC).",
+   "Online",
+   "CLO 1",
+   "",
+   "Associated Coursera links",
+   "",
+   "Complete Week 2 of the course AWS Cloud Technical Essentials",
+   ""
+  ],
+  [
+   "3",
+   "AWS Cloud Technical Essentials\n\nAfter this topic, you be able to:\n\n- Learn important concepts for AWS storage services—such as buckets and objects for Amazon Simple Storage Service (Amazon S3), and how Amazon Elastic Block Store (Amazon EBS) is used on AWS. You will also explore databases on AWS, and the use cases for each AWS storage service.",
+   "Online",
+   "CLO 1",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "Complete Week 3 of the course AWS Cloud Technical Essentials",
+   ""
+  ],
+  [
+   "4",
+   "AWS Cloud Technical Essentials\n\nThis topic teach you:\n\n- Learn about the benefits of monitoring on AWS, and how to optimize solutions on AWS. You will also learn about the function of Elastic Load Balancing (ELB), and how to differentiate between vertical scaling and horizontal scaling.",
+   "Online",
+   "CLO 1",
+   "",
+   "Associated Coursera links",
+   "",
+   "Complete Week 4 of the course AWS Cloud Technical Essentials",
+   ""
+  ],
+  [
+   "5",
+   "Architecting Solutions on AWS\n\nIn this topic, you will:\n\n- The first week in this course follows a customer use case where an ecommerce company needs to migrate a backend web service to AWS. You will first hear from the customer about their requirements and the problems that they are trying to solve with this migration. Then, you will learn how to design the solution for this use case, step by step, by using services such as Amazon API Gateway, AWS Lambda, Amazon Simple Queue Service (Amazon SQS), Amazon Simple Notification Service (Amazon SNS), and Amazon DynamoDB.\n\n- 1st Evaluation (For students completed Course 1)",
+   "Online",
+   "CLO 2",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1 of the course Architecting Solutions on AWS",
+   ""
+  ],
+  [
+   "6",
+   "Architecting Solutions on AWS\n\nIn this topic, you will:\n\n- The second week in this course follows a customer use case where a software company needs a data analytics solution in AWS so that they can derive insights from clickstream data. You will first hear from the customer about their requirements and the problems that they are trying to solve with this solution. Then, you will learn how to design the solution for this use case, step by step, by using services such as Amazon Simple Storage Service (Amazon S3), Amazon Kinesis Data Firehose, Amazon Athena, Amazon QuickSight, and more.",
+   "Online",
+   "CLO 2",
+   "",
+   "Associated Coursera links",
+   "",
+   "Complete Week 2 of the course Architecting Solutions on AWS",
+   ""
+  ],
+  [
+   "7",
+   "Architecting Solutions on AWS\n\nAfter this topic, you be able to:\n\n- The third week in this course follows a customer use case where an enterprise insurance company needs to migrate some of their container workloads to AWS by using a hybrid model. You will first hear from the customer about their requirements and the problems that they are trying to solve with this migration. Then, you will learn how to design the solution for this use case, step by step, by using services such as AWS Direct Connect, Amazon Elastic Container Service (Amazon ECS), Amazon ECS Anywhere, Amazon Relational Database Service (Amazon RDS), AWS Systems Manager, and more.",
+   "Online",
+   "CLO 2",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "Complete Week 3 of the course Architecting Solutions on AWS",
+   ""
+  ],
+  [
+   "8",
+   "Architecting Solutions on AWS\n\nIn this topic, you will be:\n\n- The fourth week in this course follows a customer use case where a startup company needs guidance about how to set up an account-management strategy that follows best practices for account governance and standards. You will first hear from the customer about their requirements and the problems that they are trying to solve with this strategy. Then, you will learn how to design the solution for this use case, step by step, by using services such as AWS Organizations, AWS IAM Identity Center (successor to AWS Single Sign-On), AWS CloudTrail, and more.",
+   "Online",
+   "CLO 2",
+   "",
+   "Associated Coursera links",
+   "",
+   "Complete Week 4 of the course Architecting Solutions on AWS",
+   ""
+  ],
+  [
+   "9",
+   "Introduction to Designing Data Lakes on AWS\n\nIn this topic, you will:\n\n- You'll discover why you may want a Data Lake, its characteristics and components, and how it compares to other data data scenarios, such as databases and data warehouses.\n\n- You'll build on your knowledge of what data lakes are and why they may be a solution for your needs. You'll explore AWS services that can be used in data lake architectures, like Amazon S3, AWS Glue, Amazon Athena, Amazon Elasticsearch Service, LakeFormation, Amazon Rekognition, API Gateway and other services used for data movement, processing and visualization.\n\n- 2nd Evaluation (For students completed Course 2)",
+   "Online",
+   "CLO 3",
+   "IT",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1,2 of the course Introduction to Designing Data Lakes on AWS",
+   ""
+  ],
+  [
+   "10",
+   "Introduction to Designing Data Lakes on AWS\n\nIn this topic, you will:\n\n- You'll explore specifics of data cataloging and ingestion, and learn about services like AWS Transfer Family, Amazon Kinesis Data Streams, Kinesis Firehose, Kinesis Analytics, AWS Snow Family, AWS Glue Crawlers, and others. You'll also discover when is the right time to process data--before, after, or while data is being ingested. Given scenarios, you'll be able to easily identify when to process data and match the most appropriate AWS services to each scenario.\n\n- You are going to dive deeper into data optimization and data processing. Demos around best practices will show you how to optimize your dataset for performance and cost--just by using the right tool for the job! You will also discover data security, data visualization tools, and AWS datasets you can use to experiment and get started.",
+   "Online",
+   "CLO 3",
+   "",
+   "Associated Coursera links",
+   "",
+   "Complete Week 3,4 of the course Introduction to Designing Data Lakes on AWS",
+   ""
+  ],
+  [
+   "11",
+   "Exam Prep: AWS Certified Solutions Architect - Associate\n\nIn this topic, you will:\n\n- Get an overview of relevant concepts and services for Designing Resilient Architectures (Domain 1). For this domain, question walkthroughs cover designing a multi-tier architecture solution, designing highly available or fault-tolerant architectures, and decoupling mechanisms by using AWS services.\n\n- Review relevant concepts and services for Designing High-performing Architectures (Domain 2) so you can get a benchmark of your knowledge in this area. Question walkthroughs for this domain address the topics of identifying and selecting storage, network, and database solutions that are elastic, scalable, and high performing.",
+   "Online",
+   "All CLOs",
+   "",
+   "Associated Coursera links",
+   "",
+   "Complete Week 1,2,3 of the course Exam Prep: AWS Certified Solutions Architect - Associate",
+   ""
+  ],
+  [
+   "12",
+   "Exam Prep: AWS Certified Solutions Architect - Associate\n\nIn this topic, you will:\n\n- Get an overview of relevant concepts and services for Designing Secure Applications and Architectures (Domain 3) so you can get a benchmark of your knowledge in this area. For this domain, the question walkthroughs focus on designing secure access to AWS resources, designing secure application tiers, and selecting the appropriate data security options.\n\n- Review relevant concepts and services on Designing Cost-optimized Architectures (Domain 4) so you can get a benchmark of your knowledge in this area. The question walkthroughs for this domain cover identifying cost-effective storage solutions, selecting compute and database services, and designing cost-optimized network architectures.",
+   "Offline",
+   "All CLOs",
+   "TU",
+   "Associated Coursera links",
+   "",
+   "Complete Week 4,5,6 of the course Exam Prep: AWS Certified Solutions Architect - Associate\n\nDeadline of Coursera Completion: End of Friday of the week.\n\nAll Students should participate in review slot (if any question)",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [],
+ "thamKhao": {
+  "ma": "PRC392c",
+  "sylID": "12620",
+  "ten": "Cloud Computing_Điện toán đám mây",
+  "lyDo": "trường chưa công bố syllabus cho mã này; dùng syllabus môn cùng tên/cùng môn khác mã"
+ }
 }

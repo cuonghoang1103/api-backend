@@ -131,9 +131,25 @@ export default function AcademyPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [allCourses, profile, leafActive, semesters, coursesBySemester, leafCodes],
   );
+  // Khoá CŨ (mã cũ của cùng một môn — CSI104/ICS101 cạnh CSI106…) mặc định ẨN ở mọi ngành; nút bật/tắt cạnh ô
+  // tìm kiếm, nhớ lựa chọn trong localStorage. Ô tìm kiếm dùng `allCourses` nên VẪN ra khoá cũ dù đang ẩn
+  // (người dùng 09/11/2026: "khi ẩn hay không ẩn, search vẫn hiện").
+  const [hienKhoaCu, setHienKhoaCu] = useState(false);
+  useEffect(() => {
+    try { setHienKhoaCu(localStorage.getItem('academy.hienKhoaCu') === '1'); } catch { /* chế độ riêng tư */ }
+  }, []);
+  const doiHienKhoaCu = () => setHienKhoaCu((v) => {
+    try { localStorage.setItem('academy.hienKhoaCu', v ? '0' : '1'); } catch { /* bỏ qua */ }
+    return !v;
+  });
+  const soKhoaCu = useMemo(() => nhomKy.reduce((a, n) => a + n.mon.filter((m) => m.isOld).length, 0), [nhomKy]);
+  const nhomKyHien: NhomKy[] = useMemo(
+    () => (hienKhoaCu ? nhomKy : nhomKy.map((n) => ({ ...n, mon: n.mon.filter((m) => !m.isOld) }))),
+    [nhomKy, hienKhoaCu],
+  );
   const shownTotal = useMemo(
-    () => (leafActive ? nhomKy.reduce((a, n) => a + n.mon.length, 0) : totalCourses),
-    [leafActive, nhomKy, totalCourses],
+    () => (leafActive ? nhomKyHien.reduce((a, n) => a + n.mon.length, 0) : totalCourses),
+    [leafActive, nhomKyHien, totalCourses],
   );
 
   useEffect(() => {
@@ -285,6 +301,34 @@ export default function AcademyPage() {
           )}
         </div>
 
+        {soKhoaCu > 0 && (
+          <div className="flex flex-wrap items-center gap-3 -mt-2">
+            <button
+              type="button"
+              onClick={doiHienKhoaCu}
+              aria-pressed={hienKhoaCu}
+              className={cn(
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-sm font-medium transition',
+                hienKhoaCu
+                  ? 'bg-amber-500/15 border-amber-500/40 text-tone-amber hover:bg-amber-500/20'
+                  : 'bg-[var(--bg-card)] border-[var(--border-color)] text-text-secondary hover:text-text-primary hover:border-amber-500/40',
+              )}
+            >
+              <span className={cn('relative inline-flex h-4 w-7 rounded-full transition', hienKhoaCu ? 'bg-amber-500' : 'bg-[var(--border-color)]')}>
+                <span className={cn('absolute top-0.5 h-3 w-3 rounded-full bg-white transition', hienKhoaCu ? 'left-3.5' : 'left-0.5')} />
+              </span>
+              {locale === 'en'
+                ? (hienKhoaCu ? `Hide old courses (${soKhoaCu})` : `Show old courses (${soKhoaCu})`)
+                : (hienKhoaCu ? `Ẩn khoá cũ (${soKhoaCu})` : `Hiện khoá cũ (${soKhoaCu})`)}
+            </button>
+            <span className="text-xs text-text-muted">
+              {locale === 'en'
+                ? 'Old course codes of the same subject are hidden by default — search still finds them.'
+                : 'Mã môn khoá cũ của cùng một môn được ẩn mặc định — ô tìm kiếm vẫn tìm ra.'}
+            </span>
+          </div>
+        )}
+
         {/* Khi đã chọn tới ngành hẹp, lưới môn bên dưới đã được LỌC đúng ngành —
             không còn "section ordering" riêng nữa (trước đây hiện thêm ở trên
             rồi vẫn đổ hết môn ở dưới, gây rối). */}
@@ -309,7 +353,7 @@ export default function AcademyPage() {
               <h2 className="text-lg font-semibold text-text-primary">Semester navigator</h2>
             </div>
             <div className="space-y-2">
-              {nhomKy.map((semester) => {
+              {nhomKyHien.map((semester) => {
                 const isOpen = expanded.includes(semester.id);
                 const courses = semester.mon;
                 if (leafActive && courses.length === 0) return null;
@@ -346,7 +390,7 @@ export default function AcademyPage() {
           </aside>
 
           <div className="space-y-6">
-            {nhomKy.map((semester) => {
+            {nhomKyHien.map((semester) => {
               const courses = semester.mon;
               if (leafActive && courses.length === 0) return null;
               return (

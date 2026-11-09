@@ -309,8 +309,8 @@ export function dungKhoa(ma, syl, map, mucLuc) {
       const tong = ds.reduce((a, x) => a + x.d.n, 0);
       const parts = [];
       parts.push(bi(
-        `<span class="eyebrow">${esc(ma)} · Chapter ${so} · Session ${esc(b.nhan)}${dg ? ' · assessment / review' : ''}</span>\n<h2>Session ${esc(b.nhan)} — ${esc(tenBuoi(b))}</h2>\n<p class="nhan">Source: FLM syllabus ${esc(syl.sylID)} · session plan</p>`,
-        `<span class="eyebrow">${esc(ma)} · Chương ${so} · Buổi ${esc(b.nhan)}${dg ? ' · kiểm tra / ôn tập' : ''}</span>\n<h2>Buổi ${esc(b.nhan)} — ${esc(tenBuoi(b))}</h2>\n<p class="nhan">Nguồn: syllabus FLM ${esc(syl.sylID)} · kế hoạch buổi</p>`,
+        `<span class="eyebrow">${esc(ma)} · Chapter ${so} · Session ${esc(b.nhan)}${dg ? ' · assessment / review' : ''}</span>\n<h2>Session ${esc(b.nhan)} — ${esc(tenBuoi(b))}</h2>\n<p class="nhan">Source: FLM syllabus ${esc(syl.sylID)}${syl.thamKhao ? ` of ${esc(syl.thamKhao.ma)} (reference — none published for ${esc(ma)})` : ''} · session plan</p>`,
+        `<span class="eyebrow">${esc(ma)} · Chương ${so} · Buổi ${esc(b.nhan)}${dg ? ' · kiểm tra / ôn tập' : ''}</span>\n<h2>Buổi ${esc(b.nhan)} — ${esc(tenBuoi(b))}</h2>\n<p class="nhan">Nguồn: syllabus FLM ${esc(syl.sylID)}${syl.thamKhao ? ` của môn ${esc(syl.thamKhao.ma)} (tham khảo — trường chưa công bố cho ${esc(ma)})` : ''} · kế hoạch buổi</p>`,
       ));
       const kvs = (L) => `<div class="kv-grid">\n${[
         [L === 'en' ? 'Type' : 'Hình thức', b.type], ['LO', b.lo], ['ITU', b.itu], [L === 'en' ? 'Slides in this lesson' : 'Slide trong bài', tong ? `${tong}` : (tv.length ? (L === 'en' ? `see session ${buoi[tv[0].dau].nhan}` : `xem buổi ${buoi[tv[0].dau].nhan}`) : (L === 'en' ? 'none from FLM' : 'FLM không có'))],
@@ -428,9 +428,11 @@ async function main() {
     const fMon = path.join(DIR, `${ma}.mjs`);
     if (!fs.existsSync(fSyl) || !fs.existsSync(fMon)) { console.log(`  – ${ma}: thiếu syllabus/file môn`); continue; }
     const syl = JSON.parse(fs.readFileSync(fSyl, 'utf8'));
-    const fMap = path.join(KHO, ma, 'slide-map.json');
+    // môn mượn khung (syl.thamKhao) ⇒ dùng slide + gói tài liệu của môn tham chiếu nếu bản thân không có
+    const nguonKho = (f) => (fs.existsSync(path.join(KHO, ma, f)) ? path.join(KHO, ma, f) : (syl.thamKhao ? path.join(KHO, syl.thamKhao.ma, f) : path.join(KHO, ma, f)));
+    const fMap = nguonKho('slide-map.json');
     const map = fs.existsSync(fMap) ? JSON.parse(fs.readFileSync(fMap, 'utf8')) : null;
-    const fMuc = path.join(KHO, ma, 'muc-luc.json');
+    const fMuc = nguonKho('muc-luc.json');
     const mucLuc = fs.existsSync(fMuc) ? JSON.parse(fs.readFileSync(fMuc, 'utf8')) : null;
     const spec = (await import(path.resolve(fMon))).default;
     const { sections, bao: b } = dungKhoa(ma, syl, map, mucLuc);

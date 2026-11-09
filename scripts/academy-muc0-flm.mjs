@@ -83,9 +83,14 @@ export function dungMuc0(syl, spec) {
   const qd = quyetDinh(syl.quyetDinh || c['DecisionNo MM/dd/yyyy']);
   const thu = syl.thuNgay ? syl.thuNgay.split('-').reverse().join('/') : '';
   const flmUrl = `https://flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=${syl.sylID}`;
-  const nguonEn = `Source: FLM · Syllabus ID ${esc(syl.sylID)}${qd ? ` · Decision ${esc(qd.so)}${qd.ngay ? ` dated ${esc(qd.ngay)}` : ''}` : ''}${thu ? ` · collected ${thu}` : ''}`;
-  const nguonVi = `Nguồn: FLM · Syllabus ID ${esc(syl.sylID)}${qd ? ` · QĐ ${esc(qd.so)}${qd.ngay ? ` ngày ${esc(qd.ngay)}` : ''}` : ''}${thu ? ` · thu ngày ${thu}` : ''}`;
+  const nguonEn = `Source: FLM · Syllabus ID ${esc(syl.sylID)}${syl.thamKhao ? ` (subject ${esc(syl.thamKhao.ma)}, used as reference)` : ''}${qd ? ` · Decision ${esc(qd.so)}${qd.ngay ? ` dated ${esc(qd.ngay)}` : ''}` : ''}${thu ? ` · collected ${thu}` : ''}`;
+  const nguonVi = `Nguồn: FLM · Syllabus ID ${esc(syl.sylID)}${syl.thamKhao ? ` (môn ${esc(syl.thamKhao.ma)}, dùng làm tham khảo)` : ''}${qd ? ` · QĐ ${esc(qd.so)}${qd.ngay ? ` ngày ${esc(qd.ngay)}` : ''}` : ''}${thu ? ` · thu ngày ${thu}` : ''}`;
   const tenMon = String(spec?.course?.title || c['Course Name English'] || ma).split('|||').pop();
+  // Môn KHÔNG có syllabus riêng trên FLM ⇒ mượn syllabus của môn cùng tên/cùng môn khác mã (đã kiểm 09/11/2026).
+  const tk = syl.thamKhao;
+  const ghiTk = tk ? bi(
+    `<div class="note-ct">⚠️ The university has <strong>not published a syllabus for ${esc(ma)}</strong> on FLM. This framework follows the official syllabus of the <strong>same-named subject ${esc(tk.ma)}</strong> (syllabus ${esc(tk.sylID)}) as the closest reference — check with your lecturer for anything specific to ${esc(ma)}.</div>`,
+    `<div class="note-ct">⚠️ Trường <strong>chưa công bố syllabus cho ${esc(ma)}</strong> trên FLM. Khung dưới đây theo syllabus chính thức của <strong>môn cùng tên ${esc(tk.ma)}</strong> (syllabus ${esc(tk.sylID)}) làm tham khảo gần nhất — điều gì riêng của ${esc(ma)} thì hỏi giảng viên.</div>`) : '';
 
   const danhGia = rowsOf(syl.danhGia);
   const clo = rowsOf(syl.clo);
@@ -138,6 +143,7 @@ export function dungMuc0(syl, spec) {
   const moTa = String(c.Description || '').trim();
   const ghiChu = String(c.Note || '').trim();
   const l1 = [
+    ghiTk,
     dau(1, 'Course profile, as the university publishes it', 'Hồ sơ môn học, đúng như trường công bố',
       `${esc(tenMon)} — the official numbers: credits, hours, prerequisite and the decision that issued this syllabus.`,
       `${esc(tenMon)} — các con số chính thức: tín chỉ, giờ học, môn tiên quyết và quyết định ban hành syllabus.`),
@@ -245,7 +251,7 @@ export function dungMuc0(syl, spec) {
 
   return {
     title: MUC0_FLM_TITLE,
-    description: `Official FLM syllabus ${syl.sylID}: profile, grading, CLOs, textbooks, all ${soBuoi} sessions.|||Syllabus FLM chính thức ${syl.sylID}: hồ sơ môn, cách tính điểm, CLO, giáo trình, đủ ${soBuoi} buổi.`,
+    description: syl.thamKhao ? `Reference framework from FLM syllabus ${syl.sylID} of ${syl.thamKhao.ma} (no syllabus published for ${ma}).|||Khung tham khảo theo syllabus FLM ${syl.sylID} của ${syl.thamKhao.ma} (trường chưa công bố syllabus cho ${ma}).` : `Official FLM syllabus ${syl.sylID}: profile, grading, CLOs, textbooks, all ${soBuoi} sessions.|||Syllabus FLM chính thức ${syl.sylID}: hồ sơ môn, cách tính điểm, CLO, giáo trình, đủ ${soBuoi} buổi.`,
     lessons,
   };
 }

@@ -1,0 +1,1136 @@
+{
+ "ma": "NLP301m",
+ "sylID": "14405",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14405",
+   "code": "NLP301m",
+   "name": "Natural Language Processing_Xử lý ngôn ngữ tự nhiên",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14405",
+ "thuNgay": "2026-11-09",
+ "chung": {
+  "Syllabus ID": "14405",
+  "Syllabus Name": "Natural Language Processing_Xử lý ngôn ngữ tự nhiên",
+  "Course Name English": "Natural Language Processing",
+  "Subject Code": "NLP301m",
+  "Learning-Teaching Method": "In-class lecture, guided discussion, seminar/presentation, project supervision, peer review, Social Constructivism, Active Learning, Project-based learning, Research-based learning and teaching",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45h (60 sessions) contact hours + 1h final exam + 104h self-study",
+  "Pre-Requisite": "DPL302m",
+  "Description": "This course provides students with a foundation in core concepts and methods of Natural Language Processing. The course covers text classification, vector space models, probabilistic methods, sequence models, attention, and transformer-based approaches. Through a research-oriented team project, students learn how to define an NLP problem, review related work, select datasets, build baseline and improved models, evaluate results, analyze errors, and report findings clearly. By the end of the course, students are expected to understand major NLP techniques, apply them to real problems, design and compare experiments, and write technical reports and a short research paper.",
+  "StudentTasks": "- Complete assigned Coursera specialization modules, videos, and slide readings before each week.\n\n- Attend at least 80% of contact sessions (equivalent scheduled class time) in order to be accepted to the final examination.\n\n- Work in a project team to formulate an NLP research problem, collect or select data, and maintain a reproducible repository.\n\n- Submit Progress Set evidence and 4 milestone reports on time: proposal/literature review, baseline method, advanced-model progress, and final paper/presentation.\n\n- Read selected papers or technical notes related to the project topic, cite sources properly, and participate in peer review and revision.",
+  "Tools": "- Jupyter Notebook / Google Colab\n\n- Python libraries: NumPy, NLTK, scikit-learn, TensorFlow / Keras, PyTorch or equivalent as needed for specialization-aligned models\n\n- Git/GitHub for version control, experiment logs, and teamwork\n\n- Reference manager / citation workflow (e.g., Zotero, Mendeley, or equivalent)\n\n- Cloud/GPU server or Colab runtime as needed for project experiments",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "1) On-going Assessment\n\n- 1 progress test: 10%\n\n- Report 1: Project proposal and literature review: 10%\n\n- Report 2: Baseline method and experimental design: 10%\n\n- Report 3: Advanced-model progress and discussion: 10%\n\n- Report 4: Final paper and oral presentation: 20%\n\n- Labs: 10%\n\n-1 Final Exam: 30%\n\n2) Final Result: 100%\n\nCompletion Criteria:\n\n1) Every on-going assessment component > 0\n\n2) Final Exam Score >= 4 and Final Result >= 5",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Coursera Natural Language Processing Specialization",
+   "DeepLearning.AI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/specializations/natural-language-processing"
+  ],
+  [
+   "2",
+   "Course 1: Natural Language Processing with Classification and Vector Spaces",
+   "DeepLearning.AI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/classification-vector-spaces-in-nlp"
+  ],
+  [
+   "3",
+   "Course 2: Natural Language Processing with Probabilistic Models",
+   "DeepLearning.AI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "https://www.coursera.org/learn/probabilistic-models-in-nlp"
+  ],
+  [
+   "4",
+   "Course 3: Natural Language Processing with Sequence Models",
+   "DeepLearning.AI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "False",
+   "https://www.coursera.org/learn/sequence-models-in-nlp"
+  ],
+  [
+   "5",
+   "Course 4: Natural Language Processing with Attention Models",
+   "DeepLearning.AI",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/attention-models-in-nlp"
+  ],
+  [
+   "6",
+   "Natural Language Processing in Action: Understanding, Analyzing, and Generating Text with Python",
+   "Hobson Lane, Cole Howard and Hannes Max Hapke",
+   "Manning",
+   "2019",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://library.books24x7.com/toc.aspx?bookid=147295"
+  ],
+  [
+   "7",
+   "Course project proposal and progress-report templates",
+   "Course instructor",
+   "classroom distribution",
+   "2026",
+   "course template",
+   "",
+   "False",
+   "False",
+   "False",
+   "Instructor-provided template for Report 1, Report 2, and Report 3"
+  ],
+  [
+   "8",
+   "Short research paper template and peer-review rubric",
+   "Course instructor",
+   "classroom distribution",
+   "2026",
+   "course template",
+   "",
+   "False",
+   "False",
+   "False",
+   "Instructor-provided final paper template, presentation guide, and peer-review rubric"
+  ],
+  [
+   "9",
+   "Natural Language Processing with Python",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "False",
+   "https://www.nltk.org/book/"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Explain the end-to-end NLP pipeline, text preprocessing, corpus preparation, tokenization, and core linguistic concepts used in natural language processing."
+  ],
+  [
+   "2",
+   "CLO2",
+   "Apply classical NLP methods including vectorization, Naive Bayes, edit-distance reasoning, HMM/POS tagging, n-gram language modeling, and word embeddings to baseline NLP tasks."
+  ],
+  [
+   "3",
+   "CLO3",
+   "Build and analyze neural sequence models for NLP, including feed-forward networks for text, RNN/LSTM/GRU models, and attention-based sequence learning ideas."
+  ],
+  [
+   "4",
+   "CLO4",
+   "Use transformer-based pretrained language models for classification, sequence labeling, retrieval, question answering, and generation-oriented workflows."
+  ],
+  [
+   "5",
+   "CLO5",
+   "Evaluate NLP systems with suitable metrics, perform error analysis, discuss bias and limitations, and justify research conclusions with evidence and reproducible experiments."
+  ],
+  [
+   "6",
+   "CLO6",
+   "Implement an end-to-end NLP research project including problem formulation, data collection or selection, baseline development, improved modeling, evaluation, report writing, short paper writing, and presentation."
+  ],
+  [
+   "7",
+   "CLO7",
+   "Use AI-assisted development tools responsibly to accelerate experimentation, documentation, teamwork, and reflective learning in NLP projects."
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Labs: Đánh giá tính chuyên cần trong các bài lab, thảo luận",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "distributed across lab/tutorial sessions",
+   "CLO1, CLO2, CLO3, CLO4, CLO6, CLO7",
+   "In-class participation, lab exercises, and discussion engagement",
+   "-",
+   "- assessed across tutorial/lab sessions throughout the course",
+   "in class, by instructor",
+   "Evaluates regular attendance and active participation in lab and discussion sessions."
+  ],
+  [
+   "2",
+   "Progress test",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "distributed across 20 slots",
+   "CLO1, CLO5, CLO6, CLO7",
+   "Multiple-choice and short reasoning questions",
+   "30",
+   "- emphasize Courses 1-2 and core foundations of Course 3",
+   "in class, by instructor",
+   "Scheduled after students complete the core classical NLP content and enter sequence models."
+  ],
+  [
+   "3",
+   "Report 1: Project proposal and literature review",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "3 sessions (proposal, literature review, presentation)",
+   "CLO1, CLO5, CLO6, CLO7",
+   "Written report and oral presentation",
+   "-",
+   "- topic proposal, related-work review, dataset feasibility, and evaluation-criteria justification",
+   "in class, by instructor / TA",
+   "Focus on problem definition, literature review quality, dataset selection justification, and feasibility of the proposed evaluation plan."
+  ],
+  [
+   "4",
+   "Report 2: Baseline method and experimental design",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "3 sessions (baseline design, protocol, presentation)",
+   "CLO2, CLO5, CLO6, CLO7",
+   "Report, demo, and presentation",
+   "-",
+   "- Courses 1-2 methods: sentiment, autocorrect, POS tagging, n-grams, or embeddings",
+   "team presentation, in class",
+   "Focus on problem formulation, data pipeline, baseline model, and evaluation using classical NLP methods."
+  ],
+  [
+   "5",
+   "Report 3: Advanced-model progress and discussion",
+   "on-going",
+   "1",
+   "10.0%",
+   ">0",
+   "3 sessions (comparison review, progress presentation)",
+   "CLO3, CLO5, CLO6, CLO7",
+   "Report, demo, and presentation",
+   "-",
+   "- Courses 3-4 methods: RNN/LSTM, Siamese, attention, summarization, or QA",
+   "team presentation, in class",
+   "Focus on advanced model design, experiments, error analysis, and comparison with a baseline."
+  ],
+  [
+   "6",
+   "Report 4: Final paper and oral presentation",
+   "on-going",
+   "1",
+   "20.0%",
+   ">0",
+   "3 sessions (paper writing, presentation, revision)",
+   "CLO4, CLO5, CLO6, CLO7",
+   "",
+   "",
+   "",
+   "",
+   ""
+  ],
+  [
+   "7",
+   "Final exam",
+   "Final exam",
+   "1",
+   "30.0%",
+   "4",
+   "1 session (60')",
+   "CLO1, CLO2, CLO3, CLO4, CLO5",
+   "Multiple-choice and short problem-solving questions",
+   "50",
+   "- cover Courses 1-4 of the NLP Specialization",
+   "by exam board, using computer",
+   "Covers the main methods, model intuition, and evaluation ideas from the specialization."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "1. Course Introduction",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "IT",
+   "syllabus; Coursera specialization overview; project handbook",
+   "",
+   "Course orientation, specialization structure, CLOs, assessments, and the project-based/research-based workflow",
+   ""
+  ],
+  [
+   "2",
+   "1.1 NLTK platform introduction, environment setup, and installation guide",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "IT",
+   "syllabus; Coursera specialization overview; project handbook",
+   "",
+   "Explain how the four-course specialization map to the 60-session syllabus and report schedule",
+   ""
+  ],
+  [
+   "3",
+   "1.2 Tutorial: a small hands-on example with NLTK",
+   "Offline",
+   "CLO1, CLO6, CLO7",
+   "IT",
+   "syllabus; Coursera specialization overview; project handbook",
+   "",
+   "Form teams, discuss candidate research topics, identify feasible datasets, and set expectations for repositories, logs, and citations",
+   ""
+  ],
+  [
+   "4",
+   "2. Supervised ML Pipeline, Sentiment Analysis, and Vocabulary Building",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "TU",
+   "Coursera Course 1 Week 1 slides; preprocessing notes",
+   "",
+   "Introduce labels, features, training-vs-inference flow, and sentiment analysis as a core supervised NLP task",
+   ""
+  ],
+  [
+   "5",
+   "2.1 Tweet preprocessing, feature extraction, logistic regression, and cost function",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "TU",
+   "Coursera Course 1 Week 1 slides; preprocessing notes",
+   "",
+   "Discuss tokenization, normalization, frequency counts, and how preprocessing choices shape the input representation",
+   ""
+  ],
+  [
+   "6",
+   "2.2 Tutorial: sentiment prediction, error analysis, and guided discussion",
+   "Offline",
+   "CLO1, CLO2, CLO5",
+   "TU",
+   "Coursera Course 1 Week 1 slides; preprocessing notes",
+   "",
+   "Connect sparse text features to optimization, prediction, and practical baseline evaluation in one session",
+   ""
+  ],
+  [
+   "7",
+   "3. Probability, Conditional Probability, and Bayes' Rule",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "Coursera Course 1 Week 2 slides; Naive Bayes notes",
+   "",
+   "Introduce probability foundations needed for probabilistic NLP models",
+   ""
+  ],
+  [
+   "8",
+   "3.1 Priors, posteriors, likelihood, Naive Bayes, and Laplace smoothing",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "Coursera Course 1 Week 2 slides; Naive Bayes notes",
+   "",
+   "Explain how Bayes rule supports evidence combination and decision making in classification",
+   ""
+  ],
+  [
+   "9",
+   "3.2 Tutorial: Naive Bayes classification, baseline comparison, and error analysis",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "Coursera Course 1 Week 2 slides; Naive Bayes notes",
+   "",
+   "Teach the full Naive Bayes pipeline and compare it with logistic-regression baselines",
+   ""
+  ],
+  [
+   "10",
+   "4. Vector Space Models, W/W-W/D Matrices, and Similarity",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "vector-space and retrieval notes",
+   "",
+   "Introduce distributional meaning, vector representations, and why geometry matters in NLP",
+   ""
+  ],
+  [
+   "11",
+   "4.1 PCA, analogy reasoning, vector transformation, and document search",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "vector-space and retrieval notes",
+   "",
+   "Cover core vector-space tools and short related ideas together in a single theory session",
+   ""
+  ],
+  [
+   "12",
+   "4.2 Tutorial: similarity computation, vector exploration, and project discussion",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "vector-space and retrieval notes",
+   "",
+   "Pair two shorter Course 1 Week 4 applications in one session: translation by learned transformations and retrieval/document search",
+   ""
+  ],
+  [
+   "13",
+   "5. Autocorrect, Candidate Generation, and Minimum Edit Distance",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "edit-distance worksheet",
+   "",
+   "Introduce autocorrect as a probabilistic ranking problem with candidate generation",
+   ""
+  ],
+  [
+   "14",
+   "5.1 Dynamic programming, weighted costs, candidate ranking, and language evidence",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "autocorrect notes; edit-distance worksheet",
+   "",
+   "Explain insertion, deletion, substitution, transposition, and dynamic-programming computation",
+   ""
+  ],
+  [
+   "15",
+   "5.2 Tutorial: autocorrect walkthrough, evaluation, and failure cases",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "autocorrect notes; edit-distance worksheet",
+   "",
+   "Combine ranking, evaluation, and realistic failure analysis in one theory session",
+   ""
+  ],
+  [
+   "16",
+   "6. Research Problem Formulation and Proposal Design",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 1 template; literature-matrix template; selected papers",
+   "",
+   "Help teams define task, dataset, metrics, risks, and expected contribution",
+   ""
+  ],
+  [
+   "17",
+   "6.1 Literature search, related-work matrix, and citation/reproducibility plan",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 1 template; literature-matrix template; selected papers",
+   "",
+   "Teach literature review method, comparison tables, and reproducibility planning",
+   ""
+  ],
+  [
+   "18",
+   "6.2 Review Report 1: proposal and literature review",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 1 template; literature-matrix template; selected papers",
+   "",
+   "Teams present topic, related work, dataset choice, evaluation criteria, and receive feedback",
+   ""
+  ],
+  [
+   "19",
+   "7. POS Tagging, Sequence Labeling, and Markov Chains",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "POS-tagging notes; decoding worksheet",
+   "",
+   "Introduce POS tagging, tag sets, and why sequential context matters",
+   ""
+  ],
+  [
+   "20",
+   "7.1 HMM transitions/emissions, Viterbi decoding, and ambiguity resolution",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "POS-tagging notes; decoding worksheet",
+   "",
+   "Explain probabilistic sequence models for POS tagging",
+   ""
+  ],
+  [
+   "21",
+   "7.2 Tutorial: POS tagging, decoding practice, and error analysis",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "POS-tagging notes; decoding worksheet",
+   "",
+   "Connect decoding, ambiguity, and evaluation/error cases in one session",
+   ""
+  ],
+  [
+   "22",
+   "8. N-grams, Corpus-Based Language Modeling, and Sequence Probabilities",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "n-gram notes; language-model worksheet",
+   "",
+   "Introduce unigrams, bigrams, trigrams, and sequence probability from corpus counts",
+   ""
+  ],
+  [
+   "23",
+   "8.1 Sentence generation, autocomplete, perplexity, and smoothing",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "n-gram notes; language-model worksheet",
+   "",
+   "Cover short related topics together: generation, autocomplete, and the role of smoothing",
+   ""
+  ],
+  [
+   "24",
+   "8.2 Tutorial: n-gram modeling and language model evaluation",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "n-gram notes; language-model worksheet",
+   "",
+   "Discuss model evaluation and the limits of local-context memorization",
+   ""
+  ],
+  [
+   "25",
+   "9. Word Embeddings, Dense Representations, and Co-occurrence Intuition",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "word-embedding notes; bias/debiasing reading",
+   "",
+   "Introduce dense vectors as an alternative to one-hot and sparse count representations",
+   ""
+  ],
+  [
+   "26",
+   "9.1 One-hot vectors, embedding objectives, CBOW/skip-gram, and analogies",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "word-embedding notes; bias/debiasing reading",
+   "",
+   "Explain why embeddings capture distributional similarity better than sparse encodings",
+   ""
+  ],
+  [
+   "27",
+   "9.2 Tutorial: embedding exploration, debiasing, and evaluation",
+   "Offline",
+   "CLO2, CLO5",
+   "TU",
+   "word-embedding notes; bias/debiasing reading",
+   "",
+   "Combine short but related embedding topics in one session",
+   ""
+  ],
+  [
+   "28",
+   "10. Baseline Method Selection, Dataset Splits, and Experimental Protocol",
+   "Offline",
+   "CLO2, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 2 template; experiment-log template; metric guide",
+   "",
+   "Guide teams in choosing baselines and constructing train/dev/test splits",
+   ""
+  ],
+  [
+   "29",
+   "10.1 Metrics, ablation/control variables, and error-analysis plan",
+   "Offline",
+   "CLO2, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 2 template; experiment-log template; metric guide",
+   "",
+   "Teach fair-comparison principles for project experiments",
+   ""
+  ],
+  [
+   "30",
+   "10.2 Review Report 2: baseline method and experimental design",
+   "Offline",
+   "CLO2, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 2 template; experiment-log template; metric guide",
+   "",
+   "Teams present baselines, metrics, splits, and planned analyses for feedback",
+   ""
+  ],
+  [
+   "31",
+   "11. Neural Networks for Sentiment Analysis, Embedding Input, and Forward Propagation",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "neural-sentiment notes",
+   "",
+   "Introduce feed-forward neural models for text classification",
+   ""
+  ],
+  [
+   "32",
+   "11.1 Dense layers, activations, loss functions, optimization, and regularization",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "neural-sentiment notes",
+   "",
+   "Explain model structure from embeddings through hidden layers to predictions",
+   ""
+  ],
+  [
+   "33",
+   "11.2 Tutorial: neural vs classical models for sentiment analysis",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "neural-sentiment notes",
+   "",
+   "Combine training mechanics with critical comparison to earlier baselines",
+   ""
+  ],
+  [
+   "34",
+   "12. Recurrent Neural Networks, Sequence Models, and Hidden States",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "sequence-model notes",
+   "",
+   "Introduce recurrence, hidden-state memory, and sequence modeling for NLP",
+   ""
+  ],
+  [
+   "35",
+   "12.1 Sequence prediction, sequence generation, encoder-decoder, and GRU",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "sequence-model notes",
+   "",
+   "Explain why recurrent structure addresses some weaknesses of local-context language models",
+   ""
+  ],
+  [
+   "36",
+   "12.2 Tutorial: RNN/GRU walkthrough and model behavior discussion",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "sequence-model notes",
+   "",
+   "Pair two shorter Course 3 Week 2 topics in one session",
+   ""
+  ],
+  [
+   "37",
+   "13. Long-Term Dependencies, BPTT, and Gradient Issues",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "LSTM/NER notes; sequence-labeling notes",
+   "",
+   "Introduce the link between long-context modeling and sequence-labeling tasks",
+   ""
+  ],
+  [
+   "38",
+   "13.1 LSTM architecture, named entity recognition, and sequence-labeling evaluation",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "LSTM/NER notes; sequence-labeling notes",
+   "",
+   "Explain why vanilla RNNs struggle and why gated memory units matter",
+   ""
+  ],
+  [
+   "39",
+   "13.2 Tutorial: LSTM/NER practice and error analysis",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "LSTM/NER notes; sequence-labeling notes",
+   "",
+   "Combine LSTM details with NER data/evaluation issues in one theory session",
+   ""
+  ],
+  [
+   "40",
+   "14. Siamese Networks, Semantic Similarity, and Triplet Loss",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "Siamese-network notes; retrieval notes",
+   "",
+   "Introduce pair modeling for similarity, matching, and duplicate detection",
+   ""
+  ],
+  [
+   "41",
+   "14.1 One-shot learning, embedding-space training, retrieval, and similarity evaluation",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "Siamese-network notes; retrieval notes",
+   "",
+   "Explain similarity-oriented training objectives",
+   ""
+  ],
+  [
+   "42",
+   "14.2 Tutorial: duplicate-question detection and trade-off discussion",
+   "Offline",
+   "CLO3, CLO5",
+   "TU",
+   "C3_W4.pdf; Siamese-network notes; retrieval notes",
+   "",
+   "Combine application and evaluation trade-offs in one session",
+   ""
+  ],
+  [
+   "43",
+   "15. Model Improvement Review, Baseline vs Improved Models, and Error Categories",
+   "Offline",
+   "CLO3, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 3 template; comparison-table template; selected papers",
+   "",
+   "Guide teams in deciding what counts as a meaningful model improvement",
+   ""
+  ],
+  [
+   "44",
+   "15.1 Comparative evaluation, reproducibility evidence, and reporting strategy",
+   "Offline",
+   "CLO3, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 3 template; comparison-table template; selected papers",
+   "",
+   "Teach how to argue for improvement beyond a single metric",
+   ""
+  ],
+  [
+   "45",
+   "15.2 Review Report 3: advanced-model progress and discussion",
+   "Offline",
+   "CLO3, CLO5, CLO6, CLO7",
+   "LI",
+   "Report 3 template; comparison-table template; selected papers",
+   "",
+   "Teams present comparison tables, error analysis, and model-improvement claims",
+   ""
+  ],
+  [
+   "46",
+   "16. Neural Machine Translation, Seq2Seq, and Information Bottleneck",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "TU",
+   "attention notes; seq2seq notes",
+   "",
+   "Introduce neural machine translation and the encoder-decoder setup",
+   ""
+  ],
+  [
+   "47",
+   "16.1 Teacher forcing, attention, queries/keys/values, and generation metrics",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "TU",
+   "attention notes; seq2seq notes",
+   "",
+   "Explain the strengths and limits of fixed-memory sequence transduction",
+   ""
+  ],
+  [
+   "48",
+   "16.2 Tutorial: attention-based translation and decoding analysis",
+   "Offline",
+   "CLO3, CLO4, CLO5",
+   "TU",
+   "attention notes; seq2seq notes",
+   "",
+   "Combine attention mechanics with sequence-generation evaluation",
+   ""
+  ],
+  [
+   "49",
+   "17. Transformers, Self-Attention, and Positional Encoding",
+   "Offline",
+   "CLO4, CLO5",
+   "TU",
+   "transformer notes; summarization reading",
+   "",
+   "Introduce why transformers became state-of-the-art for many NLP tasks",
+   ""
+  ],
+  [
+   "50",
+   "17.1 Masking, multi-head attention, summarization, and state-of-the-art reasons",
+   "Offline",
+   "CLO4, CLO5",
+   "TU",
+   "transformer notes; summarization reading",
+   "",
+   "Explain the core components of transformer computation",
+   ""
+  ],
+  [
+   "51",
+   "17.2 Tutorial: transformer applications and comparison with RNNs",
+   "Offline",
+   "CLO4, CLO5",
+   "TU",
+   "transformer notes; summarization reading",
+   "",
+   "Connect architecture choices to summarization and broader NLP performance",
+   ""
+  ],
+  [
+   "52",
+   "18. Transfer Learning, BERT, T5, and Question Answering",
+   "Offline",
+   "CLO4, CLO5",
+   "TU",
+   "QA and long-context notes",
+   "",
+   "Introduce pretrained language models and transfer learning for QA",
+   ""
+  ],
+  [
+   "53",
+   "18.1 Pretraining vs fine-tuning, reliability, long-sequence challenges, and efficient transformers",
+   "Offline",
+   "CLO4, CLO5",
+   "TU",
+   "QA and long-context notes",
+   "",
+   "Explain model families, task adaptation, and answer-support issues",
+   ""
+  ],
+  [
+   "54",
+   "18.2 Tutorial: context-based QA and context-window limitations",
+   "Offline",
+   "CLO4, CLO5",
+   "TU",
+   "QA and long-context notes",
+   "",
+   "Use the shorter Course 4 Week 4 material to extend QA discussion to long-context constraints and efficient transformers",
+   ""
+  ],
+  [
+   "55",
+   "19. Progress Test on Core NLP Concepts and Project Status",
+   "Offline",
+   "CLO1, CLO5, CLO6, CLO7",
+   "LI",
+   "Progress test review guide; final paper template; peer-review rubric; citation guide",
+   "",
+   "Administer the progress test covering classical and neural NLP concepts from Sessions 1-54; introduce final paper structure and Report 4 expectations",
+   ""
+  ],
+  [
+   "56",
+   "19.1 Review Report 4, final paper structure, figures/tables, citations, and limitations",
+   "Offline",
+   "CLO5, CLO6, CLO7",
+   "LI",
+   "Final paper template; peer-review rubric; citation guide",
+   "",
+   "Teach short-paper writing conventions and how to discuss limitations honestly",
+   ""
+  ],
+  [
+   "57",
+   "19.2 Oral Presentation: final paper draft",
+   "Offline",
+   "CLO5, CLO6, CLO7",
+   "LI",
+   "Final paper template; peer-review rubric; citation guide",
+   "",
+   "Teams present final paper draft, key findings, and receive revision feedback",
+   ""
+  ],
+  [
+   "58",
+   "20. Oral Presentation: final project review and peer feedback",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "LT-SA",
+   "Revision guide; project summary checklist; reflection guide",
+   "",
+   "Assess conceptual understanding across classical, neural, and transformer NLP methods",
+   ""
+  ],
+  [
+   "59",
+   "20.1 Oral Presentation: revision plan and final improvements",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "LT-SA",
+   "Revision guide; project summary checklist; reflection guide",
+   "",
+   "Review project outcomes, peer feedback, and what should be revised before final submission",
+   ""
+  ],
+  [
+   "60",
+   "20.2 Oral Presentation: course reflection, research findings, and future work",
+   "Offline",
+   "CLO1, CLO2, CLO3, CLO4, CLO5, CLO6, CLO7",
+   "LT-SA",
+   "Revision guide; project summary checklist; reflection guide",
+   "",
+   "Synthesize theory, project evidence, and lessons learned about the limits and opportunities of current NLP methods",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "Project scope and feasibility",
+   "How should an NLP project be scoped so that the problem, dataset, metric, and expected contribution are all feasible within a 10-week course?"
+  ],
+  [
+   "2",
+   "4",
+   "Logistic baseline justification",
+   "When is logistic regression a stronger baseline than a more complex model for sentiment analysis, and what evidence would justify that choice?"
+  ],
+  [
+   "3",
+   "7",
+   "Probabilistic baselines",
+   "Which assumptions of Naive Bayes fail in real text data, and why can the model still remain competitive as a research baseline?"
+  ],
+  [
+   "4",
+   "10",
+   "Representation geometry and applications",
+   "How do representation choices change the geometry of a vector space model and the quality of translation or retrieval decisions built on top of it?"
+  ],
+  [
+   "5",
+   "13",
+   "Edit-distance limitations",
+   "Where does minimum edit distance fail to capture realistic language behavior, and what additional evidence should an autocorrect system use?"
+  ],
+  [
+   "6",
+   "16",
+   "Proposal and literature quality",
+   "What makes a project proposal and literature review convincing enough to show novelty, feasibility, and clear evaluation criteria?"
+  ],
+  [
+   "7",
+   "19",
+   "Decoding and ambiguity",
+   "Why can globally optimized decoding outperform local decisions in sequence labeling, and how would you demonstrate that experimentally?"
+  ],
+  [
+   "8",
+   "22",
+   "Language-model validity",
+   "How can we tell whether an n-gram language model is genuinely informative rather than simply memorizing frequent patterns?"
+  ],
+  [
+   "9",
+   "25",
+   "Embedding value and bias",
+   "What evidence shows that dense word embeddings add value beyond sparse features for a particular task, and how should bias in embedding spaces be examined?"
+  ],
+  [
+   "10",
+   "28",
+   "Experimental reproducibility",
+   "What makes an experimental design reproducible and fair when comparing multiple NLP baselines on the same dataset?"
+  ],
+  [
+   "11",
+   "31",
+   "Neural baseline value",
+   "When does a neural sentiment model genuinely outperform a classical baseline, and what evidence is needed beyond a single accuracy gain?"
+  ],
+  [
+   "12",
+   "34",
+   "Sequence-memory justification",
+   "Which linguistic dependencies justify moving from classical language models to RNN/GRU-style sequence models, and how would you show that empirically?"
+  ],
+  [
+   "13",
+   "37",
+   "LSTM, gradients, and annotation quality",
+   "How do gradient problems, memory design, and annotation quality together influence LSTM/NER performance on sequence-labeling tasks?"
+  ],
+  [
+   "14",
+   "40",
+   "Similarity architecture choice",
+   "When is a Siamese architecture preferable to a cross-encoder or other alternatives for semantic similarity tasks?"
+  ],
+  [
+   "15",
+   "43",
+   "Meaningful progress",
+   "What counts as meaningful progress in an NLP research project: higher metrics alone, or also stronger analysis, error diagnosis, and reproducibility?"
+  ],
+  [
+   "16",
+   "46",
+   "Attention usefulness",
+   "What does attention capture that recurrent encoder-decoder models often miss, and what evidence can support claims about its usefulness?"
+  ],
+  [
+   "17",
+   "49",
+   "Transformer design trade-offs",
+   "How do self-attention and transformer design choices alter accuracy, efficiency, and interpretability relative to recurrent models?"
+  ],
+  [
+   "18",
+   "52",
+   "QA reliability and long context",
+   "Why can transfer-learning models produce fluent but unsupported answers, and how do long-context limits change how we should evaluate QA systems?"
+  ],
+  [
+   "19",
+   "55",
+   "Paper quality",
+   "What separates a strong final NLP paper from a weak one in terms of claim quality, evidence, structure, citations, and limitations?"
+  ],
+  [
+   "20",
+   "58",
+   "Research reflection",
+   "After completing the project, what conclusions can be drawn about task-model fit, reproducibility, error analysis, and the limits of current NLP methods?"
+  ]
+ ]
+}

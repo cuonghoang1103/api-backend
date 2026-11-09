@@ -1,5 +1,1724 @@
 {
  "ma": "ESL301",
- "khongCo": true,
- "links": []
+ "sylID": "14364",
+ "quyetDinh": "968/QĐ-ĐHFPT dated 08/07/2026",
+ "ungVien": [
+  {
+   "sylID": "14364",
+   "code": "ESL101",
+   "name": "Sociolinguistics_Ngôn ngữ học xã hội",
+   "active": true,
+   "approved": true,
+   "decision": "968/QĐ-ĐHFPT dated 08/07/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14364",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14364",
+  "Syllabus Name": "Sociolinguistics_Ngôn ngữ học xã hội",
+  "Course Name English": "Sociolinguistics",
+  "Subject Code": "ESL101",
+  "Learning-Teaching Method": "Lecture, Seminar, Workshop, Active learning, Discovery Learning, In-class lecture",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1 hour final exam + 104 hours self-study",
+  "Pre-Requisite": "Passed LTG202",
+  "Description": "Objectives:\n\nThis course is designed to introduce students to the basic concepts of Sociolinguistics and the relationship between language and society, and how language is used in multilingual speech communities.\n\nDescription:\n\nThe course helps students:\n\n~Understand sociolinguistic terminology or concepts to apply in research and real-life practices.\n\n~Use language appropriately in different social contexts.\n\n~Interpret the social relationships in a community, and the way people convey and construct aspects of their social identity through language.\n\n~Examine some similarities and differences in the way people use their language to convey meaning in association with society.\n\nTeaching method:\n\nThis course applies instructional, communicative, and interactive discussions with:\n\n~instructions on lessons and exercises meant to apply learnt skills.\n\n~researching features of sociolinguistics through presentations and project work.\n\n~open-minded approach to questions and issues that may arise during lessons.\n\n~lectures and seminars to enhance interest in the field of sociolinguistics.",
+  "StudentTasks": "~Students must attend at least 80% of contact hours in order to be accepted to the final examination.\n\n~Be punctual for class.\n\n~Actively participate in class discussions.\n\n~Preview and review the lessons.\n\n~Check vocabulary for comprehension.\n\n~Do the exercises before, during, and after class.\n\n~Hand in homework and class requirements.\n\n~Work with a group for group discussions and activities.",
+  "Tools": "Coursebook, Teacher's Book, pptx, handouts, Internet\n\nTech Tools:\n\n- ChatGPT\n\n- Elicit.org\n\n- Gemini\n\n- Google Forms\n\n- Miro\n\n- NotebookLM\n\n- Notion AI\n\n- Perplexity AI\n\n- Praat\n\n- Scite. ai",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "968/QĐ-ĐHFPT dated 08/07/2026",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "8/7/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "An Introduction to Sociolinguistics",
+   "Janet Holmes and Nick Wilson",
+   "Routledge",
+   "2017",
+   "5th",
+   "9781138845015",
+   "True",
+   "True",
+   "False",
+   "Dùng song song hai bản 5th và 6th. ISBN: + 5th edition: 9781138845015 + 6th edition: 9780367421106"
+  ],
+  [
+   "2",
+   "An Introduction to Sociolinguistics: Teaching and Learning Resources",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "Introducing Sociolinguistics",
+   "Miriam Meyerhoff",
+   "Routledge",
+   "2018",
+   "3rd",
+   "9781138185593",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "4",
+   "Sociolinguistics (Oxford Introduction to Language Study Series)",
+   "Bernard Spolsky",
+   "Oxford University Press",
+   "1998",
+   "1st",
+   "978-0194372114",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "5",
+   "The Guidebook to Sociolinnguistics",
+   "John Wiley & Sons",
+   "Allen Bell",
+   "2014",
+   "1st",
+   "978-0-631-22866-0",
+   "False",
+   "True",
+   "False",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Demonstrate understanding of sociolinguistic theories and concepts through AI-enhanced theoretical exploration (ChatGPT, Perplexity.ai, Scite.ai)"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Analyze language maintenance, language shift, and multilingualism in different communities using AI-powered research synthesis (Claude, NotebookLM)"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyse how language varies in nations with different types of language used and how a language is planned to become a national language through AI-assisted policy analysis (Scite.ai, ChatGPT, Elicit.org)"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Explain how language differs in regions in terms of accents and dialects and the influence of age and gender on language use using AI-enhanced phonetic analysis (Praat, ChatGPT, Perplexity.ai, Scite.ai)"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Examine the relationship between ethnicity, social networks, and language change through AI-simulated sociolinguistic research (ChatGPT, Claude, Perplexity.ai)"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Examine how language varies according to its style and context using computational stylistic analysis tools (Stylo, ChatGPT, Gemini)"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Apply knowledge of speech functions, politeness, gender, and stereotypes in communication through AI-generated discourse analysis (Scite.ai, ChatGPT, Claude)"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Explore the relationship between language, culture, and perception in cross-cultural communication using AI-enhanced comparative analysis (Claude, ChatGPT, Scite.ai)"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Demonstrate teamwork and collaboration in sociolinguistic research projects through AI-supported collaborative methodologies (Miro, Notion AI, ChatGPT)"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "~15mins/ group",
+   "LO1, LO2, LO3, LO4",
+   "Follow lecturer's proposal",
+   "N/A",
+   "Lessons and topics learned from Chapters 1-7 of the Coursebook. Topics are to be chosen by the instructor.",
+   "In class, supervised by the class instructor. Students will be divided into groups of 4~5 members. Each group will present a topic/ unit from the lesson using PowerPoint and other visual aids. Topics will be assigned by the instructor.",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "~15mins/ group",
+   "LO5, LO6, LO7, LO8",
+   "Follow lecturer's proposal",
+   "N/A",
+   "Lessons and topics learned from Chapters 8-14 of the Coursebook. Topics are to be chosen by students.",
+   "In class, supervised by the class instructor. Students will be divided into groups of 4~5 members. Each group will choose a topic. Each group will lead a discussion.",
+   ""
+  ],
+  [
+   "3",
+   "Progress tests",
+   "on-going",
+   "2",
+   "20.0%",
+   ">0",
+   "~5-10mins",
+   "LOs 1-9",
+   "Short answer questions, Multiple Choice, True or False, Fill in the blanks",
+   "40",
+   "Lessons and topics learned from Chapters 1-14 of the Coursebook.",
+   "In class, supervised by the class instructor.",
+   ""
+  ],
+  [
+   "4",
+   "Final Project",
+   "Final exam",
+   "2",
+   "50.0%",
+   "4",
+   "25mins/group",
+   "LOs 1-9",
+   "Project",
+   "N/A",
+   "Lessons and topics learned from all Chapters of the Coursebook.",
+   "*by exam board, using computer.\n\n* Written Deliverables: Students must submit all written components of the project to the Examination Office by the end of Week 10. The Examination Office will then forward the submissions to the teacher responsible for marking the presentation.\n\n*Presentation: Students will present their project findings in a 20-minute presentation and a 5-minute Q&A during the final examination period.\n\n*Students will work in groups of 4 members. In cases where the total number of students does not allow for equal grouping, teams of three or five members may be formed to accommodate the class size.",
+   "*by exam board, using computer.\n\n* Written Deliverables: Students must submit all written components of the project to the Examination Office by the end of Week 10. The Examination Office will then forward the submissions to the teacher responsible for marking the presentation.\n\n*Presentation: Students will present their project findings in a 20-minute presentation and a 5-minute Q&A during the final examination period.\n\n*Students will work in groups of 4 members. In cases where the total number of students does not allow for equal grouping, teams of three or five members may be formed to accommodate the class size."
+  ],
+  [
+   "5",
+   "Final Project - Presentation",
+   "Final exam",
+   "1",
+   "25.0%",
+   "2",
+   "25mins/group",
+   "All LOs",
+   "Presentation",
+   "",
+   "",
+   "Presentation: Students will present their project findings in a 20-minute presentation and a 5-minute Q&A during the final examination period.",
+   ""
+  ],
+  [
+   "6",
+   "Final Project - Written components",
+   "Final exam",
+   "1",
+   "25.0%",
+   "2",
+   "Deadline: Week 10",
+   "All LOs",
+   "Writing",
+   "",
+   "",
+   "Written Deliverables: Students must submit all written components of the project to the Examination Office by the end of Week 10. The Examination Office will then forward the submissions to the teacher responsible for marking the presentation.",
+   ""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction Chapter 1: What do sociolinguists study?",
+   "Offline",
+   "LO1",
+   "ITU",
+   "Student Coursebook, Online Resource",
+   "link1-1",
+   "Students preview and review the lessons; check vocabulary for comprehension; answer the exercises during and after the class by using AI search assistants (e.g., Perplexity, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "2",
+   "What do sociolinguists study (cont.)",
+   "Offline",
+   "LO1",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students review the lessons related to what sociolinguists study for comprehension; answer the exercises during and after the class by using AI search assistants (e.g., NotbookLM, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "3",
+   "Section I: Multilingual Speech Communities Chapter 2: Language choice in multilingual communities",
+   "Offline",
+   "LO1",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students preview and review the lessons; check vocabulary for comprehension; answer the exercises during and after the class by using AI search assistants (e.g., Elicit.org, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "4",
+   "Chapter 2: Language choice in multilingual communities -Choosing your variety or code",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Perplexity, Elicit.org, ChatGPT with browsing) to search for ways to choose a variety/code.",
+   ""
+  ],
+  [
+   "5",
+   "Chapter 2: Language choice in multilingual communities - Diglossia",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students define diglossia and identify main features of diglossia by using AI search assistants (e.g., Perplexity, Notion AI, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "6",
+   "Chapter 2: Language choice in multilingual communities - Codeswitching or Codemixing",
+   "Offline",
+   "LO2",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students distinguish code-mixing and code-switching by using AI search assistants (e.g., Gemini, Praat, Scite.)",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 3: Language maintenance and shift - Language Shift in Different Communities",
+   "Offline",
+   "LO3",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students employ AI search assistants (e.g., Miro NotebookLM, Scite, ChatGPT with browsing) to clarify reasons for language shift in different communities.",
+   ""
+  ],
+  [
+   "8",
+   "Chapter 3: Language maintenance and shift - Language Death and Loss",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students research language death and language loss by using AI search assistants (e.g., Perplexity, Gemini, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "9",
+   "Chapter 3: Language maintenance and shift -Minority Language Maintenance",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Miro, Google Forms, Scite, Gemini) to discover minority language maintenance.",
+   ""
+  ],
+  [
+   "10",
+   "Chapter 3: Language maintenance and shift - Language Revival",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students research language revival using AI search assistants (e.g., NotebookLM, Gemini, ChatGPT) to discover language revival.",
+   ""
+  ],
+  [
+   "11",
+   "Chapter 4: Linguistic varieties and multilingual nations- Vernacular Languages",
+   "Offline",
+   "LO3",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students utilize AI search assistants (e.g., Perplexity, Scite, ChatGPT with browsing) to define venacular languages.",
+   ""
+  ],
+  [
+   "12",
+   "Chapter 4: Linguistic varieties and multilingual nations - Standard Languages",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students discover standard languages by using AI search assistants (e.g., Gemini, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 4: Linguistic varieties and multilingual nations - Lingua Franca",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, ChatGPT, NotebookLM) to learn about lingua franca.",
+   ""
+  ],
+  [
+   "14",
+   "Chapter 4: Linguistic varieties and multilingual nations Pidgins and Creoles",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students distinguish differences between pidgin and creoles by using AI search assistants (e.g., Scite, Gemini, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "15",
+   "Chapter 5: National languages and language planning- National and Official Languages",
+   "Offline",
+   "LO3",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Notion AI, Scite, Gemini) to identify differences between national languages and official languages.",
+   ""
+  ],
+  [
+   "16",
+   "Chapter 5: National languages and language planning- Planning for a National Official Language",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students discover ways to plan for a national official language by using AI search assistants (e.g., Perplexity, Scite, Note AI).",
+   ""
+  ],
+  [
+   "17",
+   "Chapter 5: National languages and language planning- Planning for a Standard Variety in Norway",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students employ AI search assistants (e.g., Gemini, Note AI, ChatGPT with browsing) to research planning for a standard variety in Norway.",
+   ""
+  ],
+  [
+   "18",
+   "Chapter 5: National languages and language planning - The Linguist's Role in Planning",
+   "Offline",
+   "LO3",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students identify the linguist's role by using AI search assistants (e.g., Praat, Miro, Scite, Gemini).",
+   ""
+  ],
+  [
+   "19",
+   "Section II: Language Variation: Focus on Users Chapter 6: Regional and social dialects- Regional Variations",
+   "Offline",
+   "LO4",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students preview and review the lessons; check vocabulary related to language variation for comprehension; answer the exercises during and after the class by using AI search assistants (e.g., Gemini, Scite, NotebookLM).",
+   ""
+  ],
+  [
+   "20",
+   "Chapter 6: Regional and social dialects- Social Variations",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students discover social variations by using AI search assistants (e.g., Miro, Gemini, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "21",
+   "Chapter 6: Regional and social dialects- Social Dialects",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students research social dialects by using AI search assistants (e.g., Perplexity, Gemini, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "22",
+   "Chapter 7: Gender and age- Gender Ecxlusive Speech Differences-Highly Structured Communities",
+   "Offline",
+   "LO4",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students learn about gender exclusive speech differences by using AI search assistants (e.g., ChatGPT, Gemini, Scite).",
+   ""
+  ],
+  [
+   "23",
+   "Chapter 7: Gender and age- Gender Preferential Speech Features- Social Dialect Research/ Gender and Social Class",
+   "Offline",
+   "LO4",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Note AI, Scite, ChatGPT with browsing) to discover gender preferential speech features.",
+   ""
+  ],
+  [
+   "24",
+   "Chapter 7: Gender and age- Explanation od Women's Linguistic Behavior- Age Graded features of speech",
+   "Offline",
+   "LO4, LO9",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students identify age-graded features of speech by using AI search assistants (e.g., Perplexity, Scite, NotebookLM).",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 7: Gender and age -Age and Social Dialect Data- Age Grading and Language Change",
+   "Offline",
+   "LO4, LO9",
+   "TU",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students discover age grading and language change by using AI search assistants (e.g., Perplexity, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "26",
+   "Chapter 8: Ethnicity and social networks Ethnicity",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, Scite, ChatGPT with browsing) to define ethnicity.",
+   ""
+  ],
+  [
+   "27",
+   "Chapter 8: Ethnicity and social networks -Social Network",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., NotebookLM, Scite, Gemini) to distinguish social networks.",
+   ""
+  ],
+  [
+   "28",
+   "Chapter 9: Language change -Variation and Change",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students define variation and change by using AI search assistants (e.g., Note AI, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "29",
+   "Chapter 9: Language change - How do Changes Spread",
+   "Offline",
+   "LO5",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students employ AI search assistants (e.g., Miro, Gemini, Note AI) to research how changes spread.",
+   ""
+  ],
+  [
+   "30",
+   "Chapter 9: Language change -How Do We Study Language Change",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students learn how to study language change by employing AI search assistants (e.g., NotebookLM, Scite, Gemini).",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 9: Language change -Reasons for Language Change",
+   "Offline",
+   "LO5",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students utilize AI search assistants (e.g., ChatGPT, Scite, Note AI) to figure out reasons for language change.",
+   ""
+  ],
+  [
+   "32",
+   "Section III: Language Variation: Focus on Uses- Chapter 10: Style, context and register",
+   "Offline",
+   "LO6",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students utilize AI search assistants (e.g., Scite, Note AI, ChatGPT with browsing) to define style, context, and register.",
+   ""
+  ],
+  [
+   "33",
+   "Chapter 10: Style, context and register- Adressee as an Influence on Style + Accomodation Theory",
+   "Offline",
+   "LO6",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students discover addressee and accommodation theory by utilizing AI search assistants (e.g., Gemini, Scite, Notebook LM).",
+   ""
+  ],
+  [
+   "34",
+   "Chapter 10: Style, context and register- Context, Style and Class",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students utilize AI search assistants (e.g., Note AI, NotebookLM, ChatGPT with browsing) to discover relationships among style, context, and register.",
+   ""
+  ],
+  [
+   "35",
+   "Chapter 10: Style, context and register - Style in Non-Western Societies +Register",
+   "Offline",
+   "LO6",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students learn about style in non-Western societies by employing AI search assistants (e.g., Perplexity, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "36",
+   "Assignment 1 Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, Scite, ChatGPT with browsing) to search for questions and predicted answers for the presentation.",
+   ""
+  ],
+  [
+   "37",
+   "Assignment 1 Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, Scite, ChatGPT with browsing) to search for questions and predicted answers for the presentation.",
+   ""
+  ],
+  [
+   "38",
+   "Assignment 1 Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, Scite, ChatGPT with browsing) to search for questions and predicted answers for the presentation.",
+   ""
+  ],
+  [
+   "39",
+   "Chapter 11: Speech functions, politeness and cross-cultural communication- The Functions of Speech",
+   "Offline",
+   "LO7",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students discover functions of speech by utilizing AI search assistants (e.g., Gemini, Note AI, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "40",
+   "Chapter 11: Speech functions, politeness and cross-cultural communication- Politeness and Address Form",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., NotebookLM, Gemini, ChatGPT with browsing) to learn about politeness and address form.",
+   ""
+  ],
+  [
+   "41",
+   "Chapter 11: Speech functions, politeness and cross-cultural communication- Linguistic Politeness in Different Cultures",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Perplexity, Scite, ChatGPT with browsing) to discover linguistic politeness in different cultures.",
+   ""
+  ],
+  [
+   "42",
+   "Chapter 12: Gender, politeness and stereotypes- Women's Language and Confidence",
+   "Offline",
+   "LO7",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Notebook LM, Scite, Gemini) to learn about women's language and confidence.",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 12: Gender, politeness and stereotypes- Interaction- Gossip",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students define interaction and gossip by using AI search assistants (e.g., Praat, Miro, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "44",
+   "Chapter 12: Gender, politeness and stereotypes- The Lingusitic Construction of Gender",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Note AI, ChatGPT, Scite) to learn about the linguistic construction of gender.",
+   ""
+  ],
+  [
+   "45",
+   "Chapter 12: Gender, politeness and stereotypes- The Lingusitic Construction of Sexuality",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Perplexity, Scite, Gemini) to discover the linguistic construction of sexuality.",
+   ""
+  ],
+  [
+   "46",
+   "Chapter 12: Gender, politeness and stereotypes- Sexist Language",
+   "Offline",
+   "LO7",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students define sexist language by employing AI search assistants (e.g., Perplexity, NotebookLM, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "47",
+   "Chapter 13: Language, cognition and culture- Language and Perception",
+   "Offline",
+   "LO8",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students identify relationships between language and perception by using AI search assistants (e.g., Gemini, Google Forms, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "48",
+   "Chapter 13: Language, cognition and culture - Whorf",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students find some key ideas about Whorf by using AI search assistants (e.g., Gemini, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 13: Language, cognition and culture Linguistic Categories and Culture",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Perplexity, Scite, ChatGPT with browsing) to identify linguistic categories and culture.",
+   ""
+  ],
+  [
+   "50",
+   "Chapter 13: Language, cognition and culture -Discourse Pattern and Culture",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students identify discourse patterns and culture by using AI search assistants (e.g., Note AI, Scite, Gemini).",
+   ""
+  ],
+  [
+   "51",
+   "Chapter 13: Language, cognition and culture - Language, Social Class and Cognition",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Google Forms, Scite, Gemini) to discover relationships among language, social class, and cognition.",
+   ""
+  ],
+  [
+   "52",
+   "Chapter 14: Analysing Discourse- Pragmatics and Politeness Theory",
+   "Offline",
+   "LO8",
+   "I, T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students learn about pragmatics and politeness theory by utilizing AI search assistants (e.g., Elicit.org, Scite, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "53",
+   "Chapter 14: Analysing Discourse- Ethnography of Speaking",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students employ AI search assistants (e.g., Perplexity, Praat, Miro, Gemini) to discover ethnography of speaking.",
+   ""
+  ],
+  [
+   "54",
+   "Chapter 14: Analysing Discourse - Interactional Sociolinguistics",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students employ AI search assistants (e.g., Praat, Miro, ChatGPT with browsing) to research interactional sociolinguistics.",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 14: Analysing Discourse- Conversational Analysis (CA)",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students learn about conversational analysis by employing AI search assistants (e.g., Praat, Miro, ChatGPT with browsing).",
+   ""
+  ],
+  [
+   "56",
+   "Chapter 14: Analysing Discourse- Critical Discourse Analysis (CDA)",
+   "Offline",
+   "LO8",
+   "T, U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students utilize AI search assistants (e.g., Praat, Miro, Scite, Gemini) to discover critical discourse analysis.",
+   ""
+  ],
+  [
+   "57",
+   "Assignment 2 Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, Scite, ChatGPT) to search for questions and predicted answers for the presentation.",
+   ""
+  ],
+  [
+   "58",
+   "Assignment 2 Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, Scite, ChatGPT) to search for questions and predicted answers for the presentation.",
+   ""
+  ],
+  [
+   "59",
+   "Assignment 2 Presentation",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Gemini, Scite, ChatGPT) to search for questions and predicted answers for the presentation.",
+   ""
+  ],
+  [
+   "60",
+   "Conclusion +Review (cont.)",
+   "Offline",
+   "LO1, LO2, LO3, LO4, LO5, LO6, LO7, LO8, LO9",
+   "U",
+   "Student Coursebook, Online Resource",
+   "",
+   "Students use AI search assistants (e.g., Perplexity, Scite, Gemini) to summarize main points of each chapter.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [
+  [
+   "No.",
+   "Session No",
+   "Name",
+   "Details"
+  ],
+  [
+   "1",
+   "1",
+   "HCM_CQ1.1",
+   "Give some examples of real-life situations when language competency is still not enough to avoid misunderstanding and relationship damage."
+  ],
+  [
+   "2",
+   "1",
+   "HN_CQ1.1",
+   "What is a sociolinguist?"
+  ],
+  [
+   "3",
+   "2",
+   "HCM_CQ1.2",
+   "Give some examples you can observe when you say the same thing in different ways (Ex: you address your disliked teacher “bà” when conversing with your friends but “cô” when conversing with another teacher). From your perspective, explain why you say the same thing in different ways in your above examples."
+  ],
+  [
+   "4",
+   "2",
+   "HCM_CQ1.3",
+   "Give some examples you can observe when different Vietnamese people say the same thing in different ways (pronunciation, words, structures). From your perspective, explain why people say the same thing in different ways in your above examples."
+  ],
+  [
+   "5",
+   "2",
+   "HN_CQ1.2",
+   "Why do we say the same thing in different ways? What are the different ways we say things?"
+  ],
+  [
+   "6",
+   "2",
+   "HN_CQ1.3",
+   "What affect language choice? (social factors, social dimensions)"
+  ],
+  [
+   "7",
+   "3",
+   "HCM_CQ1.4",
+   "What are some factors that affect your choice of language/dialect/language style. Give examples."
+  ],
+  [
+   "8",
+   "3",
+   "HN_CQ1.4",
+   "What is linguistic repertoire? What is yours?"
+  ],
+  [
+   "9",
+   "3",
+   "HN_CQ1.5",
+   "What are domains of language use? Provide examples, both in Vietnam and in the world."
+  ],
+  [
+   "10",
+   "4",
+   "HCM_CQ2.1",
+   "Illustrate your language choice in some common domains. Compare with your partners and explain why you and your partners have different choices of codes in the same domain."
+  ],
+  [
+   "11",
+   "4",
+   "HCM_CQ2.2",
+   "What can you observe as some limitations of the domain-based approach to identify code choice in real life? Illustrate your explanation with real-life examples."
+  ],
+  [
+   "12",
+   "4",
+   "HN_CQ2.1",
+   "What social factors affect code choice?"
+  ],
+  [
+   "13",
+   "5",
+   "HCM_CQ2.3",
+   "Each group analyzes the use of languages in different domains in the following countries/communities: Canada, the Philippines, Vietnam in the French colonialism, the Chinese community in Chợ Lớn. Then compare and contrast them."
+  ],
+  [
+   "14",
+   "5",
+   "HN_CQ2.2",
+   "What is diglossia? What are its features? Provide examples."
+  ],
+  [
+   "15",
+   "6",
+   "HCM_CQ2.4",
+   "What do you think are some differences of diglossia and bilingualism?"
+  ],
+  [
+   "16",
+   "6",
+   "HCM_CQ2.5",
+   "How do you think people’s attitude toward high and low variety in a diglossic community affect society?"
+  ],
+  [
+   "17",
+   "6",
+   "HN_CQ2.3",
+   "Make a comparison between H variety and L variety. What are people's attitudes towards H and L variety?"
+  ],
+  [
+   "18",
+   "6",
+   "HN_CQ2.4",
+   "What is polyglossia? What is the difference between diglossia and polyglossia?"
+  ],
+  [
+   "19",
+   "7",
+   "HCM_CQ3.1",
+   "What do you think are some social advantages and barriers when bringing up a bilingual child in Vietnam?"
+  ],
+  [
+   "20",
+   "7",
+   "HN_CQ3.1",
+   "What is code-switching? What are types of code-switching? Why do we code-switch?"
+  ],
+  [
+   "21",
+   "7",
+   "HN_CQ3.2",
+   "What is the difference between code-switching and code-mixing?"
+  ],
+  [
+   "22",
+   "8",
+   "HCM_CQ3.2",
+   "Give some examples when you use two languages in 1 utterance intentionally and unintentionally. Analyze why you use more than 1 language."
+  ],
+  [
+   "23",
+   "8",
+   "HCM_CQ3.3",
+   "Give some examples when code-switching/ code-mixing is widely accepted and when code-switching/ code-mixing causes annoyance. Explain from the social views why this is the case."
+  ],
+  [
+   "24",
+   "8",
+   "HN_CQ3.3",
+   "What is metaphorical switching? What is lexical borrowing?"
+  ],
+  [
+   "25",
+   "8",
+   "HN_CQ3.4",
+   "What are attitudes to code-switching?"
+  ],
+  [
+   "26",
+   "9",
+   "HCM_CQ3.4",
+   "Do you think code-switching/ code-mixing/lexical borrowing may to some extent affect our mother tongue and our ability to use mother tongue?"
+  ],
+  [
+   "27",
+   "9",
+   "HCM_CQ3.5",
+   "What are some suggestions to have a healthy dose of code-switching/ code-mixing/lexical borrowing to avoid their negative impact?"
+  ],
+  [
+   "28",
+   "9",
+   "HN_CQ3.5",
+   "What is the difference between intra-sentential and inter-sentential code-switching?"
+  ],
+  [
+   "29",
+   "9",
+   "HN_CQ3.6",
+   "What is language shift? What is the difference between language shift and language death?"
+  ],
+  [
+   "30",
+   "10",
+   "HCM_CQ4.1",
+   "Analyze how a typical Vietnamese migrant family to the U.S. shifts their language use (individuals and generations)."
+  ],
+  [
+   "31",
+   "10",
+   "HCM_CQ4.2",
+   "Analyze how a Chinese migrant family to the Vietnam shifts their language use (individuals and generations). Why do you think the language shift takes place more slowly in the Chinese family?"
+  ],
+  [
+   "32",
+   "10",
+   "HN_CQ4.1",
+   "What factors contribute to language shift?"
+  ],
+  [
+   "33",
+   "10",
+   "HN_CQ4.2",
+   "How can a minority language be maintained?"
+  ],
+  [
+   "34",
+   "10",
+   "HN_CQ4.3",
+   "What is language revival? Provide examples."
+  ],
+  [
+   "35",
+   "11",
+   "HCM_CQ4.3",
+   "What do you think are some factors that may boost or slow down language shift?"
+  ],
+  [
+   "36",
+   "11",
+   "HCM_CQ4.4",
+   "If you were a Vietnamese migrant in the U.S., would you try to slow down the language shift in your family, especially in your child generation? Why? What would you do to slow down/ speed up the language shift?"
+  ],
+  [
+   "37",
+   "11",
+   "HN_CQ4.4",
+   "Make a presentation about vernacular languages and standard languages."
+  ],
+  [
+   "38",
+   "12",
+   "HCM_CQ4.5",
+   "Why is it important to maintain some minority languages? What can you see as efforts from Vietnamese government to maintain those languages?"
+  ],
+  [
+   "39",
+   "12",
+   "HN_CQ4.5",
+   "What are World Englishes and the types? What are lingua francas?"
+  ],
+  [
+   "40",
+   "13",
+   "HCM_CQ5.1",
+   "What is your view toward vernacular Englishes spoken by people in the outer and expanding circles of English? As a speaker of English as a foreign language, would you like to pay effort to have the Received Pronunciation? Why (not)?"
+  ],
+  [
+   "41",
+   "13",
+   "HN_CQ5.1",
+   "What are pidgins? Why do they develop? What kinds of linguistic structures does a pidgin language have? What are attitudes to pidgins?"
+  ],
+  [
+   "42",
+   "14",
+   "HCM_CQ5.2",
+   "Read the first three chapters of Nguyễn Nhật Ánh’s novel “Chúc một ngày tốt lành”. What are the animal kids' purposes when they decide to speak the other species' languages and when they create a new language? If you could think of a name for their newly created language, what would it be? Why?"
+  ],
+  [
+   "43",
+   "14",
+   "HCM_CQ5.3",
+   "Read the first three chapters of Nguyễn Nhật Ánh’s novel “Chúc một ngày tốt lành”. Can you think of situations in which humans have to create a new language to communicate like those animals in the story?"
+  ],
+  [
+   "44",
+   "14",
+   "HN_CQ5.2",
+   "What are creoles? What are differences between pidgins and creoles? What are attitudes to creoles?"
+  ],
+  [
+   "45",
+   "15",
+   "HCM_CQ5.4",
+   "Do you think the original “chữ quốc ngữ” is a pidgin? Explain your answer using the features of pidgin."
+  ],
+  [
+   "46",
+   "15",
+   "HN_CQ5.3",
+   "What is national language? What is official language? Make a comparison between these two languages. Give examples of countries with official languages."
+  ],
+  [
+   "47",
+   "16",
+   "HCM_CQ6.1",
+   "Why does India have more than 1 official language but no national language?"
+  ],
+  [
+   "48",
+   "16",
+   "HCM_CQ6.2",
+   "Why do you think New Zealand recognizes Maori and New Zealand sign language as their official languages though they are only used by the minority?"
+  ],
+  [
+   "49",
+   "16",
+   "HN_CQ6.1",
+   "What are steps in planning for a national official language? Explain and give examples"
+  ],
+  [
+   "50",
+   "17",
+   "HCM_CQ6.3",
+   "What are the different roles of official and national languages?"
+  ],
+  [
+   "51",
+   "17",
+   "HN_CQ6.2",
+   "What functions does a successful national language need to have? Analyze."
+  ],
+  [
+   "52",
+   "18",
+   "HCM_CQ6.4",
+   "How did the development of Vietnamese “chữ quốc ngữ” match to the steps of official language planning?"
+  ],
+  [
+   "53",
+   "18",
+   "HCM_CQ6.5",
+   "What are the politicians and linguists’ roles in planning a national official language?"
+  ],
+  [
+   "54",
+   "18",
+   "HN_CQ6.3",
+   "What are the linguist's roles in language planning?"
+  ],
+  [
+   "55",
+   "19",
+   "HN_CQ7.1",
+   "What are types of regional variation?"
+  ],
+  [
+   "56",
+   "20",
+   "HN_CQ7.2",
+   "What is social variation?"
+  ],
+  [
+   "57",
+   "21",
+   "HN_CQ7.3",
+   "What are social dialects?"
+  ],
+  [
+   "58",
+   "22",
+   "HCM_CQ8.1",
+   "Give some examples of regional varieties of Vietnamese and analyze how the dialects vary in terms of pronunciation and structures."
+  ],
+  [
+   "59",
+   "22",
+   "HCM_CQ8.2",
+   "Give some examples of regional varieties of Vietnamese and analyze how the dialects vary in terms of vocabulary."
+  ],
+  [
+   "60",
+   "23",
+   "HCM_CQ8.3",
+   "What should be done to encourage the community to have more respectful view towards some vernacular regional dialects?"
+  ],
+  [
+   "61",
+   "23",
+   "HN_CQ8.1",
+   "How are women and men different in speech?"
+  ],
+  [
+   "62",
+   "24",
+   "HCM_CQ8.4",
+   "Should Ha Noi’s dialect and Sai Gon’s dialect be considered the standard Vietnamese? Why (not)?"
+  ],
+  [
+   "63",
+   "24",
+   "HN_CQ8.2",
+   "What is gender-exclusive speech form?"
+  ],
+  [
+   "64",
+   "24",
+   "HN_CQ8.3",
+   "What is gender-preferential speech features?"
+  ],
+  [
+   "65",
+   "25",
+   "HN_CQ9.1",
+   "How are women and men from different social classes different in speech in use?"
+  ],
+  [
+   "66",
+   "25",
+   "HN_CQ9.2",
+   "Why do women use more standard forms than men?"
+  ],
+  [
+   "67",
+   "26",
+   "HN_CQ9.3",
+   "What are some alternative explanations for females' use of more standard forms than men?"
+  ],
+  [
+   "68",
+   "26",
+   "HN_CQ9.4",
+   "What are speech differences between women and men in terms of age-graded features?"
+  ],
+  [
+   "69",
+   "27",
+   "HN_CQ9.5",
+   "What is ethnicity? How do people signal their ethnicity?"
+  ],
+  [
+   "70",
+   "28",
+   "HCM_CQ10.1",
+   "How do men and women’s speeches differ? Give examples to illustrate your points."
+  ],
+  [
+   "71",
+   "28",
+   "HCM_CQ10.2",
+   "Why do women tend to use more standard codes than men?"
+  ],
+  [
+   "72",
+   "28",
+   "HN_CQ10.1",
+   "What is AAVE? What are its features that make AAVE different from the English of white Americans?"
+  ],
+  [
+   "73",
+   "29",
+   "HCM_CQ10.3",
+   "From your observation and experience, explain how a person’s speech style changes throughout different age stages in their life."
+  ],
+  [
+   "74",
+   "29",
+   "HN_CQ10.2",
+   "What are New Englishes? What are reasons for the establishment of New Englishes?"
+  ],
+  [
+   "75",
+   "30",
+   "HCM_CQ10.4",
+   "Draw a network for yourself based on your interactions on an average weekday or a weekend. Does your social network provide any clues to the way you speak?"
+  ],
+  [
+   "76",
+   "30",
+   "HCM_CQ10.5",
+   "Draw a network for yourself based on your interactions on an average weekday or a weekend. Would it identify the people whose speech your speech most resembles?\nIf not, what would provide a more accurate indication of the influences on your speech?"
+  ],
+  [
+   "77",
+   "30",
+   "HN_CQ10.3",
+   "What is network? What are its types?"
+  ],
+  [
+   "78",
+   "31",
+   "HCM_CQ11.1",
+   "How does speaker innovation lead to language change? Give examples in Vietnamese language from your observation."
+  ],
+  [
+   "79",
+   "31",
+   "HN_CQ11.1",
+   "What is speaker innovation? What are \"changes from above\"? What are \"changes from below\"? Give examples"
+  ],
+  [
+   "80",
+   "32",
+   "HCM_CQ11.2",
+   "What can you observe as some aspects of changes in Vietnamese language that have taken place recently? Give specific examples."
+  ],
+  [
+   "81",
+   "32",
+   "HCM_CQ11.3",
+   "How did those changes spread in Vietnamese society?"
+  ],
+  [
+   "82",
+   "32",
+   "HN_CQ11.2",
+   "How do language changes spread?"
+  ],
+  [
+   "83",
+   "33",
+   "HCM_CQ11.4",
+   "Explain why those changes took place from your point of view. What changes do you think are positive and what are negative?"
+  ],
+  [
+   "84",
+   "33",
+   "HN_CQ11.3",
+   "How do we study language change?"
+  ],
+  [
+   "85",
+   "34",
+   "HCM_CQ12.1",
+   "Watch a clip of a documentary about the solar system for kids and a clip of the same topic for adults. Compare and contrast the language style used in each clip. Explain why there are differences.\nhttps://www.youtube.com/watch?v=w36yxLgwUOc\nhttps://www.youtube.com/watch?v=libKVRa01L8"
+  ],
+  [
+   "86",
+   "34",
+   "HN_CQ12.1",
+   "What are reasons for language change?"
+  ],
+  [
+   "87",
+   "35",
+   "HCM_CQ12.2",
+   "Give and analyze some cases when you (or someone you know) converge, diverge or stylize your speech. Explain the reasons why you do so in those cases."
+  ],
+  [
+   "88",
+   "35",
+   "HN_CQ12.2",
+   "What affect a speaker's style?"
+  ],
+  [
+   "89",
+   "36",
+   "HCM_CQ12.3",
+   "What is your viewpoint of comedians using stylization to make audience laugh?"
+  ],
+  [
+   "90",
+   "36",
+   "HN_CQ12.3",
+   "Make a presentation about Accommodation Theory (Speech convergence, speech divergence,stylisation)"
+  ],
+  [
+   "91",
+   "37",
+   "HCM_CQ13.1",
+   "Watch a clip of a Vietnamese football match. Describe the language features of the commentator’s style."
+  ],
+  [
+   "92",
+   "37",
+   "HN_CQ13.1",
+   "What is hypercorrection? What are stereotypes, markers, and indicators? Explain and give examples"
+  ],
+  [
+   "93",
+   "38",
+   "HCM_CQ13.2",
+   "What is the difference between baby talk and baby's code? Which is a dialect and which is a style? Why?"
+  ],
+  [
+   "94",
+   "38",
+   "HN_CQ13.2",
+   "What is register? Provide examples"
+  ],
+  [
+   "95",
+   "39",
+   "HCM_CQ13.3",
+   "Give some examples of hypercorrection you can observe from Vietnamese learners of English. Explain the reasons of hypercorrection in each example."
+  ],
+  [
+   "96",
+   "39",
+   "HN_CQ13.3",
+   "What are the functions of speech?"
+  ],
+  [
+   "97",
+   "40",
+   "HCM_CQ14.1",
+   "Are there cases when your utterances have more than one speech function? Give examples and analyze them."
+  ],
+  [
+   "98",
+   "40",
+   "HN_CQ14.1",
+   "What is the directive function? Analyze it in more detail."
+  ],
+  [
+   "99",
+   "41",
+   "HCM_CQ14.2",
+   "Give examples of cases when you use different speech functions indirectly in your utterances."
+  ],
+  [
+   "100",
+   "41",
+   "HCM_CQ14.3",
+   "Consider the form of directives. How do people get others to do things in Vietnameses? Compare and contrast them with the English forms of directives."
+  ],
+  [
+   "101",
+   "41",
+   "HN_CQ14.2",
+   "How do people decide which form to use in a particular context? What are social factors which affect a speaker's choice of the appropriate form of directive?"
+  ],
+  [
+   "102",
+   "42",
+   "HCM_CQ14.4",
+   "Distinguish politeness from formality. Give examples of cases when being formal does not mean being polite."
+  ],
+  [
+   "103",
+   "42",
+   "HCM_CQ14.5",
+   "Distinguish politeness from formality. Give examples of cases when being polite does not mean being formal."
+  ],
+  [
+   "104",
+   "42",
+   "HN_CQ14.3",
+   "What is politeness? What does 'being polite' involve? What are two types of politeness?"
+  ],
+  [
+   "105",
+   "42",
+   "HN_CQ14.4",
+   "Make a presentation about linguistic politeness in different cultures."
+  ],
+  [
+   "106",
+   "43",
+   "HCM_CQ15.1",
+   "Analyze how positive and negative politeness of language use can be applied to enhance relationship in real life."
+  ],
+  [
+   "107",
+   "43",
+   "HN_CQ15.1",
+   "What are features of 'women's language'?"
+  ],
+  [
+   "108",
+   "44",
+   "HCM_CQ15.2",
+   "Categorize Lakoff’s description of features of women’s language into hedging and boosting devices."
+  ],
+  [
+   "109",
+   "44",
+   "HCM_CQ15.3",
+   "What features in Lakoff's description can you observe in Vietnamese women’s mother tongue? Give examples."
+  ],
+  [
+   "110",
+   "44",
+   "HN_CQ15.2",
+   "Present about Lakoff's linguistic features as politeness devices"
+  ],
+  [
+   "111",
+   "45",
+   "HCM_CQ15.4",
+   "Compare men and women’s interrupting behavior and conversational feedback. Why do you think there are differences?"
+  ],
+  [
+   "112",
+   "45",
+   "HN_CQ15.3",
+   "How are men and women different in interrupting behavior and conversational feedback?"
+  ],
+  [
+   "113",
+   "46",
+   "HCM_CQ16.1",
+   "Compare men and women’s gossip behavior. Why do you think there are differences?"
+  ],
+  [
+   "114",
+   "46",
+   "HCM_CQ16.2",
+   "Compare English and Vietnamese, which language do you think is more sexist? Explain your answer and give examples."
+  ],
+  [
+   "115",
+   "46",
+   "HN_CQ16.1",
+   "What is gossip? How are men and women different in gossip?"
+  ],
+  [
+   "116",
+   "46",
+   "HN_CQ16.2",
+   "What is sexist language? Can a language be sexist?"
+  ],
+  [
+   "117",
+   "47",
+   "HCM_CQ16.3",
+   "What do you suggest to make Vietnamese/ English more gender-neutral?"
+  ],
+  [
+   "118",
+   "48",
+   "HCM_CQ16.4",
+   "Explain how you think verbal hygiene and political correctness are related. Give examples."
+  ],
+  [
+   "119",
+   "49",
+   "HCM_CQ17.1",
+   "How is the violation of conversational maxims related to politeness strategies? Give examples."
+  ],
+  [
+   "120",
+   "50",
+   "HCM_CQ17.2",
+   "Compare the modern wedding described on your textbook and a traditional wedding of Vietnam using Hyme’s ethnography of communication framework."
+  ],
+  [
+   "121",
+   "51",
+   "HN_CQ17.1",
+   "What is pragmatics? What are Grice's Conversational Maxims? Analyze 4 maxims of cooperative talk."
+  ],
+  [
+   "122",
+   "51",
+   "HN_CQ17.2",
+   "Why don't people follow the conversational maxims? Explain."
+  ],
+  [
+   "123",
+   "52",
+   "HN_CQ18.1",
+   "What is ethnography of speaking? What is the framework by Hymes? What are benefits of ethnography of speaking?"
+  ],
+  [
+   "124",
+   "53",
+   "HN_CQ18.2",
+   "What is interactional sociolinguistics? What are contextualisation cues? What is miscommunication?"
+  ],
+  [
+   "125",
+   "54",
+   "HN_CQ18.3",
+   "What is Conversation Analysis (CA)?"
+  ],
+  [
+   "126",
+   "54",
+   "HN_CQ18.4",
+   "What is Critical Discourse Analysis (CDA)?"
+  ]
+ ],
+ "links": [
+  "https://drive.google.com/drive/folders/1rkW5glgd4LIAFLgpk-6pXM4KF8KiLZKe?usp=sharing"
+ ],
+ "thamKhao": {
+  "ma": "ESL101",
+  "sylID": "14364",
+  "ten": "Sociolinguistics_Ngôn ngữ học xã hội",
+  "lyDo": "trường chưa công bố syllabus cho mã này; dùng syllabus môn cùng tên/cùng môn khác mã"
+ }
 }

@@ -1,0 +1,319 @@
+{
+ "ma": "FRS401c",
+ "sylID": "12621",
+ "quyetDinh": "359/QĐ-ĐHFPT dated 04/09/2025",
+ "ungVien": [
+  {
+   "sylID": "12621",
+   "code": "FRS401c",
+   "name": "Network Forensics_Điều tra mạng",
+   "active": true,
+   "approved": true,
+   "decision": "359/QĐ-ĐHFPT dated 04/09/2025"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=12621",
+ "thuNgay": "2026-11-09",
+ "chung": {
+  "Syllabus ID": "12621",
+  "Syllabus Name": "Network Forensics_Điều tra mạng",
+  "Course Name English": "Network Forensics",
+  "Subject Code": "FRS401c",
+  "Learning-Teaching Method": "Blended,Online,Lecture,Active learning, Discussion",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h)\n\n= 46h online + 3h offline + 1h final exam + 100h self-study",
+  "Pre-Requisite": "",
+  "Description": "This course will introduce the student to the essential aspects of information security and network forensics. The student will be provided with the tools, techniques and industry accepted methodologies so that upon completion of the course the student will be able to describe key concepts of network security and forensics and how those concepts apply to themselves and their organization.\n\nThe course is based on Courses 1, 2 and 6 of the SSCP Professional Training Certificate, the whole will show employers you have the IT security foundation to defend against cyber attacks – and puts you on a clear path to earning SSCP certification.",
+  "StudentTasks": "1. Complete three online courses 1, 2 ,6 to be allowed to take Final Exam\n\n2. Final Exam included Final Theory Exam (TE): 100%\n\n3. Students who complete all MOOCs before the course deadline will receive 1 bonus point; otherwise, no bonus point will be awarded.\n\n4. Completion Criteria: Final TE Score >=4 & (Final TE Score + bonus) >= 5",
+  "Tools": "",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "359/QĐ-ĐHFPT dated 04/09/2025",
+  "IsApproved": "True",
+  "Note": "",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/9/2025"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "SPEC: (ISC)² Systems Security Certified Practitioner (SSCP)",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/professional-certificates/sscp-training"
+  ],
+  [
+   "2",
+   "Help Articles",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   "https://learner.coursera.help/hc/en-us/articles/208280036-Coursera-Code-of-Conduct"
+  ],
+  [
+   "3",
+   "MOOC 1: Access Controls",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/access-controls"
+  ],
+  [
+   "4",
+   "MOOC 2: Security Operations and Administration",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/security-operations"
+  ],
+  [
+   "5",
+   "MOOC 3: Systems and Application Security",
+   "",
+   "Coursera",
+   "",
+   "",
+   "",
+   "True",
+   "False",
+   "True",
+   "https://www.coursera.org/learn/systems-and-application-security"
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Understand the different access control systems and how they should be implemented to protect the system and data using the different levels of confidentiality, integrity, and availability.\nLO1.1 Describe how to implement Authentication mechanisms\nLO1.2 Identify and operate internetwork trust architectures\nLO1.3 Describe the process of administering identity management life cycle\nLO1.4 Implement the different types of access controls (Subject/Object based)"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Achieve basic security concepts and the application of those concepts in the day to day operation and administration of enterprise computer systems and the information that they host.\nLO2.1 Define Code of Ethics, describe the security concepts, Document and operate security\ncontrols\"\nLO2.2 Describe the asset management process\nLO2.3 Implement and assess compliance controls\nLO2.4 Describe the change management process\nLO2.5 Contribute to the security awareness training program and physical security operations"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Know concepts in endpoint device security, cloud infrastructure security, securing big data systems, securing virtual environments, and how an organization can protect itself from these attacks.\nLO3.1 Identify malicious activity, describe malicious code and the various countermeasures\nLO3.2 Describe the processes for operating endpoint device security, and mobile device management processes\nLO3.3 Describe the process for configuring cloud security\nLO3.4 Explain and summarize the process for securing big data systems and virtual environments"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "TE",
+   "Final exam",
+   "1",
+   "100.0%",
+   "4",
+   "60'",
+   "All LOs",
+   "Multiple choicesMarked by Computer",
+   "60",
+   "All studied courses. Each module of course contributes 3-5 questions.",
+   "by exam board,\n\nusing computer",
+   "Customized from the quizzes of this specialization\n\n1st Evaluation: For students who completed & got Coursera's specialization certificates) at week 13;\n\n2nd Evaluation: For students who completed & got Coursera's specialization certificates) at week 14."
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Specialization Introduction\n\nAccess Controls\n\n- Implement Authentication Mechanisms\n\n- Signle factor, Multifactor Authentication\n\n- Single Sign-On\n\nOffline 1: Guide learning and review of the specialization",
+   "Offline",
+   "LO1.1",
+   "",
+   "",
+   "",
+   "Complete Week 1, 2 of the course Access Controls\n\nAll Students should participate in offline slot",
+   ""
+  ],
+  [
+   "2",
+   "Access Controls\n\n- Operate Internetwork Trust Architectures\n\n- Administer Identity Management Life Cycle",
+   "Online",
+   "LO1.2, LO1.3",
+   "",
+   "",
+   "",
+   "Complete Week 3, 4 of the course Access Controls",
+   ""
+  ],
+  [
+   "3",
+   "Access Controls\n\n- Implement Access Controls\n\n- Case Study",
+   "Online",
+   "LO1.4, LO1",
+   "",
+   "",
+   "",
+   "Complete Week 5, 6 of the course Access Controls",
+   ""
+  ],
+  [
+   "4",
+   "Access Controls\n\n- Exam",
+   "Online",
+   "LO1",
+   "",
+   "",
+   "",
+   "Complete Week 7 of the course Access Controls",
+   ""
+  ],
+  [
+   "5",
+   "Security Operations and Administration\n\n- Understand and Comply with Code of Ethics and Security Concepts\n\n- Participate in Asset Management",
+   "Online",
+   "LO2.1, LO2.2",
+   "",
+   "",
+   "",
+   "Complete Week 1, 2 of the course Security Operations and Administration",
+   ""
+  ],
+  [
+   "6",
+   "Security Operations and Administration\n\n- Implement and Assess Compliance with Controls & Participate in Change Management Duties\n\n- Participate in Physical Security Operations & Security Awareness Training",
+   "Online",
+   "LO2.3, LO2.4, LO2.5",
+   "",
+   "",
+   "",
+   "Complete Week 3, 4 of the course Security Operations and Administration",
+   ""
+  ],
+  [
+   "7",
+   "Security Operations and Administration\n\n- Case Study\n\n- Exam",
+   "Online",
+   "LO2",
+   "",
+   "",
+   "",
+   "Complete Week 5, 6 of the course Security Operations and Administration.",
+   ""
+  ],
+  [
+   "8",
+   "Systems and Application Security\n\n- Identify and Analyze Malicious Code and Activity\n\n- Implement and Operate Endpoint Device Security",
+   "Online",
+   "LO1, LO2, LO3.1, LO3.2",
+   "",
+   "",
+   "",
+   "Complete Week 1, 2 of the course Systems and Application Security",
+   ""
+  ],
+  [
+   "9",
+   "Systems and Application Security\n\n- Operate and Configure Cloud Security\n\n- Secure Big Data Systems & Operate and Secure Virtual Environments",
+   "Online",
+   "LO3.3, LO3.4",
+   "",
+   "",
+   "",
+   "Complete Week 3, 4 of the course Systems and Application Security",
+   ""
+  ],
+  [
+   "10",
+   "Systems and Application Security\n\n- Case Study\n\n- Exam",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "Complete Week 5, 6 of the Systems and Application Security",
+   ""
+  ],
+  [
+   "11",
+   "Systems and Application Security (cont.)\n\n- Case Study\n\n- Exam",
+   "Online",
+   "LO3",
+   "",
+   "",
+   "",
+   "Complete Week 5, 6 of the Systems and Application Security",
+   ""
+  ],
+  [
+   "12",
+   "- Apply What You've Learned\n\nCourse Review",
+   "Offline",
+   "All LOs",
+   "TU",
+   "",
+   "",
+   "Review, Complete three course, Preparing for your Exam\n\nAll Students should participate in offline slot\n\nDeadline of Coursera Completion: End of Friday of the week.",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": []
+}

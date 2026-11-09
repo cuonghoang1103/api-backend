@@ -39,7 +39,9 @@ export async function ganMuc0Flm(spec, specFile) {
   // KHOÁ FLM trọn (chương ↔ buổi, slide đặt đúng buổi, thi, tài liệu) — academy-khoa-flm.mjs — thắng
   // chương slide rời (academy-slide-flm.mjs, chỉ dùng cho môn có Mục 0 làm tay).
   const khoa = await napNeuCo(path.join(dir, '_khoa-flm', `${ma}.mjs`));
-  const slide = (khoa.length ? khoa : await napNeuCo(path.join(dir, '_slide-flm', `${ma}.mjs`))).filter((s) => !daCo.has(s.title));
+  // Môn trường KHÔNG công bố syllabus ⇒ khoá TỰ SOẠN (agent, theo content/academy/_HOP-DONG-TU-SOAN.md) ở _tu-soan/.
+  const tuSoan = khoa.length ? [] : await napNeuCo(path.join(dir, '_tu-soan', `${ma}.mjs`));
+  const slide = (khoa.length ? khoa : tuSoan.length ? tuSoan : await napNeuCo(path.join(dir, '_slide-flm', `${ma}.mjs`))).filter((s) => !daCo.has(s.title));
   if (!muc0.length && !slide.length) return spec;
   // Môn đã có Mục 0 / tài liệu / giới thiệu làm tay ở đầu ⇒ chương slide đứng SAU khối mở đầu đó, trước nội dung.
   let mo = 0;

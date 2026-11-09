@@ -1,5 +1,975 @@
 {
  "ma": "ECR302",
- "khongCo": true,
- "links": []
+ "sylID": "14238",
+ "quyetDinh": "444/QĐ-ĐHFPT dated 04/23/2026",
+ "ungVien": [
+  {
+   "sylID": "14238",
+   "code": "ECR301",
+   "name": "Critical Reading in English_Kỹ năng đọc tư duy phản biện tiếng Anh",
+   "active": true,
+   "approved": true,
+   "decision": "444/QĐ-ĐHFPT dated 04/23/2026"
+  }
+ ],
+ "nguon": "flm.fpt.edu.vn/gui/role/student/SyllabusDetails?sylID=14238",
+ "thuNgay": "2026-11-08",
+ "chung": {
+  "Syllabus ID": "14238",
+  "Syllabus Name": "Critical Reading in English_Kỹ năng đọc tư duy phản biện tiếng Anh",
+  "Course Name English": "Critical Reading in English",
+  "Subject Code": "ECR301",
+  "Learning-Teaching Method": "OfflineSuggested: ARCS MODEL OF MOTIVATION",
+  "NoCredit": "3",
+  "Degree Level": "Bachelor",
+  "Time Allocation": "Study hour (150h) = 45 contact hours (60 sessions) + 1.5 hours final exam + 103.5 hours self-study",
+  "Pre-Requisite": "None",
+  "Description": "*Students develop and apply critical reading skills through the analysis of texts taken from authentic sources (journals, newspapers, magazines and websites) and a variety of academic disciplines. Students are encouraged to develop their comprehension, while at the same time forming a reasoned assessment of the effectiveness and validity of the text.\n\n*Students are encouraged to use AI tools and Digital tools to enhance learningn benefits: efficiency, accuracy, personalized learning, future-ready skills",
+  "StudentTasks": "Attend at least 80% of contact hours in order to be accepted to the final examination\n\n- Actively participate in class activities\n\n- Fulfil tasks given by instructor after class\n\n- Use their own laptops in class only for learning purposes",
+  "Tools": "1. AI Tools for Reading Comprehension Support\n\n- ChatGPT\n\n- Immersive Reader\n\n- NotebookLM\n\n2. AI Tools to Foster Critical Thinking While Reading\n\n- ChatGPT and ChatGPT for stats - Stats.ai\n\n- Perplexity.ai\n\n- Google Fact Check Tools\n\n- Tableau Public\n\n- Turnitin\n\n- Semantic Scholar AI\n\n- Grammarly Tone Detector\n\n- Connected Papers\n\n3. AI Tools for Collaborative and Reflective Learning\n\n- ChatGPT (Debate Mode) for Discussion Simulators\n\n- Kialo Edu\n\n- Mindmup\n\n- Padlet/Canva\n\n- Perspective API\n\n- Semantic Scholar\n\n- Hemingway Editor",
+  "Scoring Scale": "10",
+  "DecisionNo MM/dd/yyyy": "444/QĐ-ĐHFPT dated 04/23/2026",
+  "IsApproved": "True",
+  "Note": "Conditions to pass:\n\nEach progress mark: > 0\n\nFinal Exam mark: >=4\n\nGrade Average >= 5/10",
+  "Is Scored": "True",
+  "MinAvgMarkToPass": "5",
+  "IsActive": "True",
+  "ApprovedDate": "4/23/2026"
+ },
+ "taiLieu": [
+  [
+   "No.",
+   "Material Description",
+   "Author",
+   "Publisher",
+   "Published Date",
+   "Edition",
+   "ISBN",
+   "Is Main Material",
+   "Is Hard Copy",
+   "Is Online",
+   "Note"
+  ],
+  [
+   "1",
+   "Critical Reading - English for Academic Purposes, Pearson (2015)\n(For teachers:\n+ My eLab Documents\n+ For teacher: http://gsi.berkeley.edu/media/Reading.pdf (Teaching Critical Reading))",
+   "",
+   "Pearson",
+   "2015",
+   "",
+   "9782761356541",
+   "True",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "2",
+   "Critical Thinking, Reading, and Writing - A Brief Guide to Argument, 8th Edition (soft copy) - Bedford/St. Martin’s",
+   "Bedford/St. Martin’s",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "3",
+   "English Newspapers/ Journals",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "4",
+   "http://www.bbc.co.uk/learningenglish/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "5",
+   "https://vietnamnews.vn/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "6",
+   "https://www.heraldsun.com.au/",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ],
+  [
+   "7",
+   "Mindscapes: Critical Reading Skills and Strategies",
+   "",
+   "Cengage Learning",
+   "",
+   "",
+   "",
+   "False",
+   "True",
+   "False",
+   ""
+  ],
+  [
+   "8",
+   "Ted Talks",
+   "",
+   "",
+   "",
+   "",
+   "",
+   "False",
+   "False",
+   "True",
+   ""
+  ]
+ ],
+ "clo": [
+  [
+   "No.",
+   "CLO Name",
+   "CLO Details"
+  ],
+  [
+   "1",
+   "CLO1",
+   "Apply appropriate reading strategies (skimming, scanning, close reading, analytical reading) to different text types and demonstrate critical reading skills by creating annotated texts that identify assumptions, evaluate evidence, and question arguments (using Claude, NotebookLM for analysis verification and pattern recognition)"
+  ],
+  [
+   "2",
+   "CLO2",
+   "Evaluate the academic credibility of texts by analyzing peer-review status, publication sources, and currency, and create a comparative analysis demonstrating why peer-reviewed sources are preferable for academic research (using using AI-powered fact-checkers and source analyzers: Turnitin, Semantic Scholar AI)"
+  ],
+  [
+   "3",
+   "CLO3",
+   "Analyze author credibility and potential bias by examining author background, funding sources, and quoted authorities, and produce a bias assessment report with specific examples and reasoning (using AI bias detection tools: Claude, Perspective API, Media Bias/Fact Check AI)"
+  ],
+  [
+   "4",
+   "CLO4",
+   "Identify and assess author stance, intended audience, and purpose by analyzing rhetorical choices, tone, and context, and present findings through structured analysis templates (using sentiment analysis and rhetorical analysis AI: ChatGPT, Grammarly Tone Detector, Claude)"
+  ],
+  [
+   "5",
+   "CLO5",
+   "Distinguish between factual claims and opinions by categorizing statements and construct evidence-based arguments that clearly separate verifiable facts from subjective interpretations (using AI classification tools: Google Fact Check Tools)"
+  ],
+  [
+   "6",
+   "CLO6",
+   "Evaluate empirical research reports by applying scientific method criteria and create structured reviews that assess methodology, data quality, and conclusion validity (using AI research analysis platforms: Semantic Scholar)"
+  ],
+  [
+   "7",
+   "CLO7",
+   "Assess the strength and reliability of different evidence types (anecdotal, statistical, visual, testimonial) and design evidence evaluation frameworks for various persuasive techniques (using AI-powered statistical analysis tools: Tableau Public, ChatGPT for stats - Stats.ai)"
+  ],
+  [
+   "8",
+   "CLO8",
+   "Contextualize texts within broader intellectual frameworks by identifying schools of thought and compare how different theoretical perspectives influence interpretation and analysis (Using AI knowledge graphs and contextual analysis tools: NotebookLM, Claude, Connected Papers)"
+  ],
+  [
+   "9",
+   "CLO9",
+   "Analyze the relationship between personal experience and textual interpretation and develop strategies for maintaining objectivity while acknowledging subjective responses (using AI reflection prompts and bias-checking tools: Claude, Perspective API)"
+  ],
+  [
+   "10",
+   "CLO10",
+   "Synthesize critical review components (summary, analysis, evaluation) to produce well-structured critical reviews that demonstrate comprehensive analytical thinking (using AI writing assistants and structure analyzers: ChatGPT, Grammarly, Hemingway Editor)"
+  ]
+ ],
+ "danhGia": [
+  [
+   "No.",
+   "Category",
+   "Type",
+   "Part",
+   "Weight",
+   "Completion Criteria",
+   "Duration",
+   "CLO",
+   "Question Type",
+   "No Question",
+   "Knowledge and Skill",
+   "Grading Guide",
+   "Note"
+  ],
+  [
+   "1",
+   "Assignment 1",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO1-5",
+   "Written Question",
+   "1",
+   "Knowledge and skills in studied chapter(s)",
+   "Student create visual comparison chart",
+   ""
+  ],
+  [
+   "2",
+   "Assignment 2",
+   "on-going",
+   "1",
+   "15.0%",
+   ">0",
+   "",
+   "LO5-9",
+   "Written Question",
+   "1",
+   "Knowledge and skills in studied chapter(s)",
+   "AI-Guided Reflection Journal",
+   ""
+  ],
+  [
+   "3",
+   "Assignment 3",
+   "on-going",
+   "1",
+   "30.0%",
+   ">0",
+   "",
+   "LO1-10",
+   "Project",
+   "1",
+   "Knowledge and skills in studied chapter(s)",
+   "Project (written + Presentation)",
+   ""
+  ],
+  [
+   "4",
+   "Final exam",
+   "Final exam",
+   "2",
+   "40.0%",
+   "4",
+   "90'",
+   "All LOs",
+   "1. Students will be given a new, short non-fiction article (e.g., an op-ed, a short report, or an excerpt from a book) on a topic related to the course themes (e.g., technology, social issues, leadership). They will have to perform a detailed critical analysis of this text.2. Short Writing Task Write a short response (250 words)",
+   "Part 1: The Critical Reading AnalysisPart 2: Writing task in response to the reading in the critical reading analysis",
+   "Knowledge and skills in studied chapter(s)",
+   "in exam room, using computer or papers",
+   "Part 1. (70%)\n\nInstructions:\n\n- Thesis and Purpose: Identify the author's main thesis or purpose. What is the author trying to convince the reader of?\n\n- Evidence Evaluation: Identify distinct pieces of evidence or reasoning the author uses. For each one, evaluate its strength and identify its type (e.g., anecdote, statistic, quotation, appeal to emotion).\n\n- Assumptions and Bias: Identify underlying assumptions the author holds. How might these assumptions influence the author's argument?\n\n- Counter-Argument: Briefly outline a potential counter-argument to the author's central thesis. What evidence would a critical reader need to find to support this opposing view?\n\nPart 2. (30%)\n\nInstruction:\n\nWrite a short response (~250 words) that addresses the following prompt:\n\nPrompt:\n\n\"Based on your critical analysis of the provided text, what is your final judgment on the author's argument? Is it a credible, well-supported claim, or is it a flawed and unconvincing one? Your response should not just state your opinion but must explicitly reference at least two specific points from your analysis in Part 1 to justify your conclusion. You must mention at least one strength and one weakness you identified in the author's argument.\""
+  ]
+ ],
+ "buoiCotHeader": [
+  "Session",
+  "Topic",
+  "Learning-Teaching Type",
+  "LO",
+  "ITU",
+  "Student Materials",
+  "S-Download",
+  "Student's Tasks",
+  "URLs"
+ ],
+ "buoi": [
+  [
+   "1",
+   "Course Introduction",
+   "Offline",
+   "LO1",
+   "I",
+   "Student's Book",
+   "link1-1",
+   "",
+   ""
+  ],
+  [
+   "2",
+   "Chapter 1- Myth or Reality\nCritical Reading: an Overview",
+   "Offline",
+   "LO1",
+   "TU",
+   "Student's Book",
+   "",
+   "",
+   ""
+  ],
+  [
+   "3",
+   "Reading 1: Igopogo: The Monster of Lake Simcoe (1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO1",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Igopogo: The Monster of Lake Simcoe\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "4",
+   "Reading 1: Igopogo: The Monster of Lake Simcoe (2)\n-Analysis and Discussion",
+   "Offline",
+   "LO1",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Igopogo: The Monster of Lake Simcoe\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "5",
+   "Reading 2: The Call of the Weird: In Praise of Cryptobiologists (1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO1",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"The Call of the Weird: In Praise of Cryptobiologists\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "6",
+   "Reading 2: The Call of the Weird: In Praise of Cryptobiologists (2)\n-Analysis and Discussion\n-Going Further",
+   "Offline",
+   "LO1",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"The Call of the Weird: In Praise of Cryptobiologists\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "7",
+   "Chapter 2-What Is the Best Way to Eat?\n*Where and When was the text published?\n*Reading 1: The Caveman Diet (1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO2",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"The Caveman Diet\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "8",
+   "Reading 1: The Caveman Diet (2)\n-Analysis and Discussion",
+   "Offline",
+   "LO2",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"The Caveman Diet\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "9",
+   "Reading 2: There’s No Reason to Eat Animals (1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO2",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"There’s No Reason to Eat Animals\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "10",
+   "Reading 2: There’s No Reason to Eat Animals(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO2",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"There’s No Reason to Eat Animals\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "11",
+   "Reading 3 Obesity: A Public Health Failure(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO2",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Obesity: A Public Health Failure.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "12",
+   "Reading 3 Obesity: A Public Health Failure(2)\n-Analysis and Discussion\n-Going Further",
+   "Offline",
+   "LO2",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Obesity: A Public Health Failure.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "13",
+   "Chapter 3-The Values of Sport\n*Who is the Author?\nReading 1: MMA for Kids: Teaching Violence, or Values?(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO3",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"MMA for Kids: Teaching Violence, or Values\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "14",
+   "Reading 1: MMA for Kids: Teaching Violence, or Values?(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO3",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"MMA for Kids: Teaching Violence, or Values\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "15",
+   "Reading 2 Sports Doping Should Be Legal and Controlled(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO3",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Sports Doping Should Be Legal and Controlled\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "16",
+   "Reading 2 Sports Doping Should Be Legal and Controlled(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO3",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Sports Doping Should Be Legal and Controlled\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup accessand Perplexity.ai access",
+   ""
+  ],
+  [
+   "17",
+   "Reading 3: Why the Olympics Are a Lot Like The Hunger Games(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO3",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Why the Olympics Are a Lot Like The Hunger Games\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "18",
+   "Reading 3: Why the Olympics Are a Lot Like The Hunger Games(2)\n-Analysis and Discussion\n-Going Further\n*Assignment 1",
+   "Offline",
+   "LO3",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Why the Olympics Are a Lot Like The Hunger Games\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "19",
+   "Chapter 4 - Approaches to the Global Energy Crisis\n*Stance\n*Reading 1: Panda Poop Power Promising for Biofuel Production(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO4",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Panda Poop Power Promising for Biofuel Production\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "20",
+   "Reading 1: Panda Poop Power Promising for Biofuel Production(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO4",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Panda Poop Power Promising for Biofuel Production\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "21",
+   "Reading 2: Living Off-Grid(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO4",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Living Off-Grid\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "22",
+   "Reading 2: Living Off-Grid(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO4",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Living Off-Grid\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "23",
+   "Reading 3: Adverse Health Effects of Industrial Wind Turbines(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO4",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Adverse Health Effects of Industrial Wind Turbines\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "24",
+   "Reading 3: Adverse Health Effects of Industrial Wind Turbines(2)\n-Analysis and Discussion\nGoing Further",
+   "Offline",
+   "LO4",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Adverse Health Effects of Industrial Wind Turbines\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "25",
+   "Chapter 5 - Leaders and Leader\n*Fact or Opinion?\n*Reading 1: Top Ten Qualities that Make a Great Leader(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO5",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Top Ten Qualities that Make a Great Leader.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "26",
+   "Reading 1: Top Ten Qualities that Make a Great Leader(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO5",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Top Ten Qualities that Make a Great Leader.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "27",
+   "Reading 2: Why We Need Quiet, Introverted Leaders(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO5",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Why We Need Quiet, Introverted Leaders\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "28",
+   "Reading 2: Why We Need Quiet, Introverted Leaders(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO5",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Why We Need Quiet, Introverted Leaders\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "29",
+   "Reading 3: MIA: Women in the Executive Suite(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO5",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"MIA: Women in the Executive Suite.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "30",
+   "Reading 3: MIA: Women in the Executive Suite(2)\n-Analysis and Discussion\n-Going Further\n*Assignment 2",
+   "Offline",
+   "LO5",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"MIA: Women in the Executive Suite.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "31",
+   "Chapter 6 -Technology in Education\n*The Author's Evidence\nReading 1: Swimming against the Tide of PowerPoint(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO6",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Swimming against the Tide of PowerPoint\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "32",
+   "Reading 1: Swimming against the Tide of PowerPoint(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO6",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Swimming against the Tide of PowerPoint\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "33",
+   "Reading 2: Students Want More Mobile Devices in Classroom(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO6",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Students Want More Mobile Devices in Classroom\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "34",
+   "Reading 2: Students Want More Mobile Devices in Classroom(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO6",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Students Want More Mobile Devices in Classroom\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "35",
+   "Reading 3: Facebook as a Formal Instructional Environment(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO6",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Facebook as a Formal Instructional Environment.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "36",
+   "Reading 3: Facebook as a Formal Instructional Environment(2)\n-Analysis and Discussion\n-Going Further",
+   "Offline",
+   "LO6",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Facebook as a Formal Instructional Environment.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "37",
+   "Chapter 7 -Design and Productivity\n*Other kinds of Evidence\nReading 1: Ancient Chinese Wisdom for the Modern Workplace(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO7",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Ancient Chinese Wisdom for the Modern Workplace\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "38",
+   "Reading 1: Ancient Chinese Wisdom for the Modern Workplace(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO7",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Ancient Chinese Wisdom for the Modern Workplace\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "39",
+   "Reading 2: Sitting Too Long Is Bad for You, but a Treadmill Desk Left Me Cold(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO7",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Sitting Too Long Is Bad for You, but a Treadmill Desk Left Me Cold\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "40",
+   "Reading 2: Sitting Too Long Is Bad for You, but a Treadmill Desk Left Me Cold(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO7",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Sitting Too Long Is Bad for You, but a Treadmill Desk Left Me Cold\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "41",
+   "Reading 3: Workstation Design for Organizational Productivity(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO7",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Sitting Too Long Is Bad for You, but a Treadmill Desk Left Me Cold\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "42",
+   "Reading 3: Workstation Design for Organizational Productivity(2)\n-Analysis and Discussion\n-Going Further\n*Assignment 3",
+   "Offline",
+   "LO7",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Workstation Design for Organizational Productivity\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "43",
+   "Chapter 8 Inequality, Wealth and Happines\n*The Context of a Text\nReading 1: Can Money Buy Happiness? An Examination of Happiness Economics(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO8",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Can Money Buy Happiness? An Examination of Happiness Economics.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "44",
+   "Reading 1: Can Money Buy Happiness? An Examination of Happiness Economics(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO8",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Can Money Buy Happiness? An Examination of Happiness Economics.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "45",
+   "Reading 2: Denmark Is Considered the Happiest Country. You’ll Never Guess Why.(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO8",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Denmark Is Considered the Happiest Country. You’ll Never Guess Why.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "46",
+   "Reading 2: Denmark Is Considered the Happiest Country. You’ll Never Guess Why(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO8",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Denmark Is Considered the Happiest Country. You’ll Never Guess Why.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "47",
+   "Reading 3: Is Bhutan the Happiest Place in the World?(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO8",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Is Bhutan the Happiest Place in the World?.\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "48",
+   "Reading 3: Is Bhutan the Happiest Place in the World?(2)\n-Analysis and Discussion\n-Going Further",
+   "Offline",
+   "LO8",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Is Bhutan the Happiest Place in the World?.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "49",
+   "Chapter 9-Social Networks: A Magic Number?\n*Your connection to the text\nReading 1: A Magic Number?(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO9",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Magic Number?\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "50",
+   "Reading 1: A Magic Number?(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO9",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Magic Number?\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "51",
+   "Reading 2: Is Dunbar’s Friend-Limiting Number Still Relevant in the Facebook Era?(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO9",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Is Dunbar’s Friend-Limiting Number Still Relevant in the Facebook Era?\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "52",
+   "Reading 2: Is Dunbar’s Friend-Limiting Number Still Relevant in the Facebook Era?(2)\n-Analysis and Discussion",
+   "Offline",
+   "LO9",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Is Dunbar’s Friend-Limiting Number Still Relevant in the Facebook Era?\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "53",
+   "Reading 3: Social Networks: A Learning Tool for Teams?(1)\n-Before You Read\n-Key Vocabulary\n-Check Your Understanding",
+   "Offline",
+   "LO9",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Social Networks: A Learning Tool for Teams.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "54",
+   "Reading 3: Social Networks: A Learning Tool for Teams?(2)\n-Analysis and Discussion\n-Going Further\n*Assignment 4",
+   "Offline",
+   "LO9",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \"Social Networks: A Learning Tool for Teams.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "55",
+   "Chapter 10-Looking at the Stars\n*How to write a Critical Review",
+   "Offline",
+   "LO10",
+   "TU",
+   "Student's Book",
+   "",
+   "",
+   ""
+  ],
+  [
+   "56",
+   "Reading 1: Why It’s Important to Look at the Stars—Literally(1)\n-Before your read\n-Key Vocabulary\n-Check your understanding",
+   "Offline",
+   "LO10",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Why It’s Important to Look at the Stars—Literally.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "57",
+   "Reading 1: Why It’s Important to Look at the Stars—Literally(2)\n-Anaysis and Discussion\n-Your Critical Review",
+   "Offline",
+   "LO10",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Why It’s Important to Look at the Stars—Literally.\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "58",
+   "Reading 2: Does Mars Have Rights?(1)\n-Before your read\n-Key Vocabulary\n-Check your understanding",
+   "Offline",
+   "LO10",
+   "TU",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Does Mars Have Rights?\"\n• Student devices with ChatGPT and Perplexity.ai, Kialo Edu, Mindmup access",
+   ""
+  ],
+  [
+   "59",
+   "Reading 2: Does Mars Have Rights?(2)\n-Anaysis and Discussion\n-Your Critical Review\n-Going Further",
+   "Offline",
+   "LO10",
+   "U",
+   "Student's Book",
+   "",
+   "• Pre-assigned readings: \" Does Mars Have Rights?\"\n• Student devices with ChatGPT and Perplexity.ai access",
+   ""
+  ],
+  [
+   "60",
+   "Vocabulary Test 2\nRevision",
+   "Offline",
+   "LO10",
+   "U",
+   "Student's Book",
+   "",
+   "",
+   ""
+  ]
+ ],
+ "cauHoiKienTao": [],
+ "links": [
+  "https://drive.google.com/drive/folders/1HRCl6KHI2J-mpcnDC0Iuw_wXmFDsN37K?usp=drive_link"
+ ],
+ "thamKhao": {
+  "ma": "ECR301",
+  "sylID": "14238",
+  "ten": "Critical Reading in English_Kỹ năng đọc tư duy phản biện tiếng Anh",
+  "lyDo": "trường chưa công bố syllabus cho mã này; dùng syllabus môn cùng tên/cùng môn khác mã"
+ }
 }

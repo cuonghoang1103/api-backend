@@ -89,6 +89,36 @@ const ON_THE: Lesson = {
 };
 
 type Stub = [Lesson['kind'], string];
+/**
+ * 🎌 CuongMini_Kana Practice (09/11/2026) — trang luyện GHIM ở đầu mục lục, trên Bài 0. Người dùng: "một nút cố định
+ * để luyện chữ cái, chữ Hán, từ vựng theo bài… nhất là chữ cái kiểu kana.pro — người mới học ấn vào luyện cho dễ".
+ * Gom hai bộ luyện đã có: bảng chữ (khối luyenKana, như Bài 0) + thẻ ôn theo bài (khối onthe, chọn bài nào cũng được).
+ */
+const KANA_PRACTICE: Lesson = {
+  id: 'cuongmini-kana',
+  kind: 'review',
+  title: 'CuongMini_Kana Practice',
+  goal: 'Luyện bảng chữ cái kiểu kana.pro, rồi chữ Hán, từ vựng, ngữ pháp của bất kỳ bài nào — mỗi ngày 10–15 phút.',
+  minutes: 15,
+  ready: true,
+  blocks: [
+    {
+      t: 'note',
+      title: 'Luyện ở đây thế nào',
+      items: [
+        '**Mới bắt đầu:** chỉ làm phần ① — mỗi ngày **2–3 hàng chữ mới**, luyện tới khi đúng ≥ 90% rồi mới thêm hàng. Thuộc hết hiragana rồi mới sang katakana.',
+        '**Đang học một bài:** xuống phần ② — chọn đúng bài đó, lật thẻ → học → tự kiểm tra; từ sai tự vào hộp **ôn lại**.',
+        '**Trước kỳ thi:** phần ② chọn nhiều bài một lúc (vd. Bài 1–3 cho JPD113, Bài 4–7 cho JPD123) rồi làm **Kiểm tra**.',
+        'Tiến độ lưu trên máy: chữ nào hay sai sẽ được hỏi lại nhiều hơn.',
+      ],
+    },
+    { t: 'h', text: '① Bảng chữ cái — hiragana · katakana (nhìn chữ gõ romaji · chọn chữ · nghe · bảng tiến độ)' },
+    { t: 'luyenKana' },
+    { t: 'h', text: '② Chữ Hán · từ vựng · ngữ pháp theo bài (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, ghép câu, kiểm tra)' },
+    { t: 'onthe' },
+  ],
+};
+
 const stub = (n: number, i: number, [kind, title]: Stub): Lesson => ({ id: `b${n}-${i}`, kind, title, goal: '', minutes: 30 });
 
 /** Khung theo mục lục sách — bài nào chưa soạn thì hiện "sắp có". */
@@ -158,6 +188,7 @@ const OUTLINE: { n: number; title: string }[] = [
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
   // Bài 0 hiện là "Bài 0" nhưng lịch học vẫn đánh số từ 1 — n ở đây là số thứ tự buổi.
   n: n + 1,
+  title,
   // Chỉ MỤC LỤC (manifest.ts, sinh tự động) — nội dung bài tải khi mở, qua loadDay.
   lessons: MANIFEST[n]?.lessons ?? [stub(n, 1, [n === 0 ? 'kana' : 'conversation', title])],
 }));
@@ -172,6 +203,7 @@ export const DEKIRU = defineCourse({
   badgeWord: 'Bài',
   intro: INTRO,
   extras: [CHIA, ON_THE, DE_LUYEN_67, ...ON_113, ...ON_CUOI_KY],
+  ghim: KANA_PRACTICE,
   // 🎬 Video giảng mp4 gắn theo mục (ポイント, tiêu đề…) — videos.ts, sinh bởi xuat/gan-sach.mts của dự án video.
   videoNeo: VIDEO_NEO,
   // Mục lục mỗi bài gom 5 nhóm (học trước → luyện thêm → ôn thi → tra sách) — nhom.ts.

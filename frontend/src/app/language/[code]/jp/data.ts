@@ -104,6 +104,7 @@ const OUTLINE: { n: number; title: string }[] = [
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
   // Bài 0 hiện là "Bài 0" nhưng lịch học đánh số buổi từ 1 — n ở đây là số buổi.
   n: n + 1,
+  title,
   lessons: MANIFEST[n]?.lessons ?? [stub(n, [n === 0 ? 'kana' : 'conversation', title])],
 }));
 

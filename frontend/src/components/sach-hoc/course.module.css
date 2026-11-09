@@ -1949,3 +1949,143 @@
 /* Nút mở 📖 Bản sách (09/11/2026) — trên Tổng quan buổi và dưới mục tiêu mỗi bài. */
 .nutSach { display: flex; justify-content: flex-end; margin: 6px 0 10px; }
 @media print { .nutSach { display: none; } }
+
+/* ── Mục lục kiểu THẺ BÀI (09/11/2026): mỗi bài một thẻ, chỉ thẻ đang học mở ra ── */
+.theBai {
+  margin-bottom: 8px;
+  border: 1px solid var(--lh-line);
+  border-radius: 12px;
+  background: var(--lh-surface);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.theBaiMo {
+  border-color: var(--lh-accent);
+  box-shadow: 0 0 0 3px var(--lh-accent-soft);
+  margin: 12px 0;
+}
+.theBaiDau {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 10px 10px 10px;
+  text-align: left;
+  border-radius: 12px;
+  color: var(--lh-ink);
+}
+.theBaiDau:hover:not(:disabled) { background: var(--lh-surface-2); }
+.theBaiMo .theBaiDau { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.theBaiDau:disabled { cursor: default; opacity: 0.6; }
+.theBaiSo {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--lh-surface-2);
+  color: var(--lh-ink-2);
+  font-size: 16px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.theBaiMo .theBaiSo { background: var(--lh-accent); color: var(--lh-accent-ink); }
+.theBaiXong .theBaiSo { background: var(--lh-good-soft); color: var(--lh-good); }
+.theBaiChu { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.theBaiNhan {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--lh-ink-3);
+}
+.theBaiMo .theBaiNhan { color: var(--lh-accent); }
+.theBaiChip {
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--lh-accent);
+  color: var(--lh-accent-ink);
+}
+.theBaiChipMoi { background: var(--lh-accent-soft); color: var(--lh-accent); }
+.theBaiChipSap { background: var(--lh-surface-2); color: var(--lh-ink-3); }
+.theBaiTen {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--lh-ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.theBaiMo .theBaiTen { font-size: 15px; -webkit-line-clamp: 3; }
+.theBaiTien { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+.theBaiTien small { font-size: 11px; color: var(--lh-ink-3); font-variant-numeric: tabular-nums; }
+.theBaiVach { flex: 1; height: 4px; border-radius: 999px; background: var(--lh-surface-2); overflow: hidden; }
+.theBaiVach i { display: block; height: 100%; border-radius: inherit; background: var(--lh-accent); }
+.theBaiXong .theBaiVach i { background: var(--lh-good); }
+.theBaiMui { flex: none; font-size: 12px; color: var(--lh-ink-3); }
+.theBaiThan { padding: 4px 6px 8px; border-top: 1px solid var(--lh-line); }
+.theBaiTongQuan {
+  display: block;
+  width: 100%;
+  margin: 4px 0 6px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lh-accent);
+}
+.theBaiTongQuan:hover { background: var(--lh-surface-2); }
+.theBaiMucLuc {
+  margin: 16px 4px 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lh-ink-3);
+}
+
+/* ── Nút ghim "CuongMini_Kana Practice" (09/11/2026): luôn ở đầu mục lục ── */
+.ghimNut {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  text-align: left;
+  color: #fff;
+  background: linear-gradient(135deg, #e0475b 0%, #c2185b 45%, #6a3fd0 100%);
+  box-shadow: 0 6px 18px -8px rgba(194, 24, 91, 0.6);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.ghimNut:hover { transform: translateY(-1px); box-shadow: 0 10px 22px -8px rgba(194, 24, 91, 0.7); }
+.ghimNutMo { outline: 3px solid var(--lh-accent); outline-offset: 2px; }
+.ghimIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 22px;
+  font-weight: 800;
+  animation: ghimNhip 2.6s ease-in-out infinite;
+}
+@keyframes ghimNhip { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .ghimIcon { animation: none; } }
+.ghimChu { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ghimChu b { font-size: 14.5px; font-weight: 800; letter-spacing: 0.01em; }
+.ghimChu small { font-size: 12px; opacity: 0.9; }

@@ -166,7 +166,8 @@ export type Lesson = {
   ready?: boolean;
 };
 
-export type Day = { n: number; lessons: Lesson[] };
+/** `title`: tên bài hiện ở thẻ mục lục (vd "ニュース — Tin tức · N3: …"); không có thì lấy tên mục đầu. */
+export type Day = { n: number; lessons: Lesson[]; title?: string };
 
 /**
  * Một video bài giảng gắn với một bài (CourseDef.videos). Hai loại:

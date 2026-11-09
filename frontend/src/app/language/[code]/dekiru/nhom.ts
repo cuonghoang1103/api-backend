@@ -17,6 +17,8 @@ const LOI = /^b\d+-(hoi-thoai|tu-vung|ngu-phap|han-lop|han-tu|nghe|doc|noi|viet|
 const BUOI_CO = /^(slot-|slide-tong-hop-|s113-|b\d+-buoi-)/;
 const LUYEN = /^(lt-|b\d+-lt-)/;
 const ON_THI = /^(bt-|on-giua-ky|chia-the-te-|b\d+-kiem-tra|b\d+-thi-thu)/;
+// Kho từ vựng bổ sung N3/N2 (Bài 56–57, 09/11/2026): mỗi mục một chủ đề.
+const KHO = /^b\d+-kho-/;
 
 function phut(ls: Lesson[]) {
   const h = ls.reduce((a, l) => a + (l.minutes || 0), 0) / 60;
@@ -25,15 +27,18 @@ function phut(ls: Lesson[]) {
 
 export function nhomMucDekiru(lessons: Lesson[]): NhomMuc[] | null {
   if (lessons.length < 12) return null; // Bài 8–15 chỉ 9 mục: để phẳng.
-  const g: Record<'loi' | 'co' | 'luyen' | 'thi' | 'bs', Lesson[]> = { loi: [], co: [], luyen: [], thi: [], bs: [] };
+  const g: Record<'kho' | 'loi' | 'co' | 'luyen' | 'thi' | 'bs', Lesson[]> = { kho: [], loi: [], co: [], luyen: [], thi: [], bs: [] };
   for (const l of lessons) {
-    if (LOI.test(l.id)) g.loi.push(l);
+    if (KHO.test(l.id)) g.kho.push(l);
+    else if (LOI.test(l.id)) g.loi.push(l);
     else if (BUOI_CO.test(l.id)) g.co.push(l);
     else if (LUYEN.test(l.id)) g.luyen.push(l);
     else if (ON_THI.test(l.id)) g.thi.push(l);
     else g.bs.push(l);
   }
   const ds: NhomMuc[] = [
+    { key: 'kho', ten: '📚 Kho từ theo chủ đề', batDau: true, lessons: g.kho,
+      mota: `${g.kho.length} mục, mỗi mục một chủ đề ~75 từ có câu ví dụ. Mỗi ngày một mục, rồi ôn bằng 🃏 Luyện nhớ.` },
     { key: 'loi', ten: '① Học trước — phần cốt lõi', batDau: true, lessons: g.loi,
       mota: `Chỉ ${g.loi.length} mục, ${phut(g.loi)}. Làm đủ phần này là nắm xong bài; các nhóm dưới học khi cần.` },
     { key: 'co', ten: '② Học theo buổi trên lớp', lessons: g.co,

@@ -71,9 +71,20 @@ export default function CoursePage({ course, lessonExtra }: {
   // Chuyển bài / buổi / trang kế hoạch: dừng tiếng đang phát (bài cũ không được nói tiếp).
   const viewKey = view.t === 'lesson' ? `l:${view.id}` : view.t === 'day' ? `d:${view.n}` : view.t === 'sach' ? `s:${view.n}` : 'plan';
   useEffect(() => { stopAudio(); }, [viewKey]);
+  // Đổi bài / buổi ⇒ thẻ đang mở theo bài mới (bỏ lựa chọn tay cũ).
+  useEffect(() => { setDayMo(null); }, [viewKey]);
   const [tocOpen, setTocOpen] = useState(false);
   // Nhóm mục lục đang MỞ theo người dùng: khoá `${buổi}:${nhóm}` → true/false (không có = theo mặc định).
   const [nhomMo, setNhomMo] = useState<Record<string, boolean>>({});
+  /**
+   * Mục lục kiểu "thẻ bài" (09/11/2026 — người học: "show hết mọi bài + nội dung nhìn rối, không biết bài nào ra bài nào").
+   * Chỉ MỘT buổi mở ra (buổi đang học); các buổi khác gập thành một thẻ: số bài to + tên bài + tiến độ.
+   * null = để mặc định (buổi chứa bài đang mở / buổi đang xem tổng quan / buổi đầu chưa xong).
+   */
+  const [dayMo, setDayMo] = useState<number | null>(null);
+  const theDayRef = useRef<HTMLDivElement>(null);
+  /** Thẻ "Mở đầu · tra cứu · ôn thi": null = mặc định (mở khi đang xem một mục trong đó). */
+  const [phuMo, setPhuMo] = useState<boolean | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   /**
    * Ẩn cột gia sư trên máy tính (≥1280px) — bài giảng giãn rộng. Nhớ trên máy.
@@ -125,6 +136,19 @@ export default function CoursePage({ course, lessonExtra }: {
   }, [go]);
 
   const lesson = view.t === 'lesson' ? course.allLessons.find((l) => l.id === view.id) ?? INTRO : null;
+  // Thẻ bài đang MỞ trong mục lục: người dùng chọn (dayMo) ⇒ buổi chứa bài đang mở ⇒ buổi đang xem ⇒ buổi đầu chưa xong.
+  const dayMacDinh =
+    (lesson ? DAYS.find((d) => d.lessons.some((l) => l.id === lesson.id))?.n : undefined) ??
+    (view.t === 'day' || view.t === 'sach' ? view.n : undefined) ??
+    DAYS.find((d) => d.lessons.some(isReady) && !dayDone(d, tien.done))?.n;
+  const dayMoThat = dayMo === -1 ? null : dayMo ?? dayMacDinh ?? null;
+  // Thẻ vừa mở nằm ngoài vùng nhìn của mục lục ⇒ cuộn MỤC LỤC (không cuộn cả trang) tới nó.
+  useEffect(() => {
+    const the = theDayRef.current; const nav = the?.closest('nav');
+    if (!the || !nav || nav.scrollHeight <= nav.clientHeight) return;
+    const tren = the.getBoundingClientRect().top - nav.getBoundingClientRect().top + nav.scrollTop;
+    if (tren < nav.scrollTop || tren > nav.scrollTop + nav.clientHeight - 80) nav.scrollTo({ top: Math.max(0, tren - 12), behavior: 'smooth' });
+  }, [dayMoThat]);
   const day = view.t === 'day' ? DAYS[view.n - 1] : lesson ? course.dayOf(lesson.id) : undefined;
   // Nội dung của buổi đang mở tải theo yêu cầu (một chunk mỗi buổi): `tick`
   // vẽ lại khi nó về, `loadErr` giữ buổi tải hỏng để hiện nút thử lại.
@@ -331,50 +355,125 @@ export default function CoursePage({ course, lessonExtra }: {
             <div className={s.tocClose}>
               <button type="button" className={s.iconBtn} onClick={() => setTocOpen(false)} aria-label="Đóng mục lục"><X size={18} /></button>
             </div>
+            {course.ghim && (
+              <button
+                type="button"
+                className={`${s.ghimNut} ${lesson?.id === course.ghim.id ? s.ghimNutMo : ''}`}
+                onClick={() => course.ghim && open(course.ghim)}
+                title={course.ghim.goal}
+              >
+                <span className={s.ghimIcon} aria-hidden>あ</span>
+                <span className={s.ghimChu}>
+                  <b>{course.ghim.title}</b>
+                  <small>Bảng chữ cái · chữ Hán · từ vựng theo bài</small>
+                </span>
+              </button>
+            )}
             <button type="button" className={s.tocPlan} onClick={() => go({ t: 'plan' })} style={view.t === 'plan' ? { borderColor: 'var(--lh-accent)' } : undefined}>
               <CalendarDays size={16} /> Kế hoạch & tiến độ
             </button>
             {(course.links ?? []).map((k) => (
               <Link key={k.href} href={k.href} className={s.tocPlan}>{k.label}</Link>
             ))}
-            <div className={s.tocDay}>
-              {tocItem(INTRO, 'Mở đầu')}
-              {(course.extras ?? []).map((l) => tocItem(l, 'Tra cứu'))}
-            </div>
+            {(() => {
+              // Mở đầu + tra cứu + ôn thi: gom thành MỘT thẻ gập (09/11/2026) — trước đây trải dài cả màn hình trên đầu mục lục.
+              const phu = [INTRO, ...(course.extras ?? [])];
+              const dangMo = phuMo ?? (!!lesson && phu.some((l) => l.id === lesson.id));
+              const xongPhu = phu.filter((l) => tien.done.includes(l.id)).length;
+              return (
+                <div className={`${s.theBai} ${dangMo ? s.theBaiMo : ''}`}>
+                  <button type="button" className={s.theBaiDau} aria-expanded={dangMo} onClick={() => setPhuMo(!dangMo)}>
+                    <span className={s.theBaiSo} aria-hidden>📚</span>
+                    <span className={s.theBaiChu}>
+                      <span className={s.theBaiNhan}>{phu.length > 1 ? 'Mở đầu · tra cứu · ôn thi' : 'Mở đầu'}</span>
+                      <span className={s.theBaiTen}>{phu.length > 1 ? `Bắt đầu tại đây + ${phu.length - 1} mục tra cứu, ôn thi` : INTRO.title}</span>
+                      <span className={s.theBaiTien}><small>{xongPhu}/{phu.length} đã xem</small></span>
+                    </span>
+                    <span className={s.theBaiMui} aria-hidden>{dangMo ? '▾' : '▸'}</span>
+                  </button>
+                  {dangMo && (
+                    <div className={s.theBaiThan}>
+                      {tocItem(INTRO, 'Mở đầu')}
+                      {(course.extras ?? []).map((l) => tocItem(l, 'Tra cứu'))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+            <div className={s.theBaiMucLuc}>Các bài</div>
             {DAYS.map((d) => {
               const ready = d.lessons.some(isReady);
               const isDone = dayDone(d, tien.done);
+              const mo = d.n === dayMoThat;
+              const coBai = d.lessons.filter(isReady);
+              const xong = coBai.filter((l) => tien.done.includes(l.id)).length;
+              const pt = coBai.length ? Math.round((xong / coBai.length) * 100) : 0;
+              const ten = d.title ?? d.lessons.slice(0, 2).map((l) => l.title).join(' · ');
+              const so = course.dayName(d.n).replace(/^\S+\s*/, '');
+              const trangThai = isDone ? 'xong' : mo ? 'dang' : xong > 0 ? 'do' : ready ? 'moi' : 'sap';
               return (
-                <div key={d.n} className={s.tocDay}>
+                <div key={d.n} ref={mo ? theDayRef : undefined} className={`${s.theBai} ${mo ? s.theBaiMo : ''} ${isDone ? s.theBaiXong : ''}`}>
                   <button
                     type="button"
-                    className={`${s.tocDayHead} ${s.tocDayBtn} ${view.t === 'day' && view.n === d.n ? s.tocDayBtnActive : ''}`}
-                    style={{ paddingTop: 6 }}
-                    onClick={() => go({ t: 'day', n: d.n })}
+                    className={s.theBaiDau}
+                    aria-expanded={mo}
+                    disabled={!ready}
+                    onClick={() => {
+                      if (mo && view.t === 'day' && view.n === d.n) { setDayMo(-1); return; } // bấm lần nữa = gập
+                      setDayMo(d.n);
+                      go({ t: 'day', n: d.n });
+                    }}
+                    title={ready ? `${course.dayName(d.n)} — ${ten}` : 'Sắp có'}
                   >
-                    <span>{course.dayName(d.n)}{isDone ? ' ✓' : ''}{!isDone && ready ? <small className={s.tocDem}> {d.lessons.filter((l) => tien.done.includes(l.id)).length}/{d.lessons.filter(isReady).length}</small> : null}</span>
-                    <span className={s.soon}>{ready ? 'tổng quan →' : 'sắp có'}</span>
+                    <span className={s.theBaiSo} aria-hidden>{isDone ? <Check size={18} strokeWidth={3} /> : so}</span>
+                    <span className={s.theBaiChu}>
+                      <span className={s.theBaiNhan}>
+                        {course.dayName(d.n)}
+                        {trangThai === 'dang' && <em className={s.theBaiChip}>Đang học</em>}
+                        {trangThai === 'do' && <em className={`${s.theBaiChip} ${s.theBaiChipMoi}`}>Học dở</em>}
+                        {trangThai === 'sap' && <em className={`${s.theBaiChip} ${s.theBaiChipSap}`}>Sắp có</em>}
+                      </span>
+                      <span className={s.theBaiTen}>{ten}</span>
+                      {ready && (
+                        <span className={s.theBaiTien}>
+                          <span className={s.theBaiVach}><i style={{ width: `${pt}%` }} /></span>
+                          <small>{xong}/{coBai.length}</small>
+                        </span>
+                      )}
+                    </span>
+                    {ready && <span className={s.theBaiMui} aria-hidden>{mo ? '▾' : '▸'}</span>}
                   </button>
-                  {(() => {
-                    const ng = course.nhomMuc?.(d.lessons);
-                    if (!ng) return d.lessons.map((l) => tocItem(l));
-                    return ng.map((n) => {
-                      const k = `${d.n}:${n.key}`;
-                      const chuaXong = n.lessons.filter((l) => isReady(l) && !tien.done.includes(l.id)).length;
-                      const mo = nhomMo[k] ?? (!!n.batDau || (!!lesson && n.lessons.some((l) => l.id === lesson.id)));
-                      return (
-                        <div key={k} className={s.tocNhom}>
-                          <button type="button" className={s.tocNhomHead} aria-expanded={mo} onClick={() => setNhomMo({ ...nhomMo, [k]: !mo })}>
-                            <span className={s.tocNhomTen}>{n.ten}</span>
-                            <small className={s.tocDem}>{n.lessons.length - chuaXong}/{n.lessons.length} {mo ? '▾' : '▸'}</small>
-                          </button>
-                          {n.batDau && <div className={s.tocNhomBatDau}>★ Bắt đầu ở đây</div>}
-                          {mo && <p className={s.tocNhomMota}>{n.mota}</p>}
-                          {mo && n.lessons.map((l) => tocItem(l))}
-                        </div>
-                      );
-                    });
-                  })()}
+                  {mo && ready && (
+                    <div className={s.theBaiThan}>
+                      <button
+                        type="button"
+                        className={`${s.theBaiTongQuan} ${view.t === 'day' && view.n === d.n ? s.tocDayBtnActive : ''}`}
+                        onClick={() => go({ t: 'day', n: d.n })}
+                      >
+                        📋 Tổng quan {course.dayName(d.n).toLowerCase()} — lộ trình &amp; video
+                      </button>
+                      {(() => {
+                        const ng = course.nhomMuc?.(d.lessons);
+                        if (!ng) return d.lessons.map((l) => tocItem(l));
+                        return ng.map((n) => {
+                          const k = `${d.n}:${n.key}`;
+                          const chuaXong = n.lessons.filter((l) => isReady(l) && !tien.done.includes(l.id)).length;
+                          const moN = nhomMo[k] ?? (!!n.batDau || (!!lesson && n.lessons.some((l) => l.id === lesson.id)));
+                          return (
+                            <div key={k} className={s.tocNhom}>
+                              <button type="button" className={s.tocNhomHead} aria-expanded={moN} onClick={() => setNhomMo({ ...nhomMo, [k]: !moN })}>
+                                <span className={s.tocNhomTen}>{n.ten}</span>
+                                <small className={s.tocDem}>{n.lessons.length - chuaXong}/{n.lessons.length} {moN ? '▾' : '▸'}</small>
+                              </button>
+                              {n.batDau && <div className={s.tocNhomBatDau}>★ Bắt đầu ở đây</div>}
+                              {moN && <p className={s.tocNhomMota}>{n.mota}</p>}
+                              {moN && n.lessons.map((l) => tocItem(l))}
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  )}
                 </div>
               );
             })}

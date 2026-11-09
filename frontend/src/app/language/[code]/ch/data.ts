@@ -100,6 +100,7 @@ const OUTLINE: { n: number; title: string }[] = [
 
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
   n: n + 1,
+  title,
   lessons: MANIFEST[n]?.lessons ?? [stub(n, [n === 0 ? 'kana' : 'conversation', title])],
 }));
 

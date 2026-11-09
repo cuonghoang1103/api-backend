@@ -37,6 +37,11 @@ export type CourseDef = {
    */
   extras?: Lesson[];
   /**
+   * Trang luyện tập GHIM ở đầu mục lục, trên cả Bài 0 (09/11/2026 — "CuongMini_Kana Practice": người mới vào là thấy
+   * ngay chỗ luyện bảng chữ, chữ Hán, từ vựng theo bài). Mở bằng `?bai=<id>` như extras.
+   */
+  ghim?: Lesson;
+  /**
    * Khoá tiếng Nhật: dữ liệu chữ Hán (chữ của lớp + chỉ mục từ đi chung) — TẢI CHẬM,
    * chỉ khi mở thẻ chữ Hán / bài "Chữ Hán của lớp". Có hàm này thì chữ Hán trong
    * bài chạm được (KanjiSheet).
@@ -109,7 +114,7 @@ function whenIdle(f: () => void) {
 
 export function defineCourse(def: CourseDef) {
   // Mục tra cứu (extras) đứng CUỐI thứ tự đọc: "Bài tiếp" của Mở đầu vẫn là Bài 0.
-  const allLessons: Lesson[] = [def.intro, ...def.days.flatMap((d) => d.lessons), ...(def.extras ?? [])];
+  const allLessons: Lesson[] = [def.intro, ...def.days.flatMap((d) => d.lessons), ...(def.extras ?? []), ...(def.ghim ? [def.ghim] : [])];
   const readyLessons = allLessons.filter(isReady);
 
   // Tóm tắt từng buổi: buổi tải chậm lấy từ manifest, buổi viết thẳng thì tính từ nội dung.

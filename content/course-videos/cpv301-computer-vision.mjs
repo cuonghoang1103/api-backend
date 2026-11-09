@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho CPV301 — Computer Vision. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/cpv301-computer-vision.mjs
+ */
+export default {
+  courseSlug: "cpv301-computer-vision",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "cpv301-1-1-intro": { yt: "-4E2-0sxVUM", credit: "CrashCourse — Computer Vision: Crash Course Computer Science #35" },
+    "cpv301-flm-b001": { yt: "tY2gczObpfU", credit: "MIT OpenCourseWare — Lecture 1: Introduction to Machine Vision" },
+    "cpv301-flm-b003": { yt: "4pbPQwA1m0o", credit: "NPTEL-NOC IITM — Image Formation" },
+    "cpv301-flm-b004": { yt: "7LX-19v_9ns", credit: "First Principles of Computer Vision — Image Formation using Lenses | Image Formation" },
+    "cpv301-flm-b005": { yt: "D4wpa-prk4I", credit: "Tübingen Machine Learning — Computer Vision - Lecture 2.1 (Image Formation: Primitives and Transformations)" },
+    "cpv301-flm-b012": { yt: "9-8Js62wzQs", credit: "Leo Isikdogan — Computer Vision vs Image Processing" },
+    "cpv301-flm-b013": { yt: "NGlYGPHegWs", credit: "Infinity Solution's Concept Builder — Lecture 1 : Image Processing and Computer Vision : Image Filtering" },
+    "cpv301-flm-b015": { yt: "kSqxn6zGE0c", credit: "Rob Mulla — Image Processing with OpenCV and Python" },
+    "cpv301-flm-b020": { yt: "AsU9Uy5w5mI", credit: "Kevin Wood | Robotics & AI — OpenCV Python Feature Matching (Algorithm and Code)" },
+    "cpv301-flm-b021": { yt: "nnH55-zD38I", credit: "Murtaza's Workshop - Robotics and AI — Feature Detection and Matching + Image Classifier Project | OPENCV PYTHON" },
+    "cpv301-flm-b029": { yt: "5QUmlXBb0MY", credit: "LearnOpenCV — Image Segmentation, Semantic Segmentation, Instance Segmentation, and Panoptic Segmentation" },
+    "cpv301-flm-b030": { yt: "yR7k19YBqiw", credit: "Computerphile — K-means & Image Segmentation - Computerphile" },
+    "cpv301-flm-b031": { yt: "UIgaLDgb2fY", credit: "Mr. P Solver — Python Image Segmentation Tutorial (2022)" },
+    "cpv301-flm-b033": { yt: "onWJQY5oFhs", credit: "First Principles of Computer Vision — Overview | Image Segmentation" },
+    "cpv301-flm-b035": { yt: "4MPv-VPmnCs", credit: "Dr. K. Padma Priya — Part 1/5   Unit 3   Feature based alignment and Motion estimation CCS338 Computer Vision" },
+    "cpv301-flm-b041": { yt: "J1DwQzab6Jg", credit: "First Principles of Computer Vision — Overview | Image Stitching" },
+    "cpv301-flm-b042": { yt: "l_qjO4cM74o", credit: "First Principles of Computer Vision — Computing Homography | Image Stitching" },
+    "cpv301-flm-b043": { yt: "svn9-xV7wjk", credit: "DeepBean — How YOLO Object Detection Works" },
+    "cpv301-flm-b044": { yt: "TB-fdISzpHQ", credit: "Michigan Online — Lecture 15: Object Detection" },
+    "cpv301-flm-b045": { yt: "nDPWywWRIRo", credit: "Stanford University School of Engineering — Lecture 11 | Detection and Segmentation" },
+    "cpv301-flm-b046": { yt: "vT1JzLTH4G4", credit: "Stanford University School of Engineering — Lecture 1 | Introduction to Convolutional Neural Networks for Visual Recognition" },
+    "cpv301-flm-b047": { yt: "Cgxsv1riJhI", credit: "TED — How computers learn to recognize objects instantly | Joseph Redmon" },
+    "cpv301-2-1-image-formation": { yt: "_EhY31MSbNM", credit: "First Principles of Computer Vision — Pinhole and Perspective Projection | Image Formation" },
+    "cpv301-3-1-image-processing": { yt: "0OHRJMNKhX0", credit: "First Principles of Computer Vision — LSIS and Convolution | Image Processing I" },
+    "cpv301-4-1-features": { yt: "flFbNka62v8", credit: "Kevin Wood | Robotics & AI — OpenCV Python SIFT Feature Detection (SIFT Algorithm Explained + Code)" },
+    "cpv301-5-1-segmentation": { yt: "TRr8TGIk50c", credit: "First Principles of Computer Vision — Segmentation as Clustering | Image Segmentation" },
+    "cpv301-6-1-alignment": { yt: "a2u5ZmEAB9U", credit: "Easy study — 2d and 3d feature based alignment in computer vision unit 3" },
+    "cpv301-7-1-stitching": { yt: "Zs51cg4mb0k", credit: "Nicolai Nielsen — Creating Panoramas with OpenCV Python Image Stitching" },
+    "cpv301-8-1-detection": { yt: "26PWiWCz1v8", credit: "DataMListic — Object Detection Part 1: R-CNN, Sliding Window and Selective Search" },
+    "cpv301-9-1-recognition": { yt: "JTVaCi6KNAc", credit: "MATLAB — Object Detection and Tracking using Computer Vision" },
+  },
+};

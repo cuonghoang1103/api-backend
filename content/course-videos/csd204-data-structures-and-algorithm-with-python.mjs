@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho CSD204 — Data Structures and Algorithm with Python. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/csd204-data-structures-and-algorithm-with-python.mjs
+ */
+export default {
+  courseSlug: "csd204-data-structures-and-algorithm-with-python",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "csd204-flm-b002": { yt: "HMkdlu5sP4A", credit: "Neso Academy — Introduction to Circular Linked List" },
+    "csd204-flm-b005": { yt: "NKmasqr_Xkw", credit: "Programming with Mosh — Python Stacks - Python Tutorial for Absolute Beginners | Mosh" },
+    "csd204-flm-b006": { yt: "A3ZUpyrnCbM", credit: "CS Dojo — Introduction to Stacks and Queues (Data Structures & Algorithms #12)" },
+    "csd204-flm-b007": { yt: "vOx3vY1w4tM", credit: "Greg Hogg — Stacks & Queues - DSA Course in Python Lecture 5" },
+    "csd204-flm-b008": { yt: "wptevk0bshY", credit: "WilliamFiset — Priority Queue Introduction" },
+    "csd204-flm-b015": { yt: "qH6yxkw0u78", credit: "mycodeschool — Data structures: Introduction to Trees" },
+    "csd204-flm-b016": { yt: "6oL-0TdVy28", credit: "LucidProgramming — Binary Trees in Python: Introduction and Traversal Algorithms" },
+    "csd204-flm-b019": { yt: "mtvbVLK5xDQ", credit: "Programming and Math Tutorials — Binary Search Trees (BST) Explained in Animated Demo" },
+    "csd204-flm-b023": { yt: "q4fnJZr8ztY", credit: "WilliamFiset — Balanced binary search tree rotations" },
+    "csd204-flm-b024": { yt: "E2v9hBgG6gE", credit: "Greg Hogg — Heaps & Priority Queues - Heapify, Heap Sort, Heapq Library - DSA Course in Python Lecture 9" },
+    "csd204-flm-b029": { yt: "4jyESQDrpls", credit: "Greg Hogg — Graphs: Edge List, Adjacency Matrix, Adjacency List, DFS, BFS - DSA Course in Python Lecture 11" },
+    "csd204-flm-b030": { yt: "7XVTnCrWDPY", credit: "NeuralNine — Graph Search Visualization in Python (BFS and DFS)" },
+    "csd204-flm-b033": { yt: "pVfj6mxhdMw", credit: "Computer Science Lessons — Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm" },
+    "csd204-flm-b034": { yt: "OrJ004Wid4o", credit: "ThinkX Academy — [7.5] Dijkstra Shortest Path Algorithm in Python" },
+    "csd204-flm-b037": { yt: "ZSPjZuZWCME", credit: "take U forward — G-44. Minimum Spanning Tree - Theory" },
+    "csd204-flm-b038": { yt: "5M-m62qTR-s", credit: "Mathispower4u — Graph Theory:  Euler Paths and Euler Circuits" },
+    "csd204-flm-b041": { yt: "5KjapFQNxUo", credit: "Telusko — #71 Python Tutorial for Beginners | Selection Sort using Python" },
+    "csd204-flm-b042": { yt: "Vca808JTbI8", credit: "Telusko — #70 Python Tutorial for Beginners | Bubble Sort in python | List Sort" },
+    "csd204-flm-b045": { yt: "cVZMah9kEjI", credit: "FelixTechTips — Merge Sort In Python Explained (With Example And Code)" },
+    "csd204-flm-b046": { yt: "pJ1IQD5rv4o", credit: "Algorithms with Attitude — Linear Time Sorting:  Counting Sort, Radix Sort, and Bucket Sort" },
+    "csd204-flm-b049": { yt: "sfWyugl4JWA", credit: "CS Dojo — Introduction to Hash Tables and Dictionaries (Data Structures & Algorithms #13)" },
+    "csd204-flm-b054": { yt: "JsTptu56GM8", credit: "Tom Scott — How Computers Compress Text: Huffman Coding and Huffman Trees" },
+    "csd204-1-1-complexity": { yt: "aWKEBEg55ps", credit: "Greg Hogg — Time & Space Complexity - Big O Notation - DSA Course in Python Lecture 1" },
+    "csd204-2-1-linear": { yt: "nfOV4vwXjoc", credit: "Code, Data and Tech with Alex Merced — Data Structures - Arrays, Linked Lists, Stacks and Queues" },
+    "csd204-3-1-recursion": { yt: "WPSeyjX1-4s", credit: "MIT OpenCourseWare — 6. Recursion and Dictionaries" },
+    "csd204-4-1-sorting": { yt: "rbbTd-gkajw", credit: "Coding with Lewis — 10 Sorting Algorithms Easily Explained" },
+    "csd204-5-1-search-hash": { yt: "KyUTuwz_b7Q", credit: "Computer Science Lessons — Hash Tables and Hash Functions" },
+    "csd204-6-1-trees": { yt: "I_JuQ5ayPmc", credit: "Gate Smashers — L-3.12: Introduction to Trees (Binary Tree, Almost Complete Binary Tree, Full BT, Complete BT, BST)" },
+    "csd204-7-1-graphs": { yt: "pcKY4hjDrxk", credit: "Abdul Bari — 5.1 Graph Traversals - BFS & DFS -Breadth First Search and Depth First Search" },
+    "csd204-8-1-dp-greedy": { yt: "0BhhiQGDbEA", credit: "Gate Smashers — L-5.1: Introduction to Dynamic Programming | Greedy Vs Dynamic Programming | Algorithm(DAA)" },
+  },
+};

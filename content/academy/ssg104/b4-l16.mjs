@@ -16,9 +16,9 @@ export const b4l16 = [
     'Ba danh sách cần giữ: bảng kiểm cho người dự họp (slide 11), tám kiểu điều hành hỏng (slide 12) — chính là CQ13.2 — và mười lăm nguyên tắc điều hành (slide 13–14).'),
 
   slide(D, 1, 'Groups and meetings — Session IV',
-    `<p class="y-chinh">🎯 Title slide.</p>
+    `<p class="y-chinh">🎯 Title slide: "Groups and meetings". The subtitle on the image reads "SESSION VI: GROUPS &amp; TEAMS (IN) ACTION" — a typo for Session IV, the session this lesson belongs to.</p>
      <p class="meo">💡 The syllabus places meetings at sessions 37–38 together with Activity 3, so this lesson is graded work, not background reading.</p>`,
-    `<p class="y-chinh">🎯 Slide tiêu đề.</p>
+    `<p class="y-chinh">🎯 Slide tiêu đề: "Groups and meetings" (nhóm và cuộc họp). Dòng phụ trên ảnh in "SESSION VI: GROUPS &amp; TEAMS (IN) ACTION" — gõ nhầm, đúng là Session IV, buổi chứa bài này.</p>
      <p class="meo">💡 Syllabus xếp phần cuộc họp ở buổi 37–38 cùng với Activity 3, nên bài này là phần tính điểm, không phải đọc thêm.</p>`),
 
   slide(D, 2, 'Chapter outline (5 parts)',
@@ -61,12 +61,14 @@ export const b4l16 = [
        <li>Some view meetings as <strong>boring, pointless and futile exercises</strong>.</li>
        <li>Others see them as <strong>opportunities to exchange information and produce results</strong>.</li>
      </ul>
+     <p>On the right is a satirical poster: "Are you lonely? Tired of working on your own? Do you hate making decisions? HOLD A MEETING! You can — see people, show charts, feel important, point with a stick, eat donuts, impress your colleagues. All on company time! MEETINGS — THE PRACTICAL ALTERNATIVE TO WORK". It is the "boring, pointless" view, drawn as a joke.</p>
      <p class="meo">💡 The difference between the two experiences is almost entirely decided before anyone sits down — which is what the next four slides are about.</p>`,
     `<p class="y-chinh">🎯 Họp là một phần trong cách nhóm hoàn thành công việc — và slide rất thật thà rằng người ta không đồng ý với nhau về nó.</p>
      <ul>
        <li>Có người coi họp là <strong>chán, vô nghĩa, vô ích</strong>.</li>
        <li>Người khác coi đó là <strong>cơ hội trao đổi thông tin và tạo ra kết quả</strong>.</li>
      </ul>
+     <p>Bên phải là một tấm áp phích châm biếm: "Bạn cô đơn? Chán làm việc một mình? Ghét phải ra quyết định? HÃY TỔ CHỨC MỘT CUỘC HỌP! Bạn có thể — gặp người, trình chiếu biểu đồ, thấy mình quan trọng, cầm que chỉ trỏ, ăn bánh donut, gây ấn tượng với đồng nghiệp. Tất cả trong giờ làm của công ty! CUỘC HỌP — GIẢI PHÁP THAY THẾ CHO LÀM VIỆC". Đó chính là cách nhìn "chán, vô nghĩa", vẽ thành trò đùa.</p>
      <p class="meo">💡 Khác biệt giữa hai trải nghiệm ấy gần như được quyết định xong trước khi ai kịp ngồi xuống — và đó là nội dung của bốn slide tiếp theo.</p>`),
 
   slide(D, 5, 'Pre-meeting',
@@ -166,7 +168,7 @@ export const b4l16 = [
      <p class="meo">💡 Đây chính là yếu tố "môi trường" ở slide 7 Bài 14, đem áp dụng. Muốn thành viên ít nói chịu phát biểu thì cách xếp chỗ ngồi làm được nhiều việc hơn là lời kêu gọi.</p>`),
 
   slide(D, 12, 'Meeting checklist for participants (Guffey, 2007)',
-    `<p class="y-chinh">🎯 Eleven behaviours expected of everyone in the room, not just the chair.</p>
+    `<p class="y-chinh">🎯 Twelve behaviours expected of everyone in the room, not just the chair (left column 5, right column 7).</p>
      <ul class="hai-cot">
        <li>Arrive on time and stay until it adjourns</li>
        <li>Leave only for established breaks or emergencies</li>
@@ -178,10 +180,11 @@ export const b4l16 = [
        <li>Communicate interest and stay engaged</li>
        <li>Avoid tangents and side discussions</li>
        <li>Respect space — do not spread papers everywhere</li>
-       <li>Clean up after yourself · engage in polite conversation afterwards</li>
+       <li>Clean up after yourself</li>
+       <li>Engage in polite conversation after the conclusion</li>
      </ul>
      <p class="meo">💡 "Follow the protocol for turn taking" is the one that protects the quiet members. Without a protocol, airtime goes to whoever interrupts best.</p>`,
-    `<p class="y-chinh">🎯 Mười một hành vi được trông đợi ở mọi người trong phòng, không riêng người chủ trì.</p>
+    `<p class="y-chinh">🎯 Mười hai hành vi được trông đợi ở mọi người trong phòng, không riêng người chủ trì (cột trái 5, cột phải 7).</p>
      <ul class="hai-cot">
        <li>Đến đúng giờ và ở lại tới khi họp kết thúc</li>
        <li>Chỉ rời phòng vào giờ giải lao hoặc khi có việc khẩn</li>
@@ -193,7 +196,8 @@ export const b4l16 = [
        <li>Thể hiện sự quan tâm và giữ mạch tham gia</li>
        <li>Tránh lạc đề và tránh bàn riêng</li>
        <li>Tôn trọng không gian — đừng bày giấy tờ khắp nơi</li>
-       <li>Dọn dẹp chỗ mình ngồi · trò chuyện lịch sự sau khi họp xong</li>
+       <li>Dọn dẹp chỗ mình ngồi</li>
+       <li>Trò chuyện lịch sự sau khi họp xong</li>
      </ul>
      <p class="meo">💡 "Theo đúng quy ước về lượt phát biểu" là điều bảo vệ những thành viên ít nói. Không có quy ước thì thời lượng nói thuộc về người cắt lời giỏi nhất.</p>`),
 
@@ -289,6 +293,7 @@ export const b4l16 = [
 
   slide(D, 17, 'Sample of informal minutes',
     `<p class="y-chinh">🎯 A worked example of what minutes look like in practice.</p>
+     <p>The sample on the slide is the informal minutes of a student class discussion group: a heading with the meeting name, date (February 10, 2009) and room · <em>Present</em> (the chairperson marked) and <em>Absent</em> · "Meeting began at 2:00 P.M." · bold topic headings — <em>Group Topic</em>, <em>Research Assignments</em>, <em>Absent Members</em>, <em>Class Presentation</em>, <em>Next Meeting</em> — each followed by what was discussed and decided, with italic lines "Action: <em>[name]</em> will …" for every task · "The meeting ended at 3:15 P.M."</p>
      <p><span class="nhan">A usable minimum for a student group</span></p>
      <ul>
        <li>Date, who attended, who was absent.</li>
@@ -298,6 +303,7 @@ export const b4l16 = [
      </ul>
      <p class="meo">💡 The last line is what stops a postponed item from silently becoming a forgotten one.</p>`,
     `<p class="y-chinh">🎯 Một ví dụ thực tế về hình hài của biên bản.</p>
+     <p>Mẫu trên slide là biên bản không chính thức của một nhóm thảo luận trong lớp: tiêu đề gồm tên cuộc họp, ngày (10/02/2009) và phòng · <em>Present</em> (có mặt, ghi rõ ai chủ trì) và <em>Absent</em> (vắng) · "Meeting began at 2:00 P.M." · các đề mục in đậm — <em>Group Topic</em> (chủ đề), <em>Research Assignments</em> (phân công tìm hiểu), <em>Absent Members</em> (thành viên vắng), <em>Class Presentation</em> (bài trình bày trên lớp), <em>Next Meeting</em> (cuộc họp tới) — mỗi đề mục ghi điều đã bàn và đã chốt, kèm dòng in nghiêng "Action: <em>[tên]</em> will …" cho từng việc · "The meeting ended at 3:15 P.M."</p>
      <p><span class="nhan">Mức tối thiểu dùng được cho nhóm sinh viên</span></p>
      <ul>
        <li>Ngày họp, ai có mặt, ai vắng.</li>
@@ -385,8 +391,8 @@ export const b4l16 = [
   ]),
 
   bi(
-    `<h3>✅ What this adds</h3>
-     <p>The old Academy lesson covered meetings with a before/during/after outline. The syllabus asks CQ13.2 about disruptive meeting behaviours and the chair's role — answered here by the eight perils and the fifteen facilitation guidelines, neither of which existed in the course before.</p>`,
-    `<h3>✅ Bài này bù thêm gì</h3>
-     <p>Bài cũ trên Academy nói về cuộc họp bằng một dàn ý trước/trong/sau. Syllabus hỏi CQ13.2 về hành vi phá đám trong họp và vai trò người chủ trì — được trả lời ở đây bằng tám kiểu điều hành hỏng và mười lăm nguyên tắc điều hành, cả hai đều chưa từng có trong khoá học.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus asks CQ13.2 about disruptive meeting behaviours and the chair's role — answered here by the eight perils (slide 13) and the fifteen facilitation guidelines (slides 14–15). Also know the six agenda components (slide 9) and what minutes must record (slides 16–17).</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Syllabus hỏi CQ13.2 về hành vi phá đám trong họp và vai trò người chủ trì — được trả lời ở đây bằng tám kiểu điều hành hỏng (slide 13) và mười lăm nguyên tắc điều hành (slide 14–15). Cần nắm thêm sáu thành phần chương trình họp (slide 9) và biên bản phải ghi gì (slide 16–17).</p>`),
 ].join('\n');

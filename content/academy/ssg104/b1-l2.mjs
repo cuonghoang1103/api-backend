@@ -173,8 +173,8 @@ export const b1l2 = [
   ]),
 
   bi(
-    `<h3>✅ Why this lesson used to be missing</h3>
-     <p>The syllabus lists "Cooperation" as its own session and asks about the Prisoner's Dilemma and Social Value Orientation in the check questions. Until this rebuild, the Academy course mentioned neither — the words "prisoner" and "cooperation" appeared zero times.</p>`,
-    `<h3>✅ Vì sao trước đây bài này bị thiếu</h3>
-     <p>Syllabus xếp "Cooperation" thành một buổi riêng và hỏi về Thế lưỡng nan của người tù cùng Định hướng giá trị xã hội trong phần câu hỏi ôn. Trước đợt dựng lại này, khoá học trên Academy không nhắc tới cả hai — chữ "prisoner" và "cooperation" xuất hiện đúng 0 lần.</p>`),
+    `<h3>✅ Why this lesson matters for the exam</h3>
+     <p>The syllabus lists "Cooperation" as its own session and asks about the Prisoner's Dilemma and Social Value Orientation in its check questions — learn both well.</p>`,
+    `<h3>✅ Vì sao bài này quan trọng cho bài thi</h3>
+     <p>Syllabus xếp "Cooperation" thành một buổi riêng và hỏi về Thế lưỡng nan của người tù cùng Định hướng giá trị xã hội trong phần câu hỏi ôn — nắm chắc cả hai.</p>`),
 ].join('\n');

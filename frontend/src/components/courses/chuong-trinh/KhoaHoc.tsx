@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import HuyHieuDu100 from '@/components/ui/HuyHieuDu100';
 import Link from 'next/link';
 import { BookOpen, CheckCircle2, Clock, Hourglass, Layers, Sparkles } from 'lucide-react';
 import type { MonChuongTrinh } from '@/types';
@@ -131,6 +132,7 @@ export function TheKhoa({ m, nn, c, thuTu, hienKy }: {
           <AnhBia m={m} ten={ten} className={`${s.anhKhoa} absolute inset-0 h-full w-full`} />
           <div className="absolute left-2.5 top-2.5 hidden flex-wrap gap-1.5 sm:flex">
             {m.sapRaMat ? <NhanSapRaMat c={c} noi /> : m.dangSoan ? <NhanDangSoan c={c} noi /> : null}
+            <HuyHieuDu100 slug={m.slug} />
             {xong && (
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400 px-2.5 py-1 text-xs font-semibold text-emerald-950 shadow-sm">
                 <CheckCircle2 aria-hidden className="h-3.5 w-3.5" />

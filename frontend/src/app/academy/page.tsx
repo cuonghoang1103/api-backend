@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import AcademyBackground from '@/components/academy/AcademyBackground';
 import AcademyOnboarding from '@/components/academy/AcademyOnboarding';
 import { SafeImage } from '@/components/ui/SafeImage';
+import HuyHieuDu100 from '@/components/ui/HuyHieuDu100';
 import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
 import { useAcademyProfile } from '@/hooks/useAcademyProfile';
 import { getFaculty, getCatMajor, getCatCombo } from '@/data/academyCatalog';
@@ -428,6 +429,7 @@ export default function AcademyPage() {
                             ) : (
                               <PlayCircle className="w-12 h-12 text-text-secondary group-hover:scale-110 transition-transform relative z-10" />
                             )}
+                            <HuyHieuDu100 slug={course.slug} className="absolute top-2 right-2 z-10" />
                             {isProject && (
                               <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-emerald-500/90 text-black text-[11px] font-bold shadow" title="Dự án gợi ý cho kỳ thực tập — không phải môn trong giáo trình">
                                 🚀 PROJECT

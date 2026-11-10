@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho BDA201 — Business Data Analytics. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/bda201-business-data-analytics.mjs
+ */
+export default {
+  courseSlug: "bda201-business-data-analytics",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "bda201-flm-b001": { yt: "MkjlIzvfqdo", credit: "Lights OnData — Understanding Business Intelligence, Data Analytics, and Business Analytics" },
+    "bda201-flm-b002": { yt: "3kMSsb9MFQo", credit: "365 Data Science — Introduction to Business Analytics | 365 Data Science Online Course" },
+    "bda201-flm-b003": { yt: "9IIgH0hNtgk", credit: "Cody Baldwin — Introduction to Business Analytics" },
+    "bda201-flm-b004": { yt: "O1QfG5SXRkM", credit: "Kenji Explains — Learn 80% of Data Analysis in Excel in Just 12 Minutes" },
+    "bda201-flm-b005": { yt: "_ZYSObj99Qw", credit: "Digital Transformation with Eric Kimberling — What is Data Management? [Intro to Data Migration, MDM, and Data Analytics]" },
+    "bda201-flm-b007": { yt: "YzogGu_2eRQ", credit: "Angelo the BA — Excel for Business Analysts  - Basic Data Analysis With Real Data" },
+    "bda201-flm-b010": { yt: "cHGhSj_Ax-0", credit: "Decisive Data — What is Descriptive Analytics? - Data Science Wednesday" },
+    "bda201-flm-b011": { yt: "K1a9oSybtm4", credit: "Techcanvass — What is Descriptive Analytics | Data Analytics | Techcanvass" },
+    "bda201-flm-b013": { yt: "ZUeWXNK-9yA", credit: "Analyst Academy — Data Visualization Crash Course | Consulting Best Practices" },
+    "bda201-flm-b014": { yt: "MiiANxRHSv4", credit: "Simplilearn — Data Visualization Tutorial For Beginners | Big Data Analytics Tutorial | Simplilearn" },
+    "bda201-flm-b015": { yt: "MLcDtRDQZbE", credit: "Corporate Finance Institute — Data Visualization Concepts | Intro to Business Intelligence (Part 5)" },
+    "bda201-flm-b016": { yt: "sQqniayndb4", credit: "Steve Brunton — Probability and Statistics: Overview" },
+    "bda201-flm-b019": { yt: "tFRXsngz4UQ", credit: "Dr Nic's Maths and Stats — Understanding Statistical Inference - statistics help" },
+    "bda201-flm-b021": { yt: "7cHXzp4vbBg", credit: "Chegg — What is Statistical Inference? | Introduction to Statistics" },
+    "bda201-flm-b025": { yt: "HyYvH3jSrVQ", credit: "Kenji Explains — Learn Regression Analysis in Excel in Just 12 Minutes" },
+    "bda201-flm-b028": { yt: "8LhbIr5TIxc", credit: "NPTEL IIT Bombay — #1 Lecture 1 | Introduction to Business Forecasting | Jan 2024 Business Forecasting" },
+    "bda201-flm-b034": { yt: "7rs0i-9nOjo", credit: "IBM Technology — What is Data Mining?" },
+    "bda201-flm-b037": { yt: "dUm3ptTQr0Q", credit: "Learn with Whiteboard — All Major Data Mining Techniques Explained With Examples" },
+    "bda201-flm-b038": { yt: "0FeO-_6sG2o", credit: "Katherine Carl, PhD — Business Analytics: Introduction to Data Mining" },
+    "bda201-flm-b041": { yt: "QiqZliDXCCg", credit: "IBM Technology — Exploratory Data Analysis" },
+    "bda201-flm-b046": { yt: "nDbmE0LlKQc", credit: "Engineeringly — How to Perform Monte Carlo Simulation in Ms. Excel for Risk Analysis?" },
+    "bda201-flm-b047": { yt: "7TqhmX92P6U", credit: "IBM Technology — What is Monte Carlo Simulation?" },
+    "bda201-flm-b049": { yt: "Y7e7DCsDUMY", credit: "Mario's Math Tutoring — Linear Programming (Optimization) 2 Examples Minimize & Maximize" },
+    "bda201-flm-b050": { yt: "qvyCnB-GPsE", credit: "Dr Bo Han Class — Introduction to Linear Optimization Analysis Techniques" },
+    "bda201-flm-b051": { yt: "tA4my3PNTho", credit: "Dr Bo Han Class — Linear Optimization Analysis" },
+    "bda201-1-1-overview-analytics": { yt: "-U_xkc5HeoU", credit: "RichardOnData — Descriptive vs Predictive vs Prescriptive Analytics" },
+    "bda201-2-1-data-collection-cleaning": { yt: "WpX2F2BS3Qc", credit: "Alex The Analyst — What is Data Cleaning? | Data Fundamentals for Beginners" },
+    "bda201-3-1-descriptive-stats-viz": { yt: "SplCk-t1BeA", credit: "Grad Coach — Descriptive Statistics: FULL Tutorial - Mean, Median, Mode, Variance & SD (With Examples)" },
+    "bda201-4-1-excel-pivot": { yt: "dvbLrwD2SpA", credit: "Kevin Stratvert — Pivot Table Excel | Step-by-Step Tutorial" },
+    "bda201-5-1-sql-queries": { yt: "kbKty5ZVKMY", credit: "Adam Finer - Learn BI — Learn Basic SQL in 15 Minutes | Business Intelligence For Beginners | SQL Tutorial For Beginners 1/3" },
+    "bda201-6-1-dashboard-bi": { yt: "aLV4Qe60VK4", credit: "Maven Analytics — Learn Power BI | Go from Data to Dashboard in 15 Minutes (full tutorial + project files included)" },
+    "bda201-7-1-forecasting-regression": { yt: "4y6fUC56KPw", credit: "Decisive Data — The Fundamentals of Predictive Analytics - Data Science Wednesday" },
+    "bda201-8-1-storytelling-decisions": { yt: "r5_34YnCmMY", credit: "Harvard Business Review — Telling Stories with Data in 3 Steps (Quick Study)" },
+  },
+};

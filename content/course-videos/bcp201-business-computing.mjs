@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho BCP201 — Business Computing. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/bcp201-business-computing.mjs
+ */
+export default {
+  courseSlug: "bcp201-business-computing",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "bcp201-flm-b001": { yt: "Q2f9h_-_Fv4", credit: "CS50 — Computational Thinking - CS50's Computer Science for Business Professionals 2017" },
+    "bcp201-flm-b003": { yt: "dHWmnayy8MY", credit: "Computer Science Lessons — Computational Thinking" },
+    "bcp201-flm-b004": { yt: "uOqPElBsBmM", credit: "Ryan O'Connell, CFA, FRM — Intro to Python for Finance: A Beginner's Guide" },
+    "bcp201-flm-b005": { yt: "b9RgHa1CnH4", credit: "Daniel Boctor — Quant Finance with Python and Pandas | 50 Concepts you NEED to Know in 9 Minutes | [Getting Started]" },
+    "bcp201-flm-b006": { yt: "QQrcd_62VWM", credit: "Tech With Tim — Python Programming Tutorial #2 - Basic Operators and Input" },
+    "bcp201-flm-b013": { yt: "ZB7BZMhfPgk", credit: "Enthought — Introduction to Numerical Computing with NumPy | SciPy 2019 Tutorial | Alex Chabot-Leclerc" },
+    "bcp201-flm-b014": { yt: "V0D2mhVt7NE", credit: "Enthought — Intro to Numerical Computing with NumPy (Beginner) | SciPy 2018 Tutorial | Alex Chabot-Leclerc" },
+    "bcp201-flm-b015": { yt: "lKcwuPnSHIQ", credit: "Enthought — Introduction to Numerical Computing with NumPy | SciPy 2017 Tutorial | Dillon Niederhut" },
+    "bcp201-flm-b018": { yt: "5_QXMwezPJE", credit: "Data School — How do I read a tabular data file into pandas?" },
+    "bcp201-flm-b019": { yt: "IEDJu91bf0U", credit: "Derrick Sherrill — Learn Python Pandas #2 - Data Selection, Viewing, & Indexing" },
+    "bcp201-flm-b021": { yt: "oF6eEMtqfuA", credit: "An IT Professional — Python Pandas tutorial: Indexing and Selecting Data | Python | Pandas" },
+    "bcp201-flm-b022": { yt: "Bg3CjiJ67Cc", credit: "IBM Technology — Feature Engineering for AI: Transforming Raw Data into Predictions" },
+    "bcp201-flm-b025": { yt: "5HcDJ8e9NwY", credit: "IBM Technology — Data Quality Explained" },
+    "bcp201-flm-b026": { yt: "KEFoXv3viCw", credit: "iceDQ — Dimensions of Data Quality – Everything You Need to Know | @iceDQ" },
+    "bcp201-flm-b027": { yt: "sJjzrRN7voE", credit: "Turing College — What Is Data Wrangling: Everything You Need To Know" },
+    "bcp201-flm-b028": { yt: "txMdrV1Ut64", credit: "Corey Schafer — Python Pandas Tutorial (Part 8): Grouping and Aggregating - Analyzing and Exploring Your Data" },
+    "bcp201-flm-b029": { yt: "39zsi3LkCdM", credit: "Code with Josh — Data Aggregation in Python with Pandas: A Step-by-Step Tutorial to Boost Your Data Analysis Skills" },
+    "bcp201-flm-b030": { yt: "47OriNxSKx0", credit: "Learning Python — Python Data Analysis: Data Aggregation and Group Operations in Python - Part 10" },
+    "bcp201-flm-b037": { yt: "a9UrKTVEeZA", credit: "CS Dojo — Intro to Data Analysis / Visualization with Python, Matplotlib and Pandas | Matplotlib Tutorial" },
+    "bcp201-flm-b038": { yt: "DAQNHzOcO5A", credit: "Keith Galli — Intro to Data Visualization in Python with Matplotlib! (line graph, bar chart, title, labels, size)" },
+    "bcp201-flm-b039": { yt: "2mCIcm8xau0", credit: "DataCamp — Python Tutorial: Introduction to data visualization with Matplotlib" },
+    "bcp201-flm-b043": { yt: "wmiDdBG-yP4", credit: "Kenji Explains — Learn SQL Basics in Just 15 Minutes!" },
+    "bcp201-flm-b044": { yt: "_vxobA36UN4", credit: "Maven Analytics — Learn 12 Basic SQL Concepts in 15 Minutes (project files included!)" },
+    "bcp201-flm-b045": { yt: "h0nxCDiD-zg", credit: "Kevin Stratvert — SQL Tutorial for Beginners" },
+    "bcp201-flm-b052": { yt: "DiQ5Hni6oRI", credit: "Rob Mulla — SQL Databases with Pandas and Python - A Complete Guide" },
+    "bcp201-1-1-information-systems": { yt: "X898qHM2uP0", credit: "Andrew Miller — BIS 3233 - Chapter 1: Introduction to Information Systems" },
+    "bcp201-2-1-word-processing": { yt: "y-AiPdAYixI", credit: "NIOS Secondary Courses — Basics Of Word Processing" },
+    "bcp201-4-1-excel-advanced": { yt: "v5l82vjuMpY", credit: "excelisfun — Excel For Accountants: VLOOKUP & PivotTables Complete Lessons: Basic to Advanced: CWU Seminar" },
+    "bcp201-6-1-database-basics": { yt: "wR0jg0eQsZA", credit: "Lucid Software — Database Tutorial for Beginners" },
+    "bcp201-8-1-security-ethics": { yt: "zK2-pfu4d1w", credit: "Free Education Academy - FreeEduHub — Security Privacy & Ethical Issues in Information Systems -Principles of Business Information Systems" },
+  },
+};

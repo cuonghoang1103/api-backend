@@ -1,9 +1,9 @@
 /**
  * YouTube track cho TPG302 — Typography &amp; E-publication. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
- *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/tpg302-typography-and-e-publication.mjs
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/tpg302-typography-e-publication.mjs
  */
 export default {
-  courseSlug: "tpg302-typography-and-e-publication",
+  courseSlug: "tpg302-typography-e-publication",
   defaultVideoTrack: "YT",
   lessons: {
     "tpg302-flm-b019": { yt: "hcP4Ga8vC68", credit: "Adobe Live — Design A Book Cover | Illustrator Typography Challenge" },

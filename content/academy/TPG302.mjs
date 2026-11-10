@@ -525,7 +525,7 @@ export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
     courseCode: 'TPG302',
-    slug: 'tpg302-typography-and-e-publication',
+    slug: 'tpg302-typography-e-publication',
     title: 'Typography &amp; E-publication',
     level: 'INTERMEDIATE',
     language: 'Vietnamese',

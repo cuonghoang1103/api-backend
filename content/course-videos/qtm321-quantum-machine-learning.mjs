@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho QTM321 — Quantum Machine Learning. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/qtm321-quantum-machine-learning.mjs
+ */
+export default {
+  courseSlug: "qtm321-quantum-machine-learning",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "qtm321-ts-1-1": { yt: "NqHKr9CGWJ0", credit: "IBM Technology — Quantum Machine Learning Explained" },
+    "qtm321-ts-1-3": { yt: "OKbcJCUx6xA", credit: "Qiskit — Quantum Machine Learning — Programming on Quantum Computers — Coding with Qiskit S2E6" },
+    "qtm321-ts-2-2": { yt: "zw3JYUrS-v8", credit: "Qiskit — Lecture 6.2 - Quantum Feature Spaces and Kernels" },
+    "qtm321-ts-3-1": { yt: "uDAAi5aQbMU", credit: "Quantum ML — Quantum Machine Learning - 32 - Quantum-Enhanced Kernel Methods 1 (Maria Schuld)" },
+    "qtm321-ts-3-3": { yt: "GVhCOTzAkCM", credit: "Qiskit — Lab 3 - Introduction to Quantum Kernels and Support Vector Machines" },
+    "qtm321-ts-3-4": { yt: "0SrrftaEiD8", credit: "Centre for Quantum Technologies — Power of data in quantum machine learning" },
+    "qtm321-ts-4-1": { yt: "bVymBcvE7BA", credit: "Quantum ML — Quantum Machine Learning - 20 - Variational Circuits and Quantum Simulation 1 (Alan Aspuru-Guzik)." },
+    "qtm321-ts-4-3": { yt: "DUq-0r-Prw0", credit: "Qiskit — What Is the Variational Quantum Eigensolver? | VQE Explained" },
+    "qtm321-ts-4-4": { yt: "Igxr1HLhdrM", credit: "Saesun Kim — Expressibility of Parametrized Quantum Circuits & Classification Accuracy of Quantum Neural Networks" },
+    "qtm321-ts-5-1": { yt: "crgmwXBogx4", credit: "PennyLane — Parameter--Shift Rule Derivation — Part 1 | PennyLane Tutorial" },
+    "qtm321-ts-5-2": { yt: "McgBeSVIGus", credit: "Xanadu — Automatic Differentiation of Quantum Circuits" },
+    "qtm321-ts-5-3": { yt: "0ENQXz9tDww", credit: "Qiskit — Lecture 8.2 - Barren Plateaus, Trainability Issues, and How to Avoid Them" },
+    "qtm321-ts-5-4": { yt: "JCrvxWZEtSY", credit: "IBM Technology — Quantum Error Mitigation and the Path to Useful Quantum Computing" },
+    "qtm321-ts-6-1": { yt: "-sxlXNz7ZxU", credit: "Qiskit — Lecture 5.1 - Building a Quantum Classifier" },
+    "qtm321-ts-6-2": { yt: "xL383DseSpE", credit: "QRL — Quantum Neural Networks explained in 3Blue1Brown style animation | Episode 1, Introduction" },
+    "qtm321-ts-6-4": { yt: "e2XrbWuaQNQ", credit: "Northeast Quantum Forum — Soonwon Choi - Quantum Convolutional Neural Networks" },
+    "qtm321-ts-7-1": { yt: "4nT0BTUxhJY", credit: "Qiskit — Phase Estimation and Factoring | Understanding Quantum Information & Computation | Lesson 07" },
+    "qtm321-ts-7-2": { yt: "9m92WpcTdgs", credit: "QRL — Quantum Support Vector Machines explained | Quantum algorithms explained | Quantum Machine Learning" },
+    "qtm321-ts-7-3": { yt: "aQzlNy4bepU", credit: "Peace Growba — 112 Quantum Amplitude Estimation" },
+    "qtm321-ts-7-4": { yt: "5yBtrX_jUIs", credit: "Simons Institute for the Theory of Computing — Quantum-Inspired Classical Linear Algebra" },
+    "qtm321-ts-8-1": { yt: "byS5LOr9clM", credit: "Xanadu — QHack 2021: Vishal Sharma—Quantum Circuit Born Machine With Qubit Recycle" },
+    "qtm321-ts-9-1": { yt: "RyRKmZ6A25k", credit: "Qiskit — Solving Optimization Problems with Quantum Algorithms with Daniel Egger: Qiskit Summer School 2024" },
+    "qtm321-ts-9-2": { yt: "YpLzSQPrgSc", credit: "Qiskit — Lecture 5.2 - Introduction to the Quantum Approximate Optimization Algorithm and Applications" },
+    "qtm321-ts-9-3": { yt: "zvfkXjzzYOo", credit: "D-Wave — What is Quantum Annealing?" },
+    "qtm321-ts-10-1": { yt: "m_wVLd_5rNw", credit: "PennyLane — Nathan Killoran: Better than classical? The subtle art of benchmarking QML models" },
+    "qtm321-ts-10-3": { yt: "w--HZ4QXugA", credit: "Qiskit — Understanding Noise in Near-Term Quantum Computers with Haimeng Zhang: Qiskit Summer School 2024" },
+    "qtm321-ts-10-4": { yt: "JtsmoS7vXYA", credit: "QRL — Quantum Machine Learning Project with TensorFlow Quantum and Cirq | Quantum Computing" },
+    "qtm321-1-1-foundations": { yt: "xgA4Dx_7q34", credit: "Qiskit — Lecture 1.1 - Vector Spaces, Tensor Products, and Qubits" },
+    "qtm321-2-1-gates-circuits": { yt: "HHV-P4_Xp1E", credit: "Physics but Awesome — How Quantum Computers Compute - Quantum Gates" },
+    "qtm321-4-1-data-encoding": { yt: "RKdFNJtTeeA", credit: "UTS Quantum — QSI Seminar: Dr Maria Schuld, Xanadu, Encoding Classical Data into Quantum States for ML, 05/06/2020" },
+    "qtm321-5-1-variational-circuits": { yt: "gZNO1tbMQLw", credit: "CodeLucky — Variational Quantum Algorithms Explained (VQE & Parameterized Circuits)" },
+    "qtm321-6-1-qnn-kernels": { yt: "CnSYsUhlx14", credit: "Computerphile — Quantum Machine Learning - Computerphile" },
+    "qtm321-7-1-algorithms": { yt: "N8e5nAk6KBQ", credit: "Quantum ML — Quantum Machine Learning - 18 - Quantum Approximate Optimization Algorithm (QAOA)" },
+  },
+};

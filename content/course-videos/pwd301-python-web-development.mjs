@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho PWD301 — Python Web Development. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/pwd301-python-web-development.mjs
+ */
+export default {
+  courseSlug: "pwd301-python-web-development",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "pwd301-flm-b001": { yt: "_higfXfhjdo", credit: "ByteByteGo — Everything You NEED to KNOW About Web Applications" },
+    "pwd301-flm-b002": { yt: "WNvxR8RFzBg", credit: "freeCodeCamp.org — Python for Web Development – Crash Course [API, SQL Databases, Virtual Environment, Flask, Django]" },
+    "pwd301-flm-b007": { yt: "QnDWIZuWYW0", credit: "Corey Schafer — Python Flask Tutorial: Full-Featured Web App Part 2 - Templates" },
+    "pwd301-flm-b008": { yt: "xIgPMguqyws", credit: "Tech With Tim — Flask Tutorial #2 - HTML Templates" },
+    "pwd301-flm-b009": { yt: "eZ5XKaNYTiw", credit: "sentdex — Flask Web Development in Python 7 - Extends for templates" },
+    "pwd301-flm-b010": { yt: "UIJKdCIEXUQ", credit: "Corey Schafer — Python Flask Tutorial: Full-Featured Web App Part 3 - Forms and User Input" },
+    "pwd301-flm-b011": { yt: "GbJPqu0ff9A", credit: "John Elder — Web Forms With WTF! - Flask Fridays #5" },
+    "pwd301-flm-b012": { yt: "-O9NMdvWmE8", credit: "TheCodex — Python and Flask - Web Forms with Flask-wtf" },
+    "pwd301-flm-b013": { yt: "Rxp3mkg2mRQ", credit: "John Elder — Web Forms With Flask - Python and Flask #4" },
+    "pwd301-flm-b016": { yt: "EwpT466EyP4", credit: "Code With Bubb — What is an ORM and what does it do?" },
+    "pwd301-flm-b017": { yt: "EsBqIZmR2Uc", credit: "BugBytes — Django ORM Deep Dive - Introduction to Databases & SQL" },
+    "pwd301-flm-b018": { yt: "7E1M1W9o7PA", credit: "Telusko — #15 Django tutorials | ORM | Object Relational Mapper | Theory" },
+    "pwd301-flm-b022": { yt: "XHGpPCYmPvI", credit: "Pretty Printed — Building a Blog App With Flask and Flask-SQLAlchemy" },
+    "pwd301-flm-b023": { yt: "agoZSEZbnU8", credit: "Pretty Printed — How to Create a Flask & HTMX Form With Flask-WTF and Modern SQLAlchemy" },
+    "pwd301-flm-b025": { yt: "VW8qJxy4XcQ", credit: "Pretty Printed — How to Use HTTP Basic Authentication in Your Flask App" },
+    "pwd301-flm-b026": { yt: "rhi1eIjSbvk", credit: "OktaDev — \"Basic Authentication\" in Five Minutes" },
+    "pwd301-flm-b027": { yt: "iX8g4LqF8p8", credit: "Hayk Simonyan — 7 Authentication Concepts Every Developer Should Know" },
+    "pwd301-flm-b028": { yt: "TDe7DRYK8vU", credit: "The Full Stack Junkie — Understanding Authentication in Node.js - Sessions and Cookies - Web Development Concepts Explained" },
+    "pwd301-flm-b031": { yt: "5GG-VUvruzE", credit: "Web Dev Simplified — How To Handle Permissions Like A Senior Dev" },
+    "pwd301-flm-b032": { yt: "9v2NZ2dGB60", credit: "Python Central — Implementing User Roles and Permissions in Flask" },
+    "pwd301-flm-b033": { yt: "wnSArmbI6qw", credit: "ByteGrad — Handle Permissions Like A Pro - Every Developer Should Know This" },
+    "pwd301-flm-b034": { yt: "q1fsBWLpYW4", credit: "Fireship — 21 Awesome Web Features you’re not using yet" },
+    "pwd301-flm-b040": { yt: "PTZiDnuC86g", credit: "Traversy Media — REST API With Flask & SQL Alchemy" },
+    "pwd301-flm-b041": { yt: "DlNIXC9SaF4", credit: "teclado — Build your first REST API with Flask and PostgreSQL" },
+    "pwd301-flm-b042": { yt: "GMppyAPbLYk", credit: "Tech With Tim — Python REST API Tutorial - Building a Flask REST API" },
+    "pwd301-flm-b043": { yt: "s_ht4AKnWZg", credit: "Melvin L — Building a REST API using Python and Flask | Flask-RESTful" },
+    "pwd301-flm-b044": { yt: "KIH8GZ1wHr4", credit: "Noah Does Coding — Python Backend #2: Build a Simple REST API with Flask (GET & POST Tutorial)" },
+    "pwd301-flm-b049": { yt: "tyfwwSNc9Jg", credit: "sentdex — Flask Tutorial Web Development with Python 9 - Error Handling" },
+    "pwd301-flm-b052": { yt: "Aa-F6zqLmig", credit: "Real Python — Creating a Simple Python Web Application With Flask and Testing Locally" },
+    "pwd301-1-1-flask-routing": { yt: "MwZwr5Tvyxo", credit: "Corey Schafer — Python Flask Tutorial: Full-Featured Web App Part 1 - Getting Started" },
+    "pwd301-2-1-templates-forms": { yt: "eghZ5Q0GPhs", credit: "learndataa — Jinja2 Templates for Beginners" },
+    "pwd301-3-1-database-auth": { yt: "cYWiDiIUxQc", credit: "Corey Schafer — Python Flask Tutorial: Full-Featured Web App Part 4 - Database with Flask-SQLAlchemy" },
+    "pwd301-4-1-rest-deploy": { yt: "-mN3VyJuCjM", credit: "ByteByteGo — What Is REST API? Examples And How To Use It: Crash Course System Design #3" },
+  },
+};

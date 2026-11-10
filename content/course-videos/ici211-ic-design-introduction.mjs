@@ -1,0 +1,42 @@
+/**
+ * YouTube track cho ICI211 — IC Design Introduction. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ici211-ic-design-introduction.mjs
+ */
+export default {
+  courseSlug: "ici211-ic-design-introduction",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "ici211-flm-b004": { yt: "AwRJsze_9m4", credit: "The Engineering Mindset — MOSFET Explained - How MOSFET Works" },
+    "ici211-flm-b005": { yt: "iwKxhMMMM4w", credit: "Education 4u — MOS transistor Structure | Modes of operation  | VLSI | Lec-03" },
+    "ici211-flm-b007": { yt: "faiEVOOCe-s", credit: "IIT Roorkee July 2018 — MOS Transistor Basics-I" },
+    "ici211-flm-b010": { yt: "aONAwc5c2SQ", credit: "Marilyn Wolf — The CMOS Inverter and Static Characteristics" },
+    "ici211-flm-b011": { yt: "Jf71sImJb3Y", credit: "IC-ResQ Lab — Lecture 8: MOS Inverter | MOS VLSI Design | Dr. Ambika Prasad Shah | IIT Jammu" },
+    "ici211-flm-b013": { yt: "6xzhDAIzXpQ", credit: "EC Academy — Switching Characteristics of CMOS Inverter Complete Concept, Rise Time Fall Time, Propagation Delay" },
+    "ici211-flm-b014": { yt: "BA1rnEMBjjQ", credit: "nptelhrd — Mod-01 Lec-07 MOS Inverters - II" },
+    "ici211-flm-b015": { yt: "wcz1vHHI_dw", credit: "Engineering Funda — CMOS Inverter, Voltage Transfer Characteristics of CMOS Inverter, Working & Circuit of CMOS Inverter" },
+    "ici211-flm-b016": { yt: "rUZsb1R7UD8", credit: "ACG Shots — Introduction to Inverter Switching Characteristics | VLSI Design | Dr. Sohaib A. Qazi" },
+    "ici211-flm-b018": { yt: "Lu1rhV_FoPA", credit: "VTU Academy — 10 MOS Switching Characteristics (Rise, Fall, Delay Time) Explained Module 2 6th Sem VLSI ECE VTU" },
+    "ici211-flm-b020": { yt: "1VBibVZ5fNE", credit: "Electronics Lab DIY — Cadence-1: Introduction to Cadence Virtuoso | CMOS Inverter| Tutorial for creating Schematic" },
+    "ici211-flm-b025": { yt: "m5rEKAqHyKo", credit: "IIT Roorkee July 2018 — Combinational Logic Design-I" },
+    "ici211-flm-b027": { yt: "2t1M8ouI5pw", credit: "IIT Roorkee July 2018 — Combinational Logic Design-IX" },
+    "ici211-flm-b029": { yt: "lTmAlB1T6Yo", credit: "Intermation — Ep 026: Introduction to Combinational Logic" },
+    "ici211-flm-b030": { yt: "51wwv59O5pk", credit: "IIT Roorkee July 2018 — Combinational Logic Design-VIII" },
+    "ici211-flm-b031": { yt: "RZo--xYfTR4", credit: "IIT Roorkee July 2018 — Sequential Logic Design -I" },
+    "ici211-flm-b032": { yt: "AaN72s5WfOM", credit: "Neso Academy — Introduction to Sequential Circuits | Important" },
+    "ici211-flm-b033": { yt: "DESVa4X_rpo", credit: "IC-ResQ Lab — Lecture 31: Timing Matrix of Sequential Logic | MOS VLSI Design | Dr. Ambika Prasad Shah | IIT Jammu" },
+    "ici211-flm-b034": { yt: "yndN_m9L5qI", credit: "AKTU Digital Education — VLSI Design | Sequential CMOS Logic Circuits Part-1| AKTU Digital Education" },
+    "ici211-flm-b035": { yt: "fLN1YOmuAr8", credit: "ALL ABOUT ELECTRONICS — Introduction to Sequential Circuits | Digital Electronics" },
+    "ici211-flm-b040": { yt: "dFF5jzRcDnI", credit: "AKTU Digital Education — VLSI Design | Dynamic CMOS Logic Design Part-1| AKTU Digital Education" },
+    "ici211-flm-b043": { yt: "cYSqL0KeCrU", credit: "Sanjay Vidhyadharan — VLSI Design: Dynamic Logic" },
+    "ici211-flm-b045": { yt: "uYdqlKYkD4s", credit: "VTU Academy — 3 Dynamic CMOS Logic Explained Module 4 6th Sem VLSI Design & Testing ECE VTU" },
+    "ici211-flm-b049": { yt: "1GREaNW21XM", credit: "ALL ABOUT ELECTRONICS — Semiconductor Memories: ROM Explained | Types of ROM | Applications of ROM" },
+    "ici211-flm-b050": { yt: "a--rNdqtwCI", credit: "ALL ABOUT ELECTRONICS — Semiconductor Memories:  RAM (Random Access Memory) Explained" },
+    "ici211-flm-b051": { yt: "oBMj77ONeH8", credit: "Ekeeda — Semiconductor Memories" },
+    "ici211-flm-b055": { yt: "CwL3ouoN7pE", credit: "Institute of Electronics - TU Graz — CMOS Basics - Inverter, Transmission Gate, Dynamic and Static Power Dissipation, Latch Up" },
+    "ici211-flm-b056": { yt: "-08k-ff1TK0", credit: "AKTU Digital Education — VLSI Design | Low Power CMOS VLSI Design | AKTU Digital Education" },
+    "ici211-1-1-ic-design-overview": { yt: "cIlwGFcDLhI", credit: "Systemverilog Academy — IC Design &  Manufacturing Process : Beginners Overview to VLSI" },
+    "ici211-3-1-cmos-gates": { yt: "f3zRz0d9XA8", credit: "ALL ABOUT ELECTRONICS — CMOS Logic Gates Explained | Logic Gate Implementation using CMOS logic" },
+    "ici211-7-1-memory-sequential": { yt: "NfqgM3QbiVk", credit: "Onur Mutlu Lectures — Design of Digital Circuits - Lecture 7.1: Sequential Logic Design II (ETH Zürich, Spring 2019)" },
+    "ici211-8-1-design-flow-eda": { yt: "HkT363NUOBA", credit: "Cadence Design Systems — Introduction to Electronic Design Automation (EDA)" },
+  },
+};

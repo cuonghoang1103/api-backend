@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho ICS101 — Introduction to Computer Science. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ics101-introduction-to-computer-science.mjs
+ */
+export default {
+  courseSlug: "ics101-introduction-to-computer-science",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "ics101-flm-b002": { yt: "75z6HRmo_CU", credit: "Byte Sized Explainer — Every Computer Generation Explained in 4 Minutes" },
+    "ics101-flm-b004": { yt: "FZGugFqdr60", credit: "CrashCourse — The Central Processing Unit (CPU): Crash Course Computer Science #7" },
+    "ics101-flm-b005": { yt: "PujjqfUhtNo", credit: "Neso Academy — Introduction to Memory" },
+    "ics101-flm-b006": { yt: "OZFsTelYdk4", credit: "Abelardo Pardo — Input/output subsystem in computer systems" },
+    "ics101-flm-b007": { yt: "Ol8D69VKX2k", credit: "Neso Academy — Introduction to Computer Organization and Architecture (COA)" },
+    "ics101-flm-b008": { yt: "FFDMzbrEXaE", credit: "The Organic Chemistry Tutor — Number Systems Introduction - Decimal, Binary, Octal & Hexadecimal" },
+    "ics101-flm-b009": { yt: "crSGS1uBSNQ", credit: "Neso Academy — Introduction to Number Systems" },
+    "ics101-flm-b013": { yt: "TQCr9RV7twk", credit: "CrashCourse — Memory & Storage: Crash Course Computer Science #19" },
+    "ics101-flm-b015": { yt: "gI-qXk7XojA", credit: "CrashCourse — Boolean Logic & Logic Gates: Crash Course Computer Science #3" },
+    "ics101-flm-b017": { yt: "3QhU9jd03a0", credit: "CrashCourse — Computer Networks: Crash Course Computer Science #28" },
+    "ics101-flm-b018": { yt: "VwN91x5i25g", credit: "Neso Academy — Introduction to Computer Networks" },
+    "ics101-flm-b035": { yt: "O753uuutqH8", credit: "CrashCourse — Software Engineering: Crash Course Computer Science #16" },
+    "ics101-flm-b036": { yt: "Fi3_BjVzpqk", credit: "Simplilearn — Introduction To Software Development LifeCycle | What Is Software Development? | Simplilearn" },
+    "ics101-flm-b039": { yt: "DuDz6B4cqVc", credit: "CrashCourse — Data Structures: Crash Course Computer Science #14" },
+    "ics101-flm-b040": { yt: "xLetJpcjHS0", credit: "Neso Academy — Introduction to Data Structures" },
+    "ics101-flm-b041": { yt: "XuCbpw6Bj1U", credit: "mycodeschool — Data structures: Introduction to Queues" },
+    "ics101-flm-b043": { yt: "KN8YgJnShPM", credit: "CrashCourse — Files & File Systems: Crash Course Computer Science #20" },
+    "ics101-flm-b045": { yt: "6Iu45VZGQDk", credit: "Neso Academy — Introduction to Database Management Systems" },
+    "ics101-flm-b046": { yt: "OqjJjpjDRLc", credit: "IBM Technology — What is a Relational Database?" },
+    "ics101-flm-b047": { yt: "Q45sr5p_NmQ", credit: "Neso Academy — Introduction to Relational Data Model" },
+    "ics101-flm-b048": { yt: "7m6gXeMDaHc", credit: "Neso Academy — Database Design Process" },
+    "ics101-flm-b050": { yt: "zBFB34YGK1U", credit: "Dr. Daniel Soper — Introduction to Computer Security - Information Security Lesson #1 of 12" },
+    "ics101-flm-b051": { yt: "zK2-pfu4d1w", credit: "Free Education Academy - FreeEduHub — Security Privacy & Ethical Issues in Information Systems -Principles of Business Information Systems" },
+    "ics101-flm-b052": { yt: "6IeqJtudKnk", credit: "CS50 — CS50 Cybersecurity - Lecture 4 - Preserving Privacy" },
+    "ics101-flm-b053": { yt: "_GzE99AmAQU", credit: "CrashCourse — Hackers & Cyber Attacks: Crash Course Computer Science #32" },
+    "ics101-flm-b056": { yt: "JPcx9qHzzgk", credit: "DeepLearningAI — AI for Everyone by Andrew Ng" },
+    "ics101-1-1-what-and-history": { yt: "O5nskjZ_GoI", credit: "CrashCourse — Early Computing: Crash Course Computer Science #1" },
+    "ics101-2-1-data-representation": { yt: "1GSjbWt0c9M", credit: "CrashCourse — Representing Numbers and Letters with Binary: Crash Course Computer Science #4" },
+    "ics101-3-1-architecture": { yt: "Onf7AKGHBzg", credit: "Geoffrey Messier — Computer Architecture Lecture 1: Introduction" },
+    "ics101-4-1-os-software": { yt: "26QPDBe-NB8", credit: "CrashCourse — Operating Systems: Crash Course Computer Science #18" },
+    "ics101-5-1-algorithms": { yt: "rL8X2mlNHPM", credit: "CrashCourse — Intro to Algorithms: Crash Course Computer Science #13" },
+    "ics101-6-1-programming": { yt: "RU1u-js7db8", credit: "CrashCourse — The First Programming Languages: Crash Course Computer Science #11" },
+    "ics101-7-1-networks-internet": { yt: "WO6P92v61y4", credit: "freeCodeCamp.org — Intro to Computer Networks - Crash Course" },
+  },
+};

@@ -1,0 +1,42 @@
+/**
+ * YouTube track cho ICS102 — Introduction to Computer Systems. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ics102-introduction-to-computer-systems.mjs
+ */
+export default {
+  courseSlug: "ics102-introduction-to-computer-systems",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "ics102-ts-1-1": { yt: "QwvZUpkRVsg", credit: "SKKU(LamdaLab) — [Chap.1] 1.1 Information Is Bits + Context(1), by Prof. Oh (Sungkyunkwan University)" },
+    "ics102-ts-1-2": { yt: "Ol8D69VKX2k", credit: "Neso Academy — Introduction to Computer Organization and Architecture (COA)" },
+    "ics102-ts-1-3": { yt: "26QPDBe-NB8", credit: "CrashCourse — Operating Systems: Crash Course Computer Science #18" },
+    "ics102-ts-2-1": { yt: "Weyv-V8xz0c", credit: "hhp3 — Lecture 3/12: Bits, Bytes and Words" },
+    "ics102-ts-2-2": { yt: "ffPOA7UUDAs", credit: "Learn Learn Scratch Tutorials — Bitwise Operations & Bit Masking" },
+    "ics102-ts-2-3": { yt: "lKTsv6iVxV4", credit: "Computerphile — Binary: Plusses & Minuses (Why We Use Two's Complement) - Computerphile" },
+    "ics102-ts-2-4": { yt: "7towQUO9aZI", credit: "Neso Academy — Overflow in Signed and Unsigned Numbers" },
+    "ics102-ts-2-5": { yt: "RuKkePyo9zk", credit: "Computer Science Lessons — IEEE 754 Standard for Floating Point Binary Arithmetic" },
+    "ics102-ts-3-1": { yt: "lUbPUWtmVUU", credit: "Gedare Bloom — x86-64 Assembly Programming Part 1: Registers, Data Movement, and Addressing Modes" },
+    "ics102-ts-3-2": { yt: "_CH4cm5PhK8", credit: "Gate Smashers — L-2.1: What is Addressing Mode | Various Types of Addressing Modes | COA" },
+    "ics102-ts-4-4": { yt: "1S0aBV-Waeo", credit: "Computerphile — Running a Buffer Overflow Attack - Computerphile" },
+    "ics102-ts-5-2": { yt: "3DSKn8ADtos", credit: "Sebastian — Explaining CPU Architecture: Pipelining, Pipeline Stages, Superscalar CPUs and Order - Ep. 2" },
+    "ics102-ts-5-3": { yt: "t27kbXWP5GY", credit: "Dr. Sapna Katiyar — Pipeline Hazards | Structural, Data and Control Hazards || Computer Organization & Architecture" },
+    "ics102-ts-6-2": { yt: "Ez_kyBS-y5w", credit: "Neso Academy — Introduction to Cache Memory" },
+    "ics102-ts-6-3": { yt: "G92BCtfTwOE", credit: "Creel — Performance x64: Cache Blocking (Matrix Blocking)" },
+    "ics102-ts-7-2": { yt: "YtiPCPtmZrs", credit: "Mike Shah — [Day 16] - Static and Dynamic Libraries (ar, objdump, ld, ldd) - Crash Course in C Programming" },
+    "ics102-ts-7-3": { yt: "B1cXyRPu5p4", credit: "Meta-cle — CS 238P: OS - 6 | Linking and Loading (Position Independent Code) | University of California, Irvine" },
+    "ics102-ts-8-1": { yt: "mb9yqvq7XCg", credit: "Jeff Zarnett — ECE 252 Lecture 2: Interrupts and System Calls" },
+    "ics102-ts-8-2": { yt: "IFEFVXvjiHY", credit: "Neso Academy — fork() and exec() System Calls" },
+    "ics102-ts-8-3": { yt: "83M5-NPDeWs", credit: "Jacob Sorber — Sending and Handling Signals in C (kill, signal, sigaction)" },
+    "ics102-ts-9-1": { yt: "KNUJhZCQZ9c", credit: "David Black-Schaffer — Virtual Memory: 5 Page Tables" },
+    "ics102-ts-9-2": { yt: "6neHHkI0Z0o", credit: "David Black-Schaffer — Virtual Memory: 7 Address Translation Example Walkthrough" },
+    "ics102-ts-9-3": { yt: "xa4ugmMDhiE", credit: "CS50 — Dynamic Memory Allocation - CS50 Shorts" },
+    "ics102-ts-10-1": { yt: "KM5sRWAYqaw", credit: "Ramesh Yerraballi — File Descriptors Explained" },
+    "ics102-ts-10-2": { yt: "uagKTbohimU", credit: "Neso Academy — Sockets in Operating System" },
+    "ics102-ts-10-3": { yt: "85T_ZaT8EUI", credit: "Chris Kanich — what's the difference between processes, threads, and io multiplexing?" },
+    "ics102-1-1-info": { yt: "1GSjbWt0c9M", credit: "CrashCourse — Representing Numbers and Letters with Binary: Crash Course Computer Science #4" },
+    "ics102-2-1-machine-asm": { yt: "PxiMLtsuGO0", credit: "Mxy — Learn Assembly For Beginners | Introduction to Assembly | Assembly Tutorial x86-64 Architecture" },
+    "ics102-4-1-processor": { yt: "GtVDTp826DE", credit: "BitLemon — CPU Architecture Explained" },
+    "ics102-5-1-memory-cache": { yt: "zwovvWfkuSg", credit: "Gate Smashers — L-3.1: Memory Hierarchy in Computer Architecture | Access time, Speed, Size, Cost | All Imp Points" },
+    "ics102-6-1-linking": { yt: "N2y6csonII4", credit: "EngMicroLectures — Compiling, assembling, and linking" },
+    "ics102-8-1-io-networking": { yt: "3QhU9jd03a0", credit: "CrashCourse — Computer Networks: Crash Course Computer Science #28" },
+  },
+};

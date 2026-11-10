@@ -505,7 +505,7 @@ function BangModelCm({ models, tran, onXong }: {
   );
 }
 
-// ─── Công tắc cổng rambo + tình trạng + nút Thử (19/10/2026) ─────────
+// ─── Công tắc cổng gwai (Claude rẻ) + tình trạng + nút Thử — thay cổng rambo.ai cũ (API /rambo giữ tên nội bộ) ───
 
 function CongTacRambo({ rambo, classic, onDoi }: {
   rambo: TrangThaiRambo;
@@ -516,7 +516,7 @@ function CongTacRambo({ rambo, classic, onDoi }: {
   const [dangThu, setDangThu] = useState(false);
   const doi = async (bat: boolean) => {
     setDang(true);
-    try { onDoi(await goi('/rambo', { method: 'PUT', body: JSON.stringify({ bat }) })); toast.success(bat ? 'Đã bật rambo. / Rambo on.' : 'Đã tắt rambo. / Rambo off.'); }
+    try { onDoi(await goi('/rambo', { method: 'PUT', body: JSON.stringify({ bat }) })); toast.success(bat ? 'Đã bật cổng gwai. / gwai on.' : 'Đã tắt cổng gwai. / gwai off.'); }
     catch (e) { toast.error((e as Error).message); } finally { setDang(false); }
   };
   const thu = async () => {
@@ -525,8 +525,8 @@ function CongTacRambo({ rambo, classic, onDoi }: {
       const r = await goi<{ ketQua: { models: Array<{ ok: boolean }> }; trangThai: TrangThaiRambo }>('/rambo/thu', { method: 'POST' });
       onDoi(r.trangThai);
       const ok = r.ketQua.models.filter((m) => m.ok).length;
-      if (ok) toast.success(`Rambo trả lời ${ok}/${r.ketQua.models.length} model. / Rambo answered ${ok}/${r.ketQua.models.length}.`);
-      else toast.error('Rambo không trả lời model nào. / Rambo answered none.');
+      if (ok) toast.success(`gwai trả lời ${ok}/${r.ketQua.models.length} model. / gwai answered ${ok}/${r.ketQua.models.length}.`);
+      else toast.error('gwai không trả lời model nào. / gwai answered none.');
     } catch (e) { toast.error((e as Error).message); } finally { setDangThu(false); }
   };
   const song = rambo.bat && rambo.coCauHinh && !rambo.dangNghi;
@@ -535,24 +535,22 @@ function CongTacRambo({ rambo, classic, onDoi }: {
       : rambo.dangNghi ? { t: 'SẬP — đang lùi / Down — falling back', c: 'border-red-500/50 text-red-400' }
         : { t: 'BẬT · đang chạy / On · up', c: 'border-green-500/50 text-green-400' };
   return (
-    <The tieuDe="🔌 Cổng rambo — CuongMini Default / Classic"
+    <The tieuDe="🔌 Cổng gwai — Claude rẻ (cổng chính)"
       phai={<span className={`px-2 py-0.5 rounded-full text-xs border ${nhan.c}`}>{nhan.t}</span>}>
       <div className="text-text-muted text-xs space-y-1">
         <p>
-          <b className="text-text-primary">Bật thì chuyện gì xảy ra:</b> rambo là gói trả trọn (rẻ nhất) nên thành MẶC ĐỊNH.
-          AI Code (app, CLI, extension): <b className="text-text-primary">CuongMini Default</b> chạy Sonnet mới nhất của rambo
-          ({rambo.modelSonic ?? '—'}), nhóm <b className="text-text-primary">CuongMini Classic</b> ({classic.map((m) => m.ten.replace(/^CuongMini /, '')).join(' · ') || '—'}) hiện ngay dưới Default;
-          tài khoản FREE dùng được Default (chống spam ở thẻ dưới). Web: các việc có model Claude trong bản đồ (gia sư bài học, Code Lab, CT Work…) đi rambo;
-          CT Work dùng Sonnet. Phòng Luyện nói giữ cổng chính hãng (nhanh hơn).
-          Rambo sập ⇒ cầu dao mở: Pro tự lùi CuongMini Solid, web lùi gpt-6-sol, Free nhận câu &ldquo;đang bảo trì&rdquo;; rambo sống lại là tự về.
+          <b className="text-text-primary">gwai là cổng Claude GIÁ RẺ</b> (sonnet/opus/haiku-5-5, rẻ ~16× so với chính hãng) nên là <b className="text-text-primary">cổng Claude mặc định</b> của web.
+          Mọi việc có model Claude trong bản đồ (gia sư bài học, Code Lab, phòng thi, CT Work, AI Chat Pro…) đi gwai.
+          Web AI Chat: Pro/Pro2/Max chạy gwai (haiku/sonnet/opus-5-5), chính hãng chỉ còn là lớp lùi.
+          <b className="text-text-primary"> gwai lỗi/hết credit ⇒ cầu dao mở:</b> tự lùi modelapi (gpt-6-sol), web KHÔNG gián đoạn; gwai sống lại là tự về.
+          (Thay cho cổng rambo.ai cũ đã ngừng.)
         </p>
         <p>
-          When on, rambo (flat-rate, cheapest) becomes the DEFAULT: CuongMini Default runs rambo&apos;s newest Sonnet, the Classic group appears right below it,
-          free accounts can use Default (anti-spam below), web features with a Claude model go through rambo (CT Work uses Sonnet; speaking room stays official).
-          When it fails the breaker opens: Pro falls back to Solid, web to gpt-6-sol, free users see &ldquo;under maintenance&rdquo;; it comes back automatically.
+          gwai is the CHEAP Claude gateway (~16× cheaper than official) and the DEFAULT Claude gateway: every Claude-model feature (tutors, Code Lab, exams, CT Work, AI Chat Pro) runs through gwai.
+          When it fails or runs out of credit the breaker opens and everything falls back to modelapi (gpt-6-sol) with no interruption; it returns automatically. (Replaces the retired rambo.ai gateway.)
         </p>
         {rambo.nguon === 'env' && <p className="text-amber-300/90">⚠ Đang bị env RAMBO_BAT ghi đè — công tắc không có tác dụng tới khi bỏ biến đó. / Forced by RAMBO_BAT env.</p>}
-        {!rambo.coCauHinh && <p className="text-amber-300/90">⚠ Máy chủ chưa có AGENT_GATEWAY_BASE_URL/_API_KEY — bật cũng như tắt. / Missing gateway env.</p>}
+        {!rambo.coCauHinh && <p className="text-amber-300/90">⚠ Máy chủ chưa có GWAI_BASE_URL/_API_KEY — bật cũng như tắt. / Missing gwai gateway env.</p>}
         <p>
           Lần kiểm gần nhất / Last check: {rambo.kiemGanNhat ? `${ngayVN(rambo.kiemGanNhat.luc)} — ${rambo.kiemGanNhat.song ? 'sống / up' : 'không trả lời / down'}` : 'chưa có / none yet'}
           {rambo.dsModel && <> · Danh sách model ({ngayVN(rambo.dsModel.luc)}): {rambo.dsModel.ids.join(', ')}</>}
@@ -561,10 +559,10 @@ function CongTacRambo({ rambo, classic, onDoi }: {
       <div className="flex flex-wrap items-center gap-3">
         <label className="flex items-center gap-2 text-xs">
           <input type="checkbox" disabled={dang || rambo.nguon === 'env'} checked={rambo.bat} onChange={(e) => doi(e.target.checked)} />
-          Bật cổng rambo / Enable rambo
+          Bật cổng gwai / Enable gwai
         </label>
         <button type="button" className={`${nut} border-sky-500/50 text-sky-300`} disabled={dangThu || !rambo.bat || !rambo.coCauHinh} onClick={thu}>
-          {dangThu ? 'Đang thử… / Testing…' : 'Thử rambo / Test rambo'}
+          {dangThu ? 'Đang thử… / Testing…' : 'Thử gwai / Test gwai'}
         </button>
         {song ? null : rambo.bat && <span className="text-xs text-red-400">Đang lùi về Solid / gpt-6-sol.</span>}
       </div>
@@ -583,7 +581,7 @@ function CongTacRambo({ rambo, classic, onDoi }: {
               ))}
             </tbody>
           </table>
-          <p className="text-[11px] text-text-muted mt-1">Thử lúc / Tested at {ngayVN(rambo.thuGanNhat.luc)} — mỗi model một lời gọi 1 token (gói trọn, không tốn tiền theo token).</p>
+          <p className="text-[11px] text-text-muted mt-1">Thử lúc / Tested at {ngayVN(rambo.thuGanNhat.luc)} — mỗi model một lời gọi 1 token (chi phí không đáng kể).</p>
         </div>
       )}
     </The>
@@ -597,7 +595,7 @@ interface GioiHanCtw { phutNguoi: number; ngayNguoi: number; ngayIp: number }
 interface BacCong { bac?: 'rambo' | 'chinh_hang_sonnet' | 'chinh_hang_haiku' | 'modelapi'; cong: 'rambo' | 'chinh_hang' | 'modelapi'; model: string; dungDuoc: boolean }
 interface DemMarkup { cong: string; model: string; lan: number; cuoi: string }
 const TEN_BAC: Record<string, string> = {
-  rambo: 'Rambo (gói trọn)', chinh_hang: 'Chính hãng (Code Max)', chinh_hang_sonnet: 'Chính hãng Sonnet',
+  rambo: 'gwai (Claude rẻ)', chinh_hang: 'Chính hãng (Code Max)', chinh_hang_sonnet: 'Chính hãng Sonnet',
   chinh_hang_haiku: 'Chính hãng Haiku (dự phòng)', modelapi: 'modelapi (Core)',
 };
 
@@ -662,7 +660,7 @@ function CtWorkAiAdmin() {
                 ))}
               </tbody>
             </table>
-            <p className="text-[11px] text-text-muted mt-1">Bậc hỏng (DNS/410/401/5xx/hết giờ/trả rỗng/câu báo lỗi của cổng/markup gọi tool dạng chữ) ⇒ tự sang bậc sau trong cùng lượt, người dùng không thấy lỗi; rambo sống lại ⇒ tự về. Chính hãng: Sonnet hỏng hoặc chạm trần (100 $/ngày, 10 $/người) ⇒ Haiku (thêm 20 $ / 2 $). Đổi thứ tự: env <code>CTWORK_CHUOI_CONG</code> (rambo, chinh_hang_sonnet, chinh_hang_haiku, modelapi). Đổi model: <code>CTWORK_RAMBO_MODEL</code> (fable-5), <code>CTWORK_RAMBO_MODEL_NANG</code>, <code>CTWORK_MODEL_CHINH_HANG(_NHE|_DU_PHONG)</code>, <code>LLM_MODEL_&lt;VIỆC&gt;</code>; tắt rambo riêng CT Work: <code>CTWORK_RAMBO=0</code>.</p>
+            <p className="text-[11px] text-text-muted mt-1">Bậc hỏng (DNS/410/401/5xx/hết giờ/trả rỗng/câu báo lỗi của cổng/markup gọi tool dạng chữ) ⇒ tự sang bậc sau trong cùng lượt, người dùng không thấy lỗi; gwai sống lại ⇒ tự về. Chính hãng: Sonnet hỏng hoặc chạm trần (100 $/ngày, 10 $/người) ⇒ Haiku (thêm 20 $ / 2 $). Đổi thứ tự: env <code>CTWORK_CHUOI_CONG</code> (rambo, chinh_hang_sonnet, chinh_hang_haiku, modelapi). Đổi model: <code>CTWORK_RAMBO_MODEL</code> (fable-5), <code>CTWORK_RAMBO_MODEL_NANG</code>, <code>CTWORK_MODEL_CHINH_HANG(_NHE|_DU_PHONG)</code>, <code>LLM_MODEL_&lt;VIỆC&gt;</code>; tắt rambo riêng CT Work: <code>CTWORK_RAMBO=0</code>.</p>
             {d.markupTool?.length ? (
               <p className="text-[11px] text-amber-400 mt-1">Model trả lời gọi tool dạng chữ (DSML…, đã chặn + đổi cổng) từ khi máy chủ chạy: {d.markupTool.map((x) => `${x.cong}/${x.model}: ${x.lan} lần`).join(' · ')}</p>
             ) : null}
@@ -703,8 +701,8 @@ function ChongSpamDefault({ gh, onDoi }: { gh: GioiHanDefault; onDoi: (v: GioiHa
   return (
     <The tieuDe="🛡 Chống spam CuongMini Default / Default anti-spam">
       <p className="text-text-muted text-xs">
-        Default chạy trên rambo (gói trọn) cho MỌI tài khoản, gần như không giới hạn. Chỉ đếm câu hỏi MỚI (không đếm từng bước gọi tool). Free phải xác thực email.
-        0 = tắt. Chạm giới hạn ⇒ câu thân thiện nói rõ khi nào dùng lại. ⚠ Rambo là gói của một nhà cung cấp — dùng quá đà có thể bị họ giới hạn khoá; xem bảng dưới để phát hiện sớm.
+        Default chạy trên gwai (Claude rẻ) cho MỌI tài khoản, gần như không giới hạn. Chỉ đếm câu hỏi MỚI (không đếm từng bước gọi tool). Free phải xác thực email.
+        0 = tắt. Chạm giới hạn ⇒ câu thân thiện nói rõ khi nào dùng lại. ⚠ gwai là gói của một nhà cung cấp — dùng quá đà có thể bị họ giới hạn khoá; xem bảng dưới để phát hiện sớm.
         <br />Counts new questions only. Free accounts need a verified email. 0 = off.
       </p>
       <div className="flex flex-wrap items-end gap-3">

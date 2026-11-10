@@ -392,7 +392,7 @@ export default function ChanCuongMiniAdmin() {
           </div>
         </div>
         <p className="px-4 pt-3 text-xs text-text-muted">
-          USD tự đo (ước lượng — usage × bảng giá trong mã), không phải số dư thật. Chỉ gồm lưu lượng cổng Claude chính hãng + rambo
+          USD tự đo (ước lượng — usage × bảng giá trong mã), không phải số dư thật. Chỉ gồm lưu lượng cổng Claude chính hãng + gwai
           (AI Code, thi, CT Work, AI thống kê…); lưu lượng modelapi (chat, gia sư…) ghi ở sổ khác.
         </p>
         {mucKey === null ? (

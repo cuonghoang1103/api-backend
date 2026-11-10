@@ -606,7 +606,7 @@ function CongDuPhongAdmin() {
         )}
       </div>
       <p className="text-text-muted">
-        (18/10/2026: chỉ còn tác dụng khi BẬT lại cổng rambo ở tab CuongMini Code Max.) Khi cổng chính (rambo) bảo trì, người dùng nhập mật khẩu này trong AI Code để chạy tạm qua modelapi
+        (Chỉ có tác dụng khi cổng gwai đang BẬT ở tab CuongMini · model & khoá.) Khi cổng Claude rẻ (gwai) bảo trì/hết credit, người dùng nhập mật khẩu này trong AI Code để chạy tạm qua modelapi
         {t ? <> bằng <b className="text-text-primary">{t.ten}</b></> : null} — <b className="text-text-primary">tính phí thật</b>.
         Cổng chính sống lại là tự quay về. Đổi model bằng env <code>AGENT_DU_PHONG_MODEL</code>.
         {t && !t.coKhoa && <span className="text-amber-400"> ⚠ Máy chủ chưa có khoá cho model này.</span>}

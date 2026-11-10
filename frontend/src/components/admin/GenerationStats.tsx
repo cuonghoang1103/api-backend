@@ -50,7 +50,7 @@ function ago(sec: number | null): string {
   return `${Math.floor(sec / 86400)} ngày trước`;
 }
 const PROVIDER_LABEL: Record<ModelStat['provider'], string> = {
-  claude: 'Claude · Rambo',
+  claude: 'Claude · gwai',
   openai_compat: 'GPT · modelapi',
   other: 'khác',
 };

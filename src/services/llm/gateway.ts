@@ -110,6 +110,7 @@ const MODEL_LUI: Record<string, string> = {
   'gpt-5.5': 'claude-sonnet-5',          // 1,144 → 0,801 (rẻ đi, nhưng vẫn là lùi)
   'gpt-5.6-sol': 'claude-opus-4-8',      // 1,222 → 2,003 (đắt gấp 1,6)
   'gpt-6-sol': 'claude-opus-4-8',
+  'gpt-6-luna': 'claude-sonnet-4-6',     // 10/11/2026: bulk/nền chạy luna ⇒ cần lùi khi thiếu khoá GPT (không thì 503)
 };
 
 /** Đã cắm khoá cho nhóm của model này chưa. */
@@ -403,11 +404,13 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // 39% (1,486 so với 2,419 mỗi 1k token ra); gpt-5.5 chỉ "rẻ hơn mỗi lượt"
   // vì nó viết câu trả lời NGẮN HƠN, mà ngắn hơn không phải là rẻ hơn.
   chat_pro: 'claude-sonnet-5',
-  chat_max: 'gpt-6-sol',
+  chat_max: 'claude-opus-5-5',
   // Lượt có ảnh lấy model mạnh nhất. Bài học cũ vẫn nguyên giá trị: model yếu
   // NHẬN được ảnh, không báo lỗi, và BỊA nội dung — sai mà trôi chảy thì tệ
   // hơn hẳn một lỗi. Chưa đo lại khả năng nhìn của bộ Claude này.
-  chat_vision: 'claude-opus-4-8',
+  // 10/11/2026: vision ở lại modelapi `gpt-6-sol` (model GPT duy nhất nhìn ảnh thật),
+  // thêm vào `VIEC_CHI_OPENAI` ⇒ không đẩy ảnh lên tuyến Anthropic gwai (khung khác).
+  chat_vision: 'gpt-6-sol',
   chat_free_fallback: 'claude-sonnet-4-6',
 
   interview_grade: 'claude-sonnet-5',
@@ -415,7 +418,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   interview_generate: 'claude-sonnet-5',
 
   language_tutor: 'claude-sonnet-5',
-  language_bulk: 'gpt-6-sol',
+  language_bulk: 'gpt-6-luna',
 
   // Gia sư LAB211 (giảng đề + chat hỏi tiếp + vấn đáp + đối chiếu code) chạy
   // model MẠNH NHẤT theo yêu cầu: hiểu đề + 4 tính chất OOP + review code cần độ
@@ -424,7 +427,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // codeLab.explain/coach.service ĐÃ truyền purpose:'codelab_coach' để vào đây;
   // codelab_bulk (sinh bài hàng loạt, chạy nền) vẫn giữ model rẻ.
   codelab_coach: 'claude-opus-4-8',
-  codelab_bulk: 'gpt-6-sol',
+  codelab_bulk: 'gpt-6-luna',
   // Gia sư Academy (hỏi trong từng bài học): chat NHỎ (≤4000 token) nên Opus 4.8
   // KHÔNG dính rate-limit như bản giảng dài — cùng lý do codelab_coach chạy Opus.
   course_tutor: 'claude-opus-4-8',
@@ -451,7 +454,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Vặn bằng `LLM_MODEL_WORK_ASSISTANT` / `LLM_MODEL_WORK_DIGEST`.
    */
   work_assistant: 'claude-sonnet-5',
-  work_digest: 'gpt-6-sol',
+  work_digest: 'gpt-6-luna',
   /**
    * CT Work đợt 3C (09/10/2026) — agent BUILTIN: vòng lặp ≤ 12 bước, mỗi bước model trả JSON {call|done}, mã chạy lệnh
    * của registry. Việc này chạy NỀN (không ai ngồi chờ) và nhân theo số bước ⇒ model RẺ mà gọi lệnh ĐÚNG THAM SỐ.
@@ -525,9 +528,9 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // /hoc-tap (02/10/2026): người dùng chỉ định gpt-6-sol của modelapi; chấm
   // bằng chứng cần MẮT (ảnh Terminal, ảnh bài làm) và sol là model GPT duy
   // nhất của cổng nhìn ảnh thật — xem đoạn `doc_ocr` ở CLAUDE.md.
-  study_plan: 'gpt-6-sol',
+  study_plan: 'gpt-6-luna',
   study_verify: 'gpt-6-sol',
-  study_coach: 'gpt-6-sol',
+  study_coach: 'gpt-6-luna',
   /**
    * Content Creator (04/10/2026): viết DÀI bằng tiếng Việt (gói quay 10–20
    * phút ≈ 1.500–3.000 từ lời thoại + chỉ dẫn từng cảnh), bám sát nội dung bài
@@ -543,7 +546,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   cv_parse: 'gpt-6-sol',
 
   exam_grade: 'claude-sonnet-5',
-  exphub_doc: 'gpt-6-sol',
+  exphub_doc: 'gpt-6-luna',
   /**
    * OCR đề thi lấy model MẠNH NHẤT, không hạ để tiết kiệm.
    *
@@ -552,7 +555,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * thi sai là lỗ.
    */
   doc_ocr: 'gpt-6-sol',
-  news_bulletin: 'gpt-6-sol',
+  news_bulletin: 'gpt-6-luna',
   /**
    * Xem lại kế hoạch trong ngày. Model RẺ NHẤT, có chủ ý.
    *
@@ -564,7 +567,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Thấy lời khuyên nhạt thì vặn bằng env, không cần deploy:
    * `LLM_MODEL_PLAN_REVIEW=claude-sonnet-4-6`.
    */
-  plan_review: 'gpt-6-sol',
+  plan_review: 'gpt-6-luna',
   /**
    * Robot Maker Lab khi đi CỔNG (máy nhà chết, ghim 'cong', hay câu khó ở chế
    * độ tự động — xem `makerlab/chonNao.ts`). Trước là `gpt-5.4-mini`, và
@@ -605,9 +608,9 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * mạnh nhất vì đây là tính năng Pro giảng bài + giải thích sâu từng câu.
    * Đổi bằng LLM_MODEL_EXAM_TUTOR nếu cần ghim tạm.
    */
-  /* 18/10/2026: rambo tắt ⇒ modelapi `gpt-6-sol` (chủ app chốt). Cổng chính hãng
-     vẫn là đường lùi ở `examTutor.service.ts`. */
-  exam_tutor: 'gpt-6-sol',
+  /* 10/11/2026: gwai (Claude rẻ) là cổng chính ⇒ exam_tutor chạy Claude Sonnet 5.5 trên gwai
+     (RAMBO_VIEC_SONNET). gwai sập ⇒ đường lùi chính hãng ở `examTutor.service.ts`. */
+  exam_tutor: 'claude-sonnet-5-5',
 
   /**
    * Phòng Lab LAB211 (10/09/2026) — người dùng yêu cầu rõ: "dùng opus 4.8 max ở
@@ -620,8 +623,8 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    *
    * Đổi tạm bằng LLM_MODEL_LAB_ROOM nếu cần ghim.
    */
-  /* 18/10/2026: rambo tắt ⇒ modelapi `gpt-6-sol`. */
-  lab_room: 'gpt-6-sol',
+  /* 10/11/2026: gwai (Claude rẻ) là cổng chính ⇒ lab_room chạy Claude Opus 5.5 trên gwai (việc khó nhất). */
+  lab_room: 'claude-opus-5-5',
 };
 
 
@@ -760,9 +763,13 @@ const RAMBO_NGHI_MS = Math.max(15_000, Number(process.env.RAMBO_NGHI_MS) || 60_0
 let ramboHongToi = 0;
 
 /**
- * Lỗi KHOÁ vĩnh viễn (401/403/410 — vd 22/10/2026 khoá rambo hết hạn: `HTTP 410 Key Expired`): gõ lại sau 60 s vẫn hỏng y
+ * Lỗi KHOÁ vĩnh viễn (401/410 — vd 22/10/2026 khoá hết hạn: `HTTP 410 Key Expired`): gõ lại sau 60 s vẫn hỏng y
  * vậy ⇒ cho nghỉ LÂU hơn (mặc định 10 phút, `RAMBO_NGHI_KHOA_MS`). Mũi dò vẫn gõ cửa mỗi `RAMBO_DO_LAI_MS` — chủ app thay
  * khoá mới là đóng cầu dao ngay ở nhịp dò kế tiếp, không phải chờ hết 10 phút.
+ *
+ * ⚠️ 10/11/2026: gwai nấp sau Cloudflare ⇒ 403 là chặn-bot TẠM THỜI (error 1010),
+ * KHÔNG phải khoá chết. Nên 403 KHÔNG còn tính là lỗi-khoá: nó chỉ nghỉ NGẮN
+ * (`RAMBO_NGHI_MS` 60s) rồi mũi dò thử lại — phục hồi nhanh thay vì nằm 10 phút.
  */
 const RAMBO_NGHI_KHOA_MS = Math.max(60_000, Number(process.env.RAMBO_NGHI_KHOA_MS) || 600_000);
 
@@ -774,7 +781,7 @@ export function baoRamboHong(o: { khoaHong?: boolean } = {}): void {
 
 /** Mã HTTP này có phải lỗi KHOÁ (không tự khỏi) không. THUẦN — test đọc. */
 export function laLoiKhoaRambo(status: number | undefined | null): boolean {
-  return status === 401 || status === 403 || status === 410;
+  return status === 401 || status === 410;
 }
 
 /** Rambo vừa trả lời được ⇒ mở cầu dao ngay, không phải chờ hết hạn nghỉ. */
@@ -956,7 +963,7 @@ function batDauDo(): void {
 // ra model Claude vẽ kém hơn hẳn.
 // `work_agent` (đợt 3C): agent BUILTIN của CT Work có trần TIỀN riêng tính theo model của `PURPOSE_MODEL` — đi rambo thì
 // `modelFor()` đổi ngầm sang opus và trần mất nghĩa, nên giữ ở modelapi.
-const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script', 'work_agent', 'work_setup']);
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr', 've_net', 'vo_viet_lai', 'study_plan', 'study_verify', 'study_coach', 'creator_script', 'work_agent', 'work_setup', 'chat_vision']);
 
 /**
  * Việc KHÔNG BAO GIỜ đi rambo vì lý do TỐC ĐỘ (19/10/2026, chủ app chốt khi bật lại rambo): `language_tutor` —
@@ -966,9 +973,15 @@ const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writ
  */
 const VIEC_KHONG_RAMBO = new Set<LlmPurpose>(['language_tutor']);
 
-/** Việc này có được đi rambo không (khi rambo bật). THUẦN — test đọc. */
+/**
+ * Việc này có được đi gwai không (khi gwai bật). THUẦN — test đọc.
+ * 10/11/2026: thêm điều kiện model phải là `claude-*`. gwai CHỈ phục vụ Claude; việc nào `PURPOSE_MODEL` trỏ model
+ * `gpt-*` (ảnh/OCR, bulk, cấu trúc JSON của Vở iPad, agent_code…) phải Ở LẠI modelapi — gửi model gpt lên tuyến
+ * Anthropic của gwai là 404/khung sai, hỏng CÂM. Nhờ vậy không cần liệt kê tay từng việc vào `VIEC_CHI_OPENAI`.
+ */
 export function viecDiRambo(purpose: LlmPurpose): boolean {
-  return !VIEC_CHI_OPENAI.has(purpose) && !VIEC_KHONG_RAMBO.has(purpose);
+  return !VIEC_CHI_OPENAI.has(purpose) && !VIEC_KHONG_RAMBO.has(purpose)
+    && String(PURPOSE_MODEL[purpose] ?? '').startsWith('claude-');
 }
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
@@ -1034,6 +1047,10 @@ export function ramboBat(): boolean {
   const env = process.env.RAMBO_BAT?.trim();
   if (env === '1' || env === 'true') return true;
   if (env === '0' || env === 'false') return false;
+  // 10/11/2026: gwai là cổng Claude CHÍNH ⇒ mặc định BẬT khi có khoá gwai
+  // (khác rambo cũ mặc định tắt). Thiếu khoá ⇒ `congAgent()` trả null nên vẫn
+  // coi như tắt; admin vẫn chỉnh được qua `ramboBatAdmin`.
+  if (process.env.GWAI_API_KEY?.trim() || process.env.AGENT_GATEWAY_API_KEY?.trim()) return true;
   return ramboBatAdmin;
 }
 
@@ -1080,8 +1097,12 @@ export function congAgent(): LlmEndpoint | null {
 
 /** Điểm cuối rambo theo CẤU HÌNH (`AGENT_GATEWAY_BASE_URL` + `_API_KEY`) — KHÔNG xét công tắc toàn cục. */
 export function congRamboCauHinh(): LlmEndpoint | null {
-  const root = process.env.AGENT_GATEWAY_BASE_URL?.trim().replace(/\/+$/, '');
-  const key = process.env.AGENT_GATEWAY_API_KEY?.trim();
+  // 10/11/2026: cổng Claude rẻ chuyển từ rambo.ai (chết) sang gwai
+  // (`https://1gw.gwai.cloud`, tuyến Anthropic `/v1/messages` chuẩn — client
+  // ghép `${root}/v1/messages` + `x-api-key` nên cắm thẳng). Vẫn đọc
+  // `AGENT_GATEWAY_*` làm lớp tương thích ngược, nhưng prod dùng `GWAI_*`.
+  const root = (process.env.GWAI_BASE_URL || process.env.AGENT_GATEWAY_BASE_URL)?.trim().replace(/\/+$/, '');
+  const key = (process.env.GWAI_API_KEY || process.env.AGENT_GATEWAY_API_KEY)?.trim();
   if (!root || !key) return null;
   return { root, key, local: false, label: 'cong-agent', giaoThuc: 'anthropic' };
 }
@@ -1096,9 +1117,11 @@ export function congRamboCauHinh(): LlmEndpoint | null {
  * Tắt riêng cho CT Work: `CTWORK_RAMBO=0`. Thiếu cấu hình rambo ⇒ coi như tắt.
  */
 export function ctworkDiRambo(): LlmEndpoint | null {
-  /* 27/10/2026 chủ app ngừng dùng rambo ⇒ mặc định TẮT (CT Work đi thẳng Sonnet 5.5 chính hãng). Bật lại: CTWORK_RAMBO=1. */
+  /* 10/11/2026: gwai (Claude rẻ) là cổng chính ⇒ CT Work (work_assistant…) đi gwai Sonnet, MẶC ĐỊNH BẬT khi gwai
+     cấu hình. `CTWORK_RAMBO=0` tắt cứng (về thẳng chính hãng); `=1` ép bật. `congRamboCauHinh()` trả null nếu chưa
+     cấu hình gwai ⇒ tự về chính hãng. (Trước 27/10 từng mặc định tắt khi rambo.ai chết — nay gwai thay chỗ.) */
   const env = process.env.CTWORK_RAMBO?.trim();
-  if (env !== '1' && env !== 'true') return null;
+  if (env === '0' || env === 'false') return null;
   return congRamboCauHinh();
 }
 
@@ -1292,7 +1315,9 @@ function modelBanDo(purpose: LlmPurpose): string {
  * sư bài học, Code Lab, phòng thi, phòng Lab…). Đã gọi thật bằng khoá mới:
  * trả 200, đúng tên model. Muốn quay lại từng việc: `LLM_MODEL_<VIỆC>=…`.
  */
-const RAMBO_MODEL_MANH = 'claude-opus-5';
+const RAMBO_MODEL_MANH = 'claude-opus-5-5';
+/** Model NHẸ trên gwai cho việc free/ít tốn (chat_free_fallback, note_format). */
+const RAMBO_MODEL_NHE = 'claude-haiku-5-5';
 
 /**
  * ============================================================
@@ -1318,8 +1343,18 @@ export function ramboSonic(): string {
   const ids = dsModelRambo?.ids ?? [];
   return SONNET_THU_TU.find((m) => ids.includes(m)) ?? 'claude-sonnet-5';
 }
-/** Việc CT Work đi rambo bằng Sonnet (không phải opus): rambo sống ⇒ Sonnet; sập ⇒ `MODELAPI_DU_PHONG` (gpt-6-sol). */
-export const RAMBO_VIEC_SONNET = new Set<LlmPurpose>(['work_assistant', 'work_spec_review', 'work_digest']);
+/**
+ * Việc đi gwai bằng SONNET 5.5 (không phải opus): việc tương tác hằng ngày — chất lượng cao mà RẺ hơn opus ~3×.
+ * gwai sống ⇒ sonnet-5-5; sập ⇒ `MODELAPI_DU_PHONG` (gpt-6-sol). (10/11/2026 mở rộng từ 3 việc CT Work ra mọi việc
+ * tương tác thường ngày; chỉ chat_max + lab_room giữ opus — xem `RAMBO_MODEL_MANH`.)
+ */
+export const RAMBO_VIEC_SONNET = new Set<LlmPurpose>([
+  'work_assistant', 'work_spec_review',
+  'chat_pro', 'interview_grade', 'interview_generate', 'codelab_coach', 'course_tutor',
+  'academy_advisor', 'finance_advisor', 'exam_grade', 'remix_coach', 'exam_tutor',
+]);
+/** Việc đi gwai bằng HAIKU 5.5 — nhẹ, rẻ nhất (free fallback, sắp xếp lại trang Notes). */
+export const RAMBO_VIEC_HAIKU = new Set<LlmPurpose>(['chat_free_fallback', 'note_format']);
 /**
  * ⚠️ THU HẸP 14/09/2026. Trước đây danh sách này gồm cả `codelab_bulk`,
  * `language_bulk`, `exphub_doc`, `cv_parse` — tức bài tập Code Lab, nội dung
@@ -1399,7 +1434,10 @@ export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const diem = ep ?? endpointFor(purpose);
   // Đường rambo: chỉ phục vụ model Claude, nên bản đồ `PURPOSE_MODEL` (vốn đầy
   // tên `gpt-*` của modelapi) KHÔNG dùng được ở đây — lấy nhầm là 404/503.
-  if (diem.label === 'cong-agent') return env || (RAMBO_VIEC_HANG_LOAT.has(purpose) || RAMBO_VIEC_SONNET.has(purpose) ? ramboSonic() : RAMBO_MODEL_MANH);
+  if (diem.label === 'cong-agent') return env || (
+    RAMBO_VIEC_HAIKU.has(purpose) ? RAMBO_MODEL_NHE
+    : RAMBO_VIEC_HANG_LOAT.has(purpose) || RAMBO_VIEC_SONNET.has(purpose) ? ramboSonic()
+    : RAMBO_MODEL_MANH);
   // Lùi về modelapi: dùng model dự phòng người dùng chỉ định, trừ khi việc này
   // vốn đã trỏ vào một model gpt còn sống (giữ nguyên lựa chọn cũ nếu có).
   if (!diem.local && ramboDangNghi()) return modelGoiDuoc(env || MODELAPI_DU_PHONG);

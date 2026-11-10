@@ -29,6 +29,12 @@ import {
   ramboDangNghi,
 } from './gateway.js';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc `GWAI_BASE_URL`/`GWAI_API_KEY` (xem `congRamboCauHinh`). `config/env.ts`
+// nạp `.env` nên KHOÁ THẬT lọt vào môi trường test ⇒ phép kiểm chạy nhầm cổng thật và IN KHOÁ ra khi assert đỏ.
+// Xoá chúng một lần ở đây để test tự dựng cổng giả bằng `AGENT_GATEWAY_*` (đường tương thích ngược của gwai).
+delete process.env.GWAI_BASE_URL;
+delete process.env.GWAI_API_KEY;
+
 test('mọi việc đều tra được model mà không gọi vòng', () => {
   for (const p of LLM_PURPOSES) {
     const m = modelFor(p);
@@ -125,31 +131,35 @@ test('việc gọi tool KHÔNG được phân cho model đã loại', () => {
   assert.ok(!LOAI.has(modelFor('agent_code')), 'agent_code đang trỏ vào model đã loại');
 });
 
-test('18/10/2026: rambo TẮT mặc định ⇒ lab_room/exam_tutor/agent_code đi modelapi gpt-6-sol', () => {
+test('10/11/2026: gwai BẬT mặc định ⇒ việc Claude đi gwai, việc gpt (agent_code…) ở lại modelapi', () => {
   const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'RAMBO_BAT', 'LLM_LOCAL_BASE_URL', 'LLM_LOCAL_API_KEY',
-    'LLM_MODEL_LAB_ROOM', 'LLM_MODEL_EXAM_TUTOR', 'LLM_MODEL_AGENT_CODE', 'LLM_GATEWAY_API_KEY_GPT']
+    'LLM_MODEL_LAB_ROOM', 'LLM_MODEL_EXAM_TUTOR', 'LLM_MODEL_AGENT_CODE', 'LLM_MODEL_COURSE_TUTOR', 'LLM_GATEWAY_API_KEY_GPT']
     .map((t) => [t, process.env[t]] as const);
   for (const [t] of luu) delete process.env[t];
-  process.env.AGENT_GATEWAY_BASE_URL = 'https://rambo.ai.vn/api/claude';
-  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap-rambo';
+  // gwai cấu hình (qua đường tương thích AGENT_GATEWAY_*) ⇒ ramboBat() mặc định BẬT.
+  process.env.AGENT_GATEWAY_BASE_URL = 'https://1gw.gwai.cloud';
+  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap-gwai';
   process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-gia-lap-gpt';
   try {
-    for (const viec of ['lab_room', 'exam_tutor', 'agent_code'] as const) {
-      const ep = endpointFor(viec);
-      assert.equal(ep.label, 'cong', `${viec} vẫn đi rambo dù công tắc TẮT`);
-      assert.equal(modelFor(viec), 'gpt-6-sol', `${viec} không về gpt-6-sol`);
-    }
-    // Chủ app chốt 18/10/2026 "về 6-sol hết": rambo TẮT ⇒ việc bản đồ ghi claude-* chạy gpt-6-sol (Claude qua
-    // modelapi trả theo token ~3,3×). Env LLM_MODEL_<VIỆC> vẫn thắng để giữ Claude cho riêng một việc.
-    assert.equal(modelFor('course_tutor'), 'gpt-6-sol');
-    assert.equal(modelFor('codelab_coach'), 'gpt-6-sol');
+    // Việc Claude đi gwai: lab_room = opus-5-5 (việc khó nhất), exam_tutor = sonnet (RAMBO_VIEC_SONNET).
+    assert.equal(endpointFor('lab_room').label, 'cong-agent', 'lab_room không đi gwai');
+    assert.equal(modelFor('lab_room'), 'claude-opus-5-5', 'lab_room không chạy opus-5-5 trên gwai');
+    assert.equal(endpointFor('exam_tutor').label, 'cong-agent', 'exam_tutor không đi gwai');
+    assert.ok(modelFor('exam_tutor').startsWith('claude-sonnet'), `exam_tutor không chạy sonnet: ${modelFor('exam_tutor')}`);
+    // agent_code (PURPOSE_MODEL gpt-6-sol) Ở LẠI modelapi — gwai CHỈ phục vụ Claude, gửi model gpt lên là hỏng câm.
+    assert.equal(endpointFor('agent_code').label, 'cong', 'agent_code đáng lẽ ở modelapi');
+    assert.equal(modelFor('agent_code'), 'gpt-6-sol');
+    // Việc tương tác hằng ngày (course_tutor) đi gwai bằng Claude; env LLM_MODEL_<VIỆC> vẫn thắng.
+    assert.equal(endpointFor('course_tutor').label, 'cong-agent');
+    assert.ok(modelFor('course_tutor').startsWith('claude-'), `course_tutor không chạy Claude: ${modelFor('course_tutor')}`);
     process.env.LLM_MODEL_COURSE_TUTOR = 'claude-opus-4-8';
     try { assert.equal(modelFor('course_tutor'), 'claude-opus-4-8', 'env phải thắng'); } finally { delete process.env.LLM_MODEL_COURSE_TUTOR; }
-    // Bật lại bằng env ⇒ rambo quay về; env 0 ⇒ tắt cứng.
+    // Tắt cứng bằng RAMBO_BAT=0 ⇒ việc Claude lùi về modelapi gpt-6-sol; bật lại thì về gwai.
+    process.env.RAMBO_BAT = '0';
+    assert.equal(endpointFor('lab_room').label, 'cong', 'RAMBO_BAT=0 phải tắt gwai');
+    assert.equal(modelFor('lab_room'), 'gpt-6-sol', 'tắt gwai ⇒ lab_room lùi gpt-6-sol');
     process.env.RAMBO_BAT = '1';
     assert.equal(endpointFor('lab_room').label, 'cong-agent');
-    process.env.RAMBO_BAT = '0';
-    assert.equal(endpointFor('lab_room').label, 'cong');
   } finally {
     for (const [t, gt] of luu) {
       if (gt === undefined) delete process.env[t];
@@ -180,19 +190,17 @@ test('Phòng Lab đi cổng rambo (khi BẬT lại), và KHÔNG lùi sang modela
   delete process.env.LLM_LOCAL_API_KEY;
   /* 18/10/2026: rambo TẮT mặc định — phép kiểm này kiểm đường rambo nên BẬT nó bằng env. */
   process.env.RAMBO_BAT = '1';
-  process.env.AGENT_GATEWAY_BASE_URL = 'https://rambo.ai.vn/api/claude';
-  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap-rambo';
+  process.env.AGENT_GATEWAY_BASE_URL = 'https://1gw.gwai.cloud';
+  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap-gwai';
   try {
     const ep = endpointFor('lab_room');
-    assert.equal(ep.label, 'cong-agent', 'lab_room không đi cổng rambo');
+    assert.equal(ep.label, 'cong-agent', 'lab_room không đi cổng gwai');
     assert.equal(ep.giaoThuc, 'anthropic', 'lab_room gửi body sai khung ⇒ hỏng CÂM');
-    // Bẫy đã ghi 19/08: gốc `/v1` của rambo trả 200 KỂ CẢ khi không có khoá,
-    // nên đường đúng bắt buộc mang `/api/claude`.
-    assert.match(ep.root, /\/api\/claude$/, 'đường rambo mất phần /api/claude');
+    // gwai dùng tuyến Anthropic `/v1/messages` chuẩn (client ghép `${root}/v1/messages`).
+    assert.equal(ep.root, 'https://1gw.gwai.cloud', 'đường gwai sai');
 
-    // Người dùng chốt "dùng model mạnh nhất, đừng giới hạn nó" cho Phòng Lab —
-    // 26/09/2026 đổi từ opus-4-8 sang opus-5 ("rẻ hơn và tốt hơn").
-    assert.equal(modelFor('lab_room'), 'claude-opus-5');
+    // Phòng Lab = việc khó nhất ⇒ model mạnh nhất gwai: opus-5-5 (10/11/2026).
+    assert.equal(modelFor('lab_room'), 'claude-opus-5-5');
 
     // ─── phần đáng kiểm nhất: CẦU DAO ĐANG MỞ ───
     baoRamboHong();

@@ -27,6 +27,8 @@ export interface GiaModel {
 const g = (vao: number, ra: number, cacheDoc = vao * 0.1): GiaModel => ({ in: vao, out: ra, cacheDoc, cacheGhi: vao * 1.25 });
 
 export const BANG_GIA: Record<string, GiaModel> = {
+  // Fable 5.2 (10/11/2026) — chủ app: rẻ hơn & tốt hơn 5.1; giữ tạm số của 5.1 cho đến khi đo giá thật.
+  'claude-fable-5-2': g(10, 50, 0.25),
   'claude-fable-5-1': g(10, 50, 0.25),
   'claude-fable-5': g(10, 50),
   'claude-opus-5-5': g(4, 20, 0.2),

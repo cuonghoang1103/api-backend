@@ -13,6 +13,11 @@ import http from 'node:http';
 import type { AddressInfo } from 'node:net';
 import test, { after, before, beforeEach } from 'node:test';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật trong .env để test
+// dùng đúng cổng rambo GIẢ, không gọi gwai thật (Cloudflare 403) và không in khoá ra khi assert đỏ.
+delete process.env.GWAI_BASE_URL;
+delete process.env.GWAI_API_KEY;
+
 const BAT = process.env.WORK_DB_TEST === '1';
 
 type HanhVi = 'ok' | 'credit' | '401' | '429' | '529' | 'badreq' | 'betaloi';
@@ -390,7 +395,7 @@ test('chọn tay model cao: chưa vé ⇒ CONG_ANTHROPIC_KHOA; có vé ⇒ chín
   daGoi.length = 0;
   const sk2 = await chay({ userId: ad, model: 'cl-fable-5-1' });
   assert.ok(sk2.find((e) => e.type === 'done'), JSON.stringify(sk2));
-  assert.equal(thuc()[0]!.body.model, 'claude-fable-5-1');
+  assert.equal(thuc()[0]!.body.model, 'claude-fable-5-2');
 });
 
 test('chính hãng hỏng hết key giữa lượt ⇒ lùi modelapi khi có vé; không vé ⇒ mã CONG_ANTHROPIC_HONG', { skip: !BAT }, async () => {

@@ -98,7 +98,7 @@ export function modelTuongDuong(modelRambo: string): string {
   } catch { /* JSON hỏng ⇒ dùng bảng mặc định */ }
   if (/haiku/i.test(modelRambo)) return 'claude-haiku-5-5';
   if (/opus/i.test(modelRambo)) return 'claude-opus-5-5';
-  if (/fable/i.test(modelRambo)) return 'claude-fable-5-1';
+  if (/fable/i.test(modelRambo)) return 'claude-fable-5-2';
   return 'claude-sonnet-5-5';
 }
 
@@ -164,6 +164,6 @@ export const TRAN_KY_TU_CHINH_HANG = 2_400_000;
  */
 export function dungFallbacks(model: string): boolean {
   if (process.env.ANTHROPIC_CHINH_HANG_FALLBACKS === 'false') return false;
-  return ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-fable-5-1'].includes(model);
+  return ['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-fable-5-2'].includes(model);
 }
 export const BETA_FALLBACKS = 'server-side-fallback-2026-07-01';

@@ -108,7 +108,7 @@ const BANG: readonly MucModel[] = Object.freeze(([
     tuongDuong: MA_SOLID, nhinAnh: true, thuTu: 3,
   },
   {
-    id: 'cm-invisible', model: 'claude-fable-5-1', ten: TEN_INVISIBLE,
+    id: 'cm-invisible', model: 'claude-fable-5-2', ten: TEN_INVISIBLE,
     mo: '⚠ Rất tốn token — chỉ cho việc cực khó. Khoá riêng.',
     moEn: '⚠ Very token-hungry — only for extremely hard tasks. Separate key.',
     cong: 'anthropic', khoa: 'invisible', nangLuc: 100, cuaSoToken: MOT_TRIEU, maxRa: RA_128K,

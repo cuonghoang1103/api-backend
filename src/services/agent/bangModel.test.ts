@@ -9,6 +9,13 @@ import {
   maMacDinhCho, timModel, tuongDuongFree, giaiDefault, chuanHoaMaTuApp,
 } from './bangModel.js';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc `GWAI_*` ⇒ `ramboBat()` mặc định BẬT khi có khoá. `.env` thật lọt vào
+// test (dotenv) sẽ bật rambo và lật các phép kiểm "rambo tắt ⇒ default". Xoá để test tự quyết công tắc.
+delete process.env.GWAI_BASE_URL;
+delete process.env.GWAI_API_KEY;
+delete process.env.AGENT_GATEWAY_BASE_URL;
+delete process.env.AGENT_GATEWAY_API_KEY;
+
 test('danh sách app: đúng 4 model, đúng thứ tự, không rambo, không mục ẩn', () => {
   const ds = bangChoApp(true);
   assert.deepEqual(ds.map((m) => m.ten), ['CuongMini Pro', 'CuongMini Pro 2', 'CuongMini Max', 'CuongMini Fable Max']);
@@ -23,7 +30,7 @@ test('model thật + khoá: Pro free · Pro 2 + Max khoá chung · Fable Max kho
   assert.equal(by['cm-default']!.model, 'claude-haiku-5-5'); assert.equal(by['cm-default']!.khoa, 'free');
   assert.equal(by['cm-sonic']!.model, 'claude-sonnet-5-5'); assert.equal(by['cm-sonic']!.khoa, 'chung');
   assert.equal(by['cm-optimum']!.model, 'claude-opus-5-5'); assert.equal(by['cm-optimum']!.khoa, 'chung');
-  assert.equal(by['cm-invisible']!.model, 'claude-fable-5-1'); assert.equal(by['cm-invisible']!.khoa, 'invisible');
+  assert.equal(by['cm-invisible']!.model, 'claude-fable-5-2'); assert.equal(by['cm-invisible']!.khoa, 'invisible');
 });
 
 test('mã cũ ⇒ mã mới; mã lạ / trống / mục ẩn ⇒ CuongMini Pro', () => {

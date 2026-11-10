@@ -13,6 +13,11 @@ import type { AddressInfo } from 'node:net';
 import { after, before, describe, it } from 'node:test';
 
 process.env.STORAGE_SANDBOX ??= '1';
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* ⇒ ramboBat() mặc định BẬT. `.env` thật lọt vào test (dotenv) khiến
+// các phép kiểm chạm cổng gwai THẬT (Cloudflare 403) rồi mở cầu dao, lây sang phần sau. Xoá ở ĐẦU module để mọi
+// describe tự dựng cổng rambo giả.
+delete process.env.GWAI_BASE_URL;
+delete process.env.GWAI_API_KEY;
 
 const {
   goiAiCtWork, _datCongChoTest, modelRamboCho, modelChinhHangCho, modelModelapiCho, chuoiCtWork, chuoiCongHienTai, tranChinhHang, trongTranChinhHang, laCauLoiCong,
@@ -182,6 +187,10 @@ describe('llmComplete thật — rambo 410 ⇒ lùi (HTTP giả)', () => {
       WORK_AI_CHINH_HANG_USD_NGAY: '0', // không dùng bậc chính hãng trong phần này
       LLM_DAILY_COST_HARD_USD: '0', LLM_DAILY_COST_SOFT_USD: '0',
     });
+    // 10/11/2026: cổng Claude rẻ đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật trong .env để test
+    // dùng đúng cổng rambo GIẢ dựng ở trên, không gọi gwai thật.
+    delete process.env.GWAI_BASE_URL;
+    delete process.env.GWAI_API_KEY;
     delete process.env.CTWORK_RAMBO;
     _datCongChoTest(null);
   });

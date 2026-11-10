@@ -7,6 +7,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
+delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
 const { buildSystemPrompt, catGhiChu, voHieuRaoGhiChu } = await import('./prompt.js');
 
 test('ghi chú dự án không tự đóng rào ─── hết … ─── được', () => {

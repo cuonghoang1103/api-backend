@@ -22,6 +22,9 @@ import {
   type AgentMessage,
 } from './turn.js';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
+delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
 let dem = 0;
 /** Tin assistant gọi một (hoặc nhiều) tool. */
 function goi(...ds: Array<[string, Record<string, unknown>]>): AgentMessage {

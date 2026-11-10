@@ -23,6 +23,9 @@ import { prisma } from '../config/database.js';
 import { errorHandler } from '../middleware/errorHandler.js';
 import { emailService } from '../services/email.service.js';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
+delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
 const RUN = process.env.WORK_DB_TEST === '1';
 const tag = `gh${Date.now().toString(36)}`;
 const userIds: number[] = [];

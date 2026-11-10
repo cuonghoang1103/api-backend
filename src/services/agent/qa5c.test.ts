@@ -9,6 +9,9 @@ import test from 'node:test';
 import { runAgentTurn, type AgentEvent } from './turn.js';
 import { LUAT_CTWORK } from './prompt.js';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
+delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
 function than(): ReadableStream<Uint8Array> {
   const enc = new TextEncoder();
   return new ReadableStream({

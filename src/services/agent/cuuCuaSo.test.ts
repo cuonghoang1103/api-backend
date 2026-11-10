@@ -5,6 +5,9 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
+delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
 const { laLoiVuotCuaSo, catKetQuaToolTo, CAU_TU_TOM_TAT } = await import('./cuuCuaSo.js');
 
 test('nhận đủ các cách nói "vượt cửa sổ" của các cổng, không nhầm 429', () => {

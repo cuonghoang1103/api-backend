@@ -17,6 +17,9 @@ import { khoiMucLucMcp, parseMucLucMcp, toolsForGateway } from './tools.js';
 import { LUAT_CTWORK, LUAT_DAN_DUONG, dongDuAnCtwork } from './prompt.js';
 import { runAgentTurn, type AgentEvent } from './turn.js';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
+delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
 test('hạn mức nhóm: mặc định BẬT, kẹp trần, dấu sổ, chạm trần', () => {
   assert.deepEqual(docCauHinhNhom({}), MAC_DINH_NHOM);
   assert.equal(docCauHinhNhom(null).bat, true, 'không cấu hình ⇒ BẬT (chủ app muốn)');

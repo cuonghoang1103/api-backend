@@ -11,11 +11,12 @@ import net from 'node:net';
 import { appendFileSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-// 10/11/2026 — SẠCH MÔI TRƯỜNG TEST: cổng Claude rẻ (gwai) đọc `GWAI_BASE_URL`/`GWAI_API_KEY` và `config/env.ts`
-// nạp `.env` nên KHOÁ THẬT lọt vào test ⇒ phép kiểm chạm cổng gwai THẬT (Cloudflare 403) hoặc in khoá ra khi đỏ.
-// Xoá một lần ở preload này (dùng bởi `npm test` / `test:work-db` / CI); test tự dựng cổng giả bằng `AGENT_GATEWAY_*`.
-delete process.env.GWAI_BASE_URL;
-delete process.env.GWAI_API_KEY;
+// 10/11/2026 — SẠCH MÔI TRƯỜNG TEST: cổng Claude rẻ (gwai) đọc `GWAI_BASE_URL`/`GWAI_API_KEY`. `config/env.ts`
+// gọi `dotenv.config()` (mặc định `override:false`) SAU preload này ⇒ nếu ta XOÁ biến thì dotenv thấy vắng rồi
+// NẠP LẠI khoá thật từ `.env`. Vậy phải ĐẶT RỖNG (biến "đã tồn tại" ⇒ dotenv bỏ qua, không ghi đè): `'' ||`
+// AGENT_GATEWAY_* trong `congRamboCauHinh` ⇒ test dùng đúng cổng giả của nó.
+process.env.GWAI_BASE_URL = '';
+process.env.GWAI_API_KEY = '';
 
 const hosts = new Set();
 const re = /(^|\.)r2\.cloudflarestorage\.com$/i;

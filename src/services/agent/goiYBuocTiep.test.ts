@@ -7,6 +7,9 @@ import test from 'node:test';
 
 import { prisma } from '../../config/database.js';
 
+// 10/11/2026: cổng Claude rẻ (gwai) đọc GWAI_* (ưu tiên hơn AGENT_GATEWAY_*). Xoá khoá thật .env để test dùng cổng giả.
+delete process.env.GWAI_BASE_URL; delete process.env.GWAI_API_KEY;
+
 /** Ghim gói ADMIN (không trần $), đừng đọc CSDL thật — như chongLap.test.ts (user id 1 local là tài khoản thường ⇒ trần 0 $). */
 function ghimGoiAdmin(t: { after: (f: () => void) => void }): void {
   const u = prisma.user as any;

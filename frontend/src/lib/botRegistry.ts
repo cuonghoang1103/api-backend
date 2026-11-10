@@ -17,7 +17,8 @@ export type NewsCategory =
   | 'gemini'
   | 'antigravity'
   | 'tech'
-  | 'ai-compare';
+  | 'ai-compare'
+  | 'hoc';
 
 export interface NewsCategoryMeta {
   /** The `newsCategory` value sent to the API as `?newsCategory=<key>`. */
@@ -39,6 +40,16 @@ export interface NewsCategoryMeta {
  * rendered separately by the component (it carries no `newsCategory` param).
  */
 export const NEWS_CATEGORIES: NewsCategoryMeta[] = [
+  {
+    // 10/11/2026 — "Học mỗi ngày": bài học soạn sẵn đã kiểm chứng (code chạy
+    // thật, nguồn đã mở), xoay chủ đề + định dạng + mẫu ảnh. Đứng ĐẦU hàng chip.
+    key: 'hoc',
+    label: 'Học mỗi ngày',
+    short: 'Học mỗi ngày',
+    botUsername: 'cuongmini',
+    avatar: '/images/cuongmini-avatar.svg',
+    accent: '#0f766e',
+  },
   {
     key: 'claude',
     label: 'Claude',
@@ -168,7 +179,7 @@ export const BOTS: Record<string, BotMeta> = {
     category: 'tech',
     name: 'CuongMini',
     avatar: '/images/cuongmini-avatar.svg',
-    tagline: 'Tin công nghệ & so sánh các AI mỗi ngày',
+    tagline: 'Học mỗi ngày: mẹo code, bug thật, đố vui, kiến thức CS',
     accent: '#4f5bd5',
   },
 };

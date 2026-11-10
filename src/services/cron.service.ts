@@ -663,6 +663,17 @@ export function startCronJobs(): void {
     ['0 15 * * *', '22:00'],
   ];
   for (const [bieu, slot] of newsBotsSlots) {
+    // "Học mỗi ngày" (10/11/2026) — bài học soạn sẵn đã kiểm chứng, CuongMini
+    // đăng, KHÔNG gọi LLM. Cờ riêng FEED_HOC_AUTOPOST (mặc định TẮT), số bài/ngày
+    // FEED_HOC_MOI_NGAY (1–5, mặc định 3). Chạy độc lập với mạng bot tin.
+    cron.schedule(bieu, async () => {
+      try {
+        const { chayKhungHoc } = await import('./techTrends/hocFeed/dangBaiHoc.js');
+        await chayKhungHoc(slot);
+      } catch (err) {
+        logger.error('cron hoc-feed slot failed', { slot, error: (err as Error).message });
+      }
+    }, { timezone: 'UTC' });
     cron.schedule(bieu, async () => {
       if (!newsBotsEnabled) return;
       try {
@@ -847,6 +858,9 @@ export function startCronJobs(): void {
   cuongMiniEnabled
     ? 'News bots (5 bot) feed: 5 khung giờ VN (07/10/15/18/22), trần chung 6–8 bài/ngày, claude-mini ưu tiên (cần LLM_BACKGROUND_ENABLED=true)'
     : 'News bots feed: TẮT (CUONGMINI_FEED_AUTOPOST / NEWS_BOTS_AUTOPOST chưa bật)',
+  String(process.env.FEED_HOC_AUTOPOST ?? 'false').toLowerCase() === 'true'
+    ? `Học mỗi ngày (CuongMini): ${process.env.FEED_HOC_MOI_NGAY ?? 3} bài/ngày từ thư viện đã kiểm chứng, không gọi LLM`
+    : 'Học mỗi ngày: TẮT (FEED_HOC_AUTOPOST chưa bật)',
   'Maker Lab housekeeping hourly (telemetry prune, stale devices, expired commands)',
   'IndexNow sitemap submit every 6h (+ once ~2 min after startup)',
   'Tiền nong: nhắc nợ 8h/12h/19h VN (01:00/05:00/12:00 UTC) + chốt chi tiêu 20h VN (13:00 UTC)',

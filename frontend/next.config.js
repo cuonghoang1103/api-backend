@@ -310,7 +310,10 @@ const nextConfig = {
               // cả hai, nên mọi ô avatar đều rỗng dù ảnh trả HTTP 200.
               // CT Work Resources (06/10/2026): favicon của link dự án lấy từ Google s2 (chỉ lưu URL); s2 trả 301
               // sang t*.gstatic.com/faviconV2 — CSP kiểm CẢ đích redirect nên phải có cả hai.
-              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com https://*.giphy.com https://github.com https://avatars.githubusercontent.com https://www.google.com https://*.gstatic.com",
+              "img-src 'self' data: blob: https://api.cuongthai.com https://media.cuongthai.com https://images.unsplash.com https://api.dicebear.com https://*.amazonaws.com https://e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://cuongthai-media-storage.e8105049f41b90209104afb5911d84b2.r2.cloudflarestorage.com https://*.r2.dev https://i.ytimg.com https://yt3.ggpht.com https://i9.ytimg.com https://*.giphy.com https://github.com https://avatars.githubusercontent.com https://www.google.com https://*.gstatic.com" +
+                // Dev: ảnh STORAGE_SANDBOX do backend local phục vụ ở http://localhost:3001/__r2-sandbox/
+                // (CLAUDE.md "Chạy local an toàn với R2"). Production KHÔNG có nguồn này.
+                (process.env.NODE_ENV === 'production' ? '' : ' http://localhost:3001'),
               "font-src 'self' data: https://fonts.gstatic.com",
               // blob: BẮT BUỘC cho sân chơi 3D. Các file .glb nhúng texture bên
               // trong; GLTFLoader bóc ra thành blob: URL rồi nạp bằng

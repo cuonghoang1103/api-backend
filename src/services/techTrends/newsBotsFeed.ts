@@ -385,30 +385,28 @@ export interface BotGenerateResult {
 
 /** Dựng nội dung cho một bài đã lên kế hoạch (dispatch theo kind + seq). */
 async function buildForPlan(cfg: BotConfig, botId: number, planned: BotPlannedPost, dateKey: string): Promise<BuiltPost | null> {
+  // 10/11/2026 — BỎ mọi đường "lùi cho có bài". Đo prod: RSS hầu như không đủ
+  // tin ⇒ mọi bot lùi sang bài so sánh (21/47 bài là "Claude Code vs
+  // Antigravity") và mẹo Claude xoay 8 hạt giống ⇒ feed lặp một khuôn. Nay bot
+  // tin CHỈ đăng khi có tin thật; nội dung học hằng ngày do "Học mỗi ngày"
+  // (hocFeed/) lo, có xoay chủ đề + định dạng + mẫu ảnh. Hàm so sánh/mẹo cũ
+  // giữ lại (test + admin có thể gọi tay) nhưng cron không còn tự rơi vào.
   if (cfg.kind === 'product') {
     const postType = claudePostTypeFor(dateKey, planned.seq);
-    if (postType === 'tips') return buildProductTips(cfg, botId, dateKey);
+    if (postType === 'tips') return null;
     return buildProductGrounded(cfg, botId, postType, dateKey);
   }
-  if (cfg.kind === 'general') {
-    // CuongMini: bài đầu trong ngày = tổng hợp tin chung; còn lại = so sánh.
-    if (planned.seq === 0) {
-      const digest = await buildBotDigest(cfg, botId, dateKey);
-      if (digest) return digest;
-      // Không đủ tin ⇒ lùi sang một bài so sánh để khung giờ vẫn có bài.
-      return buildComparisonPost(cfg, botId, comparisonForDay(dateKey, planned.seq));
-    }
-    return buildComparisonPost(cfg, botId, comparisonForDay(dateKey, planned.seq));
-  }
-  // digest-sources (codex-x, gemini-mini, antigravity-mini)
-  const digest = await buildBotDigest(cfg, botId, dateKey);
-  if (digest) return digest;
-  // Nguồn hiếm (antigravity) ⇒ góp bài so sánh ai-compare thay vì im lặng.
-  if (cfg.comparisonSlugs?.length) {
-    const t = comparisonBySlug(cfg.comparisonSlugs[dayNumber(dateKey) % cfg.comparisonSlugs.length]);
-    if (t) return buildComparisonPost(cfg, botId, t);
-  }
-  return null;
+  // general (CuongMini) + digest-sources (codex-x, gemini-mini, antigravity-mini)
+  if (cfg.kind === 'general' && planned.seq > 0) return null; // tối đa 1 bản tin/ngày
+  return buildBotDigest(cfg, botId, dateKey);
+}
+
+/** Đường cũ — chỉ còn cho gọi tay (không nằm trong cron). */
+export async function buildLegacyPost(cfg: BotConfig, botId: number, dateKey: string, seq: number): Promise<BuiltPost | null> {
+  if (cfg.kind === 'product') return buildProductTips(cfg, botId, dateKey);
+  const slug = cfg.comparisonSlugs?.[dayNumber(dateKey) % cfg.comparisonSlugs.length];
+  const t = (slug && comparisonBySlug(slug)) || comparisonForDay(dateKey, seq);
+  return buildComparisonPost(cfg, botId, t);
 }
 
 /** Sinh & ĐĂNG một bài cho một mục kế hoạch. Không ném (trừ lỗi hệ thống nặng). */

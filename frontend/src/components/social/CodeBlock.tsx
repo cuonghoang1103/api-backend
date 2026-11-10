@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Check, Copy } from 'lucide-react';
+import { BookOpen, Check, Copy, Eye, EyeOff, GraduationCap, Link2, PlayCircle, Terminal } from 'lucide-react';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { linkifyToNodes } from '@/lib/linkify';
 
@@ -107,6 +107,124 @@ export function CodeBlock({ code, language = 'typescript', filename, showLineNum
   );
 }
 
+// ─── Khối đặc biệt của bài "Học mỗi ngày" (10/11/2026) ─────────────────────
+// Bot CuongMini viết thêm ba loại khối rào: ```output (kết quả chạy thật),
+// ```dapan (đáp án đố vui — ẩn tới khi bấm) và ```nguon (mỗi dòng "Tên | URL"
+// ⇒ thẻ liên kết). App/khách cũ không hiểu thì vẫn đọc được: chỉ là chữ + URL.
+
+/** Kết quả chạy thật — khung terminal, khác màu với khối code. */
+export function OutputBlock({ text }: { text: string }) {
+  const isError = /^\s*(\w+Error|ERROR:)/m.test(text);
+  return (
+    <div
+      className="overflow-hidden rounded-2xl"
+      style={{ background: '#0b0f17', border: `1px solid ${isError ? 'rgba(248,113,113,0.35)' : 'rgba(34,197,94,0.3)'}` }}
+    >
+      <div
+        className="flex items-center gap-1.5 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider"
+        style={{ color: isError ? '#f87171' : '#4ade80', borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+      >
+        <Terminal size={12} /> {isError ? 'Lỗi thật khi chạy' : 'Output thật'}
+      </div>
+      <pre
+        className="overflow-x-auto px-4 py-3 text-[12.5px] leading-relaxed"
+        style={{ color: isError ? '#fecaca' : '#d1fae5', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', margin: 0 }}
+      >
+        {text}
+      </pre>
+    </div>
+  );
+}
+
+/** Đáp án đố vui: ẩn sau một nút — đọc bài, bình chọn, rồi mới mở. */
+export function RevealAnswer({ text }: { text: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className="overflow-hidden rounded-2xl"
+      style={{ border: '1px dashed var(--border-color)', background: 'var(--bg-surface-hover, rgba(127,127,127,0.06))' }}
+    >
+      <button
+        type="button"
+        onClick={(e) => { e.stopPropagation(); setOpen((v) => !v); }}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-2 px-4 py-3 text-left text-sm font-bold"
+        style={{ color: 'var(--text-primary)' }}
+      >
+        <span className="flex items-center gap-2">
+          {open ? <EyeOff size={16} /> : <Eye size={16} />}
+          {open ? 'Ẩn đáp án' : 'Xem đáp án & giải thích'}
+        </span>
+        {!open && <span className="hidden text-xs font-medium sm:inline" style={{ color: 'var(--text-secondary)' }}>bình chọn trước đã nhé</span>}
+      </button>
+      {open && (
+        <div className="whitespace-pre-wrap px-4 pb-4 text-[14px] leading-[1.7]" style={{ color: 'var(--text-primary)' }}>
+          <InlineRich text={text} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function domainOf(url: string): string {
+  try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; }
+}
+
+/** Thẻ nguồn: mỗi dòng "Tên | URL". Dòng không đúng dạng ⇒ chữ thường. */
+export function SourceCards({ text }: { text: string }) {
+  const rows = text.split('\n').map((l) => l.trim()).filter(Boolean).map((l) => {
+    const i = l.lastIndexOf(' | ');
+    const url = i >= 0 ? l.slice(i + 3).trim() : '';
+    return /^https?:\/\//.test(url) ? { ten: l.slice(0, i).trim(), url } : { ten: l, url: '' };
+  });
+  return (
+    <div className="grid gap-2">
+      {rows.map((r, k) => {
+        if (!r.url) return <p key={k} className="text-sm" style={{ color: 'var(--text-secondary)' }}>{r.ten}</p>;
+        const host = domainOf(r.url);
+        const noiBo = host === 'cuongthai.com';
+        const video = /youtube\.com|youtu\.be/.test(host);
+        const Icon = noiBo ? GraduationCap : video ? PlayCircle : /docs|developer\.|wiki|book/.test(r.url) ? BookOpen : Link2;
+        return (
+          <a
+            key={k}
+            href={r.url}
+            target={noiBo ? undefined : '_blank'}
+            rel={noiBo ? undefined : 'noopener noreferrer'}
+            onClick={(e) => e.stopPropagation()}
+            className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors"
+            style={{ border: '1px solid var(--border-color)', background: 'var(--bg-surface, transparent)' }}
+          >
+            <span
+              className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+              style={{ background: noiBo ? 'rgba(139,92,246,0.14)' : video ? 'rgba(239,68,68,0.12)' : 'rgba(59,130,246,0.12)', color: noiBo ? '#8b5cf6' : video ? '#ef4444' : '#3b82f6' }}
+            >
+              <Icon size={16} />
+            </span>
+            <span className="min-w-0">
+              <span className="line-clamp-2 text-[13px] font-semibold leading-snug group-hover:underline" style={{ color: 'var(--text-primary)' }}>{r.ten}</span>
+              <span className="mt-0.5 block truncate text-[11.5px]" style={{ color: 'var(--text-secondary)' }}>{host}</span>
+            </span>
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Khối rào → component đúng loại. */
+function renderFence(block: { code: string; language: string }, key: string, filename?: string) {
+  const lang = block.language.toLowerCase();
+  if (lang === 'output') return <div key={key} className="my-2"><OutputBlock text={block.code} /></div>;
+  if (lang === 'dapan') return <div key={key} className="my-3"><RevealAnswer text={block.code} /></div>;
+  if (lang === 'nguon') return <div key={key} className="my-2"><SourceCards text={block.code} /></div>;
+  return (
+    <div key={key} className="my-3">
+      <CodeBlock code={block.code} language={block.language} filename={filename} />
+    </div>
+  );
+}
+
 /**
  * Utility to extract code blocks from markdown-like text.
  * Handles ```language\ncode\n``` patterns.
@@ -122,7 +240,8 @@ export function extractCodeBlocks(text: string): Array<{
   while ((match = regex.exec(text)) !== null) {
     blocks.push({
       language: match[1] || 'text',
-      code: match[2].trim(),
+      // Giữ thụt đầu dòng của dòng ĐẦU (bảng psql, output căn cột) — chỉ bỏ dòng trống bao quanh.
+      code: match[2].replace(/^(?:[ \t]*\n)+/, '').replace(/\s+$/, ''),
       fullMatch: match[0],
     });
   }
@@ -358,17 +477,17 @@ export function RenderContentWithCode({
 
   codeBlocks.forEach((block, i) => {
     // Text before code block
-    const beforeText = content.slice(lastIndex, content.indexOf(block.fullMatch, lastIndex));
+    let beforeText = content.slice(lastIndex, content.indexOf(block.fullMatch, lastIndex));
+    // Dòng "▸ tên-tệp" đứng ngay trước khối code ⇒ thành nhãn trên thanh tiêu đề của khối.
+    let filename: string | undefined;
+    const nhan = beforeText.match(/(?:^|\n)▸ ([^\n]{1,60})\n?$/);
+    if (nhan) { filename = nhan[1].trim(); beforeText = beforeText.slice(0, nhan.index); }
     if (beforeText.trim()) {
       parts.push(renderText(beforeText, i === 0, `text-${i}`));
     }
 
-    // Code block
-    parts.push(
-      <div key={`code-${i}`} className="my-3">
-        <CodeBlock code={block.code} language={block.language} />
-      </div>
-    );
+    // Code block (hoặc khối đặc biệt: output / dapan / nguon)
+    parts.push(renderFence(block, `code-${i}`, filename));
 
     lastIndex = content.indexOf(block.fullMatch, lastIndex) + block.fullMatch.length;
   });

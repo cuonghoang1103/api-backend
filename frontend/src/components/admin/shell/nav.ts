@@ -99,6 +99,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     items: [
       { label: 'Posts', vi: 'Bài viết', href: '/admin/posts', icon: FileText, keywords: 'bài viết quản lý posts' },
       { label: 'Tech Trends', vi: 'Tech Trends', href: '/admin/tech-trends', icon: Newspaper, keywords: 'blog bài báo tin công nghệ' },
+      { label: 'Daily lessons feed', vi: 'Học mỗi ngày (feed)', href: '/admin/feed-hoc', icon: GraduationCap, keywords: 'bảng tin feed bot cuongmini bài học mỗi ngày ẩn bài so sánh' },
       { label: 'Homepage promos', vi: 'Video trang chủ', href: '/admin/landing', icon: MonitorPlay, keywords: 'trang chủ promo videos landing' },
       { label: 'Projects', vi: 'Dự án', href: '/admin/projects', icon: FolderKanban, keywords: 'dự án quản lý projects case study' },
       { label: 'Skills', vi: 'Kỹ năng', href: '/admin/skills', icon: Code2, keywords: 'kỹ năng quản lý skills' },

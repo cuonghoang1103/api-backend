@@ -216,6 +216,8 @@ const llmKeyAdminRoutes = llmKeyModule.adminRouter;
 const fableAdminRoutes = (await import(path.join(__dirname, 'routes', 'fableAdmin.routes.js'))).default;
 const duPhongAdminRoutes = (await import(path.join(__dirname, 'routes', 'duPhongAdmin.routes.js'))).default;
 const congAnthropicAdminRoutes = (await import(path.join(__dirname, 'routes', 'congAnthropicAdmin.routes.js'))).default;
+// "Học mỗi ngày" trên Bảng tin + dọn bài bot mẫu cũ (10/11/2026)
+const feedHocAdminRoutes = (await import(path.join(__dirname, 'routes', 'feedHocAdmin.routes.js'))).default;
 // Giao diện chung (nền 4 mùa mặc định, nền admin) do admin đặt (27/10/2026)
 const giaoDienRoutes = (await import(path.join(__dirname, 'routes', 'giaoDien.routes.js'))).default;
 // Hộp thư admin — mọi việc cần admin biết đổ về một chỗ (14/09/2026)
@@ -688,6 +690,7 @@ app.use('/api/v1/admin/llm-keys', llmKeyAdminRoutes);
 app.use('/api/v1/admin/fable', fableAdminRoutes);
 app.use('/api/v1/admin/du-phong', duPhongAdminRoutes);
 app.use('/api/v1/admin/cong-anthropic', congAnthropicAdminRoutes);
+app.use('/api/v1/admin/feed-hoc', feedHocAdminRoutes);
 app.use('/api/v1/giao-dien', giaoDienRoutes);
 app.use('/api/v1/admin/thong-bao', adminThongBaoRoutes);
 // Public CV router FIRST — the main cv router applies `authenticate` to

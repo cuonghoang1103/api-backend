@@ -145,7 +145,8 @@ export function _clearAdminCache() {
  * VARCHAR(20) and `cleanNewsCategory` is the single gate that rejects anything
  * off this list before it reaches the DB.
  */
-export const NEWS_CATEGORIES = ['claude', 'codex', 'gemini', 'antigravity', 'tech', 'ai-compare'] as const;
+// 'hoc' (10/11/2026) = bài "Học mỗi ngày" của CuongMini (techTrends/hocFeed).
+export const NEWS_CATEGORIES = ['claude', 'codex', 'gemini', 'antigravity', 'tech', 'ai-compare', 'hoc'] as const;
 export type NewsCategory = (typeof NEWS_CATEGORIES)[number];
 /** Coerce arbitrary input to a known channel or null (never store junk). */
 export function cleanNewsCategory(v: unknown): NewsCategory | null {

@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho IEI301 — Import Export. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/iei301-import-export.mjs
+ */
+export default {
+  courseSlug: "iei301-import-export",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "iei301-flm-b001": { yt: "YiZn5fpPHgY", credit: "Federal Reserve Bank of St. Louis — International Trade 101 | Economics Explained" },
+    "iei301-flm-b002": { yt: "geoe-6NBy10", credit: "CrashCourse — Imports, Exports, and Exchange Rates: Crash Course Economics #15" },
+    "iei301-flm-b003": { yt: "yaYD7R2um-U", credit: "World Trade Organization — Regional Trade Agreements and the Trading System" },
+    "iei301-flm-b005": { yt: "Sat4SiGgB84", credit: "Vixnk - English — How to Do Market Research for Export | Find Your Target Market for Free" },
+    "iei301-flm-b006": { yt: "Ya2JAj0VOPw", credit: "Nisha Malhotra — International Trade Data Sources | Free Online Databases for Exports & Imports" },
+    "iei301-flm-b010": { yt: "-U0mm7MIjQA", credit: "International Trade Administration — Manage Export Shipping Costs and Risk with Incoterms" },
+    "iei301-flm-b011": { yt: "yZzGU0fRIgg", credit: "Inco Docs — Landed Cost Calculator for Imported Products" },
+    "iei301-flm-b013": { yt: "GTUTLRXcVuA", credit: "Import Export USA — Incoterms 2020 Explained [Complete Guide]" },
+    "iei301-flm-b016": { yt: "m-0YazU13JQ", credit: "Shipping Solutions — Understanding International Sales Contracts" },
+    "iei301-flm-b022": { yt: "VPOk0E3Jc-k", credit: "LogisticsABC — Freight Forwarding Explained: How Global Trade Really Works" },
+    "iei301-flm-b024": { yt: "pSCJ6T4CY-Q", credit: "Kam Zhi Xuan — Intermodal Transportation & Multimodal Transportation" },
+    "iei301-flm-b027": { yt: "Ci9TGffi6Ew", credit: "ABTS® — Marine Insurance Explained - Understand the Cargo Insurance You're Getting" },
+    "iei301-flm-b031": { yt: "f5KA4T0KVNU", credit: "Angus Zhou — 3 Documents in Importing | Pro forma Invoice | Commercial Invoice | Packing List" },
+    "iei301-flm-b032": { yt: "PK7c9aOb8NQ", credit: "【Logistics YouTuber】 IINO san — Logistics Flow by Sea Shipment. You will clearly understand Cargo and Documents flow of Logistics." },
+    "iei301-flm-b033": { yt: "q4kIGYVLd64", credit: "10 Min For Supply Chain — Certificate of Origin Explained | Types,Components & How to Apply Certificate of Origin Step-by-Step" },
+    "iei301-flm-b034": { yt: "MCecMzBA01I", credit: "Ray Bowman — Foreign Exchange Risk in International Trade" },
+    "iei301-flm-b035": { yt: "hq1EZNBYq1w", credit: "International Trade Administration — Choosing an Export Payment Method: Cash-in-Advance" },
+    "iei301-flm-b036": { yt: "9ezhlvXkQxc", credit: "International Trade Administration — Using Documentary Collections with Trusted Foreign Buyers" },
+    "iei301-flm-b038": { yt: "egm7nxCPjlA", credit: "MMLT UUM — BWBB 3063 INTERNATIONAL TRADE AND FINANCE - DOCUMENTARY CREDIT" },
+    "iei301-flm-b041": { yt: "WAj7oR3HKMc", credit: "Shuddh Desi Banking — Trade Finance Basic Concepts | Methods of Payment | Parties Involved" },
+    "iei301-flm-b047": { yt: "ODRzRFrj72o", credit: "Paresh Solanki-International Export Import Trainer — What is Bill Of Entry in Import Business? Why Bill of Entry is Very Important for the Importer?" },
+    "iei301-flm-b048": { yt: "obWUcTqtqPw", credit: "International Trade Administration — Understand Your Product's Harmonized System (HS) Code" },
+    "iei301-flm-b049": { yt: "t5BX4k1qhVk", credit: "APICS EDU CLUB — Mastering Customs Valuation: Exploring Methods for Determining Customs Value" },
+    "iei301-flm-b050": { yt: "3lxRK76JwH4", credit: "Directorate General of Foreign Trade — What are Rules of Origin & Certificates of Origin" },
+    "iei301-flm-b051": { yt: "aK1pb9mugJs", credit: "USA Customs Clearance — How to Choose the Right Customs Broker for Your Import Business" },
+    "iei301-flm-b052": { yt: "aafM7M9-ZmM", credit: "Simply Legal — International trade law- unit 6 trade remedies, part 1 anti dumping" },
+    "iei301-flm-b053": { yt: "gj3-8hM9SJ0", credit: "Nurdalila binti Abdullah — Exporting, Importing and Countertrade (IB, Week 10, Chapter 10)" },
+    "iei301-1-1-overview-of-ie": { yt: "GpJIEw6Cz5Y", credit: "NerdWallet Small Business — Your 6-Step Guide to Starting an Import Export Business" },
+    "iei301-2-1-market-research": { yt: "0LCUHVmZ1eQ", credit: "International Trade Administration — Export Experts: Finding and Managing International Partners" },
+    "iei301-4-1-incoterms-2020": { yt: "snvWOWRF-B8", credit: "Importano Sourcing Group — INCOTERMS 2020: FOB Explained in detail | FREE ON BOARD - Shipboard Delivery - Importano" },
+    "iei301-5-1-trade-documents": { yt: "rJ7HIf-cOpo", credit: "EXPORTIMPORTPRACTICAL — EXPORT IMPORT PROCEDURES" },
+    "iei301-6-1-international-payment": { yt: "cIM5SdLI58g", credit: "Tradelinks Resources — Methods of Payment in International Trade for Export & Import (2020)" },
+    "iei301-7-1-customs-logistics": { yt: "B2SlQTcTibs", credit: "10 Min For Supply Chain — Freight Forwarding Process | Who is Freight Forwarder ? | Freight Forwarding Business | Roles" },
+  },
+};

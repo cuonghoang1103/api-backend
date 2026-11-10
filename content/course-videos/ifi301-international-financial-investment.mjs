@@ -1,0 +1,42 @@
+/**
+ * YouTube track cho IFI301 — International Financial Investment. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ifi301-international-financial-investment.mjs
+ */
+export default {
+  courseSlug: "ifi301-international-financial-investment",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "ifi301-ts-1-1": { yt: "xP3nDn_fzGQ", credit: "Singapore Department of Statistics (DOS) — Understanding Foreign Direct Investment" },
+    "ifi301-ts-1-2": { yt: "z4p87TPCnQc", credit: "MIT OpenCourseWare — Lecture 1, Part II: Introduction of Financial Markets, Financial Terms and Concepts" },
+    "ifi301-ts-1-3": { yt: "bel_y5ka80M", credit: "EconplusDal — Balance of Payments (Current Account, Financial Account and Capital Account)" },
+    "ifi301-ts-2-1": { yt: "OWiQ8LOBIg8", credit: "OTC Markets Group — American Depositary Receipts (ADRs) Explained" },
+    "ifi301-ts-2-2": { yt: "YIZCMFd4S0c", credit: "Business School of IR — Intro to the International Bond Market | What are Euro Bonds, Foreign Bonds & Global Bonds? Examples" },
+    "ifi301-ts-2-3": { yt: "ig_EO805rpA", credit: "Economics Explained — The Economics of Foreign Exchange" },
+    "ifi301-ts-3-2": { yt: "geVICRwiPSg", credit: "Floyd Gordon — Risk and Return - Expected Return, Variance and Standard Deviation" },
+    "ifi301-ts-3-3": { yt: "9HD6xo2iO1g", credit: "Wall Street Quants — The Sharpe Ratio Explained (by a quant trader)" },
+    "ifi301-ts-3-4": { yt: "8a1bacd6Qoc", credit: "Understand Finance with Dr. Dicle — Beta, CAPM, and the Cost of Equity" },
+    "ifi301-ts-4-1": { yt: "0MJ8efrrXLA", credit: "Ryan O'Connell, CFA, FRM — Calculating Risk and Return of a Two Asset Portfolio" },
+    "ifi301-ts-4-2": { yt: "6WjOYRiy24g", credit: "Morningstar, Inc. — Is International Diversification Worth It?" },
+    "ifi301-ts-4-3": { yt: "pwyR9uAM0iU", credit: "Ryan O'Connell, CFA, FRM — Efficient Frontier and Portfolio Optimization Explained | The Ultimate Guide" },
+    "ifi301-ts-5-1": { yt: "Wd0OPoSgCmc", credit: "Marginal Revolution University — Purchasing Power Parity" },
+    "ifi301-ts-5-2": { yt: "YKHu3_cNU5E", credit: "Marginal Revolution University — Covered Interest Parity" },
+    "ifi301-ts-5-3": { yt: "lJlsPals_HY", credit: "Ronald Moy, Ph.D., CFA, CFP — International Fisher Effect" },
+    "ifi301-ts-6-1": { yt: "4EgLykxTSz8", credit: "eFinanceManagement — Types of foreign exchange exposure" },
+    "ifi301-ts-6-2": { yt: "HjYW7YwzQo0", credit: "Farhat Lectures | CPA, CMA, EA & Accounting — Foreign Currency Hedging: Forward Contract Example & Entries" },
+    "ifi301-ts-6-3": { yt: "QSi_eZ_AvA8", credit: "FinaLit — Derivatives (Forwards, Futures, Options and Swaps) English for commerce and MBA students" },
+    "ifi301-ts-7-1": { yt: "lHX_56RWtSw", credit: "CNBC International — What is an emerging market? | CNBC Explains" },
+    "ifi301-ts-7-2": { yt: "Lsi0bRBXVTk", credit: "Understand Finance with Dr. Dicle — Country risk analysis" },
+    "ifi301-ts-8-1": { yt: "UD2s3RRvW3A", credit: "Zerodha Varsity — Understanding Net Asset Value (NAV)" },
+    "ifi301-ts-8-2": { yt: "pzrGxQD_Y1Y", credit: "ET Money — Tracking Error in Index Funds - Definition | Causes | Example | How to Avoid it | Learn with ETMONEY" },
+    "ifi301-ts-8-3": { yt: "YT6V6mwsARw", credit: "Tax Gate — Withholding Tax | Local WHT | foreign WHT | WHT relief" },
+    "ifi301-ts-9-1": { yt: "uBlbP0SYcbo", credit: "Julius Baer — Strategic asset allocation: A key to consistent results" },
+    "ifi301-1-1-global-markets": { yt: "UOwi7MBSfhk", credit: "MoneyWeek — An introduction to financial markets - MoneyWeek Investment Tutorials" },
+    "ifi301-2-1-asset-classes": { yt: "8ghhLR6oqwI", credit: "jpmorgan — What Are Asset Classes? | Unpacked | J.P. Morgan Insights" },
+    "ifi301-3-1-risk-return": { yt: "WVaqL0J6Mik", credit: "Pat Obi — Risk & Return (1 of 7) - Introduction" },
+    "ifi301-4-1-diversification": { yt: "1FXuMs6YRCY", credit: "Ben Felix — International Diversification" },
+    "ifi301-5-1-currency-risk-hedging": { yt: "1EkDeeGJCNo", credit: "MBA SOLUTIONS — HEDGING AGAINST THE FOREIGN EXCHANGE EXPOSURE" },
+    "ifi301-6-1-emerging-markets": { yt: "_iftE4J5Kdc", credit: "Rob Berger — Should We Invest in Emerging Markets?" },
+    "ifi301-7-1-funds-etf": { yt: "dI5yspJCrGg", credit: "TD — Guide to International ETFs: Building Your \"Passport Portfolio\"" },
+    "ifi301-8-1-global-allocation": { yt: "JtxV9BKEhyQ", credit: "Mirae Asset Mutual Fund — A Different Way to Think About Global Allocation" },
+  },
+};

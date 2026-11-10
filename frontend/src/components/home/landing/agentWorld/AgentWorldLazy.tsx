@@ -15,7 +15,18 @@ import Link from 'next/link';
 import { AGENTS, WORLD_COPY } from './agents';
 import './agentWorld.css';
 
-const AgentScene = dynamic(() => import('./AgentScene'), { ssr: false });
+// Chunk cảnh tải hỏng (mạng chập, hoặc tab cũ mở từ trước một lần deploy — chunk mang mã băm cũ đã mất) thì
+// CHỈ cảnh không hiện: chữ, nền trời và danh sách vẫn nguyên. Không để lỗi import kéo sập cả trang chủ
+// (10/11: tắt server đo ⇒ tab cũ cuộn tới làng ⇒ cả trang thành "Đã xảy ra lỗi").
+const AgentScene = dynamic(
+  () =>
+    import('./AgentScene').catch(() => ({
+      default: function SceneUnavailable() {
+        return null;
+      },
+    })),
+  { ssr: false },
+);
 
 export default function AgentWorldLazy({ vi }: { vi: boolean }) {
   const copy = vi ? WORLD_COPY.vi : WORLD_COPY.en;

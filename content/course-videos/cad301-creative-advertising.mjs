@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho CAD301 — Creative Advertising. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/cad301-creative-advertising.mjs
+ */
+export default {
+  courseSlug: "cad301-creative-advertising",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "cad301-ts-1-2": { yt: "MsFOWoPjMFY", credit: "Butler Branding Agency — How Do You Structure a Creative Agency?" },
+    "cad301-ts-1-4": { yt: "CGzf4pdx754", credit: "The Voice — History of the Ads of the Day: The Creative Revolution" },
+    "cad301-ts-2-1": { yt: "KHhBlusO2vk", credit: "Strategy Tips - Julian Cole — How To Find Consumer Insights In Marketing?" },
+    "cad301-ts-2-2": { yt: "EaRZrMQ_kUw", credit: "Learn With Shopify — What Is A Unique Selling Proposition? How To Create One (Plus 5 Examples To Inspire You)" },
+    "cad301-ts-2-3": { yt: "m9KNriatkZs", credit: "HubSpot Marketing — How to Write a Powerful CREATIVE BRIEF (GUIDE)" },
+    "cad301-ts-3-1": { yt: "k4Xuc972rKA", credit: "Edwin Dearborn — The Big Idea In Advertising | Examples of Big Idea Marketing Campaigns" },
+    "cad301-ts-3-2": { yt: "FVXGo4g3-MM", credit: "D&AD - Creative Advertising, Design and Digital — “No creative person I know has ever asked for a brainstorming session” — Brian Collins | D&AD Talks" },
+    "cad301-ts-3-4": { yt: "gHGN6hs2gZY", credit: "AJ&Smart — What Is Design Thinking? An Overview" },
+    "cad301-ts-4-1": { yt: "IeVuiQbq8DU", credit: "Marketing91 — Advertising Appeals - Rational Appeal, Competitive Advantage Appeal, Emotional Appeal (Mktg 183)" },
+    "cad301-ts-4-3": { yt: "fHQYwke3yr0", credit: "Let's Canoe Studios — The Art of Storytelling in Advertising | A Video Essay with Guinness and Google Examples" },
+    "cad301-ts-4-4": { yt: "6KUWyEa-ih4", credit: "Tyler Rablin — Rhetorical Devices for Persuasion" },
+    "cad301-ts-5-1": { yt: "VoT_YNtfy1M", credit: "The Art Of Storytelling — The Best-Written Ad Slogans Of All Time" },
+    "cad301-ts-5-2": { yt: "cqnZtGXGwsw", credit: "Think with Google — The power of great copy, with brand tone of voice and copywriting expert, Vikki Ross" },
+    "cad301-ts-5-4": { yt: "S4RfX9X2YVM", credit: "Semrush — What is a CTA? Tips for Writing Calls to Action That Convert" },
+    "cad301-ts-6-1": { yt: "ZXItTIjC0Wk", credit: "Visme — 11 Visual Hierarchy Design Principles - Learn How to Improve and Create Beautiful Graphic Designs" },
+    "cad301-ts-6-3": { yt: "zx2mSiKcOLQ", credit: "Superside — The Impact Of Colour Theory On Marketing And Design" },
+    "cad301-ts-7-2": { yt: "cmRcoJZRXEY", credit: "CrashCourse — Online Advertising: Crash Course Media Literacy #7" },
+    "cad301-ts-7-3": { yt: "RrEpB_YEnb8", credit: "Merle Becker — HOW TO CREATE A GREAT RADIO AD - Podcast Advertising Basics-  Filmmaking 101" },
+    "cad301-ts-8-1": { yt: "kZ19GK99744", credit: "OneScreen ai — Beyond the Billboard: Mastering Out-of-Home Advertising Creative" },
+    "cad301-ts-8-3": { yt: "JLiKXW82tjE", credit: "Pulse Advertising — What is an Influencer? | Influencer Marketing Explained" },
+    "cad301-ts-9-1": { yt: "Q9bv-8vZN1k", credit: "Ready To Share — IMC (Meaning & Tools)|| Integrated Marketing Communication || Coco Cola Campaign & Tesla's Example" },
+    "cad301-ts-9-2": { yt: "CP-zOCl5md0", credit: "FCB Global — Cinderella 2.0: Transmedia Storytelling" },
+    "cad301-ts-9-4": { yt: "YYFS4K3p2Aw", credit: "D&AD - Creative Advertising, Design and Digital — The Biggest Obstacles to Pitching Creative Work | D&AD Masterclass" },
+    "cad301-ts-10-2": { yt: "arNW2p42J8o", credit: "Marketing91 — Advertising Testing - Pre testing and Post Testing of Advertising (Marketing video 187)" },
+    "cad301-ts-10-4": { yt: "j9AEtFdb1_4", credit: "Marketing91 — Ethical Issues in Advertising - Advertising and Ethics" },
+    "cad301-1-1-advertising-role": { yt: "aZATLIPFXog", credit: "Digital Network Learning TV — Creativity and Creative Process in advertising" },
+    "cad301-2-1-big-idea": { yt: "jYJa6tgNpJ4", credit: "Open Door Creative — How To Brainstorm The Big Idea" },
+    "cad301-3-1-message-strategy": { yt: "wZapji2x7QE", credit: "Brand Master Academy — Nail Your Brand Messaging Strategy With These 6 Principles" },
+    "cad301-4-1-copywriting": { yt: "TUMjnmfsPeM", credit: "David Perell — Learn Copywriting in 76 Minutes – Harry Dry" },
+    "cad301-5-1-art-direction": { yt: "O_B_Ei5o1k4", credit: "Jason Murray — Art Direction Techniques You Can Use" },
+    "cad301-6-1-multichannel": { yt: "nRaCwKSgz_M", credit: "Terence Tam — What Does Multi Channel Marketing Strategy Mean (and Why You Must Use This)" },
+    "cad301-7-1-integrated-campaign": { yt: "u6KQ0l8xReg", credit: "Leaders Talk - ThinkEduca — Integrated Marketing Campaigns Explained in 13 minutes" },
+    "cad301-8-1-measurement-ethics": { yt: "uRyNxNAYIuc", credit: "Mark Grabowski — Advertising Ethics" },
+  },
+};

@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho FIN402 — Derivatives. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/fin402-derivatives.mjs
+ */
+export default {
+  courseSlug: "fin402-derivatives",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "fin402-flm-b003": { yt: "AEuCl2FmJ-Y", credit: "The Plain Bagel — Hedging Explained - The Insurance of Investing" },
+    "fin402-flm-b004": { yt: "FUuBdRN_-fc", credit: "Ryan O'Connell, CFA, FRM — Basis Risk Explained Simply  |  Hedging Strategies" },
+    "fin402-flm-b005": { yt: "OYSCLEfVW64", credit: "Ryan O'Connell, CFA, FRM — Collars Explained | Option Trading Strategies" },
+    "fin402-flm-b011": { yt: "jfaABy0E6r4", credit: "Leaders Talk - ThinkEduca — Risk Management | Process and Approaches | Real-Time Examples | in 14 min" },
+    "fin402-flm-b012": { yt: "BLAEuVSAlVM", credit: "RiskDoctorVideo — Risk management basics: What exactly is it?" },
+    "fin402-flm-b013": { yt: "pJbop8O2qDM", credit: "Corporate Finance Institute — Introduction to Risk Management Part 1: How to Identify & Mitigate Financial Risks | CFI Course" },
+    "fin402-flm-b014": { yt: "sKMt1qzmGfU", credit: "AnalystPrep — The Building Blocks of Risk Management (FRM Part 1 2025 – Book 1 – Chapter 1)" },
+    "fin402-flm-b019": { yt: "423QLJo2-Jo", credit: "PrepNuggets — CFA Level I Derivatives - Forward Contracts vs Futures Contracts" },
+    "fin402-flm-b020": { yt: "i_pLF9J3QPE", credit: "MIT OpenCourseWare — Ses 9: Forward and Futures Contracts I" },
+    "fin402-flm-b021": { yt: "ICxZ9cSrpT8", credit: "Mark Meldrum — 27.  Options, Futures and Other Derivatives Ch5: Forward and Futures Prices Pt2" },
+    "fin402-flm-b022": { yt: "dmVfZ1yjw7E", credit: "Patrick Boyle — Pricing Financial Futures (Part 2 of 2)" },
+    "fin402-flm-b023": { yt: "IwA7nVEwqto", credit: "MIT OpenCourseWare — Ses 10: Forward and Futures Contracts II & Options I" },
+    "fin402-flm-b025": { yt: "4ANPFbW_8BI", credit: "Bionic Turtle — FRM: Cost of carry model to price forwards & futures" },
+    "fin402-flm-b026": { yt: "1Mhk4UHJsRc", credit: "The Plain Bagel — What are Futures?" },
+    "fin402-flm-b027": { yt: "-szbDqknSB8", credit: "AnalystPrep — Commodity Forwards and Futures (FRM Part 1 2025 – Book 3 – Chapter 11)" },
+    "fin402-flm-b032": { yt: "F6fRXQJaQxw", credit: "Mark Meldrum — Options, Futures and Other Derivatives Ch10 Part 3" },
+    "fin402-flm-b035": { yt: "AukJ1gDeErw", credit: "Ryan O'Connell, CFA, FRM — What is the Binomial Option Pricing Model?" },
+    "fin402-flm-b036": { yt: "1p5wJxGNj1Q", credit: "finCampus Lecture Hall — One Period Binomial Option Pricing: Portfolio Replication Approach" },
+    "fin402-flm-b037": { yt: "PZrmOh2nZus", credit: "Matt Brigida — FIN 376: Binomial Option Pricing and Delta Hedging" },
+    "fin402-flm-b041": { yt: "pr-u4LCFYEY", credit: "Khan Academy — Introduction to the Black-Scholes formula | Finance & Capital Markets | Khan Academy" },
+    "fin402-flm-b042": { yt: "TnS8kI_KuJc", credit: "MIT OpenCourseWare — 19. Black-Scholes Formula, Risk-neutral Valuation" },
+    "fin402-flm-b043": { yt: "S1t6DWMxPsI", credit: "Learning0to1 — Black Scholes Formula explained simply" },
+    "fin402-flm-b044": { yt: "2UCHztlWuZg", credit: "MIT OpenCourseWare — Lecture 21: Black-Scholes Formula, Risk Neutral Valuation" },
+    "fin402-flm-b048": { yt: "YDqoUBOvF2Y", credit: "TutorialsPoint — Derivatives   SWAP" },
+    "fin402-flm-b050": { yt: "PLjyj1FJqig", credit: "Khan Academy — Interest rate swap 1 | Finance & Capital Markets | Khan Academy" },
+    "fin402-2-1-forwards-futures": { yt: "H9UEZdAnnt8", credit: "Khan Academy — Forward contract introduction | Finance & Capital Markets | Khan Academy" },
+    "fin402-3-1-pricing-hedging": { yt: "ExtOfn06T3Q", credit: "Mark Meldrum — 7.  Options, Futures and Other Derivatives Ch3: Hedging with Futures Part 1" },
+    "fin402-4-1-options-payoff": { yt: "MZQxeQYQCUg", credit: "Khan Academy — Call payoff diagram | Finance & Capital Markets | Khan Academy" },
+    "fin402-6-1-option-pricing": { yt: "J6OySvT-PDE", credit: "Ryan O'Connell, CFA, FRM — Black Scholes Option Pricing Model Explained In Excel" },
+    "fin402-7-1-swaps": { yt: "DrlKjSG1V6s", credit: "Ryan O'Connell, CFA, FRM — Interest Rate Swaps Explained  |  Example Calculation" },
+  },
+};

@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho FMS301 — Applied financial modelling and simulation. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/fms301-applied-financial-modelling-and-simulation.mjs
+ */
+export default {
+  courseSlug: "fms301-applied-financial-modelling-and-simulation",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "fms301-ts-1-1": { yt: "AYyzkfkeE-8", credit: "Christian Wattig — What is Financial Modeling? (Full Beginner’s Guide)" },
+    "fms301-ts-1-2": { yt: "Iiq4Sem9GPM", credit: "Kenji Explains — Build a Dynamic Financial Model in Just 15 Minutes" },
+    "fms301-ts-1-3": { yt: "sJAfMJK6CeQ", credit: "AuditExcel Advanced Excel and Financial Model Training and Consulting — Build errors checks into ALL spreadsheets- Ensure integrity in Spreadsheet Best Practice" },
+    "fms301-ts-2-1": { yt: "s4Nwc9diIsc", credit: "Business Career College — Time Value of Money using Excel" },
+    "fms301-ts-2-2": { yt: "YDpf00QHY0I", credit: "Ryan O'Connell, CFA, FRM — How to Calculate NPV and IRR in Excel" },
+    "fms301-ts-2-3": { yt: "46oLXwClvkw", credit: "Edspira — Weighted Average Cost of Capital (WACC)" },
+    "fms301-ts-3-1": { yt: "87FSD3IR5IU", credit: "Learn Finance Institute — 3.0 Income Statement - Forecasts" },
+    "fms301-ts-3-2": { yt: "mJd4XRTOwSg", credit: "Startup Akademia — Financial modeling in Excel - Working capital" },
+    "fms301-ts-3-3": { yt: "sTYjXC4Udrc", credit: "Corporate Finance Institute — Cash Flow: The Ultimate Guide on EBITDA, CF, FCF, FCFE, FCFF" },
+    "fms301-ts-3-4": { yt: "k5rG_MvIWWs", credit: "Diarmuid Early — WHY and HOW to stop using circular references to calculate interest" },
+    "fms301-ts-4-1": { yt: "XTBfH1MbxPE", credit: "BusinessFinance — Financial Modelling - Discounted Cash Flow (DCF)" },
+    "fms301-ts-4-2": { yt: "2e8C3m59qtY", credit: "Corporate Finance Institute — How To Calculate Terminal Value In Excel" },
+    "fms301-ts-4-3": { yt: "kYlqdoIJOqY", credit: "Mergers & Inquisitions / Breaking Into Wall Street — Equity Value vs. Enterprise Value and Valuation Multiples" },
+    "fms301-ts-5-1": { yt: "EM0tYUrg9YI", credit: "Chester Tugwell — Sensitivity Analysis Using Excel | One and Two Variable Data Tables" },
+    "fms301-ts-5-2": { yt: "VvcZBqFHdLY", credit: "David McLachlan — How to Make a Tornado Chart in Excel (Sensitivity Analysis)" },
+    "fms301-ts-5-3": { yt: "UsbVUOnBy3Y", credit: "Corporate Finance Institute — Scenario Analysis in Excel: Financial Modeling" },
+    "fms301-ts-6-1": { yt: "b9a27XN_6tg", credit: "365 Data Science — Probability: Types of Distributions" },
+    "fms301-ts-7-1": { yt: "7TqhmX92P6U", credit: "IBM Technology — What is Monte Carlo Simulation?" },
+    "fms301-ts-7-3": { yt: "6-dhdMDiYWQ", credit: "QuantPy — Monte Carlo Simulation of a Stock Portfolio with Python" },
+    "fms301-ts-8-1": { yt: "R8pDHvPWtE4", credit: "Probability, Logic, and Beyond — Simulating Stocks with Geometric Brownian Motion" },
+    "fms301-ts-8-2": { yt: "luSEdT2HBI4", credit: "Patrick Boyle — What is the Monte Carlo method? | Monte Carlo Simulation in Finance | Pricing Options" },
+    "fms301-ts-9-1": { yt: "AQy11Hfp_dU", credit: "prof smith — Standard error and 95% confidence interval" },
+    "fms301-ts-9-2": { yt: "phF3oJZQQzQ", credit: "QuantPy — Monte Carlo Variance Reduction with Antithetic Variates | Option Pricing Accuracy" },
+    "fms301-ts-9-3": { yt: "4in4NAeHZOU", credit: "Finance with BG — Sensitivity Analysis / Stress Testing on Excel - Financial Modeling" },
+    "fms301-1-1-random-variables": { yt: "O8Dak12JUIc", credit: "İsmail Başoğlu — Simulation Modeling 14 What is A Random Variable?" },
+    "fms301-3-1-monte-carlo-npv": { yt: "Q3rv3yF0bPA", credit: "Luis Olano — Monte Carlo Simulation - NPV example" },
+    "fms301-4-1-asset-price-simulation": { yt: "YZL2xdhh7qE", credit: "FinanceAndEconomics — Brownian Motion / Wiener Process Explained" },
+    "fms301-5-1-portfolio-var": { yt: "zrqI-NbZSj0", credit: "Matt Macarty — How to Use Excel & Monte Carlo Simulation to Calculate  Value at Risk (VaR)" },
+    "fms301-6-1-option-pricing-monte-carlo": { yt: "pR32aii3shk", credit: "QuantPy — Monte Carlo Simulation for Option Pricing with Python (Basic Ideas Explained)" },
+    "fms301-7-1-scenario-sensitivity-optimization": { yt: "nJAJhKeiLdc", credit: "Corporate Finance Institute — Sensitivity & Scenario Analysis Model" },
+    "fms301-8-1-tools-decision-making": { yt: "jvDLtiA3tlU", credit: "Stachanov Holding B.V. — Monte Carlo simulation & Probabilistic modelling with Oracle Crystal Ball: Example bank capital" },
+  },
+};

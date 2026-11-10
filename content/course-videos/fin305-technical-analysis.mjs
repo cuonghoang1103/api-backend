@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho FIN305 — Technical analysis. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/fin305-technical-analysis.mjs
+ */
+export default {
+  courseSlug: "fin305-technical-analysis",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "fin305-flm-b002": { yt: "Wu57GWTm1_U", credit: "Chat With Traders — The science of technical analysis vs. the art of trading | Brian Shannon, Alpha Trends" },
+    "fin305-flm-b003": { yt: "37wji6rGKo4", credit: "Zerodha Varsity — 5. Key assumption of technical analysis" },
+    "fin305-flm-b004": { yt: "YD-7lWtaKlc", credit: "Financial Wisdom — DOW THEORY - What is it & how can it be applied to the stock market?" },
+    "fin305-flm-b009": { yt: "i6eO9B1hU9E", credit: "TradeCFDs — Trendlines and Channels: How to Draw and Use them for Trading Decisions" },
+    "fin305-flm-b011": { yt: "kqBreWAG2uY", credit: "UKspreadbetting — Technical Analysis Course - Module 5: Volume and Open Interest" },
+    "fin305-flm-b012": { yt: "qLIpsBLnDVQ", credit: "ClayTrader — OHLC Bar Charts Explained (Technical Analysis 101)" },
+    "fin305-flm-b013": { yt: "SjSHVDfXHQ4", credit: "TED — The magic of Fibonacci numbers | Arthur Benjamin | TED" },
+    "fin305-flm-b014": { yt: "cfOITddizSc", credit: "Wysetrade — Fibonacci Retracement Trading For Beginners (Go Pro FAST!)" },
+    "fin305-flm-b015": { yt: "IvvUbh-cnX4", credit: "Charles Schwab — Stock Trading: Moving Averages" },
+    "fin305-flm-b016": { yt: "JDpYMDGawMI", credit: "Tradeciety.com — Chart Pattern Trading - Full Course - Everything I learned after 14 years trading" },
+    "fin305-flm-b018": { yt: "OGFxp3Pixg8", credit: "Trading 212 — How to Read Japanese Candlestick Charts?" },
+    "fin305-flm-b019": { yt: "tW13N4Hll88", credit: "TradingLab — The ONLY Candlestick Pattern Guide You'll EVER NEED" },
+    "fin305-flm-b022": { yt: "miaGZZusRnE", credit: "Trade with Purab — Candlestick Trading Full Course | Candlesticks Free Masterclass  #candlestickpattern #trading" },
+    "fin305-flm-b025": { yt: "lhRKw-y7oG4", credit: "UKspreadbetting — Technical Analysis Course - Module 10: Cloud Charts: the Ichimoku Technique" },
+    "fin305-flm-b028": { yt: "QWJP8z04W9U", credit: "Axia Futures — How To Use Market Profile - PART 1 | Beginner's Tutorial" },
+    "fin305-flm-b032": { yt: "LfD8QpGjlQY", credit: "SMB Capital — Market Profile: A SMB Trader Reveals How to Use This Tool to Make Effective Trades in $SPY" },
+    "fin305-flm-b036": { yt: "WPlFmTwepNg", credit: "Elliott Wave International — How to Spot Elliott Wave Extensions" },
+    "fin305-flm-b037": { yt: "qv1OUoVH0Zo", credit: "Logic FX Trading — Elliott Wave Theory - Extensions, Alternation & Equality" },
+    "fin305-flm-b040": { yt: "KeESGbF8D4g", credit: "Steve Miller — Understanding Cycle Analysis - Forecasting the stock markets in time and price" },
+    "fin305-flm-b042": { yt: "JM_M1RPkCR8", credit: "Zerodha Varsity — What is volatility in the stock market?" },
+    "fin305-flm-b044": { yt: "hbcCykbX14U", credit: "Charles Schwab — How to Use the Relative Strength Index (RSI)" },
+    "fin305-flm-b046": { yt: "chSHqogx2CI", credit: "YaleCourses — 11. Behavioral Finance and the Role of Psychology" },
+    "fin305-flm-b048": { yt: "gM65dEuNsMw", credit: "Humbled Trader — Risk Management & Position Sizing Strategy for Trading" },
+    "fin305-1-1-dow-theory": { yt: "LyOqC5mNEbg", credit: "Fractal Flow - Pro Trading Strategies — The ULTIMATE Beginner's Guide to the DOW THEORY" },
+    "fin305-2-1-charts-timeframes": { yt: "xQws-rKWdK4", credit: "CAPITAL CHASE — How to Analyse Charts Using Different Timeframes | Multi Timeframe Analysis for Beginners." },
+    "fin305-3-1-trend-trendline-channel": { yt: "e5QDgaJheO4", credit: "In it to Win it — Trendlines And Parallel Channels Reveal Where Price Can Move  ~ Technical Analysis" },
+    "fin305-4-1-support-resistance-patterns": { yt: "8-x2S8owxYQ", credit: "Brad Goh (The Trading Geek) — How to Master Support & Resistance Levels (All You Need to Know)" },
+    "fin305-5-1-trend-indicators": { yt: "bOVWU0As6HY", credit: "FXEmpire — How to use Trend-Following Indicators (SMA, EMA, ADX/DMS, MACD, Parabolic SAR)" },
+    "fin305-6-1-momentum-oscillators": { yt: "W0u4RBHF_XQ", credit: "CME Group — Oscillators: MACD, RSI, Stochastic's" },
+    "fin305-7-1-volume-psychology": { yt: "rDd5zNQ4d-Y", credit: "NerveCheck — Volume Analysis: The Correct Way to Read & Understand the Market" },
+    "fin305-8-1-combine-risk-management": { yt: "XeQV2ECtZVQ", credit: "CryptoCred — Technical Analysis Series - Risk Management (UPDATED)" },
+  },
+};

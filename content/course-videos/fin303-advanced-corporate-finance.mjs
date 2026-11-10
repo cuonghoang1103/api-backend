@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho FIN303 — Advanced Corporate Finance. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/fin303-advanced-corporate-finance.mjs
+ */
+export default {
+  courseSlug: "fin303-advanced-corporate-finance",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "fin303-flm-b002": { yt: "D8IJKl8sGsM", credit: "Michael Nugent — Capital Budgeting Cash Flow chapter 11" },
+    "fin303-flm-b003": { yt: "E1JqSB5rnIs", credit: "Educationleaves — What is Capital budgeting? | Importance, Methods & Limitations" },
+    "fin303-flm-b007": { yt: "iAYs2VFcB8g", credit: "Corporate Finance Institute — Weighted Average Cost of Capital (WACC)" },
+    "fin303-flm-b008": { yt: "VvT2gmQG3Mc", credit: "Corporate Finance Institute — Corporate Finance Explained | Cost of Capital" },
+    "fin303-flm-b009": { yt: "h1AyTM_fhBA", credit: "Educationleaves — Cost of Capital | Weighted average Cost of Capital Formula, Components & Examples" },
+    "fin303-flm-b010": { yt: "90e-EV1kL9I", credit: "Corporate Finance Institute — Corporate Finance Explained | Cost of Capital: How Companies Optimize WACC for Corporate Growth" },
+    "fin303-flm-b013": { yt: "T3pdlwH0MaU", credit: "Corporate Finance Institute — Underwriting: Raising Capital" },
+    "fin303-flm-b014": { yt: "FRVUdsILomk", credit: "Corporate Finance Institute — Corporate Finance Explained | Understanding Capital Structure – Balancing Debt and Equity" },
+    "fin303-flm-b015": { yt: "eVKPaoondPk", credit: "Corporate Finance Institute — Corporate Finance Explained | Capital Structure Optimization: Balancing Debt, Equity, and Risk" },
+    "fin303-flm-b019": { yt: "V7YbVzRP-8Q", credit: "Corporate Finance Institute — Capital Structure: Debt vs. Equity Explained" },
+    "fin303-flm-b020": { yt: "6uB1eWJz9jI", credit: "Marketplace APM — Capital structure explained" },
+    "fin303-flm-b022": { yt: "C2XMM-E48BA", credit: "Aswath Damodaran — Session 24: Dividend Policy - Trends & Measures" },
+    "fin303-flm-b023": { yt: "D3IRlM9ZNZk", credit: "Edspira — Dividend Policy:  why firms don't pay out all their earnings as dividends" },
+    "fin303-flm-b031": { yt: "c5iigcEppZw", credit: "The Finance Storyteller — Working capital management" },
+    "fin303-flm-b032": { yt: "Z2iSy4nnYZI", credit: "Corporate Finance Institute — Corporate Finance Explained | Working Capital Management: Strategies for Optimizing Liquidity" },
+    "fin303-flm-b037": { yt: "CDl0_Udyk70", credit: "Corporate Finance Institute — How to Build a Forecasting Model in Excel (FP&A)" },
+    "fin303-flm-b038": { yt: "-4bmmadFrPk", credit: "Christian Wattig — Ultimate Beginner’s Guide to FP&A | Financial Planning & Analysis" },
+    "fin303-flm-b043": { yt: "Hc7GoODVVmQ", credit: "Corporate Finance Institute — Corporate Finance Explained | Mastering Risk Management in Corporate Finance" },
+    "fin303-flm-b044": { yt: "yXD6dcMJ_WU", credit: "Corporate Finance Institute — Corporate Finance Explained | Interest Rate Risk Management" },
+    "fin303-flm-b045": { yt: "cJnzYE3HShM", credit: "Corporate Finance Institute — Corporate Finance Explained | Treasury Management" },
+    "fin303-flm-b046": { yt: "qp9-W6DAZn8", credit: "Corporate Finance Institute — Corporate Finance Explained | Enterprise Risk Management in Practice" },
+    "fin303-flm-b047": { yt: "XgHA50jsBxg", credit: "Corporate Finance Institute — Corporate Finance Explained | Corporate Debt Management: Strategies and Risk" },
+    "fin303-1-1-tvm-capital-budgeting": { yt: "bUkHBVtZjcs", credit: "Joshua Aura — AFM ADVANCED CAPITAL BUDGETING LESSON ONE" },
+    "fin303-2-1-cost-of-capital-capital-structure": { yt: "AOoZOVL8e1M", credit: "EZIKAN ACADEMY — Capital Structure (Traditional View of Gearing and the WACC) Modigliani and Miller Theory - M & M" },
+    "fin303-3-1-dividend-policy-buybacks": { yt: "xO8MqubSeeY", credit: "Tanveer Ahmad — Dividend Policy | Corporate Finance" },
+    "fin303-4-1-business-valuation": { yt: "ZIdADgWj6Iw", credit: "Hamid Boustanifar — A Crash Course on DCF and Multiples Valuation" },
+    "fin303-5-1-working-capital-short-term-financing": { yt: "kxJISiIEVSs", credit: "angelica bal — Working Capital Management | Short term Financing Theory" },
+    "fin303-6-1-risk-management-derivatives": { yt: "pJbop8O2qDM", credit: "Corporate Finance Institute — Introduction to Risk Management Part 1: How to Identify & Mitigate Financial Risks | CFI Course" },
+    "fin303-7-1-ma-restructuring-lbo": { yt: "nkhYG9wqGFQ", credit: "FinanceKid — Basics Of Corporate Restructuring - M&A Insights" },
+    "fin303-8-1-international-finance-eva": { yt: "kv3VWPWqJHk", credit: "Corporate Finance Institute — Economic Value Added: EVA Explained" },
+  },
+};

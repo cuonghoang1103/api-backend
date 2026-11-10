@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho FTP301 — Payments, Crypto currencies and blockchain. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ftp301-payments-crypto-currencies-and-blockchain.mjs
+ */
+export default {
+  courseSlug: "ftp301-payments-crypto-currencies-and-blockchain",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "ftp301-flm-b002": { yt: "yubzJw0uiE4", credit: "Simplilearn — Blockchain In 7 Minutes | What Is Blockchain | Blockchain Explained|How Blockchain Works|Simplilearn" },
+    "ftp301-flm-b003": { yt: "oPIupbsVimc", credit: "Whiteboard Crypto — What are dApps? (12 Decentralized Application Examples)" },
+    "ftp301-flm-b004": { yt: "Pl8OlkkwRpc", credit: "TED — How the blockchain is changing money and business | Don Tapscott" },
+    "ftp301-flm-b005": { yt: "sXP-8pD7PG4", credit: "Learn with Whiteboard — All Major Blockchain Consensus Algorithms Explained | Consensus Mechanism in Blockchain" },
+    "ftp301-flm-b006": { yt: "w7HDA8gUbpQ", credit: "MIT OpenCourseWare — 4. Blockchain Basics & Consensus" },
+    "ftp301-flm-b008": { yt: "4Q-WYFm2dl0", credit: "Data Stream — Blockchain: Social Network Opportunities" },
+    "ftp301-flm-b009": { yt: "v6TtI9qEiTU", credit: "TEDx Talks — How blockchain technology can help build a transparent future | Diana Biggs | TEDxEastEnd" },
+    "ftp301-flm-b012": { yt: "pyaIppMhuic", credit: "Whiteboard Crypto — What are Smart Contracts in Crypto? (4 Examples + Animated)" },
+    "ftp301-flm-b019": { yt: "oIgfed2BtpI", credit: "Equinix — Decentralized Finance: How Stablecoins and Blockchain Are Changing Payments" },
+    "ftp301-flm-b022": { yt: "SZXwDhcx9uY", credit: "Simplilearn — What is DeFi? | Decentralised Finance Tutorial For Beginners | Decentralised Finance | Simplilearn" },
+    "ftp301-flm-b023": { yt: "aTp9er6S73M", credit: "Finematics — Lending And Borrowing In DEFI Explained - Aave, Compound" },
+    "ftp301-flm-b024": { yt: "dTCwssZ116A", credit: "Whiteboard Crypto — What is AAVE? (Animated) Crypto Borrowing and Lending Explained" },
+    "ftp301-flm-b026": { yt: "ENBQbPbbalg", credit: "a16z — Taking Crypto Beyond Volatility: Stablecoins" },
+    "ftp301-flm-b028": { yt: "t3aGztGvGn0", credit: "ColumbiaPlus — Best Practices for Digital Wallets and Cryptoasset Ownership" },
+    "ftp301-flm-b029": { yt: "SQyg9pyJ1Ac", credit: "Whiteboard Crypto — What is a Cryptocurrency Wallet? (3 Types + Key Examples)" },
+    "ftp301-flm-b030": { yt: "zTHtK1ctgp0", credit: "Simplilearn — Blockchain Wallet Tutorial | How Blockchain Wallet Works | Blockchain Technology | Simplilearn" },
+    "ftp301-flm-b031": { yt: "n4rlqluNA-Q", credit: "MIT OpenCourseWare — Lecture 1: Introduction to 14.129 Blockchain and Design of Financial Systems" },
+    "ftp301-flm-b032": { yt: "gf2U43NTcRQ", credit: "Sagacious Investing — Cryptocurrency and Climate Change: Exploring the Environmental Impact" },
+    "ftp301-flm-b035": { yt: "JPkgJwJHYSc", credit: "MIT OpenCourseWare — 6. Smart Contracts and DApps" },
+    "ftp301-flm-b036": { yt: "AcufQeaOK1U", credit: "Energy, Climate & Copper | Webinar Series — Peer-to-peer energy trading using blockchains" },
+    "ftp301-flm-b037": { yt: "0-tzlap7FO4", credit: "Harvard Law School — The Blockchain Industry: Legal and Regulatory Challenges" },
+    "ftp301-flm-b038": { yt: "bgELYWuhm_8", credit: "Coin247 Academy — Global Overview of Cryptocurrency Regulations" },
+    "ftp301-flm-b039": { yt: "NOF0B-sMa-k", credit: "Albany Law School — Blockchain and Cryptocurrency - The Legal Framework and Future Trends" },
+    "ftp301-flm-b041": { yt: "tFbYrhkYZnQ", credit: "Crypto Steffen — Decentralized Finance (DeFi): Disrupting Traditional Banking" },
+    "ftp301-flm-b043": { yt: "25q6TwBiQB4", credit: "Boston College Carroll School of Management — Cryptocurrencies and Blockchain: Implications and Innovation for Financial Markets" },
+    "ftp301-flm-b048": { yt: "k9wKM_Wy6d0", credit: "Moody's — The Future of Payments: Blockchain, Stablecoins and AI Explained" },
+    "ftp301-1-1-evolution": { yt: "E_COzGGLMSA", credit: "Payment Talks — 1 - What is a payment, its brief evolution and key elements in Domestic and International payments" },
+    "ftp301-3-1-dlt-institutional": { yt: "wzJbzJVxGIQ", credit: "MIT OpenCourseWare — Lecture 3: Distributed Ledger as a Solution to an Information Problem" },
+    "ftp301-4-1-bitcoin-payment-network": { yt: "bBC-nXj3Ng4", credit: "3Blue1Brown — But how does bitcoin actually work?" },
+    "ftp301-6-1-crypto-cross-border": { yt: "jb-45m9f76I", credit: "Jack Mallers — Bitcoin: Disrupting Cross Border Payments - IMF Fintech Seminar" },
+    "ftp301-7-1-cbdc": { yt: "j9LVdPXBaLw", credit: "moneycontrol — Crypto 101: CBDC | Central Bank Digital Currency Explained" },
+  },
+};

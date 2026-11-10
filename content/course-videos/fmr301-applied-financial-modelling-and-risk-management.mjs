@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho FMR301 — Applied Financial modelling and risk management. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/fmr301-applied-financial-modelling-and-risk-management.mjs
+ */
+export default {
+  courseSlug: "fmr301-applied-financial-modelling-and-risk-management",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "fmr301-ts-1-1": { yt: "IP-E75FGFkU", credit: "Educationleaves — What is Risk Management? | Process, Approaches, Types, Importance, Limitations" },
+    "fmr301-ts-1-2": { yt: "PtDzY3-7ieE", credit: "Patrick Boyle — Applied Portfolio Management - Class 1 - Risk & Return" },
+    "fmr301-ts-1-3": { yt: "efPKwxZuLKY", credit: "YaleCourses — 4. Portfolio Diversification and Supporting Financial Institutions (CAPM Model)" },
+    "fmr301-ts-2-1": { yt: "MzJihqG2DEA", credit: "Ryan O'Connell, CFA, FRM — Calculate Bond Convexity and Duration in Excel | Interest Rate Risk" },
+    "fmr301-ts-2-2": { yt: "c7lTLnTCcv0", credit: "OpenTuition — Foreign Exchange Risk Management - ACCA Financial Management (FM)" },
+    "fmr301-ts-2-3": { yt: "osw_Yk6PY9M", credit: "Friendly Finance with Chandra S. Bhatnagar — Covariance and Correlation between Assets" },
+    "fmr301-ts-3-1": { yt: "IqFCuKTEx94", credit: "Patrick Boyle — How do you calculate value at risk? Two ways of calculating VaR" },
+    "fmr301-ts-3-2": { yt: "_SHhSGhwdxM", credit: "Bionic Turtle — FRM: Historical simulation value at risk (HS VaR)" },
+    "fmr301-ts-3-3": { yt: "q6qSwwpL26I", credit: "Ryan O'Connell, CFA, FRM — Monte Carlo Method: Value at Risk (VaR) In Excel" },
+    "fmr301-ts-3-4": { yt: "92WaNz9mPeY", credit: "MIT OpenCourseWare — 7. Value At Risk (VAR) Models" },
+    "fmr301-ts-4-1": { yt: "MrVJSizFJhs", credit: "Ryan O'Connell, CFA, FRM — Expected Shortfall & Conditional Value at Risk (CVaR) Explained" },
+    "fmr301-ts-4-3": { yt: "JUF-UScpEqs", credit: "Bionic Turtle — FRM: Risk-adjusted return on capital (RAROC)" },
+    "fmr301-ts-6-1": { yt: "y7ZXWz0WrM0", credit: "Finance study guide — Credit Risk Modeling in Banking with examples: PD, LGD, EAD & Expected Loss Made Simple" },
+    "fmr301-ts-6-3": { yt: "TjVvatkjlsM", credit: "MJ the Fellow Actuary — Merton Model for Credit Risk Assessment" },
+    "fmr301-ts-6-4": { yt: "6pOloIfXoeg", credit: "Quants Hub & BTRM — Kevin Liddy - Counterparty Credit Risk for Derivatives" },
+    "fmr301-ts-7-1": { yt: "H_FA6brrvFw", credit: "The Industry Portal — Liquidity Management Explained: How Banks Manage Liquidity Risk" },
+    "fmr301-ts-7-3": { yt: "pPxJqzORmbM", credit: "Educationleaves — What is Operational Risk Management? Types and Importance of Operational Risk management" },
+    "fmr301-ts-8-1": { yt: "w6egGSdnyyw", credit: "Ryan O'Connell, CFA, FRM — Equity Futures Explained: Financial Risk Management & Portfolio Hedging" },
+    "fmr301-ts-8-3": { yt: "xTBb2FTf6MA", credit: "ClaireTrythall — Understanding Hedging Strategies for Interest Rate Risk in the Banking Book (IRRBB)" },
+    "fmr301-ts-9-1": { yt: "8hgSTVz1P3w", credit: "The Industry Portal — Capital Management Explained: Bank Capital Ratios, ICAAP, and Basel III" },
+    "fmr301-ts-9-2": { yt: "Bj8oT9XJo9g", credit: "BD Study Academy — Risk Weighted Asset (RWA) || Calculation of RWA || Capital Adequacy Ratio (CAR)" },
+    "fmr301-ts-9-3": { yt: "145O51BzbZo", credit: "finRGB — Fundamental Review of Trading Book (FRTB): Quick Recap (FRM Part 2, Book 1, Market Risk)" },
+    "fmr301-ts-10-1": { yt: "CdntYuPbCy0", credit: "Eye on Tech — What is the Three Lines Model (Risk Management)?" },
+    "fmr301-ts-10-3": { yt: "JP-DYLzVh4Y", credit: "AnalyticsU — Model Risk Management | Model Validation | Model Monitoring|CCAR" },
+    "fmr301-2-1-three-statement-sensitivity": { yt: "eMuSbHkFIRU", credit: "Corporate Finance Institute — Sensitivity Analysis for Financial Modeling" },
+    "fmr301-3-1-cashflow-project-risk": { yt: "XTBfH1MbxPE", credit: "BusinessFinance — Financial Modelling - Discounted Cash Flow (DCF)" },
+    "fmr301-4-1-var-volatility": { yt: "qzOWm7PurHE", credit: "Bionic Turtle — Three approaches to value at risk (VaR) and volatility (FRM T4-1)" },
+    "fmr301-5-1-portfolio-risk-return": { yt: "6iPEyhj6QNs", credit: "Aswath Damodaran — Session 5: Risk & Return Models & The Marginal Investor" },
+    "fmr301-6-1-scenario-stress-testing": { yt: "IwEGNY7AvbM", credit: "British Bankers' Association — Stress Testing and Scenario Analysis" },
+    "fmr301-7-1-credit-risk-valuation": { yt: "-tFdnVQJkQY", credit: "Candidly Laura — Credit Risk Modeling Deep Dive: Modelling Concepts and Techniques" },
+  },
+};

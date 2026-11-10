@@ -149,20 +149,65 @@ export async function ngheMotCau(
  *
  *  1. `echoCancellation` của trình duyệt — lớp chính, và nó làm tốt khi
  *     người dùng đeo tai nghe.
- *  2. NGƯỠNG CAO HƠN HẲN ngưỡng nghe thường (0,05 so với 0,012) và phải
- *     GIỮ LIÊN TỤC 250ms. Loa ngoài mở to vẫn rò qua khử vọng âm, nhưng
- *     phần rò đó nhỏ và ngắt quãng; giọng người nói vào micro thì to và
- *     liên tục.
+ *  2. Ngưỡng THÍCH NGHI theo nền vọng của chính lúc đang phát (xem `taoBoNhanChen` ngay dưới — thay ngưỡng cố định
+ *     0,05/250ms cũ, thứ làm máy tự cắt lời sau một từ).
  *
  * Vẫn có thể ngắt nhầm với loa ngoài mở rất to — nên bên gọi phải cho người
  * dùng TẮT được tính năng này. Một trợ lý tự ngắt lời mình liên tục còn khó
  * dùng hơn một trợ lý không ngắt lời được.
  */
 
-/** Phải to hơn hẳn ngưỡng nghe thường — xem chú thích trên. */
-const NGUONG_CAT_LOI = 0.05;
-/** Và phải giữ liên tục ngần này, để một tiếng ho hay tiếng gõ bàn không kích. */
-const GIU_DE_CAT_MS = 250;
+/*
+ * 10/11/2026 — bản cũ (RMS thô ⩾ 0,05 giữ 250ms) tự cắt lời chính mình: micro được mở NGAY lúc bắt đầu phát, và ~0,3 s
+ * đầu khử vọng/lọc ồn chưa hội tụ nên tiếng loa lọt vào to (đo bằng micro giả: 0,045 ⇒ 0,015 sau khi hội tụ). Cùng lỗi
+ * với màn gọi của web (/chat, VoiceCallOverlay — người dùng báo "chỉ nói một chữ rồi im"). Nay quyết định nằm trong
+ * `taoBoNhanChen` (hàm thuần, có test): bỏ đợt vọt đầu, đo NỀN vọng của chính lúc đang phát, chỉ cắt khi tiếng vượt hẳn
+ * nền đó đủ lâu — với bộ tích luỹ RÒ vì giọng thật có quãng nghỉ giữa âm tiết.
+ */
+export const NHAN_CHEN = {
+  /** Bỏ qua: micro vừa mở, khử vọng chưa hội tụ. */
+  boQuaMs: 300,
+  /** Từ boQuaMs tới đây: đo nền vọng (trung bình). */
+  doNenMs: 900,
+  nguongToiThieu: 0.06,
+  heSoNen: 2.5,
+  /** Tổng thời gian (có rò) phải vượt ngưỡng trước khi coi là chen lời. */
+  duMs: 350,
+  /** Trần của nền: người dùng nói NGAY khi máy vừa cất tiếng thì giọng họ lọt vào khoảng đo nền — không chặn trần thì
+   *  ngưỡng vọt lên và không bao giờ cắt được. 0,05 ⇒ ngưỡng tối đa ~0,145, vẫn trên tiếng loa đã khử vọng. */
+  nenToiDa: 0.05,
+} as const;
+
+/**
+ * Bộ nhận "người dùng nói chen" — THUẦN, không đụng micro: đưa vào từng mẫu RMS kèm thời điểm (ms), trả `true` ở mẫu
+ * đầu tiên đủ điều kiện. Mức tiếng được làm mượt (lên nhanh, xuống chậm) như vòng sáng của màn gọi.
+ */
+export function taoBoNhanChen(batDau: number, cfg = NHAN_CHEN): (rms: number, luc: number) => boolean {
+  let muot = 0;
+  let tong = 0;
+  let so = 0;
+  let nen = 0;
+  let tich = 0;
+  let truoc = batDau;
+  return (rms, luc) => {
+    // Làm mượt GẦN ĐỐI XỨNG (khác vòng sáng "lên nhanh, xuống chậm"): xuống chậm thì một tiếng ho 150ms cũng kéo dài
+    // đủ 350ms trên ngưỡng.
+    muot = rms > muot ? muot + (rms - muot) * 0.5 : muot + (rms - muot) * 0.35;
+    const tuLuc = luc - batDau;
+    const dt = Math.min(100, Math.max(0, luc - truoc));
+    truoc = luc;
+    if (tuLuc < cfg.boQuaMs) return false;
+    if (tuLuc < cfg.doNenMs) { tong += muot; so += 1; nen = Math.min(cfg.nenToiDa, tong / so); return false; }
+    const nguong = Math.max(cfg.nguongToiThieu, nen * cfg.heSoNen + 0.02);
+    if (muot > nguong) {
+      tich += dt;
+      return tich >= cfg.duMs;
+    }
+    tich = Math.max(0, tich - dt / 2);
+    nen = Math.min(cfg.nenToiDa, nen * 0.97 + muot * 0.03);   // nền chỉ trôi theo mẫu DƯỚI ngưỡng — giọng người chen vào không bị nuốt vào nền
+    return false;
+  };
+}
 
 export interface BoCanh {
   thoi: () => void;
@@ -197,8 +242,8 @@ export async function canhNguoiNoiChen(
   const dem = new Float32Array(phanTich.fftSize);
 
   let khung = 0;
-  let toTu = 0;
   let xong = false;
+  const nhanChen = taoBoNhanChen(performance.now());
 
   const thoi = (): void => {
     if (xong) return;
@@ -217,12 +262,7 @@ export async function canhNguoiNoiChen(
     const rms = Math.sqrt(tong / dem.length);
     doBienDo?.(rms);
 
-    if (rms > NGUONG_CAT_LOI) {
-      if (!toTu) toTu = Date.now();
-      else if (Date.now() - toTu >= GIU_DE_CAT_MS) { thoi(); khiNoi(); return; }
-    } else {
-      toTu = 0;
-    }
+    if (nhanChen(rms, performance.now())) { thoi(); khiNoi(); return; }
     khung = requestAnimationFrame(vong);
   };
   khung = requestAnimationFrame(vong);

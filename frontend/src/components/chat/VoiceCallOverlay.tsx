@@ -277,7 +277,9 @@ export default function VoiceCallOverlay({
     const tuLuc = bay - noiTu.current;
     const nen = nenVong.current;
     if (tuLuc < BO_QUA_MS) return;
-    if (tuLuc < DO_NEN_MS) { nen.tong += mucGiong; nen.so += 1; nen.gt = nen.tong / nen.so; tichLuy.current.luc = bay; return; }
+    // Trần nền 0,05: người dùng nói NGAY khi máy vừa cất tiếng thì giọng họ lọt vào khoảng đo nền — không chặn trần thì
+    // ngưỡng vọt lên và không cắt được (cùng luật với app desktop, useGiongSong.ts › NHAN_CHEN.nenToiDa).
+    if (tuLuc < DO_NEN_MS) { nen.tong += mucGiong; nen.so += 1; nen.gt = Math.min(0.05, nen.tong / nen.so); tichLuy.current.luc = bay; return; }
     const dt = Math.min(100, bay - tichLuy.current.luc);
     tichLuy.current.luc = bay;
     const nguong = Math.max(NGUONG_TOI_THIEU, nen.gt * HE_SO_NEN + 0.02);
@@ -289,7 +291,7 @@ export default function VoiceCallOverlay({
       }
     } else {
       tichLuy.current.ms = Math.max(0, tichLuy.current.ms - dt / 2);
-      nen.gt = nen.gt * 0.97 + mucGiong * 0.03;
+      nen.gt = Math.min(0.05, nen.gt * 0.97 + mucGiong * 0.03);
     }
   }, [mucGiong, phase, speaking, chenBangGiong, stopSpeak]);
 

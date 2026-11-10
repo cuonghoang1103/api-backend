@@ -1,15 +1,10 @@
 /**
- * Curated YouTube track for ITE302c — IT and Data Ethics.
- * Every id verified live+embeddable via YouTube oEmbed.
+ * YouTube track cho ITE302c — Ethics in IT. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/it-and-data-ethics.mjs
- *
- * Pure-admin lessons (0.2 grading, 0.3 CLOs, 0.4 materials, PT.1 review) and the
- * soft-skill 4.1 stakeholder/crisis lesson are intentionally absent — no English
- * lecture matched them closely enough to include.
  */
 export default {
-  courseSlug: 'it-and-data-ethics',
-  defaultVideoTrack: 'YT',
+  courseSlug: "it-and-data-ethics",
+  defaultVideoTrack: "YT",
   lessons: {
     "ite302c-gioi-thieu": { yt: "UISZx6K9enQ", credit: "Markkula Center for Applied Ethics — What is Technology Ethics?" },
     "ite302c-1-1-bon-khung": { yt: "FRd8MmmkXs0", credit: "Christopher Kalodikis — Different Ethical Theories & Approaches" },
@@ -22,5 +17,8 @@ export default {
     "ite302c-5-2-quy-dinh-quan-tri-ai": { yt: "1mo3yRvvH_g", credit: "TÜV SÜD — AI Governance Explained: EU AI Act, ISO/IEC 42001, and What Businesses Need to Know" },
     "ite302c-6-1-ai-hien-dai": { yt: "WSStTnoSb_c", credit: "DW News — Deepfakes flooding your feed: Why AI videos are dangerous — and how to spot them | DW News" },
     "ite302c-7-1-case-studies": { yt: "VDR8qGmyEQg", credit: "The Verge — Facebook's Cambridge Analytica data scandal, explained" },
+    "ite302c-flm-b004": { yt: "BAswj8evFZk", credit: "TED — How Ethics Can Help You Make Better Decisions | Michael Schur | TED" },
+    "ite302c-flm-b007": { yt: "odrD0OLPeiY", credit: "IBM Technology — Trust, transparency, and governance in the age of generative AI" },
+    "ite302c-flm-b011": { yt: "sDJFHloFV1s", credit: "UVA CS 3240 — Software Engineering Code of Ethics" },
   },
 };

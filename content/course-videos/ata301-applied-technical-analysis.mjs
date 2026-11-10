@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho ATA301 — Applied Technical Analysis. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ata301-applied-technical-analysis.mjs
+ */
+export default {
+  courseSlug: "ata301-applied-technical-analysis",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "ata301-ts-1-1": { yt: "ZN6P9ErUcOg", credit: "Benjamin — The Truth About Technical Analysis" },
+    "ata301-ts-1-2": { yt: "YD-7lWtaKlc", credit: "Financial Wisdom — DOW THEORY - What is it & how can it be applied to the stock market?" },
+    "ata301-ts-1-3": { yt: "F-rNvoTT13I", credit: "Liu Peng — Quantitative trading strategies lab 1 - working with log returns" },
+    "ata301-ts-2-1": { yt: "Kl4-VJ2K8Ik", credit: "Udacity — How orders affect the order book" },
+    "ata301-ts-3-1": { yt: "o-tehUxUBxw", credit: "ClayTrader — Technical Chart Analysis Basics: Timeframes" },
+    "ata301-ts-3-2": { yt: "bOCHwWpLWhE", credit: "ChartTactix — Stop Trading Candlestick Patterns Until You Understand This! | Candle Mechanics" },
+    "ata301-ts-4-2": { yt: "jN4R2jeCRsg", credit: "The Secret Mindset — Trading Trendlines & Channels In Forex & Stock Market (Price Action Strategies)" },
+    "ata301-ts-4-3": { yt: "tQMT0RLO3_8", credit: "Trade Academy — 03 Reversal Patterns - Head and Shoulder" },
+    "ata301-ts-4-4": { yt: "A7d-RArgSAo", credit: "UKspreadbetting — Technical Analysis Course - Module 4: Reversal and Continuation Patterns" },
+    "ata301-ts-5-1": { yt: "DEOTQirnDKM", credit: "Quantium Research — Moving Averages (SMA, EMA, WMA, VWMA)" },
+    "ata301-ts-5-2": { yt: "Q-37hEkhzrM", credit: "Trading Tips — Episode 61 Black Cross/Golden Cross: Long-Term Moving Average Crossovers That Make Big Predictions" },
+    "ata301-ts-5-3": { yt: "HZtJCCRvgJo", credit: "Mind Math Money — MACD Indicator Explained Simply (MACD Line, Signal Line, Histogram, Crossover, Zero Line)" },
+    "ata301-ts-5-4": { yt: "Ex0Dq44BmyE", credit: "TradeShark — TradeShark Technical Indicators - Bollinger Bands, Average True Range, Aroon Oscillator" },
+    "ata301-ts-6-2": { yt: "ypXFSA4FlJ4", credit: "Trading 212 — What is Slow Stochastic Oscillator" },
+    "ata301-ts-7-2": { yt: "Thi9RW-VkKA", credit: "Darwinex — Accumulation / Distribution Versus OBV | Which Indicator is Best?" },
+    "ata301-ts-7-3": { yt: "bAT6F7x9K8M", credit: "The Secret Mindset — RSI vs MFI Trading Strategies (How to Trade with Money Flow Index)" },
+    "ata301-ts-8-1": { yt: "dIIyevqaJoM", credit: "The Chartist — The Chartist - Introduction to Elliott Wave Theory" },
+    "ata301-ts-8-2": { yt: "kazAkzdKsTY", credit: "Disciplined Trader — How To Use Fibonacci Retracements & Extensions" },
+    "ata301-ts-9-2": { yt: "2SL5g1hZ6iI", credit: "Quantified Strategies — Survivorship Bias In Trading (How To Avoid It)" },
+    "ata301-ts-9-3": { yt: "WBZ_Vv-iMv4", credit: "Darwinex — 12.1) What is 'Walk Forward Analysis' and how does it improve Trading System Optimizations" },
+    "ata301-ts-10-1": { yt: "DWVeW8tnAqk", credit: "The Chartist — Stock Trading: Managing Risk Using Fixed Fractional Position Sizing" },
+    "ata301-ts-10-3": { yt: "-9JM9suCIHs", credit: "Mutual Information — The Kelly Criterion" },
+    "ata301-ts-11-1": { yt: "vo8q5AqIKlA", credit: "Fractal Manhattan — Why Random Walks and the Efficient Market Hypothesis Fail" },
+    "ata301-ts-11-2": { yt: "9ScOr10BgEE", credit: "Aswath Damodaran — Session 11 (of 42): Technical Analysis" },
+    "ata301-ts-11-3": { yt: "LsF2dFQ42AA", credit: "Keith McGuinness — Illustrating permutation tests, using a t-test" },
+    "ata301-1-1-dow-theory": { yt: "R2Ziy8zwfOI", credit: "UKspreadbetting — Technical Analysis Course - Module 1: Technical Analysis and the Dow Theory" },
+    "ata301-2-1-chart-patterns": { yt: "WbMnfiknBoc", credit: "The Moving Average — The BEST Guide to CHART PATTERNS Price Action" },
+    "ata301-3-1-trend-support-resistance": { yt: "Y-3ZwXPvHws", credit: "Pro Trading School — Your Support And Resistance & Trendlines Are Wrong (Here's What Works Instead)" },
+    "ata301-4-1-trend-indicators": { yt: "W78Xg_pnJ1A", credit: "Financial Wisdom — MACD INDICATOR EXPLAINED (Trade with the trend)" },
+    "ata301-5-1-oscillators": { yt: "DCMtndTQhvc", credit: "CMC Markets plc — How to use RSI and Stochastic Oscillators with Michael Hewson" },
+    "ata301-6-1-volume": { yt: "wfySsU4JO3g", credit: "Trading 212 — Volume Indicator Trading — Part 1" },
+    "ata301-7-1-elliott-fibonacci": { yt: "r8xOsf8vhU8", credit: "Elliott Wave Forecast — Elliott Wave Structure and Fibonacci Ratio Seminar | Elliott Wave Forecast | Elliott Wave Theory" },
+    "ata301-8-1-trading-system-risk": { yt: "jF_bvwQQBe8", credit: "Stick Trader — Trading Psychology Starts With Risk Management" },
+  },
+};

@@ -29,8 +29,8 @@
  * 1. KHÔNG căn giữa cả trang. Lề trái là trục — đó là thứ tạo ra nhịp đọc.
  * 2. KHÔNG gradient trên chữ, KHÔNG glow theo màu nhấn, KHÔNG blob mờ.
  * 3. Hover chỉ đổi ĐƯỜNG VIỀN và MÀU CHỮ. Không `scale`, không nhấc lên.
- * 4. Mọi con số phải đến từ `useLandingStats()`. Không đếm được thì ẨN, không
- *    bịa, không thay bằng 0.
+ * 4. Không bịa con số. (Khối số liệu đếm từ CSDL đã gỡ 10/11/2026 — thay bằng
+ *    làng agent `agentWorld/`.)
  * 5. Màu lấy từ TOKEN, không gán mã hex thẳng vào lớp — xem luật mới ngay dưới.
  *
  * ─── LỚP MÀU RIÊNG (07/08/2026) ──────────────────────────────────────────────
@@ -57,7 +57,6 @@
 import Link from 'next/link';
 import PlaygroundGate from './PlaygroundGate';
 import DeepDives from './DeepDives';
-import { useLandingStats, fmt } from './useLandingStats';
 export { default } from './LandingExperience';
 
 /**
@@ -122,19 +121,6 @@ const RAILS: Rail[] = [
 ];
 
 export function LegacyRiveLanding() {
-  const stats = useLandingStats();
-
-  // Chỉ giữ ô nào ĐẾM ĐƯỢC. `null` là không đếm được ⇒ biến mất khỏi hàng,
-  // không hiện "0", không hiện dấu gạch.
-  const counts = [
-    { n: stats?.exercises, label: 'graded exercises' },
-    { n: stats?.modules, label: 'modules' },
-    { n: stats?.subjects, label: 'subjects & courses' },
-    { n: stats?.examQuestions, label: 'exam questions' },
-    { n: stats?.vocabWords, label: 'vocabulary entries' },
-    { n: stats?.hanziChars, label: 'kanji & hanzi' },
-  ].filter((c) => typeof c.n === 'number' && c.n > 0);
-
   return (
     // `isolate` bọc kín ngữ cảnh xếp lớp: hai lớp chất liệu bên dưới dùng
     // `position: fixed` + `z-index`, `isolate` bảo đảm chúng KHÔNG bao giờ leo
@@ -186,32 +172,6 @@ export function LegacyRiveLanding() {
             </Link>
           </div>
 
-          {/* Số liệu ĐẾM THẬT. Trước đây viết thành một dòng chạy ngang, số và
-              nhãn cùng cỡ nên không đọc ra được cái nào là số. Nay xếp thành
-              hàng ô kiểu trang bản quyền sách: nhãn mono nhỏ ở trên, số lớn
-              tabular ở dưới — mắt bắt số trước, đọc nhãn sau.
-              KHÔNG kẻ ô, KHÔNG đổ bóng: đây vẫn là chú thích, không phải thẻ
-              thống kê phát sáng (xem danh sách dấu hiệu ở đầu file).
-              Chưa tải xong thì cả khối không hiện — không bịa, không hiện 0. */}
-          {counts.length > 0 && (
-            <dl className="mt-14 grid grid-cols-2 gap-x-8 gap-y-7 border-t border-[var(--border-color)] pt-8 sm:grid-cols-3 lg:grid-cols-6">
-              {counts.map((c) => (
-                <div key={c.label} className="min-w-0">
-                  {/* `min-h` bằng đúng HAI dòng nhãn. Nhãn dài ("subjects &
-                      courses", "vocabulary entries") xuống dòng còn nhãn ngắn
-                      thì không, nên nếu để cao tự nhiên thì các CON SỐ tụt lệch
-                      nhau — hàng thống kê mất đường chân chung và trông như xếp
-                      ẩu. Ghim chiều cao nhãn thì số luôn thẳng hàng. */}
-                  <dt className="min-h-[1.6rem] font-mono text-[10px] uppercase leading-tight tracking-[0.16em] text-[var(--text-muted)]">
-                    {c.label}
-                  </dt>
-                  <dd className="mt-1.5 font-heading text-[1.6rem] font-bold leading-none tabular-nums tracking-tight">
-                    {fmt(c.n!)}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          )}
         </header>
 
         {/* ── Sân chơi 3D — mục nổi bật ───────────────────────────────────

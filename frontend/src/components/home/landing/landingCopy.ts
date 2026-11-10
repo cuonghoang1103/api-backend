@@ -176,17 +176,6 @@ export const LANDING_COPY = {
       proofBody: 'This is a static preview. The 3D engine and its assets only load after you choose to enter.',
       proofCta: 'Explore in 3D',
     },
-    stats: {
-      exercises: 'graded exercises',
-      examQuestions: 'exam questions',
-      subjects: 'subjects & courses',
-      roadmapNodes: 'roadmap steps',
-      vocabWords: 'vocabulary entries',
-      hanziChars: 'hanzi & kanji taught',
-      // Ghi rõ số ở trên đến TỪ ĐÂU. Đây là điểm khác biệt thật của site so
-      // với những trang gõ cứng "8k+ câu hỏi": đếm được thì mới hiện.
-      countedAt: (when: string) => `Counted straight from the database · ${when}`,
-    },
     deepDives: {
       title: 'Long reads worth finishing',
       body: 'One topic at a time, explained far enough that you can leave with something working.',
@@ -248,15 +237,6 @@ export const LANDING_COPY = {
       proofTitle: 'Lái xe vào CuongThai',
       proofBody: 'Đây chỉ là ảnh xem trước. Engine 3D và tài nguyên chỉ tải sau khi bạn chủ động bước vào.',
       proofCta: 'Khám phá 3D',
-    },
-    stats: {
-      exercises: 'bài tập có chấm điểm',
-      examQuestions: 'câu hỏi luyện thi',
-      subjects: 'môn học & lộ trình',
-      roadmapNodes: 'bước trong lộ trình',
-      vocabWords: 'từ vựng ngoại ngữ',
-      hanziChars: 'chữ Hán & Kanji',
-      countedAt: (when: string) => `Đếm thẳng từ cơ sở dữ liệu · ${when}`,
     },
     deepDives: {
       title: 'Bài dài, đọc cho đáng',

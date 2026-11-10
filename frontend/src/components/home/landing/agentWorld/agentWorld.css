@@ -1,0 +1,870 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LÀNG AGENT — trang chủ (10/11/2026)
+
+   Màu: toàn bộ là biến `--aw-*` khai ở `.aw-section` (sáng = "giờ lam" chạng vạng, tối = đêm xanh mực), không
+   gán hex trong component cảnh vật — đúng luật màu của `.landing-root`. Riêng nhân vật giữ màu của mình ở cả
+   hai chế độ (như một con thú bông, không đổi màu theo đèn phòng).
+
+   Chuyển động: CHỈ transform/opacity. Ra khỏi màn hình ⇒ `[data-paused]` dừng hết. Giảm chuyển động ⇒ tắt hết.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.aw-section {
+  /* ── SÁNG: chạng vạng tím–đào ── */
+  --aw-sky: linear-gradient(
+    180deg,
+    transparent 0%,
+    oklch(91% 0.03 290 / 0.75) 16%,
+    oklch(85% 0.055 292) 46%,
+    oklch(86% 0.065 330) 76%,
+    oklch(90% 0.07 60) 100%
+  );
+  --aw-star-op: 0.75;
+  --aw-star: oklch(99.5% 0.01 90);
+  --aw-star-rgb: 255, 253, 246;
+  --aw-hill-far: oklch(75% 0.05 295);
+  --aw-hill-mid: oklch(65% 0.055 290);
+  --aw-grass: oklch(57% 0.09 155);
+  --aw-dirt: oklch(45% 0.05 40);
+  --aw-dirt-d: oklch(39% 0.05 40);
+  --aw-fol-l: oklch(53% 0.08 165);
+  --aw-fol: oklch(44% 0.07 172);
+  --aw-fol-d: oklch(37% 0.06 188);
+  --aw-trunk: oklch(38% 0.05 45);
+  --aw-roof: oklch(49% 0.12 25);
+  --aw-roof-d: oklch(39% 0.1 25);
+  --aw-wall: oklch(56% 0.07 55);
+  --aw-wall-d: oklch(47% 0.06 50);
+  --aw-frame: oklch(36% 0.05 45);
+  --aw-win: oklch(89% 0.14 85);
+  --aw-door: oklch(35% 0.05 40);
+  --aw-stone: oklch(60% 0.02 285);
+  --aw-sign: oklch(58% 0.08 60);
+  --aw-sign-k: oklch(40% 0.06 50);
+  --aw-post: oklch(36% 0.03 285);
+  --aw-lamp: oklch(93% 0.12 90);
+  --aw-moon: oklch(98% 0.025 95);
+  --aw-moon-k: oklch(90% 0.035 95);
+  --aw-moon-n: oklch(86% 0.045 90);
+  --aw-bal-a: oklch(60% 0.19 300);
+  --aw-bal-b: oklch(83% 0.15 80);
+  --aw-bal-h: oklch(80% 0.11 300);
+  --aw-rope-c: oklch(38% 0.03 300 / 0.55);
+  --aw-basket: oklch(50% 0.08 55);
+  --aw-log: oklch(40% 0.06 45);
+  --aw-fire-a: oklch(64% 0.2 35);
+  --aw-fire-b: oklch(78% 0.17 62);
+  --aw-fire-c: oklch(95% 0.11 95);
+  --aw-snow: oklch(98.5% 0.008 260);
+  --aw-glow-warm: oklch(88% 0.13 80 / 0.45);
+  --aw-bulb-halo: 0.18;
+  --aw-label-bg: oklch(99% 0.006 300 / 0.82);
+  --aw-label-ink: oklch(28% 0.03 300);
+  --aw-link-rgb: 112, 80, 230;
+  --aw-link-base: 0.3;
+  --aw-hub-glow: oklch(70% 0.2 300 / 0.35);
+
+  position: relative;
+  margin-top: clamp(-3.5rem, -5vw, -1.5rem);
+}
+
+html.theme-dark .aw-section {
+  /* ── TỐI: đêm xanh mực ── */
+  --aw-sky: linear-gradient(
+    180deg,
+    transparent 0%,
+    oklch(16% 0.04 282 / 0.85) 14%,
+    oklch(18.5% 0.055 276) 44%,
+    oklch(22% 0.07 284) 74%,
+    oklch(27% 0.085 305) 100%
+  );
+  --aw-star-op: 1;
+  --aw-star: oklch(97% 0.03 95);
+  --aw-star-rgb: 255, 247, 222;
+  --aw-hill-far: oklch(25.5% 0.05 282);
+  --aw-hill-mid: oklch(20.5% 0.045 282);
+  --aw-grass: oklch(36% 0.07 165);
+  --aw-dirt: oklch(19.5% 0.03 300);
+  --aw-dirt-d: oklch(16.5% 0.03 300);
+  --aw-fol-l: oklch(41% 0.065 172);
+  --aw-fol: oklch(31% 0.055 185);
+  --aw-fol-d: oklch(23.5% 0.045 205);
+  --aw-trunk: oklch(28% 0.04 40);
+  --aw-roof: oklch(37% 0.095 20);
+  --aw-roof-d: oklch(29% 0.075 20);
+  --aw-wall: oklch(35% 0.05 50);
+  --aw-wall-d: oklch(28% 0.045 45);
+  --aw-frame: oklch(22% 0.03 40);
+  --aw-win: oklch(86% 0.15 80);
+  --aw-door: oklch(22% 0.03 40);
+  --aw-stone: oklch(39% 0.02 285);
+  --aw-sign: oklch(41% 0.06 55);
+  --aw-sign-k: oklch(27% 0.04 50);
+  --aw-post: oklch(27% 0.025 285);
+  --aw-lamp: oklch(94% 0.13 88);
+  --aw-moon: oklch(97% 0.035 95);
+  --aw-moon-k: oklch(87% 0.045 95);
+  --aw-moon-n: oklch(82% 0.055 90);
+  --aw-bal-a: oklch(55% 0.18 300);
+  --aw-bal-b: oklch(78% 0.15 75);
+  --aw-bal-h: oklch(72% 0.12 300);
+  --aw-rope-c: oklch(70% 0.03 300 / 0.35);
+  --aw-basket: oklch(42% 0.07 55);
+  --aw-snow: oklch(95% 0.012 260);
+  --aw-glow-warm: oklch(80% 0.15 75 / 0.38);
+  --aw-bulb-halo: 0.32;
+  --aw-label-bg: oklch(17% 0.035 290 / 0.78);
+  --aw-label-ink: oklch(94% 0.012 295);
+  --aw-link-rgb: 176, 150, 255;
+  --aw-link-base: 0.24;
+  --aw-hub-glow: oklch(68% 0.2 300 / 0.5);
+}
+
+/* ─── Sân khấu ─── */
+.aw-stage {
+  position: relative;
+  height: clamp(560px, 44vw, 640px);
+  overflow: hidden;
+  --aw-px: 4px;
+  --aw-ground: 56px;
+}
+
+.aw-sky,
+.aw-scene {
+  position: absolute;
+  inset: 0;
+}
+.aw-sky { background: var(--aw-sky); }
+.aw-scene { z-index: 1; }
+
+.aw-intro {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  padding: clamp(2.75rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2.5rem) 0;
+  pointer-events: none;
+}
+.aw-intro > * { max-width: 34rem; pointer-events: auto; }
+.aw-eyebrow {
+  color: var(--accent-color);
+  font-family: var(--font-outlier, ui-monospace, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.aw-title {
+  margin-top: 0.9rem;
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.9rem, 3.4vw, 2.85rem);
+  font-weight: 650;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+.aw-lede {
+  margin-top: 1rem;
+  max-width: 52ch;
+  color: var(--text-secondary);
+  font-size: 0.98rem;
+  line-height: 1.62;
+}
+
+/* ─── Màu pixel (lớp `aw-c-<tên>` do <Pix/> sinh ra) ─── */
+.aw-c-fol-l { fill: var(--aw-fol-l); }
+.aw-c-fol { fill: var(--aw-fol); }
+.aw-c-fol-d { fill: var(--aw-fol-d); }
+.aw-c-trunk { fill: var(--aw-trunk); }
+.aw-c-roof { fill: var(--aw-roof); }
+.aw-c-roof-d { fill: var(--aw-roof-d); }
+.aw-c-wall { fill: var(--aw-wall); }
+.aw-c-wall-d { fill: var(--aw-wall-d); }
+.aw-c-frame { fill: var(--aw-frame); }
+.aw-c-win { fill: var(--aw-win); }
+.aw-c-door { fill: var(--aw-door); }
+.aw-c-stone { fill: var(--aw-stone); }
+.aw-c-sign { fill: var(--aw-sign); }
+.aw-c-sign-k { fill: var(--aw-sign-k); }
+.aw-c-post { fill: var(--aw-post); }
+.aw-c-lamp { fill: var(--aw-lamp); }
+.aw-c-moon { fill: var(--aw-moon); }
+.aw-c-moon-k { fill: var(--aw-moon-k); }
+.aw-c-moon-n { fill: var(--aw-moon-n); }
+.aw-c-bal-a { fill: var(--aw-bal-a); }
+.aw-c-bal-b { fill: var(--aw-bal-b); }
+.aw-c-bal-h { fill: var(--aw-bal-h); }
+.aw-c-rope { fill: var(--aw-rope-c); }
+.aw-c-basket { fill: var(--aw-basket); }
+.aw-c-panda-w { fill: #ffffff; }
+.aw-c-panda-k { fill: #1d1828; }
+.aw-c-log { fill: var(--aw-log); }
+.aw-c-fire-a { fill: var(--aw-fire-a); }
+.aw-c-fire-b { fill: var(--aw-fire-b); }
+.aw-c-fire-c { fill: var(--aw-fire-c); }
+.aw-c-hill-far { fill: var(--aw-hill-far); }
+.aw-c-hill-mid { fill: var(--aw-hill-mid); }
+.aw-c-grass { fill: var(--aw-grass); }
+.aw-c-dirt { fill: var(--aw-dirt); }
+.aw-c-dirt-d { fill: var(--aw-dirt-d); }
+/* Tuyết chỉ có khi web đang ở chủ đề mùa đông. */
+.aw-c-snow { fill: var(--aw-snow); display: none; }
+html[data-mua='dong'] .aw-c-snow { display: inline; }
+
+.aw-pix { display: block; overflow: visible; }
+
+/* ─── Bầu trời ─── */
+.aw-sky-layer,
+.aw-land,
+.aw-bunting,
+.aw-links {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.aw-moon { position: absolute; }
+.aw-moon-glow {
+  position: absolute;
+  inset: -70%;
+  border-radius: 50%;
+  background: radial-gradient(circle, oklch(95% 0.06 95 / 0.32), transparent 62%);
+}
+.aw-moon .aw-pix { position: relative; }
+
+.aw-shoot {
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 90px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--aw-star));
+  opacity: 0;
+  transform: rotate(-24deg);
+  animation: aw-shoot 13s linear infinite 4s;
+}
+@keyframes aw-shoot {
+  0%, 92% { opacity: 0; transform: rotate(-24deg) translateX(0); }
+  93% { opacity: 1; }
+  98% { opacity: 0; transform: rotate(-24deg) translateX(-260px); }
+  100% { opacity: 0; transform: rotate(-24deg) translateX(-260px); }
+}
+
+.aw-balloon { position: absolute; left: 0; }
+.aw-balloon-sway { transform-origin: 50% 0; animation: aw-sway 7s ease-in-out infinite; }
+@keyframes aw-sway {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+
+/* ─── Mặt đất + đạo cụ ─── */
+.aw-far-light { animation: aw-flicker 3.4s steps(2, jump-none) infinite; }
+.aw-rope { fill: none; stroke: var(--aw-rope-c); stroke-width: 1.2; }
+.aw-flag { opacity: 0.92; }
+.aw-flag-0 { fill: oklch(64% 0.19 300); }
+.aw-flag-1 { fill: oklch(82% 0.15 80); }
+.aw-flag-2 { fill: oklch(74% 0.13 180); }
+.aw-flag-3 { fill: oklch(70% 0.17 15); }
+.aw-flag-4 { fill: oklch(72% 0.13 250); }
+.aw-flag-5 { fill: oklch(80% 0.13 155); }
+
+.aw-prop {
+  position: absolute;
+  z-index: 3;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.aw-prop-back { z-index: 2; }
+.aw-prop .aw-c-win { animation: aw-flicker 5.2s ease-in-out infinite; }
+@keyframes aw-flicker {
+  0%, 100% { opacity: 1; }
+  47% { opacity: 0.86; }
+  50% { opacity: 0.7; }
+  53% { opacity: 0.95; }
+}
+
+.aw-lamp-glow,
+.aw-fire-glow {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--aw-glow-warm), transparent 66%);
+  pointer-events: none;
+}
+.aw-lamp-glow { left: 50%; top: -28px; width: 110px; height: 110px; transform: translateX(-50%); animation: aw-breathe-glow 4s ease-in-out infinite; }
+.aw-fire-glow { left: 50%; bottom: -14px; width: 170px; height: 130px; transform: translateX(-50%); animation: aw-breathe-glow 1.6s ease-in-out infinite; }
+@keyframes aw-breathe-glow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+.aw-flames { position: absolute; left: 50%; bottom: calc(2 * var(--aw-px)); transform: translateX(-50%); }
+.aw-flame { position: absolute; left: 50%; bottom: 0; transform: translateX(-50%); }
+.aw-flame-a { animation: aw-frame-a 0.5s steps(1) infinite; }
+.aw-flame-b { animation: aw-frame-b 0.5s steps(1) infinite; }
+@keyframes aw-frame-a { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes aw-frame-b { 0% { opacity: 0; } 50% { opacity: 1; } }
+/* ─── Lõi CuongMini + dây ─── */
+.aw-links { z-index: 1; }
+.aw-hub {
+  position: absolute;
+  z-index: 2;
+  width: 46px;
+  height: 46px;
+  margin: -23px 0 0 -23px;
+  pointer-events: none;
+}
+.aw-hub-core { position: absolute; inset: 0; width: 100%; height: 100%; animation: aw-hub-float 5s ease-in-out infinite; }
+.aw-hub-halo {
+  position: absolute;
+  inset: -38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--aw-hub-glow), transparent 64%);
+  animation: aw-breathe-glow 3.2s ease-in-out infinite;
+}
+.aw-hub-ring {
+  position: absolute;
+  inset: -9px;
+  border: 1.5px solid rgba(var(--aw-link-rgb), 0.5);
+  border-radius: 50%;
+  animation: aw-ring 3.2s ease-out infinite;
+}
+@keyframes aw-ring {
+  0% { opacity: 0.8; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+.aw-hub-orbit { position: absolute; inset: -16px; animation: aw-spin 9s linear infinite; }
+.aw-hub-orbit span {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  background: oklch(90% 0.13 85);
+}
+@keyframes aw-spin { to { transform: rotate(360deg); } }
+@keyframes aw-hub-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ─── Cư dân ─── */
+.aw-agent {
+  position: absolute;
+  left: 0;
+  z-index: 5;
+  width: var(--sz);
+  margin-left: calc(var(--sz) / -2);
+}
+.aw-agent[data-lane='1'] { z-index: 4; }
+.aw-agent[data-open] { z-index: 7; }
+
+.aw-hit {
+  position: relative;
+  display: block;
+  width: var(--sz);
+  height: var(--sz);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.aw-hit:focus-visible { outline: none; }
+.aw-hit:focus-visible .aw-name { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+
+.aw-shadow {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -2px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, oklch(10% 0.03 290 / 0.42), transparent);
+}
+.aw-flip,
+.aw-body {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.aw-body { transform-origin: 50% 100%; }
+/* Đứng yên: robot KHÔNG "thở" (mỗi phần tử animate là một lớp compositor — đo 10/11). Chỉ CuongMini và Code
+   Buddy giữ nhịp thở; robot sống động nhờ chớp mắt, ăng-ten, đi lại và chào nhau. */
+.aw-agent-buddy .aw-body { animation: aw-idle 3.2s ease-in-out infinite; }
+.aw-agent[data-walk='1'] .aw-body { animation: aw-walk 0.42s ease-in-out infinite alternate; }
+@keyframes aw-idle {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.02, 0.98); }
+}
+@keyframes aw-walk {
+  0% { transform: translateY(0) rotate(-2deg); }
+  100% { transform: translateY(-3px) rotate(2deg); }
+}
+.aw-sprite { display: block; width: 100%; height: 100%; overflow: visible; }
+
+/* Bộ phận chuyển động trong SVG */
+.aw-eyes { transform-box: fill-box; transform-origin: center; animation: aw-blink 4.6s infinite; }
+.aw-agent-tutor .aw-eyes { animation-duration: 5.4s; animation-delay: -1s; }
+.aw-agent-reviewer .aw-eyes { animation-duration: 3.9s; animation-delay: -2s; }
+.aw-agent-builder .aw-eyes { animation-duration: 5s; animation-delay: -3s; }
+.aw-agent-translator .aw-eyes { animation-duration: 4.2s; animation-delay: -0.5s; }
+@keyframes aw-blink {
+  0%, 93%, 100% { transform: scaleY(1); }
+  95.5% { transform: scaleY(0.12); }
+}
+.aw-cursor { animation: aw-cursor 1.05s steps(1) infinite; }
+@keyframes aw-cursor { 50% { opacity: 0; } }
+.aw-antenna { animation: aw-wiggle 2.6s ease-in-out infinite; }
+.aw-tassel { animation: aw-wiggle 3s ease-in-out infinite; }
+@keyframes aw-wiggle {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(7deg); }
+}
+.aw-glow { animation: aw-breathe-glow 1.8s ease-in-out infinite; }
+.aw-blade { transform-box: fill-box; transform-origin: center; animation: aw-blade 0.16s linear infinite; }
+@keyframes aw-blade {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.15); }
+}
+.aw-wing { animation: aw-flap 0.6s ease-in-out infinite alternate; }
+.aw-wing-r { animation-delay: -0.3s; }
+@keyframes aw-flap {
+  0% { transform: rotate(-8deg); }
+  100% { transform: rotate(10deg); }
+}
+.aw-tread { animation: aw-tread 0.5s linear infinite; animation-play-state: paused; }
+.aw-agent[data-walk='1'] .aw-tread { animation-play-state: running; }
+@keyframes aw-tread { to { stroke-dashoffset: -10; } }
+.aw-card { animation: aw-wiggle 3.6s ease-in-out infinite; }
+
+/* Researcher bay lơ lửng; Translator nhảy kiểu thạch; Builder lăn bánh (không nhún) */
+.aw-agent-researcher .aw-body { animation: aw-float 2.8s ease-in-out infinite alternate; }
+.aw-agent-researcher[data-walk='1'] .aw-body { animation: aw-float 1.2s ease-in-out infinite alternate; }
+@keyframes aw-float {
+  0% { transform: translateY(-18px) rotate(-3deg); }
+  100% { transform: translateY(-26px) rotate(3deg); }
+}
+.aw-agent-researcher .aw-shadow { left: 28%; right: 28%; opacity: 0.6; }
+.aw-agent-translator[data-walk='1'] .aw-body { animation: aw-hop 0.5s ease-in-out infinite; }
+@keyframes aw-hop {
+  0%, 100% { transform: translateY(0) scale(1.08, 0.9); }
+  45% { transform: translateY(-9px) scale(0.94, 1.07); }
+}
+.aw-agent-builder[data-walk='1'] .aw-body { animation: aw-rumble 0.2s linear infinite alternate; }
+@keyframes aw-rumble {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-1px); }
+}
+
+/* CuongMini: nhún như bánh mochi, đèn lồng đung đưa */
+.aw-panda { position: absolute; inset: 0; display: block; }
+.aw-panda-svg { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+.aw-panda .cmp-eyes { transform-box: fill-box; transform-origin: center; animation: aw-blink 4.4s infinite; }
+.aw-agent-panda .aw-body { animation: aw-mochi 2.6s ease-in-out infinite; }
+.aw-agent-panda[data-walk='1'] .aw-body { animation: aw-hop 0.46s ease-in-out infinite; }
+@keyframes aw-mochi {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.04, 0.96); }
+}
+.aw-lantern {
+  position: absolute;
+  right: -14%;
+  bottom: 8%;
+  width: 26%;
+  transform-origin: 50% 0;
+  animation: aw-wiggle 2.4s ease-in-out infinite;
+}
+.aw-lantern-core { animation: aw-breathe-glow 1.4s ease-in-out infinite; }
+.aw-agent-panda .aw-shadow { left: 20%; right: 20%; }
+
+/* Vẫy tay khi được chạm */
+.aw-arm-wave { transform-box: view-box; }
+.aw-waving .aw-arm-wave { animation: aw-wave 1.3s ease-in-out; }
+@keyframes aw-wave {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(-55deg); }
+  35% { transform: rotate(-25deg); }
+  55% { transform: rotate(-60deg); }
+  75% { transform: rotate(-28deg); }
+}
+.aw-waving .aw-body,
+.aw-agent-panda.aw-waving .aw-body { animation: aw-happy 0.65s ease-in-out 2; }
+@keyframes aw-happy {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-8px) scale(0.97, 1.04); }
+}
+.aw-agent-researcher.aw-waving .aw-body { animation: aw-float 0.3s ease-in-out 4 alternate; }
+
+/* Chữ A/あ/文 bay quanh Translator */
+.aw-chip {
+  position: absolute;
+  top: -14px;
+  right: -12px;
+  width: 22px;
+  height: 18px;
+  border-radius: 6px;
+  background: var(--aw-label-bg);
+  color: #0f7a5a;
+  font: 700 11px/18px system-ui, sans-serif;
+  text-align: center;
+  box-shadow: 0 1px 0 oklch(0% 0 0 / 0.12);
+  animation: aw-float-chip 3s ease-in-out infinite;
+}
+html.theme-dark .aw-chip { color: #6ee7b7; }
+.aw-chip i { position: absolute; inset: 0; font-style: normal; opacity: 0; animation: aw-chip 4.5s infinite; }
+.aw-chip i:nth-child(2) { animation-delay: 1.5s; }
+.aw-chip i:nth-child(3) { animation-delay: 3s; }
+@keyframes aw-chip {
+  0%, 33% { opacity: 1; }
+  36%, 100% { opacity: 0; }
+}
+@keyframes aw-float-chip {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Nhãn tên */
+.aw-name {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--aw-label-bg);
+  color: var(--aw-label-ink);
+  font-family: var(--font-outlier, ui-monospace, monospace);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: color 0.2s ease;
+}
+.aw-agent-panda .aw-name { font-weight: 700; }
+.aw-agent[data-lane='1'] .aw-name { top: auto; bottom: calc(100% + 4px); opacity: 0.88; }
+.aw-agent-researcher .aw-name { bottom: calc(100% + 26px); }
+.aw-agent[data-open] .aw-name,
+.aw-hit:hover .aw-name { color: var(--accent); }
+.aw-agent[data-lane='1'][data-open] .aw-name { opacity: 0; }
+
+/* Lời chào giữa hai bạn */
+.aw-emote {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  min-width: 22px;
+  padding: 1px 7px;
+  border-radius: 10px;
+  background: var(--aw-label-bg);
+  color: var(--aw-label-ink);
+  font: 700 12px/18px system-ui, sans-serif;
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, 6px) scale(0.8);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1);
+  pointer-events: none;
+}
+.aw-emote[data-on='1'] { opacity: 1; transform: translate(-50%, 0) scale(1); }
+.aw-agent[data-lane='1'] .aw-emote { bottom: calc(100% + 26px); }
+.aw-agent-researcher .aw-emote { bottom: calc(100% + 48px); }
+
+/* Bong bóng thoại */
+.aw-bubble {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  z-index: 2;
+  width: 240px;
+  padding: 12px 14px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  text-align: left;
+  box-shadow: 0 10px 30px -12px oklch(10% 0.04 290 / 0.45);
+  transform: translateX(calc(-50% + var(--shift, 0px)));
+  animation: aw-bubble-in 0.32s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+.aw-agent[data-lane='1'] .aw-bubble { bottom: calc(100% + 26px); }
+.aw-agent-researcher .aw-bubble { bottom: calc(100% + 46px); }
+.aw-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(50% - var(--shift, 0px));
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-card);
+  transform: rotate(45deg);
+}
+@keyframes aw-bubble-in {
+  0% { opacity: 0; transform: translate(calc(-50% + var(--shift, 0px)), 8px) scale(0.94); }
+  100% { opacity: 1; transform: translate(calc(-50% + var(--shift, 0px)), 0) scale(1); }
+}
+.aw-bubble-place {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+.aw-bubble-dot { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+.aw-bubble-tip { margin-top: 5px; color: var(--text-secondary); font-size: 0.8rem; line-height: 1.5; }
+.aw-bubble-link {
+  display: inline-flex;
+  gap: 5px;
+  margin-top: 8px;
+  color: var(--accent-color);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.aw-bubble-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.aw-bubble-link:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; border-radius: 3px; }
+
+/* ─── Danh sách "ai trực ở đâu" (SSR, không animation) ─── */
+.aw-cast {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+  padding: 1.1rem clamp(1.25rem, 4vw, 2.5rem) 0;
+}
+.aw-cast-label {
+  color: var(--text-muted);
+  font-family: var(--font-outlier, ui-monospace, monospace);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.aw-cast ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2rem;
+  margin-top: 0.4rem;
+}
+.aw-cast a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.aw-cast a:hover { border-color: var(--accent); }
+.aw-cast a:focus-visible { outline: 2px solid var(--accent-color); outline-offset: 2px; }
+.aw-cast-dot { flex: none; width: 7px; height: 7px; border-radius: 2px; background: var(--accent); transform: translateY(-1px); }
+.aw-cast-name { font-weight: 650; }
+.aw-cast-place { color: var(--text-muted); white-space: nowrap; }
+.aw-cast-arrow { color: var(--text-muted); transition: transform 0.2s ease, color 0.2s ease; }
+.aw-cast a:hover .aw-cast-arrow { color: var(--accent-color); transform: translateX(2px); }
+
+/* ─── Màn hẹp ─── */
+@media (max-width: 639px) {
+  .aw-stage { height: 640px; --aw-px: 3px; --aw-ground: 46px; }
+  .aw-intro { padding-top: 2.5rem; }
+  .aw-title { font-size: 1.85rem; }
+  .aw-lede { font-size: 0.92rem; }
+  .aw-name { font-size: 9.5px; padding: 1px 6px; }
+  .aw-bubble { width: 210px; }
+  .aw-cast ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; }
+  .aw-cast a { flex-wrap: wrap; row-gap: 0; font-size: 0.82rem; }
+  .aw-cast-place { flex-basis: 100%; padding-left: calc(7px + 0.5rem); font-size: 0.76rem; }
+  .aw-cast-arrow { display: none; }
+}
+
+/* ─── Dừng khi ra khỏi màn hình; tắt hẳn khi giảm chuyển động ─── */
+.aw-scene[data-paused] *,
+.aw-scene[data-paused] *::before,
+.aw-scene[data-paused] *::after {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .aw-section *,
+  .aw-section *::before,
+  .aw-section *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .aw-shoot { display: none; }
+}
+html.reduce-motion .aw-shoot { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .aw-flame-b { display: none; }
+}
+html.reduce-motion .aw-flame-b { display: none; }
+
+/* ─── Code Buddy (pixel thật, ngồi gõ laptop) — màu riêng của nhân vật, không đổi theo theme ─── */
+.aw-c-bud-a { fill: #ffb547; }
+.aw-c-bud-l { fill: #ffd27a; }
+.aw-c-bud-d { fill: #d9822b; }
+.aw-c-bud-b { fill: #fff1d6; }
+.aw-c-bud-g { fill: #fff6b0; }
+.aw-c-bud-eye { fill: #2a1a10; }
+.aw-c-bud-glint { fill: #ffffff; }
+.aw-c-bud-ink { fill: #7a3d12; }
+.aw-c-bud-p { fill: #ff8fa3; }
+.aw-c-lap-f { fill: #3b3552; }
+.aw-c-lap-s { fill: #141225; }
+.aw-c-lap-m { fill: #8f88ad; }
+.aw-c-lap-M { fill: #5d5778; }
+.aw-buddy { overflow: hidden; }
+.aw-bud-blink { transform-box: fill-box; transform-origin: center; animation: aw-blink 3.8s infinite; }
+.aw-bud-code { animation: aw-bud-scroll 4s steps(8) infinite; }
+@keyframes aw-bud-scroll { to { transform: translateY(-6px); } }
+.aw-bud-hand-a { animation: aw-frame-a 0.26s steps(1) infinite; }
+.aw-bud-hand-b { animation: aw-frame-b 0.26s steps(1) infinite; }
+.aw-bud-shine { animation: aw-breathe-glow 2.2s ease-in-out infinite; }
+.aw-c-bud-g { animation: aw-breathe-glow 1.6s ease-in-out infinite; }
+.aw-agent-buddy .aw-body { animation-duration: 2.4s; }
+.aw-agent-buddy .aw-shadow { left: 6%; right: 30%; }
+.aw-agent-buddy .aw-emote { bottom: 72%; left: 34%; color: #15803d; }
+html.theme-dark .aw-agent-buddy .aw-emote { color: #86efac; }
+.aw-agent-buddy .aw-bubble { bottom: calc(72% + 12px); }
+.aw-agent-buddy.aw-waving .aw-body { animation: aw-happy 0.5s ease-in-out 3; }
+@media (prefers-reduced-motion: reduce) {
+  .aw-bud-hand-b { display: none; }
+}
+html.reduce-motion .aw-bud-hand-b { display: none; }
+.aw-credit { margin-top: 0.9rem; color: var(--text-muted); font-size: 0.72rem; }
+
+/* ─── Bong bóng code của Code Buddy: editor tí hon tự gõ Python ─── */
+.aw-section {
+  --aw-code-bg: oklch(99.2% 0.004 300 / 0.96);
+  --aw-code-bar: oklch(95.5% 0.012 300);
+  --aw-code-ink: #2a2640;
+  --aw-code-dim: #9a94b4;
+  --aw-t-k: #6d28d9;
+  --aw-t-s: #15803d;
+  --aw-t-f: #0369a1;
+  --aw-t-n: #c2410c;
+  --aw-t-c: #8a83a3;
+  --aw-t-d: #be185d;
+  --aw-t-b: #a16207;
+  --aw-t-a: #9f1239;
+  --aw-code-ok: #15803d;
+}
+html.theme-dark .aw-section {
+  --aw-code-bg: oklch(15.5% 0.035 285 / 0.96);
+  --aw-code-bar: oklch(19.5% 0.04 285);
+  --aw-code-ink: #e7e4f5;
+  --aw-code-dim: #6f6990;
+  --aw-t-k: #c4a7ff;
+  --aw-t-s: #86efac;
+  --aw-t-f: #7dd3fc;
+  --aw-t-n: #fdba74;
+  --aw-t-c: #8b85a8;
+  --aw-t-d: #f9a8d4;
+  --aw-t-b: #fcd34d;
+  --aw-t-a: #fda4af;
+  --aw-code-ok: #86efac;
+}
+.aw-code {
+  --aw-lh: 16.5px;
+  position: absolute;
+  bottom: calc(72% + 16px);
+  left: 50%;
+  z-index: 1;
+  width: 340px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--aw-code-bg);
+  box-shadow: 0 14px 34px -16px oklch(8% 0.04 290 / 0.55);
+  font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 11px;
+  text-align: left;
+  pointer-events: none;
+  transform: translateX(var(--shift, 0px));
+  transition: opacity 0.35s ease;
+}
+.aw-code[data-fade='1'] { opacity: 0; }
+.aw-code[data-hidden] { opacity: 0; transition-duration: 0.2s; }
+.aw-code::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(-1 * var(--shift, 0px));
+  width: 11px;
+  height: 11px;
+  margin: -5.5px 0 0 -5.5px;
+  border-right: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--aw-code-bg);
+  transform: rotate(45deg);
+}
+.aw-code-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 12px 12px 0 0;
+  background: var(--aw-code-bar);
+}
+.aw-code-bar i { width: 7px; height: 7px; border-radius: 50%; background: var(--aw-code-dim); opacity: 0.55; }
+.aw-code-bar i:nth-child(1) { background: #ff6b6b; opacity: 0.85; }
+.aw-code-bar i:nth-child(2) { background: #ffc145; opacity: 0.85; }
+.aw-code-bar i:nth-child(3) { background: #3ecf8e; opacity: 0.85; }
+.aw-code-file {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 6px 6px 0 0;
+  background: var(--aw-code-bg);
+  color: var(--aw-code-ink);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+.aw-code-lang { margin-left: auto; color: var(--aw-code-dim); font-size: 10px; }
+.aw-code-body { display: flex; padding: 8px 12px 8px 0; }
+.aw-code-gutter {
+  flex: none;
+  width: 3.2ch;
+  padding-right: 1.2ch;
+  color: var(--aw-code-dim);
+  line-height: var(--aw-lh);
+  text-align: right;
+  user-select: none;
+}
+.aw-code-gutter span { display: block; }
+.aw-code-text { position: relative; flex: 1; min-width: 0; height: calc(var(--lines) * var(--aw-lh)); overflow: hidden; }
+.aw-code-snip { position: absolute; inset: 0; margin: 0; color: var(--aw-code-ink); font: inherit; line-height: var(--aw-lh); white-space: pre; }
+.aw-code-snip[data-on='0'] { visibility: hidden; }
+.aw-code-line { display: block; width: max-content; min-height: var(--aw-lh); }
+.aw-t-k { color: var(--aw-t-k); font-weight: 600; }
+.aw-t-s { color: var(--aw-t-s); }
+.aw-t-f { color: var(--aw-t-f); }
+.aw-t-n { color: var(--aw-t-n); }
+.aw-t-c { color: var(--aw-t-c); font-style: italic; }
+.aw-t-d { color: var(--aw-t-d); }
+.aw-t-b { color: var(--aw-t-b); }
+.aw-t-a { color: var(--aw-t-a); }
+.aw-t-p { color: var(--aw-code-ink); }
+.aw-code-caret { margin-left: -0.15ch; color: #ffb547; font-weight: 700; }
+.aw-code[data-blink='1'] .aw-code-caret { color: transparent; }
+.aw-code-status {
+  height: 22px;
+  margin: 0;
+  padding: 0 12px;
+  border-top: 1px solid var(--border-color);
+  color: var(--aw-code-ok);
+  font-size: 10px;
+  line-height: 22px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.aw-code-status[data-on='1'] { opacity: 1; }
+@media (max-width: 639px) {
+  .aw-code { --aw-lh: 15px; width: min(300px, calc(100vw - 20px)); font-size: 10px; }
+}
+.aw-agent-buddy { z-index: 6; }
+.aw-agent-buddy[data-open] .aw-name,
+.aw-agent-buddy .aw-hit:hover .aw-name { color: #b45309; }
+html.theme-dark .aw-agent-buddy[data-open] .aw-name,
+html.theme-dark .aw-agent-buddy .aw-hit:hover .aw-name { color: #ffb547; }

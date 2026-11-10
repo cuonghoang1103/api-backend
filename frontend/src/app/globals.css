@@ -5562,31 +5562,6 @@ body:has(.landing-root) {
 .landing-playground-note { margin-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-xs); line-height: 1.55; }
 .landing-playground-cta { min-height: 2.75rem; padding-inline: var(--space-sm); }
 
-/* SÁU ô số liệu, xếp 3 cột × 2 hàng. Đường kẻ dọc gắn theo `nth-child(3n+1)`
-   chứ không theo `+ .landing-stat`: cách cũ đúng khi chỉ có một hàng, thêm
-   hàng thứ hai là ô đầu hàng dưới cũng mọc kẻ dọc. Số cột được khai TƯỜNG MINH
-   ở từng breakpoint (3 → 2 → 1) vì `nth-child` không tự biết lưới gãy ở đâu. */
-.landing-stats-block { margin-top: clamp(3.5rem, 7vw, 6rem); }
-
-.landing-stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-block: var(--rule-hair) solid var(--color-rule);
-}
-
-.landing-stat { min-width: 0; padding-block: var(--space-lg); }
-.landing-stat:not(:nth-child(3n + 1)) { border-left: var(--rule-hair) solid var(--color-rule); padding-left: var(--space-lg); }
-.landing-stat:nth-child(n + 4) { border-top: var(--rule-hair) solid var(--color-rule); }
-
-.landing-stats-source {
-  margin-top: var(--space-sm);
-  color: var(--color-muted);
-  font-family: var(--font-outlier);
-  font-size: 0.66rem;
-  letter-spacing: 0.06em;
-}
-.landing-stat dd { font-family: var(--font-display); font-size: clamp(1.85rem, 3vw, 2.65rem); font-weight: 680; letter-spacing: -0.04em; }
-.landing-stat dt { margin-top: var(--space-2xs); color: var(--color-muted); font-family: var(--font-outlier); font-size: 0.675rem; letter-spacing: 0.09em; text-transform: uppercase; }
 
 .landing-deep-dives { padding-block: clamp(4.5rem, 9vw, 8rem); }
 
@@ -5890,11 +5865,6 @@ body:has(.landing-root) {
   .landing-rail[data-reverse='true'] .landing-rail-intro,
   .landing-rail[data-reverse='true'] .landing-directory-list { grid-column: 1; grid-row: auto; }
 
-  .landing-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .landing-stat:not(:nth-child(3n + 1)) { border-left: 0; padding-left: 0; }
-  .landing-stat:nth-child(n + 4) { border-top: 0; }
-  .landing-stat:not(:nth-child(2n + 1)) { border-left: var(--rule-hair) solid var(--color-rule); padding-left: var(--space-lg); }
-  .landing-stat:nth-child(n + 3) { border-top: var(--rule-hair) solid var(--color-rule); }
 }
 
 /* Ở màn hẹp cụm nút bên phải (VI · sáng/tối · Đăng nhập) trườn vào ĐÚNG chỗ
@@ -5928,9 +5898,6 @@ body:has(.landing-root) {
   .landing-hero-title { font-variation-settings: normal; }
   .landing-playground-caption { grid-template-columns: minmax(0, 1fr); }
   .landing-playground-cta { width: 100%; }
-  .landing-stats { grid-template-columns: minmax(0, 1fr); }
-  .landing-stat:not(:nth-child(2n + 1)) { border-left: 0; padding-left: 0; }
-  .landing-stat:nth-child(n + 2) { border-top: var(--rule-hair) solid var(--color-rule); }
   .landing-deep-grid > li,
   .landing-deep-grid > li[data-featured='true'],
   .landing-deep-grid > li:nth-child(2) { grid-column: 1 / -1; }

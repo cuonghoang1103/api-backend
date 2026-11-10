@@ -1,11 +1,10 @@
 /**
- * Curated YouTube track for WDU203c — UI/UX Design.
- * Every id verified live+embeddable via YouTube oEmbed.
+ * YouTube track cho WDU203c — UI/UX Design. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ui-ux-design.mjs
  */
 export default {
-  courseSlug: 'ui-ux-design',
-  defaultVideoTrack: 'YT',
+  courseSlug: "ui-ux-design",
+  defaultVideoTrack: "YT",
   lessons: {
     "wdu203c-gioi-thieu": { yt: "rYH7AErVd7w", credit: "chunbuns — The UX Design Process explained step by step with a mobile app project" },
     "wdu203c-1-1-what-is-ux": { yt: "ziQEqGZB8GE", credit: "CareerFoundry — What Is UX Design? - An Introduction (Full Guide For 2024)" },
@@ -20,5 +19,9 @@ export default {
     "wdu203c-5-1-surveys": { yt: "ockM9XEqHN0", credit: "UX in the Head — UX Research: How to Avoid Survey Mistakes" },
     "wdu203c-5-2-analytics-ab": { yt: "xFdxD8rfWPU", credit: "Kerev Design — A/B Testing - UX/UI Terms Every Designer Needs to Know" },
     "wdu203c-8-1-advanced": { yt: "s8KsEv3KSWM", credit: "Veera Srivastava — World's Easiest WCAG Crash Course for UI/UX Designers in Just 8 Mins!" },
+    "wdu203c-flm-b001": { yt: "2QQQtiFwXjU", credit: "Grow with Google — Intro to UX (User Experience) | Google UX Design Certificate" },
+    "wdu203c-flm-b002": { yt: "fdXI9yznzz8", credit: "TEDx Talks — Psychology Behind UI/UX Design | Harrish Murugesan | TEDxUTA" },
+    "wdu203c-flm-b003": { yt: "3u-EoqRu2k4", credit: "vaexperience — User Behavior: Understanding How Users Think and Make Decisions for UX Designers" },
+    "wdu203c-flm-b006": { yt: "c9Wg6Cb_YlU", credit: "freeCodeCamp.org — UI / UX Design Tutorial – Wireframe, Mockup & Design in Figma" },
   },
 };

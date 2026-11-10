@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho ABA201c — AI and Big Data Analytics for Communications. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/aba201c-ai-and-big-data-analytics-for-communications.mjs
+ */
+export default {
+  courseSlug: "aba201c-ai-and-big-data-analytics-for-communications",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "aba201c-ts-1-3": { yt: "gK-Fj8MkbgA", credit: "Udacity — Python for Data Analysis: Learn Pandas and Data Science Basics" },
+    "aba201c-ts-2-1": { yt: "bAyrObl7TYE", credit: "Simplilearn — Big Data In 5 Minutes | What Is Big Data?| Big Data Analytics | Big Data Tutorial | Simplilearn" },
+    "aba201c-ts-2-3": { yt: "EV3T1RYWC9g", credit: "Maven Analytics — Data-Driven Decision Making - How To Go From Data To Decisions!" },
+    "aba201c-ts-3-1": { yt: "TIFc8aUajrA", credit: "Data Universe — Marketing Campaign Dashboard in Excel | Track KPIs & ROI Like a Pro" },
+    "aba201c-ts-3-2": { yt: "mPiWWnJsVGw", credit: "Elevate Digital — Digital Marketing Metrics & KPIs: The Only Ones You Need to Track" },
+    "aba201c-ts-3-3": { yt: "sxYrzzy3cq8", credit: "TED-Ed — How statistics can be misleading - Mark Liddell" },
+    "aba201c-ts-4-1": { yt: "lXJK6neMRi4", credit: "Sprout Social — What Is Social Listening? (And 5 Questions You Can Answer With it)" },
+    "aba201c-ts-4-2": { yt: "5HQCNAsSO-s", credit: "IBM Technology — What is Sentiment Analysis?" },
+    "aba201c-ts-4-3": { yt: "ytUHvMNnzZk", credit: "MLexplained — Machine Learning Lecture 2: Sentiment Analysis (text classification)" },
+    "aba201c-ts-5-1": { yt: "LTgPMz3mT44", credit: "Polo Club of Data Science @ Georgia Tech — Text Analytics Concepts: TF-IDF, Bag-of-Words Explained with Examples" },
+    "aba201c-ts-6-2": { yt: "4b5d3muPQmA", credit: "StatQuest with Josh Starmer — StatQuest: K-means clustering" },
+    "aba201c-ts-7-1": { yt: "3dhcmeOTZ_Q", credit: "3-Minute Data Science — Linear Regression in 3 Minutes" },
+    "aba201c-ts-7-2": { yt: "yIYKR4sgzI8", credit: "StatQuest with Josh Starmer — StatQuest: Logistic Regression" },
+    "aba201c-ts-7-3": { yt: "2osIZ-dSPGE", credit: "codebasics — Precision, Recall, F1 score, True Positive|Deep Learning Tutorial 19 (Tensorflow2.0, Keras & Python)" },
+    "aba201c-ts-8-1": { yt: "JEAsoUrX6KQ", credit: "Emma Ding — Sample Size Estimation in A/B Tests Explained!" },
+    "aba201c-ts-9-1": { yt: "DNuYa0ODQy4", credit: "Engineering Animated — How LLMs Actually Work — Tokens, Context Windows & Next-Word Prediction" },
+    "aba201c-ts-9-2": { yt: "m9KNriatkZs", credit: "HubSpot Marketing — How to Write a Powerful CREATIVE BRIEF (GUIDE)" },
+    "aba201c-ts-10-2": { yt: "Fmtorg_dmM0", credit: "ritvikmath — Collaborative Filtering : Data Science Concepts" },
+    "aba201c-ts-10-3": { yt: "rb30tsfEpdg", credit: "At A Glance! — Content based Recommendation System | Big Data Analytics | Cosine and Jaccard Similarity | #bigdata" },
+    "aba201c-ts-11-3": { yt: "r5_34YnCmMY", credit: "Harvard Business Review — Telling Stories with Data in 3 Steps (Quick Study)" },
+    "aba201c-ts-12-1": { yt: "EYRdIwhTDWU", credit: "Office of the Australian Information Commissioner — Big data, artificial intelligence, machine learning and data protection" },
+    "aba201c-ts-12-2": { yt: "gV0_raKR2UQ", credit: "CrashCourse — Algorithmic Bias and Fairness: Crash Course AI #18" },
+    "aba201c-1-1-what-is": { yt: "h78258SRS9Y", credit: "Simplilearn — Big Data Analytics Explained | What Is Big Data Analytics? | Big Data Tutorial | Simplilearn" },
+    "aba201c-2-1-data-sources": { yt: "AtXqpveCWQU", credit: "IBM Technology — Big Data Rules For AI: Essential Data Management Principles" },
+    "aba201c-3-1-descriptive": { yt: "MiiANxRHSv4", credit: "Simplilearn — Data Visualization Tutorial For Beginners | Big Data Analytics Tutorial | Simplilearn" },
+    "aba201c-4-1-ml-marketing": { yt: "i1UU1qP-07Y", credit: "Easy Marketing — Machine learning in Digital marketing" },
+    "aba201c-5-1-nlp": { yt: "fLvJ8VdHLA0", credit: "IBM Technology — What is NLP (Natural Language Processing)?" },
+    "aba201c-6-1-generative": { yt: "NRmAXDWJVnU", credit: "Simplilearn — Generative AI Explained In 5 Minutes | What Is GenAI? | Introduction To Generative AI | Simplilearn" },
+    "aba201c-7-1-personalization": { yt: "n3RKsY2H-NE", credit: "Art of the Problem — The Math Behind Recommender Systems" },
+    "aba201c-8-1-ethics": { yt: "VqFqWIqOB1g", credit: "UNESCO — Ethics of AI: Challenges and Governance" },
+  },
+};

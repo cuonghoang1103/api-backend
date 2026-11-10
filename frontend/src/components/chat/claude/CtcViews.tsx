@@ -7,7 +7,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  ArrowLeft, CalendarClock, Check, Code2, Copy, Eraser, ExternalLink, FolderKanban, FolderPlus, Github, Globe,
+  ArrowLeft, Check, Code2, Copy, Eraser, ExternalLink, FolderKanban, FolderPlus, Github, Globe,
   Image as ImageIcon, KanbanSquare, Languages, ListChecks, MessageSquare, Mic, MonitorDown, PenLine, Plug, Plus, Puzzle,
   Search, Sigma, Sparkle, TerminalSquare, Trash2, Workflow, X,
 } from 'lucide-react';
@@ -332,19 +332,6 @@ function ArtifactDialog({ a, onClose, onOpenChat }: { a: Artifact; onClose: () =
           <ChatMarkdown content={'```' + a.lang + '\n' + a.code + '\n```'} />
         </div>
       </div>
-    </div>
-  );
-}
-
-/* ═══ Tác vụ đã lên lịch ═══════════════════════════════════════════════════ */
-export function ScheduledView({ onNew }: { onNew: () => void }) {
-  return (
-    <div className="ctc-page">
-      <div className="ctc-page-head"><h1>Tác vụ đã lên lịch</h1></div>
-      <Trong title="Chưa có tác vụ nào">
-        <p>Sắp tới CuongMini sẽ tự chạy việc theo lịch — ví dụ tóm tắt tin công nghệ mỗi sáng hay nhắc ôn bài trước giờ thi. Tính năng đang được làm.</p>
-        <button type="button" className="ctc-btn" onClick={onNew}><CalendarClock size={15} /> Trò chuyện với CuongMini</button>
-      </Trong>
     </div>
   );
 }

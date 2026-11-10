@@ -161,6 +161,7 @@ model User {
   refundedCourseOrders    CourseOrder[]            @relation("CourseOrderRefunder")
   chatSessions            ChatSession[]
   chatFolders             ChatFolder[]
+  chatTacVu               ChatTacVu[]
   chatFeedback            ChatFeedback[]
   assignmentSubmissions   AssignmentSubmission[]
   aiConfigUpdates         AiConfig[]               @relation("AiConfigUpdater")
@@ -2413,6 +2414,42 @@ model ChatFolder {
   @@unique([userId, ten])
   @@index([userId], name: "idx_chat_folders_user")
   @@map("chat_folders")
+}
+
+/// Tác vụ đã lên lịch của AI Chat (/chat → Tác vụ đã lên lịch, 10/11/2026).
+///
+/// Mỗi lần đến hạn, cron (cron.service.ts → chatTacVu.ts) chạy `loiNhac` như một câu hỏi của chính người dùng
+/// qua đúng đường `aiService.streamChat` (tìm web, kỹ năng, ví tiền chat) và ghi kết quả vào cuộc `sessionId`.
+/// `loiNhac` đi vào tin nhắn NGƯỜI DÙNG, không bao giờ vào system prompt.
+model ChatTacVu {
+  id        String    @id @default(cuid())
+  userId    Int       @map("user_id")
+  ten       String    @db.VarChar(120)
+  /// Mẫu: tom-tat-ngay | theo-doi | y-tuong | tong-ket-tuan | tu-dat
+  mau       String    @db.VarChar(40)
+  chuDe     String?   @map("chu_de") @db.VarChar(200)
+  loiNhac   String    @map("loi_nhac") @db.Text
+  /// 'ngay' | 'tuan'
+  lich      String    @db.VarChar(10)
+  /// Phút trong ngày theo giờ Việt Nam (0–1439).
+  gio       Int
+  /// Lịch tuần: 0 = Chủ nhật … 6 = Thứ bảy.
+  thu       Int?
+  bat       Boolean   @default(true)
+  /// Cuộc trò chuyện nhận kết quả (tạo ở lần chạy đầu).
+  sessionId String?   @map("session_id")
+  lanToi    DateTime  @map("lan_toi")
+  lanCuoi   DateTime? @map("lan_cuoi")
+  loiCuoi   String?   @map("loi_cuoi") @db.VarChar(300)
+  soLan     Int       @default(0) @map("so_lan")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([bat, lanToi])
+  @@index([userId])
+  @@map("chat_tac_vu")
 }
 
 model ChatSession {

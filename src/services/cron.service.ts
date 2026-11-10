@@ -74,6 +74,19 @@ export function startCronJobs(): void {
     }
   }, { timezone: 'UTC' });
 
+  // ─── Tác vụ đã lên lịch của AI Chat — MỖI PHÚT (10/11/2026) ───
+  // Truy vấn có chỉ mục (bat, lan_toi); thường không có gì đến hạn. Chạy tuần tự, tối đa 5/nhịp, và tự bỏ nhịp
+  // nếu nhịp trước chưa xong (chatTacVu.ts › nhipTacVu) ⇒ model chậm không làm các nhịp chồng lên nhau.
+  cron.schedule('* * * * *', async () => {
+    try {
+      const { nhipTacVu } = await import('./chatTacVu.js');
+      const n = await nhipTacVu();
+      if (n) logger.info('cron đã chạy tác vụ chat', { soTacVu: n });
+    } catch (err) {
+      logger.error('cron tác vụ chat lỗi', { error: (err as Error).message });
+    }
+  }, { timezone: 'UTC' });
+
   // ─── Nightly cleanup @ 03:00 Vietnam (20:00 UTC) ───
   cron.schedule('0 20 * * *', async () => {
  logger.info('cron running nightly cleanup job');

@@ -27,6 +27,7 @@ import { prisma } from '../config/database.js';
 import { aiService, DEFAULT_CHAT_MODEL_ID, generateSessionId, type ChatModelMeta } from '../services/ai.service.js';
 import { datTieuDeNeuCan } from '../services/chatTieuDe.js';
 import { docDoKy, docTenKho, layKhoMa } from '../services/chatKhoMa.js';
+import { chayTacVu, kiemDauVao, tinhLanToi, TOI_DA_MOI_NGUOI } from '../services/chatTacVu.js';
 import { optionalAuth, authenticate, requireAdmin, extractToken } from '../middleware/auth.js';
 import { quotaMiddleware } from '../services/quota.service.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -654,6 +655,84 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       );
       res.end();
     }
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
+// TÁC VỤ ĐÃ LÊN LỊCH (10/11/2026) — /chat → Tác vụ đã lên lịch. Xem services/chatTacVu.ts.
+//   GET    /chat/tac-vu              — danh sách của mình
+//   POST   /chat/tac-vu              — tạo (mẫu chạy được + lịch); tối đa TOI_DA_MOI_NGUOI
+//   PATCH  /chat/tac-vu/:id          — bật/tắt, đổi tên/lịch/chủ đề
+//   DELETE /chat/tac-vu/:id
+//   POST   /chat/tac-vu/:id/chay     — chạy ngay (cách nhau ≥ 2 phút)
+// ════════════════════════════════════════════════════════════════
+router.get('/chat/tac-vu', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const ds = await prisma.chatTacVu.findMany({ where: { userId: req.userId }, orderBy: { createdAt: 'desc' } });
+    res.json({ success: true, data: ds });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/chat/tac-vu', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const so = await prisma.chatTacVu.count({ where: { userId: req.userId } });
+    if (so >= TOI_DA_MOI_NGUOI) throw new AppError(`Tối đa ${TOI_DA_MOI_NGUOI} tác vụ mỗi người`, 400, 'TAC_VU_TOI_DA');
+    const v = kiemDauVao(req.body ?? {});
+    const tv = await prisma.chatTacVu.create({ data: { userId: req.userId, ...v, lanToi: tinhLanToi(v.lich, v.gio, v.thu) } });
+    res.status(201).json({ success: true, data: tv });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch('/chat/tac-vu/:id', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const cu = await prisma.chatTacVu.findFirst({ where: { id: req.params.id, userId: req.userId } });
+    if (!cu) throw new AppError('Không tìm thấy tác vụ', 404, 'TAC_VU_404');
+    const b = (req.body ?? {}) as Record<string, unknown>;
+    const chiBat = Object.keys(b).length === 1 && typeof b.bat === 'boolean';
+    if (chiBat) {
+      const tv = await prisma.chatTacVu.update({
+        where: { id: cu.id },
+        // Bật lại ⇒ tính lại lần tới từ BÂY GIỜ (không chạy bù những lần đã lỡ lúc tắt).
+        data: { bat: b.bat as boolean, ...(b.bat ? { lanToi: tinhLanToi(cu.lich as 'ngay' | 'tuan', cu.gio, cu.thu) } : {}) },
+      });
+      res.json({ success: true, data: tv });
+      return;
+    }
+    const v = kiemDauVao({ mau: cu.mau, ten: cu.ten, chuDe: cu.chuDe, loiNhac: cu.mau === 'tu-dat' ? cu.loiNhac : undefined, lich: cu.lich, gio: cu.gio, thu: cu.thu, ...b });
+    const tv = await prisma.chatTacVu.update({
+      where: { id: cu.id },
+      data: { ...v, ...(typeof b.bat === 'boolean' ? { bat: b.bat } : {}), lanToi: tinhLanToi(v.lich, v.gio, v.thu) },
+    });
+    res.json({ success: true, data: tv });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/chat/tac-vu/:id', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { count } = await prisma.chatTacVu.deleteMany({ where: { id: req.params.id, userId: req.userId } });
+    res.json({ success: true, data: { daXoa: count > 0 } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/chat/tac-vu/:id/chay', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const tv = await prisma.chatTacVu.findFirst({ where: { id: req.params.id, userId: req.userId } });
+    if (!tv) throw new AppError('Không tìm thấy tác vụ', 404, 'TAC_VU_404');
+    if (tv.lanCuoi && Date.now() - tv.lanCuoi.getTime() < 120_000) throw new AppError('Vừa chạy xong — thử lại sau 2 phút', 429, 'TAC_VU_VUA_CHAY');
+    const kq = await chayTacVu(tv.id);
+    if (!kq.ok) throw new AppError(kq.loi ?? 'Chạy hỏng', 502, 'TAC_VU_HONG');
+    const moi = await prisma.chatTacVu.findUnique({ where: { id: tv.id } });
+    res.json({ success: true, data: moi });
+  } catch (error) {
+    next(error);
   }
 });
 

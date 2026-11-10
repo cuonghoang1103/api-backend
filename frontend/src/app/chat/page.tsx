@@ -31,12 +31,13 @@ import QuotaIndicator from '@/components/chat/QuotaIndicator';
 import VoiceCallOverlay from '@/components/chat/VoiceCallOverlay';
 import { CtcSidebar, type CtcView, type SessionRow } from '@/components/chat/claude/CtcSidebar';
 import {
-  ArtifactsView, CustomizeView, ProjectView, ProjectsView, RecentsView, ScheduledView, SearchDialog,
+  ArtifactsView, CustomizeView, ProjectView, ProjectsView, RecentsView, SearchDialog,
 } from '@/components/chat/claude/CtcViews';
 import { CuongMiniPanda, CuongMiniWordmark } from '@/components/chat/claude/CuongMiniPanda';
 import { thanTuyChinh, useCtcPrefs } from '@/components/chat/claude/ctcPrefs';
 import { ID_KY_NANG_MAY_CHU, KY_NANG } from '@/components/chat/claude/ctcCatalog';
 import { CodeHome, EffortPicker, RepoPicker, type DoKy, type KhoInfo } from '@/components/chat/claude/CtcCode';
+import { ScheduledView } from '@/components/chat/claude/CtcTacVu';
 import { CtcComposer, type CtcAttach, type CtcComposerHandle } from '@/components/chat/claude/CtcComposer';
 import { CtcAssistantMessage, CtcUserMessage } from '@/components/chat/claude/CtcMessage';
 // Chữ có chân CÓ tiếng Việt cho câu trả lời + wordmark (xem --ctc-serif trong claudeChat.css).
@@ -921,7 +922,7 @@ export default function ChatPage() {
         ) : view === 'artifacts' ? (
           <div className="ctc-scroll"><ArtifactsView messages={messages} sessions={sessions as SessionRow[]} onOpenChat={(id) => void chonPhien(id)} /></div>
         ) : view === 'scheduled' ? (
-          <div className="ctc-scroll"><ScheduledView onNew={() => phienMoi()} /></div>
+          <div className="ctc-scroll"><ScheduledView signedIn={isAuthenticated} onOpenChat={(id) => void chonPhien(id)} /></div>
         ) : view === 'code' ? (
           <CodeHome composer={composer} kho={codeKho} onKho={setCodeKho} signedIn={isAuthenticated} />
         ) : view === 'customize' ? (

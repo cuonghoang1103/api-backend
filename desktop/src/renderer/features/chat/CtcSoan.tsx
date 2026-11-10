@@ -5,8 +5,8 @@
  * Enter gửi · Shift+Enter xuống dòng · nhường Enter cho bộ gõ (IME
  * `isComposing`) — gõ Telex/VNI mà Enter chốt chữ không được gửi nhầm.
  */
-import { useEffect, useLayoutEffect, type RefObject } from 'react';
-import { ArrowUp, AudioLines, Camera, Lock, Paperclip, Plus, Square } from 'lucide-react';
+import { useEffect, useLayoutEffect, type ReactNode, type RefObject } from 'react';
+import { ArrowUp, AudioLines, Camera, Lock, Paperclip, Plus, Sparkle, Square, X } from 'lucide-react';
 import { DaiDinhKem, ODinhKem, type useDinhKem } from './DinhKem';
 import { NutGoiThoai } from './NutGoiThoai';
 import { CtcChonModel, type MaModel } from './CtcChonModel';
@@ -15,7 +15,7 @@ import { useCtcChu } from './CtcChu';
 
 export function CtcSoan({
   oRef, nhap, datNhap, onGui, onDung, dangChay, pro, model, onChonModel, dk,
-  onChupMan, onMoGoi, onNoi, giuaTrang,
+  onChupMan, onMoGoi, onNoi, giuaTrang, duoiTrai, kyNang, dsKyNang = [], onChonKyNang,
 }: {
   oRef: RefObject<HTMLTextAreaElement>;
   nhap: string;
@@ -32,6 +32,12 @@ export function CtcSoan({
   onNoi: (cau: string) => Promise<string>;
   /** Màn trống: ô soạn nằm giữa trang, chữ gợi ý khác. */
   giuaTrang: boolean;
+  /** Bên TRÁI hàng dưới ô soạn (chọn dự án / dòng lưu ý). Model luôn ở bên phải hàng đó (10/11, như /chat web). */
+  duoiTrai?: ReactNode;
+  /** Kỹ năng đang chọn cho câu hỏi (chip trong ô) + kỹ năng chọn được trong menu ＋. */
+  kyNang?: { id: string; ten: string } | null;
+  dsKyNang?: Array<{ id: string; ten: string }>;
+  onChonKyNang?: (id: string | null) => void;
 }) {
   const { c } = useCtcChu();
   const cong = useCtcMo();
@@ -71,9 +77,22 @@ export function CtcSoan({
       khoa: dangChay,
       onChon: onMoGoi,
     },
+    ...(onChonKyNang && dsKyNang.length
+      ? [
+        { loai: 'vach' } as MucCtc,
+        { loai: 'tieuDe', nhan: c('Dùng kỹ năng') } as MucCtc,
+        ...dsKyNang.map((k): MucCtc => ({
+          nhan: k.ten,
+          icon: <Sparkle size={15} aria-hidden />,
+          chon: kyNang?.id === k.id,
+          onChon: () => onChonKyNang(kyNang?.id === k.id ? null : k.id),
+        })),
+      ]
+      : []),
   ];
 
   return (
+    <>
     <div className="ctc-soan" data-chay={dangChay} data-giua={giuaTrang}>
       <DaiDinhKem tep={dk.tep} bo={dk.bo} />
       <textarea
@@ -119,12 +138,17 @@ export function CtcSoan({
           nhan={c('Đính kèm & công cụ')}
         />
 
+        {kyNang && (
+          <span className="ctd-chip-kn">
+            <Sparkle size={13} aria-hidden /> {kyNang.ten}
+            {onChonKyNang && <button type="button" onClick={() => onChonKyNang(null)} aria-label={c('Bỏ kỹ năng')}><X size={12} aria-hidden /></button>}
+          </span>
+        )}
         <span className="ctc-soan-dem" />
 
         <span className="ctc-soan-mic">
           <NutGoiThoai khoa={dangChay} onNoi={onNoi} />
         </span>
-        <CtcChonModel giaTri={model} pro={pro} khoa={dangChay} onChon={onChonModel} huong={giuaTrang ? 'duoi' : 'tren'} />
         {dangChay ? (
           <button
             type="button"
@@ -151,5 +175,10 @@ export function CtcSoan({
         )}
       </div>
     </div>
+    <div className="ctd-duoi-soan" data-giua={giuaTrang}>
+      <div className="ctd-duoi-trai">{duoiTrai}</div>
+      <CtcChonModel giaTri={model} pro={pro} khoa={dangChay} onChon={onChonModel} huong={giuaTrang ? 'duoi' : 'tren'} />
+    </div>
+    </>
   );
 }

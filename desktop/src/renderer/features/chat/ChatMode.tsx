@@ -18,7 +18,8 @@
  * một nút chết. Mở kênh sinh ảnh trong Console của cổng thì mới làm được.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowDown, BookOpen, Menu, Plus, Search } from 'lucide-react';
+import { ArrowDown, BookOpen, Check, ChevronDown, Code2, Coffee, FolderKanban, GraduationCap, Menu, PenLine, Plus, Search, X } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAppState } from '../../app-state';
 import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
 import { catCauDau } from '../odin/hoiOdin';
@@ -34,11 +35,19 @@ import { ChupManHinh } from './ChupManHinh';
 /* Kiểu `PhienChat`/`ThuMuc` sống ở `ThanhBenChat` chứ không ở đây: thanh bên
    là chỗ vẽ chúng ra, và hai bản khai trùng nhau thì thêm một trường ở máy chủ
    là phải nhớ sửa hai chỗ — đúng kiểu trôi dạt đã làm vỡ seed hồi 08/08. */
-import { ThanhBenChat, type LocThuMuc, type PhienChat, type ThuMuc } from './ThanhBenChat';
+import { ThanhBenChat, type PhienChat, type ThuMuc } from './ThanhBenChat';
+import {
+  HopTim, TrangArtifacts, TrangDuAn, TrangLichSu, TrangMotDuAn, TrangTacVu, TrangTuyChinh, moWeb, type CtdView,
+} from './CtdTrang';
+import { thanTuyChinh, useTuyChinh } from './ctdTuyChinh';
+import { KY_NANG } from './ctdDanhMuc';
 import { useDich } from '../../i18n';
 import { DaiNgoaiTuyen, NhanMay, useGiaoDienNgoaiTuyen } from './NgoaiTuyen';
 /* Giao diện kiểu Claude (09/11/2026) — mọi style mới nằm trong `chatClaude.css`,
    gói dưới `.ctc-root`; `styles.css` chung (AgentMode dùng) không bị đụng. */
+// Chữ có chân CÓ tiếng Việt cho câu trả lời + wordmark (xem --ctc-serif, 10/11/2026).
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
 import './chatClaude.css';
 import { CtcSoan } from './CtcSoan';
 import { CtcDau } from './CtcDau';
@@ -133,10 +142,10 @@ function luuModel(id: string): void {
   try { localStorage.setItem(KHOA_MODEL, id); } catch { /* bộ nhớ bị chặn — chỉ mất phần nhớ */ }
 }
 
-export function ChatMode({ pro }: { pro: boolean }) {
+export function ChatMode({ pro, onLapTrinh }: { pro: boolean; onLapTrinh?: () => void }) {
   const { dich, dichP } = useDich();
   const { c, cP } = useCtcChu();
-  const { api } = useSession();
+  const { api, user } = useSession();
   const { settings, layThamSo, lanDieuHuong, online } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
   const [nhap, datNhap] = useState('');
@@ -185,9 +194,18 @@ export function ChatMode({ pro }: { pro: boolean }) {
   const [phienId, datPhienId] = useState<string | null>(null);
   const [dsPhien, datDsPhien] = useState<PhienChat[]>([]);
   const [dsThuMuc, datDsThuMuc] = useState<ThuMuc[]>([]);
-  const [loc, datLoc] = useState<LocThuMuc>(null);
-  /** Thanh bên đang xem KHO LƯU TRỮ thay vì danh sách thường. */
+  /** Màn bên phải: hội thoại, hoặc một màn của thanh bên (Lịch sử, Dự án, Artifacts, Tác vụ, Tùy chỉnh). */
+  const [view, datView] = useState<CtdView>('chat');
+  const [timMo, datTimMo] = useState(false);
+  /** Màn Lịch sử đang xem KHO LƯU TRỮ (danh sách riêng, thanh bên luôn là danh sách thường). */
   const [xemLuuTru, datXemLuuTru] = useState(false);
+  const [dsLuuTru, datDsLuuTru] = useState<PhienChat[]>([]);
+  /** Dự án gán cho cuộc MỚI sắp gửi (chọn dưới ô soạn ở màn chào). */
+  const [duAnMoi, datDuAnMoi] = useState<string | null>(null);
+  /** Kỹ năng chọn trong ô soạn / "Dùng thử" — gửi `kyNang` thay cho tự nhận. */
+  const [kyNangEp, datKyNangEp] = useState<string | null>(null);
+  const [chuDe, datChuDe] = useState<string | null>(null);
+  const tuyChinh = useTuyChinh();
   const huyRef = useRef<AbortController | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
   const dk = useDinhKem();
@@ -234,16 +252,20 @@ export function ChatMode({ pro }: { pro: boolean }) {
       // ⚠️ `api.request` ĐÃ bóc `envelope.data` (xem `unwrap` trong api/client.ts),
       // nên đây là mảng luôn — bóc `.data` lần nữa cho ra `undefined`, và danh
       // sách rỗng vĩnh viễn trong khi máy chủ trả về đủ dữ liệu.
-      const ts = new URLSearchParams();
-      if (loc) ts.set('folderId', loc);
-      // Danh sách thường và kho lưu trữ là HAI màn tách hẳn — máy chủ lọc, ở
-      // đây không lọc lại. Xem chú thích `nhom` trong ThanhBenChat.
-      if (xemLuuTru) ts.set('archived', '1');
-      const q = ts.toString();
-      const r = await api.request<PhienChat[]>(`/api/v1/ai/chat/sessions${q ? `?${q}` : ''}`);
+      // 10/11: thanh bên luôn là danh sách THƯỜNG (lọc dự án làm ở màn Dự án); kho lưu trữ nạp riêng (napLuuTru).
+      const r = await api.request<PhienChat[]>('/api/v1/ai/chat/sessions');
       datDsPhien(Array.isArray(r) ? r : []);
     } catch { /* mất mạng — danh sách rỗng, không phải lỗi chặn đường */ }
-  }, [api, loc, xemLuuTru]);
+  }, [api]);
+
+  const napLuuTru = useCallback(async () => {
+    if (!api) return;
+    try {
+      const r = await api.request<PhienChat[]>('/api/v1/ai/chat/sessions?archived=1');
+      datDsLuuTru(Array.isArray(r) ? r : []);
+    } catch { /* như trên */ }
+  }, [api]);
+  useEffect(() => { if (xemLuuTru) void napLuuTru(); }, [xemLuuTru, napLuuTru]);
 
   const napThuMuc = useCallback(async () => {
     if (!api) return;
@@ -271,12 +293,13 @@ export function ChatMode({ pro }: { pro: boolean }) {
       // Cuộc bên trong KHÔNG mất — máy chủ đặt `folderId` về null. Nếu đang lọc
       // theo đúng thư mục vừa xoá thì quay về xem tất cả, không để màn hình
       // trống trơn mà người dùng tưởng mất hết.
-      if (loc === id) datLoc(null);
+      datView((v) => (v === `project:${id}` ? 'projects' : v));
+      if (duAnMoi === id) datDuAnMoi(null);
       await Promise.all([napThuMuc(), napDsPhien()]);
     } catch (err) {
       datLoi(dichP('Không xoá được thư mục: {loi}', { loi: (err as Error).message }));
     }
-  }, [api, loc, napThuMuc, napDsPhien]);
+  }, [api, duAnMoi, napThuMuc, napDsPhien]);
 
   const xepVaoThuMuc = useCallback(async (sid: string, folderId: string | null) => {
     if (!api) return;
@@ -322,11 +345,14 @@ export function ChatMode({ pro }: { pro: boolean }) {
         const luc = m.createdAt ? new Date(m.createdAt).getTime() : NaN;
         return {
           vai: m.role === 'user' ? 'user' as const : 'assistant' as const,
-          text: String(m.content ?? ''),
+          // NFC: model có lúc trả tiếng Việt dạng tổ hợp (chữ + dấu rời) ⇒ dấu vẽ tách khỏi chữ.
+          text: String(m.content ?? '').normalize('NFC'),
           ...(Number.isFinite(luc) ? { luc } : {}),
         };
       }));
       datPhienId(id);
+      datView('chat');
+      datTimMo(false);
       datLoi(null);
       datRoiBac(null);
       datDangSua(null);
@@ -343,10 +369,37 @@ export function ChatMode({ pro }: { pro: boolean }) {
       await api.request(`/api/v1/ai/chat/sessions/${id}`, { method: 'DELETE' });
       if (id === phienId) { datPhienId(null); datLuot([]); }
       await napDsPhien();
+      if (xemLuuTru) await napLuuTru();
     } catch (err) {
       datLoi(dichP('Không xoá được: {loi}', { loi: (err as Error).message }));
     }
-  }, [api, phienId, napDsPhien]);
+  }, [api, phienId, napDsPhien, xemLuuTru, napLuuTru]);
+
+  /** Xoá nhiều cuộc một lần (màn Lịch sử → Chọn). */
+  const xoaNhieu = useCallback(async (ids: string[]) => {
+    if (!api || !ids.length) return;
+    try {
+      await api.request('/api/v1/ai/chat/sessions/xoa-nhieu', { method: 'POST', body: { ids } });
+      if (phienId && ids.includes(phienId)) { datPhienId(null); datLuot([]); }
+      toast.success(cP('Đã xoá {n} cuộc trò chuyện', { n: ids.length }));
+      await Promise.all([napDsPhien(), xemLuuTru ? napLuuTru() : Promise.resolve()]);
+    } catch (err) {
+      toast.error(dichP('Không xoá được: {loi}', { loi: (err as Error).message }));
+    }
+  }, [api, phienId, napDsPhien, xemLuuTru, napLuuTru, cP]);
+
+  /** Dọn các cuộc chưa có tin nhắn nào (robot/bản cũ tạo sẵn). */
+  const donCuocTrong = useCallback(async () => {
+    if (!api) return;
+    try {
+      const r = await api.request<{ soXoa?: number }>('/api/v1/ai/chat/sessions/xoa-trong', { method: 'POST', body: {} });
+      const n = Number(r?.soXoa ?? 0);
+      toast.success(n > 0 ? cP('Đã dọn {n} cuộc trò chuyện trống', { n }) : c('Không có cuộc trò chuyện trống nào'));
+      await napDsPhien();
+    } catch (err) {
+      toast.error(dichP('Không xoá được: {loi}', { loi: (err as Error).message }));
+    }
+  }, [api, napDsPhien, cP, c]);
 
   /**
    * GHIM · ĐỔI TÊN · LƯU TRỮ · TÁCH NHÁNH.
@@ -370,12 +423,14 @@ export function ChatMode({ pro }: { pro: boolean }) {
     if (!api) return;
     try {
       // Đang xem kho ⇒ thao tác là LẤY RA. Đang xem danh sách thường ⇒ CẤT ĐI.
+      // 10/11: thao tác từ thanh bên (luôn là danh sách thường) ⇒ CẤT ĐI; phiên đang nằm trong kho ⇒ LẤY RA.
+      const trongKho = !!p.archivedAt;
       await api.request(`/api/v1/ai/chat/sessions/${p.id}`, {
-        method: 'PATCH', body: { archived: !xemLuuTru },
+        method: 'PATCH', body: { archived: !trongKho },
       });
-      await napDsPhien();
+      await Promise.all([napDsPhien(), xemLuuTru ? napLuuTru() : Promise.resolve()]);
     } catch (err) { datLoi(dichP('Không lưu trữ được: {loi}', { loi: (err as Error).message })); }
-  }, [api, napDsPhien, xemLuuTru]);
+  }, [api, napDsPhien, xemLuuTru, napLuuTru]);
 
   const doiTenPhien = useCallback(async (id: string, ten: string) => {
     if (!api) return;
@@ -423,8 +478,13 @@ export function ChatMode({ pro }: { pro: boolean }) {
     }
   }, [api, phienId, napDsPhien, moPhien]);
 
-  const chatMoi = (): void => {
+  const chatMoi = (duAn: string | null = null): void => {
     huyRef.current?.abort();
+    datView('chat');
+    datTimMo(false);
+    datDuAnMoi(duAn);
+    datKyNangEp(null);
+    datChuDe(null);
     datPhienId(null);
     datLuot([]);
     datLoi(null);
@@ -655,11 +715,21 @@ export function ChatMode({ pro }: { pro: boolean }) {
        */
       let phienDung = phienId;
       if (!phienDung) {
+        /* 10/11: KHÔNG đặt tiêu đề ở đây — để tên tạm của máy chủ, trả lời xong máy chủ tự đặt tiêu đề ngắn
+           (src/services/chatTieuDe.ts, khung SSE `title`). Đặt sẵn 60 chữ đầu thì tên đó là "tên thật", không bao
+           giờ được thay. */
         const r = await api.request<{ sessionId?: string }>(
-          '/api/v1/ai/chat/sessions', { method: 'POST', body: { title: text.slice(0, 60) || 'Cuộc mới' } },
+          '/api/v1/ai/chat/sessions', { method: 'POST', body: {} },
         );
         phienDung = r?.sessionId ?? null;
         if (phienDung) datPhienId(phienDung);
+        // Cuộc mới bắt đầu trong một dự án ⇒ xếp vào dự án ngay.
+        if (phienDung && duAnMoi) {
+          const duAn = duAnMoi;
+          datDuAnMoi(null);
+          void api.request(`/api/v1/ai/chat/sessions/${phienDung}/folder`, { method: 'PATCH', body: { folderId: duAn } })
+            .then(() => napThuMuc()).catch(() => toast.error(c('Không xếp được cuộc trò chuyện vào dự án')));
+        }
       }
 
       const anh = tep.filter((t) => t.loai === 'image');
@@ -693,6 +763,8 @@ export function ChatMode({ pro }: { pro: boolean }) {
           // model có để nói "trong file hợp-đồng.pdf thì…".
           ...(anhGui?.length ? { images: anhGui } : {}),
           ...(tai.length ? { documents: tai.map((t) => t.url), documentNames: tai.map((t) => t.ten) } : {}),
+          // Tùy chỉnh (ngôn ngữ / tìm web / kỹ năng) — danh sách trắng của máy chủ. Lượt nói khoá ngôn ngữ đè lên.
+          ...thanTuyChinh(tuyChinh, kyNangEp),
           ...(tuMicro
             ? { voice: true, ngonNgu: settings.odinNgonNgu === 'en' ? 'en' : 'vi' }
             : {}),
@@ -721,7 +793,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           if (!d.startsWith('data: ')) continue;
           let e: {
             type?: string; text?: string; error?: string; fellBack?: boolean; reason?: string;
-            requested?: string; viec?: string; chu?: string; nguon?: unknown;
+            requested?: string; viec?: string; chu?: string; nguon?: unknown; title?: string; sessionId?: string;
           };
           try { e = JSON.parse(d.slice(6)); } catch { continue; }
 
@@ -732,7 +804,14 @@ export function ChatMode({ pro }: { pro: boolean }) {
           if (e.type === 'nguon' && Array.isArray(e.nguon)) {
             // Gắn nguồn vào lượt trả lời — nó thuộc về câu trả lời đó, không
             // thuộc về màn hình. Đổi cuộc rồi quay lại vẫn phải còn.
-            nguonLuot = e.nguon as Nguon[];
+            nguonLuot = (e.nguon as Nguon[]).map((n) => ({ ...n, tieuDe: String(n.tieuDe ?? '').normalize('NFC') }));
+            continue;
+          }
+          // Máy chủ vừa đặt tiêu đề cho cuộc (lượt đầu) — cập nhật ngay, không chờ nạp lại danh sách.
+          if (e.type === 'title' && typeof e.title === 'string' && e.title.trim()) {
+            const t = e.title.normalize('NFC');
+            const sid = e.sessionId ?? phienDung;
+            datDsPhien((ds) => ds.map((p) => (p.id === sid ? { ...p, title: t } : p)));
             continue;
           }
           if (e.type === 'chunk' && e.text) {
@@ -740,11 +819,12 @@ export function ChatMode({ pro }: { pro: boolean }) {
             datDangCho(false);
             const mieng = e.text;
             traLoiDayDu += mieng;
+            // NFC cả chuỗi mỗi lần: dấu tổ hợp có thể tới ở mẩu SAU chữ gốc.
             datLuot((cu) => {
-              if (!daMo) { daMo = true; return [...cu, { vai: 'assistant', text: mieng }]; }
+              if (!daMo) { daMo = true; return [...cu, { vai: 'assistant', text: mieng.normalize('NFC') }]; }
               const cuoi = cu[cu.length - 1];
-              if (!cuoi || cuoi.vai !== 'assistant') return [...cu, { vai: 'assistant', text: mieng }];
-              return [...cu.slice(0, -1), { vai: 'assistant', text: cuoi.text + mieng }];
+              if (!cuoi || cuoi.vai !== 'assistant') return [...cu, { vai: 'assistant', text: mieng.normalize('NFC') }];
+              return [...cu.slice(0, -1), { vai: 'assistant', text: (cuoi.text + mieng).normalize('NFC') }];
             });
             if (onCauDau && !daBaoCauDau) {
               const cau = catCauDau(traLoiDayDu);
@@ -912,6 +992,50 @@ ${kq.chu}`;
   /** Chữ ĐANG chảy về (khác với còn đang chờ chữ đầu). */
   const dangChayChu = dangChay && !dangCho;
 
+  /* ── Lời chào + chip chủ đề + chọn dự án (màn trống, như /chat web) ── */
+  const tenGoi = tuyChinh.tenGoi || user?.fullName?.trim().split(/\s+/).slice(-1)[0] || user?.username || '';
+  const loiChao = ((): string => {
+    const h = new Date().getHours();
+    const buoi = h < 11 ? c('Chào buổi sáng') : h < 14 ? c('Chào buổi trưa') : h < 18 ? c('Chào buổi chiều') : c('Chào buổi tối');
+    return tenGoi ? `${buoi}, ${tenGoi}` : buoi;
+  })();
+  const CHU_DE = [
+    { id: 'viet', nhan: 'Viết', Icon: PenLine, goiY: ['Viết email xin nghỉ học gửi thầy cô, lịch sự và ngắn gọn', 'Viết phần giới thiệu bản thân cho CV thực tập IT', 'Viết lại đoạn văn sau cho mạch lạc và tự nhiên hơn:\n\n', 'Soạn bài đăng LinkedIn chia sẻ dự án mình vừa làm xong'] },
+    { id: 'hoc', nhan: 'Học', Icon: GraduationCap, goiY: ['Giải thích độ phức tạp Big-O bằng ví dụ đời thường', 'Lập kế hoạch ôn thi 7 ngày cho môn ', 'Tạo 10 câu trắc nghiệm ôn tập về SQL JOIN, kèm đáp án', 'So sánh TCP và UDP thật dễ hiểu'] },
+    { id: 'code', nhan: 'Code', Icon: Code2, goiY: ['Review đoạn code này và chỉ ra lỗi:\n\n', 'Viết API REST CRUD bằng Express + Prisma cho bảng Student', 'Giải thích khi nào useEffect chạy trong React', 'Viết câu SQL lấy top 3 sinh viên điểm cao nhất mỗi lớp'] },
+    { id: 'song', nhan: 'Đời sống', Icon: Coffee, goiY: ['Gợi ý thực đơn 3 ngày cho sinh viên, tiết kiệm mà đủ chất', 'Lên lịch học và làm thêm hợp lý cho một tuần', 'Cách chuẩn bị cho buổi phỏng vấn thực tập đầu tiên', 'Gợi ý quà sinh nhật dưới 300 nghìn'] },
+  ];
+  const chuDeMo = CHU_DE.find((x) => x.id === chuDe);
+  const duAnDangChon = dsThuMuc.find((f) => f.id === duAnMoi);
+  const [duAnMenu, datDuAnMenu] = useState(false);
+  const chonDuAn = (
+    <span className="ctd-du-an" data-mo={duAnMenu}>
+      <button type="button" className="ctd-duoi-nut" data-on={!!duAnDangChon} onClick={() => datDuAnMenu((v) => !v)} aria-haspopup="menu" aria-expanded={duAnMenu}>
+        <FolderKanban size={15} aria-hidden /> <span>{duAnDangChon ? duAnDangChon.ten : c('Dự án')}</span> <ChevronDown size={13} aria-hidden />
+      </button>
+      {duAnMenu && (
+        <div className="ctd-menu ctd-menu-duoi" role="menu" onMouseLeave={() => datDuAnMenu(false)}>
+          <div className="ctd-menu-nhan">{c('Bắt đầu trong dự án')}</div>
+          <button type="button" className="ctd-menu-muc" onClick={() => { datDuAnMoi(null); datDuAnMenu(false); }}>{c('Không thuộc dự án')} {!duAnMoi && <Check size={14} style={{ marginLeft: 'auto' }} />}</button>
+          {dsThuMuc.map((f) => (
+            <button key={f.id} type="button" className="ctd-menu-muc" onClick={() => { datDuAnMoi(f.id); datDuAnMenu(false); }}>
+              <FolderKanban size={14} /> {f.ten} {duAnMoi === f.id && <Check size={14} style={{ marginLeft: 'auto' }} />}
+            </button>
+          ))}
+          <div className="ctd-menu-vach" />
+          <button type="button" className="ctd-menu-muc" onClick={() => { datDuAnMenu(false); datView('projects'); }}><FolderKanban size={14} /> {c('Quản lý dự án…')}</button>
+        </div>
+      )}
+    </span>
+  );
+  /** "Dùng thử" ở Tùy chỉnh ⇒ cuộc mới, chọn sẵn kỹ năng, điền câu mẫu. */
+  const dungThuKyNang = (id: string, viDu: string): void => {
+    if (id === 'goi-thoai') { datMoManGoi(true); return; }
+    chatMoi();
+    datKyNangEp(['anh', 'code', 'toan', 'tieng-anh', 'tieng-nhat', 'tieng-viet'].includes(id) ? id : null);
+    if (viDu) { datNhap(viDu); setTimeout(() => oSoanRef.current?.focus(), 0); }
+  };
+
   const thongBao = (
     <>
       {loi && <div className="ct-notice ctc-bao" data-tone="err"><span>{loi}</span></div>}
@@ -927,10 +1051,11 @@ ${kq.chu}`;
       <ThanhBenChat
         ds={dsPhien}
         dangMo={phienId}
-        xemLuuTru={xemLuuTru}
-        onXemLuuTru={datXemLuuTru}
+        view={view}
+        onView={datView}
+        onTim={() => datTimMo(true)}
         onMo={(id) => void moPhien(id)}
-        onTaoMoi={chatMoi}
+        onTaoMoi={() => chatMoi()}
         onXoa={(id) => void xoaPhien(id)}
         onGhim={(p) => void ghimPhien(p)}
         onLuuTru={(p) => void luuTruPhien(p)}
@@ -938,10 +1063,6 @@ ${kq.chu}`;
         onTachNhanh={(id) => void tachNhanhPhien(id)}
         onXepVaoThuMuc={(sid, fid) => void xepVaoThuMuc(sid, fid)}
         dsThuMuc={dsThuMuc}
-        loc={loc}
-        onLoc={datLoc}
-        onTaoThuMuc={(ten) => void taoThuMuc(ten)}
-        onXoaThuMuc={(id) => void xoaThuMuc(id)}
         ngan={ngan}
         onNgan={datNgan}
       />
@@ -974,7 +1095,7 @@ ${kq.chu}`;
           >
             <Menu size={18} aria-hidden />
           </button>
-          {phienId && (suaTieuDe !== null ? (
+          {view === 'chat' && phienId && (suaTieuDe !== null ? (
             <input
               className="ctc-dau-sua"
               autoFocus
@@ -1001,7 +1122,7 @@ ${kq.chu}`;
           <span className="ctc-dau-dem" />
           <button
             type="button" className="ctc-dau-nut ctc-chi-hep" data-nut="chatMoi"
-            onClick={chatMoi}
+            onClick={() => chatMoi()}
             aria-label={c('Cuộc trò chuyện mới')} title={c('Cuộc trò chuyện mới')}
           >
             <Plus size={18} aria-hidden />
@@ -1015,7 +1136,47 @@ ${kq.chu}`;
           dangChay={dangChay}
         />
 
-        {!trong && (
+        {view !== 'chat' && (
+          <div className="ctd-cuon">
+            {view === 'recents' ? (
+              <TrangLichSu
+                ds={xemLuuTru ? dsLuuTru : dsPhien}
+                xemLuuTru={xemLuuTru}
+                onXemLuuTru={datXemLuuTru}
+                onMo={(id) => void moPhien(id)}
+                onMoi={() => chatMoi()}
+                onXoaNhieu={xoaNhieu}
+                onDonTrong={donCuocTrong}
+              />
+            ) : view === 'projects' ? (
+              <TrangDuAn dsThuMuc={dsThuMuc} onMo={(id) => datView(`project:${id}`)} onTao={(t) => void taoThuMuc(t)} />
+            ) : view.startsWith('project:') ? (
+              <TrangMotDuAn
+                thuMuc={dsThuMuc.find((f) => f.id === view.slice('project:'.length))}
+                ds={dsPhien}
+                onLui={() => datView('projects')}
+                onMo={(id) => void moPhien(id)}
+                onBatDau={() => chatMoi(view.slice('project:'.length))}
+                onXoa={() => void xoaThuMuc(view.slice('project:'.length))}
+              />
+            ) : view === 'artifacts' ? (
+              <TrangArtifacts api={api} ds={dsPhien} onMoPhien={(id) => void moPhien(id)} />
+            ) : view === 'scheduled' ? (
+              <TrangTacVu api={api} onMoPhien={(id) => void moPhien(id)} />
+            ) : (
+              <TrangTuyChinh
+                pro={pro}
+                model={bac}
+                onChonModel={datBac}
+                onThu={dungThuKyNang}
+                onLapTrinh={() => onLapTrinh?.()}
+                onMoTrang={moWeb}
+              />
+            )}
+          </div>
+        )}
+
+        {view === 'chat' && !trong && (
           <div className="ctc-cuon" ref={cuonRef} onScroll={doCuon}>
             <div className="ctc-cot">
               {luot.map((l, i) => (l.vai === 'user' ? (
@@ -1101,7 +1262,7 @@ ${kq.chu}`;
           </div>
         )}
 
-        <div className="ctc-day">
+        {view === 'chat' && <div className="ctc-day">
           {!trong && !ganDay && (
             <button
               type="button" className="ctc-xuong"
@@ -1113,8 +1274,8 @@ ${kq.chu}`;
           )}
           {trong && (
             <div className="ctc-chao">
-              <CtcDau co={34} />
-              <h1>{c('Chào bạn, hôm nay mình giúp gì?')}</h1>
+              <CtcDau co={56} />
+              <h1>{loiChao}</h1>
             </div>
           )}
           {trong && <div className="ctc-day-bao">{thongBao}</div>}
@@ -1133,15 +1294,42 @@ ${kq.chu}`;
             onMoGoi={() => datMoManGoi(true)}
             onNoi={(cau) => guiDi(cau, true)}
             giuaTrang={trong}
+            duoiTrai={trong ? chonDuAn : <span className="ctc-luuy ctd-luuy">{c('CuongMini có thể nhầm. Hãy kiểm tra lại thông tin quan trọng.')}</span>}
+            kyNang={kyNangEp ? { id: kyNangEp, ten: KY_NANG.find((k) => k.id === kyNangEp)?.ten ?? kyNangEp } : null}
+            dsKyNang={KY_NANG.filter((k) => k.loai === 'ky-nang' && tuyChinh.kyNangBat.includes(k.id)).map((k) => ({ id: k.id, ten: k.ten }))}
+            onChonKyNang={datKyNangEp}
           />
-          <p className="ctc-luuy">{c('CuongMini có thể nhầm. Hãy kiểm tra lại thông tin quan trọng.')}</p>
-        </div>
+          {trong && (
+            <div className="ctd-chip-hang">
+              {CHU_DE.map((cd) => (
+                <button key={cd.id} type="button" className="ctd-chip" data-on={chuDe === cd.id} onClick={() => datChuDe((v) => (v === cd.id ? null : cd.id))}>
+                  <cd.Icon size={15} aria-hidden /> {c(cd.nhan)}
+                </button>
+              ))}
+            </div>
+          )}
+          {trong && chuDeMo && (
+            <div className="ctd-goi-y" role="list">
+              <div className="ctd-goi-y-dau">
+                <chuDeMo.Icon size={15} aria-hidden /> <span>{c(chuDeMo.nhan)}</span>
+                <button type="button" className="ctd-icon" onClick={() => datChuDe(null)} aria-label={c('Đóng')}><X size={14} /></button>
+              </div>
+              {chuDeMo.goiY.map((g) => (
+                <button key={g} type="button" role="listitem" onClick={() => { datNhap(g); datChuDe(null); setTimeout(() => oSoanRef.current?.focus(), 0); }}>{g.trim()}</button>
+              ))}
+            </div>
+          )}
+        </div>}
 
         {dangChupMan && (
           <ChupManHinh
             onXong={(f) => void dk.them([f])}
             onDong={() => datDangChupMan(false)}
           />
+        )}
+
+        {timMo && (
+          <HopTim ds={dsPhien} onDong={() => datTimMo(false)} onMo={(id) => void moPhien(id)} onMoi={() => chatMoi()} />
         )}
 
         {/* Màn nói chuyện phủ lên trên — đặt CUỐI cây để nó nằm trên mọi thứ. */}

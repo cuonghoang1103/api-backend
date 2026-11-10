@@ -18,14 +18,14 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Archive, ArchiveRestore, ChevronLeft, Folder, FolderInput, FolderPlus, GitBranch, MoreHorizontal,
-  PanelLeftClose, PanelLeftOpen, Pencil, Pin, PinOff, Plus, Search, Trash2, X,
+  Archive, ArchiveRestore, CalendarClock, Folder, FolderInput, FolderKanban, GitBranch, LayoutGrid, MoreHorizontal,
+  PanelLeftClose, PanelLeftOpen, Pencil, Pin, PinOff, Plus, Search, SlidersHorizontal, Trash2, X,
 } from 'lucide-react';
 
 import { useAppState } from '../../app-state';
 import { CtcMenu, CtcXacNhan, useCtcMo, type MucCtc } from './CtcMenu';
-import { CtcDau } from './CtcDau';
-import { NHAN_NHOM, nhomTheoNgay } from './CtcNhomNgay';
+import { CtcDau, CtcWordmark } from './CtcDau';
+import type { CtdView } from './CtdTrang';
 import { useCtcChu } from './CtcChu';
 
 export interface ThuMuc {
@@ -48,8 +48,6 @@ export interface PhienChat {
   folder?: { id: string; ten: string; mau: string | null } | null;
 }
 
-/** `null` = tất cả · `'none'` = chưa phân loại · `<id>` = một thư mục. */
-export type LocThuMuc = null | 'none' | string;
 
 const RONG_MIN = 220;
 const RONG_MAX = 420;
@@ -102,7 +100,7 @@ function HangPhien({
     },
     ...(dsThuMuc.length > 0
       ? [
-        { loai: 'tieuDe', nhan: c('Chuyển vào thư mục') } as MucCtc,
+        { loai: 'tieuDe', nhan: c('Chuyển vào dự án') } as MucCtc,
         ...dsThuMuc.map((f): MucCtc => ({
           nhan: f.ten,
           icon: <Folder size={14} aria-hidden />,
@@ -111,7 +109,7 @@ function HangPhien({
         })),
         ...(p.folderId
           ? [{
-            nhan: c('Bỏ khỏi thư mục'),
+            nhan: c('Bỏ khỏi dự án'),
             icon: <FolderInput size={14} aria-hidden />,
             onChon: () => hd.onXepVaoThuMuc(p.id, null),
           } as MucCtc]
@@ -179,31 +177,37 @@ function HangPhien({
   );
 }
 
+const SO_GAN_DAY = 40;
+const NAV: Array<{ v: CtdView; nhan: string; Icon: typeof Search }> = [
+  { v: 'projects', nhan: 'Dự án', Icon: FolderKanban },
+  { v: 'artifacts', nhan: 'Artifacts', Icon: LayoutGrid },
+  { v: 'scheduled', nhan: 'Tác vụ đã lên lịch', Icon: CalendarClock },
+  { v: 'customize', nhan: 'Tùy chỉnh', Icon: SlidersHorizontal },
+];
+
+/**
+ * 10/11/2026 — bố cục như claude.ai (và /chat web): logo gấu trúc + wordmark · Tạo mới · Tìm kiếm · Dự án ·
+ * Artifacts · Tác vụ đã lên lịch · Tùy chỉnh · "Đã ghim" · "Gần đây" (+ Xem tất cả). Thư mục ⇒ màn Dự án; kho lưu
+ * trữ ⇒ màn Lịch sử. Thanh bên luôn hiện danh sách THƯỜNG (không lưu trữ).
+ */
 export function ThanhBenChat({
-  ds, dangMo, xemLuuTru, onXemLuuTru, onTaoMoi,
-  dsThuMuc, loc, onLoc, onTaoThuMuc, onXoaThuMuc,
-  ngan, onNgan,
+  ds, dangMo, view, onView, onTim, onTaoMoi, dsThuMuc, ngan, onNgan,
   ...hd
 }: {
   ds: PhienChat[];
   dangMo: string | null;
-  xemLuuTru: boolean;
-  onXemLuuTru: (v: boolean) => void;
+  view: CtdView;
+  onView: (v: CtdView) => void;
+  onTim: () => void;
   onTaoMoi: () => void;
   dsThuMuc: ThuMuc[];
-  loc: LocThuMuc;
-  onLoc: (l: LocThuMuc) => void;
-  onTaoThuMuc: (ten: string) => void;
-  onXoaThuMuc: (id: string) => void;
   /** Ngăn kéo (cửa sổ hẹp) đang mở. */
   ngan: boolean;
   onNgan: (v: boolean) => void;
 } & HanhDongPhien) {
   const { c } = useCtcChu();
   const { settings, setSetting } = useAppState();
-  const [tim, datTim] = useState('');
   const [dangKeo, datDangKeo] = useState(false);
-  const [tenThuMuc, datTenThuMuc] = useState<string | null>(null);
 
   const gap = settings.chatThanhBenGap === true;
   const rong = typeof settings.chatThanhBenRong === 'number'
@@ -236,39 +240,30 @@ export function ThanhBenChat({
     return () => document.removeEventListener('keydown', phim);
   }, [ngan, onNgan]);
 
-  const nhom = useMemo(() => {
-    const q = tim.trim().toLowerCase();
-    const co = q ? ds.filter((p) => (p.title ?? '').toLowerCase().includes(q)) : ds;
-    return nhomTheoNgay(co);
-  }, [ds, tim]);
+  const { ghim, ganDay } = useMemo(() => {
+    const s = [...ds].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+    return { ghim: s.filter((p) => p.pinned === true), ganDay: s.filter((p) => p.pinned !== true).slice(0, SO_GAN_DAY) };
+  }, [ds]);
 
   const taoMoi = (): void => { onTaoMoi(); onNgan(false); };
-  const luuThuMuc = (): void => {
-    const t = tenThuMuc?.trim();
-    datTenThuMuc(null);
-    if (t) onTaoThuMuc(t);
-  };
-
+  const chuyen = (v: CtdView): void => { onView(v); onNgan(false); };
   const hienBen = !gap || ngan;
+  const hang = (p: PhienChat) => (
+    <HangPhien key={p.id} p={p} dangMo={view === 'chat' && p.id === dangMo} xemLuuTru={false} dsThuMuc={dsThuMuc} hd={hd} onChonXong={() => onNgan(false)} />
+  );
 
   return (
     <>
       {gap && (
         <nav className="ctc-ray" aria-label={c('Mở thanh bên')}>
-          <button
-            type="button" className="ctc-ray-nut"
-            onClick={() => setSetting('chatThanhBenGap', false)}
-            title={c('Mở thanh bên')} aria-label={c('Mở thanh bên')}
-          >
+          <button type="button" className="ctc-ray-nut" onClick={() => setSetting('chatThanhBenGap', false)} title={c('Mở thanh bên')} aria-label={c('Mở thanh bên')}>
             <PanelLeftOpen size={18} aria-hidden />
           </button>
-          <button
-            type="button" className="ctc-ray-nut" data-moi
-            data-nut="chatMoi"
-            onClick={taoMoi}
-            title={c('Cuộc trò chuyện mới')} aria-label={c('Cuộc trò chuyện mới')}
-          >
+          <button type="button" className="ctc-ray-nut" data-moi data-nut="chatMoi" onClick={taoMoi} title={c('Cuộc trò chuyện mới')} aria-label={c('Cuộc trò chuyện mới')}>
             <Plus size={16} aria-hidden />
+          </button>
+          <button type="button" className="ctc-ray-nut" onClick={onTim} title={c('Tìm kiếm')} aria-label={c('Tìm kiếm')}>
+            <Search size={16} aria-hidden />
           </button>
         </nav>
       )}
@@ -276,134 +271,50 @@ export function ThanhBenChat({
       {ngan && <div className="ctc-ben-nen" onPointerDown={() => onNgan(false)} aria-hidden />}
 
       {hienBen && (
-        <aside
-          className="ctc-ben"
-          style={{ width: rong }}
-          data-keo={dangKeo}
-          data-ngan={ngan}
-          aria-label={c('Cuộc trò chuyện mới')}
-        >
+        <aside className="ctc-ben" style={{ width: rong }} data-keo={dangKeo} data-ngan={ngan} aria-label="CuongMini">
           <div className="ctc-ben-dau">
-            <span className="ctc-ben-ten"><CtcDau co={18} /> CuongMini</span>
-            <button
-              type="button" className="ctc-ben-icon ctc-chi-rong"
-              onClick={() => setSetting('chatThanhBenGap', true)}
-              title={c('Thu gọn thanh bên')} aria-label={c('Thu gọn thanh bên')}
-            >
+            <button type="button" className="ctc-ben-ten ctd-logo" onClick={taoMoi} title={c('Cuộc trò chuyện mới')}>
+              <CtcDau co={28} /> <CtcWordmark co={19} />
+            </button>
+            <button type="button" className="ctc-ben-icon ctc-chi-rong" onClick={() => setSetting('chatThanhBenGap', true)} title={c('Thu gọn thanh bên')} aria-label={c('Thu gọn thanh bên')}>
               <PanelLeftClose size={18} aria-hidden />
             </button>
-            <button
-              type="button" className="ctc-ben-icon ctc-chi-hep"
-              onClick={() => onNgan(false)}
-              title={c('Thu gọn thanh bên')} aria-label={c('Thu gọn thanh bên')}
-            >
+            <button type="button" className="ctc-ben-icon ctc-chi-hep" onClick={() => onNgan(false)} title={c('Thu gọn thanh bên')} aria-label={c('Thu gọn thanh bên')}>
               <X size={18} aria-hidden />
             </button>
           </div>
 
-          <button type="button" className="ctc-ben-moi" data-nut="chatMoi" onClick={taoMoi}>
-            <span className="ctc-ben-moi-icon"><Plus size={14} strokeWidth={2.6} aria-hidden /></span>
-            {c('Cuộc trò chuyện mới')}
-          </button>
-
-          <label className="ctc-ben-tim">
-            <Search size={15} aria-hidden />
-            <input value={tim} placeholder={c('Tìm cuộc trò chuyện…')} onChange={(e) => datTim(e.target.value)} />
-            {tim && (
-              <button type="button" className="ctc-ben-tim-xoa" onClick={() => datTim('')} aria-label={c('Huỷ')}>
-                <X size={13} aria-hidden />
+          <nav className="ctd-nav" aria-label="CuongMini">
+            <button type="button" className="ctd-nav-muc ctd-nav-moi" data-nut="chatMoi" onClick={taoMoi}>
+              <span className="ctc-ben-moi-icon"><Plus size={14} strokeWidth={2.6} aria-hidden /></span>
+              <span>{c('Tạo mới')}</span>
+            </button>
+            <button type="button" className="ctd-nav-muc" onClick={() => { onTim(); onNgan(false); }}>
+              <span className="ctd-nav-ic"><Search size={17} aria-hidden /></span><span>{c('Tìm kiếm')}</span>
+            </button>
+            {NAV.map(({ v, nhan, Icon }) => (
+              <button key={v} type="button" className="ctd-nav-muc" data-on={view === v || (v === 'projects' && view.startsWith('project:'))} onClick={() => chuyen(v)}>
+                <span className="ctd-nav-ic"><Icon size={17} aria-hidden /></span><span>{c(nhan)}</span>
               </button>
-            )}
-          </label>
-
-          {/* Thư mục: lọc danh sách (máy chủ lọc theo `folderId`). */}
-          <div className="ctc-tm">
-            <div className="ctc-tm-dau">
-              <span>{c('Thư mục')}</span>
-              <button
-                type="button" className="ctc-ben-icon" data-nho
-                onClick={() => datTenThuMuc('')}
-                title={c('Thư mục mới…')} aria-label={c('Thư mục mới…')}
-              >
-                <FolderPlus size={15} aria-hidden />
-              </button>
-            </div>
-            {tenThuMuc !== null && (
-              <input
-                className="ctc-hang-sua"
-                autoFocus
-                value={tenThuMuc}
-                maxLength={80}
-                placeholder={c('Thư mục mới…')}
-                onChange={(e) => datTenThuMuc(e.target.value)}
-                onBlur={luuThuMuc}
-                onKeyDown={(e) => {
-                  if (e.nativeEvent.isComposing) return;
-                  if (e.key === 'Enter') { e.preventDefault(); luuThuMuc(); }
-                  if (e.key === 'Escape') { e.preventDefault(); datTenThuMuc(null); }
-                }}
-              />
-            )}
-            {dsThuMuc.length > 0 && (
-              <div className="ctc-tm-ds">
-                <button type="button" className="ctc-tm-chip" data-chon={loc === null} onClick={() => onLoc(null)}>
-                  {c('Tất cả')}
-                </button>
-                <button type="button" className="ctc-tm-chip" data-chon={loc === 'none'} onClick={() => onLoc('none')}>
-                  {c('Chưa phân loại')}
-                </button>
-                {dsThuMuc.map((f) => (
-                  <span key={f.id} className="ctc-tm-o" data-chon={loc === f.id}>
-                    <button type="button" className="ctc-tm-chip" data-chon={loc === f.id} onClick={() => onLoc(f.id)}>
-                      <Folder size={12} aria-hidden />
-                      {f.ten}
-                      {!!f._count?.sessions && <span className="ctc-tm-dem">{f._count.sessions}</span>}
-                    </button>
-                    <button
-                      type="button" className="ctc-tm-xoa"
-                      onClick={() => onXoaThuMuc(f.id)}
-                      title={c('Xoá thư mục (các cuộc bên trong về Chưa phân loại)')}
-                      aria-label={c('Xoá thư mục (các cuộc bên trong về Chưa phân loại)')}
-                    >
-                      <X size={11} aria-hidden />
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
+            ))}
+          </nav>
 
           <div className="ctc-ben-ds">
-            {nhom.length === 0 && (
-              <p className="ctc-ben-trong">
-                {tim.trim()
-                  ? c('Không khớp cuộc nào.')
-                  : xemLuuTru ? c('Kho lưu trữ đang trống.') : c('Chưa có cuộc trò chuyện nào.')}
-              </p>
-            )}
-            {nhom.map((n) => (
-              <section key={n.khoa} className="ctc-nhom">
-                <h3>{n.khoa === 'ghim' && <Pin size={11} aria-hidden />}{c(NHAN_NHOM[n.khoa])}</h3>
-                {n.ds.map((p) => (
-                  <HangPhien
-                    key={p.id}
-                    p={p}
-                    dangMo={p.id === dangMo}
-                    xemLuuTru={xemLuuTru}
-                    dsThuMuc={dsThuMuc}
-                    hd={hd}
-                    onChonXong={() => onNgan(false)}
-                  />
-                ))}
+            {ghim.length > 0 && (
+              <section className="ctc-nhom">
+                <h3><Pin size={11} aria-hidden />{c('Đã ghim')}</h3>
+                {ghim.map(hang)}
               </section>
-            ))}
+            )}
+            <section className="ctc-nhom">
+              <h3 className="ctd-nhom-hang">
+                <span>{c('Gần đây')}</span>
+                {ds.length > 0 && <button type="button" className="ctd-lien" onClick={() => chuyen('recents')}>{c('Xem tất cả')}</button>}
+              </h3>
+              {ganDay.map(hang)}
+              {ds.length === 0 && <p className="ctc-ben-trong">{c('Chưa có cuộc trò chuyện nào.')}</p>}
+            </section>
           </div>
-
-          <button type="button" className="ctc-ben-kho" onClick={() => onXemLuuTru(!xemLuuTru)} data-dang={xemLuuTru}>
-            {xemLuuTru
-              ? <><ChevronLeft size={14} aria-hidden /> {c('Về danh sách')}</>
-              : <><Archive size={14} aria-hidden /> {c('Kho lưu trữ')}</>}
-          </button>
 
           <div
             className="ctc-ben-keo"

@@ -322,6 +322,11 @@ html[data-mua] .ctc {
 
 /* Đang chờ chữ đầu */
 .ctc-wait { display: inline-flex; align-items: center; gap: 10px; color: var(--ctc-muted); font-size: 14px; font-family: var(--ctc-sans); }
+/* Khối "Đang suy nghĩ" to: Gấu pixel lấy máy ra gõ; khi có chữ ⇒ giơ biển DONE phía trên câu trả lời. */
+.ctc-wait-big { flex-direction: column; align-items: flex-start; gap: 2px; }
+.ctc-wait-big .gaupx { margin-left: -8px; }
+.ctc-done { margin: 0 0 4px -8px; }
+.gaupx { display: block; flex-shrink: 0; }
 .ctc-caret { display: inline-block; width: 8px; height: 1.05em; vertical-align: -0.15em; margin-left: 2px; background: var(--ctc-accent); border-radius: 2px; animation: ctc-blink 1s steps(2, start) infinite; }
 @keyframes ctc-blink { to { visibility: hidden; } }
 .ctc-steps { margin: 4px 0 10px; display: flex; flex-direction: column; gap: 4px; font-family: var(--ctc-sans); }

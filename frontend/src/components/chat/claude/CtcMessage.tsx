@@ -14,6 +14,7 @@ import ChatMarkdown from '../ChatMarkdown';
 import ThinkingSteps from '../ThinkingSteps';
 import { NguonCards } from '../NguonCards';
 import { CuongMiniPanda } from './CuongMiniPanda';
+import { GauPixel } from './GauPixel';
 
 /**
  * Chuẩn hoá NFC trước khi vẽ: model (nhất là đường Groq) đôi khi trả tiếng Việt dạng TỔ HỢP (NFD — chữ gốc + dấu
@@ -142,6 +143,19 @@ export const CtcAssistantMessage = memo(function CtcAssistantMessage({ msg, stre
   const [rated, setRated] = useState<null | 'up' | 'down'>(null);
   const empty = !msg.content?.trim();
 
+  // Nháy "DONE": khi câu trả lời bắt đầu có chữ (đang stream), giữ Gấu giơ biển DONE ~1,3s rồi ẩn.
+  const [justDone, setJustDone] = useState(false);
+  const wasEmpty = useRef(true);
+  useEffect(() => {
+    if (!empty && streaming && wasEmpty.current) {
+      wasEmpty.current = false;
+      setJustDone(true);
+      const t = setTimeout(() => setJustDone(false), 1300);
+      return () => clearTimeout(t);
+    }
+    if (empty) wasEmpty.current = true;
+  }, [empty, streaming]);
+
   const rate = async (kind: 'up' | 'down') => {
     if (!msg.dbId || rated) { if (!msg.dbId) toast.info('Đăng nhập để gửi đánh giá'); return; }
     setRated(kind);
@@ -171,9 +185,13 @@ export const CtcAssistantMessage = memo(function CtcAssistantMessage({ msg, stre
         </div>
       )}
 
-      {empty && streaming ? (
-        <div className="ctc-wait"><CtcMark thinking /> <span>Đang suy nghĩ…</span></div>
-      ) : (
+      {streaming && (empty || justDone) && (
+        <div className={empty ? 'ctc-wait ctc-wait-big' : 'ctc-done'}>
+          <GauPixel mode="desk" size={116} state={empty ? 'thinking' : 'done'} title="CuongMini đang trả lời" />
+          {empty && <span>Đang suy nghĩ…</span>}
+        </div>
+      )}
+      {!(empty && streaming) && (
         <div className="ctc-prose">
           <ChatMarkdown content={nfc(msg.content)} renderMath={!streaming} />
           {streaming && <span className="ctc-caret" aria-hidden />}

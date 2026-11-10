@@ -27,7 +27,10 @@ const NOI_THANG = [
 /** Hỏi về thứ ĐỔI THEO THỜI GIAN — kiến thức sẵn có gần như chắc chắn cũ. */
 const THEO_THOI_GIAN = [
   'mới nhất', 'hiện nay', 'hiện tại', 'bây giờ', 'gần đây', 'vừa rồi',
-  'năm nay', 'tháng này', 'hôm nay', 'đang', 'cập nhật',
+  'năm nay', 'tháng này', 'hôm nay', 'cập nhật',
+  // 'đang' ĐÃ BỎ (10/11/2026): là tiểu từ thì-tiếp-diễn có trong gần như MỌI câu
+  // ("bạn đang làm gì", "đang dùng model gì") ⇒ kích hoạt web-search bừa, đính nguồn
+  // từ điển rác cho cả câu hội thoại. THÀ BỎ SÓT CÒN HƠN TÌM BỪA.
   'giá', 'bao nhiêu tiền', 'tỷ giá', 'thời tiết', 'tin tức', 'lịch thi đấu',
   'phiên bản mới', 'ra mắt', 'sắp ra', 'có tin gì',
 ];

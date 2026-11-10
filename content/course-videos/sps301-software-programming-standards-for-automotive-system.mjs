@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho SPS301 — Software & Programming Standards for Automotive System. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/sps301-software-programming-standards-for-automotive-system.mjs
+ */
+export default {
+  courseSlug: "sps301-software-programming-standards-for-automotive-system",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "sps301-ts-1-2": { yt: "_QPjZF346b4", credit: "Software Design — V-Model - The 9 steps of the V-Model process" },
+    "sps301-ts-1-4": { yt: "77hYE-B2b5U", credit: "UL Solutions – Software Intensive Systems — SYS.2 System Requirements Analysis | Automotive SPICE" },
+    "sps301-ts-2-2": { yt: "PaDfrHqWg5A", credit: "Shriram Vasudevan — MISRA C / C ++ - What is it?" },
+    "sps301-ts-3-1": { yt: "3BNKfraEJK8", credit: "Simplified Coding — What is Static Code Analysis?" },
+    "sps301-ts-3-2": { yt: "2VFE6nWS3As", credit: "TASKING — Measure code metrics to improve software quality" },
+    "sps301-ts-3-3": { yt: "OchPaGEH4TE", credit: "C++ Weekly With Jason Turner — C++ Weekly - Ep 3 Intro to clang-tidy" },
+    "sps301-ts-4-2": { yt: "El8jquebRng", credit: "Embedded System Creations — AUTOSAR | AUTOSAR Layers | BSW | RTE | MCAL | Service Layer | Application Layer | Classic AUTOSAR" },
+    "sps301-ts-4-3": { yt: "MMYzGGrfCqM", credit: "Learn-AUTOSAR-basics — AUTOSAR Operating System Overview | AUTOSAR OS | OSEK OS" },
+    "sps301-ts-5-1": { yt: "o9VMp2lNwF4", credit: "VECTOR — What Is the AUTOSAR Adaptive Platform? | #EnginEEringTheJigsaw | Episode F9" },
+    "sps301-ts-5-2": { yt: "T0K9oGaZJoY", credit: "Intrepid Control Systems — SOME/IP - A Service Oriented Architecture (Intrepid Tech Day '19)" },
+    "sps301-ts-5-4": { yt: "lKJ3AzJWaDU", credit: "PrivAI Compute Labs — Zephyr RTOS - Better than FreeRTOS? IoT Operating System" },
+    "sps301-ts-6-1": { yt: "9wcJuW9E0S8", credit: "UL Solutions – Software Intensive Systems — ISO 26262 – Functional Safety at a Glance" },
+    "sps301-ts-6-2": { yt: "x6T28yLJ2ME", credit: "UL Solutions – Software Intensive Systems — Hazard Analysis and Risk Assessment (HARA) | Engineering Expertise EE#4" },
+    "sps301-ts-6-3": { yt: "gXFqhE-hTr4", credit: "AutoTechSimplified — ISO 26262 Part 6 | Software Development & Functional Safety" },
+    "sps301-ts-6-4": { yt: "EaD1qgsRNr0", credit: "Anexas — Mastering FMEA | Failure Modes and Effects Analysis Explained | Lean Six Sigma| Anexas | FMEA Guide" },
+    "sps301-ts-7-1": { yt: "kcpHuuEt1xs", credit: "Quantum Leaps, LLC — #49 Embedded Unit Testing" },
+    "sps301-ts-7-2": { yt: "ju4nNx_ejUE", credit: "MATLAB — What Is MCDC? Modified Condition / Decision Coverage Explained" },
+    "sps301-ts-7-3": { yt: "8vbf9MZMOCY", credit: "MATLAB — Hardware in the Loop Testing" },
+    "sps301-ts-7-4": { yt: "Mzv0mlB8bGY", credit: "UL Solutions – Software Intensive Systems — Configuration Management (SUP.8) - Automotive SPICE" },
+    "sps301-ts-8-1": { yt: "Io6f3wI71vo", credit: "ITpreneurs — TIPA - IT Process Assessment Based on ISO/IEC 15504" },
+    "sps301-ts-8-2": { yt: "aBEIPXihOm4", credit: "TM SQUARE — ISTQB Automotive Tester | Automotive SPICE | 2.1.1 Design and Structure of the Standard (Part-2)" },
+    "sps301-ts-8-3": { yt: "w5wwwEUf_iA", credit: "Mike Chapple — CertMike Explains Capability Maturity Model Integration (CMMI)" },
+    "sps301-ts-9-1": { yt: "H_J41yopxvE", credit: "Vector Consulting Services — Automotive Cybersecurity with ISO/SAE 21434 and UNECE (May 2020)" },
+    "sps301-ts-9-2": { yt: "pYK802pSufw", credit: "CyberPlatter — Secure Coding Best Practices | Cybersecurity Interview | Secure Coding Practices | Secure Coding" },
+    "sps301-1-1-automotive-sw": { yt: "dfimUPf4Iug", credit: "Fraunhofer IESE — Software in Automotive Technology" },
+    "sps301-3-1-autosar": { yt: "7b5BY1IAfwY", credit: "Learn-AUTOSAR-basics — AUTOSAR Basics  | AUTOSAR Tutorial | Architecture | Automotive" },
+    "sps301-4-1-iso26262": { yt: "NhJX6JPI0_8", credit: "UL Solutions – Software Intensive Systems — ISO 26262 – Functional Safety at the System level" },
+    "sps301-5-1-aspice": { yt: "z-0dyV8-hO8", credit: "KnowledgeBase — ASPICE - Part 1 | Introduction to Automotive SPICE | Software Process Standard for Automotive |" },
+    "sps301-6-1-iso21434": { yt: "DPQkHCJhJC8", credit: "UL Solutions – Software Intensive Systems — Automotive Cybersecurity – The Nine2Five TARA Navigator and ISO/SAE 21434" },
+    "sps301-8-1-process-tools": { yt: "LBZB1IE5MEE", credit: "ANCIT Technical Videos — Tools Used in Automotive Software Development" },
+  },
+};

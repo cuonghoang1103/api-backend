@@ -1,11 +1,10 @@
 /**
- * Curated YouTube track for SWD392 — Software Architecture and Design.
- * Every id verified live+embeddable via YouTube oEmbed.
+ * YouTube track cho SWD392 — Software Architecture and Design. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/software-architecture-and-design.mjs
  */
 export default {
-  courseSlug: 'software-architecture-and-design',
-  defaultVideoTrack: 'YT',
+  courseSlug: "software-architecture-and-design",
+  defaultVideoTrack: "YT",
   lessons: {
     "swd392-gioi-thieu": { yt: "6dsuowZVv6Q", credit: "Tech With Tim — Learning Programming Design Patterns" },
     "swd392-cong-cu": { yt: "9cXkpy7iHYI", credit: "draw.io — Demystifying UML: A beginner's guide to UML diagrams" },
@@ -71,5 +70,6 @@ export default {
     "swd392-slide-cs4-2": { yt: "sGmhaizFcEA", credit: "Spring I/O — Unit Test Your Spring Architecture With ArchUnit by Roland Weisleder @ Spring I/O 2024" },
     "swd392-cs4-on": { yt: "xHlDyKVyvig", credit: "Dan Vega — Introduction to Spring Modulith - Modular Monoliths in Spring Boot" },
     "swd392-slide-cs5-2": { yt: "cNzFPWuju8k", credit: "Amigoscode — Top 10 Spring Boot Interview Questions and Answers [2025]" },
+    "swd392-slide-swd12-4": { yt: "5mJd--JCwBI", credit: "MIT OpenCourseWare — 6.2.1 Finite State Machines" },
   },
 };

@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho SPF291 — Systems Programming. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/spf291-systems-programming.mjs
+ */
+export default {
+  courseSlug: "spf291-systems-programming",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "spf291-ts-1-2": { yt: "lhToWeuWWfw", credit: "Neso Academy — System Calls" },
+    "spf291-ts-1-3": { yt: "Ce_bc6zgbQw", credit: "Akamai Developers — Using Linux Man Pages | Command Line Tips" },
+    "spf291-ts-2-1": { yt: "KM5sRWAYqaw", credit: "Ramesh Yerraballi — File Descriptors Explained" },
+    "spf291-ts-3-1": { yt: "TMNGAxtZzvw", credit: "Shahid Nihal — Process creation and termination - fork(), exec(), wait() and exit()" },
+    "spf291-ts-3-2": { yt: "ss1-REMJ9GA", credit: "Jacob Sorber — Creating new processes with fork()!" },
+    "spf291-ts-3-3": { yt: "IFEFVXvjiHY", credit: "Neso Academy — fork() and exec() System Calls" },
+    "spf291-ts-4-1": { yt: "83M5-NPDeWs", credit: "Jacob Sorber — Sending and Handling Signals in C (kill, signal, sigaction)" },
+    "spf291-ts-4-3": { yt: "RU0ULe2f6hI", credit: "Chris Kanich — Signal handling in Linux" },
+    "spf291-ts-5-1": { yt: "dhFkwGRSVGk", credit: "Jacob Sorber — Using Pipes and Named Pipes to get your programs working together." },
+    "spf291-ts-5-2": { yt: "2hba3etpoJg", credit: "CodeVault — Introduction to FIFOs (aka named pipes) in C" },
+    "spf291-ts-5-3": { yt: "3XJHXLrR7XA", credit: "softwarecarpentry — The Shell - Episode 7 - Job Control" },
+    "spf291-ts-6-1": { yt: "m7E9piHcfr4", credit: "Jacob Sorber — How to Map Files into Memory in C (mmap, memory mapped file io)" },
+    "spf291-ts-6-2": { yt: "XglR4afFVg0", credit: "SoftPrayog — POSIX shared memory in Linux" },
+    "spf291-ts-7-1": { yt: "LOfGJcVnvAk", credit: "Neso Academy — Introduction to Threads" },
+    "spf291-ts-7-2": { yt: "bhpzTWtee2A", credit: "Core Dumped — The Weirdest Bug in Programming - Race Conditions" },
+    "spf291-ts-7-3": { yt: "0sVGnxg6Z3k", credit: "CodeVault — Condition variables in C" },
+    "spf291-ts-8-1": { yt: "FNuVjnZwy6M", credit: "Canny Information Center — TCP/IP SOCKETS | SOCKET PROGRAMMING IN C - PART1" },
+    "spf291-ts-8-2": { yt: "f9gUFy-9uCM", credit: "Arpit Bhayani — Why most TCP servers are multi threaded and how to build one from scratch" },
+    "spf291-ts-8-3": { yt: "ihvbhwGblQg", credit: "Computerphile — Network Basics - Transport Layer and User Datagram Protocol Explained - Computerphile" },
+    "spf291-ts-8-4": { yt: "dEHZb9JsmOU", credit: "SoftPrayog — I/O multiplexing: Doing I/O with many sources  using select, poll and epoll calls in Linux." },
+    "spf291-ts-9-1": { yt: "8yO2FBBfaB0", credit: "MIT OpenCourseWare — 16.2.2 Basics of Virtual Memory" },
+    "spf291-ts-9-2": { yt: "xa4ugmMDhiE", credit: "CS50 — Dynamic Memory Allocation - CS50 Shorts" },
+    "spf291-ts-10-1": { yt: "ny6y0pPO--4", credit: "NeuralNine — Debugging C Programs with GDB" },
+    "spf291-ts-10-2": { yt: "tEbV21aPSKw", credit: "Jacob Sorber — find memory errors quickly. (-fsanitize, addresssanitizer)" },
+    "spf291-ts-10-4": { yt: "dFGPOr_gInY", credit: "Bit Byte Talks — How Docker Containers Really Work: Namespaces & cgroups Explained" },
+    "spf291-2-1-processes": { yt: "OrM7nZcxXZU", credit: "Neso Academy — Process Management (Processes and Threads)" },
+    "spf291-5-1-ipc": { yt: "dJuYKfR8vec", credit: "Neso Academy — Interprocess Communication" },
+    "spf291-6-1-threads": { yt: "QMNtAFZtFMA", credit: "Packt — Mastering Multithreading with C++ – POSIX Threads | packtpub.com" },
+    "spf291-7-1-sockets": { yt: "uagKTbohimU", credit: "Neso Academy — Sockets in Operating System" },
+    "spf291-8-1-memory-tools": { yt: "3rez2rDYHHA", credit: "Nic Barker — Memory Management, Explained Simply (Part 1)" },
+  },
+};

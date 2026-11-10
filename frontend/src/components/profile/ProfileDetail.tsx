@@ -142,6 +142,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   // Upload + crop
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  /** URL ảnh đại diện vừa tải lỗi ⇒ hiện chữ cái đầu thay vì một vòng tròn trống. Đổi ảnh (URL khác) là thử lại. */
+  const [anhLoi, setAnhLoi] = useState<string | null>(null);
   const [showImageCropper, setShowImageCropper] = useState<'avatar' | 'cover' | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -633,16 +635,20 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                 </span>
               )}
               <div className={`group relative h-[120px] w-[120px] sm:h-[168px] sm:w-[168px] rounded-full ring-4 shadow-2xl overflow-hidden transition-all duration-300 ${p.isPro ? 'ring-amber-400/80 hover:ring-amber-300' : 'ring-darkcard hover:ring-neon-violet/40'}`}>
-                {p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt="Ảnh đại diện" className="w-full h-full object-cover" />) : (
+                {p.avatarUrl && anhLoi !== p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt="Ảnh đại diện" className="w-full h-full object-cover" onError={() => setAnhLoi(p.avatarUrl ?? null)} />) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-violet via-neon-purple to-neon-pink">
                     <span className="text-5xl sm:text-6xl font-bold text-text-primary drop-shadow-lg">{(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}</span>
                   </div>
                 )}
                 {p.isOnline && <div className="absolute bottom-2.5 right-2.5 h-5 w-5 rounded-full bg-emerald-500 ring-2 ring-darkcard" />}
                 {isOwn && (
-                  <label className="absolute inset-0 flex items-center justify-center bg-[var(--bg-surface)] hover:bg-[var(--bg-surface)] transition-colors cursor-pointer rounded-full" aria-label="Đổi ảnh đại diện">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-[var(--border-light-hover)]">
-                      {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-5 w-5 animate-spin text-text-primary" /> : <Camera className="h-5 w-5 text-text-primary" />}
+                  /* ⚠️ Lớp phủ PHẢI trong suốt: nó nằm `inset-0` ĐÈ LÊN ảnh. Commit 562f6379d (đổi màu
+                     theo chủ đề) từng thay `bg-black/0 hover:bg-black/40` bằng `bg-[var(--bg-surface)]` —
+                     nền ĐẶC ⇒ chủ trang thấy vòng tròn trống, người khác vẫn thấy ảnh (09/11/2026).
+                     Chấm máy ảnh luôn nền đen ⇒ biểu tượng trắng cố định, không theo chủ đề. */
+                  <label className="absolute inset-0 flex items-center justify-center bg-transparent hover:bg-black/40 transition-colors cursor-pointer rounded-full" aria-label="Đổi ảnh đại diện">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-white/20">
+                      {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : <Camera className="h-5 w-5 text-white" />}
                     </div>
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'avatar')} />
                   </label>

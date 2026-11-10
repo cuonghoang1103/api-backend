@@ -42,6 +42,25 @@ const APPLE_SECRET = biMatApple();
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
+/* ⚠️ Apple trả kết quả về bằng `response_mode: form_post` — một POST XUYÊN TRANG từ
+ * appleid.apple.com vào /api/auth/callback/apple. Cookie mặc định của Auth.js là
+ * `SameSite=Lax`, mà trình duyệt KHÔNG gửi cookie Lax kèm POST xuyên trang ⇒ thiếu
+ * cookie `state`/`nonce` ⇒ Auth.js ném `InvalidCheck` ⇒ đăng nhập Apple luôn hỏng; thiếu
+ * `callback-url` ⇒ không về /oauth-callback ⇒ không có `backend_token`.
+ * Sửa: ba cookie ngắn hạn đó dùng `SameSite=None; Secure` (bắt buộc HTTPS ⇒ chỉ bật khi
+ * NEXTAUTH_URL là https, và chỉ khi Apple bật — Google/GitHub giữ nguyên mặc định). */
+const COOKIE_XUYEN_TRANG =
+  APPLE_SECRET && (process.env.NEXTAUTH_URL ?? process.env.AUTH_URL ?? "").startsWith("https://")
+    ? (["state", "nonce", "callbackUrl"] as const).reduce<NonNullable<NextAuthConfig["cookies"]>>((acc, k) => {
+        const ten = { state: "authjs.state", nonce: "authjs.nonce", callbackUrl: "authjs.callback-url" }[k];
+        acc[k] = {
+          name: `__Secure-${ten}`,
+          options: { httpOnly: true, sameSite: "none", path: "/", secure: true, ...(k === "callbackUrl" ? {} : { maxAge: 60 * 15 }) },
+        };
+        return acc;
+      }, {})
+    : undefined;
+
 /**
  * NextAuth config — used ONLY for OAuth providers (Google, GitHub).
  *
@@ -54,6 +73,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
  */
 export const authConfig: NextAuthConfig = {
   trustHost: true,
+  ...(COOKIE_XUYEN_TRANG ? { cookies: COOKIE_XUYEN_TRANG } : {}),
   session: {
     strategy: "jwt",
     maxAge: 3600,

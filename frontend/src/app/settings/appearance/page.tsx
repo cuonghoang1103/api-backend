@@ -157,7 +157,7 @@ export default function AppearanceSettingsPage() {
       <SettingsCard title="Chuyển động" icon={<Sparkles className="h-4 w-4" />}>
         <SettingsRow
           label="Giảm chuyển động"
-          description="Tắt gần như toàn bộ hiệu ứng chuyển cảnh và animation trên trang. Hữu ích nếu bạn thấy chóng mặt hoặc muốn máy chạy nhẹ hơn. Nếu hệ điều hành của bạn đã bật 'giảm chuyển động', trang web tự tôn trọng cài đặt đó dù công tắc này đang tắt."
+          description="Tắt gần như toàn bộ hiệu ứng chuyển cảnh và animation trên trang. Hữu ích nếu bạn thấy chóng mặt hoặc muốn máy chạy nhẹ hơn. Bật thì tuyết/hạt của chủ đề mùa cũng đứng yên (trang trí vẫn hiện). Cài đặt này lưu theo TÀI KHOẢN nên áp lên mọi máy ngay khi bạn đăng nhập. Nếu hệ điều hành của bạn đã bật 'giảm chuyển động', trang web tự tôn trọng cài đặt đó dù công tắc này đang tắt."
           control={
             <Toggle
               checked={reduceMotion}

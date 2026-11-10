@@ -21,7 +21,10 @@ const NGUON_KHOA = {
 } as const;
 
 const AUD_APPLE = (process.env.APPLE_OAUTH_AUDIENCES
-  ?? 'com.cuongthai.app,com.cuongthai.ctwork,com.cuongthai.admin,com.cuongthai.app.macos').split(',').map((s) => s.trim()).filter(Boolean);
+  ?? 'com.cuongthai.app,com.cuongthai.ctwork,com.cuongthai.admin,com.cuongthai.app.macos').split(',')
+  // + Services ID của web (10/11/2026). Luồng web vào bằng chữ ký nội bộ, nhưng identityToken mang aud này
+  // thì cũng phải được nhận — không thì một client gửi thẳng token web sẽ bị từ chối khó hiểu.
+  .concat(process.env.APPLE_CLIENT_ID ?? '').map((s) => s.trim()).filter(Boolean);
 const AUD_GOOGLE = [
   // 22/10/2026: + client iOS của app CT Work (com.cuongthai.ctwork, project Google 20442169272 — khác project của app chính).
   ...(process.env.GOOGLE_OAUTH_AUDIENCES

@@ -13,6 +13,7 @@ import { toast } from 'sonner';
 import { authApi } from '@/lib/api';
 import type { ApiError } from '@/lib/api';
 import { TurnstileWidget } from '@/components/TurnstileWidget';
+import { NutDangNhapMxh } from '@/components/auth/NutDangNhapMxh';
 
 const registerSchema = z
   .object({
@@ -373,6 +374,19 @@ export default function RegisterPage() {
               )}
             </motion.button>
           </form>
+
+          {/* Đăng ký bằng Google/GitHub/Apple — cùng một luồng với đăng nhập: lần đầu tạo
+              tài khoản, email đã có tài khoản thì gắn nhà cung cấp vào tài khoản đó. */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-darkborder" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-darkcard text-text-muted">or sign up with</span>
+            </div>
+          </div>
+
+          <NutDangNhapMxh callbackUrl={() => '/oauth-callback'} />
 
           {/* Footer */}
           <p className="text-center text-text-muted text-sm mt-6">

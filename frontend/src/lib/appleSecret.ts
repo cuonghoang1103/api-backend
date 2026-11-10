@@ -40,14 +40,31 @@ export interface CauHinhApple {
   privateKey: string;
 }
 
-/** Đọc cấu hình Apple từ env. `null` = chưa cấu hình (KHÔNG phải lỗi). */
+/** Biến đầu tiên có giá trị (đã trim), hoặc undefined. */
+function docBien(...ten: string[]): string | undefined {
+  for (const t of ten) {
+    const v = process.env[t]?.trim();
+    if (v) return v;
+  }
+  return undefined;
+}
+
+/**
+ * Đọc cấu hình Apple từ env. `null` = chưa cấu hình (KHÔNG phải lỗi).
+ *
+ * Team ID / Key ID / khoá `.p8` LÙI về bộ `APPLE_SIWA_*` mà backend đã dùng cho app iOS / CT Work
+ * (src/services/appleSiwa.service.ts — 10/11/2026): một khoá "Sign in with Apple" ký được cho MỌI
+ * Services ID gom chung Primary App ID của nó (com.cuongthai.app), nên web không cần khoá mới.
+ * Thứ DUY NHẤT web cần riêng là `APPLE_CLIENT_ID` = Services ID (Bundle ID của app KHÔNG dùng được
+ * cho luồng web — Apple trả `invalid_client`).
+ */
 export function docCauHinhApple(): CauHinhApple | null {
-  const clientId = process.env.APPLE_CLIENT_ID?.trim();
-  const teamId = process.env.APPLE_TEAM_ID?.trim();
-  const keyId = process.env.APPLE_KEY_ID?.trim();
+  const clientId = docBien('APPLE_CLIENT_ID');
+  const teamId = docBien('APPLE_TEAM_ID', 'APPLE_SIWA_TEAM_ID');
+  const keyId = docBien('APPLE_KEY_ID', 'APPLE_SIWA_KEY_ID');
   /* Biến môi trường không chứa được xuống dòng thật, nên khoá `.p8` thường được
      dán dưới dạng `\n` hai ký tự. Không đổi lại thì `createPrivateKey` ném. */
-  const privateKey = process.env.APPLE_PRIVATE_KEY?.replace(/\\n/g, '\n').trim();
+  const privateKey = docBien('APPLE_PRIVATE_KEY', 'APPLE_SIWA_PRIVATE_KEY')?.replace(/\\n/g, '\n').trim();
   if (!clientId || !teamId || !keyId || !privateKey) return null;
   return { clientId, teamId, keyId, privateKey };
 }

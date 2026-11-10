@@ -268,6 +268,20 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:-}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:-}
+      # Sign in with Apple trên web (09/11/2026). Thiếu ⇒ provider không nạp ⇒ nút Apple
+      # tự ẩn (frontend/src/lib/appleSecret.ts). CHỈ runtime, KHÔNG làm build-arg: khoá
+      # .p8 mà đi qua ARG/ENV của Dockerfile là nằm vĩnh viễn trong lớp ảnh trên GHCR.
+      # Trước bản này container frontend KHÔNG nhận các biến này (không có env_file), nên
+      # đặt khoá vào /opt/cuonghoangdev/.env cũng không làm nút hiện.
+      APPLE_CLIENT_ID: ${APPLE_CLIENT_ID:-}
+      APPLE_TEAM_ID: ${APPLE_TEAM_ID:-}
+      APPLE_KEY_ID: ${APPLE_KEY_ID:-}
+      APPLE_PRIVATE_KEY: ${APPLE_PRIVATE_KEY:-}
+      APPLE_CLIENT_SECRET: ${APPLE_CLIENT_SECRET:-}
+      # Thiếu APPLE_TEAM_ID/KEY_ID/PRIVATE_KEY ⇒ web dùng lại khoá SIWA của app iOS (backend đã có).
+      APPLE_SIWA_TEAM_ID: ${APPLE_SIWA_TEAM_ID:-}
+      APPLE_SIWA_KEY_ID: ${APPLE_SIWA_KEY_ID:-}
+      APPLE_SIWA_PRIVATE_KEY: ${APPLE_SIWA_PRIVATE_KEY:-}
       ADMIN_EMAILS: ${ADMIN_EMAILS:-cuongthaihnhe176322@gmail.com}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}

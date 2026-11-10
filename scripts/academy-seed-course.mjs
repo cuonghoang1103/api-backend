@@ -199,12 +199,15 @@ if (course) {
           ...(q.explanation ? { explanation: q.explanation } : {}),
         })),
       } : undefined;
+      // Chữ trích từ pptx có thể mang nửa cặp surrogate (emoji/ký tự bị cắt) hoặc NUL ⇒ Prisma ném
+      // "unexpected end of hex escape" và bài giữ nội dung cũ (seed-academy rc=1 từ 09/11/2026). Làm sạch ở cửa ghi.
+      const sach = (v) => (typeof v === 'string' ? v.toWellFormed().replace(/\u0000/g, '') : v);
       const lessonCore = {
-        title: l.title, description: l.description ?? null,
+        title: sach(l.title), description: sach(l.description ?? null),
         // Khối mô phỏng được DỰNG ở đây, không viết tay trong file nội dung:
         // mọi bài có cùng một dạng markup, hai nửa song ngữ luôn cân nhau, và
         // link về /simulation mang sẵn ngữ cảnh quay lại đúng bài này.
-        content: withSimulation(l.content ?? null, { ...l, slug: lslug }, cslug),
+        content: sach(withSimulation(l.content ?? null, { ...l, slug: lslug }, cslug)),
         lessonType: normType(l.type), isFreePreview: l.isFreePreview ?? false, isPublished: l.isPublished ?? true,
       };
 

@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho IBA201 — Introduction to Business Analytics. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/iba201-introduction-to-business-analytics.mjs
+ */
+export default {
+  courseSlug: "iba201-introduction-to-business-analytics",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "iba201-ts-1-1": { yt: "MkjlIzvfqdo", credit: "Lights OnData — Understanding Business Intelligence, Data Analytics, and Business Analytics" },
+    "iba201-ts-1-2": { yt: "lxCaYg1G9fE", credit: "David Caughlin — Descriptive, Predictive, & Prescriptive Analytics" },
+    "iba201-ts-1-3": { yt: "q_okDS2RtzY", credit: "Cody Baldwin — Introduction to the CRISP-DM Methodology (Analytics & Data Science)" },
+    "iba201-ts-2-1": { yt: "hZxnzfnt5v8", credit: "Dr Nic's Maths and Stats — Types of Data: Nominal, Ordinal, Interval/Ratio - Statistics Help" },
+    "iba201-ts-2-2": { yt: "DRlriVQf3Sw", credit: "Digital E-Learning — Types and Sources of Data in Statistics | Primary & Secondary data | Qualitative & Quantitative data" },
+    "iba201-ts-2-3": { yt: "5HcDJ8e9NwY", credit: "IBM Technology — Data Quality Explained" },
+    "iba201-ts-3-2": { yt: "R4yfNi_8Kqw", credit: "CrashCourse — Measures of Spread: Crash Course Statistics #4" },
+    "iba201-ts-3-3": { yt: "9jYqZS142mg", credit: "Whats Up Dude — What Are And How To Calculate Quartiles, The Interquartile Range, IQR, And Outliers Explained" },
+    "iba201-ts-4-1": { yt: "EKsBn3zPxrs", credit: "Data with Baraa — How to Choose the Right Chart for Your Data  | #Tableau Course #136" },
+    "iba201-ts-4-2": { yt: "9NUjHBNWe9M", credit: "Excel Campus - Jon — Introduction to Pivot Tables, Charts, and Dashboards in Excel (Part 1)" },
+    "iba201-ts-4-3": { yt: "H79S8YDuYUU", credit: "Christine Jiang — Data Storytelling 101 | Think Like a Data Analyst" },
+    "iba201-ts-5-1": { yt: "ibINrxJLvlM", credit: "Dr. Trefor Bazett — Intro to Conditional Probability" },
+    "iba201-ts-5-2": { yt: "c06FZ2Yq9rk", credit: "LEARN & APPLY : Lean and Six Sigma — Probability Distributions: From Basics to Binomial and Poisson" },
+    "iba201-ts-5-3": { yt: "YAlJCEDH2uY", credit: "StatQuest with Josh Starmer — The Central Limit Theorem, Clearly Explained!!!" },
+    "iba201-ts-6-1": { yt: "hlM7zdf7zwU", credit: "Khan Academy — Confidence intervals and margin of error | AP Statistics | Khan Academy" },
+    "iba201-ts-6-2": { yt: "VK-rnA3-41c", credit: "Math and Science — Intro to Hypothesis Testing in Statistics - Hypothesis Testing Statistics Problems & Examples" },
+    "iba201-ts-7-1": { yt: "AxY7nTkgR6M", credit: "Nicole Hamilton — Scatter Plots, Association and Correlation" },
+    "iba201-ts-7-2": { yt: "owI7zxCqNY0", credit: "dataminingincae — Video 1: Introduction to Simple Linear Regression" },
+    "iba201-ts-7-3": { yt: "Ut22-WLvEVw", credit: "Jason Delaney — Excel Walkthrough 4 - Reading Regression Output" },
+    "iba201-ts-8-1": { yt: "Wg4FNHJgxsM", credit: "Business School 101 — 3 Types of Models (Regression, Classification, Clustering ) | Business Analytics" },
+    "iba201-ts-8-2": { yt: "qBzBinHSPa4", credit: "excelisfun — Basic Excel Business Analytics #03: Goal Seek For What-If Analysis" },
+    "iba201-ts-9-2": { yt: "wjNRsugDHL0", credit: "NPTEL IIT Bombay — #10 Lecture 9 : Ethics and Data Privacy in LA | Introduction to Learning Analytics" },
+    "iba201-ts-9-3": { yt: "sjub3tYLHDc", credit: "Jay Feng — Learn how to SOLVE a data analytics case study problem" },
+    "iba201-1-1-three-types": { yt: "9IIgH0hNtgk", credit: "Cody Baldwin — Introduction to Business Analytics" },
+    "iba201-2-1-data-driven": { yt: "EevYFzAqJ2M", credit: "Grow with Google — Making Data-driven Decisions in Business | Google Data Analytics Certificate" },
+    "iba201-3-1-data-types-quality": { yt: "NhwvA5Zqtio", credit: "Grow with Google — Understanding Data Types and Structures | Google Data Analytics Certificate" },
+    "iba201-4-1-descriptive-statistics": { yt: "SplCk-t1BeA", credit: "Grad Coach — Descriptive Statistics: FULL Tutorial - Mean, Median, Mode, Variance & SD (With Examples)" },
+    "iba201-5-1-visualization-spreadsheets": { yt: "VV8iRJ-DS0A", credit: "freeCodeCamp.org — Excel Data Visualization Course – Guide to Charts & Dashboards" },
+    "iba201-6-1-simple-regression": { yt: "hxrM8LJ-27w", credit: "Adam Finer - Learn BI — Simple Linear Regression Analysis For Beginners | Basic Predictive Analytics" },
+    "iba201-7-1-what-if-optimization": { yt: "flYlA-l6P3s", credit: "Dr Bo Han Class — Business Analytics Modeling Class Introduction - What is an Optimization Analysis?" },
+  },
+};

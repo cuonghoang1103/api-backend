@@ -160,6 +160,15 @@ export const authConfig: NextAuthConfig = {
       const email = token.email as string | undefined;
       if (!email) return token;
 
+      /* 10/11/2026: callback này chạy ở MỌI lần đọc phiên (một lần tải trang ≈ 5 lần), và trước đây lần nào
+       * cũng gọi backend /auth/role ⇒ chạm authLimiter (10 lượt/phút, chung một IP container cho cả site)
+       * ⇒ chuỗi 429. Role chỉ cần tươi trong vòng 60 giây; đăng nhập mới (`account`) và `update()` thì luôn hỏi. */
+      const NHIP_ROLE_MS = 60_000;
+      if (!account && trigger !== "update" && typeof token.roleCheckedAt === "number"
+          && Date.now() - token.roleCheckedAt < NHIP_ROLE_MS) {
+        return token;
+      }
+
       try {
         let endpoint: string;
         let options: RequestInit = { cache: "no-store" };
@@ -188,7 +197,8 @@ export const authConfig: NextAuthConfig = {
           endpoint = `/api/v1/auth/role?email=${encodeURIComponent(email)}`;
           options = {
             cache: "no-store",
-            headers: { "X-Internal-Token": process.env.INTERNAL_API_SECRET ?? "" },
+            // Chữ ký HMAC nội bộ: backend BẮT BUỘC nó ở /role và cho nó qua authLimiter (src/index.ts).
+            headers: { "X-Internal-Token": process.env.INTERNAL_API_SECRET ?? "", ...headerNoiBoOAuth() },
           };
         }
 
@@ -207,6 +217,7 @@ export const authConfig: NextAuthConfig = {
           const chiTiet = await res.text().catch(() => '');
           console.error(`[nextauth] backend từ chối ${res.status} cho ${email}: ${chiTiet.slice(0, 200)}`);
           token.backendLoi = `HTTP ${res.status}`;
+          token.roleCheckedAt = Date.now(); // lỗi cũng nghỉ 60 s — đừng dội backend đang từ chối
           return token;
         }
         delete (token as Record<string, unknown>).backendLoi;
@@ -221,6 +232,7 @@ export const authConfig: NextAuthConfig = {
         token.role = freshRole;
         token.username = (data.data?.username as string) ?? (token.username as string) ?? email.split("@")[0];
         token.backendRoleVersion = freshVersion;
+        token.roleCheckedAt = Date.now();
       } catch (err) {
         // Đã thử nội bộ lẫn công khai, mỗi đường 3 lần — tới đây là hỏng thật.
         console.error("[nextauth] backend unreachable:", err);

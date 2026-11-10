@@ -84,6 +84,20 @@ function bangNhau(a: string, b: string): boolean {
   return x.length === y.length && timingSafeEqual(x, y);
 }
 
+/**
+ * Lời gọi có mang chữ ký nội bộ HỢP LỆ của máy chủ Next (10/11/2026)? Dùng cho:
+ *  - bỏ qua authLimiter (src/index.ts): mọi lời gọi máy chủ Next ⇒ backend mang CÙNG một IP (container
+ *    frontend), nên 10 lượt/phút/IP là MỘT hạn mức chung cho toàn bộ người dùng OAuth của site — một người
+ *    tải trang đã đủ chạm trần, và /oauth/register của người khác bị 429 ⇒ bấm Google/Apple thất bại.
+ *  - chốt GET /auth/role (trước đó INTERNAL_API_SECRET chưa đặt ⇒ ai cũng tra được role theo email).
+ * Không có AUTH_SECRET ⇒ luôn false (không bao giờ mở cửa khi chưa cấu hình).
+ */
+export function laLoiGoiNoiBo(headers: Record<string, unknown>): boolean {
+  const gui = headers['x-cuongthai-noi-bo'];
+  const mong = chuKyNoiBo();
+  return typeof gui === 'string' && gui.length > 0 && mong !== null && bangNhau(gui, mong);
+}
+
 const conHan = (than: Record<string, unknown>): boolean => typeof than.exp === 'number' && than.exp * 1000 > Date.now() - 60_000;
 const cungEmail = (a: unknown, b: string): boolean => typeof a === 'string' && a.trim().toLowerCase() === b.trim().toLowerCase();
 

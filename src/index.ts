@@ -59,6 +59,7 @@ import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from './config/redis.js';
 import { nanoid } from 'nanoid';
 import { locLoiMoiMuaChoIos } from './utils/appIos.js';
+import { laLoiGoiNoiBo } from './services/xacMinhOAuth.js';
 
 // 22/10/2026: rambo.ai.vn SERVFAIL ⇒ CuongMini đi rambo `fetch failed`. Chỉ tên miền khai trong DNS_DU_PHONG, chỉ khi tra cứu hỏng.
 caiDnsDuPhong();
@@ -503,6 +504,10 @@ const authLimiter = rateLimit({
   // in on phone, then desktop) tripped the limit.
   windowMs: config.nodeEnv === 'production' ? 60 * 1000 : 60 * 1000,
   store: makeRlStore('rl:auth:'),
+  // Lời gọi máy chủ Next ⇒ backend (NextAuth: /oauth/register, /oauth/token, /role) đều đến từ CÙNG một IP
+  // (container frontend) ⇒ không có chữ ký này thì cả site dùng chung 10 lượt/phút và đăng nhập OAuth bị 429
+  // (10/11/2026). Chữ ký là HMAC của AUTH_SECRET — bên ngoài không giả được. Xem xacMinhOAuth.laLoiGoiNoiBo.
+  skip: (req: Request) => laLoiGoiNoiBo(req.headers as Record<string, unknown>),
   max: (req: Request) => {
     // Judge "local" by the unspoofable client key, not the forgeable
     // first X-Forwarded-For entry (spoofing XFF: 127.0.0.1 used to

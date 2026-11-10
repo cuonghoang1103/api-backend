@@ -7,7 +7,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { softCaptchaMiddleware } from '../middleware/captcha.js';
 import type { ApiResponse, AuthResponse } from '../types/index.js';
 import mfaRoutes from './mfa.routes.js';
-import { xacMinhOAuth } from '../services/xacMinhOAuth.js';
+import { laLoiGoiNoiBo, xacMinhOAuth } from '../services/xacMinhOAuth.js';
 import { luuTokenApple } from '../services/appleSiwa.service.js';
 import { logger } from '../utils/logger.js';
 
@@ -304,17 +304,19 @@ router.get(
 
 // ─── GET /api/v1/auth/role ──────────────────────────────
 // Internal-only: the NextAuth server calls this (server→server) during token
-// refresh to keep the role/roleVersion fresh. When INTERNAL_API_SECRET is
-// configured, we require the matching `X-Internal-Token` header so external
-// callers can't enumerate users / probe roles. If the secret isn't set yet
-// the guard is a no-op (safe rollout) — set INTERNAL_API_SECRET on BOTH the
-// backend and frontend runtime env to enforce.
+// refresh to keep the role/roleVersion fresh. Requires the internal HMAC
+// signature (x-cuongthai-noi-bo) or a matching X-Internal-Token, so external
+// callers can't enumerate users / probe roles.
 router.get(
   '/role',
   async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
     try {
+      // 10/11/2026: BẮT BUỘC lời gọi nội bộ. Trước đây INTERNAL_API_SECRET chưa từng được đặt trên VPS ⇒ chốt cũ
+      // là no-op ⇒ bất kỳ ai cũng tra được role/roleVersion của một email. Nay nhận một trong hai:
+      // chữ ký HMAC x-cuongthai-noi-bo (máy chủ Next luôn gửi — lib/auth.ts) hoặc X-Internal-Token khớp secret.
       const secret = process.env.INTERNAL_API_SECRET;
-      if (secret && req.headers['x-internal-token'] !== secret) {
+      const quaSecret = !!secret && req.headers['x-internal-token'] === secret;
+      if (!quaSecret && !laLoiGoiNoiBo(req.headers as Record<string, unknown>)) {
         res.status(401).json({ success: false, message: 'Unauthorized' });
         return;
       }

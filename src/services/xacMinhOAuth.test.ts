@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createSign, generateKeyPairSync } from 'node:crypto';
 
 process.env.AUTH_SECRET = 'bi-mat-thu';
-const { xacMinhOAuth, chuKyNoiBo } = await import('./xacMinhOAuth.js');
+const { xacMinhOAuth, chuKyNoiBo, laLoiGoiNoiBo } = await import('./xacMinhOAuth.js');
 
 const { privateKey, publicKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
 const jwk = { ...publicKey.export({ format: 'jwk' }), kid: 'k1', alg: 'RS256', use: 'sig' };
@@ -26,6 +26,17 @@ test('không bằng chứng ⇒ từ chối (lỗ chiếm tài khoản cũ)', as
 test('chữ ký nội bộ đúng ⇒ cho qua; sai ⇒ từ chối', async () => {
   assert.equal((await xacMinhOAuth({ 'x-cuongthai-noi-bo': chuKyNoiBo()! }, { email: 'a@x.com' })).ok, true);
   assert.equal((await xacMinhOAuth({ 'x-cuongthai-noi-bo': 'sai' }, { email: 'a@x.com' })).ok, false);
+});
+test('laLoiGoiNoiBo (bỏ qua authLimiter + chốt /auth/role): chỉ đúng chữ ký mới qua', () => {
+  assert.equal(laLoiGoiNoiBo({ 'x-cuongthai-noi-bo': chuKyNoiBo()! }), true);
+  assert.equal(laLoiGoiNoiBo({ 'x-cuongthai-noi-bo': 'sai' }), false);
+  assert.equal(laLoiGoiNoiBo({ 'x-cuongthai-noi-bo': '' }), false);
+  assert.equal(laLoiGoiNoiBo({}), false);
+  assert.equal(laLoiGoiNoiBo({ 'x-cuongthai-noi-bo': [chuKyNoiBo()!] }), false); // header lặp ⇒ mảng ⇒ không nhận
+  const bi = process.env.AUTH_SECRET;
+  delete process.env.AUTH_SECRET;
+  assert.equal(laLoiGoiNoiBo({ 'x-cuongthai-noi-bo': '' }), false, 'chưa cấu hình bí mật ⇒ không bao giờ mở cửa');
+  process.env.AUTH_SECRET = bi;
 });
 test('Apple: token hợp lệ ⇒ qua; email khác / aud lạ / sub lệch / hết hạn ⇒ từ chối', async () => {
   const than = { iss: 'https://appleid.apple.com', aud: 'com.cuongthai.ctwork', sub: 'apl1', email: 'u@privaterelay.appleid.com', exp };

@@ -90,6 +90,13 @@ router.get('/', boc(async (_req, res) => {
         donTool: DON_TOOL,
         tranKyTuHoiThoai: TRAN_KY_TU_CHINH_HANG,
       },
+      /* Nút "Kiểm tra limit" ở admin: 2 cổng mua ngoài không có API số dư ⇒ mở trang check của shop.
+         GPT (modelapi): đăng nhập ví. gwai (genzshop): phải DÁN key ⇒ trả kèm key để admin copy. (Chỉ admin thấy.) */
+      kiemLimit: {
+        gptWallet: 'https://modelapi.vn/wallet',
+        gwaiCheck: 'https://genzshop.vn/pages/check-usage-claude.php',
+        gwaiKey: (process.env.GWAI_API_KEY || process.env.AGENT_GATEWAY_API_KEY || '').trim(),
+      },
       ghiChu: 'Mọi số USD ở đây là SỐ TỰ ĐO (usage Anthropic trả về × bảng giá trong mã), không phải số dư thật.',
     },
   });

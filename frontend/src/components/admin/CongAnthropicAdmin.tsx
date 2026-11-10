@@ -46,6 +46,7 @@ interface TongQuan {
   /* 19/10/2026: nhóm CuongMini Classic + chống spam CuongMini Default. */
   bangClassic?: Array<{ id: string; ten: string; model: string; nangLuc: number; tuongDuong: string }>;
   defaultGioiHan?: GioiHanDefault;
+  kiemLimit?: { gptWallet: string; gwaiCheck: string; gwaiKey: string };
 }
 interface TrangThaiRambo {
   bat: boolean; nguon: 'env' | 'admin'; coCauHinh: boolean;
@@ -138,7 +139,7 @@ export default function CongAnthropicAdmin() {
       <MatKhau loai="chung" daBat={tq.daBatMatKhau} onXong={nap} />
       <MatKhau loai="invisible" daBat={tq.daBatMatKhauInvisible === true} onXong={nap} />
       <MaGiaHanTien />
-      {tq.rambo && <CongTacRambo rambo={tq.rambo} classic={tq.bangClassic ?? []} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
+      {tq.rambo && <CongTacRambo rambo={tq.rambo} classic={tq.bangClassic ?? []} kiemLimit={tq.kiemLimit} onDoi={(rambo) => setTq({ ...tq, rambo })} />}
       {tq.defaultGioiHan && <ChongSpamDefault gh={tq.defaultGioiHan} onDoi={(defaultGioiHan) => setTq({ ...tq, defaultGioiHan })} />}
       {/* 22/10/2026: CuongMini trong CT Work — tài trợ theo Pro (người / trưởng nhóm) + chuỗi cổng. */}
       <CtWorkAiAdmin />
@@ -507,9 +508,10 @@ function BangModelCm({ models, tran, onXong }: {
 
 // ─── Công tắc cổng gwai (Claude rẻ) + tình trạng + nút Thử — thay cổng rambo.ai cũ (API /rambo giữ tên nội bộ) ───
 
-function CongTacRambo({ rambo, classic, onDoi }: {
+function CongTacRambo({ rambo, classic, kiemLimit, onDoi }: {
   rambo: TrangThaiRambo;
   classic: Array<{ id: string; ten: string; model: string }>;
+  kiemLimit?: { gptWallet: string; gwaiCheck: string; gwaiKey: string };
   onDoi: (r: TrangThaiRambo) => void;
 }) {
   const [dang, setDang] = useState(false);
@@ -566,6 +568,22 @@ function CongTacRambo({ rambo, classic, onDoi }: {
         </button>
         {song ? null : rambo.bat && <span className="text-xs text-red-400">Đang lùi về Solid / gpt-6-sol.</span>}
       </div>
+      {kiemLimit && (
+        <div className="mt-2 rounded-lg border border-darkborder p-2 space-y-2 text-xs">
+          <p className="text-text-muted">🔍 Kiểm tra số dư / limit — 2 cổng mua ngoài không có API số dư, mở trang check của shop:</p>
+          <div className="flex flex-wrap items-center gap-2">
+            <a href={kiemLimit.gptWallet} target="_blank" rel="noopener noreferrer" className={`${nut} border-emerald-500/50 text-emerald-300`}>Kiểm tra GPT (modelapi) ↗</a>
+            <a href={kiemLimit.gwaiCheck} target="_blank" rel="noopener noreferrer" className={`${nut} border-sky-500/50 text-sky-300`}>Kiểm tra Claude gwai ↗</a>
+          </div>
+          {kiemLimit.gwaiKey && (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-text-muted">Key gwai (dán vào trang check):</span>
+              <code className="px-2 py-0.5 rounded bg-black/20 border border-darkborder font-mono text-text-primary">{kiemLimit.gwaiKey.slice(0, 12)}…{kiemLimit.gwaiKey.slice(-6)}</code>
+              <button type="button" className={`${nut} border-darkborder`} onClick={() => { navigator.clipboard?.writeText(kiemLimit.gwaiKey); toast.success('Đã copy key gwai'); }}>Copy key</button>
+            </div>
+          )}
+        </div>
+      )}
       {rambo.thuGanNhat && (
         <div className="overflow-x-auto">
           <table className="text-xs w-full">

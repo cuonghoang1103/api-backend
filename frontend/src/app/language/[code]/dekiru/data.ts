@@ -16,6 +16,7 @@ import { DE_LUYEN_67 } from './bai/deLuyen67';
 import { ON_CUOI_KY } from './bai/onCuoiKy';
 import { ON_113 } from './bai/jp113B3';
 import { VIDEO_NEO } from './videos';
+import { VIDEO_YT } from './videoYt';
 import { nhomMucDekiru } from './nhom';
 import { videoLoTrinh } from './videoLoTrinh';
 
@@ -210,6 +211,8 @@ export const DEKIRU = defineCourse({
   ghim: KANA_PRACTICE,
   // 🎬 Video giảng mp4 gắn theo mục (ポイント, tiêu đề…) — videos.ts, sinh bởi xuat/gan-sach.mts của dự án video.
   videoNeo: VIDEO_NEO,
+  // 🎬 Video YouTube TUYỂN CHỌN (nguồn ngoài, soạn tay) — videoYt.ts; hiện đầu bài, tách hẳn mp4 chính chủ.
+  videos: VIDEO_YT,
   // Mục lục mỗi bài gom 5 nhóm (học trước → luyện thêm → ôn thi → tra sách) — nhom.ts.
   nhomMuc: nhomMucDekiru,
   videoLoTrinh,

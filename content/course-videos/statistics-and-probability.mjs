@@ -1,39 +1,67 @@
 /**
- * Curated YouTube track for MAS291 — Statistics and Probability.
- * Every id verified live+embeddable via YouTube oEmbed.
+ * YouTube track cho MAS291 — Statistics and Probability. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/statistics-and-probability.mjs
  */
 export default {
-  courseSlug: 'statistics-and-probability',
-  defaultVideoTrack: 'YT',
+  courseSlug: "statistics-and-probability",
+  defaultVideoTrack: "YT",
   lessons: {
-    // 0.1 About & course map — a general "learn statistics" overview
     "mas291-gioi-thieu": { yt: "kyjlxsLW1Is", credit: "zedstatistics — Teach me STATISTICS in half an hour! Seriously." },
-    // 1.1 Populations, samples, parameters
     "mas291-tong-the-mau": { yt: "vikkiwjQqfU", credit: "StatQuest with Josh Starmer — Population and Estimated Parameters, Clearly Explained!!!" },
-    // 2.2 Conditional probability & Bayes
     "mas291-bayes": { yt: "9wCnvr7Xw4E", credit: "StatQuest with Josh Starmer — Bayes' Theorem, Clearly Explained!!!!" },
-    // 3.1 Binomial distribution (mean/variance, binomial & Poisson group)
     "mas291-phan-phoi-roi-rac": { yt: "J8jNoF-K8E8", credit: "StatQuest with Josh Starmer — The Binomial Distribution and Test, Clearly Explained!!!" },
-    // 3.2 Other discrete distributions (hypergeometric, geometric, negative binomial)
     "mas291-phan-phoi-roi-rac-khac": { yt: "UrOXRvG9oYE", credit: "jbstatistics — Overview of Some Discrete Probability Distributions (Binomial,Geometric,Hypergeometric,Poisson,NegB)" },
-    // 4.1 Normal distribution & z-scores
     "mas291-phan-phoi-chuan": { yt: "rzFX5NWojp0", credit: "StatQuest with Josh Starmer — The Normal Distribution, Clearly Explained!!!" },
-    // 4.2 PDF, CDF, continuous uniform & exponential
     "mas291-pdf-cdf-deu-mu": { yt: "OWSOhpS00_s", credit: "jbstatistics — An Introduction to Continuous Probability Distributions" },
-    // 6.1 Standard error, CLT & z for x-bar
     "mas291-clt": { yt: "YAlJCEDH2uY", credit: "StatQuest with Josh Starmer — The Central Limit Theorem, Clearly Explained!!!" },
-    // 7.1 Confidence intervals
     "mas291-khoang-tin-cay": { yt: "TqOeMYtOc1w", credit: "StatQuest with Josh Starmer — Confidence Intervals, Clearly Explained!!!" },
-    // 8.1 Hypothesis testing procedure
     "mas291-kiem-dinh-gia-thuyet": { yt: "0oc49DyA3hU", credit: "StatQuest with Josh Starmer — Hypothesis Testing and The Null Hypothesis, Clearly Explained!!!" },
-    // 9.1 Difference of two means
     "mas291-hai-trung-binh": { yt: "UcZwyzwWU7o", credit: "The Organic Chemistry Tutor — Hypothesis Testing - Difference of Two Means - Student's -Distribution & Normal Distribution" },
-    // 10.1 Correlation r, regression line & R^2
     "mas291-hoi-quy": { yt: "nk2CQITm_eo", credit: "StatQuest with Josh Starmer — Linear Regression, Clearly Explained!!!" },
-    // 10.2 Inference on the regression model (ANOVA, t-tests)
     "mas291-suy-luan-hoi-quy": { yt: "NF5_btOaCig", credit: "StatQuest with Josh Starmer — Using Linear Models for t-tests and ANOVA, Clearly Explained!!!" },
-    // R.2 Counting: permutations & combinations
     "mas291-dem-phan-phoi-mo-rong": { yt: "XJnIdRXUi7A", credit: "The Organic Chemistry Tutor — Permutations and Combinations Tutorial" },
+    "mas291-flm-b001": { yt: "sQqniayndb4", credit: "Steve Brunton — Probability and Statistics: Overview" },
+    "mas291-flm-b003": { yt: "j9WZyLZCBzs", credit: "MIT OpenCourseWare — 1. Probability Models and Axioms" },
+    "mas291-flm-b004": { yt: "SkidyDQuupA", credit: "The Organic Chemistry Tutor — Introduction to Probability, Basic Overview - Sample Space, & Tree Diagrams" },
+    "mas291-flm-b005": { yt: "KzfWUEJjG18", credit: "mathantics — Math Antics - Basic Probability" },
+    "mas291-flm-b007": { yt: "LgLgexX7iTs", credit: "JensenMath — Probability Top 10 Must Knows (ultimate study guide)" },
+    "mas291-flm-b009": { yt: "3v9w79NhsfI", credit: "Khan Academy — Random variables | Probability and Statistics | Khan Academy" },
+    "mas291-flm-b010": { yt: "dOr0NKyD31Q", credit: "Khan Academy — Discrete and continuous random variables | Probability and Statistics | Khan Academy" },
+    "mas291-flm-b011": { yt: "-7QG2itL1u4", credit: "Steve Brunton — Random Variables and Probability Distributions" },
+    "mas291-flm-b012": { yt: "d2STHFVHGAg", credit: "Khan Academy — Probability with discrete random variable example | Random variables | AP Statistics | Khan Academy" },
+    "mas291-flm-b013": { yt: "1VEWB06OGbU", credit: "MATH TEACHER GON — Probability Distribution of Discrete Random Variables -Statistics and Probability @MathTeacherGon" },
+    "mas291-flm-b017": { yt: "vfBwVa9oQA4", credit: "GreeneMath.com — How to Solve Probability Word Problems | P(A and B) | P(A or B) | Binomial Probability" },
+    "mas291-flm-b019": { yt: "j8XLYFzTJzE", credit: "Khan Academy — Continuous probability distribution intro" },
+    "mas291-flm-b020": { yt: "mHfn_7ym6to", credit: "MIT OpenCourseWare — 8. Continuous Random Variables" },
+    "mas291-flm-b027": { yt: "SplCk-t1BeA", credit: "Grad Coach — Descriptive Statistics: FULL Tutorial - Mean, Median, Mode, Variance & SD (With Examples)" },
+    "mas291-flm-b028": { yt: "FzujIYo9GYo", credit: "numiqo — Descriptive Statistics [Simply explained]" },
+    "mas291-flm-b029": { yt: "VHYOuWu9jQI", credit: "The Organic Chemistry Tutor — Descriptive Statistics vs Inferential Statistics" },
+    "mas291-flm-b030": { yt: "jfa8hDU6Mz8", credit: "numiqo — What is Descriptive Statistics? A Beginner's Guide to Descriptive Statistics!" },
+    "mas291-flm-b031": { yt: "z0Ry_3_qhDw", credit: "Khan Academy — Introduction to sampling distributions | Sampling distributions | AP Statistics | Khan Academy" },
+    "mas291-flm-b032": { yt: "7XVA2JRzYoE", credit: "Steve Brunton — Parameter Estimation and Fitting Distributions" },
+    "mas291-flm-b035": { yt: "hlM7zdf7zwU", credit: "Khan Academy — Confidence intervals and margin of error | AP Statistics | Khan Academy" },
+    "mas291-flm-b036": { yt: "qTVdV8ITZfk", credit: "Steve Brunton — Confidence Intervals" },
+    "mas291-flm-b041": { yt: "cn4S3QqEBRg", credit: "Khan Academy — Idea behind hypothesis testing" },
+    "mas291-flm-b042": { yt: "4N_TfsUfslA", credit: "Luther Maddy - Helping Humans Learn — Business Statistics Lesson 10: One Sample Test of Hypothesis" },
+    "mas291-flm-b043": { yt: "rDQNorW_iNU", credit: "Dr. Venoo Kakar — 4.2 The t-test: Testing hypotheses about a single population parameter" },
+    "mas291-flm-b046": { yt: "6_Cuz0QqRWc", credit: "Khan Academy — Introduction to power in significance tests | AP Statistics | Khan Academy" },
+    "mas291-flm-b047": { yt: "NkGvw18zlGQ", credit: "Khan Academy — Two-sample t test for difference of means | AP Statistics | Khan Academy" },
+    "mas291-flm-b048": { yt: "86ss6qOTfts", credit: "jbstatistics — Inference for Two Means:  Introduction" },
+    "mas291-flm-b049": { yt: "tFRXsngz4UQ", credit: "Dr Nic's Maths and Stats — Understanding Statistical Inference - statistics help" },
+    "mas291-flm-b050": { yt: "ZtrGCH-u3bM", credit: "Nelly Litvak — 29  Statistical inference for two samples, part 2: paired observations" },
+    "mas291-flm-b051": { yt: "KsVBBJRb9TE", credit: "jbstatistics — Introduction to Simple Linear Regression" },
+    "mas291-flm-b052": { yt: "7ArmBVF2dCs", credit: "StatQuest with Josh Starmer — Linear Regression, Clearly Explained!!!" },
+    "mas291-flm-b053": { yt: "aztcS-3MwH0", credit: "slcmath@pc — Linear Regression and Correlation - Example" },
+    "mas291-flm-b054": { yt: "gPfgB4ew3RY", credit: "numiqo — Simple Linear Regression: An Easy and Clear Beginner’s Guide" },
+    "mas291-flm-b055": { yt: "owI7zxCqNY0", credit: "dataminingincae — Video 1: Introduction to Simple Linear Regression" },
+    "mas291-xac-suat-co-ban": { yt: "OyddY7DlV58", credit: "CrashCourse — Probability Part 1: Rules and Patterns: Crash Course Statistics #13" },
+    "mas291-xap-xi-chuan": { yt: "SmjepW2Mb28", credit: "ExamSolutions — Normal Approximation to Binomial distribution (Continuity Corrections): ExamSolutions" },
+    "mas291-thong-ke-mo-ta": { yt: "R4yfNi_8Kqw", credit: "CrashCourse — Measures of Spread: Crash Course Statistics #4" },
+    "mas291-bieu-do-bang-tra": { yt: "uAxyI_XfqXk", credit: "CrashCourse — Z-Scores and Percentiles: Crash Course Statistics #18" },
+    "mas291-phan-phoi-mau-ty-le-hieu": { yt: "Br067hrasc8", credit: "Khan Academy — Sampling distribution of sample proportion part 1 | AP Statistics | Khan Academy" },
+    "mas291-khoang-tin-cay-mot-phia": { yt: "8MeC3EAmnKU", credit: "Christina Knudson (Dr. Knudson) — 3. One-Sided Confidence Intervals" },
+    "mas291-hai-ty-le": { yt: "pCbNUnZ98oE", credit: "The Organic Chemistry Tutor — Hypothesis Testing With Two Proportions" },
+    "mas291-phan-mem-thong-ke": { yt: "aRR86imVsxM", credit: "The Organic Chemistry Tutor — Statistics - Excel" },
+    "mas291-bai-toan-loi-van": { yt: "vGcmjINp1x8", credit: "Buffington — Probability Word Problems (Simplifying Math)" },
   },
 };

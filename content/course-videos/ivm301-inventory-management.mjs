@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho IVM301 — Inventory Management. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/ivm301-inventory-management.mjs
+ */
+export default {
+  courseSlug: "ivm301-inventory-management",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "ivm301-ts-1-1": { yt: "EInAsO-gBwY", credit: "Academic Gain Tutorials — Why Companies hold Inventories? Need for Inventory Management." },
+    "ivm301-ts-1-3": { yt: "vGPn_Oo7UBQ", credit: "Accounting Stuff — The Essential Guide to Inventory in Accounting" },
+    "ivm301-ts-2-1": { yt: "JVl0Z0AUSlw", credit: "Operations & Supply Chain Management University — ABC Analysis Explained — Inventory Classification & Control Strategy" },
+    "ivm301-ts-3-1": { yt: "nsr7Uf-MHCo", credit: "Laurence Gartside — How Much Inventory Should You Buy / Own? -  Ordering Vs Holding Costs" },
+    "ivm301-ts-3-2": { yt: "AYpjPWmlyHM", credit: "Edspira — EOQ Economic Order Quantity formula and explanation" },
+    "ivm301-ts-3-3": { yt: "49aFBTGXN44", credit: "OpenTuition — Inventory Management – Quantity discounts - ACCA Financial Management (FM)" },
+    "ivm301-ts-4-1": { yt: "gKG50ePysQQ", credit: "The Business Doctor — Operations & Supply Chain Management: Forecasting & Demand Planning" },
+    "ivm301-ts-4-2": { yt: "lCPZ7VAt6bo", credit: "Operations & Supply Chain Management University — Measuring Forecast Error Explained — MAD, MSE & MAPE" },
+    "ivm301-ts-4-3": { yt: "lpnHNd6l-2M", credit: "DBM — What is S&OP? An Expert's Definition of Sales and Operations Planning!" },
+    "ivm301-ts-5-1": { yt: "kdTzkWhwmK8", credit: "Operations & Supply Chain Management University — Reorder Point (ROP) Explained — When to Reorder Inventory" },
+    "ivm301-ts-5-2": { yt: "gTkFpDR--qI", credit: "Ian Johnson — Calculating Safety Stock: Protecting Against Stock Outs" },
+    "ivm301-ts-5-3": { yt: "qnTJr__m36s", credit: "smart software — Service Level vs Fill Rate" },
+    "ivm301-ts-6-1": { yt: "huDPvwJGJM4", credit: "Prof. J Ajith kumar — INVENTORY CONTROL 4: CONTINUOUS REVIEW SYSTEM" },
+    "ivm301-ts-6-2": { yt: "p6gk-TCQp3Q", credit: "Prof. J Ajith kumar — INVENTORY CONTROL 5: PERIODIC REVIEW SYSTEM" },
+    "ivm301-ts-6-3": { yt: "AJWhfAqyx2Q", credit: "Mike von Massow — The newsvendor model" },
+    "ivm301-ts-7-1": { yt: "22nKcTZZ6p0", credit: "Walton College Supply Chain Management — Inventory Management for Dependent Demand & Independent Demand Items | SCMT 3623" },
+    "ivm301-ts-7-2": { yt: "pi7MPYMbXyk", credit: "Prashanth Bharadwaj — MRP Table and Logic for One Item (13 Mins)" },
+    "ivm301-ts-7-3": { yt: "ttRqLwvN2Pw", credit: "Dr. Haywood — MRP vs  MRP II vs ERP - A Comparison of Planning Systems" },
+    "ivm301-ts-8-1": { yt: "Hnp-uswyYlg", credit: "Ian Johnson — Just in Time (JIT) Supply Chains" },
+    "ivm301-ts-8-2": { yt: "Mdyyyu41dZ4", credit: "Chua — Kanban and Pull Concept: A Pizza Example" },
+    "ivm301-ts-9-1": { yt: "OTnSXMhqQ-g", credit: "Ian Johnson — Bullwhip Forrester Effect: How Sudden Demand Increases Affect Supply Chains" },
+    "ivm301-ts-9-2": { yt: "jFPl55jsZCQ", credit: "AdvancePro Technologies — Vendor Managed Inventory (VMI) and Consignment" },
+    "ivm301-ts-9-3": { yt: "34QKQtcOsXw", credit: "Walton College Supply Chain Management — Risk Pooling | SCMT 3623" },
+    "ivm301-ts-10-1": { yt: "inNAvP5kwB0", credit: "Supply Chain Secrets — Warehousing - 10 Principles of Design and Operations" },
+    "ivm301-1-1-overview-role": { yt: "0NOER-Lle-0", credit: "Leaders Talk - ThinkEduca — Inventory Management  in 11 minutes" },
+    "ivm301-2-1-classification-abc": { yt: "IzPw02jAtkU", credit: "Palms Academy — ABC Analysis in Inventory Management | ABC Classification in Warehouse" },
+    "ivm301-3-1-costs-eoq": { yt: "iRVK5fqD81w", credit: "Ian Johnson — Calculating EOQ - Economic Order Quantity (Inventory Costs & Purchasing Costs)" },
+    "ivm301-4-1-rop-safety-stock": { yt: "LLKG2bs-HlA", credit: "Farhat Lectures | CPA, CMA, EA & Accounting — Reorder Point and Safety Stock In Inventory Management" },
+    "ivm301-5-1-control-systems": { yt: "s9Tw5O9yRAE", credit: "Ian Johnson — Min-Max Inventory Supply Chain Strategies" },
+    "ivm301-7-1-lean-jit-scm": { yt: "KgCcNMToRv8", credit: "Business School 101 — Just-in-Time (JIT) | Supply Chain Management | From A Business Professor" },
+  },
+};

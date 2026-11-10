@@ -1,0 +1,42 @@
+/**
+ * YouTube track cho IOM201 — International Operation Management. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/iom201-international-operation-management.mjs
+ */
+export default {
+  courseSlug: "iom201-international-operation-management",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "iom201-flm-b002": { yt: "l-MnHBREzG8", credit: "Leaders Talk - ThinkEduca — Operation Management in 12 minutes" },
+    "iom201-flm-b003": { yt: "4-RB5vpZUJg", credit: "School of Learning — What are Operations Systems? (Input, Process & Output)" },
+    "iom201-flm-b004": { yt: "DqPJ_RgLkqY", credit: "Dr Ogunseyin — Operations Performance Objectives" },
+    "iom201-flm-b006": { yt: "XKt2BQME0h8", credit: "The Business Doctor — Measuring Performance in Operations and Value Chains" },
+    "iom201-flm-b007": { yt: "VozCAXEAdoo", credit: "Operations Management - IITR — Lecture 05 Operations Strategy" },
+    "iom201-flm-b008": { yt: "qpqQtJ7GW8k", credit: "Dr. Harvi Millar — Operations Strategy 1" },
+    "iom201-flm-b009": { yt: "u4_ObeL-gyw", credit: "Dr. Harvi Millar — Operations Strategy 2" },
+    "iom201-flm-b010": { yt: "Lpp9bHtPAN0", credit: "Simplilearn — Supply Chain Management In 6 Minutes | What Is Supply Chain Management? | Simplilearn" },
+    "iom201-flm-b011": { yt: "Qf-UzEQ9CM4", credit: "Dr. Haywood — What is Capacity Planning in Operations Management" },
+    "iom201-flm-b012": { yt: "JXr49yp0tNc", credit: "Business School 101 — Vertical Integration (With Real World Examples)  | From A Business Professor" },
+    "iom201-flm-b014": { yt: "LmI8eJHb2v4", credit: "Marco Cimino — HSC Business Studies Operations: Volume, Variety, Variation in Demand, and Visibility" },
+    "iom201-flm-b024": { yt: "gKG50ePysQQ", credit: "The Business Doctor — Operations & Supply Chain Management: Forecasting & Demand Planning" },
+    "iom201-flm-b025": { yt: "9qBZyzjoqAo", credit: "Operations Management - IITR — Lecture 26 Production Planning and Control" },
+    "iom201-flm-b027": { yt: "BW-kGwrp-PE", credit: "Dr Ogunseyin — Capacity Management" },
+    "iom201-flm-b029": { yt: "0NOER-Lle-0", credit: "Leaders Talk - ThinkEduca — Inventory Management  in 11 minutes" },
+    "iom201-flm-b030": { yt: "uqSWx9c90GE", credit: "The Business Doctor — Inventory Management: Economic Order Quantity (EOQ)" },
+    "iom201-flm-b032": { yt: "2SYeEt5vNec", credit: "DrAnandNair — Manufacturing Planning and Control - An Overview" },
+    "iom201-flm-b033": { yt: "Da1hUqzoiAo", credit: "IBM Technology — What is Enterprise Resource Planning (ERP) Software?" },
+    "iom201-flm-b038": { yt: "sUtmosujXVE", credit: "EMS Consulting Group — Lean Manufacturing: What is Lean and the Toyota Production System?" },
+    "iom201-flm-b039": { yt: "i1nWINaK4Fc", credit: "LeanActivity — Lean Office: 8 Types of Waste in Lean Administration" },
+    "iom201-flm-b040": { yt: "_VaVR4sExbs", credit: "USI Events — This is Lean Management - Niklas Modig, at USI" },
+    "iom201-flm-b041": { yt: "UXChmphBrw0", credit: "Invensis Learning — What is Quality Management? | Quality Management Tutorial | Invensis Learning" },
+    "iom201-flm-b043": { yt: "VD6tXadibk0", credit: "Gemba Academy — What is Total Quality Management - TQM" },
+    "iom201-flm-b046": { yt: "ena1GxBwSNw", credit: "Online PM Courses - Mike Clayton — What is Failure Mode and Effects Analysis - FMEA? PM in Under 5" },
+    "iom201-1-1-overview-of-iom": { yt: "_VJkKZFuRvE", credit: "Operations Management - IITR — Lecture 01 Operations Management: Basics" },
+    "iom201-2-1-operations-strategy": { yt: "XeOasqYtt1M", credit: "Nhel Sam Ok Education — Chapter 2: Operations Strategy in Global Environment" },
+    "iom201-3-1-product-process-layout": { yt: "qKca93vGPho", credit: "Dr. Haywood — Facility Layout in Operations Management - Product vs Process Oriented Layout & Fixed" },
+    "iom201-4-1-global-supply-chain": { yt: "mEIqLcGxZRM", credit: "Business School 101 — Global Supply Chain Management | International Business | From A Business Professor" },
+    "iom201-5-1-quality-management": { yt: "_iWJzSp_foE", credit: "Operations & Supply Chain Management University — Total Quality Management (TQM) Overview: Six Sigma, Benchmarking & JIT" },
+    "iom201-6-1-forecasting-capacity": { yt: "gUDn0-kCWM0", credit: "Management for real people — QDC1 Chapter 5 - Strategic Capacity Planning" },
+    "iom201-7-1-inventory-lean-jit": { yt: "KgCcNMToRv8", credit: "Business School 101 — Just-in-Time (JIT) | Supply Chain Management | From A Business Professor" },
+    "iom201-8-1-sustainable-ops-industry4": { yt: "Y6wkLBJLfLU", credit: "Dr. Vikas Kumar Tyagi — Sustainable Operations Management" },
+  },
+};

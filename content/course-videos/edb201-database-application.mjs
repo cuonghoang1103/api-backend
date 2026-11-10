@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho EDB201 — Database Application. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/edb201-database-application.mjs
+ */
+export default {
+  courseSlug: "edb201-database-application",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "edb201-ts-1-1": { yt: "OqjJjpjDRLc", credit: "IBM Technology — What is a Relational Database?" },
+    "edb201-ts-1-3": { yt: "loZ5L_NmCG8", credit: "Jelvix | TECH IN 5 MINUTES — SIMPLY EXPLAINED: MYSQL vs POSTGRESQL vs SQL SERVER" },
+    "edb201-ts-2-1": { yt: "wOD02sezmX8", credit: "Neso Academy — Basic Concepts of Entity-Relationship Model" },
+    "edb201-ts-2-2": { yt: "hktyW5Lp0Vo", credit: "Lucid Software — Entity Relationship Diagram (ERD) Tutorial - Part 2: Primary keys, foreign keys, and bridge tables" },
+    "edb201-ts-2-3": { yt: "-8bYtApJNos", credit: "Neso Academy — Constraints in SQL" },
+    "edb201-ts-2-4": { yt: "GFQaEYEc8_8", credit: "Decomplexify — Learn Database Normalization - 1NF, 2NF, 3NF, 4NF, 5NF" },
+    "edb201-ts-3-1": { yt: "TDKoTItCVMU", credit: "Data with Baraa — SQL SELECT Queries (Visually Explained) for Beginners | All Essential Clauses | #SQL Course 4" },
+    "edb201-ts-3-2": { yt: "6Twnw3sQChk", credit: "Neso Academy — NULL Functions in SQL" },
+    "edb201-ts-3-4": { yt: "6lBeh9ufu0k", credit: "Knowledge Thrusters — Order of Execution of a SQL Query | MySQL Tutorial" },
+    "edb201-ts-4-1": { yt: "nNrgRVIzeHg", credit: "Becoming a Data Scientist — Advanced Aggregate Functions in SQL (GROUP BY, HAVING vs. WHERE)" },
+    "edb201-ts-4-2": { yt: "UfgRTbRN9FM", credit: "Database Star — SQL Joins: A Guide and Examples" },
+    "edb201-ts-4-3": { yt: "ZaFMM-vNlvc", credit: "Database Star — SQL CTEs (Common Table Expressions) - Why and How to Use Them" },
+    "edb201-ts-4-4": { yt: "rIcB4zMYMas", credit: "Maven Analytics — SQL Window Functions | Clearly Explained | PARTITION BY, ORDER BY, ROW_NUMBER, RANK, DENSE_RANK" },
+    "edb201-ts-5-2": { yt: "wva2yMqcB6Q", credit: "Corey Schafer — SQL Tutorial for Beginners 5: UPDATE and DELETE - Modifying and Removing Records from Your Database" },
+    "edb201-ts-5-4": { yt: "xKAKVr9r1Vk", credit: "The Luminary Coach - Sukhvinder Singh — Python and Databases 6 - SQLite3 - Bulk Loading" },
+    "edb201-ts-6-1": { yt: "GAe5oB742dw", credit: "ByteByteGo — ACID Properties in Databases With Examples" },
+    "edb201-ts-6-2": { yt: "-gxyut1VLcs", credit: "Edredo for Learners — Isolation Levels in Database Management Systems" },
+    "edb201-ts-7-1": { yt: "vLLkNI-vkV8", credit: "Colt Steele — SQL Views In 4 Minutes: Super Useful! Wow! Crazy! Amazing! I'm Crying Tears Of SQL Joy." },
+    "edb201-ts-7-2": { yt: "7wLFr7ZnKPU", credit: "The Magic of SQL — How to Create Database Indexes: Databases for Developers: Performance #4" },
+    "edb201-ts-8-1": { yt: "NrBJmtD0kEw", credit: "Alex The Analyst — Advanced SQL Tutorial | Stored Procedures + Use Cases" },
+    "edb201-ts-8-2": { yt: "NmYaOlcbfZM", credit: "WiseOwlTutorials — SQL Server Programming Part 3 - Variables" },
+    "edb201-ts-8-3": { yt: "Vuz62mzmJIs", credit: "edureka! — Triggers in SQL | Triggers In Database | SQL Triggers Tutorial For Beginners | Edureka Rewind" },
+    "edb201-ts-9-2": { yt: "WONbg6ZjiXk", credit: "Vickie Li Dev — SQL Injection Prevention: Security Simplified" },
+    "edb201-ts-10-1": { yt: "mtPM3iZFE04", credit: "Microsoft Developer — For Your Eyes Only: Roles, Privileges, and Security in PostgreSQL | Citus Con 2023" },
+    "edb201-ts-10-2": { yt: "vZT1Qx2xUCo", credit: "Microsoft Developer — Everything you need to know about Postgres Row Level Security | POSETTE 2024" },
+    "edb201-ts-10-3": { yt: "mr8Lpkx5yag", credit: "SQL with Manoj — Backup and Restore Database in SQL Server" },
+    "edb201-1-1-overview-enterprise": { yt: "Zde-Lzx_kt4", credit: "TutorialsPoint — DBMS - Database System Applications" },
+    "edb201-2-1-erd-design": { yt: "5RpUmDEsn1k", credit: "Database Star — How to Design a Database" },
+    "edb201-3-1-sql-select-join": { yt: "h4EQBAzW3m4", credit: "Neso Academy — Joins in SQL" },
+    "edb201-5-1-view-procedure-function": { yt: "MgWzfHgOuJA", credit: "Nivea's Tutorials — SQL Stored Procedures, Functions and Views explained basics" },
+    "edb201-7-1-security-backup": { yt: "05Wbt1el5A8", credit: "Dr. Daniel Soper — Topic 06, Part 11 - Database Security - Permissions and Roles" },
+  },
+};

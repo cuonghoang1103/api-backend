@@ -108,7 +108,8 @@ chay_kiem() {
 }
 
 # ─── 1. frontend tsc — KHI CHƯA có node_modules gốc (giống Docker) ───
-chay_kiem "frontend tsc" bash -c 'cd frontend && ./node_modules/.bin/tsc --noEmit --skipLibCheck'
+# Heap 8 GB: tsc frontend mặc định (~4 GB) chết OOM từ 09/11/2026 khi dữ liệu nội dung lớn lên — chặn push dù mã đúng.
+chay_kiem "frontend tsc" bash -c 'cd frontend && NODE_OPTIONS=--max-old-space-size=8192 ./node_modules/.bin/tsc --noEmit --skipLibCheck'
 
 # ─── 2. node_modules gốc: symlink từng mục, @prisma/client chép thật ───
 mkdir -p "$WT/node_modules/@prisma"

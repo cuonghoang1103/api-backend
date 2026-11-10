@@ -137,7 +137,7 @@ export function UserAvatar({
 
   // Ring colours
   const ringClass = showStatusRing
-    ? 'ring-2 ring-green-400 ring-offset-2 ring-offset-darkbg'
+    ? 'ring-2 ring-green-400 ring-offset-2 ring-offset-[var(--bg-card)]'
     : '';
 
   const wrapperStyle: React.CSSProperties = {
@@ -156,14 +156,6 @@ export function UserAvatar({
       role="img"
       aria-label={ariaLabel ?? displayName}
     >
-      {/* Online dot */}
-      {showStatusRing && (
-        <span
-          className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-darkbg bg-green-400"
-          aria-label="Online"
-        />
-      )}
-
       {/* 1️⃣ Image */}
       {showImage && (
         // eslint-disable-next-line @next/next/no-img-element
@@ -207,6 +199,29 @@ export function UserAvatar({
     </div>
   );
 
+  // ── Online dot — đặt NGOÀI khung ảnh (11/11/2026) ───────────────────────
+  // Khung ảnh có `overflow-hidden rounded-full`: một chấm `absolute bottom-0 right-0` bên
+  // trong bị cắt mất góc vuông ngoài hình tròn ⇒ người dùng thấy chấm bị ảnh che. Bọc thêm
+  // một lớp `relative` và đặt chấm ở lớp đó, viền bằng màu nền để tách khỏi ảnh.
+  const dotSize = Math.max(8, Math.round(pixelSize * 0.28));
+  const withDot = showStatusRing ? (
+    <span className="relative inline-flex flex-shrink-0" style={{ width: pixelSize, height: pixelSize }}>
+      {avatarContent}
+      <span
+        className="absolute rounded-full bg-[#31a24c]"
+        style={{
+          width: dotSize,
+          height: dotSize,
+          right: 0,
+          bottom: 0,
+          boxShadow: '0 0 0 2px var(--bg-card)',
+        }}
+        aria-label="Đang hoạt động"
+        title="Đang hoạt động"
+      />
+    </span>
+  ) : avatarContent;
+
   // ── Optional profile link ────────────────────────────────────────────────
   if (linkToProfile && userId != null) {
     return (
@@ -215,12 +230,12 @@ export function UserAvatar({
         className="inline-block flex-shrink-0"
         aria-label={`Xem trang cá nhân của ${displayName}`}
       >
-        {avatarContent}
+        {withDot}
       </Link>
     );
   }
 
-  return avatarContent;
+  return withDot;
 }
 
 // ─── Convenience re-exports ────────────────────────────────────────────────────

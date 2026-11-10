@@ -13,15 +13,17 @@
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X, Edit3, Globe, Camera, Loader2, Check,
   Mail, Phone, Briefcase, GraduationCap, Heart, User,
-  Link2, Image as ImageIcon, Settings, Grid3X3, UserPlus, UserCheck, Clock, MoreHorizontal,
+  Link2, Image as ImageIcon, Settings, Grid3X3, UserPlus, UserCheck, MoreHorizontal,
   Facebook, Twitter, Github, Linkedin, Youtube, Instagram,
-  Plus, Home, Star, Building, MapPinned, MapPinHouse, Info,
-  BookText, CalendarDays, Briefcase as WorkIcon, Link as LinkIcon, Copy, Lock, Crown,
+  Home, Star, Building, MapPinned, MapPinHouse, Info,
+  CalendarDays, Briefcase as WorkIcon, Link as LinkIcon, Copy, Lock, Crown,
+  LayoutGrid, List, Play, MessageCircle, Search, UserMinus, UserX, Eye, ChevronDown, Ban, SquarePen,
+  Rss, Clock3, School, Users,
 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import type { ComponentType } from 'react';
@@ -30,6 +32,8 @@ import { socialUserApi, fileApi, friendApi, type FriendStatus } from '@/lib/api'
 import { authApi } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useSocialStore } from '@/store/socialStore';
+import { useMessagingStore } from '@/store/messagingStore';
+import { moChatNho } from '@/lib/miniChat';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
@@ -79,6 +83,8 @@ interface ExtendedProfile {
   followingCount?: number;
   isFollowing?: boolean;
   isOnline?: boolean;
+  lastActiveAt?: string | null;
+  createdAt?: string;
   isPro?: boolean;
 }
 
@@ -89,10 +95,10 @@ const socialIcons: Record<string, ComponentType<{ className?: string }>> = {
 
 const aboutTabs: { id: AboutTab; label: string; icon: ComponentType<{ className?: string }> }[] = [
   { id: 'overview', label: 'Tổng quan', icon: Grid3X3 },
-  { id: 'work', label: 'Công việc', icon: Briefcase },
-  { id: 'places', label: 'Địa điểm', icon: MapPinned },
-  { id: 'contact', label: 'Liên hệ', icon: Phone },
-  { id: 'details', label: 'Chi tiết', icon: Info },
+  { id: 'work', label: 'Công việc và học vấn', icon: Briefcase },
+  { id: 'places', label: 'Nơi từng sống', icon: MapPinned },
+  { id: 'contact', label: 'Thông tin liên hệ và cơ bản', icon: Phone },
+  { id: 'details', label: 'Chi tiết về bạn', icon: Info },
 ];
 
 const mainTabs: { id: MainTab; label: string }[] = [
@@ -128,6 +134,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const [postsHasMore, setPostsHasMore] = useState(true);
   const [loadingPosts, setLoadingPosts] = useState(false);
   const postsSentinelRef = useRef<HTMLDivElement | null>(null);
+  /** 401 khi chưa đăng nhập ⇒ dừng hẳn (trước đây lỗi giữ hasMore=true ⇒ ô canh cuộn gọi lại vô tận, 11/11/2026). */
+  const [postsLocked, setPostsLocked] = useState(false);
 
   // Media (photos + videos)
   const [media, setMedia] = useState<any[]>([]);
@@ -136,8 +144,16 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const [loadingMedia, setLoadingMedia] = useState(false);
   const mediaSentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // Friends (followers)
+  // Friends tab — người theo dõi / đang theo dõi / bạn bè (chỉ chủ trang có danh sách bạn bè)
   const [friends, setFriends] = useState<any[]>([]);
+  const [friendsCursor, setFriendsCursor] = useState<number | null>(null);
+  const [followingList, setFollowingList] = useState<any[] | null>(null);
+  const [followingCursor, setFollowingCursor] = useState<number | null>(null);
+  const [myFriends, setMyFriends] = useState<any[] | null>(null);
+  const [myFriendsCursor, setMyFriendsCursor] = useState<number | null>(null);
+  const [friendsSub, setFriendsSub] = useState<'followers' | 'following' | 'friends'>('followers');
+  const [friendsQuery, setFriendsQuery] = useState('');
+  const [loadingList, setLoadingList] = useState(false);
 
   // Upload + crop
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -166,6 +182,162 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const [saving, setSaving] = useState(false);
 
   const isOwn = currentUser?.id === id;
+  const router = useRouter();
+
+  // ─── Kiểu Facebook (11/11/2026) ──────────────────────────────
+  /** "Xem với tư cách người khác": chủ trang thấy trang như khách (ẩn mọi nút sửa). */
+  const [previewPublic, setPreviewPublic] = useState(false);
+  const own = isOwn && !previewPublic;
+  const [postView, setPostView] = useState<'list' | 'grid'>('list');
+  const [showFriendMenu, setShowFriendMenu] = useState(false);
+  const friendMenuRef = useRef<HTMLDivElement | null>(null);
+  /** Thanh tab dính: khi tên đã cuộn khuất thì hiện ảnh + tên thu nhỏ ở đầu thanh. */
+  const [compact, setCompact] = useState(false);
+  const nameRef = useRef<HTMLDivElement | null>(null);
+  const tabsRef = useRef<HTMLDivElement | null>(null);
+  /** Cột trái dính kiểu Facebook: cột dài hơn màn hình thì dính theo ĐÁY, không bị cắt. */
+  const leftRef = useRef<HTMLDivElement | null>(null);
+  const [leftTop, setLeftTop] = useState(132);
+  const peerOnline = useMessagingStore((s) => s.presence.byUserId[id]?.online ?? false);
+  const realtimeOn = useMessagingStore((s) => s.isConnected);
+
+  const navH = () => {
+    if (typeof window === 'undefined') return 64;
+    const v = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--app-nav-h'));
+    // --app-nav-h tính bằng rem (4rem) ⇒ đổi ra px.
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    return Number.isFinite(v) && v > 0 ? (v < 20 ? v * rem : v) : 64;
+  };
+
+  useEffect(() => {
+    const onScroll = () => {
+      const el = nameRef.current;
+      if (!el) return;
+      setCompact(el.getBoundingClientRect().bottom < navH() + 56);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
+
+  useEffect(() => {
+    const el = leftRef.current;
+    if (!el) return;
+    const place = () => {
+      const top = navH() + 52 + 16;
+      setLeftTop(Math.min(top, window.innerHeight - el.offsetHeight - 16));
+    };
+    place();
+    const ro = new ResizeObserver(place);
+    ro.observe(el);
+    window.addEventListener('resize', place);
+    return () => { ro.disconnect(); window.removeEventListener('resize', place); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, mainTab]);
+
+  useEffect(() => {
+    if (!showFriendMenu) return;
+    const onClick = (e: MouseEvent) => {
+      if (friendMenuRef.current && !friendMenuRef.current.contains(e.target as Node)) setShowFriendMenu(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowFriendMenu(false); };
+    document.addEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('mousedown', onClick); document.removeEventListener('keydown', onKey); };
+  }, [showFriendMenu]);
+
+  // Đổi trang cá nhân khác ⇒ đặt lại các danh sách phụ.
+  useEffect(() => {
+    setFollowingList(null); setMyFriends(null); setFriendsSub('followers'); setFriendsQuery('');
+    setPreviewPublic(false); setMainTab('posts');
+  }, [id]);
+
+  const loadMoreFollowers = useCallback(async () => {
+    if (!id || !friendsCursor || loadingList) return;
+    setLoadingList(true);
+    try {
+      const res: any = await socialUserApi.getFollowers(id, friendsCursor, 24);
+      setFriends((prev) => [...prev, ...(res.data?.data?.users ?? [])]);
+      setFriendsCursor(res.data?.data?.nextCursor ?? null);
+    } catch { toast.error('Không tải thêm được'); } finally { setLoadingList(false); }
+  }, [id, friendsCursor, loadingList]);
+
+  const loadFollowing = useCallback(async (reset: boolean) => {
+    if (!id || loadingList) return;
+    setLoadingList(true);
+    try {
+      const res: any = await socialUserApi.getFollowing(id, reset ? undefined : followingCursor ?? undefined, 24);
+      const list = res.data?.data?.users ?? [];
+      setFollowingList((prev) => (reset || !prev ? list : [...prev, ...list]));
+      setFollowingCursor(res.data?.data?.nextCursor ?? null);
+    } catch { toast.error('Không tải được danh sách đang theo dõi'); setFollowingList((p) => p ?? []); } finally { setLoadingList(false); }
+  }, [id, followingCursor, loadingList]);
+
+  const loadMyFriends = useCallback(async (reset: boolean) => {
+    if (loadingList) return;
+    setLoadingList(true);
+    try {
+      const res: any = await friendApi.listFriends(reset ? undefined : myFriendsCursor ?? undefined, 24);
+      const list = res.data?.data?.users ?? [];
+      setMyFriends((prev) => (reset || !prev ? list : [...prev, ...list]));
+      setMyFriendsCursor(res.data?.data?.nextCursor ?? null);
+    } catch { toast.error('Không tải được danh sách bạn bè'); setMyFriends((p) => p ?? []); } finally { setLoadingList(false); }
+  }, [myFriendsCursor, loadingList]);
+
+  useEffect(() => {
+    if (mainTab !== 'friends') return;
+    if (friendsSub === 'following' && followingList === null) void loadFollowing(true);
+    if (friendsSub === 'friends' && myFriends === null) void loadMyFriends(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mainTab, friendsSub]);
+
+  /** Đổi tab; nếu đang cuộn sâu thì đưa thanh tab về sát đầu trang để thấy nội dung mới. */
+  const goTab = (t: MainTab) => {
+    setMainTab(t);
+    const el = tabsRef.current;
+    if (el && compact) {
+      const y = el.getBoundingClientRect().top + window.scrollY - navH();
+      window.scrollTo({ top: Math.max(0, y - 1), behavior: 'smooth' });
+    }
+  };
+
+  const requireLogin = () => {
+    if (previewPublic) {
+      toast.info('Đang xem trước với tư cách người khác — các nút này chỉ để xem.');
+      return true;
+    }
+    if (currentUser) return false;
+    router.push('/login');
+    return true;
+  };
+
+  const openMessage = () => {
+    if (requireLogin() || !profile) return;
+    const ok = moChatNho({
+      id,
+      username: profile.username,
+      displayName: profile.displayName || profile.fullName || profile.username,
+      avatarUrl: profile.avatarUrl ?? null,
+    });
+    if (!ok) router.push(`/messages?peer=${id}`);
+  };
+
+  const declineFriend = async () => {
+    setShowFriendMenu(false);
+    setFriendBusy(true);
+    try { await friendApi.respond(id, false); setFriendStatus('none'); toast.success('Đã xoá lời mời'); }
+    catch { toast.error('Không thể thực hiện'); } finally { setFriendBusy(false); }
+  };
+
+  const blockUser = async () => {
+    setShowSettings(false);
+    if (requireLogin()) return;
+    const ten = profile?.displayName || profile?.fullName || profile?.username || 'người này';
+    if (!window.confirm(`Chặn ${ten}? Hai bạn sẽ không nhắn tin được cho nhau. Bỏ chặn ở Cài đặt › Quyền riêng tư.`)) return;
+    try { await useMessagingStore.getState().blockUser(id); toast.success(`Đã chặn ${ten}`); }
+    catch { toast.error('Không chặn được, thử lại sau'); }
+  };
 
   // ─── Load profile ─────────────────────────────────────────────
   const loadProfile = useCallback(async () => {
@@ -214,8 +386,11 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       }));
       setPostsCursor(nextCursor);
       setPostsHasMore(hasMore);
-    } catch {
-      toast.error('Không tải được bài viết');
+      setPostsLocked(false);
+    } catch (err: any) {
+      setPostsHasMore(false);
+      if (err?.response?.status === 401) setPostsLocked(true);
+      else toast.error('Không tải được bài viết');
     } finally {
       setLoadingPosts(false);
     }
@@ -232,8 +407,9 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       setMedia((prev) => (reset ? (items ?? []) : [...prev, ...(items ?? [])]));
       setMediaCursor(nextCursor);
       setMediaHasMore(hasMore);
-    } catch {
-      toast.error('Không tải được ảnh/video');
+    } catch (err: any) {
+      setMediaHasMore(false);
+      if (err?.response?.status !== 401) toast.error('Không tải được ảnh/video');
     } finally {
       setLoadingMedia(false);
     }
@@ -242,9 +418,10 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   const loadFriends = useCallback(async () => {
     if (!id) return;
     try {
-      const res: any = await socialUserApi.getFollowers(id, undefined, 12);
+      const res: any = await socialUserApi.getFollowers(id, undefined, 24);
       const list = res.data?.data?.users ?? res.data?.data?.items ?? res.data?.data ?? [];
       setFriends(Array.isArray(list) ? list : []);
+      setFriendsCursor(res.data?.data?.nextCursor ?? null);
     } catch {
       /* non-fatal — Friends card just stays empty */
     }
@@ -487,7 +664,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         return (
           <div className="space-y-4">
             {p.work || p.workplace || p.jobTitle ? (
-              <div className="p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] flex items-start gap-3">
+              <div className="p-4 rounded-xl bg-[var(--bg-surface)] flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-neon-violet/10"><Briefcase className="h-5 w-5 text-tone-violet" /></div>
                 <div>
                   {p.jobTitle && <p className="font-medium text-text-primary">{p.jobTitle}</p>}
@@ -497,7 +674,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               </div>
             ) : <p className="text-text-muted italic">Chưa cập nhật thông tin công việc</p>}
             {(p.school || p.college) && (
-              <div className="p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] flex items-start gap-3">
+              <div className="p-4 rounded-xl bg-[var(--bg-surface)] flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-emerald-500/10"><GraduationCap className="h-5 w-5 text-emerald-500" /></div>
                 <div>
                   {p.school && <p className="font-medium text-text-primary">{p.school}</p>}
@@ -511,13 +688,13 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         return (
           <div className="space-y-4">
             {p.location ? (
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)]">
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-surface)]">
                 <MapPinHouse className="h-5 w-5 text-tone-violet" />
                 <div><p className="text-sm text-text-muted">Thành phố hiện tại</p><p className="font-medium text-text-primary">{p.location}</p></div>
               </div>
             ) : <p className="text-text-muted italic">Chưa cập nhật nơi ở</p>}
             {p.hometown && (
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)]">
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-surface)]">
                 <Home className="h-5 w-5 text-emerald-500" />
                 <div><p className="text-sm text-text-muted">Quê quán</p><p className="font-medium text-text-primary">{p.hometown}</p></div>
               </div>
@@ -573,187 +750,350 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   // ─── Loading skeleton ─────────────────────────────────────────
   if (loading) {
     return (
-      <div className="mx-auto w-full max-w-[1050px] px-4">
-        <div className="h-[220px] sm:h-[300px] lg:h-[350px] animate-pulse rounded-2xl bg-[var(--bg-glass)] mb-16" />
-        <div className="flex flex-col lg:flex-row gap-5">
-          <div className="w-full lg:w-2/5 space-y-4"><div className="h-[420px] animate-pulse rounded-2xl bg-[var(--bg-glass)]" /></div>
-          <div className="flex-1 space-y-4"><div className="h-32 animate-pulse rounded-2xl bg-[var(--bg-glass)]" /><div className="h-64 animate-pulse rounded-2xl bg-[var(--bg-glass)]" /></div>
+      <div className="w-full pb-10">
+        <div className="bg-[var(--bg-card)] border-b border-[var(--border-color)]">
+          <div className="mx-auto max-w-[1250px]">
+            <div className="h-[200px] sm:h-[300px] lg:h-[420px] animate-pulse lg:rounded-b-xl bg-[var(--bg-surface)]" />
+          </div>
+          <div className="mx-auto max-w-[1100px] px-4 lg:px-8 pb-6 flex flex-col items-center lg:flex-row lg:items-end gap-4">
+            <div className="-mt-[70px] lg:-mt-[84px] h-[140px] w-[140px] lg:h-[176px] lg:w-[176px] rounded-full animate-pulse bg-[var(--bg-surface)] ring-4 ring-[var(--bg-card)]" />
+            <div className="space-y-2 lg:pb-4"><div className="h-7 w-56 rounded animate-pulse bg-[var(--bg-surface)]" /><div className="h-4 w-40 rounded animate-pulse bg-[var(--bg-surface)]" /></div>
+          </div>
+        </div>
+        <div className="mx-auto max-w-[1100px] px-4 lg:px-8 mt-4 flex flex-col lg:flex-row gap-4">
+          <div className="w-full lg:w-[42%] space-y-4"><div className="h-[360px] animate-pulse rounded-xl bg-[var(--bg-card)]" /></div>
+          <div className="flex-1 space-y-4"><div className="h-28 animate-pulse rounded-xl bg-[var(--bg-card)]" /><div className="h-64 animate-pulse rounded-xl bg-[var(--bg-card)]" /></div>
         </div>
       </div>
     );
   }
   if (!profile) {
-    return <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-12 text-center text-text-muted">Không tìm thấy người dùng.</div>;
+    return (
+      <div className="mx-auto max-w-[680px] px-4 py-16">
+        <div className={cn(CARD, 'p-12 text-center')}>
+          <UserX className="h-12 w-12 mx-auto text-text-muted mb-3" />
+          <p className="text-lg font-semibold text-text-primary">Không tìm thấy người dùng</p>
+          <p className="text-sm text-text-muted mt-1">Liên kết có thể đã hỏng hoặc trang đã bị gỡ.</p>
+        </div>
+      </div>
+    );
   }
 
   const p = profile;
   const cover = p.coverPhotoUrl;
+  const ten = p.displayName || p.fullName || p.username;
   // Guard against empty/null media URLs so they never render as black tiles.
   const videos = media.filter((m) => m.type === 'VIDEO' && (m.url || m.thumbnail));
   const photos = media.filter((m) => m.type !== 'VIDEO' && (m.url || m.thumbnail));
+  /** Chủ trang luôn "đang hoạt động" khi đang kết nối realtime; người khác: server + socket. */
+  const online = isOwn ? realtimeOn || !!p.isOnline : peerOnline || !!p.isOnline;
+  const hoatDongLuc = !online && p.lastActiveAt ? thoiGianTruoc(p.lastActiveAt) : null;
 
   // Automated news-bot account? → polished bot hero instead of the normal
   // cover/avatar header. The tab bar + posts list below are unchanged.
   const bot = getBot(p.username);
 
+  const followerList = friends;
+  const listForSub = friendsSub === 'followers' ? followerList : friendsSub === 'following' ? (followingList ?? []) : (myFriends ?? []);
+  const kw = friendsQuery.trim().toLowerCase();
+  const listShown = kw
+    ? listForSub.filter((f: any) => `${f.displayName ?? ''} ${f.fullName ?? ''} ${f.username ?? ''}`.toLowerCase().includes(kw))
+    : listForSub;
+  const subHasMore = friendsSub === 'followers' ? !!friendsCursor : friendsSub === 'following' ? !!followingCursor : !!myFriendsCursor;
+  const subLoading = loadingList && (friendsSub !== 'following' || followingList !== null) && (friendsSub !== 'friends' || myFriends !== null);
+
+  const btnPrimary = 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[var(--accent-color)] px-4 h-9 text-[15px] font-semibold text-white hover:bg-[var(--accent-hover)] transition-colors disabled:opacity-60';
+  const btnGrey = 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] px-4 h-9 text-[15px] font-semibold text-text-primary hover:bg-[color-mix(in_srgb,var(--text-primary)_15%,var(--bg-card))] transition-colors disabled:opacity-60';
+  const menuItem = 'w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-[15px] font-medium text-text-primary hover:bg-[var(--bg-surface-hover)] transition-colors text-left';
+
   // ─── Render ───────────────────────────────────────────────────
   return (
-    <div className="mx-auto w-full max-w-[1050px] px-4 pb-10">
-      {bot ? (
-        <BotProfileBanner
-          bot={bot}
-          displayName={p.displayName || p.fullName || p.username}
-          followerCount={p.followerCount ?? 0}
-        />
-      ) : (
-      /* Cover + avatar header (avatar overlaps cover via negative margin, not clipped) */
-      <div className="relative rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)]">
-        {/* Cover photo — its own overflow-hidden box; the avatar is a SIBLING so it is never clipped */}
-        <div
-          className="h-[200px] sm:h-[280px] lg:h-[350px] w-full relative overflow-hidden rounded-t-2xl"
-          style={!cover ? { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)' } : undefined}
-        >
-          {cover && (/* eslint-disable-next-line @next/next/no-img-element */ <img src={cover} alt="Ảnh bìa" className="w-full h-full object-cover" />)}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-          {isOwn && (
-            <label className="absolute bottom-4 right-4 cursor-pointer inline-flex items-center gap-2 rounded-xl bg-black/60 hover:bg-black/80 backdrop-blur-sm px-4 py-2.5 text-sm font-medium text-white transition-all hover:scale-105 shadow-lg" aria-label="Cập nhật ảnh bìa">
-              {uploadingImage && showImageCropper === 'cover' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
-              <span className="hidden sm:inline">Cập nhật ảnh bìa</span>
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'cover')} />
-            </label>
-          )}
+    <div className="w-full pb-10">
+      {previewPublic && (
+        <div className="sticky top-[var(--app-nav-h)] z-[31] bg-[var(--accent-color)] text-white text-sm">
+          <div className="mx-auto max-w-[1100px] px-4 h-10 flex items-center justify-between gap-3">
+            <span className="inline-flex items-center gap-2"><Eye className="h-4 w-4" />Bạn đang xem trang cá nhân của mình với tư cách người khác.</span>
+            <button onClick={() => setPreviewPublic(false)} className="rounded-md bg-white/20 hover:bg-white/30 px-3 py-1 font-semibold">Thoát chế độ xem</button>
+          </div>
         </div>
+      )}
 
-        {/* Avatar + name + actions row */}
-        <div className="px-4 sm:px-6 pb-4">
-          <div className="flex flex-col items-center sm:flex-row sm:items-end gap-3 sm:gap-5">
-            {/* Avatar — pulled UP over the cover bottom edge; z-10 keeps it above the cover */}
-            <div className="relative z-10 -mt-14 sm:-mt-[80px] shrink-0">
-              {p.isPro && (
-                <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-0.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white bg-gradient-to-r from-amber-400 to-violet-500 shadow-[0_2px_10px_rgba(245,158,11,0.5)] ring-2 ring-darkcard">
-                  <Crown className="w-3 h-3" /> PRO
-                </span>
-              )}
-              <div className={`group relative h-[120px] w-[120px] sm:h-[168px] sm:w-[168px] rounded-full ring-4 shadow-2xl overflow-hidden transition-all duration-300 ${p.isPro ? 'ring-amber-400/80 hover:ring-amber-300' : 'ring-darkcard hover:ring-neon-violet/40'}`}>
-                {p.avatarUrl && anhLoi !== p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt="Ảnh đại diện" className="w-full h-full object-cover" onError={() => setAnhLoi(p.avatarUrl ?? null)} />) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-violet via-neon-purple to-neon-pink">
-                    <span className="text-5xl sm:text-6xl font-bold text-text-primary drop-shadow-lg">{(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}</span>
-                  </div>
-                )}
-                {p.isOnline && <div className="absolute bottom-2.5 right-2.5 h-5 w-5 rounded-full bg-emerald-500 ring-2 ring-darkcard" />}
-                {isOwn && (
-                  /* ⚠️ Lớp phủ PHẢI trong suốt: nó nằm `inset-0` ĐÈ LÊN ảnh. Commit 562f6379d (đổi màu
-                     theo chủ đề) từng thay `bg-black/0 hover:bg-black/40` bằng `bg-[var(--bg-surface)]` —
-                     nền ĐẶC ⇒ chủ trang thấy vòng tròn trống, người khác vẫn thấy ảnh (09/11/2026).
-                     Chấm máy ảnh luôn nền đen ⇒ biểu tượng trắng cố định, không theo chủ đề. */
-                  <label className="absolute inset-0 flex items-center justify-center bg-transparent hover:bg-black/40 transition-colors cursor-pointer rounded-full" aria-label="Đổi ảnh đại diện">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-white/20">
-                      {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : <Camera className="h-5 w-5 text-white" />}
-                    </div>
-                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'avatar')} />
+      {/* ══ Dải đầu trang: ảnh bìa rộng + ảnh đại diện đè mép + tên + nút ══ */}
+      <section className="bg-[var(--bg-card)] shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
+        {bot ? (
+          <div className="mx-auto max-w-[1100px] px-4 lg:px-8 pt-4 pb-2">
+            <BotProfileBanner bot={bot} displayName={ten} followerCount={p.followerCount ?? 0} />
+          </div>
+        ) : (
+          <>
+            {/* Ảnh bìa — gần tràn khung như Facebook (tối đa 1250px), bo góc dưới trên màn lớn */}
+            <div className="mx-auto max-w-[1250px]">
+              <div
+                className="relative h-[200px] sm:h-[300px] md:h-[360px] lg:h-[420px] xl:h-[460px] w-full overflow-hidden lg:rounded-b-xl"
+                style={!cover ? { background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)' } : undefined}
+              >
+                {cover && (/* eslint-disable-next-line @next/next/no-img-element */ <img src={cover} alt="Ảnh bìa" className="w-full h-full object-cover" />)}
+                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/35 to-transparent pointer-events-none" />
+                {own && (
+                  <label className="absolute bottom-4 right-4 cursor-pointer inline-flex items-center gap-2 rounded-lg bg-[var(--bg-card)] px-3 h-9 text-[15px] font-semibold text-text-primary shadow-md hover:bg-[var(--bg-surface)] transition-colors" aria-label="Chỉnh sửa ảnh bìa">
+                    {uploadingImage && showImageCropper === 'cover' ? <Loader2 className="h-4 w-4 animate-spin" /> : <Camera className="h-4 w-4" />}
+                    <span className="hidden sm:inline">{cover ? 'Chỉnh sửa ảnh bìa' : 'Thêm ảnh bìa'}</span>
+                    <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'cover')} />
                   </label>
                 )}
               </div>
             </div>
 
-            {/* Header info */}
-            <div className="flex-1 min-w-0 w-full flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pb-1 text-center sm:text-left">
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-text-primary">{p.displayName || p.fullName || p.username}</h1>
-              <p className="text-text-muted mt-0.5">@{p.username}</p>
-              <div className="flex items-center justify-center sm:justify-start gap-4 mt-2 text-sm text-text-muted flex-wrap">
-                <span><strong className="text-text-primary font-semibold">{p.followerCount ?? 0}</strong> người theo dõi</span>
-                <span><strong className="text-text-primary font-semibold">{p.followingCount ?? 0}</strong> đang theo dõi</span>
-              </div>
-            </div>
-            <div className="flex gap-2 flex-wrap justify-center sm:justify-end max-sm:w-full">
-              {isOwn ? (
-                <>
-                  <button onClick={() => { setMainTab('about'); startEditing(aboutTab); }} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-neon-violet to-neon-purple text-white px-5 py-2.5 font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-neon-violet/20">
-                    <Edit3 className="h-4 w-4" />Chỉnh sửa trang cá nhân
-                  </button>
+            <div className="mx-auto max-w-[1100px] px-4 lg:px-8">
+              <div className="flex flex-col items-center lg:flex-row lg:items-end gap-3 lg:gap-5 pb-4">
+                {/* Ảnh đại diện: khung tròn cắt ảnh nằm TRONG, chấm xanh + nút máy ảnh nằm NGOÀI để không bị che */}
+                <div className="relative z-10 -mt-[76px] lg:-mt-[88px] shrink-0">
+                  <div className={cn('group relative h-[152px] w-[152px] lg:h-[176px] lg:w-[176px] rounded-full p-1 shadow-lg', p.isPro ? 'bg-gradient-to-br from-amber-300 via-amber-500 to-violet-500' : 'bg-[var(--bg-card)]')}>
+                    <div className="h-full w-full rounded-full overflow-hidden ring-4 ring-[var(--bg-card)] bg-[var(--bg-surface)]">
+                      {p.avatarUrl && anhLoi !== p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt={`Ảnh đại diện của ${ten}`} className="w-full h-full object-cover" onError={() => setAnhLoi(p.avatarUrl ?? null)} />) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-violet via-neon-purple to-neon-pink">
+                          <span className="text-6xl font-bold text-white drop-shadow-lg">{ten.slice(0, 1).toUpperCase()}</span>
+                        </div>
+                      )}
+                    </div>
+                    {own && (
+                      /* ⚠️ Lớp phủ PHẢI trong suốt: nó nằm đè lên ảnh. Commit 562f6379d từng đổi sang nền ĐẶC
+                         ⇒ chủ trang thấy vòng tròn trống (09/11/2026). */
+                      <label className="absolute inset-1 rounded-full cursor-pointer bg-transparent hover:bg-black/25 transition-colors" aria-label="Đổi ảnh đại diện">
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'avatar')} />
+                      </label>
+                    )}
+                  </div>
+                  {/* Chấm "đang hoạt động": góc dưới-phải, trên đường tròn (45°), viền màu nền ⇒ luôn nhìn rõ */}
+                  {online && (
+                    <span
+                      title="Đang hoạt động"
+                      aria-label="Đang hoạt động"
+                      className="absolute z-20 h-6 w-6 lg:h-7 lg:w-7 rounded-full bg-[#31a24c] ring-[5px] ring-[var(--bg-card)] right-[14px] bottom-[14px] lg:right-[17px] lg:bottom-[17px]"
+                    />
+                  )}
+                  {/* Nút đổi ảnh đại diện (chủ trang): góc dưới-trái, đối xứng với chấm xanh */}
+                  {own && (
+                    <label className="absolute z-20 left-[6px] bottom-[10px] lg:left-[10px] lg:bottom-[12px] h-9 w-9 rounded-full bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] ring-2 ring-[var(--bg-card)] flex items-center justify-center cursor-pointer hover:bg-[color-mix(in_srgb,var(--text-primary)_15%,var(--bg-card))] shadow" aria-label="Cập nhật ảnh đại diện" title="Cập nhật ảnh đại diện">
+                      {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-[18px] w-[18px] animate-spin text-text-primary" /> : <Camera className="h-[18px] w-[18px] text-text-primary" />}
+                      <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'avatar')} />
+                    </label>
+                  )}
+                  {p.isPro && (
+                    <span className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 z-20 inline-flex items-center gap-0.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white bg-gradient-to-r from-amber-400 to-violet-500 shadow ring-2 ring-[var(--bg-card)]">
+                      <Crown className="w-3 h-3" /> PRO
+                    </span>
+                  )}
+                </div>
+
+                {/* Tên + số người theo dõi + mặt người theo dõi */}
+                <div ref={nameRef} className="flex-1 min-w-0 w-full text-center lg:text-left lg:pb-3">
+                  <h1 className="text-[28px] lg:text-[32px] leading-tight font-bold text-text-primary break-words">{ten}</h1>
+                  <p className="text-[15px] text-text-secondary">
+                    @{p.username}
+                    {online && !isOwn && <span className="ml-2 inline-flex items-center gap-1 text-[#31a24c] font-medium"><span className="h-2 w-2 rounded-full bg-[#31a24c]" />Đang hoạt động</span>}
+                    {hoatDongLuc && <span className="ml-2 text-text-muted">· Hoạt động {hoatDongLuc}</span>}
+                  </p>
+                  <div className="mt-1 flex items-center justify-center lg:justify-start gap-1.5 text-[15px] text-text-secondary flex-wrap">
+                    <button onClick={() => { setFriendsSub('followers'); goTab('friends'); }} className="hover:underline"><strong className="text-text-primary font-semibold">{p.followerCount ?? 0}</strong> người theo dõi</button>
+                    <span aria-hidden>•</span>
+                    <button onClick={() => { setFriendsSub('following'); goTab('friends'); }} className="hover:underline"><strong className="text-text-primary font-semibold">{p.followingCount ?? 0}</strong> đang theo dõi</button>
+                  </div>
+                  {friends.length > 0 && (
+                    <div className="mt-2 flex justify-center lg:justify-start -space-x-2">
+                      {friends.slice(0, 8).map((f) => (
+                        <a key={f.id} href={`/profile/${f.id}/v2`} title={f.displayName || f.username} className="relative inline-block h-8 w-8 rounded-full ring-2 ring-[var(--bg-card)] overflow-hidden bg-gradient-to-br from-neon-violet/40 to-neon-pink/40 hover:z-10">
+                          {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="h-full w-full object-cover" />) : <span className="flex h-full w-full items-center justify-center text-xs font-bold text-text-primary">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Nút hành động */}
+                <div className="flex gap-2 flex-wrap justify-center lg:justify-end lg:pb-4 w-full lg:w-auto">
+                  {own ? (
+                    <>
+                      <button onClick={() => { goTab('posts'); window.setTimeout(() => document.getElementById('profile-composer')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50); }} className={cn(btnPrimary, 'max-sm:flex-1')}>
+                        <SquarePen className="h-4 w-4" />Tạo bài viết
+                      </button>
+                      <button onClick={() => { goTab('about'); startEditing('overview'); }} className={cn(btnGrey, 'max-sm:flex-1')}>
+                        <Edit3 className="h-4 w-4 shrink-0" /><span className="sm:hidden">Chỉnh sửa</span><span className="max-sm:hidden">Chỉnh sửa trang cá nhân</span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {/* Kết bạn (hai chiều, độc lập với theo dõi) */}
+                      <div className="relative" ref={friendMenuRef}>
+                        <button
+                          onClick={() => {
+                            if (requireLogin()) return;
+                            if (friendStatus === 'friends' || friendStatus === 'pending_incoming') setShowFriendMenu((v) => !v);
+                            else void toggleFriend();
+                          }}
+                          disabled={friendBusy || (!!currentUser && friendStatus === null)}
+                          aria-haspopup={friendStatus === 'friends' || friendStatus === 'pending_incoming' ? 'menu' : undefined}
+                          className={friendStatus === 'none' || friendStatus === 'pending_incoming' || !currentUser ? btnPrimary : btnGrey}
+                        >
+                          {friendBusy ? <Loader2 className="h-4 w-4 animate-spin" />
+                            : friendStatus === 'friends' ? <UserCheck className="h-4 w-4" />
+                            : friendStatus === 'pending_outgoing' ? <UserMinus className="h-4 w-4" />
+                            : friendStatus === 'pending_incoming' ? <UserCheck className="h-4 w-4" />
+                            : <UserPlus className="h-4 w-4" />}
+                          {friendStatus === 'friends' ? 'Bạn bè' : friendStatus === 'pending_outgoing' ? 'Huỷ lời mời' : friendStatus === 'pending_incoming' ? 'Phản hồi' : 'Thêm bạn bè'}
+                          {(friendStatus === 'friends' || friendStatus === 'pending_incoming') && <ChevronDown className="h-4 w-4 -mr-1" />}
+                        </button>
+                        <AnimatePresence>
+                          {showFriendMenu && (
+                            <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} role="menu"
+                              className="absolute left-0 lg:left-auto lg:right-0 mt-2 w-60 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] p-1.5 shadow-2xl z-50">
+                              {friendStatus === 'pending_incoming' ? (
+                                <>
+                                  <button role="menuitem" className={menuItem} onClick={() => { setShowFriendMenu(false); void toggleFriend(); }}><Check className="h-5 w-5" />Xác nhận</button>
+                                  <button role="menuitem" className={menuItem} onClick={declineFriend}><X className="h-5 w-5" />Xoá lời mời</button>
+                                </>
+                              ) : (
+                                <>
+                                  <button role="menuitem" className={menuItem} onClick={() => { setShowFriendMenu(false); void toggleFollow(); }}>
+                                    {following ? <><UserMinus className="h-5 w-5" />Bỏ theo dõi</> : <><Rss className="h-5 w-5" />Theo dõi</>}
+                                  </button>
+                                  <button role="menuitem" className={menuItem} onClick={() => { setShowFriendMenu(false); if (window.confirm(`Huỷ kết bạn với ${ten}?`)) void toggleFriend(); }}><UserX className="h-5 w-5" />Huỷ kết bạn</button>
+                                </>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                      <button onClick={openMessage} className={friendStatus === 'friends' ? btnPrimary : btnGrey}>
+                        <MessageCircle className="h-4 w-4" />Nhắn tin
+                      </button>
+                      {friendStatus !== 'friends' && (
+                        <button onClick={() => { if (!requireLogin()) void toggleFollow(); }} disabled={followBusy || (!!currentUser && following === null)} className={btnGrey}>
+                          {followBusy ? <Loader2 className="h-4 w-4 animate-spin" /> : following ? <Check className="h-4 w-4" /> : <Rss className="h-4 w-4" />}
+                          {following ? 'Đang theo dõi' : 'Theo dõi'}
+                        </button>
+                      )}
+                    </>
+                  )}
+                  {/* Menu ⌄ / ⋯ */}
                   <div className="relative" ref={settingsRef}>
-                    <button onClick={() => setShowSettings((s) => !s)} aria-label="Tùy chọn" aria-haspopup="menu" aria-expanded={showSettings}
-                      className="inline-flex items-center justify-center rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] p-2.5 hover:bg-[var(--bg-glass)] transition-colors">
-                      <Settings className="h-5 w-5 text-text-secondary" />
+                    <button onClick={() => setShowSettings((v) => !v)} aria-label="Tuỳ chọn khác" aria-haspopup="menu" aria-expanded={showSettings} className={cn(btnGrey, 'px-3')}>
+                      {own ? <ChevronDown className="h-5 w-5" /> : <MoreHorizontal className="h-5 w-5" />}
                     </button>
                     <AnimatePresence>
                       {showSettings && (
                         <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                          role="menu" className="absolute right-0 mt-2 w-56 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl overflow-hidden z-50">
-                          <button role="menuitem" onClick={() => { setShowSettings(false); setMainTab('about'); startEditing('overview'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary transition-colors"><Edit3 className="h-4 w-4" />Chỉnh sửa trang cá nhân</button>
-                          <button role="menuitem" onClick={copyProfileLink} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary transition-colors"><Copy className="h-4 w-4" />Sao chép liên kết</button>
-                          <button role="menuitem" onClick={() => { setShowSettings(false); toast.info('Cài đặt quyền riêng tư sẽ sớm ra mắt'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary transition-colors"><Lock className="h-4 w-4" />Quyền riêng tư</button>
+                          role="menu" className="absolute right-0 mt-2 w-72 rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] p-1.5 shadow-2xl z-50">
+                          {isOwn && (
+                            <button role="menuitem" className={menuItem} onClick={() => { setShowSettings(false); setPreviewPublic((v) => !v); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
+                              <Eye className="h-5 w-5" />{previewPublic ? 'Thoát chế độ xem với tư cách người khác' : 'Xem với tư cách người khác'}
+                            </button>
+                          )}
+                          {own && (
+                            <button role="menuitem" className={menuItem} onClick={() => { setShowSettings(false); goTab('about'); startEditing('overview'); }}><Edit3 className="h-5 w-5" />Chỉnh sửa trang cá nhân</button>
+                          )}
+                          <button role="menuitem" className={menuItem} onClick={copyProfileLink}><Copy className="h-5 w-5" />Sao chép liên kết trang cá nhân</button>
+                          <button role="menuitem" className={menuItem} onClick={() => { setShowSettings(false); setFriendsSub('followers'); goTab('friends'); }}><Users className="h-5 w-5" />Xem người theo dõi</button>
+                          {own ? (
+                            <a role="menuitem" className={menuItem} href="/settings/privacy" onClick={() => setShowSettings(false)}><Lock className="h-5 w-5" />Quyền riêng tư</a>
+                          ) : !isOwn && (
+                            <button role="menuitem" className={menuItem} onClick={blockUser}><Ban className="h-5 w-5" />Chặn nhắn tin</button>
+                          )}
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
-                </>
-              ) : (
-                <>
-                  {/* Two-way friend button (independent of follow). */}
-                  <button onClick={toggleFriend} disabled={friendBusy || friendStatus === null}
-                    className={cn('inline-flex items-center gap-2 px-5 py-2.5 font-semibold rounded-xl transition-all shadow-lg',
-                      friendStatus === 'none'
-                        ? 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20'
-                        : 'bg-[var(--bg-glass)] border border-[var(--border-color)] text-text-primary hover:bg-[var(--bg-card)]',
-                      friendBusy && 'opacity-50')}>
-                    {friendStatus === 'friends' ? <><UserCheck className="h-4 w-4" />Bạn bè</>
-                      : friendStatus === 'pending_outgoing' ? <><Clock className="h-4 w-4" />Đã gửi lời mời</>
-                      : friendStatus === 'pending_incoming' ? <><Check className="h-4 w-4" />Đồng ý kết bạn</>
-                      : <><UserPlus className="h-4 w-4" />Kết bạn</>}
-                  </button>
-                  <button onClick={toggleFollow} disabled={followBusy || following === null}
-                    className={cn('inline-flex items-center gap-2 px-5 py-2.5 font-semibold rounded-xl transition-all shadow-lg',
-                      following ? 'bg-[var(--bg-glass)] border border-[var(--border-color)] text-text-primary hover:bg-[var(--bg-card)]' : 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20',
-                      followBusy && 'opacity-50')}>
-                    {following ? <><Check className="h-4 w-4" />Đang theo dõi</> : <><UserPlus className="h-4 w-4" />Theo dõi</>}
-                  </button>
-                  <a href={`/messages?peer=${id}`} className="inline-flex items-center gap-2 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] px-5 py-2.5 font-medium text-text-primary hover:bg-[var(--bg-card)] transition-colors"><Mail className="h-4 w-4" />Nhắn tin</a>
-                  <button aria-label="Thêm" className="inline-flex items-center justify-center rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] p-2.5 hover:bg-[var(--bg-glass)] transition-colors"><MoreHorizontal className="h-5 w-5 text-text-secondary" /></button>
-                </>
-              )}
+                </div>
+              </div>
             </div>
-            </div>
+          </>
+        )}
+      </section>
+
+      {/* ══ Thanh tab dính — cuộn qua tên thì hiện ảnh + tên thu nhỏ (như Facebook) ══
+          --app-nav-h là chiều cao thật của thanh điều hướng (kể cả tai thỏ PWA). z-30 < navbar z-40. */}
+      <div ref={tabsRef} style={previewPublic ? { top: 'calc(var(--app-nav-h) + 40px)' } : undefined} className="sticky top-[var(--app-nav-h)] z-30 bg-[var(--bg-card)] border-t border-[var(--border-color)] shadow-[0_1px_2px_rgba(0,0,0,0.1)]">
+        <div className="mx-auto max-w-[1100px] px-2 sm:px-4 lg:px-8 flex items-center gap-2">
+          {compact && !bot && (
+            <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="hidden sm:flex items-center gap-2 pr-3 mr-1 border-r border-[var(--border-color)] min-w-0 max-w-[260px] py-1.5" title="Lên đầu trang">
+              <span className="relative h-9 w-9 shrink-0">
+                <span className="block h-full w-full rounded-full overflow-hidden bg-[var(--bg-surface)]">
+                  {p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt="" className="h-full w-full object-cover" />) : <span className="flex h-full w-full items-center justify-center font-bold text-text-primary">{ten.slice(0, 1).toUpperCase()}</span>}
+                </span>
+                {online && <span className="absolute -right-0.5 -bottom-0.5 h-3 w-3 rounded-full bg-[#31a24c] ring-2 ring-[var(--bg-card)]" />}
+              </span>
+              <span className="truncate text-[15px] font-semibold text-text-primary">{ten}</span>
+            </button>
+          )}
+          <div className="flex flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist" aria-label="Mục trang cá nhân">
+            {mainTabs.map((tab) => {
+              const count = tab.id === 'photos' ? photos.length : tab.id === 'videos' ? videos.length : 0;
+              return (
+                <button key={tab.id} role="tab" aria-selected={mainTab === tab.id} onClick={() => goTab(tab.id)}
+                  className={cn('group relative shrink-0 px-3 sm:px-4 h-[52px] text-[15px] font-semibold whitespace-nowrap transition-colors',
+                    mainTab === tab.id ? 'text-[var(--accent-color)]' : 'text-text-secondary hover:text-text-primary')}>
+                  <span className={cn('inline-flex items-center gap-1.5 rounded-md px-1 py-1.5', mainTab !== tab.id && 'group-hover:bg-[var(--bg-surface-hover)]')}>
+                    {tab.label}
+                    {count > 0 && !mediaHasMore && <span className="text-xs font-medium text-text-muted">{count}</span>}
+                  </span>
+                  {mainTab === tab.id && <span className="absolute inset-x-0 bottom-0 h-[3px] rounded-t bg-[var(--accent-color)]" />}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
-      )}
 
-      {/* Sticky tab bar — sibling of the header card so it stays pinned while the feed scrolls.
-          --app-nav-h is the navbar's real height: 64px, or 64 + the notch on an installed PWA.
-          A sticky element resolves `top` against the scrollport, so .app-main's safe-area
-          padding never reaches it and a hard top-16 parks it behind the navbar. z-30 < the
-          navbar's z-40, so if it lands too high the navbar wins and this bar disappears. */}
-      <div className="sticky top-[var(--app-nav-h)] z-30 mt-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur supports-[backdrop-filter]:bg-darkcard/75">
-        <div className="flex gap-1 overflow-x-auto scrollbar-hide px-1.5" role="tablist">
-          {mainTabs.map((tab) => (
-            <button key={tab.id} role="tab" aria-selected={mainTab === tab.id} onClick={() => setMainTab(tab.id)}
-              className={cn('px-4 py-3.5 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px',
-                mainTab === tab.id ? 'text-text-primary border-neon-violet' : 'text-text-muted border-transparent hover:text-text-primary hover:bg-[var(--bg-surface-hover)]')}>
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="mt-4">
+      {/* ══ Thân trang ══ */}
+      <div className="mx-auto max-w-[1100px] px-2 sm:px-4 lg:px-8 mt-4">
         {mainTab === 'posts' && (
-          <div className="flex flex-col lg:flex-row items-start gap-5">
-            {/* Left sidebar — sticky below the pinned tab bar; only the right feed scrolls */}
-            <div className="w-full lg:w-2/5 lg:sticky lg:top-[132px] self-start space-y-4">
-              <IntroCard profile={p} isOwn={isOwn} onEdit={() => { setMainTab('about'); startEditing('overview'); }} onShowAbout={() => setMainTab('about')} />
-              <PhotosCard photos={photos} onSeeAll={() => setMainTab('photos')} />
-              <FriendsCard friends={friends} count={p.followerCount ?? 0} onSeeAll={() => setMainTab('friends')} />
+          <div className="flex flex-col lg:flex-row items-start gap-4">
+            {/* Cột trái — dính kiểu Facebook (cột dài hơn màn hình thì dính theo đáy) */}
+            <div ref={leftRef} className="w-full lg:w-[42%] lg:sticky self-start space-y-4" style={{ top: leftTop }}>
+              <IntroCard profile={p} own={own}
+                onEditBio={() => startEditing('overview')}
+                onEditDetails={() => { goTab('about'); setAboutTab('work'); startEditing('work'); }}
+                onShowAbout={() => goTab('about')} />
+              <PhotosCard photos={photos} onSeeAll={() => goTab('photos')} />
+              <FriendsCard friends={friends} count={p.followerCount ?? 0} onSeeAll={() => { setFriendsSub('followers'); goTab('friends'); }} />
+              <LinksCard profile={p} own={own} onEdit={() => startEditing('contact')} />
+              <p className="px-2 text-xs text-text-muted leading-relaxed">
+                <a href="/settings/privacy" className="hover:underline">Quyền riêng tư</a> · <a href="/settings" className="hover:underline">Cài đặt</a> · <a href="/feed" className="hover:underline">Bảng tin</a> · CuongThai © {new Date().getFullYear()}
+              </p>
             </div>
-            {/* Right feed */}
-            <div className="flex-1 min-w-0 space-y-4">
-              {isOwn && <PostComposer />}
-              {storePosts.length === 0 && !loadingPosts ? (
-                <div className="rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-glass)] p-12 text-center">
+            {/* Cột phải — đăng bài + bài viết */}
+            <div className="flex-1 min-w-0 w-full space-y-4">
+              {own && <div id="profile-composer"><PostComposer /></div>}
+              <div className={cn(CARD, 'overflow-hidden')}>
+                <div className="flex items-center justify-between px-4 pt-3 pb-2">
+                  <h2 className="text-xl font-bold text-text-primary">Bài viết</h2>
+                  {own && <a href="/settings/privacy" className={cn(btnGrey, 'h-8 px-3 text-sm')}><Settings className="h-4 w-4" />Quyền riêng tư</a>}
+                </div>
+                <div className="flex border-t border-[var(--border-color)] mx-4">
+                  {([['list', 'Chế độ xem danh sách', List], ['grid', 'Chế độ xem lưới', LayoutGrid]] as const).map(([v, label, Icon]) => (
+                    <button key={v} onClick={() => setPostView(v)} aria-pressed={postView === v}
+                      className={cn('relative flex-1 flex items-center justify-center gap-2 h-11 text-[15px] font-semibold rounded-md my-1 transition-colors',
+                        postView === v ? 'text-[var(--accent-color)]' : 'text-text-secondary hover:bg-[var(--bg-surface-hover)]')}>
+                      <Icon className="h-4 w-4" /><span className="max-sm:hidden">{label}</span><span className="sm:hidden">{v === 'list' ? 'Danh sách' : 'Lưới'}</span>
+                      {postView === v && <span className="absolute inset-x-2 -bottom-1 h-[3px] rounded-t bg-[var(--accent-color)]" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {postsLocked && storePosts.length === 0 ? (
+                <div className={cn(CARD, 'p-10 text-center')}>
+                  <Lock className="h-10 w-10 mx-auto text-text-muted mb-3" />
+                  <p className="text-text-primary font-semibold">Đăng nhập để xem bài viết của {ten}</p>
+                  <a href="/login" className={cn(btnPrimary, 'mt-4')}>Đăng nhập</a>
+                </div>
+              ) : storePosts.length === 0 && !loadingPosts ? (
+                <div className={cn(CARD, 'p-12 text-center')}>
                   <Edit3 className="h-12 w-12 mx-auto text-text-muted mb-3" />
-                  <p className="text-text-muted">Chưa có bài viết nào</p>
+                  <p className="text-text-muted">{own ? 'Bạn chưa đăng bài viết nào — hãy chia sẻ điều gì đó!' : 'Chưa có bài viết nào'}</p>
+                </div>
+              ) : postView === 'grid' ? (
+                <div className="grid grid-cols-3 gap-1 sm:gap-1.5">
+                  {storePosts.map((post: any) => <PostTile key={post.id} post={post} />)}
                 </div>
               ) : storePosts.map((post) => <PostCard key={post.id} post={post} />)}
               {postsHasMore && <div ref={postsSentinelRef} className="flex justify-center py-4">{loadingPosts && <Loader2 className="h-6 w-6 animate-spin text-text-muted" />}</div>}
@@ -762,62 +1102,94 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         )}
 
         {mainTab === 'about' && (
-          <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] overflow-hidden">
-            <div className="p-4 flex items-center justify-between border-b border-[var(--border-color)]">
-              <h2 className="text-lg font-semibold text-text-primary">Giới thiệu</h2>
-              {isOwn && <button onClick={() => startEditing(aboutTab)} aria-label="Chỉnh sửa" className="p-2 rounded-lg hover:bg-[var(--bg-surface-hover)] text-text-muted hover:text-text-primary transition-colors"><Edit3 className="h-4 w-4" /></button>}
-            </div>
-            <div className="flex flex-col sm:flex-row">
-              <div className="sm:w-56 sm:border-r border-[var(--border-color)] p-2 flex sm:flex-col gap-1 overflow-x-auto">
-                {aboutTabs.map((tab) => (
-                  <button key={tab.id} onClick={() => setAboutTab(tab.id)}
-                    className={cn('flex items-center gap-2 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap text-left',
-                      aboutTab === tab.id ? 'bg-neon-violet/10 text-tone-violet' : 'text-text-muted hover:text-text-primary hover:bg-[var(--bg-surface-hover)]')}>
-                    <tab.icon className="h-4 w-4" />{tab.label}
-                  </button>
-                ))}
+          <div className={cn(CARD, 'overflow-hidden')}>
+            <div className="flex flex-col md:flex-row">
+              <div className="md:w-72 md:border-r border-[var(--border-color)] p-2 md:p-3">
+                <h2 className="hidden md:block text-xl font-bold text-text-primary px-2 pt-1 pb-3">Giới thiệu</h2>
+                <div className="flex md:flex-col gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {aboutTabs.map((tab) => (
+                    <button key={tab.id} onClick={() => setAboutTab(tab.id)}
+                      className={cn('flex items-center gap-2 px-3 py-2.5 text-[15px] font-semibold rounded-md transition-colors whitespace-nowrap text-left',
+                        aboutTab === tab.id ? 'bg-[color-mix(in_srgb,var(--accent-color)_12%,transparent)] text-[var(--accent-color)]' : 'text-text-secondary hover:bg-[var(--bg-surface-hover)]')}>
+                      <tab.icon className="h-4 w-4 shrink-0" />{tab.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="flex-1 p-5">{renderAboutContent()}</div>
+              <div className="flex-1 p-5 min-w-0">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[17px] font-bold text-text-primary">{aboutTabs.find((t) => t.id === aboutTab)?.label}</h3>
+                  {own && <button onClick={() => startEditing(aboutTab)} className={cn(btnGrey, 'h-8 px-3 text-sm')}><Edit3 className="h-4 w-4" />Chỉnh sửa</button>}
+                </div>
+                {renderAboutContent()}
+              </div>
             </div>
           </div>
         )}
 
         {mainTab === 'friends' && (
-          <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-5">
-            <h2 className="text-lg font-semibold text-text-primary mb-4">Bạn bè · {p.followerCount ?? 0}</h2>
-            {friends.length === 0 ? <p className="text-text-muted italic">Chưa có người theo dõi nào</p> : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {friends.map((f) => (
-                  <a key={f.id} href={`/profile/${f.id}/v2`} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] hover:border-neon-violet/40 transition-colors">
-                    <div className="h-16 w-16 rounded-full overflow-hidden bg-gradient-to-br from-neon-violet/30 to-neon-pink/30 flex items-center justify-center">
-                      {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="w-full h-full object-cover" />) : <span className="text-xl font-bold text-text-primary">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
-                    </div>
-                    <span className="text-sm text-text-primary truncate max-w-full">{f.displayName || f.username}</span>
-                  </a>
-                ))}
+          <div className={cn(CARD, 'p-4')}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+              <h2 className="text-xl font-bold text-text-primary">Bạn bè</h2>
+              <label className="flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] px-3 h-9 sm:w-64">
+                <Search className="h-4 w-4 text-text-muted shrink-0" />
+                <input value={friendsQuery} onChange={(e) => setFriendsQuery(e.target.value)} placeholder="Tìm kiếm" aria-label="Tìm trong danh sách" className="flex-1 min-w-0 bg-transparent text-[15px] text-text-primary placeholder:text-text-muted focus:outline-none" />
+              </label>
+            </div>
+            <div className="flex gap-1 border-b border-[var(--border-color)] mb-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {([
+                ['followers', `Người theo dõi`, p.followerCount ?? 0],
+                ['following', `Đang theo dõi`, p.followingCount ?? 0],
+                ...(isOwn ? [['friends', 'Bạn bè của tôi', null] as const] : []),
+              ] as const).map(([v, label, n]) => (
+                <button key={v} onClick={() => setFriendsSub(v as typeof friendsSub)}
+                  className={cn('relative px-3 h-11 text-[15px] font-semibold whitespace-nowrap transition-colors',
+                    friendsSub === v ? 'text-[var(--accent-color)]' : 'text-text-secondary hover:text-text-primary')}>
+                  {label}{n != null && <span className="ml-1 text-text-muted font-medium">{n}</span>}
+                  {friendsSub === v && <span className="absolute inset-x-0 bottom-0 h-[3px] rounded-t bg-[var(--accent-color)]" />}
+                </button>
+              ))}
+            </div>
+            {(friendsSub === 'following' && followingList === null) || (friendsSub === 'friends' && myFriends === null) ? (
+              <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-text-muted" /></div>
+            ) : listShown.length === 0 ? (
+              <p className="text-text-muted text-center py-10">
+                {kw ? 'Không có ai khớp tìm kiếm' : friendsSub === 'followers' ? 'Chưa có người theo dõi nào' : friendsSub === 'following' ? 'Chưa theo dõi ai' : 'Chưa có bạn bè nào'}
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {listShown.map((f: any) => <PersonRow key={f.id} person={f} selfId={currentUser?.id ?? null} />)}
+              </div>
+            )}
+            {subHasMore && !kw && (
+              <div className="flex justify-center mt-4">
+                <button disabled={subLoading} onClick={() => { if (friendsSub === 'followers') void loadMoreFollowers(); else if (friendsSub === 'following') void loadFollowing(false); else void loadMyFriends(false); }} className={btnGrey}>
+                  {subLoading && <Loader2 className="h-4 w-4 animate-spin" />}Xem thêm
+                </button>
               </div>
             )}
           </div>
         )}
 
         {(mainTab === 'photos' || mainTab === 'videos') && (
-          <div>
+          <div className={cn(CARD, 'p-4')}>
+            <h2 className="text-xl font-bold text-text-primary mb-3">{mainTab === 'photos' ? 'Ảnh' : 'Video'}</h2>
             {(() => {
               const items = mainTab === 'photos' ? photos : videos;
               if (items.length === 0 && !loadingMedia) {
                 return (
-                  <div className="rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-glass)] p-12 text-center">
-                    <ImageIcon className="h-12 w-12 mx-auto text-text-muted mb-3" />
+                  <div className="py-12 text-center">
+                    {mainTab === 'photos' ? <ImageIcon className="h-12 w-12 mx-auto text-text-muted mb-3" /> : <Play className="h-12 w-12 mx-auto text-text-muted mb-3" />}
                     <p className="text-text-muted">{mainTab === 'photos' ? 'Chưa có ảnh nào' : 'Chưa có video nào'}</p>
                   </div>
                 );
               }
               return (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 rounded-2xl overflow-hidden border border-[var(--border-color)]">
+                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5">
                   {items.map((m) => (
-                    <a key={m.id} href={`/?post=${m.postId}`} className="group relative aspect-square overflow-hidden bg-[var(--bg-glass)]">
-                      <MediaThumb url={m.url || m.thumbnail} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
-                      {m.type === 'VIDEO' && <div className="absolute top-2 right-2 bg-black/60 rounded-full p-1.5"><ImageIcon className="h-4 w-4 text-text-primary" /></div>}
+                    <a key={m.id} href={`/?post=${m.postId}`} className="group relative aspect-square overflow-hidden rounded-lg bg-[var(--bg-surface)]">
+                      <MediaThumb url={m.type === 'VIDEO' ? (m.thumbnail || m.url) : (m.url || m.thumbnail)} video={m.type === 'VIDEO' && !m.thumbnail} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                      {m.type === 'VIDEO' && <div className="absolute inset-0 flex items-center justify-center"><span className="rounded-full bg-black/55 p-2.5"><Play className="h-5 w-5 text-white fill-white" /></span></div>}
                     </a>
                   ))}
                 </div>
@@ -917,50 +1289,88 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   );
 }
 
+// ─── Kiểu thẻ chung (giống thẻ Facebook: nền thẻ, bo 12px, bóng nhẹ) ──────
+const CARD = 'rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] shadow-[0_1px_2px_rgba(0,0,0,0.08)]';
+
+/** "5 phút trước" · "3 giờ trước" — cho dòng "Hoạt động … trước". */
+function thoiGianTruoc(iso: string): string | null {
+  const t = new Date(iso).getTime();
+  if (!Number.isFinite(t)) return null;
+  const s = Math.max(0, Math.floor((Date.now() - t) / 1000));
+  if (s < 60) return 'vừa xong';
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m} phút trước`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} giờ trước`;
+  const d = Math.floor(h / 24);
+  if (d < 7) return `${d} ngày trước`;
+  return null; // quá lâu — không hiện
+}
+
 // ─── Sidebar cards ────────────────────────────────────────────
-function IntroCard({ profile: p, isOwn, onEdit, onShowAbout }: { profile: ExtendedProfile; isOwn: boolean; onEdit: () => void; onShowAbout: () => void }) {
+function IntroCard({ profile: p, own, onEditBio, onEditDetails, onShowAbout }: {
+  profile: ExtendedProfile; own: boolean; onEditBio: () => void; onEditDetails: () => void; onShowAbout: () => void;
+}) {
+  const congViec = p.jobTitle && p.workplace ? `${p.jobTitle} tại ${p.workplace}` : p.jobTitle || p.workplace || p.work;
+  const hoc = p.college || p.school || p.education;
+  const thamGia = p.createdAt ? new Date(p.createdAt) : null;
   return (
-    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-4">
-      <h2 className="text-lg font-semibold text-text-primary mb-3">Giới thiệu</h2>
-      {p.bio && <p className="text-sm text-text-secondary whitespace-pre-wrap mb-3 text-center">{p.bio}</p>}
-      <div className="space-y-2">
-        {p.work && <SidebarRow icon={WorkIcon} text={p.work} />}
+    <div className={cn(CARD, 'p-4')}>
+      <h2 className="text-xl font-bold text-text-primary mb-3">Giới thiệu</h2>
+      {p.bio && <p className="text-[15px] text-text-primary whitespace-pre-wrap text-center mb-3">{p.bio}</p>}
+      {own && (
+        <button onClick={onEditBio} className="mb-3 w-full h-9 rounded-lg bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] hover:bg-[color-mix(in_srgb,var(--text-primary)_15%,var(--bg-card))] text-[15px] font-semibold text-text-primary transition-colors">
+          {p.bio ? 'Chỉnh sửa tiểu sử' : 'Thêm tiểu sử'}
+        </button>
+      )}
+      <div className="space-y-3">
+        {congViec && <SidebarRow icon={WorkIcon} text={congViec} />}
+        {p.work && congViec !== p.work && <SidebarRow icon={Briefcase} text={p.work} />}
+        {hoc && <SidebarRow icon={School} text={`Học tại ${hoc}`} />}
         {p.location && <SidebarRow icon={MapPinHouse} text={`Sống tại ${p.location}`} />}
         {p.hometown && <SidebarRow icon={Home} text={`Đến từ ${p.hometown}`} />}
+        {p.relationshipStatus && <SidebarRow icon={Heart} text={p.relationshipStatus} />}
+        {p.birthYear && <SidebarRow icon={CalendarDays} text={`Sinh năm ${p.birthYear}`} />}
         {p.websiteUrl && <SidebarRow icon={LinkIcon} text={p.websiteUrl.replace(/^https?:\/\//, '')} href={p.websiteUrl} />}
+        <SidebarRow icon={Rss} text={`Có ${p.followerCount ?? 0} người theo dõi`} />
+        {thamGia && !Number.isNaN(thamGia.getTime()) && (
+          <SidebarRow icon={Clock3} text={`Tham gia vào tháng ${thamGia.getMonth() + 1} năm ${thamGia.getFullYear()}`} />
+        )}
       </div>
-      {isOwn ? (
-        <button onClick={onEdit} className="mt-3 w-full py-2 rounded-lg bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] text-sm font-medium text-text-primary transition-colors">Chỉnh sửa chi tiết</button>
+      {own ? (
+        <button onClick={onEditDetails} className="mt-4 w-full h-9 rounded-lg bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] hover:bg-[color-mix(in_srgb,var(--text-primary)_15%,var(--bg-card))] text-[15px] font-semibold text-text-primary transition-colors">Chỉnh sửa chi tiết</button>
       ) : (
-        <button onClick={onShowAbout} className="mt-3 w-full py-2 rounded-lg bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] text-sm font-medium text-text-primary transition-colors">Xem thông tin</button>
+        <button onClick={onShowAbout} className="mt-4 w-full h-9 rounded-lg bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] hover:bg-[color-mix(in_srgb,var(--text-primary)_15%,var(--bg-card))] text-[15px] font-semibold text-text-primary transition-colors">Xem thông tin giới thiệu</button>
       )}
     </div>
   );
 }
 
 function SidebarRow({ icon: Icon, text, href }: { icon: ComponentType<{ className?: string }>; text: string; href?: string }) {
-  const inner = (<><Icon className="h-4 w-4 text-text-muted shrink-0" /><span className="text-sm text-text-secondary truncate">{text}</span></>);
+  const inner = (<><Icon className="h-5 w-5 text-text-muted shrink-0" /><span className="text-[15px] text-text-primary break-words min-w-0">{text}</span></>);
   return href
-    ? <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-tone-violet">{inner}</a>
+    ? <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 [&>span]:text-[var(--accent-color)] hover:underline">{inner}</a>
     : <div className="flex items-center gap-3">{inner}</div>;
 }
 
 function PhotosCard({ photos, onSeeAll }: { photos: any[]; onSeeAll: () => void }) {
   return (
-    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] overflow-hidden">
-      <div className="p-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-text-primary">Ảnh</h2>
-        <button onClick={onSeeAll} className="text-sm text-tone-violet hover:underline">Xem tất cả</button>
+    <div className={cn(CARD, 'p-4')}>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xl font-bold text-text-primary">Ảnh</h2>
+        <button onClick={onSeeAll} className="rounded-md px-2 py-1 text-[15px] text-[var(--accent-color)] hover:bg-[var(--bg-surface-hover)]">Xem tất cả ảnh</button>
       </div>
       {photos.length === 0 ? (
-        <div className="px-4 pb-5 pt-1 flex flex-col items-center text-center text-text-muted">
+        <div className="py-4 flex flex-col items-center text-center text-text-muted">
           <ImageIcon className="h-9 w-9 mb-2 opacity-50" />
           <p className="text-sm">Chưa có ảnh nào</p>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-0.5 px-1 pb-1">
+        <div className="grid grid-cols-3 gap-1 rounded-lg overflow-hidden">
           {photos.slice(0, 9).map((m, i) => (
-            <MediaThumb key={m.id || i} url={m.url || m.thumbnail} className="aspect-square w-full object-cover rounded hover:opacity-80 transition-opacity cursor-pointer" />
+            <a key={m.id || i} href={`/?post=${m.postId}`} className="block aspect-square overflow-hidden bg-[var(--bg-surface)]">
+              <MediaThumb url={m.url || m.thumbnail} className="h-full w-full object-cover hover:opacity-85 transition-opacity" />
+            </a>
           ))}
         </div>
       )}
@@ -968,40 +1378,122 @@ function PhotosCard({ photos, onSeeAll }: { photos: any[]; onSeeAll: () => void 
   );
 }
 
-/** Media thumbnail with a graceful fallback: renders a muted icon
- *  placeholder instead of a black tile when the URL is empty or the
- *  image fails to load. Used by the Photos card + Photos/Video tabs. */
-function MediaThumb({ url, className }: { url?: string | null; className?: string }) {
+/** Ảnh/video thu nhỏ. Video không có ảnh bìa ⇒ dùng chính khung đầu của video thay vì ô đen. */
+function MediaThumb({ url, className, video }: { url?: string | null; className?: string; video?: boolean }) {
   const [failed, setFailed] = useState(false);
   if (!url || failed) {
     return (
-      <div className={cn('flex items-center justify-center bg-[var(--bg-glass)]', className)}>
+      <div className={cn('flex items-center justify-center bg-[var(--bg-surface)]', className)}>
         <ImageIcon className="h-6 w-6 text-text-muted/50" />
       </div>
     );
   }
+  if (video) {
+    return <video src={`${url}#t=0.1`} muted playsInline preload="metadata" onError={() => setFailed(true)} className={className} />;
+  }
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={url} alt="" onError={() => setFailed(true)} className={className} />;
+  return <img src={url} alt="" loading="lazy" onError={() => setFailed(true)} className={className} />;
 }
 
 function FriendsCard({ friends, count, onSeeAll }: { friends: any[]; count: number; onSeeAll: () => void }) {
   return (
-    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] overflow-hidden">
-      <div className="p-4 flex items-center justify-between">
-        <div><h2 className="text-lg font-semibold text-text-primary">Bạn bè</h2><p className="text-xs text-text-muted">{count} người theo dõi</p></div>
-        <button onClick={onSeeAll} className="text-sm text-tone-violet hover:underline">Xem tất cả</button>
+    <div className={cn(CARD, 'p-4')}>
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <h2 className="text-xl font-bold text-text-primary">Bạn bè</h2>
+          <p className="text-[15px] text-text-secondary">{count} người theo dõi</p>
+        </div>
+        <button onClick={onSeeAll} className="rounded-md px-2 py-1 text-[15px] text-[var(--accent-color)] hover:bg-[var(--bg-surface-hover)]">Xem tất cả</button>
       </div>
-      <div className="grid grid-cols-3 gap-2 p-2">
-        {friends.slice(0, 6).map((f) => (
-          <a key={f.id} href={`/profile/${f.id}/v2`} className="flex flex-col items-center gap-1">
-            <div className="aspect-square w-full rounded-lg overflow-hidden bg-gradient-to-br from-neon-violet/20 to-neon-pink/20 flex items-center justify-center">
-              {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="w-full h-full object-cover" />) : <span className="text-lg font-bold text-text-primary">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
-            </div>
-            <span className="text-[11px] text-text-muted truncate max-w-full">{f.displayName || f.username}</span>
-          </a>
+      {friends.length === 0 ? (
+        <p className="py-3 text-center text-sm text-text-muted">Chưa có người theo dõi nào</p>
+      ) : (
+        <div className="grid grid-cols-3 gap-x-2 gap-y-3">
+          {friends.slice(0, 9).map((f) => (
+            <a key={f.id} href={`/profile/${f.id}/v2`} className="group min-w-0">
+              <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-gradient-to-br from-neon-violet/20 to-neon-pink/20 flex items-center justify-center">
+                {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="w-full h-full object-cover group-hover:opacity-90" />) : <span className="text-2xl font-bold text-text-primary">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
+                {f.isOnline && <span className="absolute right-1.5 bottom-1.5 h-3 w-3 rounded-full bg-[#31a24c] ring-2 ring-[var(--bg-card)]" title="Đang hoạt động" />}
+              </div>
+              <span className="mt-1 block text-[13px] font-semibold leading-tight text-text-primary truncate group-hover:underline">{f.displayName || f.username}</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Thẻ "Liên kết" (như mục Links của Facebook): website + mạng xã hội. */
+function LinksCard({ profile: p, own, onEdit }: { profile: ExtendedProfile; own: boolean; onEdit: () => void }) {
+  const links = Object.entries(p.socialLinks ?? {}).filter(([, url]) => typeof url === 'string' && url.trim());
+  if (!p.websiteUrl && links.length === 0 && !own) return null;
+  return (
+    <div className={cn(CARD, 'p-4')}>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-xl font-bold text-text-primary">Liên kết</h2>
+        {own && <button onClick={onEdit} aria-label="Sửa liên kết" className="rounded-full p-2 text-text-secondary hover:bg-[var(--bg-surface-hover)]"><Edit3 className="h-4 w-4" /></button>}
+      </div>
+      <div className="space-y-3">
+        {p.websiteUrl && <SidebarRow icon={Globe} text={p.websiteUrl.replace(/^https?:\/\//, '')} href={p.websiteUrl} />}
+        {links.map(([key, url]) => (
+          <SidebarRow key={key} icon={socialIcons[key.toLowerCase()] || Link2} text={String(url).replace(/^https?:\/\//, '')} href={String(url)} />
         ))}
-        {friends.length === 0 && Array.from({ length: 6 }).map((_, i) => <div key={`fe-${i}`} className="aspect-square rounded-lg bg-[var(--bg-glass)]" />)}
+        {!p.websiteUrl && links.length === 0 && (
+          <button onClick={onEdit} className="w-full h-9 rounded-lg bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] hover:bg-[color-mix(in_srgb,var(--text-primary)_15%,var(--bg-card))] text-[15px] font-semibold text-text-primary transition-colors">Thêm liên kết</button>
+        )}
       </div>
+    </div>
+  );
+}
+
+/** Ô bài viết ở "Chế độ xem lưới": ảnh/video đầu tiên, hoặc đoạn chữ nếu bài không có ảnh. */
+function PostTile({ post }: { post: any }) {
+  const m = (post.media ?? []).find((x: any) => x.type === 'IMAGE' || x.type === 'VIDEO');
+  const soAnh = (post.media ?? []).filter((x: any) => x.type === 'IMAGE' || x.type === 'VIDEO').length;
+  return (
+    <a href={`/?post=${post.id}`} className="group relative block aspect-square overflow-hidden rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)]" title={(post.content ?? '').slice(0, 120)}>
+      {m ? (
+        <>
+          <MediaThumb url={m.type === 'VIDEO' ? (m.thumbnail || m.url) : (m.thumbnail || m.url)} video={m.type === 'VIDEO' && !m.thumbnail} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+          {m.type === 'VIDEO' && <span className="absolute right-1.5 top-1.5 rounded-full bg-black/55 p-1"><Play className="h-3.5 w-3.5 text-white fill-white" /></span>}
+          {soAnh > 1 && <span className="absolute left-1.5 top-1.5 rounded-md bg-black/55 px-1.5 text-[11px] font-semibold text-white">+{soAnh - 1}</span>}
+        </>
+      ) : (
+        <div className="flex h-full w-full items-center justify-center p-2.5 bg-gradient-to-br from-[color-mix(in_srgb,var(--accent-color)_14%,transparent)] to-transparent">
+          <p className="line-clamp-6 text-center text-[12px] sm:text-[13px] font-medium text-text-primary break-words">{(post.content ?? '').replace(/[#*_`>]/g, '').trim() || 'Bài viết'}</p>
+        </div>
+      )}
+    </a>
+  );
+}
+
+/** Một người trong tab Bạn bè: ảnh + chấm hoạt động + tên + nút nhắn tin nhanh. */
+function PersonRow({ person: f, selfId }: { person: any; selfId: number | null }) {
+  const router = useRouter();
+  const ten = f.displayName || f.fullName || f.username;
+  const nhan = () => {
+    if (!selfId) { router.push('/login'); return; }
+    const ok = moChatNho({ id: f.id, username: f.username, displayName: ten, avatarUrl: f.avatarUrl ?? null });
+    if (!ok) router.push(`/messages?peer=${f.id}`);
+  };
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-[var(--border-color)] p-3">
+      <a href={`/profile/${f.id}/v2`} className="relative h-20 w-20 shrink-0">
+        <span className="block h-full w-full overflow-hidden rounded-lg bg-[var(--bg-surface)]">
+          {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={ten} className="h-full w-full object-cover" />) : <span className="flex h-full w-full items-center justify-center text-2xl font-bold text-text-primary">{ten.slice(0, 1).toUpperCase()}</span>}
+        </span>
+        {f.isOnline && <span className="absolute -right-1 -bottom-1 h-4 w-4 rounded-full bg-[#31a24c] ring-[3px] ring-[var(--bg-card)]" title="Đang hoạt động" />}
+      </a>
+      <div className="min-w-0 flex-1">
+        <a href={`/profile/${f.id}/v2`} className="block truncate text-[17px] font-semibold text-text-primary hover:underline">{ten}</a>
+        <p className="truncate text-[13px] text-text-muted">@{f.username}{f.isOnline ? ' · Đang hoạt động' : ''}</p>
+      </div>
+      {f.id !== selfId && (
+        <button onClick={nhan} aria-label={`Nhắn tin cho ${ten}`} title="Nhắn tin" className="h-9 w-9 shrink-0 rounded-full bg-[color-mix(in_srgb,var(--text-primary)_9%,var(--bg-card))] hover:bg-[color-mix(in_srgb,var(--text-primary)_15%,var(--bg-card))] flex items-center justify-center text-text-primary">
+          <MessageCircle className="h-[18px] w-[18px]" />
+        </button>
+      )}
     </div>
   );
 }

@@ -11,9 +11,23 @@ import {
   useState,
 } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Minus, Send, X } from 'lucide-react';
+import {
+  ChevronDown, FileText, Image as ImageIcon, Loader2, Maximize2, Mic, Minus, Phone, PlusCircle, RotateCw, Send,
+  Smile, Sticker, ThumbsUp, Trash2, UserRound, Video, WifiOff, X,
+} from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { toast } from 'sonner';
+import EmojiPickerPopover from '@/components/messaging/EmojiPickerPopover';
+import GifPicker from '@/components/messaging/GifPicker';
+import StickerPicker from '@/components/messaging/StickerPicker';
+import { dongHo, GIAY_TOI_DA, useGhiAm } from '@/components/messaging/useGhiAm';
+import { messagingApi } from '@/lib/api';
+import { useRouter } from 'next/navigation';
 import SafeAvatar from '@/components/ui/SafeAvatar';
-import { connectSocket, emitTyping, getSocket } from '@/lib/socket';
+import { connectSocket, emitTyping } from '@/lib/socket';
+
+// Màn hình gọi (WebRTC) — chỉ tải khi đã có kết nối realtime.
+const CuocGoiOverlay = dynamic(() => import('@/components/messaging/CuocGoiOverlay'), { ssr: false });
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import type { MessagingMessage } from '@/lib/api';
@@ -75,6 +89,8 @@ interface ChatWindowState {
   /** Remote peer is typing (driven by shared socket event). */
   isTyping: boolean;
   draft: string;
+  /** Mở hội thoại thất bại (mất mạng…) ⇒ hiện "Thử lại" thay vì kẹt "Đang kết nối…" mãi. */
+  loadError?: boolean;
 }
 
 const WINDOW_WIDTH = 320;
@@ -112,6 +128,7 @@ function MiniChatDockInner() {
   // Per-window typing debounce timers.
   const typingTimers = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
   const { isAuthenticated } = useAuthStore();
+  const router = useRouter();
 
   // ─── Live store subscriptions ─────────────────────────────
   // The main /messages page is the source of truth for messages +
@@ -161,6 +178,7 @@ function MiniChatDockInner() {
                 ...w,
                 threadId,
                 historyLoading: true,
+                loadError: false,
                 peer: canonicalPeer
                   ? {
                       ...w.peer,
@@ -190,11 +208,26 @@ function MiniChatDockInner() {
     } catch {
       setWindows((prev) =>
         prev.map((w) =>
-          w.peer.id === peerId ? { ...w, historyLoading: false } : w,
+          w.peer.id === peerId ? { ...w, historyLoading: false, loadError: !w.threadId } : w,
         ),
       );
     }
   }, [isAuthenticated]);
+
+  // Mạng vừa có lại ⇒ tự mở lại những khung còn chưa kết nối được (thay vì kẹt "Đang kết nối…").
+  const windowsRef = useRef<ChatWindowState[]>([]);
+  windowsRef.current = windows;
+  useEffect(() => {
+    const onOnline = () => {
+      for (const w of windowsRef.current) if (!w.threadId) void resolveThread(w.peer.id);
+    };
+    window.addEventListener('online', onOnline);
+    return () => window.removeEventListener('online', onOnline);
+  }, [resolveThread]);
+
+  // Gọi thoại/video từ khung nhỏ: một màn hình gọi dùng chung cho cả dock.
+  const realtimeOn = useMessagingStore((s) => s.isConnected);
+  const [cuocGoi, setCuocGoi] = useState<{ threadId: number; peer: MiniChatPeer; goiDi: number; goiVideo: number } | null>(null);
 
   // ─── Shared socket typing listener (one for the whole dock) ─
   // The /messages page also subscribes to thread:typing via the
@@ -336,9 +369,22 @@ function MiniChatDockInner() {
     };
   }, []);
 
-  if (windows.length === 0) return null;
+  const overlay = realtimeOn ? (
+    <CuocGoiOverlay
+      threadId={cuocGoi?.threadId}
+      peerId={cuocGoi?.peer.id}
+      peerName={cuocGoi?.peer.displayName}
+      peerAvatar={cuocGoi?.peer.avatarUrl ?? null}
+      goiDi={cuocGoi?.goiDi ?? 0}
+      goiVideo={cuocGoi?.goiVideo ?? 0}
+    />
+  ) : null;
+
+  if (windows.length === 0) return overlay;
 
   return (
+    <>
+    {overlay}
     <div
       className="pointer-events-none fixed inset-0 z-[120]"
       aria-live="polite"
@@ -375,6 +421,25 @@ function MiniChatDockInner() {
                 peerUnread={peerUnread}
                 rightOffset={rightOffset}
                 inputRefSetter={(el) => { inputRefs.current[w.peer.id] = el; }}
+                peerLastSeen={peerPresence.lastSeen}
+                onRetry={() => {
+                  setWindows((prev) => prev.map((x) => (x.peer.id === w.peer.id ? { ...x, loadError: false } : x)));
+                  void resolveThread(w.peer.id);
+                }}
+                onOpenFull={() => {
+                  router.push(w.threadId ? `/messages?thread=${w.threadId}` : `/messages?peer=${w.peer.id}`);
+                  window.setTimeout(() => closeWindow(w.peer.id), 0);
+                }}
+                onCall={(video) => {
+                  if (!w.threadId) return;
+                  if (!realtimeOn) { toast.error('Chưa có kết nối realtime — chưa gọi được. Thử lại sau giây lát.'); return; }
+                  setCuocGoi((c) => ({
+                    threadId: w.threadId!,
+                    peer: w.peer,
+                    goiDi: (c?.goiDi ?? 0) + (video ? 0 : 1),
+                    goiVideo: (c?.goiVideo ?? 0) + (video ? 1 : 0),
+                  }));
+                }}
                 onToggleMinimize={() => toggleMinimize(w.peer.id)}
                 onClose={() => closeWindow(w.peer.id)}
                 onUpdateDraft={(value) => updateDraft(w.peer.id, value, w.threadId)}
@@ -409,6 +474,7 @@ function MiniChatDockInner() {
         </AnimatePresence>
       </div>
     </div>
+    </>
   );
 }
 
@@ -428,6 +494,10 @@ interface ChatWindowProps {
   onClose: () => void;
   onUpdateDraft: (value: string) => void;
   onSend: () => Promise<void>;
+  peerLastSeen: number;
+  onCall: (video: boolean) => void;
+  onRetry: () => void;
+  onOpenFull: () => void;
 }
 
 function ChatWindow({
@@ -441,8 +511,13 @@ function ChatWindow({
   onClose,
   onUpdateDraft,
   onSend,
+  peerLastSeen,
+  onCall,
+  onRetry,
+  onOpenFull,
 }: ChatWindowProps) {
   const { user } = useAuthStore();
+  const router = useRouter();
   const selfId = user?.id ?? null;
 
   // Refs for the scroll container so we can autoscroll on new
@@ -491,6 +566,26 @@ function ChatWindow({
     void useMessagingStore.getState().markRead(w.threadId);
   }, [messages, w.threadId, w.isMinimized, selfId]);
 
+  const peerName = w.peer?.displayName ?? w.peer?.username ?? '';
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDown = (e: MouseEvent) => { if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false); };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [menuOpen]);
+
+  const trangThai = w.isTyping
+    ? 'đang nhập…'
+    : isPeerOnline
+      ? 'Đang hoạt động'
+      : peerLastSeen > 0
+        ? `Hoạt động ${thoiGianTruoc(peerLastSeen)}`
+        : '';
+
+  const iconBtn = 'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-tone-violet transition-colors hover:bg-[var(--bg-surface-hover)]';
+
   return (
     <motion.div
       layout
@@ -498,232 +593,349 @@ function ChatWindow({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 30, scale: 0.92 }}
       transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-      className="absolute flex flex-col overflow-hidden rounded-2xl shadow-2xl"
+      className="absolute flex flex-col overflow-hidden rounded-t-xl rounded-b-lg shadow-[0_12px_28px_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.12)]"
       style={{
         width: WINDOW_WIDTH,
-        // On small screens we drop the fixed height and let the body
-        // shrink so the popup doesn't push the dock off-screen. The
-        // window remains capped at WINDOW_HEIGHT on larger screens.
         maxWidth: 'calc(100vw - 32px)',
         maxHeight: 'calc(100dvh - 40px)',
         height: w.isMinimized ? 56 : WINDOW_HEIGHT,
         right: rightOffset,
         bottom: BOTTOM_OFFSET,
-        background: 'var(--bg-overlay)',
-        border: '1px solid var(--border-light)',
-        backdropFilter: 'blur(20px)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--border-color)',
         transition: 'height 0.18s ease',
       }}
     >
-      {/* Header */}
-      <div className="flex w-full items-center gap-2 border-b border-theme-light px-3 py-2">
-        <button
-          type="button"
-          onClick={onToggleMinimize}
-          aria-label={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'}
-          className="flex min-w-0 flex-1 items-center gap-2 text-left transition-colors hover:bg-[var(--bg-surface-hover)] rounded-md py-0.5 pl-0.5 pr-1"
-        >
-          <div className="relative shrink-0">
-            <SafeAvatar
-              src={w.peer?.avatarUrl}
-              alt={w.peer?.displayName ?? ''}
-              seed={w.peer?.username ?? ''}
-              size={28}
-              rounded="full"
-              fallbackType="initials"
-            />
-            <span
-              className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-[#0a0a0f] ${
-                isPeerOnline ? 'bg-neon-emerald' : 'bg-slate-500'
-              }`}
-              title={isPeerOnline ? 'Đang hoạt động' : 'Ngoại tuyến'}
-              aria-label={isPeerOnline ? 'Đang hoạt động' : 'Ngoại tuyến'}
-            >
+      {/* ── Đầu khung (như Messenger): ảnh + tên ⌄ · gọi thoại · gọi video · thu nhỏ · đóng ── */}
+      <div className="flex w-full items-center gap-0.5 border-b border-[var(--border-color)] px-1.5 py-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+        <div className="relative min-w-0 flex-1" ref={menuRef}>
+          <button
+            type="button"
+            onClick={() => (w.isMinimized ? onToggleMinimize() : setMenuOpen((v) => !v))}
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            className="flex w-full min-w-0 items-center gap-2 rounded-lg py-1 pl-1 pr-1.5 text-left transition-colors hover:bg-[var(--bg-surface-hover)]"
+          >
+            <div className="relative shrink-0">
+              <SafeAvatar src={w.peer?.avatarUrl} alt={peerName} seed={w.peer?.username ?? ''} size={32} rounded="full" fallbackType="initials" />
+              {/* Chỉ chấm XANH khi đang hoạt động; ngoại tuyến thì không vẽ gì (như Messenger) */}
               {isPeerOnline && (
-                <span className="absolute inset-0 animate-ping rounded-full bg-neon-emerald opacity-60" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-[#31a24c] ring-2 ring-[var(--bg-card)]" title="Đang hoạt động" />
               )}
-            </span>
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-text-primary">
-              {w.peer?.displayName ?? w.peer?.username ?? ''}
-            </p>
-            <p className="truncate text-[10px] text-text-muted">
-              {w.isTyping ? (
-                <span className="text-neon-emerald">đang nhập…</span>
-              ) : isPeerOnline ? (
-                <span>Đang hoạt động</span>
-              ) : (
-                <span>Ngoại tuyến</span>
+            </div>
+            <div className="min-w-0">
+              <p className="flex items-center gap-0.5 text-[15px] font-semibold leading-tight text-text-primary">
+                <span className="truncate">{peerName}</span>
+                <ChevronDown size={16} className="shrink-0 text-tone-violet" />
+              </p>
+              {trangThai && (
+                <p className={`truncate text-[11px] leading-tight ${w.isTyping || isPeerOnline ? 'text-[#31a24c]' : 'text-text-muted'}`}>{trangThai}</p>
               )}
-            </p>
-          </div>
-          {/* Unread badge — only show when the window is closed /
-              minimised so we don't clash with the active thread view. */}
-          {!w.isMinimized && peerUnread > 0 && (
-            <span
-              className="ml-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-neon-violet px-1.5 text-[10px] font-bold text-white"
-              aria-label={`${peerUnread} tin nhắn chưa đọc`}
-            >
-              {peerUnread > 99 ? '99+' : peerUnread}
-            </span>
+            </div>
+            {w.isMinimized && peerUnread > 0 && (
+              <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#e41e3f] px-1.5 text-[10px] font-bold text-white" aria-label={`${peerUnread} tin nhắn chưa đọc`}>
+                {peerUnread > 99 ? '99+' : peerUnread}
+              </span>
+            )}
+          </button>
+          {menuOpen && (
+            <div role="menu" className="absolute left-0 top-full z-10 mt-1 w-56 overflow-hidden rounded-lg border border-[var(--border-color)] bg-[var(--bg-card)] p-1 shadow-xl">
+              <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); onOpenFull(); }} className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm font-medium text-text-primary hover:bg-[var(--bg-surface-hover)]">
+                <Maximize2 size={16} className="text-text-secondary" />Mở trong Messenger
+              </button>
+              <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); router.push(`/profile/${w.peer.id}/v2`); }} className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm font-medium text-text-primary hover:bg-[var(--bg-surface-hover)]">
+                <UserRound size={16} className="text-text-secondary" />Xem trang cá nhân
+              </button>
+            </div>
           )}
+        </div>
+        <button type="button" onClick={() => onCall(false)} disabled={!w.threadId} aria-label="Gọi thoại" title="Gọi thoại" className={`${iconBtn} disabled:opacity-40`}>
+          <Phone size={17} className="fill-current" />
         </button>
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); onToggleMinimize(); }}
-          aria-label={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'}
-          className="rounded-md p-1 text-text-muted transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-text-primary"
-          style={{ minHeight: 28, minWidth: 28 }}
-        >
-          <Minus size={14} />
+        <button type="button" onClick={() => onCall(true)} disabled={!w.threadId} aria-label="Gọi video" title="Gọi video" className={`${iconBtn} disabled:opacity-40`}>
+          <Video size={19} className="fill-current" />
         </button>
-        <button
-          type="button"
-          onClick={(e) => { e.stopPropagation(); onClose(); }}
-          aria-label="Đóng"
-          className="rounded-md p-1 text-text-muted transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-text-primary"
-          style={{ minHeight: 28, minWidth: 28 }}
-        >
-          <X size={14} />
+        <button type="button" onClick={(e) => { e.stopPropagation(); onToggleMinimize(); }} aria-label={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'} title={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'} className={iconBtn}>
+          <Minus size={18} strokeWidth={2.5} />
+        </button>
+        <button type="button" onClick={(e) => { e.stopPropagation(); onClose(); }} aria-label="Đóng" title="Đóng" className={iconBtn}>
+          <X size={18} strokeWidth={2.5} />
         </button>
       </div>
 
-      {/* Body — hidden when minimized */}
       {!w.isMinimized && (
         <>
-          <div
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto px-3 py-2.5 text-sm"
-            // data-testid makes E2E tests easy
-            data-testid={`mini-chat-scroll-${w.peer.id}`}
-          >
-            {/* History states */}
-            {!w.threadId || w.historyLoading ? (
-              <div className="flex h-full flex-col items-center justify-center gap-2 py-8 text-center text-[11px] italic text-text-muted">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-2.5 py-2.5 text-sm" data-testid={`mini-chat-scroll-${w.peer.id}`}>
+            {w.loadError ? (
+              <div className="flex h-full flex-col items-center justify-center gap-2 px-4 text-center">
+                <WifiOff size={26} className="text-text-muted" />
+                <p className="text-[13px] text-text-secondary">Chưa kết nối được tới hội thoại. Kiểm tra mạng rồi thử lại.</p>
+                <button type="button" onClick={onRetry} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--accent-color)] px-3.5 py-1.5 text-[13px] font-semibold text-white hover:opacity-90">
+                  <RotateCw size={14} />Thử lại
+                </button>
+              </div>
+            ) : !w.threadId || w.historyLoading ? (
+              <div className="flex h-full flex-col items-center justify-center gap-2 py-8 text-center text-[12px] text-text-muted">
                 <LoaderDot />
                 <span>Đang tải hội thoại…</span>
               </div>
             ) : messages.length === 0 ? (
-              <>
-                <p className="mb-3 text-center text-[11px] italic text-text-muted">
-                  Chưa có tin nhắn nào — hãy bắt đầu cuộc trò chuyện.
-                </p>
-                {/* Quick-reply chips — only as a friendly empty-state
-                    affordance now that real history is shown when it
-                    exists. */}
-                <div className="flex flex-wrap gap-1.5">
+              <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+                <SafeAvatar src={w.peer?.avatarUrl} alt={peerName} seed={w.peer?.username ?? ''} size={60} rounded="full" fallbackType="initials" />
+                <p className="text-[15px] font-semibold text-text-primary">{peerName}</p>
+                <p className="mb-2 text-[12px] text-text-muted">Hãy gửi lời chào để bắt đầu trò chuyện</p>
+                <div className="flex flex-wrap justify-center gap-1.5">
                   {SUGGESTED_REPLIES.map((r) => (
-                    <button
-                      key={r}
-                      type="button"
-                      onClick={() => onUpdateDraft(r)}
-                      className="rounded-full bg-[var(--bg-surface)] px-2.5 py-1 text-[11px] text-text-secondary transition-colors hover:bg-[var(--bg-surface-active)] hover:text-text-primary"
-                      style={{ minHeight: 28 }}
-                    >
+                    <button key={r} type="button" onClick={() => onUpdateDraft(r)} className="rounded-full bg-[color-mix(in_srgb,var(--text-primary)_8%,var(--bg-card))] px-2.5 py-1 text-[12px] text-text-primary transition-colors hover:bg-[color-mix(in_srgb,var(--text-primary)_14%,var(--bg-card))]">
                       {r}
                     </button>
                   ))}
                 </div>
-              </>
+              </div>
             ) : (
-              <div className="flex flex-col gap-1.5">
-                {messages.map((m) => {
+              <div className="flex flex-col gap-0.5">
+                {messages.map((m, i) => {
                   const isOwn = selfId != null && m.senderId === selfId;
-                  const recalled = m.recalled === true;
+                  const next = messages[i + 1];
+                  const lastOfGroup = !next || next.senderId !== m.senderId;
                   return (
-                    <div
-                      key={m.id}
-                      className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div
-                        className={`relative max-w-[80%] rounded-2xl px-3 py-1.5 text-[13px] leading-snug break-words shadow-sm ${
-                          isOwn
-                            ? 'bg-neon-violet text-white rounded-br-md'
-                            : 'bg-[var(--bg-surface)] text-text-primary rounded-bl-md'
-                        }`}
-                        title={formatTime(m.createdAt)}
-                      >
-                        {recalled ? (
-                          <span className="italic opacity-60">Tin nhắn đã thu hồi</span>
-                        ) : (
-                          <>
-                            <span>{m.content}</span>
-                            <span
-                              className={`ml-1.5 inline-block align-baseline text-[9px] ${
-                                isOwn ? 'text-white/70' : 'text-text-muted'
-                              }`}
-                            >
-                              {formatTime(m.createdAt)}
-                            </span>
-                          </>
-                        )}
-                      </div>
+                    <div key={m.id} className={`flex items-end gap-1.5 ${isOwn ? 'justify-end' : 'justify-start'} ${lastOfGroup ? 'mb-1.5' : ''}`}>
+                      {!isOwn && (
+                        <span className="w-7 shrink-0">
+                          {lastOfGroup && <SafeAvatar src={w.peer?.avatarUrl} alt={peerName} seed={w.peer?.username ?? ''} size={28} rounded="full" fallbackType="initials" />}
+                        </span>
+                      )}
+                      <MiniBubble m={m} isOwn={isOwn} />
                     </div>
                   );
                 })}
               </div>
             )}
 
-            {/* Typing indicator — shown when peer is typing */}
             {w.isTyping && (
-              <div className="mt-2 flex items-center gap-2 text-xs text-text-muted">
-                <TypingDots />
-                <span className="italic">
-                  {w.peer?.displayName ?? w.peer?.username ?? ''} đang nhập…
-                </span>
+              <div className="mt-1 flex items-center gap-1.5 pl-9">
+                <span className="rounded-2xl bg-[color-mix(in_srgb,var(--text-primary)_8%,var(--bg-card))] px-3 py-2"><TypingDots /></span>
               </div>
             )}
           </div>
 
-          {/* Composer */}
-          <form
-            onSubmit={(e) => { e.preventDefault(); void onSend(); }}
-            className="flex items-center gap-2 border-t border-theme-light p-2"
-          >
-            <input
-              ref={inputRefSetter}
-              value={w.draft}
-              onChange={(e) => onUpdateDraft(e.target.value)}
-              onKeyDown={(e) => {
-                // Ô này là <input> nằm trong <form>, nên Enter tự submit —
-                // tiện, trừ khi bộ gõ tiếng Nhật/Trung/Hàn đang dựng chữ:
-                // lúc đó Enter là phím CHỐT chữ, để form submit thì tin nhắn
-                // bị gửi khi chữ còn dở. Chặn hành vi mặc định ở đúng ca đó,
-                // bộ gõ vẫn nhận phím bình thường.
-                if (e.key === 'Enter' && e.nativeEvent.isComposing) {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }
-              }}
-              placeholder={
-                w.threadId
-                  ? `Message ${w.peer?.displayName ?? w.peer?.username ?? ''}…`
-                  : 'Connecting…'
-              }
-              // text-base (16px) prevents iOS Safari from auto-zooming
-              // the input on focus, which would shift the dock off-screen.
-              className="flex-1 rounded-full bg-[var(--bg-surface)] px-3 py-2 text-base text-text-primary placeholder-text-muted outline-none focus:bg-[var(--bg-surface-active)]"
-              disabled={!w.threadId}
-              autoComplete="off"
-              spellCheck={false}
-              // 44px minimum tap target for mobile
-              style={{ minHeight: 40 }}
-            />
-            <button
-              type="submit"
-              disabled={!w.draft.trim() || !w.threadId}
-              aria-label="Gửi"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-neon-violet text-white transition-opacity hover:opacity-90 disabled:opacity-40"
-              style={{ minHeight: 40, minWidth: 40 }}
-            >
-              <Send size={14} />
-            </button>
-          </form>
+          <MiniComposer
+            threadId={w.threadId}
+            draft={w.draft}
+            inputRefSetter={inputRefSetter}
+            onUpdateDraft={onUpdateDraft}
+            onSend={onSend}
+          />
         </>
       )}
     </motion.div>
   );
+}
+
+/* ─── Bong bóng tin nhắn trong khung nhỏ: chữ, GIF/nhãn dán, ảnh, tin thoại, tệp ─── */
+/** Ảnh/GIF tải xong làm khung cao lên ⇒ kéo về cuối để tin mới nhất không bị cắt nửa. */
+function cuonCuoi(e: React.SyntheticEvent<HTMLElement>) {
+  const sc = e.currentTarget.closest('[data-testid^="mini-chat-scroll"]');
+  if (sc) sc.scrollTop = sc.scrollHeight;
+}
+
+function MiniBubble({ m, isOwn }: { m: MessagingMessage; isOwn: boolean }) {
+  const time = formatTime(m.createdAt);
+  if (m.recalled || m.deleted) {
+    return <div className="rounded-2xl border border-[var(--border-color)] px-3 py-1.5 text-[13px] italic text-text-muted" title={time}>Tin nhắn đã thu hồi</div>;
+  }
+  const media = m.mediaUrl && (m.mediaKind === 'gif' || m.mediaKind === 'sticker' || m.mediaKind === 'image');
+  const atts = m.attachments ?? [];
+  const chu = (m.content ?? '').trim();
+  // Một tin chỉ có 👍/emoji ngắn ⇒ vẽ to, không bong bóng (như Messenger).
+  const chiEmoji = chu && !media && atts.length === 0 && /^(\p{Extended_Pictographic}|\p{Emoji_Component}|\s){1,8}$/u.test(chu) && !/^\d+$/.test(chu);
+  return (
+    <div className={`flex max-w-[78%] flex-col gap-1 ${isOwn ? 'items-end' : 'items-start'}`} title={time}>
+      {media && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={m.mediaUrl!} alt={m.mediaKind === 'sticker' ? 'Nhãn dán' : 'GIF'} loading="lazy" onLoad={cuonCuoi} className={m.mediaKind === 'sticker' ? 'h-24 w-24 object-contain' : 'max-h-48 rounded-2xl object-cover'} />
+      )}
+      {atts.map((a) => (
+        a.mimeType?.startsWith('image/') ? (
+          <a key={a.id} href={a.url} target="_blank" rel="noopener noreferrer">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={a.thumbnailUrl || a.url} alt={a.fileName} loading="lazy" onLoad={cuonCuoi} className="max-h-48 rounded-2xl object-cover" />
+          </a>
+        ) : a.mimeType?.startsWith('audio/') ? (
+          <audio key={a.id} src={a.url} controls preload="metadata" className="h-9 w-[210px] max-w-full" />
+        ) : a.mimeType?.startsWith('video/') ? (
+          <video key={a.id} src={a.url} controls preload="metadata" className="max-h-48 rounded-2xl" />
+        ) : (
+          <a key={a.id} href={a.url} target="_blank" rel="noopener noreferrer" className={`flex max-w-full items-center gap-2 rounded-2xl px-3 py-2 text-[13px] ${isOwn ? 'bg-[var(--accent-color)] text-white' : 'bg-[color-mix(in_srgb,var(--text-primary)_8%,var(--bg-card))] text-text-primary'}`}>
+            <FileText size={16} className="shrink-0" /><span className="truncate">{a.fileName}</span>
+          </a>
+        )
+      ))}
+      {chu && (chiEmoji ? (
+        <span className="text-[34px] leading-none">{chu}</span>
+      ) : (
+        <div className={`whitespace-pre-wrap break-words rounded-[18px] px-3 py-1.5 text-[14px] leading-snug ${isOwn ? 'bg-[var(--accent-color)] text-white' : 'bg-[color-mix(in_srgb,var(--text-primary)_8%,var(--bg-card))] text-text-primary'}`}>
+          {chu}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Thanh soạn tin kiểu Messenger: 🎤 · ảnh · nhãn dán · GIF · [Aa 😊] · 👍/gửi ─── */
+function MiniComposer({
+  threadId, draft, inputRefSetter, onUpdateDraft, onSend,
+}: {
+  threadId: number | null;
+  draft: string;
+  inputRefSetter: (el: HTMLInputElement | null) => void;
+  onUpdateDraft: (value: string) => void;
+  onSend: () => Promise<void>;
+}) {
+  const [picker, setPicker] = useState<'emoji' | 'gif' | 'sticker' | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [moRong, setMoRong] = useState(false);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const emojiRef = useRef<HTMLButtonElement | null>(null);
+  const gifRef = useRef<HTMLButtonElement | null>(null);
+  const stickerRef = useRef<HTMLButtonElement | null>(null);
+  const ghi = useGhiAm();
+  const ready = !!threadId && !busy;
+  const coChu = draft.trim().length > 0;
+  // Đang gõ ⇒ thu 4 nút lại thành một nút "+" (như Messenger) để ô chữ rộng ra.
+  const hienNut = !coChu || moRong;
+  useEffect(() => { if (!coChu) setMoRong(false); }, [coChu]);
+
+  const guiNhanh = async (fn: () => Promise<void>, loi: string) => {
+    if (!threadId) return;
+    setBusy(true);
+    try { await fn(); } catch (e: any) { toast.error(e?.userFriendlyMessage ?? e?.message ?? loi); } finally { setBusy(false); }
+  };
+
+  const guiTep = (files: FileList | null) => {
+    const list = Array.from(files ?? []).slice(0, 10);
+    if (!list.length || !threadId) return;
+    void guiNhanh(async () => {
+      const ids: number[] = [];
+      for (const f of list) {
+        if (f.size > 25 * 1024 * 1024) { toast.error(`${f.name} lớn hơn 25MB`); continue; }
+        const res = await messagingApi.uploadAttachment(f);
+        if (res.data.data?.fileId) ids.push(res.data.data.fileId);
+      }
+      if (ids.length) await useMessagingStore.getState().sendMessage(threadId, '', ids);
+    }, 'Gửi tệp thất bại');
+  };
+
+  const guiMedia = (url: string, kind: 'gif' | 'sticker') => {
+    setPicker(null);
+    void guiNhanh(() => useMessagingStore.getState().sendMessage(threadId!, '', undefined, null, undefined, { url, kind }), 'Gửi thất bại');
+  };
+
+  const guiThoai = () => void guiNhanh(async () => {
+    const tep = await ghi.ketThuc();
+    if (!tep) return;
+    const res = await messagingApi.uploadAttachment(tep);
+    const id = res.data.data?.fileId;
+    if (!id) throw new Error('Máy chủ không trả về mã tệp.');
+    await useMessagingStore.getState().sendMessage(threadId!, '', [id]);
+  }, 'Gửi tin thoại thất bại');
+
+  const chenEmoji = (e: string) => {
+    const el = inputRef.current;
+    const start = el?.selectionStart ?? draft.length;
+    const end = el?.selectionEnd ?? draft.length;
+    onUpdateDraft(draft.slice(0, start) + e + draft.slice(end));
+    requestAnimationFrame(() => { el?.focus(); const p = start + e.length; el?.setSelectionRange(p, p); });
+  };
+
+  const iconBtn = 'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-tone-violet transition-colors hover:bg-[var(--bg-surface-hover)] disabled:opacity-40';
+
+  // Đang ghi âm: thay cả thanh bằng thanh ghi (huỷ · đồng hồ · gửi).
+  if (ghi.trangThai !== 'roi') {
+    return (
+      <div className="flex items-center gap-2 px-2 py-2">
+        <button type="button" onClick={() => ghi.huy()} aria-label="Huỷ ghi âm" title="Huỷ" className={iconBtn}><Trash2 size={18} /></button>
+        <div className="flex h-9 flex-1 items-center gap-2 rounded-full bg-[var(--accent-color)] px-3 text-white">
+          <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-white" />
+          <span className="text-[13px] font-semibold tabular-nums">{dongHo(ghi.giay)}</span>
+          <span className="ml-auto text-[11px] opacity-80">tối đa {dongHo(GIAY_TOI_DA)}</span>
+        </div>
+        <button type="button" onClick={guiThoai} disabled={ghi.trangThai === 'dang-xu-ly'} aria-label="Gửi tin thoại" title="Gửi" className={iconBtn}>
+          {ghi.trangThai === 'dang-xu-ly' ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} className="fill-current" />}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative px-1.5 py-2">
+      <EmojiPickerPopover open={picker === 'emoji'} anchorRef={emojiRef} onClose={() => setPicker(null)} onPick={chenEmoji} />
+      <GifPicker open={picker === 'gif'} anchorRef={gifRef} onClose={() => setPicker(null)} onPick={(u) => guiMedia(u, 'gif')} />
+      <StickerPicker open={picker === 'sticker'} anchorRef={stickerRef} onClose={() => setPicker(null)} onPick={(u) => guiMedia(u, 'sticker')} />
+      <input ref={fileRef} type="file" accept="image/*,video/*,.pdf,.doc,.docx,.zip,.txt" multiple hidden onChange={(e) => { guiTep(e.target.files); e.target.value = ''; }} />
+      {ghi.loi && <p className="px-2 pb-1 text-[11px] text-red-500">{ghi.loi}</p>}
+      <form
+        onSubmit={(e) => { e.preventDefault(); if (coChu) void onSend(); }}
+        className="flex items-center gap-0.5"
+      >
+        {hienNut ? (
+          <>
+            <button type="button" onClick={() => void ghi.batDau()} disabled={!ready} aria-label="Gửi tin thoại" title="Ghi âm tin thoại" className={iconBtn}><Mic size={19} /></button>
+            <button type="button" onClick={() => fileRef.current?.click()} disabled={!ready} aria-label="Đính kèm ảnh hoặc tệp" title="Đính kèm ảnh/tệp" className={iconBtn}>
+              {busy ? <Loader2 size={18} className="animate-spin" /> : <ImageIcon size={19} />}
+            </button>
+            <button ref={stickerRef} type="button" onClick={() => setPicker((p) => (p === 'sticker' ? null : 'sticker'))} disabled={!ready} aria-label="Chọn nhãn dán" title="Nhãn dán" className={iconBtn}><Sticker size={19} /></button>
+            <button ref={gifRef} type="button" onClick={() => setPicker((p) => (p === 'gif' ? null : 'gif'))} disabled={!ready} aria-label="Chọn GIF" title="GIF" className={iconBtn}>
+              <span className="rounded-[5px] bg-current px-[3px] text-[9px] font-black leading-[14px]"><span className="text-[var(--bg-card)]">GIF</span></span>
+            </button>
+          </>
+        ) : (
+          <button type="button" onClick={() => setMoRong(true)} aria-label="Hiện thêm tuỳ chọn" title="Thêm" className={iconBtn}><PlusCircle size={20} /></button>
+        )}
+        <label className="ml-0.5 flex h-9 min-w-0 flex-1 items-center rounded-full bg-[color-mix(in_srgb,var(--text-primary)_7%,var(--bg-card))] pl-3 pr-1">
+          <input
+            ref={(el) => { inputRef.current = el; inputRefSetter(el); }}
+            value={draft}
+            onChange={(e) => onUpdateDraft(e.target.value)}
+            onFocus={() => coChu && setMoRong(false)}
+            onKeyDown={(e) => {
+              // Bộ gõ Nhật/Trung/Hàn đang dựng chữ thì Enter là phím CHỐT chữ — đừng để form gửi tin dở.
+              if (e.key === 'Enter' && e.nativeEvent.isComposing) { e.preventDefault(); e.stopPropagation(); }
+            }}
+            placeholder={threadId ? 'Aa' : 'Đang kết nối…'}
+            disabled={!threadId}
+            aria-label="Nhập tin nhắn"
+            autoComplete="off"
+            spellCheck={false}
+            // 16px: Safari iOS không tự phóng to khi bấm vào ô.
+            className="min-w-0 flex-1 bg-transparent text-base text-text-primary placeholder:text-text-muted outline-none sm:text-[15px]"
+          />
+          <button ref={emojiRef} type="button" onClick={() => setPicker((p) => (p === 'emoji' ? null : 'emoji'))} disabled={!threadId} aria-label="Chọn biểu tượng cảm xúc" title="Biểu tượng cảm xúc" className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-tone-violet hover:bg-[var(--bg-surface-hover)] disabled:opacity-40">
+            <Smile size={19} />
+          </button>
+        </label>
+        {coChu ? (
+          <button type="submit" disabled={!threadId} aria-label="Gửi" title="Gửi (Enter)" className={iconBtn}><Send size={19} className="fill-current" /></button>
+        ) : (
+          <button type="button" onClick={() => void guiNhanh(() => useMessagingStore.getState().sendMessage(threadId!, '👍'), 'Gửi thất bại')} disabled={!ready} aria-label="Gửi lượt thích" title="Thích" className={iconBtn}>
+            <ThumbsUp size={20} className="fill-current" />
+          </button>
+        )}
+      </form>
+    </div>
+  );
+}
+
+/** "5 phút trước" từ mốc ms — cho dòng "Hoạt động … trước" ở đầu khung. */
+function thoiGianTruoc(ms: number): string {
+  const s = Math.max(0, Math.floor((Date.now() - ms) / 1000));
+  if (s < 60) return 'vừa xong';
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m} phút trước`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h} giờ trước`;
+  return `${Math.floor(h / 24)} ngày trước`;
 }
 
 export default function MiniChatDock() {

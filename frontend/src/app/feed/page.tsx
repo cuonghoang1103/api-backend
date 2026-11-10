@@ -36,7 +36,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, Loader2, Search, Sparkles, Users, X, RotateCw } from 'lucide-react';
 import SocialBackground from '@/components/social/SocialBackground';
 import TheaterMode from '@/components/social/TheaterMode';
-import MiniChatDock from '@/components/social/MiniChatDock';
 import { isScrollLocked } from '@/lib/scrollLock';
 import { playPop } from '@/lib/uiSound';
 
@@ -1024,12 +1023,7 @@ export default function SocialPage() {
         onReact={handleToggleLike}
       />
 
-      {/* ─── Floating mini-chat dock (added 2026-06-22) ────────
-          Listens for the `social:open-mini-chat` event that
-          SocialSidebar's FriendsSection dispatches when the
-          user clicks a friend row. Mounted at the page level
-          so it survives route changes inside the social app. */}
-      <MiniChatDock />
+      {/* MiniChatDock nay gắn toàn trang trong SiteNav (11/11/2026) — sự kiện `social:open-mini-chat` của SocialSidebar vẫn mở được. */}
     </main>
   );
 }

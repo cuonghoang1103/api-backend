@@ -830,3 +830,22 @@
 @media (prefers-reduced-motion: reduce) {
   .pill, .spot, .tile, .chev, .signupLink { transition: none !important; }
 }
+
+/* Ảnh đại diện trên thanh đầu trang + chấm "đang hoạt động" (11/11/2026).
+   Chấm đặt ở lớp bọc NGOÀI ảnh: UserAvatar có overflow-hidden nên một chấm bên trong
+   bị cắt/che mất. Viền màu nền thanh để chấm tách khỏi ảnh ở cả theme sáng lẫn tối. */
+.avatarWrap {
+  position: relative;
+  display: inline-flex;
+}
+.onlineDot {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: #31a24c;
+  box-shadow: 0 0 0 2px var(--bg-card);
+}
+.iconBtn[data-active] { background: var(--nv-hover); color: var(--nv-accent); }

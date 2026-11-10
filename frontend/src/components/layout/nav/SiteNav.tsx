@@ -47,6 +47,9 @@ const MobileSheet = dynamic(() => import('./MobileSheet'), { ssr: false });
 const CommandPalette = dynamic(() => import('./CommandPalette'), { ssr: false });
 const UserMenu = dynamic(() => import('./UserMenu'), { ssr: false });
 const NotificationDropdown = dynamic(() => import('@/components/social/NotificationDropdown'), { ssr: false });
+// Bảng "Đoạn chat" đè lên trang + khung chat nhỏ kiểu Facebook (11/11/2026).
+const ChatsPanel = dynamic(() => import('@/components/messaging/ChatsPanel'), { ssr: false });
+const MiniChatDock = dynamic(() => import('@/components/social/MiniChatDock'), { ssr: false });
 const ChangePasswordModal = dynamic(
   () => import('@/components/auth/ChangePasswordModal').then((m) => m.ChangePasswordModal),
   { ssr: false },
@@ -163,6 +166,9 @@ export default function SiteNav() {
   const [bellOpen, setBellOpen] = useState(false);
   const [pwOpen, setPwOpen] = useState(false);
   const bellRef = useRef<HTMLButtonElement>(null);
+  const [chatsOpen, setChatsOpen] = useState(false);
+  const chatsRef = useRef<HTMLButtonElement>(null);
+  const closeChats = useCallback(() => setChatsOpen(false), []);
   const userWrapRef = useRef<HTMLDivElement>(null);
 
   // Close everything on navigation.
@@ -421,6 +427,7 @@ export default function SiteNav() {
                   aria-label={t.notifications}
                   aria-expanded={bellOpen}
                   onClick={() => {
+                    setChatsOpen(false);
                     setBellOpen((o) => !o);
                     if (!bellOpen) useNotificationStore.getState().loadInitial();
                   }}
@@ -430,12 +437,23 @@ export default function SiteNav() {
                     <span className={s.badge}>{unreadNotifications > 99 ? '99+' : unreadNotifications}</span>
                   )}
                 </button>
-                <Link href="/messages" className={`${s.iconBtn} ${s.hideBelowLg}`} aria-label={t.messages}>
+                {/* Messenger: mở bảng "Đoạn chat" ĐÈ lên trang (không chuyển trang) — như Facebook.
+                    Điện thoại (< 640px) đã có tab Tin nhắn ở thanh dưới nên ẩn ở đó. */}
+                <button
+                  ref={chatsRef}
+                  type="button"
+                  className={`${s.iconBtn} ${s.hideBelowSm}`}
+                  aria-label={t.messages}
+                  aria-haspopup="dialog"
+                  aria-expanded={chatsOpen}
+                  data-active={chatsOpen || undefined}
+                  onClick={() => { setBellOpen(false); setChatsOpen((o) => !o); }}
+                >
                   <MessageCircle />
                   {(unreadMessages ?? 0) > 0 && (
                     <span className={s.badge}>{unreadMessages > 99 ? '99+' : unreadMessages}</span>
                   )}
-                </Link>
+                </button>
                 <div ref={userWrapRef} className={`${s.hideBelowLg}`} style={{ position: 'relative' }}>
                   <button
                     type="button"
@@ -445,7 +463,12 @@ export default function SiteNav() {
                     aria-expanded={userMenuOpen}
                     onClick={() => { closeMenu(); setUserMenuOpen((v) => !v); }}
                   >
-                    <UserAvatar size={28} className="rounded-lg" />
+                    <span className={s.avatarWrap}>
+                      <UserAvatar size={28} className="rounded-lg" />
+                      {/* Chấm "đang hoạt động" nằm NGOÀI ảnh (ảnh có overflow-hidden sẽ cắt mất nếu đặt bên trong). */}
+                      {/* Bạn đang dùng web ⇒ bạn đang hoạt động (giống Messenger hiện trạng thái của chính mình). */}
+                      <span className={s.onlineDot} title="Đang hoạt động" aria-hidden />
+                    </span>
                     <ChevronDown size={14} aria-hidden />
                   </button>
                   {(userMenuOpen || userMenuMounted) && (
@@ -539,6 +562,11 @@ export default function SiteNav() {
       {isAuthenticated && bellOpen && (
         <NotificationDropdown anchor={bellRef.current} open={bellOpen} onClose={() => setBellOpen(false)} />
       )}
+      {isAuthenticated && chatsOpen && (
+        <ChatsPanel anchor={chatsRef.current} open={chatsOpen} onClose={closeChats} />
+      )}
+      {/* Khung chat nhỏ nổi ở mọi trang (trừ /messages — trang đó đã là Messenger đầy đủ). */}
+      {isAuthenticated && !pathname?.startsWith('/messages') && <MiniChatDock />}
       {pwOpen && <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />}
     </div>
   );

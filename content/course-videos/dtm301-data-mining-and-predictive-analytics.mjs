@@ -1,0 +1,42 @@
+/**
+ * YouTube track cho DTM301 — Data Mining and Predictive Analytics. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/dtm301-data-mining-and-predictive-analytics.mjs
+ */
+export default {
+  courseSlug: "dtm301-data-mining-and-predictive-analytics",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "dtm301-ts-1-1": { yt: "7rs0i-9nOjo", credit: "IBM Technology — What is Data Mining?" },
+    "dtm301-ts-1-2": { yt: "q_okDS2RtzY", credit: "Cody Baldwin — Introduction to the CRISP-DM Methodology (Analytics & Data Science)" },
+    "dtm301-ts-1-4": { yt: "IG6o0_J-cxk", credit: "George Tzanetakis — UVic MIR Course - Hands on with Weka and scikit-learn" },
+    "dtm301-ts-2-1": { yt: "QiqZliDXCCg", credit: "IBM Technology — Exploratory Data Analysis" },
+    "dtm301-ts-2-3": { yt: "Bg3CjiJ67Cc", credit: "IBM Technology — Feature Engineering for AI: Transforming Raw Data into Predictions" },
+    "dtm301-ts-2-4": { yt: "AU_hBML2H1c", credit: "Cognitive Class — Machine Learning - Dimensionality Reduction - Feature Extraction & Selection" },
+    "dtm301-ts-3-1": { yt: "_L39rN6gz7Y", credit: "StatQuest with Josh Starmer — Decision and Classification Trees, Clearly Explained!!!" },
+    "dtm301-ts-3-2": { yt: "HVXime0nQeI", credit: "StatQuest with Josh Starmer — StatQuest: K-nearest neighbors, Clearly Explained" },
+    "dtm301-ts-3-3": { yt: "O2L2Uv9pdDA", credit: "StatQuest with Josh Starmer — Naive Bayes, Clearly Explained!!!" },
+    "dtm301-ts-4-1": { yt: "owI7zxCqNY0", credit: "dataminingincae — Video 1: Introduction to Simple Linear Regression" },
+    "dtm301-ts-4-2": { yt: "kr_Be9NVXOM", credit: "Stanford Online — Statistical Learning: 4.2 Logistic Regression" },
+    "dtm301-ts-4-3": { yt: "EuBBz3bI-aA", credit: "StatQuest with Josh Starmer — Machine Learning Fundamentals: Bias and Variance" },
+    "dtm301-ts-5-1": { yt: "fSytzGwwBVw", credit: "StatQuest with Josh Starmer — Machine Learning Fundamentals: Cross Validation" },
+    "dtm301-ts-5-2": { yt: "Kdsp6soqA7o", credit: "StatQuest with Josh Starmer — Machine Learning Fundamentals: The Confusion Matrix" },
+    "dtm301-ts-5-3": { yt: "uyAs6pjT7lY", credit: "Chitu Okoli — Lift Charts - Classification Evaluation - Business Intelligence with Data Mining" },
+    "dtm301-ts-6-1": { yt: "J4Wdy0Wc_xQ", credit: "StatQuest with Josh Starmer — StatQuest: Random Forests Part 1 - Building, Using and Evaluating" },
+    "dtm301-ts-6-3": { yt: "efR1C6CvhmE", credit: "StatQuest with Josh Starmer — Support Vector Machines Part 1 (of 3): Main Ideas!!!" },
+    "dtm301-ts-7-1": { yt: "4b5d3muPQmA", credit: "StatQuest with Josh Starmer — StatQuest: K-means clustering" },
+    "dtm301-ts-7-2": { yt: "7xHsRkOdVwo", credit: "StatQuest with Josh Starmer — StatQuest: Hierarchical Clustering" },
+    "dtm301-ts-7-3": { yt: "4NDORb4HBkw", credit: "Engineers.SG — Customer Segmentation in Python - PyConSG 2016" },
+    "dtm301-ts-8-1": { yt: "guVvtZ7ZClw", credit: "edureka! — Apriori Algorithm Explained | Association Rule Mining | Finding Frequent Itemset | Edureka" },
+    "dtm301-ts-8-2": { yt: "qMQfUy8ndco", credit: "EzzxAk — Association Rule Mining (Part 2) - Support/Confidence/Lift" },
+    "dtm301-ts-8-3": { yt: "n3RKsY2H-NE", credit: "Art of the Problem — The Math Behind Recommender Systems" },
+    "dtm301-ts-9-1": { yt: "GE3JOFwTWVM", credit: "IBM Technology — What is Time Series Analysis?" },
+    "dtm301-ts-9-2": { yt: "k_HN0wOKDd0", credit: "Joshua Emmanuel — Forecasting: Exponential Smoothing, MSE" },
+    "dtm301-ts-9-3": { yt: "BeDeHntF68M", credit: "IBM Technology — What is Text Mining?" },
+    "dtm301-1-1-overview-crispdm": { yt: "nNc_q08yWxw", credit: "Cognitir — Data Science for Business: Data Mining Process and CRISP DM (Cognitir Learning)" },
+    "dtm301-2-1-preprocessing": { yt: "j0tqUBhs-Nc", credit: "Trouble- Free — #8 Data Preprocessing In Data Mining - 4 Steps |DM|" },
+    "dtm301-4-1-regression-forecasting": { yt: "27bp8b1gxKY", credit: "Galit Shmueli — Regression 1: Regression for forecasting" },
+    "dtm301-5-1-clustering": { yt: "QXOkPvFM6NU", credit: "Luis Serrano Academy — Clustering: K-means and Hierarchical" },
+    "dtm301-6-1-association-rules": { yt: "icGS26TS1fE", credit: "numiqo — Market Basket Analysis [Association Analysis]" },
+    "dtm301-7-1-model-evaluation": { yt: "0RT2Q0qwXSA", credit: "IBM Technology — Overfitting, Underfitting, and Bad Data Are Ruining Your Predictive Models" },
+  },
+};

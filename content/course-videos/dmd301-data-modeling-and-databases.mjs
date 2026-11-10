@@ -1,0 +1,42 @@
+/**
+ * YouTube track cho DMD301 — Data Modeling and Databases. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/dmd301-data-modeling-and-databases.mjs
+ */
+export default {
+  courseSlug: "dmd301-data-modeling-and-databases",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "dmd301-ts-1-2": { yt: "OwQoj3GJfNY", credit: "Neso Academy — Introduction to Data Models" },
+    "dmd301-ts-1-3": { yt: "6IyRa2-ZK3I", credit: "notyournormalbrother — Database System Development Lifecycle Part 1" },
+    "dmd301-ts-2-1": { yt: "wOD02sezmX8", credit: "Neso Academy — Basic Concepts of Entity-Relationship Model" },
+    "dmd301-ts-2-2": { yt: "n3mHfQft5P8", credit: "Neso Academy — Concept of Relationships in ER Diagram" },
+    "dmd301-ts-2-3": { yt: "9gxxu5E2-SQ", credit: "Dr. Daniel Soper — Topic 04, Part 09 - Strong vs. Weak Entities" },
+    "dmd301-ts-2-4": { yt: "7V95C43ujlU", credit: "Neso Academy — ER Diagram for University Database" },
+    "dmd301-ts-3-1": { yt: "Q45sr5p_NmQ", credit: "Neso Academy — Introduction to Relational Data Model" },
+    "dmd301-ts-3-2": { yt: "v3qGAu88ifI", credit: "AKSHARA CS — ER to Relational mapping- ER diagram conversion into Tables(Relations)-Logical Database Design" },
+    "dmd301-ts-3-3": { yt: "76v3gRns28U", credit: "Neso Academy — Basics of Relational Algebra" },
+    "dmd301-ts-4-1": { yt: "HqGJA7RGaUo", credit: "Katherine Carl, PhD — Database Theory - Data Anomalies and Functional Dependencies" },
+    "dmd301-ts-4-2": { yt: "R2Z-DgZ6QFQ", credit: "Jenny's Lectures CS IT — Lec 12: Third Normal Form in DBMS | 3NF with example | Normalization in DBMS" },
+    "dmd301-ts-4-3": { yt: "ABwD8IYByfk", credit: "edureka! — What is Normalization in SQL? | Database Normalization Forms - 1NF, 2NF, 3NF, BCNF | Edureka" },
+    "dmd301-ts-5-1": { yt: "hrwq_FFky30", credit: "Michael Fudge — SQL: DDL and DML Part 2 of 4: ALTER TABLE, and CONSTRAINTs: Check, Unique, and Foreign Key" },
+    "dmd301-ts-5-2": { yt: "w27gAgDQr_w", credit: "Neso Academy — DML Commands - INSERT and UPDATE" },
+    "dmd301-ts-6-1": { yt: "ZaFMM-vNlvc", credit: "Database Star — SQL CTEs (Common Table Expressions) - Why and How to Use Them" },
+    "dmd301-ts-6-2": { yt: "rIcB4zMYMas", credit: "Maven Analytics — SQL Window Functions | Clearly Explained | PARTITION BY, ORDER BY, ROW_NUMBER, RANK, DENSE_RANK" },
+    "dmd301-ts-6-3": { yt: "09lsHOi3vP4", credit: "Data Streams Academy — Day 12 : SQL Views | Functions | Stored Procedure | Trigger | #learnwithdsa" },
+    "dmd301-ts-7-1": { yt: "uPOGPL2C0_8", credit: "Neso Academy — Relational Model Constraints" },
+    "dmd301-ts-7-2": { yt: "NHKHzwolbKU", credit: "Barry Brown — Database Transactions, part 3: ACID and Isolation" },
+    "dmd301-ts-8-1": { yt: "oF_2uDb7DvQ", credit: "codebasics — What is ETL | What is Data Warehouse | OLTP vs OLAP" },
+    "dmd301-ts-8-2": { yt: "gRE3E7VUzRU", credit: "Kahan Data Solutions — Data Modeling Tutorial: Star Schema (aka Kimball Approach)" },
+    "dmd301-ts-8-3": { yt: "XqdZF0DJpUs", credit: "Tech Coach — SCD: Slowly changing dimensions explained with real examples" },
+    "dmd301-ts-9-1": { yt: "hmGz79ae2AY", credit: "MongoDB — MongoDB Data Modeling and Schema Fundamentals | From Relational to Document Model" },
+    "dmd301-ts-9-2": { yt: "VfcRxtBKI54", credit: "Anton Putra — Types of Databases: Relational vs. Columnar vs. Document vs. Graph vs. Vector vs. Key-value & more" },
+    "dmd301-ts-9-3": { yt: "5HcDJ8e9NwY", credit: "IBM Technology — Data Quality Explained" },
+    "dmd301-1-1-dbms-overview": { yt: "X7v0O8yiUuY", credit: "Tech Might — What is Database & Database Management System DBMS | Intro to DBMS" },
+    "dmd301-2-1-er-model": { yt: "rorft23glC0", credit: "Neso Academy — Entity-Relationship (ER) Diagram" },
+    "dmd301-3-1-relational-mapping": { yt: "CZTkgMoqVss", credit: "Søren Spangsberg Jørgensen — How to convert an ER diagram to the Relational Data Model" },
+    "dmd301-4-1-normalization": { yt: "GFQaEYEc8_8", credit: "Decomplexify — Learn Database Normalization - 1NF, 2NF, 3NF, 4NF, 5NF" },
+    "dmd301-5-1-sql-basics": { yt: "vUj-kUEC_oA", credit: "Gate Smashers — Lec-60: All Types of SQL Commands with Example | DDL, DML, DCL, TCL and CONSTRAINTS | DBMS" },
+    "dmd301-6-1-sql-advanced": { yt: "Yh4CrPHVBdE", credit: "Anton Putra — 6 SQL Joins you MUST know! (Animated + Practice)" },
+    "dmd301-7-1-integrity-constraints": { yt: "1D_h-yFtQVo", credit: "Caleb Curry — Database Design 7 - Data Integrity" },
+  },
+};

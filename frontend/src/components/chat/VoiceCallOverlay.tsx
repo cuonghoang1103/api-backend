@@ -83,10 +83,24 @@ export default function VoiceCallOverlay({
   const silentRounds = useRef(0);
   const wasSpeaking = useRef(false);
   const closedRef = useRef(false);
+  /*
+   * 10/11/2026 — "CuongMini chỉ nói được một chữ rồi im". Ngoài tiếng loa lọt vào bộ ngắt lời (xem NGẮT LỜI BẰNG GIỌNG),
+   * còn một đường thứ hai: hẹn giờ "thử nghe lại" của một lượt nghe CŨ (báo no-speech) bắn ra GIỮA LÚC trợ lý đang
+   * nói ⇒ mở nhận dạng giọng ⇒ nó nghe chính cái loa ⇒ gửi câu đó thành câu hỏi mới ⇒ `speak()` mới gọi
+   * `speechSynthesis.cancel()` ⇒ câu đang đọc bị cắt. Đo bằng bộ thử headless: pha về "đang nghe" sau ~600ms đọc.
+   * Chặn bằng: số thứ tự lượt nghe (kết quả/lỗi của lượt cũ bị bỏ qua), huỷ hẹn giờ khi bắt đầu hỏi, và KHÔNG mở
+   * nghe khi đang nghĩ hoặc loa còn đang đọc.
+   */
+  const phaseRef = useRef<Phase>('idle');
+  phaseRef.current = phase;
+  const luotNghe = useRef(0);
+  const henNgheLai = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // ── Dừng mọi thứ khi đóng ─────────────────────────────────────
   const hangUp = useCallback(() => {
     closedRef.current = true;
+    clearTimeout(henNgheLai.current);
+    luotNghe.current += 1;
     stopListen();
     stopSpeak();
     setPhase('idle');
@@ -110,6 +124,11 @@ export default function VoiceCallOverlay({
 
   // ── Một lượt: nghe → hỏi → đọc câu trả lời ────────────────────
   const ask = useCallback(async (text: string) => {
+    // Từ đây tới khi đọc xong: không lượt nghe nào (cũ hay hẹn giờ) được chen vào.
+    clearTimeout(henNgheLai.current);
+    luotNghe.current += 1;
+    stopListen();
+    phaseRef.current = 'thinking';
     setHeard(text);
     setReply('');
     setPhase('thinking');
@@ -126,17 +145,24 @@ export default function VoiceCallOverlay({
       toast.error('Không gửi được câu hỏi');
       setPhase('idle');
     }
-  }, [onAsk, muted, ttsSupported, speak, lang]);
+  }, [onAsk, muted, ttsSupported, speak, lang, stopListen]);
 
   const beginListening = useCallback(() => {
     if (closedRef.current || micOff) return;
     if (!sttSupported) { setPhase('idle'); return; } // đường lùi: nút "Giữ để nói"
+    // Đang nghĩ, hoặc loa còn đang đọc ⇒ KHÔNG mở nghe (nó sẽ nghe chính câu trả lời). Đọc xong, effect bên dưới tự gọi lại.
+    if (phaseRef.current === 'thinking') return;
+    if (typeof window !== 'undefined' && window.speechSynthesis?.speaking) return;
+    clearTimeout(henNgheLai.current);
+    stopListen();   // lượt nhận dạng đang chạy (nếu có) phải dừng trước — không để hai lượt cùng nghe
+    const toi = ++luotNghe.current;
+    phaseRef.current = 'listening';
     setPhase('listening');
     listen(
       lang,
-      (text) => { silentRounds.current = 0; void ask(text); },
+      (text) => { if (toi !== luotNghe.current) return; silentRounds.current = 0; void ask(text); },
       (code) => {
-        if (closedRef.current) return;
+        if (closedRef.current || toi !== luotNghe.current) return;
         if (code === 'not-allowed' || code === 'service-not-allowed') {
           setPhase('blocked');
           return;
@@ -144,10 +170,10 @@ export default function VoiceCallOverlay({
         // 'no-speech' / 'aborted': im lặng là chuyện thường, thử lại vài lần.
         silentRounds.current += 1;
         if (silentRounds.current >= MAX_SILENT_ROUNDS) { setPhase('idle'); return; }
-        setTimeout(() => { if (!closedRef.current) beginListening(); }, 600);
+        henNgheLai.current = setTimeout(() => { if (!closedRef.current && toi === luotNghe.current) beginListening(); }, 600);
       },
     );
-  }, [ask, lang, listen, micOff, sttSupported]);
+  }, [ask, lang, listen, stopListen, micOff, sttSupported]);
 
   // Mở cuộc gọi → nghe ngay (nếu trình duyệt nghe được).
   useEffect(() => {
@@ -193,7 +219,9 @@ export default function VoiceCallOverlay({
     if (phase !== 'listening' && phase !== 'speaking') { thoiDo(); return; }
     let song = true;
     let luong: MediaStream | null = null;
-    void navigator.mediaDevices?.getUserMedia({ audio: true })
+    /* Khai RÕ ràng buộc: khử vọng âm + lọc ồn BẬT, tự khuếch đại TẮT — AGC kéo tiếng loa vọng (nhỏ) lên gần bằng giọng
+       người, đúng thứ làm bộ ngắt lời bằng giọng tưởng người dùng đang nói (10/11/2026). */
+    void navigator.mediaDevices?.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: false } })
       .then((s) => {
         if (!song) { s.getTracks().forEach((t) => t.stop()); return; }
         luong = s;
@@ -210,32 +238,60 @@ export default function VoiceCallOverlay({
   /**
    * NGẮT LỜI BẰNG GIỌNG — nói chen vào là trợ lý im ngay, không phải chạm.
    *
-   * ⚠️ CHỖ KHÓ DUY NHẤT: MICRO NGHE THẤY CHÍNH CÁI LOA. Không xử lý thì máy
-   * tự ngắt lời chính nó ngay câu đầu. Hai lớp chống:
-   *   1. `echoCancellation` của trình duyệt (bật trong `getUserMedia`)
-   *   2. ngưỡng cao hơn hẳn mức nói thường, và phải GIỮ LIÊN TỤC 250ms —
-   *      phần loa rò qua khử vọng âm thì nhỏ và ngắt quãng, còn giọng người
-   *      nói vào micro thì to và liên tục.
+   * ⚠️ MICRO NGHE THẤY CHÍNH CÁI LOA. Giọng đọc là `speechSynthesis` của HỆ ĐIỀU HÀNH — nó phát thẳng ra loa, KHÔNG
+   * đi qua đường âm thanh WebRTC của trình duyệt, nên `echoCancellation` gần như không khử được nó. Bản cũ dùng ngưỡng
+   * CỐ ĐỊNH 0.05 giữ 250ms ⇒ tiếng loa lọt vào micro vượt ngưỡng ngay từ đầu ⇒ trợ lý tự cắt lời sau đúng một từ rồi
+   * chuyển sang nghe trong im lặng (người dùng báo 10/11/2026: "chỉ nói được một chữ rồi tắt").
    *
-   * Loa ngoài mở rất to vẫn có thể rò lọt, nên có công tắc tắt: một trợ lý
-   * tự ngắt lời mình liên tục còn khó dùng hơn một trợ lý không ngắt được.
+   * Nay — chỉ coi là CHEN LỜI khi tiếng vượt hẳn "nền vọng" của chính lúc trợ lý đang nói:
+   *   1. Micro được mở LẠI mỗi lần bắt đầu nói; ~0,3 s đầu khử vọng/lọc ồn chưa hội tụ nên tiếng loa lọt vào to
+   *      (đo bằng micro giả: 0.045 ⇒ 0.015 sau khi hội tụ) — đó chính là lúc bản cũ cắt lời. Bỏ qua 300ms đầu.
+   *   2. 300–900ms: đo NỀN = trung bình mức tiếng (không lấy max — max dính đợt vọt lúc mở micro).
+   *   3. Sau đó: nền trôi chậm theo các mẫu DƯỚI ngưỡng (giọng người chen vào không bị nuốt vào nền).
+   *   4. Ngưỡng = max(0.06, nền × 2.5 + 0.02). Bộ tích luỹ RÒ: trên ngưỡng ⇒ cộng thời gian, dưới ⇒ trừ một nửa; đủ
+   *      350ms ⇒ chen lời. Giọng thật có quãng nghỉ giữa âm tiết — đòi "liên tục" thì không bao giờ bắt được.
+   * Vẫn có công tắc tắt: một trợ lý tự ngắt lời mình còn khó dùng hơn một trợ lý không ngắt được.
    */
-  const NGUONG_CHEN = 0.05;
-  const GIU_MS = 250;
-  const chenTu = useRef(0);
+  const NGUONG_TOI_THIEU = 0.06;
+  const HE_SO_NEN = 2.5;
+  const BO_QUA_MS = 300;
+  const DO_NEN_MS = 900;
+  const DU_MS = 350;
+  const noiTu = useRef(0);
+  const nenVong = useRef({ tong: 0, so: 0, gt: 0 });
+  const tichLuy = useRef({ ms: 0, luc: 0 });
+
+  // Mốc = lúc giọng đọc THẬT SỰ bắt đầu (`speaking` bật), không phải lúc chuyển pha: `speak()` có thể còn chờ nạp
+  // danh sách giọng — đo nền trong khoảng im đó thì nền ≈ 0 và tiếng loa ngay sau lại vượt ngưỡng.
+  useEffect(() => {
+    if (phase === 'speaking' && speaking) {
+      noiTu.current = Date.now();
+      nenVong.current = { tong: 0, so: 0, gt: 0 };
+      tichLuy.current = { ms: 0, luc: Date.now() };
+    }
+  }, [phase, speaking]);
 
   useEffect(() => {
-    if (phase !== 'speaking' || !chenBangGiong) { chenTu.current = 0; return; }
-    if (mucGiong > NGUONG_CHEN) {
-      if (!chenTu.current) chenTu.current = Date.now();
-      else if (Date.now() - chenTu.current >= GIU_MS) {
-        chenTu.current = 0;
+    if (phase !== 'speaking' || !speaking || !chenBangGiong) return;
+    const bay = Date.now();
+    const tuLuc = bay - noiTu.current;
+    const nen = nenVong.current;
+    if (tuLuc < BO_QUA_MS) return;
+    if (tuLuc < DO_NEN_MS) { nen.tong += mucGiong; nen.so += 1; nen.gt = nen.tong / nen.so; tichLuy.current.luc = bay; return; }
+    const dt = Math.min(100, bay - tichLuy.current.luc);
+    tichLuy.current.luc = bay;
+    const nguong = Math.max(NGUONG_TOI_THIEU, nen.gt * HE_SO_NEN + 0.02);
+    if (mucGiong > nguong) {
+      tichLuy.current.ms += dt;
+      if (tichLuy.current.ms >= DU_MS) {
+        tichLuy.current.ms = 0;
         stopSpeak();          // im NGAY; effect sẵn có sẽ chuyển sang nghe
       }
     } else {
-      chenTu.current = 0;
+      tichLuy.current.ms = Math.max(0, tichLuy.current.ms - dt / 2);
+      nen.gt = nen.gt * 0.97 + mucGiong * 0.03;
     }
-  }, [mucGiong, phase, chenBangGiong, stopSpeak]);
+  }, [mucGiong, phase, speaking, chenBangGiong, stopSpeak]);
 
   const tapOrb = useCallback(() => {
     if (phase === 'speaking') { stopSpeak(); return; }  // cắt lời → effect trên sẽ nghe tiếp

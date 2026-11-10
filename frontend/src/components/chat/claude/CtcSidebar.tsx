@@ -9,18 +9,23 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
-  CalendarClock, Check, ChevronsUpDown, Folder, FolderKanban, LayoutGrid, LogIn, MoreHorizontal, PanelLeftClose,
-  Pencil, Pin, PinOff, Plus, Search, SlidersHorizontal, Trash2,
+  CalendarClock, Check, ChevronDown, ChevronsUpDown, Code2, Folder, FolderKanban, LayoutGrid, LogIn, MessageSquare,
+  MonitorDown, MoreHorizontal, PanelLeftClose, Pencil, Pin, PinOff, Plus, Search, SlidersHorizontal, Trash2,
 } from 'lucide-react';
 import type { ChatFolder, ChatSession } from '@/types';
 import { getImageUrl } from '@/lib/utils';
 import { CuongMiniPanda, CuongMiniWordmark } from './CuongMiniPanda';
 
 export type SessionRow = ChatSession & { pinned?: boolean };
-export type CtcView = 'chat' | 'recents' | 'projects' | 'artifacts' | 'scheduled' | 'customize' | `project:${string}`;
+export type CtcView = 'chat' | 'code' | 'recents' | 'projects' | 'artifacts' | 'scheduled' | 'customize' | `project:${string}`;
 
 interface Props {
   open: boolean;
+  /** Chat thường hay CuongMini Code — đổi danh mục điều hướng + danh sách phiên gần đây. */
+  mode: 'chat' | 'code';
+  onMode: (m: 'chat' | 'code') => void;
+  /** Mã phiên ⇒ phiên Code (có kho hay không). */
+  codeSessions: Record<string, { coKho: boolean }>;
   view: CtcView;
   sessions: SessionRow[];
   currentId: string | null;
@@ -34,6 +39,8 @@ interface Props {
   onRename: (id: string, title: string) => void;
   onDelete: (id: string) => void;
   onPin: (id: string, pinned: boolean) => void;
+  /** Cuộc chỉ có ở máy (khách / chưa gửi) — không ghim/chuyển dự án được. */
+  chiOMay: (id: string) => boolean;
   user?: { name: string; avatarUrl?: string; isPro: boolean } | null;
 }
 
@@ -63,10 +70,17 @@ export function CtcSidebar(p: Props) {
     return () => { document.removeEventListener('mousedown', close); document.removeEventListener('keydown', esc); };
   }, [menuFor]);
 
-  const { ghim, ganDay } = useMemo(() => {
+  const [locCode, setLocCode] = useState<'tat-ca' | 'co-kho' | 'khong-kho'>('tat-ca');
+  const [khacMo, setKhacMo] = useState(false);
+  const { ghim, ganDay, soCode } = useMemo(() => {
     const sorted = [...p.sessions].sort((a, b) => thoiGian(b) - thoiGian(a));
-    return { ghim: sorted.filter((s) => s.pinned), ganDay: sorted.filter((s) => !s.pinned).slice(0, SO_GAN_DAY) };
-  }, [p.sessions]);
+    if (p.mode === 'code') {
+      const code = sorted.filter((s) => p.codeSessions[s.sessionId]);
+      const loc = code.filter((s) => locCode === 'tat-ca' || (locCode === 'co-kho') === p.codeSessions[s.sessionId].coKho);
+      return { ghim: [] as SessionRow[], ganDay: loc.slice(0, SO_GAN_DAY), soCode: code.length };
+    }
+    return { ghim: sorted.filter((s) => s.pinned), ganDay: sorted.filter((s) => !s.pinned).slice(0, SO_GAN_DAY), soCode: 0 };
+  }, [p.sessions, p.mode, p.codeSessions, locCode]);
 
   const commitRename = useCallback((id: string) => {
     const t = editVal.trim();
@@ -99,7 +113,13 @@ export function CtcSidebar(p: Props) {
     }
     return (
       <div key={s.sessionId} className="ctc-row" data-on={on} data-menu={menuFor === s.sessionId}>
-        <button type="button" className="ctc-row-btn" onClick={() => p.onSelect(s.sessionId)} title={s.title || 'Cuộc trò chuyện mới'}>
+        <button
+          type="button"
+          className="ctc-row-btn"
+          onClick={() => p.onSelect(s.sessionId)}
+          onDoubleClick={() => { setEditVal(s.title || ''); setEditing(s.sessionId); }}
+          title={`${s.title || 'Cuộc trò chuyện mới'} — bấm đúp để đổi tên`}
+        >
           <span>{s.title || 'Cuộc trò chuyện mới'}</span>
         </button>
         <button
@@ -129,13 +149,13 @@ export function CtcSidebar(p: Props) {
               </>
             ) : (
               <>
-                <button type="button" className="ctc-menu-item" disabled={s.sessionId.startsWith('local_')} onClick={() => { setMenuFor(null); p.onPin(s.sessionId, !s.pinned); }}>
+                <button type="button" className="ctc-menu-item" disabled={p.chiOMay(s.sessionId)} onClick={() => { setMenuFor(null); p.onPin(s.sessionId, !s.pinned); }}>
                   {s.pinned ? <PinOff size={15} /> : <Pin size={15} />} {s.pinned ? 'Bỏ ghim' : 'Ghim'}
                 </button>
                 <button type="button" className="ctc-menu-item" onClick={() => { setMenuFor(null); setEditVal(s.title || ''); setEditing(s.sessionId); }}>
                   <Pencil size={15} /> Đổi tên
                 </button>
-                <button type="button" className="ctc-menu-item" disabled={s.sessionId.startsWith('local_')} onClick={() => setMoveFor(s.sessionId)}>
+                <button type="button" className="ctc-menu-item" disabled={p.chiOMay(s.sessionId)} onClick={() => setMoveFor(s.sessionId)}>
                   <FolderKanban size={15} /> Chuyển vào dự án
                 </button>
                 <div className="ctc-menu-sep" />
@@ -171,6 +191,39 @@ export function CtcSidebar(p: Props) {
           </button>
         </div>
 
+        <div className="ctc-mode" role="tablist" aria-label="Chế độ">
+          <button type="button" role="tab" aria-selected={p.mode === 'chat'} data-on={p.mode === 'chat'} onClick={() => p.onMode('chat')}><MessageSquare size={14} /> Chat</button>
+          <button type="button" role="tab" aria-selected={p.mode === 'code'} data-on={p.mode === 'code'} onClick={() => p.onMode('code')} data-testid="ctc-mode-code"><Code2 size={14} /> Code</button>
+        </div>
+
+        {p.mode === 'code' ? (
+        <nav className="ctc-nav" aria-label="Điều hướng CuongMini Code">
+          <button type="button" className="ctc-nav-item ctc-nav-new" onClick={() => p.onView('code')}>
+            <span className="ctc-new-dot"><Plus size={15} strokeWidth={2.6} /></span>
+            <span>Tạo mới</span>
+          </button>
+          <button type="button" className="ctc-nav-item" onClick={p.onSearch}>
+            <span className="ctc-nav-ic"><Search size={17} /></span><span>Tìm kiếm</span>
+          </button>
+          <button type="button" className="ctc-nav-item" data-on={p.view === 'artifacts'} onClick={() => p.onView('artifacts')}>
+            <span className="ctc-nav-ic"><LayoutGrid size={17} /></span><span>Artifacts</span>
+          </button>
+          <button type="button" className="ctc-nav-item" data-on={p.view === 'customize'} onClick={() => p.onView('customize')}>
+            <span className="ctc-nav-ic"><SlidersHorizontal size={17} /></span><span>Tùy chỉnh</span>
+          </button>
+          <button type="button" className="ctc-nav-item" onClick={() => setKhacMo((v) => !v)} aria-expanded={khacMo}>
+            <span className="ctc-nav-ic"><MoreHorizontal size={17} /></span><span>Khác</span>
+            <ChevronDown size={14} style={{ marginLeft: 'auto', transform: khacMo ? 'rotate(180deg)' : undefined, transition: 'transform .15s' }} />
+          </button>
+          {khacMo && (
+            <div className="ctc-nav-sub">
+              <button type="button" className="ctc-nav-item" onClick={() => p.onView('projects')}><span className="ctc-nav-ic"><FolderKanban size={16} /></span><span>Dự án</span></button>
+              <button type="button" className="ctc-nav-item" onClick={() => p.onView('scheduled')}><span className="ctc-nav-ic"><CalendarClock size={16} /></span><span>Tác vụ đã lên lịch</span></button>
+              <a className="ctc-nav-item" href="/download"><span className="ctc-nav-ic"><MonitorDown size={16} /></span><span>Tải app Desktop</span></a>
+            </div>
+          )}
+        </nav>
+        ) : (
         <nav className="ctc-nav" aria-label="Điều hướng CuongMini">
           <button type="button" className="ctc-nav-item ctc-nav-new" onClick={p.onNew} data-testid="ctc-new">
             <span className="ctc-new-dot"><Plus size={15} strokeWidth={2.6} /></span>
@@ -193,6 +246,7 @@ export function CtcSidebar(p: Props) {
             </button>
           ))}
         </nav>
+        )}
 
         <div className="ctc-side-scroll">
           {ghim.length > 0 && (
@@ -202,13 +256,23 @@ export function CtcSidebar(p: Props) {
             </>
           )}
           <div className="ctc-group-label ctc-group-row">
-            <span>Gần đây</span>
-            {p.sessions.length > 0 && (
+            <span>{p.mode === 'code' ? 'Phiên gần đây' : 'Gần đây'}</span>
+            {p.mode === 'code' ? (
+              soCode > 0 && (
+                <select className="ctc-mini-select" value={locCode} onChange={(e) => setLocCode(e.target.value as typeof locCode)} aria-label="Lọc phiên Code">
+                  <option value="tat-ca">Tất cả</option>
+                  <option value="co-kho">Có repo</option>
+                  <option value="khong-kho">Không repo</option>
+                </select>
+              )
+            ) : p.sessions.length > 0 && (
               <button type="button" className="ctc-link" onClick={() => p.onView('recents')}>Xem tất cả</button>
             )}
           </div>
           {ganDay.map(dong)}
-          {p.sessions.length === 0 && <div className="ctc-empty-side">Chưa có cuộc trò chuyện nào</div>}
+          {p.mode === 'code'
+            ? ganDay.length === 0 && <div className="ctc-empty-side">{soCode ? 'Không có phiên khớp bộ lọc' : 'Chưa có phiên Code nào'}</div>
+            : p.sessions.length === 0 && <div className="ctc-empty-side">Chưa có cuộc trò chuyện nào</div>}
         </div>
 
         <div className="ctc-side-foot">

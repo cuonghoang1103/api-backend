@@ -51,12 +51,18 @@ export default function VoiceCallOverlay({
   onClose,
   onAsk,
   skin = 'terminal',
+  renderMascot,
+  brand,
 }: {
   open: boolean;
   onClose: () => void;
   /** Gửi câu vừa nghe được vào đúng luồng chat; trả về câu trả lời đã hoàn tất. */
   onAsk: (text: string) => Promise<string>;
   skin?: ChatSkin;
+  /** Linh vật thay cho logo tròn giữa màn (trang /chat dùng gấu trúc CuongMini). Nhận trạng thái hiện tại. */
+  renderMascot?: (o: { dangNghi: boolean; dangNoi: boolean }) => React.ReactNode;
+  /** Chữ ở góc trên trái (mặc định "cuongthai.com"). */
+  brand?: React.ReactNode;
 }) {
   const isStudio = skin === 'studio';
   const reduceMotion = useReducedMotion();
@@ -292,7 +298,7 @@ export default function VoiceCallOverlay({
     >
       {/* Đầu: ngôn ngữ nghe + trạng thái phụ */}
       <div className="flex items-center justify-between px-4 pt-4 sm:px-6">
-        <div className={`text-[11px] uppercase tracking-[0.18em] ${textFaint}`}>cuongthai.com</div>
+        <div className={brand ? `flex items-center gap-2 ${textMain}` : `text-[11px] uppercase tracking-[0.18em] ${textFaint}`}>{brand ?? 'cuongthai.com'}</div>
         <div role="group" aria-label="Ngôn ngữ nghe" className={`flex items-center gap-0.5 rounded-full border p-0.5 ${chip}`}>
           {(['VI', 'EN'] as Lang[]).map((l) => (
             <button
@@ -347,6 +353,18 @@ export default function VoiceCallOverlay({
               }}
             />
           )}
+          {renderMascot ? (
+            <motion.span
+              className="relative flex h-32 w-32 items-center justify-center rounded-full sm:h-36 sm:w-36"
+              style={{
+                background: 'radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--studio-accent) 22%, var(--studio-panel)) 0%, var(--studio-panel) 70%)',
+                boxShadow: '0 12px 40px color-mix(in srgb, var(--studio-accent) 28%, transparent), 0 0 0 1px var(--studio-border)',
+                ...(phase === 'listening' ? { scale: 1 + Math.min(0.1, mucGiong * 1.2) } : {}),
+              }}
+            >
+              {renderMascot({ dangNghi: phase === 'thinking' || uploading, dangNoi: phase === 'speaking' })}
+            </motion.span>
+          ) : (
           <motion.span
             className="relative flex h-28 w-28 items-center justify-center rounded-full bg-gradient-to-br from-[#6366f1] to-[#8b5cf6] text-2xl font-bold text-white shadow-[0_10px_40px_rgba(99,102,241,0.35)] sm:h-32 sm:w-32"
             animate={reduceMotion ? undefined : { scale: active ? [1, 1.04, 1] : 1 }}
@@ -364,6 +382,7 @@ export default function VoiceCallOverlay({
                 <img src="/favicon.png" alt="" className="h-3/5 w-3/5 object-contain drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]" />
               )}
           </motion.span>
+          )}
         </button>
 
         <div className="min-h-[3.5rem]">
@@ -378,24 +397,6 @@ export default function VoiceCallOverlay({
             return goiY ? <p className={`mt-1 text-[13px] ${textFaint}`}>{goiY}</p> : null;
           })()}
 
-          {/* Công tắc chen lời. Đặt ngay đây chứ không giấu trong cài đặt:
-              người cần tắt nó là người vừa bị nó ngắt lời nhầm, và họ đang ở
-              đúng màn hình này. */}
-          <button
-            type="button"
-            onClick={() => {
-              const moi = !chenBangGiong;
-              datChenBangGiong(moi);
-              window.localStorage.setItem('ct-chen-giong', moi ? 'bat' : 'tat');
-            }}
-            className={`mt-3 rounded-full border px-3 py-1 text-[11.5px] transition-colors ${textFaint}`}
-            style={{ borderColor: 'currentColor', opacity: 0.75 }}
-            title={chenBangGiong
-              ? 'Đang bật. Loa ngoài mở to có thể rò tiếng vào micro làm nó tự ngắt lời — khi đó hãy tắt.'
-              : 'Đang tắt. Muốn cắt lời thì chạm vào vòng tròn.'}
-          >
-            Ngắt lời bằng giọng: {chenBangGiong ? 'BẬT' : 'TẮT'}
-          </button>
         </div>
 
         {/* Lời thoại gần nhất — mỗi bên tối đa 2 dòng, đủ để biết máy nghe đúng chưa */}
@@ -479,6 +480,26 @@ export default function VoiceCallOverlay({
         </button>
       </div>
 
+      <div className="flex justify-center pb-3">
+          {/* Công tắc chen lời. Đặt ngay đây chứ không giấu trong cài đặt:
+              người cần tắt nó là người vừa bị nó ngắt lời nhầm, và họ đang ở
+              đúng màn hình này. */}
+          <button
+            type="button"
+            onClick={() => {
+              const moi = !chenBangGiong;
+              datChenBangGiong(moi);
+              window.localStorage.setItem('ct-chen-giong', moi ? 'bat' : 'tat');
+            }}
+            className={`rounded-full border px-3 py-1 text-[11.5px] transition-colors ${textFaint}`}
+            style={{ borderColor: 'currentColor', opacity: 0.75 }}
+            title={chenBangGiong
+              ? 'Đang bật. Loa ngoài mở to có thể rò tiếng vào micro làm nó tự ngắt lời — khi đó hãy tắt.'
+              : 'Đang tắt. Muốn cắt lời thì chạm vào vòng tròn.'}
+          >
+            Ngắt lời bằng giọng: {chenBangGiong ? 'BẬT' : 'TẮT'}
+          </button>
+      </div>
       <p className={`pb-6 text-center text-[11px] ${textFaint}`}>
         Cuộc gọi được lưu vào khung chat · Esc để kết thúc
       </p>

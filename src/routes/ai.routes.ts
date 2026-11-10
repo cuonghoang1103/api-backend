@@ -24,7 +24,9 @@ import { config } from '../config/env.js';
 import multer from 'multer';
 
 import { prisma } from '../config/database.js';
-import { aiService, DEFAULT_CHAT_MODEL_ID, type ChatModelMeta } from '../services/ai.service.js';
+import { aiService, DEFAULT_CHAT_MODEL_ID, generateSessionId, type ChatModelMeta } from '../services/ai.service.js';
+import { datTieuDeNeuCan } from '../services/chatTieuDe.js';
+import { docDoKy, docTenKho, layKhoMa } from '../services/chatKhoMa.js';
 import { optionalAuth, authenticate, requireAdmin, extractToken } from '../middleware/auth.js';
 import { quotaMiddleware } from '../services/quota.service.js';
 import { AppError } from '../middleware/errorHandler.js';
@@ -308,7 +310,8 @@ const SSE_IDLE_MS = 150_000;              // 2,5 phút không có gói nào từ
 router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Response) => {
   // ─── 1. Validate input FIRST ──────────────────────────────
   // Validation MUST happen before flushHeaders() to avoid double-response
-  const { message, sessionId, documentType, topK } = req.body as ChatMessageDto;
+  const { message, sessionId: sessionIdGui, documentType, topK } = req.body as ChatMessageDto;
+  let sessionId = sessionIdGui;
   const requestedModel = typeof (req.body as { model?: unknown }).model === 'string'
     ? (req.body as { model: string }).model
     : DEFAULT_CHAT_MODEL_ID;
@@ -369,6 +372,17 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       res.status(429).json({ success: false, message: loiCanViTien(viChat), code: 'CHAT_BUDGET_EXCEEDED' });
       return;
     }
+  }
+
+  /*
+   * Mã phiên tạm của web (`local_…`) ⇒ cấp mã THẬT của máy chủ (`sess_…`) cho cuộc MỚI; khung `connected`
+   * trả mã mới và client tự chuyển sang. Trước 10/11/2026 máy chủ dùng luôn `local_…` làm khoá thật, mà giao
+   * diện coi mọi `local_…` là "chỉ ở máy" ⇒ Xoá không xoá trên máy chủ (tải lại là cuộc hiện lại), Ghim/Chuyển
+   * dự án bị khoá. Cuộc cũ đã lưu dưới mã `local_…` vẫn giữ mã đó (không tách đôi hội thoại).
+   */
+  if (typeof sessionId === 'string' && sessionId.startsWith('local_')) {
+    const daCo = await prisma.chatSession.findUnique({ where: { id: sessionId }, select: { id: true } });
+    if (!daCo) sessionId = generateSessionId();
   }
 
   // ─── 2. Set SSE headers BEFORE flushing ─────────────────
@@ -482,6 +496,9 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     appIos: laAppIos(req),
     // Kỹ năng của robot CuongMini — danh sách trắng (xem troLy/kyNangTroLy.ts).
     kyNang: docKyNang((req.body as { kyNang?: unknown }).kyNang),
+    // Phiên Code (/chat → Code): CHỈ tên kho đã kiểm regex + mức nỗ lực trong danh sách trắng.
+    khoMa: docTenKho((req.body as { khoMa?: unknown }).khoMa) ?? undefined,
+    doKy: docDoKy((req.body as { doKy?: unknown }).doKy),
     banKyNang: (k: string) => {
       if (res.writableEnded) return;
       // KHÔNG đặt tên trường `text` — app cũ cộng `text` của mọi khung vào câu trả lời.
@@ -598,6 +615,16 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     res.write(
       `data: ${JSON.stringify({ type: 'done', text: '', done: true, tokens: tokenCount, model: modelMeta.effective, fellBack: modelMeta.fellBack, messageId: modelMeta.savedMessageId })}\n\n`,
     );
+    // Lượt đầu xong ⇒ đặt tiêu đề cho cuộc (chỉ khi còn tên tạm). Khung riêng `title`, KHÔNG có trường `text`
+    // (app cũ cộng `text` của mọi khung vào câu trả lời).
+    if (sessionId && accumulated.trim() && !res.writableEnded) {
+      try {
+        const tieuDe = await datTieuDeNeuCan(sessionId, message ?? '', accumulated);
+        if (tieuDe && !res.writableEnded) res.write(`data: ${JSON.stringify({ type: 'title', sessionId, title: tieuDe })}\n\n`);
+      } catch (e) {
+        logger.warn('Đặt tiêu đề chat hỏng', { error: e instanceof Error ? e.message : String(e) });
+      }
+    }
     res.end();
   } catch (streamError) {
     logger.error('AI-SSE stream error', { error: streamError instanceof Error ? streamError.message : String(streamError) });
@@ -627,6 +654,20 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
       );
       res.end();
     }
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/ai/chat/kho-ma?ten=owner/name — xem trước kho GitHub công khai cho phiên Code (10/11/2026)
+// ════════════════════════════════════════════════════════════════
+router.get('/chat/kho-ma', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const ten = docTenKho(req.query.ten);
+    if (!ten) throw new AppError('Tên kho không hợp lệ — dạng owner/ten-kho hoặc link github.com', 400, 'INVALID_REPO');
+    const k = await layKhoMa(ten);
+    res.json({ success: true, data: { ten: k.ten, moTa: k.moTa, nhanh: k.nhanh, ngonNgu: k.ngonNgu, sao: k.sao, soMuc: k.cay.length, url: k.url } });
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -948,6 +989,38 @@ router.get('/chat/history/:sessionId', optionalAuth, async (req: any, res: Respo
 });
 
 // ════════════════════════════════════════════════════════════════
+// Xoá nhiều cuộc một lần (10/11/2026) — người dùng từng phải xoá từng cuộc một.
+//   POST /chat/sessions/xoa-nhieu  { ids: string[] }  — tối đa 200, chỉ cuộc CỦA MÌNH
+//   POST /chat/sessions/xoa-trong                      — mọi cuộc của mình chưa có tin nhắn nào
+// ════════════════════════════════════════════════════════════════
+router.post('/chat/sessions/xoa-nhieu', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const raw = (req.body as { ids?: unknown }).ids;
+    const ids = Array.isArray(raw) ? [...new Set(raw.filter((x): x is string => typeof x === 'string' && x.length > 0 && x.length <= 80))] : [];
+    if (ids.length === 0) throw new AppError('Chưa chọn cuộc trò chuyện nào', 400, 'MISSING_IDS');
+    if (ids.length > 200) throw new AppError('Tối đa 200 cuộc mỗi lần', 400, 'TOO_MANY_IDS');
+    const cuaMinh = await prisma.chatSession.findMany({ where: { id: { in: ids }, userId: req.userId }, select: { id: true } });
+    let soXoa = 0;
+    for (const p of cuaMinh) {
+      const kq = await aiService.deleteSession(p.id);
+      if (kq.deleted) soXoa++;
+    }
+    res.json({ success: true, data: { soXoa } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/chat/sessions/xoa-trong', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { count } = await prisma.chatSession.deleteMany({ where: { userId: req.userId, messages: { none: {} } } });
+    res.json({ success: true, data: { soXoa: count } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ════════════════════════════════════════════════════════════════
 // DELETE /api/v1/ai/chat/sessions/:sessionId
 // ════════════════════════════════════════════════════════════════
 router.delete('/chat/sessions/:sessionId', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
@@ -955,13 +1028,8 @@ router.delete('/chat/sessions/:sessionId', authenticate, async (req: any, res: R
     const { sessionId } = req.params;
     if (!sessionId) throw new AppError('Session ID required', 400, 'MISSING_SESSION_ID');
 
-    // Frontend-only stub IDs (created before the user is
-    // authenticated, or after a failed send) never reach the
-    // server. Short-circuit them so the route stays idempotent.
-    if (sessionId.startsWith('local_')) {
-      res.json({ success: true, message: 'Local session removed' });
-      return;
-    }
+    // 10/11/2026: KHÔNG còn bỏ qua mã `local_…` — web từng lưu cuộc thật dưới mã đó, bỏ qua là "xoá" xong
+    // tải lại cuộc vẫn còn. Mã chỉ-ở-máy không có trong CSDL ⇒ nhánh "already removed" bên dưới (vẫn idempotent).
 
     // Verify ownership: a user can only delete their own session.
     const session = await prisma.chatSession.findUnique({

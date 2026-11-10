@@ -7,8 +7,9 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  ArrowLeft, CalendarClock, Check, Code2, Copy, FolderKanban, FolderPlus, MessageSquare, Plus, Search,
-  Trash2, Workflow, X,
+  ArrowLeft, CalendarClock, Check, Code2, Copy, Eraser, ExternalLink, FolderKanban, FolderPlus, Github, Globe,
+  Image as ImageIcon, KanbanSquare, Languages, ListChecks, MessageSquare, Mic, MonitorDown, PenLine, Plug, Plus, Puzzle,
+  Search, Sigma, Sparkle, TerminalSquare, Trash2, Workflow, X,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ChatFolder, ChatMessage } from '@/types';
@@ -16,6 +17,7 @@ import ChatMarkdown from '../ChatMarkdown';
 import { CuongMiniPanda } from './CuongMiniPanda';
 import { CtcModelPicker } from './CtcComposer';
 import { useCtcPrefs } from './ctcPrefs';
+import { KET_NOI, KY_NANG, PLUGIN, type KyNangThe, type MauThe } from './ctcCatalog';
 import type { SessionRow } from './CtcSidebar';
 
 const thoiGian = (s: SessionRow) => new Date(s.updatedAt ?? s.createdAt).getTime();
@@ -52,12 +54,30 @@ function DongPhien({ s, onOpen }: { s: SessionRow; onOpen: () => void }) {
 }
 
 /* ═══ Tất cả cuộc trò chuyện ═══════════════════════════════════════════════ */
-export function RecentsView({ sessions, onOpen, onNew }: { sessions: SessionRow[]; onOpen: (id: string) => void; onNew: () => void }) {
+export function RecentsView({
+  sessions, onOpen, onNew, onDeleteMany, onCleanEmpty, signedIn,
+}: {
+  sessions: SessionRow[];
+  onOpen: (id: string) => void;
+  onNew: () => void;
+  onDeleteMany: (ids: string[]) => Promise<void> | void;
+  onCleanEmpty: () => Promise<void> | void;
+  signedIn: boolean;
+}) {
   const [q, setQ] = useState('');
+  const [chon, setChon] = useState<Set<string> | null>(null); // null = không ở chế độ chọn
+  const [dangXoa, setDangXoa] = useState(false);
   const list = useMemo(() => {
     const kw = q.trim().toLowerCase();
     return [...sessions].filter((s) => !kw || (s.title || '').toLowerCase().includes(kw)).sort((a, b) => thoiGian(b) - thoiGian(a));
   }, [sessions, q]);
+  const tatCaDaChon = !!chon && list.length > 0 && list.every((s) => chon.has(s.sessionId));
+  const doiChon = (id: string) => setChon((c) => {
+    const n = new Set(c ?? []);
+    if (n.has(id)) n.delete(id); else n.add(id);
+    return n;
+  });
+
   return (
     <div className="ctc-page">
       <div className="ctc-page-head">
@@ -68,9 +88,54 @@ export function RecentsView({ sessions, onOpen, onNew }: { sessions: SessionRow[
         <Search size={16} />
         <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Tìm cuộc trò chuyện…" />
       </label>
-      <p className="ctc-page-note">Bạn có {sessions.length} cuộc trò chuyện với CuongMini</p>
+
+      <div className="ctc-recents-bar">
+        {chon ? (
+          <>
+            <label className="ctc-check-all">
+              <input type="checkbox" checked={tatCaDaChon} onChange={() => setChon(tatCaDaChon ? new Set() : new Set(list.map((s) => s.sessionId)))} />
+              <span>{chon.size > 0 ? `Đã chọn ${chon.size}` : 'Chọn tất cả'}</span>
+            </label>
+            <span style={{ flex: 1 }} />
+            <button type="button" className="ctc-btn" onClick={() => setChon(null)}>Huỷ</button>
+            <button
+              type="button"
+              className="ctc-btn"
+              data-danger
+              disabled={chon.size === 0 || dangXoa}
+              data-testid="ctc-bulk-delete"
+              onClick={async () => {
+                if (!window.confirm(`Xoá ${chon.size} cuộc trò chuyện? Không khôi phục được.`)) return;
+                setDangXoa(true);
+                try { await onDeleteMany([...chon]); setChon(null); } finally { setDangXoa(false); }
+              }}
+            >
+              <Trash2 size={14} /> Xoá{chon.size ? ` (${chon.size})` : ''}
+            </button>
+          </>
+        ) : (
+          <>
+            <span className="ctc-page-note" style={{ margin: 0, flex: 1 }}>Bạn có {sessions.length} cuộc trò chuyện với CuongMini</span>
+            {signedIn && (
+              <button type="button" className="ctc-btn" onClick={() => void onCleanEmpty()} title="Xoá các cuộc chưa có tin nhắn nào">
+                <Eraser size={14} /> Xoá các cuộc trò chuyện trống
+              </button>
+            )}
+            {sessions.length > 0 && <button type="button" className="ctc-btn" onClick={() => setChon(new Set())} data-testid="ctc-select-mode"><ListChecks size={14} /> Chọn</button>}
+          </>
+        )}
+      </div>
+
       <div className="ctc-list">
-        {list.map((s) => <DongPhien key={s.sessionId} s={s} onOpen={() => onOpen(s.sessionId)} />)}
+        {list.map((s) => (chon ? (
+          <label key={s.sessionId} className="ctc-list-row ctc-list-check" data-on={chon.has(s.sessionId)}>
+            <input type="checkbox" checked={chon.has(s.sessionId)} onChange={() => doiChon(s.sessionId)} />
+            <span style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <span className="ctc-list-title">{s.title || 'Cuộc trò chuyện mới'}</span>
+              <span className="ctc-list-meta">Tin nhắn cuối {tuongDoi(thoiGian(s))}</span>
+            </span>
+          </label>
+        ) : <DongPhien key={s.sessionId} s={s} onOpen={() => onOpen(s.sessionId)} />))}
         {list.length === 0 && <Trong title={q ? 'Không tìm thấy cuộc nào' : 'Chưa có cuộc trò chuyện nào'} />}
       </div>
     </div>
@@ -284,7 +349,9 @@ export function ScheduledView({ onNew }: { onNew: () => void }) {
   );
 }
 
-/* ═══ Tùy chỉnh ═════════════════════════════════════════════════════════════ */
+/* ═══ Tùy chỉnh ═════════════════════════════════════════════════════════════
+   Bố cục theo claude.ai/customize: tab Skills · Trình kết nối · Plugin (+ Cài đặt trả lời), "Của bạn | Khám phá",
+   tìm · lọc · sắp xếp · "+ Thêm", banner nổi bật, "Dành cho bạn", "Skills mới". Danh mục: ctcCatalog.ts (chỉ đồ thật). */
 function Cong({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
     <button type="button" role="switch" aria-checked={on} aria-label={label} className="ctc-switch" data-on={on} onClick={() => onChange(!on)}>
@@ -293,52 +360,248 @@ function Cong({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => 
   );
 }
 
-export function CustomizeView({ isPro }: { isPro: boolean }) {
+const ICON_THE: Record<string, typeof Code2> = {
+  code: Code2, sigma: Sigma, image: ImageIcon, languages: Languages, pen: PenLine, workflow: Workflow, terminal: TerminalSquare,
+  mic: Mic, globe: Globe, github: Github, kanban: KanbanSquare, desktop: MonitorDown, vscode: Code2,
+};
+
+function IconThe({ icon, mau, size = 20 }: { icon: string; mau: MauThe; size?: number }) {
+  if (icon === 'japan') return <span className="ctc-the-ic" data-mau={mau} style={{ fontSize: size * 0.8, fontWeight: 700 }}>あ</span>;
+  const I = ICON_THE[icon] ?? Code2;
+  return <span className="ctc-the-ic" data-mau={mau}><I size={size} /></span>;
+}
+
+type TabTc = 'skills' | 'ket-noi' | 'plugin' | 'cai-dat';
+
+export function CustomizeView({ isPro, onTry, onOpenCode }: { isPro: boolean; onTry: (skillId: string, viDu: string) => void; onOpenCode: () => void }) {
   const p = useCtcPrefs();
+  const [tab, setTab] = useState<TabTc>('skills');
+  const [pham, setPham] = useState<'cua-ban' | 'kham-pha'>('kham-pha');
+  const [q, setQ] = useState('');
+  const [loc, setLoc] = useState<'tat-ca' | 'ky-nang' | 'cong-cu'>('tat-ca');
+  const [sapXep, setSapXep] = useState<'noi-bat' | 'ten'>('noi-bat');
+  const [themMo, setThemMo] = useState(false);
+  const [moiDayDu, setMoiDayDu] = useState(false);
   const [ten, setTen] = useState(p.tenGoi);
   const hen = useRef<ReturnType<typeof setTimeout>>(undefined);
-  return (
-    <div className="ctc-page">
-      <div className="ctc-page-head"><h1>Tùy chỉnh</h1></div>
-      <p className="ctc-page-note">Thiết đặt lưu trên trình duyệt này và áp cho mọi cuộc trò chuyện mới.</p>
+  const themRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!themMo) return;
+    const close = (e: MouseEvent) => { if (themRef.current && !themRef.current.contains(e.target as Node)) setThemMo(false); };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [themMo]);
 
-      <section className="ctc-set">
-        <div className="ctc-set-row">
-          <div><b>CuongMini nên gọi bạn là gì?</b><small>Dùng trong lời chào trên màn hình.</small></div>
-          <input
-            className="ctc-set-input"
-            value={ten}
-            maxLength={40}
-            placeholder="Để trống = tên tài khoản"
-            onChange={(e) => {
-              setTen(e.target.value);
-              clearTimeout(hen.current);
-              const v = e.target.value.trim();
-              hen.current = setTimeout(() => p.set({ tenGoi: v }), 300);
-            }}
-          />
+  // Công cụ luôn bật (không thêm/bớt được); kỹ năng của máy chủ thì thêm vào "Của bạn".
+  const daCo = (k: KyNangThe) => k.loai === 'cong-cu' || p.kyNangBat.includes(k.id);
+  const batTat = (k: KyNangThe) => {
+    if (k.loai === 'cong-cu') return;
+    p.set({ kyNangBat: p.kyNangBat.includes(k.id) ? p.kyNangBat.filter((x) => x !== k.id) : [...p.kyNangBat, k.id] });
+  };
+
+  const kw = q.trim().toLowerCase();
+  const khop = (t: string) => !kw || t.toLowerCase().includes(kw);
+  const skills = KY_NANG
+    .filter((k) => (pham === 'cua-ban' ? daCo(k) : true))
+    .filter((k) => loc === 'tat-ca' || k.loai === loc)
+    .filter((k) => khop(`${k.ten} ${k.mota}`))
+    .sort((a, b) => (sapXep === 'ten' ? a.ten.localeCompare(b.ten, 'vi') : 0));
+  const moi = KY_NANG.filter((k) => k.moi);
+
+  const theSkill = (k: KyNangThe) => (
+    <div key={k.id} className="ctc-the">
+      <div className="ctc-the-top">
+        <IconThe icon={k.icon} mau={k.mau} />
+        <button
+          type="button"
+          className="ctc-the-add"
+          data-on={daCo(k)}
+          disabled={k.loai === 'cong-cu'}
+          onClick={() => batTat(k)}
+          aria-label={daCo(k) ? `Bỏ ${k.ten} khỏi của bạn` : `Thêm ${k.ten}`}
+          title={k.loai === 'cong-cu' ? 'Luôn bật' : daCo(k) ? 'Đã thêm — bấm để bỏ' : 'Thêm vào của bạn'}
+        >
+          {daCo(k) ? <Check size={15} /> : <Plus size={15} />}
+        </button>
+      </div>
+      <b>{k.ten}{k.canPro && <span className="ctc-lock">Pro</span>}</b>
+      <p>{k.mota}</p>
+      <div className="ctc-the-foot">
+        <small>CuongThai · {k.loai === 'cong-cu' ? 'Công cụ' : 'Kỹ năng'}</small>
+        {k.viDu && (
+          <button type="button" className="ctc-btn" onClick={() => onTry(k.id, k.viDu)} disabled={k.canPro && !isPro}>
+            Dùng thử
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="ctc-page ctc-page-wide">
+      <div className="ctc-page-head">
+        <h1>Tùy chỉnh</h1>
+        <div ref={themRef} style={{ position: 'relative' }}>
+          <button type="button" className="ctc-btn" data-primary onClick={() => setThemMo((v) => !v)}><Plus size={15} /> Thêm</button>
+          {themMo && (
+            <div className="ctc-menu" style={{ right: 0, top: 'calc(100% + 6px)', minWidth: 220 }} role="menu">
+              <button type="button" className="ctc-menu-item" onClick={() => { setThemMo(false); setTab('skills'); setPham('kham-pha'); }}><Sparkle size={15} /> Thêm kỹ năng</button>
+              <button type="button" className="ctc-menu-item" onClick={() => { setThemMo(false); setTab('ket-noi'); }}><Plug size={15} /> Thêm trình kết nối</button>
+              <button type="button" className="ctc-menu-item" onClick={() => { setThemMo(false); setTab('plugin'); }}><Puzzle size={15} /> Thêm plugin</button>
+            </div>
+          )}
         </div>
-        <div className="ctc-set-row">
-          <div><b>Ngôn ngữ trả lời</b><small>Tự động = trả lời theo ngôn ngữ bạn hỏi.</small></div>
-          <div className="ctc-seg" role="radiogroup" aria-label="Ngôn ngữ trả lời">
-            {([['auto', 'Tự động'], ['vi', 'Tiếng Việt'], ['en', 'English']] as const).map(([v, l]) => (
-              <button key={v} type="button" role="radio" aria-checked={p.ngonNgu === v} data-on={p.ngonNgu === v} onClick={() => p.set({ ngonNgu: v })}>{l}</button>
+      </div>
+
+      <div className="ctc-tabs" role="tablist">
+        {([['skills', 'Skills'], ['ket-noi', 'Trình kết nối'], ['plugin', 'Plugin'], ['cai-dat', 'Cài đặt trả lời']] as const).map(([v, l]) => (
+          <button key={v} type="button" role="tab" aria-selected={tab === v} data-on={tab === v} onClick={() => setTab(v)}>{l}</button>
+        ))}
+      </div>
+
+      {tab === 'skills' && (
+        <>
+          <div className="ctc-toolbar">
+            <div className="ctc-seg" role="radiogroup" aria-label="Phạm vi">
+              <button type="button" role="radio" aria-checked={pham === 'cua-ban'} data-on={pham === 'cua-ban'} onClick={() => setPham('cua-ban')}>Của bạn</button>
+              <button type="button" role="radio" aria-checked={pham === 'kham-pha'} data-on={pham === 'kham-pha'} onClick={() => setPham('kham-pha')}>Khám phá</button>
+            </div>
+            <label className="ctc-page-search ctc-toolbar-search">
+              <Search size={15} />
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Tìm kỹ năng…" />
+            </label>
+            <select className="ctc-select" value={loc} onChange={(e) => setLoc(e.target.value as typeof loc)} aria-label="Lọc">
+              <option value="tat-ca">Tất cả</option>
+              <option value="ky-nang">Kỹ năng</option>
+              <option value="cong-cu">Công cụ</option>
+            </select>
+            <select className="ctc-select" value={sapXep} onChange={(e) => setSapXep(e.target.value as typeof sapXep)} aria-label="Sắp xếp">
+              <option value="noi-bat">Nổi bật</option>
+              <option value="ten">Tên A–Z</option>
+            </select>
+          </div>
+
+          {pham === 'kham-pha' && !kw && loc === 'tat-ca' && (
+            <div className="ctc-banner">
+              <div className="ctc-banner-text">
+                <span className="ctc-banner-tag">Nổi bật</span>
+                <h2>Học ngoại ngữ cùng CuongMini</h2>
+                <p>Gia sư tiếng Anh và tiếng Nhật: giải thích bằng tiếng Việt, ví dụ chuẩn bản xứ, sửa từng lỗi trong câu bạn viết.</p>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <button type="button" className="ctc-btn" data-primary onClick={() => onTry('tieng-nhat', KY_NANG.find((k) => k.id === 'tieng-nhat')!.viDu)}>Dùng thử tiếng Nhật</button>
+                  <button type="button" className="ctc-btn" onClick={() => onTry('tieng-anh', KY_NANG.find((k) => k.id === 'tieng-anh')!.viDu)}>Tiếng Anh</button>
+                </div>
+              </div>
+              <CuongMiniPanda size={118} className="ctc-banner-panda" />
+            </div>
+          )}
+
+          <h3 className="ctc-sec-title">{pham === 'cua-ban' ? 'Kỹ năng của bạn' : 'Dành cho bạn'}</h3>
+          {skills.length > 0
+            ? <div className="ctc-the-grid">{skills.map(theSkill)}</div>
+            : <p className="ctc-page-note">{pham === 'cua-ban' ? 'Bạn chưa thêm kỹ năng nào — sang Khám phá để thêm.' : 'Không có kỹ năng khớp.'}</p>}
+
+          {pham === 'kham-pha' && !kw && moi.length > 0 && (
+            <>
+              <div className="ctc-sec-row">
+                <h3 className="ctc-sec-title" style={{ margin: 0 }}>Skills mới</h3>
+                {moi.length > 2 && <button type="button" className="ctc-link" onClick={() => setMoiDayDu((v) => !v)}>{moiDayDu ? 'Thu gọn' : 'Hiển thị tất cả'}</button>}
+              </div>
+              <div className="ctc-the-grid">{(moiDayDu ? moi : moi.slice(0, 2)).map(theSkill)}</div>
+            </>
+          )}
+          <p className="ctc-page-note" style={{ marginTop: 18 }}>
+            Kỹ năng đã thêm hiện trong nút ＋ của ô soạn để chọn cho từng câu hỏi. Không chọn thì CuongMini {p.kyNangTuDong ? 'tự nhận kỹ năng hợp với câu hỏi' : 'trả lời bình thường (tự nhận đang tắt ở Cài đặt trả lời)'}.
+          </p>
+        </>
+      )}
+
+      {tab === 'ket-noi' && (
+        <>
+          <h3 className="ctc-sec-title">Trình kết nối</h3>
+          <div className="ctc-the-grid">
+            {KET_NOI.map((k) => (
+              <div key={k.id} className="ctc-the">
+                <div className="ctc-the-top">
+                  <IconThe icon={k.icon} mau={k.mau} />
+                  {k.kieu === 'cong-tac' && <Cong on={p.timWeb} onChange={(v) => p.set({ timWeb: v })} label={k.ten} />}
+                </div>
+                <b>{k.ten}</b>
+                <p>{k.mota}</p>
+                <div className="ctc-the-foot">
+                  <small>{k.ghiChu ?? 'CuongThai'}</small>
+                  {k.kieu === 'lien-ket' && (k.href === '#code'
+                    ? <button type="button" className="ctc-btn" onClick={onOpenCode}>{k.nhanNut}</button>
+                    : <a className="ctc-btn" href={k.href}>{k.nhanNut} <ExternalLink size={13} /></a>)}
+                </div>
+              </div>
             ))}
           </div>
-        </div>
-        <div className="ctc-set-row">
-          <div><b>Tìm trên web</b><small>Cho phép CuongMini tìm tin mới khi câu hỏi cần (kèm thẻ nguồn).</small></div>
-          <Cong on={p.timWeb} onChange={(v) => p.set({ timWeb: v })} label="Tìm trên web" />
-        </div>
-        <div className="ctc-set-row">
-          <div><b>Kỹ năng tự nhận</b><small>Tự bật cách trả lời hợp việc: code, toán, ảnh, tiếng Anh, tiếng Nhật…</small></div>
-          <Cong on={p.kyNangTuDong} onChange={(v) => p.set({ kyNangTuDong: v })} label="Kỹ năng tự nhận" />
-        </div>
-        <div className="ctc-set-row">
-          <div><b>Model mặc định</b><small>{isPro ? 'Đổi được bất cứ lúc nào ngay dưới ô soạn.' : 'Pro, Pro 2 và Max dành cho tài khoản Pro.'}</small></div>
-          <div className="ctc-set-model"><CtcModelPicker isPro={isPro} placement="down" /></div>
-        </div>
-      </section>
+          <p className="ctc-page-note" style={{ marginTop: 18 }}>Google Drive, Gmail, Lịch: sắp có.</p>
+        </>
+      )}
+
+      {tab === 'plugin' && (
+        <>
+          <h3 className="ctc-sec-title">Plugin & ứng dụng</h3>
+          <div className="ctc-the-grid">
+            {PLUGIN.map((k) => (
+              <div key={k.id} className="ctc-the">
+                <div className="ctc-the-top"><IconThe icon={k.icon} mau={k.mau} /></div>
+                <b>{k.ten}</b>
+                <p>{k.mota}</p>
+                <div className="ctc-the-foot">
+                  <small>CuongThai</small>
+                  <a className="ctc-btn" href={k.href}>{k.nhanNut} <ExternalLink size={13} /></a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {tab === 'cai-dat' && (
+        <>
+          <p className="ctc-page-note">Thiết đặt lưu trên trình duyệt này và áp cho mọi cuộc trò chuyện mới.</p>
+          <section className="ctc-set">
+            <div className="ctc-set-row">
+              <div><b>CuongMini nên gọi bạn là gì?</b><small>Dùng trong lời chào trên màn hình.</small></div>
+              <input
+                className="ctc-set-input"
+                value={ten}
+                maxLength={40}
+                placeholder="Để trống = tên tài khoản"
+                onChange={(e) => {
+                  setTen(e.target.value);
+                  clearTimeout(hen.current);
+                  const v = e.target.value.trim();
+                  hen.current = setTimeout(() => p.set({ tenGoi: v }), 300);
+                }}
+              />
+            </div>
+            <div className="ctc-set-row">
+              <div><b>Ngôn ngữ trả lời</b><small>Tự động = trả lời theo ngôn ngữ bạn hỏi.</small></div>
+              <div className="ctc-seg" role="radiogroup" aria-label="Ngôn ngữ trả lời">
+                {([['auto', 'Tự động'], ['vi', 'Tiếng Việt'], ['en', 'English']] as const).map(([v, l]) => (
+                  <button key={v} type="button" role="radio" aria-checked={p.ngonNgu === v} data-on={p.ngonNgu === v} onClick={() => p.set({ ngonNgu: v })}>{l}</button>
+                ))}
+              </div>
+            </div>
+            <div className="ctc-set-row">
+              <div><b>Tìm trên web</b><small>Cho phép CuongMini tìm tin mới khi câu hỏi cần (kèm thẻ nguồn).</small></div>
+              <Cong on={p.timWeb} onChange={(v) => p.set({ timWeb: v })} label="Tìm trên web" />
+            </div>
+            <div className="ctc-set-row">
+              <div><b>Kỹ năng tự nhận</b><small>Không chọn kỹ năng nào thì tự bật cách trả lời hợp việc: code, toán, ảnh, tiếng Anh, tiếng Nhật…</small></div>
+              <Cong on={p.kyNangTuDong} onChange={(v) => p.set({ kyNangTuDong: v })} label="Kỹ năng tự nhận" />
+            </div>
+            <div className="ctc-set-row">
+              <div><b>Model mặc định</b><small>{isPro ? 'Đổi được bất cứ lúc nào ngay dưới ô soạn.' : 'Pro, Pro 2 và Max dành cho tài khoản Pro.'}</small></div>
+              <div className="ctc-set-model"><CtcModelPicker isPro={isPro} placement="down" /></div>
+            </div>
+          </section>
+        </>
+      )}
     </div>
   );
 }

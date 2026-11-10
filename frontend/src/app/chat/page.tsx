@@ -33,10 +33,15 @@ import { CtcSidebar, type CtcView, type SessionRow } from '@/components/chat/cla
 import {
   ArtifactsView, CustomizeView, ProjectView, ProjectsView, RecentsView, ScheduledView, SearchDialog,
 } from '@/components/chat/claude/CtcViews';
-import { CuongMiniPanda } from '@/components/chat/claude/CuongMiniPanda';
+import { CuongMiniPanda, CuongMiniWordmark } from '@/components/chat/claude/CuongMiniPanda';
 import { thanTuyChinh, useCtcPrefs } from '@/components/chat/claude/ctcPrefs';
+import { ID_KY_NANG_MAY_CHU, KY_NANG } from '@/components/chat/claude/ctcCatalog';
+import { CodeHome, EffortPicker, RepoPicker, type DoKy, type KhoInfo } from '@/components/chat/claude/CtcCode';
 import { CtcComposer, type CtcAttach, type CtcComposerHandle } from '@/components/chat/claude/CtcComposer';
 import { CtcAssistantMessage, CtcUserMessage } from '@/components/chat/claude/CtcMessage';
+// Chữ có chân CÓ tiếng Việt cho câu trả lời + wordmark (xem --ctc-serif trong claudeChat.css).
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
 import '@/components/chat/claude/claudeChat.css';
 
 const KHOA_THANH_BEN = 'ctc-sidebar-open';
@@ -106,6 +111,22 @@ export default function ChatPage() {
   // ─── Thư mục ─────────────────────────────────────────────────
   const [folders, setFolders] = useState<ChatFolder[]>([]);
   const [view, setView] = useState<CtcView>('chat');
+  /** Kỹ năng người dùng chọn trong ô soạn (menu ＋ hoặc "Dùng thử" ở Tùy chỉnh) — gửi `kyNang` thay cho tự nhận. */
+  const [kyNangEp, setKyNangEp] = useState<string | null>(null);
+  const kyNangEpRef = useRef<string | null>(null);
+  kyNangEpRef.current = kyNangEp;
+  const kyNangBat = useCtcPrefs((st) => st.kyNangBat);
+  // ── CuongMini Code: chế độ thanh bên + kho/mức nỗ lực cho phiên Code MỚI ──
+  const [cheDo, setCheDo] = useState<'chat' | 'code'>('chat');
+  const [codeKho, setCodeKho] = useState<KhoInfo | null>(null);
+  const [codeDoKy, setCodeDoKy] = useState<DoKy>('vua');
+  const phienCode = useCtcPrefs((st) => st.phienCode);
+  const viewRef = useRef<CtcView>('chat');
+  viewRef.current = view;
+  const codeKhoRef = useRef<KhoInfo | null>(null);
+  codeKhoRef.current = codeKho;
+  const codeDoKyRef = useRef<DoKy>('vua');
+  codeDoKyRef.current = codeDoKy;
   const [searchOpen, setSearchOpen] = useState(false);
   /** Dự án gán cho cuộc trò chuyện MỚI sắp gửi (chọn dưới ô soạn ở màn chào). */
   const [duAnMoi, setDuAnMoi] = useState<string | null>(null);
@@ -218,18 +239,31 @@ export default function ChatPage() {
     return () => ro.disconnect();
   }, [mounted, currentSessionId, coTin, setNearBottom]);
 
+  /**
+   * Cuộc CHỈ có ở máy (khách, hoặc chưa gửi tin nào lên máy chủ). Không suy từ tiền tố `local_` nữa: trước
+   * 10/11/2026 máy chủ lưu cuộc thật dưới chính mã `local_…`, và coi chúng là "chỉ ở máy" làm Xoá/Ghim/Chuyển dự án
+   * không tới máy chủ. Cuộc từ máy chủ luôn có `userId`.
+   */
+  const chiOMay = useCallback((sid: string) => {
+    if (!useAuthStore.getState().isAuthenticated) return true; // khách: không có quyền sửa/xoá trên máy chủ
+    if (!sid.startsWith('local_')) return false;
+    const s = useChatStore.getState().sessions.find((x) => x.sessionId === sid);
+    return !s?.userId;
+  }, []);
+
   const fetchHistory = useCallback(async (sessionId: string) => {
-    if (sessionId.startsWith('local_')) return;
+    if (chiOMay(sessionId)) return;
     try {
       const res = await api.get(`/ai/chat/history/${sessionId}`);
-      setMessages(sessionId, res.data.data || []);
+      setMessages(sessionId, ((res.data.data || []) as ChatMessage[]).map((m) => ({ ...m, content: (m.content ?? '').normalize('NFC') })));
     } catch { /* bỏ qua */ }
-  }, [setMessages]);
+  }, [setMessages, chiOMay]);
 
   const chonPhien = useCallback(async (sessionId: string) => {
     if (isStreaming) abortRef.current?.abort();
     setView('chat');
     setSearchOpen(false);
+    setCheDo(useCtcPrefs.getState().phienCode[sessionId] ? 'code' : 'chat');
     setCurrentSessionId(sessionId);
     dongNeuHep();
     await fetchHistory(sessionId);
@@ -240,6 +274,7 @@ export default function ChatPage() {
     setView('chat');
     setSearchOpen(false);
     setDuAnMoi(duAn);
+    setKyNangEp(null);
     setCurrentSessionId(null);
     setSuggestedPrompts(getContextualPrompts(''));
     setRobotEmotion('idle');
@@ -250,21 +285,48 @@ export default function ChatPage() {
 
   const xoaPhien = useCallback(async (sessionId: string) => {
     try {
-      if (!sessionId.startsWith('local_')) await api.delete(`/ai/chat/sessions/${sessionId}`);
+      if (!chiOMay(sessionId)) await api.delete(`/ai/chat/sessions/${sessionId}`);
       removeSession(sessionId);
       clearMessages(sessionId);
       if (useChatStore.getState().currentSessionId === sessionId) setCurrentSessionId(null);
       toast.success('Đã xoá cuộc trò chuyện');
     } catch { toast.error('Không xoá được'); }
-  }, [removeSession, clearMessages, setCurrentSessionId]);
+  }, [removeSession, clearMessages, setCurrentSessionId, chiOMay]);
+
+  /** Xoá nhiều cuộc một lần (màn Lịch sử trò chuyện → Chọn). */
+  const xoaNhieu = useCallback(async (ids: string[]) => {
+    const lenMay = ids.filter((id) => !chiOMay(id));
+    try {
+      if (lenMay.length) await api.post('/ai/chat/sessions/xoa-nhieu', { ids: lenMay });
+      for (const id of ids) { removeSession(id); clearMessages(id); }
+      if (ids.includes(useChatStore.getState().currentSessionId ?? '')) setCurrentSessionId(null);
+      toast.success(`Đã xoá ${ids.length} cuộc trò chuyện`);
+    } catch { toast.error('Không xoá được — thử lại sau'); }
+  }, [chiOMay, removeSession, clearMessages, setCurrentSessionId]);
+
+  /** Dọn các cuộc rỗng (robot desktop / bản cũ tạo sẵn mà chưa từng nhắn). */
+  const xoaCuocTrong = useCallback(async () => {
+    const rong = useChatStore.getState().sessions.filter((s) => s.sessionId !== useChatStore.getState().currentSessionId
+      && !(useChatStore.getState().messages[s.sessionId]?.length) && (s as SessionRow & { _count?: { messages?: number } })._count?.messages === 0);
+    let tuMay = 0;
+    try {
+      if (isAuthenticated) {
+        const r = await api.post('/ai/chat/sessions/xoa-trong');
+        tuMay = Number(r.data?.data?.soXoa ?? 0);
+      }
+      for (const s of rong) removeSession(s.sessionId);
+      const n = Math.max(tuMay, rong.length);
+      toast.success(n > 0 ? `Đã dọn ${n} cuộc trò chuyện trống` : 'Không có cuộc trò chuyện trống nào');
+    } catch { toast.error('Không dọn được — thử lại sau'); }
+  }, [isAuthenticated, removeSession]);
 
   const doiTen = useCallback(async (sessionId: string, title: string) => {
     const cu = useChatStore.getState().sessions;
     setSessions(cu.map((s) => (s.sessionId === sessionId ? { ...s, title } : s)));
-    if (sessionId.startsWith('local_')) return;
+    if (chiOMay(sessionId)) return;
     try { await api.patch(`/ai/chat/sessions/${sessionId}`, { title }); }
     catch { setSessions(cu); toast.error('Không đổi được tên'); }
-  }, [setSessions]);
+  }, [setSessions, chiOMay]);
 
   const ghimPhien = useCallback(async (sessionId: string, pinned: boolean) => {
     const cu = useChatStore.getState().sessions;
@@ -296,6 +358,16 @@ export default function ChatPage() {
       addSession({ id: Date.now(), sessionId, title: tieuDe, createdAt: new Date().toISOString() });
       setCurrentSessionId(sessionId);
       isNewLocalSession = true;
+    }
+
+    // Phiên Code: gửi từ màn Code (phiên mới) hoặc tiếp một phiên đã đánh dấu Code.
+    const prefsNow = useCtcPrefs.getState();
+    const maCode = viewRef.current === 'code'
+      ? { kho: codeKhoRef.current, doKy: codeDoKyRef.current }
+      : prefsNow.phienCode[sessionId] ?? null;
+    if (viewRef.current === 'code' && maCode) {
+      prefsNow.set({ phienCode: { ...prefsNow.phienCode, [sessionId]: maCode } });
+      setView('chat');
     }
 
     const tempId = Date.now();
@@ -375,7 +447,9 @@ export default function ChatPage() {
           documents: documents?.length ? documents : undefined,
           documentNames: documentNames?.length ? documentNames : undefined,
           voice: opts?.voice === true,
-          ...thanTuyChinh(useCtcPrefs.getState()),
+          ...thanTuyChinh(useCtcPrefs.getState(), kyNangEpRef.current),
+          // Phiên Code: luôn kỹ năng "code" + kho (chỉ TÊN — máy chủ tự đọc GitHub) + mức nỗ lực.
+          ...(maCode ? { kyNang: 'code', doKy: maCode.doKy, ...(maCode.kho ? { khoMa: maCode.kho.ten } : {}) } : {}),
         }),
       });
       if (!res.ok) {
@@ -394,6 +468,7 @@ export default function ChatPage() {
       if (!reader) throw new Error('No reader');
 
       let assistantContent = '';
+      let tieuDeMayChu = '';
       let resolvedSessionId = '';
       let resolvedMessageId: number | undefined;
       const assistantTempId = tempId + 1;
@@ -425,7 +500,14 @@ export default function ChatPage() {
             }
             if (data.type === 'reasoning') { if (data.step) appendAssistantReasoning(sessionId, data.step); continue; }
             if (data.type === 'buoc') { datBuocWeb((c) => [...c, { viec: String(data.viec ?? ''), chu: String(data.chu ?? '') }]); continue; }
-            if (data.type === 'nguon') { if (Array.isArray(data.nguon)) datNguonChoLuotCuoi(sessionId, data.nguon as NguonWeb[]); continue; }
+            if (data.type === 'nguon') {
+              if (Array.isArray(data.nguon)) {
+                datNguonChoLuotCuoi(sessionId, (data.nguon as NguonWeb[]).map((n) => ({ ...n, tieuDe: String(n.tieuDe ?? '').normalize('NFC') })));
+              }
+              continue;
+            }
+            // Máy chủ đặt tiêu đề cho cuộc sau lượt đầu (chatTieuDe.ts) — áp sau khi đã chuyển sang mã phiên thật.
+            if (data.type === 'title') { if (typeof data.title === 'string' && data.title.trim()) tieuDeMayChu = data.title.normalize('NFC'); continue; }
             if (data.type === 'figure_fix') {
               if (typeof data.index === 'number' && data.svg) {
                 let n = 0;
@@ -451,7 +533,8 @@ export default function ChatPage() {
             // Bước/kỹ năng không có `text` — chỉ khung chữ mới cộng vào câu trả lời.
             if (data.type && data.type !== 'chunk') continue;
             const chunk = data.text ?? data.content ?? '';
-            if (chunk) { assistantContent += chunk; updateLastAssistantMessage(sessionId, assistantContent); }
+            // NFC cả chuỗi mỗi lần: dấu tổ hợp có thể tới ở mẩu SAU chữ gốc.
+            if (chunk) { assistantContent = (assistantContent + chunk).normalize('NFC'); updateLastAssistantMessage(sessionId, assistantContent); }
           } catch { continue; } // khung SSE vỡ — không bao giờ in JSON thô ra màn hình
         }
       }
@@ -471,10 +554,16 @@ export default function ChatPage() {
         if (sessionId.startsWith('local_')) removeSession(sessionId);
         const existing = useChatStore.getState().messages[resolvedSessionId] || [];
         if (!useChatStore.getState().sessions.some((s) => s.sessionId === resolvedSessionId)) {
-          addSession({ id: Date.now(), sessionId: resolvedSessionId, title: cu?.title && cu.title !== 'New chat' ? cu.title : tieuDe, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+          addSession({ id: Date.now(), sessionId: resolvedSessionId, userId: useAuthStore.getState().user?.id, title: cu?.title && cu.title !== 'New chat' ? cu.title : tieuDe, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
         }
         setCurrentSessionId(resolvedSessionId);
         setMessages(resolvedSessionId, [...existing, ...localMessages]);
+        // Dấu "phiên Code" đi theo mã phiên thật.
+        const pcs = useCtcPrefs.getState().phienCode;
+        if (pcs[sessionId]) {
+          const { [sessionId]: dauCode, ...conLai } = pcs;
+          useCtcPrefs.getState().set({ phienCode: { ...conLai, [resolvedSessionId]: dauCode } });
+        }
         // Cuộc mới bắt đầu trong một dự án ⇒ xếp nó vào dự án đó ngay khi máy chủ cấp mã phiên.
         const duAn = duAnMoiRef.current;
         if (duAn) {
@@ -492,6 +581,11 @@ export default function ChatPage() {
       } else {
         doiTieuDeLocal();
         setSessions(useChatStore.getState().sessions.map((x) => (x.sessionId === sessionId ? { ...x, updatedAt: new Date().toISOString() } : x)));
+      }
+
+      if (tieuDeMayChu) {
+        const sid = useChatStore.getState().currentSessionId;
+        if (sid) setSessions(useChatStore.getState().sessions.map((x) => (x.sessionId === sid ? { ...x, title: tieuDeMayChu } : x)));
       }
 
       const ctx = getContextualPrompts(assistantContent);
@@ -533,10 +627,10 @@ export default function ChatPage() {
   const catTu = useCallback(async (sid: string, idx: number) => {
     const msgs = useChatStore.getState().messages[sid] || [];
     setMessages(sid, msgs.slice(0, idx));
-    if (!sid.startsWith('local_')) {
+    if (!chiOMay(sid)) {
       try { await api.post(`/ai/chat/sessions/${sid}/cat`, { tuChiSo: idx }); } catch { /* máy chủ lỗi: lượt mới vẫn gửi được */ }
     }
-  }, [setMessages]);
+  }, [setMessages, chiOMay]);
 
   const suaTin = useCallback(async (idx: number, text: string) => {
     const sid = useChatStore.getState().currentSessionId;
@@ -646,6 +740,17 @@ export default function ChatPage() {
     </div>
   ) : null;
 
+  /** "Dùng thử" một kỹ năng ở Tùy chỉnh ⇒ cuộc mới, chọn sẵn kỹ năng, điền câu mẫu. */
+  const dungThuKyNang = (id: string, viDu: string) => {
+    if (id === 'goi-thoai') { setCallOpen(true); return; }
+    phienMoi();
+    setKyNangEp(ID_KY_NANG_MAY_CHU.has(id) ? id : null);
+    if (viDu) requestAnimationFrame(() => composerRef.current?.setText(viDu));
+  };
+
+  const phienCodeHienTai = currentSessionId ? phienCode[currentSessionId] : undefined;
+  const laCode = view === 'code' || (view === 'chat' && !!phienCodeHienTai);
+
   const composer = (
     <CtcComposer
       ref={composerRef}
@@ -655,9 +760,34 @@ export default function ChatPage() {
       isStreaming={isStreaming}
       isPro={isPro}
       autoFocus
-      menuPlacement={empty ? 'down' : 'up'}
-      belowLeft={empty ? chonDuAn : <span className="ctc-disclaimer">CuongMini có thể nhầm. Hãy kiểm tra lại thông tin quan trọng.</span>}
-      placeholder={empty ? 'Hôm nay mình giúp gì được cho bạn?' : 'Trả lời CuongMini…'}
+      menuPlacement={empty || view === 'code' ? 'down' : 'up'}
+      skill={!laCode && kyNangEp ? { id: kyNangEp, ten: KY_NANG.find((k) => k.id === kyNangEp)?.ten ?? kyNangEp } : null}
+      skills={laCode ? [] : KY_NANG.filter((k) => k.loai === 'ky-nang' && kyNangBat.includes(k.id)).map((k) => ({ id: k.id, ten: k.ten }))}
+      onPickSkill={setKyNangEp}
+      belowLeft={laCode ? (
+        <span style={{ display: 'inline-flex', gap: 2, minWidth: 0 }}>
+          <RepoPicker
+            kho={view === 'code' ? codeKho : phienCodeHienTai?.kho ?? null}
+            onChange={(k) => {
+              if (view === 'code' || !currentSessionId) { setCodeKho(k); return; }
+              const pc = useCtcPrefs.getState().phienCode;
+              useCtcPrefs.getState().set({ phienCode: { ...pc, [currentSessionId]: { ...(pc[currentSessionId] ?? { doKy: 'vua' }), kho: k } } });
+            }}
+            signedIn={isAuthenticated}
+            placement={view === 'code' ? 'down' : 'up'}
+          />
+          <EffortPicker
+            value={view === 'code' ? codeDoKy : phienCodeHienTai?.doKy ?? 'vua'}
+            onChange={(d) => {
+              if (view === 'code' || !currentSessionId) { setCodeDoKy(d); return; }
+              const pc = useCtcPrefs.getState().phienCode;
+              useCtcPrefs.getState().set({ phienCode: { ...pc, [currentSessionId]: { ...(pc[currentSessionId] ?? { kho: null }), doKy: d } } });
+            }}
+            placement={view === 'code' ? 'down' : 'up'}
+          />
+        </span>
+      ) : empty ? chonDuAn : <span className="ctc-disclaimer">CuongMini có thể nhầm. Hãy kiểm tra lại thông tin quan trọng.</span>}
+      placeholder={view === 'code' ? 'Mô tả việc cần làm với mã của bạn…' : empty ? 'Hôm nay mình giúp gì được cho bạn?' : 'Trả lời CuongMini…'}
     />
   );
 
@@ -673,6 +803,9 @@ export default function ChatPage() {
       <CtcSidebar
         open={sideOpen}
         view={view}
+        mode={cheDo}
+        onMode={(m) => { setCheDo(m); if (m === 'code') { phienMoi(); setView('code'); } else phienMoi(); }}
+        codeSessions={Object.fromEntries(Object.entries(phienCode).map(([k, v]) => [k, { coKho: !!v.kho }]))}
         sessions={sessions as SessionRow[]}
         currentId={currentSessionId}
         folders={folders}
@@ -680,11 +813,12 @@ export default function ChatPage() {
         onClose={() => doiThanhBen(false)}
         onNew={() => phienMoi()}
         onSearch={() => { setSearchOpen(true); dongNeuHep(); }}
-        onView={(v) => { setView(v); dongNeuHep(); }}
+        onView={(v) => { if (v === 'code') { phienMoi(); setCheDo('code'); } setView(v); dongNeuHep(); }}
         onSelect={(id) => void chonPhien(id)}
         onRename={(id, t) => void doiTen(id, t)}
         onDelete={(id) => void xoaPhien(id)}
         onPin={(id, p) => void ghimPhien(id, p)}
+        chiOMay={chiOMay}
         user={userInfo}
       />
       {sideOpen && <div className="ctc-scrim" onClick={() => setSideOpen(false)} aria-hidden />}
@@ -722,15 +856,19 @@ export default function ChatPage() {
                   aria-label="Tên cuộc trò chuyện"
                 />
               ) : (
-                <button type="button" className="ctc-title-btn" onClick={() => setTitleMenu((v) => !v)} title={currentSession.title}>
+                <div className="ctc-title-wrap">
                   {currentSession.folder?.ten && <span className="ctc-title-proj">{currentSession.folder.ten} /</span>}
-                  <span>{currentSession.title || 'Cuộc trò chuyện mới'}</span>
-                  <ChevronDown size={14} />
-                </button>
+                  <button type="button" className="ctc-title-btn" onClick={() => setTitleEdit(currentSession.title || '')} title="Bấm để đổi tên">
+                    <span>{currentSession.title || 'Cuộc trò chuyện mới'}</span>
+                  </button>
+                  <button type="button" className="ctc-icon-btn" data-sm onClick={() => setTitleMenu((v) => !v)} aria-label="Tuỳ chọn cuộc trò chuyện" title="Tuỳ chọn">
+                    <ChevronDown size={14} />
+                  </button>
+                </div>
               )}
               {titleMenu && (
                 <div className="ctc-menu" style={{ left: 0, top: 'calc(100% + 4px)' }} role="menu">
-                  <button type="button" className="ctc-menu-item" disabled={currentSession.sessionId.startsWith('local_')} onClick={() => { setTitleMenu(false); void ghimPhien(currentSession.sessionId, !currentSession.pinned); }}>
+                  <button type="button" className="ctc-menu-item" disabled={chiOMay(currentSession.sessionId)} onClick={() => { setTitleMenu(false); void ghimPhien(currentSession.sessionId, !currentSession.pinned); }}>
                     <Pin size={15} /> {currentSession.pinned ? 'Bỏ ghim' : 'Ghim'}
                   </button>
                   <button type="button" className="ctc-menu-item" onClick={() => { setTitleMenu(false); setTitleEdit(currentSession.title || ''); }}>
@@ -753,6 +891,9 @@ export default function ChatPage() {
             </div>
           )}
 
+          {!trangPhu && phienCodeHienTai && (
+            <span className="ctc-badge" title="Phiên CuongMini Code">Code{phienCodeHienTai.kho ? ` · ${phienCodeHienTai.kho.ten}` : ''}</span>
+          )}
           <span className="ctc-top-spacer" />
           {limitedMode && (
             <button type="button" className="ctc-badge" style={{ border: 0, cursor: 'pointer' }} onClick={() => setLimitedMode(false, '')} title="Thử lại AI">
@@ -763,7 +904,7 @@ export default function ChatPage() {
         </header>
 
         {view === 'recents' ? (
-          <div className="ctc-scroll"><RecentsView sessions={sessions as SessionRow[]} onOpen={(id) => void chonPhien(id)} onNew={() => phienMoi()} /></div>
+          <div className="ctc-scroll"><RecentsView sessions={sessions as SessionRow[]} onOpen={(id) => void chonPhien(id)} onNew={() => phienMoi()} onDeleteMany={xoaNhieu} onCleanEmpty={xoaCuocTrong} signedIn={isAuthenticated} /></div>
         ) : view === 'projects' ? (
           <div className="ctc-scroll"><ProjectsView folders={folders} signedIn={isAuthenticated} onOpen={(id) => setView(`project:${id}`)} onCreate={(t) => void taoThuMuc(t)} /></div>
         ) : duAnId ? (
@@ -781,8 +922,10 @@ export default function ChatPage() {
           <div className="ctc-scroll"><ArtifactsView messages={messages} sessions={sessions as SessionRow[]} onOpenChat={(id) => void chonPhien(id)} /></div>
         ) : view === 'scheduled' ? (
           <div className="ctc-scroll"><ScheduledView onNew={() => phienMoi()} /></div>
+        ) : view === 'code' ? (
+          <CodeHome composer={composer} kho={codeKho} onKho={setCodeKho} signedIn={isAuthenticated} />
         ) : view === 'customize' ? (
-          <div className="ctc-scroll"><CustomizeView isPro={isPro} /></div>
+          <div className="ctc-scroll"><CustomizeView isPro={isPro} onTry={dungThuKyNang} onOpenCode={() => { phienMoi(); setCheDo('code'); setView('code'); }} /></div>
         ) : empty ? (
           <div className="ctc-home">
             <div className="ctc-home-hello">
@@ -867,6 +1010,8 @@ export default function ChatPage() {
             open={callOpen}
             onClose={() => setCallOpen(false)}
             skin="studio"
+            brand={<><CuongMiniPanda size={26} /><CuongMiniWordmark size={18} /></>}
+            renderMascot={({ dangNghi }) => <CuongMiniPanda size={112} state={dangNghi ? 'thinking' : 'idle'} title="CuongMini" />}
             onAsk={(text) => sendMessage(text, false, undefined, { voice: true })}
           />
         )}

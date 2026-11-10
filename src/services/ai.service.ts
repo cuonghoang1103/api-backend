@@ -47,6 +47,8 @@ import { type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from
 import { chatChinhHangSanSang, modelChinhHangCuaBac, maxTokensCuaBac, streamChatChinhHang, type MaBacClaude } from './aiChatChinhHang.js';
 import { goKhoiCheck, kiemHinh, tachHinh, thayHinh, type HinhTrongCauTraLoi } from './figureCheck.js';
 import { isProEffective } from './pro.service.js';
+import { laTieuDeTam, tieuDeLui } from './chatTieuDe.js';
+import { khoiNguCanhKho, layKhoMa, luatDoKy, type DoKy } from './chatKhoMa.js';
 import { canTimWeb } from './search/canTim.js';
 import { boiCanhHomNay } from './troLy/boiCanhHomNay.js';
 import { luatKyNang, type KyNangTroLy } from './troLy/kyNangTroLy.js';
@@ -204,7 +206,17 @@ function getGroq(): OpenAI {
 }
 
 // ─── Session ID generator ────────────────────────────────────
-function generateSessionId(): string {
+/** Ngữ cảnh của phiên Code (/chat → Code): kho GitHub + mức nỗ lực. Đọc kho hỏng ⇒ bỏ qua, không chặn câu trả lời. */
+async function nguCanhCode(context: { khoMa?: string; doKy?: DoKy }): Promise<string> {
+  let kho = '';
+  if (context.khoMa) {
+    try { kho = khoiNguCanhKho(await layKhoMa(context.khoMa)); }
+    catch (e) { logger.warn('Không đọc được kho mã cho phiên Code', { kho: context.khoMa, error: e instanceof Error ? e.message : String(e) }); }
+  }
+  return kho + luatDoKy(context.doKy);
+}
+
+export function generateSessionId(): string {
   return `sess_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
@@ -513,6 +525,10 @@ interface ChatContext {
    * câu hỏi. Danh sách trắng — xem `troLy/kyNangTroLy.ts`.
    */
   kyNang?: KyNangTroLy | 'tu-dong';
+  /** Phiên Code của /chat: tên kho GitHub công khai đã kiểm (`owner/name`) — máy chủ tự đọc rồi nối ngữ cảnh. */
+  khoMa?: string;
+  /** Phiên Code: mức nỗ lực (nhanh / vừa / kỹ). */
+  doKy?: DoKy;
   /** Máy chủ gọi lại MỘT LẦN với kỹ năng đã áp, để client gắn nhãn. */
   banKyNang?: (k: KyNangTroLy) => void;
   /** Máy chủ gọi lại để đẩy BƯỚC ra SSE ("đang tìm…", "đang đọc…"). */
@@ -740,8 +756,12 @@ export class AIService {
      * dưới mắt người dùng.
      */
     const theoLuuTru = luuTru ? { archivedAt: { not: null } } : { archivedAt: null };
-    return prisma.chatSession.findMany({
-      where: { userId, ...loc, ...theoLuuTru },
+    /*
+     * 10/11/2026: cuộc CHƯA có tin nhắn nào KHÔNG hiện (robot desktop tạo sẵn phiên "Trò chuyện bằng giọng nói"
+     * mỗi lần mở gọi ⇒ lịch sử đầy rác). Cuộc chỉ "tồn tại" với người dùng từ tin đầu tiên, như claude.ai.
+     */
+    const ds = await prisma.chatSession.findMany({
+      where: { userId, ...loc, ...theoLuuTru, messages: { some: {} } },
       include: {
         _count: { select: { messages: true } },
         folder: { select: { id: true, ten: true, mau: true } },
@@ -751,6 +771,26 @@ export class AIService {
       orderBy: [{ pinned: 'desc' }, { updatedAt: 'desc' }],
       take: 100,
     });
+    // Cuộc cũ còn tên tạm ("Chat 02:07:19 …") ⇒ đặt lại bằng mấy chữ đầu câu hỏi đầu (một lần, ghi luôn vào CSDL).
+    const tam = ds.filter((p) => laTieuDeTam(p.title)).slice(0, 40);
+    if (tam.length) {
+      const dau = await prisma.chatMessage.findMany({
+        where: { sessionId: { in: tam.map((p) => p.id) }, role: 'user' },
+        orderBy: { createdAt: 'asc' },
+        select: { sessionId: true, content: true },
+      });
+      const cauDau = new Map<string, string>();
+      for (const m of dau) if (!cauDau.has(m.sessionId) && m.content?.trim()) cauDau.set(m.sessionId, m.content);
+      for (const p of tam) {
+        const c = cauDau.get(p.id);
+        if (!c) continue;
+        const cu = p.title;
+        const moi = tieuDeLui(c);
+        p.title = moi;
+        void prisma.chatSession.updateMany({ where: { id: p.id, title: cu }, data: { title: moi } }).catch(() => {});
+      }
+    }
+    return ds;
   }
 
   // ─── Delete session ─────────────────────────────────────
@@ -817,7 +857,8 @@ export class AIService {
     // Persist userId so per-user analytics (Pro/Max usage) can attribute chats.
     await prisma.chatSession.upsert({
       where: { id: sessionId },
-      create: { id: sessionId, userId: userId ?? null, title: `Chat ${new Date().toLocaleString('vi-VN')}` },
+      // Tên tạm = mấy chữ đầu câu hỏi (không còn "Chat 02:07:19 …"); trả lời xong thì chatTieuDe.ts đặt tiêu đề thật.
+      create: { id: sessionId, userId: userId ?? null, title: tieuDeLui(content) },
       update: { updatedAt: new Date(), ...(userId ? { userId } : {}) },
     });
 
@@ -1152,7 +1193,8 @@ export class AIService {
     // dấu sao và gạch đầu dòng. Đo thật 18/08: bậc Pro rơi xuống đường miễn phí
     // (tài khoản chưa Pro) và câu trả lời ra `- **Lập trình & phát triển`.
     const systemPrompt = buildSystemPrompt(ragContext, false, !!context.voice, context.ngonNgu, !!context.appIos)
-      + luatKyNang(context.kyNang, message, !!context.images?.length, !!context.voice).luat;
+      + luatKyNang(context.kyNang, message, !!context.images?.length, !!context.voice).luat
+      + (await nguCanhCode(context));
 
     // Save user message
     if (sessionId) {
@@ -1223,7 +1265,8 @@ export class AIService {
     if (kn.kyNang) context.banKyNang?.(kn.kyNang);
     const systemPrompt = buildSystemPrompt(ragContext, selected.tier === 'claude', !!context.voice, context.ngonNgu, !!context.appIos)
       + kn.luat
-      + nguCanhWeb;
+      + nguCanhWeb
+      + (await nguCanhCode(context));
 
     // Save user message
     if (sessionId) {

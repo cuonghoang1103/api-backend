@@ -15,6 +15,10 @@ export interface CtcPrefs {
   ngonNgu: 'auto' | 'vi' | 'en';
   timWeb: boolean;
   kyNangTuDong: boolean;
+  /** Kỹ năng đã thêm vào "Của bạn" — hiện trong menu ＋ của ô soạn để chọn nhanh. */
+  kyNangBat: string[];
+  /** Phiên Code (mã phiên ⇒ kho đã gắn + mức nỗ lực) — để thanh bên lọc "Code" và lượt sau gửi lại đúng ngữ cảnh. */
+  phienCode: Record<string, { kho: { ten: string; moTa: string | null; nhanh: string; ngonNgu: string | null; sao: number; soMuc: number; url: string } | null; doKy: 'nhanh' | 'vua' | 'ky' }>;
   set: (p: Partial<Omit<CtcPrefs, 'set'>>) => void;
 }
 
@@ -25,6 +29,8 @@ export const useCtcPrefs = create<CtcPrefs>()(
       ngonNgu: 'auto',
       timWeb: true,
       kyNangTuDong: true,
+      kyNangBat: ['code', 'toan', 'anh', 'tieng-anh'],
+      phienCode: {},
       set: (p) => set(p),
     }),
     { name: 'ctc-tuy-chinh', storage: createJSONStorage(() => ssrSafeStorage) },
@@ -32,10 +38,11 @@ export const useCtcPrefs = create<CtcPrefs>()(
 );
 
 /** Phần thân yêu cầu `/ai/chat` lấy từ tùy chỉnh. */
-export function thanTuyChinh(p: CtcPrefs): Record<string, unknown> {
+export function thanTuyChinh(p: CtcPrefs, kyNangEp?: string | null): Record<string, unknown> {
   return {
     ...(p.ngonNgu !== 'auto' ? { ngonNgu: p.ngonNgu } : {}),
     choTimWeb: p.timWeb,
-    ...(p.kyNangTuDong ? { kyNang: 'tu-dong' } : {}),
+    // Kỹ năng người dùng tự chọn trong ô soạn thắng chế độ tự nhận.
+    ...(kyNangEp ? { kyNang: kyNangEp } : p.kyNangTuDong ? { kyNang: 'tu-dong' } : {}),
   };
 }

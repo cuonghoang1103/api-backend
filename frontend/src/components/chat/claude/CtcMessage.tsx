@@ -15,6 +15,12 @@ import ThinkingSteps from '../ThinkingSteps';
 import { NguonCards } from '../NguonCards';
 import { CuongMiniPanda } from './CuongMiniPanda';
 
+/**
+ * Chuẩn hoá NFC trước khi vẽ: model (nhất là đường Groq) đôi khi trả tiếng Việt dạng TỔ HỢP (NFD — chữ gốc + dấu
+ * rời), font vẽ dấu tách khỏi chữ ("quố c"). NFC gộp lại thành chữ dựng sẵn.
+ */
+export const nfc = (t: string | undefined | null) => (t ? t.normalize('NFC') : '');
+
 function useCopy() {
   const [ok, setOk] = useState(false);
   return {
@@ -107,7 +113,7 @@ export const CtcUserMessage = memo(function CtcUserMessage({ msg, locked, onEdit
           ))}
         </div>
       ) : null}
-      {msg.content && <div className="ctc-bubble">{msg.content}</div>}
+      {msg.content && <div className="ctc-bubble">{nfc(msg.content)}</div>}
       <div className="ctc-actions">
         <button type="button" className="ctc-icon-btn" data-sm title={ok ? 'Đã chép' : 'Chép'} aria-label="Chép" onClick={() => void copy(msg.content)}>
           {ok ? <Check size={15} /> : <Copy size={15} />}
@@ -169,7 +175,7 @@ export const CtcAssistantMessage = memo(function CtcAssistantMessage({ msg, stre
         <div className="ctc-wait"><CtcMark thinking /> <span>Đang suy nghĩ…</span></div>
       ) : (
         <div className="ctc-prose">
-          <ChatMarkdown content={msg.content} renderMath={!streaming} />
+          <ChatMarkdown content={nfc(msg.content)} renderMath={!streaming} />
           {streaming && <span className="ctc-caret" aria-hidden />}
         </div>
       )}

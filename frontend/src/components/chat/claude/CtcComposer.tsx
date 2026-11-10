@@ -6,7 +6,7 @@
  */
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowUp, AudioLines, Check, ChevronDown, FileText, Loader2, Lock, Mic, Paperclip, Plus, Square, X } from 'lucide-react';
+import { ArrowUp, AudioLines, Check, Sparkle, ChevronDown, FileText, Loader2, Lock, Mic, Paperclip, Plus, Square, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL_ID, getChatModel, useChatModelStore } from '@/lib/aiChatModels';
 import {
@@ -21,6 +21,10 @@ interface Props {
   belowLeft?: React.ReactNode;
   /** Menu model mở lên (ô soạn ở đáy) hay xuống (màn chào). */
   menuPlacement?: 'up' | 'down';
+  /** Kỹ năng đang ép cho câu hỏi (chip trong ô soạn) + danh sách kỹ năng chọn được trong menu ＋. */
+  skill?: { id: string; ten: string } | null;
+  skills?: Array<{ id: string; ten: string }>;
+  onPickSkill?: (id: string | null) => void;
   onSend: (text: string, attach?: CtcAttach) => void;
   onStop?: () => void;
   onVoice?: () => void;
@@ -106,7 +110,7 @@ export function CtcModelPicker({ isPro, disabled, placement = 'up' }: { isPro: b
 }
 
 export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComposer(
-  { onSend, onStop, onVoice, isStreaming, isPro, placeholder = 'Nhắn cho CuongMini…', autoFocus, belowLeft, menuPlacement = 'up' },
+  { onSend, onStop, onVoice, isStreaming, isPro, placeholder = 'Nhắn cho CuongMini…', autoFocus, belowLeft, menuPlacement = 'up', skill, skills, onPickSkill },
   ref,
 ) {
   const router = useRouter();
@@ -263,9 +267,27 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
                   <Mic size={16} /> Nói chuyện bằng giọng
                 </button>
               )}
+              {onPickSkill && skills && skills.length > 0 && (
+                <>
+                  <div className="ctc-menu-sep" />
+                  <div className="ctc-menu-label">Dùng kỹ năng</div>
+                  {skills.map((k) => (
+                    <button key={k.id} type="button" className="ctc-menu-item" onClick={() => { setPlusOpen(false); onPickSkill(skill?.id === k.id ? null : k.id); }}>
+                      <Sparkle size={15} /> {k.ten}
+                      {skill?.id === k.id && <Check size={14} style={{ marginLeft: 'auto' }} />}
+                    </button>
+                  ))}
+                </>
+              )}
             </div>
           )}
         </div>
+        {skill && (
+          <span className="ctc-skill-chip">
+            <Sparkle size={13} /> {skill.ten}
+            {onPickSkill && <button type="button" aria-label={`Bỏ kỹ năng ${skill.ten}`} onClick={() => onPickSkill(null)}><X size={12} /></button>}
+          </span>
+        )}
         <input
           ref={fileRef}
           type="file"

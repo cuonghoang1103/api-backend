@@ -502,7 +502,7 @@ export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
     courseCode: 'EMF301c',
-    slug: 'emf301c-electromagnetic-field-theory-and-microwave-fundamentals',
+    slug: 'emf301c-electromagnetic-field-theory-and-microwave-fundament',
     title: 'Electromagnetic Field Theory and Microwave Fundamentals',
     level: 'INTERMEDIATE',
     language: 'Vietnamese',

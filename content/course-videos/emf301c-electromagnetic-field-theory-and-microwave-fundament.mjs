@@ -3,7 +3,7 @@
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/emf301c-electromagnetic-field-theory-and-microwave-fundamentals.mjs
  */
 export default {
-  courseSlug: "emf301c-electromagnetic-field-theory-and-microwave-fundamentals",
+  courseSlug: "emf301c-electromagnetic-field-theory-and-microwave-fundament",
   defaultVideoTrack: "YT",
   lessons: {
     "emf301c-flm-b008": { yt: "XoVW7CRR5JY", credit: "ScienceClic English — The Electromagnetic field, how Electric and Magnetic forces arise" },

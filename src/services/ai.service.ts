@@ -43,8 +43,9 @@ import {
   cosineSimilarity,
   modelGroqConSong,
 } from './aiProviders.js';
-import { type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from './claudeChat.js';
+import { streamClaudeChat, type ClaudeMessage, type ClaudeContentBlock, type ChatStreamPart } from './claudeChat.js';
 import { chatChinhHangSanSang, modelChinhHangCuaBac, maxTokensCuaBac, streamChatChinhHang, type MaBacClaude } from './aiChatChinhHang.js';
+import { gatewayRoot, gatewayKeyFor, congAgent, ramboDangNghi, baoRamboHong, baoRamboOk } from './llm/gateway.js';
 import { goKhoiCheck, kiemHinh, tachHinh, thayHinh, type HinhTrongCauTraLoi } from './figureCheck.js';
 import { isProEffective } from './pro.service.js';
 import { laTieuDeTam, tieuDeLui } from './chatTieuDe.js';
@@ -186,6 +187,8 @@ function estimateTokens(text: string): number {
 // logic uses the provider factory in aiProviders.ts which supports
 // auto-fallback Groq → OpenRouter → OpenAI.
 let _groq: OpenAI | null = null;
+/* Cầu dao nhẹ cho "CuongMini 3.11" (free chat) đi gpt-6-luna: luna lỗi ⇒ bỏ qua 60s để KHÔNG làm mọi lượt chậm thêm. */
+let _lunaHongToi = 0;
 
 function getGroq(): OpenAI {
   if (!_groq) {
@@ -1280,59 +1283,159 @@ export class AIService {
       // default model back + a 'pro_required' signal so the UI reverts the
       // picker and can nudge them to upgrade.
       const allowPro = await isProEffective(context.userId);
-      const lyDo = allowPro ? await chatChinhHangSanSang(context.userId) : null;
       if (!allowPro) {
         if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'pro_required'; }
-      } else if (lyDo) {
-        logger.warn('[web-chat] cổng chính hãng không dùng được — lùi CuongMini 3.11', { lyDo, model: selected.id });
-        if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = `claude_${lyDo}`; }
       } else {
         /*
-         * 09/11/2026 — đi THẲNG cổng Anthropic chính hãng (không modelapi/rambo). Ảnh + PDF gửi dạng khối gốc
-         * (cổng chính hãng đọc được PDF); Word/txt rút chữ như cũ. Kiểm hình + vẽ lại (`kiemVaSuaHinh`) cũng đi
-         * cổng chính hãng, cùng model của bậc. Lỗi trước chữ đầu ⇒ lùi CuongMini 3.11 (Groq), báo client `fellBack`.
+         * 10/11/2026 — bậc Claude đi THEO THỨ TỰ: gwai (Claude RẺ ~16×) → cổng chính hãng (LỚP LÙI, trần 30$/ngày)
+         *   → Groq (CuongMini 3.11). gwai dùng cùng model của bậc (haiku/sonnet/opus-5-5) qua tuyến /v1/messages
+         *   (`streamClaudeChat` tự trỏ gwai qua `congAnthropic`). Ảnh + PDF gửi dạng khối gốc; kiểm hình + vẽ lại
+         *   (`kiemVaSuaHinh`) sau khi chữ chảy hết. Lỗi TRƯỚC chữ đầu ⇒ lùi lớp kế; đã chảy chữ rồi mới gãy ⇒ giữ
+         *   phần đã có (không lặp lại qua lớp sau).
          */
         const userContent = await buildUserContent(message, context.images, context.documents, true, docCharBudget(selected.id));
         const claudeMessages: ClaudeMessage[] = [...history, { role: 'user', content: userContent }];
-        let streamed = '';
-        const loc = taoBoLocCheck();
-        try {
-          const g = streamChatChinhHang({
-            bac: selected.id as MaBacClaude,
-            system: systemPrompt,
-            messages: claudeMessages as Array<{ role: 'user' | 'assistant'; content: string | Array<Record<string, unknown>> }>,
-            userId: context.userId!,
-          });
-          let r = await g.next();
-          while (!r.done) {
-            streamed += r.value;
-            const hien = loc.day(r.value);
-            if (hien) yield hien;
-            r = await g.next();
-          }
-          const conLai = loc.xong();
-          if (conLai) yield conLai;
-          if (!streamed.trim()) throw new Error('empty claude stream');
-          const usd = r.value.usd;
-          // Kiểm hình bằng SỐ sau khi chữ đã chảy hết; sai thì vẽ lại (cùng cổng chính hãng).
-          let ketQua = goKhoiCheck(streamed);
-          for await (const p of this.kiemVaSuaHinh(streamed, r.value.model, systemPrompt, context.userId!)) {
-            if (p.loai === 'xong') ketQua = p.text;
-            else yield p.phan;
-          }
-          if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua, usd); }
-          return;
-        } catch (err) {
-          if (streamed) {
-            const ketQua = goKhoiCheck(streamed);
+        const bacModel = modelChinhHangCuaBac(selected.id as MaBacClaude);
+
+        // ── Lớp 1: gwai (Claude rẻ). Bỏ qua nếu gwai chưa cấu hình hoặc cầu dao đang mở. ──
+        const gwaiBat = !ramboDangNghi() && !!congAgent();
+        if (gwaiBat) {
+          let streamed = '';
+          const loc = taoBoLocCheck();
+          try {
+            for await (const phan of streamClaudeChat({ model: bacModel, system: systemPrompt, messages: claudeMessages })) {
+              streamed += phan;
+              const hien = loc.day(phan);
+              if (hien) yield hien;
+            }
+            const conLai = loc.xong();
+            if (conLai) yield conLai;
+            if (!streamed.trim()) throw new Error('empty gwai claude stream');
+            baoRamboOk();
+            let ketQua = goKhoiCheck(streamed);
+            for await (const p of this.kiemVaSuaHinh(streamed, bacModel, systemPrompt, context.userId!)) {
+              if (p.loai === 'xong') ketQua = p.text;
+              else yield p.phan;
+            }
             if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua); }
-            logger.warn('[web-chat] luồng chính hãng gãy giữa chừng — giữ phần đã có', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
             return;
+          } catch (err) {
+            if (streamed) {
+              const ketQua = goKhoiCheck(streamed);
+              if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua); }
+              logger.warn('[web-chat] gwai gãy giữa chừng — giữ phần đã có', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
+              return;
+            }
+            baoRamboHong();
+            logger.warn('[web-chat] gwai lỗi trước chữ đầu — lùi cổng chính hãng', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
+            // rơi xuống cổng chính hãng bên dưới
           }
-          logger.warn('[web-chat] cổng chính hãng lỗi trước chữ đầu — lùi CuongMini 3.11', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
-          if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_error'; }
-          // fall through to Groq default
         }
+
+        // ── Lớp 2: cổng chính hãng (reserve, trần 30$/ngày). Trần hết / lỗi ⇒ Groq. ──
+        const lyDo = await chatChinhHangSanSang(context.userId);
+        if (lyDo) {
+          logger.warn('[web-chat] cổng chính hãng không dùng được — lùi CuongMini 3.11', { lyDo, model: selected.id });
+          if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = `claude_${lyDo}`; }
+        } else {
+          let streamed = '';
+          const loc = taoBoLocCheck();
+          try {
+            const g = streamChatChinhHang({
+              bac: selected.id as MaBacClaude,
+              system: systemPrompt,
+              messages: claudeMessages as Array<{ role: 'user' | 'assistant'; content: string | Array<Record<string, unknown>> }>,
+              userId: context.userId!,
+            });
+            let r = await g.next();
+            while (!r.done) {
+              streamed += r.value;
+              const hien = loc.day(r.value);
+              if (hien) yield hien;
+              r = await g.next();
+            }
+            const conLai = loc.xong();
+            if (conLai) yield conLai;
+            if (!streamed.trim()) throw new Error('empty claude stream');
+            const usd = r.value.usd;
+            // Kiểm hình bằng SỐ sau khi chữ đã chảy hết; sai thì vẽ lại (cùng cổng chính hãng).
+            let ketQua = goKhoiCheck(streamed);
+            for await (const p of this.kiemVaSuaHinh(streamed, r.value.model, systemPrompt, context.userId!)) {
+              if (p.loai === 'xong') ketQua = p.text;
+              else yield p.phan;
+            }
+            if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua, usd); }
+            return;
+          } catch (err) {
+            if (streamed) {
+              const ketQua = goKhoiCheck(streamed);
+              if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua); }
+              logger.warn('[web-chat] luồng chính hãng gãy giữa chừng — giữ phần đã có', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
+              return;
+            }
+            logger.warn('[web-chat] cổng chính hãng lỗi trước chữ đầu — lùi CuongMini 3.11', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
+            if (meta) { meta.fellBack = true; meta.effective = DEFAULT_CHAT_MODEL_ID; meta.reason = 'claude_error'; }
+            // fall through to Groq default
+          }
+        }
+      }
+    }
+
+    // ─── 10/11/2026: "CuongMini 3.11" (free mặc định) thử modelapi gpt-6-luna TRƯỚC ───
+    // Thông minh + rẻ hơn Groq Llama, vẫn chảy dần (SSE). Lỗi / timeout / TRỐNG trước khi
+    // chảy chữ nào ⇒ TỰ LÙI Groq cũ bên dưới (free chat KHÔNG BAO GIỜ chết). Đã chảy chữ rồi
+    // mới lỗi ⇒ lưu phần đã có + kết thúc (không lặp lại qua Groq). Cầu dao 60s: luna lỗi thì
+    // bỏ qua một lát để không bắt MỌI lượt chat chịu thêm độ trễ của luna khi nó đang hỏng.
+    const lunaKey = gatewayKeyFor('gpt-6-luna');
+    if (lunaKey && Date.now() >= _lunaHongToi) {
+      let lunaFull = '';
+      let lunaDaChay = false;
+      try {
+        const lunaClient = new OpenAI({ baseURL: `${gatewayRoot()}/v1`, apiKey: lunaKey });
+        const lunaStream = await lunaClient.chat.completions.create({
+          model: 'gpt-6-luna',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...history,
+            { role: 'user', content: message },
+          ],
+          max_tokens: config.aiMaxTokens,
+          temperature: config.aiTemperature,
+          stream: true,
+        });
+        const LUNA_IDLE_MS = 8_000;
+        let lunaTimer: ReturnType<typeof setTimeout> | null = null;
+        const lunaArm = () => {
+          if (lunaTimer) clearTimeout(lunaTimer);
+          lunaTimer = setTimeout(() => { try { lunaStream.controller?.abort?.(); } catch {} }, LUNA_IDLE_MS);
+        };
+        lunaArm();
+        let lunaXong = false;
+        try {
+          for await (const chunk of lunaStream) {
+            const t = chunk.choices?.[0]?.delta?.content || '';
+            if (t) { lunaFull += t; lunaDaChay = true; yield t; }
+            lunaArm();
+          }
+          lunaXong = true;
+        } finally {
+          if (lunaTimer) clearTimeout(lunaTimer);
+        }
+        if (!lunaXong) { try { lunaStream.controller?.abort?.(); } catch {} }
+        if (lunaFull) {
+          if (sessionId) { await this.saveAssistantAndTrack(sessionId, lunaFull, meta); this.ghiChiPhiChat(context, meta, message, lunaFull); }
+          return;
+        }
+        // trống ⇒ rơi xuống Groq bên dưới
+      } catch (err) {
+        logger.warn('[web-chat] gpt-6-luna streaming lỗi — lùi Groq', { error: err instanceof Error ? err.message : String(err) });
+        _lunaHongToi = Date.now() + 60_000;
+        if (lunaDaChay) {
+          // đã chảy chữ cho người dùng ⇒ KHÔNG lặp lại bằng Groq; lưu phần đã có rồi dừng
+          if (sessionId && lunaFull) { await this.saveAssistantAndTrack(sessionId, lunaFull, meta); this.ghiChiPhiChat(context, meta, message, lunaFull); }
+          return;
+        }
+        // chưa chảy chữ nào ⇒ rơi xuống Groq bên dưới
       }
     }
 

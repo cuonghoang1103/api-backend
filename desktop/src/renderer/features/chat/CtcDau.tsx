@@ -47,38 +47,38 @@ export function CtcDau({ co = 22, dangChay = false }: { co?: number; dangChay?: 
       <g className="ctc-gau-than">
         <g className="ctc-gau-tai ctc-gau-tai-t">
           <circle cx="27" cy="30" r="17" fill={`url(#${id('e')})`} />
-          <circle cx="27" cy="31" r="8" fill="#3a3450" opacity="0.7" />
+          <circle cx="27" cy="31" r="8" style={{ fill: 'var(--gau-tai)' }} opacity="0.7" />
         </g>
         <g className="ctc-gau-tai ctc-gau-tai-p">
           <circle cx="93" cy="30" r="17" fill={`url(#${id('e')})`} />
-          <circle cx="93" cy="31" r="8" fill="#3a3450" opacity="0.7" />
+          <circle cx="93" cy="31" r="8" style={{ fill: 'var(--gau-tai)' }} opacity="0.7" />
         </g>
         <ellipse cx="60" cy="64" rx="46" ry="42" fill={`url(#${id('h')})`} />
-        <path d="M30 40 Q45 26 64 25" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.9" />
+        <path d="M30 40 Q45 26 64 25" style={{ stroke: 'var(--gau-trang)' }} strokeWidth="4" strokeLinecap="round" fill="none" opacity="0.9" />
         <g className="ctc-gau-la">
           <path d="M60 24 C62 14 70 7 82 6 C79 16 71 23 60 24 Z" fill={`url(#${id('l')})`} />
-          <path d="M61 23 C67 17 73 12 80 8" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" opacity="0.55" fill="none" />
-          <path d="M60 25 L59 30" stroke="#5a3ee6" strokeWidth="2.4" strokeLinecap="round" />
+          <path d="M61 23 C67 17 73 12 80 8" style={{ stroke: 'var(--gau-trang)' }} strokeWidth="1.2" strokeLinecap="round" opacity="0.55" fill="none" />
+          <path d="M60 25 L59 30" style={{ stroke: 'var(--gau-cuong)' }} strokeWidth="2.4" strokeLinecap="round" />
         </g>
         <ellipse cx="40" cy="64" rx="14" ry="17" transform="rotate(28 40 64)" fill={`url(#${id('d')})`} />
         <ellipse cx="80" cy="64" rx="14" ry="17" transform="rotate(-28 80 64)" fill={`url(#${id('d')})`} />
         <g className="ctc-gau-mat">
           <g className="ctc-gau-mat1">
-            <circle cx="42" cy="65" r="7.2" fill="#0d0a14" />
-            <circle cx="44.6" cy="62.2" r="2.7" fill="#ffffff" />
-            <circle cx="40" cy="68" r="1.2" fill="#ffffff" opacity="0.8" />
+            <circle cx="42" cy="65" r="7.2" style={{ fill: 'var(--gau-mat)' }} />
+            <circle cx="44.6" cy="62.2" r="2.7" style={{ fill: 'var(--gau-trang)' }} />
+            <circle cx="40" cy="68" r="1.2" style={{ fill: 'var(--gau-trang)' }} opacity="0.8" />
           </g>
           <g className="ctc-gau-mat1">
-            <circle cx="78" cy="65" r="7.2" fill="#0d0a14" />
-            <circle cx="80.6" cy="62.2" r="2.7" fill="#ffffff" />
-            <circle cx="76" cy="68" r="1.2" fill="#ffffff" opacity="0.8" />
+            <circle cx="78" cy="65" r="7.2" style={{ fill: 'var(--gau-mat)' }} />
+            <circle cx="80.6" cy="62.2" r="2.7" style={{ fill: 'var(--gau-trang)' }} />
+            <circle cx="76" cy="68" r="1.2" style={{ fill: 'var(--gau-trang)' }} opacity="0.8" />
           </g>
         </g>
         <ellipse cx="26" cy="82" rx="10" ry="6.5" fill={`url(#${id('c')})`} />
         <ellipse cx="94" cy="82" rx="10" ry="6.5" fill={`url(#${id('c')})`} />
-        <ellipse cx="60" cy="78" rx="5.6" ry="3.9" fill="#1d1828" />
-        <ellipse cx="58.6" cy="76.9" rx="1.8" ry="1" fill="#ffffff" opacity="0.6" />
-        <path d="M52.5 83 Q56.2 87.4 60 83 Q63.8 87.4 67.5 83" stroke="#1d1828" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="60" cy="78" rx="5.6" ry="3.9" style={{ fill: 'var(--gau-mui)' }} />
+        <ellipse cx="58.6" cy="76.9" rx="1.8" ry="1" style={{ fill: 'var(--gau-trang)' }} opacity="0.6" />
+        <path d="M52.5 83 Q56.2 87.4 60 83 Q63.8 87.4 67.5 83" style={{ stroke: 'var(--gau-mui)' }} strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </g>
     </svg>
   );

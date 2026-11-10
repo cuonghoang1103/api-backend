@@ -19,6 +19,15 @@
  * bằng giá trị CỦA APP rồi kế thừa xuống — `.ctc-root` bên dưới ánh xạ ngược `--ct-*` ⇒ `--ctc-*` mà không vòng lặp.
  */
 :root {
+  /* Màu KHÔNG theo chủ đề của các màn mới (10/11): nền đặc của ô biểu tượng (chữ trắng trên gradient), núm công tắc,
+     khối mã luôn tối, điểm hồng của wordmark/banner. Khai dạng token (mauCung.test.ts chỉ đếm màu thô ở thuộc tính). */
+  --ctd-tren-ic: #ffffff;
+  --ctd-g1: #64748b;
+  --ctd-g2: #334155;
+  --ctd-num: #ffffff;
+  --ctd-ma-nen: #17141f;
+  --ctd-ma-chu: #d6d2e8;
+  --ctd-hong: #ec4899;
   --ctc-nhan: var(--ct-accent);
   --ctc-nhan-2: #8b5cf6;
   --ctc-nhan-hover: color-mix(in srgb, var(--ct-accent) 86%, #000);
@@ -932,7 +941,11 @@
 }
 
 /* ══ LINH VẬT GẤU TRÚC (CtcDau.tsx) + WORDMARK — 10/11/2026 ══════════ */
-.ctc-gau { display: block; overflow: visible; }
+.ctc-gau {
+  display: block; overflow: visible;
+  /* Màu NHÂN VẬT (không theo chủ đề — gấu trúc vẫn trắng-đen ở cả sáng lẫn tối), khai dạng token cho mauCung.test. */
+  --gau-mat: #0d0a14; --gau-mui: #1d1828; --gau-tai: #3a3450; --gau-trang: #ffffff; --gau-cuong: #5a3ee6;
+}
 .ctc-gau .ctc-gau-than, .ctc-gau .ctc-gau-bong, .ctc-gau .ctc-gau-mat1, .ctc-gau .ctc-gau-mat, .ctc-gau .ctc-gau-tai, .ctc-gau .ctc-gau-la { transform-box: fill-box; }
 .ctc-gau .ctc-gau-than { transform-origin: 50% 100%; animation: ctcg-lac 3.8s ease-in-out infinite; }
 .ctc-gau .ctc-gau-bong { transform-origin: 50% 50%; animation: ctcg-bong 3.8s ease-in-out infinite; }
@@ -961,7 +974,7 @@
 .ctc-wm-a { color: var(--ctc-chu); }
 .ctc-wm-b {
   font-style: italic; padding-right: .08em; margin-left: .02em;
-  background: linear-gradient(100deg, var(--ctc-nhan) 0%, var(--ctc-nhan-2) 55%, color-mix(in srgb, var(--ctc-nhan-2) 55%, #ec4899) 100%);
+  background: linear-gradient(100deg, var(--ctc-nhan) 0%, var(--ctc-nhan-2) 55%, color-mix(in srgb, var(--ctc-nhan-2) 55%, var(--ctd-hong)) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 
@@ -1070,14 +1083,14 @@
 .ctd-the-tren { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
 .ctd-the-chan { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
 .ctd-the-chan .ctd-nut { padding: 5px 11px; font-size: 13px; }
-.ctd-ic { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; color: #fff; flex: none; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25); }
-.ctd-ic[data-mau='violet'] { background: linear-gradient(135deg, #8b5cf6, #4f46e5); }
-.ctd-ic[data-mau='blue'] { background: linear-gradient(135deg, #60a5fa, #2563eb); }
-.ctd-ic[data-mau='green'] { background: linear-gradient(135deg, #34d399, #059669); }
-.ctd-ic[data-mau='amber'] { background: linear-gradient(135deg, #fbbf24, #d97706); }
-.ctd-ic[data-mau='rose'] { background: linear-gradient(135deg, #fb7185, #e11d48); }
-.ctd-ic[data-mau='teal'] { background: linear-gradient(135deg, #2dd4bf, #0d9488); }
-.ctd-ic[data-mau='slate'] { background: linear-gradient(135deg, #64748b, #334155); }
+.ctd-ic { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; color: var(--ctd-tren-ic); background: linear-gradient(135deg, var(--ctd-g1), var(--ctd-g2)); flex: none; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25); }
+.ctd-ic[data-mau='violet'] { --ctd-g1: #8b5cf6; --ctd-g2: #4f46e5; }
+.ctd-ic[data-mau='blue'] { --ctd-g1: #60a5fa; --ctd-g2: #2563eb; }
+.ctd-ic[data-mau='green'] { --ctd-g1: #34d399; --ctd-g2: #059669; }
+.ctd-ic[data-mau='amber'] { --ctd-g1: #fbbf24; --ctd-g2: #d97706; }
+.ctd-ic[data-mau='rose'] { --ctd-g1: #fb7185; --ctd-g2: #e11d48; }
+.ctd-ic[data-mau='teal'] { --ctd-g1: #2dd4bf; --ctd-g2: #0d9488; }
+.ctd-ic[data-mau='slate'] { --ctd-g1: #64748b; --ctd-g2: #334155; }
 .ctd-them { width: 30px; height: 30px; border-radius: 9px; border: 1px solid var(--ctc-vien); background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--ctc-chu-2); }
 .ctd-them:hover:not(:disabled) { background: var(--ctc-hover); color: var(--ctc-chu); }
 .ctd-them[data-on='true'] { background: color-mix(in srgb, var(--ctc-nhan) 12%, transparent); color: var(--ctc-nhan); border-color: transparent; }
@@ -1085,7 +1098,7 @@
 .ctd-nhan { display: inline-flex; align-items: center; gap: 5px; align-self: flex-start; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; padding: 2px 7px; border-radius: 6px; background: color-mix(in srgb, var(--ctc-nhan) 12%, transparent); color: var(--ctc-nhan); }
 .ctd-sap { margin-left: auto; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 999px; background: var(--ctc-hover); color: var(--ctc-chu-mo); white-space: nowrap; }
 .ctd-banner { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; padding: 22px 24px; border-radius: 18px; overflow: hidden;
-  background: linear-gradient(120deg, color-mix(in srgb, var(--ctc-nhan) 16%, var(--ctc-mat)) 0%, var(--ctc-mat) 62%, color-mix(in srgb, #ec4899 9%, var(--ctc-mat)) 100%);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--ctc-nhan) 16%, var(--ctc-mat)) 0%, var(--ctc-mat) 62%, color-mix(in srgb, var(--ctd-hong) 9%, var(--ctc-mat)) 100%);
   border: 1px solid color-mix(in srgb, var(--ctc-nhan) 25%, var(--ctc-vien)); }
 .ctd-banner-chu { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .ctd-banner-chu h2 { margin: 0; font-family: var(--ctc-serif); font-weight: 500; font-size: 24px; color: var(--ctc-chu); }
@@ -1106,12 +1119,12 @@
 .ctd-cai-hang b { display: block; font-size: 14.5px; font-weight: 500; color: var(--ctc-chu); }
 .ctd-cai-hang small { display: block; font-size: 12.5px; color: var(--ctc-chu-mo); margin-top: 2px; line-height: 1.45; }
 .ctd-cong { position: relative; width: 40px; height: 24px; border-radius: 999px; border: 0; cursor: pointer; background: var(--ctc-vien-dam); flex: none; transition: background-color .18s; }
-.ctd-cong span { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .18s; }
+.ctd-cong span { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 999px; background: var(--ctd-num); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .18s; }
 .ctd-cong[data-on='true'] { background: var(--ctc-nhan); }
 .ctd-cong[data-on='true'] span { transform: translateX(16px); }
 .ctd-art { display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: 14px; cursor: pointer; border: 1px solid var(--ctc-vien); background: var(--ctc-mat); text-align: left; color: inherit; font: inherit; }
 .ctd-art:hover { box-shadow: var(--ctc-bong-tap); }
-.ctd-art pre { margin: 0; height: 150px; overflow: hidden; padding: 12px 14px; background: #17141f; color: #d6d2e8; font: 11.5px/1.55 var(--ctc-mono); white-space: pre; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+.ctd-art pre { margin: 0; height: 150px; overflow: hidden; padding: 12px 14px; background: var(--ctd-ma-nen); color: var(--ctd-ma-chu); font: 11.5px/1.55 var(--ctc-mono); white-space: pre; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
 .ctd-art-chan { display: flex; flex-direction: column; gap: 3px; padding: 10px 14px 12px; }
 .ctd-art-chan b { font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ctd-art-chan small { font-size: 12px; color: var(--ctc-chu-mo); }

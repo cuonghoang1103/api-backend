@@ -322,8 +322,18 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
         // mô phỏng trong thân bài chỉ có thể trỏ bằng slug.
         const requestedSlug = qs?.get('lessonSlug') || null;
         const allLessons = data.sections.flatMap(s => s.lessons || []);
+        // Slug cũ (vd link in sẵn trong video đã render: `typescript-3-1-tham-so-tra-ve`
+        // trong khi bài đã đổi slug thành `typescript-3-1-tham-so`) ⇒ nhận bài DUY NHẤT
+        // cùng tiền tố `<khoá>-<chương>-<bài>`; mơ hồ thì thôi, không đoán.
+        const theoTienTo = (() => {
+          const pre = requestedSlug?.match(/^(.*?-\d+-\d+)(?:-|$)/)?.[1];
+          if (!pre) return undefined;
+          const khop = allLessons.filter(l => l.slug === pre || (l.slug ?? '').startsWith(pre + '-'));
+          return khop.length === 1 ? khop[0] : undefined;
+        })();
         const target = (requestedLessonId && allLessons.find(l => l.id === requestedLessonId))
           || (requestedSlug && allLessons.find(l => l.slug === requestedSlug))
+          || theoTienTo
           || allLessons[0];
         if (target) {
           setCurrentLesson(target);

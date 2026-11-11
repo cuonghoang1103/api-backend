@@ -1,0 +1,40 @@
+/**
+ * YouTube track cho MKR301 — Marketing Research. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/mkr301-marketing-research.mjs
+ */
+export default {
+  courseSlug: "mkr301-marketing-research",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "mkr301-flm-b002": { yt: "Y_QpbYVJwGQ", credit: "Dong Soo Kim — LN1: Marketing Research & Decision-Making" },
+    "mkr301-flm-b003": { yt: "bKjURBAyNc0", credit: "Paul Tilley's Channel — Marketing Research - Unit2 MR2300 Marketing Research Process" },
+    "mkr301-flm-b004": { yt: "IX0CCiNgKlI", credit: "Jae Min Jung — Definition of Marketing Research & Problem Identification vs Problem Solving Research" },
+    "mkr301-flm-b007": { yt: "YxSIq5QDEfE", credit: "Erlinde Cornelis — Marketing Research Proposal" },
+    "mkr301-flm-b008": { yt: "aVVnws-o4tQ", credit: "Anna Cupal — Marketing Research Proposal" },
+    "mkr301-flm-b010": { yt: "ObpYM0PtWAw", credit: "MeanThat — 5.1 Using Secondary Data In Your Research" },
+    "mkr301-flm-b011": { yt: "sz_bG9co0v0", credit: "Dana Marsy — Secondary Data Analysis" },
+    "mkr301-flm-b015": { yt: "FlBFdEgrTBM", credit: "MeanThat — 1.3 Exploratory, Descriptive and Explanatory Nature Of Research" },
+    "mkr301-flm-b017": { yt: "TCRWKDh-NLs", credit: "Live Innovation — Exploratory Research Design / Marketing Research #5" },
+    "mkr301-flm-b018": { yt: "zrv-PsjzPKw", credit: "Galak Breaks It Down — The Importance of Research Design  - Observational Research (Marketing Research Module 1, Video 3)" },
+    "mkr301-flm-b019": { yt: "j9A3ceOBihM", credit: "Grad Coach — Qualitative Data Analysis 101 Tutorial: 6 Analysis Methods + Examples" },
+    "mkr301-flm-b020": { yt: "3TwgVQIZPsw", credit: "TED-Ed — How do focus groups work? - Hector Lanz" },
+    "mkr301-flm-b021": { yt: "8MHkVtE_sVw", credit: "Grad Coach — Qualitative Coding Tutorial: How To Code Qualitative Data For Analysis (4 Steps + Examples)" },
+    "mkr301-flm-b022": { yt: "oPNR_g4c-tk", credit: "Jennifer Taylor, PhD — Qualitative Data Analysis" },
+    "mkr301-flm-b026": { yt: "zEktj19rQik", credit: "Marketing research and analysis — Lecture 13- Causal Research & Types" },
+    "mkr301-flm-b028": { yt: "PMAVsVuGbwE", credit: "Research Hub — Sampling Methods | Types | Techniques  | Examples | Research Hub" },
+    "mkr301-flm-b029": { yt: "LuBD49SFpWs", credit: "The Organic Chemistry Tutor — Scales of Measurement - Nominal, Ordinal, Interval, & Ratio Scale Data" },
+    "mkr301-flm-b031": { yt: "fSmedyVv-Us", credit: "Grad Coach — Sampling Methods 101: Probability & Non-Probability Sampling Explained Simply" },
+    "mkr301-flm-b033": { yt: "FkX-t0Pgzzs", credit: "Dr Nic's Maths and Stats — Designing a Questionnaire or Survey - statistics help" },
+    "mkr301-flm-b034": { yt: "_zoIVE9PRTM", credit: "Dr Hayley Stainton | Tourism Teacher — How To Design A Questionnaire Or Survey | Research Methods Tutorial" },
+    "mkr301-flm-b035": { yt: "eh9ZzpS0ATM", credit: "Live Innovation — How to Create a Survey Questionnaire I Marketing Research #2" },
+    "mkr301-flm-b043": { yt: "EUeQRE5UJpg", credit: "Grad Coach — Quantitative Data Analysis 101 Tutorial: Descriptive vs Inferential Statistics (With Examples)" },
+    "mkr301-flm-b044": { yt: "lgCNTuLBMK4", credit: "CareerFoundry — A Beginners Guide To The Data Analysis Process" },
+    "mkr301-1-1-process-role": { yt: "b4us4bNwAsc", credit: "Professor Wolters — The Basics of the Marketing Research Process" },
+    "mkr301-2-1-problem-design": { yt: "93Rio-HOeWQ", credit: "Marketing research and analysis — Lecture 2-Defining Research Problem" },
+    "mkr301-3-1-secondary-qualitative": { yt: "rT0WLkOVHzA", credit: "Wolters World — Comparing Secondary & Primary Data in Marketing Research" },
+    "mkr301-4-1-survey-scales": { yt: "g_0PMbvGI5w", credit: "Research Methods and Statistics (FMG, UvA) — 4.8 Scales and response options | Quantitative methods | Measurement | UvA" },
+    "mkr301-5-1-sampling": { yt: "pTuj57uXWlk", credit: "Simple Learning Pro — Types of Sampling Methods (4.1)" },
+    "mkr301-6-1-collection-processing": { yt: "YeORbdE-J8c", credit: "Marketing Management-I — Data Collection, Preparation and Analysis" },
+    "mkr301-7-1-analysis": { yt: "aX8UwvyyRoY", credit: "Funnel — What Is Marketing Data Analysis? (Data Analysis for Marketing Explained By an Expert)" },
+  },
+};

@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho MKT301 — Marketing Research. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/mkt301-marketing-research.mjs
+ */
+export default {
+  courseSlug: "mkt301-marketing-research",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "mkt301-flm-b003": { yt: "Vtv0_7UBYWk", credit: "The Marketing Channel - MKTG 101 — The five step marketing research process" },
+    "mkt301-flm-b004": { yt: "fFyaJl9T74g", credit: "Grad Coach — The Research Problem & Problem Statement: Plain-Language Explainer (With Examples) + FREE Templates" },
+    "mkt301-flm-b010": { yt: "uRPkZXAphxw", credit: "Marketing research and analysis — Lecture 9- Primary & Secondary Data, Research Error" },
+    "mkt301-flm-b011": { yt: "sz_bG9co0v0", credit: "Dana Marsy — Secondary Data Analysis" },
+    "mkt301-flm-b012": { yt: "QKxRJFx1Bno", credit: "Raffaela Bonfim — Using Secondary Data" },
+    "mkt301-flm-b015": { yt: "FlBFdEgrTBM", credit: "MeanThat — 1.3 Exploratory, Descriptive and Explanatory Nature Of Research" },
+    "mkt301-flm-b017": { yt: "zrv-PsjzPKw", credit: "Galak Breaks It Down — The Importance of Research Design  - Observational Research (Marketing Research Module 1, Video 3)" },
+    "mkt301-flm-b018": { yt: "lTDcctPT9rc", credit: "FairLearn — Observational Research Designs P1" },
+    "mkt301-flm-b019": { yt: "j9A3ceOBihM", credit: "Grad Coach — Qualitative Data Analysis 101 Tutorial: 6 Analysis Methods + Examples" },
+    "mkt301-flm-b020": { yt: "CgrmjGPvFvQ", credit: "Grad Coach — QUALITATIVE Research Design: Everything You Need To Know (With Examples)" },
+    "mkt301-flm-b021": { yt: "8MHkVtE_sVw", credit: "Grad Coach — Qualitative Coding Tutorial: How To Code Qualitative Data For Analysis (4 Steps + Examples)" },
+    "mkt301-flm-b022": { yt: "lYzhgMZii3o", credit: "Quirkos - Simple Qualitative Analysis Software — Beginners guide to coding qualitative data" },
+    "mkt301-flm-b026": { yt: "zEktj19rQik", credit: "Marketing research and analysis — Lecture 13- Causal Research & Types" },
+    "mkt301-flm-b028": { yt: "fSmedyVv-Us", credit: "Grad Coach — Sampling Methods 101: Probability & Non-Probability Sampling Explained Simply" },
+    "mkt301-flm-b029": { yt: "LuBD49SFpWs", credit: "The Organic Chemistry Tutor — Scales of Measurement - Nominal, Ordinal, Interval, & Ratio Scale Data" },
+    "mkt301-flm-b031": { yt: "KLAEwukvuZs", credit: "Digital E-Learning — Sampling: Sampling & its Types | Simple Random, Convenience, Systematic, Cluster, Stratified" },
+    "mkt301-flm-b032": { yt: "pTuj57uXWlk", credit: "Simple Learning Pro — Types of Sampling Methods (4.1)" },
+    "mkt301-flm-b033": { yt: "zYX8Ycm9vQE", credit: "Marketing research and analysis — Lecture 12- Questionnaire & Form Design" },
+    "mkt301-flm-b034": { yt: "vjailyWAcJQ", credit: "Graham R Gibbs — Question types & piloting. Part 1 of 3 on Questionnaire Design" },
+    "mkt301-flm-b035": { yt: "mdVWbuffdNY", credit: "Sage Video — Designing a Survey" },
+    "mkt301-flm-b036": { yt: "_zoIVE9PRTM", credit: "Dr Hayley Stainton | Tourism Teacher — How To Design A Questionnaire Or Survey | Research Methods Tutorial" },
+    "mkt301-flm-b041": { yt: "lgCNTuLBMK4", credit: "CareerFoundry — A Beginners Guide To The Data Analysis Process" },
+    "mkt301-flm-b043": { yt: "EUeQRE5UJpg", credit: "Grad Coach — Quantitative Data Analysis 101 Tutorial: Descriptive vs Inferential Statistics (With Examples)" },
+    "mkt301-flm-b044": { yt: "LBQqGKY2dJ0", credit: "Talks on Management & Research — Statistical tests for data analysis in research" },
+    "mkt301-flm-b053": { yt: "r5_34YnCmMY", credit: "Harvard Business Review — Telling Stories with Data in 3 Steps (Quick Study)" },
+    "mkt301-flm-b054": { yt: "7AS94R-7YCs", credit: "Harvard Business Review — How to Get People to Listen to You | The Harvard Business Review Guide" },
+    "mkt301-2-1-problem-definition-design": { yt: "W5m6kZekUNE", credit: "Learning Academy of Commerce — Marketing Research Process (Part-1) | Research Problem I Research Design I MR Process Steps" },
+    "mkt301-3-1-secondary-qualitative": { yt: "Hj8rrhaElzY", credit: "BizEdMadeSimple — Business Market Research Explained | Primary vs Secondary Research, Sampling (IGCSE & A-level)" },
+    "mkt301-4-1-quantitative-surveys": { yt: "VQbkw-SI8c4", credit: "Grad Coach — QUANTITATIVE Research Design: Everything You Need To Know (With Examples)" },
+    "mkt301-6-1-sampling-data-collection": { yt: "Rf-fIpB4D50", credit: "CrashCourse — Sampling Methods and Bias with Surveys: Crash Course Statistics #10" },
+    "mkt301-8-1-interpretation-reporting-ethics": { yt: "LnglDN0ifoU", credit: "Management Tutorials — Ethics in Research-Research Ethics-Principles of Ethics in Research" },
+  },
+};

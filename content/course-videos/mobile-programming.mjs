@@ -1,11 +1,10 @@
 /**
- * Curated YouTube track for PRM392 — Mobile Programming.
- * Every id verified live+embeddable via YouTube oEmbed.
+ * YouTube track cho PRM392 — Mobile Programming. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/mobile-programming.mjs
  */
 export default {
-  courseSlug: 'mobile-programming',
-  defaultVideoTrack: 'YT',
+  courseSlug: "mobile-programming",
+  defaultVideoTrack: "YT",
   lessons: {
     "prm392-gioi-thieu": { yt: "fis26HvvDII", credit: "freeCodeCamp.org — Android Development for Beginners - Full Course" },
     "prm392-1-1-platform": { yt: "FbWaCUB70z8", credit: "Fahim Khan — Android Studio Tutorial for Beginners: Setup, New Project & File Structure Explained" },
@@ -23,5 +22,41 @@ export default {
     "prm392-7-1-retrofit": { yt: "t6Sql3WMAnk", credit: "Philipp Lackner — The Ultimate Retrofit Crash Course" },
     "prm392-8-1-architecture": { yt: "eHhXoCNCI1c", credit: "ArjanCodes — Which Software Architecture Should You Use: MVC, MVP, or MVVM?" },
     "prm392-10-1-advanced": { yt: "6_wK_Ud8--0", credit: "Philipp Lackner — The Jetpack Compose Beginner Crash Course 💻  (Android Studio Tutorial)" },
+    "prm392-flm-b001": { yt: "jtK3RYjEH2I", credit: "VTU e-Shikshana Programme — Lecture 1 -- Introduction to Mobile Application Development" },
+    "prm392-flm-b002": { yt: "saKrGCWlJDs", credit: "DJ Malone — Android Studio Tutorial (2024 Edition) - Part 1" },
+    "prm392-flm-b003": { yt: "iqI6MAsi1Xg", credit: "Simplilearn — Introduction To Android Application Development | Simplilearn" },
+    "prm392-flm-b004": { yt: "FjrKMcnKahY", credit: "freeCodeCamp.org — Android App Development Tutorial for Beginners - Your First App" },
+    "prm392-flm-b007": { yt: "loc7WUQ2jIY", credit: "Codes Easy — Layouts In Android | Constraintlayout and Linearlayout" },
+    "prm392-flm-b010": { yt: "sNSlDfaNq-0", credit: "Android Developers — Best practices for themes and styles (Android Dev Summit '18)" },
+    "prm392-flm-b011": { yt: "IJ0jScwGu-8", credit: "Stevdza-San — View Binding vs Data Binding - Explained | Android Development" },
+    "prm392-flm-b013": { yt: "SJw3Nu_h8kk", credit: "Philipp Lackner — Activities & the Activity Lifecycle - Android Basics 2023" },
+    "prm392-flm-b015": { yt: "2hIY1xuImuQ", credit: "Philipp Lackner — Intents & Intent Filters - Android Basics 2023" },
+    "prm392-flm-b016": { yt: "1vFO__7fE2w", credit: "Google for Developers India — Activities and Intents DEMO (Android Development Fundamentals, Unit 1: Lesson 2.1)" },
+    "prm392-flm-b019": { yt: "HtwDXRWjMcU", credit: "Philipp Lackner — RECYCLERVIEW - Android Fundamentals" },
+    "prm392-flm-b020": { yt: "Mc0XT58A1Z4", credit: "Practical Coding — RecyclerView | Everything You Need to Know" },
+    "prm392-flm-b021": { yt: "dvu-zrHxiaI", credit: "Codetutor — RecyclerView - Part 5, The definitive guide" },
+    "prm392-flm-b024": { yt: "CRmfdVYWOhc", credit: "Philipp Lackner — TOOLBAR MENUS - Android Fundamentals" },
+    "prm392-flm-b025": { yt: "S4jkcRhembY", credit: "Philipp Lackner — PERMISSIONS - Android Fundamentals" },
+    "prm392-flm-b026": { yt: "KHl0YcQDhD0", credit: "Igor Dorovskikh — How to handle Android permission Dialogues" },
+    "prm392-flm-b027": { yt: "LP623htmWcI", credit: "Philipp Lackner — Local Notifications in Android - The Full Guide (Android Studio Tutorial)" },
+    "prm392-flm-b028": { yt: "jKRN7UM37eU", credit: "Technical Coding — How to create Notification in android app || Android studio tutorial" },
+    "prm392-flm-b029": { yt: "wtpRp2IpCSo", credit: "Philipp Lackner — SAVING DATA IN SHARED PREFERENCES - Android Fundamentals" },
+    "prm392-flm-b030": { yt: "Jswr6tkv8ro", credit: "slidenerd — 151 Android Internal Storage Part 1 |" },
+    "prm392-flm-b031": { yt: "9t8VVWebRFM", credit: "CodeLabX — SQLite Database Tutorial Android Studio | Insert, Delete, Update and View Data in SQLite Database" },
+    "prm392-flm-b032": { yt: "lwAvI3WDXBY", credit: "Stevdza-San — ROOM Database - #1 Create Database Schema | Android Studio Tutorial" },
+    "prm392-flm-b033": { yt: "IVHZpTyVOxU", credit: "Philipp Lackner — Content Providers - Android Basics 2023" },
+    "prm392-flm-b034": { yt: "-4GgzqMVrYc", credit: "Codetutor — Content Provider - Part 1, A brief introduction" },
+    "prm392-flm-b037": { yt: "EwwB_wZhBaw", credit: "Philipp Lackner — SERVICES - Android Fundamentals" },
+    "prm392-flm-b038": { yt: "7ENFeb-J75k", credit: "Computerphile — Multithreading Code - Computerphile" },
+    "prm392-flm-b039": { yt: "6Oo-9Can3H8", credit: "Defog Tech — Java ExecutorService - Part 1 - Introduction" },
+    "prm392-flm-b041": { yt: "pI5kh94soac", credit: "TutorialsPoint — Android - Fragment" },
+    "prm392-flm-b042": { yt: "i22INe14JUc", credit: "Coding in Flow — Fragment to Fragment/Activity Communication - Android Studio Tutorial" },
+    "prm392-flm-b045": { yt: "LooL6_chvN4", credit: "Clever Techie — REST API & RESTful Web Services Explained | Web Services Tutorial" },
+    "prm392-flm-b046": { yt: "sRLunCZX2Uc", credit: "CodingZest — Android Retrofit Tutorial Using Kotlin 2023 | Getting JSON Response From Api Using Retrofit Kotlin" },
+    "prm392-flm-b047": { yt: "lT3-NBWV9HU", credit: "Codersee- Kotlin on the backend — Retrofit with Kotlin- the ULTIMATE GUIDE" },
+    "prm392-flm-b049": { yt: "WS-Yo6NUZeU", credit: "Kishan Joshi — Socket Programming in Android" },
+    "prm392-flm-b051": { yt: "HDVyFsFUuVg", credit: "Philipp Lackner — Broadcasts & Broadcast Receivers - Android Basics 2023" },
+    "prm392-flm-b053": { yt: "S_25hti4IEc", credit: "Codetutor — Android App Architectures - Part 1, Learning to master MVC, MVP & MVVM | Learning path" },
+    "prm392-flm-b054": { yt: "_T4zjIEkGOM", credit: "Reso Coder — Introduction to MVVM on Android - Tutorial - Learn Android Architecture Patterns" },
   },
 };

@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { CHAT_MODELS, DEFAULT_CHAT_MODEL_ID, getChatModel, useChatModelStore } from '@/lib/aiChatModels';
 import {
   FILE_ACCEPT, MAX_DOCS, MAX_DOC_BYTES, MAX_IMAGES, compressImage, docMediaType, readAsDataURL,
+  buildProjectDoc, filesFromDrop, filesFromZip,
 } from './attachments';
 
 export interface CtcAttach { images?: string[]; documents?: string[]; documentNames?: string[] }
@@ -148,17 +149,46 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
     if (!isVision && (images.length || docs.length)) { setImages([]); setDocs([]); }
   }, [isVision, images.length, docs.length]);
 
-  const addFiles = useCallback(async (files: File[]) => {
-    if (!files.length) return;
+  // Bảo đảm tài khoản Pro + model đọc file được (chung cho ảnh/doc/dự án).
+  const baoDamProDocFile = useCallback((): boolean => {
     if (!isPro) {
       toast.info('Gửi ảnh và tài liệu cần tài khoản Pro', { action: { label: 'Nâng cấp', onClick: () => router.push('/pro') } });
-      return;
+      return false;
     }
     if (getChatModel(modelId).tier === 'default') {
       // CuongMini 3.11 không đọc được file ⇒ tự chuyển lên Pro 2 và nói ra.
       setModelId('cuongmini-pro-2');
       toast.info('Đã chuyển sang CuongMini Pro 2 để đọc ảnh/tài liệu');
     }
+    return true;
+  }, [isPro, modelId, setModelId, router]);
+
+  // Kéo folder / tải .zip ⇒ gói mọi file code/text thành MỘT tài liệu dự án (đã lọc + trần dung lượng).
+  const addProject = useCallback(async (name: string, items: { path: string; file?: File; bytes?: Uint8Array; size: number }[]) => {
+    if (!items.length || !baoDamProDocFile()) return;
+    if (docs.length >= MAX_DOCS) { toast.info(`Tối đa ${MAX_DOCS} tài liệu mỗi tin`); return; }
+    setBusy(true);
+    try {
+      const doc = await buildProjectDoc(name, items);
+      if (!doc) { toast.error('Không thấy file code/text nào trong đó'); return; }
+      setDocs((p) => [...p, { id: `${Date.now()}proj`, name: doc.name, dataUrl: doc.dataUrl }].slice(0, MAX_DOCS));
+      toast.success(`Đã gói ${doc.fileCount} file${doc.truncated ? ' (rút gọn theo trần)' : ''}${doc.skipped ? `, bỏ ${doc.skipped}` : ''}`);
+    } finally { setBusy(false); }
+  }, [baoDamProDocFile, docs.length]);
+
+  const addFiles = useCallback(async (files: File[]) => {
+    if (!files.length) return;
+    // .zip ⇒ giải nén + gói dự án, tách khỏi luồng ảnh/doc thường.
+    const zips = files.filter((f) => /\.zip$/i.test(f.name));
+    if (zips.length) {
+      for (const z of zips) {
+        try { const ex = await filesFromZip(z); await addProject(z.name.replace(/\.zip$/i, ''), ex.map((x) => ({ path: x.path, bytes: x.bytes, size: x.bytes.length }))); }
+        catch { toast.error(`Không mở được ${z.name}`); }
+      }
+      files = files.filter((f) => !/\.zip$/i.test(f.name));
+      if (!files.length) return;
+    }
+    if (!baoDamProDocFile()) return;
     const imgs = files.filter((f) => f.type.startsWith('image/'));
     const ds = files.map((f) => ({ f, media: docMediaType(f) })).filter((x): x is { f: File; media: string } => !!x.media);
     if (files.length - imgs.length - ds.length > 0) toast.error('Chỉ nhận ảnh, PDF, Word, Excel, PowerPoint hoặc .txt/.md/.csv');
@@ -184,7 +214,7 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
     } finally {
       setBusy(false);
     }
-  }, [isPro, modelId, setModelId, images.length, docs.length, router]);
+  }, [baoDamProDocFile, addProject, images.length, docs.length]);
 
   const submit = useCallback(() => {
     const text = value.trim();
@@ -209,10 +239,29 @@ export const CtcComposer = forwardRef<CtcComposerHandle, Props>(function CtcComp
       onDragOver={(e) => { if (e.dataTransfer?.types?.includes('Files')) { e.preventDefault(); setDrag(true); } }}
       onDragLeave={() => setDrag(false)}
       onDrop={(e) => {
-        if (!e.dataTransfer?.files?.length) return;
+        const dt = e.dataTransfer;
+        if (!dt || (!dt.items?.length && !dt.files?.length)) return;
         e.preventDefault();
         setDrag(false);
-        void addFiles(Array.from(e.dataTransfer.files));
+        void (async () => {
+          const dropped = await filesFromDrop(dt);
+          if (!dropped.length) return;
+          const isZip = (p: string) => /\.zip$/i.test(p);
+          const zips = dropped.filter((d) => isZip(d.path));
+          const folderFiles = dropped.filter((d) => d.path.includes('/') && !isZip(d.path));
+          const plain = dropped.filter((d) => !d.path.includes('/') && !isZip(d.path)).map((d) => d.file);
+          if (zips.length || folderFiles.length) {
+            const items: { path: string; file?: File; bytes?: Uint8Array; size: number }[] = [];
+            for (const z of zips) {
+              try { const ex = await filesFromZip(z.file); items.push(...ex.map((x) => ({ path: x.path, bytes: x.bytes, size: x.bytes.length }))); }
+              catch { toast.error(`Không mở được ${z.file.name}`); }
+            }
+            for (const f of folderFiles) items.push({ path: f.path, file: f.file, size: f.file.size });
+            const name = (zips[0] ? zips[0].file.name.replace(/\.zip$/i, '') : '') || folderFiles[0]?.path.split('/')[0] || 'Dự án';
+            if (items.length) await addProject(name, items);
+          }
+          if (plain.length) await addFiles(plain);
+        })();
       }}
     >
       {(images.length > 0 || docs.length > 0 || busy) && (

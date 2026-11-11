@@ -18,7 +18,7 @@ const DOC_TYPE_BY_EXT: Record<string, string> = {
   pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 };
 export const FILE_ACCEPT =
-  'image/png,image/jpeg,image/webp,image/gif,.pdf,.docx,.xlsx,.pptx,.txt,.md,.csv';
+  'image/png,image/jpeg,image/webp,image/gif,.pdf,.docx,.xlsx,.pptx,.txt,.md,.csv,.zip';
 
 /** Media type chuẩn của một tài liệu (theo ĐUÔI trước — `file.type` của .md là chuỗi rỗng). */
 export function docMediaType(file: File): string | null {
@@ -69,4 +69,101 @@ export async function compressImage(file: File): Promise<string> {
   } catch {
     return original;
   }
+}
+
+/* ───────────────── Kéo FOLDER / tải .ZIP (11/11/2026) ─────────────────
+   Gói cả thư mục/zip thành MỘT tài liệu text (header đường dẫn) ⇒ tái dùng pipeline <file> của backend.
+   Lọc: giữ code/text, bỏ nhị phân + node_modules/.git/dist/lockfile; trần 100KB/file · 300KB tổng · 50 file. */
+import { unzipSync } from 'fflate';
+
+// ⚠️ Backend cắt MỖI tài liệu ở 60k ký tự (MAX_DOC_CHARS_DEFAULT, ~15k token, vì chi phí). Gói cả dự án
+// là MỘT tài liệu ⇒ trần tổng phải < 60k để không mất file âm thầm. 55KB chừa chỗ cho header đường dẫn.
+// (Muốn đưa CẢ repo lớn cho AI thì dùng app desktop AI Code — nó đọc file trực tiếp, không qua trần này.)
+export const PACK_CAP_TOTAL = 55 * 1024;
+export const PACK_CAP_FILE = 100 * 1024;
+export const PACK_CAP_N = 50;
+
+const SKIP_DIR = /(^|\/)(node_modules|\.git|\.next|dist|build|out|coverage|vendor|target|__pycache__|\.cache|\.venv|venv|\.idea|\.vscode|\.turbo|\.svn)\//i;
+const SKIP_FILE = /(^|\/)(package-lock\.json|yarn\.lock|pnpm-lock\.yaml|composer\.lock|Cargo\.lock|poetry\.lock|\.DS_Store)$/i;
+const MINIFIED = /\.min\.(js|css)$|\.map$/i;
+const CODE_EXT = new Set('js jsx ts tsx mjs cjs py java c cc cpp h hpp cs go rs rb php swift kt kts scala sh bash zsh sql html htm css scss sass less json jsonc yaml yml toml xml md markdown txt csv tsv ini cfg conf env gitignore dockerignore editorconfig vue svelte astro r lua dart ex exs clj cljs pl pm ps1 bat gradle properties graphql gql proto tf hcl prisma'.split(' '));
+const BIN_EXT = new Set('png jpg jpeg gif webp bmp ico svg pdf zip gz tar rar 7z exe dll so dylib bin dat woff woff2 ttf otf eot mp3 mp4 mov avi mkv wav flac psd ai class jar war o a lib node wasm pyc pyo db sqlite'.split(' '));
+const NO_EXT_CODE = new Set(['dockerfile', 'makefile', 'readme', 'license', 'procfile', 'gemfile', 'rakefile', '.gitignore', '.env', '.env.example', '.npmrc', '.prettierrc', '.eslintrc', '.babelrc']);
+
+function keepFile(path: string, size: number): boolean {
+  const low = path.toLowerCase();
+  const base = low.split('/').pop() || low;
+  const ext = base.includes('.') ? base.split('.').pop()! : '';
+  if (SKIP_DIR.test('/' + low)) return false;
+  if (SKIP_FILE.test('/' + low)) return false;
+  if (MINIFIED.test(low)) return false;
+  if (ext && BIN_EXT.has(ext)) return false;
+  if (size > PACK_CAP_FILE) return false;
+  return (ext && CODE_EXT.has(ext)) || NO_EXT_CODE.has(base) || !ext;
+}
+
+const _dec = new TextDecoder('utf-8', { fatal: false });
+
+/** Mọi file từ một thao tác kéo-thả, đệ quy vào thư mục con (webkitGetAsEntry). */
+export async function filesFromDrop(dt: DataTransfer): Promise<{ path: string; file: File }[]> {
+  const out: { path: string; file: File }[] = [];
+  const items = dt.items ? Array.from(dt.items) : [];
+  const entries = items
+    .map((it) => (typeof it.webkitGetAsEntry === 'function' ? it.webkitGetAsEntry() : null))
+    .filter((e): e is FileSystemEntry => !!e);
+  if (entries.length) {
+    for (const e of entries) await walkEntry(e, '', out);
+  } else {
+    for (const f of Array.from(dt.files)) out.push({ path: f.name, file: f });
+  }
+  return out;
+}
+function walkEntry(entry: FileSystemEntry, prefix: string, out: { path: string; file: File }[]): Promise<void> {
+  return new Promise((resolve) => {
+    if ((entry as FileSystemFileEntry).isFile) {
+      (entry as FileSystemFileEntry).file((f) => { out.push({ path: prefix + entry.name, file: f }); resolve(); }, () => resolve());
+    } else if ((entry as FileSystemDirectoryEntry).isDirectory) {
+      if (SKIP_DIR.test('/' + (prefix + entry.name + '/').toLowerCase())) { resolve(); return; }
+      const rd = (entry as FileSystemDirectoryEntry).createReader();
+      const all: FileSystemEntry[] = [];
+      const read = () => rd.readEntries(async (es) => {
+        if (!es.length) { for (const c of all) await walkEntry(c, prefix + entry.name + '/', out); resolve(); }
+        else { all.push(...es); read(); }
+      }, () => resolve());
+      read();
+    } else resolve();
+  });
+}
+
+/** Giải nén .zip → [{path, bytes}] (bỏ thư mục rỗng). */
+export async function filesFromZip(file: File): Promise<{ path: string; bytes: Uint8Array }[]> {
+  const buf = new Uint8Array(await file.arrayBuffer());
+  const un = unzipSync(buf);
+  const top = file.name.replace(/\.zip$/i, '') || 'zip';
+  return Object.entries(un).filter(([p]) => !p.endsWith('/')).map(([p, bytes]) => ({ path: `${top}/${p}`, bytes }));
+}
+
+export interface ProjectDoc { name: string; dataUrl: string; fileCount: number; skipped: number; truncated: boolean }
+
+/** Gói các file (folder/zip) thành MỘT tài liệu markdown. Lọc + đọc text + trần dung lượng. null nếu không có file hợp lệ. */
+export async function buildProjectDoc(
+  name: string,
+  items: { path: string; file?: File; bytes?: Uint8Array; size: number }[],
+): Promise<ProjectDoc | null> {
+  items.sort((a, b) => a.path.localeCompare(b.path));
+  const parts: string[] = [];
+  let total = 0, n = 0, skipped = 0, truncated = false;
+  for (const it of items) {
+    if (!keepFile(it.path, it.size)) { skipped++; continue; }
+    if (n >= PACK_CAP_N || total + it.size > PACK_CAP_TOTAL) { truncated = true; skipped++; continue; }
+    let text: string;
+    try { text = it.bytes ? _dec.decode(it.bytes) : it.file ? await it.file.text() : ''; } catch { skipped++; continue; }
+    parts.push(`\n// ===== ${it.path} =====\n${text}`);
+    total += it.size; n++;
+  }
+  if (!n) return null;
+  const head = `# Dự án đính kèm: ${name} — ${n} file${truncated ? ' (đã rút gọn theo trần dung lượng)' : ''}\n`;
+  const content = head + parts.join('\n');
+  const b64 = btoa(unescape(encodeURIComponent(content)));
+  return { name: `${name} · ${n} file`, dataUrl: `data:text/markdown;base64,${b64}`, fileCount: n, skipped, truncated };
 }

@@ -294,12 +294,13 @@ console.log(user?.fullName);</code></pre>
       title: '0.2 — Getting Prisma running|||0.2 — Cho Prisma chạy lên',
       slug: 'pr-0-2-cai-dat',
       type: 'LESSON',
-      description: 'PostgreSQL trong một câu lệnh Docker, prisma init và bốn tệp nó đẻ ra, DATABASE_URL đọc đúng từng phần, prisma generate làm gì với node_modules, và bốn thứ cần sửa ngay ở lần đầu.',
+      description: 'PostgreSQL trong một câu lệnh Docker, prisma init và các tệp nó đẻ ra (có prisma.config.ts), DATABASE_URL đọc đúng từng phần, prisma generate làm gì với node_modules, và bốn thứ cần sửa ngay ở lần đầu.',
       content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>Getting Prisma running</h2>
 <p class="lead">Prisma needs three things before it can do anything useful: a database it can reach, a schema file, and a generated client. This lesson gets all three in about five minutes, then spends the rest of its length on the parts people skip and regret — what <code>DATABASE_URL</code> actually contains, where the generated client lands, and the four settings worth fixing before you write a single model.</p>
+<p class="note">Every output in this lesson was re-run on 11 Nov 2026 with <strong>Prisma 6.19.3</strong>, npm 11.19.0, Node 26.8.1 and PostgreSQL 16.14 (in Docker, mapped to port 55491 on the course machine — with the command below it is 5432). Earlier 6.x releases print slightly different messages; the steps are the same.</p>
 
 <h3>Step 1 — a database to point at</h3>
 <p>You need PostgreSQL running somewhere. If you have one already, skip ahead. If not, Docker gives you one in a single command:</p>
@@ -329,38 +330,54 @@ npm install @prisma/client
 npm install -D typescript tsx @types/node
 
 npx prisma -v</code></pre>
-<div class="out">prisma                  : 6.7.0
-@prisma/client          : 6.7.0
-Computed binaryTarget   : debian-openssl-3.0.x
-Operating System        : linux
-Architecture            : x64
-Node.js                 : v22.14.0
-Query Engine (Node-API) : libquery-engine 34ace0eb2704183d2c05b60b52fba5c43c13f303
-Schema Engine           : schema-engine-cli 34ace0eb2704183d2c05b60b52fba5c43c13f303
-Default Engines Hash    : 34ace0eb2704183d2c05b60b52fba5c43c13f303
+<div class="out">prisma                  : 6.19.3
+@prisma/client          : 6.19.3
+Computed binaryTarget   : darwin-arm64
+Operating System        : darwin
+Architecture            : arm64
+Node.js                 : v26.8.1
+TypeScript              : 5.9.3
+Query Engine (Node-API) : libquery-engine c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+Schema Engine           : schema-engine-cli c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+Default Engines Hash    : c2990dca591cba766e3b7ef5d9e8a84796e47ab7
 Studio                  : 0.511.0</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>prisma</code> — devDependency</span><span class="v">The CLI. Used at build time and by you at a terminal: <code>init</code>, <code>generate</code>, <code>migrate</code>, <code>studio</code>, <code>db pull</code>. Your running server never imports it, which is why it belongs in <code>devDependencies</code> and why a production Docker image can drop it — <em>with one exception covered in Chapter 11: if you run migrations at container start, the CLI must survive into the final image.</em></span></div>
   <div class="kv"><span class="k"><code>@prisma/client</code> — dependency</span><span class="v">What your application imports. Notice that the version you install is a <strong>placeholder</strong>: it contains no models until <code>prisma generate</code> writes them. Install it and import it before generating and you get an error telling you exactly that.</span></div>
 </div>
+<pre><code class="language-bash"># import the client before anything has been generated
+node -e "new (require('@prisma/client').PrismaClient)()"</code></pre>
+<div class="out">Error: Cannot find module '.prisma/client/default'</div>
+<p>The installed <code>@prisma/client</code> forwards to <code>node_modules/.prisma/client</code>, and that folder does not exist until <code>prisma generate</code> writes it. (If the package's postinstall script ran, the folder exists as an empty stub and the message reads “<code>@prisma/client did not initialize yet. Please run "prisma generate"</code>” instead — same cause, same fix.)</p>
+<p><strong>npm 11 note.</strong> Recent npm versions may refuse to run install scripts and print <code>npm warn install-scripts … Run &#96;npm install-scripts approve &lt;pkg&gt;&#96; to allow</code>. Prisma needs its scripts (they fetch the engines and generate the client), so allow them once: <code>npm install-scripts approve prisma @prisma/client @prisma/engines</code>, then <code>npm rebuild</code>.</p>
 <p>Keep the two versions in lockstep. A CLI newer than the client generates output the client cannot read, and the error message when this happens ("<code>Prisma Client could not be generated due to a version mismatch</code>") is clear, but only if you know to look for it.</p>
 
 <h3>Step 3 — <code>prisma init</code></h3>
 <pre><code class="language-bash">npx prisma init --datasource-provider postgresql</code></pre>
-<div class="out">✔ Your Prisma schema was created at prisma/schema.prisma
-  You can now open it in your favorite editor.
+<div class="out">Initialized Prisma in your project
 
-warn You already have a .gitignore file. Don't forget to add &#96;.env&#96; in it to not commit any private information.
+  prisma/
+    schema.prisma
+  prisma.config.ts
+  .env
 
-Next steps:
-1. Set the DATABASE_URL in the .env file to point to your existing database.
-2. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
-3. Run prisma db pull to turn your database schema into a Prisma schema.
-4. Run prisma generate to generate the Prisma Client. You can now start querying your database.</div>
-<p>Four files exist now. Know what each one is for, because two of them are dangerous to get wrong:</p>
+warn You already have a .gitignore file. Don't forget to add .env in it to not commit any private information.
+
+Next, choose how you want to set up your database:
+CONNECT EXISTING DATABASE:
+  1. Configure your DATABASE_URL in prisma.config.ts
+  2. Run prisma db pull to introspect your database.
+CREATE NEW DATABASE:
+  Local: npx prisma dev (runs Postgres locally in your terminal)
+  Cloud: npx create-db (creates a free Prisma Postgres database)
+
+Then, define your models in prisma/schema.prisma and run prisma migrate dev to apply your schema.
+Learn more: https://pris.ly/getting-started</div>
+<p>Prisma 6.19 writes one more file than older guides show — <code>prisma.config.ts</code>. Know what each file is for, because two of them are dangerous to get wrong:</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">prisma/schema.prisma</span><span class="lz-t">The source of truth</span><span class="lz-d">Your models, your datasource, your generator. This is the file the entire course is about. It is committed to git and reviewed like any other code.</span></div>
-  <div class="lz-step"><span class="lz-k">.env</span><span class="lz-t">The connection string</span><span class="lz-d">Contains <code>DATABASE_URL</code>. <strong>Never committed.</strong> Prisma reads it automatically — you do not need <code>dotenv</code> for the CLI, though your application still does unless it is Node 20+ with <code>--env-file</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">.env</span><span class="lz-t">The connection string</span><span class="lz-d">Contains <code>DATABASE_URL</code> — <code>init</code> writes a placeholder (<code>johndoe:randompassword@localhost:5432/mydb</code>) that you replace. <strong>Never committed.</strong></span></div>
+  <div class="lz-step"><span class="lz-k">prisma.config.ts</span><span class="lz-t">Where the CLI looks</span><span class="lz-d">New in recent 6.x: tells the CLI where the schema and migrations live and which URL to use. Its first line is <code>import "dotenv/config"</code> — that is how the CLI now reads <code>.env</code>, and why it prints “<code>Prisma config detected, skipping environment variable loading</code>”. The file's own comment says to install <code>dotenv</code>; in this run it was already present as a dependency of Prisma's config loader, but add it yourself (<code>npm i -D dotenv</code>). Commit this file.</span></div>
   <div class="lz-step"><span class="lz-k">.gitignore</span><span class="lz-t">The safety net</span><span class="lz-d"><code>init</code> creates one if missing but only <em>warns</em> if it exists. Check it yourself, now — an accidental <code>.env</code> commit means rotating a database password under pressure.</span></div>
   <div class="lz-step"><span class="lz-k">node_modules/.prisma/client</span><span class="lz-t">The generated code</span><span class="lz-d">Does not exist yet. Written by <code>generate</code>, rebuilt on every <code>npm install</code> via a postinstall hook, and never committed. If it goes missing, regenerating is always the fix.</span></div>
 </div>
@@ -380,7 +397,13 @@ DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma?schema=publi
 </div>
 
 <div class="pitfall">
-<p><strong>Trap — the <code>.env</code> that is not read.</strong> The Prisma CLI reads <code>.env</code> from the current working directory <em>and</em> from <code>prisma/.env</code>, and it does this itself, without <code>dotenv</code>. Your application does <strong>not</strong>. So <code>npx prisma migrate dev</code> works, and then <code>node index.js</code> fails with "<code>Environment variable not found: DATABASE_URL</code>" and it looks like Prisma is broken. It is not. Either load the file yourself (<code>import 'dotenv/config'</code>) or run Node with <code>--env-file=.env</code>. Also: if both <code>.env</code> and <code>prisma/.env</code> exist, the CLI loads both and one silently wins — keep exactly one.</p>
+<p><strong>Trap — the <code>.env</code> that is not there.</strong> With <code>prisma-client-js</code> in Prisma 6, the generated client looks for <code>.env</code> in the project folder by itself, so a plain script with no <code>dotenv</code> works as long as the file is there:</p>
+<pre><code class="language-bash">node -e "new (require('@prisma/client').PrismaClient)().user.count().then(n=>console.log('count =',n))"
+mv .env .env.bak &amp;&amp; node -e "…the same call…"</code></pre>
+<div class="out">count = 1
+error: Environment variable not found: DATABASE_URL.
+ 7 |   url      = env("DATABASE_URL")</div>
+<p>Run the app from another folder, deploy without the file, or start it from a container that only passes some variables, and you get exactly that second line — and it looks like Prisma is broken. It is not: the variable is missing. Your own code that reads <code>process.env</code> directly still needs <code>import 'dotenv/config'</code> or <code>node --env-file=.env</code>. And keep exactly one <code>.env</code> — a second one in <code>prisma/</code> means one of them silently wins.</p>
 </div>
 
 <h3>Step 4 — a first model and the generated client</h3>
@@ -402,26 +425,29 @@ model User {
 
   @@map("users")
 }</code></pre>
-<p>Two commands turn that into a real table and a real TypeScript API:</p>
+<p>Two commands turn that into a real table and a real TypeScript API (in Prisma 6.19 <code>migrate dev</code> already runs <code>generate</code> — “Running generate…” below — so the second command is a harmless repeat):</p>
 <pre><code class="language-bash">npx prisma migrate dev --name khoi_tao
 npx prisma generate</code></pre>
-<div class="out">Environment variables loaded from .env
-Prisma schema loaded from prisma/schema.prisma
-Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:5432"
+<div class="out">Loaded Prisma config from prisma.config.ts.
 
-Applying migration &#96;20260823041207_khoi_tao&#96;
+Prisma config detected, skipping environment variable loading.
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "hocprisma", schema "public" at "127.0.0.1:55491"
+
+Applying migration &#96;20261111161623_khoi_tao&#96;
 
 The following migration(s) have been created and applied from new schema changes:
 
-migrations/
-  └─ 20260823041207_khoi_tao/
+prisma/migrations/
+  └─ 20261111161623_khoi_tao/
     └─ migration.sql
 
 Your database is now in sync with your schema.
 
-✔ Generated Prisma Client (v6.7.0) to ./node_modules/@prisma/client in 84ms</div>
+Running generate... (Use --skip-generate to skip the generators)
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 36ms</div>
 <p>Look at what <code>migrate dev</code> wrote, because you will be reading these files for the rest of your career:</p>
-<pre><code class="language-bash">cat prisma/migrations/20260823041207_khoi_tao/migration.sql</code></pre>
+<pre><code class="language-bash">cat prisma/migrations/20261111161623_khoi_tao/migration.sql</code></pre>
 <div class="out">-- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
@@ -447,14 +473,14 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");</div>
 grep -c "findUnique" node_modules/.prisma/client/index.d.ts
 grep -o "model User" node_modules/.prisma/client/schema.prisma
 wc -l node_modules/.prisma/client/index.d.ts</code></pre>
-<div class="out">18
+<div class="out">10
 model User
-6142</div>
-<p>Six thousand lines of TypeScript for a single four-field model. That number is worth remembering: it grows roughly linearly with your schema, and Chapter 8 explains why a large schema can slow your editor to a crawl and what to do about it.</p>
+    2408 node_modules/.prisma/client/index.d.ts</div>
+<p>About two and a half thousand lines of TypeScript for a single four-field model (2,408 with Prisma 6.19.3 — the exact count changes between versions). That number is worth remembering: it grows roughly linearly with your schema, and Chapter 8 explains why a large schema can slow your editor to a crawl and what to do about it.</p>
 
 <h3>Four things to fix on day one</h3>
 <div class="callout ok">
-<p><strong>1 · Pin the versions.</strong> Change <code>"^6.7.0"</code> to <code>"6.7.0"</code> for both packages. A minor bump of the CLI without the client is a broken build, and it will happen on a machine that is not yours.</p>
+<p><strong>1 · Pin the versions.</strong> Change <code>"^6.19.3"</code> to <code>"6.19.3"</code> for both packages. A minor bump of the CLI without the client is a broken build, and it will happen on a machine that is not yours.</p>
 <p><strong>2 · Add the scripts you will type fifty times a day.</strong></p>
 <pre><code class="language-typescript"><span class="tok-comment">// package.json</span>
 "scripts": {
@@ -510,6 +536,7 @@ Indexes:
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
 <h2>Cho Prisma chạy lên</h2>
 <p class="lead">Prisma cần ba thứ trước khi làm được việc gì có ích: một cơ sở dữ liệu nó với tới được, một tệp lược đồ, và một client được sinh ra. Bài này dựng đủ cả ba trong khoảng năm phút, rồi dành phần còn lại cho những chỗ người ta hay bỏ qua và sau đó hối hận — <code>DATABASE_URL</code> thật sự chứa gì, client sinh ra rơi vào đâu, và bốn thiết lập đáng sửa trước khi bạn viết dòng model đầu tiên.</p>
+<p class="note">Mọi output trong bài được chạy lại ngày 11/11/2026 với <strong>Prisma 6.19.3</strong>, npm 11.19.0, Node 26.8.1 và PostgreSQL 16.14 (trong Docker, trên máy của khoá ánh xạ ra cổng 55491 — với câu lệnh bên dưới thì là 5432). Các bản 6.x cũ hơn in thông báo hơi khác; các bước thì y nguyên.</p>
 
 <h3>Bước 1 — một cơ sở dữ liệu để trỏ vào</h3>
 <p>Bạn cần một PostgreSQL đang chạy ở đâu đó. Có sẵn rồi thì nhảy qua. Chưa có thì Docker cho bạn một cái bằng đúng một câu lệnh:</p>
@@ -539,38 +566,54 @@ npm install @prisma/client
 npm install -D typescript tsx @types/node
 
 npx prisma -v</code></pre>
-<div class="out">prisma                  : 6.7.0
-@prisma/client          : 6.7.0
-Computed binaryTarget   : debian-openssl-3.0.x
-Operating System        : linux
-Architecture            : x64
-Node.js                 : v22.14.0
-Query Engine (Node-API) : libquery-engine 34ace0eb2704183d2c05b60b52fba5c43c13f303
-Schema Engine           : schema-engine-cli 34ace0eb2704183d2c05b60b52fba5c43c13f303
-Default Engines Hash    : 34ace0eb2704183d2c05b60b52fba5c43c13f303
+<div class="out">prisma                  : 6.19.3
+@prisma/client          : 6.19.3
+Computed binaryTarget   : darwin-arm64
+Operating System        : darwin
+Architecture            : arm64
+Node.js                 : v26.8.1
+TypeScript              : 5.9.3
+Query Engine (Node-API) : libquery-engine c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+Schema Engine           : schema-engine-cli c2990dca591cba766e3b7ef5d9e8a84796e47ab7
+Default Engines Hash    : c2990dca591cba766e3b7ef5d9e8a84796e47ab7
 Studio                  : 0.511.0</div>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>prisma</code> — devDependency</span><span class="v">Bộ CLI. Dùng lúc build và dùng bởi chính bạn ở terminal: <code>init</code>, <code>generate</code>, <code>migrate</code>, <code>studio</code>, <code>db pull</code>. Máy chủ đang chạy không bao giờ import nó, nên nó thuộc <code>devDependencies</code>, và nên một ảnh Docker production có thể bỏ nó đi — <em>trừ một ngoại lệ nói ở Chương 11: nếu bạn chạy migration lúc container khởi động thì CLI bắt buộc phải sống tới ảnh cuối.</em></span></div>
   <div class="kv"><span class="k"><code>@prisma/client</code> — dependency</span><span class="v">Thứ ứng dụng của bạn import. Để ý: bản bạn vừa cài chỉ là một <strong>chỗ giữ chỗ</strong> — nó không chứa model nào cho tới khi <code>prisma generate</code> viết chúng vào. Cài rồi import trước khi generate thì bạn nhận đúng một lỗi nói thẳng điều đó.</span></div>
 </div>
+<pre><code class="language-bash"># import client khi chưa sinh ra gì
+node -e "new (require('@prisma/client').PrismaClient)()"</code></pre>
+<div class="out">Error: Cannot find module '.prisma/client/default'</div>
+<p>Gói <code>@prisma/client</code> vừa cài chỉ chuyển tiếp tới <code>node_modules/.prisma/client</code>, mà thư mục ấy chưa tồn tại cho tới khi <code>prisma generate</code> viết nó ra. (Nếu script postinstall của gói đã chạy thì thư mục tồn tại dưới dạng vỏ rỗng và thông báo sẽ là “<code>@prisma/client did not initialize yet. Please run "prisma generate"</code>” — cùng nguyên nhân, cùng cách sửa.)</p>
+<p><strong>Lưu ý npm 11.</strong> npm bản mới có thể từ chối chạy script cài đặt và in <code>npm warn install-scripts … Run &#96;npm install-scripts approve &lt;pkg&gt;&#96; to allow</code>. Prisma cần các script đó (tải engine và sinh client), nên cho phép một lần: <code>npm install-scripts approve prisma @prisma/client @prisma/engines</code>, rồi <code>npm rebuild</code>.</p>
 <p>Giữ hai phiên bản đi cùng nhau. CLI mới hơn client sẽ sinh ra thứ client không đọc nổi, và thông báo lỗi lúc ấy ("<code>Prisma Client could not be generated due to a version mismatch</code>") thì rõ, nhưng chỉ rõ nếu bạn biết mà tìm.</p>
 
 <h3>Bước 3 — <code>prisma init</code></h3>
 <pre><code class="language-bash">npx prisma init --datasource-provider postgresql</code></pre>
-<div class="out">✔ Your Prisma schema was created at prisma/schema.prisma
-  You can now open it in your favorite editor.
+<div class="out">Initialized Prisma in your project
 
-warn You already have a .gitignore file. Don't forget to add &#96;.env&#96; in it to not commit any private information.
+  prisma/
+    schema.prisma
+  prisma.config.ts
+  .env
 
-Next steps:
-1. Set the DATABASE_URL in the .env file to point to your existing database.
-2. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
-3. Run prisma db pull to turn your database schema into a Prisma schema.
-4. Run prisma generate to generate the Prisma Client. You can now start querying your database.</div>
-<p>Giờ có bốn tệp. Hãy biết từng tệp để làm gì, vì hai trong số đó sai là nguy hiểm:</p>
+warn You already have a .gitignore file. Don't forget to add .env in it to not commit any private information.
+
+Next, choose how you want to set up your database:
+CONNECT EXISTING DATABASE:
+  1. Configure your DATABASE_URL in prisma.config.ts
+  2. Run prisma db pull to introspect your database.
+CREATE NEW DATABASE:
+  Local: npx prisma dev (runs Postgres locally in your terminal)
+  Cloud: npx create-db (creates a free Prisma Postgres database)
+
+Then, define your models in prisma/schema.prisma and run prisma migrate dev to apply your schema.
+Learn more: https://pris.ly/getting-started</div>
+<p>Prisma 6.19 sinh thêm một tệp so với các hướng dẫn cũ — <code>prisma.config.ts</code>. Hãy biết từng tệp để làm gì, vì hai trong số đó sai là nguy hiểm:</p>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">prisma/schema.prisma</span><span class="lz-t">Nguồn sự thật</span><span class="lz-d">Model của bạn, datasource của bạn, generator của bạn. Đây là tệp mà cả khoá học này nói về. Nó được commit vào git và được review như mọi đoạn mã khác.</span></div>
-  <div class="lz-step"><span class="lz-k">.env</span><span class="lz-t">Chuỗi kết nối</span><span class="lz-d">Chứa <code>DATABASE_URL</code>. <strong>Không bao giờ commit.</strong> Prisma tự đọc nó — bạn không cần <code>dotenv</code> cho phần CLI, dù ứng dụng của bạn thì vẫn cần, trừ khi chạy Node 20+ với <code>--env-file</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">.env</span><span class="lz-t">Chuỗi kết nối</span><span class="lz-d">Chứa <code>DATABASE_URL</code> — <code>init</code> ghi sẵn một giá trị giữ chỗ (<code>johndoe:randompassword@localhost:5432/mydb</code>) để bạn thay. <strong>Không bao giờ commit.</strong></span></div>
+  <div class="lz-step"><span class="lz-k">prisma.config.ts</span><span class="lz-t">CLI tìm đồ ở đâu</span><span class="lz-d">Mới ở các bản 6.x gần đây: chỉ cho CLI lược đồ và migration nằm đâu, dùng URL nào. Dòng đầu là <code>import "dotenv/config"</code> — đó là cách CLI giờ đọc <code>.env</code>, và vì thế nó in “<code>Prisma config detected, skipping environment variable loading</code>”. Chú thích trong tệp bảo cài <code>dotenv</code>; ở lần chạy này nó đã có sẵn vì là phụ thuộc của bộ đọc cấu hình của Prisma, nhưng bạn nên tự thêm (<code>npm i -D dotenv</code>). Commit tệp này.</span></div>
   <div class="lz-step"><span class="lz-k">.gitignore</span><span class="lz-t">Lưới an toàn</span><span class="lz-d"><code>init</code> tạo mới nếu chưa có nhưng chỉ <em>cảnh báo</em> nếu đã có. Tự kiểm lại, ngay bây giờ — lỡ commit <code>.env</code> nghĩa là phải đổi mật khẩu cơ sở dữ liệu trong lúc cuống.</span></div>
   <div class="lz-step"><span class="lz-k">node_modules/.prisma/client</span><span class="lz-t">Mã được sinh ra</span><span class="lz-d">Chưa tồn tại. Do <code>generate</code> viết ra, dựng lại sau mỗi <code>npm install</code> nhờ móc postinstall, và không bao giờ commit. Nếu nó biến mất thì sinh lại luôn là câu trả lời.</span></div>
 </div>
@@ -590,7 +633,13 @@ DATABASE_URL="postgresql://student:matkhau@localhost:5432/hocprisma?schema=publi
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy — cái <code>.env</code> không được đọc.</strong> CLI của Prisma đọc <code>.env</code> ở thư mục hiện tại <em>và</em> ở <code>prisma/.env</code>, và nó tự làm việc đó, không cần <code>dotenv</code>. Ứng dụng của bạn thì <strong>không</strong>. Thế nên <code>npx prisma migrate dev</code> chạy ngon, rồi <code>node index.js</code> chết với "<code>Environment variable not found: DATABASE_URL</code>" và trông như Prisma hỏng. Nó không hỏng. Hoặc tự nạp tệp (<code>import 'dotenv/config'</code>), hoặc chạy Node với <code>--env-file=.env</code>. Thêm nữa: nếu tồn tại cả <code>.env</code> lẫn <code>prisma/.env</code> thì CLI nạp cả hai và một cái âm thầm thắng — giữ đúng một tệp thôi.</p>
+<p><strong>Bẫy — cái <code>.env</code> không có ở đó.</strong> Với <code>prisma-client-js</code> ở Prisma 6, client sinh ra tự tìm <code>.env</code> trong thư mục dự án, nên một script thường không có <code>dotenv</code> vẫn chạy được — miễn là tệp còn đó:</p>
+<pre><code class="language-bash">node -e "new (require('@prisma/client').PrismaClient)().user.count().then(n=>console.log('count =',n))"
+mv .env .env.bak &amp;&amp; node -e "…cùng lời gọi đó…"</code></pre>
+<div class="out">count = 1
+error: Environment variable not found: DATABASE_URL.
+ 7 |   url      = env("DATABASE_URL")</div>
+<p>Chạy ứng dụng từ thư mục khác, deploy mà thiếu tệp, hay khởi động từ một container chỉ truyền vài biến, là bạn nhận đúng dòng thứ hai — và trông như Prisma hỏng. Nó không hỏng: biến môi trường bị thiếu. Còn mã của riêng bạn đọc thẳng <code>process.env</code> thì vẫn cần <code>import 'dotenv/config'</code> hoặc <code>node --env-file=.env</code>. Và chỉ giữ đúng một tệp <code>.env</code> — thêm một tệp trong <code>prisma/</code> là một trong hai âm thầm thắng.</p>
 </div>
 
 <h3>Bước 4 — model đầu tiên và client được sinh ra</h3>
@@ -612,26 +661,29 @@ model User {
 
   @@map("users")
 }</code></pre>
-<p>Hai câu lệnh biến đoạn đó thành một bảng thật và một API TypeScript thật:</p>
+<p>Hai câu lệnh biến đoạn đó thành một bảng thật và một API TypeScript thật (ở Prisma 6.19, <code>migrate dev</code> đã tự chạy <code>generate</code> — dòng “Running generate…” bên dưới — nên lệnh thứ hai chỉ là chạy lại vô hại):</p>
 <pre><code class="language-bash">npx prisma migrate dev --name khoi_tao
 npx prisma generate</code></pre>
-<div class="out">Environment variables loaded from .env
-Prisma schema loaded from prisma/schema.prisma
-Datasource "db": PostgreSQL database "hocprisma", schema "public" at "localhost:5432"
+<div class="out">Loaded Prisma config from prisma.config.ts.
 
-Applying migration &#96;20260823041207_khoi_tao&#96;
+Prisma config detected, skipping environment variable loading.
+Prisma schema loaded from prisma/schema.prisma
+Datasource "db": PostgreSQL database "hocprisma", schema "public" at "127.0.0.1:55491"
+
+Applying migration &#96;20261111161623_khoi_tao&#96;
 
 The following migration(s) have been created and applied from new schema changes:
 
-migrations/
-  └─ 20260823041207_khoi_tao/
+prisma/migrations/
+  └─ 20261111161623_khoi_tao/
     └─ migration.sql
 
 Your database is now in sync with your schema.
 
-✔ Generated Prisma Client (v6.7.0) to ./node_modules/@prisma/client in 84ms</div>
+Running generate... (Use --skip-generate to skip the generators)
+✔ Generated Prisma Client (v6.19.3) to ./node_modules/@prisma/client in 36ms</div>
 <p>Hãy nhìn thứ <code>migrate dev</code> vừa viết ra, vì bạn sẽ đọc loại tệp này suốt phần đời nghề nghiệp còn lại:</p>
-<pre><code class="language-bash">cat prisma/migrations/20260823041207_khoi_tao/migration.sql</code></pre>
+<pre><code class="language-bash">cat prisma/migrations/20261111161623_khoi_tao/migration.sql</code></pre>
 <div class="out">-- CreateTable
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
@@ -657,14 +709,14 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");</div>
 grep -c "findUnique" node_modules/.prisma/client/index.d.ts
 grep -o "model User" node_modules/.prisma/client/schema.prisma
 wc -l node_modules/.prisma/client/index.d.ts</code></pre>
-<div class="out">18
+<div class="out">10
 model User
-6142</div>
-<p>Sáu nghìn dòng TypeScript cho đúng một model bốn trường. Con số ấy đáng nhớ: nó tăng gần như tuyến tính theo lược đồ của bạn, và Chương 8 giải thích vì sao một lược đồ lớn có thể làm trình soạn thảo bò như rùa, cùng cách xử lý.</p>
+    2408 node_modules/.prisma/client/index.d.ts</div>
+<p>Khoảng hai nghìn rưỡi dòng TypeScript cho đúng một model bốn trường (2.408 dòng với Prisma 6.19.3 — con số chính xác đổi theo phiên bản). Con số ấy đáng nhớ: nó tăng gần như tuyến tính theo lược đồ của bạn, và Chương 8 giải thích vì sao một lược đồ lớn có thể làm trình soạn thảo bò như rùa, cùng cách xử lý.</p>
 
 <h3>Bốn thứ cần sửa ngay ngày đầu</h3>
 <div class="callout ok">
-<p><strong>1 · Ghim phiên bản.</strong> Đổi <code>"^6.7.0"</code> thành <code>"6.7.0"</code> cho cả hai gói. Một lần nhảy minor của CLI mà client đứng yên là một bản build hỏng, và nó sẽ xảy ra trên một cái máy không phải máy bạn.</p>
+<p><strong>1 · Ghim phiên bản.</strong> Đổi <code>"^6.19.3"</code> thành <code>"6.19.3"</code> cho cả hai gói. Một lần nhảy minor của CLI mà client đứng yên là một bản build hỏng, và nó sẽ xảy ra trên một cái máy không phải máy bạn.</p>
 <p><strong>2 · Thêm sẵn những script bạn sẽ gõ năm mươi lần mỗi ngày.</strong></p>
 <pre><code class="language-typescript"><span class="tok-comment">// package.json</span>
 "scripts": {

@@ -5,6 +5,7 @@
 export default {
   courseSlug: "adt401-mobility-applications-design-2",
   defaultVideoTrack: "YT",
+  goYt: {"adt401-flm-b020": "NP49mRmbadQ"},
   lessons: {
     "adt401-flm-b005": { yt: "kFM72UJhW8s", credit: "Adam Erhart — How To Do Market Research (Market Research 101)" },
     "adt401-flm-b006": { yt: "0MLwuhpwRiE", credit: "NNgroup — What Is User Research?" },
@@ -17,7 +18,6 @@ export default {
     "adt401-flm-b013": { yt: "bAARmsv1tms", credit: "CareerFoundry — UX Research - Get Started With Qualitative User Research (2023)" },
     "adt401-flm-b014": { yt: "AxgMIEVcIMY", credit: "CareerFoundry — How To Do Card Sorting In UX Design (Video Guide)" },
     "adt401-flm-b017": { yt: "jsGBuu88WE0", credit: "ProjectManager — Project Proposal Writing: How to Write A Winning Project Proposal" },
-    "adt401-flm-b020": { yt: "NP49mRmbadQ", credit: "Daring Design — Mobile App Design in Figma | Sketching, Designing UI, Prototyping" },
     "adt401-flm-b026": { yt: "0OPmsy7SXoM", credit: "Wisc-Online (Part of WisTech Open) — User Experience Design: Fitts' Law" },
     "adt401-flm-b027": { yt: "1bzWw2uZZuA", credit: "IxDF - Interaction Design Foundation — Mobile UX Design Principles: 5-Step Human-Centered Design Process" },
     "adt401-flm-b033": { yt: "rYH7AErVd7w", credit: "chunbuns — The UX Design Process explained step by step with a mobile app project" },

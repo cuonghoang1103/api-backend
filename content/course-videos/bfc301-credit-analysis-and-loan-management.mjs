@@ -5,6 +5,7 @@
 export default {
   courseSlug: "bfc301-credit-analysis-and-loan-management",
   defaultVideoTrack: "YT",
+  goYt: {"bfc301-ts-5-1": "E009naC-ftY"},
   lessons: {
     "bfc301-ts-1-1": { yt: "hdINYt5DYDw", credit: "Corporate Finance Institute — Introduction to Credit: What is Credit?" },
     "bfc301-ts-1-2": { yt: "tuk2jLCix7E", credit: "DecisivEdge, LLC — 7 Stages in Loan Origination" },
@@ -17,7 +18,6 @@ export default {
     "bfc301-ts-3-3": { yt: "Kk7tgtTZgMA", credit: "CA Raja Classes — Mini Webinar | Cash Flow Analysis in Loan Proposal | CA Raja Classes" },
     "bfc301-ts-4-1": { yt: "c0TQlgoUHRE", credit: "Vox — What your credit score actually means" },
     "bfc301-ts-4-2": { yt: "Ih5-YiIlJV0", credit: "Stachanov Holding B.V. — Logistic Regression: Credit scoring in microfinance and banking: 3" },
-    "bfc301-ts-5-1": { yt: "E009naC-ftY", credit: "IBS DRA Certification | Course & Exam Preparation — Types of Bank Advances | Cash Credit, Overdraft, Working Capital & Term Loans | Important for DRA" },
     "bfc301-ts-5-3": { yt: "aPgJbdoqDKs", credit: "University of London Postgraduate Laws — Law of International Finance: Syndicated Loans Introduction" },
     "bfc301-ts-5-4": { yt: "smXx6g7oRj4", credit: "Corporate Finance Institute — Corporate Finance Explained | Financial Covenants: The Hidden Rules That Shape Corporate Flexibility" },
     "bfc301-ts-6-4": { yt: "a1lVOO9Y080", credit: "Khan Academy — Credit default swaps | Finance & Capital Markets | Khan Academy" },

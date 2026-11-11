@@ -5,6 +5,7 @@
 export default {
   courseSlug: "cos201c-communication-systems",
   defaultVideoTrack: "YT",
+  goYt: {"cos201c-flm-b043": "cFT32OBev-4"},
   lessons: {
     "cos201c-flm-b001": { yt: "KXFF8m4uGDc", credit: "MIT OpenCourseWare — Lec 1 | MIT 6.450 Principles of Digital Communications I, Fall 2006" },
     "cos201c-flm-b002": { yt: "E4E1GftPD1M", credit: "ALL ABOUT ELECTRONICS — Classification of Signals Explained | Types of Signals in Communication" },
@@ -33,7 +34,6 @@ export default {
     "cos201c-flm-b037": { yt: "MAddbFfCsIo", credit: "Iain Explains Signals, Systems, and Digital Comms — How is Data Sent? An Overview of Digital Communications" },
     "cos201c-flm-b039": { yt: "tZiKRfH2yZ4", credit: "Texas Instruments — What is an eye diagram?" },
     "cos201c-flm-b040": { yt: "0hd_uGg5zh8", credit: "Wessam Mesbah — EE 370, 99- M-ary Baseband Signaling" },
-    "cos201c-flm-b043": { yt: "cFT32OBev-4", credit: "Ali Muqaibel — Band-Pass Transmission Introduction and Models" },
     "cos201c-flm-b044": { yt: "o4AGEHROSVQ", credit: "Ali Muqaibel — 7.6 Digital Carrier Modulation ASK PSK FSK" },
     "cos201c-flm-b046": { yt: "2s3aJfRr9gE", credit: "Khan Academy Labs — Information entropy | Journey into information theory | Computer Science | Khan Academy" },
     "cos201c-flm-b047": { yt: "t1r5anHpaNk", credit: "RTU Wallah — Shannon's Noiseless Coding Theorem | Source Coding Theorem" },

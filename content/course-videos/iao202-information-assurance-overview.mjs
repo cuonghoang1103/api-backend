@@ -5,6 +5,7 @@
 export default {
   courseSlug: "iao202-information-assurance-overview",
   defaultVideoTrack: "YT",
+  goYt: {"iao202-flm-b040": "Kh9cvEmRuQM"},
   lessons: {
     "iao202-flm-b003": { yt: "cIfLMC0pHH0", credit: "Astrit Krasniqi — 1.2 Fighters in the War Against Cybercrime - CCNA Cyber Ops Chapter 1" },
     "iao202-flm-b007": { yt: "bZDGL-_3srM", credit: "Struggle Security — Linux Basics for a Career in Cybersecurity" },
@@ -29,7 +30,6 @@ export default {
     "iao202-flm-b036": { yt: "6YgU_OGtI9M", credit: "Arthur Salmon — Cisco - CyberOps Associate - Module 17 - Attacking What We Do" },
     "iao202-flm-b037": { yt: "ECoIQUM1-XA", credit: "Cybersecurity Dojo — Understanding Defense in Depth in Cybersecurity" },
     "iao202-flm-b039": { yt: "GgquXOl4_t0", credit: "ness-intricity101 — What is Access Control?" },
-    "iao202-flm-b040": { yt: "Kh9cvEmRuQM", credit: "Adam Doupé — CSE 365 F19: 9-5-19 \"Overview pt. 4 and Access Control pt. 1\"" },
     "iao202-flm-b041": { yt: "86fruE9jkKk", credit: "Professor Messer — Threat Intelligence - CompTIA Security+ SY0-701 - 4.3" },
     "iao202-flm-b043": { yt: "2oXKjPwBSUk", credit: "WhiteboardDoodles — Cryptography Basics: Intro to Cybersecurity" },
     "iao202-flm-b045": { yt: "83pCkSSj1IQ", credit: "Professor Messer — Endpoint Security - CompTIA Security+ SY0-701 - 4.5" },

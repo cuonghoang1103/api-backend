@@ -5,6 +5,7 @@
 export default {
   courseSlug: "sba301-integrate-single-page-application-with-spring-boot",
   defaultVideoTrack: "YT",
+  goYt: {"sba301-1-1-react": "DiiERCjJDh0"},
   lessons: {
     "sba301-flm-b002": { yt: "5PdEmeopJVQ", credit: "freeCodeCamp.org — Full Stack Development with Java Spring Boot, React, and MongoDB – Full Course" },
     "sba301-flm-b004": { yt: "mgbEz23qZP0", credit: "Almighty Java — 1 - React And Spring Boot : Introduction & Set Up | ReactJS | ReactDOM | Spring Boot" },
@@ -67,7 +68,6 @@ export default {
     "sba301-flm-b106": { yt: "WYunZ9Lq1Ms", credit: "DataStax Developers — Build an E-commerce Application with React, Spring Boot and NoSQL" },
     "sba301-flm-b109": { yt: "jBDTsf8jsEs", credit: "EmbarkX | Real Engineering | Faisal Memon — Deploy a Full Stack Spring Boot & React App with Database for FREE | Step-by-Step Guide" },
     "sba301-flm-b110": { yt: "4OVe0MWgZ4k", credit: "Dan Vega — The #1 Spring Boot Starter you should include in every single application" },
-    "sba301-1-1-react": { yt: "DiiERCjJDh0", credit: "Jon Peppinck — React Tutorial for Beginners - Introduction to React | Components, Props, State, Material-UI, CRUD" },
     "sba301-2-1-spring-rest-cors": { yt: "klnxzL8oQdM", credit: "Dan Vega — Build a Spring Boot 4 REST API in Minutes" },
     "sba301-3-1-connect-fetch": { yt: "r0EAb96-KvA", credit: "Java Guides — React JS  Integration with Spring Boot using Fetch API" },
     "sba301-4-1-jpa-mongo-security": { yt: "dFzvVoS-sRE", credit: "Telusko — #36 Spring Security Project Setup for JWT" },

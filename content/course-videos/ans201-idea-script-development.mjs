@@ -5,6 +5,7 @@
 export default {
   courseSlug: "ans201-idea-script-development",
   defaultVideoTrack: "YT",
+  goYt: {"ans201-1-1-idea": "ZlnhJ8B0vZQ"},
   lessons: {
     "ans201-flm-b007": { yt: "fxYhxBXtgvE", credit: "YouTube Creators — Convert Your Story Idea Into a Script (ft. Anna Akana)" },
     "ans201-flm-b008": { yt: "mtn31hh6kU4", credit: "TED Archive — 4 simple ways to have a great idea | Richard St. John" },
@@ -24,7 +25,6 @@ export default {
     "ans201-flm-b038": { yt: "-FOCpMAww28", credit: "TED — TED's secret to great public speaking | Chris Anderson | TED" },
     "ans201-flm-b039": { yt: "1sOgYNgq88E", credit: "TED-Ed — What’s the best way to give a presentation?" },
     "ans201-flm-b055": { yt: "0Vjh5d5rez0", credit: "TED — Want to Give a Great Presentation? Use Ugly Sketches | Martin J. Eppler | TED" },
-    "ans201-1-1-idea": { yt: "ZlnhJ8B0vZQ", credit: "ScreenWeaver: AI Filmmaking & Storyboard — How to Write a Logline: Idea, Premise and a 4-Part Template | Free Screenwriting Course 3.1" },
     "ans201-2-1-structure": { yt: "tvqjp1CxxD8", credit: "StudioBinder — Three Act Structure Explained — The Secret to Telling a Great Story" },
     "ans201-3-1-hero-journey": { yt: "x8XUVqjX_IA", credit: "TEDx Talks — What is the Hero's Journey?: Pat Soloman at TEDxRockCreekPark" },
     "ans201-5-1-beat-sheet": { yt: "2kil95fwMVo", credit: "StudioBinder — 3 Act Story Structure with Save the Cat's Beat Sheet — Parasite Movie Explained in 15 Beats" },

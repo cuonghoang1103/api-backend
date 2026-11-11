@@ -5,6 +5,7 @@
 export default {
   courseSlug: "fin301-financial-markets-and-institutions-thi-truong-t224i-ch237nh-v224-c225c-inh-che-t224i-ch237nh",
   defaultVideoTrack: "YT",
+  goYt: {"fin301-flm-b027": "Y45PAHkO6bE"},
   lessons: {
     "fin301-flm-b002": { yt: "tDHwUh8fbsQ", credit: "Krassimir Petrov — Financial Markets and Institutions - Lecture 01" },
     "fin301-flm-b003": { yt: "szUhmDH98oQ", credit: "Khan Academy — How financial institutions and markets facilitate saving and investing | Khan Academy" },
@@ -21,7 +22,6 @@ export default {
     "fin301-flm-b024": { yt: "y4z1FSdN_GA", credit: "Columbia Business School — Ciamac Moallemi: High-Frequency Trading and Market Microstructure" },
     "fin301-flm-b025": { yt: "i_pLF9J3QPE", credit: "MIT OpenCourseWare — Ses 9: Forward and Futures Contracts I" },
     "fin301-flm-b026": { yt: "3g6P0lRXotI", credit: "Khan Academy — Futures introduction | Finance & Capital Markets | Khan Academy" },
-    "fin301-flm-b027": { yt: "Y45PAHkO6bE", credit: "Simplilearn — Mechanics of Futures Markets | Financial Markets & Products | Lecture On FRM | Simplilearn" },
     "fin301-flm-b029": { yt: "VkUEWUxI6u0", credit: "YaleCourses — 17. Options Markets" },
     "fin301-flm-b030": { yt: "nnl3x1wo25g", credit: "Khan Academy — American call options | Finance & Capital Markets | Khan Academy" },
     "fin301-flm-b032": { yt: "QhoN0Q_eknQ", credit: "AnalystPrep — Options Markets (FRM Part 1 2025 – Book 3 – Chapter 12)" },

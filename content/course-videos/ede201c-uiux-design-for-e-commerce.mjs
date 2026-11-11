@@ -5,6 +5,7 @@
 export default {
   courseSlug: "ede201c-uiux-design-for-e-commerce",
   defaultVideoTrack: "YT",
+  goYt: {"ede201c-4-1-product-category-pages": "IfKK2soyzhw"},
   lessons: {
     "ede201c-ts-1-1": { yt: "ODpB9-MCa5s", credit: "Simplilearn — UI/UX Explained In 8 Minutes | UI/UX Design For Beginners | UI/UX Design Basics | Simplilearn" },
     "ede201c-ts-1-2": { yt: "TQ5jY1kKUNk", credit: "IxDF - Interaction Design Foundation — Heuristic Evaluation in UX Design. What are the 10 Usability Heuristics" },
@@ -28,7 +29,6 @@ export default {
     "ede201c-ts-9-3": { yt: "XjZK4-Jp9jY", credit: "Flux Academy — Conversion Rate Optimisation For Designers" },
     "ede201c-2-1-user-research-persona": { yt: "u44pBnAn7cM", credit: "PlaybookUX — Creating Personas for User Experience Research" },
     "ede201c-3-1-ia-navigation": { yt: "akWDacn5lIA", credit: "Nick Babich — Information Architecture guide for UX designers" },
-    "ede201c-4-1-product-category-pages": { yt: "IfKK2soyzhw", credit: "Maisha Farzana Taki — Design an E-Commerce Product Page in Figma (Beginner UI Project) | UX Design Ep 23" },
     "ede201c-7-1-responsive-mobile-commerce": { yt: "KCHwo3_Rn3g", credit: "UX World — E-Commerce Mobile App Design in Figma | Figma Design and Prototype Tutorial" },
     "ede201c-8-1-cro-ab-accessibility": { yt: "uXkQ-aqb68A", credit: "Dashly — A/B Testing for Conversion Rate Optimization" },
   },

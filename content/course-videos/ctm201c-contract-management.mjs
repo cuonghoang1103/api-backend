@@ -5,6 +5,7 @@
 export default {
   courseSlug: "ctm201c-contract-management",
   defaultVideoTrack: "YT",
+  goYt: {"ctm201c-ts-4-1": "oD9uk-HvNZc"},
   lessons: {
     "ctm201c-ts-1-2": { yt: "sToYkDRsxrc", credit: "Procurement Tactics — The Contract Management Lifecycle" },
     "ctm201c-ts-1-3": { yt: "iDalWOpOEkQ", credit: "CIPS — Contract Management Masterclass: Roles, Responsibilities, and Common Mistakes | CIPS MENA" },
@@ -13,7 +14,6 @@ export default {
     "ctm201c-ts-3-1": { yt: "b6jX0Ec1zMk", credit: "NPTEL-NOC IITM — Special Contracts: Sale of Goods - Part 05" },
     "ctm201c-ts-3-2": { yt: "iSCWolgYm_Y", credit: "The Knowledge Academy — What Is a Service Level Agreement (SLA)? | SLA Explained | The Knowledge Academy" },
     "ctm201c-ts-3-5": { yt: "jP2gAixxPBs", credit: "Corporate Direct — Confidentiality Agreements (and NDA’s) Explained" },
-    "ctm201c-ts-4-1": { yt: "oD9uk-HvNZc", credit: "NPTEL-NOC IITM — #32 Supply Contracts | Strategic Sourcing" },
     "ctm201c-ts-4-3": { yt: "0NZL233Qqhk", credit: "Procurement Tactics — Supplier Selection Criteria – Evaluating Suppliers in Procurement" },
     "ctm201c-ts-5-1": { yt: "GdWqD0DjhYI", credit: "Study Legal English — Commercial Contract Structure" },
     "ctm201c-ts-5-3": { yt: "ITvV8Z4i95E", credit: "Lawpath — Intellectual property and Licensing Agreements" },

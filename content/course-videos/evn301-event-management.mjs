@@ -5,6 +5,7 @@
 export default {
   courseSlug: "evn301-event-management",
   defaultVideoTrack: "YT",
+  goYt: {"evn301-flm-b016": "AgAdc11KZLo"},
   lessons: {
     "evn301-flm-b001": { yt: "b3B24wl3gCQ", credit: "Jeff Su — Intro to Event Planning & Management (with Google Sheets)" },
     "evn301-flm-b002": { yt: "YTWAITl6VZM", credit: "Genius Group — INTRODUCTION TO EVENT MANAGEMENT" },
@@ -14,7 +15,6 @@ export default {
     "evn301-flm-b007": { yt: "phZ61QHZOAs", credit: "theiiechannel — The IIE: Event Management:  Phase 3 - Planning [Part 3/5]" },
     "evn301-flm-b008": { yt: "iG_vhNhSS8U", credit: "theiiechannel — The IIE: Event Management:  Phase 4 - Co-ordination & Implementation [Part 4/5]" },
     "evn301-flm-b009": { yt: "VUqpizvmAXQ", credit: "Ripluo Event Planning + CRM Software — 6 SIMPLE Event Planning Steps for EVERY Event" },
-    "evn301-flm-b016": { yt: "AgAdc11KZLo", credit: "Event Management Apps and Tools — The Art of Event Planning: Event Design" },
     "evn301-flm-b043": { yt: "lvy_7DtgnVc", credit: "theiiechannel — The IIE: Event Management:  Phase 5 - Evaluation & Feedback [Part 5/5]" },
     "evn301-flm-b047": { yt: "aqzcKlm1oeQ", credit: "Jamie White — How To Plan An Event Successfully | Tips To Nail Your First Event" },
     "evn301-flm-b048": { yt: "7lIfD9IYHGg", credit: "Jeff Su — Plan an ENTIRE Event on Notion (in 9 minutes)!" },

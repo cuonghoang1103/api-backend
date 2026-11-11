@@ -5,6 +5,7 @@
 export default {
   courseSlug: "edc301-digital-customer-insight-and-analytics",
   defaultVideoTrack: "YT",
+  goYt: {"edc301-ts-2-3": "Nf2LnjydS5Y", "edc301-ts-5-4": "rhWa-bBKG3w", "edc301-ts-8-2": "bPvQHaQCOQM", "edc301-8-1-ethics-privacy-reporting": "ETfWGCzMTr8"},
   lessons: {
     "edc301-ts-1-1": { yt: "s8zpxuJ788o", credit: "Christine Jiang — Think Like a Senior Data Analyst: Data to Insight in 15 Minutes" },
     "edc301-ts-1-2": { yt: "IU6BoM9S-kc", credit: "Ross School of Business — Customer-Centricity: What It Means and What It Takes" },
@@ -12,7 +13,6 @@ export default {
     "edc301-ts-1-4": { yt: "aUSpikXdoZk", credit: "Columbia Business School — Strategic Customer Insight: 5 Key Questions You Need to Answer" },
     "edc301-ts-2-1": { yt: "D4JGG33pdEk", credit: "Learn Programmatic Advertising — What is First, Second & Third Party Data?" },
     "edc301-ts-2-2": { yt: "sQD7kaZ5h0s", credit: "Simplilearn — What Is CRM? | Introduction To CRM Software| CRM Projects For Beginners | CRM 2022 | Simplilearn" },
-    "edc301-ts-2-3": { yt: "Nf2LnjydS5Y", credit: "Google News Initiative — Webinar 1: Basic GA4 - Intro to Web & App Analytics, UI Familiarisation & Interpretation of Data" },
     "edc301-ts-2-4": { yt: "5HcDJ8e9NwY", credit: "IBM Technology — Data Quality Explained" },
     "edc301-ts-3-1": { yt: "hRBXSWWmk_c", credit: "Marketing Study Guide — The Criteria for Effective Segmentation" },
     "edc301-ts-3-2": { yt: "i-HNJZeOOMY", credit: "Adam Finer - Learn BI — RFM Analysis in Excel Tutorial | Simple Segmentation Analysis" },
@@ -22,10 +22,8 @@ export default {
     "edc301-ts-4-4": { yt: "-eW7XsninWA", credit: "Brie E Anderson — Multi Channel Attribution in Google Analytics 4" },
     "edc301-ts-5-2": { yt: "x0L75CV5eSI", credit: "Data Science Dojo — What is Customer Lifetime Value (CLV)? | Marketing Analytics for Beginners | Part 30" },
     "edc301-ts-5-3": { yt: "JL9C2h3fxEg", credit: "MapML — Customer Churn Prediction with Machine Learning" },
-    "edc301-ts-5-4": { yt: "rhWa-bBKG3w", credit: "SaasRise — The SaaS Growth Course - Calculating Your CAC & LTV And Full Unit Economics (Lesson 1)" },
     "edc301-ts-6-2": { yt: "feqVpMtRyMU", credit: "CustomerSure — Customer Experience Metrics: NPS, CSAT or Customer Effort: Explained!" },
     "edc301-ts-7-2": { yt: "XZ15VehMa7U", credit: "Surfside PPC — What is A/B Testing? Marketing and Advertising A/B Tests Explained" },
-    "edc301-ts-8-2": { yt: "bPvQHaQCOQM", credit: "Capitol Data Analytics — Customer Behavior Revealed: How Propensity Models Act as Your Crystal Ball" },
     "edc301-ts-8-3": { yt: "4jRBRDbJemM", credit: "StatQuest with Josh Starmer — ROC and AUC, Clearly Explained!" },
     "edc301-ts-9-1": { yt: "O3PbtX5Hi7A", credit: "Simplilearn — Data Ethics Full Course | Responsible AI, Bias & Data Privacy | Simplilearn" },
     "edc301-ts-9-3": { yt: "r5_34YnCmMY", credit: "Harvard Business Review — Telling Stories with Data in 3 Steps (Quick Study)" },
@@ -35,6 +33,5 @@ export default {
     "edc301-5-1-clv-churn": { yt: "Pc06VoScVRY", credit: "Simplilearn — How To Calculate Customer Lifetime Value | Customer Lifetime Value Prediction | Simplilearn" },
     "edc301-6-1-sentiment-voc": { yt: "5HQCNAsSO-s", credit: "IBM Technology — What is Sentiment Analysis?" },
     "edc301-7-1-personalization-recommendation": { yt: "gGDYz5eBxNI", credit: "CXOTalk — Digital Marketing: Personalization, Data, and Best Practices (Robert Tas, McKinsey) CXOTalk #256" },
-    "edc301-8-1-ethics-privacy-reporting": { yt: "ETfWGCzMTr8", credit: "The Data Incubator — Data Science in 30 Minutes: Data Privacy and Big Data Ethics with @data_nerd, Carla Gentry" },
   },
 };

@@ -5,6 +5,7 @@
 export default {
   courseSlug: "adm401-mobility-application-design",
   defaultVideoTrack: "YT",
+  goYt: {"adm401-flm-b033": "pGc2GOsVN6k"},
   lessons: {
     "adm401-flm-b002": { yt: "ODpB9-MCa5s", credit: "Simplilearn — UI/UX Explained In 8 Minutes | UI/UX Design For Beginners | UI/UX Design Basics | Simplilearn" },
     "adm401-flm-b008": { yt: "gHGN6hs2gZY", credit: "AJ&Smart — What Is Design Thinking? An Overview" },
@@ -18,7 +19,6 @@ export default {
     "adm401-flm-b024": { yt: "-eyRiwXQw24", credit: "Simplilearn — How To Create a Customer Journey Map 2026 | Customer Journey Mapping Tutorial | Simplilearn" },
     "adm401-flm-b026": { yt: "4uHxJMCzeGg", credit: "DesignCourse — UX Design - Why you NEED to know User Flows!" },
     "adm401-flm-b028": { yt: "V6nN3jJMbJY", credit: "Wired to Create — User Flow Diagram Tutorial - MASTER Breakdown of UX Method" },
-    "adm401-flm-b033": { yt: "pGc2GOsVN6k", credit: "Great Learning — Mastering Wireframes, Prototypes, and UI UX Tools | Complete Guide for Designers" },
     "adm401-flm-b039": { yt: "YLo6g58vUm0", credit: "Figma — Welcome to design systems - Lesson 1 : Introduction to design systems" },
     "adm401-flm-b040": { yt: "_uva2dQPlV8", credit: "Tim Gabe — Your First Design System in Figma (Beginner Tutorial)" },
     "adm401-flm-b044": { yt: "sybtdc4dYzE", credit: "Tim Gabe — Master Responsive Grids (Rows & Columns) in Figma" },

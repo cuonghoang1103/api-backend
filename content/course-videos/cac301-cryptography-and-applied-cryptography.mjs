@@ -5,6 +5,7 @@
 export default {
   courseSlug: "cac301-cryptography-and-applied-cryptography",
   defaultVideoTrack: "YT",
+  goYt: {"cac301-ts-9-3": "J03UE89Qw8E"},
   lessons: {
     "cac301-ts-1-1": { yt: "yIm0Ol9Dg4Y", credit: "Neso Academy — Security Attacks" },
     "cac301-ts-1-2": { yt: "2A1tZIg6Cts", credit: "Cryptography for Everybody — Basics of Cryptology – Part 22 (Cryptography – Kerckhoffs' Principle & Modern Cryptographic Goals)" },
@@ -36,7 +37,6 @@ export default {
     "cac301-ts-8-4": { yt: "1-MPcUHhXoc", credit: "Victor Dozal — What is PGP/GPG Encryption? In 3 Minutes - PGP/GPG Tutorial for Beginners" },
     "cac301-ts-9-1": { yt: "8VSuwDG4bhw", credit: "Computerphile — Encryption & Entropy - Computerphile" },
     "cac301-ts-9-2": { yt: "P-JK4hBPBYI", credit: "nptelhrd — Side Channel Analysis of Cryptographic Implementations" },
-    "cac301-ts-9-3": { yt: "J03UE89Qw8E", credit: "Bill Buchanan OBE FRSE — Trust4Futures: Zero Knowledge Proofs and Homomorphic Encryption" },
     "cac301-ts-9-4": { yt: "ZrHKwxasXS4", credit: "IBM Technology — The Rise of Crypto Agility: How to Secure Systems for the Quantum Era" },
     "cac301-1-1-classical": { yt: "jhXCTbFnK8o", credit: "CrashCourse — Cryptography: Crash Course Computer Science #33" },
     "cac301-2-1-block": { yt: "G_guTnTcoqg", credit: "Mark Stamp — Chapter 3, part 4: Symmetric Key Crypto --- block ciphers, DES" },

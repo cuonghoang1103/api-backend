@@ -5,10 +5,10 @@
 export default {
   courseSlug: "daa401-design-and-secure-ai-system",
   defaultVideoTrack: "YT",
+  goYt: {"daa401-ts-1-3": "eSqhpCgYgew"},
   lessons: {
     "daa401-ts-1-1": { yt: "_9x-mAHGgC4", credit: "IBM Technology — Artificial Intelligence: The new attack surface" },
     "daa401-ts-1-2": { yt: "3l8GwLv2f3E", credit: "IBM Technology — 10 Principles for Secure by Design: Baking Security into Your Systems" },
-    "daa401-ts-1-3": { yt: "eSqhpCgYgew", credit: "EuroPython Conference — Secure Python ML: The Major Security Flaws in the ML Lifecycle - presented by Alejandro Saucedo" },
     "daa401-ts-2-2": { yt: "QhoG74PDFyc", credit: "IBM Technology — Anatomy of an AI ATTACK: MITRE ATLAS" },
     "daa401-ts-2-3": { yt: "cYuesqIKf9A", credit: "IBM Technology — Explained: The OWASP Top 10 for Large Language Model Applications" },
     "daa401-ts-2-4": { yt: "0oeD2Wf25wY", credit: "IBM Technology — Mastering AI Risk: NIST’s Risk Management Framework Explained" },

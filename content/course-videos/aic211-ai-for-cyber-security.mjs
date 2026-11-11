@@ -5,6 +5,7 @@
 export default {
   courseSlug: "aic211-ai-for-cyber-security",
   defaultVideoTrack: "YT",
+  goYt: {"aic211-flm-b044": "i630PLNlPb0", "aic211-8-1-xai-mlsecops-ethics": "17J8DBpO4TQ"},
   lessons: {
     "aic211-flm-b001": { yt: "4QzBdeUQ0Dc", credit: "IBM Technology — AI in Cybersecurity" },
     "aic211-flm-b004": { yt: "sQqniayndb4", credit: "Steve Brunton — Probability and Statistics: Overview" },
@@ -18,7 +19,6 @@ export default {
     "aic211-flm-b034": { yt: "rNLByGjvJ8c", credit: "BlackBoard AI — F1 Score: Better than Accuracy for Imbalanced Data" },
     "aic211-flm-b037": { yt: "dfVAi87BSEs", credit: "Simplilearn — What Is Intrusion Detection System? | Intrusion Detection System (IDS) | Cyber Security |Simplilearn" },
     "aic211-flm-b038": { yt: "sJvZKhw3lYo", credit: "PIRAT Research Team — Error Prevalence in NIDS datasets: A Case Study on CIC-IDS-2017 and CSE-CIC-IDS-2018 (G. Engelen)" },
-    "aic211-flm-b044": { yt: "i630PLNlPb0", credit: "Satnam Singh — Using Deep Learning for Cybersecurity Part 1" },
     "aic211-flm-b046": { yt: "aXZ-BF8Ot-o", credit: "Professor Messer — Adversarial Artificial Intelligence - SY0-601 CompTIA Security+ : 1.2" },
     "aic211-flm-b047": { yt: "C8jJ4H6BL1c", credit: "Software Engineering Institute | Carnegie Mellon University — Overview of Adversarial Machine Learning" },
     "aic211-flm-b048": { yt: "TlAUp1S-6W0", credit: "DEFCONConference — DEF CON 26 AI VILLAGE -  infosecanon  - The Current State of Adversarial Machine Learning" },
@@ -32,6 +32,5 @@ export default {
     "aic211-4-1-intrusion-anomaly": { yt: "VEu326IZpsc", credit: "IBM Technology — Cybersecurity Architecture: Detection" },
     "aic211-6-1-fraud-ueba": { yt: "j29XwVsMW-s", credit: "IBM Technology — User Behavior Analytics" },
     "aic211-7-1-adversarial-ml": { yt: "0tHb6U2604g", credit: "IBM Technology — AI ATTACKS! How Hackers Weaponize Artificial Intelligence" },
-    "aic211-8-1-xai-mlsecops-ethics": { yt: "17J8DBpO4TQ", credit: "SANS Institute — The Ethics of AI and ML: Ensuring Cybersecurity and Privacy in Automated Decision Making" },
   },
 };

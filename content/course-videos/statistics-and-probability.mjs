@@ -5,6 +5,7 @@
 export default {
   courseSlug: "statistics-and-probability",
   defaultVideoTrack: "YT",
+  goYt: {"mas291-flm-b050": "ZtrGCH-u3bM"},
   lessons: {
     "mas291-gioi-thieu": { yt: "kyjlxsLW1Is", credit: "zedstatistics — Teach me STATISTICS in half an hour! Seriously." },
     "mas291-tong-the-mau": { yt: "vikkiwjQqfU", credit: "StatQuest with Josh Starmer — Population and Estimated Parameters, Clearly Explained!!!" },
@@ -48,7 +49,6 @@ export default {
     "mas291-flm-b047": { yt: "NkGvw18zlGQ", credit: "Khan Academy — Two-sample t test for difference of means | AP Statistics | Khan Academy" },
     "mas291-flm-b048": { yt: "86ss6qOTfts", credit: "jbstatistics — Inference for Two Means:  Introduction" },
     "mas291-flm-b049": { yt: "tFRXsngz4UQ", credit: "Dr Nic's Maths and Stats — Understanding Statistical Inference - statistics help" },
-    "mas291-flm-b050": { yt: "ZtrGCH-u3bM", credit: "Nelly Litvak — 29  Statistical inference for two samples, part 2: paired observations" },
     "mas291-flm-b051": { yt: "KsVBBJRb9TE", credit: "jbstatistics — Introduction to Simple Linear Regression" },
     "mas291-flm-b052": { yt: "7ArmBVF2dCs", credit: "StatQuest with Josh Starmer — Linear Regression, Clearly Explained!!!" },
     "mas291-flm-b053": { yt: "aztcS-3MwH0", credit: "slcmath@pc — Linear Regression and Correlation - Example" },

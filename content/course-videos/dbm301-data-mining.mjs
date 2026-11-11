@@ -5,9 +5,9 @@
 export default {
   courseSlug: "dbm301-data-mining",
   defaultVideoTrack: "YT",
+  goYt: {"dbm301-flm-b003": "9U8Px7MVJSM"},
   lessons: {
     "dbm301-flm-b001": { yt: "7rs0i-9nOjo", credit: "IBM Technology — What is Data Mining?" },
-    "dbm301-flm-b003": { yt: "9U8Px7MVJSM", credit: "Prof. Weimao Ke — Getting to Know Your Data" },
     "dbm301-flm-b005": { yt: "j0tqUBhs-Nc", credit: "Trouble- Free — #8 Data Preprocessing In Data Mining - 4 Steps |DM|" },
     "dbm301-flm-b006": { yt: "Z9kfK7XZ4Es", credit: "RANJI RAJ — Data Mining & Business Intelligence | Tutorial #4 | Forms Of Data Preprocessing" },
     "dbm301-flm-b007": { yt: "P8ERBy91Y90", credit: "AltexSoft — How is data prepared for machine learning?" },

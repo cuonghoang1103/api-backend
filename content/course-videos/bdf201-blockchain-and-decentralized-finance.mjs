@@ -5,6 +5,7 @@
 export default {
   courseSlug: "bdf201-blockchain-and-decentralized-finance",
   defaultVideoTrack: "YT",
+  goYt: {"bdf201-flm-b022": "AcU88UGcoxk", "bdf201-flm-b023": "LlXzGjNt2yQ"},
   lessons: {
     "bdf201-flm-b001": { yt: "EH6vE97qIP4", credit: "MIT OpenCourseWare — 1. Introduction for 15.S12 Blockchain and Money, Fall 2018" },
     "bdf201-flm-b002": { yt: "orIgy2MjqrA", credit: "RedBlockBlue — SHA-256 | COMPLETE Step-By-Step Explanation (W/ Example)" },
@@ -21,8 +22,6 @@ export default {
     "bdf201-flm-b015": { yt: "6He1vmUPR1w", credit: "The Bitcoin Express — Solving The Blockchain Trilemma: Scalability, Security, Decentralization" },
     "bdf201-flm-b017": { yt: "6flx1_MkVlA", credit: "FinMagical — What Is the Bitcoin Lightning Network? Fast, Low-Cost Payments Explained" },
     "bdf201-flm-b018": { yt: "ZP9-lCINuiA", credit: "Blockchained Future — Ethereum Layer 2 Scaling | Plasma vs ZK Rollups vs Optimistic Rollups" },
-    "bdf201-flm-b022": { yt: "AcU88UGcoxk", credit: "Scott Cunningham — Stablecoins: Fiat-Collateralized Coins" },
-    "bdf201-flm-b023": { yt: "LlXzGjNt2yQ", credit: "Berkeley RDI — Lec 7.5 Crypto-Collateralized Stablecoins" },
     "bdf201-flm-b024": { yt: "AciVy2dVZlY", credit: "The Defiant — Algorithmic Stablecoins" },
     "bdf201-flm-b029": { yt: "Vb1Y760Sazc", credit: "Coin Bureau — CBDCs Vs. Cryptocurrencies: Side-by-Side Comparison!!" },
     "bdf201-flm-b030": { yt: "WeSram2P178", credit: "Reserve Bank of Australia — Monetary Policy Transmission – Four Channels" },

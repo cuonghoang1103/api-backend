@@ -5,6 +5,7 @@
 export default {
   courseSlug: "ftp301-payments-crypto-currencies-and-blockchain",
   defaultVideoTrack: "YT",
+  goYt: {"ftp301-flm-b043": "25q6TwBiQB4", "ftp301-flm-b048": "k9wKM_Wy6d0"},
   lessons: {
     "ftp301-flm-b002": { yt: "yubzJw0uiE4", credit: "Simplilearn — Blockchain In 7 Minutes | What Is Blockchain | Blockchain Explained|How Blockchain Works|Simplilearn" },
     "ftp301-flm-b003": { yt: "oPIupbsVimc", credit: "Whiteboard Crypto — What are dApps? (12 Decentralized Application Examples)" },
@@ -30,8 +31,6 @@ export default {
     "ftp301-flm-b038": { yt: "bgELYWuhm_8", credit: "Coin247 Academy — Global Overview of Cryptocurrency Regulations" },
     "ftp301-flm-b039": { yt: "NOF0B-sMa-k", credit: "Albany Law School — Blockchain and Cryptocurrency - The Legal Framework and Future Trends" },
     "ftp301-flm-b041": { yt: "tFbYrhkYZnQ", credit: "Crypto Steffen — Decentralized Finance (DeFi): Disrupting Traditional Banking" },
-    "ftp301-flm-b043": { yt: "25q6TwBiQB4", credit: "Boston College Carroll School of Management — Cryptocurrencies and Blockchain: Implications and Innovation for Financial Markets" },
-    "ftp301-flm-b048": { yt: "k9wKM_Wy6d0", credit: "Moody's — The Future of Payments: Blockchain, Stablecoins and AI Explained" },
     "ftp301-1-1-evolution": { yt: "E_COzGGLMSA", credit: "Payment Talks — 1 - What is a payment, its brief evolution and key elements in Domestic and International payments" },
     "ftp301-3-1-dlt-institutional": { yt: "wzJbzJVxGIQ", credit: "MIT OpenCourseWare — Lecture 3: Distributed Ledger as a Solution to an Information Problem" },
     "ftp301-4-1-bitcoin-payment-network": { yt: "bBC-nXj3Ng4", credit: "3Blue1Brown — But how does bitcoin actually work?" },

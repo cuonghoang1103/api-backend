@@ -5,7 +5,7 @@
 export default {
   courseSlug: "ccp301-luat-canh-tranh-va-bao-ve-quyen-loi-nguoi-tieu-dung",
   defaultVideoTrack: "YT",
+  goYt: {"ccp301-ts-2-1": "4Jmc2IPS5tA"},
   lessons: {
-    "ccp301-ts-2-1": { yt: "4Jmc2IPS5tA", credit: "China IP SME Helpdesk — Vietnam's New Competition Law: What Businesses Should Know" },
   },
 };

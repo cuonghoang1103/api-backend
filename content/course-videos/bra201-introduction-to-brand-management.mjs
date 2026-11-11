@@ -5,6 +5,7 @@
 export default {
   courseSlug: "bra201-introduction-to-brand-management",
   defaultVideoTrack: "YT",
+  goYt: {"bra201-ts-8-3": "YWr3SWLrinU"},
   lessons: {
     "bra201-ts-1-1": { yt: "sQLlPC_alT8", credit: "Trigger Advertising — What is a brand?" },
     "bra201-ts-1-3": { yt: "QPs6uwd4Q2U", credit: "Edwin Dearborn — Strategic Brand Management - What Is Brand Management?" },
@@ -25,7 +26,6 @@ export default {
     "bra201-ts-7-2": { yt: "NssN3GCnAck", credit: "quantilope — Foundations of Better Brand Health Tracking (BBHT)" },
     "bra201-ts-8-1": { yt: "xBNrGK-9ksU", credit: "Prof. Sameer Mathur — Brand Extensions (Brand Management by Professor Sameer Mathur, Ph.D. (Carnegie Mellon University)" },
     "bra201-ts-8-2": { yt: "Sgppn5vuaU8", credit: "Iowa State University Ivy College of Business — “Lessons in Building and Managing Strong Brands.” – Kevin Lane Keller of Dartmouth College" },
-    "bra201-ts-8-3": { yt: "YWr3SWLrinU", credit: "Taewon Suh — Global Branding: global brand equity" },
     "bra201-ts-9-1": { yt: "Z1edvos_nnc", credit: "Latasha James — How to create a social media strategy for ANY brand" },
     "bra201-ts-9-3": { yt: "LwklKeZMF4g", credit: "Dr. Haywood — Operating Ethically and Sustainably - How Ethics and Sustainability Impact Business" },
     "bra201-1-1-brand-basics": { yt: "GHSyuK6-qpk", credit: "Management Courses - Mike Clayton — What is Brand Management? The Role of a Brand Manager." },

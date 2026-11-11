@@ -5,6 +5,7 @@
 export default {
   courseSlug: "cdr301-3d-cad-design-for-robotics",
   defaultVideoTrack: "YT",
+  goYt: {"cdr301-ts-3-3": "NTgFlKZ9v8I"},
   lessons: {
     "cdr301-ts-1-2": { yt: "7aZHFKe2-gA", credit: "CAD CAM Lessons — Parametric VS Direct Modeling" },
     "cdr301-ts-1-3": { yt: "NGPn9nvLPmg", credit: "Articulated Robotics — Coordinate Transformations - How robots move through space" },
@@ -12,7 +13,6 @@ export default {
     "cdr301-ts-2-2": { yt: "6STIrs0U8y4", credit: "Onshape — Sketch Constraints in Onshape" },
     "cdr301-ts-3-1": { yt: "lAQvLWcdq9k", credit: "Shapr3D — The Extrude tool | 3D Modeling Fundamentals: Extrude, Revolve, and Loft" },
     "cdr301-ts-3-2": { yt: "c25gOZZ1NE8", credit: "Fusion 360 School — Fusion 360 - Sweep VS Loft" },
-    "cdr301-ts-3-3": { yt: "NTgFlKZ9v8I", credit: "CAD Space — Autodesk Inventor 2026 3D Model Tutorial | Fillet, Chamfer, Shell, Emboss, Plane & Mirror" },
     "cdr301-ts-4-1": { yt: "BM-IX82N-C0", credit: "Onshape — Onshape Robot Arm Tutorial | Layout Sketch to Full Assembly in 20 Minutes!" },
     "cdr301-ts-4-2": { yt: "zI64DyaRUvQ", credit: "Northwestern Robotics — Modern Robotics, Chapter 2.2:  Degrees of Freedom of a Robot" },
     "cdr301-ts-5-1": { yt: "ht9GwXQMgpo", credit: "The Efficient Engineer — Understanding Engineering Drawings" },

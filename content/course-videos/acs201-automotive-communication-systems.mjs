@@ -5,6 +5,7 @@
 export default {
   courseSlug: "acs201-automotive-communication-systems",
   defaultVideoTrack: "YT",
+  goYt: {"acs201-ts-3-1": "SuGbyI-knNs", "acs201-ts-3-3": "NwZxeeH_WFI", "acs201-ts-7-2": "9zDngUuoBjI"},
   lessons: {
     "acs201-ts-1-3": { yt: "mzGwCASOLhk", credit: "Intrepid Control Systems — Zonal Network Architectures Explained in 5 Minutes" },
     "acs201-ts-1-4": { yt: "fKz4TSvme6Q", credit: "CSS Electronics — Python CAN Bus API - Automate CAN/LIN Processing [Open Source]" },
@@ -12,14 +13,11 @@ export default {
     "acs201-ts-2-2": { yt: "3vs40cm1wYs", credit: "Foolish Engineer — CAN Frame structure Understanding | CAN communication Explained" },
     "acs201-ts-2-3": { yt: "FCrZRSikQY0", credit: "Secrets of Automotive Industry — CAN protocol basics. PART6, Bit stuffing." },
     "acs201-ts-2-4": { yt: "61UnW7Jxd14", credit: "Embedded System Creations — Error Confinement in CAN | Error Active | Error Passive | Bus off | Error Handling in CAN" },
-    "acs201-ts-3-1": { yt: "SuGbyI-knNs", credit: "automotive autosar — CAN DBC file edition for adding new message and new signal that wilL be sent from ECU_A to ECU_B" },
     "acs201-ts-3-2": { yt: "d1dnqFS7fwg", credit: "Tarun Kumar — CAN TP - Protocol, Multi CAN Frame, Single Frame, First Frame, Consecutive Frame, Flow Control Frame" },
-    "acs201-ts-3-3": { yt: "NwZxeeH_WFI", credit: "Technically U — SAE J1939 - How Devices In Heavy Duty Vehicles Communicate" },
     "acs201-ts-4-1": { yt: "2Mhqwt2xTxk", credit: "Texas Instruments — CAN and CAN FD protocol" },
     "acs201-ts-4-2": { yt: "KqV5nIkGKFs", credit: "CSS Electronics — CAN FD Explained - A Simple Intro (2020)" },
     "acs201-ts-5-1": { yt: "t8vqcbtJ_qQ", credit: "GlobalScalar — LIN Protocol Explained | Variants, Architecture & Automotive Applications | LIN Bus Tutorial" },
     "acs201-ts-7-1": { yt: "KwNAEdjd7d0", credit: "Technica Engineering — What Is Automotive Ethernet?" },
-    "acs201-ts-7-2": { yt: "9zDngUuoBjI", credit: "Auto Tech Bytes — TCP/IP Reference Model (Automotive Ethernet)" },
     "acs201-ts-7-3": { yt: "RC6yUtr_xvs", credit: "Siemens Knowledge Hub — Expert Talk: TSN – Time-Sensitive Networking" },
     "acs201-ts-7-4": { yt: "T0K9oGaZJoY", credit: "Intrepid Control Systems — SOME/IP - A Service Oriented Architecture (Intrepid Tech Day '19)" },
     "acs201-ts-8-1": { yt: "0moNloDppvk", credit: "Tech Infused — OBD Tutorial: What is OBD2? (On-board Diagnostics) - #1" },

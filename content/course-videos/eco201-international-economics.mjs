@@ -5,6 +5,7 @@
 export default {
   courseSlug: "eco201-international-economics",
   defaultVideoTrack: "YT",
+  goYt: {"eco201-4-1-tariffs": "s0EOclwqHTg"},
   lessons: {
     "eco201-1-1-ricardian-model": { yt: "WtSDza5_IFI", credit: "Mike Moore (GWU econ professor) — Ricardian model opportunity cost example" },
     "eco201-1-2-gains-from-trade": { yt: "LTM7jVtjsm4", credit: "Mike Moore (GWU econ professor) — Ricardian model possible world trade prices" },
@@ -49,7 +50,6 @@ export default {
     "eco201-flm-b052": { yt: "q5uNaLup1y8", credit: "EconplusDal — Y2/IB 3) Common Characteristics of Developing Countries" },
     "eco201-3-1-standard-trade-model": { yt: "3oxX4n9-wRw", credit: "Nisha Malhotra — Standard Trade Model Explained | Terms of Trade, Offer Curves & Welfare Analysis" },
     "eco201-3-2-scale-economies": { yt: "DUmgU_F3Imk", credit: "Marginal Revolution University — Intra Industry Trade" },
-    "eco201-4-1-tariffs": { yt: "s0EOclwqHTg", credit: "Sarah Tinkler — Ec 340 Course Video 19 Deadweight Loss of a Tariff" },
     "eco201-4-2-other-instruments": { yt: "yi86T8altZo", credit: "Econbusters — International Trade:   Export Subsidies" },
     "eco201-4-4-political-economy-wto": { yt: "e3suA-qMZJw", credit: "Economics Department, Oxford University — Political Economy of Trade Policy | Professor Paola Conconi" },
     "eco201-5-1-balance-of-payments": { yt: "bel_y5ka80M", credit: "EconplusDal — Balance of Payments (Current Account, Financial Account and Capital Account)" },

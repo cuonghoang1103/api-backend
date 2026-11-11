@@ -5,13 +5,13 @@
 export default {
   courseSlug: "ite304-law-and-ethics-in-digital-technology",
   defaultVideoTrack: "YT",
+  goYt: {"ite304-ts-3-4": "oUEBN_uMpjg"},
   lessons: {
     "ite304-ts-1-1": { yt: "FRd8MmmkXs0", credit: "Christopher Kalodikis — Different Ethical Theories & Approaches" },
     "ite304-ts-1-2": { yt: "b2SoQwjB9VU", credit: "Learners Coach — Introduction To Computer Ethics | Privacy and Security" },
     "ite304-ts-1-3": { yt: "_HWTJBtLT9k", credit: "Christopher Kalodikis — Codes of Ethics" },
     "ite304-ts-1-4": { yt: "_CSbNINRXVo", credit: "International Pharmaceutical Federation — A framework for ethical decision making" },
     "ite304-ts-2-1": { yt: "NVHq-dKmlS0", credit: "The Law Academy — Sources of Law | English Legal System" },
-    "ite304-ts-3-4": { yt: "oUEBN_uMpjg", credit: "Conventus Law — A Look Inside Decree 13 - Personal Data Protection Obligations In Vietnam" },
     "ite304-ts-4-4": { yt: "XLvPpirlmEs", credit: "Simplilearn — What Is Ethical Hacking? | Ethical Hacking In 8 Minutes | Ethical Hacking Explanation | Simplilearn" },
     "ite304-ts-5-1": { yt: "RQOJgEA5e1k", credit: "CrashCourse — Introduction to IP: Crash Course Intellectual Property #1" },
     "ite304-ts-5-2": { yt: "Q_9O8J9skL0", credit: "CrashCourse — Copyright, Exceptions, and Fair Use: Crash Course Intellectual Property #3" },

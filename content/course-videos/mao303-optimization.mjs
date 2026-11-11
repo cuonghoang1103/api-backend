@@ -5,13 +5,13 @@
 export default {
   courseSlug: "mao303-optimization",
   defaultVideoTrack: "YT",
+  goYt: {"mao303-ts-3-2": "-btskgiEN1E"},
   lessons: {
     "mao303-ts-1-1": { yt: "AM6BY4btj-M", credit: "Visually Explained — What Is Mathematical Optimization?" },
     "mao303-ts-1-2": { yt: "cKN2uLuSHB8", credit: "Probably Optimal — The Basic Notions of Optimization | Global vs Local Minima, Constraints & Algorithms" },
     "mao303-ts-2-2": { yt: "P5LirQfaIaE", credit: "IIT KANPUR-NPTEL — Lec 29 | Applied Optimization | Operations that preserve Convexity   | IIT Kanpur" },
     "mao303-ts-2-3": { yt: "uBjv6zFIs9M", credit: "Lewis Mitchell — Convex cones and Farkas' lemma" },
     "mao303-ts-3-1": { yt: "pxcsXQuaXQ8", credit: "aa4cc — L1.2 - Introduction to unconstrained optimization: first- and second-order conditions (vector case)" },
-    "mao303-ts-3-2": { yt: "-btskgiEN1E", credit: "IIT KANPUR-NPTEL — Lecture 18: Convexity Preserving Operations" },
     "mao303-ts-4-2": { yt: "h5o1n1QMcmM", credit: "StatQuest with Josh Starmer — Optimization with Linear Programming (and the Simplex Algorithm), Main Ideas!!!" },
     "mao303-ts-4-3": { yt: "lwbkvW0WT_Y", credit: "Zubair Khalid — EE563 Convex Optimization - Conic Optimization and Semidefinite Programming" },
     "mao303-ts-5-1": { yt: "06mQQ_RcQH4", credit: "Michel Bierlaire — Optimality conditions: unconstrained problems, sufficient optimality conditions" },

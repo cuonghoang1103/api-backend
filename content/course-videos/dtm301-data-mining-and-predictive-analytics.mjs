@@ -5,10 +5,10 @@
 export default {
   courseSlug: "dtm301-data-mining-and-predictive-analytics",
   defaultVideoTrack: "YT",
+  goYt: {"dtm301-ts-1-4": "IG6o0_J-cxk"},
   lessons: {
     "dtm301-ts-1-1": { yt: "7rs0i-9nOjo", credit: "IBM Technology — What is Data Mining?" },
     "dtm301-ts-1-2": { yt: "q_okDS2RtzY", credit: "Cody Baldwin — Introduction to the CRISP-DM Methodology (Analytics & Data Science)" },
-    "dtm301-ts-1-4": { yt: "IG6o0_J-cxk", credit: "George Tzanetakis — UVic MIR Course - Hands on with Weka and scikit-learn" },
     "dtm301-ts-2-1": { yt: "QiqZliDXCCg", credit: "IBM Technology — Exploratory Data Analysis" },
     "dtm301-ts-2-3": { yt: "Bg3CjiJ67Cc", credit: "IBM Technology — Feature Engineering for AI: Transforming Raw Data into Predictions" },
     "dtm301-ts-2-4": { yt: "AU_hBML2H1c", credit: "Cognitive Class — Machine Learning - Dimensionality Reduction - Feature Extraction & Selection" },

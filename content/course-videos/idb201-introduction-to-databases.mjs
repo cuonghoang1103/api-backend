@@ -5,6 +5,7 @@
 export default {
   courseSlug: "idb201-introduction-to-databases",
   defaultVideoTrack: "YT",
+  goYt: {"idb201-ts-4-1": "jDMDoAipdo0"},
   lessons: {
     "idb201-ts-1-1": { yt: "ZtVw2iuFI2w", credit: "Gate Smashers — Lec-3: File  System vs DBMS | Disadvantages of File System | DBMS Advantages" },
     "idb201-ts-1-2": { yt: "vuXnRRG-m5M", credit: "Neso Academy — Three-Schema Architecture & Data Independence" },
@@ -15,7 +16,6 @@ export default {
     "idb201-ts-3-1": { yt: "wOD02sezmX8", credit: "Neso Academy — Basic Concepts of Entity-Relationship Model" },
     "idb201-ts-3-2": { yt: "n3mHfQft5P8", credit: "Neso Academy — Concept of Relationships in ER Diagram" },
     "idb201-ts-3-3": { yt: "WOFYySkSrQQ", credit: "Sarita Ambadekar — DBMS: Mapping of EER to Relational model" },
-    "idb201-ts-4-1": { yt: "jDMDoAipdo0", credit: "Jacob Schrum — Creating and Altering Tables in SQL: Data Definition Language (DDL)" },
     "idb201-ts-4-2": { yt: "wva2yMqcB6Q", credit: "Corey Schafer — SQL Tutorial for Beginners 5: UPDATE and DELETE - Modifying and Removing Records from Your Database" },
     "idb201-ts-5-1": { yt: "Yh4CrPHVBdE", credit: "Anton Putra — 6 SQL Joins you MUST know! (Animated + Practice)" },
     "idb201-ts-5-2": { yt: "VQf0V6Wwbf4", credit: "Neso Academy — GROUP BY and HAVING Clause in SQL" },

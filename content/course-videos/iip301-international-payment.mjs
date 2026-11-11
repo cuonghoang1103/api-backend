@@ -5,6 +5,7 @@
 export default {
   courseSlug: "iip301-international-payment",
   defaultVideoTrack: "YT",
+  goYt: {"iip301-flm-b036": "c2rmp3oVpWc"},
   lessons: {
     "iip301-flm-b006": { yt: "fOaXIzkjnlw", credit: "Import- Export, Supply Chain and Operations — Terms of Payment Part - I" },
     "iip301-flm-b007": { yt: "bfZ888OfWXM", credit: "GeorgiaITC — Export U session 8: International Payment Terms" },
@@ -19,7 +20,6 @@ export default {
     "iip301-flm-b028": { yt: "Se2dEZ5RLSM", credit: "Shipping Solutions — Methods of Payment in International Trade: Documentary Collections" },
     "iip301-flm-b033": { yt: "wLB_Tr7UvwE", credit: "International Trade Finance & Cash Management ~Fundamentals — Documentary Credits Guide 1&2" },
     "iip301-flm-b034": { yt: "076OLN4TXM8", credit: "International Trade Finance & Cash Management ~Fundamentals — Overview of Documentary Credits" },
-    "iip301-flm-b036": { yt: "c2rmp3oVpWc", credit: "International Trade Finance & Cash Management ~Fundamentals — Documentary Credits Guide 13 1" },
     "iip301-flm-b052": { yt: "1h-QQOaLxoI", credit: "Tradelinks Resources — How Documents Against Payment works  in International Trade" },
     "iip301-flm-b053": { yt: "nrY1bZp6K18", credit: "Tradelinks Resources — How Documents Against Acceptance works in International Trade" },
     "iip301-1-1-overview-banks": { yt: "dJmj942dnmQ", credit: "Shipping Solutions — 5 Payment Methods for International Trade" },

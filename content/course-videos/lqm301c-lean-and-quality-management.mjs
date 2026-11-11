@@ -5,6 +5,7 @@
 export default {
   courseSlug: "lqm301c-lean-and-quality-management",
   defaultVideoTrack: "YT",
+  goYt: {"lqm301c-ts-5-2": "EnyxE5OpDV0"},
   lessons: {
     "lqm301c-ts-1-2": { yt: "42UgAS-U1-o", credit: "A Oktay — Deming, Juran & Crosby: Contributors to TQM (Total Quality Management)" },
     "lqm301c-ts-2-1": { yt: "sUtmosujXVE", credit: "EMS Consulting Group — Lean Manufacturing: What is Lean and the Toyota Production System?" },
@@ -20,7 +21,6 @@ export default {
     "lqm301c-ts-4-3": { yt: "9OL7BMBa4ys", credit: "Vector Solutions Industrial — Lean Manufacturing - Pull Systems" },
     "lqm301c-ts-4-4": { yt: "0wdvtyARMT4", credit: "Gemba Academy — Total Productive Maintenance (TPM) Introduction" },
     "lqm301c-ts-5-1": { yt: "VD6tXadibk0", credit: "Gemba Academy — What is Total Quality Management - TQM" },
-    "lqm301c-ts-5-2": { yt: "EnyxE5OpDV0", credit: "Panu Hämäri — QFD Step 1 Voice of the customer and Kano model spoken" },
     "lqm301c-ts-5-3": { yt: "qz-XdI89vUM", credit: "CQE Academy — PDCA (PLAN – DO – CHECK -ACT) CYCLE | PDSA Cycle | Problem Solving!" },
     "lqm301c-ts-6-1": { yt: "4EDYfSl-fmc", credit: "Simplilearn — Six Sigma In 9 Minutes | What Is Six Sigma? | Six Sigma Explained | Six Sigma Training | Simplilearn" },
     "lqm301c-ts-6-4": { yt: "LYuBOI9fbN8", credit: "Nikola Sretenovic — SPC - The Lean Six Sigma Tool You Must Know (Statistical Process Control)" },

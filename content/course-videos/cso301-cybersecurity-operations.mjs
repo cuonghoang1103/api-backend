@@ -5,6 +5,7 @@
 export default {
   courseSlug: "cso301-cybersecurity-operations",
   defaultVideoTrack: "YT",
+  goYt: {"cso301-ts-7-2": "EF7-S3qZ2wY"},
   lessons: {
     "cso301-ts-1-1": { yt: "Ula3TG8QS7g", credit: "IBM Technology — Building a Cybersecurity Framework" },
     "cso301-ts-1-2": { yt: "OHkWXFheSKM", credit: "IBM Technology — Security Operations Center (SOC) Explained" },
@@ -23,7 +24,6 @@ export default {
     "cso301-ts-6-1": { yt: "UtDWApdO8Zk", credit: "Professor Messer — Digital Forensics - CompTIA Security+ SY0-701 - 4.8" },
     "cso301-ts-6-2": { yt: "1PAGcPJFwbE", credit: "13Cubed — Introduction to Memory Forensics" },
     "cso301-ts-7-1": { yt: "Gqpl9xp518M", credit: "Motasem Hamdan — Malware Static Analysis | Part Three | TryHackMe Basic Static Analysis" },
-    "cso301-ts-7-2": { yt: "EF7-S3qZ2wY", credit: "OpenSecurityTraining2 — Dynamic Malware Analysis D3P14 Automated Dynamic Analysis Sandboxes CuckooSandbox Lab PoisonIvy" },
     "cso301-ts-8-1": { yt: "VNp35Uw_bSM", credit: "IBM Technology — Cybersecurity Threat Hunting Explained" },
     "cso301-ts-8-2": { yt: "OFR8tPzwk_k", credit: "Shefali Kumari — MITRE ATT&CK framework and THREAT HUNTING scenarios" },
     "cso301-ts-8-3": { yt: "gpa9QFuou5k", credit: "Professor Messer — Honeypots and Deception - SY0-601 CompTIA Security+ : 2.1" },

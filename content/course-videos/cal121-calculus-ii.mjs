@@ -5,6 +5,7 @@
 export default {
   courseSlug: "cal121-calculus-ii",
   defaultVideoTrack: "YT",
+  goYt: {"cal121-ts-9-2": "bIApWWqgIAk"},
   lessons: {
     "cal121-ts-1-1": { yt: "rpzTQkaTo74", credit: "Math with Professor V — 5 Integration Techniques You Need to Know | Calculus 2 Review" },
     "cal121-ts-1-2": { yt: "ocgjfF2AboA", credit: "The Organic Chemistry Tutor — Trigonometric Substitution" },
@@ -35,7 +36,6 @@ export default {
     "cal121-ts-8-3": { yt: "wqtr4Udz8AY", credit: "Dr. Trefor Bazett — How to find the TANGENT PLANE | Linear approximation of multi-variable functions" },
     "cal121-ts-8-4": { yt: "2XraaWefBd8", credit: "MIT OpenCourseWare — Lec 12: Gradient; directional derivative; tangent plane | MIT 18.02 Multivariable Calculus, Fall 07" },
     "cal121-ts-9-1": { yt: "_Ffcr98c7EE", credit: "Dr. Trefor Bazett — Multi-variable Optimization & the Second Derivative Test" },
-    "cal121-ts-9-2": { yt: "bIApWWqgIAk", credit: "The Math Professors — Absolute Extrema for multivariable functions on closed regions" },
     "cal121-ts-9-3": { yt: "8mjcnxGMwFo", credit: "Dr. Trefor Bazett — Lagrange Multipliers | Geometric Meaning & Full Example" },
     "cal121-ts-10-1": { yt: "9FGs0Dj_5V8", credit: "Alexandra Niedden — 15.1: Double Integrals over Rectangles" },
     "cal121-ts-10-2": { yt: "k7ND70gFTLU", credit: "Patrick J — Calculating Double Integrals over General Regions" },

@@ -5,12 +5,12 @@
 export default {
   courseSlug: "aic301-analog-ics",
   defaultVideoTrack: "YT",
+  goYt: {"aic301-ts-2-3": "nI145k2fOOg", "aic301-2-1-single-stage": "dmHsVOCVEF4"},
   lessons: {
     "aic301-ts-1-2": { yt: "wfBPCjaVABY", credit: "Ali Hajimiri (Academy) — 109N. MOSFET Introduction, threshold and body effect, IV characteristic in linear region" },
     "aic301-ts-1-3": { yt: "utBRWK4GmmE", credit: "ALL ABOUT ELECTRONICS — MOSFET Transconductance and MOSFET Small Signal Model Explained" },
     "aic301-ts-2-1": { yt: "UTo4IGXxzlk", credit: "Behzad Razavi (Long Kong) — Razavi Electronics 1, Lec 35, Common-Source Stage I" },
     "aic301-ts-2-2": { yt: "jzkhIbq1C9o", credit: "ALL ABOUT ELECTRONICS — MOSFET Source Follower (Common Drain Amplifier) - Small Signal Analysis Explained" },
-    "aic301-ts-2-3": { yt: "nI145k2fOOg", credit: "YOMS Electronics — Part 10 | Cascode Differential Amplifier Explained (BJT) | High Gain & High Output Resistance" },
     "aic301-ts-3-1": { yt: "mejPNuPAHBY", credit: "w2aew — #193: Back to Basics: the differential amplifier, aka long-tailed pair, diff-pair" },
     "aic301-ts-3-2": { yt: "hpCu3HbAiWg", credit: "ALL ABOUT ELECTRONICS — Op-Amp: CMRR (Common Mode Rejection Ratio) Explained (with example)" },
     "aic301-ts-3-3": { yt: "f0Jk7c8E2gc", credit: "Mateo Aboy — MOSFET Differential Pait with Active Load" },
@@ -37,7 +37,6 @@ export default {
     "aic301-ts-11-2": { yt: "vJb5U17Ry0Q", credit: "VLSI and Microelectronics [IIT Dharwad, Karnataka] — Sample & Hold and Switched Capacitor Circuits" },
     "aic301-ts-11-3": { yt: "HicZcgdGxZY", credit: "ALL ABOUT ELECTRONICS — Introduction to ADC and DAC" },
     "aic301-1-1-mosfet-model": { yt: "YfX453RU5i0", credit: "Mastering Microelectronics — Analog ICs | Dr. Hesham Omran | Lecture 05 | MOSFET Small Signal Model" },
-    "aic301-2-1-single-stage": { yt: "dmHsVOCVEF4", credit: "Yaqub Mahnashi — 2.1: Single Stage Amplifiers | Analog IC Design | Yaqub Mahnashi" },
     "aic301-3-1-current-mirrors": { yt: "aDteBKenpWk", credit: "Behzad Razavi (Long Kong) — Razavi Electronics2 Lec5: Problem of Biasing; Intro. to Current Mirrors" },
     "aic301-4-1-differential-pairs": { yt: "IYR-FxjAym0", credit: "ALL ABOUT ELECTRONICS — MOSFET - Differential Amplifier Explained" },
     "aic301-5-1-frequency-feedback": { yt: "Bw6ahZ8znNU", credit: "Digilent — Real Analog - Circuits1 Labs: Ch11 Vid1: Introduction to Frequency Response" },

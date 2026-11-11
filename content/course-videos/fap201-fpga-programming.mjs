@@ -5,6 +5,7 @@
 export default {
   courseSlug: "fap201-fpga-programming",
   defaultVideoTrack: "YT",
+  goYt: {"fap201-flm-b026": "J6TfWjctqIc"},
   lessons: {
     "fap201-flm-b001": { yt: "gUsHwi4M4xE", credit: "EEVblog — EEVblog #496 - What Is An FPGA?" },
     "fap201-flm-b002": { yt: "nY2BY2Yr5tU", credit: "Ekeeda — Comparison of TTL and CMOS - Digital Logic and Logic Families - Industrial Electronics" },
@@ -21,7 +22,6 @@ export default {
     "fap201-flm-b020": { yt: "zSyc6py964Q", credit: "EsteemPCB Academy — FPGA Development Tutorial | Alinx AX7020 | Switch and Push Button Debouncing using D Flip-Flops" },
     "fap201-flm-b023": { yt: "AEU9bvpzas8", credit: "nandland — Shift Register in FPGA - VHDL and Verilog Examples" },
     "fap201-flm-b024": { yt: "myU2x27FIIc", credit: "Techquickie — What's the Difference Between Parallel and Serial?" },
-    "fap201-flm-b026": { yt: "J6TfWjctqIc", credit: "FPGA Works IIIT Sri City — Blinking LED on Artix-7 FPGA | Step-by-Step Verilog Guide" },
     "fap201-flm-b027": { yt: "iei1EugtQvQ", credit: "Simple Tutorials for Embedded Systems — How to create a Blinking LED on FPGA? | Xilinx FPGA Programming Tutorials" },
     "fap201-flm-b029": { yt: "GSPIRcBQUVo", credit: "Shepherd Tutorials — Designing a First In First Out (FIFO) in Verilog" },
     "fap201-flm-b031": { yt: "eyNU6mn_-7g", credit: "nandland — Crossing Clock Domains in an FPGA" },

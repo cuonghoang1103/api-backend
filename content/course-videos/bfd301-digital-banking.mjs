@@ -5,6 +5,7 @@
 export default {
   courseSlug: "bfd301-digital-banking",
   defaultVideoTrack: "YT",
+  goYt: {"bfd301-ts-9-2": "xDV2OdX6Okg"},
   lessons: {
     "bfd301-ts-1-1": { yt: "g6K6g73EjRk", credit: "Rían Chapman - X School — What Is Digital Banking?" },
     "bfd301-ts-1-2": { yt: "pPkNtN8G7q8", credit: "TEDx Talks — How FinTech is Shaping the Future of Banking | Henri Arslanian | TEDxWanChai" },
@@ -25,7 +26,6 @@ export default {
     "bfd301-ts-6-4": { yt: "rWqLW3UUuw0", credit: "Forbes Middle East — Banking Fraud and Cybersecurity Risks in a Digitized World" },
     "bfd301-ts-7-2": { yt: "88oCd2m4bEE", credit: "Global Banking & Finance Review — Banks Are Losing Customers to Super Apps. Here's Why" },
     "bfd301-ts-8-3": { yt: "20JLw9uzMbw", credit: "Z/Yen Group — Digital Operational Resilience - Are You Ready?" },
-    "bfd301-ts-9-2": { yt: "xDV2OdX6Okg", credit: "TEDx Talks — Reimagining Financial Inclusion: Banking the Unbanked | Kabeer Naqvi | TEDxRiphah Intl U" },
     "bfd301-ts-9-3": { yt: "SLiRQEhLPOA", credit: "Bernard Marr — The Top Banking Trends In 2025" },
     "bfd301-1-1-tong-quan": { yt: "fu5Lt8VLQjQ", credit: "TEDx Talks — The Revolution in Digital Banking  | Marta Echarri | TEDxIEMadrid" },
     "bfd301-3-1-thanh-toan-so": { yt: "229QbEiFKj8", credit: "Finance Broz — How digital payment system works: Beginner's Guide to Electronic Transactions" },

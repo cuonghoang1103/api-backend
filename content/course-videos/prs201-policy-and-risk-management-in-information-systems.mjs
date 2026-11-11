@@ -5,6 +5,7 @@
 export default {
   courseSlug: "prs201-policy-and-risk-management-in-information-systems",
   defaultVideoTrack: "YT",
+  goYt: {"prs201-ts-3-1": "SPQqcy00_WQ"},
   lessons: {
     "prs201-ts-1-1": { yt: "EqNe55IzjAw", credit: "IBM Technology — Cybersecurity Architecture: Fundamentals of Confidentiality, Integrity, and Availability" },
     "prs201-ts-1-2": { yt: "s_6mKZrcCyM", credit: "Mavim — Why a GRC Framework? | Governance Risk and Compliance" },
@@ -12,7 +13,6 @@ export default {
     "prs201-ts-2-1": { yt: "IP-E75FGFkU", credit: "Educationleaves — What is Risk Management? | Process, Approaches, Types, Importance, Limitations" },
     "prs201-ts-2-2": { yt: "iuqD89yVx1U", credit: "CyberPlatter — NIST RMF | NIST Risk Management Framework | Step by Step Guide to NIST RMF | Risk Management" },
     "prs201-ts-2-3": { yt: "K85qXpu0y9E", credit: "PCR Global — ISO 31000 Risk Definition, Principles, Framework and Processes, and how they effect Objectives" },
-    "prs201-ts-3-1": { yt: "SPQqcy00_WQ", credit: "Destination Certification — CISM Domain 3: Information Asset Identification and Data Classification" },
     "prs201-ts-3-2": { yt: "rEnJYNkUde0", credit: "Netsec Explained — STRIDE Threat Modeling for Beginners - In 20 Minutes" },
     "prs201-ts-3-3": { yt: "oSyEGkX6sX0", credit: "Red Hat — CVE and CVSS explained | Security Detail" },
     "prs201-ts-4-1": { yt: "_c2L4z-v06g", credit: "IBM Technology — Risky Business: Strengthening Cybersecurity with Risk Analysis" },

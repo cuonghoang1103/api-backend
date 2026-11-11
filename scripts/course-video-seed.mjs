@@ -153,6 +153,23 @@ for (const file of files) {
     patched++;
   }
 
+  // goYt: { slug: id } — GỠ video YouTube đã gắn trước đây (11/11/2026: gỡ video dưới ngưỡng 1.000 lượt xem).
+  // Chỉ xoá khi DB đang giữ ĐÚNG id đó ⇒ chạy lại vô hại, không đụng video khác đã thay vào.
+  let go = 0;
+  for (const [lessonSlug, id] of Object.entries(map.goYt || {})) {
+    const lesson = bySlug.get(lessonSlug);
+    if (!lesson || !id) continue;
+    const d = await prisma.lessonDetail.findUnique({ where: { lessonId: lesson.id }, select: { videoUrlYt: true, videoUrl: true } });
+    if (!d?.videoUrlYt?.includes(id)) continue;
+    console.log(`  - ${lessonSlug} gỡ YT ${id}`);
+    if (APPLY) {
+      await prisma.lessonDetail.update({ where: { lessonId: lesson.id }, data: { videoUrlYt: null, videoYtCredit: null, ...(d.videoUrl?.includes(id) ? { videoUrl: null } : {}) } });
+      const l = await prisma.lesson.findUnique({ where: { id: lesson.id }, select: { videoUrl: true } });
+      if (l?.videoUrl?.includes(id)) await prisma.lesson.update({ where: { id: lesson.id }, data: { videoUrl: null } });
+    }
+    go++;
+  }
+  if (go) console.log(`  · gỡ ${go} video YouTube`);
   console.log(`  · ${patched} bài gắn video · ${missing} không khớp slug · ${bad} link hỏng`);
   totalPatched += patched; totalMissing += missing; totalBad += bad;
 }

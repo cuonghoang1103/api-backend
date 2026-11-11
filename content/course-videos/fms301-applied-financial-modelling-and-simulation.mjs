@@ -5,10 +5,10 @@
 export default {
   courseSlug: "fms301-applied-financial-modelling-and-simulation",
   defaultVideoTrack: "YT",
+  goYt: {"fms301-ts-1-3": "sJAfMJK6CeQ"},
   lessons: {
     "fms301-ts-1-1": { yt: "AYyzkfkeE-8", credit: "Christian Wattig — What is Financial Modeling? (Full Beginner’s Guide)" },
     "fms301-ts-1-2": { yt: "Iiq4Sem9GPM", credit: "Kenji Explains — Build a Dynamic Financial Model in Just 15 Minutes" },
-    "fms301-ts-1-3": { yt: "sJAfMJK6CeQ", credit: "AuditExcel Advanced Excel and Financial Model Training and Consulting — Build errors checks into ALL spreadsheets- Ensure integrity in Spreadsheet Best Practice" },
     "fms301-ts-2-1": { yt: "s4Nwc9diIsc", credit: "Business Career College — Time Value of Money using Excel" },
     "fms301-ts-2-2": { yt: "YDpf00QHY0I", credit: "Ryan O'Connell, CFA, FRM — How to Calculate NPV and IRR in Excel" },
     "fms301-ts-2-3": { yt: "46oLXwClvkw", credit: "Edspira — Weighted Average Cost of Capital (WACC)" },

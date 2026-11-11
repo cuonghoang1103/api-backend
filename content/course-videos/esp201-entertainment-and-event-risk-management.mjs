@@ -5,10 +5,10 @@
 export default {
   courseSlug: "esp201-entertainment-and-event-risk-management",
   defaultVideoTrack: "YT",
+  goYt: {"esp201-ts-1-3": "31ZEMdAJIwk"},
   lessons: {
     "esp201-ts-1-1": { yt: "C2KEVN2ujAA", credit: "Event Planning — EVENT RISK MANAGEMENT Part 1" },
     "esp201-ts-1-2": { yt: "_V6RYlxFXj4", credit: "ERM Academy — ISO 31000 | Risk Management Framework" },
-    "esp201-ts-1-3": { yt: "31ZEMdAJIwk", credit: "The Institute of Internal Auditors — Board Oversight of Management’s Risk Appetite & Tolerance" },
     "esp201-ts-2-1": { yt: "wjnD1R53iN8", credit: "Logan Clements — Event Budgets 101: Six Budget Basics to Help You Plan Your Next Event" },
     "esp201-ts-2-2": { yt: "XZ0riJeipw4", credit: "Educationleaves — Break-even Analysis | Breakeven Chart, Formula  (In 4 minutes)" },
     "esp201-ts-2-4": { yt: "hJrhsNr38nc", credit: "BizMoney Explained — How to Manage Cash Flow for Small Business (How Money Really Works)" },

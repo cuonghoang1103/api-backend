@@ -5,6 +5,7 @@
 export default {
   courseSlug: "ega301-e-government-and-public-administration",
   defaultVideoTrack: "YT",
+  goYt: {"ega301-ts-8-2": "xJ4TAVql8tY"},
   lessons: {
     "ega301-ts-1-1": { yt: "kOy25Q8Y_Gg", credit: "ConsultKano — Introduction To Public Administration in Under 10 Minutes For Beginners | Meaning and Importance" },
     "ega301-ts-1-2": { yt: "I8EQAnKntLs", credit: "CrashCourse — Bureaucracy Basics: Crash Course Government and Politics #15" },
@@ -20,7 +21,6 @@ export default {
     "ega301-ts-6-3": { yt: "OeyMEDPnPcE", credit: "Design Systems London — Accessibility in the GOV.UK Design System - Nick Colley - Design Systems London" },
     "ega301-ts-7-1": { yt: "NAxOUBMMQd4", credit: "CNBC International — How Estonia became one of the world’s most advanced digital societies | CNBC Reports" },
     "ega301-ts-7-3": { yt: "y9cNlPcZ-ws", credit: "The Guardian — Gov.uk: how geeks opened up government" },
-    "ega301-ts-8-2": { yt: "xJ4TAVql8tY", credit: "UNDESA Public Institutions and Digital Government — Improving Public Service Delivery and Promoting Inclusion through Innovation and ICTs" },
     "ega301-ts-8-4": { yt: "9XWqalMmG-U", credit: "CEC — E- Governance : Opportunities & Challenges" },
     "ega301-ts-9-2": { yt: "uPsUjKLHLAg", credit: "IBM Technology — Data Governance Explained in 5 Minutes" },
     "ega301-ts-9-3": { yt: "y6FDBDGNYFc", credit: "TEDx Talks — Should we worry about AI and algorithms in government? | Lyria Bennett Moses | TEDxSydneySalon" },

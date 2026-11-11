@@ -5,6 +5,7 @@
 export default {
   courseSlug: "server-side-development-nodejs-express-mongodb",
   defaultVideoTrack: "YT",
+  goYt: {"sdn302-goc-7-ejs": "z3lrXR5Xjls"},
   lessons: {
     "sdn302-gioi-thieu": { yt: "ENrzD9HAZK4", credit: "Fireship — Node.js Ultimate Beginner’s Guide in 7 Easy Steps", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4' }, defaultVideoTrack: 'VI'},
     "sdn302-1-1-node-event-loop": { yt: "8aGhZQkoFbQ", credit: "JSConf — What the heck is the event loop anyway? | Philip Roberts | JSConf EU" },
@@ -33,7 +34,7 @@ export default {
     "sdn302-goc-3-2-nosql-mongodb": { yt: "ACUXjXtG8J4", credit: "Code With Yousaf — How to Connect Node.JS with MongoDB using Mongoose | Connect to a MongoDB Database Using Node.js", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/03-mongodb-mongoose/G03-01-nosql-mongodb-tron-5750dee5.mp4' }, defaultVideoTrack: 'VI'},
     "sdn302-goc-4-1-mongoose": { yt: "4yqu8YF29cU", credit: "freeCodeCamp.org — MongoDB Full Tutorial w/ Node.js, Express, & Mongoose" },
     "sdn302-goc-6-restful-api": { yt: "HbkWIaT0lVI", credit: "ProgrammingKnowledge — Node.js Rest Api with Express  MongoDB  5 - Building a Restful CRUD API with Node.js, Express", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G06-restful-api-tron-a5ec867d.mp4' }, defaultVideoTrack: 'VI'},
-    "sdn302-goc-7-ejs": { yt: "z3lrXR5Xjls", credit: "Tech Forum — Using Template Engines with Express | Embedded JavaScript Template(EJS)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G07-ejs-tron-72ea60c8.mp4' }, defaultVideoTrack: 'VI'},
+    "sdn302-goc-7-ejs": { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G07-ejs-tron-72ea60c8.mp4' }, defaultVideoTrack: 'VI'},
     "sdn302-goc-8-handlebars": { yt: "SfQFoMOd_ng", credit: "Traversy Media — NodeJS, Express and Handlebars", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/04-rest-api-mvc-templating/G08-handlebars-tron-7c97aa7f.mp4' }, defaultVideoTrack: 'VI'},
     "sdn302-goc-9-10-auth": { yt: "6FOq4cUdH8k", credit: "Traversy Media — Node.js With Passport Authentication | Full Project", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G0910-auth-tron-3757915b.mp4' }, defaultVideoTrack: 'VI'},
     "sdn302-goc-11-https": { yt: "xvMGNGaapG0", credit: "PothOnProgramming — Create a Secure HTTPS Server with Node JS!", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/05-xac-thuc-bao-mat/G11-https-tron-e6ca785e.mp4' }, defaultVideoTrack: 'VI'},

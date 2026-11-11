@@ -5,6 +5,7 @@
 export default {
   courseSlug: "sap321-sap-general-2",
   defaultVideoTrack: "YT",
+  goYt: {"sap321-flm-b013": "f40liWRfJf8"},
   lessons: {
     "sap321-flm-b001": { yt: "9ftnWTV90Wo", credit: "The Smart Hands — SAP WM Training - Overview of SAP WM (Video 3) | SAP WM Warehouse Management" },
     "sap321-flm-b002": { yt: "u37r2osByTo", credit: "The Smart Hands — SAP WM Training - Overview of Organizational Structure (Video 4) | SAP WM Warehouse Management" },
@@ -12,7 +13,6 @@ export default {
     "sap321-flm-b004": { yt: "oGmgLqTlopk", credit: "Uplatz — Storage Unit Management (SUM) in SAP WM | SAP Warehouse Management Tutorial |SAP WM Training| Uplatz" },
     "sap321-flm-b005": { yt: "8vxf-4FJKJM", credit: "The Smart Hands — SAP WM Training - Introduction to SAP WM (Video 1) | SAP WM Warehouse Management" },
     "sap321-flm-b008": { yt: "QlSIvKOsEhY", credit: "The Smart Hands — SAP WM Training - Company Code (Video 7) | SAP WM Warehouse Management" },
-    "sap321-flm-b013": { yt: "f40liWRfJf8", credit: "ZaranTech DotCom — Warehouse organization unit | SAP WM (Warehouse Management) Training | ZaranTech" },
     "sap321-flm-b019": { yt: "nyILyO_Gif8", credit: "Karma Sherif — SAP Financial Accounting" },
     "sap321-flm-b035": { yt: "uO5eh-HIGsY", credit: "The Smart Hands — SAP CO Training - Org Units (Video 3) | SAP CO Controlling" },
     "sap321-flm-b040": { yt: "fn6NJuwIh3M", credit: "The Smart Hands — SAP CO Training - Overview of CO Module (Video 2) | SAP CO Controlling" },

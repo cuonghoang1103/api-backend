@@ -5,6 +5,7 @@
 export default {
   courseSlug: "nwc303-network-connectivity",
   defaultVideoTrack: "YT",
+  goYt: {"nwc303-flm-b022": "YGDdHztzg8o"},
   lessons: {
     "nwc303-flm-b004": { yt: "DCU4Gw4tWKI", credit: "Ron Wellman — Lab 1 - Connection Basics" },
     "nwc303-flm-b007": { yt: "MNZa-S4E-To", credit: "PowerCert Animated Videos — VLANs, Tagging, Trunking, VxLAN, & Native VLAN" },
@@ -17,7 +18,6 @@ export default {
     "nwc303-flm-b017": { yt: "n3tqBHXyjY0", credit: "Anthony Lucas — Packet Tracer 7.4.1 - Implement DHCPv4" },
     "nwc303-flm-b019": { yt: "jlG_nrCOmJc", credit: "OneMarcFifty — IPv6 explained - SLAAC and DHCPv6 (IPv6 from scratch part 2)" },
     "nwc303-flm-b020": { yt: "A6WVj82by3Y", credit: "Professor Messer — IPv6 and SLAAC - CompTIA Network+ N10-009 - 3.4" },
-    "nwc303-flm-b022": { yt: "YGDdHztzg8o", credit: "@EnterpriseIT_Labs — Configure IPv6 DHCPv6 for Multiple LANs | Cisco Router Practical Lab" },
     "nwc303-flm-b025": { yt: "n7cjd5E_nsc", credit: "Chris Titus Tech — Network Security Basics - Are you doing these things?" },
     "nwc303-flm-b028": { yt: "0W4JZIWtjLQ", credit: "NetworkChuck — you NEED to learn Port Security…….RIGHT NOW!! // FREE CCNA // EP 14" },
     "nwc303-flm-b029": { yt: "Y4PT5hn-P08", credit: "CertBros — How to Configure Port Security on a Cisco Switch" },

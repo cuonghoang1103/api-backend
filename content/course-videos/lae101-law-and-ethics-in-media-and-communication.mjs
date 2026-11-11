@@ -5,6 +5,7 @@
 export default {
   courseSlug: "lae101-law-and-ethics-in-media-and-communication",
   defaultVideoTrack: "YT",
+  goYt: {"lae101-flm-b025": "4a7nP1z0yK8"},
   lessons: {
     "lae101-flm-b003": { yt: "cs2DdGgdgrI", credit: "Mark Pearson — Media Law Griffith University Module 1a: Introduction, media law in the digital era and legal system" },
     "lae101-flm-b004": { yt: "Jik3F9zUXgo", credit: "Vox — The messy truth about free speech" },
@@ -22,7 +23,6 @@ export default {
     "lae101-flm-b022": { yt: "0pgEPKAKrtQ", credit: "CrashCourse — International IP Law: Crash Course Intellectual Property #6" },
     "lae101-flm-b023": { yt: "6olibqmKTDE", credit: "United Nations ESCAP — Module 6 Intellectual Property Rights" },
     "lae101-flm-b024": { yt: "eWOOVlwkrEc", credit: "NPTEL IIT Kharagpur — Lecture 12 : Intellectual Property Rights and Ethics" },
-    "lae101-flm-b025": { yt: "4a7nP1z0yK8", credit: "Vidya-mitra — Globalisation, Media and Intellectual Property Rights" },
     "lae101-flm-b049": { yt: "TVaZnxYKKdM", credit: "CrashCourse — Media Policy & You: Crash Course Media Literacy #9" },
     "lae101-flm-b050": { yt: "UUP39YJ5VGE", credit: "Indian Mass Communication — 6.1 Foundations of Media Law | Journalism and Mass Communication | UGC NET Unit 6 | CUET PG | COQP17" },
     "lae101-flm-b051": { yt: "EB1MZj7BWrQ", credit: "Biola University — [JOUR 111] Ethics in Public Relations" },

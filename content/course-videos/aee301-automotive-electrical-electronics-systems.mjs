@@ -5,6 +5,7 @@
 export default {
   courseSlug: "aee301-automotive-electrical-electronics-systems",
   defaultVideoTrack: "YT",
+  goYt: {"aee301-flm-b044": "AsOfdJrXFro", "aee301-flm-b045": "X7ebPG_mIb4"},
   lessons: {
     "aee301-flm-b002": { yt: "sm5emP-1Co8", credit: "Adept Ape — Electrical 101 for cars, trucks and equipment. Beginner electrical, Class 1." },
     "aee301-flm-b003": { yt: "Zpbj3C4RtBc", credit: "MECHANICAL & AUTOMOBILE ENGINEERING_LJIET — L 01 Introduction to Electrical and Electronics | Automotive Electricals & Electronics | Automobile" },
@@ -30,8 +31,6 @@ export default {
     "aee301-flm-b033": { yt: "dK-JvAkipx4", credit: "Julian Edgar — Basics of engine management systems" },
     "aee301-flm-b034": { yt: "iJbXfv7ugLM", credit: "AndysAutoSportTV — Engine Management Systems - Presented by Andy's Auto Sport" },
     "aee301-flm-b043": { yt: "5MN29kfKCz8", credit: "NPTEL-NOC IITM — Automotive Instrumentation: Introduction to Autotronics systems" },
-    "aee301-flm-b044": { yt: "AsOfdJrXFro", credit: "NPTEL-NOC IITM — Automotive Instrumentation: Elements for Automotive instruments" },
-    "aee301-flm-b045": { yt: "X7ebPG_mIb4", credit: "NPTEL-NOC IITM — Automotive Instrumentation: Electronic in Automotive Systems - Part 2" },
     "aee301-flm-b046": { yt: "nm0vXRiLTqs", credit: "Motoring Masters — How does Car Air Conditioning Work?-Components and Their Functions -Car AC system" },
     "aee301-flm-b048": { yt: "NSUeRlJ2P0g", credit: "AC Avalanche — AC Avalanche - Auto Air Conditioning 101 Made Easy" },
     "aee301-flm-b053": { yt: "hAjM9Gk63M4", credit: "EricTheCarGuy — Automotive Electrical System Basics - EricTheCarGuy" },

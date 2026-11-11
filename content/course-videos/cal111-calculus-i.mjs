@@ -5,6 +5,7 @@
 export default {
   courseSlug: "cal111-calculus-i",
   defaultVideoTrack: "YT",
+  goYt: {"cal111-ts-5-2": "NfDwoFrlLFE"},
   lessons: {
     "cal111-ts-1-1": { yt: "KirGQOwjBVI", credit: "The Organic Chemistry Tutor — Domain and Range of a Function From a Graph" },
     "cal111-ts-1-2": { yt: "Tmdrjs9xufc", credit: "The Organic Chemistry Tutor — Transformations of Functions | Precalculus" },
@@ -21,7 +22,6 @@ export default {
     "cal111-ts-4-2": { yt: "I9mVUo-bhM8", credit: "The Organic Chemistry Tutor — Introduction to Related Rates" },
     "cal111-ts-4-3": { yt: "FIbpibkywmk", credit: "The Organic Chemistry Tutor — Linear Approximation, Differentials, Tangent Line, Linearization, f(x), dy, dx - Calculus" },
     "cal111-ts-5-1": { yt: "VZuJ4bGj2D0", credit: "The Organic Chemistry Tutor — Absolute & Local Minimum and Maximum Values - Relative Extrema, Critical Numbers / Points Calculus" },
-    "cal111-ts-5-2": { yt: "NfDwoFrlLFE", credit: "Math Lessons by Dr. Lane — Calculus 1 - Increasing and Decreasing Functions (Via Rolle's Theorem and The Mean Value Theorem)" },
     "cal111-ts-5-3": { yt: "15awMHeP1Yc", credit: "The Organic Chemistry Tutor — Concavity, Inflection Points, Increasing Decreasing, First & Second Derivative - Calculus" },
     "cal111-ts-5-4": { yt: "PdSzruR5OeE", credit: "Khan Academy — Introduction to l'Hôpital's rule | Derivative applications | Differential Calculus | Khan Academy" },
     "cal111-ts-6-1": { yt: "q1U6AmIa_uQ", credit: "Professor Dave Explains — Optimization Problems in Calculus" },

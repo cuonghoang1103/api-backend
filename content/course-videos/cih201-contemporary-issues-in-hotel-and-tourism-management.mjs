@@ -5,10 +5,10 @@
 export default {
   courseSlug: "cih201-contemporary-issues-in-hotel-and-tourism-management",
   defaultVideoTrack: "YT",
+  goYt: {"cih201-flm-b010": "mQY-UxbyqmY", "cih201-7-1-community-culture-vietnam": "AoK4XuEXzS8"},
   lessons: {
     "cih201-flm-b002": { yt: "NH_ZMWBQ6a4", credit: "BBC News — Is this the world’s first AI powered hotel? | BBC News" },
     "cih201-flm-b009": { yt: "oL-X2iQi864", credit: "Tourism Roadmap — Sustainable Tourism Explained" },
-    "cih201-flm-b010": { yt: "mQY-UxbyqmY", credit: "mfu.mooc — Week 2 Sustainable Tourism Development Clip 2 Emergence of Sustainable Tourism" },
     "cih201-flm-b017": { yt: "pmZ0RFTdlG0", credit: "Easy Marketing — Tourism Marketing: 12 Tourism Marketing Strategies" },
     "cih201-flm-b018": { yt: "JInMsKoXZ3M", credit: "Easy Marketing — Tourism marketing: Future of the tourism marketing" },
     "cih201-flm-b031": { yt: "YqmpfIUwcKA", credit: "Travel Professors — Airbnb and the Role of Sharing Economy in Tourism" },
@@ -25,7 +25,6 @@ export default {
     "cih201-3-1-digital-transformation": { yt: "GjdGqf_3oSs", credit: "LeanVlog — What Is Digital Transformation - A Brief Introduction With Examples, Process and Statistics" },
     "cih201-4-1-guest-experience": { yt: "leVaoG-u5nY", credit: "Hotel Tech Report — AI in Hotels: Revenue, Operations & Guest Experience Transformed" },
     "cih201-6-1-crisis-recovery": { yt: "JQsIgXL6OAU", credit: "UQx TOURISMx Tourism and Travel Management — UQx TOURISMx TOUR_033 What is risk and crisis management?" },
-    "cih201-7-1-community-culture-vietnam": { yt: "AoK4XuEXzS8", credit: "Plan International Ireland — How Community Tourism Is Transforming Lives in Rural Vietnam" },
     "cih201-8-1-destination-marketing-future": { yt: "k0LfKwf-Twc", credit: "Cornell University — How Tech, Social Media Now Drive the Travel/Hotel Industry" },
   },
 };

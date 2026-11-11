@@ -5,6 +5,7 @@
 export default {
   courseSlug: "iei301-import-export",
   defaultVideoTrack: "YT",
+  goYt: {"iei301-flm-b038": "egm7nxCPjlA", "iei301-flm-b051": "aK1pb9mugJs", "iei301-flm-b052": "aafM7M9-ZmM"},
   lessons: {
     "iei301-flm-b001": { yt: "YiZn5fpPHgY", credit: "Federal Reserve Bank of St. Louis — International Trade 101 | Economics Explained" },
     "iei301-flm-b002": { yt: "geoe-6NBy10", credit: "CrashCourse — Imports, Exports, and Exchange Rates: Crash Course Economics #15" },
@@ -24,14 +25,11 @@ export default {
     "iei301-flm-b034": { yt: "MCecMzBA01I", credit: "Ray Bowman — Foreign Exchange Risk in International Trade" },
     "iei301-flm-b035": { yt: "hq1EZNBYq1w", credit: "International Trade Administration — Choosing an Export Payment Method: Cash-in-Advance" },
     "iei301-flm-b036": { yt: "9ezhlvXkQxc", credit: "International Trade Administration — Using Documentary Collections with Trusted Foreign Buyers" },
-    "iei301-flm-b038": { yt: "egm7nxCPjlA", credit: "MMLT UUM — BWBB 3063 INTERNATIONAL TRADE AND FINANCE - DOCUMENTARY CREDIT" },
     "iei301-flm-b041": { yt: "WAj7oR3HKMc", credit: "Shuddh Desi Banking — Trade Finance Basic Concepts | Methods of Payment | Parties Involved" },
     "iei301-flm-b047": { yt: "ODRzRFrj72o", credit: "Paresh Solanki-International Export Import Trainer — What is Bill Of Entry in Import Business? Why Bill of Entry is Very Important for the Importer?" },
     "iei301-flm-b048": { yt: "obWUcTqtqPw", credit: "International Trade Administration — Understand Your Product's Harmonized System (HS) Code" },
     "iei301-flm-b049": { yt: "t5BX4k1qhVk", credit: "APICS EDU CLUB — Mastering Customs Valuation: Exploring Methods for Determining Customs Value" },
     "iei301-flm-b050": { yt: "3lxRK76JwH4", credit: "Directorate General of Foreign Trade — What are Rules of Origin & Certificates of Origin" },
-    "iei301-flm-b051": { yt: "aK1pb9mugJs", credit: "USA Customs Clearance — How to Choose the Right Customs Broker for Your Import Business" },
-    "iei301-flm-b052": { yt: "aafM7M9-ZmM", credit: "Simply Legal — International trade law- unit 6 trade remedies, part 1 anti dumping" },
     "iei301-flm-b053": { yt: "gj3-8hM9SJ0", credit: "Nurdalila binti Abdullah — Exporting, Importing and Countertrade (IB, Week 10, Chapter 10)" },
     "iei301-1-1-overview-of-ie": { yt: "GpJIEw6Cz5Y", credit: "NerdWallet Small Business — Your 6-Step Guide to Starting an Import Export Business" },
     "iei301-2-1-market-research": { yt: "0LCUHVmZ1eQ", credit: "International Trade Administration — Export Experts: Finding and Managing International Partners" },

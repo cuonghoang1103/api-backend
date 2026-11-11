@@ -5,6 +5,7 @@
 export default {
   courseSlug: "qtm321-quantum-machine-learning",
   defaultVideoTrack: "YT",
+  goYt: {"qtm321-ts-6-4": "e2XrbWuaQNQ", "qtm321-ts-10-1": "m_wVLd_5rNw"},
   lessons: {
     "qtm321-ts-1-1": { yt: "NqHKr9CGWJ0", credit: "IBM Technology — Quantum Machine Learning Explained" },
     "qtm321-ts-1-3": { yt: "OKbcJCUx6xA", credit: "Qiskit — Quantum Machine Learning — Programming on Quantum Computers — Coding with Qiskit S2E6" },
@@ -21,7 +22,6 @@ export default {
     "qtm321-ts-5-4": { yt: "JCrvxWZEtSY", credit: "IBM Technology — Quantum Error Mitigation and the Path to Useful Quantum Computing" },
     "qtm321-ts-6-1": { yt: "-sxlXNz7ZxU", credit: "Qiskit — Lecture 5.1 - Building a Quantum Classifier" },
     "qtm321-ts-6-2": { yt: "xL383DseSpE", credit: "QRL — Quantum Neural Networks explained in 3Blue1Brown style animation | Episode 1, Introduction" },
-    "qtm321-ts-6-4": { yt: "e2XrbWuaQNQ", credit: "Northeast Quantum Forum — Soonwon Choi - Quantum Convolutional Neural Networks" },
     "qtm321-ts-7-1": { yt: "4nT0BTUxhJY", credit: "Qiskit — Phase Estimation and Factoring | Understanding Quantum Information & Computation | Lesson 07" },
     "qtm321-ts-7-2": { yt: "9m92WpcTdgs", credit: "QRL — Quantum Support Vector Machines explained | Quantum algorithms explained | Quantum Machine Learning" },
     "qtm321-ts-7-3": { yt: "aQzlNy4bepU", credit: "Peace Growba — 112 Quantum Amplitude Estimation" },
@@ -30,7 +30,6 @@ export default {
     "qtm321-ts-9-1": { yt: "RyRKmZ6A25k", credit: "Qiskit — Solving Optimization Problems with Quantum Algorithms with Daniel Egger: Qiskit Summer School 2024" },
     "qtm321-ts-9-2": { yt: "YpLzSQPrgSc", credit: "Qiskit — Lecture 5.2 - Introduction to the Quantum Approximate Optimization Algorithm and Applications" },
     "qtm321-ts-9-3": { yt: "zvfkXjzzYOo", credit: "D-Wave — What is Quantum Annealing?" },
-    "qtm321-ts-10-1": { yt: "m_wVLd_5rNw", credit: "PennyLane — Nathan Killoran: Better than classical? The subtle art of benchmarking QML models" },
     "qtm321-ts-10-3": { yt: "w--HZ4QXugA", credit: "Qiskit — Understanding Noise in Near-Term Quantum Computers with Haimeng Zhang: Qiskit Summer School 2024" },
     "qtm321-ts-10-4": { yt: "JtsmoS7vXYA", credit: "QRL — Quantum Machine Learning Project with TensorFlow Quantum and Cirq | Quantum Computing" },
     "qtm321-1-1-foundations": { yt: "xgA4Dx_7q34", credit: "Qiskit — Lecture 1.1 - Vector Spaces, Tensor Products, and Qubits" },

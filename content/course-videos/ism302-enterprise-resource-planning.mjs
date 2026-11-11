@@ -5,13 +5,13 @@
 export default {
   courseSlug: "ism302-enterprise-resource-planning",
   defaultVideoTrack: "YT",
+  goYt: {"ism302-flm-b015": "_2aJ9W7xs9k"},
   lessons: {
     "ism302-flm-b001": { yt: "rCQlTs_S6bA", credit: "BuddyFromIT — What is ERP? | System ERP | SAP for beginners" },
     "ism302-flm-b002": { yt: "_H59sWSG0eI", credit: "Educationleaves — What is Enterprise Resource Planning (ERP)? Types, Advantages & Disadvantages #erp" },
     "ism302-flm-b007": { yt: "A98X_bvX2QA", credit: "tutor2u — Enterprise Resource Planning (ERP) | A-Level & IB Business" },
     "ism302-flm-b008": { yt: "gBXJ_PhlADQ", credit: "Leaders Talk - ThinkEduca — Enterprise Resource Planning (ERP) in 15 minutes" },
     "ism302-flm-b013": { yt: "0h0lO46ACfA", credit: "Marketing91 — Marketing Information System - Components, Advantages, Limitations, Examples (Marketing Video 11)" },
-    "ism302-flm-b015": { yt: "_2aJ9W7xs9k", credit: "Dr Bo Han Class — SAP ERP 03 Sales Process Information Management Demo" },
     "ism302-flm-b019": { yt: "qYac28pJ_hc", credit: "Leaders Talk - ThinkEduca — Supply Chain Management (SCM) Explained in 18 min" },
     "ism302-flm-b020": { yt: "z-lLPS4Dl-Y", credit: "EduAIverse — ERP & Supply Chain Management Explained Simply | Easy Guide for Students" },
     "ism302-flm-b021": { yt: "6s5RK534h7U", credit: "X-Mando — Introduction to Supply Chain Management Information Systems" },

@@ -5,6 +5,7 @@
 export default {
   courseSlug: "fle201-financial-law-and-ethics-in-finance",
   defaultVideoTrack: "YT",
+  goYt: {"fle201-3-1-cfa-code-of-ethics": "ZfhAHtXN1-A"},
   lessons: {
     "fle201-ts-1-1": { yt: "hm5zqBPsRJM", credit: "MIT OpenCourseWare — 24. Market Failures II: Informational Asymmetry" },
     "fle201-ts-1-2": { yt: "lPD9fx8fK1k", credit: "MIT OpenCourseWare — 15. Central Banks &  Commercial Banking, Part 1" },
@@ -22,7 +23,6 @@ export default {
     "fle201-ts-9-1": { yt: "7CMUfDZ0Kzk", credit: "Practice Tests Academy — The basics of Corporate Governance" },
     "fle201-ts-9-2": { yt: "IA3ZXMRAXNY", credit: "Corporate Finance Institute — ESG Fundamentals: Sustainable Finance & Investing Part 1 | CFI Course" },
     "fle201-1-1-overview-law-ethics": { yt: "YqBhEpkLfgs", credit: "Seven Pillars Institute for Global Finance and Ethics — Ethics in Finance is Good! Episode 2: Does Financial Ethics Make Sense?" },
-    "fle201-3-1-cfa-code-of-ethics": { yt: "ZfhAHtXN1-A", credit: "CFA Society Malaysia — The CFA Institute Code of Ethics and Standard of Professional Conduct" },
     "fle201-4-1-insider-trading-manipulation": { yt: "Iorb71CPj8E", credit: "Yale Law School — Insider Trading explained" },
     "fle201-5-1-conflicts-fiduciary-duty": { yt: "LICje9qiheQ", credit: "Understand Finance with Dr. Dicle — Fiduciary Responsibility, Client Duties, and Conflicts of Interest" },
     "fle201-7-1-aml-compliance": { yt: "AxA-OLVSdmo", credit: "Financial Crime Compliance and Regulations — Basics of Anti Money Laundering (AML)" },

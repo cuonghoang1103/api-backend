@@ -5,6 +5,7 @@
 export default {
   courseSlug: "cos201-communication-system",
   defaultVideoTrack: "YT",
+  goYt: {"cos201-flm-b043": "cFT32OBev-4"},
   lessons: {
     "cos201-flm-b002": { yt: "E4E1GftPD1M", credit: "ALL ABOUT ELECTRONICS — Classification of Signals Explained | Types of Signals in Communication" },
     "cos201-flm-b003": { yt: "0USI-48ovJI", credit: "Neso Academy — Properties of Fourier Transform (Part 1)" },
@@ -32,7 +33,6 @@ export default {
     "cos201-flm-b037": { yt: "MAddbFfCsIo", credit: "Iain Explains Signals, Systems, and Digital Comms — How is Data Sent? An Overview of Digital Communications" },
     "cos201-flm-b039": { yt: "tZiKRfH2yZ4", credit: "Texas Instruments — What is an eye diagram?" },
     "cos201-flm-b040": { yt: "0hd_uGg5zh8", credit: "Wessam Mesbah — EE 370, 99- M-ary Baseband Signaling" },
-    "cos201-flm-b043": { yt: "cFT32OBev-4", credit: "Ali Muqaibel — Band-Pass Transmission Introduction and Models" },
     "cos201-flm-b044": { yt: "qGwUOvErR8Q", credit: "Sunny Classroom — Digital modulation: ASK, FSK, and PSK" },
     "cos201-flm-b046": { yt: "_PG-jJKB_do", credit: "Up and Atom — Intro to Information Theory | Digital Communication | Information Technology" },
     "cos201-flm-b047": { yt: "t1r5anHpaNk", credit: "RTU Wallah — Shannon's Noiseless Coding Theorem | Source Coding Theorem" },

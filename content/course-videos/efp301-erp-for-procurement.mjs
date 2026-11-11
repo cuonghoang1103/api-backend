@@ -5,14 +5,13 @@
 export default {
   courseSlug: "efp301-erp-for-procurement",
   defaultVideoTrack: "YT",
+  goYt: {"efp301-ts-2-1": "A9NEEnZAR-k", "efp301-ts-3-1": "ocYyuVQ00TA", "efp301-5-1-sourcing-rfq": "TN4EMEwRlQ0"},
   lessons: {
     "efp301-ts-1-1": { yt: "Da1hUqzoiAo", credit: "IBM Technology — What is Enterprise Resource Planning (ERP) Software?" },
     "efp301-ts-1-2": { yt: "bC4d7P0-sjA", credit: "MVC Logistics Academy — What is Procurement? (Supply Chain Basics)" },
     "efp301-ts-1-3": { yt: "b7lSsKxHgio", credit: "Cybrosys Technologies — Odoo VS SAP | Comparison Between Odoo ERP and SAP ERP" },
-    "efp301-ts-2-1": { yt: "A9NEEnZAR-k", credit: "Online Coaching — SAP MM Vendor Master Data Tutorial | Vendor Master Creation & Configuration | SAP MM Full Course" },
     "efp301-ts-2-2": { yt: "A3OeOAqhopw", credit: "SAP PRESS — What Is the Material Master in SAP?" },
     "efp301-ts-2-3": { yt: "pMuOCjppayg", credit: "SAP MM S/4 HANA - Sourcing & Procurement — How to Create Info records in SAP MM S4 HANA" },
-    "efp301-ts-3-1": { yt: "ocYyuVQ00TA", credit: "Nikhil Mittal Procurement — P2P Process Explained | End-to-End Procure to Pay Cycle in Supply Chain Management" },
     "efp301-ts-3-3": { yt: "VubhZlCYDp0", credit: "Odoo — Approvals & Warnings | Odoo Purchase" },
     "efp301-ts-4-2": { yt: "5nmBGs_aieA", credit: "10 Min For Supply Chain — Purchase Requisition to Purchase Order Process Explained | Step-by-Step Procurement P2P  Workflow" },
     "efp301-ts-4-4": { yt: "glu3gGKnlJo", credit: "Vikram F, Gaurav Learning Solutions — SAP S4 PO (Purchase Order) Release Using Flexible Workflow | Gaurav Learning Solutions" },
@@ -30,7 +29,6 @@ export default {
     "efp301-2-1-p2p-process": { yt: "VA4hI0P5dJs", credit: "SAP MM Learning Hub — Procure To Pay (P2P) Process in SAP S4 HANA MM Module - Overview" },
     "efp301-3-1-vendor-material-master": { yt: "rI4yjDe83cg", credit: "TutorialsPoint — SAP MM - Vendor Master" },
     "efp301-4-1-pr-po": { yt: "MuXZF9Cnyjs", credit: "CVTechinn — Process for creating Purchase Requisitions and Purchase Orders in Oracle Procurement Cloud Fusion" },
-    "efp301-5-1-sourcing-rfq": { yt: "TN4EMEwRlQ0", credit: "B-Accuracy ERP Software — International Business | Step 4: Vendor Management Explained | RFI & RFQ Guide" },
     "efp301-6-1-goods-receipt-invoice-3way": { yt: "4wln1PxRaKc", credit: "Oracle ERP Guru — How to do Invoice Matching Process | 2-way 3-Way 4-way Matching Explained" },
     "efp301-7-1-spend-analysis": { yt: "sV1i2h5rkPA", credit: "10 Min For Supply Chain — Procurement Spend Analysis in Excel | Supplier Risk Analysis | Download Excel For Procurement" },
     "efp301-8-1-eprocurement-automation-ai": { yt: "0BH56EBEk28", credit: "IBM — AI in Procurement: Smarter Sourcing, Contracts, & Supplier Management" },

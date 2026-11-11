@@ -5,9 +5,9 @@
 export default {
   courseSlug: "sap341-sap-application-development-with-abap",
   defaultVideoTrack: "YT",
+  goYt: {"sap341-flm-b006": "vzSquciKHK0", "sap341-flm-b034": "IAmd6D6dGas"},
   lessons: {
     "sap341-flm-b004": { yt: "roMcnToz0ao", credit: "SAP ABAP by Rahul Mehta — 2 - Basics of SAP and ABAP - Introduction Part2" },
-    "sap341-flm-b006": { yt: "vzSquciKHK0", credit: "SAPVIC — Module 1: How to Write your first ABAP program | SAP Development System" },
     "sap341-flm-b019": { yt: "jkXOWB0lAGA", credit: "SAP ABAP by Rahul Mehta — 9 - Modularization Techniques - Function Modules Part6" },
     "sap341-flm-b024": { yt: "AZTqdTEONLk", credit: "VNRgroups.com — SAP ABAP Objects Tutorial For Beginners" },
     "sap341-flm-b026": { yt: "z-PzDHODamk", credit: "IT with Dustin — SAP ABAP Objects for Java (or OOP) Developers - Part 1" },
@@ -15,7 +15,6 @@ export default {
     "sap341-flm-b028": { yt: "Igq3GFTvU9Q", credit: "TutorialsPoint — SAP ABAP - Lock Objects" },
     "sap341-flm-b029": { yt: "OxTUUc8Q9LM", credit: "SAP ABAP by Rahul Mehta — 52 - ABAP Dictionary - Lock Objects - Creation" },
     "sap341-flm-b030": { yt: "RVhJcj2fWEM", credit: "SAP ABAP by Rahul Mehta — 50 - ABAP Dictionary - Lock Objects - Lock Modes Part1" },
-    "sap341-flm-b034": { yt: "IAmd6D6dGas", credit: "SAP Global — SAP ABAP Training Video Series || Object-Oriented Exception Handling  TAW 12 (Unit 9)" },
     "sap341-flm-b044": { yt: "bV0ayNY_v3o", credit: "SAP ABAP by Rahul Mehta — 12 - ODATA -  ODATA Service Creation Steps - Implement the Service Part2" },
     "sap341-flm-b048": { yt: "C9cK2Z2JDLg", credit: "freeCodeCamp.org — SAP UI5 / Fiori - Full Course" },
     "sap341-1-1-platform-workbench": { yt: "5HIAa_mlxB4", credit: "SAP ABAP by Rahul Mehta — 13 - Basics of SAP and ABAP - ABAP Workbench and Transaction Code" },

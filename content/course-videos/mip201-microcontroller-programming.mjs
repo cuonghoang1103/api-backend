@@ -5,6 +5,7 @@
 export default {
   courseSlug: "mip201-microcontroller-programming",
   defaultVideoTrack: "YT",
+  goYt: {"mip201-flm-b010": "of8seYFIjpc"},
   lessons: {
     "mip201-flm-b002": { yt: "aC37UE7edP0", credit: "Jacob Sorber — How to Get Started Learning Embedded Systems" },
     "mip201-flm-b004": { yt: "xStSCpVTWYQ", credit: "Neso Academy — Introduction to Microcontrollers" },
@@ -12,7 +13,6 @@ export default {
     "mip201-flm-b006": { yt: "qvrmOXtOpvw", credit: "Arm® — How to Choose your ARM Cortex-M Processor" },
     "mip201-flm-b007": { yt: "7LqPJGnBPMM", credit: "Arm® — The ARM University Program, ARM Architecture Fundamentals" },
     "mip201-flm-b009": { yt: "YhGv5AOcz1s", credit: "TutorialsPoint — Instruction Pipeline Architecture" },
-    "mip201-flm-b010": { yt: "of8seYFIjpc", credit: "Chip Design with Rashid — Week 8, Video 2, Memory Address Space - How CPU communicates peripherals through memory mapping" },
     "mip201-flm-b011": { yt: "alYwqzO6ZEQ", credit: "TeachingCS — Computer Architecture - System Bus (address, data & control)" },
     "mip201-flm-b012": { yt: "Azr5vjbgACM", credit: "STMicroelectronics — STM32CubeIDE basics - 03 GPIO HAL lab" },
     "mip201-flm-b013": { yt: "H2yA7CgLml4", credit: "STMicroelectronics — STM32CubeMX: Configuration and code generation" },

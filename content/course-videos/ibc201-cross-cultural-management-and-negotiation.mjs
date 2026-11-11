@@ -5,10 +5,10 @@
 export default {
   courseSlug: "ibc201-cross-cultural-management-and-negotiation",
   defaultVideoTrack: "YT",
+  goYt: {"ibc201-flm-b007": "zkpjz46i9tg"},
   lessons: {
     "ibc201-flm-b004": { yt: "rJ4IbhXrqnc", credit: "GlobalHub — Cross-Cultural Management" },
     "ibc201-flm-b005": { yt: "yKKruTRQ_2A", credit: "Trim Tab — Hofstede's Six Dimensions of Organizational Culture" },
-    "ibc201-flm-b007": { yt: "zkpjz46i9tg", credit: "ANU Learning and Teaching — Managing Across Cultures - MGMT7107" },
     "ibc201-flm-b014": { yt: "SVSycyhrY2Q", credit: "GlobalHub — Motivating Workers Across Cultures" },
     "ibc201-flm-b019": { yt: "fuHj3jsBdKE", credit: "TEDx Talks — Culture and Leadership | Joseph Trimble | TEDxWWU" },
     "ibc201-flm-b026": { yt: "41xcHr9jkV8", credit: "MIT OpenCourseWare — Session 4, Part 2: Negotiation Skills" },

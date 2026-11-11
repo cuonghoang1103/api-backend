@@ -205,7 +205,7 @@ if (!DRY && baoCao.them) {
   }).join('\n');
   const viTruoc = Object.values(cu.lessons || {}).filter((x) => x?.vi?.url).length, viSau = Object.values(gop.lessons).filter((x) => x?.vi?.url).length;
   if (viSau < viTruoc) { console.error(`✗ dừng: số bài có video bài giảng (vi) giảm ${viTruoc} → ${viSau} — không ghi ${fVid}`); process.exit(1); }
-  fs.writeFileSync(fVid, `/**\n * YouTube track cho ${MA} — ${tenMon}. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).\n *   node scripts/verify-youtube-videos.mjs --file ./${fVid}\n */\nexport default {\n  courseSlug: ${JSON.stringify(c.slug)},\n  defaultVideoTrack: ${JSON.stringify(gop.defaultVideoTrack)},\n  lessons: {\n${dong}\n  },\n};\n`);
+  fs.writeFileSync(fVid, `/**\n * YouTube track cho ${MA} — ${tenMon}. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).\n *   node scripts/verify-youtube-videos.mjs --file ./${fVid}\n */\nexport default {\n  courseSlug: ${JSON.stringify(c.slug)},\n  defaultVideoTrack: ${JSON.stringify(gop.defaultVideoTrack)},\n${cu.goYt && Object.keys(cu.goYt).length ? `  goYt: ${JSON.stringify(cu.goYt)},\n` : ''}  lessons: {\n${dong}\n  },\n};\n`);
 }
 fs.mkdirSync('content/course-videos/_bao-cao', { recursive: true });
 fs.writeFileSync(`content/course-videos/_bao-cao/${MA}.json`, JSON.stringify(baoCao, null, 1));

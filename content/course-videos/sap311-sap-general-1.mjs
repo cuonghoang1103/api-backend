@@ -5,13 +5,13 @@
 export default {
   courseSlug: "sap311-sap-general-1",
   defaultVideoTrack: "YT",
+  goYt: {"sap311-flm-b020": "TU61UihrjIE"},
   lessons: {
     "sap311-flm-b002": { yt: "wsFOqgz7tTA", credit: "Digital Transformation with Eric Kimberling — What is SAP S/4HANA? | Introduction to SAP | Overview of SAP ERP" },
     "sap311-flm-b003": { yt: "nO-gJ_DQ74Q", credit: "QMS, Inc. — SAP Navigation For Beginners" },
     "sap311-flm-b007": { yt: "2SqAmRisomM", credit: "Think Tree Technologies Inc — SAP Sales & Distribution  (SD) for Beginners | #sap  #sapsd" },
     "sap311-flm-b008": { yt: "RuNaOD9uGbk", credit: "Savan Chandra — Video 01 - SAP S/4HANA Sales & Distribution (SD) Module training - Introduction to SAP & SD module." },
     "sap311-flm-b009": { yt: "N7ijBeUKrNI", credit: "Uplatz — SAP S/4HANA SD Overview Tutorial | SAP S4HANA Sales and Distribution Certification Training | Uplatz" },
-    "sap311-flm-b020": { yt: "TU61UihrjIE", credit: "SAP SD Sales & Distribution — SAP SD Tutorial 04 | Sales Organization, Distribution Channel & Division Configuration | S/4HANA" },
     "sap311-flm-b025": { yt: "I0DZ4WJUjuU", credit: "The Smart Hands — SAP ECC MM Training - Overview of Procurement Processes (Video 2) | SAP MM Material Management" },
     "sap311-flm-b026": { yt: "Nf-a7_lLM6M", credit: "ZaranTech DotCom — What is SAP MM (Material Management) | ZaranTech" },
     "sap311-flm-b027": { yt: "X8Q6lJi-MuY", credit: "myTech-school — SAP MM : Materials Management Training Video" },

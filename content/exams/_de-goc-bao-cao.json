@@ -1,5 +1,5 @@
 {
- "taoLuc": "2026-11-09T10:33:35.083Z",
+ "taoLuc": "2026-11-11T14:51:37.357Z",
  "mon": {
   "ACC101": [
    "SU26-FE",
@@ -372,7 +372,10 @@
   ],
   "HOD102c": [
    "SU26-FE",
-   "SU26-FE-RE"
+   "SU26-FE-606",
+   "SU26-FE-RE",
+   "SU26-FE-RE-829",
+   "SP26-FE-RE"
   ],
   "HOD402": [
    "SU26-FE",
@@ -1049,6 +1052,19 @@
    "SU26-FE-W",
    "SU26-FE-W-RE",
    "SP26-FE-WRITING"
+  ],
+  "IAM302": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE-RE"
+  ],
+  "MED201": [
+   "SU26-FE"
+  ],
+  "RMC301": [
+   "SU26-FE",
+   "SU26-FE-RE",
+   "SP26-FE"
   ]
  },
  "boQua": [
@@ -1189,15 +1205,7 @@
    "lyDo": "chưa có môn trong content/academy"
   },
   {
-   "ma": "HOD102",
-   "lyDo": "chưa có môn trong content/academy"
-  },
-  {
    "ma": "HRM201c",
-   "lyDo": "chưa có môn trong content/academy"
-  },
-  {
-   "ma": "IAM302t",
    "lyDo": "chưa có môn trong content/academy"
   },
   {
@@ -1265,10 +1273,6 @@
    "lyDo": "chưa có môn trong content/academy"
   },
   {
-   "ma": "MED201c",
-   "lyDo": "chưa có môn trong content/academy"
-  },
-  {
    "ma": "MKT209m",
    "lyDo": "chưa có môn trong content/academy"
   },
@@ -1294,10 +1298,6 @@
   },
   {
    "ma": "PMG202c",
-   "lyDo": "chưa có môn trong content/academy"
-  },
-  {
-   "ma": "RMC301m",
    "lyDo": "chưa có môn trong content/academy"
   },
   {

@@ -55,6 +55,10 @@ const LOAI_VI = { FE: 'Thi cuối kỳ', PE: 'Thi thực hành', PT: 'Kiểm tra
 
 const monCo = new Set(fs.readdirSync('content/academy').filter((f) => /^[A-Z].*\.mjs$/.test(f)).map((f) => f.replace('.mjs', '')));
 const baoCao = { taoLuc: new Date().toISOString(), mon: {}, boQua: [] };
+// Đề đăng dưới MÃ BIẾN THỂ của cùng một môn Academy (đối chiếu tên môn 11/11/2026) ⇒ gộp vào môn đó.
+const BIEN_THE = { HOD102: 'HOD102c', IAM302t: 'IAM302', MED201c: 'MED201', RMC301m: 'RMC301' };
+const gom = {};          // mã môn Academy ⇒ đề (gộp mọi thư mục nguồn, kể cả mã biến thể)
+const codeTheoMon = {};
 
 // tải song song có giới hạn
 async function pool(items, n, fn) {
@@ -63,13 +67,15 @@ async function pool(items, n, fn) {
   return out;
 }
 
-for (const ma of fs.readdirSync(NGUON).sort()) {
+// Thư mục mã biến thể xử lý SAU ⇒ đề sẵn có của môn đích giữ nguyên code (id đề + bookmark không đổi).
+for (const ma of fs.readdirSync(NGUON).sort().sort((x, y) => Number(x in BIEN_THE) - Number(y in BIEN_THE))) {
   if (CHI && !CHI.has(ma)) continue;
   const dirMa = path.join(NGUON, ma);
   if (!fs.statSync(dirMa).isDirectory()) continue;
-  if (!monCo.has(ma)) { baoCao.boQua.push({ ma, lyDo: 'chưa có môn trong content/academy' }); continue; }
-  const exams = [];
-  const codeDaDung = new Set();
+  const mc = BIEN_THE[ma] || ma;
+  if (!monCo.has(mc)) { baoCao.boQua.push({ ma, lyDo: 'chưa có môn trong content/academy' }); continue; }
+  const exams = (gom[mc] ||= []);
+  const codeDaDung = (codeTheoMon[mc] ||= new Set());
   const deList = fs.readdirSync(dirMa).filter((d) => fs.existsSync(path.join(dirMa, d, '_de.json')));
   for (const d of deList) {
     const dir = path.join(dirMa, d);
@@ -107,7 +113,7 @@ for (const ma of fs.readdirSync(NGUON).sort()) {
     const diem = Math.round((10 / n) * 100) / 100;
     exams.push({
       kind: 'PE', peType: 'WRITE', code,
-      title: `${ma} — ${nhanEn} (original paper)|||${ma} — ${nhanVi} (đề gốc)`,
+      title: `${mc} — ${nhanEn}${mc !== ma ? ` (${ma})` : ''} (original paper)|||${mc} — ${nhanVi}${mc !== ma ? ` (${ma})` : ''} (đề gốc)`,
       description: `Real ${LOAI_VI[loai] ? loai : 'exam'} paper ${nhanEn}: ${n} page image(s) of the original paper.|||Đề ${LOAI_VI[loai] || 'thi'} thật ${nhanVi}: ${n} ảnh trang đề gốc.`,
       durationMinutes: loai === 'PE' ? 90 : 60, totalPoints: 10, passMark: 5, source: 'REAL',
       shuffleQuestions: false, shuffleOptions: false, isPublished: true,
@@ -120,6 +126,8 @@ for (const ma of fs.readdirSync(NGUON).sort()) {
       _ky: de.kySo || 0,
     });
   }
+}
+for (const [ma, exams] of Object.entries(gom)) {
   if (!exams.length) continue;
   exams.sort((a, b) => Number(b._ky) - Number(a._ky) || a.code.localeCompare(b.code));
   exams.forEach((e) => delete e._ky);
@@ -127,6 +135,11 @@ for (const ma of fs.readdirSync(NGUON).sort()) {
   const body = `// SINH TỰ ĐỘNG bởi scripts/fx-de-thi-build.mjs — đề thi thật dạng ảnh trang đề gốc. Chạy lại script, đừng sửa tay.\nexport default ${JSON.stringify({ course: { courseCode: ma }, exams }, null, 1)};\n`;
   if (!DRY) fs.writeFileSync(path.join(OUT, `${ma}-DE-GOC.mjs`), body);
   console.log(`✓ ${ma}: ${exams.length} đề (${exams.reduce((s, e) => s + e.questions.length, 0)} trang)`);
+}
+if (CHI && fs.existsSync(path.join(OUT, '_de-goc-bao-cao.json'))) {   // chạy lẻ --ma ⇒ gộp vào báo cáo cũ, không xoá môn khác
+  const cu = JSON.parse(fs.readFileSync(path.join(OUT, '_de-goc-bao-cao.json'), 'utf8'));
+  baoCao.mon = { ...cu.mon, ...baoCao.mon };
+  baoCao.boQua = [...(cu.boQua || []).filter((b) => !CHI.has(b.ma)), ...baoCao.boQua];
 }
 if (!DRY) fs.writeFileSync(path.join(OUT, '_de-goc-bao-cao.json'), JSON.stringify(baoCao, null, 1));
 console.log(`\n${Object.keys(baoCao.mon).length} môn · ${Object.values(baoCao.mon).flat().length} đề · bỏ qua ${baoCao.boQua.length}`);

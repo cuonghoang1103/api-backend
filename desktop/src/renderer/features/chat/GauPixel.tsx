@@ -19,37 +19,42 @@ import { useEffect, useRef } from 'react';
 type Mode = 'face' | 'desk';
 export type GauState = 'idle' | 'thinking' | 'still' | 'done';
 
-const U = 4;
-const C = {
+export const U = 4;
+export const C = {
   k: '#2b2d35', w: '#f7f5f0', s: '#e6e1d6', pk: '#ff9eb5', am: '#f59e0b',
   lap: '#2b2d35', lapIn: '#16303a', deckT: '#8b93a0', deck: '#4a515c', key: '#c7cfd8', keyHit: '#ffffff',
   code: ['#6ee7b7', '#93c5fd', '#fcd34d', '#f7f5f0'], sign: '#fffdf9', signB: '#2b2d35', ok: '#22c55e',
   nose: '#3a2f33', hl: '#5a5f6b', spark: '#ffd264',
 };
-const BODY = [
+export const BODY = [
   '..KK......KK....', '.KKKK....KKKK...', '.WWWWWWWWWWWWWW.', 'WWWWWWWWWWWWWWWW',
   'WWWWWWWWWWWWWWWW', 'WWWWWWWWWWWWWWWW', 'W~WWWWWWWWWWWW~W', 'WWWWWWWWWWWWWWWW',
   '.WWWWWWWWWWWWWW.', '..OOOOOOOOOOOO..', '..WWWWWWWWWWWW..', '..WWWWWWWWWWWW..',
   '..WSSWWWWSSWWW..', '...WWWWWWWWWW...',
 ];
-const MAPCOL: Record<string, string | null> = { '.': null, K: C.k, W: C.w, S: C.s, '~': C.pk, O: C.am };
+export const MAPCOL: Record<string, string | null> = { '.': null, K: C.k, W: C.w, S: C.s, '~': C.pk, O: C.am };
 const FONT: Record<string, string[]> = {
   D: ['110', '101', '101', '101', '110'], O: ['111', '101', '101', '101', '111'],
   N: ['101', '111', '111', '111', '101'], E: ['111', '100', '110', '100', '111'],
 };
 const clamp = (x: number) => Math.max(0, Math.min(1, x));
 
-function makeP(g: CanvasRenderingContext2D) {
+export function makeP(g: CanvasRenderingContext2D) {
   return (x: number, y: number, col: string, w = 1, h = 1) => {
     g.fillStyle = col;
     g.fillRect(Math.round(x * U), Math.round(y * U), w * U, h * U);
   };
 }
-function eye(P: ReturnType<typeof makeP>, ex: number, ey: number, type: string, look = 0) {
+export function eye(P: ReturnType<typeof makeP>, ex: number, ey: number, type: string, look = 0) {
   if (type === 'open') { P(ex + look, ey, C.k, 2, 2); P(ex + look, ey, C.hl, 1, 1); }
   else if (type === 'happy') { P(ex + 1, ey, C.k); P(ex, ey + 1, C.k); P(ex + 2, ey + 1, C.k); }
   else if (type === 'blink') { P(ex, ey + 1, C.k, 3, 1); }
   else if (type === 'wide') { P(ex + look, ey - 0.5, C.k, 2, 3); P(ex + look, ey - 0.5, C.hl, 1, 1); }
+  // Các kiểu dưới dành cho Gấu nổi (robot/GauNoi.tsx) — chép từ chế độ cảm xúc bên web.
+  else if (type === 'closed') { P(ex, ey + 1, C.k, 3, 1); }
+  else if (type === 'sad') { P(ex, ey, C.k); P(ex + 1, ey + 1, C.k); P(ex + 2, ey + 1, C.k); }
+  else if (type === 'down') { P(ex, ey + 1, C.k, 2, 1); }
+  else if (type === 'up') { P(ex + 1, ey - 0.5, C.k, 2, 2); P(ex + 1, ey - 0.5, C.hl, 1, 1); }
 }
 
 /** Vẽ con gấu (đầu + mình) tại gốc (bx,by), nghiêng lean, mắt nhìn look. Không miệng. */

@@ -16,7 +16,7 @@
  * đọc) cũng nằm ngoài vùng zoom.
  */
 import type { CSSProperties, ReactNode } from 'react';
-import { OdinRobot } from '../features/odin/OdinRobot';
+import { GauNoi } from './GauNoi';
 import type { OdinMood } from '../features/odin/useOdin';
 import { dich } from '../i18n';
 
@@ -98,6 +98,7 @@ export function tieuDeThan(keoDuoc: boolean): string {
 export interface ThanRobotProps {
   phanTram: number;
   mood: OdinMood;
+  /** Nháy mắt — Gấu nổi tự chớp nên không còn dùng; giữ để nơi gọi khỏi phải đổi. */
   nhay: boolean;
   hover: boolean;
   datHover: (v: boolean) => void;
@@ -162,8 +163,7 @@ export function ThanRobot(p: ThanRobotProps) {
               </svg>
             </span>
           )}
-          {(p.mood === 'vui' || p.mood === 'mung') && <span className="rb-lap-lanh" aria-hidden><i /><i /><i /></span>}
-          <OdinRobot mood={p.mood} blinking={p.nhay} hovering={p.hover} size={104} />
+          <GauNoi mood={p.mood} hover={p.hover} size={104} />
           {p.cham && <span className="rb-cham" data-loai={p.cham} />}
         </div>
 

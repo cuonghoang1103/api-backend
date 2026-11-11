@@ -5,6 +5,7 @@
  * Số đo CuongThai = prisma/schema.prisma + prisma/migrations trên commit 27318b94b (11/11/2026).
  * LUẬT: backtick → &#96;; ${ → \${; < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
+import G00_8 from '../giang/pr-00-8.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -14,6 +15,7 @@ export default {
   isFreePreview: true,
   description: 'Bài mở cửa cho người mới: Prisma là gì bằng ba hình ảnh đời thường; một lược đồ 18 dòng sinh ra 2.491 dòng kiểu và một câu SQL bạn đọc được (chạy thật); những từ hay nhầm (Prisma, Prisma Client, CLI, engine, Migrate, Studio, ORM, query builder); lịch sử 2020 → 2025 có mốc kiểm trên npm; vì sao khoá chạy Prisma 6; nó giúp gì cho bạn (chính CuongThai: 611 model, 246 migration); và bản đồ 13 mục chia bốn chặng.',
   content: `
+${G00_8}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Start here (1/2)</span>
 <h2>Hello. Before the first model, know what you are learning — and why</h2>

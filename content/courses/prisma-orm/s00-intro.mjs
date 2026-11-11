@@ -5,6 +5,9 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G00_1 from './giang/pr-00-1.mjs';
+import G00_2 from './giang/pr-00-2.mjs';
+import G00_3 from './giang/pr-00-3.mjs';
 import batDau1 from './s00/bat-dau-1.mjs';
 import batDau2 from './s00/bat-dau-2.mjs';
 
@@ -25,6 +28,7 @@ export default {
       isFreePreview: true,
       description: 'Khoảng cách giữa một hàng dữ liệu và một đối tượng, thứ trình điều khiển thô trả về mà bạn phải tự vá, ba việc Prisma làm tốt hơn mọi lựa chọn khác, ba việc nó KHÔNG làm, nó khác Knex/Drizzle/TypeORM ở đâu, và bản đồ mười ba mục.',
       content: `
+${G00_1}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
 <h2>What Prisma solves</h2>
@@ -296,6 +300,7 @@ console.log(user?.fullName);</code></pre>
       type: 'LESSON',
       description: 'PostgreSQL trong một câu lệnh Docker, prisma init và các tệp nó đẻ ra (có prisma.config.ts), DATABASE_URL đọc đúng từng phần, prisma generate làm gì với node_modules, và bốn thứ cần sửa ngay ở lần đầu.',
       content: `
+${G00_2}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>Getting Prisma running</h2>
@@ -777,6 +782,7 @@ Indexes:
       type: 'LESSON',
       description: 'Hai model và một quan hệ, rồi mười bốn câu truy vấn dựng nên mô hình tinh thần: create lồng nhau, findMany với include, select, update, upsert, delete, count, groupBy — mỗi câu kèm SQL Prisma thật sự gửi xuống, và Studio để nhìn tận mắt.',
       content: `
+${G00_3}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.3</span>
 <h2>Your first five minutes</h2>

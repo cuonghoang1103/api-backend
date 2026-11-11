@@ -4,6 +4,7 @@
  * Tình huống của sinh viên được GHI RÕ là minh hoạ. Không có output chạy mới trong bài này (mọi output ở các bài được dẫn tới).
  * LUẬT: backtick → &#96;; ${ → \${; < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  */
+import G00_9 from '../giang/pr-00-9.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -13,6 +14,7 @@ export default {
   isFreePreview: true,
   description: 'Sáu sự cố thật của chính CuongThai mà khoá này mổ lại (quan hệ ngược thiếu chặn generate, tên khoá ghép, migration không replay được — P3006, enum đổi tên làm vỡ seed production, engine sai nền làm API chết 502 bảy phút, đĩa đầy giữa lúc deploy), điểm chung của chúng — mọi phép kiểm đều xanh; ba tình huống minh hoạ của sinh viên; và cách học khoá này không nản: lộ trình tối thiểu, lộ trình đầy đủ, nhịp một buổi học, năm luật an toàn.',
   content: `
+${G00_9}
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Start here (2/2)</span>
 <h2>What goes wrong without it — and how to study this course</h2>

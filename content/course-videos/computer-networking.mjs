@@ -1,11 +1,10 @@
 /**
- * Curated YouTube track for NWC203c — Computer Networking.
- * Every id verified live+embeddable via YouTube oEmbed.
+ * YouTube track cho NWC203c — Computer Networking. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
  *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/computer-networking.mjs
  */
 export default {
-  courseSlug: 'computer-networking',
-  defaultVideoTrack: 'YT',
+  courseSlug: "computer-networking",
+  defaultVideoTrack: "YT",
   lessons: {
     "nwc203c-gioi-thieu": { yt: "VwN91x5i25g", credit: "Neso Academy — Introduction to Computer Networks" },
     "nwc203c-1-1-phan-tang": { yt: "YJGGYKAV4pA", credit: "Practical Networking — How Data moves through the Internet - Networking Fundamentals" },
@@ -22,5 +21,12 @@ export default {
     "nwc203c-6-1-tcp": { yt: "xMtP5ZB3wSk", credit: "Sunny Classroom — TCP - Three-way handshake in details" },
     "nwc203c-6-2-tac-nghen": { yt: "cIHiSR4j3g4", credit: "JimKurose — 3 7 TCP Congestion Control" },
     "nwc203c-n1-1-hanh-trinh": { yt: "AlkDbnbv7dk", credit: "ByteByteGo — What happens when you type a URL into your browser?" },
+    "nwc203c-flm-b001": { yt: "cNwEVYkx2Kk", credit: "Network Direction — Introduction to Networking | Network Fundamentals Part 1" },
+    "nwc203c-flm-b002": { yt: "eelvWAURfdI", credit: "Computerphile — Network Layers Model (Networking Basics) - Computerphile" },
+    "nwc203c-flm-b006": { yt: "-HlJ4psu5aU", credit: "Neso Academy — Switching Techniques in Computer Networks" },
+    "nwc203c-flm-b007": { yt: "oUN-s6aFMTk", credit: "TechTerms — Circuit Switching vs Packet Switching | Circuit Switched Network vs Packet switched network" },
+    "nwc203c-flm-b008": { yt: "3QhU9jd03a0", credit: "CrashCourse — Computer Networks: Crash Course Computer Science #28" },
+    "nwc203c-flm-b009": { yt: "wvPe4Zb0tUA", credit: "Neso Academy — The TCP/IP Protocol Suite" },
+    "nwc203c-flm-b010": { yt: "3b_TAYtzuho", credit: "_Drunk Engineer_ — OSI and TCP IP Models - Best Explanation" },
   },
 };

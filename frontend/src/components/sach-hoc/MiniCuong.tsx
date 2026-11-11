@@ -1,35 +1,11 @@
 /**
- * CuongMini THU NHỎ cho khung gia sư (05/10/2026) — người dùng: "giao diện khung AI
- * gia sư làm đẹp và cute hơn, 3D hay gì đó". Dựng bằng CSS thuần (khối đầu bóng có
- * chiều sâu, kính, mắt phát sáng biết chớp, ăng-ten, bồng bềnh) — KHÔNG dùng three.js:
- * khung gia sư luôn mở cạnh bài, phải nhẹ trên mọi máy. Sân khấu 3D thật chỉ ở cuộc gọi.
+ * CuongMini thu nhỏ cho khung gia sư — nay là GẤU PIXEL (11/11/2026; thay robot CSS tím/trắng trước đó),
+ * ngang với web /chat + app desktop (cùng {@link GauPixel}). Giữ API `size`/`nghi`.
  *
- * `nghi`: đang soạn câu trả lời → mắt thành ba chấm chạy. Tôn trọng prefers-reduced-motion.
+ * `nghi`: đang soạn câu trả lời ⇒ Gấu ở tư thế đang nghĩ (gõ gấp). Tôn trọng prefers-reduced-motion.
  */
-import s from './course.module.css';
+import { GauPixel } from '../chat/claude/GauPixel';
 
 export function MiniCuong({ size = 44, nghi = false }: { size?: number; nghi?: boolean }) {
-  return (
-    <span className={s.mcBoc} style={{ ['--mc' as string]: `${size}px` }} data-nghi={nghi || undefined} aria-hidden="true">
-      <span className={s.mcBay}>
-        <span className={s.mcAngTen}><i /></span>
-        <span className={s.mcDau}>
-          <span className={s.mcKinh}>
-            {nghi ? (
-              <span className={s.mcNghi}><i /><i /><i /></span>
-            ) : (
-              <>
-                <span className={s.mcMat} />
-                <span className={s.mcMat} />
-              </>
-            )}
-            <span className={s.mcMieng} />
-          </span>
-          <span className={s.mcMa} />
-          <span className={s.mcMa} data-phai="" />
-        </span>
-      </span>
-      <span className={s.mcBong} />
-    </span>
-  );
+  return <GauPixel size={size} state={nghi ? 'thinking' : 'idle'} mode="face" className="mc-gaupx" />;
 }

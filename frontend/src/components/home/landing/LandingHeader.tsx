@@ -1,6 +1,6 @@
 'use client';
 
-import LandingRobotRail from './LandingRobotRail';
+import LandingBipRail from './LandingBipRail';
 
 /**
  * Home header strip (02/11/2026).
@@ -19,7 +19,7 @@ export default function LandingHeader() {
   return (
     <header className="landing-header landing-header--under-nav">
       <div className="landing-header-stage" aria-hidden />
-      <LandingRobotRail />
+      <LandingBipRail />
     </header>
   );
 }

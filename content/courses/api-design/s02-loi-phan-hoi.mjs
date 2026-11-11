@@ -1199,6 +1199,14 @@ app.use((req, res, next) =&gt; {
 });
 app.use(express.json({ type: JSON_TYPES, limit: '10kb' }));   // body lớn nhất hợp lệ của LabFlow &lt; 1 KB</code></pre>
 <p><code>req.is()</code> has three answers, and the middleware relies on the difference: the matching type when the body matches, <code>false</code> when there is a body of another type, and <code>null</code> when there is no body at all — so <code>POST /bookings/bk_1/cancel</code>, which has no body, is not affected.</p>
+<p>Two small edits to the files from lesson 2.1, or the answers below will not match. <code>validate.js</code> already builds every entry as <code>{ pointer, detail }</code> or <code>{ parameter, detail }</code>, but the error handler in <code>app.js</code> still converts the old <code>{ field, issue }</code> shape — left as it is, every pointer comes out as <code>#/undefined</code>. Add a bridge that converts only old entries and passes new ones through (Lab 2 removes it once nothing uses <code>{ field, issue }</code> any more). And the new code <code>INVALID_QUERY</code> needs a title in <code>src/problems.js</code>, or it falls back to the generic <code>Bad Request</code>:</p>
+<pre><code class="language-javascript">// src/app.js — bộ xử lý lỗi (bài 2.1): CẦU NỐI giữa hình dạng cũ { field, issue } và lỗi đã có pointer/parameter (validate.js)
+    const more = Array.isArray(err.details)
+      ? { errors: err.details.map((d) =&gt; (d.field ? { pointer: &#96;#/\${d.field}&#96;, detail: d.issue } : d)) }   // cũ ⇒ pointer; mới: giữ nguyên
+      : err.details;
+
+// src/problems.js — thêm một dòng vào TITLES
+  INVALID_QUERY: 'Tham số truy vấn không hợp lệ',</code></pre>
 
 <h3>Try it: the six holes again</h3>
 <p>Restart the server and replay the attacks.</p>
@@ -1823,6 +1831,14 @@ app.use((req, res, next) =&gt; {
 });
 app.use(express.json({ type: JSON_TYPES, limit: '10kb' }));   // body lớn nhất hợp lệ của LabFlow &lt; 1 KB</code></pre>
 <p><code>req.is()</code> có ba kiểu trả lời, và middleware dựa vào chính sự khác nhau đó: trả về kiểu khớp khi body đúng kiểu, <code>false</code> khi có body nhưng sai kiểu, và <code>null</code> khi không có body — nên <code>POST /bookings/bk_1/cancel</code>, vốn không có body, không bị ảnh hưởng.</p>
+<p>Hai chỗ sửa nhỏ ở các tệp của bài 2.1, nếu không các câu trả lời bên dưới sẽ không khớp. <code>validate.js</code> đã dựng sẵn mỗi dòng lỗi dạng <code>{ pointer, detail }</code> hoặc <code>{ parameter, detail }</code>, nhưng bộ xử lý lỗi trong <code>app.js</code> vẫn đổi theo hình dạng cũ <code>{ field, issue }</code> — để nguyên thì mọi pointer ra <code>#/undefined</code>. Thêm một "cầu nối": chỉ đổi những dòng còn hình dạng cũ, dòng mới thì giữ nguyên (Lab 2 gỡ nó khi không còn tệp nào dùng <code>{ field, issue }</code>). Và mã mới <code>INVALID_QUERY</code> cần một title trong <code>src/problems.js</code>, không thì title rơi về cụm chung <code>Bad Request</code>:</p>
+<pre><code class="language-javascript">// src/app.js — bộ xử lý lỗi (bài 2.1): CẦU NỐI giữa hình dạng cũ { field, issue } và lỗi đã có pointer/parameter (validate.js)
+    const more = Array.isArray(err.details)
+      ? { errors: err.details.map((d) =&gt; (d.field ? { pointer: &#96;#/\${d.field}&#96;, detail: d.issue } : d)) }   // cũ ⇒ pointer; mới: giữ nguyên
+      : err.details;
+
+// src/problems.js — thêm một dòng vào TITLES
+  INVALID_QUERY: 'Tham số truy vấn không hợp lệ',</code></pre>
 
 <h3>Chạy thử: lại sáu lỗ hổng</h3>
 <p>Khởi động lại server và tấn công lại.</p>

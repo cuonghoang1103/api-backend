@@ -522,6 +522,64 @@ export const BookingCreateV2 = z.strictObject({
 });
 export const BookingsQueryV2 = bookingsQuery(BOOKING_FIELDS_V2,
   { '-createdAt': '-createdAt', createdAt: 'createdAt', start: 'startAt', '-start': '-startAt' });</code></pre>
+<p>The <code>bookingsQuery</code> helper those two lines call — the query schema of lessons 3.2–3.4 turned into a function, so each version only names its own fields and its public sort names (the <code>transform</code> maps <code>start</code> back to the internal key <code>startAt</code>, so the handler, the cursor and the fingerprint never change):</p>
+<pre><code class="language-javascript">// schemas.js — MỘT hàm dựng lược đồ query cho mọi phiên bản: chỉ khác danh sách trường (fields) và tên sắp xếp công khai (sort)
+const bookingsQuery = (fieldNames, sorts) =&gt; z.strictObject({
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  cursor: z.string().min(1).max(200).optional(),   // chuỗi mờ do server phát; offset đã bỏ (bài 3.2)
+  // Bài 3.3 — bộ lọc: tên rõ nghĩa, mỗi tham số một kiểu, kết hợp bằng AND
+  labId: id('lab').optional(),
+  status: z.string()                                // "PENDING,CANCELLED" ⇒ ['PENDING', 'CANCELLED']
+    .transform((s) =&gt; s.split(','))
+    .pipe(z.array(z.enum(BOOKING_STATUSES)).min(1))
+    .optional(),
+  from: instant.optional(),                         // lượt đặt CHỒNG LÊN khoảng [from, to)
+  to: instant.optional(),
+  q: text(2, 50).optional(),                        // tìm trong purpose, không phân biệt dấu
+  // Bài 3.4 — sắp xếp, chọn trường, nhúng quan hệ: chỉ những giá trị có trong danh sách cho phép
+  sort: z.enum(Object.keys(sorts)).default('-createdAt').transform((s) =&gt; sorts[s]),   // tên công khai ⇒ khoá nội bộ
+  fields: z.string()
+    .transform((s) =&gt; s.split(','))
+    .pipe(z.array(z.enum(fieldNames)).min(1))
+    .optional(),
+  include: z.enum(['lab']).optional(),
+}).refine((x) =&gt; {
+  // luật nhiều trường: chỉ phán khi CẢ HAI đã đúng định dạng (Zod có thể chạy refine trên giá trị còn sai)
+  const a = Date.parse(x.from ?? ''), b = Date.parse(x.to ?? '');
+  return Number.isNaN(a) || Number.isNaN(b) || a &lt; b;
+}, { path: ['to'], message: 'TO_AFTER_FROM' });   // mã luật — câu chữ dịch ở i18n.js
+export const BookingsQuery = bookingsQuery(BOOKING_FIELDS,
+  { '-createdAt': '-createdAt', createdAt: 'createdAt', startAt: 'startAt', '-startAt': '-startAt' });
+export const BOOKING_FIELDS_V2 = ['id', 'labId', 'userId', 'period', 'purpose', 'status', 'createdAt', 'cancelledAt'];</code></pre>
+<p>Every route now asks for the view of the request’s version instead of calling <code>toBooking</code>/<code>toLab</code>/<code>toDevice</code> directly — this is what makes <code>VIEWS[2]</code> take effect, and <code>req.baseUrl</code> keeps <code>Location</code> and <code>Link</code> inside the version the client used:</p>
+<pre><code class="language-javascript">// routes/*.js — mọi chỗ trả dữ liệu gọi view THEO PHIÊN BẢN, không gọi toX trực tiếp; Location/Link dựng từ req.baseUrl
+// routes/labs.js
+import { viewsOf, list } from '../views.js';
+    res.json(list(data, viewsOf(req).lab));                                              // GET /labs
+  .get((req, res) =&gt; res.json(viewsOf(req).lab(findLab(req.params.labId))))             // GET /labs/:labId
+  res.json(list(devices.filter((d) =&gt; d.labId === lab.id), viewsOf(req).device));       // GET /labs/:labId/devices
+// routes/devices.js
+    res.json(list(labId ? devices.filter((d) =&gt; d.labId === labId) : devices, viewsOf(req).device));
+    res.status(201).location(&#96;\${req.baseUrl}/\${device.id}&#96;).json(viewsOf(req).device(device));   // POST
+  .get((req, res) =&gt; res.json(viewsOf(req).device(findDevice(req.params.id))))
+    res.json(viewsOf(req).device(d));                                                    // PUT và PATCH
+// routes/bookings.js — GET danh sách
+  .get(validate('query', { 1: BookingsQuery, 2: BookingsQueryV2 }), (req, res) =&gt; {
+      res.links({ next: &#96;\${req.baseUrl}?\${qs}&#96; });   // /bookings, /v1/bookings hay /v2/bookings
+    const view = viewsOf(req);
+    const data = page.map((b) =&gt; {
+      let v = view.booking(b);
+      if (fields) v = Object.fromEntries(['id', ...fields.filter((x) =&gt; x !== 'id')].map((k) =&gt; [k, v[k]]));
+      if (labById) v.lab = view.lab(labById.get(b.labId));
+      return v;
+    });
+  .get((req, res) =&gt; res.json(viewsOf(req).booking(findOwnBooking(req))))               // GET /:id — /:id/cancel cũng trả viewsOf(req).booking(b)
+// routes/issues.js: toIssue ⇒ viewsOf(req).issue ở mọi chỗ, như trên</code></pre>
+<p>One new error code for the header of the next section, in both languages of the catalogue (lesson 2.4):</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    UNKNOWN_VERSION: ['Phiên bản API không tồn tại', (p) =&gt; &#96;Không có phiên bản \${p.got}; các phiên bản: \${p.known}&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    UNKNOWN_VERSION: ['Unknown API version', (p) =&gt; &#96;There is no version \${p.got}; versions: \${p.known}&#96;],</code></pre>
 <p>And the only place in the handler that knows v2 exists — the edge where input becomes the internal form:</p>
 <pre><code class="language-javascript">  .post(validate('body', { 1: BookingCreate, 2: BookingCreateV2 }), (req, res) =&gt; {
     const body = req.valid.body;
@@ -726,6 +784,64 @@ export const BookingCreateV2 = z.strictObject({
 });
 export const BookingsQueryV2 = bookingsQuery(BOOKING_FIELDS_V2,
   { '-createdAt': '-createdAt', createdAt: 'createdAt', start: 'startAt', '-start': '-startAt' });</code></pre>
+<p>Hàm <code>bookingsQuery</code> mà hai dòng trên gọi — lược đồ query của bài 3.2–3.4 biến thành một hàm, để mỗi phiên bản chỉ khai danh sách trường và tên sắp xếp công khai của riêng nó (<code>transform</code> đổi <code>start</code> về khoá nội bộ <code>startAt</code>, nên handler, con trỏ và dấu vân tay không đổi gì):</p>
+<pre><code class="language-javascript">// schemas.js — MỘT hàm dựng lược đồ query cho mọi phiên bản: chỉ khác danh sách trường (fields) và tên sắp xếp công khai (sort)
+const bookingsQuery = (fieldNames, sorts) =&gt; z.strictObject({
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  cursor: z.string().min(1).max(200).optional(),   // chuỗi mờ do server phát; offset đã bỏ (bài 3.2)
+  // Bài 3.3 — bộ lọc: tên rõ nghĩa, mỗi tham số một kiểu, kết hợp bằng AND
+  labId: id('lab').optional(),
+  status: z.string()                                // "PENDING,CANCELLED" ⇒ ['PENDING', 'CANCELLED']
+    .transform((s) =&gt; s.split(','))
+    .pipe(z.array(z.enum(BOOKING_STATUSES)).min(1))
+    .optional(),
+  from: instant.optional(),                         // lượt đặt CHỒNG LÊN khoảng [from, to)
+  to: instant.optional(),
+  q: text(2, 50).optional(),                        // tìm trong purpose, không phân biệt dấu
+  // Bài 3.4 — sắp xếp, chọn trường, nhúng quan hệ: chỉ những giá trị có trong danh sách cho phép
+  sort: z.enum(Object.keys(sorts)).default('-createdAt').transform((s) =&gt; sorts[s]),   // tên công khai ⇒ khoá nội bộ
+  fields: z.string()
+    .transform((s) =&gt; s.split(','))
+    .pipe(z.array(z.enum(fieldNames)).min(1))
+    .optional(),
+  include: z.enum(['lab']).optional(),
+}).refine((x) =&gt; {
+  // luật nhiều trường: chỉ phán khi CẢ HAI đã đúng định dạng (Zod có thể chạy refine trên giá trị còn sai)
+  const a = Date.parse(x.from ?? ''), b = Date.parse(x.to ?? '');
+  return Number.isNaN(a) || Number.isNaN(b) || a &lt; b;
+}, { path: ['to'], message: 'TO_AFTER_FROM' });   // mã luật — câu chữ dịch ở i18n.js
+export const BookingsQuery = bookingsQuery(BOOKING_FIELDS,
+  { '-createdAt': '-createdAt', createdAt: 'createdAt', startAt: 'startAt', '-startAt': '-startAt' });
+export const BOOKING_FIELDS_V2 = ['id', 'labId', 'userId', 'period', 'purpose', 'status', 'createdAt', 'cancelledAt'];</code></pre>
+<p>Mọi route giờ xin view theo phiên bản của request thay vì gọi thẳng <code>toBooking</code>/<code>toLab</code>/<code>toDevice</code> — đây là chỗ làm <code>VIEWS[2]</code> có hiệu lực, còn <code>req.baseUrl</code> giữ <code>Location</code> và <code>Link</code> ở đúng phiên bản client đã dùng:</p>
+<pre><code class="language-javascript">// routes/*.js — mọi chỗ trả dữ liệu gọi view THEO PHIÊN BẢN, không gọi toX trực tiếp; Location/Link dựng từ req.baseUrl
+// routes/labs.js
+import { viewsOf, list } from '../views.js';
+    res.json(list(data, viewsOf(req).lab));                                              // GET /labs
+  .get((req, res) =&gt; res.json(viewsOf(req).lab(findLab(req.params.labId))))             // GET /labs/:labId
+  res.json(list(devices.filter((d) =&gt; d.labId === lab.id), viewsOf(req).device));       // GET /labs/:labId/devices
+// routes/devices.js
+    res.json(list(labId ? devices.filter((d) =&gt; d.labId === labId) : devices, viewsOf(req).device));
+    res.status(201).location(&#96;\${req.baseUrl}/\${device.id}&#96;).json(viewsOf(req).device(device));   // POST
+  .get((req, res) =&gt; res.json(viewsOf(req).device(findDevice(req.params.id))))
+    res.json(viewsOf(req).device(d));                                                    // PUT và PATCH
+// routes/bookings.js — GET danh sách
+  .get(validate('query', { 1: BookingsQuery, 2: BookingsQueryV2 }), (req, res) =&gt; {
+      res.links({ next: &#96;\${req.baseUrl}?\${qs}&#96; });   // /bookings, /v1/bookings hay /v2/bookings
+    const view = viewsOf(req);
+    const data = page.map((b) =&gt; {
+      let v = view.booking(b);
+      if (fields) v = Object.fromEntries(['id', ...fields.filter((x) =&gt; x !== 'id')].map((k) =&gt; [k, v[k]]));
+      if (labById) v.lab = view.lab(labById.get(b.labId));
+      return v;
+    });
+  .get((req, res) =&gt; res.json(viewsOf(req).booking(findOwnBooking(req))))               // GET /:id — /:id/cancel cũng trả viewsOf(req).booking(b)
+// routes/issues.js: toIssue ⇒ viewsOf(req).issue ở mọi chỗ, như trên</code></pre>
+<p>Một mã lỗi mới cho header ở phần sau, thêm vào cả hai ngôn ngữ của cuốn danh mục (bài 2.4):</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    UNKNOWN_VERSION: ['Phiên bản API không tồn tại', (p) =&gt; &#96;Không có phiên bản \${p.got}; các phiên bản: \${p.known}&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    UNKNOWN_VERSION: ['Unknown API version', (p) =&gt; &#96;There is no version \${p.got}; versions: \${p.known}&#96;],</code></pre>
 <p>Và chỗ duy nhất trong handler biết v2 tồn tại — mép nơi dữ liệu vào biến thành dạng nội bộ:</p>
 <pre><code class="language-javascript">  .post(validate('body', { 1: BookingCreate, 2: BookingCreateV2 }), (req, res) =&gt; {
     const body = req.valid.body;
@@ -898,6 +1014,15 @@ adminRouter.get('/deprecations', requireAuth, requireRole('LAB_MANAGER'), (req, 
   }).sort((a, b) =&gt; b.count - a.count);
   res.json({ data });
 });</code></pre>
+<p>The report router hangs off the shared <code>api</code> router of lesson 4.2, and the 410 needs its words in the catalogue:</p>
+<pre><code class="language-javascript">// app.js — gắn adminRouter vào router api dùng chung của bài 4.2 ⇒ GET /v1/admin/deprecations (và /v2/admin/deprecations)
+api.use('/me', meRouter);
+api.use('/admin', adminRouter);
+
+// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    API_SUNSET: ['Phiên bản API đã ngừng phục vụ', (p) =&gt; &#96;Đường này ngừng từ \${p.sunset}; hãy dùng \${p.successor}&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    API_SUNSET: ['API version retired', (p) =&gt; &#96;This endpoint was retired on \${p.sunset}; use \${p.successor}&#96;],</code></pre>
 <pre><code class="language-javascript">// app.js — đường cũ không số phiên bản: vẫn là v1, nhưng đã KHAI TỬ
 const LEGACY = ['/labs', '/devices', '/issues', '/bookings', '/me'];
 const legacy = Router();
@@ -1102,6 +1227,15 @@ adminRouter.get('/deprecations', requireAuth, requireRole('LAB_MANAGER'), (req, 
   }).sort((a, b) =&gt; b.count - a.count);
   res.json({ data });
 });</code></pre>
+<p>Router báo cáo gắn vào router <code>api</code> dùng chung của bài 4.2, và mã 410 cần câu chữ trong cuốn danh mục:</p>
+<pre><code class="language-javascript">// app.js — gắn adminRouter vào router api dùng chung của bài 4.2 ⇒ GET /v1/admin/deprecations (và /v2/admin/deprecations)
+api.use('/me', meRouter);
+api.use('/admin', adminRouter);
+
+// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    API_SUNSET: ['Phiên bản API đã ngừng phục vụ', (p) =&gt; &#96;Đường này ngừng từ \${p.sunset}; hãy dùng \${p.successor}&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    API_SUNSET: ['API version retired', (p) =&gt; &#96;This endpoint was retired on \${p.sunset}; use \${p.successor}&#96;],</code></pre>
 <pre><code class="language-javascript">// app.js — đường cũ không số phiên bản: vẫn là v1, nhưng đã KHAI TỬ
 const LEGACY = ['/labs', '/devices', '/issues', '/bookings', '/me'];
 const legacy = Router();
@@ -1357,6 +1491,34 @@ bookingsRouter.route('/:id/check-in')
     res.json(viewsOf(req).booking(b));
   })
   .all(v2Only, onlyAllow('POST'));</code></pre>
+<p>Three more edges keep the list consistent with the items in it: v2 accepts <code>CHECKED_IN</code> in <code>?status=</code> and offers <code>checkedInAt</code> in <code>?fields=</code>, v1 filters through the same mapping as its view, and the two new codes get their words:</p>
+<pre><code class="language-javascript">// schemas.js — bộ lọc trạng thái theo phiên bản: v2 biết CHECKED_IN, v1 thì không (hàm bookingsQuery của 4.2 nhận thêm statuses)
+export const BOOKING_STATUSES = ['PENDING', 'CANCELLED'];
+export const BOOKING_STATUSES_V2 = ['PENDING', 'CHECKED_IN', 'CANCELLED'];
+const bookingsQuery = (fieldNames, sorts, statuses) =&gt; z.strictObject({
+  // …
+  status: z.string()                                // "PENDING,CANCELLED" ⇒ ['PENDING', 'CANCELLED']
+    .transform((s) =&gt; s.split(','))
+    .pipe(z.array(z.enum(statuses)).min(1))
+    .optional(),
+  // …
+});
+export const BookingsQuery = bookingsQuery(BOOKING_FIELDS,
+  { '-createdAt': '-createdAt', createdAt: 'createdAt', startAt: 'startAt', '-startAt': '-startAt' }, BOOKING_STATUSES);
+export const BOOKING_FIELDS_V2 = ['id', 'labId', 'userId', 'period', 'purpose', 'status', 'createdAt', 'cancelledAt', 'checkedInAt'];
+export const BookingsQueryV2 = bookingsQuery(BOOKING_FIELDS_V2,
+  { '-createdAt': '-createdAt', createdAt: 'createdAt', start: 'startAt', '-start': '-startAt' }, BOOKING_STATUSES_V2);
+
+// routes/bookings.js — GET danh sách: v1 lọc theo CÙNG phép ánh xạ với view của nó
+import { viewsOf, v1Status } from '../views.js';
+      &amp;&amp; (!status || status.includes(req.apiVersion === 2 ? b.status : v1Status(b.status)))
+
+// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    APP_VERSION_UNSUPPORTED: ['Phiên bản app đã quá cũ', (p) =&gt; &#96;App \${p.version} không còn được hỗ trợ; hãy cập nhật lên \${p.min} trở lên&#96;],
+    NOT_PENDING: ['Lượt đặt không ở trạng thái chờ', (p) =&gt; &#96;Lượt \${p.id} đang \${p.status}, không check-in được&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    APP_VERSION_UNSUPPORTED: ['App version no longer supported', (p) =&gt; &#96;App \${p.version} is no longer supported; update to \${p.min} or later&#96;],
+    NOT_PENDING: ['Booking is not pending', (p) =&gt; &#96;Booking \${p.id} is \${p.status}; it cannot be checked in&#96;],</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings/bk_8/check-in \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{id, status, checkedInAt}'</code></pre>
 <div class="out">{"id":"bk_8","status":"CHECKED_IN","checkedInAt":"2026-10-31T20:05:03.456Z"}</div>
@@ -1558,6 +1720,34 @@ bookingsRouter.route('/:id/check-in')
     res.json(viewsOf(req).booking(b));
   })
   .all(v2Only, onlyAllow('POST'));</code></pre>
+<p>Ba mép nữa để danh sách nhất quán với chính các phần tử trong nó: v2 nhận <code>CHECKED_IN</code> trong <code>?status=</code> và cho <code>checkedInAt</code> trong <code>?fields=</code>, v1 lọc qua cùng phép ánh xạ với view của nó, và hai mã mới có câu chữ:</p>
+<pre><code class="language-javascript">// schemas.js — bộ lọc trạng thái theo phiên bản: v2 biết CHECKED_IN, v1 thì không (hàm bookingsQuery của 4.2 nhận thêm statuses)
+export const BOOKING_STATUSES = ['PENDING', 'CANCELLED'];
+export const BOOKING_STATUSES_V2 = ['PENDING', 'CHECKED_IN', 'CANCELLED'];
+const bookingsQuery = (fieldNames, sorts, statuses) =&gt; z.strictObject({
+  // …
+  status: z.string()                                // "PENDING,CANCELLED" ⇒ ['PENDING', 'CANCELLED']
+    .transform((s) =&gt; s.split(','))
+    .pipe(z.array(z.enum(statuses)).min(1))
+    .optional(),
+  // …
+});
+export const BookingsQuery = bookingsQuery(BOOKING_FIELDS,
+  { '-createdAt': '-createdAt', createdAt: 'createdAt', startAt: 'startAt', '-startAt': '-startAt' }, BOOKING_STATUSES);
+export const BOOKING_FIELDS_V2 = ['id', 'labId', 'userId', 'period', 'purpose', 'status', 'createdAt', 'cancelledAt', 'checkedInAt'];
+export const BookingsQueryV2 = bookingsQuery(BOOKING_FIELDS_V2,
+  { '-createdAt': '-createdAt', createdAt: 'createdAt', start: 'startAt', '-start': '-startAt' }, BOOKING_STATUSES_V2);
+
+// routes/bookings.js — GET danh sách: v1 lọc theo CÙNG phép ánh xạ với view của nó
+import { viewsOf, v1Status } from '../views.js';
+      &amp;&amp; (!status || status.includes(req.apiVersion === 2 ? b.status : v1Status(b.status)))
+
+// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    APP_VERSION_UNSUPPORTED: ['Phiên bản app đã quá cũ', (p) =&gt; &#96;App \${p.version} không còn được hỗ trợ; hãy cập nhật lên \${p.min} trở lên&#96;],
+    NOT_PENDING: ['Lượt đặt không ở trạng thái chờ', (p) =&gt; &#96;Lượt \${p.id} đang \${p.status}, không check-in được&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    APP_VERSION_UNSUPPORTED: ['App version no longer supported', (p) =&gt; &#96;App \${p.version} is no longer supported; update to \${p.min} or later&#96;],
+    NOT_PENDING: ['Booking is not pending', (p) =&gt; &#96;Booking \${p.id} is \${p.status}; it cannot be checked in&#96;],</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/bookings/bk_8/check-in \\
   -H 'Authorization: Bearer tok_lan' | jq -c '{id, status, checkedInAt}'</code></pre>
 <div class="out">{"id":"bk_8","status":"CHECKED_IN","checkedInAt":"2026-10-31T20:05:03.456Z"}</div>

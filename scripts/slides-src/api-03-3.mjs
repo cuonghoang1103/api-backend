@@ -17,7 +17,7 @@ export const slides = lamDeck(meta, [
 <li><code class="i">labId</code>, <code class="i">status</code> (a list), <code class="i">from</code>/<code class="i">to</code> (overlap), <code class="i">q</code> (search)</li>
 <li>A cross-field rule with <code class="i">refine</code> — and its two surprises</li>
 <li>A cursor that refuses another query: <b>CURSOR_MISMATCH</b></li>
-<li>Measured: one index takes a filter from <b>36 ms to 0.24 ms</b></li>
+<li>Measured: one index takes a filter from <b>37 ms to 0.39 ms</b></li>
 </ul>` },
 
   { t: 'Five rules for filters', to: true, giua: true, body: cards([
@@ -115,8 +115,8 @@ CREATE INDEX bookings_lab_start
   ON bookings (lab_id, start_at);`, { lang: 'sql', hl: [7, 8] }), `
 <table class="t lon">
 <tr><th></th><th>plan</th><th>time</th></tr>
-<tr><td>without</td><td>Parallel Index Scan on <code class="i">bookings_newest</code>, Rows Removed by Filter: 333 321 ×3</td><td><b>36.183 ms</b></td></tr>
-<tr><td>with</td><td>Bitmap Index Scan on <code class="i">bookings_lab_start</code>: 324 candidates, 36 rows sorted</td><td><b>0.242 ms</b></td></tr>
+<tr><td>without</td><td>Parallel Index Scan on <code class="i">bookings_newest</code>, Rows Removed by Filter: 324 480 ×3</td><td><b>37.053 ms</b></td></tr>
+<tr><td>with</td><td>Bitmap Index Scan on <code class="i">bookings_lab_start</code>: 576 candidates, 62 overlap, sorted</td><td><b>0.387 ms</b></td></tr>
 </table>
 ${box('The real cost of rule 5', 'Every filter you publish needs a plan like this — on a million rows, PostgreSQL 18.4.', 'xanh')}`, 'r46') },
 
@@ -141,7 +141,7 @@ GET /bookings?field=x&op=y&value=z
 <li>Say what ranges mean — LabFlow’s <code class="i">from</code>/<code class="i">to</code> mean <b>overlap</b></li>
 <li>Cross-field rules: <code class="i">refine</code> with a code, tolerant of invalid fields</li>
 <li>Cursor + fingerprint: another query ⇒ <b>400 CURSOR_MISMATCH</b></li>
-<li>An index per published filter: <b>36 ms → 0.24 ms</b></li>
+<li>An index per published filter: <b>37 ms → 0.39 ms</b></li>
 </ul>
 ${box('Next', 'Lesson 3.4 — sort, sparse fields, include, and the N+1 problem.', 'xanh')}` },
 ]);

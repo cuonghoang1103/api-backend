@@ -1,0 +1,43 @@
+/**
+ * YouTube track cho CHI121 — Integrated Chinese 2. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/chi121-integrated-chinese-2.mjs
+ */
+export default {
+  courseSlug: "chi121-integrated-chinese-2",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "chi121-flm-b002": { yt: "3HT5w3FYSJ0", credit: "Chinese Zero to Hero — 2.1.2 Say \"the most\" with 最 | HSK 2 Beginner's Chinese Course" },
+    "chi121-flm-b003": { yt: "u8ALwXQTJME", credit: "Learn Chinese Online — Chinese Conversation: Talk about Travel 旅游、旅行  | Chinese Listening & Speaking | Learn Chinese Online" },
+    "chi121-flm-b005": { yt: "O5gO_vMtI3I", credit: "Harbin Mandarin — Daily Time Periods in Mandarin Chinese (Telling Time Part 2) | Beginner Lesson 11 | HSK 1" },
+    "chi121-flm-b006": { yt: "dXj0hvON1y4", credit: "Learn Chinese Through Podcast — Daily Routines Chinese | 日常生活中文 | Easy Listening Practice" },
+    "chi121-flm-b008": { yt: "yF_sMivmMKc", credit: "Twin Cities Chinese Tutor — (方位) Locations and directions in Chinese - Chinese Grammar Simplified" },
+    "chi121-flm-b009": { yt: "Q1fqE_64oU0", credit: "Kexia Yan — Mandarin Chinese-Lesson 50-(Possessive Pronoun in Chinese)" },
+    "chi121-flm-b011": { yt: "RcUVUmwnauk", credit: "Mandarin Click — 买衣服 | Slow Chinese Stories Beginner | Chinese Listening Practice HSK 2/3" },
+    "chi121-flm-b013": { yt: "PjRzSF6ka2A", credit: "Chinese Zero to Hero — HSK 2 Grammar 2.3.1 Omitting nouns after 的 - Chinese Grammar Course" },
+    "chi121-flm-b014": { yt: "eVRrjnriOzE", credit: "Yimin Chinese艺敏中文 — (help) Chinese grammar. Difference of * Bāng 帮, BāngZhù帮助，and Bāng máng帮忙 * in Mandarin Chinese" },
+    "chi121-flm-b015": { yt: "kvG7QF89Ddo", credit: "Easy Chinese Club — Job Interview | 工作面试 - Gōngzuò miànshì | Easy Chinese Podcast | HSK 2 - 3" },
+    "chi121-flm-b016": { yt: "z8fYuFH9Y7k", credit: "Learn Chinese with Pipo — Learn Chinese Through Shopping | 15 Practical Conversations for HSK 1–2" },
+    "chi121-flm-b017": { yt: "E4xTaHycP0w", credit: "ZoeyTheSharer — Chinese Character jiù就 - how to use it as an adverb in mandarin speaking." },
+    "chi121-flm-b021": { yt: "UXKo2CoCU5g", credit: "Easy Chinese Club — Learn Chinese at the restaurant | 在餐厅学中文 - Zài cāntīng xué zhōngwén | Easy Chinese | HSK 1–2" },
+    "chi121-flm-b027": { yt: "GlvaMWaLmgY", credit: "Columbus School of Chinese — Mandarin Word Order - Time vs Duration | Ask A Chinese Teacher #19 | Columbus School of Chinese" },
+    "chi121-flm-b030": { yt: "RdZYhpB5xlU", credit: "Twin Cities Chinese Tutor — Reduplication in Chinese 叠词 (Part 1) - When 1+1 is greater than 2 (Chinese Grammar Simplified)" },
+    "chi121-flm-b031": { yt: "aoE6WvN50qw", credit: "Sisi Laoshi 思思老师 — Resultative Complements in Chinese | Learn Chinese Mandarin Elementary - HSK2 / A2" },
+    "chi121-flm-b033": { yt: "W6VvTD6HG3U", credit: "Learn Chinese Online — Negation in Mandarin Chinese | Two Basic Words: 不 (bù) and 没 (méi) | Learn Chinese Online 在线学习中文" },
+    "chi121-flm-b034": { yt: "-c7mMFUV-uY", credit: "ChineseFor.Us - Learn Mandarin Chinese Online — Say Don't in Chinese and Say Should in Chinese | HSK 2 Intermediate Chinese Mandarin Course 2.1" },
+    "chi121-flm-b035": { yt: "HFcrheDwPj4", credit: "DinoMomChinese恐龙妈妈学中文 — Chinese Location & Position Words | 中文方位词 | 汉语位置词 | Questions & Answers About Location in Mandarin" },
+    "chi121-flm-b038": { yt: "wigN5SOIB_8", credit: "Grace Mandarin Chinese — COMMON Sentence-Final Particles in Chinese - 啦、哦、嘍（喽）、嘛、呢、喔" },
+    "chi121-flm-b040": { yt: "2Uu0OTmlYUA", credit: "Chinese Mandarin Cherry — （02）3 Structures of COMPARATIVE Sentences | Chinese | Mandarin | HSK ｜中文｜普通话 ｜比较句" },
+    "chi121-flm-b042": { yt: "xTTOHJv-RzU", credit: "Twin Cities Chinese Tutor — \"比\"  comparison in Chinese 中文的比较 - Chinese Grammar Simplified 201" },
+    "chi121-flm-b043": { yt: "jUvSYzT0WWA", credit: "Chinese Zero to Hero — HSK 2 Grammar 2.12.1 - Specifying degree with 得 - Chinese Grammar" },
+    "chi121-flm-b045": { yt: "iamQclBCfoY", credit: "Mandarin Click — 我感冒了 | Slow Chinese Stories Beginner | Chinese Listening Practice HSK 2/3" },
+    "chi121-flm-b052": { yt: "1qF0Fqb8AQs", credit: "Chinese Zero to Hero — 2.14.1 Describing past experiences with 过 | HSK 2 Beginner's Chinese Course" },
+    "chi121-flm-b055": { yt: "xsGPtHKrXMw", credit: "Chinese Zero to Hero — 2.15.1 Say \"about to\" with 要……了 | HSK 2 Beginner's Chinese Course" },
+    "chi121-flm-b056": { yt: "Es-nyQ8rV7o", credit: "English Task — Chinese New Year Traditions and Celebrations | Lunar New Year | How Is Chinese New Year Celebrated" },
+    "chi121-flm-b058": { yt: "KgrCK0AWB1k", credit: "Learn Chinese Online — 10 Popular Chinese New Year (Spring Festival) Greetings | Learn Chinese Online 在线学习中文| 新年快乐 , 恭喜发财" },
+    "chi121-1-1-shopping": { yt: "5g6BzylcoBQ", credit: "Learn Chinese Online — Chinese Conversation: Shopping  购物，买东西 | Chinese Conversation for Beginners |  Learn Chinese Online" },
+    "chi121-2-1-transportation": { yt: "wff2oiJPYto", credit: "Learn Chinese with Pipo — 20 Minutes of Chinese Conversations for Beginners | Taking a Taxi | HSK 1-2" },
+    "chi121-3-1-weather": { yt: "m-587fJwTKU", credit: "Learn Chinese Through Podcast — Chinese Weather Conversation for All HSK Levels - Learn Chinese" },
+    "chi121-4-1-dining": { yt: "X90wE4Dc1b0", credit: "Johnny Chinese — Learn Chinese in a Restaurant | Comprehensible Input 可理解性输入学中文很简单（餐厅）" },
+    "chi121-5-1-visiting": { yt: "3BZAL1zeZHc", credit: "Chloe Chinese Class — Visiting a Chinese Home: Gifts & Manners (CC with pinyin) | Learn Chinese Real Talk" },
+  },
+};

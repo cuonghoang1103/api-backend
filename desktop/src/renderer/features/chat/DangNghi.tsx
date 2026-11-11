@@ -21,9 +21,9 @@
  * chọn (chờ tiếp, hay bấm Dừng) — bỏ đi cho "thân thiện" là đổi sự tử tế
  * lấy sự mơ hồ.
  */
-import { Loader2 } from 'lucide-react';
 import { nhanBuoc } from './nhanBuoc';
 import { useDich } from '../../i18n';
+import { GauPixel } from './GauPixel';
 
 /** Giây bắt đầu đổi sang câu thứ hai. Dưới ngần này thì câu đầu chưa kịp đọc xong. */
 const CHANG_HAI_GIAY = 6;
@@ -60,7 +60,7 @@ export function DangNghi({
 
   return (
     <div className="ct-agent-nghi">
-      <Loader2 size={13} aria-hidden className="ct-spin" />
+      <GauPixel size={22} state="thinking" mode="face" />
       {buoc && (
         <span className="ct-agent-nghi-buoc" data-sap-het={buoc.tran - buoc.nay <= 1}>
           {nhanBuoc(buoc.nay, buoc.tran, dichP)}

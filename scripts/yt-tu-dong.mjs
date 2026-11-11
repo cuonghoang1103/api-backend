@@ -194,7 +194,17 @@ if (UNG) {
 }
 const gop = { courseSlug: c.slug, defaultVideoTrack: cu.defaultVideoTrack || 'YT', lessons: { ...(cu.lessons || {}), ...moi } };
 if (!DRY && baoCao.them) {
-  const dong = Object.entries(gop.lessons).map(([k, v]) => `    ${JSON.stringify(k)}: { yt: ${JSON.stringify(v.yt)}, credit: ${JSON.stringify(v.credit)} },`).join('\n');
+  // 11/11/2026: GIỮ MỌI TRƯỜNG của bài (vi, defaultVideoTrack…). Bản cũ chỉ ghi yt + credit ⇒ xoá câm link video bài giảng
+  // của OSG202 (70), SDN302 (20), PRJ301 (15), CSI (1) và prod mất video. `vi` ghi dạng `vi: { url: '…' }` vì
+  // video-bai-giang/xuat/gan-web.mts + gan-chung đọc đúng dạng nháy đơn đó.
+  const truong = (k, x) => (k === 'vi' && x && typeof x.url === 'string' && Object.keys(x).length === 1 ? `vi: { url: '${x.url}' }` : `${k}: ${JSON.stringify(x)}`);
+  const dong = Object.entries(gop.lessons).map(([k, v]) => {
+    const { yt, credit, ...khac } = v;
+    const ds = [yt !== undefined && truong('yt', yt), credit !== undefined && truong('credit', credit), ...Object.entries(khac).filter(([, x]) => x !== undefined).map(([kk, x]) => truong(kk, x))].filter(Boolean);
+    return `    ${JSON.stringify(k)}: { ${ds.join(', ')} },`;
+  }).join('\n');
+  const viTruoc = Object.values(cu.lessons || {}).filter((x) => x?.vi?.url).length, viSau = Object.values(gop.lessons).filter((x) => x?.vi?.url).length;
+  if (viSau < viTruoc) { console.error(`✗ dừng: số bài có video bài giảng (vi) giảm ${viTruoc} → ${viSau} — không ghi ${fVid}`); process.exit(1); }
   fs.writeFileSync(fVid, `/**\n * YouTube track cho ${MA} — ${tenMon}. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).\n *   node scripts/verify-youtube-videos.mjs --file ./${fVid}\n */\nexport default {\n  courseSlug: ${JSON.stringify(c.slug)},\n  defaultVideoTrack: ${JSON.stringify(gop.defaultVideoTrack)},\n  lessons: {\n${dong}\n  },\n};\n`);
 }
 fs.mkdirSync('content/course-videos/_bao-cao', { recursive: true });

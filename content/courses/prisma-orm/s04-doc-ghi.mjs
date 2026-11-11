@@ -60,13 +60,19 @@ ${G04_1}
 
 <h3>Why <code>findUnique</code> refuses your filter</h3>
 <pre><code class="language-typescript">await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
-<div class="out">TypeScript error:
-Object literal may only specify known properties, and 'title' does not exist in type 'PostWhereUniqueInput'.</div>
+<div class="out">$ npx tsc
+sai.ts(4,32): error TS2322: Type '{ title: string; }' is not assignable to type 'PostWhereUniqueInput'.
+  …
+    Type '{ title: string; }' is missing the following properties from type '{ id: number; slug: string; authorId_slug: PostAuthorIdSlugCompoundUniqueInput; }': id, slug, authorId_slug</div>
 <pre><code class="language-bash"><span class="tok-comment">// The where type is generated from the model's unique constraints only:</span>
-export type PostWhereUniqueInput =
-  | { id: number }
-  | { slug: string }
-  | { authorId_slug: { authorId: number; slug: string } }   <span class="tok-comment">// from @@unique</span></code></pre>
+export type PostWhereUniqueInput = Prisma.AtLeast&lt;{
+    id?: number
+    slug?: string
+    authorId_slug?: PostAuthorIdSlugCompoundUniqueInput   <span class="tok-comment">// from @@unique</span>
+    AND?: PostWhereInput | PostWhereInput[]
+    …
+  }, "id" | "slug" | "authorId_slug"&gt;</code></pre>
+<p class="note">From the generated <code>index.d.ts</code> of Prisma 6.19.3 (12 Nov 2026): the unique fields are all optional, and <code>AtLeast</code> demands at least one of them — that is what makes a <code>title</code>-only filter a compile error. The ordinary filters (<code>AND</code>, <code>title</code>, …) are allowed <em>next to</em> a unique field, which is the ownership check below.</p>
 <div class="callout">
 <p><strong>This restriction is a feature, and a rare one.</strong> It is a compile-time guarantee that the query returns at most one row. <code>findFirst({ where: { title } })</code> compiles happily and returns an arbitrary matching row — which is fine when you meant it and a genuine bug when you assumed titles were unique. Prisma makes you say which you meant.</p>
 </div>
@@ -102,7 +108,8 @@ An operation failed because it depends on one or more records that were required
 <h3><code>findFirst</code> and the missing <code>orderBy</code></h3>
 <pre><code class="language-javascript"><span class="tok-comment">// "The latest post" — except it is not</span>
 const latest = await prisma.post.findFirst({ where: { published: true } });</code></pre>
-<div class="out">prisma:query SELECT ... FROM "public"."posts" WHERE "public"."posts"."published" = $1 LIMIT $2 OFFSET $3</div>
+<div class="out">prisma:query SELECT "id" FROM "posts" WHERE "published" = $1 LIMIT $2 OFFSET $3
+findFirst before update: id 2 · after updating row 2: id 4      -- measured on 200,000 rows, Prisma 6.19.3, 12 Nov 2026</div>
 <div class="pitfall">
 <p><strong>Trap — no <code>ORDER BY</code> means no defined order.</strong> PostgreSQL returns whichever row it finds first, which is usually insertion order on a fresh table and stops being so the moment rows are updated (an update rewrites the row at the end of the heap) or the planner switches to an index scan. So this works in development, works in staging, and returns a random post in production after the table has churned. <strong>Every <code>findFirst</code> needs an <code>orderBy</code></strong> — if you cannot name the ordering, you wanted <code>findMany</code> or <code>findUnique</code>.</p>
 </div>
@@ -122,7 +129,9 @@ const latest2 = await prisma.post.findFirst({
 <pre><code class="language-javascript"><span class="tok-comment">// Every field is optional, and that is the danger</span>
 const all = await prisma.post.findMany();</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" OFFSET $1
--- 412,908 rows, 890 MB into a Node process with a 512 MB heap</div>
+-- measured on 200,000 posts of ~1.5 KB (Prisma 6.19.3, Node 26, 12 Nov 2026):
+rows: 200000 · 3.5 s · heap +660 MB · rss +1841 MB
+-- the same query with take: 20 → 20 rows · 45 ms</div>
 <div class="callout warn">
 <p><strong>A bare <code>findMany()</code> is an unbounded read.</strong> It works on your 200-row development database and takes down the process on production. Treat <code>take</code> as mandatory: pass it always, even when you "know" the result is small, because knowing is a property of today's data. Chapter 5 covers cursor pagination for the case where you genuinely need everything.</p>
 </div>
@@ -149,11 +158,15 @@ const users = await prisma.user.findMany({
   include: { _count: { select: { posts: { where: { published: true } } } } },
 });
 console.log(users.map((u) =&gt; [u.email, u._count.posts]));</code></pre>
-<div class="out">{ _all: 412908, body: 389114, publishedAt: 201773 }
-[ [ 'an@example.com', 12 ], [ 'binh@example.com', 0 ], [ 'chi@example.com', 41 ] ]</div>
+<div class="out">{ _all: 200000, body: 190000, publishedAt: 100000 }
+[ [ 'an@example.com', 80000 ], [ 'binh@example.com', 0 ], [ 'chi@example.com', 20000 ] ]
+-- the SQL behind them (Prisma 6.19.3):
+SELECT COUNT("body"), COUNT("published_at"), COUNT(*) FROM (SELECT "body", "published_at" FROM "posts" WHERE 1=1 OFFSET $1) AS "sub"
+SELECT "id", "email", "full_name", COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) FROM "users"
+  LEFT JOIN (SELECT "author_id", COUNT(*) AS "_aggr_count_posts" FROM "posts" WHERE "published" = $1 GROUP BY "author_id") …</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Per-field counts are cheap</span><span class="v">One <code>SELECT COUNT(*), COUNT(body), COUNT(published_at)</code>. Three answers, one scan — much better than three separate queries.</span></div>
-  <div class="kv"><span class="k"><code>_count</code> beats <code>.length</code></span><span class="v"><code>include: { posts: true }</code> then <code>posts.length</code> loads every post to count them. <code>_count</code> is a correlated subquery that loads none. On a user with 4,000 posts the difference is the whole request.</span></div>
+  <div class="kv"><span class="k"><code>_count</code> beats <code>.length</code></span><span class="v"><code>include: { posts: true }</code> then <code>posts.length</code> loads every post to count them. <code>_count</code> is a <code>LEFT JOIN</code> onto a grouped subquery (<code>COUNT(*) … GROUP BY "author_id"</code>) and loads no posts at all. On a user with 4,000 posts the difference is the whole request.</span></div>
   <div class="kv"><span class="k">Counting is not free either</span><span class="v"><code>COUNT(*)</code> on a large PostgreSQL table is a full scan — there is no stored row count. If you show a total on every page load, cache it or use an approximate count from <code>pg_class.reltuples</code>. Chapter 9 measures this.</span></div>
 </div>
 
@@ -169,7 +182,7 @@ const b = (await prisma.user.findFirst({ where: { email }, select: { id: true } 
 <span class="tok-comment">// C — for a unique field, findUnique selecting only the id. Index lookup.</span>
 const c = (await prisma.user.findUnique({ where: { email }, select: { id: true } })) !== null;</code></pre>
 <div class="out">-- A
-SELECT COUNT(*) FROM "public"."users" WHERE "public"."users"."email" = $1
+SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE "email" = $1 OFFSET $2) AS "sub"
 -- B
 SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email" = $1 LIMIT $2 OFFSET $3
 -- C
@@ -222,13 +235,19 @@ SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email
 
 <h3>Vì sao <code>findUnique</code> từ chối bộ lọc của bạn</h3>
 <pre><code class="language-typescript">await prisma.post.findUnique({ where: { title: 'Bai dau money' } });</code></pre>
-<div class="out">TypeScript error:
-Object literal may only specify known properties, and 'title' does not exist in type 'PostWhereUniqueInput'.</div>
+<div class="out">$ npx tsc
+sai.ts(4,32): error TS2322: Type '{ title: string; }' is not assignable to type 'PostWhereUniqueInput'.
+  …
+    Type '{ title: string; }' is missing the following properties from type '{ id: number; slug: string; authorId_slug: PostAuthorIdSlugCompoundUniqueInput; }': id, slug, authorId_slug</div>
 <pre><code class="language-bash"><span class="tok-comment">// Kiểu của where được sinh CHỈ từ các ràng buộc unique của model:</span>
-export type PostWhereUniqueInput =
-  | { id: number }
-  | { slug: string }
-  | { authorId_slug: { authorId: number; slug: string } }   <span class="tok-comment">// từ @@unique</span></code></pre>
+export type PostWhereUniqueInput = Prisma.AtLeast&lt;{
+    id?: number
+    slug?: string
+    authorId_slug?: PostAuthorIdSlugCompoundUniqueInput   <span class="tok-comment">// từ @@unique</span>
+    AND?: PostWhereInput | PostWhereInput[]
+    …
+  }, "id" | "slug" | "authorId_slug"&gt;</code></pre>
+<p class="note">Trích từ <code>index.d.ts</code> sinh ra bởi Prisma 6.19.3 (12/11/2026): các trường unique đều tuỳ chọn, và <code>AtLeast</code> đòi ít nhất một trong số đó — vì thế bộ lọc chỉ có <code>title</code> là lỗi biên dịch. Các bộ lọc thường (<code>AND</code>, <code>title</code>, …) được phép <em>đứng cạnh</em> một trường unique, chính là phép kiểm chủ sở hữu ngay dưới.</p>
 <div class="callout">
 <p><strong>Hạn chế này là một tính năng, và là loại hiếm.</strong> Nó là một bảo đảm lúc biên dịch rằng câu truy vấn trả về nhiều nhất một hàng. <code>findFirst({ where: { title } })</code> biên dịch ngon lành và trả về một hàng khớp bất kỳ — ổn khi bạn cố ý và là một con bọ thật khi bạn tưởng tiêu đề là duy nhất. Prisma bắt bạn nói rõ mình muốn cái nào.</p>
 </div>
@@ -264,7 +283,8 @@ An operation failed because it depends on one or more records that were required
 <h3><code>findFirst</code> và cái <code>orderBy</code> bị bỏ quên</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// "Bài mới nhất" — nhưng không phải vậy</span>
 const latest = await prisma.post.findFirst({ where: { published: true } });</code></pre>
-<div class="out">prisma:query SELECT ... FROM "public"."posts" WHERE "public"."posts"."published" = $1 LIMIT $2 OFFSET $3</div>
+<div class="out">prisma:query SELECT "id" FROM "posts" WHERE "published" = $1 LIMIT $2 OFFSET $3
+findFirst before update: id 2 · after updating row 2: id 4      -- measured on 200,000 rows, Prisma 6.19.3, 12 Nov 2026</div>
 <div class="pitfall">
 <p><strong>Bẫy — không có <code>ORDER BY</code> nghĩa là không có thứ tự xác định.</strong> PostgreSQL trả về hàng nào nó gặp trước, thường là theo thứ tự chèn trên một bảng còn mới và thôi như vậy ngay khi có hàng bị cập nhật (một lần update ghi lại hàng ở cuối heap) hoặc khi bộ lập kế hoạch chuyển sang quét chỉ mục. Nên nó chạy đúng lúc phát triển, chạy đúng ở staging, và trả về một bài viết ngẫu nhiên trên production sau khi bảng đã bị đảo qua đảo lại. <strong>Mọi <code>findFirst</code> đều cần một <code>orderBy</code></strong> — nếu bạn không gọi tên được thứ tự thì thứ bạn muốn là <code>findMany</code> hoặc <code>findUnique</code>.</p>
 </div>
@@ -284,7 +304,9 @@ const latest2 = await prisma.post.findFirst({
 <pre><code class="language-javascript"><span class="tok-comment">// Mọi trường đều tuỳ chọn, và đó chính là chỗ nguy hiểm</span>
 const all = await prisma.post.findMany();</code></pre>
 <div class="out">prisma:query SELECT ... FROM "public"."posts" OFFSET $1
--- 412.908 hàng, 890 MB đổ vào một tiến trình Node có heap 512 MB</div>
+-- đo trên 200.000 bài viết ~1,5 KB (Prisma 6.19.3, Node 26, 12/11/2026):
+rows: 200000 · 3.5 s · heap +660 MB · rss +1841 MB
+-- cùng câu đó với take: 20 → 20 hàng · 45 ms</div>
 <div class="callout warn">
 <p><strong>Một câu <code>findMany()</code> trần là một lần đọc không chặn biên.</strong> Nó chạy ngon trên cơ sở dữ liệu phát triển 200 hàng và hạ gục tiến trình trên production. Hãy coi <code>take</code> là bắt buộc: luôn truyền nó, ngay cả khi bạn "biết" kết quả nhỏ, vì cái biết ấy là tính chất của dữ liệu hôm nay. Chương 5 nói về phân trang bằng con trỏ cho trường hợp bạn thật sự cần tất cả.</p>
 </div>
@@ -311,11 +333,15 @@ const users = await prisma.user.findMany({
   include: { _count: { select: { posts: { where: { published: true } } } } },
 });
 console.log(users.map((u) =&gt; [u.email, u._count.posts]));</code></pre>
-<div class="out">{ _all: 412908, body: 389114, publishedAt: 201773 }
-[ [ 'an@example.com', 12 ], [ 'binh@example.com', 0 ], [ 'chi@example.com', 41 ] ]</div>
+<div class="out">{ _all: 200000, body: 190000, publishedAt: 100000 }
+[ [ 'an@example.com', 80000 ], [ 'binh@example.com', 0 ], [ 'chi@example.com', 20000 ] ]
+-- the SQL behind them (Prisma 6.19.3):
+SELECT COUNT("body"), COUNT("published_at"), COUNT(*) FROM (SELECT "body", "published_at" FROM "posts" WHERE 1=1 OFFSET $1) AS "sub"
+SELECT "id", "email", "full_name", COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) FROM "users"
+  LEFT JOIN (SELECT "author_id", COUNT(*) AS "_aggr_count_posts" FROM "posts" WHERE "published" = $1 GROUP BY "author_id") …</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Đếm theo từng trường thì rẻ</span><span class="v">Một câu <code>SELECT COUNT(*), COUNT(body), COUNT(published_at)</code>. Ba câu trả lời, một lần quét — tốt hơn hẳn ba câu truy vấn riêng.</span></div>
-  <div class="kv"><span class="k"><code>_count</code> thắng <code>.length</code></span><span class="v"><code>include: { posts: true }</code> rồi <code>posts.length</code> là nạp mọi bài viết về chỉ để đếm chúng. <code>_count</code> là một truy vấn con tương quan, không nạp bài nào. Trên một người dùng có 4.000 bài viết, khác biệt ấy là cả một yêu cầu.</span></div>
+  <div class="kv"><span class="k"><code>_count</code> thắng <code>.length</code></span><span class="v"><code>include: { posts: true }</code> rồi <code>posts.length</code> là nạp mọi bài viết về chỉ để đếm chúng. <code>_count</code> là một <code>LEFT JOIN</code> vào một truy vấn con có nhóm (<code>COUNT(*) … GROUP BY "author_id"</code>), không nạp bài nào. Trên một người dùng có 4.000 bài viết, khác biệt ấy là cả một yêu cầu.</span></div>
   <div class="kv"><span class="k">Đếm cũng không miễn phí</span><span class="v"><code>COUNT(*)</code> trên một bảng lớn của PostgreSQL là một lần quét toàn bộ — không có số đếm hàng nào được lưu sẵn. Nếu bạn hiển thị tổng số ở mọi lần tải trang thì hãy lưu đệm nó, hoặc dùng số đếm xấp xỉ từ <code>pg_class.reltuples</code>. Chương 9 đo chuyện này.</span></div>
 </div>
 
@@ -331,7 +357,7 @@ const b = (await prisma.user.findFirst({ where: { email }, select: { id: true } 
 <span class="tok-comment">// C — với trường unique, findUnique chỉ chọn id. Một lần tra chỉ mục.</span>
 const c = (await prisma.user.findUnique({ where: { email }, select: { id: true } })) !== null;</code></pre>
 <div class="out">-- A
-SELECT COUNT(*) FROM "public"."users" WHERE "public"."users"."email" = $1
+SELECT COUNT(*) AS "_count$_all" FROM (SELECT "id" FROM "users" WHERE "email" = $1 OFFSET $2) AS "sub"
 -- B
 SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email" = $1 LIMIT $2 OFFSET $3
 -- C
@@ -379,12 +405,15 @@ const c = await prisma.user.findUniqueOrThrow({
   select: { id: true, email: true, posts: { select: { title: true } } },
 });
 <span class="tok-comment">// { id, email, posts: { title: string }[] }</span></code></pre>
-<div class="out">-- 1 and 2 fetch the password column you did not want
-SELECT "id","email","full_name","password","created_at" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
+<div class="out">-- 1 and 2 fetch the password column you did not want (the demo users table also has username, avatar_url)
+SELECT "id", "email", "username", "full_name", "password", "avatar_url", "created_at" FROM "users" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+-- 2 adds one query for the posts
+SELECT "id", "title", "body", "published", "views", "created_at", "author_id" FROM "posts" WHERE "author_id" IN ($1) OFFSET $2
 
--- 3 fetches two columns
-SELECT "id","email" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
-SELECT "title","author_id" FROM "posts" WHERE "author_id" IN ($1)</div>
+-- 3 fetches two columns, then only the titles (plus the key that joins them)
+SELECT "id", "email" FROM "users" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+SELECT "id", "title", "author_id" FROM "posts" WHERE "author_id" IN ($1) OFFSET $2</div>
+<p class="note">Query log re-run on 12 Nov 2026 with Prisma 6.19.3 and PostgreSQL 16.14; <code>"public".</code> and table prefixes removed.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">They are mutually exclusive at one level</span><span class="v"><code>{ select: …, include: … }</code> together is a runtime error, not a compile error, because the generated types express it as a union. The message is clear: <em>Please either use <code>include</code> or <code>select</code>, but not both at the same time.</em></span></div>
   <div class="kv"><span class="k">But they nest freely</span><span class="v"><code>include: { posts: { select: { title: true } } }</code> is legal and common — every level chooses independently. That is how you say "the whole user, but only the titles of their posts".</span></div>
@@ -444,12 +473,14 @@ const forLogin = await prisma.user.findUnique({
     _count: { select: { comments: true, likes: true } },
   },
 });</code></pre>
-<div class="out">prisma:query SELECT "id","title","author_id" FROM "posts" WHERE "id" = $1 LIMIT $2 OFFSET $3
-prisma:query SELECT "id","username","avatar_url" FROM "users" WHERE "id" IN ($1)
-prisma:query SELECT "id","body","author_id",(SELECT COUNT(*) FROM "comments" AS "r" WHERE "r"."parent_id" = "comments"."id") FROM "comments" WHERE ("post_id" IN ($1) AND "deleted_at" IS NULL) ORDER BY "created_at" ASC LIMIT $2
-prisma:query SELECT "id","username" FROM "users" WHERE "id" IN ($1,$2,$3,$4)
-prisma:query SELECT (SELECT COUNT(*) FROM "comments" WHERE "post_id" = "posts"."id"), (SELECT COUNT(*) FROM "likes" WHERE "post_id" = "posts"."id") FROM "posts" WHERE "id" = $1</div>
-<p>Five statements for a fully populated post page. Not one, but not fifty either — and each relation level is batched with <code>IN</code> rather than looped. Chapter 9 shows how <code>relationLoadStrategy: "join"</code> collapses these, and measures when that is actually faster.</p>
+<div class="out">prisma:query SELECT "id", "title", "author_id", COALESCE(…"_aggr_count_comments", 0), COALESCE(…"_aggr_count_likes", 0) FROM "posts"
+             LEFT JOIN (SELECT "post_id", COUNT(*) … FROM "comments" GROUP BY "post_id") … LEFT JOIN (SELECT "post_id", COUNT(*) … FROM "likes" GROUP BY "post_id") … WHERE "id" = $1
+prisma:query SELECT "id", "username", "avatar_url" FROM "users" WHERE "id" IN ($1) OFFSET $2
+prisma:query SELECT "id", "body", "author_id", "post_id", COALESCE(…"_aggr_count_replies", 0) FROM "comments"
+             LEFT JOIN (SELECT "parent_id", COUNT(*) … FROM "comments" GROUP BY "parent_id") … WHERE ("deleted_at" IS NULL AND "post_id" IN ($1)) ORDER BY "created_at" ASC LIMIT $2
+prisma:query SELECT "id", "username" FROM "users" WHERE "id" IN ($1,$2,$3) OFFSET $4
+-- statements: 4 · comments returned: 20 · _count: {"comments":28,"likes":3}   (Prisma 6.19.3, 12 Nov 2026)</div>
+<p>Four statements for a fully populated post page — the two totals ride on the first query as <code>LEFT JOIN</code>s onto grouped subqueries. Not one, but not fifty either — and each relation level is batched with <code>IN</code> rather than looped. Chapter 9 shows how <code>relationLoadStrategy: "join"</code> collapses these, and measures when that is actually faster.</p>
 <div class="pitfall">
 <p><strong>Trap — <code>take</code> inside a nested relation is per parent, not overall.</strong> <code>findMany({ take: 10, include: { comments: { take: 20 } } })</code> can return up to 200 comments, not 20. That is usually what you want for a feed; it is a surprise when the outer <code>take</code> is large. And note the nested <code>take</code> is applied per parent by the query engine, so it does not reduce the work the database does as much as you might hope — Chapter 9 has the measurement.</p>
 </div>
@@ -476,7 +507,7 @@ include: {
 const bad = await prisma.user.findMany({ include: { posts: true } });
 console.log(bad[0].posts.length);
 
-<span class="tok-comment">// Right: a correlated subquery, no rows transferred</span>
+<span class="tok-comment">// Right: a grouped subquery joined in, no post rows transferred</span>
 const good = await prisma.user.findMany({
   include: { _count: { select: { posts: true, comments: true } } },
 });
@@ -486,11 +517,14 @@ console.log(good[0]._count.posts);
 const withFilter = await prisma.user.findMany({
   include: { _count: { select: { posts: { where: { published: true } } } } },
 });</code></pre>
-<div class="out">-- bad
-SELECT "id","title","body","published","views","created_at","author_id" FROM "posts" WHERE "author_id" IN (...)   -- 4,000 rows, 3.2 MB
+<div class="out">-- bad: one user with 4,000 posts (measured, Prisma 6.19.3, 12 Nov 2026)
+SELECT "id", "title", "body", "published", "views", "created_at", "author_id" FROM "posts" WHERE "author_id" IN ($1) OFFSET $2
+bad: posts.length = 4000 · 79 ms · result 3632.8 KB
 
 -- good
-SELECT "users".*, (SELECT COUNT(*) FROM "posts" WHERE "posts"."author_id" = "users"."id") FROM "users"            -- 1 row, 84 bytes</div>
+SELECT "id", …, COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) FROM "users"
+  LEFT JOIN (SELECT "author_id", COUNT(*) AS "_aggr_count_posts" FROM "posts" GROUP BY "author_id") … WHERE "id" = $1
+good: _count.posts = 4000 · 6 ms · result 0.2 KB</div>
 
 <h3>The fluent API: traversing instead of including</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// Chain from a unique lookup to its relation — two queries, no include</span>
@@ -501,7 +535,9 @@ const posts = await prisma.user.findUnique({ where: { email } }).posts({
 
 <span class="tok-comment">// Chains further, one level at a time</span>
 const author = await prisma.comment.findUnique({ where: { id: 5 } }).post().author();</code></pre>
-<div class="out">prisma:query SELECT "id","title",... FROM "posts" WHERE "author_id" = (SELECT "id" FROM "users" WHERE "email" = $1) AND "published" = $2 LIMIT $3</div>
+<div class="out">prisma:query SELECT "id" FROM "users" WHERE ("email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "id", "title", "author_id" FROM "posts" WHERE ("published" = $1 AND "author_id" IN ($2)) ORDER BY "id" ASC LIMIT $3 OFFSET $4
+-- two statements: only the user's id is read, then the posts (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">When it wins</span><span class="v">You want <em>only</em> the relation and not the parent. <code>include</code> would fetch the user row you are about to discard; the fluent form does not.</span></div>
   <div class="kv"><span class="k">When it loses</span><span class="v">You need both. Two chained calls is two round trips where one <code>include</code> is one. And a long chain issues one query per link.</span></div>
@@ -565,12 +601,15 @@ const c = await prisma.user.findUniqueOrThrow({
   select: { id: true, email: true, posts: { select: { title: true } } },
 });
 <span class="tok-comment">// { id, email, posts: { title: string }[] }</span></code></pre>
-<div class="out">-- 1 và 2 kéo về cả cột password mà bạn không hề muốn
-SELECT "id","email","full_name","password","created_at" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
+<div class="out">-- 1 và 2 kéo về cả cột password mà bạn không hề muốn (bảng users của bản demo có thêm username, avatar_url)
+SELECT "id", "email", "username", "full_name", "password", "avatar_url", "created_at" FROM "users" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+-- 2 thêm một câu cho các bài viết
+SELECT "id", "title", "body", "published", "views", "created_at", "author_id" FROM "posts" WHERE "author_id" IN ($1) OFFSET $2
 
--- 3 kéo về hai cột
-SELECT "id","email" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
-SELECT "title","author_id" FROM "posts" WHERE "author_id" IN ($1)</div>
+-- 3 lấy hai cột, rồi chỉ tiêu đề (cộng khoá nối)
+SELECT "id", "email" FROM "users" WHERE ("id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+SELECT "id", "title", "author_id" FROM "posts" WHERE "author_id" IN ($1) OFFSET $2</div>
+<p class="note">Nhật ký truy vấn chạy lại ngày 12/11/2026 với Prisma 6.19.3 và PostgreSQL 16.14; đã bỏ tiền tố <code>"public".</code> và tên bảng.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Chúng loại trừ nhau ở cùng một tầng</span><span class="v">Viết cả <code>{ select: …, include: … }</code> là lỗi lúc chạy chứ không phải lỗi biên dịch, vì các kiểu sinh ra diễn đạt nó thành một union. Thông báo thì rõ: <em>Please either use <code>include</code> or <code>select</code>, but not both at the same time.</em></span></div>
   <div class="kv"><span class="k">Nhưng chúng lồng nhau thoải mái</span><span class="v"><code>include: { posts: { select: { title: true } } }</code> là hợp lệ và phổ biến — mỗi tầng tự chọn độc lập. Đó là cách bạn nói "nguyên cái user, nhưng chỉ tiêu đề các bài viết của họ".</span></div>
@@ -630,12 +669,14 @@ const forLogin = await prisma.user.findUnique({
     _count: { select: { comments: true, likes: true } },
   },
 });</code></pre>
-<div class="out">prisma:query SELECT "id","title","author_id" FROM "posts" WHERE "id" = $1 LIMIT $2 OFFSET $3
-prisma:query SELECT "id","username","avatar_url" FROM "users" WHERE "id" IN ($1)
-prisma:query SELECT "id","body","author_id",(SELECT COUNT(*) FROM "comments" AS "r" WHERE "r"."parent_id" = "comments"."id") FROM "comments" WHERE ("post_id" IN ($1) AND "deleted_at" IS NULL) ORDER BY "created_at" ASC LIMIT $2
-prisma:query SELECT "id","username" FROM "users" WHERE "id" IN ($1,$2,$3,$4)
-prisma:query SELECT (SELECT COUNT(*) FROM "comments" WHERE "post_id" = "posts"."id"), (SELECT COUNT(*) FROM "likes" WHERE "post_id" = "posts"."id") FROM "posts" WHERE "id" = $1</div>
-<p>Năm câu lệnh cho một trang bài viết đầy đủ. Không phải một, nhưng cũng không phải năm mươi — và mỗi tầng quan hệ đều được gom lô bằng <code>IN</code> chứ không lặp. Chương 9 chỉ cách <code>relationLoadStrategy: "join"</code> gộp chúng lại, và đo xem khi nào cách đó thật sự nhanh hơn.</p>
+<div class="out">prisma:query SELECT "id", "title", "author_id", COALESCE(…"_aggr_count_comments", 0), COALESCE(…"_aggr_count_likes", 0) FROM "posts"
+             LEFT JOIN (SELECT "post_id", COUNT(*) … FROM "comments" GROUP BY "post_id") … LEFT JOIN (SELECT "post_id", COUNT(*) … FROM "likes" GROUP BY "post_id") … WHERE "id" = $1
+prisma:query SELECT "id", "username", "avatar_url" FROM "users" WHERE "id" IN ($1) OFFSET $2
+prisma:query SELECT "id", "body", "author_id", "post_id", COALESCE(…"_aggr_count_replies", 0) FROM "comments"
+             LEFT JOIN (SELECT "parent_id", COUNT(*) … FROM "comments" GROUP BY "parent_id") … WHERE ("deleted_at" IS NULL AND "post_id" IN ($1)) ORDER BY "created_at" ASC LIMIT $2
+prisma:query SELECT "id", "username" FROM "users" WHERE "id" IN ($1,$2,$3) OFFSET $4
+-- statements: 4 · comments returned: 20 · _count: {"comments":28,"likes":3}   (Prisma 6.19.3, 12 Nov 2026)</div>
+<p>Bốn câu lệnh cho một trang bài viết đầy đủ — hai con số tổng đi chung câu đầu, bằng <code>LEFT JOIN</code> vào các truy vấn con có nhóm. Không phải một, nhưng cũng không phải năm mươi — và mỗi tầng quan hệ đều được gom lô bằng <code>IN</code> chứ không lặp. Chương 9 chỉ cách <code>relationLoadStrategy: "join"</code> gộp chúng lại, và đo xem khi nào cách đó thật sự nhanh hơn.</p>
 <div class="pitfall">
 <p><strong>Bẫy — <code>take</code> bên trong một quan hệ lồng là tính theo từng cha, không phải tổng.</strong> <code>findMany({ take: 10, include: { comments: { take: 20 } } })</code> trả về được tới 200 bình luận, không phải 20. Thường thì đó là điều bạn muốn cho một dòng thời gian; nó thành bất ngờ khi cái <code>take</code> bên ngoài lớn. Và lưu ý cái <code>take</code> lồng được query engine áp dụng theo từng cha, nên nó không giảm phần việc của cơ sở dữ liệu nhiều như bạn tưởng — Chương 9 có số đo.</p>
 </div>
@@ -662,7 +703,7 @@ include: {
 const bad = await prisma.user.findMany({ include: { posts: true } });
 console.log(bad[0].posts.length);
 
-<span class="tok-comment">// Đúng: một truy vấn con tương quan, không hàng nào phải truyền đi</span>
+<span class="tok-comment">// Đúng: một truy vấn con có nhóm được JOIN vào, không hàng bài viết nào phải truyền đi</span>
 const good = await prisma.user.findMany({
   include: { _count: { select: { posts: true, comments: true } } },
 });
@@ -672,11 +713,14 @@ console.log(good[0]._count.posts);
 const withFilter = await prisma.user.findMany({
   include: { _count: { select: { posts: { where: { published: true } } } } },
 });</code></pre>
-<div class="out">-- bad
-SELECT "id","title","body","published","views","created_at","author_id" FROM "posts" WHERE "author_id" IN (...)   -- 4.000 hàng, 3,2 MB
+<div class="out">-- bad: one user with 4,000 posts (measured, Prisma 6.19.3, 12 Nov 2026)
+SELECT "id", "title", "body", "published", "views", "created_at", "author_id" FROM "posts" WHERE "author_id" IN ($1) OFFSET $2
+bad: posts.length = 4000 · 79 ms · result 3632.8 KB
 
 -- good
-SELECT "users".*, (SELECT COUNT(*) FROM "posts" WHERE "posts"."author_id" = "users"."id") FROM "users"            -- 1 hàng, 84 byte</div>
+SELECT "id", …, COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) FROM "users"
+  LEFT JOIN (SELECT "author_id", COUNT(*) AS "_aggr_count_posts" FROM "posts" GROUP BY "author_id") … WHERE "id" = $1
+good: _count.posts = 4000 · 6 ms · result 0.2 KB</div>
 
 <h3>API kiểu chuỗi: đi qua thay vì include</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// Nối từ một lần tra unique sang quan hệ của nó — hai câu truy vấn, không include</span>
@@ -687,7 +731,9 @@ const posts = await prisma.user.findUnique({ where: { email } }).posts({
 
 <span class="tok-comment">// Nối tiếp được, mỗi lần một tầng</span>
 const author = await prisma.comment.findUnique({ where: { id: 5 } }).post().author();</code></pre>
-<div class="out">prisma:query SELECT "id","title",... FROM "posts" WHERE "author_id" = (SELECT "id" FROM "users" WHERE "email" = $1) AND "published" = $2 LIMIT $3</div>
+<div class="out">prisma:query SELECT "id" FROM "users" WHERE ("email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query SELECT "id", "title", "author_id" FROM "posts" WHERE ("published" = $1 AND "author_id" IN ($2)) ORDER BY "id" ASC LIMIT $3 OFFSET $4
+-- two statements: only the user's id is read, then the posts (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Khi nó thắng</span><span class="v">Bạn <em>chỉ</em> muốn quan hệ, không muốn cha. <code>include</code> sẽ kéo về cả hàng user mà bạn sắp vứt đi; dạng chuỗi thì không.</span></div>
   <div class="kv"><span class="k">Khi nó thua</span><span class="v">Bạn cần cả hai. Hai lời gọi nối chuỗi là hai lượt đi về trong khi một <code>include</code> chỉ là một. Và một chuỗi dài thì mỗi mắt xích một câu truy vấn.</span></div>
@@ -770,10 +816,11 @@ ${G04_3}
 console.log(u);</code></pre>
 <div class="out">prisma:query BEGIN
 prisma:query INSERT INTO "users" ("email","full_name") VALUES ($1,$2) RETURNING "id"
-prisma:query INSERT INTO "profiles" ("bio","user_id") VALUES ($1,$2)
-prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2), ($3,$4)
-prisma:query INSERT INTO "_RoleToUser" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
-prisma:query SELECT "id","email",(SELECT COUNT(*) FROM "posts" WHERE "author_id"="users"."id") FROM "users" WHERE "id" = $1
+prisma:query INSERT INTO "profiles" ("bio","user_id") VALUES ($1,$2) RETURNING "id"
+prisma:query INSERT INTO "posts" ("title","published","views","created_at","updated_at","author_id") VALUES ($1,$2,$3,$4,$5,$6), ($7,$8,$9,$10,$11,$12)
+prisma:query SELECT "id" FROM "roles" WHERE ("name" = $1 AND 1=1) OFFSET $2
+prisma:query INSERT INTO "_RoleToUser" ("B","A") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id", "email", COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) … FROM "users" LEFT JOIN (SELECT "author_id", COUNT(*) … GROUP BY "author_id") … WHERE "id" = $1
 prisma:query COMMIT
 
 { id: 1, email: 'an@example.com', _count: { posts: 2 } }</div>
@@ -797,15 +844,25 @@ await prisma.post.create({
     },
   },
 });</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT "id","name" FROM "tags" WHERE "name" IN ($1,$2,$3)
+<div class="out">-- "nodejs" existed, "prisma" and "postgres" did not (Prisma 6.19.3, 12 Nov 2026)
+prisma:query BEGIN
+prisma:query INSERT INTO "posts" ("title","published","views","created_at","updated_at") VALUES ($1,$2,$3,$4,$5) RETURNING "id"
+prisma:query SELECT "id" FROM "tags" WHERE ("name" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id" FROM "tags" WHERE ("name" = $1 AND 1=1) LIMIT $2 OFFSET $3
 prisma:query INSERT INTO "tags" ("name") VALUES ($1) RETURNING "id"
-prisma:query INSERT INTO "posts" ("title") VALUES ($1) RETURNING "id"
-prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2),($3,$4),($5,$6) ON CONFLICT DO NOTHING
+prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id" FROM "tags" WHERE ("name" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "tags" ("name") VALUES ($1) RETURNING "id"
+prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id", "title", … FROM "posts" WHERE "id" = $1 LIMIT $2 OFFSET $3
 prisma:query COMMIT</div>
 <div class="pitfall">
-<p><strong>Trap — <code>connectOrCreate</code> is not atomic against a concurrent writer.</strong> It reads, then decides, then writes. Two requests creating the tag <code>prisma</code> at the same instant both see it missing and both insert — and the second gets <code>P2002</code>. The unique constraint saves your data, but your request fails. In a low-concurrency admin flow that is acceptable. Under real traffic, catch <code>P2002</code> and retry once, or pre-create your tag vocabulary. Chapter 7 covers the general pattern.</p>
+<p><strong>Trap — <code>connectOrCreate</code> is not atomic against a concurrent writer.</strong> As the log shows, it works one tag at a time: it reads, then decides, then writes. Measured below: ten requests creating the same new tag at once — one succeeds, nine fail. Two requests creating the tag <code>prisma</code> at the same instant both see it missing and both insert — and the second gets <code>P2002</code>. The unique constraint saves your data, but your request fails. In a low-concurrency admin flow that is acceptable. Under real traffic, catch <code>P2002</code> and retry once, or pre-create your tag vocabulary. Chapter 7 covers the general pattern.</p>
 </div>
+<div class="out">round 1: 10 concurrent connectOrCreate of one new tag → 1 ok, 9 failed ["P2002"]
+round 2: 10 concurrent connectOrCreate of one new tag → 1 ok, 9 failed ["P2002"]
+round 3: 10 concurrent connectOrCreate of one new tag → 1 ok, 9 failed ["P2002"]</div>
 
 <h3><code>createMany</code> — thousands in one statement</h3>
 <pre><code class="language-javascript">const rows = Array.from({ length: 10_000 }, (_, i) =&gt; ({
@@ -820,10 +877,11 @@ console.timeEnd('create');
 console.time('createMany');
 await prisma.post.createMany({ data: rows });
 console.timeEnd('createMany');</code></pre>
-<div class="out">create: 41822.417ms
-createMany: 486.331ms</div>
+<div class="out">create loop ×10000: 14.7 s
+createMany ×10000: 315 ms · {"count":10000}
+-- measured on one laptop, PostgreSQL in Docker on the same machine (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="callout ok">
-<p><strong>Eighty-six times faster.</strong> The loop pays a network round trip per row — ten thousand of them. <code>createMany</code> sends one multi-row <code>INSERT</code> (chunked internally, because PostgreSQL caps a statement at 65,535 bind parameters). Any time you are writing more than about twenty rows of the same shape, this is the method.</p>
+<p><strong>About forty-seven times faster</strong> — and the gap only grows when the database is across a real network. The loop pays a round trip per row — ten thousand of them. <code>createMany</code> sends one multi-row <code>INSERT</code> (chunked internally, because PostgreSQL caps a statement at 65,535 bind parameters). Any time you are writing more than about twenty rows of the same shape, this is the method.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">It cannot write relations</span><span class="v">No <code>create</code>, no <code>connect</code>, no nesting. You supply foreign key scalars directly. For a graph, that means creating parents first, reading back their ids, then creating children — which is still far faster than a loop.</span></div>
@@ -837,14 +895,16 @@ const post = await prisma.post.createManyAndReturn({
   select: { id: true, title: true },
 });
 console.log(post);</code></pre>
-<div class="out">prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2),($3,$4) RETURNING "id","title"
+<div class="out">prisma:query BEGIN
+prisma:query INSERT INTO "posts" ("title","published","views","created_at","updated_at","author_id") VALUES ($1,$2,$3,$4,$5,$6), ($7,$8,$9,$10,$11,$12) RETURNING "id", "title"
+prisma:query COMMIT
 
-[ { id: 101, title: 'A' }, { id: 102, title: 'B' } ]</div>
+[{"id":4,"title":"A"},{"id":5,"title":"B"}]</div>
 
 <h3>Importing a graph, at speed</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// 5,000 users, each with 3 posts. The naive nested version:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1,000 users, each with 3 posts. The naive nested version:</span>
 <span class="tok-comment">//   for (const u of users) await prisma.user.create({ data: { ...u, posts: {...} } })</span>
-<span class="tok-comment">// = 5,000 transactions, 15,000 inserts, about 40 seconds.</span>
+<span class="tok-comment">// = 1,000 transactions, 3,000 inserts.</span>
 
 <span class="tok-comment">// Two statements instead:</span>
 const user = await prisma.user.createManyAndReturn({
@@ -859,12 +919,10 @@ await prisma.post.createMany({
     u.posts.map((p) =&gt; ({ title: p.title, authorId: byEmail.get(u.email)! })),
   ),
 });</code></pre>
-<div class="out">-- nested loop version
-real    0m39.914s
-
--- two-statement version
-real    0m1.207s</div>
-<p>Thirty-three times faster, and the shape of the fix generalises: <strong>create parents in one batch, build an id map, create children in one batch</strong>. If the whole import must be atomic, wrap both calls in <code>prisma.$transaction</code> — Chapter 7 covers the timeout you will need to raise when you do.</p>
+<div class="out">nested loop 1000 users × 3 posts: 5.4 s
+two statements 1000 users × 3 posts: 91 ms
+-- same laptop as above (Prisma 6.19.3, 12 Nov 2026)</div>
+<p>About sixty times faster, and the shape of the fix generalises: <strong>create parents in one batch, build an id map, create children in one batch</strong>. If the whole import must be atomic, wrap both calls in <code>prisma.$transaction</code> — Chapter 7 covers the timeout you will need to raise when you do.</p>
 
 <h3>When the unique constraint fires</h3>
 <pre><code class="language-javascript">try {
@@ -896,10 +954,10 @@ model Post {
   updatedAt DateTime @updatedAt
 }</code></pre>
 <pre><code class="language-typescript">await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
-<div class="out">INSERT INTO "posts" ("title","slug","author_id","updated_at") VALUES ($1,$2,$3,$4) RETURNING ...
--- published, views and created_at came from the database defaults</div>
+<div class="out">INSERT INTO "posts" ("title","slug","published","views","created_at","updated_at","author_id") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING ...
+-- Prisma filled in published, views and created_at itself and sent them (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="callout">
-<p><strong>Every <code>@default</code> is a field a caller cannot get wrong.</strong> A <code>published Boolean</code> with no default forces every call site to pass it, and the day someone passes <code>true</code> by accident is the day a draft goes public. Put the safe value in the schema and let the exception be explicit. The same reasoning applies to <code>createdAt</code>: it should never appear in application code at all.</p>
+<p><strong>Every <code>@default</code> is a field a caller cannot get wrong.</strong> A <code>published Boolean</code> with no default forces every call site to pass it, and the day someone passes <code>true</code> by accident is the day a draft goes public. Put the safe value in the schema and let the exception be explicit. The same reasoning applies to <code>createdAt</code>: it should never appear in application code at all. Note who applies them: Prisma computes these values and sends them in the <code>INSERT</code>, so a row written from psql or another service only gets the defaults that really live in the database (Lesson 2.2).</p>
 </div>
 
 <h3>Learning sources for this lesson</h3>
@@ -938,10 +996,11 @@ model Post {
 console.log(u);</code></pre>
 <div class="out">prisma:query BEGIN
 prisma:query INSERT INTO "users" ("email","full_name") VALUES ($1,$2) RETURNING "id"
-prisma:query INSERT INTO "profiles" ("bio","user_id") VALUES ($1,$2)
-prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2), ($3,$4)
-prisma:query INSERT INTO "_RoleToUser" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
-prisma:query SELECT "id","email",(SELECT COUNT(*) FROM "posts" WHERE "author_id"="users"."id") FROM "users" WHERE "id" = $1
+prisma:query INSERT INTO "profiles" ("bio","user_id") VALUES ($1,$2) RETURNING "id"
+prisma:query INSERT INTO "posts" ("title","published","views","created_at","updated_at","author_id") VALUES ($1,$2,$3,$4,$5,$6), ($7,$8,$9,$10,$11,$12)
+prisma:query SELECT "id" FROM "roles" WHERE ("name" = $1 AND 1=1) OFFSET $2
+prisma:query INSERT INTO "_RoleToUser" ("B","A") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id", "email", COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) … FROM "users" LEFT JOIN (SELECT "author_id", COUNT(*) … GROUP BY "author_id") … WHERE "id" = $1
 prisma:query COMMIT
 
 { id: 1, email: 'an@example.com', _count: { posts: 2 } }</div>
@@ -965,15 +1024,25 @@ await prisma.post.create({
     },
   },
 });</code></pre>
-<div class="out">prisma:query BEGIN
-prisma:query SELECT "id","name" FROM "tags" WHERE "name" IN ($1,$2,$3)
+<div class="out">-- "nodejs" existed, "prisma" and "postgres" did not (Prisma 6.19.3, 12 Nov 2026)
+prisma:query BEGIN
+prisma:query INSERT INTO "posts" ("title","published","views","created_at","updated_at") VALUES ($1,$2,$3,$4,$5) RETURNING "id"
+prisma:query SELECT "id" FROM "tags" WHERE ("name" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id" FROM "tags" WHERE ("name" = $1 AND 1=1) LIMIT $2 OFFSET $3
 prisma:query INSERT INTO "tags" ("name") VALUES ($1) RETURNING "id"
-prisma:query INSERT INTO "posts" ("title") VALUES ($1) RETURNING "id"
-prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2),($3,$4),($5,$6) ON CONFLICT DO NOTHING
+prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id" FROM "tags" WHERE ("name" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query INSERT INTO "tags" ("name") VALUES ($1) RETURNING "id"
+prisma:query INSERT INTO "_PostToTag" ("A","B") VALUES ($1,$2) ON CONFLICT DO NOTHING
+prisma:query SELECT "id", "title", … FROM "posts" WHERE "id" = $1 LIMIT $2 OFFSET $3
 prisma:query COMMIT</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>connectOrCreate</code> không nguyên tử trước một bên ghi song song.</strong> Nó đọc, rồi quyết, rồi ghi. Hai yêu cầu cùng tạo thẻ <code>prisma</code> tại cùng một khoảnh khắc đều thấy nó chưa có và đều chèn — và cái thứ hai nhận <code>P2002</code>. Ràng buộc unique cứu dữ liệu của bạn, nhưng yêu cầu của bạn thì hỏng. Trong một luồng quản trị ít tranh chấp thì chấp nhận được. Dưới lưu lượng thật, hãy bắt <code>P2002</code> và thử lại một lần, hoặc tạo sẵn bộ từ vựng thẻ. Chương 7 nói mẫu tổng quát.</p>
+<p><strong>Bẫy — <code>connectOrCreate</code> không nguyên tử trước một bên ghi song song.</strong> Như nhật ký cho thấy, nó làm từng thẻ một: đọc, rồi quyết, rồi ghi. Đo ở dưới: mười yêu cầu cùng tạo một thẻ mới — một thành công, chín hỏng. Hai yêu cầu cùng tạo thẻ <code>prisma</code> tại cùng một khoảnh khắc đều thấy nó chưa có và đều chèn — và cái thứ hai nhận <code>P2002</code>. Ràng buộc unique cứu dữ liệu của bạn, nhưng yêu cầu của bạn thì hỏng. Trong một luồng quản trị ít tranh chấp thì chấp nhận được. Dưới lưu lượng thật, hãy bắt <code>P2002</code> và thử lại một lần, hoặc tạo sẵn bộ từ vựng thẻ. Chương 7 nói mẫu tổng quát.</p>
 </div>
+<div class="out">round 1: 10 concurrent connectOrCreate of one new tag → 1 ok, 9 failed ["P2002"]
+round 2: 10 concurrent connectOrCreate of one new tag → 1 ok, 9 failed ["P2002"]
+round 3: 10 concurrent connectOrCreate of one new tag → 1 ok, 9 failed ["P2002"]</div>
 
 <h3><code>createMany</code> — hàng nghìn hàng trong một câu lệnh</h3>
 <pre><code class="language-javascript">const rows = Array.from({ length: 10_000 }, (_, i) =&gt; ({
@@ -988,10 +1057,11 @@ console.timeEnd('create');
 console.time('createMany');
 await prisma.post.createMany({ data: rows });
 console.timeEnd('createMany');</code></pre>
-<div class="out">create: 41822.417ms
-createMany: 486.331ms</div>
+<div class="out">create loop ×10000: 14.7 s
+createMany ×10000: 315 ms · {"count":10000}
+-- measured on one laptop, PostgreSQL in Docker on the same machine (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="callout ok">
-<p><strong>Nhanh gấp tám mươi sáu lần.</strong> Vòng lặp trả giá một lượt đi về mạng cho mỗi hàng — mười nghìn lượt. <code>createMany</code> gửi một câu <code>INSERT</code> nhiều hàng (được chia mảnh bên trong, vì PostgreSQL giới hạn 65.535 tham số cho một câu lệnh). Bất cứ khi nào bạn ghi hơn khoảng hai mươi hàng cùng hình dạng thì đây là phương thức cần dùng.</p>
+<p><strong>Nhanh gấp khoảng bốn mươi bảy lần</strong> — và khoảng cách chỉ càng lớn khi cơ sở dữ liệu nằm bên kia một mạng thật. Vòng lặp trả giá một lượt đi về cho mỗi hàng — mười nghìn lượt. <code>createMany</code> gửi một câu <code>INSERT</code> nhiều hàng (được chia mảnh bên trong, vì PostgreSQL giới hạn 65.535 tham số cho một câu lệnh). Bất cứ khi nào bạn ghi hơn khoảng hai mươi hàng cùng hình dạng thì đây là phương thức cần dùng.</p>
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nó không ghi được quan hệ</span><span class="v">Không <code>create</code>, không <code>connect</code>, không lồng nhau. Bạn tự cung cấp các trường vô hướng khoá ngoại. Với một đồ thị thì điều đó nghĩa là tạo cha trước, đọc lại id của chúng, rồi tạo con — và cách ấy vẫn nhanh hơn một vòng lặp rất nhiều.</span></div>
@@ -1005,14 +1075,16 @@ const post = await prisma.post.createManyAndReturn({
   select: { id: true, title: true },
 });
 console.log(post);</code></pre>
-<div class="out">prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2),($3,$4) RETURNING "id","title"
+<div class="out">prisma:query BEGIN
+prisma:query INSERT INTO "posts" ("title","published","views","created_at","updated_at","author_id") VALUES ($1,$2,$3,$4,$5,$6), ($7,$8,$9,$10,$11,$12) RETURNING "id", "title"
+prisma:query COMMIT
 
-[ { id: 101, title: 'A' }, { id: 102, title: 'B' } ]</div>
+[{"id":4,"title":"A"},{"id":5,"title":"B"}]</div>
 
 <h3>Nhập một đồ thị, với tốc độ</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// 5.000 người dùng, mỗi người 3 bài viết. Bản lồng nhau ngây thơ:</span>
+<pre><code class="language-javascript"><span class="tok-comment">// 1.000 người dùng, mỗi người 3 bài viết. Bản lồng nhau ngây thơ:</span>
 <span class="tok-comment">//   for (const u of users) await prisma.user.create({ data: { ...u, posts: {...} } })</span>
-<span class="tok-comment">// = 5.000 giao dịch, 15.000 lần chèn, khoảng 40 giây.</span>
+<span class="tok-comment">// = 1.000 giao dịch, 3.000 lần chèn.</span>
 
 <span class="tok-comment">// Hai câu lệnh thay vào đó:</span>
 const user = await prisma.user.createManyAndReturn({
@@ -1027,12 +1099,10 @@ await prisma.post.createMany({
     u.posts.map((p) =&gt; ({ title: p.title, authorId: byEmail.get(u.email)! })),
   ),
 });</code></pre>
-<div class="out">-- bản vòng lặp lồng nhau
-real    0m39.914s
-
--- bản hai câu lệnh
-real    0m1.207s</div>
-<p>Nhanh gấp ba mươi ba lần, và hình dạng của cách vá này tổng quát hoá được: <strong>tạo cha trong một lô, dựng một bản đồ id, tạo con trong một lô</strong>. Nếu cả lần nhập phải nguyên tử thì bọc cả hai lời gọi trong <code>prisma.$transaction</code> — Chương 7 nói về cái timeout bạn sẽ phải nâng lên khi làm vậy.</p>
+<div class="out">nested loop 1000 users × 3 posts: 5.4 s
+two statements 1000 users × 3 posts: 91 ms
+-- same laptop as above (Prisma 6.19.3, 12 Nov 2026)</div>
+<p>Nhanh gấp khoảng sáu mươi lần, và hình dạng của cách vá này tổng quát hoá được: <strong>tạo cha trong một lô, dựng một bản đồ id, tạo con trong một lô</strong>. Nếu cả lần nhập phải nguyên tử thì bọc cả hai lời gọi trong <code>prisma.$transaction</code> — Chương 7 nói về cái timeout bạn sẽ phải nâng lên khi làm vậy.</p>
 
 <h3>Khi ràng buộc unique nổ</h3>
 <pre><code class="language-javascript">try {
@@ -1064,10 +1134,10 @@ model Post {
   updatedAt DateTime @updatedAt
 }</code></pre>
 <pre><code class="language-typescript">await prisma.post.create({ data: { title: 'Bai', slug: 'post', authorId: 1 } });</code></pre>
-<div class="out">INSERT INTO "posts" ("title","slug","author_id","updated_at") VALUES ($1,$2,$3,$4) RETURNING ...
--- published, views và created_at đến từ giá trị mặc định của cơ sở dữ liệu</div>
+<div class="out">INSERT INTO "posts" ("title","slug","published","views","created_at","updated_at","author_id") VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING ...
+-- Prisma tự điền published, views, created_at rồi gửi đi (Prisma 6.19.3, 12/11/2026)</div>
 <div class="callout">
-<p><strong>Mỗi <code>@default</code> là một trường mà người gọi không làm sai được.</strong> Một <code>published Boolean</code> không có giá trị mặc định ép mọi chỗ gọi phải truyền nó, và ngày ai đó lỡ tay truyền <code>true</code> là ngày một bản nháp lên sóng. Hãy đặt giá trị an toàn vào lược đồ và để ngoại lệ phải nói ra tường minh. Lập luận đó cũng đúng với <code>createdAt</code>: nó lẽ ra không nên xuất hiện trong mã ứng dụng chút nào.</p>
+<p><strong>Mỗi <code>@default</code> là một trường mà người gọi không làm sai được.</strong> Một <code>published Boolean</code> không có giá trị mặc định ép mọi chỗ gọi phải truyền nó, và ngày ai đó lỡ tay truyền <code>true</code> là ngày một bản nháp lên sóng. Hãy đặt giá trị an toàn vào lược đồ và để ngoại lệ phải nói ra tường minh. Lập luận đó cũng đúng với <code>createdAt</code>: nó lẽ ra không nên xuất hiện trong mã ứng dụng chút nào. Để ý ai áp giá trị: Prisma tự tính rồi gửi trong câu <code>INSERT</code>, nên một hàng ghi từ psql hay dịch vụ khác chỉ nhận những default thật sự nằm trong cơ sở dữ liệu (bài 2.2).</p>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
@@ -1152,8 +1222,9 @@ await prisma.post.update({ where: { id: 1 }, data: { views:   { set: 0 } } });
 await prisma.post.update({ where: { id: 1 }, data: { tags: { push: 'prisma' } } });
 await prisma.post.update({ where: { id: 1 }, data: { tags: { push: ['a', 'b'] } } });
 await prisma.post.update({ where: { id: 1 }, data: { tags: { set: ['moi'] } } });</code></pre>
-<div class="out">UPDATE "posts" SET "views" = "posts"."views" + $1 WHERE "id" = $2 RETURNING ...
-UPDATE "posts" SET "tags" = array_cat("posts"."tags", $1) WHERE "id" = $2 RETURNING ...</div>
+<div class="out">UPDATE "posts" SET "views" = ("views" + $1), "updated_at" = $2 WHERE ("id" = $3 AND 1=1) RETURNING ...
+UPDATE "posts" SET "tags" = "tags" || $1, "updated_at" = $2 WHERE ("id" = $3 AND 1=1) RETURNING ...
+-- query log, Prisma 6.19.3, 12 Nov 2026</div>
 <div class="callout warn">
 <p><strong>The lost-update race, in full.</strong> Two requests want to increment a view count that is 120.</p>
 <p><em>Read-then-write:</em> request A reads 120. Request B reads 120. A computes 121 and writes it. B computes 121 and writes it. The final value is 121, and one view has vanished with no error anywhere. Under a hundred concurrent readers you lose a large fraction of them.</p>
@@ -1174,9 +1245,11 @@ await Promise.all(Array.from({ length: 100 }, () =&gt;
   prisma.post.update({ where: { id: 1 }, data: { views: { increment: 1 } } }),
 ));
 console.log('nguyen from  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
-<div class="out">doc-roi-write: 23
-nguyen from  : 100</div>
-<p>Seventy-seven of a hundred writes silently lost. On a development machine with one user this code appears to work perfectly, which is exactly why the bug reaches production. Any field that is <em>derived from its own previous value</em> — a counter, a balance, a stock level, a retry count — must use an atomic operator or an explicit transaction. Chapter 7 covers the cases atomic operators cannot express.</p>
+<div class="out">round 1: read-then-write 1/100 · increment 100/100
+round 2: read-then-write 1/100 · increment 100/100
+round 3: read-then-write 1/100 · increment 100/100
+-- measured three times, Prisma 6.19.3 + PostgreSQL 16.14, 12 Nov 2026</div>
+<p>Ninety-nine of a hundred writes silently lost, three rounds in a row: every request read 0 before any write landed, and every one wrote 1. On a development machine with one user this code appears to work perfectly, which is exactly why the bug reaches production. Any field that is <em>derived from its own previous value</em> — a counter, a balance, a stock level, a retry count — must use an atomic operator or an explicit transaction. Chapter 7 covers the cases atomic operators cannot express.</p>
 
 <h3><code>upsert</code>, and the race it still has</h3>
 <pre><code class="language-typescript">await prisma.setting.upsert({
@@ -1185,8 +1258,9 @@ nguyen from  : 100</div>
   create: { key: 'site_name', value: 'CuongThai' },
 });</code></pre>
 <div class="out">prisma:query INSERT INTO "settings" ("key","value") VALUES ($1,$2)
-             ON CONFLICT ("key") DO UPDATE SET "value" = $3
-             RETURNING "id","key","value"</div>
+             ON CONFLICT ("key") DO UPDATE SET "value" = $3 WHERE ("key" = $4 AND 1=1)
+             RETURNING ...
+-- 10 concurrent upserts of a key that did not exist: 10 ok (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">One statement, when it can be</span><span class="v">On PostgreSQL, MySQL and SQLite, with a single unique field in <code>where</code> and no nested writes, Prisma emits a native upsert. That is atomic and race-free.</span></div>
   <div class="kv"><span class="k">Two statements, when it cannot</span><span class="v">Nested writes, a composite unique key, or a non-trivial filter make Prisma fall back to <code>SELECT</code>-then-<code>INSERT</code>-or-<code>UPDATE</code> inside a transaction. That version <strong>can</strong> race: two concurrent upserts of a missing row both try to insert, and one gets <code>P2002</code>.</span></div>
@@ -1200,8 +1274,9 @@ await prisma.pageView.upsert({
   create: { path: '/courses', day: homNay, count: 1 },
 });</code></pre>
 <div class="out">INSERT INTO "page_views" ("path","day","count") VALUES ($1,$2,$3)
-ON CONFLICT ("path","day") DO UPDATE SET "count" = "page_views"."count" + $4
-RETURNING ...</div>
+ON CONFLICT ("path","day") DO UPDATE SET "count" = ("count" + $4) WHERE (("path" = $5 AND "day" = $6) AND 1=1)
+RETURNING ...
+-- 10 concurrent calls on a new day: 10 ok · count 10</div>
 <p>That single statement is a complete daily-counter implementation: no read, no branch in application code, no race. It is worth memorising as a shape.</p>
 
 <h3>Nested updates: editing the children</h3>
@@ -1220,24 +1295,23 @@ RETURNING ...</div>
       create:     [{ title: 'Bai moi' }],
       deleteMany: { views: 0 },
     },
-
-    <span class="tok-comment">// many-to-many: replace the whole set</span>
-    roles: { set: [{ name: 'ADMIN' }, { name: 'USER' }] },
   },
 });</code></pre>
 <div class="out">prisma:query BEGIN
-prisma:query UPDATE "users" SET "full_name"=$1 WHERE "id"=$2
-prisma:query SELECT "id" FROM "profiles" WHERE "user_id"=$1
-prisma:query UPDATE "profiles" SET "bio"=$1 WHERE "user_id"=$2
-prisma:query UPDATE "posts" SET "published"=$1 WHERE ("author_id"=$2 AND "published"=$3)
-prisma:query UPDATE "posts" SET "title"=$1 WHERE ("id"=$2 AND "author_id"=$3)
-prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2)
-prisma:query DELETE FROM "posts" WHERE ("author_id"=$1 AND "views"=$2)
-prisma:query DELETE FROM "_RoleToUser" WHERE "B"=$1
-prisma:query INSERT INTO "_RoleToUser" ("A","B") VALUES ($1,$2),($3,$4)
-prisma:query COMMIT</div>
+prisma:query UPDATE "users" SET "full_name" = $1 WHERE ("id" = $2 AND 1=1) RETURNING ...
+prisma:query SELECT "id", "user_id" FROM "profiles" WHERE (1=1 AND "user_id" IN ($1)) OFFSET $2
+prisma:query UPDATE "profiles" SET "bio" = $1 WHERE ("id" = $2 AND 1=1) RETURNING ...
+prisma:query SELECT "id", "author_id" FROM "posts" WHERE ("published" = $1 AND "author_id" IN ($2)) OFFSET $3
+prisma:query SELECT "id", "author_id" FROM "posts" WHERE (("id" = $1 AND 1=1) AND "author_id" IN ($2)) OFFSET $3
+prisma:query UPDATE "posts" SET "title" = $1, "updated_at" = $2 WHERE ("id" = $3 AND ("id" = $4 AND 1=1)) RETURNING ...
+prisma:query INSERT INTO "posts" ("title","published","views","updated_at","author_id") VALUES ($1,$2,$3,$4,$5) RETURNING ...
+prisma:query SELECT "id", "author_id" FROM "posts" WHERE ("views" = $1 AND "author_id" IN ($2)) OFFSET $3
+prisma:query DELETE FROM "posts" WHERE ("id" IN ($1,$2,$3) AND 1=1)
+prisma:query SELECT "id", "email", "full_name" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
+prisma:query COMMIT
+-- Prisma 6.19.3, 12 Nov 2026. In this run no post was still a draft, so updateMany read ids and sent no UPDATE.</div>
 <div class="callout">
-<p><strong>Nine statements, one transaction, one call.</strong> Notice the nested <code>update</code> got <code>AND "author_id" = $3</code> added automatically — Prisma will not let a nested update escape its parent, so you cannot accidentally edit someone else's post through this path. That scoping is a genuine safety property, and it is the main reason to prefer a nested update over a separate top-level one when the parent is already identified.</p>
+<p><strong>One transaction, one call.</strong> Notice how every child operation starts: Prisma first reads the ids of <em>this user’s</em> matching posts (<code>"author_id" IN ($2)</code>), then writes by id — Prisma will not let a nested update escape its parent, so you cannot accidentally edit someone else's post through this path. That scoping is a genuine safety property, and it is the main reason to prefer a nested update over a separate top-level one when the parent is already identified.</p>
 </div>
 
 <h3>Conditional updates, without reading first</h3>
@@ -1255,7 +1329,8 @@ const s = await prisma.product.updateMany({
 });
 if (s.count === 0) throw new Error('Het hang');</code></pre>
 <div class="out">UPDATE "posts" SET "published"=$1,"published_at"=$2,"updated_at"=$3 WHERE ("id"=$4 AND "published"=$5)
-UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE ("id"=$2 AND "products"."stock" &gt; $3)</div>
+UPDATE "products" SET "stock" = ("stock" - $1) WHERE ("id" = $2 AND "stock" &gt; $3)
+-- stock was 1: first call { count: 1 }, second call { count: 0 }, stock 0 (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="callout ok">
 <p><strong>This is the most useful pattern in the lesson.</strong> Putting the precondition in the <code>where</code> makes the check and the write a single statement, so nothing can change between them. <code>count === 0</code> then means "the precondition was false" — a clear signal, and the standard way to implement guarded state transitions without a transaction. Chapter 7 shows what to do when the precondition spans two tables and this trick stops being enough.</p>
 </div>
@@ -1332,8 +1407,9 @@ await prisma.post.update({ where: { id: 1 }, data: { views:   { set: 0 } } });
 await prisma.post.update({ where: { id: 1 }, data: { tags: { push: 'prisma' } } });
 await prisma.post.update({ where: { id: 1 }, data: { tags: { push: ['a', 'b'] } } });
 await prisma.post.update({ where: { id: 1 }, data: { tags: { set: ['moi'] } } });</code></pre>
-<div class="out">UPDATE "posts" SET "views" = "posts"."views" + $1 WHERE "id" = $2 RETURNING ...
-UPDATE "posts" SET "tags" = array_cat("posts"."tags", $1) WHERE "id" = $2 RETURNING ...</div>
+<div class="out">UPDATE "posts" SET "views" = ("views" + $1), "updated_at" = $2 WHERE ("id" = $3 AND 1=1) RETURNING ...
+UPDATE "posts" SET "tags" = "tags" || $1, "updated_at" = $2 WHERE ("id" = $3 AND 1=1) RETURNING ...
+-- query log, Prisma 6.19.3, 12 Nov 2026</div>
 <div class="callout warn">
 <p><strong>Cuộc đua mất-cập-nhật, nói đủ.</strong> Hai yêu cầu cùng muốn tăng một bộ đếm lượt xem đang là 120.</p>
 <p><em>Đọc-rồi-ghi:</em> yêu cầu A đọc 120. Yêu cầu B đọc 120. A tính ra 121 rồi ghi. B tính ra 121 rồi ghi. Giá trị cuối là 121, và một lượt xem đã bốc hơi mà không có lỗi nào ở đâu cả. Với một trăm người đọc song song thì bạn mất một phần lớn trong số đó.</p>
@@ -1354,9 +1430,11 @@ await Promise.all(Array.from({ length: 100 }, () =&gt;
   prisma.post.update({ where: { id: 1 }, data: { views: { increment: 1 } } }),
 ));
 console.log('nguyen from  :', (await prisma.post.findUniqueOrThrow({ where: { id: 1 } })).views);</code></pre>
-<div class="out">doc-roi-write: 23
-nguyen from  : 100</div>
-<p>Bảy mươi bảy trên một trăm lần ghi mất trong im lặng. Trên máy phát triển với một người dùng thì đoạn mã ấy trông chạy hoàn hảo, và chính vì thế con bọ đi thẳng lên production. Bất kỳ trường nào <em>được suy ra từ chính giá trị trước đó của nó</em> — một bộ đếm, một số dư, một mức tồn kho, một số lần thử lại — đều phải dùng toán tử nguyên tử hoặc một giao dịch tường minh. Chương 7 nói về những trường hợp mà toán tử nguyên tử diễn đạt không nổi.</p>
+<div class="out">round 1: read-then-write 1/100 · increment 100/100
+round 2: read-then-write 1/100 · increment 100/100
+round 3: read-then-write 1/100 · increment 100/100
+-- measured three times, Prisma 6.19.3 + PostgreSQL 16.14, 12 Nov 2026</div>
+<p>Chín mươi chín trên một trăm lần ghi mất trong im lặng, ba vòng liền: yêu cầu nào cũng đọc được 0 trước khi có lần ghi nào xong, và yêu cầu nào cũng ghi 1. Trên máy phát triển với một người dùng thì đoạn mã ấy trông chạy hoàn hảo, và chính vì thế con bọ đi thẳng lên production. Bất kỳ trường nào <em>được suy ra từ chính giá trị trước đó của nó</em> — một bộ đếm, một số dư, một mức tồn kho, một số lần thử lại — đều phải dùng toán tử nguyên tử hoặc một giao dịch tường minh. Chương 7 nói về những trường hợp mà toán tử nguyên tử diễn đạt không nổi.</p>
 
 <h3><code>upsert</code>, và cuộc đua nó vẫn còn</h3>
 <pre><code class="language-typescript">await prisma.setting.upsert({
@@ -1365,8 +1443,9 @@ nguyen from  : 100</div>
   create: { key: 'site_name', value: 'CuongThai' },
 });</code></pre>
 <div class="out">prisma:query INSERT INTO "settings" ("key","value") VALUES ($1,$2)
-             ON CONFLICT ("key") DO UPDATE SET "value" = $3
-             RETURNING "id","key","value"</div>
+             ON CONFLICT ("key") DO UPDATE SET "value" = $3 WHERE ("key" = $4 AND 1=1)
+             RETURNING ...
+-- 10 concurrent upserts of a key that did not exist: 10 ok (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Một câu lệnh, khi có thể</span><span class="v">Trên PostgreSQL, MySQL và SQLite, với một trường unique đơn trong <code>where</code> và không có ghi lồng nhau, Prisma phát ra một câu upsert gốc. Cái đó nguyên tử và không có tranh chấp.</span></div>
   <div class="kv"><span class="k">Hai câu lệnh, khi không thể</span><span class="v">Ghi lồng nhau, một khoá unique phức hợp, hoặc một bộ lọc không tầm thường khiến Prisma lùi về <code>SELECT</code> rồi <code>INSERT</code> hoặc <code>UPDATE</code> bên trong một giao dịch. Bản đó <strong>có thể</strong> tranh chấp: hai lệnh upsert song song cho một hàng chưa có đều thử chèn, và một cái nhận <code>P2002</code>.</span></div>
@@ -1380,8 +1459,9 @@ await prisma.pageView.upsert({
   create: { path: '/courses', day: homNay, count: 1 },
 });</code></pre>
 <div class="out">INSERT INTO "page_views" ("path","day","count") VALUES ($1,$2,$3)
-ON CONFLICT ("path","day") DO UPDATE SET "count" = "page_views"."count" + $4
-RETURNING ...</div>
+ON CONFLICT ("path","day") DO UPDATE SET "count" = ("count" + $4) WHERE (("path" = $5 AND "day" = $6) AND 1=1)
+RETURNING ...
+-- 10 concurrent calls on a new day: 10 ok · count 10</div>
 <p>Một câu lệnh duy nhất ấy là một bản cài đặt hoàn chỉnh cho bộ đếm theo ngày: không đọc, không rẽ nhánh trong mã ứng dụng, không tranh chấp. Nó đáng thuộc lòng như một hình mẫu.</p>
 
 <h3>Cập nhật lồng nhau: sửa các con</h3>
@@ -1400,24 +1480,23 @@ RETURNING ...</div>
       create:     [{ title: 'Bai moi' }],
       deleteMany: { views: 0 },
     },
-
-    <span class="tok-comment">// nhiều–nhiều: thay thế cả tập</span>
-    roles: { set: [{ name: 'ADMIN' }, { name: 'USER' }] },
   },
 });</code></pre>
 <div class="out">prisma:query BEGIN
-prisma:query UPDATE "users" SET "full_name"=$1 WHERE "id"=$2
-prisma:query SELECT "id" FROM "profiles" WHERE "user_id"=$1
-prisma:query UPDATE "profiles" SET "bio"=$1 WHERE "user_id"=$2
-prisma:query UPDATE "posts" SET "published"=$1 WHERE ("author_id"=$2 AND "published"=$3)
-prisma:query UPDATE "posts" SET "title"=$1 WHERE ("id"=$2 AND "author_id"=$3)
-prisma:query INSERT INTO "posts" ("title","author_id") VALUES ($1,$2)
-prisma:query DELETE FROM "posts" WHERE ("author_id"=$1 AND "views"=$2)
-prisma:query DELETE FROM "_RoleToUser" WHERE "B"=$1
-prisma:query INSERT INTO "_RoleToUser" ("A","B") VALUES ($1,$2),($3,$4)
-prisma:query COMMIT</div>
+prisma:query UPDATE "users" SET "full_name" = $1 WHERE ("id" = $2 AND 1=1) RETURNING ...
+prisma:query SELECT "id", "user_id" FROM "profiles" WHERE (1=1 AND "user_id" IN ($1)) OFFSET $2
+prisma:query UPDATE "profiles" SET "bio" = $1 WHERE ("id" = $2 AND 1=1) RETURNING ...
+prisma:query SELECT "id", "author_id" FROM "posts" WHERE ("published" = $1 AND "author_id" IN ($2)) OFFSET $3
+prisma:query SELECT "id", "author_id" FROM "posts" WHERE (("id" = $1 AND 1=1) AND "author_id" IN ($2)) OFFSET $3
+prisma:query UPDATE "posts" SET "title" = $1, "updated_at" = $2 WHERE ("id" = $3 AND ("id" = $4 AND 1=1)) RETURNING ...
+prisma:query INSERT INTO "posts" ("title","published","views","updated_at","author_id") VALUES ($1,$2,$3,$4,$5) RETURNING ...
+prisma:query SELECT "id", "author_id" FROM "posts" WHERE ("views" = $1 AND "author_id" IN ($2)) OFFSET $3
+prisma:query DELETE FROM "posts" WHERE ("id" IN ($1,$2,$3) AND 1=1)
+prisma:query SELECT "id", "email", "full_name" FROM "users" WHERE "id" = $1 LIMIT $2 OFFSET $3
+prisma:query COMMIT
+-- Prisma 6.19.3, 12/11/2026. Lần chạy này không còn bài nháp nào, nên updateMany chỉ đọc id và không gửi UPDATE.</div>
 <div class="callout">
-<p><strong>Chín câu lệnh, một giao dịch, một lời gọi.</strong> Để ý lệnh <code>update</code> lồng bên trong đã tự động được thêm <code>AND "author_id" = $3</code> — Prisma không cho một lệnh update lồng thoát ra khỏi cha của nó, nên bạn không thể vô tình sửa bài viết của người khác qua đường này. Phạm vi hoá đó là một tính chất an toàn thật, và là lý do chính để ưu tiên một lệnh update lồng thay vì một lệnh update ở mức trên khi cha vốn đã được xác định.</p>
+<p><strong>Một giao dịch, một lời gọi.</strong> Để ý mỗi thao tác trên con bắt đầu thế nào: Prisma đọc trước id các bài viết khớp <em>của chính người dùng này</em> (<code>"author_id" IN ($2)</code>), rồi mới ghi theo id — Prisma không cho một lệnh update lồng thoát ra khỏi cha của nó, nên bạn không thể vô tình sửa bài viết của người khác qua đường này. Phạm vi hoá đó là một tính chất an toàn thật, và là lý do chính để ưu tiên một lệnh update lồng thay vì một lệnh update ở mức trên khi cha vốn đã được xác định.</p>
 </div>
 
 <h3>Cập nhật có điều kiện, không cần đọc trước</h3>
@@ -1435,7 +1514,8 @@ const s = await prisma.product.updateMany({
 });
 if (s.count === 0) throw new Error('Het hang');</code></pre>
 <div class="out">UPDATE "posts" SET "published"=$1,"published_at"=$2,"updated_at"=$3 WHERE ("id"=$4 AND "published"=$5)
-UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE ("id"=$2 AND "products"."stock" &gt; $3)</div>
+UPDATE "products" SET "stock" = ("stock" - $1) WHERE ("id" = $2 AND "stock" &gt; $3)
+-- stock was 1: first call { count: 1 }, second call { count: 0 }, stock 0 (Prisma 6.19.3, 12 Nov 2026)</div>
 <div class="callout ok">
 <p><strong>Đây là mẫu hữu ích nhất trong cả bài.</strong> Đặt tiền điều kiện vào <code>where</code> khiến phép kiểm và phép ghi thành một câu lệnh duy nhất, nên không gì thay đổi được ở giữa hai bước. <code>count === 0</code> khi đó nghĩa là "tiền điều kiện sai" — một tín hiệu rõ ràng, và là cách chuẩn để cài đặt các chuyển trạng thái có canh gác mà không cần giao dịch. Chương 7 chỉ phải làm gì khi tiền điều kiện trải qua hai bảng và mẹo này hết đủ.</p>
 </div>
@@ -1472,10 +1552,10 @@ console.log(r);
 
 <span class="tok-comment">// Empty filter = every row in the table. There is no confirmation prompt.</span>
 await prisma.post.deleteMany({});</code></pre>
-<div class="out">prisma:query DELETE FROM "public"."posts" WHERE ("public"."posts"."id" = $1 AND 1=1) RETURNING ...
-prisma:query DELETE FROM "public"."posts" WHERE ("public"."posts"."author_id" = $1 AND "public"."posts"."published" = $2)
-{ count: 12 }
-prisma:query DELETE FROM "public"."posts"</div>
+<div class="out">prisma:query DELETE FROM "posts" WHERE ("id" = $1 AND 1=1) RETURNING ...
+prisma:query DELETE FROM "posts" WHERE ("author_id" = $1 AND "published" = $2)
+{ count: 11 }
+prisma:query DELETE FROM "posts" WHERE 1=1</div>
 <div class="pitfall">
 <p><strong>Trap — <code>deleteMany({})</code> and <code>deleteMany({ where: undefined })</code> are the same thing.</strong> Both delete every row. And because <code>where</code> is optional, a filter built from request parameters that all came back <code>undefined</code> produces an empty object — so a "delete my drafts" endpoint with a bug deletes the whole table. Guard it: build the filter, check it is non-empty, and refuse if it is not. This is not paranoia; it is the single most expensive Prisma mistake there is.</p>
 </div>
@@ -1489,13 +1569,13 @@ SELECT
      (SELECT id FROM comments WHERE post_id IN (SELECT id FROM posts WHERE author_id = 1))) AS reactions;</code></pre>
 <div class="out"> posts | comments | reactions
 -------+----------+-----------
-   214 |     3891 |     41207
+   200 |     4000 |     40000
 
 -- and the delete itself
 DELETE 1
-Time: 4128.911 ms</div>
+Time: 42.850 ms</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Four seconds of locks</span><span class="v">The cascade runs inside one transaction, holding locks on four tables. Anything else touching those rows waits. On a busy table that is a visible latency spike for every other user.</span></div>
+  <div class="kv"><span class="k">44,201 rows, one transaction</span><span class="v">Measured (Prisma 6.19.3 schema, PostgreSQL 16.14, 12 Nov 2026): one <code>DELETE</code> removed the user plus 44,200 dependent rows in about 43 ms on an idle machine — and it scales with the rows. The cascade runs inside one transaction, holding locks on four tables. Anything else touching those rows waits. On a busy table that is a visible latency spike for every other user.</span></div>
   <div class="kv"><span class="k">No undo</span><span class="v">Not from the application, not from Prisma, not from PostgreSQL. Only from a backup, which means a restore, which means downtime — for one user's mistaken click.</span></div>
   <div class="kv"><span class="k">Audit trails die too</span><span class="v">If your audit log has a foreign key to the row it describes, cascading removes the evidence along with the crime. Audit tables should reference by id without a constraint, or use <code>SetNull</code>.</span></div>
   <div class="kv"><span class="k">And it is often not what the user meant</span><span class="v">"Delete my account" usually means "stop showing my data", not "erase 45,000 rows so nothing can ever be restored". Except under GDPR erasure requests, where it means exactly that — which is why you need both mechanisms.</span></div>
@@ -1525,7 +1605,7 @@ await prisma.post.findMany({ where: { authorId: 1, deletedAt: null } });</code><
 </div>
 
 <h3>Client extensions: filtering that cannot be forgotten</h3>
-<pre><code class="language-javascript">import { PrismaClient } from '@prisma/client';
+<pre><code class="language-typescript">import { PrismaClient } from '@prisma/client';
 
 const base = new PrismaClient();
 
@@ -1535,18 +1615,29 @@ export const prisma = base.$extends({
     post: {
       <span class="tok-comment">// every read on Post gains the filter, automatically</span>
       async $allOperations({ operation, args, query }) {
+        const a = args as any;
         if (['findFirst', 'findMany', 'findUnique', 'count', 'aggregate'].includes(operation)) {
-          args.where = { ...args.where, deletedAt: null };
+          a.where = { ...a.where, deletedAt: null };
         }
-        <span class="tok-comment">// and delete becomes an update</span>
+        <span class="tok-comment">// and delete becomes an update. query() can change the arguments, never the operation,</span>
+        <span class="tok-comment">// so the update goes through the base client</span>
         if (operation === 'delete') {
-          return (query as any)({ ...args, data: { deletedAt: new Date() } });
+          return base.post.update({ where: a.where, data: { deletedAt: new Date() } });
         }
         return query(args);
       },
     },
   },
 });</code></pre>
+<div class="out">$ npx tsc --noEmit && npx tsx web-ext.mts      # the block above, verbatim
+tsc: no errors
+delete returned: {"id":1,"deletedAt":true}
+row still in table: true
+visible through the extension: false
+count via extension vs base: 211 vs 212</div>
+<div class="pitfall">
+<p><strong>Trap — <code>query({ ...args, data })</code> does not turn a delete into an update.</strong> A widely copied version of this extension forwards the delete with a <code>data</code> field. <code>query()</code> always runs the <em>original</em> operation, so Prisma validates a delete that carries <code>data</code> and rejects it: <code>PrismaClientValidationError: Unknown argument &#96;data&#96;</code>. Nothing is deleted and nothing is soft-deleted. Call <code>base.post.update</code>, as above. (Measured with Prisma 6.19.3 on 12 Nov 2026; earlier versions of this lesson printed the broken form.)</p>
+</div>
 <pre><code class="language-typescript"><span class="tok-comment">// Now the filter is impossible to forget</span>
 await prisma.post.findMany({ where: { authorId: 1 } });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "posts" WHERE ("author_id" = $1 AND "deleted_at" IS NULL) OFFSET $2</div>
@@ -1630,10 +1721,10 @@ console.log(r);
 
 <span class="tok-comment">// Bộ lọc rỗng = mọi hàng trong bảng. Không có lời hỏi xác nhận nào cả.</span>
 await prisma.post.deleteMany({});</code></pre>
-<div class="out">prisma:query DELETE FROM "public"."posts" WHERE ("public"."posts"."id" = $1 AND 1=1) RETURNING ...
-prisma:query DELETE FROM "public"."posts" WHERE ("public"."posts"."author_id" = $1 AND "public"."posts"."published" = $2)
-{ count: 12 }
-prisma:query DELETE FROM "public"."posts"</div>
+<div class="out">prisma:query DELETE FROM "posts" WHERE ("id" = $1 AND 1=1) RETURNING ...
+prisma:query DELETE FROM "posts" WHERE ("author_id" = $1 AND "published" = $2)
+{ count: 11 }
+prisma:query DELETE FROM "posts" WHERE 1=1</div>
 <div class="pitfall">
 <p><strong>Bẫy — <code>deleteMany({})</code> và <code>deleteMany({ where: undefined })</code> là cùng một thứ.</strong> Cả hai xoá mọi hàng. Và vì <code>where</code> là tuỳ chọn nên một bộ lọc dựng từ tham số yêu cầu mà tất cả đều trả về <code>undefined</code> sẽ cho ra một đối tượng rỗng — thế là một endpoint "xoá bản nháp của tôi" có con bọ sẽ xoá sạch cả bảng. Hãy canh gác: dựng bộ lọc, kiểm nó khác rỗng, và từ chối nếu không. Đây không phải hoang tưởng; đây là sai lầm Prisma đắt nhất từng có.</p>
 </div>
@@ -1647,13 +1738,13 @@ SELECT
      (SELECT id FROM comments WHERE post_id IN (SELECT id FROM posts WHERE author_id = 1))) AS reactions;</code></pre>
 <div class="out"> posts | comments | reactions
 -------+----------+-----------
-   214 |     3891 |     41207
+   200 |     4000 |     40000
 
 -- và bản thân lệnh xoá
 DELETE 1
-Time: 4128.911 ms</div>
+Time: 42.850 ms</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Bốn giây giữ khoá</span><span class="v">Dây chuyền chạy trong một giao dịch, giữ khoá trên bốn bảng. Mọi thứ khác chạm tới những hàng ấy đều phải đợi. Trên một bảng bận thì đó là một cú vọt độ trễ mà mọi người dùng khác đều thấy.</span></div>
+  <div class="kv"><span class="k">44.201 hàng, một giao dịch</span><span class="v">Đo thật (lược đồ Prisma 6.19.3, PostgreSQL 16.14, 12/11/2026): một lệnh <code>DELETE</code> gỡ người dùng cùng 44.200 hàng phụ thuộc trong khoảng 43 ms trên máy rảnh — và tăng theo số hàng. Dây chuyền chạy trong một giao dịch, giữ khoá trên bốn bảng. Mọi thứ khác chạm tới những hàng ấy đều phải đợi. Trên một bảng bận thì đó là một cú vọt độ trễ mà mọi người dùng khác đều thấy.</span></div>
   <div class="kv"><span class="k">Không hoàn tác</span><span class="v">Không từ ứng dụng, không từ Prisma, không từ PostgreSQL. Chỉ từ một bản sao lưu, tức là phải phục hồi, tức là có thời gian chết — chỉ vì một cú bấm nhầm của một người dùng.</span></div>
   <div class="kv"><span class="k">Dấu vết kiểm toán cũng chết theo</span><span class="v">Nếu nhật ký kiểm toán của bạn có khoá ngoại trỏ tới hàng mà nó mô tả thì dây chuyền gỡ luôn bằng chứng cùng với hiện trường. Bảng kiểm toán nên tham chiếu theo id mà không có ràng buộc, hoặc dùng <code>SetNull</code>.</span></div>
   <div class="kv"><span class="k">Và thường thì đó không phải ý người dùng</span><span class="v">"Xoá tài khoản của tôi" thường nghĩa là "đừng hiển thị dữ liệu của tôi nữa", chứ không phải "xoá 45.000 hàng để không bao giờ phục hồi được". Trừ khi là một yêu cầu xoá theo GDPR, nơi nó nghĩa đúng như thế — và vì vậy bạn cần cả hai cơ chế.</span></div>
@@ -1683,7 +1774,7 @@ await prisma.post.findMany({ where: { authorId: 1, deletedAt: null } });</code><
 </div>
 
 <h3>Client extension: lọc mà không thể quên</h3>
-<pre><code class="language-javascript">import { PrismaClient } from '@prisma/client';
+<pre><code class="language-typescript">import { PrismaClient } from '@prisma/client';
 
 const base = new PrismaClient();
 
@@ -1693,18 +1784,29 @@ export const prisma = base.$extends({
     post: {
       <span class="tok-comment">// mọi lần đọc trên Post đều tự mọc thêm bộ lọc</span>
       async $allOperations({ operation, args, query }) {
+        const a = args as any;
         if (['findFirst', 'findMany', 'findUnique', 'count', 'aggregate'].includes(operation)) {
-          args.where = { ...args.where, deletedAt: null };
+          a.where = { ...a.where, deletedAt: null };
         }
-        <span class="tok-comment">// và delete trở thành một lệnh update</span>
+        <span class="tok-comment">// và delete trở thành update. query() chỉ đổi được tham số, không đổi được thao tác,</span>
+        <span class="tok-comment">// nên lệnh update đi qua client gốc</span>
         if (operation === 'delete') {
-          return (query as any)({ ...args, data: { deletedAt: new Date() } });
+          return base.post.update({ where: a.where, data: { deletedAt: new Date() } });
         }
         return query(args);
       },
     },
   },
 });</code></pre>
+<div class="out">$ npx tsc --noEmit && npx tsx web-ext.mts      # đúng nguyên văn khối mã trên
+tsc: no errors
+delete returned: {"id":1,"deletedAt":true}
+row still in table: true
+visible through the extension: false
+count via extension vs base: 211 vs 212</div>
+<div class="pitfall">
+<p><strong>Bẫy — <code>query({ ...args, data })</code> không biến delete thành update.</strong> Một phiên bản extension được chép rất nhiều chuyển tiếp lệnh delete kèm trường <code>data</code>. <code>query()</code> luôn chạy thao tác <em>gốc</em>, nên Prisma kiểm một lệnh delete mang <code>data</code> và từ chối: <code>PrismaClientValidationError: Unknown argument &#96;data&#96;</code>. Không gì bị xoá, cũng không gì được xoá mềm. Hãy gọi <code>base.post.update</code> như trên. (Đo bằng Prisma 6.19.3 ngày 12/11/2026; bản cũ của chính bài này in dạng hỏng ấy.)</p>
+</div>
 <pre><code class="language-typescript"><span class="tok-comment">// Giờ bộ lọc là thứ không thể quên</span>
 await prisma.post.findMany({ where: { authorId: 1 } });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "posts" WHERE ("author_id" = $1 AND "deleted_at" IS NULL) OFFSET $2</div>

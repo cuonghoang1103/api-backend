@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G05_1 from './giang/pr-05-1.mjs';
+import G05_2 from './giang/pr-05-2.mjs';
+import G05_3 from './giang/pr-05-3.mjs';
+import G05_4 from './giang/pr-05-4.mjs';
+import G05_5 from './giang/pr-05-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Toán tử lọc theo từng kiểu: so sánh cho số và ngày, contains/startsWith và mode insensitive, in/notIn, has/hasEvery cho mảng, lọc theo đường dẫn JSON — kèm cảnh báo chỉ mục cho từng cái, vì phần lớn chúng không dùng được B-tree.',
       content: `
+${G05_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>Every filter operator</h2>
@@ -302,6 +308,7 @@ const rows = await prisma.post.findMany({ where, take: 20, orderBy: { createdAt:
       type: 'LESSON',
       description: 'some, every, none và is/isNot — mỗi cái thành SQL nào, vì sao every có một bẫy logic mà ai cũng dính, lọc qua nhiều tầng quan hệ, phân biệt lọc cha với lọc con, và mẫu lọc theo nhiều thẻ cùng lúc.',
       content: `
+${G05_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>Filtering by relations</h2>
@@ -653,6 +660,7 @@ where: { OR: [{ categoryId: null }, { category: { isNot: { slug: 'archive' } } }
       type: 'LESSON',
       description: 'orderBy nhiều khoá, sắp theo quan hệ và theo _count, nulls first/last, rồi phân trang: vì sao skip chết ở trang 5000 đo bằng số thật, con trỏ hoạt động ra sao, và cách chọn khoá con trỏ đúng để không trùng và không sót hàng.',
       content: `
+${G05_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.3</span>
 <h2>Ordering, and pagination that survives</h2>
@@ -964,6 +972,7 @@ if (hasMore) rows.pop();</code></pre>
       type: 'LESSON',
       description: 'aggregate với năm hàm, groupBy với having, distinct và chỗ nó chạy ở đâu, gộp nhiều truy vấn bằng $transaction, và bốn thứ groupBy KHÔNG làm được — cùng chỗ để rơi xuống SQL thô.',
       content: `
+${G05_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.4</span>
 <h2>Aggregation and <code>groupBy</code></h2>
@@ -1265,6 +1274,7 @@ real    0m0.087s</div>
       type: 'LESSON',
       description: 'Từ contains tới tsvector: bốn cách làm ô tìm kiếm, mỗi cách đo trên cùng 400k hàng, cột tsvector sinh tự động cộng chỉ mục GIN, xử lý tiếng Việt không dấu, và mốc để chuyển sang một máy tìm kiếm riêng.',
       content: `
+${G05_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.5</span>
 <h2>Search: four levels, measured</h2>

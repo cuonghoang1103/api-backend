@@ -202,7 +202,32 @@ Keep-Alive: timeout=5
 <p><code>bk_196</code> appears on both pages. The new booking took position 1, every older one moved down by one, and “skip 5” now skips one fewer old booking. The mirror image happens when a row disappears — cancelled bookings hidden by a filter, a deleted device: everything moves up and one row is <strong>never shown</strong>. A feed with infinite scroll shows duplicates; an export that walks every page silently misses rows.</p>
 
 <h3>Problem 2 — deep pages get slower</h3>
-<p>Our array lives in memory, so it cannot show this. A database can. On a local PostgreSQL 18 with one million bookings and an index on <code>(created_at DESC, id DESC)</code> (Chapter 12 teaches the details; here we only measure), the same 20 rows from three depths:</p>
+<p>Our array lives in memory, so it cannot show this. A database can. On a local PostgreSQL 18 with one million bookings and an index on <code>(created_at DESC, id DESC)</code> (Chapter 12 teaches the details; here we only measure). To measure it yourself, build the same table — this is the exact script behind every number in this chapter (PostgreSQL 18.4; the session time zone was <code>Asia/Ho_Chi_Minh</code>, which is why plans print <code>+07</code>):</p>
+<pre><code class="language-sql">-- bookings-1m.sql — đúng bảng đã đo trong bài (PostgreSQL 18.4): psql -f bookings-1m.sql
+DROP TABLE IF EXISTS bookings;
+CREATE TABLE bookings (
+  id bigint PRIMARY KEY,
+  lab_id text NOT NULL,
+  user_id text NOT NULL,
+  status text NOT NULL,
+  start_at timestamptz NOT NULL,
+  created_at timestamptz NOT NULL
+);
+INSERT INTO bookings
+SELECT i, 'lab_' || (1 + i % 50), CASE WHEN i % 2 = 1 THEN 'usr_1' ELSE 'usr_2' END,
+       CASE WHEN i % 7 = 0 THEN 'CANCELLED' ELSE 'PENDING' END,
+       timestamptz '2026-11-01 00:00:00+00' + i * interval '30 seconds',   -- giờ bắt đầu tăng theo id (bài 3.3 lọc theo nó)
+       timestamptz '2025-01-01 00:00:00+00' + i * interval '30 seconds'    -- giờ tạo: dòng thứ 900 000 (mới nhất trước) là id 100001
+FROM generate_series(1, 1000000) AS i;
+CREATE INDEX bookings_newest ON bookings (created_at DESC, id DESC);
+VACUUM ANALYZE bookings;
+
+-- bảng labs nhỏ cho phép đo N+1 ở bài 3.4
+CREATE TABLE IF NOT EXISTS labs (id text PRIMARY KEY, code text NOT NULL, name text NOT NULL, building text NOT NULL, capacity int NOT NULL);
+INSERT INTO labs SELECT 'lab_' || i, 'L-' || lpad(i::text, 3, '0'), 'Phòng Lab ' || i, CASE WHEN i % 2 = 0 THEN 'Alpha' ELSE 'Beta' END, 20 + i % 25
+FROM generate_series(1, 50) AS i ON CONFLICT DO NOTHING;
+ANALYZE labs;</code></pre>
+<p>Your milliseconds will differ with your machine; the <code>rows=</code> counts should match (only the per-worker numbers of a parallel scan move by a few rows). The same 20 rows from three depths:</p>
 <pre><code class="language-sql">EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET 0;
 EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET 100000;
 EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET 900000;</code></pre>
@@ -459,7 +484,32 @@ Keep-Alive: timeout=5
 <p><code>bk_196</code> xuất hiện ở cả hai trang. Lượt đặt mới chiếm vị trí số 1, mọi lượt cũ tụt xuống một bậc, và "bỏ qua 5" giờ bỏ qua ít hơn một lượt cũ. Chiều ngược lại xảy ra khi một dòng biến mất — lượt đã huỷ bị bộ lọc giấu đi, một thiết bị bị xoá: mọi thứ dồn lên và một dòng <strong>không bao giờ được hiện</strong>. Một bảng tin cuộn vô tận sẽ hiện trùng; một bản xuất dữ liệu đi qua mọi trang sẽ lặng lẽ bỏ sót dòng.</p>
 
 <h3>Vấn đề 2 — trang càng sâu càng chậm</h3>
-<p>Mảng của ta nằm trong RAM nên không cho thấy được điều này. Cơ sở dữ liệu thì có. Trên một PostgreSQL 18 chạy ở máy với một triệu lượt đặt và index trên <code>(created_at DESC, id DESC)</code> (Chương 12 dạy chi tiết; ở đây ta chỉ đo), lấy cùng 20 dòng ở ba độ sâu:</p>
+<p>Mảng của ta nằm trong RAM nên không cho thấy được điều này. Cơ sở dữ liệu thì có. Trên một PostgreSQL 18 chạy ở máy với một triệu lượt đặt và index trên <code>(created_at DESC, id DESC)</code> (Chương 12 dạy chi tiết; ở đây ta chỉ đo). Muốn tự đo lại thì dựng đúng bảng này — đây chính là script sinh ra mọi con số trong chương (PostgreSQL 18.4; múi giờ phiên là <code>Asia/Ho_Chi_Minh</code>, nên kế hoạch in ra <code>+07</code>):</p>
+<pre><code class="language-sql">-- bookings-1m.sql — đúng bảng đã đo trong bài (PostgreSQL 18.4): psql -f bookings-1m.sql
+DROP TABLE IF EXISTS bookings;
+CREATE TABLE bookings (
+  id bigint PRIMARY KEY,
+  lab_id text NOT NULL,
+  user_id text NOT NULL,
+  status text NOT NULL,
+  start_at timestamptz NOT NULL,
+  created_at timestamptz NOT NULL
+);
+INSERT INTO bookings
+SELECT i, 'lab_' || (1 + i % 50), CASE WHEN i % 2 = 1 THEN 'usr_1' ELSE 'usr_2' END,
+       CASE WHEN i % 7 = 0 THEN 'CANCELLED' ELSE 'PENDING' END,
+       timestamptz '2026-11-01 00:00:00+00' + i * interval '30 seconds',   -- giờ bắt đầu tăng theo id (bài 3.3 lọc theo nó)
+       timestamptz '2025-01-01 00:00:00+00' + i * interval '30 seconds'    -- giờ tạo: dòng thứ 900 000 (mới nhất trước) là id 100001
+FROM generate_series(1, 1000000) AS i;
+CREATE INDEX bookings_newest ON bookings (created_at DESC, id DESC);
+VACUUM ANALYZE bookings;
+
+-- bảng labs nhỏ cho phép đo N+1 ở bài 3.4
+CREATE TABLE IF NOT EXISTS labs (id text PRIMARY KEY, code text NOT NULL, name text NOT NULL, building text NOT NULL, capacity int NOT NULL);
+INSERT INTO labs SELECT 'lab_' || i, 'L-' || lpad(i::text, 3, '0'), 'Phòng Lab ' || i, CASE WHEN i % 2 = 0 THEN 'Alpha' ELSE 'Beta' END, 20 + i % 25
+FROM generate_series(1, 50) AS i ON CONFLICT DO NOTHING;
+ANALYZE labs;</code></pre>
+<p>Số mili giây của bạn sẽ khác theo máy; còn các số <code>rows=</code> phải khớp (chỉ con số chia cho từng worker của lượt quét song song là xê dịch vài dòng). Cùng 20 dòng ở ba độ sâu:</p>
 <pre><code class="language-sql">EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET 0;
 EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET 100000;
 EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY created_at DESC, id DESC LIMIT 20 OFFSET 900000;</code></pre>
@@ -581,6 +631,13 @@ export function decodeCursor(s) {
     throw new HttpError(400, 'INVALID_CURSOR');        // client không được tự chế hay sửa con trỏ
   return c;
 }</code></pre>
+<p>Two new error codes need their words in the catalogue of lesson 2.4 (<code>src/messages.js</code>): <code>INVALID_CURSOR</code> now, <code>CURSOR_MISMATCH</code> from lesson 3.3. Add both to each language — without them <code>i18n.js</code> falls back to <code>INTERNAL</code> and a bad cursor would read “Internal server error”:</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    INVALID_CURSOR: ['Con trỏ phân trang không hợp lệ', () =&gt; 'Dùng nguyên giá trị page.next mà server trả về, đừng tự tạo hay sửa'],
+    CURSOR_MISMATCH: ['Con trỏ không khớp bộ lọc', () =&gt; 'Bộ lọc đã đổi so với lúc lấy con trỏ; hãy tải lại từ trang đầu'],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    INVALID_CURSOR: ['Invalid page cursor', () =&gt; 'Send page.next exactly as the server returned it; do not build or edit it'],
+    CURSOR_MISMATCH: ['Cursor does not match the filters', () =&gt; 'The filters changed since this cursor was issued; start again from the first page'],</code></pre>
 <p>The query loses <code>offset</code> and gains <code>cursor</code>:</p>
 <pre><code class="language-javascript">export const BookingsQuery = z.strictObject({
   limit: z.coerce.number().int().min(1).max(100).default(20),
@@ -781,6 +838,13 @@ export function decodeCursor(s) {
     throw new HttpError(400, 'INVALID_CURSOR');        // client không được tự chế hay sửa con trỏ
   return c;
 }</code></pre>
+<p>Có hai mã lỗi mới cần câu chữ trong cuốn danh mục của bài 2.4 (<code>src/messages.js</code>): <code>INVALID_CURSOR</code> dùng ngay, <code>CURSOR_MISMATCH</code> từ bài 3.3. Thêm cả hai vào mỗi ngôn ngữ — thiếu thì <code>i18n.js</code> rơi về <code>INTERNAL</code> và một con trỏ hỏng sẽ hiện "Lỗi máy chủ":</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    INVALID_CURSOR: ['Con trỏ phân trang không hợp lệ', () =&gt; 'Dùng nguyên giá trị page.next mà server trả về, đừng tự tạo hay sửa'],
+    CURSOR_MISMATCH: ['Con trỏ không khớp bộ lọc', () =&gt; 'Bộ lọc đã đổi so với lúc lấy con trỏ; hãy tải lại từ trang đầu'],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    INVALID_CURSOR: ['Invalid page cursor', () =&gt; 'Send page.next exactly as the server returned it; do not build or edit it'],
+    CURSOR_MISMATCH: ['Cursor does not match the filters', () =&gt; 'The filters changed since this cursor was issued; start again from the first page'],</code></pre>
 <p>Query bỏ <code>offset</code> và có thêm <code>cursor</code>:</p>
 <pre><code class="language-javascript">export const BookingsQuery = z.strictObject({
   limit: z.coerce.number().int().min(1).max(100).default(20),
@@ -954,7 +1018,7 @@ LIMIT 20;</code></pre>
       slug: 'api-3-3-loc',
       type: 'LESSON',
       isFreePreview: true,
-      description: 'Bộ lọc labId, status (danh sách), from/to (chồng lấn), q (không dấu) kiểm bằng Zod; dấu vân tay truy vấn trong con trỏ; index biến bộ lọc 36 ms thành 0,24 ms.',
+      description: 'Bộ lọc labId, status (danh sách), from/to (chồng lấn), q (không dấu) kiểm bằng Zod; dấu vân tay truy vấn trong con trỏ; index biến bộ lọc 37 ms thành 0,39 ms.',
       content: `${G033}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.3</span>
@@ -1091,19 +1155,20 @@ Keep-Alive: timeout=5
 WHERE lab_id = 'lab_7' AND start_at &lt; '2026-11-11 00:00+00' AND start_at + interval '2 hours' &gt; '2026-11-10 00:00+00'
 ORDER BY created_at DESC, id DESC LIMIT 20;</code></pre>
 <div class="out">-- without a matching index
- Limit (actual time=34.143..36.160 rows=20.00 loops=1)
-   -&gt;  Gather Merge (actual time=34.142..36.158 rows=20.00 loops=1)
-         -&gt;  Parallel Index Scan using bookings_newest on bookings (actual time=31.726..32.303 rows=12.00 loops=3)
-               Rows Removed by Filter: 333321
- Execution Time: 36.183 ms
+ Limit (actual time=35.026..37.026 rows=20.00 loops=1)
+   -&gt;  Gather Merge (actual time=35.026..37.013 rows=20.00 loops=1)
+         -&gt;  Parallel Index Scan using bookings_newest on bookings (actual time=33.164..33.231 rows=15.67 loops=3)
+               Rows Removed by Filter: 324480
+ Execution Time: 37.053 ms
 
 -- CREATE INDEX bookings_lab_start ON bookings (lab_id, start_at);
- Limit (actual time=0.225..0.226 rows=20.00 loops=1)
-   -&gt;  Sort (actual time=0.224..0.224 rows=20.00 loops=1)
-         -&gt;  Bitmap Heap Scan on bookings (actual time=0.198..0.218 rows=36.00 loops=1)
-               -&gt;  Bitmap Index Scan on bookings_lab_start (actual time=0.041..0.042 rows=324.00 loops=1)
- Execution Time: 0.242 ms</div>
-<p>Without the index the database walks the newest-first index and throws away a million rows (“Rows Removed by Filter: 333321” in each of three workers). With it, it reads 324 candidates and sorts 36. Every filter you publish needs a plan like this — that is the real cost of rule 5.</p>
+ Limit (actual time=0.369..0.371 rows=20.00 loops=1)
+   -&gt;  Sort (actual time=0.369..0.370 rows=20.00 loops=1)
+         -&gt;  Bitmap Heap Scan on bookings (actual time=0.320..0.353 rows=62.00 loops=1)
+               Rows Removed by Filter: 514
+               -&gt;  Bitmap Index Scan on bookings_lab_start (actual time=0.041..0.041 rows=576.00 loops=1)
+ Execution Time: 0.387 ms</div>
+<p>Without the index the database walks the newest-first index and throws away almost a million rows (“Rows Removed by Filter: 324480” in each of three workers). With it, it reads the 576 lab 7 bookings that start before 11 November, keeps the 62 that overlap the 10th and sorts only those. Every filter you publish needs a plan like this — that is the real cost of rule 5.</p>
 
 <div class="pitfall"><p><strong>Trap — “filter by anything”.</strong> <code>?where=purpose LIKE '%a%'</code> or <code>?field=x&amp;op=y&amp;value=z</code> look flexible. They invite injection if built into SQL, cannot all be indexed, and freeze your storage forever (every column becomes contract). Publish the filters users need; add more when asked.</p></div>
 <div class="pitfall"><p><strong>Trap — a filter the user may not use.</strong> <code>?userId=usr_2</code> for a student would be a data leak (Chapter 6, BOLA). LabFlow applies “only my bookings” <em>before</em> any user filter, so a student can never widen the list.</p></div>
@@ -1143,7 +1208,7 @@ ORDER BY created_at DESC, id DESC LIMIT 20;</code></pre>
   <li>Say what ranges mean — LabFlow’s <code>from</code>/<code>to</code> mean “overlaps”.</li>
   <li>Cross-field rules use <code>refine</code> with a translatable code, written to tolerate invalid fields.</li>
   <li>Bind cursors to their filters; a mismatch is a 400, not a silently wrong page.</li>
-  <li>Each published filter needs an index: 36 ms → 0.24 ms measured on a million rows.</li>
+  <li>Each published filter needs an index: 37 ms → 0.39 ms measured on a million rows.</li>
   <li>No free-form filtering on a public API; apply access rules before user filters.</li>
 </ul>
 </div>
@@ -1283,19 +1348,20 @@ Keep-Alive: timeout=5
 WHERE lab_id = 'lab_7' AND start_at &lt; '2026-11-11 00:00+00' AND start_at + interval '2 hours' &gt; '2026-11-10 00:00+00'
 ORDER BY created_at DESC, id DESC LIMIT 20;</code></pre>
 <div class="out">-- without a matching index
- Limit (actual time=34.143..36.160 rows=20.00 loops=1)
-   -&gt;  Gather Merge (actual time=34.142..36.158 rows=20.00 loops=1)
-         -&gt;  Parallel Index Scan using bookings_newest on bookings (actual time=31.726..32.303 rows=12.00 loops=3)
-               Rows Removed by Filter: 333321
- Execution Time: 36.183 ms
+ Limit (actual time=35.026..37.026 rows=20.00 loops=1)
+   -&gt;  Gather Merge (actual time=35.026..37.013 rows=20.00 loops=1)
+         -&gt;  Parallel Index Scan using bookings_newest on bookings (actual time=33.164..33.231 rows=15.67 loops=3)
+               Rows Removed by Filter: 324480
+ Execution Time: 37.053 ms
 
 -- CREATE INDEX bookings_lab_start ON bookings (lab_id, start_at);
- Limit (actual time=0.225..0.226 rows=20.00 loops=1)
-   -&gt;  Sort (actual time=0.224..0.224 rows=20.00 loops=1)
-         -&gt;  Bitmap Heap Scan on bookings (actual time=0.198..0.218 rows=36.00 loops=1)
-               -&gt;  Bitmap Index Scan on bookings_lab_start (actual time=0.041..0.042 rows=324.00 loops=1)
- Execution Time: 0.242 ms</div>
-<p>Không có index, cơ sở dữ liệu đi qua index mới-nhất-trước và vứt đi một triệu dòng ("Rows Removed by Filter: 333321" ở mỗi worker trong ba worker). Có index, nó đọc 324 ứng viên và sắp 36 dòng. Mỗi bộ lọc bạn công bố đều cần một kế hoạch như thế — đó là cái giá thật của luật số 5.</p>
+ Limit (actual time=0.369..0.371 rows=20.00 loops=1)
+   -&gt;  Sort (actual time=0.369..0.370 rows=20.00 loops=1)
+         -&gt;  Bitmap Heap Scan on bookings (actual time=0.320..0.353 rows=62.00 loops=1)
+               Rows Removed by Filter: 514
+               -&gt;  Bitmap Index Scan on bookings_lab_start (actual time=0.041..0.041 rows=576.00 loops=1)
+ Execution Time: 0.387 ms</div>
+<p>Không có index, cơ sở dữ liệu đi qua index mới-nhất-trước và vứt đi gần một triệu dòng ("Rows Removed by Filter: 324480" ở mỗi worker trong ba worker). Có index, nó đọc 576 lượt đặt của phòng 7 bắt đầu trước ngày 11/11, giữ 62 lượt chồng lên ngày 10 và chỉ sắp chừng ấy. Mỗi bộ lọc bạn công bố đều cần một kế hoạch như thế — đó là cái giá thật của luật số 5.</p>
 
 <div class="pitfall"><p><strong>Bẫy — "lọc theo bất cứ thứ gì".</strong> <code>?where=purpose LIKE '%a%'</code> hay <code>?field=x&amp;op=y&amp;value=z</code> trông linh hoạt. Chúng mời gọi tấn công chèn mã nếu được ghép vào SQL, không thể đánh index hết, và đóng băng cách lưu trữ của bạn mãi mãi (cột nào cũng thành hợp đồng). Hãy công bố các bộ lọc người dùng cần; ai xin thêm thì thêm.</p></div>
 <div class="pitfall"><p><strong>Bẫy — bộ lọc người dùng không được phép dùng.</strong> <code>?userId=usr_2</code> với một sinh viên sẽ là rò rỉ dữ liệu (Chương 6, BOLA). LabFlow áp "chỉ lượt đặt của tôi" <em>trước</em> mọi bộ lọc của người dùng, nên sinh viên không bao giờ nới rộng được danh sách.</p></div>
@@ -1335,7 +1401,7 @@ ORDER BY created_at DESC, id DESC LIMIT 20;</code></pre>
   <li>Nói rõ nghĩa của khoảng — <code>from</code>/<code>to</code> của LabFlow nghĩa là "chồng lên".</li>
   <li>Luật nhiều trường dùng <code>refine</code> với mã dịch được, viết sao cho chịu được trường còn sai.</li>
   <li>Gắn con trỏ với bộ lọc của nó; không khớp là 400, không phải một trang sai lặng lẽ.</li>
-  <li>Mỗi bộ lọc công bố cần một index: 36 ms → 0,24 ms đo trên một triệu dòng.</li>
+  <li>Mỗi bộ lọc công bố cần một index: 37 ms → 0,39 ms đo trên một triệu dòng.</li>
   <li>Không lọc tự do trên API công khai; áp luật quyền truy cập trước bộ lọc của người dùng.</li>
 </ul>
 </div>
@@ -1515,6 +1581,58 @@ Keep-Alive: timeout=5
       if (labById) v.lab = toLab(labById.get(b.labId));
       return v;
     });</code></pre>
+<p>The whole handler after this lesson, assembled in one piece — the filters of 3.3, the sort-aware cursor, <code>fields</code> and <code>include</code> (replace the <code>GET</code> of lesson 3.3 with it):</p>
+<pre><code class="language-javascript">// schemas.js — trong BookingsQuery, ngay sau dòng fields: include cũng là một danh sách cho phép
+  include: z.enum(['lab']).optional(),
+
+// routes/bookings.js — GET /bookings ghép ĐỦ sau bài 3.4 (bộ lọc 3.3 + sort/fields/include 3.4)
+import { Router } from 'express';
+import { bookings, labs, nextId } from '../db.js';
+import { HttpError, onlyAllow } from '../http.js';
+import { requireAuth } from '../auth.js';
+import { validate } from '../validate.js';
+import { BookingCreate, BookingsQuery } from '../schemas.js';
+import { orderBy, encodeCursor, decodeCursor, fingerprint } from '../paging.js';
+import { fold } from '../text.js';
+import { toBooking, toLab, list } from '../views.js';
+// … bookingsRouter, requireAuth, findOwnBooking: giữ nguyên
+
+bookingsRouter.route('/')
+  .get(validate('query', BookingsQuery), (req, res) =&gt; {
+    const { limit, cursor, fields, include, ...query } = req.valid.query;   // query = bộ lọc + sort
+    const { labId, status, from, to, q, sort } = query;
+    const mine = req.user.role === 'LAB_MANAGER' ? bookings : bookings.filter((b) =&gt; b.userId === req.user.id);
+    let rows = mine.filter((b) =&gt;
+      (!labId || b.labId === labId)
+      &amp;&amp; (!status || status.includes(b.status))
+      &amp;&amp; (!from || Date.parse(b.endAt) &gt; Date.parse(from))      // chồng lên [from, to): kết thúc sau from…
+      &amp;&amp; (!to || Date.parse(b.startAt) &lt; Date.parse(to))        // …và bắt đầu trước to
+      &amp;&amp; (!q || fold(b.purpose ?? '').includes(fold(q))));
+    const { key, cmp } = orderBy(sort);
+    rows = rows.sort(cmp);
+    const f = fingerprint(query);                                   // bộ lọc + sort; KHÔNG có limit/fields/include
+    if (cursor) {
+      const after = decodeCursor(cursor, key, f);
+      rows = rows.filter((b) =&gt; cmp(after, b) &lt; 0);
+    }
+    const page = rows.slice(0, limit);
+    const next = rows.length &gt; limit ? encodeCursor(page[page.length - 1], key, f) : null;
+    if (next) {
+      const qs = new URLSearchParams(req.query);   // giữ nguyên bộ lọc, chỉ thay con trỏ
+      qs.set('cursor', next);
+      res.links({ next: &#96;/bookings?\${qs}&#96; });
+    }
+    // include=lab: tra phòng bằng MỘT Map dựng sẵn — không tìm lại trong mảng cho từng dòng (N+1)
+    const labById = include === 'lab' ? new Map(labs.map((l) =&gt; [l.id, l])) : null;
+    const data = page.map((b) =&gt; {
+      let v = toBooking(b);
+      if (fields) v = Object.fromEntries(['id', ...fields.filter((x) =&gt; x !== 'id')].map((k) =&gt; [k, v[k]]));
+      if (labById) v.lab = toLab(labById.get(b.labId));
+      return v;
+    });
+    res.json({ data, page: { limit, next } });
+  })
+  // .post(…), .all(…) giữ nguyên</code></pre>
 <p>The <strong>N+1 problem</strong>: one query for the page, then one more query per row (N rows ⇒ N+1 queries). In memory it hardly shows; against a database every query is a round trip. Measured on the PostgreSQL table, 20 rows:</p>
 <div class="out">--- N+1: 1 query for the page + 20 queries, one per row
 Time: 0.397 ms
@@ -1741,6 +1859,58 @@ Keep-Alive: timeout=5
       if (labById) v.lab = toLab(labById.get(b.labId));
       return v;
     });</code></pre>
+<p>Toàn bộ handler sau bài này, ghép lại một khối — bộ lọc của 3.3, con trỏ theo cách sắp, <code>fields</code> và <code>include</code> (thay <code>GET</code> của bài 3.3 bằng khối này):</p>
+<pre><code class="language-javascript">// schemas.js — trong BookingsQuery, ngay sau dòng fields: include cũng là một danh sách cho phép
+  include: z.enum(['lab']).optional(),
+
+// routes/bookings.js — GET /bookings ghép ĐỦ sau bài 3.4 (bộ lọc 3.3 + sort/fields/include 3.4)
+import { Router } from 'express';
+import { bookings, labs, nextId } from '../db.js';
+import { HttpError, onlyAllow } from '../http.js';
+import { requireAuth } from '../auth.js';
+import { validate } from '../validate.js';
+import { BookingCreate, BookingsQuery } from '../schemas.js';
+import { orderBy, encodeCursor, decodeCursor, fingerprint } from '../paging.js';
+import { fold } from '../text.js';
+import { toBooking, toLab, list } from '../views.js';
+// … bookingsRouter, requireAuth, findOwnBooking: giữ nguyên
+
+bookingsRouter.route('/')
+  .get(validate('query', BookingsQuery), (req, res) =&gt; {
+    const { limit, cursor, fields, include, ...query } = req.valid.query;   // query = bộ lọc + sort
+    const { labId, status, from, to, q, sort } = query;
+    const mine = req.user.role === 'LAB_MANAGER' ? bookings : bookings.filter((b) =&gt; b.userId === req.user.id);
+    let rows = mine.filter((b) =&gt;
+      (!labId || b.labId === labId)
+      &amp;&amp; (!status || status.includes(b.status))
+      &amp;&amp; (!from || Date.parse(b.endAt) &gt; Date.parse(from))      // chồng lên [from, to): kết thúc sau from…
+      &amp;&amp; (!to || Date.parse(b.startAt) &lt; Date.parse(to))        // …và bắt đầu trước to
+      &amp;&amp; (!q || fold(b.purpose ?? '').includes(fold(q))));
+    const { key, cmp } = orderBy(sort);
+    rows = rows.sort(cmp);
+    const f = fingerprint(query);                                   // bộ lọc + sort; KHÔNG có limit/fields/include
+    if (cursor) {
+      const after = decodeCursor(cursor, key, f);
+      rows = rows.filter((b) =&gt; cmp(after, b) &lt; 0);
+    }
+    const page = rows.slice(0, limit);
+    const next = rows.length &gt; limit ? encodeCursor(page[page.length - 1], key, f) : null;
+    if (next) {
+      const qs = new URLSearchParams(req.query);   // giữ nguyên bộ lọc, chỉ thay con trỏ
+      qs.set('cursor', next);
+      res.links({ next: &#96;/bookings?\${qs}&#96; });
+    }
+    // include=lab: tra phòng bằng MỘT Map dựng sẵn — không tìm lại trong mảng cho từng dòng (N+1)
+    const labById = include === 'lab' ? new Map(labs.map((l) =&gt; [l.id, l])) : null;
+    const data = page.map((b) =&gt; {
+      let v = toBooking(b);
+      if (fields) v = Object.fromEntries(['id', ...fields.filter((x) =&gt; x !== 'id')].map((k) =&gt; [k, v[k]]));
+      if (labById) v.lab = toLab(labById.get(b.labId));
+      return v;
+    });
+    res.json({ data, page: { limit, next } });
+  })
+  // .post(…), .all(…) giữ nguyên</code></pre>
 <p><strong>Vấn đề N+1</strong>: một truy vấn lấy trang, rồi mỗi dòng thêm một truy vấn (N dòng ⇒ N+1 truy vấn). Trong RAM gần như không lộ; với cơ sở dữ liệu, truy vấn nào cũng là một lượt đi-về. Đo trên bảng PostgreSQL, 20 dòng:</p>
 <div class="out">--- N+1: 1 query for the page + 20 queries, one per row
 Time: 0.397 ms

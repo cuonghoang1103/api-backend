@@ -78,7 +78,7 @@ export function Settings() {
   const NHOM_DAY_DU: Nhom[] = [
     { ma: 'giao-dien', ten: dich('Giao diện'), moTa: dich('Chủ đề, ngôn ngữ, thanh bên, cỡ chữ'), icon: <Palette size={17} aria-hidden />, mau: '#8b9cff' },
     { ma: 'thong-bao', ten: dich('Thông báo & âm thanh'), moTa: dich('Tiếng chuông, lời nhắc, thanh phát nhạc'), icon: <Bell size={17} aria-hidden />, mau: '#e3a44f' },
-    { ma: 'odin', ten: dich('Robot Odin'), moTa: dich('Hiện/ẩn robot, giọng đọc, tốc độ'), icon: <Bot size={17} aria-hidden />, mau: '#4fb6a8' },
+    { ma: 'odin', ten: dich('Robot CuongMini'), moTa: dich('Hiện/ẩn robot, giọng đọc, tốc độ'), icon: <Bot size={17} aria-hidden />, mau: '#4fb6a8' },
     { ma: 'ai', ten: 'CuongMini', moTa: dich('Mức dùng, CuongMini chạy trên máy'), icon: <BrainCircuit size={17} aria-hidden />, mau: '#d17bb5' },
     { ma: 'du-lieu', ten: dich('Dữ liệu & đồng bộ'), moTa: dich('Hàng đợi đồng bộ, dung lượng, cache'), icon: <Database size={17} aria-hidden />, mau: '#5aa0e0' },
     { ma: 'phim', ten: dich('Phím tắt'), moTa: dich('Mọi tổ hợp phím của app'), icon: <Keyboard size={17} aria-hidden />, mau: '#93b56f' },
@@ -101,8 +101,8 @@ export function Settings() {
     { nhom: 'thong-bao', neo: 'am-thanh', ten: dich('Tiếng chuông khi xong việc'), moTa: dich('Kêu “ting” khi tick xong một việc'), tuKhoa: 'am thanh sound chuong tieng' },
     { nhom: 'thong-bao', neo: 'nhac-lich', ten: dich('Robot nhắc lịch học & việc sắp tới'), moTa: dich('Nhắc trước buổi học và việc trong kế hoạch'), tuKhoa: 'nhac nho lich hoc reminder thong bao' },
     { nhom: 'thong-bao', neo: 'thanh-phat', ten: dich('Thanh phát nhạc thu gọn'), moTa: dich('Thanh phát ở đáy app chỉ còn một dải mỏng'), tuKhoa: 'nhac music player thanh phat' },
-    { nhom: 'odin', neo: 'robot', ten: dich('Hiện robot Odin'), moTa: dich('Trợ lý ở góc màn hình'), tuKhoa: 'robot odin tro ly an hien' },
-    { nhom: 'odin', neo: 'giong-odin', ten: dich('Giọng đọc của Odin'), moTa: dich('Đọc thành tiếng, ngôn ngữ, tốc độ, giọng'), tuKhoa: 'giong noi doc tts voice toc do ngat loi' },
+    { nhom: 'odin', neo: 'robot', ten: dich('Hiện robot CuongMini'), moTa: dich('Trợ lý ở góc màn hình'), tuKhoa: 'robot odin cuongmini tro ly an hien' },
+    { nhom: 'odin', neo: 'giong-odin', ten: dich('Giọng đọc của CuongMini'), moTa: dich('Đọc thành tiếng, ngôn ngữ, tốc độ, giọng'), tuKhoa: 'giong noi doc tts voice toc do ngat loi' },
     { nhom: 'ai', neo: 'muc-dung', ten: dich('Mức dùng CuongMini'), moTa: dich('Ví AI Code và CuongMini Chat của bạn'), tuKhoa: 'han muc usage ngan sach quota tien' },
     { nhom: 'ai', neo: 'ai-ngoai-tuyen', ten: dich('CuongMini ngoại tuyến'), moTa: dich('Tải CuongMini về chạy trên máy, dùng khi mất mạng'), tuKhoa: 'offline local model mat mang tren may' },
     { nhom: 'du-lieu', neo: 'dong-bo', ten: dich('Hàng đợi đồng bộ'), moTa: dich('Thay đổi chưa gửi lên máy chủ'), tuKhoa: 'sync dong bo xung dot conflict' },
@@ -233,7 +233,7 @@ export function Settings() {
             {nhom === 'odin' && (
               <>
                 <TheRobot sang={sang} />
-                <The id="giong-odin" sang={sang('giong-odin')} ten={dich('Giọng đọc của Odin')} moTa={dich('Odin đọc câu trả lời thành tiếng — chọn ngôn ngữ, giọng và tốc độ.')} boc>
+                <The id="giong-odin" sang={sang('giong-odin')} ten={dich('Giọng đọc của CuongMini')} moTa={dich('CuongMini đọc câu trả lời thành tiếng — chọn ngôn ngữ, giọng và tốc độ.')} boc>
                   <OdinPanel />
                 </The>
               </>
@@ -386,7 +386,7 @@ function NhomThongBao({ sang: s }: { sang: (n: string) => string | undefined }) 
           }}
         />
       </The>
-      <The id="nhac-lich" sang={s('nhac-lich')} ten={dich('Robot nhắc lịch học & việc sắp tới')} moTa={dich('Odin nhắc còn bao lâu tới buổi học sớm nhất và việc sắp tới trong kế hoạch. Tắt ở đây hay trên khối Lịch học là một.')}>
+      <The id="nhac-lich" sang={s('nhac-lich')} ten={dich('Robot nhắc lịch học & việc sắp tới')} moTa={dich('CuongMini nhắc còn bao lâu tới buổi học sớm nhất và việc sắp tới trong kế hoạch. Tắt ở đây hay trên khối Lịch học là một.')}>
         <CongTac bat={nhacLich} nhan={dich('Robot nhắc lịch học & việc sắp tới')} onDoi={(v) => setSetting('nhacLichRobot', v)} />
       </The>
       <The id="thanh-phat" sang={s('thanh-phat')} ten={dich('Thanh phát nhạc thu gọn')} moTa={dich('Khi đang nghe nhạc, thanh phát ở đáy app chỉ còn một dải mỏng có nút phát và tên bài.')}>
@@ -517,11 +517,11 @@ function TheRobot({ sang }: { sang: (n: string) => string | undefined }) {
     <section className="st-the" id="st-robot" data-sang={sang('robot')}>
       <div className="st-the-dau">
         <div className="st-the-chu">
-          <h3>{dich('Trợ lý Odin')}</h3>
+          <h3>{dich('Trợ lý CuongMini')}</h3>
           <p>{dich('Hiển thị bảng trợ lý ở cạnh phải. Tắt đi thì app vẫn dùng bình thường.')}</p>
         </div>
         <div className="st-the-nut">
-          <CongTac bat={robotEnabled} nhan={dich('Trợ lý Odin')} onDoi={(v) => setSetting('robotEnabled', v)} />
+          <CongTac bat={robotEnabled} nhan={dich('Trợ lý CuongMini')} onDoi={(v) => setSetting('robotEnabled', v)} />
         </div>
       </div>
       {/* Công tắc này có BA lối khác ngoài chính nó, và người dùng không đoán ra
@@ -619,7 +619,7 @@ function ThePhimTat({ sang }: { sang?: string | undefined }) {
         ['⌘ K', dich('Mở bảng lệnh — tìm trang, chạy lệnh')],
         ['⌘ B', dich('Ẩn / hiện thanh bên')],
         ['⌥ ⇧ N', dich('Ghi nhanh vào Ghi chú')],
-        [phimRobot ?? '—', dich('Ẩn / hiện robot Odin (chạy cả khi đang ở app khác)')],
+        [phimRobot ?? '—', dich('Ẩn / hiện robot CuongMini (chạy cả khi đang ở app khác)')],
         ['⏯ ⏭ ⏮', dich('Phím media trên bàn phím/tai nghe: phát, bài sau, bài trước')],
       ],
     },

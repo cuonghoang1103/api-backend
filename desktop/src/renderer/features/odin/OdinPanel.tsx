@@ -19,8 +19,8 @@ import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
 
 const CAU_THU: Record<'vi' | 'en', string> = {
-  vi: 'Xin chào, mình là Odin. Mình sẽ đọc câu trả lời bằng giọng này.',
-  en: 'Hi, I am Odin. I will read answers out loud in this voice.',
+  vi: 'Xin chào, mình là CuongMini. Mình sẽ đọc câu trả lời bằng giọng này.',
+  en: 'Hi, I am CuongMini. I will read answers out loud in this voice.',
 };
 
 /**
@@ -80,7 +80,7 @@ export function OdinPanel() {
 
   return (
     <section className="ct-section">
-      <h2>{dich('Trợ lý Odin')}</h2>
+      <h2>{dich('Trợ lý CuongMini')}</h2>
 
       <dl className="ct-rows">
         <div className="ct-row">
@@ -120,7 +120,7 @@ export function OdinPanel() {
               <span>{settings.robotHoiThoat !== false ? dich('Bật') : dich('Tắt')}</span>
             </label>
             <p className="ct-ghichu">
-              <Chu cau='Khi bạn thoát app, Odin hỏi "Bạn không cần tôi nữa ư?" — **Có** thì ở lại, **Không** thì thoát. Không hỏi khi cài bản cập nhật hay khi máy tắt.' />
+              <Chu cau='Khi bạn thoát app, CuongMini hỏi "Bạn không cần tôi nữa ư?" — **Có** thì ở lại, **Không** thì thoát. Không hỏi khi cài bản cập nhật hay khi máy tắt.' />
             </p>
           </dd>
         </div>

@@ -51,8 +51,8 @@ describe('đang chờ người dùng', () => {
 });
 
 describe('khoảng lặng giữa hai vòng — chỗ màn hình từng đứng im', () => {
-  it('tool GHI vừa xong ⇒ "Odin đang code…"', () => {
-    expect(viecDangLam([nguoi, tool('edit_file')], false).chu).toBe('Odin đang code…');
+  it('tool GHI vừa xong ⇒ "CuongMini đang code…"', () => {
+    expect(viecDangLam([nguoi, tool('edit_file')], false).chu).toBe('CuongMini đang code…');
   });
 
   it('lệnh vừa xong ⇒ nói là đang xem kết quả, không nói "đang code"', () => {

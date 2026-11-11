@@ -40,7 +40,7 @@ describe('chuChoMayDoc', () => {
   });
 
   it('chữ vốn đã sạch thì giữ nguyên', () => {
-    const sach = 'Mình là Odin. Bạn cần gì cứ nói nhé.';
+    const sach = 'Mình là CuongMini. Bạn cần gì cứ nói nhé.';
     expect(chuChoMayDoc(sach)).toBe(sach);
   });
 

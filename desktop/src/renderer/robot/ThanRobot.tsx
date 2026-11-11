@@ -139,7 +139,7 @@ export function ThanRobot(p: ThanRobotProps) {
           className="rb-than"
           role="button"
           tabIndex={0}
-          aria-label={p.nhan ?? 'Odin'}
+          aria-label={p.nhan ?? 'CuongMini'}
           onPointerDown={p.onPointerDown}
           onClick={(e) => p.onBam(e)}
           onKeyDown={(e) => {

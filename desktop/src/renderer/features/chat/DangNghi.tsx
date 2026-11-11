@@ -53,9 +53,9 @@ export function DangNghi({
 }) {
   const { dich, dichP } = useDich();
   const chu = dangTraLoi
-    ? dich('Odin đang trả lời…')
+    ? dich('CuongMini đang trả lời…')
     : giay >= CHANG_HAI_GIAY
-      ? dich('Odin đang suy nghĩ…')
+      ? dich('CuongMini đang suy nghĩ, bạn đợi mình chút nhé…')
       : (chuRieng ?? dich('Chờ tớ suy nghĩ xíu nhé…'));
 
   return (

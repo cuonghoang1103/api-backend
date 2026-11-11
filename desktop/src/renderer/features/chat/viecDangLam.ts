@@ -103,7 +103,7 @@ export function viecDangLam(muc: MucHienThi[], dangNghi: boolean, suyNghi = fals
     if (m.kieu === 'nguoi') break;            // hết lượt này
 
     if (LOAI_XIN_PHEP.has(m.kieu) && (m as { xong?: string }).xong === undefined) {
-      return { chu: 'Đang chờ bạn duyệt — Odin dừng ở đây tới khi bạn bấm.', kieu: 'cho' };
+      return { chu: 'Đang chờ bạn duyệt — CuongMini dừng ở đây tới khi bạn bấm.', kieu: 'cho' };
     }
     if (m.kieu === 'tool') {
       if (m.dangChay === true) { toolDangChay ??= m.ten; }
@@ -111,18 +111,18 @@ export function viecDangLam(muc: MucHienThi[], dangNghi: boolean, suyNghi = fals
     }
   }
 
-  if (toolDangChay) return { chu: `Odin ${viecCuaTool(toolDangChay)}`, kieu: 'lam' };
+  if (toolDangChay) return { chu: `CuongMini ${viecCuaTool(toolDangChay)}`, kieu: 'lam' };
 
   /* Cổng Claude chính hãng báo THẬT là model đang suy nghĩ (khung `nghi`). */
-  if (suyNghi) return { chu: 'Odin đang suy nghĩ…', kieu: 'lam' };
+  if (suyNghi) return { chu: 'CuongMini đang suy nghĩ, bạn đợi mình chút nhé…', kieu: 'lam' };
 
   /* Khoảng lặng giữa hai vòng: model đang nghĩ, không tool nào chạy. Nói theo
      việc VỪA XONG — nó là thứ duy nhất ta biết chắc về giai đoạn hiện tại. */
-  if (toolCuoi && TOOL_GHI.has(toolCuoi)) return { chu: 'Odin đang code…', kieu: 'lam' };
-  if (toolCuoi === 'run_command') return { chu: 'Odin đang xem kết quả lệnh…', kieu: 'lam' };
-  if (toolCuoi) return { chu: 'Odin đang đọc mã dự án…', kieu: 'lam' };
+  if (toolCuoi && TOOL_GHI.has(toolCuoi)) return { chu: 'CuongMini đang code…', kieu: 'lam' };
+  if (toolCuoi === 'run_command') return { chu: 'CuongMini đang xem kết quả lệnh…', kieu: 'lam' };
+  if (toolCuoi) return { chu: 'CuongMini đang đọc mã dự án…', kieu: 'lam' };
 
   /* Chưa gọi tool nào. Chặng đầu agent thật sự đang ĐỌC dự án chứ không ngồi
      nghĩ suông, nên nói thế đúng hơn "đang suy nghĩ". */
-  return { chu: dangNghi ? 'Odin đang đọc dự án…' : 'Odin đang chuẩn bị…', kieu: 'lam' };
+  return { chu: dangNghi ? 'CuongMini đang đọc dự án…' : 'CuongMini đang chuẩn bị…', kieu: 'lam' };
 }

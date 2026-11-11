@@ -610,8 +610,8 @@ export function OdinDock() {
         keoDuoc={keoDuoc}
         hienSo={hienSo}
         nhan={odin.unread > 0
-          ? dichP('Odin — mở khung chat, {n} thông báo chưa đọc', { n: odin.unread })
-          : dich('Odin — mở khung chat')}
+          ? dichP('CuongMini — mở khung chat, {n} thông báo chưa đọc', { n: odin.unread })
+          : dich('CuongMini — mở khung chat')}
         phuHieu={odin.unread > 0 ? (
           <span className="odin-badge rb-phu-hieu" aria-hidden>
             {odin.unread > 99 ? '99+' : odin.unread}

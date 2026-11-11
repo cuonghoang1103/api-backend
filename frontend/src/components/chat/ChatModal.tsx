@@ -2,7 +2,13 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen, History, ImageIcon, GraduationCap, Maximize2, Minimize2, MessageSquare } from 'lucide-react';
+import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen, History, ImageIcon, GraduationCap, Maximize2, Minimize2, MessageSquare, Paperclip, FileText } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { usePro } from '@/hooks/usePro';
+import {
+  FILE_ACCEPT, MAX_DOCS, MAX_DOC_BYTES, MAX_IMAGES, compressImage, docMediaType, readAsDataURL,
+  buildProjectDoc, filesFromDrop, filesFromZip,
+} from './claude/attachments';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
@@ -229,6 +235,14 @@ export default function ChatModal({ onClose }: ChatModalProps) {
      `images` là data URL, đúng thứ `/api/v1/ai/chat` nhận. Chỉ bậc Pro/Max
      dùng được; chưa Pro thì máy chủ bỏ qua và hạ bậc, và khung báo lại. */
   const [anh, setAnh] = useState<string[]>([]);
+  /* ── Tài liệu + folder/.zip ── cùng luật với ô /chat (CtcComposer): folder hay
+     .zip được gói thành MỘT tài liệu markdown (lọc file code/text, trần 55KB). */
+  const [taiLieu, setTaiLieu] = useState<Array<{ ten: string; dataUrl: string }>>([]);
+  const [dangGoi, setDangGoi] = useState(false);
+  const [keoTha, setKeoTha] = useState(false);
+  const tepRef = useRef<HTMLInputElement>(null);
+  const { isPro } = usePro();
+  const router = useRouter();
   const [focused, setFocused] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   // Stop-generation: abort the in-flight stream, keep the partial reply.
@@ -284,7 +298,98 @@ finished: true,
 
   /* Dán ảnh bằng Ctrl/Cmd+V ngay trong ô nhập — cách nhanh nhất: chụp màn hình
      xong dán luôn, không qua bước lưu file. */
+  // Tài liệu cần Pro + model đọc được file; đang ở bậc mặc định thì tự lên Pro 2 và nói ra.
+  const baoDamDocFile = (): boolean => {
+    if (!isPro) {
+      toast.info('Gửi tài liệu cần tài khoản Pro', { action: { label: 'Nâng cấp', onClick: () => router.push('/pro') } });
+      return false;
+    }
+    const st = useChatModelStore.getState();
+    if (getChatModel(st.modelId).tier === 'default') {
+      st.setModelId('cuongmini-pro-2');
+      toast.info('Đã chuyển sang CuongMini Pro 2 để đọc tài liệu');
+    }
+    return true;
+  };
+
+  const themDuAn = async (ten: string, items: { path: string; file?: File; bytes?: Uint8Array; size: number }[]) => {
+    if (!items.length || !baoDamDocFile()) return;
+    if (taiLieu.length >= MAX_DOCS) { toast.info(`Tối đa ${MAX_DOCS} tài liệu mỗi tin`); return; }
+    setDangGoi(true);
+    try {
+      const doc = await buildProjectDoc(ten, items);
+      if (!doc) { toast.error('Không thấy file code/text nào trong đó'); return; }
+      setTaiLieu((p) => [...p, { ten: doc.name, dataUrl: doc.dataUrl }].slice(0, MAX_DOCS));
+      toast.success(`Đã gói ${doc.fileCount} file${doc.truncated ? ' (rút gọn theo trần)' : ''}${doc.skipped ? `, bỏ ${doc.skipped}` : ''}`);
+    } finally { setDangGoi(false); }
+  };
+
+  /** Tệp lẻ: .zip ⇒ gói dự án; ảnh ⇒ khay ảnh; PDF/Word/… ⇒ tài liệu. */
+  const themTep = async (files: File[]) => {
+    const zips = files.filter((f) => /\.zip$/i.test(f.name));
+    for (const z of zips) {
+      try {
+        const ex = await filesFromZip(z);
+        await themDuAn(z.name.replace(/\.zip$/i, ''), ex.map((x) => ({ path: x.path, bytes: x.bytes, size: x.bytes.length })));
+      } catch { toast.error(`Không mở được ${z.name}`); }
+    }
+    const conLai = files.filter((f) => !/\.zip$/i.test(f.name));
+    if (!conLai.length) return;
+    const imgs = conLai.filter((f) => f.type.startsWith('image/'));
+    const ds = conLai.map((f) => ({ f, media: docMediaType(f) })).filter((x): x is { f: File; media: string } => !!x.media);
+    if (conLai.length - imgs.length - ds.length > 0) toast.error('Chỉ nhận ảnh, .zip, folder, PDF, Word, Excel, PowerPoint hoặc .txt/.md/.csv');
+    setDangGoi(true);
+    try {
+      if (imgs.length) {
+        const room = Math.max(0, MAX_IMAGES - anh.length);
+        if (imgs.length > room) toast.info(`Tối đa ${MAX_IMAGES} ảnh mỗi tin`);
+        const out = await Promise.all(imgs.slice(0, room).map(compressImage));
+        setAnh((c) => [...c, ...out].slice(0, MAX_IMAGES));
+      }
+      if (ds.length && baoDamDocFile()) {
+        const room = Math.max(0, MAX_DOCS - taiLieu.length);
+        if (ds.length > room) toast.info(`Tối đa ${MAX_DOCS} tài liệu mỗi tin`);
+        const out = await Promise.all(ds.slice(0, room).map(async ({ f, media }) => {
+          if (f.size > MAX_DOC_BYTES) { toast.error(`"${f.name}" quá lớn (tối đa 6MB)`); return null; }
+          const raw = await readAsDataURL(f);
+          return { ten: f.name, dataUrl: `data:${media};base64,${raw.slice(raw.indexOf(',') + 1)}` };
+        }));
+        setTaiLieu((p) => [...p, ...out.filter((x): x is { ten: string; dataUrl: string } => !!x)].slice(0, MAX_DOCS));
+      }
+    } finally { setDangGoi(false); }
+  };
+
+  /** Kéo-thả: folder (đệ quy) và .zip ⇒ một tài liệu dự án; tệp lẻ ⇒ themTep. */
+  const nhanTha = (e: React.DragEvent<HTMLDivElement>) => {
+    const dt = e.dataTransfer;
+    if (!dt || (!dt.items?.length && !dt.files?.length)) return;
+    e.preventDefault();
+    setKeoTha(false);
+    void (async () => {
+      const dropped = await filesFromDrop(dt);
+      if (!dropped.length) return;
+      const laZip = (p: string) => /\.zip$/i.test(p);
+      const zips = dropped.filter((d) => laZip(d.path));
+      const tepFolder = dropped.filter((d) => d.path.includes('/') && !laZip(d.path));
+      const tepLe = dropped.filter((d) => !d.path.includes('/') && !laZip(d.path)).map((d) => d.file);
+      if (zips.length || tepFolder.length) {
+        const items: { path: string; file?: File; bytes?: Uint8Array; size: number }[] = [];
+        for (const z of zips) {
+          try { const ex = await filesFromZip(z.file); items.push(...ex.map((x) => ({ path: x.path, bytes: x.bytes, size: x.bytes.length }))); }
+          catch { toast.error(`Không mở được ${z.file.name}`); }
+        }
+        for (const f of tepFolder) items.push({ path: f.path, file: f.file, size: f.file.size });
+        const ten = (zips[0] ? zips[0].file.name.replace(/\.zip$/i, '') : '') || tepFolder[0]?.path.split('/')[0] || 'Dự án';
+        if (items.length) await themDuAn(ten, items);
+      }
+      if (tepLe.length) await themTep(tepLe);
+    })();
+  };
+
   const nhanDan = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    // Dán tệp KHÔNG phải ảnh (PDF, .zip…) ⇒ đi đường tài liệu.
+    const tepKhac = [...e.clipboardData.files].filter((f) => !f.type.startsWith('image/'));
+    if (tepKhac.length) { e.preventDefault(); void themTep([...e.clipboardData.files]); return; }
     const tep = [...e.clipboardData.items]
       .filter((x) => x.kind === 'file' && x.type.startsWith('image/'))
       .map((x) => x.getAsFile())
@@ -332,7 +437,7 @@ finished: true,
   const handleSend = useCallback(async (text: string) => {
     // Gửi được khi CHỈ có ảnh: dán ảnh xong bấm gửi là ý định rõ ràng, bắt gõ
     // thêm chữ chỉ để qua cửa này là bắt làm một việc vô nghĩa.
-    if ((!text.trim() && anh.length === 0) || isStreaming) return;
+    if ((!text.trim() && anh.length === 0 && taiLieu.length === 0) || isStreaming || dangGoi) return;
 
     const sessionId = '__modal__';
     const tempId = Date.now();
@@ -341,12 +446,14 @@ finished: true,
        mấy tấm ảnh đó lần nữa — và trả tiền hai lần cho chúng. */
     const anhGui = anh;
     setAnh([]);
+    const tlGui = taiLieu;
+    setTaiLieu([]);
 
     const userMsg: ChatMessage = {
       id: tempId,
       sessionId,
       role: 'user',
-      content: text.trim() || '(ảnh)',
+      content: text.trim() || (tlGui.length ? `(tệp: ${tlGui.map((t) => t.ten).join(', ')})` : '(ảnh)'),
       createdAt: new Date().toISOString(),
     };
 
@@ -382,6 +489,7 @@ finished: true,
              Pro thì nó bỏ qua và hạ bậc kèm `reason: 'pro_required'` — nhánh
              đọc SSE bên dưới đã báo lại chuyện đó. */
           ...(anhGui.length > 0 ? { images: anhGui } : {}),
+          ...(tlGui.length > 0 ? { documents: tlGui.map((t) => t.dataUrl), documentNames: tlGui.map((t) => t.ten) } : {}),
         }),
       });
 
@@ -549,7 +657,7 @@ finished: true,
     }
   }, [isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
       setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
-      updateLastAssistantMessage, removePendingMessage, messages, anh]);
+      updateLastAssistantMessage, removePendingMessage, messages, anh, taiLieu, dangGoi]);
 
   // Stop generation: abort the fetch, keep the partial reply, unlock input.
   const stopStreaming = useCallback(() => {
@@ -805,10 +913,61 @@ finished: true,
           </div>
 
           {/* Input */}
-          <div className="px-4 py-3 border-t border-[#22d3ee]/10 bg-[#0a0a0f]/80 flex-shrink-0">
-            <div className="mb-2 flex items-center">
+          <div
+            className={`px-4 py-3 border-t bg-[#0a0a0f]/80 flex-shrink-0 transition-colors ${keoTha ? 'border-[#22d3ee]/60 bg-[#22d3ee]/5' : 'border-[#22d3ee]/10'}`}
+            onDragOver={(e) => { if (e.dataTransfer?.types?.includes('Files')) { e.preventDefault(); setKeoTha(true); } }}
+            onDragLeave={() => setKeoTha(false)}
+            onDrop={nhanTha}
+          >
+            <div className="mb-2 flex items-center gap-2">
               <ModelPicker disabled={isStreaming} />
+              <button
+                type="button"
+                onClick={() => tepRef.current?.click()}
+                disabled={isStreaming || dangGoi}
+                aria-label="Đính kèm ảnh, tệp hoặc .zip"
+                title="Đính kèm ảnh, tệp hoặc .zip (hoặc kéo thả cả folder vào đây)"
+                className="ml-auto flex h-7 w-7 items-center justify-center rounded-lg border border-[#22d3ee]/15 text-[#94a3b8] hover:text-white hover:border-[#22d3ee]/40 disabled:opacity-40"
+              >
+                <Paperclip className="h-3.5 w-3.5" />
+              </button>
+              <input
+                ref={tepRef}
+                type="file"
+                multiple
+                accept={FILE_ACCEPT}
+                className="hidden"
+                onChange={(e) => { const fs = Array.from(e.target.files || []); e.target.value = ''; if (fs.length) void themTep(fs); }}
+              />
             </div>
+            {keoTha && (
+              <div className="mb-2 rounded-lg border border-dashed border-[#22d3ee]/40 px-3 py-2 text-center font-mono text-[11px] text-[#22d3ee]">
+                Thả folder, .zip, ảnh hoặc tài liệu vào đây
+              </div>
+            )}
+            {(taiLieu.length > 0 || dangGoi) && (
+              <div className="mb-2 flex flex-wrap gap-2">
+                {taiLieu.map((t, i) => (
+                  <span key={i} className="relative inline-flex max-w-[14rem] items-center gap-1.5 rounded-lg border border-[#22d3ee]/20 bg-[#0a0a0f] py-1.5 pl-2 pr-6 text-[11px] text-[#cbd5e1]">
+                    <FileText className="h-3.5 w-3.5 shrink-0 text-[#22d3ee]" />
+                    <span className="truncate">{t.ten}</span>
+                    <button
+                      type="button"
+                      onClick={() => setTaiLieu((c) => c.filter((_, k) => k !== i))}
+                      aria-label="Bỏ tệp"
+                      className="absolute right-1 top-1/2 flex h-4 w-4 -translate-y-1/2 items-center justify-center rounded-full text-[#94a3b8] hover:text-white"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                ))}
+                {dangGoi && (
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-[#22d3ee]/20 px-2 py-1.5 text-[11px] text-[#94a3b8]">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Đang xử lý…
+                  </span>
+                )}
+              </div>
+            )}
 
             {anh.length > 0 && (
               <div className="mb-2 flex flex-wrap gap-2">
@@ -841,7 +1000,7 @@ finished: true,
                 onPaste={nhanDan}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
-                placeholder="enter command... (paste images)"
+                placeholder="enter command... (dán ảnh · kéo folder/.zip)"
                 rows={1}
                 className={`
                   w-full pl-7 pr-12 py-2.5 bg-[#0a0a0f] rounded-xl text-xs text-[#f8fafc]
@@ -858,7 +1017,7 @@ finished: true,
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={isStreaming ? stopStreaming : () => handleSend(input)}
-                disabled={!isStreaming && !input.trim() && anh.length === 0}
+                disabled={!isStreaming && ((!input.trim() && anh.length === 0 && taiLieu.length === 0) || dangGoi)}
                 aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
                 title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
                 className={`
@@ -866,7 +1025,7 @@ finished: true,
                   transition-all overflow-hidden exec-btn-glitch
                   ${isStreaming
                     ? 'bg-gradient-to-r from-[#ef4444] to-[#dc2626] text-white shadow-[0_0_10px_rgba(239,68,68,0.35)]'
-                    : input.trim()
+                    : (input.trim() || anh.length > 0 || taiLieu.length > 0) && !dangGoi
                       ? 'bg-gradient-to-r from-[#22d3ee] to-[#8b5cf6] text-white shadow-[0_0_10px_rgba(34,211,238,0.3)]'
                       : 'bg-[#1a1a24] text-[#64748b] cursor-not-allowed'
                   }

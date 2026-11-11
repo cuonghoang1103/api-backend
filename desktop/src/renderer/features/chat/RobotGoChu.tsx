@@ -55,14 +55,16 @@ export function RobotGoChu({ title }: { title?: string }) {
   }, []);
 
   return (
-    <div className="ct-rgc" title={title} style={{ display: 'flex', alignItems: 'center', gap: 9, height: 40, minWidth: 0 }}>
-      <GauPixel size={36} state={typing ? 'thinking' : 'idle'} mode="face" />
+    <div className="ct-rgc" title={title} style={{ display: 'flex', alignItems: 'center', gap: 9, height: 40, flex: '0 0 auto' }}>
+      <GauPixel size={34} state={typing ? 'thinking' : 'idle'} mode="face" />
+      {/* Ô chữ BỀ RỘNG CỐ ĐỊNH ⇒ khối không đổi kích thước khi gõ ⇒ Gấu ĐỨNG YÊN, chữ hiện trong ô. */}
       <span
         ref={sayRef}
         style={{
           fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace',
           fontSize: 13, lineHeight: 1.3, whiteSpace: 'nowrap', overflow: 'hidden',
-          textOverflow: 'clip', color: 'var(--ct-muted, #8a93a3)', minWidth: 0,
+          textOverflow: 'clip', color: 'var(--ct-muted, #8a93a3)',
+          width: '27rem', maxWidth: '46vw', flex: '0 0 auto',
         }}
       />
     </div>

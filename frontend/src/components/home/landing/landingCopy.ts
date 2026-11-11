@@ -7,44 +7,47 @@ export interface LandingRail {
   items: { name: string; href: string; note: string }[];
 }
 
+// Danh mục cập nhật 11/11/2026 (soát trang chủ): thêm Bảng tin, Tin nhắn, CuongMini Code; mô tả Academy/Phòng thi/AI Chat
+// theo tính năng hiện có; dải 3 đổi thành "Luyện & kết nối" (MoneyFlow, Âm nhạc, Thuật toán vẫn ở menu trên cùng).
+// KHÔNG ghi con số vào mô tả — số trôi theo dữ liệu, chữ thì không (luật 4 ở đầu RiveLanding.tsx).
 const EN_RAILS: LandingRail[] = [
   {
     label: 'Learn',
     title: 'A clear order, from the first lesson',
     blurb: 'Full curricula instead of scattered tutorials — each one has an order, exercises and exams.',
     items: [
+      { name: 'Academy', href: '/academy', note: 'University subjects on the official syllabus, a video for every lesson' },
+      { name: 'Courses', href: '/courses', note: 'Long-form courses, from zero to in-depth' },
       { name: 'Code Lab', href: '/code-lab', note: 'Graded exercises across every stack' },
-      { name: 'Academy', href: '/academy', note: 'University subjects, worked end to end' },
-      { name: 'Courses', href: '/courses', note: 'Long-form courses, chapter by chapter' },
+      { name: 'Exam Room', href: '/exam', note: 'Real past papers, timed, with an AI companion' },
       { name: 'IELTS', href: '/ielts', note: 'A 0→7.5 path with real tests' },
       { name: 'My Language', href: '/language', note: 'English · Japanese · Chinese' },
-      { name: 'Exam Room', href: '/exam', note: 'Sit the real paper, timed' },
     ],
   },
   {
     label: 'Build',
     title: 'Tools that turn learning into work',
-    blurb: 'A Jira-style workspace, a desktop AI coding app, notes, diagrams and a CV that gets read — the things that turn study into output.',
+    blurb: 'A Jira-style workspace, AI that codes with you on the desktop and in your editor, a chat assistant and a CV that gets read.',
     items: [
       { name: 'CT Work', href: '/work', note: 'Jira-style projects & classrooms, AI agents, integrations' },
-      { name: 'AI Code', href: '/download', note: 'Desktop app: an AI agent codes with you, runs offline' },
+      { name: 'AI Code', href: '/download', note: 'Desktop app: an AI agent codes with you on your machine' },
+      { name: 'CuongMini Code', href: '/ai-code', note: 'The same assistant inside VS Code, Cursor and friends' },
+      { name: 'AI Chat', href: '/chat', note: 'Ask CuongMini about code, documents and images' },
       { name: 'CV Builder', href: '/cv', note: 'An IT résumé that survives the filter' },
       { name: 'Notes', href: '/notes', note: 'Write, organise and share' },
-      { name: 'AI Chat', href: '/chat', note: 'Ask about code, documents and ideas' },
-      { name: 'Algorithms', href: '/algorithms', note: 'See the code while it executes' },
     ],
   },
   {
-    label: 'Practise & play',
+    label: 'Practise & connect',
     title: 'Stop reading. Put it under pressure.',
-    blurb: 'Rehearse in realistic conditions, then take a break somewhere that has nothing to do with work.',
+    blurb: 'Rehearse in realistic conditions, keep up with what is new, and talk it through with other people.',
     items: [
       { name: 'Interview', href: '/interview', note: 'Mock interviews, graded out loud' },
+      { name: 'Feed', href: '/feed', note: 'Tech news and a daily lesson written by AI' },
       { name: 'Blog', href: '/tech-trends', note: 'Production incidents and deep technical guides' },
       { name: 'Forum', href: '/forum', note: 'Ask, argue and help' },
+      { name: 'Messenger', href: '/messages', note: 'Chat with friends, pop-up chats on every page' },
       { name: 'Games', href: '/games', note: 'Short games, real leaderboards' },
-      { name: 'Music', href: '/music', note: 'Listen together' },
-      { name: 'MoneyFlow', href: '/finance', note: 'Track spending and budgets' },
     ],
   },
 ];
@@ -55,38 +58,38 @@ const VI_RAILS: LandingRail[] = [
     title: 'Có thứ tự rõ ràng ngay từ bài đầu',
     blurb: 'Lộ trình hoàn chỉnh thay cho những hướng dẫn rời rạc — có trình tự, bài tập và đề thi đi cùng.',
     items: [
+      { name: 'Academy', href: '/academy', note: 'Môn trường theo khung FLM, video cho từng bài' },
+      { name: 'Khóa học', href: '/courses', note: 'Khoá dài, từ số 0 tới chuyên sâu' },
       { name: 'Code Lab', href: '/code-lab', note: 'Bài tập lập trình có chấm điểm' },
-      { name: 'Academy', href: '/academy', note: 'Môn đại học, học từ đầu đến cuối' },
-      { name: 'Khóa học', href: '/courses', note: 'Bài dài, chia theo từng chương' },
+      { name: 'Phòng thi', href: '/exam', note: 'Đề thật có bấm giờ, có AI đồng hành' },
       { name: 'IELTS', href: '/ielts', note: 'Lộ trình 0→7.5 có bài kiểm tra' },
       { name: 'Ngoại ngữ', href: '/language', note: 'Tiếng Anh · Nhật · Trung' },
-      { name: 'Phòng thi', href: '/exam', note: 'Làm đề thật, có bấm giờ' },
     ],
   },
   {
     label: 'Làm',
     title: 'Công cụ biến kiến thức thành việc thật',
-    blurb: 'Không gian làm việc kiểu Jira, app lập trình AI trên desktop, ghi chú, sơ đồ và CV — những thứ biến việc học thành sản phẩm.',
+    blurb: 'Không gian làm việc kiểu Jira, AI lập trình cùng bạn trên desktop lẫn trong trình soạn mã, trợ lý chat và CV — những thứ biến việc học thành sản phẩm.',
     items: [
       { name: 'CT Work', href: '/work', note: 'Quản lý dự án & lớp học kiểu Jira, AI agent, tích hợp' },
-      { name: 'AI Code', href: '/download', note: 'App desktop: AI agent lập trình cùng bạn, chạy offline' },
+      { name: 'AI Code', href: '/download', note: 'App desktop: AI agent lập trình cùng bạn trên máy bạn' },
+      { name: 'CuongMini Code', href: '/ai-code', note: 'Trợ lý đó ngay trong VS Code, Cursor…' },
+      { name: 'AI Chat', href: '/chat', note: 'Hỏi CuongMini về code, tài liệu và ảnh' },
       { name: 'CV Builder', href: '/cv', note: 'CV IT vượt qua vòng lọc' },
       { name: 'Ghi chú', href: '/notes', note: 'Viết, sắp xếp và chia sẻ' },
-      { name: 'AI Chat', href: '/chat', note: 'Hỏi về code, tài liệu và ý tưởng' },
-      { name: 'Thuật toán', href: '/algorithms', note: 'Nhìn mã chạy thay vì chỉ đọc' },
     ],
   },
   {
-    label: 'Luyện & chơi',
+    label: 'Luyện & kết nối',
     title: 'Ngừng đọc. Đem kiến thức ra thử.',
-    blurb: 'Luyện trong điều kiện gần với thực tế, rồi nghỉ ở một nơi chẳng liên quan gì tới công việc.',
+    blurb: 'Luyện trong điều kiện gần với thực tế, theo kịp cái mới, và bàn với người khác.',
     items: [
       { name: 'Phỏng vấn', href: '/interview', note: 'Phỏng vấn thử, chấm trực tiếp' },
+      { name: 'Bảng tin', href: '/feed', note: 'Tin công nghệ + bài "Học mỗi ngày" do AI soạn' },
       { name: 'Blog', href: '/tech-trends', note: 'Sự cố production và hướng dẫn kỹ thuật sâu' },
       { name: 'Diễn đàn', href: '/forum', note: 'Hỏi, tranh luận và giúp nhau' },
+      { name: 'Tin nhắn', href: '/messages', note: 'Nhắn bạn bè, khung chat nổi ở mọi trang' },
       { name: 'Trò chơi', href: '/games', note: 'Game ngắn, bảng xếp hạng thật' },
-      { name: 'Âm nhạc', href: '/music', note: 'Nghe cùng nhau' },
-      { name: 'MoneyFlow', href: '/finance', note: 'Quản lý chi tiêu, ngân sách' },
     ],
   },
 ];
@@ -143,13 +146,13 @@ const VI_DEEP_DIVES: Record<string, { title: string; blurb: string; via?: string
   },
   'Building a Jira-style Project Tool (CT Work)': {
     title: 'Dựng một công cụ quản lý dự án kiểu Jira (CT Work)',
-    blurb: 'Modular monolith: board, sprint và issue, AI agent qua MCP, tích hợp lịch · Notion · Slack.',
-    via: 'Sản phẩm · mở CT Work',
+    blurb: 'CT Work được dựng thế nào: mã thật, lỗi đã sửa, dòng thời gian — và cách dùng cho hiệu quả.',
+    via: 'Bài đọc · tải app ở cuối bài',
   },
   'AI Code on the Desktop: An Agent That Codes With You': {
     title: 'AI Code trên app desktop: agent lập trình cùng bạn',
-    blurb: 'Agent Claude qua cổng riêng, chạy trong app Electron — trả lời chảy dần, nhiều model để chọn.',
-    via: 'App desktop · tải về',
+    blurb: 'Bên trong agent lập trình của app desktop: vòng lặp gọi công cụ, an toàn, chọn model theo chi phí đo thật, lỗi đã sửa.',
+    via: 'Bài đọc · tải app ở cuối bài',
   },
 };
 
@@ -157,8 +160,8 @@ export const LANDING_COPY = {
   en: {
     header: {
       identity: 'CuongHoang',
-      welcome: 'Wellcome to CuongThai',
-      homeLabel: 'Wellcome to CuongThai — home',
+      welcome: 'Welcome to CuongThai',
+      homeLabel: 'Welcome to CuongThai — home',
       languageLabel: 'Switch to Vietnamese',
       lightLabel: 'Use light theme',
       darkLabel: 'Use dark theme',
@@ -168,7 +171,7 @@ export const LANDING_COPY = {
     hero: {
       title: 'Learn it.',
       mark: 'Build with it.',
-      body: 'Curricula, graded exercises, past exam papers and practical tools for software, languages and career work. Read for free; practise with real feedback.',
+      body: 'University subjects with a video for every lesson, graded exercises, real past papers, an AI tutor and the tools that go with them — for software, languages and career work. Read for free; practise with real feedback.',
       primary: 'Choose a path',
       secondary: 'Try an exercise',
       proofLabel: 'Real 3D playground',
@@ -219,8 +222,8 @@ export const LANDING_COPY = {
   vi: {
     header: {
       identity: 'CuongHoang',
-      welcome: 'Wellcome to CuongThai',
-      homeLabel: 'Wellcome to CuongThai — trang chủ',
+      welcome: 'Welcome to CuongThai',
+      homeLabel: 'Welcome to CuongThai — trang chủ',
       languageLabel: 'Chuyển sang tiếng Anh',
       lightLabel: 'Dùng giao diện sáng',
       darkLabel: 'Dùng giao diện tối',
@@ -230,7 +233,7 @@ export const LANDING_COPY = {
     hero: {
       title: 'Học cho hiểu.',
       mark: 'Làm cho được.',
-      body: 'Lộ trình, bài tập chấm điểm, đề thi và công cụ thực hành cho lập trình, ngoại ngữ và sự nghiệp. Đọc miễn phí; luyện bằng phản hồi thật.',
+      body: 'Môn trường có video từng bài, bài tập chấm điểm, đề thi thật, trợ lý AI CuongMini và công cụ thực hành — cho lập trình, ngoại ngữ và sự nghiệp. Đọc miễn phí; luyện bằng phản hồi thật.',
       primary: 'Chọn lộ trình',
       secondary: 'Làm thử một bài',
       proofLabel: 'Sân chơi 3D thật',

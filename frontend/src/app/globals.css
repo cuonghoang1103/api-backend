@@ -5643,6 +5643,20 @@ body:has(.landing-root) {
   overflow-wrap: anywhere;
 }
 .landing-showcase-head > p { max-width: 56ch; margin-top: var(--space-md); color: var(--color-ink-2); line-height: 1.68; }
+/* Soát 11/11/2026: màn rộng chia hai cột (tiêu đề trái · đoạn dẫn phải) — trước đó khối mở đầu chỉ chiếm 52ch bên
+   trái, nửa phải trống trơn. Cùng nhịp với đầu khối "Bài dài". */
+@media (min-width: 960px) {
+  .landing-showcase-head {
+    display: grid;
+    max-width: none;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: end;
+  }
+  .landing-showcase-head > .landing-showcase-eyebrow,
+  .landing-showcase-head > h2 { grid-column: 1; }
+  .landing-showcase-head > p:not(.landing-showcase-eyebrow) { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; }
+}
 
 /* ── Sản phẩm chủ lực, bản 13/10/2026 (FlagshipShowcase.tsx) ─────────────
    Mỗi sản phẩm một chương rộng cả trang: khung media (video/ảnh thật) + phần

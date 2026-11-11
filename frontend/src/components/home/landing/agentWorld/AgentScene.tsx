@@ -218,6 +218,9 @@ export default function AgentScene({ vi }: { vi: boolean }) {
   // Lựa chọn của NGƯỜI DÙNG — sự kiện gần nhất thắng (rê chuột, Tab bàn phím, hay bấm để ghim).
   const [sel, setSel] = useState<{ id: AgentKind; pinned: boolean } | null>(null);
   const [autoId, setAutoId] = useState<AgentKind | null>(null);
+  // Vẽ lại MỘT lần sau khi đặt chỗ nhân vật (lives) — `codeShift()` đọc vị trí Buddy lúc render; lần render
+  // đầu chưa có lives ⇒ lệch 0 ⇒ trên màn hẹp khung code tràn mép phải (soát trang chủ 11/11/2026).
+  const [, setLaidOut] = useState(0);
   const openId = sel?.id ?? autoId;
   const pinnedId = sel?.pinned ? sel.id : null;
   const openRef = useRef<AgentKind | null>(null);
@@ -325,6 +328,7 @@ export default function AgentScene({ vi }: { vi: boolean }) {
       prev?.anim?.cancel();
     }
     for (const id of Array.from(map.keys())) if (!visibleAgents.some((a) => a.id === id)) map.delete(id);
+    setLaidOut((n) => n + 1);
 
     // Code Buddy không vào vòng điều phối tự động: bong bóng code đã là "lời nói" thường trực của nó.
     const order = visibleAgents.filter((a) => !a.seated).map((a) => a.id);

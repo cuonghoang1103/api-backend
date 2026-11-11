@@ -64,7 +64,9 @@
   --aw-hub-glow: oklch(70% 0.2 300 / 0.35);
 
   position: relative;
-  margin-top: clamp(-3.5rem, -5vw, -1.5rem);
+  /* Từng kéo âm (-3.5rem) để chồng lên đáy hero — đè 56px lên hero, soát 11/11/2026 bỏ. Nay làng là một chương
+     riêng sau khối sản phẩm chủ lực, có khoảng thở bình thường. */
+  margin-top: clamp(1.5rem, 4vw, 3rem);
 }
 
 html.theme-dark .aw-section {

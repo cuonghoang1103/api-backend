@@ -3,12 +3,14 @@
  *
  * ⚠️ MỌI con số và tính năng ở đây phải ĐO/ĐỐI CHIẾU được trong mã — một tính
  * năng ghi ra mà bấm vào không có còn tệ hơn không ghi. Cách đo lúc viết:
- *   • 68 màn hình CT Work  — `grep -c "{ mau:" desktop/src/renderer/features/web/tuyenCtWork.ts`
- *   • 123 lệnh cho agent    — `COMMANDS.length` trong src/services/work/toolRegistry/index.ts
+ *   (Đo lại 11/11/2026 khi soát trang chủ: 68→74 màn hình, 123→230 lệnh, 46→71 công cụ, 8→4 model.)
+ *   • 74 màn hình CT Work  — `grep -c "{ mau:" desktop/src/renderer/features/web/tuyenCtWork.ts`
+ *   • 230 lệnh cho agent    — số lệnh trong `COMMANDS` (src/services/work/toolRegistry/index.ts) KHÔNG
+ *                             `personOnly` = lệnh một AI agent thành viên gọi được (tổng 290, 60 chỉ token người)
  *   • 243 bảng dữ liệu      — `grep -cE "^model Work" prisma/schema.prisma`
- *   • 8 model AI Code       — `MODEL_AGENT` trong src/services/agent/models.ts khi cổng riêng đang bật (prod)
- *   • 46 công cụ AI Code    — số `name: '…'` khác nhau trong src/services/agent/tools.ts (sổ công cụ
- *                             gửi cho model: 41 chạy trong app + 5 chạy ở máy chủ). ĐỪNG đếm `case` trong
+ *   • 4 model AI Code       — `bangChoApp().length` trong src/services/agent/bangModel.ts (tên CuongMini, app
+ *                             KHÔNG hiện tên model thật)
+ *   • 71 công cụ AI Code    — `AGENT_TOOLS.length` trong src/services/agent/tools.ts. ĐỪNG đếm `case` trong
  *                             desktop/src/main/agent/tools.ts — tệp đó chỉ chứa một phần (ra 37, thiếu).
  * Đổi số thì đo lại bằng đúng lệnh đó, đừng ước.
  */
@@ -59,8 +61,8 @@ export function getFlagships(vi: boolean): Flagship[] {
         ? ['Nhóm đồ án SWP · SWR · SWT · SEP', 'Giảng viên & mentor', 'Team dự án ở công ty', 'Freelancer làm với khách']
         : ['Student capstone teams', 'Lecturers & mentors', 'Company project teams', 'Freelancers with clients'],
       stats: [
-        { value: '68', label: vi ? 'màn hình' : 'screens' },
-        { value: '123', label: vi ? 'lệnh cho AI agent (MCP)' : 'agent commands (MCP)' },
+        { value: '74', label: vi ? 'màn hình' : 'screens' },
+        { value: '230', label: vi ? 'lệnh cho AI agent (MCP)' : 'agent commands (MCP)' },
         { value: '4', label: vi ? 'nơi dùng: web · app · app riêng · iPhone/iPad' : 'places: web · app · standalone · iPhone/iPad' },
       ],
       media: {
@@ -163,8 +165,8 @@ export function getFlagships(vi: boolean): Flagship[] {
         ? ['Sinh viên làm lab & đồ án', 'Lập trình viên làm dự án thật', 'Người mới cần giải thích từng bước', 'Ai muốn agent mà không cài CLI']
         : ['Students doing labs & capstones', 'Developers on real projects', 'Beginners who want each step explained', 'Anyone who wants an agent without a CLI'],
       stats: [
-        { value: '46', label: vi ? 'công cụ cho agent' : 'agent tools' },
-        { value: '8', label: vi ? 'model để chọn theo việc' : 'models to pick per task' },
+        { value: '71', label: vi ? 'công cụ cho agent' : 'agent tools' },
+        { value: '4', label: vi ? 'model CuongMini để chọn' : 'CuongMini models to pick' },
         { value: '3', label: vi ? 'hệ điều hành' : 'operating systems' },
       ],
       media: {

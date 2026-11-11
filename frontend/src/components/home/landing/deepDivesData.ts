@@ -51,7 +51,7 @@ export const DEEP_DIVES: DeepDive[] = [
     logo: 'nodedotjs',
     title: 'Node.js From Zero to Production',
     blurb: '19 chapters: runtime, HTTP, PostgreSQL, auth, queues, observability.',
-    href: '/courses',
+    href: '/courses/nodejs', // trỏ thẳng khoá Node.js (trước: danh sách /courses — bấm xong phải tự tìm)
     via: 'Full course · 112 lessons',
   },
   {

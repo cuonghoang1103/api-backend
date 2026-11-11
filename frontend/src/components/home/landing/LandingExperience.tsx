@@ -10,6 +10,16 @@ import PlaygroundPreview from './PlaygroundPreview';
 import { getLandingCopy, getLandingRails } from './landingCopy';
 import AgentWorldLazy from './agentWorld/AgentWorldLazy';
 
+/**
+ * Thứ tự khối trang chủ (soát 11/11/2026 — người dùng duyệt):
+ *   1. Hero — web này là gì
+ *   2. Danh mục 01 Học · 02 Làm · 03 Luyện & kết nối — bản đồ cả web, lên NGAY sau hero
+ *   3. Sản phẩm chủ lực (CT Work + AI Code)
+ *   4. Làng pixel — quãng nghỉ vui, hỏi CuongMini
+ *   5. Bài dài
+ *   6. Footer
+ * Trước đó: hero → làng (đè hero 56px) → bài dài → sản phẩm → danh mục (sau ~7.000px) → footer.
+ */
 export default function LandingExperience() {
   const { locale } = useTranslation();
   const copy = getLandingCopy(locale);
@@ -48,16 +58,6 @@ export default function LandingExperience() {
 
       </header>
 
-      {/* ── Làng agent (10/11/2026) — thay khối 6 con số "đếm từ CSDL". Cảnh đêm pixel sống: CuongMini + các agent
-          đi lại, bong bóng thoại dẫn vào tính năng thật. Tải lười khi cuộn gần tới (xem `agentWorld/`). */}
-      <AgentWorldLazy vi={vi} />
-
-      <DeepDives />
-
-      {/* ── Hai sản phẩm chủ lực (CT Work + AI Code) — viết lại 13/10/2026,
-          xem `FlagshipShowcase.tsx`. Đặt NGAY SAU Deep Dives, trước các dải "duyệt". */}
-      <FlagshipShowcase vi={vi} />
-
       <section id="discover" className="landing-directory-shell">
         {rails.map((rail, index) => (
           <article key={rail.label} className="landing-rail" data-reverse={index % 2 === 1 ? 'true' : undefined}>
@@ -89,6 +89,16 @@ export default function LandingExperience() {
           </article>
         ))}
       </section>
+
+      {/* ── Hai sản phẩm chủ lực (CT Work + AI Code) — viết lại 13/10/2026, xem `FlagshipShowcase.tsx`. */}
+      <FlagshipShowcase vi={vi} />
+
+      {/* ── Làng agent (10/11/2026) — cảnh đêm pixel sống: CuongMini + các agent đi lại, bong bóng thoại dẫn vào
+          tính năng thật. Tải lười khi cuộn gần tới (xem `agentWorld/`). Đứng SAU khối sản phẩm: là quãng nghỉ vui. */}
+      <AgentWorldLazy vi={vi} />
+
+      {/* ── Bài dài — đọc sâu, để cuối trước footer. */}
+      <DeepDives />
 
       <footer className="landing-statement-footer">
         <p className="landing-footer-statement">{copy.footer.statement}</p>

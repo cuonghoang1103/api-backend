@@ -92,6 +92,101 @@ export function verifyJwt(token) {
   if (!(p.exp * 1000 &gt; now())) throw new HttpError(401, 'TOKEN_EXPIRED');
   return p;
 }</code></pre>
+<p>The full file — the parts left out above, API keys, and the demo tokens that only survive outside production:</p>
+<pre><code class="language-javascript">// auth.js — Chương 6: xác thực THẬT. Ba loại "chìa" trong Authorization: Bearer …
+//   eyJ…      ⇒ JWT do POST /v2/auth/login cấp (người dùng, 15 phút)
+//   lf_live_… ⇒ API key cho script (chỉ lưu bản băm)
+//   tok_…     ⇒ token giả của Chương 1–5, CHỈ còn khi chạy dev (LABFLOW_DEMO_TOKENS khác "0" và không phải production)
+import { createHmac, createHash, randomBytes, timingSafeEqual } from 'node:crypto';
+import { tokens, users } from './db.js';
+import { HttpError } from './http.js';
+import { now } from './deprecation.js';
+import { VULN } from './vuln.js';
+
+const SECRET = process.env.LABFLOW_JWT_SECRET
+  ?? (process.env.NODE_ENV === 'production' ? null : 'dev-only-secret-change-me');
+if (!SECRET) throw new Error('LABFLOW_JWT_SECRET is required in production');
+export const ACCESS_TTL_SEC = 15 * 60;
+const b64u = (v) =&gt; Buffer.from(typeof v === 'string' ? v : JSON.stringify(v)).toString('base64url');
+const sign = (data) =&gt; createHmac('sha256', SECRET).update(data).digest('base64url');
+
+export function signJwt(user) {
+  const iat = Math.floor(now() / 1000);
+  const head = b64u({ alg: 'HS256', typ: 'JWT' });
+  const body = b64u({ iss: 'labflow', sub: user.id, role: user.role, iat, exp: iat + ACCESS_TTL_SEC });
+  return &#96;\${head}.\${body}.\${sign(&#96;\${head}.\${body}&#96;)}&#96;;
+}
+
+export function verifyJwt(token) {
+  const [head, body, sig] = token.split('.');
+  let h, p;
+  try { h = JSON.parse(Buffer.from(head, 'base64url')); p = JSON.parse(Buffer.from(body, 'base64url')); }
+  catch { throw new HttpError(401, 'INVALID_TOKEN'); }
+  if (VULN &amp;&amp; h.alg === 'none') return p;                         // lỗ hổng kinh điển: tin vào thuật toán do TOKEN tự khai
+  if (h.alg !== 'HS256' || !sig) throw new HttpError(401, 'INVALID_TOKEN');   // chỉ nhận đúng thuật toán của server
+  const expected = Buffer.from(sign(&#96;\${head}.\${body}&#96;));
+  const got = Buffer.from(sig);
+  if (got.length !== expected.length || !timingSafeEqual(got, expected)) throw new HttpError(401, 'INVALID_TOKEN');
+  if (p.iss !== 'labflow') throw new HttpError(401, 'INVALID_TOKEN');
+  if (!VULN &amp;&amp; !(p.exp * 1000 &gt; now())) throw new HttpError(401, 'TOKEN_EXPIRED');
+  return p;
+}
+
+// API key: hiện MỘT lần lúc tạo, server chỉ giữ sha256 + tiền tố để nhận diện
+const apiKeys = new Map();                                // sha256 ⇒ { userId, prefix, createdAt } — trong RAM (Chương 12: bảng api_keys)
+const sha256 = (s) =&gt; createHash('sha256').update(s).digest('hex');
+export function createApiKey(userId) {
+  const key = &#96;lf_live_\${randomBytes(24).toString('base64url')}&#96;;
+  const meta = { userId, prefix: key.slice(0, 12), createdAt: new Date(now()).toISOString() };
+  apiKeys.set(sha256(key), meta);
+  return { key, ...meta };
+}
+export const listApiKeys = (userId) =&gt; [...apiKeys.values()].filter((k) =&gt; k.userId === userId);
+
+const demoTokens = process.env.NODE_ENV !== 'production' &amp;&amp; process.env.LABFLOW_DEMO_TOKENS !== '0';
+
+export function requireAuth(req, res, next) {
+  const [scheme, cred] = (req.get('Authorization') ?? '').split(' ');
+  let userId;
+  if (scheme?.toLowerCase() === 'bearer' &amp;&amp; cred) {
+    if (cred.startsWith('eyJ')) userId = verifyJwt(cred).sub;
+    else if (cred.startsWith('lf_')) userId = apiKeys.get(sha256(cred))?.userId;
+    else if (demoTokens) userId = tokens[cred];
+  }
+  if (!userId) {
+    res.set('WWW-Authenticate', 'Bearer realm="labflow"');
+    throw new HttpError(401, 'UNAUTHENTICATED');
+  }
+  req.user = users.find((u) =&gt; u.id === userId);
+  if (!req.user) {                                                // token còn hạn nhưng người dùng không còn
+    res.set('WWW-Authenticate', 'Bearer realm="labflow"');
+    throw new HttpError(401, 'UNAUTHENTICATED');
+  }
+  next();
+}
+
+export function requireRole(role) {
+  return (req, res, next) =&gt; {
+    if (req.user.role !== role) throw new HttpError(403, 'FORBIDDEN', { role });
+    next();
+  };
+}</code></pre>
+<p>The lab switch it imports, and the users that now carry a real password hash:</p>
+<pre><code class="language-javascript">// vuln.js — CHỈ ĐỂ HỌC (Lab 6): LABFLOW_VULN=1 bật lại những lỗ hổng mà Chương 6 vừa vá, để bộ kiểm audit.mjs thấy ĐỎ.
+// Production không bao giờ đặt biến này.
+export const VULN = process.env.LABFLOW_VULN === '1';</code></pre>
+<pre><code class="language-javascript">// db.js — bài 6.1: mật khẩu THẬT (băm lúc khởi động) thay cho chuỗi 'demo-hash-…'
+import { hashPassword } from './passwords.js';
+// …
+export const users = [
+  // Bản ghi NỘI BỘ có nhiều thứ không bao giờ được ra ngoài API (giá trị giả, chỉ để học)
+  { id: 'usr_1', name: 'Nguyễn Văn An', role: 'STUDENT', email: 'an@student.labflow.example',
+    passwordHash: hashPassword('an-lab-2026'), failedLogins: 0, staffNote: null },
+  { id: 'usr_2', name: 'Trần Thị Bình', role: 'STUDENT', email: 'binh@student.labflow.example',
+    passwordHash: hashPassword('binh-lab-2026'), failedLogins: 3, staffNote: 'Hay đặt rồi không đến' },
+  { id: 'usr_3', name: 'Cô Lan', role: 'LAB_MANAGER', email: 'lan@labflow.example',
+    passwordHash: hashPassword('lan-lab-2026'), failedLogins: 0, staffNote: null },
+];</code></pre>
 <pre><code class="language-javascript">// routes/auth.js — bài 6.1: đăng nhập bằng email + mật khẩu ⇒ JWT 15 phút
 import { Router } from 'express';
 import { z } from 'zod';
@@ -120,6 +215,18 @@ authRouter.route('/login')
       .json({ accessToken: signJwt(user), tokenType: 'Bearer', expiresIn: ACCESS_TTL_SEC });
   })
   .all(onlyAllow('POST'));</code></pre>
+<p>Mount it next to the other routers, and give the three new codes their words:</p>
+<pre><code class="language-javascript">// app.js — gắn router đăng nhập (bài 6.1)
+import { authRouter } from './routes/auth.js';
+api.use('/auth', authRouter);                                  // /v1/auth/login, /v2/auth/login</code></pre>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    INVALID_CREDENTIALS: ['Sai email hoặc mật khẩu', () =&gt; 'Email hoặc mật khẩu không đúng'],
+    INVALID_TOKEN: ['Token không hợp lệ', () =&gt; 'Token bị sửa, sai chữ ký hoặc sai thuật toán; hãy đăng nhập lại'],
+    TOKEN_EXPIRED: ['Token đã hết hạn', () =&gt; 'Phiên đăng nhập đã hết; hãy đăng nhập lại'],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    INVALID_CREDENTIALS: ['Invalid email or password', () =&gt; 'The email or password is incorrect'],
+    INVALID_TOKEN: ['Invalid token', () =&gt; 'The token was modified, has a wrong signature or algorithm; log in again'],
+    TOKEN_EXPIRED: ['Token expired', () =&gt; 'Your session has expired; log in again'],</code></pre>
 <p>(<code>VULN</code> is the Lab 6 switch that re-opens holes on purpose; ignore it until then.)</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"an@student.labflow.example","password":"an-lab-2026"}' | tee an.json | jq -c '{tokenType, expiresIn, accessToken: (.accessToken[0:24] + "…")}'</code></pre>
@@ -140,6 +247,14 @@ authRouter.route('/login')
 
 <h3>Attack our own tokens</h3>
 <p><code>forge.mjs</code> plays the attacker: change the payload to Lan and keep the old signature, or switch the header to <code>"alg": "none"</code> and drop the signature — a classic flaw in libraries that let the token choose its algorithm (RFC 8725 lists it).</p>
+<pre><code class="language-javascript">// forge.mjs — kẻ tấn công thử sửa token: node forge.mjs role|none &lt;tệp chứa JWT thật&gt;
+import { readFileSync } from 'node:fs';
+const [mode, file] = process.argv.slice(2);
+const [head, body, sig] = readFileSync(file, 'utf8').trim().split('.');
+const p = JSON.parse(Buffer.from(body, 'base64url'));
+const b64u = (o) =&gt; Buffer.from(JSON.stringify(o)).toString('base64url');
+if (mode === 'role') console.log(&#96;\${head}.\${b64u({ ...p, role: 'LAB_MANAGER', sub: 'usr_3' })}.\${sig}&#96;);   // giữ chữ ký cũ
+if (mode === 'none') console.log(&#96;\${b64u({ alg: 'none', typ: 'JWT' })}.\${b64u({ ...p, sub: 'usr_3', role: 'LAB_MANAGER' })}.&#96;);</code></pre>
 <pre><code class="language-bash">node forge.mjs role an.jwt | cut -d. -f2 | node -e "process.stdin.on('data', (d) =&gt; console.log(Buffer.from(String(d).trim(), 'base64url').toString()))"</code></pre>
 <div class="out">{"iss":"labflow","sub":"usr_3","role":"LAB_MANAGER","iat":1793480884,"exp":1793481784}</div>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/admin/deprecations \\
@@ -168,6 +283,14 @@ Retry-After: 180</div>
 <p>Short-lived tokens limit the damage of a stolen token; a real app gets a new one with a refresh token or by logging in again. Scripts use API keys instead, shown <strong>once</strong> and stored only as a SHA-256 hash:</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
+<p>The two routes, under <code>/me</code>:</p>
+<pre><code class="language-javascript">// routes/me.js — bài 6.1: API key cho script của chính mình
+import { requireAuth, createApiKey, listApiKeys } from '../auth.js';
+// …
+meRouter.route('/api-keys')
+  .post(requireAuth, (req, res) =&gt; res.status(201).set('Cache-Control', 'no-store').json(createApiKey(req.user.id)))
+  .get(requireAuth, (req, res) =&gt; res.json({ data: listApiKeys(req.user.id).map(({ prefix, createdAt }) =&gt; ({ prefix, createdAt })) }))
+  .all(onlyAllow('GET', 'HEAD', 'POST'));</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/me/api-keys \\
   -H "Authorization: Bearer $(cat lan.jwt)" | tee lan.key.json | jq -c '{prefix, createdAt, key: (.key[0:12] + "…")}'</code></pre>
 <div class="out">{"prefix":"lf_live_fbJE","createdAt":"2026-10-31T21:08:06.093Z","key":"lf_live_fbJE…"}</div>
@@ -332,6 +455,101 @@ export function verifyJwt(token) {
   if (!(p.exp * 1000 &gt; now())) throw new HttpError(401, 'TOKEN_EXPIRED');
   return p;
 }</code></pre>
+<p>Bản đầy đủ của tệp — phần được lược ở trên, API key, và các token demo chỉ còn khi không chạy production:</p>
+<pre><code class="language-javascript">// auth.js — Chương 6: xác thực THẬT. Ba loại "chìa" trong Authorization: Bearer …
+//   eyJ…      ⇒ JWT do POST /v2/auth/login cấp (người dùng, 15 phút)
+//   lf_live_… ⇒ API key cho script (chỉ lưu bản băm)
+//   tok_…     ⇒ token giả của Chương 1–5, CHỈ còn khi chạy dev (LABFLOW_DEMO_TOKENS khác "0" và không phải production)
+import { createHmac, createHash, randomBytes, timingSafeEqual } from 'node:crypto';
+import { tokens, users } from './db.js';
+import { HttpError } from './http.js';
+import { now } from './deprecation.js';
+import { VULN } from './vuln.js';
+
+const SECRET = process.env.LABFLOW_JWT_SECRET
+  ?? (process.env.NODE_ENV === 'production' ? null : 'dev-only-secret-change-me');
+if (!SECRET) throw new Error('LABFLOW_JWT_SECRET is required in production');
+export const ACCESS_TTL_SEC = 15 * 60;
+const b64u = (v) =&gt; Buffer.from(typeof v === 'string' ? v : JSON.stringify(v)).toString('base64url');
+const sign = (data) =&gt; createHmac('sha256', SECRET).update(data).digest('base64url');
+
+export function signJwt(user) {
+  const iat = Math.floor(now() / 1000);
+  const head = b64u({ alg: 'HS256', typ: 'JWT' });
+  const body = b64u({ iss: 'labflow', sub: user.id, role: user.role, iat, exp: iat + ACCESS_TTL_SEC });
+  return &#96;\${head}.\${body}.\${sign(&#96;\${head}.\${body}&#96;)}&#96;;
+}
+
+export function verifyJwt(token) {
+  const [head, body, sig] = token.split('.');
+  let h, p;
+  try { h = JSON.parse(Buffer.from(head, 'base64url')); p = JSON.parse(Buffer.from(body, 'base64url')); }
+  catch { throw new HttpError(401, 'INVALID_TOKEN'); }
+  if (VULN &amp;&amp; h.alg === 'none') return p;                         // lỗ hổng kinh điển: tin vào thuật toán do TOKEN tự khai
+  if (h.alg !== 'HS256' || !sig) throw new HttpError(401, 'INVALID_TOKEN');   // chỉ nhận đúng thuật toán của server
+  const expected = Buffer.from(sign(&#96;\${head}.\${body}&#96;));
+  const got = Buffer.from(sig);
+  if (got.length !== expected.length || !timingSafeEqual(got, expected)) throw new HttpError(401, 'INVALID_TOKEN');
+  if (p.iss !== 'labflow') throw new HttpError(401, 'INVALID_TOKEN');
+  if (!VULN &amp;&amp; !(p.exp * 1000 &gt; now())) throw new HttpError(401, 'TOKEN_EXPIRED');
+  return p;
+}
+
+// API key: hiện MỘT lần lúc tạo, server chỉ giữ sha256 + tiền tố để nhận diện
+const apiKeys = new Map();                                // sha256 ⇒ { userId, prefix, createdAt } — trong RAM (Chương 12: bảng api_keys)
+const sha256 = (s) =&gt; createHash('sha256').update(s).digest('hex');
+export function createApiKey(userId) {
+  const key = &#96;lf_live_\${randomBytes(24).toString('base64url')}&#96;;
+  const meta = { userId, prefix: key.slice(0, 12), createdAt: new Date(now()).toISOString() };
+  apiKeys.set(sha256(key), meta);
+  return { key, ...meta };
+}
+export const listApiKeys = (userId) =&gt; [...apiKeys.values()].filter((k) =&gt; k.userId === userId);
+
+const demoTokens = process.env.NODE_ENV !== 'production' &amp;&amp; process.env.LABFLOW_DEMO_TOKENS !== '0';
+
+export function requireAuth(req, res, next) {
+  const [scheme, cred] = (req.get('Authorization') ?? '').split(' ');
+  let userId;
+  if (scheme?.toLowerCase() === 'bearer' &amp;&amp; cred) {
+    if (cred.startsWith('eyJ')) userId = verifyJwt(cred).sub;
+    else if (cred.startsWith('lf_')) userId = apiKeys.get(sha256(cred))?.userId;
+    else if (demoTokens) userId = tokens[cred];
+  }
+  if (!userId) {
+    res.set('WWW-Authenticate', 'Bearer realm="labflow"');
+    throw new HttpError(401, 'UNAUTHENTICATED');
+  }
+  req.user = users.find((u) =&gt; u.id === userId);
+  if (!req.user) {                                                // token còn hạn nhưng người dùng không còn
+    res.set('WWW-Authenticate', 'Bearer realm="labflow"');
+    throw new HttpError(401, 'UNAUTHENTICATED');
+  }
+  next();
+}
+
+export function requireRole(role) {
+  return (req, res, next) =&gt; {
+    if (req.user.role !== role) throw new HttpError(403, 'FORBIDDEN', { role });
+    next();
+  };
+}</code></pre>
+<p>Công tắc của lab mà nó import, và người dùng giờ mang bản băm mật khẩu thật:</p>
+<pre><code class="language-javascript">// vuln.js — CHỈ ĐỂ HỌC (Lab 6): LABFLOW_VULN=1 bật lại những lỗ hổng mà Chương 6 vừa vá, để bộ kiểm audit.mjs thấy ĐỎ.
+// Production không bao giờ đặt biến này.
+export const VULN = process.env.LABFLOW_VULN === '1';</code></pre>
+<pre><code class="language-javascript">// db.js — bài 6.1: mật khẩu THẬT (băm lúc khởi động) thay cho chuỗi 'demo-hash-…'
+import { hashPassword } from './passwords.js';
+// …
+export const users = [
+  // Bản ghi NỘI BỘ có nhiều thứ không bao giờ được ra ngoài API (giá trị giả, chỉ để học)
+  { id: 'usr_1', name: 'Nguyễn Văn An', role: 'STUDENT', email: 'an@student.labflow.example',
+    passwordHash: hashPassword('an-lab-2026'), failedLogins: 0, staffNote: null },
+  { id: 'usr_2', name: 'Trần Thị Bình', role: 'STUDENT', email: 'binh@student.labflow.example',
+    passwordHash: hashPassword('binh-lab-2026'), failedLogins: 3, staffNote: 'Hay đặt rồi không đến' },
+  { id: 'usr_3', name: 'Cô Lan', role: 'LAB_MANAGER', email: 'lan@labflow.example',
+    passwordHash: hashPassword('lan-lab-2026'), failedLogins: 0, staffNote: null },
+];</code></pre>
 <pre><code class="language-javascript">// routes/auth.js — bài 6.1: đăng nhập bằng email + mật khẩu ⇒ JWT 15 phút
 import { Router } from 'express';
 import { z } from 'zod';
@@ -360,6 +578,18 @@ authRouter.route('/login')
       .json({ accessToken: signJwt(user), tokenType: 'Bearer', expiresIn: ACCESS_TTL_SEC });
   })
   .all(onlyAllow('POST'));</code></pre>
+<p>Gắn nó cạnh các router khác, và cho ba mã mới câu chữ của chúng:</p>
+<pre><code class="language-javascript">// app.js — gắn router đăng nhập (bài 6.1)
+import { authRouter } from './routes/auth.js';
+api.use('/auth', authRouter);                                  // /v1/auth/login, /v2/auth/login</code></pre>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    INVALID_CREDENTIALS: ['Sai email hoặc mật khẩu', () =&gt; 'Email hoặc mật khẩu không đúng'],
+    INVALID_TOKEN: ['Token không hợp lệ', () =&gt; 'Token bị sửa, sai chữ ký hoặc sai thuật toán; hãy đăng nhập lại'],
+    TOKEN_EXPIRED: ['Token đã hết hạn', () =&gt; 'Phiên đăng nhập đã hết; hãy đăng nhập lại'],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    INVALID_CREDENTIALS: ['Invalid email or password', () =&gt; 'The email or password is incorrect'],
+    INVALID_TOKEN: ['Invalid token', () =&gt; 'The token was modified, has a wrong signature or algorithm; log in again'],
+    TOKEN_EXPIRED: ['Token expired', () =&gt; 'Your session has expired; log in again'],</code></pre>
 <p>(<code>VULN</code> là công tắc của Lab 6 để cố ý mở lại lỗ hổng; tạm bỏ qua tới lúc đó.)</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"an@student.labflow.example","password":"an-lab-2026"}' | tee an.json | jq -c '{tokenType, expiresIn, accessToken: (.accessToken[0:24] + "…")}'</code></pre>
@@ -380,6 +610,14 @@ authRouter.route('/login')
 
 <h3>Tấn công chính token của mình</h3>
 <p><code>forge.mjs</code> đóng vai kẻ tấn công: sửa payload thành cô Lan mà giữ chữ ký cũ, hoặc đổi header thành <code>"alg": "none"</code> và bỏ chữ ký — lỗi kinh điển của những thư viện để token tự chọn thuật toán (RFC 8725 có liệt kê).</p>
+<pre><code class="language-javascript">// forge.mjs — kẻ tấn công thử sửa token: node forge.mjs role|none &lt;tệp chứa JWT thật&gt;
+import { readFileSync } from 'node:fs';
+const [mode, file] = process.argv.slice(2);
+const [head, body, sig] = readFileSync(file, 'utf8').trim().split('.');
+const p = JSON.parse(Buffer.from(body, 'base64url'));
+const b64u = (o) =&gt; Buffer.from(JSON.stringify(o)).toString('base64url');
+if (mode === 'role') console.log(&#96;\${head}.\${b64u({ ...p, role: 'LAB_MANAGER', sub: 'usr_3' })}.\${sig}&#96;);   // giữ chữ ký cũ
+if (mode === 'none') console.log(&#96;\${b64u({ alg: 'none', typ: 'JWT' })}.\${b64u({ ...p, sub: 'usr_3', role: 'LAB_MANAGER' })}.&#96;);</code></pre>
 <pre><code class="language-bash">node forge.mjs role an.jwt | cut -d. -f2 | node -e "process.stdin.on('data', (d) =&gt; console.log(Buffer.from(String(d).trim(), 'base64url').toString()))"</code></pre>
 <div class="out">{"iss":"labflow","sub":"usr_3","role":"LAB_MANAGER","iat":1793480884,"exp":1793481784}</div>
 <pre><code class="language-bash">curl -s http://localhost:4000/v2/admin/deprecations \\
@@ -408,6 +646,14 @@ Retry-After: 180</div>
 <p>Token sống ngắn giới hạn thiệt hại khi bị đánh cắp; app thật lấy token mới bằng refresh token hoặc đăng nhập lại. Script thì dùng API key, chỉ hiện <strong>một lần</strong> và chỉ lưu dạng băm SHA-256:</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
+<p>Hai route, dưới <code>/me</code>:</p>
+<pre><code class="language-javascript">// routes/me.js — bài 6.1: API key cho script của chính mình
+import { requireAuth, createApiKey, listApiKeys } from '../auth.js';
+// …
+meRouter.route('/api-keys')
+  .post(requireAuth, (req, res) =&gt; res.status(201).set('Cache-Control', 'no-store').json(createApiKey(req.user.id)))
+  .get(requireAuth, (req, res) =&gt; res.json({ data: listApiKeys(req.user.id).map(({ prefix, createdAt }) =&gt; ({ prefix, createdAt })) }))
+  .all(onlyAllow('GET', 'HEAD', 'POST'));</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/me/api-keys \\
   -H "Authorization: Bearer $(cat lan.jwt)" | tee lan.key.json | jq -c '{prefix, createdAt, key: (.key[0:12] + "…")}'</code></pre>
 <div class="out">{"prefix":"lf_live_fbJE","createdAt":"2026-10-31T21:08:06.093Z","key":"lf_live_fbJE…"}</div>
@@ -598,8 +844,11 @@ bookingsRouter.route('/:id/receipt')
     const b = bookings.find((x) =&gt; x.id === req.params.id);
     if (!b) throw notFound;
     authorize(req, 'booking:read', b, notFound);                   // không có quyền ⇒ cũng 404
-    // … dựng biên nhận …
-  })</code></pre>
+    const lab = labs.find((l) =&gt; l.id === b.labId), student = users.find((u) =&gt; u.id === b.userId);   // users, labs từ db.js
+    res.json({ bookingId: b.id, lab: { code: lab.code, name: lab.name }, student: { name: student.name, email: student.email },
+      period: { start: b.startAt, end: b.endAt }, status: b.status });
+  })
+  .all(onlyAllow('GET', 'HEAD'));</code></pre>
 <p>Two decisions. The rules live in <strong>one table</strong> (<code>POLICIES</code>), not in twenty <code>if</code>s spread over the handlers — when the rule changes, it changes once. And a forbidden record answers <strong>404</strong>, exactly like a missing one, so Bin cannot even learn that <code>bk_1</code> exists. LabFlow’s older <code>GET /bookings/:id</code> keeps its 403 from Chapter 1: changing a status code is a breaking change (lesson 4.1). New endpoints start with 404.</p>
 
 <h3>Prove it for everyone: the authorisation matrix</h3>
@@ -777,8 +1026,11 @@ bookingsRouter.route('/:id/receipt')
     const b = bookings.find((x) =&gt; x.id === req.params.id);
     if (!b) throw notFound;
     authorize(req, 'booking:read', b, notFound);                   // không có quyền ⇒ cũng 404
-    // … dựng biên nhận …
-  })</code></pre>
+    const lab = labs.find((l) =&gt; l.id === b.labId), student = users.find((u) =&gt; u.id === b.userId);   // users, labs từ db.js
+    res.json({ bookingId: b.id, lab: { code: lab.code, name: lab.name }, student: { name: student.name, email: student.email },
+      period: { start: b.startAt, end: b.endAt }, status: b.status });
+  })
+  .all(onlyAllow('GET', 'HEAD'));</code></pre>
 <p>Hai quyết định. Luật nằm ở <strong>một bảng</strong> (<code>POLICIES</code>), không rải thành hai mươi câu <code>if</code> khắp các handler — luật đổi thì đổi một chỗ. Và bản ghi bị cấm trả <strong>404</strong>, y như bản ghi không tồn tại, để Bin thậm chí không biết được là có <code>bk_1</code>. <code>GET /bookings/:id</code> cũ của LabFlow vẫn giữ 403 của Chương 1: đổi mã trạng thái là thay đổi phá vỡ (bài 4.1). Endpoint mới thì bắt đầu bằng 404.</p>
 
 <h3>Chứng minh cho mọi người: ma trận phân quyền</h3>
@@ -927,6 +1179,17 @@ export const MAX_ACTIVE = 3;
       const active = bookings.filter((b) =&gt; b.userId === req.user.id &amp;&amp; b.status !== 'CANCELLED' &amp;&amp; Date.parse(b.endAt) &gt; now()).length;
       if (active &gt;= MAX_ACTIVE) throw new HttpError(422, 'TOO_MANY_ACTIVE_BOOKINGS', { max: MAX_ACTIVE });
     }</code></pre>
+<p>Where it goes, and its words:</p>
+<pre><code class="language-javascript">// routes/bookings.js — chỗ đặt luật: trong POST /, ngay sau phép kiểm UNKNOWN_LAB
+import { now } from '../deprecation.js';                        // đồng hồ của bài 4.3 (LABFLOW_NOW để thử)
+// …
+    const lab = labs.find((l) =&gt; l.id === labId &amp;&amp; !l.retiredAt);
+    if (!lab) throw new HttpError(422, 'UNKNOWN_LAB', { id: labId });
+    if (req.user.role === 'STUDENT') { /* … luật MAX_ACTIVE ở trên … */ }</code></pre>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    TOO_MANY_ACTIVE_BOOKINGS: ['Quá nhiều lượt đặt đang hiệu lực', (p) =&gt; &#96;Mỗi sinh viên giữ tối đa \${p.max} lượt đặt còn hiệu lực&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    TOO_MANY_ACTIVE_BOOKINGS: ['Too many active bookings', (p) =&gt; &#96;A student may hold at most \${p.max} active bookings&#96;],</code></pre>
 
 <h3>API7: SSRF</h3>
 <div class="lz-flow">
@@ -972,6 +1235,24 @@ export async function safeFetch(raw) {
   const res = await fetch(url, { redirect: VULN ? 'follow' : 'error', signal: AbortSignal.timeout(3000) });   // chuyển hướng có thể dẫn vào trong
   return { status: res.status, contentType: res.headers.get('content-type'), bytes: (await res.arrayBuffer()).byteLength };
 }</code></pre>
+<p>The route that calls it (managers only; the body is one URL), and the words for the new code:</p>
+<pre><code class="language-javascript">// routes/devices.js — bài 6.3: route đính kèm sách hướng dẫn (quản lý), gọi safeFetch
+import { z } from 'zod';
+import { safeFetch } from '../safeFetch.js';
+// …
+const ManualBody = z.strictObject({ url: z.string().max(500) });
+devicesRouter.route('/:id/manual')
+  .post(...manager, validate('body', ManualBody), async (req, res) =&gt; {
+    const d = findDevice(req.params.id);
+    const probe = await safeFetch(req.valid.body.url);
+    d.manualUrl = req.valid.body.url;
+    res.json({ id: d.id, manualUrl: req.valid.body.url, probe });
+  })
+  .all(onlyAllow('POST'));</code></pre>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    URL_NOT_ALLOWED: ['Địa chỉ không được phép', (p) =&gt; &#96;Không tải được URL này (\${p.reason})&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    URL_NOT_ALLOWED: ['URL not allowed', (p) =&gt; &#96;This URL cannot be fetched (\${p.reason})&#96;],</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/devices/dev_1/manual \\
@@ -1010,6 +1291,20 @@ for (const [risk, what, test] of checks) {
   if (!ok) fails++;
   console.log(&#96;\${ok ? 'PASS' : 'FAIL'}  \${risk.padEnd(22)} \${what}&#96;);
 }</code></pre>
+<p>The API3 check calls <code>PATCH /v2/me</code>, which accepts only the name (with the lab switch it copies the whole body — the hole):</p>
+<pre><code class="language-javascript">// routes/me.js — bài 6.3 (OWASP API3): người dùng chỉ được đổi TÊN của mình — bộ kiểm API3 gọi đúng route này
+import { z } from 'zod';
+import { validate } from '../validate.js';
+import { VULN } from '../vuln.js';
+// …
+// Người dùng chỉ được đổi TÊN của mình. Vai trò, email… không bao giờ đến từ body (OWASP API3, bài 6.3)
+const MePatch = z.strictObject({ name: z.string().trim().normalize('NFC').min(1).max(100) });
+meRouter.route('/')
+  .get(requireAuth, (req, res) =&gt; res.json(toMe(req.user)))   // chỉ 4 trường của hợp đồng
+  .patch(requireAuth, (req, res, next) =&gt; (VULN ? next() : validate('body', MePatch)(req, res, next)), (req, res) =&gt; {
+    res.json(toMe(Object.assign(req.user, VULN ? req.body : req.valid.body)));   // VULN: chép nguyên body ⇒ tự nâng vai trò
+  })
+  .all(onlyAllow('GET', 'HEAD', 'PATCH'));</code></pre>
 <p>Against LabFlow with the lab’s holes switched on (<code>LABFLOW_VULN=1</code>):</p>
 <pre><code class="language-bash">node audit.mjs</code></pre>
 <div class="out">FAIL  API1 BOLA              Bin reads An’s receipt
@@ -1119,6 +1414,17 @@ export const MAX_ACTIVE = 3;
       const active = bookings.filter((b) =&gt; b.userId === req.user.id &amp;&amp; b.status !== 'CANCELLED' &amp;&amp; Date.parse(b.endAt) &gt; now()).length;
       if (active &gt;= MAX_ACTIVE) throw new HttpError(422, 'TOO_MANY_ACTIVE_BOOKINGS', { max: MAX_ACTIVE });
     }</code></pre>
+<p>Đặt ở đâu, và câu chữ của nó:</p>
+<pre><code class="language-javascript">// routes/bookings.js — chỗ đặt luật: trong POST /, ngay sau phép kiểm UNKNOWN_LAB
+import { now } from '../deprecation.js';                        // đồng hồ của bài 4.3 (LABFLOW_NOW để thử)
+// …
+    const lab = labs.find((l) =&gt; l.id === labId &amp;&amp; !l.retiredAt);
+    if (!lab) throw new HttpError(422, 'UNKNOWN_LAB', { id: labId });
+    if (req.user.role === 'STUDENT') { /* … luật MAX_ACTIVE ở trên … */ }</code></pre>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    TOO_MANY_ACTIVE_BOOKINGS: ['Quá nhiều lượt đặt đang hiệu lực', (p) =&gt; &#96;Mỗi sinh viên giữ tối đa \${p.max} lượt đặt còn hiệu lực&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    TOO_MANY_ACTIVE_BOOKINGS: ['Too many active bookings', (p) =&gt; &#96;A student may hold at most \${p.max} active bookings&#96;],</code></pre>
 
 <h3>API7: SSRF</h3>
 <div class="lz-flow">
@@ -1164,6 +1470,24 @@ export async function safeFetch(raw) {
   const res = await fetch(url, { redirect: VULN ? 'follow' : 'error', signal: AbortSignal.timeout(3000) });   // chuyển hướng có thể dẫn vào trong
   return { status: res.status, contentType: res.headers.get('content-type'), bytes: (await res.arrayBuffer()).byteLength };
 }</code></pre>
+<p>Route gọi nó (chỉ quản lý; body chỉ có một URL), và câu chữ cho mã mới:</p>
+<pre><code class="language-javascript">// routes/devices.js — bài 6.3: route đính kèm sách hướng dẫn (quản lý), gọi safeFetch
+import { z } from 'zod';
+import { safeFetch } from '../safeFetch.js';
+// …
+const ManualBody = z.strictObject({ url: z.string().max(500) });
+devicesRouter.route('/:id/manual')
+  .post(...manager, validate('body', ManualBody), async (req, res) =&gt; {
+    const d = findDevice(req.params.id);
+    const probe = await safeFetch(req.valid.body.url);
+    d.manualUrl = req.valid.body.url;
+    res.json({ id: d.id, manualUrl: req.valid.body.url, probe });
+  })
+  .all(onlyAllow('POST'));</code></pre>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    URL_NOT_ALLOWED: ['Địa chỉ không được phép', (p) =&gt; &#96;Không tải được URL này (\${p.reason})&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    URL_NOT_ALLOWED: ['URL not allowed', (p) =&gt; &#96;This URL cannot be fetched (\${p.reason})&#96;],</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/devices/dev_1/manual \\
@@ -1202,6 +1526,20 @@ for (const [risk, what, test] of checks) {
   if (!ok) fails++;
   console.log(&#96;\${ok ? 'PASS' : 'FAIL'}  \${risk.padEnd(22)} \${what}&#96;);
 }</code></pre>
+<p>Phép kiểm API3 gọi <code>PATCH /v2/me</code>, route chỉ nhận tên (bật công tắc của lab thì nó chép nguyên body — chính là lỗ hổng):</p>
+<pre><code class="language-javascript">// routes/me.js — bài 6.3 (OWASP API3): người dùng chỉ được đổi TÊN của mình — bộ kiểm API3 gọi đúng route này
+import { z } from 'zod';
+import { validate } from '../validate.js';
+import { VULN } from '../vuln.js';
+// …
+// Người dùng chỉ được đổi TÊN của mình. Vai trò, email… không bao giờ đến từ body (OWASP API3, bài 6.3)
+const MePatch = z.strictObject({ name: z.string().trim().normalize('NFC').min(1).max(100) });
+meRouter.route('/')
+  .get(requireAuth, (req, res) =&gt; res.json(toMe(req.user)))   // chỉ 4 trường của hợp đồng
+  .patch(requireAuth, (req, res, next) =&gt; (VULN ? next() : validate('body', MePatch)(req, res, next)), (req, res) =&gt; {
+    res.json(toMe(Object.assign(req.user, VULN ? req.body : req.valid.body)));   // VULN: chép nguyên body ⇒ tự nâng vai trò
+  })
+  .all(onlyAllow('GET', 'HEAD', 'PATCH'));</code></pre>
 <p>Chạy với LabFlow đang bật các lỗ hổng của lab (<code>LABFLOW_VULN=1</code>):</p>
 <pre><code class="language-bash">node audit.mjs</code></pre>
 <div class="out">FAIL  API1 BOLA              Bin reads An’s receipt
@@ -1333,6 +1671,13 @@ export function cors(req, res, next) {
   }
   next();
 }</code></pre>
+<p>Mounted early, so preflights are answered before any route (and, for this lesson only, a log of every request that reaches the server):</p>
+<pre><code class="language-javascript">// app.js — bài 6.4: gắn ngay sau express.json(), trước mọi route
+import { cors } from './cors.js';
+// …
+// Bài 6.4 — để HỌC: in mỗi request tới được server (để thấy CORS KHÔNG chặn request ở server)
+if (process.env.LABFLOW_LOG) app.use((req, res, next) =&gt; { console.log(&#96;\${req.method} \${req.originalUrl} origin=\${req.get('Origin') ?? '-'}&#96;); next(); });
+app.use(cors);                                                  // bài 6.4: trình duyệt nào được gọi API</code></pre>
 <p><code>Access-Control-Expose-Headers</code> matters for this course: without it, browser code cannot read <code>Location</code>, <code>ETag</code>, <code>RateLimit</code> or <code>Deprecation</code> — the headers Chapters 1–5 rely on. <code>Vary: Origin</code> stops a cache from serving one origin’s answer to another.</p>
 <pre><code class="language-bash">curl -si -X OPTIONS http://localhost:4000/v2/auth/login \\
   -H 'Origin: http://localhost:5173' \\
@@ -1372,6 +1717,27 @@ await t('POST /v2/auth/login', async () =&gt; {
 });
 window.__out = out; document.title = 'done';
 &lt;/script&gt;</code></pre>
+<p>Two small scripts: one serves the page on both ports, the other opens it in Chromium and prints what the page saw (run <code>node web/serve.mjs &amp;</code> first; Playwright: <code>npm i -D playwright &amp;&amp; npx playwright install chromium</code>):</p>
+<pre><code class="language-javascript">// serve.mjs — phục vụ cùng một trang ở hai origin: :5173 (trang của LabFlow) và :5174 (trang lạ)
+import http from 'node:http';
+import { readFileSync } from 'node:fs';
+const page = readFileSync(new URL('./index.html', import.meta.url));
+for (const port of [5173, 5174]) http.createServer((req, res) =&gt; res.writeHead(200, { 'Content-Type': 'text/html' }).end(page)).listen(port);</code></pre>
+<pre><code class="language-javascript">// browser.mjs — mở trang ở hai origin trong Chromium thật (Playwright), in kết quả fetch và lỗi trong console
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+for (const origin of ['http://localhost:5173', 'http://localhost:5174']) {
+  const page = await browser.newPage();
+  const errors = [];
+  page.on('console', (m) =&gt; m.type() === 'error' &amp;&amp; errors.push(m.text()));
+  await page.goto(origin);
+  await page.waitForFunction(() =&gt; document.title === 'done');
+  console.log(&#96;page \${origin}&#96;);
+  for (const line of await page.evaluate(() =&gt; window.__out)) console.log(&#96;  \${line}&#96;);
+  for (const e of errors) console.log(&#96;  console: \${e.length &gt; 150 ? &#96;\${e.slice(0, 150)}…&#96; : e}&#96;);
+  await page.close();
+}
+await browser.close();</code></pre>
 <pre><code class="language-bash">node web/browser.mjs</code></pre>
 <div class="out">page http://localhost:5173
   GET /v2/labs: 200
@@ -1508,6 +1874,13 @@ export function cors(req, res, next) {
   }
   next();
 }</code></pre>
+<p>Gắn sớm, để preflight được trả lời trước mọi route (và, chỉ cho bài này, một dòng log cho mỗi request tới được server):</p>
+<pre><code class="language-javascript">// app.js — bài 6.4: gắn ngay sau express.json(), trước mọi route
+import { cors } from './cors.js';
+// …
+// Bài 6.4 — để HỌC: in mỗi request tới được server (để thấy CORS KHÔNG chặn request ở server)
+if (process.env.LABFLOW_LOG) app.use((req, res, next) =&gt; { console.log(&#96;\${req.method} \${req.originalUrl} origin=\${req.get('Origin') ?? '-'}&#96;); next(); });
+app.use(cors);                                                  // bài 6.4: trình duyệt nào được gọi API</code></pre>
 <p><code>Access-Control-Expose-Headers</code> quan trọng với khoá học này: thiếu nó, code trong trình duyệt không đọc được <code>Location</code>, <code>ETag</code>, <code>RateLimit</code> hay <code>Deprecation</code> — những header mà Chương 1–5 dựa vào. <code>Vary: Origin</code> ngăn cache trả câu trả lời của origin này cho origin khác.</p>
 <pre><code class="language-bash">curl -si -X OPTIONS http://localhost:4000/v2/auth/login \\
   -H 'Origin: http://localhost:5173' \\
@@ -1547,6 +1920,27 @@ await t('POST /v2/auth/login', async () =&gt; {
 });
 window.__out = out; document.title = 'done';
 &lt;/script&gt;</code></pre>
+<p>Hai script nhỏ: một cái phục vụ trang ở cả hai cổng, cái kia mở trang trong Chromium và in những gì trang thấy (chạy <code>node web/serve.mjs &amp;</code> trước; Playwright: <code>npm i -D playwright &amp;&amp; npx playwright install chromium</code>):</p>
+<pre><code class="language-javascript">// serve.mjs — phục vụ cùng một trang ở hai origin: :5173 (trang của LabFlow) và :5174 (trang lạ)
+import http from 'node:http';
+import { readFileSync } from 'node:fs';
+const page = readFileSync(new URL('./index.html', import.meta.url));
+for (const port of [5173, 5174]) http.createServer((req, res) =&gt; res.writeHead(200, { 'Content-Type': 'text/html' }).end(page)).listen(port);</code></pre>
+<pre><code class="language-javascript">// browser.mjs — mở trang ở hai origin trong Chromium thật (Playwright), in kết quả fetch và lỗi trong console
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+for (const origin of ['http://localhost:5173', 'http://localhost:5174']) {
+  const page = await browser.newPage();
+  const errors = [];
+  page.on('console', (m) =&gt; m.type() === 'error' &amp;&amp; errors.push(m.text()));
+  await page.goto(origin);
+  await page.waitForFunction(() =&gt; document.title === 'done');
+  console.log(&#96;page \${origin}&#96;);
+  for (const line of await page.evaluate(() =&gt; window.__out)) console.log(&#96;  \${line}&#96;);
+  for (const e of errors) console.log(&#96;  console: \${e.length &gt; 150 ? &#96;\${e.slice(0, 150)}…&#96; : e}&#96;);
+  await page.close();
+}
+await browser.close();</code></pre>
 <pre><code class="language-bash">node web/browser.mjs</code></pre>
 <div class="out">page http://localhost:5173
   GET /v2/labs: 200

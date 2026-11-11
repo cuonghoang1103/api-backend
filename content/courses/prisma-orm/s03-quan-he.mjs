@@ -114,8 +114,10 @@ await prisma.post.findMany({ include: { author: true } });
 await prisma.user.findMany({ where: { posts: { some: { published: true } } } });
 await prisma.user.findMany({ where: { posts: { none: {} } } });          <span class="tok-comment">// users with no posts</span>
 await prisma.user.findMany({ include: { _count: { select: { posts: true } } } });</code></pre>
-<div class="out">prisma:query SELECT "public"."users"."id", "public"."users"."email" FROM "public"."users" WHERE (EXISTS (SELECT "t1"."id" FROM "public"."posts" AS "t1" WHERE ("t1"."published" = $1 AND "t1"."author_id" = "public"."users"."id"))) OFFSET $2</div>
-<p><code>some</code> became an <code>EXISTS</code> subquery, which is exactly what you would have written by hand and exactly what the planner likes. <code>none</code> becomes <code>NOT EXISTS</code>, and <code>every</code> becomes a <code>NOT EXISTS</code> over the negated condition — a small piece of logic that is easy to get backwards in raw SQL and impossible to get backwards here.</p>
+<div class="out">[some] SELECT "users"."id", "users"."email" FROM "users" WHERE EXISTS(SELECT "t0"."author_id" FROM "posts" AS "t0" WHERE ("t0"."published" = $1 AND ("users"."id") = ("t0"."author_id") AND "t0"."author_id" IS NOT NULL)) OFFSET $2
+[none] SELECT "users"."id", "users"."email" FROM "users" WHERE NOT EXISTS(SELECT "t0"."author_id" FROM "posts" AS "t0" WHERE (1=1 AND ("users"."id") = ("t0"."author_id") AND "t0"."author_id" IS NOT NULL)) OFFSET $1
+[_count] SELECT "users"."id", "users"."email", COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) AS "_aggr_count_posts" FROM "users" LEFT JOIN (SELECT "posts"."author_id", COUNT(*) AS "_aggr_count_posts" FROM "posts" WHERE 1=1 GROUP BY "posts"."author_id") …</div>
+<p>Real query log (Prisma 6.19.3, PostgreSQL 16.14, 12 Nov 2026; the <code>"public".</code> prefix removed): <code>some</code> became an <code>EXISTS</code> subquery and <code>_count</code> a <code>LEFT JOIN … GROUP BY</code> — exactly what you would have written by hand and exactly what the planner likes. <code>none</code> becomes <code>NOT EXISTS</code>, and <code>every</code> becomes a <code>NOT EXISTS</code> over the negated condition — a small piece of logic that is easy to get backwards in raw SQL and impossible to get backwards here.</p>
 
 <h3>Setting a relation: three ways, one column</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// A — write the scalar directly. Simplest, and no existence check.</span>
@@ -128,19 +130,28 @@ await prisma.post.create({ data: { title: 'B', author: { connect: { id: 1 } } } 
 await prisma.post.create({
   data: { title: 'C', author: { create: { email: 'moi@example.com' } } },
 });</code></pre>
-<div class="out">-- A: one statement, and PostgreSQL rejects a bad author_id with a constraint violation (P2003)
-INSERT INTO "posts" ("title","author_id") VALUES ($1,$2) RETURNING ...
+<div class="out">-- A: one statement; a bad author_id is rejected by PostgreSQL itself (P2003 on fk_post_author)
+INSERT INTO "posts" ("title","published","author_id") VALUES ($1,$2,$3) RETURNING ...
 
--- B: also one statement — connect by primary key needs no lookup
-INSERT INTO "posts" ("title","author_id") VALUES ($1,$2) RETURNING ...
+-- B: connect by primary key — FIVE statements, not one
+BEGIN
+SELECT "users"."id" FROM "users" WHERE ("users"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+INSERT INTO "posts" ("title","published","author_id") VALUES ($1,$2,$3) RETURNING "posts"."id"
+SELECT "posts"."id", "posts"."title", "posts"."published", "posts"."author_id" FROM "posts" WHERE "posts"."id" = $1 LIMIT $2 OFFSET $3
+COMMIT
+
+-- B2: connect by email — the same five; only the lookup changes
+SELECT "users"."id" FROM "users" WHERE ("users"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
 
 -- C: a transaction, parent first
 BEGIN
-INSERT INTO "users" ("email") VALUES ($1) RETURNING "id"
-INSERT INTO "posts" ("title","author_id") VALUES ($2,$3) RETURNING ...
+INSERT INTO "users" ("email") VALUES ($1) RETURNING "users"."id"
+INSERT INTO "posts" ("title","published","author_id") VALUES ($1,$2,$3) RETURNING "posts"."id"
+SELECT "posts"."id", "posts"."title", "posts"."published", "posts"."author_id" FROM "posts" WHERE "posts"."id" = $1 LIMIT $2 OFFSET $3
 COMMIT</div>
+<p class="note">Query log re-run on 12 Nov 2026 with Prisma 6.19.3 and PostgreSQL 16.14. Many write-ups (and earlier versions of this lesson) say <code>connect</code> by primary key compiles to a single <code>INSERT</code>; measured, it does not.</p>
 <div class="pitfall">
-<p><strong>Trap — <code>connect</code> by a non-primary unique field is an extra query.</strong> <code>connect: { id: 1 }</code> can be written straight into the <code>INSERT</code> because the id <em>is</em> the foreign key value. <code>connect: { email: 'an@x.com' }</code> cannot — Prisma must first look up the id, so it becomes two statements inside a transaction. Harmless once; noticeable in a loop of five hundred imports. If you already hold the id, pass the scalar.</p>
+<p><strong>Trap — <code>connect</code> is never free.</strong> Even <code>connect: { id: 1 }</code>, where the id already <em>is</em> the foreign-key value, opens a transaction, <code>SELECT</code>s the user to prove it exists, inserts, and reads the new row back: five statements against one for <code>authorId: 1</code>. <code>connect: { email: 'an@x.com' }</code> has the same shape — only the lookup is by email. Harmless once; in a loop of five hundred imports it is 2,500 round trips instead of 500. If you already hold the id, write the scalar and let the foreign key do the checking (P2003).</p>
 </div>
 
 <h3>The one thing the database does not know</h3>
@@ -249,8 +260,10 @@ await prisma.post.findMany({ include: { author: true } });
 await prisma.user.findMany({ where: { posts: { some: { published: true } } } });
 await prisma.user.findMany({ where: { posts: { none: {} } } });          <span class="tok-comment">// người dùng chưa có bài nào</span>
 await prisma.user.findMany({ include: { _count: { select: { posts: true } } } });</code></pre>
-<div class="out">prisma:query SELECT "public"."users"."id", "public"."users"."email" FROM "public"."users" WHERE (EXISTS (SELECT "t1"."id" FROM "public"."posts" AS "t1" WHERE ("t1"."published" = $1 AND "t1"."author_id" = "public"."users"."id"))) OFFSET $2</div>
-<p><code>some</code> đã thành một truy vấn con <code>EXISTS</code>, đúng thứ bạn sẽ viết bằng tay và đúng thứ bộ lập kế hoạch ưa. <code>none</code> thành <code>NOT EXISTS</code>, còn <code>every</code> thành một <code>NOT EXISTS</code> trên điều kiện phủ định — một mẩu logic rất dễ viết ngược trong SQL thô và không thể viết ngược ở đây.</p>
+<div class="out">[some] SELECT "users"."id", "users"."email" FROM "users" WHERE EXISTS(SELECT "t0"."author_id" FROM "posts" AS "t0" WHERE ("t0"."published" = $1 AND ("users"."id") = ("t0"."author_id") AND "t0"."author_id" IS NOT NULL)) OFFSET $2
+[none] SELECT "users"."id", "users"."email" FROM "users" WHERE NOT EXISTS(SELECT "t0"."author_id" FROM "posts" AS "t0" WHERE (1=1 AND ("users"."id") = ("t0"."author_id") AND "t0"."author_id" IS NOT NULL)) OFFSET $1
+[_count] SELECT "users"."id", "users"."email", COALESCE("aggr_selection_0_Post"."_aggr_count_posts", 0) AS "_aggr_count_posts" FROM "users" LEFT JOIN (SELECT "posts"."author_id", COUNT(*) AS "_aggr_count_posts" FROM "posts" WHERE 1=1 GROUP BY "posts"."author_id") …</div>
+<p>Nhật ký truy vấn thật (Prisma 6.19.3, PostgreSQL 16.14, 12/11/2026; đã bỏ tiền tố <code>"public".</code>): <code>some</code> đã thành một truy vấn con <code>EXISTS</code>, còn <code>_count</code> thành <code>LEFT JOIN … GROUP BY</code> — đúng thứ bạn sẽ viết bằng tay và đúng thứ bộ lập kế hoạch ưa. <code>none</code> thành <code>NOT EXISTS</code>, còn <code>every</code> thành một <code>NOT EXISTS</code> trên điều kiện phủ định — một mẩu logic rất dễ viết ngược trong SQL thô và không thể viết ngược ở đây.</p>
 
 <h3>Gán một quan hệ: ba cách, một cột</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// A — ghi thẳng vào trường vô hướng. Đơn giản nhất, và không kiểm tồn tại.</span>
@@ -263,19 +276,28 @@ await prisma.post.create({ data: { title: 'B', author: { connect: { id: 1 } } } 
 await prisma.post.create({
   data: { title: 'C', author: { create: { email: 'moi@example.com' } } },
 });</code></pre>
-<div class="out">-- A: một câu lệnh, và PostgreSQL từ chối author_id sai bằng một lỗi vi phạm ràng buộc (P2003)
-INSERT INTO "posts" ("title","author_id") VALUES ($1,$2) RETURNING ...
+<div class="out">-- A: một câu lệnh; author_id sai thì chính PostgreSQL từ chối (P2003 trên fk_post_author)
+INSERT INTO "posts" ("title","published","author_id") VALUES ($1,$2,$3) RETURNING ...
 
--- B: cũng một câu lệnh — connect theo khoá chính không cần tra cứu
-INSERT INTO "posts" ("title","author_id") VALUES ($1,$2) RETURNING ...
+-- B: connect theo khoá chính — NĂM câu lệnh, không phải một
+BEGIN
+SELECT "users"."id" FROM "users" WHERE ("users"."id" = $1 AND 1=1) LIMIT $2 OFFSET $3
+INSERT INTO "posts" ("title","published","author_id") VALUES ($1,$2,$3) RETURNING "posts"."id"
+SELECT "posts"."id", "posts"."title", "posts"."published", "posts"."author_id" FROM "posts" WHERE "posts"."id" = $1 LIMIT $2 OFFSET $3
+COMMIT
+
+-- B2: connect theo email — vẫn năm câu ấy, chỉ câu tra cứu đổi
+SELECT "users"."id" FROM "users" WHERE ("users"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
 
 -- C: một giao dịch, cha trước
 BEGIN
-INSERT INTO "users" ("email") VALUES ($1) RETURNING "id"
-INSERT INTO "posts" ("title","author_id") VALUES ($2,$3) RETURNING ...
+INSERT INTO "users" ("email") VALUES ($1) RETURNING "users"."id"
+INSERT INTO "posts" ("title","published","author_id") VALUES ($1,$2,$3) RETURNING "posts"."id"
+SELECT "posts"."id", "posts"."title", "posts"."published", "posts"."author_id" FROM "posts" WHERE "posts"."id" = $1 LIMIT $2 OFFSET $3
 COMMIT</div>
+<p class="note">Nhật ký truy vấn chạy lại ngày 12/11/2026 với Prisma 6.19.3 và PostgreSQL 16.14. Nhiều bài viết (và bản cũ của chính bài này) nói <code>connect</code> theo khoá chính biên dịch thành một câu <code>INSERT</code> duy nhất; đo thật thì không phải.</p>
 <div class="pitfall">
-<p><strong>Bẫy — <code>connect</code> theo một trường unique không phải khoá chính là thêm một câu truy vấn.</strong> <code>connect: { id: 1 }</code> ghi thẳng được vào câu <code>INSERT</code> vì cái id ấy <em>chính là</em> giá trị khoá ngoại. <code>connect: { email: 'an@x.com' }</code> thì không — Prisma phải tra id trước, nên nó thành hai câu lệnh trong một giao dịch. Vô hại một lần; thấy rõ trong một vòng lặp nhập năm trăm bản ghi. Nếu bạn đã cầm sẵn id thì hãy truyền thẳng trường vô hướng.</p>
+<p><strong>Bẫy — <code>connect</code> không bao giờ miễn phí.</strong> Kể cả <code>connect: { id: 1 }</code>, khi cái id ấy <em>chính là</em> giá trị khoá ngoại, Prisma vẫn mở giao dịch, <code>SELECT</code> người dùng để chắc nó tồn tại, chèn, rồi đọc lại hàng mới: năm câu lệnh so với một câu của <code>authorId: 1</code>. <code>connect: { email: 'an@x.com' }</code> cũng đúng dáng ấy — chỉ là tra theo email. Vô hại một lần; trong một vòng lặp nhập năm trăm bản ghi là 2.500 lượt đi về thay vì 500. Nếu bạn đã cầm sẵn id thì ghi thẳng trường vô hướng và để khoá ngoại tự kiểm (P2003).</p>
 </div>
 
 <h3>Điều duy nhất cơ sở dữ liệu không biết</h3>
@@ -345,7 +367,7 @@ await prisma.user.delete({ where: { email: 'an@example.com' } });</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname"><code>Restrict</code> — refuse while children exist</span><span class="lz-lnote">The delete throws <code>P2003</code>. Nothing is removed. You must delete or reassign the posts first. <strong>This is Prisma's default for a required relation</strong>, and it is the safe one: no data disappears by surprise.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>Cascade</code> — take the children with it</span><span class="lz-lnote">Author and all three posts are gone, in one statement, executed by PostgreSQL. Correct for genuinely owned data (a post's comments, an order's line items). Dangerous where "owned" is an assumption — cascading through four levels can delete far more than you meant.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>SetNull</code> — orphan them deliberately</span><span class="lz-lnote">Author gone, three posts survive with <code>author_id = NULL</code>. Requires an optional relation; on a required one, Prisma rejects the schema. Right when the child outlives the parent — a post whose category was deleted.</span></div>
+  <div class="lz-layer"><span class="lz-lname"><code>SetNull</code> — orphan them deliberately</span><span class="lz-lnote">Author gone, three posts survive with <code>author_id = NULL</code>. Requires an optional relation; on a required one Prisma only <em>warns</em> and the delete fails at runtime (see the trap below). Right when the child outlives the parent — a post whose category was deleted.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>SetDefault</code> — reassign to a fallback</span><span class="lz-lnote">Children get the column's <code>@default</code>, so that default must reference a row that exists — an "unknown author" placeholder. Rarely used, and it fails loudly if the default id has itself been deleted.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>NoAction</code> — hand it to the database</span><span class="lz-lnote">Prisma emits no behaviour and lets the constraint decide. On PostgreSQL it behaves like <code>Restrict</code> but can be deferred to the end of a transaction, which is the one thing <code>Restrict</code> cannot do. Reach for it only when you need that.</span></div>
 </div>
@@ -370,6 +392,20 @@ category   Category? @relation(fields: [categoryId], references: [id], onDelete:
   1 | A     |
   2 | B     |
   3 | C     |</div>
+<div class="pitfall">
+<p><strong>Trap — <code>SetNull</code> on a <em>required</em> relation is only a warning.</strong> Put <code>onDelete: SetNull</code> on <code>authorId Int</code> and <code>prisma validate</code> prints a warning, then reports the schema valid; <code>migrate</code> writes <code>ON DELETE SET NULL</code> onto a <code>NOT NULL</code> column. Nothing fails until the first time someone deletes an author who has posts — then PostgreSQL refuses to write the NULL and the delete errors at runtime. Read warnings as carefully as errors.</p>
+</div>
+<div class="out">$ npx prisma validate      # authorId Int (required) … onDelete: SetNull
+Prisma schema warning:
+- The &#96;onDelete&#96; referential action of a relation should not be set to &#96;SetNull&#96; when a referenced field is required. We recommend either to choose another referential action, or to make the referenced fields optional. Read more at https://pris.ly/d/postgres-set-null
+The schema at p3/32/setnull-sai.prisma is valid 🚀</div>
+<div class="out">$ psql -c '\\d "Post"'          # after db push: the column is still NOT NULL
+ authorId | integer |           | not null |
+    "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE SET NULL
+$ psql -c 'DELETE FROM "User" WHERE id = 1;'      -- an author with one post
+ERROR:  null value in column "authorId" of relation "Post" violates not-null constraint
+DETAIL:  Failing row contains (1, null).</div>
+<p class="note">Re-run on 12 Nov 2026 with Prisma 6.19.3 and PostgreSQL 16.14.</p>
 
 <h3>The defaults, and why they differ from SQL</h3>
 <div class="kv-grid">
@@ -484,7 +520,7 @@ await prisma.user.delete({ where: { email: 'an@example.com' } });</code></pre>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname"><code>Restrict</code> — từ chối khi còn con</span><span class="lz-lnote">Lệnh xoá ném <code>P2003</code>. Không thứ gì bị gỡ đi. Bạn phải xoá hoặc chuyển các bài viết trước. <strong>Đây là mặc định của Prisma cho quan hệ bắt buộc</strong>, và nó là lựa chọn an toàn: không dữ liệu nào biến mất một cách bất ngờ.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>Cascade</code> — kéo con đi theo</span><span class="lz-lnote">Tác giả và cả ba bài viết biến mất, trong một câu lệnh, do PostgreSQL thi hành. Đúng cho dữ liệu thật sự thuộc sở hữu (bình luận của một bài viết, dòng hàng của một đơn hàng). Nguy hiểm ở chỗ "thuộc sở hữu" chỉ là một giả định — xoá dây chuyền qua bốn tầng có thể xoá nhiều hơn bạn định rất nhiều.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>SetNull</code> — cố ý để chúng mồ côi</span><span class="lz-lnote">Tác giả mất, ba bài viết sống sót với <code>author_id = NULL</code>. Cần quan hệ tuỳ chọn; đặt lên quan hệ bắt buộc thì Prisma từ chối lược đồ. Đúng khi con sống lâu hơn cha — một bài viết mà chuyên mục của nó bị xoá.</span></div>
+  <div class="lz-layer"><span class="lz-lname"><code>SetNull</code> — cố ý để chúng mồ côi</span><span class="lz-lnote">Tác giả mất, ba bài viết sống sót với <code>author_id = NULL</code>. Cần quan hệ tuỳ chọn; đặt lên quan hệ bắt buộc thì Prisma chỉ <em>cảnh báo</em> và lệnh xoá hỏng lúc chạy (xem bẫy bên dưới). Đúng khi con sống lâu hơn cha — một bài viết mà chuyên mục của nó bị xoá.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>SetDefault</code> — chuyển sang một giá trị dự phòng</span><span class="lz-lnote">Con nhận <code>@default</code> của cột, nên cái mặc định đó phải trỏ tới một hàng có thật — một "tác giả không rõ" đóng thế. Ít dùng, và nó hỏng rất ầm ĩ nếu chính cái id mặc định cũng đã bị xoá.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>NoAction</code> — trao lại cho cơ sở dữ liệu</span><span class="lz-lnote">Prisma không phát ra hành vi nào và để ràng buộc tự quyết. Trên PostgreSQL nó hành xử như <code>Restrict</code> nhưng hoãn được tới cuối giao dịch, và đó là điều duy nhất <code>Restrict</code> không làm được. Chỉ với tay tới nó khi bạn cần đúng điều đó.</span></div>
 </div>
@@ -509,6 +545,20 @@ category   Category? @relation(fields: [categoryId], references: [id], onDelete:
   1 | A     |
   2 | B     |
   3 | C     |</div>
+<div class="pitfall">
+<p><strong>Bẫy — <code>SetNull</code> trên quan hệ <em>bắt buộc</em> chỉ là một cảnh báo.</strong> Đặt <code>onDelete: SetNull</code> lên <code>authorId Int</code> thì <code>prisma validate</code> in một cảnh báo rồi vẫn báo lược đồ hợp lệ; <code>migrate</code> ghi <code>ON DELETE SET NULL</code> lên một cột <code>NOT NULL</code>. Không gì hỏng cho tới lần đầu có người xoá một tác giả còn bài viết — lúc ấy PostgreSQL từ chối ghi NULL và lệnh xoá báo lỗi khi chạy. Hãy đọc cảnh báo kỹ như đọc lỗi.</p>
+</div>
+<div class="out">$ npx prisma validate      # authorId Int (required) … onDelete: SetNull
+Prisma schema warning:
+- The &#96;onDelete&#96; referential action of a relation should not be set to &#96;SetNull&#96; when a referenced field is required. We recommend either to choose another referential action, or to make the referenced fields optional. Read more at https://pris.ly/d/postgres-set-null
+The schema at p3/32/setnull-sai.prisma is valid 🚀</div>
+<div class="out">$ psql -c '\\d "Post"'          # sau db push: cột vẫn NOT NULL
+ authorId | integer |           | not null |
+    "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"(id) ON UPDATE CASCADE ON DELETE SET NULL
+$ psql -c 'DELETE FROM "User" WHERE id = 1;'      -- một tác giả có một bài viết
+ERROR:  null value in column "authorId" of relation "Post" violates not-null constraint
+DETAIL:  Failing row contains (1, null).</div>
+<p class="note">Chạy lại ngày 12/11/2026 với Prisma 6.19.3 và PostgreSQL 16.14.</p>
 
 <h3>Các giá trị mặc định, và vì sao chúng khác SQL</h3>
 <div class="kv-grid">
@@ -922,17 +972,17 @@ model Category {
 }</code></pre>
 <pre><code class="language-bash">npx prisma migrate dev --name nhieu_nhieu_an
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
-<div class="out">           Table "public._CategoryToPost"
- Column |  Type   | Nullable | Default
---------+---------+----------+---------
- A      | integer | not null |
- B      | integer | not null |
+<div class="out">          Table "public._CategoryToPost"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ A      | integer |           | not null |
+ B      | integer |           | not null |
 Indexes:
     "_CategoryToPost_AB_pkey" PRIMARY KEY, btree ("A", "B")
     "_CategoryToPost_B_index" btree ("B")
 Foreign-key constraints:
-    "_CategoryToPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"(id) ON DELETE CASCADE
-    "_CategoryToPost_B_fkey" FOREIGN KEY ("B") REFERENCES "Post"(id) ON DELETE CASCADE</div>
+    "_CategoryToPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"(id) ON UPDATE CASCADE ON DELETE CASCADE
+    "_CategoryToPost_B_fkey" FOREIGN KEY ("B") REFERENCES "Post"(id) ON UPDATE CASCADE ON DELETE CASCADE</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Name</span><span class="lz-t"><code>_</code> + the two models, alphabetically</span><span class="lz-d"><code>_CategoryToPost</code>, not <code>_PostToCategory</code>. Alphabetical order also decides which model is <code>A</code> and which is <code>B</code>, which matters the moment you write raw SQL against it.</span></div>
   <div class="lz-step"><span class="lz-k">Columns</span><span class="lz-t">Exactly <code>A</code> and <code>B</code></span><span class="lz-d">No timestamps, no extra fields, no id of its own. The primary key is the pair, so a duplicate link is structurally impossible.</span></div>
@@ -963,10 +1013,16 @@ await prisma.post.update({
 <span class="tok-comment">// Query in both directions</span>
 await prisma.post.findMany({ where: { categories: { some: { name: 'nodejs' } } } });
 await prisma.category.findMany({ include: { _count: { select: { posts: true } } } });</code></pre>
-<div class="out">prisma:query DELETE FROM "public"."_CategoryToPost" WHERE "B" = $1
-prisma:query INSERT INTO "public"."_CategoryToPost" ("A","B") VALUES ($1,$2), ($3,$4) ON CONFLICT DO NOTHING</div>
+<div class="out">[create+connect]     INSERT INTO "_CategoryToPost" ("B","A") VALUES ($1,$2), ($3,$4) ON CONFLICT DO NOTHING   [1,1,1,2]
+[connect+disconnect] INSERT INTO "_CategoryToPost" ("B","A") VALUES ($1,$2) ON CONFLICT DO NOTHING           [1,3]
+[connect+disconnect] SELECT "B", "A" FROM "_CategoryToPost" WHERE "B" IN ($1)                                [1]
+[connect+disconnect] DELETE FROM "_CategoryToPost" WHERE ("B" = ($1) AND "A" IN ($2))                         [1,1]
+[set]                SELECT "B", "A" FROM "_CategoryToPost" WHERE "B" IN ($1)                                [1]
+[set]                DELETE FROM "_CategoryToPost" WHERE ("B" = ($1) AND "A" IN ($2,$3))                      [1,2,3]
+[set]                INSERT INTO "_CategoryToPost" ("B","A") VALUES ($1,$2), ($3,$4) ON CONFLICT DO NOTHING   [1,2,1,4]</div>
+<p class="note">Query log of the three calls above, re-run on 12 Nov 2026 with Prisma 6.19.3 and PostgreSQL 16.14 (only statements on the join table; <code>"public".</code> and table prefixes removed, parameters on the right). Before <code>set</code> the post was linked to categories 2 and 3.</p>
 <div class="pitfall">
-<p><strong>Trap — <code>set</code> deletes everything first.</strong> It is a replace, not a merge: every existing link is removed and the given list is inserted. Send <code>set: []</code> and you have cleared the relation entirely. This is exactly what a naive "save the form" handler does when the user's browser sent no categories — one empty multi-select and a post's tags are gone. Use <code>connect</code> and <code>disconnect</code> for incremental edits, and reserve <code>set</code> for when you genuinely have the complete intended list in hand.</p>
+<p><strong>Trap — <code>set</code> deletes everything first.</strong> It is a replace, not a merge: Prisma reads the current links, deletes every one of them — in the log above even category 2, which is also in the new list — and inserts the given list. <code>connect</code>, by contrast, is a single <code>INSERT … ON CONFLICT DO NOTHING</code>, so connecting an existing link is not an error. Send <code>set: []</code> and you have cleared the relation entirely. This is exactly what a naive "save the form" handler does when the user's browser sent no categories — one empty multi-select and a post's tags are gone. Use <code>connect</code> and <code>disconnect</code> for incremental edits, and reserve <code>set</code> for when you genuinely have the complete intended list in hand.</p>
 </div>
 
 <h3>Explicit: the join table as a model you own</h3>
@@ -1115,17 +1171,17 @@ model Category {
 }</code></pre>
 <pre><code class="language-bash">npx prisma migrate dev --name nhieu_nhieu_an
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"_CategoryToPost\\""</code></pre>
-<div class="out">           Table "public._CategoryToPost"
- Column |  Type   | Nullable | Default
---------+---------+----------+---------
- A      | integer | not null |
- B      | integer | not null |
+<div class="out">          Table "public._CategoryToPost"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ A      | integer |           | not null |
+ B      | integer |           | not null |
 Indexes:
     "_CategoryToPost_AB_pkey" PRIMARY KEY, btree ("A", "B")
     "_CategoryToPost_B_index" btree ("B")
 Foreign-key constraints:
-    "_CategoryToPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"(id) ON DELETE CASCADE
-    "_CategoryToPost_B_fkey" FOREIGN KEY ("B") REFERENCES "Post"(id) ON DELETE CASCADE</div>
+    "_CategoryToPost_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"(id) ON UPDATE CASCADE ON DELETE CASCADE
+    "_CategoryToPost_B_fkey" FOREIGN KEY ("B") REFERENCES "Post"(id) ON UPDATE CASCADE ON DELETE CASCADE</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Tên</span><span class="lz-t"><code>_</code> cộng hai model, theo thứ tự bảng chữ cái</span><span class="lz-d"><code>_CategoryToPost</code>, không phải <code>_PostToCategory</code>. Thứ tự chữ cái cũng quyết định model nào là <code>A</code> và model nào là <code>B</code>, và điều đó quan trọng ngay khi bạn viết SQL thô lên nó.</span></div>
   <div class="lz-step"><span class="lz-k">Cột</span><span class="lz-t">Đúng <code>A</code> và <code>B</code></span><span class="lz-d">Không mốc thời gian, không trường phụ, không id riêng. Khoá chính là cặp giá trị, nên một mối nối trùng là bất khả về cấu trúc.</span></div>
@@ -1156,10 +1212,16 @@ await prisma.post.update({
 <span class="tok-comment">// Truy vấn từ cả hai chiều</span>
 await prisma.post.findMany({ where: { categories: { some: { name: 'nodejs' } } } });
 await prisma.category.findMany({ include: { _count: { select: { posts: true } } } });</code></pre>
-<div class="out">prisma:query DELETE FROM "public"."_CategoryToPost" WHERE "B" = $1
-prisma:query INSERT INTO "public"."_CategoryToPost" ("A","B") VALUES ($1,$2), ($3,$4) ON CONFLICT DO NOTHING</div>
+<div class="out">[create+connect]     INSERT INTO "_CategoryToPost" ("B","A") VALUES ($1,$2), ($3,$4) ON CONFLICT DO NOTHING   [1,1,1,2]
+[connect+disconnect] INSERT INTO "_CategoryToPost" ("B","A") VALUES ($1,$2) ON CONFLICT DO NOTHING           [1,3]
+[connect+disconnect] SELECT "B", "A" FROM "_CategoryToPost" WHERE "B" IN ($1)                                [1]
+[connect+disconnect] DELETE FROM "_CategoryToPost" WHERE ("B" = ($1) AND "A" IN ($2))                         [1,1]
+[set]                SELECT "B", "A" FROM "_CategoryToPost" WHERE "B" IN ($1)                                [1]
+[set]                DELETE FROM "_CategoryToPost" WHERE ("B" = ($1) AND "A" IN ($2,$3))                      [1,2,3]
+[set]                INSERT INTO "_CategoryToPost" ("B","A") VALUES ($1,$2), ($3,$4) ON CONFLICT DO NOTHING   [1,2,1,4]</div>
+<p class="note">Nhật ký truy vấn của ba lời gọi trên, chạy lại ngày 12/11/2026 với Prisma 6.19.3 và PostgreSQL 16.14 (chỉ các câu trên bảng nối; đã bỏ tiền tố <code>"public".</code> và tên bảng trước cột, tham số ở bên phải). Trước <code>set</code>, bài viết đang nối với chuyên mục 2 và 3.</p>
 <div class="pitfall">
-<p><strong>Bẫy — <code>set</code> xoá sạch trước đã.</strong> Nó là thay thế chứ không phải trộn: mọi mối nối hiện có bị gỡ và danh sách được đưa vào sẽ chèn mới. Gửi <code>set: []</code> là bạn đã xoá trắng quan hệ. Đây đúng là thứ một handler "lưu biểu mẫu" ngây thơ làm khi trình duyệt của người dùng không gửi chuyên mục nào — một ô chọn nhiều để trống và các thẻ của bài viết bay sạch. Hãy dùng <code>connect</code> và <code>disconnect</code> cho các lần sửa từng phần, và để dành <code>set</code> cho khi bạn thật sự cầm trong tay danh sách đầy đủ như ý.</p>
+<p><strong>Bẫy — <code>set</code> xoá sạch trước đã.</strong> Nó là thay thế chứ không phải trộn: Prisma đọc các mối nối hiện có, xoá hết — trong nhật ký trên, kể cả chuyên mục 2 vốn cũng nằm trong danh sách mới — rồi chèn danh sách được đưa vào. Ngược lại, <code>connect</code> chỉ là một câu <code>INSERT … ON CONFLICT DO NOTHING</code>, nên nối lại một mối đã có cũng không lỗi. Gửi <code>set: []</code> là bạn đã xoá trắng quan hệ. Đây đúng là thứ một handler "lưu biểu mẫu" ngây thơ làm khi trình duyệt của người dùng không gửi chuyên mục nào — một ô chọn nhiều để trống và các thẻ của bài viết bay sạch. Hãy dùng <code>connect</code> và <code>disconnect</code> cho các lần sửa từng phần, và để dành <code>set</code> cho khi bạn thật sự cầm trong tay danh sách đầy đủ như ý.</p>
 </div>
 
 <h3>Tường minh: bảng nối là một model do bạn sở hữu</h3>
@@ -1320,7 +1382,7 @@ ${G03_5}
 }</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">The name is mandatory</span><span class="lz-t"><code>@relation("TraLoi")</code> on both fields</span><span class="lz-d">Without it Prisma sees two <code>Comment</code> fields on <code>Comment</code> and cannot tell whether <code>parent</code> pairs with <code>replies</code> or with itself. The name is the pairing.</span></div>
-  <div class="lz-step"><span class="lz-k">The parent must be optional</span><span class="lz-t"><code>parentId Int?</code></span><span class="lz-d">A root comment has no parent. Required would mean every comment needs a parent, which has no base case and no first row.</span></div>
+  <div class="lz-step"><span class="lz-k">The parent must be optional</span><span class="lz-t"><code>parentId Int?</code></span><span class="lz-d">A root comment has no parent. Prisma does <em>not</em> stop you writing <code>parentId Int</code> — the schema validates — but then the first comment has nothing to point at: <code>parentId: 999</code> fails with P2003, and the only row that can be created is one that is its own parent (<code>{"id":2,"parentId":2}</code>), a cycle on day one.</span></div>
   <div class="lz-step"><span class="lz-k"><code>onDelete: Cascade</code> recurses</span><span class="lz-t">Deleting a comment deletes its whole subtree</span><span class="lz-d">PostgreSQL follows the cascade down every level. Usually what you want for replies; check the depth before you rely on it.</span></div>
   <div class="lz-step"><span class="lz-k">Index the parent</span><span class="lz-t"><code>@@index([parentId])</code></span><span class="lz-d">"Give me the replies to this comment" is the query the whole feature is built on, and it is a sequential scan without this line.</span></div>
 </div>
@@ -1331,10 +1393,11 @@ const roots = await prisma.comment.findMany({
   orderBy: { id: 'asc' },
 });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "comments" WHERE ("post_id" = $1 AND "parent_id" IS NULL) ORDER BY "id" ASC
-prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3)
-prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3,$4,$5,$6,$7)</div>
+prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2)
+prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2)
+rows in the include tree: 5 of 7</div>
 <div class="pitfall">
-<p><strong>Trap — <code>include</code> cannot express "all the way down".</strong> Each nesting level is written out by hand and costs one query. Ten levels means ten <code>include</code>s and ten statements, and eleven levels silently returns a truncated tree with no error at all. There is no recursive <code>include</code> in Prisma and there is unlikely ever to be one, because the type would have to be infinite. For an arbitrarily deep tree you need the recursive CTE below.</p>
+<p><strong>Trap — <code>include</code> cannot express "all the way down".</strong> Each nesting level is written out by hand and costs one query. Measured above on a reply chain five levels deep (Prisma 6.19.3, 12 Nov 2026): three levels of <code>include</code>, three statements, and <strong>5 of the 7 rows</strong> — the two deepest replies are simply missing, with no error and no warning. There is no recursive <code>include</code> in Prisma and there is unlikely ever to be one, because the type would have to be infinite. For an arbitrarily deep tree you need the recursive CTE below.</p>
 </div>
 
 <h3>The query a comment tree eventually needs</h3>
@@ -1355,13 +1418,17 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
     WHERE tree.depth &lt; 10
   )
   SELECT * FROM tree ORDER BY path&#96;;</code></pre>
-<div class="out">[
-  { id: 1,  body: 'Bai hay',        parentId: null, depth: 0, path: [1] },
-  { id: 4,  body: 'Dong y',         parentId: 1,    depth: 1, path: [1, 4] },
-  { id: 9,  body: 'Vi sao?',        parentId: 4,    depth: 2, path: [1, 4, 9] },
-  { id: 12, body: 'Vi no nhanh',    parentId: 9,    depth: 3, path: [1, 4, 9, 12] },
-  { id: 2,  body: 'Chua thuyet phuc', parentId: null, depth: 0, path: [2] }
-]</div>
+<div class="out">1 Bai hay  depth=0 path=[1]
+  3 Dong y  depth=1 path=[1,3]
+    4 Vi sao?  depth=2 path=[1,3,4]
+      5 Vi no nhanh  depth=3 path=[1,3,4,5]
+        6 Nhanh the nao?  depth=4 path=[1,3,4,5,6]
+2 Chua thuyet phuc  depth=0 path=[2]
+  7 Toi cung nghi vay  depth=1 path=[2,7]
+
+-- the same CTE started from a two-row cycle (8 → 9 → 8, made by hand):
+bound 10: 11 rows, depth 10, 3 ms
+bound 100000: 100001 rows, depth 100000, 172 ms</div>
 <div class="callout ok">
 <p><strong>Three details make that query production-ready.</strong> <code>ORDER BY path</code> returns the rows already in display order, so the client renders them without sorting. <code>depth</code> gives you the indentation for free. And <code>WHERE tree.depth &lt; 10</code> is a hard stop: a cycle in the data — which a bug or a bad import can create — would otherwise loop forever and take the connection with it. Always bound a recursive CTE.</p>
 </div>
@@ -1443,23 +1510,39 @@ model Post {
 }</code></pre>
 <pre><code class="language-bash"><span class="tok-comment">// Remove the names and see what Prisma says</span>
 npx prisma validate</code></pre>
-<div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;author&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
-  --&gt;  prisma/schema.prisma:18</div>
-<p>Clear, and it names the fix. Note the two different <code>onDelete</code> choices in the working version, which is the point of separating them: deleting a user must not silently delete the posts they wrote (<code>Restrict</code>, the default), but it should clear the reviewer field on posts they merely approved (<code>SetNull</code>). One relation, one policy.</p>
+<div class="out">Error code: P1012
+error: Error validating model "User": Ambiguous relation detected. The fields &#96;daViet&#96; and &#96;daDuyet&#96; in model &#96;User&#96; both refer to &#96;Post&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;).
+  --&gt;  p3/35/haiquanhe.prisma:41</div>
+<p>Clear, and it names the fix — though notice <em>where</em> it points: at <code>User</code> and its two list fields, not at the two relation fields on <code>Post</code> (Prisma 6.19.3, 12 Nov 2026). Measured on the working version: deleting the author is refused with P2003, deleting the approver sets <code>approverId</code> to null. Note the two different <code>onDelete</code> choices in the working version, which is the point of separating them: deleting a user must not silently delete the posts they wrote (<code>Restrict</code>, the default), but it should clear the reviewer field on posts they merely approved (<code>SetNull</code>). One relation, one policy.</p>
 
 <h3>Naming the implicit join table</h3>
 <pre><code><span class="tok-comment">// Without a name: table is _CategoryToPost, columns A and B</span>
 categories Category[]
 
-<span class="tok-comment">// With a name: table is _PhanLoai — readable to a DBA, stable across model renames</span>
+<span class="tok-comment">// With a name: table is _PhanLoai — readable to a DBA, and the table survives a model rename</span>
 categories Category[] @relation("PhanLoai")</code></pre>
-<div class="out">           Table "public._PhanLoai"
- Column |  Type   | Nullable
---------+---------+----------
- A      | integer | not null
- B      | integer | not null</div>
+<div class="out">             Table "public._PhanLoai"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ A      | integer |           | not null |
+ B      | integer |           | not null |
+Indexes:
+    "_PhanLoai_AB_pkey" PRIMARY KEY, btree ("A", "B")
+    "_PhanLoai_B_index" btree ("B")</div>
 <div class="callout">
-<p><strong>A small habit worth adopting.</strong> Naming implicit relations costs nothing and buys two things: a table name a human can read in a backup or an analytics tool, and stability — rename the <code>Category</code> model later and an unnamed join table renames with it, which is a migration you did not ask for. The columns are still <code>A</code> and <code>B</code>; only the table name improves.</p>
+<p><strong>A small habit worth adopting.</strong> Naming implicit relations costs nothing and buys two things: a table name a human can read in a backup or an analytics tool, and stability — rename the <code>Category</code> model later and an unnamed join table is dropped and recreated under a new name — a migration you did not ask for, and one that loses every link. The columns are still <code>A</code> and <code>B</code>, though, and that is the catch below.</p>
+</div>
+<div class="out">$ # rename model Category → Tag, relation unnamed (migrate diff, Prisma 6.19.3)
+DROP TABLE "_CategoryToPost";
+CREATE TABLE "_PostToTag" (
+$ # rename model Category → Tag, @relation("PhanLoai")
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_B_fkey" FOREIGN KEY ("B") REFERENCES "Tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+$ # rename Category → Tag WITH @@map("Category"), @relation("PhanLoai")
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_B_fkey" FOREIGN KEY ("B") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;</div>
+<div class="pitfall">
+<p><strong>Trap — a name keeps the table, not the meaning of <code>A</code> and <code>B</code>.</strong> <code>A</code> and <code>B</code> are always assigned alphabetically. With <code>Category</code> and <code>Post</code>, <code>A</code> is the category; rename <code>Category</code> to <code>Tag</code> and <code>Post</code> now sorts first, so migrate diff re-points <code>A</code> at <code>Post</code> — while every existing row still holds a category id in <code>A</code>. <code>@@map</code> does not save you: renaming the model to <code>Tag</code> with <code>@@map("Category")</code> keeps the <code>Category</code> table but still re-points <code>A</code> at <code>Post</code> — the order follows <em>model</em> names, not table names. If a model in an implicit many-to-many may ever be renamed, move to an explicit join model first, or write the migration by hand and swap the two columns. Measured with <code>prisma migrate diff</code> on Prisma 6.19.3, 12 Nov 2026.</p>
 </div>
 
 <h3>Learning sources for this lesson</h3>
@@ -1490,7 +1573,7 @@ categories Category[] @relation("PhanLoai")</code></pre>
 }</code></pre>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">Cái tên là bắt buộc</span><span class="lz-t"><code>@relation("TraLoi")</code> ở cả hai trường</span><span class="lz-d">Không có nó thì Prisma nhìn thấy hai trường kiểu <code>Comment</code> trên <code>Comment</code> và không biết <code>parent</code> ghép với <code>replies</code> hay ghép với chính nó. Cái tên chính là phép ghép đôi.</span></div>
-  <div class="lz-step"><span class="lz-k">Cha phải tuỳ chọn</span><span class="lz-t"><code>parentId Int?</code></span><span class="lz-d">Một bình luận gốc không có cha. Bắt buộc nghĩa là mọi bình luận đều cần cha, và như thế thì không có trường hợp cơ sở, không có hàng đầu tiên.</span></div>
+  <div class="lz-step"><span class="lz-k">Cha phải tuỳ chọn</span><span class="lz-t"><code>parentId Int?</code></span><span class="lz-d">Một bình luận gốc không có cha. Prisma <em>không</em> chặn bạn viết <code>parentId Int</code> — lược đồ vẫn hợp lệ — nhưng khi ấy bình luận đầu tiên chẳng có gì để trỏ vào: <code>parentId: 999</code> hỏng với P2003, và hàng duy nhất tạo được là hàng làm cha của chính nó (<code>{"id":2,"parentId":2}</code>) — một chu trình ngay từ ngày đầu.</span></div>
   <div class="lz-step"><span class="lz-k"><code>onDelete: Cascade</code> đi đệ quy</span><span class="lz-t">Xoá một bình luận là xoá cả cây con của nó</span><span class="lz-d">PostgreSQL đi theo dây chuyền xuống mọi tầng. Thường là đúng ý cho phần trả lời; hãy kiểm độ sâu trước khi trông cậy vào nó.</span></div>
   <div class="lz-step"><span class="lz-k">Đánh chỉ mục cho cha</span><span class="lz-t"><code>@@index([parentId])</code></span><span class="lz-d">"Cho tôi các trả lời của bình luận này" là câu truy vấn mà cả tính năng dựng trên nó, và nó là một lần quét tuần tự nếu thiếu dòng này.</span></div>
 </div>
@@ -1501,10 +1584,11 @@ const roots = await prisma.comment.findMany({
   orderBy: { id: 'asc' },
 });</code></pre>
 <div class="out">prisma:query SELECT ... FROM "comments" WHERE ("post_id" = $1 AND "parent_id" IS NULL) ORDER BY "id" ASC
-prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3)
-prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2,$3,$4,$5,$6,$7)</div>
+prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2)
+prisma:query SELECT ... FROM "comments" WHERE "parent_id" IN ($1,$2)
+rows in the include tree: 5 of 7</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>include</code> không diễn đạt được "xuống tới tận cùng".</strong> Mỗi tầng lồng phải viết ra bằng tay và tốn một câu truy vấn. Mười tầng nghĩa là mười cái <code>include</code> và mười câu lệnh, còn tầng thứ mười một thì âm thầm trả về một cái cây bị cắt cụt mà không báo lỗi gì. Prisma không có <code>include</code> đệ quy và nhiều khả năng sẽ không bao giờ có, vì cái kiểu ấy sẽ phải là vô hạn. Với một cái cây sâu tuỳ ý, bạn cần CTE đệ quy ngay dưới đây.</p>
+<p><strong>Bẫy — <code>include</code> không diễn đạt được "xuống tới tận cùng".</strong> Mỗi tầng lồng phải viết ra bằng tay và tốn một câu truy vấn. Đo ở trên với một chuỗi trả lời sâu năm tầng (Prisma 6.19.3, 12/11/2026): ba tầng <code>include</code>, ba câu lệnh, và <strong>5 trên 7 hàng</strong> — hai trả lời sâu nhất biến mất, không lỗi, không cảnh báo. Prisma không có <code>include</code> đệ quy và nhiều khả năng sẽ không bao giờ có, vì cái kiểu ấy sẽ phải là vô hạn. Với một cái cây sâu tuỳ ý, bạn cần CTE đệ quy ngay dưới đây.</p>
 </div>
 
 <h3>Câu truy vấn mà một cây bình luận rốt cuộc sẽ cần</h3>
@@ -1525,13 +1609,17 @@ const tree = await prisma.$queryRaw&lt;Node[]&gt;&#96;
     WHERE tree.depth &lt; 10
   )
   SELECT * FROM tree ORDER BY path&#96;;</code></pre>
-<div class="out">[
-  { id: 1,  body: 'Bai hay',        parentId: null, depth: 0, path: [1] },
-  { id: 4,  body: 'Dong y',         parentId: 1,    depth: 1, path: [1, 4] },
-  { id: 9,  body: 'Vi sao?',        parentId: 4,    depth: 2, path: [1, 4, 9] },
-  { id: 12, body: 'Vi no nhanh',    parentId: 9,    depth: 3, path: [1, 4, 9, 12] },
-  { id: 2,  body: 'Chua thuyet phuc', parentId: null, depth: 0, path: [2] }
-]</div>
+<div class="out">1 Bai hay  depth=0 path=[1]
+  3 Dong y  depth=1 path=[1,3]
+    4 Vi sao?  depth=2 path=[1,3,4]
+      5 Vi no nhanh  depth=3 path=[1,3,4,5]
+        6 Nhanh the nao?  depth=4 path=[1,3,4,5,6]
+2 Chua thuyet phuc  depth=0 path=[2]
+  7 Toi cung nghi vay  depth=1 path=[2,7]
+
+-- the same CTE started from a two-row cycle (8 → 9 → 8, made by hand):
+bound 10: 11 rows, depth 10, 3 ms
+bound 100000: 100001 rows, depth 100000, 172 ms</div>
 <div class="callout ok">
 <p><strong>Ba chi tiết khiến câu truy vấn ấy dùng được trên production.</strong> <code>ORDER BY path</code> trả về các hàng đã đúng thứ tự hiển thị, nên phía client vẽ ra mà không cần sắp lại. <code>depth</code> cho bạn mức thụt lề miễn phí. Còn <code>WHERE tree.depth &lt; 10</code> là một cái phanh cứng: một chu trình trong dữ liệu — thứ mà một con bọ hay một lần nhập dữ liệu hỏng có thể tạo ra — nếu không sẽ lặp vô tận và kéo theo cả cái kết nối. Luôn chặn biên cho một CTE đệ quy.</p>
 </div>
@@ -1613,23 +1701,39 @@ model Post {
 }</code></pre>
 <pre><code class="language-bash"><span class="tok-comment">// Bỏ hai cái tên đi rồi xem Prisma nói gì</span>
 npx prisma validate</code></pre>
-<div class="out">error: Error validating model "Post": Ambiguous relation detected. The fields &#96;author&#96; and &#96;nguoiDuyet&#96; in model &#96;Post&#96; both refer to &#96;User&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;)&#96;.
-  --&gt;  prisma/schema.prisma:18</div>
-<p>Rõ ràng, và nó nêu luôn cách vá. Để ý hai lựa chọn <code>onDelete</code> khác nhau trong bản chạy được, vì đó chính là điểm của việc tách chúng ra: xoá một người dùng thì không được âm thầm xoá những bài họ đã viết (<code>Restrict</code>, mặc định), nhưng nên xoá trường người duyệt trên những bài họ chỉ đi duyệt (<code>SetNull</code>). Một quan hệ, một chính sách.</p>
+<div class="out">Error code: P1012
+error: Error validating model "User": Ambiguous relation detected. The fields &#96;daViet&#96; and &#96;daDuyet&#96; in model &#96;User&#96; both refer to &#96;Post&#96;. Please provide different relation names for them by adding &#96;@relation(&lt;name&gt;).
+  --&gt;  p3/35/haiquanhe.prisma:41</div>
+<p>Rõ ràng, và nó nêu luôn cách vá — nhưng để ý nó chỉ vào <em>đâu</em>: vào <code>User</code> và hai trường danh sách của nó, không phải hai trường quan hệ trên <code>Post</code> (Prisma 6.19.3, 12/11/2026). Đo trên bản chạy được: xoá tác giả bị từ chối với P2003, xoá người duyệt thì <code>approverId</code> thành null. Để ý hai lựa chọn <code>onDelete</code> khác nhau trong bản chạy được, vì đó chính là điểm của việc tách chúng ra: xoá một người dùng thì không được âm thầm xoá những bài họ đã viết (<code>Restrict</code>, mặc định), nhưng nên xoá trường người duyệt trên những bài họ chỉ đi duyệt (<code>SetNull</code>). Một quan hệ, một chính sách.</p>
 
 <h3>Đặt tên cho bảng nối ẩn</h3>
 <pre><code><span class="tok-comment">// Không đặt tên: bảng là _CategoryToPost, hai cột A và B</span>
 categories Category[]
 
-<span class="tok-comment">// Có tên: bảng là _PhanLoai — DBA đọc được, và ổn định khi model đổi tên</span>
+<span class="tok-comment">// Có tên: bảng là _PhanLoai — DBA đọc được, và bảng còn nguyên khi model đổi tên</span>
 categories Category[] @relation("PhanLoai")</code></pre>
-<div class="out">           Table "public._PhanLoai"
- Column |  Type   | Nullable
---------+---------+----------
- A      | integer | not null
- B      | integer | not null</div>
+<div class="out">             Table "public._PhanLoai"
+ Column |  Type   | Collation | Nullable | Default
+--------+---------+-----------+----------+---------
+ A      | integer |           | not null |
+ B      | integer |           | not null |
+Indexes:
+    "_PhanLoai_AB_pkey" PRIMARY KEY, btree ("A", "B")
+    "_PhanLoai_B_index" btree ("B")</div>
 <div class="callout">
-<p><strong>Một thói quen nhỏ đáng nhận.</strong> Đặt tên cho quan hệ ẩn không tốn gì và đổi lại hai thứ: một tên bảng mà con người đọc được trong một bản sao lưu hay một công cụ phân tích, và tính ổn định — đổi tên model <code>Category</code> về sau thì một bảng nối không tên sẽ đổi tên theo, tức là một migration bạn không hề xin. Hai cột vẫn là <code>A</code> và <code>B</code>; chỉ tên bảng khá lên.</p>
+<p><strong>Một thói quen nhỏ đáng nhận.</strong> Đặt tên cho quan hệ ẩn không tốn gì và đổi lại hai thứ: một tên bảng mà con người đọc được trong một bản sao lưu hay một công cụ phân tích, và tính ổn định — đổi tên model <code>Category</code> về sau thì một bảng nối không tên bị xoá rồi tạo lại dưới tên mới — một migration bạn không hề xin, và làm mất mọi mối nối. Tuy vậy hai cột vẫn là <code>A</code> và <code>B</code>, và đó là cái bẫy ngay dưới.</p>
+</div>
+<div class="out">$ # đổi tên model Category → Tag, quan hệ không tên (migrate diff, Prisma 6.19.3)
+DROP TABLE "_CategoryToPost";
+CREATE TABLE "_PostToTag" (
+$ # đổi tên model Category → Tag, có @relation("PhanLoai")
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_B_fkey" FOREIGN KEY ("B") REFERENCES "Tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+$ # đổi tên Category → Tag CÓ @@map("Category"), @relation("PhanLoai")
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_A_fkey" FOREIGN KEY ("A") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_PhanLoai" ADD CONSTRAINT "_PhanLoai_B_fkey" FOREIGN KEY ("B") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;</div>
+<div class="pitfall">
+<p><strong>Bẫy — đặt tên giữ được bảng, không giữ được nghĩa của <code>A</code> và <code>B</code>.</strong> <code>A</code> và <code>B</code> luôn xếp theo chữ cái. Với <code>Category</code> và <code>Post</code> thì <code>A</code> là chuyên mục; đổi tên <code>Category</code> thành <code>Tag</code> thì <code>Post</code> đứng trước, nên migrate diff trỏ lại <code>A</code> vào <code>Post</code> — trong khi mọi hàng cũ vẫn giữ id chuyên mục ở cột <code>A</code>. <code>@@map</code> không cứu được: đổi tên model thành <code>Tag</code> kèm <code>@@map("Category")</code> thì bảng <code>Category</code> còn nguyên nhưng <code>A</code> vẫn bị trỏ lại vào <code>Post</code> — thứ tự đi theo tên <em>model</em>, không theo tên bảng. Nếu một model trong quan hệ nhiều–nhiều ẩn có thể bị đổi tên, hãy chuyển sang model nối tường minh trước, hoặc viết migration bằng tay và đổi chỗ hai cột. Đo bằng <code>prisma migrate diff</code> trên Prisma 6.19.3, ngày 12/11/2026.</p>
 </div>
 
 <h3>Nguồn học cho bài này</h3>

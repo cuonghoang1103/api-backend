@@ -78,7 +78,7 @@ export const slides = lamDeck({ chuong: 'Chapter 3 — Relations', bai: '3.5' },
   /* 12 */ { t: 'Naming the implicit join table — and a rename trap', body: two(tp(gon(OUT('bang-ten')).split('\n').slice(0, 7).join('\n'), { wrap: 52, fs: 12 }),
       tp(gon(OUT('doiten')).replace(/^\$ .*$/m, '$ # rename Category → Tag, no name').split('\n').filter((l) => /^\$|DROP TABLE|CREATE TABLE/.test(l)).join('\n') + '\n' +
         gon(OUT('doiten-coten')).replace(/^\$ .*$/m, '$ # rename Category → Tag, @relation("PhanLoai")').split('\n').filter((l) => /^\$|ADD CONSTRAINT/.test(l)).join('\n'), { wrap: 58, fs: 12 }), 'r46') +
-    box('A name keeps the table — not the meaning of A and B', 'Unnamed: the join table is dropped and recreated (links lost). Named: <code>_PhanLoai</code> stays, but A and B are still assigned alphabetically — after the rename <b>A points at Post</b>. The old rows hold category ids in A. Rename models with <code>@@map</code>, or go explicit.', 'do2') },
+    box('A name keeps the table — not the meaning of A and B', 'Unnamed: the join table is dropped and recreated (links lost). Named: <code>_PhanLoai</code> stays, but A and B are still assigned alphabetically — after the rename <b>A points at Post</b>. The old rows hold category ids in A. <code>@@map</code> does not help — the order follows model names. Go explicit before you rename.', 'do2') },
   /* 13 */ { t: 'Your turn — and what to keep', body: two(steps([
       `Remove ${c('@relation("TraLoi")')}; read the P1012`,
       `Build a five-deep chain; read it with ${c('include')}, then with the CTE`,

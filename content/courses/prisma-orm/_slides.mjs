@@ -17,7 +17,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/PR';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'pr-01-1': 'v2' }. */
-const VER = {};
+const VER = { 'pr-03-5': 'v2' };  // 12/11: slide 12 đính chính @@map (A/B theo tên model)
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

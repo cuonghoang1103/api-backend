@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G04_1 from './giang/pr-04-1.mjs';
+import G04_2 from './giang/pr-04-2.mjs';
+import G04_3 from './giang/pr-04-3.mjs';
+import G04_4 from './giang/pr-04-4.mjs';
+import G04_5 from './giang/pr-04-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'findUnique, findUniqueOrThrow, findFirst, findFirstOrThrow, findMany, count — mỗi cái sinh ra SQL gì, cái nào trả null và cái nào ném lỗi, vì sao findUnique chỉ nhận trường unique, và bẫy findFirst không có orderBy.',
       content: `
+${G04_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
 <h2>The six ways to read</h2>
@@ -352,6 +358,7 @@ SELECT "public"."users"."id" FROM "public"."users" WHERE "public"."users"."email
       type: 'LESSON',
       description: 'Hai cách chọn dữ liệu và vì sao chúng loại trừ nhau, lồng chúng vào nhau tới độ sâu bất kỳ, omit của Prisma 6 cho cột mật khẩu, _count trong include, API kiểu chuỗi, và cách kiểu trả về đi theo đúng thứ bạn xin.',
       content: `
+${G04_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.2</span>
 <h2><code>select</code>, <code>include</code>, and shaping the result</h2>
@@ -733,6 +740,7 @@ function render(b: PostSummary) {
       type: 'LESSON',
       description: 'create với ghi lồng nhau, createMany nhanh gấp bao nhiêu lần và nó KHÔNG làm được gì, createManyAndReturn, skipDuplicates, P2002 khi đụng ràng buộc unique, và cách nhập mười nghìn hàng mà không giết connection pool.',
       content: `
+${G04_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.3</span>
 <h2>Creating rows</h2>
@@ -1078,6 +1086,7 @@ model Post {
       type: 'LESSON',
       description: 'update so với updateMany và cái nào trả về hàng, sáu toán tử nguyên tử cho số và mảng, upsert cùng cuộc đua bên trong nó, ghi lồng nhau trên quan hệ, và updateManyAndReturn của Prisma 6.',
       content: `
+${G04_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.4</span>
 <h2>Updating, and the atomic operators</h2>
@@ -1447,6 +1456,7 @@ UPDATE "products" SET "stock" = "products"."stock" - $1 WHERE ("id"=$2 AND "prod
       type: 'LESSON',
       description: 'delete với deleteMany, xoá dây chuyền tốn gì thật, vì sao gần như mọi ứng dụng thật đều cần xoá mềm, và ba cách cài nó — tay, client extension, partial index — kèm cái bẫy làm hỏng ràng buộc unique.',
       content: `
+${G04_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.5</span>
 <h2>Deleting, and soft delete done properly</h2>

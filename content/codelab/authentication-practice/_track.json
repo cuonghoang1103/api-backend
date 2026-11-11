@@ -326,6 +326,150 @@
       "name": "Lab 8 ID-token check",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 8-1 — Write verifyIdToken(payload, ctx): the seven checks · Lab 8-2 — Write audienceOk(aud, expected): string or array · Lab 8-3 — Read the reference grade"
+    },
+    {
+      "slug": "auth-9-1-phan-quyen-la-gi",
+      "name": "9.1 Where authentication ends and the expensive bugs begin",
+      "level": "BEGINNER",
+      "description": "Luyện: 9.1-1 — Where authentication ends · 9.1-2 — Write allows(grants, action): deny by default · 9.1-3 — Order the three structural rules"
+    },
+    {
+      "slug": "auth-9-2-rbac",
+      "name": "9.2 RBAC, and the boolean that becomes forty booleans",
+      "level": "BEGINNER",
+      "description": "Luyện: 9.2-1 — Roles grant actions · 9.2-2 — Write roleCan(role, action): the RBAC lookup · 9.2-3 — Role → what it adds"
+    },
+    {
+      "slug": "auth-9-3-abac-rebac",
+      "name": "9.3 Attributes and relationships: authorization RBAC cannot express",
+      "level": "BEGINNER",
+      "description": "Luyện: 9.3-1 — The gaps RBAC leaves · 9.3-2 — Write canCancel(user, booking): ABAC + ReBAC · 9.3-3 — Model → example"
+    },
+    {
+      "slug": "auth-9-4-nhieu-tenant",
+      "name": "9.4 Multi-tenancy: the boundary that must never leak",
+      "level": "BEGINNER",
+      "description": "Luyện: 9.4-1 — The boundary that must not leak · 9.4-2 — Write statusFor(ctx): 404, not 403, across tenants · 9.4-3 — Request → status"
+    },
+    {
+      "slug": "auth-9-5-dat-phep-kiem-o-dau",
+      "name": "9.5 Where the check lives, and how to make forgetting impossible",
+      "level": "BEGINNER",
+      "description": "Luyện: 9.5-1 — One gate, not a review note · 9.5-2 — Write gate(ctx): the one middleware decision · 9.5-3 — Order a request through the gate"
+    },
+    {
+      "slug": "auth-9-7-lab-can",
+      "name": "Lab 9 LabFlow's one authorization gate",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 9-1 — The order is the lesson · Lab 9-2 — Write can(user, action, resource): the whole gate · Lab 9-3 — Grade each attempt"
+    },
+    {
+      "slug": "auth-10-1-nhoi-tin-vat",
+      "name": "10.1 Credential stuffing, the attack that is happening right now",
+      "level": "BEGINNER",
+      "description": "Luyện: 10.1-1 — The highest-volume attack · 10.1-2 — Write decide(signal): allow / challenge / block · 10.1-3 — Order the anti-stuffing defences"
+    },
+    {
+      "slug": "auth-10-2-lua-dao",
+      "name": "10.2 Phishing, and the kit that relays your real login page",
+      "level": "BEGINNER",
+      "description": "Luyện: 10.2-1 — The relay, not the fake page · 10.2-2 — Write relayableFactor(factor): can an AiTM relay reuse it? · 10.2-3 — Factor → relay outcome"
+    },
+    {
+      "slug": "auth-10-3-cap-phien",
+      "name": "10.3 Session theft: four channels, and what each one can reach",
+      "level": "BEGINNER",
+      "description": "Luyện: 10.3-1 — A stolen session is you · 10.3-2 — Write stolenByXss(store): can injected JS read the token? · 10.3-3 — Channel → what closes it"
+    },
+    {
+      "slug": "auth-10-4-tang-con-nguoi",
+      "name": "10.4 Attacking the human layer: fatigue, the help desk, and the carrier",
+      "level": "BEGINNER",
+      "description": "Luyện: 10.4-1 — Going around the login · 10.4-2 — Write pushApproved(mode, tapped, typedNumber, shownNumber) · 10.4-3 — Human channel → defence"
+    },
+    {
+      "slug": "auth-10-5-chiem-truoc-va-dua",
+      "name": "10.5 Pre-hijacking, and the races nobody tests for",
+      "level": "BEGINNER",
+      "description": "Luyện: 10.5-1 — Two lifecycle attacks · 10.5-2 — Write consumeOnce(token, now): the atomic one-time consume · 10.5-3 — Order the TOCTOU fix"
+    },
+    {
+      "slug": "auth-10-7-lab-chong-nhoi",
+      "name": "Lab 10 Defend against credential stuffing without locking real users",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 10-1 — Stop the attack, not the user · Lab 10-2 — Write decide(signal): the full defence · Lab 10-3 — Grade each attempt"
+    },
+    {
+      "slug": "auth-11-1-bi-mat",
+      "name": "11.1 Secrets: getting them to the process without touching the repo",
+      "level": "BEGINNER",
+      "description": "Luyện: 11.1-1 — Secrets never touch the repo · 11.1-2 — Write missingKeys(env): fail-fast startup check · 11.1-3 — Order a safe startup"
+    },
+    {
+      "slug": "auth-11-2-xoay-khoa",
+      "name": "11.2 Rotating a key without logging everyone out",
+      "level": "BEGINNER",
+      "description": "Luyện: 11.2-1 — Rotate with an overlap · 11.2-2 — Write canVerify(ring, kid): is this key still live? · 11.2-3 — Order the three rotation phases"
+    },
+    {
+      "slug": "auth-11-3-gioi-han-tan-suat",
+      "name": "11.3 Rate limiting that survives real traffic",
+      "level": "BEGINNER",
+      "description": "Luyện: 11.3-1 — The counter must be shared · 11.3-2 — Write effectiveLimit(limit, instances): the real cap · 11.3-3 — Rate-limit choice → why"
+    },
+    {
+      "slug": "auth-11-4-nhat-ky-kiem-toan",
+      "name": "11.4 The audit log: what to write, and what never to",
+      "level": "BEGINNER",
+      "description": "Luyện: 11.4-1 — Write enough, leak nothing · 11.4-2 — Write isSensitive(name): must this field be dropped? · 11.4-3 — Field → audit"
+    },
+    {
+      "slug": "auth-11-5-giam-sat",
+      "name": "11.5 Six signals, and the runbook for when one fires",
+      "level": "BEGINNER",
+      "description": "Luyện: 11.5-1 — Signals and the runbook · 11.5-2 — Write triage(signal): the runbook as a function · 11.5-3 — Signal → action"
+    },
+    {
+      "slug": "auth-11-7-lab-audit-runbook",
+      "name": "Lab 11 The audit log and the runbook",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 11-1 — Keep enough, leak nothing, page rarely · Lab 11-2 — Write severityFor(action): the audit severity · Lab 11-3 — Grade each attempt"
+    },
+    {
+      "slug": "auth-12-1-nam-phut-dau",
+      "name": "12.1 The first five minutes: \"users cannot log in\"",
+      "level": "BEGINNER",
+      "description": "Luyện: 12.1-1 — Measure before you guess · 12.1-2 — Write diagnose(status): status ⇒ broken layer · 12.1-3 — Order the diagnosis"
+    },
+    {
+      "slug": "auth-12-2-tam-hinh-dang",
+      "name": "12.2 Eight shapes of failure, and what each one means",
+      "level": "BEGINNER",
+      "description": "Luyện: 12.2-1 — Read the shape, not the message · 12.2-2 — Write causeOf(shape): shape ⇒ cause · 12.2-3 — Shape → chapter"
+    },
+    {
+      "slug": "auth-12-3-hop-do-nghe",
+      "name": "12.3 The toolbox: answering the question yourself",
+      "level": "BEGINNER",
+      "description": "Luyện: 12.3-1 — Answer it yourself · 12.3-2 — Write tokenState(payload, nowSec): read the expiry · 12.3-3 — Tool → question it answers"
+    },
+    {
+      "slug": "auth-12-4-soat-kho-ma",
+      "name": "12.4 Reviewing a codebase you did not write",
+      "level": "BEGINNER",
+      "description": "Luyện: 12.4-1 — Review highest risk first · 12.4-2 — Write reviewFlag(line): spot an anti-pattern · 12.4-3 — Order the review"
+    },
+    {
+      "slug": "auth-12-5-loi-ket",
+      "name": "12.5 What to build first, and what actually changed",
+      "level": "BEGINNER",
+      "description": "Luyện: 12.5-1 — Build vs adopt, and what changed · 12.5-2 — Write changedByAuth(topic): changed or constant? · 12.5-3 — Changed or constant"
+    },
+    {
+      "slug": "auth-12-7-lab-du-an-cuoi-khoa",
+      "name": "Final project — LabFlow ID v1.0 under attack",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Final-1 — The whole course, graded by attack · Final-2 — Write defendsAgainst(scenario): attack ⇒ chapter · Final-3 — Grade each submission"
     }
   ]
 }

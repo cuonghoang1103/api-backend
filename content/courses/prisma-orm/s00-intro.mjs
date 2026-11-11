@@ -5,12 +5,18 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import batDau1 from './s00/bat-dau-1.mjs';
+import batDau2 from './s00/bat-dau-2.mjs';
+
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
   title: 'Section 0 — What Prisma solves, and getting set up|||Mục 0 — Prisma giải quyết gì, và cài đặt',
   description: 'Vì sao giữa mã và cơ sở dữ liệu cần một lớp nữa, Prisma KHÔNG phải cái gì, cài trong một phút, năm phút đầu tiên với schema đầu tiên và truy vấn đầu tiên, và bản đồ mười ba mục phía trước.',
   lessons: [
+    // Bắt đầu tại đây (1/2, 2/2) — thêm 11/11/2026, đứng TRƯỚC 0.1 (luật: mọi khoá mở đầu bằng 2 bài "Bắt đầu tại đây").
+    batDau1,
+    batDau2,
     /* ─────────────────────────── 0.1 ─────────────────────────── */
     {
       title: '0.1 — What Prisma solves|||0.1 — Prisma giải quyết gì',

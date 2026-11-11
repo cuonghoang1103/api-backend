@@ -128,7 +128,7 @@ ${ma('typescript', CODE.sai)}
 ${ma('javascript', CODE.saiJs)}
 ${ra(OUT['l9-sai-js'])}
 ${BANG_EN}
-<p>Two calls crash. <strong>Six give a wrong answer with no error at all.</strong> A crash at least appears in a log; NaN on a dashboard and a lecturer quietly waiting for approval can live in production for weeks. The silent ones are exactly what a type checker is for.</p>
+<p>Three calls crash. <strong>Five give a wrong answer with no error at all.</strong> A crash at least appears in a log; NaN on a dashboard and a lecturer quietly waiting for approval can live in production for weeks. The silent ones are exactly what a type checker is for.</p>
 
 <h3>What first attempts usually look like</h3>
 <p><strong>Attempt A — silence every error with <code>any</code></strong> (the project keeps it in <code>lab1/yeu/</code>, “yếu” = weak):</p>
@@ -165,7 +165,7 @@ ${RUBRIC_EN}
 ${ma('typescript', CODE.refTime)}
 ${ma('typescript', CODE.refBooking)}
 ${ra(OUT['l8-ref'])}
-<p>Ten out of ten. Compare with attempt B: the function bodies are <strong>byte-for-byte the same</strong>, apart from the import. Everything that changed is in the types — three ideas:</p>
+<p>Ten out of ten. Compare with attempt B: the function bodies are <strong>byte-for-byte the same</strong>, import line included. Everything that changed is in the types — three ideas:</p>
 <ul>
 <li><strong>Literal unions for closed sets</strong> — <code>Role</code>, <code>SlotCode</code> and the status <code>'PENDING' | 'CONFIRMED'</code> catch S5 and S7.</li>
 <li><strong>Explicit return types</strong> — <code>SlotResult</code> says <code>ok: true</code> goes with <code>minutes</code> and <code>ok: false</code> with <code>code</code>, so after <code>if (!slot.ok) throw</code> tsc knows <code>slot.minutes</code> is a <code>number</code>. Part B passes.</li>
@@ -206,7 +206,7 @@ ${ra(OUT['l8-ref'])}
 <li>Renaming <code>.js</code> to <code>.ts</code> already refused 3 of 8 wrong calls; silencing everything with <code>any</code> dropped that to 1.</li>
 <li>Primitive types (<code>string</code>, <code>number</code>) refused 6 of 8 but let “lecturer” and “APPROVED” through, and inference widened <code>ok</code> to <code>boolean</code>.</li>
 <li>Literal unions for closed sets plus explicit return types reached 10/10 without changing a single line of logic.</li>
-<li>Six of the eight wrong calls are <em>silent</em> in JavaScript — wrong results, no error. That is what types are for.</li>
+<li>Five of the eight wrong calls are <em>silent</em> in JavaScript — wrong results, no error. That is what types are for.</li>
 </ul>
 
 <h3>📚 Sources</h3>
@@ -268,7 +268,7 @@ ${ma('typescript', CODE.sai)}
 ${ma('javascript', CODE.saiJs)}
 ${ra(OUT['l9-sai-js'])}
 ${BANG_VI}
-<p>Hai lời gọi làm sập. <strong>Sáu lời gọi trả kết quả sai mà không báo lỗi gì.</strong> Sập thì ít ra còn hiện trong log; còn NaN trên bảng thống kê hay một giảng viên âm thầm chờ duyệt thì có thể sống trên production hàng tuần. Những lỗi im lặng chính là thứ trình kiểm tra kiểu sinh ra để bắt.</p>
+<p>Ba lời gọi làm sập. <strong>Năm lời gọi trả kết quả sai mà không báo lỗi gì.</strong> Sập thì ít ra còn hiện trong log; còn NaN trên bảng thống kê hay một giảng viên âm thầm chờ duyệt thì có thể sống trên production hàng tuần. Những lỗi im lặng chính là thứ trình kiểm tra kiểu sinh ra để bắt.</p>
 
 <h3>Lần thử đầu thường trông thế nào</h3>
 <p><strong>Lần thử A — tắt mọi lỗi bằng <code>any</code></strong> (dự án giữ ở <code>lab1/yeu/</code>):</p>
@@ -305,7 +305,7 @@ ${RUBRIC_VI}
 ${ma('typescript', CODE.refTime)}
 ${ma('typescript', CODE.refBooking)}
 ${ra(OUT['l8-ref'])}
-<p>Mười trên mười. So với lần thử B: thân các hàm <strong>giống hệt từng byte</strong>, trừ dòng import. Mọi thay đổi nằm ở kiểu — ba ý:</p>
+<p>Mười trên mười. So với lần thử B: thân các hàm <strong>giống hệt từng byte</strong>, kể cả dòng import. Mọi thay đổi nằm ở kiểu — ba ý:</p>
 <ul>
 <li><strong>Union literal cho tập đóng</strong> — <code>Role</code>, <code>SlotCode</code> và trạng thái <code>'PENDING' | 'CONFIRMED'</code> bắt S5 và S7.</li>
 <li><strong>Kiểu trả về viết rõ</strong> — <code>SlotResult</code> nói <code>ok: true</code> đi với <code>minutes</code>, <code>ok: false</code> đi với <code>code</code>, nên sau <code>if (!slot.ok) throw</code> tsc biết <code>slot.minutes</code> là <code>number</code>. Phần B qua.</li>
@@ -346,7 +346,7 @@ ${ra(OUT['l8-ref'])}
 <li>Đổi đuôi <code>.js</code> sang <code>.ts</code> đã từ chối được 3 trên 8 lời gọi sai; tắt hết bằng <code>any</code> kéo con số đó xuống 1.</li>
 <li>Kiểu nguyên thuỷ (<code>string</code>, <code>number</code>) từ chối 6 trên 8 nhưng để lọt "lecturer" và "APPROVED", còn suy luận nới <code>ok</code> thành <code>boolean</code>.</li>
 <li>Union literal cho tập đóng cộng kiểu trả về viết rõ đạt 10/10 mà không đổi một dòng logic nào.</li>
-<li>Sáu trong tám lời gọi sai là lỗi <em>im lặng</em> trong JavaScript — kết quả sai, không báo lỗi. Kiểu sinh ra để bắt chúng.</li>
+<li>Năm trong tám lời gọi sai là lỗi <em>im lặng</em> trong JavaScript — kết quả sai, không báo lỗi. Kiểu sinh ra để bắt chúng.</li>
 </ul>
 
 <h3>📚 Nguồn</h3>

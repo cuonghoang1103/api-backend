@@ -10291,6 +10291,40 @@ model IeltsCdtAttempt {
   @@map("ielts_cdt_attempts")
 }
 
+/// Kết quả XẾP LỚP sau test đầu vào IELTS (Đề 0, docs/ielts-lo-trinh-0-8.md mục 4.3) — 12/11/2026.
+/// Mỗi lần làm test là MỘT dòng (giữ lịch sử); `tapHieuLuc/ngayHieuLuc` = vị trí đang áp dụng sau luật
+/// "làm lại chỉ ĐẨY LÊN, không kéo xuống" (so với dòng trước của cùng người).
+model IeltsXepLop {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  /// Mã đề đầu vào đã làm (vd "de-0"); null khi gọi từ công cụ khác.
+  deId        String?  @map("de_id") @db.VarChar(40)
+  /// Sàng lọc: số câu đúng / 30.
+  sangLoc     Int      @map("sang_loc")
+  /// Listening / Reading: số câu ĐÚNG / 40 (điểm thô, không phải band).
+  nghe        Int?
+  doc         Int?
+  /// Writing / Speaking: band AI chấm (0–9, bước .5).
+  viet        Float?
+  noi         Float?
+  /// Band tổng theo mục 1.5 (null khi chỉ làm sàng lọc).
+  overall     Float?
+  /// Kết quả luật xếp lớp CỦA LẦN NÀY.
+  tap         Int
+  ngay        Int
+  /// Vị trí hiệu lực sau khi chỉ cho đẩy lên.
+  tapHieuLuc  Int      @map("tap_hieu_luc")
+  ngayHieuLuc Int      @map("ngay_hieu_luc")
+  /// string[] — 2–3 câu "bắt đầu từ đâu, vì sao".
+  lyDo        Json     @map("ly_do") @db.JsonB
+  /// string[] — đường ôn kèm (kỹ năng lệch).
+  duongOnKem  Json     @map("duong_on_kem") @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt], name: "idx_ielts_xep_lop_user")
+  @@map("ielts_xep_lop")
+}
+
 // ============================================================
 // CT WORK — quản lý dự án kiểu Jira (23/09/2026)
 // ============================================================

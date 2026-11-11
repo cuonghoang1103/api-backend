@@ -15,6 +15,15 @@ export function loadNgay(n: number): Promise<Lesson[]> | null {
     case 4: return import('./ngay4').then((m) => m.NGAY_4);
     case 5: return import('./ngay5').then((m) => m.NGAY_5);
     case 6: return import('./ngay6').then((m) => m.NGAY_6);
+    case 7: return import('./ngay7').then((m) => m.NGAY_7);
+    case 8: return import('./ngay8').then((m) => m.NGAY_8);
+    case 9: return import('./ngay9').then((m) => m.NGAY_9);
+    case 10: return import('./ngay10').then((m) => m.NGAY_10);
+    case 11: return import('./ngay11').then((m) => m.NGAY_11);
+    case 12: return import('./ngay12').then((m) => m.NGAY_12);
+    case 13: return import('./ngay13').then((m) => m.NGAY_13);
+    case 14: return import('./ngay14').then((m) => m.NGAY_14);
+    case 15: return import('./ngay15').then((m) => m.NGAY_15);
     default: return null;
   }
 }

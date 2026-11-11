@@ -40,7 +40,7 @@ function DoanVe({ d, i, moc, onBamHl, evRef }: { d: Doan; i: number; moc: Moc[];
     manh.push(
       <span key={a} data-o={a} className={cls || undefined}
         ref={ev && ev.s === a ? (el) => { (evRef as React.MutableRefObject<HTMLElement | null>).current = el; } : undefined}
-        onClick={hl ? (e) => { e.stopPropagation(); onBamHl(hl.id!, e.clientX, e.clientY); } : undefined}>
+        onClick={hl ? (e) => { if (window.getSelection()?.isCollapsed !== false) { e.stopPropagation(); onBamHl(hl.id!, e.clientX, e.clientY); } } : undefined}>
         {d.s.slice(a, b)}
       </span>,
     );
@@ -50,7 +50,7 @@ function DoanVe({ d, i, moc, onBamHl, evRef }: { d: Doan; i: number; moc: Moc[];
 }
 
 export function BaiDoc({
-  tieuDe, phuDe, gioiThieu, doan, hl, setHl, ev, tieuDeChen,
+  tieuDe, phuDe, gioiThieu, doan, hl, setHl, ev, tieuDeChen, chiDoc,
 }: {
   tieuDe: string; phuDe?: string; gioiThieu?: string; doan: Doan[];
   hl: ToSang[]; setHl: (f: (cu: ToSang[]) => ToSang[]) => void;
@@ -58,6 +58,8 @@ export function BaiDoc({
   ev?: string | null;
   /** Tiêu đề người học đã chọn cho từng đoạn (dạng matching headings) — hiện nhỏ trên đầu đoạn. */
   tieuDeChen?: Record<string, string>;
+  /** Xem lại: không tô/ghi chú nữa (chỉ xem bằng chứng). */
+  chiDoc?: boolean;
 }) {
   const goc = useRef<HTMLDivElement>(null);
   const evRef = useRef<HTMLElement | null>(null);
@@ -91,8 +93,22 @@ export function BaiDoc({
   };
 
   const moMenuChon = (e?: React.MouseEvent) => {
+    if (chiDoc) return false;
     const c = layChon();
-    if (!c) { if (!e || e.type !== 'contextmenu') setMenu(null); return false; }
+    if (!c) {
+      // Chuột phải KHÔNG có vùng chọn nhưng trúng chỗ đã tô ⇒ menu Note / Clear (như máy thi thật).
+      if (e?.type === 'contextmenu') {
+        const el = (e.target as HTMLElement).closest?.(`.${s.hl}`) as HTMLElement | null;
+        if (el) {
+          const o = Number(el.dataset.o);
+          const para = Number((el.closest('[data-p]') as HTMLElement | null)?.dataset.p);
+          const h = hl.find((x) => x.p === para && x.s <= o && x.e > o);
+          if (h) { setMenu({ x: Math.min(window.innerWidth - 220, e.clientX - 60), y: Math.max(8, e.clientY - 46), hlId: h.id }); return true; }
+        }
+      }
+      if (!e || e.type !== 'contextmenu') setMenu(null);
+      return false;
+    }
     setMenu({ x: Math.min(window.innerWidth - 200, c.rect.left + c.rect.width / 2 - 70), y: Math.max(8, c.rect.top - 42), chon: { p: c.p, s: c.s, e: c.e } });
     return true;
   };
@@ -117,7 +133,7 @@ export function BaiDoc({
   return (
     <div
       ref={goc}
-      onMouseUp={() => setTimeout(() => moMenuChon(), 0)}
+      onMouseUp={(e) => { if (e.button !== 0) return; setTimeout(() => moMenuChon(), 0); }} /* chuột phải: để contextmenu lo, không đóng menu vừa mở */
       onKeyUp={(e) => { if (e.shiftKey) moMenuChon(); }}
       onContextMenu={(e) => { if (moMenuChon(e)) e.preventDefault(); }}
     >
@@ -138,14 +154,15 @@ export function BaiDoc({
         <div className={s.menuChon} style={{ left: menu.x, top: menu.y }} role="menu" onMouseDown={(e) => e.preventDefault()}>
           {menu.chon && (
             <>
-              <button type="button" role="menuitem" onClick={() => { them(menu.chon!); setMenu(null); }}>🖍 Tô sáng</button>
-              <button type="button" role="menuitem" onClick={() => { const id = them(menu.chon!); setSoan({ id, x: menu.x, y: menu.y + 40, text: '' }); setMenu(null); }}>📝 Ghi chú</button>
+              <button type="button" role="menuitem" onClick={() => { them(menu.chon!); setMenu(null); }}>🖍 Highlight</button>
+              <button type="button" role="menuitem" onClick={() => { const id = them(menu.chon!); setSoan({ id, x: menu.x, y: menu.y + 40, text: '' }); setMenu(null); }}>📝 Note</button>
             </>
           )}
           {menu.hlId && (
             <>
-              <button type="button" role="menuitem" onClick={() => { const h = hl.find((x) => x.id === menu.hlId); setSoan({ id: menu.hlId!, x: menu.x, y: menu.y + 40, text: h?.note ?? '' }); setMenu(null); }}>📝 Ghi chú</button>
-              <button type="button" role="menuitem" onClick={() => { setHl((cu) => cu.filter((h) => h.id !== menu.hlId)); setMenu(null); }}>✕ Xoá tô</button>
+              <button type="button" role="menuitem" onClick={() => { const h = hl.find((x) => x.id === menu.hlId); setSoan({ id: menu.hlId!, x: menu.x, y: menu.y + 40, text: h?.note ?? '' }); setMenu(null); }}>📝 Note</button>
+              <button type="button" role="menuitem" onClick={() => { setHl((cu) => cu.filter((h) => h.id !== menu.hlId)); setMenu(null); }}>✕ Clear</button>
+              {hl.length > 1 && <button type="button" role="menuitem" onClick={() => { setHl(() => []); setMenu(null); }}>Clear all</button>}
             </>
           )}
           <button type="button" role="menuitem" aria-label="Đóng" onClick={() => setMenu(null)}>×</button>
@@ -154,7 +171,7 @@ export function BaiDoc({
 
       {soan && (
         <div className={s.oNote} style={{ left: Math.min(soan.x, window.innerWidth - 340), top: Math.min(soan.y, window.innerHeight - 180) }} role="dialog" aria-label="Ghi chú">
-          <textarea autoFocus value={soan.text} placeholder="Ghi chú cho đoạn đã tô (vd. ý chính, từ đồng nghĩa)…"
+          <textarea autoFocus value={soan.text} placeholder="Note — ghi chú cho đoạn đã tô (ý chính, từ đồng nghĩa…)"
             onChange={(e) => setSoan({ ...soan, text: e.target.value })}
             onKeyDown={(e) => { if (e.key === 'Escape') setSoan(null); if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { setHl((cu) => cu.map((h) => (h.id === soan.id ? { ...h, note: soan.text.trim() || undefined } : h))); setSoan(null); } }} />
           <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end', marginTop: 6 }}>
@@ -167,8 +184,8 @@ export function BaiDoc({
   );
 }
 
-/** Lời thoại bài nghe (xem lại): tô bằng chứng của câu đang xem. */
-export function LoiThoai({ loi, ev }: { loi: { ai: string; s: string }[]; ev?: string | null }) {
+/** Lời thoại bài nghe (xem lại): tô bằng chứng của câu đang xem; ▶ ở từng câu để nghe lại đúng đoạn (12/11/2026). */
+export function LoiThoai({ loi, ev, dangDong = -1, onPhat }: { loi: { ai: string; s: string }[]; ev?: string | null; dangDong?: number; onPhat?: (i: number) => void }) {
   const ref = useRef<HTMLSpanElement | null>(null);
   useEffect(() => { if (ev) requestAnimationFrame(() => ref.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })); }, [ev]);
   return (
@@ -176,7 +193,8 @@ export function LoiThoai({ loi, ev }: { loi: { ai: string; s: string }[]; ev?: s
       {loi.map((l, i) => {
         const k = ev ? l.s.indexOf(ev) : -1;
         return (
-          <p key={i}>
+          <p key={i} className={dangDong === i ? s.loiDang : undefined}>
+            {onPhat && <button type="button" className={s.nutPhatDong} onClick={() => onPhat(i)} aria-label={`Nghe lại câu thoại ${i + 1}`} title="Nghe lại câu này">▶</button>}
             <b>{l.ai}: </b>
             {k < 0 ? l.s : (<>{l.s.slice(0, k)}<span ref={ref} className={`${s.ev} ${s.evOn}`}>{ev}</span>{l.s.slice(k + ev!.length)}</>)}
           </p>

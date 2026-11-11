@@ -87,11 +87,22 @@ let serverOff = false;
 // Tệp im lặng 0,15 giây CÙNG tên miền — `data:` bị CSP media-src chặn (đo 03/10).
 const SILENT = '/audio/im-lang.mp3';
 let el: HTMLAudioElement | null = null;
+/** Âm lượng 0–1 (thanh âm lượng của phòng thi Listening, 12/11/2026) — nhớ trên máy, áp ngay lên tệp đang phát. */
+const VOL_KEY = 'sachhoc:am-luong';
+let userVolume = 1;
+try { const v = Number(localStorage.getItem(VOL_KEY)); if (v >= 0 && v <= 1 && !Number.isNaN(v) && localStorage.getItem(VOL_KEY) != null) userVolume = v; } catch { /* SSR */ }
+export function getVolume() { return userVolume; }
+export function setVolume(v: number) {
+  userVolume = Math.min(1, Math.max(0, v));
+  if (el) el.volume = userVolume;
+  try { localStorage.setItem(VOL_KEY, String(userVolume)); } catch { /* bỏ qua */ }
+}
 function moKhoa() {
   if (typeof window === 'undefined') return;
   if (!el) {
     el = new Audio();
     el.preload = 'auto';
+    el.volume = userVolume;
     el.src = tepTinh(SILENT); // app desktop: tệp tĩnh phải xin bằng địa chỉ tuyệt đối
     el.play().catch(() => { /* ngoài cú bấm — lần sau sẽ mở được */ });
   }

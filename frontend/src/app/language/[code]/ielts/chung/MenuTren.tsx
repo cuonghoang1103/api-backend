@@ -38,11 +38,20 @@ export function MenuTren({ dang, children }: { dang: TrangMenu; children?: React
   );
 }
 
-/** toi: null = THEO giao diện của web (class `theme-dark` trên <html>); true/false = người học tự chọn bằng nút ☾/☀. */
-type TuyChon = { toi: boolean | null; co: number; serif: boolean };
+/**
+ * toi: null = THEO giao diện của web (class `theme-dark` trên <html>); true/false = người học tự chọn bằng nút ☾/☀.
+ * mau (12/11/2026, Settings của phòng thi như máy thi thật): 'auto' theo web · 'bw' Black on white · 'wb' White on black ·
+ * 'yb' Yellow on black — áp cho cả bài đọc lẫn câu hỏi (biến màu ở cdt.module.css `.goc[data-mau]`).
+ */
+export type MauThi = 'auto' | 'bw' | 'wb' | 'yb';
+export type TuyChon = { toi: boolean | null; co: number; serif: boolean; mau: MauThi };
 // Khoá mới (07/10): bản đầu lưu `toi:false` mỗi lần đổi cỡ chữ ⇒ ép sáng mãi dù web tối — khoá cũ bỏ.
 const KHOA = 'ielts-cdt:hien-thi-v2';
-const MAC_DINH: TuyChon = { toi: null, co: 16, serif: false };
+const MAC_DINH: TuyChon = { toi: null, co: 16, serif: false, mau: 'auto' };
+/** Cỡ chữ theo 3 mức của máy thi thật. */
+export const CO_CHU: { id: 'standard' | 'large' | 'xlarge'; ten: string; co: number }[] = [
+  { id: 'standard', ten: 'Standard', co: 16 }, { id: 'large', ten: 'Large', co: 19 }, { id: 'xlarge', ten: 'Extra large', co: 22 },
+];
 
 /** Web có đang để giao diện tối không — theo dõi class `theme-dark` trên <html> (đổi giao diện không cần tải lại trang). */
 function useWebToi(): boolean {
@@ -62,7 +71,9 @@ function useWebToi(): boolean {
 export function useHienThi() {
   const [luu, setTc] = useState<TuyChon>(MAC_DINH);
   const webToi = useWebToi();
-  const tc = { ...luu, toi: luu.toi ?? webToi };
+  // Bảng màu của phòng thi thắng nút ☾/☀: 'bw' luôn sáng, 'wb'/'yb' luôn tối.
+  const mau: MauThi = luu.mau ?? 'auto';
+  const tc: TuyChon = { ...luu, mau, toi: mau === 'bw' ? false : mau === 'wb' || mau === 'yb' ? true : luu.toi ?? webToi };
   useEffect(() => {
     try { const r = localStorage.getItem(KHOA); if (r) setTc({ ...MAC_DINH, ...(JSON.parse(r) as Partial<TuyChon>) }); } catch { /* bỏ qua */ }
   }, []);
@@ -76,6 +87,7 @@ export function useHienThi() {
   const thuocTinh = {
     'data-toi': tc.toi ? '1' : '0',
     'data-serif': tc.serif ? '1' : '0',
+    'data-mau': tc.mau,
     style: { ['--co-chu' as string]: `${tc.co}px` } as React.CSSProperties,
   };
   return { tc, doi, thuocTinh };

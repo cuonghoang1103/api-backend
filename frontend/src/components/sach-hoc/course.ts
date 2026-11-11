@@ -247,6 +247,23 @@ export function lessonText(l: Lesson): string {
       case 'luyenKana': out.push('Luyện bảng chữ cái hiragana/katakana: nhìn chữ gõ romaji, nhìn romaji chọn chữ, nghe chọn chữ, bảng tiến độ từng chữ.'); break;
       case 'hinh': out.push(`${b.title ?? 'Từ vựng bằng hình'}: ${b.items.map((x) => `${strip(x.w)} = ${x.vi}`).join('; ')}`); break;
       case 'canh': out.push(`Cảnh: ${strip(b.caption)}`); break;
+      case 'figure': {
+        const f = b.fig;
+        const so = f.series?.map((x) => `${x.name}: ${x.values.join(', ')}`).join('; ')
+          ?? f.slices?.map((x) => `${x.label} ${x.value}`).join(', ')
+          ?? f.steps?.map((x, k) => `${k + 1}. ${x.label}`).join(' → ') ?? '';
+        out.push(`Hình Task 1 (${f.kind}) "${f.title}"${f.categories ? ` [${f.categories.join(', ')}]` : ''}${f.unit ? ` (${f.unit})` : ''}: ${so}`);
+        break;
+      }
+      case 'sodo': {
+        const chu =
+          b.kind === 'timeline' ? b.marks.map((m) => `${strip(m.label)} (${m.from}${m.to !== undefined ? `→${m.to}` : ''})`).join('; ')
+          : b.kind === 'flow' ? b.steps.map((x, k) => `${k + 1}. ${strip(x.label)}${x.sub ? ` — ${strip(x.sub)}` : ''}`).join(' → ')
+          : b.kind === 'mindmap' ? `${strip(b.center)}: ${b.branches.map((x) => `${strip(x.label)}${x.items ? ` (${x.items.map(strip).join(', ')})` : ''}`).join('; ')}`
+          : b.cols.map((c) => `${strip(c.title)}: ${c.items.map(strip).join(', ')}`).join(' | ');
+        out.push(`Sơ đồ${b.title ? ` "${strip(b.title)}"` : ''}: ${chu}${b.caption ? `. ${strip(b.caption)}` : ''}`);
+        break;
+      }
       case 'slides': out.push(`Slide "${b.title}": ${b.slides.map((x) => [x.tieuDe, ...(x.dong ?? []), x.hoi].filter(Boolean).map((t) => strip(t as string)).join(' · ')).join(' / ')}`); break;
     }
   }

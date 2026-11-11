@@ -238,7 +238,7 @@ function MotCauOn({ m, tiep }: { m: MucLoi; tiep: (m?: MucLoi) => void }) {
   const dl = (m.duLieu ?? {}) as { deId?: string; n?: number; loai?: string; tu?: string; goc?: string };
 
   useEffect(() => {
-    if (dl.deId) void taiDe(dl.deId)?.then((d) => { if (d.kyNang !== 'viet') setDe(d); });
+    if (dl.deId) void taiDe(dl.deId)?.then((d) => { if (d.kyNang === 'doc' || d.kyNang === 'nghe') setDe(d); });
     if (dl.loai === 'tu' && dl.tu) void play({ text: dl.tu, voice: 'uk-nu', toc: 0.9 });
   }, [dl.deId, dl.loai, dl.tu]);
 

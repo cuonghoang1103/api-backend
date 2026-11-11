@@ -318,6 +318,8 @@
 .vocab { margin: 16px 0; border: 1px solid var(--lh-line); border-radius: 12px; background: var(--lh-surface); overflow: hidden; }
 .word { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--lh-line); }
 .word:last-child { border-bottom: none; }
+.wordCoAnh { grid-template-columns: 28px minmax(0, 1fr) 56px; }
+.wordAnh { width: 56px; height: 56px; object-fit: contain; align-self: center; }
 .wordHead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
 .wordW { font-size: 17px; font-weight: 650; color: var(--lh-ink); }
 .wordPos { font-size: 13px; font-style: italic; color: var(--lh-ink-3); }

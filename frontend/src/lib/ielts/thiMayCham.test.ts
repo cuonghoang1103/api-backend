@@ -4,13 +4,16 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { chuanHoa, demTu, vuotGioiHan, dungCauGo, chamNhom, bandTuDiem, doanLyDo, dinhDangGio, nhomCuaDe } from '../../app/language/[code]/ielts/thi-may/cham';
+import { chuanHoa, demTu, vuotGioiHan, dungCauGo, chamNhom, bandTuDiem, doanLyDo, dinhDangGio, nhomCuaDe, conChu, lamTronBand, bandTong, BAI_ON, ngayCuaBai, linkBai } from '../../app/language/[code]/ielts/thi-may/cham';
 import type { Nhom, DeDoc, DeNghe, DapAn } from '../../app/language/[code]/ielts/thi-may/de/types';
 import { DANG_GO } from '../../app/language/[code]/ielts/thi-may/de/types';
 import { DOC_01 } from '../../app/language/[code]/ielts/thi-may/de/doc-01';
 import { NGHE_01 } from '../../app/language/[code]/ielts/thi-may/de/nghe-01';
 import { VIET_01 } from '../../app/language/[code]/ielts/thi-may/de/viet-01';
-import { MUC_LUC } from '../../app/language/[code]/ielts/thi-may/de/index';
+import { DOC_00 } from '../../app/language/[code]/ielts/thi-may/de/doc-00';
+import { NGHE_00 } from '../../app/language/[code]/ielts/thi-may/de/nghe-00';
+import { MUC_LUC, BO_DE, deCuaBo, coDe, TEN_KY_NANG } from '../../app/language/[code]/ielts/thi-may/de/index';
+import { MANIFEST } from '../../app/language/[code]/ielts/ngay/manifest';
 
 test('chuẩn hoá: hoa/thường, khoảng trắng, dấu câu hai đầu, phẩy nghìn, ký hiệu tiền', () => {
   assert.equal(chuanHoa('  Salt. '), 'salt');
@@ -136,12 +139,59 @@ function kiemDe(de: DeDoc | DeNghe) {
 
 test('đề Reading 01: 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(DOC_01));
 test('đề Listening 01: 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(NGHE_01));
+test('Đề 0 Reading (doc-00): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(DOC_00));
+test('Đề 0 Listening (nghe-00): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(NGHE_00));
 
 test('đề Writing 01 + mục lục khớp nội dung', () => {
   assert.equal(VIET_01.task.length, 2);
   for (const t of VIET_01.task) assert.ok(t.mau.s.split(/\s+/).length >= t.minTu, `bài mẫu Task ${t.so} đủ ${t.minTu} từ`);
   const bd = VIET_01.task[0].bieuDo;
   if (bd?.loai === 'cot') for (let i = 0; i < bd.chuoi.length; i++) assert.equal(bd.chuoi[i].so.reduce((a, b) => a + b, 0), 100);
-  assert.deepEqual(MUC_LUC.map((m) => m.id), ['doc-01', 'nghe-01', 'viet-01']);
+  // Đề 0 (sangloc-00, nghe-00, doc-00, viet-00, noi-00) sẽ nối vào đầu khi phiên soạn đề xong — ba đề của Đề 6 phải luôn có.
+  for (const id of ['doc-01', 'nghe-01', 'viet-01']) assert.ok(MUC_LUC.some((m) => m.id === id) && coDe(id), `${id} có trong mục lục + tải được`);
+  for (const m of MUC_LUC) assert.ok(coDe(m.id), `${m.id}: có trong MUC_LUC thì phải có tệp đề (TEP_DE)`);
+  // Dạng câu khai trên thẻ đề khớp nội dung đề thật.
+  const dangThat = (de: DeDoc | DeNghe) => new Set(nhomCuaDe(de).map((g) => g.dang));
+  for (const [id, de] of [['doc-01', DOC_01], ['nghe-01', NGHE_01], ['doc-00', DOC_00], ['nghe-00', NGHE_00]] as const) {
+    const m = MUC_LUC.find((x) => x.id === id)!;
+    assert.deepEqual(new Set(m.dang ?? []), dangThat(de), `${id}: MUC_LUC.dang khớp đề`);
+  }
   for (const p of DOC_01.phan) assert.ok(p.doan.map((d) => d.s).join(' ').split(/\s+/).length >= 550, `passage ${p.so} đủ dài`);
+});
+
+
+/* ── 12/11/2026: đồng hồ "minutes left", band tổng, bộ đề, bài ôn theo dạng ─────────── */
+test('đồng hồ kiểu CDT: "34 minutes left", dưới 1 phút đếm giây, phút làm tròn lên', () => {
+  assert.equal(conChu(34 * 60), '34 minutes left');
+  assert.equal(conChu(33 * 60 + 1), '34 minutes left');
+  assert.equal(conChu(60), '1 minute left');
+  assert.equal(conChu(59), '59 seconds left');
+  assert.equal(conChu(1), '1 second left');
+  assert.equal(conChu(0), '0 seconds left');
+});
+
+test('band tổng (mục 1.5): .25 → .5, .75 → lên nguyên, .125 → .0, .625 → .5; thiếu Speaking tính 3 kỹ năng', () => {
+  assert.equal(lamTronBand(6.25), 6.5);
+  assert.equal(lamTronBand(6.75), 7);
+  assert.equal(lamTronBand(6.125), 6);
+  assert.equal(lamTronBand(6.625), 6.5);
+  assert.deepEqual(bandTong({ nghe: 6.5, doc: 6.5, viet: 5, noi: 7 }), { band: 6.5, soKy: 4 });
+  assert.deepEqual(bandTong({ nghe: 7, doc: 7.5, viet: 6.5 }), { band: 7, soKy: 3 });
+  assert.deepEqual(bandTong({ nghe: null, doc: undefined }), null);
+});
+
+test('bộ đề: Đề 6 = doc-01/nghe-01/viet-01; mọi id trong bộ có tệp thì cũng có trong MUC_LUC; tên kỹ năng đủ 5', () => {
+  const bo6 = BO_DE.find((b) => b.so === 6)!;
+  assert.deepEqual(deCuaBo(bo6).map((d) => d.id), ['nghe-01', 'doc-01', 'viet-01']);
+  for (const b of BO_DE) for (const d of deCuaBo(b)) if (coDe(d.id)) assert.ok(MUC_LUC.some((m) => m.id === d.id && m.kyNang === d.kyNang), `${b.id}: ${d.id} phải có trong MUC_LUC đúng kỹ năng`);
+  assert.deepEqual(Object.keys(TEN_KY_NANG).sort(), ['doc', 'nghe', 'noi', 'sangloc', 'viet']);
+});
+
+test('BAI_ON: mỗi id bài ôn theo dạng câu phải có thật trong ngay/manifest.ts', () => {
+  const taCa = new Set(Object.values(MANIFEST).flatMap((d) => d.lessons.map((l) => l.id)));
+  for (const [dang, ids] of Object.entries(BAI_ON)) for (const id of ids) {
+    assert.ok(taCa.has(id), `BAI_ON[${dang}]: ${id} không có trong manifest`);
+    assert.equal(ngayCuaBai(id), Number(/^d(\d+)-/.exec(id)![1]));
+  }
+  assert.equal(linkBai('d12-doc'), '/language/en/ielts?buoi=12&bai=d12-doc');
 });

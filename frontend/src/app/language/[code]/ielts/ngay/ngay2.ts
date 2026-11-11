@@ -262,13 +262,13 @@ const D2_READING: Lesson = {
       id: "d2-doc-loai-tu-khoa",
       title: "Từ in đậm thuộc loại từ khoá nào? (8 câu)",
       items: [
-        { q: "The museum is **opposite** the train station.", options: ["Định hướng", "Địa điểm", "Tên riêng"], correct: 0, why: "“opposite” (đối diện) chỉ **vị trí** → từ khoá định hướng." },
+        { q: "The museum is **opposite** the train station.", options: ["Địa điểm", "Tên riêng", "Định hướng"], correct: 2, why: "“opposite” (đối diện) chỉ **vị trí** → từ khoá định hướng." },
         { q: "About **40 percent** of students work part-time.", options: ["Thời điểm cụ thể", "Số liệu", "Ví dụ"], correct: 1, why: "Phần trăm là **số liệu**." },
-        { q: "The bridge was built **in the 1960s**.", options: ["Thời điểm cụ thể", "Khoảng thời gian", "Số liệu"], correct: 1, why: "“in the 1960s” là cả một **thập kỷ** → khoảng thời gian." },
+        { q: "The bridge was built **in the 1960s**.", options: ["Số liệu", "Thời điểm cụ thể", "Khoảng thời gian"], correct: 2, why: "“in the 1960s” là cả một **thập kỷ** → khoảng thời gian." },
         { q: "Some fruits, **such as** mangoes, grow well here.", options: ["Ví dụ", "Thay thế", "Chủ đề"], correct: 0, why: "“such as” báo hiệu **ví dụ** sắp đến." },
-        { q: "**Why** do many young people move to big cities?", options: ["Định hướng", "Chủ đề", "Câu hỏi"], correct: 2, why: "“Why” cho biết cần tìm **lý do** → từ khoá câu hỏi." },
-        { q: "The report was written by **UNESCO**.", options: ["Tên riêng", "Địa điểm", "Ví dụ"], correct: 0, why: "Tên một **tổ chức** cụ thể, viết hoa → tên riêng." },
-        { q: "Farmers in this **region** grow rice.", options: ["Tên riêng", "Địa điểm", "Định hướng"], correct: 1, why: "“region” (vùng) là từ chung chỉ nơi chốn → địa điểm." },
+        { q: "**Why** do many young people move to big cities?", options: ["Câu hỏi", "Định hướng", "Chủ đề"], correct: 0, why: "“Why” cho biết cần tìm **lý do** → từ khoá câu hỏi." },
+        { q: "The report was written by **UNESCO**.", options: ["Địa điểm", "Tên riêng", "Ví dụ"], correct: 1, why: "Tên một **tổ chức** cụ thể, viết hoa → tên riêng." },
+        { q: "Farmers in this **region** grow rice.", options: ["Tên riêng", "Định hướng", "Địa điểm"], correct: 2, why: "“region” (vùng) là từ chung chỉ nơi chốn → địa điểm." },
         { q: "Question: “Prices **went up**.” — Bài đọc: “Prices **increased**.”", options: ["Thay thế", "Số liệu", "Câu hỏi"], correct: 0, why: "“went up” và “increased” cùng nghĩa “tăng” → từ khoá **thay thế** (đồng nghĩa)." },
       ],
     },
@@ -429,9 +429,9 @@ const D2_WRITING: Lesson = {
       title: "Kiểm tra nhanh về Task 2 (5 câu)",
       items: [
         { q: "Bài Task 2 cần tối thiểu bao nhiêu từ?", options: ["150 từ", "250 từ", "350 từ"], correct: 1, why: "Task 2 cần **ít nhất 250 từ**. 150 từ là yêu cầu của Task 1." },
-        { q: "Câu nào nên nằm ở MỞ BÀI?", options: ["Luận điểm (thesis) trả lời thẳng câu hỏi của đề", "Một ví dụ chi tiết về gia đình bạn", "Một ý mới chưa nói ở đâu"], correct: 0, why: "Mở bài = paraphrase đề + **thesis**. Ví dụ để ở thân bài, ý mới không đưa vào kết bài." },
-        { q: "Bài viết dùng “Firstly, Secondly, However” hợp lý và chia đoạn rõ ràng. Tiêu chí nào được lợi nhất?", options: ["Lexical Resource", "Coherence and Cohesion", "Task Response"], correct: 1, why: "Từ nối và cách chia đoạn thuộc **Coherence and Cohesion** (mạch lạc và liên kết)." },
-        { q: "Bài lặp từ “good” 12 lần và sai chính tả nhiều. Tiêu chí nào bị ảnh hưởng nhất?", options: ["Lexical Resource", "Grammatical Range and Accuracy", "Coherence and Cohesion"], correct: 0, why: "Lặp từ và chính tả thuộc **Lexical Resource** (vốn từ)." },
+        { q: "Câu nào nên nằm ở MỞ BÀI?", options: ["Một ví dụ chi tiết về gia đình bạn", "Một ý mới chưa nói ở đâu", "Luận điểm (thesis) trả lời thẳng câu hỏi của đề"], correct: 2, why: "Mở bài = paraphrase đề + **thesis**. Ví dụ để ở thân bài, ý mới không đưa vào kết bài." },
+        { q: "Bài viết dùng “Firstly, Secondly, However” hợp lý và chia đoạn rõ ràng. Tiêu chí nào được lợi nhất?", options: ["Coherence and Cohesion", "Lexical Resource", "Task Response"], correct: 0, why: "Từ nối và cách chia đoạn thuộc **Coherence and Cohesion** (mạch lạc và liên kết)." },
+        { q: "Bài lặp từ “good” 12 lần và sai chính tả nhiều. Tiêu chí nào bị ảnh hưởng nhất?", options: ["Grammatical Range and Accuracy", "Coherence and Cohesion", "Lexical Resource"], correct: 2, why: "Lặp từ và chính tả thuộc **Lexical Resource** (vốn từ)." },
         { q: "Ở kết bài, bạn nên…", options: ["thêm một lý do mới thật thuyết phục", "tóm tắt ý chính và nhắc lại luận điểm", "đặt một câu hỏi cho người đọc"], correct: 1, why: "Kết bài **tóm tắt + nhắc lại luận điểm**, không thêm thông tin mới." },
       ],
     },
@@ -620,7 +620,7 @@ const D2_SPEAKING: Lesson = {
         { q: "Ở Part 2, bạn có bao lâu để chuẩn bị?", options: ["Không có thời gian chuẩn bị", "1 phút", "5 phút"], correct: 1, why: "Bạn có **1 phút** chuẩn bị và được phát giấy bút để ghi chú." },
         { q: "Phần nào hỏi về quê quán, sở thích, học tập?", options: ["Part 1", "Part 2", "Part 3"], correct: 0, why: "**Part 1** hỏi các chủ đề quen thuộc về bản thân." },
         { q: "“How has the internet changed the way people shop?” thường là câu hỏi của phần nào?", options: ["Part 1", "Part 2", "Part 3"], correct: 2, why: "Câu hỏi về **thay đổi trong xã hội**, cần ý kiến và lý do → **Part 3**." },
-        { q: "Trong Part 2, bạn nên nói trong bao lâu?", options: ["1–2 phút", "15 giây", "5 phút"], correct: 0, why: "Nói **1–2 phút**, cố gắng dùng đủ 2 phút." },
+        { q: "Trong Part 2, bạn nên nói trong bao lâu?", options: ["15 giây", "5 phút", "1–2 phút"], correct: 2, why: "Nói **1–2 phút**, cố gắng dùng đủ 2 phút." },
       ],
     },
 
@@ -722,8 +722,8 @@ const D2_HOMEWORK: Lesson = {
       items: [
         {
           q: "1. Từ khoá chính trong câu hỏi là gì?",
-          options: ["main cause · Asian financial crisis · 1997", "What · was · the", "Thailand · baht · dollar"],
-          correct: 0,
+          options: ["What · was · the", "Thailand · baht · dollar", "main cause · Asian financial crisis · 1997"],
+          correct: 2,
           why: "Câu hỏi hỏi **nguyên nhân chính** (main cause) của **sự kiện nào** (Asian financial crisis) vào **năm nào** (1997). “What, was, the” là từ nhỏ. “Thailand, baht” nằm trong đoạn văn chứ không nằm trong câu hỏi.",
         },
         {
@@ -734,11 +734,11 @@ const D2_HOMEWORK: Lesson = {
         {
           q: "3. Dùng từ khoá để trả lời: nguyên nhân chính là gì?",
           options: [
-            "Foreign investors took their money out of the region.",
             "The sudden fall in value of the Thai baht.",
+            "Foreign investors took their money out of the region.",
             "The crisis spread to Indonesia and South Korea.",
           ],
-          correct: 1,
+          correct: 0,
           why: "Đoạn văn: “It was **mainly caused by** the sudden fall in value of the Thai currency, the baht”. Việc nhà đầu tư rút tiền và khủng hoảng lan rộng là **hậu quả xảy ra sau**, không phải nguyên nhân chính.",
         },
       ],
@@ -774,21 +774,21 @@ const D2_HOMEWORK: Lesson = {
         {
           q: "1. Từ khoá chủ đề và tên riêng trong câu hỏi là gì?",
           options: [
-            "Chủ đề: animal, forest loss · Tên riêng: Borneo",
             "Chủ đề: palm oil · Tên riêng: orangutan",
             "Chủ đề: island · Tên riêng: Which",
+            "Chủ đề: animal, forest loss · Tên riêng: Borneo",
           ],
-          correct: 0,
+          correct: 2,
           why: "Chủ đề của câu hỏi là **động vật** bị ảnh hưởng bởi **mất rừng** (forest loss). **Borneo** viết hoa, là tên riêng của hòn đảo. “palm oil, orangutan” nằm trong đoạn văn, không nằm trong câu hỏi.",
         },
         {
           q: "2. Từ khoá quan trọng nào trong đoạn văn cho ra đáp án, và đáp án là gì?",
           options: [
-            "“less serious” → the sun bear",
             "“in the greatest danger as the forests disappear” → the orangutan",
+            "“less serious” → the sun bear",
             "“home to many rare animals” → the pygmy elephant",
           ],
-          correct: 1,
+          correct: 0,
           why: "“**most threatened**” (bị đe doạ nhiều nhất) được viết lại thành “**in the greatest danger**”, và “**forest loss**” thành “**the forests disappear**”. Cả hai đều chỉ **orangutan** (đười ươi). Voi lùn và gấu chó “**less serious**” (ít nghiêm trọng hơn).",
         },
       ],
@@ -865,14 +865,14 @@ const D2_HOMEWORK: Lesson = {
       items: [
         {
           q: "1. Từ khoá số liệu trong câu hỏi là gì?",
-          options: ["What percentage", "all the water", "on Earth"],
-          correct: 0,
+          options: ["all the water", "What percentage", "on Earth"],
+          correct: 1,
           why: "“**What percentage**” (bao nhiêu phần trăm) cho biết đáp án là **một con số phần trăm**. Vì vậy khi lướt bài, mắt bạn chỉ cần tìm ký hiệu **%** hoặc chữ **percent**.",
         },
         {
           q: "2. Từ khoá tương ứng trong đoạn văn cho ra đáp án là gì?",
-          options: ["“97% is salt water”", "“about 3% of it is fresh water”", "“two thirds of it is frozen”"],
-          correct: 1,
+          options: ["“97% is salt water”", "“two thirds of it is frozen”", "“about 3% of it is fresh water”"],
+          correct: 2,
           why: "Con số đi cùng “**fresh water**” là **3%**. 97% là của **nước mặn** (salt water) — bẫy số liệu. “two thirds” là tỉ lệ nước ngọt **bị đóng băng**, không phải tỉ lệ nước ngọt trên tổng lượng nước.",
         },
       ],
@@ -914,11 +914,11 @@ const D2_HOMEWORK: Lesson = {
         {
           q: "2. Từ khoá tương ứng trong đoạn văn cho ra đáp án là gì?",
           options: [
-            "“rely on a technique called radiocarbon dating”",
             "“an old wooden boat or tool”",
+            "“rely on a technique called radiocarbon dating”",
             "“up to around 50,000 years old”",
           ],
-          correct: 0,
+          correct: 1,
           why: "“**use**” được viết lại thành “**rely on**” (dựa vào), “**method**” thành “**technique**” (kỹ thuật). Ngay sau đó là tên phương pháp: **radiocarbon dating** (định tuổi bằng carbon phóng xạ). 50,000 năm chỉ là giới hạn của phương pháp.",
         },
       ],

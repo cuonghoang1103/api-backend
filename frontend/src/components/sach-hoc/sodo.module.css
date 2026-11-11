@@ -1,0 +1,101 @@
+/* 🧭 Sơ đồ trong bài (SoDo.tsx). Màu lấy biến --lh-* của khung sách nên tự theo sáng/tối. */
+
+.khung {
+  container-type: inline-size;
+  margin: 18px 0;
+  padding: 16px 18px 14px;
+  border: 1px solid var(--lh-line);
+  border-radius: 14px;
+  background: var(--lh-surface);
+  box-shadow: var(--lh-shadow);
+}
+.tieuDe { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-bottom: 14px; }
+.loai { font-size: 12px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; color: var(--lh-ink-3); }
+.ten { font-size: 16px; font-weight: 650; color: var(--lh-ink); }
+.chuThich { margin-top: 12px; font-size: 14px; color: var(--lh-ink-2); line-height: 1.55; }
+.anh { width: 28px; height: 28px; object-fit: contain; flex: none; }
+
+/* Màu nhóm — một biến --c cho mọi kiểu sơ đồ. */
+.mau1 { --c: #2563eb; --c-soft: rgba(37, 99, 235, 0.1); }
+.mau2 { --c: #15803d; --c-soft: rgba(21, 128, 61, 0.1); }
+.mau3 { --c: #c2410c; --c-soft: rgba(194, 65, 12, 0.1); }
+:global(html.theme-dark) .mau1 { --c: #8fb3e6; --c-soft: rgba(143, 179, 230, 0.12); }
+:global(html.theme-dark) .mau2 { --c: #6fcf97; --c-soft: rgba(111, 207, 151, 0.12); }
+:global(html.theme-dark) .mau3 { --c: #fdba74; --c-soft: rgba(253, 186, 116, 0.12); }
+
+/* ── Trục thời gian ── */
+.tl { display: grid; gap: 6px; }
+.tlHang { display: grid; grid-template-columns: minmax(7rem, 36%) minmax(0, 1fr); gap: 12px; align-items: center; }
+.tlNhan { font-size: 14px; line-height: 1.4; color: var(--lh-ink); }
+.tlRanh { position: relative; height: 30px; border-radius: 6px; background: var(--lh-surface-2); }
+.tlBay { position: absolute; left: 50%; top: -4px; bottom: -4px; border-left: 2px dashed var(--lh-ink-3); opacity: 0.55; }
+.tlDiem {
+  position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%;
+  transform: translate(-50%, -50%); background: var(--c); box-shadow: 0 0 0 3px var(--c-soft);
+}
+.tlDoan { position: absolute; top: 50%; height: 10px; border-radius: 5px; transform: translateY(-50%); background: var(--c); }
+.tlNen { position: absolute; top: 50%; height: 10px; border-radius: 5px; transform: translateY(-50%); background: var(--c-soft); }
+.tlX { position: absolute; top: 50%; transform: translate(-50%, -52%); font-weight: 800; font-size: 15px; color: var(--c); line-height: 1; }
+.tlTruc {
+  display: flex; justify-content: space-between; align-items: center; padding-top: 6px;
+  border-top: 2px solid var(--lh-ink-3); font-size: 12px; color: var(--lh-ink-3);
+}
+.tlTruc b { color: var(--lh-ink); font-weight: 700; }
+
+/* ── Các bước ── */
+.flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
+.flow[data-ngang] { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 26px; }
+.buoc {
+  position: relative; padding: 12px 12px 12px; border-radius: 12px;
+  border: 1px solid var(--lh-line); background: var(--lh-surface-2);
+}
+.buoc::after { content: '↓'; position: absolute; left: 50%; bottom: -21px; transform: translateX(-50%); color: var(--lh-ink-3); font-weight: 700; }
+.flow[data-ngang] .buoc::after { content: '→'; left: auto; right: -20px; bottom: auto; top: 50%; transform: translateY(-50%); }
+.buoc:last-child::after { display: none; }
+.buocSo {
+  display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--lh-accent); color: var(--lh-accent-ink); font-size: 13px; font-weight: 700; margin-bottom: 6px;
+}
+.buocChu { font-size: 15px; font-weight: 600; color: var(--lh-ink); line-height: 1.4; }
+.buocPhu { margin-top: 4px; font-size: 13px; color: var(--lh-ink-2); line-height: 1.45; }
+@container (max-width: 620px) {
+  .flow[data-ngang] { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .flow[data-ngang] .buoc::after { content: '↓'; left: 50%; right: auto; top: auto; bottom: -21px; transform: translateX(-50%); }
+}
+
+/* ── Sơ đồ tư duy ── */
+.mm { display: grid; justify-items: center; gap: 0; }
+.mmTam {
+  padding: 10px 20px; border-radius: 999px; background: var(--lh-accent); color: var(--lh-accent-ink);
+  font-size: 17px; font-weight: 700; text-align: center; max-width: 100%;
+}
+.mmTam::after { content: ''; display: block; }
+.mmNhanh {
+  width: 100%; margin-top: 18px; padding-top: 16px; border-top: 2px solid var(--lh-line);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; position: relative;
+}
+.mmNhanh::before { content: ''; position: absolute; left: 50%; top: -20px; height: 18px; border-left: 2px solid var(--lh-line); }
+.mmO { border-radius: 12px; border: 1px solid var(--lh-line); border-top: 4px solid var(--c); background: var(--c-soft); padding: 10px 12px; }
+.mmDau { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 650; color: var(--lh-ink); }
+.mmDs { margin: 6px 0 0; padding-left: 18px; list-style: disc; font-size: 14px; color: var(--lh-ink-2); line-height: 1.5; }
+.mmDs li + li { margin-top: 2px; }
+
+/* ── So sánh ── */
+.cmp { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 12px; }
+.cmpCot { border-radius: 12px; border: 1px solid var(--lh-line); background: var(--c-soft); padding: 12px; }
+.cmpDau { display: flex; align-items: center; gap: 8px; padding-bottom: 8px; border-bottom: 2px solid var(--c); font-size: 15px; font-weight: 700; color: var(--c); }
+@container (max-width: 520px) {
+  .cmp { grid-template-columns: minmax(0, 1fr); }
+  .tlHang { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+
+/* ── Hình Writing Task 1 — FigureView dùng biến của web; nối sang biến của khung sách ── */
+.fig {
+  margin: 18px 0;
+  --text-primary: var(--lh-ink);
+  --text-secondary: var(--lh-ink-2);
+  --text-muted: var(--lh-ink-3);
+  --border-light: var(--lh-line);
+  --border-light-hover: var(--lh-line);
+  --bg-surface-hover: var(--lh-surface);
+}

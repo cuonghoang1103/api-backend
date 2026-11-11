@@ -51,14 +51,23 @@ export type KetQuaPhatAm = {
 
 export async function chamPhatAm(
   userId: number,
-  input: { audio: Buffer; cau: string; giong?: string },
+  input: {
+    audio: Buffer; cau: string; giong?: string;
+    /**
+     * 12/11/2026 — phòng thi Speaking: nói TỰ DO, không có câu mẫu. `tuDo` ⇒ chấm "unscripted" (ReferenceText
+     * rỗng, Azure chấm trên chính câu nó nghe ra); `cau` khi đó là bản phiên âm Whisper để lùi về chấm có mẫu
+     * nếu Azure từ chối unscripted. `toiDaGiay` nới trần 20 s (REST short-audio nhận tới 60 s).
+     */
+    tuDo?: boolean; toiDaGiay?: number;
+  },
 ): Promise<{ ketQua: KetQuaPhatAm | null; lyDo?: 'chua_co_khoa' | 'het_luot_ngay' | 'het_luot_thang' | 'khong_nghe_thay' | 'loi_may_cham' }> {
   const cau = String(input.cau ?? '').trim();
-  if (!cau) throw new BadRequestError('Thiếu câu mẫu');
-  if (cau.length > TOI_DA_KY_TU) throw new BadRequestError(`Câu mẫu tối đa ${TOI_DA_KY_TU} ký tự`);
+  if (!cau && !input.tuDo) throw new BadRequestError('Thiếu câu mẫu');
+  if (cau.length > (input.tuDo ? 2000 : TOI_DA_KY_TU)) throw new BadRequestError(`Câu mẫu tối đa ${TOI_DA_KY_TU} ký tự`);
   const giay = giayCuaWav(input.audio);
   if (giay == null) throw new BadRequestError('Âm thanh phải là WAV PCM');
-  if (giay > TOI_DA_GIAY) throw new BadRequestError(`Bản ghi tối đa ${TOI_DA_GIAY} giây`);
+  const tran = Math.min(59, Math.max(1, input.toiDaGiay ?? TOI_DA_GIAY));
+  if (giay > tran) throw new BadRequestError(`Bản ghi tối đa ${tran} giây`);
   if (giay < 0.3) return { ketQua: null, lyDo: 'khong_nghe_thay' };
 
   const key = process.env.AZURE_SPEECH_KEY;
@@ -68,28 +77,33 @@ export async function chamPhatAm(
 
   // 05/10/2026: khoá JP/CH chấm tiếng Nhật / tiếng Trung — Azure PA hỗ trợ ja-JP, zh-CN.
   const lang = input.giong === 'us' ? 'en-US' : input.giong === 'ja' ? 'ja-JP' : input.giong === 'zh' ? 'zh-CN' : 'en-GB';
-  const cauHinh = {
-    ReferenceText: cau,
-    GradingSystem: 'HundredMark',
-    Granularity: 'Phoneme',
-    Dimension: 'Comprehensive',
-    EnableMiscue: true,
-    ...(lang === 'en-US' ? { PhonemeAlphabet: 'IPA' } : {}),
-  };
-  const res = await fetch(
+  const goi = (referenceText: string) => fetch(
     `https://${region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=${lang}&format=detailed`,
     {
       method: 'POST',
       headers: {
         'Ocp-Apim-Subscription-Key': key,
         'Content-Type': 'audio/wav; codecs=audio/pcm; samplerate=16000',
-        'Pronunciation-Assessment': Buffer.from(JSON.stringify(cauHinh)).toString('base64'),
+        'Pronunciation-Assessment': Buffer.from(JSON.stringify({
+          ReferenceText: referenceText,
+          GradingSystem: 'HundredMark',
+          Granularity: 'Phoneme',
+          Dimension: 'Comprehensive',
+          EnableMiscue: !input.tuDo,
+          ...(lang === 'en-US' ? { PhonemeAlphabet: 'IPA' } : {}),
+        })).toString('base64'),
         Accept: 'application/json',
       },
       signal: AbortSignal.timeout(30_000),
       body: new Uint8Array(input.audio),
     },
   );
+  // Nói tự do: thử unscripted (ReferenceText rỗng) trước; Azure từ chối (4xx) thì lùi về chấm theo bản phiên âm.
+  let res = await goi(input.tuDo ? '' : cau);
+  if (input.tuDo && cau && res.status >= 400 && res.status !== 429 && res.status !== 403) {
+    console.warn('[ielts/phat-am] Azure unscripted', res.status, '— lùi về chấm theo bản phiên âm');
+    res = await goi(cau);
+  }
   // F0 hết 5 giờ của tháng → 429 (hoặc 403 quota). Không phải lỗi của người học.
   if (res.status === 429 || res.status === 403) return { ketQua: null, lyDo: 'het_luot_thang' };
   if (!res.ok) {

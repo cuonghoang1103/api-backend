@@ -146,3 +146,56 @@ export function dinhDangGio(giay: number): string {
   const h = Math.floor(g / 3600), m = Math.floor((g % 3600) / 60), s = g % 60;
   return [h, m, s].map((x) => String(x).padStart(2, '0')).join(':');
 }
+
+/** Đồng hồ kiểu phòng thi máy tính thật: "34 minutes left" (phút làm tròn LÊN), dưới 1 phút đếm giây. */
+export function conChu(giay: number): string {
+  const g = Math.max(0, Math.ceil(giay));
+  if (g >= 60) { const m = Math.ceil(g / 60); return `${m} minute${m === 1 ? '' : 's'} left`; }
+  return `${g} second${g === 1 ? '' : 's'} left`;
+}
+
+/* ── Band tổng (docs/ielts-lo-trinh-0-8.md mục 1.5) ─────────────────── */
+/** Làm tròn band kiểu IELTS: phần lẻ .25 → .5; .75 → lên nguyên; .125 → .0; .625 → .5. */
+export function lamTronBand(x: number): number {
+  const n = Math.floor(x), d = x - n;
+  if (d < 0.25 - 1e-9) return n;
+  if (d < 0.75 - 1e-9) return n + 0.5;
+  return n + 1;
+}
+
+/**
+ * Band tổng = trung bình các kỹ năng CÓ điểm (đủ 4 là chuẩn; thiếu Speaking thì tính 3 kỹ năng và
+ * giao diện ghi rõ) rồi làm tròn theo luật trên. Không có kỹ năng nào ⇒ null.
+ */
+export function bandTong(b: { nghe?: number | null; doc?: number | null; viet?: number | null; noi?: number | null }): { band: number; soKy: number } | null {
+  const ds = [b.nghe, b.doc, b.viet, b.noi].filter((x): x is number => typeof x === 'number' && Number.isFinite(x));
+  if (!ds.length) return null;
+  return { band: lamTronBand(ds.reduce((a, c) => a + c, 0) / ds.length), soKy: ds.length };
+}
+
+/* ── Dạng câu → bài ôn trong khoá (Tập 1, `ngay/manifest.ts`) ───────── */
+/** id bài theo dạng câu hỏi — kiểm tồn tại trong manifest ở `thiMayCham.test.ts`. Rỗng = Tập 1 chưa có bài riêng. */
+export const BAI_ON: Record<DangCau, string[]> = {
+  note: ['d7-nghe', 'd13-nghe'],
+  form: ['d7-nghe', 'd15-nghe'],
+  sentence: ['d4-doc'],
+  summary: ['d14-doc', 'd13-nghe'],
+  table: ['d8-doc'],
+  flow: ['d6-doc'],
+  diagram: ['d6-doc'],
+  short: ['d2-doc'],
+  'summary-box': ['d14-doc'],
+  mcq: ['d9-nghe', 'd11-nghe'],
+  mcq2: ['d11-nghe'],
+  tfng: ['d12-doc'],
+  ynng: ['d12-doc'],
+  heading: [],
+  'match-info': [],
+  'match-feature': ['d10-doc'],
+  'match-ending': ['d4-doc'],
+  map: ['d9-nghe'],
+};
+
+/** `d12-doc` → ngày 12 (để dựng link `?buoi=12&bai=d12-doc`). */
+export const ngayCuaBai = (id: string): number | null => { const m = /^d(\d+)-/.exec(id); return m ? Number(m[1]) : null; };
+export const linkBai = (id: string): string => `/language/en/ielts?buoi=${ngayCuaBai(id) ?? 1}&bai=${id}`;

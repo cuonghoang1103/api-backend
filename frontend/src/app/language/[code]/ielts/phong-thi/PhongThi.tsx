@@ -372,12 +372,16 @@ export default function PhongThi() {
 
         {!l && (
           <div className={s.intro}>
-            <h1 className={s.h1}>🎯 Phòng thi thử IELTS</h1>
+            <h1 className={s.h1}>🎯 Phòng thi thử dựng tự động</h1>
             <p className={s.lead}>
-              Làm một đề đủ ba phần theo đúng thứ tự và đồng hồ của kỳ thi thật: <b>Listening 30 phút → Reading 60 phút → Writing 60 phút</b>.
-              Đồng hồ không tạm dừng được, hết giờ tự sang phần sau. Xong đề thì xem đáp án, lời giải từng câu, và nhờ AI chấm bài viết.
+              Đề do máy chủ dựng từ kho bài luyện (~30 câu/phần, một cột), đủ ba phần theo đúng thứ tự và đồng hồ của kỳ thi thật:
+              <b> Listening 30 phút → Reading 60 phút → Writing 60 phút</b>. Đồng hồ không tạm dừng, hết giờ tự sang phần sau.
             </p>
-            <div className={s.pickTitle}>Chọn độ khó</div>
+            <div className={s.warn} style={{ marginBottom: 12 }}>
+              🖥️ Muốn thi <b>giống máy thi thật</b> (toàn màn hình, đề 40 câu, Highlight/Note, phiếu điểm Test Report Form, Test đầu vào xếp lớp, đề đủ 4 kỹ năng)?{' '}
+              <Link href="/language/en/ielts/thi-may" style={{ textDecoration: 'underline', fontWeight: 600 }}>Vào Trung tâm luyện thi →</Link>
+            </div>
+            <div className={s.pickTitle}>Chọn độ khó (4 chặng kho cũ ≈ Tập 1–4 của lộ trình 5 tập, đích 8.0)</div>
             <div className={s.stages}>
               {BAND_STAGES.map((b, i) => (
                 <button key={b.id} type="button" className={`${s.stage} ${chang === String(i + 1) ? s.stageOn : ''}`} onClick={() => setChang(String(i + 1))}>

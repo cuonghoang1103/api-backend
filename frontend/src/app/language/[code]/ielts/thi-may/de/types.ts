@@ -15,6 +15,7 @@
  *  - Bản quyền: đề TỰ SOẠN theo đúng DẠNG câu hỏi thật, không chép đề nào.
  */
 import type { Voice } from '@/components/sach-hoc/types';
+import type { Figure } from '@/app/tech-trends/ielts/data/types';
 
 export type Opt = { k: string; t: string };
 
@@ -117,6 +118,12 @@ export type TaskViet = {
   minTu: number;
   de: string;
   bieuDo?: BieuDo;
+  /**
+   * Hình Task 1 đủ 7 dạng (12/11/2026) — line · bar · pie · table · process · map (+ mixed = 2 hình) — vẽ bằng FigureView của
+   * kho luyện. Dùng THAY `bieuDo` (cột/bảng cũ). Mixed charts: đặt hình thứ hai vào `figure2`.
+   */
+  figure?: Figure;
+  figure2?: Figure;
   /** Số liệu dạng chữ — gửi kèm cho AI chấm để kiểm độ chính xác. */
   moTaSo?: string;
   goiY: string[];
@@ -127,8 +134,56 @@ type DeChung = { id: string; ten: string; boDe: string; capDo: string; moTa: str
 export type DeDoc = DeChung & { kyNang: 'doc'; phut: number; phan: PhanDoc[]; dapAn: Record<number, DapAn> };
 export type DeNghe = DeChung & { kyNang: 'nghe'; phut: number; phan: PhanNghe[]; dapAn: Record<number, DapAn> };
 export type DeViet = DeChung & { kyNang: 'viet'; phut: number; task: TaskViet[] };
-export type De = DeDoc | DeNghe | DeViet;
+/** Mọi loại đề phòng thi (12/11/2026 thêm Speaking `noi` + sàng lọc `sangloc` của Đề 0). */
+export type De = DeDoc | DeNghe | DeViet | DeNoi | DeSangLoc;
 export type KyNang = De['kyNang'];
 
-/** Mục lục (nhẹ) — trang chọn đề không phải tải nội dung đề. */
-export type MucDe = { id: string; kyNang: KyNang; ten: string; boDe: string; capDo: string; phut: number; soCau: number; moTa: string };
+/* ── Speaking (12/11/2026) — giám khảo AI hỏi theo đúng 3 Part ─────────────────────────────── */
+/** Câu trả lời mẫu kèm phân tích theo 4 tiêu chí (FC · LR · GRA · P). */
+export type MauNoi = { part: 1 | 2 | 3; cau: string; band: string; s: string; phanTich: string[] };
+export type DeNoi = DeChung & {
+  kyNang: 'noi';
+  /** Tổng phút ước tính (11–14). */
+  phut: number;
+  /** Part 1 (4–5'): 2–3 chủ đề quen thuộc, mỗi chủ đề 3–5 câu. */
+  part1: { chuDe: string; cau: string[] }[];
+  /** Part 2: thẻ đề (dòng đầu "Describe…", các dòng "You should say:" + gợi ý), 1' chuẩn bị + 1–2' nói, 1–2 câu chốt. */
+  part2: { cueCard: string; goiY: string[]; cauChot: string[] };
+  /** Part 3 (4–5'): 2 chủ đề trừu tượng nối Part 2, mỗi chủ đề 2–4 câu, khó dần (fact → opinion → compare → hypothesise). */
+  part3: { chuDe: string; cau: string[] }[];
+  /** Câu trả lời mẫu (ít nhất 1 cho mỗi Part) — người học xem SAU khi thi. */
+  mau: MauNoi[];
+};
+
+/* ── Sàng lọc 10 phút của test đầu vào (Đề 0) — dùng lại khung PhanDoc (mcq + tfng) ───────── */
+export type MucCefr = 'A1' | 'A2' | 'B1' | 'B1+' | 'B2';
+export type DeSangLoc = DeChung & {
+  kyNang: 'sangloc';
+  phut: number;
+  /** Một phần: nhóm mcq ngữ pháp/từ vựng (câu 1–25) + đoạn đọc ngắn ~120 từ với TFNG (câu 26–30). */
+  phan: PhanDoc[];
+  dapAn: Record<number, DapAn>;
+  /** Mức CEFR của từng câu mcq — để tính "band ngữ pháp" và luật xếp lớp. */
+  mucCau: Record<number, MucCefr>;
+};
+
+/**
+ * Bộ đề đủ 4 kỹ năng ("Đề N", docs/ielts-lo-trinh-0-8.md mục 4.2): gom id các tệp đề từng kỹ năng.
+ * Thi đủ đề = Listening → Reading → Writing → (nghỉ) → Speaking, như thi thật.
+ */
+export type BoDeDu = {
+  id: string;
+  so: number;
+  ten: string;
+  capDo: string;
+  /** Vị trí trong lộ trình, vd "Thi cuối Tập 1 (Ngày 15)". */
+  viTri: string;
+  sangLoc?: string;
+  nghe: string;
+  doc: string;
+  viet: string;
+  noi: string;
+};
+
+/** Mục lục (nhẹ) — trang chọn đề không phải tải nội dung đề. `dang`: các dạng câu có trong đề (hiện trên thẻ đề). */
+export type MucDe = { id: string; kyNang: KyNang; ten: string; boDe: string; capDo: string; phut: number; soCau: number; moTa: string; dang?: DangCau[] };

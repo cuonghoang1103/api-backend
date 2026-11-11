@@ -6,6 +6,7 @@ import type { Block } from './types';
 import { useTutor, useCourse } from './tutorContext';
 import { play } from './audio';
 import { renderBlock2 } from './Blocks2';
+import { anhUrl } from './HinhSlide';
 import s from './course.module.css';
 
 /* ── Đọc to: xem audio.ts (mp3 giọng Anh từ máy chủ, lùi về giọng trình duyệt). ── */
@@ -382,11 +383,13 @@ function Dictation({ b }: { b: Extract<Block, { t: 'dictation' }> }) {
   const [plays, setPlays] = useState<number[]>(() => b.items.map(() => 0));
   const [checked, setChecked] = useState<Record<number, boolean>>({});
   // "Greenwood Road" nghe là cả cụm; chấm không phân biệt hoa thường và dấu cách thừa.
-  const same = (a: string, c: string) => a.toLowerCase().replace(/\s+/g, ' ').trim() === c.toLowerCase();
+  const same1 = (a: string, c: string) => a.toLowerCase().replace(/\s+/g, ' ').trim() === c.toLowerCase();
+  // `alt` (12/11/2026): cách viết khác cũng đúng — "7:45" bên cạnh "7.45", "£14.50" bên cạnh "14.50".
+  const same = (a: string, it: { answer: string; alt?: string[] }) => [it.answer, ...(it.alt ?? [])].some((c) => same1(a, c));
   const grade = (i: number) => {
     const next = { ...checked, [i]: true };
     setChecked(next);
-    const right = b.items.filter((it, k) => next[k] && same(vals[k], it.answer)).length;
+    const right = b.items.filter((it, k) => next[k] && same(vals[k], it)).length;
     tutor.report(b.id, Math.round((right / b.items.length) * 100));
   };
   return (
@@ -394,7 +397,7 @@ function Dictation({ b }: { b: Extract<Block, { t: 'dictation' }> }) {
       <div className={s.quizTitle}>{b.title ?? 'Nghe và chép lại'}</div>
       <div className={s.quizSub}>Trong phòng thi bạn chỉ được nghe một lần. Hãy cố nghe ít lần nhất.</div>
       {b.items.map((it, i) => {
-        const ok = checked[i] ? same(vals[i], it.answer) : null;
+        const ok = checked[i] ? same(vals[i], it) : null;
         return (
           <div key={i} className={s.qItem}>
             <div className={s.qRow} style={{ marginTop: 0 }}>
@@ -480,7 +483,7 @@ function Vocab({ b }: { b: Extract<Block, { t: 'vocab' }> }) {
         const hideW = mode === 'hideW' && !open[k];
         const show = () => setOpen((o) => ({ ...o, [k]: true }));
         return (
-          <div key={v.w} className={s.word}>
+          <div key={v.w} className={`${s.word} ${v.anh ? s.wordCoAnh : ''}`}>
             {hideW ? <span className={s.speakGhost} aria-hidden /> : <SpeakBtn text={v.w} />}
             <div className="min-w-0">
               <div className={s.wordHead}>
@@ -504,6 +507,11 @@ function Vocab({ b }: { b: Extract<Block, { t: 'vocab' }> }) {
               {!hideVi && <div className={s.wordExVi}><Inline text={v.exVi} /></div>}
               {v.more && !hideVi && !hideW && <div className={s.wordMore}><span className={s.wordMoreTag}>＋</span><span className="min-w-0"><Inline text={v.more} /></span></div>}
             </div>
+            {/* Hình gợi nghĩa — ẩn khi đang "Che nghĩa" (hình sẽ lộ đáp án), giữ khi "Che từ" (nhìn hình nhớ ra từ). */}
+            {v.anh && (hideVi ? <span aria-hidden /> : (
+              // eslint-disable-next-line @next/next/no-img-element -- ảnh tĩnh nhỏ trên CDN
+              <img src={anhUrl(v.anh)} alt="" className={s.wordAnh} loading="lazy" decoding="async" draggable={false} />
+            ))}
           </div>
         );
       })}
@@ -560,7 +568,7 @@ function renderBlock(b: Block, i: number) {
               <div key={i} className={s.tableWrap}>
                 {b.caption && <div className={s.caption}>{b.caption}</div>}
                 <table className={`${s.table} ${stack ? s.cardTable : ''}`}>
-                  <thead><tr>{b.head.map((h) => <th key={h}>{h}</th>)}</tr></thead>
+                  <thead><tr>{b.head.map((h, j) => <th key={j}>{h}</th>)}</tr></thead>
                   <tbody>
                     {b.rows.map((r, ri) => (
                       <tr key={ri}>

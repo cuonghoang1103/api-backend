@@ -15,6 +15,7 @@ import type { Block, Lesson } from './types';
 import type { Course } from './course';
 import { Inline } from './Blocks';
 import { anhUrl } from './HinhSlide';
+import { SoDo, HinhTask1 } from './SoDo';
 import { inKhung } from './inKhung';
 import s from './course.module.css';
 import b from './sach.module.css';
@@ -204,6 +205,10 @@ function KhoiIn({ k, dap }: { k: Block; dap: DapAn[] }): ReactNode {
       return <div className={b.baiTap}><div className={b.khungTen}>🎧 {k.title ?? 'Nghe chép'}</div><ol>{k.items.map((x, i) => <li key={i}>{x.label}<div className={b.dongTrong} /></li>)}</ol></div>;
     case 'essay':
       return <div className={b.baiTap}><div className={b.khungTen}>✍ Viết</div><p><Inline text={k.prompt} /></p>{Array.from({ length: 8 }, (_, i) => <div key={i} className={b.dongTrong} />)}</div>;
+    case 'sodo':
+      return <SoDo b={k} />;
+    case 'figure':
+      return <HinhTask1 b={k} />;
     default:
       // hanlop / chia / onthe / vocabAll / chart: công cụ tương tác — không in.
       return null;

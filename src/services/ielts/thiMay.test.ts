@@ -4,7 +4,16 @@
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { lamTronBand, bandVietTong, chuanKetQuaViet, docJsonCham } from './thiMay.service.js';
+import { lamTronBand, bandVietTong, chuanKetQuaViet, docJsonCham, bandTongTuBands, KY } from './thiMay.service.js';
+
+test('band tổng bộ đề (mục 1.5): trung bình kỹ năng có điểm, làm tròn .25→.5 / .75→nguyên; thiếu Speaking vẫn tính 3', () => {
+  assert.equal(bandTongTuBands({ nghe: 6.5, doc: 6.5, viet: 5, noi: 7 }), 6.5); // 6.25 → 6.5
+  assert.equal(bandTongTuBands({ nghe: 7, doc: 7.5, viet: 6.5 }), 7);          // 7.0
+  assert.equal(bandTongTuBands({ nghe: 6, doc: 6, viet: 5.5, noi: 6.5 }), 6);   // 6.0
+  assert.equal(bandTongTuBands({ nghe: 'x', doc: null }), null);
+  assert.equal(bandTongTuBands(null), null);
+  assert.ok(KY.includes('tong') && KY.includes('noi') && KY.includes('sangloc'));
+});
 import { quyDoiBand } from './deThi.service.js';
 
 test('làm tròn band kiểu IELTS: .25 lên .5, .75 lên nguyên', () => {

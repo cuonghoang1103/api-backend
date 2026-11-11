@@ -23,6 +23,7 @@ import HanLop from './HanLop';
 import PhatAm from './PhatAm';
 import VietHanZh from './VietHanZh';
 import { HinhTu, Canh, BoSlide } from './HinhSlide';
+import { SoDo, HinhTask1 } from './SoDo';
 import s from './course.module.css';
 
 // Công cụ chia động từ chỉ có ở một mục tra cứu — tách chunk riêng.
@@ -640,6 +641,8 @@ export function renderBlock2(b: Block, i: number) {
     case 'hinh': return <HinhTu key={i} b={b} />;
     case 'canh': return <Canh key={i} b={b} />;
     case 'slides': return <BoSlide key={b.id} b={b} />;
+    case 'sodo': return <SoDo key={i} b={b} />;
+    case 'figure': return <HinhTask1 key={i} b={b} />;
     default: return null;
   }
 }

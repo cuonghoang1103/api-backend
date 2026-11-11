@@ -518,8 +518,8 @@ const D4_WRITING: Lesson = {
       title: "Kiểm tra nhanh — hiểu khung bài Task 1 (4 câu)",
       items: [
         { q: "Câu nào là một **Overview** tốt?", options: ["In 2014, children watched TV for 95 minutes.", "Overall, tablet use rose sharply, while TV viewing fell.", "I think children should read more books."], correct: 1, why: "Overview nêu **xu hướng chính**, không có số chi tiết. Câu 1 là chi tiết thân bài, câu 3 là ý kiến riêng (Task 1 không được nêu)." },
-        { q: "Số liệu năm 2016 thì dùng thì nào?", options: ["Hiện tại đơn: falls", "Quá khứ đơn: fell", "Tương lai: will fall"], correct: 1, why: "Số liệu đã xảy ra trong quá khứ → **quá khứ đơn**." },
-        { q: "Hình có các bước nối nhau bằng mũi tên là dạng nào?", options: ["pie chart", "process diagram", "map"], correct: 1, why: "**Process diagram** (sơ đồ quy trình) tả các bước theo thứ tự." },
+        { q: "Số liệu năm 2016 thì dùng thì nào?", options: ["Quá khứ đơn: fell", "Hiện tại đơn: falls", "Tương lai: will fall"], correct: 0, why: "Số liệu đã xảy ra trong quá khứ → **quá khứ đơn**." },
+        { q: "Hình có các bước nối nhau bằng mũi tên là dạng nào?", options: ["pie chart", "map", "process diagram"], correct: 2, why: "**Process diagram** (sơ đồ quy trình) tả các bước theo thứ tự." },
         { q: "Bài Task 1 tối thiểu bao nhiêu từ?", options: ["100 từ", "150 từ", "250 từ"], correct: 1, why: "Task 1 cần **ít nhất 150 từ**; 250 từ là của Task 2." },
       ],
     },

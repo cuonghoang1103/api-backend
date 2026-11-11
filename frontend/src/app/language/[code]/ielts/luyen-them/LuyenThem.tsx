@@ -124,15 +124,16 @@ export default function LuyenThem() {
         </Link>
 
         <header className="mb-6">
-          <p className="text-sky-400 text-sm font-medium tracking-wide uppercase mb-2">Kho luyện thêm · 4 chặng band · 0 → 7.5</p>
+          <p className="text-sky-400 text-sm font-medium tracking-wide uppercase mb-2">Kho luyện thêm · 4 chặng band ≈ Tập 1–4 của lộ trình 5 tập · đích 8.0</p>
           <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight">Luyện thêm theo chặng</h1>
           <p className="text-slate-400 mt-3 max-w-3xl leading-relaxed">
             Học xong mỗi buổi của khoá 15 ngày, vào đây luyện thêm đúng chặng của mình: bài học ngữ pháp có bài tập chấm điểm,
             từ vựng theo chủ đề, bài nghe và bài đọc theo dạng đề thật (mỗi câu có lời giải vì sao đúng, vì sao sai), đề viết có
             bài mẫu, chủ đề nói. Mới bắt đầu thì ở <b className="text-slate-200">Chặng 1</b>.
           </p>
-          <p className="mt-3 text-sm">
-            <Link href="/language/en/ielts/phong-thi" className="text-sky-400 hover:underline">🎯 Muốn thử sức cả đề có đồng hồ? Vào Phòng thi thử →</Link>
+          <p className="mt-3 text-sm flex flex-wrap gap-x-5 gap-y-1">
+            <Link href="/language/en/ielts/thi-may" className="text-sky-400 hover:underline">🖥️ Thi như máy thi thật, test đầu vào, đề đủ 4 kỹ năng: Trung tâm luyện thi →</Link>
+            <Link href="/language/en/ielts/phong-thi" className="text-sky-400 hover:underline">🎯 Phòng thi thử dựng tự động →</Link>
           </p>
         </header>
 

@@ -7,6 +7,8 @@
  * `**đậm**` · `==dạ quang==` · `~~câu sai~~` · `{漢字|かんじ}` → chữ có furigana.
  */
 /** Câu ví dụ: `en` = câu ngoại ngữ (tiếng Anh HOẶC tiếng Nhật), `ro` = romaji (khoá tiếng Nhật). */
+import type { Figure } from '@/app/tech-trends/ielts/data/types';
+
 export type Ex = { en: string; vi: string; ro?: string };
 
 export type Block =
@@ -22,7 +24,8 @@ export type Block =
    * (collocation), họ từ, lỗi hay gặp. Viết gọn, có thể dùng markup Inline.
    * Khối có nút "Che nghĩa / Che từ" để tự kiểm tra (không cần khai gì thêm).
    */
-  | { t: 'vocab'; items: { w: string; pos: string; ipa: string; vi: string; ex: string; exVi: string; exRo?: string; more?: string }[] }
+  /** `anh` (tuỳ chọn, 12/11/2026): tên hình Fluent Emoji minh hoạ từ (chỉ khi hình KHỚP nghĩa, đừng ép). */
+  | { t: 'vocab'; items: { w: string; pos: string; ipa: string; vi: string; ex: string; exVi: string; exRo?: string; more?: string; anh?: string }[] }
   /**
    * Tóm tắt đầu bài / đầu buổi: 3–6 ý "hôm nay học gì, cần nhớ gì" — khung 🎯
    * nổi bật ở ngay đầu bài. `title` mặc định "Tóm tắt nhanh".
@@ -37,7 +40,8 @@ export type Block =
   | { t: 'vocabAll' }
   /** Bảng chữ. `doc` (tuỳ chọn): chữ máy đọc thay cho `l` — khoá CH: ô "bā" đọc 八 (pinyin Latin không đọc trực tiếp được). */
   | { t: 'alphabet'; groups: { sound: string; letters: { l: string; ipa: string; doc?: string }[] }[] }
-  | { t: 'dictation'; id: string; title?: string; items: { label: string; spell: string; answer: string }[] }
+  /** `alt` (tuỳ chọn): các cách viết khác cũng chấm đúng (vd "7:45" cho "7.45"). */
+  | { t: 'dictation'; id: string; title?: string; items: { label: string; spell: string; answer: string; alt?: string[] }[] }
   | {
       t: 'quiz'; id: string; title: string; kind: 'fill' | 'translate';
       /** Cấu trúc ngữ pháp dùng cho cả bài — hiện trong ô 💡 Gợi ý của từng câu. */
@@ -116,7 +120,36 @@ export type Block =
    * 📽️ Bộ slide kiểu bài giảng trên lớp (giống slide của cô): xem từng slide, phím ←/→, toàn màn hình,
    * in cả bộ (mỗi slide một trang). Chữ trong slide theo cú pháp Inline (`{漢字|かな}`, `**đậm**`).
    */
-  | { t: 'slides'; id: string; title: string; slides: Slide[] };
+  | { t: 'slides'; id: string; title: string; slides: Slide[] }
+  /**
+   * 📊 Hình cho Writing Task 1 đủ 6 loại (12/11/2026): bar · line · pie · table · process · map — vẽ bằng
+   * FigureView của kho luyện IELTS (SVG, số liệu tự đặt). Dùng thay `chart` khi cần tròn/bảng/quy trình/bản đồ.
+   */
+  | { t: 'figure'; fig: Figure }
+  | SoDo;
+
+/**
+ * 🧭 Sơ đồ minh hoạ (12/11/2026 — "bài học có sơ đồ cho dễ học"), vẽ bằng SVG/CSS, theo nền sáng/tối:
+ *   - `timeline`: trục thời gian QUÁ KHỨ — BÂY GIỜ — TƯƠNG LAI cho thì động từ. Toạ độ `from`/`to` từ −10 (xa
+ *     trong quá khứ) tới +10 (xa trong tương lai), 0 = bây giờ. `kieu`: `diem` (một lần), `doan` (kéo dài từ
+ *     from tới to), `lap` (lặp lại nhiều lần trong khoảng from→to). `mau` 1–3 = màu nhóm.
+ *   - `flow`: các bước nối bằng mũi tên (cấu trúc bài viết, quy trình, chiến thuật làm bài).
+ *   - `mindmap`: một từ/ý ở giữa + các nhánh (họ từ, từ vựng theo chủ đề, ý cho Speaking Part 2).
+ *   - `compare`: 2–4 cột đặt cạnh nhau để so sánh (đếm được vs không đếm được, formal vs informal…);
+ *     `anh` = tên hình Fluent Emoji (như khối `hinh`).
+ * Chữ trong mọi nhãn hiểu cú pháp Inline (`**đậm**`, `==dạ quang==`).
+ */
+export type SoDo =
+  | {
+      t: 'sodo'; kind: 'timeline'; title?: string; caption?: string;
+      marks: { from: number; to?: number; label: string; kieu?: 'diem' | 'doan' | 'lap'; mau?: 1 | 2 | 3 }[];
+    }
+  | { t: 'sodo'; kind: 'flow'; title?: string; caption?: string; steps: { label: string; sub?: string }[] }
+  | {
+      t: 'sodo'; kind: 'mindmap'; title?: string; caption?: string;
+      center: string; branches: { label: string; items?: string[]; anh?: string }[];
+    }
+  | { t: 'sodo'; kind: 'compare'; title?: string; caption?: string; cols: { title: string; anh?: string; items: string[] }[] };
 
 /**
  * Một slide. `tieuDe` = dòng tiêu đề (dải vàng như slide lớp). `anh` = 0–4 hình (tên Fluent Emoji / URL) đặt

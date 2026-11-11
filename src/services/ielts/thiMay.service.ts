@@ -30,7 +30,22 @@ export function bandVietTong(t1: number | null, t2: number | null): number | nul
 }
 
 const CHE_DO = ['practice', 'full'] as const;
-const KY = ['doc', 'nghe', 'viet'] as const;
+/**
+ * Kỹ năng của một lượt. 12/11/2026 thêm: `noi` (Speaking, band do AI chấm gửi lên), `sangloc` (10′ sàng lọc của
+ * test đầu vào — chỉ điểm thô 0–30, không band), `tong` (lượt THI ĐỦ ĐỀ của một bộ: `deId` = id bộ, band tổng máy
+ * chủ TỰ TÍNH LẠI từ `chiTiet.bands` theo luật mục 1.5 — không tin số web gửi).
+ */
+export const KY = ['doc', 'nghe', 'viet', 'noi', 'sangloc', 'tong'] as const;
+
+/** Band tổng (docs/ielts-lo-trinh-0-8.md mục 1.5): trung bình các kỹ năng có điểm, làm tròn kiểu IELTS. */
+export function bandTongTuBands(bands: unknown): number | null {
+  if (!bands || typeof bands !== 'object') return null;
+  const ds = (['nghe', 'doc', 'viet', 'noi'] as const)
+    .map((k) => (bands as Record<string, unknown>)[k])
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 9);
+  if (!ds.length) return null;
+  return lamTronBand(ds.reduce((a, b) => a + b, 0) / ds.length);
+}
 
 export async function luuLuot(userId: number, b: { deId?: unknown; kyNang?: unknown; cheDo?: unknown; dung?: unknown; tong?: unknown; band?: unknown; giay?: unknown; chiTiet?: unknown }) {
   const deId = String(b.deId ?? '').trim();
@@ -43,15 +58,19 @@ export async function luuLuot(userId: number, b: { deId?: unknown; kyNang?: unkn
   const dung = b.dung == null ? null : Math.round(Number(b.dung));
   if (tong != null && (!Number.isFinite(tong) || tong < 0 || tong > 40)) throw new BadRequestError('tong 0–40');
   if (dung != null && (!Number.isFinite(dung) || dung < 0 || (tong != null && dung > tong))) throw new BadRequestError('dung không hợp lệ');
+  const chiTiet = b.chiTiet && typeof b.chiTiet === 'object' ? b.chiTiet : null;
   let band: number | null = null;
-  if (kyNang === 'viet') {
+  if (kyNang === 'viet' || kyNang === 'noi') {
     const v = Number(b.band);
     band = Number.isFinite(v) && v >= 0 && v <= 9 ? lamTronBand(v) : null;
+  } else if (kyNang === 'tong') {
+    band = bandTongTuBands((chiTiet as { bands?: unknown } | null)?.bands);
+  } else if (kyNang === 'sangloc') {
+    band = null; // sàng lọc chỉ có điểm thô 0–30
   } else if (cheDo === 'full' && tong === 40 && dung != null) {
     // Band chỉ có nghĩa khi làm ĐỦ 40 câu; luyện lẻ một passage thì không quy đổi.
     band = quyDoiBand(dung, 40, kyNang === 'doc' ? 'doc' : 'nghe');
   }
-  const chiTiet = b.chiTiet && typeof b.chiTiet === 'object' ? b.chiTiet : null;
   if (chiTiet && JSON.stringify(chiTiet).length > 60_000) throw new BadRequestError('chiTiet quá lớn');
   const giay = Math.max(0, Math.min(4 * 3600, Math.round(Number(b.giay) || 0)));
   const r = await prisma.ieltsCdtAttempt.create({

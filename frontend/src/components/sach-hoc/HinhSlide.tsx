@@ -12,7 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Printer, Eye, EyeOff, Volume2 } from 'lucide-react';
 import type { Block, Slide } from './types';
 import { Inline } from './Blocks';
-import { play } from './audio';
+import { play, ngonNguKhoa } from './audio';
 import { inKhung } from './inKhung';
 import s from './course.module.css';
 import h from './hinh.module.css';
@@ -32,6 +32,8 @@ function Anh({ anh, alt, className }: { anh: string; alt: string; className?: st
 
 export function HinhTu({ b }: { b: Extract<Block, { t: 'hinh' }> }) {
   const [che, setChe] = useState<'' | 'nghia' | 'chu'>('');
+  const nn = ngonNguKhoa();
+  const tenTieng = nn === 'en' ? 'Anh' : nn === 'zh' ? 'Trung' : 'Nhật';
   return (
     <div className={h.khung}>
       <div className={h.dau}>
@@ -41,7 +43,7 @@ export function HinhTu({ b }: { b: Extract<Block, { t: 'hinh' }> }) {
             {che === 'nghia' ? <Eye size={14} /> : <EyeOff size={14} />} Che nghĩa
           </button>
           <button type="button" className={`${s.btnGhost} ${che === 'chu' ? h.bat : ''}`} onClick={() => setChe(che === 'chu' ? '' : 'chu')}>
-            {che === 'chu' ? <Eye size={14} /> : <EyeOff size={14} />} Che chữ Nhật
+            {che === 'chu' ? <Eye size={14} /> : <EyeOff size={14} />} Che chữ {tenTieng}
           </button>
         </div>
       </div>

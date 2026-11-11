@@ -188,7 +188,7 @@ export const CtcAssistantMessage = memo(function CtcAssistantMessage({ msg, stre
       {streaming && (empty || justDone) && (
         <div className={empty ? 'ctc-wait ctc-wait-big' : 'ctc-done'}>
           <GauPixel mode="desk" size={116} state={empty ? 'thinking' : 'done'} title="CuongMini đang trả lời" />
-          {empty && <span>Đang suy nghĩ…</span>}
+          {empty && <span>CuongMini đang suy nghĩ, bạn đợi mình chút nhé…</span>}
         </div>
       )}
       {!(empty && streaming) && (

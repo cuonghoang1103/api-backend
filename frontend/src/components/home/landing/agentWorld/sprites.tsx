@@ -8,7 +8,7 @@
  * chỉ là transform/opacity.
  */
 import type { AgentKind } from './agents';
-import { CuongMiniPandaClay as CuongMiniPanda } from '@/components/chat/claude/CuongMiniPandaClay';
+import { CuongMiniPanda } from '@/components/chat/claude/CuongMiniPanda';
 import { BUDDY } from './pixel';
 
 const SHELL = 'url(#aw-shell)';

@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G02_1 from './giang/pr-02-1.mjs';
+import G02_2 from './giang/pr-02-2.mjs';
+import G02_3 from './giang/pr-02-3.mjs';
+import G02_4 from './giang/pr-02-4.mjs';
+import G02_5 from './giang/pr-02-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Cấu trúc một model, chín kiểu vô hướng của Prisma với đúng kiểu SQL mà mỗi cái sinh ra, hai bổ nghĩa ? và [], vì sao Float là sai cho tiền, và ba luật đặt tên bộ kiểm sẽ bắt bạn.',
       content: `
+${G02_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>Models, fields and the nine scalar types</h2>
@@ -74,23 +80,27 @@ model SampleType {
   signature   Bytes?
   tags        String[]
 }</code></pre>
-<pre><code class="language-bash">npx prisma migrate dev --name kieu_mau
+<pre><code class="language-bash">npx prisma db push
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"SampleType\\""</code></pre>
-<div class="out">                                    Table "public.SampleType"
-  Column   |            Type             | Nullable |                Default
------------+-----------------------------+----------+---------------------------------------
- id        | integer                     | not null | nextval('"KieuMau_id_seq"'::regclass)
- name       | text                        | not null |
- description      | text                        |          |
- quantity   | integer                     | not null |
- views   | bigint                      | not null | 0
- score      | double precision            | not null |
- price   | numeric(12,2)               | not null |
- visible   | boolean                     | not null | true
- createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- settings    | jsonb                       | not null | '{}'
- signature     | bytea                       |          |
- tags    | text[]                      | not null |</div>
+<div class="out">                                           Table "public.SampleType"
+   Column    |              Type              | Collation | Nullable |                 Default                  
+-------------+--------------------------------+-----------+----------+------------------------------------------
+ id          | integer                        |           | not null | nextval('"SampleType_id_seq"'::regclass)
+ name        | text                           |           | not null | 
+ description | text                           |           |          | 
+ quantity    | integer                        |           | not null | 
+ views       | bigint                         |           | not null | 0
+ score       | double precision               |           | not null | 
+ price       | numeric(12,2)                  |           | not null | 
+ visible     | boolean                        |           | not null | true
+ createdAt   | timestamp(3) without time zone |           | not null | CURRENT_TIMESTAMP
+ settings    | jsonb                          |           | not null | '{}'::jsonb
+ signature   | bytea                          |           |          | 
+ tags        | text[]                         |           |          | 
+Indexes:
+    "SampleType_pkey" PRIMARY KEY, btree (id)</div>
+
+<p class="note">Every output in this lesson was re-run on 12 Nov 2026 with Prisma 6.19.3 and PostgreSQL 16.14 (the table above came from <code>prisma db push</code> on a fresh database).</p>
 
 <h3>The money trap, measured</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// Float: binary floating point cannot represent 0.1 exactly</span>
@@ -103,7 +113,7 @@ for (let i = 0; i &lt; 10; i++) totalFloat += rows[0].score;
 console.log('Float  x10 :', totalFloat, totalFloat === 1);
 console.log('Decimal x10:', rows[0].price.times(10).toString());</code></pre>
 <div class="out">Float  x10 : 0.9999999999999999 false
-Decimal x10: 1.00</div>
+Decimal x10: 1</div>
 <div class="callout warn">
 <p><strong>Ten cents, added ten times, is not one dollar in <code>Float</code>.</strong> On one row it is a rounding curiosity. Across a hundred thousand invoice lines it is a reconciliation report that does not balance, and no amount of rounding at display time fixes it because the error is already in the stored data. Money is <code>Decimal</code> with an explicit <code>@db.Decimal(precision, scale)</code>. The alternative some teams prefer — <code>Int</code> holding cents — is also correct, and simpler to serialise; what is never correct is <code>Float</code>.</p>
 </div>
@@ -112,13 +122,19 @@ const price = rows[0].price;
 console.log(typeof price, price instanceof Prisma.Decimal);
 console.log(price + 1);                     <span class="tok-comment">// string concatenation — a real bug</span>
 console.log(price.plus(1).toFixed(2));      <span class="tok-comment">// correct</span>
-console.log(price.toNumber());              <span class="tok-comment">// only when you accept the precision loss</span></code></pre>
+console.log(price.toNumber());              <span class="tok-comment">// only when you accept the precision loss</span>
+console.log(JSON.stringify({ price }));     <span class="tok-comment">// what an API sends</span>
+console.log(JSON.stringify({ views: rows[0].views.toString() }));
+try { JSON.stringify({ views: rows[0].views }); } catch (e) { console.log('BigInt:', e.message); }</code></pre>
 <div class="out">object true
 0.11
 1.10
-0.1</div>
+0.1
+{"price":"0.1"}
+{"views":"0"}
+BigInt: Do not know how to serialize a BigInt</div>
 <div class="pitfall">
-<p><strong>Trap — <code>Decimal</code> in a JSON response.</strong> <code>JSON.stringify</code> renders a <code>Prisma.Decimal</code> as <code>{"s":1,"e":-1,"d":[1000000]}</code> — its internal representation, which is meaningless to a client. Convert explicitly at the API boundary (<code>.toFixed(2)</code> for display, <code>.toString()</code> to keep precision) and never let a raw <code>Decimal</code> reach <code>res.json()</code>. The same applies to <code>BigInt</code>, which throws outright rather than serialising wrongly.</p>
+<p><strong>Trap — <code>Decimal</code> and <code>BigInt</code> in a JSON response.</strong> Measured on Prisma 6.19.3: <code>JSON.stringify</code> sends a <code>Prisma.Decimal</code> as the <em>string</em> <code>"0.1"</code> — exact, but a string, so a client doing arithmetic on it concatenates, and a client expecting a number breaks. (Older decimal.js versions serialised the internal structure instead; do not rely on either.) <code>BigInt</code> is worse: <code>JSON.stringify</code> throws <code>Do not know how to serialize a BigInt</code>. Convert explicitly at the API boundary (<code>.toFixed(2)</code> for display, <code>.toString()</code> to keep precision) and never let a raw <code>Decimal</code> or <code>bigint</code> reach <code>res.json()</code>.</p>
 </div>
 
 <h3>The two modifiers</h3>
@@ -136,22 +152,47 @@ console.log(price.toNumber());              <span class="tok-comment">// only wh
 
 <h3>Three naming rules the validator enforces</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// All three of these fail — try them, the messages are excellent</span>
-model 2Post { id Int @id }              <span class="tok-comment">// starts with a digit</span>
-model user  { id Int @id }              <span class="tok-comment">// clashes with model User once mapped</span>
-model Post  { id Int @id  id2 Int @id } <span class="tok-comment">// two @id in one model</span></code></pre>
-<pre><code class="language-bash">npx prisma validate</code></pre>
-<div class="out">Error: Prisma schema validation - (get-dmmf wasm)
-Error code: P1012
-error: Error validating model "2Post": The model name must start with a letter.
-  --&gt;  prisma/schema.prisma:24
-   |
-23 |
-24 | model 2Post { id Int @id }
-   |
+model 2Post {
+  id Int @id
+}
 
+model Post {
+  id  Int @id
+  id2 Int @id
+}
+
+model Tag {
+  id    Int       @id
+  names String?[]
+}</code></pre>
+<pre><code class="language-bash">npx prisma validate --schema prisma/sai.prisma</code></pre>
+<div class="out">Error: Prisma schema validation - (validate wasm)
+Error code: P1012
+error: Error validating: This line is not a valid field or attribute definition.
+  --&gt;  prisma/sai.prisma:22
+   | 
+21 |   id    Int       @id
+22 |   names String?[]
+23 | }
+   | 
+error: Error validating: The name of a Model must not start with a number.
+  --&gt;  prisma/sai.prisma:11
+   | 
+10 | // All three of these fail — try them, the messages are excellent
+11 | model 2Post {
+   | 
 error: Error validating model "Post": At most one field must be marked as the id field with the &#96;@id&#96; attribute.
-  --&gt;  prisma/schema.prisma:26</div>
+  --&gt;  prisma/sai.prisma:15
+   | 
+14 | 
+15 | model Post {
+16 |   id  Int @id
+17 |   id2 Int @id
+18 | }
+   | 
+Validation Error Count: 3</div>
 <div class="callout ok">
+<p><strong>One more rule this run found:</strong> a model body cannot sit on one line. <code>model Post { id Int @id }</code> fails with "This line is invalid" — every field needs its own line, which is why the examples above are written out in full.</p>
 <p><strong>Run <code>prisma format</code> constantly.</strong> It aligns columns, sorts attributes into canonical order, adds missing back-relations where it can infer them, and — most usefully — <em>validates</em>. It is faster than <code>generate</code> and catches the same class of error, so bind it to save in your editor. The official Prisma VS Code extension does this plus autocomplete for every attribute in this chapter.</p>
 </div>
 
@@ -233,23 +274,27 @@ model SampleType {
   signature   Bytes?
   tags        String[]
 }</code></pre>
-<pre><code class="language-bash">npx prisma migrate dev --name kieu_mau
+<pre><code class="language-bash">npx prisma db push
 docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"SampleType\\""</code></pre>
-<div class="out">                                    Table "public.SampleType"
-  Column   |            Type             | Nullable |                Default
------------+-----------------------------+----------+---------------------------------------
- id        | integer                     | not null | nextval('"KieuMau_id_seq"'::regclass)
- name       | text                        | not null |
- description      | text                        |          |
- quantity   | integer                     | not null |
- views   | bigint                      | not null | 0
- score      | double precision            | not null |
- price   | numeric(12,2)               | not null |
- visible   | boolean                     | not null | true
- createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- settings    | jsonb                       | not null | '{}'
- signature     | bytea                       |          |
- tags    | text[]                      | not null |</div>
+<div class="out">                                           Table "public.SampleType"
+   Column    |              Type              | Collation | Nullable |                 Default                  
+-------------+--------------------------------+-----------+----------+------------------------------------------
+ id          | integer                        |           | not null | nextval('"SampleType_id_seq"'::regclass)
+ name        | text                           |           | not null | 
+ description | text                           |           |          | 
+ quantity    | integer                        |           | not null | 
+ views       | bigint                         |           | not null | 0
+ score       | double precision               |           | not null | 
+ price       | numeric(12,2)                  |           | not null | 
+ visible     | boolean                        |           | not null | true
+ createdAt   | timestamp(3) without time zone |           | not null | CURRENT_TIMESTAMP
+ settings    | jsonb                          |           | not null | '{}'::jsonb
+ signature   | bytea                          |           |          | 
+ tags        | text[]                         |           |          | 
+Indexes:
+    "SampleType_pkey" PRIMARY KEY, btree (id)</div>
+
+<p class="note">Mọi output trong bài này được chạy lại ngày 12/11/2026 với Prisma 6.19.3 và PostgreSQL 16.14 (bảng ở trên có từ <code>prisma db push</code> trên một cơ sở dữ liệu mới).</p>
 
 <h3>Bẫy tiền, đo bằng số</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// Float: dấu phẩy động nhị phân không biểu diễn nổi 0,1 cho chính xác</span>
@@ -262,7 +307,7 @@ for (let i = 0; i &lt; 10; i++) totalFloat += rows[0].score;
 console.log('Float  x10 :', totalFloat, totalFloat === 1);
 console.log('Decimal x10:', rows[0].price.times(10).toString());</code></pre>
 <div class="out">Float  x10 : 0.9999999999999999 false
-Decimal x10: 1.00</div>
+Decimal x10: 1</div>
 <div class="callout warn">
 <p><strong>Mười xu cộng mười lần không ra một đồng trong <code>Float</code>.</strong> Trên một hàng thì đó là chuyện làm tròn buồn cười. Trên trăm nghìn dòng hoá đơn thì đó là một báo cáo đối soát không khớp, và mọi phép làm tròn lúc hiển thị đều không cứu được vì sai số đã nằm sẵn trong dữ liệu đã lưu. Tiền là <code>Decimal</code> kèm <code>@db.Decimal(độ chính xác, số lẻ)</code> tường minh. Cách khác mà một số đội thích — dùng <code>Int</code> giữ số xu — cũng đúng, và dễ tuần tự hoá hơn; thứ không bao giờ đúng là <code>Float</code>.</p>
 </div>
@@ -271,13 +316,19 @@ const price = rows[0].price;
 console.log(typeof price, price instanceof Prisma.Decimal);
 console.log(price + 1);                     <span class="tok-comment">// nối chuỗi — một con bọ thật</span>
 console.log(price.plus(1).toFixed(2));      <span class="tok-comment">// đúng</span>
-console.log(price.toNumber());              <span class="tok-comment">// chỉ khi bạn chấp nhận mất độ chính xác</span></code></pre>
+console.log(price.toNumber());              <span class="tok-comment">// chỉ khi bạn chấp nhận mất độ chính xác</span>
+console.log(JSON.stringify({ price }));     <span class="tok-comment">// thứ một API gửi đi</span>
+console.log(JSON.stringify({ views: rows[0].views.toString() }));
+try { JSON.stringify({ views: rows[0].views }); } catch (e) { console.log('BigInt:', e.message); }</code></pre>
 <div class="out">object true
 0.11
 1.10
-0.1</div>
+0.1
+{"price":"0.1"}
+{"views":"0"}
+BigInt: Do not know how to serialize a BigInt</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>Decimal</code> nằm trong một phản hồi JSON.</strong> <code>JSON.stringify</code> in một <code>Prisma.Decimal</code> thành <code>{"s":1,"e":-1,"d":[1000000]}</code> — biểu diễn nội bộ của nó, hoàn toàn vô nghĩa với phía client. Hãy đổi tường minh ngay ở ranh giới API (<code>.toFixed(2)</code> để hiển thị, <code>.toString()</code> để giữ độ chính xác) và đừng bao giờ để một <code>Decimal</code> trần đi tới <code>res.json()</code>. Điều tương tự đúng với <code>BigInt</code>, thứ ném lỗi hẳn thay vì tuần tự hoá sai.</p>
+<p><strong>Bẫy — <code>Decimal</code> và <code>BigInt</code> nằm trong một phản hồi JSON.</strong> Đo trên Prisma 6.19.3: <code>JSON.stringify</code> gửi một <code>Prisma.Decimal</code> đi dưới dạng <em>chuỗi</em> <code>"0.1"</code> — chính xác, nhưng là chuỗi, nên phía client cộng vào là thành nối chuỗi, còn client chờ một số thì vỡ. (Các bản decimal.js cũ từng in ra cấu trúc nội bộ; đừng dựa vào cách nào cả.) <code>BigInt</code> tệ hơn: <code>JSON.stringify</code> ném lỗi <code>Do not know how to serialize a BigInt</code>. Hãy đổi tường minh ngay ở ranh giới API (<code>.toFixed(2)</code> để hiển thị, <code>.toString()</code> để giữ độ chính xác) và đừng bao giờ để một <code>Decimal</code> hay <code>bigint</code> trần đi tới <code>res.json()</code>.</p>
 </div>
 
 <h3>Hai bổ nghĩa</h3>
@@ -295,22 +346,47 @@ console.log(price.toNumber());              <span class="tok-comment">// chỉ k
 
 <h3>Ba luật đặt tên bộ kiểm sẽ thi hành</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// Cả ba đều hỏng — thử đi, thông báo lỗi rất tốt</span>
-model 2Post { id Int @id }              <span class="tok-comment">// bắt đầu bằng chữ số</span>
-model user  { id Int @id }              <span class="tok-comment">// đụng model User sau khi ánh xạ</span>
-model Post  { id Int @id  id2 Int @id } <span class="tok-comment">// hai @id trong một model</span></code></pre>
-<pre><code class="language-bash">npx prisma validate</code></pre>
-<div class="out">Error: Prisma schema validation - (get-dmmf wasm)
-Error code: P1012
-error: Error validating model "2Post": The model name must start with a letter.
-  --&gt;  prisma/schema.prisma:24
-   |
-23 |
-24 | model 2Post { id Int @id }
-   |
+model 2Post {
+  id Int @id
+}
 
+model Post {
+  id  Int @id
+  id2 Int @id
+}
+
+model Tag {
+  id    Int       @id
+  names String?[]
+}</code></pre>
+<pre><code class="language-bash">npx prisma validate --schema prisma/sai.prisma</code></pre>
+<div class="out">Error: Prisma schema validation - (validate wasm)
+Error code: P1012
+error: Error validating: This line is not a valid field or attribute definition.
+  --&gt;  prisma/sai.prisma:22
+   | 
+21 |   id    Int       @id
+22 |   names String?[]
+23 | }
+   | 
+error: Error validating: The name of a Model must not start with a number.
+  --&gt;  prisma/sai.prisma:11
+   | 
+10 | // All three of these fail — try them, the messages are excellent
+11 | model 2Post {
+   | 
 error: Error validating model "Post": At most one field must be marked as the id field with the &#96;@id&#96; attribute.
-  --&gt;  prisma/schema.prisma:26</div>
+  --&gt;  prisma/sai.prisma:15
+   | 
+14 | 
+15 | model Post {
+16 |   id  Int @id
+17 |   id2 Int @id
+18 | }
+   | 
+Validation Error Count: 3</div>
 <div class="callout ok">
+<p><strong>Thêm một luật mà lần chạy này tìm ra:</strong> thân model không được viết trên một dòng. <code>model Post { id Int @id }</code> hỏng với "This line is invalid" — mỗi trường phải nằm trên một dòng riêng, vì thế các ví dụ ở trên được viết đầy đủ.</p>
 <p><strong>Chạy <code>prisma format</code> liên tục.</strong> Nó canh cột, sắp thuộc tính theo thứ tự chuẩn, thêm những quan hệ ngược còn thiếu khi suy ra được, và — hữu ích nhất — <em>kiểm tra tính hợp lệ</em>. Nó nhanh hơn <code>generate</code> và bắt cùng một lớp lỗi, nên hãy gắn nó vào phím lưu trong trình soạn thảo. Tiện ích Prisma chính thức cho VS Code làm việc đó cộng thêm gợi ý gõ cho mọi thuộc tính trong chương này.</p>
 </div>
 
@@ -346,6 +422,7 @@ error: Error validating model "Post": At most one field must be marked as the id
       type: 'LESSON',
       description: 'Tám thuộc tính mức trường mổ đủ: @id với khoá tự tăng so với uuid/cuid, sáu hàm của @default kể cả dbgenerated, @unique và cái tên ràng buộc nó đẻ ra, @updatedAt và chỗ nó không cập nhật, @map, @ignore, và @db mở đường sang native type.',
       content: `
+${G02_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>Field attributes: every <code>@</code></h2>
@@ -378,21 +455,23 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
   code      String   @default(nanoid(12))          <span class="tok-comment">// client-side, Prisma 5.16+</span>
   fromDb    String   @default(dbgenerated("substr(md5(random()::text), 1, 8)"))
 }</code></pre>
-<pre><code class="language-bash">docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"Example\\"" | head -14</code></pre>
-<div class="out">                                   Table "public.Example"
-  Column   |            Type             | Nullable |              Default
------------+-----------------------------+----------+-------------------------------------
- id        | integer                     | not null | nextval('"Vidu_id_seq"'::regclass)
- status | text                        | not null | 'NHAP'::text
- attempts     | integer                     | not null | 0
- visible   | boolean                     | not null | true
- tags    | text[]                      | not null | ARRAY[]::text[]
- createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- code        | text                        | not null |
- fromDb      | text                        | not null | substr(md5((random())::text), 1, 8)</div>
+<pre><code class="language-bash">docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"Example\\""</code></pre>
+<div class="out">                                          Table "public.Example"
+  Column   |              Type              | Collation | Nullable |                Default                
+-----------+--------------------------------+-----------+----------+---------------------------------------
+ id        | integer                        |           | not null | nextval('"Example_id_seq"'::regclass)
+ status    | text                           |           | not null | 'NHAP'::text
+ attempts  | integer                        |           | not null | 0
+ visible   | boolean                        |           | not null | true
+ tags      | text[]                         |           |          | ARRAY[]::text[]
+ createdAt | timestamp(3) without time zone |           | not null | CURRENT_TIMESTAMP
+ code      | text                           |           | not null | 
+ fromDb    | text                           |           | not null | substr(md5(random()::text), 1, 8)</div>
 <div class="pitfall">
 <p><strong>Trap — look at the <code>code</code> column: it has no database default.</strong> <code>uuid()</code>, <code>cuid()</code> and <code>nanoid()</code> are generated <strong>by Prisma Client in JavaScript</strong>, not by PostgreSQL. So a row inserted by anything that is not Prisma — a raw <code>INSERT</code> in psql, a data-import script, another service — gets no value, and the <code>NOT NULL</code> constraint rejects it. If other systems write to that table, use <code>dbgenerated("gen_random_uuid()")</code> so the default lives where every writer can see it. This difference is invisible in the Prisma schema and obvious in <code>\\d</code>.</p>
 </div>
+
+<p class="note">The outputs in this lesson were re-run on 12 Nov 2026 with Prisma 6.19.3 and PostgreSQL 16.14 — <code>\\d</code> output exactly as psql 16 prints it, including the Collation column.</p>
 
 <h3><code>@unique</code> — and the constraint name it creates</h3>
 <pre><code class="language-typescript">model User {
@@ -403,9 +482,9 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
 }</code></pre>
 <div class="out">Indexes:
     "User_pkey" PRIMARY KEY, btree (id)
-    "User_email_key" UNIQUE CONSTRAINT, btree (email)
-    "User_soDienThoai_key" UNIQUE CONSTRAINT, btree ("phoneNumber")
-    "uk_user_username" UNIQUE CONSTRAINT, btree (username)</div>
+    "User_email_key" UNIQUE, btree (email)
+    "User_phoneNumber_key" UNIQUE, btree ("phoneNumber")
+    "uk_user_username" UNIQUE, btree (username)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">It creates an index for free</span><span class="v">A unique constraint is backed by a B-tree index, so <code>where: { email }</code> is already fast. Adding <code>@@index([email])</code> as well is duplicated work and wasted disk.</span></div>
   <div class="kv"><span class="k">It unlocks <code>findUnique</code></span><span class="v">Only unique fields may appear in a <code>findUnique</code> <code>where</code>. This is a compile-time guarantee that the query returns at most one row.</span></div>
@@ -421,7 +500,7 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
   updatedAt DateTime @updatedAt       @map("updated_at")
 }</code></pre>
 <pre><code class="language-typescript">await prisma.post.update({ where: { id: 1 }, data: { title: 'Doi name' } });</code></pre>
-<div class="out">prisma:query UPDATE "public"."posts" SET "title" = $1, "updated_at" = $2 WHERE ("public"."posts"."id" = $3 AND 1=1) RETURNING ...</div>
+<div class="out">prisma:query UPDATE "public"."posts" SET "title" = $1, "updated_at" = $2 WHERE ("public"."posts"."id" = $3 AND 1=1) RETURNING … ["Renamed","2026-11-11 18:36:03.581 UTC",1]</div>
 <div class="callout warn">
 <p><strong>The timestamp comes from your application, not the database.</strong> Prisma puts <code>updated_at = $2</code> in the statement with a JavaScript <code>new Date()</code> as the parameter. Three consequences: a raw <code>UPDATE</code> from psql does <em>not</em> touch it; an application server with a wrong clock writes a wrong timestamp; and two servers in different time zones are fine only because <code>Date</code> is UTC internally. If you need a guarantee independent of who is writing, use a PostgreSQL trigger instead — and then remove <code>@updatedAt</code> so the two do not fight.</p>
 </div>
@@ -435,12 +514,12 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
 
   @@map("users")
 }</code></pre>
-<p>Your code reads <code>user.fullName</code>; the database has <code>full_name</code>. This is not cosmetic — it lets a JavaScript codebase follow JavaScript conventions while the database follows SQL conventions, which is exactly what a DBA reviewing your migrations expects to see. The CuongThai schema does this on every model, which is why <code>@map</code> appears roughly four hundred times in it.</p>
+<p>Your code reads <code>user.fullName</code>; the database has <code>full_name</code>. This is not cosmetic — it lets a JavaScript codebase follow JavaScript conventions while the database follows SQL conventions, which is exactly what a DBA reviewing your migrations expects to see. The CuongThai schema does this on every model, which is why it holds 4,173 field-level <code>@map</code>s and 630 model-level <code>@@map</code>s (counted on 12 Nov 2026 — note that <code>grep -c '@map('</code> would also count every <code>@@map</code>).</p>
 <pre><code class="language-bash"><span class="tok-comment"># Count them yourself in this repository</span>
-grep -c '@map(' prisma/schema.prisma
-grep -c '@@map(' prisma/schema.prisma</code></pre>
-<div class="out">412
-112</div>
+grep -o '[^@]@map(' prisma/schema.prisma | wc -l    <span class="tok-comment"># field-level @map</span>
+grep -o '@@map(' prisma/schema.prisma | wc -l       <span class="tok-comment"># model-level @@map</span></code></pre>
+<div class="out">    4173
+     630</div>
 
 <h3><code>@ignore</code>, and the rest</h3>
 <div class="lz-flow">
@@ -472,7 +551,7 @@ CREATE TABLE "tai_khoan" (
     "so_du" DECIMAL(14,2) NOT NULL DEFAULT 0,
     "tao_luc" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "sua_luc" TIMESTAMPTZ(3) NOT NULL,
-    "cot_cu" VARCHAR(191),
+    "cot_cu" TEXT,
 
     CONSTRAINT "tai_khoan_pkey" PRIMARY KEY ("id")
 );
@@ -520,21 +599,23 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
   code      String   @default(nanoid(12))          <span class="tok-comment">// phía client, Prisma 5.16+</span>
   fromDb    String   @default(dbgenerated("substr(md5(random()::text), 1, 8)"))
 }</code></pre>
-<pre><code class="language-bash">docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"Example\\"" | head -14</code></pre>
-<div class="out">                                   Table "public.Example"
-  Column   |            Type             | Nullable |              Default
------------+-----------------------------+----------+-------------------------------------
- id        | integer                     | not null | nextval('"Vidu_id_seq"'::regclass)
- status | text                        | not null | 'NHAP'::text
- attempts     | integer                     | not null | 0
- visible   | boolean                     | not null | true
- tags    | text[]                      | not null | ARRAY[]::text[]
- createdAt    | timestamp(3) without time zone | not null | CURRENT_TIMESTAMP
- code        | text                        | not null |
- fromDb      | text                        | not null | substr(md5((random())::text), 1, 8)</div>
+<pre><code class="language-bash">docker exec -it pg-hoc psql -U student -d hocprisma -c "\\d \\"Example\\""</code></pre>
+<div class="out">                                          Table "public.Example"
+  Column   |              Type              | Collation | Nullable |                Default                
+-----------+--------------------------------+-----------+----------+---------------------------------------
+ id        | integer                        |           | not null | nextval('"Example_id_seq"'::regclass)
+ status    | text                           |           | not null | 'NHAP'::text
+ attempts  | integer                        |           | not null | 0
+ visible   | boolean                        |           | not null | true
+ tags      | text[]                         |           |          | ARRAY[]::text[]
+ createdAt | timestamp(3) without time zone |           | not null | CURRENT_TIMESTAMP
+ code      | text                           |           | not null | 
+ fromDb    | text                           |           | not null | substr(md5(random()::text), 1, 8)</div>
 <div class="pitfall">
 <p><strong>Bẫy — nhìn cột <code>code</code>: nó KHÔNG có giá trị mặc định dưới cơ sở dữ liệu.</strong> <code>uuid()</code>, <code>cuid()</code> và <code>nanoid()</code> được sinh <strong>bởi Prisma Client bằng JavaScript</strong>, không phải bởi PostgreSQL. Nên một hàng do bất cứ thứ gì không phải Prisma chèn vào — một câu <code>INSERT</code> thô trong psql, một script nhập dữ liệu, một dịch vụ khác — sẽ không có giá trị, và ràng buộc <code>NOT NULL</code> từ chối nó. Nếu có hệ thống khác ghi vào bảng đó, hãy dùng <code>dbgenerated("gen_random_uuid()")</code> để giá trị mặc định sống ở nơi mọi bên ghi đều nhìn thấy. Khác biệt này vô hình trong lược đồ Prisma và hiện rành rành trong <code>\\d</code>.</p>
 </div>
+
+<p class="note">Các output trong bài này được chạy lại ngày 12/11/2026 với Prisma 6.19.3 và PostgreSQL 16.14 — output <code>\\d</code> đúng như psql 16 in ra, kể cả cột Collation.</p>
 
 <h3><code>@unique</code> — và cái tên ràng buộc nó đẻ ra</h3>
 <pre><code class="language-typescript">model User {
@@ -545,9 +626,9 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
 }</code></pre>
 <div class="out">Indexes:
     "User_pkey" PRIMARY KEY, btree (id)
-    "User_email_key" UNIQUE CONSTRAINT, btree (email)
-    "User_soDienThoai_key" UNIQUE CONSTRAINT, btree ("phoneNumber")
-    "uk_user_username" UNIQUE CONSTRAINT, btree (username)</div>
+    "User_email_key" UNIQUE, btree (email)
+    "User_phoneNumber_key" UNIQUE, btree ("phoneNumber")
+    "uk_user_username" UNIQUE, btree (username)</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nó tạo chỉ mục miễn phí</span><span class="v">Một ràng buộc unique được đỡ bởi một chỉ mục B-tree, nên <code>where: { email }</code> vốn đã nhanh. Thêm cả <code>@@index([email])</code> là làm trùng việc và phí đĩa.</span></div>
   <div class="kv"><span class="k">Nó mở khoá <code>findUnique</code></span><span class="v">Chỉ trường unique mới được xuất hiện trong <code>where</code> của <code>findUnique</code>. Đây là một bảo đảm lúc biên dịch rằng câu truy vấn trả về nhiều nhất một hàng.</span></div>
@@ -563,7 +644,7 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
   updatedAt DateTime @updatedAt       @map("updated_at")
 }</code></pre>
 <pre><code class="language-typescript">await prisma.post.update({ where: { id: 1 }, data: { title: 'Doi name' } });</code></pre>
-<div class="out">prisma:query UPDATE "public"."posts" SET "title" = $1, "updated_at" = $2 WHERE ("public"."posts"."id" = $3 AND 1=1) RETURNING ...</div>
+<div class="out">prisma:query UPDATE "public"."posts" SET "title" = $1, "updated_at" = $2 WHERE ("public"."posts"."id" = $3 AND 1=1) RETURNING … ["Renamed","2026-11-11 18:36:03.581 UTC",1]</div>
 <div class="callout warn">
 <p><strong>Cái mốc thời gian đó đến từ ứng dụng của bạn, không phải từ cơ sở dữ liệu.</strong> Prisma đặt <code>updated_at = $2</code> vào câu lệnh với một <code>new Date()</code> của JavaScript làm tham số. Ba hệ quả: một câu <code>UPDATE</code> thô từ psql <em>không</em> đụng tới nó; một máy chủ ứng dụng chạy sai giờ sẽ ghi sai mốc thời gian; và hai máy chủ ở hai múi giờ chỉ không sao vì <code>Date</code> vốn là UTC bên trong. Nếu bạn cần một bảo đảm không phụ thuộc ai đang ghi, hãy dùng trigger của PostgreSQL — rồi bỏ <code>@updatedAt</code> đi để hai bên khỏi đánh nhau.</p>
 </div>
@@ -577,12 +658,12 @@ model D { id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid }</c
 
   @@map("users")
 }</code></pre>
-<p>Mã của bạn đọc <code>user.fullName</code>; cơ sở dữ liệu có <code>full_name</code>. Chuyện này không phải làm đẹp — nó cho phép một kho mã JavaScript theo quy ước JavaScript trong khi cơ sở dữ liệu theo quy ước SQL, tức đúng thứ mà một DBA duyệt migration của bạn mong thấy. Lược đồ CuongThai làm vậy ở mọi model, và vì thế <code>@map</code> xuất hiện khoảng bốn trăm lần trong đó.</p>
+<p>Mã của bạn đọc <code>user.fullName</code>; cơ sở dữ liệu có <code>full_name</code>. Chuyện này không phải làm đẹp — nó cho phép một kho mã JavaScript theo quy ước JavaScript trong khi cơ sở dữ liệu theo quy ước SQL, tức đúng thứ mà một DBA duyệt migration của bạn mong thấy. Lược đồ CuongThai làm vậy ở mọi model, và vì thế nó có 4.173 chỗ <code>@map</code> mức trường và 630 chỗ <code>@@map</code> mức model (đếm ngày 12/11/2026 — để ý <code>grep -c '@map('</code> sẽ đếm lẫn cả mọi <code>@@map</code>).</p>
 <pre><code class="language-bash"><span class="tok-comment"># Tự đếm trong chính kho này</span>
-grep -c '@map(' prisma/schema.prisma
-grep -c '@@map(' prisma/schema.prisma</code></pre>
-<div class="out">412
-112</div>
+grep -o '[^@]@map(' prisma/schema.prisma | wc -l    <span class="tok-comment"># @map mức trường</span>
+grep -o '@@map(' prisma/schema.prisma | wc -l       <span class="tok-comment"># @@map mức model</span></code></pre>
+<div class="out">    4173
+     630</div>
 
 <h3><code>@ignore</code>, và phần còn lại</h3>
 <div class="lz-flow">
@@ -614,7 +695,7 @@ CREATE TABLE "tai_khoan" (
     "so_du" DECIMAL(14,2) NOT NULL DEFAULT 0,
     "tao_luc" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "sua_luc" TIMESTAMPTZ(3) NOT NULL,
-    "cot_cu" VARCHAR(191),
+    "cot_cu" TEXT,
 
     CONSTRAINT "tai_khoan_pkey" PRIMARY KEY ("id")
 );
@@ -639,6 +720,7 @@ CREATE UNIQUE INDEX "uk_taikhoan_email" ON "tai_khoan"("email");</div>
       type: 'LESSON',
       description: '@@id khoá phức hợp, @@unique và cái bẫy tên đã từng làm vỡ truy vấn thật trong kho này, @@index với type Gin/Gist/Brin và thứ tự cột quyết định mọi thứ, @@map, @@ignore, @@schema, @@fulltext — kèm chỉ mục sinh ra nhìn tận mắt trong psql.',
       content: `
+${G02_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.3</span>
 <h2>Block attributes: every <code>@@</code></h2>
@@ -664,7 +746,7 @@ CREATE UNIQUE INDEX "uk_taikhoan_email" ON "tai_khoan"("email");</div>
 );</div>
 <p>The generated client now addresses a row by both columns at once, under a compound name Prisma invents from the field names:</p>
 <pre><code class="language-typescript">await prisma.membership.findUnique({
-  where: { nguoiDungId_nhomId: { userId: 1, groupId: 7 } },
+  where: { userId_groupId: { userId: 1, groupId: 7 } },
 });</code></pre>
 <div class="callout">
 <p><strong>Composite key or surrogate id?</strong> A composite <code>@@id</code> is honest — it says "this row IS the pair" and the database enforces it. It costs you a longer <code>where</code>, and it becomes painful the moment a third table needs to reference this row, because the foreign key is now two columns. The common compromise: an <code>Int @id</code> surrogate plus <code>@@unique([userId, groupId])</code>, which gives both the short reference and the guarantee. Chapter 3 revisits this when explicit many-to-many tables arrive.</p>
@@ -714,18 +796,19 @@ where: { uk_note_subject_share: { subjectId: 3, recipientId: 9 } }</code></pre>
   @@index([authorId])                                  <span class="tok-comment">// FK — Prisma does NOT add this for you</span>
   @@index([published, publishedAt(sort: Desc)])        <span class="tok-comment">// composite, with direction</span>
   @@index([tags], type: Gin)                           <span class="tok-comment">// array containment</span>
-  @@index([search], type: Gin, map: "idx_post_search") <span class="tok-comment">// trigram/full-text</span>
+  @@index([search(ops: raw("gin_trgm_ops"))], type: Gin, map: "idx_post_search") <span class="tok-comment">// trigram — needs pg_trgm</span>
   @@map("posts")
 }</code></pre>
 <div class="out">Indexes:
     "posts_pkey" PRIMARY KEY, btree (id)
+    "idx_post_search" gin (search gin_trgm_ops)
     "posts_author_id_idx" btree (author_id)
     "posts_published_published_at_idx" btree (published, published_at DESC)
-    "posts_tags_idx" gin (tags)
-    "idx_post_search" gin (search)</div>
+    "posts_tags_idx" gin (tags)</div>
+<p class="note">Run on 12 Nov 2026 (Prisma 6.19.3, PostgreSQL 16.14, <code>CREATE EXTENSION pg_trgm</code> first). A GIN index on a plain <code>String</code> needs an operator class: written as <code>@@index([search], type: Gin)</code> the schema does not even validate — <code>The Gin index type does not support the type of the field &#96;search&#96;</code>. On 200,000 contacts, <code>@@index([lastName, firstName])</code> answered a last-name-plus-first-name lookup with an Index Scan in 0.6 ms, and a first-name-only lookup with a Seq Scan in 12.2 ms.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Foreign keys are NOT indexed automatically</span><span class="v">PostgreSQL indexes the primary key and every unique constraint. It does <strong>not</strong> index the referencing side of a foreign key, and neither does Prisma. Every <code>@relation</code> scalar you will filter or join on needs its own <code>@@index</code>. This single omission is the most common cause of a Prisma app that gets slow at 100,000 rows.</span></div>
-  <div class="kv"><span class="k">Column order is not cosmetic</span><span class="v"><code>@@index([published, publishedAt])</code> serves <code>WHERE published = true ORDER BY published_at</code> and also plain <code>WHERE published = true</code>. It does <em>nothing</em> for <code>WHERE published_at &gt; …</code> alone. Put the equality columns first, the range or sort column last.</span></div>
+  <div class="kv"><span class="k">Column order is not cosmetic</span><span class="v"><code>@@index([published, publishedAt])</code> serves <code>WHERE published = true ORDER BY published_at</code> and also plain <code>WHERE published = true</code>. For <code>WHERE published_at &gt; …</code> alone it is the wrong tool — measured on PostgreSQL 16.14 the planner still walked it here (a boolean leads with only two values), but with a selective first column, such as a <code>(lastName, firstName)</code> phone book, a filter on the second column alone becomes a sequential scan. Put the equality columns first, the range or sort column last, and confirm with <code>EXPLAIN</code>.</span></div>
   <div class="kv"><span class="k"><code>type:</code> chooses the index kind</span><span class="v"><code>BTree</code> (default), <code>Gin</code> (arrays, JSONB, trigram, full-text), <code>Gist</code>, <code>SpGist</code>, <code>Brin</code> (huge append-only tables, tiny index), <code>Hash</code>. Getting this wrong means an index that exists, takes disk, and is never used.</span></div>
   <div class="kv"><span class="k"><code>sort:</code> and <code>ops:</code></span><span class="v"><code>sort: Desc</code> matters when your <code>ORDER BY</code> is descending and you want the index to serve it without a sort step. <code>ops:</code> selects the operator class — <code>ops: raw("gin_trgm_ops")</code> is how you get a trigram index for <code>contains</code> searches.</span></div>
   <div class="kv"><span class="k">What you cannot express</span><span class="v">Partial indexes (<code>WHERE deleted_at IS NULL</code>) and expression indexes (<code>lower(email)</code>) have no schema syntax. Write them in a hand-edited migration; Prisma will leave them alone, but <code>db pull</code> will not see them either. Chapter 10 covers keeping them alive.</span></div>
@@ -803,7 +886,7 @@ CREATE INDEX "idx_posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 );</div>
 <p>Client sinh ra giờ định vị một hàng bằng cả hai cột cùng lúc, dưới một cái tên ghép mà Prisma tự đặt từ tên các trường:</p>
 <pre><code class="language-typescript">await prisma.membership.findUnique({
-  where: { nguoiDungId_nhomId: { userId: 1, groupId: 7 } },
+  where: { userId_groupId: { userId: 1, groupId: 7 } },
 });</code></pre>
 <div class="callout">
 <p><strong>Khoá phức hợp hay id thay thế?</strong> Một <code>@@id</code> phức hợp thì trung thực — nó nói "hàng này CHÍNH LÀ cặp đó" và cơ sở dữ liệu thi hành điều ấy. Cái giá là một mệnh đề <code>where</code> dài hơn, và nó trở nên khó chịu ngay khi có bảng thứ ba cần tham chiếu tới hàng này, vì khoá ngoại giờ là hai cột. Cách dung hoà phổ biến: một <code>Int @id</code> thay thế cộng <code>@@unique([userId, groupId])</code>, cho bạn cả tham chiếu ngắn lẫn bảo đảm. Chương 3 quay lại chuyện này khi bảng nhiều-nhiều tường minh xuất hiện.</p>
@@ -853,18 +936,19 @@ where: { uk_note_subject_share: { subjectId: 3, recipientId: 9 } }</code></pre>
   @@index([authorId])                                  <span class="tok-comment">// khoá ngoại — Prisma KHÔNG tự thêm hộ bạn</span>
   @@index([published, publishedAt(sort: Desc)])        <span class="tok-comment">// phức hợp, có chiều</span>
   @@index([tags], type: Gin)                           <span class="tok-comment">// kiểm phần tử trong mảng</span>
-  @@index([search], type: Gin, map: "idx_post_search") <span class="tok-comment">// trigram/toàn văn</span>
+  @@index([search(ops: raw("gin_trgm_ops"))], type: Gin, map: "idx_post_search") <span class="tok-comment">// trigram — cần pg_trgm</span>
   @@map("posts")
 }</code></pre>
 <div class="out">Indexes:
     "posts_pkey" PRIMARY KEY, btree (id)
+    "idx_post_search" gin (search gin_trgm_ops)
     "posts_author_id_idx" btree (author_id)
     "posts_published_published_at_idx" btree (published, published_at DESC)
-    "posts_tags_idx" gin (tags)
-    "idx_post_search" gin (search)</div>
+    "posts_tags_idx" gin (tags)</div>
+<p class="note">Chạy ngày 12/11/2026 (Prisma 6.19.3, PostgreSQL 16.14, chạy <code>CREATE EXTENSION pg_trgm</code> trước). Chỉ mục GIN trên một <code>String</code> thường cần operator class: viết <code>@@index([search], type: Gin)</code> thì lược đồ còn không qua bước validate — <code>The Gin index type does not support the type of the field &#96;search&#96;</code>. Trên 200.000 liên hệ, <code>@@index([lastName, firstName])</code> trả lời câu tìm theo họ và tên bằng Index Scan trong 0,6 ms, còn câu chỉ theo tên là Seq Scan 12,2 ms.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Khoá ngoại KHÔNG được tự đánh chỉ mục</span><span class="v">PostgreSQL đánh chỉ mục cho khoá chính và mọi ràng buộc unique. Nó <strong>không</strong> đánh chỉ mục cho phía tham chiếu của một khoá ngoại, và Prisma cũng không. Mọi trường vô hướng của <code>@relation</code> mà bạn sẽ lọc hoặc join đều cần <code>@@index</code> riêng. Chỉ thiếu sót này thôi là nguyên nhân phổ biến nhất khiến một ứng dụng Prisma chậm đi ở mốc 100.000 hàng.</span></div>
-  <div class="kv"><span class="k">Thứ tự cột không phải chuyện hình thức</span><span class="v"><code>@@index([published, publishedAt])</code> phục vụ <code>WHERE published = true ORDER BY published_at</code> và cả <code>WHERE published = true</code> trần. Nó <em>không làm gì</em> cho riêng <code>WHERE published_at &gt; …</code>. Hãy đặt các cột so bằng lên trước, cột khoảng hoặc cột sắp xếp xuống cuối.</span></div>
+  <div class="kv"><span class="k">Thứ tự cột không phải chuyện hình thức</span><span class="v"><code>@@index([published, publishedAt])</code> phục vụ <code>WHERE published = true ORDER BY published_at</code> và cả <code>WHERE published = true</code> trần. Với riêng <code>WHERE published_at &gt; …</code> thì nó là công cụ sai — đo trên PostgreSQL 16.14, bộ lập kế hoạch ở đây vẫn đi qua nó (cột đầu boolean chỉ có hai giá trị), nhưng với cột đầu chọn lọc, như danh bạ <code>(lastName, firstName)</code>, lọc riêng theo cột thứ hai sẽ thành quét tuần tự. Hãy đặt các cột so bằng lên trước, cột khoảng hoặc cột sắp xếp xuống cuối, và kiểm bằng <code>EXPLAIN</code>.</span></div>
   <div class="kv"><span class="k"><code>type:</code> chọn loại chỉ mục</span><span class="v"><code>BTree</code> (mặc định), <code>Gin</code> (mảng, JSONB, trigram, toàn văn), <code>Gist</code>, <code>SpGist</code>, <code>Brin</code> (bảng khổng lồ chỉ ghi thêm, chỉ mục tí hon), <code>Hash</code>. Chọn sai nghĩa là có một chỉ mục tồn tại, tốn đĩa, và không bao giờ được dùng.</span></div>
   <div class="kv"><span class="k"><code>sort:</code> và <code>ops:</code></span><span class="v"><code>sort: Desc</code> có ý nghĩa khi <code>ORDER BY</code> của bạn giảm dần và bạn muốn chỉ mục phục vụ luôn phần đó mà không cần bước sắp xếp. <code>ops:</code> chọn lớp toán tử — <code>ops: raw("gin_trgm_ops")</code> là cách bạn có chỉ mục trigram cho các phép tìm bằng <code>contains</code>.</span></div>
   <div class="kv"><span class="k">Thứ bạn không diễn đạt được</span><span class="v">Partial index (<code>WHERE deleted_at IS NULL</code>) và chỉ mục theo biểu thức (<code>lower(email)</code>) không có cú pháp trong lược đồ. Hãy viết chúng trong một migration sửa tay; Prisma sẽ để yên, nhưng <code>db pull</code> cũng sẽ không thấy chúng. Chương 10 nói cách giữ chúng sống.</span></div>
@@ -926,6 +1010,7 @@ CREATE INDEX "idx_posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
       type: 'LESSON',
       description: 'Bảng @db.* đầy đủ cho PostgreSQL, vì sao VarChar(n) là ràng buộc chứ không phải tối ưu, bẫy Timestamp so với Timestamptz dựng lại bằng hai truy vấn thật, @db.Uuid tiết kiệm 20 byte mỗi hàng, và chuyện gì xảy ra khi bạn thu hẹp một cột đã có dữ liệu.',
       content: `
+${G02_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.4</span>
 <h2>Native types, and the two that bite</h2>
@@ -954,26 +1039,26 @@ CREATE INDEX "idx_posts_title_trgm" ON "posts" USING gin ("title" gin_trgm_ops);
 
 <h3>Trap 1: <code>Timestamp</code> versus <code>Timestamptz</code></h3>
 <p>Prisma's default for <code>DateTime</code> is <code>TIMESTAMP(3)</code> — <em>without</em> a time zone. Here is what that actually means, with two rows written by the same code:</p>
-<pre><code class="language-typescript">model SuKien {
+<pre><code class="language-typescript">model Event {
   id     Int      @id @default(autoincrement())
   name   String
   noTz   DateTime <span class="tok-comment">// TIMESTAMP(3)   — Prisma default</span>
   withTz DateTime @db.Timestamptz(3)     <span class="tok-comment">// TIMESTAMPTZ(3) — what you usually want</span>
 }</code></pre>
 <pre><code class="language-javascript">const t = new Date('2026-08-23T10:00:00+07:00');   <span class="tok-comment">// 03:00 UTC</span>
-await prisma.event.create({ data: { name: 'Hop', noTz: t, withTz: t } });</code></pre>
+await prisma.event.create({ data: { name: 'Meeting', noTz: t, withTz: t } });</code></pre>
 <pre><code class="language-typescript"><span class="tok-comment">-- Read it back from psql, in two different session time zones</span>
-SET TIME ZONE 'UTC';         SELECT "noTz", "withTz" FROM "SuKien";
-SET TIME ZONE 'Asia/Bangkok'; SELECT "noTz", "withTz" FROM "SuKien";</code></pre>
-<div class="out">-- UTC session
-        noTz         |          withTz
-------------------------+------------------------
- 2026-08-23 03:00:00    | 2026-08-23 03:00:00+00
+SET TIME ZONE 'UTC';         SELECT "noTz", "withTz" FROM "Event";
+SET TIME ZONE 'Asia/Bangkok'; SELECT "noTz", "withTz" FROM "Event";</code></pre>
+<div class="out">SET
+        noTz         |         withTz         
+---------------------+------------------------
+ 2026-08-23 03:00:00 | 2026-08-23 03:00:00+00
 
--- Asia/Bangkok session (UTC+7)
-        noTz         |          withTz
-------------------------+------------------------
- 2026-08-23 03:00:00    | 2026-08-23 10:00:00+07</div>
+SET
+        noTz         |         withTz         
+---------------------+------------------------
+ 2026-08-23 03:00:00 | 2026-08-23 10:00:00+07</div>
 <div class="callout warn">
 <p><strong>Read the two columns again.</strong> <code>withTz</code> shows the correct local moment in each session — 03:00 UTC and 10:00 in Bangkok are the same instant, and PostgreSQL knows it. <code>noTz</code> shows <code>03:00</code> in both, because it stores a wall-clock reading with <em>no idea</em> what zone it belongs to. Prisma always converts to UTC before writing, so through Prisma alone both columns round-trip correctly. The damage appears the moment anything else touches the data: a psql query, a BI tool, a report, a Python job, an <code>AT TIME ZONE</code> conversion in a raw SQL migration. Then <code>noTz</code> is a number with no meaning attached.</p>
 </div>
@@ -991,15 +1076,22 @@ model Article {
   releaseDate  DateTime? @map("ngay_phat_hanh") @db.Date
 }</code></pre>
 
+<p class="note">Every output in this lesson was re-run on 12 Nov 2026 with Prisma 6.19.3 and PostgreSQL 16.14; the size comparison below uses 200,000 real rows per table.</p>
+
 <h3>Trap 2: a UUID stored as text</h3>
-<pre><code class="language-typescript">model A { id String @id @default(uuid())            }   <span class="tok-comment">// TEXT   — 36 bytes + overhead</span>
-model B { id String @id @default(uuid()) @db.Uuid   }   <span class="tok-comment">// UUID   — 16 bytes, fixed</span></code></pre>
+<pre><code class="language-typescript">model TextUuid {
+  id String @id @default(uuid())           <span class="tok-comment">// TEXT   — 36 bytes + overhead</span>
+}
+
+model NativeUuid {
+  id String @id @default(uuid()) @db.Uuid  <span class="tok-comment">// UUID   — 16 bytes, fixed</span>
+}</code></pre>
 <pre><code class="language-typescript"><span class="tok-comment">-- Same 200,000 rows, both ways</span>
-SELECT pg_size_pretty(pg_total_relation_size('"A"')) AS text_uuid,
-       pg_size_pretty(pg_total_relation_size('"B"')) AS native_uuid;</code></pre>
-<div class="out">  text_uuid | native_uuid
-------------+-------------
-  24 MB     | 16 MB</div>
+SELECT pg_size_pretty(pg_total_relation_size('"TextUuid"')) AS text_uuid,
+       pg_size_pretty(pg_total_relation_size('"NativeUuid"')) AS native_uuid;</code></pre>
+<div class="out"> text_uuid | native_uuid 
+-----------+-------------
+ 28 MB     | 17 MB</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Size</span><span class="v">16 bytes versus 36, plus the index copy of every one. On a table with three UUID foreign keys, that is roughly 60 wasted bytes per row before indexes — a third of the table for nothing.</span></div>
   <div class="kv"><span class="k">Correctness</span><span class="v"><code>UUID</code> is a real type: PostgreSQL rejects <code>'khong-phai-uuid'</code>, normalises case, and compares by value. <code>TEXT</code> accepts anything and compares byte by byte, so <code>'AB…'</code> and <code>'ab…'</code> are different rows.</span></div>
@@ -1014,30 +1106,42 @@ SELECT pg_size_pretty(pg_total_relation_size('"A"')) AS text_uuid,
 model Post {
   title String @db.VarChar(20)
 }</code></pre>
-<pre><code class="language-bash">npx prisma migrate dev --name thu_hep_title</code></pre>
-<div class="out">⚠️  Warnings for the current datasource:
-
-  • You are about to alter the column &#96;title&#96; on the &#96;posts&#96; table, which contains 2 non-null values. The data in that column will be cast from &#96;Text&#96; to &#96;VarChar(20)&#96;. This cast may fail. Please make sure the data in the column can be cast.
-
-? Are you sure you want to create and apply this migration? › (y/N)</div>
-<pre><code>ERROR: value too long for type character varying(20)
-Database error code: 22001</code></pre>
+<pre><code class="language-bash">npx prisma db push</code></pre>
+<div class="out">⚠️  There might be data loss when applying the changes:
+  • You are about to alter the column &#96;title&#96; on the &#96;posts&#96; table, which contains 2 non-null values. The data in that column will be cast from &#96;Text&#96; to &#96;VarChar(20)&#96;.
+Error: Use the --accept-data-loss flag to ignore the data loss warnings like prisma db push --accept-data-loss</div>
+<pre><code class="language-bash">npx prisma migrate diff --from-schema-datasource prisma/schema.prisma --to-schema-datamodel prisma/schema.prisma --script | psql</code></pre>
+<div class="out">-- AlterTable
+ALTER TABLE "posts" ALTER COLUMN "title" SET DATA TYPE VARCHAR(20);
+ERROR:  value too long for type character varying(20)
+[exit 1]</div>
 <div class="callout ok">
-<p><strong>This is Prisma behaving well.</strong> It warns, and if you proceed the database refuses rather than truncating — you lose no data, the migration fails, and <code>_prisma_migrations</code> records the failure. Widening (<code>VarChar(20)</code> → <code>VarChar(200)</code> → <code>Text</code>) is always safe and instant. Narrowing needs a plan: check the maximum length first (<code>SELECT max(length(title)) FROM posts</code>), decide what to do with the rows that do not fit, and write those steps into the migration by hand before applying it. Chapter 6 covers the whole family of these expand-then-contract migrations.</p>
+<p><strong>This is Prisma behaving well.</strong> <code>db push</code> warns about data loss and stops until you add <code>--accept-data-loss</code>; run the SQL anyway and the database refuses rather than truncating — you lose no data. (Through <code>migrate dev</code> the same failure would be recorded in <code>_prisma_migrations</code>.) Widening (<code>VarChar(20)</code> → <code>VarChar(200)</code> → <code>Text</code>) is always safe and instant. Narrowing needs a plan: check the maximum length first (<code>SELECT max(length(title)) FROM posts</code>), decide what to do with the rows that do not fit, and write those steps into the migration by hand before applying it. Chapter 6 covers the whole family of these expand-then-contract migrations.</p>
 </div>
 
 <h3>The one that is provider-specific in an unhelpful way</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// This validates on PostgreSQL and fails immediately on MySQL</span>
 model X {
+  id   Int      @id
   ip   String   @db.Inet
-  name String   @db.Citext        <span class="tok-comment">// needs CREATE EXTENSION citext</span>
   tags String[] <span class="tok-comment">// arrays: PostgreSQL and CockroachDB only</span>
 }</code></pre>
-<div class="out">error: Native type Inet is not supported for mysql connector.
-  --&gt;  prisma/schema.prisma:31
-   |
-30 | model X {
-31 |   ip     String @db.Inet</div>
+<div class="out">Error: Prisma schema validation - (validate wasm)
+Error code: P1012
+error: Native type Inet is not supported for mysql connector.
+  --&gt;  prisma/schema.prisma:9
+   | 
+ 8 |   id   Int      @id
+ 9 |   ip   String   @db.Inet
+   | 
+error: Field "tags" in model "X" can't be a list. The current connector does not support lists of primitive types.
+  --&gt;  prisma/schema.prisma:10
+   | 
+ 9 |   ip   String   @db.Inet
+10 |   tags String[]
+11 | }
+   | 
+Validation Error Count: 2</div>
 <p>This is the concrete form of the portability warning from Lesson 0.1. Native types, array fields, index types and JSON operators are all provider-bound, and a schema that uses them well is a schema committed to its database. That is a fine trade — just make it knowingly, and stop describing the project as "database-agnostic" once you have.</p>
 
 <h3>Learning sources for this lesson</h3>
@@ -1075,26 +1179,26 @@ model X {
 
 <h3>Bẫy 1: <code>Timestamp</code> so với <code>Timestamptz</code></h3>
 <p>Mặc định của Prisma cho <code>DateTime</code> là <code>TIMESTAMP(3)</code> — <em>không</em> kèm múi giờ. Đây là ý nghĩa thật của nó, với hai cột do cùng một đoạn mã ghi vào:</p>
-<pre><code class="language-typescript">model SuKien {
+<pre><code class="language-typescript">model Event {
   id     Int      @id @default(autoincrement())
   name   String
   noTz   DateTime <span class="tok-comment">// TIMESTAMP(3)   — mặc định của Prisma</span>
   withTz DateTime @db.Timestamptz(3)     <span class="tok-comment">// TIMESTAMPTZ(3) — thứ bạn thường muốn</span>
 }</code></pre>
 <pre><code class="language-javascript">const t = new Date('2026-08-23T10:00:00+07:00');   <span class="tok-comment">// tức 03:00 UTC</span>
-await prisma.event.create({ data: { name: 'Hop', noTz: t, withTz: t } });</code></pre>
+await prisma.event.create({ data: { name: 'Meeting', noTz: t, withTz: t } });</code></pre>
 <pre><code class="language-typescript"><span class="tok-comment">-- Đọc lại từ psql, ở hai múi giờ phiên khác nhau</span>
-SET TIME ZONE 'UTC';         SELECT "noTz", "withTz" FROM "SuKien";
-SET TIME ZONE 'Asia/Bangkok'; SELECT "noTz", "withTz" FROM "SuKien";</code></pre>
-<div class="out">-- phiên UTC
-        noTz         |          withTz
-------------------------+------------------------
- 2026-08-23 03:00:00    | 2026-08-23 03:00:00+00
+SET TIME ZONE 'UTC';         SELECT "noTz", "withTz" FROM "Event";
+SET TIME ZONE 'Asia/Bangkok'; SELECT "noTz", "withTz" FROM "Event";</code></pre>
+<div class="out">SET
+        noTz         |         withTz         
+---------------------+------------------------
+ 2026-08-23 03:00:00 | 2026-08-23 03:00:00+00
 
--- phiên Asia/Bangkok (UTC+7)
-        noTz         |          withTz
-------------------------+------------------------
- 2026-08-23 03:00:00    | 2026-08-23 10:00:00+07</div>
+SET
+        noTz         |         withTz         
+---------------------+------------------------
+ 2026-08-23 03:00:00 | 2026-08-23 10:00:00+07</div>
 <div class="callout warn">
 <p><strong>Đọc lại hai cột đó.</strong> <code>withTz</code> hiện đúng thời khắc địa phương ở mỗi phiên — 03:00 UTC và 10:00 ở Bangkok là cùng một khoảnh khắc, và PostgreSQL biết điều đó. <code>noTz</code> hiện <code>03:00</code> ở cả hai, vì nó lưu một con số đồng hồ treo tường mà <em>không biết</em> nó thuộc múi giờ nào. Prisma luôn đổi sang UTC trước khi ghi, nên nếu chỉ đi qua Prisma thì cả hai cột đều đi về đúng chỗ. Thiệt hại xuất hiện ngay khi có thứ khác chạm vào dữ liệu: một câu truy vấn psql, một công cụ BI, một báo cáo, một job Python, một phép <code>AT TIME ZONE</code> trong migration SQL thô. Lúc đó <code>noTz</code> là một con số không gắn với nghĩa nào.</p>
 </div>
@@ -1112,15 +1216,22 @@ model Article {
   releaseDate  DateTime? @map("ngay_phat_hanh") @db.Date
 }</code></pre>
 
+<p class="note">Mọi output trong bài này được chạy lại ngày 12/11/2026 với Prisma 6.19.3 và PostgreSQL 16.14; phép so dung lượng dưới đây dùng 200.000 hàng thật mỗi bảng.</p>
+
 <h3>Bẫy 2: một UUID lưu dưới dạng văn bản</h3>
-<pre><code class="language-typescript">model A { id String @id @default(uuid())            }   <span class="tok-comment">// TEXT   — 36 byte cộng phần dư</span>
-model B { id String @id @default(uuid()) @db.Uuid   }   <span class="tok-comment">// UUID   — 16 byte, cố định</span></code></pre>
+<pre><code class="language-typescript">model TextUuid {
+  id String @id @default(uuid())           <span class="tok-comment">// TEXT   — 36 byte cộng phần dư</span>
+}
+
+model NativeUuid {
+  id String @id @default(uuid()) @db.Uuid  <span class="tok-comment">// UUID   — 16 byte, cố định</span>
+}</code></pre>
 <pre><code class="language-typescript"><span class="tok-comment">-- Cùng 200.000 hàng, hai cách</span>
-SELECT pg_size_pretty(pg_total_relation_size('"A"')) AS text_uuid,
-       pg_size_pretty(pg_total_relation_size('"B"')) AS native_uuid;</code></pre>
-<div class="out">  text_uuid | native_uuid
-------------+-------------
-  24 MB     | 16 MB</div>
+SELECT pg_size_pretty(pg_total_relation_size('"TextUuid"')) AS text_uuid,
+       pg_size_pretty(pg_total_relation_size('"NativeUuid"')) AS native_uuid;</code></pre>
+<div class="out"> text_uuid | native_uuid 
+-----------+-------------
+ 28 MB     | 17 MB</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Kích thước</span><span class="v">16 byte so với 36, cộng thêm bản sao của từng cái trong chỉ mục. Trên một bảng có ba khoá ngoại UUID thì đó là khoảng 60 byte lãng phí mỗi hàng trước khi tính chỉ mục — một phần ba cái bảng cho không.</span></div>
   <div class="kv"><span class="k">Tính đúng</span><span class="v"><code>UUID</code> là một kiểu thật: PostgreSQL từ chối <code>'khong-phai-uuid'</code>, chuẩn hoá chữ hoa chữ thường, và so sánh theo giá trị. <code>TEXT</code> nhận mọi thứ và so từng byte, nên <code>'AB…'</code> và <code>'ab…'</code> là hai hàng khác nhau.</span></div>
@@ -1135,30 +1246,42 @@ SELECT pg_size_pretty(pg_total_relation_size('"A"')) AS text_uuid,
 model Post {
   title String @db.VarChar(20)
 }</code></pre>
-<pre><code class="language-bash">npx prisma migrate dev --name thu_hep_title</code></pre>
-<div class="out">⚠️  Warnings for the current datasource:
-
-  • You are about to alter the column &#96;title&#96; on the &#96;posts&#96; table, which contains 2 non-null values. The data in that column will be cast from &#96;Text&#96; to &#96;VarChar(20)&#96;. This cast may fail. Please make sure the data in the column can be cast.
-
-? Are you sure you want to create and apply this migration? › (y/N)</div>
-<pre><code>ERROR: value too long for type character varying(20)
-Database error code: 22001</code></pre>
+<pre><code class="language-bash">npx prisma db push</code></pre>
+<div class="out">⚠️  There might be data loss when applying the changes:
+  • You are about to alter the column &#96;title&#96; on the &#96;posts&#96; table, which contains 2 non-null values. The data in that column will be cast from &#96;Text&#96; to &#96;VarChar(20)&#96;.
+Error: Use the --accept-data-loss flag to ignore the data loss warnings like prisma db push --accept-data-loss</div>
+<pre><code class="language-bash">npx prisma migrate diff --from-schema-datasource prisma/schema.prisma --to-schema-datamodel prisma/schema.prisma --script | psql</code></pre>
+<div class="out">-- AlterTable
+ALTER TABLE "posts" ALTER COLUMN "title" SET DATA TYPE VARCHAR(20);
+ERROR:  value too long for type character varying(20)
+[exit 1]</div>
 <div class="callout ok">
-<p><strong>Đây là Prisma cư xử tử tế.</strong> Nó cảnh báo, và nếu bạn cứ tiến thì cơ sở dữ liệu từ chối chứ không cắt bớt — bạn không mất dữ liệu nào, migration hỏng, và <code>_prisma_migrations</code> ghi lại thất bại đó. Nới rộng (<code>VarChar(20)</code> → <code>VarChar(200)</code> → <code>Text</code>) luôn an toàn và tức thì. Thu hẹp thì cần một kế hoạch: kiểm độ dài lớn nhất trước (<code>SELECT max(length(title)) FROM posts</code>), quyết xem làm gì với những hàng không vừa, rồi viết các bước ấy vào migration bằng tay trước khi áp dụng. Chương 6 nói về cả họ migration "nới rồi thu" này.</p>
+<p><strong>Đây là Prisma cư xử tử tế.</strong> <code>db push</code> cảnh báo mất dữ liệu và dừng cho tới khi bạn thêm <code>--accept-data-loss</code>; cứ chạy câu SQL thì cơ sở dữ liệu từ chối chứ không cắt bớt — bạn không mất dữ liệu nào. (Qua <code>migrate dev</code>, thất bại đó sẽ được ghi vào <code>_prisma_migrations</code>.) Nới rộng (<code>VarChar(20)</code> → <code>VarChar(200)</code> → <code>Text</code>) luôn an toàn và tức thì. Thu hẹp thì cần một kế hoạch: kiểm độ dài lớn nhất trước (<code>SELECT max(length(title)) FROM posts</code>), quyết xem làm gì với những hàng không vừa, rồi viết các bước ấy vào migration bằng tay trước khi áp dụng. Chương 6 nói về cả họ migration "nới rồi thu" này.</p>
 </div>
 
 <h3>Cái gắn với provider theo kiểu chẳng dễ chịu</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// Đoạn này hợp lệ trên PostgreSQL và hỏng ngay lập tức trên MySQL</span>
 model X {
+  id   Int      @id
   ip   String   @db.Inet
-  name String   @db.Citext        <span class="tok-comment">// cần CREATE EXTENSION citext</span>
   tags String[] <span class="tok-comment">// mảng: chỉ PostgreSQL và CockroachDB</span>
 }</code></pre>
-<div class="out">error: Native type Inet is not supported for mysql connector.
-  --&gt;  prisma/schema.prisma:31
-   |
-30 | model X {
-31 |   ip     String @db.Inet</div>
+<div class="out">Error: Prisma schema validation - (validate wasm)
+Error code: P1012
+error: Native type Inet is not supported for mysql connector.
+  --&gt;  prisma/schema.prisma:9
+   | 
+ 8 |   id   Int      @id
+ 9 |   ip   String   @db.Inet
+   | 
+error: Field "tags" in model "X" can't be a list. The current connector does not support lists of primitive types.
+  --&gt;  prisma/schema.prisma:10
+   | 
+ 9 |   ip   String   @db.Inet
+10 |   tags String[]
+11 | }
+   | 
+Validation Error Count: 2</div>
 <p>Đây là dạng cụ thể của lời cảnh báo về tính di động ở Bài 0.1. Native type, trường mảng, loại chỉ mục và toán tử JSON đều gắn với provider, và một lược đồ dùng chúng cho tốt là một lược đồ đã cam kết với cơ sở dữ liệu của nó. Đó là một đánh đổi hoàn toàn ổn — chỉ cần làm nó một cách có ý thức, và thôi mô tả dự án là "không phụ thuộc cơ sở dữ liệu" kể từ lúc đó.</p>
 
 <h3>Nguồn học cho bài này</h3>
@@ -1177,6 +1300,7 @@ model X {
       type: 'LESSON',
       description: 'Bốn kiểu không cư xử như phần còn lại: enum và cái giá thật của việc đổi tên một giá trị đã deploy, Json với cách cho nó kiểu bằng generic, Bytes, và Unsupported cho những cột Prisma không hiểu — kèm sự cố production 08/08/2026 mổ từng dòng.',
       content: `
+${G02_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.5</span>
 <h2>Enums, Json, Bytes and Unsupported</h2>
@@ -1185,7 +1309,7 @@ model X {
 <div class="lz-map">
   <div class="lz-stage">
     <span class="lz-badge">Constrained but rigid</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">enum</span><span class="lz-nsub">A real PostgreSQL type, 4 bytes, enforced against every writer. Adding a value is one statement; renaming one is seven and an exclusive lock.</span></div></div>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">enum</span><span class="lz-nsub">A real PostgreSQL type, 4 bytes, enforced against every writer. Adding a value is one statement; renaming one is eight, inside a transaction, plus an exclusive lock.</span></div></div>
   </div>
   <div class="lz-stage">
     <span class="lz-badge">Flexible but untyped</span>
@@ -1199,6 +1323,7 @@ model X {
 </div>
 
 <h3>Enums — cheap constraint, expensive rename</h3>
+<p class="note">The enum outputs below are real <code>prisma migrate diff</code> / <code>db push</code> runs of exactly these schemas on 12 Nov 2026 (Prisma 6.19.3, PostgreSQL 16.14).</p>
 <pre><code class="language-typescript">enum OrderStatus {
   MOI
   DANG_XU_LY
@@ -1217,7 +1342,8 @@ CREATE TYPE "OrderStatus" AS ENUM ('MOI', 'DANG_XU_LY', 'DA_GIAO', 'DA_HUY');
 CREATE TABLE "Order" (
     "id" SERIAL NOT NULL,
     "trang_thai" "OrderStatus" NOT NULL DEFAULT 'MOI',
-    CONSTRAINT "DonHang_pkey" PRIMARY KEY ("id")
+
+    CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">In PostgreSQL: a real type</span><span class="v">A native <code>ENUM</code>, 4 bytes, enforced by the database. An invalid value is rejected regardless of which client wrote it — a genuine constraint, not a convention.</span></div>
@@ -1242,19 +1368,21 @@ enum OrderStatus {
   HOAN_TAT       <span class="tok-comment">// ← was DA_GIAO</span>
   DA_HUY
 }</code></pre>
-<div class="out">⚠️  Warnings:
-  • The values [DA_GIAO] on the enum &#96;OrderStatus&#96; will be removed. If these variants are still used in the database, this will fail.
-
--- AlterEnum
+<div class="out">-- AlterEnum
 BEGIN;
-CREATE TYPE "TrangThaiDon_new" AS ENUM ('MOI', 'DANG_XU_LY', 'HOAN_TAT', 'DA_HUY');
+CREATE TYPE "OrderStatus_new" AS ENUM ('MOI', 'DANG_XU_LY', 'HOAN_TAT', 'DA_HUY');
 ALTER TABLE "Order" ALTER COLUMN "trang_thai" DROP DEFAULT;
-ALTER TABLE "Order" ALTER COLUMN "trang_thai" TYPE "TrangThaiDon_new" USING ("trang_thai"::text::"TrangThaiDon_new");
-ALTER TYPE "OrderStatus" RENAME TO "TrangThaiDon_old";
-ALTER TYPE "TrangThaiDon_new" RENAME TO "OrderStatus";
-DROP TYPE "TrangThaiDon_old";
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" TYPE "OrderStatus_new" USING ("trang_thai"::text::"OrderStatus_new");
+ALTER TYPE "OrderStatus" RENAME TO "OrderStatus_old";
+ALTER TYPE "OrderStatus_new" RENAME TO "OrderStatus";
+DROP TYPE "OrderStatus_old";
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" SET DEFAULT 'MOI';
 COMMIT;</div>
-<p>Seven statements, an exclusive lock on the table, and a cast that <strong>fails on any existing row still holding <code>DA_GIAO</code></strong>. The correct sequence is add-migrate-backfill-remove across two deploys: add <code>HOAN_TAT</code>, ship it, update every row and every code path, then remove <code>DA_GIAO</code> in a second migration. Chapter 6 generalises this into the expand–contract pattern.</p>
+<pre><code class="language-bash">npx prisma db push    <span class="tok-comment"># one row still holds DA_GIAO</span></code></pre>
+<div class="out">⚠️  There might be data loss when applying the changes:
+  • The values [DA_GIAO] on the enum &#96;OrderStatus&#96; will be removed. If these variants are still used in the database, this will fail.
+Error: Use the --accept-data-loss flag to ignore the data loss warnings like prisma db push --accept-data-loss</div>
+<p>Eight statements inside one transaction (the last one restores the default), an exclusive lock on the table, and a cast that <strong>fails on any existing row still holding <code>DA_GIAO</code></strong>. The correct sequence is add-migrate-backfill-remove across two deploys: add <code>HOAN_TAT</code>, ship it, update every row and every code path, then remove <code>DA_GIAO</code> in a second migration. Chapter 6 generalises this into the expand–contract pattern.</p>
 
 <div class="note-ct">
 <p><strong>From the CuongThai codebase — the enum rename that passed every check and broke production.</strong> On 2026-08-08 the value <code>ContentType.CODE</code> was renamed to <code>CODE_REVIEW</code>, matching what the frontend had always called it. <code>npx tsc --noEmit</code> passed. <code>prisma generate</code> passed. The frontend build passed. The migration applied. And <code>prisma db seed</code> broke on production.</p>
@@ -1311,7 +1439,7 @@ await prisma.file.create({ data: { hash } });
 
 const row = await prisma.file.findFirstOrThrow();
 console.log(row.hash.constructor.name, Buffer.from(row.hash).toString('hex').slice(0, 16));</code></pre>
-<div class="out">Uint8Array 4e9518575422c9087396887ce20477ab</div>
+<div class="out">Uint8Array f9b197ffdaa45e4f</div>
 <div class="pitfall">
 <p><strong>Trap — files in the database.</strong> A 5 MB image in a <code>BYTEA</code> column means every <code>SELECT *</code> on that table pulls 5 MB over the wire, every backup carries it, and PostgreSQL's TOAST machinery works around your data instead of with it. Store files in object storage (R2, S3) and keep a URL or key in the row. The CuongThai backend does exactly this with Cloudflare R2, and the CuongThai Object Storage course covers the pattern. Reserve <code>Bytes</code> for small fixed-size binaries: hashes, keys, encrypted tokens, a TOTP secret.</p>
 </div>
@@ -1357,7 +1485,7 @@ const attach = await prisma.$queryRaw&lt;{ id: number; name: string; m: number }
 <div class="lz-map">
   <div class="lz-stage">
     <span class="lz-badge">Ràng buộc chặt nhưng cứng</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">enum</span><span class="lz-nsub">Một kiểu PostgreSQL thật, 4 byte, thi hành với mọi bên ghi. Thêm một giá trị là một câu lệnh; đổi tên một giá trị là bảy câu lệnh cộng một khoá độc quyền.</span></div></div>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">enum</span><span class="lz-nsub">Một kiểu PostgreSQL thật, 4 byte, thi hành với mọi bên ghi. Thêm một giá trị là một câu lệnh; đổi tên một giá trị là tám câu lệnh trong một giao dịch, cộng một khoá độc quyền.</span></div></div>
   </div>
   <div class="lz-stage">
     <span class="lz-badge">Linh hoạt nhưng không kiểu</span>
@@ -1371,6 +1499,7 @@ const attach = await prisma.$queryRaw&lt;{ id: number; name: string; m: number }
 </div>
 
 <h3>Enum — ràng buộc rẻ, đổi tên thì đắt</h3>
+<p class="note">Output enum dưới đây là các lần chạy thật <code>prisma migrate diff</code> / <code>db push</code> đúng những lược đồ này, ngày 12/11/2026 (Prisma 6.19.3, PostgreSQL 16.14).</p>
 <pre><code class="language-typescript">enum OrderStatus {
   MOI
   DANG_XU_LY
@@ -1389,7 +1518,8 @@ CREATE TYPE "OrderStatus" AS ENUM ('MOI', 'DANG_XU_LY', 'DA_GIAO', 'DA_HUY');
 CREATE TABLE "Order" (
     "id" SERIAL NOT NULL,
     "trang_thai" "OrderStatus" NOT NULL DEFAULT 'MOI',
-    CONSTRAINT "DonHang_pkey" PRIMARY KEY ("id")
+
+    CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Ở PostgreSQL: một kiểu thật</span><span class="v">Một <code>ENUM</code> gốc, 4 byte, do cơ sở dữ liệu thi hành. Một giá trị sai bị từ chối bất kể client nào ghi vào — một ràng buộc thật, không phải một quy ước.</span></div>
@@ -1414,19 +1544,21 @@ enum OrderStatus {
   HOAN_TAT       <span class="tok-comment">// ← vốn là DA_GIAO</span>
   DA_HUY
 }</code></pre>
-<div class="out">⚠️  Warnings:
-  • The values [DA_GIAO] on the enum &#96;OrderStatus&#96; will be removed. If these variants are still used in the database, this will fail.
-
--- AlterEnum
+<div class="out">-- AlterEnum
 BEGIN;
-CREATE TYPE "TrangThaiDon_new" AS ENUM ('MOI', 'DANG_XU_LY', 'HOAN_TAT', 'DA_HUY');
+CREATE TYPE "OrderStatus_new" AS ENUM ('MOI', 'DANG_XU_LY', 'HOAN_TAT', 'DA_HUY');
 ALTER TABLE "Order" ALTER COLUMN "trang_thai" DROP DEFAULT;
-ALTER TABLE "Order" ALTER COLUMN "trang_thai" TYPE "TrangThaiDon_new" USING ("trang_thai"::text::"TrangThaiDon_new");
-ALTER TYPE "OrderStatus" RENAME TO "TrangThaiDon_old";
-ALTER TYPE "TrangThaiDon_new" RENAME TO "OrderStatus";
-DROP TYPE "TrangThaiDon_old";
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" TYPE "OrderStatus_new" USING ("trang_thai"::text::"OrderStatus_new");
+ALTER TYPE "OrderStatus" RENAME TO "OrderStatus_old";
+ALTER TYPE "OrderStatus_new" RENAME TO "OrderStatus";
+DROP TYPE "OrderStatus_old";
+ALTER TABLE "Order" ALTER COLUMN "trang_thai" SET DEFAULT 'MOI';
 COMMIT;</div>
-<p>Bảy câu lệnh, một khoá độc quyền trên bảng, và một phép ép kiểu <strong>hỏng với bất kỳ hàng nào còn đang giữ <code>DA_GIAO</code></strong>. Chuỗi thao tác đúng là thêm–migrate–đổ dữ liệu–bỏ, trải qua hai lần deploy: thêm <code>HOAN_TAT</code>, đưa lên chạy, cập nhật mọi hàng và mọi nhánh mã, rồi bỏ <code>DA_GIAO</code> trong một migration thứ hai. Chương 6 tổng quát hoá chuyện này thành mẫu nới–thu.</p>
+<pre><code class="language-bash">npx prisma db push    <span class="tok-comment"># vẫn còn một hàng giữ DA_GIAO</span></code></pre>
+<div class="out">⚠️  There might be data loss when applying the changes:
+  • The values [DA_GIAO] on the enum &#96;OrderStatus&#96; will be removed. If these variants are still used in the database, this will fail.
+Error: Use the --accept-data-loss flag to ignore the data loss warnings like prisma db push --accept-data-loss</div>
+<p>Tám câu lệnh trong một giao dịch (câu cuối đặt lại giá trị mặc định), một khoá độc quyền trên bảng, và một phép ép kiểu <strong>hỏng với bất kỳ hàng nào còn đang giữ <code>DA_GIAO</code></strong>. Chuỗi thao tác đúng là thêm–migrate–đổ dữ liệu–bỏ, trải qua hai lần deploy: thêm <code>HOAN_TAT</code>, đưa lên chạy, cập nhật mọi hàng và mọi nhánh mã, rồi bỏ <code>DA_GIAO</code> trong một migration thứ hai. Chương 6 tổng quát hoá chuyện này thành mẫu nới–thu.</p>
 
 <div class="note-ct">
 <p><strong>Từ chính kho mã CuongThai — cú đổi tên enum qua được mọi phép kiểm và làm vỡ production.</strong> Ngày 08/08/2026 giá trị <code>ContentType.CODE</code> được đổi tên thành <code>CODE_REVIEW</code>, khớp với thứ frontend vốn luôn gọi. <code>npx tsc --noEmit</code> qua. <code>prisma generate</code> qua. Bản build frontend qua. Migration áp dụng xong. Và <code>prisma db seed</code> vỡ trên production.</p>
@@ -1483,7 +1615,7 @@ await prisma.file.create({ data: { hash } });
 
 const row = await prisma.file.findFirstOrThrow();
 console.log(row.hash.constructor.name, Buffer.from(row.hash).toString('hex').slice(0, 16));</code></pre>
-<div class="out">Uint8Array 4e9518575422c9087396887ce20477ab</div>
+<div class="out">Uint8Array f9b197ffdaa45e4f</div>
 <div class="pitfall">
 <p><strong>Bẫy — nhét tệp vào cơ sở dữ liệu.</strong> Một ảnh 5 MB nằm trong cột <code>BYTEA</code> nghĩa là mọi câu <code>SELECT *</code> trên bảng đó kéo 5 MB qua đường truyền, mọi bản sao lưu đều mang nó theo, và bộ máy TOAST của PostgreSQL phải lách quanh dữ liệu của bạn thay vì làm việc cùng nó. Hãy lưu tệp trong kho đối tượng (R2, S3) và giữ một URL hoặc một khoá trong hàng. Backend CuongThai làm đúng thế với Cloudflare R2, và khoá Object Storage của CuongThai nói về mẫu này. Hãy dành <code>Bytes</code> cho các khối nhị phân nhỏ cỡ cố định: hash, khoá, token đã mã hoá, một bí mật TOTP.</p>
 </div>

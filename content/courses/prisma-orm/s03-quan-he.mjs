@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G03_1 from './giang/pr-03-1.mjs';
+import G03_2 from './giang/pr-03-2.mjs';
+import G03_3 from './giang/pr-03-3.mjs';
+import G03_4 from './giang/pr-03-4.mjs';
+import G03_5 from './giang/pr-03-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Vì sao mọi quan hệ Prisma cần đúng hai trường trong khi cơ sở dữ liệu chỉ có một cột, bốn tham số của @relation, phía nào sở hữu khoá ngoại, và lỗi thiếu quan hệ ngược — chính là lỗi đã chặn một lần generate trong kho này.',
       content: `
+${G03_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>Two sides, one foreign key</h2>
@@ -298,6 +304,7 @@ Foreign-key constraints:
       type: 'LESSON',
       description: 'Quan hệ phổ biến nhất, làm cho đúng: khoá ngoại bắt buộc so với tuỳ chọn, năm giá trị onDelete chạy thật trên dữ liệu thật và mỗi cái để lại gì, onUpdate, và vì sao mặc định của Prisma khác mặc định của SQL.',
       content: `
+${G03_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.2</span>
 <h2>One-to-many, and the five <code>onDelete</code> behaviours</h2>
@@ -585,6 +592,7 @@ prisma:query COMMIT</div>
       type: 'LESSON',
       description: 'Quan hệ một–một thật ra là một–nhiều cộng @unique, phía nào giữ khoá và vì sao chọn sai làm tạo người dùng thành bất khả, khi nào nên tách bảng và khi nào nên trải phẳng, và quan hệ một–một bắt buộc hai chiều là thứ không tồn tại.',
       content: `
+${G03_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.3</span>
 <h2>One-to-one, and where to put the key</h2>
@@ -894,6 +902,7 @@ model Profile {
       type: 'LESSON',
       description: 'Bảng nối Prisma tự tạo trông ra sao và đặt tên theo luật nào, API connect/disconnect/set, khi nào buộc phải chuyển sang bảng tường minh, cách chuyển mà không mất dữ liệu, và vì sao gần như dự án nào cũng phải chuyển.',
       content: `
+${G03_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.4</span>
 <h2>Many-to-many: implicit versus explicit</h2>
@@ -1289,6 +1298,7 @@ SELECT (SELECT count(*) FROM "_CategoryToPost") AS cu,
       type: 'LESSON',
       description: 'Khi một model trỏ vào chính nó — cây bình luận, cấp trên, danh mục lồng nhau — và khi hai model nối nhau nhiều hơn một lần; vì sao lúc đó @relation("Ten") trở thành bắt buộc, và cách truy vấn một cây sâu tuỳ ý bằng CTE đệ quy.',
       content: `
+${G03_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.5</span>
 <h2>Self-relations and multiple relations</h2>

@@ -91,6 +91,8 @@ export default function ChatsPanel({ anchor, open, onClose }: Props) {
   const [timNguoi, setTimNguoi] = useState(false);
   const [dangMo, setDangMo] = useState<number | null>(null);
   const [menuId, setMenuId] = useState<number | null>(null);
+  /** Bạn bè + người mình theo dõi (GET /users/network) — để nhắn người CHƯA từng nhắn mà không phải gõ tìm. */
+  const [lienHe, setLienHe] = useState<Array<{ id: number; username: string; displayName: string | null; avatarUrl: string | null; isOnline: boolean }>>([]);
 
   // Neo dưới icon tin nhắn; màn hẹp thì gần tràn ngang.
   useLayoutEffect(() => {
@@ -113,6 +115,9 @@ export default function ChatsPanel({ anchor, open, onClose }: Props) {
     const st = useMessagingStore.getState();
     if (!st.threadsLoading) void st.loadThreads();
     setMenuId(null);
+    socialUserApi.getNetwork(60)
+      .then((res: any) => { const d = res.data?.data; setLienHe(Array.isArray(d) ? d : []); })
+      .catch(() => {});
   }, [open]);
 
   // Bấm ra ngoài / Esc ⇒ đóng.
@@ -171,28 +176,36 @@ export default function ChatsPanel({ anchor, open, onClose }: Props) {
     });
   }, [threads, tab, q]);
 
+  // Người liên hệ chưa có hội thoại (đang hoạt động lên trước — server đã sắp).
+  const lienHeMoi = useMemo(() => {
+    const daCo = new Set(threads.map((t) => t.peer?.id).filter(Boolean));
+    const kw = q.trim().toLowerCase();
+    return lienHe.filter((u) => u.id !== selfId && !daCo.has(u.id)
+      && (!kw || `${u.displayName ?? ''} ${u.username}`.toLowerCase().includes(kw)));
+  }, [lienHe, threads, selfId, q]);
+
   // Người tìm được mà CHƯA có hội thoại trong danh sách.
   const nguoiMoi = useMemo(() => {
     const daCo = new Set(threads.map((t) => t.peer?.id).filter(Boolean));
-    return nguoi.filter((u) => u.id !== selfId && !daCo.has(u.id));
-  }, [nguoi, threads, selfId]);
+    const daLienHe = new Set(lienHeMoi.map((u) => u.id));
+    return nguoi.filter((u) => u.id !== selfId && !daCo.has(u.id) && !daLienHe.has(u.id));
+  }, [nguoi, threads, selfId, lienHeMoi]);
 
   if (!open || typeof document === 'undefined' || !pos) return null;
 
   const moHoiThoai = (t: MessagingThread) => {
-    if (t.type === 'USER' && t.peer) {
-      const ok = moChatNho({
-        id: t.peer.id,
-        username: t.peer.username,
-        displayName: t.peer.alias || t.peer.displayName || t.peer.username,
-        avatarUrl: t.peer.avatarUrl,
-      });
-      onClose();
-      if (!ok) router.push(`/messages?thread=${t.id}`);
-      return;
-    }
+    // MỌI hội thoại (USER lẫn HỖ TRỢ/ADMIN) mở thành khung chat nổi trên trang hiện tại — như Facebook.
+    // Trước đây hội thoại ADMIN rơi sang /messages; tài khoản admin có nhiều loại này nên gần như bấm đâu
+    // cũng chuyển trang (11/11/2026). Truyền threadId để khung mở ĐÚNG hội thoại đó.
+    const ok = moChatNho({
+      id: t.peer?.id ?? -t.id,
+      username: t.peer?.username ?? 'ho-tro',
+      displayName: t.peer ? (t.peer.alias || t.peer.displayName || t.peer.username) : tenHoiThoai(t),
+      avatarUrl: t.peer?.avatarUrl ?? null,
+      threadId: t.id,
+    });
     onClose();
-    router.push(`/messages?thread=${t.id}`);
+    if (!ok) router.push(`/messages?thread=${t.id}`);
   };
 
   const moNguoi = async (u: DiscoverUser) => {
@@ -300,7 +313,7 @@ export default function ChatsPanel({ anchor, open, onClose }: Props) {
           </div>
         ) : (
           <>
-            {danhSach.length === 0 && nguoiMoi.length === 0 && !timNguoi && (
+            {danhSach.length === 0 && nguoiMoi.length === 0 && !timNguoi && (tab !== 'all' || lienHeMoi.length === 0) && (
               <div className="flex flex-col items-center px-6 py-10 text-center">
                 <MessageCircle className="mb-2 h-10 w-10 text-text-muted opacity-60" />
                 <p className="text-sm text-text-secondary">
@@ -392,6 +405,29 @@ export default function ChatsPanel({ anchor, open, onClose }: Props) {
                 );
               })}
             </ul>
+
+            {tab === 'all' && lienHeMoi.length > 0 && (
+              <div className="mt-1 border-t border-[var(--border-color)] pt-2">
+                <p className="px-2 pb-1 text-[13px] font-semibold text-text-secondary">Người liên hệ</p>
+                <ul>
+                  {lienHeMoi.slice(0, q.trim() ? 8 : 30).map((u) => {
+                    const ten = u.displayName || u.username;
+                    return (
+                      <li key={`lh-${u.id}`}>
+                        <button
+                          type="button"
+                          onClick={() => moNguoi({ id: u.id, username: u.username, displayName: u.displayName, fullName: null, avatarUrl: u.avatarUrl, isOnline: u.isOnline, isFollowing: true, friendStatus: 'none' })}
+                          className="flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left hover:bg-[var(--bg-surface-hover)]"
+                        >
+                          <AnhDaiDien src={u.avatarUrl} ten={ten} online={u.isOnline || !!presence.byUserId[u.id]?.online} size={40} />
+                          <span className="min-w-0 flex-1 truncate text-[15px] font-medium">{ten}</span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
 
             {q.trim() && (nguoiMoi.length > 0 || timNguoi) && (
               <div className="mt-1 border-t border-[var(--border-color)] pt-2">

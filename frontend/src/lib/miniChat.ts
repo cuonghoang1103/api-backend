@@ -10,6 +10,8 @@ export interface MiniChatPeer {
   username: string;
   displayName: string;
   avatarUrl: string | null;
+  /** Mở thẳng hội thoại có sẵn (vd. hỗ trợ loại ADMIN) thay vì tìm/tạo hội thoại 1-1. */
+  threadId?: number;
 }
 
 export const MINI_CHAT_EVENT = 'social:open-mini-chat';

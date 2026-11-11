@@ -76,6 +76,9 @@ interface MiniChatPeer {
   username: string;
   displayName: string;
   avatarUrl: string | null;
+  /** Có sẵn hội thoại (vd. hội thoại HỖ TRỢ loại ADMIN từ bảng "Đoạn chat") ⇒ mở thẳng nó,
+   *  không tạo/tìm hội thoại 1-1 bằng startUserThread. */
+  threadId?: number;
 }
 
 interface ChatWindowState {
@@ -93,12 +96,18 @@ interface ChatWindowState {
   loadError?: boolean;
 }
 
-const WINDOW_WIDTH = 320;
-const WINDOW_HEIGHT = 380;
+// Cỡ khung theo Messenger trên Facebook (≈ 338 × 455) — người dùng thấy 320×380 quá nhỏ (11/11/2026).
+const WINDOW_WIDTH = 338;
+const WINDOW_HEIGHT = 455;
+/** Cột bong bóng (khung đã thu nhỏ) nằm ngay TRÊN nút robot AI (fixed bottom-6 right-6, ~64px). */
+const BUBBLE_RIGHT = 38;
+const BUBBLE_BOTTOM = 112;
+const BUBBLE_SIZE = 52;
 const WINDOW_GAP = 12;
-const RIGHT_OFFSET = 20;
-const BOTTOM_OFFSET = 20;
-const MAX_VISIBLE = 3;
+/** Khung mở xếp bên TRÁI cột bong bóng, áp sát mép dưới như Facebook. */
+const RIGHT_OFFSET = 116;
+const BOTTOM_OFFSET = 0; // áp sát mép dưới như Facebook
+const MAX_VISIBLE = 3; // trần cứng; màn hẹp hơn thì tính theo bề ngang (soKhungVua)
 /** Stop-typing signal fires this many ms after the last keystroke. */
 const TYPING_DEBOUNCE_MS = 2000;
 
@@ -159,10 +168,10 @@ function MiniChatDockInner() {
   }, [threads]);
 
   // Resolve thread + load history + join socket room + mark read.
-  const resolveThread = useCallback(async (peerId: number) => {
+  const resolveThread = useCallback(async (peerId: number, knownThreadId?: number) => {
     if (!isAuthenticated) return;
     try {
-      const threadId = await useMessagingStore.getState().startUserThread(peerId);
+      const threadId = knownThreadId ?? await useMessagingStore.getState().startUserThread(peerId);
       // Reconcile the peer from the authoritative thread record (startUserThread
       // ran loadThreads()). The sidebar-supplied avatar/name can be null or
       // stale; the thread's peer carries the canonical values, which fixes the
@@ -219,7 +228,7 @@ function MiniChatDockInner() {
   windowsRef.current = windows;
   useEffect(() => {
     const onOnline = () => {
-      for (const w of windowsRef.current) if (!w.threadId) void resolveThread(w.peer.id);
+      for (const w of windowsRef.current) if (!w.threadId) void resolveThread(w.peer.id, w.peer.threadId);
     };
     window.addEventListener('online', onOnline);
     return () => window.removeEventListener('online', onOnline);
@@ -279,11 +288,11 @@ function MiniChatDockInner() {
       setWindows((prev) => {
         const existing = prev.find((w) => w.peer.id === detail.id);
         if (existing) {
-          return prev.map((w) =>
-            w.peer.id === detail.id
-              ? { ...w, isOpen: true, isMinimized: false }
-              : w,
-          );
+          // Mở lại một khung đã có ⇒ đưa lên cuối (khung mới nhất, sát bong bóng) và bung ra.
+          return [
+            ...prev.filter((w) => w.peer.id !== detail.id),
+            { ...existing, isOpen: true, isMinimized: false },
+          ];
         }
         return [
           ...prev,
@@ -299,7 +308,7 @@ function MiniChatDockInner() {
         ];
       });
       // Kick off async thread resolution + history load.
-      void resolveThread(detail.id);
+      void resolveThread(detail.id, detail.threadId);
     };
     window.addEventListener('social:open-mini-chat', onOpen as EventListener);
     return () =>
@@ -330,12 +339,23 @@ function MiniChatDockInner() {
   }, []);
 
   const toggleMinimize = useCallback((id: number) => {
-    setWindows((prev) =>
-      prev.map((w) =>
-        w.peer.id === id ? { ...w, isMinimized: !w.isMinimized } : w,
-      ),
-    );
+    setWindows((prev) => {
+      const w = prev.find((x) => x.peer.id === id);
+      if (!w) return prev;
+      // Bung một bong bóng ⇒ đưa khung đó lên cuối (vị trí mới nhất, sát mép phải).
+      if (w.isMinimized) return [...prev.filter((x) => x.peer.id !== id), { ...w, isMinimized: false }];
+      return prev.map((x) => (x.peer.id === id ? { ...x, isMinimized: true } : x));
+    });
   }, []);
+
+  // Số khung mở vừa bề ngang màn hình (còn lại thu thành bong bóng, như Facebook).
+  const [vw, setVw] = useState(() => (typeof window === 'undefined' ? 1440 : window.innerWidth));
+  useEffect(() => {
+    const on = () => setVw(window.innerWidth);
+    window.addEventListener('resize', on);
+    return () => window.removeEventListener('resize', on);
+  }, []);
+  const soKhungVua = Math.max(1, Math.min(MAX_VISIBLE, Math.floor((vw - RIGHT_OFFSET - 16) / (WINDOW_WIDTH + WINDOW_GAP))));
 
   const updateDraft = useCallback(
     (peerId: number, value: string, threadId: number | null) => {
@@ -357,10 +377,14 @@ function MiniChatDockInner() {
   );
 
   const visibleWindows = useMemo(() => {
-    const open = windows.filter((w) => w.isOpen);
-    if (open.length <= MAX_VISIBLE) return open;
-    return open.slice(-MAX_VISIBLE);
-  }, [windows]);
+    const expanded = windows.filter((w) => w.isOpen && !w.isMinimized);
+    return expanded.slice(-soKhungVua);
+  }, [windows, soKhungVua]);
+  /** Bong bóng: khung đã thu nhỏ + khung mở bị đẩy ra vì hết chỗ. Mới nhất ở dưới cùng. */
+  const bubbles = useMemo(() => {
+    const shown = new Set(visibleWindows.map((w) => w.peer.id));
+    return windows.filter((w) => w.isOpen && !shown.has(w.peer.id)).slice(-6);
+  }, [windows, visibleWindows]);
 
   // Cleanup timers on unmount.
   useEffect(() => {
@@ -389,6 +413,50 @@ function MiniChatDockInner() {
       className="pointer-events-none fixed inset-0 z-[120]"
       aria-live="polite"
     >
+      {/* Cột bong bóng (như Messenger trên Facebook): bấm ⇒ bung khung, rê chuột ⇒ hiện nút đóng */}
+      <div className="pointer-events-auto absolute flex flex-col-reverse items-center gap-2.5" style={{ right: BUBBLE_RIGHT, bottom: BUBBLE_BOTTOM }}>
+        <AnimatePresence>
+          {bubbles.map((w) => {
+            const unread = unreadByPeerId.get(w.peer.id) ?? 0;
+            const online = presence.byUserId[w.peer.id]?.online ?? false;
+            const ten = w.peer.displayName || w.peer.username;
+            return (
+              <motion.div
+                key={`b-${w.peer.id}`}
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.6 }}
+                className="group relative"
+                style={{ width: BUBBLE_SIZE, height: BUBBLE_SIZE }}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleMinimize(w.peer.id)}
+                  aria-label={`Mở đoạn chat với ${ten}`}
+                  title={ten}
+                  className="block h-full w-full overflow-hidden rounded-full bg-[var(--bg-card)] shadow-[0_4px_12px_rgba(0,0,0,0.25)] ring-2 ring-[var(--bg-card)] transition-transform hover:scale-105"
+                >
+                  <SafeAvatar src={w.peer.avatarUrl} alt={ten} seed={w.peer.username} size={BUBBLE_SIZE} rounded="full" fallbackType="initials" />
+                </button>
+                {online && <span className="pointer-events-none absolute bottom-0.5 right-0.5 h-3.5 w-3.5 rounded-full bg-[#31a24c] ring-2 ring-[var(--bg-card)]" />}
+                {unread > 0 && (
+                  <span className="pointer-events-none absolute -left-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[#e41e3f] px-1 text-[11px] font-bold text-white ring-2 ring-[var(--bg-card)]">
+                    {unread > 99 ? '99+' : unread}
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => closeWindow(w.peer.id)}
+                  aria-label={`Đóng đoạn chat với ${ten}`}
+                  className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-[var(--border-color)] bg-[var(--bg-card)] text-text-secondary opacity-0 shadow transition-opacity hover:text-text-primary focus:opacity-100 group-hover:opacity-100"
+                >
+                  <X size={12} strokeWidth={3} />
+                </button>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
+      </div>
       <div className="pointer-events-auto absolute bottom-0 right-0 flex items-end gap-3 p-0">
         <AnimatePresence>
           {visibleWindows.map((w, i) => {
@@ -424,7 +492,7 @@ function MiniChatDockInner() {
                 peerLastSeen={peerPresence.lastSeen}
                 onRetry={() => {
                   setWindows((prev) => prev.map((x) => (x.peer.id === w.peer.id ? { ...x, loadError: false } : x)));
-                  void resolveThread(w.peer.id);
+                  void resolveThread(w.peer.id, w.peer.threadId);
                 }}
                 onOpenFull={() => {
                   router.push(w.threadId ? `/messages?thread=${w.threadId}` : `/messages?peer=${w.peer.id}`);
@@ -567,6 +635,8 @@ function ChatWindow({
   }, [messages, w.threadId, w.isMinimized, selfId]);
 
   const peerName = w.peer?.displayName ?? w.peer?.username ?? '';
+  /** Hội thoại hỗ trợ chưa có admin nhận (không có người cụ thể) ⇒ id âm, không gọi/không có trang cá nhân. */
+  const khongCoNguoi = w.peer.id < 0;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -593,7 +663,7 @@ function ChatWindow({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 30, scale: 0.92 }}
       transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-      className="absolute flex flex-col overflow-hidden rounded-t-xl rounded-b-lg shadow-[0_12px_28px_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.12)]"
+      className="absolute flex flex-col overflow-hidden rounded-t-xl shadow-[0_12px_28px_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.12)]"
       style={{
         width: WINDOW_WIDTH,
         maxWidth: 'calc(100vw - 32px)',
@@ -603,6 +673,7 @@ function ChatWindow({
         bottom: BOTTOM_OFFSET,
         background: 'var(--bg-card)',
         border: '1px solid var(--border-color)',
+        borderBottom: 'none',
         transition: 'height 0.18s ease',
       }}
     >
@@ -643,16 +714,16 @@ function ChatWindow({
               <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); onOpenFull(); }} className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm font-medium text-text-primary hover:bg-[var(--bg-surface-hover)]">
                 <Maximize2 size={16} className="text-text-secondary" />Mở trong Messenger
               </button>
-              <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); router.push(`/profile/${w.peer.id}/v2`); }} className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm font-medium text-text-primary hover:bg-[var(--bg-surface-hover)]">
+              {!khongCoNguoi && <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); router.push(`/profile/${w.peer.id}/v2`); }} className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm font-medium text-text-primary hover:bg-[var(--bg-surface-hover)]">
                 <UserRound size={16} className="text-text-secondary" />Xem trang cá nhân
-              </button>
+              </button>}
             </div>
           )}
         </div>
-        <button type="button" onClick={() => onCall(false)} disabled={!w.threadId} aria-label="Gọi thoại" title="Gọi thoại" className={`${iconBtn} disabled:opacity-40`}>
+        <button type="button" onClick={() => onCall(false)} disabled={!w.threadId || khongCoNguoi} aria-label="Gọi thoại" title="Gọi thoại" className={`${iconBtn} disabled:opacity-40`}>
           <Phone size={17} className="fill-current" />
         </button>
-        <button type="button" onClick={() => onCall(true)} disabled={!w.threadId} aria-label="Gọi video" title="Gọi video" className={`${iconBtn} disabled:opacity-40`}>
+        <button type="button" onClick={() => onCall(true)} disabled={!w.threadId || khongCoNguoi} aria-label="Gọi video" title="Gọi video" className={`${iconBtn} disabled:opacity-40`}>
           <Video size={19} className="fill-current" />
         </button>
         <button type="button" onClick={(e) => { e.stopPropagation(); onToggleMinimize(); }} aria-label={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'} title={w.isMinimized ? 'Mở rộng' : 'Thu nhỏ'} className={iconBtn}>
@@ -774,7 +845,7 @@ function MiniBubble({ m, isOwn }: { m: MessagingMessage; isOwn: boolean }) {
       {chu && (chiEmoji ? (
         <span className="text-[34px] leading-none">{chu}</span>
       ) : (
-        <div className={`whitespace-pre-wrap break-words rounded-[18px] px-3 py-1.5 text-[14px] leading-snug ${isOwn ? 'bg-[var(--accent-color)] text-white' : 'bg-[color-mix(in_srgb,var(--text-primary)_8%,var(--bg-card))] text-text-primary'}`}>
+        <div className={`whitespace-pre-wrap break-words rounded-[18px] px-3 py-[7px] text-[15px] leading-[1.35] ${isOwn ? 'bg-[var(--accent-color)] text-white' : 'bg-[color-mix(in_srgb,var(--text-primary)_8%,var(--bg-card))] text-text-primary'}`}>
           {chu}
         </div>
       ))}

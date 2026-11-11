@@ -72,7 +72,7 @@ ${ma('ts', CODE.model)}
 <p>The teammate value-imported the type and value-re-exported it:</p>
 ${ma('ts', CODE.starter)}
 ${ra(OUT['l3-starter'])}
-<p><strong>6/10.</strong> Under <code>verbatimModuleSyntax</code> the plain import (TS1484) and the plain re-export (TS1205) are both errors, so it fails to compile (A). The logic is fine — with types erased it would run — but a module that does not build is not transpile-ready.</p>
+<p><strong>6/10.</strong> Under <code>verbatimModuleSyntax</code> the plain import (TS1484) and the plain re-export (TS1205) are both errors, so it fails to compile (A). It does not even run: once types are erased, Node still executes <code>import { Booking }</code>, finds no runtime export named <code>Booking</code> and stops at load — so the behaviour tests fail too (D). A module that neither builds nor runs is not transpile-ready.</p>
 
 <h3>Your task</h3>
 <p>Edit <code>lab15/src/boundary.ts</code> until <code>npm run lab15</code> prints <strong>Score: 10/10</strong>: import <code>Booking</code> with <code>import type</code>, import the values (<code>makeBooking</code>, <code>VERSION</code>) plainly, and re-export the type with <code>export type</code>. Keep <code>describe</code> and <code>demo</code>. No <code>any</code>, <code>as</code> or <code>!</code>.</p>
@@ -149,7 +149,7 @@ ${ma('ts', CODE.model)}
 <p>Đồng đội value-import kiểu và value-re-export nó:</p>
 ${ma('ts', CODE.starter)}
 ${ra(OUT['l3-starter'])}
-<p><strong>6/10.</strong> Dưới <code>verbatimModuleSyntax</code> import thường (TS1484) và re-export thường (TS1205) đều là lỗi, nên nó không biên dịch (A). Logic ổn — với kiểu bị xoá nó sẽ chạy — nhưng một module không build được thì chưa sẵn-sàng-transpile.</p>
+<p><strong>6/10.</strong> Dưới <code>verbatimModuleSyntax</code> import thường (TS1484) và re-export thường (TS1205) đều là lỗi, nên nó không biên dịch (A). Và nó còn không chạy nổi: kiểu bị xoá rồi Node vẫn chạy <code>import { Booking }</code>, không thấy export nào tên <code>Booking</code> lúc chạy nên dừng ngay khi nạp — test hành vi cũng trượt (D). Một module không build được cũng không chạy được thì chưa sẵn-sàng-transpile.</p>
 
 <h3>Việc của bạn</h3>
 <p>Sửa <code>lab15/src/boundary.ts</code> tới khi <code>npm run lab15</code> in <strong>Score: 10/10</strong>: import <code>Booking</code> bằng <code>import type</code>, import các giá trị (<code>makeBooking</code>, <code>VERSION</code>) thường, và re-export kiểu bằng <code>export type</code>. Giữ <code>describe</code> và <code>demo</code>. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p>

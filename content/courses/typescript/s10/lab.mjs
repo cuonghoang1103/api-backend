@@ -80,7 +80,7 @@ ${ma('js', CODE.js)}
 <p>The teammate’s stub declares every export as <code>any</code>:</p>
 ${ma('ts', CODE.starterDts)}
 ${ra(OUT['l3-starter'])}
-<p><strong>6/10.</strong> It is well-formed (A) and the tests pass (D), but it checks nothing — <code>slugify(42)</code>, a missing argument, a number read as a string all slip through, and the <code>any</code> costs the honesty point (C). A declaration that exists but does not do its job.</p>
+<p><strong>6/10.</strong> It is well-formed (A) and the tests pass (D), but it checks nothing — <code>slugify(42)</code>, a number read as a string all slip through, and the <code>any</code> costs the honesty point (C). A declaration that exists but does not do its job.</p>
 
 <h3>Your task</h3>
 <p>Write <code>labflow-slug.d.ts</code> so <code>npm run lab10</code> prints <strong>Score: 10/10</strong>: declare <code>SLUG_MAX: number</code>, <code>slugify(text: string): string</code>, <code>truncate(text: string, max: number): string</code>, and <code>isSlug(value: string): boolean</code>. No <code>any</code>, no <code>@ts-</code>.</p>
@@ -153,7 +153,7 @@ ${ma('js', CODE.js)}
 <p>Bản stub của đồng đội khai mọi export là <code>any</code>:</p>
 ${ma('ts', CODE.starterDts)}
 ${ra(OUT['l3-starter'])}
-<p><strong>6/10.</strong> Nó đúng dạng (A) và test qua (D), nhưng nó không kiểm gì — <code>slugify(42)</code>, một đối số thiếu, một number đọc như string đều lọt, và <code>any</code> tốn điểm trung thực (C). Một khai báo tồn tại nhưng không làm việc của nó.</p>
+<p><strong>6/10.</strong> Nó đúng dạng (A) và test qua (D), nhưng nó không kiểm gì — <code>slugify(42)</code>, một number đọc như string đều lọt, và <code>any</code> tốn điểm trung thực (C). Một khai báo tồn tại nhưng không làm việc của nó.</p>
 
 <h3>Việc của bạn</h3>
 <p>Viết <code>labflow-slug.d.ts</code> để <code>npm run lab10</code> in <strong>Score: 10/10</strong>: khai <code>SLUG_MAX: number</code>, <code>slugify(text: string): string</code>, <code>truncate(text: string, max: number): string</code>, và <code>isSlug(value: string): boolean</code>. Không <code>any</code>, không <code>@ts-</code>.</p>

@@ -18,7 +18,7 @@ const MAP_EN = `<table>
 <tr><td>9</td><td>A strict tsconfig and a CI type-check gate</td></tr>
 <tr><td>11</td><td>A typed Express API with an <code>ApiResult</code> error envelope</td></tr>
 <tr><td>12</td><td>A typed React form and hook sharing the same types</td></tr>
-<tr><td>13</td><td>Zod at the request boundary, Prisma at the database</td></tr>
+<tr><td>13</td><td>A Zod schema at the request boundary as the single source of truth</td></tr>
 <tr><td>14</td><td>A <code>BookingService</code> over an abstract repo, with <code>#private</code> state</td></tr>
 <tr><td>15</td><td>A transpile-ready build (<code>import type</code> / <code>export type</code>)</td></tr>
 <tr><td>16</td><td>Branded <code>LabCode</code>, illegal states unrepresentable</td></tr>
@@ -35,7 +35,7 @@ const MAP_VI = `<table>
 <tr><td>9</td><td>Một tsconfig strict và một cổng kiểm kiểu CI</td></tr>
 <tr><td>11</td><td>Một API Express có kiểu với envelope lỗi <code>ApiResult</code></td></tr>
 <tr><td>12</td><td>Một form và hook React có kiểu dùng chung cùng các kiểu</td></tr>
-<tr><td>13</td><td>Zod ở biên request, Prisma ở CSDL</td></tr>
+<tr><td>13</td><td>Schema Zod ở biên request làm nguồn sự thật duy nhất</td></tr>
 <tr><td>14</td><td>Một <code>BookingService</code> trên một repo abstract, với trạng thái <code>#private</code></td></tr>
 <tr><td>15</td><td>Một build sẵn-sàng-transpile (<code>import type</code> / <code>export type</code>)</td></tr>
 <tr><td>16</td><td>Branded <code>LabCode</code>, trạng thái sai không biểu diễn được</td></tr>

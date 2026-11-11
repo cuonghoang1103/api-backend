@@ -103,7 +103,7 @@ ${ra(OUT['l4-yeu'])}
 </div>
 <p><strong>Attempt B — TS-private, not <code>#private</code></strong> (<code>lab14/vua/</code>):</p>
 ${ra(OUT['l5-vua'])}
-<p>9.5/10 — everything is typed and there is no <code>any</code>, but the repo is a <code>private</code> field, not <code>#private</code>. Reading it from outside is still refused — but with TS2341, not the TS18013 the wrong-use expected, so that one slips. For true run-time encapsulation the field must be <code>#private</code>.</p>
+<p>9.5/10 — everything is typed and there is no <code>any</code>, but the repo is a <code>private</code> field, not <code>#private</code>. Reading it from outside is still refused — but with TS2339, not the TS18013 the wrong-use expected, so that one slips. For true run-time encapsulation the field must be <code>#private</code>.</p>
 
 <h3>Rubric (10 points, pass mark 7)</h3>
 ${RUBRIC_EN}
@@ -133,7 +133,7 @@ ${ra(OUT['l6-ref'])}
 <ul>
 <li>An <code>any</code> stub compiles and runs but enforces nothing — it scores 5.5.</li>
 <li>Leaving <code>Booking</code> as <code>any</code> scores 7.5 — the model’s three Booking checks slip.</li>
-<li>A <code>private</code> repo instead of <code>#private</code> scores 9.5 — reading it is TS2341, not the TS18013 expected.</li>
+<li>A <code>private</code> repo instead of <code>#private</code> scores 9.5 — reading it is TS2339, not the TS18013 expected.</li>
 <li>The reference: a typed <code>Booking</code>, an abstract <code>BookingRepo</code>, and a <code>#private</code> repo.</li>
 </ul>
 
@@ -181,7 +181,7 @@ ${ra(OUT['l4-yeu'])}
 </div>
 <p><strong>Thử B — private của TS, không phải <code>#private</code></strong> (<code>lab14/vua/</code>):</p>
 ${ra(OUT['l5-vua'])}
-<p>9.5/10 — mọi thứ có kiểu và không có <code>any</code>, nhưng repo là một field <code>private</code>, không phải <code>#private</code>. Đọc nó từ ngoài vẫn bị từ chối — nhưng với TS2341, không phải TS18013 mà cách dùng sai mong, nên cái đó lọt. Cho đóng gói thật lúc chạy, field phải là <code>#private</code>.</p>
+<p>9.5/10 — mọi thứ có kiểu và không có <code>any</code>, nhưng repo là một field <code>private</code>, không phải <code>#private</code>. Đọc nó từ ngoài vẫn bị từ chối — nhưng với TS2339, không phải TS18013 mà cách dùng sai mong, nên cái đó lọt. Cho đóng gói thật lúc chạy, field phải là <code>#private</code>.</p>
 
 <h3>Thang điểm (10 điểm, đạt 7)</h3>
 ${RUBRIC_VI}
@@ -211,7 +211,7 @@ ${ra(OUT['l6-ref'])}
 <ul>
 <li>Một bản stub <code>any</code> biên dịch và chạy nhưng không ép gì — nó được 5.5.</li>
 <li>Để <code>Booking</code> là <code>any</code> được 7.5 — ba phép kiểm Booking của model lọt.</li>
-<li>Một repo <code>private</code> thay vì <code>#private</code> được 9.5 — đọc nó là TS2341, không phải TS18013 mong đợi.</li>
+<li>Một repo <code>private</code> thay vì <code>#private</code> được 9.5 — đọc nó là TS2339, không phải TS18013 mong đợi.</li>
 <li>Lời giải: một <code>Booking</code> có kiểu, một <code>BookingRepo</code> abstract, và một repo <code>#private</code>.</li>
 </ul>
 

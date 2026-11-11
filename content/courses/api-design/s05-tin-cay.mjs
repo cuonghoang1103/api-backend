@@ -61,6 +61,72 @@ export function chaos(req, res, next) {
   next();
 }
 // app.js:  app.use(chaos);   ngay sau express.json()</code></pre>
+<p>The full file — the outage and slow-response switches are used in lesson 5.2 — and where it is mounted:</p>
+<pre><code class="language-javascript">// chaos.js — CHỈ ĐỂ HỌC (Chương 5): giả lập mạng và server hỏng. Production không bao giờ đặt các biến này.
+//   LABFLOW_DROP_FIRST=n   ⇒ n response POST đầu tiên bị "mất": server ĐÃ làm xong nhưng cắt kết nối trước khi gửi
+//   LABFLOW_SLOW_MS=ms     ⇒ response POST tới muộn ms mili giây (việc đã làm xong); LABFLOW_SLOW_COUNT=n chỉ áp n lần đầu
+//   LABFLOW_OUTAGE_MS=ms   ⇒ GET /v2/labs trả 503 trong ms mili giây kể từ request đầu tiên (sự cố), sau đó server
+//                            chỉ phục vụ LABFLOW_CAPACITY request mỗi 100 ms (mặc định 10), dư ⇒ 503; GET /chaos/arrivals để đếm
+import { Router } from 'express';
+
+let started = null;
+let dropped = 0, slowed = 0;
+const arrivals = [];                                              // [ms kể từ lúc khởi động, mã trả về]
+
+export function chaos(req, res, next) {
+  if (req.method === 'GET' &amp;&amp; req.path === '/v2/labs' &amp;&amp; process.env.LABFLOW_OUTAGE_MS) {
+    started ??= Date.now();
+    const t = Date.now() - started;
+    const bucket = Math.floor(t / 100);
+    const servedNow = arrivals.filter(([u, s]) =&gt; s === 200 &amp;&amp; Math.floor(u / 100) === bucket).length;
+    const down = t &lt; Number(process.env.LABFLOW_OUTAGE_MS)                       // đang sự cố
+      || servedNow &gt;= Number(process.env.LABFLOW_CAPACITY ?? 10);                // hoặc quá tải trong 100 ms này
+    arrivals.push([t, down ? 503 : 200]);
+    if (down) return res.status(503).type('application/problem+json')
+      .json({ type: 'about:blank', title: 'Service Unavailable', status: 503 });
+  }
+  if (req.method !== 'POST') return next();
+  if (dropped &lt; Number(process.env.LABFLOW_DROP_FIRST ?? 0)) {
+    dropped++;
+    res.end = () =&gt; req.socket.destroy();                         // việc đã làm, nhưng client không bao giờ nhận được câu trả lời
+  }
+  const slow = Number(process.env.LABFLOW_SLOW_MS ?? 0);
+  if (slow &amp;&amp; slowed &lt; Number(process.env.LABFLOW_SLOW_COUNT ?? Infinity)) {
+    slowed++;
+    const json = res.json.bind(res);
+    res.json = (body) =&gt; { setTimeout(() =&gt; json(body), slow); return res; };
+  }
+  next();
+}
+
+// GET /chaos/arrivals — server đã thấy bao nhiêu request, dồn dập tới mức nào (mỗi ô 100 ms)
+export const chaosRouter = Router();
+chaosRouter.get('/arrivals', (req, res) =&gt; {
+  const buckets = {};
+  for (const [t] of arrivals) buckets[Math.floor(t / 100)] = (buckets[Math.floor(t / 100)] ?? 0) + 1;
+  const last = arrivals.length ? Math.max(...arrivals.map(([t]) =&gt; t)) : 0;
+  res.json({
+    total: arrivals.length,
+    failed: arrivals.filter(([, s]) =&gt; s === 503).length,
+    peakPer100ms: Math.max(0, ...Object.values(buckets)),
+    lastArrivalMs: last,
+    per100ms: Array.from({ length: Math.floor(last / 100) + 1 }, (_, i) =&gt; buckets[i] ?? 0),
+  });
+});</code></pre>
+<pre><code class="language-javascript">// app.js — gắn chaos (bài 5.1–5.2): CHỈ có tác dụng khi đặt biến môi trường
+app.use(chaos);                                                 // ngay sau express.json()
+if (process.env.LABFLOW_OUTAGE_MS) app.use('/chaos', chaosRouter);   // GET /chaos/arrivals — chỉ tồn tại khi đang giả lập sự cố</code></pre>
+<p>The four idempotency codes need their words in the catalogue of lesson 2.4:</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    IDEMPOTENCY_KEY_MISSING: ['Thiếu Idempotency-Key', () =&gt; 'Thao tác này cần header Idempotency-Key để thử lại an toàn'],
+    IDEMPOTENCY_KEY_INVALID: ['Idempotency-Key không hợp lệ', () =&gt; 'Khoá phải là chuỗi 1–255 ký tự in được, ví dụ một UUID'],
+    IDEMPOTENCY_KEY_REUSED: ['Idempotency-Key đã dùng cho yêu cầu khác', () =&gt; 'Khoá này đã gắn với một yêu cầu có nội dung khác; hãy tạo khoá mới'],
+    IDEMPOTENCY_IN_PROGRESS: ['Yêu cầu cùng khoá đang được xử lý', () =&gt; 'Lần gửi trước với khoá này chưa xong; đợi một chút rồi thử lại'],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    IDEMPOTENCY_KEY_MISSING: ['Idempotency-Key required', () =&gt; 'This operation needs an Idempotency-Key header to be retried safely'],
+    IDEMPOTENCY_KEY_INVALID: ['Invalid Idempotency-Key', () =&gt; 'The key must be 1–255 printable characters, for example a UUID'],
+    IDEMPOTENCY_KEY_REUSED: ['Idempotency-Key reused for a different request', () =&gt; 'This key belongs to a request with different content; use a new key'],
+    IDEMPOTENCY_IN_PROGRESS: ['A request with this key is still being processed', () =&gt; 'The previous request with this key has not finished; wait and retry'],</code></pre>
 <p>Without a key, An’s two taps:</p>
 <pre><code class="language-bash">curl -sS -X POST http://localhost:4000/v2/bookings \\
   -H 'Authorization: Bearer tok_an' \\
@@ -256,6 +322,72 @@ export function chaos(req, res, next) {
   next();
 }
 // app.js:  app.use(chaos);   ngay sau express.json()</code></pre>
+<p>Bản đầy đủ của tệp — công tắc sự cố và trả lời chậm dùng ở bài 5.2 — và chỗ gắn nó:</p>
+<pre><code class="language-javascript">// chaos.js — CHỈ ĐỂ HỌC (Chương 5): giả lập mạng và server hỏng. Production không bao giờ đặt các biến này.
+//   LABFLOW_DROP_FIRST=n   ⇒ n response POST đầu tiên bị "mất": server ĐÃ làm xong nhưng cắt kết nối trước khi gửi
+//   LABFLOW_SLOW_MS=ms     ⇒ response POST tới muộn ms mili giây (việc đã làm xong); LABFLOW_SLOW_COUNT=n chỉ áp n lần đầu
+//   LABFLOW_OUTAGE_MS=ms   ⇒ GET /v2/labs trả 503 trong ms mili giây kể từ request đầu tiên (sự cố), sau đó server
+//                            chỉ phục vụ LABFLOW_CAPACITY request mỗi 100 ms (mặc định 10), dư ⇒ 503; GET /chaos/arrivals để đếm
+import { Router } from 'express';
+
+let started = null;
+let dropped = 0, slowed = 0;
+const arrivals = [];                                              // [ms kể từ lúc khởi động, mã trả về]
+
+export function chaos(req, res, next) {
+  if (req.method === 'GET' &amp;&amp; req.path === '/v2/labs' &amp;&amp; process.env.LABFLOW_OUTAGE_MS) {
+    started ??= Date.now();
+    const t = Date.now() - started;
+    const bucket = Math.floor(t / 100);
+    const servedNow = arrivals.filter(([u, s]) =&gt; s === 200 &amp;&amp; Math.floor(u / 100) === bucket).length;
+    const down = t &lt; Number(process.env.LABFLOW_OUTAGE_MS)                       // đang sự cố
+      || servedNow &gt;= Number(process.env.LABFLOW_CAPACITY ?? 10);                // hoặc quá tải trong 100 ms này
+    arrivals.push([t, down ? 503 : 200]);
+    if (down) return res.status(503).type('application/problem+json')
+      .json({ type: 'about:blank', title: 'Service Unavailable', status: 503 });
+  }
+  if (req.method !== 'POST') return next();
+  if (dropped &lt; Number(process.env.LABFLOW_DROP_FIRST ?? 0)) {
+    dropped++;
+    res.end = () =&gt; req.socket.destroy();                         // việc đã làm, nhưng client không bao giờ nhận được câu trả lời
+  }
+  const slow = Number(process.env.LABFLOW_SLOW_MS ?? 0);
+  if (slow &amp;&amp; slowed &lt; Number(process.env.LABFLOW_SLOW_COUNT ?? Infinity)) {
+    slowed++;
+    const json = res.json.bind(res);
+    res.json = (body) =&gt; { setTimeout(() =&gt; json(body), slow); return res; };
+  }
+  next();
+}
+
+// GET /chaos/arrivals — server đã thấy bao nhiêu request, dồn dập tới mức nào (mỗi ô 100 ms)
+export const chaosRouter = Router();
+chaosRouter.get('/arrivals', (req, res) =&gt; {
+  const buckets = {};
+  for (const [t] of arrivals) buckets[Math.floor(t / 100)] = (buckets[Math.floor(t / 100)] ?? 0) + 1;
+  const last = arrivals.length ? Math.max(...arrivals.map(([t]) =&gt; t)) : 0;
+  res.json({
+    total: arrivals.length,
+    failed: arrivals.filter(([, s]) =&gt; s === 503).length,
+    peakPer100ms: Math.max(0, ...Object.values(buckets)),
+    lastArrivalMs: last,
+    per100ms: Array.from({ length: Math.floor(last / 100) + 1 }, (_, i) =&gt; buckets[i] ?? 0),
+  });
+});</code></pre>
+<pre><code class="language-javascript">// app.js — gắn chaos (bài 5.1–5.2): CHỈ có tác dụng khi đặt biến môi trường
+app.use(chaos);                                                 // ngay sau express.json()
+if (process.env.LABFLOW_OUTAGE_MS) app.use('/chaos', chaosRouter);   // GET /chaos/arrivals — chỉ tồn tại khi đang giả lập sự cố</code></pre>
+<p>Bốn mã idempotency cần câu chữ trong cuốn danh mục của bài 2.4:</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    IDEMPOTENCY_KEY_MISSING: ['Thiếu Idempotency-Key', () =&gt; 'Thao tác này cần header Idempotency-Key để thử lại an toàn'],
+    IDEMPOTENCY_KEY_INVALID: ['Idempotency-Key không hợp lệ', () =&gt; 'Khoá phải là chuỗi 1–255 ký tự in được, ví dụ một UUID'],
+    IDEMPOTENCY_KEY_REUSED: ['Idempotency-Key đã dùng cho yêu cầu khác', () =&gt; 'Khoá này đã gắn với một yêu cầu có nội dung khác; hãy tạo khoá mới'],
+    IDEMPOTENCY_IN_PROGRESS: ['Yêu cầu cùng khoá đang được xử lý', () =&gt; 'Lần gửi trước với khoá này chưa xong; đợi một chút rồi thử lại'],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    IDEMPOTENCY_KEY_MISSING: ['Idempotency-Key required', () =&gt; 'This operation needs an Idempotency-Key header to be retried safely'],
+    IDEMPOTENCY_KEY_INVALID: ['Invalid Idempotency-Key', () =&gt; 'The key must be 1–255 printable characters, for example a UUID'],
+    IDEMPOTENCY_KEY_REUSED: ['Idempotency-Key reused for a different request', () =&gt; 'This key belongs to a request with different content; use a new key'],
+    IDEMPOTENCY_IN_PROGRESS: ['A request with this key is still being processed', () =&gt; 'The previous request with this key has not finished; wait and retry'],</code></pre>
 <p>Không có khoá, hai lần bấm của An:</p>
 <pre><code class="language-bash">curl -sS -X POST http://localhost:4000/v2/bookings \\
   -H 'Authorization: Bearer tok_an' \\
@@ -489,6 +621,18 @@ console.log(&#96;kết quả: \${res.status} \${body.id ?? body.code}\${res.head
 #2 201 sau 10 ms
 kết quả: 201 bk_9 (Idempotent-Replayed)</div>
 <p>The booking was made during the first attempt; the retry 55 ms later got it back as a replay. Now the same client <em>without</em> a key:</p>
+<pre><code class="language-javascript">// book-nokey.mjs — y hệt book-retry.mjs nhưng KHÔNG gửi Idempotency-Key
+import { randomUUID } from 'node:crypto';
+import { fetchWithRetry } from './retry.mjs';
+
+const key = randomUUID();                                          // sinh MỘT lần cho một ý định "đặt phòng"
+const res = await fetchWithRetry('http://localhost:4000/v2/bookings', {
+  method: 'POST',
+  headers: { Authorization: 'Bearer tok_an', 'Content-Type': 'application/json' },
+  body: JSON.stringify({ labId: 'lab_3', period: { start: '2027-01-04T08:00:00+07:00', end: '2027-01-04T10:00:00+07:00' } }),
+}, { timeoutMs: 2000, log: console.log });
+const body = await res.json();
+console.log(&#96;kết quả: \${res.status} \${body.id ?? body.code}\${res.headers.get('idempotent-replayed') ? ' (Idempotent-Replayed)' : ''}&#96;);</code></pre>
 <pre><code class="language-bash">node book-nokey.mjs</code></pre>
 <div class="out">#1 TimeoutError sau 2004 ms
 node:internal/deps/undici/undici:15270
@@ -648,6 +792,18 @@ console.log(&#96;kết quả: \${res.status} \${body.id ?? body.code}\${res.head
 #2 201 sau 10 ms
 kết quả: 201 bk_9 (Idempotent-Replayed)</div>
 <p>Lượt đặt đã được tạo trong lần thử đầu; lần thử lại 55 ms sau nhận lại nó dưới dạng phát lại. Giờ cũng client đó nhưng <em>không</em> có khoá:</p>
+<pre><code class="language-javascript">// book-nokey.mjs — y hệt book-retry.mjs nhưng KHÔNG gửi Idempotency-Key
+import { randomUUID } from 'node:crypto';
+import { fetchWithRetry } from './retry.mjs';
+
+const key = randomUUID();                                          // sinh MỘT lần cho một ý định "đặt phòng"
+const res = await fetchWithRetry('http://localhost:4000/v2/bookings', {
+  method: 'POST',
+  headers: { Authorization: 'Bearer tok_an', 'Content-Type': 'application/json' },
+  body: JSON.stringify({ labId: 'lab_3', period: { start: '2027-01-04T08:00:00+07:00', end: '2027-01-04T10:00:00+07:00' } }),
+}, { timeoutMs: 2000, log: console.log });
+const body = await res.json();
+console.log(&#96;kết quả: \${res.status} \${body.id ?? body.code}\${res.headers.get('idempotent-replayed') ? ' (Idempotent-Replayed)' : ''}&#96;);</code></pre>
 <pre><code class="language-bash">node book-nokey.mjs</code></pre>
 <div class="out">#1 TimeoutError sau 2004 ms
 node:internal/deps/undici/undici:15270
@@ -795,6 +951,11 @@ export function rateLimit({ name, capacity, windowSec, key }) {
 export const bookingLimit = rateLimit({ name: 'booking', capacity: 5, windowSec: 60, key: (req) =&gt; req.user.id });
 const [q, w] = (process.env.LABFLOW_IP_LIMIT ?? '100/60').split('/').map(Number);
 export const ipLimit = rateLimit({ name: 'ip', capacity: q, windowSec: w, key: (req) =&gt; req.ip });</code></pre>
+<p>The 429 needs its words in the catalogue:</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    RATE_LIMITED: ['Gửi quá nhanh', (p) =&gt; &#96;Bạn đã dùng hết lượt; thử lại sau \${p.wait} giây&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    RATE_LIMITED: ['Too many requests', (p) =&gt; &#96;You have used up your quota; retry in \${p.wait} seconds&#96;],</code></pre>
 <p>The headers follow <code>draft-ietf-httpapi-ratelimit-headers-11</code> (23 May 2026, an active Internet-Draft): <code>RateLimit-Policy: "booking";q=5;w=60</code> describes the quota (5 per 60 s), <code>RateLimit: "booking";r=4;t=12</code> the current state (4 left; the effective window — here, seconds until the bucket is full again). When the quota is used up the answer is <strong>429 Too Many Requests</strong> with <code>Retry-After</code>, which the draft says takes precedence. Because the drafts can still change, LabFlow keeps the header code in one file.</p>
 <pre><code class="language-javascript">// routes/bookings.js — idempotency TRƯỚC giới hạn: lần phát lại không tốn lượt
   .post(idempotent(), bookingLimit, validate('body', { 1: BookingCreate, 2: BookingCreateV2 }), (req, res) =&gt; {
@@ -835,6 +996,9 @@ RateLimit: "booking";r=4;t=12</div>
 <pre><code class="language-javascript">// app.js — chỉ tin X-Forwarded-For đúng số chặng proxy CỦA MÌNH (mặc định: không tin)
 const TP = process.env.LABFLOW_TRUST_PROXY ?? 'false';
 app.set('trust proxy', /^\\d+$/.test(TP) ? Number(TP) : TP === 'true');</code></pre>
+<p>For the experiment below the app gets a debugging route that shows what Express decided (started with <code>LABFLOW_DEBUG_IP=1 LABFLOW_IP_LIMIT=5/10</code>):</p>
+<pre><code class="language-javascript">// app.js — CHỈ để học (bài 5.3): server thấy người gọi là ai. Production không có đường này
+if (process.env.LABFLOW_DEBUG_IP) app.get('/debug/ip', (req, res) =&gt; res.json({ ip: req.ip, xff: req.get('X-Forwarded-For') ?? null }));</code></pre>
 <p>To test it on one machine, <code>proxy.mjs</code> behaves like nginx and pretends two users on two networks (port 8081 = client 203.0.113.10, port 8082 = 198.51.100.7, addresses reserved for documentation). The public lab list is limited to 5 requests per 10 s per IP for the demo.</p>
 <pre><code class="language-javascript">// proxy.mjs — reverse proxy tối giản đứng trước LabFlow, làm đúng như nginx:
 //   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  (NỐI địa chỉ người kết nối vào cuối)
@@ -970,6 +1134,11 @@ export function rateLimit({ name, capacity, windowSec, key }) {
 export const bookingLimit = rateLimit({ name: 'booking', capacity: 5, windowSec: 60, key: (req) =&gt; req.user.id });
 const [q, w] = (process.env.LABFLOW_IP_LIMIT ?? '100/60').split('/').map(Number);
 export const ipLimit = rateLimit({ name: 'ip', capacity: q, windowSec: w, key: (req) =&gt; req.ip });</code></pre>
+<p>Mã 429 cần câu chữ trong cuốn danh mục:</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    RATE_LIMITED: ['Gửi quá nhanh', (p) =&gt; &#96;Bạn đã dùng hết lượt; thử lại sau \${p.wait} giây&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    RATE_LIMITED: ['Too many requests', (p) =&gt; &#96;You have used up your quota; retry in \${p.wait} seconds&#96;],</code></pre>
 <p>Header theo <code>draft-ietf-httpapi-ratelimit-headers-11</code> (23/5/2026, bản thảo Internet đang hoạt động): <code>RateLimit-Policy: "booking";q=5;w=60</code> mô tả hạn mức (5 lần mỗi 60 giây), <code>RateLimit: "booking";r=4;t=12</code> mô tả hiện trạng (còn 4; cửa sổ hiệu lực — ở đây là số giây tới khi xô đầy lại). Khi hết lượt, câu trả lời là <strong>429 Too Many Requests</strong> kèm <code>Retry-After</code>, header mà bản thảo nói là được ưu tiên. Vì bản thảo còn có thể đổi, LabFlow để phần header trong đúng một tệp.</p>
 <pre><code class="language-javascript">// routes/bookings.js — idempotency TRƯỚC giới hạn: lần phát lại không tốn lượt
   .post(idempotent(), bookingLimit, validate('body', { 1: BookingCreate, 2: BookingCreateV2 }), (req, res) =&gt; {
@@ -1010,6 +1179,9 @@ RateLimit: "booking";r=4;t=12</div>
 <pre><code class="language-javascript">// app.js — chỉ tin X-Forwarded-For đúng số chặng proxy CỦA MÌNH (mặc định: không tin)
 const TP = process.env.LABFLOW_TRUST_PROXY ?? 'false';
 app.set('trust proxy', /^\\d+$/.test(TP) ? Number(TP) : TP === 'true');</code></pre>
+<p>Cho thí nghiệm bên dưới, app có thêm một đường gỡ lỗi cho thấy Express đã quyết định gì (khởi động với <code>LABFLOW_DEBUG_IP=1 LABFLOW_IP_LIMIT=5/10</code>):</p>
+<pre><code class="language-javascript">// app.js — CHỈ để học (bài 5.3): server thấy người gọi là ai. Production không có đường này
+if (process.env.LABFLOW_DEBUG_IP) app.get('/debug/ip', (req, res) =&gt; res.json({ ip: req.ip, xff: req.get('X-Forwarded-For') ?? null }));</code></pre>
 <p>Để thử trên một máy, <code>proxy.mjs</code> làm đúng như nginx và giả làm hai người dùng ở hai mạng (cổng 8081 = client 203.0.113.10, cổng 8082 = 198.51.100.7, dải địa chỉ dành cho tài liệu). Danh sách phòng công khai được giới hạn 5 request mỗi 10 giây mỗi IP cho phần demo.</p>
 <pre><code class="language-javascript">// proxy.mjs — reverse proxy tối giản đứng trước LabFlow, làm đúng như nginx:
 //   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;  (NỐI địa chỉ người kết nối vào cuối)
@@ -1161,6 +1333,11 @@ export function bump(res, record) {
   record.version = (record.version ?? 1) + 1;
   res.set('ETag', etagOf(record));
 }</code></pre>
+<p>And the words for the 412, in both languages:</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    PRECONDITION_FAILED: ['Bản ghi đã bị người khác sửa', (p) =&gt; &#96;Bạn đang sửa trên một bản cũ; bản hiện tại là \${p.current} — hãy tải lại rồi sửa tiếp&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    PRECONDITION_FAILED: ['The record was changed by someone else', (p) =&gt; &#96;You are editing an old copy; the current one is \${p.current} — reload and try again&#96;],</code></pre>
 <pre><code class="language-javascript">// routes/devices.js
   .get((req, res) =&gt; {
     const d = findDevice(req.params.id);
@@ -1326,6 +1503,11 @@ export function bump(res, record) {
   record.version = (record.version ?? 1) + 1;
   res.set('ETag', etagOf(record));
 }</code></pre>
+<p>Và câu chữ cho mã 412, ở cả hai ngôn ngữ:</p>
+<pre><code class="language-javascript">// messages.js — thêm vào MESSAGES.vi (ngay trước INTERNAL)
+    PRECONDITION_FAILED: ['Bản ghi đã bị người khác sửa', (p) =&gt; &#96;Bạn đang sửa trên một bản cũ; bản hiện tại là \${p.current} — hãy tải lại rồi sửa tiếp&#96;],
+// … và vào MESSAGES.en (ngay trước INTERNAL)
+    PRECONDITION_FAILED: ['The record was changed by someone else', (p) =&gt; &#96;You are editing an old copy; the current one is \${p.current} — reload and try again&#96;],</code></pre>
 <pre><code class="language-javascript">// routes/devices.js
   .get((req, res) =&gt; {
     const d = findDevice(req.params.id);

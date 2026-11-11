@@ -1,0 +1,42 @@
+/**
+ * YouTube track cho ELI402 — English Interpretation 2. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/eli402-english-interpretation-2.mjs
+ */
+export default {
+  courseSlug: "eli402-english-interpretation-2",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "eli402-flm-b003": { yt: "fNV7CsKI5m8", credit: "TED-Ed — One of the most difficult words to translate... - Krystian Aparta" },
+    "eli402-flm-b005": { yt: "3mItUYXvv84", credit: "RobWords — Are these words really \"untranslatable\" into English?" },
+    "eli402-flm-b007": { yt: "UzajmGhQomM", credit: "Alexander Lyon Communication Coach — How to Structure a Persuasive Speech" },
+    "eli402-flm-b008": { yt: "v4HhzvSgUpU", credit: "Khan Academy — Evaluating a source’s reasoning and evidence | Reading | Khan Academy" },
+    "eli402-flm-b009": { yt: "NXO3KT8bne4", credit: "Khan Academy — What is an argument? | Reading | Khan Academy" },
+    "eli402-flm-b010": { yt: "Qf03U04rqGQ", credit: "Jill Bearup — 31 logical fallacies in 8 minutes" },
+    "eli402-flm-b011": { yt: "aUpiy67_nt4", credit: "tamuwritingcenter — Ethos, Pathos & Logos" },
+    "eli402-flm-b012": { yt: "xu2tf9Vta0w", credit: "Worldwide Speak — Counterargument and Refutation | Argumentative Essay | English Writing Skills" },
+    "eli402-flm-b013": { yt: "rGZZHyIHxOM", credit: "OSU School of Writing, Literature and Film — \"What is Diction in Literature?\": A Literary Guide for English Students and Teachers" },
+    "eli402-flm-b014": { yt: "hdKYl8Tg_FQ", credit: "BBC Learning English — Formal English and informal English - BBC English Masterclass" },
+    "eli402-flm-b015": { yt: "XRt1N0sJJQo", credit: "Khan Academy — Connotation | Reading | Khan Academy" },
+    "eli402-flm-b016": { yt: "rBqE8uftVpA", credit: "Language & Linguistics Online Dr Khurram Shahzad — Register Analysis (CDA, Sociolinguistics & Translation)" },
+    "eli402-flm-b017": { yt: "0VlTfKK-nx0", credit: "El Mejor Inglés — Slang vs Jargon - Informal vs technical English - Differences" },
+    "eli402-flm-b018": { yt: "J-r1xVMAjL4", credit: "KGH Interpretation — Consecutive Interpreting Practice (EN): Interpreting Tone of Voice" },
+    "eli402-flm-b021": { yt: "_-i9SDYeC8U", credit: "POC English — Formal English Phrases For Everyday Conversation!" },
+    "eli402-flm-b022": { yt: "Y3tphahhAo8", credit: "POC English — Formal VS Informal English Vocabulary" },
+    "eli402-flm-b023": { yt: "cXNTArhA0Jg", credit: "TED-Ed — How interpreters juggle two languages at once - Ewandro Magalhaes" },
+    "eli402-flm-b024": { yt: "0ZYX6giCkM4", credit: "Mr V Englisch und Sport — Formal or Informal? - How to Adapt your Register" },
+    "eli402-flm-b026": { yt: "dNlkHtMgcPQ", credit: "TED-Ed — Beware of nominalizations (AKA zombie nouns) - Helen Sword" },
+    "eli402-flm-b030": { yt: "3klMM9BkW5o", credit: "TED-Ed — How to use rhetoric to get what you want - Camille A. Langston" },
+    "eli402-flm-b033": { yt: "EUeA0PEF_g4", credit: "Marcus Weaver-Hightower, PhD — What is Discourse Analysis?" },
+    "eli402-flm-b034": { yt: "K-Nps59NeBA", credit: "BBC Learning English — Rhetoric: How persuasive are you? - 6 Minute English" },
+    "eli402-flm-b037": { yt: "2pVdSEp-tT8", credit: "Big Think — Debate world champion explains how to argue | Bo Seo" },
+    "eli402-flm-b041": { yt: "vmU1OzFdems", credit: "Adam’s English Lessons · engVid — English Vocabulary: How to talk about the economy" },
+    "eli402-flm-b044": { yt: "0hEW-MxunTk", credit: "JForrest English — Trade War Crisis - Improve Your English Vocabulary with the News" },
+    "eli402-flm-b045": { yt: "4Y16hRjbljo", credit: "TEDx Talks — Humor is Not Lost in Translation | Dr. Diana Ruggiero | TEDxMemphis" },
+    "eli402-flm-b046": { yt: "jWCbVrjJe3g", credit: "Speak English With Vanessa — Top 15 Jokes in English: Can you understand them?" },
+    "eli402-flm-b048": { yt: "KTwfY9QQK7k", credit: "TEDx Talks — Where Humor Hides in Language | Emily Sabo | TEDxUMDearborn" },
+    "eli402-flm-b049": { yt: "XIiExle1EO8", credit: "Next Level English — The Top Latin phrases used in English" },
+    "eli402-flm-b050": { yt: "jtPazercm-8", credit: "Single Step English — 10 Latin Root Words | How To Build Your English Vocabulary" },
+    "eli402-flm-b051": { yt: "SdSJFYYIcPM", credit: "Steve Vondran — 30 Latin Legal Terms Everyone Needs to Know" },
+    "eli402-flm-b052": { yt: "c3_VoWd_Ai0", credit: "Academic English UK — Academic Style (Academic Writing)" },
+  },
+};

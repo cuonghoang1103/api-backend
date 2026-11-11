@@ -266,3 +266,79 @@ describe('datDinhKemTuDuong — kéo-thả từ Finder', () => {
     await expect(datDinhKemTuDuong(goc, path.join(ngoai, 'khong-co'))).rejects.toThrow();
   });
 });
+
+/** Dựng một .zip tối giản (kiểu nén 8 = DEFLATE) từ danh sách {tên: nội dung}. */
+async function taoZip(muc: Record<string, string>): Promise<Buffer> {
+  const zlib = await import('node:zlib');
+  const phanLoc: Buffer[] = [];
+  const phanCen: Buffer[] = [];
+  let viTri = 0;
+  for (const [ten, chu] of Object.entries(muc)) {
+    const t = Buffer.from(ten, 'utf8');
+    const goc = Buffer.from(chu, 'utf8');
+    const nen = zlib.deflateRawSync(goc);
+    const loc = Buffer.alloc(30); loc.writeUInt32LE(0x04034b50, 0); loc.writeUInt16LE(8, 8);
+    loc.writeUInt32LE(nen.length, 18); loc.writeUInt32LE(goc.length, 22); loc.writeUInt16LE(t.length, 26);
+    const cen = Buffer.alloc(46); cen.writeUInt32LE(0x02014b50, 0); cen.writeUInt16LE(8, 10);
+    cen.writeUInt32LE(nen.length, 20); cen.writeUInt32LE(goc.length, 24); cen.writeUInt16LE(t.length, 28); cen.writeUInt32LE(viTri, 42);
+    phanLoc.push(loc, t, nen);
+    phanCen.push(cen, t);
+    viTri += loc.length + t.length + nen.length;
+  }
+  const cen = Buffer.concat(phanCen);
+  const n = Object.keys(muc).length;
+  const eocd = Buffer.alloc(22); eocd.writeUInt32LE(0x06054b50, 0); eocd.writeUInt16LE(n, 8); eocd.writeUInt16LE(n, 10);
+  eocd.writeUInt32LE(cen.length, 12); eocd.writeUInt32LE(viTri, 16);
+  return Buffer.concat([...phanLoc, cen, eocd]);
+}
+
+describe('.zip đính kèm ⇒ giải nén thành thư mục (11/11/2026)', () => {
+  let goc: string;
+  let ngoai: string;
+  beforeEach(async () => {
+    goc = await fs.mkdtemp(path.join(os.tmpdir(), 'ct-zip-'));
+    ngoai = await fs.mkdtemp(path.join(os.tmpdir(), 'ct-zip-ngoai-'));
+  });
+
+  const MAU = {
+    'bai-nop/src/Main.java': 'class Main {}',
+    'bai-nop/README.md': '# Bài nộp',
+    'bai-nop/node_modules/x/index.js': 'rác',
+    '__MACOSX/bai-nop/._Main.java': 'rác mac',
+    'bai-nop/.DS_Store': 'rác',
+    '../../thoat.txt': 'trèo ra ngoài',
+    '/etc/tuyet-doi.txt': 'tuyệt đối',
+  };
+
+  it('base64: giải nén, giữ cấu trúc, bỏ rác + chặn trèo thư mục', async () => {
+    const zip = await taoZip(MAU);
+    const r = await datDinhKem(goc, 'Bai Nop.zip', zip.toString('base64'));
+    expect(r.laThuMuc).toBe(true);
+    expect(r.soFile).toBe(2);
+    expect(r.tuongDoi).toBe(path.join('.cuongthai', 'dinh-kem', 'Bai-Nop') + path.sep);
+    const dich = path.join(goc, r.tuongDoi);
+    expect(await fs.readFile(path.join(dich, 'bai-nop', 'src', 'Main.java'), 'utf8')).toBe('class Main {}');
+    await expect(fs.access(path.join(dich, 'bai-nop', 'node_modules'))).rejects.toThrow();
+    await expect(fs.access(path.join(dich, '__MACOSX'))).rejects.toThrow();
+    await expect(fs.access(path.join(goc, '.cuongthai', 'thoat.txt'))).rejects.toThrow();
+    await expect(fs.access(path.join(goc, 'thoat.txt'))).rejects.toThrow();
+  });
+
+  it('kéo-thả đường dẫn: zip NGOÀI dự án cũng được giải nén; gửi lần 2 không đè lần 1', async () => {
+    const f = path.join(ngoai, 'du-an.zip');
+    await fs.writeFile(f, await taoZip({ 'a.ts': 'lần 1' }));
+    const r1 = await datDinhKemTuDuong(goc, f);
+    await fs.writeFile(f, await taoZip({ 'a.ts': 'lần 2' }));
+    const r2 = await datDinhKemTuDuong(goc, f);
+    expect(r1.laThuMuc).toBe(true);
+    expect(r1.tuongDoi).not.toBe(r2.tuongDoi);
+    expect(await fs.readFile(path.join(goc, r1.tuongDoi, 'a.ts'), 'utf8')).toBe('lần 1');
+    expect(await fs.readFile(path.join(goc, r2.tuongDoi, 'a.ts'), 'utf8')).toBe('lần 2');
+  });
+
+  it('không phải zip thật (đuôi .zip giả) ⇒ lùi về lưu nguyên tệp như cũ', async () => {
+    const r = await datDinhKem(goc, 'gia.zip', Buffer.from('không phải zip').toString('base64'));
+    expect(r.laThuMuc).toBeUndefined();
+    expect(r.tuongDoi).toBe(path.join('.cuongthai', 'dinh-kem', 'gia.zip'));
+  });
+});

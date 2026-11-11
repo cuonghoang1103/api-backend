@@ -33,6 +33,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { capQuyenDocNgoai } from './jail';
+import { Zip } from './docOffice';
 
 /**
  * Trần một file. Lớn hơn nữa thì gần như chắc chắn là gửi nhầm (một thư mục
@@ -87,6 +88,91 @@ export interface KetQuaDinhKem {
   /** Đường dẫn TƯƠNG ĐỐI so với gốc dự án — thứ đưa cho agent. */
   tuongDoi: string;
   byte: number;
+  /** `true` khi đính kèm là .zip đã được giải nén thành thư mục. */
+  laThuMuc?: boolean;
+  /** Số file đã giải nén (chỉ có với .zip). */
+  soFile?: number;
+}
+
+/* ─── .zip ⇒ GIẢI NÉN THÀNH THƯ MỤC (11/11/2026) ───
+   Trước đây .zip được lưu nguyên: agent chỉ `list_dir` thấy MỘT file nhị phân,
+   `read_file` liệt kê được bên trong rồi phải xin chạy `unzip` (cần duyệt lệnh,
+   và Windows không có sẵn `unzip`). Người dùng kéo một bài nộp / một dự án nén
+   vào là muốn agent ĐỌC nó — nên giải nén luôn ở đây, đưa agent `@thư-mục/`.
+   Hỏng (zip64, mã hoá, kiểu nén lạ) ⇒ ném lỗi để nơi gọi lùi về lưu nguyên tệp. */
+
+/** Trần số file giải nén — bài nộp/dự án thường vài trăm; vạn file là gửi nhầm. */
+export const TRAN_FILE_ZIP = 3000;
+/** Thư mục không giải nén: nặng, không ai cần agent đọc, và máy người dùng tự dựng lại được. */
+const BO_THU_MUC_ZIP = /(^|\/)(node_modules|\.git|__MACOSX|\.next|\.venv|venv|__pycache__)(\/|$)/i;
+
+/** Đường mục zip ⇒ các đoạn an toàn, hoặc null nếu phải bỏ (trèo thư mục, tuyệt đối, rác hệ điều hành). */
+export function doanAnToanTrongZip(tenMuc: string): string[] | null {
+  const chuan = tenMuc.replace(/\\/g, '/');
+  if (chuan.endsWith('/')) return null;                       // mục thư mục
+  if (/^[a-z]:/i.test(chuan) || chuan.startsWith('/')) return null;
+  if (BO_THU_MUC_ZIP.test(chuan)) return null;
+  const doan = chuan.split('/').filter((d) => d && d !== '.');
+  if (!doan.length || doan.some((d) => d === '..')) return null;
+  if (doan[doan.length - 1] === '.DS_Store') return null;
+  return doan.map((d) => d.replace(/[\u0000-\u001f<>:"|?*]/g, '-'));
+}
+
+/** Tên chưa dùng trong `thuMuc` (thêm hậu tố -1, -2… — không ghi đè, cùng lý do với `datDinhKem`). */
+async function tenChuaDung(thuMuc: string, sach: string, laThuMuc = false): Promise<string> {
+  const duoi = laThuMuc ? '' : path.extname(sach);
+  const than = sach.slice(0, sach.length - duoi.length) || 'tep';
+  let cuoi = sach;
+  for (let i = 1; i < 200; i += 1) {
+    try {
+      await fs.access(path.join(thuMuc, cuoi));
+      cuoi = `${than}-${i}${duoi}`;
+    } catch {
+      break;
+    }
+  }
+  return cuoi;
+}
+
+/** Giải nén `byte` vào `<gốc>/.cuongthai/dinh-kem/<tên zip>/`. Ném lỗi nếu không mở được zip. */
+export async function giaiNenZipDinhKem(goc: string, tenZip: string, byte: Buffer): Promise<KetQuaDinhKem> {
+  const zip = new Zip(byte);                                    // ném nếu không phải zip / zip64
+  const thuMuc = path.join(goc, THU_MUC);
+  await fs.mkdir(thuMuc, { recursive: true });
+  const ten = await tenChuaDung(thuMuc, tenAnToan(tenZip.replace(/\.zip$/i, '')) || 'zip', true);
+  const dich = path.join(thuMuc, ten);
+  await fs.mkdir(dich, { recursive: true });
+
+  let soFile = 0;
+  let tong = 0;
+  for (const tenMuc of zip.ten()) {
+    if (soFile >= TRAN_FILE_ZIP) break;
+    const doan = doanAnToanTrongZip(tenMuc);
+    if (!doan) continue;
+    const ra = path.join(dich, ...doan);
+    // Lớp chặn thứ hai: dù đoạn đã sạch, đường cuối vẫn phải nằm TRONG `dich`.
+    const rel = path.relative(dich, ra);
+    if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) continue;
+    let noiDung: Buffer | null;
+    try {
+      noiDung = zip.docByte(tenMuc);
+    } catch (e) {
+      // Bom zip / quá trần tổng ⇒ dừng, giữ phần đã giải. Mục hỏng lẻ ⇒ bỏ qua mục đó.
+      if (/bom zip/.test((e as Error).message)) break;
+      continue;
+    }
+    if (!noiDung) continue;
+    await fs.mkdir(path.dirname(ra), { recursive: true });
+    await fs.writeFile(ra, noiDung);
+    soFile += 1;
+    tong += noiDung.length;
+  }
+  if (!soFile) {
+    await fs.rm(dich, { recursive: true, force: true });
+    throw new Error('File zip rỗng hoặc không giải nén được mục nào.');
+  }
+  void boQuaTrongGit(goc);
+  return { tuongDoi: `${path.join(THU_MUC, ten)}${path.sep}`, byte: tong, laThuMuc: true, soFile };
 }
 
 /**
@@ -106,6 +192,10 @@ export async function datDinhKem(
   if (byte.byteLength === 0) throw new Error('File rỗng.');
   if (byte.byteLength > TRAN_BYTE_DINH_KEM) {
     throw new Error(`File ${(byte.byteLength / 1048576).toFixed(1)}MB, quá trần ${TRAN_BYTE_DINH_KEM / 1048576}MB.`);
+  }
+
+  if (/\.zip$/i.test(ten)) {
+    try { return await giaiNenZipDinhKem(goc, ten, byte); } catch { /* không mở được ⇒ lưu nguyên như cũ */ }
   }
 
   const thuMuc = path.join(goc, THU_MUC);
@@ -215,6 +305,13 @@ export async function datDinhKemTuDuong(goc: string, duong: string): Promise<Ket
   if (tt.size === 0) throw new Error('File rỗng.');
   if (tt.size > TRAN_BYTE_DINH_KEM) {
     throw new Error(`File ${(tt.size / 1048576).toFixed(1)}MB, quá trần ${TRAN_BYTE_DINH_KEM / 1048576}MB.`);
+  }
+
+  if (/\.zip$/i.test(that)) {
+    try {
+      const kq = await giaiNenZipDinhKem(gocThat, path.basename(that), await fs.readFile(that));
+      return { tuongDoi: kq.tuongDoi, byte: kq.byte, laThuMuc: true, coSan: false };
+    } catch { /* không mở được ⇒ chép nguyên như cũ */ }
   }
 
   const thuMuc = path.join(gocThat, THU_MUC);

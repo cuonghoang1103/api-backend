@@ -3284,7 +3284,8 @@ export interface DesktopBridge {
     /** Đổi chế độ quyền của một tab. Trả về trạng thái thư mục đã cập nhật. */
     datCheDoQuyen(cuocId: string, cheDo: CheDoQuyen): Promise<AgentWorkspace>;
     themDinhKem(cuocId: string, ten: string, duLieuBase64: string): Promise<
-      { ok: true; tuongDoi: string; byte: number } | { ok: false; loi: string }
+      /* `laThuMuc`: file .zip đã được giải nén thành thư mục (11/11/2026). */
+      { ok: true; tuongDoi: string; byte: number; laThuMuc?: boolean; soFile?: number } | { ok: false; loi: string }
     >;
     /**
      * Đính kèm từ ĐƯỜNG DẪN (kéo-thả). Khác `themDinhKem` ở chỗ không phải

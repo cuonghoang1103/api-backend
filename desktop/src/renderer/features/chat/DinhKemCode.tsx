@@ -176,7 +176,7 @@ export function useDinhKemCode(cuocId: string) {
         datTep((cu) => cu.map((t) => {
           if (t.id !== id) return t;
           if (!r || !r.ok) return { ...t, dangTai: false, loi: r?.loi ?? 'Không lưu được file.' };
-          return { ...t, dangTai: false, tuongDoi: r.tuongDoi, byte: r.byte };
+          return { ...t, dangTai: false, tuongDoi: r.tuongDoi, byte: r.byte, ...(r.laThuMuc ? { laThuMuc: true } : {}) };
         }));
       } catch (e) {
         datTep((cu) => cu.map((t) => (t.id === id ? { ...t, dangTai: false, loi: (e as Error).message } : t)));

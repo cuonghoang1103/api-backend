@@ -67,6 +67,12 @@ export class Zip {
   dsMuc(): Array<{ ten: string; byte: number }> { return [...this.muc.values()].map((m) => ({ ten: m.ten, byte: m.goc })); }
 
   doc(ten: string): string | null {
+    const ra = this.docByte(ten);
+    return ra === null ? null : ra.toString('utf8');
+  }
+
+  /** Như `doc` nhưng trả byte thô — dùng để giải nén .zip đính kèm ra đĩa. */
+  docByte(ten: string): Buffer | null {
     const m = this.muc.get(ten);
     if (!m) return null;
     if (m.goc > TRAN_MUC) throw new Error(`mục "${ten}" quá lớn sau giải nén`);
@@ -82,7 +88,7 @@ export class Zip {
     else if (m.phuongPhap === 8) ra = zlib.inflateRawSync(tho, { maxOutputLength: TRAN_MUC });
     else throw new Error(`kiểu nén ${m.phuongPhap} chưa hỗ trợ`);
     this.daGiai += ra.length;
-    return ra.toString('utf8');
+    return ra;
   }
 }
 

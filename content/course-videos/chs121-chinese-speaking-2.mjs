@@ -1,0 +1,41 @@
+/**
+ * YouTube track cho CHS121 — Chinese speaking 2. Mục tự động: scripts/yt-tu-dong.mjs (phát được khi nhúng, có phụ đề EN ⇒ tự dịch VI).
+ *   node scripts/verify-youtube-videos.mjs --file ./content/course-videos/chs121-chinese-speaking-2.mjs
+ */
+export default {
+  courseSlug: "chs121-chinese-speaking-2",
+  defaultVideoTrack: "YT",
+  lessons: {
+    "chs121-flm-b001": { yt: "5dgXSy_hq_8", credit: "Chinese e-Learning Center, NOU (TW) 國立空中大學數位華語文中心 — Mandarin Grammar: Ep20. 正在 (zhèngzài)/Ongoing" },
+    "chs121-flm-b003": { yt: "wigN5SOIB_8", credit: "Grace Mandarin Chinese — COMMON Sentence-Final Particles in Chinese - 啦、哦、嘍（喽）、嘛、呢、喔" },
+    "chs121-flm-b004": { yt: "0snLvSfDaus", credit: "Learn Chinese with Litao — Expressing actions from the past with 了(le) | HSK 1 - Lesson 14 (Clip) - Learn Mandarin Chinese" },
+    "chs121-flm-b005": { yt: "rEMBpBJno0Y", credit: "Grace Mandarin Chinese — Useful Chinese Time Words and Phrases in Daily Conversation" },
+    "chs121-flm-b006": { yt: "DTqiJ0nQyp4", credit: "Chinese e-Learning Center, NOU (TW) 國立空中大學數位華語文中心 — Mandarin Grammar: Ep6. Directional Complements: V.去 (qù)/V.來 (lái)" },
+    "chs121-flm-b008": { yt: "lWsEtV2kuRo", credit: "Adam Ross — Chinese Grammar, Uses of LE: New Situation LE" },
+    "chs121-flm-b009": { yt: "39cIwpdQ17s", credit: "SMART Mandarin - Katrina Lee — Talking About Temperature in Chinese" },
+    "chs121-flm-b010": { yt: "jUvSYzT0WWA", credit: "Chinese Zero to Hero — HSK 2 Grammar 2.12.1 - Specifying degree with 得 - Chinese Grammar" },
+    "chs121-flm-b011": { yt: "_4NrnK6At-g", credit: "Mandarin Hero — Chinese Podcast for Beginners: HSK 3 Hobbies & Sports in Chinese | Chinese Listening Practice" },
+    "chs121-flm-b013": { yt: "xsGPtHKrXMw", credit: "Chinese Zero to Hero — 2.15.1 Say \"about to\" with 要……了 | HSK 2 Beginner's Chinese Course" },
+    "chs121-flm-b019": { yt: "Ujsp13hGcq0", credit: "Columbus School of Chinese — Mandarin Aspect Particles \"le\" and \"guo\" | Ask A Chinese Teacher #20 | Columbus School of Chinese" },
+    "chs121-flm-b021": { yt: "RHDE2NJwSqw", credit: "ChinesePod — How to Use Past Experience Marker 过 (guò)| Pre-Intermediate Lesson | ChinesePod (v)" },
+    "chs121-flm-b025": { yt: "aoE6WvN50qw", credit: "Sisi Laoshi 思思老师 — Resultative Complements in Chinese | Learn Chinese Mandarin Elementary - HSK2 / A2" },
+    "chs121-flm-b026": { yt: "1f0-fywxpeA", credit: "Chinesewithmei — Making a phone call in Chinese| 8 sentences you must know|Basic Everyday Chinese Sentences (106-113)" },
+    "chs121-flm-b028": { yt: "ramk7HG90fc", credit: "Chinese Zero to Hero — “V 来/去” Complements of Direction  - HSK 3 Grammar Lesson 3.2.2" },
+    "chs121-flm-b029": { yt: "-Wa6DR-mPHI", credit: "Chinese Zero to Hero — Use compound complements of direction | HSK 3 Intermediate Chinese Course 3.13.1" },
+    "chs121-flm-b037": { yt: "xTTOHJv-RzU", credit: "Twin Cities Chinese Tutor — \"比\"  comparison in Chinese 中文的比较 - Chinese Grammar Simplified 201" },
+    "chs121-flm-b039": { yt: "urj4ZjerieQ", credit: "Harbin Mandarin — Negative Comparisons in Mandarin Chinese Using bùbǐ and méiyǒu | Beginner Lesson 13 | HSK 3 HSK 5" },
+    "chs121-flm-b040": { yt: "-RL9TIIqyhE", credit: "Grace Mandarin Chinese — WHY & WHEN to Use “把 (bǎ)” Structure in Chinese" },
+    "chs121-flm-b045": { yt: "Ur-1mLCHx8Y", credit: "Chinese e-Learning Center, NOU (TW) 國立空中大學數位華語文中心 — Mandarin Grammar: Ep16. Resultative Complements (1)" },
+    "chs121-flm-b046": { yt: "wYCxOtcUB3M", credit: "Chinese Zero to Hero — Use the passive voice with 被, 叫, 让 | HSK 3 Intermediate Chinese Course 3.20.1" },
+    "chs121-flm-b049": { yt: "IVrTRRTyjpM", credit: "Grace Mandarin Chinese — 10 MUST-KNOW Chinese Phrases to Say Goodbye Naturally" },
+    "chs121-flm-b051": { yt: "XDs_tRzeGq8", credit: "Learn Chinese Online — Airport Conversations in Chinese | Learn Chinese Online  | Airport Vocabulary and Phrases" },
+    "chs121-flm-b052": { yt: "pu4pmE3kQ-c", credit: "Chinese Zero to Hero — \"How to Say Goodbye!\" Introduction to Chinese - Lesson 2" },
+    "chs121-1-1-hobbies-weekend": { yt: "dZxQV5Dy26o", credit: "Learn Chinese Online — What are your Hobbies? Chinese Conversation | Learn Chinese Online在线学习中文 |Talk about Hobbies:你有什么爱好?" },
+    "chs121-2-1-weather-health": { yt: "m-587fJwTKU", credit: "Learn Chinese Through Podcast — Chinese Weather Conversation for All HSK Levels - Learn Chinese" },
+    "chs121-3-1-phone-appointments": { yt: "BeSww3cQfSA", credit: "Learn Chinese with ChineseClass101.com — How to Make a Phone Call in Chinese - Chinese Conversational Phrases" },
+    "chs121-4-1-restaurant": { yt: "OxxIREVvPxw", credit: "Learn Chinese Online — Chinese Conversations at a Restaurant | Chinese Listening and Speaking Learn Chinese Online 在线学习中文" },
+    "chs121-5-1-shopping": { yt: "5g6BzylcoBQ", credit: "Learn Chinese Online — Chinese Conversation: Shopping  购物，买东西 | Chinese Conversation for Beginners |  Learn Chinese Online" },
+    "chs121-6-1-directions-transport": { yt: "6lNH730Nscg", credit: "Lala Chinese 啦啦的中文课 — Learn Chinese Through Travel: Asking Directions Made Easy" },
+    "chs121-8-1-telling-a-story": { yt: "FnkBd97qW8c", credit: "Lazy Chinese - Comprehensible Input — A sad story about instant noodles | comprehensible input Chinese | intermediate Chinese | TPRS" },
+  },
+};

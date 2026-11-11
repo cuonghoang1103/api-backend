@@ -1604,7 +1604,7 @@ sắp theo sentAt của máy client: tin 2, 4, 6, 8, 10, 12, 14, 16, …  ⇒ 20
     },
     /* ─────────────────────────── 11.6 ─────────────────────────── */
     {
-      title: '11.4 — Interview: design the API of a booking system|||11.4 — Phỏng vấn: thiết kế API cho hệ thống đặt lịch',
+      title: '11.6 — Interview: design the API of a booking system|||11.6 — Phỏng vấn: thiết kế API cho hệ thống đặt lịch',
       slug: 'api-11-4-dat-lich',
       type: 'LESSON',
       isFreePreview: true,

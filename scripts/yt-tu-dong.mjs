@@ -21,6 +21,12 @@ const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] :
 const MA = val('--ma'); const DRY = args.includes('--dry');
 const UNG = args.includes('--ung'); // chỉ xuất ứng viên đã kiểm ra TSV cho agent duyệt (ngành IT), không ghi .mjs
 const AP = val('--ap'); // áp lựa chọn đã duyệt: file TSV `slug<TAB>id|-`
+// Môn ngôn ngữ (11/11/2026): tên bài là tiếng Việt/Trung/Nhật/Hàn + nhiều buổi trùng tên ⇒ agent viết sẵn câu tìm tiếng Anh
+// cho từng bài (`slug<TAB>query`, '-' = bỏ) và --nn nới lọc: cho tiêu đề chữ Nhật/Trung/Hàn, âm thanh en|ja|zh|ko; VẪN bắt phụ đề EN.
+const QF = val('--q'); const NN = args.includes('--nn');
+const TRUY_VAN = QF ? Object.fromEntries(fs.readFileSync(QF, 'utf8').split('\n').map((x) => x.split('\t')).filter((x) => x.length >= 2 && x[0].trim()).map((x) => [x[0].trim(), x[1].trim()])) : null;
+const KHONG_LATIN = NN ? /[^\x00-\x7F‘-‟–—|·•…\u3000-\u30ff\u3400-\u9fff\uac00-\ud7af\uff00-\uffef]/ : /[^\x00-\x7F‘-‟–—|·•…–—]/;
+const AM_THANH_OK = (a) => !a || a.startsWith('en') || (NN && /^(ja|zh|ko)/.test(a));
 const N = Number(val('--n', 15)); const NGHI = Number(val('--nghi', 1500));
 if (!MA) { console.error('cần --ma <MÃ>'); process.exit(1); }
 const ngu = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -41,6 +47,11 @@ const KENH_TOT = [
   'Real Engineering', 'The Engineering Mindset', 'GreatScott!', 'EEVblog', 'Andreas Spiess', 'Articulated Robotics', 'The Construct',
   'Qiskit', 'Zach Star', 'Physics Videos by Eugene Khutoryansky', 'Nielsen Norman Group', 'Figma', 'Google Design', 'AJ&Smart', 'DesignCourse',
   'Event Manager Blog', 'Atlassian', 'Scrum.org', 'Project Management Institute', 'Ali Abdaal', 'Supply Chain Secrets', 'MIT CTL',
+  // Ngôn ngữ — kênh dạy chuyên nghiệp (môn nn)
+  'Japanese Ammo with Misa', 'JapanesePod101.com', 'Tokini Andy', 'Cure Dolly', 'Game Gengo', 'Nihongo no Mori', 'Japanese with Shun', 'NHK WORLD-JAPAN', 'Comprehensible Japanese', 'Learn Japanese with JapanesePod101.com',
+  'Talk To Me In Korean', 'Go! Billy Korean', 'KoreanClass101.com', 'Learn Korean with KoreanClass101.com', 'Korean Unnie', 'Korean Class 101', 'Arirang TV',
+  'Yoyo Chinese', 'Mandarin Blueprint', 'ChineseClass101.com', 'Learn Chinese with ChineseClass101.com', 'Mandarin Corner', 'Grace Mandarin Chinese', 'Everyday Chinese', 'Chinese Zero to Hero', 'ChinesePod', 'Learn Chinese with Litao', 'Mandarin Monkey',
+  'BBC Learning English', 'English with Lucy', 'Oxford Online English', 'mmmEnglish', 'Rachel\'s English', 'engVid', 'Learn English with EnglishClass101.com', 'Speak English With Vanessa', 'British Council | LearnEnglish', 'Cambridge English', 'Linguisticator', 'The Ling Space', 'NativLang', 'Langfocus', 'Scribbr', 'Purdue OWL',
 ];
 const LOAI_KENH = /hindi|urdu|bangla|tamil|telugu|marathi|tutorials? in hindi|\bgujarati\b|projects?\b|infotech|with ?ai\b|learn ?ai|ai tech|tech hub|clickbait|motivation/i;
 const LOAI_TIEU_DE = /hindi|urdu|bangla|tamil|telugu|#shorts|in 60 seconds|in 1 minute|reaction|meme|asmr|compilation/i;
@@ -135,18 +146,19 @@ for (const s of (AP ? [] : secs)) {
     // Bỏ biểu tượng đầu dòng (📘/📑…), tiền tố 'Session 32 —', 'Chapter 1.' — không thì YouTube tìm ra 'guitar session 32'.
     const chuDe = tBai.replace(/^[^\p{L}\p{N}]+/u, '').replace(/^(Lesson|Bài|Session|Buổi|Slot)\s*[\d.]+\s*[—:-]\s*/i, '').replace(/^(Chapter|Chương)\s*\d+[.:]?\s*/i, '').replace(/\s*[—–-]\s*(slides?|reading).*$/i, '').trim();
     if (!chuDe) continue;
+    if (TRUY_VAN && (!TRUY_VAN[l.slug] || TRUY_VAN[l.slug] === '-')) continue;
     bai++;
-    const q = `${chuDe} ${tenMon}`.slice(0, 120);
+    const q = TRUY_VAN ? TRUY_VAN[l.slug].slice(0, 120) : `${chuDe} ${tenMon}`.slice(0, 120);
     const ds = await timKiem(q); await ngu(NGHI);
-    const kw = new Set([...tach(chuDe), ...tach(tChuong)]);
-    const kwBai = tach(chuDe);
+    const kw = TRUY_VAN ? new Set(tach(q)) : new Set([...tach(chuDe), ...tach(tChuong)]);
+    const kwBai = TRUY_VAN ? tach(q) : tach(chuDe);
     const ung = ds.map((v) => {
       const tv = new Set(tach(v.title)); const trung = kwBai.filter((w) => tv.has(w)).length; const trungC = [...kw].filter((w) => tv.has(w)).length;
       const sec = giay(v.dur); const xem = luotXem(v.views); const tot = KENH_TOT.some((k) => v.ch.toLowerCase() === k.toLowerCase());
       let d = trung * 3 + trungC + (tot ? 6 : 0) + Math.min(4, Math.log10(xem + 1) - 2);
       if (sec < 180 || sec > 3 * 3600) d -= 10; else if (sec > 60 * 60) d -= 2;
       if (LOAI_KENH.test(v.ch) || LOAI_TIEU_DE.test(v.title)) d -= 20;
-      if (/[^\x00-\x7F‘-‟–—|·•…–—]/.test(v.title.replace(/[À-ɏ]/g, ''))) d -= 8; // tiêu đề chữ không Latin ⇒ ngôn ngữ khác
+      if (KHONG_LATIN.test(v.title.replace(/[À-ɏ]/g, ''))) d -= 8; // tiêu đề chữ không Latin ⇒ ngôn ngữ khác
       // Kênh ngoài danh sách uy tín phải tự chứng minh: đủ lượt xem + khớp chủ đề rõ ràng (chặn kênh vô danh/AI sinh).
       const canTrung = kwBai.length >= 3 ? 2 : 1;
       if (!tot && xem < 20000) d -= 6;
@@ -161,14 +173,14 @@ for (const s of (AP ? [] : secs)) {
       if (!t) { baoCao.loai.push(`${l.slug} ${v.id} không đọc được trang`); continue; }
       if (t.st !== 'OK' || !t.emb) { baoCao.loai.push(`${l.slug} ${v.id} ${t.st} embed=${t.emb}`); continue; }
       if (!t.en) { baoCao.loai.push(`${l.slug} ${v.id} không có phụ đề EN`); continue; }
-      if (t.audio && !t.audio.startsWith('en')) { baoCao.loai.push(`${l.slug} ${v.id} âm thanh ${t.audio}`); continue; }
-      if (/[^\x00-\x7F‘-‟–—|·•…–—]/.test((t.title || '').replace(/[À-ɏ]/g, ''))) { baoCao.loai.push(`${l.slug} ${v.id} tiêu đề gốc không phải tiếng Anh`); continue; }
+      if (!AM_THANH_OK(t.audio)) { baoCao.loai.push(`${l.slug} ${v.id} âm thanh ${t.audio}`); continue; }
+      if (KHONG_LATIN.test((t.title || '').replace(/[À-ɏ]/g, ''))) { baoCao.loai.push(`${l.slug} ${v.id} tiêu đề gốc không phải tiếng Anh`); continue; }
       chon = chon || { yt: v.id, credit: `${t.ch || v.ch} — ${t.title || v.title}` };
       daKiem.push({ id: v.id, ch: t.ch || v.ch, title: t.title || v.title, dur: v.dur, views: v.views, vi: t.vi });
       if (!UNG) break;
       if (daKiem.length >= 4) break;
     }
-    if (UNG) { ungVien.push({ slug: l.slug, chuong: tChuong, bai: chuDe, ds: daKiem }); console.log(`… ${l.slug}: ${daKiem.length} ứng viên`); continue; }
+    if (UNG) { ungVien.push({ slug: l.slug, chuong: tChuong, bai: TRUY_VAN ? `${chuDe} ⟶ tìm: ${q}` : chuDe, ds: daKiem }); console.log(`… ${l.slug}: ${daKiem.length} ứng viên`); continue; }
     if (chon) { moi[l.slug] = { yt: chon.yt, credit: chon.credit }; daDung.add(chon.yt); baoCao.them++; console.log(`✓ ${l.slug} → ${chon.yt} · ${chon.credit.slice(0, 90)}`); }
     else { baoCao.trong.push(`${l.slug} — ${chuDe}`); console.log(`· ${l.slug} — chưa có video đạt chuẩn`); }
   }

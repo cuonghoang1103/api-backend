@@ -74,7 +74,7 @@ export function CtcModelPicker({ isPro, disabled, placement = 'up' }: { isPro: b
       {open && (
         <div className="ctc-menu ctc-model-menu" data-place={placement} role="menu">
           <div className="ctc-menu-label">Chọn model</div>
-          {CHAT_MODELS.map((m) => {
+          {CHAT_MODELS.filter((m) => !m.hidden).map((m) => {
             const locked = m.tier !== 'default' && !isPro;
             return (
               <button

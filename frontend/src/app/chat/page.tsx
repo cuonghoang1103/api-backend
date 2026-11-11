@@ -494,8 +494,15 @@ export default function ChatPage() {
             if (data.type === 'model') {
               if (data.fellBack) {
                 const requested = getChatModel(data.requested);
-                useChatModelStore.getState().setModelId(DEFAULT_CHAT_MODEL_ID);
-                toast.info(cauHaBac(data.reason, requested.label));
+                const laGroq = data.effective === 'cuongmini-groq' || data.reason === 'groq_fallback';
+                if (laGroq) {
+                  // Model chính không phản hồi ⇒ lùi Groq (kém hơn). HIỆN RÕ "CuongMini Groq" + cảnh báo, không im lặng.
+                  useChatModelStore.getState().setModelId('cuongmini-groq');
+                  toast.warning(`${requested.label} không phản hồi — đã trả lời bằng CuongMini Groq (dự phòng, có thể kém hơn)`, { duration: 7000 });
+                } else {
+                  useChatModelStore.getState().setModelId(DEFAULT_CHAT_MODEL_ID);
+                  toast.info(cauHaBac(data.reason, requested.label));
+                }
               }
               continue;
             }

@@ -20,7 +20,9 @@ export interface ChatModelOption {
   /** Short Vietnamese hint shown in the dropdown. */
   desc: string;
   /** Visual tier for the badge colour. */
-  tier: 'default' | 'pro' | 'max';
+  tier: 'default' | 'pro' | 'max' | 'groq';
+  /** Không hiện trong ô chọn — chỉ dùng để HIỂN THỊ khi backend lùi (vd. CuongMini Groq). */
+  hidden?: boolean;
 }
 
 export const DEFAULT_CHAT_MODEL_ID = 'cuongmini-3.11';
@@ -32,7 +34,12 @@ export const CHAT_MODELS: ChatModelOption[] = [
   { id: 'cuongmini-pro', label: 'CuongMini Pro', desc: 'Nhanh, thông minh · việc hằng ngày', tier: 'pro' },
   { id: 'cuongmini-pro-2', label: 'CuongMini Pro 2', desc: 'Cân bằng · viết, code, phân tích', tier: 'pro' },
   { id: 'cuongmini-max', label: 'CuongMini Max', desc: 'Mạnh nhất · bài khó, đọc file dài', tier: 'max' },
+  // Dự phòng (ẩn khỏi ô chọn): chỉ hiện khi model chính không phản hồi và backend lùi về Groq.
+  { id: 'cuongmini-groq', label: 'CuongMini Groq', desc: 'Dự phòng khi model chính không phản hồi · có thể kém hơn', tier: 'groq', hidden: true },
 ];
+
+/** Các model người dùng CHỌN được (bỏ bản dự phòng ẩn). */
+export const SELECTABLE_CHAT_MODELS = CHAT_MODELS.filter((m) => !m.hidden);
 
 export function getChatModel(id: string | undefined): ChatModelOption {
   return CHAT_MODELS.find((m) => m.id === id) ?? CHAT_MODELS[0];
@@ -52,6 +59,11 @@ export const useChatModelStore = create<ChatModelState>()(
     {
       name: 'cuongmini-chat-model',
       storage: createJSONStorage(() => ssrSafeStorage),
+      // 'cuongmini-groq' là trạng thái LÙI tạm thời (model chính không phản hồi) — chỉ hiện trong phiên,
+      // nạp lại thì về mặc định để phiên mới không khởi động trên Groq.
+      onRehydrateStorage: () => (state) => {
+        if (state?.modelId === 'cuongmini-groq') state.setModelId(DEFAULT_CHAT_MODEL_ID);
+      },
     },
   ),
 );

@@ -455,8 +455,14 @@ finished: true,
             if (data.type === 'model') {
               if (data.fellBack) {
                 const requested = getChatModel(data.requested);
-                useChatModelStore.getState().setModelId(DEFAULT_CHAT_MODEL_ID);
-                toast.info(`${requested.label} không phản hồi — đã chuyển về ${getChatModel(DEFAULT_CHAT_MODEL_ID).label}`);
+                const laGroq = data.effective === 'cuongmini-groq' || data.reason === 'groq_fallback';
+                if (laGroq) {
+                  useChatModelStore.getState().setModelId('cuongmini-groq');
+                  toast.warning(`${requested.label} không phản hồi — đã trả lời bằng CuongMini Groq (dự phòng, có thể kém hơn)`, { duration: 7000 });
+                } else {
+                  useChatModelStore.getState().setModelId(DEFAULT_CHAT_MODEL_ID);
+                  toast.info(`${requested.label} không phản hồi — đã chuyển về ${getChatModel(DEFAULT_CHAT_MODEL_ID).label}`);
+                }
               }
               continue;
             }

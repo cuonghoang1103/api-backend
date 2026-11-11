@@ -1452,6 +1452,9 @@ export class AIService {
       groqAvailable = false;
     }
 
+    // Tới được đây nghĩa là luna đã hỏng/trống ⇒ câu trả lời SẼ do Groq (model kém hơn) sinh ra.
+    // Đánh dấu để client HIỆN RÕ "CuongMini Groq" + báo "model chính không phản hồi" (không im lặng dùng model kém).
+    if (meta) { meta.fellBack = true; meta.effective = 'cuongmini-groq'; if (!meta.reason) meta.reason = 'groq_fallback'; }
     if (groqAvailable && groq) {
       try {
         const stream = await groq.chat.completions.create({

@@ -10,15 +10,16 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ChevronDown, Check, Sparkles, Zap, Gem, Crown, Lock } from 'lucide-react';
+import { ChevronDown, Check, Sparkles, Zap, Gem, Crown, Lock, TriangleAlert } from 'lucide-react';
 import { CHAT_MODELS, useChatModelStore, getChatModel, DEFAULT_CHAT_MODEL_ID } from '@/lib/aiChatModels';
 import { usePro } from '@/hooks/usePro';
 
-const TIER_ICON = { default: Zap, pro: Gem, max: Crown } as const;
+const TIER_ICON = { default: Zap, pro: Gem, max: Crown, groq: TriangleAlert } as const;
 const TIER_COLOR = {
   default: 'text-cyan-300',
   pro: 'text-violet-300',
   max: 'text-amber-300',
+  groq: 'text-orange-400',
 } as const;
 
 export default function ModelPicker({ disabled = false, variant = 'terminal' }: { disabled?: boolean; variant?: 'terminal' | 'studio' }) {
@@ -72,7 +73,7 @@ export default function ModelPicker({ disabled = false, variant = 'terminal' }: 
           <div className={`flex items-center gap-1.5 border-b px-3 py-2 text-[11px] ${isStudio ? 'border-[color:var(--studio-border-soft)] text-[color:var(--studio-text-faint)]' : 'border-white/5 text-slate-500'}`}>
             <Sparkles className="h-3 w-3" /> Chọn model
           </div>
-          {CHAT_MODELS.map((m) => {
+          {CHAT_MODELS.filter((m) => !m.hidden).map((m) => {
             const Icon = TIER_ICON[m.tier];
             const isActive = m.id === active.id;
             const locked = m.tier !== 'default' && !isPro;

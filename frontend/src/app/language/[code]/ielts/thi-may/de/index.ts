@@ -28,12 +28,25 @@ export const MUC_LUC: MucDe[] = [
     moTa: 'Task 1: time spent reading by age group (single bar chart) · Task 2: is online learning as effective as the classroom? (opinion)' },
   { id: 'noi-00', kyNang: 'noi', ten: 'Placement Test — Speaking', boDe: 'Đề 0 · Test đầu vào', capDo: 'Band 4.0 → 8.0', phut: 13, soCau: 3,
     moTa: 'Part 1: work or study · hometown · Part 2: a person you admire · Part 3: role models, fame and admiration' },
+  // Đề 1 — thi cuối Tập 1 (Ngày 15), band 3.5 → 4.5 (soạn 12/11/2026). Mã tệp `-de1` vì `-01` đã là Đề 6.
+  { id: 'nghe-de1', kyNang: 'nghe', ten: 'Listening — Đề 1 (thi cuối Tập 1)', boDe: 'Đề 1', capDo: 'Band 3.5 → 4.5', phut: 30, soCau: 40,
+    moTa: 'Joining a public library · Bus service changes & bus station plan · Two students choose a presentation topic · Lecture on sleep',
+    dang: ['form', 'note', 'mcq', 'map', 'match-feature', 'summary'] },
+  { id: 'doc-de1', kyNang: 'doc', ten: 'Academic Reading — Đề 1 (thi cuối Tập 1)', boDe: 'Đề 1', capDo: 'Band 3.5 → 4.5', phut: 60, soCau: 40,
+    moTa: 'The story of the traffic light · Turning the classroom upside down · The barcode: lines that changed shopping',
+    dang: ['sentence', 'table', 'tfng', 'match-feature', 'flow', 'short', 'summary-box'] },
+  { id: 'viet-de1', kyNang: 'viet', ten: 'Academic Writing — Đề 1 (thi cuối Tập 1)', boDe: 'Đề 1', capDo: 'Band 3.5 → 4.5', phut: 60, soCau: 2,
+    moTa: 'Task 1: visitors to three city attractions, 2014–2024 (line graph) · Task 2: should students bring mobile phones to school? (opinion)' },
+  { id: 'noi-de1', kyNang: 'noi', ten: 'Speaking — Đề 1 (thi cuối Tập 1)', boDe: 'Đề 1', capDo: 'Band 3.5 → 4.5', phut: 12, soCau: 3,
+    moTa: 'Part 1: daily routine · family · Part 2: a place you like to go to · Part 3: places to relax, public places in cities' },
   // Đề 6 (đầu Tập 4).
   { id: 'doc-01', kyNang: 'doc', ten: 'Academic Reading — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 60, soCau: 40, moTa: 'Mangroves · The shipping container · The hidden value of boredom',
     dang: ['note', 'diagram', 'tfng', 'heading', 'match-feature', 'summary-box', 'ynng', 'mcq', 'mcq2', 'sentence'] },
   { id: 'nghe-01', kyNang: 'nghe', ten: 'Listening — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 30, soCau: 40, moTa: 'Paddle club form · Market hall map · Urban heat project · Reef sounds lecture',
     dang: ['form', 'map', 'mcq', 'match-feature', 'mcq2', 'flow', 'note'] },
   { id: 'viet-01', kyNang: 'viet', ten: 'Academic Writing — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 60, soCau: 2, moTa: 'Task 1 bar chart (commuting) · Task 2 discuss both views (university purpose)' },
+  { id: 'noi-06', kyNang: 'noi', ten: 'Speaking — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 13, soCau: 3,
+    moTa: 'Part 1: art · neighbours · Part 2: an important decision you made · Part 3: decisions, advice, choice and technology' },
 ];
 
 /** id → hàm tải tệp đề (mỗi tệp một chunk). */
@@ -46,6 +59,11 @@ const TEP_DE: Record<string, () => Promise<De>> = {
   'doc-00': () => import('./doc-00').then((m) => m.DOC_00),
   'viet-00': () => import('./viet-00').then((m) => m.VIET_00),
   'noi-00': () => import('./noi-00').then((m) => m.NOI_00),
+  'nghe-de1': () => import('./nghe-de1').then((m) => m.NGHE_DE1),
+  'doc-de1': () => import('./doc-de1').then((m) => m.DOC_DE1),
+  'viet-de1': () => import('./viet-de1').then((m) => m.VIET_DE1),
+  'noi-de1': () => import('./noi-de1').then((m) => m.NOI_DE1),
+  'noi-06': () => import('./noi-06').then((m) => m.NOI_06),
 };
 
 export function taiDe(id: string): Promise<De> | null {
@@ -63,7 +81,8 @@ export const THU_TU_THI: KyNang[] = ['sangloc', 'nghe', 'doc', 'viet', 'noi'];
 
 /**
  * Bộ đề đủ 4 kỹ năng ("Đề N", docs/ielts-lo-trinh-0-8.md mục 4.2). Đề 0 = test đầu vào (mục 4.3).
- * Bộ hiện có `doc-01` · `nghe-01` · `viet-01` = Đề 6 (đầu Tập 4); `noi-06` chưa soạn ⇒ Speaking "sắp có".
+ * Đề 1 (thi cuối Tập 1) = `nghe-de1` · `doc-de1` · `viet-de1` · `noi-de1` (mã `-de1` vì `-01` đã thuộc Đề 6).
+ * Đề 6 (đầu Tập 4) = `nghe-01` · `doc-01` · `viet-01` · `noi-06`.
  */
 export const BO_DE: BoDeDu[] = [
   {
@@ -71,8 +90,12 @@ export const BO_DE: BoDeDu[] = [
     sangLoc: 'sangloc-00', nghe: 'nghe-00', doc: 'doc-00', viet: 'viet-00', noi: 'noi-00',
   },
   {
+    id: 'bo-01', so: 1, ten: 'Đề 1', capDo: 'Band 3.5 → 4.5', viTri: 'Thi cuối Tập 1 (Ngày 15)',
+    nghe: 'nghe-de1', doc: 'doc-de1', viet: 'viet-de1', noi: 'noi-de1',
+  },
+  {
     id: 'bo-06', so: 6, ten: 'Đề 6', capDo: 'Band 6.0 → 7.5', viTri: 'Đầu Tập 4 (Ngày 1)',
-    nghe: 'nghe-01', doc: 'doc-01', viet: 'viet-01', noi: '',
+    nghe: 'nghe-01', doc: 'doc-01', viet: 'viet-01', noi: 'noi-06',
   },
 ];
 

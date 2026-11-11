@@ -6,6 +6,13 @@
  *
  * Giữ đủ kiến thức, thứ tự, dạng bài và số câu của sách; bài đọc, ví dụ, câu
  * trả lời mẫu và câu bài tập đều VIẾT MỚI (xem ../SOAN-BAI.md).
+ *
+ * Nâng cấp 12/11/2026 (lộ trình mục 5.1): sơ đồ `flow` 9 bước Sentence Completion +
+ * khung 4 đoạn Task 1; khối `chart` cũ đổi sang `figure` và thêm đủ 6 dạng hình
+ * (line · bar · pie · table · process · map); bài mẫu Task 1 sửa lỗi đọc số ("least
+ * popular throughout the period" sai ở 2014–2016) và nới lên ~185 từ (bản cũ 146 —
+ * dưới 150); `hinh` từ vựng sở thích + 12 nguyên âm; `canh` trước mỗi hội thoại;
+ * thêm âm /ə/ và 5 cặp tối thiểu vào `phatam`; mcq d4-doc-nhanh.
  */
 import type { Lesson } from '../data';
 
@@ -46,6 +53,23 @@ const D4_READING: Lesson = {
     {
       t: "p",
       text: "Đây là 9 bước sách hướng dẫn cho mục tiêu band 4.0. Lúc đầu hãy làm **chậm, đủ cả 9 bước**. Làm quen rồi, các bước sẽ tự nhập lại thành một động tác nhanh.",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "9 bước làm Sentence Completion",
+      caption: "Bước 1–4 làm **trên câu hỏi** (chưa nhìn bài đọc) · bước 5–7 làm **trên bài đọc** · bước 8–9 **quay lại câu hỏi** để điền và soát. Bảng ngay dưới giải thích từng bước.",
+      steps: [
+        { label: "**Đọc kỹ hướng dẫn**", sub: "ONE WORD ONLY? NO MORE THAN TWO WORDS? Khoanh giới hạn số từ." },
+        { label: "**Hiểu nghĩa câu cần điền**", sub: "Chỗ trống hỏi người, vật, nơi chốn, con số hay lý do?" },
+        { label: "**Đoán từ loại**", sub: "a / the + ___ → danh từ · to / can + ___ → động từ · is / very + ___ → tính từ" },
+        { label: "**Gạch chân từ khoá**", sub: "Ưu tiên tên riêng, con số, năm — khó bị viết lại." },
+        { label: "**Quét (scan) bài đọc**", sub: "Săn từ khoá **hoặc từ đồng nghĩa** của nó (closed ↔ shut)." },
+        { label: "**Đọc kỹ đoạn liên quan**", sub: "Câu chứa từ khoá + 1–2 câu trước / sau." },
+        { label: "**So sánh, đối chiếu**", sub: "Ý có khớp không? Đúng từ loại không? Loại bẫy đứng gần." },
+        { label: "**Điền đáp án**", sub: "Chép **đúng chữ trong bài**, đúng số ít / số nhiều, đúng số từ." },
+        { label: "**Đọc lại câu hoàn chỉnh**", sub: "Câu đúng ngữ pháp, đúng nghĩa? (a + số ít…)" },
+      ],
     },
     {
       t: "table",
@@ -90,6 +114,18 @@ const D4_READING: Lesson = {
         "**Con số** viết bằng chữ số tính là 1 số, không tính là từ: đề “ONE WORD AND/OR A NUMBER” cho phép điền **45 minutes**.",
         "Mạo từ **a / an / the** cũng là một từ. Thường không cần chép chúng vào chỗ trống, vì câu hỏi đã có sẵn.",
         "Viết hoa hay viết thường đều được chấm đúng, nhưng **chính tả phải đúng tuyệt đối**.",
+      ],
+    },
+    {
+      t: "mcq",
+      id: "d4-doc-nhanh",
+      title: "Kiểm tra nhanh — giới hạn số từ & từ loại (5 câu, phần thêm)",
+      items: [
+        { q: "Đề: **NO MORE THAN TWO WORDS**. Bài đọc: “People crossed the river on the old wooden bridge.” Câu hỏi: “People crossed the river on the ___.” Điền gì?", options: ["old wooden bridge", "the bridge", "wooden bridge"], correct: 2, why: "**wooden bridge** = 2 từ, đúng giới hạn và câu đọc lại vẫn đúng. ~~old wooden bridge~~ là 3 từ (quá giới hạn → sai cả câu). ~~the bridge~~ làm câu thành “on the the bridge” — thừa mạo từ." },
+        { q: "“Children need a safe ___ to play.” Chỗ trống cần **từ loại** nào?", options: ["Danh từ", "Động từ", "Tính từ"], correct: 0, why: "Sau **a + tính từ (safe)** là **danh từ** (place, space, area…). Bước 3: nhìn từ đứng ngay trước chỗ trống." },
+        { q: "“Students must ___ their essays by Friday.” Chỗ trống cần **từ loại** nào?", options: ["Danh từ", "Động từ nguyên mẫu", "Tính từ"], correct: 1, why: "Sau **must / can / will / to** là **động từ nguyên mẫu** (submit, finish…). Phía sau còn có tân ngữ their essays — đúng vị trí của động từ." },
+        { q: "Đề: **ONE WORD ONLY**. Bài: “The library shut its doors for a month after a serious flood.” Câu hỏi: “The library was closed because of a ___.” Điền gì?", options: ["doors", "shut", "flood"], correct: 2, why: "closed ↔ **shut**, because of ↔ **after** (nguyên nhân). Sau **a** cần danh từ số ít chỉ lý do → **flood**. ~~doors~~ là số nhiều và không phải lý do; ~~shut~~ là động từ." },
+        { q: "Đề: **ONE WORD AND/OR A NUMBER**. Bài: “The bus journey to the zoo takes about 45 minutes.” Câu hỏi: “The bus journey lasts approximately ___.” Điền gì?", options: ["about 45 minutes", "45 minutes", "minutes"], correct: 1, why: "**45 minutes** = một số + một từ, đúng giới hạn. ~~about 45 minutes~~ là 2 từ + số (quá giới hạn), và **approximately** trong câu hỏi đã thay cho “about”. ~~minutes~~ một mình thì mất thông tin chính." },
       ],
     },
 
@@ -297,7 +333,7 @@ const D4_READING: Lesson = {
       t: "note",
       title: "Cẩn thận: những chỗ sách ghi quá gọn",
       items: [
-        "Sách ghi **mechanic (n) = cơ chế**. Thật ra **a mechanic** là **thợ máy**. Nghĩa “cơ chế” luôn dùng dạng **mechanics** (có -s): **game mechanics**, **the mechanics of a clock**.",
+        "Sách ghi **mechanic (n) = cơ chế**. Thật ra nghĩa phổ biến của **a mechanic** là **thợ máy**. Nghĩa “cơ chế, cách vận hành” thường dùng dạng **mechanics** (có -s, động từ số nhiều): **game mechanics**, **the mechanics of a clock**. Riêng trong ngành game, **a game mechanic** (số ít) = **một** luật / thao tác chơi cụ thể — sẽ gặp ở bài đọc Ngày 6.",
         "**effect** (n, ảnh hưởng) khác **affect** (v, ảnh hưởng tới): ~~It effects children.~~ → **It affects children.** / **It has an effect on children.**",
         "**present** tính từ đọc /ˈpreznt/ (nhấn đầu). Động từ **present** (trình bày) đọc /prɪˈzent/ (nhấn sau). Trạng từ **presently** trong bài đọc nghĩa là “hiện nay”.",
         "**range** vừa là danh từ (**a wide range of** + danh từ số nhiều) vừa là động từ (**range from A to B**). Sách tách thành 2 từ, ở đây cũng giữ 2 mục.",
@@ -313,7 +349,7 @@ const D4_WRITING: Lesson = {
   kind: "writing",
   title: "Viết: Làm quen IELTS Writing Task 1",
   goal: "Biết Task 1 yêu cầu gì, nhận ra 6 dạng biểu đồ, nắm khung Introduction – Overview – Body, hiểu một bài band 4 trông thế nào và phải làm gì để lên band 5–6.",
-  minutes: 45,
+  minutes: 50,
   blocks: [
     {
       t: "recap",
@@ -357,36 +393,130 @@ const D4_WRITING: Lesson = {
     },
     {
       t: "p",
-      text: "Hai hình dưới đây là ví dụ tự soạn cho khoá học. Mọi con số là giả định để luyện tập.",
+      text: "Sáu hình dưới đây là ví dụ **tự soạn** cho khoá học, mỗi dạng một hình, để bạn nhìn quen mặt từng dạng. Mọi con số là giả định để luyện tập. Hai hình đầu (line graph, bar chart) được dùng tiếp ở mục 6 (bài mẫu) và mục 7 (tự viết).",
     },
+    { t: "p", text: "**① Line graph — biểu đồ đường.** Trục ngang là **thời gian** → tả **xu hướng** (tăng, giảm, vượt nhau)." },
     {
-      t: "chart",
-      kind: "line",
-      title: "Average daily time children aged 3–6 spent on three activities in one country, 2014–2024",
-      unit: "phút/ngày",
-      labels: ["2014", "2016", "2018", "2020", "2022", "2024"],
-      series: [
-        { name: "Watching TV", values: [95, 90, 82, 75, 70, 62] },
-        { name: "Using tablets", values: [10, 25, 45, 80, 88, 96] },
-        { name: "Reading books", values: [30, 28, 27, 25, 24, 24] },
-      ],
+      t: "figure",
+      fig: {
+        kind: "line",
+        title: "Average daily time children aged 3–6 spent on three activities in one country, 2014–2024 (minutes per day)",
+        note: "Số liệu tự đặt cho bài luyện.",
+        unit: "minutes / day",
+        categories: ["2014", "2016", "2018", "2020", "2022", "2024"],
+        series: [
+          { name: "Watching TV", values: [95, 90, 82, 75, 70, 62] },
+          { name: "Using tablets", values: [10, 25, 45, 80, 88, 96] },
+          { name: "Reading books", values: [30, 28, 27, 25, 24, 24] },
+        ],
+      },
     },
+    { t: "p", text: "**② Bar chart — biểu đồ cột.** Ở đây trục ngang là **các nhóm** (không có thời gian) → **so sánh** nhóm nào cao hơn, chênh bao nhiêu." },
     {
-      t: "chart",
-      kind: "bar",
-      title: "Favourite free-time activities of teenagers (13–17) in one city, by gender",
-      unit: "%",
-      labels: ["Sport", "Music", "Video games", "Reading", "Drawing"],
-      series: [
-        { name: "Boys", values: [42, 18, 55, 15, 10] },
-        { name: "Girls", values: [28, 35, 25, 30, 26] },
-      ],
+      t: "figure",
+      fig: {
+        kind: "bar",
+        title: "Favourite free-time activities of teenagers (13–17) in one city, by gender (%)",
+        note: "Số liệu tự đặt cho bài luyện. Mỗi bạn được chọn nhiều hoạt động nên cột không cộng thành 100%.",
+        unit: "%",
+        categories: ["Sport", "Music", "Video games", "Reading", "Drawing"],
+        series: [
+          { name: "Boys", values: [42, 18, 55, 15, 10] },
+          { name: "Girls", values: [28, 35, 25, 30, 26] },
+        ],
+      },
+    },
+    { t: "p", text: "**③ Pie chart — biểu đồ tròn.** Cả hình = **100%** → tả **tỉ lệ**: phần lớn nhất, nhỏ nhất, phần nào gần bằng nhau." },
+    {
+      t: "figure",
+      fig: {
+        kind: "pie",
+        title: "How students at one university travel to campus (%)",
+        note: "Số liệu tự đặt cho bài luyện.",
+        slices: [
+          { label: "Motorbike", value: 46 },
+          { label: "Bus", value: 22 },
+          { label: "Bicycle", value: 15 },
+          { label: "Walking", value: 12 },
+          { label: "Car", value: 5 },
+        ],
+      },
+    },
+    { t: "p", text: "**④ Table — bảng số liệu.** Nhiều con số → **chọn số nổi bật** (cao nhất, thấp nhất, thay đổi lớn nhất), không kể hết từng ô." },
+    {
+      t: "figure",
+      fig: {
+        kind: "table",
+        title: "Number of visitors to three museums in one city (thousands)",
+        note: "Số liệu tự đặt cho bài luyện.",
+        categories: ["2010", "2015", "2020"],
+        series: [
+          { name: "History Museum", values: [120, 135, 90] },
+          { name: "Science Museum", values: [80, 110, 150] },
+          { name: "Art Gallery", values: [60, 58, 61] },
+        ],
+      },
+    },
+    { t: "p", text: "**⑤ Process diagram — sơ đồ quy trình.** Các **bước nối bằng mũi tên** → tả theo thứ tự, hay dùng **câu bị động** (are picked, is dried)." },
+    {
+      t: "figure",
+      fig: {
+        kind: "process",
+        title: "How green tea is produced",
+        note: "Quy trình đơn giản hoá cho bài luyện.",
+        steps: [
+          { label: "Leaves are picked", note: "by hand, early morning" },
+          { label: "Leaves are steamed", note: "to stop them turning brown" },
+          { label: "Leaves are rolled", note: "into thin shapes" },
+          { label: "Leaves are dried", note: "in hot air" },
+          { label: "Tea is packed", note: "and sent to shops" },
+        ],
+      },
+    },
+    { t: "p", text: "**⑥ Map — bản đồ.** Thường là **một nơi ở hai thời điểm** → tả cái gì được xây thêm, bị dỡ bỏ, chuyển chỗ. Dưới đây là bản đồ một khu trung tâm năm 2025 (đề thật sẽ cho thêm bản đồ cũ để so)." },
+    {
+      t: "figure",
+      fig: {
+        kind: "map",
+        title: "Riverside town centre in 2025",
+        note: "Bản đồ tự vẽ cho bài luyện. Phía trên là hướng Bắc.",
+        map: {
+          cols: 10,
+          rows: 7,
+          paths: [
+            // Đường ngang tách hai đoạn để nhãn nằm ở nửa phía Tây, không đè ngã tư.
+            { x: 0.2, y: 3.1, w: 4.4, h: 0.8, label: "Main Street" },
+            { x: 5.4, y: 3.1, w: 4.4, h: 0.8 },
+            { x: 4.6, y: 0.2, w: 0.8, h: 6.6 },
+          ],
+          boxes: [
+            { x: 0.4, y: 0.4, w: 3.8, h: 2.3, label: "Park" },
+            { x: 5.8, y: 0.4, w: 3.8, h: 2.3, label: "Shopping centre" },
+            { x: 0.4, y: 4.3, w: 3.8, h: 2.3, label: "Car park" },
+            { x: 5.8, y: 4.3, w: 1.8, h: 2.3, label: "Library" },
+            { x: 7.8, y: 4.3, w: 1.8, h: 2.3, label: "Café" },
+          ],
+          pins: [{ x: 7.6, y: 3.5, label: "Bus stop" }],
+        },
+      },
     },
 
     { t: "h", text: "3. Khung bài: Introduction – Overview – Body" },
     {
       t: "p",
       text: "Dạng nào cũng viết theo **một khung 4 đoạn**. Học thuộc khung này là bạn đã biết mình phải viết gì trước khi nhìn đề.",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Khung 4 đoạn của Task 1 (khoảng 160–190 từ)",
+      caption: "Overview **không có số chi tiết**; số liệu chỉ nằm ở hai đoạn Body. Không có đoạn kết luận nêu ý kiến.",
+      steps: [
+        { label: "**Introduction**", sub: "1 câu · viết lại đề: hình gì, tả cái gì, ở đâu, khi nào" },
+        { label: "**Overview**", sub: "1–2 câu · Overall, + 2 điểm nổi bật nhất" },
+        { label: "**Body 1**", sub: "2–4 câu · nhóm số liệu thứ nhất + so sánh" },
+        { label: "**Body 2**", sub: "2–4 câu · nhóm số liệu còn lại + so sánh" },
+      ],
     },
     {
       t: "table",
@@ -432,7 +562,7 @@ const D4_WRITING: Lesson = {
         { q: "Biểu đồ đường cho thấy trẻ em dành bao nhiêu phút mỗi ngày để xem TV từ năm 2014 đến 2024.", hint: "the line graph, illustrates, how many minutes, a day, between 2014 and 2024", answers: ["The line graph illustrates how many minutes a day children spent watching TV between 2014 and 2024.", "The line graph illustrates how many minutes per day children spent watching TV between 2014 and 2024.", "The line graph shows how many minutes a day children spent watching TV between 2014 and 2024.", "The line graph illustrates how many minutes children spent watching TV each day between 2014 and 2024.", "The line graph illustrates how many minutes a day children spent watching TV from 2014 to 2024."] },
         { q: "Nhìn chung, việc dùng máy tính bảng tăng mạnh, trong khi việc xem TV giảm.", hint: "overall, tablet use, rose sharply, while, TV viewing, fell", answers: ["Overall, tablet use rose sharply, while TV viewing fell.", "Overall, tablet use rose sharply while TV viewing fell.", "Overall, tablet use increased sharply, while TV viewing fell.", "Overall, tablet use rose sharply, while TV viewing decreased.", "Overall, tablet use rose sharply, whereas TV viewing fell."] },
         { q: "Năm 2014, trẻ em xem TV khoảng 95 phút mỗi ngày.", hint: "in 2014, watched, around, 95 minutes, a day", answers: ["In 2014, children watched TV for around 95 minutes a day.", "In 2014, children watched TV for about 95 minutes a day.", "In 2014, children watched TV for around 95 minutes per day.", "In 2014, children watched TV for about 95 minutes per day.", "In 2014 children watched TV for around 95 minutes a day.", "In 2014, children watched around 95 minutes of TV a day."] },
-        { q: "Đọc sách là hoạt động ít phổ biến nhất trong suốt giai đoạn.", hint: "reading books, the least popular activity, throughout the period", answers: ["Reading books was the least popular activity throughout the period.", "Reading was the least popular activity throughout the period.", "Reading books was the least popular activity during the whole period.", "Reading books was the least popular activity over the period."] },
+        { q: "Từ năm 2018 trở đi, đọc sách là hoạt động ít phổ biến nhất.", hint: "from 2018 onwards, reading books, was, the least popular activity", answers: ["From 2018 onwards, reading books was the least popular activity.", "From 2018 onwards reading books was the least popular activity.", "From 2018, reading books was the least popular activity.", "From 2018 on, reading books was the least popular activity.", "From 2018 onwards, reading was the least popular activity.", "Reading books was the least popular activity from 2018 onwards.", "Reading was the least popular activity from 2018 onwards.", "Reading books was the least popular activity from 2018."] },
       ],
     },
 
@@ -465,6 +595,7 @@ const D4_WRITING: Lesson = {
         "Dùng sai thì: số liệu năm 2014 mà viết ~~TV viewing falls~~ → **TV viewing fell**.",
         "Kể từng con số như đọc bảng mà **không so sánh**. Giám khảo muốn thấy **cái nào hơn, hơn bao nhiêu, thay đổi ra sao**.",
         "Tự thêm nguyên nhân: ~~because children like games more~~. Hình không nói lý do thì bạn **không được đoán**.",
+        "Viết **“suốt cả giai đoạn” (throughout the period)** mà không kiểm từng mốc. Ở biểu đồ đường mục 2, năm 2014 và 2016 đọc sách (30, 28 phút) vẫn **nhiều hơn** máy tính bảng (10, 25 phút) → không được viết ~~Reading was the least popular activity throughout the period~~; đúng là **from 2018 onwards** (từ 2018 trở đi).",
       ],
     },
 
@@ -492,15 +623,15 @@ const D4_WRITING: Lesson = {
     { t: "h", text: "6. Bài mẫu cho biểu đồ đường ở trên (phần thêm)" },
     {
       t: "p",
-      text: "Sách chưa có bài mẫu ở ngày này. Dưới đây là một bài mẫu khoảng **175 từ**, mức band 6, viết cho biểu đồ đường ở mục 2. Để ý nhãn **[Intro] [Overview] [Body 1] [Body 2]** và các từ in đậm.",
+      text: "Sách chưa có bài mẫu ở ngày này. Dưới đây là một bài mẫu khoảng **185 từ**, mức band 6, viết cho biểu đồ đường ở mục 2. Để ý nhãn **[Intro] [Overview] [Body 1] [Body 2]** và các từ tả xu hướng (liệt kê ở khung Mẹo ngay dưới bài). Nhìn lại hình để kiểm **từng con số** trong bài khớp với hình.",
     },
     {
       t: "examples",
       items: [
         { en: "[Intro] The line graph illustrates how many minutes a day children aged three to six in one country spent watching TV, using tablets and reading books between 2014 and 2024.", vi: "[Mở bài] Biểu đồ đường cho thấy trẻ từ ba đến sáu tuổi ở một quốc gia dành bao nhiêu phút mỗi ngày để xem TV, dùng máy tính bảng và đọc sách từ năm 2014 đến 2024." },
         { en: "[Overview] Overall, tablet use rose dramatically and overtook television as the main activity, while the time spent on TV and books both fell.", vi: "[Tổng quan] Nhìn chung, thời gian dùng máy tính bảng tăng vọt và vượt TV để trở thành hoạt động chính, trong khi thời gian xem TV và đọc sách đều giảm." },
-        { en: "[Body 1] In 2014, children watched TV for around 95 minutes a day, far more than the 10 minutes they spent on tablets. Over the next six years, TV viewing declined steadily to 75 minutes, whereas tablet use climbed sharply to 80 minutes, overtaking television in 2020.", vi: "[Thân bài 1] Năm 2014, trẻ xem TV khoảng 95 phút mỗi ngày, nhiều hơn hẳn 10 phút dùng máy tính bảng. Sáu năm sau đó, thời gian xem TV giảm đều xuống 75 phút, trong khi máy tính bảng tăng mạnh lên 80 phút và vượt TV vào năm 2020." },
-        { en: "[Body 2] After 2020, the gap widened. Tablet use kept growing and reached a peak of 96 minutes in 2024, while TV viewing dropped to 62 minutes. Reading books was the least popular activity throughout the period, falling gradually from 30 to 24 minutes and then remaining stable.", vi: "[Thân bài 2] Sau năm 2020, khoảng cách ngày càng lớn. Máy tính bảng tiếp tục tăng, đạt đỉnh 96 phút năm 2024, còn TV giảm xuống 62 phút. Đọc sách là hoạt động ít nhất suốt giai đoạn, giảm dần từ 30 xuống 24 phút rồi giữ nguyên." },
+        { en: "[Body 1] In 2014, children watched TV for around 95 minutes a day, far more than the 10 minutes they spent on tablets. Over the next six years, TV viewing declined steadily to 75 minutes, whereas tablet use climbed sharply to 80 minutes. Television was still the most popular activity in 2018, at 82 minutes compared with 45 minutes for tablets, but by 2020 tablets were slightly ahead.", vi: "[Thân bài 1] Năm 2014, trẻ xem TV khoảng 95 phút mỗi ngày, nhiều hơn hẳn 10 phút dùng máy tính bảng. Trong sáu năm tiếp theo, thời gian xem TV giảm đều xuống 75 phút, trong khi máy tính bảng tăng mạnh lên 80 phút. Năm 2018 TV vẫn là hoạt động phổ biến nhất với 82 phút, so với 45 phút của máy tính bảng, nhưng đến năm 2020 máy tính bảng đã nhỉnh hơn một chút." },
+        { en: "[Body 2] After 2020, the gap widened. Tablet use kept growing and reached a peak of 96 minutes in 2024, while TV viewing dropped to 62 minutes, so by the end of the period children spent about 34 minutes more a day on tablets than on television. Time spent reading books fell gradually from 30 to 24 minutes and then remained stable, making it the least popular activity from 2018 onwards.", vi: "[Thân bài 2] Sau năm 2020, khoảng cách ngày càng lớn. Máy tính bảng tiếp tục tăng, đạt đỉnh 96 phút năm 2024, còn TV giảm xuống 62 phút, nên đến cuối giai đoạn trẻ dùng máy tính bảng nhiều hơn xem TV khoảng 34 phút mỗi ngày. Thời gian đọc sách giảm dần từ 30 xuống 24 phút rồi giữ nguyên, khiến nó trở thành hoạt động ít nhất từ năm 2018 trở đi." },
       ],
     },
     {
@@ -548,8 +679,8 @@ const D4_SPEAKING: Lesson = {
   id: "d4-noi",
   kind: "speaking",
   title: "Nói: Trả lời câu hỏi Yes/No (Part 1 · Sở thích)",
-  goal: "Trả lời câu hỏi Yes/No ở Speaking Part 1 bằng 2–4 câu (trả lời + lý do + ví dụ) về chủ đề sở thích, và phát âm đúng 11 nguyên âm đơn ngắn/dài.",
-  minutes: 45,
+  goal: "Trả lời câu hỏi Yes/No ở Speaking Part 1 bằng 2–4 câu (trả lời + lý do + ví dụ) về chủ đề sở thích, và phát âm đúng 11 nguyên âm đơn ngắn/dài cùng âm yếu /ə/.",
+  minutes: 55,
   blocks: [
     {
       t: "recap",
@@ -558,7 +689,7 @@ const D4_SPEAKING: Lesson = {
         "Khung 3 bước: ==Answer== (Yes/No + câu đầy đủ) → ==Reason== (because / so) → ==Example== (khi nào, với ai, ở đâu).",
         "Trả lời ngắn phải **khớp trợ động từ** của câu hỏi: Do you…? → Yes, I **do** · Are you…? → Yes, I **am** · Did you…? → Yes, I **did**.",
         "Chủ đề Hobbies (như sách): **watching movies**, **playing sports** — từ vựng, công thức, câu trả lời band 4.0 và bản nâng band 6.",
-        "Phát âm: **11 nguyên âm đơn** — 6 ngắn, 5 dài (dấu ː = kéo dài).",
+        "Phát âm: **11 nguyên âm đơn** — 6 ngắn, 5 dài (dấu ː = kéo dài) — cộng âm yếu **/ə/ (schwa)** sách chưa dạy; luyện **cặp tối thiểu** (ship – sheep, cup – cap…).",
       ],
     },
     { t: "h", text: "1. Câu hỏi Yes/No ở Part 1" },
@@ -671,8 +802,41 @@ const D4_SPEAKING: Lesson = {
         "**help + O + V nguyên mẫu** (không có to cũng được): **helps me stay healthy** = **helps me to stay healthy**.",
       ],
     },
+    {
+      t: "hinh",
+      title: "Từ vựng sở thích có hình (phần thêm) — chạm thẻ để nghe",
+      items: [
+        { anh: "cinema", w: "watch movies", ro: "/wɒtʃ ˈmuːviz/", vi: "xem phim" },
+        { anh: "face-with-tears-of-joy", w: "comedy", ro: "/ˈkɒmədi/", vi: "phim hài" },
+        { anh: "soccer-ball", w: "play football", ro: "/pleɪ ˈfʊtbɔːl/", vi: "chơi bóng đá" },
+        { anh: "badminton", w: "badminton", ro: "/ˈbædmɪntən/", vi: "cầu lông" },
+        { anh: "person-running", w: "go jogging", ro: "/ɡəʊ ˈdʒɒɡɪŋ/", vi: "đi chạy bộ" },
+        { anh: "person-biking", w: "go cycling", ro: "/ɡəʊ ˈsaɪklɪŋ/", vi: "đi đạp xe" },
+        { anh: "person-lifting-weights", w: "exercise", ro: "/ˈeksəsaɪz/", vi: "tập thể dục" },
+        { anh: "flexed-biceps", w: "stay fit", ro: "/steɪ fɪt/", vi: "giữ dáng, giữ sức khoẻ" },
+        { anh: "couch-and-lamp", w: "relax", ro: "/rɪˈlæks/", vi: "thư giãn" },
+        { anh: "open-book", w: "read books", ro: "/riːd bʊks/", vi: "đọc sách" },
+        { anh: "artist-palette", w: "draw", ro: "/drɔː/", vi: "vẽ" },
+        { anh: "video-game", w: "play video games", ro: "/pleɪ ˈvɪdiəʊ ɡeɪmz/", vi: "chơi trò chơi điện tử" },
+        { anh: "musical-notes", w: "listen to music", ro: "/ˈlɪsn tə ˈmjuːzɪk/", vi: "nghe nhạc" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Cẩn thận: play / go / do với môn thể thao (phần thêm)",
+      items: [
+        "**play** + môn có **bóng / đối thủ**: play football, play badminton, play chess — **không** có “the”: ~~play the football~~.",
+        "**go** + môn tận cùng **-ing**: go jogging, go cycling, go swimming — ~~go to swimming~~ là sai.",
+        "**do** + môn tập một mình / võ: do yoga, do karate, do exercise.",
+      ],
+    },
 
     { t: "h", text: "4. Câu trả lời mẫu band 4.0" },
+    {
+      t: "canh",
+      anh: ["clapper-board", "popcorn", "television"],
+      caption: "Phòng thi Speaking Part 1. Giám khảo hỏi về **sở thích xem phim**. Nghe câu trả lời band 4.0: đúng, rõ, nhưng còn rất ngắn.",
+    },
     {
       t: "dialogue",
       title: "Câu 1 — Do you enjoy watching movies? (band 4.0)",
@@ -689,6 +853,11 @@ const D4_SPEAKING: Lesson = {
         "Có từ **relaxed** và nói được **khi nào** xem (at the weekend), nhưng **chưa phát triển ý**: không nói vì sao thích phim hài, xem với ai, xem ở đâu.",
         "Các câu nối với nhau chỉ bằng **and**, chưa có because, so, when. Đây là lý do bài dừng ở band 4.",
       ],
+    },
+    {
+      t: "canh",
+      anh: ["badminton", "soccer-ball", "person-running"],
+      caption: "Câu hỏi thứ hai về **thể thao**. Thí sinh chơi cầu lông với bạn cùng lớp — để ý câu trả lời chỉ có ba câu đơn cùng một kiểu.",
     },
     {
       t: "dialogue",
@@ -714,12 +883,22 @@ const D4_SPEAKING: Lesson = {
       text: "Cùng hai câu hỏi, đây là cách một thí sinh band 6 trả lời. Không cần từ khó, chỉ cần **có lý do, có chi tiết, có từ nối** và vài cụm từ tự nhiên.",
     },
     {
+      t: "canh",
+      anh: ["film-frames", "couch-and-lamp", "smiling-face-with-smiling-eyes"],
+      caption: "Cùng câu hỏi về phim, lần này thí sinh band 6 trả lời: có **lý do** (to unwind), có **chi tiết** (Saturday night, animated movies), có **so / because**.",
+    },
+    {
       t: "dialogue",
       title: "Câu 1 — bản nâng cấp band 6",
       lines: [
         { who: "Examiner", role: "examiner", text: "Do you enjoy watching movies?" },
         { who: "Candidate", role: "candidate", text: "Yes, I really do. Watching films is my favourite way to unwind after a busy week, so I usually watch one on Saturday night. I'm especially into animated movies, because they're funny but they often have a meaningful message too.", vi: "Có, rất thích. Xem phim là cách tôi thích nhất để thả lỏng sau một tuần bận rộn, nên tôi thường xem một bộ vào tối thứ Bảy. Tôi đặc biệt mê phim hoạt hình, vì chúng vui mà thường còn có thông điệp ý nghĩa." },
       ],
+    },
+    {
+      t: "canh",
+      anh: ["badminton", "national-park", "person-running"],
+      caption: "Câu hỏi về thể thao, bản band 6: cầu lông **twice a week**, chạy bộ ở **công viên gần nhà** sáng Chủ nhật — chi tiết cụ thể làm câu trả lời sống động.",
     },
     {
       t: "dialogue",
@@ -783,6 +962,34 @@ const D4_SPEAKING: Lesson = {
       ],
     },
     {
+      t: "hinh",
+      title: "Mỗi nguyên âm một hình để nhớ (phần thêm) — chạm thẻ để nghe",
+      items: [
+        { anh: "cat", w: "cat", ro: "/kæt/", vi: "/æ/ ngắn · con mèo" },
+        { anh: "ship", w: "ship", ro: "/ʃɪp/", vi: "/ɪ/ ngắn · con tàu" },
+        { anh: "bus", w: "bus", ro: "/bʌs/", vi: "/ʌ/ ngắn · xe buýt" },
+        { anh: "dog", w: "dog", ro: "/dɒɡ/", vi: "/ɒ/ ngắn · con chó" },
+        { anh: "bed", w: "bed", ro: "/bed/", vi: "/e/ ngắn · cái giường" },
+        { anh: "open-book", w: "book", ro: "/bʊk/", vi: "/ʊ/ ngắn · quyển sách" },
+        { anh: "key", w: "key", ro: "/kiː/", vi: "/iː/ dài · chìa khoá" },
+        { anh: "full-moon", w: "moon", ro: "/muːn/", vi: "/uː/ dài · mặt trăng" },
+        { anh: "automobile", w: "car", ro: "/kɑː/", vi: "/ɑː/ dài · xe ô tô" },
+        { anh: "door", w: "door", ro: "/dɔː/", vi: "/ɔː/ dài · cái cửa" },
+        { anh: "bird", w: "bird", ro: "/bɜːd/", vi: "/ɜː/ dài · con chim" },
+        { anh: "banana", w: "banana", ro: "/bəˈnɑːnə/", vi: "/ə/ yếu (xem dưới) · quả chuối" },
+      ],
+    },
+    {
+      t: "note",
+      title: "Ghi nhớ: âm thứ 12 — /ə/ (schwa) — phần sách chưa có",
+      items: [
+        "Bảng nguyên âm đơn đầy đủ của tiếng Anh-Anh có **12 âm**: 11 âm ở trên + **/ə/** (gọi là **schwa**), một âm “ơ” rất ngắn, rất nhẹ, miệng thả lỏng hoàn toàn.",
+        "/ə/ là âm **gặp nhiều nhất** trong tiếng Anh vì nó nằm ở **âm tiết KHÔNG nhấn**: **a**bout /əˈbaʊt/, ban**a**n**a** /bəˈnɑːnə/, doct**or** /ˈdɒktə/, comput**er** /kəmˈpjuːtə/.",
+        "Các từ nhỏ trong câu cũng đọc yếu thành /ə/: **a** /ə/, **the** /ðə/, **to** /tə/, **of** /əv/, **and** /ənd/. Đọc mạnh từng chữ (“tu”, “ót”) làm câu nghe cứng như đọc từng từ.",
+        "Người Việt hay đọc **mọi** âm tiết rõ như nhau: ~~ba-na-na~~ → **bə-NAA-nə**. Nhấn đúng âm tiết chính, các âm tiết còn lại đọc nhẹ /ə/.",
+      ],
+    },
+    {
       t: "note",
       title: "Những cặp người Việt hay nhầm (phần thêm)",
       items: [
@@ -790,6 +997,8 @@ const D4_SPEAKING: Lesson = {
         "**/ʊ/ và /uː/**: full – fool, look – Luke. Âm dài phải chu môi mạnh.",
         "**/æ/ và /e/**: bad – bed, man – men. /æ/ mở miệng rộng hơn hẳn.",
         "**/ʌ/ và /ɑː/**: cut – cart, hut – heart. /ɑː/ mở to và kéo dài.",
+        "**/ʌ/ và /æ/**: cup – cap, hut – hat. /ʌ/ miệng hé vừa như “ă”; /æ/ miệng mở rộng, khoé môi kéo ngang.",
+        "**/ɒ/ và /ɔː/**: shot – short, cod – cord. /ɔː/ tròn môi hơn và kéo dài.",
         "**said** đọc /sed/ (như bed), không đọc ~~/seɪd/~~. **heard** và **word** đọc /ɜː/, không đọc ~~“hia”~~, ~~“wo”~~.",
       ],
     },
@@ -801,6 +1010,9 @@ const D4_SPEAKING: Lesson = {
         { en: "bad — bed", vi: "/æ/ · /e/" },
         { en: "cut — cart", vi: "/ʌ/ ngắn · /ɑː/ dài" },
         { en: "shot — short", vi: "/ɒ/ ngắn · /ɔː/ dài" },
+        { en: "cup — cap", vi: "/ʌ/ · /æ/" },
+        { en: "men — man", vi: "/e/ · /æ/" },
+        { en: "work — walk", vi: "/ɜː/ · /ɔː/" },
       ],
     },
 
@@ -816,6 +1028,11 @@ const D4_SPEAKING: Lesson = {
         { text: "bad, bed", ipa: "bæd bed", vi: "/æ/ mở rộng · /e/ hẹp hơn" },
         { text: "cut, cart", ipa: "kʌt kɑːt", vi: "/ʌ/ ngắn · /ɑː/ dài" },
         { text: "dog, door", ipa: "dɒɡ dɔː", vi: "/ɒ/ ngắn · /ɔː/ dài" },
+        { text: "shot, short", ipa: "ʃɒt ʃɔːt", vi: "cặp tối thiểu /ɒ/ · /ɔː/" },
+        { text: "cup, cap", ipa: "kʌp kæp", vi: "cặp tối thiểu /ʌ/ · /æ/" },
+        { text: "men, man", ipa: "men mæn", vi: "cặp tối thiểu /e/ · /æ/" },
+        { text: "work, walk", ipa: "wɜːk wɔːk", vi: "cặp tối thiểu /ɜː/ · /ɔː/" },
+        { text: "about, banana, doctor", ipa: "əbaʊt bənɑːnə dɒktə", vi: "/ə/ ở âm tiết không nhấn: a-BOUT · ba-NA-na · DOC-tor" },
         { text: "bird, word, heard", ipa: "bɜːd wɜːd hɜːd", vi: "/ɜː/ — không đọc “bơt”, “wo”, “hia”" },
         { text: "The cat sat on a black hat.", ipa: "ðə kæt sæt ɒn ə blæk hæt", vi: "/æ/ cả câu" },
         { text: "Please sit in this seat.", ipa: "pliːz sɪt ɪn ðɪs siːt", vi: "/iː/ và /ɪ/ xen kẽ" },
@@ -887,7 +1104,7 @@ const D4_HOMEWORK: Lesson = {
         { q: "Giáo viên tương tác với học sinh qua các trò chơi.", hint: "interact", answers: ["The teacher interacts with students through games.", "The teacher interacts with the students through games.", "Teachers interact with students through games."] },
         { q: "Bạn có thể điều khiển chiếc xe đồ chơi bằng điện thoại.", hint: "control", answers: ["You can control the toy car with your phone.", "You can control the toy car with a phone.", "You can control the toy car using your phone.", "You can control the toy car by phone.", "You can control the toy car with a smartphone."] },
         { q: "Hai chị em tôi có sở thích khác nhau.", hint: "different", answers: ["My sister and I have different hobbies.", "My sister and I have different interests.", "My sister and I have different tastes."] },
-        { q: "Cơ chế của trò chơi này rất đơn giản.", hint: "mechanics", answers: ["The mechanics of this game are very simple.", "This game's mechanics are very simple.", "The mechanics of this game is very simple.", "The mechanic of this game is very simple."] },
+        { q: "Cơ chế của trò chơi này rất đơn giản.", hint: "mechanics", answers: ["The mechanics of this game are very simple.", "This game's mechanics are very simple.", "The mechanics of this game are really simple."] },
         { q: "Giá nhà ở thời điểm hiện tại quá cao.", hint: "present", answers: ["At present, house prices are too high.", "At present house prices are too high.", "House prices are too high at present.", "House prices at the present time are too high.", "Present house prices are too high.", "The present house prices are too high."] },
         { q: "Thị trường điện thoại ở Việt Nam rất cạnh tranh.", hint: "market", answers: ["The phone market in Vietnam is very competitive.", "The mobile phone market in Vietnam is very competitive.", "The smartphone market in Vietnam is very competitive.", "The phone market in Viet Nam is very competitive."] },
         { q: "YouTube là một nền tảng phổ biến để học tiếng Anh.", hint: "platform", answers: ["YouTube is a popular platform for learning English.", "YouTube is a popular platform to learn English."] },
@@ -910,7 +1127,7 @@ const D4_HOMEWORK: Lesson = {
       items: [
         "Câu 3: “quan tâm đến” = **have an interest in** (giới từ **in**), không phải ~~interest about~~.",
         "Câu 9: **a wide range of** + danh từ **số nhiều** (books, không phải ~~book~~).",
-        "Câu 20: **mechanics** là danh từ có -s nhưng thường đi với động từ số nhiều khi nói về các cơ chế: **The mechanics… are**.",
+        "Câu 20: nghĩa “cơ chế” dùng **mechanics** (có -s) và đi với động từ **số nhiều**: **The mechanics… are**. Không viết ~~The mechanic of this game is…~~: **a mechanic** thường là **thợ máy**; dân làm game có nói **a game mechanic** nhưng đó là **một** luật chơi cụ thể (Ngày 6), còn “cơ chế của cả trò chơi” là **mechanics**.",
         "Câu 26 và 28: việc đã xong (đã mua, hôm qua) → **quá khứ đơn**: purchased, won (win → won là động từ bất quy tắc).",
         "Câu 32: **fruit** (quả nói chung) thường **không đếm được**: **a lot of fruit**, không phải ~~a lot of fruits~~ khi nói sản lượng.",
       ],

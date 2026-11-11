@@ -6,7 +6,7 @@
  * Script này quét các tệp bài, tìm slug, tải bản 3D từ kho microsoft/fluentui-emoji (ghim commit trong
  * fluent-catalog.json), thu về WebP 256 px rồi đẩy lên R2 — ảnh nào đã có trên R2 thì bỏ qua.
  *
- *   npx tsx scripts/hinh/len-r2.mts                 # quét dekiru/bai + jp/bai, đẩy ảnh thiếu
+ *   npx tsx scripts/hinh/len-r2.mts                 # quét dekiru/bai + jp/bai + ielts/ngay + ielts/data.ts, đẩy ảnh thiếu
  *   npx tsx scripts/hinh/len-r2.mts --kiem          # chỉ kiểm slug lạ (không tải, không đẩy)
  *   npx tsx scripts/hinh/len-r2.mts --thu dog cat   # đẩy đúng mấy slug này
  *
@@ -22,7 +22,12 @@ const GOC = path.resolve(import.meta.dirname, '../..');
 const CAT = JSON.parse(await readFile(path.join(import.meta.dirname, 'fluent-catalog.json'), 'utf8')) as {
   commit: string; hinh: Record<string, string>;
 };
-const THU_MUC = ['frontend/src/app/language/[code]/dekiru/bai', 'frontend/src/app/language/[code]/jp/bai'];
+const THU_MUC = [
+  'frontend/src/app/language/[code]/dekiru/bai',
+  'frontend/src/app/language/[code]/jp/bai',
+  'frontend/src/app/language/[code]/ielts/ngay', // IELTS (12/11/2026): vocab.anh, hinh, canh, sodo mindmap/compare
+  'frontend/src/app/language/[code]/ielts', // IELTS Ngày 1 nằm trong data.ts (13/11/2026) — chỉ quét *.ts ngay cấp này
+];
 export const KHOA = (slug: string) => `hoc/hinh/${slug}.webp`;
 
 /** Mọi slug trong khối hình: `anh: 'x'`, `anh: ['x', 'y']`, `"anh": "x"`, `"anh": ["x"]`. */

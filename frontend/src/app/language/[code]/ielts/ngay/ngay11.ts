@@ -8,6 +8,11 @@
  * đồ (tự đặt), kịch bản nghe đều VIẾT MỚI. Bài nghe Part 3 nói về một khảo sát giấc
  * ngủ — nối với từ vựng xu hướng của bài từ vựng (fell sharply, recovered gradually…)
  * và với dạng Matching Features của Ngày 10 (ai đề xuất điều gì).
+ *
+ * Bổ sung 12/11/2026 (lộ trình 0→8, mục 5.1 #4): bài ngữ pháp thêm mục 8 "There is /
+ * there are" và mục 9 "in / on / at — nơi chốn & thời gian" mức A2, gắn với tả bản đồ
+ * và biểu đồ Task 1 (bản đồ tự vẽ + 10 câu điền + 2 bài dịch). Mục "Ứng dụng" đổi số
+ * 8 → 10 (mục 1–7 giữ nguyên số vì Ngày 12 dẫn chiếu tới).
  */
 import type { Lesson } from '../data';
 
@@ -17,8 +22,8 @@ const D11_GRAMMAR: Lesson = {
   id: "d11-ngu-phap",
   kind: "grammar",
   title: "Kết hợp danh từ – động từ – tính từ (Collocation, trật tự từ & cụm danh từ)",
-  goal: "Dùng đúng các cặp từ “hay đi với nhau” (make a decision, heavy rain, rise sharply, impact on…), xếp từ đúng trật tự S–V–O–cách thức–nơi chốn–thời gian, và dựng được cụm danh từ dài, chính xác cho Writing.",
-  minutes: 60,
+  goal: "Dùng đúng các cặp từ “hay đi với nhau” (make a decision, heavy rain, rise sharply, impact on…), xếp từ đúng trật tự S–V–O–cách thức–nơi chốn–thời gian, dựng được cụm danh từ dài, chính xác cho Writing, và tả được bản đồ / biểu đồ bằng there is / there are + giới từ in / on / at.",
+  minutes: 80,
   blocks: [
     {
       t: "recap",
@@ -29,6 +34,7 @@ const D11_GRAMMAR: Lesson = {
         "**Cụm danh từ**: từ hạn định + số lượng + tính từ + danh từ bổ nghĩa + ==DANH TỪ CHÍNH== + phần bổ nghĩa phía sau. Tính từ tiếng Anh **đứng trước** danh từ — thứ tự gần như **ngược** tiếng Việt.",
         "6 kiểu kết hợp: **động từ + danh từ · tính từ + danh từ · danh từ + danh từ · trạng từ + tính từ · động từ + trạng từ · từ + giới từ**.",
         "Vì sao quan trọng: tiêu chí **Lexical Resource** (vốn từ) chấm cả độ **tự nhiên** của cách kết hợp từ — band 6 trở lên phải có “awareness of collocation”.",
+        "**There is / there are** (mục 8) = “có” (tồn tại ở đâu đó) — không dịch thành have. **in / on / at** (mục 9): ==at = điểm, giờ== · ==on = bề mặt, đường, ngày== · ==in = không gian, tháng, năm== — dùng tả bản đồ và biểu đồ Task 1.",
       ],
     },
 
@@ -497,7 +503,259 @@ const D11_GRAMMAR: Lesson = {
       ],
     },
 
-    { t: "h", text: "8. Ứng dụng: sửa một đoạn Task 2" },
+    { t: "h", text: "8. There is / there are — “có” để giới thiệu và mô tả" },
+    {
+      t: "p",
+      text: "**Phần thêm (mức A2).** Tiếng Việt dùng một chữ **“có”** cho hai nghĩa: “Tôi **có** một chiếc xe máy” (**sở hữu**) và “Gần nhà tôi **có** một công viên” (**tồn tại** ở đâu đó). Tiếng Anh tách riêng: sở hữu → **have / has**; tồn tại → **there is / there are**. Đây là cấu trúc số một để **tả bản đồ** (Writing Task 1 dạng map), nói về **nơi bạn sống** (Speaking Part 1) và giới thiệu một thay đổi trên **biểu đồ** (There was a sharp rise in…).",
+    },
+    {
+      t: "patterns",
+      rows: [
+        {
+          formula: "There is + a / an + N số ít (+ nơi chốn)",
+          vi: "Một vật / một nơi. Viết tắt khi nói: **There's**.",
+          examples: [
+            { en: "There is a small park near my house.", vi: "Gần nhà tôi có một công viên nhỏ." },
+            { en: "There's a café opposite the station.", vi: "Đối diện nhà ga có một quán cà phê." },
+          ],
+        },
+        {
+          formula: "There is + N không đếm được (some / a lot of / much)",
+          vi: "Danh từ không đếm được (traffic, water, noise, information — Ngày 5) luôn đi với **is**.",
+          examples: [
+            { en: "There is a lot of traffic in the city centre at 6 p.m.", vi: "Lúc 6 giờ chiều trung tâm thành phố rất đông xe." },
+          ],
+        },
+        {
+          formula: "There are + N số nhiều (two / some / many / a lot of)",
+          vi: "Từ hai vật trở lên.",
+          examples: [
+            { en: "There are two supermarkets in my neighbourhood.", vi: "Khu tôi ở có hai siêu thị." },
+            { en: "There are many trees along the river.", vi: "Dọc bờ sông có nhiều cây." },
+          ],
+        },
+        {
+          formula: "There isn't / aren't + any + N · Is / Are there + N? — Yes, there is / are. · No, there isn't / aren't.",
+          vi: "Phủ định thêm **not**; câu hỏi đưa **is / are** lên trước **there**.",
+          examples: [
+            { en: "There aren't any cinemas in my village.", vi: "Làng tôi không có rạp chiếu phim nào." },
+            { en: "Is there a bank near here? — Yes, there is.", vi: "Gần đây có ngân hàng không? — Có." },
+          ],
+        },
+        {
+          formula: "There was / were (quá khứ) · There will be (tương lai)",
+          vi: "Đổi thì bằng cách đổi **be**. Bản đồ “trước – sau” và biểu đồ năm đã qua dùng was / were; dự báo dùng will be (Ngày 9, mục 10).",
+          examples: [
+            { en: "In 2000, there were only three hotels in the town.", vi: "Năm 2000, thị trấn chỉ có ba khách sạn." },
+            { en: "There will be a new hospital in the north of the town.", vi: "Phía bắc thị trấn sẽ có một bệnh viện mới." },
+          ],
+        },
+      ],
+    },
+    {
+      t: "table",
+      caption: "There is / there are ở ba thì",
+      head: ["Thì", "Số ít / không đếm được", "Số nhiều"],
+      rows: [
+        ["Hiện tại", "There **is** a library. · There **is** some noise.", "There **are** two libraries."],
+        ["Quá khứ", "There **was** a farm here in 2000.", "There **were** many farms here in 2000."],
+        ["Tương lai", "There **will be** a new bridge.", "There **will be** more bus stops."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Người Việt hay sai với there is / there are",
+      items: [
+        "Dịch chữ “có” thành **have**: ~~It has a park near my house.~~ / ~~Near my house has a park.~~ → **There is** a park near my house.",
+        "Bỏ mất **there**: ~~Have many people in the street.~~ / ~~Are many people…~~ → **There are** many people in the street.",
+        "Sai số ít – số nhiều: ~~There is many cars.~~ → There **are** many cars. · ~~There are many traffic.~~ → There **is** a lot of traffic (traffic không đếm được).",
+        "~~There have…~~ không tồn tại. Chỉ có **there is / there are** (và was / were / will be).",
+        "Khi liệt kê, **be** hoà hợp với danh từ **đứng ngay sau nó**: There **is** a bed and two chairs. · There **are** two chairs and a bed.",
+        "Phát âm: **There's** /ðeəz/; **there are** đọc nối /ðeərə/ — âm /r/ nối sang nguyên âm phía sau.",
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: there is / there are trong IELTS",
+      items: [
+        "**Task 1 bản đồ**: mở câu bằng There is / are + vị trí: **There is** a car park **to the east of** the school. Bản đồ hai năm: In 1990 **there was** a farm…; now **there is** a shopping centre.",
+        "**Task 1 biểu đồ** — hai cách nói cùng một ý để paraphrase: **There was a sharp rise in** sales = Sales **rose sharply**.",
+        "**Speaking Part 1** (Where do you live? / What is your area like?): **There are** lots of street food stalls, and **there is** a big lake nearby.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "There is + a / an + N số ít / N không đếm được · There are + N số nhiều · Is / Are there…? · There was / were · There will be",
+      vi: "“Có” (tồn tại ở đâu đó) = there is / are — không dịch thành have. be chia theo danh từ đứng ngay sau.",
+    },
+    {
+      t: "quiz",
+      id: "d11-there-dich",
+      title: "Dịch nhanh — there is / there are (4 câu)",
+      kind: "translate",
+      grammar: "There is + a / an + N số ít · There are + N số nhiều · There aren't any + N · Is there + a / an + N? · There was / were (quá khứ).",
+      items: [
+        { q: "Khu tôi ở có hai siêu thị.", hint: "There are, two supermarkets, in my neighbourhood / in my area", answers: ["There are two supermarkets in my neighbourhood.", "There are two supermarkets in my neighborhood.", "There are two supermarkets in my area.", "In my neighbourhood, there are two supermarkets.", "In my neighbourhood there are two supermarkets.", "In my area, there are two supermarkets.", "In my area there are two supermarkets."] },
+        { q: "Gần nhà tôi không có rạp chiếu phim nào.", hint: "There aren't any cinemas / There are no cinemas, near my house", answers: ["There aren't any cinemas near my house.", "There are not any cinemas near my house.", "There are no cinemas near my house.", "There isn't a cinema near my house.", "There is not a cinema near my house.", "There is no cinema near my house.", "There aren't any cinemas near my home.", "There are no cinemas near my home.", "There aren't any movie theaters near my house."] },
+        { q: "Năm 2000, ở phía bắc thị trấn có một trang trại.", hint: "In 2000, there was, a farm, in the north of the town", answers: ["In 2000, there was a farm in the north of the town.", "In 2000 there was a farm in the north of the town.", "In 2000, there was a farm in the north of town.", "There was a farm in the north of the town in 2000.", "In 2000, there was a farm in the northern part of the town.", "There was a farm in the northern part of the town in 2000."] },
+        { q: "Gần đây có ngân hàng nào không?", hint: "Is there, a bank, near here / nearby", answers: ["Is there a bank near here?", "Is there a bank nearby?", "Is there a bank around here?", "Are there any banks near here?", "Are there any banks nearby?", "Is there any bank near here?", "Is there any bank nearby?"] },
+      ],
+    },
+
+    { t: "h", text: "9. Giới từ in / on / at — nơi chốn và thời gian" },
+    {
+      t: "p",
+      text: "**Phần thêm (mức A2).** Ba giới từ ngắn nhất mà sai nhiều nhất, vì tiếng Việt chỉ có “ở”, “vào”, “lúc”. Cách nhớ bằng hình: ==at = một ĐIỂM==, ==on = một BỀ MẶT / một ĐƯỜNG==, ==in = một KHÔNG GIAN bao quanh==. Áp được cho cả **nơi chốn** lẫn **thời gian**: khoảng thời gian càng dài thì càng “rộng” — **at** (giờ) → **on** (ngày) → **in** (tháng, năm).",
+    },
+    {
+      t: "sodo",
+      kind: "compare",
+      title: "at · on · in — từ hẹp đến rộng",
+      cols: [
+        {
+          title: "**AT** — một điểm",
+          anh: "bus-stop",
+          items: ["Nơi: **at** the bus stop · **at** home · **at** work · **at** school · **at** 25 Tran Phu Street", "Giờ: **at** 7 o'clock · **at** noon · **at** night", "Dịp lễ: **at** Tet · **at** Christmas · **at** the weekend (Anh-Anh)"],
+        },
+        {
+          title: "**ON** — bề mặt, đường, ngày",
+          anh: "spiral-calendar",
+          items: ["Nơi: **on** the table · **on** the wall · **on** Tran Phu Street · **on** the left · **on** the second floor", "Ngày: **on** Monday · **on** 2 September · **on** my birthday · **on** Monday morning", "Xe công cộng: **on** the bus · **on** the train"],
+        },
+        {
+          title: "**IN** — không gian, khoảng dài",
+          anh: "world-map",
+          items: ["Nơi: **in** the room · **in** the park · **in** Hanoi · **in** Vietnam · **in** the north of…", "Thời gian: **in** May · **in** 2020 · **in** summer · **in** the 1990s · **in** the morning", "Xe riêng nhỏ: **in** a car · **in** a taxi"],
+        },
+      ],
+      caption: "at → on → in: hẹp → rộng. Ngoại lệ phải thuộc: **at night** (nhưng in the morning / afternoon / evening); **on** Monday **morning** (có tên ngày thì dùng on).",
+    },
+    {
+      t: "table",
+      caption: "Giới từ chỉ thời gian",
+      head: ["Giới từ", "Dùng với", "Ví dụ"],
+      rows: [
+        ["**at**", "giờ · noon / night / midnight · dịp lễ · the weekend (Anh-Anh) · the beginning / the end of…", "The class starts **at** 8 a.m. · **at** the end of the year"],
+        ["**on**", "thứ · ngày tháng · ngày cụ thể (my birthday, New Year's Day) · thứ + buổi", "**on** Friday · **on** 15 March · **on** Sunday evening"],
+        ["**in**", "buổi (the morning / afternoon / evening) · tháng · mùa · năm · thập kỷ · thế kỷ", "**in** July · **in** 2015 · **in** the 1990s · **in** the 21st century"],
+        ["(không giới từ)", "last · next · this · every · yesterday · today · tomorrow", "I met her **last** year. (~~in last year~~) · See you **next** Monday. (~~on next Monday~~)"],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Giới từ nơi chốn dùng nhiều khi tả bản đồ (Writing Task 1 · Listening Part 2)",
+      head: ["Cụm", "Nghĩa", "Ví dụ"],
+      rows: [
+        ["**in** the north / south / east / west **of**…", "ở phía bắc… (nằm **bên trong** khu vực đó)", "The school is **in the north of** the town."],
+        ["**to** the north / east… **of**…", "về phía bắc của… (nằm **bên ngoài** khu vực đó)", "The airport is **to the north of** the city."],
+        ["**in** the centre / middle **of**…", "ở trung tâm, ở giữa", "There is a fountain **in the centre of** the park."],
+        ["**on** the left / right · **on** the east side **of**…", "bên trái / phải · ở phía đông của…", "The car park is **on the east side of** the hospital."],
+        ["**on / at** the corner **of** A and B", "ở góc giao nhau của A và B", "The bank is **on the corner of** Main Street and Park Road."],
+        ["next to · opposite · between A and B · along · near", "cạnh · đối diện · giữa A và B · dọc theo · gần", "The café is **opposite** the bank. · Trees were planted **along** the river."],
+      ],
+    },
+    {
+      t: "table",
+      caption: "Giới từ thời gian khi tả biểu đồ (Writing Task 1)",
+      head: ["Cụm", "Ví dụ"],
+      rows: [
+        ["**in** + năm / tháng", "Sales peaked **in** 2015. · Visitor numbers were highest **in** July."],
+        ["**from** … **to** … · **between** … **and** …", "The figure doubled **from** 2010 **to** 2020. · It fell **between** 2015 **and** 2018."],
+        ["**at** the beginning / **at** the end **of** the period", "**At the end of the period**, the figure stood at 40%."],
+        ["**over** the period · **during** the 1990s", "**Over the period**, car use rose steadily."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Người Việt hay sai với in / on / at",
+      items: [
+        "~~in Monday~~ / ~~at Monday~~ → **on** Monday. ~~on 2020~~ / ~~at 2020~~ → **in** 2020. ~~on the morning~~ → **in** the morning (nhưng **on** Monday morning).",
+        "~~in the night~~ → **at night**. ~~in the weekend~~ → **at** the weekend (Anh-Anh) / **on** the weekend (Anh-Mỹ).",
+        "Thừa giới từ trước last / next / this / every: ~~in last year~~ → **last year** · ~~on every Sunday~~ → **every Sunday**.",
+        "~~in the end of 2020~~ → **at the end of** 2020. **In the end** (không có of) nghĩa khác: **cuối cùng thì** (sau nhiều chuyện).",
+        "~~arrive to Hanoi~~ → arrive **in** Hanoi (thành phố, nước) / arrive **at** the airport (một điểm). ~~in home~~ → **at home**.",
+        "Bản đồ: **in** the north of (bên trong) ≠ **to** the north of (bên ngoài). Dùng nhầm là đặt sai vị trí cả toà nhà.",
+      ],
+    },
+    {
+      t: "rule",
+      formula: "at + giờ / điểm · on + ngày / bề mặt / đường · in + tháng / năm / buổi / không gian · last / next / this / every + (không giới từ)",
+      vi: "Bản đồ: in the north of (trong) · to the north of (ngoài) · on the corner of. Biểu đồ: in 2010 · from… to… · at the end of the period.",
+    },
+    {
+      t: "quiz",
+      id: "d11-in-on-at-dich",
+      title: "Dịch nhanh — in / on / at (4 câu)",
+      kind: "translate",
+      grammar: "at + giờ · on + thứ / ngày (on Monday mornings) · in + tháng / năm · in the north of + nơi · on the corner of A and B · at the end of + khoảng thời gian.",
+      items: [
+        { q: "Sáng thứ Hai tôi thường dậy lúc sáu giờ.", hint: "I usually get up, at six, on Monday mornings", answers: ["I usually get up at six on Monday mornings.", "I usually get up at 6 on Monday mornings.", "I usually get up at six o'clock on Monday mornings.", "I usually get up at 6 a.m. on Monday mornings.", "On Monday mornings, I usually get up at six.", "On Monday mornings I usually get up at six.", "On Monday mornings, I usually get up at 6.", "On Monday mornings, I usually get up at six o'clock.", "I usually wake up at six on Monday mornings.", "I usually get up at six on Monday morning."] },
+        { q: "Bệnh viện nằm ở phía đông bắc thị trấn.", hint: "The hospital is, in the north-east of, the town", answers: ["The hospital is in the north-east of the town.", "The hospital is in the northeast of the town.", "The hospital is in the north east of the town.", "The hospital is located in the north-east of the town.", "The hospital is located in the northeast of the town.", "The hospital is in the north-eastern part of the town.", "The hospital is in the northeastern part of the town."] },
+        { q: "Ngân hàng ở góc đường Main Street và Park Road.", hint: "The bank is, on / at the corner of, Main Street and Park Road", answers: ["The bank is on the corner of Main Street and Park Road.", "The bank is at the corner of Main Street and Park Road.", "The bank is located on the corner of Main Street and Park Road.", "The bank is located at the corner of Main Street and Park Road."] },
+        { q: "Số du khách đạt đỉnh vào tháng Bảy và giảm vào cuối năm.", hint: "The number of visitors, peaked / reached a peak, in July, and fell, at the end of the year", answers: ["The number of visitors peaked in July and fell at the end of the year.", "The number of visitors reached a peak in July and fell at the end of the year.", "The number of visitors peaked in July and decreased at the end of the year.", "The number of visitors peaked in July and dropped at the end of the year.", "The number of visitors peaked in July and then fell at the end of the year.", "Visitor numbers peaked in July and fell at the end of the year.", "The number of tourists peaked in July and fell at the end of the year.", "The number of visitors reached a peak in July and decreased at the end of the year.", "The number of visitors peaked in July, and fell at the end of the year."] },
+      ],
+    },
+    {
+      t: "p",
+      text: "**Luyện tổng hợp với bản đồ.** Nhìn bản đồ thị trấn dưới đây (phía trên là hướng **Bắc**; đường ngang là **Main Street**, đường dọc là **Park Road**, phía nam là **sông**). Câu 1–6 tả bản đồ; câu 7–10 tả số liệu và thời gian như trong Writing Task 1.",
+    },
+    {
+      t: "figure",
+      fig: {
+        kind: "map",
+        title: "Bản đồ thị trấn Riverside (năm 2025)",
+        note: "Bản đồ tự vẽ cho bài luyện. Phía trên là hướng Bắc.",
+        map: {
+          cols: 12,
+          rows: 9,
+          paths: [
+            { x: 0.3, y: 4.2, w: 11.4, h: 0.9, label: "Main Street" },
+            { x: 5.6, y: 0.3, w: 0.9, h: 3.9 },
+          ],
+          boxes: [
+            { x: 0.4, y: 0.4, w: 3.2, h: 1.7, label: "School" },
+            { x: 8.4, y: 0.4, w: 3.2, h: 1.7, label: "Hospital" },
+            { x: 3.3, y: 2.6, w: 2.2, h: 1.5, label: "Library" },
+            { x: 6.6, y: 2.6, w: 2.2, h: 1.5, label: "Bank" },
+            { x: 6.6, y: 5.2, w: 2.2, h: 1.4, label: "Café" },
+            { x: 9.1, y: 5.2, w: 2.6, h: 2.3, label: "Supermarket" },
+            { x: 0.4, y: 5.2, w: 4.6, h: 2.3, label: "Park" },
+            { x: 0.3, y: 7.8, w: 11.4, h: 0.9, label: "River" },
+          ],
+          pins: [{ x: 6.05, y: 0.9, label: "Park Road" }],
+        },
+      },
+    },
+    {
+      t: "quiz",
+      id: "d11-ban-do-dien",
+      title: "Bản đồ & biểu đồ — điền there is / are / was hoặc in / on / at (10 câu)",
+      kind: "fill",
+      items: [
+        { q: "(1) ___ a school in the north-west of the town. (there + be)", answers: ["There is", "There's"] },
+        { q: "(2) There ___ two buildings next to Park Road: the library and the bank.", answers: ["are"] },
+        { q: "(3) The hospital is ___ the north-east of the town.", answers: ["in"] },
+        { q: "(4) The bank is ___ the corner of Main Street and Park Road.", answers: ["on", "at"] },
+        { q: "(5) The café is ___ Main Street, opposite the bank.", answers: ["on", "in"] },
+        { q: "(6) ___ there a car park near the supermarket? — No, there isn't.", answers: ["Is"] },
+        { q: "(7) Visitor numbers reached a peak ___ July.", answers: ["in"] },
+        { q: "(8) The figure fell slightly ___ the end of the period.", answers: ["at"] },
+        { q: "(9) In 2000, ___ only one hotel in the town; now there are three. (there + be)", answers: ["there was"] },
+        { q: "(10) The new bridge over the river opened ___ 15 March 2021.", answers: ["on"] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Giải thích đáp án bài bản đồ & biểu đồ",
+      items: [
+        "(1) **There is** — một trường (số ít). (2) **are** — hai toà nhà (số nhiều). (6) **Is** — câu hỏi số ít: Is there a…? Bản đồ không có bãi đỗ xe nên trả lời No, there isn't.",
+        "(3) **in** the north-east of — bệnh viện nằm **bên trong** thị trấn. (4) **on** / **at** the corner of — cả hai đều đúng. (5) **on** + tên đường (Anh-Anh cũng nói **in** Main Street — chấm đúng cả hai).",
+        "(7) **in** + tháng. (8) **at** the end of the period (không phải ~~in the end of~~). (10) **on** + ngày tháng cụ thể.",
+        "(9) **there was** — năm 2000 đã qua, một khách sạn (số ít) → quá khứ số ít.",
+      ],
+    },
+
+    { t: "h", text: "10. Ứng dụng: sửa một đoạn Task 2" },
     {
       t: "p",
       text: "Đoạn dưới đây có **5 lỗi collocation và trật tự từ** — loại lỗi khiến bài dừng ở band 5 dù ý không tệ. So sánh bản trước và sau khi sửa.",

@@ -28,7 +28,7 @@ export const VIDEO_BAI: Record<string, LessonVideo[]> = {
     {"id":"pSL2fwBNh58","credit":"Woodward English — Change the Subject + Verb – Present Simple Tense – English Grammar Exercises","dur":"10:26","lang":"en","note":"Bài tập đổi chủ ngữ rồi chia lại động từ ở hiện tại đơn (I like → he likes), giúp trực tiếp phần III; dừng video trả lời từng câu trước khi xem đáp án."},
   ],
   'd2-doc': [
-    {"id":"m9x9fZCBIMY","credit":"TakeIELTS Official — IELTS Academic Reading: Question types, strategies and tips  | TakeIELTS Preparation","dur":"11:24","lang":"en","note":"Video chính thức: bài Reading có 3 đoạn văn, 40 câu, 60 phút và các dạng câu hỏi; xem hết để nhận ra 8 dạng câu hỏi trong bài học."},
+    {"id":"m9x9fZCBIMY","credit":"TakeIELTS Official — IELTS Academic Reading: Question types, strategies and tips  | TakeIELTS Preparation","dur":"11:24","lang":"en","note":"Video chính thức: bài Reading có 3 đoạn văn, 40 câu, 60 phút và các dạng câu hỏi; xem hết để nhận ra các dạng câu hỏi trong bảng 14 dạng của bài học."},
     {"id":"pSkjHMs9GjY","credit":"IELTS Simon — IELTS Reading: keyword technique","dur":"4:10","lang":"en","note":"Thầy Simon chỉ cách gạch từ khoá trong câu hỏi rồi dò tìm chúng trong bài đọc; đây đúng là cách làm 2 bước của bài học."},
   ],
   'd2-viet': [

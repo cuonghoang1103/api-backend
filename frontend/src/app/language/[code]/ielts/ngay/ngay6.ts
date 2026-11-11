@@ -11,6 +11,12 @@
  * Rà soát 29/09/2026: câu hỏi đánh số 10–13 như sách, đáp án khớp phần Answer
  * Explanation của sách (firm · simplicity · full version · feedback); thêm recap
  * đầu mỗi bài, khung câu (rule) Opinion + Wh-, bài dịch d6-viet-dich, d6-noi-dich.
+ *
+ * Nâng cấp 12/11/2026 (lộ trình mục 5.1): sơ đồ `flow` 6 bước Flow-chart + 5 bước mở
+ * bài; sơ đồ câu 10–13 và câu 5–7 (kiểm tra chặng) vẽ bằng `flow` thay bảng có mũi tên;
+ * `canh` trước mỗi hội thoại; `hinh` nhị trùng âm + 4 cặp tối thiểu mới trong `phatam`;
+ * bài mẫu Task 2 nới lên ~260 từ (bản cũ 211 từ — dưới 250); Bài tập thêm Bài II 10 câu
+ * dịch khung mở bài (d6-dich-mo-bai) + Bài III 10 câu trắc nghiệm (d6-chon-mo-bai).
  */
 import type { Lesson } from '../data';
 
@@ -53,6 +59,20 @@ const D6_READING: Lesson = {
     {
       t: "p",
       text: "Sách đưa ra 6 bước. Bảng dưới đây giữ đúng 6 bước đó và thêm cột **giải thích** cho người mới.",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "6 bước làm Flow-chart Completion",
+      caption: "Giống 9 bước Sentence Completion của Ngày 4, nhưng có thêm một lợi thế: sơ đồ **đi theo thứ tự bài đọc** — tìm được ô đầu là các ô sau cứ đi tiếp xuống.",
+      steps: [
+        { label: "**Đọc kỹ đề bài**", sub: "Tiêu đề sơ đồ = chủ đề · khoanh giới hạn số từ · đoán loại từ cần điền" },
+        { label: "**Tìm đoạn văn**", sub: "Tiêu đề chỉ ra đoạn cần đọc; ô đầu tìm thấy rồi thì đi tiếp xuống" },
+        { label: "**Đọc kỹ từng ô**", sub: "Đọc ô trước và sau chỗ trống; để ý then, after, finally, Testing of…" },
+        { label: "**Tìm từ khoá & từ đồng nghĩa**", sub: "collected → **Collection**, a dozen → **twelve**" },
+        { label: "**Điền đúng dạng từ**", sub: "Chép nguyên chữ trong bài; đúng loại từ, đúng số từ" },
+        { label: "**Kiểm tra lại**", sub: "Đọc liền từ ô đầu tới ô cuối: các bước có nối nhau hợp lý không?" },
+      ],
     },
     {
       t: "table",
@@ -135,17 +155,15 @@ const D6_READING: Lesson = {
       text: "Complete the flow-chart below. Choose **NO MORE THAN TWO WORDS** from the passage for each answer. — *Hoàn thành sơ đồ dưới đây. Chọn **KHÔNG QUÁ HAI TỪ** trong bài đọc cho mỗi câu trả lời.*",
     },
     {
-      t: "table",
-      caption: "Using the Results of the Home Visits — Sử dụng kết quả của các lần đến thăm tại nhà",
-      head: ["", "Bước (đọc từ trên xuống)"],
-      rows: [
-        ["1", "Design needs presented to a specialist **(10) ______** — **Trình bày nhu cầu thiết kế cho một (10) ______ chuyên môn**"],
-        ["↓", ""],
-        ["2", "Testing of new mechanics in the company's own lab (assessing **(11) ______** and interest) — **Thử các cơ chế mới trong phòng thí nghiệm của công ty (đánh giá (11) ______ và mức độ hứng thú)**"],
-        ["↓", ""],
-        ["3", "A field test of the **(12) ______** involving twelve children — **Thử nghiệm thực địa (12) ______ với mười hai trẻ**"],
-        ["↓", ""],
-        ["4", "Collection of **(13) ______** from adults in the family — **Thu thập (13) ______ từ người lớn trong gia đình**"],
+      t: "sodo",
+      kind: "flow",
+      title: "Using the Results of the Home Visits",
+      caption: "Sử dụng kết quả của các lần đến thăm tại nhà — đọc từ bước 1 tới bước 4, mỗi chỗ trống điền **không quá hai từ** lấy trong bài.",
+      steps: [
+        { label: "Design needs presented to a specialist **(10) ______**", sub: "Trình bày nhu cầu thiết kế cho một (10) ______ chuyên môn" },
+        { label: "Testing of new mechanics in the company's own lab (assessing **(11) ______** and interest)", sub: "Thử các cơ chế mới trong phòng thí nghiệm của công ty (đánh giá (11) ______ và mức độ hứng thú)" },
+        { label: "A field test of the **(12) ______** involving twelve children", sub: "Thử nghiệm thực địa (12) ______ với mười hai trẻ" },
+        { label: "Collection of **(13) ______** from adults in the family", sub: "Thu thập (13) ______ từ người lớn trong gia đình" },
       ],
     },
     {
@@ -319,6 +337,19 @@ const D6_WRITING: Lesson = {
       text: "Sách đưa ra các bước theo mục tiêu band 4.0, ở hai trang liền nhau: một bảng 4 bước (Paraphrase → Thesis → Ghép → Rà soát) và một bảng 5 bước có thêm **bước đọc đề** ở đầu. Bảng dưới gộp cả hai thành **5 bước**; ví dụ đều viết mới.",
     },
     {
+      t: "sodo",
+      kind: "flow",
+      title: "5 bước viết mở bài Opinion (khoảng 5 phút trong phòng thi)",
+      caption: "Kết quả của bước 4 là **một đoạn 2 câu, 40–50 từ**: câu paraphrase đứng trước, câu thesis đứng sau.",
+      steps: [
+        { label: "**Đọc đề**", sub: "Gạch chân chủ đề · đối tượng · ý kiến của đề → chốt quan điểm" },
+        { label: "**Paraphrase**", sub: "Câu 1: viết lại đề — đổi từ, đổi dạng từ, đổi cấu trúc, **giữ nghĩa**" },
+        { label: "**Thesis**", sub: "Câu 2: agree / disagree + **1–2 lý do** (= 2 đoạn thân bài)" },
+        { label: "**Ghép**", sub: "Paraphrase + thesis thành một đoạn, không xuống dòng giữa hai câu" },
+        { label: "**Rà soát**", sub: "1 phút: nghĩa · quan điểm · lý do · ngữ pháp · dấu câu (bảng mục 5)" },
+      ],
+    },
+    {
       t: "table",
       head: ["Bước", "Làm gì", "Giải thích thêm"],
       rows: [
@@ -343,7 +374,7 @@ const D6_WRITING: Lesson = {
         ["2. Paraphrase", "Some people **argue** that **learning over the internet offers** university students **more advantages**, **whereas** others **feel** that it **does more harm than good**. — **Một số người lập luận rằng học qua internet mang lại cho sinh viên nhiều lợi thế hơn, trong khi những người khác cảm thấy nó gây hại nhiều hơn lợi.**"],
         ["3. Thesis", "I believe that online study is more beneficial **because** it **saves travel time** and **lets students learn at their own pace**. — **Tôi tin rằng học trực tuyến có lợi hơn vì nó tiết kiệm thời gian đi lại và cho phép sinh viên học theo tốc độ của riêng mình.**"],
         ["4. Ghép", "Some people argue that learning over the internet offers university students more advantages, whereas others feel that it does more harm than good. I believe that online study is more beneficial because it saves travel time and lets students learn at their own pace."],
-        ["5. Rà soát", "✓ **offers** (chủ ngữ số ít “learning”) · ✓ **lets students learn** (let + O + V nguyên mẫu) · ✓ không lặp “studying online” ba lần · ✓ 2 câu, 48 từ."],
+        ["5. Rà soát", "✓ **offers** (chủ ngữ số ít “learning”) · ✓ **lets students learn** (let + O + V nguyên mẫu) · ✓ không lặp “studying online” ba lần · ✓ 2 câu, 44 từ."],
       ],
     },
     {
@@ -480,7 +511,7 @@ const D6_WRITING: Lesson = {
     { t: "h", text: "6. Mở bài mẫu và dàn ý cả bài (phần thêm)" },
     {
       t: "p",
-      text: "Sách mới dạy mở bài. Để bạn thấy mở bài **dẫn đường** cho cả bài ra sao, đây là dàn ý và bài mẫu khoảng 270 từ cho đề ở **Ví dụ 1**. Để ý: **hai lý do trong thesis = hai đoạn thân bài**.",
+      text: "Sách mới dạy mở bài. Để bạn thấy mở bài **dẫn đường** cho cả bài ra sao, đây là dàn ý và bài mẫu khoảng **260 từ** (Task 2 cần ít nhất 250) cho đề ở **Ví dụ 1**. Để ý: **hai lý do trong thesis = hai đoạn thân bài**.",
     },
     {
       t: "table",
@@ -497,9 +528,9 @@ const D6_WRITING: Lesson = {
       t: "examples",
       items: [
         { en: "[Introduction] Some people argue that learning over the internet offers university students more advantages, whereas others feel that it does more harm than good. I believe that online study is more beneficial because it saves travel time and lets students learn at their own pace.", vi: "[Mở bài] Một số người lập luận rằng học qua internet mang lại cho sinh viên nhiều lợi thế hơn, trong khi những người khác cảm thấy nó hại nhiều hơn lợi. Tôi tin rằng học trực tuyến có lợi hơn vì nó tiết kiệm thời gian đi lại và cho phép sinh viên học theo tốc độ của riêng mình." },
-        { en: "[Body 1] Firstly, studying online saves students a great deal of time. In big cities such as Hanoi, a trip to campus can take more than an hour because of traffic jams. When lectures are online, students can use this time to review their notes, do a part-time job or simply rest. As a result, they often feel less tired and can concentrate better in class.", vi: "[Thân bài 1] Thứ nhất, học trực tuyến giúp sinh viên tiết kiệm rất nhiều thời gian. Ở các thành phố lớn như Hà Nội, một chuyến đến trường có thể mất hơn một giờ vì tắc đường. Khi bài giảng diễn ra trực tuyến, sinh viên có thể dùng thời gian này để ôn bài, làm thêm hoặc đơn giản là nghỉ ngơi. Nhờ vậy, họ thường bớt mệt và tập trung tốt hơn trong giờ học." },
-        { en: "[Body 2] Secondly, online courses allow learners to study at their own speed. A recorded lecture can be paused, replayed or watched again before an exam, which is especially helpful for students who find a subject difficult. For example, a first-year student who struggles with mathematics can watch the same explanation three times until it makes sense, something that is impossible in a crowded lecture hall.", vi: "[Thân bài 2] Thứ hai, các khoá học trực tuyến cho phép người học học theo tốc độ riêng. Một bài giảng ghi hình có thể tạm dừng, tua lại hoặc xem lại trước kỳ thi, điều này đặc biệt có ích với sinh viên thấy môn học khó. Ví dụ, một sinh viên năm nhất gặp khó với môn toán có thể xem lại cùng một phần giảng ba lần cho đến khi hiểu, điều không thể làm trong một giảng đường đông đúc." },
-        { en: "[Conclusion] In conclusion, although studying online can feel lonely at times, I believe its advantages clearly outweigh its drawbacks. It saves students valuable time and gives them control over how fast they learn, so universities should continue to offer it.", vi: "[Kết bài] Tóm lại, dù học trực tuyến đôi khi khiến người học thấy cô đơn, tôi tin rằng lợi ích của nó rõ ràng lớn hơn bất lợi. Nó giúp sinh viên tiết kiệm thời gian quý báu và cho họ quyền kiểm soát tốc độ học, vì vậy các trường đại học nên tiếp tục cung cấp hình thức này." },
+        { en: "[Body 1] Firstly, studying online saves students a great deal of time. In big cities such as Hanoi, a trip to campus can take more than an hour because of traffic jams. My cousin, for instance, used to spend almost two hours a day on crowded buses before her university moved half of its lectures online. When lectures are online, students can use this time to review their notes, do a part-time job or simply rest. As a result, they often feel less tired and can concentrate better in class.", vi: "[Thân bài 1] Thứ nhất, học trực tuyến giúp sinh viên tiết kiệm rất nhiều thời gian. Ở các thành phố lớn như Hà Nội, một chuyến đến trường có thể mất hơn một giờ vì tắc đường. Chẳng hạn, chị họ tôi từng mất gần hai tiếng mỗi ngày trên những chuyến xe buýt chật chội trước khi trường chị chuyển một nửa số bài giảng lên mạng. Khi bài giảng diễn ra trực tuyến, sinh viên có thể dùng thời gian này để ôn bài, làm thêm hoặc đơn giản là nghỉ ngơi. Nhờ vậy, họ thường bớt mệt và tập trung tốt hơn trong giờ học." },
+        { en: "[Body 2] Secondly, online courses allow learners to study at their own speed. A recorded lecture can be paused, replayed or watched again before an exam, which is especially helpful for students who find a subject difficult. For example, a first-year student who struggles with mathematics can watch the same explanation three times until it makes sense, something that is impossible in a crowded lecture hall. In addition, most online materials remain available for the whole semester, so learners can return to them whenever they need to.", vi: "[Thân bài 2] Thứ hai, các khoá học trực tuyến cho phép người học học theo tốc độ riêng. Một bài giảng ghi hình có thể tạm dừng, tua lại hoặc xem lại trước kỳ thi, điều này đặc biệt có ích với sinh viên thấy môn học khó. Ví dụ, một sinh viên năm nhất gặp khó với môn toán có thể xem lại cùng một phần giảng ba lần cho đến khi hiểu, điều không thể làm trong một giảng đường đông đúc. Thêm vào đó, phần lớn tài liệu trực tuyến được giữ suốt cả học kỳ, nên người học có thể quay lại xem bất cứ khi nào cần." },
+        { en: "[Conclusion] In conclusion, although studying online can feel lonely at times, I believe its advantages clearly outweigh its drawbacks. It saves students valuable time and gives them control over how fast they learn, so universities should continue to offer it, perhaps alongside some face-to-face classes.", vi: "[Kết bài] Tóm lại, dù học trực tuyến đôi khi khiến người học thấy cô đơn, tôi tin rằng lợi ích của nó rõ ràng lớn hơn bất lợi. Nó giúp sinh viên tiết kiệm thời gian quý báu và cho họ quyền kiểm soát tốc độ học, vì vậy các trường đại học nên tiếp tục cung cấp hình thức này, có thể kết hợp với một số buổi học trực tiếp." },
       ],
     },
     {
@@ -709,6 +740,11 @@ const D6_SPEAKING: Lesson = {
       ],
     },
     {
+      t: "canh",
+      anh: ["alarm-clock", "potted-plant", "person-biking"],
+      caption: "Phòng thi Speaking Part 1, chủ đề **Daily Routine**. Giám khảo hỏi lần lượt 6 câu Wh-; thí sinh trả lời mỗi câu đúng **3 câu**: trả lời thẳng → chi tiết (I usually…) → lợi ích / cảm xúc.",
+    },
+    {
       t: "dialogue",
       title: "Daily Routine — câu trả lời mẫu band 4.0",
       lines: [
@@ -741,6 +777,11 @@ const D6_SPEAKING: Lesson = {
       ],
     },
     {
+      t: "canh",
+      anh: ["old-woman", "cooking", "house"],
+      caption: "Chủ đề chuyển sang **Family**. Thí sinh kể về người bà mình hay ở cùng và quê nhà ở Cần Thơ — vẫn khung 3 câu, thì hiện tại đơn.",
+    },
+    {
       t: "dialogue",
       title: "Family — câu trả lời mẫu band 4.0",
       lines: [
@@ -765,6 +806,11 @@ const D6_SPEAKING: Lesson = {
     {
       t: "p",
       text: "Công thức 3 câu giúp bạn **không bị cứng họng**, nhưng nếu câu nào cũng “This helps me…” thì giám khảo sẽ thấy bạn **nói theo khuôn**. Muốn lên band 6, giữ đúng khung nhưng: **đổi cách mở đầu**, thêm **chi tiết cụ thể** (con số, tên riêng), dùng **từ nối** và vài **cụm từ tự nhiên**.",
+    },
+    {
+      t: "canh",
+      anh: ["sunrise", "steaming-bowl", "old-woman"],
+      caption: "Cùng hai câu hỏi (buổi sáng, người hay ở cùng), lần này là thí sinh band 6: mở đầu tự nhiên (**Well,… / That would be…**), chi tiết cụ thể, cụm từ tự nhiên.",
     },
     {
       t: "dialogue",
@@ -826,6 +872,22 @@ const D6_SPEAKING: Lesson = {
       ],
     },
     {
+      t: "hinh",
+      title: "Nhị trùng âm có hình (phần thêm) — chạm thẻ để nghe, để ý miệng TRƯỢT",
+      items: [
+        { anh: "train", w: "train", ro: "/treɪn/", vi: "/eɪ/ · tàu hoả" },
+        { anh: "birthday-cake", w: "cake", ro: "/keɪk/", vi: "/eɪ/ · bánh ngọt" },
+        { anh: "kite", w: "kite", ro: "/kaɪt/", vi: "/aɪ/ · con diều" },
+        { anh: "boy", w: "boy", ro: "/bɔɪ/", vi: "/ɔɪ/ · cậu bé" },
+        { anh: "coin", w: "coin", ro: "/kɔɪn/", vi: "/ɔɪ/ · đồng xu" },
+        { anh: "house", w: "house", ro: "/haʊs/", vi: "/aʊ/ · ngôi nhà" },
+        { anh: "mobile-phone", w: "phone", ro: "/fəʊn/", vi: "/əʊ/ · điện thoại" },
+        { anh: "ear", w: "ear", ro: "/ɪə(r)/", vi: "/ɪə/ · cái tai" },
+        { anh: "chair", w: "chair", ro: "/tʃeə(r)/", vi: "/eə/ · cái ghế" },
+        { anh: "bear", w: "bear", ro: "/beə(r)/", vi: "/eə/ · con gấu" },
+      ],
+    },
+    {
       t: "note",
       title: "Những lỗi người Việt hay mắc với nhị trùng âm (phần thêm)",
       items: [
@@ -842,6 +904,8 @@ const D6_SPEAKING: Lesson = {
         { en: "coat — cot", vi: "/əʊ/ · /ɒ/" },
         { en: "time — tie", vi: "/aɪm/ · /aɪ/ — giữ âm /m/ cuối" },
         { en: "here — hair", vi: "/ɪə/ · /eə/" },
+        { en: "now — no", vi: "/aʊ/ · /əʊ/" },
+        { en: "buy — boy", vi: "/aɪ/ · /ɔɪ/" },
       ],
     },
 
@@ -861,6 +925,11 @@ const D6_SPEAKING: Lesson = {
         { text: "tour, pure, cure", ipa: "tʊə pjʊə kjʊə", vi: "/ʊə/" },
         { text: "late, let", ipa: "leɪt let", vi: "/eɪ/ · /e/" },
         { text: "coat, cot", ipa: "kəʊt kɒt", vi: "/əʊ/ · /ɒ/" },
+        { text: "now, no", ipa: "naʊ nəʊ", vi: "cặp tối thiểu /aʊ/ · /əʊ/" },
+        { text: "buy, boy", ipa: "baɪ bɔɪ", vi: "cặp tối thiểu /aɪ/ · /ɔɪ/" },
+        { text: "here, hair", ipa: "hɪə heə", vi: "cặp tối thiểu /ɪə/ · /eə/" },
+        { text: "pain, pen", ipa: "peɪn pen", vi: "cặp tối thiểu /eɪ/ · /e/" },
+        { text: "I'm sure the chair is here.", ipa: "aɪm ʃʊə ðə tʃeə ɪz hɪə", vi: "/ʊə/ /eə/ /ɪə/ trong một câu" },
         { text: "I go home by train every day.", ipa: "aɪ ɡəʊ həʊm baɪ treɪn evri deɪ", vi: "/aɪ/ /əʊ/ /eɪ/ trong một câu" },
         { text: "I know how to make a cake.", ipa: "aɪ nəʊ haʊ tə meɪk ə keɪk", vi: "/aɪ/ /əʊ/ /aʊ/ /eɪ/" },
       ],
@@ -893,8 +962,8 @@ const D6_HOMEWORK: Lesson = {
   id: "d6-bai-tap",
   kind: "homework",
   title: "Bài tập Ngày 6",
-  goal: "Hoàn thành mở bài cho 3 đề Opinion (điền 6 chỗ trống theo các bước paraphrase → thesis → ghép), rồi tự ghép câu thesis statement đúng thứ tự.",
-  minutes: 30,
+  goal: "Hoàn thành mở bài cho 3 đề Opinion (điền 6 chỗ trống theo các bước paraphrase → thesis → ghép), tự ghép câu thesis, dịch 10 khung câu mở bài và làm 10 câu trắc nghiệm về mở bài.",
+  minutes: 45,
   blocks: [
     {
       t: "recap",
@@ -904,6 +973,7 @@ const D6_HOMEWORK: Lesson = {
         "Đoán **loại từ** trước khi điền: sau **to** → động từ nguyên mẫu; sau **is** → tính từ; sau **an essential / improve** → danh từ.",
         "Điền xong, đọc **mở bài hoàn chỉnh** (bước 3 — Ghép) để thấy paraphrase + thesis nối với nhau thế nào.",
         "Bài thêm: **ghép câu thesis** — tránh mảnh sai ~~am agree~~, ~~because of + mệnh đề~~.",
+        "Phần thêm: **Bài II — 10 câu dịch** khung mở bài (4 paraphrase + 6 thesis) và **Bài III — 10 câu trắc nghiệm** về mở bài Opinion.",
       ],
     },
     {
@@ -1035,6 +1105,62 @@ const D6_HOMEWORK: Lesson = {
           chips: ["I partly agree ", "because ", "while reading ", "is useful, ", "watching films ", "can also teach ", "can also teaches ", "new words."],
           answer: ["I partly agree ", "because ", "while reading ", "is useful, ", "watching films ", "can also teach ", "new words."],
         },
+      ],
+    },
+
+    { t: "h", text: "Bài II: dịch khung câu mở bài (10 câu, phần thêm)" },
+    {
+      t: "p",
+      text: "Dịch sang tiếng Anh, dùng đúng **khung câu** của bài Viết hôm nay. Câu 1–4 là câu **paraphrase**, câu 5–10 là câu **thesis**. Bấm 💡 để xem từ gợi ý. Nhớ: sau **that** và sau **because** là một **mệnh đề** (S + V); chủ ngữ số ít → động từ thêm **-s**.",
+    },
+    {
+      t: "quiz",
+      id: "d6-dich-mo-bai",
+      title: "II. Dịch khung câu mở bài Opinion (10 câu)",
+      kind: "translate",
+      grammar: "Paraphrase: Some people / Many people + believe / claim / argue + that + S + V · It is often argued that + S + V · …, while / whereas others + think / feel + that + S + V. Thesis: I (completely / partly) agree / disagree (with this view) + because + S + V · I believe that + S + V + because + S + V · In my view, + S + V. make it harder for sb to V · help sb + V.",
+      items: [
+        { q: "Một số người tin rằng học sinh nên mặc đồng phục ở trường.", hint: "Some people believe that, students, should wear, uniforms, at school", answers: ["Some people believe that students should wear uniforms at school.", "Some people believe that students should wear school uniforms.", "Some people believe students should wear uniforms at school.", "Some people believe that students should wear a uniform at school.", "Some people believe that pupils should wear uniforms at school.", "Some people believe that students should wear school uniforms at school."] },
+        { q: "Nhiều người cho rằng điện thoại thông minh khiến người trẻ khó tập trung hơn.", hint: "Many people claim that, smartphones, make it harder for young people to + V (concentrate / focus)", answers: ["Many people claim that smartphones make it harder for young people to concentrate.", "Many people claim that smartphones make it harder for young people to focus.", "Many people claim that smartphones make it more difficult for young people to concentrate.", "Many people claim that smartphones make it more difficult for young people to focus.", "Many people think that smartphones make it harder for young people to concentrate.", "Many people believe that smartphones make it harder for young people to concentrate.", "Many people claim that mobile phones make it harder for young people to concentrate.", "Many people claim smartphones make it harder for young people to concentrate."] },
+        { q: "Người ta thường cho rằng du lịch là cách tốt nhất để học về các nền văn hoá khác.", hint: "It is often argued that, travelling, is the best way to + V, learn about other cultures", answers: ["It is often argued that travelling is the best way to learn about other cultures.", "It is often argued that traveling is the best way to learn about other cultures.", "It is often argued that travel is the best way to learn about other cultures.", "It is often claimed that travelling is the best way to learn about other cultures.", "It is often said that travelling is the best way to learn about other cultures.", "It is often argued that travelling is the best way of learning about other cultures."] },
+        { q: "Một số người lập luận rằng chính phủ nên xây thêm công viên, trong khi những người khác cho rằng trung tâm mua sắm quan trọng hơn.", hint: "Some people argue that, the government, should build more parks, while others think that, shopping centres, are more important", answers: ["Some people argue that the government should build more parks, while others think that shopping centres are more important.", "Some people argue that the government should build more parks, whereas others think that shopping centres are more important.", "Some people argue that the government should build more parks, while others feel that shopping centres are more important.", "Some people argue that the government should build more parks, whereas others feel that shopping centres are more important.", "Some people argue that governments should build more parks, while others think that shopping centres are more important.", "Some people argue that the government should build more parks, while others think that shopping centers are more important.", "Some people argue that the government should build more parks, while others think shopping centres are more important.", "Some people argue that the government should build more parks while others think that shopping centres are more important.", "Some people argue that the government should build more parks, while others think that shopping malls are more important."] },
+        { q: "Tôi hoàn toàn đồng ý vì đồng phục giúp học sinh tiết kiệm thời gian.", hint: "I completely agree, because, uniforms help students + V nguyên mẫu (save time)", answers: ["I completely agree because uniforms help students save time.", "I completely agree because uniforms help students to save time.", "I completely agree because school uniforms help students save time.", "I completely agree because school uniforms help students to save time.", "I totally agree because uniforms help students save time.", "I strongly agree because uniforms help students save time."] },
+        { q: "Tôi hoàn toàn không đồng ý với quan điểm này vì trẻ em cần thời gian để chơi.", hint: "I completely disagree with this view, because, children need time to play", answers: ["I completely disagree with this view because children need time to play.", "I completely disagree with this opinion because children need time to play.", "I strongly disagree with this view because children need time to play.", "I totally disagree with this view because children need time to play.", "I completely disagree with this view because children need time for playing.", "I completely disagree with this view because children need some time to play."] },
+        { q: "Tôi đồng ý một phần vì dù học trực tuyến tiện lợi, nó có thể khiến sinh viên cô đơn.", hint: "I partly agree, because while, online learning is convenient, it can make students (feel) lonely", answers: ["I partly agree because while online learning is convenient, it can make students lonely.", "I partly agree because while online learning is convenient, it can make students feel lonely.", "I partly agree because although online learning is convenient, it can make students lonely.", "I partly agree because although online learning is convenient, it can make students feel lonely.", "I partially agree because while online learning is convenient, it can make students lonely.", "I partially agree because while online learning is convenient, it can make students feel lonely.", "I partly agree because while online study is convenient, it can make students feel lonely.", "I partly agree because while studying online is convenient, it can make students feel lonely."] },
+        { q: "Tôi tin rằng việc làm thêm có lợi cho sinh viên vì nó cho họ kinh nghiệm làm việc.", hint: "I believe that, a part-time job (số ít → is), is beneficial for students, because, it gives them work experience", answers: ["I believe that a part-time job is beneficial for students because it gives them work experience.", "I believe a part-time job is beneficial for students because it gives them work experience.", "I believe that part-time jobs are beneficial for students because they give them work experience.", "I believe part-time jobs are beneficial for students because they give them work experience.", "I believe that working part-time is beneficial for students because it gives them work experience.", "I believe that a part-time job is beneficial to students because it gives them work experience.", "I believe that having a part-time job is beneficial for students because it gives them work experience.", "I believe that a part-time job is good for students because it gives them work experience."] },
+        { q: "Theo quan điểm của tôi, các thành phố nên đầu tư nhiều hơn vào giao thông công cộng.", hint: "In my view, cities, should invest more in, public transport", answers: ["In my view, cities should invest more in public transport.", "In my opinion, cities should invest more in public transport.", "In my view, cities should invest more in public transportation.", "In my opinion, cities should invest more in public transportation.", "In my view cities should invest more in public transport.", "In my opinion cities should invest more in public transport.", "In my view, cities should invest more money in public transport.", "In my opinion, cities should invest more money in public transport."] },
+        { q: "Tôi đồng ý vì đọc sách giúp người trẻ mở rộng vốn từ và cải thiện kỹ năng viết.", hint: "I agree, because, reading helps young people + V (expand their vocabulary) + and + V (improve their writing skills)", answers: ["I agree because reading helps young people expand their vocabulary and improve their writing skills.", "I agree because reading helps young people to expand their vocabulary and improve their writing skills.", "I agree because reading helps young people expand their vocabulary and improve their writing.", "I agree because reading books helps young people expand their vocabulary and improve their writing skills.", "I agree because reading helps young people widen their vocabulary and improve their writing skills.", "I agree because reading helps young people broaden their vocabulary and improve their writing skills.", "I agree because reading helps young people expand their vocabulary and improve their writing skill."] },
+      ],
+    },
+    {
+      t: "note",
+      title: "Soát lỗi Bài II",
+      items: [
+        "(2) **make it harder for + người + to V**: có **it** giả và **for** — ~~make young people harder to concentrate~~ là sai cấu trúc.",
+        "(3) **It is often argued that…** là câu bị động trang trọng, rất hợp câu paraphrase đề một ý kiến. **travelling** (Anh) = **traveling** (Mỹ) — chọn một kiểu, giữ cả bài.",
+        "(4) Có dấu phẩy trước **while / whereas** khi nối hai quan điểm trái nhau.",
+        "(5)(10) **help + người + V nguyên mẫu** (help students **save**), có hay không có to đều đúng — nhưng ~~help students saving~~ là sai.",
+        "(8) Chủ ngữ **a part-time job** số ít → **is … it gives**; chủ ngữ **part-time jobs** số nhiều → **are … they give**. Đừng trộn ~~part-time jobs is~~.",
+        "(9) **In my view, / In my opinion,** đứng đầu câu rồi nói thẳng ý — không thêm ~~I think~~ phía sau (lặp ý).",
+      ],
+    },
+
+    { t: "h", text: "Bài III: trắc nghiệm mở bài Opinion (10 câu, phần thêm)" },
+    {
+      t: "mcq",
+      id: "d6-chon-mo-bai",
+      title: "III. Chọn đáp án đúng — mở bài Opinion (10 câu)",
+      items: [
+        { q: "Đề kết thúc bằng câu **“Do you agree or disagree?”** là dạng bài nào?", options: ["Discussion essay (đề “Discuss both views…”)", "Opinion essay (nêu quan điểm của bạn)", "Problem – solution essay (vấn đề – giải pháp)"], correct: 1, why: "**Do you agree or disagree? / To what extent…?** là dấu hiệu của **Opinion essay** (Agree/Disagree): bạn phải nêu rõ **mình** đồng ý hay không." },
+        { q: "Một mở bài Opinion cho người mới nên gồm những gì?", options: ["1 câu: chỉ cần thesis", "3–4 câu: câu dẫn dắt chung chung + paraphrase + thesis + liệt kê dàn ý", "2 câu: paraphrase + thesis (khoảng 40–50 từ)"], correct: 2, why: "Mở bài chỉ cần **2 câu**: paraphrase để cho thấy hiểu đề, thesis để nêu quan điểm + lý do. Câu dẫn dắt chung chung kiểu “Nowadays, … is a hot topic” không được điểm." },
+        { q: "Đề: “Many people believe that university education should be **free**.” Câu paraphrase nào **ĐỔI SAI NGHĨA**?", options: ["Many people think that students should pay nothing to study at university.", "Many people believe that university should be cheaper.", "It is often argued that higher education ought to be free of charge."], correct: 1, why: "**cheaper** (rẻ hơn) **≠ free** (miễn phí) — câu 2 làm yếu ý của đề. Câu 1 và câu 3 đổi từ (pay nothing, free of charge, higher education) nhưng giữ đúng nghĩa." },
+        { q: "Câu nào **đúng ngữ pháp**?", options: ["I am agree with this opinion.", "I agreeing with this opinion.", "I agree with this opinion."], correct: 2, why: "**agree** là động từ → **I agree**. ~~I am agree~~ là lỗi kinh điển của người Việt (dịch từ “tôi **thì** đồng ý”)." },
+        { q: "Cách mở câu nêu ý kiến nào **đúng**?", options: ["In my opinion, I think online learning is useful.", "According to me, online learning is useful.", "In my view, online learning is useful."], correct: 2, why: "**In my view, …** đúng và gọn. Câu 1 lặp ý (In my opinion + I think); câu 2 sai cách dùng — **according to** chỉ dùng cho người / nguồn khác (according to experts)." },
+        { q: "“I agree because ___.” Sau **because** cần gì?", options: ["Một mệnh đề có S + V: it saves time", "Chỉ một cụm danh từ: the saving of time", "because of + S + V: because of it saves time"], correct: 0, why: "**because + S + V** (mệnh đề). **because of** thì đi với **danh từ** (because of traffic) — không bao giờ theo sau là S + V." },
+        { q: "“Smartphones ___ affect teenagers' ability to concentrate.” Điền dạng từ nào?", options: ["negative", "negatively", "negativity"], correct: 1, why: "Đứng trước động từ **affect** để bổ nghĩa cho nó → **trạng từ** negatively. Đây là cách **đổi dạng từ** khi paraphrase: have a negative effect on → negatively affect." },
+        { q: "“Some people argue that cities need more parks, ___ others feel that shopping centres are more useful.”", options: ["whereas", "because", "so"], correct: 0, why: "Hai quan điểm **trái ngược** → **whereas / while** (trong khi). because chỉ lý do, so chỉ kết quả — đều sai nghĩa." },
+        { q: "Đề hỏi **“To what extent do you agree or disagree?”**. Người mới nên làm gì?", options: ["Không nêu quan điểm để an toàn", "Kể ý kiến của cả hai phía mà không chọn bên nào", "Chọn một quan điểm rõ ràng (hoặc đồng ý một phần, có lý do cho cả hai mặt)"], correct: 2, why: "Đề Opinion **bắt buộc** có quan điểm. Không nêu quan điểm thì tiêu chí Task Response khó vượt band 5. Người mới nên chọn **một phía rõ ràng**." },
+        { q: "Thesis: “I agree because uniforms **save time** and **reduce pressure to wear expensive clothes**.” Thân bài nên chia thế nào?", options: ["Hai đoạn: Body 1 = tiết kiệm thời gian · Body 2 = giảm áp lực quần áo đắt tiền", "Một đoạn dài kể mọi lý do", "Ba đoạn, đoạn ba nói ý kiến ngược lại cho cân bằng"], correct: 0, why: "**Hai lý do trong thesis = hai đoạn thân bài**, theo đúng thứ tự. Thêm một đoạn ý kiến ngược lại là dạng Discussion, không phải điều mở bài này hứa." },
       ],
     },
   ],
@@ -1373,15 +1499,14 @@ export const KIEM_TRA_1: Lesson = {
       text: '**Questions 5–7.** Complete the flow-chart below. Choose **ONE WORD ONLY** from the passage for each answer. — *Hoàn thành sơ đồ. Chọn **MỘT TỪ DUY NHẤT** trong bài đọc cho mỗi câu trả lời.*',
     },
     {
-      t: 'table',
-      caption: 'A visit to the repair café — Một lần đến quán sửa đồ',
-      head: ['', 'Bước (đọc từ trên xuống)'],
-      rows: [
-        ['1', 'The visitor writes down his or her name and the problem on a **(5) ______** — **Khách ghi tên và vấn đề của món đồ vào một (5) ______**'],
-        ['↓', ''],
-        ['2', 'A volunteer checks the item and decides if it can be **(6) ______** — **Tình nguyện viên xem món đồ và quyết định nó có thể được (6) ______ hay không**'],
-        ['↓', ''],
-        ['3', 'The owner watches the work, then has tea and gives a small **(7) ______** — **Chủ đồ xem sửa, rồi uống trà và để lại một khoản (7) ______ nhỏ**'],
+      t: 'sodo',
+      kind: 'flow',
+      title: 'A visit to the repair café',
+      caption: 'Một lần đến quán sửa đồ — đọc từ bước 1 tới bước 3, mỗi chỗ trống điền **một từ** lấy trong bài.',
+      steps: [
+        { label: 'The visitor writes down his or her name and the problem on a **(5) ______**', sub: 'Khách ghi tên và vấn đề của món đồ vào một (5) ______' },
+        { label: 'A volunteer checks the item and decides if it can be **(6) ______**', sub: 'Tình nguyện viên xem món đồ và quyết định nó có thể được (6) ______ hay không' },
+        { label: 'The owner watches the work, then has tea and gives a small **(7) ______**', sub: 'Chủ đồ xem sửa, rồi uống trà và để lại một khoản (7) ______ nhỏ' },
       ],
     },
     {

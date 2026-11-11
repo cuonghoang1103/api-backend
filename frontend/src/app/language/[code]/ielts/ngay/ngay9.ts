@@ -8,6 +8,11 @@
  * cách đọc đuôi -ed (/t/ /d/ /ɪd/). Bài nghe nối chủ đề tình nguyện: buổi giới
  * thiệu cho tình nguyện viên mới ở một nông trại cộng đồng (câu 11–20) + một
  * thông báo dọn bãi biển (6 câu).
+ *
+ * Bổ sung 12/11/2026 (lộ trình 0→8, mục 5.1 #4): mục 10 "Tương lai nhập môn: will
+ * và be going to" mức A2 — cách dùng, ba dạng câu, lỗi người Việt, áp vào Speaking
+ * Part 1, bài dịch 5 câu + trắc nghiệm 8 câu. Mục "Ứng dụng" / "Lỗi" đổi số thành
+ * 11 / 12 (mục 1–9 giữ nguyên số vì Ngày 12 dẫn chiếu tới).
  */
 import type { Lesson } from '../data';
 
@@ -17,8 +22,8 @@ const D9_GRAMMAR: Lesson = {
   id: 'd9-ngu-phap',
   kind: 'grammar',
   title: 'Hiện tại tiếp diễn & Quá khứ đơn (Present Continuous & Past Simple)',
-  goal: 'Chia đúng và chọn đúng giữa hiện tại đơn, hiện tại tiếp diễn và quá khứ đơn (kể cả động từ bất quy tắc, đuôi -ed đọc đúng), rồi dùng chúng khi kể chuyện ở Speaking và tả xu hướng / số liệu quá khứ ở Writing.',
-  minutes: 70,
+  goal: 'Chia đúng và chọn đúng giữa hiện tại đơn, hiện tại tiếp diễn và quá khứ đơn (kể cả động từ bất quy tắc, đuôi -ed đọc đúng), nói được về tương lai ở mức cơ bản bằng will / be going to, rồi dùng chúng khi kể chuyện và trả lời câu hỏi kế hoạch ở Speaking, tả xu hướng / số liệu ở Writing.',
+  minutes: 85,
   blocks: [
     {
       t: 'recap',
@@ -26,9 +31,9 @@ const D9_GRAMMAR: Lesson = {
       items: [
         '**Hiện tại tiếp diễn** = **am / is / are + V-ing**: việc ==đang xảy ra lúc nói==, việc **tạm thời** quanh giai đoạn này, và **xu hướng đang thay đổi** (More people **are working** from home).',
         '**Động từ trạng thái** (know, like, want, need, believe…) **không** chia tiếp diễn: ~~I am knowing~~ → **I know**.',
-        '**Quá khứ đơn** = **V2 / V-ed** (khẳng định) · **did not + V nguyên mẫu** (phủ định) · **Did + S + V?** (câu hỏi): việc ==đã xong ở một thời điểm xác định trong quá khứ==.',
-        '**was / were** là quá khứ của be. Học thuộc **bảng động từ bất quy tắc** theo nhóm (go → went, buy → bought, send → sent…).',
+        '**Quá khứ đơn** = **V2 / V-ed** · **did not + V** · **Did + S + V?**: việc ==đã xong ở một thời điểm xác định trong quá khứ==. **was / were** là quá khứ của be; động từ **bất quy tắc** học theo nhóm (go → went, buy → bought…).',
         'Đuôi **-ed** có **3 cách đọc**: /ɪd/ (wanted), /t/ (helped), /d/ (played) — đọc sai là giám khảo nghe nhầm thì.',
+        '**Tương lai nhập môn** (mục 10): ==will + V== = quyết định ngay lúc nói, dự đoán theo ý kiến, hứa · ==am / is / are + going to + V== = kế hoạch đã định, dự đoán có bằng chứng — trả lời được "What are you going to do this weekend?".',
         'Mỗi mục có **sơ đồ trục thời gian**, **Công thức 1 dòng** và **bài dịch 💡** — làm hết là dùng được ngay trong Speaking Part 1–2 và Writing Task 1–2.',
       ],
     },
@@ -715,7 +720,196 @@ const D9_GRAMMAR: Lesson = {
       ],
     },
 
-    { t: 'h', text: '10. Ứng dụng trong IELTS' },
+    { t: 'h', text: '10. Tương lai nhập môn: will và be going to' },
+    {
+      t: 'p',
+      text: '**Phần thêm (mức A2).** Các mục trên nói về **bây giờ** và **quá khứ**. Nhưng giám khảo Part 1 rất hay hỏi về **tương lai**: "What are you **going to** do this weekend?", "Do you think you **will** live abroad one day?". Tiếng Việt chỉ cần thêm "sẽ", "định", "sắp" trước động từ. Tiếng Anh ở mức cơ bản có **hai cách** hay dùng nhất: **will + V** và **be going to + V**. Hai cách này **không thay nhau được hoàn toàn**. Muốn chọn đúng, hỏi hai câu: ==quyết định từ lúc nào?== và ==dự đoán dựa vào đâu?==',
+    },
+    {
+      t: 'patterns',
+      rows: [
+        {
+          formula: 'S + will + V',
+          vi: 'Khẳng định. **will** là **động từ khuyết thiếu** (modal verb — học kỹ ở Ngày 13): **giống nhau cho mọi ngôi**, sau nó là **V nguyên mẫu không to**. Viết tắt: I\'ll · you\'ll · she\'ll · we\'ll · they\'ll.',
+          examples: [
+            { en: "It's cold in here. I'll close the window.", vi: 'Trong này lạnh quá. Để tôi đóng cửa sổ (vừa quyết định).' },
+            { en: 'I think the new park will be very popular.', vi: 'Tôi nghĩ công viên mới sẽ rất đông người đến (ý kiến).' },
+          ],
+        },
+        {
+          formula: 'S + will not (won\'t) + V',
+          vi: 'Phủ định. **won\'t** = will not, đọc /wəʊnt/ — khác **want** /wɒnt/ (muốn).',
+          examples: [
+            { en: "Don't worry, I won't be late.", vi: 'Đừng lo, tôi sẽ không đến muộn đâu (lời hứa).' },
+          ],
+        },
+        {
+          formula: 'Will + S + V? · Wh- + will + S + V?',
+          vi: 'Câu hỏi: đưa **will** lên trước chủ ngữ. Trả lời ngắn: Yes, I will. / No, I won\'t.',
+          examples: [
+            { en: 'Will you help me carry these boxes?', vi: 'Bạn giúp tôi khiêng mấy cái thùng này nhé? (nhờ vả)' },
+            { en: 'What time will the shop open tomorrow?', vi: 'Mai mấy giờ cửa hàng mở cửa?' },
+          ],
+        },
+        {
+          formula: 'S + am / is / are + going to + V',
+          vi: 'Khẳng định. Phải đủ **ba phần**: **am / is / are** (chia theo chủ ngữ như hiện tại tiếp diễn ở mục 1) + **going to** + **V nguyên mẫu**.',
+          examples: [
+            { en: 'I am going to visit my grandparents this weekend.', vi: 'Cuối tuần này tôi định về thăm ông bà (đã tính từ trước).' },
+            { en: 'My sister is going to study in Japan next year.', vi: 'Năm sau chị tôi sẽ đi học ở Nhật (kế hoạch đã có).' },
+          ],
+        },
+        {
+          formula: 'S + am / is / are + not + going to + V',
+          vi: 'Phủ định: thêm **not** sau am / is / are. Viết tắt: I\'m not going to · he isn\'t going to · we aren\'t going to.',
+          examples: [
+            { en: "We aren't going to travel this summer because we're saving money.", vi: 'Hè này chúng tôi không định đi du lịch vì đang tiết kiệm tiền.' },
+          ],
+        },
+        {
+          formula: 'Am / Is / Are + S + going to + V? · Wh- + am / is / are + S + going to + V?',
+          vi: 'Câu hỏi: đưa **am / is / are** lên trước chủ ngữ. Trả lời ngắn: Yes, I am. / No, I\'m not.',
+          examples: [
+            { en: 'Are you going to take the IELTS test this year?', vi: 'Năm nay bạn có định thi IELTS không?' },
+            { en: 'What are you going to do after the exam?', vi: 'Thi xong bạn định làm gì?' },
+          ],
+        },
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Khi nào dùng will, khi nào dùng be going to',
+      head: ['Tình huống', 'will + V', 'be going to + V'],
+      rows: [
+        ['**Quyết định**', 'Quyết định **ngay lúc nói** — vừa mới nghĩ ra: "The phone is ringing." — "**I\'ll** get it!"', 'Quyết định **từ trước**, đã thành **kế hoạch / dự định**: I\'m **going to** study IT next year. (đã chọn ngành từ lâu)'],
+        ['**Dự đoán**', 'Dựa vào **ý kiến, niềm tin** của mình — hay đi với **I think, I\'m sure, probably, maybe**: I think it **will** be sunny tomorrow.', 'Dựa vào **bằng chứng ngay trước mắt**: Look at those dark clouds! It **is going to** rain.'],
+        ['**Hứa · đề nghị giúp · nhờ vả**', 'I **will** call you tonight, I promise. · **I\'ll** carry that bag for you. · **Will** you open the door, please?', 'không dùng'],
+      ],
+    },
+    {
+      t: 'sodo',
+      kind: 'timeline',
+      title: 'will và be going to trên trục thời gian',
+      caption: 'Đoạn ① bắt đầu từ **quá khứ**: ý định đã có sẵn trước lúc nói → **be going to**. Đoạn ② bắt đầu đúng ở **bây giờ**: quyết định vừa nảy ra → **will**. Điểm ③ là một **dự đoán**: có bằng chứng trước mắt → going to; chỉ là ý kiến → will.',
+      marks: [
+        { from: -5, to: 5, kieu: 'doan', label: '① Đã định từ tuần trước: I\'m **going to** visit Hue next month.', mau: 1 },
+        { from: 0, to: 2, kieu: 'doan', label: '② Vừa quyết định: "It\'s cold." — "**I\'ll** close the window."', mau: 2 },
+        { from: 6, kieu: 'diem', label: '③ I think it **will** be sunny tomorrow. · Look at the clouds! It\'s **going to** rain.', mau: 3 },
+      ],
+    },
+    {
+      t: 'sodo',
+      kind: 'compare',
+      title: 'Chọn nhanh: will hay be going to?',
+      cols: [
+        {
+          title: '**will + V**',
+          anh: 'light-bulb',
+          items: ['Vừa nghĩ ra, quyết định **ngay**', 'Dự đoán theo **ý kiến**: I think… will…', 'Hứa, đề nghị giúp, nhờ vả', 'I\'ll · won\'t · Will you…?'],
+        },
+        {
+          title: '**be going to + V**',
+          anh: 'spiral-calendar',
+          items: ['Kế hoạch **đã định từ trước**', 'Dự đoán có **bằng chứng trước mắt**', 'Câu hỏi Part 1: What are you going to…?', 'am / is / are + going to + V'],
+        },
+      ],
+      caption: 'Mẹo nhớ: **going to** = đã có "kế hoạch" hoặc "bằng chứng" từ TRƯỚC. **will** = nghĩ ra NGAY, hoặc chỉ là ý kiến của mình.',
+    },
+    {
+      t: 'note',
+      title: 'Người Việt hay sai với will / be going to',
+      items: [
+        '**Thêm to sau will**: ~~I will to go.~~ → I **will go**. Sau will là **V nguyên mẫu không to**.',
+        '**Chia will theo ngôi**: ~~She wills come.~~ / ~~She will comes.~~ → She **will come**. will không bao giờ thêm -s, động từ sau nó cũng không.',
+        '**Thiếu be** trong going to: ~~I going to buy a laptop.~~ → I **am going to** buy a laptop. Giống hiện tại tiếp diễn ở mục 1: thiếu am / is / are là sai.',
+        '**Phủ định bằng don\'t**: ~~I don\'t will go.~~ → I **won\'t go** / I **will not go**. ~~I don\'t going to tell her.~~ → **I\'m not going to** tell her.',
+        '**Dịch mọi chữ "sẽ" thành will**: "Cuối tuần này tôi sẽ về quê" (đã định sẵn) → **I\'m going to visit my hometown this weekend** mới tự nhiên. Nói "I will visit…" nghe như bạn **vừa mới nghĩ ra**.',
+        '**Sau when / if khi nói về tương lai, dùng hiện tại đơn**: ~~When I will finish university, I will…~~ → **When I finish** university, **I\'m going to** look for a job.',
+        '"I think I won\'t…" không sai nhưng ít tự nhiên. Người bản xứ hay nói **I don\'t think I\'ll…**: I don\'t think I\'ll live abroad.',
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo phát âm will / won\'t / going to',
+      items: [
+        'Khi nói, will gần như luôn ở dạng viết tắt **\'ll**: **I\'ll** /aɪl/, **you\'ll** /juːl/, **it\'ll** /ˈɪtl/. Đừng nuốt mất âm /l/ cuối, nếu không "I\'ll go" nghe thành "I go" (sai thì).',
+        '**won\'t** /wəʊnt/ (âm "âu") ≠ **want** /wɒnt/ (âm "o"): I **won\'t** go (tôi sẽ không đi) ≠ I **want** to go (tôi muốn đi). Đọc nhầm là đổi hẳn nghĩa.',
+        'Người bản xứ nói nhanh, **going to** nghe như "**gonna**" /ˈɡɒnə/. Nghe hiểu được là đủ — **không viết "gonna"** trong bài Writing.',
+      ],
+    },
+    {
+      t: 'p',
+      text: '**Áp vào Speaking Part 1.** Nghe kỹ động từ trong câu hỏi rồi **trả lời bằng đúng cấu trúc đó**: hỏi **going to** (kế hoạch) → trả lời **I\'m going to…**; hỏi **Do you think… will…?** (dự đoán) → trả lời **I think I\'ll… / I don\'t think I\'ll…**. Sau câu trả lời thẳng, thêm **một lý do** hoặc **một chi tiết** (với ai, ở đâu, vì sao) là đủ 2–3 câu.',
+    },
+    {
+      t: 'table',
+      caption: 'Câu hỏi về tương lai hay gặp ở Part 1',
+      head: ['Câu hỏi', 'Hỏi về', 'Khung trả lời'],
+      rows: [
+        ['What are you **going to** do this weekend / after the exam?', 'kế hoạch đã định', "I'm going to + V… with… / because…"],
+        ['Are you **going to** + V… this year?', 'kế hoạch (Yes / No)', "Yes, I am. I'm going to… / No, I'm not. I'm going to… instead."],
+        ['Do you think you **will** + V… in the future?', 'dự đoán, ý kiến', "Yes, I think I'll… / I don't think I'll…, because…"],
+        ['What **will** you do after you graduate?', 'dự định xa, chưa chắc', "When I finish university, I'll probably… / I'm going to…"],
+      ],
+    },
+    {
+      t: 'dialogue',
+      title: 'Part 1 — câu hỏi về tương lai',
+      lines: [
+        { who: 'Examiner', role: 'examiner', text: 'What are you going to do this weekend?' },
+        { who: 'Candidate', role: 'candidate', text: "I'm going to visit my grandparents in Nam Dinh. My cousins are going to be there too, so I think it'll be a lot of fun.", vi: 'Tôi định về thăm ông bà ở Nam Định. Các anh chị em họ của tôi cũng sẽ về, nên tôi nghĩ sẽ vui lắm.' },
+        { who: 'Examiner', role: 'examiner', text: 'Are you going to study abroad in the future?' },
+        { who: 'Candidate', role: 'candidate', text: "I'm not sure yet. Studying abroad is very expensive, so I think I'll try to get a scholarship first.", vi: 'Tôi chưa chắc. Du học rất tốn kém, nên tôi nghĩ mình sẽ cố xin học bổng trước đã.' },
+        { who: 'Examiner', role: 'examiner', text: 'Do you think you will live in this city in ten years?' },
+        { who: 'Candidate', role: 'candidate', text: "Probably not. I don't think I'll stay here, because the traffic is terrible. When I finish university, I'm going to move back to my hometown.", vi: 'Chắc là không. Tôi không nghĩ mình sẽ ở lại đây, vì giao thông tệ quá. Học xong đại học, tôi định chuyển về quê.' },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Ghi nhớ: vì sao các câu trả lời trên đúng thì',
+      items: [
+        'Hỏi **are you going to** → trả lời **I\'m going to visit** (kế hoạch đã có). Phần đoán thêm "it\'ll be a lot of fun" là **ý kiến** → **will**.',
+        'Chưa có kế hoạch rõ ("I\'m not sure yet") → quyết định nảy ra lúc nói: **I think I\'ll try**.',
+        'Hỏi **Do you think you will** → **I don\'t think I\'ll stay**; vế "When I **finish** university" dùng **hiện tại đơn** sau when.',
+        'Writing Task 1: biểu đồ có **năm tương lai** (dự báo, ví dụ 2030) thì dùng **will**: The number of tourists **will reach** 5 million in 2030. Cách nói trang trọng hơn (is expected to…) học ở các tập sau.',
+      ],
+    },
+    {
+      t: 'rule',
+      formula: 'S + will / won\'t + V · Will + S + V? · S + am / is / are (+ not) + going to + V · Am / Is / Are + S + going to + V?',
+      vi: 'will: quyết định ngay lúc nói · dự đoán theo ý kiến (I think…) · hứa, đề nghị, nhờ. be going to: kế hoạch đã định · dự đoán có bằng chứng trước mắt.',
+    },
+    {
+      t: 'quiz',
+      id: 'd9-tuong-lai-dich',
+      title: 'Dịch nhanh — will hay be going to? (5 câu)',
+      kind: 'translate',
+      grammar: 'Quyết định ngay / dự đoán theo ý kiến / hứa → S + will (\'ll) + V. Kế hoạch đã định / dự đoán có bằng chứng → S + am / is / are + going to + V. Sau will không có to.',
+      items: [
+        { q: 'Điện thoại đang reo — để tôi nghe máy.', hint: "The phone is ringing, I'll answer it / I'll get it (quyết định ngay → will)", answers: ["The phone is ringing. I'll answer it.", "The phone's ringing. I'll answer it.", "The phone is ringing, I'll answer it.", "The phone's ringing, I'll answer it.", "The phone is ringing. I'll get it.", "The phone's ringing. I'll get it.", "The phone is ringing, I'll get it.", "The phone's ringing, I'll get it.", 'The phone is ringing. I will answer it.', 'The phone is ringing. I will get it.', "The phone is ringing. I'll pick it up.", "The phone's ringing. I'll pick it up."] },
+        { q: 'Cuối tuần này tôi định về thăm ông bà.', hint: "I'm going to (kế hoạch đã định), visit my grandparents, this weekend", answers: ["I'm going to visit my grandparents this weekend.", 'I am going to visit my grandparents this weekend.', "This weekend I'm going to visit my grandparents.", "This weekend, I'm going to visit my grandparents.", 'This weekend I am going to visit my grandparents.', 'This weekend, I am going to visit my grandparents.', "I'm going to see my grandparents this weekend.", 'I am going to see my grandparents this weekend.'] },
+        { q: 'Nhìn những đám mây đen kia kìa! Trời sắp mưa rồi.', hint: "Look at those dark clouds!, It's going to rain (có bằng chứng → going to)", answers: ["Look at those dark clouds! It's going to rain.", 'Look at those dark clouds! It is going to rain.', "Look at the dark clouds! It's going to rain.", 'Look at the dark clouds! It is going to rain.', "Look at those black clouds! It's going to rain.", 'Look at those black clouds! It is going to rain.', "Look at those dark clouds. It's going to rain.", "Look at those dark clouds, it's going to rain.", "Look at the black clouds! It's going to rain."] },
+        { q: 'Tôi nghĩ bạn sẽ đỗ kỳ thi.', hint: "I think, you'll / you will pass, the exam (dự đoán theo ý kiến → will)", answers: ["I think you'll pass the exam.", 'I think you will pass the exam.', "I think you'll pass your exam.", 'I think you will pass your exam.', "I think that you'll pass the exam.", 'I think that you will pass the exam.', "I think you'll pass the test.", 'I think you will pass the test.'] },
+        { q: 'Thi xong bạn định làm gì?', hint: 'What, are you going to do, after the exam', answers: ['What are you going to do after the exam?', 'What are you going to do after the exams?', 'What are you going to do after your exam?', 'What are you going to do after your exams?', 'After the exam, what are you going to do?', 'After the exams, what are you going to do?'] },
+      ],
+    },
+    {
+      t: 'mcq',
+      id: 'd9-tuong-lai-chon',
+      title: 'Kiểm tra nhanh — will hay be going to? (8 câu)',
+      items: [
+        { q: 'The phone is ringing. — Don\'t worry, ___ it.', options: ['I answered', "I'll answer", 'I answer'], correct: 1, why: 'Điện thoại **vừa reo**, người nói **quyết định ngay lúc đó** → **I\'ll answer** (will). "I answered" là quá khứ; "I answer" (hiện tại đơn) không dùng cho một quyết định vừa đưa ra.' },
+        { q: 'I ___ visit my grandparents this weekend. I bought the bus ticket yesterday.', options: ['am going to', 'will to', 'going to'], correct: 0, why: 'Đã mua vé từ hôm qua = **kế hoạch đã định** → **am going to** + V. "will to" sai (sau will không có to); "going to" thiếu **am**.' },
+        { q: 'Look at those dark clouds! It ___ .', options: ['rains', 'will raining', 'is going to rain'], correct: 2, why: 'Mây đen ngay trước mắt = **bằng chứng** → **is going to rain**. "rains" là hiện tại đơn (thói quen); "will raining" sai dạng (will + V nguyên mẫu).' },
+        { q: '___ you help me with this heavy box, please?', options: ['Are', 'Will', 'Do'], correct: 1, why: '**Nhờ vả** lịch sự → **Will you + V…?** "Are you help" sai (are không đi với V nguyên mẫu); "Do you help" là hỏi về thói quen, không phải nhờ.' },
+        { q: 'Lan ___ to the party tonight. She is feeling ill.', options: ["doesn't will come", "won't comes", "won't come"], correct: 2, why: 'Phủ định của will: **won\'t + V nguyên mẫu** → **won\'t come**. Không dùng doesn\'t với will; sau won\'t không thêm -s.' },
+        { q: 'What ___ do after the exam?', options: ['are you going to', 'you are going to', 'do you going to'], correct: 0, why: 'Câu hỏi Wh- với going to: **Wh- + are + you + going to + V?** — phải đưa **are** lên trước **you**. "do you going to" trộn hai cấu trúc.' },
+        { q: 'I think Vietnam ___ the match tomorrow.', options: ['wins', 'will win', 'is winning'], correct: 1, why: '**I think** + dự đoán theo ý kiến → **will win**. "is winning" chỉ dùng cho kế hoạch đã sắp xếp — kết quả trận đấu thì không ai sắp xếp trước được; "wins" không dùng để dự đoán.' },
+        { q: 'When I ___ university, I\'m going to look for a job in Da Nang.', options: ['will finish', 'am going to finish', 'finish'], correct: 2, why: 'Sau **when** (nói về tương lai) dùng **hiện tại đơn**: **When I finish**… Vế còn lại mới dùng will / going to.' },
+      ],
+    },
+
+    { t: 'h', text: '11. Ứng dụng trong IELTS' },
     {
       t: 'p',
       text: '**a) Speaking Part 1 — câu hỏi về quá khứ.** Giám khảo hay chuyển từ hiện tại sang quá khứ trong cùng một chủ đề: "Do you like sports?" → "**Did** you play sports **when you were a child**?". Nghe thấy **did / when you were… / in the past** là phải đổi sang quá khứ đơn.',
@@ -748,7 +942,7 @@ const D9_GRAMMAR: Lesson = {
     },
     {
       t: 'p',
-      text: '**c) Writing Task 1 — biểu đồ các năm đã qua.** Khi trục thời gian là các năm **đã qua** (2010, 2015, 2020), cả bài viết ở **quá khứ đơn**: The number of volunteers **rose** from 2,000 in 2010 to 5,000 in 2020. Donations **fell** slightly in 2015. Biểu đồ **không có mốc thời gian** thì dùng hiện tại đơn; các năm **tương lai** (dự báo) dùng will / is expected to — học ở các ngày sau.',
+      text: '**c) Writing Task 1 — biểu đồ các năm đã qua.** Khi trục thời gian là các năm **đã qua** (2010, 2015, 2020), cả bài viết ở **quá khứ đơn**: The number of volunteers **rose** from 2,000 in 2010 to 5,000 in 2020. Donations **fell** slightly in 2015. Biểu đồ **không có mốc thời gian** thì dùng hiện tại đơn; các năm **tương lai** (dự báo) dùng **will** (mục 10): The number of volunteers **will reach** 8,000 in 2030.',
     },
     {
       t: 'p',
@@ -761,6 +955,7 @@ const D9_GRAMMAR: Lesson = {
       rows: [
         ['Speaking Part 1 (hiện tại)', 'hiện tại đơn / tiếp diễn', "I usually… / At the moment I'm…"],
         ['Speaking Part 1 (Did you… / as a child)', 'quá khứ đơn', 'Yes, I did. When I was ten, I…'],
+        ['Speaking Part 1 (What are you going to…? / Do you think you will…?)', 'be going to / will', "I'm going to… / I think I'll… / I don't think I'll…"],
         ['Speaking Part 2 (Describe a time…)', 'quá khứ đơn + từ trình tự', 'First… Then… After that… In the end…'],
         ['Writing Task 1 (năm đã qua)', 'quá khứ đơn', 'The figure rose / fell / was…'],
         ['Writing Task 2 (xu hướng + ví dụ)', 'hiện tại tiếp diễn + quá khứ đơn', 'More people are… For example, when I…'],
@@ -768,7 +963,7 @@ const D9_GRAMMAR: Lesson = {
     },
     {
       t: 'rule',
-      formula: 'Did you…? / When you were… → S + V2 · Nowadays / more and more → S + are + V-ing · Năm đã qua (Task 1) → rose / fell / was',
+      formula: 'Did you…? / When you were… → S + V2 · Nowadays / more and more → S + are + V-ing · Năm đã qua (Task 1) → rose / fell / was · going to…? → I\'m going to + V',
       vi: 'Nghe thì của câu hỏi để trả lời đúng thì; biểu đồ quá khứ viết bằng quá khứ đơn.',
     },
     {
@@ -785,7 +980,7 @@ const D9_GRAMMAR: Lesson = {
       ],
     },
 
-    { t: 'h', text: '11. Lỗi về thì người Việt hay mắc nhất' },
+    { t: 'h', text: '12. Lỗi về thì người Việt hay mắc nhất' },
     {
       t: 'table',
       head: ['Sai', 'Đúng', 'Vì sao'],
@@ -800,6 +995,8 @@ const D9_GRAMMAR: Lesson = {
         ['~~The number rised.~~ / ~~falled~~', 'The number **rose** / **fell**.', 'rise, fall là bất quy tắc.'],
         ['~~I have visited Hue in 2020.~~', 'I **visited** Hue in 2020.', 'Mốc quá khứ xác định → quá khứ đơn.'],
         ['~~I born in 2006.~~', 'I **was born** in 2006.', 'be born luôn có be.'],
+        ['~~I will to go.~~ / ~~She will comes.~~', 'I **will go**. / She **will come**.', 'will + V nguyên mẫu: không to, không -s.'],
+        ['~~I going to buy a laptop.~~', 'I **am going to** buy a laptop.', 'be going to cần đủ am / is / are.'],
         ['Nói "I help-" (nuốt -ed)', 'I **helped** /helpt/', 'Không đọc đuôi -ed thì người nghe hiểu là hiện tại.'],
       ],
     },

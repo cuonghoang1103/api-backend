@@ -10,6 +10,10 @@
  * viết về thói quen nhỏ, nói về thói quen hằng ngày).
  *
  * Nối tiếp: Ngày 6 = mở bài Opinion, Ngày 8 = thân bài; Ngày 10 ghép thành bài trọn.
+ *
+ * Bổ sung 12/11/2026 (lộ trình 0→8, mục 5.1 #3): bài Nói thêm mục 9 "Part 2 nhập môn:
+ * Describe your daily routine — nói 1 phút" (thẻ đề 4 dòng, ghi chú 1 phút bằng sơ đồ
+ * ý, khung bài, bài mẫu band ~4.5–5 có phân tích, tự ghi âm). Ngày 14 nâng lên 2 phút.
  */
 import type { Lesson } from '../data';
 
@@ -755,19 +759,19 @@ const D10_SPEAKING: Lesson = {
   id: "d10-noi",
   kind: "speaking",
   title: "Nói: Câu hỏi về thói quen (Part 1 · Routines & Habits)",
-  goal: "Trả lời trôi chảy các câu hỏi Part 1 về thói quen: dùng hiện tại đơn + trạng từ tần suất đặt đúng chỗ, cụm chỉ tần suất (once a week, twice a month…), used to để so sánh xưa – nay, và phát âm đúng used to /juːst tə/ cùng âm /ʒ/ trong usually.",
-  minutes: 55,
+  goal: "Trả lời trôi chảy các câu hỏi Part 1 về thói quen: dùng hiện tại đơn + trạng từ tần suất đặt đúng chỗ, cụm chỉ tần suất (once a week, twice a month…), used to để so sánh xưa – nay, phát âm đúng used to /juːst tə/ cùng âm /ʒ/ trong usually; và làm quen Part 2: đọc thẻ đề, ghi chú 1 phút, nói liền 1 phút về một ngày của mình.",
+  minutes: 75,
   blocks: [
     {
       t: "recap",
       title: "Bài này học gì",
       items: [
         "Câu hỏi thói quen ở Part 1: **How often…? · Do you usually…? · What do you normally do…? · Has your routine changed…? · Did you use to…?**",
-        "Thói quen hiện tại → **hiện tại đơn** + trạng từ tần suất: ==S + always / usually / often / sometimes / rarely / never + V==, nhưng ==S + be + usually==.",
-        "Cụm tần suất đặt **cuối câu**: every day · **once** a week · **twice** a month · three times a year · from time to time.",
+        "Thói quen hiện tại → **hiện tại đơn** + trạng từ tần suất: ==S + always / usually / often / sometimes / rarely / never + V==, nhưng ==S + be + usually==. Cụm tần suất đặt **cuối câu**: every day · **once** a week · **twice** a month.",
         "Thói quen **trong quá khứ, nay không còn**: ==used to + V== (I **used to** walk to school). Khác hẳn ==be used to + V-ing== (quen với).",
         "Công thức trả lời 3–4 câu: **tần suất → chi tiết (khi nào, ở đâu, với ai) → lý do / cảm xúc → (xưa – nay)**.",
         "Phát âm: **used to** /juːst tə/ (âm /s/, không phải /z/) và âm **/ʒ/** trong **usually**, **leisure**, **television**.",
+        "**Part 2 nhập môn** (mục 9): thẻ đề ==Describe your daily routine== — 1 phút ghi từ khoá theo sơ đồ ý, nói **liền 1 phút**: mở → ① ② ③ → **explain**; tự ghi âm, nghe lại, ghi lần 2.",
       ],
     },
     {
@@ -1154,6 +1158,173 @@ const D10_SPEAKING: Lesson = {
         "Do you have any bad habits?",
         "How often do you use social media?",
         "Is there a habit you would like to start?",
+      ],
+    },
+
+    { t: "h", text: "9. Part 2 nhập môn: Describe your daily routine — nói 1 phút" },
+    {
+      t: "p",
+      text: "**Phần thêm — làm quen Part 2.** Ở Ngày 2 bạn đã biết Speaking có 3 phần. **Part 2** là phần **độc thoại**: giám khảo đưa một **thẻ đề (cue card)**, cho **1 phút chuẩn bị** với giấy bút, rồi bạn tự nói **1–2 phút** không ngừng. Ngày 14 sẽ luyện trọn Part 2 (nói đủ 2 phút, kể chuyện quá khứ). Hôm nay làm quen trước với đề **dễ nhất** — **thói quen hằng ngày** — vì nó dùng đúng ngữ pháp vừa học: **hiện tại đơn + trạng từ tần suất**. Đích hôm nay: **nói liền 1 phút** (khoảng 100–130 từ) mà không dừng lâu.",
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Một lượt Part 2 — bản tập hôm nay",
+      steps: [
+        { label: "Đọc thẻ đề", sub: "1 chủ đề + 4 dòng: You should say… and explain…" },
+        { label: "1 phút ghi chú", sub: "từ khoá, con số, ký hiệu — không viết câu" },
+        { label: "Nói 1 phút", sub: "mở 1 câu → 3 dòng đầu → dòng explain" },
+        { label: "Ngày 14", sub: "kéo dài từng phần để nói đủ 2 phút" },
+      ],
+      caption: "Trong phòng thi bạn được nói tối đa 2 phút; giám khảo không ngắt lời cho tới khi hết giờ. Nói dưới 1 phút là mất điểm Fluency.",
+    },
+    {
+      t: "p",
+      text: "**Thẻ đề:** **Describe your daily routine.** You should say: ① **what time** you usually get up · ② **what** you do in the morning · ③ **what** you do in the afternoon and evening · and ④ **explain** which part of the day you enjoy most.",
+    },
+    {
+      t: "table",
+      caption: "Đọc thẻ đề: mỗi dòng là một phần của bài nói",
+      head: ["Dòng trên thẻ", "Trả lời bằng", "Câu mẫu"],
+      rows: [
+        ["① **what time** you usually get up", "hiện tại đơn + **at** + giờ", "On weekdays, I **usually get up at** half past six."],
+        ["② **what** you do in the morning", "chuỗi việc nối bằng First · Then · After that", "**First**, I have a quick shower. **Then** I have breakfast…"],
+        ["③ **what** you do in the afternoon and evening", "trạng từ / cụm tần suất + nơi chốn", "In the afternoon, I **often** study in the library."],
+        ["④ and **explain** which part of the day you enjoy most", "enjoy / like + lý do (because…)", "I **enjoy** the evening **most, because** I can relax."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Ghi nhớ: Part 2 khác Part 1 thế nào",
+      items: [
+        "**Part 1**: nhiều câu hỏi ngắn, mỗi câu trả lời 2–4 câu. **Part 2**: **một** thẻ đề, bạn tự nói **một mạch**, không có ai hỏi xen vào.",
+        "Động từ trên thẻ quyết định thì: “Describe **your daily routine**” / “a place you **often** visit” → **hiện tại đơn**; “Describe a time when you **learned**…” (Ngày 14) → **quá khứ đơn**.",
+        "Dòng **and explain…** là dòng **quan trọng nhất** (nói cảm xúc, lý do) — nhưng cũng là dòng hay bị quên nhất vì nó nằm cuối.",
+      ],
+    },
+    {
+      t: "p",
+      text: "Cụm từ dưới đây là “gạch” để xây bài nói về một ngày của bạn. Bấm 🔊 nghe, rồi dùng nút che nghĩa để tự kiểm tra.",
+    },
+    {
+      t: "vocab",
+      items: [
+        { w: "wake up", pos: "phr v", ipa: "/ˌweɪk ˈʌp/", vi: "tỉnh giấc", ex: "I usually wake up before my alarm goes off.", exVi: "Tôi thường tỉnh giấc trước khi chuông báo thức reo.", more: "**wake up** = mở mắt, tỉnh dậy (có thể vẫn nằm trên giường) ≠ **get up** = ra khỏi giường. Quá khứ: **woke up**." },
+        { w: "get up", pos: "phr v", ipa: "/ˌɡet ˈʌp/", vi: "thức dậy, ra khỏi giường", ex: "On weekdays, I get up at half past six.", exVi: "Ngày thường tôi dậy lúc sáu rưỡi.", more: "**get up early / late** · cuối tuần ngủ nướng: **sleep in** (I tend to **sleep in** on Sundays)." },
+        { w: "set an alarm", pos: "phr", ipa: "/ˌset ən əˈlɑːm/", vi: "đặt chuông báo thức", ex: "I always set two alarms because I'm a heavy sleeper.", exVi: "Tôi luôn đặt hai cái báo thức vì tôi ngủ rất say.", more: "**alarm** /əˈlɑːm/ nhấn âm tiết **thứ hai**. Chuông reo: **the alarm goes off** · tắt: **turn off the alarm**." },
+        { w: "have a shower", pos: "phr", ipa: "/ˌhæv ə ˈʃaʊə(r)/", vi: "tắm (bằng vòi sen)", ex: "First, I have a quick shower to wake myself up.", exVi: "Đầu tiên, tôi tắm nhanh cho tỉnh ngủ.", more: "Anh-Anh **have a shower**, Anh-Mỹ **take a shower**. Tắm bồn: **have a bath**." },
+        { w: "get dressed", pos: "phr", ipa: "/ˌɡet ˈdrest/", vi: "mặc quần áo, thay đồ", ex: "After breakfast, I get dressed and leave the house.", exVi: "Ăn sáng xong, tôi thay đồ rồi ra khỏi nhà.", more: "Không nói ~~I dress my clothes~~. Mặc **một món** cụ thể: **put on** a jacket." },
+        { w: "take a nap", pos: "phr", ipa: "/ˌteɪk ə ˈnæp/", vi: "chợp mắt, ngủ ngắn ban ngày", ex: "Many Vietnamese students take a short nap after lunch.", exVi: "Nhiều học sinh Việt Nam ngủ trưa một lát sau bữa trưa.", more: "= **have a nap**. **a power nap** = giấc chợp mắt 15–20 phút cho tỉnh táo." },
+        { w: "stay up late", pos: "phr", ipa: "/ˌsteɪ ʌp ˈleɪt/", vi: "thức khuya", ex: "I sometimes stay up late to finish my homework.", exVi: "Thỉnh thoảng tôi thức khuya để làm xong bài tập.", more: "≠ **get up late** (dậy muộn). Thức thâu đêm: **stay up all night**." },
+        { w: "go to bed", pos: "phr", ipa: "/ˌɡəʊ tə ˈbed/", vi: "đi ngủ (lên giường)", ex: "I usually go to bed at around eleven.", exVi: "Tôi thường đi ngủ khoảng mười một giờ.", more: "**go to bed** (lên giường) ≠ **fall asleep** (ngủ thiếp đi). Không có **the**: ~~go to the bed~~." },
+      ],
+    },
+    {
+      t: "p",
+      text: "**Ghi chú trong 1 phút.** Bạn có đúng 1 phút và một tờ giấy. Đừng viết câu — ghi **từ khoá, con số, ký hiệu** theo **sơ đồ ý**: chủ đề ở giữa, mỗi dòng của thẻ là một nhánh, thêm một nhánh “từ muốn dùng”. Ngày 14 sẽ luyện kỹ cách này với chuyện quá khứ; hôm nay tập trước với thói quen.",
+    },
+    {
+      t: "sodo",
+      kind: "mindmap",
+      title: "Ghi chú mẫu trong 1 phút — Describe your daily routine",
+      center: "**My daily routine**",
+      branches: [
+        { label: "① Get up", items: ["6.30 — weekdays", "2 alarms"], anh: "alarm-clock" },
+        { label: "② Morning", items: ["shower → dressed", "breakfast w/ mum — banh mi", "bus → uni · class 8"], anh: "bus" },
+        { label: "③ Afternoon / evening", items: ["library", "jog 3x/week", "dinner — family", "bed ~11"], anh: "books" },
+        { label: "④ Explain: best part", items: ["evening", "relax + talk w/ family", "day = busy"], anh: "house" },
+        { label: "Từ muốn dùng", items: ["usually · often · always", "three times a week", "First → Then → After that"], anh: "memo" },
+      ],
+      caption: "Đây là TOÀN BỘ ghi chú. Ký hiệu cho nhanh: → (rồi, sau đó) · w/ (with) · 3x/week (ba lần một tuần) · ~ (khoảng).",
+    },
+    {
+      t: "note",
+      title: "Mẹo ghi chú 1 phút",
+      items: [
+        "Ghi nhánh **④ explain** trước tiên — dòng này hay bị quên nhất mà lại là dòng ăn điểm.",
+        "Mỗi nhánh **2–4 từ khoá**. Ghi bằng tiếng Anh nếu được (lúc nói đỡ phải dịch); không nhớ từ thì ghi tiếng Việt cũng được.",
+        "Ghi **số và giờ** (6.30, 8, ~11): vừa nhanh, vừa nhắc bạn dùng **at + giờ**.",
+        "Hết 1 phút mà chưa ghi xong cũng không sao: bắt đầu nói, đi lần lượt từng nhánh ① → ④.",
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Khung bài nói 1 phút",
+      steps: [
+        { label: "Mở — 1 câu", sub: "I'd like to talk about my daily routine on a normal weekday." },
+        { label: "① Giờ dậy", sub: "I usually get up at… (+ một chi tiết)" },
+        { label: "② Buổi sáng", sub: "First… Then… After that…" },
+        { label: "③ Chiều – tối", sub: "In the afternoon, I often… In the evening…" },
+        { label: "④ Explain", sub: "I enjoy… most, because…" },
+      ],
+      caption: "Mỗi phần 1–3 câu là đủ 1 phút. Ngày 14: kéo dài từng phần để nói đủ 2 phút.",
+    },
+    {
+      t: "rule",
+      formula: "Mở: I'd like to talk about… · I usually get up at… · First… Then… After that… · In the afternoon / evening, I often + V… · I enjoy… most, because + S + V…",
+      vi: "Part 2 về thói quen → hiện tại đơn suốt bài; trả lời đủ 4 dòng, đúng thứ tự trên thẻ.",
+    },
+    {
+      t: "canh",
+      anh: ["alarm-clock", "bus", "books", "person-running"],
+      caption: "Một ngày thường của một sinh viên: hai cái báo thức lúc sáu rưỡi, xe buýt tới trường, buổi chiều ở thư viện, mỗi tuần ba buổi chạy bộ trong công viên, buổi tối ăn cơm cùng gia đình.",
+    },
+    {
+      t: "dialogue",
+      title: "Part 2 — Describe your daily routine (bài mẫu ≈ 1 phút · 123 từ · band ~4.5–5)",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "Now, I'm going to give you a topic, and I'd like you to talk about it for one to two minutes. Before you talk, you'll have one minute to think about what you're going to say. Here's your topic: describe your daily routine." },
+        { who: "Candidate", role: "candidate", text: "I'd like to talk about my daily routine on a normal weekday.", vi: "Tôi muốn nói về nếp sinh hoạt của mình vào một ngày thường trong tuần." },
+        { who: "Candidate", role: "candidate", text: "I usually get up at half past six, and I always set two alarms.", vi: "Tôi thường dậy lúc sáu rưỡi, và lúc nào tôi cũng đặt hai cái báo thức." },
+        { who: "Candidate", role: "candidate", text: "First, I have a quick shower and get dressed. Then I have breakfast with my mum, usually banh mi. After that, I take the bus to university. My classes start at eight.", vi: "Đầu tiên, tôi tắm nhanh rồi thay đồ. Sau đó tôi ăn sáng với mẹ, thường là bánh mì. Rồi tôi bắt xe buýt đến trường. Tiết học của tôi bắt đầu lúc tám giờ." },
+        { who: "Candidate", role: "candidate", text: "In the afternoon, I often study in the library. Three times a week, I go jogging in the park, and in the evening I have dinner with my family. I usually go to bed at around eleven.", vi: "Buổi chiều, tôi hay học ở thư viện. Mỗi tuần ba lần, tôi chạy bộ trong công viên, và buổi tối tôi ăn cơm với gia đình. Tôi thường đi ngủ khoảng mười một giờ." },
+        { who: "Candidate", role: "candidate", text: "I enjoy the evening most, because I can relax and talk with my family. During the day I'm always busy, so dinner time is really special for me.", vi: "Tôi thích buổi tối nhất, vì tôi được thư giãn và trò chuyện với gia đình. Ban ngày lúc nào tôi cũng bận, nên bữa tối thật sự đặc biệt với tôi." },
+      ],
+    },
+    {
+      t: "table",
+      caption: "Phân tích bài mẫu theo 4 tiêu chí chấm Speaking",
+      head: ["Tiêu chí", "Bài mẫu làm được", "Vì sao mới ~4.5–5"],
+      rows: [
+        ["**Fluency & Coherence** (trôi chảy, mạch lạc)", "Đi đúng thứ tự 4 dòng của thẻ; có câu mở và câu kết; từ nối thời gian First · Then · After that · In the afternoon · in the evening.", "Câu ngắn, từ nối đơn giản; mỗi ý chưa được mở rộng (vì sao, so với trước kia)."],
+        ["**Lexical Resource** (từ vựng)", "Cụm thói quen đúng collocation: set two alarms · have a quick shower · get dressed · take the bus · go jogging · go to bed.", "Toàn từ phổ thông; thêm tend to, I'm in the habit of (mục 4) hay một chi tiết riêng là lên điểm."],
+        ["**Grammatical Range & Accuracy** (ngữ pháp)", "Hiện tại đơn đúng suốt bài; trạng từ tần suất đúng chỗ (usually get up · often study · I'm always busy); cụm tần suất cuối câu hoặc đầu câu (three times a week); at + giờ.", "Phần lớn là câu đơn nối bằng and / because / so; chưa có câu phức kiểu When I get home, I… hay used to (mục 3)."],
+        ["**Pronunciation** (phát âm)", "Nhiều chỗ để luyện: usually /ˈjuːʒuəli/ (mục 7) · đuôi -es của classes /ˈklɑːsɪz/ · nối âm get_up, have_a.", "Điểm phát âm là của **bạn** khi đọc lại: giữ âm cuối, -s, /ʒ/."],
+        ["**Trả lời đủ thẻ đề**", "① 6.30 ✓ · ② shower, breakfast, bus ✓ · ③ library, jogging, dinner ✓ · ④ evening + lý do ✓", "Mỗi dòng mới 1–3 câu: đủ 1 phút, chưa đủ 2 phút (việc của Ngày 14)."],
+      ],
+    },
+    {
+      t: "note",
+      title: "Mẹo: hết ý trước 1 phút thì nói thêm gì?",
+      items: [
+        "Thêm **cuối tuần khác ngày thường**: At weekends, it's different. I tend to sleep in until nine…",
+        "Thêm **xưa – nay** (mục 3): When I was in high school, I used to get up at five, but now…",
+        "Thêm **một chi tiết cụ thể**: con số, tên món ăn, tên nơi chốn (the library on the third floor, a bowl of pho).",
+        "Đừng im lặng: nối bằng **Another thing is that…** / **Oh, and I forgot to say…** rồi nói tiếp.",
+      ],
+    },
+    {
+      t: "p",
+      text: "**Tự ghi âm — bắt buộc.** Đọc thẻ đề, bấm giờ **1 phút ghi chú** trên giấy, rồi ghi âm và nói tới khi được **ít nhất 1 phút**. Nghe lại, rồi **ghi lần 2** ngay sau khi đã sửa 1–2 lỗi vừa thấy. Giữ lại bản ghi: tới Ngày 14 nghe lại để thấy mình đã tiến bộ thế nào. Thẻ thứ hai (cuối tuần) để luyện thêm cùng khung.",
+    },
+    {
+      t: "note",
+      title: "Mẹo: tự nghe lại bản ghi âm",
+      items: [
+        "Có trả lời **đủ 4 dòng** của thẻ không? Dòng **explain** có lý do (because…) chưa?",
+        "Động từ ngôi thứ ba có **-s** chưa (My class **starts**…)? Trạng từ tần suất đứng **trước** động từ thường chưa?",
+        "Có chỗ nào **im lặng quá 3 giây** không? Ghi lại chỗ đó — lần sau chuẩn bị sẵn một câu nối.",
+        "Nói **dưới 45 giây** → thêm ý theo mẹo ở trên; nói **quá 1 phút 30** cũng tốt — bạn đã sẵn sàng cho Ngày 14.",
+      ],
+    },
+    {
+      t: "speak",
+      id: "d10-noi-p2",
+      part: "2",
+      questions: [
+        "Describe your daily routine. You should say: what time you usually get up; what you do in the morning; what you do in the afternoon and evening; and explain which part of the day you enjoy most.",
+        "Describe what you usually do at the weekend. You should say: what time you get up at the weekend; what you do on Saturday; what you do on Sunday; and explain why you enjoy your weekends.",
       ],
     },
   ],

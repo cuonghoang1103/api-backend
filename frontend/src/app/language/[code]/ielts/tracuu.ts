@@ -6,7 +6,8 @@
  *     nên tự có từ của ngày mới soạn — KHÔNG phải sửa tệp này).
  *
  * Soạn thêm ngày có điểm ngữ pháp mới → thêm một mục vào TRA_CONG_THUC (xem SOAN-BAI.md §5).
- * Ví dụ viết mới, không chép sách. Mục 10–28 (Ngày 7–15) chép nguyên văn các khối
+ * Ví dụ viết mới, không chép sách. Mục 12–34 (Ngày 7–15) và các mục bổ sung 12/11/2026
+ * (3 · 8 · 11 · 19 · 22 · 25 · 26 — ghi "Ngày N · mục M" ở tiêu đề) chép nguyên văn các khối
  * rule / patterns / table của bài ngày đó — sửa bài ngày thì sửa luôn ở đây.
  */
 import type { Lesson } from '@/components/sach-hoc/types';
@@ -22,7 +23,8 @@ export const TRA_CONG_THUC: Lesson = {
       t: 'recap',
       title: 'Dùng trang này thế nào?',
       items: [
-        'Thứ tự theo ngày học: **mục 1–9** = Ngày 1–6 · **mục 10–28** = Ngày 7–15 · **mục 29** = bảng chốt chia động từ theo chủ ngữ.',
+        'Thứ tự theo ngày học: **mục 1–8** = ngữ pháp Ngày 1–6 · **mục 9–11** = khung Nói / Viết / dạng câu hỏi Reading (Ngày 2–6) · **mục 12–34** = Ngày 7–15 · **mục 35** = bảng chốt chia động từ theo chủ ngữ.',
+        'Tiêu đề ghi **(Ngày N · mục M)** = mở bài ngữ pháp / kỹ năng của Ngày N, kéo tới **mục M** để học kỹ và làm bài luyện.',
         'Mỗi khung là **một điểm ngữ pháp**: công thức tô màu → ví dụ (bấm 🔊 nghe) → **Công thức 1 dòng** để thuộc.',
         'Màu cố định cả khoá: **S chủ ngữ** xanh dương, **V động từ** đỏ, **O tân ngữ** tím, **C bổ ngữ** xanh lá, **A trạng ngữ** vàng, **N danh từ** xanh két, **adj tính từ** cam, trợ động từ (do, be…) xám.',
         'Quên chỗ nào thì mở lại **ngày ghi trong ngoặc** để học kỹ và làm bài tập.',
@@ -79,7 +81,7 @@ export const TRA_CONG_THUC: Lesson = {
     },
     { t: 'rule', formula: 'S + am/is/are (+ not) + adj / N / A', vi: 'Dùng **be** khi sau nó là tính từ, danh từ hoặc nơi chốn — không có động từ thường nào khác.' },
 
-    { t: 'h', text: '3. Thì hiện tại đơn với động từ thường (Ngày 1)' },
+    { t: 'h', text: '3. Thì hiện tại đơn — 4 cách dùng & chia động từ 4 bước (Ngày 1 · mục 2)' },
     {
       t: 'patterns',
       rows: [
@@ -91,13 +93,55 @@ export const TRA_CONG_THUC: Lesson = {
     },
     {
       t: 'table',
-      caption: 'Dùng khi nào · dấu hiệu nhận biết',
-      head: ['Cách dùng', 'Ví dụ', 'Dấu hiệu hay đi kèm'],
+      caption: '4 cách dùng thì hiện tại đơn',
+      head: ['Cách dùng', 'Ví dụ', 'Nhận ra bằng'],
       rows: [
-        ['Thói quen, việc lặp lại', 'I **drink** coffee every morning.', 'always, usually, often, sometimes, rarely, never, every day/week, once a week'],
-        ['Sự thật chung, điều luôn đúng', 'The sun **rises** in the east.', '(không cần dấu hiệu)'],
-        ['Lịch trình cố định', 'The train **leaves** at 7 a.m.', 'giờ tàu, lịch học, lịch chiếu'],
-        ['Ý kiến, cảm nhận (Writing Task 2)', 'I **believe** that…', 'think, believe, agree, feel'],
+        ['① **Thói quen**, việc lặp lại', 'My brother **plays** games every night. — Em tôi chơi game mỗi tối.', 'every day / week, always, usually, often, sometimes, never'],
+        ['② **Sự thật**, điều luôn đúng', 'The sun **rises** in the east. — Mặt trời mọc ở hướng đông.', 'Khoa học, địa lý, điều ai cũng biết'],
+        ['③ **Trạng thái, cảm xúc, ý kiến**', 'I **believe** that social media **connects** people. — Tôi tin rằng mạng xã hội kết nối con người.', 'think, believe, know, like, want, need — động từ chỉ trạng thái'],
+        ['④ **Lịch trình, thời gian biểu** cố định', 'The IELTS class **starts** at 6 p.m. on Mondays. — Lớp IELTS bắt đầu lúc 6 giờ tối thứ Hai.', 'Giờ tàu xe, giờ học, giờ mở cửa'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Chia động từ hiện tại đơn — 4 bước, lần nào cũng đi đủ. Bước 1 là chỗ hay sai nhất: chủ ngữ thật của The price of smartphones… là price (số ít) → rises, không phải smartphones.',
+      head: ['Bước', 'Làm gì'],
+      rows: [
+        ['1. Tìm **chủ ngữ thật**', 'The **price** of phones… = it · My **friends**… = they'],
+        ['2. Có phải **he / she / it** (số ít)?', 'Có → nhánh **-s / does** · Không → nhánh **nguyên mẫu / do**'],
+        ['3. Câu **khẳng định**', 'he/she/it + **V-s/es** (theo bảng quy tắc ngay dưới)'],
+        ['4. Câu **phủ định / câu hỏi**', "do / does + **V nguyên mẫu**: doesn't like (~~doesn't likes~~)"],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Quy tắc thêm -s / -es',
+      head: ['Động từ kết thúc bằng', 'Cách thêm', 'Ví dụ'],
+      rows: [
+        ['Phần lớn động từ', '+ s', 'work → works, read → reads'],
+        ['-o, -s, -x, -ch, -sh, -z', '+ es', 'go → goes, watch → watches, fix → fixes'],
+        ['phụ âm + y', 'bỏ y, + ies', 'study → studies, try → tries'],
+        ['nguyên âm + y', '+ s', 'play → plays, enjoy → enjoys'],
+        ['have (bất quy tắc)', '→ has', 'She has two phones.'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Đọc đuôi -s thế nào',
+      head: ['Âm cuối của động từ', 'Đọc là', 'Ví dụ'],
+      rows: [
+        ['/p/ /t/ /k/ /f/ /θ/', '/s/', 'works, helps, gets'],
+        ['/s/ /z/ /ʃ/ /tʃ/ /dʒ/', '/ɪz/ (thêm một âm tiết)', 'watches, uses, changes'],
+        ['Các âm còn lại', '/z/', 'plays, reads, lives'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Người Việt hay nhầm (Ngày 1)',
+      items: [
+        'Dùng hiện tại đơn cho việc **đang** làm: ~~Look! It rains.~~ → **Look! It is raining.** (việc đang diễn ra lúc nói là thì **hiện tại tiếp diễn**, học ở Ngày 9).',
+        '~~My mother work in a hospital.~~ → **My mother works in a hospital.** Hãy tập thói quen **nhìn chủ ngữ trước rồi mới viết động từ**.',
+        "~~He doesn't likes coffee.~~ → **He doesn't like coffee.** · ~~Does she works here?~~ → **Does she work here?**",
       ],
     },
     {
@@ -109,7 +153,7 @@ export const TRA_CONG_THUC: Lesson = {
         'Trạng từ tần suất đứng **trước động từ thường** nhưng **sau be**: She **often** cooks. / She is **often** late.',
       ],
     },
-    { t: 'rule', formula: "S + V(s/es) · S + don't/doesn't + V · Do/Does + S + V?", vi: 'Thói quen, sự thật, ý kiến. He/she/it → **-s** hoặc **does**; còn lại → nguyên mẫu hoặc **do**.' },
+    { t: 'rule', formula: "S + V(s/es) · S + don't/doesn't + V · Do/Does + S + V?", vi: 'Thói quen · sự thật · trạng thái / ý kiến · lịch trình cố định. **He / she / it** → thêm **-s** hoặc dùng **does**. Còn lại → nguyên mẫu hoặc **do**. Có does thì động từ trơn.' },
 
     /* ── Ngày 3 ── */
     { t: 'h', text: '4. Đại từ nhân xưng — một bảng đủ 5 dạng (Ngày 3)' },
@@ -202,8 +246,57 @@ export const TRA_CONG_THUC: Lesson = {
     },
     { t: 'rule', formula: 'many + N(s) · much + N (không đếm) · a lot of + cả hai', vi: 'Không chắc danh từ đếm được hay không → dùng **a lot of / some** là an toàn.' },
 
+    { t: 'h', text: '8. Mạo từ a / an — the — Ø (Ngày 5 · mục 7)' },
+    {
+      t: 'table',
+      caption: 'Chọn theo câu hỏi "người nghe có biết là cái nào không?" · Ø = không dùng mạo từ nào',
+      head: ['a / an — chưa biết cái nào', 'the — biết rõ cái nào', 'Ø — nói chung chung'],
+      rows: [
+        ['nhắc **lần đầu**: I bought **a** laptop.', 'nhắc **lần hai**: **The** laptop is new.', 'số nhiều nói chung: **Cats** are cute.'],
+        ['một cái **bất kỳ**: Can I borrow **a** pen?', 'vật **duy nhất**: **the** sun, **the** internet', 'không đếm được nói chung: **Money** isn\'t everything.'],
+        ['nghề nghiệp: She is **a** nurse.', '**the** + so sánh nhất: **the** best', 'tên người, thành phố, hầu hết nước: **Hanoi**, **Vietnam**'],
+        ['chỉ với đếm được **số ít**', 'dùng được với **mọi** loại danh từ', 'bữa ăn, môn học, thể thao: have **lunch**, play **football**'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: '6 trường hợp DÙNG the (mức A2)',
+      head: ['Trường hợp', 'Giải thích', 'Ví dụ'],
+      rows: [
+        ['1. **Nhắc lần hai**', 'Lần đầu dùng a/an, lần sau người nghe đã biết → the.', 'I bought **a** laptop and **a** headset. **The** laptop is for work. — Tôi mua một chiếc laptop và một bộ tai nghe. Chiếc laptop dùng để làm việc.'],
+        ['2. **Cả hai bên đều biết cái nào**', 'Trong cùng căn phòng, cùng công ty, cùng câu chuyện — chỉ có một cái đó.', 'Can you close **the** window? · **The** boss is in a meeting. (sếp của chúng ta)'],
+        ['3. **Vật duy nhất**', 'Trên đời (hoặc trong một nơi) chỉ có một.', '**the** sun, **the** moon, **the** world, **the** sky, **the** internet, **the** capital of Vietnam'],
+        ['4. **the + so sánh nhất / số thứ tự / only / same**', 'Cao nhất, đầu tiên, duy nhất… thì chỉ có một → the.', '**the** best, **the** most popular, **the** highest, **the** first day, **the** only way, **the** same school'],
+        ['5. **Danh từ được làm rõ bằng of / mệnh đề**', 'Phía sau có cụm nói rõ "cái nào".', '**the** number of employees, **the** price of rice, **the** man who lives next door'],
+        ['6. **Một số tên riêng & cụm cố định**', 'Sông, biển, đại dương, dãy núi; nước có Republic / Kingdom / States hoặc tên số nhiều; nhạc cụ; buổi trong ngày.', '**the** Red River, **the** Pacific Ocean, **the** UK, **the** USA, **the** Philippines · play **the** guitar · in **the** morning'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Những chỗ KHÔNG dùng the (Ø)',
+      head: ['Trường hợp', 'Ví dụ đúng', 'Sai hay gặp'],
+      rows: [
+        ['Danh từ số nhiều / không đếm được **nói chung**', '**Education** is important. · **Smartphones** are expensive.', '~~The education is important.~~'],
+        ['Tên người, thành phố, châu lục, hầu hết quốc gia', '**Hanoi**, **Vietnam**, **Asia**, **Mr Nam**', '~~the Vietnam~~, ~~the Hanoi~~'],
+        ['Bữa ăn, môn học, môn thể thao, ngôn ngữ', 'have **breakfast**, study **maths**, play **football**, speak **English**', '~~play the football~~, ~~have the lunch~~'],
+        ['Cụm cố định với nơi chốn / phương tiện', 'go to **school** / **work** / **bed**, go **home**, at **night**, by **bus**', '~~go to the bed~~ (khi đi ngủ), ~~by the bus~~'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Người Việt hay sai với the',
+      items: [
+        '**Thừa the khi nói chung chung** — lỗi số 1 trong Task 2: ~~The technology changes the people\'s lives.~~ → **Technology changes people\'s lives.**',
+        '**Thiếu the trước so sánh nhất**: ~~She is best student.~~ → **She is the best student.** · ~~most popular~~ → **the most popular**.',
+        '**Thiếu the với vật duy nhất**: ~~Sun is very hot today.~~ → **The sun** is very hot today. · search **the** internet.',
+        'Cách đọc: **the** đọc /ðə/ trước **âm phụ âm** (the book /ðə bʊk/), đọc /ði/ trước **âm nguyên âm** (the apple /ði ˈæpl/, the hour /ði ˈaʊə/) — chọn theo **âm**, giống a/an.',
+        'Writing Task 1: luôn **the number of** + số nhiều, **the amount of** + không đếm được, **the highest / the lowest**, **the figure for** 2020.',
+      ],
+    },
+    { t: 'rule', formula: 'a / an + N (lần đầu, bất kỳ) → the + N (lần hai, ai cũng biết, duy nhất, the + -est / the most) · Ø + N-s / N (nói chung)', vi: 'Hỏi: người nghe có biết đúng cái nào không? Biết → the. Chưa biết, một cái → a/an. Nói chung cả loại → không mạo từ.' },
+
     /* ── Khung câu kỹ năng ── */
-    { t: 'h', text: '8. Khung câu Speaking (Ngày 4, Ngày 6)' },
+    { t: 'h', text: '9. Khung câu Speaking (Ngày 4, Ngày 6)' },
     {
       t: 'patterns',
       rows: [
@@ -227,7 +320,7 @@ export const TRA_CONG_THUC: Lesson = {
     },
     { t: 'rule', formula: 'Trả lời thẳng + lý do + ví dụ', vi: 'Mỗi câu Part 1 nói **15–25 giây**. Không bao giờ chỉ "Yes." rồi im.' },
 
-    { t: 'h', text: '9. Khung câu Writing (Ngày 2, Ngày 4, Ngày 6)' },
+    { t: 'h', text: '10. Khung câu Writing (Ngày 2, Ngày 4, Ngày 6)' },
     {
       t: 'table',
       caption: 'Writing Task 1 — khung 4 đoạn',
@@ -248,9 +341,42 @@ export const TRA_CONG_THUC: Lesson = {
     },
     { t: 'rule', formula: 'Mở bài = Paraphrase + Thesis · Thân bài = Ý chính → Giải thích → Ví dụ', vi: 'Task 2 viết chủ yếu bằng **hiện tại đơn**; Task 1 **không** nêu ý kiến riêng.' },
 
+    { t: 'h', text: '11. Reading — 14 dạng câu hỏi & học ở đâu (Ngày 2 · Reading mục 2)' },
+    {
+      t: 'table',
+      caption: '14 dạng câu hỏi Reading · ★ = sách có liệt kê · T1 N4 = Tập 1, Ngày 4',
+      head: ['Dạng (tiếng Anh)', 'Bạn phải làm gì', 'Học kỹ ở'],
+      rows: [
+        ['1. **Multiple choice** ★ — chọn đáp án', 'Chọn A/B/C/D. Biến thể: chọn **2–3 đáp án** trong một danh sách dài (mỗi đáp án đúng 1 điểm).', 'T2 N10 (một đáp án) · T3 N13 (nhiều đáp án) · ôn T3 N11, T4 N7'],
+        ['2. **True / False / Not Given** ★ (tên chính thức: **Identifying information**)', 'So câu cho sẵn với **sự thật** trong bài: khớp → **True**, trái ngược → **False**, bài không nói tới → **Not Given**.', '**T1 N12** · ôn T2 N6, T3 N3, T4 N5, T5 N3'],
+        ['3. **Yes / No / Not Given** (Identifying the writer\'s views)', 'Giống dạng 2 nhưng so với **ý kiến của tác giả**, trả lời Yes / No / Not Given.', 'T2 N20 · ôn T3 N23, T4 N5, T5 N9'],
+        ['4. **Matching information** ★ — đoạn nào chứa thông tin', 'Tìm xem một chi tiết nằm ở **đoạn nào** (A, B, C…). Một đoạn có thể dùng nhiều lần, có đoạn không dùng.', 'T2 N16 · ôn T3 N19, T4 N19, T5 N15'],
+        ['5. **Matching headings** — ghép tiêu đề cho đoạn', 'Chọn tiêu đề (i, ii, iii…) nói đúng **ý chính cả đoạn**. Số tiêu đề luôn nhiều hơn số đoạn.', 'T2 N12 · ôn T3 N5, T4 N3, T5 N5'],
+        ['6. **Matching features** — ghép người / vật với thông tin', 'Nối mỗi câu với **một người, nhà khoa học, năm, địa điểm…** trong danh sách (A, B, C…).', '**T1 N10** · ôn T3 N21, T4 N23, T5 N15'],
+        ['7. **Matching sentence endings** — ghép nửa câu', 'Ghép nửa đầu câu với nửa cuối đúng **nghĩa và ngữ pháp**, theo đúng ý bài.', 'T2 N18 · ôn T4 N15'],
+        ['8. **Sentence completion** ★ — hoàn thành câu', 'Điền từ **lấy từ bài** vào chỗ trống, đúng giới hạn số từ và đúng ngữ pháp.', '**T1 N4** · ôn T2 N14, T3 N9, T5 N7'],
+        ['9. **Summary completion** ★ — hoàn thành đoạn tóm tắt', 'Hai kiểu: chọn từ trong **hộp cho sẵn** (A, B, C…) hoặc lấy **từ trong bài**.', '**T1 N14** (hộp từ) · T2 N2 (từ trong bài) · ôn T3 N9, N25'],
+        ['10. **Note completion** — hoàn thành ghi chú', 'Điền vào bản ghi chú gạch đầu dòng tóm lại một phần bài.', 'T2 N4 · ôn T4 N11'],
+        ['11. **Table completion** — hoàn thành bảng', 'Điền vào các ô của một bảng sắp xếp thông tin trong bài.', '**T1 N8** · ôn T3 N15'],
+        ['12. **Flow-chart completion** — hoàn thành sơ đồ quy trình', 'Điền vào các bước nối bằng mũi tên của một quá trình.', '**T1 N6** · ôn T3 N17, T4 N17'],
+        ['13. **Diagram label completion** ★ — gán nhãn sơ đồ', 'Điền tên các bộ phận trên hình vẽ máy móc, công trình, cơ thể…', 'T2 N22 · ôn T3 N17, T4 N17'],
+        ['14. **Short-answer questions** ★ — trả lời ngắn', 'Trả lời câu hỏi bằng từ lấy **nguyên văn** từ bài, đúng giới hạn (vd. NO MORE THAN TWO WORDS).', 'T2 N8 · ôn T3 N7, N15, T5 N7'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Hay mất điểm oan (Ngày 2 · Reading mục 2–3)',
+      items: [
+        '**True / False / Not Given** (sự thật) ≠ **Yes / No / Not Given** (ý kiến tác giả). Hai dạng làm giống nhau, chỉ khác bộ chữ trả lời. Viết True vào câu hỏi Yes/No là **mất điểm**.',
+        '**Đọc kỹ hướng dẫn trước khi đọc bài.** Đề ghi “NO MORE THAN TWO WORDS” mà bạn viết 3 từ là sai, dù ý đúng.',
+        '**Chia thời gian:** trung bình **20 phút một bài**. Một câu nghĩ quá 2 phút thì đoán một đáp án rồi đi tiếp.',
+      ],
+    },
+    { t: 'rule', formula: 'Tập 1: Sentence completion (Ngày 4) → Flow-chart completion (Ngày 6) → Table completion (Ngày 8) → Matching features (Ngày 10) → True / False / Not Given (Ngày 12) → Summary completion — hộp từ (Ngày 14)', vi: 'Dạng **điền từ** (completion) dễ nhất nên học trước; dạng **True / False / Not Given** khó hơn nên để sau khi đã quen tìm từ khoá và từ đồng nghĩa.' },
+
     /* ── Ngày 7 ── */
 
-    { t: 'h', text: '10. Tính từ: vị trí, thứ tự, -ed / -ing (Ngày 7)' },
+    { t: 'h', text: '12. Tính từ: vị trí, thứ tự, -ed / -ing (Ngày 7)' },
     {
       t: 'patterns',
       rows: [
@@ -291,7 +417,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'opinion + size + age + shape + colour + origin + material + purpose + N', vi: 'Ý kiến đứng đầu, mục đích sát danh từ nhất; thường chỉ dùng 2–3 tính từ.' },
     { t: 'rule', formula: 'người + be / feel + V-ed (cảm thấy) · vật / việc / người gây ra + be + V-ing', vi: 'I am bored (tôi thấy chán) ↔ The lesson is boring (bài học gây chán).' },
 
-    { t: 'h', text: '11. Trạng từ: cách tạo -ly, vị trí, động từ nối + tính từ (Ngày 7)' },
+    { t: 'h', text: '13. Trạng từ: cách tạo -ly, vị trí, động từ nối + tính từ (Ngày 7)' },
     {
       t: 'table',
       caption: 'Trạng từ bất quy tắc & cặp dễ bẫy',
@@ -324,7 +450,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'S + adv (tần suất) + V + O + adv (cách thức) + nơi chốn + thời gian · S + be + adv (tần suất) · very / really / extremely + adj · adj + enough · enough + N', vi: 'Không nói "I very like" — dùng "I really like" hoặc "I like … very much".' },
     { t: 'rule', formula: 'S + be / look / feel / seem / sound / taste / become / remain + adj · S + action V (+ O) + adv', vi: 'Thay động từ bằng "is" mà câu vẫn hợp nghĩa → dùng tính từ.' },
 
-    { t: 'h', text: '12. So sánh hơn & so sánh nhất (Ngày 7)' },
+    { t: 'h', text: '14. So sánh hơn & so sánh nhất (Ngày 7)' },
     {
       t: 'table',
       caption: 'Cách tạo dạng so sánh',
@@ -353,7 +479,7 @@ export const TRA_CONG_THUC: Lesson = {
 
     /* ── Ngày 8 ── */
 
-    { t: 'h', text: '13. Đoạn thân bài Task 2: chủ đề → giải thích → ví dụ (Ngày 8)' },
+    { t: 'h', text: '15. Đoạn thân bài Task 2: chủ đề → giải thích → ví dụ (Ngày 8)' },
     {
       t: 'table',
       caption: 'Cấu trúc một đoạn thân bài',
@@ -386,7 +512,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'Đoạn thân bài = Firstly / Secondly, + S + V (ý chính). → This is because / This means that + S + V. → For example, + S + V (cụ thể). → (As a result, + S + V.)', vi: 'Topic → Explain → Example → (Link). Mỗi đoạn MỘT ý, khoảng 90–110 từ.' },
     { t: 'rule', formula: 'This is because + S + V. · This means that + S + V. · As a result, + S + V. · In other words, + S + V.', vi: 'because + mệnh đề / because of + danh từ. Tự hỏi “Tại sao?” rồi “Thì sao?” để có 2 câu giải thích.' },
 
-    { t: 'h', text: '14. Khung trả lời Part 1 — Sở thích & thời gian rảnh (Ngày 8)' },
+    { t: 'h', text: '16. Khung trả lời Part 1 — Sở thích & thời gian rảnh (Ngày 8)' },
     {
       t: 'table',
       caption: 'Khung trả lời cho từng kiểu câu hỏi',
@@ -424,7 +550,7 @@ export const TRA_CONG_THUC: Lesson = {
 
     /* ── Ngày 9 ── */
 
-    { t: 'h', text: '15. Hiện tại tiếp diễn & động từ trạng thái (Ngày 9)' },
+    { t: 'h', text: '17. Hiện tại tiếp diễn & động từ trạng thái (Ngày 9)' },
     {
       t: 'patterns',
       rows: [
@@ -460,7 +586,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'know / like / want / need / believe / understand / belong / seem + V(s/es) — không bao giờ + -ing', vi: 'Động từ chỉ trạng thái (nghĩ, thích, có, giác quan) dùng hiện tại đơn kể cả khi nói "bây giờ". think / have / see có thêm nghĩa hành động thì mới được -ing.' },
     { t: 'rule', formula: 'Thói quen / sự thật: S + V(s/es) · Bây giờ / tạm thời / xu hướng: S + am / is / are + V-ing', vi: 'What do you do? = làm nghề gì · What are you doing? = đang làm gì.' },
 
-    { t: 'h', text: '16. Quá khứ đơn: was / were · V-ed / V2 · did (Ngày 9)' },
+    { t: 'h', text: '18. Quá khứ đơn: was / were · V-ed / V2 · did (Ngày 9)' },
     {
       t: 'table',
       caption: 'Quá khứ đơn với động từ be: was / were',
@@ -518,9 +644,57 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'go → went · have → had · do → did · make → made · see → saw · take → took · buy → bought · rise → rose · fall → fell', vi: 'Động từ bất quy tắc chỉ đổi dạng ở câu KHẲNG ĐỊNH; câu phủ định / câu hỏi vẫn did + V nguyên mẫu.' },
     { t: 'rule', formula: 'S + V2 + mốc quá khứ (yesterday / last… / … ago / in 2019 / when I was…)', vi: 'Việc đã xong ở thời điểm xác định · chuỗi hành động · việc kéo dài đã chấm dứt · thói quen ngày xưa (= used to + V).' },
 
+    { t: 'h', text: '19. Tương lai nhập môn: will và be going to (Ngày 9 · mục 10)' },
+    {
+      t: 'patterns',
+      rows: [
+        { formula: 'S + will + V', vi: 'Khẳng định. **will** là **động từ khuyết thiếu** (modal verb — Ngày 13): **giống nhau cho mọi ngôi**, sau nó là **V nguyên mẫu không to**. Viết tắt: I\'ll · you\'ll · she\'ll · we\'ll · they\'ll.', examples: [{ en: "It's cold in here. I'll close the window.", vi: 'Trong này lạnh quá. Để tôi đóng cửa sổ (vừa quyết định).' }, { en: 'I think the new park will be very popular.', vi: 'Tôi nghĩ công viên mới sẽ rất đông người đến (ý kiến).' }] },
+        { formula: 'S + will not (won\'t) + V', vi: 'Phủ định. **won\'t** = will not, đọc /wəʊnt/ — khác **want** /wɒnt/ (muốn).', examples: [{ en: "Don't worry, I won't be late.", vi: 'Đừng lo, tôi sẽ không đến muộn đâu (lời hứa).' }] },
+        { formula: 'Will + S + V? · Wh- + will + S + V?', vi: 'Câu hỏi: đưa **will** lên trước chủ ngữ. Trả lời ngắn: Yes, I will. / No, I won\'t.', examples: [{ en: 'Will you help me carry these boxes?', vi: 'Bạn giúp tôi khiêng mấy cái thùng này nhé? (nhờ vả)' }, { en: 'What time will the shop open tomorrow?', vi: 'Mai mấy giờ cửa hàng mở cửa?' }] },
+        { formula: 'S + am / is / are + going to + V', vi: 'Khẳng định. Phải đủ **ba phần**: **am / is / are** (chia theo chủ ngữ như hiện tại tiếp diễn) + **going to** + **V nguyên mẫu**.', examples: [{ en: 'I am going to visit my grandparents this weekend.', vi: 'Cuối tuần này tôi định về thăm ông bà (đã tính từ trước).' }, { en: 'My sister is going to study in Japan next year.', vi: 'Năm sau chị tôi sẽ đi học ở Nhật (kế hoạch đã có).' }] },
+        { formula: 'S + am / is / are + not + going to + V', vi: 'Phủ định: thêm **not** sau am / is / are. Viết tắt: I\'m not going to · he isn\'t going to · we aren\'t going to.', examples: [{ en: "We aren't going to travel this summer because we're saving money.", vi: 'Hè này chúng tôi không định đi du lịch vì đang tiết kiệm tiền.' }] },
+        { formula: 'Am / Is / Are + S + going to + V? · Wh- + am / is / are + S + going to + V?', vi: 'Câu hỏi: đưa **am / is / are** lên trước chủ ngữ. Trả lời ngắn: Yes, I am. / No, I\'m not.', examples: [{ en: 'Are you going to take the IELTS test this year?', vi: 'Năm nay bạn có định thi IELTS không?' }, { en: 'What are you going to do after the exam?', vi: 'Thi xong bạn định làm gì?' }] },
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Khi nào dùng will, khi nào dùng be going to',
+      head: ['Tình huống', 'will + V', 'be going to + V'],
+      rows: [
+        ['**Quyết định**', 'Quyết định **ngay lúc nói** — vừa mới nghĩ ra: "The phone is ringing." — "**I\'ll** get it!"', 'Quyết định **từ trước**, đã thành **kế hoạch / dự định**: I\'m **going to** study IT next year. (đã chọn ngành từ lâu)'],
+        ['**Dự đoán**', 'Dựa vào **ý kiến, niềm tin** của mình — hay đi với **I think, I\'m sure, probably, maybe**: I think it **will** be sunny tomorrow.', 'Dựa vào **bằng chứng ngay trước mắt**: Look at those dark clouds! It **is going to** rain.'],
+        ['**Hứa · đề nghị giúp · nhờ vả**', 'I **will** call you tonight, I promise. · **I\'ll** carry that bag for you. · **Will** you open the door, please?', 'không dùng'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Câu hỏi về tương lai hay gặp ở Part 1',
+      head: ['Câu hỏi', 'Hỏi về', 'Khung trả lời'],
+      rows: [
+        ['What are you **going to** do this weekend / after the exam?', 'kế hoạch đã định', "I'm going to + V… with… / because…"],
+        ['Are you **going to** + V… this year?', 'kế hoạch (Yes / No)', "Yes, I am. I'm going to… / No, I'm not. I'm going to… instead."],
+        ['Do you think you **will** + V… in the future?', 'dự đoán, ý kiến', "Yes, I think I'll… / I don't think I'll…, because…"],
+        ['What **will** you do after you graduate?', 'dự định xa, chưa chắc', "When I finish university, I'll probably… / I'm going to…"],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Người Việt hay sai với will / be going to',
+      items: [
+        '**Thêm to sau will**: ~~I will to go.~~ → I **will go**. Sau will là **V nguyên mẫu không to**.',
+        '**Chia will theo ngôi**: ~~She wills come.~~ / ~~She will comes.~~ → She **will come**.',
+        '**Thiếu be** trong going to: ~~I going to buy a laptop.~~ → I **am going to** buy a laptop.',
+        '**Phủ định bằng don\'t**: ~~I don\'t will go.~~ → I **won\'t go** / I **will not go**. ~~I don\'t going to tell her.~~ → **I\'m not going to** tell her.',
+        '**Dịch mọi chữ "sẽ" thành will**: "Cuối tuần này tôi sẽ về quê" (đã định sẵn) → **I\'m going to visit my hometown this weekend** mới tự nhiên.',
+        '**Sau when / if khi nói về tương lai, dùng hiện tại đơn**: ~~When I will finish university, I will…~~ → **When I finish** university, **I\'m going to** look for a job.',
+        'Mẹo nhớ: **going to** = đã có "kế hoạch" hoặc "bằng chứng" từ TRƯỚC. **will** = nghĩ ra NGAY, hoặc chỉ là ý kiến của mình. Nói nhanh, going to nghe như "**gonna**" /ˈɡɒnə/ — **không viết "gonna"** trong bài Writing.',
+      ],
+    },
+    { t: 'rule', formula: 'S + will / won\'t + V · Will + S + V? · S + am / is / are (+ not) + going to + V · Am / Is / Are + S + going to + V?', vi: 'will: quyết định ngay lúc nói · dự đoán theo ý kiến (I think…) · hứa, đề nghị, nhờ. be going to: kế hoạch đã định · dự đoán có bằng chứng trước mắt.' },
+
     /* ── Ngày 10 ── */
 
-    { t: 'h', text: '17. Kết bài Opinion & cả bài 4 đoạn (Ngày 10)' },
+    { t: 'h', text: '20. Kết bài Opinion & cả bài 4 đoạn (Ngày 10)' },
     {
       t: 'patterns',
       rows: [
@@ -546,7 +720,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'In conclusion, + I firmly believe / I strongly disagree that + S + V. + It + V + lý do 1, and it also + V + lý do 2.', vi: 'Kết bài = báo hiệu + quan điểm (lời khác) + 2 lý do (lời khác). Không ý mới, không ví dụ mới.' },
     { t: 'rule', formula: 'Bài Opinion = [Paraphrase + I agree because R1 and R2.] + [Firstly, R1 → giải thích → For example… → As a result…] + [Secondly, R2 → …] + [In conclusion, quan điểm (lời khác) + R1 & R2 (lời khác).]', vi: 'R1, R2 = hai lý do. Mỗi lý do xuất hiện 3 lần: thesis → thân bài → kết bài.' },
 
-    { t: 'h', text: '18. Trạng từ tần suất & used to (Ngày 10)' },
+    { t: 'h', text: '21. Trạng từ tần suất & used to (Ngày 10)' },
     {
       t: 'table',
       caption: 'Từ 100% đến 0%',
@@ -595,9 +769,53 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'S + used to + V (xưa, nay hết) · S + didn\'t use to + V · Did + S + use to + V? · S + be used to + V-ing (đã quen)', vi: 'Câu so sánh xưa – nay: I used to + V…, but now I + V(s)…' },
     { t: 'rule', formula: 'I tend to + V · I\'m in the habit of + V-ing · I used to + V… and I would + V… · These days, I + V(s)…', vi: 'Thay “I usually” lặp đi lặp lại bằng các cụm này để lên band Lexical Resource.' },
 
+    { t: 'h', text: '22. Speaking Part 2 nhập môn — nói 1 phút về thói quen (Ngày 10 · Speaking mục 9)' },
+    {
+      t: 'table',
+      caption: 'Thẻ đề: Describe your daily routine. Đọc thẻ đề — mỗi dòng là một phần của bài nói',
+      head: ['Dòng trên thẻ', 'Trả lời bằng', 'Câu mẫu'],
+      rows: [
+        ['① **what time** you usually get up', 'hiện tại đơn + **at** + giờ', 'On weekdays, I **usually get up at** half past six.'],
+        ['② **what** you do in the morning', 'chuỗi việc nối bằng First · Then · After that', '**First**, I have a quick shower. **Then** I have breakfast…'],
+        ['③ **what** you do in the afternoon and evening', 'trạng từ / cụm tần suất + nơi chốn', 'In the afternoon, I **often** study in the library.'],
+        ['④ and **explain** which part of the day you enjoy most', 'enjoy / like + lý do (because…)', 'I **enjoy** the evening **most, because** I can relax.'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Khung bài nói 1 phút — mỗi phần 1–3 câu là đủ 1 phút. Ngày 14: kéo dài từng phần để nói đủ 2 phút.',
+      head: ['Phần', 'Khung câu'],
+      rows: [
+        ['Mở — 1 câu', "I'd like to talk about my daily routine on a normal weekday."],
+        ['① Giờ dậy', 'I usually get up at… (+ một chi tiết)'],
+        ['② Buổi sáng', 'First… Then… After that…'],
+        ['③ Chiều – tối', 'In the afternoon, I often… In the evening…'],
+        ['④ Explain', 'I enjoy… most, because…'],
+      ],
+    },
+    {
+      t: 'patterns',
+      rows: [
+        { formula: "I'd like to talk about + N.", vi: 'Mở — 1 câu, nhắc lại chủ đề trên thẻ.', examples: [{ en: "I'd like to talk about my daily routine on a normal weekday.", vi: 'Tôi muốn nói về nếp sinh hoạt của mình vào một ngày thường trong tuần.' }] },
+        { formula: 'First, + S + V. Then + S + V. After that, + S + V.', vi: 'Kể chuỗi việc theo thứ tự — hiện tại đơn suốt bài.', examples: [{ en: 'First, I have a quick shower and get dressed. Then I have breakfast with my mum, usually banh mi. After that, I take the bus to university.', vi: 'Đầu tiên, tôi tắm nhanh rồi thay đồ. Sau đó tôi ăn sáng với mẹ, thường là bánh mì. Rồi tôi bắt xe buýt đến trường.' }] },
+        { formula: 'I enjoy + N + most, because + S + V.', vi: 'Dòng **explain** — cảm xúc + lý do.', examples: [{ en: 'I enjoy the evening most, because I can relax and talk with my family.', vi: 'Tôi thích buổi tối nhất, vì tôi được thư giãn và trò chuyện với gia đình.' }] },
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Ghi nhớ: Part 2 khác Part 1 thế nào',
+      items: [
+        'Một lượt Part 2: **đọc thẻ đề** → **1 phút ghi chú** (từ khoá, con số, ký hiệu — không viết câu) → **nói 1–2 phút** một mạch, không có ai hỏi xen vào. Nói dưới 1 phút là mất điểm Fluency.',
+        'Động từ trên thẻ quyết định thì: “Describe **your daily routine**” / “a place you **often** visit” → **hiện tại đơn**; “Describe a time when you **learned**…” (Ngày 14) → **quá khứ đơn**.',
+        'Dòng **and explain…** là dòng **quan trọng nhất** nhưng hay bị quên nhất — khi ghi chú, ghi nhánh **④ explain** trước tiên.',
+        'Hết ý trước 1 phút: thêm cuối tuần (At weekends, it\'s different. I tend to sleep in until nine…), thêm xưa – nay (When I was in high school, I used to…, but now…), hoặc nối bằng **Another thing is that…** rồi nói tiếp.',
+      ],
+    },
+    { t: 'rule', formula: "Mở: I'd like to talk about… · I usually get up at… · First… Then… After that… · In the afternoon / evening, I often + V… · I enjoy… most, because + S + V…", vi: 'Part 2 về thói quen → hiện tại đơn suốt bài; trả lời đủ 4 dòng, đúng thứ tự trên thẻ.' },
+
     /* ── Ngày 11 ── */
 
-    { t: 'h', text: '19. Collocation & trật tự từ (Ngày 11)' },
+    { t: 'h', text: '23. Collocation & trật tự từ (Ngày 11)' },
     {
       t: 'table',
       caption: 'Dịch từng chữ (sai) và collocation đúng',
@@ -635,7 +853,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'highly + effective / likely · fully + aware · widely + used · strongly + agree / believe · V + sharply / heavily', vi: 'Trạng từ “nhấn mạnh” cũng có bạn đồng hành riêng — very không thay được tất cả.' },
     { t: 'rule', formula: 'a rise / fall / increase IN + N · an increase OF + số · impact / effect ON · reason / demand FOR · solution / access TO · good AT · interested IN · responsible FOR', vi: 'Giới từ đi theo danh từ / tính từ — học cả cụm.' },
 
-    { t: 'h', text: '20. Cụm danh từ (Ngày 11)' },
+    { t: 'h', text: '24. Cụm danh từ (Ngày 11)' },
     {
       t: 'table',
       caption: 'Khung cụm danh từ',
@@ -659,7 +877,111 @@ export const TRA_CONG_THUC: Lesson = {
     },
     { t: 'rule', formula: '(the / my) + (số lượng) + (tính từ: ý kiến → cỡ → tuổi → màu → nguồn gốc → chất liệu) + (N bổ nghĩa, số ít) + N CHÍNH + (in… / who… / V-ing / V3)', vi: 'Tính từ và danh từ bổ nghĩa đứng TRƯỚC; thông tin dài đứng SAU danh từ chính.' },
 
-    { t: 'h', text: '21. Writing Task 1 — tả xu hướng theo thời gian (Ngày 11, Ngày 12)' },
+    { t: 'h', text: '25. There is / there are — “có” để giới thiệu và mô tả (Ngày 11 · mục 8)' },
+    {
+      t: 'patterns',
+      rows: [
+        { formula: 'There is + a / an + N số ít (+ nơi chốn)', vi: 'Một vật / một nơi. Viết tắt khi nói: **There\'s**.', examples: [{ en: 'There is a small park near my house.', vi: 'Gần nhà tôi có một công viên nhỏ.' }, { en: "There's a café opposite the station.", vi: 'Đối diện nhà ga có một quán cà phê.' }] },
+        { formula: 'There is + N không đếm được (some / a lot of / much)', vi: 'Danh từ không đếm được (traffic, water, noise, information — Ngày 5) luôn đi với **is**.', examples: [{ en: 'There is a lot of traffic in the city centre at 6 p.m.', vi: 'Lúc 6 giờ chiều trung tâm thành phố rất đông xe.' }] },
+        { formula: 'There are + N số nhiều (two / some / many / a lot of)', vi: 'Từ hai vật trở lên.', examples: [{ en: 'There are two supermarkets in my neighbourhood.', vi: 'Khu tôi ở có hai siêu thị.' }, { en: 'There are many trees along the river.', vi: 'Dọc bờ sông có nhiều cây.' }] },
+        { formula: "There isn't / aren't + any + N · Is / Are there + N? — Yes, there is / are. · No, there isn't / aren't.", vi: 'Phủ định thêm **not**; câu hỏi đưa **is / are** lên trước **there**.', examples: [{ en: "There aren't any cinemas in my village.", vi: 'Làng tôi không có rạp chiếu phim nào.' }, { en: 'Is there a bank near here? — Yes, there is.', vi: 'Gần đây có ngân hàng không? — Có.' }] },
+        { formula: 'There was / were (quá khứ) · There will be (tương lai)', vi: 'Đổi thì bằng cách đổi **be**. Bản đồ “trước – sau” và biểu đồ năm đã qua dùng was / were; dự báo dùng will be (Ngày 9, mục 10).', examples: [{ en: 'In 2000, there were only three hotels in the town.', vi: 'Năm 2000, thị trấn chỉ có ba khách sạn.' }, { en: 'There will be a new hospital in the north of the town.', vi: 'Phía bắc thị trấn sẽ có một bệnh viện mới.' }] },
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'There is / there are ở ba thì',
+      head: ['Thì', 'Số ít / không đếm được', 'Số nhiều'],
+      rows: [
+        ['Hiện tại', 'There **is** a library. · There **is** some noise.', 'There **are** two libraries.'],
+        ['Quá khứ', 'There **was** a farm here in 2000.', 'There **were** many farms here in 2000.'],
+        ['Tương lai', 'There **will be** a new bridge.', 'There **will be** more bus stops.'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Người Việt hay sai với there is / there are',
+      items: [
+        'Dịch chữ “có” thành **have**: ~~It has a park near my house.~~ / ~~Near my house has a park.~~ → **There is** a park near my house.',
+        'Bỏ mất **there**: ~~Have many people in the street.~~ / ~~Are many people…~~ → **There are** many people in the street.',
+        'Sai số ít – số nhiều: ~~There is many cars.~~ → There **are** many cars. · ~~There are many traffic.~~ → There **is** a lot of traffic (traffic không đếm được).',
+        '~~There have…~~ không tồn tại. Chỉ có **there is / there are** (và was / were / will be).',
+        'Khi liệt kê, **be** hoà hợp với danh từ **đứng ngay sau nó**: There **is** a bed and two chairs. · There **are** two chairs and a bed.',
+        'Phát âm: **There\'s** /ðeəz/; **there are** đọc nối /ðeərə/ — âm /r/ nối sang nguyên âm phía sau.',
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Mẹo: there is / there are trong IELTS',
+      items: [
+        '**Task 1 bản đồ**: mở câu bằng There is / are + vị trí: **There is** a car park **to the east of** the school. Bản đồ hai năm: In 1990 **there was** a farm…; now **there is** a shopping centre.',
+        '**Task 1 biểu đồ** — hai cách nói cùng một ý để paraphrase: **There was a sharp rise in** sales = Sales **rose sharply**.',
+        '**Speaking Part 1** (Where do you live? / What is your area like?): **There are** lots of street food stalls, and **there is** a big lake nearby.',
+      ],
+    },
+    { t: 'rule', formula: 'There is + a / an + N số ít / N không đếm được · There are + N số nhiều · Is / Are there…? · There was / were · There will be', vi: '“Có” (tồn tại ở đâu đó) = there is / are — không dịch thành have. be chia theo danh từ đứng ngay sau.' },
+
+    { t: 'h', text: '26. Giới từ in / on / at — nơi chốn, thời gian, bản đồ & biểu đồ (Ngày 11 · mục 9)' },
+    {
+      t: 'table',
+      caption: 'at · on · in — từ hẹp đến rộng: at = một ĐIỂM · on = một BỀ MẶT / một ĐƯỜNG · in = một KHÔNG GIAN bao quanh. Ngoại lệ phải thuộc: at night (nhưng in the morning / afternoon / evening); on Monday morning (có tên ngày thì dùng on).',
+      head: ['Giới từ', 'Nơi chốn', 'Thời gian', 'Thêm'],
+      rows: [
+        ['**AT** — một điểm', '**at** the bus stop · **at** home · **at** work · **at** school · **at** 25 Tran Phu Street', '**at** 7 o\'clock · **at** noon · **at** night', 'Dịp lễ: **at** Tet · **at** Christmas · **at** the weekend (Anh-Anh)'],
+        ['**ON** — bề mặt, đường, ngày', '**on** the table · **on** the wall · **on** Tran Phu Street · **on** the left · **on** the second floor', '**on** Monday · **on** 2 September · **on** my birthday · **on** Monday morning', 'Xe công cộng: **on** the bus · **on** the train'],
+        ['**IN** — không gian, khoảng dài', '**in** the room · **in** the park · **in** Hanoi · **in** Vietnam · **in** the north of…', '**in** May · **in** 2020 · **in** summer · **in** the 1990s · **in** the morning', 'Xe riêng nhỏ: **in** a car · **in** a taxi'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Giới từ chỉ thời gian',
+      head: ['Giới từ', 'Dùng với', 'Ví dụ'],
+      rows: [
+        ['**at**', 'giờ · noon / night / midnight · dịp lễ · the weekend (Anh-Anh) · the beginning / the end of…', 'The class starts **at** 8 a.m. · **at** the end of the year'],
+        ['**on**', 'thứ · ngày tháng · ngày cụ thể (my birthday, New Year\'s Day) · thứ + buổi', '**on** Friday · **on** 15 March · **on** Sunday evening'],
+        ['**in**', 'buổi (the morning / afternoon / evening) · tháng · mùa · năm · thập kỷ · thế kỷ', '**in** July · **in** 2015 · **in** the 1990s · **in** the 21st century'],
+        ['(không giới từ)', 'last · next · this · every · yesterday · today · tomorrow', 'I met her **last** year. (~~in last year~~) · See you **next** Monday. (~~on next Monday~~)'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Giới từ nơi chốn dùng nhiều khi tả bản đồ (Writing Task 1 · Listening Part 2)',
+      head: ['Cụm', 'Nghĩa', 'Ví dụ'],
+      rows: [
+        ['**in** the north / south / east / west **of**…', 'ở phía bắc… (nằm **bên trong** khu vực đó)', 'The school is **in the north of** the town.'],
+        ['**to** the north / east… **of**…', 'ở phía bắc… (nằm **bên ngoài**, sát cạnh)', 'The airport is **to the north of** the city.'],
+        ['**in** the centre / middle **of**…', 'ở trung tâm, ở giữa', 'There is a fountain **in the centre of** the park.'],
+        ['**on** the left / right · **on** the east side **of**…', 'bên trái / phải · ở phía đông của…', 'The car park is **on the east side of** the hospital.'],
+        ['**on / at** the corner **of** A and B', 'ở góc giao nhau của A và B', 'The bank is **on the corner of** Main Street and Park Road.'],
+        ['next to · opposite · between A and B · along · near', 'cạnh · đối diện · giữa A và B · dọc theo · gần', 'The café is **opposite** the bank. · Trees were planted **along** the river.'],
+      ],
+    },
+    {
+      t: 'table',
+      caption: 'Giới từ thời gian khi tả biểu đồ (Writing Task 1)',
+      head: ['Cụm', 'Ví dụ'],
+      rows: [
+        ['**in** + năm / tháng', 'Sales peaked **in** 2015. · Visitor numbers were highest **in** July.'],
+        ['**from** … **to** … · **between** … **and** …', 'The figure doubled **from** 2010 **to** 2020. · It fell **between** 2015 **and** 2018.'],
+        ['**at** the beginning / **at** the end **of** the period', '**At the end of the period**, the figure stood at 40%.'],
+        ['**over** the period · **during** the 1990s', '**Over the period**, car use rose steadily.'],
+      ],
+    },
+    {
+      t: 'note',
+      title: 'Người Việt hay sai với in / on / at',
+      items: [
+        '~~in Monday~~ / ~~at Monday~~ → **on** Monday. ~~on 2020~~ / ~~at 2020~~ → **in** 2020. ~~on the morning~~ → **in** the morning (nhưng **on** Monday morning).',
+        '~~in the night~~ → **at night**. ~~in the weekend~~ → **at** the weekend (Anh-Anh) / **on** the weekend (Anh-Mỹ).',
+        'Thừa giới từ trước last / next / this / every: ~~in last year~~ → **last year** · ~~on every Sunday~~ → **every Sunday**.',
+        '~~in the end of 2020~~ → **at the end of** 2020. **In the end** (không có of) nghĩa khác: **cuối cùng thì** (sau nhiều chuyện).',
+        '~~arrive to Hanoi~~ → arrive **in** Hanoi (thành phố, nước) / arrive **at** the airport (một điểm). ~~in home~~ → **at home**.',
+        'Bản đồ: **in** the north of (bên trong) ≠ **to** the north of (bên ngoài). Dùng nhầm là đặt sai vị trí cả toà nhà.',
+      ],
+    },
+    { t: 'rule', formula: 'at + giờ / điểm · on + ngày / bề mặt / đường · in + tháng / năm / buổi / không gian · last / next / this / every + (không giới từ)', vi: 'Bản đồ: in the north of (trong) · to the north of (ngoài) · on the corner of. Biểu đồ: in 2010 · from… to… · at the end of the period.' },
+
+    { t: 'h', text: '27. Writing Task 1 — tả xu hướng theo thời gian (Ngày 11, Ngày 12)' },
     {
       t: 'table',
       caption: 'Động từ ↔ danh từ (tả cùng một thay đổi bằng hai cách)',
@@ -718,7 +1040,7 @@ export const TRA_CONG_THUC: Lesson = {
 
     /* ── Ngày 12 ── */
 
-    { t: 'h', text: '22. Khung trả lời câu hỏi quan điểm O–R–E (Ngày 12)' },
+    { t: 'h', text: '28. Khung trả lời câu hỏi quan điểm O–R–E (Ngày 12)' },
     {
       t: 'table',
       caption: 'Cụm cho từng bước',
@@ -746,7 +1068,7 @@ export const TRA_CONG_THUC: Lesson = {
 
     /* ── Ngày 13 ── */
 
-    { t: 'h', text: '23. Động từ khuyết thiếu: luật chung · khả năng · xin phép (Ngày 13)' },
+    { t: 'h', text: '29. Động từ khuyết thiếu: luật chung · khả năng · xin phép (Ngày 13)' },
     {
       t: 'table',
       caption: 'Các modal hay gặp nhất trong IELTS',
@@ -776,7 +1098,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'Hiện tại: S + can + V · Quá khứ: S + could / was able to + V · Tương lai: S + will be able to + V', vi: 'Một lần làm được việc khó trong quá khứ → was able to / managed to, không phải could.' },
     { t: 'rule', formula: 'Can / Could / May + I + V? (xin phép) · Can / Could / Would + you + V? (nhờ) · Would you mind + V-ing? · Shall I + V? (đề nghị giúp)', vi: 'could / would trong câu hỏi = lịch sự, không phải quá khứ. may = trang trọng nhất.' },
 
-    { t: 'h', text: '24. Modal: bắt buộc · cấm · lời khuyên · phỏng đoán (Ngày 13)' },
+    { t: 'h', text: '30. Modal: bắt buộc · cấm · lời khuyên · phỏng đoán (Ngày 13)' },
     {
       t: 'table',
       caption: 'Bắt buộc, cấm đoán và “không cần”: must · have to · mustn\'t · don\'t have to',
@@ -819,7 +1141,7 @@ export const TRA_CONG_THUC: Lesson = {
 
     /* ── Ngày 14 ── */
 
-    { t: 'h', text: '25. Bài luận thảo luận hai mặt — Discussion (Ngày 14)' },
+    { t: 'h', text: '31. Bài luận thảo luận hai mặt — Discussion (Ngày 14)' },
     {
       t: 'patterns',
       rows: [
@@ -839,7 +1161,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'Mở bài = Some people argue that + [A], while others believe that + [B]. + In my opinion, (although + S + V,) + S + V.', vi: 'Hai quan điểm trong câu 1, ý kiến của bạn trong câu 2 — không bao giờ để giám khảo phải đoán.' },
     { t: 'rule', formula: 'Thân 1: On the one hand, some people argue that + [A] + This is because… + For example… · Thân 2: On the other hand, I agree with those who believe that + [B] + The main reason is that… · Kết: In conclusion, while + [A], I believe that + [B].', vi: 'Ý người khác → some people argue / those who…; ý của mình → I agree / I believe. Mỗi đoạn thân bài: câu chủ đề → lý do → ví dụ.' },
 
-    { t: 'h', text: '26. Speaking Part 2 kể chuyện quá khứ & Part 3 (Ngày 14)' },
+    { t: 'h', text: '32. Speaking Part 2 kể chuyện quá khứ & Part 3 (Ngày 14)' },
     {
       t: 'table',
       caption: 'Từ nối thời gian — giúp câu chuyện trôi chảy (Fluency & Coherence)',
@@ -876,7 +1198,7 @@ export const TRA_CONG_THUC: Lesson = {
 
     /* ── Ngày 15 ── */
 
-    { t: 'h', text: '27. Câu bị động — mọi thì đã học (Ngày 15)' },
+    { t: 'h', text: '33. Câu bị động — mọi thì đã học (Ngày 15)' },
     {
       t: 'patterns',
       rows: [
@@ -936,7 +1258,7 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'Chủ động: S + V + O → Bị động: O (làm S mới) + be (chia theo thì + S mới) + V3 (+ by + S cũ)', vi: 'Chỉ đổi được khi động từ có tân ngữ. by + người làm chỉ giữ khi thông tin đó quan trọng.' },
     { t: 'rule', formula: 'S + will / can / must / should / may + be + V3', vi: 'Tương lai & modal bị động — be luôn nguyên mẫu sau will và modal.' },
 
-    { t: 'h', text: '28. Writing Task 1 — bản đồ & quy trình (Ngày 15)' },
+    { t: 'h', text: '34. Writing Task 1 — bản đồ & quy trình (Ngày 15)' },
     {
       t: 'table',
       caption: 'Từ nối trình tự — mỗi bước một từ nối khác nhau',
@@ -954,17 +1276,17 @@ export const TRA_CONG_THUC: Lesson = {
     { t: 'rule', formula: 'The diagram illustrates how + N + is / are + V3. + The process consists of [số] stages, from [bước đầu] to [bước cuối]. + First / Next / After that / Finally + S + is / are + V3.', vi: 'Khung bài quy trình: mở bài (paraphrase đề) + tổng quan (số bước, đầu, cuối) + từng bước bị động có từ nối.' },
 
     /* ── Bảng chốt ── */
-    { t: 'h', text: '29. Bảng chốt: gặp chủ ngữ nào thì dùng gì?' },
+    { t: 'h', text: '35. Bảng chốt: gặp chủ ngữ nào thì dùng gì?' },
     {
       t: 'table',
-      head: ['Chủ ngữ', 'be', 'Động từ thường', 'Phủ định', 'Câu hỏi', 'Đang làm (Ngày 9)', 'Quá khứ (Ngày 9)'],
+      head: ['Chủ ngữ', 'be', 'Động từ thường', 'Phủ định', 'Câu hỏi', 'Đang làm (Ngày 9)', 'Quá khứ (Ngày 9)', 'Tương lai (Ngày 9)'],
       rows: [
-        ['I', 'am', 'work', "don't work · I'm not", 'Do I…? · Am I…?', 'am working', "was · worked · didn't work"],
-        ['you / we / they / N số nhiều', 'are', 'work', "don't work · aren't", 'Do they…? · Are they…?', 'are working', "were · worked · didn't work"],
-        ['he / she / it / N số ít / N không đếm được', 'is', 'works', "doesn't work · isn't", 'Does she…? · Is she…?', 'is working', "was · worked · didn't work"],
+        ['I', 'am', 'work', "don't work · I'm not", 'Do I…? · Am I…?', 'am working', "was · worked · didn't work", 'will work · am going to work'],
+        ['you / we / they / N số nhiều', 'are', 'work', "don't work · aren't", 'Do they…? · Are they…?', 'are working', "were · worked · didn't work", 'will work · are going to work'],
+        ['he / she / it / N số ít / N không đếm được', 'is', 'works', "doesn't work · isn't", 'Does she…? · Is she…?', 'is working', "was · worked · didn't work", 'will work · is going to work'],
       ],
     },
-    { t: 'rule', formula: 'Mọi chủ ngữ + V2 / didn\'t + V (Ngày 9) · Mọi chủ ngữ + can / must / should + V (Ngày 13) · be (chia như cột be) + V3 (Ngày 15)', vi: 'Quá khứ của động từ thường và modal **không đổi theo chủ ngữ**; chỉ **be** (am / is / are · was / were) và hiện tại đơn (**-s / does**) phải nhìn chủ ngữ — câu bị động cũng chỉ chia **be**.' },
+    { t: 'rule', formula: 'Mọi chủ ngữ + V2 / didn\'t + V (Ngày 9) · Mọi chủ ngữ + will / won\'t + V (Ngày 9) · Mọi chủ ngữ + can / must / should + V (Ngày 13) · be (chia như cột be) + V3 (Ngày 15)', vi: 'Quá khứ của động từ thường và modal **không đổi theo chủ ngữ**; chỉ **be** (am / is / are · was / were) và hiện tại đơn (**-s / does**) phải nhìn chủ ngữ — câu bị động và **be going to** cũng chỉ chia **be**. Riêng **there is / there are** (Ngày 11) chia theo **danh từ đứng ngay sau**, không theo there.' },
   ],
 };
 

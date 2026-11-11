@@ -13,16 +13,17 @@ const D2_READING: Lesson = {
   id: "d2-doc",
   kind: "reading",
   title: "Làm quen IELTS Reading & từ khoá",
-  goal: "Biết bài thi Reading gồm những gì, nhận ra 10 loại từ khoá và dùng chúng để tìm đáp án nhanh theo 2 bước.",
-  minutes: 35,
+  goal: "Biết bài thi Reading gồm những gì (3 bài, 40 câu, 14 dạng câu hỏi), nhận ra 10 loại từ khoá, phân biệt skim/scan và dùng từ khoá để tìm đáp án theo 2 bước.",
+  minutes: 45,
   blocks: [
     {
       t: "recap",
       items: [
         "Reading: **60 phút · 3 bài đọc · 40 câu**, không có thời gian chép đáp án riêng.",
-        "**8 dạng câu hỏi** phổ biến — mỗi ngày sau học kỹ một dạng.",
-        "**Từ khoá** chia 4 nhóm (chính · số liệu · tên riêng & địa điểm · thời gian) = 10 loại nhỏ.",
+        "**14 dạng câu hỏi** — bảng ở mục 2 ghi rõ dạng nào học ở **Ngày / Tập** nào (Tập 1 học 6 dạng nền).",
+        "**Từ khoá** chia 4 nhóm (chính · hỗ trợ · tên riêng & địa điểm · thời gian) = 10 loại nhỏ.",
         "Làm bài theo **2 bước**: ==(1) gạch từ khoá câu hỏi → (2) tìm & đối chiếu trong bài==, chú ý từ đồng nghĩa.",
+        "Hai cách đọc: **skim** (lướt lấy ý chính) và **scan** (dò tìm một chi tiết). Cuối bài có **16 từ vựng về bài thi** để vào thẻ nhớ.",
       ],
     },
     { t: "h", text: "1. Cấu trúc bài thi IELTS Reading" },
@@ -62,32 +63,53 @@ const D2_READING: Lesson = {
       ],
     },
 
-    { t: "h", text: "2. 8 dạng câu hỏi phổ biến" },
+    { t: "h", text: "2. 14 dạng câu hỏi IELTS Reading — và học ở đâu trong khoá" },
     {
       t: "p",
-      text: "Mỗi đề Reading trộn nhiều dạng câu hỏi. Biết trước tên từng dạng giúp bạn đọc đề không bị bỡ ngỡ. Các ngày sau của khoá sẽ luyện riêng từng dạng.",
+      text: "Mỗi đề Reading trộn nhiều dạng câu hỏi (một bài đọc thường có 2–3 dạng). Sách liệt kê **8 dạng hay gặp**; bảng dưới **bổ sung đủ cả 14 dạng** của IELTS Reading Academic, và cột cuối cho biết dạng đó được dạy kỹ ở **Ngày / Tập** nào của lộ trình 5 tập (T1 = Tập 1 — khoá bạn đang học; Tập 2–5 đang soạn). Hôm nay bạn **chưa cần làm** các dạng này — chỉ cần biết tên để không bỡ ngỡ khi gặp. Thứ cần làm được ngay hôm nay là **kỹ năng nền**: tìm từ khoá (mục 4–7).",
     },
     {
       t: "table",
-      head: ["Tên dạng (tiếng Anh)", "Nghĩa", "Bạn phải làm gì"],
+      caption: "14 dạng câu hỏi Reading · ★ = sách có liệt kê · T1 N4 = Tập 1, Ngày 4",
+      head: ["Dạng (tiếng Anh)", "Bạn phải làm gì", "Học kỹ ở"],
       rows: [
-        ["Multiple Choice", "Chọn đáp án đúng", "Chọn A, B, C hoặc D. Có khi phải chọn 2–3 đáp án trong một danh sách dài."],
-        ["Matching Information", "Ghép thông tin", "Tìm xem một thông tin nằm ở **đoạn nào** (A, B, C…). Một đoạn có thể được dùng nhiều lần."],
-        ["Identifying Information", "Nhận diện thông tin", "Tên chính thức của dạng **True / False / Not Given** (xem ô bên dưới)."],
-        ["True / False / Not Given", "Đúng / Sai / Không có thông tin", "So câu cho sẵn với bài đọc: khớp → **True**, trái ngược → **False**, bài không nói tới → **Not Given**."],
-        ["Short Answer Questions", "Trả lời câu hỏi ngắn", "Trả lời bằng từ lấy **nguyên văn** từ bài, đúng giới hạn số từ (ví dụ: NO MORE THAN TWO WORDS)."],
-        ["Sentence Completion", "Hoàn thành câu", "Điền từ trong bài vào chỗ trống để câu đúng nghĩa và đúng ngữ pháp."],
-        ["Summary Completion", "Hoàn thành đoạn tóm tắt", "Điền vào đoạn tóm tắt, bằng từ trong bài hoặc từ trong một hộp cho sẵn."],
-        ["Diagram Labeling", "Gán nhãn sơ đồ", "Điền tên các bộ phận trên hình vẽ máy móc, quy trình, công trình."],
+        ["1. **Multiple choice** ★ — chọn đáp án", "Chọn A/B/C/D. Biến thể: chọn **2–3 đáp án** trong một danh sách dài (mỗi đáp án đúng 1 điểm).", "T2 N10 (một đáp án) · T3 N13 (nhiều đáp án) · ôn T3 N11, T4 N7"],
+        ["2. **True / False / Not Given** ★ (tên chính thức: **Identifying information**)", "So câu cho sẵn với **sự thật** trong bài: khớp → **True**, trái ngược → **False**, bài không nói tới → **Not Given**.", "**T1 N12** · ôn T2 N6, T3 N3, T4 N5, T5 N3"],
+        ["3. **Yes / No / Not Given** (Identifying the writer's views)", "Giống dạng 2 nhưng so với **ý kiến của tác giả**, trả lời Yes / No / Not Given.", "T2 N20 · ôn T3 N23, T4 N5, T5 N9"],
+        ["4. **Matching information** ★ — đoạn nào chứa thông tin", "Tìm xem một chi tiết nằm ở **đoạn nào** (A, B, C…). Một đoạn có thể dùng nhiều lần, có đoạn không dùng.", "T2 N16 · ôn T3 N19, T4 N19, T5 N15"],
+        ["5. **Matching headings** — ghép tiêu đề cho đoạn", "Chọn tiêu đề (i, ii, iii…) nói đúng **ý chính cả đoạn**. Số tiêu đề luôn nhiều hơn số đoạn.", "T2 N12 · ôn T3 N5, T4 N3, T5 N5"],
+        ["6. **Matching features** — ghép người / vật với thông tin", "Nối mỗi câu với **một người, nhà khoa học, năm, địa điểm…** trong danh sách (A, B, C…).", "**T1 N10** · ôn T3 N21, T4 N23, T5 N15"],
+        ["7. **Matching sentence endings** — ghép nửa câu", "Ghép nửa đầu câu với nửa cuối đúng **nghĩa và ngữ pháp**, theo đúng ý bài.", "T2 N18 · ôn T4 N15"],
+        ["8. **Sentence completion** ★ — hoàn thành câu", "Điền từ **lấy từ bài** vào chỗ trống, đúng giới hạn số từ và đúng ngữ pháp.", "**T1 N4** · ôn T2 N14, T3 N9, T5 N7"],
+        ["9. **Summary completion** ★ — hoàn thành đoạn tóm tắt", "Hai kiểu: chọn từ trong **hộp cho sẵn** (A, B, C…) hoặc lấy **từ trong bài**.", "**T1 N14** (hộp từ) · T2 N2 (từ trong bài) · ôn T3 N9, N25"],
+        ["10. **Note completion** — hoàn thành ghi chú", "Điền vào bản ghi chú gạch đầu dòng tóm lại một phần bài.", "T2 N4 · ôn T4 N11"],
+        ["11. **Table completion** — hoàn thành bảng", "Điền vào các ô của một bảng sắp xếp thông tin trong bài.", "**T1 N8** · ôn T3 N15"],
+        ["12. **Flow-chart completion** — hoàn thành sơ đồ quy trình", "Điền vào các bước nối bằng mũi tên của một quá trình.", "**T1 N6** · ôn T3 N17, T4 N17"],
+        ["13. **Diagram label completion** ★ — gán nhãn sơ đồ", "Điền tên các bộ phận trên hình vẽ máy móc, công trình, cơ thể…", "T2 N22 · ôn T3 N17, T4 N17"],
+        ["14. **Short-answer questions** ★ — trả lời ngắn", "Trả lời câu hỏi bằng từ lấy **nguyên văn** từ bài, đúng giới hạn (vd. NO MORE THAN TWO WORDS).", "T2 N8 · ôn T3 N7, N15, T5 N7"],
       ],
     },
     {
       t: "note",
       title: "Cẩn thận: sách tách hai dạng thật ra là một",
       items: [
-        "Sách liệt kê **Identifying Information** và **True / False / Not Given** như hai dạng khác nhau. Thực ra trong đề thi, “Identifying information” chính là **tên chính thức** của dạng True / False / Not Given.",
-        "Dạng “anh em” của nó là **Identifying the writer’s views** — trả lời **Yes / No / Not Given** — hỏi về **ý kiến của tác giả** chứ không phải sự thật. Hai dạng làm giống nhau, chỉ khác bộ chữ trả lời. Viết True vào câu hỏi Yes/No là **mất điểm**.",
-        "Ngoài 8 dạng trên, đề thật còn có **Matching Headings** (ghép tiêu đề cho đoạn), **Matching Features** (ghép người/vật với thông tin), **Matching Sentence Endings** (ghép nửa câu), **Note / Table / Flow-chart Completion** (điền ghi chú, bảng, sơ đồ quy trình). Khoá sẽ học dần.",
+        "Sách liệt kê **Identifying Information** và **True / False / Not Given** như hai dạng khác nhau. Thực ra trong đề thi, “Identifying information” chính là **tên chính thức** của dạng True / False / Not Given (dạng 2 ở bảng trên).",
+        "Dạng “anh em” của nó là **Identifying the writer’s views** — trả lời **Yes / No / Not Given** (dạng 3) — hỏi về **ý kiến của tác giả** chứ không phải sự thật. Hai dạng làm giống nhau, chỉ khác bộ chữ trả lời. Viết True vào câu hỏi Yes/No là **mất điểm**.",
+        "Vì sao nơi khác nói “11 dạng” hay “16 dạng”? Trang chính thức của IELTS gộp 4 dạng điền (summary / note / table / flow-chart) làm một nhóm, nên 14 − 3 = 11; khoá này tách riêng vì **cách làm từng dạng khác nhau**. Tính thêm biến thể (Multiple choice nhiều đáp án, Summary có hộp từ) thì thành 16. Cùng một bộ dạng, chỉ khác cách đếm.",
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Tập 1 học 6 dạng Reading — mỗi ngày kỹ năng một dạng",
+      caption: "Ba dạng **điền từ** (completion) dễ nhất nên học trước; **Matching features** và **True / False / Not Given** khó hơn nên để sau khi đã quen tìm từ khoá và từ đồng nghĩa. Ngày 14 quay lại dạng điền, lần này chọn từ trong hộp.",
+      steps: [
+        { label: "Ngày 4", sub: "Sentence completion" },
+        { label: "Ngày 6", sub: "Flow-chart completion" },
+        { label: "Ngày 8", sub: "Table completion" },
+        { label: "Ngày 10", sub: "Matching features" },
+        { label: "Ngày 12", sub: "True / False / Not Given" },
+        { label: "Ngày 14", sub: "Summary completion (hộp từ)" },
       ],
     },
 
@@ -118,6 +140,19 @@ const D2_READING: Lesson = {
     {
       t: "p",
       text: "Sách chia từ khoá thành **4 nhóm lớn**. Học theo nhóm giúp mắt bạn quen “bắt” đúng loại từ khi lướt bài. Ví dụ trong bảng là ví dụ mới, bạn hãy đọc to từng ví dụ.",
+    },
+    {
+      t: "sodo",
+      kind: "mindmap",
+      title: "4 nhóm từ khoá = 10 loại nhỏ",
+      caption: "**Tên riêng** (3.1), **số liệu** (2.3) và **năm, ngày tháng** (nhóm 4) dễ “bắt” nhất khi lướt vì viết hoa hoặc là chữ số — hãy tìm chúng **trước**.",
+      center: "**Keyword** (từ khoá)",
+      branches: [
+        { label: "1. Từ khoá chính", anh: "key", items: ["1.1 **Chủ đề** — solar power", "1.2 **Câu hỏi** — Why, When, According to", "1.3 **Định hướng** — next to, opposite"] },
+        { label: "2. Từ khoá hỗ trợ", anh: "link", items: ["2.1 **Thay thế** (đồng nghĩa) — big → large", "2.2 **Ví dụ** — such as, for instance", "2.3 **Số liệu** — percent, half, rate"] },
+        { label: "3. Tên riêng & địa điểm", anh: "round-pushpin", items: ["3.1 **Tên riêng** — Marie Curie, Tokyo", "3.2 **Địa điểm** — region, coast"] },
+        { label: "4. Thời gian", anh: "spiral-calendar", items: ["4.1 **Thời điểm** — 2015, last month", "4.2 **Khoảng** — in the 1990s, for two decades"] },
+      ],
     },
     {
       t: "table",
@@ -178,7 +213,33 @@ const D2_READING: Lesson = {
         ["3. Chú ý từ khoá thay thế", "Thông tin trong bài thường được **viết lại bằng từ khác** (từ đồng nghĩa, cụm từ khác, hoặc cách nói trái nghĩa). Không thấy đúng chữ không có nghĩa là không có thông tin."],
       ],
     },
+    {
+      t: "p",
+      text: "Phần này sách chưa giảng kỹ: khi dùng từ khoá, mắt bạn đọc theo **hai kiểu** rất khác nhau. Người mới học hay đọc chậm từng chữ từ đầu đến cuối — đó là lý do không kịp giờ. Hãy tập đổi “số” đọc theo việc cần làm.",
+    },
+    {
+      t: "sodo",
+      kind: "compare",
+      title: "Skim và scan — hai kiểu đọc nhanh",
+      caption: "Một câu hỏi thường cần **cả hai**: scan để tới đúng chỗ, rồi đọc kỹ 1–2 câu ở đó để đối chiếu. Không bao giờ đọc kỹ cả bài trước khi xem câu hỏi.",
+      cols: [
+        { title: "**Skim** /skɪm/ — đọc lướt lấy ý", anh: "eyes", items: ["Mục đích: biết **bài / đoạn nói về gì**", "Đọc tiêu đề, câu đầu mỗi đoạn, bỏ qua chi tiết", "~2–3 phút cho cả bài", "Dùng cho: Matching headings, câu hỏi ý chính"] },
+        { title: "**Scan** /skæn/ — dò tìm chi tiết", anh: "magnifying-glass-tilted-left", items: ["Mục đích: tìm **một chi tiết** cụ thể", "Mắt chạy nhanh, chỉ dừng ở **từ khoá**: tên riêng, số, năm", "Vài giây đến 1 phút cho mỗi câu hỏi", "Dùng cho: điền từ, Short answer, Matching features"] },
+      ],
+    },
     { t: "rule", formula: "Từ khoá câu hỏi → quét bài → đọc kỹ 1–2 câu quanh đó → đối chiếu", vi: "Tên riêng, số, năm dễ tìm nhất — **tìm chúng trước**. Bài hay dùng **từ đồng nghĩa** thay cho chữ trong câu hỏi." },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "2 bước tìm đáp án bằng từ khoá — áp cho mọi dạng câu hỏi",
+      caption: "Bước 1 làm trên **câu hỏi**, bước 2 làm trên **bài đọc**. Mục 7 ngay dưới làm thử đủ 2 bước với một câu hỏi thật.",
+      steps: [
+        { label: "Bước 1a · Gạch **2–4 từ khoá** trong câu hỏi", sub: "Bỏ the, a, is, do… · ưu tiên tên riêng, số, năm" },
+        { label: "Bước 1b · Đoán **loại đáp án**", sub: "When → thời gian · What percentage → số % · Which country → tên nước" },
+        { label: "Bước 2a · **Scan** bài tìm từ khoá hoặc từ đồng nghĩa", sub: "produced the most ≈ the largest producer" },
+        { label: "Bước 2b · Đọc kỹ 1–2 câu quanh đó, **đối chiếu** rồi chọn", sub: "Đủ khớp mới chọn · cảnh giác đáp án lặp y nguyên chữ trong bài" },
+      ],
+    },
 
     { t: "h", text: "7. Ví dụ làm bài theo 2 bước" },
     {
@@ -272,6 +333,33 @@ const D2_READING: Lesson = {
         { q: "Question: “Prices **went up**.” — Bài đọc: “Prices **increased**.”", options: ["Thay thế", "Số liệu", "Câu hỏi"], correct: 0, why: "“went up” và “increased” cùng nghĩa “tăng” → từ khoá **thay thế** (đồng nghĩa)." },
       ],
     },
+
+    { t: "h", text: "9. Từ vựng về bài thi IELTS (16 từ)" },
+    {
+      t: "p",
+      text: "Phần này sách chưa có. Đây là những từ **đề thi và lời giảng dùng liên tục** trong cả khoá — hiểu chúng thì đọc hướng dẫn đề không bị khựng. Các từ này cũng được đưa vào **thẻ nhớ** và **tra từ** của khoá. Bấm 🔊 nghe, đọc to theo, rồi bấm **Che nghĩa** để tự kiểm tra.",
+    },
+    {
+      t: "vocab",
+      items: [
+        { w: "passage", pos: "n", ipa: "/ˈpæsɪdʒ/", vi: "bài đọc, đoạn văn", ex: "Each Reading test has three long passages.", exVi: "Mỗi bài thi Reading có ba bài đọc dài.", more: "**Reading Passage 1 / 2 / 3** · **a short passage** (một đoạn ngắn) · nghĩa khác: hành lang, lối đi", anh: "open-book" },
+        { w: "heading", pos: "n", ipa: "/ˈhedɪŋ/", vi: "tiêu đề (của một đoạn / một mục)", ex: "Choose the correct heading for each paragraph.", exVi: "Chọn tiêu đề đúng cho mỗi đoạn.", more: "Dạng **Matching headings** · khác **headline** (tít báo) · gốc: **head** (đầu)" },
+        { w: "keyword", pos: "n", ipa: "/ˈkiːwɜːd/", vi: "từ khoá", ex: "Underline the keywords in the question before you read.", exVi: "Gạch chân từ khoá trong câu hỏi trước khi đọc bài.", more: "Viết liền **keyword** hoặc rời **key word** đều đúng · **underline / identify / find** keywords", anh: "key" },
+        { w: "synonym", pos: "n", ipa: "/ˈsɪnənɪm/", vi: "từ đồng nghĩa", ex: "“Large” is a synonym for “big”.", exVi: "“Large” là từ đồng nghĩa của “big”.", more: "a synonym **for / of** sth · tính từ **synonymous** /sɪˈnɒnɪməs/ · trái nghĩa: **antonym** (từ trái nghĩa)" },
+        { w: "paraphrase", pos: "v, n", ipa: "/ˈpærəfreɪz/", vi: "diễn đạt lại bằng từ khác; câu diễn đạt lại", ex: "The passage often paraphrases the words in the question.", exVi: "Bài đọc thường diễn đạt lại các từ trong câu hỏi.", more: "Trọng âm âm đầu **PA**-ra-phrase · **paraphrase the question** (mở bài Writing) · khác **copy** (chép nguyên)" },
+        { w: "skim", pos: "v", ipa: "/skɪm/", vi: "đọc lướt (lấy ý chính)", ex: "Skim the passage first to see what it is about.", exVi: "Đọc lướt bài trước để biết nó nói về gì.", more: "**skim (through) a text** · quá khứ gấp đôi m: **skimmed** · V-ing: **skimming**", anh: "eyes" },
+        { w: "scan", pos: "v", ipa: "/skæn/", vi: "đọc dò tìm (một chi tiết)", ex: "Scan the text for names and numbers.", exVi: "Dò bài để tìm tên riêng và con số.", more: "**scan a text for** sth · quá khứ: **scanned** · nghĩa khác: quét (mã QR, tài liệu)", anh: "magnifying-glass-tilted-left" },
+        { w: "instructions", pos: "n", ipa: "/ɪnˈstrʌkʃnz/", vi: "lời hướng dẫn (của đề)", ex: "Read the instructions carefully: some questions allow only one word.", exVi: "Đọc kỹ hướng dẫn: có câu chỉ cho phép một từ.", more: "Thường **số nhiều** · **follow the instructions** (làm theo hướng dẫn) · động từ: **instruct**", anh: "clipboard" },
+        { w: "band", pos: "n", ipa: "/bænd/", vi: "mức điểm IELTS (thang 0–9)", ex: "She needs band 6.5 to study in Australia.", exVi: "Cô ấy cần band 6.5 để du học Úc.", more: "**band score** · **overall band** (điểm tổng) · **get / achieve / reach band 7**" },
+        { w: "criterion", pos: "n", ipa: "/kraɪˈtɪəriən/", vi: "tiêu chí (chấm điểm)", ex: "Lexical Resource is one criterion in Writing.", exVi: "Vốn từ là một tiêu chí trong bài Viết.", more: "Số nhiều bất quy tắc: **criteria** /kraɪˈtɪəriə/ (~~criterias~~) · **four criteria** · **assessment criteria**" },
+        { w: "essay", pos: "n", ipa: "/ˈeseɪ/", vi: "bài luận", ex: "In Task 2 you write an essay of at least 250 words.", exVi: "Ở Task 2 bạn viết một bài luận ít nhất 250 từ.", more: "**write / plan an essay** · **opinion essay** (bài nêu ý kiến) · **discussion essay** (bài thảo luận hai mặt)", anh: "writing-hand" },
+        { w: "thesis", pos: "n", ipa: "/ˈθiːsɪs/", vi: "luận điểm chính (câu nêu quan điểm ở mở bài)", ex: "Your thesis should answer the question directly.", exVi: "Luận điểm của bạn nên trả lời thẳng câu hỏi của đề.", more: "**thesis statement** · số nhiều: **theses** /ˈθiːsiːz/ · nghĩa khác: luận văn (master’s thesis)" },
+        { w: "examiner", pos: "n", ipa: "/ɪɡˈzæmɪnə(r)/", vi: "giám khảo", ex: "The examiner records the whole Speaking test.", exVi: "Giám khảo ghi âm toàn bộ bài thi Nói.", more: "Họ từ: **examine** (v) · **exam / examination** (n) · **examinee** = thí sinh (ít dùng hơn candidate)" },
+        { w: "candidate", pos: "n", ipa: "/ˈkændɪdət/", vi: "thí sinh; ứng viên", ex: "Each candidate has one minute to prepare for Part 2.", exVi: "Mỗi thí sinh có một phút chuẩn bị cho Part 2.", more: "Cũng đọc /ˈkændɪdeɪt/ · nghĩa khác: **ứng viên** (job candidate, ứng viên tranh cử)", anh: "student" },
+        { w: "cue card", pos: "n", ipa: "/ˈkjuː kɑːd/", vi: "thẻ chủ đề (Speaking Part 2)", ex: "The cue card lists three or four points to talk about.", exVi: "Thẻ chủ đề liệt kê ba hoặc bốn ý để nói.", more: "Còn gọi **task card** · **cue** /kjuː/ = gợi ý, tín hiệu (đọc giống chữ Q)" },
+        { w: "fluency", pos: "n", ipa: "/ˈfluːənsi/", vi: "sự trôi chảy", ex: "Long pauses can lower your fluency score.", exVi: "Ngập ngừng lâu có thể làm giảm điểm trôi chảy.", more: "Tiêu chí **Fluency and Coherence** (Speaking) · tính từ **fluent** · **speak English fluently**" },
+      ],
+    },
   ],
 };
 
@@ -288,7 +376,7 @@ const D2_WRITING: Lesson = {
       t: "recap",
       items: [
         "Task 2 = bài luận **ít nhất 250 từ** trong **40 phút**, chiếm **2/3 điểm Writing**.",
-        "Khung **4–5 đoạn**: Mở bài (paraphrase + thesis) → 2 thân bài (ý chính → ví dụ → giải thích) → Kết bài.",
+        "Khung **4–5 đoạn**: Mở bài (paraphrase + thesis) → 2 thân bài (ý chính → giải thích → ví dụ) → Kết bài.",
         "**4 tiêu chí**, mỗi cái 25%: Task Response · Coherence & Cohesion · Lexical Resource · Grammar.",
         "Điểm = **trung bình 4 tiêu chí**, báo theo bước 0.5.",
       ],
@@ -323,13 +411,33 @@ const D2_WRITING: Lesson = {
       head: ["Phần", "Viết gì", "Độ dài gợi ý"],
       rows: [
         ["Mở bài (Introduction)", "**Paraphrase** đề (viết lại ý của đề bằng từ của bạn) + nêu **thesis** (luận điểm chính — câu trả lời thẳng cho câu hỏi của đề).", "2–3 câu, ~40–50 từ"],
-        ["Thân bài 1 (Body 1)", "Nêu **ý chính thứ nhất** → đưa **bằng chứng hoặc ví dụ** → giải thích vì sao ý này **ủng hộ luận điểm** của bạn.", "4–6 câu, ~90–100 từ"],
-        ["Thân bài 2 (Body 2)", "Nêu **ý chính thứ hai**, làm giống thân bài 1: ý chính → ví dụ → giải thích.", "4–6 câu, ~90–100 từ"],
+        ["Thân bài 1 (Body 1)", "Nêu **ý chính thứ nhất** → **giải thích** (vì sao ý này đúng, nó **ủng hộ luận điểm** thế nào) → đưa **bằng chứng hoặc ví dụ** cụ thể.", "4–6 câu, ~90–100 từ"],
+        ["Thân bài 2 (Body 2)", "Nêu **ý chính thứ hai**, làm giống thân bài 1: ý chính → giải thích → ví dụ.", "4–6 câu, ~90–100 từ"],
         ["(Thân bài 3 — nếu cần)", "Có thể thêm đoạn khi lập luận phức tạp. Người mới học nên giữ **2 đoạn** để kịp giờ và viết sâu.", "Tuỳ chọn"],
         ["Kết bài (Conclusion)", "**Tóm tắt** các ý chính và **nhắc lại luận điểm** (bằng từ khác). **Không đưa thông tin mới** vào kết bài.", "1–2 câu, ~30–40 từ"],
       ],
     },
-    { t: "rule", formula: "Mở bài (paraphrase + thesis) → Thân bài 1 → Thân bài 2 → Kết bài", vi: "Mỗi thân bài: **ý chính → ví dụ → giải thích**. Kết bài **không** thêm ý mới." },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Khung bài luận Task 2 — 4 đoạn, ~270 từ",
+      caption: "Mỗi ô là **một đoạn văn** (xuống dòng giữa các đoạn). Thân bài là phần dài nhất và quyết định điểm Task Response.",
+      steps: [
+        { label: "**Mở bài** · ~45 từ", sub: "Paraphrase đề + **thesis** (trả lời thẳng câu hỏi)" },
+        { label: "**Thân bài 1** · ~95 từ", sub: "Firstly, ý chính → giải thích → For example, …" },
+        { label: "**Thân bài 2** · ~95 từ", sub: "Secondly, ý chính → giải thích → For instance, …" },
+        { label: "**Kết bài** · ~35 từ", sub: "In conclusion, tóm 2 ý + nhắc lại thesis · **không** ý mới" },
+      ],
+    },
+    { t: "rule", formula: "Mở bài (paraphrase + thesis) → Thân bài 1 → Thân bài 2 → Kết bài", vi: "Mỗi thân bài: **ý chính → giải thích → ví dụ**. Kết bài **không** thêm ý mới." },
+    {
+      t: "note",
+      title: "Ghi nhớ: giải thích trước hay ví dụ trước?",
+      items: [
+        "Cả hai thứ tự **ý chính → giải thích → ví dụ** và **ý chính → ví dụ → giải thích** đều được giám khảo chấp nhận — điều quan trọng là đoạn có **đủ cả ba**.",
+        "Khoá này dùng thống nhất **ý chính → giải thích → ví dụ** (như Ngày 1 và dàn ý mẫu ngay dưới): người mới viết dễ giữ mạch hơn, và ví dụ cụ thể ở cuối làm đoạn văn “chốt” chắc hơn.",
+      ],
+    },
     {
       t: "note",
       title: "Người Việt hay sai",
@@ -353,8 +461,10 @@ const D2_WRITING: Lesson = {
         ["Mở bài — paraphrase", "It is often argued that young learners should start studying a second language at primary school.", "Người ta thường cho rằng trẻ nhỏ nên bắt đầu học ngôn ngữ thứ hai từ bậc tiểu học."],
         ["Mở bài — thesis", "I completely agree with this view for two main reasons.", "Tôi hoàn toàn đồng ý với quan điểm này vì hai lý do chính."],
         ["Thân bài 1 — ý chính", "Firstly, children learn new sounds and words more easily than adults.", "Thứ nhất, trẻ em học âm và từ mới dễ hơn người lớn."],
+        ["Thân bài 1 — giải thích", "This is because their brains are still flexible, so they can copy the sounds they hear without much effort.", "Đó là vì não của trẻ còn linh hoạt, nên trẻ có thể bắt chước những âm nghe được mà không mất nhiều công sức."],
         ["Thân bài 1 — ví dụ", "For example, many Vietnamese children who start English at six can pronounce it almost like native speakers.", "Ví dụ, nhiều trẻ Việt Nam học tiếng Anh từ sáu tuổi có thể phát âm gần như người bản xứ."],
         ["Thân bài 2 — ý chính", "Secondly, an early start gives children more opportunities in the future.", "Thứ hai, bắt đầu sớm cho trẻ nhiều cơ hội hơn trong tương lai."],
+        ["Thân bài 2 — giải thích", "Most universities and international companies require a good level of English, and children who start early usually reach that level sooner.", "Hầu hết trường đại học và công ty quốc tế đòi hỏi trình độ tiếng Anh tốt, và trẻ bắt đầu sớm thường đạt trình độ đó sớm hơn."],
         ["Thân bài 2 — ví dụ", "For instance, students who speak English well can win scholarships to study abroad.", "Chẳng hạn, học sinh giỏi tiếng Anh có thể giành học bổng du học."],
         ["Kết bài", "In conclusion, I believe learning a foreign language at primary school is highly beneficial because children learn faster and gain better chances later in life.", "Tóm lại, tôi tin học ngoại ngữ từ tiểu học rất có lợi vì trẻ học nhanh hơn và có nhiều cơ hội hơn sau này."],
       ],
@@ -465,8 +575,8 @@ const D2_SPEAKING: Lesson = {
   id: "d2-noi",
   kind: "speaking",
   title: "Cấu trúc bài thi IELTS Speaking",
-  goal: "Nắm 3 phần của bài thi Nói (thời gian, giám khảo làm gì), nghe câu trả lời mẫu và tự ghi âm trả lời Part 1.",
-  minutes: 35,
+  goal: "Nắm 3 phần của bài thi Nói (thời gian, giám khảo làm gì), nghe câu trả lời mẫu cả 3 Part và tự ghi âm trả lời Part 1.",
+  minutes: 40,
   blocks: [
     {
       t: "recap",
@@ -489,6 +599,17 @@ const D2_SPEAKING: Lesson = {
         ["**Part 1** — Introduction & Interview (Giới thiệu và phỏng vấn)", "4–5 phút", "Tự giới thiệu, hỏi tên, kiểm tra giấy tờ, rồi hỏi các câu **chung về bản thân**: quê quán, gia đình, học tập, công việc, sở thích.", "Trả lời ngắn gọn, tự nhiên, mỗi câu **2–3 câu** (khoảng 15–25 giây)."],
         ["**Part 2** — Long Turn (Lượt nói dài)", "3–4 phút", "Đưa bạn một **thẻ chủ đề** (cue card) có câu hỏi và các gợi ý, cùng giấy bút. Cho **1 phút chuẩn bị**, rồi để bạn nói; có thể hỏi thêm 1–2 câu ngắn sau đó.", "Ghi chú trong 1 phút, rồi nói liền **1–2 phút** (nên cố nói đủ 2 phút) theo các gợi ý trên thẻ."],
         ["**Part 3** — Discussion (Thảo luận)", "4–5 phút", "Hỏi các câu **sâu hơn, rộng hơn** liên quan tới chủ đề Part 2: ý kiến, so sánh, nguyên nhân, xu hướng xã hội.", "Nêu **ý kiến + lý do + ví dụ**, nói dài hơn Part 1 (khoảng 30–60 giây mỗi câu)."],
+      ],
+    },
+    {
+      t: "sodo",
+      kind: "compare",
+      title: "3 Part đặt cạnh nhau — độ khó tăng dần",
+      caption: "Càng về sau câu trả lời càng **dài** và càng **trừu tượng**: Part 1 nói về **bạn**, Part 2 **kể một chuyện**, Part 3 bàn về **xã hội nói chung**.",
+      cols: [
+        { title: "**Part 1** · 4–5 phút", anh: "speech-balloon", items: ["Câu hỏi **quen thuộc**: quê, học, việc, sở thích", "Khoảng 10–12 câu, 2–3 chủ đề", "Mỗi câu trả lời **2–3 câu** (15–25 giây)", "Thì hay dùng: **hiện tại đơn**"] },
+        { title: "**Part 2** · 3–4 phút", anh: "spiral-notepad", items: ["Một **cue card** + giấy bút", "**1 phút** chuẩn bị (ghi từ khoá)", "Nói liền **1–2 phút**, không bị ngắt", "Thì hay dùng: **quá khứ** khi kể chuyện"] },
+        { title: "**Part 3** · 4–5 phút", anh: "thinking-face", items: ["Câu hỏi **sâu, rộng** nối từ chủ đề Part 2", "Ý kiến, so sánh, nguyên nhân, xu hướng", "Mỗi câu trả lời **30–60 giây**", "Nói về **người nói chung**, không chỉ bản thân"] },
       ],
     },
     {
@@ -525,6 +646,22 @@ const D2_SPEAKING: Lesson = {
         "Không học thuộc cả bài văn mẫu. Giám khảo nhận ra giọng đọc thuộc lòng và có thể chuyển sang câu hỏi khác.",
         "Không nghe rõ câu hỏi thì hỏi lại: **“Sorry, could you repeat the question, please?”** Việc này **không bị trừ điểm**.",
       ],
+    },
+    {
+      t: "sodo",
+      kind: "flow",
+      title: "Công thức một câu trả lời Part 1 — 3 nhịp",
+      caption: "Ví dụ câu hỏi: **Do you like music?** Ba câu ngắn, khoảng 20 giây — đủ để giám khảo chấm trôi chảy mà không bị coi là học thuộc.",
+      steps: [
+        { label: "1. **Trả lời thẳng**", sub: "Yes, I really **like** music." },
+        { label: "2. **Lý do / chi tiết**", sub: "It **helps** me relax after a long day at school." },
+        { label: "3. **Ví dụ nhỏ**", sub: "For example, I usually **listen** to pop songs on the bus." },
+      ],
+    },
+    {
+      t: "canh",
+      anh: ["woman-teacher", "woman-student", "studio-microphone"],
+      caption: "Phòng thi Speaking: chỉ có **giám khảo Sarah** và **thí sinh Minh Anh**, một bàn, một máy ghi âm. Sarah mở đầu bằng chào hỏi, hỏi tên, rồi chuyển sang các câu Part 1 về quê và sở thích.",
     },
     {
       t: "dialogue",
@@ -577,6 +714,11 @@ const D2_SPEAKING: Lesson = {
       ],
     },
     {
+      t: "canh",
+      anh: ["spiral-notepad", "stopwatch", "books"],
+      caption: "Sarah đưa cue card “**Describe a book you have read recently**” cùng giấy bút. Minh Anh có **1 phút** ghi từ khoá, rồi nói liền khoảng **2 phút** theo thứ tự các gợi ý trên thẻ.",
+    },
+    {
       t: "dialogue",
       title: "Part 2 mẫu (khoảng band 6) — phần này sách chưa có",
       lines: [
@@ -609,6 +751,30 @@ const D2_SPEAKING: Lesson = {
         "Khung trả lời: **Ý kiến → Lý do → Ví dụ → (so sánh hoặc mặt trái)**.",
         "Dùng cụm mở đầu để có thêm vài giây suy nghĩ: **“That’s an interesting question.”**, **“I’d say that…”**, **“It depends on…”**.",
         "Nói về **người nói chung** (young people, many families…), không chỉ kể chuyện bản thân như Part 1.",
+      ],
+    },
+    {
+      t: "canh",
+      anh: ["woman-teacher", "thinking-face", "mobile-phone"],
+      caption: "Sang Part 3, Sarah hỏi rộng hơn về **thói quen đọc của người trẻ** và **công nghệ**. Minh Anh không kể chuyện riêng nữa mà nêu ý kiến về xã hội nói chung.",
+    },
+    {
+      t: "dialogue",
+      title: "Part 3 mẫu (khoảng band 6) — phần này sách chưa có",
+      lines: [
+        { who: "Examiner", role: "examiner", text: "Do young people in your country read as much as older people?", vi: "Người trẻ ở nước bạn có đọc sách nhiều như người lớn tuổi không?" },
+        { who: "Candidate", role: "candidate", text: "I'd say they read just as much, but in a different way. Older people usually read newspapers and printed books, while young people read a lot on their phones, for example news articles and comics.", vi: "Tôi cho là họ đọc nhiều không kém, nhưng theo cách khác. Người lớn tuổi thường đọc báo và sách in, còn người trẻ đọc nhiều trên điện thoại, ví dụ bài báo và truyện tranh." },
+        { who: "Examiner", role: "examiner", text: "Should schools make students read more books? Why?", vi: "Trường học có nên bắt học sinh đọc nhiều sách hơn không? Vì sao?" },
+        { who: "Candidate", role: "candidate", text: "That's an interesting question. I think schools should encourage reading, but not force it. If students can choose books they enjoy, they read more. For instance, my school has a small library corner in every classroom, and many of my friends started reading because of it.", vi: "Câu hỏi thú vị đấy. Tôi nghĩ trường nên khuyến khích đọc, nhưng không ép. Nếu học sinh được chọn sách mình thích, các em sẽ đọc nhiều hơn. Chẳng hạn, trường tôi có một góc thư viện nhỏ trong mỗi lớp, và nhiều bạn của tôi bắt đầu đọc sách nhờ nó." },
+      ],
+    },
+    {
+      t: "note",
+      title: "Vì sao câu trả lời Part 3 trên ổn?",
+      items: [
+        "Mở bằng cụm “câu giờ” tự nhiên: **I'd say…**, **That's an interesting question. I think…**",
+        "Có **so sánh** (older people… while young people…) và **ví dụ** cụ thể (a library corner in every classroom) — đúng khung **ý kiến → lý do → ví dụ**.",
+        "Nói về **người nói chung** (young people, students), chỉ dùng chuyện bản thân làm ví dụ minh hoạ.",
       ],
     },
     {
@@ -683,8 +849,8 @@ const D2_HOMEWORK: Lesson = {
   id: "d2-bai-tap",
   kind: "homework",
   title: "Bài tập Ngày 2 — Tìm từ khoá",
-  goal: "Luyện 5 bài tìm từ khoá: đọc câu hỏi, đọc đoạn văn, xác định đúng loại từ khoá rồi dùng chúng để ra đáp án.",
-  minutes: 30,
+  goal: "Luyện 5 bài tìm từ khoá như sách, rồi củng cố: 5 câu trả lời ngắn, 10 câu nhận diện loại từ khoá và 5 câu dịch dùng từ vựng bài thi — tổng 31 câu.",
+  minutes: 40,
   blocks: [
     {
       t: "recap",
@@ -692,7 +858,7 @@ const D2_HOMEWORK: Lesson = {
       items: [
         "Mỗi bài: đọc câu hỏi → **gạch từ khoá** → đọc đoạn văn → **tìm từ khoá tương ứng** → chọn đáp án.",
         "Cuối mỗi bài có **bản dịch** — làm xong mới mở.",
-        "Phần cuối: **5 câu trả lời ngắn** (tối đa HAI TỪ và/hoặc MỘT SỐ).",
+        "Phần thêm: **5 câu trả lời ngắn** (tối đa HAI TỪ và/hoặc MỘT SỐ) · **10 câu** “từ khoá loại nào” · **5 câu dịch** dùng từ vựng bài thi (mục 9 bài Reading).",
       ],
     },
     {
@@ -943,10 +1109,10 @@ const D2_HOMEWORK: Lesson = {
       title: "Viết đáp án — tối đa HAI TỪ và/hoặc MỘT SỐ (5 câu)",
       kind: "fill",
       items: [
-        { q: "Bài 1: The 1997 crisis was mainly caused by the sudden fall in value of the Thai ___ .", answers: ["baht", "currency", "Thai baht"] },
-        { q: "Bài 2: Which animal is most threatened by forest loss on Borneo? → the ___", answers: ["orangutan", "orangutans", "the orangutan"] },
+        { q: "Bài 1: The 1997 crisis was mainly caused by the sudden fall in value of the Thai ___ .", answers: ["baht", "currency"] },
+        { q: "Bài 2: Which animal is most threatened by forest loss on Borneo? → the ___", answers: ["orangutan", "orangutans"] },
         { q: "Bài 3: In which year did the first public steam railway open? → ___", answers: ["1825", "September 1825", "in 1825"] },
-        { q: "Bài 4: What percentage of all the water on Earth is fresh water? → about ___", answers: ["3%", "3 %", "3 percent", "3 per cent", "three percent", "three per cent", "about 3%"] },
+        { q: "Bài 4: What percentage of all the water on Earth is fresh water? → about ___", answers: ["3%", "3 %", "3 percent", "3 per cent", "three percent", "three per cent"] },
         { q: "Bài 5: What method do scientists use to find the age of ancient wooden objects? → ___", answers: ["radiocarbon dating", "carbon dating"] },
       ],
     },
@@ -957,6 +1123,47 @@ const D2_HOMEWORK: Lesson = {
         "Viết đúng **chính tả** từ trong bài. Sai một chữ cái là mất điểm cả câu.",
         "Vượt giới hạn số từ là **sai**, dù ý đúng: ~~the sudden fall of the baht~~ (quá 2 từ) → **baht**.",
         "Số có thể viết bằng chữ số (**3%**) cho nhanh và ít sai chính tả hơn viết bằng chữ.",
+        "Chữ đã in sẵn trước chỗ trống (the, about, Thai…) thì **không viết lại**: “about ___” → viết **3%**, không viết ~~about 3%~~.",
+      ],
+    },
+
+    /* Phần thêm: nhận diện loại từ khoá (10 câu) + dịch (5 câu) — để đủ khuôn ≥ 30 câu */
+    { t: "h", text: "Thêm: Từ khoá này thuộc loại nào? (10 câu)" },
+    {
+      t: "p",
+      text: "Phần này sách chưa có. Mỗi câu in đậm **một** từ khoá — hãy gọi đúng tên loại của nó trong 10 loại đã học (mục 5 bài Reading). Nhận ra loại từ khoá là biết ngay mắt phải “bắt” thứ gì khi scan bài.",
+    },
+    {
+      t: "mcq",
+      id: "d2-bt-loai-tu-khoa",
+      title: "Từ in đậm thuộc loại từ khoá nào? (10 câu)",
+      items: [
+        { q: "The new hospital is **between** the park and the river.", options: ["Địa điểm", "Định hướng", "Tên riêng"], correct: 1, why: "“between” (ở giữa) chỉ **vị trí tương đối** → từ khoá **định hướng**." },
+        { q: "**Over the last ten years**, the number of cyclists has doubled.", options: ["Khoảng thời gian", "Thời điểm cụ thể", "Số liệu"], correct: 0, why: "Một **quãng** kéo dài mười năm → **khoảng thời gian**. Chữ “ten” nằm trong cụm thời gian, không phải số liệu thống kê." },
+        { q: "Many cities, **for instance** Singapore, have strict rules on litter.", options: ["Thay thế", "Tên riêng", "Ví dụ"], correct: 2, why: "“for instance” = “for example” → báo hiệu **ví dụ** sắp đến." },
+        { q: "Most **renewable energy** in the country comes from the wind.", options: ["Chủ đề", "Địa điểm", "Câu hỏi"], correct: 0, why: "“renewable energy” (năng lượng tái tạo) là **chủ đề** chính của câu." },
+        { q: "The study was carried out by **Oxford University**.", options: ["Địa điểm", "Ví dụ", "Tên riêng"], correct: 2, why: "Tên một **tổ chức cụ thể**, viết hoa → **tên riêng**. “Địa điểm” chỉ dùng cho từ chung như city, region." },
+        { q: "**How** do bees tell other bees where the flowers are?", options: ["Định hướng", "Câu hỏi", "Chủ đề"], correct: 1, why: "“How” cho biết cần tìm **cách thức** → từ khoá **câu hỏi**." },
+        { q: "The museum opened on **12 May 2019**.", options: ["Số liệu", "Khoảng thời gian", "Thời điểm cụ thể"], correct: 2, why: "Một **ngày cụ thể** → **thời điểm cụ thể**, không phải khoảng thời gian." },
+        { q: "Almost **a quarter** of the forest was destroyed by fire.", options: ["Số liệu", "Thời điểm cụ thể", "Thay thế"], correct: 0, why: "“a quarter” (một phần tư) là **tỉ lệ** → **số liệu**." },
+        { q: "Most tea in Vietnam is grown in **mountainous areas**.", options: ["Tên riêng", "Địa điểm", "Định hướng"], correct: 1, why: "“mountainous areas” (vùng núi) là từ chung chỉ nơi chốn, không viết hoa → **địa điểm**." },
+        { q: "Question: “Young people **prefer** short videos.” — Bài đọc: “Teenagers **favour** short clips.”", options: ["Chủ đề", "Thay thế", "Ví dụ"], correct: 1, why: "“prefer” và “favour” cùng nghĩa “thích hơn” (cả young people → teenagers, videos → clips) → từ khoá **thay thế**." },
+      ],
+    },
+
+    { t: "h", text: "Thêm: Dịch sang tiếng Anh — từ vựng bài thi (5 câu)" },
+    {
+      t: "quiz",
+      id: "d2-bt-dich",
+      title: "Dịch sang tiếng Anh — dùng từ gợi ý (5 câu)",
+      kind: "translate",
+      grammar: "Thì hiện tại đơn (Ngày 1): chủ ngữ he / she / it / danh từ số ít (the examiner, the passage) → động từ thêm -s/-es. Từ vựng ở mục 9 bài Reading.",
+      items: [
+        { q: "Tôi gạch chân từ khoá trong mỗi câu hỏi.", hint: "underline, keyword, each question", answers: ["I underline the keywords in each question.", "I underline keywords in each question.", "I underline the keywords in every question.", "I underline keywords in every question.", "I underline the key words in each question.", "I underline key words in each question.", "I underline the keyword in each question.", "I underline the keywords in each of the questions.", "I underline the keywords of each question."] },
+        { q: "Bài đọc thường dùng từ đồng nghĩa.", hint: "the passage, often, synonym", answers: ["The passage often uses synonyms.", "The passages often use synonyms.", "Reading passages often use synonyms.", "The reading passage often uses synonyms.", "The passage usually uses synonyms.", "Passages often use synonyms.", "The passage often uses a synonym."] },
+        { q: "Tôi đọc lướt bài đọc trong hai phút.", hint: "skim, the passage, in two minutes", answers: ["I skim the passage in two minutes.", "I skim the passage for two minutes.", "I skim through the passage in two minutes.", "I skim the text in two minutes.", "I skim the reading passage in two minutes.", "I skim the passage within two minutes.", "I skim through the passage for two minutes."] },
+        { q: "Giám khảo chấm bài luận theo bốn tiêu chí.", hint: "the examiner, mark, essay, four criteria", answers: ["The examiner marks the essay on four criteria.", "The examiner marks the essay using four criteria.", "The examiner marks the essay based on four criteria.", "The examiner marks the essay according to four criteria.", "The examiner grades the essay on four criteria.", "The examiner grades the essay using four criteria.", "The examiner scores the essay on four criteria.", "The examiner assesses the essay on four criteria.", "The examiner assesses the essay using four criteria.", "Examiners mark essays on four criteria.", "The examiner marks the essay against four criteria.", "The examiner marks the essay by four criteria.", "The examiner marks the essay with four criteria.", "The examiner marks essays on four criteria.", "The examiner marks the essay according to the four criteria.", "The examiner marks the essay on the four criteria."] },
+        { q: "Cô ấy cần band 6.5 để du học.", hint: "need, band, study abroad", answers: ["She needs band 6.5 to study abroad.", "She needs a band 6.5 to study abroad.", "She needs band 6.5 in order to study abroad.", "She needs an overall band of 6.5 to study abroad.", "She needs a band score of 6.5 to study abroad.", "She needs IELTS band 6.5 to study abroad.", "She needs band 6.5 to study overseas.", "She needs a band of 6.5 to study abroad."] },
       ],
     },
   ],

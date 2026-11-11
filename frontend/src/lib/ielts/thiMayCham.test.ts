@@ -12,6 +12,11 @@ import { NGHE_01 } from '../../app/language/[code]/ielts/thi-may/de/nghe-01';
 import { VIET_01 } from '../../app/language/[code]/ielts/thi-may/de/viet-01';
 import { DOC_00 } from '../../app/language/[code]/ielts/thi-may/de/doc-00';
 import { NGHE_00 } from '../../app/language/[code]/ielts/thi-may/de/nghe-00';
+import { DOC_DE1 } from '../../app/language/[code]/ielts/thi-may/de/doc-de1';
+import { NGHE_DE1 } from '../../app/language/[code]/ielts/thi-may/de/nghe-de1';
+import { VIET_DE1 } from '../../app/language/[code]/ielts/thi-may/de/viet-de1';
+import { NOI_DE1 } from '../../app/language/[code]/ielts/thi-may/de/noi-de1';
+import { NOI_06 } from '../../app/language/[code]/ielts/thi-may/de/noi-06';
 import { MUC_LUC, BO_DE, deCuaBo, coDe, TEN_KY_NANG } from '../../app/language/[code]/ielts/thi-may/de/index';
 import { MANIFEST } from '../../app/language/[code]/ielts/ngay/manifest';
 
@@ -141,6 +146,42 @@ test('đề Reading 01: 40 câu, đáp án + bằng chứng nguyên văn hợp l
 test('đề Listening 01: 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(NGHE_01));
 test('Đề 0 Reading (doc-00): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(DOC_00));
 test('Đề 0 Listening (nghe-00): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(NGHE_00));
+test('Đề 1 Reading (doc-de1): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(DOC_DE1));
+test('Đề 1 Listening (nghe-de1): 40 câu, đáp án + bằng chứng nguyên văn hợp lệ', () => kiemDe(NGHE_DE1));
+
+test('Đề 1 (thi cuối Tập 1): chỉ dùng dạng Tập 1 đã dạy, passage đủ dài, trắc nghiệm rải đều, Writing + Speaking đủ khuôn', () => {
+  // Mọi dạng câu của Đề 1 phải có bài ôn trong Tập 1 (BAI_ON khác rỗng) — đề cuối tập không được hỏi dạng chưa dạy.
+  for (const de of [DOC_DE1, NGHE_DE1]) for (const g of nhomCuaDe(de)) assert.ok(BAI_ON[g.dang].length > 0, `${de.id} ${g.id}: dạng ${g.dang} chưa có bài ôn ở Tập 1`);
+  for (const p of DOC_DE1.phan) assert.ok(p.doan.map((d) => d.s).join(' ').split(/\s+/).length >= 550, `doc-de1 passage ${p.so} đủ dài`);
+  // TFNG: đủ cả ba loại đáp án, không loại nào quá nửa.
+  const tfng = nhomCuaDe(DOC_DE1).filter((g) => g.dang === 'tfng').flatMap((g) => Array.from({ length: g.den - g.tu + 1 }, (_, i) => DOC_DE1.dapAn[g.tu + i].a[0]));
+  for (const k of ['TRUE', 'FALSE', 'NOT GIVEN']) { const n = tfng.filter((x) => x === k).length; assert.ok(n >= 2 && n <= tfng.length / 2, `doc-de1 TFNG: ${k} xuất hiện ${n}/${tfng.length}`); }
+  // MCQ Listening (giao diện KHÔNG xáo): A/B/C đều nhau, không quá 2 câu liền cùng chữ.
+  const mcq = nhomCuaDe(NGHE_DE1).filter((g) => g.dang === 'mcq').flatMap((g) => g.cau!.map((c) => NGHE_DE1.dapAn[c.n].a[0]));
+  for (const k of ['A', 'B', 'C']) assert.equal(mcq.filter((x) => x === k).length, 3, `nghe-de1 MCQ: ${k} phải 3/9`);
+  for (let i = 2; i < mcq.length; i++) assert.ok(!(mcq[i] === mcq[i - 1] && mcq[i] === mcq[i - 2]), 'nghe-de1 MCQ: 3 câu liền cùng đáp án');
+  // Listening ≥ 3 giọng.
+  assert.ok(new Set(NGHE_DE1.phan.flatMap((p) => p.loi.map((l) => l.giong))).size >= 3, 'nghe-de1: ít nhất 3 giọng');
+  // Writing: 2 task, bài mẫu đủ số từ, Task 1 là line graph có số liệu khớp số mốc.
+  assert.equal(VIET_DE1.task.length, 2);
+  for (const t of VIET_DE1.task) assert.ok(t.mau.s.split(/\s+/).length >= t.minTu, `viet-de1 bài mẫu Task ${t.so} đủ ${t.minTu} từ`);
+  const fig = VIET_DE1.task[0].figure!;
+  assert.equal(fig.kind, 'line');
+  for (const c of fig.series!) assert.equal(c.values.length, fig.categories!.length, `viet-de1: chuỗi ${c.name} đủ số mốc`);
+  // Speaking (Đề 1 + Đề 6): Part 1 hai chủ đề × 3 câu, cue card đủ 4 ý, Part 3 4–5 câu, mẫu đủ 3 Part.
+  for (const de of [NOI_DE1, NOI_06]) {
+    assert.equal(de.part1.length, 2, `${de.id}: Part 1 hai chủ đề`);
+    assert.equal(de.part1.flatMap((c) => c.cau).length, 6, `${de.id}: Part 1 sáu câu`);
+    assert.equal(de.part2.cueCard.split('\n').filter((d) => d.startsWith('• ')).length, 3, `${de.id}: cue card 3 gạch đầu dòng`);
+    assert.match(de.part2.cueCard, /^Describe .+\n\nYou should say:\n[\s\S]+\n\nand explain /, `${de.id}: cue card đúng khuôn (3 ý + "and explain")`);
+    const p3 = de.part3.flatMap((c) => c.cau).length;
+    assert.ok(p3 >= 4 && p3 <= 5, `${de.id}: Part 3 có ${p3} câu`);
+    for (const part of [1, 2, 3] as const) assert.ok(de.mau.some((m) => m.part === part), `${de.id}: thiếu câu trả lời mẫu Part ${part}`);
+    // Câu mẫu phải là câu hỏi có thật trong đề.
+    const moiCau = new Set([...de.part1.flatMap((c) => c.cau), de.part2.cueCard.split('\n')[0], ...de.part3.flatMap((c) => c.cau)]);
+    for (const m of de.mau) assert.ok(moiCau.has(m.cau), `${de.id}: câu mẫu "${m.cau}" không có trong đề`);
+  }
+});
 
 test('đề Writing 01 + mục lục khớp nội dung', () => {
   assert.equal(VIET_01.task.length, 2);
@@ -152,7 +193,7 @@ test('đề Writing 01 + mục lục khớp nội dung', () => {
   for (const m of MUC_LUC) assert.ok(coDe(m.id), `${m.id}: có trong MUC_LUC thì phải có tệp đề (TEP_DE)`);
   // Dạng câu khai trên thẻ đề khớp nội dung đề thật.
   const dangThat = (de: DeDoc | DeNghe) => new Set(nhomCuaDe(de).map((g) => g.dang));
-  for (const [id, de] of [['doc-01', DOC_01], ['nghe-01', NGHE_01], ['doc-00', DOC_00], ['nghe-00', NGHE_00]] as const) {
+  for (const [id, de] of [['doc-01', DOC_01], ['nghe-01', NGHE_01], ['doc-00', DOC_00], ['nghe-00', NGHE_00], ['doc-de1', DOC_DE1], ['nghe-de1', NGHE_DE1]] as const) {
     const m = MUC_LUC.find((x) => x.id === id)!;
     assert.deepEqual(new Set(m.dang ?? []), dangThat(de), `${id}: MUC_LUC.dang khớp đề`);
   }
@@ -180,9 +221,12 @@ test('band tổng (mục 1.5): .25 → .5, .75 → lên nguyên, .125 → .0, .6
   assert.deepEqual(bandTong({ nghe: null, doc: undefined }), null);
 });
 
-test('bộ đề: Đề 6 = doc-01/nghe-01/viet-01; mọi id trong bộ có tệp thì cũng có trong MUC_LUC; tên kỹ năng đủ 5', () => {
+test('bộ đề: Đề 6 = nghe-01/doc-01/viet-01/noi-06, Đề 1 = bộ -de1; mọi id trong bộ có tệp thì cũng có trong MUC_LUC; tên kỹ năng đủ 5', () => {
   const bo6 = BO_DE.find((b) => b.so === 6)!;
-  assert.deepEqual(deCuaBo(bo6).map((d) => d.id), ['nghe-01', 'doc-01', 'viet-01']);
+  assert.deepEqual(deCuaBo(bo6).map((d) => d.id), ['nghe-01', 'doc-01', 'viet-01', 'noi-06']);
+  const bo1 = BO_DE.find((b) => b.so === 1)!;
+  assert.deepEqual(deCuaBo(bo1).map((d) => d.id), ['nghe-de1', 'doc-de1', 'viet-de1', 'noi-de1']);
+  for (const b of [bo1, bo6]) for (const d of deCuaBo(b)) assert.ok(coDe(d.id), `${b.id}: ${d.id} phải có tệp đề`);
   for (const b of BO_DE) for (const d of deCuaBo(b)) if (coDe(d.id)) assert.ok(MUC_LUC.some((m) => m.id === d.id && m.kyNang === d.kyNang), `${b.id}: ${d.id} phải có trong MUC_LUC đúng kỹ năng`);
   assert.deepEqual(Object.keys(TEN_KY_NANG).sort(), ['doc', 'nghe', 'noi', 'sangloc', 'viet']);
 });

@@ -175,13 +175,25 @@ const norm = (x: string) => {
   if (JA.test(t)) return t.replace(/[\s。、，．,.!?！？「」]/g, '').toLowerCase();
   return normEn(t);
 };
-const normEn = (x: string) =>
-  x
-    .toLowerCase()
-    .replace(/[’‘]/g, "'")
-    .replace(/[.?!]+$/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+/**
+ * 13/11/2026: người học viết "I will" hay "I'll", có hay không dấu phẩy đều là câu đúng — trước đây
+ * bị chấm sai vì so chuỗi. Mở viết tắt về dạng đầy đủ (cả đáp án lẫn bài làm) + bỏ dấu phẩy/chấm phẩy.
+ * `'s` chỉ mở sau đại từ (it's, there's…) — sau danh từ là sở hữu cách, phải giữ.
+ */
+const VIET_TAT: [RegExp, string][] = [
+  [/\bwon't\b/g, 'will not'], [/\bcan't\b/g, 'cannot'], [/\bcan not\b/g, 'cannot'], [/\bshan't\b/g, 'shall not'],
+  [/\b(\w+)n't\b/g, '$1 not'],
+  [/\b(i|you|he|she|it|we|they|there|that)'ll\b/g, '$1 will'],
+  [/\b(i|you|we|they)'re\b/g, '$1 are'], [/\b(i|you|we|they|there|that)'ve\b/g, '$1 have'],
+  [/\b(i|you|he|she|it|we|they)'d\b/g, '$1 would'], [/\bi'm\b/g, 'i am'],
+  [/\b(he|she|it|there|that|what|where|who|here)'s\b/g, '$1 is'],
+  [/\blet's\b/g, 'let us'],
+];
+const normEn = (x: string) => {
+  let t = x.toLowerCase().replace(/[’‘]/g, "'").replace(/[.?!]+$/g, '').replace(/\s*[,;]\s*/g, ' ');
+  for (const [re, thay] of VIET_TAT) t = t.replace(re, thay);
+  return t.replace(/\s+/g, ' ').trim();
+};
 const isRight = (given: string, answers: string[]) => answers.some((a) => norm(a) === norm(given));
 
 /**
@@ -566,14 +578,14 @@ function renderBlock(b: Block, i: number) {
             const stack = b.head.length >= 3 && avg > 22;
             return (
               <div key={i} className={s.tableWrap}>
-                {b.caption && <div className={s.caption}>{b.caption}</div>}
+                {b.caption && <div className={s.caption}><Inline text={b.caption} /></div>}
                 <table className={`${s.table} ${stack ? s.cardTable : ''}`}>
-                  <thead><tr>{b.head.map((h, j) => <th key={j}>{h}</th>)}</tr></thead>
+                  <thead><tr>{b.head.map((h, j) => <th key={j}><Inline text={h} /></th>)}</tr></thead>
                   <tbody>
                     {b.rows.map((r, ri) => (
                       <tr key={ri}>
                         {r.map((c, ci) => (
-                          <td key={ci} className={`${s.cell} ${ci === 0 ? s.cellFirst : ''}`} data-label={stack && ci > 0 ? b.head[ci] : undefined}>
+                          <td key={ci} className={`${s.cell} ${ci === 0 ? s.cellFirst : ''}`} data-label={stack && ci > 0 ? b.head[ci].replace(/\*\*|==|~~/g, '') : undefined}>
                             {looksLikeFormula(c) ? <span className={s.formula}><Formula text={c} /></span> : <Inline text={c} />}
                           </td>
                         ))}

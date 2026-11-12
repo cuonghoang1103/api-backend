@@ -46,6 +46,11 @@ export default {
 </ul>
 <p><strong>Why it is worth it:</strong> “it works on my machine with one user” is where most student projects stop. Interviews for backend roles ask “what happens when 1,000 people do this at once?”, and on-call work is mostly reading these numbers. Every number in this chapter was measured on LabFlow — none is copied from a blog.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Download: LabFlow API at the start of Chapter 8 (zip, without node_modules)</span><span class="lc-sub">Before Lab 8. Run <code>npm ci</code>, then <code>npm start</code>; every command of lessons 8.1–8.6 works from the project folder (scripts in <code>perf/</code>). Demo passwords: an-lab-2026, binh-lab-2026, lan-lab-2026 (learning only).</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
 
 <h3>One request, many legs</h3>
 <p>When An taps “Book” in the LabFlow app, the time he waits is the sum of many smaller times. Some are on the network, some are in our code, some are in the database:</p>
@@ -219,6 +224,11 @@ Server-Timing: auth;dur=0.18, validate;dur=0.34, db;dur=3.20, sort;dur=0.59, tot
 </ul>
 <p><strong>Vì sao đáng học:</strong> “máy em chạy được với một người dùng” là chỗ phần lớn đồ án sinh viên dừng lại. Phỏng vấn backend hay hỏi “1.000 người cùng làm việc này thì sao?”, và trực sự cố (on-call) phần lớn là đọc những con số này. Mọi số trong chương đều đo trên LabFlow — không số nào chép từ blog.</p>
 </div>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Tải về: LabFlow API đầu Chương 8 (zip, không kèm node_modules)</span><span class="lc-sub">Trước Lab 8. Chạy <code>npm ci</code> rồi <code>npm start</code>; mọi lệnh của bài 8.1–8.6 chạy từ thư mục dự án (script ở <code>perf/</code>). Mật khẩu demo: an-lab-2026, binh-lab-2026, lan-lab-2026 (chỉ để học).</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 
 <h3>Một request, nhiều chặng</h3>
 <p>Khi An bấm “Đặt phòng” trên app LabFlow, thời gian cậu chờ là tổng của nhiều khoảng nhỏ hơn. Có khoảng nằm trên mạng, có khoảng trong code của ta, có khoảng trong cơ sở dữ liệu:</p>
@@ -484,7 +494,7 @@ export async function verifyPassword(password, stored) {
   return timingSafeEqual(hash, Buffer.from(hashHex, 'hex'));       // so trong thời gian không đổi
 }</code></pre>
 <pre><code class="language-javascript">// routes/auth.js — chỉ đổi hai chỗ: handler async, và await
-.post(loginLimit, validate('body', Login), async (req, res) =&gt; {
+.post(...(VULN ? [] : [loginLimit]), validate('body', Login), async (req, res) =&gt; {
   const t0 = performance.now();
   const ok = (await verifyPassword(password, user?.passwordHash ?? DUMMY)) &amp;&amp; user;
   req.timing.add('scrypt', performance.now() - t0);   // thời gian CHỜ — event loop vẫn rảnh
@@ -654,7 +664,7 @@ export async function verifyPassword(password, stored) {
   return timingSafeEqual(hash, Buffer.from(hashHex, 'hex'));       // so trong thời gian không đổi
 }</code></pre>
 <pre><code class="language-javascript">// routes/auth.js — chỉ đổi hai chỗ: handler async, và await
-.post(loginLimit, validate('body', Login), async (req, res) =&gt; {
+.post(...(VULN ? [] : [loginLimit]), validate('body', Login), async (req, res) =&gt; {
   const t0 = performance.now();
   const ok = (await verifyPassword(password, user?.passwordHash ?? DUMMY)) &amp;&amp; user;
   req.timing.add('scrypt', performance.now() - t0);   // thời gian CHỜ — event loop vẫn rảnh
@@ -1550,7 +1560,7 @@ console.log(&#96;SLI (2xx và &lt; 300 ms): \${sli.toFixed(2)}% · SLO \${SLO}% 
 const budget = 30 * 24 * 60 * (1 - SLO / 100);                // phút được phép hỏng mỗi 30 ngày
 const used = (SECONDS / 60) * (1 - sli / 100);                // phút "hỏng" trong lần đo này
 console.log(&#96;Ngân sách lỗi 30 ngày ở SLO \${SLO}%: \${budget.toFixed(1)} phút · lần đo này đã dùng \${used.toFixed(2)} phút (\${((100 * used) / budget).toFixed(1)}%)&#96;);</code></pre>
-<p>Started against LabFlow with <code>LABFLOW_OUTAGE_MS=3000</code> (Chapter 5’s simulated outage: the first 3 seconds answer 503):</p>
+<p>Started against LabFlow with <code>LABFLOW_OUTAGE_MS=3000 LABFLOW_IP_LIMIT=1000000/60</code> (Chapter 5’s simulated outage: the first 3 seconds answer 503; the IP limit is lifted as in 8.2, otherwise the probe measures our own 429s):</p>
 <pre><code class="language-bash">SECONDS=30 node perf/probe.mjs</code></pre>
 <div class="out">291 request · tốt 262 · mã {"200":262,"503":29}
 SLI (2xx và &lt; 300 ms): 90.03% · SLO 99.9% ⇒ TRƯỢT
@@ -1605,7 +1615,7 @@ export function limitInflight(max) {
   };
 }
 // routes/auth.js — đặt TRƯỚC giới hạn đăng nhập: bị từ chối thì không tốn lượt của người dùng
-.post(...shed, loginLimit, validate('body', Login), async (req, res) =&gt; { … })</code></pre>
+.post(...shed, ...(VULN ? [] : [loginLimit]), validate('body', Login), async (req, res) =&gt; { … })</code></pre>
 <p>N = 8: four threadpool threads × 2, so a thread never waits for work but the queue never grows. What a rejected client sees:</p>
 <pre><code class="language-bash">for i in 1 2 3; do curl -s -o /dev/null -w '%{http_code} ' -X POST http://localhost:4000/v2/auth/login --json "{\\"email\\":\\"sv$i@student.labflow.example\\",\\"password\\":\\"x\\"}" &amp; done; wait; echo</code></pre>
 <div class="out">503 503 401 </div>
@@ -1742,7 +1752,7 @@ console.log(&#96;SLI (2xx và &lt; 300 ms): \${sli.toFixed(2)}% · SLO \${SLO}% 
 const budget = 30 * 24 * 60 * (1 - SLO / 100);                // phút được phép hỏng mỗi 30 ngày
 const used = (SECONDS / 60) * (1 - sli / 100);                // phút "hỏng" trong lần đo này
 console.log(&#96;Ngân sách lỗi 30 ngày ở SLO \${SLO}%: \${budget.toFixed(1)} phút · lần đo này đã dùng \${used.toFixed(2)} phút (\${((100 * used) / budget).toFixed(1)}%)&#96;);</code></pre>
-<p>Chạy với LabFlow đặt <code>LABFLOW_OUTAGE_MS=3000</code> (sự cố giả lập của Chương 5: 3 giây đầu trả 503):</p>
+<p>Chạy với LabFlow đặt <code>LABFLOW_OUTAGE_MS=3000 LABFLOW_IP_LIMIT=1000000/60</code> (sự cố giả lập của Chương 5: 3 giây đầu trả 503; bỏ giới hạn IP như bài 8.2, không thì probe đo toàn 429 của chính ta):</p>
 <pre><code class="language-bash">SECONDS=30 node perf/probe.mjs</code></pre>
 <div class="out">291 request · tốt 262 · mã {"200":262,"503":29}
 SLI (2xx và &lt; 300 ms): 90.03% · SLO 99.9% ⇒ TRƯỢT
@@ -1797,7 +1807,7 @@ export function limitInflight(max) {
   };
 }
 // routes/auth.js — đặt TRƯỚC giới hạn đăng nhập: bị từ chối thì không tốn lượt của người dùng
-.post(...shed, loginLimit, validate('body', Login), async (req, res) =&gt; { … })</code></pre>
+.post(...shed, ...(VULN ? [] : [loginLimit]), validate('body', Login), async (req, res) =&gt; { … })</code></pre>
 <p>N = 8: bốn luồng threadpool × 2, để luồng không bao giờ ngồi chờ việc nhưng hàng đợi cũng không phình ra. Client bị từ chối thấy gì:</p>
 <pre><code class="language-bash">for i in 1 2 3; do curl -s -o /dev/null -w '%{http_code} ' -X POST http://localhost:4000/v2/auth/login --json "{\\"email\\":\\"sv$i@student.labflow.example\\",\\"password\\":\\"x\\"}" &amp; done; wait; echo</code></pre>
 <div class="out">503 503 401 </div>
@@ -2320,6 +2330,11 @@ Trang trạng thái: https://status.labflow.example (ví dụ)</code></pre>
 <p class="lead">Ms Lan asked for a usage report: for each day and each lab, how many bookings and how many hours. A teammate wrote <code>GET /v2/reports/usage</code>; it returns the right numbers. On planning day five lab managers open it at once — and every student’s app freezes. Your job is the whole chapter in one task: measure it, find why it hurts <em>other</em> endpoints, fix it without changing a single number in the answer, protect the server, check it across two instances, and write down what LabFlow now promises.</p>
 
 <h3>Starting point</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Starting point: LabFlow API at the start of Chapter 8 (zip)</span><span class="lc-sub"><code>src/routes/reports.js</code> is already the deliberately slow starter (same as <code>lab/reports-starter.js</code>); <code>openapi.yaml</code> 2.2.0 has no <code>/reports/usage</code> yet and <code>docs/slo.md</code> no report row — task 6 is yours. <code>npm ci</code>, <code>npm test</code> 10/10.</span></span>
+  <span class="lc-cta">DOWNLOAD →</span>
+</a>
 <p>Start from the chapter’s code (download below) and put the starter file in place: <code>cp lab/reports-starter.js src/routes/reports.js</code>. Run with 20,000 seeded bookings (about four years of a three-lab building):</p>
 <pre><code class="language-bash">SEED_BOOKINGS=20000 LABFLOW_IP_LIMIT=1000000/60 npm start     # IP_LIMIT chỉ để test tải, đừng đặt ở production</code></pre>
 <pre><code class="language-javascript">// routes/reports.js — Lab 8 (BẢN KHỞI ĐẦU, cố ý chậm): báo cáo dùng phòng cho cô Lan
@@ -2527,6 +2542,11 @@ Quá tải: tối đa 2 lượt tính cùng lúc mỗi instance ⇒ 503 OVERLOAD
 <p class="lead">Cô Lan cần một báo cáo dùng phòng: mỗi ngày, mỗi phòng, bao nhiêu lượt đặt và bao nhiêu giờ. Một bạn trong nhóm viết <code>GET /v2/reports/usage</code>; nó trả đúng số. Ngày lên kế hoạch học kỳ, năm quản lý phòng lab cùng mở báo cáo — và app của mọi sinh viên đứng hình. Việc của bạn là cả chương gói trong một bài: đo, tìm ra vì sao nó làm hại endpoint <em>khác</em>, sửa mà không đổi một con số nào trong câu trả lời, bảo vệ server, kiểm khi chạy hai bản, và viết ra LabFlow giờ hứa những gì.</p>
 
 <h3>Điểm xuất phát</h3>
+<a class="link-card" href="https://media.cuongthai.com/files/academy/API/v1/labflow-api-ch8-dau.zip" target="_blank" rel="noopener">
+  <span class="lc-ico">📦</span>
+  <span class="lc-body"><span class="lc-title">Điểm xuất phát: LabFlow API đầu Chương 8 (zip)</span><span class="lc-sub"><code>src/routes/reports.js</code> đã là bản khởi đầu cố ý chậm (giống <code>lab/reports-starter.js</code>); <code>openapi.yaml</code> 2.2.0 chưa có <code>/reports/usage</code> và <code>docs/slo.md</code> chưa có dòng báo cáo — nhiệm vụ 6 là của bạn. <code>npm ci</code>, <code>npm test</code> 10/10.</span></span>
+  <span class="lc-cta">TẢI VỀ →</span>
+</a>
 <p>Bắt đầu từ code của chương (tải ở cuối bài) và đặt tệp khởi đầu vào chỗ: <code>cp lab/reports-starter.js src/routes/reports.js</code>. Chạy với 20.000 lượt đặt mẫu (khoảng bốn năm của một toà nhà ba phòng lab):</p>
 <pre><code class="language-bash">SEED_BOOKINGS=20000 LABFLOW_IP_LIMIT=1000000/60 npm start     # IP_LIMIT chỉ để test tải, đừng đặt ở production</code></pre>
 <pre><code class="language-javascript">// routes/reports.js — Lab 8 (BẢN KHỞI ĐẦU, cố ý chậm): báo cáo dùng phòng cho cô Lan

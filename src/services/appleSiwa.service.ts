@@ -17,7 +17,7 @@
  *   APPLE_SIWA_TEAM_ID       Team ID (10 ký tự, góc phải trên developer.apple.com)
  *   APPLE_SIWA_KEY_ID        Key ID của khoá Sign in with Apple
  *   APPLE_SIWA_PRIVATE_KEY   nội dung tệp AuthKey_<KEYID>.p8 (giữ nguyên xuống dòng, hoặc viết `\n`)
- *   APPLE_SIWA_CLIENT_IDS    tuỳ chọn — bundle id được phép, mặc định "com.cuongthai.ctwork,com.cuongthai.app"
+ *   APPLE_SIWA_CLIENT_IDS    tuỳ chọn — bundle id được phép, mặc định "com.cuongthai.ctwork,com.cuongthai.app,com.cuongthai.ctlanguage"
  */
 import { createPrivateKey, createSign } from 'node:crypto';
 import { prisma } from '../config/database.js';
@@ -48,7 +48,7 @@ export function cauHinhSiwa(): CauHinh | null {
 }
 
 export function clientIdsHopLe(): string[] {
-  return (process.env.APPLE_SIWA_CLIENT_IDS ?? 'com.cuongthai.ctwork,com.cuongthai.app').split(',').map((s) => s.trim()).filter(Boolean);
+  return (process.env.APPLE_SIWA_CLIENT_IDS ?? 'com.cuongthai.ctwork,com.cuongthai.app,com.cuongthai.ctlanguage').split(',').map((s) => s.trim()).filter(Boolean);
 }
 
 /** `siwa:ctwork` cho com.cuongthai.ctwork — cột provider chỉ 24 ký tự. */

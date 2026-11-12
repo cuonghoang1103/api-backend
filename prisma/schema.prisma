@@ -17701,3 +17701,22 @@ model SachRiengQuyen {
 
   @@map("sach_rieng_quyen")
 }
+
+/// CT Language — app iOS học Anh · Nhật · Trung (docs/ct-language-app.md, 12/11/2026).
+/// Hồ sơ học của MỘT người: ngôn ngữ đang học + lựa chọn lúc làm quen (trình độ, mục tiêu, phút/ngày) của
+/// TỪNG ngôn ngữ đã chọn, giờ nhắc. Tiến độ bài học KHÔNG nằm ở đây (IELTS: `ielts_progress`…).
+/// Không FK sang users, cùng kiểu `ielts_*`. Kiểm hình dạng ở `src/services/ctlanguage/hoSo.ts`.
+model CtLanguageProfile {
+  id         Int      @id @default(autoincrement())
+  userId     Int      @unique(map: "uk_ctlanguage_profile_user") @map("user_id")
+  /// en | ja | zh
+  activeLang String   @map("active_lang") @db.VarChar(4)
+  /// { en?: {level, goal, target?, minutesPerDay, startedAt}, ja?: …, zh?: … }
+  langs      Json     @db.JsonB
+  /// "HH:mm" theo giờ máy người dùng; null = không nhắc.
+  reminder   String?  @db.VarChar(5)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("ctlanguage_profiles")
+}

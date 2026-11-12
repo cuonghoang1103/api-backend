@@ -52,8 +52,9 @@ describe('Sign in with Apple — client_secret + cấu hình', () => {
     }
   });
 
-  it('client id mặc định = hai app có Sign in with Apple; provider ≤ 24 ký tự', () => {
-    assert.deepEqual(clientIdsHopLe(), ['com.cuongthai.ctwork', 'com.cuongthai.app']);
+  it('client id mặc định = ba app có Sign in with Apple (CT Language từ 12/11/2026); provider ≤ 24 ký tự', () => {
+    assert.deepEqual(clientIdsHopLe(), ['com.cuongthai.ctwork', 'com.cuongthai.app', 'com.cuongthai.ctlanguage']);
+    assert.equal(providerCho('com.cuongthai.ctlanguage'), 'siwa:ctlanguage');
     assert.equal(providerCho('com.cuongthai.ctwork'), 'siwa:ctwork');
     assert.equal(providerCho('com.cuongthai.app'), 'siwa:app');
     assert.ok(providerCho('com.example.a-very-long-bundle-name-here').length <= 24);

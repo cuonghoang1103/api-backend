@@ -167,10 +167,23 @@ export async function chuCuaNgay(ngay: string) {
   const han = await prisma.ctlChuHan.findUnique({ where: { chu } });
   // Kanji Nhật (異, 歴) ≠ chữ giản thể của Trung (异, 历) ⇒ tìm từ Trung theo CẢ dạng giản thể lẫn phồn thể.
   const dangTrung = han?.gianThe ?? chu;
-  const [zh, ja] = await Promise.all([
-    // Không bắt `thong_dung` (chữ tần suất vừa như 异 sẽ trắng) — bỏ tên riêng (pinyin viết hoa), xếp theo ưu tiên.
-    prisma.$queryRawUnsafe<MucGon[]>(`SELECT ${COT} FROM ctl_tu t WHERE t.nn = 'zh' AND (t.chu LIKE $1 OR t.chu_phu LIKE $2) AND char_length(t.chu) BETWEEN 2 AND 3 AND t.doc !~ '^[A-ZĀÁǍÀĒÉĚÈŌÓǑÒ]' ORDER BY (t.chu LIKE $3) DESC, t.thong_dung DESC, t.uu_tien DESC, char_length(t.chu) LIMIT 3`, `%${dangTrung}%`, `%${chu}%`, `${dangTrung}%`),
-    prisma.$queryRawUnsafe<MucGon[]>(`SELECT ${COT} FROM ctl_tu t WHERE t.nn = 'ja' AND t.thong_dung AND t.chu LIKE $1 AND char_length(t.chu) BETWEEN 2 AND 3 ORDER BY (t.chu LIKE $2) DESC, t.uu_tien DESC LIMIT 3`, `%${chu}%`, `${chu}%`),
-  ]);
+  // Từ Nhật thông dụng chứa chữ (đứng đầu từ trước).
+  const jaRong = await prisma.$queryRawUnsafe<MucGon[]>(
+    `SELECT ${COT} FROM ctl_tu t WHERE t.nn = 'ja' AND t.thong_dung AND t.chu LIKE $1 AND char_length(t.chu) BETWEEN 2 AND 3
+      ORDER BY (t.chu LIKE $2) DESC, t.uu_tien DESC LIMIT 12`, `%${chu}%`, `${chu}%`);
+  // Từ Trung: ưu tiên từ CÙNG ÂM HÁN VIỆT với một từ Nhật ở trên (历史 ↔ 歴史 "lịch sử", 异常 ↔ 異常 "dị thường") — đó là
+  // từ chung của cả ba ngôn ngữ, đúng tinh thần thẻ. Tần suất chữ không phân biệt được 历史 với 历年 (đo 12/11).
+  // Không bắt `thong_dung` (chữ tần suất vừa như 异 sẽ trắng); bỏ tên riêng (pinyin viết hoa).
+  const hvNhat = [...new Set(jaRong.map((m) => m.hanViet).filter((x): x is string => !!x))];
+  const zhRong = await prisma.$queryRawUnsafe<MucGon[]>(
+    `SELECT ${COT} FROM ctl_tu t WHERE t.nn = 'zh' AND (t.chu LIKE $1 OR t.chu_phu LIKE $2) AND char_length(t.chu) BETWEEN 2 AND 3
+        AND t.doc !~ '^[A-ZĀÁǍÀĒÉĚÈŌÓǑÒ]'
+      ORDER BY array_position($4::text[], t.han_viet) NULLS LAST, (t.chu LIKE $3) DESC, t.thong_dung DESC, char_length(t.chu), t.uu_tien DESC
+      LIMIT 10`, `%${dangTrung}%`, `%${chu}%`, `${dangTrung}%`, hvNhat);
+  // Một chữ giản thể có thể ứng nhiều dạng phồn thể (历年 = 歷年 / 曆年) ⇒ bỏ trùng theo chữ.
+  const daCo = new Set<string>();
+  const zh = zhRong.filter((m) => (daCo.has(m.chu) ? false : (daCo.add(m.chu), true))).slice(0, 3);
+  const hvTrung = new Set(zh.map((m) => m.hanViet));
+  const ja = [...jaRong.filter((m) => hvTrung.has(m.hanViet)), ...jaRong.filter((m) => !hvTrung.has(m.hanViet))].slice(0, 3);
   return { ...han, dangTrung, tuTrung: zh, tuNhat: ja };
 }

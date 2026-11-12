@@ -159,3 +159,10 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   sau deploy chạy `npx tsx scripts/ctlanguage/nhap-tu-dien.mts --tai` trên VPS. Bước 4: thuê bao Pro (backend 3f75ea1d7:
   `quyTac.ts` nhận bundle CT Language, `/pro/apple/notifications` V2; ios-app 9b7173f). Việc làm tay trên App Store Connect
   (sản phẩm, URL thông báo, App Group): `ios-app/CTLANGUAGE_APP_REVIEW_NOTES.md` mục 1.
+- 12/11 23:55 (APP): **bước 5 XONG** (chưa deploy). Backend `610710735` + commit sau nó: `GET /tu-dien/chu-ngay?ngay=` (công khai —
+  một chữ Hán đủ Hán Việt/pinyin/on, từ Trung–Nhật xếp theo **cùng âm Hán Việt**: 历史↔歴史 "lịch sử"), `GET /tu-dien/:nn/goi-offline`
+  (Pro, 403 `CTL_CAN_PRO`; zh 32k từ ≈1,9 MB gzip). Bộ nhập: từ thông dụng tiếng Trung theo Unihan `kHanyuPinlu`, tân tự thể Nhật →
+  giản thể qua `kJapaneseOldVariant` ⇒ **sau deploy chạy lại `nhap-tu-dien.mts --tai`** (đã nằm trong việc sau deploy của bước 3).
+  ios-app `6116977`: thẻ "Một chữ · ba ngôn ngữ" thật ở Hôm nay, Tôi › Học offline (tải từ điển từng ngôn ngữ; mất mạng thì tra
+  cục bộ), "Tải hết để học ngoại tuyến" của khoá học thành Pro qua móc `chanTaiHetSH` (app CuongThai không gắn ⇒ không đổi).
+  Khoá Nhật/Trung (`dekiru` 1.241 bài, `jp`, `ch`) mở được trong CT Language. Bước kế: 6 (game, cộng đồng, AI gọi thoại).

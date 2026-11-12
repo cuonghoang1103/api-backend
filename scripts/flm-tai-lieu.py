@@ -196,6 +196,25 @@ DRIVE_RE = re.compile(r'https?://(?:drive|docs)\.google\.com/[^\s<>"\')\]]+')
 GDOWN = os.environ.get('FLM_GDOWN') or str(Path(__file__).resolve().parent / 'venv' / 'bin' / 'gdown')
 
 
+def liet_ke_nhung(fid, goc='', sau=0):
+    """Liệt kê thư mục Drive công khai qua trang embeddedfolderview (đệ quy ≤ 4 tầng) ⇒ [(id, đường dẫn)].
+    Đường lùi khi `gdown --json` bỏ cuộc giữa chừng: nó dừng cả thư mục khi gặp MỘT tệp Google Docs/Slides gốc
+    ("Cannot retrieve the public link…") — đo 12/11/2026 ở MKG101 (2 thư mục con, 0 tệp tải được)."""
+    try:
+        h = urllib.request.urlopen(f'https://drive.google.com/embeddedfolderview?id={fid}', timeout=60).read().decode('utf8', 'ignore')
+    except Exception:
+        return []
+    kq = []
+    for href, loai, id_, ten in re.findall(r'<a href="(https://drive\.google\.com/(file/d|drive/folders)/([\w-]+)[^"]*)"[^>]*>.*?flip-entry-title">([^<]+)', h, re.S):
+        ten = html.unescape(ten).strip().replace('/', '_')
+        if loai == 'drive/folders':
+            if sau < 4:
+                kq += liet_ke_nhung(id_, f'{goc}{ten}/', sau + 1)
+        else:
+            kq.append((id_, f'{goc}{ten}'))
+    return kq
+
+
 def theo_drive(raw, tmp, links_syl):
     """Tìm link Drive trong file nhỏ (docx/txt/url/pdf ≤ 2 MB) + cột link của syllabus, tải về raw/_drive/<k>/."""
     urls = []
@@ -236,6 +255,8 @@ def theo_drive(raw, tmp, links_syl):
                 tep = [(re.search(r'id=([\w-]+)', x['url']).group(1), x['path']) for x in json.loads(r.stdout.decode('utf8', 'ignore') or '[]')]
             except Exception:
                 tep = []
+            if not tep:
+                tep = liet_ke_nhung(m.group(1))
         else:
             tep = [(m.group(1), None)]
         ok_n, loi_n = 0, 0
@@ -339,8 +360,14 @@ def pdf_ngang(p):
         return False
 
 
+# Tên bài giảng thật bị RIENG_TU bắt nhầm (11/11/2026): "Trade marks", "Resume _ Cover Letter", "networking solutions".
+KHONG_RIENG = re.compile(r'(?i)trade ?marks?|cover letter|networking solutions|career')
+
+
 def la_deck(rel, p):
-    if RIENG_TU.search(rel):
+    if 'previous_version' in rel or '__MACOSX' in rel or Path(rel).name.startswith(('~$', '._')):
+        return False
+    if RIENG_TU.search(rel) and not KHONG_RIENG.search(rel):
         return False
     e = p.suffix.lower()
     if e in ('.pptx', '.ppsx'):
@@ -357,8 +384,12 @@ def ve_deck(p, out_dir, tmp):
     if e != '.pdf':
         for f in tmp.glob('*.pdf'):
             f.unlink()
-        subprocess.run(NICE + [SOFFICE, f'-env:UserInstallation={LO_PROFILE}', '--headless', '--convert-to', 'pdf', '--outdir', str(tmp), str(p)],
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=600)
+        try:
+            subprocess.run(NICE + [SOFFICE, f'-env:UserInstallation={LO_PROFILE}', '--headless', '--convert-to', 'pdf', '--outdir', str(tmp), str(p)],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=900)
+        except subprocess.TimeoutExpired:      # JLR302 Session 24 treo 600 s (09/11) ⇒ trước đây hỏng CẢ môn
+            subprocess.run(['pkill', '-f', LO_PROFILE], capture_output=True)
+            return 0, 0, 0, None
         ds = list(tmp.glob('*.pdf'))
         if not ds:
             return 0, 0, 0, None
@@ -443,13 +474,97 @@ def dung_slide(ma, raw, goc, phien_ban, upload=True):
     return sum(d.get('n', 0) for d in ds), len(ds)
 
 
+def so_trang_pdf(p):
+    try:
+        r = subprocess.run(['pdfinfo', str(p)], capture_output=True, timeout=30).stdout.decode('utf8', 'ignore')
+        return int((re.search(r'Pages:\s*(\d+)', r) or [0, 0])[1])
+    except Exception:
+        return 0
+
+
+def _ten_chuan(rel):
+    return re.sub(r'^_drive/\d+/', '', rel)
+
+
+def bo_sung(m, kho, pdf_re=None, max_trang_pdf=150):
+    """BỔ SUNG deck vào môn đã xong (11/11/2026): tải lại nguồn, dựng CHỈ những deck chưa có trong slide-map
+    (deck bị bộ lọc bắt nhầm, PDF dọc khớp --pdf-re), key nối tiếp, đẩy R2 cùng prefix ⇒ URL ảnh cũ KHÔNG đổi."""
+    ma = m['ma']
+    goc = kho / ma
+    f_map = goc / 'slide-map.json'
+    cu = json.loads(f_map.read_text()) if f_map.exists() else {'ma': ma, 'prefix': f'{ma}/flm1', 'base': f'https://media.cuongthai.com/images/academy/{ma}/flm1', 'decks': []}
+    da_co = {_ten_chuan(d['file']) for d in cu['decks'] if d.get('n')}
+    tai_dir, raw, tmp, out = goc / '_bs_tai', goc / '_bs_raw', goc / '_bs_tmp', goc / '_slide'
+    for d in (tai_dir, raw, tmp, out, goc / '_tmp_slide'):
+        shutil.rmtree(d, ignore_errors=True)
+    for d in (tai_dir, raw, tmp):
+        d.mkdir(parents=True)
+    try:
+        for l in [l for l in m.get('links', []) if l.startswith('/download/')]:
+            f = tai_dir / l.rsplit('/', 1)[-1]
+            tai(BASE + l, f)
+            try:
+                giai_nen(f, raw / f.stem)
+            except zipfile.BadZipFile:
+                pass
+        giai_nen_khac(raw)
+        theo_drive(raw, tmp, m.get('links', []))
+        moi = []
+        for p in raw.rglob('*'):
+            if not p.is_file():
+                continue
+            rel = p.relative_to(raw).as_posix()
+            if _ten_chuan(rel) in da_co:
+                continue
+            la_pdf_tl = (p.suffix.lower() == '.pdf' and pdf_re and re.search(pdf_re, rel) and not Path(rel).name.startswith('._')
+                         and 0 < so_trang_pdf(p) <= max_trang_pdf)
+            if la_deck(rel, p) or la_pdf_tl:
+                moi.append((rel, p))
+        moi.sort(key=lambda x: nat_key(x[0]))
+        # bỏ bản trùng tên (cùng tệp nằm ở hai thư mục)
+        thay, uniq = set(), []
+        for rel, p in moi:
+            k = (Path(rel).name.lower(), p.stat().st_size)
+            if k not in thay:
+                thay.add(k); uniq.append((rel, p))
+        if not uniq:
+            return 'không có deck mới'
+        so = max([int(d['key'][1:]) for d in cu['decks']] + [0])
+        tmp2 = goc / '_tmp_slide'
+        tmp2.mkdir(exist_ok=True)
+        them = []
+        for rel, p in uniq:
+            so += 1
+            key = f'd{so:02d}'
+            n, w, h, chu = ve_deck(p, out / key, tmp2)
+            if n == 0:
+                print(f'   ! {ma} {rel}: không dựng được', flush=True)
+                so -= 1
+                continue
+            parts = rel.split('/')
+            cha = [x for x in parts[:-1] if not re.fullmatch(rf'\d+_{re.escape(ma)}', x, flags=re.I) and not re.fullmatch(r'_drive|\d+', x)]
+            them.append({'key': key, 'file': rel, 'chuong': ten_dep(cha[-1]) if cha else '', 'ten': ten_dep(parts[-1]), 'n': n, 'w': w, 'h': h, 'chu': chu})
+        if not them:
+            return 'deck mới đều hỏng'
+        r = subprocess.run(['node', '--env-file=.env', 'scripts/upload-academy-slides.mjs', '--dir', str(out), '--prefix', cu['prefix']],
+                           cwd=API, capture_output=True, timeout=7200)
+        if r.returncode != 0:
+            raise RuntimeError('upload R2 hỏng: ' + (r.stdout + r.stderr).decode('utf8', 'ignore')[-400:])
+        cu['decks'] += them
+        f_map.write_text(json.dumps(cu, ensure_ascii=False, indent=1))
+        return f'+{len(them)} deck · +{sum(d["n"] for d in them)} slide: ' + ' ; '.join(d['ten'][:40] for d in them[:6])
+    finally:
+        for d in (tai_dir, raw, tmp, out, goc / '_tmp_slide'):
+            shutil.rmtree(d, ignore_errors=True)
+
+
 def mot_mon(m, kho, min_gb, slide=True, phien_ban='flm1', upload=True):
     ma = m['ma']
     goc = kho / ma
     if (goc / '_xong.json').exists():
         return 'đã có'
     links = [l for l in m.get('links', []) if l.startswith('/download/')]
-    if not links:
+    if not links and not any(DRIVE_RE.match(l) for l in m.get('links', [])):
         goc.mkdir(parents=True, exist_ok=True)
         (goc / '_xong.json').write_text(json.dumps({'ma': ma, 'zip': [], 'ghiChu': 'FLM không có file tải cho môn này', 'linkKhac': m.get('links', [])}, ensure_ascii=False, indent=1))
         return 'không có file'
@@ -510,6 +625,8 @@ def main():
     ap.add_argument('--ma', default='')
     ap.add_argument('--khong-slide', action='store_true')
     ap.add_argument('--khong-day', action='store_true', help='không đẩy R2 (máy không có khoá) — giữ _slide/ chờ Mac đẩy')
+    ap.add_argument('--bo-sung', action='store_true', help='môn đã xong: dựng THÊM deck chưa có (xem bo_sung)')
+    ap.add_argument('--pdf-re', default='', help='với --bo-sung: regex đường dẫn PDF dọc cũng dựng thành ảnh')
     ap.add_argument('--luong', default='0/1', help='i/N: tiến trình này chỉ làm môn thứ k với k %% N == i')
     a = ap.parse_args()
     kho = Path(os.path.expanduser(a.kho))
@@ -523,7 +640,7 @@ def main():
     for i, m in enumerate(ds, 1):
         t0 = time.time()
         try:
-            kq = mot_mon(m, kho, a.min_trong_gb, slide=not a.khong_slide, upload=not a.khong_day)
+            kq = bo_sung(m, kho, m.get('pdfRe') or a.pdf_re or None) if a.bo_sung else mot_mon(m, kho, a.min_trong_gb, slide=not a.khong_slide, upload=not a.khong_day)
         except SystemExit:
             raise
         except Exception as e:  # noqa

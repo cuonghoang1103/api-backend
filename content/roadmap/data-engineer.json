@@ -1,0 +1,551 @@
+{
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Python for Backend & AI": {
+  "body": "Python là ngôn ngữ chung của gần như toàn bộ hệ sinh thái dữ liệu: script nạp dữ liệu, thư viện pandas/numpy, PySpark, và cả Airflow lẫn Dagster (hai công cụ điều phối) đều được viết và cấu hình bằng Python. Nếu SQL là \"cách hỏi dữ liệu\" thì Python là \"keo dán\" nối các hệ thống lại với nhau.\n\n### Vì sao cần biết\nMột data engineer dùng Python hằng ngày để: gọi API của bên thứ ba lấy dữ liệu về, đọc/ghi file (CSV, JSON, Parquet), làm sạch dữ liệu nhỏ và vừa, viết task cho Airflow, viết job PySpark, và viết test cho pipeline. Bạn không cần là chuyên gia thuật toán, nhưng phải đọc và viết Python sạch, có cấu trúc.\n\n### Ý chính cần nắm\n- Kiểu dữ liệu cơ bản (`int`, `str`, `list`, `dict`, `set`, `tuple`) và comprehension — cách viết gọn để biến đổi tập dữ liệu.\n- Hàm, module, package, và cách tổ chức một dự án có môi trường ảo (`venv`/`uv`) để pipeline chạy giống nhau trên mọi máy.\n- Xử lý lỗi (`try/except`), context manager (`with open(...)`), đọc cấu hình từ biến môi trường — thứ khiến script chạy được trên production.\n- Type hint và test bằng `pytest`: pipeline dữ liệu hỏng âm thầm rất khó phát hiện, test là lưới an toàn.\n- Gọi HTTP có thử lại (`requests`/`httpx`), và `async` để gọi nhiều nguồn song song khi việc chủ yếu là chờ mạng.\n- numpy/pandas nhập môn: mảng vector hoá, `DataFrame`, đọc – lọc – nhóm – nối.\n\n### Ví dụ ngắn\n```python\nimport pandas as pd\n\ndf = pd.read_csv(\"orders.csv\", parse_dates=[\"ordered_at\"])\ndaily = (\n    df[df[\"status\"] == \"paid\"]\n      .groupby(df[\"ordered_at\"].dt.date)[\"amount\"]\n      .sum()\n      .reset_index(name=\"revenue\")\n)\ndaily.to_parquet(\"daily_revenue.parquet\")  # cần cài pyarrow\n```\nĐoạn này đọc, lọc, gom nhóm theo ngày rồi lưu ra định dạng cột — một pipeline thu nhỏ.\n\n### Lỗi hay gặp\n- Dùng pandas cho dữ liệu lớn hơn RAM: `read_csv` nạp cả file vào bộ nhớ. Khi dữ liệu vượt một máy, bước sau của lộ trình (Spark) mới là lời giải; còn trước đó có thể đọc theo `chunksize` hoặc dùng DuckDB.\n- Sửa `DataFrame` gốc rồi quên rằng bước sau đang dùng nó; hãy ưu tiên các phép biến đổi trả về bản mới.\n- Cài thư viện thẳng vào Python hệ thống thay vì môi trường ảo, rồi \"máy tôi chạy được mà máy chủ thì không\".\n\n### Tự kiểm tra\n- Khi nào dùng `async` có lợi, khi nào không?\n- Vì sao script đọc mật khẩu từ biến môi trường thay vì ghi cứng trong code?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-2-1-python-numpy-pandas",
+    "ten": "2.1 — Python cho DS (numpy & pandas)",
+    "nguon": "Data Science · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "The Python Tutorial (python.org)",
+    "url": "https://docs.python.org/3/tutorial/index.html"
+   },
+   {
+    "type": "official",
+    "title": "10 minutes to pandas",
+    "url": "https://pandas.pydata.org/docs/user_guide/10min.html"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá PostgreSQL": {
+  "body": "Dữ liệu nào rồi cũng nằm trong một cơ sở dữ liệu, và với data engineer, PostgreSQL vừa là nguồn dữ liệu phổ biến nhất (hệ thống nghiệp vụ của công ty thường chạy trên nó) vừa là nơi luyện SQL tốt nhất. Hiểu nó từ bên trong giúp bạn biết nên lấy dữ liệu ra thế nào mà không làm hệ thống nguồn chậm đi.\n\n### Vì sao cần biết\nHầu hết pipeline bắt đầu bằng việc đọc từ một CSDL quan hệ: bạn cần biết bảng được thiết kế ra sao, khoá và ràng buộc nghĩa là gì, truy vấn đi qua chỉ mục hay quét cả bảng, và một câu lệnh đọc có thể khoá hay chặn ai không. Đặc biệt, CDC (bước sau) đọc đúng nhật ký WAL của PostgreSQL.\n\n### Ý chính cần nắm\n- Mô hình quan hệ, khoá chính/khoá ngoại, kiểu dữ liệu, ràng buộc (`NOT NULL`, `UNIQUE`, `CHECK`) — nền để hiểu dữ liệu nguồn \"sạch\" đến đâu.\n- Truy vấn: `JOIN`, `GROUP BY`/`HAVING`, truy vấn con, CTE (`WITH`), hàm cửa sổ (`OVER`) — bộ công cụ chính của nghề.\n- Chỉ mục (B-tree và các loại khác) và `EXPLAIN ANALYZE` để đọc kế hoạch thực thi — biết vì sao một truy vấn chậm.\n- Giao dịch, ACID, MVCC và các mức cô lập: vì sao người đọc không chặn người ghi, và dữ liệu bạn đọc ra \"tươi\" tới mức nào.\n- Sao lưu, nhân bản (replication), WAL: nền tảng của sao chép dữ liệu và CDC.\n- `JSONB`, view, materialized view — những công cụ thường gặp khi dữ liệu nguồn không \"phẳng\".\n\n### Ví dụ ngắn\n```sql\n-- Doanh thu theo ngày, kèm tổng luỹ tiến\nwith daily as (\n  select date_trunc('day', ordered_at) as day, sum(amount) as revenue\n  from orders\n  where status = 'paid'\n  group by 1\n)\nselect day, revenue, sum(revenue) over (order by day) as running_total\nfrom daily\norder by day;\n```\n\n### Lỗi hay gặp\n- Chạy truy vấn báo cáo nặng thẳng trên CSDL production: khoá, tốn I/O và làm chậm người dùng thật. Đây chính là lý do kho phân tích tồn tại.\n- Quên `LIMIT`/điều kiện thời gian khi thăm dò bảng lớn.\n- Hiểu nhầm `NULL`: `NULL = NULL` không phải đúng, và `NOT IN` với tập có `NULL` cho kết quả bất ngờ.\n\n### Tự kiểm tra\n- `EXPLAIN` và `EXPLAIN ANALYZE` khác nhau ở đâu?\n- Vì sao một chỉ mục có thể không được dùng dù cột đã được đánh chỉ mục?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-0-1-gioi-thieu",
+    "ten": "0.1 — Về khoá học này & bản đồ toàn khoá",
+    "nguon": "PostgreSQL · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-7-3-cte",
+    "ten": "7.3 — CTE (WITH): truy vấn theo bước dễ đọc",
+    "nguon": "PostgreSQL · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-8-1-window-la-gi",
+    "ten": "8.1 — Hàm cửa sổ là gì: tổng hợp mà không gộp dòng",
+    "nguon": "PostgreSQL · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi",
+    "ten": "9.1 — Chỉ mục là gì: B-tree, Seq Scan vs Index Scan",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/postgresql-practice",
+    "ten": "PostgreSQL — Luyện tập SQL chấm thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "PostgreSQL Tutorial (tài liệu chính thức)",
+    "url": "https://www.postgresql.org/docs/current/tutorial.html"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Docker": {
+  "body": "Một hệ dữ liệu thật gồm nhiều mảnh: PostgreSQL làm nguồn, Kafka nhận sự kiện, ClickHouse làm kho phân tích, Airflow điều phối... Cài từng thứ trực tiếp lên máy vừa mất cả ngày vừa dễ lệch phiên bản. Docker đóng mỗi mảnh vào một container, và Docker Compose dựng cả hệ bằng một lệnh.\n\n### Vì sao cần biết\nData engineer cần một \"phòng lab\" tái lập được: bạn clone dự án, chạy `docker compose up`, và có đủ dịch vụ như đồng nghiệp. Pipeline cũng thường được đóng thành image để chạy giống nhau trên máy bạn, CI và máy chủ. Hầu hết hướng dẫn chính thức của Kafka, Airflow, Spark, ClickHouse đều cho sẵn file Compose để thử.\n\n### Ý chính cần nắm\n- Container là tiến trình được cô lập (namespace, cgroup), không phải máy ảo; image là khuôn đóng gói, container là bản đang chạy.\n- Dữ liệu trong container mất khi container bị xoá: dữ liệu cần sống lâu (CSDL, log) phải nằm trên volume.\n- Mạng: các container trong cùng một Compose gọi nhau bằng tên dịch vụ (ví dụ `postgres:5432`), không phải `localhost`.\n- `depends_on` chỉ đợi container được tạo; để đợi dịch vụ thật sự sẵn sàng, dùng `healthcheck` kết hợp `condition: service_healthy`.\n- Biến môi trường và file `.env` để không ghi mật khẩu vào file Compose; profile để bật tắt nhóm dịch vụ.\n- Dockerfile và cache khi dựng image để image nhỏ và build nhanh.\n\n### Ví dụ ngắn\n```yaml\nservices:\n  postgres:\n    image: postgres:16\n    environment:\n      POSTGRES_PASSWORD: ${PG_PASSWORD}\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U postgres\"]\n      interval: 5s\n      retries: 10\nvolumes:\n  pgdata:\n```\n\n### Lỗi hay gặp\n- Quên volume rồi `docker compose down -v` hoặc xoá container và mất cả dữ liệu thử nghiệm.\n- Dịch vụ phụ thuộc khởi động trước khi CSDL sẵn sàng, rồi chết vì không kết nối được.\n- Mở cổng CSDL ra mọi giao diện (`0.0.0.0`) trên máy chủ thật.\n- Chạy cả hệ nặng (Kafka + Spark + ClickHouse) trên máy ít RAM mà không giới hạn tài nguyên.\n\n### Tự kiểm tra\n- Vì sao container \"quên\" dữ liệu, và volume khác bind mount ở đâu?\n- Trong Compose, một dịch vụ gọi CSDL bằng địa chỉ nào?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: Docker từ đầu, bằng hình",
+    "nguon": "Docker · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Docker là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-1-ba-cach-gan",
+    "ten": "7.1 — Vì sao container quên, và ba cách chữa",
+    "nguon": "Docker · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-1-file-dau-tien",
+    "ten": "9.1 — File compose đầu tiên của bạn",
+    "nguon": "Docker · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=docker-compose",
+    "ten": "docker compose — thứ tự khởi động",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Docker Compose — tài liệu chính thức",
+    "url": "https://docs.docker.com/compose/"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Data Engineering": {
+  "body": "Đây là khoá \"xương sống\" của lộ trình: nó dạy bạn nhìn dữ liệu như một sản phẩm đi qua nhiều tầng — từ hệ thống nghiệp vụ, qua đường ống nạp dữ liệu, vào kho phân tích, rồi lên dashboard — và biết từng tầng dùng công cụ gì, hỏng ở đâu.\n\n### Khoá bao gồm những gì\n- **Vì sao không báo cáo thẳng trên PostgreSQL production**, và khác biệt OLTP với OLAP: ghi nhiều dòng nhỏ khác hẳn quét nhiều cột trên hàng triệu dòng.\n- **Lưu theo cột và định dạng file** (CSV, JSON, Parquet, ORC, Avro), thử bằng DuckDB ngay trên laptop.\n- **Mô hình hoá phân tích** theo Kimball: bảng fact và dimension, star và snowflake schema, dimension thay đổi chậm (SCD), dữ liệu sự kiện.\n- **Nạp dữ liệu**: ETL và ELT, trích xuất batch (toàn bộ, tăng dần, watermark), CDC bằng Debezium, streaming từ Kafka, API và file bên thứ ba.\n- **Kho dữ liệu cột với ClickHouse**: MergeTree, khoá `ORDER BY`, partition, skip index, materialized view; so sánh với BigQuery, Snowflake, Redshift.\n- **Lakehouse**: data lake trên object storage (S3/R2), định dạng bảng mở Iceberg/Delta/Hudi, công cụ truy vấn.\n- **dbt** để biến đổi bằng SQL như viết code: model, `ref`, `source`, test, tài liệu, lineage, CI.\n- **Điều phối** bằng Airflow hoặc Dagster; thử lại, cảnh báo, SLA.\n- **Chất lượng dữ liệu**: các chiều chất lượng, kiểm tự động, hợp đồng dữ liệu, quyền riêng tư.\n- **Dashboard** với Metabase/Superset, semantic layer, và xử lý thời gian thực khi nó thật sự đáng tiền.\n\n### Học thế nào cho hiệu quả\nLàm theo thứ tự các tầng và dựng từng tầng thật trong Docker Compose. Với mỗi công cụ, hỏi ba câu: nó giải quyết vấn đề gì mà tầng trước không giải quyết được; dữ liệu đi vào và đi ra ở định dạng nào; và khi nó hỏng thì dấu hiệu là gì.\n\n### Dự án gợi ý\nDựng một pipeline phân tích thật cho một website nhỏ: nạp sự kiện người dùng, mô hình hoá thành fact/dimension, biến đổi bằng dbt, điều phối hằng ngày, kiểm chất lượng và vẽ dashboard. Hoàn thành một dự án đầu-cuối như vậy có giá trị hơn đọc thêm mười bài lý thuyết, và là câu chuyện tốt để kể khi phỏng vấn.\n\n### Lỗi hay gặp\n- Học công cụ (dbt, Airflow) trước khi hiểu mô hình dữ liệu; công cụ đổi liên tục, mô hình thì bền.\n- Bỏ qua chất lượng và giám sát cho tới khi người dùng báo số liệu sai.\n\n### Tự kiểm tra\n- Một câu hỏi kinh doanh đi qua những tầng nào trước khi thành một con số trên dashboard?\n- Khi nào dùng batch, khi nào cần streaming?"
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Apache Kafka": {
+  "body": "Kafka là nền tảng log sự kiện phân tán: các hệ thống ghi sự kiện (đơn hàng được tạo, người dùng bấm nút) vào những \"topic\", và nhiều hệ thống khác đọc lại theo tốc độ riêng của mình. Hãy hình dung nó như một cuốn nhật ký chung bền vững mà ai cũng có thể đọc từ bất kỳ trang nào, và nội dung không biến mất khi đã có người đọc.\n\n### Vì sao cần biết\nTrong pipeline dữ liệu hiện đại, Kafka là chỗ nối giữa các hệ thống: CDC từ CSDL đổ vào Kafka, Spark/Flink đọc ra để xử lý luồng, Kafka Connect đẩy sang kho phân tích. Nó tách bên sinh dữ liệu khỏi bên dùng dữ liệu, nên hệ thống nguồn không bị tải thêm khi có thêm người đọc.\n\n### Ý chính cần nắm\n- **Topic, partition, offset**: topic chia thành các partition; mỗi bản ghi trong partition có một số thứ tự (offset). Thứ tự chỉ được đảm bảo trong một partition.\n- **Key** quyết định bản ghi vào partition nào: cùng key thì cùng partition, nên giữ được thứ tự theo từng đối tượng (ví dụ cùng một khách hàng).\n- **Broker và nhân bản**: dữ liệu được sao ra nhiều broker; ISR (in-sync replicas) quyết định khi nào một bản ghi coi là an toàn.\n- **Producer**: `acks`, thử lại, idempotent producer để không ghi trùng.\n- **Consumer group**: các consumer trong một nhóm chia nhau partition; commit offset cho biết đã đọc tới đâu. Rebalance xảy ra khi nhóm đổi thành viên.\n- **Ngữ nghĩa giao nhận**: at-most-once, at-least-once, exactly-once; trên thực tế phải thiết kế consumer idempotent.\n- **Kafka Connect** để đưa dữ liệu vào/ra không cần viết code; **Debezium** làm nguồn CDC cho Connect.\n- **Retention và log compaction**: giữ theo thời gian/dung lượng, hoặc giữ bản ghi mới nhất theo từng key.\n- **Schema Registry** với Avro/Protobuf để thay đổi cấu trúc sự kiện mà không phá bên đọc.\n\n### Ví dụ ngắn\n```bash\n# Tạo topic 3 partition và gửi thử vài sự kiện (công cụ đi kèm Kafka)\nkafka-topics.sh --bootstrap-server localhost:9092 --create --topic orders --partitions 3\necho 'order-1:{\"amount\":120}' | kafka-console-producer.sh \\\n  --bootstrap-server localhost:9092 --topic orders \\\n  --property parse.key=true --property key.separator=:\n```\n\n### Lỗi hay gặp\n- Dùng Kafka khi một bảng và một cron là đủ; nó thêm một hệ phân tán phải vận hành.\n- Quá ít partition làm nghẽn song song; quá nhiều làm tốn tài nguyên và rebalance lâu.\n- Commit offset trước khi xử lý xong rồi mất dữ liệu khi consumer chết; hoặc xử lý rồi mới commit và xử lý trùng nếu không idempotent.\n- Thay đổi schema sự kiện tuỳ tiện làm vỡ các consumer.\n\n### Tự kiểm tra\n- Vì sao thứ tự chỉ được đảm bảo trong một partition?\n- Consumer lag tăng đều nghĩa là gì?",
+  "more": [
+   {
+    "type": "official",
+    "title": "Apache Kafka Documentation",
+    "url": "https://kafka.apache.org/documentation/"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Spark & Lakehouse": {
+  "body": "Khi dữ liệu lớn hơn bộ nhớ và đĩa của một máy, hoặc cần quét hàng tỷ dòng nhanh, ta chia việc cho nhiều máy. Apache Spark là engine xử lý phân tán phổ biến nhất cho việc đó, còn \"lakehouse\" là cách lưu dữ liệu trên object storage mà vẫn có tính chất của một kho dữ liệu: bảng, giao dịch, schema.\n\n### Khoá bao gồm những gì\n- **Kiến trúc Spark**: driver, executor, trình quản lý cụm; từ RDD tới DataFrame; thực thi lười (transformation và action), DAG; shuffle — việc đắt nhất; đọc Spark UI.\n- **PySpark và Spark SQL**: select/filter/withColumn, đọc ghi Parquet/JSON/CSV/JDBC, join, nhóm, hàm cửa sổ, UDF và vì sao hàm có sẵn thường thắng.\n- **Hiệu năng**: Catalyst và Adaptive Query Execution, đọc kế hoạch `explain`, phân vùng, vấn đề file nhỏ, lệch dữ liệu (skew), broadcast join, bộ nhớ và OOM.\n- **Structured Streaming**: micro-batch, watermark, trạng thái, checkpoint, đọc từ Kafka.\n- **Delta Lake và Apache Iceberg**: nhật ký giao dịch/metadata, ACID, MERGE, time travel, tiến hoá schema, bảo trì (compaction, dọn file).\n- **Kiến trúc medallion** (bronze, silver, gold), CDC vào lakehouse, SCD2, cổng chất lượng.\n- **Airflow chuyên sâu**: TaskFlow, backfill, task idempotent, sensor.\n- Vận hành: Spark trên Kubernetes, lưu trữ tương thích S3, chi phí; engine một máy như DuckDB/Polars; Trino cho SQL tương tác.\n\n### Ví dụ ngắn\n```python\nfrom pyspark.sql import SparkSession, functions as F\n\nspark = SparkSession.builder.appName(\"daily\").getOrCreate()\norders = spark.read.parquet(\"s3a://lake/bronze/orders/\")\ndaily = (orders.filter(F.col(\"status\") == \"paid\")\n               .groupBy(F.to_date(\"ordered_at\").alias(\"day\"))\n               .agg(F.sum(\"amount\").alias(\"revenue\")))\ndaily.write.mode(\"overwrite\").parquet(\"s3a://lake/gold/daily_revenue/\")\n```\n\n### Lỗi hay gặp\n- Dùng Spark cho dữ liệu vài GB: một máy với DuckDB hoặc Polars thường nhanh và đơn giản hơn.\n- Chia partition thành hàng triệu file nhỏ, làm đọc chậm kinh khủng.\n- Một key chiếm phần lớn dữ liệu làm một executor gánh hết việc (skew).\n- Dùng UDF Python cho việc hàm có sẵn làm được.\n\n### Tự kiểm tra\n- Vì sao shuffle đắt, và làm sao hạn chế nó?\n- Bảng Iceberg/Delta khác một thư mục file Parquet ở đâu?",
+  "more": [
+   {
+    "type": "official",
+    "title": "Spark SQL, DataFrames and Datasets Guide",
+    "url": "https://spark.apache.org/docs/latest/sql-programming-guide.html"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Linux & Bash": {
+  "body": "Gần như mọi hệ dữ liệu chạy trên Linux: máy chủ chứa Airflow, node Spark, broker Kafka, container Docker. Biết làm việc trong terminal giúp bạn xem log, kiểm tra tài nguyên, viết script xử lý file và đặt lịch chạy mà không cần giao diện đồ hoạ.\n\n### Vì sao cần biết\nKhi một job đêm hỏng, bạn thường phải SSH vào máy, đọc log, kiểm đĩa đầy hay RAM cạn, rồi chạy lại một bước. Nhiều việc nhỏ (gộp file, đếm dòng, lọc log, kiểm trùng) làm bằng vài dòng shell nhanh hơn viết cả chương trình.\n\n### Ý chính cần nắm\n- Hệ thống file, quyền (`chmod`, `chown`), người dùng và `sudo`.\n- Dòng chuẩn và ống dẫn: `stdin`/`stdout`/`stderr`, chuyển hướng `>` `2>&1`, nối lệnh bằng `|`.\n- Bộ công cụ văn bản: `grep`, `cut`, `sort`, `uniq`, `wc`, `sed`, `awk` — xử lý file văn bản lớn mà không nạp vào bộ nhớ.\n- Script bash an toàn: `set -euo pipefail`, kiểm tham số, `trap` để dọn file tạm.\n- Tiến trình, tín hiệu, dùng `top`/`ps`, xem đĩa (`df`, `du`) và log (`journalctl`, `tail -f`).\n- Lập lịch bằng `cron` hoặc timer của systemd; và hiểu giới hạn của chúng (không có phụ thuộc giữa job, không thử lại thông minh) — lý do cần Airflow/Dagster.\n- SSH và truyền file (`scp`, `rsync`).\n\n### Ví dụ ngắn\n```bash\n# Top 10 IP gọi nhiều nhất trong log truy cập, không mở file ra editor\nawk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10\n```\n```cron\n# Chạy script mỗi ngày lúc 02:30, ghi log\n30 2 * * * /opt/etl/run_daily.sh >> /var/log/etl.log 2>&1\n```\n\n### Lỗi hay gặp\n- Script không có `set -e` nên lệnh đầu lỗi mà các lệnh sau vẫn chạy tiếp trên dữ liệu hỏng.\n- Quên dấu ngoặc kép quanh biến chứa khoảng trắng (`\"$file\"`), làm lệnh hiểu nhầm thành nhiều tham số.\n- `cron` chạy với môi trường (`PATH`) khác terminal của bạn nên lệnh không tìm thấy.\n- Chạy `rm -rf` với biến rỗng.\n\n### Tự kiểm tra\n- `2>&1` làm gì, và thứ tự của nó trong lệnh quan trọng ra sao?\n- Vì sao cron một mình không đủ cho pipeline có nhiều bước phụ thuộc?",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Linux và shell là gì, ra đời thế nào, vì sao quan trọng với bạn",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: dòng chuẩn, ống dẫn và công cụ văn bản bằng hình",
+    "nguon": "Linux & Bash · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-7-1-khung-script",
+    "ten": "7.1 — Bộ khung: shebang, chế độ nghiêm ngặt, và những cái bẫy của nó",
+    "nguon": "Linux & Bash · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer",
+    "ten": "11.2 — Hẹn giờ: cron và timer của systemd",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/linux-bash",
+    "ten": "Linux & Bash",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "GNU Bash Reference Manual",
+    "url": "https://www.gnu.org/software/bash/manual/bash.html"
+   }
+  ]
+ },
+ "Nền tảng › Data Engineer làm gì": {
+  "body": "Data engineer xây và vận hành hệ thống đưa dữ liệu từ nơi nó sinh ra (ứng dụng, cảm biến, API, file) tới nơi người ta dùng nó (báo cáo, dashboard, mô hình AI), sao cho dữ liệu đó đầy đủ, đúng, và đến đúng giờ. Nếu data analyst đặt câu hỏi và data scientist xây mô hình, thì data engineer làm \"đường ống nước\": không có ống thì không ai có nước sạch để dùng.\n\n### Công việc hằng ngày\n- Nạp dữ liệu từ nhiều nguồn (CSDL nghiệp vụ, API, file, luồng sự kiện).\n- Biến đổi và mô hình hoá để người phân tích dùng được bằng SQL.\n- Điều phối và giám sát pipeline: chạy đúng lịch, thử lại khi lỗi, cảnh báo khi dữ liệu trễ hoặc sai.\n- Đảm bảo chất lượng, phân quyền, tuân thủ dữ liệu cá nhân, và kiểm soát chi phí lưu trữ/truy vấn.\n\n### Ranh giới với các vai gần\n- **Data analyst**: trả lời câu hỏi kinh doanh bằng SQL và dashboard.\n- **Analytics engineer**: tập trung lớp mô hình hoá (thường bằng dbt) giữa kho dữ liệu và người dùng.\n- **Data scientist / ML engineer**: xây mô hình; cần data engineer cung cấp dữ liệu huấn luyện đáng tin.\n- **Backend engineer**: xây hệ thống nghiệp vụ tạo ra dữ liệu; data engineer là người \"dùng\" nó theo cách khác (đọc hàng loạt, theo thời gian).\n\nRanh giới mờ và khác nhau theo công ty, nhất là công ty nhỏ nơi một người làm cả hai ba vai.\n\n### Vì sao cần biết\nHiểu vai trò giúp bạn chọn đúng thứ để học trước: SQL và mô hình dữ liệu trước, rồi nạp dữ liệu, điều phối, chất lượng; công cụ cụ thể thì đến sau và dễ thay.",
+  "lessons": [
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-2-3",
+    "ten": "2.3 — Từ dữ liệu đến quyết định: đường ống dữ liệu, cấp độ phân tích và vai trò trong đội",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ]
+ },
+ "Nền tảng › SQL nâng cao": {
+  "body": "SQL là công cụ data engineer dùng nhiều nhất. \"Nâng cao\" không có nghĩa là mẹo hiếm, mà là biết viết truy vấn phân tích mà đọc được, đúng, và chạy nhanh: hàm cửa sổ, CTE, truy vấn con, và đọc kế hoạch thực thi để biết vì sao một câu chậm.\n\n### Hàm cửa sổ\nHàm tổng hợp thông thường với `GROUP BY` gộp nhiều dòng thành một. Hàm cửa sổ (`OVER`) tính trên một \"cửa sổ\" dòng nhưng **giữ nguyên từng dòng**.\n```sql\nselect customer_id, ordered_at, amount,\n       sum(amount) over (partition by customer_id order by ordered_at) as running_total,\n       row_number() over (partition by customer_id order by ordered_at desc) as rn,\n       lag(amount) over (partition by customer_id order by ordered_at) as prev_amount\nfrom orders;\n```\n- `PARTITION BY` chia nhóm, `ORDER BY` định thứ tự trong nhóm, khung (`ROWS BETWEEN ...`) giới hạn phạm vi tính.\n- Xếp hạng: `ROW_NUMBER`, `RANK` (có khoảng trống khi đồng hạng), `DENSE_RANK` (không khoảng trống). Dịch chuyển: `LAG`/`LEAD`.\n- Hàm cửa sổ chạy sau `WHERE`/`GROUP BY`, nên không đặt trực tiếp trong `WHERE`; muốn lọc theo kết quả của nó thì bọc trong CTE hoặc truy vấn con.\n\n### CTE\n`WITH` đặt tên cho từng bước, biến một truy vấn lồng khó đọc thành chuỗi bước rõ ràng. CTE đệ quy (`WITH RECURSIVE`) đi qua dữ liệu dạng cây (cấp bậc nhân sự, danh mục lồng nhau).\n\n### Tối ưu\n- Đọc `EXPLAIN ANALYZE`: quét tuần tự hay dùng chỉ mục, số dòng ước lượng so với thực tế, loại join (nested loop, hash, merge).\n- Lọc sớm, chọn cột cần thiết, tránh hàm bọc cột trong điều kiện lọc (làm chỉ mục mất tác dụng).\n\n### Lỗi hay gặp\n- Join một-nhiều rồi `SUM` làm số bị nhân lên (fan-out); hãy tổng hợp trước rồi mới join.\n- Quên rằng `ROW_NUMBER` không xác định nếu `ORDER BY` có giá trị trùng; thêm cột phá hoà.\n- Dùng `NOT IN` với tập có `NULL`.\n- Hàm cửa sổ với khung mặc định khi có `ORDER BY`: tính luỹ tiến chứ không phải toàn nhóm, và `RANGE` gộp các dòng cùng giá trị sắp xếp.\n\n### Tự kiểm tra\n- Lấy đơn hàng mới nhất của mỗi khách bằng `ROW_NUMBER` như thế nào?\n- Khác biệt giữa `RANK` và `DENSE_RANK`?",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-slide-cs5-1",
+    "ten": "⭐ CS.5 — 📑 SQL nâng cao (1): hàm cửa sổ, khung, CTE và CTE đệ quy (slide 1–12)",
+    "nguon": "Database Systems · ⭐ Chuyên sâu — Ngoài giáo trình: lịch sử",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-8-1-window-la-gi",
+    "ten": "8.1 — Hàm cửa sổ là gì: tổng hợp mà không gộp dòng",
+    "nguon": "PostgreSQL · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-7-3-cte",
+    "ten": "7.3 — CTE (WITH): truy vấn theo bước dễ đọc",
+    "nguon": "PostgreSQL · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain",
+    "ten": "10.1 — Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE",
+    "nguon": "PostgreSQL · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-lab-4-cte-ham-cua-so-ct-shop",
+    "ten": "Lab 4 — CT Shop: bảng điều khiển tăng trưởng (CTE + hàm cửa sổ)",
+    "nguon": "PostgreSQL · Chương 8",
+    "kieu": "lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "PostgreSQL: Window Functions (tutorial)",
+    "url": "https://www.postgresql.org/docs/current/tutorial-window.html"
+   }
+  ]
+ },
+ "Nền tảng › OLTP vs OLAP": {
+  "body": "Hai loại việc với dữ liệu có hình dạng rất khác nhau. **OLTP** (online transaction processing) là hệ thống nghiệp vụ: đặt hàng, đăng nhập, chuyển tiền — rất nhiều thao tác nhỏ, mỗi thao tác đọc hoặc ghi vài dòng, cần nhanh và đúng tuyệt đối. **OLAP** (online analytical processing) là phân tích: \"doanh thu theo tháng và theo vùng trong hai năm qua\" — ít truy vấn hơn nhưng mỗi truy vấn quét hàng triệu dòng và chỉ cần vài cột.\n\n### Khác biệt chính\n- **Mẫu truy cập**: OLTP chạm vài dòng theo khoá chính; OLAP quét nhiều dòng và gom nhóm.\n- **Lưu trữ**: OLTP lưu theo dòng (cả bản ghi nằm gần nhau, tiện đọc/ghi một đơn hàng); OLAP lưu theo cột (mỗi cột nằm riêng, quét một cột nhanh và nén rất tốt).\n- **Mô hình dữ liệu**: OLTP chuẩn hoá để tránh trùng lặp và giữ nhất quán; OLAP thường phi chuẩn hoá (star schema) để truy vấn ít join.\n- **Chỉ số**: OLTP đo độ trễ và số giao dịch mỗi giây; OLAP đo thông lượng quét và thời gian trả lời cho truy vấn nặng.\n\n### Vì sao cần biết\nĐây là lý do không chạy báo cáo nặng thẳng trên CSDL production: truy vấn quét lớn tranh I/O và khoá với giao dịch của người dùng thật. Giải pháp: sao chép dữ liệu sang một hệ riêng thiết kế cho phân tích (kho dữ liệu), và đó là nguồn gốc của hầu hết pipeline dữ liệu.\n\n### Lỗi hay gặp\n- Tin rằng \"cứ thêm chỉ mục\" sẽ làm báo cáo nhanh: chỉ mục giúp tra cứu điểm, không giúp quét toàn bộ.\n- Dùng một CSDL OLTP làm kho phân tích rồi ngạc nhiên khi nó chậm khi dữ liệu lớn.\n- Cho rằng OLAP là \"CSDL khác hẳn\": nhiều kho hiện đại vẫn nói SQL; khác biệt nằm ở cách lưu và thực thi.",
+  "lessons": [
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-2-1-warehouse-star-schema",
+    "ten": "2.1 — Kho dữ liệu & mô hình star schema",
+    "nguon": "Technology for BI Analysts · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   },
+   {
+    "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-6-1-warehouse-olap",
+    "ten": "6.1 — Kho dữ liệu & OLAP",
+    "nguon": "Advanced Database · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBD301"
+   },
+   {
+    "href": "/courses/dbm301-data-mining/learn?lessonSlug=dbm301-4-1-warehouse-olap",
+    "ten": "4.1 — Data warehouse, OLAP & data cube",
+    "nguon": "Data Mining · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBM301"
+   }
+  ]
+ },
+ "Mô hình hoá & Kho dữ liệu › Star schema & Dimensional modeling": {
+  "body": "Mô hình hoá chiều (dimensional modeling, do Ralph Kimball phổ biến) tổ chức dữ liệu phân tích quanh hai loại bảng. **Bảng fact** ghi các sự kiện đo được — mỗi dòng là một lần bán hàng, một lượt xem, một giao dịch — chứa các số đo (số tiền, số lượng) và khoá ngoại trỏ tới các dimension. **Bảng dimension** mô tả ngữ cảnh: khách hàng, sản phẩm, ngày, cửa hàng — \"ai, cái gì, khi nào, ở đâu\".\n\nKhi các dimension toả quanh một fact trông giống ngôi sao, ta gọi là **star schema**. Còn nếu dimension lại được chuẩn hoá thành nhiều bảng nhỏ (ví dụ sản phẩm → danh mục → ngành hàng) thì thành **snowflake schema**; nó tiết kiệm chỗ nhưng thêm join, nên kho phân tích thường ưu tiên star cho dễ truy vấn.\n\n### Vì sao cần biết\nHầu hết kho dữ liệu và lớp dbt mart đều theo kiểu này. Người phân tích viết truy vấn đơn giản (\"tổng doanh thu theo danh mục theo tháng\") mà không cần hiểu cấu trúc hệ nghiệp vụ.\n\n### Ý chính\n- **Grain (độ mịn)**: quyết định trước một dòng fact đại diện cho cái gì (\"một dòng hàng trong đơn\"). Sai grain là sai cả mô hình.\n- **Surrogate key**: khoá thay thế do kho sinh ra, tách khỏi khoá của hệ nguồn.\n- **Dimension thay đổi chậm (SCD)**: khi thuộc tính dimension đổi (khách chuyển thành phố). Loại 1 ghi đè; loại 2 thêm dòng mới kèm khoảng thời gian hiệu lực để giữ lịch sử.\n- **Conformed dimension**: dimension dùng chung giữa nhiều fact (cùng một dimension ngày, khách hàng) để so sánh chéo.\n- Dimension ngày thường được dựng sẵn thành một bảng lịch.\n\n### Ví dụ ngắn\n```sql\nselect d.year, d.month, p.category, sum(f.amount) as revenue\nfrom fact_sales f\njoin dim_date    d on d.date_key    = f.date_key\njoin dim_product p on p.product_key = f.product_key\ngroup by d.year, d.month, p.category;\n```\n\n### Lỗi hay gặp\n- Trộn nhiều grain trong một bảng fact, rồi cộng số đo bị trùng.\n- Dùng khoá nghiệp vụ làm khoá chính và mất lịch sử khi hệ nguồn tái sử dụng khoá.\n- Chuẩn hoá quá tay làm truy vấn phân tích đầy join.\n\n### Tự kiểm tra\n- Grain của bảng fact doanh thu bán lẻ nên là gì, và vì sao quan trọng?\n- Khi nào chọn SCD loại 2?",
+  "lessons": [
+   {
+    "href": "/courses/itb302c-business-intelligence-bi/learn?lessonSlug=itb302c-3-1-dimensional-modeling",
+    "ten": "3.1 — Mô hình dữ liệu đa chiều",
+    "nguon": "Business Intelligence (BI) · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ITB302c"
+   },
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-2-1-warehouse-star-schema",
+    "ten": "2.1 — Kho dữ liệu & mô hình star schema",
+    "nguon": "Technology for BI Analysts · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   },
+   {
+    "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-6-1-warehouse-olap",
+    "ten": "6.1 — Kho dữ liệu & OLAP",
+    "nguon": "Advanced Database · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBD301"
+   }
+  ]
+ },
+ "Mô hình hoá & Kho dữ liệu › Kho dữ liệu cột (ClickHouse/BigQuery/Snowflake)": {
+  "body": "Kho dữ liệu cột lưu mỗi cột thành một vùng riêng trên đĩa thay vì lưu từng dòng liền nhau. Truy vấn phân tích thường chỉ đụng vài cột trong số hàng chục (ví dụ `sum(amount)` theo `day`), nên engine chỉ đọc đúng các cột đó và bỏ qua phần còn lại.\n\n### Vì sao nhanh\n- **Đọc ít hơn**: chỉ cột được hỏi mới đi qua I/O.\n- **Nén tốt hơn**: giá trị cùng cột giống nhau về kiểu và thường lặp, nên nén (dictionary, run-length, delta) rất hiệu quả.\n- **Thực thi theo lô (vectorized)**: xử lý hàng nghìn giá trị một lần, tận dụng CPU.\n- **Song song**: dữ liệu chia theo khối và theo máy để quét cùng lúc.\n\n### Các lựa chọn\n- **ClickHouse**: mã nguồn mở, rất nhanh cho phân tích; bảng `MergeTree` sắp xếp dữ liệu theo khoá `ORDER BY`, tự gộp các \"part\" ngầm. Có thể tự host.\n- **BigQuery, Snowflake, Redshift**: dịch vụ quản lý trên cloud; tách lưu trữ và tính toán, trả tiền theo lượng quét hoặc thời gian chạy.\n- **DuckDB**: engine cột nhúng, chạy ngay trong tiến trình, phù hợp phân tích trên một máy.\n\n### Lưu ý khi dùng\nKho cột mạnh ở quét lớn nhưng yếu ở cập nhật/xoá từng dòng và giao dịch nhiều bước; đừng dùng thay CSDL nghiệp vụ. Dữ liệu thường được nạp theo lô hoặc dòng sự kiện, ít khi sửa tại chỗ. Với dịch vụ tính tiền theo lượng quét, `select *` trên bảng lớn có thể rất đắt.",
+  "lessons": [
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-8-1-modern-bi",
+    "ten": "8.1 — BI hiện đại: cloud, big data, AI/augmented analytics & quản trị dữ liệu",
+    "nguon": "Technology for BI Analysts · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "ClickHouse — Introduction",
+    "url": "https://clickhouse.com/docs/en/intro"
+   }
+  ]
+ },
+ "Mô hình hoá & Kho dữ liệu › dbt (transform bằng SQL)": {
+  "body": "dbt (data build tool) cho phép bạn viết biến đổi dữ liệu như viết code phần mềm: mỗi biến đổi là một file SQL `select`, dbt lo việc tạo bảng/view trong kho dữ liệu, sắp xếp thứ tự chạy theo phụ thuộc, chạy test và sinh tài liệu. Nó chỉ lo chữ **T** (transform) trong ELT: dữ liệu đã nằm sẵn trong kho, dbt biến nó thành các bảng sạch.\n\n### Vì sao cần biết\nTrước dbt, SQL biến đổi nằm rải rác trong script và công cụ BI, khó kiểm thử và khó biết số nào dựa vào số nào. dbt đưa vào kho dữ liệu những thói quen của kỹ thuật phần mềm: version control, review, test, CI.\n\n### Ý chính\n- **Model**: một file SQL `select`; dbt biến nó thành view hoặc bảng. Dùng `{{ ref('ten_model') }}` để trỏ tới model khác, từ đó dbt tự dựng đồ thị phụ thuộc (DAG) và biết chạy cái nào trước.\n- **Source**: khai báo bảng thô do hệ nạp dữ liệu tạo ra, dùng `{{ source('app','orders') }}`.\n- **Materialization**: `view`, `table`, `incremental` (chỉ xử lý dữ liệu mới), `ephemeral`.\n- **Test**: `unique`, `not_null`, `accepted_values`, `relationships` khai trong file YAML; và test tự viết bằng SQL.\n- **Tài liệu và lineage**: dbt sinh trang web mô tả cột và vẽ đồ thị nguồn gốc của từng bảng.\n- **Macro (Jinja)** để tái sử dụng SQL, và **package** để dùng lại code cộng đồng.\n- Cấu trúc thường dùng: `staging` (làm sạch nhẹ từ nguồn) → `intermediate` → `marts` (fact/dimension cho người dùng).\n\n### Ví dụ ngắn\n```sql\n-- models/marts/fct_orders.sql\nselect\n    o.order_id,\n    o.ordered_at,\n    c.customer_key,\n    o.amount\nfrom {{ ref('stg_orders') }} o\njoin {{ ref('dim_customers') }} c on c.customer_id = o.customer_id\n```\n```yaml\n# models/marts/schema.yml\nmodels:\n  - name: fct_orders\n    columns:\n      - name: order_id\n        tests: [unique, not_null]\n```\n\n### Lỗi hay gặp\n- Model `incremental` thiếu điều kiện lọc dữ liệu mới, hoặc khoá duy nhất sai, dẫn đến trùng dòng.\n- Đặt logic nghiệp vụ nặng vào model `staging` thay vì giữ nó mỏng.\n- Có model mà không có test; lỗi chỉ lộ khi người dùng báo số sai.\n\n### Tự kiểm tra\n- `ref()` làm gì ngoài việc điền tên bảng?\n- Khi nào chọn `incremental` thay vì `table`?",
+  "more": [
+   {
+    "type": "official",
+    "title": "dbt — Introduction",
+    "url": "https://docs.getdbt.com/docs/introduction"
+   },
+   {
+    "type": "official",
+    "title": "dbt — Data tests",
+    "url": "https://docs.getdbt.com/docs/build/data-tests"
+   }
+  ]
+ },
+ "Ingest: Batch, CDC & Streaming › ETL vs ELT": {
+  "body": "Cả hai là cách đưa dữ liệu từ nguồn vào kho phân tích; khác nhau ở **chỗ và lúc biến đổi**.\n\n- **ETL** (Extract, Transform, Load): trích xuất, biến đổi trên một máy trung gian, rồi mới nạp kết quả vào kho. Hợp thời kho dữ liệu đắt và yếu: chỉ nạp thứ đã làm sạch và gom sẵn.\n- **ELT** (Extract, Load, Transform): nạp dữ liệu thô vào kho trước, rồi biến đổi ngay trong kho bằng SQL. Hợp thời kho cột và lưu trữ rẻ, mạnh về tính toán.\n\n### Vì sao ELT phổ biến\n- Kho hiện đại (ClickHouse, BigQuery, Snowflake) quét và biến đổi lượng lớn rất nhanh, nên không cần máy trung gian riêng.\n- Giữ dữ liệu thô nghĩa là khi logic biến đổi sai hoặc yêu cầu đổi, bạn chạy lại từ dữ liệu gốc thay vì phải trích xuất lại từ nguồn (đôi khi không còn nữa).\n- Biến đổi bằng SQL trong kho đi cùng dbt: có version control, test, lineage.\n\n### Tổ chức tầng\nThường chia: **raw** (nguyên trạng từ nguồn) → **staging** (đổi tên, ép kiểu, khử trùng) → **mart** (fact và dimension phục vụ người dùng).\n\n### Khi ETL vẫn hợp\nCần che hoặc loại dữ liệu nhạy cảm **trước khi** nó vào kho (tuân thủ), cần xử lý mà SQL làm không nổi (trích văn bản từ PDF, gọi mô hình), hoặc kho không đủ mạnh.\n\n### Lỗi hay gặp\n- Nạp dữ liệu thô chứa thông tin cá nhân vào kho ai cũng truy cập được.\n- Không giữ lại bản thô nên không thể tái xử lý.\n- Gọi mọi thứ là \"ELT\" mà vẫn để nghiệp vụ nằm trong script ngoài kho, không ai kiểm thử.",
+  "lessons": [
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-3-1-etl",
+    "ten": "3.1 — ETL & tích hợp dữ liệu",
+    "nguon": "Technology for BI Analysts · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-2-3",
+    "ten": "2.3 — Từ dữ liệu đến quyết định: đường ống dữ liệu, cấp độ phân tích và vai trò trong đội",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ]
+ },
+ "Ingest: Batch, CDC & Streaming › Change Data Capture (Debezium)": {
+  "body": "Change Data Capture (CDC) bắt mọi thay đổi (thêm, sửa, xoá) của CSDL nguồn và phát ra như một dòng sự kiện, thay vì định kỳ quét lại cả bảng. Cách làm hiện đại đọc **nhật ký giao dịch** của CSDL — với PostgreSQL là WAL (write-ahead log) qua logical decoding — nên không phải truy vấn bảng nguồn và bắt được cả thao tác xoá.\n\n### Debezium\nDebezium là công cụ CDC mã nguồn mở, thường chạy như một connector của Kafka Connect. Mỗi thay đổi thành một sự kiện chứa trạng thái trước (`before`), sau (`after`), loại thao tác (`op`: tạo, sửa, xoá, hoặc snapshot đọc ban đầu) và vị trí trong log. Sự kiện được ghi vào Kafka topic (thường một topic cho mỗi bảng), rồi bên đọc đưa vào kho dữ liệu hoặc lakehouse.\n\n### Vì sao cần biết\n- Gần thời gian thực: độ trễ tính bằng giây, không phải theo giờ chạy batch.\n- Tải trên nguồn thấp: chỉ đọc log, không quét bảng.\n- Không mất xoá: quét theo `updated_at` bỏ lỡ dòng bị xoá và dòng sửa mà không cập nhật cột đó.\n\n### Ý chính khi dùng với PostgreSQL\n- Cần bật `wal_level = logical` và dùng replication slot.\n- Connector làm một snapshot ban đầu rồi chuyển sang đọc thay đổi liên tục.\n- Cần tài khoản có quyền replication và publication cho các bảng cần theo dõi.\n\n### Lỗi hay gặp\n- **Replication slot đứng im**: nếu connector chết lâu, PostgreSQL giữ WAL cho slot và có thể làm đầy đĩa nguồn. Phải giám sát độ trễ slot.\n- Đổi schema bảng nguồn mà không tính tới bên đọc.\n- Quên rằng sự kiện có thể đến trùng (ít nhất một lần): bên đích phải ghi idempotent (ví dụ upsert theo khoá).\n- Dùng CDC cho bảng nhỏ, hiếm đổi, nơi một lần batch mỗi đêm là đủ.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-2-wal-pitr",
+    "ten": "15.2 — WAL và khôi phục theo thời điểm",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Debezium Tutorial",
+    "url": "https://debezium.io/documentation/reference/stable/tutorial.html"
+   }
+  ]
+ },
+ "Ingest: Batch, CDC & Streaming › Xử lý luồng (Kafka Streams / Flink)": {
+  "body": "Xử lý luồng tính toán liên tục trên dòng sự kiện ngay khi chúng đến, thay vì đợi gom đủ rồi chạy batch. Ví dụ: đếm số đơn mỗi phút, phát hiện thanh toán bất thường, nối dòng click với dòng đơn hàng.\n\n### Khái niệm lõi\n- **Thời gian sự kiện và thời gian xử lý**: sự kiện xảy ra lúc nào khác lúc hệ thống nhận được nó. Tính theo thời gian sự kiện mới cho kết quả đúng khi mạng trễ.\n- **Cửa sổ (window)**: gom sự kiện theo thời gian — *tumbling* (khoảng cố định, không chồng), *hopping/sliding* (chồng nhau), *session* (đóng khi im lặng một lúc).\n- **Watermark**: ước lượng \"đến đây thì dữ liệu cũ hơn mốc này coi như đã tới đủ\", để biết khi nào đóng cửa sổ; dữ liệu đến muộn hơn watermark bị bỏ hoặc xử lý riêng.\n- **Trạng thái (state)**: đếm, tổng, join cần nhớ dữ liệu giữa các sự kiện; framework lưu trạng thái bền và khôi phục sau sự cố (checkpoint).\n- **Ngữ nghĩa giao nhận**: ít nhất một lần, đúng một lần (cần phối hợp đầu vào, trạng thái và đầu ra).\n\n### Công cụ\n- **Kafka Streams**: thư viện Java chạy ngay trong ứng dụng của bạn, đọc và ghi Kafka; không cần cụm riêng.\n- **Apache Flink**: engine phân tán chuyên cho luồng, mạnh về thời gian sự kiện và trạng thái lớn; chạy trên cụm riêng.\n- Ngoài ra Spark Structured Streaming (micro-batch) cũng đủ cho nhiều trường hợp.\n\n### Khi nào đáng dùng\nChỉ khi độ trễ vài giây thật sự tạo giá trị (phát hiện gian lận, cảnh báo). Nếu người dùng xem báo cáo mỗi sáng, batch hằng giờ đơn giản và rẻ hơn nhiều.\n\n### Lỗi hay gặp\n- Quên xử lý dữ liệu đến trễ, nên số đếm lệch.\n- Trạng thái phình mãi vì không đặt hạn giữ (TTL).\n- Gộp key lệch: một key chiếm phần lớn lưu lượng làm một tác vụ gánh hết.",
+  "lessons": [
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-2-2",
+    "ten": "2.2 — Lưu và xử lý dữ liệu lớn: kho, hồ, theo lô, theo luồng, phân tán",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ]
+ },
+ "Dữ liệu lớn & Lakehouse › Apache Spark": {
+  "body": "Apache Spark là engine xử lý dữ liệu phân tán: bạn viết chương trình như thao tác trên một bảng (DataFrame), Spark chia dữ liệu thành các phần (partition) và chạy song song trên nhiều máy (hoặc nhiều nhân). Nó dùng khi dữ liệu không vừa một máy hoặc khi một máy quá chậm.\n\n### Kiến trúc\n- **Driver** chạy chương trình chính, lập kế hoạch; **executor** là các tiến trình trên các máy làm việc thật; **trình quản lý cụm** (standalone, YARN, Kubernetes) cấp tài nguyên.\n- Dữ liệu chia thành **partition**; mỗi partition được một task xử lý.\n- **Thực thi lười**: các *transformation* (`select`, `filter`, `join`) chỉ ghi lại kế hoạch; chỉ khi có *action* (`count`, `write`, `show`) Spark mới tối ưu rồi chạy thật. Bộ tối ưu Catalyst viết lại kế hoạch trước khi thực thi.\n- **Shuffle**: khi cần dữ liệu cùng key ở cùng chỗ (join, `groupBy`), Spark xáo trộn dữ liệu qua mạng và đĩa — việc đắt nhất.\n\n### Ví dụ ngắn\n```python\nfrom pyspark.sql import SparkSession, functions as F\n\nspark = SparkSession.builder.getOrCreate()\norders = spark.read.parquet(\"orders/\")\ncustomers = spark.read.parquet(\"customers/\")\nresult = (orders.join(F.broadcast(customers), \"customer_id\")\n                .groupBy(\"country\")\n                .agg(F.sum(\"amount\").alias(\"revenue\")))\nresult.explain()\nresult.write.mode(\"overwrite\").parquet(\"out/revenue_by_country/\")\n```\n`broadcast` gửi bảng nhỏ tới mọi executor để tránh shuffle bảng lớn.\n\n### Ý chính khi tối ưu\n- Đọc **Spark UI** (job, stage, task) và `explain()` để thấy shuffle ở đâu.\n- Chọn số partition hợp lý; tránh quá nhiều file nhỏ.\n- **Skew**: một key quá lớn làm một task chậm hơn mọi task khác.\n- Ưu tiên hàm có sẵn của Spark SQL hơn UDF Python, vì UDF bỏ qua tối ưu hoá.\n- Biết bộ nhớ executor và hiện tượng tràn đĩa/OOM.\n\n### Lỗi hay gặp\n- Dùng Spark cho dữ liệu nhỏ: chi phí khởi động và phối hợp lớn hơn lợi ích.\n- Gọi `collect()` kéo cả bảng về driver rồi hết bộ nhớ.\n- Join hai bảng lớn không chú ý tới shuffle và skew.\n\n### Tự kiểm tra\n- Vì sao thực thi lười lại có lợi?\n- Khi nào broadcast join phù hợp?",
+  "lessons": [
+   {
+    "href": "/courses/bdi302c-big-data/learn?lessonSlug=bdi302c-3-1-spark-integration",
+    "ten": "3.1 — Tích hợp & xử lý với Apache Spark",
+    "nguon": "Big Data · Module 3 — Tích hợp & xử lý",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDI302c"
+   },
+   {
+    "href": "/courses/bdi302c-big-data/learn?lessonSlug=bdi302c-1-1-hadoop-hdfs-mapreduce",
+    "ten": "1.1 — Vì sao Big Data, khả năng mở rộng & Hadoop",
+    "nguon": "Big Data · Module 1 — Giới thiệu Big Data",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDI302c"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Spark SQL, DataFrames and Datasets Guide",
+    "url": "https://spark.apache.org/docs/latest/sql-programming-guide.html"
+   }
+  ]
+ },
+ "Dữ liệu lớn & Lakehouse › Lakehouse (Delta Lake / Apache Iceberg)": {
+  "body": "Data lake là kho file thô (thường Parquet) trên object storage rẻ như S3, nhưng thiếu những thứ một CSDL có: giao dịch, schema chặt, cập nhật an toàn. Kho dữ liệu thì ngược lại, có đủ nhưng đắt và đóng. **Lakehouse** thêm một lớp \"định dạng bảng\" lên trên file Parquet để có cả hai: lưu trữ rẻ và mở, cộng với bảng có tính chất ACID.\n\n### Cách hoạt động\nĐịnh dạng bảng không đổi bản chất file dữ liệu; nó thêm **metadata** ghi lại danh sách file nào thuộc phiên bản nào của bảng.\n- **Delta Lake**: thư mục `_delta_log` chứa nhật ký các commit (JSON, kèm checkpoint định kỳ).\n- **Apache Iceberg**: cây metadata gồm file metadata → manifest list → manifest, mỗi cấp trỏ tới các file dữ liệu và kèm thống kê.\nMỗi lần ghi tạo một snapshot mới bằng cách commit nguyên tử; người đọc luôn thấy một snapshot nhất quán.\n\n### Bạn được gì\n- **ACID** trên object storage; nhiều người ghi/đọc cùng lúc mà không thấy dữ liệu nửa vời.\n- **`MERGE`/upsert và xoá** ở mức dòng.\n- **Time travel**: đọc bảng như ở một thời điểm trước, tiện kiểm toán và khôi phục.\n- **Tiến hoá schema** (thêm cột, đổi tên) không cần ghi lại toàn bộ.\n- Tối ưu việc đọc nhờ thống kê và phân vùng (Iceberg còn có phân vùng ẩn).\n- Nhiều engine đọc cùng một bảng: Spark, Trino, Flink, DuckDB.\n\n### Bảo trì\nMỗi lần ghi để lại file; cần định kỳ gộp file nhỏ (compaction), xoá file không còn được snapshot nào dùng (vacuum/expire snapshot).\n\n### Lỗi hay gặp\n- Quên bảo trì nên file nhỏ chất đống và đọc chậm.\n- Hiểu nhầm \"lakehouse\" là thay thế mọi CSDL: nó vẫn là hệ phân tích, không phục vụ giao dịch nghiệp vụ.\n- Chọn định dạng chỉ vì thịnh hành mà không xem engine mình dùng hỗ trợ tới đâu.",
+  "lessons": [
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-8-1-modern-bi",
+    "ten": "8.1 — BI hiện đại: cloud, big data, AI/augmented analytics & quản trị dữ liệu",
+    "nguon": "Technology for BI Analysts · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-5-1-datalake-exam",
+    "ten": "5.1 — Data lake & chiến lược thi",
+    "nguon": "Cloud Computing · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-2-2",
+    "ten": "2.2 — Lưu và xử lý dữ liệu lớn: kho, hồ, theo lô, theo luồng, phân tán",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Apache Iceberg Documentation",
+    "url": "https://iceberg.apache.org/docs/latest/"
+   },
+   {
+    "type": "official",
+    "title": "Delta Lake Documentation",
+    "url": "https://docs.delta.io/latest/index.html"
+   }
+  ]
+ },
+ "Dữ liệu lớn & Lakehouse › Parquet & định dạng cột": {
+  "body": "Parquet là định dạng file cột mã nguồn mở, gần như chuẩn chung của hệ sinh thái dữ liệu: Spark, DuckDB, ClickHouse, BigQuery, Snowflake, pandas và các định dạng bảng như Iceberg/Delta đều đọc và ghi nó. Nếu CSV là \"bảng tính dạng chữ\", Parquet là \"bảng được đóng gói cho máy quét nhanh\".\n\n### Cấu trúc\n- File chia thành **row group** (một nhóm dòng liên tiếp).\n- Trong mỗi row group, mỗi cột lưu thành một **column chunk**, chia tiếp thành các **page**.\n- Cuối file là **footer** chứa schema và thống kê (giá trị nhỏ nhất/lớn nhất, số null) của từng chunk.\n\n### Vì sao hiệu quả\n- **Chỉ đọc cột cần dùng** (column pruning): hỏi 3 cột thì không đọc 30 cột còn lại.\n- **Bỏ qua cả khối** nhờ thống kê trong footer (predicate pushdown): điều kiện `ngay >= '2026-01-01'` cho phép bỏ qua row group có giá trị lớn nhất cũ hơn mốc.\n- **Nén mạnh**: mã hoá theo từ điển, run-length, rồi nén (Snappy, Zstd...); giá trị cùng cột giống nhau nên nén tốt.\n- **Có schema** và kiểu dữ liệu, không như CSV phải đoán kiểu.\n\n### So sánh nhanh\n- **CSV/JSON**: dễ đọc bằng mắt, không kiểu, không nén tốt, phải đọc cả dòng; hợp trao đổi nhỏ.\n- **Parquet/ORC**: cột, cho phân tích.\n- **Avro**: lưu theo dòng, có schema; hợp luồng sự kiện (Kafka) và ghi nhiều.\n\n### Ví dụ ngắn\n```python\nimport pandas as pd\ndf = pd.read_csv(\"events.csv\")\ndf.to_parquet(\"events.parquet\", compression=\"zstd\")        # cần pyarrow\nonly = pd.read_parquet(\"events.parquet\", columns=[\"user_id\", \"ts\"])\n```\n```sql\n-- DuckDB đọc thẳng Parquet, kèm đẩy điều kiện xuống file\nselect count(*) from 'events.parquet' where ts >= '2026-01-01';\n```\n\n### Lỗi hay gặp\n- Ghi quá nhiều file Parquet nhỏ: mỗi file có footer riêng, đọc chậm. Gộp về file vài chục đến vài trăm MB.\n- Phân vùng thư mục theo cột có quá nhiều giá trị khác nhau.\n- Mong sửa một dòng trong file Parquet: file bất biến; cập nhật cần ghi lại, đó là lý do có Delta/Iceberg.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Apache Parquet — Documentation",
+    "url": "https://parquet.apache.org/docs/overview/"
+   }
+  ]
+ },
+ "Điều phối, Chất lượng & Vận hành › Apache Airflow / Dagster": {
+  "body": "Khi pipeline có nhiều bước phụ thuộc nhau (nạp → biến đổi → kiểm chất lượng → báo cáo), `cron` không đủ: nó không biết bước nào phụ thuộc bước nào, không tự thử lại, không cho bạn thấy cái gì đã chạy và cái gì hỏng. Trình điều phối (orchestrator) giải quyết việc này: bạn khai báo các tác vụ và phụ thuộc, nó lập lịch, chạy theo thứ tự, thử lại và hiển thị trạng thái.\n\n### Apache Airflow\nNền tảng điều phối phổ biến nhất. Một pipeline là một **DAG** (đồ thị có hướng không chu trình) viết bằng Python, gồm các **task**. Thành phần: scheduler (lập lịch), executor (chạy task), giao diện web (theo dõi, chạy lại), metadata database.\n```python\nfrom datetime import datetime\nfrom airflow.decorators import dag, task\n\n@dag(schedule=\"@daily\", start_date=datetime(2026, 1, 1), catchup=False)\ndef daily_orders():\n    @task(retries=2)\n    def extract():\n        return \"orders.parquet\"\n\n    @task\n    def load(path: str):\n        print(\"loading\", path)\n\n    load(extract())\n\ndaily_orders()\n```\n\n### Dagster\nCách tiếp cận theo **tài sản dữ liệu (asset)**: bạn mô tả \"bảng/tệp này được tạo ra từ những bảng kia\" và Dagster suy ra thứ tự chạy, kèm khả năng nhìn lineage và kiểm tra chất lượng ngay trong công cụ.\n\n### Ý chính\n- **Idempotent**: chạy lại cùng một tác vụ cho cùng khoảng dữ liệu phải cho cùng kết quả, không nhân đôi dòng. Đây là điều kiện để thử lại và backfill an toàn.\n- **Backfill**: chạy lại pipeline cho khoảng thời gian trong quá khứ.\n- Thử lại với chờ tăng dần, cảnh báo khi tác vụ hỏng hoặc trễ so với SLA.\n- Task nên nhẹ: để Spark/dbt/kho dữ liệu làm việc nặng, Airflow chỉ ra lệnh.\n\n### Lỗi hay gặp\n- Task không idempotent, rồi chạy lại làm trùng dữ liệu.\n- Nhét xử lý dữ liệu nặng thẳng vào worker Airflow.\n- Dùng giờ và `catchup` mà không hiểu, rồi tự nhiên chạy hàng trăm lượt bù.\n- Không có cảnh báo, nên pipeline hỏng cả tuần mới biết.\n\n### Tự kiểm tra\n- Vì sao task phải idempotent?\n- Orchestration theo task khác theo asset ở điểm nào?",
+  "more": [
+   {
+    "type": "official",
+    "title": "Apache Airflow Documentation",
+    "url": "https://airflow.apache.org/docs/apache-airflow/stable/index.html"
+   },
+   {
+    "type": "official",
+    "title": "Dagster Documentation",
+    "url": "https://docs.dagster.io/"
+   }
+  ]
+ },
+ "Điều phối, Chất lượng & Vận hành › Data quality & contracts": {
+  "body": "Dữ liệu sai còn tệ hơn dữ liệu thiếu vì người ta tin nó và ra quyết định theo nó. Kiểm chất lượng dữ liệu giống kiểm thử phần mềm: viết các điều kiện \"dữ liệu tốt phải thoả\" và chạy tự động mỗi khi pipeline chạy.\n\n### Các chiều chất lượng thường dùng\nĐầy đủ (không thiếu giá trị bắt buộc), duy nhất (không trùng khoá), hợp lệ (đúng định dạng, trong miền giá trị), nhất quán (khớp giữa các bảng), kịp thời (đến đúng giờ), chính xác (đúng với thực tế).\n\n### Kiểm tự động\n- **dbt test**: `unique`, `not_null`, `accepted_values`, `relationships`.\n- **Great Expectations, Soda**: khai báo kỳ vọng (số dòng, tỷ lệ null, phân phối) và sinh báo cáo.\n- Kiểm **độ tươi** (dữ liệu mới nhất có quá cũ không) và **khối lượng** (số dòng hôm nay lệch bất thường so với thường lệ).\nQuyết định rõ khi kiểm thất bại: chặn pipeline (dữ liệu hỏng không được lên dashboard) hay chỉ cảnh báo.\n\n### Hợp đồng dữ liệu (data contract)\nMột thoả thuận bằng văn bản và máy đọc được giữa nhóm tạo dữ liệu và nhóm dùng nó: schema, ý nghĩa cột, độ tươi mong đợi, ai chịu trách nhiệm, và cách báo trước thay đổi. Mục tiêu là tránh cảnh nhóm nguồn đổi tên một cột và vô tình làm hỏng báo cáo của người khác. Hợp đồng nên được kiểm trong CI của nhóm nguồn.\n\n### Lỗi hay gặp\n- Chỉ kiểm ở cuối pipeline; lỗi đã lan qua nhiều bảng.\n- Test quá nhiều, ngưỡng quá nhạy, nên cảnh báo thành tiếng ồn và bị bỏ qua.\n- Không ai sở hữu một bảng, nên khi nó hỏng không ai sửa.",
+  "lessons": [
+   {
+    "href": "/courses/iba201-introduction-to-business-analytics/learn?lessonSlug=iba201-3-1-data-types-quality",
+    "ten": "3.1 — Dữ liệu: loại, nguồn & chất lượng",
+    "nguon": "Introduction to Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IBA201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-3-1-cleaning",
+    "ten": "3.1 — Thu thập & làm sạch dữ liệu",
+    "nguon": "Data Science · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "dbt — Data tests",
+    "url": "https://docs.getdbt.com/docs/build/data-tests"
+   }
+  ]
+ },
+ "Điều phối, Chất lượng & Vận hành › Chi phí & quản trị dữ liệu": {
+  "body": "Khi nền tảng dữ liệu lớn dần, hai câu hỏi đi cùng nhau: ai được xem dữ liệu gì và theo luật nào, và nền tảng đang tốn bao nhiêu tiền cho cái gì. Cả hai là việc của data engineer, không chỉ của bộ phận pháp chế hay tài chính.\n\n### Quản trị và phân quyền\n- **Vòng đời và phân loại dữ liệu**: biết dữ liệu nào là thông tin cá nhân, nhạy cảm, nội bộ, công khai; từ đó quyết định ai truy cập, lưu bao lâu, xoá thế nào.\n- **Quyền tối thiểu**: mỗi người, mỗi dịch vụ chỉ có quyền cần dùng; phân theo vai trò (RBAC). Che hoặc ẩn danh cột nhạy cảm (số điện thoại, email) cho người không cần.\n- **Nhật ký truy cập và lineage**: biết ai đã đọc gì, và một con số bắt nguồn từ bảng nào để trả lời khi có kiểm toán hay sự cố.\n- **Danh mục dữ liệu (catalog)** để mọi người tìm và hiểu dữ liệu.\n\n### Dữ liệu cá nhân ở Việt Nam\nNghị định 13/2023/NĐ-CP là văn bản đầu tiên quy định chi tiết bảo vệ dữ liệu cá nhân (phân biệt dữ liệu cơ bản và nhạy cảm, yêu cầu có sự đồng ý, đánh giá tác động, chuyển dữ liệu ra nước ngoài). Khung pháp lý này đang được cập nhật bằng luật và nghị định mới, nên hãy kiểm tra văn bản hiện hành trước khi thiết kế. Nguyên tắc kỹ thuật thì bền: thu thập tối thiểu, đúng mục đích, giới hạn thời gian lưu, bảo vệ và cho người dùng quyền truy cập/xoá dữ liệu của họ. Bài viết này không phải tư vấn pháp lý.\n\n### Chi phí\n- Lưu trữ: dữ liệu thô nhiều năm tích tụ; đặt chính sách vòng đời (chuyển lớp lạnh, xoá), nén bằng định dạng cột.\n- Truy vấn: với kho tính tiền theo lượng quét, lọc theo phân vùng và chọn cột để giảm quét; tránh `select *`; cache kết quả hay dùng.\n- Tính toán: tắt cụm khi không dùng, đặt giới hạn tài nguyên và ngân sách kèm cảnh báo.\n- Gắn nhãn chi phí theo nhóm/dự án để biết ai tiêu bao nhiêu.\n\n### Lỗi hay gặp\n- Giữ mọi thứ vĩnh viễn \"phòng khi cần\", vừa tốn tiền vừa tăng rủi ro pháp lý.\n- Xoá tài khoản người dùng nhưng dữ liệu vẫn còn trong kho, bản sao và log.\n- Cấp quyền rộng cho tiện rồi không bao giờ thu hồi.\n\n### Tự kiểm tra\n- Dữ liệu nhạy cảm cần xử lý khác dữ liệu thường ở những điểm nào?\n- Ba cách giảm chi phí truy vấn trên kho tính theo lượng quét?",
+  "lessons": [
+   {
+    "href": "/courses/dpy391-data-security-and-privacy/learn?lessonSlug=dpy391-2-1-lifecycle-classification",
+    "ten": "2.1 — Vòng đời & phân loại dữ liệu",
+    "nguon": "Data Security and Privacy · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPY391"
+   },
+   {
+    "href": "/courses/dpy391-data-security-and-privacy/learn?lessonSlug=dpy391-4-1-access-control",
+    "ten": "4.1 — Kiểm soát truy cập",
+    "nguon": "Data Security and Privacy · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPY391"
+   },
+   {
+    "href": "/courses/fre201-fintech-regulations-and-ethics/learn?lessonSlug=fre201-4-1-data-privacy",
+    "ten": "4.1 — Bảo mật dữ liệu: GDPR & Nghị định 13/2023",
+    "nguon": "Fintech regulations and ethics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "FRE201"
+   },
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-8-1-modern-bi",
+    "ten": "8.1 — BI hiện đại: cloud, big data, AI/augmented analytics & quản trị dữ liệu",
+    "nguon": "Technology for BI Analysts · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   }
+  ]
+ }
+}

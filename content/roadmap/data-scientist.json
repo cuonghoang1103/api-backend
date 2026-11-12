@@ -1,0 +1,1403 @@
+{
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Python for Backend & AI": {
+  "body": "Python là ngôn ngữ chung của khoa học dữ liệu: gần như mọi thư viện bạn sẽ dùng sau này (NumPy, pandas, scikit-learn, PyTorch) đều có giao diện chính bằng Python. Giai đoạn này không nhằm biến bạn thành lập trình viên backend, mà để bạn đọc và viết được code đủ trôi chảy để không bị vướng khi làm phân tích.\n\n### Vì sao cần biết\nMột Data Scientist dành phần lớn thời gian viết script làm sạch dữ liệu, thử mô hình và dựng pipeline. Nếu cú pháp còn lúng túng, bạn sẽ mất sức vào chuyện `KeyError` hay vòng lặp thay vì vào câu hỏi dữ liệu.\n\n### Ý chính cần nắm\n- **Kiểu dữ liệu cơ bản**: `int`, `float`, `str`, `bool`, và bốn cấu trúc `list`, `tuple`, `dict`, `set`. Biết khi nào dùng cái nào (ví dụ `dict` để tra cứu theo khoá, `set` để loại trùng).\n- **Điều khiển luồng và hàm**: `if/elif/else`, `for`, `while`, định nghĩa hàm với tham số mặc định, trả về nhiều giá trị.\n- **Comprehension**: `[x**2 for x in nums if x > 0]` là cách viết ngắn gọn mà code dữ liệu dùng rất nhiều.\n- **Module, package và môi trường ảo**: `import`, `pip install`, `venv` — để dự án của bạn chạy lại được trên máy khác.\n- **Đọc/ghi file và xử lý lỗi**: `with open(...)`, `try/except`, đọc CSV/JSON.\n- **Nhập môn NumPy và pandas**: mảng, DataFrame, lọc và nhóm dữ liệu (sẽ đào sâu ở các bước sau).\n\n### Thử ngay\n```python\nfrom collections import Counter\n\ntext = \"to be or not to be\"\ndem = Counter(text.split())\nprint(dem.most_common(2))   # [('to', 2), ('be', 2)]\n```\nĐoạn code này đã dùng chuỗi, list, dict (Counter là một dict đặc biệt) và hàm có sẵn.\n\n### Lỗi hay gặp\n- Dùng `list` làm giá trị mặc định của tham số hàm (`def f(x=[])`): danh sách bị dùng chung giữa các lần gọi.\n- Gán `b = a` rồi tưởng đã sao chép list; thực ra hai tên trỏ cùng một đối tượng, cần `a.copy()`.\n- Cài thư viện thẳng vào Python hệ thống thay vì môi trường ảo, về sau xung đột phiên bản.\n\n### Tự kiểm tra\n1. Khác nhau giữa `list` và `tuple`, và vì sao `tuple` dùng được làm khoá của `dict`?\n2. Viết một comprehension trả về bình phương các số chẵn trong `range(10)`.\n3. Môi trường ảo giải quyết vấn đề gì?",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-1-1-basics",
+    "ten": "1.1 — Python cơ bản: biến, kiểu, nhập/xuất",
+    "nguon": "Python programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-3-1-data-structures",
+    "ten": "3.1 — Cấu trúc dữ liệu: list, tuple, dict, set",
+    "nguon": "Python programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-2-1-python-numpy-pandas",
+    "ten": "2.1 — Python cho DS (numpy & pandas)",
+    "nguon": "Data Science · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Toán cho ML": {
+  "body": "Machine Learning là toán được viết thành code: dữ liệu là ma trận, huấn luyện là tối thiểu hoá một hàm bằng đạo hàm, và dự đoán là suy luận xác suất. Bạn không cần toán ở mức nhà toán học, nhưng cần đủ để đọc hiểu công thức trong tài liệu và biết vì sao một mô hình hành xử như vậy.\n\n### Ba mảng cần học, theo thứ tự\n1. **Đại số tuyến tính**: vector, ma trận, phép nhân ma trận, chuyển vị, nghịch đảo, trị riêng/vector riêng. Một bảng dữ liệu `n` dòng, `d` cột chính là ma trận `n × d`; hồi quy tuyến tính, PCA, mạng nơ-ron đều là phép nhân ma trận.\n2. **Giải tích**: đạo hàm, đạo hàm riêng, gradient, quy tắc chuỗi. Gradient chỉ hướng làm hàm mất mát tăng nhanh nhất, nên đi ngược lại là cách mô hình học.\n3. **Xác suất**: xác suất có điều kiện, định lý Bayes, kỳ vọng, phương sai, các phân phối thường gặp (chuẩn, Bernoulli, nhị thức). Nền cho thống kê và mô hình xác suất.\n\n### Vì sao cần biết\n- Hiểu vì sao chuẩn hoá đặc trưng giúp gradient descent hội tụ nhanh hơn.\n- Hiểu hàm mất mát cross-entropy vì sao xuất hiện trong phân loại.\n- Debug khi kích thước (shape) ma trận không khớp hoặc loss thành `NaN`.\n\n### Ví dụ nhỏ\nHồi quy tuyến tính chỉ là bài toán tìm vector trọng số `w` để `X @ w` gần `y` nhất:\n```python\nimport numpy as np\n\nX = np.array([[1, 1], [1, 2], [1, 3]])   # cột đầu toàn 1 = hệ số chặn\ny = np.array([2, 3, 4])\nw, *_ = np.linalg.lstsq(X, y, rcond=None)\nprint(w)   # xấp xỉ [1. 1.]  ->  y = 1 + 1*x\n```\n\n### Lỗi hay gặp\n- Học toán như môn thi, không gắn với code; nên vừa học vừa dùng NumPy để kiểm lại từng phép tính.\n- Nhầm nhân từng phần tử (`*`) với nhân ma trận (`@`).\n- Bỏ qua trực giác hình học (vector là mũi tên, ma trận là phép biến đổi), chỉ nhớ công thức.\n\n### Tự kiểm tra\n1. Ma trận `3×4` nhân ma trận `4×2` ra kích thước nào?\n2. Gradient của hàm nhiều biến cho ta biết điều gì?\n3. Định lý Bayes dùng để làm gì?",
+  "lessons": [
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-1-1-linear-algebra",
+    "ten": "M1.1 — Đại số tuyến tính cho ML",
+    "nguon": "Machine Learning · Module 1 — Math for ML",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-1-2-gradient-descent",
+    "ten": "M1.2 — Giải tích, gradient & gradient descent",
+    "nguon": "Machine Learning · Module 1 — Math for ML",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/maa102-linear-algebra/learn?lessonSlug=maa102-3-1-matrices",
+    "ten": "3.1 — Ma trận & phép toán ma trận",
+    "nguon": "Linear Algebra · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAA102"
+   },
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-3-1-bayes",
+    "ten": "3.1 — Định lý Bayes",
+    "nguon": "Introduction to Probability · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Thống kê & Data Science": {
+  "body": "Thống kê là cách ta rút ra kết luận đáng tin từ một mẫu dữ liệu hữu hạn, còn Data Science dùng nó cùng lập trình và hiểu biết nghiệp vụ để trả lời câu hỏi thật. Giai đoạn này đặt nền cho mọi thứ sau: từ phân tích khám phá đến thiết kế thí nghiệm và đánh giá mô hình.\n\n### Quy trình của một dự án dữ liệu\nDự án thường đi theo vòng: đặt câu hỏi, thu thập dữ liệu, làm sạch, khám phá, mô hình hoá, đánh giá, trình bày. Mô hình CRISP-DM mô tả vòng này gồm sáu pha. Câu hỏi đặt sai thì phần sau dù làm tốt cũng vô nghĩa.\n\n### Ý chính cần học\n- **Thống kê mô tả**: trung bình, trung vị, độ lệch chuẩn, tứ phân vị; biết khi nào trung vị tốt hơn trung bình (dữ liệu lệch, có ngoại lai).\n- **EDA (phân tích khám phá)**: nhìn phân phối từng biến, quan hệ giữa các biến, nhận ra giá trị bất thường trước khi mô hình hoá.\n- **Thống kê suy luận**: tổng thể và mẫu, khoảng tin cậy, kiểm định giả thuyết, p-value, lỗi loại I và II.\n- **Hồi quy và tương quan**: mô tả quan hệ giữa các biến và cẩn thận với kết luận nhân quả.\n- **Trực quan hoá**: chọn biểu đồ đúng câu hỏi, không để biểu đồ gây hiểu lầm.\n- **Thiết kế thí nghiệm / A/B test**: cách duy nhất rõ ràng để nói \"thay đổi này gây ra kết quả kia\".\n\n### Ví dụ minh hoạ\nHai nhóm người dùng, nhóm B có thời gian phiên trung bình dài hơn nhóm A 3%. Câu hỏi thống kê là: chênh lệch đó có thể chỉ do ngẫu nhiên không? Kiểm định giả thuyết và khoảng tin cậy trả lời câu hỏi này, còn \"3%\" một mình thì không đủ.\n\n### Lỗi hay gặp\n- Hiểu p-value là xác suất giả thuyết đúng; thực ra đó là xác suất thấy dữ liệu (hoặc cực đoan hơn) nếu giả thuyết không đúng.\n- Chạy nhiều kiểm định rồi chỉ báo cáo cái \"có ý nghĩa\" (p-hacking).\n- Nhầm tương quan với nhân quả.\n\n### Tự kiểm tra\n1. Khi nào nên báo cáo trung vị thay vì trung bình?\n2. Khoảng tin cậy 95% nghĩa là gì và không nghĩa là gì?\n3. Vì sao A/B test cho phép kết luận nhân quả còn dữ liệu quan sát thì khó hơn?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-1-1",
+    "ten": "1.1 — Khoa học dữ liệu là gì: quy trình từ câu hỏi tới quyết định",
+    "nguon": "Data Science · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-4-1-eda",
+    "ten": "4.1 — Phân tích khám phá (EDA)",
+    "nguon": "Data Science · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-5-1-inferential-hypothesis",
+    "ten": "5.1 — Thống kê suy diễn & kiểm định giả thuyết",
+    "nguon": "Data analysis · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   },
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-5-2",
+    "ten": "5.2 — p-value: nó là gì và không là gì",
+    "nguon": "Probability and Statistical Inference II · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-12-2",
+    "ten": "12.2 — Dự án cuối khoá thu nhỏ, phần 1: đặt bài toán, làm sạch và khám phá dữ liệu giao hàng",
+    "nguon": "Data Science · Chương 12",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá PostgreSQL": {
+  "body": "Dữ liệu nào rồi cũng nằm trong một cơ sở dữ liệu quan hệ, và SQL là ngôn ngữ để lấy nó ra. PostgreSQL là hệ quản trị mã nguồn mở rất phổ biến, nên học SQL trên nó là một đầu tư dùng được lâu dài.\n\n### Vì sao Data Scientist cần biết\nBạn hiếm khi nhận file CSV đẹp sẵn; thường phải tự viết truy vấn để gom dữ liệu từ nhiều bảng, lọc, tổng hợp rồi mới đưa vào pandas. Truy vấn tốt còn giảm lượng dữ liệu phải kéo về máy.\n\n### Ý chính cần học\n- **Mô hình quan hệ**: bảng, khoá chính, khoá ngoại, vì sao tách bảng (chuẩn hoá) để tránh trùng lặp.\n- **Kiểu dữ liệu và ràng buộc**: số, chữ, ngày giờ, `NOT NULL`, `UNIQUE`, `CHECK`.\n- **Chỉ mục (index)**: giúp tìm dòng nhanh hơn nhiều khi bảng lớn; đọc kế hoạch truy vấn bằng `EXPLAIN` để biết truy vấn chạy thế nào.\n- **Giao dịch và ACID**: nhiều thao tác thành công hoặc thất bại cùng nhau.\n- Phần truy vấn phân tích (JOIN, GROUP BY, hàm cửa sổ) được tách riêng ở bước SQL.\n\n### Ví dụ\n```sql\nEXPLAIN ANALYZE\nSELECT customer_id, SUM(amount) AS tong\nFROM orders\nWHERE created_at >= DATE '2026-01-01'\nGROUP BY customer_id;\n```\n`EXPLAIN ANALYZE` chạy thật truy vấn và cho biết nó quét tuần tự hay dùng chỉ mục, mất bao lâu.\n\n### Lỗi hay gặp\n- Tạo bảng không có khoá chính, về sau không phân biệt được các dòng.\n- Lưu số tiền bằng `float` thay vì `numeric`, gây sai số làm tròn.\n- Cho rằng thêm chỉ mục luôn tốt; chỉ mục làm chậm thao tác ghi và tốn dung lượng.\n\n### Tự kiểm tra\n1. Khoá ngoại bảo đảm điều gì?\n2. Vì sao `numeric` phù hợp hơn `float` cho tiền?\n3. `EXPLAIN` khác `EXPLAIN ANALYZE` ở chỗ nào?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-1-mo-hinh-quan-he",
+    "ten": "1.1 — Mô hình quan hệ & vì sao nó thắng",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-3-1-khoa-chinh",
+    "ten": "3.1 — Khoá chính: danh tính của một dòng",
+    "nguon": "PostgreSQL · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi",
+    "ten": "9.1 — Chỉ mục là gì: B-tree, Seq Scan vs Index Scan",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain",
+    "ten": "10.1 — Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE",
+    "nguon": "PostgreSQL · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/postgresql",
+    "ten": "PostgreSQL",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Machine Learning Fundamentals": {
+  "body": "Machine Learning (học máy) là cách cho máy tự tìm quy luật từ dữ liệu thay vì ta viết luật bằng tay. Với scikit-learn, một thư viện Python thống nhất, bạn có thể thử hàng chục thuật toán chỉ bằng vài dòng code, nên phần khó không nằm ở gọi hàm mà ở việc dùng đúng và đánh giá trung thực.\n\n### Bản đồ các bài toán\n- **Học có giám sát**: có nhãn. *Hồi quy* dự đoán số (giá nhà), *phân loại* dự đoán nhóm (thư rác hay không).\n- **Học không giám sát**: không có nhãn. *Phân cụm* gom nhóm tương tự, *giảm chiều* (PCA) nén bớt đặc trưng.\n\n### Ý chính cần học\n- Các mô hình nền: hồi quy tuyến tính/logistic, cây quyết định, random forest, gradient boosting, k-NN, k-means.\n- **Chia dữ liệu**: train/test để đo khả năng tổng quát hoá, không đo trên dữ liệu đã dùng để học.\n- **Overfitting**: mô hình nhớ dữ liệu huấn luyện thay vì học quy luật; chống bằng regularization, mô hình đơn giản hơn, thêm dữ liệu, cross-validation.\n- **Pipeline**: gói tiền xử lý và mô hình để tránh rò rỉ dữ liệu.\n- **Metric đúng bài toán**: accuracy không đủ khi lớp mất cân bằng.\n\n### Ví dụ\n```python\nfrom sklearn.datasets import load_breast_cancer\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\n\nX, y = load_breast_cancer(return_X_y=True)\nX_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=0, stratify=y)\nmodel = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000))\nmodel.fit(X_tr, y_tr)\nprint(model.score(X_te, y_te))\n```\n\n### Lỗi hay gặp\n- Chuẩn hoá toàn bộ dữ liệu trước khi chia train/test (rò rỉ thông tin từ test sang train).\n- Chọn mô hình dựa trên điểm test rồi báo cáo chính điểm đó như thể chưa từng nhìn.\n- Dùng accuracy cho bài toán chỉ 1% là lớp dương.\n\n### Tự kiểm tra\n1. Overfitting nhận ra thế nào qua điểm train và điểm test?\n2. Vì sao phải fit bộ chuẩn hoá chỉ trên tập train?\n3. Khi nào nên ưu tiên recall hơn precision?",
+  "lessons": [
+   {
+    "href": "/courses/ail303m-machine-learning/learn?lessonSlug=ail303m-2-1-regression",
+    "ten": "2.1 — Học có giám sát & hồi quy tuyến tính",
+    "nguon": "Machine Learning · Module 2 — Supervised learning: Regressi",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL303m"
+   },
+   {
+    "href": "/courses/ail303m-machine-learning/learn?lessonSlug=ail303m-3-1-classification",
+    "ten": "3.1 — Phân loại & độ đo",
+    "nguon": "Machine Learning · Module 3 — Supervised learning: Classifi",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL303m"
+   },
+   {
+    "href": "/courses/ail303m-machine-learning/learn?lessonSlug=ail303m-4-1-clustering",
+    "ten": "4.1 — Học không giám sát & gom cụm",
+    "nguon": "Machine Learning · Module 4 — Unsupervised learning",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL303m"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-6-1",
+    "ten": "6.1 — Tập train, validation và test; baseline và quá khớp",
+    "nguon": "Data Science · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Deep Learning with PyTorch": {
+  "body": "Deep Learning (học sâu) dùng các mạng nơ-ron nhiều tầng để học biểu diễn trực tiếp từ dữ liệu thô như ảnh, âm thanh, văn bản. Nó là nền của thị giác máy tính hiện đại và các mô hình ngôn ngữ lớn. Với dữ liệu dạng bảng nhỏ, các mô hình cổ điển (boosting) thường vẫn ngang hoặc tốt hơn, nên học sâu là công cụ chuyên dụng chứ không phải mặc định.\n\n### Khung khái niệm cần có\n- **Tensor**: mảng nhiều chiều, đơn vị dữ liệu của framework.\n- **Mạng nơ-ron**: các tầng tuyến tính xen hàm kích hoạt phi tuyến (ReLU, sigmoid); `loss` đo sai lệch; huấn luyện là lặp forward, tính loss, backward, cập nhật trọng số.\n- **Autograd**: framework tự tính đạo hàm cho bạn, nên bạn viết phần forward còn gradient có sẵn.\n- **Kiến trúc chuyên biệt**: CNN cho ảnh, RNN/LSTM cho chuỗi, Transformer cho ngôn ngữ và ngày càng nhiều lĩnh vực.\n- **Transfer learning và fine-tune**: lấy mạng đã huấn luyện sẵn rồi chỉnh cho bài toán của mình, thường hiệu quả hơn tự huấn luyện từ đầu.\n- **GPU**: huấn luyện chủ yếu là phép nhân ma trận lớn nên chạy nhanh hơn nhiều trên GPU.\n\n### Ví dụ vòng huấn luyện (PyTorch)\n```python\nimport torch, torch.nn as nn\n\nmodel = nn.Sequential(nn.Linear(10, 16), nn.ReLU(), nn.Linear(16, 1))\nopt = torch.optim.Adam(model.parameters(), lr=1e-3)\nloss_fn = nn.MSELoss()\n\nX, y = torch.randn(64, 10), torch.randn(64, 1)\nfor _ in range(100):\n    opt.zero_grad()\n    loss = loss_fn(model(X), y)\n    loss.backward()\n    opt.step()\n```\nBốn dòng trong vòng lặp là khung của mọi bài huấn luyện, dù mạng to đến đâu.\n\n### Lưu ý về tài liệu trên web\nCác bài học deep learning của môn trường trên cuongthai.com dùng TensorFlow/Keras; khái niệm (backprop, CNN, attention) dùng được nguyên cho PyTorch, chỉ khác cú pháp.\n\n### Lỗi hay gặp\n- Quên `opt.zero_grad()` nên gradient cộng dồn qua các bước.\n- Không đưa model và dữ liệu lên cùng một thiết bị (CPU/GPU).\n- Dùng mạng sâu cho dữ liệu quá ít rồi overfit nặng.\n\n### Tự kiểm tra\n1. Vì sao cần hàm kích hoạt phi tuyến giữa các tầng?\n2. Backward làm gì, và `loss.backward()` ghi kết quả ở đâu?\n3. Khi nào transfer learning hợp lý?",
+  "lessons": [
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-0-1-overview",
+    "ten": "Tổng quan: Học sâu",
+    "nguon": "Deep Learning · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/dpl303m-deep-learning/learn?lessonSlug=dpl303m-1-2-transfer-style",
+    "ten": "M1.2 — Transfer learning & neural style transfer",
+    "nguon": "Deep Learning · Module 1 — CNN (vision)",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL303m"
+   },
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-4-2-cnn-cases-apps",
+    "ten": "4.2 — Kiến trúc kinh điển & ứng dụng",
+    "nguon": "Deep Learning · Module 4 — Mạng tích chập (CNN)",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/dpl303m-deep-learning/learn?lessonSlug=dpl303m-2-3-exercise",
+    "ten": "Bài tập 1 — sentiment với HuggingFace",
+    "nguon": "Deep Learning · Module 2 — Sequences & Transformers",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL303m"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Data Engineering": {
+  "body": "Data Engineering là phần \"đường ống\" của dữ liệu: đưa dữ liệu từ nơi nó sinh ra (ứng dụng, cảm biến, bên thứ ba) về nơi phân tích được, ở dạng sạch và đáng tin. Đây là nhánh tuỳ chọn, nhưng Data Scientist hiểu nó sẽ làm việc với đồng nghiệp trơn tru hơn nhiều.\n\n### Vì sao nên biết\nMô hình tốt đến mấy cũng vô dụng nếu dữ liệu đầu vào trễ, thiếu hoặc đổi định dạng mà không ai báo. Biết dữ liệu đến từ đâu giúp bạn đặt câu hỏi đúng (\"cột này cập nhật khi nào?\") và tự dựng được pipeline nhỏ.\n\n### Ý chính\n- **OLTP và OLAP**: hệ thống giao dịch (ghi nhiều, nhanh) khác hệ thống phân tích (đọc quét lớn). Thường không chạy báo cáo nặng thẳng trên database sản phẩm.\n- **Kho dữ liệu và mô hình chiều**: bảng *fact* (sự kiện, ví dụ từng đơn hàng) nối với các bảng *dimension* (khách hàng, sản phẩm, thời gian) theo sơ đồ hình sao (star schema).\n- **ETL và ELT**: trích xuất (extract), biến đổi (transform), nạp (load); ELT nạp dữ liệu thô trước rồi biến đổi trong kho.\n- **Định dạng cột như Parquet**: nén tốt và đọc nhanh cho phân tích.\n- **Điều phối và chất lượng dữ liệu**: lịch chạy, kiểm tra tự động, theo dõi sự cố.\n\n### Ví dụ hình dung\nBảng `fact_orders(order_id, customer_key, product_key, date_key, amount)` nối với `dim_customer`, `dim_product`, `dim_date`. Câu hỏi \"doanh thu theo tháng và nhóm sản phẩm\" trở thành một phép JOIN nhóm quen thuộc.\n\n### Lỗi hay gặp\n- Phân tích trực tiếp trên bảng giao dịch đang chạy, làm chậm hệ thống.\n- Không ghi lại nguồn và thời điểm cập nhật của từng bảng.\n- Bỏ qua kiểm tra chất lượng, để dữ liệu lỗi âm thầm lọt vào mô hình.",
+  "lessons": [
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-2-1-warehouse-star-schema",
+    "ten": "2.1 — Kho dữ liệu & mô hình star schema",
+    "nguon": "Technology for BI Analysts · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   },
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-3-1-etl",
+    "ten": "3.1 — ETL & tích hợp dữ liệu",
+    "nguon": "Technology for BI Analysts · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   },
+   {
+    "href": "/courses/bdi302c-big-data/learn?lessonSlug=bdi302c-3-1-spark-integration",
+    "ten": "3.1 — Tích hợp & xử lý với Apache Spark",
+    "nguon": "Big Data · Module 3 — Tích hợp & xử lý",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BDI302c"
+   },
+   {
+    "href": "/courses/tbi301c-technology-for-bi-analysts/learn?lessonSlug=tbi301c-8-1-modern-bi",
+    "ten": "8.1 — BI hiện đại: cloud, big data, AI/augmented analytics & quản trị dữ liệu",
+    "nguon": "Technology for BI Analysts · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "TBI301c"
+   }
+  ]
+ },
+ "Mathematics › Linear Algebra & Calculus": {
+  "body": "Đại số tuyến tính và giải tích là hai trụ toán của Machine Learning: cái đầu cho ta ngôn ngữ biểu diễn dữ liệu và mô hình, cái sau cho ta cách làm mô hình học.\n\n### Đại số tuyến tính\nMột **vector** là danh sách số, ví dụ một điểm dữ liệu với `d` đặc trưng. Một **ma trận** là bảng số, có hai cách nhìn: bảng dữ liệu (mỗi dòng một mẫu) hoặc phép biến đổi tuyến tính (kéo giãn, xoay, chiếu vector).\n- **Tích vô hướng** `a·b` đo mức \"cùng hướng\" của hai vector; nằm sau độ tương đồng cosine và mọi tầng tuyến tính của mạng nơ-ron.\n- **Nhân ma trận**: `A (m×n)` nhân `B (n×p)` ra `(m×p)`; số cột của A phải bằng số dòng của B.\n- **Nghịch đảo, định thức, hạng**: cho biết hệ phương trình có nghiệm duy nhất hay không.\n- **Trị riêng, vector riêng**: hướng mà phép biến đổi chỉ co giãn; PCA chính là tìm các hướng đó của ma trận hiệp phương sai.\n\n### Giải tích\n**Đạo hàm** là tốc độ thay đổi; với hàm nhiều biến ta có **đạo hàm riêng** và **gradient** (vector gom các đạo hàm riêng) chỉ hướng tăng nhanh nhất. **Quy tắc chuỗi** cho phép tính đạo hàm của hàm hợp, và chính nó là cốt lõi của lan truyền ngược.\n\n### Vì sao cần biết\nHuấn luyện mô hình là tìm tham số làm hàm mất mát nhỏ nhất; ta làm bằng cách đi ngược hướng gradient. Không hiểu gradient thì learning rate, loss `NaN` hay vanishing gradient chỉ còn là ma thuật.\n\n### Kiểm chứng bằng code\n```python\nimport numpy as np\n\nA = np.array([[2.0, 0.0], [0.0, 1.0]])\nvals, vecs = np.linalg.eig(A)\nprint(vals)   # [2. 1.]  -> A kéo giãn gấp đôi theo trục x\n\n# đạo hàm số của f(x) = x**2 tại x = 3 (đúng là 6)\nf = lambda x: x**2\nh = 1e-5\nprint((f(3 + h) - f(3 - h)) / (2 * h))\n```\n\n### Lỗi hay gặp\n- Nhầm `A @ B` với `A * B` (nhân từng phần tử) trong NumPy.\n- Quên rằng nhân ma trận không giao hoán: `AB` thường khác `BA`.\n- Chỉ nhớ công thức đạo hàm mà không hiểu ý nghĩa hình học (độ dốc).\n\n### Tự kiểm tra\n1. `A` có kích thước `5×3`, `B` có `3×2`; `AB` có kích thước nào?\n2. Gradient của `f(x, y) = x² + 3y` là gì?\n3. Vì sao quy tắc chuỗi quan trọng với mạng nơ-ron?",
+  "lessons": [
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-1-1-linear-algebra",
+    "ten": "M1.1 — Đại số tuyến tính cho ML",
+    "nguon": "Machine Learning · Module 1 — Math for ML",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/maa102-linear-algebra/learn?lessonSlug=maa102-3-1-matrices",
+    "ten": "3.1 — Ma trận & phép toán ma trận",
+    "nguon": "Linear Algebra · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAA102"
+   },
+   {
+    "href": "/courses/maa102-linear-algebra/learn?lessonSlug=maa102-7-1-eigen",
+    "ten": "7.1 — Trị riêng, vector riêng & chéo hoá",
+    "nguon": "Linear Algebra · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAA102"
+   },
+   {
+    "href": "/courses/cal111-calculus-i/learn?lessonSlug=cal111-3-1-derivatives",
+    "ten": "3.1 — Đạo hàm & quy tắc",
+    "nguon": "Calculus I · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CAL111"
+   },
+   {
+    "href": "/courses/mac103-calculus/learn?lessonSlug=mac103-7-1-multivariable",
+    "ten": "7.1 — Hàm nhiều biến, đạo hàm riêng & gradient",
+    "nguon": "Calculus · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAC103"
+   }
+  ]
+ },
+ "Mathematics › Probability Theory": {
+  "body": "Xác suất là ngôn ngữ để nói về sự bất định, và gần như mọi mô hình học máy đều có một cách hiểu xác suất ẩn bên trong. Với Data Scientist, ba ý cần nắm chắc là xác suất có điều kiện, định lý Bayes và các phân phối thường gặp.\n\n### Ý chính\n- **Xác suất có điều kiện** `P(A|B)`: xác suất của A khi đã biết B xảy ra.\n- **Định lý Bayes**: `P(A|B) = P(B|A) · P(A) / P(B)`. Nó cho phép đảo chiều điều kiện và cập nhật niềm tin khi có bằng chứng.\n- **Biến ngẫu nhiên, kỳ vọng, phương sai**: tóm tắt giá trị trung bình và độ dao động.\n- **Phân phối quen thuộc**: Bernoulli/nhị thức (đếm thành công), Poisson (đếm sự kiện hiếm), chuẩn (đo lường có nhiễu).\n- **Luật số lớn, định lý giới hạn trung tâm**: lý do trung bình mẫu ổn định và hay xấp xỉ chuẩn.\n\n### Ví dụ: bẫy tỉ lệ nền\nMột xét nghiệm đúng 99% (cả dương và âm), bệnh chỉ chiếm 1% dân số. Người có kết quả dương tính thực sự bị bệnh với xác suất bao nhiêu?\n```python\np_benh = 0.01\np_duong_neu_benh = 0.99\np_duong_neu_khoe = 0.01\np_duong = p_duong_neu_benh * p_benh + p_duong_neu_khoe * (1 - p_benh)\nprint(p_duong_neu_benh * p_benh / p_duong)   # 0.5\n```\nChỉ khoảng 50%, không phải 99%, vì số người khoẻ rất đông nên dương tính giả cũng nhiều.\n\n### Lỗi hay gặp\n- Nhầm `P(A|B)` với `P(B|A)`.\n- Bỏ qua tỉ lệ nền (prior) khi diễn giải kết quả dương tính.",
+  "lessons": [
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-2-1-conditional",
+    "ten": "2.1 — Xác suất có điều kiện",
+    "nguon": "Introduction to Probability · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   },
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-ts-3-3",
+    "ten": "3.3 — Quy tắc Bayes: cập nhật niềm tin theo bằng chứng",
+    "nguon": "Introduction to Probability · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   },
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-5-1-discrete-dists",
+    "ten": "5.1 — Phân phối rời rạc quan trọng",
+    "nguon": "Introduction to Probability · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   },
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-7-1-continuous-dists",
+    "ten": "7.1 — Phân phối liên tục quan trọng",
+    "nguon": "Introduction to Probability · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   },
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-8-1-limit-theorems",
+    "ten": "8.1 — Định lý giới hạn & ứng dụng",
+    "nguon": "Introduction to Probability · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   }
+  ]
+ },
+ "Mathematics › Tối ưu hoá & Phương pháp số (Optimization & Numerical Methods)": {
+  "body": "Hầu hết các bài toán học máy cuối cùng quy về một việc: tìm tham số làm một hàm mất mát nhỏ nhất. Tối ưu hoá là bộ công cụ để làm việc đó, và phương pháp số là cách máy tính thực hiện nó với số thực hữu hạn.\n\n### Gradient descent\nÝ tưởng: tại tham số hiện tại `θ`, tính gradient `∇L(θ)` rồi bước ngược hướng đó:\n`θ ← θ − η · ∇L(θ)`, với `η` là **learning rate**. Quá nhỏ thì học chậm, quá lớn thì dao động hoặc phân kỳ.\n\n### Các biến thể quan trọng\n- **Batch / mini-batch / stochastic (SGD)**: tính gradient trên toàn bộ dữ liệu, một lô nhỏ, hoặc một mẫu. Mini-batch là lựa chọn thực tế: nhanh, nhiễu vừa phải.\n- **Momentum**: giữ \"đà\" của các bước trước để vượt qua vùng phẳng và giảm dao động.\n- **RMSProp, Adam**: điều chỉnh bước theo từng tham số dựa trên lịch sử gradient; Adam là mặc định phổ biến khi huấn luyện mạng nơ-ron.\n- **Newton và tựa Newton** dùng thêm thông tin đạo hàm bậc hai, hội tụ nhanh hơn nhưng đắt khi số tham số lớn.\n\n### Lồi và không lồi\nVới hàm **lồi** (hồi quy tuyến tính, hồi quy logistic), mọi cực tiểu địa phương cũng là toàn cục. Mạng nơ-ron thì không lồi, có nhiều cực tiểu địa phương và điểm yên ngựa; thực tế vẫn tìm được lời giải đủ tốt.\n\n### Vấn đề số\nSố thực dấu phẩy động có sai số làm tròn. Tính `log(softmax(x))` ngây thơ có thể tràn số, nên dùng kỹ thuật ổn định như trừ giá trị lớn nhất trước khi lấy mũ.\n\n### Ví dụ gradient descent từ đầu\n```python\n# cực tiểu hoá f(w) = (w - 3)**2, đạo hàm 2*(w - 3)\nw, lr = 0.0, 0.1\nfor _ in range(50):\n    w -= lr * 2 * (w - 3)\nprint(w)   # rất gần 3\n```\nThử `lr = 1.1` và bạn sẽ thấy `w` phân kỳ.\n\n### Lỗi hay gặp\n- Không chuẩn hoá đặc trưng, làm bề mặt hàm mất mát méo và gradient descent hội tụ chậm.\n- Chọn learning rate bằng cảm tính mà không vẽ đường loss theo bước.\n- Dừng khi loss giảm chậm mà quên rằng có thể đang ở vùng phẳng chứ chưa phải cực tiểu.\n\n### Tự kiểm tra\n1. Vì sao mini-batch thường được ưu tiên hơn batch đầy đủ?\n2. Momentum giải quyết điều gì?\n3. Loss tăng vọt lên rồi thành `NaN`; nghi ngờ đầu tiên của bạn là gì?",
+  "lessons": [
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-1-2-gradient-descent",
+    "ten": "M1.2 — Giải tích, gradient & gradient descent",
+    "nguon": "Machine Learning · Module 1 — Math for ML",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/mao303-optimization/learn?lessonSlug=mao303-4-1-gradient",
+    "ten": "4.1 — Phương pháp gradient",
+    "nguon": "Optimization · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAO303"
+   },
+   {
+    "href": "/courses/cvo201-convex-optimization/learn?lessonSlug=cvo201-5-1-unconstrained",
+    "ten": "5.1 — Thuật toán không ràng buộc: gradient descent & Newton",
+    "nguon": "Convex Optimization · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CVO201"
+   },
+   {
+    "href": "/courses/cvo201-convex-optimization/learn?lessonSlug=cvo201-7-1-stochastic-sgd",
+    "ten": "7.1 — Tối ưu ngẫu nhiên & SGD cho học máy",
+    "nguon": "Convex Optimization · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CVO201"
+   },
+   {
+    "href": "/courses/mac103-calculus/learn?lessonSlug=mac103-8-1-multiple-integrals-gd",
+    "ten": "8.1 — Tích phân bội & gradient descent trong ML/robotics",
+    "nguon": "Calculus · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAC103"
+   }
+  ]
+ },
+ "Statistics › Descriptive & Inferential Statistics": {
+  "body": "Thống kê mô tả cho ta bức tranh về dữ liệu đang có; thống kê suy luận cho ta cách kết luận về tổng thể rộng hơn từ một mẫu. Hai phần này là nền để đọc kết quả A/B test, báo cáo khoa học và cả điểm đánh giá mô hình.\n\n### Thống kê mô tả\n- **Tâm**: trung bình, trung vị, yếu vị (mode). Trung vị bền với ngoại lai hơn trung bình.\n- **Độ phân tán**: phương sai, độ lệch chuẩn, khoảng tứ phân vị (IQR).\n- **Hình dạng**: độ lệch (skewness), phân phối lệch phải hay trái, có nhiều đỉnh không.\n\n### Thống kê suy luận\n- **Tổng thể và mẫu**: ta quan sát mẫu nhưng muốn nói về tổng thể.\n- **Sai số chuẩn và khoảng tin cậy**: khoảng tin cậy 95% là khoảng được tạo bằng một quy trình mà nếu lặp lại nhiều lần thì khoảng chứa tham số thật trong khoảng 95% số lần. Nó không nói \"tham số có 95% xác suất nằm trong khoảng này\" cho một khoảng đã tính.\n- **Kiểm định giả thuyết**: đặt giả thuyết không H₀ (không có hiệu ứng) và đối H₁, tính thống kê kiểm định rồi p-value.\n- **p-value**: xác suất thấy dữ liệu cực đoan như vậy hoặc hơn nếu H₀ đúng. p nhỏ là bằng chứng chống lại H₀, chưa phải \"xác suất H₀ sai\".\n- **Lỗi loại I và II, lực kiểm định**: loại I là bác bỏ nhầm H₀, loại II là bỏ sót hiệu ứng thật; cỡ mẫu lớn tăng lực kiểm định.\n\n### Ví dụ\n```python\nfrom scipy import stats\n\na = [12.1, 11.8, 12.4, 12.0, 11.9, 12.2]\nb = [12.6, 12.9, 12.5, 12.8, 12.7, 13.0]\nt, p = stats.ttest_ind(a, b, equal_var=False)   # t-test Welch\nprint(t, p)\n```\n\n### Tự kiểm tra\n1. Vì sao dữ liệu thu nhập thường nên báo cáo trung vị?\n2. p = 0,03 nghĩa là gì?\n3. Làm gì để giảm rủi ro bỏ sót hiệu ứng thật?",
+  "lessons": [
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-3-1-descriptive-distributions",
+    "ten": "3.1 — Thống kê mô tả & phân phối",
+    "nguon": "Data analysis · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   },
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-4-1",
+    "ten": "4.1 — Ý tưởng khoảng tin cậy: đại lượng chốt và khoảng z",
+    "nguon": "Probability and Statistical Inference II · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   },
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-5-1-inferential-hypothesis",
+    "ten": "5.1 — Thống kê suy diễn & kiểm định giả thuyết",
+    "nguon": "Data analysis · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   },
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-5-2",
+    "ten": "5.2 — p-value: nó là gì và không là gì",
+    "nguon": "Probability and Statistical Inference II · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   },
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-6-2",
+    "ten": "6.2 — So sánh hai trung bình độc lập: kiểm định t gộp và Welch",
+    "nguon": "Probability and Statistical Inference II · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   }
+  ]
+ },
+ "Statistics › Hồi quy (Regression)": {
+  "body": "Hồi quy mô hình hoá quan hệ giữa một biến kết quả và các biến giải thích. Nó vừa là công cụ thống kê (để hiểu và giải thích) vừa là điểm khởi đầu của học máy (để dự đoán).\n\n### Hai dạng nền\n- **Hồi quy tuyến tính**: `y = β₀ + β₁x₁ + … + ε`. Hệ số `βⱼ` là mức thay đổi trung bình của `y` khi `xⱼ` tăng một đơn vị, giữ các biến khác cố định. Ước lượng bằng bình phương tối thiểu.\n- **Hồi quy logistic**: dự đoán xác suất cho kết quả nhị phân qua hàm sigmoid; hệ số được đọc dưới dạng log-odds hay tỉ số odds.\n\n### Ý chính\n- **R²** cho biết tỉ lệ phương sai của `y` được mô hình giải thích.\n- **Giả định** (tuyến tính, phần dư độc lập, phương sai không đổi, phần dư xấp xỉ chuẩn): cần kiểm bằng đồ thị phần dư.\n- **Đa cộng tuyến**: các biến giải thích tương quan mạnh làm hệ số bất ổn.\n\n### Ví dụ\n```python\nimport numpy as np, statsmodels.api as sm\n\nrng = np.random.default_rng(0)\nx = rng.normal(size=100)\ny = 2 + 3 * x + rng.normal(size=100)\nres = sm.OLS(y, sm.add_constant(x)).fit()\nprint(res.params)   # xấp xỉ [2, 3]\n```\n\n### Lỗi hay gặp\n- Diễn giải hệ số như quan hệ nhân quả.\n- Ngoại suy ra ngoài khoảng dữ liệu đã quan sát.",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-7-1",
+    "ten": "7.1 — Hồi quy tuyến tính và chính quy hoá (Ridge, Lasso)",
+    "nguon": "Data Science · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-9-2",
+    "ten": "9.2 — Hồi quy tuyến tính đơn: bình phương tối thiểu và R²",
+    "nguon": "Probability and Statistical Inference II · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   },
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-9-4",
+    "ten": "9.4 — Chẩn đoán hồi quy và hồi quy tuyến tính bội",
+    "nguon": "Probability and Statistical Inference II · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-7-2",
+    "ten": "7.2 — Hồi quy logistic: xác suất cho bài toán phân loại",
+    "nguon": "Data Science · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "Statistics › Thống kê Bayes (Bayesian Statistics)": {
+  "body": "Thống kê Bayes coi tham số là đại lượng có phân bố xác suất thể hiện niềm tin của ta, và dùng dữ liệu để cập nhật niềm tin đó. Khác với cách tiếp cận tần suất (frequentist) vốn coi tham số cố định còn dữ liệu mới ngẫu nhiên, Bayes trả lời trực tiếp câu hỏi \"tham số có khả năng là bao nhiêu, cho dữ liệu này?\".\n\n### Ba thành phần\n- **Prior** `P(θ)`: niềm tin trước khi thấy dữ liệu (từ kinh nghiệm hoặc không thông tin).\n- **Likelihood** `P(dữ liệu | θ)`: dữ liệu có khả năng đến đâu nếu `θ` đúng.\n- **Posterior** `P(θ | dữ liệu) ∝ likelihood × prior`: niềm tin sau khi cập nhật.\n\n### Ví dụ kinh điển: tỉ lệ nhấp chuột\nGiả sử tỉ lệ nhấp `p` có prior Beta(2, 2). Quan sát 58 lần nhấp trong 120 lượt xem thì posterior cũng là Beta, cụ thể Beta(2+58, 2+62) = Beta(60, 64). Beta là \"liên hợp\" của phân phối nhị thức nên cập nhật chỉ là cộng số đếm.\n```python\nfrom scipy import stats\n\npost = stats.beta(2 + 58, 2 + (120 - 58))\nprint(post.mean())                 # ≈ 0.484\nprint(post.interval(0.95))         # khoảng tin cậy Bayes (credible interval) 95%\nprint(1 - post.cdf(0.5))           # P(p > 0.5)\n```\n\n### Vì sao hữu ích\n- Cho phép nói thẳng \"xác suất `p > 0,5` là khoảng 36%\", điều mà p-value không nói được.\n- Hợp với dữ liệu ít, khi có tri thức nền, và với mô hình phân cấp.\n- Với mô hình phức tạp, hậu nghiệm không có công thức đóng nên dùng MCMC để lấy mẫu (thư viện như PyMC, Stan).\n\n### Lỗi hay gặp\n- Chọn prior bừa mà không kiểm độ nhạy; hãy thử vài prior khác để xem kết luận có đổi không.\n- Nhầm khoảng credible (nói về tham số) với khoảng tin cậy tần suất.\n- Dùng MCMC mà không kiểm tra hội tụ (R-hat, trace plot).\n\n### Tự kiểm tra\n1. Posterior tỉ lệ thuận với đại lượng nào?\n2. Khi có rất nhiều dữ liệu, ảnh hưởng của prior thay đổi ra sao?\n3. Khoảng credible khác khoảng tin cậy chỗ nào?",
+  "lessons": [
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-10-4",
+    "ten": "10.4 — Nhập môn suy luận Bayes: tiên nghiệm, hậu nghiệm và khoảng tin cậy Bayes",
+    "nguon": "Probability and Statistical Inference II · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   },
+   {
+    "href": "/courses/ama401-advanced-methods-for-data-analysis/learn?lessonSlug=ama401-7-1-bayesian",
+    "ten": "7.1 — Thống kê Bayes: prior, posterior & MCMC",
+    "nguon": "Advanced Methods for Data Analysis · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AMA401"
+   },
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-ts-3-3",
+    "ten": "3.3 — Quy tắc Bayes: cập nhật niềm tin theo bằng chứng",
+    "nguon": "Introduction to Probability · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   },
+   {
+    "href": "/courses/ama401-advanced-methods-for-data-analysis/learn?lessonSlug=ama401-quiz-7",
+    "ten": "Quiz 7 — Thống kê Bayes",
+    "nguon": "Advanced Methods for Data Analysis · Chapter 7",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "AMA401"
+   }
+  ]
+ },
+ "Econometrics › Time Series Analysis": {
+  "body": "Chuỗi thời gian là dữ liệu có thứ tự theo thời gian (doanh thu theo ngày, nhiệt độ theo giờ). Thứ tự là điểm mấu chốt: các quan sát lân cận thường liên quan với nhau, nên nhiều giả định quen thuộc (quan sát độc lập) không còn đúng.\n\n### Thành phần của chuỗi\n- **Xu hướng (trend)**: chiều đi lên hoặc xuống dài hạn.\n- **Mùa vụ (seasonality)**: mẫu lặp theo chu kỳ cố định (tuần, năm).\n- **Phần dư / nhiễu**: biến động còn lại.\n\n### Khái niệm cần nắm\n- **Tính dừng (stationarity)**: trung bình và phương sai không đổi theo thời gian. Nhiều mô hình cổ điển cần chuỗi dừng; thường đạt bằng cách lấy sai phân.\n- **Tự tương quan (ACF/PACF)**: tương quan của chuỗi với chính nó ở các độ trễ khác nhau, giúp chọn bậc mô hình.\n- **Mô hình dự báo**: trung bình động, làm trơn mũ (exponential smoothing), ARIMA(p, d, q), rồi các mô hình học máy.\n- **Đánh giá đúng cách**: tuyệt đối không xáo trộn ngẫu nhiên khi chia train/test, vì sẽ dùng \"tương lai\" để dự đoán \"quá khứ\". Chia theo thời gian và dùng backtesting.\n\n### Ví dụ\n```python\nimport pandas as pd\n\ns = pd.Series([10, 12, 13, 15, 14, 16, 18], index=pd.date_range(\"2026-01-01\", periods=7))\nprint(s.rolling(window=3).mean())   # trung bình động 3 ngày\nprint(s.diff())                      # sai phân bậc 1\n```\n\n### Lỗi hay gặp\n- Dùng `train_test_split` xáo trộn trên chuỗi thời gian.\n- So sánh mô hình phức tạp với dự báo ngây thơ (lấy giá trị hôm qua) mà không ra mô hình thắng được mốc cơ sở.\n- Bỏ qua mùa vụ khi chọn cửa sổ đánh giá.\n\n### Tự kiểm tra\n1. Vì sao lấy sai phân giúp chuỗi trở nên dừng hơn?\n2. Hãy nêu một cách chia dữ liệu đúng cho chuỗi thời gian.\n3. Mốc cơ sở \"ngây thơ\" dùng để làm gì?",
+  "lessons": [
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-7-1-time-series-forecasting",
+    "ten": "7.1 — Phân tích chuỗi thời gian & dự báo cơ bản",
+    "nguon": "Data analysis · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   },
+   {
+    "href": "/courses/ama401-advanced-methods-for-data-analysis/learn?lessonSlug=ama401-6-1-time-series",
+    "ten": "6.1 — Chuỗi thời gian: phân rã, ARIMA & dự báo",
+    "nguon": "Advanced Methods for Data Analysis · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AMA401"
+   },
+   {
+    "href": "/courses/rmb302-research-methods-amp-quantitative-analysis/learn?lessonSlug=rmb302-flm-b019",
+    "ten": "📑 Buổi 19 — \"Chapter 6 Univariate time-series modeling and forecasting (cont)",
+    "nguon": "Research Methods &amp; Quantitative Analysis · FLM 6 · Chapter 6 Univariate time-series",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "RMB302"
+   },
+   {
+    "href": "/courses/ama401-advanced-methods-for-data-analysis/learn?lessonSlug=ama401-quiz-6",
+    "ten": "Quiz 6 — Chuỗi thời gian & ARIMA",
+    "nguon": "Advanced Methods for Data Analysis · Chapter 6",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "AMA401"
+   }
+  ]
+ },
+ "Econometrics › Causal Inference": {
+  "body": "Suy luận nhân quả hỏi \"nếu ta can thiệp thì chuyện gì xảy ra?\", khác với \"hai thứ này có đi cùng nhau không?\". Quan sát thấy kem chống nắng và bỏng nắng cùng tăng không có nghĩa kem gây bỏng; cả hai cùng tăng vào mùa hè.\n\n### Ý chính\n- **Biến gây nhiễu (confounder)**: ảnh hưởng đồng thời đến nguyên nhân và kết quả, tạo tương quan giả. Nghịch lý Simpson là ví dụ nổi tiếng.\n- **Thí nghiệm ngẫu nhiên có kiểm soát (A/B test)**: ngẫu nhiên hoá cắt đứt ảnh hưởng của biến gây nhiễu nên là tiêu chuẩn vàng.\n- **Khi không thể thí nghiệm**: dùng thiết kế quan sát (ghép cặp, điểm xu hướng, khác biệt trong khác biệt, biến công cụ) với các giả định phải nêu rõ.\n\n### Lỗi hay gặp\n- Kết luận nhân quả từ tương quan.\n- Kiểm soát nhầm biến \"va chạm\" (collider), tự tạo ra tương quan giả.",
+  "lessons": [
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-6-1-correlation-regression",
+    "ten": "6.1 — Tương quan & hồi quy",
+    "nguon": "Data analysis · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-2",
+    "ten": "4.2 — Quan hệ giữa các biến: so sánh nhóm, tương quan và nghịch lý Simpson",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/ipy111-introduction-to-probability/learn?lessonSlug=ipy111-ts-3-4",
+    "ten": "3.4 — Bẫy kinh điển: Monty Hall, ngộ nhận công tố viên, nghịch lý Simpson",
+    "nguon": "Introduction to Probability · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IPY111"
+   }
+  ]
+ },
+ "Econometrics › Nền tảng Kinh tế lượng (Econometrics Foundations)": {
+  "body": "Kinh tế lượng áp dụng thống kê vào dữ liệu kinh tế - tài chính, với mục tiêu ước lượng quan hệ và kiểm định lý thuyết một cách có kỷ luật. Cốt lõi của nó là mô hình hồi quy tuyến tính cổ điển và việc kiểm tra các giả định để biết khi nào kết quả đáng tin.\n\n### Mô hình hồi quy tuyến tính cổ điển\n`y = Xβ + ε`, ước lượng bằng bình phương tối thiểu thường (OLS). Nếu các giả định cổ điển đúng (kỳ vọng sai số bằng 0, không tự tương quan, phương sai sai số không đổi, không đa cộng tuyến hoàn hảo, các biến giải thích không tương quan với sai số), OLS là ước lượng tuyến tính không chệch có phương sai nhỏ nhất (định lý Gauss–Markov).\n\n### Khi giả định bị vi phạm\n- **Phương sai sai số thay đổi (heteroskedasticity)**: sai số chuẩn sai; xử lý bằng sai số chuẩn vững (robust standard errors) hoặc biến đổi mô hình.\n- **Tự tương quan sai số**: thường gặp ở chuỗi thời gian; ước lượng vẫn dùng được nhưng suy luận sai.\n- **Nội sinh (endogeneity)**: biến giải thích tương quan với sai số (bỏ sót biến, đo sai, nhân quả hai chiều) làm hệ số chệch; xử lý bằng biến công cụ hoặc thiết kế thí nghiệm tự nhiên.\n- **Đa cộng tuyến**: hệ số bất ổn, sai số chuẩn phình to.\n\n### Dữ liệu bảng và biến phụ thuộc rời rạc\nDữ liệu bảng (panel) theo dõi nhiều đối tượng qua thời gian, cho phép kiểm soát khác biệt không quan sát được giữa các đối tượng (mô hình hiệu ứng cố định). Với kết quả nhị phân thì dùng logit/probit thay vì OLS.\n\n### Ví dụ chẩn đoán\n```python\nimport numpy as np, statsmodels.api as sm\nfrom statsmodels.stats.diagnostic import het_breuschpagan\n\nrng = np.random.default_rng(1)\nx = rng.uniform(1, 10, 200)\ny = 1 + 2 * x + rng.normal(scale=x)          # phương sai tăng theo x\nres = sm.OLS(y, sm.add_constant(x)).fit()\nprint(het_breuschpagan(res.resid, res.model.exog)[1])   # p nhỏ: nghi phương sai thay đổi\nrobust = res.get_robustcov_results(cov_type=\"HC3\")\n```\n\n### Lỗi hay gặp\n- Đọc hệ số thành nhân quả khi chưa xử lý nội sinh.\n- Chỉ nhìn R² cao mà bỏ qua đồ thị phần dư.\n- Hồi quy giữa hai chuỗi thời gian không dừng và tưởng quan hệ thật (hồi quy giả).\n\n### Tự kiểm tra\n1. Vì sao sai số chuẩn sai khi phương sai sai số thay đổi?\n2. Nội sinh là gì, cho một ví dụ?\n3. Khi nào dùng mô hình hiệu ứng cố định?",
+  "lessons": [
+   {
+    "href": "/courses/rmb302-research-methods-amp-quantitative-analysis/learn?lessonSlug=rmb302-flm-b005",
+    "ten": "📑 Buổi 5 — Chapter 3 Brief Overview of the classical linear regression model",
+    "nguon": "Research Methods &amp; Quantitative Analysis · FLM 3 · Chapter 3 Brief Overview of the",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "RMB302"
+   },
+   {
+    "href": "/courses/rmb302-research-methods-amp-quantitative-analysis/learn?lessonSlug=rmb302-flm-b014",
+    "ten": "📑 Buổi 14 — Chapter 5 Classical linear regression model assumptions and diagnostic tests (cont)",
+    "nguon": "Research Methods &amp; Quantitative Analysis · FLM 5 · Chapter 5 Classical linear regre",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "RMB302"
+   },
+   {
+    "href": "/courses/psi221-probability-and-statistical-inference-ii/learn?lessonSlug=psi221-ts-9-4",
+    "ten": "9.4 — Chẩn đoán hồi quy và hồi quy tuyến tính bội",
+    "nguon": "Probability and Statistical Inference II · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PSI221"
+   },
+   {
+    "href": "/courses/rmb302-research-methods-amp-quantitative-analysis/learn?lessonSlug=rmb302-flm-b046",
+    "ten": "📑 Buổi 46 — Chapter 14 Additional econometrics techniques for financial research",
+    "nguon": "Research Methods &amp; Quantitative Analysis · FLM 12 · Chapter 14 Additional econometr",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "RMB302"
+   }
+  ]
+ },
+ "Coding › Python cho Data Science": {
+  "body": "Python chiếm vị trí trung tâm trong khoa học dữ liệu nhờ cú pháp dễ đọc và hệ sinh thái thư viện khổng lồ. Bước này tập trung vào phần Python bạn dùng hằng ngày khi làm dữ liệu, không phải toàn bộ ngôn ngữ.\n\n### Ý chính\n- **Cấu trúc dữ liệu**: `list` (có thứ tự, sửa được), `tuple` (bất biến), `dict` (khoá → giá trị), `set` (không trùng). Biết độ phức tạp tra cứu: `x in set` nhanh hơn nhiều so với `x in list`.\n- **Hàm và comprehension**: chia code thành hàm nhỏ có tên rõ; `[f(x) for x in xs if cond]` thay cho vòng lặp ngắn.\n- **Module và môi trường ảo**: mỗi dự án một môi trường (`python -m venv .venv`), ghim phiên bản trong `requirements.txt` để người khác tái lập được kết quả.\n- **File và định dạng**: đọc/ghi CSV, JSON, dùng `with open(...)` để file luôn được đóng.\n- **Xử lý lỗi**: `try/except` đúng chỗ, không nuốt lỗi âm thầm.\n- **Thư viện lõi cho dữ liệu**: NumPy (mảng số), pandas (bảng), matplotlib/seaborn (vẽ), scikit-learn (mô hình).\n\n### Ví dụ tổng hợp\n```python\nimport csv\nfrom collections import defaultdict\n\ntong = defaultdict(float)\nwith open(\"don_hang.csv\", newline=\"\", encoding=\"utf-8\") as f:\n    for dong in csv.DictReader(f):\n        tong[dong[\"khach_hang\"]] += float(dong[\"so_tien\"])\n\ntop3 = sorted(tong.items(), key=lambda kv: kv[1], reverse=True)[:3]\nprint(top3)\n```\nVòng lặp này gồm dict, hàm sắp xếp với `lambda`, và quản lý file bằng `with`.\n\n### Lỗi hay gặp\n- Không dùng môi trường ảo, rồi \"máy tôi chạy được\" nhưng máy bạn thì không.\n- Sửa list trong lúc lặp qua nó.\n- Viết vòng lặp Python thuần trên hàng triệu dòng thay vì thao tác vector hoá bằng NumPy/pandas.\n- Tên biến vô nghĩa (`df2`, `tmp`) khiến notebook không đọc nổi sau một tuần.\n\n### Tự kiểm tra\n1. Khi nào dùng `set` thay cho `list`?\n2. Vì sao nên dùng `with open(...)`?\n3. Môi trường ảo và `requirements.txt` phối hợp để làm gì?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-2-1-python-numpy-pandas",
+    "ten": "2.1 — Python cho DS (numpy & pandas)",
+    "nguon": "Data Science · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-1-1-python-basics",
+    "ten": "1.1 — Python cơ bản cho phân tích kinh doanh",
+    "nguon": "Python for Business Analytics · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-3-1-data-structures",
+    "ten": "3.1 — Cấu trúc dữ liệu: list, tuple, dict, set",
+    "nguon": "Python programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Coding › SQL": {
+  "body": "Mọi Data Scientist phải biết SQL, vì dữ liệu doanh nghiệp hầu như luôn nằm trong cơ sở dữ liệu quan hệ và phỏng vấn gần như chắc chắn có vòng SQL. Bước này nói về phần SQL dùng cho phân tích: truy vấn, ghép bảng, tổng hợp.\n\n### Các khối kiến thức\n1. **SELECT, WHERE, ORDER BY, LIMIT**: lọc và sắp xếp.\n2. **JOIN**: ghép bảng theo khoá. `INNER JOIN` giữ dòng khớp ở cả hai bên; `LEFT JOIN` giữ mọi dòng bên trái và điền `NULL` nếu không khớp.\n3. **GROUP BY và hàm tổng hợp**: `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`. `WHERE` lọc dòng trước khi nhóm, `HAVING` lọc nhóm sau khi tổng hợp.\n4. **CTE (`WITH`)**: đặt tên cho bước trung gian để truy vấn dài vẫn đọc được.\n5. **Hàm cửa sổ**: tính toán trên một \"cửa sổ\" dòng mà không gộp dòng, như xếp hạng hay tổng luỹ tiến.\n\n### Ví dụ\nTìm 3 khách chi nhiều nhất mỗi tháng:\n```sql\nWITH theo_thang AS (\n  SELECT customer_id,\n         date_trunc('month', created_at) AS thang,\n         SUM(amount) AS tong\n  FROM orders\n  GROUP BY customer_id, date_trunc('month', created_at)\n),\nxep_hang AS (\n  SELECT *, ROW_NUMBER() OVER (PARTITION BY thang ORDER BY tong DESC) AS hang\n  FROM theo_thang\n)\nSELECT thang, customer_id, tong\nFROM xep_hang\nWHERE hang <= 3\nORDER BY thang, hang;\n```\nTruy vấn gồm một phép nhóm, một hàm cửa sổ `ROW_NUMBER` và hai CTE nối tiếp nhau.\n\n### Lỗi hay gặp\n- **Fan-out khi JOIN**: ghép bảng một-nhiều rồi `SUM` làm tổng bị nhân lên; tổng hợp trước rồi mới ghép.\n- Dùng `NOT IN` với cột có `NULL`, kết quả rỗng bất ngờ; dùng `NOT EXISTS`.\n- So sánh `= NULL` thay vì `IS NULL`.\n- Chọn mọi cột bằng `SELECT *` rồi kéo cả bảng lớn về máy.\n\n### Tự kiểm tra\n1. `WHERE` và `HAVING` khác nhau thế nào?\n2. `LEFT JOIN` trả những dòng nào mà `INNER JOIN` bỏ?\n3. Hàm cửa sổ khác `GROUP BY` ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-5-1-inner-join",
+    "ten": "5.1 — INNER JOIN: ráp các dòng lại với nhau",
+    "nguon": "PostgreSQL · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-6-2-group-by",
+    "ten": "6.2 — GROUP BY: một tóm tắt cho mỗi nhóm",
+    "nguon": "PostgreSQL · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-7-3-cte",
+    "ten": "7.3 — CTE (WITH): truy vấn theo bước dễ đọc",
+    "nguon": "PostgreSQL · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-8-1-window-la-gi",
+    "ten": "8.1 — Hàm cửa sổ là gì: tổng hợp mà không gộp dòng",
+    "nguon": "PostgreSQL · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/postgresql-practice",
+    "ten": "PostgreSQL — Luyện tập SQL chấm thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Coding › Pandas & NumPy": {
+  "body": "NumPy và pandas là cặp công cụ nền cho dữ liệu dạng bảng và dạng số trong Python.\n\n### NumPy\nCung cấp mảng nhiều chiều `ndarray` và phép toán **vector hoá**: viết `a * 2 + b` thay vì vòng lặp, nhanh hơn nhiều vì chạy bằng code C bên dưới. Cần nắm `shape`, `dtype`, lập chỉ mục/cắt lát, broadcasting (tự mở rộng kích thước khi hợp lệ) và các phép tổng hợp theo trục (`axis`).\n\n### pandas\n`DataFrame` là bảng có nhãn dòng và cột. Việc thường làm: `read_csv`, chọn cột/dòng (`loc`, `iloc`), lọc bằng điều kiện, `groupby().agg()`, `merge` (như JOIN trong SQL), xử lý ngày giờ.\n\n```python\nimport pandas as pd\n\ndf = pd.DataFrame({\"thanh_pho\": [\"HN\", \"HN\", \"HCM\"], \"doanh_thu\": [10, 20, 30]})\nprint(df.groupby(\"thanh_pho\")[\"doanh_thu\"].sum())\nprint(df[df[\"doanh_thu\"] > 15])\n```\n\n### Lỗi hay gặp\n- Duyệt từng dòng bằng `for` hoặc `iterrows` khi có thể vector hoá.\n- Cảnh báo `SettingWithCopyWarning`: sửa trên một bản \"lát cắt\" thay vì bản gốc; dùng `.loc` hoặc `.copy()`.\n- Quên rằng `axis=0` là theo dòng (xuống), `axis=1` là theo cột (ngang).",
+  "lessons": [
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-2-1-numpy",
+    "ten": "2.1 — Cấu trúc dữ liệu & NumPy",
+    "nguon": "Python for Business Analytics · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-4-1-cleaning",
+    "ten": "4.1 — Làm sạch & biến đổi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-flm-b013",
+    "ten": "📑 Buổi 13 — 5. Numerical Computing with NumPy",
+    "nguon": "Business Computing · FLM 5 · Numerical Computing with NumPy (",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-flm-b019",
+    "ten": "📑 Buổi 19 — 7. Data Selection & Indexing Techniques (Pandas II)",
+    "nguon": "Business Computing · FLM 7 · Data Selection & Indexing Techni",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   }
+  ]
+ },
+ "Coding › Git & GitHub cho Data Science": {
+  "body": "Git là hệ thống quản lý phiên bản, và trong dự án dữ liệu nó giải quyết ba việc: biết mình đã đổi gì, quay lại được khi hỏng, và làm việc nhóm không ghi đè lên nhau. GitHub là nơi lưu kho mã trên mạng, kèm công cụ review và cộng tác.\n\n### Ý chính\n- **Mô hình ba vùng**: thư mục làm việc, vùng chuẩn bị (index/staging), và lịch sử commit. `git add` đưa thay đổi vào vùng chuẩn bị, `git commit` chốt thành một ảnh chụp có thông điệp.\n- **Nhánh (branch)**: tách đường làm việc để thử nghiệm mà không đụng bản chính; `git merge` hoặc pull request đưa về sau khi được review.\n- **Remote**: `git clone`, `git pull`, `git push` đồng bộ với GitHub.\n- **Pull request**: nơi đồng nghiệp đọc và góp ý trước khi gộp.\n- **`.gitignore`**: danh sách thứ không đưa vào kho.\n\n### Điểm riêng của dự án dữ liệu\n- **Không commit dữ liệu lớn và bí mật**: ghi `data/raw/`, `models/`, `.env` vào `.gitignore`. Dữ liệu lớn dùng công cụ như DVC hoặc lưu ngoài, kho chỉ giữ mã và hướng dẫn tái tạo.\n- **Notebook và diff**: file `.ipynb` chứa cả đầu ra nên diff rất rối; nên xoá đầu ra trước khi commit hoặc chuyển phần logic ra file `.py`.\n- **Commit nhỏ, thông điệp ghi lại kết quả** (\"tăng F1 từ 0,71 lên 0,74 bằng thêm đặc trưng X\") giúp tái hiện hành trình thử nghiệm.\n\n### Ví dụ vòng làm việc\n```bash\ngit switch -c them-dac-trung-thoi-gian\n# ... sửa code ...\ngit add src/features.py\ngit commit -m \"Thêm đặc trưng ngày trong tuần, CV F1 0,71 -> 0,74\"\ngit push -u origin them-dac-trung-thoi-gian\n# mở pull request trên GitHub\n```\n\n### Lỗi hay gặp\n- Commit nhầm khoá API hoặc dữ liệu cá nhân; một khi đã push lên kho công khai thì phải coi như lộ và đổi khoá.\n- Làm thẳng trên nhánh `main` rồi `push --force` làm mất việc của người khác.\n- Một commit khổng lồ gom mọi thứ, không ai review và không quay lại được từng phần.\n\n### Tự kiểm tra\n1. Khác nhau giữa `git add` và `git commit`?\n2. Vì sao không nên commit file dữ liệu vài GB?\n3. Nhánh giúp ích gì khi thử nghiệm mô hình?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-5-gitignore",
+    "ten": "1.5 — .gitignore, và thứ không bao giờ được commit",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-11-3",
+    "ten": "11.3 — Quản lý phiên bản bằng git cho dự án dữ liệu",
+    "nguon": "Data Science · Chương 11",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/code-lab/git",
+    "ten": "Git",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Coding › AI Engineering & Vibe Coding": {
+  "body": "AI Engineering là việc xây sản phẩm trên các mô hình có sẵn, đặc biệt là mô hình ngôn ngữ lớn (LLM), bằng prompt, truy xuất dữ liệu ngoài (RAG) và code kết nối. \"Vibe coding\" là cách làm việc với trợ lý AI viết code: bạn mô tả ý đồ bằng ngôn ngữ tự nhiên, trợ lý sinh code, bạn đọc, chạy và chỉnh.\n\n### Ý chính\n- **Prompt rõ ràng**: nêu vai trò, bối cảnh, ràng buộc và định dạng đầu ra; thêm ví dụ khi cần.\n- **RAG**: tìm đoạn tài liệu liên quan rồi đưa vào prompt để mô hình trả lời dựa trên dữ liệu của bạn, giảm \"bịa\".\n- **Đánh giá**: chuẩn bị bộ câu hỏi mẫu có đáp án mong đợi để đo thay đổi, đừng chỉ tin cảm giác.\n- **Dùng trợ lý code có kỷ luật**: đọc kỹ code sinh ra, chạy test, không dán thẳng vào production khi chưa hiểu.\n\n### Lỗi hay gặp\n- Tin tuyệt đối vào code AI sinh; nó có thể gọi hàm không tồn tại hoặc sai logic tinh vi.\n- Dán dữ liệu nhạy cảm hoặc khoá bí mật vào prompt gửi dịch vụ bên ngoài.\n- Không viết test nên không biết khi nào thay đổi làm hỏng hành vi cũ.",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-5-1-llm",
+    "ten": "5.1 — Mô hình ngôn ngữ lớn (LLM)",
+    "nguon": "Generative AI · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-6-1-prompt-finetune",
+    "ten": "6.1 — Prompt & fine-tuning",
+    "nguon": "Generative AI · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Exploratory Data Analysis › Làm sạch dữ liệu (Data Cleaning)": {
+  "body": "Làm sạch dữ liệu là chuẩn bị dữ liệu thô thành dạng phân tích được, và thường chiếm phần lớn thời gian của một dự án. Dữ liệu thật hầu như luôn có giá trị thiếu, trùng lặp, sai kiểu và ngoại lai; bỏ qua chúng thì \"rác vào, rác ra\" (garbage in, garbage out).\n\n### Quy trình gợi ý\n1. **Nhìn tổng quan**: kích thước, kiểu từng cột, số giá trị thiếu, mẫu vài dòng.\n2. **Sửa kiểu và định dạng**: chuỗi số thành số, ngày thành `datetime`, chuẩn hoá chữ hoa/thường, khoảng trắng.\n3. **Loại trùng lặp** theo khoá nghiệp vụ hợp lý.\n4. **Xử lý giá trị thiếu** (xem dưới).\n5. **Xử lý ngoại lai**: phát hiện rồi quyết định giữ, giới hạn (winsorize) hay loại.\n6. **Kiểm tra tính hợp lý**: tuổi âm, ngày kết thúc trước ngày bắt đầu, tổng không khớp.\n\n### Giá trị thiếu: hiểu cơ chế trước khi điền\n- **MCAR**: thiếu hoàn toàn ngẫu nhiên, bỏ dòng thường ít gây chệch.\n- **MAR**: xác suất thiếu phụ thuộc biến khác đã quan sát.\n- **MNAR**: thiếu vì chính giá trị đó (người thu nhập cao né khai thu nhập); khó nhất, cần suy nghĩ kỹ.\nĐiền bằng trung vị là cách đơn giản; nên thêm cột chỉ báo \"đã bị thiếu\" vì việc thiếu đôi khi tự nó mang thông tin.\n\n### Ví dụ pandas\n```python\nimport pandas as pd\n\ndf = pd.read_csv(\"khach_hang.csv\")\ndf = df.drop_duplicates(subset=\"ma_khach\")\ndf[\"luong\"] = pd.to_numeric(df[\"luong\"], errors=\"coerce\")\ndf[\"luong_thieu\"] = df[\"luong\"].isna()\ndf[\"luong\"] = df[\"luong\"].fillna(df[\"luong\"].median())\n\nq1, q3 = df[\"luong\"].quantile([0.25, 0.75])\niqr = q3 - q1\nngoai_lai = (df[\"luong\"] < q1 - 1.5 * iqr) | (df[\"luong\"] > q3 + 1.5 * iqr)\nprint(ngoai_lai.sum())\n```\n\n### Lỗi hay gặp\n- Tính trung vị/trung bình để điền trên toàn bộ dữ liệu trước khi chia train/test (rò rỉ); hãy học giá trị điền chỉ từ tập train.\n- Xoá ngoại lai chỉ vì \"trông lạ\"; đôi khi đó chính là hiện tượng đáng quan tâm nhất.\n- Làm sạch bằng thao tác tay trong Excel không ghi lại, nên không tái lập được.\n\n### Tự kiểm tra\n1. Vì sao phải hiểu cơ chế thiếu (MCAR/MAR/MNAR) trước khi điền?\n2. Quy tắc 1,5 × IQR xác định ngoại lai thế nào?\n3. Vì sao việc làm sạch nên nằm trong code thay vì thao tác tay?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-3-1-cleaning",
+    "ten": "3.1 — Thu thập & làm sạch dữ liệu",
+    "nguon": "Data Science · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-3-2",
+    "ten": "3.2 — Kiểu dữ liệu, bản ghi trùng và giá trị thiếu",
+    "nguon": "Data Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-3-3",
+    "ten": "3.3 — Chuỗi, ngày tháng, ngoại lai và ghép bảng an toàn",
+    "nguon": "Data Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dta301-data-analysis/learn?lessonSlug=dta301-2-1-collect-clean",
+    "ten": "2.1 — Thu thập & làm sạch dữ liệu",
+    "nguon": "Data Analysis · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTA301"
+   },
+   {
+    "href": "/courses/dtm301-data-mining-and-predictive-analytics/learn?lessonSlug=dtm301-2-1-preprocessing",
+    "ten": "2.1 — Tiền xử lý & làm sạch dữ liệu",
+    "nguon": "Data Mining and Predictive Analytics · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTM301"
+   }
+  ]
+ },
+ "Exploratory Data Analysis › Trực quan hoá (Matplotlib/Seaborn)": {
+  "body": "Trực quan hoá là cách nhanh nhất để thấy phân phối, xu hướng và điểm bất thường trong dữ liệu mà bảng số che khuất. Matplotlib là thư viện vẽ nền của Python; seaborn xây trên nó và cho biểu đồ thống kê đẹp hơn với ít code hơn.\n\n### Chọn biểu đồ theo câu hỏi\n- **Phân phối của một biến số**: histogram, boxplot, biểu đồ mật độ.\n- **So sánh giữa các nhóm**: biểu đồ cột, boxplot theo nhóm.\n- **Quan hệ giữa hai biến số**: scatter plot (thêm đường hồi quy để thấy xu hướng).\n- **Thay đổi theo thời gian**: biểu đồ đường.\n- **Tương quan nhiều biến**: heatmap của ma trận tương quan.\n\n### Nguyên tắc để biểu đồ không nói dối\n- Trục cột nên bắt đầu từ 0; cắt trục làm chênh lệch nhỏ trông như lớn.\n- Gắn nhãn trục, đơn vị và tiêu đề; chú thích khi dùng nhiều màu.\n- Bớt \"mực thừa\": lưới dày, hiệu ứng 3D, quá nhiều màu.\n- Dùng bảng màu thân thiện với người mù màu.\n\n### Ví dụ\n```python\nimport matplotlib.pyplot as plt\nimport seaborn as sns\n\ndf = sns.load_dataset(\"tips\")\nfig, axes = plt.subplots(1, 2, figsize=(10, 4))\nsns.histplot(df[\"total_bill\"], kde=True, ax=axes[0])\nsns.boxplot(data=df, x=\"day\", y=\"tip\", ax=axes[1])\naxes[0].set_title(\"Phân phối hoá đơn\")\naxes[1].set_title(\"Tiền tip theo ngày\")\nplt.tight_layout()\nplt.show()\n```\n\n### Lỗi hay gặp\n- Biểu đồ tròn với quá nhiều lát, khó so sánh.\n- Hai trục tung khác thang để \"ép\" ra tương quan.\n- Chỉ nhìn trung bình mà không vẽ phân phối; hai nhóm cùng trung bình có thể khác hẳn về hình dạng.\n\n### Tự kiểm tra\n1. Chọn biểu đồ nào để so sánh phân phối thu nhập giữa ba thành phố?\n2. Vì sao cắt trục tung của biểu đồ cột là gây hiểu lầm?\n3. Seaborn làm gì mà matplotlib thuần không làm gọn bằng?",
+  "lessons": [
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-5-1-visualization",
+    "ten": "5.1 — Trực quan hoá với matplotlib & seaborn",
+    "nguon": "Python for Business Analytics · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-4-3",
+    "ten": "4.3 — Trực quan hoá với matplotlib: chọn và dựng biểu đồ trung thực",
+    "nguon": "Data Science · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/bcp201-business-computing/learn?lessonSlug=bcp201-flm-b037",
+    "ten": "📑 Buổi 37 — 13. Data Visualization Principles (Matplotlib)",
+    "nguon": "Business Computing · FLM 13 · Data Visualization Principles (",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "BCP201"
+   },
+   {
+    "href": "/courses/eda301-data-analysis/learn?lessonSlug=eda301-4-1-data-visualization",
+    "ten": "4.1 — Trực quan hoá dữ liệu",
+    "nguon": "Data analysis · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "EDA301"
+   }
+  ]
+ },
+ "Exploratory Data Analysis › Jupyter Notebook": {
+  "body": "Jupyter Notebook là môi trường tương tác trộn code, kết quả, biểu đồ và ghi chú trong cùng một tài liệu, gồm các \"ô\" chạy riêng lẻ. Nó rất hợp cho khám phá dữ liệu vì bạn thấy kết quả ngay sau từng bước.\n\n### Ý chính\n- Ô code chạy bằng `Shift+Enter`; ô Markdown dùng để ghi giải thích.\n- **Trạng thái ẩn**: biến sống trong bộ nhớ của kernel, nên chạy ô không theo thứ tự có thể cho kết quả mà người khác không tái lập được. Thói quen tốt: định kỳ chọn *Restart & Run All* để chắc notebook chạy được từ trên xuống.\n- Đặt seed ngẫu nhiên (`random_state`, `numpy.random.default_rng(seed)`) để kết quả lặp lại.\n- Khi logic ổn định, chuyển hàm sang file `.py` rồi `import`, giữ notebook cho phần kể chuyện và khám phá.\n\n### Lỗi hay gặp\n- Notebook phụ thuộc biến đã xoá khỏi code nhưng vẫn còn trong bộ nhớ.\n- Commit notebook chứa dữ liệu nhạy cảm trong đầu ra của ô.",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-11-1",
+    "ten": "11.1 — Notebook tái lập được: trạng thái ẩn, seed và cấu trúc dự án",
+    "nguon": "Data Science · Chương 11",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-11-2",
+    "ten": "11.2 — Môi trường, phiên bản cố định và lưu mô hình kèm metadata",
+    "nguon": "Data Science · Chương 11",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   }
+  ]
+ },
+ "Exploratory Data Analysis › Trực quan hoá nâng cao (Advanced Visualization)": {
+  "body": "Matplotlib và seaborn đủ cho biểu đồ tĩnh; khi cần người đọc **tương tác** (rê chuột xem giá trị, lọc, phóng to) thì chuyển sang thư viện như Plotly, hoặc dựng dashboard để người không biết code tự khám phá.\n\n### Ý chính\n- **Plotly** (Python) tạo biểu đồ tương tác chỉ với vài dòng, xuất ra HTML nhúng được vào báo cáo.\n- **Dashboard** gom nhiều biểu đồ cùng bộ lọc. Có thể dựng bằng code (Dash, Streamlit) hoặc công cụ BI (Power BI, Tableau).\n- **Thiết kế dashboard**: đặt chỉ số quan trọng nhất ở trên cùng, nhóm theo chủ đề, giữ số biểu đồ vừa phải, mỗi biểu đồ trả lời một câu hỏi.\n- **Kể chuyện bằng dữ liệu (data storytelling)**: bối cảnh, phát hiện chính, hành động đề xuất; một thông điệp rõ ràng thay vì mười biểu đồ.\n\n### Ví dụ\n```python\nimport plotly.express as px\n\ndf = px.data.gapminder().query(\"year == 2007\")\nfig = px.scatter(df, x=\"gdpPercap\", y=\"lifeExp\", size=\"pop\", color=\"continent\",\n                 hover_name=\"country\", log_x=True)\nfig.show()\n```\n\n### Lưu ý\nBiểu đồ tương tác không thay thế được việc chọn đúng loại biểu đồ: một biểu đồ xấu vẫn xấu dù có tooltip. Trên web, các bài hiện có tập trung vào nguyên tắc chọn biểu đồ, thiết kế dashboard và kể chuyện bằng dữ liệu; thư viện Plotly cụ thể bạn nên đọc thêm tài liệu chính thức.",
+  "lessons": [
+   {
+    "href": "/courses/idv301-interactive-data-visualization-for-business-analytics/learn?lessonSlug=idv301-2-1-chart-selection",
+    "ten": "2.1 — Chọn loại biểu đồ phù hợp dữ liệu",
+    "nguon": "Interactive Data Visualization for Business Analytics · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IDV301"
+   },
+   {
+    "href": "/courses/idv301-interactive-data-visualization-for-business-analytics/learn?lessonSlug=idv301-7-1-dashboard-design",
+    "ten": "7.1 — Thiết kế dashboard hiệu quả & tương tác: filter & drill-down",
+    "nguon": "Interactive Data Visualization for Business Analytics · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IDV301"
+   },
+   {
+    "href": "/courses/idv301-interactive-data-visualization-for-business-analytics/learn?lessonSlug=idv301-8-1-storytelling",
+    "ten": "8.1 — Data storytelling: trình bày insight cho lãnh đạo",
+    "nguon": "Interactive Data Visualization for Business Analytics · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IDV301"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-8-1-dashboard-case-study",
+    "ten": "8.1 — Ứng dụng: dashboard, báo cáo tự động & case study kinh doanh",
+    "nguon": "Python for Business Analytics · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   }
+  ]
+ },
+ "Machine Learning › scikit-learn": {
+  "body": "scikit-learn là thư viện học máy cổ điển chuẩn của Python. Sức mạnh lớn nhất của nó là **giao diện thống nhất**: mọi mô hình đều có `fit`, `predict` (và `transform` cho bộ biến đổi), nên đổi thuật toán chỉ là đổi một dòng.\n\n### Các thành phần chính\n- **Mô hình**: `LinearRegression`, `LogisticRegression`, `DecisionTreeClassifier`, `RandomForestClassifier`, `GradientBoostingClassifier`, `KNeighborsClassifier`, `KMeans`, `PCA`…\n- **Tiền xử lý**: `StandardScaler`, `OneHotEncoder`, `SimpleImputer`.\n- **ColumnTransformer**: áp bộ biến đổi khác nhau cho nhóm cột khác nhau (số và phân loại).\n- **Pipeline**: nối tiền xử lý và mô hình thành một đối tượng duy nhất; điều này ngăn rò rỉ dữ liệu vì bộ biến đổi chỉ học từ dữ liệu train trong mỗi lần fit.\n- **Chọn mô hình**: `train_test_split`, `cross_val_score`, `GridSearchCV`.\n\n### Ví dụ pipeline đầy đủ\n```python\nimport pandas as pd\nfrom sklearn.compose import ColumnTransformer\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.impute import SimpleImputer\nfrom sklearn.model_selection import cross_val_score\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import OneHotEncoder, StandardScaler\n\nso = [\"tuoi\", \"thu_nhap\"]\nphan_loai = [\"thanh_pho\"]\ntien_xu_ly = ColumnTransformer([\n    (\"so\", Pipeline([(\"thieu\", SimpleImputer(strategy=\"median\")),\n                     (\"chuan\", StandardScaler())]), so),\n    (\"pl\", OneHotEncoder(handle_unknown=\"ignore\"), phan_loai),\n])\nmo_hinh = Pipeline([(\"tx\", tien_xu_ly), (\"rf\", RandomForestClassifier(random_state=0))])\n\n# X là DataFrame có các cột trên, y là nhãn\n# print(cross_val_score(mo_hinh, X, y, cv=5).mean())\n```\n\n### Lỗi hay gặp\n- Gọi `fit_transform` trên cả tập dữ liệu rồi mới chia train/test.\n- Quên `random_state`, nên kết quả đổi mỗi lần chạy và không so sánh công bằng được.\n- Truyền DataFrame có cột chữ vào mô hình cần số mà không mã hoá.\n- Tối ưu siêu tham số bằng chính tập test.\n\n### Tự kiểm tra\n1. Pipeline giúp ngăn loại rò rỉ dữ liệu nào?\n2. `handle_unknown=\"ignore\"` trong `OneHotEncoder` dùng cho trường hợp nào?\n3. Khi nào chọn random forest thay vì hồi quy logistic?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-5-3",
+    "ten": "5.3 — Pipeline và ColumnTransformer: tiền xử lý không thể rò rỉ",
+    "nguon": "Data Science · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-7-3",
+    "ten": "7.3 — Cây quyết định: luật nếu-thì học từ dữ liệu",
+    "nguon": "Data Science · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-7-4",
+    "ten": "7.4 — Rừng ngẫu nhiên và gradient boosting: tổ hợp cây (trực giác)",
+    "nguon": "Data Science · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-9-1",
+    "ten": "9.1 — Phân cụm bằng k-means: tìm nhóm khi không có nhãn",
+    "nguon": "Data Science · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-7-1-regression",
+    "ten": "7.1 — Hồi quy & dự báo kinh doanh cơ bản",
+    "nguon": "Python for Business Analytics · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   }
+  ]
+ },
+ "Machine Learning › Feature Engineering": {
+  "body": "Feature engineering là biến dữ liệu thô thành đặc trưng giúp mô hình học dễ hơn. Với dữ liệu dạng bảng, chất lượng đặc trưng thường quyết định kết quả nhiều hơn việc chọn thuật toán.\n\n### Các kỹ thuật phổ biến\n- **Chuẩn hoá/co giãn số**: `StandardScaler` (trung bình 0, độ lệch chuẩn 1) hoặc min-max. Cần cho mô hình dựa trên khoảng cách hoặc gradient (k-NN, SVM, hồi quy có regularization, mạng nơ-ron); cây quyết định thì không cần.\n- **Mã hoá biến phân loại**: one-hot cho biến không thứ tự, mã hoá thứ tự cho biến có bậc.\n- **Biến đổi log** cho dữ liệu lệch phải (giá nhà, thu nhập).\n- **Tạo đặc trưng từ nghiệp vụ**: tách ngày thành thứ/tháng/giờ, tỉ lệ giữa hai cột, số lần mua trong 30 ngày qua, đặc trưng tương tác.\n- **Chọn đặc trưng**: bỏ cột nhiễu hoặc trùng thông tin.\n\n```python\nimport numpy as np, pandas as pd\n\ndf = pd.DataFrame({\"gia\": [1e6, 2e6, 9e7], \"ngay\": pd.to_datetime([\"2026-01-03\", \"2026-01-04\", \"2026-01-10\"])})\ndf[\"log_gia\"] = np.log1p(df[\"gia\"])\ndf[\"thu\"] = df[\"ngay\"].dt.dayofweek\n```\n\n### Lỗi hay gặp\n- Học tham số biến đổi (trung bình, độ lệch chuẩn) trên cả tập dữ liệu thay vì chỉ tập train.\n- Tạo đặc trưng dùng thông tin từ tương lai (ví dụ tổng chi tiêu của cả tháng khi dự đoán ở đầu tháng).\n- One-hot cho cột có hàng nghìn giá trị khác nhau làm số cột bùng nổ.",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-5-1",
+    "ten": "5.1 — Mã hoá biến phân loại và chuẩn hoá biến số",
+    "nguon": "Data Science · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-5-2",
+    "ten": "5.2 — Tạo đặc trưng: hiểu biết nghiệp vụ, log và tương tác",
+    "nguon": "Data Science · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/ail303m-machine-learning/learn?lessonSlug=ail303m-1-2-features-and-stats",
+    "ten": "1.2 — Feature engineering & thống kê suy diễn",
+    "nguon": "Machine Learning · Module 1 — EDA for Machine Learning",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL303m"
+   },
+   {
+    "href": "/courses/dam321-data-mining-ii/learn?lessonSlug=dam321-1-1-pipeline",
+    "ten": "1.1 — Pipeline nâng cao & feature engineering",
+    "nguon": "Data mining II · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DAM321"
+   }
+  ]
+ },
+ "Machine Learning › Model Evaluation & Cross-Validation": {
+  "body": "Một mô hình điểm cao trên dữ liệu đã học chưa chứng tỏ gì. Đánh giá là trả lời câu hỏi: mô hình sẽ hoạt động thế nào trên dữ liệu **chưa từng thấy**, và đo bằng thước nào là đúng cho bài toán.\n\n### Chia dữ liệu và kiểm chứng chéo\n- **Train / validation / test**: train để học, validation để chọn mô hình và siêu tham số, test chỉ dùng **một lần** ở cuối để báo cáo.\n- **k-fold cross-validation**: chia dữ liệu thành k phần, lần lượt giữ một phần làm kiểm tra rồi lấy trung bình; cho ước lượng ổn định hơn một lần chia, đặc biệt khi dữ liệu ít.\n- **Biến thể phù hợp dữ liệu**: `StratifiedKFold` giữ tỉ lệ lớp, `GroupKFold` khi nhiều dòng thuộc cùng một đối tượng, `TimeSeriesSplit` cho chuỗi thời gian.\n\n### Chọn metric theo bài toán\n- **Hồi quy**: MAE (sai số trung bình tuyệt đối, dễ hiểu), RMSE (phạt sai số lớn nặng hơn), R².\n- **Phân loại**: ma trận nhầm lẫn, precision (trong số dự đoán dương, bao nhiêu đúng), recall (trong số dương thật, bắt được bao nhiêu), F1 (trung bình điều hoà), ROC-AUC và PR-AUC.\n- Lớp mất cân bằng: accuracy đánh lừa. Nếu chỉ 5% là lớp dương, mô hình luôn đoán \"âm\" đạt accuracy 95% mà recall bằng 0.\n\n### Ví dụ\n```python\nfrom sklearn.datasets import make_classification\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import StratifiedKFold, cross_val_score\n\nX, y = make_classification(n_samples=1000, weights=[0.95], random_state=0)\ncv = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)\nprint(cross_val_score(LogisticRegression(max_iter=1000), X, y, cv=cv, scoring=\"f1\").mean())\n```\n\n### Lỗi hay gặp\n- **Rò rỉ dữ liệu**: tiền xử lý trên toàn bộ dữ liệu trước khi chia, hoặc đặc trưng chứa thông tin của nhãn. Điểm \"quá đẹp\" thường là dấu hiệu.\n- Nhìn điểm test nhiều lần để chỉnh mô hình, biến test thành validation.\n- Chỉ báo cáo một con số mà không có độ biến thiên (độ lệch chuẩn qua các fold).\n\n### Tự kiểm tra\n1. Vì sao không được xáo trộn ngẫu nhiên khi dự báo chuỗi thời gian?\n2. Khi nào ưu tiên recall hơn precision?\n3. Một mô hình đạt accuracy 99% trên dữ liệu mất cân bằng nặng; bạn kiểm tra gì tiếp theo?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-6-2",
+    "ten": "6.2 — Kiểm định chéo và tinh chỉnh siêu tham số",
+    "nguon": "Data Science · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-8-2",
+    "ten": "8.2 — Chỉ số phân loại: ma trận nhầm lẫn, precision, recall, F1",
+    "nguon": "Data Science · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-6-3",
+    "ten": "6.3 — Rò rỉ dữ liệu: vì sao kết quả quá đẹp thường là sai",
+    "nguon": "Data Science · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/ama401-advanced-methods-for-data-analysis/learn?lessonSlug=ama401-4-1-resampling",
+    "ten": "4.1 — Resampling: cross-validation & bootstrap",
+    "nguon": "Advanced Methods for Data Analysis · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AMA401"
+   },
+   {
+    "href": "/courses/dtm301-data-mining-and-predictive-analytics/learn?lessonSlug=dtm301-7-1-model-evaluation",
+    "ten": "7.1 — Đánh giá mô hình & overfitting",
+    "nguon": "Data Mining and Predictive Analytics · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTM301"
+   }
+  ]
+ },
+ "Machine Learning › Học có giám sát & Không giám sát (Supervised / Unsupervised)": {
+  "body": "Học máy chia thành hai nhánh lớn tuỳ vào việc dữ liệu có nhãn hay không.\n\n### Học có giám sát\nCó cặp (đầu vào, nhãn đúng) để học. Hai dạng bài toán:\n- **Phân loại (classification)**: dự đoán nhóm. Ví dụ thư rác hay không, khách có rời bỏ dịch vụ không. Mô hình thường gặp: hồi quy logistic, cây quyết định, random forest, gradient boosting, k-NN, SVM, Naive Bayes.\n- **Hồi quy**: dự đoán một số (giá nhà, thời gian giao hàng).\n\nĐiểm cần cân nhắc: cây quyết định dễ giải thích nhưng dễ overfit; ensemble (random forest, boosting) gộp nhiều cây để giảm overfit và thường chính xác hơn; hồi quy logistic đơn giản, nhanh và cho xác suất.\n\n### Học không giám sát\nKhông có nhãn, mục tiêu là tìm cấu trúc ẩn trong dữ liệu.\n- **Phân cụm (clustering)**: gom các điểm giống nhau. **k-means** chia thành k cụm quanh tâm cụm và cần chọn k (phương pháp khuỷu tay, hệ số silhouette); phân cụm phân cấp tạo cây các cụm; **DBSCAN** tìm cụm theo mật độ, nhận ra điểm nhiễu và cụm hình dạng bất kỳ.\n- **Giảm chiều (PCA)**: nén nhiều đặc trưng tương quan thành ít thành phần giữ phần lớn phương sai, hữu ích để vẽ biểu đồ và loại nhiễu.\n\n### Ví dụ k-means\n```python\nfrom sklearn.cluster import KMeans\nfrom sklearn.datasets import load_iris\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.preprocessing import StandardScaler\n\nX, _ = load_iris(return_X_y=True)\nmo_hinh = make_pipeline(StandardScaler(), KMeans(n_clusters=3, n_init=10, random_state=0))\nnhan_cum = mo_hinh.fit_predict(X)\nprint(nhan_cum[:10])\n```\n\n### Lỗi hay gặp\n- Quên chuẩn hoá trước k-means; cột có thang lớn lấn át khoảng cách.\n- Tưởng cụm tìm được là \"sự thật\"; cụm do thuật toán tạo ra cần chuyên gia nghiệp vụ diễn giải và kiểm tra tính ổn định.\n- Dùng k-means cho cụm hình lưỡi liềm hoặc có kích thước, mật độ rất khác nhau.\n\n### Tự kiểm tra\n1. Phân biệt phân loại và phân cụm.\n2. Làm sao chọn số cụm k?\n3. Vì sao cần chuẩn hoá trước khi phân cụm?",
+  "lessons": [
+   {
+    "href": "/courses/dtm301-data-mining-and-predictive-analytics/learn?lessonSlug=dtm301-3-1-classification",
+    "ten": "3.1 — Phân lớp: cây quyết định, kNN, Naive Bayes",
+    "nguon": "Data Mining and Predictive Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DTM301"
+   },
+   {
+    "href": "/courses/dam311-data-mining-i/learn?lessonSlug=dam311-5-1-classification",
+    "ten": "5.1 — Phân lớp: cây, Naive Bayes, kNN",
+    "nguon": "Data mining I · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DAM311"
+   },
+   {
+    "href": "/courses/dam311-data-mining-i/learn?lessonSlug=dam311-7-1-clustering",
+    "ten": "7.1 — Phân cụm: k-means, phân cấp, DBSCAN",
+    "nguon": "Data mining I · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DAM311"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-9-2",
+    "ten": "9.2 — Chọn k và vượt ra ngoài k-means: silhouette, phân cụm phân cấp, DBSCAN",
+    "nguon": "Data Science · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/ail303m-machine-learning/learn?lessonSlug=ail303m-4-2-dimensionality",
+    "ten": "4.2 — Lời nguyền chiều & PCA",
+    "nguon": "Machine Learning · Module 4 — Unsupervised learning",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL303m"
+   }
+  ]
+ },
+ "Deep Learning › Mạng Nơ-ron (Neural Networks)": {
+  "body": "Mạng nơ-ron (neural network) là hàm có rất nhiều tham số học được, xếp thành các tầng. Mỗi **nơ-ron** tính tổng có trọng số của đầu vào cộng độ chệch rồi đưa qua hàm kích hoạt phi tuyến: `a = f(w·x + b)`.\n\n### Cấu trúc và dòng dữ liệu\n- **Perceptron**: một nơ-ron, mạng đơn giản nhất.\n- **Mạng nhiều tầng (MLP)**: tầng vào, một hay nhiều tầng ẩn, tầng ra. Dữ liệu đi từ vào đến ra (lan truyền tiến, *forward*).\n- **Hàm kích hoạt**: ReLU `max(0, x)` phổ biến cho tầng ẩn; sigmoid cho xác suất nhị phân; softmax cho phân loại nhiều lớp. Không có phi tuyến thì cả mạng suy biến thành một phép biến đổi tuyến tính duy nhất.\n- **Hàm mất mát**: MSE cho hồi quy, cross-entropy cho phân loại.\n- **Huấn luyện**: lặp lại forward, tính loss, lan truyền ngược (*backpropagation*) để lấy gradient, rồi cập nhật trọng số bằng gradient descent.\n\n### Vì sao sâu hơn có ích\nCác tầng sau học đặc trưng ngày càng trừu tượng dựa trên tầng trước (với ảnh: cạnh, rồi hình dạng, rồi bộ phận, rồi vật thể). Đó là \"học biểu diễn phân cấp\".\n\n### Ví dụ perceptron đơn\n```python\nimport numpy as np\n\nX = np.array([[0, 0], [0, 1], [1, 0], [1, 1]], dtype=float)\ny = np.array([0, 0, 0, 1], dtype=float)    # hàm AND\nw, b, lr = np.zeros(2), 0.0, 0.1\nfor _ in range(20):\n    for xi, yi in zip(X, y):\n        dudoan = 1.0 if xi @ w + b > 0 else 0.0\n        w += lr * (yi - dudoan) * xi\n        b += lr * (yi - dudoan)\nprint(w, b, [1.0 if xi @ w + b > 0 else 0.0 for xi in X])   # [0.2 0.1] -0.2 [0.0, 0.0, 0.0, 1.0]\n```\nPerceptron học được AND nhưng không học được XOR; cần tầng ẩn mới giải được, đó là lý do sinh ra mạng nhiều tầng.\n\n### Lỗi hay gặp\n- Dùng sigmoid ở mọi tầng ẩn của mạng sâu, gây gradient biến mất.\n- Không chuẩn hoá đầu vào nên huấn luyện chậm và bất ổn.\n- Dùng accuracy trên tập huấn luyện để kết luận mạng \"học tốt\".\n\n### Tự kiểm tra\n1. Vì sao cần hàm kích hoạt phi tuyến?\n2. XOR cho thấy hạn chế gì của perceptron?\n3. Cross-entropy phù hợp với loại bài toán nào?",
+  "lessons": [
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-2-1-neural-networks",
+    "ten": "M2.1 — Mạng nơ-ron fully-connected",
+    "nguon": "Machine Learning · Module 2 — Neural networks",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-1-2-shallow-deep",
+    "ten": "1.2 — Mạng nông & mạng sâu",
+    "nguon": "Deep Learning · Module 1 — Mạng nơ-ron & học sâu",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-1-3-exercise",
+    "ten": "Bài tập 1 — perceptron đơn",
+    "nguon": "Machine Learning · Module 1 — Math for ML",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/dam321-data-mining-ii/learn?lessonSlug=dam321-5-1-neural-nets",
+    "ten": "5.1 — Mạng nơ-ron & học sâu nhập môn",
+    "nguon": "Data mining II · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DAM321"
+   }
+  ]
+ },
+ "Deep Learning › PyTorch / TensorFlow": {
+  "body": "PyTorch và TensorFlow (với API Keras) là hai framework deep learning phổ biến nhất. Cả hai cung cấp tensor, tính đạo hàm tự động, các tầng dựng sẵn và hỗ trợ GPU, nên bạn tập trung vào kiến trúc và dữ liệu thay vì tự viết gradient.\n\n### So sánh nhanh\n- **PyTorch**: viết kiểu Python thông thường, dễ debug, rất phổ biến trong nghiên cứu và hệ sinh thái mô hình mở.\n- **TensorFlow/Keras**: API cấp cao gọn (`Sequential`, `compile`, `fit`), mạnh về triển khai (TF Serving, TFLite).\nKhái niệm chung (tensor, optimizer, loss, batch, epoch) chuyển đổi giữa hai bên dễ dàng; chọn một cái rồi học cho vững.\n\n### Ví dụ Keras\n```python\nimport tensorflow as tf\n\nmo_hinh = tf.keras.Sequential([\n    tf.keras.layers.Dense(16, activation=\"relu\"),\n    tf.keras.layers.Dense(1),\n])\nmo_hinh.compile(optimizer=\"adam\", loss=\"mse\")\n# mo_hinh.fit(X, y, epochs=10, batch_size=32, validation_split=0.2)\n```\n\n### Lưu ý về tài liệu trên web\nCác bài deep learning của môn trường trên cuongthai.com dùng TensorFlow/Keras. Chưa có bài riêng cho PyTorch, nên phần đó bạn học thêm từ tài liệu chính thức.",
+  "lessons": [
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-3-2-tensorflow",
+    "ten": "M3.2 — Tối ưu & TensorFlow/Keras",
+    "nguon": "Machine Learning · Module 3 — Optimizing DNNs & TensorFlow",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/dpl303m-deep-learning/learn?lessonSlug=dpl303m-3-1-strategy-project",
+    "ten": "M3.1 — ML strategy & đồ án TensorFlow",
+    "nguon": "Deep Learning · Module 3 — Strategy & project",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "DPL303m"
+   }
+  ]
+ },
+ "Deep Learning › CNN / RNN / Transformer": {
+  "body": "Ba kiến trúc chuyên biệt xây trên nền mạng nơ-ron, mỗi cái khai thác cấu trúc riêng của dữ liệu.\n\n### CNN (mạng tích chập) cho ảnh\nDùng các bộ lọc (kernel) trượt trên ảnh để phát hiện cạnh, hoa văn, nhờ **chia sẻ trọng số** (cùng một bộ lọc dùng ở mọi vị trí) và tính **cục bộ**, nên ít tham số hơn mạng kết nối đầy đủ. Xếp các tầng tích chập, pooling và tầng cuối phân loại. Kiến trúc kinh điển: LeNet, VGG, ResNet (kết nối tắt giúp huấn luyện mạng rất sâu).\n\n### RNN / LSTM cho chuỗi\nXử lý chuỗi từng bước và giữ **trạng thái ẩn** làm \"bộ nhớ\". RNN thuần gặp vấn đề gradient biến mất với chuỗi dài; LSTM và GRU thêm các cổng để nhớ có chọn lọc.\n\n### Transformer\nThay vì xử lý tuần tự, dùng **self-attention**: mỗi phần tử trong chuỗi tính mức độ liên quan với mọi phần tử khác qua ba vector query, key, value. Nhờ đó xử lý song song được, nắm quan hệ xa tốt, và là nền của các mô hình ngôn ngữ lớn.\n\n### Công thức attention\n`Attention(Q, K, V) = softmax(Q Kᵀ / √d) V`: chia cho `√d` để điểm không quá lớn làm softmax bão hoà.\n\n### Khi nào dùng gì\nẢnh: CNN hoặc Vision Transformer. Văn bản: Transformer. Chuỗi cảm biến ngắn: RNN/LSTM hoặc CNN 1D còn dùng được. Thực tế thường bắt đầu từ mô hình đã huấn luyện sẵn rồi fine-tune.",
+  "lessons": [
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-4-1-cnn-foundations",
+    "ten": "4.1 — Nền tảng CNN",
+    "nguon": "Deep Learning · Module 4 — Mạng tích chập (CNN)",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-5-1-rnn-lstm",
+    "ten": "5.1 — RNN, LSTM & GRU",
+    "nguon": "Deep Learning · Module 5 — Mô hình chuỗi",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-5-2-attention-transformer",
+    "ten": "5.2 — Attention & Transformer",
+    "nguon": "Deep Learning · Module 5 — Mô hình chuỗi",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-4-1-transformer-attention",
+    "ten": "4.1 — Transformer & attention",
+    "nguon": "Generative AI · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Deep Learning › Lan truyền ngược & Tối ưu hoá (Backpropagation & Optimization)": {
+  "body": "Huấn luyện mạng nơ-ron là bài toán tối ưu: tìm trọng số làm hàm mất mát nhỏ nhất. Lan truyền ngược (backpropagation) là thuật toán tính gradient của loss theo mọi trọng số một cách hiệu quả, còn optimizer dùng gradient đó để cập nhật.\n\n### Backpropagation hoạt động thế nào\nMạng là chuỗi hàm hợp: `loss = L(f₃(f₂(f₁(x))))`. Theo **quy tắc chuỗi**, gradient ở tầng đầu là tích các đạo hàm cục bộ đi ngược từ loss về. Ta lưu các giá trị trung gian ở lượt forward, rồi ở lượt backward nhân dần các đạo hàm, nên chi phí chỉ cỡ vài lần một lượt forward thay vì tính riêng từng trọng số.\n\n### Các vấn đề và cách xử lý\n- **Gradient biến mất / bùng nổ** ở mạng sâu: dùng ReLU, khởi tạo trọng số đúng (Xavier/He), chuẩn hoá theo lô (batch normalization), kết nối tắt, cắt gradient (gradient clipping).\n- **Chọn learning rate**: thường quan trọng nhất; dùng lịch giảm dần (scheduler) hoặc warmup.\n- **Optimizer**: SGD có momentum, Adam/AdamW cho mặc định hợp lý.\n- **Overfitting**: regularization L2, dropout, dừng sớm (early stopping), thêm dữ liệu hoặc tăng cường dữ liệu.\n- **Chẩn đoán bias/variance**: train loss cao nghĩa là underfit (mô hình quá yếu, huấn luyện chưa đủ); train thấp nhưng validation cao nghĩa là overfit.\n\n### Kiểm chứng gradient bằng tay\n```python\nimport numpy as np\n\n# loss = (w*x - y)**2, đạo hàm theo w là 2*(w*x - y)*x\nw, x, y = 0.5, 3.0, 4.0\nphan_tich = 2 * (w * x - y) * x\nh = 1e-6\nso = (((w + h) * x - y) ** 2 - ((w - h) * x - y) ** 2) / (2 * h)\nprint(phan_tich, so)   # hai số gần như bằng nhau\n```\nSo sánh đạo hàm giải tích với đạo hàm số (gradient check) là cách kiểm tra cài đặt backward.\n\n### Lỗi hay gặp\n- Quên đặt gradient về 0 giữa các bước nên chúng cộng dồn.\n- Learning rate quá lớn làm loss nhảy lung tung hoặc ra `NaN`.\n- Chỉ nhìn loss huấn luyện mà không theo dõi loss validation.\n\n### Tự kiểm tra\n1. Vì sao backprop hiệu quả hơn tính gradient từng trọng số riêng?\n2. Dấu hiệu nào cho thấy mạng đang overfit?\n3. Dropout làm gì khi huấn luyện?",
+  "lessons": [
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-1-1-nn-basics",
+    "ten": "1.1 — Cơ bản mạng nơ-ron",
+    "nguon": "Deep Learning · Module 1 — Mạng nơ-ron & học sâu",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/dpl302m-deep-learning/learn?lessonSlug=dpl302m-2-1-practical-optim",
+    "ten": "2.1 — Thực hành, regularization & tối ưu",
+    "nguon": "Deep Learning · Module 2 — Cải thiện DNN",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DPL302m"
+   },
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-3-1-bias-variance",
+    "ten": "M3.1 — Train/dev/test, bias & variance",
+    "nguon": "Machine Learning · Module 3 — Optimizing DNNs & TensorFlow",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   },
+   {
+    "href": "/courses/ail304m-machine-learning/learn?lessonSlug=ail304m-4-1-ml-strategy",
+    "ten": "M4.1 — ML strategy: phân tích lỗi & transfer learning",
+    "nguon": "Machine Learning · Module 4 — ML strategy",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "AIL304m"
+   }
+  ]
+ },
+ "MLOps & Thực hành › Kaggle (thực hành dataset thật)": {
+  "body": "Kaggle là nền tảng có dataset thật, cuộc thi và notebook cộng đồng. Nó là sân tập tốt vì bạn gặp dữ liệu bẩn, đặc trưng khó và bảng xếp hạng buộc bạn đánh giá nghiêm túc. Phần quan trọng hơn con số xếp hạng là thói quen làm việc bạn hình thành.\n\n### Cách tập luyện hiệu quả\n1. **Chọn cuộc thi/dataset vừa sức**: bắt đầu với bài dạng bảng cho người mới, rồi mới tới ảnh và văn bản.\n2. **Dựng baseline sớm**: mô hình đơn giản (hồi quy logistic, gradient boosting mặc định) để có mốc so sánh.\n3. **Thiết lập kiểm chứng chéo đáng tin**: điểm CV cục bộ phải tương quan với bảng xếp hạng; nếu không, dữ liệu kiểm tra có thể khác phân phối.\n4. **Cải thiện có hệ thống**: một thay đổi mỗi lần, ghi lại kết quả (đặc trưng mới, siêu tham số, ensemble).\n5. **Đọc lời giải của người thắng**: sau cuộc thi, các top thường mô tả chi tiết cách làm.\n\n### Ngoài Kaggle\nNhà tuyển dụng quan tâm tới **portfolio**: một dự án đầu-cuối với câu hỏi rõ ràng, làm sạch, EDA, mô hình, đánh giá trung thực và báo cáo dễ hiểu. Một dự án cá nhân với dữ liệu bạn tự thu thập hoặc dữ liệu mở thường nói lên nhiều hơn một vị trí xếp hạng.\n\n### Lỗi hay gặp\n- Chỉ chạy lại notebook của người khác mà không hiểu từng bước.\n- Tối ưu theo bảng xếp hạng công khai đến mức overfit (leaderboard overfitting).\n- Bỏ qua tính tái lập: không ghi seed, phiên bản thư viện, nguồn dữ liệu.\n- Dùng đặc trưng chứa thông tin của nhãn (rò rỉ) vì \"điểm cao\".\n\n### Lưu ý\nTrên web chưa có bài nào dạy riêng về Kaggle; các bài gợi ý là dự án đầu-cuối để bạn tập quy trình tương tự.\n\n### Tự kiểm tra\n1. Vì sao điểm CV cục bộ không tương quan với leaderboard là dấu hiệu cần điều tra?\n2. Một portfolio tốt có những phần nào?",
+  "lessons": [
+   {
+    "href": "/courses/ail303m-machine-learning/learn?lessonSlug=ail303m-5-1-capstone",
+    "ten": "5.1 — Mini Capstone: dự án ML đầu-cuối",
+    "nguon": "Machine Learning · Module 5 — Mini Capstone",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "AIL303m"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-12-2",
+    "ten": "12.2 — Dự án cuối khoá thu nhỏ, phần 1: đặt bài toán, làm sạch và khám phá dữ liệu giao hàng",
+    "nguon": "Data Science · Chương 12",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-ts-12-3",
+    "ten": "12.3 — Dự án cuối khoá thu nhỏ, phần 2: mô hình, đánh giá, diễn giải và báo cáo",
+    "nguon": "Data Science · Chương 12",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/dsp391m-data-science-capstone-project/learn?lessonSlug=dsp391m-6-1-eval",
+    "ten": "Giai đoạn 6 — Đánh giá, tinh chỉnh & so sánh",
+    "nguon": "Data Science - Capstone Project · Phase 6 — Evaluation & tuning",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSP391m"
+   }
+  ]
+ },
+ "MLOps & Thực hành › MLOps": {
+  "body": "MLOps là tập hợp thực hành để đưa mô hình học máy vào sản xuất và giữ cho nó chạy tốt: kết hợp ý tưởng DevOps với những vấn đề riêng của ML. Mô hình khác phần mềm thường ở chỗ hành vi của nó phụ thuộc vào dữ liệu, mà dữ liệu thay đổi.\n\n### Vòng đời\nDữ liệu, huấn luyện, đánh giá, triển khai, giám sát, rồi huấn luyện lại. Mỗi bước nên tự động và tái lập được.\n\n### Ý chính\n- **Phiên bản hoá**: mã (Git), dữ liệu (DVC hoặc tương tự), mô hình và môi trường, để biết kết quả nào ra từ đâu.\n- **Theo dõi thí nghiệm**: công cụ như MLflow ghi tham số, chỉ số, artifact của mỗi lần chạy để so sánh.\n- **Model registry**: kho quản lý phiên bản mô hình và trạng thái (staging, production).\n- **CI/CD cho ML**: kiểm thử mã, kiểm tra chất lượng dữ liệu và mô hình, triển khai tự động.\n- **Giám sát**: hiệu năng dịch vụ (độ trễ, lỗi) và chất lượng mô hình; **data drift** (phân phối đầu vào đổi) và **concept drift** (quan hệ đầu vào–nhãn đổi) làm mô hình xuống cấp âm thầm.\n- **Huấn luyện lại**: theo lịch, theo ngưỡng drift hoặc khi hiệu năng giảm.\n\n### Ví dụ ghi thí nghiệm\n```python\nimport mlflow\n\nwith mlflow.start_run():\n    mlflow.log_param(\"max_depth\", 6)\n    mlflow.log_metric(\"f1\", 0.82)\n```\n\n### Lỗi hay gặp\n- Lệch giữa lúc huấn luyện và lúc phục vụ (cùng đặc trưng nhưng tính hai kiểu khác nhau).\n- Không giám sát sau khi triển khai, nên mô hình sai đã lâu mới có người nhận ra.\n- Mô hình chạy được trong notebook nhưng không ai tái tạo được.",
+  "lessons": [
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-1-1-what-is-mlops",
+    "ten": "1.1 — MLOps là gì",
+    "nguon": "Machine learning operations · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-3-1-training-experiments",
+    "ten": "3.1 — Huấn luyện & thử nghiệm",
+    "nguon": "Machine learning operations · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-4-1-packaging-versioning",
+    "ten": "4.1 — Đóng gói & versioning mô hình",
+    "nguon": "Machine learning operations · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-6-1-cicd-for-ml",
+    "ten": "6.1 — CI/CD/CT cho ML",
+    "nguon": "Machine learning operations · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-7-1-monitoring",
+    "ten": "7.1 — Giám sát & vận hành",
+    "nguon": "Machine learning operations · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   }
+  ]
+ },
+ "MLOps & Thực hành › Triển khai mô hình (Model Deployment & Serving)": {
+  "body": "Một mô hình chỉ tạo giá trị khi người hoặc hệ thống khác dùng được nó. Triển khai là đóng gói mô hình rồi cho phép gọi dự đoán, phổ biến nhất qua một **REST API**.\n\n### Các kiểu phục vụ\n- **Theo lô (batch)**: chạy định kỳ trên nhiều dòng, ghi kết quả vào bảng; đơn giản và rẻ khi không cần tức thời.\n- **Trực tuyến (online)**: API trả lời từng yêu cầu trong vài chục đến vài trăm mili giây.\n- **Luồng (streaming)**: xử lý sự kiện liên tục.\n\n### Các bước cơ bản\n1. **Lưu mô hình cùng pipeline tiền xử lý** (ví dụ `joblib.dump`) và kèm metadata: phiên bản thư viện, ngày huấn luyện, chỉ số.\n2. **Dựng API** bằng FastAPI hoặc Flask, kiểm tra đầu vào chặt chẽ.\n3. **Đóng gói bằng Docker** để chạy giống nhau ở mọi máy.\n4. **Phát hành an toàn**: thử bóng (shadow), canary hoặc A/B, và có đường quay lui.\n5. **Giám sát** độ trễ, lỗi và chất lượng dự đoán.\n\n### Ví dụ FastAPI tối giản\n```python\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\nimport joblib\n\napp = FastAPI()\nmo_hinh = joblib.load(\"mo_hinh.joblib\")   # pipeline đã gồm tiền xử lý\n\nclass DauVao(BaseModel):\n    tuoi: float\n    thu_nhap: float\n\n@app.post(\"/du-doan\")\ndef du_doan(x: DauVao):\n    diem = mo_hinh.predict_proba([[x.tuoi, x.thu_nhap]])[0, 1]\n    return {\"xac_suat\": float(diem)}\n```\nChạy bằng `uvicorn main:app`.\n\n### Lỗi hay gặp\n- Tải lại mô hình ở mỗi yêu cầu thay vì một lần khi khởi động.\n- Tiền xử lý ở API khác với lúc huấn luyện.\n- Load tệp `pickle` từ nguồn không tin cậy, vì nó có thể chạy mã tuỳ ý khi mở.\n\n### Tự kiểm tra\n1. Khi nào chọn suy luận theo lô thay vì API trực tuyến?\n2. Vì sao nên lưu cả pipeline tiền xử lý cùng mô hình?\n3. Canary release giảm rủi ro thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-5-1-deployment",
+    "ten": "5.1 — Triển khai & phục vụ mô hình",
+    "nguon": "Machine learning operations · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/dsp391m-data-science-capstone-project/learn?lessonSlug=dsp391m-7-1-deploy",
+    "ten": "Giai đoạn 7 — Triển khai, MLOps & dashboard",
+    "nguon": "Data Science - Capstone Project · Phase 7 — Deployment & MLOps",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSP391m"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-flm-b041",
+    "ten": "📑 Buổi 41 — Chapter 9: REST API with Flask",
+    "nguon": "Python Web Development · FLM 9 · REST API with Flask (buổi 40–48)",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   }
+  ]
+ },
+ "MLOps & Thực hành › Nền tảng đám mây cho ML (Cloud Platforms for ML)": {
+  "body": "Production ML thường chạy trên đám mây vì cần tài nguyên co giãn: máy có GPU, lưu trữ lớn, dịch vụ điều phối. Bạn không cần học hết mọi nhà cung cấp; hãy nắm khái niệm chung rồi đào sâu một nền tảng (AWS SageMaker, Google Vertex AI hoặc Azure ML).\n\n### Các khái niệm chung\n- **Compute**: máy ảo (có thể gắn GPU), dịch vụ container, serverless cho việc nhẹ.\n- **Lưu trữ đối tượng** (S3, Cloud Storage, Blob): nơi chứa dữ liệu thô, dataset và mô hình.\n- **Dịch vụ ML được quản lý**: huấn luyện, điều chỉnh siêu tham số, registry, endpoint triển khai tự co giãn.\n- **Data lake và truy vấn**: dữ liệu để trên lưu trữ đối tượng, truy vấn bằng công cụ SQL phía trên.\n- **Quản lý quyền (IAM)**: nguyên tắc quyền tối thiểu.\n- **Chi phí**: GPU đắt; dùng máy spot cho việc chịu được gián đoạn, chọn đúng cỡ máy, **tắt tài nguyên khi không dùng**, đặt ngân sách cảnh báo.\n\n### Lỗi hay gặp\n- Quên tắt máy hay endpoint, nhận hoá đơn bất ngờ.\n- Để bucket chứa dữ liệu ở chế độ công khai.\n- Dùng khoá truy cập dài hạn trong code thay vì vai trò (role) có quyền hạn chế.",
+  "lessons": [
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-8-1-infra-governance",
+    "ten": "8.1 — Hạ tầng & quản trị",
+    "nguon": "Machine learning operations · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-5-1-datalake-exam",
+    "ten": "5.1 — Data lake & chiến lược thi",
+    "nguon": "Cloud Computing · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-1-1-what-is-cloud",
+    "ten": "1.1 — Điện toán đám mây là gì?",
+    "nguon": "Cloud Computing · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-4-1-compute-storage",
+    "ten": "4.1 — Điện toán & lưu trữ đám mây",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ }
+}

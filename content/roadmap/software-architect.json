@@ -1,0 +1,311 @@
+{
+ "Quản lý & Công cụ › Slack / Trello / Atlassian Tools": {
+  "body": "Kiến trúc sư không chỉ vẽ sơ đồ: phần lớn thời gian là phối hợp với nhiều người, và công cụ cộng tác quyết định việc phối hợp đó trơn tru hay thất lạc. Ba tên quen thuộc: **Slack** (nhắn tin theo kênh), **Trello** (bảng thẻ kiểu Kanban đơn giản) và **Atlassian** (Jira, Confluence, Bitbucket) cho theo dõi việc, tài liệu và mã nguồn.\n\n### Vì sao cần biết\n- Quyết định kiến trúc nằm rải rác trong chat, thẻ việc và tài liệu. Nếu không có nơi ghi lại, ba tháng sau không ai nhớ vì sao chọn phương án đó.\n- Người làm kiến trúc phải theo dõi phụ thuộc giữa các nhóm, rủi ro kỹ thuật và công việc nợ kỹ thuật (tech debt) trên cùng một bảng với các nhóm khác.\n- Hiểu một công cụ theo dõi việc thì học công cụ khác rất nhanh: khái niệm giống nhau (thẻ, cột, nhãn, người nhận việc, hạn).\n\n### Ý chính\n- **Slack**: chia kênh theo chủ đề hoặc nhóm (`#arch-decisions`, `#team-payments`), dùng thread để giữ cuộc thảo luận gọn, ghim hoặc đưa kết luận sang tài liệu chính thức. Chat là nơi bàn, không phải nơi lưu quyết định.\n- **Trello**: bảng gồm cột và thẻ; hợp nhóm nhỏ, quy trình đơn giản. Khi cần báo cáo, phụ thuộc, sprint nhiều đội thì người ta chuyển sang Jira.\n- **Atlassian**: Jira theo dõi issue/epic, Confluence viết tài liệu, Bitbucket lưu mã và review; các công cụ liên kết với nhau (thẻ Jira dẫn tới trang Confluence, commit gắn mã thẻ).\n- Thông báo bắn vào Slack khi có thẻ đổi trạng thái hoặc pull request mới giúp cả nhóm thấy luồng việc mà không phải mở từng công cụ.\n\n### Lỗi hay gặp\n- Quyết định quan trọng chỉ nằm trong một thread Slack rồi trôi mất.\n- Đặt quá nhiều kênh và thông báo khiến ai cũng tắt tiếng.\n- Mỗi nhóm dùng một bảng với quy ước khác nhau nên không tổng hợp được tiến độ.\n\n### Tự kiểm tra\n1. Quyết định kiến trúc nên được ghi ở đâu để người mới vào nhóm đọc được?\n2. Khi nào một bảng Trello đơn giản không còn đủ và nên chuyển sang công cụ như Jira?",
+  "lessons": [
+   {
+    "href": "/courses/huong-dan-ct-work/learn?lessonSlug=ctw-02-board-hang-ngay",
+    "ten": "Dùng Board mỗi ngày: kéo thẻ, lọc, nhóm theo người và epic",
+    "nguon": "CT Work Tutorial · Phần 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/huong-dan-ct-work/learn?lessonSlug=ctw-11-ai-agent-tich-hop",
+    "ten": "Nâng cao: Trợ lý AI, AI agent và kết nối GitHub, Slack, lịch",
+    "nguon": "CT Work Tutorial · Phần 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › Atlassian Tools (Jira, Confluence, Bitbucket)": {
+  "body": "Bộ ba của Atlassian phủ ba nhu cầu của một nhóm phần mềm: **Jira** theo dõi công việc, **Confluence** viết tài liệu tập trung, **Bitbucket** (hoặc GitHub) lưu mã nguồn và review.\n\nVới kiến trúc sư, điểm mạnh là khả năng **liên kết**: một quyết định kiến trúc có thể là một trang Confluence, mỗi hạng mục triển khai là một epic hoặc issue Jira trỏ về trang đó, và các pull request mang mã issue để lần ngược từ mã về lý do thiết kế.\n\n### Ý chính\n- **Jira**: epic, story, task, bug; backlog và sprint; trường tuỳ chỉnh; loại liên kết như \"blocks\", \"is blocked by\". Dùng nhãn hoặc loại issue riêng cho rủi ro và phụ thuộc kiến trúc để lọc nhanh bằng JQL.\n- **Confluence**: tài liệu kiến trúc, ADR, hướng dẫn onboarding; dùng template để mọi trang quyết định có cùng cấu trúc (bối cảnh, phương án, quyết định, hệ quả).\n- **Bitbucket/GitHub**: pull request, review bắt buộc, branch protection. Kiến trúc sư thường là reviewer cho các thay đổi chạm ranh giới module hoặc hợp đồng API.\n- Đặt quy ước: mã issue trong tên nhánh và message commit để các công cụ tự liên kết.\n\n### Lỗi hay gặp\n- Tài liệu Confluence viết một lần rồi không ai cập nhật; hãy gắn chủ sở hữu và ngày rà soát.\n- Biến Jira thành nơi chứa mọi thứ, backlog hàng nghìn issue không ai đọc.\n\nNếu chưa có tài khoản Atlassian, bạn vẫn luyện được tư duy này trên bất kỳ công cụ nào có bảng thẻ, tài liệu và liên kết thẻ-với-mã.",
+  "lessons": [
+   {
+    "href": "/courses/huong-dan-ct-work/learn?lessonSlug=ctw-06-backlog-sprint-timeline",
+    "ten": "Lập kế hoạch: Backlog, Sprint, Dòng thời gian và danh sách thẻ",
+    "nguon": "CT Work Tutorial · Phần 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/huong-dan-ct-work/learn?lessonSlug=ctw-07-docs-so-do-hop",
+    "ten": "Tài liệu, sơ đồ và cuộc họp: viết SRS, vẽ ERD, biên bản thành thẻ việc",
+    "nguon": "CT Work Tutorial · Phần 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-2-review",
+    "ten": "6.2 — Review: cho và nhận phản hồi",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › BABOK": {
+  "body": "**BABOK** (Business Analysis Body of Knowledge) là bộ khung kiến thức do IIBA (International Institute of Business Analysis) công bố, mô tả công việc của người phân tích nghiệp vụ (Business Analyst, BA). Nói đơn giản: nó là \"sách giáo khoa\" cho việc biến nhu cầu kinh doanh mơ hồ thành yêu cầu rõ ràng mà đội kỹ thuật làm được.\n\n### Vì sao kiến trúc sư cần biết\nKiến trúc tốt bắt đầu từ hiểu đúng vấn đề. Phần lớn dự án thất bại không vì chọn sai công nghệ mà vì xây đúng thứ không ai cần. BABOK cho bạn ngôn ngữ chung để làm việc với BA, product owner và các bên liên quan (stakeholder), và giúp phân biệt yêu cầu nghiệp vụ với yêu cầu giải pháp.\n\n### Ý chính\n- **Mô hình khái niệm cốt lõi** (BACCM) gồm sáu khái niệm: thay đổi (change), nhu cầu (need), giải pháp (solution), bên liên quan (stakeholder), giá trị (value), bối cảnh (context).\n- BABOK v3 chia công việc thành sáu **lĩnh vực kiến thức**: lập kế hoạch và giám sát phân tích nghiệp vụ; khai thác và cộng tác (elicitation); quản lý vòng đời yêu cầu; phân tích chiến lược; phân tích và định nghĩa thiết kế yêu cầu; đánh giá giải pháp.\n- Ngoài ra có phần **năng lực nền tảng** (tư duy phân tích, giao tiếp, tương tác với người khác) và các kỹ thuật cụ thể như phỏng vấn, workshop, phân tích quy tắc nghiệp vụ, mô hình hoá quy trình.\n- Yêu cầu có tầng: nghiệp vụ, bên liên quan, giải pháp (chức năng và phi chức năng) và chuyển giao; quản lý truy vết giữa các tầng.\n\n### Lỗi hay gặp\n- Nhảy ngay sang giải pháp (\"cần microservices\") trước khi nêu rõ nhu cầu.\n- Chỉ phỏng vấn người ra quyết định, bỏ qua người dùng thực tế.\n\n### Tự kiểm tra\n1. Khác nhau giữa yêu cầu nghiệp vụ và yêu cầu giải pháp là gì?\n2. Vì sao cần truy vết (traceability) từ yêu cầu tới thiết kế và kiểm thử?",
+  "lessons": [
+   {
+    "href": "/courses/software-requirements/learn?lessonSlug=swr302-4b-1-ch4-role-tasks",
+    "ten": "4B.1 — Slide: vai trò BA và mười nhiệm vụ của BA (Ch.4 · 1–15)",
+    "nguon": "Software Requirements · Chuyên viên phân tích nghiệp vụ — BA (Ch",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWR302"
+   },
+   {
+    "href": "/courses/software-requirements/learn?lessonSlug=swr302-4b-2-ch4-skills",
+    "ten": "4B.2 — Slide: mười bốn kỹ năng cốt lõi của analyst (Ch.4 · 16–30)",
+    "nguon": "Software Requirements · Chuyên viên phân tích nghiệp vụ — BA (Ch",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWR302"
+   },
+   {
+    "href": "/courses/software-requirements/learn?lessonSlug=swr302-5v-1-ch5-business-req-vision",
+    "ten": "5V.1 — Slide: business requirement & tầm nhìn (Ch.5 · 1–17)",
+    "nguon": "Software Requirements · Thiết lập yêu cầu nghiệp vụ — Vision & S",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWR302"
+   },
+   {
+    "href": "/courses/software-requirements/learn?lessonSlug=swr302-3-1-ky-thuat-elicitation",
+    "ten": "3.1 — Kỹ thuật khai thác: phỏng vấn, workshop, quan sát, bảng hỏi, prototype",
+    "nguon": "Software Requirements · Chương 3",
+    "kieu": "video",
+    "academy": true,
+    "ma": "SWR302"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › IAF": {
+  "body": "Hãy lưu ý trước: mô tả cũ của bước này ghi IAF là \"Intangible Assets Framework\", nhưng trong thế giới kiến trúc doanh nghiệp, **IAF** thường là **Integrated Architecture Framework** do Capgemini phát triển. Nếu gặp tên này trong tin tuyển dụng hoặc tài liệu kiến trúc, hầu như bạn đang đọc về khung kiến trúc đó.\n\nIAF là một khung phương pháp để xây kiến trúc doanh nghiệp (Enterprise Architecture, EA), tương tự TOGAF hay Zachman: nó giúp tổ chức mô tả hệ thống từ nhiều góc nhìn để chiến lược kinh doanh và công nghệ khớp nhau.\n\n### Ý chính\n- Khung nhìn kiến trúc thành các **khía cạnh** (kinh doanh, thông tin, hệ thống thông tin, hạ tầng công nghệ) và các **mức trừu tượng** (bối cảnh, khái niệm, logic, vật lý), kèm một lớp quản trị xuyên suốt.\n- Mục đích chung của mọi khung EA: bảo đảm quyết định kỹ thuật bám sát mục tiêu kinh doanh, và có chỗ ghi lại nguyên tắc, chuẩn, lộ trình.\n- Với kiến trúc sư phần mềm, giá trị thực tế là biết đặt hệ thống mình thiết kế vào bức tranh lớn của tổ chức, thay vì tối ưu cục bộ.\n\n### Lưu ý khi học\nĐây là chủ đề ở tầng doanh nghiệp, ít xuất hiện trong công việc hằng ngày của kiến trúc sư giải pháp. Nếu cần chọn một khung EA để đầu tư thời gian, TOGAF phổ biến hơn trong thị trường; hiểu IAF giúp bạn so sánh các khung với nhau. Hãy đối chiếu tài liệu chính thức của khung mà tổ chức bạn dùng để biết chi tiết."
+ },
+ "Quản lý & Công cụ › Quản lý": {
+  "body": "Khi lên vai trò kiến trúc sư, bạn thường **không có quyền quản lý trực tiếp** nhưng vẫn phải dẫn dắt nhiều nhóm. Kỹ năng quản lý ở đây nghĩa là lập kế hoạch, đặt mục tiêu, phát triển người và xử lý xung đột để định hướng kỹ thuật thật sự được thực hiện.\n\n### Ý chính\n- **Lập kế hoạch**: chia tầm nhìn kiến trúc thành các mốc nhỏ giao được, có thứ tự phụ thuộc rõ. Lộ trình dài hạn chỉ cần đủ chi tiết cho quý gần, phần xa để mở.\n- **Đặt mục tiêu**: OKR (Objectives and Key Results) gồm mục tiêu định tính và vài kết quả then chốt đo được, ví dụ giảm thời gian triển khai hoặc tỷ lệ lỗi. MBO (Management by Objectives) là cách tiếp cận cũ hơn, mục tiêu thoả thuận giữa cấp trên và nhân viên rồi đánh giá theo kết quả.\n- **Đánh giá và phản hồi**: phản hồi cụ thể, kịp thời, dựa trên hành vi quan sát được, không chờ tới cuối kỳ.\n- **Phát triển đội**: giao việc vừa quá sức một chút, kèm người hỗ trợ; cho junior cơ hội trình bày quyết định thiết kế của họ.\n- **Ảnh hưởng không cần quyền**: dùng dữ liệu, nguyên mẫu, ADR và lắng nghe mối quan tâm của từng nhóm thay vì ra lệnh.\n- **Xử lý xung đột kỹ thuật**: tách con người khỏi vấn đề, làm rõ tiêu chí quyết định (hiệu năng, chi phí, thời gian) rồi cùng đánh giá phương án.\n\n### Lỗi hay gặp\n- Làm kiến trúc sư \"tháp ngà\": ra chuẩn nhưng không ngồi cùng đội để hiểu ràng buộc thật.\n- Đặt OKR như danh sách việc phải làm thay vì kết quả cần đạt.\n\n### Tự kiểm tra\n1. Làm sao thuyết phục một đội không báo cáo cho bạn áp dụng một chuẩn mới?\n2. Một kết quả then chốt tốt khác một đầu việc ở điểm nào?"
+ },
+ "Quản lý & Công cụ › PMI": {
+  "body": "**PMI** (Project Management Institute) là tổ chức nghề nghiệp ban hành **PMBOK Guide** (Project Management Body of Knowledge) và chứng chỉ **PMP**. Đây là tiêu chuẩn quản lý dự án được dùng rộng rãi trên thế giới, đặc biệt trong dự án lớn, có hợp đồng và ngân sách chặt.\n\n### Vì sao kiến trúc sư cần biết\nKiến trúc nằm trong dự án: phạm vi, tiến độ, chi phí, rủi ro đều ràng buộc lựa chọn kỹ thuật. Hiểu ngôn ngữ của quản lý dự án giúp bạn nói chuyện với PM, ước lượng thực tế và giải trình đánh đổi.\n\n### Ý chính\n- **Năm nhóm quy trình** (PMBOK 6): khởi tạo, lập kế hoạch, thực thi, giám sát và kiểm soát, kết thúc.\n- **Mười lĩnh vực kiến thức**: tích hợp, phạm vi, tiến độ, chi phí, chất lượng, nguồn lực, truyền thông, rủi ro, mua sắm, bên liên quan.\n- PMBOK 7 (2021) đổi cách tiếp cận: thay quy trình bằng **nguyên tắc** và **lĩnh vực hiệu quả** (performance domains), nhấn mạnh giá trị và thích ứng, cho phép cả cách làm dự đoán lẫn agile.\n- Các khái niệm hay dùng: WBS (cấu trúc phân rã công việc), đường găng, sổ đăng ký rủi ro, quản lý thay đổi, bên liên quan.\n- Vòng đời dự án có thể **dự đoán** (waterfall), **lặp/tăng trưởng**, hoặc **agile**; chọn theo mức độ chắc chắn của yêu cầu.\n\n### Lỗi hay gặp\n- Hiểu PMBOK như quy trình bắt buộc; thực tế đó là tập hướng dẫn cần được điều chỉnh theo dự án.\n- Bỏ qua quản lý bên liên quan, trong khi đó là nguyên nhân thất bại phổ biến.\n\n### Tự kiểm tra\n1. Kể tên năm nhóm quy trình của PMBOK.\n2. Khi nào nên chọn vòng đời agile thay vì dự đoán?",
+  "lessons": [
+   {
+    "href": "/courses/spm401-security-project-management/learn?lessonSlug=spm401-1-1-lifecycle",
+    "ten": "1.1 — Quản lý dự án & vòng đời dự án an ninh",
+    "nguon": "Security Project Management · Chapter 1",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SPM401"
+   },
+   {
+    "href": "/courses/isp490-is-capstone-project/learn?lessonSlug=isp490-4-1-planning",
+    "ten": "Giai đoạn 4 — Lập kế hoạch & quản lý dự án",
+    "nguon": "IS Capstone Project · Phase 4 — Planning & management",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "ISP490"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › ITIL": {
+  "body": "**ITIL** (Information Technology Infrastructure Library) là bộ thực hành tốt nhất để quản lý dịch vụ CNTT. Phiên bản 4 chuyển trọng tâm từ \"quy trình\" sang **tạo giá trị** cho khách hàng thông qua dịch vụ.\n\n### Vì sao kiến trúc sư cần biết\nHệ thống bạn thiết kế rồi phải được vận hành, hỗ trợ, thay đổi và cải tiến. Các tổ chức lớn dùng ITIL làm ngôn ngữ chung giữa phát triển và vận hành (ví dụ sự cố, thay đổi, cấp phát, mức dịch vụ), nên bạn phải thiết kế để khớp với nó: có chỉ số giám sát, tài liệu vận hành, quy trình triển khai an toàn.\n\n### Ý chính\n- **Service Value System (SVS)**: gồm nguyên tắc chỉ đạo, quản trị, chuỗi giá trị dịch vụ, thực hành và cải tiến liên tục.\n- **Chuỗi giá trị dịch vụ** có sáu hoạt động: lập kế hoạch, cải tiến, tương tác, thiết kế và chuyển đổi, thu nhận/xây dựng, cung cấp và hỗ trợ.\n- **Bốn chiều** (Four Dimensions) cần xét cho mọi dịch vụ: tổ chức và con người; thông tin và công nghệ; đối tác và nhà cung cấp; luồng giá trị và quy trình.\n- Có **bảy nguyên tắc chỉ đạo** (như tập trung vào giá trị, bắt đầu từ nơi bạn đang đứng, tiến bộ lặp lại kèm phản hồi) và nhiều **thực hành** như quản lý sự cố, quản lý thay đổi, quản lý mức dịch vụ.\n\n### Lỗi hay gặp\n- Coi ITIL là thủ tục nặng nề thay vì chọn lọc những thực hành thật sự giúp dịch vụ.\n- Thiết kế hệ thống mà không tính đến cách vận hành, giám sát, sao lưu và xử lý sự cố.\n\n### Tự kiểm tra\n1. Bốn chiều của ITIL 4 là gì?\n2. Một thiết kế kiến trúc nên cung cấp gì để đội vận hành xử lý sự cố nhanh?"
+ },
+ "Quản lý & Công cụ › PRINCE2": {
+  "body": "**PRINCE2** (Projects IN Controlled Environments) là phương pháp quản lý dự án có cấu trúc, xuất phát từ Anh và phổ biến ở châu Âu, khu vực công và các tổ chức lớn. Điểm riêng của nó: kiểm soát theo **giai đoạn** và theo **ngoại lệ**, với vai trò và trách nhiệm xác định rõ.\n\n### Ý chính\n- **Bảy nguyên tắc**: biện minh kinh doanh liên tục, học từ kinh nghiệm, vai trò và trách nhiệm xác định, quản lý theo giai đoạn, quản lý theo ngoại lệ, tập trung vào sản phẩm, điều chỉnh cho phù hợp dự án.\n- **Bảy chủ đề**: business case, tổ chức, chất lượng, kế hoạch, rủi ro, thay đổi, tiến độ.\n- **Bảy quy trình**: khởi động dự án, chỉ đạo dự án, khởi tạo dự án, kiểm soát giai đoạn, quản lý chuyển giao sản phẩm, quản lý ranh giới giai đoạn, kết thúc dự án.\n- Quản lý theo ngoại lệ: ban chỉ đạo đặt ngưỡng dung sai (thời gian, chi phí, phạm vi); chỉ khi vượt ngưỡng mới báo lên cấp cao hơn.\n\n### Vì sao quan tâm\nKhi làm việc với khách hàng hoặc tổ chức dùng PRINCE2, bạn sẽ gặp các thuật ngữ trên và phải đưa tài liệu kiến trúc vào đúng giai đoạn (ví dụ kiến trúc mức cao ở khởi tạo, chi tiết ở giai đoạn thực thi). PRINCE2 có thể kết hợp với agile (PRINCE2 Agile).\n\n### Lưu ý\nĐây là nhánh tuỳ chọn: nếu tổ chức của bạn dùng PMBOK hoặc agile thuần thì chỉ cần nắm khái niệm."
+ },
+ "Quản lý & Công cụ › RUP": {
+  "body": "**RUP** (Rational Unified Process) là quy trình phát triển phần mềm lặp, ra đời từ Rational (sau là IBM), là một bản cụ thể của Unified Process. Ba đặc trưng nổi tiếng: **hướng use case**, **lấy kiến trúc làm trung tâm** và **lặp, tăng trưởng**.\n\n### Vì sao quan tâm\nRUP đặt kiến trúc ở vị trí hàng đầu: phải có một **kiến trúc nền tảng** chạy được từ sớm để giảm rủi ro kỹ thuật. Nhiều ý tưởng ngày nay như ADR, kiến trúc đi trước một bước và quản lý rủi ro sớm đều có gốc từ đây. Kruchten, một tác giả của RUP, cũng đề xuất mô hình **4+1 view** để mô tả kiến trúc.\n\n### Ý chính\n- **Bốn pha**: Inception (khởi đầu, xác định phạm vi và business case), Elaboration (làm rõ, xây kiến trúc nền, giải rủi ro lớn), Construction (xây dựng), Transition (chuyển giao).\n- **Các kỷ luật** (disciplines) chạy xuyên suốt các pha với tỷ trọng khác nhau: mô hình hoá nghiệp vụ, yêu cầu, phân tích và thiết kế, hiện thực, kiểm thử, triển khai, quản lý cấu hình, quản lý dự án, môi trường.\n- Mỗi pha gồm các vòng lặp ngắn, kết thúc bằng một cột mốc có tiêu chí đạt rõ ràng.\n- Quy trình mô tả **vai trò, hoạt động và artifact** (sản phẩm công việc).\n\n### Lưu ý\nRUP là khung có thể tuỳ biến; trong thực tế nhiều đội chỉ lấy một phần. Nó nặng hơn Scrum nhưng phù hợp dự án lớn, phức tạp.",
+  "lessons": [
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-slide-swd4-2",
+    "ten": "1.E — 📑 Học theo từng slide · Vòng đời (2): Unified Process, xác minh & thẩm định, kiểm thử (Chapter 3 của trường, slide 14–24)",
+    "nguon": "Software Architecture and Design · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWD392"
+   },
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-spiral-rup-prototype",
+    "ten": "2.2 — Spiral, RUP & Prototyping",
+    "nguon": "Introduction to Software Engineering · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-slide-cs1-2",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Lịch sử thiết kế (2/2): RUP, GoF, COMET, Agile, C4, ADR, học gì tiếp (slide 13–22)",
+    "nguon": "Software Architecture and Design · ⭐ Chuyên sâu — Từ sơ đồ tới code Spring",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWD392"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › LeSS": {
+  "body": "**LeSS** (Large-Scale Scrum) do Craig Larman và Bas Vodde đề xuất: thay vì thêm nhiều tầng quy trình, nó **mở rộng Scrum bằng cách giữ Scrum gần như nguyên vẹn** cho nhiều đội cùng làm một sản phẩm. Triết lý: \"ít hơn là nhiều hơn\" (less is more).\n\n### Ý chính\n- Nhiều đội chia sẻ **một Product Backlog, một Product Owner và một định nghĩa hoàn thành**, cùng hướng tới một sản phẩm có thể phát hành ở cuối mỗi Sprint.\n- Có hai cấu hình: **LeSS** (khoảng hai tới tám đội) và **LeSS Huge** (nhiều hơn, chia thành các lĩnh vực yêu cầu, mỗi lĩnh vực có Product Owner riêng).\n- Sprint Planning có phần chung giữa các đội, Sprint Review thường chung, và có thêm retrospective chung toàn bộ đội để giải quyết vấn đề xuyên đội.\n- Đội là **đội theo tính năng (feature team)** có thể làm việc xuyên suốt các thành phần, tránh đội theo tầng hay theo thành phần gây phụ thuộc chéo.\n\n### Vì sao quan tâm\nKiến trúc và tổ chức đội ảnh hưởng lẫn nhau (định luật Conway). LeSS nhấn mạnh chia sẻ mã và kiến trúc chung, tránh cấu trúc chia tách quá sớm. Bạn nên đọc Scrum trước, vì LeSS giả định đã nắm Scrum.\n\n### Lưu ý\nĐây là nhánh tuỳ chọn; các lựa chọn khác như SAFe cũng tồn tại. Kiến trúc sư cần biết khung đang dùng để biết mình tham gia ở buổi nào.",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-scrum-xp",
+    "ten": "4.1 — Scrum: vai trò, sprint & các buổi họp",
+    "nguon": "Introduction to Software Engineering · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › Kanban": {
+  "body": "**Kanban** là phương pháp quản lý luồng công việc, xuất phát từ hệ thống sản xuất của Toyota và được áp vào phát triển phần mềm. Khác Scrum, Kanban không có sprint cố định: công việc chảy liên tục qua các cột của bảng, và quan trọng nhất là **giới hạn công việc đang làm (WIP limit)**.\n\n### Vì sao cần biết\nLàm nhiều việc cùng lúc khiến mọi thứ chậm lại vì chuyển ngữ cảnh. Giới hạn WIP buộc nhóm hoàn thành việc đang làm trước khi nhận việc mới, làm lộ ra điểm nghẽn. Kiến trúc sư thấy ngay chỗ nào luồng giao hàng bị tắc: chờ review, chờ môi trường, chờ quyết định thiết kế.\n\n### Ý chính\n- **Sáu thực hành**: trực quan hoá công việc; giới hạn WIP; quản lý luồng; làm rõ chính sách; vòng phản hồi; cải tiến cộng tác theo khoa học.\n- **Chỉ số**: lead time (từ lúc yêu cầu đến khi giao), cycle time (từ lúc bắt đầu làm đến khi xong), throughput (số việc hoàn thành mỗi đơn vị thời gian). Theo định luật Little, WIP trung bình bằng throughput nhân thời gian trung bình, nên giảm WIP giúp giảm thời gian chờ.\n- Bảng thường có cột như Backlog, Đang làm, Review, Xong; mỗi cột có thể có giới hạn riêng.\n- Phù hợp việc ra đến liên tục như hỗ trợ, vận hành, sửa lỗi; Scrum phù hợp khi muốn nhịp giao hàng cố định.\n\n### Lỗi hay gặp\n- Có bảng nhưng không đặt giới hạn WIP, thành chỉ là danh sách việc.\n- Giới hạn quá cao nên không có tác dụng, hoặc né giới hạn bằng cách tạo thêm cột.\n- Không đo lead time nên không biết cải thiện có hiệu quả không.\n\n### Tự kiểm tra\n1. Vì sao giảm WIP có thể làm công việc xong nhanh hơn?\n2. Kanban khác Scrum ở những điểm chính nào?",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-kanban",
+    "ten": "5.1 — Bảng, giới hạn WIP & luồng liên tục",
+    "nguon": "Introduction to Software Engineering · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-xp-scrum-kanban",
+    "ten": "9.2 — Các cách tiếp cận Agile: thực hành chung, XP, Scrum và Kanban",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/huong-dan-ct-work/learn?lessonSlug=ctw-02-board-hang-ngay",
+    "ten": "Dùng Board mỗi ngày: kéo thẻ, lọc, nhóm theo người và epic",
+    "nguon": "CT Work Tutorial · Phần 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › Scrum": {
+  "body": "**Scrum** là khung làm việc agile phổ biến nhất. Nhóm giao sản phẩm theo các **Sprint** ngắn (tối đa một tháng), mỗi Sprint tạo ra một **Increment** dùng được, nhờ vậy nhận phản hồi sớm và điều chỉnh liên tục.\n\n### Vì sao cần biết\nHầu hết nhóm phần mềm đều dùng Scrum hoặc biến thể. Kiến trúc sư phải biết khi nào đưa quyết định thiết kế vào backlog, cách trình bày công việc kỹ thuật (spike, nợ kỹ thuật) để product owner ưu tiên, và cách kiến trúc \"xuất hiện dần\" qua các sprint thay vì thiết kế hết trước.\n\n### Ý chính (theo Scrum Guide 2020)\n- **Scrum Team** gồm Product Owner (tối đa hoá giá trị, sở hữu Product Backlog), Scrum Master (giúp nhóm áp dụng Scrum và gỡ cản trở) và Developers.\n- **Năm sự kiện**: Sprint (khung chứa tất cả), Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospective.\n- **Ba artifact**: Product Backlog (kèm Product Goal), Sprint Backlog (kèm Sprint Goal), Increment (kèm Definition of Done).\n- Định nghĩa hoàn thành (DoD) là cam kết chất lượng chung; có thể đưa vào đó các tiêu chí kiến trúc như tuân thủ chuẩn, có test, có giám sát.\n\n### Lỗi hay gặp\n- \"Scrum-but\": giữ tên sự kiện nhưng bỏ nội dung như không retrospective, không làm Increment thật sự.\n- Xem kiến trúc là giai đoạn riêng trước sprint 1, hoặc ngược lại, bỏ qua hoàn toàn nên nợ kỹ thuật chồng chất.\n- Product Owner không có thẩm quyền quyết định nên backlog thành danh sách yêu cầu từ nhiều phía.\n\n### Tự kiểm tra\n1. Liệt kê vai trò, sự kiện và artifact của Scrum.\n2. Một nhiệm vụ kiến trúc lớn nên được chia và đưa vào các sprint như thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-scrum-xp",
+    "ten": "4.1 — Scrum: vai trò, sprint & các buổi họp",
+    "nguon": "Introduction to Software Engineering · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-agile",
+    "ten": "3.1 — Agile Manifesto & tư duy",
+    "nguon": "Introduction to Software Engineering · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/huong-dan-ct-work/learn?lessonSlug=ctw-06-backlog-sprint-timeline",
+    "ten": "Lập kế hoạch: Backlog, Sprint, Dòng thời gian và danh sách thẻ",
+    "nguon": "CT Work Tutorial · Phần 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/spm401-security-project-management/learn?lessonSlug=spm401-8-1-closing-agile",
+    "ten": "8.1 — Kết thúc, bài học kinh nghiệm & Agile/Scrum",
+    "nguon": "Security Project Management · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SPM401"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › XP": {
+  "body": "**XP** (Extreme Programming) là phương pháp agile tập trung vào **thực hành kỹ thuật** để giữ chất lượng mã cao khi thay đổi liên tục. Nếu Scrum quản lý cách nhóm làm việc, XP quản lý cách viết phần mềm.\n\n### Vì sao quan tâm\nKiến trúc tốt bền nhờ mã dễ thay đổi. XP cho các thực hành giúp kiến trúc \"tiến hoá\" an toàn: test tự động, refactor thường xuyên, tích hợp liên tục.\n\n### Ý chính\n- **Giá trị**: giao tiếp, đơn giản, phản hồi, can đảm, tôn trọng.\n- **Thực hành chính**: Pair Programming (hai người một máy), TDD (viết test trước), Refactoring (cải tiến cấu trúc mà không đổi hành vi), Simple Design (làm vừa đủ cho yêu cầu hiện tại), Continuous Integration, small releases, sở hữu mã tập thể, Planning Game, tiêu chuẩn viết mã.\n- TDD theo chu trình đỏ (test fail) - xanh (làm cho pass) - refactor.\n\n```java\n// Đỏ: viết test trước khi có phần cài đặt\n@Test void tinhPhi_donHangTren500k_mienPhi() {\n    assertEquals(0, new TinhPhiVanChuyen().tinh(600_000));\n}\n```\n\n### Lỗi hay gặp\n- Viết test sau cùng nên test chỉ xác nhận mã sẵn có.\n- Hiểu \"thiết kế đơn giản\" là không thiết kế gì; XP vẫn cần kiến trúc, chỉ không xây thứ chưa cần (YAGNI).\n- Refactor mà không có test bảo vệ.",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-scrum-xp",
+    "ten": "4.1 — Scrum: vai trò, sprint & các buổi họp",
+    "nguon": "Introduction to Software Engineering · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-agile-xp-scrum-kanban",
+    "ten": "9.2 — Các cách tiếp cận Agile: thực hành chung, XP, Scrum và Kanban",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-1-tdd",
+    "ten": "10.1 — TDD trong thực tế: đỏ, xanh, refactor",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › Technical Consulting — Tư vấn kỹ thuật": {
+  "body": "**Technical Consulting** là khả năng nhận một vấn đề kỹ thuật chưa rõ ràng, phân tích, so sánh phương án và đưa ra **khuyến nghị** mà các bên liên quan hiểu và hành động được. Kiến trúc sư làm việc này mỗi ngày, dù với đội nội bộ hay khách hàng.\n\n### Các bước cốt lõi\n1. **Làm rõ vấn đề và ràng buộc**: mục tiêu kinh doanh, ngân sách, thời gian, năng lực đội, hệ thống sẵn có.\n2. **Nêu tiêu chí đánh giá** trước khi so sánh (hiệu năng, chi phí, rủi ro, độ phức tạp vận hành), có trọng số nếu cần.\n3. **Liệt kê phương án**, kể cả \"không làm gì\" và phương án đơn giản nhất.\n4. **Phân tích ưu nhược điểm và đánh đổi** (trade-off) của từng phương án; dùng dữ liệu, nguyên mẫu hoặc kinh nghiệm để minh hoạ.\n5. **Đưa khuyến nghị** rõ ràng cùng lý do, rủi ro còn lại và kế hoạch giảm rủi ro.\n\n### Truyền đạt\n- Mở đầu bằng kết luận rồi mới giải thích (cho người quản lý), kèm chi tiết cho người kỹ thuật.\n- Ghi lại thành ADR hoặc tài liệu ngắn để quyết định có thể tra lại.\n\n### Lỗi hay gặp\n- Chỉ trình bày phương án mình thích; người nghe không tin khi không thấy phương án khác được xét công bằng.\n- Dùng thuật ngữ nặng với người không kỹ thuật.\n- Khuyến nghị không gắn với bối cảnh của khách hàng, chỉ nói \"best practice\"."
+ },
+ "Quản lý & Công cụ › Coaching & Pair Programming": {
+  "body": "Kiến trúc sư nhân bội năng lực của đội bằng cách **dạy người khác** chứ không chỉ tự mình thiết kế. Ba phương tiện chính: mentor kèm cặp, pair programming và review code.\n\n### Ý chính\n- **Mentoring**: gặp định kỳ một-một, đặt mục tiêu phát triển, giao việc có độ khó vừa phải rồi hỗ trợ. Hỏi để người học tự tìm ra đáp án thay vì đưa luôn lời giải.\n- **Pair programming**: hai người cùng làm một việc, một người \"lái\" (gõ), một người \"điều hướng\" (nghĩ hướng đi). Hiệu quả để truyền ngữ cảnh, giảm lỗi và lan toả chuẩn mã; nên đổi vai thường xuyên.\n- **Code review**: góc nhìn kiến trúc tập trung vào ranh giới module, hợp đồng, xử lý lỗi và khả năng thay đổi. Nhận xét có thang mức (bắt buộc sửa, gợi ý, ý kiến), giọng văn tôn trọng.\n- **Brown-bag session**: buổi chia sẻ ngắn, không hình thức, trong giờ nghỉ trưa, về một chủ đề kỹ thuật hoặc bài học sau sự cố.\n\n### Lỗi hay gặp\n- Làm hộ thay vì hướng dẫn, khiến đội phụ thuộc vào bạn.\n- Review chỉ chú ý kiểu mã, bỏ qua vấn đề thiết kế.\n- Phản hồi công khai theo cách làm người khác xấu hổ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-2-review",
+    "ten": "6.2 — Review: cho và nhận phản hồi",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/introduction-to-software-engineering/learn?lessonSlug=swe201c-scrum-xp",
+    "ten": "4.1 — Scrum: vai trò, sprint & các buổi họp",
+    "nguon": "Introduction to Software Engineering · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE201c"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › Technical Personal Branding": {
+  "body": "**Personal branding kỹ thuật** là cách bạn được biết đến vì chuyên môn của mình: người khác nhớ tên bạn gắn với một lĩnh vực cụ thể. Với kiến trúc sư, đây là cách mở rộng ảnh hưởng ngoài đội của mình và thu hút cơ hội nghề nghiệp.\n\n### Ý chính\n- **Chọn vài trụ cột** (ví dụ kiến trúc hướng sự kiện, hệ thống phân tán, quản trị nợ kỹ thuật) thay vì viết mọi thứ.\n- **Viết blog hoặc bài ngắn** kể bài học thật từ dự án: bối cảnh, lựa chọn, hệ quả. Bài dựa trên kinh nghiệm thực có giá trị hơn bài tóm tắt tài liệu. Không tiết lộ thông tin mật của công ty.\n- **Thuyết trình** tại meetup, hội nghị hoặc buổi nội bộ; bắt đầu bằng buổi nhỏ để luyện.\n- **Hiện diện nhất quán**: cùng tên, ảnh, mô tả ngắn trên GitHub, LinkedIn và blog; một nơi trung tâm (website cá nhân) chứa các nơi khác.\n- **Đóng góp mã nguồn mở** hoặc tài liệu: hồ sơ GitHub có README rõ ràng và dự án ghim là một dạng CV.\n\n### Lỗi hay gặp\n- Đăng đều nhưng không có góc nhìn riêng.\n- Chạy theo số lượt xem thay vì xây uy tín lâu dài.\n- Trình bày kết luận quá chắc chắn khi chưa đủ bằng chứng; uy tín đến từ độ chính xác.",
+  "lessons": [
+   {
+    "href": "/courses/content-creator/learn?lessonSlug=cr-01-4-thuong-hieu-ca-nhan",
+    "ten": "1.4 — Thương hiệu cá nhân: trụ cột, nhận diện, và website làm trung tâm",
+    "nguon": "Content Creator: Quay, Dựng & Đăng Video · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-1-ho-so-github",
+    "ten": "15.1 — Hồ sơ GitHub như một CV: profile README, repo ghim & README dự án",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Quản lý & Công cụ › Technical Writing": {
+  "body": "**Technical Writing** là viết tài liệu kỹ thuật sao cho người đọc hiểu và hành động được: design document, ADR (Architecture Decision Record), RFC, README, hướng dẫn vận hành. Với kiến trúc sư, tài liệu là cách để quyết định tồn tại lâu hơn cuộc họp.\n\n### Ý chính\n- **Biết người đọc và mục đích**: người ra quyết định cần tóm tắt và đánh đổi; người cài đặt cần chi tiết; người vận hành cần bước làm và cách xử lý sự cố.\n- **Cấu trúc**: tóm tắt đầu trang, bối cảnh/vấn đề, phương án đã xét, quyết định, hệ quả, câu hỏi còn mở.\n- **ADR** ghi một quyết định kiến trúc trong một trang: tiêu đề, trạng thái (đề xuất/chấp nhận/thay thế), bối cảnh, quyết định, hệ quả. Lưu cùng mã nguồn để theo dõi lịch sử.\n- **Phong cách**: câu ngắn, chủ động, mỗi đoạn một ý, thuật ngữ nhất quán, dùng sơ đồ (như C4) khi mô tả cấu trúc, và ví dụ cụ thể.\n- Với yêu cầu, dùng từ có nghĩa chính xác (ví dụ \"shall\") và mỗi yêu cầu một câu kiểm chứng được.\n\n```markdown\n# ADR-007: Dùng PostgreSQL cho dịch vụ đơn hàng\nTrạng thái: Chấp nhận\nBối cảnh: cần giao dịch ACID và truy vấn quan hệ.\nQuyết định: chọn PostgreSQL thay vì MongoDB.\nHệ quả: tốn công thiết kế schema, đổi lại nhất quán dữ liệu.\n```\n\n### Lỗi hay gặp\n- Tài liệu quá dài, không có tóm tắt.\n- Không nêu phương án đã loại nên người sau tranh luận lại từ đầu.\n- Viết xong không cập nhật; hãy gắn tài liệu vào quy trình thay đổi.",
+  "lessons": [
+   {
+    "href": "/courses/se-gra-ele-graduation-elective-software-engineering/learn?lessonSlug=se-gra-ele-7-1-bao-cao-ky-thuat",
+    "ten": "7.1 — Viết báo cáo & tài liệu kỹ thuật",
+    "nguon": "Graduation Elective - Software Engineering · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SE_GRA_ELE"
+   },
+   {
+    "href": "/courses/software-requirements/learn?lessonSlug=swr302-5-5-ch11-writing",
+    "ten": "5.5 — Slide: hướng dẫn viết yêu cầu (Ch.11 · 12–20)",
+    "nguon": "Software Requirements · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWR302"
+   },
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-slide-cs1-2",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Lịch sử thiết kế (2/2): RUP, GoF, COMET, Agile, C4, ADR, học gì tiếp (slide 13–22)",
+    "nguon": "Software Architecture and Design · ⭐ Chuyên sâu — Từ sơ đồ tới code Spring",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWD392"
+   }
+  ]
+ }
+}

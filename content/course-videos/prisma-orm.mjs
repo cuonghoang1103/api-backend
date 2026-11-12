@@ -38,16 +38,16 @@ export default {
 
     /* ── Chương 2 — Ngôn ngữ lược đồ ── */
     'pr-2-1-model-va-kieu': { yt: 'gT2KNOIDHoI', credit: 'GiraffeReactor — Prisma Tutorial for Beginners #2 - Creating Our First Schema', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-01-model-va-kieu-59ada316.mp4' }, defaultVideoTrack: 'VI'},      // Prisma Tutorial for Beginners #2 - Creating Our First Schema
-    'pr-2-2-thuoc-tinh-truong': { yt: 'eKY4lCDZP2I', credit: 'Holodeck — Create a Prisma Schema' },  // Create a Prisma Schema
-    'pr-2-3-thuoc-tinh-khoi': { yt: 'zS_vJgRPYo8', credit: 'Prisma — Using Multiple Prisma Schema Files' },    // Using Multiple Prisma Schema Files
-    'pr-2-4-native-type': { yt: '6clK-CAsFus', credit: 'Mehul Kundu | That Product Dude — Prisma Schema Builder' },        // Prisma Schema Builder
-    'pr-2-5-kieu-kho-chiu': { yt: 'gcpcxMxJ1AQ', credit: 'Prisma — Working with JSON Fields in Prisma ORM' },      // Working with JSON Fields in Prisma ORM
+    'pr-2-2-thuoc-tinh-truong': { yt: 'eKY4lCDZP2I', credit: 'Holodeck — Create a Prisma Schema', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-02-thuoc-tinh-truong-d085ff9e.mp4' }, defaultVideoTrack: 'VI'},  // Create a Prisma Schema
+    'pr-2-3-thuoc-tinh-khoi': { yt: 'zS_vJgRPYo8', credit: 'Prisma — Using Multiple Prisma Schema Files', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-03-thuoc-tinh-khoi-948b3803.mp4' }, defaultVideoTrack: 'VI'},    // Using Multiple Prisma Schema Files
+    'pr-2-4-native-type': { yt: '6clK-CAsFus', credit: 'Mehul Kundu | That Product Dude — Prisma Schema Builder', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-04-native-type-38cbc143.mp4' }, defaultVideoTrack: 'VI'},        // Prisma Schema Builder
+    'pr-2-5-kieu-kho-chiu': { yt: 'gcpcxMxJ1AQ', credit: 'Prisma — Working with JSON Fields in Prisma ORM', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/02-ngon-ngu-luoc-do/02-05-kieu-kho-chiu-67cb6076.mp4' }, defaultVideoTrack: 'VI'},      // Working with JSON Fields in Prisma ORM
 
     /* ── Chương 3 — Quan hệ ── */
-    'pr-3-1-hai-phia': { yt: 'phixQBZNZwU', credit: 'TomDoesTech — Learn Prisma Relationships (1-1, 1-m, m-m)' },     // Learn Prisma Relationships (1-1, 1-m, m-m)
-    'pr-3-2-mot-nhieu': { yt: '-Nv3wSm0Ac0', credit: 'Prisma — How to Use Cascading Deletes' },    // How to Use Cascading Deletes
-    'pr-3-3-mot-mot': { yt: '9CrK_sZyW8E', credit: 'Ben Awad — 1 to 1 Associations in Prisma' },      // 1 to 1 Associations in Prisma
-    'pr-3-4-nhieu-nhieu': { yt: '_FxMevXW2XI', credit: 'Evoqys — Many to Many Relation in Prisma' },  // Many to Many Relation in Prisma
+    'pr-3-1-hai-phia': { yt: 'phixQBZNZwU', credit: 'TomDoesTech — Learn Prisma Relationships (1-1, 1-m, m-m)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-01-hai-phia-df524a54.mp4' }, defaultVideoTrack: 'VI'},     // Learn Prisma Relationships (1-1, 1-m, m-m)
+    'pr-3-2-mot-nhieu': { yt: '-Nv3wSm0Ac0', credit: 'Prisma — How to Use Cascading Deletes', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-02-mot-nhieu-16c44ea9.mp4' }, defaultVideoTrack: 'VI'},    // How to Use Cascading Deletes
+    'pr-3-3-mot-mot': { yt: '9CrK_sZyW8E', credit: 'Ben Awad — 1 to 1 Associations in Prisma', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-03-mot-mot-f1ca7c3f.mp4' }, defaultVideoTrack: 'VI'},      // 1 to 1 Associations in Prisma
+    'pr-3-4-nhieu-nhieu': { yt: '_FxMevXW2XI', credit: 'Evoqys — Many to Many Relation in Prisma', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-04-nhieu-nhieu-a66bb6c7.mp4' }, defaultVideoTrack: 'VI'},  // Many to Many Relation in Prisma
     'pr-3-5-tu-quan-he': { yt: 'fpBYj55-zd8', credit: 'Prisma — How to model relationships (1-1, 1-m, m-m)' },   // How to model relationships (1-1, 1-m, m-m)
 
     /* ── Chương 4 — Đọc và ghi ── */

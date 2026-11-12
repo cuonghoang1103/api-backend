@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 12.5 Giờ bạn biết gì, và đi tiếp về đâu (deck pr-12-5, 9 slide). VI = lời giảng video prisma-12-5; EN viết riêng. */
+import { walkPr } from '../_slides.mjs';
+
+export default walkPr('pr-12-5', "What you know now, and where to go next", "Giờ bạn biết gì, và đi tiếp về đâu", [
+  [1, "What you know now, and where to go next",
+    "<p>Lesson 12.5 closes the Prisma ORM course: what you know now, six ideas worth keeping, one project to prove it, and where to go next.</p>",
+    "<p>Đây là bài 12.5: giờ bạn biết gì, và đi tiếp về đâu.</p>"],
+  [2, "The course, in four arcs",
+    "<p>The course in four arcs: model it (why an ORM, the schema language, relations); use it (reading, writing, querying); keep data safe (migrations, transactions, generated types); and run it (performance, escape hatches, production, diagnosis). Every section ended in something you ran.</p>",
+    "<p>Khoá học đi qua bốn chặng. Mô hình hoá: vì sao cần ORM, ngôn ngữ schema, quan hệ. Sử dụng: đọc, ghi, truy vấn sâu. Giữ dữ liệu an toàn: migration, giao dịch, hệ kiểu sinh ra. Và vận hành: hiệu năng, cửa thoát hiểm, production, chẩn đoán. Mục nào cũng kết thúc bằng thứ bạn đã chạy thật.</p>"],
+  [3, "Six ideas worth keeping when the syntax changes",
+    "<p>Six ideas that survive syntax changes: Prisma writes SQL, so read the SQL; the schema is the source of truth and it is checked; migrations are append-only history; deploys have a window, not an instant; measure before changing anything; a green build is not a runnable image.</p>",
+    "<p>Sáu ý vẫn đúng khi cú pháp đổi. Prisma viết SQL, nên hãy đọc SQL. Schema là nguồn sự thật, và nó được kiểm. Migration là lịch sử chỉ ghi thêm. Deploy có một cửa sổ, không phải một khoảnh khắc. Đo trước khi đổi bất cứ thứ gì. Và build xanh chưa phải là ảnh chạy được.</p>"],
+  [4, "Numbers this course measured",
+    "<p>Numbers this course measured: 44 queries for one N+1 feed page; a default pool of 21; seven minutes of 502 from an engine for the wrong platform; an 'instant' ALTER waiting 9 seconds; a killed backfill continuing without redoing rows; Node as PID 1 exiting 137; P1017 arriving before P1001.</p>",
+    "<p>Vài con số khoá học đã đo thật. Một trang feed N+1: bốn mươi tư truy vấn. Pool mặc định trên máy lab: hai mươi mốt kết nối. Engine sai nền: bảy phút lỗi năm trăm lẻ hai. Câu ALTER tức thì chờ chín giây. Nạp bù bị giết vẫn tiếp được. Node làm PID 1 thì chết với mã 137. Và P1017 đến trước P1001.</p>"],
+  [5, "Prove it to yourself: one project, six milestones",
+    "<p>The project, in six milestones: a schema with three relation kinds; a feed with no N+1; one transaction, written racy first; one thing the builder cannot say, in typed raw SQL; a column rename across three deploys; and a Dockerfile verified by awaiting a query inside the image.</p>",
+    "<p>Tự chứng minh bằng một dự án sáu mốc. Một: schema có ba kiểu quan hệ. Hai: endpoint feed không N+1. Ba: một việc cần giao dịch, viết bản lỗi trước. Bốn: một việc builder không nói được, viết bằng SQL thô có kiểu. Năm: đổi tên cột qua ba lần deploy. Sáu: một Dockerfile đã kiểm, chờ được một truy vấn ngay trong ảnh.</p>"],
+  [6, "What \"done\" looks like for each milestone",
+    "<p>Each milestone is done when a test or a log proves it, after one deliberate failure, with a README recording the numbers, machine and version. The Code Lab track has exercises for every chapter.</p>",
+    "<p>Mỗi mốc xong khi có một bài test hay một dòng log, không phải một lời khẳng định. Mỗi mốc cố tình làm hỏng một lần, đọc lỗi, rồi sửa. README ghi lại số đo, máy và phiên bản. Và Code Lab của khoá có bài tập cho từng chương.</p>"],
+  [7, "Where to go next",
+    "<p>Where next: PostgreSQL for indexes, locks and monitoring; Redis for caching what you measured; Docker for images and deploys; Node.js for deploys without downtime; TypeScript for the types under Chapter 8; API Design for what your endpoints promise.</p>",
+    "<p>Đi tiếp: khoá PostgreSQL cho chỉ mục, khoá và giám sát. Khoá Redis để cache những gì bạn đã đo. Khoá Docker cho ảnh và deploy. Khoá Node.js cho deploy không gián đoạn. Khoá TypeScript cho hệ kiểu dưới Chương 8, và khoá API Design cho những gì endpoint hứa.</p>"],
+  [8, "Before you go: the final exam",
+    "<p>Before you go: Lesson 12.6 is the final exam over all thirteen sections. The exam checks ideas and the project checks hands — take the exam now, then build the project one milestone at a time.</p>",
+    "<p>Trước khi đi: bài 12.6 là bài thi cuối khoá, phủ toàn bộ mười ba mục. Bài thi kiểm ý tưởng, còn dự án kiểm đôi tay. Làm bài thi ngay khi kiến thức còn mới. Phòng thi còn có đề luyện PT, PE và FE riêng cho khoá này. Rồi xây dự án trong vài tuần tới, mỗi lần một mốc.</p>"],
+  [9, "Thank you — and what to keep",
+    "<p>Thank you for finishing the course. Read the SQL, trust the schema, treat migrations as history, plan for the deploy window, measure first, verify the image — then take the 12.6 exam, build the project, and continue with PostgreSQL or Docker.</p>",
+    "<p>Cảm ơn bạn đã đi hết khoá Prisma ORM. Đọc SQL. Tin schema, đừng chép kiểu của nó. Coi migration là lịch sử. Tính tới cửa sổ deploy. Đo trước khi đổi. Kiểm cái ảnh. Làm bài thi 12.6, xây dự án sáu mốc, rồi đi tiếp với khoá PostgreSQL hay Docker. Bạn bấm liên kết dưới video để vào bài thi cuối khoá và Code Lab. Hẹn gặp lại ở khoá tiếp theo.</p>"],
+]);

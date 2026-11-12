@@ -51,78 +51,69 @@ const user = await prisma.$queryRawUnsafe(
 </div>
 
 <h3>What each one actually sends</h3>
-<pre><code class="language-sql"><span class="tok-comment">// Log the SQL to see it (Lesson 9.1's $on('query'))</span>
-await prisma.$queryRaw&#96;SELECT * FROM "User" WHERE email = \${'a@b.com'} AND "isActive" = \${true}&#96;;</code></pre>
-<div class="out">prisma:query SELECT * FROM "User" WHERE email = $1 AND "isActive" = $2
-prisma:query params: ["a@b.com", true]</div>
-<pre><code class="language-javascript">const n = await prisma.$executeRaw&#96;
-  UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = \${userId}&#96;;
-console.log(n);</code></pre>
-<div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = $1
-14</div>
+<pre><code class="language-javascript">await prisma.$queryRaw&#96;SELECT id, username FROM users WHERE email = \${'u1@vd.vn'} AND deleted_at IS NULL&#96;;
+const n = await prisma.$executeRaw&#96;UPDATE posts SET deleted_at = now() WHERE author_id = \${7}&#96;;
+const x = await prisma.$executeRaw&#96;SELECT id FROM users WHERE id &lt;= \${3}&#96;;</code></pre>
+<div class="out">prisma:query SELECT id, username FROM users WHERE email = $1 AND deleted_at IS NULL
+prisma:query params: ["u1@vd.vn"]
+prisma:query UPDATE posts SET deleted_at = now() WHERE author_id = $1
+prisma:query params: [7]
+$executeRaw UPDATE tra ve: 50
+prisma:query SELECT id FROM users WHERE id &lt;= $1
+prisma:query params: [3]
+$executeRaw SELECT tra ve: 3 (mot con so, khong phai hang)</div>
 <div class="pitfall">
-<p><strong>Trap — <code>$executeRaw</code> returns a count, and people <code>await</code> it expecting rows.</strong> <code>const rows = await prisma.$executeRaw&#96;SELECT …&#96;</code> compiles, runs, and hands you the number <code>0</code> — because <code>SELECT</code> affects no rows. The type is <code>Promise&lt;number&gt;</code>, so TypeScript will complain the moment you index it; if you wrote <code>any</code> anywhere upstream, it fails silently at runtime instead. <code>SELECT</code> is always <code>$queryRaw</code>.</p>
+<p><strong>Trap — <code>$executeRaw</code> returns a number, whatever the statement.</strong> For the SELECT it returned 3 — the row count, not the rows (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3, 2,000 users and 100,000 posts). <code>const rows = await prisma.$executeRaw&#96;SELECT …&#96;</code> compiles, runs and hands you a number.</p>
 </div>
 
 <h3>The attack, run for real</h3>
-<pre><code class="language-sql"><span class="tok-comment">// A "search by email" endpoint, written the unsafe way</span>
-app.get('/search', async (req, res) =&gt; {
-  const rows = await prisma.$queryRawUnsafe(
-    &#96;SELECT id, username FROM "User" WHERE email = '\${req.query.email}'&#96;
-  );
-  res.json(rows);
-});</code></pre>
-<pre><code class="language-bash"><span class="tok-comment"># Normal use</span>
-curl "localhost:3000/tim?email=an@vidu.com"</code></pre>
-<div class="out">[{"id":"clx7…","username":"an"}]</div>
-<pre><code class="language-bash"><span class="tok-comment"># The same endpoint, with a quote in the value</span>
-curl --get "localhost:3000/tim" --data-urlencode "email=x' OR 1=1 --"</code></pre>
-<div class="out">[{"id":"clx7…","username":"an"},
- {"id":"clx8…","username":"binh"},
- {"id":"clx9…","username":"admin"},
- … 12,847 rows …]</div>
-<pre><code class="language-sql"><span class="tok-comment"># And the SQL that actually ran</span>
-SELECT id, username FROM "User" WHERE email = 'x' OR 1=1 --'</code></pre>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The quote closes the literal</span><span class="lz-d"><code>'x'</code> ends where the attacker's own quote ends it, and everything after is parsed as SQL, not as data.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>OR 1=1</code> makes the filter useless</span><span class="lz-d">Every row matches. The endpoint that returns one user now returns the table.</span></div>
-  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>--</code> hides the wreckage</span><span class="lz-d">The trailing quote that would have been a syntax error is now a comment. The query is valid SQL, so there is no error in the log — just a very large response.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">The same input against <code>$queryRaw</code></span><span class="lz-d">Returns <code>[]</code>. There is no user whose email is literally the string <code>x' OR 1=1 --</code>, and that is the only question the parameterised query ever asks.</span></div>
+<pre><code class="language-javascript">const timUnsafe = (email: string) =&gt;
+  prisma.$queryRawUnsafe(&#96;SELECT id, username FROM users WHERE email = '\${email}'&#96;);   <span class="tok-comment">// danger</span>
+const timSafe = (email: string) =&gt;
+  prisma.$queryRaw&#96;SELECT id, username FROM users WHERE email = \${email}&#96;;</code></pre>
+<div class="out">email = "u1@vd.vn"       → $queryRawUnsafe:    1 hang · $queryRaw: 1 hang
+email = "x' OR 1=1 --"   → $queryRawUnsafe: 2000 hang · $queryRaw: 0 hang
+SQL that su chay (Unsafe): SELECT id, username FROM users WHERE email = 'x' OR 1=1 --'
+cau ghep 2 lenh qua $queryRawUnsafe → P2010 Raw query failed. Code: &#96;42601&#96;. Message: &#96;ERROR: cannot insert multiple commands into a prepared statement&#96;
+username cua user 1 sau do: user1</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">1</span><span class="v">The quote closes the literal: <code>'x'</code> ends where the attacker ends it, and everything after is SQL.</span></div>
+  <div class="kv"><span class="k">2</span><span class="v"><code>OR 1=1</code> makes every row match: the search returned all 2,000 users.</span></div>
+  <div class="kv"><span class="k">3</span><span class="v"><code>--</code> turns the leftover quote into a comment: valid SQL, no error in any log.</span></div>
+  <div class="kv"><span class="k">4</span><span class="v">Stacking a second statement was refused (42601: one prepared statement cannot hold two commands) — but reading the whole table needed only one. Through <code>$queryRaw</code> the same input returned 0 rows.</span></div>
 </div>
-<div class="callout ok">
-<p><strong>Escaping the quotes yourself is not the fix.</strong> Every "sanitise the input" scheme has been broken by an encoding nobody thought about — backslash escapes, multi-byte characters that swallow the escape byte, a second decode layer between your check and the database. Bind parameters are not an escaping scheme: the value never enters the SQL text at all, so there is no parse step for it to influence. That is a categorical difference, not a stronger filter.</p>
-</div>
+<p>If you must call the Unsafe function, pass values as parameters: <code>$queryRawUnsafe('… WHERE email = $1', email)</code> is still parameterised — the attack string returned 0 rows that way. The danger is only ever text you concatenated. Escaping quotes yourself is not the fix.</p>
 
 <h3>Dynamic queries that stay parameterised</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// The problem: the filters depend on what the caller sent</span>
-import { Prisma } from '@prisma/client';
-
-const dieuKien: Prisma.Sql[] = [Prisma.sql&#96;"deletedAt" IS NULL&#96;];
-if (tuKhoa)  dieuKien.push(Prisma.sql&#96;content ILIKE \${'%' + tuKhoa + '%'}&#96;);
-if (author)  dieuKien.push(Prisma.sql&#96;"authorId" = \${author}&#96;);
-if (tuNgay)  dieuKien.push(Prisma.sql&#96;"createdAt" &gt;= \${tuNgay}&#96;);
-
-const rows = await prisma.$queryRaw&#96;
-  SELECT id, content, "createdAt"
-  FROM "SocialPost"
-  WHERE \${Prisma.join(dieuKien, ' AND ')}
-  ORDER BY "createdAt" DESC
-  LIMIT \${gioiHan}&#96;;</code></pre>
-<div class="out">prisma:query SELECT id, content, "createdAt" FROM "SocialPost"
-             WHERE "deletedAt" IS NULL AND content ILIKE $1 AND "authorId" = $2
-             ORDER BY "createdAt" DESC LIMIT $3
-prisma:query params: ["%prisma%", "clx7…", 20]</div>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.sql&#96;…&#96;</code></span><span class="lz-lnote">A fragment that carries its own bind parameters. Composing two fragments composes their parameters correctly — you never renumber <code>$1</code>, <code>$2</code> by hand.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.join(list, ' AND ')</code></span><span class="lz-lnote">Glues fragments with a separator. The separator is a plain string and must be a constant you wrote — it is SQL text, not data.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.empty</code></span><span class="lz-lnote">The zero-length fragment, for the branch where a clause is absent. <code>WHERE \${dieuKien ?? Prisma.empty}</code> avoids building two versions of the query.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.raw('…')</code></span><span class="lz-lnote"><strong>Injects text verbatim.</strong> It exists for identifiers — a column name to sort by — and it is the one place inside the safe API where user input must never reach. Whitelist, always: <code>const column = ({ moi: 'createdAt', name: 'title' })[req.query.sort] ?? 'createdAt';</code></span></div>
+<pre><code class="language-javascript">const dk: Prisma.Sql[] = [Prisma.sql&#96;deleted_at IS NULL&#96;];
+if (tuKhoa) dk.push(Prisma.sql&#96;content ILIKE \${'%' + tuKhoa + '%'}&#96;);
+if (tacGia) dk.push(Prisma.sql&#96;author_id = \${tacGia}&#96;);
+await prisma.$queryRaw&#96;SELECT id, title FROM posts WHERE \${Prisma.join(dk, ' AND ')} ORDER BY created_at DESC LIMIT \${3}&#96;;</code></pre>
+<div class="out">ket qua: 94839, 88839, 82839
+prisma:query SELECT id, title FROM posts WHERE deleted_at IS NULL AND content ILIKE $1 AND author_id = $2 ORDER BY created_at DESC LIMIT $3
+prisma:query params: ["%prisma%",42,3]</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>Prisma.sql&#96;…&#96;</code></span><span class="v">A fragment carrying its own parameters; composing renumbers $1, $2 for you.</span></div>
+  <div class="kv"><span class="k"><code>Prisma.join(list, sep)</code></span><span class="v">The separator is SQL text — a constant you wrote, never input.</span></div>
+  <div class="kv"><span class="k"><code>Prisma.empty</code></span><span class="v">The zero-length fragment for an absent clause.</span></div>
+  <div class="kv"><span class="k"><code>Prisma.raw('…')</code></span><span class="v">Text verbatim — for identifiers from your own allow-list only.</span></div>
 </div>
+<pre><code class="language-javascript">await prisma.$queryRaw&#96;… ORDER BY \${cot} ASC LIMIT 4&#96;;   <span class="tok-comment">// sends ORDER BY $1</span>
+await prisma.$queryRaw&#96;… ORDER BY \${Prisma.raw(['title', 'created_at'].includes(cot) ? cot : 'id')} ASC LIMIT 4&#96;;</code></pre>
+<div class="out">ORDER BY \${cot}            → Bai 98839 | Bai 96839 | Bai 94839 | Bai 92839 (khong loi, khong sap)
+ORDER BY Prisma.raw(trang) → Bai 10839 | Bai 12839 | Bai 14839 | Bai 16839</div>
 <div class="pitfall">
-<p><strong>Trap — you cannot parameterise an identifier.</strong> <code>ORDER BY \${column}</code> inside <code>$queryRaw</code> sends <code>ORDER BY $1</code>, and PostgreSQL sorts every row by the constant string — no error, wrong results, and it looks like the sort is "just not working". Table names, column names, <code>ASC</code>/<code>DESC</code> and <code>LIMIT</code> keywords are SQL <em>text</em>. They go through <code>Prisma.raw</code>, from a whitelist, or they do not go at all.</p>
+<p><strong>Trap — you cannot parameterise an identifier.</strong> <code>ORDER BY \${cot}</code> sends <code>ORDER BY $1</code> with "title" as a value: PostgreSQL sorts every row by the same constant — no error and no order. Whitelist the column and pass it through <code>Prisma.raw</code>.</p>
 </div>
 <div class="note-ct">
-<p><strong>The habit that removes the whole class of bug.</strong> Grep the repository for <code>RawUnsafe</code> in CI and fail the build on any new occurrence outside an allow-listed file. On CuongThai there are two legitimate uses — a maintenance script that vacuums a table chosen from a fixed list, and a migration helper — and both are in files the check names explicitly. Everything else uses the tagged template. A rule a machine enforces is worth more than a rule in a document nobody re-reads.</p>
+<p><strong>The habit that removes the whole class of bug — and where CuongThai stands.</strong> Grep for <code>RawUnsafe</code> in CI and fail the build on a new occurrence outside an allow-list. Measured on the CuongThai repository (read-only, 12 November 2026):</p>
+<div class="out">$ grep -rn 'RawUnsafe' src | grep -v '\\.test\\.' | grep -v '\\.md:' | wc -l
+      28
+$ grep -rln 'RawUnsafe' src | grep -v '\\.test\\.' | grep -v '\\.md$' | wc -l
+      10
+$ grep -rln 'RawUnsafe' .github 2&gt;/dev/null | wc -l
+       0</div>
+<p>28 lines in 10 source files, and no workflow that checks them. Some are DDL with names from fixed lists; each deserves a reviewer who knows why — and a CI rule so the twenty-ninth is a decision, not an accident.</p>
 </div>
 
 <h3>Learning sources for this lesson</h3>
@@ -158,78 +149,69 @@ const user = await prisma.$queryRawUnsafe(
 </div>
 
 <h3>Mỗi cái THẬT SỰ gửi đi cái gì</h3>
-<pre><code class="language-sql"><span class="tok-comment">// Ghi nhật ký SQL để nhìn (dùng $on('query') của Bài 9.1)</span>
-await prisma.$queryRaw&#96;SELECT * FROM "User" WHERE email = \${'a@b.com'} AND "isActive" = \${true}&#96;;</code></pre>
-<div class="out">prisma:query SELECT * FROM "User" WHERE email = $1 AND "isActive" = $2
-prisma:query params: ["a@b.com", true]</div>
-<pre><code class="language-javascript">const n = await prisma.$executeRaw&#96;
-  UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = \${userId}&#96;;
-console.log(n);</code></pre>
-<div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = now() WHERE "authorId" = $1
-14</div>
+<pre><code class="language-javascript">await prisma.$queryRaw&#96;SELECT id, username FROM users WHERE email = \${'u1@vd.vn'} AND deleted_at IS NULL&#96;;
+const n = await prisma.$executeRaw&#96;UPDATE posts SET deleted_at = now() WHERE author_id = \${7}&#96;;
+const x = await prisma.$executeRaw&#96;SELECT id FROM users WHERE id &lt;= \${3}&#96;;</code></pre>
+<div class="out">prisma:query SELECT id, username FROM users WHERE email = $1 AND deleted_at IS NULL
+prisma:query params: ["u1@vd.vn"]
+prisma:query UPDATE posts SET deleted_at = now() WHERE author_id = $1
+prisma:query params: [7]
+$executeRaw UPDATE tra ve: 50
+prisma:query SELECT id FROM users WHERE id &lt;= $1
+prisma:query params: [3]
+$executeRaw SELECT tra ve: 3 (mot con so, khong phai hang)</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>$executeRaw</code> trả về một CON SỐ, mà người ta cứ <code>await</code> nó và chờ các hàng.</strong> <code>const rows = await prisma.$executeRaw&#96;SELECT …&#96;</code> biên dịch được, chạy được, và trao cho bạn số <code>0</code> — vì <code>SELECT</code> không ảnh hưởng hàng nào. Kiểu của nó là <code>Promise&lt;number&gt;</code>, nên TypeScript sẽ kêu ngay khi bạn lấy chỉ số; còn nếu ở đâu đó phía trên bạn lỡ viết <code>any</code>, nó hỏng LẶNG LẼ lúc chạy. <code>SELECT</code> thì LUÔN là <code>$queryRaw</code>.</p>
+<p><strong>Bẫy — <code>$executeRaw</code> trả về một con số, bất kể câu lệnh là gì.</strong> Với SELECT nó trả về 3 — số hàng, không phải các hàng (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3, 2.000 người dùng và 100.000 bài). <code>const rows = await prisma.$executeRaw&#96;SELECT …&#96;</code> biên dịch được, chạy được, và đưa bạn một con số.</p>
 </div>
 
 <h3>Cú tấn công, chạy thật</h3>
-<pre><code class="language-sql"><span class="tok-comment">// Một endpoint "tìm theo email", viết theo kiểu không an toàn</span>
-app.get('/search', async (req, res) =&gt; {
-  const rows = await prisma.$queryRawUnsafe(
-    &#96;SELECT id, username FROM "User" WHERE email = '\${req.query.email}'&#96;
-  );
-  res.json(rows);
-});</code></pre>
-<pre><code class="language-bash"><span class="tok-comment"># Dùng bình thường</span>
-curl "localhost:3000/tim?email=an@vidu.com"</code></pre>
-<div class="out">[{"id":"clx7…","username":"an"}]</div>
-<pre><code class="language-bash"><span class="tok-comment"># Cũng endpoint đó, với một dấu nháy trong giá trị</span>
-curl --get "localhost:3000/tim" --data-urlencode "email=x' OR 1=1 --"</code></pre>
-<div class="out">[{"id":"clx7…","username":"an"},
- {"id":"clx8…","username":"binh"},
- {"id":"clx9…","username":"admin"},
- … 12.847 hang …]</div>
-<pre><code class="language-sql"><span class="tok-comment"># Và đây là câu SQL thật sự đã chạy</span>
-SELECT id, username FROM "User" WHERE email = 'x' OR 1=1 --'</code></pre>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Dấu nháy đóng chuỗi lại</span><span class="lz-d"><code>'x'</code> kết thúc đúng chỗ dấu nháy của kẻ tấn công kết thúc nó, và mọi thứ phía sau được phân tích thành SQL, không phải thành dữ liệu.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t"><code>OR 1=1</code> làm bộ lọc thành vô nghĩa</span><span class="lz-d">Mọi hàng đều khớp. Cái endpoint lẽ ra trả về một người dùng giờ trả về cả bảng.</span></div>
-  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t"><code>--</code> che đi đống đổ nát</span><span class="lz-d">Dấu nháy thừa ở cuối, thứ lẽ ra gây lỗi cú pháp, giờ thành chú thích. Câu truy vấn là SQL HỢP LỆ, nên nhật ký không có lỗi nào — chỉ có một phản hồi rất lớn.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cũng đầu vào đó, với <code>$queryRaw</code></span><span class="lz-d">Trả về <code>[]</code>. Không có người dùng nào email đúng bằng chuỗi <code>x' OR 1=1 --</code>, và đó là câu hỏi DUY NHẤT mà truy vấn tham số hoá từng đặt ra.</span></div>
+<pre><code class="language-javascript">const timUnsafe = (email: string) =&gt;
+  prisma.$queryRawUnsafe(&#96;SELECT id, username FROM users WHERE email = '\${email}'&#96;);   <span class="tok-comment">// nguy hiểm</span>
+const timSafe = (email: string) =&gt;
+  prisma.$queryRaw&#96;SELECT id, username FROM users WHERE email = \${email}&#96;;</code></pre>
+<div class="out">email = "u1@vd.vn"       → $queryRawUnsafe:    1 hang · $queryRaw: 1 hang
+email = "x' OR 1=1 --"   → $queryRawUnsafe: 2000 hang · $queryRaw: 0 hang
+SQL that su chay (Unsafe): SELECT id, username FROM users WHERE email = 'x' OR 1=1 --'
+cau ghep 2 lenh qua $queryRawUnsafe → P2010 Raw query failed. Code: &#96;42601&#96;. Message: &#96;ERROR: cannot insert multiple commands into a prepared statement&#96;
+username cua user 1 sau do: user1</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">1</span><span class="v">Dấu nháy đóng chuỗi: <code>'x'</code> kết thúc đúng chỗ kẻ tấn công muốn, phần sau là SQL.</span></div>
+  <div class="kv"><span class="k">2</span><span class="v"><code>OR 1=1</code> khiến mọi hàng khớp: câu tìm trả về cả 2.000 người dùng.</span></div>
+  <div class="kv"><span class="k">3</span><span class="v"><code>--</code> biến dấu nháy còn thừa thành chú thích: SQL hợp lệ, không lỗi nào trong log.</span></div>
+  <div class="kv"><span class="k">4</span><span class="v">Ghép thêm câu lệnh thứ hai bị từ chối (42601: một prepared statement không chứa được hai lệnh) — nhưng đọc trộm cả bảng chỉ cần một. Qua <code>$queryRaw</code> cùng chuỗi đó trả về 0 hàng.</span></div>
 </div>
-<div class="callout ok">
-<p><strong>Tự đi thoát dấu nháy KHÔNG phải cách vá.</strong> Mọi sơ đồ "làm sạch đầu vào" đều đã từng bị phá bằng một cách mã hoá không ai nghĩ tới — thoát bằng gạch chéo ngược, ký tự nhiều byte nuốt mất byte thoát, một tầng giải mã thứ hai nằm giữa chỗ bạn kiểm và cơ sở dữ liệu. Tham số ràng buộc KHÔNG phải một sơ đồ thoát ký tự: giá trị KHÔNG BAO GIỜ đi vào phần chữ của câu SQL, nên chẳng có bước phân tích nào cho nó tác động vào. Đó là khác biệt về BẢN CHẤT, không phải một bộ lọc mạnh hơn.</p>
-</div>
+<p>Nếu buộc phải gọi hàm Unsafe, hãy truyền giá trị thành tham số: <code>$queryRawUnsafe('… WHERE email = $1', email)</code> vẫn được tham số hoá — chuỗi tấn công trả về 0 hàng theo cách đó. Nguy hiểm chỉ nằm ở chữ bạn tự ghép. Tự thoát dấu nháy không phải là cách sửa.</p>
 
 <h3>Truy vấn động mà vẫn tham số hoá</h3>
-<pre><code class="language-javascript"><span class="tok-comment">// Vấn đề: các bộ lọc phụ thuộc vào thứ người gọi gửi lên</span>
-import { Prisma } from '@prisma/client';
-
-const dieuKien: Prisma.Sql[] = [Prisma.sql&#96;"deletedAt" IS NULL&#96;];
-if (tuKhoa)  dieuKien.push(Prisma.sql&#96;content ILIKE \${'%' + tuKhoa + '%'}&#96;);
-if (author)  dieuKien.push(Prisma.sql&#96;"authorId" = \${author}&#96;);
-if (tuNgay)  dieuKien.push(Prisma.sql&#96;"createdAt" &gt;= \${tuNgay}&#96;);
-
-const rows = await prisma.$queryRaw&#96;
-  SELECT id, content, "createdAt"
-  FROM "SocialPost"
-  WHERE \${Prisma.join(dieuKien, ' AND ')}
-  ORDER BY "createdAt" DESC
-  LIMIT \${gioiHan}&#96;;</code></pre>
-<div class="out">prisma:query SELECT id, content, "createdAt" FROM "SocialPost"
-             WHERE "deletedAt" IS NULL AND content ILIKE $1 AND "authorId" = $2
-             ORDER BY "createdAt" DESC LIMIT $3
-prisma:query params: ["%prisma%", "clx7…", 20]</div>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.sql&#96;…&#96;</code></span><span class="lz-lnote">Một mẩu câu MANG THEO tham số ràng buộc của chính nó. Ghép hai mẩu thì ghép luôn tham số cho đúng — bạn không bao giờ phải tự đánh lại số <code>$1</code>, <code>$2</code>.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.join(list, ' AND ')</code></span><span class="lz-lnote">Dán các mẩu bằng một dấu phân cách. Dấu phân cách là chuỗi thường và PHẢI là hằng do chính bạn viết — nó là chữ SQL, không phải dữ liệu.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.empty</code></span><span class="lz-lnote">Mẩu rỗng, cho nhánh mà một mệnh đề vắng mặt. <code>WHERE \${dieuKien ?? Prisma.empty}</code> giúp khỏi phải dựng hai phiên bản của câu truy vấn.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>Prisma.raw('…')</code></span><span class="lz-lnote"><strong>Chèn chữ NGUYÊN XI.</strong> Nó tồn tại cho định danh — một tên cột để sắp xếp — và là chỗ DUY NHẤT bên trong API an toàn mà đầu vào người dùng KHÔNG BAO GIỜ được chạm tới. Danh sách trắng, luôn luôn: <code>const column = ({ moi: 'createdAt', name: 'title' })[req.query.sort] ?? 'createdAt';</code></span></div>
+<pre><code class="language-javascript">const dk: Prisma.Sql[] = [Prisma.sql&#96;deleted_at IS NULL&#96;];
+if (tuKhoa) dk.push(Prisma.sql&#96;content ILIKE \${'%' + tuKhoa + '%'}&#96;);
+if (tacGia) dk.push(Prisma.sql&#96;author_id = \${tacGia}&#96;);
+await prisma.$queryRaw&#96;SELECT id, title FROM posts WHERE \${Prisma.join(dk, ' AND ')} ORDER BY created_at DESC LIMIT \${3}&#96;;</code></pre>
+<div class="out">ket qua: 94839, 88839, 82839
+prisma:query SELECT id, title FROM posts WHERE deleted_at IS NULL AND content ILIKE $1 AND author_id = $2 ORDER BY created_at DESC LIMIT $3
+prisma:query params: ["%prisma%",42,3]</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>Prisma.sql&#96;…&#96;</code></span><span class="v">Một mảnh mang theo tham số của nó; ghép lại thì $1, $2 được đánh số giúp bạn.</span></div>
+  <div class="kv"><span class="k"><code>Prisma.join(list, sep)</code></span><span class="v">Dấu nối là chữ SQL — hằng số bạn tự viết, không bao giờ là dữ liệu vào.</span></div>
+  <div class="kv"><span class="k"><code>Prisma.empty</code></span><span class="v">Mảnh rỗng cho mệnh đề vắng mặt.</span></div>
+  <div class="kv"><span class="k"><code>Prisma.raw('…')</code></span><span class="v">Chèn nguyên chữ — chỉ cho tên cột từ danh sách trắng của chính bạn.</span></div>
 </div>
+<pre><code class="language-javascript">await prisma.$queryRaw&#96;… ORDER BY \${cot} ASC LIMIT 4&#96;;   <span class="tok-comment">// gửi ORDER BY $1</span>
+await prisma.$queryRaw&#96;… ORDER BY \${Prisma.raw(['title', 'created_at'].includes(cot) ? cot : 'id')} ASC LIMIT 4&#96;;</code></pre>
+<div class="out">ORDER BY \${cot}            → Bai 98839 | Bai 96839 | Bai 94839 | Bai 92839 (khong loi, khong sap)
+ORDER BY Prisma.raw(trang) → Bai 10839 | Bai 12839 | Bai 14839 | Bai 16839</div>
 <div class="pitfall">
-<p><strong>Bẫy — KHÔNG tham số hoá được một định danh.</strong> <code>ORDER BY \${column}</code> bên trong <code>$queryRaw</code> gửi đi <code>ORDER BY $1</code>, và PostgreSQL sắp mọi hàng theo một chuỗi hằng — không lỗi, kết quả sai, và nhìn cứ như "sắp xếp tự nhiên không chạy". Tên bảng, tên cột, từ khoá <code>ASC</code>/<code>DESC</code> và <code>LIMIT</code> đều là CHỮ SQL. Chúng đi qua <code>Prisma.raw</code>, lấy từ một danh sách trắng, hoặc không đi đâu cả.</p>
+<p><strong>Bẫy — không thể tham số hoá một tên cột.</strong> <code>ORDER BY \${cot}</code> gửi <code>ORDER BY $1</code> với "title" là một giá trị: PostgreSQL sắp mọi hàng theo cùng một hằng số — không lỗi và không thứ tự. Lập danh sách trắng cho cột rồi đưa qua <code>Prisma.raw</code>.</p>
 </div>
 <div class="note-ct">
-<p><strong>Thói quen xoá sạch cả một LỚP bug.</strong> Cho CI grep kho mã tìm <code>RawUnsafe</code> và làm hỏng bản dựng khi có chỗ mới nào nằm ngoài danh sách file được phép. Trên CuongThai có hai chỗ dùng chính đáng — một script bảo trì chạy vacuum trên bảng chọn từ danh sách cố định, và một hàm phụ cho migration — cả hai đều nằm trong những file mà phép kiểm gọi tên tường minh. Còn lại dùng thẻ mẫu hết. Một luật do MÁY cưỡng chế đáng giá hơn một luật nằm trong tài liệu không ai đọc lại.</p>
+<p><strong>Thói quen xoá cả lớp lỗi — và CuongThai đang ở đâu.</strong> Grep <code>RawUnsafe</code> trong CI và đánh đỏ bản dựng khi có chỗ mới ngoài danh sách được phép. Đo trên repo CuongThai (chỉ đọc, 12/11/2026):</p>
+<div class="out">$ grep -rn 'RawUnsafe' src | grep -v '\\.test\\.' | grep -v '\\.md:' | wc -l
+      28
+$ grep -rln 'RawUnsafe' src | grep -v '\\.test\\.' | grep -v '\\.md$' | wc -l
+      10
+$ grep -rln 'RawUnsafe' .github 2&gt;/dev/null | wc -l
+       0</div>
+<p>28 dòng trong 10 tệp nguồn, và không workflow nào kiểm chúng. Một số là DDL với tên từ danh sách cố định; mỗi chỗ cần một người soát hiểu lý do — và một luật CI để chỗ thứ hai mươi chín là một quyết định, không phải một tai nạn.</p>
 </div>
 
 <h3>Nguồn học cho bài này</h3>
@@ -255,122 +237,79 @@ ${G10_2}
 <p class="lead">Once you leave the query builder you also leave the type system — not obviously, which is the problem. <code>$queryRaw&lt;User[]&gt;</code> compiles into a plain cast, so TypeScript will happily let you read a field the query never selected. This lesson shows exactly where the guarantee stops, the four value conversions that surprise people, and how to put a real check back at the boundary.</p>
 
 <h3>What the generic actually does</h3>
-<pre><code class="language-sql"><span class="tok-comment">// It looks like the query returns User rows</span>
-const users = await prisma.$queryRaw&lt;User[]&gt;&#96;SELECT id FROM "User" LIMIT 3&#96;;
-
-console.log(users[0].email.toLowerCase());   <span class="tok-comment">// tsc: fine. Runtime: ?</span></code></pre>
-<div class="out">TypeError: Cannot read properties of undefined (reading 'toLowerCase')</div>
-<pre><code><span class="tok-comment">// The signature, simplified</span>
-$queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): PrismaPromise&lt;T&gt;
-
-<span class="tok-comment">// T is never derived from the SQL. It is whatever you typed.</span>
-<span class="tok-comment">// The compiler has no way to read the string and check it.</span></code></pre>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Builder</span><span class="lz-t">Types derived</span><span class="lz-d"><code>findMany({ select: { id: true } })</code> returns <code>{ id: string }[]</code> — computed from the argument you passed. Ask for <code>.email</code> and the compiler stops you.</span></div>
-  <div class="lz-step"><span class="lz-k">Raw</span><span class="lz-t">Types asserted</span><span class="lz-d"><code>$queryRaw&lt;User[]&gt;</code> is you telling the compiler what to believe. It believes you. Nothing verifies it — not at build, not at run.</span></div>
-  <div class="lz-step"><span class="lz-k">The drift</span><span class="lz-t">Where it bites</span><span class="lz-d">A migration renames a column. Every builder query is a compile error. Every raw query still compiles, and starts returning <code>undefined</code> for that field in production.</span></div>
-  <div class="lz-step"><span class="lz-k">The fix</span><span class="lz-t">Two of them</span><span class="lz-d">Validate at the boundary with a schema (below), or use <strong>TypedSQL</strong> (Lesson 10.4), which reads the <code>.sql</code> file at generate time and derives the type from the real database.</span></div>
+<pre><code class="language-javascript">const users = await prisma.$queryRaw&lt;User[]&gt;&#96;SELECT id FROM users LIMIT 3&#96;;
+console.log('users[0] =', users[0]);
+users[0].email.toLowerCase();   <span class="tok-comment">// tsc: fine</span></code></pre>
+<div class="out">users[0] = { id: 1 }
+users[0].email.toLowerCase() → TypeError: Cannot read properties of undefined (reading 'toLowerCase')</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Builder: types derived</span><span class="v"><code>findMany({ select: { id: true } })</code> returns <code>{ id: number }[]</code>; ask for <code>.email</code> and the compiler stops you.</span></div>
+  <div class="kv"><span class="k">Raw: types asserted</span><span class="v"><code>$queryRaw&lt;T&gt;</code> is a cast. Nothing reads the SQL string to check it — not at build, not at run.</span></div>
+  <div class="kv"><span class="k">The drift</span><span class="v">A migration renames a column: every builder query becomes a compile error, every raw query still compiles.</span></div>
+  <div class="kv"><span class="k">The fixes</span><span class="v">Validate at the boundary with a schema (below), or let the database type the query with TypedSQL (Lesson 10.4).</span></div>
 </div>
 
 <h3>Conversion 1 — <code>count(*)</code> is a BigInt, and it breaks <code>res.json</code></h3>
-<pre><code class="language-javascript">const rows = await prisma.$queryRaw&#96;
-  SELECT "authorId", count(*) AS post_count
-  FROM "SocialPost" GROUP BY "authorId"&#96;;
-console.log(rows[0]);
-res.json(rows);</code></pre>
-<div class="out">{ authorId: 'clx7…', post_count: 14n }        ← note the n
-
-TypeError: Do not know how to serialize a BigInt
-    at JSON.stringify (&lt;anonymous&gt;)
-    at ServerResponse.json (express/lib/response.js:1150:14)</div>
-<pre><code class="language-typescript"><span class="tok-comment">-- Fix at the source: cast in the SQL</span>
-SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
-<div class="out">{ authorId: 'clx7…', post_count: 14 }         ← a plain number</div>
-<div class="callout ok">
-<p><strong>Cast in SQL, do not convert in JavaScript.</strong> <code>Number(row.post_count)</code> works but must be repeated at every call site and forgotten at exactly one of them. <code>::int</code> fixes it once, at the place the value is produced, for every caller — and it documents the intent to the next reader of the query. Use <code>::bigint</code> deliberately when a count really can exceed 2<sup>31</sup>, and then handle the BigInt on purpose.</p>
-</div>
+<pre><code class="language-sql">SELECT author_id, count(*) AS post_count FROM posts GROUP BY author_id;
+SELECT author_id, count(*)::int AS post_count FROM posts GROUP BY author_id;</code></pre>
+<div class="out">{ author_id: 1, post_count: 50n }
+JSON.stringify(rows) → TypeError: Do not know how to serialize a BigInt
+voi ::int → { author_id: 1, post_count: 50 }</div>
+<p>Measured (measured 12 Nov 2026, Apple-silicon laptop, PostgreSQL 16.14 in Docker, Prisma 6.19.3): the driver returned <code>50n</code> and <code>JSON.stringify</code> — what <code>res.json</code> calls — threw. Cast in SQL, once, rather than <code>Number()</code> at every call site.</p>
 
 <h3>Conversion 2 — <code>Decimal</code> stays a Decimal object</h3>
-<pre><code class="language-sql">const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
-console.log(rows[0].price, typeof rows[0].price);
-console.log(rows[0].price + 100);</code></pre>
-<div class="out">Decimal { s: 1, e: 5, d: [ 249000 ] } object
-249000100        ← string concatenation, not addition</div>
-<pre><code class="language-typescript"><span class="tok-comment">// Decimal has its own arithmetic. Use it, or convert explicitly.</span>
-rows[0].price.plus(100).toString();     <span class="tok-comment">// '249100'  — exact</span>
-rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    — float, loses precision above 2^53</span></code></pre>
+<pre><code class="language-javascript">const rows = await prisma.$queryRaw&lt;any[]&gt;&#96;SELECT id, price FROM orders ORDER BY id&#96;;
+console.log(rows[0].price, typeof rows[0].price, rows[0].price.constructor.name);
+console.log('price + 100 =', rows[0].price + 100);
+console.log('price.plus(100).toString() =', rows[0].price.plus(100).toString());
+rows[2].price.plus('0.20').toString();   rows[2].price.toNumber() + 0.2;</code></pre>
+<div class="out">249000 object i
+price + 100 = 249000100
+price.plus(100).toString() = 249100
+0.10 + 0.20 bang Decimal = 0.3 · bang number = 0.30000000000000004</div>
 <div class="pitfall">
-<p><strong>Trap — <code>Decimal + number</code> is a silent string concatenation.</strong> JavaScript's <code>+</code> falls back to string when either side is an object, and <code>Decimal.toString()</code> gives digits, so <code>249000 + 100</code> becomes <code>'249000100'</code> — a plausible-looking number that is wrong by a factor of a thousand. It reaches an invoice before anyone notices. Money is <code>Decimal</code>, and <code>Decimal</code> arithmetic uses methods: <code>.plus()</code>, <code>.minus()</code>, <code>.times()</code>, <code>.dividedBy()</code>.</p>
+<p><strong>Trap — Decimal + number is a silent string concatenation.</strong> <code>console.log</code> prints the Decimal as 249000, so it looks like a number; <code>+</code> then falls back to strings and gives "249000100". Use <code>plus()</code>, or convert deliberately — <code>toNumber()</code> brings float error back (0.30000000000000004).</p>
 </div>
 
 <h3>Conversion 3 — raw queries use <em>column</em> names, not field names</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
-model User {
-  id        String  @id
+<pre><code class="language-javascript">model User {
   avatarUrl String? @map("avatar_url")
   @@map("users")
 }</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment">// The builder speaks Prisma names</span>
-await prisma.user.findMany({ select: { avatarUrl: true } });   <span class="tok-comment">// ✅</span>
-
-<span class="tok-comment">// Raw speaks database names, and the mapping does not apply</span>
-await prisma.$queryRaw&#96;SELECT "avatarUrl" FROM "User"&#96;;         <span class="tok-comment">// ❌</span></code></pre>
-<div class="out">PrismaClientKnownRequestError:
-Raw query failed. Code: &#96;42P01&#96;. Message: &#96;relation "User" does not exist&#96;</div>
-<pre><code class="language-sql"><span class="tok-comment">// Correct: the names that exist in PostgreSQL</span>
-await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
-
-<span class="tok-comment">// And the key returned is the column name, not the field name</span>
-<span class="tok-comment">// → { id: 'clx7…', avatar_url: 'https://…' }</span></code></pre>
+<div class="out">SELECT "avatarUrl" FROM "User" → PrismaClientKnownRequestError: P2010 Raw query failed. Code: &#96;42P01&#96;. Message: &#96;relation "User" does not exist&#96;
+SELECT "avatarUrl" FROM users → PrismaClientKnownRequestError: P2010 Raw query failed. Code: &#96;42703&#96;. Message: &#96;column "avatarUrl" does not exist&#96;
+SELECT id, avatar_url FROM users → [ { id: 1, avatar_url: 'https://cdn.vd/a/1.png' } ]
+… AS "avatarUrl" → [ { id: 1, avatarUrl: 'https://cdn.vd/a/1.png' } ]
+… AS avatarUrl (khong ngoac kep) → [ { id: 1, avatarurl: 'https://cdn.vd/a/1.png' } ]</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">The error is the good case</span><span class="v"><code>relation "User" does not exist</code> is loud and immediate. The bad case is a column that exists under both names in different tables, or a query that silently returns a key your code does not read.</span></div>
-  <div class="kv"><span class="k">Alias back to the field name</span><span class="v"><code>SELECT avatar_url AS "avatarUrl"</code> keeps the rest of your code speaking one vocabulary. The double quotes matter — without them PostgreSQL folds the alias to lower case and you get <code>avatarurl</code>.</span></div>
-  <div class="kv"><span class="k">Unquoted identifiers are lower-cased</span><span class="v">Prisma creates tables with quoted, case-preserving names by default, so <code>SELECT * FROM SocialPost</code> looks for <code>socialpost</code> and fails. Quote every identifier in raw SQL: <code>"SocialPost"</code>.</span></div>
-  <div class="kv"><span class="k">Enums come back as strings</span><span class="v">A PostgreSQL enum column returns its text value, not the generated TypeScript enum member. They compare equal, but <code>typeof</code> is <code>'string'</code> and any exhaustiveness check you rely on elsewhere does not apply here.</span></div>
+  <div class="kv"><span class="k">The error is the good case</span><span class="v">"User" (42P01) and "avatarUrl" (42703) do not exist in PostgreSQL — <code>@map</code> and <code>@@map</code> do not apply to raw SQL.</span></div>
+  <div class="kv"><span class="k">Alias back, with quotes</span><span class="v"><code>avatar_url AS "avatarUrl"</code> keeps one vocabulary. Without the quotes PostgreSQL folded it to <code>avatarurl</code>.</span></div>
 </div>
 
 <h3>Conversion 4 — what else raw SQL bypasses</h3>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Client extensions and middleware</span><span class="lz-lnote">A soft-delete extension that adds <code>deletedAt: null</code> to every query (Lesson 10.5) does not touch raw SQL. Your raw query returns deleted rows, and it will do so on the day someone adds the extension, not the day you wrote the query.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Default values and <code>@updatedAt</code></span><span class="lz-lnote"><code>@default(uuid())</code> and <code>@updatedAt</code> are applied by Prisma, not by the database, unless the migration also created a database default. A raw <code>INSERT</code> that omits those columns inserts NULL or fails.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Referential actions declared in the schema</span><span class="lz-lnote"><code>onDelete: Cascade</code> is a real foreign key in PostgreSQL, so it <em>does</em> apply to raw deletes. But <code>NoAction</code> emulated by Prisma at the client level does not — check the migration SQL if it matters.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Nothing about transactions</span><span class="lz-lnote">This one is fine: <code>tx.$queryRaw</code> inside <code>$transaction(async (tx) =&gt; …)</code> runs in that transaction, exactly as you would want. Raw and builder queries mix freely inside one transaction.</span></div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Client extensions</span><span class="v">A soft-delete filter in an extension does not touch raw SQL (measured in Lesson 10.5).</span></div>
+  <div class="kv"><span class="k">Prisma-side defaults</span><span class="v"><code>@default(uuid())</code> and <code>@updatedAt</code> are filled by the client, not the database, unless the migration also created a database default.</span></div>
+  <div class="kv"><span class="k">Not transactions</span><span class="v"><code>tx.$executeRaw</code> inside an interactive transaction runs in it — measured below.</span></div>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// Raw and builder in one transaction — this works</span>
-await prisma.$transaction(async (tx) =&gt; {
-  await tx.$executeRaw&#96;LOCK TABLE "Counter" IN SHARE ROW EXCLUSIVE MODE&#96;;
-  const c = await tx.counter.findUnique({ where: { key: 'order-hang' } });
-  await tx.counter.update({ where: { key: 'order-hang' }, data: { value: c.value + 1 } });
+<pre><code class="language-javascript">await prisma.$transaction(async (tx) =&gt; {
+  await tx.$executeRaw&#96;LOCK TABLE orders IN SHARE ROW EXCLUSIVE MODE&#96;;
+  const o = await tx.order.findUniqueOrThrow({ where: { id: 1 } });
+  await tx.order.update({ where: { id: 1 }, data: { price: o.price.plus(1) } });
 });</code></pre>
+<div class="out">trong cung giao dich: khoa ShareRowExclusiveLock · gia moi 249001</div>
 
 <h3>Putting a real check back</h3>
 <pre><code class="language-javascript">import { z } from 'zod';
-
-const StatsRow = z.object({
-  authorId: z.string(),
-  post_count:   z.number().int(),
-  gan_nhat: z.date(),
-});
-
-const rows = StatsRow.array().parse(
-  await prisma.$queryRaw&#96;
-    SELECT "authorId", count(*)::int AS post_count, max("createdAt") AS gan_nhat
-    FROM "SocialPost" WHERE "deletedAt" IS NULL GROUP BY "authorId"&#96;
-);
-<span class="tok-comment">// rows is now { authorId: string; so_bai: number; gan_nhat: Date }[]</span>
-<span class="tok-comment">// — inferred from the schema, and verified at runtime.</span></code></pre>
-<div class="out">ZodError: [
-  {
-    "code": "invalid_type", "expected": "number", "received": "bigint",
-    "path": [0, "post_count"], "message": "Expected number, received bigint"
-  }
+const StatsRow = z.object({ author_id: z.number().int(), post_count: z.number().int(), gan_nhat: z.date() });
+const rows = StatsRow.array().parse(await prisma.$queryRaw&#96;
+  SELECT author_id, count(*)::int AS post_count, max(created_at) AS gan_nhat FROM posts GROUP BY author_id&#96;);</code></pre>
+<div class="out">parse khong ep kieu → ZodError: {"code":"invalid_type","expected":"number","received":"bigint","path":[0,"post_count"],"message":"Expected number, received bigint"}
+parse voi ::int → [
+  { author_id: 1, post_count: 50, gan_nhat: 2026-03-11T10:40:00.000Z },
+  { author_id: 2, post_count: 50, gan_nhat: 2026-03-11T05:19:00.000Z }
 ]</div>
-<div class="callout ok">
-<p><strong>This error is the point.</strong> Without the schema, that BigInt would have travelled through your service layer and failed at <code>res.json</code> — a stack trace in Express with no mention of the query that produced it. With the schema it fails at the boundary, names the column, and tells you the actual type. One <code>z.object</code> per raw query is a few lines, and it converts "types are a lie here" into "types are checked here" for the small part of the codebase that needs it.</p>
-</div>
-<div class="note-ct">
-<p><strong>When to reach for validation, honestly.</strong> A raw query returning three scalar columns into one function that immediately sums them does not need zod. A raw query whose result crosses a module boundary, gets serialised to an API response, or is written by one person and consumed by another — that one does. The rule of thumb on CuongThai: if the shape appears in a function's <em>return type</em>, validate it; if it dies inside the function that made the query, a cast is honest enough.</p>
-</div>
+<p>The type is inferred from the schema and verified on every call. Forget the <code>::int</code> and zod says exactly where: expected number, received bigint, at <code>post_count</code>.</p>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/using-raw-sql/raw-queries#type-mapping" target="_blank" rel="noopener"><span class="lc-ico">🔁</span><span class="lc-body"><span class="lc-title">Prisma — raw query type mapping</span><span class="lc-sub">prisma.io/docs · The full table of PostgreSQL type → JavaScript value</span></span></a>
@@ -386,122 +325,79 @@ const rows = StatsRow.array().parse(
 <p class="lead">Rời khỏi trình dựng truy vấn là bạn cũng rời khỏi hệ kiểu — mà rời một cách KHÔNG lộ liễu, đó mới là vấn đề. <code>$queryRaw&lt;User[]&gt;</code> biên dịch thành một phép ép kiểu trần, nên TypeScript vui vẻ để bạn đọc một trường mà câu truy vấn chưa từng chọn. Bài này chỉ đúng chỗ bảo đảm ngừng lại, bốn cú chuyển đổi giá trị làm người ta ngã, và cách đặt một phép kiểm THẬT trở lại ở biên.</p>
 
 <h3>Cái generic đó THẬT SỰ làm gì</h3>
-<pre><code class="language-sql"><span class="tok-comment">// Nhìn cứ như câu truy vấn trả về các hàng User</span>
-const users = await prisma.$queryRaw&lt;User[]&gt;&#96;SELECT id FROM "User" LIMIT 3&#96;;
-
-console.log(users[0].email.toLowerCase());   <span class="tok-comment">// tsc: ổn. Lúc chạy: ?</span></code></pre>
-<div class="out">TypeError: Cannot read properties of undefined (reading 'toLowerCase')</div>
-<pre><code><span class="tok-comment">// Chữ ký, rút gọn</span>
-$queryRaw&lt;T = unknown&gt;(query: TemplateStringsArray, ...values: any[]): PrismaPromise&lt;T&gt;
-
-<span class="tok-comment">// T KHÔNG BAO GIỜ được suy ra từ câu SQL. Nó đúng bằng thứ bạn gõ vào.</span>
-<span class="tok-comment">// Trình biên dịch không có cách nào đọc chuỗi đó rồi kiểm lại.</span></code></pre>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Trình dựng</span><span class="lz-t">Kiểu được SUY RA</span><span class="lz-d"><code>findMany({ select: { id: true } })</code> trả về <code>{ id: string }[]</code> — tính ra từ chính đối số bạn truyền. Xin <code>.email</code> là trình biên dịch chặn lại.</span></div>
-  <div class="lz-step"><span class="lz-k">Thô</span><span class="lz-t">Kiểu được KHẲNG ĐỊNH</span><span class="lz-d"><code>$queryRaw&lt;User[]&gt;</code> là bạn bảo trình biên dịch phải tin gì. Nó tin. Không có gì xác minh cả — không lúc build, không lúc chạy.</span></div>
-  <div class="lz-step"><span class="lz-k">Trôi dạt</span><span class="lz-t">Chỗ nó cắn</span><span class="lz-d">Một migration đổi tên cột. MỌI truy vấn qua trình dựng thành lỗi biên dịch. MỌI truy vấn thô vẫn biên dịch trót lọt, và bắt đầu trả <code>undefined</code> cho trường đó trên production.</span></div>
-  <div class="lz-step"><span class="lz-k">Cách vá</span><span class="lz-t">Có hai</span><span class="lz-d">Kiểm ở biên bằng một lược đồ (bên dưới), hoặc dùng <strong>TypedSQL</strong> (Bài 10.4) — nó đọc file <code>.sql</code> lúc generate và suy kiểu ra từ cơ sở dữ liệu THẬT.</span></div>
+<pre><code class="language-javascript">const users = await prisma.$queryRaw&lt;User[]&gt;&#96;SELECT id FROM users LIMIT 3&#96;;
+console.log('users[0] =', users[0]);
+users[0].email.toLowerCase();   <span class="tok-comment">// tsc: ổn</span></code></pre>
+<div class="out">users[0] = { id: 1 }
+users[0].email.toLowerCase() → TypeError: Cannot read properties of undefined (reading 'toLowerCase')</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Builder: kiểu được suy ra</span><span class="v"><code>findMany({ select: { id: true } })</code> trả về <code>{ id: number }[]</code>; đòi <code>.email</code> là trình biên dịch chặn.</span></div>
+  <div class="kv"><span class="k">Thô: kiểu được khẳng định</span><span class="v"><code>$queryRaw&lt;T&gt;</code> là một phép ép kiểu. Không gì đọc chuỗi SQL để kiểm — lúc build cũng không, lúc chạy cũng không.</span></div>
+  <div class="kv"><span class="k">Trôi dạt</span><span class="v">Một migration đổi tên cột: mọi truy vấn builder thành lỗi biên dịch, mọi truy vấn thô vẫn biên dịch.</span></div>
+  <div class="kv"><span class="k">Cách sửa</span><span class="v">Kiểm ở biên bằng một lược đồ (bên dưới), hoặc để chính cơ sở dữ liệu định kiểu bằng TypedSQL (Bài 10.4).</span></div>
 </div>
 
 <h3>Chuyển đổi 1 — <code>count(*)</code> là BigInt, và nó làm vỡ <code>res.json</code></h3>
-<pre><code class="language-javascript">const rows = await prisma.$queryRaw&#96;
-  SELECT "authorId", count(*) AS post_count
-  FROM "SocialPost" GROUP BY "authorId"&#96;;
-console.log(rows[0]);
-res.json(rows);</code></pre>
-<div class="out">{ authorId: 'clx7…', post_count: 14n }        ← chu y chu n
-
-TypeError: Do not know how to serialize a BigInt
-    at JSON.stringify (&lt;anonymous&gt;)
-    at ServerResponse.json (express/lib/response.js:1150:14)</div>
-<pre><code class="language-typescript"><span class="tok-comment">-- Vá tại nguồn: ép kiểu ngay trong SQL</span>
-SELECT "authorId", count(*)::int AS post_count FROM "SocialPost" GROUP BY "authorId";</code></pre>
-<div class="out">{ authorId: 'clx7…', post_count: 14 }         ← mot count thuong</div>
-<div class="callout ok">
-<p><strong>Ép kiểu trong SQL, đừng chuyển đổi trong JavaScript.</strong> <code>Number(row.post_count)</code> chạy được nhưng phải lặp lại ở mọi chỗ gọi và sẽ bị quên ở đúng một chỗ. <code>::int</code> vá một lần, ngay nơi giá trị được sinh ra, cho MỌI người gọi — và nó nói rõ ý định cho người đọc câu truy vấn sau này. Chỉ dùng <code>::bigint</code> một cách CÓ CHỦ Ý khi phép đếm thật sự có thể vượt 2<sup>31</sup>, rồi xử lý BigInt một cách có chủ ý luôn.</p>
-</div>
+<pre><code class="language-sql">SELECT author_id, count(*) AS post_count FROM posts GROUP BY author_id;
+SELECT author_id, count(*)::int AS post_count FROM posts GROUP BY author_id;</code></pre>
+<div class="out">{ author_id: 1, post_count: 50n }
+JSON.stringify(rows) → TypeError: Do not know how to serialize a BigInt
+voi ::int → { author_id: 1, post_count: 50 }</div>
+<p>Đo thật (đo ngày 12/11/2026, laptop Apple silicon, PostgreSQL 16.14 trong Docker, Prisma 6.19.3): trình điều khiển trả <code>50n</code> và <code>JSON.stringify</code> — thứ <code>res.json</code> gọi — ném lỗi. Ép kiểu trong SQL, một lần, thay vì <code>Number()</code> ở mọi chỗ gọi.</p>
 
 <h3>Chuyển đổi 2 — <code>Decimal</code> vẫn là một object Decimal</h3>
-<pre><code class="language-sql">const rows = await prisma.$queryRaw&#96;SELECT id, price FROM "Order" LIMIT 1&#96;;
-console.log(rows[0].price, typeof rows[0].price);
-console.log(rows[0].price + 100);</code></pre>
-<div class="out">Decimal { s: 1, e: 5, d: [ 249000 ] } object
-249000100        ← noi chuoi, khong phai phep cong</div>
-<pre><code class="language-typescript"><span class="tok-comment">// Decimal có số học riêng. Dùng nó, hoặc chuyển đổi tường minh.</span>
-rows[0].price.plus(100).toString();     <span class="tok-comment">// '249100'  — chính xác</span>
-rows[0].price.toNumber() + 100;         <span class="tok-comment">// 249100    — số thực, mất chính xác trên 2^53</span></code></pre>
+<pre><code class="language-javascript">const rows = await prisma.$queryRaw&lt;any[]&gt;&#96;SELECT id, price FROM orders ORDER BY id&#96;;
+console.log(rows[0].price, typeof rows[0].price, rows[0].price.constructor.name);
+console.log('price + 100 =', rows[0].price + 100);
+console.log('price.plus(100).toString() =', rows[0].price.plus(100).toString());
+rows[2].price.plus('0.20').toString();   rows[2].price.toNumber() + 0.2;</code></pre>
+<div class="out">249000 object i
+price + 100 = 249000100
+price.plus(100).toString() = 249100
+0.10 + 0.20 bang Decimal = 0.3 · bang number = 0.30000000000000004</div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>Decimal + number</code> là một phép nối chuỗi LẶNG LẼ.</strong> Toán tử <code>+</code> của JavaScript rơi về chuỗi khi một vế là object, và <code>Decimal.toString()</code> cho ra chữ số, nên <code>249000 + 100</code> thành <code>'249000100'</code> — một con số nhìn RẤT HỢP LÝ mà sai gấp một nghìn lần. Nó đi tới tận hoá đơn trước khi có ai nhận ra. Tiền là <code>Decimal</code>, và số học của <code>Decimal</code> dùng phương thức: <code>.plus()</code>, <code>.minus()</code>, <code>.times()</code>, <code>.dividedBy()</code>.</p>
+<p><strong>Bẫy — Decimal + number là phép nối chuỗi âm thầm.</strong> <code>console.log</code> in Decimal ra 249000, trông như một số; rồi <code>+</code> quay về chuỗi và cho "249000100". Dùng <code>plus()</code>, hoặc đổi có chủ đích — <code>toNumber()</code> mang lỗi số thực trở lại (0.30000000000000004).</p>
 </div>
 
 <h3>Chuyển đổi 3 — truy vấn thô dùng tên <em>CỘT</em>, không phải tên TRƯỜNG</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
-model User {
-  id        String  @id
+<pre><code class="language-javascript">model User {
   avatarUrl String? @map("avatar_url")
   @@map("users")
 }</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment">// Trình dựng nói tiếng Prisma</span>
-await prisma.user.findMany({ select: { avatarUrl: true } });   <span class="tok-comment">// ✅</span>
-
-<span class="tok-comment">// Thô nói tiếng cơ sở dữ liệu, và phép ánh xạ KHÔNG áp dụng</span>
-await prisma.$queryRaw&#96;SELECT "avatarUrl" FROM "User"&#96;;         <span class="tok-comment">// ❌</span></code></pre>
-<div class="out">PrismaClientKnownRequestError:
-Raw query failed. Code: &#96;42P01&#96;. Message: &#96;relation "User" does not exist&#96;</div>
-<pre><code class="language-sql"><span class="tok-comment">// Đúng: những cái tên có thật trong PostgreSQL</span>
-await prisma.$queryRaw&#96;SELECT id, avatar_url FROM users&#96;;
-
-<span class="tok-comment">// Và khoá trả về là tên CỘT, không phải tên trường</span>
-<span class="tok-comment">// → { id: 'clx7…', avatar_url: 'https://…' }</span></code></pre>
+<div class="out">SELECT "avatarUrl" FROM "User" → PrismaClientKnownRequestError: P2010 Raw query failed. Code: &#96;42P01&#96;. Message: &#96;relation "User" does not exist&#96;
+SELECT "avatarUrl" FROM users → PrismaClientKnownRequestError: P2010 Raw query failed. Code: &#96;42703&#96;. Message: &#96;column "avatarUrl" does not exist&#96;
+SELECT id, avatar_url FROM users → [ { id: 1, avatar_url: 'https://cdn.vd/a/1.png' } ]
+… AS "avatarUrl" → [ { id: 1, avatarUrl: 'https://cdn.vd/a/1.png' } ]
+… AS avatarUrl (khong ngoac kep) → [ { id: 1, avatarurl: 'https://cdn.vd/a/1.png' } ]</div>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Cái lỗi mới là trường hợp TỐT</span><span class="v"><code>relation "User" does not exist</code> ồn ào và tức thì. Trường hợp XẤU là một cột tồn tại dưới cả hai tên ở hai bảng khác nhau, hoặc một câu truy vấn lặng lẽ trả về một khoá mà mã của bạn không đọc.</span></div>
-  <div class="kv"><span class="k">Đặt bí danh trở lại tên trường</span><span class="v"><code>SELECT avatar_url AS "avatarUrl"</code> giữ cho phần còn lại của mã chỉ nói MỘT thứ tiếng. Cặp nháy kép có ý nghĩa — thiếu nó, PostgreSQL hạ bí danh xuống chữ thường và bạn nhận được <code>avatarurl</code>.</span></div>
-  <div class="kv"><span class="k">Định danh không nháy bị hạ chữ thường</span><span class="v">Prisma tạo bảng với tên có nháy, giữ nguyên chữ hoa chữ thường, nên <code>SELECT * FROM SocialPost</code> đi tìm <code>socialpost</code> và thất bại. Trong SQL thô, hãy đặt nháy cho MỌI định danh: <code>"SocialPost"</code>.</span></div>
-  <div class="kv"><span class="k">Enum quay về dạng chuỗi</span><span class="v">Một cột enum của PostgreSQL trả về giá trị chữ của nó, không phải thành viên enum TypeScript được sinh ra. Chúng so sánh bằng nhau, nhưng <code>typeof</code> là <code>'string'</code> và mọi phép kiểm vét cạn bạn dựa vào ở chỗ khác đều KHÔNG áp dụng ở đây.</span></div>
+  <div class="kv"><span class="k">Lỗi là trường hợp tốt</span><span class="v">"User" (42P01) và "avatarUrl" (42703) không tồn tại trong PostgreSQL — <code>@map</code> và <code>@@map</code> không áp dụng cho SQL thô.</span></div>
+  <div class="kv"><span class="k">Đặt bí danh lại, có ngoặc kép</span><span class="v"><code>avatar_url AS "avatarUrl"</code> giữ một bộ từ vựng. Thiếu ngoặc kép, PostgreSQL hạ nó thành <code>avatarurl</code>.</span></div>
 </div>
 
 <h3>Chuyển đổi 4 — SQL thô còn đi vòng qua những gì nữa</h3>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Phần mở rộng client và middleware</span><span class="lz-lnote">Một phần mở rộng soft delete tự thêm <code>deletedAt: null</code> vào mọi truy vấn (Bài 10.5) KHÔNG chạm được tới SQL thô. Truy vấn thô của bạn trả về cả hàng đã xoá — và nó sẽ làm vậy vào NGÀY có người thêm phần mở rộng đó, chứ không phải ngày bạn viết câu truy vấn.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Giá trị mặc định và <code>@updatedAt</code></span><span class="lz-lnote"><code>@default(uuid())</code> và <code>@updatedAt</code> do PRISMA áp, không phải cơ sở dữ liệu, trừ khi migration cũng tạo một default ở phía cơ sở dữ liệu. Một câu <code>INSERT</code> thô bỏ sót những cột đó sẽ chèn NULL hoặc thất bại.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Hành vi tham chiếu khai trong lược đồ</span><span class="lz-lnote"><code>onDelete: Cascade</code> là một khoá ngoại THẬT trong PostgreSQL, nên nó <em>có</em> áp cho cả lệnh xoá thô. Nhưng <code>NoAction</code> do Prisma mô phỏng ở mức client thì KHÔNG — nếu điều đó quan trọng, hãy mở file SQL của migration ra xem.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Giao dịch thì không sao cả</span><span class="lz-lnote">Cái này ổn: <code>tx.$queryRaw</code> bên trong <code>$transaction(async (tx) =&gt; …)</code> chạy TRONG giao dịch đó, đúng như bạn muốn. Truy vấn thô và truy vấn qua trình dựng trộn thoải mái trong cùng một giao dịch.</span></div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Client extension</span><span class="v">Bộ lọc xoá mềm trong extension không chạm tới SQL thô (đo ở Bài 10.5).</span></div>
+  <div class="kv"><span class="k">Giá trị mặc định phía Prisma</span><span class="v"><code>@default(uuid())</code> và <code>@updatedAt</code> do client điền, không phải cơ sở dữ liệu, trừ khi migration cũng tạo giá trị mặc định ở cơ sở dữ liệu.</span></div>
+  <div class="kv"><span class="k">Không đi vòng giao dịch</span><span class="v"><code>tx.$executeRaw</code> trong giao dịch tương tác chạy trong chính giao dịch ấy — đo ở dưới.</span></div>
 </div>
-<pre><code class="language-javascript"><span class="tok-comment">// Thô và trình dựng trong một giao dịch — cái này chạy được</span>
-await prisma.$transaction(async (tx) =&gt; {
-  await tx.$executeRaw&#96;LOCK TABLE "Counter" IN SHARE ROW EXCLUSIVE MODE&#96;;
-  const c = await tx.counter.findUnique({ where: { key: 'order-hang' } });
-  await tx.counter.update({ where: { key: 'order-hang' }, data: { value: c.value + 1 } });
+<pre><code class="language-javascript">await prisma.$transaction(async (tx) =&gt; {
+  await tx.$executeRaw&#96;LOCK TABLE orders IN SHARE ROW EXCLUSIVE MODE&#96;;
+  const o = await tx.order.findUniqueOrThrow({ where: { id: 1 } });
+  await tx.order.update({ where: { id: 1 }, data: { price: o.price.plus(1) } });
 });</code></pre>
+<div class="out">trong cung giao dich: khoa ShareRowExclusiveLock · gia moi 249001</div>
 
 <h3>Đặt một phép kiểm THẬT trở lại</h3>
 <pre><code class="language-javascript">import { z } from 'zod';
-
-const StatsRow = z.object({
-  authorId: z.string(),
-  post_count:   z.number().int(),
-  gan_nhat: z.date(),
-});
-
-const rows = StatsRow.array().parse(
-  await prisma.$queryRaw&#96;
-    SELECT "authorId", count(*)::int AS post_count, max("createdAt") AS gan_nhat
-    FROM "SocialPost" WHERE "deletedAt" IS NULL GROUP BY "authorId"&#96;
-);
-<span class="tok-comment">// rows giờ là { authorId: string; so_bai: number; gan_nhat: Date }[]</span>
-<span class="tok-comment">// — suy ra từ lược đồ, VÀ được xác minh lúc chạy.</span></code></pre>
-<div class="out">ZodError: [
-  {
-    "code": "invalid_type", "expected": "number", "received": "bigint",
-    "path": [0, "post_count"], "message": "Expected number, received bigint"
-  }
+const StatsRow = z.object({ author_id: z.number().int(), post_count: z.number().int(), gan_nhat: z.date() });
+const rows = StatsRow.array().parse(await prisma.$queryRaw&#96;
+  SELECT author_id, count(*)::int AS post_count, max(created_at) AS gan_nhat FROM posts GROUP BY author_id&#96;);</code></pre>
+<div class="out">parse khong ep kieu → ZodError: {"code":"invalid_type","expected":"number","received":"bigint","path":[0,"post_count"],"message":"Expected number, received bigint"}
+parse voi ::int → [
+  { author_id: 1, post_count: 50, gan_nhat: 2026-03-11T10:40:00.000Z },
+  { author_id: 2, post_count: 50, gan_nhat: 2026-03-11T05:19:00.000Z }
 ]</div>
-<div class="callout ok">
-<p><strong>Chính CÁI LỖI NÀY mới là điểm mấu chốt.</strong> Không có lược đồ, cái BigInt đó đã đi xuyên qua tầng service rồi chết ở <code>res.json</code> — một vết ngăn xếp trong Express không hề nhắc tới câu truy vấn đã sinh ra nó. Có lược đồ, nó chết ngay tại biên, gọi tên cái cột, và nói cho bạn biết kiểu THẬT là gì. Một <code>z.object</code> cho mỗi truy vấn thô chỉ vài dòng, và nó biến "ở đây kiểu là lời nói dối" thành "ở đây kiểu được kiểm" cho đúng cái phần nhỏ của kho mã cần điều đó.</p>
-</div>
-<div class="note-ct">
-<p><strong>Khi nào nên dùng kiểm, nói cho thật.</strong> Một truy vấn thô trả về ba cột vô hướng vào một hàm cộng chúng lại ngay lập tức thì KHÔNG cần zod. Một truy vấn thô có kết quả vượt qua ranh giới module, được tuần tự hoá thành phản hồi API, hoặc do người này viết và người khác dùng — cái đó thì cần. Quy tắc ngón tay cái ở CuongThai: nếu cái hình dạng đó xuất hiện trong <em>kiểu trả về</em> của một hàm, hãy kiểm nó; nếu nó chết ngay trong chính cái hàm đã tạo ra truy vấn, thì một phép ép kiểu là đủ trung thực.</p>
-</div>
+<p>Kiểu suy ra từ lược đồ và được kiểm ở mọi lần gọi. Quên <code>::int</code> thì zod nói đúng chỗ: cần number, nhận bigint, tại <code>post_count</code>.</p>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://www.prisma.io/docs/orm/prisma-client/using-raw-sql/raw-queries#type-mapping" target="_blank" rel="noopener"><span class="lc-ico">🔁</span><span class="lc-body"><span class="lc-title">Prisma — ánh xạ kiểu trong truy vấn thô</span><span class="lc-sub">prisma.io/docs · Bảng đầy đủ kiểu PostgreSQL → giá trị JavaScript</span></span></a>
@@ -526,156 +422,112 @@ ${G10_3}
 <p class="lead">Prisma's query builder covers the shapes an application asks for ninety-five times out of a hundred. These are five of the other five: each one is a single SQL statement, each one is either impossible or catastrophically slow through the builder, and each one shows up in a real product sooner than you expect.</p>
 
 <h3>1. Top-N per group — the query the builder cannot express</h3>
-<pre><code><span class="tok-comment">// "The 3 most recent posts of each of these 50 authors"</span>
-<span class="tok-comment">// Through the builder: 50 queries, one per author. Lesson 9.2's N+1,</span>
-<span class="tok-comment">// except there is no include that avoids it — take inside include</span>
-<span class="tok-comment">// applies per parent, which is exactly the fan-out.</span></code></pre>
-<pre><code class="language-typescript">SELECT u.id, u.username, p.id AS post_id, p.content, p."createdAt"
-FROM "User" u
+<pre><code class="language-sql">SELECT u.id, p.id AS post_id, p.created_at
+FROM users u
 CROSS JOIN LATERAL (
-  SELECT id, content, "createdAt"
-  FROM "SocialPost"
-  WHERE "authorId" = u.id AND "deletedAt" IS NULL
-  ORDER BY "createdAt" DESC
-  LIMIT 3
+  SELECT id, created_at FROM posts
+  WHERE author_id = u.id AND deleted_at IS NULL
+  ORDER BY created_at DESC LIMIT 3
 ) p
 WHERE u.id = ANY($1);</code></pre>
-<div class="out">50 tac price x 3 post = 150 hang, 1 cau truy van, 11.4 ms
-
-(cung du lieu qua trinh dung: 51 cau truy van, 288 ms)</div>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k"><code>LATERAL</code></span><span class="lz-t">A subquery that sees the outer row</span><span class="lz-d">An ordinary subquery in <code>FROM</code> is evaluated once. A <code>LATERAL</code> one is evaluated per outer row and can reference its columns — which is exactly "for each author, the top 3".</span></div>
-  <div class="lz-step"><span class="lz-k">Still one round trip</span><span class="lz-t">Where the 25x comes from</span><span class="lz-d">The database runs the loop internally, on the same page cache, without a network hop or a query-plan lookup per iteration. Loops are not the problem; loops <em>across a network</em> are.</span></div>
-  <div class="lz-step"><span class="lz-k">Needs the index</span><span class="lz-t">Same rule as Lesson 9.3</span><span class="lz-d"><code>@@index([authorId, createdAt(sort: Desc)])</code>. Without it each lateral iteration sorts that author's whole history and the elegance buys nothing.</span></div>
-  <div class="lz-step"><span class="lz-k">The alternative</span><span class="lz-t"><code>row_number()</code></span><span class="lz-d">A window function partitioned by author, filtered to <code>rn &lt;= 3</code>. Correct, and usually slower here: it ranks every row before discarding, while <code>LATERAL</code> stops after three.</span></div>
+<div class="out">vong lap 50 findMany      → 150 hang · 50 truy van · 36.1 ms
+include posts take 3      → 150 hang · 2 truy van · 6.0 ms
+LATERAL                   → 150 hang · 1 truy van · 1.1 ms
+row_number() &lt;= 3         → 150 hang · 1 truy van · 3.0 ms
+include take 3 sends: SELECT … FROM "users" WHERE "users"."id" IN ($1 … $50) OFFSET $51 ; SELECT … FROM "posts" WHERE "posts"."author_id" IN ($1 … $50) ORDER BY "posts"."created_at" DESC OFFSET $51</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">include with take is not per-parent in SQL</span><span class="v">Its second query reads every post of the fifty authors, ordered, and the query engine keeps three each — two queries, but far more rows than needed (measured 12 Nov 2026, PostgreSQL 16.14 in Docker, Prisma 6.19.3, 2,000 users and 100,000 posts, median of 5).</span></div>
+  <div class="kv"><span class="k">LATERAL</span><span class="v">A subquery evaluated per outer row, with its own LIMIT, running on the (author_id, created_at DESC) index inside PostgreSQL. One query, the fastest here.</span></div>
+  <div class="kv"><span class="k">row_number()</span><span class="v">Correct, and slower here: it ranks every matching row before filtering to three.</span></div>
 </div>
 
 <h3>2. Window functions — rank, running total, and the previous row</h3>
-<pre><code class="language-typescript">SELECT
-  u.username,
-  count(p.id)::int                                      AS post_count,
-  rank()       OVER (ORDER BY count(p.id) DESC)         AS hang,
-  sum(count(p.id)) OVER (ORDER BY count(p.id) DESC)     AS luy_tien,
-  lag(u.username) OVER (ORDER BY count(p.id) DESC)      AS nguoi_tren
-FROM "User" u
-LEFT JOIN "SocialPost" p ON p."authorId" = u.id AND p."deletedAt" IS NULL
-GROUP BY u.id, u.username
-ORDER BY post_count DESC
-LIMIT 5;</code></pre>
-<div class="out">  username  | post_count | hang | luy_tien | nguoi_tren
-------------+--------+------+----------+------------
- cuongthai  |    418 |    1 |      418 |
- an         |    391 |    2 |      809 | cuongthai
- binh       |    287 |    3 |     1096 | an
- chi        |    287 |    3 |     1383 | binh      ← tie: both rank 3
- dung       |    150 |    5 |     1533 | chi       ← rank() skips 4</div>
-<div class="kv-grid">
-  <div class="kv"><span class="k">A window function does not collapse rows</span><span class="v"><code>GROUP BY</code> turns many rows into one. <code>OVER (…)</code> computes across a set of rows and keeps every row. That is the whole distinction, and it is why a leaderboard with ranks needs one and a leaderboard without ranks does not.</span></div>
-  <div class="kv"><span class="k"><code>rank()</code> vs <code>dense_rank()</code> vs <code>row_number()</code></span><span class="v"><code>rank</code> gives ties the same number and skips the next (1,2,3,3,5). <code>dense_rank</code> does not skip (1,2,3,3,4). <code>row_number</code> never ties (1,2,3,4,5) and is arbitrary between equal rows — add a tie-break to <code>ORDER BY</code> or it is unstable.</span></div>
-  <div class="kv"><span class="k">Computing this in JavaScript</span><span class="v">Requires loading every user and every post count into the process. On 12,000 users that is a query returning 12,000 rows to compute five. The database has the data sorted already.</span></div>
-  <div class="kv"><span class="k">The builder's version</span><span class="v"><code>groupBy</code> gives you counts. It has no <code>rank</code>, no running total, no <code>lag</code>. If your feature spec contains the word "rank", "streak", "compared to the previous", or "percentile", you are writing SQL.</span></div>
-</div>
+<pre><code class="language-sql">SELECT u.username, count(p.id)::int AS post_count,
+  rank()       OVER (ORDER BY count(p.id) DESC) AS hang,
+  dense_rank() OVER (ORDER BY count(p.id) DESC) AS hang_lien,
+  sum(count(p.id)) OVER (ORDER BY count(p.id) DESC, u.id) AS luy_tien,
+  lag(u.username)  OVER (ORDER BY count(p.id) DESC, u.id) AS nguoi_tren
+FROM users u LEFT JOIN posts p ON p.author_id = u.id AND p.deleted_at IS NULL
+GROUP BY u.id, u.username ORDER BY post_count DESC;</code></pre>
+<div class="out">┌─────────┬──────────┬────────────┬──────┬───────────┬──────────┬────────────┐
+│ (index) │ username │ post_count │ hang │ hang_lien │ luy_tien │ nguoi_tren │
+├─────────┼──────────┼────────────┼──────┼───────────┼──────────┼────────────┤
+│ 0       │ 'user1'  │ 50         │ 1    │ 1         │ 50       │ null       │
+│ 1       │ 'user2'  │ 41         │ 2    │ 2         │ 91       │ 'user1'    │
+│ 2       │ 'user3'  │ 29         │ 3    │ 3         │ 120      │ 'user2'    │
+│ 3       │ 'user4'  │ 29         │ 3    │ 3         │ 149      │ 'user3'    │
+│ 4       │ 'user7'  │ 15         │ 5    │ 4         │ 164      │ 'user4'    │
+│ 5       │ 'user8'  │ 10         │ 6    │ 5         │ 174      │ 'user7'    │
+└─────────┴──────────┴────────────┴──────┴───────────┴──────────┴────────────┘</div>
+<p>A window function computes across rows and keeps every row. With a tie at 29, <code>rank()</code> gave 3, 3 and then 5, while <code>dense_rank()</code> gave 3, 3, 4; <code>sum(…) OVER</code> accumulated and <code>lag()</code> read the previous row. <code>groupBy</code> can count — it cannot rank, accumulate or look back.</p>
 
 <h3>3. A recursive CTE — the comment tree in one query</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// The self-relation from Lesson 3.4</span>
-model Comment {
-  id       String    @id @default(cuid())
-  content  String
-  parentId String?
-  parent   Comment?  @relation("Replies", fields: [parentId], references: [id])
-  replies  Comment[] @relation("Replies")
-}
-
-<span class="tok-comment">// Through the builder, depth is fixed at write time:</span>
-include: { replies: { include: { replies: { include: { replies: true } } } } }
-<span class="tok-comment">// Three levels. The fourth is silently missing.</span></code></pre>
 <pre><code class="language-sql">WITH RECURSIVE tree AS (
-  <span class="tok-comment">-- anchor: the top-level comments of this post</span>
-  SELECT id, content, "parentId", 0 AS do_sau,
-         ARRAY["createdAt"] AS path
-  FROM "Comment"
-  WHERE "postId" = $1 AND "parentId" IS NULL
-
+  SELECT id, content, parent_id, 0 AS do_sau, ARRAY[id] AS path
+  FROM comments WHERE post_id = 1 AND parent_id IS NULL
   UNION ALL
-
-  <span class="tok-comment">-- recursive step: children of everything already in cay</span>
-  SELECT c.id, c.content, c."parentId", tree.do_sau + 1,
-         tree.path || c."createdAt"
-  FROM "Comment" c
-  JOIN tree ON c."parentId" = tree.id
-  WHERE tree.do_sau &lt; 10          <span class="tok-comment">-- depth guard, always</span>
+  SELECT c.id, c.content, c.parent_id, tree.do_sau + 1, tree.path || c.id
+  FROM comments c JOIN tree ON c.parent_id = tree.id
+  WHERE tree.do_sau &lt; 10          -- depth guard, always
 )
-SELECT * FROM tree ORDER BY path;</code></pre>
-<div class="out">              id | do_sau |            content
------------------+--------+---------------------------------
- cm_a            |      0 | Bai viet hay
- cm_a1           |      1 |   Dong y
- cm_a1x          |      2 |     Minh cung nghi vay
- cm_a1x9         |      3 |       Chinh xac
- cm_b            |      0 | Cho hoi phan 2 khi nao ra?
+SELECT id, do_sau, content FROM tree ORDER BY path;</code></pre>
+<div class="out">┌─────────┬────┬────────┬──────────────────────────────────────────────┐
+│ (index) │ id │ do_sau │ content                                      │
+├─────────┼────┼────────┼──────────────────────────────────────────────┤
+│ 0       │ 1  │ 0      │ 'Bai viet hay'                               │
+│ 1       │ 3  │ 1      │ '  Dong y'                                   │
+│ 2       │ 4  │ 2      │ '    Minh cung nghi vay'                     │
+│ 3       │ 5  │ 3      │ '      Chinh xac'                            │
+│ 4       │ 6  │ 4      │ '        Tang 5 — include 3 tang khong thay' │
+│ 5       │ 2  │ 0      │ 'Cho hoi phan 2 khi nao ra?'                 │
+└─────────┴────┴────────┴──────────────────────────────────────────────┘
 
-Execution Time: 3.208 ms   (any depth, one query)</div>
+-- the builder, four levels of nested include
+include 4 tang (goc + 3): {"content":"Bai viet hay","replies":[{"content":"Dong y","replies":[{"content":"Minh cung nghi vay","replies":[{"content":"Chinh xac"}]}]}]}</div>
 <div class="pitfall">
-<p><strong>Trap — a recursive CTE without a depth guard runs forever on a cycle.</strong> One row whose <code>parentId</code> points at its own descendant — a bug, a bad import, a merge — and the query generates rows until the connection dies or the disk fills with temp files. <code>WHERE do_sau &lt; 10</code> costs nothing and bounds the damage. The <code>path</code> array is the second half of the defence: <code>WHERE NOT c.id = ANY(path)</code> makes a cycle terminate rather than merely time out, and it gives you the ordering for free.</p>
+<p><strong>Trap — a recursive CTE without a depth guard runs forever on a cycle.</strong> Measured: one comment re-parented under its own descendant made a cycle. With the guard the query returned 11 rows and stopped at depth 10; without it, it ran until <code>statement_timeout</code> cancelled it:</p>
+<div class="out">co vong + chan do sau 10 → { so_hang: 11, sau_nhat: 10 }
+co vong + KHONG chan → P2010 Raw query failed. Code: &#96;57014&#96;. Message: &#96;ERROR: canceling statement due to statement timeout&#96;</div>
 </div>
 
 <h3>4. <code>ON CONFLICT DO UPDATE</code> with an expression</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// What upsert can say: "if it exists, set it to this value"</span>
-await prisma.dailyStat.upsert({
-  where:  { uk_ngay: { key: 'luot-xem', day } },
-  create: { key: 'luot-xem', day, count: 1 },
-  update: { count: { increment: 1 } },        <span class="tok-comment">// ok — increment is supported</span>
-});</code></pre>
-<pre><code class="language-sql"><span class="tok-comment">-- What upsert cannot say: a value computed from BOTH sides,</span>
-<span class="tok-comment">-- for many rows at once, in one statement.</span>
-INSERT INTO "DailyStat" (key, day, count, updated_at)
+<pre><code class="language-sql">INSERT INTO daily_stats (key, day, count, updated_at)
 SELECT * FROM unnest($1::text[], $2::date[], $3::int[], $4::timestamptz[])
 ON CONFLICT (key, day) DO UPDATE
-SET count       = "DailyStat".count + EXCLUDED.count,
-    updated_at = GREATEST("DailyStat".updated_at, EXCLUDED.updated_at)
-WHERE EXCLUDED.updated_at &gt; "DailyStat".updated_at;   <span class="tok-comment">-- conditional update</span></code></pre>
-<div class="out">INSERT 0 4096
-
-4.096 hang gop trong 1 cau lenh, 1 giao dich, 34 ms.
-Qua upsert: 4.096 luot di ve, 4.096 giao dich, ~39 giay.</div>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname"><code>EXCLUDED</code></span><span class="lz-lnote">The pseudo-table holding the row that <em>would have been</em> inserted. It lets the update read both the existing value and the incoming one — which is what "merge" means and what <code>upsert</code>'s <code>update</code> block cannot see.</span></div>
-  <div class="lz-layer"><span class="lz-lname">A <code>WHERE</code> on the conflict action</span><span class="lz-lnote">Skip the update when the incoming row is older. Last-write-wins is a choice, not a law, and this is where you override it.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>unnest</code> of arrays</span><span class="lz-lnote">Four parameters carry four thousand rows. It stays inside the 65,535 bind-parameter cap that would stop a <code>VALUES</code> list of the same size (Lesson 9.5).</span></div>
-  <div class="lz-layer"><span class="lz-lname">The unique constraint is required</span><span class="lz-lnote"><code>ON CONFLICT (key, day)</code> needs a unique index on exactly those columns. Without it PostgreSQL raises <code>there is no unique or exclusion constraint matching the ON CONFLICT specification</code> — which at least fails loudly.</span></div>
+SET count = daily_stats.count + EXCLUDED.count,
+    updated_at = GREATEST(daily_stats.updated_at, EXCLUDED.updated_at)
+WHERE EXCLUDED.updated_at &gt; daily_stats.updated_at;</code></pre>
+<div class="out">vong lap upsert x 4096    → 3408 ms
+unnest + ON CONFLICT x 4096 → 56 ms · 4096 hang · 4 tham so
+k0 sau ca hai: 3</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EXCLUDED</span><span class="v">The row that would have been inserted — the update reads both sides.</span></div>
+  <div class="kv"><span class="k">Four parameters, 4,096 rows</span><span class="v">unnest of arrays stays far below the 65,535 bind-parameter cap. The loop of upsert paid one statement and one commit per row — about sixty times slower here.</span></div>
+  <div class="kv"><span class="k">A unique constraint is required</span><span class="v">ON CONFLICT (key, day) needs a unique index on exactly those columns.</span></div>
 </div>
 
 <h3>5. Full-text search that ranks</h3>
-<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql — a generated column plus a GIN index</span>
-ALTER TABLE "SocialPost"
-  ADD COLUMN tim_kiem tsvector
+<pre><code class="language-sql">ALTER TABLE posts ADD COLUMN tim_kiem tsvector
   GENERATED ALWAYS AS (to_tsvector('simple', coalesce(content, ''))) STORED;
+CREATE INDEX posts_tim_kiem_idx ON posts USING GIN (tim_kiem);
 
-CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code></pre>
-<pre><code class="language-javascript">const result = await prisma.$queryRaw&#96;
-  SELECT id, content,
-         ts_rank(tim_kiem, truy_van) AS score,
-         ts_headline('simple', content, truy_van,
-                     'StartSel=&lt;mark&gt;, StopSel=&lt;/mark&gt;') AS trich
-  FROM "SocialPost", websearch_to_tsquery('simple', \${tuKhoa}) AS truy_van
-  WHERE tim_kiem @@ truy_van AND "deletedAt" IS NULL
-  ORDER BY score DESC, "createdAt" DESC
-  LIMIT 20&#96;;</code></pre>
-<div class="out">from key: prisma migration
-
- score  | trich
--------+-------------------------------------------------------
- 0.099 | huong dan &lt;mark&gt;migration&lt;/mark&gt; cua &lt;mark&gt;Prisma&lt;/mark&gt;…
- 0.075 | &lt;mark&gt;Prisma&lt;/mark&gt; migrate deploy tren VPS…
- 0.061 | vi sao &lt;mark&gt;migration&lt;/mark&gt; that post voi P3006…
-
-Execution Time: 4.7 ms over 1.2M rows (GIN index scan)</div>
-<div class="callout ok">
-<p><strong><code>websearch_to_tsquery</code> takes what a human types.</strong> It understands quoted phrases, <code>or</code>, and a leading <code>-</code> for exclusion, and — crucially — it does not throw a syntax error on input like <code>c++ &amp;&amp; ???</code>, which <code>to_tsquery</code> does. That single choice removes a whole class of 500s from a search box. Prisma's own <code>search</code> filter uses <code>to_tsquery</code>, so unsanitised input there is a real error path.</p>
-</div>
-<div class="note-ct">
-<p><strong>CuongThai's actual search.</strong> Post search runs on a <code>pg_trgm</code> GIN index (migration <code>20260623_gin_social_posts_content_trgm</code>) rather than <code>tsvector</code>, because Vietnamese has no PostgreSQL stemming dictionary — <code>to_tsvector('simple', …)</code> only splits on whitespace, so it cannot match "lập trình" against "lập trình viên", while trigram similarity can. Full-text with <code>ts_rank</code> is the right default for English content; for Vietnamese, measure both against real queries before choosing. Lesson 5.5 covers the trigram side.</p>
-</div>
+SELECT id, ts_rank(tim_kiem, q) AS score,
+       ts_headline('simple', content, q, 'StartSel=&lt;mark&gt;, StopSel=&lt;/mark&gt;') AS trich
+FROM posts, websearch_to_tsquery('simple', $1) AS q
+WHERE tim_kiem @@ q AND deleted_at IS NULL
+ORDER BY ts_rank(tim_kiem, q) DESC, created_at DESC LIMIT 3;</code></pre>
+<div class="out">┌─────────┬───────┬──────────┬─────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ id    │ score    │ trich                                                                           │
+├─────────┼───────┼──────────┼─────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 99999 │ '0.0974' │ '&lt;mark&gt;prisma&lt;/mark&gt; migration tren &lt;mark&gt;production&lt;/mark&gt; — ghi chu so 99999' │
+│ 1       │ 99993 │ '0.0974' │ '&lt;mark&gt;prisma&lt;/mark&gt; migration tren &lt;mark&gt;production&lt;/mark&gt; — ghi chu so 99993' │
+│ 2       │ 99987 │ '0.0974' │ '&lt;mark&gt;prisma&lt;/mark&gt; migration tren &lt;mark&gt;production&lt;/mark&gt; — ghi chu so 99987' │
+└─────────┴───────┴──────────┴─────────────────────────────────────────────────────────────────────────────────┘
+thoi gian (trung vi 5): 18.3 ms
+contains 'prisma production' → 0 hang · 18.7 ms (khop chuoi lien, khong hieu tu)
+Bitmap Heap Scan on posts  (cost=67.49..2889.01 rows=5561 width=4)
+  -&gt;  Bitmap Index Scan on posts_tim_kiem_idx  (cost=0.00..66.10 rows=5561 width=0)</div>
+<p><code>websearch_to_tsquery</code> parses what people type, <code>ts_rank</code> orders and <code>ts_headline</code> marks the excerpt. Prisma's <code>contains</code> with the same two words found nothing: it matches a contiguous string, not words.</p>
 
 <h3>When not to reach for this</h3>
 <div class="lz-flow">
@@ -701,156 +553,112 @@ Execution Time: 4.7 ms over 1.2M rows (GIN index scan)</div>
 <p class="lead">Trình dựng truy vấn của Prisma phủ được những hình dạng mà một ứng dụng cần, chín mươi lăm lần trên một trăm. Đây là năm cái thuộc về năm phần trăm còn lại: mỗi cái là MỘT câu SQL duy nhất, mỗi cái hoặc là bất khả thi hoặc là chậm thảm hoạ khi đi qua trình dựng, và mỗi cái đều xuất hiện trong một sản phẩm thật sớm hơn bạn tưởng.</p>
 
 <h3>1. Top-N mỗi nhóm — câu truy vấn trình dựng không diễn đạt nổi</h3>
-<pre><code><span class="tok-comment">// "3 bài mới nhất của MỖI người trong 50 tác giả này"</span>
-<span class="tok-comment">// Qua trình dựng: 50 truy vấn, mỗi tác giả một cái. Chính là N+1 của Bài 9.2,</span>
-<span class="tok-comment">// mà lại không có include nào tránh được — take bên trong include</span>
-<span class="tok-comment">// áp theo TỪNG cha, và đó đúng là cú nở bung ra.</span></code></pre>
-<pre><code class="language-typescript">SELECT u.id, u.username, p.id AS post_id, p.content, p."createdAt"
-FROM "User" u
+<pre><code class="language-sql">SELECT u.id, p.id AS post_id, p.created_at
+FROM users u
 CROSS JOIN LATERAL (
-  SELECT id, content, "createdAt"
-  FROM "SocialPost"
-  WHERE "authorId" = u.id AND "deletedAt" IS NULL
-  ORDER BY "createdAt" DESC
-  LIMIT 3
+  SELECT id, created_at FROM posts
+  WHERE author_id = u.id AND deleted_at IS NULL
+  ORDER BY created_at DESC LIMIT 3
 ) p
 WHERE u.id = ANY($1);</code></pre>
-<div class="out">50 tac price x 3 post = 150 hang, 1 cau truy van, 11,4 ms
-
-(cung du lieu qua trinh dung: 51 cau truy van, 288 ms)</div>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k"><code>LATERAL</code></span><span class="lz-t">Truy vấn con NHÌN THẤY hàng ngoài</span><span class="lz-d">Một truy vấn con thường trong <code>FROM</code> chỉ được tính MỘT lần. Một cái <code>LATERAL</code> được tính cho TỪNG hàng ngoài và tham chiếu được cột của nó — đúng nghĩa "với mỗi tác giả, lấy top 3".</span></div>
-  <div class="lz-step"><span class="lz-k">Vẫn chỉ MỘT lượt đi về</span><span class="lz-t">Chỗ con số 25 lần đến từ</span><span class="lz-d">Cơ sở dữ liệu chạy vòng lặp ở BÊN TRONG, trên cùng bộ đệm trang, không có bước nhảy mạng và không phải tra kế hoạch truy vấn cho mỗi vòng. Vòng lặp không phải vấn đề; vòng lặp <em>xuyên qua mạng</em> mới là.</span></div>
-  <div class="lz-step"><span class="lz-k">Vẫn cần chỉ mục</span><span class="lz-t">Cùng luật của Bài 9.3</span><span class="lz-d"><code>@@index([authorId, createdAt(sort: Desc)])</code>. Thiếu nó thì mỗi vòng lateral phải sắp xếp toàn bộ lịch sử của tác giả đó, và cái sự thanh lịch kia chẳng mua được gì.</span></div>
-  <div class="lz-step"><span class="lz-k">Cách khác</span><span class="lz-t"><code>row_number()</code></span><span class="lz-d">Một window function phân hoạch theo tác giả, lọc <code>rn &lt;= 3</code>. Đúng, và ở đây thường CHẬM hơn: nó xếp hạng mọi hàng rồi mới vứt đi, còn <code>LATERAL</code> dừng ngay sau ba cái.</span></div>
+<div class="out">vong lap 50 findMany      → 150 hang · 50 truy van · 36.1 ms
+include posts take 3      → 150 hang · 2 truy van · 6.0 ms
+LATERAL                   → 150 hang · 1 truy van · 1.1 ms
+row_number() &lt;= 3         → 150 hang · 1 truy van · 3.0 ms
+include take 3 sends: SELECT … FROM "users" WHERE "users"."id" IN ($1 … $50) OFFSET $51 ; SELECT … FROM "posts" WHERE "posts"."author_id" IN ($1 … $50) ORDER BY "posts"."created_at" DESC OFFSET $51</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">include với take không giới hạn theo từng cha trong SQL</span><span class="v">Câu thứ hai đọc mọi bài của năm mươi tác giả, đã sắp, rồi engine giữ ba bài mỗi người — hai truy vấn, nhưng đọc nhiều hàng hơn cần (đo ngày 12/11/2026, PostgreSQL 16.14 trong Docker, Prisma 6.19.3, 2.000 người dùng và 100.000 bài, trung vị 5 lần).</span></div>
+  <div class="kv"><span class="k">LATERAL</span><span class="v">Truy vấn con chạy theo từng hàng ngoài, có LIMIT riêng, đi theo chỉ mục (author_id, created_at DESC) ngay trong PostgreSQL. Một truy vấn, nhanh nhất ở đây.</span></div>
+  <div class="kv"><span class="k">row_number()</span><span class="v">Đúng, và chậm hơn ở đây: nó xếp hạng mọi hàng khớp trước khi lọc còn ba.</span></div>
 </div>
 
 <h3>2. Window function — xếp hạng, tổng luỹ tiến, và hàng liền trước</h3>
-<pre><code class="language-typescript">SELECT
-  u.username,
-  count(p.id)::int                                      AS post_count,
-  rank()       OVER (ORDER BY count(p.id) DESC)         AS hang,
-  sum(count(p.id)) OVER (ORDER BY count(p.id) DESC)     AS luy_tien,
-  lag(u.username) OVER (ORDER BY count(p.id) DESC)      AS nguoi_tren
-FROM "User" u
-LEFT JOIN "SocialPost" p ON p."authorId" = u.id AND p."deletedAt" IS NULL
-GROUP BY u.id, u.username
-ORDER BY post_count DESC
-LIMIT 5;</code></pre>
-<div class="out">  username  | post_count | hang | luy_tien | nguoi_tren
-------------+--------+------+----------+------------
- cuongthai  |    418 |    1 |      418 |
- an         |    391 |    2 |      809 | cuongthai
- binh       |    287 |    3 |     1096 | an
- chi        |    287 |    3 |     1383 | binh      ← hoa: ca hai deu hang 3
- dung       |    150 |    5 |     1533 | chi       ← rank() bo qua count 4</div>
-<div class="kv-grid">
-  <div class="kv"><span class="k">Window function KHÔNG gộp hàng lại</span><span class="v"><code>GROUP BY</code> biến nhiều hàng thành một. <code>OVER (…)</code> tính trên một TẬP hàng mà GIỮ NGUYÊN mọi hàng. Đó là toàn bộ khác biệt, và là lý do một bảng xếp hạng CÓ thứ hạng thì cần nó, còn bảng KHÔNG có thứ hạng thì không.</span></div>
-  <div class="kv"><span class="k"><code>rank()</code> đối lại <code>dense_rank()</code> đối lại <code>row_number()</code></span><span class="v"><code>rank</code> cho các trường hợp hoà cùng một số rồi BỎ QUA số kế (1,2,3,3,5). <code>dense_rank</code> không bỏ qua (1,2,3,3,4). <code>row_number</code> không bao giờ hoà (1,2,3,4,5) và tuỳ tiện giữa các hàng bằng nhau — thêm cột phá hoà vào <code>ORDER BY</code> nếu không nó không ổn định.</span></div>
-  <div class="kv"><span class="k">Tính cái này trong JavaScript</span><span class="v">Phải nạp MỌI người dùng và MỌI số đếm bài viết vào tiến trình. Với 12.000 người dùng thì đó là một truy vấn trả về 12.000 hàng để tính ra năm dòng. Cơ sở dữ liệu vốn đã có dữ liệu và đã sắp xếp sẵn.</span></div>
-  <div class="kv"><span class="k">Bản của trình dựng</span><span class="v"><code>groupBy</code> cho bạn các phép đếm. Nó KHÔNG có <code>rank</code>, không có tổng luỹ tiến, không có <code>lag</code>. Nếu bản mô tả tính năng của bạn có chữ "thứ hạng", "chuỗi ngày liên tiếp", "so với lần trước", hay "phân vị" — thì bạn đang viết SQL.</span></div>
-</div>
+<pre><code class="language-sql">SELECT u.username, count(p.id)::int AS post_count,
+  rank()       OVER (ORDER BY count(p.id) DESC) AS hang,
+  dense_rank() OVER (ORDER BY count(p.id) DESC) AS hang_lien,
+  sum(count(p.id)) OVER (ORDER BY count(p.id) DESC, u.id) AS luy_tien,
+  lag(u.username)  OVER (ORDER BY count(p.id) DESC, u.id) AS nguoi_tren
+FROM users u LEFT JOIN posts p ON p.author_id = u.id AND p.deleted_at IS NULL
+GROUP BY u.id, u.username ORDER BY post_count DESC;</code></pre>
+<div class="out">┌─────────┬──────────┬────────────┬──────┬───────────┬──────────┬────────────┐
+│ (index) │ username │ post_count │ hang │ hang_lien │ luy_tien │ nguoi_tren │
+├─────────┼──────────┼────────────┼──────┼───────────┼──────────┼────────────┤
+│ 0       │ 'user1'  │ 50         │ 1    │ 1         │ 50       │ null       │
+│ 1       │ 'user2'  │ 41         │ 2    │ 2         │ 91       │ 'user1'    │
+│ 2       │ 'user3'  │ 29         │ 3    │ 3         │ 120      │ 'user2'    │
+│ 3       │ 'user4'  │ 29         │ 3    │ 3         │ 149      │ 'user3'    │
+│ 4       │ 'user7'  │ 15         │ 5    │ 4         │ 164      │ 'user4'    │
+│ 5       │ 'user8'  │ 10         │ 6    │ 5         │ 174      │ 'user7'    │
+└─────────┴──────────┴────────────┴──────┴───────────┴──────────┴────────────┘</div>
+<p>Window function tính trên một tập hàng mà vẫn giữ mọi hàng. Với một cặp hoà ở 29, <code>rank()</code> cho 3, 3 rồi 5, còn <code>dense_rank()</code> cho 3, 3, 4; <code>sum(…) OVER</code> cộng dồn và <code>lag()</code> đọc hàng liền trước. <code>groupBy</code> đếm được — nó không xếp hạng, không cộng dồn, không nhìn lại được.</p>
 
 <h3>3. CTE đệ quy — cây bình luận trong MỘT câu truy vấn</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// Quan hệ tự trỏ của Bài 3.4</span>
-model Comment {
-  id       String    @id @default(cuid())
-  content  String
-  parentId String?
-  parent   Comment?  @relation("Replies", fields: [parentId], references: [id])
-  replies  Comment[] @relation("Replies")
-}
-
-<span class="tok-comment">// Qua trình dựng, độ sâu bị CHỐT CỨNG lúc viết mã:</span>
-include: { replies: { include: { replies: { include: { replies: true } } } } }
-<span class="tok-comment">// Ba tầng. Tầng thứ tư biến mất trong im lặng.</span></code></pre>
 <pre><code class="language-sql">WITH RECURSIVE tree AS (
-  <span class="tok-comment">-- mỏ neo: các bình luận gốc của bài này</span>
-  SELECT id, content, "parentId", 0 AS do_sau,
-         ARRAY["createdAt"] AS path
-  FROM "Comment"
-  WHERE "postId" = $1 AND "parentId" IS NULL
-
+  SELECT id, content, parent_id, 0 AS do_sau, ARRAY[id] AS path
+  FROM comments WHERE post_id = 1 AND parent_id IS NULL
   UNION ALL
-
-  <span class="tok-comment">-- bước đệ quy: con của mọi thứ đã có trong cay</span>
-  SELECT c.id, c.content, c."parentId", tree.do_sau + 1,
-         tree.path || c."createdAt"
-  FROM "Comment" c
-  JOIN tree ON c."parentId" = tree.id
-  WHERE tree.do_sau &lt; 10          <span class="tok-comment">-- chốt chặn độ sâu, LUÔN LUÔN</span>
+  SELECT c.id, c.content, c.parent_id, tree.do_sau + 1, tree.path || c.id
+  FROM comments c JOIN tree ON c.parent_id = tree.id
+  WHERE tree.do_sau &lt; 10          -- depth guard, always
 )
-SELECT * FROM tree ORDER BY path;</code></pre>
-<div class="out">              id | do_sau |            content
------------------+--------+---------------------------------
- cm_a            |      0 | Bai viet hay
- cm_a1           |      1 |   Dong y
- cm_a1x          |      2 |     Minh cung nghi vay
- cm_a1x9         |      3 |       Chinh xac
- cm_b            |      0 | Cho hoi phan 2 khi nao ra?
+SELECT id, do_sau, content FROM tree ORDER BY path;</code></pre>
+<div class="out">┌─────────┬────┬────────┬──────────────────────────────────────────────┐
+│ (index) │ id │ do_sau │ content                                      │
+├─────────┼────┼────────┼──────────────────────────────────────────────┤
+│ 0       │ 1  │ 0      │ 'Bai viet hay'                               │
+│ 1       │ 3  │ 1      │ '  Dong y'                                   │
+│ 2       │ 4  │ 2      │ '    Minh cung nghi vay'                     │
+│ 3       │ 5  │ 3      │ '      Chinh xac'                            │
+│ 4       │ 6  │ 4      │ '        Tang 5 — include 3 tang khong thay' │
+│ 5       │ 2  │ 0      │ 'Cho hoi phan 2 khi nao ra?'                 │
+└─────────┴────┴────────┴──────────────────────────────────────────────┘
 
-Execution Time: 3,208 ms   (do sau bao nhieu cung 1 truy van)</div>
+-- builder, include lồng bốn tầng
+include 4 tang (goc + 3): {"content":"Bai viet hay","replies":[{"content":"Dong y","replies":[{"content":"Minh cung nghi vay","replies":[{"content":"Chinh xac"}]}]}]}</div>
 <div class="pitfall">
-<p><strong>Bẫy — một CTE đệ quy KHÔNG có chốt chặn độ sâu sẽ chạy MÃI MÃI khi gặp chu trình.</strong> Chỉ một hàng có <code>parentId</code> trỏ vào chính hậu duệ của nó — do bug, do nhập dữ liệu sai, do một lần gộp nhánh — là câu truy vấn sinh hàng cho tới khi kết nối chết hoặc đĩa đầy file tạm. <code>WHERE do_sau &lt; 10</code> không tốn gì và chặn được thiệt hại. Cái mảng <code>path</code> là nửa còn lại của hàng phòng thủ: <code>WHERE NOT c.id = ANY(path)</code> làm chu trình DỪNG hẳn chứ không chỉ hết giờ, và tặng luôn thứ tự sắp xếp cho bạn.</p>
+<p><strong>Bẫy — CTE đệ quy không có rào độ sâu chạy mãi khi gặp vòng.</strong> Đo thật: gán một bình luận làm con của chính hậu duệ nó tạo ra vòng. Có rào, truy vấn trả 11 hàng và dừng ở độ sâu 10; không có rào, nó chạy tới khi <code>statement_timeout</code> huỷ:</p>
+<div class="out">co vong + chan do sau 10 → { so_hang: 11, sau_nhat: 10 }
+co vong + KHONG chan → P2010 Raw query failed. Code: &#96;57014&#96;. Message: &#96;ERROR: canceling statement due to statement timeout&#96;</div>
 </div>
 
 <h3>4. <code>ON CONFLICT DO UPDATE</code> kèm BIỂU THỨC</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// Thứ upsert nói được: "nếu đã có thì đặt thành giá trị này"</span>
-await prisma.dailyStat.upsert({
-  where:  { uk_ngay: { key: 'luot-xem', day } },
-  create: { key: 'luot-xem', day, count: 1 },
-  update: { count: { increment: 1 } },        <span class="tok-comment">// ổn — increment có hỗ trợ</span>
-});</code></pre>
-<pre><code class="language-sql"><span class="tok-comment">-- Thứ upsert KHÔNG nói được: một giá trị tính từ CẢ HAI phía,</span>
-<span class="tok-comment">-- cho nhiều hàng cùng lúc, trong MỘT câu lệnh.</span>
-INSERT INTO "DailyStat" (key, day, count, updated_at)
+<pre><code class="language-sql">INSERT INTO daily_stats (key, day, count, updated_at)
 SELECT * FROM unnest($1::text[], $2::date[], $3::int[], $4::timestamptz[])
 ON CONFLICT (key, day) DO UPDATE
-SET count       = "DailyStat".count + EXCLUDED.count,
-    updated_at = GREATEST("DailyStat".updated_at, EXCLUDED.updated_at)
-WHERE EXCLUDED.updated_at &gt; "DailyStat".updated_at;   <span class="tok-comment">-- cập nhật có điều kiện</span></code></pre>
-<div class="out">INSERT 0 4096
-
-4.096 hang gop trong 1 cau lenh, 1 giao dich, 34 ms.
-Qua upsert: 4.096 luot di ve, 4.096 giao dich, ~39 giay.</div>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname"><code>EXCLUDED</code></span><span class="lz-lnote">Bảng giả chứa cái hàng LẼ RA đã được chèn. Nó cho phép phần update đọc CẢ giá trị đang có LẪN giá trị đang tới — đó chính là nghĩa của "gộp", và là thứ khối <code>update</code> của <code>upsert</code> không nhìn thấy.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Một <code>WHERE</code> gắn vào hành động khi xung đột</span><span class="lz-lnote">Bỏ qua việc cập nhật khi hàng đang tới CŨ hơn. "Ai ghi sau thắng" là một LỰA CHỌN, không phải định luật, và đây là chỗ bạn lật ngược nó.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>unnest</code> các mảng</span><span class="lz-lnote">Bốn tham số cõng bốn nghìn hàng. Nó nằm gọn trong trần 65.535 tham số ràng buộc, cái trần sẽ chặn một danh sách <code>VALUES</code> cùng cỡ (Bài 9.5).</span></div>
-  <div class="lz-layer"><span class="lz-lname">BẮT BUỘC phải có ràng buộc duy nhất</span><span class="lz-lnote"><code>ON CONFLICT (key, day)</code> cần một chỉ mục duy nhất trên ĐÚNG những cột đó. Thiếu nó, PostgreSQL ném <code>there is no unique or exclusion constraint matching the ON CONFLICT specification</code> — ít ra thì nó hỏng một cách ồn ào.</span></div>
+SET count = daily_stats.count + EXCLUDED.count,
+    updated_at = GREATEST(daily_stats.updated_at, EXCLUDED.updated_at)
+WHERE EXCLUDED.updated_at &gt; daily_stats.updated_at;</code></pre>
+<div class="out">vong lap upsert x 4096    → 3408 ms
+unnest + ON CONFLICT x 4096 → 56 ms · 4096 hang · 4 tham so
+k0 sau ca hai: 3</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EXCLUDED</span><span class="v">Hàng lẽ ra đã được chèn — lệnh cập nhật đọc được cả hai phía.</span></div>
+  <div class="kv"><span class="k">Bốn tham số, 4.096 hàng</span><span class="v">unnest các mảng ở rất xa trần 65.535 tham số. Vòng lặp upsert trả một câu lệnh và một commit cho mỗi hàng — chậm hơn khoảng sáu mươi lần ở đây.</span></div>
+  <div class="kv"><span class="k">Cần một ràng buộc unique</span><span class="v">ON CONFLICT (key, day) cần một chỉ mục unique đúng trên các cột đó.</span></div>
 </div>
 
 <h3>5. Tìm kiếm toàn văn CÓ XẾP HẠNG</h3>
-<pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql — một cột sinh ra cộng một chỉ mục GIN</span>
-ALTER TABLE "SocialPost"
-  ADD COLUMN tim_kiem tsvector
+<pre><code class="language-sql">ALTER TABLE posts ADD COLUMN tim_kiem tsvector
   GENERATED ALWAYS AS (to_tsvector('simple', coalesce(content, ''))) STORED;
+CREATE INDEX posts_tim_kiem_idx ON posts USING GIN (tim_kiem);
 
-CREATE INDEX socialpost_tim_kiem_idx ON "SocialPost" USING GIN (tim_kiem);</code></pre>
-<pre><code class="language-javascript">const result = await prisma.$queryRaw&#96;
-  SELECT id, content,
-         ts_rank(tim_kiem, truy_van) AS score,
-         ts_headline('simple', content, truy_van,
-                     'StartSel=&lt;mark&gt;, StopSel=&lt;/mark&gt;') AS trich
-  FROM "SocialPost", websearch_to_tsquery('simple', \${tuKhoa}) AS truy_van
-  WHERE tim_kiem @@ truy_van AND "deletedAt" IS NULL
-  ORDER BY score DESC, "createdAt" DESC
-  LIMIT 20&#96;;</code></pre>
-<div class="out">from key: prisma migration
-
- score  | trich
--------+-------------------------------------------------------
- 0,099 | huong dan &lt;mark&gt;migration&lt;/mark&gt; cua &lt;mark&gt;Prisma&lt;/mark&gt;…
- 0,075 | &lt;mark&gt;Prisma&lt;/mark&gt; migrate deploy tren VPS…
- 0,061 | vi sao &lt;mark&gt;migration&lt;/mark&gt; that post voi P3006…
-
-Execution Time: 4,7 ms tren 1,2 trieu hang (quet chi muc GIN)</div>
-<div class="callout ok">
-<p><strong><code>websearch_to_tsquery</code> nhận đúng thứ con người gõ vào.</strong> Nó hiểu cụm trong ngoặc kép, hiểu <code>or</code>, hiểu dấu <code>-</code> đứng đầu để loại trừ, và — quan trọng nhất — nó KHÔNG ném lỗi cú pháp với đầu vào kiểu <code>c++ &amp;&amp; ???</code>, thứ mà <code>to_tsquery</code> thì ném. Chỉ một lựa chọn đó thôi đã xoá sạch cả một lớp lỗi 500 khỏi ô tìm kiếm. Bộ lọc <code>search</code> của chính Prisma dùng <code>to_tsquery</code>, nên đầu vào chưa làm sạch ở đó là một đường lỗi CÓ THẬT.</p>
-</div>
-<div class="note-ct">
-<p><strong>Tìm kiếm THẬT của CuongThai.</strong> Tìm bài viết chạy trên chỉ mục GIN <code>pg_trgm</code> (migration <code>20260623_gin_social_posts_content_trgm</code>) chứ không phải <code>tsvector</code>, vì tiếng Việt không có từ điển tách gốc từ trong PostgreSQL — <code>to_tsvector('simple', …)</code> chỉ cắt theo khoảng trắng, nên nó không khớp "lập trình" với "lập trình viên", còn độ tương tự trigram thì khớp được. Toàn văn kèm <code>ts_rank</code> là mặc định ĐÚNG cho nội dung tiếng Anh; với tiếng Việt, hãy ĐO cả hai trên truy vấn thật rồi mới chọn. Bài 5.5 nói kỹ phần trigram.</p>
-</div>
+SELECT id, ts_rank(tim_kiem, q) AS score,
+       ts_headline('simple', content, q, 'StartSel=&lt;mark&gt;, StopSel=&lt;/mark&gt;') AS trich
+FROM posts, websearch_to_tsquery('simple', $1) AS q
+WHERE tim_kiem @@ q AND deleted_at IS NULL
+ORDER BY ts_rank(tim_kiem, q) DESC, created_at DESC LIMIT 3;</code></pre>
+<div class="out">┌─────────┬───────┬──────────┬─────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ id    │ score    │ trich                                                                           │
+├─────────┼───────┼──────────┼─────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 99999 │ '0.0974' │ '&lt;mark&gt;prisma&lt;/mark&gt; migration tren &lt;mark&gt;production&lt;/mark&gt; — ghi chu so 99999' │
+│ 1       │ 99993 │ '0.0974' │ '&lt;mark&gt;prisma&lt;/mark&gt; migration tren &lt;mark&gt;production&lt;/mark&gt; — ghi chu so 99993' │
+│ 2       │ 99987 │ '0.0974' │ '&lt;mark&gt;prisma&lt;/mark&gt; migration tren &lt;mark&gt;production&lt;/mark&gt; — ghi chu so 99987' │
+└─────────┴───────┴──────────┴─────────────────────────────────────────────────────────────────────────────────┘
+thoi gian (trung vi 5): 18.3 ms
+contains 'prisma production' → 0 hang · 18.7 ms (khop chuoi lien, khong hieu tu)
+Bitmap Heap Scan on posts  (cost=67.49..2889.01 rows=5561 width=4)
+  -&gt;  Bitmap Index Scan on posts_tim_kiem_idx  (cost=0.00..66.10 rows=5561 width=0)</div>
+<p><code>websearch_to_tsquery</code> hiểu thứ người dùng gõ, <code>ts_rank</code> xếp thứ tự và <code>ts_headline</code> đánh dấu đoạn trích. <code>contains</code> của Prisma với cùng hai từ không tìm thấy gì: nó so một chuỗi liền, không hiểu từ.</p>
 
 <h3>Khi nào ĐỪNG với tay tới thứ này</h3>
 <div class="lz-flow">
@@ -885,104 +693,118 @@ ${G10_4}
 <p class="lead">Lesson 10.2 ended with an unsatisfying answer: raw queries lie about their types, so validate at runtime. TypedSQL is the satisfying one. You put the SQL in a file, Prisma asks the real database what that statement returns, and generates the type from the answer. The cast disappears, and so does the class of bug where a renamed column compiles fine and fails in production.</p>
 
 <h3>The setup, end to end</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
-generator client {
+<pre><code class="language-javascript">generator client {
   provider        = "prisma-client-js"
+  output          = "../gen"              <span class="tok-comment">// custom output ⇒ import from ../gen/sql</span>
   previewFeatures = ["typedSql"]
 }</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment"># prisma/sql/thongKeTacGia.sql — the directory name is fixed</span>
-<span class="tok-comment">-- @param {String} $1:tacGiaId  ID cua tac gia</span>
-<span class="tok-comment">-- @param {Int}    $2:gioiHan   So hang toi da</span>
-SELECT
-  p.id,
-  p.content,
-  p."createdAt",
-  count(c.id)::int AS comment_count
-FROM "SocialPost" p
-LEFT JOIN "Comment" c ON c."postId" = p.id
-WHERE p."authorId" = $1 AND p."deletedAt" IS NULL
+<pre><code class="language-sql">-- prisma/sql/thongKeTacGia.sql — the file name becomes the function name
+-- @param {Int} $1:tacGiaId  ID cua tac gia
+-- @param {Int} $2:gioiHan   So hang toi da
+SELECT p.id, p.content, p.created_at, count(c.id)::int AS comment_count
+FROM posts p
+LEFT JOIN comments c ON c.post_id = p.id
+WHERE p.author_id = $1 AND p.deleted_at IS NULL
 GROUP BY p.id
-ORDER BY p."createdAt" DESC
+ORDER BY p.created_at DESC
 LIMIT $2;</code></pre>
-<pre><code class="language-bash"><span class="tok-comment"># Generate. Note the flag — plain &#96;prisma generate&#96; skips the .sql files.</span>
-npx prisma generate --sql</code></pre>
-<div class="out">Prisma schema loaded from prisma/schema.prisma
-Datasource "db": PostgreSQL database "cuongthai" at "localhost:5432"
-
-✔ Generated Prisma Client (v6.4.1) to ./node_modules/@prisma/client in 284ms
-✔ Generated 1 SQL query to ./node_modules/@prisma/client/sql in 41ms</div>
-<pre><code class="language-javascript"><span class="tok-comment">// Use it. The import path is @prisma/client/sql, not @prisma/client.</span>
-import { authorStats } from '@prisma/client/sql';
-
-const rows = await prisma.$queryRawTyped(authorStats(authorId, 20));
-
-rows[0].comment_count;   <span class="tok-comment">// number</span>
-rows[0].createdAt;      <span class="tok-comment">// Date</span>
-rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' does not exist</span></code></pre>
-<div class="lz-map">
-  <div class="lz-stage">
-    <span class="lz-badge">Build</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Prisma reads the .sql file</span><span class="lz-nsub">Parses the @param comments for the input types</span></div></div>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Prepares it against the real database</span><span class="lz-nsub">PostgreSQL reports the result column names and types</span></div></div>
-  </div>
-  <div class="lz-stage">
-    <span class="lz-badge">Generate</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">A typed function per file</span><span class="lz-nsub">Arguments from @param, return type from the database</span></div></div>
-  </div>
-  <div class="lz-stage">
-    <span class="lz-badge">Compile</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">tsc checks both ends</span><span class="lz-nsub">Wrong argument type, wrong field read — both are errors now</span></div></div>
-  </div>
+<div class="out">$ npx prisma generate --sql --schema p10/prisma/schema.prisma 2&gt;&amp;1 | grep -E 'loaded|Generated|Error'
+Environment variables loaded from .env
+Prisma schema loaded from p10/prisma/schema.prisma
+✔ Generated Prisma Client (v6.19.3) to ./p10/gen in 53ms</div>
+<p>Plain <code>prisma generate</code> skips the .sql files; with <code>--sql</code> Prisma prepares every statement against the database and writes typed functions under <code>&lt;output&gt;/sql</code>. In 6.19.3 it prints the same single "Generated Prisma Client" line either way — check the generated files, not the console.</p>
+<div class="out">export namespace thongKeTacGia {
+  export type Parameters = [tacGiaId: number, gioiHan: number]
+  export type Result = {
+    id: number
+    content: string
+    created_at: Date
+    comment_count: number | null
+  }
+}
+export namespace timBai {
+  export type Parameters = [tuKhoa: string | null, tuNgay: Date | null]
+  export type Result = {
+    id: number
+    content: string
+    created_at: Date
+  }
+}</div>
+<div class="pitfall">
+<p><strong>Trap — an expression comes back nullable.</strong> <code>count(c.id)::int</code> cannot be null, yet PostgreSQL reports an expression column as possibly null, so the generated type is <code>number | null</code>. Handle the null, or wrap it in <code>COALESCE(…, 0)</code>. Optional parameters (the trailing <code>?</code>) become <code>| null</code> arguments.</p>
 </div>
+<pre><code class="language-javascript">// Bài 10.4 — dùng hàm TypedSQL sinh ra
+import { PrismaClient } from '../gen/index.js';
+import { thongKeTacGia, timBai } from '../gen/sql/index.js';
+const prisma = new PrismaClient();
+const rows = await prisma.$queryRawTyped(thongKeTacGia(42, 3));
+const n: number = rows[0].comment_count;
+const d: Date = rows[0].created_at;
+console.log(rows[0].khong_co_that);
+await prisma.$queryRawTyped(thongKeTacGia('42', 3));
+await prisma.$queryRawTyped(timBai('prisma', null));
+export { n, d };</code></pre>
+<div class="out">$ npx tsc --noEmit --strict dung.ts
+dung.ts(6,7): error TS2322: Type 'number | null' is not assignable to type 'number'.
+  Type 'null' is not assignable to type 'number'.
+dung.ts(8,21): error TS2339: Property 'khong_co_that' does not exist on type 'Result'.
+dung.ts(9,43): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+[exit 2]</div>
+<p>Three mistakes, three compile errors: the nullable count assigned to a number, a field that does not exist, and a string where an <code>Int</code> parameter goes. Through <code>$queryRaw&lt;any[]&gt;</code> all three would compile.</p>
 
 <h3>The drift from Lesson 10.2, now caught at build</h3>
-<pre><code class="language-bash"><span class="tok-comment">// A migration renames content → body.</span>
-<span class="tok-comment">// The $queryRaw version of this query still compiles. Then:</span>
-npx prisma generate --sql</code></pre>
-<div class="out">Error: Failed to generate SQL queries
+<div class="out">-- (CSDL c104b: cot content da doi ten thanh body)
+$ npx prisma generate --sql --schema p10/prisma/schema.prisma 2&gt;&amp;1 | grep -v '^Environment'
+Prisma schema loaded from p10/prisma/schema.prisma
+Error: Errors while reading sql files:
+In p10/prisma/sql/thongKeTacGia.sql:
+Error: column p.content does not exist
+In p10/prisma/sql/timBai.sql:
+Error: column "content" does not exist</div>
+<p>The column <code>content</code> was renamed to <code>body</code> in the database; generate --sql failed for every file that used it, naming the file and the column. This error in CI is the whole value: the same rename through <code>$queryRaw</code> compiles and returns undefined in production.</p>
 
-  prisma/sql/authorStats.sql
-    Error: column p.content does not exist
-      LINE 3:   p.content,
-                ^
-      HINT: Perhaps you meant to reference the column "p.body".
-
-✖ Generating SQL queries failed. Exit code 1.</div>
-<div class="callout ok">
-<p><strong>This error appearing in CI is the entire value proposition.</strong> The same mistake, without TypedSQL, is a field that quietly becomes <code>undefined</code> in production — and if that field feeds a template or a JSON response, nothing throws at all; the page just renders empty. With TypedSQL the build fails, on the commit that caused it, with the column name and a hint. That is the difference between a bug and a compile error, applied to the one part of the codebase where Prisma previously could not help.</p>
-</div>
-
-<h3>The <code>@param</code> comment, in full</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k"><code>-- @param {String} $1:name</code></span><span class="v">Position, type, and the name the generated function's argument will have. The name is what appears in your editor's autocomplete, so make it readable.</span></div>
-  <div class="kv"><span class="k">The type names</span><span class="v"><code>String</code>, <code>Int</code>, <code>BigInt</code>, <code>Float</code>, <code>Boolean</code>, <code>DateTime</code>, <code>Decimal</code>, <code>Json</code>, <code>Bytes</code> — the Prisma scalar names, not the PostgreSQL ones.</span></div>
-  <div class="kv"><span class="k">Optional parameters</span><span class="v"><code>-- @param {String} $1:tuKhoa?</code> — the trailing <code>?</code> makes the argument <code>string | null</code>. Use it with <code>WHERE (\$1 IS NULL OR content ILIKE \$1)</code> for a filter that may be absent.</span></div>
-  <div class="kv"><span class="k">A description after the name</span><span class="v">Everything after the name becomes the JSDoc comment on the generated argument. It costs one line and shows up on hover months later.</span></div>
-</div>
-<pre><code class="language-typescript"><span class="tok-comment">-- prisma/sql/timBai.sql — an optional filter, no dynamic SQL needed</span>
-<span class="tok-comment">-- @param {String}   $1:tuKhoa?   Tu khoa, bo trong de lay tat ca</span>
-<span class="tok-comment">-- @param {DateTime} $2:tuNgay?   Chi lay bai tu ngay nay tro di</span>
-SELECT id, content, "createdAt"
-FROM "SocialPost"
-WHERE "deletedAt" IS NULL
+<h3>The <code>@param</code> comment, and optional filters</h3>
+<pre><code class="language-sql">-- prisma/sql/timBai.sql
+-- @param {String}   $1:tuKhoa?  Tu khoa, bo trong de lay tat ca
+-- @param {DateTime} $2:tuNgay?  Chi lay bai tu ngay nay tro di
+SELECT id, content, created_at
+FROM posts
+WHERE deleted_at IS NULL
   AND ($1::text IS NULL OR content ILIKE '%' || $1 || '%')
-  AND ($2::timestamptz IS NULL OR "createdAt" &gt;= $2)
-ORDER BY "createdAt" DESC
-LIMIT 50;</code></pre>
-<div class="out">import { timBai } from '@prisma/client/sql';
-
-await prisma.$queryRawTyped(timBai('prisma', null));
-await prisma.$queryRawTyped(timBai(null, new Date('2026-08-01')));
-await prisma.$queryRawTyped(timBai(null, null));       // tat ca</div>
+  AND ($2::timestamptz IS NULL OR created_at &gt;= $2)
+ORDER BY created_at DESC
+LIMIT 3;</code></pre>
+<pre><code class="language-javascript">await prisma.$queryRawTyped(timBai('prisma', null));
+await prisma.$queryRawTyped(timBai(null, new Date('2026-03-01')));
+await prisma.$queryRawTyped(timBai(null, null));</code></pre>
+<div class="out">timBai(prisma, null): [ 99999, 99996, 99993 ]
+timBai(null, 2026-03-01): [ 100000, 99999, 99998 ]
+timBai(null, null): [ 100000, 99999, 99998 ]</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>-- @param {String} $1:tuKhoa?</code></span><span class="v">Position, type (Prisma scalar names: String, Int, DateTime, Decimal…), argument name, optional mark, description.</span></div>
+  <div class="kv"><span class="k"><code>$1::text IS NULL OR …</code></span><span class="v">One static statement covers every combination of optional filters; the cast tells PostgreSQL the type when the value is null.</span></div>
+</div>
 
 <h3>The cost, stated honestly</h3>
+<p>Measured with the database unreachable:</p>
+<div class="out">$ npx prisma generate --sql --schema p10/prisma/schema.prisma 2&gt;&amp;1 | grep -v '^Environment'
+Prisma schema loaded from p10/prisma/schema.prisma
+Error: Errors while reading sql files:
+In p10/prisma/sql/thongKeTacGia.sql:
+Error: P1001
+Can't reach database server at &#96;127.0.0.1:59999&#96;
+Please make sure your database server is running at &#96;127.0.0.1:59999&#96;.
+In p10/prisma/sql/timBai.sql:
+Error: P1001
+Can't reach database server at &#96;127.0.0.1:59999&#96;
+Please make sure your database server is running at &#96;127.0.0.1:59999&#96;.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">CI needs a live database</span><span class="lz-lnote">This is the real price. <code>prisma generate --sql</code> connects and prepares each statement; without a reachable <code>DATABASE_URL</code> whose schema is current, the build fails. A Postgres service container plus <code>prisma migrate deploy</code> before generate — about eight lines of workflow YAML, and then it is permanent.</span></div>
   <div class="lz-layer"><span class="lz-lname">The schema must be migrated first</span><span class="lz-lnote">Generate against a database that is one migration behind and you get the <em>old</em> types, silently, in a green build. The order is always: <code>migrate deploy</code>, then <code>generate --sql</code>. Put them in that order in one npm script so nobody can run half of it.</span></div>
   <div class="lz-layer"><span class="lz-lname">Static SQL only</span><span class="lz-lnote">The file cannot be assembled at runtime. Optional parameters cover "this filter may be absent"; they do not cover "the caller chooses which of nine columns to sort by". That still needs <code>Prisma.sql</code> and <code>Prisma.raw</code> from Lesson 10.1 — and those still have no compile-time check.</span></div>
   <div class="lz-layer"><span class="lz-lname">Preview feature, PostgreSQL first</span><span class="lz-lnote">Still behind <code>previewFeatures</code> as of Prisma 6.x, with PostgreSQL the best-supported provider (MySQL and SQLite work; others do not). Preview means the API can change between minor versions — pin the Prisma version if you adopt it widely.</span></div>
 </div>
-<pre><code class="language-typescript"><span class="tok-comment"># .github/workflows/ci-lint.yml — the eight lines</span>
+<pre><code class="language-typescript"><span class="tok-comment"># .github/workflows/&lt;ci&gt;.yml — the eight lines (CuongThai&#39;s ci-lint already runs a postgres service for its tests; it does not run generate --sql)</span>
 services:
   postgres:
     image: postgres:16-alpine
@@ -1018,104 +840,118 @@ services:
 <p class="lead">Bài 10.2 kết thúc bằng một câu trả lời không mấy dễ chịu: truy vấn thô nói dối về kiểu của nó, nên hãy kiểm lúc chạy. TypedSQL mới là câu trả lời dễ chịu. Bạn đặt câu SQL vào một file, Prisma đi HỎI THẲNG cơ sở dữ liệu thật xem câu lệnh đó trả về gì, rồi sinh kiểu từ câu trả lời. Phép ép kiểu biến mất, và cùng với nó biến mất luôn cái lớp bug mà một cột đổi tên vẫn biên dịch ngon lành rồi chết trên production.</p>
 
 <h3>Dựng từ đầu tới cuối</h3>
-<pre><code class="language-typescript"><span class="tok-comment">// schema.prisma</span>
-generator client {
+<pre><code class="language-javascript">generator client {
   provider        = "prisma-client-js"
+  output          = "../gen"              <span class="tok-comment">// output tuỳ chỉnh ⇒ import từ ../gen/sql</span>
   previewFeatures = ["typedSql"]
 }</code></pre>
-<pre><code class="language-typescript"><span class="tok-comment"># prisma/sql/thongKeTacGia.sql — tên thư mục là CỐ ĐỊNH</span>
-<span class="tok-comment">-- @param {String} $1:tacGiaId  ID cua tac gia</span>
-<span class="tok-comment">-- @param {Int}    $2:gioiHan   So hang toi da</span>
-SELECT
-  p.id,
-  p.content,
-  p."createdAt",
-  count(c.id)::int AS comment_count
-FROM "SocialPost" p
-LEFT JOIN "Comment" c ON c."postId" = p.id
-WHERE p."authorId" = $1 AND p."deletedAt" IS NULL
+<pre><code class="language-sql">-- prisma/sql/thongKeTacGia.sql — tên tệp thành tên hàm
+-- @param {Int} $1:tacGiaId  ID cua tac gia
+-- @param {Int} $2:gioiHan   So hang toi da
+SELECT p.id, p.content, p.created_at, count(c.id)::int AS comment_count
+FROM posts p
+LEFT JOIN comments c ON c.post_id = p.id
+WHERE p.author_id = $1 AND p.deleted_at IS NULL
 GROUP BY p.id
-ORDER BY p."createdAt" DESC
+ORDER BY p.created_at DESC
 LIMIT $2;</code></pre>
-<pre><code class="language-bash"><span class="tok-comment"># Sinh mã. Chú ý cái cờ — &#96;prisma generate&#96; trơn BỎ QUA các file .sql.</span>
-npx prisma generate --sql</code></pre>
-<div class="out">Prisma schema loaded from prisma/schema.prisma
-Datasource "db": PostgreSQL database "cuongthai" at "localhost:5432"
-
-✔ Generated Prisma Client (v6.4.1) to ./node_modules/@prisma/client in 284ms
-✔ Generated 1 SQL query to ./node_modules/@prisma/client/sql in 41ms</div>
-<pre><code class="language-javascript"><span class="tok-comment">// Dùng nó. Đường import là @prisma/client/sql, KHÔNG phải @prisma/client.</span>
-import { authorStats } from '@prisma/client/sql';
-
-const rows = await prisma.$queryRawTyped(authorStats(authorId, 20));
-
-rows[0].comment_count;   <span class="tok-comment">// number</span>
-rows[0].createdAt;      <span class="tok-comment">// Date</span>
-rows[0].not_real;  <span class="tok-comment">// ❌ Property 'khong_co_that' does not exist</span></code></pre>
-<div class="lz-map">
-  <div class="lz-stage">
-    <span class="lz-badge">Build</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Prisma đọc file .sql</span><span class="lz-nsub">Phân tích các chú thích @param để lấy kiểu đầu vào</span></div></div>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Chuẩn bị nó trên cơ sở dữ liệu THẬT</span><span class="lz-nsub">PostgreSQL báo lại tên cột và kiểu của kết quả</span></div></div>
-  </div>
-  <div class="lz-stage">
-    <span class="lz-badge">Generate</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Một hàm có kiểu cho mỗi file</span><span class="lz-nsub">Đối số lấy từ @param, kiểu trả về lấy từ cơ sở dữ liệu</span></div></div>
-  </div>
-  <div class="lz-stage">
-    <span class="lz-badge">Biên dịch</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">tsc kiểm CẢ HAI đầu</span><span class="lz-nsub">Sai kiểu đối số, đọc sai tên trường — giờ đều là lỗi</span></div></div>
-  </div>
+<div class="out">$ npx prisma generate --sql --schema p10/prisma/schema.prisma 2&gt;&amp;1 | grep -E 'loaded|Generated|Error'
+Environment variables loaded from .env
+Prisma schema loaded from p10/prisma/schema.prisma
+✔ Generated Prisma Client (v6.19.3) to ./p10/gen in 53ms</div>
+<p><code>prisma generate</code> trơn bỏ qua các tệp .sql; có <code>--sql</code> thì Prisma chuẩn bị từng câu lệnh trên cơ sở dữ liệu rồi ghi các hàm có kiểu vào <code>&lt;output&gt;/sql</code>. Ở 6.19.3 cả hai cách đều in đúng một dòng "Generated Prisma Client" — hãy xem tệp sinh ra, đừng xem console.</p>
+<div class="out">export namespace thongKeTacGia {
+  export type Parameters = [tacGiaId: number, gioiHan: number]
+  export type Result = {
+    id: number
+    content: string
+    created_at: Date
+    comment_count: number | null
+  }
+}
+export namespace timBai {
+  export type Parameters = [tuKhoa: string | null, tuNgay: Date | null]
+  export type Result = {
+    id: number
+    content: string
+    created_at: Date
+  }
+}</div>
+<div class="pitfall">
+<p><strong>Bẫy — một biểu thức trả về có thể null.</strong> <code>count(c.id)::int</code> không thể null, vậy mà PostgreSQL báo một cột biểu thức là có thể null, nên kiểu sinh ra là <code>number | null</code>. Hãy xử lý null, hoặc bọc trong <code>COALESCE(…, 0)</code>. Tham số tuỳ chọn (dấu <code>?</code> ở cuối) thành đối số <code>| null</code>.</p>
 </div>
+<pre><code class="language-javascript">// Bài 10.4 — dùng hàm TypedSQL sinh ra
+import { PrismaClient } from '../gen/index.js';
+import { thongKeTacGia, timBai } from '../gen/sql/index.js';
+const prisma = new PrismaClient();
+const rows = await prisma.$queryRawTyped(thongKeTacGia(42, 3));
+const n: number = rows[0].comment_count;
+const d: Date = rows[0].created_at;
+console.log(rows[0].khong_co_that);
+await prisma.$queryRawTyped(thongKeTacGia('42', 3));
+await prisma.$queryRawTyped(timBai('prisma', null));
+export { n, d };</code></pre>
+<div class="out">$ npx tsc --noEmit --strict dung.ts
+dung.ts(6,7): error TS2322: Type 'number | null' is not assignable to type 'number'.
+  Type 'null' is not assignable to type 'number'.
+dung.ts(8,21): error TS2339: Property 'khong_co_that' does not exist on type 'Result'.
+dung.ts(9,43): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+[exit 2]</div>
+<p>Ba lỗi, ba lỗi biên dịch: gán số đếm có thể null vào number, đọc một trường không tồn tại, và truyền chuỗi vào chỗ tham số <code>Int</code>. Qua <code>$queryRaw&lt;any[]&gt;</code>, cả ba đều biên dịch được.</p>
 
 <h3>Cú trôi dạt của Bài 10.2, giờ bị bắt ngay lúc build</h3>
-<pre><code class="language-bash"><span class="tok-comment">// Một migration đổi tên content → body.</span>
-<span class="tok-comment">// Bản $queryRaw của câu truy vấn này VẪN biên dịch được. Rồi thì:</span>
-npx prisma generate --sql</code></pre>
-<div class="out">Error: Failed to generate SQL queries
+<div class="out">-- (CSDL c104b: cot content da doi ten thanh body)
+$ npx prisma generate --sql --schema p10/prisma/schema.prisma 2&gt;&amp;1 | grep -v '^Environment'
+Prisma schema loaded from p10/prisma/schema.prisma
+Error: Errors while reading sql files:
+In p10/prisma/sql/thongKeTacGia.sql:
+Error: column p.content does not exist
+In p10/prisma/sql/timBai.sql:
+Error: column "content" does not exist</div>
+<p>Cột <code>content</code> được đổi tên thành <code>body</code> trong cơ sở dữ liệu; generate --sql hỏng ở mọi tệp dùng cột ấy, chỉ rõ tệp và cột. Lỗi này trong CI chính là toàn bộ giá trị: cùng lần đổi tên qua <code>$queryRaw</code> vẫn biên dịch và trả undefined trên production.</p>
 
-  prisma/sql/authorStats.sql
-    Error: column p.content does not exist
-      LINE 3:   p.content,
-                ^
-      HINT: Perhaps you meant to reference the column "p.body".
-
-✖ Generating SQL queries failed. Exit code 1.</div>
-<div class="callout ok">
-<p><strong>Việc cái lỗi này hiện ra TRONG CI chính là toàn bộ giá trị của TypedSQL.</strong> Cũng lỗi ấy, khi không có TypedSQL, là một trường lặng lẽ thành <code>undefined</code> trên production — và nếu trường đó chảy vào một template hay một phản hồi JSON thì chẳng có gì ném lỗi cả; trang chỉ hiện ra trống rỗng. Với TypedSQL thì bản dựng HỎNG, ngay trên commit gây ra nó, kèm tên cột và một gợi ý. Đó là khác biệt giữa một con bug với một lỗi biên dịch, áp đúng vào cái phần duy nhất của kho mã mà trước đây Prisma không giúp được gì.</p>
-</div>
-
-<h3>Chú thích <code>@param</code>, đầy đủ</h3>
-<div class="kv-grid">
-  <div class="kv"><span class="k"><code>-- @param {String} $1:name</code></span><span class="v">Vị trí, kiểu, và cái TÊN mà đối số của hàm sinh ra sẽ mang. Cái tên đó là thứ hiện lên trong gợi ý của trình soạn thảo, nên hãy đặt cho dễ đọc.</span></div>
-  <div class="kv"><span class="k">Các tên kiểu</span><span class="v"><code>String</code>, <code>Int</code>, <code>BigInt</code>, <code>Float</code>, <code>Boolean</code>, <code>DateTime</code>, <code>Decimal</code>, <code>Json</code>, <code>Bytes</code> — tên kiểu vô hướng của PRISMA, không phải của PostgreSQL.</span></div>
-  <div class="kv"><span class="k">Tham số tuỳ chọn</span><span class="v"><code>-- @param {String} $1:tuKhoa?</code> — dấu <code>?</code> ở cuối làm đối số thành <code>string | null</code>. Dùng nó cùng <code>WHERE (\$1 IS NULL OR content ILIKE \$1)</code> cho một bộ lọc có thể vắng mặt.</span></div>
-  <div class="kv"><span class="k">Phần mô tả sau cái tên</span><span class="v">Mọi thứ viết sau tên sẽ thành chú thích JSDoc trên đối số được sinh ra. Tốn một dòng, và hiện lên khi bạn rê chuột vào nó mấy tháng sau.</span></div>
-</div>
-<pre><code class="language-typescript"><span class="tok-comment">-- prisma/sql/timBai.sql — một bộ lọc tuỳ chọn, không cần SQL động</span>
-<span class="tok-comment">-- @param {String}   $1:tuKhoa?   Tu khoa, bo trong de lay tat ca</span>
-<span class="tok-comment">-- @param {DateTime} $2:tuNgay?   Chi lay bai tu ngay nay tro di</span>
-SELECT id, content, "createdAt"
-FROM "SocialPost"
-WHERE "deletedAt" IS NULL
+<h3>Chú thích <code>@param</code>, và bộ lọc tuỳ chọn</h3>
+<pre><code class="language-sql">-- prisma/sql/timBai.sql
+-- @param {String}   $1:tuKhoa?  Tu khoa, bo trong de lay tat ca
+-- @param {DateTime} $2:tuNgay?  Chi lay bai tu ngay nay tro di
+SELECT id, content, created_at
+FROM posts
+WHERE deleted_at IS NULL
   AND ($1::text IS NULL OR content ILIKE '%' || $1 || '%')
-  AND ($2::timestamptz IS NULL OR "createdAt" &gt;= $2)
-ORDER BY "createdAt" DESC
-LIMIT 50;</code></pre>
-<div class="out">import { timBai } from '@prisma/client/sql';
-
-await prisma.$queryRawTyped(timBai('prisma', null));
-await prisma.$queryRawTyped(timBai(null, new Date('2026-08-01')));
-await prisma.$queryRawTyped(timBai(null, null));       // tat ca</div>
+  AND ($2::timestamptz IS NULL OR created_at &gt;= $2)
+ORDER BY created_at DESC
+LIMIT 3;</code></pre>
+<pre><code class="language-javascript">await prisma.$queryRawTyped(timBai('prisma', null));
+await prisma.$queryRawTyped(timBai(null, new Date('2026-03-01')));
+await prisma.$queryRawTyped(timBai(null, null));</code></pre>
+<div class="out">timBai(prisma, null): [ 99999, 99996, 99993 ]
+timBai(null, 2026-03-01): [ 100000, 99999, 99998 ]
+timBai(null, null): [ 100000, 99999, 99998 ]</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>-- @param {String} $1:tuKhoa?</code></span><span class="v">Vị trí, kiểu (tên vô hướng của Prisma: String, Int, DateTime, Decimal…), tên đối số, dấu tuỳ chọn, mô tả.</span></div>
+  <div class="kv"><span class="k"><code>$1::text IS NULL OR …</code></span><span class="v">Một câu lệnh tĩnh phủ mọi tổ hợp bộ lọc tuỳ chọn; phép ép kiểu cho PostgreSQL biết kiểu khi giá trị là null.</span></div>
+</div>
 
 <h3>Cái giá, nói cho thật</h3>
+<p>Đo thật khi không với tới cơ sở dữ liệu:</p>
+<div class="out">$ npx prisma generate --sql --schema p10/prisma/schema.prisma 2&gt;&amp;1 | grep -v '^Environment'
+Prisma schema loaded from p10/prisma/schema.prisma
+Error: Errors while reading sql files:
+In p10/prisma/sql/thongKeTacGia.sql:
+Error: P1001
+Can't reach database server at &#96;127.0.0.1:59999&#96;
+Please make sure your database server is running at &#96;127.0.0.1:59999&#96;.
+In p10/prisma/sql/timBai.sql:
+Error: P1001
+Can't reach database server at &#96;127.0.0.1:59999&#96;
+Please make sure your database server is running at &#96;127.0.0.1:59999&#96;.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">CI cần một cơ sở dữ liệu SỐNG</span><span class="lz-lnote">Đây là cái giá thật. <code>prisma generate --sql</code> phải KẾT NỐI và chuẩn bị từng câu lệnh; không có một <code>DATABASE_URL</code> chạm tới được và có lược đồ mới nhất thì bản dựng hỏng. Một service container Postgres cộng <code>prisma migrate deploy</code> chạy trước generate — chừng tám dòng YAML, và sau đó thì nó vĩnh viễn nằm đó.</span></div>
   <div class="lz-layer"><span class="lz-lname">Lược đồ phải được migrate TRƯỚC</span><span class="lz-lnote">Generate trên một cơ sở dữ liệu chậm một migration thì bạn nhận kiểu CŨ, một cách lặng lẽ, trong một bản dựng màu xanh. Thứ tự LUÔN là: <code>migrate deploy</code> rồi mới <code>generate --sql</code>. Nhét chúng theo thứ tự đó vào MỘT npm script để không ai chạy được nửa vời.</span></div>
   <div class="lz-layer"><span class="lz-lname">Chỉ SQL TĨNH</span><span class="lz-lnote">File không thể được lắp ráp lúc chạy. Tham số tuỳ chọn phủ được "bộ lọc này có thể vắng"; nó KHÔNG phủ được "người gọi chọn sắp xếp theo một trong chín cột". Cái đó vẫn cần <code>Prisma.sql</code> và <code>Prisma.raw</code> của Bài 10.1 — và những cái đó vẫn không có phép kiểm lúc biên dịch.</span></div>
   <div class="lz-layer"><span class="lz-lname">Tính năng xem trước, PostgreSQL đi đầu</span><span class="lz-lnote">Tới Prisma 6.x nó vẫn nằm sau <code>previewFeatures</code>, với PostgreSQL là provider được hỗ trợ tốt nhất (MySQL và SQLite chạy được; những cái khác thì không). "Xem trước" nghĩa là API có thể đổi giữa hai bản minor — hãy ghim phiên bản Prisma nếu bạn dùng nó rộng rãi.</span></div>
 </div>
-<pre><code class="language-typescript"><span class="tok-comment"># .github/workflows/ci-lint.yml — tám dòng đó</span>
+<pre><code class="language-typescript"><span class="tok-comment"># .github/workflows/&lt;ci&gt;.yml — tám dòng (ci-lint của CuongThai đã có service postgres cho test; nó chưa chạy generate --sql)</span>
 services:
   postgres:
     image: postgres:16-alpine
@@ -1151,7 +987,7 @@ services:
       title: '10.5 — $extends: changing the client without wrapping it|||10.5 — $extends: đổi client mà không phải bọc nó',
       slug: 'pr-10-5-extends',
       type: 'LESSON',
-      description: 'Bốn thành phần result, model, query, client; trường tính toán kèm needs; phương thức riêng cho từng model; chặn mọi thao tác để làm soft delete — và ba chỗ soft delete bằng extension KHÔNG với tới, phải biết trước khi tin nó.',
+      description: 'Bốn thành phần result, model, query, client; trường tính toán kèm needs; phương thức riêng cho từng model; chặn mọi thao tác để làm soft delete — đo tám đường đọc: extension mẫu chỉ ẩn ba (findUnique, groupBy, include từ model khác và $queryRaw vẫn thấy hàng đã xoá), chỉ mục unique một phần, và $use đã bị gỡ ở Prisma 6.19.3.',
       content: `
 ${G10_5}
 <div class="ml-en">
@@ -1244,18 +1080,12 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
 </div>
 
 <h3><code>query</code> — soft delete, and what it actually covers</h3>
-<pre><code class="language-javascript">const softDeleteExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const softDelete = Prisma.defineExtension({
   name: 'soft-delete',
   query: {
-    socialPost: {
-      <span class="tok-comment">// turn delete into an update</span>
-      async delete({ args, query }) {
-        return prisma.socialPost.update({ ...args, data: { deletedAt: new Date() } });
-      },
-      async deleteMany({ args }) {
-        return prisma.socialPost.updateMany({ ...args, data: { deletedAt: new Date() } });
-      },
-      <span class="tok-comment">// hide soft-deleted rows from reads</span>
+    post: {
+      async delete({ args })     { return base.post.update({ ...args, data: { deletedAt: new Date() } }); },
+      async deleteMany({ args }) { return base.post.updateMany({ ...args, data: { deletedAt: new Date() } }); },
       async $allOperations({ operation, args, query }) {
         if (['findMany', 'findFirst', 'count', 'aggregate'].includes(operation)) {
           args.where = { ...args.where, deletedAt: null };
@@ -1264,38 +1094,42 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
       },
     },
   },
-});</code></pre>
-<pre><code class="language-typescript">await prisma.socialPost.delete({ where: { id } });
-await prisma.socialPost.findMany({ where: { authorId } });</code></pre>
-<div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = $1 WHERE "id" = $2
-prisma:query SELECT … FROM "SocialPost" WHERE "authorId" = $1 AND "deletedAt" IS NULL</div>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">✗ Raw queries</span><span class="lz-lnote">Lesson 10.2 said this and it is worth repeating here: <code>$queryRaw</code> goes straight to the database. Every raw query in the codebase must write <code>AND "deletedAt" IS NULL</code> itself, forever, and nothing will remind it to.</span></div>
-  <div class="lz-layer"><span class="lz-lname">✗ Rows reached through a relation</span><span class="lz-lnote"><code>prisma.user.findMany({ include: { posts: true } })</code> is a <code>findMany</code> on <strong>User</strong>. The extension's <code>socialPost</code> hooks never fire, and deleted posts come back inside the include. Filter in the include itself: <code>include: { posts: { where: { deletedAt: null } } }</code>.</span></div>
-  <div class="lz-layer"><span class="lz-lname">✗ Cascades from the database</span><span class="lz-lnote"><code>onDelete: Cascade</code> is a real foreign key. Hard-deleting a <code>User</code> deletes their posts <em>in PostgreSQL</em>, past every extension. Soft delete and cascading hard delete cannot both be the rule for the same relation — pick one per relation and write down which.</span></div>
-  <div class="lz-layer"><span class="lz-lname">✓ Unique constraints keep counting deleted rows</span><span class="lz-lnote">A soft-deleted user still occupies their email in a <code>@unique</code> column, so re-registering fails with <code>P2002</code>. The fix is a partial unique index — <code>CREATE UNIQUE INDEX … WHERE "deletedAt" IS NULL</code> — hand-written in a migration, because the schema language cannot express it.</span></div>
+});
+const prisma = base.$extends(softDelete);
+await prisma.post.delete({ where: { id: 1001 } });</code></pre>
+<div class="out">delete → UPDATE "posts" SET "deleted_at" = $1 WHERE ("posts"."id" = $2 AND 1=1) RETURNING …</div>
+<p>The row stays and <code>deleted_at</code> is set. Then the deleted post was read eight ways (measured 12 Nov 2026, PostgreSQL 16.14, Prisma 6.19.3):</p>
+<div class="out">findMany (where authorId)      → an               ✓
+findFirst                      → an               ✓
+count                          → an               ✓
+findUnique                     → THAY bai da xoa  ✗
+findUniqueOrThrow              → THAY bai da xoa  ✗
+groupBy                        → THAY bai da xoa  ✗
+user.findMany include posts    → THAY bai da xoa  ✗
+$queryRaw                      → THAY bai da xoa  ✗</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">✓ findMany · findFirst · count</span><span class="v">Exactly the operations in the list.</span></div>
+  <div class="kv"><span class="k">✗ findUnique · findUniqueOrThrow · groupBy</span><span class="v">Not in the list, so not filtered. <code>findUnique</code> accepts an extra non-unique filter, so it can be added:<br><code>findUnique({ where: { id: 1001, deletedAt: null } }) → null</code></span></div>
+  <div class="kv"><span class="k">✗ Rows reached through a relation</span><span class="v"><code>user.findMany({ include: { posts: true } })</code> is a query on User; the post hooks never fire and the deleted post came back.</span></div>
+  <div class="kv"><span class="k">✗ $queryRaw</span><span class="v">Goes straight to the database. Every raw query must write <code>AND deleted_at IS NULL</code> itself.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Trap — an incomplete soft-delete extension is more dangerous than none.</strong> With no extension, every developer knows they must filter and they do. With one that covers four operations out of a dozen, everybody stops thinking about it — and the day someone adds an <code>include</code>, deleted content appears in a response with no code change to blame. If you adopt soft delete, write down the three gaps above next to the extension, and test the include path specifically.</p>
+<p><strong>Trap — an incomplete soft-delete extension is more dangerous than none.</strong> With no extension, every developer knows they must filter. With one that hides deleted rows from three of eight read paths, people stop writing the filter — and five paths leak. Test the paths your code uses, not the hook.</p>
 </div>
-<div class="note-ct">
-<p><strong>Why CuongThai does per-viewer deletion in the query layer instead.</strong> Message threads use a per-viewer <code>deletedAt</code> (delete-for-me), and on 2026-07-02 that looked exactly like data loss until someone read the query filters. The lesson taken from it was not "add an extension" but "make the filter visible at the call site": <code>listThreadsForUser</code> states its own <code>deletedAt</code> condition, so the next person debugging it finds the answer in the function they are already reading, not in an extension registered in a different file.</p>
-</div>
+<pre><code class="language-sql">ALTER TABLE users DROP CONSTRAINT users_email_key;
+CREATE UNIQUE INDEX users_email_con_song ON users (email) WHERE deleted_at IS NULL;</code></pre>
+<div class="out">dang ky lai email da xoa mem → P2002 {"modelName":"User","target":["email"]}
+sau chi muc unique mot phan (WHERE deleted_at IS NULL) → tao duoc user 2002</div>
+<p>A soft-deleted user still owned the email: re-registering failed with P2002 until the unique constraint became a partial unique index. Prisma's schema cannot express the <code>WHERE</code> — it lives in a hand-written migration (Lesson 6.3), and <code>@unique</code> comes off the field.</p>
 
-<h3>Migrating off <code>$use</code></h3>
-<pre><code class="language-typescript"><span class="tok-comment">// Old middleware — deprecated, and untyped: params.args is &#96;any&#96;</span>
-prisma.$use(async (params, next) =&gt; {
-  if (params.model === 'SocialPost' &amp;&amp; params.action === 'delete') {
-    params.action = 'update';
-    params.args.data = { deletedAt: new Date() };
-  }
-  return next(params);
-});</code></pre>
+<h3><code>$use</code> is gone</h3>
+<div class="out">typeof prisma.$use = undefined
+prisma.$use(...) → TypeError: prisma.$use is not a function</div>
+<p>Old tutorials still show <code>prisma.$use(async (params, next) =&gt; …)</code>. In Prisma 6.19.3 the method does not exist, so there is nothing to keep running alongside an extension during a migration: rewrite each branch as a query extension for that model and operation, then delete the call.</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Types</span><span class="v"><code>$use</code> gives you <code>params.args: any</code> and a string <code>model</code>. <code>query</code> extensions give you the real argument type for that model and operation, so a typo in a field name is a compile error.</span></div>
-  <div class="kv"><span class="k">Scope</span><span class="v"><code>$use</code> is global and order-dependent across every registration. Extensions are scoped to the models and operations you name, and compose explicitly.</span></div>
-  <div class="kv"><span class="k">Mutation</span><span class="v"><code>$use</code> mutates the shared client — every import sees it, including code that did not want it. <code>$extends</code> returns a new client, so an un-extended one remains available for the migration script that genuinely needs to hard-delete.</span></div>
-  <div class="kv"><span class="k">Both at once</span><span class="v">They still work together during a migration, with <code>$use</code> running first. Do not leave it that way: two layers rewriting the same arguments is a debugging problem nobody enjoys twice.</span></div>
+  <div class="kv"><span class="k">Typed</span><span class="v">A query extension gets the real argument type for its model and operation.</span></div>
+  <div class="kv"><span class="k">Scoped</span><span class="v">Only the models and operations you name.</span></div>
+  <div class="kv"><span class="k">A new client</span><span class="v"><code>$extends</code> returns one; the base client stays available — and unfiltered. Keep it private.</span></div>
 </div>
 
 <h3>Learning sources for this lesson</h3>
@@ -1396,18 +1230,12 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
 </div>
 
 <h3><code>query</code> — soft delete, và nó THẬT SỰ phủ tới đâu</h3>
-<pre><code class="language-javascript">const softDeleteExt = Prisma.defineExtension({
+<pre><code class="language-javascript">const softDelete = Prisma.defineExtension({
   name: 'soft-delete',
   query: {
-    socialPost: {
-      <span class="tok-comment">// biến delete thành update</span>
-      async delete({ args, query }) {
-        return prisma.socialPost.update({ ...args, data: { deletedAt: new Date() } });
-      },
-      async deleteMany({ args }) {
-        return prisma.socialPost.updateMany({ ...args, data: { deletedAt: new Date() } });
-      },
-      <span class="tok-comment">// giấu những hàng đã xoá mềm khỏi các thao tác đọc</span>
+    post: {
+      async delete({ args })     { return base.post.update({ ...args, data: { deletedAt: new Date() } }); },
+      async deleteMany({ args }) { return base.post.updateMany({ ...args, data: { deletedAt: new Date() } }); },
       async $allOperations({ operation, args, query }) {
         if (['findMany', 'findFirst', 'count', 'aggregate'].includes(operation)) {
           args.where = { ...args.where, deletedAt: null };
@@ -1416,38 +1244,42 @@ await prisma.$kiemTraSucKhoe();                    <span class="tok-comment">// 
       },
     },
   },
-});</code></pre>
-<pre><code class="language-typescript">await prisma.socialPost.delete({ where: { id } });
-await prisma.socialPost.findMany({ where: { authorId } });</code></pre>
-<div class="out">prisma:query UPDATE "SocialPost" SET "deletedAt" = $1 WHERE "id" = $2
-prisma:query SELECT … FROM "SocialPost" WHERE "authorId" = $1 AND "deletedAt" IS NULL</div>
-<div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">✗ Truy vấn thô</span><span class="lz-lnote">Bài 10.2 đã nói và ở đây đáng nói lại: <code>$queryRaw</code> đi THẲNG xuống cơ sở dữ liệu. MỌI truy vấn thô trong kho mã phải tự viết <code>AND "deletedAt" IS NULL</code>, mãi mãi, và sẽ không có gì nhắc nó cả.</span></div>
-  <div class="lz-layer"><span class="lz-lname">✗ Hàng đi tới qua một QUAN HỆ</span><span class="lz-lnote"><code>prisma.user.findMany({ include: { posts: true } })</code> là một <code>findMany</code> trên <strong>User</strong>. Các móc <code>socialPost</code> của phần mở rộng KHÔNG BAO GIỜ nổ, và bài đã xoá quay về ngay bên trong cái include. Hãy lọc ngay trong chính include: <code>include: { posts: { where: { deletedAt: null } } }</code>.</span></div>
-  <div class="lz-layer"><span class="lz-lname">✗ Cascade từ cơ sở dữ liệu</span><span class="lz-lnote"><code>onDelete: Cascade</code> là một khoá ngoại THẬT. Xoá cứng một <code>User</code> sẽ xoá bài của họ <em>trong PostgreSQL</em>, vượt qua mọi phần mở rộng. Soft delete và xoá cứng theo cascade KHÔNG thể cùng là luật cho một quan hệ — hãy chọn một cho mỗi quan hệ và ghi lại là chọn cái nào.</span></div>
-  <div class="lz-layer"><span class="lz-lname">✓ Ràng buộc duy nhất VẪN đếm cả hàng đã xoá</span><span class="lz-lnote">Một người dùng đã xoá mềm vẫn CHIẾM email của họ trong một cột <code>@unique</code>, nên đăng ký lại thất bại với <code>P2002</code>. Cách vá là một chỉ mục duy nhất từng phần — <code>CREATE UNIQUE INDEX … WHERE "deletedAt" IS NULL</code> — viết tay trong một migration, vì ngôn ngữ lược đồ không diễn đạt được nó.</span></div>
+});
+const prisma = base.$extends(softDelete);
+await prisma.post.delete({ where: { id: 1001 } });</code></pre>
+<div class="out">delete → UPDATE "posts" SET "deleted_at" = $1 WHERE ("posts"."id" = $2 AND 1=1) RETURNING …</div>
+<p>Hàng vẫn còn và <code>deleted_at</code> được đặt. Rồi bài đã xoá được đọc theo tám cách (đo ngày 12/11/2026, PostgreSQL 16.14, Prisma 6.19.3):</p>
+<div class="out">findMany (where authorId)      → an               ✓
+findFirst                      → an               ✓
+count                          → an               ✓
+findUnique                     → THAY bai da xoa  ✗
+findUniqueOrThrow              → THAY bai da xoa  ✗
+groupBy                        → THAY bai da xoa  ✗
+user.findMany include posts    → THAY bai da xoa  ✗
+$queryRaw                      → THAY bai da xoa  ✗</div>
+<div class="kv-grid">
+  <div class="kv"><span class="k">✓ findMany · findFirst · count</span><span class="v">Đúng những thao tác có trong danh sách.</span></div>
+  <div class="kv"><span class="k">✗ findUnique · findUniqueOrThrow · groupBy</span><span class="v">Không có trong danh sách nên không bị lọc. <code>findUnique</code> nhận thêm một bộ lọc không-unique, nên có thể thêm nó vào:<br><code>findUnique({ where: { id: 1001, deletedAt: null } }) → null</code></span></div>
+  <div class="kv"><span class="k">✗ Hàng đi qua quan hệ</span><span class="v"><code>user.findMany({ include: { posts: true } })</code> là truy vấn trên User; hook của post không bao giờ chạy và bài đã xoá quay lại.</span></div>
+  <div class="kv"><span class="k">✗ $queryRaw</span><span class="v">Đi thẳng tới cơ sở dữ liệu. Mọi truy vấn thô phải tự viết <code>AND deleted_at IS NULL</code>.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — một phần mở rộng soft delete LÀM DỞ còn nguy hiểm hơn là không có.</strong> Khi không có phần mở rộng, mọi lập trình viên đều BIẾT là phải tự lọc, và họ lọc. Khi có một cái phủ bốn thao tác trên hơn chục thao tác, tất cả ngừng nghĩ tới nó — và cái ngày có người thêm một <code>include</code>, nội dung đã xoá xuất hiện trong một phản hồi mà không có dòng mã nào để đổ lỗi. Nếu bạn dùng soft delete, hãy ghi ba khoảng hở ở trên ngay cạnh phần mở rộng, và kiểm thử RIÊNG đường include.</p>
+<p><strong>Bẫy — một extension xoá mềm không đủ còn nguy hiểm hơn không có.</strong> Không có extension, ai cũng biết phải tự lọc. Có một extension ẩn hàng đã xoá ở ba trên tám đường đọc, người ta thôi viết bộ lọc — và năm đường làm lộ. Hãy kiểm các đường mà mã của bạn dùng, đừng chỉ kiểm cái hook.</p>
 </div>
-<div class="note-ct">
-<p><strong>Vì sao CuongThai làm xoá-theo-từng-người-xem ở tầng truy vấn thay vì ở đây.</strong> Các luồng tin nhắn dùng <code>deletedAt</code> theo từng người xem (xoá-cho-riêng-tôi), và ngày 02/07/2026 chuyện đó trông y hệt mất dữ liệu cho tới khi có người đọc lại các bộ lọc trong truy vấn. Bài học rút ra KHÔNG phải "thêm một phần mở rộng" mà là "làm cho bộ lọc HIỆN RA ngay chỗ gọi": <code>listThreadsForUser</code> tự viết điều kiện <code>deletedAt</code> của nó, nên người gỡ lỗi kế tiếp tìm thấy câu trả lời ngay trong cái hàm họ đang đọc, chứ không phải trong một phần mở rộng đăng ký ở file khác.</p>
-</div>
+<pre><code class="language-sql">ALTER TABLE users DROP CONSTRAINT users_email_key;
+CREATE UNIQUE INDEX users_email_con_song ON users (email) WHERE deleted_at IS NULL;</code></pre>
+<div class="out">dang ky lai email da xoa mem → P2002 {"modelName":"User","target":["email"]}
+sau chi muc unique mot phan (WHERE deleted_at IS NULL) → tao duoc user 2002</div>
+<p>Người dùng đã xoá mềm vẫn giữ email: đăng ký lại hỏng với P2002 cho tới khi ràng buộc unique thành chỉ mục unique một phần. Lược đồ Prisma không diễn đạt được <code>WHERE</code> — nó nằm trong một migration viết tay (Bài 6.3), và bỏ <code>@unique</code> khỏi trường.</p>
 
-<h3>Rời khỏi <code>$use</code></h3>
-<pre><code class="language-typescript"><span class="tok-comment">// Middleware cũ — đã lỗi thời, và không có kiểu: params.args là &#96;any&#96;</span>
-prisma.$use(async (params, next) =&gt; {
-  if (params.model === 'SocialPost' &amp;&amp; params.action === 'delete') {
-    params.action = 'update';
-    params.args.data = { deletedAt: new Date() };
-  }
-  return next(params);
-});</code></pre>
+<h3><code>$use</code> đã bị gỡ</h3>
+<div class="out">typeof prisma.$use = undefined
+prisma.$use(...) → TypeError: prisma.$use is not a function</div>
+<p>Hướng dẫn cũ vẫn chỉ <code>prisma.$use(async (params, next) =&gt; …)</code>. Ở Prisma 6.19.3 phương thức này không còn, nên chẳng có gì để chạy song song với extension trong lúc chuyển: viết lại mỗi nhánh thành một extension query cho đúng model và thao tác, rồi xoá lời gọi.</p>
 <div class="kv-grid">
-  <div class="kv"><span class="k">Kiểu</span><span class="v"><code>$use</code> trao cho bạn <code>params.args: any</code> và một <code>model</code> dạng chuỗi. Phần mở rộng <code>query</code> trao cho bạn kiểu đối số THẬT của model và thao tác đó, nên gõ sai một tên trường là lỗi biên dịch.</span></div>
-  <div class="kv"><span class="k">Phạm vi</span><span class="v"><code>$use</code> là toàn cục và phụ thuộc thứ tự đăng ký giữa mọi lần gọi. Phần mở rộng có phạm vi đúng những model và thao tác bạn gọi tên, và ghép lại một cách TƯỜNG MINH.</span></div>
-  <div class="kv"><span class="k">Sửa đổi tại chỗ</span><span class="v"><code>$use</code> SỬA chính cái client dùng chung — mọi lần import đều thấy, kể cả những đoạn mã không muốn. <code>$extends</code> trả về client mới, nên vẫn còn một cái CHƯA mở rộng cho cái script migration thật sự cần xoá cứng.</span></div>
-  <div class="kv"><span class="k">Dùng cả hai cùng lúc</span><span class="v">Chúng vẫn chạy chung được trong lúc chuyển đổi, với <code>$use</code> chạy trước. ĐỪNG để nguyên như thế: hai tầng cùng viết lại một bộ đối số là một bài toán gỡ lỗi không ai muốn nếm tới lần thứ hai.</span></div>
+  <div class="kv"><span class="k">Có kiểu</span><span class="v">Extension query nhận đúng kiểu đối số của model và thao tác.</span></div>
+  <div class="kv"><span class="k">Có phạm vi</span><span class="v">Chỉ những model và thao tác bạn khai.</span></div>
+  <div class="kv"><span class="k">Một client mới</span><span class="v"><code>$extends</code> trả về một client mới; client gốc vẫn còn — và không bị lọc. Hãy giữ nó riêng tư.</span></div>
 </div>
 
 <h3>Nguồn học cho bài này</h3>

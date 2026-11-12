@@ -4,12 +4,13 @@
  * CuongThai.com) rồi chỉ đổi mặc định khoa/duong/bieuTuong/khau sang Prisma và THÊM:
  *   prs(src, opts)  — khối lược đồ Prisma (.prisma) tô màu Dark+ (highlight.js không có ngôn ngữ prisma ⇒ tự tách token)
  *   tp(text, opts)  — terminal Prisma/tsc/node: như tc() nhưng tiêu đề mặc định là môi trường chạy thật của khoá video.
- * Bản trong repo (12/11/2026): deck pr-NN-M.mjs ở cùng thư mục, mỗi deck tự chứa output chạy thật (đóng băng từ khoá video).
- * Render: node scripts/_render-slides.mjs --deck scripts/slides-src/pr-NN-M.mjs --out <dir>
- *         node scripts/tst/kiem-slide.mjs scripts/slides-src/pr-NN-M.mjs   ⇒ 0 slide có vấn đề
+ * Không sửa tệp nào trong api-backend (chỉ import). Deck nằm NGOÀI repo web: scratchpad/prisma/slides/pr-NN-M.mjs.
+ * Render (cwd PHẢI là api-backend vì bộ render đọc node_modules/katex tương đối):
+ *   cd ~/Downloads/api-backend && node scripts/_render-slides.mjs --deck <đường dẫn tuyệt đối deck> --out <tmp>
+ * Hoặc: bash ~/Documents/video-bai-giang/scratchpad/prisma/dung-slide.sh <id>:<deck>
  */
-import * as G from './_ts-chung.mjs';
-export * from './_ts-chung.mjs';
+import * as G from '/Users/admin/Downloads/api-backend/scripts/slides-src/_ts-chung.mjs';
+export * from '/Users/admin/Downloads/api-backend/scripts/slides-src/_ts-chung.mjs';
 
 export const MOI_TRUONG = 'Node 26.8.1 · Prisma 6.19.3 · PostgreSQL 16.14';
 const MAC_DINH = { khoa: 'Prisma ORM', duong: 'courses/prisma-orm', bieuTuong: '🗃️', khau: 'from one schema file to production' };
@@ -81,6 +82,14 @@ const NET = {
   code: '<path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/>',
   check: '<path d="M4 12l5 5L20 6"/>',
   stack: '<rect x="4" y="3" width="16" height="5" rx="1"/><rect x="4" y="10" width="16" height="5" rx="1"/><rect x="4" y="17" width="16" height="4" rx="1"/>',
+  box: '<path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/>',
+  power: '<path d="M12 2v10"/><path d="M6.3 6.3a8 8 0 1 0 11.4 0"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  pulse: '<path d="M2 12h4l3-8 4 16 3-8h6"/>',
+  flag: '<path d="M5 22V3"/><path d="M5 4h12l-2 4 2 4H5"/>',
+  cpu: '<rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+  seed: '<path d="M12 22V11"/><path d="M12 11c0-4 3-7 8-7 0 5-3 8-8 7z"/><path d="M12 14c0-3-2-5-7-5 0 4 2 6 7 5z"/>',
 };
 /** Icon SVG nét mảnh, một màu. */
 export const ico = (ten, mau = '#b85a2b', co = 34) => `<svg viewBox="0 0 24 24" width="${co}" height="${co}" fill="none" stroke="${mau}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:none">${NET[ten] || NET.list}</svg>`;
@@ -137,4 +146,4 @@ export function tiers(items, opts = {}) {
     if (i < items.length - 1) s += `<line x1="${w / 2}" y1="${y + th + 2}" x2="${w / 2}" y2="${y + th + gap - 4}" stroke="#b85a2b" stroke-width="3" marker-end="url(#mtt)"/>`; });
   return s + '</svg>';
 }
-export { flow, vsd } from './_ts-chung.mjs';
+export { flow, vsd } from '/Users/admin/Downloads/api-backend/scripts/slides-src/_ts-chung.mjs';

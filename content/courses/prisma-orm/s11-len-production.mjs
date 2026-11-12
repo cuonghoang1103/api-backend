@@ -6,6 +6,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G11_1 from './giang/pr-11-1.mjs';
+import G11_2 from './giang/pr-11-2.mjs';
+import G11_3 from './giang/pr-11-3.mjs';
+import G11_4 from './giang/pr-11-4.mjs';
+import G11_5 from './giang/pr-11-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -20,6 +25,7 @@ export default {
       isFreePreview: true,
       description: 'Prisma đóng gói một engine Rust theo từng nền: musl với glibc là hai file khác nhau, binaryTargets quyết định file nào vào ảnh, và một lần dựng ảnh sai nền đã làm API CuongThai chết 502 bảy phút dù build xanh, đẩy xanh, tráo xanh.',
       content: `
+${G11_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.1</span>
 <h2>The engine in the image, and the seven-minute outage</h2>
@@ -28,30 +34,25 @@ export default {
 <h3>What <code>prisma generate</code> actually puts on disk</h3>
 <pre><code class="language-bash">npx prisma generate
 ls -la node_modules/.prisma/client/</code></pre>
-<div class="out">index.js                                    1.2 MB   <span class="tok-comment">← the JS API</span>
-index.d.ts                                  3.8 MB   <span class="tok-comment">← the types from Chapter 8</span>
-schema.prisma                                 12 KB   <span class="tok-comment">← a copy, read at runtime</span>
-libquery_engine-debian-openssl-3.0.x.count.node  18 MB   <span class="tok-comment">← the Rust engine</span></div>
+<div class="out"><span class="tok-comment"># measured: Apple Silicon Mac, inside node:22-slim, Prisma 6.19.3 (sizes in bytes)</span>
+    5971  index.js                                       <span class="tok-comment">← the JS API</span>
+   67926  index.d.ts                                     <span class="tok-comment">← the types from Chapter 8</span>
+     215  schema.prisma                                  <span class="tok-comment">← a copy, read at runtime</span>
+ 2297601  query_engine_bg.wasm
+19581616  libquery_engine-linux-arm64-openssl-1.1.x.so.node  <span class="tok-comment">← the Rust engine</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">The engine speaks the wire protocol</span><span class="lz-lnote">It builds the SQL, manages the connection pool from Lesson 9.4, and handles the PostgreSQL protocol. The JavaScript layer is an API over it, which is why <code>PrismaClient</code> works identically across databases.</span></div>
   <div class="lz-layer"><span class="lz-lname">One file per platform</span><span class="lz-lnote">The name encodes it: <code>debian-openssl-3.0.x</code> means glibc plus OpenSSL 3. Alpine's <code>linux-musl-openssl-3.0.x</code> is a different binary, and an ARM Mac's <code>darwin-arm64</code> is a third.</span></div>
   <div class="lz-layer"><span class="lz-lname">Generated, not installed</span><span class="lz-lnote"><code>npm ci</code> alone does not produce it. Nothing in <code>node_modules/@prisma/client</code> works until <code>prisma generate</code> has run — which is why a Dockerfile that copies <code>node_modules</code> from the host ships a client with the host's engine.</span></div>
-  <div class="lz-layer"><span class="lz-lname">18 MB, per target</span><span class="lz-lnote">Listing four <code>binaryTargets</code> puts four engines in the image. It works, and it costs 72 MB. List the one the runtime actually uses, plus <code>native</code> only if the same image is also used for local development.</span></div>
+  <div class="lz-layer"><span class="lz-lname">16–20 MB, per target</span><span class="lz-lnote">Measured: 19.6 MB (glibc arm64), 17.6 MB (musl x86), 15.7 MB (musl arm64) — three targets put 54 MB of engines in the image. List the one the runtime actually uses, plus <code>native</code> only if the same image is also used for local development.</span></div>
 </div>
 
 <h3>The failure, exactly as it looks</h3>
-<pre><code class="language-bash"><span class="tok-comment"># The image built on Debian, running on Alpine</span>
-docker logs cuonghoangdev_backend --tail 20</code></pre>
-<div class="out">PrismaClientInitializationError:
-Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node&#96;)
-Error loading shared library ld-linux-x86-64.count.2: No such file or directory
-
-    at new PrismaClient (/app/node_modules/@prisma/client/…)
-    at Object.&lt;anonymous&gt; (/app/dist/lib/prisma.js:4:16)
-
-node:internal/process/promises:288
-            triggerUncaughtException(err, true);
-[nodemon] app crashed</div>
+<pre><code class="language-bash"><span class="tok-comment"># Measured: client generated in node:22-slim, run in node:22-alpine (Apple Silicon Mac, Prisma 6.19.3)</span>
+docker run --rm -v $PWD/app:/app -w /app node:22-alpine node nap.cjs</code></pre>
+<div class="out">PrismaClientInitializationError: Prisma Client could not locate the Query Engine for runtime "linux-musl-arm64-openssl-3.0.x".
+This happened because Prisma Client was generated for "linux-arm64-openssl-1.1.x", but the actual deployment required "linux-musl-arm64-openssl-3.0.x".
+Add "linux-musl-arm64-openssl-3.0.x" to &#96;binaryTargets&#96; in the "schema.prisma" file and run &#96;prisma generate&#96; after saving it</div>
 <pre><code class="language-bash"><span class="tok-comment"># And what the orchestrator does about it</span>
 docker ps -a --filter name=backend</code></pre>
 <div class="out">CONTAINER ID   STATUS
@@ -79,13 +80,14 @@ generator client {
   <div class="kv"><span class="k">ARM servers</span><span class="v">A Graviton or Ampere host needs <code>linux-arm64-openssl-3.0.x</code>. Building on an Apple Silicon Mac for an x86 VPS is the same mismatch in the other direction, and it produces the identical error.</span></div>
 </div>
 <pre><code class="language-bash"><span class="tok-comment"># Find out what a running container actually is</span>
-docker run --rm node:22-alpine sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'
+docker run --rm node:22-alpine sh -c 'uname -m; ldd --version 2&gt;&amp;1 | head -1; openssl version'
 docker run --rm node:22-slim  sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'</code></pre>
-<div class="out">musl libc (x86_64) Version 1.2.5
-OpenSSL 3.5.1 1 Jul 2025
+<div class="out">aarch64
+musl libc (aarch64)
+sh: openssl: not found
 
-ldd (Debian GLIBC 2.36-9+deb12u13) 2.36
-OpenSSL 3.0.16 11 Feb 2025</div>
+ldd (Debian GLIBC 2.36-9+deb12u14) 2.36
+sh: 1: openssl: not found     <span class="tok-comment"># libssl3 is installed; the openssl command is not</span></div>
 
 <h3>The check that would have caught it</h3>
 <pre><code class="language-javascript"><span class="tok-comment">#!/usr/bin/env bash</span>
@@ -94,7 +96,7 @@ set -euo pipefail
 ANH="\$1"
 
 <span class="tok-comment"># 1. Which libc is inside the image?</span>
-if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.count.1' &gt;/dev/null 2&gt;&amp;1; then
+if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.so.1' &gt;/dev/null 2&gt;&amp;1; then
   LIBC=musl
 else
   LIBC=glibc
@@ -102,7 +104,7 @@ fi
 
 <span class="tok-comment"># 2. Which engine did generate put there?</span>
 ENGINE=\$(docker run --rm --entrypoint sh "\$ANH" -c \\
-  'ls /app/node_modules/.prisma/client/libquery_engine-*.count.node' | head -1)
+  'ls /app/node_modules/.prisma/client/libquery_engine-*.so.node' | head -1)
 
 <span class="tok-comment"># 3. Do they agree?</span>
 case "\$LIBC:\$ENGINE" in
@@ -114,11 +116,11 @@ esac
 
 <span class="tok-comment"># 4. The only proof that counts: actually construct a client.</span>
 docker run --rm --entrypoint node "\$ANH" \\
-  -e "new (require('@prisma/client').PrismaClient)(); console.log('✅ engine nap duoc')"</code></pre>
-<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.count.node
+  -e "new (require('@prisma/client').PrismaClient)().\$connect().then(() => console.log('✅ engine nap duoc'), (e) => { console.error(e.message); process.exit(1) })"</code></pre>
+<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.so.node
 ✅ engine nap duoc</div>
 <div class="callout ok">
-<p><strong>Step 4 is the one that generalises.</strong> Constructing a <code>PrismaClient</code> inside the built image loads the engine, and it does so without a database — the connection is lazy. It catches the libc mismatch, a missing OpenSSL, a <code>node_modules</code> layer that did not copy, and an engine that was pruned by an over-eager cleanup step. One <code>docker run</code>, about 400 ms, and it turns a seven-minute outage into a failed deploy step.</p>
+<p><strong>Step 4 is the one that generalises — if it waits.</strong> Measured on 6.19.3: <code>new PrismaClient()</code> alone returned and printed "no error", then the engine load failed in the background and the process exited with code 1. Awaiting <code>$connect()</code> surfaces the failure where the script can test it; against an unreachable or absent database, "Can't reach database server" means the engine loaded. It catches the libc mismatch, a missing OpenSSL, a <code>node_modules</code> layer that did not copy, and an engine that was pruned by an over-eager cleanup step. One <code>docker run</code>, and it turns a seven-minute outage into a failed deploy step.</p>
 </div>
 <div class="pitfall">
 <p><strong>Trap — building the image outside compose picks the default <code>Dockerfile</code>.</strong> <code>docker build .</code> means <code>-f Dockerfile</code>, whatever <code>docker-compose.yml</code> says the service uses. If your repository has <code>Dockerfile</code>, <code>Dockerfile.backend</code> and <code>frontend/Dockerfile</code>, a script that omits <code>-f</code> builds a plausible-looking image from the wrong recipe. Always pass <code>-f</code> explicitly in deploy scripts, and read it from the same compose file the server runs.</p>
@@ -127,13 +129,12 @@ docker run --rm --entrypoint node "\$ANH" \\
 <h3>The engineless option</h3>
 <pre><code class="language-bash"><span class="tok-comment"># Generate a client with no engine binary at all</span>
 npx prisma generate --no-engine</code></pre>
-<div class="out">✔ Generated Prisma Client (v6.4.1, engine=none) in 178ms
-
-node_modules/.prisma/client/  →  4.1 MB   (khong co .count.node)</div>
+<div class="out">✔ Generated Prisma Client (v6.19.3, engine=none) to ./node_modules/@prisma/client in 25ms
+node_modules/.prisma/client/  →  144K   (0 tệp .so.node)      <span class="tok-comment"># với engine: 22M</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">What it is for</span><span class="lz-lnote">Prisma Accelerate and Data Proxy: the client speaks HTTP to a hosted service that owns the engine and the pool. The platform question from Lesson 9.4 — two hundred lambdas, one hundred connections — is what it exists to answer.</span></div>
   <div class="lz-layer"><span class="lz-lname">What you give up</span><span class="lz-lnote">A network hop per query, a vendor in the data path, and <code>$queryRaw</code> restrictions. For a container on a VPS with a database in the same datacentre, it adds latency and solves a problem you do not have.</span></div>
-  <div class="lz-layer"><span class="lz-lname">The size argument is real but small</span><span class="lz-lnote">18 MB out of a Node image that is 180 MB compressed. Worth it on a serverless bundle with a 50 MB limit; irrelevant on a long-running container.</span></div>
+  <div class="lz-layer"><span class="lz-lname">The size argument is real but small</span><span class="lz-lnote">22 MB against a 234 MB node:22-alpine image (uncompressed, measured). Worth it on a serverless bundle with a 50 MB limit; irrelevant on a long-running container.</span></div>
   <div class="lz-layer"><span class="lz-lname">The new <code>prisma-client</code> generator</span><span class="lz-lnote">Prisma 6 ships a second generator that emits into your source tree instead of <code>node_modules/.prisma</code>, with ESM output. Same engine story — it changes where the JavaScript lands, not what the Rust binary needs.</span></div>
 </div>
 
@@ -154,30 +155,25 @@ node_modules/.prisma/client/  →  4.1 MB   (khong co .count.node)</div>
 <h3><code>prisma generate</code> THẬT SỰ đặt gì lên đĩa</h3>
 <pre><code class="language-bash">npx prisma generate
 ls -la node_modules/.prisma/client/</code></pre>
-<div class="out">index.js                                    1,2 MB   <span class="tok-comment">← API JavaScript</span>
-index.d.ts                                  3,8 MB   <span class="tok-comment">← bộ kiểu của Chương 8</span>
-schema.prisma                                 12 KB   <span class="tok-comment">← một bản sao, đọc lúc chạy</span>
-libquery_engine-debian-openssl-3.0.x.count.node  18 MB   <span class="tok-comment">← engine Rust</span></div>
+<div class="out"><span class="tok-comment"># đo thật: Mac Apple Silicon, trong node:22-slim, Prisma 6.19.3 (kích thước tính bằng byte)</span>
+    5971  index.js                                       <span class="tok-comment">← API JavaScript</span>
+   67926  index.d.ts                                     <span class="tok-comment">← bộ kiểu của Chương 8</span>
+     215  schema.prisma                                  <span class="tok-comment">← bản sao, đọc lúc chạy</span>
+ 2297601  query_engine_bg.wasm
+19581616  libquery_engine-linux-arm64-openssl-1.1.x.so.node  <span class="tok-comment">← engine Rust</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Engine nói giao thức đường dây</span><span class="lz-lnote">Nó dựng câu SQL, quản connection pool của Bài 9.4, và xử lý giao thức PostgreSQL. Tầng JavaScript chỉ là một API phủ lên trên nó — đó là lý do <code>PrismaClient</code> hoạt động y hệt nhau trên các cơ sở dữ liệu khác nhau.</span></div>
   <div class="lz-layer"><span class="lz-lname">MỖI nền một file</span><span class="lz-lnote">Cái tên nói hết: <code>debian-openssl-3.0.x</code> nghĩa là glibc cộng OpenSSL 3. Bản <code>linux-musl-openssl-3.0.x</code> của Alpine là một tệp nhị phân KHÁC, và <code>darwin-arm64</code> của Mac ARM là cái thứ ba.</span></div>
   <div class="lz-layer"><span class="lz-lname">Được SINH RA, không phải được CÀI</span><span class="lz-lnote">Chỉ <code>npm ci</code> thôi thì không tạo ra nó. Không thứ gì trong <code>node_modules/@prisma/client</code> chạy được cho tới khi <code>prisma generate</code> chạy — đó là lý do một Dockerfile copy <code>node_modules</code> từ máy chủ nhà sẽ mang theo engine của máy đó vào ảnh.</span></div>
-  <div class="lz-layer"><span class="lz-lname">18 MB, cho MỖI target</span><span class="lz-lnote">Khai bốn <code>binaryTargets</code> là bốn engine nằm trong ảnh. Nó chạy, và nó tốn 72 MB. Hãy khai đúng cái mà runtime dùng, cộng <code>native</code> chỉ khi cùng ảnh đó còn dùng để phát triển tại máy.</span></div>
+  <div class="lz-layer"><span class="lz-lname">16–20 MB, cho MỖI target</span><span class="lz-lnote">Đo thật: 19,6 MB (glibc arm64), 17,6 MB (musl x86), 15,7 MB (musl arm64) — ba target là 54 MB engine nằm trong ảnh. Hãy khai đúng cái mà runtime dùng, cộng <code>native</code> chỉ khi cùng ảnh đó còn dùng để phát triển tại máy.</span></div>
 </div>
 
 <h3>Cú hỏng, đúng như nó hiện ra</h3>
-<pre><code class="language-bash"><span class="tok-comment"># Ảnh dựng trên Debian, chạy trên Alpine</span>
-docker logs cuonghoangdev_backend --tail 20</code></pre>
-<div class="out">PrismaClientInitializationError:
-Unable to require(&#96;/app/node_modules/.prisma/client/libquery_engine-debian-openssl-3.0.x.count.node&#96;)
-Error loading shared library ld-linux-x86-64.count.2: No such file or directory
-
-    at new PrismaClient (/app/node_modules/@prisma/client/…)
-    at Object.&lt;anonymous&gt; (/app/dist/lib/prisma.js:4:16)
-
-node:internal/process/promises:288
-            triggerUncaughtException(err, true);
-[nodemon] app crashed</div>
+<pre><code class="language-bash"><span class="tok-comment"># Đo thật: client sinh trong node:22-slim, chạy trong node:22-alpine (Mac Apple Silicon, Prisma 6.19.3)</span>
+docker run --rm -v $PWD/app:/app -w /app node:22-alpine node nap.cjs</code></pre>
+<div class="out">PrismaClientInitializationError: Prisma Client could not locate the Query Engine for runtime "linux-musl-arm64-openssl-3.0.x".
+This happened because Prisma Client was generated for "linux-arm64-openssl-1.1.x", but the actual deployment required "linux-musl-arm64-openssl-3.0.x".
+Add "linux-musl-arm64-openssl-3.0.x" to &#96;binaryTargets&#96; in the "schema.prisma" file and run &#96;prisma generate&#96; after saving it</div>
 <pre><code class="language-bash"><span class="tok-comment"># Và bộ điều phối làm gì với chuyện đó</span>
 docker ps -a --filter name=backend</code></pre>
 <div class="out">CONTAINER ID   STATUS
@@ -205,13 +201,14 @@ generator client {
   <div class="kv"><span class="k">Máy chủ ARM</span><span class="v">Một máy Graviton hay Ampere cần <code>linux-arm64-openssl-3.0.x</code>. Dựng trên Mac Apple Silicon để chạy trên VPS x86 là ĐÚNG cú lệch đó theo chiều ngược lại, và nó cho ra y hệt một lỗi.</span></div>
 </div>
 <pre><code class="language-bash"><span class="tok-comment"># Xem một container đang chạy THẬT SỰ là nền gì</span>
-docker run --rm node:22-alpine sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'
+docker run --rm node:22-alpine sh -c 'uname -m; ldd --version 2&gt;&amp;1 | head -1; openssl version'
 docker run --rm node:22-slim  sh -c 'ldd --version 2&gt;&amp;1 | head -1; openssl version'</code></pre>
-<div class="out">musl libc (x86_64) Version 1.2.5
-OpenSSL 3.5.1 1 Jul 2025
+<div class="out">aarch64
+musl libc (aarch64)
+sh: openssl: not found
 
-ldd (Debian GLIBC 2.36-9+deb12u13) 2.36
-OpenSSL 3.0.16 11 Feb 2025</div>
+ldd (Debian GLIBC 2.36-9+deb12u14) 2.36
+sh: 1: openssl: not found     <span class="tok-comment"># libssl3 is installed; the openssl command is not</span></div>
 
 <h3>Chốt kiểm lẽ ra đã bắt được nó</h3>
 <pre><code class="language-javascript"><span class="tok-comment">#!/usr/bin/env bash</span>
@@ -220,7 +217,7 @@ set -euo pipefail
 ANH="\$1"
 
 <span class="tok-comment"># 1. Bên trong ảnh là libc nào?</span>
-if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.count.1' &gt;/dev/null 2&gt;&amp;1; then
+if docker run --rm --entrypoint sh "\$ANH" -c 'ls /lib/ld-musl-*.so.1' &gt;/dev/null 2&gt;&amp;1; then
   LIBC=musl
 else
   LIBC=glibc
@@ -228,7 +225,7 @@ fi
 
 <span class="tok-comment"># 2. generate đã đặt engine nào vào đó?</span>
 ENGINE=\$(docker run --rm --entrypoint sh "\$ANH" -c \\
-  'ls /app/node_modules/.prisma/client/libquery_engine-*.count.node' | head -1)
+  'ls /app/node_modules/.prisma/client/libquery_engine-*.so.node' | head -1)
 
 <span class="tok-comment"># 3. Hai cái có khớp nhau không?</span>
 case "\$LIBC:\$ENGINE" in
@@ -240,11 +237,11 @@ esac
 
 <span class="tok-comment"># 4. Bằng chứng DUY NHẤT có giá trị: thật sự dựng một client.</span>
 docker run --rm --entrypoint node "\$ANH" \\
-  -e "new (require('@prisma/client').PrismaClient)(); console.log('✅ engine nap duoc')"</code></pre>
-<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.count.node
+  -e "new (require('@prisma/client').PrismaClient)().\$connect().then(() => console.log('✅ engine nap duoc'), (e) => { console.error(e.message); process.exit(1) })"</code></pre>
+<div class="out">✅ musl ↔ libquery_engine-linux-musl-openssl-3.0.x.so.node
 ✅ engine nap duoc</div>
 <div class="callout ok">
-<p><strong>Bước 4 mới là bước TỔNG QUÁT ĐƯỢC.</strong> Dựng một <code>PrismaClient</code> bên trong ảnh đã build sẽ nạp engine, và nạp mà KHÔNG cần cơ sở dữ liệu — kết nối là lười. Nó bắt được cú lệch libc, một OpenSSL thiếu, một tầng <code>node_modules</code> không copy sang, và một engine bị một bước dọn dẹp quá hăng xoá mất. Một lệnh <code>docker run</code>, chừng 400 ms, và nó biến bảy phút chết API thành một bước deploy thất bại.</p>
+<p><strong>Bước 4 mới là bước TỔNG QUÁT ĐƯỢC — nếu nó CHỜ.</strong> Đo trên 6.19.3: chỉ <code>new PrismaClient()</code> thì hàm dựng trả về, in "không lỗi", rồi engine nạp hỏng ở phía sau và tiến trình thoát với mã 1. Phải <code>await $connect()</code> thì lỗi mới hiện đúng chỗ script kiểm được; với một cơ sở dữ liệu không với tới, câu "Can't reach database server" nghĩa là engine ĐÃ nạp. Nó bắt được cú lệch libc, một OpenSSL thiếu, một tầng <code>node_modules</code> không copy sang, và một engine bị một bước dọn dẹp quá hăng xoá mất. Một lệnh <code>docker run</code>, và nó biến bảy phút chết API thành một bước deploy thất bại.</p>
 </div>
 <div class="pitfall">
 <p><strong>Bẫy — dựng ảnh NGOÀI compose thì lấy <code>Dockerfile</code> MẶC ĐỊNH.</strong> <code>docker build .</code> nghĩa là <code>-f Dockerfile</code>, bất kể <code>docker-compose.yml</code> nói dịch vụ đó dùng file nào. Nếu kho của bạn có <code>Dockerfile</code>, <code>Dockerfile.backend</code> và <code>frontend/Dockerfile</code>, thì một script quên <code>-f</code> sẽ dựng ra một cái ảnh trông rất hợp lý từ CÔNG THỨC SAI. Luôn truyền <code>-f</code> tường minh trong script deploy, và đọc nó ra từ chính cái file compose mà máy chủ chạy.</p>
@@ -253,13 +250,12 @@ docker run --rm --entrypoint node "\$ANH" \\
 <h3>Lựa chọn KHÔNG engine</h3>
 <pre><code class="language-bash"><span class="tok-comment"># Sinh một client không kèm tệp nhị phân engine nào cả</span>
 npx prisma generate --no-engine</code></pre>
-<div class="out">✔ Generated Prisma Client (v6.4.1, engine=none) in 178ms
-
-node_modules/.prisma/client/  →  4,1 MB   (khong co .count.node)</div>
+<div class="out">✔ Generated Prisma Client (v6.19.3, engine=none) to ./node_modules/@prisma/client in 25ms
+node_modules/.prisma/client/  →  144K   (0 tệp .so.node)      <span class="tok-comment"># với engine: 22M</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Nó dùng để làm gì</span><span class="lz-lnote">Prisma Accelerate và Data Proxy: client nói HTTP tới một dịch vụ được lưu trữ sẵn, dịch vụ đó SỞ HỮU engine và cái pool. Bài toán nền tảng của Bài 9.4 — hai trăm lambda, một trăm kết nối — chính là thứ nó sinh ra để trả lời.</span></div>
   <div class="lz-layer"><span class="lz-lname">Cái bạn đánh đổi</span><span class="lz-lnote">Một bước nhảy mạng cho MỖI truy vấn, một nhà cung cấp nằm trên đường đi của dữ liệu, và những hạn chế với <code>$queryRaw</code>. Với một container trên VPS có cơ sở dữ liệu cùng trung tâm dữ liệu, nó thêm độ trễ để giải một bài toán bạn không có.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Lý lẽ về dung lượng là THẬT nhưng nhỏ</span><span class="lz-lnote">18 MB trên một ảnh Node nén lại đã 180 MB. Đáng với một gói serverless có trần 50 MB; không liên quan với một container chạy dài.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Lý lẽ về dung lượng là THẬT nhưng nhỏ</span><span class="lz-lnote">22 MB trên ảnh node:22-alpine 234 MB (chưa nén, đo thật). Đáng với một gói serverless có trần 50 MB; không liên quan với một container chạy dài.</span></div>
   <div class="lz-layer"><span class="lz-lname">Generator <code>prisma-client</code> mới</span><span class="lz-lnote">Prisma 6 kèm một generator thứ hai, xuất mã vào chính cây nguồn của bạn thay vì <code>node_modules/.prisma</code>, và ra ESM. Câu chuyện engine vẫn y nguyên — nó đổi chỗ JavaScript rơi xuống, không đổi thứ tệp nhị phân Rust cần.</span></div>
 </div>
 
@@ -280,6 +276,7 @@ node_modules/.prisma/client/  →  4,1 MB   (khong co .count.node)</div>
       type: 'LESSON',
       description: 'Vì sao schema.prisma phải được COPY TRƯỚC npm ci, vì sao generate phải chạy trong tầng có cùng nền với runtime, chuyện gì xảy ra khi --omit=dev cắt mất Prisma CLI, và một Dockerfile ba tầng có chú thích từng dòng kèm số dung lượng thật.',
       content: `
+${G11_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.2</span>
 <h2>A Dockerfile that generates in the right place</h2>
@@ -319,7 +316,10 @@ RUN npm ci &amp;&amp; npx prisma generate      <span class="tok-comment"># debia
 
 FROM node:22-alpine
 COPY --from=build /app/node_modules ./node_modules   <span class="tok-comment"># musl runtime, debian engine</span></code></pre>
-<div class="out">Error loading shared library ld-linux-x86-64.count.2: No such file or directory</div>
+<div class="out">PrismaClientInitializationError
+Prisma Client could not locate the Query Engine for runtime "linux-musl-arm64-openssl-3.0.x".
+This happened because Prisma Client was generated for "linux-arm64-openssl-1.1.x", but the actual deployment required "linux-musl-arm64-openssl-3.0.x".
+<span class="tok-comment"># measured: deps + build on node:22-slim, runtime node:22-alpine, Apple Silicon Mac, Prisma 6.19.3 — the image held only the two glibc engines</span></div>
 <pre><code><span class="tok-comment"># ✅ Same base everywhere</span>
 FROM node:22-alpine AS deps
 FROM node:22-alpine AS build
@@ -331,13 +331,24 @@ FROM node:22-alpine AS runtime</code></pre>
   <div class="kv"><span class="k">Never <code>COPY node_modules</code> from the host</span><span class="v">Put it in <code>.dockerignore</code>. Copying it ships your laptop's engine — <code>darwin-arm64</code> — into a Linux image, which is the same failure with a more confusing error message.</span></div>
 </div>
 
-<h3>Rule 3 — the CLI disappears with <code>--omit=dev</code></h3>
-<pre><code>RUN npm ci --omit=dev
-RUN npx prisma migrate deploy</code></pre>
-<div class="out">npm error could not determine executable to run
-(prisma is a devDependency; --omit=dev removed it)</div>
+<h3>Rule 3 — know where the CLI is (<code>--omit=dev</code> did not remove it)</h3>
+<pre><code><span class="tok-comment"># prisma is a devDependency; the build stage ran npm prune --omit=dev</span>
+docker run --rm -e DATABASE_URL=… p112:ba-tang npx --no-install prisma migrate deploy
+docker run --rm --entrypoint sh p112:ba-tang -c "npm explain prisma; du -sh node_modules/prisma node_modules/typescript"</code></pre>
+<div class="out">1 migration found in prisma/migrations
+Applying migration &#96;20261112000000_init&#96;
+The following migration(s) have been applied:
+
+prisma@6.19.3
+node_modules/prisma
+  dev prisma@"6.19.3" from the root project
+  peerOptional prisma@"*" from @prisma/client@6.19.3
+65.1M	node_modules/prisma
+22.9M	node_modules/typescript
+<span class="tok-comment"># measured: npm 10, Prisma 6.19.3, node:22-alpine — the CLI survived the prune</span></div>
+<p>Many guides say <code>--omit=dev</code> removes the CLI and <code>npx prisma</code> then fails. Measured here it did not: <code>@prisma/client</code> declares <code>prisma</code> as an optional peer, so npm kept it — and <code>typescript</code> with it, 88 MB the runtime never needed. Other npm versions or lockfiles may behave differently, so do not assume either way: run <code>npm explain prisma</code> in the runtime image and decide deliberately where the CLI lives.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Option A — keep <code>prisma</code> in <code>dependencies</code></span><span class="lz-lnote">Simplest, and about 12 MB. Do this when the runtime image itself runs <code>migrate deploy</code> — which is the common pattern for a single-container deploy on a VPS.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Option A — keep <code>prisma</code> in <code>dependencies</code></span><span class="lz-lnote">Simplest — here it happened anyway (65 MB). Make it explicit when the runtime image itself runs <code>migrate deploy</code> — which is the common pattern for a single-container deploy on a VPS.</span></div>
   <div class="lz-layer"><span class="lz-lname">Option B — a separate migration stage</span><span class="lz-lnote">Keep the CLI in a stage that has dev dependencies, run <code>migrate deploy</code> from there in the deploy pipeline, and leave the runtime image lean. Better hygiene, one more moving part.</span></div>
   <div class="lz-layer"><span class="lz-lname">Option C — migrations in CI, not in the image</span><span class="lz-lnote">The deploy job runs <code>migrate deploy</code> against the production database before swapping containers. This is where the ordering question of Lesson 11.3 lives, and it is the one that caused a real outage.</span></div>
   <div class="lz-layer"><span class="lz-lname">Whatever you pick, pick once</span><span class="lz-lnote">Two places running <code>migrate deploy</code> concurrently — the container entrypoint and the CI job — race for the advisory lock. One wins, the other reports a lock timeout, and the deploy log becomes ambiguous about whether the schema is current.</span></div>
@@ -378,17 +389,13 @@ USER node                                     <span class="tok-comment"># do not
 EXPOSE 3000
 ENTRYPOINT ["dumb-init", "--"]                <span class="tok-comment"># PID 1 that forwards SIGTERM — Lesson 11.5</span>
 CMD ["node", "dist/index.js"]</code></pre>
-<div class="out">docker build -f Dockerfile.backend -t backend:test .
-
- =&gt; [deps  3/5] COPY prisma ./prisma                          0.0s
- =&gt; [deps  5/5] RUN npm ci                                   41.2s
- =&gt; [build 4/6] RUN npx prisma generate                       3.8s
- =&gt; [build 5/6] RUN npm run build                            18.4s
- =&gt; exporting layers                                          6.1s
-
-docker images backend:test
-REPOSITORY   TAG    SIZE
-backend      test   412MB     (node:22-alpine 178MB + engine 18MB + deps + dist)</div>
+<div class="out"><span class="tok-comment"># measured: the lesson's lab app with this file (Apple Silicon Mac, Docker Desktop 29.8, npm 10, Prisma 6.19.3)</span>
+docker build -t p112:ba-tang .            <span class="tok-comment"># cold cache except the base image: 89 s</span>
+docker image inspect node:22-alpine p112:ba-tang --format "{{index .RepoTags 0}} {{.Size}}"
+node:22-alpine   234377612      <span class="tok-comment"># ~234 MB</span>
+p112:ba-tang     595498716      <span class="tok-comment"># ~595 MB — node_modules alone is 258.8 MB</span>
+docker run --rm --entrypoint sh p112:ba-tang -c "ls node_modules/.prisma/client | grep so.node"
+libquery_engine-linux-musl-arm64-openssl-3.0.x.so.node</div>
 <div class="pitfall">
 <p><strong>Trap — <code>npm prune --omit=dev</code> runs after <code>generate</code>, and that order is not optional.</strong> Prune first and the CLI is gone before it can generate; generate first and the already-generated client in <code>node_modules/.prisma</code> survives the prune, because prune removes packages, not the generated output. Getting this backwards produces <code>@prisma/client did not initialize yet. Please run "prisma generate"</code> at container start — a message that sends people to re-run generate on their laptop, where it works fine.</p>
 </div>
@@ -462,7 +469,10 @@ RUN npm ci &amp;&amp; npx prisma generate      <span class="tok-comment"># engin
 
 FROM node:22-alpine
 COPY --from=build /app/node_modules ./node_modules   <span class="tok-comment"># runtime musl, engine debian</span></code></pre>
-<div class="out">Error loading shared library ld-linux-x86-64.count.2: No such file or directory</div>
+<div class="out">PrismaClientInitializationError
+Prisma Client could not locate the Query Engine for runtime "linux-musl-arm64-openssl-3.0.x".
+This happened because Prisma Client was generated for "linux-arm64-openssl-1.1.x", but the actual deployment required "linux-musl-arm64-openssl-3.0.x".
+<span class="tok-comment"># measured: deps + build on node:22-slim, runtime node:22-alpine, Apple Silicon Mac, Prisma 6.19.3 — the image held only the two glibc engines</span></div>
 <pre><code><span class="tok-comment"># ✅ Cùng một nền ở mọi tầng</span>
 FROM node:22-alpine AS deps
 FROM node:22-alpine AS build
@@ -474,13 +484,24 @@ FROM node:22-alpine AS runtime</code></pre>
   <div class="kv"><span class="k">ĐỪNG BAO GIỜ <code>COPY node_modules</code> từ máy nhà</span><span class="v">Cho nó vào <code>.dockerignore</code>. Copy nó là đem engine của laptop bạn — <code>darwin-arm64</code> — vào một ảnh Linux, tức cùng một cú hỏng nhưng với thông báo lỗi khó hiểu hơn.</span></div>
 </div>
 
-<h3>Luật 3 — CLI biến mất cùng <code>--omit=dev</code></h3>
-<pre><code>RUN npm ci --omit=dev
-RUN npx prisma migrate deploy</code></pre>
-<div class="out">npm error could not determine executable to run
-(prisma la devDependency; --omit=dev da go no di)</div>
+<h3>Luật 3 — biết CLI nằm ở đâu (<code>--omit=dev</code> KHÔNG gỡ nó)</h3>
+<pre><code><span class="tok-comment"># prisma là devDependency; tầng build đã chạy npm prune --omit=dev</span>
+docker run --rm -e DATABASE_URL=… p112:ba-tang npx --no-install prisma migrate deploy
+docker run --rm --entrypoint sh p112:ba-tang -c "npm explain prisma; du -sh node_modules/prisma node_modules/typescript"</code></pre>
+<div class="out">1 migration found in prisma/migrations
+Applying migration &#96;20261112000000_init&#96;
+The following migration(s) have been applied:
+
+prisma@6.19.3
+node_modules/prisma
+  dev prisma@"6.19.3" from the root project
+  peerOptional prisma@"*" from @prisma/client@6.19.3
+65.1M	node_modules/prisma
+22.9M	node_modules/typescript
+<span class="tok-comment"># đo thật: npm 10, Prisma 6.19.3, node:22-alpine — CLI sống sót qua prune</span></div>
+<p>Nhiều hướng dẫn nói <code>--omit=dev</code> gỡ mất CLI rồi <code>npx prisma</code> hỏng. Đo ở đây thì KHÔNG: <code>@prisma/client</code> khai <code>prisma</code> là peer tuỳ chọn, nên npm giữ lại — kéo theo cả <code>typescript</code>, 88 MB mà runtime không cần. Bản npm hay lockfile khác có thể khác, nên đừng đoán chiều nào: chạy <code>npm explain prisma</code> trong ảnh runtime rồi CỐ Ý quyết định CLI nằm ở đâu.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Lối A — giữ <code>prisma</code> trong <code>dependencies</code></span><span class="lz-lnote">Đơn giản nhất, tốn chừng 12 MB. Chọn nó khi chính ảnh runtime chạy <code>migrate deploy</code> — mẫu phổ biến với một triển khai một-container trên VPS.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Lối A — giữ <code>prisma</code> trong <code>dependencies</code></span><span class="lz-lnote">Đơn giản nhất — ở đây nó đã xảy ra sẵn (65 MB). Khai rõ ra khi chính ảnh runtime chạy <code>migrate deploy</code> — mẫu phổ biến với một triển khai một-container trên VPS.</span></div>
   <div class="lz-layer"><span class="lz-lname">Lối B — một tầng migration riêng</span><span class="lz-lnote">Giữ CLI trong một tầng CÓ dev dependency, chạy <code>migrate deploy</code> từ đó trong đường ống deploy, và để ảnh runtime gọn nhẹ. Vệ sinh hơn, thêm một bộ phận chuyển động.</span></div>
   <div class="lz-layer"><span class="lz-lname">Lối C — migration ở CI, không nằm trong ảnh</span><span class="lz-lnote">Job deploy chạy <code>migrate deploy</code> lên cơ sở dữ liệu production TRƯỚC khi tráo container. Đây là chỗ câu hỏi về THỨ TỰ của Bài 11.3 sinh sống, và nó từng gây một sự cố có thật.</span></div>
   <div class="lz-layer"><span class="lz-lname">Chọn cái nào cũng được, nhưng chọn MỘT</span><span class="lz-lnote">Hai chỗ cùng chạy <code>migrate deploy</code> song song — entrypoint của container và job CI — sẽ tranh nhau cái advisory lock. Một bên thắng, bên kia báo hết giờ chờ khoá, và nhật ký deploy trở nên mập mờ về việc lược đồ đã mới hay chưa.</span></div>
@@ -521,17 +542,13 @@ USER node                                     <span class="tok-comment"># đừn
 EXPOSE 3000
 ENTRYPOINT ["dumb-init", "--"]                <span class="tok-comment"># PID 1 biết chuyển tiếp SIGTERM — Bài 11.5</span>
 CMD ["node", "dist/index.js"]</code></pre>
-<div class="out">docker build -f Dockerfile.backend -t backend:test .
-
- =&gt; [deps  3/5] COPY prisma ./prisma                          0.0s
- =&gt; [deps  5/5] RUN npm ci                                   41.2s
- =&gt; [build 4/6] RUN npx prisma generate                       3.8s
- =&gt; [build 5/6] RUN npm run build                            18.4s
- =&gt; exporting layers                                          6.1s
-
-docker images backend:test
-REPOSITORY   TAG    SIZE
-backend      test   412MB     (node:22-alpine 178MB + engine 18MB + deps + dist)</div>
+<div class="out"><span class="tok-comment"># measured: the lesson's lab app with this file (Apple Silicon Mac, Docker Desktop 29.8, npm 10, Prisma 6.19.3)</span>
+docker build -t p112:ba-tang .            <span class="tok-comment"># cold cache except the base image: 89 s</span>
+docker image inspect node:22-alpine p112:ba-tang --format "{{index .RepoTags 0}} {{.Size}}"
+node:22-alpine   234377612      <span class="tok-comment"># ~234 MB</span>
+p112:ba-tang     595498716      <span class="tok-comment"># ~595 MB — node_modules alone is 258.8 MB</span>
+docker run --rm --entrypoint sh p112:ba-tang -c "ls node_modules/.prisma/client | grep so.node"
+libquery_engine-linux-musl-arm64-openssl-3.0.x.so.node</div>
 <div class="pitfall">
 <p><strong>Bẫy — <code>npm prune --omit=dev</code> chạy SAU <code>generate</code>, và thứ tự đó KHÔNG tuỳ chọn.</strong> Prune trước thì CLI biến mất trước khi kịp sinh mã; generate trước thì client đã sinh nằm trong <code>node_modules/.prisma</code> SỐNG SÓT qua lần prune, vì prune gỡ GÓI chứ không gỡ đầu ra đã sinh. Làm ngược thứ tự sẽ cho ra <code>@prisma/client did not initialize yet. Please run "prisma generate"</code> ngay lúc container khởi động — một thông báo đẩy người ta đi chạy lại generate trên laptop, nơi mọi thứ vẫn ổn.</p>
 </div>
@@ -574,6 +591,7 @@ frontend              <span class="tok-comment"># frontend có Dockerfile riêng
       type: 'LESSON',
       description: 'Trong lúc tráo container, mã CŨ và lược đồ MỚI cùng sống một lúc — luật hai chiều rút ra từ đó, mẫu mở-rộng-rồi-thu-hẹp để đổi tên cột qua ba lần deploy, lock_timeout để một ALTER TABLE không xếp hàng cả website, và vì sao CREATE INDEX CONCURRENTLY không nằm trong migration được.',
       content: `
+${G11_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.3</span>
 <h2>Migrations in the deploy, and the window where both versions run</h2>
@@ -622,22 +640,22 @@ Database schema is up to date!</div>
 <h3>Expand and contract — renaming a column across three deploys</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// ❌ The one-step rename. Compiles, migrates, breaks the window.</span>
 model User {
-  fullName String <span class="tok-comment">// was: fullName</span>
+  hoTen String @map("ho_ten") <span class="tok-comment">// was: fullName @map("full_name")</span>
 }</code></pre>
 <div class="out">-- Prisma sinh ra:
-ALTER TABLE "User" DROP COLUMN "fullName";
-ALTER TABLE "User" ADD COLUMN "fullName" TEXT NOT NULL;
+ALTER TABLE "users" DROP COLUMN "full_name",
+ADD COLUMN     "ho_ten" TEXT NOT NULL;   -- migrate diff, Prisma 6.19.3
 
--- Ma CU van dang SELECT "fullName" → 42703 column does not exist
+-- Ma CU van dang SELECT "full_name" → P2022 (do that: ca findFirst lan create)
 -- Va toan bo du lieu ho name vua bi xoa.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Expand</span><span class="lz-d">Add <code>fullName String?</code> — nullable, no default needed. Migration adds the column; old code ignores it. New code <strong>writes both</strong> columns and <strong>reads <code>fullName</code></strong>. Safe in both directions.</span></div>
-  <div class="lz-step"><span class="lz-k">Between</span><span class="lz-t">Backfill</span><span class="lz-d"><code>UPDATE "User" SET "fullName" = "fullName" WHERE "fullName" IS NULL</code> — in chunks, as Lesson 11.4 shows. Nothing depends on it finishing, so it can take an hour.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Switch the read</span><span class="lz-d">New code <strong>reads <code>fullName</code></strong>, still writes both. If you roll back to deploy 1's image, it still works — <code>fullName</code> is current because deploy 2 kept writing it.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Contract</span><span class="lz-d">Stop writing <code>fullName</code>. One deploy later, when you are sure no rollback target still reads it, a migration drops the column and <code>fullName</code> becomes <code>NOT NULL</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Expand</span><span class="lz-d">Add <code>hoTen String? @map("ho_ten")</code> — nullable, no default needed. Migration adds the column; old code ignores it. New code <strong>writes both</strong> columns and <strong>reads <code>fullName</code></strong>. Safe in both directions.</span></div>
+  <div class="lz-step"><span class="lz-k">Between</span><span class="lz-t">Backfill</span><span class="lz-d"><code>UPDATE "users" SET "ho_ten" = "full_name" WHERE "ho_ten" IS NULL</code> — in chunks, as Lesson 11.4 shows. Nothing depends on it finishing, so it can take an hour.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Switch the read</span><span class="lz-d">New code <strong>reads <code>hoTen</code></strong>, still writes both. If you roll back to deploy 1's image, it still works — <code>fullName</code> is current because deploy 2 kept writing it.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Contract</span><span class="lz-d">Stop writing <code>fullName</code>. One deploy later, when you are sure no rollback target still reads it, a migration drops <code>full_name</code> and <code>hoTen</code> becomes <code>NOT NULL</code>.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Trap — <code>@map</code> makes this free, and people forget it exists.</strong> If the change is only what the <em>Prisma field</em> is called, <code>fullName String @map("fullName")</code> renames it in your code with an empty migration — no column moves, no window, no backfill. Three deploys are for changing the actual column. Check which one you are doing before writing any of this.</p>
+<p><strong>Trap — <code>@map</code> makes this free, and people forget it exists.</strong> If the change is only what the <em>Prisma field</em> is called, <code>hoTen String @map("full_name")</code> renames it in your code with an empty migration — no column moves, no window, no backfill. Three deploys are for changing the actual column. Check which one you are doing before writing any of this.</p>
 </div>
 
 <h3>The migrations that lock the table</h3>
@@ -655,14 +673,18 @@ SET statement_timeout = '30s';
 
 ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="out">-- KHONG co lock_timeout:
---   ALTER TABLE waitMs lay ACCESS EXCLUSIVE
+--   ALTER TABLE cho lay ACCESS EXCLUSIVE
 --   → mot truy van dang chay giu lock 40 giay
 --   → ALTER xep hang, va MOI truy van moi xep hang SAU no
 --   → ca website dung, 40 giay, vi mot lenh "tuc thi"
 
 -- CO lock_timeout = '3s':
 ERROR: canceling statement due to lock timeout
--- Migration that post. Website khong sao. Chay lai luc vang.</div>
+-- Migration that post. Website khong sao. Chay lai luc vang.
+
+-- DO THAT (prisma-pg PostgreSQL 16.14, 200.000 hang, giao dich A giu 10 s):
+--   khong lock_timeout: ALTER cho 9 s; SELECT thuong bi huy boi statement_timeout sau 5 s
+--   lock_timeout = '2s': ALTER huy sau 2 s; SELECT tra loi sau 1 s</div>
 <div class="callout warn">
 <p><strong>A queued <code>ALTER TABLE</code> blocks everything behind it, including plain <code>SELECT</code>s.</strong> This is the detail that makes lock waits so much worse than they sound: the <code>ALTER</code> waits politely for the lock, but every query that arrives after it queues behind the <code>ALTER</code>, not behind the original holder. One slow report and one "instant" migration produce a full outage. <code>lock_timeout</code> turns that into a failed migration, which is a far better outcome — and it is two lines.</p>
 </div>
@@ -671,15 +693,20 @@ ERROR: canceling statement due to lock timeout
 <pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql</span>
 CREATE INDEX CONCURRENTLY "socialpost_author_created_idx"
   ON "SocialPost" ("authorId", "createdAt" DESC);</code></pre>
-<div class="out">Error: ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block
+<div class="out"><span class="tok-comment"># do that (Prisma 6.19.3, PostgreSQL 16.14): hai file migration</span>
+1_idx_mot_lenh/migration.sql   CREATE INDEX CONCURRENTLY …                 → ap duoc
+2_idx_hai_lenh/migration.sql   SET lock_timeout = '3s'; CREATE INDEX CONCURRENTLY …
+Error: P3018
+Database error code: 25001
+ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block
 
-(Prisma ap dung MOI file migration ben trong mot giao dich tren PostgreSQL,
- nen ca file khong the chua CONCURRENTLY.)</div>
+<span class="tok-comment"># File CHI co mot cau thi ap duoc; NHIEU cau trong mot file chay nhu MOT giao dich ngam.</span>
+<span class="tok-comment"># Nen CONCURRENTLY phai dung MOT MINH trong file migration cua no.</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">On a small table — just take the lock</span><span class="lz-lnote">A plain <code>CREATE INDEX</code> on a few hundred thousand rows finishes in under a second and blocks writes for that long. Below roughly a million rows this is the simple, honest answer, and it keeps the index in migration history where it belongs.</span></div>
   <div class="lz-layer"><span class="lz-lname">On a large table — out of band, deliberately</span><span class="lz-lnote">Run the <code>CONCURRENTLY</code> statement by hand against production, verify it with <code>\\d+</code>, then add the matching migration and mark it applied. That is a <em>planned</em> use of <code>migrate resolve --applied</code>, written in the runbook beforehand — the opposite of auto-resolving a migration that failed, which hides a partially-applied change.</span></div>
   <div class="lz-layer"><span class="lz-lname">Never leave the index only in production</span><span class="lz-lnote">An index that exists on the server but not in <code>prisma/migrations/</code> is drift. Every fresh environment — CI, a new developer, a restored staging database — gets a different query plan from production, and the difference surfaces as "it is only slow on prod".</span></div>
-  <div class="lz-layer"><span class="lz-lname">Check for drift, always</span><span class="lz-lnote"><code>npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script</code>. Empty output means the migration history and the live database agree. Anything else is a list of the differences, and it is much better to read it now than during an incident.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Check for drift, always</span><span class="lz-lnote"><code>npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --script</code> (Prisma 6.19.3 has no <code>--to-database-url</code> — measured: "unknown or unexpected option"). Empty output means the migration history and the live database agree. Anything else is a list of the differences, and it is much better to read it now than during an incident.</span></div>
 </div>
 <div class="note-ct">
 <p><strong>Why <code>migrate dev</code> is not part of any of this.</strong> <code>migrate dev</code> needs a shadow database and may reset it; it belongs on a developer's machine and nowhere else. On this codebase it does not even run locally: migration <code>20260706130000_add_music_and_profile</code> creates a unique constraint and a plain index with the same name, so replaying it on a shadow database fails with <code>P3006</code> forever. Migrations here are hand-written SQL under <code>prisma/migrations/&lt;timestamp&gt;_&lt;name&gt;/migration.sql</code> and applied with <code>migrate deploy</code>, which takes no shadow database — a constraint that turned out to enforce good habits.</p>
@@ -742,22 +769,22 @@ Database schema is up to date!</div>
 <h3>Mở rộng rồi thu hẹp — đổi tên một cột qua BA lần deploy</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// ❌ Đổi tên một phát. Biên dịch được, migrate được, vỡ ngay trong cửa sổ.</span>
 model User {
-  fullName String <span class="tok-comment">// trước là: fullName</span>
+  hoTen String @map("ho_ten") <span class="tok-comment">// trước là: fullName @map("full_name")</span>
 }</code></pre>
 <div class="out">-- Prisma sinh ra:
-ALTER TABLE "User" DROP COLUMN "fullName";
-ALTER TABLE "User" ADD COLUMN "fullName" TEXT NOT NULL;
+ALTER TABLE "users" DROP COLUMN "full_name",
+ADD COLUMN     "ho_ten" TEXT NOT NULL;   -- migrate diff, Prisma 6.19.3
 
--- Ma CU van dang SELECT "fullName" → 42703 column does not exist
+-- Ma CU van dang SELECT "full_name" → P2022 (do that: ca findFirst lan create)
 -- Va toan bo du lieu ho name vua bi xoa.</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Mở rộng</span><span class="lz-d">Thêm <code>fullName String?</code> — cho phép null, không cần default. Migration thêm cột; mã cũ lờ nó đi. Mã mới <strong>GHI cả hai</strong> cột và <strong>ĐỌC <code>fullName</code></strong>. An toàn cả hai chiều.</span></div>
-  <div class="lz-step"><span class="lz-k">Ở giữa</span><span class="lz-t">Nạp bù</span><span class="lz-d"><code>UPDATE "User" SET "fullName" = "fullName" WHERE "fullName" IS NULL</code> — chia lô, như Bài 11.4 chỉ. Không có gì phụ thuộc vào việc nó xong lúc nào, nên nó chạy cả tiếng cũng được.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Chuyển đường ĐỌC</span><span class="lz-d">Mã mới <strong>ĐỌC <code>fullName</code></strong>, vẫn ghi cả hai. Nếu bạn lùi về ảnh của deploy 1, nó vẫn chạy — <code>fullName</code> vẫn đúng vì deploy 2 vẫn ghi vào đó.</span></div>
-  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Thu hẹp</span><span class="lz-d">Ngừng ghi <code>fullName</code>. Một lần deploy sau nữa, khi bạn chắc chắn không còn đích lùi bản nào còn đọc nó, một migration xoá cột đi và <code>fullName</code> thành <code>NOT NULL</code>.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 1</span><span class="lz-t">Mở rộng</span><span class="lz-d">Thêm <code>hoTen String? @map("ho_ten")</code> — cho phép null, không cần default. Migration thêm cột; mã cũ lờ nó đi. Mã mới <strong>GHI cả hai</strong> cột và <strong>ĐỌC <code>fullName</code></strong>. An toàn cả hai chiều.</span></div>
+  <div class="lz-step"><span class="lz-k">Ở giữa</span><span class="lz-t">Nạp bù</span><span class="lz-d"><code>UPDATE "users" SET "ho_ten" = "full_name" WHERE "ho_ten" IS NULL</code> — chia lô, như Bài 11.4 chỉ. Không có gì phụ thuộc vào việc nó xong lúc nào, nên nó chạy cả tiếng cũng được.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 2</span><span class="lz-t">Chuyển đường ĐỌC</span><span class="lz-d">Mã mới <strong>ĐỌC <code>hoTen</code></strong>, vẫn ghi cả hai. Nếu bạn lùi về ảnh của deploy 1, nó vẫn chạy — <code>fullName</code> vẫn đúng vì deploy 2 vẫn ghi vào đó.</span></div>
+  <div class="lz-step"><span class="lz-k">Deploy 3</span><span class="lz-t">Thu hẹp</span><span class="lz-d">Ngừng ghi <code>fullName</code>. Một lần deploy sau nữa, khi bạn chắc chắn không còn đích lùi bản nào còn đọc nó, một migration xoá <code>full_name</code> và <code>hoTen</code> thành <code>NOT NULL</code>.</span></div>
 </div>
 <div class="pitfall">
-<p><strong>Bẫy — <code>@map</code> làm việc này MIỄN PHÍ, mà người ta quên là nó tồn tại.</strong> Nếu thay đổi chỉ là cái <em>trường Prisma</em> tên là gì, thì <code>fullName String @map("fullName")</code> đổi tên nó trong mã của bạn với một migration RỖNG — không cột nào dịch chuyển, không cửa sổ, không nạp bù. Ba lần deploy là dành cho việc đổi CỘT THẬT. Hãy xem mình đang làm cái nào trước khi viết bất cứ thứ gì ở trên.</p>
+<p><strong>Bẫy — <code>@map</code> làm việc này MIỄN PHÍ, mà người ta quên là nó tồn tại.</strong> Nếu thay đổi chỉ là cái <em>trường Prisma</em> tên là gì, thì <code>hoTen String @map("full_name")</code> đổi tên nó trong mã của bạn với một migration RỖNG — không cột nào dịch chuyển, không cửa sổ, không nạp bù. Ba lần deploy là dành cho việc đổi CỘT THẬT. Hãy xem mình đang làm cái nào trước khi viết bất cứ thứ gì ở trên.</p>
 </div>
 
 <h3>Những migration KHOÁ cả bảng</h3>
@@ -775,14 +802,18 @@ SET statement_timeout = '30s';
 
 ALTER TABLE "SocialPost" ADD COLUMN "score" INTEGER NOT NULL DEFAULT 0;</code></pre>
 <div class="out">-- KHONG co lock_timeout:
---   ALTER TABLE waitMs lay ACCESS EXCLUSIVE
+--   ALTER TABLE cho lay ACCESS EXCLUSIVE
 --   → mot truy van dang chay giu lock 40 giay
 --   → ALTER xep hang, va MOI truy van moi xep hang SAU no
 --   → ca website dung, 40 giay, vi mot lenh "tuc thi"
 
 -- CO lock_timeout = '3s':
 ERROR: canceling statement due to lock timeout
--- Migration that post. Website khong sao. Chay lai luc vang.</div>
+-- Migration that post. Website khong sao. Chay lai luc vang.
+
+-- DO THAT (prisma-pg PostgreSQL 16.14, 200.000 hang, giao dich A giu 10 s):
+--   khong lock_timeout: ALTER cho 9 s; SELECT thuong bi huy boi statement_timeout sau 5 s
+--   lock_timeout = '2s': ALTER huy sau 2 s; SELECT tra loi sau 1 s</div>
 <div class="callout warn">
 <p><strong>Một <code>ALTER TABLE</code> đang xếp hàng sẽ CHẶN mọi thứ đứng sau nó, kể cả những câu <code>SELECT</code> thường.</strong> Đây là chi tiết làm cho việc chờ khoá tệ hơn nhiều so với vẻ ngoài của nó: cái <code>ALTER</code> chờ khoá một cách lịch sự, nhưng MỌI truy vấn tới sau nó lại xếp hàng SAU cái <code>ALTER</code>, chứ không phải sau kẻ đang giữ khoá ban đầu. Một báo cáo chạy chậm cộng một migration "tức thì" là ra một cú chết toàn phần. <code>lock_timeout</code> biến chuyện đó thành một migration thất bại, kết cục tốt hơn hẳn — và nó chỉ là hai dòng.</p>
 </div>
@@ -791,15 +822,20 @@ ERROR: canceling statement due to lock timeout
 <pre><code class="language-sql"><span class="tok-comment">-- prisma/migrations/…/migration.sql</span>
 CREATE INDEX CONCURRENTLY "socialpost_author_created_idx"
   ON "SocialPost" ("authorId", "createdAt" DESC);</code></pre>
-<div class="out">Error: ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block
+<div class="out"><span class="tok-comment"># do that (Prisma 6.19.3, PostgreSQL 16.14): hai file migration</span>
+1_idx_mot_lenh/migration.sql   CREATE INDEX CONCURRENTLY …                 → ap duoc
+2_idx_hai_lenh/migration.sql   SET lock_timeout = '3s'; CREATE INDEX CONCURRENTLY …
+Error: P3018
+Database error code: 25001
+ERROR: CREATE INDEX CONCURRENTLY cannot run inside a transaction block
 
-(Prisma ap dung MOI file migration ben trong mot giao dich tren PostgreSQL,
- nen ca file khong the chua CONCURRENTLY.)</div>
+<span class="tok-comment"># File CHI co mot cau thi ap duoc; NHIEU cau trong mot file chay nhu MOT giao dich ngam.</span>
+<span class="tok-comment"># Nen CONCURRENTLY phai dung MOT MINH trong file migration cua no.</span></div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Bảng nhỏ — cứ nhận lấy cái khoá</span><span class="lz-lnote">Một <code>CREATE INDEX</code> thường trên vài trăm nghìn hàng xong dưới một giây và chặn ghi đúng chừng đó. Dưới cỡ một triệu hàng, đây là câu trả lời đơn giản và trung thực, và nó giữ cái chỉ mục nằm trong lịch sử migration — đúng chỗ của nó.</span></div>
   <div class="lz-layer"><span class="lz-lname">Bảng lớn — làm ngoài luồng, CÓ CHỦ Ý</span><span class="lz-lnote">Chạy câu <code>CONCURRENTLY</code> bằng tay lên production, xác minh bằng <code>\\d+</code>, rồi thêm migration tương ứng và đánh dấu là đã áp. Đó là một lần dùng <em>CÓ KẾ HOẠCH</em> của <code>migrate resolve --applied</code>, viết sẵn trong sổ tay vận hành — ngược hẳn với việc tự động resolve một migration ĐÃ THẤT BẠI, thứ che giấu một thay đổi áp dở dang.</span></div>
   <div class="lz-layer"><span class="lz-lname">ĐỪNG BAO GIỜ để chỉ mục chỉ tồn tại trên production</span><span class="lz-lnote">Một chỉ mục có trên máy chủ mà không có trong <code>prisma/migrations/</code> là TRÔI DẠT. Mọi môi trường mới — CI, một lập trình viên mới, một bản staging khôi phục từ sao lưu — sẽ nhận một kế hoạch truy vấn khác với production, và khác biệt đó hiện ra dưới dạng "chỉ chậm trên prod thôi".</span></div>
-  <div class="lz-layer"><span class="lz-lname">Kiểm trôi dạt, luôn luôn</span><span class="lz-lnote"><code>npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script</code>. Đầu ra rỗng nghĩa là lịch sử migration và cơ sở dữ liệu đang chạy khớp nhau. Bất cứ thứ gì khác là một danh sách khác biệt, và đọc nó BÂY GIỜ thì tốt hơn nhiều so với đọc lúc đang có sự cố.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Kiểm trôi dạt, luôn luôn</span><span class="lz-lnote"><code>npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma --script</code> (Prisma 6.19.3 KHÔNG có <code>--to-database-url</code> — đo thật: "unknown or unexpected option"). Đầu ra rỗng nghĩa là lịch sử migration và cơ sở dữ liệu đang chạy khớp nhau. Bất cứ thứ gì khác là một danh sách khác biệt, và đọc nó BÂY GIỜ thì tốt hơn nhiều so với đọc lúc đang có sự cố.</span></div>
 </div>
 <div class="note-ct">
 <p><strong>Vì sao <code>migrate dev</code> không dính gì tới tất cả những chuyện này.</strong> <code>migrate dev</code> cần một shadow database và có thể reset nó; nó thuộc về máy của lập trình viên và không thuộc về đâu khác. Trên kho mã này, nó thậm chí không chạy nổi ở máy: migration <code>20260706130000_add_music_and_profile</code> tạo một ràng buộc duy nhất và một chỉ mục thường TRÙNG TÊN, nên phát lại nó trên shadow database hỏng với <code>P3006</code> mãi mãi. Migration ở đây là SQL viết tay dưới <code>prisma/migrations/&lt;timestamp&gt;_&lt;tên&gt;/migration.sql</code> và áp bằng <code>migrate deploy</code>, thứ không cần shadow database — một ràng buộc hoá ra lại cưỡng chế những thói quen tốt.</p>
@@ -822,6 +858,7 @@ CREATE INDEX CONCURRENTLY "socialpost_author_created_idx"
       type: 'LESSON',
       description: 'Seed phải chạy lại được nên nó viết bằng upsert; data migration chạy một lần và phải ghi lại là đã chạy; script nạp bù chạy hàng giờ nên phải chia lô, nối lại được và có --dry-run. Kèm lý do tsc KHÔNG đụng tới prisma/** và cách bịt lỗ đó.',
       content: `
+${G11_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.4</span>
 <h2>Seeds, data migrations and backfills are three different things</h2>
@@ -920,6 +957,9 @@ CREATE UNIQUE INDEX "user_email_chuan_hoa_key" ON "User" ("emailChuanHoa");</cod
   <div class="lz-layer"><span class="lz-lname">Test it against a copy</span><span class="lz-lnote">Restore a recent production dump locally and run <code>migrate deploy</code>. Real data has the duplicate emails, the NULLs and the 4,000-character bio that your development database does not, and those are what break data migrations.</span></div>
 </div>
 
+<div class="callout warn">
+<p><strong>Measured — one duplicate, nothing applied.</strong> The same three statements on 200,001 rows where <code>u1@x.vn</code> and <code>U1@X.VN</code> collide after <code>lower()</code> (prisma-pg PostgreSQL 16.14, Prisma 6.19.3): <code>Error: P3018</code>, database error <code>23505</code> on the unique index — and the new column was gone too, because a multi-statement file runs as one transaction. The <code>_prisma_migrations</code> row stayed unfinished and blocked every later deploy. After removing the duplicate (and, in a throwaway database only, <code>migrate resolve --rolled-back</code>), the migration applied in about 2 seconds. On production, follow Lesson 12.2 before touching <code>resolve</code>.</p>
+</div>
 <h3>The backfill: chunked, resumable, dry-runnable</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// scripts/nap-bu-ho-ten.ts</span>
 const LO = 1000;
@@ -929,18 +969,19 @@ let total = 0;
 for (;;) {
   <span class="tok-comment">// The un-backfilled rows ARE the queue. No cursor to store.</span>
   const todo = await prisma.user.findMany({
-    where:  { fullName: null, fullName: { not: null } },
+    where:  { hoTen: null },                 <span class="tok-comment">// ho_ten chưa nạp</span>
     select: { id: true, fullName: true },
+    orderBy: { id: 'asc' },
     take:   LO,
   });
   if (todo.length === 0) break;
 
   if (!KHO) {
-    console.log(&#96;[thu] se cap nhat \${todo.length} hang, vi du:&#96;, todo[0]);
+    console.log(&#96;[thử] sẽ cập nhật \${todo.length} hàng, ví dụ:&#96;, todo[0]);
   } else {
     await prisma.$transaction(
       todo.map((u) =&gt; prisma.user.update({
-        where: { id: u.id }, data: { fullName: u.fullName },
+        where: { id: u.id }, data: { hoTen: u.fullName },
       })),
     );
   }
@@ -950,17 +991,22 @@ for (;;) {
   if (!KHO) break;
   await new Promise((r) =&gt; setTimeout(r, 200));   <span class="tok-comment">// let the database breathe</span>
 }</code></pre>
-<div class="out">$ npx tsx scripts/nap-bu-ho-name.ts
-[thu] se cap nhat 1000 hang, vi du: { id: 'clx7…', fullName: 'Nguyen Van An' }
-1000 hang · 2026-08-23T13:04:11.284Z
-
-$ npx tsx scripts/nap-bu-ho-name.ts --that
-1000 hang · 2026-08-23T13:05:02.118Z
-2000 hang · 2026-08-23T13:05:03.402Z
+<div class="out"><span class="tok-comment"># đo thật: 200.000 hàng, prisma-pg PostgreSQL 16.14, Prisma 6.19.3, Mac arm64; script in tiến độ mỗi 20 lô</span>
+$ npx tsx scripts/nap-bu-ho-ten.ts                 <span class="tok-comment"># mặc định: chạy thử</span>
+[thử] sẽ cập nhật 1000 hàng, ví dụ: { id: 1, fullName: 'Người 1' }
+xong: 0 hàng lần này · còn null: 200000
+$ timeout 6 npx tsx scripts/nap-bu-ho-ten.ts --that   <span class="tok-comment"># giết sau 6 giây</span>
+[exit 124]
+$ psql -c "SELECT count(*) FROM users WHERE ho_ten IS NULL"
+190000
+$ npx tsx scripts/nap-bu-ho-ten.ts --that           <span class="tok-comment"># chạy lại: tiếp từ chỗ dừng</span>
+20000 hàng · 12 s
+40000 hàng · 23 s
 …
-1247104 hang · 2026-08-23T13:41:55.907Z</div>
+180000 hàng · 107 s
+xong: 190000 hàng lần này · còn null: 0</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">The filter is the cursor</span><span class="lz-t">Resumable for free</span><span class="lz-d"><code>where: { fullName: null }</code> means completed rows leave the queue by definition. Kill the script at any point, run it again, and it continues — no checkpoint file, no offset to store, no double-processing.</span></div>
+  <div class="lz-step"><span class="lz-k">The filter is the cursor</span><span class="lz-t">Resumable for free</span><span class="lz-d"><code>where: { hoTen: null }</code> means completed rows leave the queue by definition. Kill the script at any point, run it again, and it continues — no checkpoint file, no offset to store, no double-processing.</span></div>
   <div class="lz-step"><span class="lz-k">Dry run by default</span><span class="lz-t">The flag is <code>--that</code>, not <code>--dry-run</code></span><span class="lz-d">Requiring a flag to write means a mistyped command does nothing. Requiring a flag to <em>not</em> write means a forgotten flag rewrites production. Default to safe.</span></div>
   <div class="lz-step"><span class="lz-k">Sleep between chunks</span><span class="lz-t">Leave headroom</span><span class="lz-d">200 ms per thousand rows keeps the backfill well under the connection budget from Lesson 9.4 and gives autovacuum room to keep up with the dead tuples the updates create.</span></div>
   <div class="lz-step"><span class="lz-k">Log a timestamp per chunk</span><span class="lz-t">So you can predict the end</span><span class="lz-d">Two lines of output give you a rate; a rate gives you an ETA. A backfill with no progress output is indistinguishable from a hung one, and someone will kill it at minute forty.</span></div>
@@ -1076,6 +1122,9 @@ CREATE UNIQUE INDEX "user_email_chuan_hoa_key" ON "User" ("emailChuanHoa");</cod
   <div class="lz-layer"><span class="lz-lname">Thử nó trên một BẢN SAO</span><span class="lz-lnote">Khôi phục một bản dump production gần đây xuống máy rồi chạy <code>migrate deploy</code>. Dữ liệu thật mới có mấy cái email trùng, mấy giá trị NULL và cái tiểu sử 4.000 ký tự mà cơ sở dữ liệu phát triển của bạn không có, và đó chính là những thứ làm vỡ data migration.</span></div>
 </div>
 
+<div class="callout warn">
+<p><strong>Đo thật — MỘT hàng trùng, KHÔNG gì được áp.</strong> Đúng ba câu đó trên 200.001 hàng có <code>u1@x.vn</code> và <code>U1@X.VN</code> đụng nhau sau <code>lower()</code> (prisma-pg PostgreSQL 16.14, Prisma 6.19.3): <code>Error: P3018</code>, lỗi CSDL <code>23505</code> ở chỉ mục unique — và cột vừa thêm cũng không còn, vì một file nhiều câu chạy như MỘT giao dịch. Dòng <code>_prisma_migrations</code> nằm ở trạng thái chưa xong và chặn mọi lần deploy sau. Xoá hàng trùng (và, CHỈ ở CSDL tạm, <code>migrate resolve --rolled-back</code>) thì migration áp được trong khoảng 2 giây. Trên production, làm theo Bài 12.2 trước khi đụng tới <code>resolve</code>.</p>
+</div>
 <h3>Nạp bù: chia lô, nối lại được, chạy thử được</h3>
 <pre><code class="language-javascript"><span class="tok-comment">// scripts/nap-bu-ho-ten.ts</span>
 const LO = 1000;
@@ -1085,18 +1134,19 @@ let total = 0;
 for (;;) {
   <span class="tok-comment">// Những hàng CHƯA nạp bù CHÍNH LÀ hàng đợi. Không cần lưu con trỏ.</span>
   const todo = await prisma.user.findMany({
-    where:  { fullName: null, fullName: { not: null } },
+    where:  { hoTen: null },                 <span class="tok-comment">// ho_ten chưa nạp</span>
     select: { id: true, fullName: true },
+    orderBy: { id: 'asc' },
     take:   LO,
   });
   if (todo.length === 0) break;
 
   if (!KHO) {
-    console.log(&#96;[thu] se cap nhat \${todo.length} hang, vi du:&#96;, todo[0]);
+    console.log(&#96;[thử] sẽ cập nhật \${todo.length} hàng, ví dụ:&#96;, todo[0]);
   } else {
     await prisma.$transaction(
       todo.map((u) =&gt; prisma.user.update({
-        where: { id: u.id }, data: { fullName: u.fullName },
+        where: { id: u.id }, data: { hoTen: u.fullName },
       })),
     );
   }
@@ -1106,17 +1156,22 @@ for (;;) {
   if (!KHO) break;
   await new Promise((r) =&gt; setTimeout(r, 200));   <span class="tok-comment">// để cơ sở dữ liệu thở</span>
 }</code></pre>
-<div class="out">$ npx tsx scripts/nap-bu-ho-name.ts
-[thu] se cap nhat 1000 hang, vi du: { id: 'clx7…', fullName: 'Nguyen Van An' }
-1000 hang · 2026-08-23T13:04:11.284Z
-
-$ npx tsx scripts/nap-bu-ho-name.ts --that
-1000 hang · 2026-08-23T13:05:02.118Z
-2000 hang · 2026-08-23T13:05:03.402Z
+<div class="out"><span class="tok-comment"># đo thật: 200.000 hàng, prisma-pg PostgreSQL 16.14, Prisma 6.19.3, Mac arm64; script in tiến độ mỗi 20 lô</span>
+$ npx tsx scripts/nap-bu-ho-ten.ts                 <span class="tok-comment"># mặc định: chạy thử</span>
+[thử] sẽ cập nhật 1000 hàng, ví dụ: { id: 1, fullName: 'Người 1' }
+xong: 0 hàng lần này · còn null: 200000
+$ timeout 6 npx tsx scripts/nap-bu-ho-ten.ts --that   <span class="tok-comment"># giết sau 6 giây</span>
+[exit 124]
+$ psql -c "SELECT count(*) FROM users WHERE ho_ten IS NULL"
+190000
+$ npx tsx scripts/nap-bu-ho-ten.ts --that           <span class="tok-comment"># chạy lại: tiếp từ chỗ dừng</span>
+20000 hàng · 12 s
+40000 hàng · 23 s
 …
-1247104 hang · 2026-08-23T13:41:55.907Z</div>
+180000 hàng · 107 s
+xong: 190000 hàng lần này · còn null: 0</div>
 <div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">Bộ lọc CHÍNH LÀ con trỏ</span><span class="lz-t">Nối lại được, miễn phí</span><span class="lz-d"><code>where: { fullName: null }</code> nghĩa là hàng đã xong thì tự rời khỏi hàng đợi theo định nghĩa. Giết script ở bất cứ đâu, chạy lại, và nó đi tiếp — không file điểm dừng, không offset phải lưu, không xử lý trùng.</span></div>
+  <div class="lz-step"><span class="lz-k">Bộ lọc CHÍNH LÀ con trỏ</span><span class="lz-t">Nối lại được, miễn phí</span><span class="lz-d"><code>where: { hoTen: null }</code> nghĩa là hàng đã xong thì tự rời khỏi hàng đợi theo định nghĩa. Giết script ở bất cứ đâu, chạy lại, và nó đi tiếp — không file điểm dừng, không offset phải lưu, không xử lý trùng.</span></div>
   <div class="lz-step"><span class="lz-k">Mặc định là chạy THỬ</span><span class="lz-t">Cờ là <code>--that</code>, không phải <code>--dry-run</code></span><span class="lz-d">Bắt phải có cờ mới GHI nghĩa là một câu lệnh gõ nhầm chẳng làm gì. Bắt phải có cờ mới KHÔNG ghi nghĩa là một cái cờ quên mất sẽ ghi đè production. Hãy mặc định về phía an toàn.</span></div>
   <div class="lz-step"><span class="lz-k">Ngủ giữa các lô</span><span class="lz-t">Chừa khoảng thở</span><span class="lz-d">200 ms cho mỗi nghìn hàng giữ cho việc nạp bù nằm sâu dưới ngân sách kết nối của Bài 9.4 và cho autovacuum chỗ để theo kịp đám tuple chết mà các lệnh update sinh ra.</span></div>
   <div class="lz-step"><span class="lz-k">In dấu thời gian ở mỗi lô</span><span class="lz-t">Để đoán được lúc xong</span><span class="lz-d">Hai dòng đầu ra cho bạn một TỐC ĐỘ; tốc độ cho bạn một giờ dự kiến xong. Một script nạp bù không in tiến độ thì không phân biệt được với một script đã treo, và tới phút thứ bốn mươi sẽ có người giết nó.</span></div>
@@ -1142,6 +1197,7 @@ $ npx tsx scripts/nap-bu-ho-name.ts --that
       type: 'LESSON',
       description: 'Một PrismaClient cho mỗi tiến trình và mẫu globalThis chặn rò kết nối khi hot reload; SIGTERM, dumb-init và cách rút lui gọn gàng trong mười giây Docker cho; health check sống đối lại sẵn sàng; và vì sao bật log query trên production là ghi mật khẩu người dùng vào nhật ký.',
       content: `
+${G11_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.5</span>
 <h2>One client, and how it should die</h2>
@@ -1153,10 +1209,11 @@ app.get('/post-viet', async (req, res) =&gt; {
   const prisma = new PrismaClient();
   res.json(await prisma.socialPost.findMany({ take: 20 }));
 });</code></pre>
-<div class="out">warn(prisma-client) There are already 10 instances of Prisma Client
-actively running.
-
-FATAL: sorry, too many clients already</div>
+<div class="out"><span class="tok-comment"># đo thật: 30 "request", mỗi cái một new PrismaClient() + một truy vấn, không ai $disconnect (prisma-pg PostgreSQL 16.14, Prisma 6.19.3)</span>
+sau 10 request: 10 kết nối mở tới CSDL
+sau 20 request: 20 kết nối mở tới CSDL
+sau 30 request: 30 kết nối mở tới CSDL
+<span class="tok-comment"># … tới ~100 là chạm max_connections mặc định: FATAL: sorry, too many clients already</span></div>
 <pre><code class="language-javascript"><span class="tok-comment">// ✅ src/lib/prisma.ts — created once, imported everywhere</span>
 import { PrismaClient } from '@prisma/client';
 
@@ -1187,10 +1244,10 @@ docker compose up -d --no-build backend</code></pre>
 <pre><code class="language-javascript"><span class="tok-comment">// src/index.ts — use all ten seconds, then stop</span>
 const server = app.listen(3000);
 
-let disabled = false;
-async function backoff(msg: string) {
-  if (disabled) return;              <span class="tok-comment">// SIGTERM can arrive twice</span>
-  disabled = true;
+let dangTat = false;
+async function tatDan(msg: string) {
+  if (dangTat) return;              <span class="tok-comment">// SIGTERM can arrive twice</span>
+  dangTat = true;
   console.log(&#96;[\${msg}] bat dau tat dan&#96;);
 
   <span class="tok-comment">// 1. Stop accepting new connections; existing requests finish.</span>
@@ -1204,20 +1261,21 @@ async function backoff(msg: string) {
   process.exit(0);
 }
 
-process.on('SIGTERM', () =&gt; backoff('SIGTERM'));
-process.on('SIGINT',  () =&gt; backoff('SIGINT'));
+process.on('SIGTERM', () =&gt; tatDan('SIGTERM'));
+process.on('SIGINT',  () =&gt; tatDan('SIGINT'));
 
 <span class="tok-comment">// A hard deadline, in case a request never finishes</span>
 process.on('SIGTERM', () =&gt; setTimeout(() =&gt; process.exit(1), 9000).unref());</code></pre>
-<div class="out">[SIGTERM] bat dau tat dan
-[tat] http da dong          ← 1,8s (mot request dang waitMs database)
-[tat] prisma da ngat        ← 1,9s
-exit 0                       ← khong co request nao bi cat giua chung</div>
+<div class="out"><span class="tok-comment"># đo thật: một truy vấn 2 giây đang chạy khi SIGTERM tới; request thứ hai gửi lúc 1,0 s (Prisma 6.19.3, Node + tsx, Mac arm64)</span>
+[SIGTERM] bắt đầu tắt dần (0.6s)
+[tắt] http đã đóng (2.1s)        ← chờ request đang chạy xong
+[tắt] prisma đã ngắt (2.1s)
+[server] exit=0                  ← request đầu: 200; request lúc 1,0 s: bị từ chối</div>
 <div class="pitfall">
-<p><strong>Trap — Node as PID 1 does not get the default signal handlers.</strong> Linux gives PID 1 no default action for SIGTERM, so a container started with <code>CMD ["node", …]</code> ignores it entirely and dies to SIGKILL ten seconds later — every request in flight cut mid-response, every transaction rolled back. Your handler is never called and there is nothing in the log to say so. <code>ENTRYPOINT ["dumb-init", "--"]</code> from Lesson 11.2 fixes it; so does <code>tini</code>, or <code>docker run --init</code>. Verify it: <code>docker stop</code> a container and check whether your shutdown lines appear.</p>
+<p><strong>Trap — Node as PID 1 does not get the default signal handlers.</strong> Linux gives PID 1 no default action for SIGTERM, so a container started with <code>CMD ["node", …]</code> ignores it entirely and dies to SIGKILL ten seconds later — every request in flight cut mid-response, every transaction rolled back. Your handler is never called and there is nothing in the log to say so. <code>ENTRYPOINT ["dumb-init", "--"]</code> from Lesson 11.2 fixes it; so does <code>tini</code>, or <code>docker run --init</code>. Verify it: <code>docker stop</code> a container and check whether your shutdown lines appear. <em>Measured (Docker Desktop 29.8, node:22-alpine, <code>docker stop -t 10</code>):</em> no handler → 10 s then SIGKILL, exit 137; <code>--init</code> → immediate, 143; a SIGTERM handler → immediate, 0.</p>
 </div>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Order matters: HTTP first, Prisma second</span><span class="lz-lnote"><code>$disconnect()</code> before <code>server.close()</code> kills the pool while requests are still using it — every in-flight query fails with a connection error, and the client politely reconnects, which is the opposite of shutting down.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Order matters: HTTP first, Prisma second</span><span class="lz-lnote"><code>$disconnect()</code> first, measured on 6.19.3: it waited for the in-flight query, so that request still got its 200 — but the server was still listening, accepted a new request at 1.0 s, and the client reconnected to serve it. Exit came at 3.2 s instead of 2.1 s. Closing HTTP first is what actually stops new work.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>beforeExit</code> is not a shutdown hook</span><span class="lz-lnote">Prisma 5 and later no longer emit a <code>beforeExit</code> event for the library engine, and Node's own <code>beforeExit</code> does not fire on an explicit <code>process.exit()</code> or on a signal. Handle signals directly.</span></div>
   <div class="lz-layer"><span class="lz-lname">The unreferenced deadline</span><span class="lz-lnote"><code>.unref()</code> means the timer will not keep the process alive on its own. If the graceful path finishes in two seconds, the process exits then; if it hangs, the timer fires at nine and exits non-zero, which is a signal in your logs rather than a silent SIGKILL.</span></div>
   <div class="lz-layer"><span class="lz-lname">Raise <code>stop_grace_period</code> if you need to</span><span class="lz-lnote">Ten seconds is the compose default. A service with long-running requests can set <code>stop_grace_period: 30s</code> — but measure first: if requests routinely take that long, the shutdown is not your real problem.</span></div>
@@ -1229,7 +1287,7 @@ app.get('/health', (_req, res) =&gt; res.json({ ok: true }));
 
 <span class="tok-comment">// Readiness — should this instance receive traffic?</span>
 app.get('/ready', async (_req, res) =&gt; {
-  if (disabled) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
+  if (dangTat) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
   try {
     await prisma.$queryRaw&#96;SELECT 1&#96;;
     res.json({ ok: true });
@@ -1247,11 +1305,11 @@ app.get('/ready', async (_req, res) =&gt; {
 <h3>Logging: the query log is full of user data</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// Innocent-looking, and a data-protection incident on production</span>
 new PrismaClient({ log: ['query'] });</code></pre>
-<div class="out">prisma:query SELECT "User"."passwordHash" FROM "User" WHERE "email" = $1
-prisma:query params: ["an@vidu.com"]
-
-prisma:query INSERT INTO "Message" ("content","threadId") VALUES ($1,$2)
-prisma:query params: ["count tai khoan cua minh la 0123456789", "clx7…"]</div>
+<div class="out"><span class="tok-comment"># đo thật (sự kiện query, Prisma 6.19.3)</span>
+prisma:query SELECT "public"."users"."id" FROM "public"."users" WHERE ("public"."users"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query params: ["an@vidu.com",1,0]
+prisma:query UPDATE "public"."users" SET "ho_ten" = $1 WHERE ("public"."users"."email" = $2 AND 1=1) RETURNING …
+prisma:query params: ["SĐT 0912 345 678, nhà 12 ngõ 3","an@vidu.com"]</div>
 <pre><code class="language-typescript"><span class="tok-comment">// Structured, sampled, and without the parameters</span>
 prisma.$on('query', (e) =&gt; {
   if (e.duration &lt; 100) return;                <span class="tok-comment">// only the slow ones</span>
@@ -1293,10 +1351,11 @@ app.get('/post-viet', async (req, res) =&gt; {
   const prisma = new PrismaClient();
   res.json(await prisma.socialPost.findMany({ take: 20 }));
 });</code></pre>
-<div class="out">warn(prisma-client) There are already 10 instances of Prisma Client
-actively running.
-
-FATAL: sorry, too many clients already</div>
+<div class="out"><span class="tok-comment"># đo thật: 30 "request", mỗi cái một new PrismaClient() + một truy vấn, không ai $disconnect (prisma-pg PostgreSQL 16.14, Prisma 6.19.3)</span>
+sau 10 request: 10 kết nối mở tới CSDL
+sau 20 request: 20 kết nối mở tới CSDL
+sau 30 request: 30 kết nối mở tới CSDL
+<span class="tok-comment"># … tới ~100 là chạm max_connections mặc định: FATAL: sorry, too many clients already</span></div>
 <pre><code class="language-javascript"><span class="tok-comment">// ✅ src/lib/prisma.ts — tạo một lần, import ở mọi nơi</span>
 import { PrismaClient } from '@prisma/client';
 
@@ -1327,10 +1386,10 @@ docker compose up -d --no-build backend</code></pre>
 <pre><code class="language-javascript"><span class="tok-comment">// src/index.ts — dùng hết mười giây đó, rồi hãy dừng</span>
 const server = app.listen(3000);
 
-let disabled = false;
-async function backoff(msg: string) {
-  if (disabled) return;              <span class="tok-comment">// SIGTERM có thể tới hai lần</span>
-  disabled = true;
+let dangTat = false;
+async function tatDan(msg: string) {
+  if (dangTat) return;              <span class="tok-comment">// SIGTERM có thể tới hai lần</span>
+  dangTat = true;
   console.log(&#96;[\${msg}] bat dau tat dan&#96;);
 
   <span class="tok-comment">// 1. Ngừng nhận kết nối mới; request đang chạy thì chạy nốt.</span>
@@ -1344,20 +1403,21 @@ async function backoff(msg: string) {
   process.exit(0);
 }
 
-process.on('SIGTERM', () =&gt; backoff('SIGTERM'));
-process.on('SIGINT',  () =&gt; backoff('SIGINT'));
+process.on('SIGTERM', () =&gt; tatDan('SIGTERM'));
+process.on('SIGINT',  () =&gt; tatDan('SIGINT'));
 
 <span class="tok-comment">// Một hạn chót cứng, phòng khi có request không bao giờ xong</span>
 process.on('SIGTERM', () =&gt; setTimeout(() =&gt; process.exit(1), 9000).unref());</code></pre>
-<div class="out">[SIGTERM] bat dau tat dan
-[tat] http da dong          ← 1,8s (mot request dang waitMs database)
-[tat] prisma da ngat        ← 1,9s
-exit 0                       ← khong co request nao bi cat giua chung</div>
+<div class="out"><span class="tok-comment"># đo thật: một truy vấn 2 giây đang chạy khi SIGTERM tới; request thứ hai gửi lúc 1,0 s (Prisma 6.19.3, Node + tsx, Mac arm64)</span>
+[SIGTERM] bắt đầu tắt dần (0.6s)
+[tắt] http đã đóng (2.1s)        ← chờ request đang chạy xong
+[tắt] prisma đã ngắt (2.1s)
+[server] exit=0                  ← request đầu: 200; request lúc 1,0 s: bị từ chối</div>
 <div class="pitfall">
-<p><strong>Bẫy — Node làm PID 1 thì KHÔNG có bộ xử lý tín hiệu mặc định.</strong> Linux không gán hành động mặc định nào cho SIGTERM ở PID 1, nên một container khởi động bằng <code>CMD ["node", …]</code> LỜ nó hoàn toàn rồi chết vì SIGKILL mười giây sau — mọi request đang bay bị cắt giữa chừng phản hồi, mọi giao dịch bị quay lui. Bộ xử lý của bạn không bao giờ được gọi, và trong nhật ký chẳng có gì nói ra chuyện đó. <code>ENTRYPOINT ["dumb-init", "--"]</code> của Bài 11.2 vá được; <code>tini</code> hay <code>docker run --init</code> cũng vậy. Hãy kiểm chứng: <code>docker stop</code> một container rồi xem mấy dòng tắt dần của bạn có hiện ra không.</p>
+<p><strong>Bẫy — Node làm PID 1 thì KHÔNG có bộ xử lý tín hiệu mặc định.</strong> Linux không gán hành động mặc định nào cho SIGTERM ở PID 1, nên một container khởi động bằng <code>CMD ["node", …]</code> LỜ nó hoàn toàn rồi chết vì SIGKILL mười giây sau — mọi request đang bay bị cắt giữa chừng phản hồi, mọi giao dịch bị quay lui. Bộ xử lý của bạn không bao giờ được gọi, và trong nhật ký chẳng có gì nói ra chuyện đó. <code>ENTRYPOINT ["dumb-init", "--"]</code> của Bài 11.2 vá được; <code>tini</code> hay <code>docker run --init</code> cũng vậy. Hãy kiểm chứng: <code>docker stop</code> một container rồi xem mấy dòng tắt dần của bạn có hiện ra không. <em>Đo thật (Docker Desktop 29.8, node:22-alpine, <code>docker stop -t 10</code>):</em> không handler → 10 s rồi SIGKILL, mã 137; <code>--init</code> → dừng ngay, 143; có handler SIGTERM → dừng ngay, 0.</p>
 </div>
 <div class="lz-stack">
-  <div class="lz-layer"><span class="lz-lname">Thứ tự quan trọng: HTTP trước, Prisma sau</span><span class="lz-lnote"><code>$disconnect()</code> trước <code>server.close()</code> là giết cái pool trong lúc request còn đang dùng nó — mọi truy vấn đang bay hỏng với lỗi kết nối, rồi client lịch sự kết nối lại, tức là ngược hẳn với việc đang tắt.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Thứ tự quan trọng: HTTP trước, Prisma sau</span><span class="lz-lnote"><code>$disconnect()</code> trước, đo trên 6.19.3: nó CHỜ truy vấn đang chạy, nên request đó vẫn nhận 200 — nhưng máy chủ vẫn mở cổng, nhận thêm request lúc 1,0 s, và client kết nối lại để phục vụ nó. Thoát lúc 3,2 s thay vì 2,1 s. Đóng HTTP trước mới là thứ thật sự chặn việc mới.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>beforeExit</code> KHÔNG phải móc tắt máy</span><span class="lz-lnote">Prisma từ bản 5 trở đi không còn phát sự kiện <code>beforeExit</code> cho engine dạng thư viện, và bản thân <code>beforeExit</code> của Node cũng không nổ khi có <code>process.exit()</code> tường minh hay khi có tín hiệu. Hãy xử lý TÍN HIỆU trực tiếp.</span></div>
   <div class="lz-layer"><span class="lz-lname">Cái hạn chót không tham chiếu</span><span class="lz-lnote"><code>.unref()</code> nghĩa là bộ đếm giờ sẽ không tự nó giữ tiến trình sống. Nếu đường tắt gọn gàng xong trong hai giây thì tiến trình thoát lúc đó; nếu nó treo, bộ đếm nổ ở giây thứ chín và thoát với mã khác 0 — một tín hiệu nằm trong nhật ký của bạn, thay vì một cú SIGKILL câm lặng.</span></div>
   <div class="lz-layer"><span class="lz-lname">Nâng <code>stop_grace_period</code> nếu cần</span><span class="lz-lnote">Mười giây là mặc định của compose. Một dịch vụ có request chạy dài có thể đặt <code>stop_grace_period: 30s</code> — nhưng hãy ĐO trước: nếu request thường xuyên lâu tới mức đó thì việc tắt máy không phải vấn đề thật của bạn.</span></div>
@@ -1369,7 +1429,7 @@ app.get('/health', (_req, res) =&gt; res.json({ ok: true }));
 
 <span class="tok-comment">// Sẵn sàng — instance này có nên nhận lưu lượng không?</span>
 app.get('/ready', async (_req, res) =&gt; {
-  if (disabled) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
+  if (dangTat) return res.status(503).json({ ok: false, ly_do: 'dang tat' });
   try {
     await prisma.$queryRaw&#96;SELECT 1&#96;;
     res.json({ ok: true });
@@ -1387,11 +1447,11 @@ app.get('/ready', async (_req, res) =&gt; {
 <h3>Nhật ký: log truy vấn ĐẦY dữ liệu người dùng</h3>
 <pre><code class="language-typescript"><span class="tok-comment">// Trông vô hại, và là một sự cố lộ dữ liệu trên production</span>
 new PrismaClient({ log: ['query'] });</code></pre>
-<div class="out">prisma:query SELECT "User"."passwordHash" FROM "User" WHERE "email" = $1
-prisma:query params: ["an@vidu.com"]
-
-prisma:query INSERT INTO "Message" ("content","threadId") VALUES ($1,$2)
-prisma:query params: ["count tai khoan cua minh la 0123456789", "clx7…"]</div>
+<div class="out"><span class="tok-comment"># đo thật (sự kiện query, Prisma 6.19.3)</span>
+prisma:query SELECT "public"."users"."id" FROM "public"."users" WHERE ("public"."users"."email" = $1 AND 1=1) LIMIT $2 OFFSET $3
+prisma:query params: ["an@vidu.com",1,0]
+prisma:query UPDATE "public"."users" SET "ho_ten" = $1 WHERE ("public"."users"."email" = $2 AND 1=1) RETURNING …
+prisma:query params: ["SĐT 0912 345 678, nhà 12 ngõ 3","an@vidu.com"]</div>
 <pre><code class="language-typescript"><span class="tok-comment">// Có cấu trúc, lấy mẫu, và KHÔNG kèm tham số</span>
 prisma.$on('query', (e) =&gt; {
   if (e.duration &lt; 100) return;                <span class="tok-comment">// chỉ những câu chậm</span>
@@ -1531,7 +1591,7 @@ prisma.$on('error', (e) =&gt; logger.error({ msg: e.message }, 'prisma error'));
           {
             question: 'On SIGTERM, what order should shutdown happen in, and what breaks if a container runs node as PID 1 without an init?|||Khi có SIGTERM, việc tắt nên theo thứ tự nào, và cái gì hỏng nếu container chạy node làm PID 1 mà không có init?',
             options: [
-              'Close HTTP first, then $disconnect. Without an init, PID 1 has no default SIGTERM action, so the handler never runs and SIGKILL cuts every in-flight request ten seconds later|||Đóng HTTP trước, rồi $disconnect. Không có init thì PID 1 không có hành động mặc định cho SIGTERM, nên bộ xử lý không bao giờ chạy và SIGKILL cắt mọi request đang bay mười giây sau',
+              'Close HTTP first, then $disconnect. Without an init and without a handler, PID 1 has no default SIGTERM action, so nothing happens and SIGKILL cuts every in-flight request ten seconds later (exit 137)|||Đóng HTTP trước, rồi $disconnect. Không có init và không có handler thì PID 1 không có hành động mặc định cho SIGTERM, nên không gì xảy ra và SIGKILL cắt mọi request đang bay mười giây sau (mã 137)',
               '$disconnect first, then close HTTP; the init only affects logging|||$disconnect trước, rồi đóng HTTP; cái init chỉ ảnh hưởng tới nhật ký',
               'Order does not matter; Prisma handles it via beforeExit|||Thứ tự không quan trọng; Prisma tự lo qua beforeExit',
               'Call process.exit(0) immediately to free the port|||Gọi process.exit(0) ngay để giải phóng cổng',

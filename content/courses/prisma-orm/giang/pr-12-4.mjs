@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 12.4 Giám sát: tám bảng và tám cảnh báo (deck pr-12-4, 9 slide). VI = lời giảng video prisma-12-4; EN viết riêng. */
+import { walkPr } from '../_slides.mjs';
+
+export default walkPr('pr-12-4', "Monitoring: eight panels and eight alerts", "Giám sát: tám bảng và tám cảnh báo", [
+  [1, "Monitoring: eight panels and eight alerts",
+    "<p>Lesson 12.4: monitoring with eight panels and eight alerts — see trouble before users do, and alert only on what needs a person tonight.</p>",
+    "<p>Đây là bài 12.4: giám sát, tám bảng và tám cảnh báo.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Four takeaways: what Prisma itself can report, and its deprecation; eight panels; eight alerts with thresholds; and what not to alert on.</p>",
+    "<p>Bốn điều mang về. Prisma tự báo được gì, và chuyện tính năng đó đang bị ngừng. Tám bảng theo dõi. Tám cảnh báo kèm ngưỡng. Và những thứ không nên cảnh báo.</p>"],
+  [3, "$metrics after 40 parallel queries",
+    "<p>With the metrics preview enabled, 40 parallel queries left 21 connections open, all idle, nobody waiting. The gauges answer 'is the pool saturated?' directly — but prisma validate warned that metrics is deprecated in 6.19.3, so plan a second source for the same panels.</p>",
+    "<p>Bật preview metrics, bắn bốn mươi truy vấn song song. Pool mở hai mươi mốt kết nối, giờ đều rảnh, không ai chờ. Các gauge trả lời thẳng câu pool có bão hoà không. Nhưng validate đã cảnh báo: metrics bị đánh dấu ngừng ở bản 6.19.3. Hãy có thêm nguồn thứ hai cho các bảng.</p>"],
+  [4, "Exporting it: the Prometheus format",
+    "<p>A /metrics route returns the Prometheus text, 85 lines. The histograms tell the busy moment: about 5 ms per query on average, but about 14 ms waiting for a connection — 40 queries at once on 21 connections waited longer than they ran. Latency hides in the pool first.</p>",
+    "<p>Một route metrics trả về chuỗi Prometheus, tám mươi lăm dòng. Chia trung bình: mỗi truy vấn chạy khoảng năm mili giây, nhưng chờ kết nối khoảng mười bốn. Bốn mươi truy vấn cùng lúc với hai mươi mốt kết nối: chờ lâu hơn chạy. Độ trễ hay trốn ở pool đầu tiên.</p>"],
+  [5, "Eight panels",
+    "<p>Eight panels: latency p50/p95/p99; queries per second by operation; pool open, busy, idle and waiting; PostgreSQL connections by state; errors by Prisma code; slow queries per minute; table growth and dead tuples; and free disk on the database volume.</p>",
+    "<p>Tám bảng. Độ trễ p50, p95, p99. Số truy vấn mỗi giây theo thao tác. Pool: mở, bận, rảnh, chờ. Kết nối PostgreSQL theo trạng thái. Lỗi theo mã Prisma. Truy vấn chậm mỗi phút. Bảng tăng trưởng và hàng chết. Và dung lượng trống của ổ đĩa cơ sở dữ liệu.</p>"],
+  [6, "Eight alerts, with thresholds",
+    "<p>Eight alerts: pool wait above zero for five minutes; connections above 80% of max; idle in transaction over 60 seconds; disk below 20%; errors by code above baseline; p99 above twice the weekly baseline; pending migrations after a deploy; and any container restarts.</p>",
+    "<p>Tám cảnh báo. Thời gian chờ pool lớn hơn không quá năm phút. Kết nối vượt tám mươi phần trăm. Giao dịch idle quá sáu mươi giây. Ổ đĩa dưới hai mươi phần trăm. Lỗi theo mã vượt đường nền. p99 gấp đôi đường nền tuần. Còn migration chờ sau deploy. Và container khởi động lại nhiều hơn không.</p>"],
+  [7, "The disk alert is not theoretical",
+    "<p>The disk alert is not theoretical. On CuongThai's VPS, Postgres and the build cache shared one disk; the cache grew to 7.6 GB, and on 18/08/2026 a deploy died with no space left on device. The fix: build elsewhere, clean weekly, and a disk alert.</p>",
+    "<p>Ở CuongThai, Postgres và cache build từng nằm chung một ổ đĩa. Cache phình tới bảy chấm sáu gigabyte. Ngày mười tám tháng tám, một lần deploy chết vì hết chỗ, ổ chỉ còn một chấm tám gigabyte. Cách sửa: build ở nơi khác, dọn hằng tuần, và một cảnh báo ổ đĩa. Bảng nhàm nhất chặn được sự cố tệ nhất.</p>"],
+  [8, "What not to alert on",
+    "<p>Do not alert on one slow query — alert on the rate; not on database CPU at 80%; not on every P2002. Alerts that train people to ignore alerts are the worst kind. The test: does it need a human tonight?</p>",
+    "<p>Không cảnh báo một truy vấn chậm, mà cảnh báo tốc độ của chúng. Không cảnh báo CPU tám mươi phần trăm. Không cảnh báo mọi P2002, vì ràng buộc đang làm đúng việc. Cảnh báo dạy người ta lờ đi cảnh báo, là cảnh báo tệ nhất.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: enable metrics and read the deprecation warning; fire 40 queries and read open, busy, idle and wait; expose /metrics and scrape it once; pick thresholds for eight alerts, then delete one that fails the 3 a.m. test.</p>",
+    "<p>Tới lượt bạn: bật metrics, đọc cảnh báo ngừng. Bắn bốn mươi truy vấn, đọc mở, bận, rảnh, chờ. Mở route metrics và lấy về một lần. Chọn ngưỡng cho tám cảnh báo, rồi xoá một cái không qua được phép thử ba giờ sáng. Tóm lại: thời gian chờ lộ ra pool. metrics đang bị ngừng, hãy có nguồn thứ hai. Cảnh báo theo tốc độ và triệu chứng. Canh ổ đĩa. Giám sát phía cơ sở dữ liệu có ở khoá PostgreSQL bài 14.4. Bạn bấm liên kết Code Lab dưới video. Bài sau: giờ bạn biết gì, và đi tiếp về đâu.</p>"],
+]);

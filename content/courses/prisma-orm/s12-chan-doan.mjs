@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G12_1 from './giang/pr-12-1.mjs';
+import G12_2 from './giang/pr-12-2.mjs';
+import G12_3 from './giang/pr-12-3.mjs';
+import G12_4 from './giang/pr-12-4.mjs';
+import G12_5 from './giang/pr-12-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Một quy trình phân loại có thứ tự: câu hỏi ĐẦU TIÊN không phải "lỗi gì" mà là "vừa có gì thay đổi"; bốn lệnh trả lời được 80% sự cố; và luật rằng bạn không được sửa bất cứ thứ gì cho tới khi biết mình đang ở nhánh nào.',
       content: `
+${G12_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.1</span>
 <h2>The first five minutes</h2>
@@ -58,23 +64,30 @@ Up 4 minutes              ghcr.io/…/backend:latest      ← khoi dong lai 4 ph
 docker exec cuonghoangdev_backend node -e \\
   "const{PrismaClient}=require('@prisma/client');const p=new PrismaClient();
    p.\\$queryRaw\\&#96;SELECT now()\\&#96;.then(r=&gt;console.log('OK',r)).catch(e=&gt;console.log('LOI',e.code,e.message.split('\\n')[0]))"</code></pre>
-<div class="out">LOI P1001 Can't reach database server at &#96;postgres:5432&#96;</div>
+<div class="out"><span class="tok-comment"># đo thật — sự cố dựng: container prisma-pg12 (PostgreSQL 16) bị dừng giữa lúc ứng dụng nhận ~50 request/giây; Prisma 6.19.3</span>
+LOI undefined Please make sure your database server is running at &#96;127.0.0.1:55493&#96;.
+<span class="tok-comment"># truy vấn đầu tiên mang lớp PrismaClientInitializationError nhưng KHÔNG mang errorCode — Bài 12.2</span></div>
 <pre><code class="language-sql"><span class="tok-comment"># 3. What is the database itself doing?</span>
 psql "$DATABASE_URL" -c "SELECT state, count(*) FROM pg_stat_activity
                          WHERE datname = current_database() GROUP BY state;"</code></pre>
-<div class="out">        state        | count
----------------------+-------
- idle                |    97
- active              |     3               ← 100 ket noi, max_connections = 100</div>
+<div class="out"><span class="tok-comment"># đo thật, chạy lại sau khi CSDL lên (pool 5 của ứng dụng đã tự nối lại)</span>
+ state | count
+-------+-------
+ idle  |     5
+(1 row)</div>
 <pre><code class="language-bash"><span class="tok-comment"># 4. What did the app log at the moment it broke?</span>
 docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0-9]{4}|error' | head -30</code></pre>
-<div class="out">[13:41:07] PrismaClientInitializationError: P1001
-[13:41:09] PrismaClientKnownRequestError: P2024 Timed out fetching a new
-           connection from the connection pool (pool_timeout=10)
-[13:41:09] … x 214</div>
+<div class="out"><span class="tok-comment"># đo thật — log của ứng dụng trong sự cố dựng (giây tính từ lúc khởi động)</span>
+[  2.2] P1017 — Server has closed the connection.          <span class="tok-comment">× 5  ← ĐẦU TIÊN</span>
+[  2.3] P1001 — Please make sure your database server is running at &#96;127.0.0.1:55493&#96;.
+[  2.4] P1001 — …                                          <span class="tok-comment">× 180 tới khi CSDL lên lại</span>
+[ 11.0] ok × 10                                            <span class="tok-comment">← pool tự hồi phục, không ai khởi động lại</span>
+$ grep -oE "\\] (P[0-9]{4})" app.log | sort | uniq -c
+ 180 P1001
+   5 P1017</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Read the error code, not the sentence</span><span class="lz-lnote">Prisma's messages are written for a developer at a terminal; the code is written for you at 2am. <code>P1001</code>, <code>P2002</code>, <code>P2024</code>, <code>P3009</code> each mean exactly one thing, and Lesson 12.2 is the table.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Read the FIRST error, not the loudest</span><span class="lz-lnote">The log above has 214 <code>P2024</code>s and one <code>P1001</code>. The pool timeouts are the <em>consequence</em>: the database went away, connections could not be established, requests queued for a connection that never came. Fixing pool timeouts here would be fixing a symptom.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Read the FIRST error, not the loudest</span><span class="lz-lnote">Measured: 180 <code>P1001</code> lines and 5 <code>P1017</code> lines — and the five came first, at 2.2 s: the pool&#39;s five connections cut the moment the database stopped. The 180 are consequences: every new request trying to connect while it was down. Read the first one; the loudest only tells you how long it lasted.</span></div>
   <div class="lz-layer"><span class="lz-lname">Note the time, and compare it to the deploy</span><span class="lz-lnote">Four minutes of uptime and errors starting at 13:41 is one story; six days of uptime and errors starting at 13:41 is a completely different one. The container's <code>Created</code> timestamp is the cheapest correlation you will get.</span></div>
   <div class="lz-layer"><span class="lz-lname">Do not restart yet</span><span class="lz-lnote">A restart clears the evidence: the connection state, the in-memory metrics, the log context. It also "fixes" about a third of incidents temporarily, which is exactly why it is so tempting and so expensive — the same thing happens again in six hours with no more information than the first time.</span></div>
 </div>
@@ -140,23 +153,30 @@ Up 4 minutes              ghcr.io/…/backend:latest      ← khoi dong lai 4 ph
 docker exec cuonghoangdev_backend node -e \\
   "const{PrismaClient}=require('@prisma/client');const p=new PrismaClient();
    p.\\$queryRaw\\&#96;SELECT now()\\&#96;.then(r=&gt;console.log('OK',r)).catch(e=&gt;console.log('LOI',e.code,e.message.split('\\n')[0]))"</code></pre>
-<div class="out">LOI P1001 Can't reach database server at &#96;postgres:5432&#96;</div>
+<div class="out"><span class="tok-comment"># đo thật — sự cố dựng: container prisma-pg12 (PostgreSQL 16) bị dừng giữa lúc ứng dụng nhận ~50 request/giây; Prisma 6.19.3</span>
+LOI undefined Please make sure your database server is running at &#96;127.0.0.1:55493&#96;.
+<span class="tok-comment"># truy vấn đầu tiên mang lớp PrismaClientInitializationError nhưng KHÔNG mang errorCode — Bài 12.2</span></div>
 <pre><code class="language-sql"><span class="tok-comment"># 3. Bản thân cơ sở dữ liệu đang làm gì?</span>
 psql "$DATABASE_URL" -c "SELECT state, count(*) FROM pg_stat_activity
                          WHERE datname = current_database() GROUP BY state;"</code></pre>
-<div class="out">        state        | count
----------------------+-------
- idle                |    97
- active              |     3               ← 100 ket noi, max_connections = 100</div>
+<div class="out"><span class="tok-comment"># đo thật, chạy lại sau khi CSDL lên (pool 5 của ứng dụng đã tự nối lại)</span>
+ state | count
+-------+-------
+ idle  |     5
+(1 row)</div>
 <pre><code class="language-bash"><span class="tok-comment"># 4. Ứng dụng ghi gì vào nhật ký ĐÚNG lúc nó hỏng?</span>
 docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0-9]{4}|error' | head -30</code></pre>
-<div class="out">[13:41:07] PrismaClientInitializationError: P1001
-[13:41:09] PrismaClientKnownRequestError: P2024 Timed out fetching a new
-           connection from the connection pool (pool_timeout=10)
-[13:41:09] … x 214</div>
+<div class="out"><span class="tok-comment"># đo thật — log của ứng dụng trong sự cố dựng (giây tính từ lúc khởi động)</span>
+[  2.2] P1017 — Server has closed the connection.          <span class="tok-comment">× 5  ← ĐẦU TIÊN</span>
+[  2.3] P1001 — Please make sure your database server is running at &#96;127.0.0.1:55493&#96;.
+[  2.4] P1001 — …                                          <span class="tok-comment">× 180 tới khi CSDL lên lại</span>
+[ 11.0] ok × 10                                            <span class="tok-comment">← pool tự hồi phục, không ai khởi động lại</span>
+$ grep -oE "\\] (P[0-9]{4})" app.log | sort | uniq -c
+ 180 P1001
+   5 P1017</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">Đọc MÃ LỖI, đừng đọc câu văn</span><span class="lz-lnote">Thông báo của Prisma viết cho một lập trình viên đang ngồi trước terminal; cái MÃ thì viết cho bạn lúc hai giờ sáng. <code>P1001</code>, <code>P2002</code>, <code>P2024</code>, <code>P3009</code> mỗi cái nghĩa đúng một thứ, và Bài 12.2 chính là cái bảng đó.</span></div>
-  <div class="lz-layer"><span class="lz-lname">Đọc lỗi ĐẦU TIÊN, đừng đọc lỗi ỒN NHẤT</span><span class="lz-lnote">Nhật ký ở trên có 214 cái <code>P2024</code> và một cái <code>P1001</code>. Đám timeout pool là HỆ QUẢ: cơ sở dữ liệu biến mất, không mở được kết nối, request xếp hàng chờ một kết nối không bao giờ tới. Sửa timeout pool ở đây là sửa triệu chứng.</span></div>
+  <div class="lz-layer"><span class="lz-lname">Đọc lỗi ĐẦU TIÊN, đừng đọc lỗi ỒN NHẤT</span><span class="lz-lnote">Đo thật: 180 dòng <code>P1001</code> và 5 dòng <code>P1017</code> — và năm dòng ấy đến TRƯỚC, lúc 2,2 s: năm kết nối của pool bị cắt đúng lúc CSDL dừng. 180 dòng kia là HẬU QUẢ: mọi request mới cố kết nối trong lúc CSDL chết. Đọc dòng đầu tiên; dòng ồn nhất chỉ cho biết sự cố kéo dài bao lâu.</span></div>
   <div class="lz-layer"><span class="lz-lname">Ghi lại GIỜ, rồi so với lần deploy</span><span class="lz-lnote">Bốn phút uptime và lỗi bắt đầu lúc 13:41 là một câu chuyện; sáu ngày uptime và lỗi bắt đầu lúc 13:41 là một câu chuyện HOÀN TOÀN khác. Dấu thời gian <code>Created</code> của container là mối tương quan rẻ nhất bạn có được.</span></div>
   <div class="lz-layer"><span class="lz-lname">ĐỪNG khởi động lại vội</span><span class="lz-lnote">Khởi động lại xoá sạch bằng chứng: trạng thái kết nối, chỉ số trong bộ nhớ, ngữ cảnh nhật ký. Nó cũng "chữa" được chừng một phần ba sự cố TẠM THỜI, và đó chính xác là lý do nó vừa cám dỗ vừa đắt đỏ — cùng chuyện đó lặp lại sau sáu tiếng, với đúng lượng thông tin của lần đầu.</span></div>
 </div>
@@ -191,6 +211,7 @@ docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0
       type: 'LESSON',
       description: 'Từ P1001 tới P3018: bảy nhóm hỏng hóc, mỗi nhóm có một nguyên nhân gốc và một hành động khác hẳn nhau. Kèm quy trình cho migration thất bại — cái nhóm duy nhất mà việc tự động sửa có thể phá hỏng dữ liệu vĩnh viễn.',
       content: `
+${G12_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.2</span>
 <h2>Seven failure shapes, told apart by their code</h2>
@@ -201,6 +222,7 @@ docker logs cuonghoangdev_backend --since 15m 2&gt;&amp;1 | grep -iE 'prisma|P[0
   <div class="kv"><span class="k"><code>P1000</code> Authentication failed</span><span class="v">Wrong user or password in <code>DATABASE_URL</code>. Usually a deploy that picked up a stale env file, or a password rotated in the database but not in <code>/opt/cuonghoangdev/.env</code>.</span></div>
   <div class="kv"><span class="k"><code>P1001</code> Can't reach database server</span><span class="v">DNS, network, or the database is not running. From inside the container: <code>getent hosts postgres</code> then <code>nc -zv postgres 5432</code>. It is almost never Prisma.</span></div>
   <div class="kv"><span class="k"><code>P1003</code> Database does not exist</span><span class="v">The URL points at a database name that was never created — common on a fresh VPS or after a volume was recreated. Note that the volume being recreated also means the data is gone.</span></div>
+  <div class="kv"><span class="k">⚠️ Measured: the code depends on the call</span><span class="v">On 6.19.3 all three failures were <code>PrismaClientInitializationError</code>. An explicit <code>await prisma.$connect()</code> carried <code>errorCode</code> P1000 / P1001 / P1003; the same failure on a first query (lazy connect) carried <code>errorCode: undefined</code> — only the message told them apart. Match on the class and the message, not only the code. Once the pool exists, a lost database shows as <code>P1001</code> on requests.</span></div>
   <div class="kv"><span class="k">Engine load error / "did not initialize yet"</span><span class="v">Lesson 11.1 and 11.2: the wrong <code>binaryTargets</code>, or <code>prisma generate</code> never ran in the image. The container restart-loops and the deploy reports success.</span></div>
 </div>
 
@@ -229,7 +251,7 @@ try {
 <h3>Shape 3 — the row was not there</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>P2025</code> Record not found</span><span class="v">From <code>update</code>, <code>delete</code>, or <code>findUniqueOrThrow</code>. Usually a legitimate 404 — but if it appears in bursts, suspect a soft-delete filter or a tenant scope that changed.</span></div>
-  <div class="kv"><span class="k"><code>P2018</code> Required connected records not found</span><span class="v">A nested <code>connect</code> pointing at an id that does not exist. Common when a client sends a stale id after a delete.</span></div>
+  <div class="kv"><span class="k"><code>P2018</code> Required connected records not found</span><span class="v">A nested <code>connect</code> pointing at an id that does not exist. Common when a client sends a stale id after a delete. <em>Measured on 6.19.3: a nested connect to a missing id came back as <code>P2025</code> ("No 'User' record … found for nested connect"), not P2018 — match both.</em></span></div>
   <div class="kv"><span class="k"><code>null</code> from <code>findUnique</code></span><span class="v">Not an error at all, which is the danger: the code carries on and fails three lines later on <code>.email</code> of <code>null</code>. Use <code>findUniqueOrThrow</code> where absence is genuinely impossible.</span></div>
   <div class="kv"><span class="k">Zero rows from <code>updateMany</code></span><span class="v">Silently returns <code>{ count: 0 }</code>. If the update was supposed to happen, nothing tells you it did not — check the count when it matters.</span></div>
 </div>
@@ -254,7 +276,7 @@ GROUP BY state ORDER BY 2 DESC;</code></pre>
 <h3>Shape 5 — the transaction gave up</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>P2028</code> Transaction API error</span><span class="v">Usually "Transaction already closed": the interactive transaction exceeded its <code>timeout</code> (5s by default) and everything after that point runs outside it. Raise <code>timeout</code> only after checking why it is slow.</span></div>
-  <div class="kv"><span class="k"><code>P2034</code> Write conflict or deadlock</span><span class="v">Two transactions touching the same rows in opposite orders, or a serialisation failure under <code>Serializable</code>. This one is <em>expected</em> — retry with backoff, as Lesson 7.5 describes. It is not a bug unless the rate is climbing.</span></div>
+  <div class="kv"><span class="k"><code>P2034</code> Write conflict or deadlock</span><span class="v">Two transactions touching the same rows in opposite orders, or a serialisation failure under <code>Serializable</code>. <em>Measured on 6.19.3: a real deadlock between two interactive transactions did NOT arrive as P2034 — it was a <code>PrismaClientUnknownRequestError</code> with no code, PostgreSQL&#39;s <code>40P01</code> / "deadlock detected" inside the message. A retry helper that checks only <code>e.code === 'P2034'</code> never retries it.</em> This one is <em>expected</em> — retry with backoff, as Lesson 7.5 describes. It is not a bug unless the rate is climbing.</span></div>
   <div class="kv"><span class="k"><code>P1017</code> Server has closed the connection</span><span class="v">The database or a pooler dropped it: an idle timeout, a failover, a restart, or PgBouncer killing a session. Prisma reconnects, but any in-flight transaction is lost.</span></div>
   <div class="kv"><span class="k">Deadlocks in the PostgreSQL log</span><span class="v"><code>deadlock detected</code> in the server log names both statements and the exact lock cycle. That is far more useful than the Prisma-side error, and it is the first place to look when <code>P2034</code> repeats.</span></div>
 </div>
@@ -268,8 +290,8 @@ failed with: ERROR: column "score" of relation "SocialPost" already exists
 Prisma Migrate will not apply any further migrations until this is resolved.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">STOP. Do not auto-fix.</span><span class="lz-lnote">This is the one shape where the obvious command makes things permanently worse. <code>migrate resolve --applied</code> on a partially-applied migration tells Prisma the whole file ran when only some of it did, and every later migration is then built on a false assumption.</span></div>
-  <div class="lz-layer"><span class="lz-lname">1 — Read the migration file</span><span class="lz-lnote">Which statement failed, and which ones ran before it? Prisma applies the file inside a transaction on PostgreSQL, so usually nothing was committed — but a migration containing <code>COMMIT</code>, or one run through a tool that split it, may have applied partially.</span></div>
-  <div class="lz-layer"><span class="lz-lname">2 — Check the database against the history</span><span class="lz-lnote"><code>npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script</code>. This is the ground truth: what the database has that the history does not, and vice versa.</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 — Read the migration file</span><span class="lz-lnote">Which statement failed, and which ones ran before it? Measured: a multi-statement migration file runs as one implicit transaction on PostgreSQL — when its third statement failed (22P02), the first two left nothing behind and <code>applied_steps_count</code> stayed 0 — so usually nothing was committed — but a migration containing <code>COMMIT</code>, or one run through a tool that split it, may have applied partially.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 — Check the database against the history</span><span class="lz-lnote"><code>npx prisma migrate diff --from-migrations ./prisma/migrations --to-url "$DATABASE_URL" --shadow-database-url "$SHADOW_DATABASE_URL" --script</code> (no shadow? <code>--from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma</code> compares the database with the schema instead). This is the ground truth: what the database has that the history does not, and vice versa.</span></div>
   <div class="lz-layer"><span class="lz-lname">3 — Report, then decide with a human</span><span class="lz-lnote">The exact error, the migration name, whether it applied partially, and a proposed fix. Then act. On production, this step is not optional — auto-resolving a partially applied migration can silently corrupt schema and data, and it is on this codebase's forbidden list for exactly that reason.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>P3006</code> is different — it is the shadow database</span><span class="lz-lnote">A shadow-database failure never touched production; it means a past migration cannot replay from scratch. On this repository that is permanent: <code>20260706130000_add_music_and_profile</code> creates a unique constraint and an index with the same name. Already deployed, so it must not be edited — which is why migrations here are hand-written and applied with <code>migrate deploy</code>.</span></div>
 </div>
@@ -311,6 +333,7 @@ const post = await prisma.socialPost.findMany({ where: { authorId } });
   <div class="kv"><span class="k"><code>P1000</code> Xác thực thất bại</span><span class="v">Sai user hoặc mật khẩu trong <code>DATABASE_URL</code>. Thường là một lần deploy vớ phải file env cũ, hoặc mật khẩu đã xoay trong cơ sở dữ liệu mà chưa xoay trong <code>/opt/cuonghoangdev/.env</code>.</span></div>
   <div class="kv"><span class="k"><code>P1001</code> Không với tới máy chủ</span><span class="v">DNS, mạng, hoặc cơ sở dữ liệu không chạy. Từ bên trong container: <code>getent hosts postgres</code> rồi <code>nc -zv postgres 5432</code>. Gần như không bao giờ là lỗi Prisma.</span></div>
   <div class="kv"><span class="k"><code>P1003</code> Cơ sở dữ liệu không tồn tại</span><span class="v">URL trỏ tới một tên cơ sở dữ liệu chưa từng được tạo — hay gặp trên VPS mới hoặc sau khi một volume bị tạo lại. Lưu ý: volume bị tạo lại cũng có nghĩa là DỮ LIỆU đã mất.</span></div>
+  <div class="kv"><span class="k">⚠️ Đo thật: mã phụ thuộc vào lời gọi</span><span class="v">Trên 6.19.3 cả ba đều là <code>PrismaClientInitializationError</code>. Gọi rõ <code>await prisma.$connect()</code> thì có <code>errorCode</code> P1000 / P1001 / P1003; cùng lỗi đó ở truy vấn đầu tiên (kết nối lười) thì <code>errorCode: undefined</code> — chỉ còn thông báo để phân biệt. Hãy khớp theo lớp và thông báo, đừng chỉ dựa vào mã. Khi pool đã có, mất CSDL hiện ra là <code>P1001</code> trên từng request.</span></div>
   <div class="kv"><span class="k">Lỗi nạp engine / "did not initialize yet"</span><span class="v">Bài 11.1 và 11.2: sai <code>binaryTargets</code>, hoặc <code>prisma generate</code> chưa từng chạy trong ảnh. Container quay vòng khởi động lại còn deploy thì báo thành công.</span></div>
 </div>
 
@@ -339,7 +362,7 @@ try {
 <h3>Hình dáng 3 — không có hàng nào ở đó</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>P2025</code> Không tìm thấy bản ghi</span><span class="v">Từ <code>update</code>, <code>delete</code>, hoặc <code>findUniqueOrThrow</code>. Thường là một mã 404 chính đáng — nhưng nếu nó tới thành TỪNG CHÙM thì hãy nghi một bộ lọc soft delete hoặc một phạm vi tenant vừa đổi.</span></div>
-  <div class="kv"><span class="k"><code>P2018</code> Thiếu bản ghi cần nối</span><span class="v">Một <code>connect</code> lồng nhau trỏ tới một id không tồn tại. Hay gặp khi client gửi lên một id cũ sau một lần xoá.</span></div>
+  <div class="kv"><span class="k"><code>P2018</code> Thiếu bản ghi cần nối</span><span class="v">Một <code>connect</code> lồng nhau trỏ tới một id không tồn tại. Hay gặp khi client gửi lên một id cũ sau một lần xoá. <em>Đo trên 6.19.3: connect lồng tới id không có trả về <code>P2025</code> ("No 'User' record … found for nested connect"), KHÔNG phải P2018 — hãy bắt cả hai.</em></span></div>
   <div class="kv"><span class="k"><code>null</code> từ <code>findUnique</code></span><span class="v">Không phải lỗi gì cả, và đó mới là chỗ nguy: mã chạy tiếp rồi chết ba dòng sau ở <code>.email</code> của <code>null</code>. Dùng <code>findUniqueOrThrow</code> ở chỗ mà sự vắng mặt là THẬT SỰ bất khả thi.</span></div>
   <div class="kv"><span class="k">Không hàng nào từ <code>updateMany</code></span><span class="v">Lặng lẽ trả về <code>{ count: 0 }</code>. Nếu lệnh cập nhật đó LẼ RA phải xảy ra thì chẳng có gì báo cho bạn biết nó đã không xảy ra — hãy kiểm cái count ở những chỗ điều đó quan trọng.</span></div>
 </div>
@@ -364,7 +387,7 @@ GROUP BY state ORDER BY 2 DESC;</code></pre>
 <h3>Hình dáng 5 — giao dịch đã bỏ cuộc</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k"><code>P2028</code> Lỗi API giao dịch</span><span class="v">Thường là "Transaction already closed": giao dịch tương tác vượt quá <code>timeout</code> của nó (mặc định 5 giây) và mọi thứ sau điểm đó chạy NGOÀI giao dịch. Chỉ nâng <code>timeout</code> sau khi đã kiểm vì sao nó chậm.</span></div>
-  <div class="kv"><span class="k"><code>P2034</code> Xung đột ghi hoặc deadlock</span><span class="v">Hai giao dịch chạm cùng những hàng theo thứ tự ngược nhau, hoặc một cú thất bại tuần tự hoá dưới mức <code>Serializable</code>. Cái này là ĐƯỢC MONG ĐỢI — hãy thử lại với lùi dần, như Bài 7.5 mô tả. Nó không phải bug trừ khi tần suất đang tăng.</span></div>
+  <div class="kv"><span class="k"><code>P2034</code> Xung đột ghi hoặc deadlock</span><span class="v">Hai giao dịch chạm cùng những hàng theo thứ tự ngược nhau, hoặc một cú thất bại tuần tự hoá dưới mức <code>Serializable</code>. <em>Đo trên 6.19.3: một deadlock THẬT giữa hai giao dịch tương tác KHÔNG ra P2034 — nó là <code>PrismaClientUnknownRequestError</code> không mã, <code>40P01</code> / "deadlock detected" của PostgreSQL nằm trong thông báo. Hàm thử lại chỉ kiểm <code>e.code === 'P2034'</code> sẽ không bao giờ thử lại nó.</em> Cái này là ĐƯỢC MONG ĐỢI — hãy thử lại với lùi dần, như Bài 7.5 mô tả. Nó không phải bug trừ khi tần suất đang tăng.</span></div>
   <div class="kv"><span class="k"><code>P1017</code> Máy chủ đã đóng kết nối</span><span class="v">Cơ sở dữ liệu hoặc một pooler thả nó ra: hết giờ nhàn rỗi, một cú chuyển dự phòng, một lần khởi động lại, hay PgBouncer giết một phiên. Prisma nối lại được, nhưng mọi giao dịch đang bay thì mất.</span></div>
   <div class="kv"><span class="k">Deadlock trong nhật ký PostgreSQL</span><span class="v"><code>deadlock detected</code> trong log của máy chủ gọi tên CẢ HAI câu lệnh và đúng cái vòng khoá. Nó hữu ích hơn hẳn lỗi phía Prisma, và là chỗ nhìn đầu tiên khi <code>P2034</code> lặp lại.</span></div>
 </div>
@@ -378,8 +401,8 @@ failed with: ERROR: column "score" of relation "SocialPost" already exists
 Prisma Migrate will not apply any further migrations until this is resolved.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lname">DỪNG. Đừng tự động sửa.</span><span class="lz-lnote">Đây là hình dáng DUY NHẤT mà câu lệnh hiển nhiên nhất lại làm mọi thứ tệ đi VĨNH VIỄN. <code>migrate resolve --applied</code> lên một migration áp dở dang là nói với Prisma rằng cả file đã chạy trong khi chỉ một phần chạy, và mọi migration về sau đều dựng trên một giả định sai.</span></div>
-  <div class="lz-layer"><span class="lz-lname">1 — Đọc file migration</span><span class="lz-lnote">Câu lệnh nào hỏng, và những câu nào đã chạy trước nó? Prisma áp cả file trong một giao dịch trên PostgreSQL, nên thường là chưa có gì được commit — nhưng một migration có chứa <code>COMMIT</code>, hoặc một cái chạy qua công cụ tự cắt nhỏ nó ra, thì có thể đã áp một phần.</span></div>
-  <div class="lz-layer"><span class="lz-lname">2 — Đối chiếu cơ sở dữ liệu với lịch sử</span><span class="lz-lnote"><code>npx prisma migrate diff --from-migrations ./prisma/migrations --to-database-url "$DATABASE_URL" --script</code>. Đây là sự thật nền: cơ sở dữ liệu có gì mà lịch sử không có, và ngược lại.</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 — Đọc file migration</span><span class="lz-lnote">Câu lệnh nào hỏng, và những câu nào đã chạy trước nó? Đo thật: một file migration nhiều câu chạy như MỘT giao dịch ngầm trên PostgreSQL — khi câu thứ ba hỏng (22P02), hai câu đầu không để lại gì và <code>applied_steps_count</code> vẫn là 0 — nên thường là chưa có gì được commit — nhưng một migration có chứa <code>COMMIT</code>, hoặc một cái chạy qua công cụ tự cắt nhỏ nó ra, thì có thể đã áp một phần.</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 — Đối chiếu cơ sở dữ liệu với lịch sử</span><span class="lz-lnote"><code>npx prisma migrate diff --from-migrations ./prisma/migrations --to-url "$DATABASE_URL" --shadow-database-url "$SHADOW_DATABASE_URL" --script</code> (no shadow? <code>--from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma</code> compares the database with the schema instead). Đây là sự thật nền: cơ sở dữ liệu có gì mà lịch sử không có, và ngược lại.</span></div>
   <div class="lz-layer"><span class="lz-lname">3 — Báo cáo, rồi quyết định CÙNG một con người</span><span class="lz-lnote">Đúng thông báo lỗi, tên migration, nó có áp một phần không, và một đề xuất cách vá. Rồi mới hành động. Trên production, bước này KHÔNG tuỳ chọn — tự động resolve một migration áp dở dang có thể âm thầm phá hỏng lược đồ và dữ liệu, và đó chính là lý do nó nằm trong danh sách cấm của kho mã này.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>P3006</code> thì khác — nó là shadow database</span><span class="lz-lnote">Một cú hỏng ở shadow database CHƯA HỀ chạm production; nó nghĩa là một migration cũ không phát lại được từ đầu. Trên kho này chuyện đó là vĩnh viễn: <code>20260706130000_add_music_and_profile</code> tạo một ràng buộc duy nhất và một chỉ mục TRÙNG TÊN. Nó đã deploy rồi nên không được sửa — và đó là lý do migration ở đây viết tay rồi áp bằng <code>migrate deploy</code>.</span></div>
 </div>
@@ -419,6 +442,7 @@ const post = await prisma.socialPost.findMany({ where: { authorId } });
       type: 'LESSON',
       description: 'Mười công cụ, mỗi cái trả lời đúng một câu hỏi: migrate status và bốn chiều của migrate diff, validate, db pull (và vì sao nó nguy hiểm), Studio, DEBUG, $metrics, và bốn khung nhìn pg_stat trả lời được thứ mà phía ứng dụng không trả lời nổi.',
       content: `
+${G12_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.3</span>
 <h2>The diagnostic toolbox</h2>
@@ -437,15 +461,18 @@ The &#96;20260823140000_them_cot_diem&#96; migration failed. (P3009)</div>
 <pre><code class="language-bash"><span class="tok-comment"># Does the live database match the migration history? (read-only, safe)</span>
 npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
-  --to-database-url "$DATABASE_URL" \\
+  --to-url "$DATABASE_URL" \\
+  --shadow-database-url "$SHADOW_DATABASE_URL" \\
   --script</code></pre>
-<div class="out">-- rong = khop hoan toan
-
--- hoac, day la troi dat:
-CREATE INDEX "socialpost_author_created_idx" ON "SocialPost"("authorId", "createdAt");
--- ai do da tao chi muc nay bang tay tren production</div>
+<div class="out"><span class="tok-comment"># đo thật (prisma-pg12 PostgreSQL 16, Prisma 6.19.3) — ai đó đã chạy tay: CREATE INDEX posts_title_idx ON posts (title)</span>
+-- CreateIndex
+CREATE INDEX "posts_title_idx" ON "public"."posts"("title" ASC);
+<span class="tok-comment"># thiếu --shadow-database-url thì lệnh từ chối:</span>
+Error: You must pass the --shadow-database-url if you want to diff a migrations directory.
+<span class="tok-comment"># và CÙNG lúc đó, migrate status vẫn nói:</span>
+Database schema is up to date!     <span class="tok-comment">← exit 0: status chỉ đọc bảng lịch sử, không thấy trôi dạt</span></div>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>--from-migrations … --to-database-url</code></span><span class="v">History versus reality. The one to run when you suspect somebody changed production by hand. Empty output is the answer you want.</span></div>
+  <div class="kv"><span class="k"><code>--from-migrations … --to-url</code> (+ <code>--shadow-database-url</code>)</span><span class="v">History versus reality. Prisma 6.19.3 has no <code>--to-database-url</code>. The one to run when you suspect somebody changed production by hand. Empty output is the answer you want.</span></div>
   <div class="kv"><span class="k"><code>--from-schema-datasource … --to-schema-datamodel</code></span><span class="v">The live database versus <code>schema.prisma</code>. Empty means your schema file describes what is actually there — the check the pre-push checklist uses.</span></div>
   <div class="kv"><span class="k"><code>--from-migrations … --to-schema-datamodel</code></span><span class="v">History versus the schema file. This is what a new migration <em>would</em> contain, without creating one — useful for reviewing a change before writing the SQL.</span></div>
   <div class="kv"><span class="k">Direction matters</span><span class="v">The output is the SQL that turns <code>from</code> into <code>to</code>. Swapping them gives you the inverse script, which is occasionally exactly what you want and usually a confusing surprise.</span></div>
@@ -489,7 +516,7 @@ npx prisma studio</code></pre>
   <div class="lz-layer"><span class="lz-lname">Why not production</span><span class="lz-lnote">Studio can edit and delete rows with two clicks and no confirmation dialog worth the name, over an unauthenticated local web server, using a connection from the same pool your application needs. Every one of those is a reason on its own.</span></div>
   <div class="lz-layer"><span class="lz-lname">The safe substitute</span><span class="lz-lnote">A restored dump on your machine, or read-only SQL through <code>psql</code>. If you need to look at one production row, <code>SELECT</code> it — a query in the log is auditable and a Studio click is not.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>DEBUG</code> for the layer below</span><span class="lz-lnote"><code>DEBUG="prisma:client,prisma:engine" node dist/index.js</code> prints what the client sends the engine and what the engine does with it. Verbose, invaluable when the SQL looks right but the result does not, and never something to leave enabled.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>$metrics</code> for the pool</span><span class="lz-lnote">Lesson 9.4's gauges: connections open, busy, idle, and <code>prisma_client_queries_wait</code>. Read-only, cheap, and the only view of the pool that does not require database access — which matters precisely when the database is the problem.</span></div>
+  <div class="lz-layer"><span class="lz-lname"><code>$metrics</code> for the pool</span><span class="lz-lnote"><em>Measured: enabling it makes <code>prisma validate</code> warn 'Preview feature "metrics" is deprecated' on 6.19.3 — Lesson 12.4.</em> Lesson 9.4's gauges: connections open, busy, idle, and <code>prisma_client_queries_wait</code>. Read-only, cheap, and the only view of the pool that does not require database access — which matters precisely when the database is the problem.</span></div>
 </div>
 
 <h3>The four PostgreSQL views worth memorising</h3>
@@ -574,15 +601,18 @@ The &#96;20260823140000_them_cot_diem&#96; migration failed. (P3009)</div>
 <pre><code class="language-bash"><span class="tok-comment"># Cơ sở dữ liệu đang chạy có khớp lịch sử migration không? (chỉ đọc, an toàn)</span>
 npx prisma migrate diff \\
   --from-migrations ./prisma/migrations \\
-  --to-database-url "$DATABASE_URL" \\
+  --to-url "$DATABASE_URL" \\
+  --shadow-database-url "$SHADOW_DATABASE_URL" \\
   --script</code></pre>
-<div class="out">-- rong = khop hoan toan
-
--- hoac, day la troi dat:
-CREATE INDEX "socialpost_author_created_idx" ON "SocialPost"("authorId", "createdAt");
--- ai do da tao chi muc nay bang tay tren production</div>
+<div class="out"><span class="tok-comment"># đo thật (prisma-pg12 PostgreSQL 16, Prisma 6.19.3) — ai đó đã chạy tay: CREATE INDEX posts_title_idx ON posts (title)</span>
+-- CreateIndex
+CREATE INDEX "posts_title_idx" ON "public"."posts"("title" ASC);
+<span class="tok-comment"># thiếu --shadow-database-url thì lệnh từ chối:</span>
+Error: You must pass the --shadow-database-url if you want to diff a migrations directory.
+<span class="tok-comment"># và CÙNG lúc đó, migrate status vẫn nói:</span>
+Database schema is up to date!     <span class="tok-comment">← exit 0: status chỉ đọc bảng lịch sử, không thấy trôi dạt</span></div>
 <div class="kv-grid">
-  <div class="kv"><span class="k"><code>--from-migrations … --to-database-url</code></span><span class="v">Lịch sử đối lại thực tế. Cái để chạy khi bạn nghi có người sửa production bằng tay. Đầu ra RỖNG là câu trả lời bạn muốn.</span></div>
+  <div class="kv"><span class="k"><code>--from-migrations … --to-url</code> (+ <code>--shadow-database-url</code>)</span><span class="v">Lịch sử đối lại thực tế. Prisma 6.19.3 KHÔNG có <code>--to-database-url</code>. Cái để chạy khi bạn nghi có người sửa production bằng tay. Đầu ra RỖNG là câu trả lời bạn muốn.</span></div>
   <div class="kv"><span class="k"><code>--from-schema-datasource … --to-schema-datamodel</code></span><span class="v">Cơ sở dữ liệu đang chạy đối lại <code>schema.prisma</code>. Rỗng nghĩa là file lược đồ của bạn mô tả đúng thứ đang có — chính phép kiểm mà danh sách trước-khi-push dùng.</span></div>
   <div class="kv"><span class="k"><code>--from-migrations … --to-schema-datamodel</code></span><span class="v">Lịch sử đối lại file lược đồ. Đây là thứ một migration mới SẼ chứa, mà không phải tạo ra migration nào — hữu ích để review một thay đổi trước khi viết SQL.</span></div>
   <div class="kv"><span class="k">Chiều có ý nghĩa</span><span class="v">Đầu ra là câu SQL biến <code>from</code> thành <code>to</code>. Đảo hai cái cho bạn kịch bản NGƯỢC, thỉnh thoảng đúng là thứ bạn muốn và thường thì là một bất ngờ khó hiểu.</span></div>
@@ -626,7 +656,7 @@ npx prisma studio</code></pre>
   <div class="lz-layer"><span class="lz-lname">Vì sao không dùng với production</span><span class="lz-lnote">Studio sửa và xoá hàng bằng hai cú nhấp, với hộp thoại xác nhận chẳng đáng gọi là xác nhận, qua một máy chủ web cục bộ không xác thực, dùng một kết nối lấy từ chính cái pool mà ứng dụng của bạn đang cần. Mỗi điều đó tự nó đã là một lý do.</span></div>
   <div class="lz-layer"><span class="lz-lname">Thứ thay thế an toàn</span><span class="lz-lnote">Một bản dump khôi phục xuống máy bạn, hoặc SQL chỉ-đọc qua <code>psql</code>. Nếu bạn cần nhìn MỘT hàng production, hãy <code>SELECT</code> nó — một câu truy vấn trong nhật ký thì kiểm toán được, một cú nhấp trong Studio thì không.</span></div>
   <div class="lz-layer"><span class="lz-lname"><code>DEBUG</code> cho tầng bên dưới</span><span class="lz-lnote"><code>DEBUG="prisma:client,prisma:engine" node dist/index.js</code> in ra thứ client gửi cho engine và thứ engine làm với nó. Rất dài dòng, vô giá khi câu SQL trông đúng mà kết quả thì không, và tuyệt đối không phải thứ để bật rồi bỏ đó.</span></div>
-  <div class="lz-layer"><span class="lz-lname"><code>$metrics</code> cho cái pool</span><span class="lz-lnote">Mấy cái đồng hồ của Bài 9.4: kết nối đang mở, đang bận, đang rảnh, và <code>prisma_client_queries_wait</code>. Chỉ đọc, rẻ, và là cái nhìn DUY NHẤT vào pool mà không cần truy cập cơ sở dữ liệu — điều đó quan trọng chính xác vào lúc cơ sở dữ liệu là vấn đề.</span></div>
+  <div class="lz-layer"><span class="lz-lname"><code>$metrics</code> cho cái pool</span><span class="lz-lnote"><em>Đo thật: bật nó thì <code>prisma validate</code> cảnh báo 'Preview feature "metrics" is deprecated' trên 6.19.3 — Bài 12.4.</em> Mấy cái đồng hồ của Bài 9.4: kết nối đang mở, đang bận, đang rảnh, và <code>prisma_client_queries_wait</code>. Chỉ đọc, rẻ, và là cái nhìn DUY NHẤT vào pool mà không cần truy cập cơ sở dữ liệu — điều đó quan trọng chính xác vào lúc cơ sở dữ liệu là vấn đề.</span></div>
 </div>
 
 <h3>Bốn khung nhìn PostgreSQL đáng thuộc lòng</h3>
@@ -701,6 +731,7 @@ ORDER BY total_exec_time DESC LIMIT 5;</code></pre>
       type: 'LESSON',
       description: 'Xuất $metrics sang Prometheus bằng mười dòng, tám thứ đáng vẽ đồ thị, tám cảnh báo kèm ngưỡng và lý do chọn ngưỡng đó — trong đó có cái cảnh báo dung lượng đĩa mà nếu có thì đã cứu được Postgres của CuongThai một lần.',
       content: `
+${G12_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.4</span>
 <h2>Monitoring: eight panels and eight alerts</h2>
@@ -717,15 +748,20 @@ app.get('/metrics', chiNoiBo, async (_req, res) =&gt; {
   res.set('Content-Type', 'text/plain; version=0.0.4');
   res.end(await prisma.$metrics.prometheus());
 });</code></pre>
-<div class="out">prisma_client_queries_total 4820193
-prisma_client_queries_active 3
+<div class="out"><span class="tok-comment"># measured: 40 findMany in parallel, then $metrics (prisma-pg12 PostgreSQL 16, Prisma 6.19.3, Mac arm64)</span>
+$ npx prisma validate
+Prisma schema warning:
+- Preview feature "metrics" is deprecated. It will be removed in a future version of Prisma.
+$ curl -s localhost:3000/metrics | grep -E "^prisma_(client_queries_total|client_queries_wait|pool_connections_(open|busy|idle)) "
+prisma_client_queries_total 40
 prisma_client_queries_wait 0
-prisma_client_queries_duration_histogram_ms_bucket{le="1"} 1204882
-prisma_client_queries_duration_histogram_ms_bucket{le="50"} 4802001
-prisma_pool_connections_open 12
-prisma_pool_connections_busy 3
-prisma_pool_connections_idle 9
-prisma_datasource_queries_total 5104882</div>
+prisma_pool_connections_busy 0
+prisma_pool_connections_idle 21
+prisma_pool_connections_open 21
+<span class="tok-comment"># histograms: query duration count=40 sum=208 ms · waiting for a connection count=41 sum=575 ms — the queries waited longer than they ran</span></div>
+<div class="callout warn">
+<p><strong>Measured — the metrics preview feature is deprecated in 6.19.3.</strong> It still works, and the pool gauges are the most direct answer to "is the pool saturated?" — but plan a second source for the same panels: your own counters around the client, OpenTelemetry tracing, and PostgreSQL&#39;s own views (<code>pg_stat_activity</code>) for connection state.</p>
+</div>
 <div class="callout ok">
 <p><strong>Restrict <code>/metrics</code> to the internal network.</strong> The histogram and counters are harmless, but the endpoint is a free description of your traffic shape and your infrastructure to anyone who can reach it. Bind it to the compose network, or put it behind the same middleware as the admin routes. Never on the public hostname.</p>
 </div>
@@ -821,15 +857,20 @@ app.get('/metrics', chiNoiBo, async (_req, res) =&gt; {
   res.set('Content-Type', 'text/plain; version=0.0.4');
   res.end(await prisma.$metrics.prometheus());
 });</code></pre>
-<div class="out">prisma_client_queries_total 4820193
-prisma_client_queries_active 3
+<div class="out"><span class="tok-comment"># đo thật: 40 findMany song song, rồi đọc $metrics (prisma-pg12 PostgreSQL 16, Prisma 6.19.3, Mac arm64)</span>
+$ npx prisma validate
+Prisma schema warning:
+- Preview feature "metrics" is deprecated. It will be removed in a future version of Prisma.
+$ curl -s localhost:3000/metrics | grep -E "^prisma_(client_queries_total|client_queries_wait|pool_connections_(open|busy|idle)) "
+prisma_client_queries_total 40
 prisma_client_queries_wait 0
-prisma_client_queries_duration_histogram_ms_bucket{le="1"} 1204882
-prisma_client_queries_duration_histogram_ms_bucket{le="50"} 4802001
-prisma_pool_connections_open 12
-prisma_pool_connections_busy 3
-prisma_pool_connections_idle 9
-prisma_datasource_queries_total 5104882</div>
+prisma_pool_connections_busy 0
+prisma_pool_connections_idle 21
+prisma_pool_connections_open 21
+<span class="tok-comment"># histogram: thời gian truy vấn count=40 sum=208 ms · chờ kết nối count=41 sum=575 ms — truy vấn CHỜ lâu hơn CHẠY</span></div>
+<div class="callout warn">
+<p><strong>Đo thật — tính năng preview metrics đã bị đánh dấu NGỪNG ở 6.19.3.</strong> Nó vẫn chạy, và các gauge của pool là câu trả lời thẳng nhất cho "pool có bão hoà không?" — nhưng hãy chuẩn bị nguồn thứ hai cho cùng các bảng: bộ đếm của chính bạn quanh client, OpenTelemetry, và các view của PostgreSQL (<code>pg_stat_activity</code>) cho trạng thái kết nối.</p>
+</div>
 <div class="callout ok">
 <p><strong>Hãy giới hạn <code>/metrics</code> trong mạng nội bộ.</strong> Mấy cái histogram và bộ đếm thì vô hại, nhưng bản thân endpoint là một bản mô tả MIỄN PHÍ về hình dạng lưu lượng và hạ tầng của bạn, cho bất kỳ ai với tới được. Hãy buộc nó vào mạng của compose, hoặc đặt nó sau đúng cái middleware của các route quản trị. ĐỪNG BAO GIỜ để nó trên tên miền công khai.</p>
 </div>
@@ -917,6 +958,7 @@ groups:
       type: 'LESSON',
       description: 'Tổng kết mười ba mục thành sáu ý đáng giữ lại, một dự án tự chứng minh với sáu mốc đo được, và bản đồ đi tiếp — những khoá CuongThai kế cận, và những thứ khoá này CỐ Ý không dạy.',
       content: `
+${G12_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.5</span>
 <h2>What you know now, and where to go next</h2>
@@ -957,7 +999,7 @@ groups:
   <div class="kv"><span class="k">3 · One thing that needs a transaction</span><span class="v">A vote that updates a counter, or a transfer between two balances. Write the version with the lost update, observe it under concurrency, then fix it with an atomic <code>increment</code> or the right isolation level.</span></div>
   <div class="kv"><span class="k">4 · One thing the builder cannot express</span><span class="v">A leaderboard with ranks, or the comment tree as a recursive CTE. Write it as raw SQL, then as TypedSQL, and rename a column to watch the build catch it.</span></div>
   <div class="kv"><span class="k">5 · A column rename across three deploys</span><span class="v">Expand, backfill with a resumable chunked script, contract. At each step, check that the previous image still works — that check is the entire exercise.</span></div>
-  <div class="kv"><span class="k">6 · A Dockerfile you verified</span><span class="v">Multi-stage, generate on the runtime base, and a build script that constructs a <code>PrismaClient</code> inside the finished image before pushing. Then break <code>binaryTargets</code> on purpose and confirm the check stops you.</span></div>
+  <div class="kv"><span class="k">6 · A Dockerfile you verified</span><span class="v">Multi-stage, generate on the runtime base, and a build script that awaits a query with a <code>PrismaClient</code> inside the finished image before pushing. Then break <code>binaryTargets</code> on purpose and confirm the check stops you.</span></div>
 </div>
 <div class="callout ok">
 <p><strong>Milestone 5 is the one that separates people who have used Prisma from people who can run it.</strong> Everything else has a tutorial somewhere. Planning a schema change so that two versions of your code can both work against the database, for the minutes it takes to swap them, is the skill that makes the difference on a system with real users — and it is entirely independent of which ORM you end up using.</p>
@@ -1026,7 +1068,7 @@ groups:
   <div class="kv"><span class="k">3 · Một thứ CẦN giao dịch</span><span class="v">Một lượt bình chọn cập nhật bộ đếm, hoặc một lần chuyển tiền giữa hai số dư. Hãy viết bản CÓ mất cập nhật, quan sát nó dưới tương tranh, rồi vá bằng <code>increment</code> nguyên tử hoặc bằng đúng mức cô lập.</span></div>
   <div class="kv"><span class="k">4 · Một thứ trình dựng KHÔNG diễn đạt nổi</span><span class="v">Một bảng xếp hạng có thứ hạng, hoặc cây bình luận bằng CTE đệ quy. Viết nó bằng SQL thô, rồi bằng TypedSQL, rồi đổi tên một cột để xem bản dựng bắt được nó.</span></div>
   <div class="kv"><span class="k">5 · Đổi tên một cột qua BA lần deploy</span><span class="v">Mở rộng, nạp bù bằng một script chia lô nối lại được, thu hẹp. Ở MỖI bước, hãy kiểm rằng cái ảnh TRƯỚC ĐÓ vẫn chạy — chính phép kiểm đó mới là toàn bộ bài tập.</span></div>
-  <div class="kv"><span class="k">6 · Một Dockerfile bạn ĐÃ XÁC MINH</span><span class="v">Nhiều tầng, generate trên nền runtime, và một script build dựng một <code>PrismaClient</code> bên trong ảnh đã hoàn tất TRƯỚC khi đẩy. Rồi cố ý phá <code>binaryTargets</code> và xác nhận rằng chốt kiểm chặn bạn lại.</span></div>
+  <div class="kv"><span class="k">6 · Một Dockerfile bạn ĐÃ XÁC MINH</span><span class="v">Nhiều tầng, generate trên nền runtime, và một script build dựng một <code>PrismaClient</code> rồi CHỜ một truy vấn bên trong ảnh đã hoàn tất TRƯỚC khi đẩy. Rồi cố ý phá <code>binaryTargets</code> và xác nhận rằng chốt kiểm chặn bạn lại.</span></div>
 </div>
 <div class="callout ok">
 <p><strong>Mốc số 5 là thứ phân biệt người ĐÃ DÙNG Prisma với người VẬN HÀNH ĐƯỢC nó.</strong> Mọi mốc khác đều có hướng dẫn ở đâu đó. Lên kế hoạch cho một thay đổi lược đồ sao cho HAI phiên bản mã của bạn đều chạy được với cơ sở dữ liệu, suốt mấy phút tráo container — đó là kỹ năng tạo ra khác biệt trên một hệ thống có người dùng thật, và nó hoàn toàn ĐỘC LẬP với chuyện rốt cuộc bạn dùng ORM nào.</p>

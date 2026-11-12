@@ -1,0 +1,1769 @@
+{
+ "Nền tảng › Cú pháp cơ bản & JVM": {
+  "body": "Java là ngôn ngữ **biên dịch ra bytecode rồi chạy trên máy ảo (JVM)**. Bạn viết code một lần, biên dịch thành tệp `.class`, và tệp đó chạy được trên bất kỳ hệ điều hành nào có JVM — đó là ý nghĩa của khẩu hiệu \"write once, run anywhere\". Phần cú pháp (biến, kiểu, toán tử, rẽ nhánh, vòng lặp) khá giống C/C++, nhưng mọi thứ đều nằm trong một `class`.\n\n### Ba cái tên dễ nhầm\n- **JVM** (Java Virtual Machine): chương trình nạp và thực thi bytecode.\n- **JRE** (Java Runtime Environment): JVM + thư viện chuẩn, đủ để *chạy* chương trình.\n- **JDK** (Java Development Kit): JRE + công cụ phát triển như `javac` (trình biên dịch), `jar`, `javadoc`. Muốn *viết* Java thì cài JDK.\n\n### Chương trình Java nhỏ nhất\n```java\npublic class Hello {\n    public static void main(String[] args) {\n        int tuoi = 20;                 // biến cục bộ, kiểu nguyên thủy\n        String ten = \"An\";             // kiểu tham chiếu\n        System.out.println(ten + \" \" + tuoi);\n    }\n}\n```\nLưu thành `Hello.java` (tên tệp phải trùng tên class `public`), rồi chạy `javac Hello.java` và `java Hello`.\n\n### Ý chính\n- Mỗi chương trình bắt đầu từ phương thức `public static void main(String[] args)`.\n- Java là ngôn ngữ **định kiểu tĩnh**: mỗi biến có kiểu cố định, trình biên dịch bắt lỗi kiểu trước khi chạy.\n- Phân biệt hoa/thường; câu lệnh kết thúc bằng `;`; khối lệnh nằm trong `{ }`.\n- Có 8 kiểu nguyên thủy (`byte`, `short`, `int`, `long`, `float`, `double`, `char`, `boolean`); còn lại (`String`, mảng, đối tượng) là kiểu tham chiếu.\n\n### Lỗi hay gặp\n- Cài JRE rồi gõ `javac` không thấy lệnh — thiếu JDK hoặc chưa đặt `PATH`.\n- Tên tệp không khớp tên class `public` → lỗi biên dịch.\n- Quên `;` hoặc thiếu dấu `}` — trình biên dịch báo lỗi ở dòng *sau* chỗ thực sự sai.\n\n### Tự kiểm tra\n1. JDK, JRE và JVM khác nhau thế nào?\n2. Vì sao cùng một tệp `.class` chạy được trên Windows lẫn macOS?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro3-1",
+    "ten": "1.B — 📑 Học theo từng slide · Getting Started (1/2): lịch sử, bytecode và JVM, nền tảng Java, PATH (slide 1–10)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-1-2-cu-phap-java",
+    "ten": "1.2 — Cú pháp Java cốt lõi (từ C sang Java)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro4-1",
+    "ten": "1.D — 📑 Học theo từng slide · Learning the Java Language: kiểu, mảng, toán tử, ép kiểu, phạm vi (slide 1–27)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/code-lab/java-core",
+    "ten": "Java Core",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Arrays & Type Casting": {
+  "body": "**Mảng** là một dãy phần tử *cùng kiểu*, *kích thước cố định* khi đã tạo, truy cập theo chỉ số bắt đầu từ 0. **Ép kiểu** (type casting) là đổi một giá trị sang kiểu khác.\n\n```java\nint[] diem = new int[3];        // mặc định {0, 0, 0}\ndiem[0] = 8;\nint[] lop = {7, 9, 10};         // khởi tạo trực tiếp\nSystem.out.println(lop.length); // 3 — length là trường, không có ()\n\nint[][] luoi = new int[2][3];   // mảng hai chiều\n```\nTruy cập ngoài phạm vi (`lop[3]`) ném `ArrayIndexOutOfBoundsException` lúc chạy.\n\n### Ép kiểu: mở rộng và thu hẹp\n- **Widening** (ngầm định, an toàn): `int` → `long` → `float` → `double`. Trình biên dịch tự làm.\n- **Narrowing** (tường minh, có thể mất dữ liệu): phải viết `(kiểu)`.\n```java\ndouble d = 3.9;\nint i = (int) d;        // 3 — cắt bỏ phần thập phân, KHÔNG làm tròn\nint lon = 130;\nbyte b = (byte) lon;    // -126 — tràn số, bit cao bị cắt\n```\n\n### Ý chính\n- Mảng là **đối tượng** nằm trên heap; biến mảng chỉ giữ tham chiếu. Gán `int[] b = a;` không sao chép dữ liệu, hai biến cùng trỏ một mảng. Dùng `Arrays.copyOf` để sao chép thật.\n- Mảng kích thước cố định; cần co giãn thì dùng `ArrayList`.\n- Phép chia hai số `int` cho kết quả `int`: `5 / 2 == 2`. Muốn 2.5 phải ép một vế sang `double`.\n\n### Lỗi hay gặp\n- In thẳng mảng (`System.out.println(arr)`) ra chuỗi kiểu `[I@1b6d3586`; dùng `Arrays.toString(arr)`.\n- So sánh hai mảng bằng `==` hoặc `equals` chỉ so tham chiếu; dùng `Arrays.equals`.\n- Ép kiểu thu hẹp \"thầm lặng\" làm sai số mà không báo lỗi.\n\n### Tự kiểm tra\n- `(int) 7.99` bằng bao nhiêu? `(byte) 200` ra gì và vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro4-1",
+    "ten": "1.D — 📑 Học theo từng slide · Learning the Java Language: kiểu, mảng, toán tử, ép kiểu, phạm vi (slide 1–27)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-mang",
+    "ten": "1.1 — Mảng & mảng động",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/code-lab/java-core",
+    "ten": "Java Core",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Lifecycle of a Program": {
+  "body": "Java không \"thông dịch thuần\" như một số ngôn ngữ script, cũng không biên dịch thẳng ra mã máy như C. Nó đi qua hai giai đoạn.\n\n### Vòng đời từ mã nguồn đến lúc chạy\n1. **Viết** `Hello.java`.\n2. **Biên dịch**: `javac Hello.java` kiểm tra cú pháp và kiểu, rồi sinh **bytecode** trong `Hello.class`. Bytecode là tập lệnh của máy ảo, độc lập với CPU/hệ điều hành.\n3. **Nạp lớp**: `java Hello` khởi động JVM; *class loader* tìm và nạp `.class`, *verifier* kiểm tra bytecode hợp lệ.\n4. **Thực thi**: JVM ban đầu *thông dịch* bytecode; đoạn code chạy nhiều (\"nóng\") được trình **JIT** biên dịch sang mã máy để nhanh hơn.\n5. **Dọn dẹp**: bộ **thu gom rác** (GC) giải phóng đối tượng không còn ai tham chiếu.\n\n### Vì sao thiết kế như vậy\n- **Di động**: cùng một `.class` chạy trên mọi nền có JVM.\n- **An toàn**: bytecode được kiểm tra trước khi chạy, không cho con trỏ tuỳ tiện như C.\n- **Nhanh sau khi \"khởi động nóng\"**: JIT tối ưu dựa trên hành vi thật lúc chạy.\n\n### Ý chính\n- Lỗi cú pháp/kiểu xuất hiện lúc **biên dịch**; `NullPointerException`, chia cho 0 xuất hiện lúc **chạy**.\n- Xem bytecode bằng `javap -c Hello`.\n- Từ Java 11 có thể chạy một tệp nguồn đơn bằng `java Hello.java` (biên dịch trong bộ nhớ).\n\n### Lỗi hay gặp\n- Sửa `.java` nhưng quên biên dịch lại nên vẫn chạy bản `.class` cũ.\n- Chạy `java Hello.class` (đừng kèm đuôi) — phải là `java Hello`.\n- Nhầm \"đã biên dịch thành công\" với \"chương trình đúng\".\n\n### Tự kiểm tra\n- Bytecode khác mã máy ở điểm nào? JIT làm gì mà vẫn gọi Java là \"biên dịch\"?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro3-1",
+    "ten": "1.B — 📑 Học theo từng slide · Getting Started (1/2): lịch sử, bytecode và JVM, nền tảng Java, PATH (slide 1–10)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro3-2",
+    "ten": "1.C — 📑 Học theo từng slide · Getting Started (2/2): chương trình đầu tiên, cách chạy, công cụ JDK, lỗi hay gặp (slide 11–26)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs5-1",
+    "ten": "⭐ CS.5 — 📑 Học theo từng slide · Bên trong JVM (1): bytecode, nạp lớp, stack, thế hệ GC (slide 1–12)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Nền tảng › Câu lệnh điều kiện (Conditionals)": {
+  "body": "Câu lệnh điều kiện cho chương trình **rẽ nhánh**: chạy đoạn này nếu điều kiện đúng, đoạn khác nếu sai. Điều kiện luôn là giá trị `boolean` (Java không coi `0` hay `null` là \"sai\" như C hay JavaScript).\n\n```java\nint diem = 7;\nif (diem >= 8) {\n    System.out.println(\"Giỏi\");\n} else if (diem >= 5) {\n    System.out.println(\"Đạt\");\n} else {\n    System.out.println(\"Chưa đạt\");\n}\n\nString xepLoai = diem >= 5 ? \"Đạt\" : \"Trượt\";   // toán tử ba ngôi\n```\n\n### switch: chọn theo giá trị\n```java\n// switch kiểu cũ: dễ quên break, rơi xuống case kế tiếp\nswitch (thu) {\n    case 6: case 7: System.out.println(\"Cuối tuần\"); break;\n    default: System.out.println(\"Ngày thường\");\n}\n\n// switch expression (Java 14+): gọn, không rơi xuống\nString loai = switch (thu) {\n    case 6, 7 -> \"Cuối tuần\";\n    default   -> \"Ngày thường\";\n};\n```\n`switch` nhận `int`, `char`, `String`, `enum` (và kiểu bọc tương ứng).\n\n### Ý chính\n- Dùng `&&`, `||` có **đoản mạch**: vế sau không chạy nếu vế trước đã đủ quyết định (`if (s != null && s.length() > 0)` an toàn).\n- So sánh chuỗi bằng `equals`, không dùng `==` (xem bước Strings).\n- Luôn có `default`/`else` cho trường hợp \"không ngờ tới\".\n\n### Lỗi hay gặp\n- `if (x = 5)` — phép gán thay vì so sánh; Java báo lỗi kiểu vì `int` không phải `boolean`, nhưng `if (flag = true)` với `boolean` thì lọt.\n- Quên `break` trong switch kiểu cũ nên chạy tràn xuống case sau.\n- Ternary lồng nhau khó đọc; đổi sang `if` cho rõ.\n\n### Tự kiểm tra\n- Vì sao `if (name == \"An\")` có thể cho kết quả sai? Khi nào switch expression tiện hơn `if-else`?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro4-1",
+    "ten": "1.D — 📑 Học theo từng slide · Learning the Java Language: kiểu, mảng, toán tử, ép kiểu, phạm vi (slide 1–27)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs3-1",
+    "ten": "⭐ CS.3 — 📑 Học theo từng slide · Java hiện đại (1): phiên bản, var, text block, switch, enum, record (slide 1–13)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/code-lab/java-core",
+    "ten": "Java Core",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Vòng lặp (Loops)": {
+  "body": "Vòng lặp lặp lại một khối lệnh cho tới khi điều kiện dừng. Java có bốn dạng.\n\n```java\n// for: biết trước số lần\nfor (int i = 0; i < 5; i++) {\n    System.out.println(i);\n}\n\n// while: kiểm tra điều kiện TRƯỚC, có thể không chạy lần nào\nint n = 10;\nwhile (n > 0) { n /= 2; }\n\n// do-while: chạy ít nhất MỘT lần rồi mới kiểm tra\nString nhap;\ndo { nhap = doc(); } while (nhap.isEmpty());\n\n// for-each: duyệt mảng/Collection, không cần chỉ số\nint[] diem = {7, 9, 10};\nfor (int d : diem) {\n    System.out.println(d);\n}\n```\n\n### Điều khiển vòng lặp\n- `break` thoát hẳn vòng lặp; `continue` bỏ qua phần còn lại của lần lặp này.\n- Với vòng lặp lồng nhau có thể gắn **nhãn**: `ngoai: for (...) { for (...) { break ngoai; } }`.\n\n### Ý chính\n- Chọn `for` khi biết số lần, `while` khi lặp theo điều kiện, `for-each` khi chỉ cần *đọc* từng phần tử.\n- Biến đếm khai báo trong `for` chỉ sống trong vòng lặp đó.\n- Trong `for-each` bạn không có chỉ số, và sửa biến lặp không làm đổi phần tử của mảng kiểu nguyên thủy.\n\n### Lỗi hay gặp\n- **Vòng lặp vô hạn**: quên cập nhật biến điều kiện, hoặc `i--` thay vì `i++`.\n- **Lệch một đơn vị** (off-by-one): `i <= arr.length` gây `ArrayIndexOutOfBoundsException`; đúng là `i < arr.length`.\n- Xoá phần tử của `List` trong `for-each` gây `ConcurrentModificationException` (xem bước Iterator).\n\n### Tự kiểm tra\n- Khi nào `do-while` khác `while`? Viết vòng lặp tính tổng các số chẵn từ 1 đến 100.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro4-1",
+    "ten": "1.D — 📑 Học theo từng slide · Learning the Java Language: kiểu, mảng, toán tử, ép kiểu, phạm vi (slide 1–27)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-1-2-cu-phap-java",
+    "ten": "1.2 — Cú pháp Java cốt lõi (từ C sang Java)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/code-lab/java-core",
+    "ten": "Java Core",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Biến và phạm vi (Variables and Scopes)": {
+  "body": "**Phạm vi (scope)** của biến là vùng code mà tên biến còn dùng được. Java có ba loại biến chính:\n\n| Loại | Khai báo ở | Sống tới khi | Giá trị mặc định |\n|---|---|---|---|\n| **Local** | trong phương thức/khối `{}` | hết khối | *không có* — phải gán trước khi dùng |\n| **Instance** (field) | trong class, không `static` | đối tượng bị thu gom | `0`, `false`, `null` |\n| **Static** | trong class, có `static` | chương trình kết thúc (lớp được nạp) | như trên |\n\n```java\npublic class Dem {\n    static int tongSo = 0;     // dùng chung cho mọi đối tượng\n    int soLan = 0;             // mỗi đối tượng một bản\n\n    void tang() {\n        int buoc = 1;          // local: biến mất khi tang() kết thúc\n        soLan += buoc;\n        tongSo += buoc;\n    }\n}\n```\n\n### Ý chính\n- Biến local nằm trên **stack** (mỗi lời gọi một khung); đối tượng nằm trên **heap**.\n- Biến trong khối `{ }` (vòng `for`, `if`) không dùng được bên ngoài khối.\n- Biến local không được trùng tên với biến local khác đang \"sống\" trong cùng phương thức (khác C++/JS ở chỗ không cho che bóng).\n- Field cùng tên với tham số thì tham số *che* field; dùng `this.ten = ten`.\n- Quy ước đặt tên: `camelCase` cho biến/phương thức, `PascalCase` cho class, `UPPER_SNAKE_CASE` cho hằng.\n\n### Lỗi hay gặp\n- \"variable might not have been initialized\": dùng biến local trước khi gán.\n- Quên `this.` trong constructor nên field không được gán.\n- Lạm dụng biến `static` thay đổi được: chia sẻ trạng thái giữa các luồng/đối tượng dễ sinh bug.\n\n### Tự kiểm tra\n- Biến `i` khai báo trong `for` có dùng được sau vòng lặp không? Vì sao field có giá trị mặc định còn local thì không?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro4-1",
+    "ten": "1.D — 📑 Học theo từng slide · Learning the Java Language: kiểu, mảng, toán tử, ép kiểu, phạm vi (slide 1–27)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro7-1",
+    "ten": "2.A — 📑 Học theo từng slide · Quản lý bộ nhớ trong Java: stack, heap, tham chiếu, thu gom rác (slide 1–9)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-2-1-lop-doi-tuong",
+    "ten": "2.1 — Trường, phương thức & constructor",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Nền tảng › Toán tử và lớp Math (Math Operations)": {
+  "body": "Java có các nhóm toán tử: **số học** (`+ - * / %`), **so sánh** (`== != < > <= >=`), **logic** (`&& || !`), **gán** (`= += -=`…), **bitwise** (`& | ^ ~ << >> >>>`) và `++`/`--`. Lớp `Math` (trong `java.lang`, không cần import) cung cấp các hàm toán học.\n\n```java\nint a = 7, b = 2;\nSystem.out.println(a / b);        // 3  — chia nguyên\nSystem.out.println(a % b);        // 1  — chia lấy dư\nSystem.out.println((double) a / b); // 3.5\n\nSystem.out.println(Math.sqrt(16));      // 4.0\nSystem.out.println(Math.pow(2, 10));    // 1024.0\nSystem.out.println(Math.max(3, 9));     // 9\nSystem.out.println(Math.round(2.5));    // 3  (kết quả kiểu long)\nSystem.out.println(Math.floorMod(-7, 3)); // 2, còn -7 % 3 là -1\nint ketQua = Math.addExact(Integer.MAX_VALUE, 1); // ném ArithmeticException\n```\n`Math.random()` trả số `double` trong khoảng `[0.0, 1.0)`.\n\n### Ý chính\n- Chia `int` cho `int` cắt phần thập phân; chia số nguyên cho `0` ném `ArithmeticException`, còn chia số thực cho `0` ra `Infinity`/`NaN`.\n- `i++` (dùng rồi tăng) khác `++i` (tăng rồi dùng).\n- Số nguyên **tràn số âm thầm**: `Integer.MAX_VALUE + 1` ra số âm. Dùng `Math.addExact`/`multiplyExact` khi cần phát hiện.\n- `>>` giữ dấu, `>>>` dịch không dấu.\n\n### Lỗi hay gặp\n- So sánh số thực bằng `==`: `0.1 + 0.2 == 0.3` là `false`. Dùng sai số cho phép, hoặc `BigDecimal` với tiền tệ.\n- `&` và `|` không đoản mạch, `&&` và `||` thì có — nhầm sẽ gây `NullPointerException`.\n- Nhầm `^` là luỹ thừa; nó là XOR. Luỹ thừa dùng `Math.pow`.\n\n### Tự kiểm tra\n- `5 / 2`, `5 % 2`, `-5 % 2`, `5 / 2.0` lần lượt bằng bao nhiêu?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro4-1",
+    "ten": "1.D — 📑 Học theo từng slide · Learning the Java Language: kiểu, mảng, toán tử, ép kiểu, phạm vi (slide 1–27)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro5-1",
+    "ten": "1.E — 📑 Học theo từng slide · Numbers and Strings (1/2): lớp bao, Math, tự đóng/mở hộp, Character (slide 1–13)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=number-bits",
+    "ten": "Số âm và số thực trong máy tính",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Method Chaining (Chaining phương thức)": {
+  "body": "**Method chaining** là gọi nhiều phương thức liên tiếp trên cùng một biểu thức, vì mỗi phương thức *trả về một đối tượng* mà phương thức kế tiếp có thể gọi tiếp.\n\n```java\n// Với String (bất biến): mỗi phương thức trả về String MỚI\nString ketQua = \"  Hello Java  \".trim().toUpperCase().replace(\"JAVA\", \"WORLD\");\n// \"HELLO WORLD\"\n\n// Với StringBuilder: mỗi append trả về chính this\nString s = new StringBuilder()\n        .append(\"id=\").append(42)\n        .append(\", ten=\").append(\"An\")\n        .toString();\n```\n\n### Cách tự viết lớp có thể chaining\nĐể chain được, phương thức \"cấu hình\" trả về `this`:\n```java\nclass Email {\n    private String to, subject;\n    Email to(String v)      { this.to = v;      return this; }\n    Email subject(String v) { this.subject = v; return this; }\n}\nnew Email().to(\"a@b.com\").subject(\"Chào\");\n```\nMẫu này là nền của **Builder pattern** và của chuỗi thao tác trên Stream (`list.stream().filter(...).map(...).toList()`).\n\n### Ý chính\n- Code ngắn, đọc từ trái sang phải như một câu.\n- Hiểu rõ phương thức trả về cái gì: với kiểu bất biến (`String`) là đối tượng mới, với kiểu \"builder\" là chính nó.\n\n### Lỗi hay gặp\n- Chuỗi quá dài khó gỡ lỗi (stack trace chỉ cho một dòng). Tách ra biến trung gian khi cần.\n- Một khâu trả về `null` làm cả chuỗi sau đó ném `NullPointerException`.\n- Quên gán kết quả với `String`: `s.trim();` không đổi `s`, phải viết `s = s.trim();`.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro5-2",
+    "ten": "1.F — 📑 Học theo từng slide · Numbers and Strings (2/2): String, StringBuilder, Scanner, format (slide 14–30)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs4-2",
+    "ten": "⭐ CS.4 — 📑 Học theo từng slide · Bất biến (2): sao chép, factory, builder, tiền, record (slide 14–26)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Nền tảng › Vòng đời đối tượng (Object Lifecycle)": {
+  "body": "Một đối tượng Java đi qua các giai đoạn: **tạo → dùng → hết người dùng → bị thu gom**.\n\n1. **Nạp lớp** (lần đầu lớp được dùng): JVM nạp `.class`, chạy khối `static`.\n2. **Cấp phát**: `new Student(\"An\")` xin vùng nhớ trên **heap** và đặt các field về giá trị mặc định.\n3. **Khởi tạo**: chạy constructor (sau khi lớp cha khởi tạo xong), field được gán giá trị thật.\n4. **Sử dụng**: gọi phương thức qua *tham chiếu*. Có thể có nhiều tham chiếu cùng trỏ một đối tượng.\n5. **Không còn truy cập được**: khi không còn tham chiếu nào \"từ gốc\" (biến local đang sống, biến static, luồng…) trỏ tới nó, đối tượng *đủ điều kiện* (eligible) để thu gom.\n6. **Thu gom rác**: GC giải phóng bộ nhớ vào một thời điểm JVM tự chọn — bạn không điều khiển được.\n\n```java\nStudent a = new Student(\"An\");   // a trỏ tới đối tượng\nStudent b = a;                    // hai tham chiếu, MỘT đối tượng\na = null;                         // vẫn còn b nên chưa bị thu gom\nb = null;                         // giờ đủ điều kiện thu gom\n```\n\n### Ý chính\n- Không có `delete` như C++: bạn chỉ \"buông\" tham chiếu.\n- `System.gc()` chỉ là *gợi ý*, đừng dựa vào nó.\n- `finalize()` đã lỗi thời (deprecated for removal), không dùng. Tài nguyên ngoài bộ nhớ (tệp, kết nối) phải đóng bằng `try-with-resources`.\n- GC dựa trên **khả năng truy cập**, không đếm tham chiếu, nên hai đối tượng trỏ vòng cho nhau mà không ai trỏ tới vẫn bị dọn.\n\n### Lỗi hay gặp\n- **Rò rỉ bộ nhớ kiểu Java**: giữ đối tượng trong `Map` static (cache không giới hạn) hoặc listener không gỡ, khiến GC không dọn được.\n- Hứa \"đóng tài nguyên khi GC chạy\" — GC chỉ lo bộ nhớ, không lo tệp/socket.\n\n### Tự kiểm tra\n- Trong ví dụ trên, sau dòng nào đối tượng đủ điều kiện thu gom? Vì sao `System.gc()` không đảm bảo gì?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro7-1",
+    "ten": "2.A — 📑 Học theo từng slide · Quản lý bộ nhớ trong Java: stack, heap, tham chiếu, thu gom rác (slide 1–9)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-2",
+    "ten": "2.C — 📑 Học theo từng slide · Encapsulation (2/3): truyền tham số, new, demo constructor (slide 16–25)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs5-2",
+    "ten": "⭐ CS.5 — 📑 Học theo từng slide · Bên trong JVM (2): rò rỉ bộ nhớ, OutOfMemoryError, JIT, container (slide 13–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=stack-heap",
+    "ten": "Stack và Heap — biến của bạn nằm ở đâu",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Packages": {
+  "body": "**Package** là cách nhóm các class liên quan vào một \"không gian tên\", giống thư mục chứa tệp. Nhờ vậy hai class cùng tên (`java.util.List` và `java.awt.List`) không xung đột, và bạn kiểm soát được ai được truy cập gì.\n\n```java\n// tệp: src/com/example/shop/Product.java\npackage com.example.shop;      // phải là dòng đầu tiên\n\npublic class Product { }\n```\n```java\n// tệp khác\npackage com.example.app;\nimport com.example.shop.Product;   // hoặc dùng tên đầy đủ\n\npublic class Main {\n    public static void main(String[] args) {\n        Product p = new Product();\n    }\n}\n```\n\n### Ý chính\n- **Cấu trúc thư mục khớp tên package**: `com.example.shop` ↔ `com/example/shop/`.\n- Quy ước đặt tên: chữ thường, theo tên miền đảo ngược (`com.congty.duan.module`).\n- `import` chỉ giúp khỏi gõ tên đầy đủ, không \"nạp\" thêm gì. `java.lang` (String, Math…) được import sẵn.\n- Phạm vi truy cập mặc định (không ghi từ khoá) là **package-private**: chỉ các class cùng package thấy được.\n- Class không khai báo `package` rơi vào *default package* — chỉ chấp nhận khi học, tránh trong dự án thật.\n- Muốn chạy class có package từ dòng lệnh, đứng ở thư mục gốc và dùng tên đầy đủ: `java com.example.app.Main`.\n\n### Lỗi hay gặp\n- \"Could not find or load main class\": gõ sai tên package hoặc đứng sai thư mục.\n- Thư mục và khai báo `package` không khớp nhau.\n- `import com.example.*` không nhập luôn các package con (`com.example.shop` phải import riêng).\n- Hai package cùng có class tên `Date` mà import cả hai sẽ xung đột; dùng tên đầy đủ cho một cái.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-3",
+    "ten": "3.A — 📑 Học theo từng slide · Encapsulation (3/3): package, mức truy cập, varargs, case study (slide 26–40)",
+    "nguon": "Object-Oriented Programming · Chương 3",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-on-ch3",
+    "ten": "3.2 — 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt · Đóng gói làm thật: truy cập, package, jar, varargs",
+    "nguon": "Object-Oriented Programming · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Nền tảng › Initializer Block & Constructor Chaining": {
+  "body": "Khi bạn viết `new Con()`, Java không chỉ chạy constructor của `Con`. Nó chạy cả một **chuỗi khởi tạo** theo thứ tự cố định — hiểu chuỗi này giúp tránh các lỗi kiểu \"field vẫn là `null` dù mình đã gán\".\n\n### Hai loại khối khởi tạo\n- **Static initializer** `static { ... }`: chạy **một lần** khi lớp được nạp (lần đầu dùng).\n- **Instance initializer** `{ ... }`: chạy **mỗi lần** `new`, ngay *sau* `super()` và *trước* thân constructor. Nó và các field có giá trị khởi tạo chạy theo thứ tự xuất hiện trong mã.\n\n### Constructor chaining\n- `this(...)` gọi constructor khác trong cùng lớp (để khỏi lặp code); `super(...)` gọi constructor lớp cha. Một trong hai phải là **câu lệnh đầu tiên**; nếu bạn không viết, trình biên dịch tự thêm `super()`.\n\n```java\nclass A {\n    static { System.out.println(\"A static\"); }\n    { System.out.println(\"A init\"); }\n    A() { System.out.println(\"A ctor\"); }\n}\nclass B extends A {\n    static { System.out.println(\"B static\"); }\n    { System.out.println(\"B init\"); }\n    B() { super(); System.out.println(\"B ctor\"); }\n}\nnew B();\n// A static, B static, A init, A ctor, B init, B ctor\n```\n\n### Ý chính\n- Thứ tự: static lớp cha → static lớp con → (init + constructor) lớp cha → (init + constructor) lớp con.\n- Nếu constructor bắt đầu bằng `this(...)`, các khối init chỉ chạy một lần, trong constructor *được gọi tới*.\n- Lớp cha không có constructor không tham số thì lớp con phải gọi `super(...)` tường minh.\n\n### Lỗi hay gặp\n- Gọi phương thức bị **override** từ constructor lớp cha: nó chạy khi field của lớp con *chưa được gán* (đang là `0`/`null`).\n- Dùng `this(...)` và `super(...)` cùng lúc trong một constructor (không được).\n- Vòng gọi `this(...)` qua lại giữa hai constructor → lỗi biên dịch.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-2",
+    "ten": "2.C — 📑 Học theo từng slide · Encapsulation (2/3): truyền tham số, new, demo constructor (slide 16–25)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-cs5-on",
+    "ten": "⭐ CS.5 — 🧪 Bài tập · bytecode, thứ tự khởi tạo, rò rỉ HashSet, lỗi bộ nhớ, đếm JIT, heap container",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Nền tảng › Pass by Value / Pass by Reference": {
+  "body": "**Java luôn truyền đối số theo giá trị** (pass by value) — không có ngoại lệ. Điều gây nhầm lẫn là \"giá trị\" của một biến đối tượng là một **tham chiếu** (một \"mũi tên\" tới đối tượng trên heap).\n\n- Với **kiểu nguyên thủy**: phương thức nhận *bản sao* của số. Sửa bản sao không ảnh hưởng biến gốc.\n- Với **đối tượng**: phương thức nhận *bản sao của tham chiếu*. Hai tham chiếu cùng trỏ một đối tượng nên **thay đổi nội dung đối tượng** thì thấy ở ngoài; nhưng **gán tham chiếu sang đối tượng khác** thì không ảnh hưởng ngoài.\n\n```java\nstatic void tang(int x)        { x = x + 1; }           // vô hiệu với biến gốc\nstatic void doiTen(Person p)   { p.name = \"Bình\"; }     // sửa đối tượng thật\nstatic void gan(Person p)      { p = new Person(\"Cường\"); } // chỉ đổi bản sao tham chiếu\n\nint n = 5;            tang(n);          // n vẫn là 5\nPerson a = new Person(\"An\");\ndoiTen(a);            // a.name == \"Bình\"\ngan(a);               // a vẫn là \"Bình\"\n```\n\n### Ý chính\n- Vì vậy không viết được hàm `swap(a, b)` hoán đổi hai biến thường.\n- `String` và các kiểu bọc (`Integer`…) bất biến nên \"sửa\" trong hàm không đổi bản gốc.\n- Muốn trả nhiều kết quả: trả về đối tượng/`record`, hoặc mảng.\n\n### Lỗi hay gặp\n- Nói \"đối tượng truyền theo tham chiếu\" — không chính xác: chính tham chiếu được truyền *theo giá trị*.\n- Mong đợi hàm `gan(p)` thay đổi biến của người gọi.\n- Sửa trực tiếp tham số là `List`/`Map` do người gọi đưa vào mà không báo (tác dụng phụ ngoài ý muốn); cân nhắc sao chép phòng thủ.\n\n### Tự kiểm tra\n- Vì sao `doiTen(a)` đổi được tên còn `gan(a)` thì không?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-2",
+    "ten": "2.C — 📑 Học theo từng slide · Encapsulation (2/3): truyền tham số, new, demo constructor (slide 16–25)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=stack-heap",
+    "ten": "Stack và Heap — biến của bạn nằm ở đâu",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Documentation & Javadoc": {
+  "body": "**Javadoc** là công cụ chuẩn của JDK để sinh tài liệu API dạng HTML từ các comment đặc biệt `/** ... */` đặt ngay trước class, phương thức hoặc field. Các thư viện Java, IDE (hiện popup khi rê chuột) và trang tài liệu chính thức đều dùng nó.\n\n```java\n/**\n * Tính giá sau giảm.\n *\n * <p>Giá trị trả về luôn không âm.</p>\n *\n * @param gia  giá gốc, phải &gt;= 0\n * @param tyLe tỷ lệ giảm trong khoảng [0, 1]\n * @return giá sau khi giảm\n * @throws IllegalArgumentException nếu tham số ngoài khoảng cho phép\n * @see #tinhThue(double)\n */\npublic static double giamGia(double gia, double tyLe) { ... }\n```\n\nSinh tài liệu: `javadoc -d docs -sourcepath src com.example.shop`.\n\n### Ý chính\n- **Câu đầu tiên** là phần tóm tắt, xuất hiện trong danh sách; viết thành một câu hoàn chỉnh.\n- Thẻ thường dùng: `@param`, `@return`, `@throws`, `@see`, `@since`, `{@code x}` (hiển thị code), `{@link Class#method}` (liên kết).\n- Comment có HTML nên ký tự `<`, `>`, `&` cần viết `&lt;`, `&gt;`, `&amp;` hoặc bọc trong `{@code}`.\n- Bắt buộc viết cho **API công khai** (public/protected); phần cài đặt nội bộ dùng comment `//` thường.\n\n### Lỗi hay gặp\n- Javadoc chỉ lặp lại tên phương thức (\"Lấy tên\" cho `getName`) mà không nói ràng buộc, đơn vị, giá trị đặc biệt (`null`, rỗng).\n- Sửa code mà không sửa tài liệu nên comment nói sai.\n- Dùng `/** */` cho ghi chú nội bộ làm tài liệu sinh ra lẫn lộn."
+ },
+ "Nền tảng › Cú pháp cơ bản (Basic Syntax)": {
+  "body": "Mọi chương trình Java đều dùng chung một \"khung\" cú pháp. Nắm vững khung này là bước đầu để đọc được code của người khác.\n\n```java\npackage com.example;                 // (tuỳ chọn) khai báo package\n\nimport java.util.Scanner;            // nhập thư viện\n\n/** Chương trình mẫu. */\npublic class Greeter {               // tên class = tên tệp Greeter.java\n    // comment một dòng\n    /* comment nhiều dòng */\n    public static void main(String[] args) {   // điểm vào chương trình\n        Scanner in = new Scanner(System.in);\n        String ten = in.nextLine();\n        System.out.println(\"Xin chào, \" + ten);\n    }\n}\n```\n\n### Ý chính\n- **Mọi thứ nằm trong class**; mỗi tệp `.java` có tối đa một class `public` và tên tệp phải trùng.\n- **Phân biệt hoa/thường**: `Main` khác `main`.\n- Quy ước đặt tên (coding convention): class `PascalCase`, biến và phương thức `camelCase`, hằng `UPPER_SNAKE_CASE`, package chữ thường. Thụt lề 4 khoảng trắng, `{` đặt cuối dòng.\n- Từ khoá (`class`, `static`, `int`…) không dùng làm tên định danh.\n- Có thể khai báo `var` cho biến local từ Java 10 (`var n = 5;`), kiểu vẫn được suy luận tĩnh.\n\n### Lỗi hay gặp\n- Thiếu dấu `;`, `}` hoặc `)` — trình biên dịch thường báo ở dòng kế tiếp.\n- Đặt tên `class` thường (`greeter`) hoặc tên tệp không khớp.\n- `System.out.println` viết sai hoa/thường (`system.out…`).",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-1-2-cu-phap-java",
+    "ten": "1.2 — Cú pháp Java cốt lõi (từ C sang Java)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro3-2",
+    "ten": "1.C — 📑 Học theo từng slide · Getting Started (2/2): chương trình đầu tiên, cách chạy, công cụ JDK, lỗi hay gặp (slide 11–26)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/oop-with-java-lab/learn?lessonSlug=lab211-f26-dat-ten-convention",
+    "ten": "B.6 — Đặt tên và coding convention",
+    "nguon": "OOP with Java Lab · Fall 2026 · B — Kiến trúc 9 package của",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LAB211"
+   }
+  ]
+ },
+ "Nền tảng › Kiểu dữ liệu (Data Types)": {
+  "body": "Java có **8 kiểu nguyên thủy** lưu giá trị trực tiếp, và **kiểu tham chiếu** (mọi thứ còn lại) lưu địa chỉ tới đối tượng.\n\n| Kiểu | Kích thước | Ghi chú | Mặc định (field) |\n|---|---|---|---|\n| `byte` | 8 bit | -128..127 | `0` |\n| `short` | 16 bit | -32 768..32 767 | `0` |\n| `int` | 32 bit | ±2,1 tỷ (kiểu số nguyên mặc định) | `0` |\n| `long` | 64 bit | hậu tố `L`: `10L` | `0L` |\n| `float` | 32 bit | hậu tố `f`: `3.14f` | `0.0f` |\n| `double` | 64 bit | số thực mặc định | `0.0` |\n| `char` | 16 bit | một đơn vị UTF-16, vd `'A'` | `'\\u0000'` |\n| `boolean` | — | `true` / `false` | `false` |\n\n```java\nint tong = 1_000_000;                  // dấu _ cho dễ đọc\nlong lon = 3_000_000_000L;\nint tran = Integer.MAX_VALUE + 1;      // -2147483648: tràn số\nInteger hop = 42;                      // autoboxing int -> Integer\n```\nMỗi kiểu nguyên thủy có **lớp bao** (wrapper): `Integer`, `Double`, `Boolean`… dùng trong `List<Integer>`, có thể là `null`.\n\n### Ý chính\n- Kiểu tham chiếu có giá trị mặc định `null`.\n- Số nguyên **tràn số âm thầm**, không báo lỗi.\n- `float`/`double` biểu diễn xấp xỉ nhị phân; tiền tệ dùng `BigDecimal`.\n- So sánh hai `Integer` bằng `==` chỉ đúng với giá trị nhỏ (bộ nhớ đệm -128..127); dùng `equals`.\n\n### Lỗi hay gặp\n- `float f = 3.14;` lỗi biên dịch vì `3.14` là `double`.\n- `NullPointerException` khi tự mở hộp (unboxing) một `Integer` đang là `null`.\n- Nhầm `char` với `String`: `'a'` khác `\"a\"`.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro4-1",
+    "ten": "1.D — 📑 Học theo từng slide · Learning the Java Language: kiểu, mảng, toán tử, ép kiểu, phạm vi (slide 1–27)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro5-1",
+    "ten": "1.E — 📑 Học theo từng slide · Numbers and Strings (1/2): lớp bao, Math, tự đóng/mở hộp, Character (slide 1–13)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=number-bits",
+    "ten": "Số âm và số thực trong máy tính",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Chuỗi & Phương thức xử lý chuỗi (Strings)": {
+  "body": "`String` là kiểu tham chiếu đặc biệt: **bất biến** (immutable) — một khi tạo ra, nội dung không đổi. Mọi phương thức \"sửa\" thực ra trả về một `String` mới.\n\n```java\nString s = \"Java\";\ns.toUpperCase();              // KHÔNG đổi s\ns = s.toUpperCase();          // phải gán lại: \"JAVA\"\n\nString a = \"hi\", b = \"hi\";\nString c = new String(\"hi\");\nSystem.out.println(a == b);       // true  — cùng đối tượng trong string pool\nSystem.out.println(a == c);       // false — c là đối tượng khác\nSystem.out.println(a.equals(c));  // true  — so sánh nội dung\n```\n\n### Phương thức hay dùng\n`length()`, `charAt(i)`, `substring(from, to)`, `indexOf`, `contains`, `startsWith`, `split(\",\")`, `replace`, `trim()`/`strip()`, `isBlank()`, `String.join(\"-\", list)`, `String.format(\"%.2f\", x)`, `equals`/`equalsIgnoreCase`, `compareTo`.\n\n### Ghép chuỗi hiệu quả\nNối chuỗi trong vòng lặp bằng `+=` tạo nhiều đối tượng trung gian. Dùng **`StringBuilder`** (không đồng bộ, nhanh); `StringBuffer` là bản đồng bộ cũ, ít cần.\n```java\nStringBuilder sb = new StringBuilder();\nfor (int i = 0; i < 5; i++) sb.append(i).append(',');\nString ketQua = sb.toString();\n```\n\n### Lỗi hay gặp\n- So sánh chuỗi bằng `==` — đúng/sai thất thường; luôn dùng `equals` (viết `\"abc\".equals(x)` để tránh `NullPointerException`).\n- Quên gán lại kết quả của `trim()`, `replace()`…\n- `split` nhận **regex**: `split(\".\")` hoặc `split(\"|\")` không ra kết quả như ý, phải thoát `\"\\\\.\"`.\n- Ghép chuỗi trong vòng lặp lớn bằng `+=`, làm chậm chương trình.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro5-2",
+    "ten": "1.F — 📑 Học theo từng slide · Numbers and Strings (2/2): String, StringBuilder, Scanner, format (slide 14–30)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro5-1",
+    "ten": "1.E — 📑 Học theo từng slide · Numbers and Strings (1/2): lớp bao, Math, tự đóng/mở hộp, Character (slide 1–13)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/oop-with-java-lab/learn?lessonSlug=lab211-xu-ly-chuoi",
+    "ten": "2.3 — Xử lý chuỗi",
+    "nguon": "OOP with Java Lab · Phần 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LAB211"
+   }
+  ]
+ },
+ "Nền tảng › Thuộc tính & Phương thức (Attributes & Methods)": {
+  "body": "**Thuộc tính (field)** là dữ liệu của đối tượng; **phương thức (method)** là hành vi. Chúng cùng định nghĩa một class.\n\n```java\npublic class Account {\n    private double balance;              // field (thuộc tính)\n    private static int count = 0;        // field static: dùng chung\n    public static final double MIN = 0;  // hằng\n\n    public void deposit(double amount) { // method: nhận tham số, không trả gì\n        if (amount <= 0) throw new IllegalArgumentException(\"amount > 0\");\n        balance += amount;\n    }\n    public double getBalance() {         // method: trả về giá trị\n        return balance;\n    }\n    public static int total(int... xs) { // varargs\n        int s = 0; for (int x : xs) s += x; return s;\n    }\n}\n```\n\n### Cấu tạo một phương thức\n`[phạm vi truy cập] [static] [kiểu trả về] tên(tham số) { thân }`. **Chữ ký** (signature) gồm tên + danh sách kiểu tham số — dùng để phân biệt các phương thức nạp chồng.\n\n### Ý chính\n- Bổ từ truy cập: `private` (trong lớp), mặc định (trong package), `protected` (package + lớp con), `public` (mọi nơi).\n- `static`: thuộc về lớp, gọi bằng `Account.total(1,2,3)`; không dùng được `this`.\n- `final` cho field: gán đúng một lần; cho phương thức: không cho override.\n- Tham số truyền theo giá trị; phương thức `void` không trả gì, các phương thức khác phải `return`.\n\n### Lỗi hay gặp\n- Gọi phương thức không-static từ `main` (static) mà không tạo đối tượng.\n- Quên `return` ở một nhánh → lỗi biên dịch \"missing return statement\".\n- Để field `public` và để người ngoài sửa tuỳ ý — dùng `private` + phương thức.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-2-1-lop-doi-tuong",
+    "ten": "2.1 — Trường, phương thức & constructor",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-1",
+    "ten": "2.B — 📑 Học theo từng slide · Encapsulation (1/3): thiết kế lớp, constructor, this, getter/setter (slide 1–15)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-2",
+    "ten": "2.C — 📑 Học theo từng slide · Encapsulation (2/3): truyền tham số, new, demo constructor (slide 16–25)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Nền tảng › Nền tảng OOP (Basics of OOP)": {
+  "body": "**Lập trình hướng đối tượng (OOP)** tổ chức chương trình thành các **đối tượng** — mỗi đối tượng gói *dữ liệu* và *hành vi* thao tác trên dữ liệu đó — thay vì một dãy thủ tục rời rạc. Cả hệ sinh thái Java được thiết kế quanh ý tưởng này.\n\n### Bốn nguyên lý cốt lõi\n1. **Đóng gói** (encapsulation): giấu dữ liệu nội bộ (`private`), chỉ cho truy cập qua phương thức có kiểm soát.\n2. **Kế thừa** (inheritance): lớp con (`extends`) dùng lại và mở rộng lớp cha; biểu diễn quan hệ *is-a*.\n3. **Đa hình** (polymorphism): cùng lời gọi, hành vi tuỳ kiểu *thực* của đối tượng lúc chạy.\n4. **Trừu tượng** (abstraction): chỉ lộ ra \"làm gì\" (interface, abstract class), giấu \"làm thế nào\".\n\n```java\nabstract class Shape { abstract double area(); }\nclass Circle extends Shape {\n    private final double r;\n    Circle(double r) { this.r = r; }\n    double area() { return Math.PI * r * r; }\n}\nShape s = new Circle(2);        // kiểu tham chiếu Shape, đối tượng thật Circle\nSystem.out.println(s.area());   // gọi Circle.area() — đa hình\n```\n\n### Ý chính\n- Class là khuôn, object là thể hiện của khuôn đó.\n- Ưu tiên **composition** (có-một) hơn kế thừa khi quan hệ không thật sự *is-a*.\n- Lập trình theo **interface** giúp code lỏng ghép, dễ thay thế và dễ kiểm thử.\n\n### Lỗi hay gặp\n- Lạm dụng kế thừa chỉ để dùng lại vài dòng code.\n- Class \"thần thánh\" làm mọi việc, vi phạm trách nhiệm đơn.\n- Hiểu \"đóng gói\" là cứ thêm getter/setter cho mọi field — vẫn lộ hết ruột.\n\n### Tự kiểm tra\n- Nêu ví dụ đời thường cho từng nguyên lý. Đa hình cần những điều kiện gì (kế thừa/ghi đè)?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-1-1-tu-duy-oo",
+    "ten": "1.1 — Vì sao đối tượng? Thủ tục vs OO",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro1-1",
+    "ten": "1.A — 📑 Học theo từng slide · Introduction: độ phức tạp, trừu tượng, đóng gói, phân cấp, đa hình (slide 1–16)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/oop-with-java-lab/learn?lessonSlug=lab211-f26-oop-bon-tinh-chat",
+    "ten": "C.1 — 4 tính chất OOP, chỉ thẳng vào source của bạn",
+    "nguon": "OOP with Java Lab · Fall 2026 · C — OOP, SOLID và Design Pat",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LAB211"
+   }
+  ]
+ },
+ "OOP toàn diện › Classes, Objects & Attributes": {
+  "body": "**Class** là bản thiết kế (khuôn) mô tả một loại đối tượng: nó có những **thuộc tính** (dữ liệu) và **phương thức** (hành vi) nào. **Object** (đối tượng) là một thể hiện cụ thể tạo ra từ khuôn đó bằng `new`, mỗi object có bộ giá trị thuộc tính riêng.\n\n```java\npublic class Student {\n    private String name;\n    private double gpa;\n\n    public Student(String name, double gpa) {   // constructor\n        this.name = name;\n        this.gpa = gpa;\n    }\n    public String getName() { return name; }\n    public boolean isHonor() { return gpa >= 3.2; }\n\n    @Override\n    public String toString() { return name + \" (\" + gpa + \")\"; }\n}\n\nStudent a = new Student(\"An\", 3.5);\nStudent b = new Student(\"Bình\", 2.8);\nSystem.out.println(a);            // An (3.5)\nSystem.out.println(a.isHonor());  // true\n```\n\n### Ý chính\n- `new` cấp phát đối tượng trên heap rồi gọi constructor; biến `a` giữ **tham chiếu**.\n- **Constructor**: tên trùng tên class, không có kiểu trả về; không viết thì Java tạo constructor mặc định không tham số (hết tạo ngay khi bạn viết một constructor khác).\n- `this` là tham chiếu tới đối tượng hiện tại.\n- Mặc định `toString()` in ra kiểu `Student@1b6d3586`, hãy ghi đè để dễ debug.\n- `a == b` so sánh tham chiếu; so sánh nội dung cần `equals` (và `hashCode`) do bạn viết.\n\n### Lỗi hay gặp\n- `NullPointerException` vì khai báo `Student s;` rồi dùng mà chưa `new`.\n- Gán `b = a` rồi tưởng đã sao chép đối tượng (thực ra hai biến cùng trỏ một đối tượng).\n- Đặt tên thuộc tính và tham số trùng nhau mà quên `this.`.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-2-1-lop-doi-tuong",
+    "ten": "2.1 — Trường, phương thức & constructor",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-1",
+    "ten": "2.B — 📑 Học theo từng slide · Encapsulation (1/3): thiết kế lớp, constructor, this, getter/setter (slide 1–15)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=stack-heap",
+    "ten": "Stack và Heap — biến của bạn nằm ở đâu",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "OOP toàn diện › Encapsulation & Access Specifiers": {
+  "body": "**Đóng gói (encapsulation)** là giấu dữ liệu bên trong class và chỉ cho bên ngoài tác động qua các phương thức công khai. Mục đích: bảo vệ **bất biến** (invariant) của đối tượng — ví dụ số dư không bao giờ âm — và cho phép đổi cách cài đặt mà không phá code đang dùng nó.\n\n### Các mức truy cập\n| Từ khoá | Class | Package | Lớp con (khác package) | Mọi nơi |\n|---|---|---|---|---|\n| `private` | có | — | — | — |\n| *(mặc định)* | có | có | — | — |\n| `protected` | có | có | có | — |\n| `public` | có | có | có | có |\n\n```java\npublic class Account {\n    private double balance;                  // giấu\n\n    public double getBalance() { return balance; }\n\n    public void withdraw(double amount) {    // cửa duy nhất để đổi balance\n        if (amount <= 0 || amount > balance)\n            throw new IllegalArgumentException(\"Số tiền không hợp lệ\");\n        balance -= amount;\n    }\n}\n```\n\n### Ý chính\n- Field để `private`, phương thức công khai kiểm tra dữ liệu trước khi thay đổi.\n- Getter/setter chỉ có giá trị khi *có logic*; setter vô điều kiện cho mọi field gần như không khác để field `public`.\n- Cách mạnh nhất để bảo vệ: **bất biến** — field `final`, không có setter (như `String`, `record`).\n- Khi getter trả về `List`/mảng nội bộ, hãy trả bản sao hoặc `List.copyOf`/`unmodifiableList`, nếu không người ngoài sửa được ruột đối tượng.\n\n### Lỗi hay gặp\n- Để `public` cho tiện, rồi code khắp nơi phụ thuộc vào field đó.\n- Quên rằng `protected` cũng cho cả class cùng package truy cập.\n- Getter trả thẳng tham chiếu tới tập hợp thay đổi được → \"rò rỉ\" đóng gói.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-3-1-dong-goi",
+    "ten": "3.1 — Đóng gói & trừu tượng",
+    "nguon": "Object-Oriented Programming · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-3",
+    "ten": "3.A — 📑 Học theo từng slide · Encapsulation (3/3): package, mức truy cập, varargs, case study (slide 26–40)",
+    "nguon": "Object-Oriented Programming · Chương 3",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro8-1",
+    "ten": "2.B — 📑 Học theo từng slide · Encapsulation (1/3): thiết kế lớp, constructor, this, getter/setter (slide 1–15)",
+    "nguon": "Object-Oriented Programming · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "OOP toàn diện › Inheritance & Abstraction": {
+  "body": "**Kế thừa** cho phép lớp con (`extends`) nhận lại field và phương thức của lớp cha rồi thêm hoặc thay đổi hành vi. Nó biểu diễn quan hệ **is-a**: `Dog` *là một* `Animal`. **Trừu tượng** dùng `abstract class` để định ra một \"khuôn\" chung mà bản thân nó không thể `new` được.\n\n```java\nabstract class Shape {\n    protected final String name;\n    Shape(String name) { this.name = name; }\n    abstract double area();                    // chưa có thân: lớp con bắt buộc cài\n    public String describe() { return name + \": \" + area(); }\n}\nclass Rect extends Shape {\n    private final double w, h;\n    Rect(double w, double h) { super(\"Rect\"); this.w = w; this.h = h; }\n    @Override double area() { return w * h; }\n}\n// new Shape(\"x\");   // lỗi biên dịch — lớp trừu tượng không khởi tạo được\n```\n\n### Ý chính\n- Java chỉ có **đơn kế thừa lớp**: một lớp chỉ `extends` được một lớp.\n- `super(...)` gọi constructor cha (phải ở dòng đầu); `super.method()` gọi phương thức cha.\n- Lớp trừu tượng có thể có field, constructor, phương thức đã cài đặt *và* phương thức `abstract`.\n- Lớp con ghi đè (override) phương thức cha bằng `@Override`; `final` chặn ghi đè hoặc chặn kế thừa cả lớp.\n- Mọi lớp đều (gián tiếp) kế thừa `java.lang.Object`.\n\n### Khi nào nên dùng\nDùng abstract class khi các lớp con **chia sẻ trạng thái và code thật** (field chung, logic chung). Nếu chỉ cần hợp đồng hành vi thì dùng `interface`.\n\n### Lỗi hay gặp\n- Kế thừa chỉ để tái sử dụng code dù không phải *is-a* (nên dùng composition).\n- Lớp con phụ thuộc vào chi tiết cài đặt của lớp cha, nên thay đổi ở cha làm hỏng con (\"fragile base class\").\n- Quên gọi `super(...)` khi cha không có constructor mặc định → lỗi biên dịch.\n- Thu hẹp quyền truy cập khi override (`public` → `protected`) bị cấm.\n\n### Tự kiểm tra\n- Vì sao không `new` được lớp trừu tượng? Abstract class khác interface ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-4-1-ke-thua",
+    "ten": "4.1 — Kế thừa",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro9-1",
+    "ten": "4.A — 📑 Học theo từng slide · Inheritance: is-a, has-a, super, constructor, che giấu, ép kiểu (slide 1–17)",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-5-1-abstract-interface",
+    "ten": "5.1 — Abstract class & interface",
+    "nguon": "Object-Oriented Programming · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "OOP toàn diện › Interfaces & Polymorphism": {
+  "body": "**Interface** là một *hợp đồng*: danh sách hành vi mà lớp triển khai (`implements`) cam kết cung cấp. **Đa hình** là khả năng dùng một đối tượng thông qua kiểu interface/lớp cha mà hành vi thật được quyết định theo kiểu thực của đối tượng lúc chạy.\n\n```java\ninterface Payment {\n    double fee(double amount);                       // abstract mặc định\n    default String label() { return \"Thanh toán\"; }  // Java 8+\n    static Payment free() { return a -> 0; }         // phương thức static\n}\nclass Card implements Payment {\n    public double fee(double amount) { return amount * 0.02; }\n}\nclass Cash implements Payment {\n    public double fee(double amount) { return 0; }\n}\n\nList<Payment> list = List.of(new Card(), new Cash());\nfor (Payment p : list) {\n    System.out.println(p.fee(1000));    // 20.0 rồi 0.0 — cùng lời gọi, khác hành vi\n}\n```\n\n### Ý chính\n- Một lớp có thể `implements` **nhiều interface** (cách Java có \"đa kế thừa kiểu\").\n- Phương thức interface mặc định `public abstract`; field là `public static final`.\n- `default`/`static`/`private` method trong interface từ Java 8/9.\n- Thêm hành vi mới = thêm lớp mới triển khai interface, **không sửa** code đang dùng (nguyên lý đóng–mở).\n- Đa hình giúp bỏ chuỗi `if/else` kiểm tra loại đối tượng.\n\n### Lỗi hay gặp\n- Gọi phương thức chỉ có ở lớp con qua biến kiểu interface mà không ép kiểu.\n- Hai interface có `default` trùng tên → lớp triển khai phải tự override để giải quyết.\n- Dùng `instanceof` hàng loạt thay vì để đa hình làm việc.\n- Nhầm override với overload (xem bước Nạp chồng & Ghi đè).\n\n### Tự kiểm tra\n- Vì sao `List<Payment>` chứa được cả `Card` lẫn `Cash`? Khi nào chọn interface thay vì abstract class?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-5-1-abstract-interface",
+    "ten": "5.1 — Abstract class & interface",
+    "nguon": "Object-Oriented Programming · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro10-2",
+    "ten": "5.A — 📑 Học theo từng slide · Polymorphism (2/2): interface, lớp trừu tượng, lớp ẩn danh (slide 12–27)",
+    "nguon": "Object-Oriented Programming · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-4-2-da-hinh",
+    "ten": "4.2 — Đa hình",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "OOP toàn diện › Static / Final Keyword": {
+  "body": "### static: thuộc về lớp, không thuộc về đối tượng\nThành viên `static` chỉ có **một bản** dùng chung cho mọi đối tượng, truy cập qua tên lớp và không cần `new`.\n```java\npublic class IdGen {\n    private static int next = 1;                 // dùng chung\n    public static int newId() { return next++; } // gọi: IdGen.newId()\n}\n```\nPhương thức `static` không có `this`, không truy cập trực tiếp field không-static. Khối `static { }` chạy một lần khi nạp lớp.\n\n### final: \"không đổi\" tuỳ ngữ cảnh\n- **Biến/field `final`**: chỉ gán một lần. Với kiểu tham chiếu, *tham chiếu* không đổi nhưng *nội dung đối tượng* vẫn có thể đổi.\n- **Phương thức `final`**: không cho override.\n- **Lớp `final`**: không cho kế thừa (`String`, `Integer`).\n\n```java\npublic static final double PI_XAP_XI = 3.14159;  // hằng: static final + UPPER_SNAKE_CASE\nfinal List<String> ds = new ArrayList<>();\nds.add(\"a\");          // được — đổi nội dung\n// ds = new ArrayList<>();  // lỗi — gán lại tham chiếu\n```\n\n### Ý chính\n- Hằng dùng chung: `static final`.\n- Đối tượng bất biến: lớp `final` + mọi field `private final` + không có setter.\n- `static` hay bị lạm dụng thành \"biến toàn cục\"; hạn chế trạng thái `static` thay đổi được, vì khó kiểm thử và không an toàn đa luồng.\n\n### Lỗi hay gặp\n- Gọi `static` qua tham chiếu đối tượng (`obj.dem()`) — chạy được nhưng gây hiểu nhầm.\n- Nghĩ `final List` là danh sách bất biến.\n- Dùng `static` chỉ để \"gọi cho tiện\" từ `main` thay vì thiết kế lớp đúng nghĩa.",
+  "lessons": [
+   {
+    "href": "/courses/oop-with-java-lab/learn?lessonSlug=lab211-f26-access-modifier-static",
+    "ten": "C.2 — Access modifier và static: hai chỗ bị reject nhiều nhất",
+    "nguon": "OOP with Java Lab · Fall 2026 · C — OOP, SOLID và Design Pat",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LAB211"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-lab-3-dong-goi-va-luat-du-lieu",
+    "ten": "Lab 3 — 🏗️ CT Library: đóng gói và luật dữ liệu (access modifier, static, xoá, thống kê, review code)",
+    "nguon": "Object-Oriented Programming · Chương 3",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "OOP toàn diện › Enums & Records": {
+  "body": "### Enum: tập hằng có kiểu\n`enum` định nghĩa một tập **hữu hạn** các giá trị an toàn kiểu, thay cho \"số ma thuật\" (`0`, `1`, `2`) hay chuỗi tự do.\n```java\nenum Level {\n    LOW(1), MEDIUM(5), HIGH(10);             // mỗi hằng là một đối tượng\n\n    private final int weight;\n    Level(int weight) { this.weight = weight; }   // constructor luôn private\n    int weight() { return weight; }\n}\nLevel l = Level.valueOf(\"HIGH\");\nfor (Level x : Level.values()) System.out.println(x + \" \" + x.weight());\nString s = switch (l) { case LOW -> \"thấp\"; case MEDIUM -> \"vừa\"; case HIGH -> \"cao\"; };\n```\nEnum có thể có field, constructor, phương thức, và triển khai interface. Dùng `EnumMap`/`EnumSet` cho hiệu năng tốt.\n\n### Record (Java 16+): lớp dữ liệu bất biến\n```java\npublic record Point(int x, int y) {\n    public Point {                            // compact constructor: kiểm tra dữ liệu\n        if (x < 0 || y < 0) throw new IllegalArgumentException();\n    }\n}\nPoint p = new Point(1, 2);\np.x();                                        // accessor là x(), không phải getX()\n```\nCompiler tự sinh constructor chuẩn, accessor, `equals`, `hashCode`, `toString`.\n\n### Ý chính\n- Record: các field `private final`, lớp `final`, **không kế thừa** được lớp khác (nhưng `implements` interface được).\n- Record hợp cho DTO, khoá của `Map`, giá trị trả về nhiều thành phần.\n- Enum so sánh bằng `==` an toàn vì mỗi hằng là duy nhất.\n\n### Lỗi hay gặp\n- Dùng `String`/`int` để biểu diễn trạng thái hữu hạn rồi gõ sai chính tả.\n- Thêm setter hoặc field có thể đổi vào `record` (không được; record là bất biến nông — nếu field là `List` thì nội dung vẫn đổi được).\n- Dùng `ordinal()` để lưu xuống CSDL: thêm hằng ở giữa sẽ làm hỏng dữ liệu cũ. Lưu tên hằng.\n\n### Tự kiểm tra\n- Khi nào dùng enum thay cho hằng `static final int`? Record khác một lớp thường có getter/setter ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs3-1",
+    "ten": "⭐ CS.3 — 📑 Học theo từng slide · Java hiện đại (1): phiên bản, var, text block, switch, enum, record (slide 1–13)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-cs3-on",
+    "ten": "⭐ CS.3 — 🧪 Bài tập · record, enum, thanh toán sealed, text block, luồng ảo, viết lại cho JDK 8",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "OOP toàn diện › Static Binding và Dynamic Binding": {
+  "body": "**Binding** là việc xác định *phương thức nào* sẽ chạy khi gặp một lời gọi.\n\n- **Static binding (early)**: quyết định lúc **biên dịch**, dựa vào *kiểu khai báo* của biến. Áp dụng cho phương thức `static`, `private`, `final`, constructor, **nạp chồng** (overload) và truy cập **field**.\n- **Dynamic binding (late)**: quyết định lúc **chạy**, dựa vào *kiểu thực* của đối tượng. Áp dụng cho phương thức thể hiện bị **ghi đè** (override) — nền tảng của đa hình.\n\n```java\nclass Animal {\n    String name = \"animal\";\n    void speak()          { System.out.println(\"...\"); }\n    static void kind()    { System.out.println(\"Animal\"); }\n}\nclass Dog extends Animal {\n    String name = \"dog\";\n    @Override void speak() { System.out.println(\"Gâu\"); }\n    static void kind()     { System.out.println(\"Dog\"); }\n}\nAnimal a = new Dog();\na.speak();            // Gâu     — dynamic: theo kiểu thực Dog\nSystem.out.println(a.name); // animal  — field: theo kiểu khai báo Animal\na.kind();             // Animal  — static: theo kiểu khai báo\n```\n\n### Ý chính\n- Overriding ⇒ dynamic; overloading ⇒ static (chọn theo kiểu *tĩnh* của đối số).\n- JVM thực hiện dynamic binding qua **bảng phương thức ảo** (vtable) của lớp thực.\n- Field và `static` method không có đa hình: chúng bị \"che\" (hiding), không bị \"ghi đè\".\n\n### Lỗi hay gặp\n- Gọi `void in(Object o)` và `void in(String s)` với `Object x = \"hi\"` — chạy bản `Object` vì kiểu khai báo là `Object`.\n- Tưởng `static` method có thể override.\n- Mong field của lớp con thay thế field cùng tên của lớp cha.\n\n### Tự kiểm tra\n- Vì sao `a.name` in \"animal\" còn `a.speak()` in \"Gâu\"?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro10-1",
+    "ten": "4.B — 📑 Học theo từng slide · Polymorphism (1/2): nạp chồng, ghi đè, ràng buộc động (slide 1–11)",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-4-2-da-hinh",
+    "ten": "4.2 — Đa hình",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "OOP toàn diện › Nested Classes (Lớp lồng nhau)": {
+  "body": "Java cho phép khai báo một lớp **bên trong** lớp khác. Có bốn loại.\n\n```java\npublic class Outer {\n    private int x = 10;\n\n    static class Nested {                   // 1. static nested: không giữ Outer\n        void hi() { System.out.println(\"nested\"); }\n    }\n    class Inner {                           // 2. inner (member): gắn với MỘT Outer cụ thể\n        void show() { System.out.println(x); }   // truy cập được cả field private của Outer\n    }\n    void run() {\n        class Local { }                     // 3. local: trong phương thức\n        Runnable r = new Runnable() {       // 4. anonymous: lớp không tên, tạo tại chỗ\n            @Override public void run() { System.out.println(\"anon\"); }\n        };\n    }\n}\nOuter.Nested n = new Outer.Nested();\nOuter.Inner  i = new Outer().new Inner();\n```\n\n### Ý chính\n- **Static nested**: chỉ nhóm cho gọn (như `Map.Entry`, builder), không cần đối tượng ngoài.\n- **Inner**: giữ một tham chiếu ẩn tới `Outer.this`, truy cập được thành viên của `Outer`.\n- **Anonymous class**: thường dùng cho callback; với interface một phương thức thì **lambda** gọn hơn.\n- Local/anonymous chỉ dùng được biến local **final hoặc hiệu lực final** (effectively final).\n\n### Lỗi hay gặp\n- Dùng inner class (không static) khi không cần `Outer`: tham chiếu ẩn gây **rò rỉ bộ nhớ** (vd. giữ cả `Activity`/đối tượng lớn).\n- Khởi tạo `new Inner()` từ `static main` mà không có đối tượng `Outer`.\n- Sửa biến local được lớp ẩn danh bắt (capture) → lỗi biên dịch.\n\n### Tự kiểm tra\n- Khác biệt giữa static nested và inner là gì? Khi nào lambda thay được anonymous class?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro10-2",
+    "ten": "5.A — 📑 Học theo từng slide · Polymorphism (2/2): interface, lớp trừu tượng, lớp ẩn danh (slide 12–27)",
+    "nguon": "Object-Oriented Programming · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs1-2",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Lambda: interface hàm, method reference, chuỗi Comparator (slide 13–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "OOP toàn diện › Annotations": {
+  "body": "**Annotation** là siêu dữ liệu (metadata) gắn vào class, phương thức, field, tham số… bằng cú pháp `@Ten`. Bản thân annotation **không làm gì**; một công cụ khác (trình biên dịch, framework, thư viện) đọc nó rồi hành động.\n\n### Annotation có sẵn\n- `@Override`: báo trình biên dịch kiểm tra đây đúng là ghi đè.\n- `@Deprecated`: đánh dấu lỗi thời.\n- `@SuppressWarnings(\"unchecked\")`: tắt cảnh báo.\n- `@FunctionalInterface`: bắt interface chỉ có một phương thức trừu tượng.\n\n### Tự định nghĩa và đọc bằng reflection\n```java\nimport java.lang.annotation.*;\n\n@Retention(RetentionPolicy.RUNTIME)   // còn tồn tại lúc chạy\n@Target(ElementType.METHOD)           // chỉ gắn lên phương thức\n@interface Timed { String label() default \"\"; }\n\nclass Service {\n    @Timed(label = \"tai-du-lieu\")\n    void load() { }\n}\n\nfor (var m : Service.class.getDeclaredMethods()) {\n    Timed t = m.getAnnotation(Timed.class);\n    if (t != null) System.out.println(m.getName() + \" -> \" + t.label());\n}\n```\n\n### Ý chính\n- `@Retention`: `SOURCE` (chỉ ở mã nguồn), `CLASS` (trong `.class`), `RUNTIME` (đọc được lúc chạy).\n- `@Target` giới hạn chỗ được gắn.\n- Spring (`@Service`, `@GetMapping`), JUnit (`@Test`), JPA (`@Entity`) đọc annotation **lúc chạy** bằng reflection; Lombok xử lý chúng **lúc biên dịch** (annotation processor).\n- Hiểu annotation giúp bạn \"giải mã\" được phần lớn \"phép thuật\" của framework Java.\n\n### Lỗi hay gặp\n- Quên `RetentionPolicy.RUNTIME` nên `getAnnotation` luôn trả `null`.\n- Tin rằng annotation tự thực thi logic; không có bộ xử lý đọc nó thì nó vô tác dụng.\n- Lạm dụng annotation che khuất luồng chạy khiến khó debug."
+ },
+ "OOP toàn diện › Java Modules (Project Jigsaw)": {
+  "body": "**Java Platform Module System (JPMS)**, còn gọi là Project Jigsaw, ra mắt ở Java 9. Một **module** là nhóm các package kèm một bản mô tả `module-info.java` khai báo rõ: module này **cần** gì và **mở ra** gì.\n\n```java\n// module-info.java đặt ở gốc mã nguồn\nmodule com.example.shop {\n    requires java.sql;                       // phụ thuộc module khác\n    requires transitive com.example.core;\n    exports com.example.shop.api;            // chỉ package này được bên ngoài dùng\n    // com.example.shop.internal không exports => bên ngoài không truy cập được\n}\n```\n\n### Lợi ích\n- **Đóng gói mạnh**: ngay cả class `public` cũng bị ẩn nếu package không được `exports` (mạnh hơn `package-private`).\n- **Phụ thuộc rõ ràng**: kiểm tra khi biên dịch và khi khởi động, thay vì lỗi `ClassNotFoundException` muộn.\n- **Runtime gọn**: dùng `jlink` tạo bản JRE tuỳ chỉnh chỉ chứa module cần thiết.\n- Chính JDK đã được module hoá (`java.base`, `java.sql`…). Xem bằng `java --list-modules`.\n\n### Ý chính\n- Ứng dụng không bắt buộc dùng module; phần lớn dự án (nhất là Spring Boot) vẫn chạy bằng *classpath* truyền thống.\n- Thư viện không module hoá nằm ở \"unnamed module\"/\"automatic module\".\n- Module cần thiết hơn khi bạn viết thư viện lớn hoặc cần runtime nhỏ.\n\n### Lỗi hay gặp\n- Package dùng reflection (Spring, Hibernate) bị chặn nếu không `opens`.\n- Hai module cùng chứa một package (\"split package\") không được phép.\n- Gộp module-info vào dự án cũ mà không kiểm tra thư viện bên thứ ba có tương thích."
+ },
+ "OOP toàn diện › Nạp chồng & Ghi đè phương thức (Overloading / Overriding)": {
+  "body": "Hai khái niệm có tên gần nhau nhưng khác hẳn.\n\n### Nạp chồng (overloading)\n**Cùng tên, khác tham số** (số lượng hoặc kiểu), trong cùng một lớp (hoặc cùng cây kế thừa). Trình biên dịch chọn phiên bản theo *kiểu khai báo* của đối số — quyết định lúc **biên dịch**.\n```java\nint cong(int a, int b)       { return a + b; }\ndouble cong(double a, double b) { return a + b; }\nString cong(String a, String b) { return a + b; }\n```\nChỉ khác **kiểu trả về** thì *không* phải overload (lỗi biên dịch).\n\n### Ghi đè (overriding)\nLớp con định nghĩa lại phương thức của lớp cha với **cùng chữ ký** để thay đổi hành vi — quyết định lúc **chạy** (đa hình).\n```java\nclass Animal { String sound() { return \"...\"; } }\nclass Cat extends Animal {\n    @Override String sound() { return \"Meo\"; }   // @Override để trình biên dịch kiểm tra\n}\n```\n\n### Luật ghi đè\n- Cùng tên và tham số; kiểu trả về giống hoặc là kiểu con (covariant).\n- Quyền truy cập **không được hẹp hơn** (cha `protected` thì con `protected` hoặc `public`).\n- Không ném thêm checked exception rộng hơn cha.\n- Không override được `static`, `private`, `final`.\n\n### Lỗi hay gặp\n- Quên `@Override`: gõ sai tham số (`equals(Student s)` thay cho `equals(Object o)`) sẽ thành *overload* chứ không ghi đè, và bug lặng lẽ xuất hiện (nhất là với `equals`/`hashCode` trong `HashSet`).\n- Overload mơ hồ khi truyền `null` hoặc kiểu cần ép (`f(int)` và `f(long)` với `char`).\n- Nghĩ overload cũng đa hình lúc chạy.\n\n### Tự kiểm tra\n- Với `Object o = \"hi\"`, lời gọi `in(o)` chọn overload nào? Overload khác override thế nào về thời điểm quyết định?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro10-1",
+    "ten": "4.B — 📑 Học theo từng slide · Polymorphism (1/2): nạp chồng, ghi đè, ràng buộc động (slide 1–11)",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-4-1-ke-thua",
+    "ten": "4.1 — Kế thừa",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-4-2-da-hinh",
+    "ten": "4.2 — Đa hình",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Exception Handling › try/catch/finally": {
+  "body": "**Ngoại lệ (exception)** là sự kiện bất thường làm gián đoạn luồng chạy bình thường (chia cho 0, mở tệp không tồn tại, `null`…). Java cho bạn *bắt và xử lý* thay vì để chương trình sập.\n\n### Cây ngoại lệ\n- `Throwable` → `Error` (lỗi hệ thống như `OutOfMemoryError`, thường không bắt) và `Exception`.\n- **Checked** (kế thừa `Exception` nhưng không phải `RuntimeException`, vd. `IOException`): trình biên dịch *bắt buộc* bạn `try/catch` hoặc khai `throws`.\n- **Unchecked** (`RuntimeException` như `NullPointerException`, `IllegalArgumentException`): không bắt buộc xử lý, thường là lỗi lập trình.\n\n```java\ntry {\n    int n = Integer.parseInt(chuoi);\n    System.out.println(100 / n);\n} catch (NumberFormatException e) {          // bắt cụ thể trước\n    System.out.println(\"Không phải số\");\n} catch (ArithmeticException | NullPointerException e) {  // multi-catch\n    System.out.println(\"Lỗi: \" + e.getMessage());\n} finally {\n    System.out.println(\"Luôn chạy\");         // dọn dẹp, kể cả khi có return/ngoại lệ\n}\n```\n\n### try-with-resources\nTự đóng tài nguyên `AutoCloseable`, kể cả khi lỗi:\n```java\ntry (var in = new java.io.BufferedReader(new java.io.FileReader(\"a.txt\"))) {\n    System.out.println(in.readLine());\n} catch (java.io.IOException e) {\n    e.printStackTrace();\n}\n```\n\n### Ý chính\n- `throw` ném một ngoại lệ; `throws` khai báo phương thức có thể ném.\n- Các `catch` xếp **từ cụ thể đến tổng quát**; bắt lớp cha trước làm lớp con không bao giờ tới.\n- Ngoại lệ lan lên ngăn xếp gọi cho đến khi có `catch` phù hợp.\n\n### Lỗi hay gặp\n- **Nuốt lỗi**: `catch (Exception e) {}` rỗng khiến lỗi biến mất.\n- Bắt `Exception`/`Throwable` quá rộng, che cả lỗi lập trình.\n- Dùng ngoại lệ để điều khiển luồng bình thường (chậm và khó đọc).\n- `return` trong `finally` che mất ngoại lệ đang bay.\n\n### Tự kiểm tra\n- Checked và unchecked khác nhau thế nào? `finally` có chạy khi `try` đã `return` không?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro11-1",
+    "ten": "6.A — 📑 Học theo từng slide · Exception Handling: try-catch-finally, throws, lan truyền ngoại lệ (slide 1–17)",
+    "nguon": "Object-Oriented Programming · Chương 6",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-6-1-ngoai-le",
+    "ten": "6.1 — try, catch, finally & throw",
+    "nguon": "Object-Oriented Programming · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Exception Handling › Custom Exceptions": {
+  "body": "Ngoại lệ có sẵn như `IllegalArgumentException` hay `IOException` chưa nói được \"chuyện gì sai trong nghiệp vụ của bạn\". **Custom exception** là lớp ngoại lệ do bạn tự định nghĩa để diễn đạt đúng tình huống: `InsufficientFundsException`, `BookNotFoundException`…\n\n```java\n// Checked: người gọi BẮT BUỘC xử lý\npublic class InsufficientFundsException extends Exception {\n    private final double thieu;\n    public InsufficientFundsException(String message, double thieu) {\n        super(message);\n        this.thieu = thieu;\n    }\n    public double getThieu() { return thieu; }\n}\n\n// Unchecked: kế thừa RuntimeException\npublic class BookNotFoundException extends RuntimeException {\n    public BookNotFoundException(String isbn, Throwable cause) {\n        super(\"Không tìm thấy sách \" + isbn, cause);   // giữ nguyên nhân gốc\n    }\n}\n\nvoid rut(double soTien) throws InsufficientFundsException {\n    if (soTien > so_du) throw new InsufficientFundsException(\"Không đủ tiền\", soTien - so_du);\n}\n```\n\n### Chọn checked hay unchecked\n- **Checked** khi tình huống *phục hồi được* và bạn muốn ép người gọi nghĩ tới (hiếm hơn trong code hiện đại).\n- **Unchecked** khi là lỗi lập trình hoặc lỗi mà tầng gọi không thể xử lý tại chỗ. Spring và đa số thư viện mới ưu tiên unchecked.\n\n### Ý chính\n- Đặt tên kết thúc bằng `Exception`, tên nói rõ lý do.\n- Luôn truyền **`cause`** khi bọc ngoại lệ khác (*exception chaining*) để stack trace giữ nguyên gốc.\n- Mang theo dữ liệu hữu ích (mã lỗi, giá trị sai) trong field, đừng chỉ nhét vào chuỗi.\n- Ở biên hệ thống (REST controller) gom về một chỗ để đổi sang mã HTTP phù hợp.\n\n### Lỗi hay gặp\n- Tạo cả chục lớp ngoại lệ gần giống nhau không ai phân biệt.\n- Bắt rồi ném lại ngoại lệ mới mà không truyền `cause`, mất dấu vết gốc.\n- Dùng `Exception` chung chung khi có thể dùng ngoại lệ có sẵn (`IllegalArgumentException`, `IllegalStateException`).",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro11-1",
+    "ten": "6.A — 📑 Học theo từng slide · Exception Handling: try-catch-finally, throws, lan truyền ngoại lệ (slide 1–17)",
+    "nguon": "Object-Oriented Programming · Chương 6",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-lab-6-ngoai-le-muon-tra",
+    "ten": "Lab 6 — 🏗️ CT Library: ngoại lệ nghiệp vụ, mượn và trả (ngoại lệ checked, ném/bắt đúng tầng, try-with-resources)",
+    "nguon": "Object-Oriented Programming · Chương 6",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-on-ch6",
+    "ten": "6.2 — 🧪 Thực hành + 🗂 Thuật ngữ + 📌 Tóm tắt · Ngoại lệ kiểu PE: ngoại lệ tự tạo, nhập liệu an toàn, stack trace",
+    "nguon": "Object-Oriented Programming · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Functional Programming › Lambda Expressions": {
+  "body": "**Lambda** là một hàm ẩn danh gọn nhẹ, viết dưới dạng `(tham số) -> thân`. Nó thay cho lớp ẩn danh dài dòng khi bạn chỉ cần truyền *một hành vi*, và chỉ dùng được ở chỗ mong đợi một **functional interface**.\n\n```java\n// Trước Java 8\nlist.sort(new Comparator<String>() {\n    public int compare(String a, String b) { return a.length() - b.length(); }\n});\n\n// Với lambda\nlist.sort((a, b) -> a.length() - b.length());\n\nRunnable r = () -> System.out.println(\"chạy\");\nFunction<Integer, Integer> binh = x -> x * x;\nBiFunction<Integer, Integer, Integer> cong = (a, b) -> a + b;\nFunction<String, Integer> dai = String::length;      // method reference\n```\n\n### Ý chính\n- Cú pháp: không tham số `() ->`, một tham số `x ->`, nhiều tham số `(a, b) ->`; thân nhiều dòng đặt trong `{ ... return ...; }`.\n- Kiểu tham số được **suy luận** từ functional interface đích.\n- Lambda **bắt biến local bên ngoài**, nhưng biến đó phải *final hoặc effectively final* (không bị gán lại).\n- **Method reference** (`Class::method`, `obj::method`, `Class::new`) là cách viết gọn khi lambda chỉ gọi một phương thức.\n- Lambda là nền của Stream API, `Comparator`, callback, `CompletableFuture`.\n\n### Lỗi hay gặp\n- Sửa biến local từ trong lambda (`dem++`) → lỗi biên dịch. Dùng mảng một phần tử, `AtomicInteger`, hoặc thiết kế lại.\n- Lambda quá dài và phức tạp: tách thành phương thức có tên rồi dùng method reference.\n- Nhầm `this` trong lambda (là lớp bao ngoài) với `this` trong lớp ẩn danh (là chính lớp ẩn danh).\n\n### Tự kiểm tra\n- Vì sao `list.forEach(x -> tong += x)` không biên dịch được với `int tong` local?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs1-2",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Lambda: interface hàm, method reference, chuỗi Comparator (slide 13–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-n1-1-modern-java",
+    "ten": "N1.1 — Java hiện đại tóm gọn",
+    "nguon": "Object-Oriented Programming · Nâng cao 1 — Generics, lambda & Stream A",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Functional Programming › Functional Interfaces": {
+  "body": "**Functional interface** là interface có **đúng một** phương thức trừu tượng (có thể thêm `default`/`static`). Lambda và method reference chính là cách tạo ra một thể hiện của nó. Gói `java.util.function` cung cấp sẵn các loại hay dùng:\n\n| Interface | Phương thức | Ý nghĩa | Ví dụ |\n|---|---|---|---|\n| `Function<T,R>` | `R apply(T)` | biến đổi | `s -> s.length()` |\n| `Predicate<T>` | `boolean test(T)` | kiểm tra điều kiện | `n -> n > 0` |\n| `Consumer<T>` | `void accept(T)` | dùng giá trị, không trả | `System.out::println` |\n| `Supplier<T>` | `T get()` | tạo giá trị | `() -> new ArrayList<>()` |\n| `BiFunction<T,U,R>` | `R apply(T,U)` | hai tham số | `(a, b) -> a + b` |\n| `UnaryOperator<T>` | `T apply(T)` | `Function<T,T>` | `String::trim` |\n| `BinaryOperator<T>` | `T apply(T,T)` | gộp hai giá trị | `Integer::sum` |\n\n`Runnable`, `Callable`, `Comparator` cũng là functional interface.\n\n```java\n@FunctionalInterface\ninterface Validator<T> { boolean valid(T t); }\n\nValidator<String> khongRong = s -> !s.isBlank();\nSystem.out.println(khongRong.valid(\"Java\"));   // true\n```\n\n### Ý chính\n- `@FunctionalInterface` không bắt buộc nhưng làm trình biên dịch báo lỗi nếu bạn lỡ thêm phương thức trừu tượng thứ hai.\n- Có bản chuyên cho kiểu nguyên thủy (`IntPredicate`, `IntFunction`, `ToIntFunction`…) tránh tốn công đóng/mở hộp.\n- Phương thức của `Object` (`equals`…) không tính vào \"một phương thức trừu tượng\".\n\n### Lỗi hay gặp\n- Tự định nghĩa interface mới trong khi `java.util.function` đã có sẵn.\n- Dùng `Function<Integer,Integer>` cho số lượng lớn thay vì `IntUnaryOperator` (tốn bộ nhớ do boxing).\n- Quên rằng `Consumer` không trả giá trị: cần trả về thì dùng `Function`.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs1-2",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Lambda: interface hàm, method reference, chuỗi Comparator (slide 13–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-n1-1-modern-java",
+    "ten": "N1.1 — Java hiện đại tóm gọn",
+    "nguon": "Object-Oriented Programming · Nâng cao 1 — Generics, lambda & Stream A",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Functional Programming › Stream API": {
+  "body": "**Stream API** (Java 8) xử lý một tập dữ liệu theo phong cách **khai báo**: bạn mô tả \"lấy gì, biến đổi ra sao\", thay vì viết vòng `for` và biến tạm.\n\nMột pipeline có ba phần: **nguồn** → các thao tác **trung gian** (lười) → một thao tác **kết thúc**.\n\n```java\nrecord Sv(String ten, double diem) {}\nList<Sv> ds = List.of(new Sv(\"An\", 8.5), new Sv(\"Bình\", 6.0), new Sv(\"Chi\", 9.0));\n\nList<String> top = ds.stream()                  // nguồn\n        .filter(s -> s.diem() >= 8)             // trung gian\n        .sorted(Comparator.comparingDouble(Sv::diem).reversed())\n        .map(Sv::ten)\n        .toList();                              // kết thúc (Java 16+)   -> [Chi, An]\n\ndouble tb = ds.stream().mapToDouble(Sv::diem).average().orElse(0);\n\nMap<Boolean, List<Sv>> dau = ds.stream()\n        .collect(Collectors.partitioningBy(s -> s.diem() >= 5));\n```\n\n### Ý chính\n- **Trung gian** (`filter`, `map`, `sorted`, `distinct`, `limit`, `flatMap`) trả về stream mới và **không chạy** cho tới khi có thao tác kết thúc.\n- **Kết thúc** (`collect`, `toList`, `forEach`, `reduce`, `count`, `anyMatch`, `findFirst`) kích hoạt chạy.\n- Stream **không lưu dữ liệu** và **không sửa nguồn**; dùng được **một lần**.\n- `Collectors.groupingBy`, `toMap`, `joining` để gom nhóm.\n- `parallelStream()` chạy song song nhưng chỉ nên dùng khi đã đo thấy có lợi (việc nặng CPU, dữ liệu lớn).\n\n### Lỗi hay gặp\n- Dùng lại stream đã tiêu thụ → `IllegalStateException: stream has already been operated upon or closed`.\n- `toMap` gặp khoá trùng sẽ ném `IllegalStateException` nếu không cung cấp hàm gộp.\n- Đặt tác dụng phụ (sửa biến ngoài) trong `map`/`filter`.\n- Dùng stream cho việc đơn giản khiến code khó đọc hơn vòng `for`.\n\n### Tự kiểm tra\n- Vì sao một pipeline chỉ có `filter` và `map` mà không có thao tác kết thúc thì không in gì? Đổi đoạn trên sang `groupingBy` theo xếp loại thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs2-1",
+    "ten": "⭐ CS.2 — 📑 Học theo từng slide · Stream (1): tính lười, ngắt mạch, flatMap, reduce, stream số (slide 1–12)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs2-2",
+    "ten": "⭐ CS.2 — 📑 Học theo từng slide · Stream (2): Collectors, toMap, groupingBy, Optional, parallel (slide 13–26)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-cs2-on",
+    "ten": "⭐ CS.2 — 🧪 Bài tập · đoán pipeline, bảng điểm, toMap trùng khoá, Optional, f3 kiểu PE, lỗi song song",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Functional Programming › Optional": {
+  "body": "`Optional<T>` là **hộp chứa một giá trị hoặc không chứa gì**. Mục đích: khiến chữ ký phương thức nói rõ \"kết quả có thể vắng mặt\", buộc người gọi xử lý thay vì bất ngờ gặp `NullPointerException`.\n\n```java\nOptional<User> timTheoEmail(String email) { ... }   // thay vì trả null\n\nOptional<String> o = Optional.of(\"An\");        // giá trị chắc chắn khác null\nOptional<String> v = Optional.empty();\nOptional<String> m = Optional.ofNullable(maybeNull);\n\nString ten = timTheoEmail(\"a@b.c\")\n        .map(User::getName)                    // biến đổi nếu có\n        .filter(s -> !s.isBlank())\n        .orElse(\"Ẩn danh\");                    // mặc định nếu rỗng\n\ntimTheoEmail(\"a@b.c\").ifPresent(u -> gui(u));\nUser u = timTheoEmail(\"a@b.c\").orElseThrow(() -> new NotFoundException(\"email\"));\n```\n\n### Ý chính\n- Ưu tiên `map`, `flatMap`, `orElse`, `orElseGet`, `orElseThrow`, `ifPresent` thay vì `isPresent()` + `get()`.\n- `orElse(x)` luôn tính `x`; nếu tạo `x` tốn kém thì dùng `orElseGet(() -> ...)`.\n- `Optional` dành cho **kiểu trả về** của phương thức; không phải để làm field của entity, tham số phương thức hay phần tử của collection.\n\n### Lỗi hay gặp\n- Gọi `get()` không kiểm tra → `NoSuchElementException`, chẳng khác gì NPE.\n- Trả về `null` cho một phương thức có kiểu `Optional` (phá hoàn toàn mục đích).\n- Dùng `Optional.of(null)` (ném NPE) thay vì `ofNullable`.\n- Bọc `Optional` quanh `List` — trả danh sách rỗng là đủ.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs2-2",
+    "ten": "⭐ CS.2 — 📑 Học theo từng slide · Stream (2): Collectors, toMap, groupingBy, Optional, parallel (slide 13–26)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-quiz-cs2",
+    "ten": "⭐ Quiz CS.2 — Stream API và Optional",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Functional Programming › Functional Composition & High Order Functions": {
+  "body": "**Hàm bậc cao** (higher-order function) là hàm *nhận hàm làm tham số* hoặc *trả về hàm*. **Hợp hàm** (function composition) là ghép nhiều hàm nhỏ thành một pipeline lớn. Java hỗ trợ cả hai nhờ lambda và các interface trong `java.util.function`.\n\n```java\nFunction<Integer, Integer> congHai = x -> x + 2;\nFunction<Integer, Integer> nhanBa  = x -> x * 3;\n\n// andThen: chạy a rồi b      => b(a(x))\ncongHai.andThen(nhanBa).apply(4);   // (4 + 2) * 3 = 18\n// compose: chạy b rồi a      => a(b(x))\ncongHai.compose(nhanBa).apply(4);   // (4 * 3) + 2 = 14\n\nPredicate<String> khongRong = s -> !s.isBlank();\nPredicate<String> ngan      = s -> s.length() < 10;\nkhongRong.and(ngan).test(\"Java\");   // true\nkhongRong.negate().test(\"\");        // true\n\nComparator<Sv> thuTu = Comparator.comparing(Sv::lop).thenComparing(Sv::ten);\n```\n\n### Hàm trả về hàm\n```java\nstatic Function<Integer, Integer> nhanVoi(int k) { return x -> x * k; }\nvar gapDoi = nhanVoi(2);            // gapDoi.apply(21) == 42\n```\n\n### Ý chính\n- `andThen` đọc thuận tự nhiên (trái → phải); `compose` ngược lại.\n- `Predicate` có `and`, `or`, `negate`; `Comparator` có `thenComparing`, `reversed`.\n- `BiFunction<T,U,R>` nhận hai tham số; `UnaryOperator<T>` = `Function<T,T>`; `BinaryOperator<T>` = `BiFunction<T,T,T>`.\n- Đây là nền của Stream (`map`, `filter`, `reduce` đều nhận hàm).\n\n### Lỗi hay gặp\n- Nhầm thứ tự `andThen` và `compose`.\n- Ghép chuỗi hàm quá dài, khó đặt điểm dừng gỡ lỗi; gán từng bước vào biến có tên.\n- Các hàm có tác dụng phụ trong pipeline khiến kết quả phụ thuộc thứ tự chạy.\n\n### Tự kiểm tra\n- `f.andThen(g)` và `f.compose(g)` khác nhau thế nào với `f = x + 1`, `g = x * 2` và x = 5?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs1-2",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Lambda: interface hàm, method reference, chuỗi Comparator (slide 13–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-n1-1-modern-java",
+    "ten": "N1.1 — Java hiện đại tóm gọn",
+    "nguon": "Object-Oriented Programming · Nâng cao 1 — Generics, lambda & Stream A",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Collections & Generics › List / Set / Map": {
+  "body": "**Java Collections Framework** là bộ cấu trúc dữ liệu chuẩn, chia thành ba họ giao diện chính.\n\n| Họ | Đặc điểm | Cài đặt hay dùng |\n|---|---|---|\n| `List` | có thứ tự, cho phép trùng, truy cập theo chỉ số | `ArrayList` (mặc định), `LinkedList` |\n| `Set` | không trùng | `HashSet` (nhanh, không thứ tự), `LinkedHashSet` (giữ thứ tự thêm), `TreeSet` (sắp xếp) |\n| `Map<K,V>` | ánh xạ khoá → giá trị, khoá không trùng | `HashMap`, `LinkedHashMap`, `TreeMap` |\n\n```java\nList<String> ds = new ArrayList<>(List.of(\"An\", \"Bình\"));\nds.add(\"Chi\");\nSet<String> duyNhat = new HashSet<>(ds);\n\nMap<String, Integer> diem = new HashMap<>();\ndiem.put(\"An\", 9);\ndiem.merge(\"An\", 1, Integer::sum);                 // 10\ndiem.computeIfAbsent(\"Dũng\", k -> 0);\nfor (Map.Entry<String, Integer> e : diem.entrySet()) {\n    System.out.println(e.getKey() + \"=\" + e.getValue());\n}\n```\n\n### Ý chính\n- Khai báo bằng **interface** (`List<String> ds = new ArrayList<>()`), không bằng lớp cụ thể.\n- `ArrayList`: truy cập theo chỉ số O(1), chèn giữa O(n). `HashMap`/`HashSet`: tìm, thêm xoá trung bình O(1). `TreeMap`/`TreeSet`: O(log n) nhưng luôn sắp xếp.\n- Phần tử/khoá của `HashSet`/`HashMap` cần **`equals` và `hashCode` nhất quán**; chúng của `TreeSet`/`TreeMap` cần `Comparable` hoặc `Comparator`.\n- `List.of(...)`, `Set.of(...)`, `Map.of(...)` (Java 9+) tạo collection **bất biến**.\n\n### Lỗi hay gặp\n- Ghi đè `equals` mà quên `hashCode` → phần tử \"biến mất\" trong `HashSet`.\n- Sửa field dùng để tính `hashCode` sau khi đã đưa vào `HashSet`/làm khoá `HashMap`.\n- Thêm phần tử vào `List.of(...)` → `UnsupportedOperationException`.\n- Duyệt `HashMap` và nghĩ có thứ tự; cần thứ tự thì dùng `LinkedHashMap`/`TreeMap`.\n\n### Tự kiểm tra\n- Khi nào chọn `TreeMap` thay vì `HashMap`? Điều gì xảy ra nếu khoá của `HashMap` là đối tượng không ghi đè `equals`/`hashCode`?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro13-1",
+    "ten": "8.A — 📑 Học theo từng slide · Collections (1/2): khung, generics, List, ArrayList, LinkedList (slide 1–11)",
+    "nguon": "Object-Oriented Programming · Chương 8",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro13-2",
+    "ten": "8.B — 📑 Học theo từng slide · Collections (2/2): Set, bảng băm, equals/hashCode, Comparable, Map (slide 12–27)",
+    "nguon": "Object-Oriented Programming · Chương 8",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-8-1-collections",
+    "ten": "8.1 — List, Set & Map",
+    "nguon": "Object-Oriented Programming · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/simulation?scenario=hash-map",
+    "ten": "HashMap — tìm trong một triệu khoá mà không duyệt",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/simulation?scenario=list-vs-linked",
+    "ten": "ArrayList so với LinkedList — trong bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Collections & Generics › Generics": {
+  "body": "**Generics** cho phép viết lớp, interface, phương thức làm việc với **kiểu được tham số hoá** (`List<T>`), để trình biên dịch kiểm tra kiểu ngay lúc biên dịch và bỏ việc ép kiểu thủ công.\n\n```java\n// Trước generics: List thô, lỗi lộ ra lúc chạy\nList raw = new ArrayList();\nraw.add(\"a\"); raw.add(1);\nString s = (String) raw.get(1);          // ClassCastException\n\n// Với generics\nList<String> ds = new ArrayList<>();\nds.add(\"a\");\n// ds.add(1);                            // lỗi biên dịch\nString x = ds.get(0);                    // không cần ép kiểu\n\n// Lớp và phương thức generic, có giới hạn kiểu\nclass Hop<T> { private T giaTri; T get() { return giaTri; } void set(T v) { giaTri = v; } }\n\nstatic <T extends Comparable<T>> T lonNhat(List<T> ds) {\n    T best = ds.get(0);\n    for (T t : ds) if (t.compareTo(best) > 0) best = t;\n    return best;\n}\n```\n\n### Wildcard\n- `List<? extends Number>`: đọc ra được `Number`, *không* thêm vào được (producer).\n- `List<? super Integer>`: thêm `Integer` vào được, đọc ra chỉ là `Object` (consumer).\n- Quy tắc **PECS**: Producer-Extends, Consumer-Super.\n\n### Ý chính\n- Generics chỉ nhận **kiểu tham chiếu** (`List<Integer>`, không `List<int>`).\n- **Type erasure**: thông tin kiểu bị xoá sau biên dịch, nên không `new T()`, không `instanceof List<String>`.\n- `List<Dog>` **không phải** `List<Animal>` dù `Dog` là `Animal` (generics là bất biến).\n- Dùng toán tử kim cương `<>` để suy luận kiểu.\n\n### Lỗi hay gặp\n- Dùng kiểu thô (`List` không tham số) — mất kiểm tra kiểu, chỉ còn cảnh báo.\n- Cố gán `List<Dog>` cho `List<Animal>`; dùng `List<? extends Animal>`.\n- `@SuppressWarnings(\"unchecked\")` rải khắp nơi để \"cho yên\" cảnh báo.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs1-1",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Generics: lớp, phương thức, wildcard, PECS, xoá kiểu (slide 1–12)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro13-1",
+    "ten": "8.A — 📑 Học theo từng slide · Collections (1/2): khung, generics, List, ArrayList, LinkedList (slide 1–11)",
+    "nguon": "Object-Oriented Programming · Chương 8",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-n1-1-modern-java",
+    "ten": "N1.1 — Java hiện đại tóm gọn",
+    "nguon": "Object-Oriented Programming · Nâng cao 1 — Generics, lambda & Stream A",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Collections & Generics › Iterator & Queue/Deque": {
+  "body": "### Iterator: duyệt an toàn\n`Iterator` là con trỏ duyệt qua một collection: `hasNext()`, `next()`, `remove()`. Vòng `for-each` thực chất dùng nó. Collection chuẩn là **fail-fast**: nếu bạn sửa cấu trúc collection (thêm/xoá) trong lúc đang duyệt *bằng cách khác*, lần `next()` sau ném `ConcurrentModificationException`.\n\n```java\nList<Integer> so = new ArrayList<>(List.of(1, 2, 3, 4));\n\n// SAI: xoá trong for-each -> ConcurrentModificationException\n// for (int n : so) if (n % 2 == 0) so.remove((Integer) n);\n\nIterator<Integer> it = so.iterator();\nwhile (it.hasNext()) {\n    if (it.next() % 2 == 0) it.remove();      // xoá an toàn qua iterator\n}\nso.removeIf(n -> n % 2 == 0);                 // cách gọn nhất (Java 8+)\n```\n\n### Queue và Deque\n- **`Queue`** (FIFO – vào trước ra trước): `offer` thêm cuối, `poll` lấy và bỏ đầu, `peek` xem đầu.\n- **`Deque`** (hàng đợi hai đầu): `addFirst/addLast`, `pollFirst/pollLast`, dùng được làm cả hàng đợi lẫn **stack** (LIFO).\n- Cài đặt: `ArrayDeque` (mặc định nên dùng), `LinkedList`, `PriorityQueue` (ra theo thứ tự ưu tiên).\n\n```java\nDeque<String> dq = new ArrayDeque<>();\ndq.offer(\"a\"); dq.offer(\"b\");\ndq.poll();            // \"a\"\ndq.push(\"z\");         // đẩy lên đầu (kiểu stack)\ndq.pop();             // \"z\"\n```\n\n### Ý chính\n- Có hai họ phương thức: `add/remove/element` **ném ngoại lệ** khi lỗi; `offer/poll/peek` **trả `null`/`false`**.\n- `ArrayDeque` không nhận phần tử `null`.\n- Duyệt `Map` thì lặp trên `entrySet()`.\n\n### Lỗi hay gặp\n- Xoá phần tử khỏi `List` trong `for-each`.\n- Dùng `list.remove(1)` khi `list` là `List<Integer>`: gọi bản *xoá theo chỉ số*, không phải xoá giá trị 1.\n- Dùng `LinkedList` làm queue theo thói quen trong khi `ArrayDeque` nhanh hơn.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-java-list-api",
+    "ten": "1.4 — Java thực chiến: ArrayList vs LinkedList",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-stack-queue",
+    "ten": "2.1 — Ngăn xếp (LIFO) & Hàng đợi (FIFO)",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-deque",
+    "ten": "2.4 — Deque & bài toán cửa sổ trượt",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd6-1",
+    "ten": "2.B — 📑 Học theo từng slide · Hàng đợi, deque & hàng đợi ưu tiên (2B-Queues, slide 1–21)",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Collections & Generics › Array vs ArrayList": {
+  "body": "Cả hai đều chứa một dãy phần tử có chỉ số, nhưng khác bản chất.\n\n| | Mảng (`int[]`, `String[]`) | `ArrayList<E>` |\n|---|---|---|\n| Kích thước | **cố định** khi tạo | **tự giãn** |\n| Kiểu phần tử | nguyên thủy hoặc đối tượng | chỉ đối tượng (có boxing với `Integer`…) |\n| Độ dài | `arr.length` (trường) | `list.size()` (phương thức) |\n| Truy cập | `a[i]` | `list.get(i)` |\n| Tiện ích | `Arrays.*` | `add`, `remove`, `contains`, `sort`, stream… |\n| Generics | không thể tạo mảng generic | có `ArrayList<String>` |\n\n```java\nint[] a = new int[3];                 // gói gọn, nhanh, không boxing\na[0] = 5;\n\nList<Integer> l = new ArrayList<>();  // phần tử là Integer (đối tượng)\nl.add(5);\nl.add(7);\nl.remove(Integer.valueOf(5));         // xoá giá trị 5\n\nInteger[] b = l.toArray(new Integer[0]);\nList<Integer> c = Arrays.asList(1, 2, 3);   // khung nhìn cố định kích thước\n```\n\n### Bên trong ArrayList\nDùng **một mảng `Object[]`** phía sau. Khi đầy, nó cấp mảng mới lớn hơn (khoảng 1,5 lần) rồi chép dữ liệu sang. Thêm cuối thường O(1) tính trung bình, chèn/xoá giữa là O(n). Biết trước số lượng thì truyền dung lượng ban đầu: `new ArrayList<>(10_000)`.\n\n### Ý chính\n- Dùng **mảng** khi kích thước biết trước và cần hiệu năng/bộ nhớ với kiểu nguyên thủy.\n- Dùng **ArrayList** trong hầu hết mọi trường hợp khác.\n- `Arrays.asList` trả danh sách kích thước cố định: `set` được, `add/remove` ném `UnsupportedOperationException`.\n\n### Lỗi hay gặp\n- Nhầm `length`, `length()`, `size()`.\n- `ArrayList<int>` không biên dịch; dùng `ArrayList<Integer>`.\n- Hiệu năng kém khi chèn đầu `ArrayList` nhiều lần (dịch cả mảng).",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-mang",
+    "ten": "1.1 — Mảng & mảng động",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-java-list-api",
+    "ten": "1.4 — Java thực chiến: ArrayList vs LinkedList",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/simulation?scenario=list-vs-linked",
+    "ten": "ArrayList so với LinkedList — trong bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Collections & Generics › Stack": {
+  "body": "**Stack** (ngăn xếp) là cấu trúc **LIFO** (vào sau, ra trước) với ba thao tác: `push` (đẩy lên đỉnh), `pop` (lấy đỉnh và bỏ đi), `peek` (xem đỉnh). Nó xuất hiện ở khắp nơi: ngăn xếp lời gọi hàm, nút Undo, kiểm tra ngoặc cân bằng, duyệt cây/đồ thị theo chiều sâu, tính biểu thức hậu tố.\n\n### Hai cách dùng trong Java\n```java\n// Cổ điển: java.util.Stack — kế thừa Vector (đồng bộ, lỗi thời)\nStack<Integer> s1 = new Stack<>();\ns1.push(1); s1.push(2);\ns1.pop();      // 2\ns1.peek();     // 1\n\n// Hiện đại, được khuyến nghị: Deque\nDeque<Integer> s2 = new ArrayDeque<>();\ns2.push(1); s2.push(2);\ns2.pop();      // 2\ns2.peek();     // 1\n```\n\n### Ví dụ: kiểm tra ngoặc cân bằng\n```java\nstatic boolean canBang(String s) {\n    Deque<Character> st = new ArrayDeque<>();\n    for (char c : s.toCharArray()) {\n        if (\"([{\".indexOf(c) >= 0) st.push(c);\n        else if (\")]}\".indexOf(c) >= 0) {\n            if (st.isEmpty()) return false;\n            char m = st.pop();\n            if (\"([{\".indexOf(m) != \")]}\".indexOf(c)) return false;\n        }\n    }\n    return st.isEmpty();\n}\n```\n\n### Ý chính\n- Tài liệu Java khuyên dùng `Deque` (`ArrayDeque`) thay cho `Stack`: nhanh hơn, không bị đồng bộ thừa, API nhất quán.\n- `pop()`/`peek()` trên stack rỗng: `Stack` ném `EmptyStackException`, `ArrayDeque.pop()` ném `NoSuchElementException`, `ArrayDeque.peek()` trả `null`.\n- `push`/`pop` đều O(1).\n\n### Lỗi hay gặp\n- Quên kiểm tra `isEmpty()` trước khi `pop`.\n- Duyệt `Stack` bằng vòng lặp và tưởng thứ tự là LIFO: `Stack` (kế thừa `Vector`) duyệt từ đáy lên, còn `ArrayDeque` duyệt từ đỉnh xuống.\n- Dùng đệ quy sâu rồi gặp `StackOverflowError` — giải bằng stack tường minh.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-stack-queue",
+    "ten": "2.1 — Ngăn xếp (LIFO) & Hàng đợi (FIFO)",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd5-1",
+    "ten": "2.A — 📑 Học theo từng slide · Ngăn xếp (2A-Stacks, slide 1–19)",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Concurrency & I/O › Threads & ExecutorService": {
+  "body": "**Thread** là một luồng thực thi độc lập; nhiều thread chạy \"đồng thời\" giúp tận dụng nhiều lõi CPU hoặc không bị kẹt khi chờ I/O. Mọi thread trong một tiến trình **dùng chung heap** nhưng mỗi thread có stack riêng.\n\n### Thread thủ công\n```java\nThread t = new Thread(() -> System.out.println(\"Chạy ở \" + Thread.currentThread().getName()));\nt.start();       // tạo luồng mới. KHÔNG dùng t.run() — nó chạy trên luồng hiện tại\nt.join();        // chờ t kết thúc\n```\nTự tạo thread cho mỗi việc là tốn kém và khó kiểm soát số lượng.\n\n### ExecutorService: nhóm luồng\n```java\nExecutorService pool = Executors.newFixedThreadPool(4);   // 4 luồng tái sử dụng\ntry {\n    List<Future<Integer>> kq = new ArrayList<>();\n    for (int i = 1; i <= 5; i++) {\n        final int n = i;\n        kq.add(pool.submit(() -> n * n));                 // Callable -> Future\n    }\n    for (Future<Integer> f : kq) System.out.println(f.get());   // chờ kết quả\n} finally {\n    pool.shutdown();                                      // không nhận việc mới\n    pool.awaitTermination(10, TimeUnit.SECONDS);\n}\n```\n\n### Ý chính\n- `Runnable` không trả giá trị; `Callable<V>` trả `V` (và có thể ném checked exception); `Future.get()` chờ kết quả.\n- Chọn cỡ pool: việc nặng CPU ≈ số lõi; việc chờ I/O có thể nhiều hơn.\n- Phải `shutdown()` — pool chưa tắt giữ chương trình không thoát.\n- Ngoại lệ trong `submit` bị bọc và chỉ lộ ra khi `get()` (`ExecutionException`).\n\n### Lỗi hay gặp\n- Gọi `run()` thay `start()` nên không có luồng nào được tạo.\n- Quên `shutdown()` nên chương trình treo.\n- Nhiều luồng cùng sửa một biến chung không đồng bộ gây **race condition** (xem bước synchronized).\n- `Executors.newCachedThreadPool()` cho việc đổ vào vô hạn có thể tạo hàng nghìn luồng.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-1",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (1): trạng thái, race đo thật, synchronized, Atomic, volatile, deadlock (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-2",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (2): executor, Future, CompletableFuture, luồng ảo, Spring (slide 15–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-2-java",
+    "ten": "4.2 — Java: Thread, ExecutorService, CompletableFuture, parallelStream, virtual thread",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Concurrency & I/O › synchronized & volatile": {
+  "body": "Khi nhiều luồng cùng đọc và ghi một dữ liệu chung, kết quả có thể sai mà không báo lỗi. Hai công cụ cơ bản của Java để xử lý là `synchronized` và `volatile`.\n\n### Vấn đề: race condition\n`counter++` không phải một thao tác mà là ba: đọc – cộng – ghi. Hai luồng xen kẽ có thể cùng đọc `5` và cùng ghi `6`, mất một lần tăng.\n\n### synchronized: loại trừ lẫn nhau\nMỗi đối tượng có một **monitor** (khoá). Tại một thời điểm chỉ một luồng giữ khoá, luồng khác phải đợi.\n```java\nclass DemSo {\n    private int n = 0;\n    public synchronized void tang() { n++; }          // khoá trên this\n    public int lay() { synchronized (this) { return n; } }   // khối synchronized\n}\n```\n`synchronized` đảm bảo cả **tính loại trừ** lẫn **tính nhìn thấy** (thay đổi của luồng trước thấy được ở luồng sau khi lấy cùng khoá). Nó **reentrant**: luồng đang giữ khoá vào lại được.\n\n### volatile: chỉ đảm bảo \"nhìn thấy\"\nBiến `volatile` buộc mọi lần đọc/ghi đi qua bộ nhớ chính, nên luồng khác thấy ngay giá trị mới và không bị sắp xếp lại tuỳ tiện. **Nhưng nó không biến `n++` thành nguyên tử.**\n```java\nprivate volatile boolean chay = true;   // cờ dừng luồng: dùng volatile là đủ\nvoid dung() { chay = false; }\n```\n\n### Ý chính\n- Cần loại trừ nhiều bước (đọc–sửa–ghi) → `synchronized`, `Lock` hoặc lớp **atomic** (`AtomicInteger.incrementAndGet()`).\n- Chỉ cần cờ trạng thái một ghi, nhiều đọc → `volatile`.\n- Giữ vùng khoá **càng nhỏ càng tốt**; không gọi code lạ khi đang giữ khoá.\n\n### Lỗi hay gặp\n- Dùng `volatile int` rồi `count++` và tưởng an toàn.\n- Hai phương thức dùng **hai khoá khác nhau** cho cùng một dữ liệu.\n- Khoá theo thứ tự khác nhau ở các nơi gây deadlock.\n- `synchronized` trên chuỗi hay `Integer` dùng chung (khoá lên đối tượng bị dùng lại ở nơi khác).",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-1",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (1): trạng thái, race đo thật, synchronized, Atomic, volatile, deadlock (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-1-race",
+    "ten": "5.1 — Race condition tái hiện được: counter++ trong C, Java và Node",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-3-semaphore",
+    "ten": "5.3 — Semaphore, khoá đọc-ghi, nguyên tử/CAS và tầm nhìn bộ nhớ",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Concurrency & I/O › Virtual Threads (Project Loom)": {
+  "body": "**Virtual thread** (Project Loom, chính thức từ **Java 21**) là luồng **do JVM quản lý** chứ không ánh xạ 1–1 với luồng hệ điều hành. Chúng cực rẻ (chỉ vài trăm byte đến vài KB khi khởi tạo), nên bạn có thể tạo hàng trăm nghìn hay hàng triệu mà không sập.\n\nKhi một virtual thread chạm thao tác **chặn** (I/O, `sleep`, `BlockingQueue`), JVM *gỡ* nó khỏi luồng nền tảng (carrier thread) để luồng đó đi chạy virtual thread khác. Nhờ vậy bạn viết code đồng bộ đơn giản \"một request một luồng\" mà vẫn mở rộng như code bất đồng bộ.\n\n```java\n// Cách 1: tạo trực tiếp\nThread t = Thread.ofVirtual().name(\"vt-1\").start(() -> System.out.println(\"xin chào\"));\nt.join();\n\n// Cách 2: một executor, mỗi việc một virtual thread\ntry (var exec = Executors.newVirtualThreadPerTaskExecutor()) {\n    for (int i = 0; i < 10_000; i++) {\n        exec.submit(() -> {\n            Thread.sleep(java.time.Duration.ofSeconds(1));   // chặn nhưng rất rẻ\n            return 1;\n        });\n    }\n}   // đóng executor sẽ chờ mọi việc xong\n```\n\n### Khi nào dùng\n- Việc **nặng I/O, nhiều thời gian chờ**: gọi API ngoài, truy vấn CSDL, máy chủ web nhiều kết nối.\n- **Không** giúp việc nặng CPU (tính toán): số lõi vẫn là giới hạn.\n\n### Ý chính\n- **Đừng gom virtual thread vào pool**: tạo mới mỗi việc là đúng cách; muốn giới hạn tải dùng `Semaphore`.\n- Là luồng nền (daemon); chương trình không chờ chúng nếu `main` kết thúc.\n- Spring Boot hiện đại bật được qua cấu hình để xử lý request bằng virtual thread.\n\n### Lỗi hay gặp\n- Ở Java 21, chặn bên trong khối `synchronized` có thể \"ghim\" (pin) luồng nền; ưu tiên `ReentrantLock` cho đoạn dài có I/O.\n- Dùng `ThreadLocal` nặng với hàng triệu luồng gây tốn bộ nhớ.\n- Kỳ vọng nó nhanh hơn cho tác vụ tính toán thuần.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs3-2",
+    "ten": "⭐ CS.3 — 📑 Học theo từng slide · Java hiện đại (2): sealed, pattern matching, virtual threads, JDK 8 (slide 14–26)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-2",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (2): executor, Future, CompletableFuture, luồng ảo, Spring (slide 15–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-2-java",
+    "ten": "4.2 — Java: Thread, ExecutorService, CompletableFuture, parallelStream, virtual thread",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Concurrency & I/O › File & I/O Operations": {
+  "body": "Java có hai lớp API chính cho tệp: `java.io` (cũ, dựa trên luồng) và **`java.nio.file`** (hiện đại: `Path`, `Files`). Với việc mới, hãy ưu tiên `nio.file`.\n\n### Đọc/ghi nhanh với Files\n```java\nimport java.nio.file.*;\nimport java.nio.charset.StandardCharsets;\nimport java.util.List;\n\nPath p = Path.of(\"data\", \"notes.txt\");              // Java 11+\nFiles.createDirectories(p.getParent());\n\nFiles.writeString(p, \"Dòng 1\\nDòng 2\\n\");           // UTF-8 mặc định\nString all = Files.readString(p);\nList<String> lines = Files.readAllLines(p, StandardCharsets.UTF_8);\n\n// Tệp lớn: đọc từng dòng, KHÔNG nạp hết vào bộ nhớ\ntry (var stream = Files.lines(p)) {\n    stream.filter(s -> !s.isBlank()).forEach(System.out::println);\n}\n```\n\n### try-with-resources\nMọi luồng/đọc/ghi phải được đóng. `try (...)` tự gọi `close()` kể cả khi có ngoại lệ:\n```java\ntry (var in  = new java.io.BufferedReader(new java.io.FileReader(\"in.txt\"));\n     var out = new java.io.PrintWriter(\"out.txt\")) {\n    String line;\n    while ((line = in.readLine()) != null) out.println(line.toUpperCase());\n} catch (java.io.IOException e) {\n    System.err.println(\"Lỗi I/O: \" + e.getMessage());\n}\n```\n\n### Ý chính\n- **Luồng byte** (`InputStream`/`OutputStream`) cho dữ liệu nhị phân; **luồng ký tự** (`Reader`/`Writer`) cho văn bản.\n- Luôn chỉ rõ **bảng mã** (UTF-8) khi đọc/ghi văn bản, kẻo chữ tiếng Việt vỡ.\n- Bọc bằng `Buffered*` để giảm số lần gọi hệ điều hành.\n- `Files.walk`, `Files.list`, `Files.copy`, `Files.move`, `Files.delete` cho thao tác thư mục/tệp.\n- Phần lớn thao tác ném `IOException` (checked).\n\n### Lỗi hay gặp\n- Quên đóng tệp nên rò rỉ file handle; ghi dữ liệu có thể chưa xuống đĩa (cần `flush`/`close`).\n- `Files.lines`/`Files.walk` không đóng stream.\n- Đường dẫn tương đối phụ thuộc thư mục chạy chương trình, không phải thư mục chứa mã nguồn.\n- `Files.readAllLines` cho tệp vài GB → `OutOfMemoryError`.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro14-1",
+    "ten": "9.A — 📑 Học theo từng slide · I/O Streams (1/3): luồng, Unicode và UTF-8, java.io, lớp File (slide 1–11)",
+    "nguon": "Object-Oriented Programming · Chương 9",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro14-2",
+    "ten": "9.B — 📑 Học theo từng slide · I/O Streams (2/3): file văn bản, hai case study, UTF-8 (slide 12–34)",
+    "nguon": "Object-Oriented Programming · Chương 9",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-9-1-file-io",
+    "ten": "9.1 — Đọc & ghi tệp",
+    "nguon": "Object-Oriented Programming · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/oop-with-java-lab/learn?lessonSlug=lab211-doc-ghi-tep",
+    "ten": "5.2 — Tệp: text, serialize, CSV, zip",
+    "nguon": "OOP with Java Lab · Phần 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LAB211"
+   }
+  ]
+ },
+ "Concurrency & I/O › Concurrency": {
+  "body": "**Concurrency** (đồng thời) là chạy nhiều tác vụ chồng lên nhau. Cái khó không phải ở việc tạo luồng mà ở việc **chia sẻ dữ liệu đúng**. Có ba loại sự cố kinh điển:\n\n- **Race condition**: kết quả phụ thuộc thứ tự xen kẽ của các luồng (hai luồng cùng `counter++`).\n- **Deadlock**: luồng A giữ khoá 1 chờ khoá 2, luồng B giữ khoá 2 chờ khoá 1 — cả hai đứng im mãi. CPU ở 0%, không có lỗi nào được in.\n- **Starvation**: một luồng mãi không được cấp tài nguyên vì luồng khác chiếm.\n\n### Công cụ trong `java.util.concurrent`\n```java\n// 1. ReentrantLock: linh hoạt hơn synchronized (tryLock, có thời hạn)\nLock lock = new ReentrantLock();\nif (lock.tryLock(1, TimeUnit.SECONDS)) {\n    try { /* vùng găng */ } finally { lock.unlock(); }   // luôn unlock trong finally\n}\n\n// 2. Semaphore: giới hạn số luồng cùng truy cập\nSemaphore cho = new Semaphore(3);\ncho.acquire(); try { /* tối đa 3 luồng */ } finally { cho.release(); }\n\n// 3. CompletableFuture: ghép các bước bất đồng bộ\nCompletableFuture<String> kq = CompletableFuture\n        .supplyAsync(() -> goiApi())              // chạy ở pool chung\n        .thenApply(String::toUpperCase)\n        .thenCombine(CompletableFuture.supplyAsync(() -> \"!\"), String::concat);\nSystem.out.println(kq.join());\n```\nNgoài ra: `ConcurrentHashMap`, `CountDownLatch`, `BlockingQueue`, các lớp `Atomic*`.\n\n### Ý chính\n- Cách an toàn nhất là **không chia sẻ trạng thái thay đổi được**: dùng đối tượng bất biến, dữ liệu cục bộ theo luồng, hoặc truyền thông điệp qua queue.\n- Tránh deadlock: luôn lấy khoá theo **một thứ tự cố định**, hoặc dùng `tryLock` có thời hạn.\n- Dùng collection đồng thời (`ConcurrentHashMap`) thay vì bọc tay `synchronized`.\n\n### Lỗi hay gặp\n- Quên `unlock()` trong `finally`.\n- Gọi `join()`/`get()` chặn ngay trên luồng quan trọng khiến mất lợi ích bất đồng bộ.\n- Chạy `CompletableFuture` mặc định cho việc chặn I/O dài, làm cạn pool chung.\n- Cho rằng chương trình đúng vì \"chạy thử không lỗi\" — lỗi đồng thời hiếm khi tái hiện.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-1",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (1): trạng thái, race đo thật, synchronized, Atomic, volatile, deadlock (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-2",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (2): executor, Future, CompletableFuture, luồng ảo, Spring (slide 15–25)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-6-1-deadlock",
+    "ten": "6.1 — Deadlock: bốn điều kiện Coffman, tìm ra bằng gdb và jstack",
+    "nguon": "Operating Systems for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-1-race",
+    "ten": "5.1 — Race condition tái hiện được: counter++ trong C, Java và Node",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=deadlock",
+    "ten": "Deadlock — hai bên cùng chờ nhau mãi mãi",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Concurrency & I/O › Java Memory Model": {
+  "body": "**Java Memory Model (JMM)** là bộ quy tắc nói rõ *khi nào một luồng chắc chắn nhìn thấy giá trị mà luồng khác đã ghi*. Cần nó vì CPU có cache riêng cho từng lõi và trình biên dịch/CPU được phép **sắp xếp lại** lệnh để tối ưu — nên không có gì đảm bảo luồng B thấy ngay thay đổi của luồng A.\n\n### Ví dụ lỗi kinh điển\n```java\nclass Co {\n    boolean xong = false;          // thiếu volatile\n    void cho()  { while (!xong) { } System.out.println(\"ra\"); }\n    void bao()  { xong = true; }\n}\n// Luồng 1 chạy cho(), luồng 2 chạy bao(): luồng 1 có thể quay vòng mãi\n// vì không có gì buộc nó đọc lại giá trị mới.\n```\nKhai báo `volatile boolean xong` là đủ để sửa.\n\n### Quan hệ happens-before\nNếu hành động A *happens-before* B thì mọi thay đổi do A thực hiện chắc chắn **thấy được** ở B. Các nguồn tạo ra quan hệ này:\n- **Thứ tự chương trình** trong cùng một luồng.\n- **Mở khoá monitor** (`synchronized` kết thúc) → **khoá lại** cùng monitor đó.\n- **Ghi `volatile`** → **đọc `volatile`** cùng biến sau đó.\n- `Thread.start()` → mọi lệnh trong luồng vừa khởi động; mọi lệnh trong luồng → `join()` trả về.\n- Ghi vào field **`final`** trong constructor được xuất bản an toàn.\n\n### Ý chính\n- **Data race** (hai luồng truy cập cùng biến, ít nhất một ghi, không có happens-before) cho kết quả không xác định.\n- `synchronized`, `volatile`, `Lock`, lớp `Atomic*` và collection đồng thời đều đã thiết lập happens-before cho bạn.\n- Mẫu double-checked locking cho singleton chỉ đúng khi biến instance là `volatile`.\n- Đối tượng **bất biến** (mọi field `final`) luôn an toàn khi chia sẻ.\n\n### Lỗi hay gặp\n- Tin rằng \"ghi vào thì luồng khác thấy ngay\".\n- Cho rằng `volatile` giải quyết race condition của `count++`.\n- Để `this` rò ra ngoài trong constructor (đăng ký listener) trước khi khởi tạo xong.\n\n### Tự kiểm tra\n- Vì sao vòng `while (!xong)` ở trên có thể không kết thúc? Quan hệ happens-before nào sửa được?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-1",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (1): trạng thái, race đo thật, synchronized, Atomic, volatile, deadlock (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-3-semaphore",
+    "ten": "5.3 — Semaphore, khoá đọc-ghi, nguyên tử/CAS và tầm nhìn bộ nhớ",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Concurrency & I/O › Networking": {
+  "body": "Java hỗ trợ lập trình mạng từ tầng thấp (socket TCP/UDP) đến tầng cao (HTTP). Phần lớn code ứng dụng ngày nay dùng **`java.net.http.HttpClient`** (Java 11+), còn socket thô dùng khi viết giao thức riêng.\n\n### HTTP client (hỗ trợ HTTP/2, đồng bộ và bất đồng bộ)\n```java\nimport java.net.URI;\nimport java.net.http.*;\nimport java.time.Duration;\n\nHttpClient client = HttpClient.newBuilder()\n        .connectTimeout(Duration.ofSeconds(5))\n        .build();\n\nHttpRequest req = HttpRequest.newBuilder(URI.create(\"https://api.example.com/users/1\"))\n        .header(\"Accept\", \"application/json\")\n        .timeout(Duration.ofSeconds(10))\n        .GET()\n        .build();\n\nHttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());\nSystem.out.println(res.statusCode() + \" \" + res.body());\n\n// Bất đồng bộ\nclient.sendAsync(req, HttpResponse.BodyHandlers.ofString())\n      .thenApply(HttpResponse::body)\n      .thenAccept(System.out::println);\n```\n\n### Socket TCP\n```java\n// Máy chủ\ntry (ServerSocket server = new ServerSocket(5000);\n     Socket s = server.accept();\n     var in = new java.io.BufferedReader(new java.io.InputStreamReader(s.getInputStream()));\n     var out = new java.io.PrintWriter(s.getOutputStream(), true)) {\n    out.println(\"echo: \" + in.readLine());\n}\n// Máy khách: new Socket(\"localhost\", 5000) rồi đọc/ghi qua getInputStream()/getOutputStream()\n```\n`DatagramSocket` dùng cho UDP; `java.net.http` còn có `WebSocket` client.\n\n### Ý chính\n- Socket TCP là luồng byte hai chiều tin cậy; `accept()` **chặn** cho tới khi có kết nối đến.\n- Máy chủ thật xử lý mỗi kết nối ở luồng riêng (hoặc virtual thread) hoặc dùng NIO (`Selector`).\n- Luôn đặt **timeout** (kết nối và đọc); đóng socket bằng try-with-resources.\n\n### Lỗi hay gặp\n- Quên timeout nên luồng treo vô hạn khi mạng chậm.\n- Gửi chuỗi không chỉ định bảng mã; hai bên hiểu khác nhau.\n- Coi một lần `read` bằng đúng một \"tin nhắn\" — TCP là dòng byte, không có ranh giới thông điệp.\n- Chặn ở luồng giao diện/luồng xử lý chính.",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-1-4-cong-socket",
+    "ten": "1.5 — Cổng và socket: một máy phục vụ nhiều ứng dụng và nhiều khách thế nào",
+    "nguon": "Networking for Developers · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Concurrency & I/O › Cryptography": {
+  "body": "**JCA (Java Cryptography Architecture)** là bộ API chuẩn trong JDK cho băm, mã hoá, chữ ký số, sinh số ngẫu nhiên an toàn và quản lý khoá. Quy tắc vàng: **dùng thuật toán và chế độ chuẩn có sẵn, đừng tự chế**.\n\n### Băm (hash) và số ngẫu nhiên\n```java\nimport java.security.*;\nimport java.util.HexFormat;           // Java 17+\n\nbyte[] h = MessageDigest.getInstance(\"SHA-256\")\n        .digest(\"xin chao\".getBytes(java.nio.charset.StandardCharsets.UTF_8));\nSystem.out.println(HexFormat.of().formatHex(h));\n\nSecureRandom rnd = new SecureRandom();   // dùng cho token, IV, salt; KHÔNG dùng java.util.Random\nbyte[] salt = new byte[16];\nrnd.nextBytes(salt);\n```\n\n### Mã hoá đối xứng AES-GCM (có xác thực)\n```java\nimport javax.crypto.*;\nimport javax.crypto.spec.GCMParameterSpec;\n\nKeyGenerator kg = KeyGenerator.getInstance(\"AES\");\nkg.init(256);\nSecretKey key = kg.generateKey();\n\nbyte[] iv = new byte[12];\nrnd.nextBytes(iv);                       // IV mới cho MỖI lần mã hoá\n\nCipher enc = Cipher.getInstance(\"AES/GCM/NoPadding\");\nenc.init(Cipher.ENCRYPT_MODE, key, new GCMParameterSpec(128, iv));\nbyte[] ct = enc.doFinal(\"bí mật\".getBytes(java.nio.charset.StandardCharsets.UTF_8));\n\nCipher dec = Cipher.getInstance(\"AES/GCM/NoPadding\");\ndec.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(128, iv));\nbyte[] pt = dec.doFinal(ct);             // ném AEADBadTagException nếu dữ liệu bị sửa\n```\n\n### Ý chính\n- **Đối xứng** (AES): một khoá mã hoá và giải mã. **Bất đối xứng** (RSA, EC): cặp khoá công khai/bí mật, dùng để trao đổi khoá và **chữ ký số** (`Signature`, vd. `SHA256withRSA`).\n- **Băm** không phải mã hoá: một chiều. Lưu **mật khẩu** không dùng SHA-256 trơn; dùng thuật toán chậm có muối (PBKDF2 qua `SecretKeyFactory`, hoặc bcrypt/Argon2 qua thư viện).\n- `KeyStore` lưu khoá/chứng chỉ; khoá bí mật không đặt cứng trong mã nguồn.\n\n### Lỗi hay gặp\n- Dùng chế độ **ECB** (`\"AES\"` mặc định thành `AES/ECB/PKCS5Padding`): để lộ mẫu dữ liệu.\n- Dùng lại cùng một IV/nonce với cùng khoá trong GCM — phá vỡ bảo mật.\n- MD5/SHA-1 cho mục đích an toàn; `Random` cho token.\n- Nuốt `GeneralSecurityException` mà không xử lý."
+ },
+ "Concurrency & I/O › Date and Time API": {
+  "body": "Gói **`java.time`** (Java 8+) thay thế `Date`, `Calendar`, `SimpleDateFormat` vốn có thể thay đổi, không an toàn đa luồng và dễ sai (tháng đánh số từ 0). Các lớp của `java.time` đều **bất biến** và an toàn đa luồng.\n\n### Chọn lớp theo nhu cầu\n| Lớp | Ý nghĩa | Ví dụ |\n|---|---|---|\n| `LocalDate` | ngày, không giờ, không múi giờ | sinh nhật `2000-05-17` |\n| `LocalTime` | giờ trong ngày | giờ mở cửa `08:30` |\n| `LocalDateTime` | ngày + giờ, không múi giờ | lịch hẹn |\n| `ZonedDateTime` | ngày giờ + múi giờ | cuộc họp quốc tế |\n| `Instant` | một điểm trên trục thời gian (UTC) | thời điểm ghi log, lưu CSDL |\n| `Duration` / `Period` | khoảng theo giờ-giây / theo ngày-tháng-năm | thời hạn |\n\n```java\nLocalDate hnay = LocalDate.now();\nLocalDate han = hnay.plusDays(30).withDayOfMonth(1);\nlong soNgay = java.time.temporal.ChronoUnit.DAYS.between(hnay, han);\n\nZonedDateTime hcm = ZonedDateTime.now(ZoneId.of(\"Asia/Ho_Chi_Minh\"));\nZonedDateTime ny  = hcm.withZoneSameInstant(ZoneId.of(\"America/New_York\"));\n\nDateTimeFormatter f = DateTimeFormatter.ofPattern(\"dd/MM/uuuu\")\n        .withResolverStyle(ResolverStyle.STRICT);        // từ chối 31/02\nLocalDate d = LocalDate.parse(\"15/08/2026\", f);\nString s = d.format(f);\n\nDuration dai = Duration.between(Instant.parse(\"2026-01-01T00:00:00Z\"), Instant.now());\n```\n\n### Ý chính\n- Tháng đánh số **1–12** (`Month.JANUARY`).\n- Lưu thời điểm ở dạng **UTC (`Instant`)**, chuyển sang múi giờ người dùng khi hiển thị.\n- Phép cộng/trừ trả về **đối tượng mới** (`hnay.plusDays(1)` không đổi `hnay`).\n- `DateTimeFormatter` là bất biến, tái sử dụng được.\n\n### Lỗi hay gặp\n- Dùng `LocalDateTime` để lưu thời điểm tuyệt đối — thiếu múi giờ nên mơ hồ.\n- Nhầm `Period` (ngày/tháng theo lịch) với `Duration` (số giây cố định): cộng 1 ngày qua thời điểm đổi giờ mùa hè không bằng 24 giờ.\n- Dùng `SimpleDateFormat` mặc định ở chế độ *lenient*: \"31/02\" bị nắn thành 03/03 thay vì báo lỗi.\n- Dùng `yyyy` (năm của kỷ nguyên) với chế độ STRICT mà thiếu era sẽ lỗi phân tích; dùng `uuuu`.",
+  "lessons": [
+   {
+    "href": "/courses/oop-with-java-lab/learn?lessonSlug=lab211-ngay-thang-lenient",
+    "ten": "3.2 — Ngày tháng: bẫy lenient",
+    "nguon": "OOP with Java Lab · Phần 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LAB211"
+   }
+  ]
+ },
+ "Concurrency & I/O › Regular Expressions": {
+  "body": "**Biểu thức chính quy (regex)** là một \"ngôn ngữ mẫu\" để mô tả tập chuỗi: khớp, kiểm tra, trích xuất, thay thế văn bản. Java cung cấp `java.util.regex` với hai lớp chính: `Pattern` (mẫu đã biên dịch) và `Matcher` (áp mẫu lên một chuỗi).\n\n```java\nimport java.util.regex.*;\n\nPattern p = Pattern.compile(\"(?<user>[\\\\w.]+)@(?<host>[\\\\w.]+)\");\nMatcher m = p.matcher(\"Liên hệ: an.nguyen@example.com, binh@fpt.edu.vn\");\n\nwhile (m.find()) {                                    // tìm từng kết quả\n    System.out.println(m.group(\"user\") + \" tại \" + m.group(\"host\"));\n}\n\nboolean ok = Pattern.matches(\"\\\\d{10}\", \"0912345678\");   // khớp TOÀN BỘ chuỗi\nString sach = \"a  b   c\".replaceAll(\"\\\\s+\", \" \");        // \"a b c\"\nString[] phan = \"a,b;c\".split(\"[,;]\");\n```\n\n### Cú pháp cần nhớ\n`.` (một ký tự bất kỳ), `\\d` chữ số, `\\w` chữ/số/gạch dưới, `\\s` khoảng trắng, `[abc]` tập ký tự, `*` `+` `?` `{n,m}` lặp, `^` `$` đầu/cuối, `( )` nhóm, `|` hoặc, `(?<tên>...)` nhóm có tên.\n\n### Ý chính\n- Trong chuỗi Java phải viết **`\\\\d`** (thoát dấu gạch chéo ngược), vì `\\d` bị hiểu là escape của chuỗi.\n- `matches()` kiểm tra khớp **toàn bộ**; `find()` tìm **một phần** của chuỗi.\n- **Biên dịch một lần** bằng `static final Pattern` nếu dùng lại; `String.matches` biên dịch lại mỗi lần gọi.\n- Cờ: `Pattern.CASE_INSENSITIVE`, `MULTILINE`, `DOTALL`.\n\n### Lỗi hay gặp\n- `\"a.b\".split(\".\")` trả mảng rỗng vì `.` là regex \"mọi ký tự\"; phải `split(\"\\\\.\")`.\n- Dùng regex để phân tích HTML/JSON/email đầy đủ theo chuẩn — dùng parser thích hợp.\n- Mẫu có lặp lồng nhau (`(a+)+`) gây **catastrophic backtracking**: chậm theo cấp số mũ với đầu vào độc hại (ReDoS).\n- Gọi `m.group()` mà chưa `find()`/`matches()` thành công → `IllegalStateException`.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro5-2",
+    "ten": "1.F — 📑 Học theo từng slide · Numbers and Strings (2/2): String, StringBuilder, Scanner, format (slide 14–30)",
+    "nguon": "Object-Oriented Programming · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-lab211-p0070-ebank-login",
+    "ten": "L.4 — 🎓 LAB211 J1.S.P0070 Đăng nhập Ebank (TPBank): hai ngôn ngữ, regex, captcha ngẫu nhiên kiểm trước, không service",
+    "nguon": "Object-Oriented Programming · 🎓 LAB211 thực chiến — qua review của thầ",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Concurrency & I/O › Từ khóa volatile": {
+  "body": "`volatile` là từ khoá đặt trước một **field** để đảm bảo mọi luồng đều thấy giá trị mới nhất của nó.\n\nNếu không có `volatile`, mỗi luồng có thể giữ bản sao trong thanh ghi hoặc cache CPU và không bao giờ đọc lại giá trị mà luồng khác vừa ghi. Với `volatile`, mỗi lần **ghi** được đẩy tới bộ nhớ chính, mỗi lần **đọc** lấy từ bộ nhớ chính, và trình biên dịch không sắp xếp lại các truy cập quanh nó theo cách phá vỡ thứ tự.\n\n```java\nclass Worker implements Runnable {\n    private volatile boolean dung = false;     // cờ dừng\n\n    public void run() {\n        while (!dung) { lamViec(); }           // luôn thấy giá trị mới\n    }\n    public void yeuCauDung() { dung = true; }  // gọi từ luồng khác\n}\n```\n\n### Khi nào dùng\n- Cờ trạng thái đơn giản (`running`, `initialized`) do một luồng ghi, nhiều luồng đọc.\n- Xuất bản một tham chiếu tới đối tượng đã dựng xong (ví dụ biến `instance` trong double-checked locking).\n\n### Ý chính\n- `volatile` đảm bảo **nhìn thấy** (visibility) và **thứ tự**, nhưng **không** đảm bảo tính nguyên tử cho thao tác ghép như `count++` (đọc–cộng–ghi). Với nó dùng `AtomicInteger` hoặc `synchronized`.\n- Đọc/ghi một `volatile long`/`double` là nguyên tử.\n- `volatile` rẻ hơn `synchronized` nhưng chỉ giải quyết một phần vấn đề.\n\n### Lỗi hay gặp\n- `volatile int dem; dem++` từ nhiều luồng → vẫn mất lần tăng.\n- Đặt `volatile` lên tham chiếu `List` và tưởng nội dung danh sách an toàn (chỉ *tham chiếu* được bảo vệ).\n- Dùng `volatile` cho trạng thái gồm nhiều biến phải đổi cùng nhau.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs8-1",
+    "ten": "⭐ CS.8 — 📑 Học theo từng slide · Luồng (1): trạng thái, race đo thật, synchronized, Atomic, volatile, deadlock (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-3-semaphore",
+    "ten": "5.3 — Semaphore, khoá đọc-ghi, nguyên tử/CAS và tầm nhìn bộ nhớ",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Database & Web Framework › JDBC": {
+  "body": "**JDBC (Java Database Connectivity)** là API chuẩn của Java để nói chuyện với cơ sở dữ liệu quan hệ. Mỗi CSDL có một **driver** (PostgreSQL, MySQL, SQL Server…) cài đặt các interface chung `Connection`, `PreparedStatement`, `ResultSet`. Hibernate/JPA/Spring Data đều chạy *bên trên* JDBC, nên hiểu JDBC là hiểu nền của tất cả.\n\n### Năm bước cơ bản\n```java\nString url = \"jdbc:postgresql://localhost:5432/shop\";\nString sql = \"SELECT id, name, price FROM product WHERE price > ? AND category = ?\";\n\ntry (Connection conn = DriverManager.getConnection(url, \"app\", System.getenv(\"DB_PASS\"));\n     PreparedStatement ps = conn.prepareStatement(sql)) {\n\n    ps.setBigDecimal(1, new java.math.BigDecimal(\"100000\"));   // tham số theo chỉ số, từ 1\n    ps.setString(2, \"book\");\n\n    try (ResultSet rs = ps.executeQuery()) {\n        while (rs.next()) {\n            System.out.println(rs.getInt(\"id\") + \" \" + rs.getString(\"name\"));\n        }\n    }\n} catch (SQLException e) {\n    throw new RuntimeException(\"Truy vấn thất bại\", e);\n}\n```\nGhi dữ liệu dùng `executeUpdate()` (INSERT/UPDATE/DELETE) trả số dòng bị ảnh hưởng.\n\n### Giao dịch\n```java\nconn.setAutoCommit(false);\ntry {\n    // nhiều câu UPDATE...\n    conn.commit();\n} catch (SQLException e) {\n    conn.rollback();\n    throw e;\n}\n```\n\n### Ý chính\n- **Luôn dùng `PreparedStatement` với tham số `?`**, không ghép chuỗi SQL: đó là phòng thủ chính chống **SQL injection**.\n- Đóng `ResultSet`, `Statement`, `Connection` bằng try-with-resources.\n- Mở kết nối thật tốn kém; ứng dụng dùng **connection pool** (HikariCP là mặc định của Spring Boot).\n- `ResultSet` đánh chỉ số cột từ **1**; `getInt` trên cột `NULL` trả `0` — dùng `rs.wasNull()` khi cần phân biệt.\n- Mẫu **DAO/Repository** tách SQL khỏi phần còn lại.\n\n### Lỗi hay gặp\n- Ghép chuỗi: `\"... WHERE name = '\" + input + \"'\"`.\n- Rò rỉ kết nối vì quên đóng → pool cạn, ứng dụng treo.\n- Mở một kết nối cho mỗi câu truy vấn nhỏ.\n- Quên `commit` khi tắt `autoCommit`, hoặc `rollback` sai chỗ.\n- Vấn đề N+1: lặp truy vấn trong vòng `for` thay vì dùng JOIN.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-prj2-2",
+    "ten": "5.B — 📑 Học theo từng slide · JDBC (2/2): năm bước, PreparedStatement, ResultSet, DAO CRUD (Slot 6–10, slide 18–40)",
+    "nguon": "Java Web Application Development · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-jdbc-dao",
+    "ten": "5.1 — Kết nối cơ sở dữ liệu an toàn",
+    "nguon": "Java Web Application Development · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-transaction-pool",
+    "ten": "5.4 — Giao dịch (transaction) & connection pool",
+    "nguon": "Java Web Application Development · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/prj302-java-web-application-development/learn?lessonSlug=prj302-3-1-jdbc-session",
+    "ten": "3.1 — JDBC & quản lý session",
+    "nguon": "Java Web Application Development · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ302"
+   }
+  ]
+ },
+ "Database & Web Framework › Spring Boot": {
+  "body": "**Spring Boot** là cách phổ biến nhất để dựng ứng dụng Java backend. Nó đứng trên **Spring Framework** (container quản lý đối tượng và phụ thuộc) và loại bỏ phần lớn cấu hình thủ công bằng ba ý tưởng:\n\n1. **Starter**: một dependency kéo theo cả bộ thư viện ăn khớp (`spring-boot-starter-web`, `-data-jpa`, `-security`, `-test`).\n2. **Auto-configuration**: Spring Boot nhìn classpath và cấu hình sẵn những gì hợp lý (có driver PostgreSQL + JPA thì tạo `DataSource`, `EntityManager`…); bạn chỉ ghi đè khi cần.\n3. **Embedded server**: Tomcat (mặc định) nằm trong chính file JAR, chạy bằng `java -jar app.jar`, không cần cài server riêng.\n\n```java\n@SpringBootApplication            // = @Configuration + @EnableAutoConfiguration + @ComponentScan\npublic class App {\n    public static void main(String[] args) {\n        SpringApplication.run(App.class, args);\n    }\n}\n\n@RestController\nclass HelloController {\n    @GetMapping(\"/hello\")\n    String hello(@RequestParam(defaultValue = \"bạn\") String name) {\n        return \"Xin chào \" + name;\n    }\n}\n```\nCấu hình trong `application.properties` hoặc `application.yml`:\n```properties\nserver.port=8080\nspring.datasource.url=jdbc:postgresql://localhost:5432/shop\n```\n\n### Ý chính\n- Khởi tạo dự án bằng **Spring Initializr** (start.spring.io); chọn Maven/Gradle, phiên bản Java và starter.\n- Cấu trúc thường theo lớp: `controller` → `service` → `repository`.\n- **Profile** (`application-dev.yml`, `application-prod.yml`) tách cấu hình theo môi trường; bí mật lấy từ biến môi trường.\n- **Actuator** cung cấp `/actuator/health`, metrics cho giám sát.\n\n### Lỗi hay gặp\n- Đặt class `main` ở package riêng nên `@ComponentScan` không thấy các bean khác (các class phải nằm trong package con của lớp chính).\n- Đưa mật khẩu vào `application.properties` rồi commit lên Git.\n- Không hiểu auto-configuration nên bất ngờ khi một bean tự xuất hiện; bật `--debug` để xem báo cáo điều kiện.\n- Nhầm phiên bản: Spring Boot mới yêu cầu Java tối thiểu cao hơn.",
+  "lessons": [
+   {
+    "href": "/courses/hsf302-working-with-spring-framework/learn?lessonSlug=hsf302-3-1-spring-boot",
+    "ten": "3.1 — Spring Boot: auto-config & starter",
+    "nguon": "Working with Spring Framework · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "HSF302"
+   },
+   {
+    "href": "/code-lab/spring-boot",
+    "ten": "Spring Boot",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Database & Web Framework › Spring Data JPA / Hibernate": {
+  "body": "**JPA (Jakarta Persistence)** là chuẩn ORM của Java: ánh xạ **lớp Java ↔ bảng CSDL** để bạn làm việc với đối tượng thay vì viết SQL cho từng thao tác. **Hibernate** là cài đặt phổ biến nhất. **Spring Data JPA** đứng trên cùng, sinh sẵn lớp truy cập dữ liệu từ một interface.\n\n```java\n@Entity\n@Table(name = \"student\")\npublic class Student {\n    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long id;\n\n    @Column(nullable = false, length = 100)\n    private String name;\n\n    @ManyToOne(fetch = FetchType.LAZY)\n    @JoinColumn(name = \"class_id\")\n    private SchoolClass schoolClass;     // quan hệ N-1\n    // getter/setter...\n}\n\npublic interface StudentRepository extends JpaRepository<Student, Long> {\n    List<Student> findByNameContainingIgnoreCase(String keyword);    // sinh từ tên phương thức\n\n    @Query(\"select s from Student s where s.schoolClass.id = :cid\")\n    List<Student> inClass(@Param(\"cid\") Long classId);               // JPQL\n}\n```\n`JpaRepository` có sẵn `save`, `findById`, `findAll`, `deleteById`, phân trang với `Pageable`.\n\n### Ý chính\n- Quan hệ: `@OneToMany`, `@ManyToOne`, `@ManyToMany`; bên giữ khoá ngoại là *owning side*.\n- Entity ở trạng thái *managed* trong một transaction; thay đổi được tự ghi xuống CSDL khi commit (dirty checking). Dùng `@Transactional` ở tầng service.\n- **Lazy loading** nạp quan hệ khi cần; truy cập ngoài transaction gây `LazyInitializationException`.\n- Quản lý lược đồ bằng migration (Flyway/Liquibase) thay vì `ddl-auto=update` ở môi trường thật.\n- Không trả thẳng entity ra API; dùng DTO.\n\n### Lỗi hay gặp\n- **N+1 query**: lặp qua danh sách rồi truy cập quan hệ lazy, sinh 1+N câu SQL. Dùng `JOIN FETCH` hoặc `@EntityGraph`.\n- Quan hệ hai chiều tuần hoàn gây đệ quy vô hạn khi chuyển JSON.\n- Đặt `FetchType.EAGER` khắp nơi làm kéo cả đồ thị đối tượng.\n- Quên `equals/hashCode` đúng cho entity khi dùng trong `Set`.",
+  "lessons": [
+   {
+    "href": "/courses/hsf302-working-with-spring-framework/learn?lessonSlug=hsf302-4-1-spring-data",
+    "ten": "4.1 — Spring Data JPA: repository",
+    "nguon": "Working with Spring Framework · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "HSF302"
+   },
+   {
+    "href": "/courses/hsf302-working-with-spring-framework/learn?lessonSlug=hsf302-1-1-jpa",
+    "ten": "1.1 — JPA & ORM: ánh xạ entity",
+    "nguon": "Working with Spring Framework · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "HSF302"
+   }
+  ]
+ },
+ "Database & Web Framework › REST API": {
+  "body": "**REST API** trong Spring biểu diễn mỗi *tài nguyên* (sách, đơn hàng…) bằng một URL và dùng các phương thức HTTP (`GET`, `POST`, `PUT`/`PATCH`, `DELETE`) cho thao tác. Dữ liệu thường là JSON.\n\nCấu trúc điển hình: **Controller** nhận request, **DTO** định nghĩa hình dạng dữ liệu vào/ra, **Service** chứa nghiệp vụ, **Repository** truy cập CSDL.\n\n```java\npublic record CreateBookRequest(\n        @NotBlank String title,\n        @Positive int pages) {}\n\npublic record BookResponse(Long id, String title, int pages) {}\n\n@RestController\n@RequestMapping(\"/api/books\")\nclass BookController {\n    private final BookService service;\n    BookController(BookService service) { this.service = service; }   // constructor injection\n\n    @GetMapping(\"/{id}\")\n    BookResponse get(@PathVariable Long id) { return service.find(id); }\n\n    @PostMapping\n    ResponseEntity<BookResponse> create(@Valid @RequestBody CreateBookRequest req) {\n        BookResponse created = service.create(req);\n        return ResponseEntity.status(HttpStatus.CREATED)\n                .header(\"Location\", \"/api/books/\" + created.id())\n                .body(created);\n    }\n}\n\n@RestControllerAdvice\nclass ApiExceptionHandler {\n    @ExceptionHandler(BookNotFoundException.class)\n    ResponseEntity<Map<String, String>> notFound(BookNotFoundException e) {\n        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(\"error\", e.getMessage()));\n    }\n}\n```\n\n### Ý chính\n- `@Valid` + annotation của Jakarta Bean Validation (`@NotBlank`, `@Email`, `@Size`) kiểm tra đầu vào; lỗi trả `400` kèm danh sách trường sai.\n- Mã trạng thái đúng nghĩa: `200`, `201` (tạo), `204` (xoá), `400`, `401`/`403`, `404`, `409`, `500`.\n- **Xử lý lỗi tập trung** bằng `@RestControllerAdvice` để định dạng lỗi nhất quán và không lộ stack trace.\n- DTO tách hợp đồng API khỏi entity, tránh lộ trường nội bộ (ví dụ mật khẩu băm).\n- Phân trang: `Pageable`/`Page<T>`; không trả danh sách vô hạn.\n\n### Lỗi hay gặp\n- Trả thẳng entity JPA (lộ dữ liệu, lỗi lazy loading, JSON đệ quy).\n- Đặt logic nghiệp vụ vào controller.\n- Dùng `GET` để thay đổi dữ liệu, hoặc luôn trả `200` kể cả khi lỗi.\n- Không validate đầu vào, tin dữ liệu client.",
+  "lessons": [
+   {
+    "href": "/courses/hsf302-working-with-spring-framework/learn?lessonSlug=hsf302-5-1-spring-mvc",
+    "ten": "5.1 — Spring MVC & REST controller",
+    "nguon": "Working with Spring Framework · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "HSF302"
+   }
+  ]
+ },
+ "Database & Web Framework › Web Frameworks": {
+  "body": "Spring Boot là lựa chọn phổ biến nhất, nhưng không phải duy nhất. Biết bức tranh chung giúp bạn chọn đúng công cụ và đọc được code dự án khác.\n\n| Framework | Điểm nhấn |\n|---|---|\n| **Spring Boot** | Hệ sinh thái lớn nhất (Data, Security, Cloud), tài liệu và nhân lực dồi dào; mặc định cho doanh nghiệp. |\n| **Jakarta EE** (trước là Java EE) | Bộ **đặc tả chuẩn** (Servlet, JPA, CDI, JAX-RS…) do nhiều nhà cung cấp cài đặt (WildFly, Payara, Open Liberty). Spring cũng dùng nhiều đặc tả này bên dưới. |\n| **Quarkus** | Tối ưu khởi động nhanh, ít RAM, hợp native image và container/serverless. |\n| **Micronaut** | Xử lý DI và AOP lúc biên dịch (không reflection nhiều), khởi động nhanh, ít bộ nhớ. |\n| **Vert.x** | Bộ công cụ **reactive**, dựa trên event loop, hiệu năng cao cho nhiều kết nối. |\n| **Play** | Framework full-stack, stateless, theo hướng reactive (Scala/Java). |\n| **Servlet/JSP thuần** | Nền tảng cổ điển của web Java; học để hiểu Tomcat và Spring MVC bên dưới. |\n\n### Cách chọn\n- Dự án doanh nghiệp, đội nhiều người, cần nhiều tích hợp → **Spring Boot**.\n- Dịch vụ nhỏ cần khởi động tức thì, chạy trên Kubernetes/serverless → cân nhắc **Quarkus** hoặc **Micronaut**.\n- Hệ thống cực nhiều kết nối đồng thời, kiểu bất đồng bộ → **Vert.x** (hoặc Spring WebFlux, hoặc virtual thread của Java 21).\n- Tổ chức đã chuẩn hoá theo máy chủ ứng dụng → **Jakarta EE**.\n\n### Ý chính\n- Các framework giống nhau ở khái niệm cốt lõi: DI, routing, ánh xạ ORM, cấu hình ngoài. Học sâu một cái thì chuyển sang cái khác không khó.\n- Chọn theo **đội ngũ, hệ sinh thái, yêu cầu vận hành** hơn là chạy theo xu hướng.\n\n### Lỗi hay gặp\n- Đổi framework chỉ vì benchmark khởi động mà bỏ qua chi phí học lại và thư viện tích hợp.\n- Học framework mà không nắm Java nền (collections, concurrency, generics).",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-bat-dau-tai-day",
+    "ten": "⭐ Bắt đầu tại đây (1/2) — PRJ301 là gì, lịch sử ngắn có mốc năm (CGI → Servlet → Jakarta EE), và vì sao quan trọng",
+    "nguon": "Java Web Application Development · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Database & Web Framework › Play Framework": {
+  "body": "**Play Framework** là framework web full-stack cho **Java và Scala**, chạy trên JVM, thiết kế theo hướng **stateless** (không giữ session phía server mặc định) và **non-blocking** (xây trên Akka/Pekko; máy chủ HTTP bên dưới là Pekko HTTP hoặc Netty tuỳ phiên bản). Nó nổi tiếng với vòng phát triển nhanh: sửa mã và tải lại trang, không cần khởi động lại thủ công (hot reload).\n\n### Đặc điểm chính\n- **Mô hình MVC** với routing khai báo trong tệp `conf/routes`.\n- **Bất đồng bộ từ gốc**: action trả về `CompletionStage<Result>` (Java) hoặc `Future[Result]` (Scala), phù hợp nhiều kết nối đồng thời và gọi dịch vụ ngoài.\n- Công cụ build **sbt**.\n- Có sẵn template engine, JSON, WebSocket, i18n, kiểm thử.\n\n```java\n// conf/routes\n// GET   /hello   controllers.HomeController.hello(name: String ?= \"bạn\")\n\npublic class HomeController extends Controller {\n    public Result hello(String name) {\n        return ok(\"Xin chào \" + name);\n    }\n}\n```\n\n### Khi nào cân nhắc\n- Đội đã quen **Scala** hoặc cần một framework reactive, stateless sẵn có.\n- Dịch vụ web nhiều I/O, cần hot reload khi phát triển.\n\n### Ý chính\n- Play không phải lựa chọn mặc định cho đa số dự án Java hiện nay: Spring Boot có hệ sinh thái và cộng đồng tuyển dụng lớn hơn rất nhiều.\n- Khái niệm bạn học (routing, controller, DI, async) chuyển được sang các framework khác.\n\n### Lưu ý\n- Kiểm tra phiên bản và tình trạng bảo trì hiện tại trên trang chính thức trước khi chọn cho dự án mới.\n- API đã thay đổi đáng kể giữa các phiên bản lớn; đừng trộn ví dụ của phiên bản cũ."
+ },
+ "Database & Web Framework › Quarkus": {
+  "body": "**Quarkus** là framework Java mã nguồn mở tối ưu cho **cloud-native**: khởi động trong vài chục đến vài trăm mili-giây, dùng ít RAM, hợp với container, Kubernetes và serverless. Ý tưởng chủ đạo: đẩy phần lớn công việc cấu hình và phân tích (thường làm lúc chạy ở framework truyền thống) sang **lúc build**.\n\n### Điểm nổi bật\n- **Native image** với GraalVM: biên dịch trước (AOT) thành tệp thực thi gốc, không cần JVM, khởi động gần như tức thì.\n- **Dev mode**: `quarkus dev` có live reload và Dev UI.\n- Dựa trên chuẩn quen thuộc: **JAX-RS/RESTEasy**, **CDI**, **Hibernate ORM (kèm Panache)**, MicroProfile, đồng thời có nhiều extension (Kafka, gRPC, OpenAPI…).\n- Hỗ trợ cả mô hình đồng bộ lẫn reactive (Mutiny, Vert.x bên dưới).\n\n```java\n@Path(\"/hello\")\npublic class GreetingResource {\n\n    @GET\n    @Produces(MediaType.TEXT_PLAIN)\n    public String hello() {\n        return \"Xin chào từ Quarkus\";\n    }\n}\n```\n\n### Khi nào cân nhắc\n- Dịch vụ nhỏ cần khởi động nhanh và tiết kiệm bộ nhớ (scale-to-zero, Function-as-a-Service).\n- Nhiều instance trên Kubernetes, nơi mỗi MB RAM đều có giá.\n\n### Ý chính\n- Quarkus **không thay thế** Spring Boot trong mọi trường hợp: Spring có hệ sinh thái và nhân lực lớn hơn; Quarkus thắng ở thời gian khởi động và bộ nhớ.\n- Biên dịch native hạn chế **reflection** động, nên một số thư viện cần cấu hình thêm.\n\n### Lỗi hay gặp\n- Chọn native image khi ứng dụng chạy lâu với tải ổn định — lợi ích khởi động ít còn ý nghĩa, mà thời gian build tăng nhiều.\n- Dùng thư viện dựa nhiều vào reflection rồi gặp lỗi chỉ xuất hiện ở chế độ native.\n- Trộn annotation Spring và Quarkus mà không có lớp tương thích."
+ },
+ "Database & Web Framework › Dependency Injection": {
+  "body": "**Dependency Injection (DI)** là kỹ thuật để một đối tượng **nhận các phụ thuộc từ bên ngoài** thay vì tự `new` chúng. Nhờ vậy lớp chỉ phụ thuộc vào *interface*, không vào cài đặt cụ thể: dễ thay thế, dễ kiểm thử, ít ràng buộc.\n\n### Không dùng DI\n```java\nclass OrderService {\n    private final EmailSender sender = new SmtpEmailSender();   // dính chặt vào SMTP\n}\n```\nMuốn kiểm thử mà không gửi email thật là rất khó.\n\n### Có DI\n```java\ninterface EmailSender { void send(String to, String body); }\n\nclass OrderService {\n    private final EmailSender sender;\n    OrderService(EmailSender sender) { this.sender = sender; }  // nhận từ ngoài\n}\n\n// Kiểm thử: truyền một bản giả\nnew OrderService((to, body) -> System.out.println(\"giả lập \" + to));\n```\n\n### Trong Spring: IoC container\nSpring làm \"người ráp\": bạn đánh dấu các lớp là **bean**, container tự tạo và tiêm phụ thuộc (**Inversion of Control** — quyền kiểm soát việc tạo đối tượng đảo từ code của bạn sang container).\n```java\n@Service\nclass OrderService {\n    private final EmailSender sender;\n    OrderService(EmailSender sender) { this.sender = sender; }   // Spring tự tiêm\n}\n\n@Component\nclass SmtpEmailSender implements EmailSender { ... }\n```\nMột lớp chỉ có **một constructor** thì không cần `@Autowired`.\n\n### Ý chính\n- Ba cách tiêm: **constructor** (nên dùng: field `final`, bất biến, dễ test), setter, field (tránh).\n- Annotation phân loại bean: `@Component`, `@Service`, `@Repository`, `@Controller`; hoặc khai báo bằng `@Bean` trong lớp `@Configuration`.\n- Có nhiều cài đặt cho cùng một interface thì dùng `@Primary` hoặc `@Qualifier`.\n- Phạm vi bean mặc định là **singleton**: một đối tượng chung cho cả ứng dụng, nên không giữ trạng thái thay đổi theo từng request.\n\n### Lỗi hay gặp\n- `NoUniqueBeanDefinitionException` (nhiều bean cùng kiểu) hoặc `NoSuchBeanDefinitionException` (quên đánh dấu bean / sai package scan).\n- **Phụ thuộc vòng** (A cần B, B cần A).\n- Tiêm field `@Autowired private ...` làm khó kiểm thử vì không tạo được đối tượng mà không có Spring.\n- Dùng `new` cho một bean rồi thắc mắc vì sao các phụ thuộc là `null`.\n\n### Tự kiểm tra\n- DI khác Service Locator thế nào? Vì sao constructor injection được ưa chuộng hơn field injection?",
+  "lessons": [
+   {
+    "href": "/courses/hsf302-working-with-spring-framework/learn?lessonSlug=hsf302-2-1-ioc-di",
+    "ten": "2.1 — Lõi Spring: IoC & Dependency Injection",
+    "nguon": "Working with Spring Framework · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "HSF302"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Thiết kế sẵn sàng Spring (1): composition, DI, exception, log (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs1-1",
+    "ten": "⭐ CS.1 — 📑 Học theo từng slide · Tomcat → Spring (1): connector, đường đi request, lịch sử, IoC/DI (slide 1–13)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Database & Web Framework › Database Access": {
+  "body": "Gần như mọi ứng dụng Java đều nói chuyện với database, và việc đó có ba lớp: mở kết nối, bọc các câu lệnh trong transaction, và (tuỳ chọn) ánh xạ bảng thành object. Hiểu cả ba lớp giúp bạn tránh những lỗi khó thấy nhất của backend: hết kết nối, dữ liệu nửa vời, và truy vấn bắn ra hàng trăm câu SQL.\n\n### Vì sao cần biết\nMở một kết nối tới database tốn thời gian (bắt tay TCP, xác thực). Nếu mỗi request mở một kết nối mới thì server chậm và database quá tải. Còn nếu hai câu `UPDATE` phải cùng thành công hoặc cùng thất bại (chuyển tiền) mà bạn không dùng transaction, một lỗi giữa chừng sẽ để lại dữ liệu sai.\n\n### Ý chính\n- **Connection pool (HikariCP)**: giữ sẵn một số kết nối, request mượn rồi trả lại. Spring Boot dùng HikariCP làm mặc định; kích thước pool (`spring.datasource.hikari.maximum-pool-size`) phải nhỏ hơn giới hạn kết nối của database, và con số lớn hơn không đồng nghĩa với nhanh hơn.\n- **Transaction**: nhóm các thao tác thành một đơn vị nguyên tử (ACID). Với Spring, đặt `@Transactional` lên phương thức của service.\n- **Propagation**: quyết định điều gì xảy ra khi một phương thức có transaction gọi phương thức khác. Mặc định `REQUIRED` (tham gia transaction đang có, nếu chưa có thì tạo mới); `REQUIRES_NEW` tạm dừng transaction ngoài và mở transaction độc lập.\n- **Isolation level**: mức cô lập giữa các transaction đồng thời (`READ_COMMITTED`, `REPEATABLE_READ`, `SERIALIZABLE`). Mức cao hơn an toàn hơn nhưng dễ tranh chấp hơn; mặc định thường là mức mặc định của database.\n- **ORM (JPA/Hibernate)**: ánh xạ class sang bảng (`@Entity`, `@Id`), cho phép viết `entityManager.find(...)` thay vì SQL thủ công. Dùng native query khi cần SQL đặc thù mà JPQL không diễn đạt được (hàm riêng của database, báo cáo phức tạp, tối ưu hiệu năng).\n\n```java\n@Service\npublic class TransferService {\n    private final AccountRepository repo;\n    public TransferService(AccountRepository repo) { this.repo = repo; }\n\n    @Transactional\n    public void transfer(long from, long to, BigDecimal amount) {\n        Account a = repo.findById(from).orElseThrow();\n        Account b = repo.findById(to).orElseThrow();\n        a.withdraw(amount);   // lỗi ở đây => rollback cả hai\n        b.deposit(amount);\n    }\n}\n```\n\n### Lỗi hay gặp\n- Gọi một phương thức `@Transactional` từ chính class đó (`this.transfer(...)`) thì proxy bị bỏ qua và annotation không có tác dụng.\n- Mặc định Spring chỉ rollback với `RuntimeException`/`Error`; exception checked không làm rollback nếu bạn không khai `rollbackFor`.\n- N+1 query: vòng lặp đọc quan hệ `LAZY` bắn một câu SQL cho mỗi phần tử; sửa bằng `JOIN FETCH` hoặc `@EntityGraph`.\n- Giữ transaction (và kết nối) mở trong lúc gọi API bên ngoài, khiến pool cạn.\n\n### Tự kiểm tra\n1. Pool có 10 kết nối nhưng 50 request đồng thời cần database thì chuyện gì xảy ra?\n2. Khi nào `REQUIRES_NEW` có ích?\n3. Vì sao EAGER không chữa được N+1?",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs3-1",
+    "ten": "⭐ CS.3 — 📑 Học theo từng slide · Dữ liệu (1): HikariCP, Flyway, JdbcTemplate, truy vấn Spring Data JPA (slide 1–12)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs3-2",
+    "ten": "⭐ CS.3 — 📑 Học theo từng slide · Dữ liệu (2): N+1, @Transactional, open-in-view, ddl-auto (slide 13–24)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-transaction-pool",
+    "ten": "5.4 — Giao dịch (transaction) & connection pool",
+    "nguon": "Java Web Application Development · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/hsf302-working-with-spring-framework/learn?lessonSlug=hsf302-1-1-jpa",
+    "ten": "1.1 — JPA & ORM: ánh xạ entity",
+    "nguon": "Working with Spring Framework · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "HSF302"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-quiz-cs3",
+    "ten": "⭐ Quiz CS.3 — N+1, HikariCP, luật @Transactional, open-in-view, Flyway, DataAccessException",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Database & Web Framework › EBean": {
+  "body": "Ebean là một ORM cho Java và Kotlin theo hướng đơn giản hơn JPA/Hibernate. Điểm khác biệt dễ thấy nhất là kiểu Active Record: entity kế thừa `io.ebean.Model`, nên bạn có thể gọi `save()`, `delete()` ngay trên đối tượng thay vì đi qua `EntityManager`.\n\n### Ý chính\n- Dùng các annotation ánh xạ quen thuộc (`@Entity`, `@Id`, `@ManyToOne`...) giống JPA.\n- Truy vấn qua `DB.find(Customer.class)` hoặc \"query bean\" sinh tự động, an toàn kiểu (type-safe).\n- Ebean không có persistence context kéo dài như Hibernate; mô hình này giúp tránh nhiều rắc rối về trạng thái entity (detached, merge).\n- Có lazy loading cho quan hệ, cache cấp hai (L2) và truy vấn chỉ-đọc nhẹ.\n- Chạy trên JDBC nên dùng chung pool và transaction với phần còn lại của ứng dụng.\n\n```java\n@Entity\npublic class Customer extends Model {\n    @Id Long id;\n    String name;\n}\n\nnew Customer().setName(\"An\").save();           // Active Record\nCustomer c = DB.find(Customer.class, 1L);      // đọc theo id\n```\n\n### Khi nào chọn\nỨng dụng cần ORM gọn, ít \"phép thuật\". Nếu dự án đã dùng Spring Data JPA hoặc cần hệ sinh thái lớn (nhiều tài liệu, tuyển người dễ), JPA/Hibernate vẫn là lựa chọn phổ biến hơn."
+ },
+ "Database & Web Framework › Logging Frameworks": {
+  "body": "Logging là cách ứng dụng \"kể lại\" điều đang xảy ra để bạn gỡ lỗi trên production, nơi không có debugger. Trong Java có hai khái niệm cần tách bạch: **logging engine** (thật sự ghi log) và **facade** (API để code gọi mà không phụ thuộc engine).\n\n### Vì sao cần biết\n`System.out.println` không có mức log, không có thời gian, không tắt bật được và không ghi ra file xoay vòng. Một thư viện logging giải quyết tất cả.\n\n### Ý chính\n- **JUL (java.util.logging)**: engine có sẵn trong JDK, không cần thêm dependency; cấu hình khá thô sơ nên ít dùng ở dự án lớn.\n- **SLF4J**: facade chuẩn; code gọi `LoggerFactory.getLogger(...)`, còn engine thật (Logback, Log4j2...) nằm ở classpath. Không có provider nào thì SLF4J in cảnh báo và bỏ log (no-op).\n- **Mức log** từ chi tiết nhất đến nghiêm trọng nhất: `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`. Production thường đặt `INFO`; điều chỉnh từng package khi cần điều tra.\n- **Appender** quyết định log đi đâu (console, file xoay vòng, hệ thống tập trung) và **layout/pattern** quyết định định dạng.\n\n```java\nprivate static final Logger log = LoggerFactory.getLogger(OrderService.class);\n\nlog.info(\"Tạo đơn {} cho user {}\", orderId, userId);   // dùng {} thay vì nối chuỗi\nlog.error(\"Thanh toán lỗi, đơn {}\", orderId, ex);      // exception đặt ở tham số cuối\n```\n\n### Lỗi hay gặp\n- Nối chuỗi trước khi gọi log (`\"a\" + b`), tốn công ngay cả khi mức log bị tắt.\n- Ghi log mật khẩu, token, số thẻ.\n- Bắt exception, log, rồi ném lại: cùng một lỗi xuất hiện nhiều lần trong log.\n- Cho nhiều engine cùng lên classpath khiến SLF4J báo xung đột binding.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Thiết kế sẵn sàng Spring (1): composition, DI, exception, log (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-quiz-cs6",
+    "ten": "⭐ Quiz CS.6 — Thiết kế OO sẵn sàng Spring và phỏng vấn Java",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Database & Web Framework › Logback và Log4j2": {
+  "body": "Logback và Log4j2 là hai engine logging phổ biến nhất cho Java; cả hai đều đứng sau facade SLF4J (Log4j2 qua một bridge), nên code ứng dụng không đổi khi bạn chuyển qua lại. Logback do tác giả của log4j gốc viết, là engine mặc định của Spring Boot; Log4j2 là bản viết lại hoàn toàn của Log4j.\n\n### Ý chính\n- **Cấu hình**: Logback đọc `logback.xml` (hoặc `logback-spring.xml` trong Spring Boot); Log4j2 đọc `log4j2.xml` (cũng hỗ trợ JSON/YAML/properties).\n- **Appender**: console, file, file xoay vòng theo ngày/kích thước (rolling policy). Dùng `RollingFileAppender` để log không làm đầy đĩa.\n- **Filter**: lọc theo mức, hoặc theo nội dung.\n- **Async logging**: ghi log qua hàng đợi và luồng riêng để request không phải chờ I/O đĩa. Log4j2 nổi tiếng với async logger dựa trên LMAX Disruptor; Logback có `AsyncAppender`. Đánh đổi: có thể mất vài dòng log cuối nếu tiến trình chết đột ngột, và hàng đợi đầy sẽ phải chọn giữa chặn hay bỏ log.\n- **MDC**: gắn ngữ cảnh (requestId, userId) vào mọi dòng log của một luồng.\n\n```xml\n<configuration>\n  <appender name=\"STDOUT\" class=\"ch.qos.logback.core.ConsoleAppender\">\n    <encoder><pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern></encoder>\n  </appender>\n  <root level=\"INFO\"><appender-ref ref=\"STDOUT\"/></root>\n  <logger name=\"com.example.payment\" level=\"DEBUG\"/>\n</configuration>\n```\n\n### Lưu ý\nLuôn dùng bản Log4j2 đã vá lỗi bảo mật (sự cố Log4Shell năm 2021 ảnh hưởng các bản cũ); đừng ghim phiên bản cũ."
+ },
+ "Database & Web Framework › Javalin": {
+  "body": "Javalin là web framework rất nhỏ cho Java và Kotlin, chạy trên Jetty. Nó chỉ cung cấp phần cốt lõi: routing, xử lý request/response, JSON, WebSocket, static file. Không có dependency injection hay \"phép thuật\" annotation như Spring Boot, nên một API chạy được chỉ cần vài dòng và khởi động rất nhanh.\n\n### Ý chính\n- Khai báo route bằng lambda: `app.get(\"/users/{id}\", ctx -> ...)`.\n- `Context` (`ctx`) đại diện request lẫn response: đọc `ctx.pathParam(\"id\")`, `ctx.queryParam(\"q\")`, `ctx.bodyAsClass(...)`; trả về bằng `ctx.json(obj)` hoặc `ctx.status(404)`.\n- Before/after handler dùng làm middleware (xác thực, ghi log).\n- Xử lý lỗi tập trung bằng `app.exception(...)` và `app.error(...)`.\n- JSON cần thêm một thư viện như Jackson vào dependency.\n\n```java\npublic class Main {\n    public static void main(String[] args) {\n        Javalin app = Javalin.create().start(7070);\n        app.get(\"/hello/{name}\", ctx -> ctx.result(\"Xin chào \" + ctx.pathParam(\"name\")));\n        app.post(\"/users\", ctx -> {\n            User u = ctx.bodyAsClass(User.class);\n            ctx.status(201).json(u);\n        });\n    }\n}\n```\n\n### Khi nào chọn\nMicroservice nhỏ, công cụ nội bộ, dự án học tập, hoặc khi bạn muốn thấy rõ HTTP hoạt động thế nào. Nếu cần hệ sinh thái đầy đủ (bảo mật, data, batch, cấu hình theo profile), Spring Boot tiết kiệm công sức hơn dù nặng hơn."
+ },
+ "Build Tools & Testing › Maven / Gradle": {
+  "body": "Build tool là chương trình biên dịch mã, kéo thư viện bên ngoài về, chạy test và đóng gói ra file `.jar`/`.war`. Thay vì tải từng file `.jar` thủ công, bạn khai báo \"tôi cần thư viện X phiên bản Y\" và công cụ tự tải cùng các thư viện mà X cần (phụ thuộc bắc cầu).\n\n### Ý chính\n- **Maven**: cấu hình khai báo bằng XML trong `pom.xml`. Cấu trúc thư mục chuẩn (`src/main/java`, `src/test/java`) và vòng đời cố định (`validate`, `compile`, `test`, `package`, `verify`, `install`, `deploy`); chạy `mvn package` sẽ chạy mọi pha trước đó, kể cả test.\n- **Gradle**: cấu hình bằng script Groovy hoặc Kotlin (`build.gradle(.kts)`), linh hoạt hơn, có build tăng dần (incremental) và cache; là mặc định của Android.\n- Cả hai đều lấy thư viện từ repository (như Maven Central), hỗ trợ plugin, và quản lý **scope** (compile, test, runtime...).\n- Dùng **wrapper** (`mvnw`, `gradlew`) để mọi người, và CI, dùng cùng một phiên bản công cụ.\n\n```xml\n<dependency>\n  <groupId>org.junit.jupiter</groupId>\n  <artifactId>junit-jupiter</artifactId>\n  <version>5.11.0</version>\n  <scope>test</scope>\n</dependency>\n```\n\n### Lỗi hay gặp\n- Quên `<scope>test</scope>` nên thư viện test bị đóng gói vào bản chạy.\n- Xung đột phiên bản của phụ thuộc bắc cầu; xem bằng `mvn dependency:tree`.\n- Dùng version động hoặc không ghim phiên bản làm build không lặp lại được.\n\n### Tự kiểm tra\n1. `mvn package` chạy những pha nào?\n2. Khác biệt cốt lõi giữa cách cấu hình của Maven và Gradle?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-2",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Thiết kế sẵn sàng Spring (2): Maven, JUnit 5, 40 câu phỏng vấn Java (slide 15–26)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-junit-hands-on",
+    "ten": "8.5 — THỰC HÀNH: JUnit với bộ mẫu của môn (build.xml, JUnit 4.13.2) → JUnit 5 với Maven",
+    "nguon": "Software Testing · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-cs6-on",
+    "ten": "⭐ CS.6 — 🧪 Bài tập · composition, DI, dịch exception, test biên bằng tay và bằng Maven, luyện phỏng vấn",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Build Tools & Testing › JUnit 5": {
+  "body": "JUnit 5 là framework unit test tiêu chuẩn của Java. Một test là một phương thức nhỏ chạy mã của bạn rồi **khẳng định** kết quả; nếu khẳng định sai, test đỏ và cho bạn biết ngay chỗ hỏng.\n\nJUnit 5 gồm ba phần: **Platform** (nền chạy test, cho IDE và Maven/Gradle), **Jupiter** (API và engine mới để viết test) và **Vintage** (chạy test JUnit 3/4 cũ).\n\n### Ý chính\n- `@Test` đánh dấu phương thức test; không cần `public`.\n- Theo mô hình **Arrange – Act – Assert**: chuẩn bị dữ liệu, gọi hàm, khẳng định kết quả.\n- Assertion: `assertEquals`, `assertTrue`, `assertThrows`, `assertAll`; nhiều dự án dùng thêm AssertJ cho câu khẳng định dễ đọc.\n- `@BeforeEach`/`@AfterEach` (thay cho `@Before`/`@After` của JUnit 4), `@BeforeAll`/`@AfterAll` cho việc chạy một lần.\n- `@ParameterizedTest` với `@CsvSource`/`@ValueSource` chạy cùng một test cho nhiều bộ dữ liệu, rất hợp để kiểm tra giá trị biên.\n- `@DisplayName`, `@Disabled`, `@Nested` giúp tổ chức và đọc báo cáo dễ hơn.\n\n```java\nclass FeeCalculatorTest {\n    @ParameterizedTest\n    @CsvSource({\"0,0\", \"1,5000\", \"7,35000\"})\n    void tinhPhiTraMuon(int ngay, int phi) {\n        assertEquals(phi, new FeeCalculator().tinh(ngay));\n    }\n\n    @Test\n    void ngayAmThiNemLoi() {\n        assertThrows(IllegalArgumentException.class, () -> new FeeCalculator().tinh(-1));\n    }\n}\n```\nChạy bằng `mvn test` (cần plugin Surefire; bản hiện đại đã tích hợp sẵn trong Spring Boot starter).\n\n### Lỗi hay gặp\n- Nhầm import của JUnit 4 (`org.junit.Test`) với JUnit 5 (`org.junit.jupiter.api.Test`): test không chạy.\n- Các test phụ thuộc thứ tự chạy hoặc dùng chung trạng thái, thành test chập chờn.\n- Test không có assertion thật sự nên luôn xanh.\n- Chỉ kiểm tra \"đường vui\", bỏ qua giá trị biên.\n\n### Tự kiểm tra\n1. `@BeforeEach` khác `@BeforeAll` ở đâu?\n2. Khi nào nên dùng `@ParameterizedTest`?",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-2",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Thiết kế sẵn sàng Spring (2): Maven, JUnit 5, 40 câu phỏng vấn Java (slide 15–26)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Test (1): JUnit 6, Mockito, MockMvc, Testcontainers, JaCoCo (slide 1–15)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-junit-hands-on",
+    "ten": "8.5 — THỰC HÀNH: JUnit với bộ mẫu của môn (build.xml, JUnit 4.13.2) → JUnit 5 với Maven",
+    "nguon": "Software Testing · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-5-3-unit-tests-junit",
+    "ten": "5.3 — Unit test bằng JUnit 5 cho DAO và service (NetBeans, MySQL)",
+    "nguon": "Software Development Project · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Build Tools & Testing › Mockito": {
+  "body": "Một unit test tốt chỉ kiểm tra một đơn vị mã. Nhưng service thường gọi repository, API ngoài, gửi email... Mockito tạo ra các đối tượng giả (mock) thay cho những phụ thuộc đó, để test chạy nhanh, ổn định và không cần database hay mạng thật.\n\n### Ý chính\n- Tạo mock: `@Mock` (với `@ExtendWith(MockitoExtension.class)`) hoặc `mock(Class)`.\n- **Stub**: định nghĩa mock trả gì, `when(repo.findById(1L)).thenReturn(Optional.of(user))`; hoặc ném lỗi bằng `thenThrow`.\n- **Verify**: kiểm tra tương tác đã xảy ra, `verify(mailer).send(any())`, `verify(repo, never()).delete(any())`, `times(n)`; `InOrder` để kiểm tra thứ tự gọi.\n- `ArgumentCaptor` bắt lại tham số đã truyền để khẳng định nội dung.\n- `@InjectMocks` tiêm mock vào đối tượng cần test (hoặc tự tiêm qua constructor cho rõ ràng).\n\n```java\n@ExtendWith(MockitoExtension.class)\nclass OrderServiceTest {\n    @Mock UserRepository users;\n    @Mock Mailer mailer;\n\n    @Test\n    void guiMailKhiDatHang() {\n        when(users.findById(1L)).thenReturn(Optional.of(new User(1L, \"an@x.vn\")));\n        OrderService svc = new OrderService(users, mailer);\n\n        svc.dat(1L);\n\n        verify(mailer).send(\"an@x.vn\");\n    }\n}\n```\n\n### Lỗi hay gặp\n- Mock quá tay: test chỉ kiểm tra từng lời gọi bên trong, nên đổi cách cài đặt (refactor) là test đỏ dù hành vi đúng.\n- Mock cả những thứ mình không sở hữu (thư viện bên thứ ba) thay vì bọc chúng qua một interface.\n- Stub dư thừa; `MockitoExtension` ở chế độ strict sẽ báo `UnnecessaryStubbingException`.\n- Mock class có `static`/`final` mà không biết giới hạn của công cụ.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Test (1): JUnit 6, Mockito, MockMvc, Testcontainers, JaCoCo (slide 1–15)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-cs6-on",
+    "ten": "⭐ CS.6 — 🧪 Bài tập: giá trị biên, thứ tự Mockito, MockMvcTester, Testcontainers, ma trận quyền, Dockerfile, CI",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-lab2-vi-du-login",
+    "ten": "L2.13 — Dự án làm thật (4): ví dụ trọn vòng AuthService.login",
+    "nguon": "Software Testing · Lab 2 — Component (unit) test: white-box",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-5-3-unit-tests-junit",
+    "ten": "5.3 — Unit test bằng JUnit 5 cho DAO và service (NetBeans, MySQL)",
+    "nguon": "Software Development Project · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Build Tools & Testing › Maven": {
+  "body": "Maven là build tool và công cụ quản lý dependency phổ biến nhất của hệ sinh thái Java. Dù có Gradle, phần lớn dự án doanh nghiệp và mã nguồn mở vẫn dùng Maven vì quy ước rõ ràng và khuôn mẫu giống nhau giữa các dự án.\n\n### Ý chính\n- **POM** (`pom.xml`) mô tả dự án: toạ độ `groupId:artifactId:version`, dependency, plugin, thuộc tính.\n- **Cấu trúc chuẩn**: mã ở `src/main/java`, tài nguyên ở `src/main/resources`, test ở `src/test/java`; kết quả ra thư mục `target/`.\n- **Vòng đời (lifecycle)** gồm các pha theo thứ tự: `validate`, `compile`, `test`, `package`, `verify`, `install`, `deploy`. Gọi một pha thì mọi pha trước đó cũng chạy. Mỗi pha gắn với các **goal** của plugin.\n- **Dependency** được tải từ Maven Central về kho cục bộ `~/.m2`, kèm phụ thuộc bắc cầu; `scope` (`compile`, `provided`, `runtime`, `test`) quyết định thư viện có mặt ở đâu.\n- Dự án nhiều module (multi-module) dùng POM cha để thống nhất phiên bản; `dependencyManagement` hoặc BOM (như `spring-boot-starter-parent`) ghim phiên bản.\n\n```xml\n<project>\n  <modelVersion>4.0.0</modelVersion>\n  <groupId>vn.example</groupId>\n  <artifactId>demo</artifactId>\n  <version>1.0.0</version>\n  <properties><maven.compiler.release>17</maven.compiler.release></properties>\n  <dependencies>\n    <dependency>\n      <groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId>\n      <version>5.11.0</version><scope>test</scope>\n    </dependency>\n  </dependencies>\n</project>\n```\nLệnh thường dùng: `mvn clean package`, `mvn test`, `mvn dependency:tree`, `-DskipTests`.\n\n### Lỗi hay gặp\n- Hiểu nhầm rằng `mvn clean` là một phần của `package`; nó thuộc lifecycle riêng.\n- Xung đột phiên bản bắc cầu; dùng `dependency:tree` để lần ra.\n- Bỏ qua test bằng `-DskipTests` rồi quên bật lại trên CI.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-2",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Thiết kế sẵn sàng Spring (2): Maven, JUnit 5, 40 câu phỏng vấn Java (slide 15–26)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-junit-hands-on",
+    "ten": "8.5 — THỰC HÀNH: JUnit với bộ mẫu của môn (build.xml, JUnit 4.13.2) → JUnit 5 với Maven",
+    "nguon": "Software Testing · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-cs6-on",
+    "ten": "⭐ CS.6 — 🧪 Bài tập · composition, DI, dịch exception, test biên bằng tay và bằng Maven, luyện phỏng vấn",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Build Tools & Testing › Gradle": {
+  "body": "Gradle là build tool dùng ngôn ngữ lập trình (Groovy hoặc Kotlin DSL) thay vì XML cố định như Maven, nên bạn có thể viết logic ngay trong script build. Nó là công cụ build mặc định của Android và được dùng nhiều ở các dự án có build phức tạp hay nhiều module.\n\n### Ý chính\n- File cấu hình: `build.gradle` (Groovy) hoặc `build.gradle.kts` (Kotlin), cùng `settings.gradle(.kts)` khai báo các module.\n- Nội dung build là đồ thị các **task**; Gradle chỉ chạy lại task nào có đầu vào hoặc đầu ra thay đổi (incremental build) và có thể dùng build cache.\n- Dependency khai báo theo **configuration** như `implementation`, `api`, `testImplementation`. `implementation` không lộ thư viện cho module phụ thuộc vào bạn, giúp biên dịch nhanh hơn.\n- Dùng **wrapper** (`./gradlew`) để mọi người dùng cùng phiên bản Gradle.\n- Dùng cùng repository như Maven (Maven Central).\n\n```kotlin\nplugins { java }\n\nrepositories { mavenCentral() }\n\ndependencies {\n    testImplementation(\"org.junit.jupiter:junit-jupiter:5.11.0\")\n}\n\ntasks.test { useJUnitPlatform() }\n```\nChạy bằng `./gradlew build`, `./gradlew test`.\n\n### So với Maven\nMaven ưu tiên quy ước và sự đồng nhất; Gradle ưu tiên linh hoạt và tốc độ ở dự án lớn, đổi lại script có thể phức tạp, khó đọc hơn khi lạm dụng. Nếu dự án không có nhu cầu đặc biệt, chọn công cụ mà đội của bạn đã quen."
+ },
+ "Build Tools & Testing › SLF4J": {
+  "body": "SLF4J (Simple Logging Facade for Java) là một lớp API mỏng cho logging. Code của bạn chỉ gọi SLF4J; engine thật (Logback, Log4j2, JUL...) được chọn bằng dependency lúc đóng gói. Nhờ vậy thư viện bạn viết không ép người dùng dùng một engine cụ thể, và đổi engine không cần sửa code.\n\n### Ý chính\n- Lấy logger: `private static final Logger log = LoggerFactory.getLogger(MyClass.class);`\n- Năm mức: `trace`, `debug`, `info`, `warn`, `error`.\n- Dùng **placeholder** `{}`: `log.debug(\"User {} login\", id)`; chuỗi chỉ được ghép khi mức đó đang bật.\n- Nếu tham số cuối là `Throwable`, SLF4J in cả stack trace: `log.error(\"Lỗi xử lý đơn {}\", id, ex)`.\n- **MDC** gắn thông tin ngữ cảnh (requestId) vào mỗi dòng log.\n- Không có provider nào trên classpath thì SLF4J không ghi gì (no-op) và in cảnh báo lúc khởi động; có nhiều provider thì nó báo xung đột và chọn một.\n\n```xml\n<dependency>\n  <groupId>org.slf4j</groupId><artifactId>slf4j-api</artifactId><version>2.0.16</version>\n</dependency>\n<dependency>\n  <groupId>ch.qos.logback</groupId><artifactId>logback-classic</artifactId><version>1.5.12</version>\n</dependency>\n```\n\n### Lỗi hay gặp\n- Quên thêm engine nên không thấy log nào.\n- Nối chuỗi bằng `+` thay vì `{}`.\n- Log mật khẩu hoặc dữ liệu cá nhân.",
+  "lessons": [
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Thiết kế sẵn sàng Spring (1): composition, DI, exception, log (slide 1–14)",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-quiz-cs6",
+    "ten": "⭐ Quiz CS.6 — Thiết kế OO sẵn sàng Spring và phỏng vấn Java",
+    "nguon": "Object-Oriented Programming · ⭐ Chuyên sâu — Java hiện đại & sẵn sàng",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "PRO192"
+   }
+  ]
+ },
+ "Build Tools & Testing › TinyLog": {
+  "body": "tinylog là thư viện logging nhẹ cho Java và Kotlin, tự đóng gói gọn, ít cấu hình và ít bộ nhớ hơn các engine lớn. Nó phù hợp ứng dụng nhỏ, công cụ dòng lệnh, hoặc môi trường cần giữ kích thước gọn.\n\n### Ý chính\n- Dùng qua lớp tĩnh `Logger`, không cần tự tạo đối tượng logger: `Logger.info(\"Xin chào {}\", name);`.\n- Cấu hình bằng file `tinylog.properties` đơn giản (mức log, writer ra console hoặc file, định dạng).\n- Hỗ trợ placeholder `{}`, ghi log exception, và các writer ra file xoay vòng.\n- Có thể làm backend cho SLF4J nếu bạn thêm module tương ứng, để thư viện bên thứ ba cùng ghi vào một nơi.\n\n```properties\nwriter = console\nwriter.level = info\nwriter.format = {date: HH:mm:ss} {level}: {message}\n```\n```java\nLogger.info(\"Khởi động {}\", \"app\");\nLogger.error(ex, \"Không đọc được file\");\n```\n\n### Khi nào chọn\nKhi bạn cần logging gần như không cấu hình. Ở dự án Spring Boot hoặc nơi cần nhiều tính năng (appender phức tạp, async nâng cao, tích hợp hệ thống log tập trung), Logback hoặc Log4j2 là lựa chọn phổ biến hơn."
+ },
+ "Build Tools & Testing › Test Doubles (Stubs, Mocks, Fakes, Dummies)": {
+  "body": "Khi test một đơn vị mã, bạn thường thay các phụ thuộc thật (database, dịch vụ gửi mail, đồng hồ hệ thống) bằng \"đồ đóng thế\". Thuật ngữ chung là **test double**, lấy ý từ người đóng thế trong phim. Mỗi loại có mục đích khác nhau, và phân biệt đúng giúp test ngắn gọn và không giòn.\n\n### Ý chính\n- **Dummy**: chỉ để lấp tham số bắt buộc, không bao giờ được dùng thật.\n- **Stub**: trả về giá trị cứng đã định sẵn để dẫn mã đang test đi theo nhánh mong muốn (\"tìm user id 1 thì trả user này\").\n- **Spy**: bản ghi lại các lời gọi (thường bọc đối tượng thật) để kiểm tra sau.\n- **Mock**: được lập trình sẵn kỳ vọng về tương tác (\"`send` phải được gọi đúng một lần\") và tự khẳng định đúng/sai.\n- **Fake**: bản cài đặt thật nhưng đơn giản, như repository lưu trong `HashMap` thay vì database.\n\nCần chọn giữa kiểm tra **trạng thái** (kết quả cuối cùng có đúng không) và kiểm tra **tương tác** (đã gọi ai, mấy lần). Ưu tiên kiểm tra trạng thái khi có thể; chỉ kiểm tra tương tác khi tác dụng phụ chính là kết quả (gửi mail, gọi API).\n\n```java\nclass FakeUserRepo implements UserRepo {          // fake\n    private final Map<Long, User> data = new HashMap<>();\n    public void save(User u) { data.put(u.id(), u); }\n    public Optional<User> find(long id) { return Optional.ofNullable(data.get(id)); }\n}\n```\n\n### Lỗi hay gặp\n- Lạm dụng mock: test kiểm tra từng lời gọi nội bộ, đổi cách cài đặt là đỏ dù hành vi vẫn đúng; ngược lại, test mock vẫn xanh khi luật nghiệp vụ bị phá.\n- Mock những thứ mình không sở hữu thay vì bọc chúng sau một interface của riêng mình.\n- Dùng cùng một chữ \"mock\" cho mọi loại, nên đồng đội hiểu sai ý định.\n\n### Tự kiểm tra\n1. Stub và mock khác nhau thế nào về thứ được khẳng định?\n2. Khi nào dùng fake tốt hơn mock?",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-1-phan-loai",
+    "ten": "3.1 — Stub, mock, spy, fake: mỗi loại là gì",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-3-qua-da",
+    "ten": "3.3 — Khi mock làm test vô giá trị: một bug được cài, một thay đổi vô hại",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-5-lab-test-double",
+    "ten": "Lab 3 — Đồ đóng thế trung thực: test luồng gửi thư và diệt 8 đột biến",
+    "nguon": "Testing · Chương 3",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Test (1): JUnit 6, Mockito, MockMvc, Testcontainers, JaCoCo (slide 1–15)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Build Tools & Testing › TestNG": {
+  "body": "TestNG là framework kiểm thử cho Java, ra đời trước JUnit 5 với mục tiêu bao quát từ unit test đến integration test. Nhiều tính năng nó có từ đầu mà JUnit 4 từng thiếu; JUnit 5 đã bổ sung nhiều thứ tương đương, nhưng TestNG vẫn được dùng rộng rãi trong kiểm thử tự động (đặc biệt cùng Selenium).\n\n### Ý chính\n- `@Test` kèm thuộc tính: `priority`, `groups`, `dependsOnMethods`, `enabled`, `timeOut`.\n- **Phụ thuộc giữa test**: `@Test(dependsOnMethods = \"dangNhap\")` chỉ chạy khi test kia đã qua (dùng cẩn thận: test độc lập vẫn tốt hơn).\n- **Nhóm test** (`groups`) để chạy theo tập như `smoke`, `regression`.\n- **Chạy song song** cấu hình trong `testng.xml` bằng `parallel=\"methods\"` và `thread-count`, hoặc theo class/tests.\n- **Data provider**: `@DataProvider` cấp nhiều bộ dữ liệu cho một test, tương đương `@ParameterizedTest`.\n- Cấu hình bộ test bằng file `testng.xml`, kèm báo cáo HTML dựng sẵn.\n\n```java\npublic class LoginTest {\n    @DataProvider(name = \"cases\")\n    public Object[][] cases() {\n        return new Object[][] {{\"an\", \"123\", true}, {\"an\", \"sai\", false}};\n    }\n\n    @Test(dataProvider = \"cases\", groups = \"smoke\")\n    public void login(String user, String pass, boolean ok) {\n        Assert.assertEquals(new AuthService().login(user, pass), ok);\n    }\n}\n```\nLưu ý: `Assert.assertEquals(actual, expected)`, thứ tự tham số ngược với JUnit.\n\n### Khi nào chọn\nDự án test tự động lớn cần nhóm, thứ tự và song song theo cấu hình. Dự án mới thuần Spring thường chọn JUnit 5 vì được hỗ trợ sẵn."
+ },
+ "Build Tools & Testing › REST Assured": {
+  "body": "REST Assured là thư viện Java cho phép kiểm thử REST API bằng DSL dạng Given – When – Then ngay trong code test. Thay vì bấm tay trong Postman, bạn viết request và khẳng định status code, header, body, rồi chạy cùng JUnit trong CI.\n\n### Ý chính\n- **given()** chuẩn bị request (header, tham số, body, xác thực); **when()** gửi (`get`, `post`...); **then()** khẳng định phản hồi.\n- Đọc JSON bằng **JsonPath**: `body(\"data.name\", equalTo(\"An\"))`; kiểm tra danh sách bằng matcher của Hamcrest như `hasSize`, `hasItems`.\n- Có thể trích dữ liệu ra để dùng cho request kế tiếp (`extract().path(\"id\")`).\n- Dùng được với API đang chạy (môi trường staging) hoặc với server dựng trong test (Spring Boot `@SpringBootTest(webEnvironment = RANDOM_PORT)`).\n\n```java\n@Test\nvoid taoUserTraVe201() {\n    given()\n        .baseUri(\"http://localhost:8080\")\n        .contentType(ContentType.JSON)\n        .body(\"{\\\"name\\\":\\\"An\\\"}\")\n    .when()\n        .post(\"/users\")\n    .then()\n        .statusCode(201)\n        .body(\"name\", equalTo(\"An\"))\n        .header(\"Location\", notNullValue());\n}\n```\n\n### Lỗi hay gặp\n- Test phụ thuộc dữ liệu có sẵn trên môi trường chung, nên lúc xanh lúc đỏ; hãy tự tạo và dọn dữ liệu.\n- Chỉ kiểm tra mã 200 mà không kiểm tra nội dung trả về.\n- Bỏ qua các đường lỗi (400, 401, 404, 409).\n\nVới API Spring, `MockMvc` là lựa chọn không cần mở cổng mạng, còn REST Assured hợp để kiểm tra \"từ ngoài vào\" như người dùng thật.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Test (1): JUnit 6, Mockito, MockMvc, Testcontainers, JaCoCo (slide 1–15)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-5-1-supertest",
+    "ten": "5.1 — Supertest: gửi request mà không cần bật server",
+    "nguon": "Testing · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Build Tools & Testing › JMeter": {
+  "body": "JMeter là công cụ mã nguồn mở của Apache để kiểm thử hiệu năng và tải: nó giả lập nhiều người dùng đồng thời gửi request tới một endpoint rồi đo kết quả. Khác unit test (kiểm tra logic đúng hay sai), test tải trả lời câu hỏi \"hệ thống chịu được bao nhiêu và chậm ở đâu\".\n\n### Ý chính\n- **Test Plan** chứa **Thread Group** (số người dùng ảo, thời gian ramp-up, số lần lặp), các **Sampler** (HTTP Request, JDBC...), **Assertion** và **Listener** (báo cáo).\n- Chỉ số cần đọc: **throughput** (request/giây), **latency/thời gian phản hồi** (xem phân vị p95, p99 chứ không chỉ trung bình), **tỉ lệ lỗi**.\n- Dùng giao diện đồ hoạ để thiết kế, nhưng chạy tải thật bằng chế độ dòng lệnh (non-GUI): `jmeter -n -t plan.jmx -l ketqua.jtl`.\n- Tăng tải dần để tìm \"điểm gãy\": nơi thời gian phản hồi bắt đầu tăng vọt hoặc lỗi xuất hiện.\n- Các công cụ cùng mục đích: Gatling, k6, Locust, autocannon.\n\n### Lỗi hay gặp\n- Chạy cả máy tạo tải lẫn server trên cùng một máy nên kết quả sai.\n- Đọc trung bình rồi bỏ qua đuôi chậm (p99).\n- Bỏ qua cơ chế giới hạn tốc độ (rate limit) khiến toàn bộ lỗi là 429 mà tưởng server yếu.\n- Dùng dữ liệu y hệt nhau cho mọi người dùng ảo nên cache làm kết quả quá đẹp.\n\nHãy luôn đo trên môi trường giống production và tìm nút thắt (CPU, database, pool kết nối) trước khi tối ưu.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-8-2-mot-may",
+    "ten": "8.2 — Đo API của bạn: một bài test tải, và nút thắt thật đầu tiên",
+    "nguon": "API & System Design · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-8-1-so-lieu",
+    "ten": "8.1 — Ngân sách độ trễ: thời gian của một lời gọi API đi đâu?",
+    "nguon": "API & System Design · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Build Tools & Testing › Cucumber-JVM": {
+  "body": "Cucumber-JVM là bản Cucumber cho Java, dùng để làm BDD (Behavior-Driven Development, phát triển hướng hành vi). Ý tưởng: mô tả hành vi mong muốn bằng ngôn ngữ tự nhiên có cấu trúc để BA, tester và developer đọc chung một tài liệu, rồi dùng chính tài liệu đó làm test tự động.\n\n### Ý chính\n- **Feature file** (`.feature`) viết bằng **Gherkin**: `Feature`, `Scenario`, và các bước `Given` (bối cảnh), `When` (hành động), `Then` (kết quả), cùng `And`/`But`.\n- **Step definition** là các phương thức Java gắn với từng bước bằng annotation `@Given`, `@When`, `@Then` (khớp theo Cucumber Expression hoặc regex).\n- `Scenario Outline` + bảng `Examples` chạy cùng kịch bản cho nhiều bộ dữ liệu.\n- Chạy qua JUnit Platform (module `cucumber-junit-platform-engine`); báo cáo sinh ra dạng HTML/JSON.\n\n```gherkin\nFeature: Mượn sách\n  Scenario: Mượn thành công\n    Given thẻ thư viện còn hạn\n    And sách \"Clean Code\" còn 1 bản\n    When bạn đọc mượn sách \"Clean Code\"\n    Then mượn thành công\n    And sách \"Clean Code\" còn 0 bản\n```\n```java\npublic class MuonSachSteps {\n    private final Library lib = new Library();\n\n    @Given(\"sách {string} còn {int} bản\")\n    public void sachCon(String ten, int soBan) { lib.them(ten, soBan); }\n\n    @When(\"bạn đọc mượn sách {string}\")\n    public void muon(String ten) { lib.muon(ten); }\n}\n```\n\n### Lỗi hay gặp\n- Viết kịch bản như script thao tác UI (\"bấm nút X\") thay vì mô tả hành vi nghiệp vụ.\n- Kịch bản quá dài, hoặc dùng chung trạng thái giữa các scenario.\n- Dùng Cucumber khi cả đội không đọc feature file: chỉ thêm một lớp phức tạp mà không có lợi ích giao tiếp.",
+  "lessons": [
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-tdd-bdd",
+    "ten": "9.6 — Phương pháp kiểm thử Agile: TDD, ATDD, BDD, test pyramid và testing quadrants",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "Build Tools & Testing › Bazel": {
+  "body": "Bazel là hệ thống build do Google phát triển, hướng tới monorepo lớn và nhiều ngôn ngữ (Java, Go, C++, Python...) trong cùng một đồ thị build. Hai điểm mạnh chính là build **tăng dần chính xác** và **có thể lặp lại** (hermetic: kết quả chỉ phụ thuộc đầu vào khai báo rõ).\n\n### Ý chính\n- Cấu hình bằng file `BUILD` (và `WORKSPACE`/`MODULE.bazel`) viết bằng Starlark, mô tả các **target** như `java_library`, `java_binary`, `java_test`.\n- Mỗi target khai báo rõ nguồn và dependency, nên Bazel biết chính xác phải build lại gì khi một file đổi.\n- Hỗ trợ **cache** cục bộ và từ xa, **build song song** và thực thi từ xa, để cả đội tái sử dụng kết quả build của nhau.\n- Đánh đổi: đường cong học khó, phải khai báo dependency tường minh, và hệ sinh thái Java cần cầu nối (như `rules_jvm_external`) để dùng thư viện Maven.\n\n```python\njava_library(\n    name = \"core\",\n    srcs = glob([\"src/main/java/**/*.java\"]),\n)\n\njava_test(\n    name = \"core_test\",\n    srcs = glob([\"src/test/java/**/*.java\"]),\n    test_class = \"vn.example.CoreTest\",\n    deps = [\":core\"],\n)\n```\nChạy: `bazel build //...`, `bazel test //...`.\n\n### Khi nào chọn\nMonorepo lớn, nhiều ngôn ngữ, thời gian build đã thành nút thắt. Dự án Java thông thường nên dùng Maven hoặc Gradle, vì Bazel chỉ đáng giá khi quy mô đủ lớn."
+ },
+ "Build Tools & Testing › Mocking với Mockito": {
+  "body": "Một unit test tốt chỉ kiểm tra một đơn vị mã. Nhưng service thường gọi repository, API ngoài, gửi email... Mockito tạo ra các đối tượng giả (mock) thay cho những phụ thuộc đó, để test chạy nhanh, ổn định và không cần database hay mạng thật.\n\n### Ý chính\n- Tạo mock: `@Mock` (với `@ExtendWith(MockitoExtension.class)`) hoặc `mock(Class)`.\n- **Stub**: định nghĩa mock trả gì, `when(repo.findById(1L)).thenReturn(Optional.of(user))`; hoặc ném lỗi bằng `thenThrow`.\n- **Verify**: kiểm tra tương tác đã xảy ra, `verify(mailer).send(any())`, `verify(repo, never()).delete(any())`, `times(n)`; `InOrder` để kiểm tra thứ tự gọi.\n- `ArgumentCaptor` bắt lại tham số đã truyền để khẳng định nội dung.\n- `@InjectMocks` tiêm mock vào đối tượng cần test (hoặc tự tiêm qua constructor cho rõ ràng).\n\n```java\n@ExtendWith(MockitoExtension.class)\nclass OrderServiceTest {\n    @Mock UserRepository users;\n    @Mock Mailer mailer;\n\n    @Test\n    void guiMailKhiDatHang() {\n        when(users.findById(1L)).thenReturn(Optional.of(new User(1L, \"an@x.vn\")));\n        OrderService svc = new OrderService(users, mailer);\n\n        svc.dat(1L);\n\n        verify(mailer).send(\"an@x.vn\");\n    }\n}\n```\n\n### Lỗi hay gặp\n- Mock quá tay: test chỉ kiểm tra từng lời gọi bên trong, nên đổi cách cài đặt (refactor) là test đỏ dù hành vi đúng.\n- Mock cả những thứ mình không sở hữu (thư viện bên thứ ba) thay vì bọc chúng qua một interface.\n- Stub dư thừa; `MockitoExtension` ở chế độ strict sẽ báo `UnnecessaryStubbingException`.\n- Mock class có `static`/`final` mà không biết giới hạn của công cụ.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Học theo từng slide · Test (1): JUnit 6, Mockito, MockMvc, Testcontainers, JaCoCo (slide 1–15)",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-cs6-on",
+    "ten": "⭐ CS.6 — 🧪 Bài tập: giá trị biên, thứ tự Mockito, MockMvcTester, Testcontainers, ma trận quyền, Dockerfile, CI",
+    "nguon": "Java Web Application Development · ⭐ Chuyên sâu — Từ Servlet tới Spring Boo",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-1-phan-loai",
+    "ten": "3.1 — Stub, mock, spy, fake: mỗi loại là gì",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-lab2-vi-du-login",
+    "ten": "L2.13 — Dự án làm thật (4): ví dụ trọn vòng AuthService.login",
+    "nguon": "Software Testing · Lab 2 — Component (unit) test: white-box",
+    "kieu": "lab",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ }
+}

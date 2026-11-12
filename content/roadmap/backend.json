@@ -1489,6 +1489,2101 @@
    }
   ]
  },
+ "API › OpenAPI Specs": {
+  "body": "OpenAPI Specification (OAS) là một tệp YAML hoặc JSON mô tả toàn bộ API của bạn theo một định dạng máy đọc được: có những đường dẫn nào, mỗi đường nhận phương thức gì, tham số ra sao, trả về mã trạng thái và hình dạng dữ liệu nào. Hãy nghĩ nó như bản vẽ kỹ thuật của một toà nhà: thợ điện, thợ nước và chủ nhà đều nhìn cùng một bản vẽ thay vì mỗi người tự đoán.\n\n### Vì sao cần biết\n- Frontend, mobile, đối tác và đội QA đọc cùng một \"hợp đồng\" thay vì hỏi miệng.\n- Từ một tệp có thể sinh tài liệu tương tác (Swagger UI, Redoc), client có kiểu (TypeScript, Java...), server stub và bộ validate request.\n- Công cụ có thể so hai phiên bản spec để phát hiện thay đổi phá vỡ trước khi deploy.\n\n### Ý chính\n- Tệp có `openapi: 3.1.0`, `info`, `servers`, `paths` và `components`.\n- Mỗi operation (`get`, `post`...) khai báo `parameters`, `requestBody` và `responses` theo từng mã trạng thái.\n- Các schema dùng lại được đặt trong `components/schemas` và tham chiếu bằng `$ref`. Từ OpenAPI 3.1, schema là JSON Schema 2020-12 đầy đủ.\n- Xác thực (bearer, API key, OAuth) khai ở `components/securitySchemes`.\n- Có hai cách làm việc: viết spec trước rồi code theo (design-first), hoặc code trước rồi sinh spec (code-first). Dù cách nào, phải có bước kiểm để spec không nói dối.\n\n```yaml\nopenapi: 3.1.0\ninfo: { title: Notes API, version: 1.0.0 }\npaths:\n  /notes/{id}:\n    get:\n      parameters:\n        - { name: id, in: path, required: true, schema: { type: integer } }\n      responses:\n        '200':\n          description: Một ghi chú\n          content:\n            application/json:\n              schema: { $ref: '#/components/schemas/Note' }\n        '404': { description: Không tìm thấy }\ncomponents:\n  schemas:\n    Note:\n      type: object\n      required: [id, title]\n      properties:\n        id: { type: integer }\n        title: { type: string }\n```\n\n### Lỗi hay gặp\n- Spec viết một lần rồi để mốc meo: tài liệu nói một đằng, server làm một nẻo. Cần test hợp đồng chạy trong CI.\n- Chỉ mô tả \"happy path\" 200, bỏ quên các mã lỗi 400, 401, 404, 409.\n- Đặt cả nghìn dòng vào một tệp không tách `components`, khiến việc review rất khó.\n\n### Tự kiểm tra\n1. Khác biệt giữa design-first và code-first là gì, mỗi bên có rủi ro gì?\n2. `$ref` giúp ích gì cho việc bảo trì spec?\n3. Làm sao để biết spec của bạn còn khớp server thật?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-1-openapi",
+    "ten": "7.1 — Viết OpenAPI 3.1: hợp đồng của LabFlow thành một tệp",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-1-kiem-hop-dong",
+    "ten": "7.2 — Tài liệu có nói thật không? Kiểm hợp đồng với server đang chạy",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-2-sinh-code",
+    "ten": "7.3 — Sinh tài liệu, client có kiểu và bộ validate từ một tệp",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-5-4-hop-dong",
+    "ten": "5.4 — Contract test và OpenAPI: khi frontend và backend lệch nhau",
+    "nguon": "Testing · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-3-design-first",
+    "ten": "7.4 — Thiết kế trước hay code trước: mock, luật phong cách và cổng chặn thay đổi phá vỡ",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "OpenAPI Specification (bản mới nhất)",
+    "url": "https://spec.openapis.org/oas/latest.html"
+   }
+  ]
+ },
+ "API › Learn about APIs": {
+  "body": "API (Application Programming Interface) là giao diện để một chương trình nói chuyện với chương trình khác. Với backend web, API thường là một tập các địa chỉ HTTP: client gửi request, server xử lý và trả response. Giống như ở nhà hàng: thực đơn là API, bạn gọi món (request), bếp chế biến phía sau và bồi bàn mang món ra (response). Bạn không cần biết bếp làm thế nào.\n\n### Vì sao cần biết\nHầu như mọi ứng dụng hiện đại đều ghép từ API: app di động gọi server của bạn, server gọi cổng thanh toán, dịch vụ email, bản đồ. Hiểu API là hiểu ngôn ngữ chung của backend.\n\n### Ý chính\n- **Request** gồm: method (GET, POST, PUT, PATCH, DELETE), URL, header và (tuỳ chọn) body, thường là JSON.\n- **Response** gồm: status code, header và body.\n- Status code theo nhóm: 2xx thành công, 3xx chuyển hướng, 4xx lỗi do client, 5xx lỗi do server.\n- Header mang siêu dữ liệu: `Content-Type`, `Authorization`, `Cache-Control`.\n- HTTP không nhớ gì giữa hai request (stateless), nên danh tính phải đi kèm mỗi request (cookie, token).\n- REST là phong cách phổ biến nhất: mô hình hoá thành tài nguyên (`/users/42`) và dùng method để nói hành động.\n\n```bash\ncurl -i -X POST https://api.example.com/notes \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"title\":\"Học API\"}'\n```\nCờ `-i` in cả header của response để bạn nhìn thấy status code.\n\n### Lỗi hay gặp\n- Nhầm `401` (chưa xác thực) với `403` (đã xác thực nhưng không đủ quyền).\n- Luôn trả `200` kể cả khi lỗi, bắt client phải đọc body mới biết.\n- Đặt tên theo động từ (`/getUser`) thay vì tài nguyên.\n\n### Tự kiểm tra\n1. Một request và một response gồm những phần nào?\n2. Vì sao nói HTTP là stateless, và hệ quả với đăng nhập là gì?\n3. `404` và `500` khác nhau về trách nhiệm của ai?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-0-slides",
+    "ten": "6.0 — Slide bài giảng: HTTP & API trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-1-request-response",
+    "ten": "6.1 — Request và response: hình dạng của HTTP",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — API là gì, ra đời thế nào, và vì sao thiết kế nó cho tốt lại quan trọng với bạn",
+    "nguon": "API & System Design · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-3-status-codes",
+    "ten": "6.3 — Mã trạng thái: máy chủ trả lời gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=rest-api",
+    "ten": "REST API — Request & Response",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "API › Testing": {
+  "body": "Kiểm thử phần mềm là viết thêm code để tự động kiểm tra code chính có làm đúng hay không. Nhờ đó khi sửa một chỗ, bạn biết ngay chỗ khác có hỏng không, thay vì để khách hàng phát hiện.\n\n### Vì sao cần biết\nBackend sống lâu, nhiều người cùng sửa. Không có test thì mỗi lần refactor hay nâng thư viện đều là canh bạc. Test tốt cũng là tài liệu sống: đọc test là biết hàm này nên cư xử thế nào.\n\n### Ý chính\n- **Unit test**: kiểm một hàm hay lớp nhỏ, chạy cực nhanh, không chạm mạng hay cơ sở dữ liệu.\n- **Integration test**: kiểm nhiều phần ghép lại, ví dụ route kèm cơ sở dữ liệu thật.\n- **End-to-end (E2E)**: đi qua cả hệ thống như người dùng thật, chậm và dễ chập chờn hơn.\n- **Kim tự tháp test**: nhiều unit test ở đáy, ít hơn ở giữa, rất ít E2E ở đỉnh, để bộ test vừa nhanh vừa đáng tin.\n- Test tốt kiểm hành vi quan sát được, không kiểm chi tiết cài đặt bên trong.\n\n### Lỗi hay gặp\n- Đo độ phủ (coverage) rồi tưởng 100% là chắc: test chỉ chạy qua dòng code mà không kiểm gì vẫn tính là phủ.\n- Mock quá tay đến mức test chỉ kiểm lại chính mock.\n- Test phụ thuộc thứ tự chạy hoặc thời gian hiện tại nên lúc xanh lúc đỏ (flaky).\n\n### Tự kiểm tra\n1. Vì sao kim tự tháp có đáy rộng và đỉnh hẹp?\n2. Khi nào một integration test đáng giá hơn mười unit test?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-13-0-slides",
+    "ten": "13.0 — Kiểm thử trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 13",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Kiểm thử là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+    "nguon": "Testing · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap",
+    "ten": "0.2 — Kim tự tháp test (và chiếc cúp), đo thật trên LabFlow Lite",
+    "nguon": "Testing · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-14-1-vi-sao-test",
+    "ten": "14.1 — Một bài test giá bao nhiêu và mua được gì",
+    "nguon": "Node.js · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/testing-practice",
+    "ten": "Testing — Luyện viết test, chấm bằng đột biến",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "API › REST API Design": {
+  "body": "REST là cách thiết kế API xoay quanh **tài nguyên** (danh từ) thay vì hành động. Bạn có `/orders` và `/orders/42`, rồi dùng method HTTP để nói việc cần làm. Một API nhất quán cho phép người dùng đoán được cách dùng điểm cuối mới mà không cần đọc tài liệu.\n\n### Vì sao cần biết\nĐây là kỹ năng backend được dùng hằng ngày và được hỏi nhiều nhất khi phỏng vấn. Một thiết kế tồi (đặt tên lộn xộn, mã trạng thái tuỳ tiện) sẽ trở thành nợ kéo dài vì rất khó đổi khi đã có client dùng.\n\n### Ý chính\n- **Tài nguyên là danh từ số nhiều**: `GET /orders`, `POST /orders`, `GET /orders/42`, `DELETE /orders/42`. Tránh `/getOrders`.\n- **Method có cam kết**: GET an toàn và không đổi dữ liệu; PUT và DELETE idempotent (gọi lại nhiều lần kết quả vẫn như một lần); POST thì không.\n- **PUT thay cả tài nguyên, PATCH sửa một phần.**\n- **Mã trạng thái có nghĩa**: `201` khi tạo xong, `400` hoặc `422` khi dữ liệu sai, `401` chưa đăng nhập, `403` không đủ quyền, `404` không tồn tại, `409` xung đột.\n- **Lỗi một định dạng chung**, ví dụ Problem Details (RFC 9457), để client xử lý thống nhất.\n- **Danh sách phải phân trang, lọc và sắp xếp** ngay từ đầu; phân trang con trỏ (cursor) bền hơn offset khi dữ liệu lớn.\n- Tên trường nhất quán: một kiểu viết hoa, ngày giờ theo ISO 8601, tiền tính bằng đơn vị nhỏ nhất.\n\n```http\nPOST /v1/orders\nContent-Type: application/json\n\n{\"productId\": 7, \"quantity\": 2}\n\nHTTP/1.1 201 Created\nLocation: /v1/orders/42\n```\n\n### Lỗi hay gặp\n- Dùng `200` kèm `{\"success\": false}` cho mọi lỗi.\n- Trả toàn bộ bảng mà không phân trang rồi sập khi dữ liệu lớn.\n- Lộ cấu trúc cơ sở dữ liệu thẳng ra API khiến mỗi lần đổi bảng là phá hợp đồng.\n\n### Tự kiểm tra\n1. Vì sao `DELETE /orders/42` idempotent còn `POST /orders` thì không?\n2. Khi nào dùng `422` thay vì `400`?\n3. Offset pagination gặp vấn đề gì ở trang sâu?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-1-tai-nguyen",
+    "ten": "1.1 — Mô hình hoá tài nguyên, không phải hành động",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-2-phuong-thuc",
+    "ten": "1.2 — Phương thức và cam kết của chúng: safe, idempotent, PUT và PATCH",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-3-status",
+    "ten": "1.3 — Mã trạng thái có ý nghĩa: 201, 400 và 422, 401 và 403, 404 và 410, 409",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-1-4-dat-ten",
+    "ten": "1.4 — Đặt tên, kiểu chữ và nhất quán: trường, ngày giờ, tiền và id",
+    "nguon": "API & System Design · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/api-design-practice",
+    "ten": "API & System Design — Luyện tập",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "RFC 9457 – Problem Details for HTTP APIs",
+    "url": "https://datatracker.ietf.org/doc/html/rfc9457"
+   }
+  ]
+ },
+ "API › Versioning API": {
+  "body": "Khi API đã có người dùng, mọi thay đổi đều có nguy cơ làm hỏng họ. Versioning là cách cho phép API tiến hoá mà client cũ vẫn chạy được. Điều quan trọng nhất không phải chọn kiểu đánh số, mà là hiểu thế nào là thay đổi phá vỡ.\n\n### Vì sao cần biết\nApp di động và desktop không cập nhật cùng lúc với server của bạn: sẽ có phiên bản cũ chạy hàng tháng. Đổi tên một trường mà không báo trước có thể làm sập hàng nghìn máy.\n\n### Ý chính\n- **Thay đổi không phá vỡ**: thêm trường mới tuỳ chọn, thêm endpoint mới. Client cũ bỏ qua và vẫn chạy.\n- **Thay đổi phá vỡ**: đổi tên hoặc xoá trường, đổi kiểu dữ liệu, thêm tham số bắt buộc, đổi ý nghĩa mã trạng thái.\n- **Các chiến lược**: version trong URL (`/v1/...`, dễ thấy và dễ cache), trong header, trong media type, hoặc theo ngày (kiểu Stripe).\n- **Khai tử có báo trước**: thông báo, thêm header `Deprecation` và `Sunset`, theo dõi ai còn gọi bản cũ, rồi mới tắt (có thể trả `410 Gone` sau ngày hẹn).\n- **Test hợp đồng** trong CI để chặn thay đổi phá vỡ lọt ra ngoài.\n- Hạn chế số phiên bản đang sống cùng lúc, vì mỗi bản là một gánh bảo trì.\n\n```http\nGET /v1/users/42        # bản cũ vẫn chạy\nGET /v2/users/42        # bản mới với cấu trúc đổi\nDeprecation: true\nSunset: Wed, 31 Dec 2026 00:00:00 GMT\n```\n\n### Lỗi hay gặp\n- Tăng version mỗi khi đổi chút ít, sinh ra quá nhiều bản.\n- Tắt phiên bản cũ mà không biết còn ai đang dùng.\n- Quên rằng thêm một giá trị mới vào enum cũng có thể phá client viết `switch` cứng.\n\n### Tự kiểm tra\n1. Đổi tên trường `name` thành `fullName` thuộc loại thay đổi nào, và làm sao đổi mà không phá client cũ?\n2. Ưu và nhược điểm của version trong URL so với trong header?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-4-1-thay-doi",
+    "ten": "4.1 — Thay đổi phá vỡ và không phá vỡ: một client cũ, năm thay đổi, đo thật",
+    "nguon": "API & System Design · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-4-2-chien-luoc",
+    "ten": "4.2 — Chiến lược đánh phiên bản: URL, header, media type, theo ngày — và một router cho hai phiên bản",
+    "nguon": "API & System Design · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-4-3-deprecation",
+    "ten": "4.3 — Khai tử có báo trước: header chuẩn, ai còn gọi, 410 sau ngày hẹn",
+    "nguon": "API & System Design · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-4-4-app-di-dong",
+    "ten": "4.4 — Client di động và desktop không chịu cập nhật: header phiên bản, cấu hình từ xa, giấu giá trị enum mới",
+    "nguon": "API & System Design · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-4-5-lab",
+    "ten": "4.5 — Lab 4: thiết bị phiên bản 2 (đổi tên không làm vỡ, khai tử, test hợp đồng — có thang chấm)",
+    "nguon": "API & System Design · Chương 4",
+    "kieu": "lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "APIs as infrastructure: future-proofing Stripe with versioning",
+    "url": "https://stripe.com/blog/api-versioning"
+   }
+  ]
+ },
+ "API › AI trong Ứng dụng": {
+  "body": "Nhúng AI vào ứng dụng backend thường nghĩa là gọi API của một mô hình ngôn ngữ lớn (LLM) từ server của bạn: gửi một danh sách tin nhắn, nhận về văn bản. Mô hình chạy ở nhà cung cấp, bạn không tự host nó. Phần việc của backend dev là bọc lời gọi đó cho an toàn, nhanh và đáng tin.\n\n### Vì sao cần biết\nChat hỗ trợ, tóm tắt, phân loại, trích xuất dữ liệu, tìm kiếm ngữ nghĩa đều đi qua mô hình theo cách này. Gọi API thì dễ; làm cho nó chạy ổn ở production mới là việc khó.\n\n### Ý chính\n- **Khoá API chỉ nằm ở server.** Trình duyệt gọi endpoint của bạn, endpoint của bạn gọi mô hình; không bao giờ đưa khoá xuống client.\n- Một lời gọi gồm `model`, `messages` (vai trò `system`, `user`, `assistant`) và các tham số như `temperature`, `max_tokens`.\n- **Token** là đơn vị tính tiền và giới hạn. Phải đặt trần độ dài đầu vào, đầu ra và ngân sách theo người dùng.\n- **Độ trễ cao và hay biến động**: cần timeout, retry kèm backoff khi gặp `429` hoặc `5xx`, và có thể phải thiết kế phản hồi dạng stream.\n- **Không tin đầu ra.** Văn bản mô hình sinh ra có thể sai hoặc bị dẫn dụ (prompt injection); phải kiểm lại trước khi dùng để làm việc thật.\n- **Không có bộ nhớ.** Muốn trò chuyện nhiều lượt, bạn tự gửi lại lịch sử và tự lưu nó.\n\n```js\nconst res = await fetch(`${BASE_URL}/chat/completions`, {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${process.env.LLM_KEY}` },\n  body: JSON.stringify({\n    model: 'tên-model',\n    messages: [{ role: 'user', content: 'Tóm tắt giúp tôi đoạn này...' }],\n    max_tokens: 300,\n  }),\n});\nconst data = await res.json();\n```\nTên endpoint và model khác nhau theo nhà cung cấp; hãy đọc tài liệu của bên bạn dùng.\n\n### Lỗi hay gặp\n- Đặt khoá vào biến `NEXT_PUBLIC_*` hoặc mã frontend.\n- Không đặt trần chi phí nên một vòng lặp lỗi đốt hết tiền trong một đêm.\n- Ghi log nguyên văn câu hỏi của người dùng, vô tình lưu cả dữ liệu nhạy cảm.\n\n### Tự kiểm tra\n1. Vì sao khoá API không được xuất hiện ở trình duyệt?\n2. Trả lời nhiều lượt cần backend làm gì thêm?",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-server-proxy",
+    "ten": "2.1 — Route Handlers & proxy LLM phía server",
+    "nguon": "AI Study Assistant · Mục 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-chat-endpoint",
+    "ten": "4.2 — Endpoint chat, streaming & giữ key phía server",
+    "nguon": "AI Study Assistant · Mục 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   }
+  ]
+ },
+ "API › Streaming": {
+  "body": "LLM sinh chữ dần dần, và một câu trả lời dài có thể mất vài chục giây. Nếu đợi có đủ rồi mới trả, người dùng nhìn màn hình trắng rất lâu. Streaming gửi từng mẩu chữ ngay khi có, nên chữ đầu tiên hiện ra sau chưa đầy một hai giây.\n\n### Vì sao cần biết\nThời gian tới chữ đầu tiên quyết định cảm nhận tốc độ. Mọi giao diện chat đều dùng streaming, và lỗi hay gặp nhất là proxy hoặc trình duyệt làm \"nghẽn\" luồng khiến nó dồn cục.\n\n### Ý chính\n- Gửi `stream: true` trong request; nhà cung cấp trả về một chuỗi sự kiện, mỗi sự kiện chứa một mẩu chữ (delta).\n- Từ server của bạn đến trình duyệt, cách đơn giản nhất là **Server-Sent Events (SSE)**: một kết nối HTTP mở sẵn, server đẩy các dòng `data: ...`. Trình duyệt đọc bằng `EventSource` hoặc `fetch` kèm `ReadableStream`.\n- Server vừa nhận stream từ mô hình vừa chuyển tiếp ngay (pipe), không gom lại.\n- **Cho phép huỷ**: khi người dùng bỏ trang hoặc bấm dừng, phải huỷ lời gọi ngược lên mô hình (`AbortController`), nếu không bạn vẫn trả tiền cho phần chữ không ai đọc.\n- Với nginx phía trước, cần tắt bộ đệm cho đường stream (ví dụ `proxy_buffering off`, hoặc header `X-Accel-Buffering: no`) và kiểm tra thật bằng đồng hồ, vì nhiều cấu hình khác cũng có thể gây nghẽn.\n\n```js\nres.setHeader('Content-Type', 'text/event-stream');\nres.setHeader('Cache-Control', 'no-cache');\nfor await (const chunk of upstream) {\n  res.write(`data: ${JSON.stringify(chunk)}\\n\\n`);\n}\nres.end();\n```\n\n### Lỗi hay gặp\n- Nén gzip hoặc để proxy đệm cả phản hồi làm mất hiệu ứng stream.\n- Không xử lý lỗi giữa chừng: kết nối đứt khi mới nhận nửa câu mà client không biết.\n- Parse JSON từng mẩu chữ rời rạc; hãy ghép đủ rồi mới parse.\n\n### Tự kiểm tra\n1. SSE khác WebSocket ở điểm nào, và vì sao SSE đủ dùng cho chat AI?\n2. Bạn phát hiện thế nào rằng stream thật sự \"chảy\" qua proxy?",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-9-1-polling-sse",
+    "ten": "9.1 — Polling, long polling và Server-Sent Events",
+    "nguon": "Networking for Developers · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-3-realtime",
+    "ten": "10.4 — API thời gian thực: polling, SSE hay WebSocket — chọn hợp đồng",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-chat-endpoint",
+    "ten": "4.2 — Endpoint chat, streaming & giữ key phía server",
+    "nguon": "AI Study Assistant · Mục 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/nginx/learn?lessonSlug=nginx-3-3-dem-va-luong-chay",
+    "ten": "3.3 — Đệm, và cái gì THỰC SỰ làm hỏng luồng chảy",
+    "nguon": "Nginx · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "OpenAI – Streaming responses",
+    "url": "https://platform.openai.com/docs/guides/streaming-responses"
+   }
+  ]
+ },
+ "API › Structured Outputs": {
+  "body": "Mô hình ngôn ngữ mặc định trả văn bản tự do, còn code của bạn cần dữ liệu có hình dạng cố định. Structured outputs là kỹ thuật yêu cầu mô hình trả về JSON khớp một schema bạn định nghĩa, để chương trình đọc được mà không phải \"đoán chữ\".\n\n### Vì sao cần biết\nTrích xuất thông tin từ hợp đồng, CV, hoá đơn, phân loại phiếu hỗ trợ, đều cần đầu ra ổn định. Văn bản tự do làm vỡ code: lúc mô hình thêm lời dẫn, lúc đổi tên trường, lúc quên dấu ngoặc.\n\n### Ý chính\n- Định nghĩa **JSON Schema** (hoặc Zod, Pydantic): kiểu từng trường, trường bắt buộc, giá trị cho phép (enum).\n- Nhiều nhà cung cấp có chế độ ép đầu ra theo schema (thường qua `response_format` hoặc công cụ tương đương). Chế độ này làm giảm lỗi đáng kể nhưng không phải bảo đảm tuyệt đối trong mọi tình huống.\n- **Luôn validate lại ở phía bạn** bằng Zod hoặc Ajv. Đừng tin đầu ra dù đã ép schema.\n- Xử lý khi hỏng: thử lại một hai lần kèm thông báo lỗi validate, hoặc trả lỗi rõ ràng cho người dùng.\n- Cẩn thận với đầu ra bị cắt cụt khi chạm `max_tokens`: JSON dở dang không parse được.\n- Schema đơn giản, mô tả trường bằng ngôn ngữ tự nhiên thường cho kết quả tốt hơn.\n\n```js\nimport { z } from 'zod';\nconst Ticket = z.object({\n  category: z.enum(['billing', 'bug', 'question']),\n  urgency: z.number().int().min(1).max(5),\n  summary: z.string().max(200),\n});\nconst parsed = Ticket.safeParse(JSON.parse(modelText));\nif (!parsed.success) { /* thử lại hoặc báo lỗi */ }\n```\n\n### Lỗi hay gặp\n- Parse thẳng bằng `JSON.parse` mà không bọc try/catch.\n- Schema quá phức tạp, lồng sâu, khiến mô hình hay sai.\n- Dùng đầu ra đã validate nhưng sai về nghĩa (ví dụ số tiền âm) mà không kiểm luật nghiệp vụ.\n\n### Tự kiểm tra\n1. Vì sao vẫn phải validate dù đã yêu cầu mô hình trả theo schema?\n2. Điều gì xảy ra với JSON khi câu trả lời bị cắt ở `max_tokens`?",
+  "lessons": [
+   {
+    "href": "/courses/ai-recruitment-screening/learn?lessonSlug=int610-structured-core",
+    "ten": "4.1 — Ép LLM vào JSON schema đã kiểm",
+    "nguon": "AI Recruitment Screening · Mục 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT610"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-3-validate-schema",
+    "ten": "6.3 — Kiểm tra dữ liệu bằng lược đồ",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "OpenAI – Structured Outputs",
+    "url": "https://platform.openai.com/docs/guides/structured-outputs"
+   }
+  ]
+ },
+ "API › Function Calling": {
+  "body": "Function calling (hay tool use) cho phép mô hình \"nhờ\" chương trình của bạn làm việc. Mô hình không tự chạy được code: nó chỉ trả về một yêu cầu kiểu \"hãy gọi hàm `getWeather` với `city = Hà Nội`\". Backend chạy hàm thật, gửi kết quả lại, và mô hình dùng kết quả đó để soạn câu trả lời cuối.\n\n### Vì sao cần biết\nĐây là cách cho AI chạm vào dữ liệu và hành động thật: tra đơn hàng, đặt lịch, truy vấn cơ sở dữ liệu. Nó là nền của các trợ lý và agent.\n\n### Ý chính\n- Bạn khai báo danh sách **tool**: tên, mô tả và schema tham số (JSON Schema). Mô tả viết rõ vì đó là cách mô hình biết khi nào nên dùng tool.\n- Vòng lặp: gửi hỏi, mô hình đề xuất gọi tool, backend chạy tool, gửi kết quả lại, mô hình trả lời cuối (hoặc đề xuất thêm một tool nữa).\n- **Backend quyết định chạy gì.** Kiểm tra tên tool có nằm trong danh sách cho phép, validate tham số, và kiểm quyền của chính người dùng đang hỏi.\n- Mặc định cho quyền tối thiểu: tool chỉ đọc là an toàn nhất; tool ghi hoặc xoá cần xác nhận của người dùng.\n- Đặt giới hạn số vòng lặp để tránh mô hình gọi tool mãi.\n\n```js\nconst tools = [{\n  type: 'function',\n  function: {\n    name: 'get_order',\n    description: 'Tra cứu đơn hàng của người dùng hiện tại theo mã đơn',\n    parameters: {\n      type: 'object',\n      properties: { orderId: { type: 'string' } },\n      required: ['orderId'],\n    },\n  },\n}];\n```\nCú pháp khai báo hơi khác giữa các nhà cung cấp, nhưng ý tưởng giống nhau.\n\n### Lỗi hay gặp\n- Để mô hình tự điền `userId` thay vì lấy từ phiên đăng nhập: người dùng có thể dẫn dụ để đọc dữ liệu người khác.\n- Cho tool chạy câu SQL tuỳ ý do mô hình viết ra.\n- Quên trả lỗi của tool về cho mô hình nên nó bịa kết quả.\n\n### Tự kiểm tra\n1. Ai thực sự chạy hàm: mô hình hay backend?\n2. Vì sao `userId` phải lấy từ phiên chứ không từ tham số mô hình đưa?",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-6-3",
+    "ten": "6.3 — Prompt hệ thống, đầu ra có cấu trúc và gọi công cụ",
+    "nguon": "Generative AI · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-3",
+    "ten": "7.3 — Tác tử LLM và dùng công cụ",
+    "nguon": "Generative AI · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-servlet",
+    "ten": "10.2 — Gọi LLM từ một Servlet",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Anthropic – Tool use",
+    "url": "https://docs.anthropic.com/en/docs/build-with-claude/tool-use/overview"
+   }
+  ]
+ },
+ "API › Integration Patterns": {
+  "body": "Tích hợp AI vào hệ thống thật không dừng ở một lời gọi API. Có một vài mẫu thiết kế lặp lại giúp tính năng AI vẫn đáng tin dù mô hình chậm, đắt và đôi khi sai.\n\n### Vì sao cần biết\nLời gọi LLM chậm (vài giây tới vài chục giây), tốn tiền theo token và có thể lỗi bất cứ lúc nào. Một tính năng AI không có các lớp bảo vệ này sẽ làm chậm hoặc làm sập cả ứng dụng.\n\n### Ý chính\n- **Proxy phía server**: mọi lời gọi đi qua một endpoint của bạn. Ở đó gắn xác thực, giới hạn tần suất, ghi log, trần chi phí và giữ khoá bí mật.\n- **Việc dài làm bất đồng bộ**: trả `202 Accepted` và một mã công việc, đẩy việc vào hàng đợi, client hỏi lại hoặc nhận thông báo khi xong. Không giữ request mở quá lâu.\n- **Retry có backoff và idempotency**: gặp `429` hoặc `5xx` thì thử lại tăng dần, nhưng phải chắc việc thử lại không tạo kết quả lặp.\n- **Fallback**: khi nhà cung cấp chính lỗi, chuyển sang model dự phòng hoặc phản hồi suy giảm mềm.\n- **Cache**: câu hỏi lặp lại có thể dùng lại kết quả (cẩn thận với dữ liệu riêng của từng người).\n- **Phân việc theo model**: việc đơn giản dùng model rẻ, việc khó mới dùng model mạnh.\n- **Ngân sách và quan sát**: đo token, chi phí và độ trễ theo tính năng, đặt cảnh báo.\n- **Bảo vệ khỏi prompt injection**: tách rõ chỉ dẫn hệ thống với dữ liệu người dùng, kiểm đầu ra, cho quyền tối thiểu.\n\n### Lỗi hay gặp\n- Gọi mô hình thẳng trong request của người dùng không timeout, kéo cả server chờ.\n- Retry vô hạn khi nhà cung cấp quá tải, làm tình hình tệ hơn.\n- Đưa nguyên dữ liệu nhạy cảm vào prompt mà không cân nhắc quyền riêng tư.\n\n### Tự kiểm tra\n1. Khi nào nên đưa lời gọi LLM ra hàng đợi thay vì xử lý ngay trong request?\n2. Vì sao cần giới hạn chi phí theo từng người dùng?",
+  "lessons": [
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-server-proxy",
+    "ten": "2.1 — Route Handlers & proxy LLM phía server",
+    "nguon": "AI Study Assistant · Mục 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-advanced",
+    "ten": "7.1 — Chia đoạn, re-rank, prompt-injection & chi phí ★",
+    "nguon": "AI Study Assistant · Mục 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-1-hang-doi",
+    "ten": "10.1 — API bất đồng bộ: 202 Accepted, tài nguyên công việc và hỏi lại",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-13-3-thu-lai-va-idempotent",
+    "ten": "13.3 — Thất bại: thử lại, backoff, và cú trừ tiền chạy ba lần",
+    "nguon": "Node.js · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-8-4",
+    "ten": "8.4 — LLMOps: vận hành ứng dụng LLM",
+    "nguon": "Machine learning operations · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   }
+  ]
+ },
+ "API › Retrieval-Augmented Generation (RAG)": {
+  "body": "RAG (Retrieval-Augmented Generation) là cách cho mô hình ngôn ngữ trả lời dựa trên tài liệu riêng của bạn mà không cần huấn luyện lại. Trước khi hỏi mô hình, hệ thống **tìm** các đoạn tài liệu liên quan nhất, rồi **đưa chúng vào prompt** cùng câu hỏi. Giống như cho học sinh mang theo tài liệu vào phòng thi: em không cần thuộc lòng, chỉ cần tra đúng trang rồi trả lời.\n\n### Vì sao cần biết\nMô hình không biết dữ liệu nội bộ của bạn và có thể bịa khi không biết. RAG cho câu trả lời bám sát tài liệu, có thể trích dẫn nguồn, và cập nhật chỉ bằng cách thêm tài liệu mới.\n\n### Ý chính\n- **Hai giai đoạn**. Lập chỉ mục (chạy trước): chia tài liệu thành đoạn (chunk), biến mỗi đoạn thành vector bằng mô hình embedding, lưu vào kho vector. Truy vấn (lúc người dùng hỏi): embed câu hỏi, tìm các đoạn gần nhất, ghép vào prompt, gọi LLM.\n- **Embedding** là một dãy số biểu diễn ý nghĩa của văn bản; hai đoạn gần nghĩa thì vector gần nhau, thường đo bằng cosine similarity.\n- **Kho vector**: pgvector (extension của PostgreSQL) là lựa chọn gọn khi bạn đã dùng Postgres; có các chỉ mục như HNSW và IVFFlat để tìm gần đúng nhanh.\n- **Chia đoạn** là quyết định chất lượng quan trọng: quá nhỏ mất ngữ cảnh, quá lớn loãng ý. Thường chia theo cấu trúc tài liệu, có chồng lấn nhẹ giữa các đoạn.\n- **Prompt** nên yêu cầu mô hình chỉ trả lời từ ngữ cảnh được cho và nói \"không biết\" khi thiếu.\n- Lọc theo quyền: chỉ truy hồi tài liệu mà người hỏi được phép đọc.\n\n```sql\n-- pgvector: lấy 5 đoạn gần câu hỏi nhất\nSELECT id, content\nFROM chunks\nORDER BY embedding <=> $1   -- $1 là vector của câu hỏi\nLIMIT 5;\n```\n\n### Lỗi hay gặp\n- Truy hồi ra đoạn không liên quan rồi mô hình vẫn \"tự tin\" trả lời: cần ngưỡng điểm và cho phép trả lời \"không có thông tin\".\n- Đổi mô hình embedding mà không nhúng lại toàn bộ dữ liệu cũ: vector cũ và mới không so sánh được.\n- Tài liệu chứa chỉ dẫn độc hại (prompt injection gián tiếp) được đưa thẳng vào prompt.\n\n### Tự kiểm tra\n1. Vì sao RAG thường tốt hơn việc nhét cả kho tài liệu vào prompt?\n2. Hai giai đoạn của RAG chạy vào những thời điểm nào?\n3. Điều gì xảy ra nếu đổi mô hình embedding giữa chừng?",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-2",
+    "ten": "7.2 — Quy trình RAG",
+    "nguon": "Generative AI · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-ts-7-1",
+    "ten": "7.1 — Embedding văn bản và tìm kiếm vector",
+    "nguon": "Generative AI · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-schema",
+    "ten": "1.2 — Schema pgvector & index vector",
+    "nguon": "AI Study Assistant · Mục 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-retrieval",
+    "ten": "3.1 — Biến văn bản thành vector & tìm gần nhất",
+    "nguon": "AI Study Assistant · Mục 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-advanced",
+    "ten": "7.1 — Chia đoạn, re-rank, prompt-injection & chi phí ★",
+    "nguon": "AI Study Assistant · Mục 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "pgvector – vector similarity search cho PostgreSQL",
+    "url": "https://github.com/pgvector/pgvector"
+   }
+  ]
+ },
+ "API › Ứng dụng (Applications) trong kiến trúc Web": {
+  "body": "\"Ứng dụng web\" có nhiều kiểu, khác nhau ở chỗ HTML được tạo ra ở đâu và khi nào. Chọn kiểu nào ảnh hưởng tới tốc độ hiển thị, SEO, độ phức tạp vận hành và cả cách backend phải thiết kế API.\n\n### Vì sao cần biết\nBackend dev không cần viết giao diện nhưng phải hiểu client sẽ dùng API ra sao: trình duyệt tự render, hay server render sẵn, hay một ứng dụng cài được.\n\n### Ý chính\n- **Server-rendered (nhiều trang truyền thống)**: server trả HTML hoàn chỉnh cho mỗi URL. Đơn giản, tốt cho SEO, nhưng mỗi thao tác thường tải lại trang.\n- **Single-Page Application (SPA)**: server trả một khung HTML gần như rỗng cùng gói JavaScript, trình duyệt tự dựng giao diện và gọi API lấy dữ liệu (client-side rendering). Trải nghiệm mượt như ứng dụng, nhưng tải đầu chậm hơn và SEO cần thêm công sức.\n- **Kiểu lai**: SSR (render tại server theo request), SSG (render sẵn lúc build), ISR (render sẵn rồi làm mới theo chu kỳ). Next.js cho phép chọn theo từng trang.\n- **Progressive Web App (PWA)**: web app có thể cài vào máy, chạy ngoại tuyến và nhận thông báo nhờ service worker và web app manifest. Đây là đặc tính bổ sung, có thể áp lên SPA hoặc trang thường.\n- Với backend: SPA và PWA sống bằng API JSON, nên API cần ổn định, có CORS đúng, xác thực bằng cookie hoặc token, và kiểm soát cache cẩn thận.\n\n### Lỗi hay gặp\n- Chọn SPA cho một trang tin tức cần SEO mà không tính tới render phía server.\n- Cache sai ở service worker khiến người dùng kẹt ở phiên bản cũ.\n- Quên rằng mọi logic kiểm quyền vẫn phải nằm ở server, dù giao diện đã ẩn nút.\n\n### Tự kiểm tra\n1. SPA và SSR khác nhau ở bước nào trong chuỗi từ request đến màn hình?\n2. Vì sao một trang chia sẻ link lên mạng xã hội cần được render sẵn ở server?",
+  "lessons": [
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-17-1-bon-cach-render",
+    "ten": "17.1 — Bốn cách một trang được tạo ra (CSR, SSR, SSG, ISR)",
+    "nguon": "Next.js: The React Framework · Chương 17",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "web.dev – Rendering on the Web",
+    "url": "https://web.dev/articles/rendering-on-the-web"
+   },
+   {
+    "type": "official",
+    "title": "web.dev – Progressive Web Apps",
+    "url": "https://web.dev/explore/progressive-web-apps"
+   }
+  ]
+ },
+ "Authentication › JWT": {
+  "body": "JWT (JSON Web Token) là một chuỗi nhỏ chứa thông tin về người dùng, được **ký** bằng khoá bí mật của server. Server không cần tra cơ sở dữ liệu để biết bạn là ai: chỉ cần kiểm tra chữ ký. Giống như vé có dấu niêm phong: nhìn dấu hợp lệ là tin, không cần gọi về quầy.\n\n### Vì sao cần biết\nJWT là cách xác thực phổ biến cho API và ứng dụng di động. Nó cũng là nguồn của nhiều lỗi bảo mật kinh điển vì nhìn có vẻ đơn giản.\n\n### Ý chính\n- Cấu trúc gồm ba phần nối bằng dấu chấm: `header.payload.signature`, mỗi phần mã hoá base64url.\n- **Payload không được mã hoá**, ai cũng đọc được. Chữ ký chỉ chứng minh nội dung không bị sửa, không che giấu nó. Đừng đặt mật khẩu hay dữ liệu nhạy cảm vào trong.\n- Các claim chuẩn: `sub` (người dùng), `exp` (hết hạn), `iat` (thời điểm cấp), `iss` (bên cấp), `aud` (đối tượng nhận). Server phải kiểm tra chúng.\n- Ký đối xứng (HS256, một khoá chung) hoặc bất đối xứng (RS256/ES256, khoá riêng ký, khoá công khai kiểm).\n- Token sống ngắn (vài phút) kèm refresh token để gia hạn.\n- Nhược điểm lớn: token đã phát ra rất khó thu hồi trước hạn, vì server không nhớ gì.\n\n```js\nimport jwt from 'jsonwebtoken';\nconst token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET,\n  { algorithm: 'HS256', expiresIn: '15m' });\n\n// Khi xác minh, luôn chỉ định thuật toán cho phép:\nconst payload = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });\n```\n\n### Lỗi hay gặp\n- Chấp nhận thuật toán do chính token tự khai (`alg: none` hoặc đổi RS256 sang HS256): luôn cố định danh sách thuật toán khi verify.\n- Không kiểm `exp`, `aud`, `iss`.\n- Cất token ở `localStorage` rồi bị XSS đánh cắp; cân nhắc cookie `HttpOnly`.\n- Dùng một bí mật yếu hoặc commit nó vào git.\n\n### Tự kiểm tra\n1. Vì sao có thể đọc payload nhưng không thể sửa nó mà server vẫn chấp nhận?\n2. Làm sao thu hồi một JWT đã phát ra?\n3. Lỗi `alg: none` hoạt động thế nào và phòng ra sao?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-0-slides",
+    "ten": "7.0 — Slide bài giảng: xác thực & bảo mật trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-4-1-giai-ma-bang-tay",
+    "ten": "4.1 — Tự tay giải mã một cái",
+    "nguon": "Authentication · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-4-2-truong-alg",
+    "ten": "4.2 — Cái token TỰ NÓI cho máy chủ cách kiểm nó",
+    "nguon": "Authentication · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-4-3-cac-claim",
+    "ten": "4.3 — Bảy claim, và cú tấn công cho mỗi cái bạn bỏ qua",
+    "nguon": "Authentication · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-jwt-refresh",
+    "ten": "JWT, refresh token và xoay vòng",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "RFC 7519 – JSON Web Token",
+    "url": "https://www.rfc-editor.org/rfc/rfc7519"
+   }
+  ]
+ },
+ "Authentication › OAuth 2.0 / OpenID Connect": {
+  "body": "OAuth 2.0 là giao thức **uỷ quyền**: cho một ứng dụng được phép truy cập tài nguyên của bạn ở một dịch vụ khác (ví dụ đọc lịch Google) mà không đưa mật khẩu cho ứng dụng đó. OpenID Connect (OIDC) là lớp **danh tính** xây trên OAuth: cho ứng dụng biết người đăng nhập là ai. Hai thứ hay bị lẫn nhưng làm hai việc khác nhau.\n\n### Vì sao cần biết\nNút \"Đăng nhập bằng Google/GitHub\" và việc tích hợp API bên thứ ba đều dựa trên chúng. Làm sai là mở cửa cho chiếm tài khoản.\n\n### Ý chính\n- **Bốn vai**: resource owner (người dùng), client (ứng dụng của bạn), authorization server (nơi cấp token, ví dụ Google), resource server (API giữ dữ liệu).\n- **Authorization Code + PKCE** là luồng nên dùng cho hầu hết ứng dụng, kể cả web và di động: ứng dụng nhận một `code` tạm thời qua trình duyệt, rồi đổi lấy token ở kênh sau. PKCE chặn kẻ tấn công cướp code.\n- **Tham số `state`** chống CSRF; **`redirect_uri`** phải khớp chính xác với giá trị đã đăng ký; **`nonce`** chống phát lại ID token.\n- **Access token** để gọi API, sống ngắn, nói \"được làm gì\" (scope). **ID token** (của OIDC, dạng JWT) nói \"người này là ai\" và chỉ dành cho client của bạn, không dùng để gọi API.\n- Khi nhận ID token phải kiểm chữ ký, `iss`, `aud`, `exp`, `nonce`.\n- OAuth 2.1 gom các thực hành tốt nhất vào một bản: bỏ implicit flow, bắt buộc PKCE.\n\n```http\nGET https://accounts.example.com/authorize\n  ?response_type=code\n  &client_id=abc\n  &redirect_uri=https://app.example.com/callback\n  &scope=openid%20email\n  &state=Xyz123\n  &code_challenge=...&code_challenge_method=S256\n```\n\n### Lỗi hay gặp\n- Dùng access token như bằng chứng đăng nhập (OAuth một mình không nói người dùng là ai).\n- Không kiểm `state` hoặc cho `redirect_uri` khớp lỏng.\n- Lưu `client_secret` trong ứng dụng di động hoặc frontend.\n\n### Tự kiểm tra\n1. OAuth và OIDC khác nhau ở câu hỏi nào mà chúng trả lời?\n2. PKCE bảo vệ khỏi kiểu tấn công nào?\n3. Vì sao không gửi ID token cho API tài nguyên làm chìa khoá truy cập?",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-1-oauth-la-gi",
+    "ten": "8.1 — OAuth dùng để làm gì, và ba thứ nó bị lẫn với",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-2-luong-code-pkce",
+    "ten": "8.2 — Luồng authorization code kèm PKCE, từng bước một",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-3-state-nonce-redirect",
+    "ten": "8.3 — state, nonce và redirect_uri: ba tham số, ba cú tấn công",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-4-id-token",
+    "ten": "8.4 — ID token so với access token, và bảy phép kiểm",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-6-quiz",
+    "ten": "8.6 — Quiz: OAuth 2.1 và OpenID Connect",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "quiz"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "RFC 6749 – The OAuth 2.0 Authorization Framework",
+    "url": "https://datatracker.ietf.org/doc/html/rfc6749"
+   }
+  ]
+ },
+ "Authentication › Session & Cookie-based Auth": {
+  "body": "Với xác thực theo phiên (session), server **nhớ** người dùng đã đăng nhập. Sau khi kiểm tra mật khẩu, server tạo một bản ghi phiên có mã ngẫu nhiên khó đoán, lưu ở cơ sở dữ liệu hoặc Redis, rồi gửi mã đó cho trình duyệt trong một cookie. Từ đó trình duyệt tự gửi cookie kèm mỗi request, và server tra mã để biết bạn là ai. Giống như vòng đeo tay ở sự kiện: nhân viên nhìn vòng, tra sổ, biết ngay quyền của bạn.\n\n### Vì sao cần biết\nĐây là mô hình phổ biến và an toàn nhất cho ứng dụng web chạy trong trình duyệt, vì server giữ toàn quyền: có thể đăng xuất ngay, thu hồi một thiết bị hay khoá tài khoản tức thì.\n\n### Ý chính\n- Mã phiên phải ngẫu nhiên đủ dài (tạo bằng bộ sinh ngẫu nhiên an toàn, không tự chế).\n- Cờ cookie quan trọng: `HttpOnly` (JavaScript không đọc được, chống đánh cắp qua XSS), `Secure` (chỉ gửi qua HTTPS), `SameSite=Lax` hoặc `Strict` (giảm CSRF).\n- **Tạo mã phiên mới mỗi khi đổi mức đặc quyền** (đăng nhập, lên quyền) để chống session fixation.\n- Đặt hạn tuyệt đối và hạn không hoạt động; khi đăng xuất phải xoá phiên phía server chứ không chỉ xoá cookie.\n- **CSRF**: vì trình duyệt tự gửi cookie, trang khác có thể mượn phiên của bạn. Phòng bằng `SameSite`, token CSRF và kiểm `Origin`.\n- Khi chạy nhiều server, phiên phải ở kho dùng chung (Redis, DB) hoặc dùng sticky session.\n\n```js\nres.cookie('sid', sessionId, {\n  httpOnly: true, secure: true, sameSite: 'lax', maxAge: 1000 * 60 * 60 * 8,\n});\n```\n\n### Lỗi hay gặp\n- Quên `HttpOnly` hoặc `Secure`.\n- Giữ nguyên mã phiên trước và sau khi đăng nhập.\n- Lưu phiên trong bộ nhớ của một tiến trình rồi mất hết khi khởi động lại hoặc chạy nhiều instance.\n\n### Tự kiểm tra\n1. Vì sao session dễ thu hồi hơn JWT?\n2. `SameSite` giúp chống CSRF thế nào, và nó còn thiếu gì?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-2-cookies-sessions",
+    "ten": "7.2 — Cookie và phiên",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-3-1-bang-phien",
+    "ten": "3.1 — Một cái bảng, và mỗi cột để làm gì",
+    "nguon": "Authentication · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie",
+    "ten": "3.2 — Từng thuộc tính cookie, và nó THẬT SỰ chặn được gì",
+    "nguon": "Authentication · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-3-4-csrf",
+    "ten": "3.4 — CSRF, và ba lớp phòng xếp theo thứ tự",
+    "nguon": "Authentication · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-3-5-phien-song-o-dau",
+    "ten": "3.5 — Ba chỗ để giữ một phiên",
+    "nguon": "Authentication · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Authentication › Basic / Token Authentication": {
+  "body": "Hai cách xác thực đơn giản nhất cho API: **Basic**, gửi tên đăng nhập và mật khẩu ở mỗi request; và **Token**, đổi thông tin đăng nhập lấy một chuỗi (token) rồi chỉ gửi chuỗi đó.\n\n### Ý chính\n- **Basic**: header `Authorization: Basic base64(user:password)`. Base64 chỉ là cách viết lại, không phải mã hoá, nên bắt buộc dùng qua HTTPS. Phù hợp với script nội bộ hay công cụ đơn giản.\n- **Token (Bearer)**: header `Authorization: Bearer <token>`. Token có thể là chuỗi ngẫu nhiên (server tra cứu) hoặc JWT (server kiểm chữ ký).\n- Token tốt hơn Basic vì mật khẩu chỉ đi qua mạng một lần, token có hạn và thu hồi được, và quyền có thể giới hạn theo phạm vi.\n- Ai cầm token là coi như chính người đó, nên phải cất cẩn thận và không ghi vào log.\n\n```bash\ncurl -H \"Authorization: Bearer $TOKEN\" https://api.example.com/me\n```\n\n### Lỗi hay gặp\n- Dùng Basic qua HTTP thường.\n- Đưa token vào URL (`?token=...`) rồi nó lọt vào log và lịch sử trình duyệt.\n\nHai bước kế tiếp trong lộ trình mô tả chi tiết riêng từng cách.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-1-auth-basics",
+    "ten": "7.1 — Xác thực và phân quyền",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-1-1-tin-vat-mang-theo",
+    "ten": "1.1 — Ai cầm nó, người đó LÀ bạn",
+    "nguon": "Authentication · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc",
+    "ten": "6.1 — Xác thực: session, JWT, API key, OAuth — tự dựng rồi tự tấn công",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Authentication › SAML / OpenID": {
+  "body": "SAML và OpenID Connect đều phục vụ **đăng nhập một lần (SSO)**: người dùng đăng nhập ở một nhà cung cấp danh tính (Identity Provider, IdP), rồi dùng danh tính đó ở nhiều ứng dụng mà không tạo tài khoản mới.\n\n### Ý chính\n- **SAML 2.0** ra đời sớm hơn, dùng XML và phổ biến trong doanh nghiệp (Active Directory, Okta, Azure AD, các hệ thống nội bộ cũ).\n- **OpenID Connect** là lớp danh tính trên OAuth 2.0, dùng JSON/JWT, hợp với ứng dụng web hiện đại và di động.\n- Cùng mục tiêu, khác định dạng: SAML trao \"assertion\" (XML ký số) qua trình duyệt; OIDC trao ID token (JWT).\n- Với sản phẩm mới, OIDC thường dễ tích hợp hơn; SAML cần khi khách hàng doanh nghiệp yêu cầu.\n- Dù dùng giao thức nào, ứng dụng của bạn vẫn phải kiểm chữ ký, bên cấp (`issuer`), đối tượng nhận (`audience`) và hạn dùng.\n\n### Lỗi hay gặp\n- Tự viết bộ phân tích XML cho SAML mà bỏ qua kiểm chữ ký, dẫn tới các lỗi bypass kinh điển; nên dùng thư viện đã được kiểm chứng.",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-1-oauth-la-gi",
+    "ten": "8.1 — OAuth dùng để làm gì, và ba thứ nó bị lẫn với",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Okta – SAML là gì và hoạt động thế nào",
+    "url": "https://developer.okta.com/docs/concepts/saml/"
+   }
+  ]
+ },
+ "Authentication › Basic Authentication": {
+  "body": "Basic Authentication là cơ chế xác thực có sẵn của HTTP: client gửi tên đăng nhập và mật khẩu trong header `Authorization` ở mọi request.\n\n### Cách hoạt động\nClient ghép `username:password`, mã hoá base64 rồi đặt vào header. Nếu thiếu hoặc sai, server trả `401 Unauthorized` kèm `WWW-Authenticate: Basic realm=\"...\"` và trình duyệt hiện hộp thoại đăng nhập.\n\n```bash\ncurl -u admin:matkhau https://api.example.com/private\n# tương đương: -H \"Authorization: Basic YWRtaW46bWF0a2hhdQ==\"\n```\n\n### Ý chính\n- **Base64 không phải mã hoá.** Ai thấy header có thể giải ngược ra mật khẩu bằng một lệnh. Vì vậy chỉ dùng qua HTTPS.\n- Mật khẩu đi theo từng request, nên phạm vi rủi ro lớn nếu bị ghi vào log hoặc proxy.\n- Không có đăng xuất đúng nghĩa, không có hết hạn, không có xác thực nhiều yếu tố.\n- Phù hợp với công cụ nội bộ, môi trường thử nghiệm hoặc bảo vệ nhanh một khu vực; không nên dùng làm cơ chế đăng nhập chính của ứng dụng cho người dùng.\n\n### Lỗi hay gặp\n- Dùng qua HTTP thường.\n- Mật khẩu mặc định hoặc chung cho cả nhóm.\n- So sánh mật khẩu bằng `===` thay vì hàm so sánh hằng thời gian khi tự cài đặt.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-1-auth-basics",
+    "ten": "7.1 — Xác thực và phân quyền",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Authentication › Xác thực bằng Token (Token Authentication)": {
+  "body": "Xác thực bằng token nghĩa là: người dùng đăng nhập một lần, server cấp một **token**, và từ đó client chỉ gửi token trong header `Authorization: Bearer <token>`. Server không giữ trạng thái đăng nhập bên trong tiến trình; danh tính nằm trong token hoặc được tra từ token.\n\n### Vì sao cần biết\nMô hình này hợp với API, ứng dụng di động, SPA và hệ thống nhiều server vì không phụ thuộc cookie của trình duyệt.\n\n### Ý chính\n- **Hai loại token**: opaque (chuỗi ngẫu nhiên, server tra bảng để biết ý nghĩa, dễ thu hồi) và tự chứa như JWT (server chỉ cần kiểm chữ ký, không cần tra).\n- **Cặp access token và refresh token**: access token sống ngắn (vài phút) để gọi API; refresh token sống lâu hơn, chỉ dùng để xin access token mới. Vì sao cần hai cái? Một token không vừa ngắn hạn (để an toàn) vừa tiện dùng (để không bắt đăng nhập lại liên tục).\n- **Xoay vòng refresh token**: mỗi lần dùng cấp cái mới và vô hiệu cái cũ. Nếu có ai dùng lại token cũ, đó là dấu hiệu bị đánh cắp và nên thu hồi cả chuỗi.\n- **Cất ở đâu**: ứng dụng di động dùng kho bảo mật của hệ điều hành; trình duyệt thì cookie `HttpOnly` an toàn hơn `localStorage`, vì mã JavaScript bị tiêm vào (XSS) không đọc được cookie đó.\n- Mỗi token mang phạm vi quyền nhỏ nhất cần thiết (scope).\n\n```http\nGET /me HTTP/1.1\nAuthorization: Bearer eyJhbGciOi...\n```\n\n### Lỗi hay gặp\n- Token sống quá lâu, không có cách thu hồi.\n- Lưu token ở nơi XSS với tới được mà không có biện pháp phòng thủ khác.\n- Không ghi nhận thiết bị nên người dùng không thể \"đăng xuất khỏi mọi nơi\".",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-5-1-hai-token",
+    "ten": "5.1 — Hai token, vì một cái không làm nổi cả hai việc",
+    "nguon": "Authentication · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-5-2-xoay-vong",
+    "ten": "5.2 — Xoay vòng, và cú tái dùng tố giác kẻ cắp",
+    "nguon": "Authentication · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh",
+    "ten": "8.2 — JWT, refresh token và xoay vòng",
+    "nguon": "Node.js · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-4-5-cat-token-o-dau",
+    "ten": "4.5 — Cất token ở đâu trong trình duyệt",
+    "nguon": "Authentication · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-jwt-refresh",
+    "ten": "JWT, refresh token và xoay vòng",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Authentication › OAuth 2.0": {
+  "body": "OAuth 2.0 là framework **uỷ quyền truy cập**: cho phép một ứng dụng thay mặt người dùng gọi API của dịch vụ khác, với phạm vi giới hạn và thu hồi được, mà người dùng không phải đưa mật khẩu cho ứng dụng. Ví dụ: một app lịch xin quyền chỉ đọc lịch Google của bạn.\n\n### Ý chính\n- **Bốn vai**: người dùng (resource owner), ứng dụng (client), máy chủ cấp quyền (authorization server) và máy chủ tài nguyên (resource server).\n- **Authorization Code + PKCE** là luồng nên dùng: người dùng đồng ý trên trang của nhà cung cấp, ứng dụng nhận `code` rồi đổi lấy access token ở kênh trực tiếp kèm `code_verifier`.\n- **Scope** giới hạn quyền xin (ví dụ `calendar.readonly`).\n- Access token sống ngắn; refresh token dùng để xin cái mới.\n- Ba tham số bảo vệ: `state` chống CSRF, `redirect_uri` phải khớp đã đăng ký, PKCE chống cướp code.\n- Luồng Client Credentials dành cho máy gọi máy (không có người dùng).\n- OAuth một mình **không** cho biết người dùng là ai; việc đó thuộc về OpenID Connect.\n\n### Lỗi hay gặp\n- Dùng implicit flow cũ (token nằm trên URL) thay vì code + PKCE.\n- Cho phép `redirect_uri` ký tự đại diện hoặc khớp lỏng.\n- Lưu `client_secret` ở nơi công khai như mã frontend hoặc app di động.\n- Dùng OAuth làm \"đăng nhập\" mà không kiểm ID token.",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-1-oauth-la-gi",
+    "ten": "8.1 — OAuth dùng để làm gì, và ba thứ nó bị lẫn với",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-2-luong-code-pkce",
+    "ten": "8.2 — Luồng authorization code kèm PKCE, từng bước một",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-3-state-nonce-redirect",
+    "ten": "8.3 — state, nonce và redirect_uri: ba tham số, ba cú tấn công",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-5-lam-client-that",
+    "ten": "8.5 — Làm client thật: nối, gỡ nối, và cái ngày Google sập",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Authentication › Cookie-Based Authentication": {
+  "body": "Xác thực dựa trên cookie là cách ghép phiên đăng nhập vào cơ chế cookie của trình duyệt: sau khi đăng nhập, server gửi header `Set-Cookie`, và trình duyệt tự đính cookie đó vào mọi request tới cùng site. Phiên thật nằm ở server (xem bước Session), cookie chỉ là chiếc \"thẻ\" mang mã phiên.\n\n### Ý chính\n- **Thuộc tính cookie là tuyến phòng thủ chính**:\n  - `HttpOnly`: JavaScript không đọc được, giảm thiệt hại khi bị XSS.\n  - `Secure`: chỉ gửi qua HTTPS.\n  - `SameSite=Lax/Strict`: hạn chế gửi cookie trong request từ site khác, giảm CSRF.\n  - `Max-Age`/`Expires`, `Path`, `Domain`: kiểm soát vòng đời và phạm vi. Tiền tố `__Host-` ép cookie dính chặt vào một host.\n- **CSRF**: vì trình duyệt tự gửi cookie, một trang xấu có thể khiến trình duyệt của bạn gửi yêu cầu đến site đã đăng nhập. Phòng bằng SameSite, token CSRF cho thao tác ghi, và kiểm header `Origin`.\n- **Cookie chỉ đi cùng cùng site**: khi frontend và API ở hai domain khác nhau cần cấu hình CORS với credentials và `SameSite=None; Secure`, và phải cân nhắc kỹ.\n- Cookie bị giới hạn kích thước (khoảng 4KB) và gửi theo mọi request, nên chỉ chứa mã phiên, không chứa dữ liệu lớn.\n\n```http\nSet-Cookie: sid=9f3c...; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=28800\n```\n\n### Lỗi hay gặp\n- Bỏ `HttpOnly` để \"tiện\" đọc ở JavaScript.\n- Tưởng `SameSite` thay thế hoàn toàn token CSRF.\n- Đặt `Domain` quá rộng nên subdomain không tin cậy cũng đọc được cookie.",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie",
+    "ten": "3.2 — Từng thuộc tính cookie, và nó THẬT SỰ chặn được gì",
+    "nguon": "Authentication · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-3-3-tai-sinh-phien",
+    "ten": "3.3 — Phiên MỚI ở mỗi lần đổi mức đặc quyền",
+    "nguon": "Authentication · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-3-4-csrf",
+    "ten": "3.4 — CSRF, và ba lớp phòng xếp theo thứ tự",
+    "nguon": "Authentication · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi",
+    "ten": "8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu",
+    "nguon": "Node.js · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-2-cookies-sessions",
+    "ten": "7.2 — Cookie và phiên",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Authentication › OpenID Connect": {
+  "body": "OpenID Connect (OIDC) là lớp **danh tính** đặt trên OAuth 2.0. OAuth trả lời \"ứng dụng này được làm gì\"; OIDC trả lời thêm \"người đang đăng nhập là ai\". Nhờ nó bạn làm được \"Đăng nhập bằng Google\" một cách chuẩn mực.\n\n### Ý chính\n- Khi xin quyền, thêm scope `openid` (và `email`, `profile` nếu cần). Kết quả có thêm một **ID token**, là một JWT chứa các claim về người dùng.\n- **Các claim quan trọng**: `iss` (bên cấp), `sub` (mã định danh người dùng, ổn định, dùng làm khoá liên kết tài khoản), `aud` (phải đúng client của bạn), `exp`, `iat`, `nonce`.\n- **Cần kiểm gì khi nhận ID token**: chữ ký (lấy khoá công khai từ JWKS của nhà cung cấp), `iss`, `aud`, `exp` và `nonce` khớp với giá trị bạn đã gửi.\n- **Discovery**: nhà cung cấp công bố một tài liệu cấu hình tại `/.well-known/openid-configuration` để client tự tìm các endpoint.\n- ID token dành cho client của bạn; **không** dùng nó để gọi API. API được gọi bằng access token.\n- Dùng `sub` (không phải email) làm khoá nhận diện người dùng, vì email có thể đổi hoặc chưa được xác minh.\n\n```json\n{ \"iss\": \"https://accounts.google.com\", \"sub\": \"110169484474386276334\",\n  \"aud\": \"client-id-cua-ban\", \"exp\": 1767000000, \"email\": \"a@example.com\" }\n```\n\n### Lỗi hay gặp\n- Không kiểm `aud` và `nonce`.\n- Tin `email` mà không xem `email_verified`.\n- Liên kết tài khoản theo email, tạo cơ hội chiếm tài khoản.",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-4-id-token",
+    "ten": "8.4 — ID token so với access token, và bảy phép kiểm",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-1-oauth-la-gi",
+    "ten": "8.1 — OAuth dùng để làm gì, và ba thứ nó bị lẫn với",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-7-lab-id-token",
+    "ten": "Lab 8 — Kiểm ID token của LabFlow API",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-5-lam-client-that",
+    "ten": "8.5 — Làm client thật: nối, gỡ nối, và cái ngày Google sập",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "OpenID Connect Core 1.0",
+    "url": "https://openid.net/specs/openid-connect-core-1_0.html"
+   }
+  ]
+ },
+ "Authentication › SAML 2.0": {
+  "body": "SAML 2.0 là giao thức đăng nhập một lần (SSO) dựa trên XML, phổ biến trong doanh nghiệp. Người dùng đăng nhập ở nhà cung cấp danh tính (IdP, ví dụ Okta, Azure AD, ADFS), và ứng dụng của bạn (Service Provider, SP) nhận một **assertion** được ký số xác nhận người đó là ai.\n\n### Ý chính\n- **Luồng thường gặp (SP-initiated)**: người dùng vào ứng dụng, ứng dụng chuyển hướng sang IdP kèm một yêu cầu xác thực, người dùng đăng nhập ở IdP, IdP gửi assertion ký số về ứng dụng qua trình duyệt (POST), ứng dụng kiểm tra rồi tạo phiên.\n- **Assertion** chứa thông tin về người dùng (NameID, các thuộc tính) cùng điều kiện hiệu lực.\n- **Cần kiểm**: chữ ký (bằng chứng chỉ công khai của IdP), `Issuer`, `Audience`, thời hạn hiệu lực, `InResponseTo`, và chống phát lại assertion.\n- Hai bên trao đổi **metadata** (XML) chứa địa chỉ endpoint và chứng chỉ trước khi chạy.\n- So với OIDC: SAML nặng hơn nhưng có mặt ở khắp hệ thống doanh nghiệp cũ; OIDC gọn hơn cho ứng dụng mới.\n\n### Lỗi hay gặp\n- Phân tích XML tự chế, dính các lỗi như XML signature wrapping khiến kẻ tấn công giả mạo assertion. Hãy dùng thư viện SAML đã kiểm chứng và cập nhật.\n- Không kiểm `Audience`, nên assertion cấp cho ứng dụng khác vẫn được chấp nhận.\n- Quên theo dõi ngày hết hạn của chứng chỉ ký, làm SSO đứt đột ngột.",
+  "more": [
+   {
+    "type": "article",
+    "title": "Okta – SAML là gì và hoạt động thế nào",
+    "url": "https://developer.okta.com/docs/concepts/saml/"
+   }
+  ]
+ },
+ "Caching › Redis": {
+  "body": "Redis là một kho dữ liệu **nằm trong bộ nhớ RAM**, truy cập theo khoá. Vì không phải đọc đĩa nên mỗi thao tác thường chỉ mất khoảng một phần nghìn giây hoặc ít hơn. Nó hay được đặt trước cơ sở dữ liệu để giữ kết quả đắt đỏ: lần đầu tính và lưu lại, các lần sau trả luôn.\n\n### Vì sao cần biết\nRedis là công cụ cache phổ biến nhất của backend. Ngoài cache nó còn làm phiên đăng nhập, bộ đếm, giới hạn tần suất, hàng đợi và pub/sub.\n\n### Ý chính\n- **Cấu trúc dữ liệu phong phú**: string, hash, list, set, sorted set, kèm bitmap, HyperLogLog, stream.\n- **TTL (hết hạn tự động)**: đặt thời gian sống cho khoá, hết hạn thì tự xoá, rất hợp cho cache.\n- **Mô hình một luồng**: lệnh được thực thi tuần tự nên mỗi lệnh có tính nguyên tử; nhưng một lệnh chậm sẽ chặn tất cả (tránh `KEYS *`, dùng `SCAN`).\n- **Đặt tên khoá có quy ước** (ví dụ `user:42:profile`) để dễ quản lý và xoá.\n- Dùng làm cache nghĩa là phải chấp nhận dữ liệu có thể cũ và có thể mất; nguồn dữ liệu thật vẫn là cơ sở dữ liệu.\n\n```bash\nSET user:42:profile '{\"name\":\"An\"}' EX 300   # sống 300 giây\nGET user:42:profile\nINCR page:views            # bộ đếm nguyên tử\n```\n\n### Lỗi hay gặp\n- Coi Redis là nơi lưu duy nhất của dữ liệu quan trọng mà không cấu hình bền vững.\n- Không đặt TTL nên bộ nhớ đầy dần.\n- Mở Redis ra Internet không mật khẩu.\n\n### Tự kiểm tra\n1. Vì sao Redis nhanh hơn cơ sở dữ liệu quan hệ cho việc đọc theo khoá?\n2. TTL giúp gì cho bộ nhớ và cho độ tươi của dữ liệu?",
+  "lessons": [
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-0-1-van-de",
+    "ten": "0.1 — Redis giải quyết gì",
+    "nguon": "Redis · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-0-3-nam-phut",
+    "ten": "0.3 — Năm phút đầu tiên của bạn",
+    "nguon": "Redis · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban",
+    "ten": "12.1 — Redis thực chất là gì, và thời gian trôi đi đâu",
+    "nguon": "Node.js · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-1-1-mot-luong",
+    "ten": "1.1 — Một luồng, và vì sao thế là nhanh",
+    "nguon": "Redis · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/redis",
+    "ten": "Redis",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Caching › Memcached": {
+  "body": "Memcached là một bộ nhớ đệm phân tán đơn giản: lưu cặp khoá và giá trị trong RAM, truy cập cực nhanh, tự đẩy dữ liệu cũ ra khi hết bộ nhớ (chính sách LRU). Nó chỉ làm một việc là cache và làm rất gọn.\n\n### Ý chính\n- Chỉ có kiểu string/byte, không có cấu trúc dữ liệu phong phú như Redis.\n- **Đa luồng**, nên tận dụng tốt máy nhiều nhân cho các thao tác đơn giản.\n- **Không có lưu bền, không có nhân bản tích hợp**: khởi động lại là mất sạch. Điều này chấp nhận được nếu nó chỉ là cache.\n- Mở rộng bằng cách thêm nhiều máy; phân bổ khoá do **client** quyết định (consistent hashing), các máy không biết nhau.\n- Có TTL cho từng khoá.\n- **So với Redis**: dùng Memcached khi chỉ cần cache khoá-giá trị đơn thuần, thích sự đơn giản. Dùng Redis khi cần cấu trúc dữ liệu, lưu bền, pub/sub, script hoặc nhân bản. Phần lớn dự án mới chọn Redis vì làm được nhiều việc hơn.\n\n```bash\nset greeting 0 300 5   # key flags ttl(giây) số_byte\nhello\nget greeting\n```\n\n### Lỗi hay gặp\n- Coi nó là nơi lưu dữ liệu thật.\n- Mở cổng 11211 ra Internet: Memcached từng bị lợi dụng để khuếch đại tấn công DDoS.",
+  "lessons": [
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-0-1-van-de",
+    "ten": "0.1 — Redis giải quyết gì",
+    "nguon": "Redis · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Caching › Server-side vs Client-side Caching": {
+  "body": "Cache có thể đặt ở nhiều tầng trên đường từ dữ liệu tới người dùng. Hai nhóm lớn: **cache phía client** (trình duyệt, ứng dụng) và **cache phía server** (nằm sau API của bạn, ví dụ Redis). Hiểu chúng khác nhau thế nào giúp bạn chọn đúng chỗ để cache và biết vì sao dữ liệu đôi khi cũ.\n\n### Ý chính\n- **Client-side cache** (trình duyệt): điều khiển bằng header HTTP như `Cache-Control` và `ETag`. Ưu điểm là nhanh nhất vì không tốn mạng, rẻ vì không tốn tài nguyên server. Nhược điểm là bạn không thể xoá cache trên máy người dùng; nó chỉ hết hạn khi tới hạn.\n- **Server-side cache**: bạn kiểm soát hoàn toàn, có thể xoá bất cứ lúc nào và dùng chung cho mọi người dùng. Vẫn tốn một vòng mạng và vẫn chạy code của bạn.\n- **Tầng trung gian**: CDN và reverse proxy (như nginx) nằm giữa, cache phản hồi HTTP công khai.\n- **Quy tắc chọn**: dữ liệu công khai, ít đổi thì cache ở cả client và CDN; dữ liệu riêng của từng người thì dùng `Cache-Control: private` hoặc chỉ cache ở server theo khoá có chứa người dùng; kết quả truy vấn đắt đỏ thì cache ở server bằng Redis.\n- **Vô hiệu hoá cache** khó nhất ở client; muốn đổi nội dung ngay thì đổi URL (thêm mã băm vào tên tệp) thay vì mong cache hết hạn.\n\n```http\nCache-Control: public, max-age=31536000, immutable   # tệp có mã băm trong tên\nCache-Control: private, no-cache                      # dữ liệu riêng, luôn hỏi lại\n```\n\n### Lỗi hay gặp\n- Cache dữ liệu riêng của người dùng ở tầng chung, lộ dữ liệu cho người khác.\n- Quên rằng cache client không xoá được nên đặt `max-age` quá dài cho nội dung hay đổi.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-9-1-cache",
+    "ten": "9.1 — Cache HTTP cho API: Cache-Control, ETag và 304",
+    "nguon": "API & System Design · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-9-1-server-cache",
+    "ten": "9.2 — Cache phía server bằng Redis — và cú giẫm đạp khi khoá hết hạn",
+    "nguon": "API & System Design · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=cache-layers",
+    "ten": "Tầng đệm — dữ liệu lấy ra từ đâu",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/simulation?scenario=caching",
+    "ten": "Tầng đệm — CDN & Redis",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Caching › CDN": {
+  "body": "CDN (Content Delivery Network) là mạng lưới máy chủ đặt ở nhiều nơi trên thế giới. Nó giữ bản sao nội dung (ảnh, CSS, JS, video, đôi khi cả phản hồi API) và phục vụ người dùng từ **điểm gần nhất** thay vì bắt mọi người kết nối về máy chủ gốc (origin) của bạn. Giống như hệ thống kho hàng: thay vì mọi đơn đều gửi từ một kho ở xa, hàng nằm sẵn ở kho gần nhà bạn.\n\n### Vì sao cần biết\nCDN giảm độ trễ cho người dùng ở xa, giảm tải cho origin, và hấp thụ các đợt tăng đột biến truy cập. Hầu hết website lớn đều đứng sau CDN.\n\n### Ý chính\n- **Edge/PoP** là điểm phục vụ gần người dùng; **origin** là máy chủ gốc.\n- **Cache hit**: edge có sẵn nên trả ngay. **Cache miss**: edge hỏi origin, lưu lại rồi trả.\n- CDN dựa vào header của origin (`Cache-Control`, `Vary`) để biết cache gì và trong bao lâu; có thể ghi đè bằng cấu hình.\n- **Khoá cache**: thường gồm URL; query string, cookie hay header nào vào khoá sẽ quyết định hiệu quả cache và nguy cơ lộ dữ liệu.\n- **Xoá cache (purge)**: có thể xoá theo URL hay theo thẻ; cách bền hơn là đặt phiên bản hoặc mã băm trong tên tệp.\n- Giới hạn: nội dung động hoặc cá nhân hoá ít cache được; có giới hạn timeout và kích thước.\n\n### Lỗi hay gặp\n- Cache nhầm phản hồi có chứa dữ liệu riêng của một người.\n- Proxy phía origin ghi đè `Cache-Control` làm CDN không cache gì.\n- Quên chuyển IP thật của client (dùng header `X-Forwarded-For`) nên log và giới hạn tần suất sai.\n\n### Tự kiểm tra\n1. Điều gì quyết định một phản hồi có được CDN giữ lại không?\n2. Cách nào ép người dùng thấy ngay tệp JavaScript mới mà không phải chờ cache hết hạn?",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-1-cdn",
+    "ten": "8.1 — CDN hoạt động thế nào: edge, origin và PoP",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-2-cache-dung",
+    "ten": "8.2 — Khoá cache, TTL và xoá cache cho đúng",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-4-gioi-han-cdn",
+    "ten": "8.4 — Giới hạn của CDN: timeout, kích thước và nội dung động",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache",
+    "ten": "10.4 — Phục vụ media trở lại: định dạng, cache và CDN",
+    "nguon": "Node.js · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=caching",
+    "ten": "Tầng đệm — CDN & Redis",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Cloudflare – Cache documentation",
+    "url": "https://developers.cloudflare.com/cache/"
+   }
+  ]
+ },
+ "Caching › HTTP Caching": {
+  "body": "HTTP có sẵn một hệ thống cache: server dùng các header để bảo trình duyệt (và CDN, proxy) rằng phản hồi này có thể được giữ lại và dùng lại trong bao lâu. Đây là cache rẻ nhất vì tận dụng cả hạ tầng web có sẵn.\n\n### Ý chính\n- **`Cache-Control`** là header chính:\n  - `max-age=N`: còn tươi trong N giây, trong thời gian đó không cần hỏi lại server.\n  - `no-cache`: có thể lưu nhưng phải hỏi server xác nhận trước khi dùng.\n  - `no-store`: không lưu gì (dữ liệu nhạy cảm).\n  - `public`/`private`: cho phép cache chung hay chỉ cache của riêng người dùng.\n  - `immutable`: tệp không bao giờ đổi trong thời gian sống.\n- **Xác nhận có điều kiện**: khi hết tươi, client hỏi lại bằng `If-None-Match` (kèm `ETag`) hoặc `If-Modified-Since`. Nếu chưa đổi, server trả `304 Not Modified` không kèm body, tiết kiệm băng thông.\n- **`ETag`** là dấu vân tay của nội dung. **`Vary`** cho biết phản hồi thay đổi theo header nào (ví dụ `Accept-Encoding`).\n- **Chiến lược phổ biến**: tệp tĩnh có mã băm trong tên thì `max-age` rất dài kèm `immutable`; trang HTML và API thì `no-cache` kèm ETag hoặc `max-age` ngắn.\n\n```http\nHTTP/1.1 200 OK\nCache-Control: public, max-age=3600\nETag: \"v42\"\n\nGET /logo.png\nIf-None-Match: \"v42\"\nHTTP/1.1 304 Not Modified\n```\n\n### Lỗi hay gặp\n- Nhầm `no-cache` (vẫn lưu, phải xác nhận) với `no-store` (không lưu).\n- Quên `Vary`, nên người dùng nhận nhầm phiên bản nén hoặc ngôn ngữ của người khác.\n- Proxy ngược (như nginx) vô tình xoá hoặc ghi đè `Cache-Control` của ứng dụng.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-9-1-cache",
+    "ten": "9.1 — Cache HTTP cho API: Cache-Control, ETag và 304",
+    "nguon": "API & System Design · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nginx/learn?lessonSlug=nginx-4-2-etag-va-bo-dem",
+    "ten": "4.2 — ETag được dựng từ mtime, và đó là lý do mỗi lần deploy làm hỏng bộ đệm",
+    "nguon": "Nginx · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-3-nginx-nuot-header",
+    "ten": "8.3 — Khi proxy ghi đè header cache của bạn",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-contract",
+    "ten": "Hợp đồng API — idempotency và ETag",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "RFC 9111 – HTTP Caching",
+    "url": "https://www.rfc-editor.org/rfc/rfc9111"
+   }
+  ]
+ },
+ "Caching › Caching Strategies": {
+  "body": "Chiến lược cache trả lời hai câu hỏi: **ai** đọc và ghi cache, và **khi nào** dữ liệu trong cache được làm mới. Chọn sai là nguồn của dữ liệu cũ và những sự cố khó dò.\n\n### Ý chính\n- **Cache-aside (lazy loading)**: ứng dụng tự quản lý. Đọc: hỏi cache, nếu trượt thì đọc DB rồi ghi vào cache. Ghi: cập nhật DB rồi xoá (hoặc cập nhật) khoá trong cache. Đơn giản và phổ biến nhất.\n- **Read-through**: ứng dụng chỉ hỏi cache; tầng cache tự tải từ DB khi trượt.\n- **Write-through**: ghi vào cache và DB đồng thời; đọc luôn tươi nhưng ghi chậm hơn.\n- **Write-behind (write-back)**: ghi vào cache trước, đẩy xuống DB sau theo lô; nhanh nhưng có nguy cơ mất dữ liệu nếu cache chết giữa chừng.\n- **Làm mới/vô hiệu hoá**: theo TTL (đơn giản), xoá khi ghi (chính xác), hoặc kết hợp.\n- **Cache stampede**: một khoá nóng hết hạn, hàng trăm request cùng trượt và cùng đổ về DB. Phòng bằng khoá chống trùng lặp (chỉ một request tải lại), TTL có độ lệch ngẫu nhiên, hoặc làm mới sớm.\n- **Nhất quán**: giữa cache và DB luôn có khoảng trễ; thiết kế cần chấp nhận \"nhất quán cuối cùng\" hoặc dùng các kỹ thuật chặt hơn.\n\n```js\nasync function getUser(id) {\n  const key = `user:${id}`;\n  const hit = await redis.get(key);\n  if (hit) return JSON.parse(hit);\n  const user = await db.user.findUnique({ where: { id } });\n  if (user) await redis.set(key, JSON.stringify(user), 'EX', 300);\n  return user;\n}\n```\n\n### Lỗi hay gặp\n- Cập nhật DB nhưng quên xoá cache, nên người dùng thấy dữ liệu cũ.\n- Cache cả kết quả \"không tìm thấy\" mãi mãi.\n- Đặt cùng một TTL cho hàng loạt khoá khiến chúng hết hạn cùng lúc.",
+  "lessons": [
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-6-1-bon-khuon",
+    "ten": "6.1 — Bốn khuôn làm bộ đệm, và bạn đang dùng khuôn nào",
+    "nguon": "Redis · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside",
+    "ten": "12.2 — Cache-aside: khuôn mẫu và bốn lần nó phản chủ",
+    "nguon": "Node.js · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-cache-aside",
+    "ten": "Cache-aside và bốn lần nó phản chủ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-6-3-giam-dap",
+    "ten": "6.3 — Giẫm đạp: khi một lần trượt bộ đệm hạ gục cơ sở dữ liệu",
+    "nguon": "Redis · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-6-4-nhat-quan",
+    "ten": "6.4 — Nhất quán: khi bộ đệm và cơ sở dữ liệu nói khác nhau",
+    "nguon": "Redis · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Caching › Redis nâng cao": {
+  "body": "Khi Redis không chỉ làm cache mà giữ dữ liệu quan trọng, bạn cần hiểu ba thứ: **lưu bền** (dữ liệu sống sót qua khởi động lại), **nhân bản** (có bản sao chịu lỗi) và **script** (chạy logic nguyên tử ngay trong server).\n\n### Ý chính\n- **Persistence**:\n  - **RDB**: chụp ảnh toàn bộ dữ liệu theo chu kỳ vào một tệp. Gọn, khôi phục nhanh, nhưng có thể mất vài phút dữ liệu gần nhất.\n  - **AOF**: ghi nhật ký từng lệnh ghi. Tuỳ cấu hình `appendfsync` (mỗi lệnh, mỗi giây, hoặc để hệ điều hành lo) mà đánh đổi giữa an toàn và tốc độ.\n  - Có thể dùng cả hai. Dữ liệu chỉ là cache thì có thể tắt hẳn.\n- **Replication**: một primary và nhiều replica sao chép bất đồng bộ. Replica giúp đọc nhiều hơn và có bản dự phòng, nhưng vì bất đồng bộ nên vẫn có thể mất vài lệnh khi primary chết. **Sentinel** tự chọn primary mới; **Cluster** chia dữ liệu thành 16384 slot trên nhiều node để mở rộng.\n- **Lua scripting** (`EVAL`) và Redis Functions: gom nhiều lệnh thành một đơn vị nguyên tử, dùng cho rate limit, khoá phân tán, trừ kho an toàn.\n- `MULTI/EXEC` xếp hàng lệnh nhưng không phải giao dịch kiểu SQL: không có rollback.\n- **Bộ nhớ**: đặt `maxmemory` và chính sách đẩy khoá (ví dụ `allkeys-lru`) để Redis không ăn hết RAM.\n\n```lua\n-- Giảm tồn kho chỉ khi còn đủ, nguyên tử\nlocal stock = tonumber(redis.call('GET', KEYS[1]) or '0')\nif stock >= tonumber(ARGV[1]) then\n  return redis.call('DECRBY', KEYS[1], ARGV[1])\nend\nreturn -1\n```\n\n### Lỗi hay gặp\n- Bật AOF `always` rồi thắc mắc vì sao ghi chậm.\n- Cho rằng replica là bản sao lưu: lệnh xoá nhầm cũng được sao chép sang replica ngay.\n- Không đặt `maxmemory`, Redis bị hệ điều hành giết khi hết RAM.",
+  "lessons": [
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-9-3-rdb",
+    "ten": "9.3 — RDB: ảnh chụp, fork và sao-chép-khi-ghi",
+    "nguon": "Redis · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-9-4-aof",
+    "ten": "9.4 — AOF: cuốn nhật ký mọi lượt ghi",
+    "nguon": "Redis · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-9-5-tu-the-ben",
+    "ten": "9.5 — Chọn tư thế bền vững, và khôi phục",
+    "nguon": "Redis · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-11-1-nhan-ban",
+    "ten": "11.1 — Nhân bản: bản sao đuổi kịp và bám theo ra sao",
+    "nguon": "Redis · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-7-3-lua",
+    "ten": "7.3 — Lua: chuyển logic vào bên trong máy chủ",
+    "nguon": "Redis · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Redis – Persistence",
+    "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/"
+   }
+  ]
+ },
+ "Caching › Memcached chi tiết": {
+  "body": "Phần này đi sâu hơn vào cách Memcached hoạt động và khi nào nên chọn nó.\n\n### Cách hoạt động bên trong\n- Bộ nhớ được chia thành các **slab class** theo kích thước mục; mỗi giá trị rơi vào lớp vừa đủ chứa nó. Cách này tránh phân mảnh bộ nhớ nhưng có thể lãng phí một ít khi kích thước mục lệch.\n- Khi hết bộ nhớ, mục **ít dùng gần đây nhất (LRU)** bị loại. Mục hết TTL cũng được loại.\n- Server **không biết nhau**. Client dùng **consistent hashing** để chọn node cho mỗi khoá, nên thêm hoặc bớt node chỉ làm trượt một phần nhỏ khoá.\n- Đa luồng, mỗi luồng xử lý nhiều kết nối; hợp cho tải đọc đơn giản số lượng lớn.\n- Giới hạn mặc định cho một giá trị là khoảng 1MB.\n\n### Lệnh cơ bản\n```text\nset key flags exptime bytes   # lưu\nget key                       # đọc\nadd / replace                 # chỉ thêm khi chưa có / chỉ thay khi đã có\nincr key 1                    # bộ đếm\ncas key flags exptime bytes token   # ghi có điều kiện (kiểm phiên bản)\n```\n\n### Khi nên chọn\n- Cache khoá-giá trị thuần tuý, dữ liệu nhỏ đến vừa, muốn đơn giản và dùng ít tài nguyên.\n- Không cần lưu bền, không cần cấu trúc dữ liệu, không cần pub/sub.\n- Nếu cần các tính năng đó, hãy chọn Redis.\n\n### Bảo mật và vận hành\n- Không để lộ cổng ra mạng công cộng; chỉ cho các máy ứng dụng truy cập (tường lửa hoặc mạng riêng). Bật xác thực SASL nếu cần.\n- Theo dõi tỉ lệ hit/miss, số lần bị loại (`evictions`) và dung lượng sử dụng qua lệnh `stats`.\n- Chuẩn bị cho việc node chết: ứng dụng phải chạy được khi cache trống (chấp nhận chậm hơn, không được sập).",
+  "lessons": [
+   {
+    "href": "/courses/redis/learn?lessonSlug=rd-0-1-van-de",
+    "ten": "0.1 — Redis giải quyết gì",
+    "nguon": "Redis · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Caching › CDN và Caching chiến lược": {
+  "body": "Dùng CDN hiệu quả không chỉ là bật nó lên, mà là phối hợp header cache của ứng dụng, khoá cache của CDN và cách vô hiệu hoá nội dung.\n\n### Ý chính\n- **Phân loại nội dung**:\n  - Tệp tĩnh có mã băm trong tên (`app.3f9a1.js`): cache rất lâu (`max-age=31536000, immutable`), không bao giờ cần xoá vì đổi nội dung là đổi tên.\n  - Trang HTML và API công khai ít đổi: cache ngắn (vài giây tới vài phút) kèm `stale-while-revalidate`, để người dùng nhận bản cũ trong khi CDN làm mới ngầm.\n  - Nội dung riêng của người dùng: `private` hoặc không cho CDN cache.\n- **Khoá cache cẩn thận**: bỏ các query string rác (như tham số theo dõi quảng cáo) khỏi khoá để tăng tỉ lệ hit; ngược lại, tham số làm đổi nội dung (ngôn ngữ, phiên bản) phải nằm trong khoá hoặc trong `Vary`.\n- **Vô hiệu hoá**: purge theo URL hoặc theo thẻ khi nội dung đổi; ưu tiên cách đổi URL.\n- **Bảo vệ origin**: CDN gom nhiều request giống nhau thành một (request collapsing) và có thể phục vụ bản cũ khi origin lỗi (`stale-if-error`).\n- **Đo lường**: theo dõi tỉ lệ cache hit; nhìn header như `Age` hay `X-Cache` để biết một phản hồi đến từ edge hay origin.\n- **Lưu ý khi có reverse proxy giữa app và CDN**: nginx hay Cloudflare có thể ghi đè header cache. Kiểm bằng `curl -I`, đừng đọc cấu hình rồi tin.\n\n```http\nCache-Control: public, max-age=60, stale-while-revalidate=300, stale-if-error=86400\n```\n\n### Lỗi hay gặp\n- Cache một phản hồi có `Set-Cookie` hoặc dữ liệu của một người rồi phục vụ cho người khác.\n- Cả cuộc deploy làm đổi mọi tên tệp, khiến tỉ lệ hit tụt về 0 một lúc; cần chuẩn bị cho origin chịu tải đợt đó.",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-1-cdn",
+    "ten": "8.1 — CDN hoạt động thế nào: edge, origin và PoP",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-2-cache-dung",
+    "ten": "8.2 — Khoá cache, TTL và xoá cache cho đúng",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-3-nginx-nuot-header",
+    "ten": "8.3 — Khi proxy ghi đè header cache của bạn",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-5-lab-cdn-labflow",
+    "ten": "Lab 8 — Kiểm toán tầng CDN của LabFlow: chứng minh cache, bắt header bị nuốt, đụng giới hạn",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "lab"
+   },
+   {
+    "href": "/simulation?scenario=cache-layers",
+    "ten": "Tầng đệm — dữ liệu lấy ra từ đâu",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Unit Testing": {
+  "body": "Unit test kiểm một đơn vị code nhỏ (một hàm, một lớp) tách riêng khỏi phần còn lại: không mạng, không cơ sở dữ liệu, không đồng hồ thật. Vì thế chúng chạy trong mili giây, và bạn có thể chạy hàng nghìn bài mỗi lần lưu file.\n\n### Vì sao cần biết\nUnit test là tuyến phòng thủ nhanh nhất và rẻ nhất, đáy của kim tự tháp test. Viết code dễ test cũng thường là code thiết kế tốt: hàm nhỏ, ít phụ thuộc.\n\n### Ý chính\n- Cấu trúc **Arrange, Act, Assert**: chuẩn bị dữ liệu, gọi hàm, khẳng định kết quả.\n- Tên test nói rõ hành vi: `trả 422 khi email sai định dạng`, không phải `test1`.\n- Test **hàm thuần** trước: chia phân vùng đầu vào, thử giá trị biên (0, 1, tối đa, rỗng, null).\n- **Test double**: stub (trả dữ liệu cố định), mock (kiểm có được gọi), spy (ghi lại lời gọi), fake (bản cài đơn giản). Dùng chúng để cô lập đơn vị khỏi cơ sở dữ liệu hay API ngoài.\n- Test cả nhánh lỗi và biên, không chỉ đường đi vui vẻ.\n- Mỗi test độc lập, chạy theo thứ tự nào cũng được.\n\n```ts\nimport { describe, it, expect } from 'vitest';\nimport { applyDiscount } from './pricing';\n\ndescribe('applyDiscount', () => {\n  it('giảm 10% cho đơn từ 1 triệu', () => {\n    expect(applyDiscount(1_000_000)).toBe(900_000);\n  });\n  it('không giảm khi dưới ngưỡng', () => {\n    expect(applyDiscount(999_999)).toBe(999_999);\n  });\n});\n```\nVitest và Jest dùng cú pháp gần như giống nhau.\n\n### Lỗi hay gặp\n- Mock quá nhiều, test chỉ kiểm lại mock mà không kiểm hành vi thật.\n- Kiểm chi tiết cài đặt nên refactor là test đỏ dù hành vi không đổi.\n- Test phụ thuộc ngày giờ hiện tại hoặc số ngẫu nhiên nên lúc đúng lúc sai.\n\n### Tự kiểm tra\n1. Vì sao unit test không nên chạm cơ sở dữ liệu thật?\n2. Giá trị biên nào bạn cần thử cho hàm tính phí vận chuyển theo cân nặng?",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-1-1-cau-truc",
+    "ten": "1.1 — Giải phẫu một test: chuẩn bị, hành động, khẳng định",
+    "nguon": "Testing · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-1-4-ham-thuan",
+    "ten": "1.4 — Test hàm thuần: phân vùng, giá trị biên, bảng quyết định, thuộc tính",
+    "nguon": "Testing · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-1-phan-loai",
+    "ten": "3.1 — Stub, mock, spy, fake: mỗi loại là gì",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-14-2-unit-test",
+    "ten": "14.2 — Test đơn vị, hàng giả, và những bài test không kiểm gì cả",
+    "nguon": "Node.js · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/testing-practice",
+    "ten": "Testing — Luyện viết test, chấm bằng đột biến",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Integration Testing": {
+  "body": "Integration test kiểm nhiều thành phần chạy **cùng nhau**: một route Express đi qua middleware, service và cơ sở dữ liệu thật. Mục tiêu là bắt những lỗi mà unit test không thấy, vì chúng nằm ở chỗ ghép: câu SQL sai, ràng buộc cơ sở dữ liệu, serialize JSON, thứ tự middleware.\n\n### Vì sao cần biết\nNhiều lỗi sản phẩm không nằm trong một hàm mà nằm ở giao điểm giữa các phần. Cơ sở dữ liệu giả (mock) không có ràng buộc, khoá, tranh chấp đồng thời, nên có thể cho test xanh trong khi production hỏng.\n\n### Ý chính\n- **Dùng cơ sở dữ liệu thật** cho test: Postgres trong Docker Compose hoặc **Testcontainers** tự bật và tắt mỗi lần chạy. Dùng tmpfs hoặc schema mới để nhanh.\n- **Cô lập dữ liệu giữa các test**: bọc mỗi test trong một giao dịch rồi rollback, hoặc xoá bảng/nạp dữ liệu mẫu trước mỗi test.\n- **Test HTTP bằng Supertest**: gửi request vào ứng dụng mà không cần mở cổng thật.\n- Test cả xác thực và phân quyền (401, 403, 404), validate đầu vào (400, 422) và định dạng lỗi.\n- Giữ số lượng vừa phải: chúng chậm hơn unit test, nên tập trung vào luồng quan trọng và các ràng buộc dữ liệu.\n\n```ts\nimport request from 'supertest';\nimport { app } from '../src/app';\n\nit('POST /notes tạo ghi chú và trả 201', async () => {\n  const res = await request(app)\n    .post('/notes')\n    .set('Authorization', `Bearer ${token}`)\n    .send({ title: 'Xin chào' });\n  expect(res.status).toBe(201);\n  expect(res.body).toMatchObject({ title: 'Xin chào' });\n});\n```\n\n### Lỗi hay gặp\n- Test dùng chung dữ liệu nên chạy riêng thì xanh, chạy chung thì đỏ.\n- Dùng SQLite trong test nhưng production là Postgres: hành vi khác nhau ở kiểu dữ liệu, khoá, JSON.\n- Không dọn dữ liệu sau test, làm lần chạy sau thất bại.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-4-1-vi-sao",
+    "ten": "4.1 — Vì sao cơ sở dữ liệu thật hơn cơ sở dữ liệu giả: lỗi tranh chấp Chương 2, sửa và chứng minh",
+    "nguon": "Testing · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-4-2-docker-db",
+    "ten": "4.2 — Postgres dùng một lần cho test: Docker Compose, tmpfs và schema mới mỗi lần",
+    "nguon": "Testing · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-4-3-testcontainers",
+    "ten": "4.3 — Testcontainers cho Node: lần chạy test tự bật cơ sở dữ liệu",
+    "nguon": "Testing · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-5-1-supertest",
+    "ten": "5.1 — Supertest: gửi request mà không cần bật server",
+    "nguon": "Testing · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-14-4-db-that",
+    "ten": "14.4 — Kiểm thử trên cơ sở dữ liệu thật",
+    "nguon": "Node.js · Chương 14",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Functional Testing": {
+  "body": "Functional testing kiểm hệ thống **làm đúng chức năng** theo yêu cầu, nhìn từ bên ngoài như người dùng hay client thật: gửi đầu vào, quan sát đầu ra, không quan tâm bên trong cài đặt ra sao (kiểm thử hộp đen).\n\n### Vì sao cần biết\nUnit và integration test cho biết các mảnh chạy đúng; functional test cho biết **cả tính năng** đúng: đăng ký, đăng nhập, đặt hàng, thanh toán đi từ đầu tới cuối.\n\n### Ý chính\n- Với backend, hình thức phổ biến là **test API đầu-cuối**: gọi chuỗi các endpoint theo kịch bản thật (tạo tài khoản, đăng nhập, tạo đơn, kiểm kết quả).\n- Với sản phẩm có giao diện, **E2E trên trình duyệt** (Playwright, Cypress) chạy kịch bản người dùng thật; chậm và dễ chập chờn nên chỉ giữ một số ít luồng sống còn.\n- Kịch bản nên bắt nguồn từ **yêu cầu và tiêu chí chấp nhận**: \"khi A làm B thì thấy C\".\n- Cả luồng thành công lẫn luồng lỗi: thiếu dữ liệu, sai quyền, trùng lặp, hết hàng.\n- **Làm test ổn định**: dữ liệu khởi tạo rõ ràng, không phụ thuộc thời gian, chờ theo điều kiện thay vì `sleep`, dọn sau test.\n- Chạy trong CI trên môi trường gần giống production; chặn merge khi test đỏ.\n\n```ts\ntest('luồng đặt hàng', async ({ request }) => {\n  const login = await request.post('/auth/login', { data: { email, password } });\n  const { token } = await login.json();\n  const order = await request.post('/orders', {\n    headers: { Authorization: `Bearer ${token}` },\n    data: { productId: 1, quantity: 2 },\n  });\n  expect(order.status()).toBe(201);\n});\n```\n\n### Lỗi hay gặp\n- Viết quá nhiều test E2E chậm và giòn thay vì dồn vào unit và integration.\n- Test phụ thuộc dữ liệu có sẵn trên môi trường chung nên hỏng bất ngờ.\n- Dùng `sleep` cố định rồi vẫn flaky; hãy chờ đúng điều kiện.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-5-1-supertest",
+    "ten": "5.1 — Supertest: gửi request mà không cần bật server",
+    "nguon": "Testing · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-5-2-xac-thuc",
+    "ten": "5.2 — Test xác thực và phân quyền: 401, 403, 404",
+    "nguon": "Testing · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-2-luong",
+    "ten": "7.2 — Test luồng người dùng thật",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-3-on-dinh",
+    "ten": "7.3 — Làm test e2e ổn định",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-11-2-backend",
+    "ten": "11.2 — Test backend từ đầu tới cuối",
+    "nguon": "Testing · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểm thử (Testing) › Code Reviews": {
+  "body": "Code review là việc đồng đội đọc thay đổi của bạn trước khi nó được trộn vào nhánh chính. Mục tiêu là bắt lỗi sớm, giữ chất lượng và nhất quán của codebase, và truyền kiến thức trong nhóm. Nó không phải để soi lỗi người viết.\n\n### Vì sao cần biết\nReview tốt giảm lỗi ra production và rút ngắn thời gian vào việc của người mới. Review tệ (chậm, mơ hồ, gay gắt) khiến cả nhóm chậm và bực bội.\n\n### Ý chính\n- **Người viết (tác giả)**: giữ pull request nhỏ và tập trung vào một việc; mô tả rõ **vì sao** đổi (không chỉ đổi gì); tự đọc lại diff trước; cho thấy đã test; trả lời bình luận một cách cởi mở.\n- **Người review** xem lần lượt: thiết kế có hợp lý không, logic có đúng không (kể cả trường hợp biên và lỗi), bảo mật (kiểm quyền, kiểm đầu vào, lộ bí mật), test có đủ và có kiểm hành vi thật, tên gọi và độ dễ đọc, hiệu năng ở đường nóng.\n- **Phản hồi tốt**: cụ thể, kèm lý do và gợi ý; phân biệt điều bắt buộc sửa với gợi ý tuỳ chọn (ví dụ tiền tố `nit:`); hỏi thay vì khẳng định khi chưa chắc; khen điều làm tốt.\n- **Để máy lo phần máy làm được**: linter, định dạng, kiểm kiểu, test chạy trong CI; người chỉ bàn chuyện cần phán đoán.\n- **Phản hồi nhanh** (trong vòng một ngày làm việc) để không chặn người khác.\n\n### Lỗi hay gặp\n- Pull request vài nghìn dòng nên không ai đọc kỹ và chỉ bấm approve.\n- Tranh luận phong cách cá nhân thay vì dựa vào quy ước chung của nhóm.\n- Review mà không chạy hoặc không đọc test.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-2-review",
+    "ten": "6.2 — Review: cho và nhận phản hồi",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-3-review",
+    "ten": "10.3 — Review test trong pull request",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Google Engineering Practices – Code Review",
+    "url": "https://google.github.io/eng-practices/review"
+   }
+  ]
+ },
+ "Bảo mật Web › OWASP Top 10 & Server Security": {
+  "body": "OWASP Top 10 là danh sách mười nhóm rủi ro bảo mật ứng dụng web phổ biến và nghiêm trọng nhất, do cộng đồng OWASP tổng hợp từ dữ liệu thật và cập nhật định kỳ. Đây là bản kiểm tra tối thiểu cho mọi backend dev: nếu bạn tránh được các lỗi này thì đã chặn được phần lớn tấn công thực tế.\n\n### Vì sao cần biết\nHầu hết các vụ lộ dữ liệu đến từ những lỗi quen thuộc này chứ không phải từ kỹ thuật tinh vi. Danh sách cũng là ngôn ngữ chung khi trao đổi về bảo mật với nhóm và khách hàng.\n\n### Các nhóm chính (bản 2021, nên đối chiếu bản mới nhất)\n- **Broken Access Control** (kiểm quyền hỏng): người dùng làm được việc ngoài quyền, như đọc dữ liệu người khác bằng cách đổi ID (IDOR/BOLA).\n- **Cryptographic Failures**: dữ liệu nhạy cảm không mã hoá, băm mật khẩu yếu, dùng HTTP thay HTTPS.\n- **Injection**: SQL, NoSQL, lệnh hệ thống, XSS; phòng bằng truy vấn tham số hoá và encode đầu ra.\n- **Insecure Design**: thiếu thiết kế bảo mật ngay từ đầu.\n- **Security Misconfiguration**: cấu hình mặc định, bật debug, lộ trang quản trị.\n- **Vulnerable and Outdated Components**: thư viện cũ có lỗ hổng đã biết.\n- **Identification and Authentication Failures**: đăng nhập yếu, không giới hạn thử sai, phiên không an toàn.\n- **Software and Data Integrity Failures**, **Security Logging and Monitoring Failures**, **SSRF**.\n\n### Về server\nBảo mật không chỉ là code ứng dụng: cập nhật hệ điều hành, đóng cổng không cần, dùng SSH bằng khoá, chạy dịch vụ bằng người dùng ít quyền, giấu bí mật khỏi git, và có sao lưu đã thử khôi phục.\n\n### Lỗi hay gặp\n- Chỉ kiểm quyền ở giao diện (ẩn nút) mà không kiểm ở API.\n- Dựa vào kiểm tra đầu vào ở frontend.\n- Ghi log chứa mật khẩu, token hay số thẻ.",
+  "lessons": [
+   {
+    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-1-2",
+    "ten": "1.2 — Tổng quan OWASP Top 10",
+    "nguon": "Modern Web Application Security · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAW301"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
+    "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-3-dau-vao-doc-hai",
+    "ten": "9.3 — Đầu vào là kẻ thù: ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request, SSRF",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-4-bi-mat-va-phu-thuoc",
+    "ten": "9.4 — Bí mật, phụ thuộc, và những gì lỗi của bạn khai ra",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu",
+    "ten": "11.3 — Gia cố một máy chủ: giờ đầu tiên, và nếp thường ngày sau đó",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "OWASP Top 10",
+    "url": "https://owasp.org/www-project-top-ten/"
+   }
+  ]
+ },
+ "Bảo mật Web › HTTPS & SSL/TLS": {
+  "body": "HTTPS là HTTP chạy bên trong một đường ống mã hoá TLS. TLS (kế nhiệm của SSL) bảo đảm ba điều: **bí mật** (người đứng giữa không đọc được), **toàn vẹn** (không sửa được trên đường) và **xác thực server** (bạn đang nói chuyện đúng với example.com thật, nhờ chứng chỉ).\n\n### Vì sao cần biết\nKhông có HTTPS thì mật khẩu, cookie và token đi trần qua mạng, ai ở quán cà phê cũng có thể đọc hoặc chỉnh sửa. Trình duyệt hiện cũng đánh dấu site HTTP là không an toàn.\n\n### Ý chính\n- **Bắt tay TLS** (handshake): client và server thống nhất phiên bản và bộ mã, server trình chứng chỉ, hai bên cùng tính ra khoá phiên dùng chung rồi mã hoá dữ liệu bằng khoá đó (nhanh). TLS 1.3 chỉ cần một vòng đi về.\n- **Chứng chỉ** liên kết một tên miền với khoá công khai và được một **CA** (tổ chức cấp chứng chỉ) tin cậy ký. Trình duyệt kiểm chuỗi chứng chỉ lên tới CA gốc mà nó tin.\n- **Let's Encrypt** cấp chứng chỉ miễn phí và tự động gia hạn (ví dụ bằng certbot).\n- **Chuyển hướng HTTP sang HTTPS** và bật **HSTS** để trình duyệt luôn dùng HTTPS cho site của bạn.\n- Thường kết thúc TLS ở reverse proxy (nginx, load balancer) rồi chuyển vào ứng dụng bằng mạng nội bộ.\n- Dùng TLS 1.2 trở lên; tắt SSL và TLS cũ.\n\n```nginx\nserver {\n  listen 443 ssl;\n  server_name example.com;\n  ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;\n  ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;\n  add_header Strict-Transport-Security \"max-age=31536000\" always;\n}\n```\n\n### Lỗi hay gặp\n- Chứng chỉ hết hạn vì quên gia hạn.\n- Thiếu chứng chỉ trung gian trong chuỗi, nên một số client báo lỗi dù trình duyệt của bạn chạy tốt.\n- Lẫn nội dung HTTP trong trang HTTPS (mixed content).\n\n### Tự kiểm tra\n1. HTTPS có ngăn được lừa đảo (phishing) không?\n2. Vì sao dữ liệu thật được mã hoá bằng khoá chung chứ không bằng khoá công khai?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-5-https-cors",
+    "ten": "7.5 — HTTPS và CORS",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-1-tls-la-gi",
+    "ten": "6.1 — TLS bảo đảm điều gì, và lịch sử từ SSL tới TLS 1.3",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-2-bat-tay-tls",
+    "ten": "6.2 — Bắt tay TLS 1.3, từng bước",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-3-chung-chi",
+    "ten": "6.3 — Chứng chỉ, chuỗi tin cậy và CA",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nginx/learn?lessonSlug=nginx-6-5-chuyen-huong-va-hsts",
+    "ten": "6.5 — Cú chuyển hướng sang HTTPS, HSTS, và việc gia hạn nó âm thầm phá",
+    "nguon": "Nginx · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "RFC 8446 – TLS 1.3",
+    "url": "https://datatracker.ietf.org/doc/html/rfc8446"
+   }
+  ]
+ },
+ "Bảo mật Web › CORS": {
+  "body": "Trình duyệt áp dụng **same-origin policy**: một trang chạy ở `https://app.example.com` mặc định không được đọc phản hồi từ `https://api.other.com`. CORS (Cross-Origin Resource Sharing) là cơ chế để server **cho phép** có chọn lọc việc đó, bằng các header đặc biệt. Nhớ: CORS là quy tắc của **trình duyệt** nhằm bảo vệ người dùng, không phải tường lửa của server.\n\n### Vì sao cần biết\nKhi frontend và API ở hai origin khác nhau (khác giao thức, tên miền hoặc cổng), lỗi \"blocked by CORS policy\" là chuyện gần như chắc chắn gặp.\n\n### Ý chính\n- **Origin** = giao thức + tên miền + cổng.\n- **Request đơn giản** (GET/POST thường, header cơ bản): trình duyệt gửi luôn, và chỉ cho JavaScript đọc phản hồi nếu có `Access-Control-Allow-Origin` phù hợp.\n- **Preflight**: với phương thức hay header đặc biệt (PUT, DELETE, `Authorization`, `Content-Type: application/json`), trình duyệt gửi trước một request `OPTIONS` để hỏi server có cho phép không (`Access-Control-Allow-Methods`, `Access-Control-Allow-Headers`). Có thể cache bằng `Access-Control-Max-Age`.\n- **Credentials**: muốn gửi kèm cookie thì client đặt `credentials: 'include'` và server phải trả `Access-Control-Allow-Credentials: true` cùng một origin cụ thể (không được dùng `*`).\n- Chỉ liệt kê origin tin cậy; đừng phản chiếu bừa header `Origin` của request.\n\n```js\nimport cors from 'cors';\napp.use(cors({\n  origin: ['https://app.example.com'],\n  credentials: true,\n  methods: ['GET', 'POST', 'PUT', 'DELETE'],\n}));\n```\n\n### Lỗi hay gặp\n- Đặt `Access-Control-Allow-Origin: *` cho API có xác thực bằng cookie.\n- Tưởng CORS chặn được kẻ tấn công gọi API: curl hay server khác hoàn toàn không bị ảnh hưởng, nên vẫn phải xác thực và kiểm quyền.\n- Quên xử lý `OPTIONS` ở một lớp trung gian nên preflight thất bại.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-5-https-cors",
+    "ten": "7.5 — HTTPS và CORS",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-4-cors",
+    "ten": "6.4 — CORS, CSRF và trình duyệt: đo trong Chromium thật",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors",
+    "ten": "9.1 — Đường biên: header bảo mật, CSP và CORS",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/object-storage/learn?lessonSlug=os-5-1-vi-sao-cors",
+    "ten": "5.1 — Vì sao CORS: browser chặn cross-origin PUT",
+    "nguon": "Object Storage (Cloudflare R2) · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật Web › CSP": {
+  "body": "Content Security Policy (CSP) là một header HTTP cho trình duyệt biết **trang này được phép tải và chạy những gì từ đâu**: script, style, ảnh, kết nối... Nếu kẻ tấn công chèn được một đoạn script vào trang (XSS), CSP chặt có thể khiến trình duyệt từ chối chạy nó.\n\n### Ý chính\n- Header: `Content-Security-Policy`, gồm các chỉ thị (directive) như `default-src`, `script-src`, `style-src`, `img-src`, `connect-src`, `frame-ancestors`.\n- Cách mạnh nhất cho script là dùng **nonce** (một chuỗi ngẫu nhiên mỗi request, gắn vào thẻ `<script nonce=\"...\">`) hoặc hash, thay vì cho phép `'unsafe-inline'`.\n- `frame-ancestors` quyết định ai được nhúng trang bạn vào iframe (chống clickjacking).\n- Triển khai an toàn: bắt đầu bằng **`Content-Security-Policy-Report-Only`** để chỉ báo cáo vi phạm mà chưa chặn, sửa dần, rồi mới bật thật.\n- CSP là lớp phòng thủ bổ sung, không thay thế việc encode đầu ra và sanitize đầu vào.\n\n```http\nContent-Security-Policy:\n  default-src 'self';\n  script-src 'self' 'nonce-r4nd0m';\n  img-src 'self' data: https:;\n  frame-ancestors 'none'\n```\n\n### Lỗi hay gặp\n- Thêm `'unsafe-inline'` và `'unsafe-eval'` để \"cho chạy được\" rồi mất hết tác dụng.\n- Cho phép cả CDN công cộng rộng rãi nên kẻ tấn công vẫn nạp được script độc hại từ đó.\n- Bật chặn ngay trên production không qua giai đoạn report-only, làm hỏng chức năng.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors",
+    "ten": "9.1 — Đường biên: header bảo mật, CSP và CORS",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-3-2",
+    "ten": "3.2 — Content Security Policy và header bảo mật",
+    "nguon": "Modern Web Application Security · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAW301"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong",
+    "ten": "7.4 — Các header đổi hành vi: cache, nén, CORS, bảo mật",
+    "nguon": "Networking for Developers · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "OWASP – Content Security Policy Cheat Sheet",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html"
+   }
+  ]
+ },
+ "Bảo mật Web › Hashing — bcrypt/scrypt/MD5/SHA": {
+  "body": "Hàm băm (hash) biến một dữ liệu bất kỳ thành một chuỗi cố định, **một chiều**: từ kết quả không suy ngược được dữ liệu gốc, và đổi một ký tự đầu vào là kết quả đổi hoàn toàn. Với mật khẩu, bạn chỉ lưu giá trị băm; lúc đăng nhập băm mật khẩu nhập vào rồi so với giá trị đã lưu. Nhờ đó, kể cả khi cơ sở dữ liệu bị lộ, kẻ tấn công không có mật khẩu gốc ngay.\n\n### Vì sao cần biết\nLưu mật khẩu sai cách là một trong những lỗi gây hậu quả lớn nhất khi lộ dữ liệu. Chọn đúng hàm băm là chuyện sống còn.\n\n### Ý chính\n- **Hai họ hàm băm khác mục đích**:\n  - Băm **nhanh** (MD5, SHA-1, SHA-256, SHA-512) dành cho toàn vẹn dữ liệu, chữ ký, mã định danh nội dung. Chúng **không dùng riêng cho mật khẩu** vì quá nhanh: kẻ tấn công thử hàng tỉ mật khẩu mỗi giây bằng GPU. MD5 và SHA-1 còn bị phá về va chạm, nên tránh cả cho mục đích bảo mật.\n  - Băm **chậm có chủ đích** dành cho mật khẩu: **Argon2id** (lựa chọn khuyến nghị hiện nay), **scrypt**, **bcrypt**, PBKDF2.\n- **Salt**: chuỗi ngẫu nhiên riêng cho mỗi mật khẩu, trộn vào trước khi băm, để hai người cùng mật khẩu có băm khác nhau và bảng tính sẵn (rainbow table) vô dụng. bcrypt và Argon2 tự sinh và nhúng salt vào kết quả.\n- **Hệ số chi phí** (cost/work factor) chỉnh độ chậm; tăng dần theo thời gian khi phần cứng mạnh lên, và băm lại khi người dùng đăng nhập.\n- **Pepper** (bí mật phía server, tuỳ chọn) là lớp bổ sung, lưu ngoài cơ sở dữ liệu.\n- So sánh mã băm bằng hàm hằng thời gian để tránh rò thông tin qua thời gian phản hồi.\n\n```js\nimport argon2 from 'argon2';\nconst hash = await argon2.hash(password);       // salt tự sinh, nhúng trong chuỗi kết quả\nconst ok = await argon2.verify(hash, password);\n```\n\n### Lỗi hay gặp\n- Lưu mật khẩu bằng SHA-256 trần hoặc MD5, không salt.\n- Tự sáng chế thuật toán băm.\n- Đặt chi phí quá thấp để \"cho nhanh\".\n- Giới hạn độ dài mật khẩu quá ngắn hoặc cắt bớt âm thầm.\n\n### Tự kiểm tra\n1. Vì sao SHA-256 nhanh lại tệ cho mật khẩu?\n2. Salt giải quyết tấn công nào?\n3. Làm thế nào nâng cấp từ hàm băm cũ lên Argon2 mà không bắt người dùng đặt lại mật khẩu?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-7-4-passwords",
+    "ten": "7.4 — Mật khẩu: hash, muối, bcrypt",
+    "nguon": "Nền tảng Lập trình Web · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-1-4-bam-mac-chu-ky",
+    "ten": "1.4 — Băm, MAC, chữ ký: ba công cụ, một sự nhầm lẫn",
+    "nguon": "Authentication · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-2-1-da-co-csdl",
+    "ten": "2.1 — Kẻ tấn công ĐÃ CÓ cơ sở dữ liệu của bạn",
+    "nguon": "Authentication · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-2-2-chon-va-chinh",
+    "ten": "2.2 — Chọn và chỉnh hàm băm, bằng phép đo",
+    "nguon": "Authentication · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=password-hashing",
+    "ten": "Băm mật khẩu — muối và sự chậm chạp",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "OWASP – Password Storage Cheat Sheet",
+    "url": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
+   }
+  ]
+ },
+ "Bảo mật Web › Web Security": {
+  "body": "Bảo mật web là tập hợp thói quen và kỹ thuật để ứng dụng không bị kẻ xấu lợi dụng. Điểm xuất phát đơn giản: **mọi thứ đến từ bên ngoài đều có thể độc hại**, kể cả khi nó đến từ frontend của chính bạn.\n\n### Ý chính\n- **Injection**: không nối chuỗi người dùng nhập vào câu SQL, lệnh shell hay đường dẫn tệp. Dùng truy vấn tham số hoá, hoặc ORM đúng cách.\n- **XSS** (Cross-Site Scripting): kẻ tấn công chèn script vào trang của bạn. Phòng bằng encode đầu ra theo ngữ cảnh, sanitize HTML người dùng gửi lên, và thêm CSP.\n- **CSRF**: trang khác mượn phiên đăng nhập của bạn để gửi yêu cầu. Phòng bằng cookie `SameSite`, token CSRF và kiểm `Origin`.\n- **Phân quyền hỏng**: luôn kiểm quyền **ở server** cho từng đối tượng (IDOR/BOLA: người dùng A đọc đơn hàng của B bằng cách đổi ID).\n- **Gán hàng loạt (mass assignment)**: đừng nhận cả body để ghi thẳng vào model; chỉ nhận trường cho phép.\n- **Xác thực an toàn**: băm mật khẩu bằng Argon2/bcrypt, giới hạn số lần thử sai, phiên cookie `HttpOnly; Secure`.\n- **Bí mật**: không commit khoá vào git, nạp qua biến môi trường hoặc kho bí mật.\n- **Phụ thuộc**: quét thư viện (`npm audit`), cập nhật đều.\n- **HTTPS ở mọi nơi**, header bảo mật, giới hạn tần suất, giới hạn kích thước body.\n- **Log và giám sát**, không ghi bí mật vào log.\n\n```js\n// Xấu: chuỗi nối -> SQL injection\ndb.query(`SELECT * FROM users WHERE email = '${email}'`);\n// Tốt: tham số hoá\ndb.query('SELECT * FROM users WHERE email = $1', [email]);\n```\n\n### Lỗi hay gặp\n- Tin dữ liệu đã được kiểm ở frontend.\n- Thông báo lỗi chi tiết (stack trace, câu SQL) lộ ra người dùng.\n- Một endpoint quản trị bị quên không bảo vệ.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors",
+    "ten": "9.1 — Đường biên: header bảo mật, CSP và CORS",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-2-xss-va-sanitize",
+    "ten": "9.2 — XSS: từ ghi chú của người lạ tới phiên đăng nhập của bạn",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-3-dau-vao-doc-hai",
+    "ten": "9.3 — Đầu vào là kẻ thù: ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request, SSRF",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-2-phan-quyen",
+    "ten": "6.2 — Phân quyền và truy cập theo đối tượng (BOLA): khai thác, vá, ma trận",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-input-attacks",
+    "ten": "Đầu vào là kẻ thù",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Bảo mật Web › SSL/TLS và HTTPS": {
+  "body": "Phần này đi sâu hơn vào cách TLS bảo vệ kết nối và cách vận hành chứng chỉ trong thực tế.\n\n### Cơ chế hoạt động\n- **Bắt tay TLS 1.3**: client gửi `ClientHello` kèm các bộ mã hỗ trợ và phần trao đổi khoá; server trả lời bằng phần trao đổi khoá của mình cùng chứng chỉ và chữ ký chứng minh nó sở hữu khoá riêng. Hai bên tính ra khoá phiên chung (bằng Diffie-Hellman trên đường cong elliptic), nên khoá không đi qua mạng. Sau đó mọi dữ liệu được mã hoá bằng khoá đối xứng (như AES-GCM hay ChaCha20).\n- **Forward secrecy**: vì khoá phiên là tạm thời, lộ khoá riêng của server sau này không giải mã được các cuộc trò chuyện đã ghi lại.\n- **Chuỗi tin cậy**: chứng chỉ của server do CA trung gian ký, CA trung gian do CA gốc ký, và CA gốc nằm sẵn trong hệ điều hành hay trình duyệt.\n\n### Vận hành\n- Cấp chứng chỉ bằng Let's Encrypt (certbot hoặc trình quản lý của reverse proxy), bật **gia hạn tự động** và theo dõi ngày hết hạn.\n- Cấu hình server gửi **đầy đủ chuỗi** (fullchain), không chỉ chứng chỉ lá.\n- Chuyển hướng HTTP sang HTTPS; bật **HSTS** sau khi chắc chắn mọi thứ chạy tốt.\n- Chọn giao thức TLS 1.2 trở lên, dùng bộ mã hiện đại.\n- Tái sử dụng kết nối (keep-alive, HTTP/2) vì bắt tay có chi phí.\n- Với dịch vụ nội bộ giữa các máy, cân nhắc mTLS (cả hai phía trình chứng chỉ).\n\n### Chẩn đoán lỗi thường gặp\n```bash\nopenssl s_client -connect example.com:443 -servername example.com\ncurl -vI https://example.com\n```\nCác lỗi hay gặp: chứng chỉ hết hạn, tên miền không khớp, thiếu chứng chỉ trung gian, đồng hồ máy sai lệch, giao thức không tương thích.",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-2-bat-tay-tls",
+    "ten": "6.2 — Bắt tay TLS 1.3, từng bước",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-3-chung-chi",
+    "ten": "6.3 — Chứng chỉ, chuỗi tin cậy và CA",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-6-4-loi-tls",
+    "ten": "6.4 — Chẩn đoán lỗi TLS",
+    "nguon": "Networking for Developers · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nginx/learn?lessonSlug=nginx-6-1-chuoi-chung-chi",
+    "ten": "6.1 — Chuỗi chứng chỉ, và cái CA trung gian ai cũng quên",
+    "nguon": "Nginx · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=nginx-proxy",
+    "ten": "Nginx — TLS và cái giá của việc đứng giữa",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Let's Encrypt – Getting Started",
+    "url": "https://letsencrypt.org/getting-started/"
+   }
+  ]
+ },
+ "Bảo mật Web › OWASP Risks": {
+  "body": "OWASP Top 10 liệt kê các nhóm rủi ro phổ biến nhất. Dưới đây là cách hiểu từng nhóm bằng ví dụ cụ thể và biện pháp chính, để bạn dùng nó làm danh mục kiểm tra khi review.\n\n### Ý chính\n- **Broken Access Control**: đổi `/orders/42` thành `/orders/43` mà xem được đơn của người khác. Cách chặn: kiểm quyền theo từng đối tượng ở server, mặc định từ chối.\n- **Cryptographic Failures**: mật khẩu băm bằng MD5, dữ liệu nhạy cảm gửi qua HTTP. Cách chặn: HTTPS, Argon2/bcrypt, mã hoá dữ liệu nhạy cảm khi lưu, quản lý khoá đúng cách.\n- **Injection**: chuỗi người dùng đi vào SQL, lệnh hệ thống, HTML. Cách chặn: tham số hoá, encode đầu ra, kiểm đầu vào theo danh sách cho phép.\n- **Insecure Design**: thiếu giới hạn tần suất ở chức năng đặt lại mật khẩu. Cách chặn: mô hình hoá mối đe doạ ngay lúc thiết kế.\n- **Security Misconfiguration**: để chế độ debug, tài khoản mặc định, S3 công khai. Cách chặn: cấu hình tối thiểu, kiểm tự động.\n- **Vulnerable Components**: dùng thư viện có lỗ hổng đã công bố. Cách chặn: `npm audit`, Dependabot, cập nhật đều.\n- **Authentication Failures**: cho thử mật khẩu vô hạn. Cách chặn: giới hạn tần suất, MFA, phiên an toàn.\n- **Integrity Failures**: cập nhật phần mềm không kiểm chữ ký, pipeline CI bị chiếm. Cách chặn: ghim phiên bản, kiểm chữ ký, bảo vệ CI.\n- **Logging and Monitoring Failures**: không ai biết mình đang bị tấn công. Cách chặn: log sự kiện bảo mật và đặt cảnh báo.\n- **SSRF**: server bị lừa gọi tới địa chỉ nội bộ (ví dụ dịch vụ metadata của đám mây). Cách chặn: danh sách cho phép địa chỉ đích, chặn dải IP nội bộ.\n\nOWASP còn có **API Security Top 10** riêng, nơi BOLA (kiểm quyền cấp đối tượng) đứng đầu.\n\n### Cách dùng trong công việc\nBiến danh sách thành test tự động: ví dụ một bài test gọi endpoint bằng token của người A để lấy dữ liệu của người B và khẳng định phải trả 403 hoặc 404.",
+  "lessons": [
+   {
+    "href": "/courses/maw301-modern-web-application-security/learn?lessonSlug=maw301-ts-1-2",
+    "ten": "1.2 — Tổng quan OWASP Top 10",
+    "nguon": "Modern Web Application Security · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MAW301"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
+    "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-2-phan-quyen",
+    "ten": "6.2 — Phân quyền và truy cập theo đối tượng (BOLA): khai thác, vá, ma trận",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-2-xss-va-sanitize",
+    "ten": "9.2 — XSS: từ ghi chú của người lạ tới phiên đăng nhập của bạn",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-3-dau-vao-doc-hai",
+    "ten": "9.3 — Đầu vào là kẻ thù: ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request, SSRF",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "OWASP API Security Top 10",
+    "url": "https://owasp.org/www-project-api-security/"
+   }
+  ]
+ },
+ "Bảo mật Web › Server Security Hardening": {
+  "body": "Hardening (gia cố) máy chủ là thu hẹp bề mặt tấn công: bỏ những gì không cần, khoá chặt những gì cần giữ. Một máy chủ mới dựng thường quá cởi mở; giờ đầu tiên sau khi tạo máy là lúc quan trọng nhất.\n\n### Ý chính\n- **Cập nhật** hệ điều hành và gói thường xuyên; bật cập nhật bảo mật tự động nếu phù hợp.\n- **SSH an toàn**: chỉ dùng khoá, tắt đăng nhập bằng mật khẩu (`PasswordAuthentication no`), không đăng nhập trực tiếp bằng root, giới hạn người được vào. Nên kiểm hiệu lực bằng `sshd -T`, không chỉ đọc tệp cấu hình.\n- **Tường lửa**: mặc định chặn mọi thứ vào, chỉ mở cổng cần (80, 443, SSH). Cơ sở dữ liệu và Redis không nên mở ra Internet.\n- **Quyền tối thiểu**: tạo người dùng riêng cho từng dịch vụ, không chạy ứng dụng bằng root, giới hạn quyền ghi tệp.\n- **Dịch vụ**: tắt cái không dùng, chạy ứng dụng như dịch vụ có người giám sát (systemd) kèm giới hạn tài nguyên.\n- **Chống dò mật khẩu**: công cụ như fail2ban chặn IP thử sai liên tục.\n- **Bí mật** nằm ngoài mã nguồn, quyền đọc chặt, và được xoay vòng định kỳ.\n- **Log và giám sát** tập trung; cảnh báo khi có đăng nhập lạ hoặc đĩa đầy.\n- **Sao lưu** và thử khôi phục thật.\n- Với container: ảnh tối giản, chạy không bằng root, quét lỗ hổng ảnh. Các chuẩn như CIS Benchmarks cho danh mục kiểm chi tiết.\n\n```bash\n# Ví dụ tường lửa với ufw\nufw default deny incoming\nufw allow 22/tcp\nufw allow 80,443/tcp\nufw enable\n```\n\n### Lỗi hay gặp\n- Docker công bố cổng làm vượt qua quy tắc tường lửa của hệ thống mà bạn không để ý; hãy kiểm từ bên ngoài.\n- Sửa cấu hình SSH rồi tự khoá mình ngoài; luôn giữ một phiên đang mở khi thử.\n- Quên rằng một drop-in cấu hình khác có thể đè lên giá trị bạn vừa đặt.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: dịch vụ, lịch chạy và gia cố bằng hình",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu",
+    "ten": "11.3 — Gia cố một máy chủ: giờ đầu tiên, và nếp thường ngày sau đó",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh",
+    "ten": "9.3 — SSH: khoá, file cấu hình và đường hầm",
+    "nguon": "Linux & Bash · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua",
+    "ten": "9.5 — Tường lửa, và gói tin thật ra dừng ở đâu",
+    "nguon": "Linux & Bash · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "CIS Benchmarks",
+    "url": "https://www.cisecurity.org/cis-benchmarks"
+   }
+  ]
+ },
+ "CI/CD › CI/CD": {
+  "body": "CI/CD là chuỗi tự động hoá đưa thay đổi code từ máy lập trình viên tới người dùng: **CI** (Continuous Integration, tích hợp liên tục) tự kiểm tra mỗi thay đổi; **CD** (Continuous Delivery/Deployment, chuyển giao hoặc triển khai liên tục) tự đóng gói và đưa lên môi trường chạy. Như dây chuyền nhà máy: mỗi sản phẩm đi qua các trạm kiểm tra cố định thay vì kiểm bằng mắt từng chiếc.\n\n### Vì sao cần biết\nThiếu tự động hoá thì \"máy tôi chạy được\" trở thành câu quen thuộc, deploy thủ công dễ sai và đáng sợ. CI/CD biến việc phát hành thành thói quen nhàm chán, ít rủi ro.\n\n### Ý chính\n- **Pipeline** gồm nhiều giai đoạn: lấy mã, cài phụ thuộc, lint, kiểm kiểu, chạy test, build, (đóng gói ảnh), triển khai.\n- **GitHub Actions** là công cụ phổ biến: định nghĩa trong `.github/workflows/*.yml` với `on` (khi nào chạy), `jobs` (các công việc), `steps`; mỗi job chạy trên một runner mới.\n- Kích hoạt theo `push`, `pull_request`, lịch hẹn (`schedule`) hoặc chạy tay (`workflow_dispatch`).\n- **Cache phụ thuộc** để pipeline nhanh; **bí mật** lưu trong secrets, không viết thẳng vào tệp.\n- **Check bắt buộc** kết hợp bảo vệ nhánh: không đạt test thì không được merge.\n- Pipeline phải **nhanh và đáng tin**; test chập chờn làm mọi người mất tin tưởng.\n\n```yaml\nname: CI\non: [push, pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with: { node-version: 22, cache: npm }\n      - run: npm ci\n      - run: npm test\n```\n\n### Lỗi hay gặp\n- Pipeline chạy 30 phút nên không ai chờ.\n- Chạy mọi thứ trong một job tuần tự khi có thể song song.\n- Ghim phiên bản action lỏng lẻo (chỉ `@v4`) mà không nghĩ tới rủi ro chuỗi cung ứng.\n\n### Tự kiểm tra\n1. CI khác CD ở điểm nào?\n2. Vì sao check bắt buộc cần kết hợp với bảo vệ nhánh?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: CI thật ra giải quyết vấn đề gì",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — CI/CD và GitHub Actions là gì, ra đời thế nào, vì sao công ty cần",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-2-bon-tang",
+    "ten": "0.2 — Workflow, job, bước, runner",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-2-actions",
+    "ten": "11.2 — GitHub Actions: CI từ số 0",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=cicd-pipeline",
+    "ten": "CI/CD — và cuộc đua giữa hai workflow",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "GitHub Actions documentation",
+    "url": "https://docs.github.com/en/actions"
+   }
+  ]
+ },
+ "CI/CD › Tích hợp liên tục (CI)": {
+  "body": "Tích hợp liên tục (CI) là thực hành mà mỗi lần ai đó đẩy code hoặc mở pull request, một hệ thống tự động **dựng lại và chạy kiểm tra** trên một máy sạch. Nếu đỏ, mọi người biết ngay trong vài phút, khi thay đổi còn nhỏ và còn nằm trong đầu người viết.\n\n### Vì sao cần biết\nLỗi tích hợp (hai người sửa hai chỗ, ghép lại thì hỏng) càng phát hiện muộn càng đắt. CI cũng chấm dứt cảnh \"máy tôi chạy được\": môi trường CI là chuẩn chung.\n\n### Ý chính\n- **Mỗi thay đổi đều qua cùng một chuỗi kiểm**: cài phụ thuộc bằng `npm ci` (đúng theo lockfile), lint và kiểm kiểu, test đơn vị và tích hợp, build.\n- Chạy trên **commit gộp** của pull request (code của bạn đã trộn với nhánh đích), nên bắt được xung đột ngầm.\n- **Test cần dịch vụ thật** (Postgres, Redis): dùng service container của CI để có cơ sở dữ liệu thật.\n- **Nhanh**: cache phụ thuộc, chạy các job độc lập song song, chia nhỏ test, chỉ chạy phần liên quan khi có thể (lọc theo đường dẫn).\n- **Chặn merge khi đỏ**: đặt check bắt buộc (required status checks) và bảo vệ nhánh `main`.\n- **Báo cáo rõ**: log, annotation ngay trên diff, artifact (báo cáo độ phủ).\n- Ma trận (matrix) để thử nhiều phiên bản Node hay hệ điều hành khi cần.\n\n```yaml\njobs:\n  test:\n    runs-on: ubuntu-latest\n    services:\n      postgres:\n        image: postgres:16\n        env: { POSTGRES_PASSWORD: test }\n        ports: ['5432:5432']\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm ci && npm run lint && npm test\n```\n\n### Lỗi hay gặp\n- Test chập chờn (flaky): người ta quen việc bấm chạy lại cho tới khi xanh, rồi bỏ qua tín hiệu thật.\n- Dùng `npm install` thay `npm ci`, nên kết quả khác nhau theo lần chạy.\n- Đẩy thẳng lên `main`, bỏ qua CI.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-1-may-toi-chay-duoc",
+    "ten": "0.1 — \"Máy tôi chạy được\" KHÔNG phải một lời khẳng định kiểm chứng được",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-2-kich-hoat",
+    "ten": "1.2 — Cái gì KHỞI ĐỘNG một lần chạy",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-9-1-github-actions",
+    "ten": "9.1 — Chạy test trong GitHub Actions",
+    "nguon": "Testing · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-15-1-ci-cho-pr",
+    "ten": "15.1 — CI cho pull request: bốn job, một Postgres thật, một check bắt buộc",
+    "nguon": "GitHub Actions · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-14-1-cong-chat-luong",
+    "ten": "14.1 — Cổng chất lượng: check bắt buộc, job tổng hợp, paths, ruleset và merge queue",
+    "nguon": "GitHub Actions · Chương 14",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Atlassian – Continuous integration",
+    "url": "https://www.atlassian.com/continuous-delivery/continuous-integration"
+   }
+  ]
+ },
+ "CI/CD › Triển khai liên tục (CD)": {
+  "body": "CD là phần tự động đưa bản dựng đã qua kiểm tra tới môi trường chạy. Có hai mức: **Continuous Delivery** (luôn sẵn sàng phát hành, nhưng một người bấm nút duyệt) và **Continuous Deployment** (mọi thay đổi qua test đều tự lên production).\n\n### Vì sao cần biết\nDeploy thủ công dễ sai và hay bị né vì sợ. Deploy tự động, lặp được và có đường lùi giúp phát hành nhỏ, thường xuyên và ít rủi ro hơn.\n\n### Ý chính\n- **Dựng một lần, chạy nhiều nơi**: build tạo ra một **artifact** bất biến (thường là ảnh Docker gắn thẻ theo commit), và chính artifact đó đi qua staging rồi production. Đừng dựng lại ở mỗi môi trường.\n- **Môi trường (environments)**: staging và production có cấu hình và bí mật riêng; có thể bắt duyệt thủ công trước khi lên production.\n- **Triển khai không gián đoạn**: rolling, blue-green (chạy song song bản cũ và mới rồi chuyển lưu lượng), canary (cho một phần nhỏ người dùng thử trước).\n- **Migration cơ sở dữ liệu** phải tương thích với cả bản cũ và mới trong lúc hai bản cùng chạy (mở rộng rồi mới thu hẹp).\n- **Kiểm sau triển khai (smoke test)** và **tự động quay lui** khi kiểm hỏng.\n- **Rollback đã được thử**: nhánh quay lui mà không ai từng chạy thường là nhánh hỏng khi cần. Nhớ rằng lùi code không lùi được dữ liệu.\n- **Đừng để một lần push là tự deploy** nếu chưa có cơ chế chống hai lần deploy chạy chồng nhau.\n\n```yaml\ndeploy:\n  needs: test\n  environment: production      # có thể yêu cầu người duyệt\n  concurrency: deploy-prod     # chỉ một lần deploy tại một thời điểm\n  steps:\n    - run: ./scripts/deploy.sh ${{ github.sha }}\n    - run: ./scripts/smoke-test.sh\n```\n\n### Lỗi hay gặp\n- Smoke test không thực sự chạm các chức năng chính nên luôn xanh dù hệ thống hỏng.\n- Migration không tương thích ngược làm bản cũ lỗi trong lúc chuyển.\n- Khoá bí mật triển khai có quyền quá rộng.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-9-0-slides",
+    "ten": "9.0 — Slide Chương 9: deploy từ CI, và vì sao kho này đã thôi, bằng hình",
+    "nguon": "GitHub Actions · Chương 9",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-9-1-push-de-deploy",
+    "ten": "9.1 — Push-để-deploy, và hai sự cố đã kết liễu nó ở đây",
+    "nguon": "GitHub Actions · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-9-4-moi-truong",
+    "ten": "9.4 — Environment, và CON NGƯỜI như một biện pháp kiểm soát",
+    "nguon": "GitHub Actions · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-9-3-rollback",
+    "ten": "9.3 — Rollback, cái nhánh bạn không bao giờ đi là cái nhánh đang hỏng",
+    "nguon": "GitHub Actions · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-15-3-deploy-an-toan",
+    "ten": "15.3 — Deploy an toàn: environment, SSH, khoá, smoke test, tự quay lui",
+    "nguon": "GitHub Actions · Chương 15",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Atlassian – Continuous deployment",
+    "url": "https://www.atlassian.com/continuous-delivery/continuous-deployment"
+   }
+  ]
+ },
+ "Chuyên sâu Database › ORM": {
+  "body": "ORM (Object-Relational Mapper) là thư viện cho phép làm việc với cơ sở dữ liệu quan hệ bằng đối tượng và hàm của ngôn ngữ lập trình thay vì viết tay từng câu SQL. Ví dụ `prisma.user.findMany({ where: { active: true } })` được dịch thành câu `SELECT` tương ứng.\n\n### Vì sao cần biết\nORM tăng tốc phát triển, kiểm tra kiểu dữ liệu lúc biên dịch, và giúp chống SQL injection mặc định. Nhưng nếu không hiểu SQL bên dưới, bạn dễ tạo ra truy vấn chậm mà không hay biết.\n\n### Ý chính\n- **Lược đồ (schema)** mô tả model và quan hệ (một-nhiều, nhiều-nhiều). Prisma dùng tệp `schema.prisma` rồi sinh client có kiểu đầy đủ.\n- **Migration** biến thay đổi schema thành các tệp SQL có phiên bản để áp lên mọi môi trường.\n- **Quan hệ và truy vấn**: `include` hay `select` để lấy dữ liệu liên quan; lọc, sắp xếp, phân trang, gom nhóm.\n- **Giao dịch**: `$transaction` để nhiều thao tác cùng thành công hoặc cùng thất bại.\n- **Cái giá**: một lớp trừu tượng che SQL. Cần biết nó sinh ra câu gì (bật log truy vấn), cẩn thận bẫy **N+1**, và biết lối thoát dùng SQL thô cho truy vấn phức tạp.\n- ORM không thay được việc thiết kế schema, chỉ mục và hiểu giao dịch.\n\n```ts\nconst orders = await prisma.order.findMany({\n  where: { userId, status: 'PAID' },\n  include: { items: true },       // một truy vấn, không phải N+1\n  orderBy: { createdAt: 'desc' },\n  take: 20,\n});\n```\n\n### Lỗi hay gặp\n- Lấy toàn bộ cột và toàn bộ quan hệ khi chỉ cần vài trường.\n- Gọi ORM trong vòng lặp tạo N+1 truy vấn.\n- Không dùng migration có kiểm soát mà sửa schema tay ở production.\n\n### Tự kiểm tra\n1. Vì sao nên bật log SQL khi dùng ORM?\n2. Khi nào nên dùng SQL thô thay cho ORM?",
+  "lessons": [
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Prisma là gì, học để làm gì, và lộ trình",
+    "nguon": "Prisma ORM · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-1-1-lech-tro-khang",
+    "ten": "1.1 — Lệch trở kháng giữa hàng và đối tượng",
+    "nguon": "Prisma ORM · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-1-3-thanh-sql",
+    "ten": "1.3 — Một câu truy vấn thành SQL như thế nào",
+    "nguon": "Prisma ORM · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-8-5-orm-prisma",
+    "ten": "8.5 — ORM với Prisma: JavaScript thay cho chuỗi SQL",
+    "nguon": "Nền tảng Lập trình Web · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/prisma-orm",
+    "ten": "Prisma ORM",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Chuyên sâu Database › ACID & Transactions": {
+  "body": "Giao dịch (transaction) gom nhiều thao tác thành một đơn vị: hoặc **tất cả cùng thành công**, hoặc **không cái nào có hiệu lực**. Ví dụ chuyển tiền: trừ tài khoản A và cộng tài khoản B phải đi cùng nhau, nếu chỉ một bên chạy thì tiền biến mất.\n\n### Vì sao cần biết\nKhông có giao dịch, lỗi giữa chừng hoặc hai người dùng thao tác cùng lúc sẽ để lại dữ liệu sai lệch, rất khó phát hiện và sửa.\n\n### ACID là bốn bảo đảm\n- **Atomicity (nguyên tử)**: tất cả hoặc không gì cả; lỗi giữa chừng thì `ROLLBACK` mọi thứ.\n- **Consistency (nhất quán)**: giao dịch đưa cơ sở dữ liệu từ trạng thái hợp lệ sang trạng thái hợp lệ khác, các ràng buộc (khoá ngoại, `CHECK`, `UNIQUE`) luôn được giữ.\n- **Isolation (cô lập)**: các giao dịch chạy đồng thời không làm hỏng nhau; mức cô lập quyết định những hiện tượng bất thường nào còn được phép.\n- **Durability (bền vững)**: đã `COMMIT` thì sống sót qua sự cố (nhờ ghi nhật ký WAL xuống đĩa).\n\n### Ý chính thêm\n- **Mức cô lập** trong PostgreSQL: `READ COMMITTED` (mặc định), `REPEATABLE READ`, `SERIALIZABLE`. Mức càng cao càng ít bất thường nhưng càng dễ bị huỷ cần thử lại.\n- **MVCC**: người đọc không chặn người ghi, vì mỗi giao dịch thấy một ảnh chụp nhất quán.\n- **Lost update**: hai giao dịch cùng đọc rồi cùng ghi đè nhau; xử lý bằng khoá dòng (`SELECT ... FOR UPDATE`), cập nhật nguyên tử (`SET qty = qty - 1`) hoặc khoá lạc quan (cột phiên bản).\n- **Deadlock**: hai giao dịch chờ nhau; cơ sở dữ liệu huỷ một bên, nên code phải sẵn sàng thử lại. Khoá theo thứ tự nhất quán để giảm nguy cơ.\n- Giữ giao dịch **ngắn**, không gọi API bên ngoài trong lúc đang giữ khoá.\n\n```sql\nBEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;   -- lỗi ở đâu đó thì ROLLBACK, cả hai đều không đổi\n```\n\n### Lỗi hay gặp\n- Quên rằng hai câu lệnh riêng lẻ ngoài giao dịch không bảo đảm gì với nhau.\n- Đọc rồi ghi (read-modify-write) trong ứng dụng thay vì dùng cập nhật nguyên tử.\n\n### Tự kiểm tra\n1. Điều gì xảy ra nếu máy chủ mất điện ngay sau `COMMIT`?\n2. Cách nào chống lost update khi hai người cùng mua món hàng cuối cùng?",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-2-acid",
+    "ten": "1.2 — ACID: bốn bảo đảm, được chứng minh",
+    "nguon": "PostgreSQL · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich",
+    "ten": "11.1 — Giao dịch: được tất cả, hoặc không gì cả",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-2-mvcc",
+    "ten": "11.2 — MVCC: vì sao người đọc không bao giờ chặn người ghi",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap",
+    "ten": "11.3 — Các mức cô lập và những bất thường mỗi mức chặn được",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock",
+    "ten": "11.4 — Khoá dòng, lost update và deadlock",
+    "nguon": "PostgreSQL · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Chuyên sâu Database › Normalization": {
+  "body": "Chuẩn hoá (normalization) là quá trình tổ chức các bảng để mỗi sự thật chỉ được lưu **một nơi**. Nếu tên khách hàng được chép vào mỗi dòng đơn hàng, sửa tên một khách là phải sửa hàng trăm dòng, và nếu quên một dòng thì dữ liệu mâu thuẫn nhau.\n\n### Vì sao cần biết\nThiết kế bảng tốt tránh các **bất thường** khi thêm, sửa, xoá, và giữ dữ liệu nhất quán. Đây là kiến thức nền để thiết kế lược đồ cho mọi hệ quan hệ.\n\n### Ý chính\n- **1NF**: mỗi ô chứa một giá trị đơn (không có danh sách trong một cột, không có nhóm lặp lại), và mỗi dòng xác định được.\n- **2NF**: đã đạt 1NF và mọi cột không khoá phụ thuộc vào **toàn bộ** khoá chính (chỉ xét với khoá gồm nhiều cột).\n- **3NF**: đã đạt 2NF và không có **phụ thuộc bắc cầu**: cột không khoá không được phụ thuộc vào một cột không khoá khác.\n- **BCNF** chặt hơn 3NF một chút: mọi phụ thuộc hàm đều có vế trái là siêu khoá.\n- Cách nghĩ nhanh: \"mỗi cột phụ thuộc vào khoá, toàn bộ khoá, và không gì ngoài khoá\".\n- **Ví dụ**: bảng `orders(order_id, customer_id, customer_name, customer_city)` có `customer_name` phụ thuộc vào `customer_id` chứ không phải `order_id`. Tách thành `customers` và `orders` rồi nối bằng khoá ngoại.\n\n### Phi chuẩn hoá có chủ đích\nChuẩn hoá đổi lấy nhiều phép JOIN. Với dữ liệu đọc nhiều (báo cáo, tìm kiếm), đôi khi sao chép dữ liệu có chủ đích (phi chuẩn hoá) để đọc nhanh hơn, kèm kế hoạch giữ cho các bản sao đồng bộ (trigger, job, materialized view). Nguyên tắc: chuẩn hoá trước, phi chuẩn hoá khi **đã đo** thấy cần.\n\n```sql\nCREATE TABLE customers (id serial PRIMARY KEY, name text NOT NULL, city text);\nCREATE TABLE orders (\n  id serial PRIMARY KEY,\n  customer_id int NOT NULL REFERENCES customers(id),\n  created_at timestamptz NOT NULL DEFAULT now()\n);\n```\n\n### Lỗi hay gặp\n- Nhét danh sách phân cách bằng dấu phẩy vào một cột (`tags = 'a,b,c'`).\n- Chuẩn hoá quá đà thành hàng chục bảng nhỏ khi không có nhu cầu thật.\n- Phi chuẩn hoá từ đầu mà không có cơ chế đồng bộ.",
+  "lessons": [
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-slide-dbi4-2",
+    "ten": "4.B — 📑 Học theo từng slide · Bất thường, phân rã, 1NF & 2NF (Chapter 3, slide 20–38)",
+    "nguon": "Database Systems · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/courses/introduction-to-databases/learn?lessonSlug=dbi202-chuan-hoa",
+    "ten": "4.1 — Phụ thuộc hàm & 1NF–BCNF",
+    "nguon": "Database Systems · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DBI202"
+   },
+   {
+    "href": "/courses/dmd301-data-modeling-and-databases/learn?lessonSlug=dmd301-4-1-normalization",
+    "ten": "4.1 — Chuẩn hoá (1NF-3NF, BCNF)",
+    "nguon": "Data Modeling and Databases · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DMD301"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-3-4-alter-chuan-hoa",
+    "ten": "3.4 — Tiến hoá lược đồ: ALTER TABLE & chuẩn hoá",
+    "nguon": "PostgreSQL · Chương 3",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Microsoft – Mô tả chuẩn hoá cơ sở dữ liệu",
+    "url": "https://learn.microsoft.com/en-us/office/troubleshoot/access/database-normalization-description"
+   }
+  ]
+ },
+ "Chuyên sâu Database › N+1 Problem": {
+  "body": "Bẫy N+1 xảy ra khi bạn chạy **1 truy vấn** để lấy danh sách N dòng, rồi **N truy vấn nữa** (mỗi dòng một cái) để lấy dữ liệu liên quan. Lấy 100 bài viết kèm tác giả mà ra 101 câu SQL: nhanh khi test với vài dòng, nhưng chậm thảm hại khi dữ liệu thật.\n\n### Vì sao cần biết\nĐây là nguyên nhân hiệu năng số một của ứng dụng dùng ORM. Nó khó thấy vì code trông vô hại, và mỗi truy vấn nhỏ đều nhanh; tổng độ trễ mạng mới là thứ giết bạn.\n\n### Ý chính\n- Dấu hiệu: vòng lặp có truy vấn bên trong, hoặc ORM tự tải quan hệ lười (lazy loading) khi bạn truy cập thuộc tính.\n- **Cách sửa**:\n  - **Eager loading**: nhờ ORM tải kèm quan hệ trong một hoặc hai câu (`include` của Prisma, `JOIN FETCH` của JPA, `joinedload` của SQLAlchemy).\n  - **Gom bằng `IN`**: lấy danh sách ID rồi truy vấn một lần cho tất cả (`WHERE author_id IN (...)`), sau đó ghép trong bộ nhớ.\n  - **JOIN** trực tiếp bằng SQL khi cần.\n  - **DataLoader** (đặc biệt với GraphQL): gộp các yêu cầu cùng lượt vào một lần gọi.\n- **Phát hiện**: bật log truy vấn khi phát triển, đếm số câu mỗi request, dùng công cụ APM; viết test khẳng định số lượng truy vấn tối đa.\n- Cẩn thận ngược lại: JOIN nhiều bảng một-nhiều sinh ra tích nhân dòng; đôi khi hai truy vấn riêng (một cho danh sách, một cho quan hệ bằng `IN`) tốt hơn một JOIN lớn.\n\n```ts\n// N+1: 1 + N truy vấn\nconst posts = await prisma.post.findMany();\nfor (const p of posts) {\n  p.author = await prisma.user.findUnique({ where: { id: p.authorId } });\n}\n\n// Sửa: tải kèm trong một lần\nconst posts2 = await prisma.post.findMany({ include: { author: true } });\n```\n\n### Tự kiểm tra\n1. Với 1.000 bài viết, đoạn code thứ nhất gửi bao nhiêu truy vấn?\n2. Vì sao N+1 hầu như không lộ ra khi chạy thử với 5 dòng dữ liệu?",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=n-plus-one",
+    "ten": "Bẫy N+1 query",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-n-plus-1",
+    "ten": "Quan hệ và bẫy N+1",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-7-4-quan-he-va-n-plus-1",
+    "ten": "7.4 — Quan hệ, và bẫy N+1 đo bằng số thật",
+    "nguon": "Node.js · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-9-2-n-cong-1",
+    "ten": "9.2 — N+1 ở đủ mọi dạng",
+    "nguon": "Prisma ORM · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Chuyên sâu Database › Database Failure Modes & Profiling": {
+  "body": "Cơ sở dữ liệu thường là chỗ hỏng đầu tiên khi hệ thống chịu tải. Biết các kiểu hỏng phổ biến và cách đo (profiling) giúp bạn trả lời nhanh câu hỏi \"sao nó chậm thế?\" thay vì đoán mò.\n\n### Các kiểu hỏng thường gặp\n- **Truy vấn chậm** vì thiếu chỉ mục, quét toàn bảng (Seq Scan), hoặc bộ lập kế hoạch ước lượng sai do thống kê cũ.\n- **Hết kết nối**: quá nhiều client mở kết nối, vượt `max_connections`.\n- **Khoá và deadlock**: giao dịch dài giữ khoá, những người khác xếp hàng chờ.\n- **Bloat và VACUUM**: các dòng chết không được dọn kịp làm bảng phình và chậm dần.\n- **Hết đĩa hoặc hết RAM** làm cơ sở dữ liệu dừng hoặc bị hệ điều hành giết.\n- **Độ trễ nhân bản** làm replica đọc dữ liệu cũ.\n- **Migration nửa vời** để lại schema ở trạng thái lửng.\n\n### Cách đo\n- **`EXPLAIN (ANALYZE, BUFFERS)`** cho thấy kế hoạch thật, thời gian từng bước, số dòng ước lượng so với thực tế.\n- **`pg_stat_statements`** (extension) xếp hạng các truy vấn tốn thời gian nhất.\n- **`pg_stat_activity`** cho biết ai đang chạy gì, ai đang chờ khoá.\n- Log truy vấn chậm (`log_min_duration_statement`).\n- Theo dõi: số kết nối, tỉ lệ cache hit, độ trễ nhân bản, dung lượng đĩa, tỉ lệ dòng chết.\n- **Quy trình**: đo trước khi sửa; tìm truy vấn tốn nhất; xem kế hoạch; thêm chỉ mục hoặc viết lại; đo lại để chắc đã tốt hơn.\n\n```sql\nEXPLAIN (ANALYZE, BUFFERS)\nSELECT * FROM orders WHERE user_id = 42 ORDER BY created_at DESC LIMIT 20;\n\nSELECT pid, state, wait_event_type, query\nFROM pg_stat_activity WHERE state <> 'idle';\n```\n\n### Lỗi hay gặp\n- Thêm chỉ mục theo cảm tính mà không xem kế hoạch.\n- Đọc trung bình thời gian và bỏ qua phần đuôi chậm (p95, p99).\n- Không có cảnh báo, chỉ biết khi người dùng phàn nàn.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain",
+    "ten": "10.1 — Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE",
+    "nguon": "PostgreSQL · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-14-4-giam-sat",
+    "ten": "14.4 — Giám sát: trả lời câu \"sao nó chậm thế?\"",
+    "nguon": "PostgreSQL · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-14-3-vacuum-bloat",
+    "ten": "14.3 — VACUUM, autovacuum và bloat",
+    "nguon": "PostgreSQL · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-9-1-do-truoc",
+    "ten": "9.1 — Đo trước khi đổi bất cứ thứ gì",
+    "nguon": "Prisma ORM · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-12-2-bay-hinh-dang",
+    "ten": "12.2 — Bảy hình dáng hỏng hóc, phân biệt bằng mã lỗi",
+    "nguon": "Prisma ORM · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "PostgreSQL – Using EXPLAIN",
+    "url": "https://www.postgresql.org/docs/current/using-explain.html"
+   }
+  ]
+ },
+ "Chuyên sâu Database › Loadshifting": {
+  "body": "Load shifting (chuyển tải) là dịch chuyển công việc nặng sang một thời điểm hoặc một nơi khác ít ảnh hưởng tới người dùng. Thay vì làm hết mọi thứ ngay trong lúc người dùng đang chờ phản hồi, bạn làm phần bắt buộc ngay, còn phần còn lại làm sau, hoặc làm sẵn từ trước.\n\n### Vì sao cần biết\nCơ sở dữ liệu chịu tải khủng khiếp vào giờ cao điểm nhưng gần như rảnh lúc nửa đêm. Dàn đều tải theo thời gian giúp hệ thống chịu được nhiều người hơn với cùng một phần cứng, và giữ độ trễ thấp.\n\n### Ý chính\n- **Hàng đợi và worker**: request chỉ ghi một công việc vào hàng đợi rồi trả `202 Accepted`; worker chạy nền xử lý theo tốc độ của mình (gửi email, xuất báo cáo, xử lý ảnh). Hàng đợi cũng làm \"bộ giảm xóc\" khi lưu lượng tăng vọt.\n- **Công việc theo lịch**: tác vụ nặng (tổng hợp báo cáo, dọn dữ liệu cũ, `VACUUM`, sao lưu) chạy vào giờ thấp điểm bằng cron hoặc bộ lập lịch của hàng đợi.\n- **Tính trước (precompute)**: dùng materialized view, bảng tổng hợp hay cache được làm mới định kỳ, để truy vấn đọc chỉ lấy kết quả sẵn có thay vì tính lại trên bảng khổng lồ.\n- **Ghi theo lô (batching)**: gom nhiều ghi nhỏ thành một ghi lớn.\n- **Đọc từ replica**: đưa truy vấn đọc nặng sang bản sao để primary rảnh cho việc ghi.\n- **Đánh đổi**: người dùng thấy kết quả trễ hơn (nhất quán cuối cùng), cần theo dõi hàng đợi, xử lý thử lại an toàn (idempotent) và công việc bị lỗi (dead-letter).\n\n```js\n// Request chỉ xếp việc vào hàng đợi\nawait queue.add('export-report', { userId, range });\nres.status(202).json({ jobId, statusUrl: `/jobs/${jobId}` });\n```\n\n### Lỗi hay gặp\n- Công việc nền chạy lại hai lần gây tác dụng phụ lặp (gửi hai email, trừ tiền hai lần).\n- Lịch chạy nặng đúng lúc tải cao do quên múi giờ.\n- Hàng đợi dài vô hạn mà không ai theo dõi.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-13-1-vi-sao-hang-doi",
+    "ten": "13.1 — Request không phải chỗ để làm việc nặng",
+    "nguon": "Node.js · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-1-hang-doi",
+    "ten": "10.1 — API bất đồng bộ: 202 Accepted, tài nguyên công việc và hỏi lại",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-1-worker",
+    "ten": "10.2 — Hàng đợi và worker: việc bất đồng bộ thật sự chạy ở đâu",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh",
+    "ten": "13.4 — Lịch trình: hẹn giờ, ưu tiên, bóp tốc độ và job định kỳ",
+    "nguon": "Node.js · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-12-4-materialized-view",
+    "ten": "12.4 — Materialized view: đánh đổi độ tươi lấy tốc độ",
+    "nguon": "PostgreSQL · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Chuyên sâu Database › Database Indexing chiến lược": {
+  "body": "Chỉ mục (index) là cấu trúc phụ giúp cơ sở dữ liệu tìm dòng mà không phải đọc cả bảng, giống mục lục cuối sách. Nhưng mỗi chỉ mục tốn dung lượng và làm chậm các thao tác ghi, nên vấn đề là **đánh đúng chỗ**, không phải đánh thật nhiều.\n\n### Ý chính\n- **B-tree** là loại mặc định, hợp với so sánh bằng, khoảng (`<`, `>`, `BETWEEN`) và sắp xếp.\n- **Chỉ mục tổ hợp**: thứ tự cột quan trọng. Chỉ mục `(user_id, created_at)` phục vụ tốt `WHERE user_id = ? ORDER BY created_at`, vì cột lọc bằng đứng trước, cột sắp xếp đứng sau. Quy tắc tiền tố trái: chỉ mục `(a, b)` giúp được truy vấn theo `a` hoặc `a, b`, nhưng không giúp truy vấn chỉ theo `b`.\n- **Covering index** (`INCLUDE`): chứa đủ cột truy vấn cần để chỉ đọc chỉ mục, không đụng bảng (index-only scan).\n- **Partial index**: chỉ lập chỉ mục cho tập con dòng (`WHERE status = 'active'`), nhỏ và nhanh.\n- **Chỉ mục trên biểu thức**: ví dụ `lower(email)` cho tìm không phân biệt hoa thường.\n- **Loại khác**: GIN cho JSONB và full-text, BRIN cho bảng rất lớn có thứ tự tự nhiên (thời gian), GiST cho dữ liệu hình học.\n- **Khi chỉ mục không được dùng**: hàm bọc cột (`WHERE lower(email) = ...` mà không có chỉ mục biểu thức), `LIKE '%abc'` bắt đầu bằng ký tự đại diện, kiểu dữ liệu khác nhau, hoặc độ chọn lọc thấp nên quét toàn bảng còn rẻ hơn.\n- **Chiến lược**: bắt đầu từ các truy vấn thật (đo bằng `EXPLAIN ANALYZE`), thêm chỉ mục cho truy vấn chậm nhất, gỡ chỉ mục không còn được dùng.\n\n```sql\nCREATE INDEX idx_orders_user_created ON orders (user_id, created_at DESC);\nCREATE INDEX idx_orders_pending ON orders (created_at) WHERE status = 'pending';\nCREATE INDEX CONCURRENTLY idx_users_email ON users (lower(email));  -- không khoá bảng\n```\n\n### Lỗi hay gặp\n- Đánh chỉ mục cho mọi cột: ghi chậm, tốn bộ nhớ.\n- Sai thứ tự cột trong chỉ mục tổ hợp.\n- Tạo chỉ mục trên bảng lớn ở production bằng lệnh khoá ghi; hãy dùng `CONCURRENTLY`.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi",
+    "ten": "9.1 — Chỉ mục là gì: B-tree, Seq Scan vs Index Scan",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-2-to-hop-covering",
+    "ten": "9.2 — Cột nào, chỉ mục tổ hợp & covering",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-3-khong-dung-selectivity-partial",
+    "ten": "9.3 — Khi chỉ mục KHÔNG được dùng, độ chọn lọc & partial index",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-index-explain",
+    "ten": "Chỉ mục và EXPLAIN ANALYZE",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/postgresql-practice",
+    "ten": "PostgreSQL — Luyện tập SQL chấm thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Use The Index, Luke – chỉ mục SQL cho lập trình viên",
+    "url": "https://use-the-index-luke.com/"
+   }
+  ]
+ },
+ "Chuyên sâu Database › Database nâng cao": {
+  "body": "Ba kỹ thuật PostgreSQL thường gặp khi dữ liệu và độ phức tạp lớn lên: **hàm cửa sổ**, **materialized view** và **phân mảnh bảng (partitioning)**.\n\n### Hàm cửa sổ (window functions)\nTính toán trên một \"cửa sổ\" các dòng liên quan **mà không gộp** chúng thành một dòng như `GROUP BY`. Dùng cho xếp hạng, tổng luỹ tiến, so với dòng trước.\n```sql\nSELECT user_id, created_at, total,\n       ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY created_at DESC) AS rn,\n       SUM(total)   OVER (PARTITION BY user_id ORDER BY created_at)      AS running_total,\n       LAG(total)   OVER (PARTITION BY user_id ORDER BY created_at)      AS prev_total\nFROM orders;\n```\n\n### Materialized view\nMột truy vấn nặng được **lưu sẵn kết quả** như một bảng. Đọc rất nhanh, nhưng dữ liệu cũ cho tới khi `REFRESH MATERIALIZED VIEW` (có thể `CONCURRENTLY` để không chặn đọc, cần một chỉ mục duy nhất). Phù hợp báo cáo, bảng tổng hợp. Đánh đổi là độ tươi lấy tốc độ.\n\n### Partitioning\nChia một bảng logic lớn thành nhiều bảng vật lý nhỏ theo khoá (khoảng thời gian, danh sách, băm).\n- Lợi ích: truy vấn chỉ chạm các phân mảnh liên quan (partition pruning), xoá dữ liệu cũ bằng cách bỏ cả phân mảnh (nhanh hơn `DELETE` hàng loạt), bảo trì từng mảnh.\n- Cần chọn khoá phân mảnh khớp với điều kiện truy vấn phổ biến; khoá chính và ràng buộc duy nhất phải chứa khoá phân mảnh.\n```sql\nCREATE TABLE events (id bigint, created_at timestamptz NOT NULL, payload jsonb)\n  PARTITION BY RANGE (created_at);\nCREATE TABLE events_2026_11 PARTITION OF events\n  FOR VALUES FROM ('2026-11-01') TO ('2026-12-01');\n```\n\n### Lỗi hay gặp\n- Dùng partitioning khi bảng chưa đủ lớn để cần: thêm phức tạp mà ít lợi.\n- Quên làm mới materialized view nên báo cáo cũ không ai hay.\n- Truy vấn không lọc theo khoá phân mảnh nên phải quét mọi phân mảnh.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-8-1-window-la-gi",
+    "ten": "8.1 — Hàm cửa sổ là gì: tổng hợp mà không gộp dòng",
+    "nguon": "PostgreSQL · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-8-2-ranking",
+    "ten": "8.2 — Xếp hạng: ROW_NUMBER, RANK & DENSE_RANK",
+    "nguon": "PostgreSQL · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-12-4-materialized-view",
+    "ten": "12.4 — Materialized view: đánh đổi độ tươi lấy tốc độ",
+    "nguon": "PostgreSQL · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-4-phan-manh",
+    "ten": "15.4 — Phân mảnh: một bảng, nhiều mảnh",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "PostgreSQL – Table Partitioning",
+    "url": "https://www.postgresql.org/docs/current/ddl-partitioning.html"
+   }
+  ]
+ },
+ "Chuyên sâu Database › Database Connection Pooling": {
+  "body": "Mở một kết nối tới cơ sở dữ liệu rất tốn: bắt tay TCP, TLS, xác thực, và với PostgreSQL mỗi kết nối là cả một tiến trình riêng ngốn bộ nhớ. **Connection pool** giữ sẵn một số kết nối đã mở và cho các request mượn rồi trả lại, thay vì mở mới và đóng mỗi lần.\n\n### Vì sao cần biết\nKhông có pool, mỗi request mở một kết nối: chậm, và khi tải tăng cơ sở dữ liệu chạm giới hạn `max_connections` rồi từ chối. Cấu hình pool sai là nguyên nhân của rất nhiều sự cố production.\n\n### Ý chính\n- Pool có **kích thước tối đa**. Khi mọi kết nối đang bận, request mới **chờ** trong hàng đợi (có timeout) thay vì mở thêm.\n- **Pool trong ứng dụng** (thư viện `pg`, Prisma, HikariCP) và **pool đứng trước cơ sở dữ liệu** (PgBouncer) bổ sung cho nhau; PgBouncer đặc biệt hữu ích khi có nhiều instance ứng dụng hoặc môi trường serverless.\n- **Tính cỡ pool**: tổng (số instance x kích thước pool mỗi instance) phải nhỏ hơn `max_connections` của cơ sở dữ liệu, chừa chỗ cho công cụ quản trị và job. Pool lớn hơn không có nghĩa nhanh hơn: số kết nối hiệu quả thường chỉ cỡ một vài lần số nhân CPU của máy cơ sở dữ liệu.\n- **Chế độ PgBouncer**: `transaction pooling` hiệu quả nhất nhưng hạn chế một số tính năng gắn với phiên (như prepared statement theo phiên hay `SET` theo phiên).\n- **Giữ kết nối ngắn**: đừng giữ kết nối trong lúc chờ API bên ngoài; trả về pool ngay sau khi xong. Rò kết nối (quên trả) làm pool cạn.\n- Đặt timeout cho việc lấy kết nối và cho truy vấn.\n\n```ts\nimport { Pool } from 'pg';\nconst pool = new Pool({\n  max: 10,                       // tối đa 10 kết nối cho mỗi instance\n  idleTimeoutMillis: 30_000,\n  connectionTimeoutMillis: 5_000,\n});\nconst { rows } = await pool.query('SELECT now()');   // tự mượn và trả\n```\n\n### Lỗi hay gặp\n- Mỗi instance đặt pool 100 rồi chạy 20 instance: vượt giới hạn cơ sở dữ liệu.\n- Tạo một `new PrismaClient()` hoặc pool mới ở mỗi request thay vì dùng chung một cái.\n- Giao dịch mở rồi quên đóng, giữ kết nối mãi.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-14-1-gia-ket-noi",
+    "ten": "14.1 — Một kết nối tốn những gì",
+    "nguon": "PostgreSQL · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-14-2-pool-pgbouncer",
+    "ten": "14.2 — Pool: trong app, và đứng trước app",
+    "nguon": "PostgreSQL · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-7-1-ket-noi-va-pool",
+    "ten": "7.1 — Vì sao cần cơ sở dữ liệu, và một kết nối thật sự tốn gì",
+    "nguon": "Node.js · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-9-4-connection-pool",
+    "ten": "9.4 — Connection pool, tính bằng số học",
+    "nguon": "Prisma ORM · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "PostgreSQL Wiki – Number of Database Connections",
+    "url": "https://wiki.postgresql.org/wiki/Number_Of_Database_Connections"
+   }
+  ]
+ },
+ "Mở rộng Database (Scaling) › Database Indexes": {
+  "body": "Khi dữ liệu lớn lên, chỉ mục là công cụ mở rộng rẻ nhất và hiệu quả nhất: một chỉ mục đúng có thể đưa truy vấn từ vài giây xuống vài mili giây mà không cần thêm máy.\n\n### Cách một chỉ mục B-tree hoạt động\nDữ liệu được tổ chức thành cây cân bằng có thứ tự. Tìm một khoá chỉ cần đi vài tầng của cây (độ phức tạp theo logarit) thay vì đọc mọi dòng. Vì có thứ tự, nó cũng phục vụ tốt khoảng giá trị và sắp xếp.\n\n### Ý chính\n- **Seq Scan** đọc cả bảng; **Index Scan** đi qua chỉ mục tới các dòng cần; **Index-Only Scan** chỉ đọc chỉ mục nếu mọi cột cần đều có trong đó.\n- Cơ sở dữ liệu tự chọn cách quét dựa trên thống kê. Với truy vấn trả về phần lớn bảng, Seq Scan có thể rẻ hơn, nên chỉ mục không phải lúc nào cũng được dùng.\n- Chỉ mục **tự có** ở khoá chính và ràng buộc `UNIQUE`; khoá ngoại **không** tự có chỉ mục trong PostgreSQL, nên thường cần tự thêm để JOIN và xoá dây chuyền nhanh.\n- **Chi phí**: mỗi chỉ mục làm chậm `INSERT/UPDATE/DELETE`, tốn dung lượng và bộ nhớ đệm.\n- **Loại chỉ mục**: B-tree (mặc định), Hash, GIN (JSONB, mảng, full-text), GiST, BRIN.\n- **Kiểm chứng bằng `EXPLAIN ANALYZE`**: xem có dùng chỉ mục không và thời gian thực tế ra sao.\n- **Tạo an toàn trên production**: `CREATE INDEX CONCURRENTLY` để không khoá ghi.\n\n```sql\nEXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = 42;\n-- Trước: Seq Scan on orders (thời gian lớn)\nCREATE INDEX CONCURRENTLY idx_orders_user ON orders (user_id);\n-- Sau: Index Scan using idx_orders_user\n```\n\n### Lỗi hay gặp\n- Quên chỉ mục cho cột khoá ngoại.\n- Cột kiểu khác nhau khi so sánh nên chỉ mục bị bỏ qua.\n- Giữ lại chỉ mục dư thừa hoặc trùng nhau.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi",
+    "ten": "9.1 — Chỉ mục là gì: B-tree, Seq Scan vs Index Scan",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-4-loai-chi-muc",
+    "ten": "9.4 — Các loại chỉ mục: B-tree, GIN, BRIN, GiST & unique",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-9-3-khong-dung-selectivity-partial",
+    "ten": "9.3 — Khi chỉ mục KHÔNG được dùng, độ chọn lọc & partial index",
+    "nguon": "PostgreSQL · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain",
+    "ten": "10.1 — Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE",
+    "nguon": "PostgreSQL · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-index-explain",
+    "ten": "Chỉ mục và EXPLAIN ANALYZE",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "PostgreSQL – Indexes",
+    "url": "https://www.postgresql.org/docs/current/indexes.html"
+   }
+  ]
+ },
+ "Mở rộng Database (Scaling) › Migrations": {
+  "body": "Migration là các thay đổi cấu trúc cơ sở dữ liệu được ghi thành **tệp có phiên bản** và lưu trong git cùng code. Mỗi môi trường (máy bạn, CI, staging, production) áp dụng đúng chuỗi tệp đó theo thứ tự, nên lược đồ của mọi nơi luôn giống nhau và có lịch sử.\n\n### Vì sao cần biết\nSửa tay cấu trúc bảng trên production là công thức của sự cố: mỗi nơi một kiểu, không ai biết ai đã chạy gì. Với dữ liệu thật, một migration sai có thể khoá bảng hàng phút hoặc mất dữ liệu.\n\n### Ý chính\n- Công cụ lưu lại những migration đã áp dụng (một bảng như `_prisma_migrations`); lệnh áp dụng (`prisma migrate deploy`) chỉ chạy các tệp còn thiếu.\n- **Không sửa migration đã được áp dụng ở nơi khác**; thay đổi tiếp theo hãy viết một migration mới.\n- **Tương thích khi hai phiên bản cùng chạy**: trong lúc deploy, bản code cũ và mới cùng chạy trên một cơ sở dữ liệu. Dùng mẫu **mở rộng rồi mới thu hẹp**: thêm cột mới (cho phép null), triển khai code ghi cả hai, chuyển dữ liệu, rồi sau đó mới xoá cột cũ ở lần phát hành khác. Đổi tên cột một bước là phá vỡ bản đang chạy.\n- **Cẩn thận với khoá**: thêm cột có giá trị mặc định, tạo chỉ mục, thêm ràng buộc trên bảng lớn có thể khoá bảng; dùng `CREATE INDEX CONCURRENTLY`, thêm ràng buộc ở dạng `NOT VALID` rồi `VALIDATE`, và kiểm `lock_timeout`.\n- **Phân biệt migration cấu trúc với dữ liệu mẫu (seed) và migration dữ liệu** (điền bù cho dòng cũ); đây là ba việc khác nhau.\n- **Lùi lại**: code lùi được, dữ liệu thì không; hãy xem xét đường quay lui trước khi viết migration.\n- Thử migration trên bản sao của dữ liệu thật trước khi chạy ở production.\n\n```sql\n-- migration 001: thêm cột, không phá bản cũ\nALTER TABLE users ADD COLUMN full_name text;\n-- migration 002 (sau khi code mới đã ghi cột này): điền bù dữ liệu cũ\nUPDATE users SET full_name = name WHERE full_name IS NULL;\n-- migration 003 (phát hành sau): xoá cột cũ\nALTER TABLE users DROP COLUMN name;\n```\n\n### Lỗi hay gặp\n- Migration chạy nửa chừng rồi hỏng, để schema ở trạng thái lửng; cần quy trình xử lý rõ ràng thay vì \"đánh dấu đã xong\" bừa.\n- Chạy migration và khởi động code mới ở hai thời điểm không ăn khớp.\n- Đổi tên hoặc xoá cột trong cùng một lần phát hành với code vẫn còn dùng nó.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: một cơ sở dữ liệu, hai phiên bản mã",
+    "nguon": "Deploy lên VPS · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-6-1-migration-la-gi",
+    "ten": "6.1 — Migration thật sự là gì",
+    "nguon": "Prisma ORM · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-7-2-luoc-do-va-migration",
+    "ten": "7.2 — Lược đồ, và migration sống sót được trên production",
+    "nguon": "Node.js · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-5-2-mo-rong-thu-hep",
+    "ten": "5.2 — Mở rộng và thu hẹp: cú đổi tên không bao giờ làm vỡ",
+    "nguon": "Deploy lên VPS · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prisma-orm/learn?lessonSlug=pr-6-5-tren-production",
+    "ten": "6.5 — Migration trên production",
+    "nguon": "Prisma ORM · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mở rộng Database (Scaling) › Data Replication": {
+  "body": "Replication (nhân bản) là việc giữ một hoặc nhiều **bản sao** của cơ sở dữ liệu trên các máy khác, tự động cập nhật theo bản gốc (primary). Nó phục vụ hai mục đích: **chịu lỗi** (có bản dự phòng khi primary chết) và **mở rộng đọc** (chia truy vấn đọc cho các bản sao).\n\n### Vì sao cần biết\nMột máy cơ sở dữ liệu duy nhất là điểm chết duy nhất, và cũng có giới hạn về số truy vấn đọc. Replication là bước mở rộng đầu tiên của hầu hết hệ thống.\n\n### Ý chính\n- **Primary/replica (leader/follower)**: mọi lệnh ghi đi vào primary; replica nhận lại thay đổi qua luồng nhật ký ghi trước (WAL trong PostgreSQL) và chỉ đọc.\n- **Bất đồng bộ**: primary không chờ replica, nên ghi nhanh nhưng replica có thể **trễ** vài mili giây tới vài giây; nếu primary chết đột ngột có thể mất những ghi chưa kịp sao chép. **Đồng bộ**: primary chờ ít nhất một replica xác nhận, an toàn hơn nhưng chậm hơn và có nguy cơ treo khi replica lỗi.\n- **Đọc-sau-ghi (read-your-writes)**: người dùng vừa ghi xong rồi đọc từ replica trễ có thể không thấy dữ liệu của chính mình. Cách xử lý: đọc từ primary ngay sau khi ghi, hoặc ghim phiên về primary trong một khoảng ngắn.\n- **Failover**: khi primary chết, nâng một replica lên làm primary mới (thủ công hoặc nhờ công cụ như Patroni); cần tránh **split-brain** (hai máy cùng nghĩ mình là primary).\n- **Replication không phải sao lưu**: lệnh `DROP TABLE` nhầm cũng được sao chép tức thì. Vẫn cần sao lưu và khôi phục theo thời điểm (PITR).\n- Replication giúp mở rộng **đọc**, không mở rộng **ghi**; muốn mở rộng ghi cần phân mảnh (sharding).\n\n```sql\n-- Trên replica: biết nó đang là bản sao và trễ bao nhiêu\nSELECT pg_is_in_recovery();\nSELECT now() - pg_last_xact_replay_timestamp() AS replication_lag;\n```\n\n### Lỗi hay gặp\n- Cho rằng có replica nghĩa là đã có sao lưu.\n- Đọc dữ liệu cần mới nhất từ replica trễ (ví dụ số dư tài khoản).\n- Failover chưa từng được diễn tập, nên lúc cần thì không chạy.",
+  "lessons": [
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-3-nhan-ban",
+    "ten": "15.3 — Nhân bản streaming, dựng thật",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-2-wal-pitr",
+    "ten": "15.2 — WAL và khôi phục theo thời điểm",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-9-2-db-doc",
+    "ten": "9.3 — Đọc-sau-ghi trong hợp đồng API: bản sao đọc và dữ liệu cũ",
+    "nguon": "API & System Design · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-lab-8-sao-luu-nhan-ban-ct-shop",
+    "ten": "Lab 8 — CT Shop: backups that restore, a read-only account, a streaming replica",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "PostgreSQL – Log-Shipping Standby Servers",
+    "url": "https://www.postgresql.org/docs/current/warm-standby.html"
+   }
+  ]
+ },
  "Mở rộng Database (Scaling) › Sharding Strategies": {
   "body": "Sharding là chia một tập dữ liệu lớn thành nhiều phần (shard), mỗi phần nằm trên một máy cơ sở dữ liệu riêng. Hãy hình dung một thư viện quá đông: thay vì xây thêm kệ cho một toà nhà duy nhất, bạn mở nhiều chi nhánh và quy ước sách có tên bắt đầu bằng chữ A–H nằm ở chi nhánh 1, I–P ở chi nhánh 2, v.v. Mỗi chi nhánh chỉ lo một phần, nên cả hệ thống ghi được nhiều hơn một máy đơn có thể chịu.\n\n### Vì sao cần biết\nReplica chỉ giúp mở rộng **đọc**; mọi lượt ghi vẫn dồn vào một primary. Khi một máy không còn đủ dung lượng đĩa hoặc không còn chịu nổi lượng ghi, sharding là cách mở rộng ghi theo chiều ngang. Đổi lại, nó là một trong những thay đổi kiến trúc đắt và khó đảo ngược nhất — nên cần hiểu kỹ trước khi dùng.\n\n### Ý chính\n- **Shard key** là cột (hoặc tổ hợp cột) quyết định dòng dữ liệu nằm ở shard nào. Chọn key là quyết định quan trọng nhất.\n- **Chia theo khoảng (range)**: dễ truy vấn theo khoảng, nhưng dễ tạo *điểm nóng* (ví dụ chia theo ngày thì mọi ghi mới dồn vào shard cuối).\n- **Chia theo băm (hash)**: `shard = hash(key) mod N` rải đều tải, nhưng truy vấn theo khoảng phải hỏi mọi shard.\n- **Băm nhất quán (consistent hashing)** giúp khi thêm/bớt shard chỉ phải dời một phần nhỏ dữ liệu thay vì xáo trộn tất cả.\n- **Chia theo thư mục (lookup/directory)**: một bảng tra cứu ghi rõ key nào ở shard nào — linh hoạt nhưng bảng tra cứu thành điểm phụ thuộc mới.\n\n```sql\n-- Ví dụ ý tưởng: định tuyến theo user_id\n-- shard_index = hash(user_id) % 4\n-- user_id = 1042 -> shard 2: SELECT ... FROM orders WHERE user_id = 1042;\n```\n\n### Lỗi hay gặp\n- Chọn shard key có độ phân bố lệch (ví dụ `country`) nên một shard quá tải trong khi các shard khác rảnh.\n- Truy vấn không chứa shard key phải quét mọi shard (scatter-gather), chậm và tốn kém; JOIN và giao dịch xuyên shard rất khó.\n- Dùng `id` tự tăng làm khoá ở nhiều shard gây trùng; cần sinh định danh toàn cục (UUIDv7, Snowflake…).\n- Shard sớm khi chưa cần: thường nên tối ưu index, cache và thêm replica trước.\n\n### Tự kiểm tra\n1. Vì sao chia theo ngày tạo thường tạo điểm nóng ghi?\n2. Hash mod N có vấn đề gì khi N đổi từ 4 lên 5, và băm nhất quán giải quyết thế nào?",
   "lessons": [

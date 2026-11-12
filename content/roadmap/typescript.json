@@ -1,0 +1,1676 @@
+{
+ "Giới thiệu › TypeScript vs JavaScript": {
+  "body": "TypeScript (TS) là JavaScript cộng thêm **kiểu tĩnh** (static types). Bạn vẫn viết JavaScript quen thuộc, nhưng có thể ghi chú \"biến này là số\", \"hàm này nhận một chuỗi và trả về boolean\". Trước khi chạy, trình biên dịch `tsc` đọc các ghi chú đó và báo lỗi nếu bạn dùng sai. Sau đó các kiểu bị **xoá đi**, chỉ còn JavaScript thuần chạy trên trình duyệt hoặc Node.\n\nHình dung đơn giản: JavaScript giống như điền form giấy, ai muốn viết gì vào ô cũng được, sai thì phát hiện khi đã nộp. TypeScript giống form có kiểm tra ngay lúc gõ: ô \"tuổi\" mà nhập chữ thì báo đỏ liền.\n\n### Vì sao cần biết\n- Lỗi gõ sai tên thuộc tính, gọi hàm thiếu tham số, quên xử lý `undefined`… bị bắt ngay trong editor thay vì nổ trên production.\n- Editor gợi ý code (autocomplete) chính xác hơn nhiều, đổi tên biến/hàm trên cả dự án an toàn hơn.\n- Hầu hết dự án frontend/backend Node hiện đại ở công ty đều dùng TypeScript.\n\n### Ý chính\n- TS là **superset** của JS: mọi code JS hợp lệ cũng là code TS hợp lệ.\n- Kiểm tra kiểu xảy ra lúc **biên dịch** (compile time); lúc chạy (runtime) kiểu không còn tồn tại.\n- Nghĩa là TS không tự bảo vệ bạn khỏi dữ liệu sai đến từ bên ngoài (JSON từ API, input người dùng) — phần đó cần validate lúc chạy.\n\n```ts\nfunction tinhTong(a: number, b: number): number {\n  return a + b;\n}\ntinhTong(1, \"2\"); // Lỗi biên dịch: \"2\" không phải number\n```\n\n### Lỗi hay gặp\n- Nghĩ rằng TS làm code chạy nhanh hơn: không, JS sinh ra gần như y hệt.\n- Nghĩ rằng đã có kiểu thì dữ liệu lúc chạy chắc chắn đúng kiểu: kiểu chỉ là lời hứa lúc biên dịch.\n\n### Tự kiểm tra\n- Điều gì xảy ra với kiểu khi code TS được biên dịch?\n- Vì sao `JSON.parse` trả về dữ liệu không thể tin tuyệt đối dù bạn đã khai báo kiểu?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-4-mo-hinh",
+    "ten": "0.4 — Mô hình tư duy cốt lõi: lúc biên dịch vs lúc chạy",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — TypeScript là gì, và vì sao nó ra đời",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-1-ba-con-bug",
+    "ten": "1.1 — Ba con bug JavaScript đẩy thẳng lên production",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-1-why-typescript",
+    "ten": "9.1 — Vì sao TypeScript: bắt lỗi trước khi chạy",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › Cài đặt & Running TypeScript": {
+  "body": "Để chạy TypeScript bạn cần một công cụ chuyển nó thành JavaScript, hoặc một runtime hiểu thẳng `.ts`.\n\n### Các cách phổ biến\n- **`tsc`** — trình biên dịch chính thức. Cài bằng `npm install -D typescript`, chạy `npx tsc` để kiểm tra kiểu và (tuỳ cấu hình) xuất file `.js`.\n- **Chạy trực tiếp**: `ts-node` (cũ hơn), `tsx` (nhanh, dùng esbuild), hoặc chính Node.js bản mới có khả năng \"type stripping\" — chạy file `.ts` bằng cách bỏ phần kiểu đi, không kiểm tra kiểu. Các cách này tiện cho script và dev, còn kiểm kiểu thật vẫn nhờ `tsc --noEmit`.\n- **TS Playground** — thử code online, không cần cài gì.\n\n```bash\nmkdir demo && cd demo\nnpm init -y\nnpm install -D typescript\nnpx tsc --init          # tạo tsconfig.json\necho 'const x: number = 5; console.log(x)' > a.ts\nnpx tsc                 # sinh a.js\nnode a.js\n```\n\n### Ý chính\n- Cài TypeScript theo từng dự án (devDependency) để cả nhóm dùng cùng phiên bản.\n- \"Chạy được\" và \"đúng kiểu\" là hai chuyện khác nhau: công cụ chạy trực tiếp thường bỏ qua kiểm tra kiểu.\n- Trong CI nên có bước `tsc --noEmit` riêng.\n\n### Lỗi hay gặp\n- Cài TypeScript global rồi mỗi máy mỗi phiên bản.\n- Tưởng `tsx`/Node chạy được nghĩa là code không có lỗi kiểu.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-3-cai-dat",
+    "ten": "0.3 — Cài đặt: Node 22, TypeScript 7, VS Code",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig",
+    "ten": "9.1 — tsc làm gì & tsconfig căn bản",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › tsconfig.json & Compiler Options": {
+  "body": "`tsconfig.json` là bảng điều khiển của trình biên dịch: file nào được biên dịch, kiểm tra nghiêm ngặt tới mức nào, và JavaScript xuất ra có dạng gì. Tạo bản mẫu bằng `npx tsc --init`.\n\n### Những tuỳ chọn quan trọng nhất\n- **`strict`**: bật cả nhóm kiểm tra nghiêm ngặt (`strictNullChecks`, `noImplicitAny`, …). Dự án mới nên luôn bật.\n- **`target`**: phiên bản JavaScript xuất ra (ví dụ `ES2022`).\n- **`module`** / **`moduleResolution`**: hệ module (ESM hay CommonJS) và cách tìm module khi `import`.\n- **`outDir`** / **`rootDir`**: thư mục xuất và thư mục nguồn.\n- **`include`** / **`exclude`**: file nào thuộc dự án.\n- **`noEmit`**: chỉ kiểm kiểu, không xuất file (khi bundler hoặc runtime khác lo phần chuyển đổi).\n- **`lib`**: các khai báo kiểu của môi trường (DOM, ES2022…).\n\n```json\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"Bundler\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"skipLibCheck\": true\n  },\n  \"include\": [\"src\"]\n}\n```\n\n### Lỗi hay gặp\n- Bật `strict` sau khi dự án đã lớn: hàng trăm lỗi cùng lúc. Bật từ đầu, hoặc siết dần từng cờ.\n- Chọn `module` không khớp môi trường chạy (Node ESM vs bundler) nên import báo lỗi khó hiểu.\n- Quên `include` nên `tsc` biên dịch cả thư mục không mong muốn.\n\n### Tự kiểm tra\n- `strict` thực chất bật những gì, và vì sao nên bật?\n- Khi nào dùng `noEmit`?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig",
+    "ten": "9.1 — tsc làm gì & tsconfig căn bản",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-2-strict-mode",
+    "ten": "9.2 — Chế độ strict",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-4-target-lib-module",
+    "ten": "9.4 — target, lib, module & noEmit",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-3-extra-safety-flags",
+    "ten": "9.3 — Vượt strict: các cờ an toàn thêm",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-6-lab-siet-strict",
+    "ten": "Lab 9 — Siết một dự án lỏng lên strict",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › TS/JS Interoperability": {
+  "body": "Thế giới npm vẫn còn rất nhiều thư viện viết bằng JavaScript thuần. TypeScript dùng được chúng nhờ **file khai báo kiểu** (`.d.ts`): file chỉ chứa mô tả kiểu, không có code chạy.\n\n### Các con đường\n- Thư viện tự kèm kiểu (trường `types` trong `package.json`): dùng luôn.\n- Thư viện không có kiểu nhưng cộng đồng viết sẵn: cài `@types/ten-thu-vien` (từ DefinitelyTyped), ví dụ `npm i -D @types/express`.\n- Tự viết: tạo file `.d.ts` hoặc dùng `declare module \"ten-thu-vien\"`.\n- Dự án JS đang chuyển dần sang TS: bật `allowJs` (cho phép lẫn `.js` và `.ts`) và `checkJs` (kiểm kiểu cả file JS, kết hợp chú thích JSDoc).\n\n```ts\n// vendor.d.ts\ndeclare module \"thu-vien-cu\" {\n  export function tinhGia(sl: number, don: number): number;\n}\n```\n\n### Ý chính\n- Import một package JS không có kiểu dưới `strict` sẽ báo lỗi (TS7016) — đó là cố ý, nhắc bạn khai báo kiểu.\n- `any` là lối thoát nhanh nhưng làm mất bảo vệ; ưu tiên `unknown` hoặc khai báo kiểu thật.\n\n### Lỗi hay gặp\n- Cài `@types/...` sai phiên bản so với thư viện.\n- Chuyển cả dự án sang `.ts` một lượt thay vì từng file.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown",
+    "ten": "1.4 — any, unknown & dùng TypeScript dần dần",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-2-declaration-files",
+    "ten": "10.2 — File khai báo (.d.ts)",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-4-types-from-packages",
+    "ten": "10.4 — Lấy kiểu từ package",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-6-lab-viet-dts",
+    "ten": "Lab 10 — Viết một .d.ts cho một package JS",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › Giới thiệu TypeScript": {
+  "body": "TypeScript là ngôn ngữ do Microsoft phát triển, ra mắt năm 2012, là **superset của JavaScript** có hệ thống kiểu tĩnh. Code TS được biên dịch xuống JavaScript thường, nên chạy ở mọi nơi JS chạy: trình duyệt, Node.js, Deno, Bun.\n\n### Nó giải quyết vấn đề gì\nJavaScript là ngôn ngữ kiểu động: lỗi như `user.nmae` (gõ sai) hay truyền thiếu đối số chỉ lộ ra khi chạy đúng nhánh code đó. Ở dự án lớn nhiều người, điều này nghĩa là sửa một hàm có thể làm vỡ chỗ khác mà không ai hay.\n\n### Bạn nhận được gì\n- Phát hiện lỗi lúc viết code, không phải lúc người dùng gặp.\n- Autocomplete, gợi ý tham số, đổi tên an toàn, \"go to definition\" chính xác.\n- Kiểu đóng vai trò tài liệu sống: đọc chữ ký hàm là biết nó nhận và trả gì.\n- Refactor tự tin: đổi một kiểu, compiler chỉ ra mọi chỗ cần sửa.\n\n```ts\ntype Phong = { ten: string; soGhe: number };\nconst p: Phong = { ten: \"BE-201\", soGhe: \"30\" }; // lỗi: soGhe phải là number\n```\n\n### Lỗi hay gặp\n- Coi TS là ngôn ngữ hoàn toàn mới: thực ra học JS vững là nền tảng.\n- Lạm dụng `any` khiến mất hết lợi ích.\n\n### Tự kiểm tra\n- TS khác JS ở điểm cốt lõi nào?\n- Kiểm tra kiểu xảy ra ở giai đoạn nào?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-0-slides",
+    "ten": "9.0 — Slide bài giảng: TypeScript trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — TypeScript là gì, và vì sao nó ra đời",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-1-gioi-thieu",
+    "ten": "0.1 — Về khoá học, dự án LabFlow TS & lộ trình",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-1-why-typescript",
+    "ten": "9.1 — Vì sao TypeScript: bắt lỗi trước khi chạy",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › TypeScript Playground": {
+  "body": "**TypeScript Playground** (typescriptlang.org/play) là trình soạn thảo chạy trên trình duyệt: bạn gõ code TS bên trái, bên phải thấy JavaScript sinh ra, lỗi kiểu và kết quả chạy. Không cần cài đặt gì.\n\n### Dùng để làm gì\n- Thử nhanh một ý tưởng về kiểu, kiểm tra vì sao compiler báo lỗi.\n- Xem JS sinh ra, và các lỗi/ghi chú (tab \"Errors\", \"Logs\", \".D.TS\").\n- Chọn phiên bản TypeScript khác nhau và bật/tắt cờ trong **TS Config** (ví dụ `strict`) để so sánh hành vi.\n- Chia sẻ code bằng link: toàn bộ code nằm trong URL, rất tiện khi hỏi đáp hoặc báo bug.\n\n### Mẹo\n- Rê chuột lên biến để xem kiểu mà TS suy ra: cách nhanh nhất hiểu type inference.\n- Khi hỏi ở diễn đàn, đính kèm link Playground tái hiện lỗi thay vì dán ảnh.\n\n### Lỗi hay gặp\n- Quên rằng cờ cấu hình trong Playground có thể khác `tsconfig` dự án thật, nên kết quả không giống nhau.",
+  "lessons": [
+   {
+    "href": "/code-lab/typescript-practice",
+    "ten": "TypeScript — Luyện kiểu, chấm bằng tsc thật",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › TypeScript là gì": {
+  "body": "TypeScript là ngôn ngữ lập trình mã nguồn mở của Microsoft, xây trên JavaScript và bổ sung **hệ thống kiểu tĩnh**. Nó không phải thư viện hay framework: nó là một lớp phủ lên JS, được kiểm tra bằng trình biên dịch rồi xoá đi.\n\n### Phân biệt các khái niệm hay bị lẫn\n- **Kiểu (type)**: mô tả hình dạng của giá trị, chỉ tồn tại lúc biên dịch.\n- **Biên dịch (compile)**: kiểm tra kiểu và chuyển `.ts` thành `.js`. Chuyển đổi này thực chất là \"xoá kiểu\", không đổi logic.\n- **Runtime**: JS chạy thật. Ở đây không còn kiểu, nên `typeof` hay `instanceof` mới kiểm tra được.\n\n### Ý chính\n- Mọi JS hợp lệ đều là TS hợp lệ; bạn thêm kiểu dần dần.\n- Có thể suy luận kiểu tự động: không phải chỗ nào cũng phải ghi.\n- Kiểm tra kiểu giúp bắt lỗi sớm nhưng không thay thế được test và validate dữ liệu ngoài.\n\n```ts\nconst ten = \"Lan\";          // TS suy ra: string\nconst tuoi: number = 20;    // ghi rõ kiểu\n```\n\n### Lỗi hay gặp\n- Nhầm TS với một ngôn ngữ chạy riêng: không có \"TS runtime\".",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — TypeScript là gì, và vì sao nó ra đời",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-4-mo-hinh",
+    "ten": "0.4 — Mô hình tư duy cốt lõi: lúc biên dịch vs lúc chạy",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-1-why-typescript",
+    "ten": "9.1 — Vì sao TypeScript: bắt lỗi trước khi chạy",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › Cài đặt và Cấu hình (Installation & Configuration)": {
+  "body": "Cài và khởi tạo TypeScript trong một dự án gồm vài bước.\n\n```bash\nnpm init -y\nnpm install -D typescript\nnpx tsc --init\n```\n\nLệnh cuối tạo `tsconfig.json` với nhiều tuỳ chọn đã comment sẵn. Sau đó tạo file `src/index.ts` và chạy `npx tsc` (hoặc `npx tsc --watch` để biên dịch lại mỗi khi lưu).\n\n### Ý chính\n- Dùng `npx tsc` thay vì cài global để mọi người trong nhóm dùng cùng phiên bản.\n- Thêm script vào `package.json`: `\"build\": \"tsc\"`, `\"typecheck\": \"tsc --noEmit\"`.\n- Cài thêm `@types/node` nếu dùng API của Node (`fs`, `process`…).\n- Editor như VS Code có sẵn language service TypeScript; không cần cài thêm gì để thấy lỗi kiểu.\n\n### Cấu hình tối thiểu hợp lý\n```json\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"strict\": true,\n    \"outDir\": \"dist\"\n  },\n  \"include\": [\"src\"]\n}\n```\n\n### Lỗi hay gặp\n- Quên `include` nên `tsc` quét cả `node_modules` hay thư mục không liên quan.\n- Thiếu `@types/node` nên `process`, `require` báo \"cannot find name\".\n- Dùng phiên bản TypeScript của editor khác với của dự án.\n\n### Tự kiểm tra\n- Lệnh nào tạo `tsconfig.json`?\n- Vì sao nên cài TypeScript như devDependency của dự án?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-3-cai-dat",
+    "ten": "0.3 — Cài đặt: Node 22, TypeScript 7, VS Code",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig",
+    "ten": "9.1 — tsc làm gì & tsconfig căn bản",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-2-strict-mode",
+    "ten": "9.2 — Chế độ strict",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểu cơ bản › string/number/boolean/Array/Tuple": {
+  "body": "Kiểu nguyên thuỷ cơ bản của TypeScript: `string`, `number`, `boolean`, cùng `bigint`, `symbol`, `null`, `undefined`. Với tập hợp có **mảng** (`Array`) và **tuple**.\n\n```ts\nconst ten: string = \"Lan\";\nconst tuoi: number = 20;\nconst dangHoc: boolean = true;\n\nconst diem: number[] = [8, 9, 7];          // mảng số\nconst ds: Array<string> = [\"a\", \"b\"];      // cách viết khác, cùng nghĩa\n\nconst toaDo: [number, number] = [10.5, 20]; // tuple: đúng 2 phần tử, đều là number\nconst nguoi: [string, number] = [\"Lan\", 20];\n```\n\n### Ý chính\n- Viết kiểu bằng chữ thường (`string`), không phải `String`, `Number` (kiểu object bọc, hiếm khi cần).\n- **Tuple** là mảng có độ dài và kiểu từng vị trí cố định. Hữu ích khi trả về nhiều giá trị (như `useState` trong React).\n- Mảng chỉ đọc: `readonly number[]` hay `ReadonlyArray<number>`, chặn `push`, `sort` làm đổi dữ liệu gốc.\n- Thường không cần ghi kiểu khi khởi tạo: `const x = 5` đã suy ra `number`.\n\n### Lỗi hay gặp\n- Nhầm `number[]` và tuple `[number, number]`: cái đầu độ dài bất kỳ.\n- Truy cập `arr[5]` luôn ra `number` dù thực tế có thể `undefined` (trừ khi bật `noUncheckedIndexedAccess`).\n\n### Tự kiểm tra\n- Khác nhau giữa `string[]` và `[string, string]`?\n- Khi nào nên dùng `readonly` cho mảng?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-1-primitive",
+    "ten": "2.1 — Kiểu primitive, chú thích & strict null checks",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-2-mang-tuple",
+    "ten": "2.2 — Mảng, tuple & readonly",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-9-2-basic-types",
+    "ten": "9.2 — Kiểu cơ bản, suy luận kiểu và union",
+    "nguon": "Nền tảng Lập trình Web · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-5-quiz",
+    "ten": "Kiểm tra Chương 2 — 10 câu tình huống",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Kiểu cơ bản › any / unknown / never / void": {
+  "body": "Bốn kiểu \"đặc biệt\" bạn sẽ gặp liên tục, đại diện cho ý nghĩa khác nhau.\n\n- **`any`**: tắt kiểm tra kiểu cho giá trị đó. Gán gì cũng được, gọi gì cũng được, và `any` lây sang mọi thứ nó chạm vào. Hãy coi là \"lối thoát hiểm\".\n- **`unknown`**: \"tôi chưa biết kiểu\". Giống `any` ở chỗ nhận mọi giá trị, nhưng bạn **phải kiểm tra/thu hẹp** trước khi dùng. Đây là lựa chọn an toàn cho dữ liệu từ ngoài.\n- **`never`**: không bao giờ có giá trị. Dùng cho hàm luôn ném lỗi hoặc lặp vô hạn, và để kiểm tra union đã xử lý đủ nhánh.\n- **`void`**: hàm không trả giá trị có ý nghĩa.\n\n```ts\nfunction parse(raw: unknown) {\n  if (typeof raw === \"string\") return raw.toUpperCase(); // đã thu hẹp\n  throw new Error(\"không phải chuỗi\");\n}\n\nfunction fail(msg: string): never {\n  throw new Error(msg);\n}\n```\n\n### Ý chính\n- `unknown` là đỉnh của hệ thống kiểu (mọi thứ gán vào được), `never` là đáy (không gán được gì vào, nhưng gán được cho mọi kiểu).\n- Ưu tiên `unknown` hơn `any` khi chưa rõ kiểu.\n\n### Lỗi hay gặp\n- Dùng `any` cho \"nhanh\" rồi quên, kiểu mất ở cả chuỗi hàm gọi sau.\n- `JSON.parse` trả `any`: nên gán qua `unknown` rồi validate.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-3-kieu-dac-biet",
+    "ten": "2.3 — Các kiểu đặc biệt: any, unknown, never, void",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown",
+    "ten": "1.4 — any, unknown & dùng TypeScript dần dần",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-16-2-any-unknown-never",
+    "ten": "16.2 — any, unknown & never",
+    "nguon": "TypeScript · Chương 16",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-3-overload-void",
+    "ten": "3.3 — Overload & điều tinh tế của void",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › Enum": {
+  "body": "**Enum** là tập hợp hằng số có tên.\n\n```ts\nenum Role {\n  Admin,        // 0\n  Teacher,      // 1\n  Student       // 2\n}\nenum Status {\n  Active = \"ACTIVE\",\n  Banned = \"BANNED\"\n}\nconst r: Role = Role.Admin;\n```\n\nEnum số tự tăng từ 0 và có **reverse mapping** (`Role[0] === \"Admin\"`). Enum chuỗi rõ ràng hơn khi log hoặc lưu DB. `const enum` được thay thẳng bằng giá trị lúc biên dịch.\n\n### Điểm đặc biệt\nEnum là một trong số ít tính năng TypeScript **sinh ra code JavaScript thật** (một object), chứ không chỉ là kiểu bị xoá. Hệ quả: các runtime chỉ \"gỡ kiểu\" (như Node type stripping) hoặc cấu hình `erasableSyntaxOnly`/`isolatedModules` chặt có thể không chấp nhận enum.\n\n### Lựa chọn thay thế phổ biến\n```ts\nconst ROLE = { Admin: \"ADMIN\", Teacher: \"TEACHER\" } as const;\ntype Role = typeof ROLE[keyof typeof ROLE]; // \"ADMIN\" | \"TEACHER\"\n```\nhoặc đơn giản là union literal: `type Role = \"ADMIN\" | \"TEACHER\"`. Cách này không sinh thêm code (với union), nhận được chuỗi thường từ JSON, và dễ dùng hơn.\n\n### Lỗi hay gặp\n- Enum số cho phép gán số bất kỳ ở một số phiên bản cũ, nên kiểm tra kém chặt.\n- Dùng enum số rồi lưu DB: thêm giá trị ở giữa làm lệch mã số cũ.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const",
+    "ten": "2.4 — Kiểu literal & as const",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › Type Aliases": {
+  "body": "**Type alias** đặt tên cho một kiểu bằng từ khoá `type`, để dùng lại và để code dễ đọc.\n\n```ts\ntype ID = string | number;\ntype Phong = { ten: string; soGhe: number };\ntype DanhSach = Phong[];\ntype Callback = (err: Error | null, data?: string) => void;\ntype Trang = \"mo\" | \"dong\";\n```\n\n### Ý chính\n- Alias **không tạo kiểu mới**, chỉ là cái tên khác của cùng kiểu; hai kiểu cùng cấu trúc là tương thích nhau.\n- Đặt tên được cho thứ mà `interface` không làm được trực tiếp: union, tuple, kiểu hàm, kiểu nguyên thuỷ.\n- Có thể tham số hoá (generic): `type Hop<T> = { gia_tri: T }`.\n- Với object, `type` và `interface` gần như đổi chỗ được; khác biệt chính là `interface` có declaration merging.\n\n### Khi nào dùng\n- Kết hợp kiểu (union/intersection), kiểu hàm, mapped/conditional types: dùng `type`.\n- Mô tả hình dạng object và muốn khả năng mở rộng/`implements`: `interface` là lựa chọn quen thuộc.\n\n### Lỗi hay gặp\n- Khai báo hai `type` cùng tên cùng phạm vi: lỗi (khác `interface` sẽ gộp).\n- Tưởng alias tạo kiểu \"khác biệt\" (nominal): `type UserId = string` vẫn nhận mọi string.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type",
+    "ten": "4.2 — interface hay type alias",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-3-extends-intersection",
+    "ten": "4.3 — Ghép kiểu: extends & intersection (giao)",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-16-3-organizing-types",
+    "ten": "16.3 — Tổ chức kiểu",
+    "nguon": "TypeScript · Chương 16",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểu cơ bản › Kiểu void": {
+  "body": "`void` là kiểu trả về của hàm **không trả về giá trị có nghĩa**.\n\n```ts\nfunction ghiLog(msg: string): void {\n  console.log(msg);\n}\n```\n\nVề mặt giá trị, hàm trả `void` thực chất trả `undefined`, nhưng bạn không nên dùng kết quả đó.\n\n### Điểm tinh tế\nKhi một **kiểu hàm** có trả về `void`, hàm được gán vào đó *được phép* trả giá trị, và giá trị bị bỏ qua:\n\n```ts\ntype Callback = () => void;\nconst cb: Callback = () => 42; // hợp lệ\n[1, 2, 3].forEach(n => n * 2); // callback của forEach trả void, nhưng trả số vẫn ổn\n```\n\nNhưng nếu khai báo trực tiếp hàm có kiểu `: void` thì `return 42` bị lỗi.\n\n### Khác `undefined`\n- `void`: \"đừng quan tâm kết quả\".\n- `undefined`: một giá trị cụ thể.\n- `never`: hàm không bao giờ kết thúc bình thường (ném lỗi).\n\n### Lỗi hay gặp\n- Gán biến cho kết quả hàm `void` rồi dùng nó.\n- Dùng `void` làm kiểu cho biến thông thường: gần như vô ích.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-3-kieu-dac-biet",
+    "ten": "2.3 — Các kiểu đặc biệt: any, unknown, never, void",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-3-overload-void",
+    "ten": "3.3 — Overload & điều tinh tế của void",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › undefined và null": {
+  "body": "`undefined` nghĩa là \"chưa có giá trị\" (biến khai báo chưa gán, thuộc tính không tồn tại, hàm không return). `null` nghĩa là \"cố ý không có giá trị\".\n\nVới `strictNullChecks` (bật qua `strict`), hai giá trị này **không còn nằm ngầm trong mọi kiểu**. Muốn cho phép, bạn phải nói rõ:\n\n```ts\nlet ten: string = \"Lan\";\nten = null;          // lỗi dưới strict\n\nlet timThay: string | null = null;   // ok\nfunction tim(id: number): User | undefined { /* ... */ }\n\nconst u = tim(1);\nu.ten;               // lỗi: u có thể undefined\nu?.ten;              // ok: optional chaining\nconst t = u?.ten ?? \"ẩn danh\";  // nullish coalescing: chỉ thay khi null/undefined\n```\n\n### Vì sao quan trọng\nLỗi \"Cannot read properties of undefined\" là lỗi runtime phổ biến nhất trong JavaScript. `strictNullChecks` biến chúng thành lỗi lúc biên dịch.\n\n### Ý chính\n- Dùng `?.` để truy cập an toàn, `??` để đặt giá trị mặc định (khác `||` vì `||` cũng loại `0` và chuỗi rỗng).\n- Thu hẹp bằng `if (x !== undefined)` hoặc `if (x)` trước khi dùng.\n- Thuộc tính tuỳ chọn `ten?: string` có kiểu `string | undefined`.\n\n### Lỗi hay gặp\n- Tắt `strictNullChecks` cho đỡ lỗi: mất lợi ích lớn nhất của TS.\n- Dùng `!` để \"ép\" bỏ null thay vì xử lý.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-1-primitive",
+    "ten": "2.1 — Kiểu primitive, chú thích & strict null checks",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-6-lab-lich-phong",
+    "ten": "Lab 2 — Bật strict cho lịch phòng lab",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so",
+    "ten": "3.1 — Gõ kiểu tham số: bắt buộc, optional, mặc định, rest",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › Kiểu object": {
+  "body": "Kiểu `object` (chữ thường) nghĩa là \"bất kỳ giá trị nào không phải primitive\": object, mảng, hàm… Nó khá mơ hồ, ít khi là lựa chọn tốt.\n\n```ts\nlet o: object = { a: 1 };\no.a;              // lỗi: object không biết có thuộc tính a\n```\n\nThay vào đó, hãy mô tả **hình dạng** của object:\n\n```ts\nlet phong: { ten: string; soGhe: number; ghiChu?: string } = {\n  ten: \"BE-201\",\n  soGhe: 30\n};\n\nconst tuDien: Record<string, number> = { a: 1, b: 2 }; // khoá bất kỳ\n```\n\n### Ý chính\n- Tránh nhầm: `object` (chữ thường, kiểu không-primitive), `Object` (kiểu cũ, gần như chứa mọi thứ), `{}` (mọi giá trị khác null/undefined). Dùng hình dạng cụ thể, `Record<K, V>` hoặc `unknown` thay thế.\n- TS dùng **structural typing**: object có đủ thuộc tính cần thiết là được, kể cả có thừa.\n- Object literal mới tạo bị kiểm tra \"thuộc tính thừa\" (excess property check) để bắt lỗi gõ sai.\n- `readonly` và `?` để chặn ghi hoặc cho phép vắng mặt thuộc tính.\n\n### Lỗi hay gặp\n- Dùng `object` rồi không truy cập được gì.\n- Khai báo khoá động bằng `{}` thay vì index signature hoặc `Record`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object",
+    "ten": "4.1 — Dáng object: thuộc tính bắt buộc, optional & readonly",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-4-index-record",
+    "ten": "4.4 — Index signature & Record",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › ts-node": {
+  "body": "`ts-node` là công cụ chạy file TypeScript trực tiếp bằng Node mà không cần chạy `tsc` ra file `.js` trước.\n\n```bash\nnpm i -D ts-node typescript\nnpx ts-node src/index.ts\n```\n\nNó biên dịch trong bộ nhớ rồi chạy. Mặc định có kiểm tra kiểu nên khởi động chậm hơn; có chế độ `--transpile-only` bỏ qua kiểm kiểu cho nhanh.\n\n### Các lựa chọn hiện nay\n- **`tsx`**: nhanh, dùng esbuild, chạy ESM/CJS dễ hơn trong nhiều dự án. Không kiểm kiểu.\n- **Node.js bản mới** có thể chạy file `.ts` bằng cách gỡ phần kiểu (type stripping): tiện cho script, nhưng chỉ hỗ trợ cú pháp TS \"xoá được\" (không có enum, namespace…) và cũng không kiểm kiểu.\n- Dù chọn cách nào, kiểm kiểu thật vẫn phải chạy `tsc --noEmit` (ở editor và CI).\n\n### Dùng khi nào\nChạy script, dev server, thử nhanh. Không nên coi là cách deploy production; hãy build ra JS (hoặc dùng bundler).\n\n### Lỗi hay gặp\n- Cấu hình `module` trong `tsconfig` không khớp kiểu import/ESM của Node nên lỗi `Cannot use import statement outside a module`.\n- Nghĩ chạy được bằng `ts-node --transpile-only` là code đúng kiểu.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-3-cai-dat",
+    "ten": "0.3 — Cài đặt: Node 22, TypeScript 7, VS Code",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-4-mo-hinh",
+    "ten": "0.4 — Mô hình tư duy cốt lõi: lúc biên dịch vs lúc chạy",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › Type Assertions": {
+  "body": "**Type assertion** là cách bạn nói với TypeScript \"tôi biết kiểu của giá trị này rõ hơn bạn\".\n\n```ts\nconst el = document.getElementById(\"ten\") as HTMLInputElement;\nel.value;                         // ok, vì đã khẳng định đây là input\n\nconst data = JSON.parse(raw) as { id: number };\n```\n\nCũng có cú pháp `<HTMLInputElement>el`, nhưng không dùng được trong file JSX/TSX nên `as` được ưa chuộng.\n\n### Điều quan trọng cần nhớ\nAssertion **chỉ tồn tại lúc biên dịch**, không kiểm tra hay chuyển đổi gì lúc chạy. Nếu bạn sai, TS không cứu được. TS chỉ cho phép ép giữa các kiểu \"đủ gần\" nhau; ép giữa hai kiểu không liên quan phải đi qua `unknown`, và đó là dấu hiệu phải xem lại.\n\n### Ý chính\n- Dùng khi thật sự biết hơn compiler (ví dụ DOM element cụ thể).\n- Với dữ liệu ngoài (JSON, API), nên validate (ví dụ bằng Zod) thay vì assertion.\n- Ưu tiên thu hẹp kiểu bằng kiểm tra (`typeof`, `in`, type guard) trước khi cân nhắc `as`.\n\n### Lỗi hay gặp\n- Dùng `as` để \"dập lỗi\", sau đó lỗi bùng ra runtime.\n- Chuỗi `as unknown as T` làm mất hoàn toàn sự bảo vệ.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown",
+    "ten": "1.4 — any, unknown & dùng TypeScript dần dần",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-2-chung-minh-gi",
+    "ten": "1.2 — Trình kiểm tra kiểu chứng minh được gì — và không được gì",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-3-discriminated-union",
+    "ten": "5.3 — Discriminated union (union có nhãn) & type predicate",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › Non-null Assertion Operator": {
+  "body": "**Non-null assertion** là toán tử hậu tố `!`, nói với TS rằng giá trị **chắc chắn không phải `null`/`undefined`**.\n\n```ts\nconst input = document.querySelector(\"#ten\");   // Element | null\ninput!.focus();               // \"tin tôi đi, nó có\"\n\nfunction dai(s?: string) {\n  return s!.length;           // báo hiệu s có giá trị\n}\n```\n\nGiống type assertion, `!` chỉ có tác dụng lúc biên dịch. Nếu giá trị thực sự là `null`, chương trình vẫn nổ `TypeError` lúc chạy.\n\n### Khi nào chấp nhận\n- Bạn vừa kiểm tra bằng logic mà TS không theo dõi được, và có chú thích vì sao.\n- Trong test hoặc script ngắn.\n\n### Cách tốt hơn\n```ts\nconst input = document.querySelector(\"#ten\");\nif (input) input.focus();      // thu hẹp kiểu bằng kiểm tra\n\nconst ten = user?.ten ?? \"ẩn danh\";\n```\n\n### Lỗi hay gặp\n- Rải `!` khắp nơi để im lỗi: \"lỗi null\" chỉ đổi chỗ xuất hiện sang production.\n- Dùng `!` với kết quả mảng `arr[i]!`: nếu index vượt biên vẫn trả `undefined` lúc chạy.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-2-chung-minh-gi",
+    "ten": "1.2 — Trình kiểm tra kiểu chứng minh được gì — và không được gì",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-1-primitive",
+    "ten": "2.1 — Kiểu primitive, chú thích & strict null checks",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-6-lab-lich-phong",
+    "ten": "Lab 2 — Bật strict cho lịch phòng lab",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu cơ bản › never": {
+  "body": "`never` là kiểu của những giá trị **không bao giờ xảy ra**. Không có giá trị nào thuộc kiểu `never`.\n\n```ts\nfunction fail(msg: string): never {\n  throw new Error(msg);   // không bao giờ return\n}\n\nfunction loop(): never {\n  while (true) {}\n}\n```\n\n### Kiểm tra đầy đủ (exhaustiveness)\nCông dụng thực tế nhất: bảo đảm bạn xử lý hết các nhánh của union.\n\n```ts\ntype Hinh = { kind: \"tron\"; r: number } | { kind: \"vuong\"; a: number };\n\nfunction dienTich(h: Hinh): number {\n  switch (h.kind) {\n    case \"tron\": return Math.PI * h.r ** 2;\n    case \"vuong\": return h.a ** 2;\n    default: {\n      const _kiemTra: never = h; // nếu thêm \"tamGiac\" mà quên case, dòng này báo lỗi\n      return _kiemTra;\n    }\n  }\n}\n```\n\n### Ý chính\n- `never` là kiểu rỗng: nó gán được cho mọi kiểu nhưng không có gì gán được vào nó.\n- Sau khi thu hẹp hết mọi khả năng của union, phần còn lại có kiểu `never`.\n- Xuất hiện trong kiểu điều kiện (`Exclude` loại bỏ bằng cách biến thành `never`).\n\n### Lỗi hay gặp\n- Nhầm `never` với `void`: `void` vẫn kết thúc, chỉ không trả giá trị.\n- Mảng rỗng khởi tạo bị suy ra `never[]` ở vài ngữ cảnh.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-4-exhaustiveness",
+    "ten": "5.4 — Kiểm tra đầy đủ với never",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-3-kieu-dac-biet",
+    "ten": "2.3 — Các kiểu đặc biệt: any, unknown, never, void",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-16-2-any-unknown-never",
+    "ten": "16.2 — any, unknown & never",
+    "nguon": "TypeScript · Chương 16",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểu cơ bản › Cài đặt và cấu hình TypeScript": {
+  "body": "Thiết lập một dự án TypeScript gồm hai việc: cài compiler và tạo `tsconfig.json`.\n\n```bash\nnpm install -D typescript\nnpx tsc --init\n```\n\nMở `tsconfig.json` và quyết định vài cờ nền tảng:\n- **`strict: true`**: bật nhóm kiểm tra chặt chẽ. Nên bật ngay từ đầu.\n- **`target`**: phiên bản JS xuất ra (`ES2020`, `ES2022`…), chọn theo môi trường chạy.\n- **`module`**: `NodeNext` cho Node, `ESNext` + bundler cho frontend.\n- **`outDir`**: nơi đặt file `.js`; **`noEmit`** nếu chỉ cần kiểm kiểu.\n\n### Ý chính\n- `strict` gom: `noImplicitAny`, `strictNullChecks`, `strictFunctionTypes`, `strictPropertyInitialization`…\n- Đổi `tsconfig` thường không cần đổi code, nhưng có thể làm hiện nhiều lỗi mới (đó là thông tin hữu ích).\n- Kiểm tra cấu hình hiệu lực: `npx tsc --showConfig`.\n\n### Lỗi hay gặp\n- Copy `tsconfig` từ dự án khác có `module` không khớp môi trường.\n- Tắt `strict` để \"hết lỗi\".\n- Không thêm script `typecheck` để chạy ở CI.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-0-3-cai-dat",
+    "ten": "0.3 — Cài đặt: Node 22, TypeScript 7, VS Code",
+    "nguon": "TypeScript · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-1-tsc-and-tsconfig",
+    "ten": "9.1 — tsc làm gì & tsconfig căn bản",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-2-strict-mode",
+    "ten": "9.2 — Chế độ strict",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-4-target-lib-module",
+    "ten": "9.4 — target, lib, module & noEmit",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Type Inference & Compatibility › Type Inference": {
+  "body": "**Type inference** (suy luận kiểu) là khả năng TypeScript tự tìm ra kiểu từ giá trị và ngữ cảnh, nên bạn không phải ghi kiểu ở mọi nơi.\n\n```ts\nlet ten = \"Lan\";            // string\nconst tuoi = 20;            // 20 (literal type, vì const)\nconst ds = [1, 2, 3];       // number[]\nfunction nhan(a: number, b: number) {\n  return a * b;             // kiểu trả về suy ra: number\n}\nconst ketQua = nhan(2, 3);  // number\n```\n\n### Ý chính\n- `let` thì \"mở rộng\" (widening) về kiểu chung (`string`), còn `const` giữ kiểu literal (`\"Lan\"`).\n- Thường ghi kiểu ở **ranh giới**: tham số hàm, giá trị trả về của hàm export, kiểu public của module. Bên trong thân hàm để TS suy.\n- Suy luận theo ngữ cảnh (contextual typing): trong `arr.map(x => ...)` thì `x` được suy từ kiểu của `arr`.\n- Biến khai báo không có giá trị khởi tạo (`let x;`) mang kiểu `any` ngầm, nên ghi kiểu rõ.\n\n### Mẹo\nRê chuột lên biến trong editor để xem kiểu đã suy ra. Nếu kiểu suy ra quá rộng hoặc quá hẹp so với ý bạn, hãy chú thích hoặc dùng `as const`/`satisfies`.\n\n### Lỗi hay gặp\n- Ghi kiểu thừa ở mọi biến khiến code rườm rà.\n- Để TS suy kiểu trả về của hàm export lớn: một thay đổi nhỏ trong thân hàm âm thầm đổi API.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-3-suy-luan-kieu",
+    "ten": "1.3 — Suy luận kiểu: bạn viết ít hơn bạn tưởng",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-1-why-generics",
+    "ten": "6.1 — Vì sao cần generics: giữ lại kiểu",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice",
+    "ten": "6.4 — Generics thực chiến: suy kiểu & bẫy thường gặp",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Type Inference & Compatibility › Type Compatibility (Structural Typing)": {
+  "body": "TypeScript dùng **structural typing** (kiểu theo cấu trúc, còn gọi là \"duck typing\" lúc biên dịch): hai kiểu tương thích nếu **hình dạng** khớp, bất kể tên hay nơi khai báo. Java hay C# thì ngược lại (kiểu theo tên, nominal).\n\n```ts\ninterface Diem { x: number; y: number }\n\nconst p = { x: 1, y: 2, nhan: \"A\" };   // thừa thuộc tính \"nhan\"\nconst d: Diem = p;                      // vẫn hợp lệ: p có đủ x, y\n\nclass Cho { ten = \"Mực\"; }\nclass Meo { ten = \"Tom\"; }\nconst m: Meo = new Cho();               // hợp lệ, vì cấu trúc giống nhau\n```\n\n### Ý chính\n- Quy tắc: kiểu nguồn phải có **ít nhất** các thuộc tính mà kiểu đích yêu cầu.\n- Ngoại lệ: object literal ghi trực tiếp bị kiểm tra **thuộc tính thừa** (excess property check) để bắt lỗi gõ sai.\n- Hàm cũng so khớp theo cấu trúc: tham số ít hơn thì vẫn gán được vào kiểu hàm nhiều tham số hơn.\n- Muốn tạo kiểu \"khác biệt\" dù cấu trúc giống nhau (ví dụ `UserId` khác `OrderId`), dùng kỹ thuật **branded type**.\n\n### Lỗi hay gặp\n- Tưởng hai class cùng cấu trúc là khác nhau và không dùng lẫn được.\n- Bất ngờ khi truyền biến (không phải literal) có thuộc tính thừa mà không báo lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object",
+    "ten": "4.1 — Dáng object: thuộc tính bắt buộc, optional & readonly",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-4-index-record",
+    "ten": "4.4 — Index signature & Record",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-16-1-illegal-states",
+    "ten": "16.1 — Làm trạng thái sai không biểu diễn được",
+    "nguon": "TypeScript · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Type Inference & Compatibility › as any — ép kiểu mạnh": {
+  "body": "`as any` ép một giá trị về kiểu `any`, **tắt kiểm tra kiểu** cho nó: bạn có thể gọi bất cứ thứ gì trên đó và gán nó cho bất cứ kiểu nào, compiler im lặng.\n\n```ts\nconst data = JSON.parse(raw) as any;\ndata.nguoiDung.ten.toUpperCase();   // không lỗi biên dịch, có thể nổ lúc chạy\n```\n\n### Khi nào có lý do dùng\n- Làm việc với code JS cũ chưa có kiểu, khi cần nhanh và sẽ bổ sung sau.\n- Thư viện kiểu sai/thiếu mà không thể sửa ngay.\n- Test hoặc script ngắn dùng một lần.\n\n### Vì sao nguy hiểm\n`any` **lây lan**: kết quả của phép toán trên `any` cũng là `any`, nên một chỗ `as any` có thể làm mất bảo vệ trên cả chuỗi xử lý phía sau. Các lỗi tưởng chừng đã được TS bắt lại lọt qua.\n\n### Thay thế tốt hơn\n- `unknown` rồi thu hẹp kiểu bằng `typeof`, `in`, type guard.\n- Validate bằng schema (Zod…) cho dữ liệu ngoài.\n- Khai báo `.d.ts` hoặc kiểu cục bộ đúng thay vì `any`.\n- Nếu bắt buộc, cô lập `as any` ở một chỗ nhỏ có comment lý do.\n\n### Lỗi hay gặp\n- Dùng `as any` để \"qua lỗi\" mà không hiểu lỗi nói gì: thường lỗi đang chỉ ra bug thật.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown",
+    "ten": "1.4 — any, unknown & dùng TypeScript dần dần",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-2-chung-minh-gi",
+    "ten": "1.2 — Trình kiểm tra kiểu chứng minh được gì — và không được gì",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-16-2-any-unknown-never",
+    "ten": "16.2 — any, unknown & never",
+    "nguon": "TypeScript · Chương 16",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Type Inference & Compatibility › Từ khóa satisfies": {
+  "body": "Toán tử **`satisfies`** (TypeScript 4.9) kiểm tra rằng một giá trị **khớp với một kiểu**, nhưng **không thay đổi kiểu suy ra** của giá trị đó.\n\nSo sánh ba cách:\n\n```ts\ntype Mau = \"do\" | \"xanh\";\ntype Palette = Record<string, Mau | number[]>;\n\n// 1. Chú thích kiểu: kiểm tra được, nhưng kiểu bị \"rộng ra\"\nconst a: Palette = { nen: \"do\", vien: [1, 2, 3] };\na.nen.toUpperCase();      // lỗi: a.nen có thể là Mau | number[]\n\n// 2. satisfies: vừa kiểm tra vừa giữ kiểu hẹp\nconst b = { nen: \"do\", vien: [1, 2, 3] } satisfies Palette;\nb.nen.toUpperCase();      // ok: b.nen vẫn là \"do\"\nb.vien.map(n => n * 2);   // ok: b.vien là number[]\n```\n\nNếu gõ sai (`nen: \"tim\"`) hoặc sai tên khoá theo kiểu, `satisfies` vẫn báo lỗi như chú thích.\n\n### Khi nào dùng\nCấu hình, bảng tra, route table... nơi bạn muốn compiler kiểm tra cấu trúc mà vẫn cần biết chính xác từng giá trị.\n\n### Lỗi hay gặp\n- Dùng `satisfies` khi bạn thực sự muốn kiểu rộng: lúc đó chú thích kiểu thông thường là đủ.\n- Nhầm với `as`: `as` ép kiểu (bỏ qua kiểm tra), `satisfies` thì kiểm tra thật.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-3-suy-luan-kieu",
+    "ten": "1.3 — Suy luận kiểu: bạn viết ít hơn bạn tưởng",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const",
+    "ten": "2.4 — Kiểu literal & as const",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kết hợp kiểu › Union Types": {
+  "body": "**Union type** `A | B` nghĩa là giá trị có thể là **một trong** các kiểu liệt kê.\n\n```ts\ntype ID = string | number;\nfunction hienThi(id: ID) {\n  if (typeof id === \"string\") {\n    return id.toUpperCase();   // ở nhánh này id là string\n  }\n  return id.toFixed(0);        // nhánh còn lại: number\n}\n\ntype Trang = \"cho\" | \"dang\" | \"xong\";   // union của các literal\n```\n\n### Ý chính\n- Trên một union, bạn chỉ dùng được những thao tác **chung cho mọi thành viên**, cho tới khi **thu hẹp** (narrowing) bằng `typeof`, `instanceof`, `in`, so sánh `===`, hay kiểm tra thuộc tính tag.\n- Union của các literal thay cho enum rất gọn: `\"cho\" | \"dang\" | \"xong\"`.\n- Union của các object có thuộc tính tag chung gọi là **discriminated union**, mô hình hoá trạng thái cực tốt.\n- `null`, `undefined` cũng chỉ là thành viên union: `string | null`.\n\n### Lỗi hay gặp\n- Truy cập thuộc tính không có ở mọi thành viên mà chưa thu hẹp: lỗi.\n- Quên một nhánh khi xử lý: dùng kiểm tra `never` để bắt.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-2-literal-union",
+    "ten": "5.2 — Union literal & thu hẹp theo giá trị",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-5-quiz",
+    "ten": "Kiểm tra Chương 5 — 10 câu tình huống",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Kết hợp kiểu › Intersection Types": {
+  "body": "**Intersection type** `A & B` gộp nhiều kiểu thành một: giá trị phải thoả **tất cả** kiểu cùng lúc, nên có mọi thuộc tính của cả hai.\n\n```ts\ntype CoTen = { ten: string };\ntype CoTuoi = { tuoi: number };\ntype NguoiDung = CoTen & CoTuoi;\n\nconst u: NguoiDung = { ten: \"Lan\", tuoi: 20 };  // phải đủ cả hai\n\ntype DaLuu<T> = T & { id: number; taoLuc: Date };  // thêm trường vào kiểu bất kỳ\n```\n\n### Ý chính\n- Union (`|`) là \"hoặc\", intersection (`&`) là \"và\".\n- Dùng nhiều để trộn các \"mảnh\" kiểu, hay thêm metadata vào một kiểu có sẵn.\n- Với object, tương tự `interface B extends A`, nhưng khi trùng tên thuộc tính khác kiểu: `extends` báo lỗi ngay chỗ khai báo, còn `&` có thể cho ra thuộc tính kiểu `never` (kiểu rỗng) mà không cảnh báo sớm.\n- Intersection các kiểu nguyên thuỷ không tương thích (`string & number`) cho `never`.\n\n### Lỗi hay gặp\n- Nhầm `&` với \"hợp\" các giá trị: nó chỉ làm kiểu hẹp lại (đòi hỏi nhiều hơn).\n- Dùng `&` chuỗi dài khiến thông báo lỗi khó đọc: cân nhắc `interface extends`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-3-extends-intersection",
+    "ten": "4.3 — Ghép kiểu: extends & intersection (giao)",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kết hợp kiểu › keyof / typeof Operator": {
+  "body": "Hai toán tử giúp \"lấy kiểu từ cái đã có\" thay vì viết tay lại.\n\n### `keyof`\nCho **union các tên khoá** của một kiểu object.\n\n```ts\ntype User = { id: number; ten: string; email: string };\ntype KhoaUser = keyof User;     // \"id\" | \"ten\" | \"email\"\n\nfunction layGiaTri<T, K extends keyof T>(obj: T, khoa: K): T[K] {\n  return obj[khoa];\n}\nlayGiaTri({ id: 1, ten: \"Lan\" }, \"ten\");   // string\nlayGiaTri({ id: 1, ten: \"Lan\" }, \"tuoi\");  // lỗi: khoá không tồn tại\n```\n\n### `typeof` (ở vị trí kiểu)\nLấy **kiểu của một giá trị/biến** (khác `typeof` của JS trả chuỗi lúc chạy).\n\n```ts\nconst cauHinh = { cong: 3000, host: \"localhost\" };\ntype CauHinh = typeof cauHinh;          // { cong: number; host: string }\ntype KhoaCauHinh = keyof typeof cauHinh; // \"cong\" | \"host\"\n```\n\n### Ý chính\n- Kết hợp `keyof typeof obj` rất phổ biến để lấy các khoá của một object hằng.\n- `T[K]` (indexed access) lấy kiểu giá trị tại khoá K.\n- Mục tiêu: một **nguồn sự thật duy nhất**, đổi giá trị thì kiểu cập nhật theo.\n\n### Lỗi hay gặp\n- Quên rằng `keyof` trên kiểu có index signature `string` cho `string | number`.\n- Nhầm `typeof` kiểu (lúc biên dịch) với `typeof` giá trị (lúc chạy).",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-2-constraints-keyof",
+    "ten": "6.2 — Ràng buộc, keyof & truy cập theo chỉ mục",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const",
+    "ten": "2.4 — Kiểu literal & as const",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-1-mapped-types",
+    "ten": "7.1 — Mapped types (kiểu ánh xạ)",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kết hợp kiểu › as const / satisfies": {
+  "body": "Hai công cụ để giữ kiểu **chính xác** khi khai báo dữ liệu hằng.\n\n### `as const`\n\"Đóng băng\" giá trị: mọi thuộc tính thành `readonly`, chuỗi/số thành kiểu literal, mảng thành tuple chỉ đọc.\n\n```ts\nconst ROLES = [\"admin\", \"teacher\", \"student\"] as const;\ntype Role = typeof ROLES[number];   // \"admin\" | \"teacher\" | \"student\"\n\nconst ROUTE = { home: \"/\", login: \"/login\" } as const;\ntype Path = typeof ROUTE[keyof typeof ROUTE];   // \"/\" | \"/login\"\n```\n\nKhông có `as const`, `ROLES` chỉ là `string[]` và bạn mất danh sách giá trị cụ thể. Danh sách chạy được lúc runtime (để lặp, kiểm tra `includes`) lẫn sinh được kiểu: **một nguồn sự thật**.\n\n### `satisfies`\nKiểm tra giá trị khớp một kiểu mà vẫn giữ kiểu hẹp của giá trị:\n\n```ts\nconst cauHinh = {\n  cong: 3000,\n  mode: \"dev\"\n} as const satisfies { cong: number; mode: \"dev\" | \"prod\" };\n```\n\n### Ý chính\n- `as const` giữ literal; `satisfies` kiểm tra; kết hợp cả hai là mẫu rất mạnh cho bảng cấu hình.\n- Có thể thay cho `enum` trong phần lớn trường hợp.\n\n### Lỗi hay gặp\n- `ROLES.includes(x)` với `x: string` báo lỗi vì mảng là tuple chỉ đọc kiểu literal: cần guard hoặc ép kiểu hợp lý.\n- Quên rằng `as const` làm mảng thành `readonly`: không `push` được.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const",
+    "ten": "2.4 — Kiểu literal & as const",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-3-suy-luan-kieu",
+    "ten": "1.3 — Suy luận kiểu: bạn viết ít hơn bạn tưởng",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kết hợp kiểu › Combining Types": {
+  "body": "TypeScript có hai cách chính để **kết hợp kiểu** thành kiểu mới:\n\n- **Union `A | B`**: giá trị là A **hoặc** B. Tập các giá trị cho phép *rộng ra*.\n- **Intersection `A & B`**: giá trị là A **và** B cùng lúc. Với object, nghĩa là có đủ thuộc tính của cả hai.\n\n```ts\ntype KetQua = { ok: true; du_lieu: string } | { ok: false; loi: string };\n\ntype CoId = { id: number };\ntype CoTen = { ten: string };\ntype SinhVien = CoId & CoTen;\n```\n\n### Ý chính\n- Union dùng để mô hình hoá \"một trong nhiều khả năng\": trạng thái, kết quả thành công/thất bại, kiểu đầu vào linh hoạt.\n- Intersection dùng để \"ghép\" các mảnh cấu trúc.\n- Với union, phải **thu hẹp** trước khi dùng thành viên riêng; với intersection, dùng được mọi thành viên ngay.\n- Có thể tổ hợp: `(A | B) & C`.\n\n### Lỗi hay gặp\n- Nhầm hướng: \"A hoặc B\" nghe như thêm, nhưng với `|` bạn chỉ dùng được phần chung cho đến khi thu hẹp.\n- Intersection của hai kiểu xung đột cho `never`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-3-extends-intersection",
+    "ten": "4.3 — Ghép kiểu: extends & intersection (giao)",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-3-discriminated-union",
+    "ten": "5.3 — Discriminated union (union có nhãn) & type predicate",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Interface › Interface Declaration": {
+  "body": "**Interface** mô tả hình dạng (shape) của một object: có những thuộc tính nào, kiểu gì.\n\n```ts\ninterface SinhVien {\n  readonly id: number;     // chỉ đọc sau khi tạo\n  ten: string;\n  email?: string;          // tuỳ chọn\n  diem: number[];\n  chao(loi: string): string;   // method\n}\n\nconst sv: SinhVien = {\n  id: 1,\n  ten: \"Lan\",\n  diem: [8, 9],\n  chao: loi => `${loi}, Lan`\n};\n```\n\n### Ý chính\n- `?` đánh dấu thuộc tính **tuỳ chọn** (kiểu thực tế `T | undefined`).\n- `readonly` chặn gán lại thuộc tính; đây là kiểm tra lúc biên dịch.\n- Object phải có **đủ** thuộc tính bắt buộc, và object literal gán trực tiếp không được có thuộc tính lạ.\n- Interface có thể mô tả cả hàm hoặc kiểu có index signature (`[khoa: string]: number`).\n\n### Lỗi hay gặp\n- Ghi kiểu `id?: number` rồi quên rằng giá trị có thể `undefined` khi dùng.\n- Nghĩ `readonly` chặn cả lúc chạy: không, chỉ là kiểm tra của compiler.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object",
+    "ten": "4.1 — Dáng object: thuộc tính bắt buộc, optional & readonly",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type",
+    "ten": "4.2 — interface hay type alias",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Interface › Extending Interfaces": {
+  "body": "Interface có thể **kế thừa** interface khác bằng `extends`, để dùng lại các thuộc tính chung.\n\n```ts\ninterface Nguoi {\n  ten: string;\n  tuoi: number;\n}\ninterface SinhVien extends Nguoi {\n  mssv: string;\n}\ninterface GiangVien extends Nguoi {\n  khoa: string;\n}\n// Kế thừa nhiều interface:\ninterface TroGiang extends SinhVien, GiangVien {}\n```\n\n### Ý chính\n- Kiểu con có **mọi** thuộc tính của kiểu cha cộng thêm của riêng nó.\n- Có thể **thu hẹp** kiểu một thuộc tính ở interface con (ví dụ cha `id: string | number`, con `id: number`), nhưng không đổi thành kiểu không tương thích: compiler báo lỗi ngay chỗ khai báo.\n- Tương đương với intersection `A & B` trong nhiều trường hợp, nhưng `extends` báo xung đột sớm hơn nên an toàn hơn.\n- Interface cũng có thể extends type alias của object.\n\n### Lỗi hay gặp\n- Tạo cây kế thừa quá sâu: khó hiểu, hãy ghép bằng thành phần (composition) khi hợp lý.\n- Kế thừa nhiều interface cùng thuộc tính khác kiểu gây lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-3-extends-intersection",
+    "ten": "4.3 — Ghép kiểu: extends & intersection (giao)",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type",
+    "ten": "4.2 — interface hay type alias",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Interface › Types vs Interfaces": {
+  "body": "`interface` và `type` đều đặt tên cho kiểu object, và trong hầu hết trường hợp đổi chỗ được. Khác biệt thật sự:\n\n| | `interface` | `type` |\n|---|---|---|\n| Mô tả object | có | có |\n| Union, tuple, kiểu hàm, primitive | không trực tiếp | có |\n| Khai báo trùng tên | **gộp** (declaration merging) | lỗi |\n| Mở rộng | `extends` | `&` |\n| `implements` bởi class | có | có (với kiểu object) |\n\n```ts\ninterface A { x: number }\ninterface A { y: number }       // gộp: A có cả x và y\n\ntype B = { x: number };\ntype B = { y: number };         // lỗi: trùng tên\n```\n\nDeclaration merging hữu ích khi bổ sung kiểu cho thư viện (ví dụ mở rộng `Request` của Express). Nhưng nó cũng có thể gộp ngoài ý muốn.\n\n### Quy tắc thực dụng\n- Mô tả object, API công khai, thứ class `implements`: dùng **`interface`**.\n- Union, tuple, mapped/conditional type, alias cho kiểu hàm: dùng **`type`**.\n- Điều quan trọng nhất là **nhất quán** trong cả dự án.\n\n### Lỗi hay gặp\n- Tranh luận mãi mà không thống nhất quy ước của nhóm.\n- Vô tình khai báo trùng tên interface ở hai file và bị gộp.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type",
+    "ten": "4.2 — interface hay type alias",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-16-3-organizing-types",
+    "ten": "16.3 — Tổ chức kiểu",
+    "nguon": "TypeScript · Chương 16",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Interface › Khái niệm Interface": {
+  "body": "**Interface** là một \"hợp đồng kiểu\": nó mô tả những gì một giá trị phải có (thuộc tính, method), mà không nói giá trị đó được tạo ra thế nào. Bất kỳ thứ gì đáp ứng hợp đồng đều dùng được.\n\n```ts\ninterface ThanhToan {\n  thanhToan(soTien: number): boolean;\n}\n\nclass TheTinDung implements ThanhToan {\n  thanhToan(soTien: number) { return soTien < 10_000_000; }\n}\n\nfunction mua(cach: ThanhToan, gia: number) {\n  return cach.thanhToan(gia);       // chỉ cần biết \"có thanhToan\"\n}\n```\n\n### Vì sao hữu ích\n- **Tách rời**: hàm `mua` không phụ thuộc vào class cụ thể, nên dễ thay thế (ví dụ đối tượng giả khi test).\n- **Hợp đồng rõ ràng** giữa các phần của hệ thống (service, repository, API).\n- Một class có thể `implements` nhiều interface; compiler báo lỗi nếu thiếu thành viên.\n\n### Ý chính\n- Interface **biến mất** khi biên dịch: không có code JS tương ứng.\n- Nhờ structural typing, object không cần khai báo `implements` vẫn dùng được nếu khớp cấu trúc.\n\n### Lỗi hay gặp\n- Coi interface như class: không thể `new` hay kiểm tra bằng `instanceof` lúc chạy.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object",
+    "ten": "4.1 — Dáng object: thuộc tính bắt buộc, optional & readonly",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type",
+    "ten": "4.2 — interface hay type alias",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-2-abstract-implements",
+    "ten": "14.2 — Kế thừa, abstract & implements",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Interface › TypeScript Interfaces": {
+  "body": "Interface TypeScript định nghĩa **cấu trúc** mà một object phải theo. Ngoài thuộc tính thường, interface còn mô tả được nhiều dạng đặc biệt:\n\n```ts\ninterface Mau {\n  readonly ma: string;                // chỉ đọc\n  ten?: string;                       // tuỳ chọn\n  [thuocTinhKhac: string]: unknown;   // index signature: khoá động\n}\n\ninterface HamSoSanh {\n  (a: number, b: number): number;     // mô tả một hàm (call signature)\n}\n\ninterface KhoiTao {\n  new (ten: string): Mau;             // mô tả constructor\n}\n```\n\n### Khác với type alias\nInterface có **declaration merging** (hai khai báo cùng tên gộp lại) và thường cho thông báo lỗi dễ đọc hơn khi so sánh object. Type alias làm được việc mà interface không làm trực tiếp: union, tuple, kiểu có điều kiện.\n\n### Ý chính\n- Dùng `extends` để dùng lại và mở rộng.\n- Với `strict`, thuộc tính tuỳ chọn có kiểu `T | undefined`.\n- Interface chỉ có tác dụng lúc biên dịch; lúc chạy không còn gì.\n\n### Lỗi hay gặp\n- Index signature `[k: string]: number` buộc **mọi** thuộc tính phải là number, kể cả thuộc tính đã khai báo tên cụ thể.\n- Dùng interface cho dữ liệu từ API rồi tin nó tuyệt đối: vẫn cần validate lúc chạy.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object",
+    "ten": "4.1 — Dáng object: thuộc tính bắt buộc, optional & readonly",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-2-interface-vs-type",
+    "ten": "4.2 — interface hay type alias",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-6-lab-mo-hinh-du-lieu",
+    "ten": "Lab 4 — Mô hình dữ liệu LabFlow",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Interface › Hybrid Types": {
+  "body": "**Hybrid type** là kiểu mô tả một giá trị vừa **gọi được như hàm**, vừa **có thuộc tính/method như object**. Trong JavaScript đây là chuyện thường: hàm cũng là object nên gắn thêm thuộc tính được (ví dụ `$` của jQuery, hay `express()` có thêm `.static`).\n\n```ts\ninterface BoDem {\n  (batDau: number): string;     // call signature: gọi như hàm\n  giaTri: number;               // thuộc tính\n  reset(): void;                // method\n}\n\nfunction taoBoDem(): BoDem {\n  const f = function (batDau: number) {\n    f.giaTri = batDau;\n    return `bắt đầu từ ${batDau}`;\n  } as BoDem;\n  f.giaTri = 0;\n  f.reset = () => { f.giaTri = 0; };\n  return f;\n}\n\nconst dem = taoBoDem();\ndem(5);          // gọi như hàm\ndem.reset();     // dùng như object\n```\n\n### Ý chính\n- Chìa khoá là **call signature** (`(tham_so): kieu_tra_ve`) nằm cạnh các thành viên khác trong cùng interface.\n- Cũng làm được với type alias hoặc `Object.assign(hàm, {...})` cho kiểu tự suy.\n- Cần dùng assertion `as` khi khởi tạo vì hàm không có sẵn các thuộc tính thêm.\n\n### Khi nào dùng\nKhi mô tả thư viện JS kiểu cũ trong file `.d.ts`. Với code mới, class hoặc hàm trả object thường dễ hiểu hơn.\n\n### Lỗi hay gặp\n- Quên gán thuộc tính trước khi trả về, dù kiểu tuyên bố có.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-2-callback",
+    "ten": "3.2 — Hàm như một giá trị: kiểu hàm & callback",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Type Guards & Narrowing › typeof / instanceof Narrowing": {
+  "body": "**Narrowing** (thu hẹp kiểu) là việc TypeScript theo dõi các kiểm tra lúc chạy và hiểu kiểu hẹp hơn trong từng nhánh code. `typeof` và `instanceof` là hai công cụ cơ bản.\n\n### `typeof`: cho kiểu nguyên thuỷ\n```ts\nfunction dinhDang(v: string | number | Date) {\n  if (typeof v === \"string\") return v.trim();        // string\n  if (typeof v === \"number\") return v.toFixed(2);    // number\n  return v.toISOString();                            // Date\n}\n```\n`typeof` trả về `\"string\"`, `\"number\"`, `\"boolean\"`, `\"bigint\"`, `\"symbol\"`, `\"undefined\"`, `\"function\"`, `\"object\"`.\n\n### `instanceof`: cho class\n```ts\nfunction xuLy(err: unknown) {\n  if (err instanceof Error) {\n    console.log(err.message);   // err là Error\n  }\n}\n```\nTrong `catch`, biến lỗi thường có kiểu `unknown`, nên `instanceof Error` là cách chuẩn để đọc `.message`.\n\n### Ý chính\n- `typeof null === \"object\"`: đừng quên kiểm tra `null` riêng.\n- `instanceof` chỉ dùng cho class (có hàm khởi tạo), không dùng cho `interface` hay `type`.\n- Có thêm `in` (kiểm tra thuộc tính) cho object khác hình dạng.\n\n### Lỗi hay gặp\n- Dùng `typeof x === \"object\"` mà quên `null` lẫn mảng.\n- `instanceof` có thể sai khi object đến từ iframe/realm khác hoặc từ bản copy của package.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-2-literal-union",
+    "ten": "5.2 — Union literal & thu hẹp theo giá trị",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Type Guards & Narrowing › Truthiness & Equality Narrowing": {
+  "body": "Ngoài `typeof`, TypeScript còn thu hẹp kiểu dựa trên **truthiness** (giá trị \"thật/giả\") và **so sánh bằng**.\n\n```ts\nfunction chao(ten?: string | null) {\n  if (ten) {\n    return `Chào ${ten}`;      // ten: string (loại undefined, null, \"\")\n  }\n  return \"Chào bạn\";\n}\n\nfunction so(a: string | number, b: string | boolean) {\n  if (a === b) {\n    // a và b chỉ có thể bằng nhau nếu cùng là string\n    a.toUpperCase();           // a: string\n  }\n}\n\nfunction lay(x: number | undefined) {\n  if (x !== undefined) return x.toFixed(); // loại undefined\n}\n```\n\n### Ý chính\n- Kiểm tra truthiness loại bỏ `null`, `undefined`, nhưng cũng loại `0`, `\"\"`, `false`, `NaN`: cẩn thận với số 0 và chuỗi rỗng.\n- Nếu chỉ muốn loại `null/undefined`, dùng `x != null` hoặc `x !== undefined`.\n- Dùng `??` và `?.` thay cho nhiều kiểm tra lồng nhau.\n- Narrowing theo dõi qua các nhánh `if`, `return` sớm, `&&`, `||`, toán tử `?:`.\n\n### Lỗi hay gặp\n- `if (soLuong)` loại luôn trường hợp `soLuong === 0` hợp lệ.\n- Narrowing mất tác dụng khi biến bị gán lại trong callback.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-1-primitive",
+    "ten": "2.1 — Kiểu primitive, chú thích & strict null checks",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Type Guards & Narrowing › Type Predicates (is)": {
+  "body": "**Type predicate** (`x is Type`) là kiểu trả về đặc biệt của một hàm, cho TypeScript biết: \"nếu hàm này trả `true`, thì tham số có kiểu `Type`\". Đây là **custom type guard** có thể tái sử dụng.\n\n```ts\ninterface Meo { keu(): void }\ninterface Cho { sua(): void }\n\nfunction laMeo(a: Meo | Cho): a is Meo {\n  return \"keu\" in a;\n}\n\nfunction keuGoi(a: Meo | Cho) {\n  if (laMeo(a)) a.keu();   // a: Meo\n  else a.sua();            // a: Cho\n}\n\n// Lọc mảng và được kiểu đúng\nconst ds: (string | null)[] = [\"a\", null, \"b\"];\nconst sach = ds.filter((x): x is string => x !== null);  // string[]\n```\n\n### Ý chính\n- Compiler **tin** bạn: nếu predicate viết sai logic, kiểu và thực tế lệch nhau. Hãy viết kiểm tra thật sự đầy đủ.\n- Rất hữu ích với `Array.filter` để loại `null/undefined` (nếu không, kết quả vẫn mang kiểu cũ).\n- Kết hợp với `unknown` để kiểm tra dữ liệu ngoài.\n- Có thêm `asserts x is T` cho hàm ném lỗi nếu không đúng.\n\n### Lỗi hay gặp\n- Predicate luôn trả `true` hay kiểm tra thiếu: TS không phát hiện.\n- Quên đặt kiểu trả về `x is T` nên hàm chỉ trả `boolean` và không thu hẹp được.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-3-discriminated-union",
+    "ten": "5.3 — Discriminated union (union có nhãn) & type predicate",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Type Guards & Narrowing › Discriminated Union": {
+  "body": "**Discriminated union** (union có nhãn) là union của các object cùng có một thuộc tính chung kiểu literal (gọi là *discriminant*, thường tên `kind`, `type` hay `status`). Kiểm tra thuộc tính đó, TS biết chính xác đang ở thành viên nào.\n\n```ts\ntype KetQua =\n  | { status: \"ok\"; du_lieu: string[] }\n  | { status: \"loi\"; thongBao: string }\n  | { status: \"dang_tai\" };\n\nfunction hienThi(r: KetQua) {\n  switch (r.status) {\n    case \"ok\":       return r.du_lieu.join(\", \");   // có du_lieu\n    case \"loi\":      return r.thongBao;             // có thongBao\n    case \"dang_tai\": return \"Đang tải…\";\n  }\n}\n```\n\n### Vì sao mạnh\n- **Trạng thái không thể sai**: không có chuyện `status: \"ok\"` mà lại thiếu `du_lieu`, hay `\"loi\"` mà có dữ liệu. Tránh kiểu `{ loading: boolean; error?: string; data?: ... }` cho ra tổ hợp vô nghĩa.\n- Kết hợp kiểm tra `never` ở nhánh `default` để compiler nhắc khi thêm trạng thái mới.\n- Dùng nhiều trong reducer, máy trạng thái, kết quả API, Redux action.\n\n### Ý chính\n- Nhãn phải là **literal** (chuỗi/số/boolean cụ thể) và có mặt ở mọi thành viên.\n- Dùng `switch` hoặc `if (x.kind === ...)` để thu hẹp.\n\n### Lỗi hay gặp\n- Dùng nhãn kiểu `string` chung nên không thu hẹp được.\n- Quên nhánh cho thành viên mới vì không có kiểm tra đầy đủ.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-3-discriminated-union",
+    "ten": "5.3 — Discriminated union (union có nhãn) & type predicate",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-4-exhaustiveness",
+    "ten": "5.4 — Kiểm tra đầy đủ với never",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-6-lab-may-trang-thai",
+    "ten": "Lab 5 — Máy trạng thái lượt đặt",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Type Guards & Narrowing › Type Guards & Narrowing": {
+  "body": "**Type narrowing** là kỹ thuật thu hẹp kiểu của một biến trong một khối code, dựa vào các điều kiện kiểm tra lúc chạy. **Type guard** là biểu thức hay hàm giúp việc đó.\n\n```ts\nfunction xuLy(v: string | number | string[] | null) {\n  if (v === null) return;                    // loại null\n  if (typeof v === \"string\") return v.length; // string\n  if (Array.isArray(v)) return v.join(\",\");   // string[]\n  return v.toFixed(1);                        // number\n}\n```\n\n### Các loại guard\n- `typeof x === \"...\"` cho primitive.\n- `x instanceof Class` cho instance của class.\n- `\"khoa\" in obj` kiểm tra thuộc tính.\n- So sánh `===` với literal hay `null`/`undefined`.\n- Truthiness (`if (x)`).\n- Thuộc tính nhãn của discriminated union.\n- **Hàm type predicate** `x is T` tự viết.\n\n### Ý chính\n- Narrowing có tác dụng qua `if`, `switch`, `return` sớm, `&&`, `||`.\n- Dữ liệu từ ngoài (`unknown`) phải được thu hẹp (hoặc validate) trước khi dùng.\n- Sau khi loại hết khả năng, phần còn lại là `never` — nền tảng của kiểm tra đầy đủ.\n\n### Lỗi hay gặp\n- Gán lại biến hoặc dùng trong callback làm mất thu hẹp.\n- Dùng assertion `as` thay vì thu hẹp thật, dẫn tới sai kiểu lúc chạy.\n\n### Tự kiểm tra\n- Làm sao thu hẹp `string | number | null` về `number`?\n- Khác nhau giữa `typeof` và `instanceof` là gì?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-2-literal-union",
+    "ten": "5.2 — Union literal & thu hẹp theo giá trị",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-3-discriminated-union",
+    "ten": "5.3 — Discriminated union (union có nhãn) & type predicate",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-5-quiz",
+    "ten": "Kiểm tra Chương 5 — 10 câu tình huống",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Function & Class › Typing Functions & Overloading": {
+  "body": "Trong TypeScript bạn ghi kiểu cho **tham số** và **giá trị trả về** của hàm. Đây là chỗ nên ghi kiểu rõ ràng nhất, vì nó là \"hợp đồng\" của hàm.\n\n```ts\nfunction chia(a: number, b: number): number { return a / b; }\n\nfunction chao(ten: string, loi = \"Xin chào\", ...them: string[]): string {\n  return `${loi} ${ten} ${them.join(\" \")}`;\n}\n\nfunction tim(id: number, sau?: boolean) { /* sau: boolean | undefined */ }\n```\n\n### Function overload\nKhi một hàm có nhiều cách gọi với kiểu trả về phụ thuộc đầu vào, khai báo nhiều **chữ ký** (overload signature) rồi một phần cài đặt:\n\n```ts\nfunction doi(x: string): number;\nfunction doi(x: number): string;\nfunction doi(x: string | number): number | string {\n  return typeof x === \"string\" ? Number(x) : String(x);\n}\ndoi(\"5\");   // number\ndoi(5);     // string\n```\n\n### Ý chính\n- Tham số tuỳ chọn `?` phải đứng sau các tham số bắt buộc; mặc định (`= giá_trị`) cũng làm tham số tuỳ chọn.\n- Chữ ký cài đặt **không** hiển thị cho người gọi; họ chỉ thấy các overload.\n- Thường dùng union hoặc generic là đủ; chỉ dùng overload khi kiểu trả về phụ thuộc rõ vào kiểu đầu vào.\n\n### Lỗi hay gặp\n- Overload viết thừa trong khi một union đơn giản là được.\n- Quên bao quát hết trường hợp ở phần cài đặt.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so",
+    "ten": "3.1 — Gõ kiểu tham số: bắt buộc, optional, mặc định, rest",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-3-overload-void",
+    "ten": "3.3 — Overload & điều tinh tế của void",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-2-callback",
+    "ten": "3.2 — Hàm như một giá trị: kiểu hàm & callback",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Function & Class › Classes — Access Modifiers": {
+  "body": "**Access modifier** quyết định ai được truy cập thành viên của class.\n\n```ts\nclass TaiKhoan {\n  public ten: string;              // mặc định, ở đâu cũng truy cập được\n  private soDu = 0;                // chỉ trong class này\n  protected loai = \"thuong\";       // trong class và lớp con\n  readonly id: number;             // gán một lần (ở khai báo hoặc constructor)\n\n  constructor(ten: string, id: number) {\n    this.ten = ten;\n    this.id = id;\n  }\n  napTien(n: number) { this.soDu += n; }\n}\n\nconst t = new TaiKhoan(\"Lan\", 1);\nt.soDu;        // lỗi: private\nt.id = 2;      // lỗi: readonly\n```\n\n### Ý chính\n- `private`, `protected`, `readonly` của TypeScript là kiểm tra **lúc biên dịch**; mã JS sinh ra vẫn truy cập được. Muốn riêng tư thật sự lúc chạy, dùng cú pháp JS `#truong`.\n- Giấu chi tiết bên trong (đóng gói) giúp đổi cách cài đặt mà không ảnh hưởng code bên ngoài.\n\n### Lỗi hay gặp\n- Nghĩ `private` bảo vệ dữ liệu nhạy cảm lúc chạy: không, kiểm tra chỉ ở compiler.\n- Để mọi thứ `public` rồi bên ngoài tuỳ ý sửa trạng thái.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-1-classes-access",
+    "ten": "14.1 — Class & modifier truy cập",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-3-hash-private-static",
+    "ten": "14.3 — #private thật, getter & static",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Function & Class › Abstract Classes & Inheritance": {
+  "body": "**Abstract class** là lớp \"khuôn\": không tạo trực tiếp (`new`) được, chỉ để lớp con kế thừa. Nó có thể chứa vừa phương thức đã cài đặt sẵn, vừa phương thức `abstract` (chỉ có chữ ký) mà lớp con **bắt buộc** phải viết.\n\n```ts\nabstract class Repo<T> {\n  abstract tim(id: number): T | undefined;   // lớp con phải cài\n  abstract luu(item: T): void;\n\n  timHoacLoi(id: number): T {                // dùng chung\n    const x = this.tim(id);\n    if (!x) throw new Error(\"không có \" + id);\n    return x;\n  }\n}\n\nclass RepoUser extends Repo<{ id: number; ten: string }> {\n  private ds = new Map<number, { id: number; ten: string }>();\n  tim(id: number) { return this.ds.get(id); }\n  luu(u: { id: number; ten: string }) { this.ds.set(u.id, u); }\n}\n\nnew Repo();       // lỗi: không tạo được lớp trừu tượng\n```\n\n### Ý chính\n- Dùng khi có phần logic chung (template) và phần riêng thay đổi theo lớp con.\n- Lớp con dùng `extends`, gọi `super(...)` trong constructor nếu cần.\n- Khác `interface`: abstract class có thể chứa code và trạng thái, và tồn tại lúc chạy (dùng được `instanceof`). Class cũng có thể `implements` interface để cam kết hợp đồng.\n\n### Lỗi hay gặp\n- Lạm dụng kế thừa sâu: ưu tiên composition và interface khi được.\n- Quên cài hết phương thức abstract: lớp con cũng phải khai báo `abstract` hoặc báo lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-2-abstract-implements",
+    "ten": "14.2 — Kế thừa, abstract & implements",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-6-lab-service-repo",
+    "ten": "Lab 14 — Service trên một repo abstract",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Function & Class › Decorators": {
+  "body": "**Decorator** là một hàm \"bọc\" class hoặc thành viên của nó (method, thuộc tính, accessor) để thêm hành vi hoặc metadata mà không sửa nội dung bên trong. Cú pháp dùng ký tự `@`.\n\n```ts\nfunction log<This, Args extends unknown[], R>(\n  target: (this: This, ...args: Args) => R,\n  context: ClassMethodDecoratorContext\n) {\n  return function (this: This, ...args: Args): R {\n    console.log(`gọi ${String(context.name)}`, args);\n    return target.call(this, ...args);\n  };\n}\n\nclass Dich {\n  @log\n  tinh(a: number, b: number) { return a + b; }\n}\n```\n\n### Ý chính\n- TypeScript hiện hỗ trợ decorator **chuẩn của ECMAScript (TC39)**; nó khác với bản cũ cần cờ `experimentalDecorators` mà NestJS, Angular, TypeORM trước đây dựa vào. Cách tương thích tuỳ framework và phiên bản: xem tài liệu của chính framework.\n- Hay dùng để: ghi log, kiểm tra quyền, cache, đăng ký route (`@Get('/users')`), tiêm phụ thuộc (DI).\n- Decorator chạy lúc định nghĩa class, không phải lúc gọi.\n\n### Lỗi hay gặp\n- Trộn decorator kiểu cũ và kiểu chuẩn trong cùng dự án.\n- Lạm dụng \"ma thuật\": khó theo dõi luồng chạy khi chồng nhiều decorator.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-4-decorators",
+    "ten": "14.4 — Decorator",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Function & Class › TypeScript Functions": {
+  "body": "Hàm là công dân hạng nhất trong JS, và TS cho bạn mô tả nó đầy đủ: kiểu tham số, kiểu trả về, tham số tuỳ chọn, mặc định, rest, và cả **kiểu của chính hàm**.\n\n```ts\n// Khai báo hàm\nfunction nhan(a: number, b: number): number { return a * b; }\n\n// Arrow function\nconst chia = (a: number, b = 1): number => a / b;\n\n// Kiểu hàm (dùng cho biến, tham số, callback)\ntype PhepToan = (a: number, b: number) => number;\nconst cong: PhepToan = (a, b) => a + b;    // a, b tự suy ra từ kiểu\n\nfunction ungDung(f: PhepToan, x: number, y: number) { return f(x, y); }\n```\n\n### Ý chính\n- Ghi kiểu tham số bắt buộc; kiểu trả về thường để TS suy, nhưng nên ghi cho hàm export.\n- `?`/giá trị mặc định cho tham số tuỳ chọn; `...rest: T[]` cho số lượng bất kỳ.\n- Hàm không trả gì: `void`; hàm không bao giờ trả: `never`.\n- Đừng dùng kiểu `Function` chung chung: nó bỏ mất thông tin về tham số, coi như `any`.\n\n### Lỗi hay gặp\n- Quên rằng TS **đếm tham số**: gọi thiếu/thừa đối số là lỗi (khác JS).\n- Dùng `this` không kiểu trong hàm thường: có thể khai báo tham số giả `this: Kieu`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so",
+    "ten": "3.1 — Gõ kiểu tham số: bắt buộc, optional, mặc định, rest",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-2-callback",
+    "ten": "3.2 — Hàm như một giá trị: kiểu hàm & callback",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-6-lab-luat-dat-phong",
+    "ten": "Lab 3 — Bộ luật đặt phòng là một mảng hàm",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Function & Class › Constructor Parameters": {
+  "body": "**Parameter property** cho phép khai báo và gán thuộc tính class ngay trong danh sách tham số của constructor, bằng cách thêm access modifier (hoặc `readonly`) trước tham số.\n\n```ts\n// Viết dài\nclass SinhVien {\n  private ten: string;\n  readonly mssv: string;\n  constructor(ten: string, mssv: string) {\n    this.ten = ten;\n    this.mssv = mssv;\n  }\n}\n\n// Viết gọn bằng parameter property\nclass SinhVien2 {\n  constructor(private ten: string, readonly mssv: string) {}\n}\n```\n\nHai đoạn trên tương đương: TS tự khai báo thuộc tính và gán `this.ten = ten`.\n\n### Ý chính\n- Có thể dùng `public`, `private`, `protected`, `readonly` (hoặc kết hợp).\n- Tham số **không** có modifier chỉ là tham số thường, không thành thuộc tính.\n- Rất hay dùng với **dependency injection**: `constructor(private repo: UserRepo)`.\n- Tham số có thể có giá trị mặc định: `constructor(public ten = \"ẩn danh\")`.\n\n### Lỗi hay gặp\n- Quên modifier nên thuộc tính không tồn tại, truy cập `this.ten` báo lỗi.\n- Một số cấu hình chỉ cho phép cú pháp \"xoá được\" (ví dụ `erasableSyntaxOnly`) không chấp nhận parameter property: lúc đó viết dạng dài.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-1-classes-access",
+    "ten": "14.1 — Class & modifier truy cập",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-3-generic-types-classes",
+    "ten": "6.3 — Interface, class generic & kiểu mặc định",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Function & Class › Constructor Overloading": {
+  "body": "JavaScript chỉ có **một** constructor cho mỗi class. TypeScript cho phép khai báo nhiều **chữ ký constructor** (overload) nhưng vẫn chỉ có **một phần cài đặt** xử lý mọi trường hợp.\n\n```ts\nclass Diem {\n  x: number;\n  y: number;\n\n  constructor();                         // chữ ký 1: gốc toạ độ\n  constructor(x: number, y: number);     // chữ ký 2\n  constructor(p: { x: number; y: number }); // chữ ký 3\n  constructor(a?: number | { x: number; y: number }, b?: number) {\n    if (a === undefined) {\n      this.x = 0; this.y = 0;\n    } else if (typeof a === \"number\") {\n      this.x = a; this.y = b ?? 0;\n    } else {\n      this.x = a.x; this.y = a.y;\n    }\n  }\n}\n\nnew Diem();\nnew Diem(1, 2);\nnew Diem({ x: 3, y: 4 });\nnew Diem(\"a\");     // lỗi: không chữ ký nào khớp\n```\n\n### Ý chính\n- Chữ ký cài đặt phải tương thích với mọi overload nhưng **không hiển thị** cho người gọi.\n- Trong thân dùng narrowing (`typeof`, `in`) để phân biệt từng trường hợp.\n- Lựa chọn đơn giản thường tốt hơn: tham số tuỳ chọn, tham số object, hoặc **static factory** (`Diem.tuToaDo(...)`).\n\n### Lỗi hay gặp\n- Quá nhiều overload khó bảo trì.\n- Thứ tự chữ ký: TS chọn chữ ký khớp **đầu tiên**; đặt chữ ký cụ thể trước chữ ký chung.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-3-overload-void",
+    "ten": "3.3 — Overload & điều tinh tế của void",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-1-classes-access",
+    "ten": "14.1 — Class & modifier truy cập",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Function & Class › Inheritance vs Polymorphism": {
+  "body": "**Kế thừa** (inheritance) và **đa hình** (polymorphism) là hai ý hay đi cùng nhau nhưng khác nhau.\n\n- **Kế thừa**: lớp con (`extends`) nhận lại thuộc tính/phương thức của lớp cha để dùng lại code.\n- **Đa hình**: cùng một lời gọi, các đối tượng khác kiểu xử lý theo cách riêng của chúng. Bạn viết code làm việc với **kiểu cha**, còn hành vi thật tuỳ lớp con.\n\n```ts\nabstract class Hinh {\n  abstract dienTich(): number;\n  mota() { return `Diện tích: ${this.dienTich().toFixed(2)}`; }\n}\nclass Tron extends Hinh {\n  constructor(private r: number) { super(); }\n  dienTich() { return Math.PI * this.r ** 2; }\n}\nclass Vuong extends Hinh {\n  constructor(private a: number) { super(); }\n  dienTich() { return this.a ** 2; }\n}\n\nconst ds: Hinh[] = [new Tron(1), new Vuong(2)];\nds.forEach(h => console.log(h.mota()));   // mỗi phần tử tự tính theo kiểu của mình\n```\n\n### Ý chính\n- TS hỗ trợ cả đa hình qua **interface** (nhờ structural typing): không cần cùng cha, chỉ cần cùng hình dạng.\n- Kế thừa tạo ràng buộc chặt; nhiều dự án ưu tiên **composition** (\"có một\") hơn \"là một\".\n- Một lớp chỉ `extends` được một lớp cha, nhưng `implements` được nhiều interface.\n\n### Lỗi hay gặp\n- Kế thừa chỉ để tái sử dụng vài dòng code, dẫn tới cây lớp rối.\n- Lớp con phá vỡ giả định của lớp cha (vi phạm nguyên tắc thay thế Liskov).",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-2-abstract-implements",
+    "ten": "14.2 — Kế thừa, abstract & implements",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-slide-pro10-1",
+    "ten": "4.B — 📑 Học theo từng slide · Polymorphism (1/2): nạp chồng, ghi đè, ràng buộc động (slide 1–11)",
+    "nguon": "Object-Oriented Programming · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-6-lab-service-repo",
+    "ten": "Lab 14 — Service trên một repo abstract",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Function & Class › Method Overriding": {
+  "body": "**Method overriding** (ghi đè phương thức): lớp con định nghĩa lại một phương thức đã có ở lớp cha, với chữ ký tương thích, để đổi hành vi.\n\n```ts\nclass DongVat {\n  keu(): string { return \"...\"; }\n}\nclass Cho extends DongVat {\n  override keu(): string { return \"Gâu!\"; }\n}\nclass Meo extends DongVat {\n  override keu(): string { return super.keu() + \" Meo!\"; }  // gọi lại bản của cha\n}\n```\n\n### Ý chính\n- Phương thức ghi đè phải **tương thích** với bản gốc (tham số/kiểu trả về không làm hỏng lời hứa của kiểu cha).\n- Dùng `super.tenPhuongThuc()` để gọi bản của lớp cha.\n- Từ khoá **`override`** (TS 4.3) khẳng định ý định ghi đè: nếu lớp cha đổi tên/xoá phương thức, compiler báo lỗi thay vì lặng lẽ biến thành phương thức mới. Bật `noImplicitOverride` để bắt buộc dùng.\n- Phương thức `abstract` của lớp cha bắt buộc lớp con cài đặt.\n\n### Lỗi hay gặp\n- Gõ sai tên khi ghi đè: không dùng `override` thì thành phương thức mới và bản gốc vẫn chạy.\n- Dùng arrow function làm thuộc tính class: nó không nằm trên prototype nên cách ghi đè và `super` khác với method thường.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-2-abstract-implements",
+    "ten": "14.2 — Kế thừa, abstract & implements",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-6-lab-service-repo",
+    "ten": "Lab 14 — Service trên một repo abstract",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Function & Class › Constructor Parameters — Rút gọn thuộc tính": {
+  "body": "Cách viết gọn cho constructor: đặt access modifier ngay trước tham số để vừa khai báo thuộc tính, vừa gán giá trị.\n\n```ts\nclass DonHang {\n  constructor(\n    public readonly id: number,\n    private khach: string,\n    protected tong = 0\n  ) {}\n\n  tomTat() { return `#${this.id} - ${this.khach}: ${this.tong}`; }\n}\n\nconst d = new DonHang(1, \"Lan\", 500);\nd.id;         // 1\nd.khach;      // lỗi: private\n```\n\nSo với cách thông thường, bạn tiết kiệm được khai báo thuộc tính và các dòng `this.x = x;` lặp lại. Với class có nhiều tham số (nhất là service tiêm phụ thuộc) code ngắn đi đáng kể.\n\n### Ý chính\n- Mỗi tham số có `public/private/protected/readonly` trở thành thuộc tính cùng tên.\n- Giữ nguyên thứ tự và giá trị mặc định như tham số thường.\n- Thân constructor vẫn chạy bình thường, thường để trống hoặc làm thêm khởi tạo khác.\n- Phù hợp với mẫu **dependency injection**: `constructor(private readonly repo: Repo) {}`.\n\n### Lỗi hay gặp\n- Thiếu modifier nên không tạo ra thuộc tính.\n- Trộn kiểu viết dài và gọn trong cùng class gây khó đọc.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-14-1-classes-access",
+    "ten": "14.1 — Class & modifier truy cập",
+    "nguon": "TypeScript · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-3-generic-types-classes",
+    "ten": "6.3 — Interface, class generic & kiểu mặc định",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Generics › Generic Types & Functions": {
+  "body": "**Generics** (kiểu tổng quát) cho phép viết hàm/class/kiểu **dùng lại với nhiều kiểu** mà vẫn giữ được thông tin kiểu. Bạn khai báo một **tham số kiểu** `<T>` như một \"biến\" cho kiểu.\n\n```ts\nfunction dau<T>(ds: T[]): T | undefined {\n  return ds[0];\n}\nconst a = dau([1, 2, 3]);       // number | undefined\nconst b = dau([\"x\", \"y\"]);      // string | undefined\n\ninterface Hop<T> { giaTri: T }\nconst h: Hop<string> = { giaTri: \"abc\" };\n\nclass Kho<T> {\n  private ds: T[] = [];\n  them(x: T) { this.ds.push(x); }\n  lay(i: number): T | undefined { return this.ds[i]; }\n}\nconst kho = new Kho<number>();\n```\n\nNếu dùng `any`, bạn mất thông tin: `dau([1,2])` trả `any`. Generic giữ nguyên \"đầu vào là `number[]` thì đầu ra là `number`\".\n\n### Ý chính\n- Thường **không cần ghi tường minh** `<number>`: TS suy ra từ đối số.\n- Có thể có nhiều tham số kiểu `<K, V>` và giá trị mặc định `<T = string>`.\n- Đặt tên có nghĩa khi phức tạp (`TItem`, `TKey`) thay vì chỉ `T`.\n- Generic có mặt khắp nơi: `Array<T>`, `Promise<T>`, `Map<K, V>`, React `useState<T>`.\n\n### Lỗi hay gặp\n- Tham số kiểu chỉ xuất hiện một lần trong chữ ký: có thể chưa cần generic.\n- Gọi phương thức trên `T` không có ràng buộc: cần `extends` (bước tiếp theo).\n\n### Tự kiểm tra\n- Vì sao generic tốt hơn `any` cho hàm `dau`?\n- Khi nào nên ghi tường minh tham số kiểu?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-1-why-generics",
+    "ten": "6.1 — Vì sao cần generics: giữ lại kiểu",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-3-generic-types-classes",
+    "ten": "6.3 — Interface, class generic & kiểu mặc định",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice",
+    "ten": "6.4 — Generics thực chiến: suy kiểu & bẫy thường gặp",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-6-lab-repository-generic",
+    "ten": "Lab 6 — Repository generic",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Generics › Generic Constraints": {
+  "body": "**Generic constraint** dùng `extends` để giới hạn tham số kiểu: `T` phải thoả một điều kiện nào đó. Nhờ vậy bên trong hàm bạn biết chắc `T` có những thành viên nào.\n\n```ts\n// Không ràng buộc: T có thể là gì cũng được → không truy cập .length\nfunction doDai<T extends { length: number }>(x: T): number {\n  return x.length;\n}\ndoDai(\"abc\");        // ok\ndoDai([1, 2, 3]);    // ok\ndoDai(42);           // lỗi: number không có length\n\n// Ràng buộc bằng keyof: khoá phải thuộc về đối tượng\nfunction lay<T, K extends keyof T>(obj: T, khoa: K): T[K] {\n  return obj[khoa];\n}\nlay({ id: 1, ten: \"Lan\" }, \"ten\");   // string\nlay({ id: 1, ten: \"Lan\" }, \"xyz\");   // lỗi\n```\n\n### Ý chính\n- `T extends X` nghĩa là \"T phải gán được cho X\", T có thể có **nhiều hơn** X.\n- Kiểu trả về giữ nguyên kiểu cụ thể của đối số (khác với việc khai báo tham số là `X`).\n- Ràng buộc có thể tham chiếu tham số kiểu khác (`K extends keyof T`).\n\n### Lỗi hay gặp\n- Nhầm `extends` trong generic (ràng buộc) với `extends` của class (kế thừa).\n- Ràng buộc quá chặt làm hàm khó dùng lại.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-2-constraints-keyof",
+    "ten": "6.2 — Ràng buộc, keyof & truy cập theo chỉ mục",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice",
+    "ten": "6.4 — Generics thực chiến: suy kiểu & bẫy thường gặp",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Utility Types › Partial / Pick / Omit / Record": {
+  "body": "Bốn **utility type** dùng nhiều nhất, để biến đổi một kiểu object có sẵn thay vì viết lại.\n\n```ts\ninterface User { id: number; ten: string; email: string; matKhau: string }\n\ntype CapNhat = Partial<User>;                    // mọi thuộc tính thành tuỳ chọn\ntype CongKhai = Pick<User, \"id\" | \"ten\">;        // chỉ giữ id, ten\ntype KhongMatKhau = Omit<User, \"matKhau\">;       // bỏ matKhau\ntype DanhBa = Record<string, User>;              // object khoá string → User\ntype TheoRole = Record<\"admin\" | \"user\", number>; // đúng 2 khoá này\n```\n\n### Khi nào dùng\n- `Partial<T>`: body cập nhật (PATCH) chỉ gửi vài trường.\n- `Pick<T, K>` / `Omit<T, K>`: tạo DTO công khai, bỏ trường nhạy cảm; dùng chung một nguồn kiểu.\n- `Record<K, V>`: bảng tra, từ điển, ánh xạ đầy đủ các khoá của một union.\n\n### Ý chính\n- Chúng đều được cài đặt bằng mapped type, và giúp kiểu **bám theo** kiểu gốc: đổi `User` thì các kiểu dẫn xuất tự cập nhật.\n- `Pick`/`Omit` kiểm tra khoá có thật; `Omit` thì lỏng hơn (nhận khoá bất kỳ không báo lỗi).\n- `Record<\"a\" | \"b\", X>` buộc phải có đủ cả hai khoá, rất hợp để bảo đảm không thiếu trường hợp.\n\n### Lỗi hay gặp\n- Dùng `Partial` rồi quên rằng mọi trường có thể `undefined` khi đọc.\n- `Record<string, T>` coi mọi khoá đều tồn tại; truy cập có thể `undefined` thực tế.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-1-partial-required-readonly",
+    "ten": "8.1 — Partial, Required & Readonly",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-2-pick-omit",
+    "ten": "8.2 — Pick & Omit",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-3-record",
+    "ten": "8.3 — Record",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-6-lab-utility-dto",
+    "ten": "Lab 8 — Utility types & tầng DTO của API",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Utility Types › Readonly / Exclude / Extract / NonNullable": {
+  "body": "Nhóm utility type bổ sung: bất biến hoá object và lọc union.\n\n```ts\ninterface Cauhinh { host: string; cong: number }\ntype BatBien = Readonly<Cauhinh>;      // mọi thuộc tính readonly\n\ntype Trang = \"cho\" | \"dang\" | \"xong\" | \"huy\";\ntype ConDuoc = Exclude<Trang, \"xong\" | \"huy\">;   // \"cho\" | \"dang\"  (loại bớt)\ntype ChiXong = Extract<Trang, \"xong\" | \"huy\">;   // \"xong\" | \"huy\"  (giữ lại)\n\ntype CoGiaTri = NonNullable<string | null | undefined>;  // string\n```\n\n### Ý chính\n- **`Readonly<T>`**: chặn gán lại thuộc tính (cấp một, không sâu); tiện cho cấu hình và state bất biến.\n- **`Exclude<T, U>`**: loại khỏi union `T` mọi thành viên gán được cho `U`.\n- **`Extract<T, U>`**: giữ lại những thành viên của `T` gán được cho `U`.\n- **`NonNullable<T>`**: bỏ `null` và `undefined`.\n- `Exclude`/`Extract` chỉ hoạt động trên **union**; nền tảng của chúng là conditional type phân phối.\n\n### Lỗi hay gặp\n- Mong `Readonly` bất biến cả object lồng nhau: nó chỉ tác dụng một cấp.\n- Dùng `Exclude` trên kiểu object tưởng nó loại thuộc tính: muốn bỏ thuộc tính thì dùng `Omit`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-1-partial-required-readonly",
+    "ten": "8.1 — Partial, Required & Readonly",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited",
+    "ten": "8.4 — Exclude, NonNullable, ReturnType & Awaited",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Utility Types › ReturnType / Awaited / InstanceType": {
+  "body": "Ba utility type để **trích kiểu từ thứ có sẵn** thay vì viết tay lại.\n\n```ts\nfunction taoUser() {\n  return { id: 1, ten: \"Lan\", vaiTro: \"admin\" as const };\n}\ntype User = ReturnType<typeof taoUser>;    // { id: number; ten: string; vaiTro: \"admin\" }\n\nasync function layDuLieu(): Promise<string[]> { return []; }\ntype KetQua = Awaited<ReturnType<typeof layDuLieu>>;   // string[]\n\nclass Kho { constructor(public ten: string) {} }\ntype MotKho = InstanceType<typeof Kho>;    // Kho\n```\n\n### Ý chính\n- **`ReturnType<F>`**: kiểu trả về của hàm. Cần `typeof tenHam` vì F là kiểu, không phải giá trị.\n- **`Awaited<T>`**: kiểu cuối cùng sau khi `await`, bóc cả Promise lồng nhau. `ReturnType` của hàm async cho `Promise<X>`, `Awaited` mới cho `X`.\n- **`InstanceType<C>`**: kiểu của instance tạo bởi constructor/class `C`.\n- Giúp giữ **một nguồn sự thật**: đổi hàm thì kiểu dẫn xuất tự đổi theo.\n\n### Lỗi hay gặp\n- Quên `typeof` trước tên hàm/class nên báo \"refers to a value, but is being used as a type\".\n- Quên `Awaited` nên có kiểu `Promise<...>` thay vì giá trị thật.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited",
+    "ten": "8.4 — Exclude, NonNullable, ReturnType & Awaited",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-3-conditional-infer",
+    "ten": "7.3 — Conditional types & infer",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Utility Types › Extract": {
+  "body": "**`Extract<T, U>`** giữ lại những thành viên của union `T` mà **gán được cho `U`**. Nó là \"bộ lọc giữ lại\", ngược với `Exclude`.\n\n```ts\ntype Gia_tri = string | number | boolean | null;\n\ntype ChiSo = Extract<Gia_tri, number | boolean>;     // number | boolean\ntype ChiChuoi = Extract<Gia_tri, string>;             // string\n\n// Lọc discriminated union theo nhãn\ntype Su_kien =\n  | { type: \"click\"; x: number; y: number }\n  | { type: \"key\"; phim: string }\n  | { type: \"scroll\"; dy: number };\n\ntype SuKienChuot = Extract<Su_kien, { type: \"click\" | \"scroll\" }>;\n// { type: \"click\"; ... } | { type: \"scroll\"; ... }\n```\n\n### Cách hoạt động\nNó được viết bằng conditional type phân phối trên union:\n\n```ts\ntype MyExtract<T, U> = T extends U ? T : never;\n```\nMỗi thành viên của `T` được kiểm tra riêng; thành viên không khớp biến thành `never` và biến mất khỏi union.\n\n### Ý chính\n- Chỉ có ý nghĩa với **union**.\n- Rất hữu ích để lấy một nhánh của discriminated union.\n- Cặp đôi với `Exclude<T, U>` (loại bỏ) và `NonNullable<T>`.\n\n### Lỗi hay gặp\n- Dùng `Extract` để chọn thuộc tính object: nó lọc thành viên union, không lọc khoá (dùng `Pick`).\n- Kết quả `never` khi không thành viên nào khớp: dễ gây lỗi khó hiểu về sau.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited",
+    "ten": "8.4 — Exclude, NonNullable, ReturnType & Awaited",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-3-conditional-infer",
+    "ten": "7.3 — Conditional types & infer",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Utility Types › Parameters": {
+  "body": "**`Parameters<F>`** trả về một **tuple** chứa kiểu của tất cả tham số của hàm `F`.\n\n```ts\nfunction taoDon(khach: string, soLuong: number, ghiChu?: string) {}\n\ntype ThamSo = Parameters<typeof taoDon>;\n// [khach: string, soLuong: number, ghiChu?: string | undefined]\n\ntype KhachHang = ThamSo[0];       // string\n\n// Bọc một hàm mà không viết lại chữ ký\nfunction ghiLog<F extends (...args: any[]) => unknown>(f: F) {\n  return (...args: Parameters<F>): ReturnType<F> => {\n    console.log(\"gọi với\", args);\n    return f(...args) as ReturnType<F>;\n  };\n}\nconst taoDonCoLog = ghiLog(taoDon);\ntaoDonCoLog(\"Lan\", 2);   // kiểm tra đúng kiểu tham số của taoDon\n```\n\n### Ý chính\n- Cần `typeof ten_ham` để lấy kiểu của hàm.\n- Kết quả là tuple có tên và có tính tuỳ chọn, nên dùng lại để chuyển tiếp tham số (wrapper, debounce, middleware, hàm mock).\n- Có họ hàng: `ReturnType`, `ConstructorParameters<C>` (cho class), `ThisParameterType<F>`.\n- Được cài bằng conditional type với `infer`: `F extends (...args: infer P) => any ? P : never`.\n\n### Lỗi hay gặp\n- Dùng với hàm overload: chỉ lấy chữ ký **cuối cùng**.\n- Quên `typeof`, hoặc đưa vào thứ không phải hàm.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited",
+    "ten": "8.4 — Exclude, NonNullable, ReturnType & Awaited",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-3-conditional-infer",
+    "ten": "7.3 — Conditional types & infer",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so",
+    "ten": "3.1 — Gõ kiểu tham số: bắt buộc, optional, mặc định, rest",
+    "nguon": "TypeScript · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Utility Types › Kiểu Awaited": {
+  "body": "**`Awaited<T>`** cho biết kiểu của giá trị **sau khi `await`**: bóc lớp `Promise`, kể cả Promise lồng nhau.\n\n```ts\ntype A = Awaited<Promise<string>>;               // string\ntype B = Awaited<Promise<Promise<number>>>;      // number\ntype C = Awaited<string>;                        // string (không phải Promise thì giữ nguyên)\n\nasync function layUser() { return { id: 1, ten: \"Lan\" }; }\n\ntype KetQuaHam = ReturnType<typeof layUser>;           // Promise<{ id: number; ten: string }>\ntype User = Awaited<ReturnType<typeof layUser>>;       // { id: number; ten: string }\n```\n\n### Vì sao cần\nMột hàm `async` luôn trả về `Promise`, nên `ReturnType` cho ra `Promise<X>`; thứ bạn muốn dùng thường là `X`. `Awaited` làm đúng việc đó, kể cả với các thành viên union chứa Promise.\n\n### Ý chính\n- Dùng với `Promise.all`: TS dùng `Awaited` để suy kiểu mảng kết quả.\n- Có từ TypeScript 4.5; trước đó người ta tự viết kiểu đệ quy.\n- Làm việc với các object \"thenable\" (có `.then`).\n\n### Lỗi hay gặp\n- Dùng `ReturnType` mà quên `Awaited`, dẫn tới truy cập thuộc tính trên `Promise` và báo lỗi.\n- Nhầm `Awaited<T>` với hành động `await` lúc chạy: nó chỉ là kiểu.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited",
+    "ten": "8.4 — Exclude, NonNullable, ReturnType & Awaited",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-1-partial-required-readonly",
+    "ten": "8.1 — Partial, Required & Readonly",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu nâng cao › Mapped Types": {
+  "body": "**Mapped type** tạo kiểu mới bằng cách **lặp qua các khoá** của một kiểu khác và biến đổi từng thuộc tính. Cú pháp giống vòng lặp `for...in` ở mức kiểu.\n\n```ts\ntype User = { id: number; ten: string; email: string };\n\n// Mọi thuộc tính thành boolean\ntype CoTruong<T> = { [K in keyof T]: boolean };\ntype TrangThai = CoTruong<User>;   // { id: boolean; ten: boolean; email: boolean }\n\n// Cài lại Partial và Readonly\ntype MyPartial<T> = { [K in keyof T]?: T[K] };\ntype MyReadonly<T> = { readonly [K in keyof T]: T[K] };\n\n// Bỏ ? và readonly bằng dấu trừ\ntype BatBuoc<T> = { [K in keyof T]-?: T[K] };\ntype ChoPhepGhi<T> = { -readonly [K in keyof T]: T[K] };\n\n// Đổi tên khoá bằng `as`\ntype Getter<T> = {\n  [K in keyof T as `lay${Capitalize<string & K>}`]: () => T[K];\n};\n```\n\n### Ý chính\n- `[K in keyof T]` lặp qua từng khoá; `T[K]` là kiểu giá trị ứng với khoá.\n- `?`, `readonly` thêm vào; `-?`, `-readonly` gỡ bỏ.\n- `as` trong mapped type cho phép đổi tên hoặc lọc khoá (trả `never` để bỏ).\n- Nền tảng của `Partial`, `Required`, `Readonly`, `Pick`, `Record`.\n\n### Lỗi hay gặp\n- Quên dấu `?`/`readonly` được giữ nguyên khi lặp qua `keyof T`: muốn đổi thì phải thêm `-?` hay `-readonly`.\n- Viết kiểu quá phức tạp khiến thông báo lỗi khó đọc.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-1-mapped-types",
+    "ten": "7.1 — Mapped types (kiểu ánh xạ)",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-2-mapping-modifiers",
+    "ten": "7.2 — Modifier ánh xạ: thêm & gỡ ? và readonly",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-1-partial-required-readonly",
+    "ten": "8.1 — Partial, Required & Readonly",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu nâng cao › Conditional Types & infer": {
+  "body": "**Conditional type** cho phép \"if/else\" ở mức kiểu: `T extends U ? X : Y`. Nếu `T` gán được cho `U` thì kiểu là `X`, ngược lại là `Y`.\n\n```ts\ntype LaChuoi<T> = T extends string ? \"co\" : \"khong\";\ntype A = LaChuoi<\"abc\">;    // \"co\"\ntype B = LaChuoi<number>;   // \"khong\"\n\n// infer: \"bắt\" một kiểu nằm bên trong\ntype PhanTu<T> = T extends (infer E)[] ? E : T;\ntype X = PhanTu<number[]>;    // number\ntype Y = PhanTu<string>;      // string\n\ntype KetQuaHam<F> = F extends (...args: any[]) => infer R ? R : never;\ntype Z = KetQuaHam<() => boolean>;   // boolean\n```\n\n### Ý chính\n- `infer R` khai báo một biến kiểu mới, TS tự điền khi khớp mẫu. Đây là cách `ReturnType`, `Parameters`, `Awaited` được viết.\n- **Phân phối (distributive)**: khi `T` là union trần, điều kiện áp dụng cho từng thành viên rồi gộp lại. `LaChuoi<string | number>` cho `\"co\" | \"khong\"`. Bọc `[T]` để tắt hành vi này.\n- Hay đi cùng mapped type và template literal để tạo kiểu mạnh.\n\n### Lỗi hay gặp\n- Quên rằng kết quả phân phối trên union, gây bất ngờ.\n- Lạm dụng conditional type phức tạp: khó đọc, chậm compiler; chỉ dùng khi thật sự cần.\n- `never` lan truyền: điều kiện trên `never` cho `never`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-3-conditional-infer",
+    "ten": "7.3 — Conditional types & infer",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-4-template-literal-types",
+    "ten": "7.4 — Template literal types (kiểu chuỗi mẫu)",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểu nâng cao › Template Literal Types": {
+  "body": "Template literal type dùng đúng cú pháp của template string trong JavaScript, nhưng ở tầng kiểu: nó **dựng ra một kiểu chuỗi mới** từ các kiểu khác. Giống như bạn có một khuôn bánh, đổ các nguyên liệu khác nhau vào thì ra nhiều chiếc bánh khác nhau.\n\n```ts\ntype Action = \"created\" | \"cancelled\";\ntype EventName = `booking:${Action}`;\n// \"booking:created\" | \"booking:cancelled\"\n```\n\n### Vì sao cần biết\nTên sự kiện, khoá i18n, route, tên class CSS, tên cột... đều là chuỗi có quy luật. Nếu chỉ gõ `string`, gõ sai `\"booking:cancled\"` vẫn qua; với template literal type, `tsc` báo lỗi ngay và editor gợi ý đủ các giá trị hợp lệ.\n\n### Ý chính\n- Chèn một union vào mẫu thì TypeScript sinh **mọi tổ hợp** (tích Descartes): `` `${\"a\"|\"b\"}-${1|2}` `` ra bốn chuỗi.\n- Có sẵn bốn kiểu biến đổi: `Uppercase<S>`, `Lowercase<S>`, `Capitalize<S>`, `Uncapitalize<S>`.\n- Kết hợp với mapped type và `as` để đổi tên khoá: tạo bộ \"getter\" hoặc bộ handler từ một kiểu có sẵn.\n\n```ts\ntype Handlers<T> = {\n  [K in keyof T & string as `on${Capitalize<K>}`]: (value: T[K]) => void;\n};\ntype Form = { name: string; seats: number };\n// { onName: (v: string) => void; onSeats: (v: number) => void }\ntype FormHandlers = Handlers<Form>;\n```\n\n### Lỗi hay gặp\n- Quên `& string` khi lặp `keyof T`: khoá có thể là `number | symbol`, không nhét được vào template.\n- Sinh quá nhiều tổ hợp (hai union lớn nhân nhau) làm trình biên dịch chậm hoặc báo lỗi \"union quá phức tạp\".\n- Mong template literal kiểm tra được **mọi** định dạng chuỗi: nó chỉ mô tả được mẫu đơn giản, không thay cho regex hay validate lúc chạy.\n\n### Tự kiểm tra\n- `` `${\"x\" | \"y\"}${1 | 2 | 3}` `` có bao nhiêu giá trị?\n- Viết kiểu `EventName<E extends string>` thêm tiền tố `on` và viết hoa chữ đầu.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-4-template-literal-types",
+    "ten": "7.4 — Template literal types (kiểu chuỗi mẫu)",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-6-lab-he-su-kien",
+    "ten": "Lab 7 — Hệ sự kiện có kiểu",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-7-5-quiz",
+    "ten": "Kiểm tra Chương 7 — 10 câu tình huống",
+    "nguon": "TypeScript · Chương 7",
+    "kieu": "quiz"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "TypeScript Handbook — Template Literal Types",
+    "url": "https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html"
+   }
+  ]
+ },
+ "Kiểu nâng cao › Recursive Types": {
+  "body": "Recursive type là kiểu **tự nhắc đến chính nó** trong định nghĩa. Nó cần thiết khi dữ liệu có cấu trúc lồng nhau không biết trước độ sâu, như JSON, cây thư mục, menu nhiều cấp, bình luận trả lời bình luận.\n\n```ts\ntype Json =\n  | string | number | boolean | null\n  | Json[]\n  | { [key: string]: Json };\n\ninterface TreeNode<T> {\n  value: T;\n  children: TreeNode<T>[];\n}\n```\n\nKiểu `Json` nói: một giá trị JSON là chuỗi, số, boolean, null, **mảng các giá trị JSON**, hoặc **object có các giá trị JSON**. Vì có điểm dừng (các kiểu nguyên thuỷ), định nghĩa không vô tận.\n\n### Ý chính\n- Type alias tự tham chiếu được khi lời tham chiếu nằm trong mảng, object hoặc tuple (từ TypeScript 3.7). Interface luôn tự tham chiếu được.\n- Cặp đôi quen thuộc với hàm đệ quy lúc chạy: kiểu đệ quy mô tả dữ liệu, hàm đệ quy duyệt dữ liệu đó.\n- Ứng dụng nâng cao: `DeepReadonly<T>`, `DeepPartial<T>` là conditional/mapped type gọi lại chính nó cho từng thuộc tính.\n\n```ts\ntype DeepReadonly<T> = T extends (infer U)[]\n  ? ReadonlyArray<DeepReadonly<U>>\n  : T extends object\n    ? { readonly [K in keyof T]: DeepReadonly<T[K]> }\n    : T;\n```\n\n### Lỗi hay gặp\n- Kiểu đệ quy không có nhánh dừng sẽ báo \"circularly references itself\".\n- Đệ quy quá sâu trên kiểu lớn làm `tsc` chậm hoặc chạm giới hạn độ sâu khi tính kiểu; giữ kiểu đơn giản và có điểm dừng rõ.\n- Gán dữ liệu JSON từ ngoài vào kiểu `Json` không chứng minh dữ liệu đúng cấu trúc; kiểu bị xoá lúc chạy, cần validate (ví dụ Zod) tại biên."
+ },
+ "Kiểu nâng cao › Advanced Types": {
+  "body": "Ba utility type này đổi **modifier** của mọi thuộc tính trong một kiểu cùng lúc, nên bạn không phải chép lại kiểu bằng tay.\n\n```ts\ntype Booking = { id: number; seats?: number; note: string | null };\n\ntype A = Required<Booking>;    // mọi thuộc tính bắt buộc (bỏ dấu ?)\ntype B = Readonly<Booking>;    // mọi thuộc tính chỉ đọc\ntype C = NonNullable<string | null | undefined>; // string\n```\n\n### Vì sao cần biết\nKhi code có \"bản gốc\" và nhiều biến thể (đầu vào form, bản đã validate, bản bất biến cho state), sinh biến thể từ một nguồn giúp chúng không bao giờ lệch nhau.\n\n### Ý chính\n- `Required<T>`: gỡ mọi dấu `?`. Gán thiếu trường sẽ báo lỗi. Hợp để biểu diễn đối tượng \"đã điền đủ mặc định\".\n- `Readonly<T>`: gán lại thuộc tính là lỗi. Chỉ kiểm tra **lúc biên dịch** và chỉ **nông một tầng**: object lồng bên trong vẫn sửa được.\n- `NonNullable<T>`: loại `null` và `undefined` khỏi một union. Rất hay đi cùng kết quả của `Map.get` hoặc `find`, sau khi bạn đã kiểm tra.\n- Chúng là kiểu thông thường nên ghép được: `Readonly<Required<T>>`.\n\n### Lỗi hay gặp\n- Tưởng `Readonly` đóng băng dữ liệu lúc chạy. Muốn vậy cần `Object.freeze` (và vẫn nông).\n- Dùng `NonNullable` để \"dập\" cảnh báo thay vì kiểm tra thật; kiểu nói dối còn nguy hiểm hơn `any`.\n- Nhầm `Required` với `strictNullChecks`: `Required` chỉ gỡ `?`, không loại `null` khỏi kiểu của trường.\n\n### Tự kiểm tra\n- `Readonly<{ tags: string[] }>` có cho phép `x.tags.push(\"a\")` không? Vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-1-partial-required-readonly",
+    "ten": "8.1 — Partial, Required & Readonly",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-4-exclude-returntype-awaited",
+    "ten": "8.4 — Exclude, NonNullable, ReturnType & Awaited",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-6-lab-utility-dto",
+    "ten": "Lab 8 — Utility types & tầng DTO của API",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-8-5-quiz",
+    "ten": "Kiểm tra Chương 8 — 10 câu tình huống",
+    "nguon": "TypeScript · Chương 8",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Kiểu nâng cao › Literal Types": {
+  "body": "Literal type là kiểu chỉ chứa **đúng một giá trị**: `\"open\"`, `42`, `true`. Gộp vài literal bằng `|` bạn được một tập hữu hạn, thay cho `string` hay `number` quá rộng.\n\n```ts\ntype Status = \"pending\" | \"confirmed\" | \"cancelled\";\n\nfunction setStatus(s: Status) {}\nsetStatus(\"confirmed\"); // ok\nsetStatus(\"done\");      // lỗi: không thuộc Status\n```\n\n### Vì sao cần biết\nTrạng thái, mã lỗi, vai trò, tuỳ chọn cấu hình... đều là tập giá trị đóng. Literal union cho phép editor gợi ý, bắt lỗi chính tả, và `switch` kiểm tra được đã xử lý đủ trường hợp chưa.\n\n### Ý chính\n- `const x = \"a\"` có kiểu `\"a\"`; `let x = \"a\"` được **mở rộng** thành `string`.\n- `as const` giữ nguyên literal và biến mảng/object thành `readonly`. Mẹo nhỏ: một danh sách vừa là dữ liệu lúc chạy vừa sinh ra kiểu.\n\n```ts\nconst LABS = [\"AL-101\", \"AL-202\"] as const;\ntype LabCode = (typeof LABS)[number]; // \"AL-101\" | \"AL-202\"\n```\n\n- Literal union là nền của discriminated union: thuộc tính `kind: \"circle\"` là literal để thu hẹp kiểu.\n\n### Lỗi hay gặp\n- Object literal bị mở rộng: `{ status: \"open\" }` có `status: string`, truyền vào hàm đòi `Status` sẽ lỗi. Dùng `as const` hoặc chú thích kiểu.\n- Viết hai nguồn sự thật (mảng giá trị chép tay và union chép tay) rồi để chúng lệch nhau.\n- Dùng `enum` cho thứ literal union làm tốt hơn: enum sinh code lúc chạy.\n\n### Tự kiểm tra\n- Vì sao `let a = \"x\"` và `const a = \"x\"` có kiểu khác nhau?",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-2-4-literal-as-const",
+    "ten": "2.4 — Kiểu literal & as const",
+    "nguon": "TypeScript · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-2-literal-union",
+    "ten": "5.2 — Union literal & thu hẹp theo giá trị",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Modules & Namespaces › TypeScript Modules (import/export)": {
+  "body": "Module là một file có `import` hoặc `export` ở cấp cao nhất. Mỗi module có phạm vi riêng; thứ gì không `export` thì bên ngoài không thấy. Đây là cách chia code lớn thành nhiều file nhỏ, mỗi file một trách nhiệm.\n\n```ts\n// booking.ts\nexport type Booking = { id: number; seats: number };\nexport function total(b: Booking[]): number {\n  return b.reduce((s, x) => s + x.seats, 0);\n}\nexport default function create(): Booking { return { id: 1, seats: 2 }; }\n\n// main.ts\nimport create, { total, type Booking } from \"./booking.js\";\n```\n\n### Ý chính\n- Cú pháp `import/export` của TypeScript chính là ES module của JavaScript; **kiểu bị xoá lúc chạy**, chỉ giá trị còn lại.\n- `import type { X }` (hoặc `type X` trong ngoặc) nói rõ đây chỉ là kiểu, để bundler bỏ cạnh phụ thuộc đó. Với `verbatimModuleSyntax` bật, import một kiểu mà không đánh dấu `type` là lỗi.\n- Với Node ESM, đường dẫn tương đối thường phải ghi đủ đuôi (`./booking.js`, ngay cả khi file nguồn là `.ts`); do tuỳ `moduleResolution` trong `tsconfig`.\n- Ưu tiên named export: dễ đổi tên, dễ tìm, editor tự động import đúng.\n\n### Lỗi hay gặp\n- File không có `import`/`export` nào là **script**, khai báo của nó rò vào phạm vi toàn cục. Thêm `export {}` nếu cần ép thành module.\n- Quên đuôi `.js` khi chạy ESM trên Node, gây lỗi \"Cannot find module\".\n- Vòng phụ thuộc: A import B, B import A; tách phần dùng chung ra file thứ ba.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-1-es-modules",
+    "ten": "10.1 — ES module & biên giới kiểu",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules",
+    "ten": "5.5 — ES module: tách mã thành nhiều tệp",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Modules & Namespaces › Namespaces & Ambient Modules": {
+  "body": "Hai khái niệm này cùng giải quyết bài toán \"tổ chức và mô tả code ngoài ES module\".\n\n**Namespace** (trước kia gọi là \"internal module\") là cách gom code vào một đối tượng chung bằng từ khoá `namespace`, từ thời chưa có ES module. **Ambient module** là khai báo kiểu cho một module **tồn tại lúc chạy nhưng TypeScript chưa biết kiểu**, thường là thư viện JavaScript thuần.\n\n```ts\n// khai báo kiểu cho package \"legacy-lib\" không có .d.ts\ndeclare module \"legacy-lib\" {\n  export function parse(input: string): { ok: boolean };\n}\n\n// import sau đó có kiểu đầy đủ\nimport { parse } from \"legacy-lib\";\n```\n\n### Ý chính\n- Từ khoá `declare` chỉ **mô tả**, không tạo ra code lúc chạy.\n- Viết tắt `declare module \"legacy-lib\";` (không có thân) khiến mọi thứ import từ đó có kiểu `any`: tiện nhưng mất an toàn.\n- Dự án mới nên dùng ES module thay namespace; namespace chủ yếu còn thấy trong code cũ và trong các file `.d.ts`.\n\n### Lỗi hay gặp\n- Import file `.js` không có khai báo trong chế độ `strict` báo TS7016; cách xử lý là cài `@types/...` hoặc viết `.d.ts`.\n- Đặt `declare module` ở file không được `tsc` đưa vào (`include`) nên không có hiệu lực.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-2-declaration-files",
+    "ten": "10.2 — File khai báo (.d.ts)",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-3-augmentation",
+    "ten": "10.3 — Bổ sung toàn cục & bổ sung module",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Modules & Namespaces › Namespaces": {
+  "body": "`namespace` là cách tổ chức code kiểu cũ của TypeScript: gom hàm, kiểu, hằng vào một cái tên chung, truy cập bằng dấu chấm.\n\n```ts\nnamespace Validation {\n  export interface StringValidator {\n    isValid(s: string): boolean;\n  }\n  export const lettersOnly: StringValidator = {\n    isValid: (s) => /^[A-Za-z]+$/.test(s),\n  };\n}\n\nValidation.lettersOnly.isValid(\"abc\");\n```\n\nKhi biên dịch, namespace trở thành một hàm tự gọi (IIFE) gán vào một biến. Nghĩa là nó **sinh ra code lúc chạy**, khác với `type` và `interface` bị xoá hoàn toàn.\n\n### Ý chính\n- Chỉ thứ nào `export` bên trong namespace mới truy cập được từ ngoài.\n- Nhiều khối `namespace` cùng tên sẽ **gộp** thành một (declaration merging); cơ chế này cũng là cách nhiều thư viện mở rộng kiểu toàn cục.\n- Dự án mới nên dùng ES module (`import/export`). Cờ `erasableSyntaxOnly` hay chế độ \"bỏ kiểu\" của Node từ chối `namespace` có code vì nó không phải cú pháp chỉ-kiểu.\n\n### Khi nào còn gặp\n- Bảo trì codebase cũ viết trước khi ES module phổ biến.\n- Trong file `.d.ts`, nơi `declare namespace` mô tả thư viện có biến toàn cục.\n\n### Lỗi hay gặp\n- Trộn namespace với module trong cùng file gây rối phạm vi.\n- Lạm dụng namespace lồng sâu chỉ để \"đặt tên cho gọn\": module cùng file/thư mục làm việc đó tốt hơn.",
+  "more": [
+   {
+    "type": "official",
+    "title": "TypeScript Handbook — Namespaces",
+    "url": "https://www.typescriptlang.org/docs/handbook/namespaces.html"
+   }
+  ]
+ },
+ "Modules & Namespaces › Ambient Modules": {
+  "body": "Ambient module dùng `declare module \"tên\"` để nói với TypeScript: \"có một module tên này, đây là hình dáng của nó\", mà không cần viết lại code. Các khai báo này thường nằm trong file `.d.ts` (declaration file), file chỉ chứa kiểu, không chứa code chạy.\n\n```ts\n// types/legacy-lib.d.ts\ndeclare module \"legacy-lib\" {\n  export interface Options { retries?: number }\n  export function connect(url: string, opts?: Options): Promise<void>;\n}\n```\n\n### Vì sao cần biết\nHệ sinh thái npm có rất nhiều thư viện JavaScript thuần. Có ba nguồn kiểu cho một package: (1) package tự đóng gói kiểu (trường `\"types\"` trong `package.json`); (2) cộng đồng viết sẵn trong **DefinitelyTyped**, cài bằng `npm i -D @types/ten-package`; (3) bạn tự viết `.d.ts`.\n\n### Ý chính\n- `.d.ts` mô tả; `.js` mới chạy. Một file `slug.d.ts` cạnh `slug.js` đủ để `tsc` đọc kiểu.\n- Đảm bảo file khai báo nằm trong `include` của `tsconfig` (hoặc `typeRoots`/`types`).\n- Wildcard cho tài nguyên không phải code: `declare module \"*.svg\" { const url: string; export default url; }`.\n\n### Lỗi hay gặp\n- Viết `declare module \"x\";` rút gọn rồi quên: mọi thứ thành `any`.\n- Kiểu viết tay lệch với thư viện thật; vì tsc không kiểm khai báo ambient so với code, hãy kiểm bằng test hoặc ví dụ dùng thật.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-2-declaration-files",
+    "ten": "10.2 — File khai báo (.d.ts)",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-4-types-from-packages",
+    "ten": "10.4 — Lấy kiểu từ package",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-6-lab-viet-dts",
+    "ten": "Lab 10 — Viết một .d.ts cho một package JS",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Modules & Namespaces › Namespace Augmentation": {
+  "body": "Module/namespace augmentation cho phép **thêm** thành viên vào một kiểu bạn không sở hữu, không cần sửa thư viện. Cơ chế nền là **declaration merging**: hai `interface` cùng tên trong cùng phạm vi gộp thành một.\n\nVí dụ kinh điển: middleware xác thực gắn `req.user` vào Express.\n\n```ts\n// types/express.d.ts  (file phải có import/export để là module)\nimport \"express\";\n\ndeclare module \"express-serve-static-core\" {\n  interface Request {\n    user?: { id: number; role: string };\n  }\n}\n```\n\nTừ nay trong mọi handler, `req.user` có kiểu đúng.\n\n### Ý chính\n- Augmentation phải **cùng tên module** mà thư viện khai báo kiểu (ở Express là `express-serve-static-core`). Đặt sai tên sẽ tạo một module mới thay vì mở rộng.\n- Chỉ `interface` (và `namespace`) gộp được; `type` alias thì không. Nên thư viện nào muốn cho người dùng mở rộng thường export `interface`.\n- Augmentation chỉ đổi **kiểu**, không tạo giá trị lúc chạy: bạn vẫn phải thực sự gán `req.user` trong middleware.\n\n### Lỗi hay gặp\n- File khai báo không phải module (thiếu `import`/`export`), khiến `declare module` biến thành khai báo ambient mới thay vì augmentation.\n- Đánh dấu `user?` bắt buộc rồi quên rằng route công khai không có user.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-3-augmentation",
+    "ten": "10.3 — Bổ sung toàn cục & bổ sung module",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-5-quiz",
+    "ten": "Kiểm tra Chương 10 — 10 câu tình huống",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "quiz"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "TypeScript Handbook — Declaration Merging",
+    "url": "https://www.typescriptlang.org/docs/handbook/declaration-merging.html"
+   }
+  ]
+ },
+ "Modules & Namespaces › Global Augmentation": {
+  "body": "Global augmentation thêm kiểu vào **phạm vi toàn cục** từ bên trong một module, bằng `declare global { ... }`. Dùng khi bạn muốn bổ sung cho kiểu có sẵn của môi trường như `Window`, `process.env`, hay cả `Array`.\n\n```ts\n// env.d.ts\nexport {}; // ép file thành module\n\ndeclare global {\n  namespace NodeJS {\n    interface ProcessEnv {\n      DATABASE_URL: string;\n      PORT?: string;\n    }\n  }\n  interface Window {\n    analytics?: { track(event: string): void };\n  }\n}\n```\n\nSau đó `process.env.DATABASE_URL` có kiểu `string` thay vì `string | undefined`.\n\n### Ý chính\n- `declare global` **chỉ dùng được trong module** (file có import/export). Ở file script thông thường, bạn khai báo thẳng không cần bọc.\n- Nó dựa trên declaration merging, nên chỉ mở rộng được interface/namespace.\n- Nên dùng tiết kiệm: kiểu toàn cục thấy được ở mọi file, dễ xung đột khi thư viện khác cùng khai báo.\n\n### Lỗi hay gặp\n- Khai báo env là `string` mà quên kiểm tra lúc khởi động; kiểu hứa nhưng giá trị có thể thiếu thật. Hãy validate `process.env` một lần (ví dụ bằng Zod) khi app chạy.\n- Thêm thuộc tính vào `Array.prototype` ở kiểu mà không cài đặt thật ở runtime, gây lỗi \"is not a function\".",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-3-augmentation",
+    "ten": "10.3 — Bổ sung toàn cục & bổ sung module",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-5-quiz",
+    "ten": "Kiểm tra Chương 10 — 10 câu tình huống",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Modules & Namespaces › External Modules — ESM & CommonJS": {
+  "body": "Hai hệ module song song trong JavaScript phía server: **CommonJS (CJS)** dùng `require()` / `module.exports`, **ES module (ESM)** dùng `import` / `export`. Node hỗ trợ cả hai, và TypeScript phải biết bạn muốn xuất ra loại nào.\n\n```js\n// CommonJS\nconst fs = require(\"node:fs\");\nmodule.exports = { total };\n\n// ESM\nimport fs from \"node:fs\";\nexport function total() {}\n```\n\n### Ý chính\n- Node coi file là ESM khi `package.json` có `\"type\": \"module\"` hoặc đuôi `.mjs`; còn lại là CJS (đuôi `.cjs` ép CJS).\n- ESM chạy bất đồng bộ, hỗ trợ `top-level await`, và import cần đường dẫn đầy đủ gồm đuôi. CJS chạy đồng bộ.\n- Trong `tsconfig`, `\"module\": \"nodenext\"` (kèm `\"moduleResolution\": \"nodenext\"`) bảo TypeScript theo đúng luật của Node: nó đọc `package.json` để biết file nào là ESM hay CJS.\n- Viết code bằng cú pháp `import/export` trong TypeScript không có nghĩa output là ESM; output phụ thuộc cấu hình `module` và `type`.\n- `esModuleInterop` giúp `import x from \"cjs-lib\"` hoạt động với thư viện CJS.\n\n### Lỗi hay gặp\n- \"Cannot use import statement outside a module\" hoặc \"require is not defined\": nhầm loại module giữa code và cấu hình.\n- Dùng `require` một package chỉ có ESM.\n- Trộn `module: commonjs` với package ESM-only mới.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-1-es-modules",
+    "ten": "10.1 — ES module & biên giới kiểu",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-1-5-module",
+    "ten": "1.5 — Module: CommonJS và ES Modules",
+    "nguon": "Node.js · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-5-5-es-modules",
+    "ten": "5.5 — ES module: tách mã thành nhiều tệp",
+    "nguon": "Nền tảng Lập trình Web · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › Linting & Formatting": {
+  "body": "**Linting** là phân tích code **không chạy nó** để bắt lỗi và thói quen xấu (biến không dùng, `any` tràn lan, Promise bị bỏ quên). **Formatting** là tự động căn chỉnh style (dấu nháy, thụt lề, xuống dòng) để cả nhóm cùng một kiểu viết, khỏi tranh luận trong review.\n\nBộ công cụ tiêu chuẩn: **ESLint** + **typescript-eslint** để lint, **Prettier** để format.\n\n```bash\nnpm i -D eslint @eslint/js typescript-eslint prettier\n```\n\n```js\n// eslint.config.js (flat config)\nimport eslint from \"@eslint/js\";\nimport tseslint from \"typescript-eslint\";\n\nexport default [\n  eslint.configs.recommended,\n  ...tseslint.configs.recommended,\n];\n```\n\n### Ý chính\n- `tsc` kiểm tra **kiểu**; ESLint bắt thứ khác: `@typescript-eslint/no-explicit-any`, `no-floating-promises`, `no-misused-promises`... Hai thứ bổ trợ nhau, không thay nhau.\n- Các luật \"có kiểu\" (type-aware) mạnh hơn nhưng cần cấu hình `parserOptions` cho ESLint đọc `tsconfig`, và chậm hơn.\n- Prettier chỉ lo giao diện code. Để tránh ESLint và Prettier mâu thuẫn, tắt luật style của ESLint bằng `eslint-config-prettier`, hoặc đơn giản là không bật luật style trong ESLint.\n- Chạy trong editor (lưu file tự format) và trong CI (`eslint .`, `prettier --check .`) để không ai lách được.\n\n### Lỗi hay gặp\n- Cấu hình cũ `.eslintrc` không còn là mặc định ở ESLint mới; dự án mới dùng `eslint.config.js`.\n- Để cả ESLint và Prettier cùng sửa style, gây \"đánh nhau\" mỗi lần lưu.\n- Bật quá nhiều luật cùng lúc cho codebase cũ; hãy bật dần để đội còn theo kịp.",
+  "more": [
+   {
+    "type": "official",
+    "title": "typescript-eslint — Getting Started",
+    "url": "https://typescript-eslint.io/getting-started"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › TypeScript với React": {
+  "body": "Gõ kiểu cho React nghĩa là đặt kiểu cho **props, state, event và hook** để lỗi như truyền thiếu prop hay đọc state chưa tải bị bắt ngay trong editor.\n\n```tsx\ntype ButtonProps = {\n  label: string;\n  onClick: () => void;\n  disabled?: boolean;\n  children?: React.ReactNode;\n};\n\nfunction Button({ label, onClick, disabled = false }: ButtonProps) {\n  return <button onClick={onClick} disabled={disabled}>{label}</button>;\n}\n\nfunction Profile() {\n  const [user, setUser] = React.useState<{ name: string } | null>(null);\n  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>\n    console.log(e.target.value);\n  return user ? <p>{user.name}</p> : <input onChange={onChange} />;\n}\n```\n\n### Ý chính\n- **Props**: dùng `type` hoặc `interface`; prop tuỳ chọn thêm `?`; nội dung lồng bên trong là `children: React.ReactNode`.\n- **State**: `useState(0)` tự suy ra `number`; khi khởi tạo `null` hoặc mảng rỗng, viết generic rõ: `useState<User | null>(null)`.\n- **Event**: `React.ChangeEvent<HTMLInputElement>`, `React.FormEvent<HTMLFormElement>`, `React.MouseEvent<HTMLButtonElement>`. Thường để inline handler tự suy ra kiểu.\n- **Context** nên có hook bọc ném lỗi khi `null`, để nơi dùng khỏi phải kiểm tra lặp lại.\n- **Component generic**: `function List<T>({ items }: { items: T[] })` suy ra `T` từ dữ liệu truyền vào.\n\n### Lỗi hay gặp\n- Ép kiểu `as` để im lỗi thay vì mô hình hoá trường hợp `null`.\n- `useRef<HTMLInputElement>(null)` có `.current` có thể `null`; phải kiểm tra trước khi dùng.\n- Kiểu props quá rộng (`any`, `object`) khiến mất gợi ý và bắt lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-1-components-props",
+    "ten": "12.1 — Component & props",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-2-hooks",
+    "ten": "12.2 — Gõ kiểu hooks",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-3-events",
+    "ten": "12.3 — Gõ kiểu sự kiện",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-4-context-generics",
+    "ten": "12.4 — Context có kiểu & component generic",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-12-6-lab-form-co-kieu",
+    "ten": "Lab 12 — Component & hook có kiểu",
+    "nguon": "TypeScript · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › TypeScript với Node": {
+  "body": "TypeScript trên backend Node đem lại cùng lợi ích như frontend: hợp đồng giữa handler, service và dữ liệu được kiểm tra trước khi chạy. Có thể dùng Express, Fastify, NestJS...\n\nĐiểm khởi đầu: cài `typescript` và `@types/node` (và `@types/express` nếu dùng Express), rồi gõ kiểu cho handler.\n\n```ts\nimport type { Request, Response } from \"express\";\n\ntype Params = { id: string };\ntype Body = { seats: number };\ntype Result = { id: number; seats: number } | { error: string };\n\nexport function updateBooking(\n  req: Request<Params, Result, Body>,\n  res: Response<Result>,\n) {\n  const id = Number(req.params.id);\n  if (!Number.isInteger(id)) return res.status(400).json({ error: \"bad id\" });\n  return res.json({ id, seats: req.body.seats });\n}\n```\n\n### Ý chính\n- Kiểu của `Request` là **lời hứa**, không phải kiểm tra: `req.body` đến từ bên ngoài. Hãy validate bằng Zod (hoặc tương tự) tại biên rồi mới tin kiểu.\n- Tách thành tầng: handler (HTTP) gọi service (nghiệp vụ) gọi repository (dữ liệu); kiểu trả về của service nên trung thực (`T | undefined` khi có thể không tìm thấy).\n- Cấu hình đọc một lần từ môi trường rồi trả về đối tượng có kiểu, `readonly`.\n- Chạy: build bằng `tsc` ra JavaScript, hoặc dùng công cụ như `tsx` khi phát triển; Node bản mới còn có thể chạy trực tiếp file `.ts` đơn giản bằng cách bỏ kiểu. Dù chạy bằng gì, vẫn cần `tsc --noEmit` để kiểm kiểu.\n\n### Lỗi hay gặp\n- Tin `req.body as CreateBooking` mà không validate.\n- Quên `@types/node` nên `process`, `Buffer` không có kiểu.\n- Kiểu `any` ở tầng lỗi (`catch (e)`): từ `useUnknownInCatchVariables`, `e` là `unknown`, hãy thu hẹp trước khi dùng.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-11-1-express-handlers",
+    "ten": "11.1 — Gõ kiểu handler Express",
+    "nguon": "TypeScript · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-11-2-typed-responses",
+    "ten": "11.2 — Response có kiểu",
+    "nguon": "TypeScript · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-11-3-api-envelope-errors",
+    "ten": "11.3 — Envelope kết quả API",
+    "nguon": "TypeScript · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-11-4-services-and-config",
+    "ten": "11.4 — Service & config",
+    "nguon": "TypeScript · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-11-6-lab-handler-co-kieu",
+    "ten": "Lab 11 — Handler có kiểu với envelope lỗi",
+    "nguon": "TypeScript · Chương 11",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › Migrate JS → TS": {
+  "body": "Bạn không cần viết lại cả dự án JavaScript trong một đêm. Có thể chuyển **dần dần**, vừa chuyển vừa vẫn chạy được.\n\n### Các bước\n1. Cài `typescript`, tạo `tsconfig.json` với `\"allowJs\": true` để `.js` và `.ts` cùng tồn tại.\n2. Bật `\"checkJs\": true` (hoặc thêm `// @ts-check` đầu từng file) để TypeScript **kiểm kiểu ngay file `.js`**. Bạn có thể dùng chú thích JSDoc (`/** @param {number} seats */`) để mô tả kiểu mà không đổi đuôi file.\n3. Đổi tên từng file `.js` thành `.ts`, bắt đầu từ lá của đồ thị phụ thuộc (utils, hằng số), rồi vào trong, vào biên (API, I/O).\n4. Siết dần: bật `strict` sau khi phần lớn đã chuyển; hoặc bật từng cờ như `noImplicitAny`.\n5. Ở biên dữ liệu ngoài, dùng `unknown` rồi thu hẹp hoặc validate, tránh rải `any`.\n\n```json\n{\n  \"compilerOptions\": {\n    \"allowJs\": true,\n    \"checkJs\": true,\n    \"noEmit\": true,\n    \"strict\": false\n  },\n  \"include\": [\"src\"]\n}\n```\n\n### Lỗi hay gặp\n- Đổi đuôi hàng loạt rồi rải `any` để hết lỗi: build xanh nhưng không bắt được bug nào.\n- Bật `strict` ngay một lần trên codebase lớn: hàng nghìn lỗi làm cả đội nản.\n- Quên rằng tệp `.js` ngoài `include` thì `tsc` không kiểm.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown",
+    "ten": "1.4 — any, unknown & dùng TypeScript dần dần",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-1-6-lab-chuyen-doi",
+    "ten": "Lab 1 — Đổi luật LabFlow sang TypeScript",
+    "nguon": "TypeScript · Chương 1",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "TypeScript Handbook — Migrating from JavaScript",
+    "url": "https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › Ecosystem & Packages": {
+  "body": "Sức mạnh của TypeScript thực tế đến từ hệ sinh thái xung quanh: các thư viện giúp kiểu **đi xuyên qua** ranh giới runtime, nơi kiểu vốn bị xoá.\n\n### Những mảnh quan trọng\n- **Zod / Valibot**: validate dữ liệu lúc chạy **và** suy ra kiểu từ schema (`z.infer`). Một nguồn sự thật cho cả hai.\n- **tRPC**: gọi hàm server từ client với kiểu đầu-cuối, không cần viết lại hợp đồng API bằng tay (phù hợp khi client và server cùng là TypeScript).\n- **Prisma**: ORM sinh kiểu từ schema cơ sở dữ liệu, nên kết quả truy vấn có kiểu chính xác.\n- **ts-pattern**: pattern matching với kiểm tra đầy đủ (`exhaustive`).\n- **DefinitelyTyped** (`@types/*`): kiểu do cộng đồng viết cho thư viện JavaScript.\n\n```ts\nimport { z } from \"zod\";\n\nconst Booking = z.object({ labCode: z.string(), seats: z.number().int().positive() });\ntype Booking = z.infer<typeof Booking>;\n\nconst parsed = Booking.safeParse(JSON.parse(input));\nif (parsed.success) parsed.data.seats; // đã có kiểu chính xác\n```\n\n### Ý chính\n- Nguyên tắc chung: để schema (Zod, Prisma) là nguồn sự thật và **suy kiểu từ đó**, thay vì viết kiểu bằng tay rồi để lệch.\n- Khi chọn thư viện, kiểm tra nó tự đóng gói kiểu hay cần `@types`.\n\n### Lỗi hay gặp\n- Cài thư viện rồi dùng `as` ép kiểu thay vì validate.\n- Cài `@types/x` không khớp phiên bản của `x`.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-1-boundary-zod",
+    "ten": "13.1 — Vấn đề tại biên & Zod",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-3-schema-source-of-truth",
+    "ten": "13.3 — Schema là nguồn sự thật duy nhất",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-4-types-from-prisma",
+    "ten": "13.4 — Kiểu từ Prisma",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-4-types-from-packages",
+    "ten": "10.4 — Lấy kiểu từ package",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › Formatting & Linting": {
+  "body": "**Linting** là phân tích code **không chạy nó** để bắt lỗi và thói quen xấu (biến không dùng, `any` tràn lan, Promise bị bỏ quên). **Formatting** là tự động căn chỉnh style (dấu nháy, thụt lề, xuống dòng) để cả nhóm cùng một kiểu viết, khỏi tranh luận trong review.\n\nBộ công cụ tiêu chuẩn: **ESLint** + **typescript-eslint** để lint, **Prettier** để format.\n\n```bash\nnpm i -D eslint @eslint/js typescript-eslint prettier\n```\n\n```js\n// eslint.config.js (flat config)\nimport eslint from \"@eslint/js\";\nimport tseslint from \"typescript-eslint\";\n\nexport default [\n  eslint.configs.recommended,\n  ...tseslint.configs.recommended,\n];\n```\n\n### Ý chính\n- `tsc` kiểm tra **kiểu**; ESLint bắt thứ khác: `@typescript-eslint/no-explicit-any`, `no-floating-promises`, `no-misused-promises`... Hai thứ bổ trợ nhau, không thay nhau.\n- Các luật \"có kiểu\" (type-aware) mạnh hơn nhưng cần cấu hình `parserOptions` cho ESLint đọc `tsconfig`, và chậm hơn.\n- Prettier chỉ lo giao diện code. Để tránh ESLint và Prettier mâu thuẫn, tắt luật style của ESLint bằng `eslint-config-prettier`, hoặc đơn giản là không bật luật style trong ESLint.\n- Chạy trong editor (lưu file tự format) và trong CI (`eslint .`, `prettier --check .`) để không ai lách được.\n\n### Lỗi hay gặp\n- Cấu hình cũ `.eslintrc` không còn là mặc định ở ESLint mới; dự án mới dùng `eslint.config.js`.\n- Để cả ESLint và Prettier cùng sửa style, gây \"đánh nhau\" mỗi lần lưu.\n- Bật quá nhiều luật cùng lúc cho codebase cũ; hãy bật dần để đội còn theo kịp.",
+  "more": [
+   {
+    "type": "official",
+    "title": "Prettier — Documentation",
+    "url": "https://prettier.io/docs/en/"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › Build Tools": {
+  "body": "Trình duyệt và Node không chạy TypeScript trực tiếp (trừ khi dùng cơ chế bỏ kiểu của Node bản mới). Cần một bước biến `.ts` thành JavaScript. \"Compile\" thực ra gồm **hai việc khác nhau**:\n\n1. **Kiểm kiểu** (type check): chậm, phải nhìn cả chương trình. Chỉ `tsc` (và editor) làm.\n2. **Transpile**: bỏ kiểu, đổi cú pháp sang JavaScript. Nhanh, làm từng file được.\n\n### Công cụ thường gặp\n- **tsc**: chuẩn tham chiếu. Làm được cả hai việc; thường dùng `tsc --noEmit` chỉ để kiểm kiểu.\n- **Vite** (dùng esbuild khi dev, Rollup khi build production), **esbuild** (viết bằng Go), **SWC** (viết bằng Rust): transpile cực nhanh nhưng **không kiểm kiểu**.\n- **tsx**, **ts-node**: chạy file TypeScript trực tiếp trong Node khi phát triển.\n\n```json\n{\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"tsc --noEmit && vite build\",\n    \"typecheck\": \"tsc --noEmit\"\n  }\n}\n```\n\n### Ý chính\n- Vì transpiler xử lý từng file riêng lẻ, nó không biết `Booking` là kiểu hay giá trị. Bật `isolatedModules` và dùng `import type` để mỗi file tự đủ thông tin.\n- `verbatimModuleSyntax` buộc bạn ghi rõ `import type`; còn giúp đồ thị module gọn vì kiểu không kéo thêm file.\n- Test xanh hay build xanh (với esbuild/Vite) **không** chứng minh kiểu đúng: luôn chạy `tsc --noEmit` thành một bước riêng trong CI.\n\n### Lỗi hay gặp\n- Tin rằng `vite build` đã kiểm kiểu.\n- Dự án lớn build chậm: bật `incremental`, `skipLibCheck`, dùng project references.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-15-3-isolated-modules",
+    "ten": "15.3 — Tách kiểm kiểu khỏi transpile",
+    "nguon": "TypeScript · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-15-4-import-type",
+    "ten": "15.4 — Cắt gọn đồ thị module",
+    "nguon": "TypeScript · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-15-2-incremental-references",
+    "ten": "15.2 — Incremental & project references",
+    "nguon": "TypeScript · Chương 15",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-9-4-target-lib-module",
+    "ten": "9.4 — target, lib, module & noEmit",
+    "nguon": "TypeScript · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Hệ sinh thái & Thực chiến › Package hữu ích cho TypeScript": {
+  "body": "Ngoài các kiểu có sẵn, vài package nhỏ giúp code TypeScript thực tế gọn và an toàn hơn.\n\n- **Zod**: schema validate lúc chạy, suy ra kiểu.\n- **tRPC**: API có kiểu đầu-cuối giữa server và client TypeScript.\n- **ts-pattern**: pattern matching kiểm tra đầy đủ các trường hợp.\n- **type-fest**: bộ utility type bổ sung (`Simplify`, `SetRequired`, `PartialDeep`, `Jsonify`...) cho thứ built-in chưa có.\n\n```ts\nimport { match } from \"ts-pattern\";\n\ntype State = { kind: \"loading\" } | { kind: \"ok\"; data: string } | { kind: \"error\"; msg: string };\n\nconst text = (s: State) =>\n  match(s)\n    .with({ kind: \"loading\" }, () => \"Đang tải\")\n    .with({ kind: \"ok\" }, ({ data }) => data)\n    .with({ kind: \"error\" }, ({ msg }) => `Lỗi: ${msg}`)\n    .exhaustive(); // thiếu nhánh thì tsc báo lỗi\n```\n\n### Ý chính\n- Thêm package khi nó giải quyết vấn đề thật; đừng thêm \"cho đủ bộ\". Utility type đơn giản có thể tự viết bằng vài dòng.\n- Zod nên đặt ở **biên** (request, env, file đọc vào) và là nguồn của kiểu; tRPC hợp khi cả hai đầu cùng một monorepo TypeScript.\n- Với kiểu từ cơ sở dữ liệu, Prisma sinh sẵn, nên không cần viết tay.\n\n### Lỗi hay gặp\n- Dùng nhiều thư viện kiểu chồng chéo cho cùng một việc (ví dụ cả Zod và một thư viện validate khác).\n- Quên rằng `type-fest` chỉ cung cấp **kiểu**: không có code lúc chạy.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-1-boundary-zod",
+    "ten": "13.1 — Vấn đề tại biên & Zod",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-2-parse-safeparse",
+    "ten": "13.2 — parse so với safeParse",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-13-4-types-from-prisma",
+    "ten": "13.4 — Kiểu từ Prisma",
+    "nguon": "TypeScript · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-10-4-types-from-packages",
+    "ten": "10.4 — Lấy kiểu từ package",
+    "nguon": "TypeScript · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "type-fest — bộ utility type bổ sung",
+    "url": "https://github.com/sindresorhus/type-fest"
+   }
+  ]
+ }
+}

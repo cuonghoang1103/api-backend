@@ -1,0 +1,1695 @@
+{
+ "Nền tảng › Cú pháp cơ bản": {
+  "body": "Python là ngôn ngữ đọc gần như tiếng Anh: không dấu chấm phẩy cuối dòng, không dấu ngoặc nhọn bao khối lệnh. Thay vào đó, **thụt lề** (indentation) quyết định đoạn code nào thuộc khối nào. Bạn viết một dòng, chạy ngay, thấy kết quả ngay — đó là lý do Python hay được chọn làm ngôn ngữ đầu tiên.\n\n### Vì sao cần biết\nMọi thứ ở các bước sau (hàm, class, web, dữ liệu, AI) đều dựng trên vài viên gạch này: biến, kiểu dữ liệu, toán tử và ba cấu trúc điều khiển `if`, `for`, `while`. Nắm chắc cú pháp thì đọc code người khác và sửa lỗi nhanh hơn rất nhiều.\n\n### Ý chính\n- Chạy file bằng `python ten_file.py` (hoặc `python3` tuỳ máy). Gõ `python` không kèm file để vào chế độ tương tác (REPL) và thử từng dòng.\n- Biến **không cần khai báo kiểu**: `tuoi = 20` là đủ. Kiểu gắn với giá trị chứ không gắn với tên biến (dynamic typing).\n- Khối lệnh kết thúc dòng đầu bằng dấu `:` và các dòng bên trong thụt vào, quy ước 4 dấu cách.\n- Chú thích bắt đầu bằng `#`.\n- `print()` xuất ra màn hình, `input()` đọc một dòng người dùng gõ (luôn trả về chuỗi).\n\n```python\nten = input(\"Bạn tên gì? \")\ntuoi = int(input(\"Bạn bao nhiêu tuổi? \"))\n\nif tuoi >= 18:\n    print(f\"Chào {ten}, bạn đã đủ 18 tuổi.\")\nelse:\n    print(f\"Chào {ten}, còn {18 - tuoi} năm nữa bạn đủ 18.\")\n\nfor i in range(3):      # i = 0, 1, 2\n    print(\"Lần\", i + 1)\n```\n\n### Lỗi hay gặp\n- Quên dấu `:` sau `if`/`for`/`while`/`def` → `SyntaxError`.\n- Trộn dấu cách với tab hoặc thụt lề lệch → `IndentationError`.\n- Nhầm `=` (gán) với `==` (so sánh bằng).\n- Quên rằng `input()` trả về chuỗi nên `\"5\" + 1` báo `TypeError`.\n\n### Tự kiểm tra\n1. Vì sao Python không cần dấu ngoặc nhọn mà code vẫn rõ khối?\n2. `range(1, 10, 3)` sinh ra những số nào?\n3. Đoạn code trên sẽ lỗi ở đâu nếu người dùng gõ chữ thay vì số khi hỏi tuổi?",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-1-1-basics",
+    "ten": "1.1 — Python cơ bản: biến, kiểu, nhập/xuất",
+    "nguon": "Python programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/pfp191-programming-fundamentals-with-python/learn?lessonSlug=pfp191-2-1-bien-bieu-thuc",
+    "ten": "1.3 — Giá trị, kiểu, biến, tên biến & câu lệnh",
+    "nguon": "Programming Fundamentals with Python · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PFP191"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-2-1-control-flow",
+    "ten": "2.1 — Điều khiển luồng: if, for, while",
+    "nguon": "Python programming · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Hàm & Built-in Functions": {
+  "body": "Hàm là đoạn code được đặt tên để gọi lại nhiều lần. Python có hai loại bạn dùng hằng ngày: **hàm dựng sẵn** (built-in) như `len`, `print`, `sorted` và **hàm tự viết** bằng từ khoá `def`.\n\n### Định nghĩa hàm\n```python\ndef chao(ten, loi=\"Xin chào\"):      # loi có giá trị mặc định\n    return f\"{loi}, {ten}!\"\n\nprint(chao(\"An\"))                    # Xin chào, An!\nprint(chao(\"Bình\", loi=\"Chào\"))      # truyền theo tên (keyword argument)\n```\n- `return` trả giá trị về; hàm không có `return` sẽ trả `None`.\n- **`*args`** gom các đối số vị trí thừa vào một tuple, **`**kwargs`** gom các đối số có tên vào một dict:\n\n```python\ndef tong(*so):\n    return sum(so)\n\ndef in_thong_tin(**thong_tin):\n    for k, v in thong_tin.items():\n        print(k, \"=\", v)\n\ntong(1, 2, 3)                        # 6\nin_thong_tin(ten=\"An\", tuoi=20)\n```\n\n### Built-in nên thuộc\n`len`, `range`, `sum`, `min`, `max`, `sorted`, `reversed`, `enumerate`, `zip`, `map`, `filter`, `abs`, `round`, `type`, `isinstance`, `any`, `all`. Danh sách đầy đủ nằm ở tài liệu \"Built-in Functions\" của docs.python.org. Biết sẵn chúng giúp bạn khỏi viết lại thứ đã có.\n\n### Lỗi hay gặp\n- **Tham số mặc định có thể thay đổi** như `def them(x, ds=[])`: danh sách `ds` được tạo một lần duy nhất khi định nghĩa hàm và dùng chung giữa các lần gọi. Dùng `ds=None` rồi tạo list mới bên trong hàm.\n- Quên `return` rồi dùng kết quả (nhận được `None`).\n- `map` và `filter` trả về iterator, không phải list; cần `list(...)` nếu muốn xem toàn bộ.",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-4-1-functions-files",
+    "ten": "4.1 — Hàm, module & file",
+    "nguon": "Python programming · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-1-1-core-python",
+    "ten": "1.1 — Ôn Python cốt lõi",
+    "nguon": "Advanced Python with OOP · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Exceptions": {
+  "body": "Exception là cách Python báo \"có chuyện bất thường\" (chia cho 0, mở file không tồn tại, ép kiểu sai). Nếu không bắt, chương trình dừng và in traceback. Nếu bắt đúng chỗ, bạn xử lý được lỗi và cho chương trình đi tiếp.\n\n### Cú pháp đầy đủ\n```python\ntry:\n    so = int(input(\"Nhập số: \"))\n    print(100 / so)\nexcept ValueError:\n    print(\"Đó không phải số nguyên.\")\nexcept ZeroDivisionError:\n    print(\"Không chia được cho 0.\")\nelse:\n    print(\"Không có lỗi nào xảy ra.\")   # chỉ chạy khi try thành công\nfinally:\n    print(\"Luôn chạy, kể cả khi có lỗi.\")  # dọn dẹp tài nguyên\n```\n\n### Ném lỗi và tự định nghĩa lỗi\n```python\nclass SoDuKhongDu(Exception):\n    pass\n\ndef rut(so_du, tien):\n    if tien > so_du:\n        raise SoDuKhongDu(f\"Cần {tien}, chỉ có {so_du}\")\n    return so_du - tien\n```\nClass lỗi tự tạo kế thừa từ `Exception` (không phải `BaseException`). Cây kế thừa giúp bạn bắt cả nhóm: bắt `OSError` sẽ bắt luôn `FileNotFoundError`.\n\n### Ý chính\n- Bắt lỗi **cụ thể** (`except ValueError`) thay vì `except:` trần, vì `except:` nuốt luôn cả lỗi bạn không dự tính và cả `KeyboardInterrupt`.\n- `raise` không kèm tham số trong khối `except` ném lại đúng lỗi vừa bắt; `raise Moi from loi_goc` giữ chuỗi nguyên nhân.\n- `finally` chạy dù có lỗi hay không; thường thay bằng `with` khi làm việc với file.\n\n### Lỗi hay gặp\n- `except Exception: pass` che giấu bug: ít nhất hãy ghi log.\n- Đặt quá nhiều code trong `try`, khiến không biết dòng nào gây lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-5-1-exceptions-files",
+    "ten": "5.1 — Ngoại lệ & file",
+    "nguon": "Advanced Python with OOP · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-6-1-exceptions-packages-venv",
+    "ten": "6.1 — Xử lý ngoại lệ, module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Nền tảng › Biến và Kiểu dữ liệu": {
+  "body": "Biến trong Python không phải \"cái hộp chứa giá trị\" như nhiều người tưởng, mà là một **cái nhãn** dán lên một đối tượng nằm trong bộ nhớ. Câu `x = 5` nghĩa là \"cho cái tên `x` trỏ tới đối tượng số 5\". Hiểu điều này giải thích gần như mọi hành vi lạ của Python về sau (sao chép list, tham số hàm, `is` và `==`).\n\n### Các kiểu cơ bản\n| Kiểu | Ví dụ | Ghi chú |\n|---|---|---|\n| `int` | `42`, `-7` | số nguyên không giới hạn độ lớn |\n| `float` | `3.14` | số thực theo chuẩn IEEE 754 |\n| `str` | `\"xin chào\"` | chuỗi Unicode, bất biến |\n| `bool` | `True`, `False` | thực chất là lớp con của `int` |\n| `NoneType` | `None` | \"không có giá trị\" |\n\n```python\nx = 10\ny = x\nx = 20          # x trỏ sang đối tượng khác, y vẫn là 10\nprint(type(x), isinstance(y, int))\nprint(0.1 + 0.2)        # 0.30000000000000004 — lỗi làm tròn nhị phân, không phải bug của Python\nprint(True + 1)         # 2\n```\n\n### Quy tắc đặt tên\n- Chữ cái, số, gạch dưới; không bắt đầu bằng số; phân biệt hoa thường (`Tuoi` khác `tuoi`).\n- Quy ước PEP 8: `snake_case` cho biến và hàm, `HANG_SO` cho hằng.\n- Không dùng từ khoá (`if`, `class`, `for`...) và nên tránh đè lên built-in như `list`, `str`, `id`.\n\n### Lỗi hay gặp\n- So sánh số thực bằng `==`: dùng `math.isclose(a, b)` thay vì `0.1 + 0.2 == 0.3`.\n- Đặt tên biến trùng built-in (`list = [1, 2]`) rồi gọi `list(...)` báo lỗi.\n- Tưởng gán `b = a` cho list là sao chép: cả hai tên cùng trỏ một list.\n\n### Tự kiểm tra\n1. `type(3 / 2)` và `type(3 // 2)` khác nhau thế nào?\n2. Sau `a = [1, 2]`, `b = a`, `b.append(3)` thì `a` là gì và vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/pfp191-programming-fundamentals-with-python/learn?lessonSlug=pfp191-2-1-bien-bieu-thuc",
+    "ten": "1.3 — Giá trị, kiểu, biến, tên biến & câu lệnh",
+    "nguon": "Programming Fundamentals with Python · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PFP191"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-1-1-basics",
+    "ten": "1.1 — Python cơ bản: biến, kiểu, nhập/xuất",
+    "nguon": "Python programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-1-1-data-model",
+    "ten": "1.1 — Ôn nhanh Python & mô hình dữ liệu",
+    "nguon": "Advanced Python with OOP · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/simulation?scenario=number-bits",
+    "ten": "Số âm và số thực trong máy tính",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Câu lệnh điều kiện (Conditionals)": {
+  "body": "Câu lệnh điều kiện cho chương trình **rẽ nhánh**: làm việc này nếu điều kiện đúng, làm việc khác nếu sai.\n\n```python\ndiem = 7.5\nif diem >= 8.5:\n    xep_loai = \"Giỏi\"\nelif diem >= 6.5:\n    xep_loai = \"Khá\"\nelif diem >= 5:\n    xep_loai = \"Trung bình\"\nelse:\n    xep_loai = \"Yếu\"\nprint(xep_loai)\n```\nPython kiểm tra các nhánh **từ trên xuống** và chạy nhánh đúng đầu tiên rồi bỏ qua phần còn lại, nên thứ tự các điều kiện quan trọng.\n\n### Ý chính\n- Toán tử so sánh: `==`, `!=`, `<`, `>`, `<=`, `>=`. Python cho phép so sánh nối: `0 <= x < 10`.\n- Toán tử logic: `and`, `or`, `not`. Chúng **đoản mạch**: `a and b` không tính `b` nếu `a` sai.\n- **Truthiness**: trong điều kiện, `0`, `0.0`, `\"\"`, `[]`, `{}`, `None` và `False` được coi là sai; hầu hết giá trị khác là đúng. Nên viết `if danh_sach:` thay vì `if len(danh_sach) > 0:`.\n- Biểu thức điều kiện một dòng: `nhan = \"chẵn\" if n % 2 == 0 else \"lẻ\"`.\n- Từ Python 3.10 có `match`/`case` để rẽ nhánh theo mẫu, hợp khi có nhiều trường hợp.\n\n### Lỗi hay gặp\n- Dùng `=` thay `==` trong điều kiện (Python báo `SyntaxError` ngay nên lỗi này khá dễ phát hiện).\n- Viết `if x == True:`; chỉ cần `if x:`.\n- So sánh với `None` bằng `==`; nên dùng `if x is None:`.\n- Dùng `if x:` để kiểm tra \"có giá trị\" trong khi `0` hoặc `\"\"` là giá trị hợp lệ: khi đó hãy kiểm tra `is not None`.",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-2-1-control-flow",
+    "ten": "2.1 — Điều khiển luồng: if, for, while",
+    "nguon": "Python programming · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Ép kiểu (Type Casting)": {
+  "body": "**Ép kiểu** (type casting) là chuyển một giá trị từ kiểu này sang kiểu khác bằng chính tên kiểu như một hàm: `int()`, `float()`, `str()`, `bool()`. Bước này gần như luôn cần vì `input()` luôn trả về chuỗi.\n\n```python\ntuoi_str = input(\"Tuổi: \")      # \"20\" — vẫn là chuỗi\ntuoi = int(tuoi_str)             # 20\nprint(tuoi + 1)                  # 21\n\nprint(float(\"3.5\"))              # 3.5\nprint(str(100) + \" điểm\")        # \"100 điểm\"\nprint(int(3.9))                  # 3 — cắt phần thập phân, không làm tròn\nprint(round(3.9))                # 4\n```\n\n### Ý chính\n- `int(\"12\")` được, `int(\"12.5\")` và `int(\"abc\")` ném `ValueError`; muốn đổi `\"12.5\"` thành số nguyên hãy `int(float(\"12.5\"))`.\n- `bool(x)` theo truthiness: `bool(\"\")` là `False`, nhưng `bool(\"False\")` là `True` vì chuỗi khác rỗng.\n- Python **tự ép ngầm** trong vài chỗ (ví dụ `1 + 2.5` ra `3.5`), nhưng **không** tự ép giữa chuỗi và số: `\"5\" + 1` là `TypeError`.\n- Có thể ép giữa tập hợp: `list(\"abc\")` ra `['a', 'b', 'c']`, `set([1, 1, 2])` ra `{1, 2}`.\n\n### Lỗi hay gặp\n- Quên ép kiểu sau `input()` rồi so sánh `\"5\" > 3`.\n- Không bắt `ValueError` khi người dùng nhập bậy:\n\n```python\ntry:\n    n = int(input(\"Nhập số: \"))\nexcept ValueError:\n    n = 0\n```\n- Nghĩ `int()` làm tròn: nó chỉ cắt về phía 0 (`int(-3.9)` là `-3`).\n\n### Tự kiểm tra\nKết quả của `int(\"7\") + int(2.9)` là gì? Còn `str(7) + str(2.9)`?",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-1-1-basics",
+    "ten": "1.1 — Python cơ bản: biến, kiểu, nhập/xuất",
+    "nguon": "Python programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/pfp191-programming-fundamentals-with-python/learn?lessonSlug=pfp191-1-6-input-chu-thich-debug",
+    "ten": "1.6 — input(), chú thích, tên biến dễ nhớ, gỡ lỗi",
+    "nguon": "Programming Fundamentals with Python · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PFP191"
+   }
+  ]
+ },
+ "Nền tảng › Vòng lặp (Loops)": {
+  "body": "Vòng lặp lặp lại một khối lệnh. Python có hai loại: `for` (duyệt qua từng phần tử của một dãy) và `while` (lặp khi điều kiện còn đúng).\n\n```python\nfor ten in [\"An\", \"Bình\", \"Chi\"]:\n    print(ten)\n\nfor i in range(5):            # 0, 1, 2, 3, 4\n    print(i)\n\nn = 3\nwhile n > 0:\n    print(n)\n    n -= 1\n```\n\n### Ý chính\n- `for` duyệt mọi **iterable**: list, chuỗi, dict, tệp, `range`... Dùng `range(bat_dau, ket_thuc, buoc)`; `ket_thuc` không được tính.\n- `break` thoát hẳn vòng lặp, `continue` bỏ qua phần còn lại của lượt hiện tại.\n- Vòng lặp có thể có `else`: khối này chạy khi vòng lặp kết thúc **không** bị `break`.\n- Hai trợ thủ nên dùng thay vì đếm chỉ số bằng tay:\n\n```python\nmon = [\"toán\", \"lý\", \"hoá\"]\nfor vi_tri, ten in enumerate(mon, start=1):\n    print(vi_tri, ten)\n\ndiem = [8, 7, 9]\nfor ten, d in zip(mon, diem):      # ghép song song từng cặp\n    print(ten, d)\n```\n\n### Lỗi hay gặp\n- Quên cập nhật biến điều kiện trong `while`, gây vòng lặp vô hạn (dừng bằng `Ctrl+C`).\n- Thêm hoặc xoá phần tử của list **trong khi đang duyệt** nó, làm bỏ sót phần tử; hãy duyệt một bản sao hoặc tạo list mới.\n- Nhầm `range(5)` ra 1..5; thực ra là 0..4.\n\n### Tự kiểm tra\nĐoạn `for i in range(10): if i % 2: continue; print(i)` in ra những số nào?",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-2-1-control-flow",
+    "ten": "2.1 — Điều khiển luồng: if, for, while",
+    "nguon": "Python programming · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Xử lý chuỗi (Strings)": {
+  "body": "Chuỗi (`str`) là dãy ký tự Unicode và là kiểu dữ liệu bạn thao tác nhiều nhất. Điểm cốt lõi: chuỗi **bất biến** — mọi \"sửa\" thực ra là tạo chuỗi mới.\n\n### Cắt, nối, định dạng\n```python\ns = \"Xin chào Python\"\nprint(s[0], s[-1])          # X n\nprint(s[4:8])               # \"chào\" — slicing [bắt đầu:kết thúc), không gồm vị trí kết thúc\nprint(s[::-1])              # đảo chuỗi\nprint(\"Py\" in s, len(s))    # True 15\n\nten, diem = \"An\", 8.256\nprint(f\"{ten} được {diem:.1f} điểm\")   # f-string: An được 8.3 điểm\n```\n\n### Phương thức hay dùng\n| Phương thức | Việc làm |\n|---|---|\n| `strip()` | bỏ khoảng trắng hai đầu |\n| `split(\",\")` | tách thành list |\n| `\",\".join(ds)` | nối list thành chuỗi |\n| `replace(\"a\", \"b\")` | thay thế |\n| `find(\"x\")` | vị trí (hoặc -1), còn `index` ném lỗi |\n| `startswith`, `endswith` | kiểm tra đầu/cuối |\n| `lower()`, `upper()`, `title()` | đổi hoa/thường |\n\n### Lỗi hay gặp\n- `s[0] = \"x\"` báo `TypeError` vì chuỗi bất biến.\n- Dùng `+=` trong vòng lặp lớn để ghép chuỗi: chậm; hãy gom vào list rồi `\"\".join(...)`.\n- Quên rằng `split()` không tham số tách theo mọi khoảng trắng liên tiếp, còn `split(\" \")` thì giữ lại chuỗi rỗng.\n- Ghép chuỗi với số bằng `+` (`\"Tuổi: \" + 20`): dùng f-string.\n\n### Tự kiểm tra\nCho `t = \" a,b,,c \"`. `t.strip().split(\",\")` ra gì?",
+  "lessons": [
+   {
+    "href": "/courses/pfp191-programming-fundamentals-with-python/learn?lessonSlug=pfp191-1-5-uu-tien-modulo-chuoi",
+    "ten": "1.5 — Thứ tự ưu tiên, toán tử chia lấy dư, thao tác chuỗi",
+    "nguon": "Programming Fundamentals with Python · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PFP191"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-1-1-basics",
+    "ten": "1.1 — Python cơ bản: biến, kiểu, nhập/xuất",
+    "nguon": "Python programming · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/simulation?scenario=text-encoding",
+    "ten": "Chữ thành byte — ASCII, Unicode và UTF-8",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Toán tử (Operators)": {
+  "body": "Toán tử là các ký hiệu thực hiện phép tính hoặc so sánh trên giá trị (toán hạng). Python có nhiều nhóm; quan trọng là biết kết quả và độ ưu tiên của từng nhóm.\n\n### Các nhóm toán tử\n- **Số học**: `+ - * / // % **`. `/` luôn trả `float` (`7 / 2 = 3.5`), `//` là chia lấy phần nguyên làm tròn xuống (`7 // 2 = 3`, `-7 // 2 = -4`), `%` chia lấy dư, `**` luỹ thừa.\n- **Gán kết hợp**: `+=`, `-=`, `*=`... (`n += 1` tương đương `n = n + 1`).\n- **So sánh**: `== != < > <= >=`, trả `bool`, có thể nối (`1 < x < 5`).\n- **Logic**: `and`, `or`, `not`. `a or b` trả **chính toán hạng** quyết định kết quả chứ không nhất thiết là `True`/`False`: `\"\" or \"mặc định\"` cho ra `\"mặc định\"`.\n- **Bitwise** (làm việc trên từng bit của số nguyên): `&` và, `|` hoặc, `^` xor, `~` đảo, `<<` `>>` dịch bit. Ví dụ `5 & 3` là `1`, `1 << 3` là `8`. Thường gặp trong cờ quyền, mặt nạ bit, thuật toán.\n- **Membership**: `in`, `not in` (có trong list, chuỗi, dict key...).\n- **Identity**: `is`, `is not` kiểm tra có cùng một đối tượng hay không.\n\n```python\nprint(7 // 2, 7 % 2, 2 ** 10)       # 3 1 1024\nprint(not 3 > 5 and \"a\" in \"abc\")   # True\n```\n\n### Độ ưu tiên (cao đến thấp, rút gọn)\n`**`, rồi `* / // %`, rồi `+ -`, rồi so sánh, rồi `not`, `and`, `or`. Khi không chắc, dùng ngoặc đơn cho rõ.\n\n### Lỗi hay gặp\n- Dùng `is` để so sánh giá trị (`x is 1000`): `is` kiểm tra danh tính, không phải bằng nhau. Dùng `==`.\n- Nhầm `&`/`|` (bitwise) với `and`/`or` (logic) trong điều kiện.\n- Quên rằng chia số nguyên bằng `/` ra số thực.",
+  "lessons": [
+   {
+    "href": "/courses/pfp191-programming-fundamentals-with-python/learn?lessonSlug=pfp191-1-4-toan-tu-va-bieu-thuc",
+    "ten": "1.4 — Toán tử, toán hạng và biểu thức",
+    "nguon": "Programming Fundamentals with Python · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PFP191"
+   },
+   {
+    "href": "/courses/pfp191-programming-fundamentals-with-python/learn?lessonSlug=pfp191-1-5-uu-tien-modulo-chuoi",
+    "ten": "1.5 — Thứ tự ưu tiên, toán tử chia lấy dư, thao tác chuỗi",
+    "nguon": "Programming Fundamentals with Python · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PFP191"
+   }
+  ]
+ },
+ "Nền tảng › Phạm vi biến (Variable Scope)": {
+  "body": "**Phạm vi** (scope) là vùng code mà một tên biến có hiệu lực. Python tra tên theo quy tắc **LEGB**, từ trong ra ngoài: **L**ocal (trong hàm hiện tại), **E**nclosing (hàm bao ngoài), **G**lobal (cấp module), **B**uilt-in (như `len`, `print`). Tìm thấy ở tầng nào thì dùng tầng đó.\n\n```python\nx = \"toàn cục\"\n\ndef ngoai():\n    x = \"bao ngoài\"\n    def trong():\n        print(x)        # tra: Local không có → Enclosing có → in \"bao ngoài\"\n    trong()\n\nngoai()\nprint(x)                # \"toàn cục\"\n```\n\n### Gán trong hàm tạo biến local\nHễ trong hàm có **phép gán** tới một tên, tên đó được coi là local trong **toàn bộ** hàm:\n\n```python\ndem = 0\ndef tang():\n    dem += 1            # UnboundLocalError: dem là local nhưng chưa có giá trị\n```\nCó hai cách xử lý:\n```python\ndef tang():\n    global dem          # nói rõ: dùng biến cấp module\n    dem += 1\n\ndef tao_bo_dem():\n    n = 0\n    def tang():\n        nonlocal n      # dùng biến của hàm bao ngoài (không phải global)\n        n += 1\n        return n\n    return tang\n```\n\n### Ý chính\n- Chỉ **đọc** biến ở tầng ngoài thì không cần khai báo gì; muốn **gán lại** phải `global` hoặc `nonlocal`.\n- Sửa nội dung một đối tượng mutable (ví dụ `ds.append(1)`) không phải là gán lại tên nên không cần `global`.\n- Biến lặp của `for` rò ra ngoài vòng lặp (vẫn dùng được sau vòng), còn biến trong comprehension thì không.\n- Hạn chế `global`: code phụ thuộc trạng thái chung rất khó kiểm thử.\n\n### Lỗi hay gặp\n- Đặt tên local trùng built-in (`sum = 0`) rồi không gọi được hàm `sum()` trong cùng phạm vi.\n- Closure trong vòng lặp: các hàm tạo trong `for` cùng nhìn vào một biến lặp, nên đều thấy giá trị cuối.\n\n### Tự kiểm tra\nVì sao `print(x)` rồi `x = 5` trong cùng một hàm (với `x` cũng tồn tại ở global) lại báo `UnboundLocalError`?"
+ },
+ "Nền tảng › Xử lý tệp (File Handling)": {
+  "body": "Chương trình chỉ nhớ dữ liệu khi đang chạy; muốn lưu lại hoặc đọc dữ liệu có sẵn bạn cần làm việc với **tệp**. Cách chuẩn trong Python là hàm `open()` kết hợp câu lệnh `with`.\n\n```python\n# Ghi\nwith open(\"ghi_chu.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Dòng 1\\n\")\n    f.write(\"Dòng 2\\n\")\n\n# Đọc từng dòng (tiết kiệm bộ nhớ với tệp lớn)\nwith open(\"ghi_chu.txt\", \"r\", encoding=\"utf-8\") as f:\n    for dong in f:\n        print(dong.strip())\n```\n\n### Ý chính\n- **Chế độ mở**: `\"r\"` đọc (mặc định), `\"w\"` ghi và **xoá nội dung cũ**, `\"a\"` ghi nối thêm, `\"x\"` tạo mới (lỗi nếu đã có), thêm `\"b\"` cho nhị phân (`\"rb\"`, `\"wb\"`).\n- **`with` là context manager**: khi thoát khối, tệp được đóng tự động kể cả khi có lỗi. Đừng quên đóng tệp bằng tay (`f.close()`) khi không dùng `with`.\n- Đọc: `f.read()` (cả tệp thành một chuỗi), `f.readline()`, `f.readlines()` hoặc duyệt trực tiếp `for dong in f`.\n- Luôn chỉ định `encoding=\"utf-8\"` khi làm việc với tiếng Việt để không phụ thuộc mặc định của hệ điều hành.\n- Với đường dẫn, dùng `pathlib`: `Path(\"data\") / \"ten.txt\"` chạy đúng trên cả Windows và Linux, kèm `.exists()`, `.read_text()`, `.write_text()`.\n- Dữ liệu có cấu trúc dùng thư viện `json` (`json.load`, `json.dump`) hoặc `csv`.\n\n### Lỗi hay gặp\n- `FileNotFoundError` vì đường dẫn tương đối tính từ **thư mục đang chạy** chứ không phải thư mục chứa file `.py`.\n- Mở bằng `\"w\"` làm mất dữ liệu cũ ngoài ý muốn.\n- Đọc cả tệp vài GB bằng `read()` làm tràn bộ nhớ.\n- Lỗi `UnicodeDecodeError` do đọc sai encoding.\n\n### Tự kiểm tra\nKhác biệt giữa mở tệp bằng `\"w\"` và `\"a\"` là gì? Vì sao nên dùng `with`?",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-5-1-exceptions-files",
+    "ten": "5.1 — Ngoại lệ & file",
+    "nguon": "Advanced Python with OOP · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-4-1-functions-files",
+    "ten": "4.1 — Hàm, module & file",
+    "nguon": "Python programming · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-5-1-data-apps",
+    "ten": "5.1 — Truy xuất & xử lý dữ liệu (JSON, CSV, API)",
+    "nguon": "Python programming · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › glob — Tìm tệp theo mẫu": {
+  "body": "Module `glob` trong thư viện chuẩn tìm các đường dẫn khớp một **mẫu có ký tự đại diện** (wildcard), giống cách shell hiểu `*.py`. Nó tiện khi bạn cần xử lý hàng loạt tệp mà không phải tự duyệt thư mục.\n\n```python\nimport glob\n\nglob.glob(\"*.txt\")                 # mọi tệp .txt trong thư mục hiện tại\nglob.glob(\"anh/img_??.png\")        # ? thay đúng 1 ký tự: img_01.png, img_AB.png\nglob.glob(\"log/[0-9]*.log\")        # [ ] khớp một ký tự trong tập\nglob.glob(\"**/*.py\", recursive=True)   # ** duyệt cả thư mục con (cần recursive=True)\n```\n\n### Ý chính\n- `*` khớp mọi chuỗi (không gồm dấu `/`), `?` một ký tự, `[abc]` hoặc `[a-z]` một ký tự trong tập.\n- Kết quả là **list**, thứ tự không được đảm bảo; nếu cần ổn định hãy bọc `sorted(...)`.\n- Mặc định `glob` **không khớp tệp ẩn** (tên bắt đầu bằng dấu chấm) với `*`.\n- `glob.iglob(...)` trả iterator, tiết kiệm bộ nhớ khi có rất nhiều tệp.\n- Cách hiện đại hơn là `pathlib`: `Path(\".\").glob(\"*.txt\")` và `Path(\".\").rglob(\"*.py\")` trả về các đối tượng `Path`.\n\n### Lỗi hay gặp\n- Quên `recursive=True` nên `**` chỉ hoạt động như `*`.\n- Tưởng `glob` hiểu regex; nó chỉ hỗ trợ mẫu wildcard đơn giản.\n- Dùng đường dẫn tương đối rồi chạy từ thư mục khác nên không thấy tệp nào."
+ },
+ "Nền tảng › Xử lý lỗi (Error Handling)": {
+  "body": "Bước này nói về **chiến lược** xử lý lỗi chứ không chỉ cú pháp `try`/`except`. Mục tiêu: chương trình thất bại một cách có kiểm soát, có thông tin để sửa, và không làm hỏng dữ liệu.\n\n```python\nimport logging\n\ndef doc_cau_hinh(duong_dan):\n    try:\n        with open(duong_dan, encoding=\"utf-8\") as f:\n            return f.read()\n    except FileNotFoundError:\n        logging.warning(\"Chưa có %s, dùng cấu hình mặc định\", duong_dan)\n        return \"\"\n    except PermissionError as loi:\n        raise RuntimeError(f\"Không có quyền đọc {duong_dan}\") from loi\n```\n\n### Ý chính\n- **Bắt đúng loại lỗi, đúng chỗ**: chỉ `except` những lỗi bạn biết cách xử lý. Lỗi còn lại cứ để nổi lên cho tầng trên hoặc cho người đọc traceback.\n- Phong cách **EAFP** (\"xin lỗi còn hơn xin phép\") của Python: cứ thử rồi bắt lỗi, thay vì kiểm tra điều kiện trước (LBYL). Với file, kiểm tra `exists()` rồi mở vẫn có thể lỗi vì file bị xoá giữa hai bước.\n- `else` trong `try` chứa phần chỉ chạy khi không có lỗi; `finally` dọn dẹp. Tài nguyên ưu tiên dùng `with`.\n- Ghi **log** thay vì `print` khi lỗi: `logging.exception(\"...\")` trong khối `except` ghi kèm traceback.\n- Ném lỗi bằng lớp rõ nghĩa (tự định nghĩa nếu cần) và đính thông điệp có ngữ cảnh. `raise ... from loi_goc` giữ nguyên nhân gốc.\n- `assert` dùng để kiểm tra giả định lúc phát triển, không dùng để kiểm tra dữ liệu người dùng (có thể bị tắt khi chạy với `-O`).\n\n### Lỗi hay gặp\n- `except Exception: pass` hoặc `except:` trần: nuốt lỗi, bug biến mất không dấu vết.\n- Bắt lỗi rồi in ra và trả `None`, khiến lỗi bùng lên ở chỗ khác khó truy.\n- Khối `try` quá dài, không biết lỗi từ dòng nào.\n- Retry vô hạn không có giới hạn hoặc không chờ giữa các lần.\n\n### Tự kiểm tra\nKhi nào nên để lỗi nổi lên thay vì bắt nó? Giữa `raise` và `raise ... from ...` khác nhau gì?",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-5-1-exceptions-files",
+    "ten": "5.1 — Ngoại lệ & file",
+    "nguon": "Advanced Python with OOP · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-6-1-exceptions-packages-venv",
+    "ten": "6.1 — Xử lý ngoại lệ, module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Nền tảng › Thao tác nâng cao với Strings": {
+  "body": "Khi cần định dạng phức tạp hoặc xử lý dữ liệu nhị phân và tiếng Việt, bạn dùng thêm vài công cụ nữa của kiểu `str`.\n\n### f-string và định dạng\n```python\ngia, ten = 1234567.891, \"Bàn phím\"\nprint(f\"{ten:<12}|{gia:>15,.2f}\")   # Bàn phím    |   1,234,567.89\nprint(f\"{42:08b}  {255:#x}  {0.256:.1%}\")   # 00101010  0xff  25.6%\nprint(f\"{gia=}\")                      # gia=1234567.891 (Python 3.8+, tiện khi debug)\nprint(\"{:^9}\".format(\"giữa\"))         # căn giữa, bằng str.format\n```\nCú pháp `{giá_trị:căn_lề độ_rộng , .số_lẻ kiểu}`: `<` trái, `>` phải, `^` giữa; kiểu `f` số thực, `d` nguyên, `x` hex, `b` nhị phân, `%` phần trăm.\n\n### str và bytes\n- `str` là dãy ký tự Unicode; `bytes` là dãy byte thô. Chuyển qua lại bằng mã hoá:\n\n```python\nb = \"Việt\".encode(\"utf-8\")      # b'Vi\\xe1\\xbb\\x87t' — \"ệ\" tốn 3 byte\nprint(len(\"Việt\"), len(b))      # 4 6\nprint(b.decode(\"utf-8\"))        # Việt\n```\n- `ord(\"A\")` cho điểm mã (65), `chr(65)` ngược lại.\n- Chữ có dấu có thể được biểu diễn theo hai cách (ký tự dựng sẵn hoặc chữ cái + dấu rời). Dùng `unicodedata.normalize(\"NFC\", s)` trước khi so sánh hoặc tìm kiếm tiếng Việt.\n\n### Lỗi hay gặp\n- `UnicodeDecodeError` khi giải mã sai encoding; luôn chỉ rõ `encoding=\"utf-8\"` khi đọc/ghi tệp.\n- Cộng `str` với `bytes` (`TypeError`).\n- Coi `len()` là số byte: nó đếm ký tự (điểm mã), không đếm byte.\n- So sánh hai chuỗi tiếng Việt trông giống hệt nhau mà `==` trả `False` do khác dạng chuẩn hoá.",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=text-encoding",
+    "ten": "Chữ thành byte — ASCII, Unicode và UTF-8",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › Lists / Tuples / Sets / Dictionaries": {
+  "body": "Bốn cấu trúc dữ liệu dựng sẵn này gần như là toàn bộ \"kho đồ\" hằng ngày của lập trình viên Python. Chọn đúng cái nào quyết định code ngắn gọn hay rối, nhanh hay chậm.\n\n| | Cú pháp | Thứ tự | Sửa được | Phần tử trùng |\n|---|---|---|---|---|\n| **list** | `[1, 2, 3]` | có | có | cho phép |\n| **tuple** | `(1, 2, 3)` | có | **không** | cho phép |\n| **set** | `{1, 2, 3}` | không | có | **không** |\n| **dict** | `{\"a\": 1}` | giữ thứ tự thêm vào (từ 3.7) | có | khoá không trùng |\n\n```python\nds = [3, 1, 2]\nds.append(4); ds.sort()          # [1, 2, 3, 4]\ntoa_do = (10, 20)                # tuple: bộ giá trị cố định\nx, y = toa_do                    # gỡ (unpack)\nso_duy_nhat = set([1, 1, 2, 3])  # {1, 2, 3}\ntuoi = {\"An\": 20, \"Bình\": 21}\ntuoi[\"Chi\"] = 19\nprint(tuoi.get(\"Dũng\", 0))       # 0 — tránh KeyError\n```\n\n### Chọn cái nào\n- Cần dãy có thứ tự, hay thay đổi → **list**.\n- Bộ giá trị cố định, hoặc dùng làm khoá dict → **tuple**.\n- Cần kiểm tra \"có trong\" nhanh, loại trùng, phép hợp/giao/hiệu (`|`, `&`, `-`) → **set**.\n- Tra cứu giá trị theo khoá → **dict**.\n\n### Ý chính về hiệu năng\n- `x in list` duyệt tuần tự O(n); `x in set` và `x in dict` trung bình O(1) nhờ bảng băm.\n- `list.append` trung bình O(1), nhưng `insert(0, x)` hay `pop(0)` là O(n); cần cả hai đầu nhanh thì dùng `collections.deque`.\n- Khoá của dict và phần tử của set phải **hashable** (số, chuỗi, tuple chứa toàn thứ hashable); list thì không.\n\n### Lỗi hay gặp\n- `b = a` với list không sao chép; dùng `a.copy()` hoặc `a[:]` (sao chép nông).\n- Tuple một phần tử phải có dấu phẩy: `(5,)`. `{}` là dict rỗng, set rỗng phải viết `set()`.\n- Truy cập `d[\"khoá_lạ\"]` ném `KeyError`; dùng `.get()`.",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-3-1-data-structures",
+    "ten": "3.1 — Cấu trúc dữ liệu: list, tuple, dict, set",
+    "nguon": "Python programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-1-1-core-python",
+    "ten": "1.1 — Ôn Python cốt lõi",
+    "nguon": "Advanced Python with OOP · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/csd203-data-structures-and-algorithm-with-python/learn?lessonSlug=csd203-1-1-bigo-list",
+    "ten": "1.1 — Big-O & list Python",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD203"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › Arrays, Linked List, Hash Table": {
+  "body": "Cài tay ba cấu trúc nền tảng này giúp bạn hiểu vì sao `list`, `dict` của Python lại nhanh ở chỗ này và chậm ở chỗ kia.\n\n### Mảng (array)\nCác phần tử nằm **liền kề trong bộ nhớ**, nên truy cập theo chỉ số `a[i]` là O(1). Chèn hoặc xoá ở giữa phải dời các phần tử sau nó: O(n). `list` của Python thực chất là **mảng động** (dynamic array): khi đầy, nó cấp phát mảng lớn hơn rồi chép sang, nên `append` trung bình O(1) (chi phí được \"chia đều\" - amortized).\n\n### Danh sách liên kết (linked list)\nMỗi nút giữ giá trị và con trỏ tới nút kế. Chèn/xoá tại nút đã biết là O(1), nhưng muốn tới vị trí thứ k phải đi từ đầu: O(n). Python không có sẵn linked list đơn trong thư viện chuẩn; `collections.deque` là danh sách liên kết đôi theo khối, dùng tốt cho hàng đợi.\n\n```python\nclass Nut:\n    def __init__(self, gia_tri, ke=None):\n        self.gia_tri, self.ke = gia_tri, ke\n\ndau = Nut(1, Nut(2, Nut(3)))\nnut = dau\nwhile nut:\n    print(nut.gia_tri)\n    nut = nut.ke\n```\n\n### Bảng băm (hash table)\nMột **hàm băm** biến khoá thành chỉ số ô; nhờ vậy tra cứu, chèn, xoá trung bình O(1). Hai khoá khác nhau có thể trùng ô (**va chạm**) và phải được xử lý (nối chuỗi hoặc dò tuyến tính). `dict` và `set` của Python đều là bảng băm; vì vậy khoá phải hashable và bất biến.\n\n### Lỗi hay gặp\n- Cho rằng `list` là linked list nên ngại truy cập theo chỉ số.\n- Quên rằng trường hợp xấu nhất của bảng băm là O(n) khi quá nhiều va chạm.\n- Dùng `list.pop(0)` làm hàng đợi trên dữ liệu lớn: chậm vì O(n); dùng `deque.popleft()`.",
+  "lessons": [
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-2-1-linear",
+    "ten": "2.1 — Mảng, danh sách, ngăn xếp & hàng đợi",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-5-1-search-hash",
+    "ten": "5.1 — Tìm kiếm & bảng băm",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/simulation?scenario=list-vs-linked",
+    "ten": "ArrayList so với LinkedList — trong bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/simulation?scenario=hash-map",
+    "ten": "HashMap — tìm trong một triệu khoá mà không duyệt",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › Stacks, Queues, Heaps, BST, Recursion": {
+  "body": "Nhóm cấu trúc và kỹ thuật này là phần cốt lõi của giáo trình cấu trúc dữ liệu và của các vòng phỏng vấn. Với Python, bạn thường tận dụng thư viện chuẩn thay vì cài từ đầu.\n\n- **Stack** (ngăn xếp, vào sau ra trước, LIFO): dùng `list` với `append()` và `pop()` đều O(1). Ứng dụng: kiểm tra ngoặc, hoàn tác (undo), duyệt sâu.\n- **Queue** (hàng đợi, vào trước ra trước, FIFO): dùng `collections.deque` với `append()` và `popleft()`, vì `list.pop(0)` là O(n). Ứng dụng: duyệt theo tầng (BFS), xử lý theo lượt.\n- **Heap** (hàng đợi ưu tiên): module `heapq` cài **min-heap** trên list: `heapq.heappush(h, x)`, `heapq.heappop(h)` luôn lấy phần tử nhỏ nhất, O(log n). Muốn max-heap thì đẩy số âm.\n- **BST** (cây tìm kiếm nhị phân): mỗi nút có con trái nhỏ hơn, con phải lớn hơn; tìm/chèn trung bình O(log n) nhưng thoái hoá thành O(n) nếu cây lệch.\n- **Đệ quy**: hàm tự gọi chính nó, cần **trường hợp cơ sở** để dừng và một bước thu nhỏ bài toán.\n\n```python\nfrom collections import deque\nimport heapq\n\nngan_xep = []; ngan_xep.append(1); ngan_xep.append(2); ngan_xep.pop()   # 2\nhang_doi = deque([1, 2, 3]); hang_doi.popleft()                         # 1\nheap = []; [heapq.heappush(heap, x) for x in (5, 1, 3)]\nprint(heapq.heappop(heap))                                              # 1\n\ndef giai_thua(n):\n    return 1 if n <= 1 else n * giai_thua(n - 1)\n```\n\n### Lỗi hay gặp\n- Đệ quy thiếu trường hợp cơ sở hoặc quá sâu: Python mặc định giới hạn khoảng 1000 tầng (`RecursionError`); bài toán sâu hơn thì chuyển sang vòng lặp với stack tự quản.\n- Pop từ list/stack rỗng gây `IndexError`.\n- Nhầm `heapq` là max-heap.\n\nHãy luyện trực quan ở trang Algorithms của site để thấy từng bước các cấu trúc này vận hành.",
+  "lessons": [
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-2-1-linear",
+    "ten": "2.1 — Mảng, danh sách, ngăn xếp & hàng đợi",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-3-1-recursion",
+    "ten": "3.1 — Đệ quy",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-6-1-trees",
+    "ten": "6.1 — Cây, BST, AVL & heap",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › Sorting Algorithms": {
+  "body": "Sắp xếp là bài toán kinh điển: đưa dãy về thứ tự tăng (hoặc giảm). Hiểu các thuật toán giúp bạn đọc được độ phức tạp và chọn đúng công cụ, dù ngoài đời bạn hầu như dùng hàm có sẵn.\n\n### Các thuật toán chính\n| Thuật toán | Trung bình | Xấu nhất | Ổn định | Ghi chú |\n|---|---|---|---|---|\n| Bubble / Selection / Insertion | O(n²) | O(n²) | Bubble, Insertion: có | đơn giản; Insertion tốt với dữ liệu gần như đã sắp |\n| Merge sort | O(n log n) | O(n log n) | có | chia đôi, sắp xếp từng nửa, trộn lại; cần thêm O(n) bộ nhớ |\n| Quick sort | O(n log n) | O(n²) | không | chọn pivot, chia hai phía; nhanh trong thực tế, xấu nếu pivot kém |\n| Heap sort | O(n log n) | O(n log n) | không | dùng heap, tại chỗ |\n\n**Ổn định** nghĩa là các phần tử bằng nhau giữ nguyên thứ tự ban đầu, quan trọng khi sắp theo nhiều khoá lần lượt.\n\n### Trong Python\n```python\nso = [5, 2, 9, 1]\nprint(sorted(so))                    # list mới: [1, 2, 5, 9]\nso.sort(reverse=True)                # sắp tại chỗ, trả None\nsv = [(\"An\", 8), (\"Bình\", 6), (\"Chi\", 8)]\nsv.sort(key=lambda t: t[1], reverse=True)   # theo điểm; giữ thứ tự cũ khi bằng điểm\n```\n`sorted` và `list.sort` dùng **Timsort** (lai giữa merge sort và insertion sort): ổn định, O(n log n), và rất nhanh trên dữ liệu đã có sẵn đoạn tăng.\n\n### Lỗi hay gặp\n- Gán `kq = ds.sort()` rồi nhận `None`.\n- Sắp xếp danh sách có kiểu lẫn lộn (`int` với `str`) gây `TypeError`.\n- Tự viết bubble sort cho dữ liệu lớn thay vì dùng `sorted`.\n- Quên rằng quick sort tự cài đệ quy có thể sâu và chạm giới hạn đệ quy.",
+  "lessons": [
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-4-1-sorting",
+    "ten": "4.1 — Các giải thuật sắp xếp",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/csd203-data-structures-and-algorithm-with-python/learn?lessonSlug=csd203-3-1-sorting-searching",
+    "ten": "3.1 — Sắp xếp & tìm kiếm",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD203"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd12-1",
+    "ten": "6.A — 📑 Học theo từng slide · Sắp xếp, phần 1: sắp xếp cơ bản & quicksort (6-Sorting, slide 1–20)",
+    "nguon": "Data Structures and Algorithms · Chương 6",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › DSA track (Code Lab)": {
+  "body": "Đọc lý thuyết chưa đủ để dùng được cấu trúc dữ liệu và giải thuật; bạn cần tự giải bài. Track DSA trong Code Lab của site gồm các nhóm bài đi từ nền tảng đến nâng cao: cấu trúc tuyến tính, tìm kiếm - sắp xếp - đệ quy, danh sách liên kết, cây và BST, băm và heap, đồ thị, quy hoạch động... Mỗi bài có đề, bộ test chạy tự động và bạn nộp lời giải bằng Python ngay trong trình duyệt.\n\n### Cách luyện cho hiệu quả\n- Đọc đề, **tự đưa ví dụ nhỏ** ra giấy trước khi gõ code.\n- Nói ra độ phức tạp thời gian và bộ nhớ của lời giải.\n- Làm bản đơn giản (vét cạn) cho chạy đúng, rồi mới tối ưu.\n- Gặp bài khó, xem gợi ý một lớp rồi tự làm tiếp thay vì chép lời giải.\n- Ghi lại các **mẫu** gặp nhiều lần: hai con trỏ, cửa sổ trượt, BFS/DFS, quy hoạch động, quay lui.\n\n### Lỗi hay gặp\n- Nhảy sang bài khó quá sớm rồi nản.\n- Chỉ làm bài mình đã biết cách.\n- Không kiểm các trường hợp biên: dãy rỗng, một phần tử, phần tử trùng, số âm.\n\nTrang Algorithms bổ sung phần **trực quan hoá**: xem từng bước thuật toán chạy trước khi bạn tự cài đặt.",
+  "lessons": [
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › Cấu trúc dữ liệu tự định nghĩa (Custom Data Structures)": {
+  "body": "Tự cài đặt Stack, Queue và Linked List bằng `class` là bài tập nền tảng: bạn thấy rõ cấu trúc làm việc ra sao bên trong, trước khi dùng bản có sẵn của thư viện.\n\n### Stack (LIFO) bằng class\n```python\nclass Stack:\n    def __init__(self):\n        self._items = []\n\n    def push(self, x):\n        self._items.append(x)\n\n    def pop(self):\n        if self.is_empty():\n            raise IndexError(\"pop từ stack rỗng\")\n        return self._items.pop()\n\n    def peek(self):\n        return self._items[-1]\n\n    def is_empty(self):\n        return not self._items\n\n    def __len__(self):\n        return len(self._items)\n```\n\n### Queue (FIFO)\nDùng `collections.deque` làm bộ chứa bên trong để `enqueue` (`append`) và `dequeue` (`popleft`) đều O(1). Nếu dùng `list.pop(0)` thì mỗi lần lấy ra là O(n).\n\n### Linked List đơn\nMỗi `Nut` có `gia_tri` và `ke`. Lớp danh sách giữ `dau` và cài `them_cuoi`, `xoa`, `tim`, `__iter__`. Thao tác cần chú ý: xoá nút đầu, xoá nút cuối, danh sách rỗng.\n\n### Ý chính\n- Che dữ liệu bên trong (tên `_items`), chỉ cho thao tác qua phương thức (đóng gói).\n- Cài dunder `__len__`, `__iter__`, `__repr__` để class dùng tự nhiên với `len()`, `for`, `print`.\n- Ghi rõ độ phức tạp từng thao tác.\n\n### Lỗi hay gặp\n- Quên xử lý trường hợp rỗng (`pop` trên stack rỗng).\n- Mất tham chiếu tới phần còn lại của danh sách khi chèn/xoá (gán sai thứ tự con trỏ).\n- Chỉ kiểm tra ví dụ \"đường đi đẹp\" mà không thử biên.",
+  "lessons": [
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-2-1-linear",
+    "ten": "2.1 — Mảng, danh sách, ngăn xếp & hàng đợi",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/csd203-data-structures-and-algorithm-with-python/learn?lessonSlug=csd203-2-1-stack-queue-recursion",
+    "ten": "2.1 — Stack, queue & đệ quy",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD203"
+   },
+   {
+    "href": "/simulation?scenario=list-vs-linked",
+    "ten": "ArrayList so với LinkedList — trong bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › Cấu trúc dữ liệu & Giải thuật (Data Structures & Algorithms)": {
+  "body": "**Cấu trúc dữ liệu** là cách tổ chức dữ liệu trong bộ nhớ; **giải thuật** là dãy bước để giải một bài toán. Chọn cặp cấu trúc - giải thuật phù hợp quyết định chương trình xử lý được một nghìn hay một trăm triệu phần tử.\n\n### Các nhóm chính\n- **Cấu trúc**: list, tuple, set, dict, stack, queue, heap, cây, đồ thị.\n- **Giải thuật**: tìm kiếm (tuyến tính, nhị phân), sắp xếp, đệ quy, duyệt cây/đồ thị (BFS, DFS), quy hoạch động, tham lam, quay lui.\n\n### Đo độ phức tạp bằng Big-O\nBig-O mô tả thời gian (hoặc bộ nhớ) **tăng thế nào** khi kích thước đầu vào n tăng, bỏ qua hằng số: O(1) hằng, O(log n), O(n), O(n log n), O(n²), O(2ⁿ)... Với n = 1 triệu, O(n) cỡ một triệu bước, còn O(n²) cỡ một nghìn tỉ bước: khác biệt giữa \"tức thì\" và \"không bao giờ xong\".\n\n```python\n# O(n²): với mỗi số lại duyệt cả list\ndef co_trung_cham(a):\n    return any(a[i] == a[j] for i in range(len(a)) for j in range(i + 1, len(a)))\n\n# O(n): dùng set để nhớ những số đã gặp\ndef co_trung_nhanh(a):\n    da_thay = set()\n    for x in a:\n        if x in da_thay:\n            return True\n        da_thay.add(x)\n    return False\n```\n\n### Ý chính\n- Đổi **bộ nhớ lấy thời gian**: thêm một set/dict thường biến O(n²) thành O(n).\n- Biết Big-O của thao tác dựng sẵn (`in` trên list là O(n), trên set là O(1)).\n- Đọc đề, nghĩ giới hạn n để đoán độ phức tạp cần đạt.\n\n### Lỗi hay gặp\n- Tối ưu sớm khi chưa đo.\n- Quên rằng O(1) hay O(n) chỉ nói về xu hướng tăng, không so được hai thuật toán ở n nhỏ.",
+  "lessons": [
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-0-1-overview",
+    "ten": "Tổng quan: Cấu trúc dữ liệu & giải thuật",
+    "nguon": "Data Structures and Algorithm with Python · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-1-1-complexity",
+    "ten": "1.1 — Phân tích độ phức tạp (Big-O)",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd3-1",
+    "ten": "0.C — 📑 Học theo từng slide · Phân tích độ phức tạp, phần 1: thời gian chạy & Big-O (ComplexityAnalysis, slide 1–23)",
+    "nguon": "Data Structures and Algorithms · Mục 0",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cấu trúc dữ liệu & DSA › Cây tìm kiếm nhị phân (Binary Search Tree)": {
+  "body": "**Cây tìm kiếm nhị phân** (BST) là cây mà mỗi nút có tối đa hai con, và với mọi nút: mọi giá trị ở cây con **trái nhỏ hơn**, mọi giá trị ở cây con **phải lớn hơn** nút đó. Nhờ quy tắc này, mỗi lần so sánh bạn loại được một nửa cây (nếu cây cân bằng), nên tìm, chèn, xoá trung bình O(log n).\n\n```python\nclass Nut:\n    def __init__(self, khoa):\n        self.khoa, self.trai, self.phai = khoa, None, None\n\ndef chen(goc, khoa):\n    if goc is None:\n        return Nut(khoa)\n    if khoa < goc.khoa:\n        goc.trai = chen(goc.trai, khoa)\n    elif khoa > goc.khoa:\n        goc.phai = chen(goc.phai, khoa)\n    return goc\n\ndef tim(goc, khoa):\n    while goc and goc.khoa != khoa:\n        goc = goc.trai if khoa < goc.khoa else goc.phai\n    return goc\n\ndef inorder(goc):            # duyệt trái - nút - phải: ra dãy TĂNG DẦN\n    if goc:\n        yield from inorder(goc.trai)\n        yield goc.khoa\n        yield from inorder(goc.phai)\n```\n\n### Ý chính\n- **Duyệt**: inorder (trái, nút, phải) cho dãy tăng dần; preorder (nút, trái, phải) hợp để sao chép cây; postorder (trái, phải, nút) hợp để xoá cây; theo tầng dùng queue (BFS).\n- **Xoá** có ba trường hợp: nút lá (bỏ đi), nút một con (thay bằng con đó), nút hai con (thay bằng giá trị nhỏ nhất của cây con phải, hay \"nút kế vị inorder\", rồi xoá nút kế vị).\n- Chèn dãy đã sắp xếp vào BST thường làm cây **lệch** như một danh sách và mất lợi thế O(log n); cây tự cân bằng như AVL hay Red-Black xử lý việc này.\n\n### Lỗi hay gặp\n- Xoá nút hai con mà quên xử lý lại con trỏ cha.\n- Không xét các khoá trùng (quy ước bỏ qua, đếm hoặc đưa về một bên).\n- Đệ quy trên cây rất lệch vượt giới hạn đệ quy của Python.\n\n### Tự kiểm tra\nDuyệt inorder một BST cho kết quả gì? Chèn 1, 2, 3, 4, 5 lần lượt thì cây trông thế nào và hệ quả về độ phức tạp?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd8-2",
+    "ten": "4.B — 📑 Học theo từng slide · Cây, phần 1b: cài đặt cây nhị phân & BST (4A-Trees1, slide 18–34)",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-6-1-trees",
+    "ten": "6.1 — Cây, BST, AVL & heap",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bst",
+    "ten": "4.4 — Cây nhị phân tìm kiếm (BST)",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bst-chen-xoa",
+    "ten": "4.5 — BST: chèn & ba trường hợp xoá",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Module & Package Manager › Modules & import": {
+  "body": "Khi chương trình lớn dần, không ai nhét hết vào một file. Python chia code thành **module** (một file `.py`) và **package** (một thư mục chứa nhiều module), rồi dùng `import` để lấy code từ chỗ này sang chỗ khác.\n\n```python\n# tien_ich.py\ndef binh_phuong(x):\n    return x * x\n\n# main.py\nimport tien_ich\nfrom tien_ich import binh_phuong\nimport math as m\nprint(tien_ich.binh_phuong(3), binh_phuong(4), m.sqrt(16))\n```\n\n### Ý chính\n- Các dạng: `import mod`, `from mod import ten`, `import mod as bi_danh`. Hạn chế `from mod import *` vì làm lộn xộn không gian tên.\n- Khi import, Python tìm theo `sys.path`: thư mục của script đang chạy, các đường dẫn cài đặt thư viện (nơi `pip` cài), thư viện chuẩn. Module chỉ được **chạy một lần** và lưu vào `sys.modules`.\n- **Package**: thư mục có (tuỳ chọn) file `__init__.py`; import bằng `from goi.con import ham`. Trong cùng package có thể dùng import tương đối: `from . import anh_em`.\n- Cách chặn code chạy khi import, chỉ chạy khi chạy trực tiếp:\n\n```python\nif __name__ == \"__main__\":\n    main()\n```\n- Thư viện chuẩn rất lớn (`os`, `json`, `datetime`, `pathlib`, `collections`...). Thư viện ngoài cài bằng `pip`.\n\n### Lỗi hay gặp\n- Đặt tên file trùng thư viện chuẩn (`random.py`, `json.py`) khiến `import random` lấy chính file của bạn.\n- **Import vòng tròn** (A import B, B import A) gây `ImportError`; tách phần dùng chung ra module thứ ba.\n- `ModuleNotFoundError` vì chạy sai thư mục hoặc quên kích hoạt môi trường ảo nơi đã cài thư viện.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-6-1-exceptions-packages-venv",
+    "ten": "6.1 — Xử lý ngoại lệ, module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-4-1-functions-files",
+    "ten": "4.1 — Hàm, module & file",
+    "nguon": "Python programming · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   }
+  ]
+ },
+ "Module & Package Manager › pip & PyPI": {
+  "body": "**PyPI** (Python Package Index) là kho thư viện công cộng của cộng đồng Python (pypi.org). **pip** là công cụ dòng lệnh mặc định đi kèm Python để tải và cài các gói đó cùng các gói chúng phụ thuộc.\n\n```bash\npython -m pip install requests              # cài bản mới nhất\npython -m pip install \"requests==2.32.3\"    # ghim đúng phiên bản\npython -m pip install \"pandas>=2.0,<3\"      # khoảng phiên bản\npython -m pip install --upgrade requests\npython -m pip uninstall requests\npython -m pip list                          # đã cài những gì\npython -m pip show requests                 # thông tin một gói\npython -m pip freeze > requirements.txt     # ghi danh sách phiên bản hiện tại\npython -m pip install -r requirements.txt   # cài lại đúng như vậy ở máy khác\n```\n\n### Ý chính\n- Viết `python -m pip` thay vì `pip` trơn để chắc chắn dùng **đúng** trình thông dịch bạn đang gọi.\n- Luôn cài vào **môi trường ảo** của dự án (xem bước venv), không cài lung tung vào Python hệ thống.\n- `requirements.txt` giúp tái tạo môi trường; cần ghim phiên bản cụ thể để build lặp lại được. Dự án lớn nên dùng công cụ có **lockfile** (Poetry, uv, PDM).\n- Chỉ cài gói tên đúng và nguồn đáng tin: có kẻ đăng gói tên giống hệt (typosquatting) để cài mã độc.\n\n### Lỗi hay gặp\n- `pip` và `python` trỏ vào hai bản Python khác nhau nên \"đã cài rồi mà vẫn không import được\".\n- Quên ghim phiên bản, tuần sau cài lại ra bản mới làm vỡ code.\n- Cài gói hệ thống bằng quyền quản trị (`sudo pip`) làm xung đột với gói của hệ điều hành.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Module & Package Manager › Poetry / uv": {
+  "body": "`pip` chỉ cài gói. Khi dự án lớn lên, bạn cần thêm: khai báo phụ thuộc ở một chỗ, **khoá phiên bản** (lockfile) để mọi người cài giống nhau, tự quản môi trường ảo, và đóng gói để phát hành. **Poetry** và **uv** là hai công cụ làm trọn gói việc đó, đều dùng file `pyproject.toml` (chuẩn mới của hệ sinh thái Python).\n\n### Poetry\n```bash\npoetry init                    # tạo pyproject.toml\npoetry add requests            # thêm phụ thuộc (ghi vào pyproject.toml + poetry.lock)\npoetry install                 # cài đúng theo poetry.lock\npoetry run python main.py      # chạy trong môi trường của dự án\n```\nPoetry tự tạo và quản lý môi trường ảo, có sẵn lệnh build và publish lên PyPI.\n\n### uv\n`uv` do Astral phát triển, viết bằng Rust, nhanh hơn pip rõ rệt:\n```bash\nuv init\nuv add requests\nuv run main.py\nuv sync                        # đồng bộ môi trường theo uv.lock\n```\nNgoài ra uv thay được `pip`, `pip-tools`, `virtualenv` và có thể cài cả phiên bản Python.\n\n### Chọn cái nào\n- Dự án mới, muốn nhanh và gọn: **uv** là lựa chọn hợp lý.\n- Dự án sẵn dùng Poetry, hoặc cần quy trình publish quen thuộc: giữ **Poetry**.\n- Chỉ viết script nhỏ: `venv` + `pip` là đủ.\n\n### Lỗi hay gặp\n- Vừa dùng `pip install` trực tiếp vừa dùng `poetry add`/`uv add`: lockfile và môi trường lệch nhau. Chọn một công cụ cho mỗi dự án.\n- Không commit lockfile vào git nên đồng đội cài ra phiên bản khác."
+ },
+ "Module & Package Manager › venv / virtualenv / Pipenv / pyenv": {
+  "body": "Mỗi dự án nên có **môi trường ảo** riêng: một thư mục chứa bản sao Python và các gói cài riêng cho dự án đó, để dự án A dùng `django 4` còn dự án B dùng `django 5` mà không đụng nhau. Nhóm công cụ này giải quyết hai việc: cô lập gói và quản lý nhiều phiên bản Python.\n\n| Công cụ | Làm gì |\n|---|---|\n| **venv** | module có sẵn trong thư viện chuẩn: `python -m venv .venv` |\n| **virtualenv** | bản độc lập, có từ trước `venv`; nhanh hơn, hỗ trợ nhiều phiên bản Python hơn |\n| **Pipenv** | gộp `pip` + môi trường ảo, dùng `Pipfile` và `Pipfile.lock` |\n| **pyenv** | cài và chuyển đổi **nhiều phiên bản Python** trên một máy; không phải công cụ môi trường ảo |\n\n```bash\npython -m venv .venv\nsource .venv/bin/activate        # Windows: .venv\\Scripts\\activate\npython -m pip install requests\ndeactivate\n```\n\n### Ý chính\n- Kích hoạt môi trường thì `python` và `pip` trong terminal đó trỏ vào môi trường ảo.\n- Không commit thư mục `.venv` lên git; thêm vào `.gitignore` và chia sẻ bằng `requirements.txt` hoặc lockfile.\n- `pyenv` và `venv` bổ sung cho nhau: pyenv chọn phiên bản Python, venv cô lập gói.\n\n### Lỗi hay gặp\n- Quên kích hoạt rồi cài gói vào Python hệ thống.\n- Di chuyển hoặc đổi tên thư mục dự án làm hỏng môi trường ảo (đường dẫn bên trong bị cố định): tạo lại.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-6-1-exceptions-packages-venv",
+    "ten": "6.1 — Xử lý ngoại lệ, module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Module & Package Manager › uv": {
+  "body": "**uv** là công cụ quản lý gói và dự án Python do Astral (nhóm làm `ruff`) viết bằng Rust. Nó gộp công việc của `pip`, `pip-tools`, `virtualenv`, `pipx` và cả phần quản lý phiên bản Python (thay một phần `pyenv`) vào một lệnh duy nhất, với tốc độ cao hơn pip nhiều lần nhờ cache và giải phụ thuộc song song.\n\n### Quy trình dự án\n```bash\nuv init ten-du-an && cd ten-du-an     # tạo pyproject.toml, .python-version\nuv add requests \"pandas>=2\"           # thêm phụ thuộc, tự tạo .venv và uv.lock\nuv run main.py                        # chạy trong môi trường dự án (không cần activate)\nuv sync                               # dựng lại môi trường đúng theo uv.lock\nuv remove requests\n```\n- `pyproject.toml` khai báo phụ thuộc; `uv.lock` khoá chính xác phiên bản. **Commit cả hai** vào git.\n\n### Ý chính\n- **Quản lý Python**: `uv python install 3.13` tải bản Python về; `.python-version` ghi bản dự án cần.\n- **Chạy công cụ một lần**: `uvx ruff check .` (hoặc `uv tool run`) chạy công cụ trong môi trường tạm, tương tự `pipx run`.\n- **Tương thích pip**: `uv pip install ...` và `uv venv` có giao diện giống pip/venv, dễ chuyển dần.\n- Chạy một script đơn có thể khai báo phụ thuộc ngay trong file bằng metadata nội tuyến (PEP 723) và `uv run script.py`.\n\n### Lỗi hay gặp\n- Trộn `uv add` với `pip install` thủ công làm môi trường lệch khỏi lockfile.\n- Quên commit `uv.lock`, đồng đội cài ra phiên bản khác.\n- Gọi `python` trần ngoài `uv run` nên dùng nhầm Python hệ thống.",
+  "more": [
+   {
+    "type": "official",
+    "title": "uv — tài liệu chính thức (Astral)",
+    "url": "https://docs.astral.sh/uv/"
+   }
+  ]
+ },
+ "Module & Package Manager › pyenv": {
+  "body": "Một máy thường cần nhiều phiên bản Python cùng lúc: dự án cũ chạy 3.9, dự án mới 3.13, và bản Python hệ điều hành thì không nên đụng vào. **pyenv** cho phép cài và chuyển đổi giữa các phiên bản đó, trên Linux và macOS (trên Windows có bản `pyenv-win`).\n\n```bash\npyenv install --list | grep 3.12     # xem các bản có thể cài\npyenv install 3.12.4                 # biên dịch và cài một phiên bản\npyenv versions                       # các bản đã cài\npyenv global 3.12.4                  # bản mặc định toàn máy (cho người dùng)\ncd ten-du-an && pyenv local 3.11.9   # chỉ định bản cho thư mục này (ghi .python-version)\npython --version\n```\n\n### Ý chính\n- pyenv hoạt động qua các \"shim\" đặt trong `PATH`: khi bạn gõ `python`, shim đọc `.python-version` ở thư mục hiện tại rồi chạy đúng bản.\n- pyenv **chỉ quản lý phiên bản Python**, không cô lập gói; kết hợp với `venv`: chọn phiên bản bằng pyenv, rồi `python -m venv .venv` tạo môi trường cho dự án.\n- Phần lớn bản Python được **biên dịch từ mã nguồn**, nên cần cài trước các thư viện dựng (compiler, `openssl`, `zlib`, `libffi`...); thiếu chúng thì cài báo lỗi hoặc thiếu module như `ssl`.\n- Cần thêm dòng khởi tạo vào file cấu hình shell (`~/.bashrc`, `~/.zshrc`) theo hướng dẫn cài đặt, nếu không lệnh `pyenv` không có tác dụng.\n\n### Lỗi hay gặp\n- Đã `pyenv install` nhưng `python --version` vẫn ra bản cũ: chưa khởi tạo shell hoặc chưa chọn `global`/`local`.\n- Quên rằng venv tạo từ bản nào thì gắn với bản đó; đổi bản Python phải tạo lại venv."
+ },
+ "Module & Package Manager › virtualenv": {
+  "body": "**virtualenv** là công cụ tạo môi trường Python cô lập cho từng dự án: mỗi môi trường có `python` và `site-packages` riêng, nên gói cài ở dự án này không ảnh hưởng dự án khác. Đây là nền tảng ý tưởng mà module `venv` có sẵn trong thư viện chuẩn (từ Python 3.3) kế thừa.\n\n```bash\npython -m pip install virtualenv     # chỉ cần nếu dùng virtualenv (venv thì có sẵn)\npython -m virtualenv .venv           # hoặc: python -m venv .venv\nsource .venv/bin/activate            # Windows: .venv\\Scripts\\activate\npip install requests\npip freeze > requirements.txt\ndeactivate\n```\n\n### Ý chính\n- Với dự án thông thường, `python -m venv` là đủ. `virtualenv` đáng dùng khi bạn cần tạo môi trường **nhanh hơn**, nhắm tới phiên bản Python khác với bản đang chạy (`-p python3.9`), hoặc hỗ trợ bản Python cũ.\n- Thư mục môi trường (thường đặt tên `.venv` hoặc `venv`) là **sản phẩm phát sinh**: không commit lên git, chỉ commit `requirements.txt`/lockfile.\n- Mỗi IDE (VS Code, PyCharm) cho chọn trình thông dịch của môi trường ảo để tự nhận gói đã cài.\n\n### Lỗi hay gặp\n- Cài gói rồi mới nhớ chưa kích hoạt môi trường.\n- Sao chép nguyên thư mục môi trường sang máy khác: không chạy được vì chứa đường dẫn tuyệt đối. Hãy tạo lại từ `requirements.txt`.\n- Đổi tên hoặc di chuyển thư mục dự án rồi môi trường hỏng.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-6-1-exceptions-packages-venv",
+    "ten": "6.1 — Xử lý ngoại lệ, module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Module & Package Manager › PDM — Python Dependency Manager": {
+  "body": "**PDM** (Python Development Master) là trình quản lý phụ thuộc và dự án viết bằng Python, bám sát các chuẩn của hệ sinh thái: khai báo trong `pyproject.toml` theo PEP 621, build theo PEP 517, và khoá phiên bản trong `pdm.lock`. Nó cùng nhóm với Poetry và uv.\n\n```bash\npdm init                 # tạo pyproject.toml\npdm add requests         # thêm phụ thuộc\npdm install              # cài theo pdm.lock\npdm run python main.py   # chạy trong môi trường dự án\n```\n\n### Điểm đáng chú ý\n- Giải phụ thuộc và có lockfile, hỗ trợ nhóm phụ thuộc (dev, test...) và phụ thuộc tuỳ chọn.\n- **PEP 582** là đề xuất cho phép cài gói vào thư mục `__pypackages__` trong dự án, không cần môi trường ảo. PDM từng hỗ trợ ý tưởng này, nhưng PEP 582 cuối cùng **bị bác bỏ** (2023), nên mặc định ngày nay PDM dùng môi trường ảo như các công cụ khác. Đừng xây quy trình dựa vào PEP 582.\n- Có hệ plugin và script (khai báo lệnh tắt trong `pyproject.toml`).\n\n### Khi nào chọn PDM\nKhi bạn thích công cụ bám chuẩn PEP và muốn lockfile, không cần tốc độ tối đa. Nếu bắt đầu dự án mới và ưu tiên tốc độ cùng hệ sinh thái đang lớn, uv thường được chọn; nếu đã có Poetry, giữ nguyên.\n\n### Lỗi hay gặp\n- Hiểu nhầm PDM bắt buộc dùng `__pypackages__`.\n- Trộn nhiều trình quản lý phụ thuộc trong cùng một dự án."
+ },
+ "Module & Package Manager › Conda": {
+  "body": "**Conda** là trình quản lý gói và môi trường cho nhiều ngôn ngữ, phổ biến trong khoa học dữ liệu. Khác `pip` chỉ cài gói Python, conda cài được cả **thư viện nhị phân không phải Python** (C/C++, CUDA toolkit, HDF5, GDAL...) và chính trình thông dịch Python. Vì vậy nó đỡ đau đầu khi cài `numpy`, `scipy`, `tensorflow` hay công cụ cần thư viện hệ thống.\n\n```bash\nconda create -n khoa-hoc-du-lieu python=3.12\nconda activate khoa-hoc-du-lieu\nconda install numpy pandas\nconda install -c conda-forge geopandas     # chọn kênh (channel) conda-forge\nconda env export > environment.yml          # lưu môi trường\nconda env create -f environment.yml         # dựng lại ở máy khác\n```\n\n### Ý chính\n- **Anaconda** là bộ cài lớn kèm sẵn nhiều gói; **Miniconda** và **Miniforge** là bản gọn chỉ có conda. Miniforge mặc định dùng kênh cộng đồng `conda-forge`.\n- Kênh (channel) là nơi lấy gói: `defaults` (của Anaconda) và `conda-forge` (cộng đồng, rất lớn). Nên giữ nhất quán một kênh chính.\n- Có thể dùng `pip` bên trong môi trường conda cho gói không có trên conda, nhưng nên cài bằng conda trước rồi pip sau cùng, để không phá phụ thuộc.\n- Với tổ chức lớn, hãy đọc điều khoản dùng kênh `defaults` của Anaconda trước khi dùng; `conda-forge` là phương án tự do hơn.\n\n### Lỗi hay gặp\n- Trộn `conda install` và `pip install` lộn xộn đến mức môi trường hỏng.\n- Dựng môi trường bằng cách cài mọi thứ vào môi trường `base`.\n- Giải phụ thuộc chậm do quá nhiều kênh; thu gọn kênh sử dụng."
+ },
+ "OOP & Lập trình hàm › Object Oriented Programming": {
+  "body": "**Lập trình hướng đối tượng** (OOP) tổ chức chương trình thành các **đối tượng**, mỗi đối tượng gói chung **dữ liệu** (thuộc tính) và **hành vi** (phương thức). Một **class** là bản thiết kế, một **object** (instance) là sản phẩm tạo từ bản thiết kế đó. Trong Python mọi thứ đều là đối tượng, kể cả số, chuỗi và hàm.\n\n```python\nclass TaiKhoan:\n    def __init__(self, chu, so_du=0):\n        self.chu = chu\n        self._so_du = so_du\n\n    def nap(self, tien):\n        if tien <= 0:\n            raise ValueError(\"Số tiền phải dương\")\n        self._so_du += tien\n\n    def __str__(self):\n        return f\"{self.chu}: {self._so_du:,}đ\"\n\ntk = TaiKhoan(\"An\", 100_000)\ntk.nap(50_000)\nprint(tk)               # An: 150,000đ\n```\n\n### Vì sao cần biết\nHầu hết thư viện và framework (Django, FastAPI, pandas...) được thiết kế theo OOP. Hiểu OOP giúp bạn đọc được mã nguồn của chúng và tổ chức dự án lớn gọn gàng.\n\n### Ý chính\n- **Bốn trụ cột**: *đóng gói* (che trạng thái bên trong, chỉ lộ giao diện), *kế thừa* (lớp con dùng lại lớp cha), *đa hình* (cùng lời gọi, hành vi tuỳ loại đối tượng), *trừu tượng* (chỉ lộ cái cần dùng, ẩn chi tiết).\n- Python theo \"**duck typing**\": quan trọng là đối tượng *có* phương thức cần gọi, không quan trọng nó kế thừa từ đâu.\n- **Dunder method** (`__init__`, `__str__`, `__eq__`, `__len__`...) cho phép class của bạn tham gia vào cú pháp Python như `print(obj)`, `len(obj)`, `a == b`.\n- Ưu tiên **composition** (\"có một\") thay vì kế thừa (\"là một\") khi quan hệ không thật sự là \"là một\".\n\n### Lỗi hay gặp\n- Quên `self` ở tham số đầu của phương thức.\n- Đặt thuộc tính mutable ở cấp class (như `ds = []`) nên mọi đối tượng dùng chung.\n- Lạm dụng kế thừa sâu nhiều tầng thay vì kết hợp các đối tượng nhỏ.\n\n### Tự kiểm tra\nKhác biệt giữa class và object? Vì sao `TaiKhoan(\"An\")` không cần gõ `self`?",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-2-1-classes",
+    "ten": "2.1 — Lớp & đối tượng",
+    "nguon": "Advanced Python with OOP · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-3-1-four-pillars",
+    "ten": "3.1 — Bốn trụ của OOP",
+    "nguon": "Advanced Python with OOP · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-2-1-classes-pillars",
+    "ten": "2.1 — Lớp, đối tượng & 4 trụ cột OOP",
+    "nguon": "Advanced Python with OOP · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-4-1-dunder",
+    "ten": "4.1 — Magic method (dunder)",
+    "nguon": "Advanced Python with OOP · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Decorators": {
+  "body": "**Decorator** là hàm nhận vào một hàm và trả về một hàm mới có thêm chức năng, mà không phải sửa hàm gốc. Cú pháp `@ten_decorator` đặt trên dòng định nghĩa hàm chỉ là cách viết gọn cho `ham = ten_decorator(ham)`.\n\n```python\nimport functools, time\n\ndef do_thoi_gian(ham):\n    @functools.wraps(ham)            # giữ lại tên, docstring của hàm gốc\n    def boc(*args, **kwargs):\n        bat_dau = time.perf_counter()\n        kq = ham(*args, **kwargs)\n        print(f\"{ham.__name__} chạy {time.perf_counter() - bat_dau:.4f}s\")\n        return kq\n    return boc\n\n@do_thoi_gian\ndef tinh(n):\n    return sum(range(n))\n\ntinh(1_000_000)\n```\n\n### Ý chính\n- Dựa trên việc hàm là **đối tượng hạng nhất** và **closure** (hàm bên trong nhớ biến của hàm bao ngoài).\n- Decorator **có tham số** cần thêm một tầng: hàm nhận tham số, trả decorator thật (`@thu_lai(so_lan=3)`).\n- Có thể xếp chồng nhiều decorator; chúng áp dụng từ dưới lên.\n- Decorator dựng sẵn hay gặp: `@property`, `@staticmethod`, `@classmethod`, `@functools.lru_cache` (lưu đệm kết quả), `@dataclass`. Framework web dùng decorator để khai báo route, kiểm tra quyền, ghi log.\n\n### Lỗi hay gặp\n- Quên `functools.wraps`, nên `ten_ham.__name__` thành `boc` và công cụ gỡ lỗi/tài liệu bị rối.\n- Quên `return` kết quả của hàm gốc trong hàm bọc, hoặc quên truyền `*args, **kwargs`.\n- Quên rằng decorator chạy lúc **định nghĩa** hàm (khi import), không phải lúc gọi.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-4-1-property-descriptor-decorator",
+    "ten": "4.1 — Property, descriptor & decorator",
+    "nguon": "Advanced Python with OOP · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-7-1-functional-advanced",
+    "ten": "7.1 — Lập trình hàm & nâng cao",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Lambdas": {
+  "body": "**Lambda** là hàm ẩn danh viết gọn trên một dòng: `lambda tham_so: biểu_thức`. Nó chỉ chứa **một biểu thức** (kết quả được trả về tự động), không chứa câu lệnh như `if` nhiều dòng hay `for`.\n\n```python\nbinh_phuong = lambda x: x * x          # tương đương def binh_phuong(x): return x * x\nprint(binh_phuong(5))                  # 25\n\nsv = [(\"An\", 8.0), (\"Bình\", 6.5), (\"Chi\", 9.0)]\nprint(sorted(sv, key=lambda t: t[1], reverse=True))   # theo điểm giảm dần\nprint(list(map(lambda x: x * 2, [1, 2, 3])))          # [2, 4, 6]\nprint(list(filter(lambda x: x % 2 == 0, range(10))))  # [0, 2, 4, 6, 8]\n```\n\n### Khi nào dùng\n- Làm đối số **tạm thời** cho hàm bậc cao: `key=` của `sorted`, `min`, `max`, hoặc `map`/`filter`.\n- Hàm đã khá dài hoặc dùng nhiều lần: viết `def` có tên cho dễ đọc, dễ gỡ lỗi.\n- Với `map`/`filter` đơn giản, **comprehension** thường dễ đọc hơn: `[x * 2 for x in ds]`.\n\n### Lỗi hay gặp\n- Gán lambda vào một tên (`f = lambda ...`): PEP 8 khuyên dùng `def`, vì traceback sẽ hiện `<lambda>` thay vì tên có nghĩa.\n- Tạo nhiều lambda trong vòng lặp rồi cùng nhìn vào biến vòng lặp (ràng buộc muộn):\n\n```python\ncac_ham = [lambda: i for i in range(3)]\nprint([f() for f in cac_ham])           # [2, 2, 2], không phải [0, 1, 2]\ncac_ham = [lambda i=i: i for i in range(3)]   # cố định giá trị bằng tham số mặc định\n```\n- Nhồi logic phức tạp vào một lambda làm code khó đọc.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-7-1-functional-advanced",
+    "ten": "7.1 — Lập trình hàm & nâng cao",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Iterators & Generators": {
+  "body": "**Iterable** là thứ bạn duyệt được bằng `for` (list, chuỗi, dict, tệp...). **Iterator** là đối tượng nhớ vị trí hiện tại và trả từng phần tử khi gọi `next()`, hết thì ném `StopIteration`. **Generator** là cách viết iterator ngắn gọn bằng hàm có từ khoá `yield`.\n\n```python\ndef dem_den(n):\n    i = 0\n    while i < n:\n        yield i            # trả một giá trị rồi \"tạm dừng\", nhớ nguyên trạng thái\n        i += 1\n\nfor x in dem_den(3):\n    print(x)               # 0 1 2\n\ng = dem_den(2)\nprint(next(g), next(g))    # 0 1  — gọi thêm lần nữa sẽ StopIteration\n```\n\n### Vì sao hữu ích: tính toán lười\nGenerator chỉ sinh giá trị **khi cần**, không dựng cả dãy trong bộ nhớ. Đọc một tệp 10 GB từng dòng, hoặc xử lý dãy vô hạn, đều khả thi:\n\n```python\ndef fib():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n\nfrom itertools import islice\nprint(list(islice(fib(), 10)))   # 10 số Fibonacci đầu\n```\n\n### Ý chính\n- Giao thức iterator: đối tượng có `__iter__()` (trả chính nó) và `__next__()`; `for` gọi hai phương thức này ngầm.\n- `yield from ds_con` chuyển giao cho một iterable con.\n- Module `itertools` có nhiều công cụ lười hữu ích (`islice`, `chain`, `groupby`, `product`).\n\n### Lỗi hay gặp\n- Generator chỉ **dùng được một lần**: duyệt xong, duyệt lại sẽ rỗng.\n- Gọi `len()` hoặc truy cập `g[0]` trên generator (không hỗ trợ); cần `list(g)` trước.\n- Nhầm `return` với `yield`: `return` kết thúc generator, không trả dãy.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-5-1-iterator-generator-context",
+    "ten": "5.1 — Iterator, generator & context manager",
+    "nguon": "Advanced Python with OOP · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-7-1-functional-advanced",
+    "ten": "7.1 — Lập trình hàm & nâng cao",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › List / Generator Comprehensions": {
+  "body": "**Comprehension** là cú pháp gọn để tạo list, dict, set (hoặc generator) từ một iterable, thay cho vòng lặp `for` kèm `append`. Nó nhanh, gọn và là dấu hiệu \"code Pythonic\".\n\n```python\nso = [1, 2, 3, 4, 5, 6]\n\nbinh_phuong = [x * x for x in so]                  # [1, 4, 9, 16, 25, 36]\nchan = [x for x in so if x % 2 == 0]               # lọc: [2, 4, 6]\nnhan = [\"chẵn\" if x % 2 == 0 else \"lẻ\" for x in so]    # điều kiện if-else đặt TRƯỚC for\ntu_dien = {x: x * x for x in so}                   # dict comprehension\nduy_nhat = {len(t) for t in [\"a\", \"bb\", \"cc\"]}     # set comprehension: {1, 2}\ncap = [(x, y) for x in range(2) for y in \"ab\"]     # lồng: (0,'a'), (0,'b'), (1,'a'), (1,'b')\n```\n\nCấu trúc chung: `[biểu_thức  for  phần_tử  in  iterable  if  điều_kiện]`.\n\n### Ý chính\n- Dùng `()` thay `[]` được **generator expression** (xem bước riêng) — lười, tiết kiệm bộ nhớ.\n- Biến lặp của comprehension chỉ tồn tại trong comprehension (phạm vi riêng).\n- Comprehension với `if` để lọc đặt sau `for`; `if-else` để chọn giá trị đặt trước `for`.\n\n### Khi nào KHÔNG nên dùng\n- Có nhiều vòng lồng và điều kiện, đọc không ra: viết vòng `for` thường.\n- Chỉ cần thực hiện hành động phụ (in, ghi tệp), không cần list kết quả: đừng viết `[print(x) for x in ds]`.\n\n### Lỗi hay gặp\n- Nhầm thứ tự `if-else` và `if` lọc, gây `SyntaxError` hoặc kết quả sai.\n- Tạo list khổng lồ trong bộ nhớ khi chỉ cần duyệt một lần: dùng generator.",
+  "lessons": [
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-3-1-data-structures",
+    "ten": "3.1 — Cấu trúc dữ liệu: list, tuple, dict, set",
+    "nguon": "Python programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-1-1-core-python",
+    "ten": "1.1 — Ôn Python cốt lõi",
+    "nguon": "Advanced Python with OOP · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Regular Expressions": {
+  "body": "**Biểu thức chính quy** (regex) là ngôn ngữ mô tả **mẫu chuỗi** để tìm, kiểm tra và thay thế văn bản (kiểm tra email, trích số điện thoại, làm sạch log...). Python hỗ trợ qua module `re` trong thư viện chuẩn. (Bài học đi kèm trình bày bằng JavaScript, nhưng các ký hiệu và khái niệm dùng giống nhau.)\n\n```python\nimport re\n\nvan_ban = \"Liên hệ: 0901-234-567 hoặc 0912-345-678\"\nmau = r\"\\d{4}-\\d{3}-\\d{3}\"           # r\"...\" (raw string) để không phải gấp đôi dấu \\\n\nprint(re.findall(mau, van_ban))      # ['0901-234-567', '0912-345-678']\nm = re.search(r\"(?P<dau>\\d{4})-(\\d{3})\", van_ban)\nprint(m.group(\"dau\"), m.group(2))    # 0901 234\nprint(re.sub(r\"\\d\", \"*\", \"ab12\"))    # ab**\n```\n\n### Ý chính\n- Hàm chính: `re.search` (tìm ở bất kỳ đâu), `re.match` (chỉ khớp **đầu chuỗi**), `re.fullmatch` (khớp toàn chuỗi), `re.findall`, `re.finditer`, `re.sub`, `re.split`. Dùng `re.compile(mau)` khi dùng nhiều lần.\n- Ký hiệu cơ bản: `.` ký tự bất kỳ, `\\d` chữ số, `\\w` ký tự chữ-số-gạch dưới, `\\s` khoảng trắng, `^` `$` đầu/cuối, `*` `+` `?` `{n,m}` lặp, `[...]` tập, `|` hoặc, `( )` nhóm.\n- **Greedy và lazy**: `.*` ăn càng nhiều càng tốt, `.*?` ăn ít nhất.\n- Cờ: `re.IGNORECASE`, `re.MULTILINE`, `re.VERBOSE` (cho phép viết mẫu dài có chú thích).\n- Với kiểu `str`, `\\w` hiểu cả chữ Unicode (có dấu tiếng Việt).\n\n### Lỗi hay gặp\n- Quên `r\"...\"` nên `\\b` thành ký tự backspace thay vì ranh giới từ.\n- Dùng `re.match` mà tưởng nó tìm trong cả chuỗi.\n- Mẫu lồng lặp lồng nhau (`(a+)+`) gây **backtracking thảm hoạ**, làm chương trình đứng.\n- Dùng regex để phân tích HTML hoặc JSON: hãy dùng parser chuyên dụng.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-11-5-regex",
+    "ten": "11.5 — Biểu thức chính quy, vừa đủ dùng",
+    "nguon": "Nền tảng Lập trình Web · Chương 11",
+    "kieu": "video"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Regular Expression HOWTO — docs.python.org",
+    "url": "https://docs.python.org/3/howto/regex.html"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Đóng gói (Encapsulation)": {
+  "body": "**Đóng gói** (encapsulation) là che giấu trạng thái bên trong của đối tượng và chỉ cho bên ngoài tương tác qua một giao diện rõ ràng, để bạn đổi cách cài đặt mà không làm hỏng code đang dùng nó, và để chặn việc ghi giá trị vô lý.\n\nPython **không có `private` thật**. Thay vào đó dựa vào quy ước:\n- `_ten`: \"nội bộ, đừng đụng vào\" (quy ước, vẫn truy cập được).\n- `__ten`: Python đổi tên thành `_TenLop__ten` (**name mangling**) để tránh va chạm tên với lớp con; không phải bảo mật.\n\n### property: giao diện đẹp, kiểm soát bên trong\n```python\nclass NhietDo:\n    def __init__(self, do_c):\n        self.do_c = do_c            # gọi setter bên dưới\n\n    @property\n    def do_c(self):\n        return self._do_c\n\n    @do_c.setter\n    def do_c(self, gia_tri):\n        if gia_tri < -273.15:\n            raise ValueError(\"Thấp hơn độ không tuyệt đối\")\n        self._do_c = gia_tri\n\n    @property\n    def do_f(self):                 # thuộc tính tính toán, chỉ đọc\n        return self._do_c * 9 / 5 + 32\n\nt = NhietDo(25)\nt.do_c = 30                          # dùng như thuộc tính, nhưng có kiểm tra\nprint(t.do_f)                        # 86.0\n```\n\n### Ý chính\n- Bên ngoài vẫn viết `t.do_c = 30` (cú pháp thuộc tính), nhưng bên trong chạy hàm kiểm tra: đổi cách cài đặt sau này không phải đổi code gọi.\n- Không cần viết `get_x()`/`set_x()` kiểu Java; chỉ chuyển sang `@property` **khi cần** kiểm tra hoặc tính toán.\n- Thuộc tính chỉ đọc: chỉ khai báo `@property` mà không có setter.\n\n### Lỗi hay gặp\n- Tin rằng `__ten` bảo mật được dữ liệu: vẫn truy cập được qua `obj._Lop__ten`.\n- Viết setter gán lại chính tên property (`self.do_c = ...` trong setter) gây đệ quy vô hạn; hãy gán vào `self._do_c`.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-2-1-classes-pillars",
+    "ten": "2.1 — Lớp, đối tượng & 4 trụ cột OOP",
+    "nguon": "Advanced Python with OOP · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-3-1-four-pillars",
+    "ten": "3.1 — Bốn trụ của OOP",
+    "nguon": "Advanced Python with OOP · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-4-1-property-descriptor-decorator",
+    "ten": "4.1 — Property, descriptor & decorator",
+    "nguon": "Advanced Python with OOP · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Lớp (Classes)": {
+  "body": "`class` định nghĩa một kiểu dữ liệu mới gồm **thuộc tính** (dữ liệu) và **phương thức** (hành vi). Gọi tên class như hàm sẽ tạo ra một **đối tượng** (instance).\n\n```python\nclass SinhVien:\n    truong = \"FPT\"                    # thuộc tính CẤP CLASS: dùng chung mọi đối tượng\n\n    def __init__(self, ten, diem):    # hàm khởi tạo, chạy khi tạo đối tượng\n        self.ten = ten                # thuộc tính CẤP ĐỐI TƯỢNG\n        self.diem = diem\n\n    def xep_loai(self):\n        return \"Đạt\" if self.diem >= 5 else \"Chưa đạt\"\n\n    def __repr__(self):               # biểu diễn khi in/debug\n        return f\"SinhVien({self.ten!r}, {self.diem})\"\n\nsv = SinhVien(\"An\", 7.5)\nprint(sv, sv.xep_loai(), sv.truong)\n```\n\n### Ý chính\n- `self` là đối tượng đang được thao tác, truyền ngầm làm tham số đầu tiên; bạn phải khai báo nó trong `def` nhưng không truyền khi gọi (`sv.xep_loai()` thay vì `SinhVien.xep_loai(sv)`).\n- `__init__` không phải \"constructor\" tạo đối tượng mà là hàm **khởi tạo** giá trị ban đầu; việc cấp phát do `__new__` lo (hiếm khi cần đụng).\n- Thuộc tính class và thuộc tính instance khác nhau: gán `sv.truong = \"X\"` chỉ tạo thuộc tính riêng cho `sv`, class vẫn là `\"FPT\"`.\n- Với lớp chủ yếu chứa dữ liệu, `@dataclass` sinh sẵn `__init__`, `__repr__`, `__eq__`.\n- Nên có `__repr__` để in đối tượng ra dễ debug.\n\n### Lỗi hay gặp\n- Thuộc tính mutable ở cấp class (`ds = []`) bị mọi đối tượng chia sẻ; khởi tạo trong `__init__`.\n- Quên `self.` khi dùng thuộc tính (`ten = ten` chỉ gán biến cục bộ).\n- Gọi `SinhVien.xep_loai()` không qua đối tượng nên thiếu `self`.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-2-1-classes",
+    "ten": "2.1 — Lớp & đối tượng",
+    "nguon": "Advanced Python with OOP · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-2-1-classes-pillars",
+    "ten": "2.1 — Lớp, đối tượng & 4 trụ cột OOP",
+    "nguon": "Advanced Python with OOP · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Kế thừa (Inheritance)": {
+  "body": "**Kế thừa** cho phép lớp con dùng lại thuộc tính và phương thức của lớp cha, rồi bổ sung hoặc ghi đè phần khác biệt. Dùng khi hai lớp có quan hệ **\"là một\"** (Chó *là một* Động vật).\n\n```python\nclass DongVat:\n    def __init__(self, ten):\n        self.ten = ten\n    def keu(self):\n        raise NotImplementedError\n\nclass Cho(DongVat):\n    def __init__(self, ten, giong):\n        super().__init__(ten)          # gọi hàm khởi tạo của lớp cha\n        self.giong = giong\n    def keu(self):                     # ghi đè (override)\n        return \"Gâu!\"\n\nclass Meo(DongVat):\n    def keu(self):\n        return \"Meo!\"\n\nfor con in (Cho(\"Bi\", \"Phú Quốc\"), Meo(\"Mun\")):\n    print(con.ten, con.keu())          # đa hình: cùng lời gọi, hành vi tuỳ loại\n```\n\n### Ý chính\n- `super()` gọi phương thức của lớp cha theo đúng thứ tự phân giải.\n- **Đa kế thừa**: `class C(A, B)`. Thứ tự tra phương thức theo **MRO** (Method Resolution Order, thuật toán C3). Xem bằng `C.__mro__`.\n- **Lớp trừu tượng**: module `abc` với `ABC` và `@abstractmethod` buộc lớp con phải cài đặt phương thức; không thể tạo đối tượng từ lớp còn phương thức trừu tượng.\n- `isinstance(x, DongVat)` kiểm tra quan hệ kế thừa; nhưng Python ưu tiên **duck typing**: cứ gọi phương thức, không cần kiểm tra kiểu.\n- **Composition over inheritance**: nếu quan hệ là \"có một\" (Xe *có một* Động cơ), hãy chứa đối tượng thay vì kế thừa.\n\n### Lỗi hay gặp\n- Quên gọi `super().__init__(...)` nên thuộc tính của lớp cha không được khởi tạo.\n- Dựng cây kế thừa sâu, phụ thuộc chặt vào chi tiết lớp cha, khó sửa.\n- Đa kế thừa không hiểu MRO dẫn tới gọi sai phương thức.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-3-1-inheritance-mro-abc",
+    "ten": "3.1 — Kế thừa, đa hình, MRO & abstract base class",
+    "nguon": "Advanced Python with OOP · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-3-1-four-pillars",
+    "ten": "3.1 — Bốn trụ của OOP",
+    "nguon": "Advanced Python with OOP · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/simulation?scenario=oop-pillars",
+    "ten": "Bốn tính chất OOP — nhìn từ bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Phương thức (Methods)": {
+  "body": "Phương thức là hàm nằm trong class. Python có ba loại, khác nhau ở tham số đầu tiên mà chúng nhận.\n\n```python\nclass SinhVien:\n    so_luong = 0\n\n    def __init__(self, ten):\n        self.ten = ten\n        SinhVien.so_luong += 1\n\n    def chao(self):                     # instance method: nhận đối tượng (self)\n        return f\"Xin chào, tôi là {self.ten}\"\n\n    @classmethod\n    def tu_chuoi(cls, chuoi):           # class method: nhận chính class (cls)\n        ten = chuoi.split(\"-\")[0]\n        return cls(ten)                 # \"constructor thay thế\"; đúng cả với lớp con\n\n    @staticmethod\n    def hop_le(ten):                    # static method: không nhận gì tự động\n        return len(ten) > 1\n\nsv = SinhVien.tu_chuoi(\"An-20\")\nprint(sv.chao(), SinhVien.hop_le(\"An\"), SinhVien.so_luong)\n```\n\n### Ý chính\n- **Instance method** (`self`): làm việc với dữ liệu của một đối tượng cụ thể; loại phổ biến nhất.\n- **`@classmethod`** (`cls`): làm việc với class; hay dùng làm **hàm khởi tạo thay thế** (`from_json`, `tu_chuoi`) hoặc thao tác trên dữ liệu cấp class.\n- **`@staticmethod`**: hàm thường nhưng gom vào class vì liên quan chủ đề; không truy cập `self` hay `cls`.\n- Phương thức gạch dưới kép đầu và cuối (`__str__`, `__len__`...) là **dunder method**, Python gọi ngầm khi bạn dùng cú pháp tương ứng.\n\n### Lỗi hay gặp\n- Quên `self` trong định nghĩa instance method (nhận `TypeError: ... takes 0 positional arguments but 1 was given`).\n- Dùng `@staticmethod` khi thực ra cần `cls`, làm mất khả năng hoạt động đúng với lớp con.\n- Gọi instance method trực tiếp trên class mà không truyền đối tượng.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-2-1-classes",
+    "ten": "2.1 — Lớp & đối tượng",
+    "nguon": "Advanced Python with OOP · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-2-1-classes-pillars",
+    "ten": "2.1 — Lớp, đối tượng & 4 trụ cột OOP",
+    "nguon": "Advanced Python with OOP · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "OOP & Lập trình hàm › Biểu thức sinh (Generator Expressions)": {
+  "body": "**Biểu thức sinh** (generator expression) có cú pháp giống list comprehension nhưng dùng dấu ngoặc tròn. Thay vì dựng ngay cả list trong bộ nhớ, nó trả về một generator sinh từng giá trị **khi được hỏi**.\n\n```python\nbinh_phuong_list = [x * x for x in range(1_000_000)]   # dựng cả triệu phần tử trong bộ nhớ\nbinh_phuong_gen  = (x * x for x in range(1_000_000))   # gần như không tốn bộ nhớ\n\nprint(sum(x * x for x in range(1_000_000)))   # truyền thẳng vào hàm: bỏ được cặp ngoặc thừa\nprint(max(len(t) for t in [\"a\", \"bcd\", \"ef\"]))   # 3\nprint(any(x > 10 for x in [1, 5, 20]))            # True — dừng ngay khi gặp phần tử đầu tiên thoả\n```\n\n### Ý chính\n- Dùng khi chỉ cần **duyệt một lần**: tính tổng, tìm max/min, `any`/`all`, `\"\".join(...)`, ghi từng dòng ra tệp.\n- Bộ nhớ gần như hằng số, còn list comprehension tốn O(n).\n- `any` và `all` với generator có **đoản mạch**: dừng ngay khi đã biết kết quả, không tính phần còn lại.\n- Cần truy cập theo chỉ số, duyệt nhiều lần, hoặc lấy `len()` thì dùng list.\n\n### Lỗi hay gặp\n- Duyệt lần hai thấy rỗng: generator **chỉ chạy một lượt**.\n- Gọi `len(gen)` hoặc `gen[0]` (không hỗ trợ); dùng `list(gen)` nếu thực sự cần.\n- Dùng generator để rồi `list(...)` ngay lập tức, được tiếng \"lười\" mà không được lợi gì.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-5-1-iterator-generator-context",
+    "ten": "5.1 — Iterator, generator & context manager",
+    "nguon": "Advanced Python with OOP · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Static Typing › Type Hints (typing)": {
+  "body": "**Type hint** (gợi ý kiểu) là chú thích cho biết biến, tham số, giá trị trả về *nên* thuộc kiểu nào. Python vẫn là ngôn ngữ kiểu động: **type hint không được ép buộc lúc chạy**, chúng là thông tin cho IDE, người đọc và các công cụ kiểm tra tĩnh.\n\n```python\ndef tong_diem(diem: list[float], he_so: float = 1.0) -> float:\n    return sum(diem) * he_so\n\nten: str = \"An\"\ntuoi: int | None = None          # int hoặc None (cú pháp X | Y từ Python 3.10)\n\ntong_diem([8, 9.5])\ntong_diem(\"không phải list\")     # vẫn CHẠY được lúc runtime; mypy/pyright mới báo lỗi trước khi chạy\n```\n\n### Vì sao cần biết\n- IDE gợi ý đúng và tự hoàn thành code chính xác hơn.\n- Công cụ như mypy/pyright bắt lỗi sai kiểu **trước khi chạy** — nhất là trong dự án lớn.\n- Code tự làm tài liệu: đọc chữ ký hàm là biết nhận và trả gì.\n- Nhiều framework (FastAPI, Pydantic) *đọc* type hint để kiểm tra dữ liệu và sinh tài liệu API.\n\n### Ý chính\n- Kiểu dựng sẵn: `int`, `float`, `str`, `bool`, `bytes`, `None`.\n- Kiểu chứa: `list[int]`, `dict[str, float]`, `tuple[int, str]`, `set[str]` (viết thường như thế từ Python 3.9; trước đó dùng `List`, `Dict` từ module `typing`).\n- Kiểu hợp: `int | str` (hoặc `Union[int, str]`); giá trị có thể vắng: `str | None` (hoặc `Optional[str]`).\n- `Callable[[int], str]` cho hàm, `Any` để tắt kiểm tra tại chỗ đó.\n\n### Lỗi hay gặp\n- Tưởng type hint sẽ chặn truyền sai kiểu lúc chạy.\n- Lạm dụng `Any` đến mức hint hết ý nghĩa.\n- Gõ `list` trơn (không biết chứa gì) thay vì `list[int]`.\n- Quên rằng `Optional[int]` nghĩa là \"int hoặc None\", không phải \"tham số tuỳ chọn\" (tham số tuỳ chọn là có giá trị mặc định).\n\n### Tự kiểm tra\nChạy `tong_diem(\"abc\")` có lỗi ngay ở dòng gọi không? Công cụ nào sẽ phát hiện điều này mà không cần chạy?",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Static Typing › mypy / pyright / pyre": {
+  "body": "Vì Python không kiểm tra kiểu lúc chạy, bạn dùng **trình kiểm tra kiểu tĩnh** (static type checker) để đọc code và báo lỗi sai kiểu mà không cần chạy, giống vai trò của compiler TypeScript đối với JavaScript. Ba cái tên phổ biến:\n\n| Công cụ | Do | Viết bằng | Điểm nổi bật |\n|---|---|---|---|\n| **mypy** | cộng đồng Python (bản gốc, lâu đời) | Python | tham chiếu của hệ sinh thái, cấu hình linh hoạt |\n| **Pyright** | Microsoft | TypeScript | nhanh, là lõi của Pylance trong VS Code |\n| **Pyre** | Meta | OCaml | tối ưu cho codebase rất lớn, kiểm tra tăng dần |\n\n```bash\npython -m pip install mypy\nmypy ten_file.py            # hoặc: mypy src/\n```\n\n### Ý chính\n- Các công cụ đều dựa trên cùng chuẩn type hint (các PEP 484, 526, 544, 612...), nên thường dùng được chung một codebase, nhưng **cách suy luận có khác nhau** ở các trường hợp biên.\n- Áp dụng dần dần (**gradual typing**): bắt đầu ở mức dễ, thêm hint cho module mới, rồi siết chặt (`strict`).\n- Nên chạy kiểm tra trong CI để lỗi kiểu không lọt vào nhánh chính.\n- Chọn một công cụ cho dự án và để cả nhóm dùng thống nhất.\n\n### Lỗi hay gặp\n- Bật chế độ nghiêm ngặt nhất ngay trên codebase cũ rồi bị hàng nghìn lỗi và bỏ cuộc.\n- Dùng `# type: ignore` tràn lan thay vì sửa gốc.\n- Quên rằng lỗi kiểu mà công cụ báo không có nghĩa chương trình sẽ crash, và ngược lại.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Static Typing › Pydantic": {
+  "body": "**Pydantic** là thư viện dùng type hint để **kiểm tra và chuyển đổi dữ liệu**. Bạn khai báo một lớp kế thừa `BaseModel` với các trường có kiểu; khi tạo đối tượng từ dữ liệu bên ngoài (JSON, form, biến môi trường...), Pydantic kiểm tra, ép kiểu hợp lý và báo lỗi rõ ràng nếu sai. Nó là nền của FastAPI.\n\n```python\nfrom pydantic import BaseModel, Field, field_validator, ValidationError\n\nclass NguoiDung(BaseModel):\n    ten: str = Field(min_length=1)\n    tuoi: int = Field(ge=0, le=150)\n    email: str | None = None\n\n    @field_validator(\"ten\")\n    @classmethod\n    def viet_hoa_chu_dau(cls, v: str) -> str:\n        return v.strip().title()\n\nu = NguoiDung(ten=\"  an \", tuoi=\"20\")       # \"20\" được ép sang int 20\nprint(u.ten, u.tuoi)                         # An 20\nprint(u.model_dump())                        # {'ten': 'An', 'tuoi': 20, 'email': None}\n\ntry:\n    NguoiDung(ten=\"Bình\", tuoi=-5)\nexcept ValidationError as loi:\n    print(loi.errors()[0][\"loc\"])            # ('tuoi',)\n```\n\n### Ý chính\n- Ví dụ trên theo Pydantic v2 (`model_dump`, `model_validate`, `field_validator`); v1 dùng tên cũ như `.dict()`, `@validator`.\n- Mặc định có **ép kiểu linh hoạt** (chuỗi `\"20\"` thành `20`); muốn nghiêm ngặt dùng chế độ strict.\n- `Field(...)` thêm ràng buộc: `min_length`, `ge`, `le`, `pattern`...\n- `model_validate(dict)` và `model_validate_json(chuoi)` tạo đối tượng từ dữ liệu thô; `model_dump_json()` ngược lại.\n- Cấu hình ứng dụng đọc từ biến môi trường: gói `pydantic-settings` (`BaseSettings`).\n- Trong FastAPI, model Pydantic làm body request/response và tự sinh tài liệu OpenAPI.\n\n### Lỗi hay gặp\n- Tưởng Pydantic chỉ là type hint; thực ra nó **thật sự kiểm tra** lúc chạy (khác type hint thông thường).\n- Lẫn lộn API v1 và v2 khi đọc tài liệu cũ.\n- Bắt `ValidationError` ở biên hệ thống (API, đọc tệp cấu hình) và trả thông báo lỗi dễ hiểu thay vì để nó nổi lên thành lỗi 500.",
+  "lessons": [
+   {
+    "href": "/code-lab/fastapi",
+    "ten": "FastAPI",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Static Typing › mypy": {
+  "body": "**mypy** là trình kiểm tra kiểu tĩnh lâu đời và phổ biến nhất cho Python. Nó đọc code cùng type hint của bạn, suy luận kiểu và báo lỗi mà không chạy chương trình.\n\n```python\n# vi_du.py\ndef chia_doi(x: int) -> float:\n    return x / 2\n\nchia_doi(\"10\")            # lỗi kiểu\nket_qua: int = chia_doi(4)   # lỗi: float không phải int\n```\n```bash\npython -m pip install mypy\nmypy vi_du.py\n# vi_du.py:5: error: Argument 1 to \"chia_doi\" has incompatible type \"str\"; expected \"int\"\n# vi_du.py:6: error: Incompatible types in assignment (expression has type \"float\", variable has type \"int\")\n```\n\n### Cấu hình (trong `pyproject.toml`)\n```toml\n[tool.mypy]\npython_version = \"3.12\"\nstrict = true                  # bật toàn bộ kiểm tra nghiêm ngặt\nignore_missing_imports = true  # thư viện không có type: bỏ qua thay vì báo lỗi\n```\n\n### Ý chính\n- Mặc định mypy **bỏ qua hàm không có chú thích kiểu**; do đó áp dụng được dần dần. `--strict` yêu cầu chú thích đầy đủ.\n- Thư viện bên thứ ba chưa có type hint thường có gói **stub** riêng: `python -m pip install types-requests` (hoặc `mypy --install-types`).\n- Có thể tắt kiểm tra một dòng bằng `# type: ignore[mã-lỗi]`, nhưng đừng lạm dụng.\n- Chạy `mypy` trong CI và pre-commit để chặn lỗi kiểu sớm.\n- Hay dùng cùng `ruff` (lint/format).\n\n### Lỗi hay gặp\n- Gõ `mypy` trong môi trường khác với môi trường đã cài thư viện của dự án, nên báo thiếu module.\n- Bật `strict` ngay cho dự án cũ rồi đơ.\n- Cho `Any` lan khắp nơi nên mypy không còn bắt được lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Static Typing › Pyright": {
+  "body": "**Pyright** là trình kiểm tra kiểu tĩnh của Microsoft, viết bằng TypeScript và chạy trên Node.js. Nó rất nhanh, suy luận kiểu thông minh, và là lõi của **Pylance**, tiện ích Python mặc định của VS Code — nên nếu bạn dùng VS Code, bạn đã dùng Pyright mỗi ngày qua đường gạch đỏ ngay trong editor.\n\n```bash\npython -m pip install pyright     # bản đóng gói cho Python (tự tải bản Node cần thiết)\n# hoặc: npm install -g pyright\npyright                           # kiểm tra cả dự án\npyright src/main.py\n```\n\n### Cấu hình\nĐặt trong `pyproject.toml` (mục `[tool.pyright]`) hoặc file `pyrightconfig.json`:\n```toml\n[tool.pyright]\ninclude = [\"src\"]\npythonVersion = \"3.12\"\ntypeCheckingMode = \"standard\"    # có các mức: off, basic, standard, strict\n```\n\n### Điểm đáng chú ý\n- Giao tiếp với editor qua **LSP** nên cho phản hồi tức thời, hover xem kiểu suy luận, tự hoàn thành.\n- Suy luận chặt hơn mypy ở nhiều chỗ (ví dụ thu hẹp kiểu sau `isinstance`, `is None`, `match`).\n- Thực thi nhanh trên codebase lớn nhờ kiểm tra tăng dần và chế độ theo dõi (`--watch`).\n- Có thể chạy trong CI giống mypy.\n\n### Lỗi hay gặp\n- Cùng một đoạn code mà Pyright và mypy báo khác nhau: chọn một công cụ chính thức cho dự án và cấu hình thống nhất.\n- Pyright không biết môi trường ảo của bạn nên báo thiếu thư viện: chỉ định `venvPath`/`venv` hoặc chạy trong môi trường đã kích hoạt.\n- Mức `strict` bật sớm quá trên mã cũ."
+ },
+ "Static Typing › Pyre": {
+  "body": "**Pyre** là trình kiểm tra kiểu tĩnh do Meta (Facebook) phát triển, viết bằng OCaml. Nó sinh ra để chạy trên codebase **cực lớn** (hàng triệu dòng, hàng chục nghìn file) của chính Meta, nên thiết kế quanh **kiểm tra tăng dần**: chạy một máy chủ nền (server), chỉ phân tích lại phần file vừa thay đổi và những gì phụ thuộc vào nó.\n\n```bash\npython -m pip install pyre-check\npyre init           # tạo file cấu hình .pyre_configuration\npyre                # khởi động server nền và kiểm tra\npyre incremental    # kiểm tra lại sau khi sửa file\n```\n\n### Điểm đáng chú ý\n- Cùng chuẩn type hint với mypy và Pyright, nhưng tối ưu cho tốc độ ở quy mô rất lớn.\n- Đi kèm **Pysa**, công cụ phân tích luồng dữ liệu để dò lỗ hổng bảo mật (ví dụ dữ liệu người dùng chảy vào câu SQL mà không qua lọc).\n- Chủ yếu dành cho Linux/macOS.\n- Meta đã giới thiệu thêm một trình kiểm tra thế hệ mới viết bằng Rust có tên Pyrefly; hãy kiểm tra tài liệu hiện hành của dự án trước khi chọn công cụ cho codebase mới.\n\n### Khi nào cân nhắc Pyre\nChỉ khi codebase của bạn đủ lớn để mypy hoặc Pyright thấy chậm, hoặc bạn cần phân tích bảo mật bằng Pysa. Với phần lớn dự án, mypy hoặc Pyright là đủ và có cộng đồng, tài liệu phong phú hơn.\n\n### Lỗi hay gặp\n- Chọn công cụ vì \"ngầu\" thay vì vì nhu cầu thực tế.\n- Chạy Pyre trên Windows mà không tìm hiểu hỗ trợ (dùng WSL).\n- Quên rằng kết quả không hoàn toàn trùng với mypy/Pyright nên chuyển công cụ có thể sinh ra lỗi mới cần xử lý."
+ },
+ "Static Typing › typing — Advanced": {
+  "body": "Sau khi quen với type hint cơ bản (`int`, `list[str]`, `X | None`), module `typing` còn nhiều công cụ để mô tả kiểu chính xác hơn.\n\n```python\nfrom typing import Protocol, TypedDict, TypeVar, Generic, Literal, Callable, Final\n\n# Protocol: kiểu theo \"cấu trúc\" (duck typing có kiểm tra kiểu)\nclass CoThe_Dong(Protocol):\n    def close(self) -> None: ...\n\ndef dong_tat_ca(ds: list[CoThe_Dong]) -> None:\n    for x in ds:\n        x.close()               # file, socket... đều hợp lệ miễn có close()\n\n# TypedDict: dict có khoá và kiểu cố định\nclass NguoiDung(TypedDict):\n    ten: str\n    tuoi: int\n\n# TypeVar + Generic: kiểu tổng quát\nT = TypeVar(\"T\")\ndef dau_tien(ds: list[T]) -> T:\n    return ds[0]\n\nclass Hop(Generic[T]):\n    def __init__(self, gia_tri: T) -> None:\n        self.gia_tri = gia_tri\n\nche_do: Literal[\"doc\", \"ghi\"] = \"doc\"      # chỉ nhận các giá trị liệt kê\nMAX: Final = 100                            # không được gán lại\n```\n\n### Ý chính\n- **Protocol** cho phép mô tả \"giao diện\" mà không bắt kế thừa — hợp với tinh thần duck typing.\n- **Generic/TypeVar** giúp hàm và lớp giữ nguyên thông tin kiểu: `dau_tien([1, 2])` có kiểu `int`.\n- **TypedDict** mô tả dict có cấu trúc (thường dùng cho JSON).\n- **Literal**, **Final**, **Callable**, `@overload`, `ParamSpec` (cho decorator), `Self`.\n- Từ Python 3.12 có cú pháp gọn cho generic: `def dau_tien[T](ds: list[T]) -> T:`.\n\n### Lỗi hay gặp\n- Dùng `TypedDict` rồi tưởng nó kiểm tra lúc chạy: đây vẫn là dict thường, chỉ công cụ tĩnh mới kiểm tra.\n- Dùng `Any` thay cho `TypeVar`, làm mất thông tin kiểu.\n- Tạo hệ thống kiểu phức tạp hơn mức đáng có: kiểu nên giúp đọc, không gây rối."
+ },
+ "Static Typing › Chú thích kiểu (Type Annotations)": {
+  "body": "**Chú thích kiểu** (type annotation) là cú pháp gắn thông tin kiểu vào biến, tham số và giá trị trả về của hàm bằng dấu hai chấm `:` và mũi tên `->`.\n\n```python\nten: str = \"An\"                      # biến\ndiem: list[float] = []               # biến chứa list số thực\nchua_gan: int                        # chỉ khai báo kiểu, chưa gán giá trị\n\ndef tinh_trung_binh(diem: list[float]) -> float:    # tham số và giá trị trả về\n    return sum(diem) / len(diem)\n\nclass SinhVien:\n    ten: str                         # chú thích cấp class\n    diem: float = 0.0\n```\n\n### Ý chính\n- Python lưu chú thích trong thuộc tính `__annotations__` nhưng **không kiểm tra** nó lúc chạy.\n- Người dùng chính của chú thích: IDE, trình kiểm tra tĩnh (mypy, pyright), và thư viện đọc chú thích để hoạt động (Pydantic, FastAPI, `dataclasses`).\n- Hàm không trả gì thì ghi `-> None`.\n- Muốn tham chiếu tới lớp chưa định nghĩa xong (ví dụ trong chính lớp đó), viết kiểu trong dấu nháy `\"SinhVien\"` hoặc dùng `from __future__ import annotations`.\n- `@dataclass` dùng chú thích để biết các trường của lớp:\n\n```python\nfrom dataclasses import dataclass\n\n@dataclass\nclass Diem:\n    x: float\n    y: float = 0.0\n```\n\n### Lỗi hay gặp\n- Tin rằng chú thích đúng nghĩa là code đúng: chỉ có công cụ kiểm tra mới phát hiện sai.\n- Viết sai cú pháp `def f(x: int) -> int:` thành `def f(x: int): -> int`.\n- Chú thích nhưng gán giá trị khác kiểu: lỗi chỉ lộ khi chạy mypy/pyright.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Paradigm & Concurrency › Concurrency — Threading/Multiprocessing": {
+  "body": "**Đồng thời** (concurrency) là xử lý nhiều việc xen kẽ nhau; **song song** (parallelism) là nhiều việc chạy cùng lúc trên nhiều lõi CPU. Python cho bạn ba công cụ chính, và chọn đúng cái phụ thuộc vào việc của bạn **bị chặn bởi gì**.\n\n| Loại việc | Đặc điểm | Công cụ phù hợp |\n|---|---|---|\n| **I/O-bound** | phần lớn thời gian chờ mạng, đĩa, DB | `threading`, hoặc `asyncio` |\n| **CPU-bound** | tính toán nặng (xử lý ảnh, mã hoá, toán) | `multiprocessing` (nhiều tiến trình) |\n\n### Vì sao không chỉ dùng thread?\nCPython có **GIL** (Global Interpreter Lock): tại một thời điểm chỉ một thread chạy bytecode Python. Hệ quả: nhiều thread không làm việc *tính toán thuần Python* nhanh hơn; nhưng khi một thread đang chờ I/O, GIL được nhả ra nên các thread khác chạy tiếp, nên thread vẫn giúp ích với việc chờ I/O. Muốn tận dụng nhiều lõi cho việc CPU-bound, dùng nhiều **tiến trình**, mỗi tiến trình có GIL riêng.\n\n```python\nfrom concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor\n\ndef tai_trang(url): ...          # I/O-bound\ndef tinh_nang(n): ...            # CPU-bound\n\nif __name__ == \"__main__\":\n    with ThreadPoolExecutor(max_workers=10) as ex:\n        ket_qua = list(ex.map(tai_trang, danh_sach_url))\n\n    with ProcessPoolExecutor() as ex:       # mặc định = số lõi CPU\n        ket_qua = list(ex.map(tinh_nang, range(8)))\n```\n\n### Ý chính\n- `concurrent.futures` cung cấp giao diện gọn cho cả thread pool và process pool; ưu tiên nó trước khi dùng `threading.Thread` hay `multiprocessing.Process` trực tiếp.\n- Đo trước khi chọn: chạy thử và so thời gian thực, đừng đoán.\n- Dùng `asyncio` khi có hàng nghìn kết nối I/O và các thư viện hỗ trợ `await`.\n- Chia sẻ dữ liệu giữa các luồng phải có khoá hoặc hàng đợi (`queue.Queue`) để tránh race condition.\n\n### Lỗi hay gặp\n- Dùng thread cho việc CPU-bound rồi thất vọng vì không nhanh hơn.\n- Dùng process mà quên rằng dữ liệu truyền qua lại phải **tuần tự hoá** (pickle), nên truyền dữ liệu lớn rất tốn.\n- Quên bảo vệ điểm vào bằng `if __name__ == \"__main__\":` khi dùng multiprocessing trên Windows/macOS.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-4-python",
+    "ten": "4.4 — Python: GIL, threading vs multiprocessing vs asyncio, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-3-1-luong",
+    "ten": "3.1 — Luồng: chia sẻ gì và không chia sẻ gì",
+    "nguon": "Operating Systems for Developers · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-5-so-sanh",
+    "ten": "4.5 — Đo lại: Amdahl, Gustafson, Karp–Flatt, số luồng, bốn ngôn ngữ",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Paradigm & Concurrency › Asynchrony (async/await)": {
+  "body": "`asyncio` cho phép một **luồng duy nhất** xử lý hàng nghìn việc I/O đồng thời bằng cách *nhường quyền* mỗi khi phải chờ. Một **event loop** điều phối: khi một coroutine gặp `await` (đang chờ mạng/đĩa/hẹn giờ), nó tạm dừng và loop chuyển sang coroutine khác đã sẵn sàng. Nhờ vậy không cần nhiều luồng, không lo tranh chấp dữ liệu như thread.\n\n```python\nimport asyncio\n\nasync def tai(ten, giay):\n    print(\"bắt đầu\", ten)\n    await asyncio.sleep(giay)          # giả lập chờ I/O, KHÔNG chặn các việc khác\n    print(\"xong\", ten)\n    return ten.upper()\n\nasync def main():\n    kq = await asyncio.gather(tai(\"a\", 2), tai(\"b\", 1), tai(\"c\", 1))\n    print(kq)                           # ['A', 'B', 'C']; tổng thời gian ~2s thay vì 4s\n\nasyncio.run(main())\n```\n\n### Ý chính\n- `async def` định nghĩa **coroutine**; gọi nó chỉ tạo đối tượng coroutine, phải `await` hoặc đưa vào loop mới chạy.\n- `await` chỉ dùng được trong `async def`.\n- `asyncio.gather(...)` hoặc `asyncio.TaskGroup` (Python 3.11+) chạy nhiều coroutine đồng thời; `asyncio.create_task` lên lịch chạy nền.\n- Dùng cho **I/O-bound**: gọi HTTP, DB, WebSocket, đọc nhiều kết nối. Không giúp việc CPU-bound.\n- Cần thư viện bất đồng bộ tương ứng (`httpx`/`aiohttp`, `asyncpg`...). Hàm đồng bộ chặn có thể đẩy ra thread bằng `asyncio.to_thread(...)`.\n\n### Lỗi hay gặp\n- Gọi hàm chặn (`time.sleep`, `requests.get`, đọc tệp lớn) trong coroutine: **cả loop đứng** vì không có `await` để nhường.\n- Quên `await` nên nhận được đối tượng coroutine thay vì kết quả (kèm cảnh báo \"coroutine was never awaited\").\n- Gọi `asyncio.run()` lồng bên trong loop đang chạy.\n- Trộn `async` và code đồng bộ không có kế hoạch.\n\n### Tự kiểm tra\nVí dụ trên chạy ~2 giây chứ không phải 4: điều gì xảy ra nếu thay `asyncio.sleep` bằng `time.sleep`?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-4-python",
+    "ten": "4.4 — Python: GIL, threading vs multiprocessing vs asyncio, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-10-6-runtime",
+    "ten": "10.5 — Node, nginx, Netty, Go, asyncio: cùng một epoll bên dưới",
+    "nguon": "Operating Systems for Developers · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Paradigm & Concurrency › aiohttp / gevent": {
+  "body": "`asyncio` trong thư viện chuẩn cung cấp event loop và coroutine, nhưng **không có sẵn HTTP client/server** hoàn chỉnh. Hai thư viện bên ngoài hay được dùng ở vùng này:\n\n### aiohttp\nClient và server HTTP bất đồng bộ xây trên `asyncio`, hỗ trợ cả WebSocket.\n\n```python\nimport asyncio, aiohttp\n\nasync def lay(session, url):\n    async with session.get(url) as phan_hoi:\n        return await phan_hoi.text()\n\nasync def main():\n    async with aiohttp.ClientSession() as session:      # dùng lại một session cho nhiều request\n        trang = await asyncio.gather(*(lay(session, u) for u in [\n            \"https://example.com\", \"https://example.org\"]))\n        print([len(t) for t in trang])\n\nasyncio.run(main())\n```\nDùng một `ClientSession` cho cả chương trình, không tạo mới mỗi request.\n\n### gevent\nCách tiếp cận khác: thay vì `async/await`, gevent dùng **greenlet** (luồng siêu nhẹ) và \"**monkey patching**\" thư viện chuẩn để các lời gọi chặn (socket, sleep) tự nhường quyền. Code viết kiểu đồng bộ nhưng chạy đồng thời. Từng phổ biến với server Gunicorn + gevent, ít hợp khi bạn đã dùng `async/await` thuần.\n\n### Chọn gì\n- Viết mới theo phong cách hiện đại: `asyncio` với `aiohttp` hoặc `httpx.AsyncClient`.\n- Cần tăng thông lượng mã đồng bộ sẵn có mà không viết lại: cân nhắc gevent.\n- Chỉ gọi vài API: `requests` đồng bộ hoặc thread pool là đủ.\n\n### Lỗi hay gặp\n- Tạo `ClientSession` cho mỗi request: tốn kết nối, cảnh báo rò rỉ.\n- Quên `await` phản hồi (`await resp.text()`).\n- Trộn monkey patching của gevent với asyncio trong cùng chương trình.",
+  "more": [
+   {
+    "type": "official",
+    "title": "gevent — tài liệu chính thức",
+    "url": "https://www.gevent.org/"
+   }
+  ]
+ },
+ "Paradigm & Concurrency › Global Interpreter Lock (GIL)": {
+  "body": "**GIL** (Global Interpreter Lock) là một khoá toàn cục trong **CPython** (bản Python tiêu chuẩn), đảm bảo tại mỗi thời điểm chỉ **một thread** thực thi bytecode Python trong một tiến trình. Nó tồn tại chủ yếu để quản lý bộ nhớ (đếm tham chiếu) an toàn và đơn giản.\n\n### Hệ quả thực tế\n- Việc **CPU-bound** thuần Python (vòng lặp tính toán) chạy trên 4 thread không nhanh hơn 1 thread, thậm chí chậm hơn vì chi phí chuyển đổi.\n- Việc **I/O-bound** vẫn hưởng lợi từ thread: khi thread chờ I/O, nó *nhả* GIL cho thread khác.\n- Nhiều thư viện nặng (NumPy, một số phần của pandas...) nhả GIL khi chạy mã C bên trong, nên tận dụng được nhiều lõi.\n- GIL **không** làm code của bạn an toàn thread. `x += 1` gồm nhiều bước bytecode nên vẫn có thể xảy ra race condition; vẫn cần `threading.Lock` hoặc `queue.Queue` khi chia sẻ dữ liệu.\n\n```python\nimport threading, time\n\ndef dem(n):\n    while n > 0:\n        n -= 1\n\nt0 = time.perf_counter()\ndem(30_000_000); dem(30_000_000)\nprint(\"tuần tự:\", time.perf_counter() - t0)\n\nt0 = time.perf_counter()\nts = [threading.Thread(target=dem, args=(30_000_000,)) for _ in range(2)]\n[t.start() for t in ts]; [t.join() for t in ts]\nprint(\"2 thread:\", time.perf_counter() - t0)    # thường không nhanh hơn\n```\n\n### Cách vượt qua\n- Dùng **nhiều tiến trình** (`multiprocessing`, `ProcessPoolExecutor`): mỗi tiến trình có GIL riêng.\n- Đẩy phần nặng sang C/Rust/NumPy.\n- Dùng `asyncio` cho việc chờ I/O.\n- Xu hướng mới: bản **free-threaded** (không GIL) của CPython bắt đầu có từ 3.13 ở dạng thử nghiệm và được hỗ trợ chính thức ở 3.14, nhưng là bản dựng tuỳ chọn tách riêng và nhiều thư viện vẫn đang thích nghi; bản Python thông thường vẫn có GIL.\n\n### Lỗi hay gặp\n- Cho rằng \"Python không có đa luồng\": nó có thread thật của hệ điều hành, chỉ bị khoá việc thực thi bytecode.\n- Cho rằng \"có GIL nên không cần khoá\".",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-4-python",
+    "ten": "4.4 — Python: GIL, threading vs multiprocessing vs asyncio, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-3-1-luong",
+    "ten": "3.1 — Luồng: chia sẻ gì và không chia sẻ gì",
+    "nguon": "Operating Systems for Developers · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Glossary: global interpreter lock — docs.python.org",
+    "url": "https://docs.python.org/3/glossary.html#term-global-interpreter-lock"
+   }
+  ]
+ },
+ "Paradigm & Concurrency › Threading": {
+  "body": "Module `threading` cho phép chạy nhiều **luồng** (thread) trong cùng một tiến trình; các luồng dùng chung bộ nhớ. Vì có GIL, thread trong Python hợp nhất với việc **chờ I/O** (gọi mạng, đọc ghi tệp, chờ DB), không giúp tính toán CPU thuần Python nhanh hơn.\n\n```python\nimport threading, time\n\ndef tai(ten):\n    time.sleep(1)                       # giả lập chờ I/O\n    print(\"xong\", ten)\n\nts = [threading.Thread(target=tai, args=(f\"việc {i}\",)) for i in range(5)]\nfor t in ts: t.start()\nfor t in ts: t.join()                   # chờ tất cả; tổng ~1s thay vì 5s\n```\n\n### Cách dùng gọn hơn: thread pool\n```python\nfrom concurrent.futures import ThreadPoolExecutor\nwith ThreadPoolExecutor(max_workers=8) as ex:\n    ket_qua = list(ex.map(tai, [\"a\", \"b\", \"c\"]))\n```\n\n### Chia sẻ dữ liệu an toàn\nNhiều luồng cùng sửa một biến sẽ gây **race condition** (kết quả phụ thuộc thứ tự xen kẽ), kể cả khi có GIL:\n```python\ndem = 0\nkhoa = threading.Lock()\n\ndef tang():\n    global dem\n    for _ in range(100_000):\n        with khoa:          # chỉ một luồng vào đoạn này tại một thời điểm\n            dem += 1\n```\nCách sạch hơn là trao đổi qua `queue.Queue` (đã an toàn thread) thay vì chia sẻ biến.\n\n### Ý chính\n- `daemon=True` cho luồng nền tự dừng khi chương trình chính kết thúc.\n- `join()` để chờ luồng; `Event` để báo hiệu giữa các luồng.\n- Hai luồng giữ khoá chéo nhau gây **deadlock**: luôn lấy khoá theo cùng một thứ tự.\n\n### Lỗi hay gặp\n- Dùng thread cho việc tính toán nặng rồi không thấy nhanh hơn.\n- Quên `join()` nên đọc kết quả khi luồng chưa chạy xong.\n- Bỏ qua ngoại lệ trong luồng: lỗi bị in ra nhưng luồng chính không biết; dùng `Future.result()` của executor để bắt lại.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-4-python",
+    "ten": "4.4 — Python: GIL, threading vs multiprocessing vs asyncio, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-3-1-luong",
+    "ten": "3.1 — Luồng: chia sẻ gì và không chia sẻ gì",
+    "nguon": "Operating Systems for Developers · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-1-race",
+    "ten": "5.1 — Race condition tái hiện được: counter++ trong C, Java và Node",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-5-2-mutex",
+    "ten": "5.2 — Mutex, spinlock và biến điều kiện, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Paradigm & Concurrency › Multiprocessing": {
+  "body": "Module `multiprocessing` chạy nhiều **tiến trình** Python riêng biệt, mỗi tiến trình có trình thông dịch, bộ nhớ và **GIL riêng**. Vì vậy đây là cách để việc **CPU-bound** thật sự chạy song song trên nhiều lõi.\n\n```python\nfrom multiprocessing import Pool\nimport os\n\ndef tinh(n):\n    return sum(i * i for i in range(n))\n\nif __name__ == \"__main__\":              # BẮT BUỘC trên Windows/macOS\n    with Pool(processes=os.cpu_count()) as pool:\n        ket_qua = pool.map(tinh, [10_000_000] * 8)\n    print(len(ket_qua))\n```\nHoặc gọn hơn với `concurrent.futures.ProcessPoolExecutor`.\n\n### Ý chính\n- Tiến trình **không chia sẻ bộ nhớ** như thread. Dữ liệu đi qua lại phải được **tuần tự hoá** (pickle) rồi sao chép, nên truyền object lớn nhiều lần rất tốn; hãy chia việc đủ lớn để chi phí này nhỏ so với phần tính.\n- Trao đổi: `Queue`, `Pipe`; chia sẻ trạng thái: `Value`, `Array`, `shared_memory` hoặc `Manager`.\n- Cách khởi tạo tiến trình: `fork` (Linux), `spawn` (Windows, macOS; chạy lại module để import), `forkserver`. Với `spawn`, code ở cấp module sẽ được chạy lại trong tiến trình con nên phải đặt phần điểm vào dưới `if __name__ == \"__main__\":`.\n- Tạo tiến trình tốn hơn tạo thread (cả thời gian lẫn bộ nhớ), nên chỉ đáng khi công việc đủ nặng.\n- Tăng tốc gần-tuyến-tính chỉ đạt khi việc chia được độc lập; luôn đo lại speedup thật.\n\n### Lỗi hay gặp\n- Quên `if __name__ == \"__main__\":` dẫn tới tạo tiến trình đệ quy hoặc lỗi.\n- Truyền hàm lambda hoặc hàm lồng vào `Pool.map`: không pickle được.\n- Dùng quá nhiều tiến trình so với số lõi, hoặc mỗi tiến trình lại dùng nhiều thread của thư viện (NumPy) gây tranh chấp.\n- Mong đợi biến toàn cục thay đổi trong tiến trình con sẽ hiện ở tiến trình cha.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-4-python",
+    "ten": "4.4 — Python: GIL, threading vs multiprocessing vs asyncio, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-5-so-sanh",
+    "ten": "4.5 — Đo lại: Amdahl, Gustafson, Karp–Flatt, số luồng, bốn ngôn ngữ",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Web Framework › FastAPI": {
+  "body": "**FastAPI** là framework web hiện đại để xây **API** bằng Python. Nó chạy trên chuẩn bất đồng bộ **ASGI** (qua Starlette) và dùng **type hint cùng Pydantic** để tự kiểm tra dữ liệu vào ra, đồng thời **tự sinh tài liệu** OpenAPI (giao diện Swagger tại `/docs`). Đây là lựa chọn rất phổ biến cho backend dịch vụ AI và microservice.\n\n```python\n# main.py\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass SanPham(BaseModel):\n    ten: str\n    gia: float\n\nkho: dict[int, SanPham] = {}\n\n@app.post(\"/san-pham/{ma}\", status_code=201)\nasync def tao(ma: int, sp: SanPham):        # body JSON được kiểm tra theo SanPham\n    kho[ma] = sp\n    return sp\n\n@app.get(\"/san-pham/{ma}\")\nasync def lay(ma: int, chi_tiet: bool = False):   # ma: tham số path; chi_tiet: tham số query\n    if ma not in kho:\n        raise HTTPException(status_code=404, detail=\"Không tìm thấy\")\n    return kho[ma]\n```\n```bash\npython -m pip install \"fastapi[standard]\"\nfastapi dev main.py          # hoặc: uvicorn main:app --reload\n# mở http://127.0.0.1:8000/docs\n```\n\n### Ý chính\n- Tham số hàm được tự phân loại: có trong đường dẫn thì là **path**, kiểu đơn giản còn lại là **query**, kiểu Pydantic là **body**.\n- Dữ liệu sai bị từ chối tự động bằng lỗi 422 kèm chi tiết, bạn không phải tự viết đoạn kiểm tra.\n- **Dependency injection** bằng `Depends(...)`: dùng chung kết nối DB, xác thực người dùng.\n- `response_model` lọc và định dạng dữ liệu trả về (ví dụ không lộ mật khẩu).\n- Hỗ trợ cả hàm `async def` và `def` thường; việc chặn nặng trong `async def` làm đứng cả loop.\n- Còn có: background tasks, WebSocket, middleware, OAuth2/JWT, kiểm thử bằng `TestClient`.\n\n### Lỗi hay gặp\n- Gọi thư viện chặn (như `requests`) trong `async def`.\n- Dùng cùng một model cho cả input và output nên lộ trường nhạy cảm.\n- Chạy `uvicorn --reload` trên production.",
+  "lessons": [
+   {
+    "href": "/code-lab/fastapi",
+    "ten": "FastAPI",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Web Framework › Django": {
+  "body": "**Django** là framework web \"pin sẵn\" (*batteries included*): bạn nhận ngay ORM, hệ thống migration, trang quản trị (admin), xác thực người dùng, form, template, bảo vệ CSRF/XSS và hệ thống phân quyền, mà không phải ghép nhiều thư viện. Hợp cho ứng dụng có nghiệp vụ và dữ liệu phức tạp, và cho đội muốn một cách làm thống nhất.\n\n```bash\npython -m pip install django\ndjango-admin startproject mysite\ncd mysite\npython manage.py startapp blog\npython manage.py migrate\npython manage.py runserver\n```\n\n```python\n# blog/models.py\nfrom django.db import models\n\nclass BaiViet(models.Model):\n    tieu_de = models.CharField(max_length=200)\n    noi_dung = models.TextField()\n    ngay_dang = models.DateTimeField(auto_now_add=True)\n\n# blog/views.py\nfrom django.shortcuts import render\nfrom .models import BaiViet\n\ndef danh_sach(request):\n    bai = BaiViet.objects.order_by(\"-ngay_dang\")[:10]\n    return render(request, \"blog/danh_sach.html\", {\"bai\": bai})\n```\n\n### Ý chính\n- Mô hình **MTV** (Model - Template - View): Model là bảng dữ liệu, View là hàm xử lý request, Template là HTML. `urls.py` ánh xạ đường dẫn vào view.\n- Sửa model xong chạy `makemigrations` rồi `migrate` để cập nhật CSDL.\n- **ORM**: truy vấn bằng Python (`BaiViet.objects.filter(...)`) thay vì SQL; chú ý bẫy N+1 (dùng `select_related`/`prefetch_related`).\n- **Admin** tự sinh giao diện CRUD sau khi `register` model.\n- Làm API: thêm **Django REST Framework (DRF)**. Django cũng hỗ trợ view `async` và chạy trên ASGI.\n- Có sẵn hệ thống test và nhiều cài đặt bảo mật (`DEBUG=False`, `ALLOWED_HOSTS`, `SECRET_KEY` không commit).\n\n### Lỗi hay gặp\n- Bật `DEBUG=True` trên production.\n- Quên chạy migrate sau khi sửa model.\n- Truy vấn lặp trong vòng lặp (N+1) làm chậm trang.",
+  "lessons": [
+   {
+    "href": "/code-lab/django",
+    "ten": "Django",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Web Framework › Flask": {
+  "body": "**Flask** là micro-framework web: lõi nhỏ gọn (Werkzeug cho WSGI cùng Jinja2 cho template), bạn tự chọn các thư viện đi kèm (ORM, form, xác thực) theo nhu cầu. Rất hợp cho dịch vụ nhỏ, prototype, hoặc khi muốn hiểu rõ từng mảnh ghép.\n\n```python\nfrom flask import Flask, jsonify, request, render_template\n\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef trang_chu():\n    return render_template(\"index.html\", ten=\"Python\")   # templates/index.html (Jinja2)\n\n@app.get(\"/api/chao/<ten>\")\ndef chao(ten):\n    return jsonify(loi_chao=f\"Xin chào {ten}\")\n\n@app.post(\"/api/tong\")\ndef tong():\n    du_lieu = request.get_json()\n    return jsonify(tong=sum(du_lieu[\"so\"]))\n```\n```bash\npython -m pip install flask\nflask --app app run --debug\n```\n\n### Ý chính\n- **Route** gắn URL với hàm; `<ten>` và `<int:id>` là tham số đường dẫn.\n- **Jinja2** dựng HTML động; ký hiệu `{{ biến }}` và `{% for %}`; Jinja2 tự escape để chống XSS.\n- `request` chứa form, JSON, header; `session` lưu dữ liệu phiên (ký bằng `SECRET_KEY`).\n- Mở rộng thường dùng: Flask-SQLAlchemy (ORM), Flask-Migrate, Flask-WTF (form + CSRF), Flask-Login (đăng nhập). Cấu trúc ứng dụng lớn dùng **Blueprint**.\n- Chạy production với server WSGI như Gunicorn (đừng dùng server dev của Flask), thường đặt sau Nginx.\n- So với Django: Flask tự do, ít thứ sẵn có; so với FastAPI: Flask đồng bộ theo chuẩn WSGI, không tự kiểm tra dữ liệu bằng type hint.\n\n### Lỗi hay gặp\n- Để `debug=True` trên production, lộ trình debugger tương tác ra ngoài.\n- Hardcode `SECRET_KEY` vào mã nguồn.\n- Gom tất cả vào một file `app.py` thay vì tách blueprint khi ứng dụng lớn dần.",
+  "lessons": [
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-0-1-overview",
+    "ten": "Tổng quan: Web Python với Flask",
+    "nguon": "Python Web Development · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-1-1-flask-routing",
+    "ten": "1.1 — App Flask & routing",
+    "nguon": "Python Web Development · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-2-1-templates-forms",
+    "ten": "2.1 — Template Jinja2 & form",
+    "nguon": "Python Web Development · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-3-1-database-auth",
+    "ten": "3.1 — Cơ sở dữ liệu (SQLAlchemy) & xác thực",
+    "nguon": "Python Web Development · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-4-1-rest-deploy",
+    "ten": "4.1 — API RESTful & triển khai",
+    "nguon": "Python Web Development · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   }
+  ]
+ },
+ "Web Framework › Plotly Dash / Sanic / Tornado": {
+  "body": "Ba cái tên này thuộc ba nhóm khác nhau, đừng nhầm:\n\n### Plotly Dash: ứng dụng dữ liệu / dashboard\n**Dash** (của Plotly) cho phép dựng dashboard tương tác hoàn toàn bằng Python, không cần viết JavaScript. Bạn khai báo giao diện bằng các thành phần Python và dùng **callback** để cập nhật biểu đồ khi người dùng đổi bộ lọc.\n\n```python\nfrom dash import Dash, dcc, html, Input, Output\nimport plotly.express as px\n\napp = Dash(__name__)\napp.layout = html.Div([\n    dcc.Dropdown([\"a\", \"b\"], \"a\", id=\"chon\"),\n    dcc.Graph(id=\"bieu-do\"),\n])\n\n@app.callback(Output(\"bieu-do\", \"figure\"), Input(\"chon\", \"value\"))\ndef ve(gia_tri):\n    return px.bar(x=[\"x\", \"y\"], y=[1, 2 if gia_tri == \"a\" else 5])\n\nif __name__ == \"__main__\":\n    app.run(debug=True)\n```\nHợp cho data scientist cần chia sẻ phân tích dưới dạng ứng dụng web.\n\n### Sanic và Tornado: framework web bất đồng bộ\n- **Sanic**: framework async hiệu năng cao, cú pháp gần Flask nhưng dùng `async def` và có server riêng.\n- **Tornado**: framework và thư viện mạng bất đồng bộ ra đời từ trước `asyncio`, mạnh ở kết nối dài (WebSocket, long polling); từ các bản mới chạy trên vòng lặp `asyncio`.\n\n### Chọn gì\n- Dashboard / ứng dụng phân tích dữ liệu → **Dash** (hoặc Streamlit).\n- API bất đồng bộ mới → ưu tiên **FastAPI**, trừ khi bạn có lý do chọn Sanic.\n- Dịch vụ có nhiều kết nối dài hạn, hoặc bảo trì hệ thống Tornado cũ → **Tornado**.\n\n### Lỗi hay gặp\n- Dùng Dash cho giao diện sản phẩm phức tạp nhiều người dùng, nơi framework frontend thật sự phù hợp hơn.\n- Chạy server dev (`debug=True`) trên production.\n- Gọi code chặn trong handler async của Sanic/Tornado làm đứng cả luồng.",
+  "lessons": [
+   {
+    "href": "/courses/idv301-interactive-data-visualization-for-business-analytics/learn?lessonSlug=idv301-ts-9-3",
+    "ten": "9.3 — Plotly, Dash và Streamlit cho ứng dụng phân tích",
+    "nguon": "Interactive Data Visualization for Business Analytics · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IDV301"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Sanic — tài liệu chính thức",
+    "url": "https://sanic.dev/en/"
+   },
+   {
+    "type": "official",
+    "title": "Tornado — tài liệu chính thức",
+    "url": "https://www.tornadoweb.org/en/stable/"
+   }
+  ]
+ },
+ "Web Framework › Học một Framework": {
+  "body": "Python không có một framework web \"chính thức\"; bạn chọn theo bài toán. Framework lo phần việc lặp lại ở mọi web app: nhận request, định tuyến (routing) tới hàm xử lý, kiểm tra dữ liệu, trả response, và (tuỳ loại) làm việc với database, template, đăng nhập.\n\n### Vì sao cần biết\nHầu hết việc backend bằng Python đi qua một framework. Chọn đúng giúp bạn đỡ tự viết lại thứ người khác đã làm tốt; chọn sai thì hoặc quá nặng cho việc nhỏ, hoặc phải tự ghép quá nhiều.\n\n### Ý chính\n- **FastAPI**: hiện đại, dựa trên type hint và Pydantic để kiểm tra dữ liệu, tự sinh tài liệu OpenAPI (`/docs`), hỗ trợ `async`. Hợp với REST API và phục vụ mô hình ML.\n- **Django**: \"pin đầy đủ\" — ORM, migration, trang admin, xác thực, form đều có sẵn. Hợp với web app đầy đủ có nhiều model.\n- **Flask**: micro-framework, lõi nhỏ (routing + request/response), thêm thứ gì tự chọn extension. Hợp với app nhỏ, dễ học nhất.\n- **Pyramid, Dash**: Pyramid cho người muốn kiểm soát cấu trúc; Dash chuyên dựng dashboard dữ liệu.\n\n```python\n# FastAPI tối thiểu: chạy bằng `uvicorn main:app --reload`\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/items/{item_id}\")\ndef read_item(item_id: int, q: str | None = None):\n    return {\"item_id\": item_id, \"q\": q}\n```\n\n### Lỗi hay gặp\n- Học cả ba framework một lúc; hãy chọn một, làm xong một dự án nhỏ rồi mới so sánh.\n- Bật `debug=True` (Flask) hoặc chạy server phát triển trên production.\n- Dùng Django cho một API vài endpoint rồi vật lộn với khối lượng cấu hình không cần thiết, hoặc ngược lại.\n\n### Tự kiểm tra\nMột API nội bộ 5 endpoint cần tài liệu tự sinh và kiểm tra kiểu đầu vào: bạn chọn gì, vì sao? Một trang quản trị có đăng nhập và nhiều bảng dữ liệu thì sao?",
+  "lessons": [
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-0-1-overview",
+    "ten": "Tổng quan: Web Python với Flask",
+    "nguon": "Python Web Development · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-1-1-flask-routing",
+    "ten": "1.1 — App Flask & routing",
+    "nguon": "Python Web Development · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   },
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-6-2",
+    "ten": "6.2 — Phục vụ mô hình bằng REST API với FastAPI",
+    "nguon": "Machine learning operations · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-4-1-rest-deploy",
+    "ten": "4.1 — API RESTful & triển khai",
+    "nguon": "Python Web Development · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   },
+   {
+    "href": "/simulation?scenario=rest-api",
+    "ten": "REST API — Request & Response",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Web Framework › Pyramid": {
+  "body": "Pyramid là framework web Python theo hướng \"bắt đầu nhỏ, lớn lên không phải viết lại\". Một app Pyramid có thể chỉ là một file với vài route như Flask, nhưng cùng một cấu trúc đó mở rộng được tới ứng dụng lớn mà không đổi kiến trúc.\n\n### Ý chính\n- Không áp sẵn ORM hay template: bạn tự ghép, thường là SQLAlchemy cho database và Jinja2 cho template.\n- Cấu hình tường minh (configurator), hệ thống bảo mật và phân quyền (ACL) có sẵn trong lõi.\n- Có hai cách định tuyến: URL dispatch (khai báo route rồi gắn view) và traversal (đi theo cây tài nguyên).\n\n```python\nfrom wsgiref.simple_server import make_server\nfrom pyramid.config import Configurator\nfrom pyramid.response import Response\n\ndef hello(request):\n    return Response(\"Xin chào từ Pyramid\")\n\nwith Configurator() as config:\n    config.add_route(\"hello\", \"/\")\n    config.add_view(hello, route_name=\"hello\")\n    app = config.make_wsgi_app()\n\nmake_server(\"0.0.0.0\", 6543, app).serve_forever()\n```\n\n### Khi nào chọn\nKhi bạn muốn tự quyết các thành phần như Flask nhưng cần cấu trúc rõ ràng và phân quyền chi tiết cho app lớn. Cộng đồng nhỏ hơn Django/FastAPI nên tài liệu và ví dụ ít hơn; người mới thường nên bắt đầu ở Flask hoặc FastAPI."
+ },
+ "Code Formatting & Docs › black / ruff / yapf": {
+  "body": "Cả ba đều là formatter hoặc linter: công cụ tự động sắp xếp lại cách trình bày code để cả nhóm viết cùng một phong cách, khỏi tranh cãi về dấu ngoặc hay độ dài dòng trong code review.\n\n### Vì sao cần biết\nMột codebase có style thống nhất dễ đọc hơn và diff của pull request chỉ chứa thay đổi thật, không lẫn thay đổi khoảng trắng.\n\n### Ý chính\n- **Formatter** (black, yapf, `ruff format`): viết lại code theo quy tắc, không đổi ý nghĩa.\n- **Linter** (ruff, flake8): chỉ ra lỗi và mùi code (import thừa, biến không dùng, so sánh sai...).\n- **black**: ít tuỳ chỉnh, một cách trình bày chung. **yapf**: cấu hình được nhiều. **ruff**: viết bằng Rust, rất nhanh, gộp cả lint lẫn format.\n- Chọn một bộ, đặt cấu hình trong `pyproject.toml`, chạy trong editor (format khi lưu) và trong CI.\n\n```bash\npip install ruff\nruff check .          # lint\nruff format .         # format\n```\n\n### Lỗi hay gặp\n- Dùng nhiều formatter cùng lúc rồi chúng sửa đi sửa lại của nhau.\n- Không cố định phiên bản công cụ nên mỗi máy format một kiểu.\n- Chỉ chạy ở máy cá nhân, không có bước kiểm tra trong CI.\n\n### Tự kiểm tra\nKhác biệt giữa formatter và linter là gì? Vì sao nên cố định phiên bản công cụ trong dự án?",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-8-1-testing-packaging-pro",
+    "ten": "8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Code Formatting & Docs › Sphinx": {
+  "body": "Sphinx là công cụ sinh tài liệu cho dự án Python: bạn viết tài liệu bằng reStructuredText hoặc Markdown (qua MyST), và Sphinx dựng thành website HTML hoặc PDF. Nó đọc cả docstring trong code nên tài liệu API luôn bám theo mã nguồn.\n\n### Ý chính\n- Cấu hình ở `conf.py`; nội dung ở các file `.rst`/`.md`.\n- Extension `autodoc` kéo docstring của module, class, hàm vào tài liệu; `napoleon` cho phép dùng docstring kiểu Google hoặc NumPy.\n- Nhiều thư viện lớn (và Read the Docs) dùng Sphinx làm chuẩn.\n\n```bash\npip install sphinx\nsphinx-quickstart docs\nsphinx-build -b html docs docs/_build/html\n```\n\n### Lỗi hay gặp\n- Docstring viết sai định dạng nên autodoc hiển thị lộn xộn.\n- Không đưa bước dựng tài liệu vào CI nên tài liệu cũ dần so với code.\n\nDự án nhỏ chỉ cần README và docstring tốt; Sphinx đáng dùng khi bạn xuất bản thư viện cho người khác."
+ },
+ "Code Formatting & Docs › ruff": {
+  "body": "ruff là linter và formatter cho Python viết bằng Rust. Nó chạy nhanh hơn nhiều so với công cụ viết bằng Python, và thay thế gọn một nhóm công cụ cũ: flake8 (lint), isort (sắp xếp import), `ruff format` tương thích gần như hoàn toàn với black.\n\n### Vì sao cần biết\nMột công cụ, một cấu hình trong `pyproject.toml`, chạy gần như tức thì kể cả trên codebase lớn, nên dễ gắn vào editor, pre-commit và CI.\n\n### Ý chính\n- `ruff check` lint, `ruff check --fix` tự sửa các lỗi sửa được, `ruff format` định dạng.\n- Chọn bộ luật qua `select` (ví dụ `E`, `F` cho lỗi cơ bản, `I` cho import).\n\n```toml\n# pyproject.toml\n[tool.ruff]\nline-length = 88\n\n[tool.ruff.lint]\nselect = [\"E\", \"F\", \"I\"]\n```\n\n```bash\nruff check --fix .\nruff format .\n```\n\n### Lỗi hay gặp\n- Bật quá nhiều bộ luật ngay từ đầu rồi bị hàng trăm cảnh báo; thêm dần từng nhóm.\n- Dùng `# noqa` bừa để tắt lỗi thay vì sửa.\n\n### Tự kiểm tra\nRuff thay được những công cụ nào? Đặt cấu hình ruff ở đâu trong dự án?",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-8-1-testing-packaging-pro",
+    "ten": "8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Code Formatting & Docs › black": {
+  "body": "black là formatter \"không thương lượng\": bạn gần như không cấu hình gì, black tự viết lại toàn bộ file theo một style cố định. Ưu điểm là chấm dứt mọi tranh luận về trình bày, vì mọi người đều ra cùng một kết quả.\n\n### Ý chính\n- Mặc định độ dài dòng 88 ký tự, dùng dấu nháy kép, thêm \"dấu phẩy cuối\" (magic trailing comma) khi chia nhiều dòng.\n- Chạy: `black .`; kiểm tra mà không sửa: `black --check .` (hữu ích trong CI).\n- Chỉ đổi cách trình bày, không đổi hành vi chương trình.\n\n```toml\n# pyproject.toml\n[tool.black]\nline-length = 88\ntarget-version = [\"py311\"]\n```\n\n### Lỗi hay gặp\n- Quên chạy trước khi commit nên CI báo lỗi format; dùng pre-commit hook hoặc \"format on save\".\n- Chạy cùng ruff format nhưng khác cấu hình độ dài dòng. Hiện nay nhiều dự án chỉ dùng `ruff format` cho gọn.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-8-1-testing-packaging-pro",
+    "ten": "8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Code Formatting & Docs › yapf": {
+  "body": "yapf (Yet Another Python Formatter) do Google phát triển. Khác black cứng nhắc, yapf cho chỉnh style chi tiết qua file cấu hình và có sẵn kiểu như `pep8`, `google`, `facebook`. Nó hợp khi bạn phải giữ phong cách của codebase cũ thay vì áp một chuẩn mới.\n\n### Ý chính\n- Chọn `based_on_style` rồi ghi đè từng tuỳ chọn.\n- Chạy: `yapf -i file.py` (sửa tại chỗ) hoặc `yapf -d file.py` để xem diff.\n\n```ini\n# .style.yapf\n[style]\nbased_on_style = pep8\ncolumn_limit = 100\n```\n\n### Lưu ý\nDự án mới thường chọn black hoặc `ruff format` vì ít tuỳ chọn hơn đồng nghĩa ít tranh cãi hơn; yapf là lựa chọn khi cần linh hoạt."
+ },
+ "Code Formatting & Docs › Chú thích mã nguồn (Comments)": {
+  "body": "Comment và docstring giúp người đọc hiểu **vì sao** code làm vậy, thay vì phải đoán. Code đã nói được \"làm gì\"; comment nên nói ý đồ, ràng buộc và điều bất ngờ.\n\n### Vì sao cần biết\nNgười đọc code của bạn nhiều nhất thường là chính bạn sau ba tháng. Docstring tốt còn hiện ra trong editor khi gõ `help(hàm)` hoặc di chuột, và là nguồn để sinh tài liệu (Sphinx).\n\n### Ý chính\n- Comment một dòng bắt đầu bằng `#`. Dùng để giải thích lý do, không lặp lại code.\n- **Docstring** là chuỗi ba nháy đặt ngay dưới `def`, `class` hoặc đầu module; truy cập qua `__doc__`.\n- Ba kiểu phổ biến: Google, NumPy, Sphinx (reST). Chọn một kiểu cho cả dự án.\n\n```python\ndef chia(a: float, b: float) -> float:\n    \"\"\"Chia a cho b.\n\n    Args:\n        a: Số bị chia.\n        b: Số chia, khác 0.\n\n    Returns:\n        Thương của a và b.\n\n    Raises:\n        ZeroDivisionError: Nếu b bằng 0.\n    \"\"\"\n    return a / b\n```\n\n### Lỗi hay gặp\n- Comment lặp code (`i += 1  # tăng i`) hoặc để comment cũ sai so với code.\n- Dùng comment để giữ code chết thay vì xoá, vì đã có Git.\n- Không viết docstring cho hàm công khai của thư viện.\n\n### Tự kiểm tra\nComment nào đáng viết, comment nào là thừa? Docstring khác comment `#` ở chỗ nào?",
+  "lessons": [
+   {
+    "href": "/courses/pfp191-programming-fundamentals-with-python/learn?lessonSlug=pfp191-1-6-input-chu-thich-debug",
+    "ten": "1.6 — input(), chú thích, tên biến dễ nhớ, gỡ lỗi",
+    "nguon": "Programming Fundamentals with Python · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PFP191"
+   }
+  ]
+ },
+ "Testing & Đóng gói › pytest": {
+  "body": "pytest là framework test phổ biến nhất của Python. Bạn viết test là các hàm bắt đầu bằng `test_`, dùng câu lệnh `assert` thường; khi lỗi, pytest in ra giá trị hai vế rất rõ ràng.\n\n### Vì sao cần biết\nHầu như mọi dự án Python chuyên nghiệp đều dùng pytest. Test tốt cho phép bạn sửa code và refactor mà không sợ vỡ chức năng cũ.\n\n### Ý chính\n- File `test_*.py` hoặc `*_test.py`, hàm `test_*`; chạy bằng lệnh `pytest`.\n- **Fixture** (`@pytest.fixture`): chuẩn bị dữ liệu hoặc tài nguyên dùng chung, tự truyền vào test qua tên tham số.\n- **parametrize**: chạy cùng một test với nhiều bộ dữ liệu.\n- `pytest.raises` kiểm tra code có ném đúng ngoại lệ.\n\n```python\nimport pytest\n\ndef chia(a, b):\n    return a / b\n\n@pytest.mark.parametrize(\"a,b,kq\", [(6, 3, 2), (5, 2, 2.5), (0, 4, 0)])\ndef test_chia(a, b, kq):\n    assert chia(a, b) == kq\n\ndef test_chia_cho_0():\n    with pytest.raises(ZeroDivisionError):\n        chia(1, 0)\n```\n\n### Lỗi hay gặp\n- Test phụ thuộc thứ tự chạy hoặc dùng chung trạng thái giữa các test.\n- Một test kiểm tra quá nhiều thứ nên không biết lỗi nằm đâu.\n- Quên đặt tên file hoặc hàm đúng quy ước nên pytest không thu thập được.\n\n### Tự kiểm tra\nFixture giải quyết vấn đề gì? Khi nào dùng `parametrize` thay vì viết nhiều test?",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-8-1-testing-packaging-pro",
+    "ten": "8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-4-1-rest-deploy",
+    "ten": "4.1 — API RESTful & triển khai",
+    "nguon": "Python Web Development · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   }
+  ]
+ },
+ "Testing & Đóng gói › unittest / doctest": {
+  "body": "Python có sẵn hai công cụ test trong thư viện chuẩn, không cần cài gì thêm.\n\n**unittest** theo kiểu xUnit: test là method của class kế thừa `unittest.TestCase`, dùng các hàm `assertEqual`, `assertRaises`..., có `setUp`/`tearDown` để chuẩn bị và dọn dẹp.\n\n**doctest** chạy các ví dụ nằm trong docstring (dạng phiên `>>>`) và so kết quả in ra, nên tài liệu luôn được kiểm chứng.\n\n```python\nimport unittest\n\ndef binh_phuong(x):\n    \"\"\"\n    >>> binh_phuong(3)\n    9\n    \"\"\"\n    return x * x\n\nclass TestBinhPhuong(unittest.TestCase):\n    def test_so_duong(self):\n        self.assertEqual(binh_phuong(4), 16)\n\nif __name__ == \"__main__\":\n    unittest.main()\n```\n\n```bash\npython -m unittest           # chạy unittest\npython -m doctest -v file.py # chạy doctest\n```\n\n### Khi dùng\nunittest khi muốn không thêm dependency hoặc dự án cũ đã dùng nó; doctest cho ví dụ ngắn trong docstring. pytest chạy được cả test unittest nên có thể chuyển dần.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Testing & Đóng gói › tox / nose": {
+  "body": "**tox** tự tạo một môi trường ảo sạch cho mỗi cấu hình (ví dụ Python 3.10, 3.11, 3.12), cài dự án vào đó rồi chạy bộ test. Nhờ vậy bạn biết thư viện chạy được trên nhiều phiên bản và không phụ thuộc thứ vô tình có sẵn trên máy mình.\n\n**nose** là framework test cũ, đã ngừng phát triển; dự án mới nên dùng pytest.\n\n```ini\n# tox.ini\n[tox]\nenvlist = py310, py311, py312\n\n[testenv]\ndeps = pytest\ncommands = pytest\n```\n\n```bash\npip install tox\ntox            # chạy mọi môi trường\ntox -e py311   # chỉ một môi trường\n```\n\n### Lưu ý\nMáy cần có sẵn các phiên bản Python tương ứng (hoặc dùng công cụ quản lý phiên bản). Với app chỉ chạy trên một phiên bản cố định thì tox không cần thiết; nó đáng giá nhất với thư viện công khai."
+ },
+ "Testing & Đóng gói › pyproject.toml": {
+  "body": "`pyproject.toml` là file cấu hình chuẩn của dự án Python hiện đại (PEP 517/518/621). Nó thay thế phần lớn `setup.py`, `setup.cfg` và `requirements` rải rác: một chỗ khai báo cách build, thông tin gói, dependency và cấu hình công cụ.\n\n### Vì sao cần biết\nMuốn đóng gói thư viện, cài ở chế độ phát triển (`pip install -e .`), hay cấu hình ruff, pytest, black đều đi qua file này.\n\n### Ý chính\n- `[build-system]`: công cụ build (setuptools, hatchling...).\n- `[project]`: tên, phiên bản, `requires-python`, `dependencies`.\n- `[tool.xxx]`: cấu hình cho công cụ như `tool.ruff`, `tool.pytest.ini_options`.\n\n```toml\n[build-system]\nrequires = [\"setuptools>=68\"]\nbuild-backend = \"setuptools.build_meta\"\n\n[project]\nname = \"goi-cua-toi\"\nversion = \"0.1.0\"\nrequires-python = \">=3.10\"\ndependencies = [\"requests>=2.31\"]\n\n[tool.pytest.ini_options]\ntestpaths = [\"tests\"]\n```\n\n```bash\npip install -e .      # cài chế độ phát triển\npython -m build       # dựng wheel và sdist (cần gói `build`)\n```\n\n### Lỗi hay gặp\n- Quên khai báo dependency nên cài ở máy khác bị lỗi `ModuleNotFoundError`.\n- Trộn `setup.py` và `pyproject.toml` với thông tin mâu thuẫn.\n- Cấu trúc thư mục `src/` hoặc package không khớp phần cấu hình tìm package.",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-8-1-testing-packaging-pro",
+    "ten": "8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Testing & Đóng gói › Đóng gói & Docker": {
+  "body": "Docker đóng gói ứng dụng cùng môi trường chạy (phiên bản Python, thư viện hệ thống, dependency) vào một **image**; từ image chạy ra **container**. Nhờ đó \"máy tôi chạy được\" trở thành \"chạy giống hệt ở mọi nơi\".\n\n### Vì sao cần biết\nTriển khai app Python lên server hầu như luôn đi qua container. Nó giải quyết xung đột phiên bản và giúp dev, CI, production dùng cùng một môi trường.\n\n### Ý chính\n- `Dockerfile` mô tả từng bước dựng image; mỗi chỉ thị tạo một lớp (layer) có cache.\n- Chép file `requirements.txt` và cài dependency **trước**, rồi mới chép mã nguồn, để khi chỉ sửa code thì lớp cài thư viện vẫn dùng lại cache.\n- Dùng image base gọn như `python:3.12-slim`, thêm `.dockerignore` để loại `.git`, `__pycache__`, `.venv`.\n- Chạy app bằng server thật (gunicorn, uvicorn), không dùng server phát triển; không chạy bằng root nếu tránh được.\n\n```dockerfile\nFROM python:3.12-slim\nWORKDIR /app\nENV PYTHONUNBUFFERED=1\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY . .\nEXPOSE 8000\nCMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\n```bash\ndocker build -t app-cua-toi .\ndocker run -p 8000:8000 app-cua-toi\n```\n\n### Lỗi hay gặp\n- Chép toàn bộ mã trước khi cài dependency nên mỗi lần sửa code là cài lại từ đầu.\n- Ứng dụng nghe ở `127.0.0.1` trong container nên không truy cập được từ ngoài; phải nghe `0.0.0.0`.\n- Đưa bí mật (khoá, mật khẩu) vào image thay vì biến môi trường lúc chạy.\n- Nhiều dịch vụ (app + database) thì dùng docker compose, đừng nhồi vào một container.\n\n### Tự kiểm tra\nVì sao thứ tự `COPY requirements.txt` rồi `RUN pip install` quan trọng? `0.0.0.0` khác `127.0.0.1` thế nào trong container?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: từng dòng Dockerfile, giải thích bằng hình",
+    "nguon": "Docker · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-5-cong-thuc",
+    "ten": "4.5 — Công thức: Node, Next.js, Python, Go, trang tĩnh",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien",
+    "ten": "4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng",
+    "nguon": "Docker · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=docker-layers",
+    "ten": "Docker — tầng ảnh và cache build",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-1-file-dau-tien",
+    "ten": "9.1 — File compose đầu tiên của bạn",
+    "nguon": "Docker · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Testing & Đóng gói › Docker": {
+  "body": "Docker là công cụ container hoá: nó đóng gói ứng dụng cùng môi trường chạy (phiên bản Python, thư viện hệ thống, dependency) vào một **image**; từ image chạy ra **container**. Nhờ đó \"máy tôi chạy được\" trở thành \"chạy giống hệt ở mọi nơi\".\n\n### Vì sao cần biết\nTriển khai app Python lên server hầu như luôn đi qua container. Nó giải quyết xung đột phiên bản và giúp dev, CI, production dùng cùng một môi trường.\n\n### Ý chính\n- `Dockerfile` mô tả từng bước dựng image; mỗi chỉ thị tạo một lớp (layer) có cache.\n- Chép file `requirements.txt` và cài dependency **trước**, rồi mới chép mã nguồn, để khi chỉ sửa code thì lớp cài thư viện vẫn dùng lại cache.\n- Dùng image base gọn như `python:3.12-slim`, thêm `.dockerignore` để loại `.git`, `__pycache__`, `.venv`.\n- Chạy app bằng server thật (gunicorn, uvicorn), không dùng server phát triển; không chạy bằng root nếu tránh được.\n\n```dockerfile\nFROM python:3.12-slim\nWORKDIR /app\nENV PYTHONUNBUFFERED=1\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY . .\nEXPOSE 8000\nCMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\n```bash\ndocker build -t app-cua-toi .\ndocker run -p 8000:8000 app-cua-toi\n```\n\n### Lỗi hay gặp\n- Chép toàn bộ mã trước khi cài dependency nên mỗi lần sửa code là cài lại từ đầu.\n- Ứng dụng nghe ở `127.0.0.1` trong container nên không truy cập được từ ngoài; phải nghe `0.0.0.0`.\n- Đưa bí mật (khoá, mật khẩu) vào image thay vì biến môi trường lúc chạy.\n- Nhiều dịch vụ (app + database) thì dùng docker compose, đừng nhồi vào một container.\n\n### Tự kiểm tra\nVì sao thứ tự `COPY requirements.txt` rồi `RUN pip install` quan trọng? `0.0.0.0` khác `127.0.0.1` thế nào trong container?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: từng dòng Dockerfile, giải thích bằng hình",
+    "nguon": "Docker · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-5-cong-thuc",
+    "ten": "4.5 — Công thức: Node, Next.js, Python, Go, trang tĩnh",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien",
+    "ten": "4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng",
+    "nguon": "Docker · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=docker-layers",
+    "ten": "Docker — tầng ảnh và cache build",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-1-file-dau-tien",
+    "ten": "9.1 — File compose đầu tiên của bạn",
+    "nguon": "Docker · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=docker-compose",
+    "ten": "docker compose — thứ tự khởi động",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Testing & Đóng gói › doctest": {
+  "body": "doctest tìm các đoạn trong docstring trông như phiên tương tác của Python (dòng bắt đầu bằng `>>>`), chạy chúng và so kết quả in ra với phần bên dưới. Ví dụ trong tài liệu vì thế trở thành test, và không thể lệch khỏi thực tế mà không ai biết.\n\n### Ý chính\n- Hợp với hàm thuần, dễ minh hoạ bằng đầu vào/đầu ra: toán học, xử lý chuỗi, thư viện nhỏ.\n- Không hợp với logic cần dựng nhiều dữ liệu hoặc mock; khi đó dùng pytest hoặc unittest.\n\n```python\ndef giai_thua(n):\n    \"\"\"Tính n!.\n\n    >>> giai_thua(5)\n    120\n    >>> giai_thua(0)\n    1\n    \"\"\"\n    return 1 if n <= 1 else n * giai_thua(n - 1)\n\nif __name__ == \"__main__\":\n    import doctest\n    doctest.testmod()\n```\n\n```bash\npython -m doctest -v file.py\npytest --doctest-modules       # pytest cũng chạy được doctest\n```\n\n### Lỗi hay gặp\n- Kết quả có khoảng trắng, thứ tự dict hoặc địa chỉ bộ nhớ không ổn định làm test chập chờn.\n- Lạm dụng doctest làm bộ test chính nên docstring quá dài."
+ },
+ "Testing & Đóng gói › unittest / pyUnit": {
+  "body": "unittest (tên cũ PyUnit) là framework test có sẵn trong thư viện chuẩn, mô phỏng JUnit của Java theo mẫu xUnit: mỗi nhóm test là một class kế thừa `unittest.TestCase`, mỗi test là method bắt đầu bằng `test`.\n\n### Ý chính\n- `setUp` chạy trước mỗi test, `tearDown` chạy sau; `setUpClass`/`tearDownClass` chạy một lần cho cả class.\n- Nhiều hàm khẳng định: `assertEqual`, `assertTrue`, `assertIn`, `assertRaises`...\n- `unittest.mock` (có sẵn) dùng để thay thế phụ thuộc bằng đối tượng giả.\n\n```python\nimport unittest\nfrom unittest.mock import patch\n\nclass TestGio(unittest.TestCase):\n    def setUp(self):\n        self.ds = [1, 2, 3]\n\n    def test_tong(self):\n        self.assertEqual(sum(self.ds), 6)\n\n    def test_loi(self):\n        with self.assertRaises(ZeroDivisionError):\n            1 / 0\n\nif __name__ == \"__main__\":\n    unittest.main()\n```\n\n```bash\npython -m unittest discover -v\n```\n\n### Khi dùng\nKhi không muốn thêm dependency hoặc dự án đã dùng sẵn. Cú pháp dài dòng hơn pytest nhưng pytest chạy được test unittest, nên chuyển dần được.",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Testing & Đóng gói › Common Packages": {
+  "body": "Một số thư viện bên thứ ba xuất hiện ở hầu hết dự án Python. Biết chúng giúp bạn viết code thật nhanh hơn và tránh tự chế thứ đã có.\n\n### Ý chính\n- **requests / httpx**: gọi HTTP. `requests` đơn giản, đồng bộ; `httpx` có API tương tự và hỗ trợ cả `async`.\n- **rich**: in terminal có màu, bảng, thanh tiến trình, traceback đẹp.\n- **click** (hoặc `typer`): dựng ứng dụng dòng lệnh với tham số và trợ giúp tự sinh.\n- **python-dotenv**: nạp biến môi trường từ file `.env`.\n- **tenacity**: thử lại có điều kiện (retry, backoff). **loguru**: logging đơn giản hơn module `logging`.\n\n```python\nimport httpx\n\nresp = httpx.get(\"https://httpbin.org/get\", params={\"q\": \"python\"}, timeout=10)\nresp.raise_for_status()\nprint(resp.json()[\"args\"])\n```\n\nCài đặt trong môi trường ảo: `python -m venv .venv`, kích hoạt, rồi `pip install httpx rich click`.\n\n### Lỗi hay gặp\n- Gọi HTTP không đặt `timeout`, nên một dịch vụ chậm làm treo cả chương trình.\n- Cài thẳng vào Python hệ thống thay vì môi trường ảo.\n- Không ghi phiên bản (`requirements.txt` hoặc `pyproject.toml`) nên máy khác cài ra bản khác.\n- Thêm thư viện cho việc thư viện chuẩn làm được gọn (ví dụ `pathlib`, `json`).",
+  "lessons": [
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-6-1-modules-venv",
+    "ten": "6.1 — Module, package & môi trường ảo",
+    "nguon": "Advanced Python with OOP · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Testing & Đóng gói › pytest — Beyond Basics": {
+  "body": "Sau khi viết được test cơ bản, pytest còn nhiều công cụ giúp bộ test gọn và dễ bảo trì khi dự án lớn lên.\n\n### Ý chính\n- **Fixture có scope**: `scope=\"function\"` (mặc định), `\"module\"`, `\"session\"` quyết định bao lâu tạo lại một lần. Dùng `yield` để có phần dọn dẹp (teardown) sau test.\n- **conftest.py**: fixture đặt ở đây tự dùng được cho mọi test trong thư mục, không cần import.\n- **parametrize** chạy một test với nhiều bộ dữ liệu; có thể xếp chồng nhiều `parametrize` để sinh tổ hợp.\n- **Plugin**: `pytest-cov` đo độ phủ, `pytest-asyncio` test hàm `async`, `pytest-mock` bọc `unittest.mock` thành fixture `mocker`.\n- Marker (`@pytest.mark.slow`) để lọc test; `-k \"ten\"` để chạy theo tên.\n\n```python\n# conftest.py\nimport pytest\n\n@pytest.fixture\ndef ket_noi_db():\n    db = {\"nguoi_dung\": []}      # giả lập tài nguyên\n    yield db                     # test chạy ở đây\n    db.clear()                   # dọn dẹp sau test\n\n# test_nguoi_dung.py\ndef test_them(ket_noi_db):\n    ket_noi_db[\"nguoi_dung\"].append(\"an\")\n    assert ket_noi_db[\"nguoi_dung\"] == [\"an\"]\n```\n\n```bash\npytest --cov=goi_cua_toi -q\n```\n\n### Lỗi hay gặp\n- Fixture scope rộng giữ trạng thái nên test này làm hỏng test kia.\n- Lạm dụng fixture lồng nhau khiến khó biết dữ liệu đến từ đâu.\n- Chạy theo phần trăm độ phủ mà không kiểm tra test có thật sự khẳng định gì.\n\n### Tự kiểm tra\nKhi nào dùng scope `session`? Vì sao nên dọn dẹp bằng `yield` trong fixture?",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-8-1-testing-packaging-pro",
+    "ten": "8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Testing & Đóng gói › Testing": {
+  "body": "Chiến lược test tốt không phải viết nhiều test, mà viết test đáng tin: chạy nhanh, chỉ hỏng khi code thật sự sai, và nói rõ chỗ hỏng.\n\n### Ý chính\n- **Mock và patch**: thay một phụ thuộc (gọi HTTP, gửi mail, đọc đồng hồ) bằng đối tượng giả để test chạy nhanh và không phụ thuộc bên ngoài. Trong Python dùng `unittest.mock.patch` hoặc fixture `mocker`.\n- **Fixture**: dữ liệu hoặc trạng thái chuẩn bị sẵn cho test.\n- **Coverage**: tỷ lệ dòng (hoặc nhánh) code được chạy khi test. Cao chưa chắc tốt, nhưng thấp là dấu hiệu có vùng chưa được kiểm.\n- **Cô lập (isolation)**: mỗi test độc lập, chạy theo thứ tự nào cũng ra cùng kết quả.\n\n```python\nfrom unittest.mock import patch\n\ndef lay_nhiet_do(thanh_pho):\n    import httpx\n    return httpx.get(f\"https://api.example.com/{thanh_pho}\").json()[\"temp\"]\n\ndef test_lay_nhiet_do():\n    with patch(\"httpx.get\") as gia:\n        gia.return_value.json.return_value = {\"temp\": 31}\n        assert lay_nhiet_do(\"hanoi\") == 31\n```\n\n### Lỗi hay gặp\n- Mock quá nhiều đến mức test chỉ kiểm tra chính các mock; hãy patch ở biên hệ thống, giữ logic thật.\n- Patch sai chỗ: phải patch tên **nơi nó được dùng**, không phải nơi định nghĩa.\n- Test dùng chung dữ liệu hoặc phụ thuộc thứ tự chạy nên chập chờn.\n- Chạy theo con số coverage thay vì kiểm hành vi quan trọng.\n\nCác bài dưới đây dùng ví dụ JavaScript nhưng nguyên lý mock, cô lập và độ phủ giống hệt trong Python.\n\n### Tự kiểm tra\nKhác nhau giữa stub và mock? Vì sao test nên độc lập với thứ tự chạy?",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-1-phan-loai",
+    "ten": "3.1 — Stub, mock, spy, fake: mỗi loại là gì",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-3-4-thiet-ke",
+    "ten": "3.4 — Thiết kế code dễ test: tiêm phụ thuộc, lõi thuần, ports and adapters",
+    "nguon": "Testing · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-4-4-co-lap",
+    "ten": "4.4 — Cô lập: transaction, xoá bảng và dữ liệu mẫu",
+    "nguon": "Testing · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-8-1-do-phu",
+    "ten": "8.1 — Độ phủ: đo được gì và không đo được gì",
+    "nguon": "Testing · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-8-1-testing-packaging-pro",
+    "ten": "8.1 — Testing (pytest), đóng gói & thực hành chuyên nghiệp",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   }
+  ]
+ },
+ "Testing & Đóng gói › Static Typing": {
+  "body": "Python là ngôn ngữ kiểu động, nhưng từ Python 3.5 bạn có thể ghi **type hint** (chú thích kiểu). Chương trình vẫn chạy như cũ: hint không bị Python ép lúc chạy. Công cụ kiểm tra tĩnh như **mypy** hay **pyright** đọc hint để bắt lỗi kiểu trước khi chạy.\n\n### Vì sao cần biết\nHint giúp editor gợi ý chính xác, giúp bạn bắt lỗi (truyền `str` vào chỗ cần `int`, quên xử lý `None`) sớm, và làm hợp đồng giữa các hàm. Framework như FastAPI và Pydantic còn dùng hint để kiểm tra dữ liệu thật lúc chạy.\n\n### Ý chính\n- Cơ bản: `def f(x: int, y: str = \"a\") -> bool`.\n- Kiểu gộp: `list[int]`, `dict[str, float]`, `X | None` (hoặc `Optional[X]`), `Callable[[int], str]`.\n- Cũng có `TypedDict`, `Protocol`, generic (`TypeVar`).\n- Mức nghiêm ngặt tăng dần: bắt đầu thêm hint cho hàm công khai, dùng `# type: ignore` hạn chế cho chỗ chưa xử lý được, rồi bật `strict` của mypy.\n\n```python\ndef trung_binh(so: list[float]) -> float | None:\n    if not so:\n        return None\n    return sum(so) / len(so)\n\nkq = trung_binh([1.5, 2.5])\nprint(kq + 1)   # mypy báo: kq có thể là None\n```\n\n```bash\npip install mypy\nmypy --strict src/\n```\n\n### Lỗi hay gặp\n- Tin rằng hint làm Python tự báo lỗi lúc chạy; thật ra cần mypy hoặc pyright.\n- Dùng `Any` khắp nơi nên mất hết tác dụng kiểm tra.\n- Bật `strict` một lần trên codebase lớn rồi bỏ cuộc; hãy bật theo từng module.\n\n### Tự kiểm tra\nPython có từ chối chạy khi hint sai không? `X | None` buộc bạn phải làm gì trước khi dùng giá trị?",
+  "lessons": [
+   {
+    "href": "/courses/apo202-advanced-python-with-oop/learn?lessonSlug=apo202-7-1-functional-typehints",
+    "ten": "7.1 — Functional Python & type hints",
+    "nguon": "Advanced Python with OOP · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO202"
+   },
+   {
+    "href": "/courses/apo201c-advanced-python-with-oop/learn?lessonSlug=apo201c-8-1-testing-best-practices",
+    "ten": "8.1 — Kiểm thử & thực hành tốt",
+    "nguon": "Advanced Python with OOP · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "APO201c"
+   }
+  ]
+ },
+ "Testing & Đóng gói › tox — Kiểm thử trên nhiều môi trường": {
+  "body": "tox tự động hoá việc \"chạy test trên nhiều môi trường\". Với mỗi mục trong `envlist`, nó tạo một môi trường ảo riêng, cài dự án (như người dùng cuối sẽ cài) cùng dependency, rồi chạy lệnh test. Nhờ vậy phát hiện được lỗi tương thích phiên bản Python và dependency thiếu trong gói.\n\n### Ý chính\n- Khai báo trong `tox.ini` hoặc phần `[tool.tox]` của `pyproject.toml`.\n- Mỗi môi trường tách biệt, tái tạo được; thích hợp chạy cả trong CI.\n- Ngoài test còn dùng cho lint (`tox -e lint`) và dựng tài liệu.\n\n```ini\n[tox]\nenvlist = py310, py311, py312, lint\n\n[testenv]\ndeps = pytest\ncommands = pytest -q\n\n[testenv:lint]\ndeps = ruff\ncommands = ruff check .\n```\n\n```bash\ntox -p auto    # chạy các môi trường song song\n```\n\n### Lỗi hay gặp\n- Thiếu interpreter của một phiên bản trên máy nên môi trường đó bị bỏ qua.\n- Khai báo thiếu `deps` nên test chỉ chạy được khi trùng thư viện đã cài sẵn.\n\nVới app chỉ triển khai trên một phiên bản Python cố định (ví dụ trong Docker), tox không cần thiết; nó giá trị nhất với thư viện cho nhiều người dùng."
+ },
+ "Tiếp tục học › NumPy / Pandas (Data)": {
+  "body": "Đây là nhánh dành cho ai muốn làm việc với dữ liệu: phân tích dữ liệu, khoa học dữ liệu, học máy. **NumPy** cung cấp mảng nhiều chiều (`ndarray`) và phép tính số học nhanh; **pandas** xây trên NumPy để xử lý dữ liệu dạng bảng với `Series` và `DataFrame`.\n\n### Vì sao cần biết\nGần như mọi công việc dữ liệu trong Python (làm sạch, tổng hợp, huấn luyện mô hình) bắt đầu từ hai thư viện này, và các thư viện như scikit-learn đều nhận dữ liệu ở dạng của chúng.\n\n### Ý chính\n- **Vector hoá**: phép toán áp lên cả mảng cùng lúc, nhanh hơn nhiều so với vòng lặp Python.\n- NumPy: tạo mảng, chỉ số, slicing, broadcasting, thống kê (`mean`, `std`).\n- pandas: đọc CSV, chọn cột/dòng, lọc theo điều kiện, `groupby`, ghép bảng, xử lý giá trị thiếu.\n\n```python\nimport numpy as np\nimport pandas as pd\n\na = np.array([1, 2, 3, 4])\nprint(a * 2, a.mean())\n\ndf = pd.DataFrame({\"ten\": [\"An\", \"Bình\", \"Chi\"], \"diem\": [8.0, 6.5, 9.0]})\nprint(df[df[\"diem\"] >= 7])\nprint(df[\"diem\"].mean())\n```\n\n### Lỗi hay gặp\n- Dùng vòng lặp `for` trên DataFrame thay vì phép toán vector hoá.\n- Sửa trên một lát cắt rồi gặp `SettingWithCopyWarning`; dùng `.loc` và `.copy()` rõ ràng.\n- Quên kiểm tra kiểu dữ liệu và giá trị thiếu sau khi đọc file.\n\n### Tự kiểm tra\nVì sao `a * 2` trên mảng NumPy nhanh hơn vòng lặp? Khác nhau giữa `Series` và `DataFrame`?",
+  "lessons": [
+   {
+    "href": "/courses/dsi201-data-science/learn?lessonSlug=dsi201-2-1-python-numpy-pandas",
+    "ten": "2.1 — Python cho DS (numpy & pandas)",
+    "nguon": "Data Science · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DSI201"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-2-1-numpy",
+    "ten": "2.1 — Cấu trúc dữ liệu & NumPy",
+    "nguon": "Python for Business Analytics · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/courses/pba301-python-for-business-analytics/learn?lessonSlug=pba301-3-1-pandas",
+    "ten": "3.1 — pandas: Series/DataFrame, đọc/ghi dữ liệu",
+    "nguon": "Python for Business Analytics · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PBA301"
+   },
+   {
+    "href": "/code-lab/python",
+    "ten": "Python",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tiếp tục học › Tiếp: Backend / AI Engineer": {
+  "body": "Python là ngôn ngữ chính của hai hướng nghề: **Backend** (xây API và dịch vụ) và **AI Engineer** (đưa mô hình học máy và LLM vào sản phẩm). Sau khi nắm nền tảng ngôn ngữ, test, đóng gói và Docker, bạn chọn một hướng để đi sâu.\n\n### Hướng Backend\n- Một framework (FastAPI hoặc Django), thiết kế REST API, xác thực.\n- Database và ORM (SQLAlchemy hoặc ORM của Django), migration.\n- Hàng đợi tác vụ, cache, triển khai bằng Docker, logging và giám sát.\n- Hiểu `async`, thread và GIL để chọn mô hình đồng thời phù hợp.\n\n### Hướng AI Engineer\n- NumPy, pandas, scikit-learn cho dữ liệu và học máy cổ điển.\n- Gọi và tích hợp mô hình (API LLM, embeddings, RAG), phục vụ mô hình qua REST API.\n- Đóng gói và theo dõi phiên bản mô hình, đánh giá chất lượng đầu ra.\n\n### Lời khuyên\nHai hướng giao nhau ở chỗ đưa thứ chạy được lên production, nên kỹ năng test, Docker và API đều dùng cho cả hai. Hãy chọn một dự án nhỏ end-to-end (ví dụ API dự đoán dựa trên một mô hình đơn giản, có test và Dockerfile) làm bước tiếp theo.",
+  "lessons": [
+   {
+    "href": "/courses/mlo401-machine-learning-operations/learn?lessonSlug=mlo401-ts-6-2",
+    "ten": "6.2 — Phục vụ mô hình bằng REST API với FastAPI",
+    "nguon": "Machine learning operations · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "MLO401"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-4-4-python",
+    "ten": "4.4 — Python: GIL, threading vs multiprocessing vs asyncio, đo thật",
+    "nguon": "Operating Systems for Developers · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/pwd301-python-web-development/learn?lessonSlug=pwd301-4-1-rest-deploy",
+    "ten": "4.1 — API RESTful & triển khai",
+    "nguon": "Python Web Development · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PWD301"
+   }
+  ]
+ }
+}

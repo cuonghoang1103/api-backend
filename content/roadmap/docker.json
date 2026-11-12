@@ -1,0 +1,2049 @@
+{
+ "Kiến trúc Container › Bare Metal vs VMs vs Containers": {
+  "body": "Có ba cách chạy một ứng dụng trên máy chủ. **Bare metal** là chạy thẳng trên phần cứng với một hệ điều hành duy nhất. **Máy ảo (VM)** dùng hypervisor để giả lập cả một máy tính, mỗi VM có kernel và hệ điều hành riêng. **Container** thì không giả lập phần cứng: các container chạy chung kernel của máy chủ, chỉ được cô lập về mặt tiến trình, mạng, hệ thống file.\n\n### Vì sao cần biết\nKhác biệt này quyết định tốc độ và độ cô lập. Container khởi động trong vài giây (thực chất chỉ là khởi động một tiến trình), nhẹ vì không mang theo cả OS. Đổi lại, mọi container dùng chung kernel nên cô lập yếu hơn VM; muốn chạy kernel khác (ví dụ Windows trên máy Linux) thì vẫn cần VM.\n\n### Ý chính\n- VM = phần cứng ảo + kernel riêng + OS đầy đủ, nặng cỡ GB, khởi động theo phút.\n- Container = tiến trình được cô lập, dùng chung kernel host, nặng cỡ MB, khởi động theo giây.\n- Container Linux cần kernel Linux: Docker Desktop trên Mac/Windows thật ra chạy một VM Linux nhỏ ở bên dưới.\n- Hai thứ không loại trừ nhau: thực tế thường chạy container bên trong VM trên cloud.\n\n### Lỗi hay gặp\n- Nghĩ container là \"VM nhẹ\" nên tin rằng cô lập tuyệt đối. Một lỗ hổng kernel có thể ảnh hưởng mọi container trên host.\n- Tưởng image Linux chạy được trên mọi kernel; thực tế image nhắm một kiến trúc CPU (amd64/arm64) và hệ điều hành cụ thể.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình tư duy bằng hình",
+    "nguon": "Docker · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-1-container-la-gi",
+    "ten": "1.1 — Container thật ra được làm bằng gì",
+    "nguon": "Docker · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=docker-container",
+    "ten": "Container không phải máy ảo nhẹ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-6-runc",
+    "ten": "12.6 — Docker thật sự chạy gì: dockerd, containerd, shim, runc và config.json OCI — và vì sao đó không phải máy ảo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-3-1-virtualization-containers",
+    "ten": "3.1 — Ảo hoá & container",
+    "nguon": "Cloud Computing · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "Kiến trúc Container › Namespaces & cgroups": {
+  "body": "**Namespace** và **cgroups** là hai tính năng của kernel Linux tạo nên container. Namespace quyết định tiến trình *nhìn thấy gì*; cgroups quyết định tiến trình *được dùng bao nhiêu*.\n\nMỗi loại namespace cô lập một tài nguyên: `pid` (cây tiến trình riêng, tiến trình đầu tiên trong container thấy mình là PID 1), `net` (card mạng, bảng định tuyến, cổng riêng), `mnt` (cây thư mục riêng), `uts` (hostname), `ipc`, `user` (ánh xạ UID), và `cgroup`. Còn cgroups giới hạn và đo CPU, RAM, số tiến trình, I/O của một nhóm tiến trình.\n\n### Ý chính\n- Container không phải một đối tượng có sẵn trong kernel; nó là một tiến trình thường được bọc trong một bộ namespace + một cgroup.\n- Cờ `--memory` và `--cpus` của `docker run` chính là cấu hình cgroups.\n- Vượt giới hạn RAM thì kernel giết tiến trình (OOM kill), thường thấy dưới dạng exit code 137.\n\n```bash\ndocker run -d --name demo --memory 128m alpine sleep 300\ndocker exec demo ps          # trong container: sleep là PID nhỏ\nps aux | grep \"sleep 300\"    # trên host: cùng tiến trình, PID khác\n```\n\n### Lỗi hay gặp\n- Quên đặt giới hạn bộ nhớ, một container ngốn RAM kéo cả host vào swap hoặc bị OOM.\n- Tưởng PID trong container và PID trên host là một.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-1-container-la-gi",
+    "ten": "1.1 — Container thật ra được làm bằng gì",
+    "nguon": "Docker · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces",
+    "ten": "12.1 — Container là một tiến trình nhìn thế giới khác đi: từng namespace một",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups",
+    "ten": "12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan",
+    "ten": "14.1 — Bên trong nhân: system call, /proc, namespaces, cgroups và capabilities",
+    "nguon": "Linux & Bash · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiến trúc Container › Union Filesystems": {
+  "body": "Image Docker không phải một khối liền mà là **chồng nhiều lớp (layer) chỉ đọc**, xếp lên nhau. Mỗi chỉ thị trong Dockerfile như `RUN`, `COPY`, `ADD` tạo ra một layer chứa phần *chênh lệch* so với layer dưới. **Union filesystem** (trên Linux thường là **OverlayFS**) ghép các layer này lại thành một cây thư mục duy nhất mà container nhìn thấy.\n\nKhi container chạy, Docker thêm lên trên cùng một lớp **ghi được** (upper layer). Ghi hay sửa một file có sẵn ở layer dưới thì file đó được *copy-up* lên lớp ghi được rồi mới sửa (copy-on-write). Xoá file chỉ che nó đi bằng một dấu \"whiteout\", file gốc vẫn nằm trong layer cũ.\n\n### Vì sao cần biết\n- Layer được chia sẻ: hai image cùng dựa trên `node:22` chỉ lưu một bản layer nền trên đĩa.\n- Cache build hoạt động theo layer: layer không đổi thì dùng lại, nên sắp xếp Dockerfile hợp lý giúp build nhanh hơn rất nhiều.\n- Xoá file ở layer sau **không làm image nhỏ đi**, vì dữ liệu vẫn nằm ở layer trước.\n\n### Ý chính\n- Layer bất biến, định danh bằng hash nội dung.\n- Lớp ghi được của container bị bỏ khi xoá container.\n- `docker history <image>` liệt kê các layer và kích thước.\n\n### Lỗi hay gặp\n- `RUN` tải file lớn ở một lệnh rồi `rm` ở lệnh sau: file vẫn nằm trong image. Phải tải và xoá trong cùng một `RUN`.\n- Ghi dữ liệu quan trọng vào lớp ghi được thay vì volume.\n\n### Tự kiểm tra\n- Vì sao `rm` ở lệnh `RUN` sau không thu nhỏ image?\n- Hai container từ cùng một image chia sẻ và không chia sẻ gì?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-2-tang-anh",
+    "ten": "1.2 — Image là những chồng tầng",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-3-overlayfs",
+    "ten": "12.3 — OverlayFS và các lớp ảnh: lower, upper, work — copy-up, whiteout và build cache",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-4-tang-ghi-duoc",
+    "ten": "1.4 — Tầng ghi được, và vì sao dữ liệu của bạn biến mất",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=docker-layers",
+    "ten": "Docker — tầng ảnh và cache build",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Kiến trúc Container › Giới thiệu lộ trình Docker": {
+  "body": "Lộ trình này đi từ câu hỏi \"container là gì\" đến việc đưa một ứng dụng nhiều dịch vụ lên môi trường thật. Thứ tự các phần được xếp để mỗi bước dựa trên bước trước.\n\n### Các chặng chính\n- **Kiến trúc container**: hiểu container, image, namespace, cgroups, runtime.\n- **Cài đặt và CLI**: cài Docker, chạy, quan sát, dọn dẹp container.\n- **Image và Dockerfile**: viết Dockerfile, cache layer, multi-stage, tối ưu kích thước.\n- **Mạng và lưu trữ**: bridge/host/overlay, volume, bind mount, tmpfs.\n- **Compose và Swarm**: định nghĩa nhiều dịch vụ trong một file, dev với hot reload, orchestration nhẹ.\n- **Registry**: đẩy và kéo image, xác thực.\n- **Bảo mật và tối ưu**: quét lỗ hổng, chạy không root, giới hạn tài nguyên.\n\n### Cách học hiệu quả\nĐừng chỉ đọc. Mỗi khái niệm nên đi kèm một lệnh bạn tự gõ: chạy, làm hỏng, đọc log, sửa. Docker là kỹ năng thực hành; hiểu mô hình tư duy (image là chồng layer, container là tiến trình cô lập) sẽ giúp bạn đọc được lỗi thay vì chép lệnh từ mạng.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: Docker từ đầu, bằng hình",
+    "nguon": "Docker · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Docker là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-1-van-de",
+    "ten": "0.1 — Docker thật sự giải quyết cái gì",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiến trúc Container › Container là gì?": {
+  "body": "**Container** là một tiến trình (hoặc nhóm tiến trình) chạy trong môi trường được cô lập, được tạo ra từ một **image** — gói chứa code, runtime, thư viện và cấu hình ứng dụng cần. Hình dung image như bản thiết kế chỉ đọc, còn container là một thể hiện đang chạy của bản thiết kế đó. Từ một image bạn chạy được nhiều container độc lập.\n\nContainer không có OS riêng; nó dùng kernel của máy chủ, và nhờ kernel cô lập (namespace) và giới hạn (cgroups) nên mỗi container thấy một \"thế giới\" riêng: hệ thống file riêng, mạng riêng, cây tiến trình riêng.\n\n### Ý chính\n- Image = công thức đóng gói; container = tiến trình đang chạy từ công thức đó.\n- Container mặc định **tạm thời**: xoá đi thì dữ liệu ghi trong nó mất (trừ khi dùng volume).\n- Mỗi container nên làm một việc, giao tiếp với container khác qua mạng.\n\n```bash\ndocker run --rm -p 8080:80 nginx:alpine\n# mở http://localhost:8080 để thấy trang chào của nginx\n```\n\n### Lỗi hay gặp\n- Gọi image và container lẫn lộn: `docker images` liệt kê image, `docker ps` liệt kê container.\n- Thử `ssh` vào container để cấu hình như một máy chủ; cách đúng là sửa Dockerfile rồi tạo lại.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình tư duy bằng hình",
+    "nguon": "Docker · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-1-container-la-gi",
+    "ten": "1.1 — Container thật ra được làm bằng gì",
+    "nguon": "Docker · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=docker-container",
+    "ten": "Container không phải máy ảo nhẹ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-3-nam-phut",
+    "ten": "0.3 — Năm phút đầu tiên: chạy một thứ có thật",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiến trúc Container › Tại sao cần Container?": {
+  "body": "Câu \"máy tôi chạy được mà\" xuất hiện vì môi trường chạy khác nhau: phiên bản Node/Python khác, thiếu thư viện hệ thống, biến môi trường lệch, hệ điều hành khác. Container giải quyết bằng cách **đóng gói ứng dụng cùng toàn bộ môi trường nó cần** thành một image; chạy image đó ở đâu cũng ra cùng kết quả.\n\n### Vì sao cần biết\n- **Nhất quán**: dev, CI, staging, production dùng cùng một image.\n- **Onboard nhanh**: thành viên mới chạy `docker compose up` thay vì cài tay Postgres, Redis, đúng phiên bản.\n- **Cô lập**: hai dự án cần hai phiên bản Node khác nhau không còn xung đột.\n- **Triển khai và rollback đơn giản**: deploy là đổi tag image; lỗi thì quay lại tag cũ.\n- **Mật độ cao**: nhiều ứng dụng chia sẻ một máy chủ mà không phải gánh nhiều OS.\n\n### Lỗi hay gặp\n- Kỳ vọng Docker sửa được mọi bất đồng: nếu app phụ thuộc vào dữ liệu hay dịch vụ bên ngoài khác nhau giữa các môi trường, vẫn có lỗi.\n- Dùng tag `latest`: hôm nay và tuần sau có thể là hai image khác nhau, mất tính tái lập.\n\n### Tự kiểm tra\n- Kể ba vấn đề môi trường mà container loại bỏ.\n- Vì sao \"một image, nhiều môi trường\" an toàn hơn build lại ở mỗi môi trường?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-1-van-de",
+    "ten": "0.1 — Docker thật sự giải quyết cái gì",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-6-bat-dau-khi-khong-co",
+    "ten": "Bắt đầu tại đây (2/2) — Khi không có nó: những sự cố thật, và cách học để không bỏ cuộc",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Docker là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiến trúc Container › Công nghệ nền tảng của Container": {
+  "body": "Docker không phát minh ra cô lập; nó đóng gói các tính năng có sẵn của kernel Linux thành công cụ dễ dùng. Ba mảnh ghép chính:\n\n- **Namespaces** cô lập những gì tiến trình nhìn thấy (PID, mạng, mount, hostname, user...).\n- **cgroups (control groups)** giới hạn và đo tài nguyên: CPU, RAM, I/O, số tiến trình.\n- **Union filesystem (OverlayFS)** ghép các layer image thành một hệ thống file, cho phép chia sẻ layer và copy-on-write.\n\nNgoài ra còn **capabilities** (chia quyền root thành các quyền nhỏ, container bị bỏ bớt mặc định) và **seccomp** (lọc system call) để thu hẹp bề mặt tấn công.\n\n### Vì sao cần biết\nKhi hiểu các mảnh này, nhiều hành vi \"lạ\" của Docker trở nên dễ đoán: vì sao container bị giết với exit code 137 (cgroup giới hạn RAM), vì sao Docker Desktop trên Mac phải chạy một VM Linux (cần kernel Linux), vì sao ghi file trong container không bền (lớp ghi được của overlay).\n\n### Lỗi hay gặp\n- Chạy container với `--privileged` cho tiện; làm vậy gần như bỏ hết các lớp bảo vệ trên.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-1-container-la-gi",
+    "ten": "1.1 — Container thật ra được làm bằng gì",
+    "nguon": "Docker · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces",
+    "ten": "12.1 — Container là một tiến trình nhìn thế giới khác đi: từng namespace một",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups",
+    "ten": "12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-4-mini",
+    "ten": "12.4 — Tự dựng một mini container bằng tay: rootfs Alpine, overlayfs, một cgroup, sáu namespace và pivot_root",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiến trúc Container › Kiến trúc Docker và Container Ecosystem": {
+  "body": "Docker là một hệ gồm nhiều thành phần, không phải một chương trình duy nhất. Khi gõ `docker run`, chuỗi sau diễn ra:\n\n1. **Docker CLI** (`docker`) gửi yêu cầu qua API tới **Docker daemon** (`dockerd`) — thường qua socket `/var/run/docker.sock`.\n2. `dockerd` quản lý image, mạng, volume, và giao việc chạy container cho **containerd**.\n3. **containerd** là container runtime cấp cao: kéo image, quản lý vòng đời container, gọi runtime cấp thấp.\n4. **runc** (runtime cấp thấp theo chuẩn OCI) thực sự tạo container: thiết lập namespace, cgroup rồi khởi chạy tiến trình.\n\n### Ý chính\n- CLI chỉ là máy khách; thay đổi biến `DOCKER_HOST` hoặc dùng context là nó nói chuyện với daemon khác.\n- Registry (Docker Hub, GHCR...) là nơi lưu image; daemon kéo từ đó.\n- Kubernetes bỏ `dockerd` và nói chuyện thẳng với containerd, mà image vẫn chạy như cũ vì cùng chuẩn OCI.\n\n### Lỗi hay gặp\n- Gắn `/var/run/docker.sock` vào container \"để quản lý Docker\": container đó gần như có quyền root trên host.\n- Nhầm lỗi \"Cannot connect to the Docker daemon\" là hỏng image; thực ra daemon chưa chạy hoặc user thiếu quyền.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-5-ngan-xep-runtime",
+    "ten": "1.5 — Ai thật sự chạy cái container",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-6-runc",
+    "ten": "12.6 — Docker thật sự chạy gì: dockerd, containerd, shim, runc và config.json OCI — và vì sao đó không phải máy ảo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình tư duy bằng hình",
+    "nguon": "Docker · Chương 1",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Kiến trúc Container › containerd và OCI": {
+  "body": "**containerd** là container runtime cấp cao, tách ra từ Docker và nay là dự án độc lập của CNCF. Nó lo kéo image, lưu snapshot, quản lý vòng đời container và gọi runtime cấp thấp (mặc định **runc**) để tạo container thật. Docker Engine và Kubernetes đều dùng containerd.\n\n**OCI (Open Container Initiative)** là tổ chức đặt ra các chuẩn mở: **image spec** (định dạng image), **runtime spec** (cách chạy container từ một \"bundle\" gồm rootfs + `config.json`) và **distribution spec** (giao thức registry). Nhờ chuẩn này, image build bằng Docker chạy được trên Podman, containerd, CRI-O.\n\n### Vì sao cần biết\nBiết chuẩn OCI giúp bạn hiểu vì sao công cụ thay thế được cho nhau và vì sao \"Docker bị bỏ khỏi Kubernetes\" không làm hỏng image của bạn: runtime đổi, định dạng image vẫn là OCI.\n\n### Ý chính\n- containerd: quản lý nhiều container, image, snapshot.\n- runc: một lần chạy, tạo container theo `config.json`, rồi thoát.\n- Có runtime khác theo chuẩn OCI nhưng cô lập mạnh hơn (gVisor, Kata Containers).",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-5-ngan-xep-runtime",
+    "ten": "1.5 — Ai thật sự chạy cái container",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-6-runc",
+    "ten": "12.6 — Docker thật sự chạy gì: dockerd, containerd, shim, runc và config.json OCI — và vì sao đó không phải máy ảo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiến trúc Container › Thiết kế ứng dụng cho Container": {
+  "body": "Container hợp nhất với ứng dụng được thiết kế để có thể **bỏ đi và tạo lại bất cứ lúc nào**. Các nguyên tắc cốt lõi (gần với 12-factor app):\n\n### Ý chính\n- **Stateless**: ứng dụng không giữ trạng thái quan trọng trong bộ nhớ hay đĩa của container. Dữ liệu bền nằm ở dịch vụ ngoài (database, object storage) hoặc volume.\n- **Cấu hình qua biến môi trường**, không nhét vào image. Cùng một image chạy ở dev và prod, chỉ khác biến.\n- **Log ra stdout/stderr**, không ghi file log trong container; Docker thu log từ đó.\n- **Tắt nhẹ nhàng**: bắt tín hiệu `SIGTERM` để đóng kết nối rồi thoát, vì `docker stop` gửi SIGTERM rồi sau mặc định 10 giây gửi SIGKILL.\n- **Một tiến trình chính, một mối quan tâm** cho mỗi container.\n- **Khởi động nhanh**, chịu được thứ tự khởi động ngẫu nhiên (kết nối lại database khi chưa sẵn sàng).\n\n```js\n// Node: tắt nhẹ nhàng khi container bị dừng\nprocess.on('SIGTERM', () => server.close(() => process.exit(0)));\n```\n\n### Lỗi hay gặp\n- Lưu file người dùng tải lên vào đĩa container: mất khi triển khai bản mới.\n- Chạy ứng dụng qua shell wrapper nên tiến trình không nhận SIGTERM, bị SIGKILL sau 10 giây.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-3-vong-doi",
+    "ten": "1.3 — Vòng đời một container, và PID 1",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-4-tang-ghi-duoc",
+    "ten": "1.4 — Tầng ghi được, và vì sao dữ liệu của bạn biến mất",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-4-arg-env",
+    "ten": "4.4 — ARG và ENV: lúc dựng so với lúc chạy",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-3-log",
+    "ten": "11.3 — Log, xoay log, và cái đĩa đầy",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiến trúc Container › Các công nghệ nền tảng — BuildKit, Kaniko, img": {
+  "body": "**BuildKit** là engine build hiện đại của Docker (mặc định từ Docker Engine 23.0; trước đó phải bật bằng `DOCKER_BUILDKIT=1`). So với builder cũ, nó dựng các stage độc lập song song, bỏ qua stage không cần cho target, cache thông minh hơn, hỗ trợ `RUN --mount=type=cache` (giữ cache của trình quản lý gói giữa các lần build) và `--mount=type=secret` (đưa bí mật vào lúc build mà không để lại trong layer).\n\n`docker buildx` là CLI mở rộng của BuildKit, cho phép build đa nền tảng (amd64 + arm64) và xuất cache ra registry cho CI.\n\n**Kaniko** và **img** là các công cụ build image *không cần Docker daemon*, hữu ích trong môi trường như pod Kubernetes hoặc CI không muốn cấp quyền đặc biệt. Kaniko chạy trong container, đọc Dockerfile và đẩy image lên registry.\n\n### Ý chính\n- Dùng mặc định BuildKit; hầu hết dev không cần chọn gì thêm.\n- `--mount=type=secret` thay cho việc `COPY` file khoá rồi xoá (file vẫn nằm trong layer cũ).\n- Cần build không daemon thì xem Kaniko hay buildah.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-1-buildx-bake",
+    "ten": "15.1 — BuildKit nâng cao: builder riêng, đa nền tảng, bake, bí mật lúc build",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-1-cache-quyet-dinh",
+    "ten": "5.1 — Cache lúc dựng quyết định thế nào",
+    "nguon": "Docker · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-3-cache-mount",
+    "ten": "5.3 — Cache mount: giữ lại phần đã tải giữa các lượt dựng",
+    "nguon": "Docker · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Docker Desktop / Engine (Linux)": {
+  "body": "Có hai cách cài Docker tuỳ hệ điều hành.\n\n- **Docker Desktop** (macOS, Windows, Linux): ứng dụng đồ hoạ gói sẵn Docker Engine, CLI, Compose, kèm một VM Linux nhẹ (trên Windows thường dùng WSL 2). Dễ cài, hợp máy cá nhân. Lưu ý điều khoản cấp phép: dùng cho doanh nghiệp lớn có thể phải trả phí.\n- **Docker Engine** (Linux): cài thẳng gói `docker-ce` từ kho apt/dnf chính thức của Docker, chạy như một dịch vụ systemd. Nhẹ, là cách dùng trên máy chủ thật.\n\n### Ý chính\n- Docker Engine chỉ chạy native trên Linux; trên Mac/Windows luôn có một lớp VM.\n- Sau khi cài Engine trên Linux, thêm user vào nhóm `docker` để khỏi gõ `sudo`. Nhớ rằng thuộc nhóm này tương đương quyền root.\n- Kiểm tra bằng:\n\n```bash\ndocker version\ndocker run --rm hello-world\n```\n\n### Lỗi hay gặp\n- Cài `docker.io` từ kho distro cũ thay vì kho chính thức, thiếu Compose plugin hoặc bản cũ.\n- Trên Mac/Windows, tài nguyên (RAM, CPU, đĩa) bị giới hạn bởi cấu hình của VM trong Docker Desktop, không phải của máy.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-2-cai-dat",
+    "ten": "0.2 — Cài Docker, và bạn vừa cài cái gì",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-4-mac-windows",
+    "ten": "13.4 — Docker trên Mac & Windows thật ra là một máy ảo Linux",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-3-nam-phut",
+    "ten": "0.3 — Năm phút đầu tiên: chạy một thứ có thật",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Docker CLI & docker run": {
+  "body": "`docker run` là lệnh quan trọng nhất: nó tạo và khởi động một container từ một image (tự kéo image nếu chưa có). Một nhóm lệnh nhỏ đi cùng là bạn đã làm được phần lớn việc hằng ngày.\n\n```bash\ndocker run -d --name web -p 8080:80 nginx:alpine   # chạy nền, map cổng\ndocker ps                                          # container đang chạy (-a: cả đã dừng)\ndocker logs -f web                                 # xem log\ndocker exec -it web sh                             # mở shell trong container\ndocker stop web && docker rm web                   # dừng và xoá\n```\n\n### Ý chính\n- `-d` chạy nền; `-it` tương tác (có terminal); `--rm` tự xoá khi thoát.\n- `-p HOST:CONTAINER` công bố cổng ra máy chủ.\n- `-e KEY=VALUE` đặt biến môi trường; `-v` hoặc `--mount` gắn dữ liệu.\n- `--name` đặt tên dễ nhớ thay cho tên ngẫu nhiên.\n\n### Lỗi hay gặp\n- Quên `-p` rồi thắc mắc vì sao không truy cập được dịch vụ.\n- Chạy lại `docker run --name web` khi container tên đó còn tồn tại (đã dừng): lỗi trùng tên. Dùng `docker rm` hoặc `--rm`.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: chạy container bằng hình",
+    "nguon": "Docker · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-1-docker-run",
+    "ten": "2.1 — docker run: những cờ bạn dùng mỗi ngày",
+    "nguon": "Docker · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-3-nam-phut",
+    "ten": "0.3 — Năm phút đầu tiên: chạy một thứ có thật",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/docker",
+    "ten": "Docker",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Quản lý package trong Linux": {
+  "body": "Image container thường dựa trên một bản phân phối Linux (Debian, Ubuntu, Alpine), nên khi viết Dockerfile bạn cài thêm phần mềm bằng trình quản lý gói của bản phân phối đó:\n\n- Debian/Ubuntu: `apt-get`\n- Alpine: `apk`\n- RHEL/Fedora: `dnf`\n\n```dockerfile\nFROM debian:bookworm-slim\nRUN apt-get update  && apt-get install -y --no-install-recommends curl ca-certificates  && rm -rf /var/lib/apt/lists/*\n```\n\n### Ý chính\n- Gộp `update`, `install` và dọn cache trong **cùng một `RUN`**; nếu `update` ở layer riêng, cache layer cũ có thể khiến cài gói bị lỗi hoặc dùng danh sách gói lỗi thời.\n- `--no-install-recommends` và xoá `/var/lib/apt/lists` giúp image nhỏ hơn.\n- Ghim phiên bản gói quan trọng khi cần tái lập chính xác.\n- Alpine dùng `apk add --no-cache <gói>` (không để lại cache).\n\n### Lỗi hay gặp\n- Quên `-y` khiến build treo chờ xác nhận.\n- Chạy `apt` tương tác trong build; dùng biến `DEBIAN_FRONTEND=noninteractive` khi gói hỏi cấu hình.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-10-2-goi-phan-mem",
+    "ten": "10.2 — Gói phần mềm: apt, dnf, và thứ không nên cài toàn cục",
+    "nguon": "Linux & Bash · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/los201-linux-and-open-source-platform/learn?lessonSlug=los201-5-1-package-management",
+    "ten": "5.1 — Quản lý gói & phần mềm",
+    "nguon": "Linux and Open Source Platform · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "LOS201"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Câu lệnh Shell cơ bản": {
+  "body": "Phần lớn thời gian làm việc với container là làm việc với **shell**. Dù bạn gõ `docker exec -it web sh`, đọc entrypoint script hay viết lệnh `RUN` trong Dockerfile, bạn đều đang dùng shell. Những lệnh nên thuộc:\n\n- Điều hướng: `pwd`, `ls -la`, `cd`\n- Xem file: `cat`, `less`, `head`, `tail -f` (theo dõi log)\n- Tìm kiếm: `grep`, `find`\n- Quyền và sở hữu: `chmod`, `chown`\n- Tiến trình và hệ thống: `ps`, `top`, `df -h`, `env`\n- Kết nối nhanh: `curl`, `ping` (không phải image nào cũng có sẵn)\n\n### Ý chính\n- Image tối giản (Alpine, distroless) có thể chỉ có `sh` của BusyBox, hoặc không có shell nào; lúc đó phải debug bằng cách khác.\n- Pipe `|` và chuyển hướng `>` nối các lệnh nhỏ thành xử lý lớn.\n- `&&` chạy lệnh sau khi lệnh trước thành công, rất hay dùng trong Dockerfile để gộp layer.\n\n### Lỗi hay gặp\n- Giả định có `bash` trong mọi image; Alpine mặc định chỉ có `sh`.\n- Sửa file thủ công trong container đang chạy rồi quên rằng thay đổi mất khi container bị tạo lại.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: shell và hệ thống file bằng hình",
+    "nguon": "Linux & Bash · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-1-1-dau-nhac-ba-lenh",
+    "ten": "1.1 — Dấu nhắc, và ba lệnh đầu tiên của bạn",
+    "nguon": "Linux & Bash · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-3-vao-ben-trong",
+    "ten": "2.3 — Vào bên trong, kể cả khi không có shell nào",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/linux-bash",
+    "ten": "Linux & Bash",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Lập trình với ngôn ngữ scripting": {
+  "body": "Khi một thao tác cần nhiều bước, ta viết **script** để tự động hoá. Trong thế giới container, shell script (`sh`/`bash`) xuất hiện ở ba nơi: **entrypoint script** (chuẩn bị môi trường rồi chạy ứng dụng), **health check** và các bước trong CI. Python hay Node hợp khi logic phức tạp hơn.\n\n```sh\n#!/bin/sh\nset -e                      # dừng ngay khi có lệnh lỗi\necho \"Chờ database...\"\nuntil nc -z \"$DB_HOST\" 5432; do sleep 1; done\nexec \"$@\"                   # thay tiến trình shell bằng lệnh chính\n```\n\n### Ý chính\n- Dùng `exec \"$@\"` ở cuối entrypoint để ứng dụng thành PID 1 và nhận được tín hiệu `SIGTERM`.\n- `set -e` (và với bash `set -euo pipefail`) giúp script không âm thầm lờ lỗi.\n- Script phải có quyền thực thi (`chmod +x`) và line ending kiểu Unix (LF); file lưu từ Windows với CRLF gây lỗi `no such file or directory` rất khó hiểu.\n- Alpine không có bash: viết theo chuẩn POSIX `sh` hoặc cài bash.\n\n### Lỗi hay gặp\n- Quên `exec`, shell giữ PID 1 và nuốt tín hiệu dừng.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: script production bằng hình",
+    "nguon": "Linux & Bash · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-7-5-script-hoan-chinh",
+    "ten": "7.5 — Một script hoàn chỉnh, và khi nào bash là công cụ sai",
+    "nguon": "Linux & Bash · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint",
+    "ten": "4.3 — CMD, ENTRYPOINT và script entrypoint",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Cài đặt Docker": {
+  "body": "Cài Docker trên máy để chạy container ở môi trường local. Cách cài tuỳ hệ điều hành:\n\n- **macOS / Windows**: tải **Docker Desktop**, cài như ứng dụng thường. Windows cần bật WSL 2 hoặc Hyper-V. Docker Desktop đã gồm CLI, Engine, Compose và Buildx.\n- **Linux**: cài **Docker Engine** từ kho apt/dnf chính thức của Docker (làm theo hướng dẫn của docs.docker.com cho đúng bản phân phối), rồi bật dịch vụ.\n\n```bash\n# Linux, sau khi cài xong\nsudo systemctl enable --now docker\nsudo usermod -aG docker $USER      # đăng xuất/đăng nhập lại để có hiệu lực\ndocker run --rm hello-world        # kiểm tra cài đặt\ndocker compose version             # Compose là plugin kèm theo\n```\n\n### Ý chính\n- `hello-world` chạy được nghĩa là CLI, daemon, mạng và kéo image đều ổn.\n- Compose V2 là lệnh `docker compose` (hai từ), thay cho `docker-compose` cũ.\n\n### Lỗi hay gặp\n- \"permission denied ... docker.sock\": user chưa thuộc nhóm `docker` hoặc chưa đăng nhập lại.\n- Trên Mac M1/M2 (arm64) kéo image chỉ có amd64 sẽ chạy qua giả lập, chậm hoặc lỗi; chọn image đa kiến trúc.\n\n### Tự kiểm tra\n- Khác nhau giữa Docker Desktop và Docker Engine?\n- Vì sao thuộc nhóm `docker` cần cân nhắc về bảo mật?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-2-cai-dat",
+    "ten": "0.2 — Cài Docker, và bạn vừa cài cái gì",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-3-nam-phut",
+    "ten": "0.3 — Năm phút đầu tiên: chạy một thứ có thật",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-4-mac-windows",
+    "ten": "13.4 — Docker trên Mac & Windows thật ra là một máy ảo Linux",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Docker CLI Nâng Cao": {
+  "body": "Ngoài `run`, `ps`, `logs`, Docker CLI có những lệnh dùng để *quan sát và chẩn đoán* một container đang chạy.\n\n```bash\ndocker inspect web                                   # toàn bộ cấu hình + trạng thái, dạng JSON\ndocker inspect -f '{{.State.ExitCode}}' web          # lấy một trường bằng Go template\ndocker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web\ndocker stats --no-stream                             # CPU, RAM, mạng, I/O từng container\ndocker top web                                       # tiến trình bên trong container\ndocker diff web                                      # file bị thêm/sửa trong lớp ghi được\ndocker events                                        # luồng sự kiện của daemon\n```\n\n### Ý chính\n- `inspect` là nguồn sự thật: cổng map, mount, biến môi trường, health status, exit code đều ở đó.\n- `docker stats` cho biết container có chạm giới hạn bộ nhớ không (cột `MEM USAGE / LIMIT`).\n- `docker logs --since 10m --tail 100 web` lọc log theo thời gian.\n- Container đã thoát vẫn `inspect` được để xem `State.ExitCode`, `State.OOMKilled`.\n\n### Lỗi hay gặp\n- Tưởng container \"đứng\" trong khi thực ra nó đã thoát: kiểm tra `docker ps -a` và exit code (137 thường là bị OOM hoặc bị kill).\n- Đọc `docker stats` rồi hiểu cột CPU% là phần trăm của một lõi; giá trị trên 100% là bình thường khi dùng nhiều lõi.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-2-quan-sat",
+    "ten": "2.2 — Quan sát một container đang chạy",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-3-vao-ben-trong",
+    "ten": "2.3 — Vào bên trong, kể cả khi không có shell nào",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137",
+    "ten": "11.2 — Hạn mức, và mã thoát 137",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Docker System Prune": {
+  "body": "Theo thời gian Docker tích tụ rất nhiều thứ: container đã dừng, image không còn dùng, volume mồ côi, network không gắn, cache build. Chúng có thể ăn hết đĩa. Nhóm lệnh `prune` dọn các thứ \"không còn ai dùng\":\n\n```bash\ndocker system df                 # xem đang chiếm bao nhiêu\ndocker container prune           # xoá container đã dừng\ndocker image prune               # xoá image \"dangling\" (không tag)\ndocker image prune -a            # xoá mọi image không được container nào dùng\ndocker builder prune             # xoá cache build\ndocker volume prune              # xoá volume không gắn vào container nào\ndocker system prune              # gộp: container, network, image dangling, cache build\n```\n\n### Ý chính\n- `docker system prune` **không** xoá volume mặc định; muốn cả volume phải thêm `--volumes`. Volume chứa dữ liệu thật nên hãy chắc trước khi xoá.\n- Lọc theo thời gian: `docker image prune -a --filter \"until=168h\"`.\n- Đặt dọn dẹp định kỳ trên máy chủ build/CI, nếu không đĩa sẽ đầy dần.\n\n### Lỗi hay gặp\n- Chạy `docker volume prune` (hay `system prune --volumes`) trên máy chủ production khi container database đang tạm dừng: volume của nó có thể bị coi là \"không dùng\" và bị xoá mất dữ liệu.\n- Dùng `image prune -a` rồi bất ngờ vì lần deploy sau phải kéo lại tất cả image.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-5-don-dia",
+    "ten": "3.5 — Giữ cho /var/lib/docker khỏi nuốt cả cái đĩa",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-5-dia-giam-sat",
+    "ten": "11.5 — Đĩa, dọn dẹp, và biết trước người dùng",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Docker Context": {
+  "body": "**Docker context** cho phép CLI trên máy bạn chọn *daemon nào để nói chuyện*: máy local, một server từ xa qua SSH, hay một endpoint khác. Nhờ đó bạn quản lý container trên VPS ngay từ laptop mà không phải SSH vào gõ lệnh.\n\n```bash\n# tạo context trỏ tới server qua SSH\ndocker context create prod --docker \"host=ssh://deploy@vps.example.com\"\ndocker context ls\ndocker context use prod            # từ giờ mọi lệnh docker chạy trên server đó\ndocker ps\ndocker context use default         # quay về máy local\n\ndocker --context prod compose up -d   # hoặc chỉ dùng cho một lệnh\n```\n\n### Ý chính\n- Context lưu địa chỉ endpoint và thông tin xác thực (SSH key, TLS) trên máy bạn.\n- Image được build/kéo bởi daemon của context hiện tại, không phải máy bạn; `docker compose up` với context từ xa sẽ chạy trên server.\n- Tương đương đặt biến `DOCKER_HOST`, nhưng có tên gọi và dễ chuyển đổi hơn.\n\n### Lỗi hay gặp\n- Quên mình đang ở context `prod` rồi chạy `docker rm -f $(docker ps -aq)` trên production. Hãy kiểm tra `docker context ls` (dấu `*`) hoặc hiển thị context trong prompt."
+ },
+ "Cài đặt & CLI › Các câu lệnh CLI cơ bản": {
+  "body": "Sáu nhóm lệnh bạn dùng mỗi ngày:\n\n```bash\ndocker run [tùy chọn] IMAGE [LỆNH]   # tạo + khởi động container\ndocker ps -a                          # liệt kê container (-a: cả đã dừng)\ndocker images                         # liệt kê image\ndocker logs -f TÊN                    # xem/theo dõi log\ndocker exec -it TÊN sh                # chạy lệnh trong container đang chạy\ndocker stop TÊN / start / restart     # dừng / chạy lại / khởi động lại\ndocker rm TÊN ; docker rmi IMAGE      # xoá container ; xoá image\ndocker pull IMAGE ; docker build -t TÊN .\n```\n\n### Ý chính\n- `run` = `pull` (nếu thiếu image) + `create` + `start`.\n- `docker stop` gửi SIGTERM rồi sau 10 giây gửi SIGKILL; `docker kill` gửi thẳng tín hiệu (mặc định SIGKILL).\n- Tên có thể thay bằng ID (chỉ cần vài ký tự đầu, miễn không trùng).\n- `docker run --rm` tự xoá container khi nó thoát, phù hợp lệnh chạy một lần.\n- `docker run IMAGE LỆNH` ghi đè CMD của image.\n\n### Lỗi hay gặp\n- Quên rằng `docker rm` không xoá volume ẩn danh trừ khi thêm `-v`.\n- Gõ `docker run` lặp lại rồi chất đống container dừng; dùng `--rm` hoặc `docker container prune`.\n- Chạy `docker exec` vào container đã thoát: container phải đang chạy; xem `docker logs` để biết vì sao nó thoát.\n\n### Tự kiểm tra\n- `docker run` thực ra gồm những bước nào?\n- Khác nhau giữa `docker stop` và `docker kill`?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: chạy container bằng hình",
+    "nguon": "Docker · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-1-docker-run",
+    "ten": "2.1 — docker run: những cờ bạn dùng mỗi ngày",
+    "nguon": "Docker · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-2-quan-sat",
+    "ten": "2.2 — Quan sát một container đang chạy",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-3-vong-doi",
+    "ten": "1.3 — Vòng đời một container, và PID 1",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/docker",
+    "ten": "Docker",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Công cụ CLI bổ sung": {
+  "body": "Docker CLI chính chỉ là một phần của hệ công cụ. Những công cụ bổ sung đáng biết:\n\n- **Docker Compose** (`docker compose`): định nghĩa và chạy nhiều container bằng một file YAML.\n- **Docker Buildx** (`docker buildx`): build với BuildKit, đa nền tảng, xuất cache.\n- **Docker Scout** (`docker scout`): phân tích lỗ hổng và gợi ý cập nhật image.\n- **Docker Context**: chuyển CLI giữa các daemon (local, từ xa).\n- **Hộp công cụ chạy trong container**: chạy một công cụ (`jq`, `terraform`, `node` phiên bản khác...) mà không cài lên máy, bằng `docker run --rm -v \"$PWD\":/work -w /work IMAGE ...`.\n\n### Ý chính\n- Compose V2 và Buildx đều là *plugin* của CLI nên lệnh có dạng `docker <tên>`.\n- Dùng container làm \"công cụ chạy một lần\" giữ cho máy sạch và phiên bản công cụ nhất quán cả nhóm.\n- Ngoài Docker còn có CLI bên thứ ba như `dive` (xem layer), `lazydocker` (giao diện terminal), `hadolint` (kiểm tra Dockerfile).\n\n### Lỗi hay gặp\n- Dùng cú pháp `docker-compose` (V1, đã ngừng hỗ trợ) trong tài liệu mới; hãy dùng `docker compose`.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-1-file-dau-tien",
+    "ten": "9.1 — File compose đầu tiên của bạn",
+    "nguon": "Docker · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-1-buildx-bake",
+    "ten": "15.1 — BuildKit nâng cao: builder riêng, đa nền tảng, bake, bí mật lúc build",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-14-1-cong-cu-khong-cai",
+    "ten": "14.1 — Chạy công cụ mà không cần cài",
+    "nguon": "Docker · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Các công cụ CLI bổ sung": {
+  "body": "Bộ lệnh giúp bạn nhìn vào bên trong một container đang chạy mà không phải đoán:\n\n```bash\ndocker stats                       # CPU, RAM, mạng, I/O thời gian thực\ndocker stats --no-stream web       # chụp một lần\ndocker inspect web                 # cấu hình và trạng thái chi tiết (JSON)\ndocker top web                     # tiến trình bên trong\ndocker logs --tail 100 -f web      # log\ndocker diff web                    # file bị thay đổi so với image\ndocker cp web:/app/log.txt .       # chép file ra/vào container\ndocker port web                    # cổng đã map\n```\n\n### Ý chính\n- `docker stats` hiển thị mức dùng so với giới hạn (`--memory`); dùng khi nghi ngờ rò rỉ bộ nhớ hoặc container bị giết.\n- `inspect` cho bạn cả `State.OOMKilled`, `State.ExitCode`, `HostConfig.RestartPolicy`.\n- Dùng `-f` với Go template để lấy đúng trường cần, tiện cho script.\n\n### Lỗi hay gặp\n- Dùng `docker cp` để \"sửa\" file trong container production; lần tạo lại tiếp theo thay đổi sẽ mất. Sửa trong image/mount.\n- Không đặt giới hạn tài nguyên nên `docker stats` hiện limit bằng toàn bộ RAM của host, che mất vấn đề.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-2-quan-sat",
+    "ten": "2.2 — Quan sát một container đang chạy",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137",
+    "ten": "11.2 — Hạn mức, và mã thoát 137",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-3-vao-ben-trong",
+    "ten": "2.3 — Vào bên trong, kể cả khi không có shell nào",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cài đặt & CLI › Công cụ CLI bổ sung — dive, ctop, docker-scan": {
+  "body": "Ba công cụ thường được nhắc để soi image và container, mỗi cái giải quyết một việc:\n\n- **dive**: duyệt từng layer của image, xem file thêm/sửa/xoá ở mỗi layer và ước lượng phần không gian bị lãng phí. Hữu ích khi image to bất thường. Chạy: `dive IMAGE`.\n- **ctop**: giao diện terminal kiểu `top` cho container (CPU, RAM, mạng từng container), thay cho gõ lặp `docker stats`.\n- **Quét lỗ hổng**: lệnh `docker scan` (dựa trên Snyk) đã bị thay bằng **Docker Scout** (`docker scout cves IMAGE`); ngoài ra có **Trivy**, **Grype**.\n\n```bash\ndocker scout cves myapp:1.0\ntrivy image myapp:1.0\ndive myapp:1.0\n```\n\n### Ý chính\n- Quét lỗ hổng nên chạy trong CI trước khi đẩy image, không chỉ chạy tay.\n- Kết quả quét cần đọc có chọn lọc: nhiều CVE không khai thác được trong ngữ cảnh của bạn; ưu tiên mức nghiêm trọng cao có bản vá.\n- Cập nhật image nền thường là cách sửa nhanh nhất.\n\n### Lỗi hay gặp\n- Nhìn `dive` rồi tối ưu những layer nhỏ trong khi thủ phạm là một layer `COPY . .` kéo cả `node_modules` hoặc `.git` vì thiếu `.dockerignore`.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-3-cat-kich-thuoc",
+    "ten": "6.3 — Tìm ra và cắt đi những megabyte",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-5-quet-chuoi-cung-ung",
+    "ten": "6.5 — Quét lỗ hổng, SBOM và chuỗi cung ứng",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Image & Dockerfile › Dockerfiles": {
+  "body": "**Dockerfile** là file văn bản mô tả từng bước dựng một image. Mỗi chỉ thị tạo một layer; Docker đọc từ trên xuống dưới.\n\n```dockerfile\nFROM node:22-alpine           # image nền\nWORKDIR /app                  # thư mục làm việc\nCOPY package*.json ./         # chép file khai báo phụ thuộc trước\nRUN npm ci --omit=dev         # cài phụ thuộc\nCOPY . .                      # chép mã nguồn\nENV NODE_ENV=production       # biến môi trường lúc chạy\nEXPOSE 3000                   # tài liệu hoá cổng (không tự mở cổng)\nUSER node                     # chạy không root\nCMD [\"node\", \"server.js\"]     # lệnh mặc định khi container khởi động\n```\n\n### Ý chính\n- `FROM` mở đầu mỗi stage; `RUN` chạy lệnh lúc **build**; `CMD`/`ENTRYPOINT` định nghĩa lệnh lúc **chạy**.\n- `COPY` thường tốt hơn `ADD` (ADD còn giải nén và tải URL, dễ gây bất ngờ).\n- Dạng **exec** `CMD [\"node\",\"server.js\"]` tốt hơn dạng shell `CMD node server.js` vì tiến trình nhận được tín hiệu trực tiếp.\n- `EXPOSE` chỉ là ghi chú; công bố cổng thật cần `-p`.\n- Build: `docker build -t myapp:1.0 .`\n\n### Lỗi hay gặp\n- Chép toàn bộ mã nguồn trước khi cài phụ thuộc, mỗi lần sửa code là cài lại từ đầu.\n- Chạy ứng dụng bằng root không cần thiết.\n- Nhét bí mật (token, mật khẩu) vào `ENV` hoặc `ARG`; chúng lưu trong lịch sử image.\n\n### Tự kiểm tra\n- `RUN` khác `CMD` ở chỗ nào?\n- Vì sao nên chép `package.json` trước khi chép phần còn lại?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: từng dòng Dockerfile, giải thích bằng hình",
+    "nguon": "Docker · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien",
+    "ten": "4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng",
+    "nguon": "Docker · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-2-cac-chi-thi",
+    "ten": "4.2 — Mọi chỉ thị, và nó thật sự làm gì",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint",
+    "ten": "4.3 — CMD, ENTRYPOINT và script entrypoint",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-5-cong-thuc",
+    "ten": "4.5 — Công thức: Node, Next.js, Python, Go, trang tĩnh",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Image & Dockerfile › Building Container Images": {
+  "body": "Build image là bước biến Dockerfile cùng một thư mục mã nguồn thành image:\n\n```bash\ndocker build -t myapp:1.0 .            # \".\" là build context\ndocker build -f docker/Dockerfile.prod -t myapp:prod .\ndocker build --target build -t myapp:build .   # dừng ở một stage\n```\n\n**Build context** là thư mục (dấu `.`) mà Docker gửi cho builder; `COPY` chỉ lấy được file nằm trong context. File `.dockerignore` loại bớt thứ không cần gửi, giống `.gitignore`.\n\n```text\nnode_modules\n.git\n.env\n*.log\nDockerfile\n```\n\n### Ý chính\n- Context càng nhỏ, build càng nhanh và càng ít nguy cơ lộ file nhạy cảm.\n- Luôn loại `.git`, `node_modules`, `.env` và thư mục build ra khỏi context.\n- `-t` đặt tên:tag; không ghi tag thì mặc định là `latest`.\n- Xem lịch sử layer: `docker history myapp:1.0`.\n\n### Lỗi hay gặp\n- `COPY ../shared .` thất bại vì file nằm ngoài context. Hãy đổi thư mục chạy build hoặc chỉ định context khác.\n- Không có `.dockerignore` khiến `COPY . .` kéo cả `.env` vào image.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien",
+    "ten": "4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng",
+    "nguon": "Docker · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-5-cong-thuc",
+    "ten": "4.5 — Công thức: Node, Next.js, Python, Go, trang tĩnh",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-1-cache-quyet-dinh",
+    "ten": "5.1 — Cache lúc dựng quyết định thế nào",
+    "nguon": "Docker · Chương 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Image & Dockerfile › Efficient Layer Caching": {
+  "body": "Docker cache từng layer: nếu chỉ thị và dữ liệu đầu vào không đổi, nó dùng lại layer cũ thay vì chạy lại. **Nhưng một layer bị vô hiệu thì mọi layer phía sau cũng phải dựng lại.** Vì vậy quy tắc vàng là: *đặt thứ ít thay đổi lên trên, thứ hay thay đổi xuống dưới*.\n\n```dockerfile\n# Tệ: sửa một dòng code là cài lại toàn bộ thư viện\nCOPY . .\nRUN npm ci\n\n# Tốt: chỉ khi package*.json đổi mới cài lại\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\n```\n\n### Ý chính\n- `COPY` bị vô hiệu khi nội dung file được chép thay đổi; `RUN` chỉ so chuỗi lệnh, nên `RUN apt-get update` có thể dùng cache cũ dù kho gói đã đổi.\n- Gộp các lệnh liên quan (`update && install`) vào cùng một `RUN`.\n- `.dockerignore` giúp context ổn định, ít vô hiệu cache không đáng có.\n- BuildKit có `RUN --mount=type=cache,target=/root/.npm` giữ cache tải về giữa các lần build.\n- Trong CI, cache lưu ở runner bị mất mỗi lần; xuất/nhập cache qua registry (`--cache-to`/`--cache-from`).\n\n### Lỗi hay gặp\n- Đặt lệnh có giá trị thay đổi mỗi lần (như `ARG BUILD_DATE`) quá sớm, làm vô hiệu mọi layer sau nó.\n- Nhầm cache là bất biến: muốn build sạch dùng `--no-cache`.\n\n### Tự kiểm tra\n- Vì sao sắp xếp lại Dockerfile có thể rút build từ vài phút xuống vài giây?\n- Khi nào layer `RUN apt-get update` bị dùng lại dù nội dung kho đã đổi?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: cache lúc dựng bằng hình",
+    "nguon": "Docker · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-1-cache-quyet-dinh",
+    "ten": "5.1 — Cache lúc dựng quyết định thế nào",
+    "nguon": "Docker · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-2-thu-tu",
+    "ten": "5.2 — Thứ tự: biến bốn phút dựng lại thành sáu giây",
+    "nguon": "Docker · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=docker-layers",
+    "ten": "Docker — tầng ảnh và cache build",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-3-cache-mount",
+    "ten": "5.3 — Cache mount: giữ lại phần đã tải giữa các lượt dựng",
+    "nguon": "Docker · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Image & Dockerfile › Multi-stage Builds": {
+  "body": "**Multi-stage build** dùng nhiều `FROM` trong một Dockerfile. Stage đầu có đủ compiler và công cụ build (nặng); stage cuối chỉ chép kết quả cần để chạy (nhẹ). Mọi thứ của stage trước không đi vào image cuối nếu bạn không chép.\n\n```dockerfile\nFROM node:22 AS build\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\nRUN npm run build\n\nFROM node:22-alpine AS runtime\nWORKDIR /app\nENV NODE_ENV=production\nCOPY package*.json ./\nRUN npm ci --omit=dev\nCOPY --from=build /app/dist ./dist\nUSER node\nCMD [\"node\", \"dist/server.js\"]\n```\n\n### Ý chính\n- `COPY --from=<tên stage>` lấy file từ stage khác (hoặc từ image bên ngoài).\n- Image cuối không chứa mã nguồn gốc, devDependencies, compiler: nhỏ hơn và ít bề mặt tấn công hơn.\n- Với ngôn ngữ biên dịch (Go, Rust), image cuối có thể là `scratch` hoặc distroless chứa mỗi file nhị phân.\n- `--target <stage>` dùng để build một stage riêng (ví dụ stage `test`).\n- BuildKit chỉ dựng stage cần thiết cho target.\n\n### Lỗi hay gặp\n- Quên chép file runtime cần thiết (file cấu hình, thư mục `prisma`...) nên container không chạy.\n- Chép nhầm toàn bộ thư mục stage build, mất lợi ích thu nhỏ.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: ảnh nhỏ và an toàn bằng hình",
+    "nguon": "Docker · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-1-multi-stage",
+    "ten": "6.1 — Dựng nhiều tầng, cho tử tế",
+    "nguon": "Docker · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-2-chon-anh-nen",
+    "ten": "6.2 — Chọn ảnh nền, và cái bẫy musl",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-3-cat-kich-thuoc",
+    "ten": "6.3 — Tìm ra và cắt đi những megabyte",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/docker",
+    "ten": "Docker",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Image & Dockerfile › Image Tagging Best Practices": {
+  "body": "**Tag** là nhãn đặt cho một phiên bản image (`myapp:1.4.2`). Tag *có thể di chuyển*: ai đó đẩy image khác lên cùng tag thì tag trỏ sang image mới. Chỉ **digest** (`sha256:...`) mới bất biến.\n\n### Ý chính\n- **Đừng dùng `latest` cho production**: nó chỉ là tag mặc định, không đảm bảo \"mới nhất\", và không cho bạn biết đang chạy phiên bản nào.\n- Dùng **semver** (`1.4.2`) cho bản phát hành; có thể gắn thêm tag trượt `1.4` và `1`.\n- Gắn **mã commit** (`myapp:3f9a1c2`) để truy ngược image về mã nguồn, rất tiện cho CI.\n- Rollback = triển khai lại tag/digest cũ; tag mới mỗi lần deploy làm việc này dễ.\n- Để triển khai cố định tuyệt đối, tham chiếu theo digest: `myapp@sha256:...`.\n\n```bash\ndocker build -t myapp:1.4.2 -t myapp:1.4 -t myapp:3f9a1c2 .\ndocker push myapp:1.4.2\n```\n\n### Lỗi hay gặp\n- Ghi đè tag phiên bản đã phát hành; hai máy chủ chạy \"cùng tag\" nhưng khác nội dung.\n- Tag base image kiểu `node:22` không ghim: build hôm nay và tháng sau có thể khác nhau.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-2-tag-digest",
+    "ten": "3.2 — Tag thì di chuyển, digest thì không",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-1-ten-anh",
+    "ten": "3.1 — Đọc một cái tên ảnh",
+    "nguon": "Docker · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-16-3-ci-ghcr-deploy",
+    "ten": "16.3 — Đưa lên: CI build, GHCR, deploy và quay lui",
+    "nguon": "Docker · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Image & Dockerfile › Sử dụng Image từ bên thứ ba": {
+  "body": "Hầu hết ứng dụng bắt đầu từ image có sẵn: `node`, `python`, `postgres`, `nginx`, `redis`... trên Docker Hub hoặc registry khác. Image của bạn cũng chỉ là lớp đặt thêm lên image nền do bên khác duy trì, nên chọn nguồn đáng tin là quyết định bảo mật.\n\n### Ý chính\n- Ưu tiên **Docker Official Images**, **Verified Publisher** và **Docker-Sponsored Open Source**; hạn chế image ẩn danh ít người dùng.\n- Đọc trang mô tả: Dockerfile nguồn, tần suất cập nhật, biến môi trường hỗ trợ.\n- **Ghim phiên bản** (`postgres:16.4`, tốt hơn nữa là digest) thay vì `latest`.\n- Chọn biến thể phù hợp: `-slim` hoặc `-alpine` nhỏ hơn nhưng Alpine dùng musl nên đôi khi gây lỗi với gói biên dịch sẵn; Debian slim an toàn về tương thích.\n- Quét lỗ hổng và cập nhật định kỳ; image nền cũ tích tụ CVE.\n\n```bash\ndocker pull postgres:16\ndocker inspect postgres:16 --format '{{index .RepoDigests 0}}'   # lấy digest để ghim\n```\n\n### Lỗi hay gặp\n- Chạy image lạ từ nguồn không rõ với quyền cao hoặc gắn thư mục nhạy cảm.\n- Dùng cùng tag `postgres:latest` và bị nâng phiên bản lớn bất ngờ, dữ liệu cũ không tương thích.\n- Quên đọc xem image khởi tạo dữ liệu ở đâu (volume cần gắn đúng thư mục).",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-1-ten-anh",
+    "ten": "3.1 — Đọc một cái tên ảnh",
+    "nguon": "Docker · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-2-tag-digest",
+    "ten": "3.2 — Tag thì di chuyển, digest thì không",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-5-quet-chuoi-cung-ung",
+    "ten": "6.5 — Quét lỗ hổng, SBOM và chuỗi cung ứng",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Image & Dockerfile › Container Lifecycle": {
+  "body": "Container đi qua các trạng thái: **created** (đã tạo), **running** (đang chạy), **paused** (đóng băng), **exited** (đã thoát), rồi bị **xoá**. Hiểu vòng đời giúp bạn chẩn đoán vì sao container \"tự tắt\".\n\n```bash\ndocker create --name c1 nginx:alpine   # created\ndocker start c1                         # running\ndocker pause c1 ; docker unpause c1     # paused <-> running\ndocker stop c1                          # SIGTERM, sau 10s SIGKILL -> exited\ndocker restart c1\ndocker rm c1                            # xoá\n```\n\n### Ý chính\n- Container sống đúng bằng **tiến trình chính (PID 1)**. Tiến trình thoát thì container thoát. Ứng dụng chạy nền (daemonize) làm container thoát ngay.\n- `exited (0)` là thoát bình thường; `exited (1)` thường lỗi ứng dụng; `137` = SIGKILL (hay OOM hoặc `docker kill`); `143` = SIGTERM.\n- Chính sách restart: `--restart unless-stopped` hoặc `on-failure:3` để Docker tự khởi động lại.\n- `pause` dùng cgroup freezer để đóng băng tiến trình, không gửi tín hiệu.\n- Container đã dừng vẫn giữ lớp ghi được cho tới khi `rm`.\n\n### Lỗi hay gặp\n- Chạy dịch vụ bằng `service nginx start` hoặc script rồi thoát: container thoát ngay vì PID 1 kết thúc. Dùng chế độ foreground (`nginx -g 'daemon off;'`).\n- Không bắt `SIGTERM` nên mỗi lần `docker stop` mất đủ 10 giây.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-3-vong-doi",
+    "ten": "1.3 — Vòng đời một container, và PID 1",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-1-docker-run",
+    "ten": "2.1 — docker run: những cờ bạn dùng mỗi ngày",
+    "nguon": "Docker · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Image & Dockerfile › Dockerfile HEALTHCHECK": {
+  "body": "Container \"đang chạy\" chưa chắc ứng dụng bên trong **khoẻ**: tiến trình có thể còn sống nhưng kẹt, hết kết nối database, trả lỗi 500. **HEALTHCHECK** cho Docker một lệnh để kiểm tra định kỳ; kết quả hiện thành trạng thái `healthy` / `unhealthy` / `starting` trong `docker ps`.\n\n```dockerfile\nHEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3   CMD curl -fsS http://localhost:3000/health || exit 1\n```\n\nLệnh trả exit code 0 là khoẻ, 1 là không khoẻ.\n\n### Ý chính\n- `--start-period` cho ứng dụng thời gian khởi động trước khi tính lần lỗi.\n- Image nhỏ có thể không có `curl`; dùng lệnh sẵn có (ví dụ `node -e` gọi HTTP, hoặc `wget`) hoặc tự viết script kiểm tra nhỏ.\n- Docker thuần **không tự khởi động lại** container unhealthy (restart policy chỉ phản ứng khi tiến trình thoát); Swarm và orchestrator khác thì có.\n- Trong Compose, `depends_on` với `condition: service_healthy` chờ dịch vụ khác khoẻ rồi mới chạy.\n- Endpoint `/health` nên nhẹ, kiểm tra các phụ thuộc thiết yếu nhưng không quá nặng.\n\n### Lỗi hay gặp\n- Health check gọi tới trang cần đăng nhập nên luôn lỗi.\n- `interval` quá ngắn làm chính nó tốn tài nguyên.\n- Kiểm tra mỗi việc \"cổng mở\" mà không kiểm tra ứng dụng thực sự phục vụ được.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-3-thu-tu-khoi-dong",
+    "ten": "9.3 — depends_on, healthcheck, thứ tự khởi động",
+    "nguon": "Docker · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-2-cac-chi-thi",
+    "ten": "4.2 — Mọi chỉ thị, và nó thật sự làm gì",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Image & Dockerfile › Tối ưu kích thước Image": {
+  "body": "Image nhỏ nghĩa là kéo nhanh hơn, khởi động nhanh hơn, tốn ít băng thông và đĩa, và ít thứ có thể chứa lỗ hổng. Các đòn bẩy chính:\n\n- **Image nền nhỏ**: `-slim`, `alpine`, hoặc distroless. Alpine rất nhỏ nhưng dùng musl libc; một số gói biên dịch sẵn (đặc biệt Python, một số module native của Node) có thể lỗi hoặc build lâu.\n- **Multi-stage build**: không đưa compiler, devDependencies, mã nguồn vào image cuối.\n- **Dọn trong cùng layer**: cài gói và xoá cache trong cùng một `RUN`.\n- **`.dockerignore`**: tránh kéo `node_modules`, `.git`, dữ liệu test vào context và image.\n- **Chỉ cài phụ thuộc production**: `npm ci --omit=dev`, `pip install --no-cache-dir`.\n\n```bash\ndocker images myapp                 # xem kích thước\ndocker history myapp:1.0            # layer nào to\n```\n\n### Ý chính\n- Xoá file ở layer sau không làm image nhỏ lại; phải không tạo nó ngay từ đầu.\n- Kích thước hiển thị trong `docker images` là kích thước giải nén; kích thước nén khi kéo nhỏ hơn.\n- Đo trước khi tối ưu: tìm layer lớn nhất bằng `docker history` hoặc `dive`.\n\n### Lỗi hay gặp\n- Đổi sang Alpine để nhỏ rồi mất nhiều giờ vì lỗi musl; đôi khi `bookworm-slim` hợp lý hơn.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: ảnh nhỏ và an toàn bằng hình",
+    "nguon": "Docker · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-2-chon-anh-nen",
+    "ten": "6.2 — Chọn ảnh nền, và cái bẫy musl",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-3-cat-kich-thuoc",
+    "ten": "6.3 — Tìm ra và cắt đi những megabyte",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-1-multi-stage",
+    "ten": "6.1 — Dựng nhiều tầng, cho tử tế",
+    "nguon": "Docker · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Networks (bridge/host)": {
+  "body": "Mặc định, mỗi container có **network namespace** riêng (IP, bảng định tuyến, cổng riêng). Docker nối chúng bằng các **network driver**:\n\n- **bridge** (mặc định): một switch ảo trên host, container trong cùng bridge nói chuyện được với nhau, ra ngoài qua NAT.\n- **host**: container dùng chung network stack của host, không cô lập mạng, không cần map cổng. Chỉ có ý nghĩa trên Linux.\n- **none**: không có mạng ngoài loopback.\n\n### Ý chính\n- Bridge mặc định (`bridge`) **không có DNS theo tên container**. Hãy tạo bridge do người dùng định nghĩa để container gọi nhau bằng tên:\n\n```bash\ndocker network create appnet\ndocker run -d --network appnet --name db postgres:16\ndocker run --rm --network appnet alpine ping -c1 db   # phân giải được \"db\"\n```\n\n- Công bố cổng ra ngoài: `-p 8080:80` (cổng host:cổng container). Mặc định lắng nghe trên mọi giao diện (`0.0.0.0`); muốn chỉ local, dùng `-p 127.0.0.1:8080:80`.\n- Trong container, `localhost` là chính container đó, không phải host hay container khác.\n\n### Lỗi hay gặp\n- App trong container kết nối `localhost:5432` đến database ở container khác: phải dùng tên dịch vụ (`db`).\n- Dịch vụ lắng nghe `127.0.0.1` trong container nên `-p` không truy cập được; cần lắng nghe `0.0.0.0`.\n- Nghĩ `-p` bị tường lửa host chặn; Docker tự thêm rule iptables, có thể bỏ qua tường lửa như ufw.\n\n### Tự kiểm tra\n- Vì sao container gọi nhau bằng tên được trên network tự tạo nhưng không được trên bridge mặc định?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: mạng container bằng hình",
+    "nguon": "Docker · Chương 8",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-1-mang-bridge",
+    "ten": "8.1 — Mạng, và vì sao bridge mặc định là cái sai",
+    "nguon": "Docker · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong",
+    "ten": "8.2 — Công bố cổng, và cái bẫy tường lửa",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-3-goi-nhau",
+    "ten": "8.3 — Container nói chuyện với nhau",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-4-toi-may-chu",
+    "ten": "8.4 — localhost, máy chủ, và --network host",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Volumes": {
+  "body": "**Volume** là kho lưu trữ do Docker quản lý (trên Linux nằm dưới `/var/lib/docker/volumes`), sống độc lập với container. Xoá container, volume còn nguyên; đây là cách chuẩn để giữ dữ liệu như database.\n\n```bash\ndocker volume create pgdata\ndocker run -d --name db -v pgdata:/var/lib/postgresql/data   -e POSTGRES_PASSWORD=secret postgres:16\ndocker rm -f db\ndocker run -d --name db2 -v pgdata:/var/lib/postgresql/data   -e POSTGRES_PASSWORD=secret postgres:16      # dữ liệu cũ vẫn còn\n```\n\n### Ý chính\n- **Named volume** (`pgdata`) dễ quản lý, sao lưu, di chuyển; **anonymous volume** không tên, dễ thành rác.\n- Volume mới rỗng sẽ được điền sẵn nội dung từ thư mục tương ứng của image khi gắn lần đầu.\n- Dùng được từ nhiều container, và có driver cho lưu trữ từ xa (NFS...).\n- Sao lưu: chạy container tạm gắn volume và `tar` ra thư mục host.\n- `docker volume ls`, `inspect`, `rm`; `docker compose down -v` xoá cả volume.\n\n### Lỗi hay gặp\n- Chạy `docker compose down -v` hoặc `volume prune` rồi mất dữ liệu.\n- Gắn volume vào sai đường dẫn (không phải thư mục dữ liệu thật của ứng dụng) nên dữ liệu vẫn ghi vào lớp container.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: dữ liệu thật ra nằm ở đâu",
+    "nguon": "Docker · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-1-ba-cach-gan",
+    "ten": "7.1 — Vì sao container quên, và ba cách chữa",
+    "nguon": "Docker · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-2-volume",
+    "ten": "7.2 — Volume, đào sâu",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-5-sao-luu",
+    "ten": "7.5 — Sao lưu, khôi phục, di chuyển",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Bind Mounts": {
+  "body": "**Bind mount** gắn trực tiếp một thư mục (hoặc file) của máy chủ vào container. Hai bên thấy cùng nội dung ngay lập tức, nên rất hợp cho **phát triển**: sửa code trên máy, container thấy ngay.\n\n```bash\ndocker run --rm -it   -v \"$PWD\":/app -w /app   -p 3000:3000 node:22 npm run dev\n\n# dạng --mount, tường minh hơn, lỗi nếu đường dẫn không tồn tại\ndocker run --rm --mount type=bind,src=\"$PWD\",dst=/app,readonly node:22 ls /app\n```\n\n### Ý chính\n- Dùng đường dẫn **tuyệt đối** bên host.\n- Bind mount phụ thuộc cấu trúc thư mục máy chủ nên kém di động hơn volume; production nên dùng volume.\n- Thêm `:ro` / `readonly` khi container chỉ cần đọc (cấu hình, chứng chỉ).\n- Che phủ: gắn lên thư mục đã có nội dung trong image sẽ che nội dung đó đi; đây là nguồn lỗi kinh điển với `node_modules`.\n- Quyền sở hữu: file tạo trong container (user root) hiện là của root trên host, và UID khác nhau gây lỗi quyền.\n\n### Lỗi hay gặp\n- Gắn `./` lên `/app` che mất `node_modules` đã cài trong image; giải pháp là volume ẩn danh cho `/app/node_modules`.\n- Trên Mac/Windows, bind mount qua lớp máy ảo nên chậm với nhiều file nhỏ.\n- Gắn `/var/run/docker.sock` hay thư mục gốc `/` vào container: cực kỳ nguy hiểm.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-3-bind-mount",
+    "ten": "7.3 — Bind mount, và bốn cái bẫy",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-1-ba-cach-gan",
+    "ten": "7.1 — Vì sao container quên, và ba cách chữa",
+    "nguon": "Docker · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-2-hot-reload-debug",
+    "ten": "13.2 — Sửa mã thấy ngay: hot reload, compose watch và debugger trong container",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Mạng Docker": {
+  "body": "Docker cung cấp nhiều **network driver** cho nhiều tình huống:\n\n- **bridge**: mạng ảo trên một máy; mặc định cho container đơn lẻ.\n- **host**: dùng thẳng mạng của host, bỏ cô lập mạng.\n- **overlay**: nối container chạy trên *nhiều máy* (Swarm) bằng VXLAN.\n- **macvlan**: cho container một địa chỉ MAC/IP riêng trên mạng vật lý.\n- **none**: tắt mạng.\n\n```bash\ndocker network ls\ndocker network create --driver bridge appnet\ndocker network inspect appnet\ndocker network connect appnet web      # gắn thêm container vào mạng\n```\n\n### Ý chính\n- **Mạng tự tạo** (user-defined bridge) cho DNS theo tên và cô lập tốt hơn bridge mặc định.\n- Một container có thể thuộc nhiều mạng: ví dụ `proxy` chỉ nối nginx với web, `backend` nối web với db, nên db không lộ ra proxy.\n- Trong Compose, mỗi project tự có mạng riêng và dịch vụ gọi nhau bằng tên dịch vụ.\n- Docker chèn rule iptables để publish cổng, có thể vượt qua tường lửa do bạn cấu hình.\n\n### Lỗi hay gặp\n- Dịch vụ cơ sở dữ liệu publish `-p 5432:5432` ra Internet vì tiện debug; hãy ràng buộc `127.0.0.1` hoặc không publish.\n- Xung đột dải IP của mạng Docker với mạng VPN/công ty khiến không truy cập được.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-1-mang-bridge",
+    "ten": "8.1 — Mạng, và vì sao bridge mặc định là cái sai",
+    "nguon": "Docker · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-3-goi-nhau",
+    "ten": "8.3 — Container nói chuyện với nhau",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-5-chan-doan-mang",
+    "ten": "8.5 — Chẩn đoán mạng container",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-5-mang",
+    "ten": "12.5 — Mạng container bằng tay: cặp veth, bridge, NAT và một cổng publish",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Ephemeral Filesystem của Container": {
+  "body": "Hệ thống file của container gồm các layer image chỉ đọc cộng một **lớp ghi được** ở trên cùng. Mọi thay đổi trong lúc chạy đi vào lớp này, và lớp này **biến mất khi container bị xoá** (không chỉ khi dừng: dừng rồi chạy lại thì còn, xoá thì mất). Ghi vào lớp này còn chậm hơn volume vì đi qua copy-on-write.\n\n### Ý chính\n- Coi container là *dùng một lần*: được thay thế khi cập nhật, khi lỗi, khi scale.\n- Dữ liệu cần bền (database, file người dùng tải lên) phải ra **volume**, **bind mount** hoặc dịch vụ ngoài (S3, database).\n- `docker diff <container>` cho thấy bạn đã ghi gì vào lớp này.\n- File tạm hoặc cache có thể dùng `tmpfs` để khỏi ghi xuống đĩa.\n- Có thể chạy container với hệ thống file gốc chỉ đọc (`--read-only`) và chỉ cấp chỗ ghi cụ thể: tăng bảo mật và buộc ứng dụng khai báo rõ nơi cần ghi.\n\n### Lỗi hay gặp\n- Lưu ảnh upload hay SQLite vào đường dẫn trong container, deploy bản mới là mất sạch.\n- Log ghi file ngày càng to trong lớp ghi được, làm đầy đĩa mà không rõ file ở đâu.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-4-tang-ghi-duoc",
+    "ten": "1.4 — Tầng ghi được, và vì sao dữ liệu của bạn biến mất",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-1-ba-cach-gan",
+    "ten": "7.1 — Vì sao container quên, và ba cách chữa",
+    "nguon": "Docker · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Overlay Network & Service Discovery": {
+  "body": "Trên **Docker Swarm**, các máy (node) tạo thành một cụm. Container của cùng một ứng dụng có thể chạy ở các máy khác nhau, nhưng phải nói chuyện với nhau như ở cùng một mạng. **Overlay network** làm việc đó: nó bọc gói tin trong đường hầm (VXLAN) giữa các node để tạo mạng ảo xuyên máy.\n\n```bash\ndocker swarm init\ndocker network create --driver overlay --attachable appnet\ndocker service create --name api --network appnet --replicas 3 myapp:1.0\ndocker service create --name db  --network appnet postgres:16\n```\n\n### Service discovery\nDocker có DNS nội bộ: mỗi service phân giải được bằng **tên service** (`api`, `db`). Với service có nhiều replica, tên đó trỏ tới một **virtual IP**, và Swarm cân bằng tải giữa các replica (cơ chế \"routing mesh\" còn cho phép truy cập cổng được publish qua bất kỳ node nào). Có thể dùng `endpoint_mode: dnsrr` để DNS trả danh sách IP từng replica.\n\n### Ý chính\n- Overlay cần các cổng giữa node: 2377/tcp (quản lý cụm), 7946 tcp/udp (khám phá node), 4789/udp (VXLAN).\n- Có thể mã hoá lưu lượng overlay bằng `--opt encrypted`.\n- Trên Docker thường (không Swarm), tương đương là user-defined bridge trên một máy.\n\n### Lỗi hay gặp\n- Tường lửa giữa các node chặn 4789/udp nên container ở máy khác không liên lạc được.\n- Tưởng đặt tên service là đủ trong Compose chạy trên Docker thường; overlay chỉ dùng khi bật Swarm.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-3-goi-nhau",
+    "ten": "8.3 — Container nói chuyện với nhau",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-2-tra-cuu-dich-vu",
+    "ten": "9.2 — Tra cứu một dịch vụ",
+    "nguon": "Docker · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › tmpfs Mount": {
+  "body": "**tmpfs mount** gắn một vùng **RAM** vào đường dẫn trong container. Dữ liệu không bao giờ ghi xuống đĩa và mất khi container dừng. Nhanh, và tránh để lại dấu vết cho dữ liệu nhạy cảm.\n\n```bash\ndocker run -d --name app   --tmpfs /run/secrets:rw,size=16m   --read-only   myapp:1.0\n\n# dạng ngắn\ndocker run --tmpfs /tmp:rw,size=64m myapp:1.0\n```\n\n### Ý chính\n- Hợp cho: thư mục `/tmp`, session tạm, bí mật chỉ cần trong bộ nhớ, thư mục ghi được khi chạy với `--read-only`, và dữ liệu test cần nhanh (như Postgres dùng một lần cho test).\n- Chiếm RAM, nên đặt `tmpfs-size` để không ăn hết bộ nhớ.\n- Chỉ có trên Linux; không chia sẻ giữa các container.\n- Kết hợp `--read-only` với tmpfs cho những chỗ cần ghi là một thực hành cứng hoá tốt.\n\n### Lỗi hay gặp\n- Đặt dữ liệu cần giữ lại vào tmpfs rồi mất khi container khởi động lại.\n- Không giới hạn kích thước nên một tiến trình ghi tràn làm container bị OOM.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-1-ba-cach-gan",
+    "ten": "7.1 — Vì sao container quên, và ba cách chữa",
+    "nguon": "Docker · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Driver Network Tùy Chỉnh": {
+  "body": "Ngoài `bridge` và `host`, hai driver mạng đáng biết:\n\n- **none**: container chỉ có giao diện loopback, không ra vào mạng được. Dùng cho tác vụ xử lý dữ liệu offline hoặc khi cần cô lập hoàn toàn (ví dụ chạy mã không tin cậy).\n- **macvlan**: gán cho container một địa chỉ MAC riêng và IP trên chính mạng vật lý, nên nó hiện ra như một máy thật. Hợp khi phần mềm cũ cần IP riêng trên mạng LAN hoặc muốn bỏ qua NAT.\n\n```bash\ndocker run --rm --network none alpine ip addr          # chỉ thấy lo\n\ndocker network create -d macvlan   --subnet=192.168.1.0/24 --gateway=192.168.1.1   -o parent=eth0 lan\ndocker run -d --network lan --ip 192.168.1.50 nginx:alpine\n```\n\n### Ý chính\n- Với macvlan, mặc định **host không nói chuyện trực tiếp được** với container macvlan của chính nó (hạn chế của kernel); phải tạo thêm một giao diện macvlan phụ trên host nếu cần.\n- Card mạng thường phải cho phép nhiều MAC (chế độ promiscuous); môi trường cloud và Wi-Fi hay không hỗ trợ.\n- Cần quản lý dải IP thủ công để không đụng DHCP.\n\n### Lỗi hay gặp\n- Dùng macvlan trên VPS cloud rồi thấy không ra mạng: nhà cung cấp chặn nhiều MAC trên một cổng.\n- Dùng `--network none` rồi thắc mắc vì sao không `pip install` được.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-1-mang-bridge",
+    "ten": "8.1 — Mạng, và vì sao bridge mặc định là cái sai",
+    "nguon": "Docker · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-4-toi-may-chu",
+    "ten": "8.4 — localhost, máy chủ, và --network host",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Named Volume & tmpfs Mount": {
+  "body": "Docker có ba loại nơi lưu dữ liệu ngoài lớp ghi được, mỗi loại hợp một việc:\n\n- **Named volume**: có tên, Docker quản lý, bền qua việc xoá container. Dùng cho dữ liệu cần giữ (database).\n- **Anonymous volume**: tạo tự động khi image khai `VOLUME` hoặc khi bạn viết `-v /data` không có tên; khó nhận diện và dễ thành rác, nên hạn chế.\n- **tmpfs**: nằm trong RAM, mất khi container dừng. Dùng cho dữ liệu tạm hoặc nhạy cảm.\n\n```bash\ndocker volume create appdata\ndocker run -v appdata:/data ...                       # named\ndocker run -v /data ...                               # anonymous\ndocker run --mount type=tmpfs,destination=/cache ...  # tmpfs\n```\n\n### Ý chính\n- Muốn dữ liệu sống: named volume; muốn dữ liệu biến mất không dấu vết: tmpfs.\n- `docker volume ls -f dangling=true` tìm volume không còn gắn vào container nào.\n- Đặt tên volume rõ ràng (hoặc dùng Compose) để dễ sao lưu và tránh nhầm.\n\n### Lỗi hay gặp\n- Image khai `VOLUME` khiến mỗi lần `docker run` sinh một volume ẩn danh mới và tích tụ dần.\n- Nhầm `-v pgdata:/path` (named) với `-v ./pgdata:/path` (bind mount): chỉ khác ở dấu `/` hoặc `./` đầu tên.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-1-ba-cach-gan",
+    "ten": "7.1 — Vì sao container quên, và ba cách chữa",
+    "nguon": "Docker · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-2-volume",
+    "ten": "7.2 — Volume, đào sâu",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Mạng nâng cao — Overlay, CNI và Service Mesh": {
+  "body": "Chạy trên một máy thì bridge/host là đủ. Khi container trải ra **nhiều máy**, bài toán mạng đổi hẳn: container ở máy A phải gọi được container ở máy B, tìm được nhau theo tên, và cân bằng tải.\n\n- **Overlay (Docker Swarm)**: bọc gói tin vào VXLAN giữa các node, tạo mạng ảo phẳng xuyên máy, kèm DNS theo tên service.\n- **CNI (Container Network Interface)**: chuẩn plugin mạng mà Kubernetes dùng; plugin như Calico, Cilium, Flannel quyết định cách gán IP cho pod, định tuyến và áp network policy. Trong Kubernetes mỗi pod có IP riêng và mọi pod nói chuyện được với nhau không cần NAT.\n- **Service mesh** (Istio, Linkerd): thêm tầng proxy (sidecar hoặc tương đương) quản lý lưu lượng giữa các dịch vụ: mTLS, retry, timeout, quan sát. Đây là tầng ứng dụng, đặt trên mạng cơ bản.\n\n### Ý chính\n- Mức độ phức tạp tăng dần: bridge, overlay, CNI, mesh. Chỉ lên tầng cao khi bài toán thật sự cần.\n- Phần lớn ứng dụng nhỏ-vừa không cần service mesh.\n- Mạng Compose trên một máy cũng đã cho bạn DNS theo tên dịch vụ.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-5-mang",
+    "ten": "12.5 — Mạng container bằng tay: cặp veth, bridge, NAT và một cổng publish",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Cấu hình Runtime": {
+  "body": "Docker cho phép chỉnh hành vi lúc chạy ở hai mức: toàn daemon (`daemon.json`) và từng container (cờ `docker run`). Những mục hay gặp:\n\n- **Logging driver**: mặc định `json-file`, ghi log vào file trên host. Có `local` (định dạng gọn, có xoay vòng), `syslog`, `journald`, `fluentd`, `gelf`... Lưu ý: với một số driver, `docker logs` có thể không đọc lại được.\n- **Xoay log**: nếu không đặt, `json-file` phình mãi tới khi đầy đĩa.\n- **Storage driver**: `overlay2` là mặc định và khuyến nghị trên Linux hiện đại.\n- **Tài nguyên**: `--memory`, `--cpus`, `--pids-limit`.\n- **Restart policy**: `no`, `on-failure[:n]`, `always`, `unless-stopped`.\n\n```bash\ndocker run -d --log-driver json-file   --log-opt max-size=10m --log-opt max-file=3   --memory 512m --cpus 1 --restart unless-stopped myapp:1.0\n```\n\n### Lỗi hay gặp\n- Không đặt `max-size`, một container nhiều log làm đầy ổ đĩa máy chủ.\n- Đặt giới hạn RAM thấp hơn mức ứng dụng cần: container bị OOM kill (exit 137) lặp đi lặp lại.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-3-log",
+    "ten": "11.3 — Log, xoay log, và cái đĩa đầy",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137",
+    "ten": "11.2 — Hạn mức, và mã thoát 137",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Bảo mật Runtime": {
+  "body": "Container cô lập nhưng chia sẻ kernel với host, nên cần cứng hoá ở lúc chạy. Các cơ chế kernel chính:\n\n- **Capabilities**: chia quyền root thành các quyền nhỏ. Docker mặc định đã bỏ nhiều quyền; nên bỏ hết rồi chỉ thêm cái cần: `--cap-drop ALL --cap-add NET_BIND_SERVICE`.\n- **seccomp**: lọc system call; Docker có hồ sơ mặc định chặn các syscall nguy hiểm.\n- **AppArmor / SELinux**: kiểm soát truy cập bắt buộc theo hồ sơ.\n- **User namespace và rootless**: ánh xạ root trong container thành user thường trên host.\n\n```bash\ndocker run -d   --user 10001:10001   --read-only --tmpfs /tmp   --cap-drop ALL   --security-opt no-new-privileges:true   --pids-limit 200 --memory 256m   myapp:1.0\n```\n\n### Ý chính\n- Chạy bằng user không phải root là biện pháp rẻ và hiệu quả nhất.\n- `--read-only` + tmpfs cho nơi cần ghi giới hạn thiệt hại khi bị xâm nhập.\n- Tránh `--privileged` và gắn `docker.sock`; cả hai gần như trao quyền host.\n- Đặt giới hạn tài nguyên để một container lỗi hoặc bị lợi dụng không làm sập cả máy.\n\n### Lỗi hay gặp\n- Bỏ hết capability rồi ứng dụng không bind được cổng dưới 1024; thêm lại `NET_BIND_SERVICE` hoặc dùng cổng cao.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-2-rootless-podman",
+    "ten": "15.2 — Bảo mật sâu hơn: nhóm docker, Docker rootless, userns-remap và Podman",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-14-1-ben-trong-nhan",
+    "ten": "14.1 — Bên trong nhân: system call, /proc, namespaces, cgroups và capabilities",
+    "nguon": "Linux & Bash · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Data Persistence": {
+  "body": "Vì lớp ghi được của container biến mất khi xoá container, dữ liệu cần giữ phải đặt ra ngoài. Quy tắc chọn:\n\n- **Named volume** cho database và dữ liệu cần bền, do Docker quản lý.\n- **Bind mount** khi cần truy cập từ host (mã nguồn khi dev, file cấu hình).\n- **tmpfs** cho dữ liệu tạm hoặc nhạy cảm chỉ cần trong RAM.\n- **Dịch vụ ngoài** (S3, database được quản lý) cho dữ liệu của ứng dụng cloud-native.\n\n```yaml\nservices:\n  db:\n    image: postgres:16\n    volumes:\n      - pgdata:/var/lib/postgresql/data\nvolumes:\n  pgdata:\n```\n\n### Ý chính\n- Gắn volume đúng **thư mục dữ liệu mà ứng dụng thật sự ghi** (với Postgres là `/var/lib/postgresql/data`).\n- Bền vững không có nghĩa là an toàn: volume nằm trên cùng máy, mất đĩa là mất dữ liệu. Cần **sao lưu** và thử khôi phục.\n- Sao lưu volume: chạy container tạm, `tar` nội dung ra thư mục host; với database nên dùng công cụ riêng (`pg_dump`).\n- Nâng cấp phiên bản database là việc riêng: volume cũ có thể không tương thích phiên bản mới.\n\n### Lỗi hay gặp\n- Tin rằng có volume là có backup.\n- Chạy `docker compose down -v` hay `volume prune` trên production.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: dữ liệu thật ra nằm ở đâu",
+    "nguon": "Docker · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-2-volume",
+    "ten": "7.2 — Volume, đào sâu",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-5-sao-luu",
+    "ten": "7.5 — Sao lưu, khôi phục, di chuyển",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-10-2-tang-du-lieu",
+    "ten": "10.2 — Tầng dữ liệu: Postgres và Redis",
+    "nguon": "Docker · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng & Lưu trữ › Cấu hình Docker Daemon": {
+  "body": "**Docker daemon** (`dockerd`) đọc cấu hình từ file JSON, trên Linux là `/etc/docker/daemon.json` (Docker Desktop chỉnh trong giao diện Settings). Sửa xong phải khởi động lại dịch vụ Docker (`sudo systemctl restart docker`) để có hiệu lực; một số tuỳ chọn cần restart, nên dùng `live-restore` để container không dừng theo daemon.\n\n```json\n{\n  \"log-driver\": \"json-file\",\n  \"log-opts\": { \"max-size\": \"10m\", \"max-file\": \"3\" },\n  \"data-root\": \"/mnt/data/docker\",\n  \"live-restore\": true,\n  \"registry-mirrors\": [\"https://mirror.example.com\"],\n  \"default-address-pools\": [{ \"base\": \"10.200.0.0/16\", \"size\": 24 }]\n}\n```\n\n### Ý chính\n- `log-opts` đặt xoay log mặc định cho mọi container mới: cấu hình đáng làm đầu tiên trên máy chủ.\n- `data-root` chuyển nơi lưu image/volume sang ổ khác khi ổ hệ thống nhỏ.\n- `default-address-pools` tránh đụng dải IP mạng nội bộ/VPN.\n- `userns-remap` và chế độ rootless là hai cách giảm quyền của daemon.\n- Mở cổng TCP của daemon không mã hoá là nguy hiểm; nếu cần truy cập từ xa hãy dùng SSH hoặc TLS.\n\n### Lỗi hay gặp\n- JSON sai cú pháp (dấu phẩy thừa) làm daemon không khởi động lại được: kiểm tra bằng `journalctl -u docker`.\n- Thay đổi cấu hình log chỉ áp cho container tạo **sau đó**, không áp cho container đang có.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-3-log",
+    "ten": "11.3 — Log, xoay log, và cái đĩa đầy",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-2-rootless-podman",
+    "ten": "15.2 — Bảo mật sâu hơn: nhóm docker, Docker rootless, userns-remap và Podman",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-5-dia-giam-sat",
+    "ten": "11.5 — Đĩa, dọn dẹp, và biết trước người dùng",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Docker Compose & Swarm › Docker Compose": {
+  "body": "**Docker Compose** cho phép khai báo cả một ứng dụng nhiều thành phần (web, API, database, cache) trong một file YAML, rồi khởi động tất cả bằng một lệnh thay cho hàng chục `docker run` dài.\n\n```yaml\n# compose.yaml\nservices:\n  api:\n    build: ./api\n    ports: [\"3000:3000\"]\n    environment:\n      DATABASE_URL: postgres://app:secret@db:5432/app\n    depends_on:\n      db:\n        condition: service_healthy\n  db:\n    image: postgres:16\n    environment:\n      POSTGRES_USER: app\n      POSTGRES_PASSWORD: secret\n      POSTGRES_DB: app\n    volumes: [pgdata:/var/lib/postgresql/data]\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U app\"]\n      interval: 5s\n      retries: 10\nvolumes:\n  pgdata:\n```\n\n```bash\ndocker compose up -d      # tạo mạng, volume, chạy mọi dịch vụ\ndocker compose logs -f api\ndocker compose down       # dừng và xoá container (thêm -v để xoá cả volume)\n```\n\n### Ý chính\n- Mỗi project có **mạng riêng**; dịch vụ gọi nhau bằng tên (`db`), không dùng `localhost`.\n- `depends_on` chỉ đảm bảo thứ tự khởi động; muốn chờ sẵn sàng thật phải kèm `healthcheck` và `condition: service_healthy`.\n- Biến lấy từ file `.env` cạnh `compose.yaml` hoặc `env_file`.\n- `docker compose up --build` dựng lại image; `profiles` bật/tắt nhóm dịch vụ.\n\n### Lỗi hay gặp\n- Ứng dụng kết nối `localhost` để tới database.\n- Ghi mật khẩu thật vào file compose rồi commit lên Git.\n- Dựa vào `depends_on` thuần tuý mà ứng dụng vẫn lỗi vì database chưa sẵn sàng.\n\n### Tự kiểm tra\n- Vì sao `depends_on` không đủ để chờ database sẵn sàng?\n- Khác nhau giữa `docker compose down` và `down -v`?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-0-slides",
+    "ten": "9.0 — Slide Chương 9: Compose bằng hình",
+    "nguon": "Docker · Chương 9",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-1-file-dau-tien",
+    "ten": "9.1 — File compose đầu tiên của bạn",
+    "nguon": "Docker · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-2-tra-cuu-dich-vu",
+    "ten": "9.2 — Tra cứu một dịch vụ",
+    "nguon": "Docker · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-3-thu-tu-khoi-dong",
+    "ten": "9.3 — depends_on, healthcheck, thứ tự khởi động",
+    "nguon": "Docker · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=docker-compose",
+    "ten": "docker compose — thứ tự khởi động",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/docker",
+    "ten": "Docker",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Docker Compose & Swarm › Docker Swarm": {
+  "body": "**Docker Swarm** (swarm mode) là bộ điều phối container có sẵn trong Docker Engine. Nó gộp nhiều máy thành một cụm, rồi bạn khai báo \"muốn chạy bao nhiêu bản của dịch vụ này\" và Swarm lo việc đặt, giám sát, thay thế.\n\n```bash\ndocker swarm init                        # máy này thành manager\ndocker service create --name web --replicas 3 -p 80:80 nginx:alpine\ndocker service scale web=5\ndocker service update --image nginx:1.27-alpine web   # rolling update\n```\n\n### So với Kubernetes\n- Swarm: ít khái niệm, dùng chung CLI Docker, cú pháp stack gần giống Compose; hợp cụm nhỏ.\n- Kubernetes: mạnh và linh hoạt hơn nhiều (autoscaling, hệ sinh thái, CRD) nhưng phức tạp hơn và là chuẩn công nghiệp.\n\n### Ý chính\n- Cần ít nhất một node manager; nhiều manager (số lẻ) cho độ sẵn sàng cao.\n- Mô hình khai báo: bạn mô tả trạng thái mong muốn, Swarm tự khớp lại khi container hoặc node chết.\n- Chỉ nên chọn Swarm khi quy mô nhỏ và muốn đơn giản; hệ sinh thái và tuyển dụng nghiêng về Kubernetes.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Docker Compose & Swarm › Docker Compose cho Dev": {
+  "body": "Với dev, bạn muốn: sửa code thấy ngay, mở cổng debug, bật log chi tiết, dùng database local. Production thì ngược lại. Compose xử lý bằng cách **chồng nhiều file**. Hai file mặc định `compose.yaml` (nền chung) và `compose.override.yaml` (tự động được gộp khi chạy `docker compose up`) là cách quen thuộc để thêm cấu hình dev.\n\n```yaml\n# compose.override.yaml  (tự gộp vào compose.yaml khi dev)\nservices:\n  api:\n    build:\n      target: dev\n    volumes:\n      - ./api:/app            # bind mount: sửa code là thấy\n      - /app/node_modules     # giữ node_modules của container\n    ports:\n      - \"3000:3000\"\n      - \"9229:9229\"           # cổng debugger Node\n    environment:\n      NODE_ENV: development\n    command: npm run dev\n```\n\n```bash\ndocker compose up                                   # dev: nền + override\ndocker compose -f compose.yaml -f compose.prod.yaml up -d   # prod: chỉ định tường minh\n```\n\n### Ý chính\n- Khi gộp: giá trị đơn bị ghi đè, danh sách như `ports`/`volumes` được nối thêm.\n- Dùng `docker compose config` để xem kết quả sau khi gộp, rất tiện kiểm tra.\n- Compose có `develop.watch` (`docker compose watch`) để đồng bộ file hoặc build lại khi code đổi, thay cho bind mount.\n- Tách `.env` cho dev và prod; đừng commit bí mật.\n\n### Lỗi hay gặp\n- Quên rằng `override` tự động áp dụng, nên deploy production bằng `docker compose up` trên máy có file này sẽ chạy cấu hình dev.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-5-nhieu-file",
+    "ten": "9.5 — Nhiều file: dev với prod",
+    "nguon": "Docker · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-2-hot-reload-debug",
+    "ten": "13.2 — Sửa mã thấy ngay: hot reload, compose watch và debugger trong container",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-16-2-compose-dev-prod",
+    "ten": "16.2 — Compose cho dev và cho prod",
+    "nguon": "Docker · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-4-bien-profile",
+    "ten": "9.4 — Biến, .env, và profile",
+    "nguon": "Docker · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Docker Compose & Swarm › Docker Swarm: Orchestration": {
+  "body": "Triển khai lên Swarm dùng **service** (một dịch vụ, nhiều **task** là các container) hoặc **stack** (nhiều service khai trong file Compose). Swarm giữ số bản sao bạn khai báo, tự khởi động lại task chết và có thể cập nhật cuốn chiếu.\n\n```yaml\n# stack.yaml\nservices:\n  api:\n    image: ghcr.io/me/api:1.2.0\n    deploy:\n      replicas: 3\n      update_config:\n        parallelism: 1\n        delay: 10s\n        order: start-first\n        failure_action: rollback\n      restart_policy:\n        condition: on-failure\n```\n\n```bash\ndocker stack deploy -c stack.yaml shop\ndocker service ls\ndocker service ps shop_api\ndocker service update --image ghcr.io/me/api:1.3.0 shop_api   # rolling update\ndocker service rollback shop_api\n```\n\n### Ý chính\n- **Rolling update**: thay từng phần nhỏ task bằng phiên bản mới; `order: start-first` chạy bản mới trước rồi mới tắt bản cũ để không gián đoạn.\n- Phần `deploy:` chỉ có tác dụng với `docker stack deploy`; `docker compose up` bỏ qua phần lớn.\n- Swarm không build image: image phải có trên registry mà mọi node truy cập được.\n- Dùng `docker secret` và `docker config` cho bí mật và cấu hình thay vì biến môi trường.\n- Healthcheck giúp Swarm biết task bản mới đã sẵn sàng chưa.\n\n### Lỗi hay gặp\n- Dùng `build:` trong stack file: bị bỏ qua.\n- Dùng tag `latest` nên các node có thể giữ phiên bản khác nhau.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Docker Compose & Swarm › Docker Swarm — Multi-node trong 5 phút": {
+  "body": "Swarm đã nằm sẵn trong Docker Engine nên dựng cụm nhiều máy rất nhanh. Với hai máy cùng thấy nhau trên mạng:\n\n```bash\n# Máy 1 (manager)\ndocker swarm init --advertise-addr 10.0.0.1\n# lệnh in ra một \"join token\", chạy trên máy 2 (worker):\ndocker swarm join --token SWMTKN-1-... 10.0.0.1:2377\n\n# Trở lại manager\ndocker node ls\ndocker service create --name web --replicas 4 -p 80:80 nginx:alpine\ndocker service ps web          # xem task nằm trên node nào\n```\n\n### Ý chính\n- **Manager** điều khiển cụm và lưu trạng thái (đồng thuận Raft); **worker** chỉ chạy task.\n- Hai máy cần thông cổng 2377/tcp, 7946 tcp+udp và 4789/udp giữa chúng.\n- **Routing mesh**: truy cập cổng đã publish qua bất kỳ node nào đều được chuyển tới một replica.\n- Thử nghiệm một máy cũng được (`docker swarm init` trên một node).\n- Rời cụm: `docker swarm leave` (manager cần `--force`).\n\n### Lỗi hay gặp\n- Một manager duy nhất chết là mất khả năng điều khiển cụm; production cần 3 manager.\n- `--advertise-addr` sai (máy nhiều card mạng) khiến node khác không join được.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Docker Compose & Swarm › Hot Reloading": {
+  "body": "**Hot reload** là sửa code thì ứng dụng cập nhật ngay, không cần build lại image. Với container, làm được bằng cách **bind mount thư mục code** vào container và chạy một trình theo dõi file.\n\n```yaml\nservices:\n  web:\n    build: .\n    command: npm run dev          # nodemon / next dev / vite / uvicorn --reload\n    volumes:\n      - ./:/app\n      - /app/node_modules\n    ports: [\"3000:3000\"]\n```\n\n### Ý chính\n- Công cụ theo dõi file theo ngôn ngữ: `nodemon` hoặc `tsx watch`, `vite`/`next dev`, `uvicorn --reload`, `air` cho Go.\n- Trên Mac/Windows, sự kiện thay đổi file đôi khi không truyền qua lớp ảo hoá; bật chế độ polling (ví dụ `CHOKIDAR_USEPOLLING=true`, `WATCHPACK_POLLING=true`).\n- Docker Compose mới có `docker compose watch`: đồng bộ file vào container (`sync`) hoặc build lại (`rebuild`) khi file đổi, đỡ phụ thuộc bind mount.\n- Chỉ dùng cấu hình này cho dev; image production không bind mount code.\n\n### Lỗi hay gặp\n- Bind mount `.` che `node_modules` trong image; thêm volume ẩn danh cho `/app/node_modules`.\n- Dev server chỉ lắng nghe `localhost` trong container nên truy cập từ trình duyệt host không được; đặt host `0.0.0.0`.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-2-hot-reload-debug",
+    "ten": "13.2 — Sửa mã thấy ngay: hot reload, compose watch và debugger trong container",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-3-bind-mount",
+    "ten": "7.3 — Bind mount, và bốn cái bẫy",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Docker Compose & Swarm › Developer Experience": {
+  "body": "Mục tiêu của \"developer experience\" với Docker: người mới vào dự án chỉ cần **một lệnh hoặc một cú nhấp** là có môi trường chạy đúng, không phải cài hàng loạt công cụ.\n\n- **Dev Containers**: file `.devcontainer/devcontainer.json` mô tả container dùng làm môi trường phát triển (image, tiện ích VS Code, cổng, lệnh khởi tạo). VS Code mở dự án *bên trong* container; cả nhóm có cùng phiên bản công cụ. GitHub Codespaces dùng cùng định dạng.\n- **Extension Docker cho VS Code**: xem container, image, log, mở shell, tạo Dockerfile/Compose gợi ý ngay trong editor.\n- **Docker Compose** cho dịch vụ phụ thuộc (database, cache) của dự án.\n- **Docker Desktop** có thêm giao diện quản lý, volume, extension.\n\n```json\n{\n  \"name\": \"api\",\n  \"image\": \"mcr.microsoft.com/devcontainers/typescript-node:22\",\n  \"forwardPorts\": [3000],\n  \"postCreateCommand\": \"npm install\"\n}\n```\n\n### Ý chính\n- Mã nguồn vẫn nằm trên máy bạn (mount vào), công cụ nằm trong container.\n- Ghi đủ trong repo (devcontainer, compose, README) để onboard không cần hỏi người khác.\n\n### Lỗi hay gặp\n- Hiệu năng bind mount chậm trên Mac/Windows với dự án lớn; dùng volume cho thư mục nặng như `node_modules`.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-0-slides",
+    "ten": "13.0 — Slide Chương 13: Docker trong vòng lặp phát triển",
+    "nguon": "Docker · Chương 13",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-1-dev-containers",
+    "ten": "13.1 — Dev Containers: cả nhóm một môi trường",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-2-hot-reload-debug",
+    "ten": "13.2 — Sửa mã thấy ngay: hot reload, compose watch và debugger trong container",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Container Registry › Docker Hub / GHCR": {
+  "body": "**Registry** là nơi lưu và phân phối image. Hai cái bạn gặp nhiều nhất:\n\n- **Docker Hub** (`docker.io`): registry mặc định; chứa các Official Images (`nginx`, `postgres`...). Có giới hạn số lượt kéo cho người dùng ẩn danh/miễn phí.\n- **GitHub Container Registry** (`ghcr.io`): gắn với tài khoản/tổ chức GitHub, tiện cho CI dùng GitHub Actions, hỗ trợ ảnh public/private.\n\nTên image đầy đủ có dạng `registry/namespace/repo:tag`, ví dụ `ghcr.io/my-org/api:1.4.2`; bỏ phần registry thì ngầm hiểu là Docker Hub.\n\n```bash\ndocker login ghcr.io -u <user>                 # nhập token khi được hỏi mật khẩu\ndocker build -t ghcr.io/my-org/api:1.4.2 .\ndocker push ghcr.io/my-org/api:1.4.2\ndocker pull ghcr.io/my-org/api:1.4.2\n```\n\n### Ý chính\n- Đẩy trước khi triển khai; máy chủ chỉ cần `pull` rồi chạy (không build trên server).\n- Repository private cần đăng nhập mới kéo được.\n- Tag theo phiên bản hoặc mã commit, không chỉ `latest`.\n- Có thể tự chạy registry riêng (`registry:2`) khi cần nội bộ.\n\n### Lỗi hay gặp\n- `denied: requested access to the resource is denied`: sai tên namespace, chưa login hoặc token thiếu quyền ghi.\n- Đẩy image chứa bí mật lên repository public.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: image và registry bằng hình",
+    "nguon": "Docker · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-2-tag-digest",
+    "ten": "3.2 — Tag thì di chuyển, digest thì không",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-16-3-ci-ghcr-deploy",
+    "ten": "16.3 — Đưa lên: CI build, GHCR, deploy và quay lui",
+    "nguon": "Docker · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Container Registry › ECR / GCR / ACR (Cloud Registries)": {
+  "body": "Mỗi nền tảng cloud lớn có registry riêng, tích hợp với hệ thống danh tính và mạng của chính nền tảng đó:\n\n- **AWS ECR** (Elastic Container Registry): đăng nhập qua IAM; hỗ trợ quét lỗ hổng, quy tắc vòng đời để tự xoá image cũ.\n- **Google Artifact Registry** (kế thừa Container Registry/GCR): lưu image và cả các loại gói khác, gắn với Google Cloud IAM.\n- **Azure Container Registry (ACR)**: gắn với Microsoft Entra ID, tích hợp tốt với AKS.\n\n### Vì sao dùng\n- Kéo image từ trong cùng cloud nhanh và không tốn phí truyền dữ liệu ra ngoài.\n- Dùng quyền theo vai trò (IAM) thay vì chia sẻ mật khẩu.\n- Có thể giới hạn truy cập chỉ trong mạng riêng (VPC/private endpoint).\n- Tích hợp quét bảo mật và dịch vụ chạy container của cùng nền tảng (ECS/EKS, Cloud Run/GKE, AKS).\n\n### Ý chính\n- Cách đẩy image y như registry khác: gắn tag đầy đủ rồi `docker push`; khác ở bước xác thực (dùng CLI của cloud lấy token đăng nhập tạm thời).\n\n```bash\n# ví dụ AWS ECR\naws ecr get-login-password --region ap-southeast-1  | docker login --username AWS --password-stdin <account>.dkr.ecr.ap-southeast-1.amazonaws.com\n```\n\n### Lỗi hay gặp\n- Token đăng nhập ECR chỉ sống một thời gian ngắn (khoảng 12 giờ); script CI cần đăng nhập lại mỗi lần chạy.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-13-2-registry-build-o-may-khac",
+    "ten": "13.2 — Registry và dựng ở máy khác: chứng minh ảnh chạy được trước khi đẩy",
+    "nguon": "Deploy lên VPS · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Container Registry › Docker Registry Authentication": {
+  "body": "Registry private (và việc đẩy image lên bất kỳ registry nào) đòi hỏi xác thực. Lệnh `docker login` đăng nhập và lưu thông tin để các lệnh `push`/`pull` sau dùng.\n\n```bash\ndocker login ghcr.io -u myuser --password-stdin < token.txt\ndocker login                      # Docker Hub (hỏi tương tác)\ndocker logout ghcr.io\n```\n\nThông tin lưu ở `~/.docker/config.json`. Mặc định nó có thể chỉ được mã hoá base64 trong file, tức là **không bí mật thực sự**. Nên cấu hình **credential helper** để dùng kho khoá của hệ điều hành (macOS Keychain, Windows Credential Manager, `pass`...).\n\n### Ý chính\n- Dùng **access token** có phạm vi hạn chế (chỉ `read:packages`/`write:packages`) thay cho mật khẩu tài khoản.\n- Trong CI, lấy token từ secret của nền tảng, và truyền bằng `--password-stdin` để không lộ trong lịch sử shell hay process list.\n- Máy chủ chỉ cần quyền đọc (pull); máy build mới cần quyền ghi.\n- Với cloud registry, dùng token tạm thời cấp bởi CLI của cloud hoặc danh tính của workload.\n\n### Lỗi hay gặp\n- Gõ mật khẩu trực tiếp `-p mypass`: bị ghi vào lịch sử lệnh.\n- Dùng token cá nhân toàn quyền cho máy chủ production; lộ máy là lộ cả tài khoản.\n- Quên `docker login` trên máy chủ nên `pull` image private lỗi `unauthorized`.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-16-3-ci-ghcr-deploy",
+    "ten": "16.3 — Đưa lên: CI build, GHCR, deploy và quay lui",
+    "nguon": "Docker · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Container Registry › Container Registries (Cloud)": {
+  "body": "Ngoài Docker Hub, các nhà cung cấp cloud đều có registry của riêng họ: **AWS ECR**, **Google Artifact Registry**, **Azure Container Registry**, cùng các lựa chọn khác như **GHCR** (GitHub), **GitLab Container Registry**, và registry tự host (Harbor, `registry:2`).\n\n### Chọn thế nào\n- Ứng dụng chạy ở cloud nào thì ưu tiên registry của cloud đó: gần nơi chạy, xác thực bằng danh tính nền tảng, không bị giới hạn lượt kéo như Docker Hub miễn phí.\n- Mã nguồn trên GitHub dùng GitHub Actions thì GHCR rất tiện.\n- Cần kiểm soát dữ liệu hoặc môi trường kín: tự host Harbor hay registry riêng.\n- Tính năng cần so sánh: quét lỗ hổng, ký image, quy tắc dọn dẹp, sao chép giữa vùng, giá lưu trữ và truyền dữ liệu.\n\n### Ý chính\n- Mọi registry theo chuẩn OCI nên image chuyển qua lại được.\n- Tên image gồm địa chỉ registry; đổi registry nghĩa là đổi tag và đăng nhập lại.\n- Có thể dùng **registry mirror/pull-through cache** để giảm số lượt kéo từ Docker Hub.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-13-2-registry-build-o-may-khac",
+    "ten": "13.2 — Registry và dựng ở máy khác: chứng minh ảnh chạy được trước khi đẩy",
+    "nguon": "Deploy lên VPS · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Container Registry › Sử dụng Image từ bên thứ ba — verify, pin tag, multi-arch": {
+  "body": "Image công khai tiện nhưng cũng là một mắt xích trong **chuỗi cung ứng phần mềm**: ai đẩy được lên tag nào, tag đó thay đổi lúc nào, và image có thật sự đến từ nguồn bạn nghĩ hay không. Ba việc cần làm:\n\n- **Kiểm tra nguồn gốc (verify)**: chọn Official/Verified Publisher; có thể kiểm tra chữ ký với Docker Content Trust hoặc Sigstore **cosign** nếu nhà phát hành ký image. Xem Dockerfile và SBOM nếu có.\n- **Ghim phiên bản (pin)**: tag có thể bị đổi; digest thì không. Ghim bằng digest để mỗi lần build/triển khai ra cùng một thứ.\n- **Multi-arch**: image có thể là một \"manifest list\" chứa nhiều kiến trúc (amd64, arm64); Docker tự chọn bản khớp với máy.\n\n```bash\ndocker buildx imagetools inspect node:22-alpine     # xem các kiến trúc và digest\ndocker pull --platform linux/arm64 node:22-alpine\n```\n\n```dockerfile\nFROM node:22-alpine@sha256:<digest>\n```\n\n### Ý chính\n- Ghim bằng digest nhưng cần quy trình cập nhật (ví dụ Dependabot/Renovate) để không bị kẹt ở bản cũ nhiều lỗ hổng.\n- Lỗi `exec format error` thường là image sai kiến trúc so với máy.\n\n### Lỗi hay gặp\n- Build trên Mac M-series rồi đẩy lên server amd64 mà không dùng `--platform linux/amd64` hay build đa nền tảng.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-2-tag-digest",
+    "ten": "3.2 — Tag thì di chuyển, digest thì không",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-4-da-kien-truc",
+    "ten": "3.4 — Ảnh đa kiến trúc và lỗi exec format error",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-5-quet-chuoi-cung-ung",
+    "ten": "6.5 — Quét lỗ hổng, SBOM và chuỗi cung ứng",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Image Security & Scanning": {
+  "body": "Image chứa hệ điều hành nền cộng thư viện và phụ thuộc của ứng dụng; mỗi thành phần có thể mang **lỗ hổng đã biết (CVE)**. **Quét image** so từng gói bên trong với cơ sở dữ liệu lỗ hổng và báo mức nghiêm trọng, bản vá có sẵn.\n\n```bash\ndocker scout cves myapp:1.0            # Docker Scout\ndocker scout quickview myapp:1.0\ntrivy image --severity HIGH,CRITICAL myapp:1.0     # Trivy\ntrivy image --exit-code 1 --severity CRITICAL myapp:1.0   # làm CI thất bại\n```\n\n### Ý chính\n- Quét **trong CI** trước khi đẩy; gắn ngưỡng (ví dụ chặn khi có CRITICAL có bản vá).\n- Quét lại **định kỳ** các image đang chạy: CVE mới công bố sau khi bạn build.\n- Giảm bề mặt tấn công: image nền nhỏ (slim/distroless), multi-stage để bỏ công cụ build, chỉ cài thứ cần.\n- Cập nhật image nền thường xuyên; nhiều lỗ hổng biến mất chỉ nhờ build lại với bản nền mới.\n- Cũng cần: chạy không root, bỏ capabilities, hệ thống file chỉ đọc, **SBOM** (danh sách thành phần) và ký image.\n- Đọc kết quả có phán đoán: lỗ hổng trong gói không dùng tới, không có đường khai thác thì ưu tiên thấp.\n\n### Lỗi hay gặp\n- Bỏ qua cảnh báo vì quá nhiều, không phân loại.\n- Chỉ quét lúc build, không quét lại, nên image chạy nhiều tháng mang CVE mới.\n- Quét xong nhưng bí mật vẫn nằm trong layer (token trong `ENV`, file `.env`): quét lỗ hổng không thay thế quản lý bí mật.\n\n### Tự kiểm tra\n- Vì sao image không đổi vẫn có thể \"xấu đi\" theo thời gian?\n- Những biện pháp nào giảm số CVE trong image mà không cần vá từng cái?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-5-quet-chuoi-cung-ung",
+    "ten": "6.5 — Quét lỗ hổng, SBOM và chuỗi cung ứng",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: ảnh nhỏ và an toàn bằng hình",
+    "nguon": "Docker · Chương 6",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Container Security (non-root, least privilege)": {
+  "body": "Mặc định process trong container chạy bằng **root** (UID 0) trừ khi ảnh nói khác. Root trong container không hoàn toàn là root của máy chủ, nhưng nếu kẻ tấn công thoát được khỏi container (hoặc container bị cấu hình lỏng, ví dụ `--privileged`), nó sẽ mang theo quyền đó ra ngoài. Nguyên tắc **least privilege**: chỉ cho tiến trình đúng những quyền nó cần để làm việc, không hơn.\n\n### Ý chính\n- Tạo user riêng trong Dockerfile và đổi sang nó bằng `USER` trước dòng `CMD`/`ENTRYPOINT`.\n- Bỏ bớt capability: `--cap-drop ALL`, rồi chỉ `--cap-add` thứ thật sự cần (ví dụ `NET_BIND_SERVICE`).\n- Thêm `--security-opt no-new-privileges` để tiến trình không tự nâng quyền qua setuid.\n- Không bao giờ dùng `--privileged` hay gắn `/var/run/docker.sock` vào container ứng dụng: cả hai gần như trao cả máy chủ.\n\n```dockerfile\nFROM node:22-alpine\nWORKDIR /app\nCOPY --chown=node:node . .\nUSER node\nCMD [\"node\", \"server.js\"]\n```\n\n```bash\ndocker run --rm --user 10001:10001 --cap-drop ALL \\\n  --security-opt no-new-privileges alpine id\n```\n\n### Lỗi hay gặp\n- Đặt `USER` quá sớm rồi `RUN apt-get install` bị \"permission denied\": cài gói khi còn root, đổi user ở cuối.\n- Quên `chown` thư mục ghi dữ liệu nên app không ghi được log/upload.\n- Tưởng \"không root\" là đủ: nó chỉ là lớp đầu tiên, các bước sau trong mục Runtime Security bổ sung thêm.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: ảnh nhỏ và an toàn bằng hình",
+    "nguon": "Docker · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-2-rootless-podman",
+    "ten": "15.2 — Bảo mật sâu hơn: nhóm docker, Docker rootless, userns-remap và Podman",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape",
+    "ten": "13.4 — Container nhìn từ bảo mật, và danh sách kiểm tra cứng hoá",
+    "nguon": "Operating Systems for Developers · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities",
+    "ten": "9.7 — Vượt khỏi rwx: capabilities, ACL, người dùng trong container — và bốn sự cố về quyền",
+    "nguon": "Operating Systems for Developers · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Users & Groups Permissions": {
+  "body": "Với kernel Linux, người dùng và nhóm chỉ là **con số**: UID và GID. Tên như `node` hay `www-data` chỉ là nhãn trong `/etc/passwd` của từng ảnh. Vì vậy trong container, quyền truy cập file được quyết định bởi UID/GID của tiến trình so với UID/GID của chủ file — kể cả khi file đó nằm trên máy host qua bind mount. Hiểu điều này là hiểu 90% lỗi \"permission denied\" khi dùng Docker.\n\n### Vì sao cần biết\nHai tình huống kinh điển: (1) bạn chạy app bằng user không phải root nhưng thư mục dữ liệu thuộc root nên app không ghi được; (2) bạn bind-mount thư mục dự án vào container, container (root) tạo file thuộc root trên host, rồi sau đó bạn không xoá/sửa được chúng bằng user thường.\n\n### Ý chính\n- Tạo user với UID cố định (ví dụ 10001) để mọi môi trường nhất quán; ảnh Node đã có sẵn user `node` (UID 1000).\n- `COPY --chown=user:group` đặt đúng chủ ngay lúc copy, đỡ tốn một tầng `RUN chown`.\n- **Volume đặt tên** mới tạo sẽ thừa hưởng quyền của thư mục tương ứng trong ảnh, nên `mkdir` + `chown` thư mục đó trước khi tạo volume.\n- **Bind mount** giữ nguyên UID/GID của host. Trên Linux, chạy container bằng đúng UID của bạn: `--user \"$(id -u):$(id -g)\"`.\n- Docker Desktop (Mac/Windows) thường che bớt chuyện này qua lớp chia sẻ file, nên lỗi hay chỉ lộ ra ở Linux hoặc CI.\n\n```dockerfile\nFROM debian:bookworm-slim\nRUN groupadd -r -g 10001 app && useradd -r -u 10001 -g app app \\\n && mkdir /data && chown app:app /data\nUSER app\n```\n\n```bash\n# bind mount nhưng ghi file thuộc về user của bạn, không phải root\ndocker run --rm --user \"$(id -u):$(id -g)\" -v \"$PWD:/work\" -w /work alpine touch hello.txt\nls -ln hello.txt   # chủ là UID của bạn\n```\n\n### Lỗi hay gặp\n- Trong compose viết `user: \"${UID}:${GID}\"` nhưng shell không export `UID`/`GID`: đặt chúng trong `.env` hoặc `export` trước.\n- Chạy `chmod 777` để \"cho qua\": che lỗi chứ không sửa nguyên nhân và mở quyền cho mọi UID.\n- Hai container chia sẻ cùng volume nhưng dùng UID khác nhau nên một bên không ghi được.\n\n### Tự kiểm tra\n- Vì sao container root ghi vào bind mount lại để lại file mà bạn không xoá được?\n- `COPY --chown` khác gì `COPY` rồi `RUN chown` về kích thước ảnh?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-4-moi-truong-nguoi-dung",
+    "ten": "2.4 — Môi trường, người dùng và tham số",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-3-bind-mount",
+    "ten": "7.3 — Bind mount, và bốn cái bẫy",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities",
+    "ten": "9.7 — Vượt khỏi rwx: capabilities, ACL, người dùng trong container — và bốn sự cố về quyền",
+    "nguon": "Operating Systems for Developers · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-4-4-nguoi-dung-nhom-sudo",
+    "ten": "4.4 — Người dùng, nhóm và sudo",
+    "nguon": "Linux & Bash · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Giới Hạn Tài Nguyên Container": {
+  "body": "Container không tự có trần tài nguyên: một tiến trình rò bộ nhớ hay vòng lặp vô hạn có thể ăn hết RAM/CPU của cả máy chủ và kéo sập mọi container khác (kể cả database). Docker dùng **cgroups** của kernel để đặt hạn mức, và bạn chỉ cần vài cờ.\n\n### Ý chính\n- `--memory 512m`: trần RAM. Vượt trần, kernel **OOM kill** tiến trình, container thoát với mã **137** (128 + SIGKILL 9).\n- `--memory-swap`: tổng RAM + swap; đặt bằng `--memory` để cấm dùng swap.\n- `--cpus 1.5`: tối đa 1,5 nhân CPU. Khác với `--cpu-shares`, đây là giới hạn cứng chứ không phải trọng số khi tranh chấp.\n- `--pids-limit 200`: tối đa số tiến trình/luồng, chặn fork bomb.\n- Trong compose: `mem_limit`, `cpus`, `pids_limit` (hoặc `deploy.resources.limits` với bản compose hiện đại).\n\n```bash\ndocker run -d --name api --memory 512m --memory-swap 512m \\\n  --cpus 1.5 --pids-limit 200 my-api\ndocker stats --no-stream api\ndocker inspect -f '{{.State.OOMKilled}} {{.State.ExitCode}}' api\n```\n\n### Lỗi hay gặp\n- Đặt trần container thấp hơn heap runtime cần: Node/JVM thấy trần theo cgroup nên phải chỉnh `--max-old-space-size` hay `-Xmx` cho vừa, nếu không bị giết lúc cao điểm.\n- Thấy mã 137 rồi nghĩ \"Docker lỗi\": hãy kiểm `OOMKilled` trước khi đoán.\n- Đặt giới hạn mà không theo dõi: dùng `docker stats` để biết mức dùng thật trước khi chọn số.\n\n### Tự kiểm tra\n- Mã thoát 137 nói điều gì? Có phải lúc nào cũng do hết RAM không?\n- Khác biệt giữa `--cpus` và `--cpu-shares`?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: chạy trên production bằng hình",
+    "nguon": "Docker · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137",
+    "ten": "11.2 — Hạn mức, và mã thoát 137",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-8-5-gioi-han",
+    "ten": "8.5 — Giới hạn bộ nhớ cho Node, JVM, container và Kubernetes",
+    "nguon": "Operating Systems for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=docker-container",
+    "ten": "Container không phải máy ảo nhẹ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Docker Secrets": {
+  "body": "Mật khẩu database, API key, chứng chỉ TLS không nên nằm trong ảnh, trong Dockerfile hay trong biến môi trường lộ ra qua `docker inspect`. **Docker Secrets** là cơ chế của Docker Swarm: bí mật được lưu mã hoá trong kho Raft của cụm, truyền qua kết nối mã hoá giữa các node, và chỉ được gắn vào container của service được cấp quyền, dưới dạng **file trong tmpfs** tại `/run/secrets/<tên>` (không ghi xuống đĩa của container).\n\n### Ý chính\n- Tạo: `docker secret create db_password -` (đọc từ stdin) hoặc từ file.\n- Cấp cho service: `docker service create --secret db_password ...`; app đọc file `/run/secrets/db_password`.\n- Nhiều ảnh chính thức hỗ trợ biến dạng `*_FILE`, ví dụ `POSTGRES_PASSWORD_FILE=/run/secrets/db_password`.\n- Chỉ dùng được khi Docker ở chế độ Swarm (`docker swarm init`, kể cả một node). Compose thường có khối `secrets:` nhưng nó chỉ bind-mount một file từ host, không có mã hoá của Swarm.\n\n```bash\ndocker swarm init\nprintf 's3cr3t' | docker secret create db_password -\ndocker service create --name db --secret db_password \\\n  -e POSTGRES_PASSWORD_FILE=/run/secrets/db_password postgres:17\n```\n\n### Lỗi hay gặp\n- Truyền bí mật bằng `-e PASSWORD=...` hoặc `ENV`/`ARG` trong Dockerfile: lộ qua `docker inspect` và `docker history`.\n- Quên rằng secret không sửa được tại chỗ: muốn đổi phải tạo secret mới (tên mới) rồi cập nhật service.\n- Commit file `.env` chứa bí mật vào Git.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-4-moi-truong-nguoi-dung",
+    "ten": "2.4 — Môi trường, người dùng và tham số",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-1-buildx-bake",
+    "ten": "15.1 — BuildKit nâng cao: builder riêng, đa nền tảng, bake, bí mật lúc build",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: cấu hình và bí mật, bằng hình",
+    "nguon": "Deploy lên VPS · Chương 4",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Cấu Hình Runtime Bảo Mật": {
+  "body": "Sau khi đã chạy không root và giới hạn tài nguyên, lớp tiếp theo là **khoá bản thân container lại**, để dù một tiến trình bị chiếm quyền thì nó cũng khó làm gì thêm. Ba công tắc chính ở runtime đều nằm trên dòng lệnh `docker run`.\n\n### Ý chính\n- `--read-only`: filesystem gốc chỉ đọc. Kẻ tấn công không thể ghi mã độc hay sửa file cấu hình trong container. Ứng dụng cần chỗ ghi tạm thì mở đúng chỗ đó bằng `--tmpfs /tmp` hoặc một volume.\n- `--security-opt no-new-privileges`: tiến trình (và con của nó) không thể có thêm quyền qua setuid/setgid hay file capability.\n- Seccomp: Docker áp sẵn một profile mặc định chặn khoảng vài chục system call nguy hiểm; đừng tắt nó bằng `seccomp=unconfined`.\n\n```bash\ndocker run -d --name web \\\n  --read-only --tmpfs /tmp --tmpfs /var/run \\\n  --security-opt no-new-privileges \\\n  --user 10001:10001 nginx-unprivileged\n```\n\nTrong compose tương ứng: `read_only: true`, `tmpfs: [/tmp]`, `security_opt: [no-new-privileges:true]`.\n\n### Lỗi hay gặp\n- Bật `--read-only` rồi app chết vì cần ghi `/tmp`, thư mục cache hay file PID: đọc log để biết nó cần ghi đâu rồi mở đúng chỗ.\n- Nghĩ rằng read-only bảo vệ cả volume: volume vẫn ghi được trừ khi gắn `:ro`.\n- Bật từng lớp rồi không kiểm: hãy thử thật bằng `docker exec ... touch /x` để chắc nó bị từ chối.\n\n### Tự kiểm tra\n- Vì sao `--read-only` thường đi kèm `--tmpfs`?\n- `no-new-privileges` chặn kiểu leo thang quyền nào?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: ảnh nhỏ và an toàn bằng hình",
+    "nguon": "Docker · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape",
+    "ten": "13.4 — Container nhìn từ bảo mật, và danh sách kiểm tra cứng hoá",
+    "nguon": "Operating Systems for Developers · Chương 13",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Runtime Security": {
+  "body": "Mục này đi sâu vào **hai thứ kernel dùng để giới hạn một tiến trình**: capability và seccomp. Root truyền thống là một khối quyền duy nhất; Linux đã chia nó thành nhiều **capability** nhỏ (`NET_BIND_SERVICE`, `CHOWN`, `SYS_ADMIN`...). Docker mặc định chỉ giữ một tập con trong số đó cho container. Còn **seccomp** là bộ lọc system call: tiến trình gọi syscall nằm ngoài danh sách cho phép sẽ bị từ chối.\n\n### Ý chính\n- Cách làm chuẩn: bỏ hết rồi thêm lại đúng thứ cần: `--cap-drop ALL --cap-add NET_BIND_SERVICE`.\n- Profile seccomp tuỳ chỉnh: `--security-opt seccomp=profile.json`. Chỉ cần khi ứng dụng có nhu cầu đặc biệt hoặc bạn muốn siết chặt hơn bản mặc định.\n- AppArmor/SELinux là lớp kiểm soát truy cập bắt buộc bổ sung (tuỳ distro host).\n- Những thứ KHÔNG nên có trong container ứng dụng: `--privileged` (trả lại gần hết capability và tắt nhiều bảo vệ), `--cap-add SYS_ADMIN`, và gắn `/var/run/docker.sock` (ai điều khiển socket là điều khiển được daemon, tức gần như root trên host).\n\n```bash\ndocker run -d --cap-drop ALL --cap-add NET_BIND_SERVICE \\\n  --security-opt no-new-privileges \\\n  --security-opt seccomp=./profile.json nginx:1.27\ndocker inspect -f '{{.HostConfig.CapDrop}} {{.HostConfig.CapAdd}}' <container>\n```\n\n### Lỗi hay gặp\n- Bỏ hết capability rồi app báo \"operation not permitted\" mà không biết thiếu cái nào: thêm lại từng cái và đọc log/`dmesg`.\n- Copy profile seccomp từ Internet không đọc: có thể nó cho phép quá rộng.\n- Dùng `--privileged` \"cho nhanh\" và quên gỡ khi lên production.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: ảnh nhỏ và an toàn bằng hình",
+    "nguon": "Docker · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-2-rootless-podman",
+    "ten": "15.2 — Bảo mật sâu hơn: nhóm docker, Docker rootless, userns-remap và Podman",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape",
+    "ten": "13.4 — Container nhìn từ bảo mật, và danh sách kiểm tra cứng hoá",
+    "nguon": "Operating Systems for Developers · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities",
+    "ten": "9.7 — Vượt khỏi rwx: capabilities, ACL, người dùng trong container — và bốn sự cố về quyền",
+    "nguon": "Operating Systems for Developers · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật & Tối ưu › Cấu hình Runtime — Storage driver, logging driver, daemon.json": {
+  "body": "Docker Engine (daemon `dockerd`) đọc cấu hình toàn cục từ **`/etc/docker/daemon.json`** (trên Linux). Ở đây bạn đặt mặc định cho mọi container: driver lưu trữ, driver log, registry mirror, thư mục dữ liệu... Sửa file xong phải restart daemon (`sudo systemctl restart docker`) thì mới có hiệu lực.\n\n### Ý chính\n- **Storage driver**: cách Docker xếp các tầng ảnh thành một filesystem. `overlay2` là lựa chọn mặc định và khuyến nghị trên Linux hiện đại; ít khi cần đổi.\n- **Logging driver**: mặc định `json-file`, và nó **không xoay log** nếu bạn không đặt giới hạn, nên log có thể ăn đầy đĩa. Đặt `max-size` và `max-file` ở đây là cách rẻ nhất để phòng sự cố đó.\n- `data-root` (đổi nơi chứa ảnh/volume), `registry-mirrors`, `live-restore` (giữ container chạy khi daemon khởi động lại).\n\n```json\n{\n  \"storage-driver\": \"overlay2\",\n  \"log-driver\": \"json-file\",\n  \"log-opts\": { \"max-size\": \"10m\", \"max-file\": \"3\" },\n  \"live-restore\": true\n}\n```\n\n```bash\nsudo systemctl restart docker\ndocker info --format '{{.Driver}} {{.LoggingDriver}}'\n```\n\n### Lỗi hay gặp\n- File JSON sai cú pháp (thừa dấu phẩy) khiến daemon không khởi động: kiểm bằng `python3 -m json.tool /etc/docker/daemon.json` trước khi restart.\n- Đổi cấu hình log mặc định mà tưởng áp dụng cho container cũ: chỉ container **tạo mới** mới nhận giá trị mới.\n- Đổi storage driver trên máy đã có ảnh: ảnh/container cũ sẽ \"biến mất\" khỏi tầm nhìn của driver mới.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-3-log",
+    "ten": "11.3 — Log, xoay log, và cái đĩa đầy",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: chạy trên production bằng hình",
+    "nguon": "Docker · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-1-docker-bat-log",
+    "ten": "2.1 — Docker làm gì với dòng log của bạn",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-3-overlayfs",
+    "ten": "12.3 — OverlayFS và các lớp ảnh: lower, upper, work — copy-up, whiteout và build cache",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug & CI › Debugging Containers": {
+  "body": "Khi container \"không chạy đúng\", đừng đoán mò: gỡ lỗi container có một trình tự nhỏ, lặp đi lặp lại. Mục này nói về **phương pháp**; các công cụ cụ thể (`exec`, `diff`, `stats`) được đào sâu ở mục \"Debug Container Đang Chạy\".\n\n### Ý chính — trình tự hỏi\n1. **Nó đang ở trạng thái nào?** `docker ps -a` cho thấy `Up`, `Exited (137)`, `Restarting`... Mã thoát cho manh mối ngay: 0 = thoát bình thường, 1 = lỗi ứng dụng, 125-127 = lỗi chạy lệnh/không tìm thấy, 137 = bị SIGKILL (thường OOM), 143 = SIGTERM.\n2. **Nó nói gì?** `docker logs --tail 100 -f <tên>`.\n3. **Cấu hình thực tế là gì?** `docker inspect <tên>` (biến môi trường, mount, mạng, lý do thoát, `OOMKilled`).\n4. **Vào xem bên trong**: `docker exec -it <tên> sh`.\n5. **Container chết ngay lúc khởi động?** Chạy lại với lệnh khác để vào được: `docker run --rm -it --entrypoint sh <ảnh>`.\n6. **Ảnh không có shell (distroless)?** Gắn một container công cụ vào cùng namespace: `docker run --rm -it --network container:<tên> --pid container:<tên> nicolaka/netshoot`.\n\n```bash\ndocker ps -a\ndocker logs --tail 50 api\ndocker inspect -f '{{.State.ExitCode}} {{.State.OOMKilled}} {{.State.Error}}' api\n```\n\n### Lỗi hay gặp\n- Đổi nhiều thứ cùng lúc rồi không biết cái nào có tác dụng: đổi một thứ mỗi lần.\n- Chỉ nhìn log của container, quên rằng app có thể ghi log vào file thay vì stdout.\n- Sửa file trong container đang chạy rồi mất khi tái tạo: sửa nguồn (Dockerfile/compose) và dựng lại.\n\n### Tự kiểm tra\n- Một container thoát với mã 137 và `OOMKilled=false`: có thể do những gì?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: chạy container bằng hình",
+    "nguon": "Docker · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-12-1-phuong-phap",
+    "ten": "12.1 — Một phương pháp, trước khi tới sách công thức",
+    "nguon": "Docker · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-3-vao-ben-trong",
+    "ten": "2.3 — Vào bên trong, kể cả khi không có shell nào",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-2-quan-sat",
+    "ten": "2.2 — Quan sát một container đang chạy",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: sách công thức chẩn đoán bằng hình",
+    "nguon": "Docker · Chương 12",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Debug & CI › Continuous Integration": {
+  "body": "**Continuous Integration (CI)** là thói quen: mỗi lần đẩy code, một máy chủ tự động build và chạy test, để lỗi lộ ra sớm thay vì ngày deploy. Docker hợp với CI vì nó cho môi trường build **giống hệt mọi lần**, không phụ thuộc cấu hình của runner.\n\n### Ý chính\n- CI chạy trên máy sạch, nên cache build của Docker luôn **nguội** theo mặc định; muốn nhanh phải chia sẻ cache (`--cache-from` / `--cache-to`, ví dụ `type=gha` trên GitHub Actions).\n- Ở CI, `docker build` nên dùng BuildKit và gắn tag theo commit (SHA) thay vì chỉ `latest`.\n- Cần database/Redis cho test tích hợp? Dùng **service container** hoặc Testcontainers.\n- CI đỏ thì chặn merge; đó mới là giá trị của CI.\n\n```yaml\n# .github/workflows/ci.yml (rút gọn)\non: [push, pull_request]\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: docker/setup-buildx-action@v3\n      - uses: docker/build-push-action@v6\n        with:\n          context: .\n          push: false\n          cache-from: type=gha\n          cache-to: type=gha,mode=max\n```\n\n### Lỗi hay gặp\n- Build chậm vì `COPY . .` đặt trước `npm ci` nên mỗi lần đổi code là cài lại toàn bộ thư viện.\n- Test chạy trên máy dev mà không chạy trong ảnh thật: lỗi chỉ lộ khi lên production.\n- Đẩy secret ra log CI khi `echo` biến môi trường.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-4-cache-ci",
+    "ten": "5.4 — Chia sẻ cache với CI",
+    "nguon": "Docker · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-16-3-ci-ghcr-deploy",
+    "ten": "16.3 — Đưa lên: CI build, GHCR, deploy và quay lui",
+    "nguon": "Docker · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-9-1-github-actions",
+    "ten": "9.1 — Chạy test trong GitHub Actions",
+    "nguon": "Testing · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-3-db-that-cho-test",
+    "ten": "13.3 — Dịch vụ thật cho test: Postgres dùng-một-lần, Testcontainers và CI",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Debug & CI › Debug Container Đang Chạy": {
+  "body": "Đây là bộ đồ nghề \"xem container đang sống ra sao\" mà bạn dùng hằng ngày. Khác với mục gỡ lỗi nói về trình tự suy nghĩ, ở đây là **các lệnh cụ thể** và đọc kết quả của chúng.\n\n### Ý chính\n- `docker exec -it <tên> sh` (hoặc `bash`): mở shell bên trong container đang chạy. `-i` giữ stdin, `-t` cấp terminal. Thoát shell **không** dừng container (khác với `attach`).\n- `docker diff <tên>`: liệt kê file đã thêm (`A`), đổi (`C`), xoá (`D`) so với ảnh gốc, tức tầng ghi được. Rất hay để phát hiện app ghi file ở chỗ bất ngờ.\n- `docker stats`: CPU, RAM, mạng, block I/O theo thời gian thực; `--no-stream` để lấy một lần.\n- `docker top <tên>` xem tiến trình bên trong; `docker port <tên>` xem ánh xạ cổng; `docker cp` chép file ra/vào.\n- `docker events` theo dõi sự kiện vòng đời (start, die, oom).\n\n```bash\ndocker exec -it api sh -c 'env | sort; ls -la /app'\ndocker diff api\ndocker stats --no-stream\ndocker cp api:/app/logs/error.log ./error.log\n```\n\n### Lỗi hay gặp\n- Dùng `exec` vào ảnh slim/distroless không có `sh` rồi tưởng container hỏng: ảnh đó đơn giản là không có shell.\n- Dùng `attach` rồi bấm Ctrl-C làm dừng cả ứng dụng thay vì chỉ thoát khỏi phiên.\n- Sửa file bằng `exec` rồi mất khi container được tạo lại.\n\n### Tự kiểm tra\n- `docker diff` hiển thị `C /etc/hosts` có đáng lo không?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: chạy container bằng hình",
+    "nguon": "Docker · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-2-quan-sat",
+    "ten": "2.2 — Quan sát một container đang chạy",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-3-vao-ben-trong",
+    "ten": "2.3 — Vào bên trong, kể cả khi không có shell nào",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-6-quiz",
+    "ten": "2.6 — Kiểm tra: chạy container",
+    "nguon": "Docker · Chương 2",
+    "kieu": "quiz"
+   }
+  ]
+ },
+ "Debug & CI › Docker Logging Configuration": {
+  "body": "Docker thu mọi thứ ứng dụng ghi ra **stdout/stderr** và đưa cho một **logging driver**. Lựa chọn driver quyết định log nằm ở đâu, có xoay vòng không, và bạn đọc nó bằng cách nào.\n\n### Ý chính\n- `json-file` (mặc định): ghi file JSON trên host, đọc được bằng `docker logs`. **Không xoay log nếu không đặt giới hạn**, nên phải thêm `max-size` và `max-file`.\n- `local`: định dạng gọn hơn, có xoay vòng mặc định; `syslog`/`journald` đưa vào hệ thống log của máy; `awslogs`, `gelf`, `fluentd`... gửi tới hệ thống tập trung.\n- Lưu ý: với driver không phải `json-file`/`local`/`journald`, `docker logs` có thể không đọc được (tuỳ bản Docker), nên cần kiểm tra trước khi dùng.\n- Ứng dụng nên ghi log ra stdout (tốt nhất dạng JSON có cấu trúc), không ghi vào file trong container.\n\n```bash\ndocker run -d --name api \\\n  --log-driver json-file --log-opt max-size=10m --log-opt max-file=3 my-api\n\ndocker logs --tail 100 -f --since 10m api\n```\n\n```yaml\nservices:\n  api:\n    logging:\n      driver: json-file\n      options: { max-size: \"10m\", max-file: \"3\" }\n```\n\n### Lỗi hay gặp\n- Không giới hạn dung lượng log: đĩa đầy lúc 3 giờ sáng, kéo theo cả database chết.\n- `docker logs` không có gì vì app ghi vào file thay vì stdout.\n- Đặt giá trị mặc định trong `daemon.json` rồi quên rằng container cũ không đổi theo.\n\n### Tự kiểm tra\n- Một container sống 6 tháng với `json-file` mặc định thì file log lớn tới đâu? Vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: chạy trên production bằng hình",
+    "nguon": "Docker · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-3-log",
+    "ten": "11.3 — Log, xoay log, và cái đĩa đầy",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-1-docker-bat-log",
+    "ten": "2.1 — Docker làm gì với dòng log của bạn",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Debug & CI › Testcontainers": {
+  "body": "**Testcontainers** là thư viện (có cho Java, Node, Go, Python, .NET...) cho phép **bộ test tự bật container thật** — PostgreSQL, Redis, Kafka... — rồi tự huỷ khi chạy xong. Thay vì mock database (dễ cho kết quả đúng mà thật ra sai) hay dựng sẵn một database dùng chung (dữ liệu rác lẫn nhau), mỗi lần chạy test bạn có một database sạch, đúng phiên bản production.\n\n### Vì sao cần biết\nTest tích hợp với dịch vụ thật bắt được lỗi mà mock không thấy: cú pháp SQL, migration, ràng buộc, transaction, hành vi index. Với Docker có sẵn trên máy dev và runner CI, chi phí để có chúng gần như bằng không.\n\n### Ý chính\n- Thư viện gọi Docker API để kéo ảnh, chạy container ở cổng ngẫu nhiên và trả về chuỗi kết nối.\n- Có cơ chế chờ \"sẵn sàng\" (wait strategy) để test không chạy khi database chưa nhận kết nối.\n- Container được dọn bằng một container phụ (Ryuk) kể cả khi test bị kill.\n- Vẫn nên chia sẻ một container cho cả bộ test (bật một lần ở global setup) rồi dọn dữ liệu giữa các test, thay vì bật mỗi test một cái cho chậm.\n\n```ts\nimport { PostgreSqlContainer } from \"@testcontainers/postgresql\";\n\nconst pg = await new PostgreSqlContainer(\"postgres:17\").start();\nconst url = pg.getConnectionUri();   // dùng cho client trong test\n// ... chạy test ...\nawait pg.stop();\n```\n\n### Lỗi hay gặp\n- CI không có Docker daemon (runner đặc biệt) nên test không khởi động được.\n- Test chạy song song cùng ghi một database mà không cô lập dữ liệu.\n- Dùng `latest` thay vì ghim phiên bản, khiến test đổi hành vi bất ngờ.\n\n### Tự kiểm tra\n- Khi nào Testcontainers đáng hơn mock? Khi nào mock vẫn hợp lý?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-0-slides",
+    "ten": "13.0 — Slide Chương 13: Docker trong vòng lặp phát triển",
+    "nguon": "Docker · Chương 13",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-3-db-that-cho-test",
+    "ten": "13.3 — Dịch vụ thật cho test: Postgres dùng-một-lần, Testcontainers và CI",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-4-3-testcontainers",
+    "ten": "4.3 — Testcontainers cho Node: lần chạy test tự bật cơ sở dữ liệu",
+    "nguon": "Testing · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug & CI › Tích hợp Docker vào CI/CD Pipeline": {
+  "body": "Mục tiêu của pipeline Docker: **mỗi commit tạo ra một ảnh đã được kiểm chứng, gắn tag truy vết được, sẵn sàng deploy**. Bạn dựng ảnh một lần ở CI, rồi đưa *chính ảnh đó* qua các môi trường thay vì dựng lại.\n\n### Ý chính — một pipeline chuẩn\n1. **Checkout + test**: chạy lint, unit test (và test tích hợp nếu có).\n2. **Build image** bằng BuildKit, dùng cache của CI.\n3. **Quét lỗ hổng** (Trivy, Docker Scout) và có thể chặn khi có lỗi mức nghiêm trọng.\n4. **Push lên registry** (GHCR, Docker Hub, ECR...) với tag theo **commit SHA**, không chỉ `latest`.\n5. **Deploy**: máy chủ chỉ `pull` đúng tag đó rồi `up -d`; quay lui là chạy lại tag cũ.\n6. **Smoke test** sau deploy để biết bản mới thật sự sống.\n\n```yaml\n- uses: docker/login-action@v3\n  with: { registry: ghcr.io, username: ${{ github.actor }}, password: ${{ secrets.GITHUB_TOKEN }} }\n- uses: docker/build-push-action@v6\n  with:\n    push: true\n    tags: ghcr.io/${{ github.repository }}:${{ github.sha }}\n    cache-from: type=gha\n    cache-to: type=gha,mode=max\n```\n\n### Lỗi hay gặp\n- Chỉ dùng tag `latest`: không biết production đang chạy commit nào, không quay lui chính xác được.\n- Hai workflow cùng deploy một máy chủ nên giẫm chân nhau: dùng `concurrency` hoặc một đường deploy duy nhất.\n- Ảnh build xanh nhưng chạy chết (ví dụ sai kiến trúc/libc): thêm bước chạy thử ảnh trước khi đẩy.\n- Lưu khoá SSH/registry trong code thay vì secrets của CI.\n\n### Tự kiểm tra\n- Vì sao nên tag theo SHA? Quay lui bằng ảnh tag cũ khác gì dựng lại từ code cũ?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-16-3-ci-ghcr-deploy",
+    "ten": "16.3 — Đưa lên: CI build, GHCR, deploy và quay lui",
+    "nguon": "Docker · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-4-cap-nhat-quay-lui",
+    "ten": "11.4 — Cập nhật, CI/CD, và quay lui",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-5-4-cache-ci",
+    "ten": "5.4 — Chia sẻ cache với CI",
+    "nguon": "Docker · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=cicd-pipeline",
+    "ten": "CI/CD — và cuộc đua giữa hai workflow",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/github-actions",
+    "ten": "GitHub Actions CI/CD",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Debug & CI › Chạy Container": {
+  "body": "Chạy một container thật sự cho production không chỉ là `docker run image`. Hai việc quan trọng: container phải **tự sống lại** khi sập hoặc khi máy khởi động lại, và nó phải **dừng sạch** khi được yêu cầu.\n\n### Ý chính\n- `--restart` có bốn chế độ: `no` (mặc định), `on-failure[:N]` (chỉ khi thoát mã khác 0), `always`, và `unless-stopped` (như `always` nhưng không tự dậy lại nếu bạn đã chủ động `docker stop`). Với dịch vụ chạy lâu dài, `unless-stopped` là lựa chọn quen thuộc.\n- Docker tăng dần độ trễ giữa các lần restart; container sập vòng lặp sẽ hiện trạng thái `Restarting` — hãy đọc log chứ đừng chỉ chờ.\n- **Healthcheck** chỉ đánh dấu `healthy/unhealthy`; riêng nó không khởi động lại container.\n- **`--init`** chạy một init nhỏ (tini) làm PID 1: nó chuyển tiếp tín hiệu và dọn tiến trình zombie. Không có nó, app làm PID 1 có thể phớt lờ SIGTERM nên `docker stop` chờ 10 giây rồi SIGKILL (mã 137).\n\n```bash\ndocker run -d --name api --restart unless-stopped --init \\\n  --stop-timeout 20 -p 3000:3000 my-api\ndocker update --restart on-failure:5 api   # đổi chính sách không cần tạo lại\n```\n\n### Lỗi hay gặp\n- Dùng `always` rồi không bao giờ dừng được container trong khi sửa lỗi.\n- Quên xử lý SIGTERM trong app nên mỗi lần deploy là cắt ngang request đang xử lý.\n- Tưởng `--restart` thay thế cho việc theo dõi: crash loop vẫn cần cảnh báo.\n\n### Tự kiểm tra\n- Khác biệt giữa `always` và `unless-stopped` khi máy chủ khởi động lại?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: chạy container bằng hình",
+    "nguon": "Docker · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-1-restart",
+    "ten": "11.1 — Chính sách restart và sống sót qua khởi động lại",
+    "nguon": "Docker · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-1-5-pid1",
+    "ten": "1.5 — PID 1, hệ thống init và tiến trình trong container",
+    "nguon": "Operating Systems for Developers · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-2-han-muc-137",
+    "ten": "11.2 — Hạn mức, và mã thoát 137",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Tiếp tục học › Sang Kubernetes": {
+  "body": "Docker Compose rất tốt khi toàn bộ ứng dụng chạy trên **một máy**. Kubernetes (K8s) trả lời câu hỏi tiếp theo: khi có nhiều máy, nhiều bản sao, cần tự lành, cập nhật cuốn chiếu, co giãn theo tải, bạn khai báo **trạng thái mong muốn** và hệ thống tự làm cho thực tế khớp với nó.\n\n### Khi nào nên đi tiếp, khi nào chưa\nNên cân nhắc khi: cần chạy trên nhiều node, cần zero-downtime và tự co giãn, nhóm vận hành đủ lớn. **Chưa cần** nếu một VPS với Compose vẫn đáp ứng tải và đội chỉ có vài người: K8s mang theo chi phí học và vận hành đáng kể.\n\n### Ý chính\n- Ánh xạ khái niệm: service Compose ≈ Deployment + Service; `.env`/environment ≈ ConfigMap/Secret; volume ≈ PersistentVolumeClaim; reverse proxy ≈ Ingress.\n- Nên học trên cụm cục bộ (`kind`, `minikube`) trước khi đụng cụm thật.\n- Công cụ `kompose` dịch cú pháp Compose sang manifest, nhưng không dịch ý đồ (probe, tài nguyên, chính sách cập nhật phải tự thêm).\n\n```bash\nkind create cluster\nkubectl create deployment web --image=nginx:1.27 --replicas=2\nkubectl get pods\n```\n\nHãy nắm vững Docker (ảnh, mạng, volume, giới hạn tài nguyên) trước: K8s chỉ là lớp điều phối đặt lên trên các khái niệm đó.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tiếp tục học › Database trong Container": {
+  "body": "Hầu hết cơ sở dữ liệu phổ biến (PostgreSQL, MySQL, MongoDB, Redis) có ảnh chính thức, nên dựng một database cho dev hay test chỉ mất một lệnh. Điểm cần nắm là: **container thì tạm thời, dữ liệu thì không được phép mất**, nên dữ liệu phải sống ngoài tầng ghi được của container.\n\n### Ý chính\n- Gắn **volume đặt tên** vào thư mục dữ liệu (ví dụ `/var/lib/postgresql/data`); xoá container không làm mất dữ liệu, `docker compose down -v` mới xoá.\n- Cấu hình ban đầu qua biến môi trường (`POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`). Script trong `/docker-entrypoint-initdb.d/` chỉ chạy **khi thư mục dữ liệu còn rỗng** (lần đầu).\n- Ghim phiên bản (`postgres:17`, không `latest`): nâng cấp phiên bản chính cần quy trình dump/restore hoặc `pg_upgrade`.\n- Dùng healthcheck (`pg_isready`) và `depends_on: condition: service_healthy` để app đợi database thật sự sẵn sàng.\n- Đừng publish cổng database ra Internet; để nó trong mạng nội bộ của Compose.\n- Sao lưu bằng công cụ của chính database: `docker exec db pg_dump -U app appdb > backup.sql`.\n\n```yaml\nservices:\n  db:\n    image: postgres:17\n    environment: { POSTGRES_PASSWORD_FILE: /run/secrets/pg }\n    volumes: [pgdata:/var/lib/postgresql/data]\n    healthcheck: { test: [\"CMD-SHELL\", \"pg_isready -U postgres\"], interval: 5s, retries: 10 }\nvolumes: { pgdata: {} }\n```\n\n### Lỗi hay gặp\n- Đổi `POSTGRES_PASSWORD` rồi không thấy tác dụng: biến chỉ dùng lúc khởi tạo thư mục dữ liệu trống.\n- Mất dữ liệu vì dùng volume vô danh hoặc bind mount sai quyền.\n- Cho rằng chạy database production trong container là luôn tốt: nhiều đội chọn dịch vụ database được quản lý để đỡ lo sao lưu/HA.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-14-2-kho-du-lieu-mot-lenh",
+    "ten": "14.2 — Mọi loại CSDL và hạ tầng trong một lệnh",
+    "nguon": "Docker · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-2-volume",
+    "ten": "7.2 — Volume, đào sâu",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-1-ba-cach-gan",
+    "ten": "7.1 — Vì sao container quên, và ba cách chữa",
+    "nguon": "Docker · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-13-3-db-that-cho-test",
+    "ten": "13.3 — Dịch vụ thật cho test: Postgres dùng-một-lần, Testcontainers và CI",
+    "nguon": "Docker · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Tiếp tục học › Container Ecosystem & Standards": {
+  "body": "Docker là tên một sản phẩm, nhưng \"container\" là một hệ sinh thái có chuẩn mở, và biết các mảnh ghép giúp bạn đọc tài liệu Kubernetes, CI hay bảo mật không bị lạc.\n\n### Ý chính\n- **OCI (Open Container Initiative)** định nghĩa ba đặc tả: *image spec* (định dạng ảnh), *runtime spec* (cách chạy một container từ bundle), *distribution spec* (cách đẩy/kéo qua registry). Ảnh Docker build ra chạy được trên mọi runtime tuân thủ OCI.\n- **runc**: runtime cấp thấp tham chiếu của OCI, thực sự tạo namespace/cgroup và chạy tiến trình.\n- **containerd**: daemon quản lý vòng đời container, kéo ảnh, lưu trữ; Docker Engine dùng nó bên dưới, và Kubernetes cũng gọi nó qua CRI. Chuỗi gần đúng: `docker CLI → dockerd → containerd → shim → runc`.\n- **nerdctl**: CLI cho containerd với cú pháp gần giống `docker`.\n- **Podman**: engine không daemon, mặc định chạy rootless, cùng định dạng ảnh OCI; có thể dùng alias `docker=podman` cho nhiều lệnh cơ bản.\n- **CRI-O**: runtime gọn dành riêng cho Kubernetes.\n\n```bash\nps -eo pid,ppid,cmd | grep -E 'dockerd|containerd|runc' | head\npodman run --rm alpine echo \"chạy không cần daemon\"\n```\n\n### Lỗi hay gặp\n- Nhầm \"Docker\" với \"container\": thay Docker bằng runtime khác trong K8s không làm hỏng ảnh bạn build vì chuẩn là OCI.\n- Cho rằng Podman và Docker hoàn toàn đổi chỗ được: compose, networking, volume có những khác biệt nhỏ cần kiểm.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình tư duy bằng hình",
+    "nguon": "Docker · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-5-ngan-xep-runtime",
+    "ten": "1.5 — Ai thật sự chạy cái container",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-6-runc",
+    "ten": "12.6 — Docker thật sự chạy gì: dockerd, containerd, shim, runc và config.json OCI — và vì sao đó không phải máy ảo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-2-rootless-podman",
+    "ten": "15.2 — Bảo mật sâu hơn: nhóm docker, Docker rootless, userns-remap và Podman",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Tiếp tục học › Deploy Container lên Production": {
+  "body": "Đưa container lên production có một nấc thang, và nên đi từng nấc theo nhu cầu thật chứ không nhảy thẳng lên cấp cao nhất.\n\n### Ý chính\n1. **Một VM/VPS + Docker Compose**: SSH vào, `docker compose pull && docker compose up -d`. Đơn giản, rẻ, đủ cho phần lớn sản phẩm nhỏ và vừa.\n2. **Docker Swarm**: nhiều máy, vẫn dùng cú pháp quen thuộc (`docker stack deploy`), tự dựng lại task, cập nhật cuốn chiếu.\n3. **Kubernetes** (tự dựng hoặc dịch vụ quản lý như EKS/GKE/AKS): nhiều tính năng nhất, chi phí vận hành cao nhất.\n4. **PaaS/dịch vụ chạy container** (Cloud Run, Render, Fly.io...): bạn đưa ảnh, nhà cung cấp lo máy chủ.\n\n### Nguyên tắc chung ở mọi nấc\n- Build ảnh ở CI, push lên registry, máy chủ chỉ **pull theo tag cố định** (SHA phiên bản), không build trên máy production.\n- Cấu hình và bí mật đưa vào lúc chạy (env, secret), không nướng vào ảnh.\n- Có healthcheck, giới hạn tài nguyên, xoay log và chính sách restart.\n- Có đường **quay lui**: giữ tag ảnh cũ, kiểm thử cách quay lại trước khi cần.\n- Có smoke test sau deploy.\n\n```bash\ndocker compose pull\ndocker compose up -d --wait\ndocker compose ps\n```\n\n### Lỗi hay gặp\n- Dùng `latest` rồi không biết đang chạy phiên bản nào.\n- Dừng bản cũ trước khi bản mới sẵn sàng nên rơi request: dùng healthcheck và `--wait`, hoặc chiến lược xanh-lục.\n- Dựng ảnh trực tiếp trên VPS nhỏ bị OOM giữa chừng.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: chạy trên production bằng hình",
+    "nguon": "Docker · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-11-4-cap-nhat-quay-lui",
+    "ten": "11.4 — Cập nhật, CI/CD, và quay lui",
+    "nguon": "Docker · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-16-3-ci-ghcr-deploy",
+    "ten": "16.3 — Đưa lên: CI build, GHCR, deploy và quay lui",
+    "nguon": "Docker · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-13-1-compose-tren-vps",
+    "ten": "13.1 — Compose trên VPS: một tệp mô tả cả cái máy",
+    "nguon": "Deploy lên VPS · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Tiếp tục học › Nền tảng PaaS hỗ trợ Container": {
+  "body": "**PaaS (Platform as a Service)** cho bạn đưa mã hoặc ảnh container lên, còn máy chủ, hệ điều hành, TLS, cân bằng tải và việc khởi động lại do nhà cung cấp lo. Đổi lại bạn trả tiền theo mức dùng và chấp nhận các ràng buộc của nền tảng.\n\n### Ý chính\n- Nhiều nền tảng nhận **Dockerfile** hoặc ảnh dựng sẵn: Heroku (container registry), Render, Railway, Fly.io, và các dịch vụ chạy container serverless của cloud lớn như Google Cloud Run, AWS App Runner/ECS Fargate, Azure Container Apps.\n- Quy ước thường gặp: app phải **lắng nghe cổng do nền tảng cấp** (thường qua biến môi trường `PORT`), ghi log ra stdout, và coi filesystem là **tạm thời** — dữ liệu lâu dài phải ở database/volume/object storage mà nền tảng cung cấp.\n- Cấu hình bằng biến môi trường trong bảng điều khiển; deploy thường kích hoạt bằng `git push` hoặc từ CI.\n- Ưu: nhanh, ít vận hành. Nhược: giá khi tải tăng, ít kiểm soát mạng/hệ điều hành, khoá nhà cung cấp ở mức nhất định.\n\n```dockerfile\nFROM node:22-alpine\nWORKDIR /app\nCOPY . .\nRUN npm ci --omit=dev\nENV PORT=8080\nCMD [\"node\", \"server.js\"]   # app đọc process.env.PORT\n```\n\n### Lỗi hay gặp\n- Cứng cổng 3000 trong code trong khi nền tảng cấp cổng khác nên health check fail.\n- Ghi upload vào đĩa container rồi mất khi instance bị thay.\n- Chọn \"gói miễn phí\" rồi gặp tình trạng ngủ đông/giới hạn khi demo.\n\nGiá và gói của từng nhà cung cấp thay đổi liên tục, hãy đối chiếu trang chính thức trước khi quyết định.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Tiếp tục học › Kubernetes (K8s) — Điều phối container quy mô lớn": {
+  "body": "**Kubernetes** (viết tắt K8s) là hệ thống điều phối container mã nguồn mở, khởi nguồn từ kinh nghiệm chạy Borg của Google, nay là chuẩn de facto ở quy mô production. Nếu Docker Compose mô tả nhiều container trên **một máy**, thì K8s quản lý hàng chục đến hàng nghìn container trên **cả một cụm máy**: đặt chúng lên node nào, dựng lại khi chết, cập nhật dần, co giãn theo tải.\n\n### Mô hình tư duy: khai báo trạng thái mong muốn\nBạn viết một file YAML nói \"tôi muốn 3 bản sao của ảnh này\", gửi cho API server. Các **controller** liên tục so sánh trạng thái thực tế với mong muốn và sửa cho khớp (pod chết thì tạo lại, node hỏng thì dời sang node khác).\n\n### Ý chính — các khối chính\n- **Cụm** gồm *control plane* (API server, etcd, scheduler, controller manager) và các *node* chạy `kubelet` cùng container runtime.\n- **Pod**: đơn vị chạy nhỏ nhất, gồm một hay vài container chia sẻ mạng và volume.\n- **Deployment** (qua ReplicaSet): giữ đủ số bản sao, cập nhật cuốn chiếu và `rollout undo`.\n- **Service**: địa chỉ ổn định + cân bằng tải trước các pod (IP của pod luôn thay đổi); **Ingress** đưa HTTP(S) từ ngoài vào.\n- **ConfigMap/Secret**: cấu hình và bí mật. Lưu ý Secret mặc định chỉ là base64, không phải mã hoá.\n- **PersistentVolumeClaim**: lưu trữ bền; **probe** (liveness/readiness) và **requests/limits** để vận hành an toàn.\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata: { name: web }\nspec:\n  replicas: 3\n  selector: { matchLabels: { app: web } }\n  template:\n    metadata: { labels: { app: web } }\n    spec:\n      containers:\n        - name: web\n          image: nginx:1.27\n          resources: { requests: { cpu: 100m, memory: 128Mi }, limits: { memory: 256Mi } }\n```\n\n```bash\nkubectl apply -f web.yaml\nkubectl get pods -w\nkubectl rollout undo deployment/web\n```\n\n### Lỗi hay gặp\n- Quên `readinessProbe` nên traffic đổ vào pod chưa sẵn sàng.\n- Không đặt requests/limits nên pod bị `OOMKilled` hoặc node quá tải.\n- Dùng K8s cho một app nhỏ chạy ổn trên một VPS: chi phí học và vận hành vượt xa lợi ích.\n\n### Tự kiểm tra\n- Vì sao không nên gọi thẳng IP của một pod mà phải qua Service?\n- Điều gì xảy ra khi bạn xoá một pod thuộc Deployment có 3 replicas?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tiếp tục học › Nomad — Lựa chọn thay thế nhẹ cho Kubernetes": {
+  "body": "**HashiCorp Nomad** là một scheduler đơn giản hơn Kubernetes: một file nhị phân duy nhất đóng cả vai server lẫn client, đọc **job** viết bằng HCL, rồi xếp việc lên các máy trong cụm. Điểm khác với Kubernetes là Nomad không chỉ chạy container: nó có nhiều *task driver* (docker, exec, java, QEMU...), nên cùng một cụm chạy được cả container lẫn ứng dụng không đóng gói.\n\n### Ý chính\n- Cấu trúc job: `job` → `group` (các task chạy cùng nhau trên một node) → `task` (một đơn vị công việc, có `driver` và `config`).\n- Tự lên lịch, tự chạy lại khi task chết, cập nhật cuốn chiếu và hỗ trợ nhiều datacenter/region.\n- Thường kết hợp Consul (khám phá dịch vụ) và Vault (bí mật) của HashiCorp, nhưng không bắt buộc.\n- Hợp khi: đội nhỏ, muốn ít thành phần vận hành hơn K8s, hoặc cần chạy hỗn hợp container và tiến trình thường. Hệ sinh thái và tài liệu của Kubernetes thì rộng hơn nhiều, nên đây là một lựa chọn thay thế, không phải mặc định.\n- Giấy phép của các sản phẩm HashiCorp đã chuyển sang BSL từ 2023; hãy đọc kỹ điều khoản nếu bạn định tích hợp vào sản phẩm thương mại.\n\n```hcl\njob \"web\" {\n  datacenters = [\"dc1\"]\n  group \"app\" {\n    count = 2\n    network { port \"http\" { to = 80 } }\n    task \"nginx\" {\n      driver = \"docker\"\n      config { image = \"nginx:1.27\"  ports = [\"http\"] }\n      resources { cpu = 200  memory = 128 }\n    }\n  }\n}\n```\n\n```bash\nnomad agent -dev          # cụm một node để thử\nnomad job run web.nomad.hcl\nnomad job status web\n```\n\n### Lỗi hay gặp\n- Cho rằng \"đơn giản\" nghĩa là không cần học: bạn vẫn phải hiểu mạng, lưu trữ, bí mật và cập nhật an toàn.\n- Chọn công cụ ít phổ biến rồi khó tuyển người/khó tìm lời giải khi gặp sự cố.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ }
+}

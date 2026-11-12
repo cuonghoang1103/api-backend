@@ -1,0 +1,1232 @@
+{
+ "Khái niệm & Cài đặt › What is Version Control?": {
+  "body": "Version control (kiểm soát phiên bản) là hệ thống ghi lại **từng thay đổi** của một tập file theo thời gian, để bạn xem lại được \"ai sửa gì, khi nào, vì sao\" và quay về bất kỳ thời điểm nào trong quá khứ. Hãy nghĩ đến nút Undo của trình soạn thảo, nhưng sống lâu hơn một phiên làm việc và dùng chung được cho cả nhóm.\n\n### Ý chính\n- Mỗi lần lưu một mốc có ý nghĩa, hệ thống ghi lại một **phiên bản** kèm tác giả, thời gian và lời nhắn.\n- Nhiều người sửa cùng dự án mà không ghi đè lên nhau: mỗi người làm trên bản của mình rồi **hợp nhất** (merge).\n- Lịch sử là tài sản: tìm commit làm hỏng chương trình, đọc lại lý do của một thay đổi cũ.\n\n### Lỗi hay gặp\n- Nhầm VCS với sao lưu: backup chụp cả thư mục theo giờ, còn VCS lưu thay đổi *có chủ đích* kèm lời giải thích.\n- Đặt tên `final_v2_that_su_final.docx` rồi gọi đó là quản lý phiên bản.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: bắt đầu với Git bằng hình",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-6-bat-dau-khi-khong-co-git",
+    "ten": "Bắt đầu tại đây (2/2) — Khi không có Git: những sự cố thật, và cách học Git mà không bỏ cuộc",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Cài đặt & git config": {
+  "body": "Trước khi tạo commit đầu tiên, Git cần biết **bạn là ai**, và bạn nên chuẩn bị sẵn cách xác thực với GitHub cùng một file `.gitignore`. Làm một lần cho mỗi máy là đủ.\n\n```bash\ngit config --global user.name  \"Nguyen Van A\"\ngit config --global user.email \"a@example.com\"\ngit config --global init.defaultBranch main\n\n# Tạo khoá SSH để đẩy code lên GitHub không cần gõ mật khẩu\nssh-keygen -t ed25519 -C \"a@example.com\"\ncat ~/.ssh/id_ed25519.pub   # dán vào GitHub > Settings > SSH keys\nssh -T git@github.com       # kiểm tra kết nối\n```\n\n### Ý chính\n- `user.name` và `user.email` được **ghi vào mọi commit**; email phải khớp với tài khoản GitHub thì commit mới hiện đúng avatar của bạn.\n- **Khoá riêng** (`id_ed25519`) không bao giờ gửi cho ai; chỉ dán khoá công khai (`.pub`).\n- `.gitignore` liệt kê file Git không theo dõi (`node_modules/`, `.env`, file build).\n\n### Lỗi hay gặp\n- Commit trước khi cấu hình, kết quả là tác giả \"unknown\" hoặc email cá nhân lộ ra repo công ty.\n- Dán nhầm file khoá riêng thay vì `.pub`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: bắt đầu với Git bằng hình",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-3-cai-dat-cau-hinh",
+    "ten": "0.3 — Cài đặt & cấu hình Git, và tạo khoá SSH",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-2-danh-tinh",
+    "ten": "KĐ.2 — Danh tính: user.name, user.email và những cài đặt làm một lần cho mỗi máy",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-14-3-cau-hinh",
+    "ten": "14.3 — .gitconfig nâng cao: alias, hai danh tính với includeIf, --show-origin",
+    "nguon": "Git & GitHub · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Hệ thống kiểm soát phiên bản (Version Control)": {
+  "body": "Một hệ thống kiểm soát phiên bản gồm hai thứ: một **kho lưu lịch sử** các thay đổi và một tập lệnh để thao tác trên kho đó. Có ba thế hệ: cục bộ (RCS, lưu bản vá trên một máy), tập trung (SVN, CVS: một máy chủ giữ lịch sử, mọi người nối vào) và phân tán (Git, Mercurial: mỗi người có bản sao đầy đủ).\n\n### Vì sao cần biết\nHiểu mô hình giúp bạn hiểu vì sao Git commit được khi không có mạng, vì sao tạo nhánh gần như tức thì, và vì sao \"mất server\" không đồng nghĩa mất lịch sử.\n\n### Ý chính\n- **Commit** là một mốc lưu; **repository** là toàn bộ các mốc cùng nhau.\n- Hệ phân tán: không có \"bản duy nhất đúng\" về mặt kỹ thuật; nhóm *thoả thuận* một remote làm nơi chung (thường gọi `origin`).\n- Hầu hết đội phần mềm hôm nay dùng Git, kèm GitHub/GitLab/Bitbucket làm nơi cộng tác.\n\n### Tự kiểm tra\n- Khác biệt cốt lõi giữa VCS tập trung và phân tán là gì?\n- Nếu máy chủ GitHub biến mất, bạn còn gì trên máy?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: bắt đầu với Git bằng hình",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Git vs các hệ thống VCS khác": {
+  "body": "Git thuộc nhóm hệ **phân tán**, còn Subversion (SVN) và CVS là **tập trung**; Mercurial cũng phân tán và có thiết kế khá gần Git. Khác biệt lớn nhất nằm ở chỗ lịch sử sống ở đâu và các thao tác tốn bao nhiêu.\n\n### Ý chính\n- SVN/CVS: cần kết nối máy chủ để xem log, commit; nhánh là thư mục sao chép nên nặng.\n- Git: mỗi bản clone có đủ lịch sử; commit, xem log, tạo nhánh đều chạy cục bộ và rất nhanh.\n- Git lưu mỗi commit như một **ảnh chụp** toàn dự án (nén và dùng chung dữ liệu giống nhau), không phải danh sách diff từng file.\n- Đổi lại, Git có đường học khó hơn (staging, rebase, các vùng).\n\n### Lỗi hay gặp\nMang thói quen SVN sang Git: dồn thay đổi lớn rồi mới commit một lần, hoặc cứ làm trực tiếp trên `main`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Cài đặt Git trên máy local": {
+  "body": "Cài Git là bước đầu tiên: tải bộ cài chính thức, chạy xong là có lệnh `git` trong terminal.\n\n- **Windows:** tải *Git for Windows* từ git-scm.com; bộ cài kèm **Git Bash**, một terminal dùng được các lệnh kiểu Linux.\n- **macOS:** gõ `git --version`; nếu chưa có, hệ thống đề nghị cài Xcode Command Line Tools. Hoặc dùng Homebrew.\n- **Linux:** dùng trình quản lý gói của bản phân phối.\n\n```bash\ngit --version     # kiểm tra đã cài và xem phiên bản\nwhich git         # (macOS/Linux) Git nằm ở đâu\n```\n\n### Lỗi hay gặp\n- Cài xong nhưng mở terminal **cũ** nên chưa nhận lệnh: đóng mở lại terminal.\n- Windows: có nhiều bản Git trên PATH khiến hành vi lệch nhau; kiểm tra bằng `where git`.\n- Quên cấu hình `user.name`/`user.email` sau khi cài.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-1-kiem-tra-cai-dat",
+    "ten": "KĐ.1 — Cài và kiểm tra Git trên Windows và Mac, mở terminal đúng thư mục",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-3-cai-dat-cau-hinh",
+    "ten": "0.3 — Cài đặt & cấu hình Git, và tạo khoá SSH",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Cấu hình Git với git config": {
+  "body": "`git config` đọc và ghi các thiết lập của Git. Hai thiết lập bắt buộc nên có là tên và email; Git ghi chúng vào mọi commit bạn tạo.\n\n```bash\ngit config --global user.name  \"Nguyen Van A\"\ngit config --global user.email \"a@example.com\"\ngit config --global core.editor \"code --wait\"   # editor mở khi cần gõ lời nhắn\ngit config --global pull.rebase false           # chọn cách pull cho rõ ràng\ngit config --list                               # xem tất cả\ngit config user.email                           # xem một khoá\n```\n\n### Ý chính\n- Cú pháp: `git config [phạm vi] <khoá> <giá trị>`.\n- Có thể đặt **alias** để gõ ngắn: `git config --global alias.st status`.\n- Thiết lập lưu ở file văn bản (`~/.gitconfig` hoặc `.git/config`), sửa tay được.\n\n### Lỗi hay gặp\nDùng email khác với tài khoản GitHub, nên commit không gắn với hồ sơ của bạn.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-3-cai-dat-cau-hinh",
+    "ten": "0.3 — Cài đặt & cấu hình Git, và tạo khoá SSH",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-2-danh-tinh",
+    "ten": "KĐ.2 — Danh tính: user.name, user.email và những cài đặt làm một lần cho mỗi máy",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-14-3-cau-hinh",
+    "ten": "14.3 — .gitconfig nâng cao: alias, hai danh tính với includeIf, --show-origin",
+    "nguon": "Git & GitHub · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Cấu hình Local vs Global": {
+  "body": "Git đọc cấu hình từ ba tầng, tầng hẹp hơn **ghi đè** tầng rộng hơn:\n\n| Tầng | Cờ | File | Áp dụng cho |\n|---|---|---|---|\n| system | `--system` | `/etc/gitconfig` | mọi người dùng trên máy |\n| global | `--global` | `~/.gitconfig` | tài khoản của bạn, mọi repo |\n| local | `--local` (mặc định) | `.git/config` | chỉ repo hiện tại |\n\nTình huống thật: máy dùng chung cho dự án công ty và dự án cá nhân. Đặt email cá nhân ở global, rồi trong repo công ty chạy `git config user.email \"ban@congty.com\"` để chỉ repo đó dùng email công ty.\n\n```bash\ngit config --show-origin user.email   # email này đến từ file nào?\ngit config --list --show-scope\n```\n\n### Lỗi hay gặp\nQuên mình đang ở tầng nào: đặt `--global` mà tưởng chỉ ảnh hưởng một repo. Khi nghi ngờ hãy dùng `--show-origin`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-14-3-cau-hinh",
+    "ten": "14.3 — .gitconfig nâng cao: alias, hai danh tính với includeIf, --show-origin",
+    "nguon": "Git & GitHub · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-2-danh-tinh",
+    "ten": "KĐ.2 — Danh tính: user.name, user.email và những cài đặt làm một lần cho mỗi máy",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-3-cai-dat-cau-hinh",
+    "ten": "0.3 — Cài đặt & cấu hình Git, và tạo khoá SSH",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Tại sao cần Version Control?": {
+  "body": "Không có version control, nhóm 3 người cùng sửa một thư mục sẽ sớm gặp cảnh ghi đè file của nhau, không biết bản nào mới nhất, không ai nhớ vì sao một dòng được sửa. Version control biến những vấn đề đó thành thao tác có quy trình.\n\n### Vì sao cần biết\n- **Quay lui:** lỡ sửa hỏng thì về lại bản chạy được.\n- **Cộng tác:** nhiều người làm song song trên nhánh riêng rồi hợp nhất.\n- **Truy vết:** `git blame`/`git log` cho biết thay đổi do ai và vì sao.\n- **Thử nghiệm an toàn:** thử tính năng trên nhánh, hỏng thì bỏ.\n- **Nền của CI/CD:** pipeline build và triển khai dựa trên commit.\n\n### Tự kiểm tra\nNhớ lại lần bạn mất code hay ghi đè bản của bạn cùng nhóm; Git sẽ giúp tránh nó ở bước nào?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-6-bat-dau-khi-khong-co-git",
+    "ten": "Bắt đầu tại đây (2/2) — Khi không có Git: những sự cố thật, và cách học Git mà không bỏ cuộc",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Git so với các hệ thống VCS khác": {
+  "body": "Điểm khác biệt khiến Git thống trị: nó là hệ **phân tán**, nhánh rẻ và hoạt động ngoại tuyến.\n\n### Ý chính\n- **Phân tán vs tập trung:** SVN/CVS cần máy chủ cho hầu hết thao tác; Git cho mỗi người một bản sao toàn bộ lịch sử.\n- **Snapshot vs delta:** Git coi mỗi commit là ảnh chụp cả dự án (file không đổi chỉ trỏ tới bản cũ); nhiều VCS cũ lưu danh sách thay đổi theo từng file.\n- **Toàn vẹn:** mọi đối tượng có mã băm SHA, nên lịch sử bị sửa ngầm sẽ lộ ra.\n- **Nhánh nhẹ:** tạo, chuyển, xoá nhánh trong tích tắc, vì nhánh chỉ là một con trỏ.\n- **Hệ sinh thái:** GitHub/GitLab, pull request, CI đều xoay quanh Git.\n\n### Lỗi hay gặp\nCho rằng Git \"cần GitHub\": Git chạy hoàn toàn cục bộ; GitHub chỉ là một nơi lưu remote.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-2-van-de-git-giai-quyet",
+    "ten": "0.2 — Vấn đề Git giải quyết (và vì sao thư mục thì không)",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Khái niệm & Cài đặt › Cài đặt Git qua Package Manager": {
+  "body": "Cài Git bằng trình quản lý gói tiện ở chỗ cập nhật bằng một lệnh, và dễ ghi vào script thiết lập máy.\n\n```bash\n# macOS (Homebrew)\nbrew install git\n# Ubuntu / Debian\nsudo apt update && sudo apt install git\n# Fedora\nsudo dnf install git\n# Windows\nwinget install --id Git.Git -e\nchoco install git\n```\n\n### Lỗi hay gặp\n- Bản Git trong kho gói của một số distro cũ hơn bản mới nhất; cần tính năng mới thì thêm kho PPA hoặc tải từ git-scm.com.\n- Trên macOS có thể có hai bản (của Apple và của Homebrew); `which git` cho biết bản nào đang chạy.\n- Luôn kiểm bằng `git --version` sau khi cài.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-1-kiem-tra-cai-dat",
+    "ten": "KĐ.1 — Cài và kiểm tra Git trên Windows và Mac, mở terminal đúng thư mục",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-3-cai-dat-cau-hinh",
+    "ten": "0.3 — Cài đặt & cấu hình Git, và tạo khoá SSH",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Repository & Staging › git init / Cloning Repositories": {
+  "body": "Có hai cách có một repo trên máy: **tạo mới** từ thư mục sẵn có bằng `git init`, hoặc **tải về** repo đã tồn tại bằng `git clone`.\n\n```bash\n# Tạo mới\nmkdir bai-tap && cd bai-tap\ngit init -b main\n# Tải về (lấy cả lịch sử và tự gắn remote origin)\ngit clone https://github.com/user/du-an.git\ngit clone git@github.com:user/du-an.git ten-thu-muc-tuy-chon\n```\n\n### Ý chính\n- `git init` tạo thư mục ẩn `.git/`, chứa toàn bộ lịch sử; xoá nó là mất repo.\n- `git clone` = tạo thư mục + tải mọi commit + checkout nhánh mặc định + đặt `origin`.\n- **Đừng tải ZIP** từ GitHub: bạn mất lịch sử và đường nối tới remote.\n\n### Lỗi hay gặp\n- `git init` ngay trong thư mục đã nằm trong một repo khác (repo lồng nhau).\n- Clone xong quên `cd` vào đúng thư mục trước khi gõ lệnh.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-6-clone-du-an",
+    "ten": "KĐ.6 — Thành viên lấy dự án về: git clone một lần, đừng tải ZIP, và mở ĐÚNG thư mục đó",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Repository & Staging › Working Directory, Staging Area & Commit": {
+  "body": "Git chia công việc thành ba vùng mà bạn di chuyển thay đổi qua lại: **working directory** (file bạn đang sửa), **staging area** (danh sách những gì sẽ vào commit kế tiếp) và **repository** (các commit đã lưu).\n\n```bash\necho \"xin chao\" > a.txt   # sửa ở working directory\ngit add a.txt             # đưa vào staging\ngit commit -m \"Thêm a.txt\"  # lưu vào repository\ngit status                # xem file đang ở vùng nào\n```\n\n### Vì sao cần biết\nVùng staging cho phép bạn chọn *chính xác* thay đổi nào vào commit, nên một ngày làm việc có thể tách thành vài commit gọn gàng, mỗi commit một ý.\n\n### Ý chính\n- `git status` luôn chỉ rõ file thuộc vùng nào.\n- Một file có thể vừa có bản đã staged vừa có thay đổi mới chưa staged.\n- Khi thêm remote còn có thêm vùng thứ tư: kho trên máy chủ.\n\n### Tự kiểm tra\nSửa `a.txt`, `git add`, rồi sửa tiếp. Commit sẽ chứa bản nào?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-1-ba-cai-cay",
+    "ten": "1.1 — Ba cái cây: thư mục làm việc, index, HEAD",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Repository & Staging › Viewing Commit History (git log)": {
+  "body": "`git log` liệt kê lịch sử commit, mới nhất ở trên cùng. Dạng mặc định khá dài, nên người dùng thạo hầu như luôn thêm cờ.\n\n```bash\ngit log                      # đầy đủ: hash, tác giả, ngày, lời nhắn\ngit log --oneline            # mỗi commit một dòng\ngit log --oneline --graph --all   # vẽ cây nhánh\ngit log -5                   # chỉ 5 commit gần nhất\ngit log -- src/app.js        # lịch sử của riêng một file\n```\n\n### Ý chính\n- Nhấn `q` để thoát khung xem.\n- Hash ngắn (7 ký tự đầu) thường đủ để tham chiếu một commit.\n- Kho mã giống một cơ sở dữ liệu; `git log` là ngôn ngữ truy vấn của nó.\n\n### Lỗi hay gặp\nQuên `--all` nên không thấy các nhánh khác khi vẽ đồ thị.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: đọc lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-1-git-log",
+    "ten": "2.1 — git log: biến lịch sử thành một truy vấn",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Repository & Staging › Repository là gì": {
+  "body": "**Repository** (repo, kho) là thư mục dự án cộng với toàn bộ lịch sử thay đổi của nó. Về mặt kỹ thuật, đó là thư mục ẩn `.git/` nằm cạnh các file của bạn; phần còn lại, các file bạn thấy và sửa, chính là working directory.\n\n### Ý chính\n- Repo **cục bộ** nằm trên máy bạn; repo **remote** nằm trên máy chủ (GitHub, GitLab…); chúng đồng bộ bằng `push`/`pull`.\n- Trong `.git/` có các đối tượng (commit, tree, blob), con trỏ nhánh và `HEAD`, file cấu hình.\n- Một dự án có thể có nhiều remote và nhiều bản clone độc lập.\n\n```bash\nls -a        # thấy thư mục .git\ngit status   # chỉ chạy được khi đang ở trong repo\n```\n\n### Lỗi hay gặp\n- Xoá nhầm `.git` rồi tưởng chỉ xoá \"file ẩn\": mất toàn bộ lịch sử chưa đẩy lên remote.\n- Chạy lệnh Git ở thư mục không phải repo: lỗi `not a git repository`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-9-1-thu-muc-git",
+    "ten": "9.1 — Tham quan thư mục .git",
+    "nguon": "Git & GitHub · Chương 9",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Repository & Staging › Khởi tạo Repository cục bộ với git init": {
+  "body": "`git init` biến một thư mục thường thành repo Git bằng cách tạo thư mục `.git/` bên trong. Chưa có commit nào; mọi file đều là \"untracked\".\n\n```bash\nmkdir my-app && cd my-app\ngit init -b main          # -b đặt tên nhánh đầu tiên\necho \"# My App\" > README.md\ngit add README.md\ngit commit -m \"Khởi tạo dự án\"\ngit remote add origin git@github.com:user/my-app.git\ngit push -u origin main   # đẩy lần đầu, nhớ nhánh theo dõi\n```\n\n### Ý chính\n- Chạy lại `git init` trong repo cũ là an toàn, không xoá gì.\n- Git không theo dõi thư mục rỗng; nếu cần giữ, đặt file giữ chỗ như `.gitkeep`.\n- Tạo `.gitignore` *trước* commit đầu tiên để khỏi lỡ commit file rác.\n\n### Lỗi hay gặp\nKhởi tạo xong mới phát hiện đã commit nhầm file bí mật; khi đó nó nằm trong lịch sử và cần gỡ riêng.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-9-1-thu-muc-git",
+    "ten": "9.1 — Tham quan thư mục .git",
+    "nguon": "Git & GitHub · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Repository & Staging › Working Directory": {
+  "body": "**Working directory** (còn gọi working tree) là các file bạn đang thấy và sửa trên đĩa, ứng với *một* phiên bản được checkout. Nó là nơi duy nhất bạn thật sự viết code; hai vùng còn lại (staging, repository) nằm trong `.git/`.\n\n### Ý chính\n- File trong working directory có hai trạng thái: **tracked** (Git đã biết) và **untracked** (mới, chưa theo dõi).\n- File tracked lại có thể *unmodified*, *modified* (đã sửa nhưng chưa staged) hoặc *staged*.\n- `git status` tóm tắt những thay đổi này; `git restore <file>` bỏ thay đổi chưa staged và đưa file về bản gần nhất.\n\n```bash\ngit status\ngit restore app.js    # CẨN THẬN: bỏ hẳn thay đổi chưa commit của file\n```\n\n### Lỗi hay gặp\n`git restore`/`git checkout -- file` xoá thay đổi chưa commit mà không hỏi lại; Git không cứu được vì chúng chưa từng được lưu.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-1-ba-cai-cay",
+    "ten": "1.1 — Ba cái cây: thư mục làm việc, index, HEAD",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Repository & Staging › Staging Area (Index)": {
+  "body": "**Staging area** (còn gọi **index**) là vùng đệm giữa working directory và repository: nơi bạn \"soạn\" commit tiếp theo. Chỉ những gì đã `git add` mới vào commit.\n\n```bash\ngit add file.js          # staging cả file\ngit add -p               # chọn từng khối thay đổi (hunk)\ngit restore --staged file.js   # rút khỏi staging, giữ nguyên nội dung sửa\ngit diff --staged        # xem commit sắp tạo chứa gì\n```\n\n### Vì sao cần biết\nBạn sửa ba việc không liên quan trong một buổi chiều. Nhờ staging, bạn tạo ba commit riêng, mỗi cái một mục đích, dễ review và dễ hoàn tác.\n\n### Lỗi hay gặp\n- `git add .` hấp tấp kéo cả file tạm hoặc bí mật vào commit.\n- Sửa file *sau khi* add mà quên add lại, nên commit chứa bản cũ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-1-ba-cai-cay",
+    "ten": "1.1 — Ba cái cây: thư mục làm việc, index, HEAD",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Repository & Staging › Committing Changes": {
+  "body": "`git commit` lưu thành một **commit** những gì đang trong staging. Commit là một ảnh chụp toàn dự án, kèm tác giả, thời gian, lời nhắn và trỏ tới commit cha; nó được định danh bằng mã băm SHA.\n\n```bash\ngit commit -m \"Sửa lỗi đăng nhập khi mật khẩu có dấu cách\"\ngit commit           # mở editor để viết lời nhắn nhiều dòng\ngit commit -a -m \"…\" # tự stage file tracked đã sửa (không gồm file mới)\n```\n\n### Ý chính\n- Commit nhỏ, một ý, và luôn ở trạng thái chạy được.\n- Lời nhắn: dòng đầu ngắn (khoảng 50 ký tự), nói *vì sao/cái gì*; thêm đoạn giải thích sau một dòng trống nếu cần.\n- Commit đã tạo gần như bất biến; \"sửa\" nghĩa là tạo commit mới (hoặc `--amend`).\n\n### Lỗi hay gặp\n- Lời nhắn \"fix\", \"update\", \"aaa\" khiến một năm sau không ai hiểu.\n- Commit một khối khổng lồ gồm nhiều việc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-2-commit-la-gi",
+    "ten": "1.2 — Một commit thật sự là gì: ảnh chụp, mã băm & commit cha",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-4-loi-nhan-commit",
+    "ten": "1.4 — Lời nhắn commit một năm sau vẫn còn dùng được",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Repository & Staging › .gitignore": {
+  "body": "`.gitignore` là file văn bản ở gốc repo liệt kê các mẫu đường dẫn Git phải **bỏ qua** (không hiện trong `git status`, không bị `git add .` kéo vào).\n\n```gitignore\nnode_modules/\ndist/\n.env\n*.log\n.DS_Store\n!important.log   # ngoại lệ: vẫn theo dõi file này\n```\n\n### Ý chính\n- Nên ignore: thư mục phụ thuộc, file build, log, cấu hình IDE, và **mọi bí mật** (`.env`, khoá).\n- `.gitignore` chỉ có tác dụng với file *chưa được theo dõi*. File đã commit rồi thì phải gỡ khỏi chỉ mục: `git rm --cached <file>`.\n- File này cũng được commit để cả nhóm dùng chung quy tắc.\n\n### Lỗi hay gặp\n- Thêm `.env` vào `.gitignore` *sau khi* đã commit nó: bí mật vẫn nằm trong lịch sử và phải coi là đã lộ.\n- Ignore luôn cả file cấu hình mẫu mà đồng đội cần.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-5-gitignore",
+    "ten": "1.5 — .gitignore, và thứ không bao giờ được commit",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Repository & Staging › Git Remotes": {
+  "body": "**Remote** là một bản sao của repo đặt ở nơi khác (GitHub, GitLab, máy chủ công ty), được đặt cho một cái tên ngắn. Tên mặc định khi clone là `origin`; thực chất nó chỉ là biệt danh của một URL.\n\n```bash\ngit remote -v                                # liệt kê remote và URL\ngit remote add origin git@github.com:u/r.git\ngit fetch origin                             # tải dữ liệu mới, chưa gộp\ngit push origin main\n```\n\n### Ý chính\n- Remote không tự đồng bộ; mọi thứ diễn ra khi bạn `fetch`/`pull`/`push`.\n- Nhánh theo dõi remote như `origin/main` là bản nhớ của bạn về nhánh `main` trên remote ở lần liên lạc gần nhất.\n- Một repo có thể có nhiều remote (ví dụ `origin` là fork của bạn, `upstream` là dự án gốc).\n\n### Lỗi hay gặp\nTưởng `origin/main` luôn mới nhất; thực ra nó cũ cho tới khi bạn `fetch`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: remote bằng hình",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull",
+    "ten": "5.1 — Remote là gì, và vì sao fetch ≠ pull",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-3-push",
+    "ten": "5.3 — Push: nhánh theo dõi, tag, và xoá",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Repository & Staging › git log options": {
+  "body": "`git log` có nhiều cờ biến nó thành công cụ điều tra. Một số cờ dùng hằng ngày:\n\n```bash\ngit log --oneline --graph --decorate --all   # cây nhánh gọn\ngit log --author=\"An\" --since=\"2 weeks ago\"  # lọc theo người, thời gian\ngit log --grep=\"login\"                       # lọc theo lời nhắn\ngit log -S\"calculateTax\"                     # commit nào thêm/bớt chuỗi này\ngit log --stat                               # kèm số dòng đổi mỗi file\ngit log main..feature                        # có ở feature mà chưa ở main\ngit log --pretty=format:\"%h %an %s\"          # tự định dạng\n```\n\n### Ý chính\n- Cờ kết hợp được với nhau.\n- `A..B` nghĩa là \"commit của B mà A chưa có\"; đây là cách xem một nhánh sắp đem lại gì.\n- Đặt alias cho dạng bạn dùng nhiều: `git config --global alias.lg \"log --oneline --graph --all\"`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-1-git-log",
+    "ten": "2.1 — git log: biến lịch sử thành một truy vấn",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: đọc lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Repository & Staging › Between Commits": {
+  "body": "So sánh hai commit bất kỳ để xem *từ A đến B đã đổi gì* là cách điều tra \"bản trước còn chạy, bản sau thì không\".\n\n```bash\ngit diff abc1234 def5678            # hai commit\ngit diff HEAD~3 HEAD                # ba commit gần nhất gộp lại\ngit diff v1.0 v2.0 --stat           # giữa hai tag, chỉ thống kê\ngit diff abc1234 def5678 -- src/    # giới hạn vào một thư mục\ngit show abc1234                    # nội dung một commit\n```\n\n### Ý chính\n- `HEAD~N` là tổ tiên thứ N của HEAD.\n- `--stat` và `--name-only` giúp đọc diff lớn.\n- Diff hai điểm bất kỳ không đổi working tree; chỉ in ra.\n\n### Lỗi hay gặp\nĐảo thứ tự hai commit nên dấu `+`/`-` bị đọc ngược.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-2-show-va-diff",
+    "ten": "2.2 — git show và so sánh hai thời điểm bất kỳ",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: đọc lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Repository & Staging › Between Branches": {
+  "body": "So sánh hai nhánh giúp bạn biết trước khi merge: nhánh kia mang thêm gì.\n\n```bash\ngit diff main feature            # khác biệt hai đầu nhánh\ngit diff main..feature           # tương tự\ngit diff main...feature          # chỉ thay đổi của feature kể từ tổ tiên chung\ngit diff main feature --name-only\ngit log main..feature --oneline  # liệt kê commit mới\n```\n\n### Ý chính\n- Hai chấm `..` so sánh trực tiếp hai đầu nhánh; ba chấm `...` so với *điểm tách ra* (merge base), đúng thứ pull request hiển thị.\n- Nếu `main` đã đi tiếp, dùng hai chấm sẽ lẫn cả thay đổi của `main`.\n\n### Lỗi hay gặp\nDùng `main..feature` rồi hoảng vì thấy \"xoá\" nhiều thứ: đó là những thứ `main` có thêm sau khi feature tách ra.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-2-show-va-diff",
+    "ten": "2.2 — git show và so sánh hai thời điểm bất kỳ",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Repository & Staging › Staged Changes": {
+  "body": "`git diff --staged` (đồng nghĩa `--cached`) cho thấy sự khác nhau giữa **staging area và commit gần nhất**, tức đúng nội dung commit tiếp theo sẽ chứa.\n\n```bash\ngit add -p\ngit diff --staged        # đọc lại lần cuối trước khi commit\ngit diff --staged --stat\ngit commit\n```\n\n### Vì sao cần biết\nThói quen \"tự review diff của chính mình\" trước khi commit bắt được nhiều lỗi nhất: dòng `console.log` quên xoá, file nhầm, khoảng trắng thừa.\n\n### Lỗi hay gặp\nGõ `git diff` trơn không thấy gì rồi tưởng mình chưa sửa gì: thay đổi đã staged nên phải dùng `--staged`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-1-ba-cai-cay",
+    "ten": "1.1 — Ba cái cây: thư mục làm việc, index, HEAD",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Repository & Staging › Unstaged Changes": {
+  "body": "`git diff` không đối số so sánh **working directory với staging area**, tức những gì bạn đã sửa nhưng chưa `git add`.\n\n```bash\ngit diff                 # tất cả thay đổi chưa staged\ngit diff src/app.js      # một file\ngit diff --stat\ngit diff -w              # bỏ qua khác biệt khoảng trắng\n```\n\n### Ý chính\n- File mới, chưa tracked, không xuất hiện trong `git diff`; dùng `git status` để thấy chúng.\n- Sau `git add`, thay đổi biến khỏi `git diff` và xuất hiện trong `git diff --staged`.\n- Trộn hai lệnh này cho bạn bức tranh đầy đủ về \"đang dở những gì\".\n\n### Lỗi hay gặp\nDiff rỗng vì file đã staged; hoặc vì file bị `.gitignore` bỏ qua.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-1-ba-cai-cay",
+    "ten": "1.1 — Ba cái cây: thư mục làm việc, index, HEAD",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Repository & Staging › Viewing Diffs": {
+  "body": "Có bốn phép so sánh Git hay dùng, tương ứng với các vùng:\n\n| Lệnh | So sánh |\n|---|---|\n| `git diff` | working directory ↔ staging |\n| `git diff --staged` | staging ↔ commit gần nhất |\n| `git diff HEAD` | working directory ↔ commit gần nhất |\n| `git diff A B` | hai commit/nhánh/tag bất kỳ |\n\nMột diff đọc theo khối (`@@ -10,6 +10,8 @@`): dòng `-` là bị bỏ, dòng `+` là thêm, dòng không dấu là ngữ cảnh.\n\n### Ý chính\n- Dùng `--stat`, `--name-only`, `--word-diff` để đọc dễ hơn.\n- Thêm `-- <đường dẫn>` để giới hạn file.\n- `git difftool` mở công cụ so sánh đồ hoạ.\n\n### Tự kiểm tra\nBạn vừa sửa và `git add` file A, rồi sửa tiếp. Lệnh nào cho thấy phần sửa tiếp, lệnh nào cho thấy phần đã add?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-2-show-va-diff",
+    "ten": "2.2 — git show và so sánh hai thời điểm bất kỳ",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-0-slides",
+    "ten": "2.0 — Slide Chương 2: đọc lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Branching › Creating, Renaming & Deleting Branch": {
+  "body": "Nhánh (branch) cho phép bạn làm một việc riêng, tách khỏi dòng chính, rồi ghép lại khi xong. Trong Git việc này rẻ đến mức làm cho mỗi tính năng, mỗi lỗi một nhánh là chuyện bình thường.\n\n```bash\ngit branch                     # liệt kê nhánh (dấu * là nhánh hiện tại)\ngit branch feature/login       # tạo\ngit switch -c feature/login    # tạo và chuyển sang luôn\ngit branch -m feature/login feature/dang-nhap   # đổi tên\ngit branch -d feature/dang-nhap # xoá (chỉ khi đã merge)\ngit branch -D feature/dang-nhap # xoá ép buộc\n```\n\n### Ý chính\n- Đặt tên nhánh có quy ước: `feature/…`, `fix/…`, `docs/…`.\n- Không xoá được nhánh bạn đang đứng; chuyển sang nhánh khác trước.\n- Xoá nhánh chỉ xoá con trỏ; commit vẫn còn trong reflog một thời gian.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: nhánh, hợp nhất và rebase bằng hình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Branching › Checkout Branch & Detached HEAD": {
+  "body": "`git switch` (hoặc `git checkout` kiểu cũ) chuyển bạn sang nhánh khác: Git đổi `HEAD` và cập nhật các file trong working directory cho khớp.\n\n```bash\ngit switch main\ngit switch -              # quay lại nhánh trước\ngit switch --detach a1b2c3d   # xem một commit cụ thể\ngit checkout v1.0         # trỏ vào tag -> detached HEAD\n```\n\n**Detached HEAD** xảy ra khi `HEAD` trỏ thẳng vào một commit chứ không phải vào một tên nhánh. Bạn vẫn xem, thử, thậm chí commit được, nhưng các commit mới *không thuộc nhánh nào*; chuyển đi chỗ khác là chúng chỉ còn trong reflog.\n\n### Cách xử lý\nMuốn giữ công việc: `git switch -c ten-nhanh-moi` ngay tại đó. Muốn bỏ: chỉ cần `git switch main`.\n\n### Lỗi hay gặp\nCommit nhiều lần trong trạng thái detached rồi chuyển nhánh, tưởng đã mất; hãy tìm lại bằng `git reflog`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-4-reflog",
+    "ten": "4.4 — git reflog: không gì thật sự mất",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: nhánh, hợp nhất và rebase bằng hình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Branching › Fast-Forward vs Non-FF Merge": {
+  "body": "Khi hợp nhất nhánh `feature` vào `main`, có hai kết quả khác nhau.\n\n- **Fast-forward (FF):** nếu `main` chưa có commit mới nào kể từ lúc `feature` tách ra, Git chỉ việc dời con trỏ `main` tới đầu `feature`. Không có commit mới, lịch sử là một đường thẳng.\n- **Non-FF (hợp nhất ba chiều):** nếu `main` đã đi tiếp, Git tạo một **merge commit** có hai cha, kết hợp hai dòng lịch sử.\n\n```bash\ngit switch main\ngit merge feature            # FF nếu có thể\ngit merge --no-ff feature    # luôn tạo merge commit\ngit merge --ff-only feature  # từ chối nếu không FF được\n```\n\n### Ý chính\n- `--no-ff` giữ lại dấu vết \"tính năng này là một nhóm commit\" trong lịch sử.\n- `--ff-only` bảo vệ nhánh chính khỏi merge commit ngoài ý muốn.\n\n### Tự kiểm tra\nTrong tình huống nào Git bắt buộc tạo merge commit?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-2-hai-kieu-merge",
+    "ten": "3.2 — Fast-forward vs hợp nhất ba chiều",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: nhánh, hợp nhất và rebase bằng hình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Branching › Branching Basics": {
+  "body": "Branch là một **con trỏ di động** tới một commit. Khi bạn commit lúc đang đứng trên nhánh, con trỏ đó tự tiến tới commit mới. Vì vậy một nhánh chỉ là một file nhỏ chứa mã băm, và `HEAD` cho biết bạn đang đứng ở nhánh nào.\n\n### Vì sao cần biết\nHiểu điều này làm mọi thứ sáng ra: tạo nhánh tức thì, xoá nhánh không xoá code, merge/rebase chỉ là cách dời các con trỏ và tạo commit.\n\n### Ý chính\n- `main` chỉ là một cái tên quy ước, không đặc biệt về kỹ thuật.\n- Nhiều nhánh có thể cùng trỏ vào một commit.\n- Commit không có nhánh/tag nào trỏ tới sẽ bị dọn khi `gc` chạy, sau thời gian lưu giữ trong reflog.\n\n```bash\ncat .git/refs/heads/main   # một dòng mã băm\ncat .git/HEAD              # ref: refs/heads/main\n```",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: nhánh, hợp nhất và rebase bằng hình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-9-1-thu-muc-git",
+    "ten": "9.1 — Tham quan thư mục .git",
+    "nguon": "Git & GitHub · Chương 9",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Branching › Tạo nhánh với git branch / git checkout -b": {
+  "body": "Có hai bước: tạo con trỏ nhánh mới tại commit hiện tại, rồi chuyển sang đó. Git cho phép gộp thành một lệnh.\n\n```bash\ngit branch fix/typo        # chỉ tạo, vẫn đứng ở nhánh cũ\ngit switch fix/typo        # chuyển sang\ngit switch -c fix/typo     # tạo + chuyển (cách hiện đại)\ngit checkout -b fix/typo   # cách cũ, tương đương\ngit switch -c hotfix v1.0  # tạo nhánh từ một tag/commit khác\n```\n\n### Ý chính\n- Nhánh mới bắt đầu từ chỗ bạn đang đứng, nên hãy `git switch main` và `git pull` trước khi tách nhánh để nó xuất phát từ code mới nhất.\n- Thay đổi chưa commit sẽ đi theo bạn sang nhánh mới (nếu không xung đột).\n\n### Lỗi hay gặp\nTách nhánh từ một nhánh feature khác mà không để ý, kéo cả những commit không liên quan vào pull request.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: nhánh, hợp nhất và rebase bằng hình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Branching › Renaming Branch": {
+  "body": "Đổi tên nhánh cục bộ bằng `git branch -m`.\n\n```bash\ngit branch -m ten-moi              # đổi tên nhánh hiện tại\ngit branch -m ten-cu ten-moi       # đổi nhánh khác\ngit branch -M master main          # -M: ép buộc nếu tên đích đã có\n```\n\nNếu nhánh đã được đẩy lên remote, remote **không tự đổi**:\n\n```bash\ngit push origin -u ten-moi          # đẩy nhánh tên mới\ngit push origin --delete ten-cu     # xoá nhánh tên cũ trên remote\n```\n\n### Lỗi hay gặp\n- Quên cập nhật remote, nên đồng đội vẫn trỏ về tên cũ.\n- Đổi tên nhánh mặc định của repo chung mà không báo nhóm; trên GitHub nên đổi trong Settings để PR tự cập nhật.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-3-push",
+    "ten": "5.3 — Push: nhánh theo dõi, tag, và xoá",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Branching › Deleting Branch": {
+  "body": "Xoá nhánh là dọn dẹp sau khi công việc đã được hợp nhất.\n\n```bash\ngit branch -d feature/login      # an toàn: từ chối nếu chưa merge\ngit branch -D feature/login      # ép xoá, mất commit chưa merge khỏi tầm thấy\ngit push origin --delete feature/login   # xoá trên remote\ngit fetch --prune                # dọn nhánh remote đã bị xoá\n```\n\n### Ý chính\n- `-d` kiểm tra nhánh đã nằm trong nhánh hiện tại hay upstream chưa.\n- Xoá nhầm với `-D`? Tìm commit trong `git reflog` rồi `git branch tên <hash>` để dựng lại.\n- Nhiều đội bật \"tự xoá nhánh sau khi merge\" trên GitHub.\n\n### Lỗi hay gặp\nXoá nhánh trên remote rồi quên rằng đồng đội còn công việc chưa merge trên nhánh đó.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-1-nhanh-la-gi",
+    "ten": "3.1 — Một nhánh là một file 41 byte",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-4-reflog",
+    "ten": "4.4 — git reflog: không gì thật sự mất",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-3-push",
+    "ten": "5.3 — Push: nhánh theo dõi, tag, và xoá",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Branching › Cherry Picking Commits": {
+  "body": "`git cherry-pick` lấy **một commit cụ thể** từ nơi khác và áp dụng nó như một commit mới lên nhánh hiện tại.\n\n```bash\ngit switch release/1.2\ngit cherry-pick a1b2c3d              # một commit\ngit cherry-pick a1b2c3d..f4e5d6c     # một dải (không gồm a1b2c3d)\ngit cherry-pick -x a1b2c3d           # ghi chú nguồn gốc vào lời nhắn\ngit cherry-pick --continue / --abort # khi gặp xung đột\n```\n\n### Vì sao cần biết\nKịch bản kinh điển: sửa lỗi trên `main`, rồi cần đưa **đúng bản sửa đó** vào nhánh phát hành cũ mà không kéo theo tính năng mới.\n\n### Lỗi hay gặp\n- Commit được tạo mới có mã băm khác, nên sau này merge hai nhánh có thể xung đột trùng lặp.\n- Cherry-pick quá nhiều là dấu hiệu quy trình nhánh cần xem lại.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-3-phat-hanh-changelog",
+    "ten": "7.3 — Phát hành, changelog & hotfix",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-3-phat-hanh-hotfix",
+    "ten": "16.3 — Chốt bản nộp: tag v1.0.0, release notes, và hotfix từ tag",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Remotes (fetch/pull/push)": {
+  "body": "Làm việc với remote quy về ba động từ: **fetch** (tải về), **pull** (tải và tích hợp), **push** (đẩy lên).\n\n```bash\ngit fetch origin            # cập nhật origin/* , không đụng nhánh của bạn\ngit pull                    # fetch + merge (hoặc rebase nếu cấu hình)\ngit pull --rebase\ngit push                    # đẩy nhánh hiện tại\ngit push -u origin feature  # lần đầu: đặt upstream\n```\n\n### Ý chính\n- `origin` là remote mặc định khi clone; `upstream` thường là dự án gốc khi bạn fork.\n- `git fetch` luôn an toàn; `git pull` có thể tạo merge hoặc xung đột.\n- Push bị từ chối (`rejected`) nghĩa là remote có commit mà bạn chưa có: `fetch`/`pull` rồi thử lại, *đừng* vội `--force`.\n\n### Tự kiểm tra\nKhác biệt giữa nhánh `main` và nhánh `origin/main` trên máy bạn là gì?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: remote bằng hình",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull",
+    "ten": "5.1 — Remote là gì, và vì sao fetch ≠ pull",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-3-push",
+    "ten": "5.3 — Push: nhánh theo dõi, tag, và xoá",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=git-flow",
+    "ten": "Git — bốn vùng chứa và cái nhãn tên nhánh",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Rebase": {
+  "body": "**Rebase** lấy các commit của nhánh bạn, \"nhấc\" chúng lên rồi **phát lại** trên đỉnh một nhánh khác. Kết quả là lịch sử thẳng một đường thay vì có nhánh rẽ và merge commit.\n\n```bash\ngit switch feature\ngit rebase main     # đặt các commit của feature lên đầu main mới nhất\n```\n\n### Ý chính\n- Rebase **viết lại** commit (mã băm đổi), nên đó là lịch sử mới.\n- Ưu điểm: log sạch, dễ đọc, dễ bisect. Nhược điểm: mất thông tin \"nhánh này tách ra khi nào\".\n- **Quy tắc vàng:** chỉ rebase commit chưa chia sẻ cho ai; đừng rebase nhánh chung như `main`.\n\n### Lỗi hay gặp\nRebase nhánh đã push rồi bắt buộc push lại với force, làm đồng đội lỡ kéo bản cũ bị rối lịch sử. Nếu bắt buộc, dùng `--force-with-lease`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-4-rebase-vs-merge",
+    "ten": "3.4 — Rebase vs merge: phát lại thay vì nhập vào",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: nhánh, hợp nhất và rebase bằng hình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Squash & Cherry-picking": {
+  "body": "**Squash** gộp nhiều commit thành một; **cherry-pick** chọn riêng một commit để áp dụng nơi khác. Đây là hai công cụ để giữ lịch sử gọn.\n\n```bash\ngit merge --squash feature     # gom thay đổi của feature vào staging, rồi tự commit\ngit rebase -i HEAD~4           # đổi 'pick' thành 'squash'/'fixup' để gộp commit\ngit cherry-pick a1b2c3d        # lấy đúng commit này\n```\n\n### Ý chính\n- Trên GitHub có nút **Squash and merge**: một PR thành đúng một commit trên `main`.\n- Squash che đi lịch sử chi tiết bên trong nhánh; hợp với PR nhỏ, kém hợp khi muốn giữ từng bước.\n- Squash nhánh cá nhân trước khi chia sẻ thì an toàn; trên nhánh chung thì không.\n\n### Tự kiểm tra\nKhi nào bạn thích squash-merge hơn merge thường?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-3-chien-luoc-merge",
+    "ten": "6.3 — Ba chiến lược merge: merge, squash, hay rebase",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-5-rebase-tuong-tac",
+    "ten": "3.5 — Rebase tương tác: biên tập lịch sử của chính mình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-3-phat-hanh-changelog",
+    "ten": "7.3 — Phát hành, changelog & hotfix",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Handling Merge Conflicts": {
+  "body": "**Xung đột (conflict)** xảy ra khi hai nhánh sửa cùng một vùng của cùng một file và Git không biết chọn bên nào. Git dừng lại và đánh dấu file:\n\n```text\n<<<<<<< HEAD\nconst timeout = 5000;\n=======\nconst timeout = 3000;\n>>>>>>> feature\n```\n\nPhần giữa `<<<<<<<` và `=======` là của nhánh bạn đang đứng, phần dưới là của nhánh được gộp.\n\n### Cách xử lý\n1. `git status` để xem file nào xung đột.\n2. Mở file, quyết định nội dung cuối cùng, **xoá cả ba dòng đánh dấu**.\n3. `git add <file>` rồi `git commit` (hoặc `git merge --continue`, `git rebase --continue`).\n4. Muốn huỷ: `git merge --abort`.\n\n### Lỗi hay gặp\n- Commit khi còn sót `<<<<<<<`.\n- Chọn bừa \"lấy bên mình\" làm mất thay đổi của đồng đội; hãy hỏi họ khi không chắc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-3-xung-dot",
+    "ten": "3.3 — Xung đột hợp nhất: đọc và giải quyết một cách bình tĩnh",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-18-2-xung-dot-web-xml",
+    "ten": "18.2 — Tai nạn: xung đột web.xml và pull request để lâu",
+    "nguon": "Git & GitHub · Chương 18",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-8-lay-code-cua-ban",
+    "ten": "KĐ.8 — Lấy code của bạn: pull, merge main, làm mới NetBeans, xung đột đầu tiên",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Merging Basics": {
+  "body": "`git merge` đưa thay đổi của nhánh khác vào nhánh hiện tại.\n\n```bash\ngit switch main\ngit pull\ngit merge feature/login\ngit log --oneline --graph\n```\n\n### Ý chính\n- Merge luôn *đổ vào nhánh bạn đang đứng*; nhánh còn lại giữ nguyên.\n- Git tìm **tổ tiên chung** của hai nhánh, rồi kết hợp thay đổi từ đó. Nếu một bên chưa đi xa thì fast-forward, ngược lại tạo merge commit.\n- Gặp xung đột thì xử lý theo từng file rồi `git commit`.\n- Trước khi merge hãy chắc working tree sạch (`git status`).\n\n### Lỗi hay gặp\nMerge *ngược chiều*: gộp `main` vào nhánh sai, hoặc đứng nhầm nhánh khi gõ lệnh. Luôn kiểm tra `git branch` trước.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-2-hai-kieu-merge",
+    "ten": "3.2 — Fast-forward vs hợp nhất ba chiều",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-3-xung-dot",
+    "ten": "3.3 — Xung đột hợp nhất: đọc và giải quyết một cách bình tĩnh",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: nhánh, hợp nhất và rebase bằng hình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Managing Remotes": {
+  "body": "`git remote` quản lý danh sách các remote mà repo biết.\n\n```bash\ngit remote -v                         # xem URL fetch/push\ngit remote add upstream https://github.com/goc/du-an.git\ngit remote rename origin github\ngit remote set-url origin git@github.com:toi/du-an.git   # đổi URL\ngit remote remove upstream\ngit remote show origin                # chi tiết, nhánh theo dõi\n```\n\n### Ý chính\n- Mô hình fork: `origin` là bản fork của bạn, `upstream` là dự án gốc; bạn kéo từ `upstream` để cập nhật.\n- Chuyển HTTPS sang SSH chỉ cần `set-url`; lịch sử không đổi.\n\n### Lỗi hay gặp\nGõ sai URL khi `remote add`, nên push báo `repository not found`. Kiểm bằng `git remote -v`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull",
+    "ten": "5.1 — Remote là gì, và vì sao fetch ≠ pull",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-4-fork-upstream",
+    "ten": "5.4 — Fork và upstream: đóng góp cho dự án của người khác",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-2-xac-thuc",
+    "ten": "5.2 — Xác thực với GitHub: SSH, token, chứng chỉ",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Fetch without Merge": {
+  "body": "`git fetch` tải commit mới từ remote về máy nhưng **không** thay đổi nhánh cục bộ hay working directory. Nó chỉ cập nhật các nhánh theo dõi remote như `origin/main`.\n\n```bash\ngit fetch origin\ngit log HEAD..origin/main --oneline   # có gì mới trên remote?\ngit diff main origin/main\ngit merge origin/main                 # chủ động tích hợp\n```\n\n### Vì sao cần biết\nFetch là cách *nhìn trước* người khác đã làm gì mà không rủi ro. `git pull` thực chất là `fetch` rồi `merge` (hoặc `rebase`), nên có thể bất ngờ nếu bạn chưa xem.\n\n### Ý chính\n- `git fetch --all` lấy từ mọi remote; `--prune` dọn nhánh remote đã xoá.\n\n### Lỗi hay gặp\nTưởng `fetch` đã cập nhật code của mình; thực ra bạn còn phải merge hoặc rebase.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull",
+    "ten": "5.1 — Remote là gì, và vì sao fetch ≠ pull",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: remote bằng hình",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › Pushing / Pulling Changes": {
+  "body": "`git push` đẩy commit cục bộ lên remote; `git pull` kéo commit từ remote về và tích hợp.\n\n```bash\ngit push -u origin feature/login   # lần đầu, lưu upstream\ngit push                           # các lần sau\ngit pull --rebase                  # kéo và đặt commit của bạn lên trên\ngit push origin v1.0.0             # tag không tự đi theo push\n```\n\n### Ý chính\n- Push chỉ thành công khi nó là *fast-forward* trên remote; nếu không sẽ bị `rejected`.\n- Cách xử lý chuẩn khi bị từ chối: `git pull --rebase` (hoặc merge), giải quyết xung đột, push lại.\n- Không dùng `--force` để \"vượt\" lỗi từ chối trên nhánh chung.\n\n### Lỗi hay gặp\n- Pull khi đang có thay đổi chưa commit gây xung đột lộn xộn: commit hoặc stash trước.\n- Lạc nhánh: push `main` thay vì nhánh tính năng.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-3-push",
+    "ten": "5.3 — Push: nhánh theo dõi, tag, và xoá",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull",
+    "ten": "5.1 — Remote là gì, và vì sao fetch ≠ pull",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-18-3-keo-main-va-push-tu-choi",
+    "ten": "18.3 — Tai nạn: kéo main nhầm chỗ và push bị từ chối",
+    "nguon": "Git & GitHub · Chương 18",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Remote & Merge Strategies › git rebase": {
+  "body": "`git rebase <nền>` phát lại các commit riêng của nhánh hiện tại lên trên `<nền>`. Dùng thường xuyên nhất để cập nhật nhánh tính năng theo `main` mới.\n\n```bash\ngit switch feature\ngit fetch origin\ngit rebase origin/main\n# nếu xung đột: sửa -> git add -> git rebase --continue\n# bỏ cuộc:       git rebase --abort\ngit push --force-with-lease   # bắt buộc nếu feature đã push trước đó\n```\n\n### Ý chính\n- Mỗi commit được phát lại một lần, nên xung đột có thể phải giải quyết nhiều lần.\n- `git pull --rebase` = fetch + rebase thay vì fetch + merge.\n- Sau rebase, các commit có mã băm mới; chỉ làm khi nhánh là của riêng bạn.\n\n### Lỗi hay gặp\nRebase nhầm hướng (đặt `main` lên feature). Câu hỏi giúp nhớ: *tôi đang đứng ở nhánh nào, và tôi muốn nó đặt lên đâu?*",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-4-rebase-vs-merge",
+    "ten": "3.4 — Rebase vs merge: phát lại thay vì nhập vào",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-5-rebase-tuong-tac",
+    "ten": "3.5 — Rebase tương tác: biên tập lịch sử của chính mình",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-2-force-with-lease",
+    "ten": "8.2 — Force-push an toàn: --force-with-lease",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Undoing Changes › git reset (--soft/--mixed/--hard)": {
+  "body": "`git reset` dời con trỏ nhánh hiện tại về một commit khác. Ba chế độ khác nhau ở chỗ nó còn đụng tới staging và working directory đến đâu.\n\n| Chế độ | Nhánh/HEAD | Staging | Working directory |\n|---|---|---|---|\n| `--soft` | dời | giữ nguyên | giữ nguyên |\n| `--mixed` (mặc định) | dời | đặt lại | giữ nguyên |\n| `--hard` | dời | đặt lại | **đặt lại, mất thay đổi** |\n\n```bash\ngit reset --soft HEAD~1   # bỏ commit cuối, giữ nguyên thay đổi đã staged (để commit lại)\ngit reset HEAD~1          # bỏ commit, giữ thay đổi nhưng chưa staged\ngit reset --hard HEAD~1   # bỏ commit VÀ thay đổi\ngit reset file.js         # chỉ rút file khỏi staging\n```\n\n### Ý chính\n- Reset viết lại lịch sử cục bộ: không dùng trên commit đã push cho người khác (dùng `revert`).\n- `--hard` nguy hiểm nhưng commit bị bỏ vẫn cứu được bằng `git reflog`; thay đổi chưa commit thì không.\n\n### Tự kiểm tra\nBạn lỡ commit sớm, muốn sửa thêm rồi commit lại: dùng chế độ nào?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: hoàn tác bằng hình",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-1-ban-do-hoan-tac",
+    "ten": "4.1 — Bản đồ hoàn tác: lệnh nào đụng vào cây nào",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-2-reset",
+    "ten": "4.2 — git reset: soft, mixed, hard",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Undoing Changes › git revert": {
+  "body": "`git revert` tạo một commit **mới** có nội dung ngược lại với commit chỉ định. Lịch sử không bị viết lại, nên đây là cách hoàn tác an toàn cho nhánh đã chia sẻ.\n\n```bash\ngit revert a1b2c3d            # hoàn tác một commit\ngit revert HEAD               # hoàn tác commit gần nhất\ngit revert -m 1 <merge-hash>  # hoàn tác một merge commit (chọn cha chính)\ngit revert --no-commit A..B   # gom nhiều revert thành một commit\n```\n\n### Ý chính\n- Revert khác reset: reset *xoá* khỏi lịch sử, revert *thêm* một commit đảo ngược.\n- Với merge commit phải chỉ rõ `-m 1` (thường giữ dòng của nhánh chính).\n- Sau khi revert merge, muốn merge lại cùng nhánh đó thì phải revert chính cái revert, nếu không Git coi thay đổi đã nằm sẵn.\n\n### Lỗi hay gặp\nDùng `reset --hard` rồi `push --force` trên `main` để \"xoá\" một commit lỗi: làm hỏng bản local của mọi người.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-3-revert",
+    "ten": "4.3 — git revert: cách hoàn tác an toàn duy nhất trên lịch sử đã chia sẻ",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-18-6-hoan-tac-merge",
+    "ten": "18.6 — Tai nạn: hoàn tác một merge đã nằm trên main",
+    "nguon": "Git & GitHub · Chương 18",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-1-ban-do-hoan-tac",
+    "ten": "4.1 — Bản đồ hoàn tác: lệnh nào đụng vào cây nào",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Undoing Changes › git stash": {
+  "body": "`git stash` cất tạm các thay đổi chưa commit vào một ngăn xếp và trả working directory về sạch, để bạn đổi việc rồi quay lại lấy ra sau.\n\n```bash\ngit stash push -m \"dang lam dang\"   # cất (file tracked)\ngit stash -u                        # cất cả file untracked\ngit stash list\ngit stash pop                       # lấy ra và xoá khỏi danh sách\ngit stash apply stash@{1}           # lấy ra nhưng giữ lại\ngit stash drop stash@{0}\n```\n\n### Vì sao cần biết\nĐang sửa dở thì có lỗi khẩn cần vá trên nhánh khác, nhưng chưa muốn commit nửa vời. Stash giải quyết đúng chỗ đó.\n\n### Lỗi hay gặp\n- Stash rồi quên: nên đặt message, kiểm `git stash list`.\n- `pop` gặp xung đột thì stash vẫn còn, giải quyết rồi tự `drop`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-5-stash",
+    "ten": "4.5 — git stash: cất việc lại mà không cần commit",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: hoàn tác bằng hình",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Undoing Changes › git reflog": {
+  "body": "`git reflog` là nhật ký **mọi lần HEAD (và các nhánh) di chuyển trên máy bạn**: commit, checkout, reset, rebase, merge. Vì ghi cả những commit không còn nhánh nào trỏ tới nên nó là lưới cứu sinh.\n\n```bash\ngit reflog\n# a1b2c3d HEAD@{0}: reset: moving to HEAD~3\n# f4e5d6c HEAD@{1}: commit: Thêm trang thanh toán\ngit reset --hard HEAD@{1}        # quay về trước lần reset lỡ tay\ngit branch cuu-ho f4e5d6c        # dựng lại nhánh từ một commit tìm thấy\n```\n\n### Ý chính\n- Reflog là **cục bộ**, không được push; mỗi máy một cuốn.\n- Mục cũ bị dọn sau một thời gian (mặc định khoảng 90 ngày cho mục còn tới được, ngắn hơn cho mục không còn tới được).\n- Chỉ cứu được thứ từng được *commit*; thay đổi chưa commit mà bị xoá thì không.\n\n### Tự kiểm tra\nBạn lỡ `git reset --hard` mất ba commit. Làm sao tìm lại?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-4-reflog",
+    "ten": "4.4 — git reflog: không gì thật sự mất",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-1-cuu-ho",
+    "ten": "13.1 — Sách công thức cứu hộ",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: hoàn tác bằng hình",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Undoing Changes › Xem Diff giữa Commits, Branches, Staged và Unstaged": {
+  "body": "Bạn đã biết từng lệnh diff; đây là cách gom chúng thành thói quen làm việc. Hỏi \"so với cái gì?\" rồi chọn lệnh:\n\n```bash\ngit diff                       # đang sửa gì mà chưa add?\ngit diff --staged              # commit tới sẽ chứa gì?\ngit diff HEAD                  # tổng thay đổi chưa commit\ngit diff main..feature         # hai nhánh khác nhau gì?\ngit diff main...feature        # feature đã thêm gì từ lúc tách?\ngit diff abc123 def456 --stat  # giữa hai commit, tóm tắt\ngit diff HEAD~1 -- file.js     # một file so với commit trước\n```\n\n### Ý chính\n- Trước mỗi commit: đọc `git diff --staged`; trước khi mở PR: đọc `git diff main...HEAD`.\n- Thêm `--word-diff` hoặc `-w` để loại nhiễu khoảng trắng.\n- Diff lớn: đọc `--stat` trước rồi mới mở từng file.\n\n### Lỗi hay gặp\nNhầm `..` và `...` khi so hai nhánh đã phân kỳ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-2-show-va-diff",
+    "ten": "2.2 — git show và so sánh hai thời điểm bất kỳ",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-3-vong-lap-hang-ngay",
+    "ten": "1.3 — Vòng lặp hằng ngày: add, commit, diff — và add -p",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Undoing Changes › Rewriting History với filter-branch và push --force": {
+  "body": "Viết lại lịch sử là sửa các commit **đã tồn tại**: đổi email tác giả, xoá một file khỏi mọi commit, gỡ một bí mật bị lộ. Vì mọi commit sau đó đổi mã băm, kết quả là một lịch sử *khác*, và để đưa nó lên remote bạn phải push đè.\n\n### Ý chính\n- Công cụ cũ là `git filter-branch`; tài liệu Git hiện **khuyên dùng `git filter-repo`** (nhanh hơn, ít bẫy hơn).\n- Sau khi viết lại, push đè phải dùng `--force-with-lease`, và **mọi đồng đội phải clone lại** hoặc reset về lịch sử mới.\n- Bí mật đã push thì phải **thu hồi/đổi khoá** trước tiên; xoá khỏi lịch sử chỉ là bước phụ.\n\n```bash\ngit filter-repo --path secrets.env --invert-paths   # xoá file khỏi toàn lịch sử\ngit push --force-with-lease --all\n```\n\n### Lỗi hay gặp\nViết lại lịch sử trên repo chung mà không báo trước, rồi đồng đội kéo về và vô tình đẩy lại lịch sử cũ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: viết lại lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-3-go-bi-mat",
+    "ten": "8.3 — Gỡ một bí mật bị lộ khỏi toàn bộ lịch sử",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-2-force-with-lease",
+    "ten": "8.2 — Force-push an toàn: --force-with-lease",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Undoing Changes › Linear vs Non-Linear": {
+  "body": "Lịch sử **tuyến tính** là một đường thẳng, mỗi commit có một cha; thường đạt được bằng rebase hoặc squash. Lịch sử **phi tuyến** giữ các nhánh rẽ và merge commit đúng như đã xảy ra.\n\n| | Tuyến tính | Phi tuyến |\n|---|---|---|\n| Cách tạo | rebase, squash-merge, `--ff-only` | merge thường (`--no-ff`) |\n| Ưu | log gọn, dễ đọc, dễ bisect, dễ revert | giữ nguyên bối cảnh, an toàn (không viết lại) |\n| Nhược | viết lại commit, mất dấu nhánh tách | đồ thị rối nếu nhiều nhánh |\n\n### Ý chính\n- Không có đáp án tuyệt đối; quan trọng là cả nhóm thống nhất và bật luật tương ứng trên GitHub (chỉ cho squash/rebase merge, hay cho phép merge commit).\n- Cần xem lịch sử phi tuyến thì dùng `git log --graph`; muốn bỏ nhiễu merge thì `--first-parent`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-4-rebase-vs-merge",
+    "ten": "3.4 — Rebase vs merge: phát lại thay vì nhập vào",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-3-chien-luoc-merge",
+    "ten": "6.3 — Ba chiến lược merge: merge, squash, hay rebase",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Undoing Changes › Git Stash Basics": {
+  "body": "Cách dùng stash điển hình là một \"ngắt quãng\" ngắn: cất việc đang dở, làm việc gấp, rồi lấy lại.\n\n```bash\ngit stash push -m \"form-dang-nhap dang do\"\ngit switch main\ngit switch -c hotfix/loi-thanh-toan\n# ... sửa, commit, push ...\ngit switch feature/form\ngit stash pop\n```\n\n### Ý chính\n- Mặc định stash chỉ cất file **tracked** đã sửa; thêm `-u` cho file mới, `-a` cho cả file bị ignore.\n- `git stash show -p` xem nội dung; `git stash branch ten` tạo nhánh mới từ stash.\n- Stash là ngăn xếp: `stash@{0}` là mới nhất.\n\n### Lỗi hay gặp\n- Dùng stash như nơi lưu lâu dài; stash dễ bị quên, hãy commit lên nhánh tạm nếu việc kéo dài.\n- Nhầm `pop` với `apply`: `pop` xoá stash sau khi áp dụng thành công.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-5-stash",
+    "ten": "4.5 — git stash: cất việc lại mà không cần commit",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Undoing Changes › git push --force": {
+  "body": "`git push --force` ghi đè nhánh trên remote bằng nhánh cục bộ của bạn, **bỏ qua** kiểm tra \"remote có commit bạn chưa có\". Cần dùng khi bạn đã viết lại lịch sử (rebase, amend) trên nhánh đã push.\n\n```bash\ngit push --force-with-lease origin feature/login\n```\n\n### Ý chính\n- `--force` đè vô điều kiện, có thể xoá công việc của đồng đội vừa push.\n- `--force-with-lease` an toàn hơn: chỉ ghi đè nếu remote vẫn đúng ở trạng thái bạn đã thấy lần fetch cuối; nếu có người push thêm, lệnh từ chối.\n- Quy tắc: chỉ force-push trên nhánh **của riêng bạn**; bật bảo vệ nhánh để cấm force-push lên `main`.\n\n### Lỗi hay gặp\n- Force-push lên `main` để \"dọn\" lịch sử.\n- Chạy `git fetch` ngay trước `--force-with-lease` mà không đọc xem mình sắp ghi đè gì: lease bị làm mới và mất tác dụng bảo vệ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-2-force-with-lease",
+    "ten": "8.2 — Force-push an toàn: --force-with-lease",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: viết lại lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-4-bao-ve-nhanh",
+    "ten": "6.4 — Bảo vệ nhánh, CODEOWNERS & kiểm tra bắt buộc",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Undoing Changes › git filter-branch": {
+  "body": "`git filter-branch` duyệt qua nhiều commit và áp một bộ lọc lên từng cái: bỏ một file khỏi mọi commit, đổi thư mục gốc, đổi thông tin tác giả.\n\n```bash\ngit filter-branch --tree-filter 'rm -f passwords.txt' -- --all\ngit filter-branch --env-filter 'GIT_AUTHOR_EMAIL=\"moi@example.com\"' -- --all\n```\n\n### Ý chính\n- Mỗi commit bị sinh lại với mã băm mới; tham chiếu cũ (tag, nhánh) cần cập nhật bằng `-- --all`.\n- Lệnh này **chậm và nhiều bẫy**, và tài liệu Git chính thức khuyên chuyển sang `git filter-repo` cho việc tương tự.\n- Luôn thao tác trên một bản **clone mới** để còn đường lui.\n- Sau đó: `git push --force-with-lease --all`, và thông báo cả nhóm clone lại.\n\n### Lỗi hay gặp\nChạy trên repo thật không backup, hoặc quên rằng các bản clone khác vẫn còn dữ liệu cũ và có thể đẩy lại nó lên.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-3-go-bi-mat",
+    "ten": "8.3 — Gỡ một bí mật bị lộ khỏi toàn bộ lịch sử",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: viết lại lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Nâng cao › git commit --amend": {
+  "body": "`git commit --amend` thay commit gần nhất bằng một commit **mới**: bạn đổi lời nhắn, hoặc thêm thay đổi bị quên vào đó.\n\n```bash\ngit commit --amend -m \"Lời nhắn đúng hơn\"\ngit add quen.js\ngit commit --amend --no-edit     # thêm file, giữ nguyên lời nhắn\n```\n\n### Ý chính\n- Về bản chất amend không sửa commit cũ, nó tạo commit khác (mã băm đổi).\n- An toàn khi commit **chưa push**. Nếu đã push, phải force-push và có thể làm phiền người khác, tốt nhất tránh.\n- Hữu ích cho lỗi chính tả, quên file, quên cập nhật test.\n\n### Lỗi hay gặp\nAmend nhiều lần trên nhánh chung rồi push đè; hoặc amend nhầm commit không phải cuối cùng (muốn sửa commit cũ hơn thì dùng `rebase -i`).",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-1-amend",
+    "ten": "8.1 — git commit --amend: sửa commit cuối cùng",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: viết lại lịch sử bằng hình",
+    "nguon": "Git & GitHub · Chương 8",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Nâng cao › git bisect": {
+  "body": "`git bisect` tìm ra **commit gây lỗi** bằng tìm kiếm nhị phân. Bạn cho Git biết một commit tốt và một commit xấu; Git checkout điểm giữa, bạn kiểm tra rồi báo tốt/xấu; mỗi lần khoảng tìm giảm một nửa. 1000 commit chỉ cần khoảng 10 bước.\n\n```bash\ngit bisect start\ngit bisect bad                 # commit hiện tại đang lỗi\ngit bisect good v1.4.0         # bản này còn chạy tốt\n# Git checkout điểm giữa. Chạy thử rồi báo:\ngit bisect good    # hoặc: git bisect bad\ngit bisect reset   # kết thúc, về nhánh cũ\n```\n\nTự động hoá bằng một script trả mã thoát 0 là tốt, khác 0 là xấu:\n\n```bash\ngit bisect run npm test\n```\n\n### Lỗi hay gặp\n- Báo nhầm tốt/xấu một lần là kết quả sai hết.\n- Bản build thất bại ở vài điểm giữa: dùng `git bisect skip`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-4-bisect",
+    "ten": "2.4 — git bisect: tìm nhị phân ra commit đã làm hỏng",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-5-dieu-tra-thuc-te",
+    "ten": "2.5 — Một cuộc điều tra thật, từ đầu tới cuối",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nâng cao › git worktree & Submodules": {
+  "body": "**Worktree** cho phép một repo có nhiều thư mục làm việc, mỗi thư mục checkout một nhánh khác nhau cùng lúc, dùng chung một kho `.git`. **Submodule** nhúng một repo khác vào repo của bạn, ghim ở một commit cụ thể.\n\n```bash\ngit worktree add ../hotfix hotfix/loi-gap   # thư mục mới cho nhánh hotfix\ngit worktree list\ngit worktree remove ../hotfix\n\ngit submodule add https://github.com/org/lib.git libs/lib\ngit clone --recurse-submodules <url>\ngit submodule update --init --recursive\n```\n\n### Ý chính\n- Worktree thay cho việc stash/clone lại khi cần xem hai nhánh song song (chạy test nhánh khác, review PR).\n- Submodule ghim commit: sau khi cập nhật phải commit con trỏ mới ở repo cha.\n- Một nhánh không thể được checkout ở hai worktree cùng lúc.\n\n### Lỗi hay gặp\nClone repo có submodule mà quên `--recurse-submodules`, nên thư mục submodule rỗng.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-0-slides",
+    "ten": "10.0 — Slide Chương 10: kho mã lớn bằng hình",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-1-worktree",
+    "ten": "10.1 — git worktree: nhiều nhánh cùng được checkout một lúc",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-2-submodule-subtree",
+    "ten": "10.2 — Submodule vs subtree: kho mã bên trong kho mã",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nâng cao › Git LFS & Patch": {
+  "body": "**Git LFS** (Large File Storage) lưu file nhị phân lớn (ảnh, video, mô hình) ở máy chủ riêng, còn trong repo chỉ giữ một file con trỏ nhỏ. Nhờ vậy repo không phình to mỗi khi file thay đổi.\n\n```bash\ngit lfs install\ngit lfs track \"*.psd\"        # ghi quy tắc vào .gitattributes\ngit add .gitattributes model.psd\ngit commit -m \"Theo dõi PSD bằng LFS\"\n```\n\n**Patch** là file văn bản mô tả thay đổi, để gửi qua email hoặc áp dụng nơi khác:\n\n```bash\ngit diff > doi.patch            # tạo patch từ diff\ngit apply doi.patch             # áp dụng\ngit format-patch -3             # xuất 3 commit gần nhất thành file .patch\ngit am *.patch                  # áp dụng, giữ nguyên tác giả và lời nhắn\n```\n\n### Lỗi hay gặp\n- Commit file lớn bằng Git thường *trước* khi bật LFS: nó đã nằm trong lịch sử, cần `git lfs migrate`.\n- Quên commit `.gitattributes`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-3-monorepo-lfs",
+    "ten": "10.3 — Monorepo, sparse-checkout & Git LFS",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-0-slides",
+    "ten": "10.0 — Slide Chương 10: kho mã lớn bằng hình",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Nâng cao › Merge Strategies": {
+  "body": "Khi gộp lịch sử, Git chọn **chiến lược** (strategy) để tìm cách kết hợp.\n\n- **Mặc định `ort`** (thay `recursive` từ Git 2.34) cho hai nhánh: ba chiều với tổ tiên chung, xử lý tốt đổi tên file.\n- **`ours`** (`-s ours`): tạo merge commit nhưng *giữ nguyên nội dung nhánh hiện tại*, bỏ hoàn toàn thay đổi bên kia. Không nhầm với tuỳ chọn `-X ours`, chỉ ưu tiên bên mình *khi có xung đột*.\n- **`octopus`**: gộp nhiều hơn hai nhánh một lúc, từ chối nếu có xung đột.\n- **`subtree`**: dùng khi gộp một dự án vào thư mục con.\n\nNgoài ra còn các **kiểu hợp nhất** ở tầng quy trình: fast-forward, merge commit, **squash**, **rebase**.\n\n```bash\ngit merge feature\ngit merge -X theirs feature   # xung đột thì ưu tiên bên feature\ngit merge --squash feature\n```\n\n### Lỗi hay gặp\nDùng `-X theirs/ours` để \"xong cho nhanh\" mà không đọc xung đột, nên mất logic của một bên.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-3-chien-luoc-merge",
+    "ten": "6.3 — Ba chiến lược merge: merge, squash, hay rebase",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-2-hai-kieu-merge",
+    "ten": "3.2 — Fast-forward vs hợp nhất ba chiều",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-3-3-xung-dot",
+    "ten": "3.3 — Xung đột hợp nhất: đọc và giải quyết một cách bình tĩnh",
+    "nguon": "Git & GitHub · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nâng cao › Git Hooks là gì và vì sao cần dùng": {
+  "body": "**Git hooks** là các script Git tự chạy ở những thời điểm nhất định: trước khi commit, sau khi merge, trước khi push… Chúng nằm trong `.git/hooks/` (file tên đúng như sự kiện, có quyền chạy).\n\n### Vì sao cần biết\nHook biến quy ước của nhóm thành thứ máy kiểm tra: chạy lint, kiểm định dạng lời nhắn, chặn commit có chuỗi giống khoá bí mật, chạy test nhanh, trước cả khi code lên CI.\n\n### Ý chính\n- Hook đáng biết: `pre-commit`, `commit-msg`, `pre-push`, `post-merge`.\n- Hook trả mã thoát khác 0 sẽ **chặn** thao tác.\n- `.git/hooks/` **không được commit/chia sẻ**; muốn cả nhóm dùng chung thì cần công cụ như husky, lint-staged hoặc pre-commit framework.\n- Có thể bỏ qua khi thật cần: `git commit --no-verify`.\n\n```bash\n#!/bin/sh\n# .git/hooks/pre-commit\nnpm run lint || exit 1\n```",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: hook và chữ ký bằng hình",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-1-hooks",
+    "ten": "12.1 — Hook: bắt lỗi trước khi nó tồn tại",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nâng cao › Client Hooks và Server Hooks": {
+  "body": "Hook chia làm hai nhóm tuỳ chạy ở đâu.\n\n**Client-side hooks** chạy trên máy lập trình viên: `pre-commit`, `prepare-commit-msg`, `commit-msg`, `post-commit`, `pre-rebase`, `post-merge`, `pre-push`. Phục vụ trải nghiệm cá nhân và bắt lỗi sớm; nhưng ai cũng **bỏ qua được** (`--no-verify`) hoặc không cài.\n\n**Server-side hooks** chạy trên máy chủ nhận push: `pre-receive`, `update`, `post-receive`. Từ chối push nếu vi phạm luật (ví dụ cấm force-push, bắt buộc định dạng commit), hoặc kích hoạt triển khai.\n\n### Ý chính\n- Luật chỉ thật sự đứng vững ở nơi lần push **hạ cánh**: server hook hoặc, trên GitHub/GitLab, protected branch/ruleset, push protection và required status checks (CI).\n- Thực hành tốt: client hook giúp phản hồi nhanh, CI chạy lại đúng các phép kiểm đó làm chốt cuối.\n- Các nền tảng lưu trữ như GitHub không cho cài hook tuỳ ý; thay vào đó dùng ruleset và Actions.\n\n### Tự kiểm tra\nVì sao chỉ dựa vào `pre-commit` thì không đảm bảo mọi commit trên `main` đều qua lint?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-1-hooks",
+    "ten": "12.1 — Hook: bắt lỗi trước khi nó tồn tại",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-4-chinh-sach-may-chu",
+    "ten": "12.3 — Cưỡng chế thật: hook phía máy chủ, ruleset và CI",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: hook và chữ ký bằng hình",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "slide"
+   }
+  ]
+ }
+}

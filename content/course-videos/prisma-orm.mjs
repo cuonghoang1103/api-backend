@@ -25,14 +25,14 @@ export default {
   defaultVideoTrack: 'YT',
   lessons: {
     /* ── Mục 0 — Prisma giải quyết gì, và cài đặt ── */
-    'pr-0-1-van-de': { yt: 'Ehv69qFvN2I', credit: 'Classsed — Prisma Tutorial - Next Gen ORM (with JS & TS)' },  // Prisma Tutorial - Next Gen ORM (with JS & TS)
+    'pr-0-1-van-de': { yt: 'Ehv69qFvN2I', credit: 'Classsed — Prisma Tutorial - Next Gen ORM (with JS & TS)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-03-prisma-giai-quyet-gi-16b67b98.mp4' }, defaultVideoTrack: 'VI'},  // Prisma Tutorial - Next Gen ORM (with JS & TS)
     'pr-0-2-cai-dat': { yt: 'CYH04BJzamo', credit: 'Traversy Media — Prisma Crash Course', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-04-cho-prisma-chay-len-a6232b8c.mp4' }, defaultVideoTrack: 'VI'}, // Prisma Crash Course
     'pr-0-3-nam-phut': { yt: '3AldkDy7TQ4', credit: '6 Pack Programmer — Prisma Complete Course 2025 - Modern Database ORM for Node.js & TypeScript', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-05-nam-phut-dau-tien-bad67610.mp4' }, defaultVideoTrack: 'VI'},// Prisma Complete Course 2025 - Modern Database ORM for Node.js & TypeScript
 
     /* ── Chương 1 — ORM thật ra là gì ── */
     'pr-1-1-lech-tro-khang': { yt: 'mU8-nKwfw4Y', credit: 'Laiture — Prisma 2 (Node JS ORM) Crash Course', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-01-lech-tro-khang-634dcb8d.mp4' }, defaultVideoTrack: 'VI'},       // Prisma 2 (Node JS ORM) Crash Course
-    'pr-1-2-generate-viet-gi': { yt: 'JuAauKOj1Kk', credit: 'Josh tried coding — They Finally Fixed Prisma' },     // They Finally Fixed Prisma
-    'pr-1-3-thanh-sql': { yt: 'z_sfTz5S3SU', credit: 'Prisma — Is Prisma ORM Slow?' },            // Is Prisma ORM Slow?
+    'pr-1-2-generate-viet-gi': { yt: 'JuAauKOj1Kk', credit: 'Josh tried coding — They Finally Fixed Prisma', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-02-generate-viet-gi-5a85f5e0.mp4' }, defaultVideoTrack: 'VI'},     // They Finally Fixed Prisma
+    'pr-1-3-thanh-sql': { yt: 'z_sfTz5S3SU', credit: 'Prisma — Is Prisma ORM Slow?', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-03-thanh-sql-9f7a4592.mp4' }, defaultVideoTrack: 'VI'},            // Is Prisma ORM Slow?
     'pr-1-4-datasource-generator': { yt: 'i0gUVkQ2grA', credit: 'Code with Sloba — Prisma Schema - Next.js 14 Course Tutorial #20', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-04-datasource-generator-efad38a9.mp4' }, defaultVideoTrack: 'VI'}, // Prisma Schema - Next.js 14 Course Tutorial #20
     'pr-1-5-ba-luong': { yt: 'BkUH_6BSFyo', credit: 'Prisma — Deep dive into database workflows with Prisma - Alex Ruheni I Prisma Day 2022', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/01-orm-la-gi/01-05-ba-luong-8517b2df.mp4' }, defaultVideoTrack: 'VI'},             // Deep dive into database workflows with Prisma - Alex Ruheni | Prisma Day 2022
 
@@ -48,20 +48,20 @@ export default {
     'pr-3-2-mot-nhieu': { yt: '-Nv3wSm0Ac0', credit: 'Prisma — How to Use Cascading Deletes', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-02-mot-nhieu-16c44ea9.mp4' }, defaultVideoTrack: 'VI'},    // How to Use Cascading Deletes
     'pr-3-3-mot-mot': { yt: '9CrK_sZyW8E', credit: 'Ben Awad — 1 to 1 Associations in Prisma', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-03-mot-mot-f1ca7c3f.mp4' }, defaultVideoTrack: 'VI'},      // 1 to 1 Associations in Prisma
     'pr-3-4-nhieu-nhieu': { yt: '_FxMevXW2XI', credit: 'Evoqys — Many to Many Relation in Prisma', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-04-nhieu-nhieu-a66bb6c7.mp4' }, defaultVideoTrack: 'VI'},  // Many to Many Relation in Prisma
-    'pr-3-5-tu-quan-he': { yt: 'fpBYj55-zd8', credit: 'Prisma — How to model relationships (1-1, 1-m, m-m)' },   // How to model relationships (1-1, 1-m, m-m)
+    'pr-3-5-tu-quan-he': { yt: 'fpBYj55-zd8', credit: 'Prisma — How to model relationships (1-1, 1-m, m-m)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/03-quan-he/03-05-tu-quan-he-7cc8f8a0.mp4' }, defaultVideoTrack: 'VI'},   // How to model relationships (1-1, 1-m, m-m)
 
     /* ── Chương 4 — Đọc và ghi ── */
-    'pr-4-1-sau-cach-doc': { yt: 'E37-33M6Ypk', credit: 'PedroTech — Prisma ORM Tutorial for Beginners | CRUD, CreateMany, Associations...' },  // Prisma ORM Tutorial for Beginners | CRUD, CreateMany, Associations...
-    'pr-4-2-select-include': { yt: 'uhJxaIEV5XQ', credit: 'Alex Rusin — Mastering Prisma in Next.js: One-to-Many Relationships' },// Mastering Prisma in Next.js: One-to-Many Relationships
-    'pr-4-3-tao-hang': { yt: 'uVOqu4DUrLg', credit: 'GiraffeReactor — Prisma Tutorial for Beginners #3 - CRUD - Creating Records' },      // Prisma Tutorial for Beginners #3 - CRUD - Creating Records
-    'pr-4-4-cap-nhat': { yt: 'uyOc52NSgak', credit: 'GiraffeReactor — Prisma Tutorial for Beginners #6 - CRUD - Updating Records' },      // Prisma Tutorial for Beginners #6 - CRUD - Updating Records
-    'pr-4-5-xoa-mem': { yt: 'FQDGQuGeoCw', credit: 'vlogize — Implementing Soft Deletes in Your NestJS Application with Prisma' },       // Implementing Soft Deletes in Your NestJS Application with Prisma
+    'pr-4-1-sau-cach-doc': { yt: 'E37-33M6Ypk', credit: 'PedroTech — Prisma ORM Tutorial for Beginners | CRUD, CreateMany, Associations...', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-01-sau-cach-doc-456c9cca.mp4' }, defaultVideoTrack: 'VI'},  // Prisma ORM Tutorial for Beginners | CRUD, CreateMany, Associations...
+    'pr-4-2-select-include': { yt: 'uhJxaIEV5XQ', credit: 'Alex Rusin — Mastering Prisma in Next.js: One-to-Many Relationships', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-02-select-include-e1c980a1.mp4' }, defaultVideoTrack: 'VI'},// Mastering Prisma in Next.js: One-to-Many Relationships
+    'pr-4-3-tao-hang': { yt: 'uVOqu4DUrLg', credit: 'GiraffeReactor — Prisma Tutorial for Beginners #3 - CRUD - Creating Records', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-03-tao-hang-4310eeb4.mp4' }, defaultVideoTrack: 'VI'},      // Prisma Tutorial for Beginners #3 - CRUD - Creating Records
+    'pr-4-4-cap-nhat': { yt: 'uyOc52NSgak', credit: 'GiraffeReactor — Prisma Tutorial for Beginners #6 - CRUD - Updating Records', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-04-cap-nhat-e408b2ed.mp4' }, defaultVideoTrack: 'VI'},      // Prisma Tutorial for Beginners #6 - CRUD - Updating Records
+    'pr-4-5-xoa-mem': { yt: 'FQDGQuGeoCw', credit: 'vlogize — Implementing Soft Deletes in Your NestJS Application with Prisma', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/04-doc-va-ghi/04-05-xoa-mem-dd4a8e61.mp4' }, defaultVideoTrack: 'VI'},       // Implementing Soft Deletes in Your NestJS Application with Prisma
 
     /* ── Chương 5 — Truy vấn sâu ── */
-    'pr-5-1-toan-tu-loc': { yt: 'GvpQzXdSPC8', credit: 'Technical Rajni — Prisma Tutorial #29  Filtering and Sorting with Prisma ORM in Node.js | Practical Guide and Examples' },        // Prisma Tutorial #29 Filtering and Sorting with Prisma ORM in Node.js
-    'pr-5-2-loc-quan-he': { yt: 'vmVUeZny73o', credit: 'Prisma — Ordering By Relation Aggregates with Prisma Client' },        // Ordering By Relation Aggregates with Prisma Client
-    'pr-5-3-sap-xep-phan-trang': { yt: 'lQWdV8W-UiA', credit: 'Evoqys — Pagination in Prisma' }, // Pagination in Prisma
-    'pr-5-4-tong-hop': { yt: 'BdlCPdPaorY', credit: 'Prisma — Using Prisma\'s Group By Feature' },           // Using Prisma's Group By Feature
+    'pr-5-1-toan-tu-loc': { yt: 'GvpQzXdSPC8', credit: 'Technical Rajni — Prisma Tutorial #29  Filtering and Sorting with Prisma ORM in Node.js | Practical Guide and Examples', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-01-toan-tu-loc-2bffc345.mp4' }, defaultVideoTrack: 'VI'},        // Prisma Tutorial #29 Filtering and Sorting with Prisma ORM in Node.js
+    'pr-5-2-loc-quan-he': { yt: 'vmVUeZny73o', credit: 'Prisma — Ordering By Relation Aggregates with Prisma Client', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-02-loc-quan-he-d4cd998d.mp4' }, defaultVideoTrack: 'VI'},        // Ordering By Relation Aggregates with Prisma Client
+    'pr-5-3-sap-xep-phan-trang': { yt: 'lQWdV8W-UiA', credit: 'Evoqys — Pagination in Prisma', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-03-sap-xep-phan-trang-940713d9.mp4' }, defaultVideoTrack: 'VI'}, // Pagination in Prisma
+    'pr-5-4-tong-hop': { yt: 'BdlCPdPaorY', credit: 'Prisma — Using Prisma\'s Group By Feature', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/05-truy-van-sau/05-04-tong-hop-7df48053.mp4' }, defaultVideoTrack: 'VI'},           // Using Prisma's Group By Feature
     'pr-5-5-tim-kiem': { yt: 'PgaasLoYeyg', credit: 'Queen-Dev — part 5 | Search,  Pagination, Filtering and Sorting with prisma and next/navigation' },           // part 5 | Search, Pagination, Filtering and Sorting with prisma and next/navigation
 
     /* ── Chương 6 — Migration ── */
@@ -112,5 +112,7 @@ export default {
     'pr-12-3-bo-cong-cu': { yt: '5nAAH7y8R9A', credit: 'Eddie Jaoude — Improve your database queries with Prisma Optimize AI' },    // Improve your database queries with Prisma Optimize AI
     'pr-12-4-giam-sat': { yt: 'j2cjvnjotyo', credit: 'Prisma — [OLD: Replaced with Query Insights] Make Your Prisma Postgres Queries Better with Optimize' },      // [Replaced with Query Insights] Make Your Prisma Postgres Faster
     'pr-12-5-ket-khoa': { yt: '6-mGtUyfGLw', credit: 'Evoqys — Building a Production-Ready E-Commerce App: Node.js, Prisma ORM, TypeScript, and MySQL' },      // Building a Production-Ready E-Commerce App: Node.js, Prisma ORM, TypeScript, and MySQL
+    'pr-0-8-bat-dau-tai-day': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-01-bat-dau-prisma-la-gi-c9a16945.mp4' }, defaultVideoTrack: 'VI' },
+    'pr-0-9-bat-dau-tai-day-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/prisma-orm/00-prisma-giai-quyet-gi-cai-dat/00-02-bat-dau-su-co-va-cach-hoc-ca67086a.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

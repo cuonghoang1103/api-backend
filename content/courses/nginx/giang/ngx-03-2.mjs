@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 3.2 Mặc định Nginx gửi gì lên upstream, và bốn thứ làm bạn bất ngờ (deck ngx-03-2, 9 slide). VI = lời giảng video ngx-3-2; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-03-2', "What Nginx sends upstream by default, and four surprises", "Mặc định Nginx gửi gì lên upstream, và bốn thứ làm bạn bất ngờ", [
+  [1, "What Nginx sends upstream by default, and four surprises",
+    "<p>Lesson 3.2. A proxy does not forward your request; it builds a new one. Which headers are copied, changed or dropped is decided by old defaults — here is the same request seen from both sides.</p>",
+    "<p>Bài 3.2: mặc định Nginx gửi gì lên upstream, và bốn thứ làm bạn bất ngờ.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: the request seen both ways; four surprises; the fixing block; X-Forwarded-For as a list; and how real_ip can be spoofed.</p>",
+    "<p>Năm điều: cùng một request gọi thẳng và gọi qua proxy, bốn điều bất ngờ, và khối cấu hình vá cả bốn. Rồi X-Forwarded-For là một danh sách mà client viết mục đầu, và dòng set_real_ip_from cho phép ai cũng tự chọn địa chỉ IP.</p>"],
+  [3, "Same request: through a default proxy vs direct",
+    "<p>The same curl, through a default proxy and straight to the upstream. Through Nginx the upstream saw HTTP/1.0, host 127.0.0.1:9101, connection close, and the header with an underscore was gone.</p>",
+    "<p>Đo thật, cùng một lệnh curl. Qua proxy mặc định, upstream thấy HTTP 1.0, host là 127.0.0.1 cổng 9101, và connection close. Gọi thẳng thì là HTTP 1.1, host vidu.com, và header x-co-gach_duoi có mặt. Qua proxy, header đó biến mất.</p>"],
+  [4, "Four surprises",
+    "<p>Four surprises. Nginx speaks HTTP/1.0 upstream. Host is replaced by the upstream address. Every request carries Connection: close, a new TCP connection each time. And headers with underscores are dropped silently.</p>",
+    "<p>Một, Nginx nói HTTP 1.0 với upstream: không giữ kết nối, không có Upgrade, nên WebSocket không chạy được. Hai, Host bị thay bằng địa chỉ upstream, nên mọi thứ ứng dụng dựng từ Host đều sai. Ba, connection close cho mọi request, mỗi lần một kết nối TCP mới. Bốn, header có gạch dưới bị vứt trong im lặng, vì underscores_in_headers mặc định tắt. Đây là cái khó chẩn đoán nhất.</p>"],
+  [5, "The block that fixes all four",
+    "<p>One block fixes all four: proxy_http_version 1.1, Host set to $host, Connection emptied so connections can be reused, the forwarded headers, and underscores_in_headers on. Measured again: everything arrives. Keep it in one included file — proxy_set_header replaces as a whole.</p>",
+    "<p>Khối vá: proxy_http_version 1.1, Host lấy từ biến host, Connection để rỗng cho phép giữ kết nối, cùng các header chuyển tiếp. Thêm underscores_in_headers on nếu bạn thật sự cần header có gạch dưới. Gom khối này vào một tệp rồi include ở mọi chỗ, vì proxy_set_header là chỉ thị mảng, một dòng ở location sẽ vứt cả bộ. Host lấy biến host là tên client đã gõ, không phải địa chỉ upstream. Connection rỗng gỡ chữ close, để kết nối được dùng lại.</p>"],
+  [6, "X-Forwarded-For is a LIST — the client writes the first entry",
+    "<p>X-Forwarded-For is a list. $proxy_add_x_forwarded_for appends, so a client that sends 1.2.3.4 gets \"1.2.3.4, 127.0.0.1\" — the first entry is whatever the caller typed. X-Real-IP from $remote_addr is the TCP peer and cannot be faked.</p>",
+    "<p>Client tự gửi X-Forwarded-For là 1.2.3.4. Upstream nhận 1.2.3.4, dấu phẩy, 127.0.0.1. Biến proxy_add_x_forwarded_for nối thêm chứ không thay, nên mục đầu tiên là do người gọi tự viết, không tin được. Còn X-Real-IP lấy từ remote_addr là địa chỉ TCP thật, không giả được. Ở rìa mạng, chỉ tin cái đó.</p>"],
+  [7, "set_real_ip_from — and how it gets spoofed",
+    "<p>The real_ip module rewrites $remote_addr from a header when the request comes from a trusted address. Trusting 127.0.0.1 here let a forged X-Forwarded-For become the client IP: X-Real-IP became 1.2.3.4. Trust only proxies you operate.</p>",
+    "<p>Module real_ip ghi đè remote_addr bằng một header, khi request tới từ địa chỉ được tin. Ở đây tin 127.0.0.1 và lấy header X-Forwarded-For, nên X-Real-IP thành 1.2.3.4, đúng con số bị giả. Chỉ liệt kê địa chỉ của những proxy chính bạn vận hành đứng trước Nginx.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: proxy_http_version 1.1, proxy_set_header Host, an empty Connection, X-Real-IP, X-Forwarded-For, and underscores_in_headers.</p>",
+    "<p>Thuật ngữ: proxy_http_version 1.1, proxy_set_header Host, và Connection rỗng để giữ kết nối. X-Real-IP là địa chỉ TCP thật. X-Forwarded-For là danh sách. Underscores_in_headers quyết định header có gạch dưới.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: compare direct and proxied requests, add the fixing block, send a forged X-Forwarded-For, and reproduce the real_ip spoof.</p>",
+    "<p>Tới lượt bạn: so request gọi thẳng và qua proxy, thêm khối vá, gửi X-Forwarded-For giả, rồi dựng lại cú giả mạo real_ip. Tóm lại: proxy viết request mới. Một chấm một, Host, Connection rỗng và header chuyển tiếp. Mục đầu của X-Forwarded-For không đáng tin. IP thật của người dùng qua nhiều proxy được nói kỹ ở khoá Networking bài 7.5, và phía ứng dụng ở khoá Node.js, liên kết dưới video. Bạn mở Code Lab Nginx, module nền tảng reverse proxy. Bài sau: đệm, và cái gì thực sự làm hỏng luồng chảy.</p>"],
+]);

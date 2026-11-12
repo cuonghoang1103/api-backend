@@ -6,6 +6,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G01_1 from './giang/ngx-01-1.mjs';
+import G01_2 from './giang/ngx-01-2.mjs';
+import G01_3 from './giang/ngx-01-3.mjs';
+import G01_4 from './giang/ngx-01-4.mjs';
+import G01_5 from './giang/ngx-01-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -20,6 +25,7 @@ export default {
       type: 'LESSON',
       description: 'Bước đầu tiên của mọi request không phải khớp tên miền, mà là khớp cái SOCKET. Bài này chỉ ra listen thật sự khai báo cái gì, vì sao 80 với 0.0.0.0:80 với [::]:80 là ba thứ khác nhau, và cái cờ nào chỉ được đặt MỘT lần cho mỗi cổng chứ không phải mỗi khối server.',
       content: `
+${G01_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>listen, and the address:port pair</h2>
@@ -29,7 +35,7 @@ export default {
 <pre><code class="language-bash">listen 80;                 <span class="tok-comment"># every IPv4 address, port 80 — same as 0.0.0.0:80</span>
 listen 127.0.0.1:8080;     <span class="tok-comment"># loopback ONLY — nothing off-box can reach it</span>
 listen 192.0.2.10:443 ssl; <span class="tok-comment"># one specific address, with TLS — Chapter 6</span>
-listen [::]:80;            <span class="tok-comment"># IPv6; on Linux the default SHARES IPv4 as well</span>
+listen [::]:80;            <span class="tok-comment"># IPv6 ONLY on nginx 1.24 (ipv6only=on is the default) — measured below</span>
 listen [::]:80 ipv6only=on;<span class="tok-comment"># IPv6 ONLY — now nginx's default</span>
 listen 8080 default_server;<span class="tok-comment"># the default server FOR THIS PORT — Lesson 1.3</span>
 
@@ -84,6 +90,85 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
 <p><strong>Read a configuration by PORT, not by file.</strong> On a real server with ten files under <code>sites-enabled</code>, the useful question is not "what does this file say" but "which server blocks exist on port 443, and which one is the default". A single <code>nginx -T | grep -E 'listen|server_name'</code> answers exactly that in one screen, and it is the fastest way to spot two sites standing on each other — something reading file by file will never reveal.</p>
 </div>
 
+<h3>🔬 Run it yourself: three blocks, two addresses, one socket</h3>
+<p>Every claim of this lesson, run on nginx/1.24.0 (Ubuntu 24.04). Three blocks: A on port 8090 on every address, B on 127.0.0.2:8090 only, C on loopback port 8091 only.</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  server { listen 8090;                return 200 "A  listen 8090 (dai dien 0.0.0.0)\\n"; }
+  server { listen 127.0.0.2:8090;      return 200 "B  listen 127.0.0.2:8090 (cu the)\\n"; }
+  server { listen 127.0.0.1:8091;      return 200 "C  listen 127.0.0.1:8091 (chi loopback)\\n"; }
+}</code></pre>
+<div class="out">$ ss -tlnp | grep nginx | awk '{print $4, $6}' | sort
+0.0.0.0:8090 users:(("nginx",pid=1430,fd=4))
+127.0.0.1:8091 users:(("nginx",pid=1430,fd=5))
+$ curl -s http://127.0.0.1:8090/
+A  listen 8090 (dai dien 0.0.0.0)
+$ curl -s http://127.0.0.2:8090/
+B  listen 127.0.0.2:8090 (cu the)
+$ curl -s http://127.0.0.1:8091/
+C  listen 127.0.0.1:8091 (chi loopback)
+$ hostname -I
+172.17.0.5 
+$ curl -s -m 2 http://$(hostname -I | awk '{print $1}'):8091/ || echo "curl: that bai (ma thoat $?)"
+curl: that bai (ma thoat 7)
+$ curl -s http://$(hostname -I | awk '{print $1}'):8090/
+A  listen 8090 (dai dien 0.0.0.0)</div>
+<p>127.0.0.2 reached the specific block B, every other address the wildcard A — and <code>ss</code> shows ONE listening socket for port 8090: Nginx binds the wildcard once and decides by the address each connection arrived on. Block C answered on the machine, while the container's own network address got curl exit code 7 (connection refused). Next: the port-level flags, the IPv6 default, and <code>ssl</code> declared on only one of two blocks:</p>
+<div class="out">$ nginx -t -c hai-default.conf
+2026/11/12 11:54:37 [emerg] 1525#1525: a duplicate default server for 0.0.0.0:8092 in hai-default.conf:4
+nginx: configuration file hai-default.conf test failed
+$ nginx -t -c reuse.conf
+2026/11/12 11:54:37 [emerg] 1533#1533: duplicate listen options for 0.0.0.0:8093 in reuse.conf:4
+nginx: configuration file reuse.conf test failed
+$ nginx -c trung-cong.conf; tail -n 3 /tmp/ng/logs/trung-error.log
+2026/11/12 11:54:37 [emerg] 1549#1549: bind() to 0.0.0.0:8090 failed (98: Address already in use)
+2026/11/12 11:54:37 [emerg] 1549#1549: bind() to 0.0.0.0:8090 failed (98: Address already in use)
+2026/11/12 11:54:37 [emerg] 1549#1549: still could not bind()
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] still could not bind()
+$ ss -tlnp 'sport = :8090'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+LISTEN 0      511          0.0.0.0:8090      0.0.0.0:*    users:(("nginx",pid=1430,fd=4))
+$ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+0
+$ nginx -c v6.conf &amp;&amp; ss -tlnp 'sport = :8094' | awk 'NR&gt;1{print $4}'
+[::]:8094
+$ curl -s -m 2 http://[::1]:8094/
+chi IPv6
+$ curl -s -m 2 http://127.0.0.1:8094/ || echo "curl IPv4: that bai (ma thoat $?)"
+curl IPv4: that bai (ma thoat 7)
+$ nginx -c ssl.conf; curl -s -m 2 http://127.0.0.1:8095/ -H 'Host: b.test' | head -c 120; echo
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;400 The plain HTTP request was sent to HTTPS port&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;400 Bad Reque
+$ curl -sk -m 2 https://127.0.0.1:8095/ -H 'Host: b.test'
+b.test</div>
+<p>Two defaults, two errors (<code>duplicate default server</code>, <code>duplicate listen options</code>); a second Nginx on a taken port fails with <code>98: Address already in use</code> and <code>ss</code> names the owner; <code>listen [::]:8094</code> refuses IPv4; and <code>b.test</code>, which never wrote <code>ssl</code>, speaks only TLS because <code>a.test</code> put the flag on the shared port.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-1-4-cong-socket" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 1.5 — Ports and sockets</span><span class="lc-sub">What a listening socket is, from the network side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — Interfaces, ports and DNS from the shell</span><span class="lc-sub">ss, ip and the interfaces behind 0.0.0.0 and 127.0.0.1</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 8.2 — Publishing ports, and the firewall trap</span><span class="lc-sub">Why a container listens on 8080 and is mapped outward</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>listen</code></span><span class="v">Declares the address:port socket a server block binds to — the first thing a request is matched against.</span></div>
+  <div class="kv"><span class="k">address:port pair</span><span class="v">The first filter in server selection; a block that does not listen on the connection's socket is never a candidate.</span></div>
+  <div class="kv"><span class="k"><code>0.0.0.0</code> vs <code>127.0.0.1</code></span><span class="v">Wildcard (every interface) versus loopback-only, which nothing off the box can reach — a real security control.</span></div>
+  <div class="kv"><span class="k"><code>default_server</code> / <code>ssl</code> / <code>reuseport</code></span><span class="v">Flags that belong to the socket, not the block — declared once per address:port.</span></div>
+  <div class="kv"><span class="k"><code>ipv6only=on</code></span><span class="v">Makes <code>listen [::]:80</code> serve IPv6 only; you still need <code>listen 80</code> for IPv4.</span></div>
+  <div class="kv"><span class="k"><code>ss -tlnp</code></span><span class="v">Shows which process actually holds a port — faster than reading the config and guessing.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Server selection starts by matching the SOCKET (address:port), before any hostname.</li><li>A specific address beats the wildcard on the same port.</li><li><code>default_server</code>, <code>ssl</code>, <code>http2</code> and <code>reuseport</code> are properties of the port, not the block — one per address:port.</li><li>Ports below 1024 need the master's privilege; containers bind a high port and map it.</li><li>Check reality with <code>ss -tlnp</code> and <code>nginx -T</code>, do not read the config and guess.</li></ul>
+
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#listen" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">nginx — listen</span><span class="lc-sub">nginx.org · Every parameter, including which ones are per-port</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — how nginx processes a request</span><span class="lc-sub">nginx.org · The four steps above, from the source of truth</span></span></a>
@@ -101,7 +186,7 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
 <pre><code class="language-bash">listen 80;                 <span class="tok-comment"># mọi địa chỉ IPv4, cổng 80  — bằng 0.0.0.0:80</span>
 listen 127.0.0.1:8080;     <span class="tok-comment"># CHỈ loopback — không ai ngoài máy tới được</span>
 listen 192.0.2.10:443 ssl; <span class="tok-comment"># một địa chỉ cụ thể, kèm TLS — Chương 6</span>
-listen [::]:80;            <span class="tok-comment"># IPv6; mặc định trên Linux là DÙNG CHUNG cả IPv4</span>
+listen [::]:80;            <span class="tok-comment"># CHỈ IPv6 trên nginx 1.24 (ipv6only=on là mặc định) — đo ở dưới</span>
 listen [::]:80 ipv6only=on;<span class="tok-comment"># CHỈ IPv6 — nay là mặc định của nginx</span>
 listen 8080 default_server;<span class="tok-comment"># máy chủ mặc định CHO CỔNG NÀY — Bài 1.3</span>
 
@@ -156,6 +241,85 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
 <p><strong>Đọc một cấu hình thì hãy đọc theo CỔNG, đừng đọc theo TỆP.</strong> Trên một máy chủ thật với mười tệp dưới <code>sites-enabled</code>, câu hỏi hữu ích không phải "tệp này nói gì" mà là "cổng 443 có những khối server nào, và cái nào là mặc định". Một câu <code>nginx -T | grep -E 'listen|server_name'</code> trả lời đúng câu đó trong một màn hình, và nó là cách nhanh nhất để thấy hai trang đang giẫm lên nhau — thứ mà đọc từng tệp một sẽ không bao giờ lộ ra.</p>
 </div>
 
+<h3>🔬 Tự chạy lại: ba khối, hai địa chỉ, một socket</h3>
+<p>Mọi khẳng định của bài, chạy thật trên nginx/1.24.0 (Ubuntu 24.04). Ba khối: A nghe cổng 8090 trên mọi địa chỉ, B chỉ nghe 127.0.0.2:8090, C chỉ nghe loopback cổng 8091.</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  server { listen 8090;                return 200 "A  listen 8090 (dai dien 0.0.0.0)\\n"; }
+  server { listen 127.0.0.2:8090;      return 200 "B  listen 127.0.0.2:8090 (cu the)\\n"; }
+  server { listen 127.0.0.1:8091;      return 200 "C  listen 127.0.0.1:8091 (chi loopback)\\n"; }
+}</code></pre>
+<div class="out">$ ss -tlnp | grep nginx | awk '{print $4, $6}' | sort
+0.0.0.0:8090 users:(("nginx",pid=1430,fd=4))
+127.0.0.1:8091 users:(("nginx",pid=1430,fd=5))
+$ curl -s http://127.0.0.1:8090/
+A  listen 8090 (dai dien 0.0.0.0)
+$ curl -s http://127.0.0.2:8090/
+B  listen 127.0.0.2:8090 (cu the)
+$ curl -s http://127.0.0.1:8091/
+C  listen 127.0.0.1:8091 (chi loopback)
+$ hostname -I
+172.17.0.5 
+$ curl -s -m 2 http://$(hostname -I | awk '{print $1}'):8091/ || echo "curl: that bai (ma thoat $?)"
+curl: that bai (ma thoat 7)
+$ curl -s http://$(hostname -I | awk '{print $1}'):8090/
+A  listen 8090 (dai dien 0.0.0.0)</div>
+<p>127.0.0.2 tới khối cụ thể B, mọi địa chỉ khác tới khối đại diện A — và <code>ss</code> chỉ thấy MỘT socket cho cổng 8090: Nginx mở socket đại diện một lần rồi chia theo địa chỉ mà mỗi kết nối đã tới. Khối C trả lời trên chính máy, còn địa chỉ mạng của container thì curl thoát mã 7 (bị từ chối kết nối). Tiếp theo: các cờ thuộc về cổng, mặc định IPv6, và <code>ssl</code> chỉ khai ở một trong hai khối:</p>
+<div class="out">$ nginx -t -c hai-default.conf
+2026/11/12 11:54:37 [emerg] 1525#1525: a duplicate default server for 0.0.0.0:8092 in hai-default.conf:4
+nginx: configuration file hai-default.conf test failed
+$ nginx -t -c reuse.conf
+2026/11/12 11:54:37 [emerg] 1533#1533: duplicate listen options for 0.0.0.0:8093 in reuse.conf:4
+nginx: configuration file reuse.conf test failed
+$ nginx -c trung-cong.conf; tail -n 3 /tmp/ng/logs/trung-error.log
+2026/11/12 11:54:37 [emerg] 1549#1549: bind() to 0.0.0.0:8090 failed (98: Address already in use)
+2026/11/12 11:54:37 [emerg] 1549#1549: bind() to 0.0.0.0:8090 failed (98: Address already in use)
+2026/11/12 11:54:37 [emerg] 1549#1549: still could not bind()
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] bind() to 0.0.0.0:8090 failed (98: Address already in use)
+nginx: [emerg] still could not bind()
+$ ss -tlnp 'sport = :8090'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+LISTEN 0      511          0.0.0.0:8090      0.0.0.0:*    users:(("nginx",pid=1430,fd=4))
+$ cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+0
+$ nginx -c v6.conf &amp;&amp; ss -tlnp 'sport = :8094' | awk 'NR&gt;1{print $4}'
+[::]:8094
+$ curl -s -m 2 http://[::1]:8094/
+chi IPv6
+$ curl -s -m 2 http://127.0.0.1:8094/ || echo "curl IPv4: that bai (ma thoat $?)"
+curl IPv4: that bai (ma thoat 7)
+$ nginx -c ssl.conf; curl -s -m 2 http://127.0.0.1:8095/ -H 'Host: b.test' | head -c 120; echo
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;400 The plain HTTP request was sent to HTTPS port&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;400 Bad Reque
+$ curl -sk -m 2 https://127.0.0.1:8095/ -H 'Host: b.test'
+b.test</div>
+<p>Hai default, hai lỗi (<code>duplicate default server</code>, <code>duplicate listen options</code>); một Nginx thứ hai trên cổng đã bị chiếm thì hỏng với <code>98: Address already in use</code> và <code>ss</code> gọi tên chủ cổng; <code>listen [::]:8094</code> từ chối IPv4; và <code>b.test</code> không hề ghi <code>ssl</code> vẫn chỉ nói TLS, vì <code>a.test</code> đã đặt cờ lên cổng dùng chung.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-1-4-cong-socket" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking cho lập trình viên · 1.5 — Cổng và socket</span><span class="lc-sub">Một socket đang nghe là gì, nhìn từ phía mạng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-1-giao-dien-cong-dns" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.1 — Mạng nhìn từ shell: giao diện, cổng và DNS</span><span class="lc-sub">ss, ip và các giao diện đứng sau 0.0.0.0 và 127.0.0.1</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 8.2 — Công bố cổng, và cái bẫy tường lửa</span><span class="lc-sub">Vì sao container nghe 8080 rồi ánh xạ ra ngoài</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>listen</code></span><span class="v">Khai báo cái socket địa chỉ:cổng mà một khối server gắn vào — thứ đầu tiên một request bị đem ra khớp.</span></div>
+  <div class="kv"><span class="k">address:port pair</span><span class="v">Cặp địa chỉ:cổng, bộ lọc đầu tiên khi chọn server; khối không nghe trên socket của kết nối thì không phải ứng viên.</span></div>
+  <div class="kv"><span class="k"><code>0.0.0.0</code> vs <code>127.0.0.1</code></span><span class="v">Địa chỉ đại diện (mọi giao diện) so với chỉ loopback — ngoài máy không tới được, một biện pháp bảo mật thật.</span></div>
+  <div class="kv"><span class="k"><code>default_server</code> / <code>ssl</code> / <code>reuseport</code></span><span class="v">Những cờ thuộc về SOCKET chứ không thuộc về khối — khai một lần cho mỗi địa chỉ:cổng.</span></div>
+  <div class="kv"><span class="k"><code>ipv6only=on</code></span><span class="v">Khiến <code>listen [::]:80</code> chỉ phục vụ IPv6; vẫn cần thêm <code>listen 80</code> cho IPv4.</span></div>
+  <div class="kv"><span class="k"><code>ss -tlnp</code></span><span class="v">Xem tiến trình nào đang thật sự giữ một cổng — nhanh hơn đọc cấu hình rồi đoán.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Việc chọn server bắt đầu bằng khớp cái SOCKET (địa chỉ:cổng), trước mọi tên miền.</li><li>Địa chỉ cụ thể thắng ký tự đại diện trên cùng một cổng.</li><li><code>default_server</code>, <code>ssl</code>, <code>http2</code> và <code>reuseport</code> là thuộc tính của CỔNG, không phải của khối — mỗi địa chỉ:cổng một cái.</li><li>Cổng dưới 1024 cần đặc quyền của master; container buộc một cổng cao rồi ánh xạ ra.</li><li>Kiểm thực tế bằng <code>ss -tlnp</code> và <code>nginx -T</code>, đừng đọc cấu hình rồi đoán.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#listen" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">nginx — listen</span><span class="lc-sub">nginx.org · Mọi tham số, kể cả những cái thuộc về CỔNG chứ không thuộc về khối</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — nginx xử lý một request thế nào</span><span class="lc-sub">nginx.org · Bốn bước ở trên, lấy từ nguồn sự thật</span></span></a>
@@ -173,6 +337,7 @@ nginx -T | grep -nE '^\\\\s*(listen|server_name)'</code></pre>
       type: 'LESSON',
       description: 'Bốn mức, một thứ tự cố định, và cái mức mà ai cũng đoán sai: một biểu thức chính quy KHÔNG thắng một ký tự đại diện. Bài này chạy sáu cái Host thật vào sáu khối server thật rồi in ra khối nào trả lời — trong đó có một dòng làm phần lớn người đọc phải nhìn lại lần hai.',
       content: `
+${G01_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>server_name, and the four levels of precedence</h2>
@@ -197,7 +362,7 @@ khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu 
   </div>
   <div class="lz-stage">
     <span class="lz-badge">Level 2</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Leading wildcard</span><span class="lz-nsub">*.vidu.com · the longest matching one wins · covers any single label in front</span></div></div>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Leading wildcard</span><span class="lz-nsub">*.vidu.com · the longest matching one wins · covers ONE OR MORE labels in front (a.b.vidu.com too — measured)</span></div></div>
   </div>
   <div class="lz-stage">
     <span class="lz-badge">Level 3</span>
@@ -213,7 +378,7 @@ khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu 
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Exact names are free</span><span class="v">Nginx puts them in hash tables, so a thousand exact names cost the same as one. If you find yourself reaching for a regex to avoid listing names, list the names — one <code>server_name</code> directive takes as many as you like, space-separated.</span></div>
-  <div class="kv"><span class="k">Wildcards cover exactly one label</span><span class="v"><code>*.vidu.com</code> matches <code>a.vidu.com</code> and it does <em>not</em> match <code>vidu.com</code> itself, nor does the star span dots the way a shell glob would. Sites that need both list both: <code>server_name vidu.com *.vidu.com;</code>.</span></div>
+  <div class="kv"><span class="k">A wildcard covers labels IN FRONT, never the bare name</span><span class="v"><code>*.vidu.com</code> matches <code>a.vidu.com</code> — and, measured on 1.24, <code>a.b.vidu.com</code> too — but it does <em>not</em> match <code>vidu.com</code> itself. Sites that need both list both: <code>server_name vidu.com *.vidu.com;</code>.</span></div>
   <div class="kv"><span class="k">The star must be at one end</span><span class="v"><code>*.vidu.com</code> and <code>www.vidu.*</code> are valid; <code>www.*.com</code> is not, and Nginx rejects it at startup. Anything in the middle is a job for a regular expression.</span></div>
   <div class="kv"><span class="k">Regexes are the only level with capture groups</span><span class="v"><code>~^(?&lt;khach&gt;.+)\\\\.vidu\\\\.com$</code> makes <code>$khach</code> usable inside that block — for a <code>root</code> path, a <code>proxy_pass</code> target or a log field. That is the real reason to use one, not specificity.</span></div>
 </div>
@@ -236,6 +401,62 @@ server {
 <div class="note-ct">
 <p><strong>The rule to carry away.</strong> Nginx ranks by KIND, not by how specific a pattern looks: exact, then leading wildcard, then trailing wildcard, then regex — and the first hit ends the search. When a request lands on a block you did not expect, the question is never "which pattern is more precise" but "which level does each pattern belong to", and the answer is usually that something two levels higher matched first. Reach for a regular expression when you need a capture group, and reach for a plain list of names the rest of the time.</p>
 </div>
+
+<h3>🔬 Run it yourself: five blocks, nine Hosts</h3>
+<p>The table at the top of this lesson, rebuilt and extended on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  server { listen 8080; server_name mot.vidu.com;                    return 200 "1 · chinh xac: mot.vidu.com\\n"; }
+  server { listen 8080; server_name *.vidu.com;                      return 200 "2 · dai dien DAU: *.vidu.com\\n"; }
+  server { listen 8080; server_name www.vidu.*;                      return 200 "3 · dai dien CUOI: www.vidu.*\\n"; }
+  server { listen 8080; server_name ~^may(?&lt;so&gt;\\d+)\\.vidu\\.com$;     return 200 "4 · regex: may$so\\n"; }
+  server { listen 8080; server_name ~^may42\\.vidu\\.net$;             return 200 "4b · regex: may42.vidu.net\\n"; }
+}</code></pre>
+<div class="out">$ for h in mot.vidu.com bat-ky.vidu.com www.vidu.net may42.vidu.com may42.vidu.net khong-khop.com; do printf '%-18s -&gt; ' $h; curl -s -H "Host: $h" http://127.0.0.1:8080/; done
+mot.vidu.com       -&gt; 1 · chinh xac: mot.vidu.com
+bat-ky.vidu.com    -&gt; 2 · dai dien DAU: *.vidu.com
+www.vidu.net       -&gt; 3 · dai dien CUOI: www.vidu.*
+may42.vidu.com     -&gt; 2 · dai dien DAU: *.vidu.com
+may42.vidu.net     -&gt; 4b · regex: may42.vidu.net
+khong-khop.com     -&gt; 1 · chinh xac: mot.vidu.com
+$ for h in a.b.vidu.com vidu.com MOT.VIDU.COM:8080; do printf '%-18s -&gt; ' $h; curl -s -H "Host: $h" http://127.0.0.1:8080/; done
+a.b.vidu.com       -&gt; 2 · dai dien DAU: *.vidu.com
+vidu.com           -&gt; 1 · chinh xac: mot.vidu.com
+MOT.VIDU.COM:8080  -&gt; 1 · chinh xac: mot.vidu.com</div>
+<p><code>may42.vidu.com</code> went to the wildcard, not the regex (level 2 beats level 4). <code>a.b.vidu.com</code> also matched <code>*.vidu.com</code>: a leading wildcard covers one OR MORE labels in front. The bare <code>vidu.com</code> did not, and fell to the default — the first block. Capital letters and the port were ignored. The remaining details — a request with no Host, a star in the middle, a long name, and a capture group used in <code>root</code>:</p>
+<div class="out">$ curl -s -H 'Host: vidu.com' http://127.0.0.1:8081/
+vidu.com
+$ printf 'GET / HTTP/1.0\\r\\n\\r\\n' | nc -q 2 127.0.0.1 8081; echo "(ket noi bi dong, khong mot byte nao: 444)"
+(ket noi bi dong, khong mot byte nao: 444)
+$ nginx -t -c sao.conf
+2026/11/12 12:03:32 [emerg] 1878#1878: invalid server name or wildcard "www.*.com" on 0.0.0.0:8082
+nginx: configuration file sao.conf test failed
+$ nginx -t -c dai.conf
+2026/11/12 12:03:33 [emerg] 1895#1895: could not build server_names_hash, you should increase server_names_hash_bucket_size: 64
+nginx: configuration file dai.conf test failed
+$ for h in an.vidu.com binh.vidu.com chi.vidu.com; do printf '%-15s -&gt; ' $h; curl -s -o /tmp/r -w '%{http_code} ' -H "Host: $h" http://127.0.0.1:8084/; cat /tmp/r | head -c 40 | tr -d '\\n'; echo; done
+an.vidu.com     -&gt; 200 trang cua khach an
+binh.vidu.com   -&gt; 200 trang cua khach binh
+chi.vidu.com    -&gt; 404 &lt;html&gt;
+&lt;head&gt;&lt;title&gt;404 Not Found&lt;/titl</div>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-5-proxy-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.5 — Proxies on the path: Host and the real client IP</span><span class="lc-sub">Where the Host header comes from and who can change it</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-14-2-web-email-dns-dhcp-chia-se-tep" target="_blank" rel="noopener"><span class="lc-ico">🎓</span><span class="lc-body"><span class="lc-title">Academy NWC204 · 14.2 — Web, email and DNS protocols</span><span class="lc-sub">The school lesson on names and DNS — this course goes one level deeper into how a server picks a name</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>server_name</code></span><span class="v">The names a block answers to, compared against the <code>Host</code> header after the socket match.</span></div>
+  <div class="kv"><span class="k">Exact name</span><span class="v">Level 1 — stored in a hash table, so a thousand names cost the same as one.</span></div>
+  <div class="kv"><span class="k">Leading wildcard</span><span class="v">Level 2 — <code>*.vidu.com</code> covers one or more labels in front (not the bare name); longest match wins.</span></div>
+  <div class="kv"><span class="k">Trailing wildcard</span><span class="v">Level 3 — <code>www.vidu.*</code> for one site across several top-level domains.</span></div>
+  <div class="kv"><span class="k">Regex name</span><span class="v">Level 4 — LAST, matched in file order, and the only level with capture groups.</span></div>
+  <div class="kv"><span class="k">Precedence by kind</span><span class="v">Nginx ranks by KIND, not by how specific a pattern looks — a wildcard beats a regex.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>Host</code> is matched against <code>server_name</code> in four fixed levels: exact, leading wildcard, trailing wildcard, regex.</li><li>The first match by KIND wins — a wildcard beats a regex no matter how specific the regex looks.</li><li>Exact names are free (hash table); list them rather than reaching for a regex.</li><li>A wildcard covers the labels in front of it (not the bare name), and the star must sit at one end.</li><li>Use a regex only for a capture group; remove a shadowing wildcard if a regex must win.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/server_names.html" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — server names</span><span class="lc-sub">nginx.org · The precedence list, wildcards, regexes and the hash sizing</span></span></a>
@@ -269,7 +490,7 @@ khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu 
   </div>
   <div class="lz-stage">
     <span class="lz-badge">Mức 2</span>
-    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Đại diện ở ĐẦU</span><span class="lz-nsub">*.vidu.com · cái khớp DÀI NHẤT thắng · phủ được đúng một nhãn ở phía trước</span></div></div>
+    <div class="lz-node"><div class="lz-nbody"><span class="lz-ntitle">Đại diện ở ĐẦU</span><span class="lz-nsub">*.vidu.com · cái khớp DÀI NHẤT thắng · phủ MỘT HOẶC NHIỀU nhãn ở phía trước (cả a.b.vidu.com — đo thật)</span></div></div>
   </div>
   <div class="lz-stage">
     <span class="lz-badge">Mức 3</span>
@@ -285,7 +506,7 @@ khong-khop.com           8080   1 · ten CHINH XAC: mot.vidu.com  &lt;- may chu 
 </div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Tên chính xác thì MIỄN PHÍ</span><span class="v">Nginx đặt chúng vào bảng băm, nên một nghìn tên chính xác tốn đúng bằng một cái. Nếu bạn thấy mình với tay lấy regex chỉ để khỏi phải liệt kê tên thì hãy cứ LIỆT KÊ — một directive <code>server_name</code> nhận bao nhiêu tên cũng được, cách nhau bằng dấu cách.</span></div>
-  <div class="kv"><span class="k">Ký tự đại diện phủ ĐÚNG MỘT nhãn</span><span class="v"><code>*.vidu.com</code> khớp <code>a.vidu.com</code> và nó <em>KHÔNG</em> khớp chính <code>vidu.com</code>, mà dấu sao cũng không nhảy qua được dấu chấm theo kiểu glob của shell. Trang nào cần cả hai thì liệt kê cả hai: <code>server_name vidu.com *.vidu.com;</code>.</span></div>
+  <div class="kv"><span class="k">Ký tự đại diện phủ các nhãn PHÍA TRƯỚC, không phủ tên trần</span><span class="v"><code>*.vidu.com</code> khớp <code>a.vidu.com</code> — và đo trên 1.24 thì khớp cả <code>a.b.vidu.com</code> — nhưng nó <em>KHÔNG</em> khớp chính <code>vidu.com</code>. Trang nào cần cả hai thì liệt kê cả hai: <code>server_name vidu.com *.vidu.com;</code>.</span></div>
   <div class="kv"><span class="k">Dấu sao phải nằm ở MỘT ĐẦU</span><span class="v"><code>*.vidu.com</code> và <code>www.vidu.*</code> thì hợp lệ; <code>www.*.com</code> thì không, và Nginx từ chối nó ngay lúc khởi động. Bất cứ thứ gì nằm ở GIỮA đều là việc của một biểu thức chính quy.</span></div>
   <div class="kv"><span class="k">Regex là mức DUY NHẤT có nhóm bắt</span><span class="v"><code>~^(?&lt;khach&gt;.+)\\\\.vidu\\\\.com$</code> làm cho <code>$khach</code> dùng được bên trong khối đó — cho một đường dẫn <code>root</code>, một đích <code>proxy_pass</code> hay một trường trong log. ĐÓ mới là lý do THẬT để dùng regex, không phải chuyện độ cụ thể.</span></div>
 </div>
@@ -309,6 +530,62 @@ server {
 <p><strong>Cái luật đáng mang theo.</strong> Nginx xếp hạng theo LOẠI, không theo việc một cái mẫu trông cụ thể tới đâu: chính xác, rồi đại diện đầu, rồi đại diện cuối, rồi regex — và cái khớp đầu tiên kết thúc cuộc tìm kiếm. Khi một request rơi vào cái khối mà bạn không ngờ tới, câu hỏi KHÔNG BAO GIỜ là "mẫu nào chính xác hơn" mà là "mỗi mẫu thuộc về MỨC nào", và câu trả lời thường là có thứ gì đó ở mức cao hơn hai bậc đã khớp trước. Hãy với tay lấy biểu thức chính quy khi bạn cần một NHÓM BẮT, và với tay lấy một danh sách tên thường trong mọi trường hợp còn lại.</p>
 </div>
 
+<h3>🔬 Tự chạy lại: năm khối, chín cái Host</h3>
+<p>Bảng ở đầu bài, dựng lại và mở rộng trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  server { listen 8080; server_name mot.vidu.com;                    return 200 "1 · chinh xac: mot.vidu.com\\n"; }
+  server { listen 8080; server_name *.vidu.com;                      return 200 "2 · dai dien DAU: *.vidu.com\\n"; }
+  server { listen 8080; server_name www.vidu.*;                      return 200 "3 · dai dien CUOI: www.vidu.*\\n"; }
+  server { listen 8080; server_name ~^may(?&lt;so&gt;\\d+)\\.vidu\\.com$;     return 200 "4 · regex: may$so\\n"; }
+  server { listen 8080; server_name ~^may42\\.vidu\\.net$;             return 200 "4b · regex: may42.vidu.net\\n"; }
+}</code></pre>
+<div class="out">$ for h in mot.vidu.com bat-ky.vidu.com www.vidu.net may42.vidu.com may42.vidu.net khong-khop.com; do printf '%-18s -&gt; ' $h; curl -s -H "Host: $h" http://127.0.0.1:8080/; done
+mot.vidu.com       -&gt; 1 · chinh xac: mot.vidu.com
+bat-ky.vidu.com    -&gt; 2 · dai dien DAU: *.vidu.com
+www.vidu.net       -&gt; 3 · dai dien CUOI: www.vidu.*
+may42.vidu.com     -&gt; 2 · dai dien DAU: *.vidu.com
+may42.vidu.net     -&gt; 4b · regex: may42.vidu.net
+khong-khop.com     -&gt; 1 · chinh xac: mot.vidu.com
+$ for h in a.b.vidu.com vidu.com MOT.VIDU.COM:8080; do printf '%-18s -&gt; ' $h; curl -s -H "Host: $h" http://127.0.0.1:8080/; done
+a.b.vidu.com       -&gt; 2 · dai dien DAU: *.vidu.com
+vidu.com           -&gt; 1 · chinh xac: mot.vidu.com
+MOT.VIDU.COM:8080  -&gt; 1 · chinh xac: mot.vidu.com</div>
+<p><code>may42.vidu.com</code> rơi vào đại diện, không vào regex (mức 2 thắng mức 4). <code>a.b.vidu.com</code> cũng khớp <code>*.vidu.com</code>: đại diện ở đầu phủ MỘT HOẶC NHIỀU nhãn phía trước. Còn <code>vidu.com</code> trần thì không, và rơi vào khối mặc định — khối đầu tiên. Chữ hoa và cổng bị bỏ qua. Các chi tiết còn lại — request không có Host, dấu sao ở giữa, tên dài, và nhóm bắt dùng trong <code>root</code>:</p>
+<div class="out">$ curl -s -H 'Host: vidu.com' http://127.0.0.1:8081/
+vidu.com
+$ printf 'GET / HTTP/1.0\\r\\n\\r\\n' | nc -q 2 127.0.0.1 8081; echo "(ket noi bi dong, khong mot byte nao: 444)"
+(ket noi bi dong, khong mot byte nao: 444)
+$ nginx -t -c sao.conf
+2026/11/12 12:03:32 [emerg] 1878#1878: invalid server name or wildcard "www.*.com" on 0.0.0.0:8082
+nginx: configuration file sao.conf test failed
+$ nginx -t -c dai.conf
+2026/11/12 12:03:33 [emerg] 1895#1895: could not build server_names_hash, you should increase server_names_hash_bucket_size: 64
+nginx: configuration file dai.conf test failed
+$ for h in an.vidu.com binh.vidu.com chi.vidu.com; do printf '%-15s -&gt; ' $h; curl -s -o /tmp/r -w '%{http_code} ' -H "Host: $h" http://127.0.0.1:8084/; cat /tmp/r | head -c 40 | tr -d '\\n'; echo; done
+an.vidu.com     -&gt; 200 trang cua khach an
+binh.vidu.com   -&gt; 200 trang cua khach binh
+chi.vidu.com    -&gt; 404 &lt;html&gt;
+&lt;head&gt;&lt;title&gt;404 Not Found&lt;/titl</div>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-5-proxy-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking cho lập trình viên · 7.5 — Proxy trên đường đi: Host và IP thật</span><span class="lc-sub">Header Host tới từ đâu và ai sửa được nó</span></span></a>
+<a class="link-card lien-ket-cheo" href="/academy/courses/nwc204-computer-networking/learn?lessonSlug=nwc204-14-2-web-email-dns-dhcp-chia-se-tep" target="_blank" rel="noopener"><span class="lc-ico">🎓</span><span class="lc-body"><span class="lc-title">Academy NWC204 · 14.2 — Giao thức web, email, DNS</span><span class="lc-sub">Bài ở trường về tên miền và DNS — khoá này đi sâu thêm một tầng: máy chủ chọn tên thế nào</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>server_name</code></span><span class="v">Các tên một khối trả lời, đem so với header <code>Host</code> sau khi đã khớp socket.</span></div>
+  <div class="kv"><span class="k">Exact name</span><span class="v">Mức 1 — tên chính xác lưu trong bảng băm, nên một nghìn tên tốn đúng bằng một.</span></div>
+  <div class="kv"><span class="k">Leading wildcard</span><span class="v">Mức 2 — <code>*.vidu.com</code> phủ một hoặc nhiều nhãn ở đầu (không phủ tên trần); khớp dài nhất thắng.</span></div>
+  <div class="kv"><span class="k">Trailing wildcard</span><span class="v">Mức 3 — <code>www.vidu.*</code> cho một trang trải trên nhiều tên miền cấp cao.</span></div>
+  <div class="kv"><span class="k">Regex name</span><span class="v">Mức 4 — CUỐI CÙNG, khớp theo thứ tự trong tệp, và là mức duy nhất có nhóm bắt.</span></div>
+  <div class="kv"><span class="k">Precedence by kind</span><span class="v">Nginx xếp hạng theo LOẠI, không theo độ cụ thể của mẫu — một đại diện thắng một regex.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>Host</code> được khớp với <code>server_name</code> theo bốn mức cố định: chính xác, đại diện đầu, đại diện cuối, regex.</li><li>Khớp đầu tiên theo LOẠI là thắng — đại diện thắng regex dù regex trông cụ thể tới đâu.</li><li>Tên chính xác thì miễn phí (bảng băm); cứ liệt kê thay vì với tay lấy regex.</li><li>Một ký tự đại diện phủ các nhãn phía trước (không phủ tên trần), và dấu sao phải nằm ở một đầu.</li><li>Chỉ dùng regex khi cần một nhóm bắt; gỡ cái đại diện đang che nếu muốn regex thắng.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/server_names.html" target="_blank" rel="noopener"><span class="lc-ico">🏷️</span><span class="lc-body"><span class="lc-title">nginx — tên máy chủ</span><span class="lc-sub">nginx.org · Danh sách ưu tiên, ký tự đại diện, regex và cách chỉnh kích thước bảng băm</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — nginx xử lý một request thế nào</span><span class="lc-sub">nginx.org · Việc khớp tên nằm ở đâu trong chuỗi bốn bước</span></span></a>
@@ -326,6 +603,7 @@ server {
       type: 'LESSON',
       description: 'Khi không tên nào khớp, Nginx VẪN trả lời — bằng máy chủ mặc định của cổng đó, và nếu bạn không khai thì đó là khối ĐẦU TIÊN, tức là một trang được chọn bởi thứ tự chữ cái của tên tệp. Bài này chạy thật ba cổng với ba cách xử lý khác nhau và chỉ ra cái nào nên là mặc định của bạn.',
       content: `
+${G01_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>The default server, and the site you did not mean to publish</h2>
@@ -387,7 +665,7 @@ server {
 <div class="kv-grid">
   <div class="kv"><span class="k">444 is an Nginx-only code, and it is the right one here</span><span class="v">It is not a real HTTP status — it tells Nginx to close the connection without sending anything. Scanners get nothing to fingerprint, no error page reveals your server version, and the request costs you one closed socket instead of a rendered response.</span></div>
   <div class="kv"><span class="k">server_name _ is not special syntax</span><span class="v">It is simply an invalid hostname that can never match a real <code>Host</code>, so the block is only ever reached through <code>default_server</code>. Any unmatchable string would do; <code>_</code> is the convention. The flag does the work, not the underscore.</span></div>
-  <div class="kv"><span class="k">The default on 443 still needs a certificate</span><span class="v">TLS is negotiated before Nginx has seen a single HTTP header, so the handshake must complete before <code>return 444</code> can run. Without a certificate on the default block, clients get a TLS error instead — which looks like a broken site rather than a deliberate refusal. A self-signed one is fine.</span></div>
+  <div class="kv"><span class="k">The default on 443 still needs a certificate</span><span class="v">TLS is negotiated before Nginx has seen a single HTTP header, so the handshake must complete before <code>return 444</code> can run. Without a certificate on that block, nginx 1.24 refuses to start at all — <code>nginx -t</code> reports <code>no "ssl_certificate" is defined for the "listen ... ssl" directive</code> (measured below). A self-signed one is fine.</span></div>
   <div class="kv"><span class="k">Declare it once per address:port</span><span class="v">Per Lesson 1.1 the flag belongs to the socket, so one block per port carries it and a second is a startup error. On a dual-stack server that means both the IPv4 and IPv6 listen lines of the same block.</span></div>
 </div>
 
@@ -406,6 +684,59 @@ curl -s -o /dev/null -w '%{http_code}\\\\n' -H 'Host: khong-ton-tai.invalid' htt
 <div class="note-ct">
 <p><strong>Test the path nobody tests.</strong> Every request you make while developing carries a <code>Host</code> that matches a block, so the default server is the one code path in your configuration that normal use never touches — and therefore the one that stays wrong for years. One <code>curl</code> with a nonsense <code>Host</code>, run once per environment, tells you exactly what a stranger connecting to your IP address sees. Do it now for whatever you have in production; the answer is quite often a site you forgot was on that machine.</p>
 </div>
+
+<h3>🔬 Run it yourself: the three ports, and the TLS default</h3>
+<p>The three-port table above, plus a 443-style default, on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  <span class="tok-comment"># cong 8080: KHONG khai gi</span>
+  server { listen 8080; server_name a.vidu.com; return 200 "8080 · khoi DAU TIEN (a.vidu.com)\\n"; }
+  server { listen 8080; server_name b.vidu.com; return 200 "8080 · khoi thu hai (b.vidu.com)\\n"; }
+  <span class="tok-comment"># cong 8081: default_server o khoi THU HAI</span>
+  server { listen 8081; server_name c.vidu.com; return 200 "8081 · c.vidu.com\\n"; }
+  server { listen 8081 default_server; server_name _; return 200 "8081 · MAC DINH tuong minh\\n"; }
+  <span class="tok-comment"># cong 8082: mac dinh TU CHOI</span>
+  server { listen 8082 default_server; server_name _; return 444; }
+  server { listen 8082; server_name d.vidu.com; return 200 "8082 · d.vidu.com\\n"; }
+}</code></pre>
+<div class="out">$ for p in "8080 a.vidu.com" "8080 b.vidu.com" "8080 la-hoac.com" "8081 c.vidu.com" "8081 la-hoac.com" "8082 d.vidu.com" "8082 la-hoac.com"; do set -- $p; printf '%-5s %-12s -&gt; ' $1 $2; curl -s -H "Host: $2" http://127.0.0.1:$1/ || echo "(curl thoat ma $?: khong co phan hoi)"; done
+8080  a.vidu.com   -&gt; 8080 · khoi DAU TIEN (a.vidu.com)
+8080  b.vidu.com   -&gt; 8080 · khoi thu hai (b.vidu.com)
+8080  la-hoac.com  -&gt; 8080 · khoi DAU TIEN (a.vidu.com)
+8081  c.vidu.com   -&gt; 8081 · c.vidu.com
+8081  la-hoac.com  -&gt; 8081 · MAC DINH tuong minh
+8082  d.vidu.com   -&gt; 8082 · d.vidu.com
+8082  la-hoac.com  -&gt; (curl thoat ma 52: khong co phan hoi)
+$ curl -sk -m 3 https://127.0.0.1:8443/ -H 'Host: la-hoac.com' || echo "(curl thoat ma $?: bat tay TLS xong, roi dong ket noi — 444)"
+(curl thoat ma 52: bat tay TLS xong, roi dong ket noi — 444)
+$ nginx -t -c tls-thieu.conf
+2026/11/12 12:04:08 [emerg] 1987#1987: no "ssl_certificate" is defined for the "listen ... ssl" directive in tls-thieu.conf:3
+nginx: configuration file tls-thieu.conf test failed
+$ nginx -T -c macdinh.conf 2&gt;/dev/null | grep -n 'default_server'
+10:  # cong 8081: default_server o khoi THU HAI
+12:  server { listen 8081 default_server; server_name _; return 200 "8081 · MAC DINH tuong minh\\n"; }
+14:  server { listen 8082 default_server; server_name _; return 444; }
+$ curl -s -o /dev/null -w '%{http_code}\\n' -H 'Host: khong-ton-tai.invalid' http://127.0.0.1:8081/
+200</div>
+<p>With a self-signed certificate the TLS handshake completes and <code>return 444</code> then closes the connection (curl exit 52, empty reply). Remove the certificate and <code>nginx -t</code> refuses the configuration — the server would not even start.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 12.3 — Open only the right ports: ss, ufw</span><span class="lc-sub">The firewall side of "who can reach this port at all"</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-1-tls-la-gi" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 6.1 — What TLS guarantees</span><span class="lc-sub">Why the handshake happens before any HTTP header is seen</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Default server</span><span class="v">The block that answers when no <code>server_name</code> matches — and every listen group always has one.</span></div>
+  <div class="kv"><span class="k"><code>default_server</code></span><span class="v">The flag that pins the default to a chosen block, overriding file order.</span></div>
+  <div class="kv"><span class="k"><code>server_name _</code></span><span class="v">Just an unmatchable name; the flag does the work, not the underscore.</span></div>
+  <div class="kv"><span class="k"><code>return 444</code></span><span class="v">An Nginx-only code that closes the connection with no response — nothing to fingerprint.</span></div>
+  <div class="kv"><span class="k">Accidental default</span><span class="v">With no flag, the first-loaded block becomes the default — chosen by filename order.</span></div>
+  <div class="kv"><span class="k">Default certificate on 443</span><span class="v">The TLS handshake must finish before <code>return 444</code> can run, so the default block still needs a cert.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Every listen group always has a default server; you only choose whether it is deliberate.</li><li>With no <code>default_server</code>, the first-loaded block becomes the default — by filename order, not intent.</li><li>Declare <code>default_server</code> on every port and make it a block you would show a stranger.</li><li>Refuse unknown hosts with <code>return 444</code>; redirect only when real users mistype.</li><li>The default on 443 still needs a certificate — and test it with a nonsense <code>Host</code>.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html#how_to_prevent_undefined_server_names" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — preventing undefined server names</span><span class="lc-sub">nginx.org · The official pattern for the refusing default block</span></span></a>
@@ -476,7 +807,7 @@ server {
 <div class="kv-grid">
   <div class="kv"><span class="k">444 là mã RIÊNG của Nginx, và ở đây nó là cái đúng</span><span class="v">Nó không phải một mã trạng thái HTTP thật — nó bảo Nginx ĐÓNG kết nối mà không gửi gì cả. Bộ quét chẳng có gì để nhận dạng, không trang lỗi nào lộ ra phiên bản máy chủ của bạn, và cái request đó tốn của bạn MỘT socket đóng lại thay vì một phản hồi đã dựng xong.</span></div>
   <div class="kv"><span class="k">server_name _ KHÔNG phải cú pháp đặc biệt</span><span class="v">Nó đơn giản là một hostname KHÔNG hợp lệ nên không bao giờ khớp được một cái <code>Host</code> thật, do đó khối ấy chỉ tới được qua đúng <code>default_server</code>. Chuỗi vô nghĩa nào cũng được; <code>_</code> chỉ là quy ước. CÁI CỜ mới làm việc, không phải cái gạch dưới.</span></div>
-  <div class="kv"><span class="k">Cái mặc định trên 443 VẪN cần chứng chỉ</span><span class="v">TLS được thương lượng TRƯỚC khi Nginx nhìn thấy dù chỉ một header HTTP, nên cái bắt tay phải xong thì <code>return 444</code> mới chạy được. Không có chứng chỉ trên khối mặc định thì client nhận một lỗi TLS — nhìn như một trang HỎNG chứ không phải một sự từ chối có chủ ý. Một chứng chỉ tự ký là đủ.</span></div>
+  <div class="kv"><span class="k">Cái mặc định trên 443 VẪN cần chứng chỉ</span><span class="v">TLS được thương lượng TRƯỚC khi Nginx nhìn thấy dù chỉ một header HTTP, nên cái bắt tay phải xong thì <code>return 444</code> mới chạy được. Thiếu chứng chỉ trên khối đó thì nginx 1.24 từ chối khởi động luôn — <code>nginx -t</code> báo <code>no "ssl_certificate" is defined for the "listen ... ssl" directive</code> (đo ở dưới). Một chứng chỉ tự ký là đủ.</span></div>
   <div class="kv"><span class="k">Khai đúng MỘT lần cho mỗi địa chỉ:cổng</span><span class="v">Theo Bài 1.1, cái cờ thuộc về SOCKET, nên một khối trên mỗi cổng mang nó và cái thứ hai là lỗi lúc khởi động. Trên một máy chủ hai ngăn xếp thì nghĩa là CẢ dòng listen IPv4 lẫn dòng IPv6 của cùng khối đó.</span></div>
 </div>
 
@@ -496,6 +827,59 @@ curl -s -o /dev/null -w '%{http_code}\\\\n' -H 'Host: khong-ton-tai.invalid' htt
 <p><strong>Hãy KIỂM THỬ cái đường mà chẳng ai kiểm thử.</strong> Mọi request bạn tự gửi trong lúc phát triển đều mang một <code>Host</code> khớp với một khối, nên máy chủ mặc định là ĐƯỜNG MÃ DUY NHẤT trong cấu hình của bạn mà việc dùng bình thường chẳng bao giờ chạm tới — và do đó là cái đường ở lại SAI suốt nhiều năm. Một câu <code>curl</code> với một cái <code>Host</code> vô nghĩa, chạy một lần cho mỗi môi trường, cho bạn biết CHÍNH XÁC một người lạ kết nối vào địa chỉ IP của bạn nhìn thấy gì. Hãy làm ngay bây giờ với thứ bạn đang có trên production; câu trả lời khá thường xuyên là một trang mà bạn đã quên là nó nằm trên cái máy đó.</p>
 </div>
 
+<h3>🔬 Tự chạy lại: ba cổng, và khối mặc định TLS</h3>
+<p>Bảng ba cổng ở trên, cộng một khối mặc định kiểu 443, trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  <span class="tok-comment"># cong 8080: KHONG khai gi</span>
+  server { listen 8080; server_name a.vidu.com; return 200 "8080 · khoi DAU TIEN (a.vidu.com)\\n"; }
+  server { listen 8080; server_name b.vidu.com; return 200 "8080 · khoi thu hai (b.vidu.com)\\n"; }
+  <span class="tok-comment"># cong 8081: default_server o khoi THU HAI</span>
+  server { listen 8081; server_name c.vidu.com; return 200 "8081 · c.vidu.com\\n"; }
+  server { listen 8081 default_server; server_name _; return 200 "8081 · MAC DINH tuong minh\\n"; }
+  <span class="tok-comment"># cong 8082: mac dinh TU CHOI</span>
+  server { listen 8082 default_server; server_name _; return 444; }
+  server { listen 8082; server_name d.vidu.com; return 200 "8082 · d.vidu.com\\n"; }
+}</code></pre>
+<div class="out">$ for p in "8080 a.vidu.com" "8080 b.vidu.com" "8080 la-hoac.com" "8081 c.vidu.com" "8081 la-hoac.com" "8082 d.vidu.com" "8082 la-hoac.com"; do set -- $p; printf '%-5s %-12s -&gt; ' $1 $2; curl -s -H "Host: $2" http://127.0.0.1:$1/ || echo "(curl thoat ma $?: khong co phan hoi)"; done
+8080  a.vidu.com   -&gt; 8080 · khoi DAU TIEN (a.vidu.com)
+8080  b.vidu.com   -&gt; 8080 · khoi thu hai (b.vidu.com)
+8080  la-hoac.com  -&gt; 8080 · khoi DAU TIEN (a.vidu.com)
+8081  c.vidu.com   -&gt; 8081 · c.vidu.com
+8081  la-hoac.com  -&gt; 8081 · MAC DINH tuong minh
+8082  d.vidu.com   -&gt; 8082 · d.vidu.com
+8082  la-hoac.com  -&gt; (curl thoat ma 52: khong co phan hoi)
+$ curl -sk -m 3 https://127.0.0.1:8443/ -H 'Host: la-hoac.com' || echo "(curl thoat ma $?: bat tay TLS xong, roi dong ket noi — 444)"
+(curl thoat ma 52: bat tay TLS xong, roi dong ket noi — 444)
+$ nginx -t -c tls-thieu.conf
+2026/11/12 12:04:08 [emerg] 1987#1987: no "ssl_certificate" is defined for the "listen ... ssl" directive in tls-thieu.conf:3
+nginx: configuration file tls-thieu.conf test failed
+$ nginx -T -c macdinh.conf 2&gt;/dev/null | grep -n 'default_server'
+10:  # cong 8081: default_server o khoi THU HAI
+12:  server { listen 8081 default_server; server_name _; return 200 "8081 · MAC DINH tuong minh\\n"; }
+14:  server { listen 8082 default_server; server_name _; return 444; }
+$ curl -s -o /dev/null -w '%{http_code}\\n' -H 'Host: khong-ton-tai.invalid' http://127.0.0.1:8081/
+200</div>
+<p>Có chứng chỉ tự ký thì bắt tay TLS hoàn tất rồi <code>return 444</code> mới đóng kết nối (curl thoát mã 52, phản hồi rỗng). Gỡ chứng chỉ đi thì <code>nginx -t</code> từ chối cấu hình — máy chủ còn không khởi động được.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 12.3 — Chỉ mở đúng cổng: ss, ufw</span><span class="lc-sub">Phía tường lửa của câu hỏi "ai tới được cổng này"</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-6-1-tls-la-gi" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Networking cho lập trình viên · 6.1 — TLS bảo đảm điều gì</span><span class="lc-sub">Vì sao bắt tay diễn ra trước khi thấy bất kỳ header HTTP nào</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Default server</span><span class="v">Khối trả lời khi không <code>server_name</code> nào khớp — và mọi nhóm listen đều luôn có một cái.</span></div>
+  <div class="kv"><span class="k"><code>default_server</code></span><span class="v">Cái cờ ghim mặc định vào khối được chọn, thắng cả thứ tự trong tệp.</span></div>
+  <div class="kv"><span class="k"><code>server_name _</code></span><span class="v">Chỉ là một cái tên không khớp được; cái cờ mới làm việc, không phải gạch dưới.</span></div>
+  <div class="kv"><span class="k"><code>return 444</code></span><span class="v">Mã riêng của Nginx, đóng kết nối mà không trả gì — không có gì để nhận dạng.</span></div>
+  <div class="kv"><span class="k">Accidental default</span><span class="v">Không có cờ thì khối nạp đầu tiên thành mặc định — chọn theo thứ tự tên tệp.</span></div>
+  <div class="kv"><span class="k">Default certificate on 443</span><span class="v">Bắt tay TLS phải xong thì <code>return 444</code> mới chạy, nên khối mặc định vẫn cần chứng chỉ.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mọi nhóm listen đều luôn có một máy chủ mặc định; bạn chỉ chọn được là nó có chủ ý hay không.</li><li>Không có <code>default_server</code> thì khối nạp đầu tiên thành mặc định — theo thứ tự tên tệp, không theo ý định.</li><li>Khai <code>default_server</code> trên mọi cổng và làm cho nó là khối bạn sẵn lòng cho người lạ xem.</li><li>Từ chối host lạ bằng <code>return 444</code>; chỉ chuyển hướng khi có người dùng thật gõ nhầm.</li><li>Mặc định trên 443 vẫn cần chứng chỉ — và hãy thử nó bằng một cái <code>Host</code> vô nghĩa.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html#how_to_prevent_undefined_server_names" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — chặn những tên máy chủ không khai báo</span><span class="lc-sub">nginx.org · Mẫu chính thức cho khối mặc định kiểu từ chối</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return" target="_blank" rel="noopener"><span class="lc-ico">↩️</span><span class="lc-body"><span class="lc-title">nginx — return</span><span class="lc-sub">nginx.org · Kể cả mã 444, và cách trả về một chuyển hướng mà không cần rewrite</span></span></a>
@@ -513,6 +897,7 @@ curl -s -o /dev/null -w '%{http_code}\\\\n' -H 'Host: khong-ton-tai.invalid' htt
       type: 'LESSON',
       description: 'Nginx dùng Host để CHỌN khối server, nên rất dễ tưởng rằng tới lúc mã của bạn chạy thì nó đã được kiểm chứng. Không hề. Bài này bắn một cái Host giả vào một cấu hình thật và cho thấy nó đi thẳng vào header Location của một cú chuyển hướng — kể cả cú chuyển hướng mà Nginx TỰ sinh ra khi bạn chẳng viết gì cả.',
       content: `
+${G01_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.4</span>
 <h2>The Host header is client input, and $host is too</h2>
@@ -590,6 +975,74 @@ return 301 https://vidu.com$request_uri;    <span class="tok-comment"># RIGHT</s
 <div class="note-ct">
 <p><strong>The one-line rule.</strong> Anything you send BACK to a client — a <code>Location</code>, a link in a page, a cookie <code>Domain</code>, a cache key — must be built from your configuration, never from the request. Anything you only look at — logs, routing decisions, a captured subdomain — may come from the request, because a wrong value there affects one request and nobody else. Sort every use of <code>$host</code> into those two piles and this entire class of bug disappears.</p>
 </div>
+
+<h3>🔬 Run it yourself: four variables, three redirects, one proxy</h3>
+<p>Run on nginx/1.24.0. The location <code>/bien</code> prints the four variables; the others redirect:</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    server_name vidu.com;
+    root /tmp/ng/www;
+    location = /bien { return 200 "host=$host\\nhttp_host=$http_host\\nserver_name=$server_name\\nscheme=$scheme\\n"; }
+    location = /chuyen-huong-hong { return 301 https://$host$request_uri; }
+    location = /chuyen-huong-dung { return 301 https://vidu.com$request_uri; }
+  }
+}</code></pre>
+<div class="out">$ curl -s -H 'Host: vidu.com' http://127.0.0.1:8080/bien
+host=vidu.com
+http_host=vidu.com
+server_name=vidu.com
+scheme=http
+$ curl -s -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/bien
+host=ke-tan-cong.com
+http_host=ke-tan-cong.com
+server_name=vidu.com
+scheme=http
+$ curl -s -H 'Host: ViDu.CoM.:9999' http://127.0.0.1:8080/bien
+host=vidu.com
+http_host=ViDu.CoM.:9999
+server_name=vidu.com
+scheme=http
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/chuyen-huong-hong | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: https://ke-tan-cong.com/chuyen-huong-hong
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/chuyen-huong-dung | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: https://vidu.com/chuyen-huong-dung
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/thu-muc | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: http://ke-tan-cong.com:8080/thu-muc/
+$ grep -n absolute_redirect host.conf
+6:  absolute_redirect off;
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/thu-muc | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: /thu-muc/
+$ curl -s -H 'Host: ke-tan-cong.com' http://127.0.0.1:8081/dat-lai-mat-khau
+{"app":"node:3000","url":"/dat-lai-mat-khau","host":"127.0.0.1:3000","ip":"127.0.0.1"}
+$ curl -s -H 'Host: ke-tan-cong.com' http://127.0.0.1:8082/dat-lai-mat-khau
+{"app":"node:3000","url":"/dat-lai-mat-khau","host":"ke-tan-cong.com","ip":"127.0.0.1"}
+$ curl -s -o /dev/null -w '%{http_code}\\n' -H 'Host: vidu.com..' http://127.0.0.1:8081/
+400</div>
+<p>With <code>Host: ViDu.CoM.:9999</code>, <code>$host</code> was cleaned to <code>vidu.com</code> while <code>$http_host</code> kept every character. The automatic slash redirect for <code>/thu-muc</code> pointed at the attacker's host until <code>absolute_redirect off</code> made it relative. Through a default proxy the app saw <code>127.0.0.1:3000</code>; with <code>proxy_set_header Host $host</code> it received the attacker's name. And <code>vidu.com..</code> got 400 before any block was chosen.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-5-proxy-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.5 — X-Forwarded-For, Host and the real client IP</span><span class="lc-sub">The same header seen from the network side</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn" target="_blank" rel="noopener"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">Authentication course</span><span class="lc-sub">Host header poisoning of password-reset links, from the application side</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>$http_host</code></span><span class="v">The raw <code>Host</code> header, exactly as the client sent it, port and all.</span></div>
+  <div class="kv"><span class="k"><code>$host</code></span><span class="v">Tidied — lowercased, port stripped — but still client-controlled.</span></div>
+  <div class="kv"><span class="k"><code>$server_name</code></span><span class="v">The name from your config; the one value a client cannot influence.</span></div>
+  <div class="kv"><span class="k">Host header injection</span><span class="v">A forged <code>Host</code> poisoning a redirect, a link or a cache key.</span></div>
+  <div class="kv"><span class="k"><code>absolute_redirect off</code></span><span class="v">Makes Nginx emit a relative <code>Location</code> so the host cannot be forged.</span></div>
+  <div class="kv"><span class="k"><code>server_name_in_redirect on</code></span><span class="v">If a redirect must be absolute, uses the configured name instead of the header.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>Host</code> is client input; selecting a server block does not validate it.</li><li>A forged <code>Host</code> can poison redirects — including the automatic trailing-slash redirect you never wrote.</li><li>Build anything sent BACK to the client (Location, links, cache keys) from config, never from the request.</li><li>Fix at the source with <code>absolute_redirect off</code> and <code>server_name_in_redirect on</code>; keep redirect targets literal.</li><li>A refusing default server is the single enforcement point for this whole class of bug.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#var_host" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — $host and $http_host</span><span class="lc-sub">nginx.org · The exact fallback order, which is easy to misremember</span></span></a>
@@ -677,6 +1130,74 @@ return 301 https://vidu.com$request_uri;    <span class="tok-comment"># ĐÚNG</
 <p><strong>Quy tắc một dòng.</strong> Bất cứ thứ gì bạn gửi TRẢ LẠI cho client — một <code>Location</code>, một đường dẫn trong trang, một <code>Domain</code> của cookie, một khoá cache — đều phải dựng từ CẤU HÌNH của bạn, không bao giờ từ request. Bất cứ thứ gì bạn chỉ NHÌN — log, quyết định định tuyến, một subdomain bắt được — thì lấy từ request cũng được, vì giá trị sai ở đó chỉ ảnh hưởng đúng một request và không đụng tới ai khác. Xếp mọi chỗ dùng <code>$host</code> vào đúng một trong hai đống ấy là cả một họ lỗi này biến mất.</p>
 </div>
 
+<h3>🔬 Tự chạy lại: bốn biến, ba cú chuyển hướng, một proxy</h3>
+<p>Chạy trên nginx/1.24.0. Location <code>/bien</code> in ra bốn biến; các location còn lại chuyển hướng:</p>
+<pre><code class="language-bash">pid       /tmp/ng/logs/nginx.pid;
+error_log /tmp/ng/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    server_name vidu.com;
+    root /tmp/ng/www;
+    location = /bien { return 200 "host=$host\\nhttp_host=$http_host\\nserver_name=$server_name\\nscheme=$scheme\\n"; }
+    location = /chuyen-huong-hong { return 301 https://$host$request_uri; }
+    location = /chuyen-huong-dung { return 301 https://vidu.com$request_uri; }
+  }
+}</code></pre>
+<div class="out">$ curl -s -H 'Host: vidu.com' http://127.0.0.1:8080/bien
+host=vidu.com
+http_host=vidu.com
+server_name=vidu.com
+scheme=http
+$ curl -s -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/bien
+host=ke-tan-cong.com
+http_host=ke-tan-cong.com
+server_name=vidu.com
+scheme=http
+$ curl -s -H 'Host: ViDu.CoM.:9999' http://127.0.0.1:8080/bien
+host=vidu.com
+http_host=ViDu.CoM.:9999
+server_name=vidu.com
+scheme=http
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/chuyen-huong-hong | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: https://ke-tan-cong.com/chuyen-huong-hong
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/chuyen-huong-dung | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: https://vidu.com/chuyen-huong-dung
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/thu-muc | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: http://ke-tan-cong.com:8080/thu-muc/
+$ grep -n absolute_redirect host.conf
+6:  absolute_redirect off;
+$ curl -sI -H 'Host: ke-tan-cong.com' http://127.0.0.1:8080/thu-muc | grep -E '^(HTTP|Location)'
+HTTP/1.1 301 Moved Permanently
+Location: /thu-muc/
+$ curl -s -H 'Host: ke-tan-cong.com' http://127.0.0.1:8081/dat-lai-mat-khau
+{"app":"node:3000","url":"/dat-lai-mat-khau","host":"127.0.0.1:3000","ip":"127.0.0.1"}
+$ curl -s -H 'Host: ke-tan-cong.com' http://127.0.0.1:8082/dat-lai-mat-khau
+{"app":"node:3000","url":"/dat-lai-mat-khau","host":"ke-tan-cong.com","ip":"127.0.0.1"}
+$ curl -s -o /dev/null -w '%{http_code}\\n' -H 'Host: vidu.com..' http://127.0.0.1:8081/
+400</div>
+<p>Với <code>Host: ViDu.CoM.:9999</code>, <code>$host</code> được dọn thành <code>vidu.com</code> còn <code>$http_host</code> giữ nguyên từng ký tự. Cú tự thêm dấu gạch chéo cho <code>/thu-muc</code> trỏ sang host của kẻ tấn công, cho tới khi <code>absolute_redirect off</code> biến nó thành tương đối. Qua proxy mặc định, ứng dụng thấy <code>127.0.0.1:3000</code>; có <code>proxy_set_header Host $host</code> thì nó nhận tên của kẻ tấn công. Và <code>vidu.com..</code> nhận 400 trước khi khối nào được chọn.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-5-proxy-header" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking cho lập trình viên · 7.5 — X-Forwarded-For, Host và IP thật</span><span class="lc-sub">Cũng header đó nhìn từ phía mạng</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn" target="_blank" rel="noopener"><span class="lc-ico">🔑</span><span class="lc-body"><span class="lc-title">Khoá Authentication</span><span class="lc-sub">Đầu độc Host header vào đường dẫn đặt lại mật khẩu, nhìn từ phía ứng dụng</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>$http_host</code></span><span class="v">Header <code>Host</code> thô, đúng cái client gửi, kèm cả cổng.</span></div>
+  <div class="kv"><span class="k"><code>$host</code></span><span class="v">Đã dọn — hạ chữ thường, bỏ cổng — nhưng vẫn do client quyết.</span></div>
+  <div class="kv"><span class="k"><code>$server_name</code></span><span class="v">Tên lấy từ cấu hình của bạn; giá trị duy nhất client không tác động được.</span></div>
+  <div class="kv"><span class="k">Host header injection</span><span class="v">Một <code>Host</code> giả đầu độc cú chuyển hướng, một đường dẫn hay một khoá cache.</span></div>
+  <div class="kv"><span class="k"><code>absolute_redirect off</code></span><span class="v">Bắt Nginx trả <code>Location</code> tương đối để không giả host được.</span></div>
+  <div class="kv"><span class="k"><code>server_name_in_redirect on</code></span><span class="v">Nếu chuyển hướng buộc phải tuyệt đối, dùng tên trong cấu hình thay cho header.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>Host</code> là đầu vào của client; chọn khối server không kiểm chứng nó.</li><li>Một <code>Host</code> giả đầu độc được cú chuyển hướng — kể cả cú tự thêm dấu gạch chéo mà bạn không hề viết.</li><li>Bất cứ thứ gì gửi TRẢ LẠI client (Location, link, khoá cache) đều dựng từ cấu hình, không bao giờ từ request.</li><li>Vá tận gốc bằng <code>absolute_redirect off</code> và <code>server_name_in_redirect on</code>; giữ đích chuyển hướng là hằng.</li><li>Một máy chủ mặc định biết từ chối là điểm thi hành duy nhất cho cả họ lỗi này.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#var_host" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — $host và $http_host</span><span class="lc-sub">nginx.org · Thứ tự lùi chính xác, thứ rất dễ nhớ nhầm</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#absolute_redirect" target="_blank" rel="noopener"><span class="lc-ico">↩️</span><span class="lc-body"><span class="lc-title">nginx — absolute_redirect</span><span class="lc-sub">nginx.org · Kèm server_name_in_redirect và port_in_redirect</span></span></a>
@@ -694,6 +1215,7 @@ return 301 https://vidu.com$request_uri;    <span class="tok-comment"># ĐÚNG</
       type: 'LESSON',
       description: 'Bốn bài trước mổ từng mảnh: listen, server_name, khối mặc định, và cái Host không đáng tin. Bài này ghép cả bốn thành một bố cục nhiều site chạy thật — rồi ĐỔI ĐÚNG MỘT TÊN FILE và cho bạn xem một host lạ đang bị chặn bỗng được chuyển hướng về trang chủ của bạn.',
       content: `
+${G01_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.5</span>
 <h2>A three-site layout, wired end to end</h2>
@@ -787,6 +1309,94 @@ vidu.com          -> 200                 (cac site that khong he suy suyen)</div
 <div class="note-ct">
 <p><strong>What this chapter bought you.</strong> Given any request, you can now say which <code>server</code> block will handle it before Nginx runs, and you can say why. That is not a small thing: most confusing Nginx behaviour is not a broken directive, it is a directive working perfectly inside a block you did not expect to be chosen. Chapter 2 assumes the block is settled and asks the next question — which <code>location</code> inside it wins.</p>
 </div>
+
+<h3>🔬 Run it yourself: the whole layout, and the rename</h3>
+<p>The five files of this lesson (paths shown as on a real server; the run used <code>nginx -c</code> on a copy under /tmp, nginx/1.24.0):</p>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/nginx/sites-available/00-default.conf</span>
+<span class="tok-comment"># khoi bat-tat: KHONG server_name that, tu choi moi host la</span>
+server {
+  listen 8080 default_server;
+  server_name _;
+  access_log /tmp/ng/logs/mac-dinh.log;
+  return 444;
+}
+<span class="tok-comment"># /etc/nginx/sites-available/10-vidu.conf</span>
+server { listen 8080; server_name www.vidu.com; return 301 http://vidu.com:8080$request_uri; }
+server { listen 8080; server_name vidu.com;     return 200 "APEX + WWW\\n"; }
+<span class="tok-comment"># /etc/nginx/sites-available/20-api.conf</span>
+server { listen 8080; server_name api.vidu.com; return 200 "API\\n"; }
+<span class="tok-comment"># /etc/nginx/sites-available/30-blog.conf</span>
+server { listen 8080; server_name blog.vidu.com; return 200 "BLOG\\n"; }
+<span class="tok-comment"># /etc/nginx/sites-available/90-admin.conf</span>
+server { listen 127.0.0.1:8081 default_server; server_name admin.vidu.com; return 200 "ADMIN\\n"; }</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># enable every site: one symlink each</span>
+cd /etc/nginx/sites-enabled &amp;&amp; for f in ../sites-available/*.conf; do ln -s "$f" .; done
+nginx -t &amp;&amp; nginx -s reload
+nginx -T | grep -nE '^# configuration file|listen' <span class="tok-comment">  # load order, includes expanded</span></code></pre>
+<div class="out">$ ls -l /etc/nginx/sites-enabled/ | awk 'NR&gt;1{print $9, $10, $11}'
+00-default.conf -&gt; ../sites-available/00-default.conf
+10-vidu.conf -&gt; ../sites-available/10-vidu.conf
+20-api.conf -&gt; ../sites-available/20-api.conf
+30-blog.conf -&gt; ../sites-available/30-blog.conf
+90-admin.conf -&gt; ../sites-available/90-admin.conf
+$ nginx -c /etc/nginx/nginx.conf -t 2&gt;&amp;1 | tail -1 &amp;&amp; nginx -c /etc/nginx/nginx.conf
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+$ nginx -T -c /etc/nginx/nginx.conf 2&gt;/dev/null | grep -nE '^# configuration file|listen'
+1:# configuration file /etc/nginx/nginx.conf:
+11:# configuration file /etc/nginx/sites-enabled/00-default.conf:
+14:  listen 8080 default_server;
+20:# configuration file /etc/nginx/sites-enabled/10-vidu.conf:
+21:server { listen 8080; server_name www.vidu.com; return 301 http://vidu.com:8080$request_uri; }
+22:server { listen 8080; server_name vidu.com;     return 200 "APEX + WWW\\n"; }
+24:# configuration file /etc/nginx/sites-enabled/20-api.conf:
+25:server { listen 8080; server_name api.vidu.com; return 200 "API\\n"; }
+27:# configuration file /etc/nginx/sites-enabled/30-blog.conf:
+28:server { listen 8080; server_name blog.vidu.com; return 200 "BLOG\\n"; }
+30:# configuration file /etc/nginx/sites-enabled/90-admin.conf:
+31:server { listen 127.0.0.1:8081 default_server; server_name admin.vidu.com; return 200 "ADMIN\\n"; }
+$ bash /root/bang.sh
+vidu.com           -&gt; 200  APEX + WWW   
+www.vidu.com       -&gt; 301  -            http://vidu.com:8080/gio-hang
+api.vidu.com       -&gt; 200  API          
+blog.vidu.com      -&gt; 200  BLOG         
+admin.vidu.com     -&gt; 000  - (444)      
+khong-ai-biet.com  -&gt; 000  - (444)      
+vidu.com.          -&gt; 200  APEX + WWW   
+VIDU.COM           -&gt; 200  APEX + WWW   
+$ curl -s -H 'Host: bat-ky-cai-gi.com' http://127.0.0.1:8081/
+ADMIN
+=== Bo co default_server. Tep van ten 00-default.conf ===
+$ bash /root/bang.sh | grep khong-ai-biet
+khong-ai-biet.com  -&gt; 000  - (444)      
+=== CUNG cau hinh. Chi doi ten tep: 00-default.conf -&gt; 99-default.conf ===
+$ ls /etc/nginx/sites-enabled/
+10-vidu.conf
+20-api.conf
+30-blog.conf
+90-admin.conf
+99-default.conf
+$ bash /root/bang.sh | grep khong-ai-biet
+khong-ai-biet.com  -&gt; 301  -            http://vidu.com:8080/gio-hang
+=== Tra lai co default_server (ten tep van la 99-) ===
+$ bash /root/bang.sh | grep -E 'khong-ai-biet|^vidu.com '
+vidu.com           -&gt; 200  APEX + WWW   
+khong-ai-biet.com  -&gt; 000  - (444)      </div>
+<p>The last three blocks are the experiment: without the flag, <code>00-default.conf</code> still loads first and still refuses; renamed to <code>99-default.conf</code> it loads last, the www redirect becomes the implicit default, and an unknown host is sent to the home page with its path; with the flag back, the file name stops mattering.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-1-may-ten-mien-https" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 15.1 — Day 1: from a bare machine to HTTPS</span><span class="lc-sub">This layout on a real server, with a real domain</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-10-5-nginx-lap-rap" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 10.5 — nginx in front, and the file too</span><span class="lc-sub">The same per-site files mounted into a container</span></span></a>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>sites-available</code> / <code>sites-enabled</code></span><span class="v">Real files versus symlinks; enable a site with <code>ln -s</code>, disable it with <code>rm</code> and keep its config.</span></div>
+  <div class="kv"><span class="k">Numeric filename prefix</span><span class="v">Documents the load order of the <code>include</code> glob — useful, but not a guarantee of correctness.</span></div>
+  <div class="kv"><span class="k"><code>include</code> glob</span><span class="v">Pulls every site file into the <code>http</code> level in sorted order.</span></div>
+  <div class="kv"><span class="k">Listen group</span><span class="v">Each distinct address:port; every one needs its own refusing default block.</span></div>
+  <div class="kv"><span class="k"><code>nginx -T</code></span><span class="v">Prints the assembled configuration, every include expanded, in load order.</span></div>
+  <div class="kv"><span class="k">www-to-apex block</span><span class="v">A tiny server whose whole body is one <code>return 301</code> with a literal target.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>One file per site plus a numeric prefix; the available/enabled split lets you disable without deleting.</li><li>Renaming one file changes load order and can silently turn a refusing default into a redirect.</li><li><code>default_server</code> cuts that order-dependence — the flag decides, not the filename.</li><li>Every listen group (each address:port) needs its own refusing default — one per group, not one per machine.</li><li>Verify with <code>nginx -T</code> and the curl table after every reload; a passing syntax test is not a correct route.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — How nginx processes a request</span><span class="lc-sub">nginx.org · The official version of the four-step picture above</span></span></a>
@@ -889,6 +1499,94 @@ vidu.com          -> 200                 (cac site that khong he suy suyen)</div
 <div class="note-ct">
 <p><strong>Chương này đã mua được gì cho bạn.</strong> Đưa ra một request bất kỳ, giờ bạn nói được khối <code>server</code> nào sẽ xử lý nó TRƯỚC KHI Nginx chạy, và nói được vì sao. Đó không phải chuyện nhỏ: phần lớn hành vi khó hiểu của Nginx không phải một chỉ thị hỏng, mà là một chỉ thị chạy hoàn hảo bên trong một khối bạn không ngờ nó được chọn. Chương 2 coi như khối đã chốt và hỏi câu tiếp theo — <code>location</code> nào bên trong nó thắng.</p>
 </div>
+
+<h3>🔬 Tự chạy lại: cả bố cục, và phép đổi tên</h3>
+<p>Năm tệp của bài (đường dẫn ghi như trên máy chủ thật; lần chạy dùng <code>nginx -c</code> trên một bản sao trong /tmp, nginx/1.24.0):</p>
+<pre><code class="language-bash"><span class="tok-comment"># /etc/nginx/sites-available/00-default.conf</span>
+<span class="tok-comment"># khoi bat-tat: KHONG server_name that, tu choi moi host la</span>
+server {
+  listen 8080 default_server;
+  server_name _;
+  access_log /tmp/ng/logs/mac-dinh.log;
+  return 444;
+}
+<span class="tok-comment"># /etc/nginx/sites-available/10-vidu.conf</span>
+server { listen 8080; server_name www.vidu.com; return 301 http://vidu.com:8080$request_uri; }
+server { listen 8080; server_name vidu.com;     return 200 "APEX + WWW\\n"; }
+<span class="tok-comment"># /etc/nginx/sites-available/20-api.conf</span>
+server { listen 8080; server_name api.vidu.com; return 200 "API\\n"; }
+<span class="tok-comment"># /etc/nginx/sites-available/30-blog.conf</span>
+server { listen 8080; server_name blog.vidu.com; return 200 "BLOG\\n"; }
+<span class="tok-comment"># /etc/nginx/sites-available/90-admin.conf</span>
+server { listen 127.0.0.1:8081 default_server; server_name admin.vidu.com; return 200 "ADMIN\\n"; }</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># bật mọi site: mỗi site một liên kết mềm</span>
+cd /etc/nginx/sites-enabled &amp;&amp; for f in ../sites-available/*.conf; do ln -s "$f" .; done
+nginx -t &amp;&amp; nginx -s reload
+nginx -T | grep -nE '^# configuration file|listen' <span class="tok-comment">  # thứ tự nạp, include đã bung</span></code></pre>
+<div class="out">$ ls -l /etc/nginx/sites-enabled/ | awk 'NR&gt;1{print $9, $10, $11}'
+00-default.conf -&gt; ../sites-available/00-default.conf
+10-vidu.conf -&gt; ../sites-available/10-vidu.conf
+20-api.conf -&gt; ../sites-available/20-api.conf
+30-blog.conf -&gt; ../sites-available/30-blog.conf
+90-admin.conf -&gt; ../sites-available/90-admin.conf
+$ nginx -c /etc/nginx/nginx.conf -t 2&gt;&amp;1 | tail -1 &amp;&amp; nginx -c /etc/nginx/nginx.conf
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+$ nginx -T -c /etc/nginx/nginx.conf 2&gt;/dev/null | grep -nE '^# configuration file|listen'
+1:# configuration file /etc/nginx/nginx.conf:
+11:# configuration file /etc/nginx/sites-enabled/00-default.conf:
+14:  listen 8080 default_server;
+20:# configuration file /etc/nginx/sites-enabled/10-vidu.conf:
+21:server { listen 8080; server_name www.vidu.com; return 301 http://vidu.com:8080$request_uri; }
+22:server { listen 8080; server_name vidu.com;     return 200 "APEX + WWW\\n"; }
+24:# configuration file /etc/nginx/sites-enabled/20-api.conf:
+25:server { listen 8080; server_name api.vidu.com; return 200 "API\\n"; }
+27:# configuration file /etc/nginx/sites-enabled/30-blog.conf:
+28:server { listen 8080; server_name blog.vidu.com; return 200 "BLOG\\n"; }
+30:# configuration file /etc/nginx/sites-enabled/90-admin.conf:
+31:server { listen 127.0.0.1:8081 default_server; server_name admin.vidu.com; return 200 "ADMIN\\n"; }
+$ bash /root/bang.sh
+vidu.com           -&gt; 200  APEX + WWW   
+www.vidu.com       -&gt; 301  -            http://vidu.com:8080/gio-hang
+api.vidu.com       -&gt; 200  API          
+blog.vidu.com      -&gt; 200  BLOG         
+admin.vidu.com     -&gt; 000  - (444)      
+khong-ai-biet.com  -&gt; 000  - (444)      
+vidu.com.          -&gt; 200  APEX + WWW   
+VIDU.COM           -&gt; 200  APEX + WWW   
+$ curl -s -H 'Host: bat-ky-cai-gi.com' http://127.0.0.1:8081/
+ADMIN
+=== Bo co default_server. Tep van ten 00-default.conf ===
+$ bash /root/bang.sh | grep khong-ai-biet
+khong-ai-biet.com  -&gt; 000  - (444)      
+=== CUNG cau hinh. Chi doi ten tep: 00-default.conf -&gt; 99-default.conf ===
+$ ls /etc/nginx/sites-enabled/
+10-vidu.conf
+20-api.conf
+30-blog.conf
+90-admin.conf
+99-default.conf
+$ bash /root/bang.sh | grep khong-ai-biet
+khong-ai-biet.com  -&gt; 301  -            http://vidu.com:8080/gio-hang
+=== Tra lai co default_server (ten tep van la 99-) ===
+$ bash /root/bang.sh | grep -E 'khong-ai-biet|^vidu.com '
+vidu.com           -&gt; 200  APEX + WWW   
+khong-ai-biet.com  -&gt; 000  - (444)      </div>
+<p>Ba khối cuối là phép thử: bỏ cờ, <code>00-default.conf</code> vẫn nạp đầu tiên nên vẫn từ chối; đổi tên thành <code>99-default.conf</code> thì nó nạp cuối, khối chuyển hướng www thành mặc định ngầm, và host lạ bị đẩy về trang chủ kèm đường dẫn; trả cờ lại thì tên tệp không còn quan trọng.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-15-1-may-ten-mien-https" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 15.1 — Ngày 1: từ máy trần tới HTTPS</span><span class="lc-sub">Bố cục này trên một máy chủ thật, với tên miền thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-10-5-nginx-lap-rap" target="_blank" rel="noopener"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker · 10.5 — nginx đứng trước, và cả cái tệp</span><span class="lc-sub">Cũng các tệp theo site đó, gắn vào container</span></span></a>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>sites-available</code> / <code>sites-enabled</code></span><span class="v">File thật so với liên kết mềm; bật một site bằng <code>ln -s</code>, tắt bằng <code>rm</code> mà vẫn giữ cấu hình.</span></div>
+  <div class="kv"><span class="k">Numeric filename prefix</span><span class="v">Tiền tố số: tài liệu hoá thứ tự nạp của glob <code>include</code> — hữu ích, nhưng không phải hàng rào đúng đắn.</span></div>
+  <div class="kv"><span class="k"><code>include</code> glob</span><span class="v">Kéo mọi file site vào tầng <code>http</code> theo thứ tự đã sắp.</span></div>
+  <div class="kv"><span class="k">Listen group</span><span class="v">Mỗi cặp địa chỉ:cổng khác nhau; mỗi nhóm cần khối mặc định biết từ chối của riêng nó.</span></div>
+  <div class="kv"><span class="k"><code>nginx -T</code></span><span class="v">In cấu hình đã ghép, mọi include bung hết, theo đúng thứ tự nạp.</span></div>
+  <div class="kv"><span class="k">www-to-apex block</span><span class="v">Một khối server tí hon mà cả thân chỉ là một <code>return 301</code> với đích viết cứng.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một file một site cộng một tiền tố số; tách available/enabled cho phép tắt mà không xoá.</li><li>Đổi tên một file là đổi thứ tự nạp, và có thể âm thầm biến một mặc định từ chối thành một cú chuyển hướng.</li><li><code>default_server</code> cắt sự phụ thuộc thứ tự đó — cái cờ quyết định, không phải tên file.</li><li>Mỗi nhóm listen (mỗi địa chỉ:cổng) cần mặc định từ chối riêng — một cái cho mỗi nhóm, không phải một cái cho cả máy.</li><li>Kiểm bằng <code>nginx -T</code> và bảng curl sau mỗi lần nạp lại; qua phép kiểm cú pháp không phải là định tuyến đúng.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — Nginx xử lý một request thế nào</span><span class="lc-sub">nginx.org · Bản chính thức của cái hình bốn bước ở trên</span></span></a>

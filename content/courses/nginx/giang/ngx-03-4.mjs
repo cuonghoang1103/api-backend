@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 3.4 Timeout: mỗi cái đo cái gì, và cú 200 nói dối (deck ngx-03-4, 9 slide). VI = lời giảng video ngx-3-4; EN = ghi chú `en` của deck. SINH bằng scratchpad/ngx/giang.mjs — sửa ở deck/kichban rồi sinh lại. */
+import { walkNgx } from '../_slides.mjs';
+
+export default walkNgx('ngx-03-4', "Timeouts: what each one measures, and the 200 that lies", "Timeout: mỗi cái đo cái gì, và cú 200 nói dối", [
+  [1, "Timeouts: what each one measures, and the 200 that lies",
+    "<p>Lesson 3.4. The timeout directives look like one knob with several names. Each measures a different gap, two give different status codes for what feels like the same failure, and one gives a 200 with an empty body.</p>",
+    "<p>Bài 3.4: timeout, mỗi cái đo cái gì, và cú hai trăm nói dối.</p>"],
+  [2, "What you will take away from this lesson",
+    "<p>Five takeaways: five failures timed; the three gaps; 502 versus 504; the empty 200; and choosing values.</p>",
+    "<p>Năm điều: năm kiểu hỏng bấm giờ thật, ba đồng hồ connect, send, read, và năm trăm lẻ hai khác năm trăm lẻ bốn ra sao. Rồi cú hai trăm với không byte nào, và cách chọn con số cho đúng.</p>"],
+  [3, "Five failure shapes, measured",
+    "<p>Five locations. An upstream that never answers: 504 after two seconds. A port nobody listens on: 502 immediately. Four chunks over 1.6 seconds with a one-second read timeout: 200, complete. One chunk then five seconds of silence: 200 after one second with zero bytes. Same with the default sixty seconds: 200 after five seconds, 24 bytes.</p>",
+    "<p>Upstream nhận kết nối mà không bao giờ trả lời: năm trăm lẻ bốn sau hai giây. Cổng không có gì chạy: năm trăm lẻ hai ngay lập tức. Bốn mẩu nhỏ giọt trong một phẩy sáu giây, timeout đọc một giây: hai trăm, đủ dữ liệu. Một mẩu rồi im năm giây, timeout đọc một giây: hai trăm sau một giây, không byte nào. Mặc định sáu mươi giây thì chờ đủ năm giây.</p>"],
+  [4, "Three timers, three different gaps",
+    "<p>Three timers measure three gaps: connect only covers the TCP handshake, send the gap between two writes, and read the gap between two reads. The read timer resets with every chunk, which is why 1.6 seconds of trickling passed a one-second timeout.</p>",
+    "<p>Proxy_connect_timeout chỉ phủ cái bắt tay. Proxy_send_timeout là khoảng giữa hai lần ghi. Proxy_read_timeout là khoảng giữa hai lần đọc. Read timeout là khoảng giữa hai lần đọc, không phải tổng thời gian. Vì thế một phẩy sáu giây nhỏ giọt vẫn qua được timeout một giây.</p>"],
+  [5, "502 vs 504 — read the error log, not the code",
+    "<p>Read the error log, not the status. 504 with \"while reading response header\": the app did not answer in time. 502 with \"connection refused\": nothing was listening and the connect timeout never even ran. And a timeout \"while reading upstream\" hides behind a 200.</p>",
+    "<p>Năm trăm lẻ bốn kèm dòng upstream timed out while reading response header: đã kết nối, nhưng ứng dụng trả lời quá chậm. Năm trăm lẻ hai kèm connection refused: không có gì chạy ở cổng đó, timeout kết nối còn chưa kịp chạy. Và timeout while reading upstream thì nấp sau một cú hai trăm. Error log gọi tên đúng giai đoạn.</p>"],
+  [6, "Trap: the 200 that lies",
+    "<p>The trap: the response headers, 200 OK, were already sent before the silence. When the read timer fires, Nginx can only close the connection. The client got 200 and zero bytes, and every layer above calls it success — only the error log tells the truth.</p>",
+    "<p>Header hai trăm OK đã được gửi trước khoảng lặng. Khi đồng hồ nổ, Nginx không sửa được mã nữa, chỉ đóng kết nối. Access log, bộ cân bằng tải, hệ thống giám sát đều thấy hai trăm. Chỉ error log nói thật, nên hãy đặt cảnh báo trên dòng đó.</p>"],
+  [7, "Choosing the numbers",
+    "<p>Choosing values: a short connect timeout so dead hosts fail fast; a read timeout equal to the slowest normal gap of your app plus margin; and long reads only as deliberate per-route exceptions such as a streaming endpoint.</p>",
+    "<p>Chọn con số: connect ngắn, khoảng năm giây, để máy chết bị phát hiện nhanh và thử máy khác, Chương 9. Read bằng khoảng chậm nhất bình thường của ứng dụng cộng biên an toàn. Đo, đừng chép sáu trăm giây từ blog. Timeout dài chỉ là ngoại lệ có chủ ý cho từng tuyến, như một tuyến chảy dần.</p>"],
+  [8, "Key terms of this lesson",
+    "<p>Key terms: the three proxy timeouts, 502 Bad Gateway and 504 Gateway Timeout.</p>",
+    "<p>Thuật ngữ: proxy_connect_timeout, proxy_send_timeout, proxy_read_timeout. Năm trăm lẻ hai Bad Gateway là không nói chuyện được với upstream. Năm trăm lẻ bốn Gateway Timeout là upstream trả lời quá chậm.</p>"],
+  [9, "Your turn — and what to keep",
+    "<p>Your turn: reproduce all five failures and read the error log lines. Keep: each timeout is a gap, and the error log names the phase.</p>",
+    "<p>Tới lượt bạn: dựng ba upstream chậm, dựng lại năm trăm lẻ bốn, năm trăm lẻ hai, cú nhỏ giọt và cú hai trăm rỗng. Rồi đọc từng dòng error log, xem mỗi dòng gọi tên giai đoạn nào. Tóm lại: mỗi timeout là một khoảng. Error log gọi tên giai đoạn. Một cú hai trăm có thể rỗng. Timeout dài chỉ theo tuyến. Cảnh báo dựa trên log được dạy ở khoá Observability, liên kết dưới video. Bạn mở Code Lab Nginx, module mẫu production. Bài sau: WebSocket, cú nâng cấp mà Nginx cố ý gỡ đi.</p>"],
+]);

@@ -1,3 +1,8 @@
+import G02_1 from './giang/ngx-02-1.mjs';
+import G02_2 from './giang/ngx-02-2.mjs';
+import G02_3 from './giang/ngx-02-3.mjs';
+import G02_4 from './giang/ngx-02-4.mjs';
+import G02_5 from './giang/ngx-02-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Nginx KHÔNG đọc các khối location từ trên xuống rồi lấy cái khớp đầu tiên — đó là mô hình sai gây ra phần lớn thời gian phí phạm với Nginx. Bài này dựng một cấu hình bảy khối, bắn mười hai URI vào, và cho bạn cái thuật toán thật đằng sau bảng kết quả.',
       content: `
+${G02_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>Four kinds of location, and the order they are tried</h2>
@@ -82,6 +88,85 @@ export default {
 <div class="note-ct">
 <p><strong>How to use this in practice.</strong> When a request goes somewhere unexpected, do not read the file top to bottom looking for the culprit. Run the five steps in your head against the actual URI: exact match, longest prefix, was it <code>^~</code>, regexes in order, fall back. Four times out of five the answer appears at step 2 — a prefix you forgot was longer — and the fifth time it is a regex earlier in the file than the one you were looking at.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>The seven-block table of this lesson, plus two order experiments and the <code>/api</code> trap, run on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    location = /a            { return 200 "1. = /a            (khop CHINH XAC)\\n"; }
+    location ^~ /a/tinh      { return 200 "2. ^~ /a/tinh      (tien to UU TIEN)\\n"; }
+    location ~ \\.php         { return 200 "3. ~ .php          (regex, phan biet hoa thuong)\\n"; }
+    location ~* \\.(jpg|gif)  { return 200 "4. ~* .jpg .gif    (regex, KHONG phan biet hoa thuong)\\n"; }
+    location /a/tinh/sau     { return 200 "5. /a/tinh/sau     (tien to thuong, DAI hon #2)\\n"; }
+    location /a              { return 200 "6. /a              (tien to thuong)\\n"; }
+    location /               { return 200 "7. /               (tien to bat-tat)\\n"; }
+  }
+}
+
+pid       /srv/logs/thutu.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8082;
+    location /a               { return 200 "tien to /a  (keo len DAU file)\\n"; }
+    location /a/tinh/sau      { return 200 "tien to /a/tinh/sau (dai hon)\\n"; }
+    location ~ \\.jpg          { return 200 "regex .jpg (viet TRUOC)\\n"; }
+    location ~ /a/.*\\.jpg     { return 200 "regex /a/...jpg (viet SAU)\\n"; }
+  }
+  server {
+    listen 8083;
+    location ~ /a/.*\\.jpg     { return 200 "regex /a/...jpg (viet TRUOC)\\n"; }
+    location ~ \\.jpg          { return 200 "regex .jpg (viet SAU)\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /a /a/ /ab /a/tinh … /khac /; do curl -s "localhost:8080$u"; done
+/a                 -&gt; 1. = /a            (khop CHINH XAC)
+/a/                -&gt; 6. /a              (tien to thuong)
+/ab                -&gt; 6. /a              (tien to thuong)
+/a/tinh            -&gt; 2. ^~ /a/tinh      (tien to UU TIEN)
+/a/tinh/x          -&gt; 2. ^~ /a/tinh      (tien to UU TIEN)
+/a/tinh/sau/y      -&gt; 5. /a/tinh/sau     (tien to thuong, DAI hon #2)
+/a/tinh/anh.jpg    -&gt; 2. ^~ /a/tinh      (tien to UU TIEN)
+/a/x.php           -&gt; 3. ~ .php          (regex, phan biet hoa thuong)
+/A/X.JPG           -&gt; 4. ~* .jpg .gif    (regex, KHONG phan biet hoa thuong)
+/a/x.PHP           -&gt; 6. /a              (tien to thuong)
+/khac              -&gt; 7. /               (tien to bat-tat)
+/                  -&gt; 7. /               (tien to bat-tat)
+=== Tien to: keo len dau file KHONG doi gi — dai nhat van thang ===
+$ curl -s http://127.0.0.1:8082/a/tinh/sau/x
+tien to /a/tinh/sau (dai hon)
+=== Regex: DOI THU TU la doi ket qua ===
+$ curl -s http://127.0.0.1:8082/a/anh.jpg
+regex .jpg (viet TRUOC)
+$ curl -s http://127.0.0.1:8083/a/anh.jpg
+regex /a/...jpg (viet TRUOC)
+$ for u in /api /api/ /api/users /apiary /api-docs; do printf '%-12s -&gt; ' "$u"; curl -s "http://127.0.0.1:8081$u"; done
+/api         -&gt; khoi /api
+/api/        -&gt; khoi /api/
+/api/users   -&gt; khoi /api/
+/apiary      -&gt; khoi /api
+/api-docs    -&gt; khoi /api</div>
+<p>A prefix written first in the file still lost to a longer prefix; two regexes in swapped order sent <code>/a/anh.jpg</code> to different blocks; and <code>location /api</code> caught <code>/apiary</code> and <code>/api-docs</code>.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-1-tu-http-toi-express" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 5.1 — From plain http to Express</span><span class="lc-sub">How an application router matches paths — and why Nginx locations are different</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">location =</span><span class="v">Exact match — stops immediately when the URI equals it character for character; no other block is tried.</span></div>
+  <div class="kv"><span class="k">location ^~</span><span class="v">Priority prefix — if it is the longest matching prefix, commit to it and skip the regex step entirely.</span></div>
+  <div class="kv"><span class="k">location ~ · ~*</span><span class="v">Regex, case-sensitive and case-insensitive; among matching regexes the first in file order wins.</span></div>
+  <div class="kv"><span class="k">Plain prefix (location /a)</span><span class="v">Matches any URI that starts with the string; the longest matching prefix is kept, position is irrelevant.</span></div>
+  <div class="kv"><span class="k">location /</span><span class="v">The catch-all floor — a prefix of every URI, always the shortest, so it wins only when nothing else did.</span></div>
+  <div class="kv"><span class="k">Longest-prefix vs file-order</span><span class="v">Two tiebreakers in one algorithm: prefixes compete on length, regexes compete on position.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Nginx does not match top to bottom: exact match, then longest prefix, then — unless that prefix is <code>^~</code> — regexes in file order, then fall back to the remembered prefix.</li><li>Prefixes win by length (file order irrelevant); regexes win by file position (length irrelevant).</li><li><code>=</code> short-circuits matching for a hot path; <code>^~</code> only decides whether the regex step runs at all.</li><li>Prefixes do not stop at a slash: <code>location /a</code> also catches <code>/ab</code> — add a trailing slash when you mean a directory.</li><li><code>location /</code> always matches and is the floor; deleting it just turns misses into a 404 from Nginx instead of your handler.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener"><span class="lc-ico">📍</span><span class="lc-body"><span class="lc-title">nginx — the location directive</span><span class="lc-sub">nginx.org · The normative description of the five steps above</span></span></a>
@@ -162,6 +247,85 @@ export default {
 <p><strong>Dùng cái này ngoài đời thế nào.</strong> Khi một request đi lạc chỗ, đừng đọc file từ trên xuống để truy thủ phạm. Hãy chạy năm bước đó trong đầu với đúng cái URI đó: khớp chính xác, tiền tố dài nhất, nó có <code>^~</code> không, regex theo thứ tự, rơi về đâu. Bốn trên năm lần câu trả lời hiện ra ngay ở bước 2 — một cái tiền tố bạn quên mất là nó dài hơn — còn lần thứ năm thì là một cái regex nằm trước cái bạn đang nhìn trong file.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Bảng bảy khối của bài, cộng hai phép thử thứ tự và cái bẫy <code>/api</code>, chạy trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    location = /a            { return 200 "1. = /a            (khop CHINH XAC)\\n"; }
+    location ^~ /a/tinh      { return 200 "2. ^~ /a/tinh      (tien to UU TIEN)\\n"; }
+    location ~ \\.php         { return 200 "3. ~ .php          (regex, phan biet hoa thuong)\\n"; }
+    location ~* \\.(jpg|gif)  { return 200 "4. ~* .jpg .gif    (regex, KHONG phan biet hoa thuong)\\n"; }
+    location /a/tinh/sau     { return 200 "5. /a/tinh/sau     (tien to thuong, DAI hon #2)\\n"; }
+    location /a              { return 200 "6. /a              (tien to thuong)\\n"; }
+    location /               { return 200 "7. /               (tien to bat-tat)\\n"; }
+  }
+}
+
+pid       /srv/logs/thutu.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8082;
+    location /a               { return 200 "tien to /a  (keo len DAU file)\\n"; }
+    location /a/tinh/sau      { return 200 "tien to /a/tinh/sau (dai hon)\\n"; }
+    location ~ \\.jpg          { return 200 "regex .jpg (viet TRUOC)\\n"; }
+    location ~ /a/.*\\.jpg     { return 200 "regex /a/...jpg (viet SAU)\\n"; }
+  }
+  server {
+    listen 8083;
+    location ~ /a/.*\\.jpg     { return 200 "regex /a/...jpg (viet TRUOC)\\n"; }
+    location ~ \\.jpg          { return 200 "regex .jpg (viet SAU)\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /a /a/ /ab /a/tinh … /khac /; do curl -s "localhost:8080$u"; done
+/a                 -&gt; 1. = /a            (khop CHINH XAC)
+/a/                -&gt; 6. /a              (tien to thuong)
+/ab                -&gt; 6. /a              (tien to thuong)
+/a/tinh            -&gt; 2. ^~ /a/tinh      (tien to UU TIEN)
+/a/tinh/x          -&gt; 2. ^~ /a/tinh      (tien to UU TIEN)
+/a/tinh/sau/y      -&gt; 5. /a/tinh/sau     (tien to thuong, DAI hon #2)
+/a/tinh/anh.jpg    -&gt; 2. ^~ /a/tinh      (tien to UU TIEN)
+/a/x.php           -&gt; 3. ~ .php          (regex, phan biet hoa thuong)
+/A/X.JPG           -&gt; 4. ~* .jpg .gif    (regex, KHONG phan biet hoa thuong)
+/a/x.PHP           -&gt; 6. /a              (tien to thuong)
+/khac              -&gt; 7. /               (tien to bat-tat)
+/                  -&gt; 7. /               (tien to bat-tat)
+=== Tien to: keo len dau file KHONG doi gi — dai nhat van thang ===
+$ curl -s http://127.0.0.1:8082/a/tinh/sau/x
+tien to /a/tinh/sau (dai hon)
+=== Regex: DOI THU TU la doi ket qua ===
+$ curl -s http://127.0.0.1:8082/a/anh.jpg
+regex .jpg (viet TRUOC)
+$ curl -s http://127.0.0.1:8083/a/anh.jpg
+regex /a/...jpg (viet TRUOC)
+$ for u in /api /api/ /api/users /apiary /api-docs; do printf '%-12s -&gt; ' "$u"; curl -s "http://127.0.0.1:8081$u"; done
+/api         -&gt; khoi /api
+/api/        -&gt; khoi /api/
+/api/users   -&gt; khoi /api/
+/apiary      -&gt; khoi /api
+/api-docs    -&gt; khoi /api</div>
+<p>Một tiền tố viết đầu tệp vẫn thua tiền tố dài hơn; hai regex đổi thứ tự thì <code>/a/anh.jpg</code> đi hai khối khác nhau; và <code>location /api</code> bắt luôn <code>/apiary</code> lẫn <code>/api-docs</code>.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-1-tu-http-toi-express" target="_blank" rel="noopener"><span class="lc-ico">🟩</span><span class="lc-body"><span class="lc-title">Node.js · 5.1 — Từ http thuần tới Express</span><span class="lc-sub">Router của ứng dụng khớp đường dẫn thế nào — và vì sao location của Nginx khác</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">location =</span><span class="v">Khớp chính xác — dừng ngay khi URI bằng nó từng ký tự; không khối nào khác được thử.</span></div>
+  <div class="kv"><span class="k">location ^~</span><span class="v">Tiền tố ưu tiên — nếu là tiền tố khớp dài nhất thì cam kết luôn và bỏ qua hẳn bước regex.</span></div>
+  <div class="kv"><span class="k">location ~ · ~*</span><span class="v">Regex, phân biệt và không phân biệt hoa thường; giữa các regex khớp, cái đầu tiên trong file thắng.</span></div>
+  <div class="kv"><span class="k">Tiền tố thường (location /a)</span><span class="v">Khớp mọi URI bắt đầu bằng chuỗi đó; giữ tiền tố khớp dài nhất, vị trí không quan trọng.</span></div>
+  <div class="kv"><span class="k">location /</span><span class="v">Cái sàn bắt-tất — là tiền tố của mọi URI, luôn ngắn nhất, nên chỉ thắng khi không cái nào khác thắng.</span></div>
+  <div class="kv"><span class="k">Dài-nhất so với thứ-tự-file</span><span class="v">Hai cách phân thắng bại trong một thuật toán: tiền tố đua bằng độ dài, regex đua bằng vị trí.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Nginx không khớp từ trên xuống: khớp chính xác, rồi tiền tố dài nhất, rồi — trừ khi tiền tố đó là <code>^~</code> — regex theo thứ tự file, rồi rơi về cái tiền tố đã nhớ.</li><li>Tiền tố thắng bằng độ dài (thứ tự file vô nghĩa); regex thắng bằng vị trí trong file (độ dài vô nghĩa).</li><li><code>=</code> đoản mạch phép khớp cho đường dẫn nóng; <code>^~</code> chỉ quyết định bước regex có chạy hay không.</li><li>Tiền tố không dừng ở dấu gạch chéo: <code>location /a</code> vớ luôn <code>/ab</code> — thêm dấu gạch chéo cuối khi bạn muốn nói một thư mục.</li><li><code>location /</code> luôn khớp và là cái sàn; xoá nó chỉ biến những cú trượt thành 404 do Nginx trả thay vì do handler.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener"><span class="lc-ico">📍</span><span class="lc-body"><span class="lc-title">nginx — chỉ thị location</span><span class="lc-sub">nginx.org · Bản mô tả chuẩn của năm bước ở trên</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener"><span class="lc-ico">🧭</span><span class="lc-body"><span class="lc-title">nginx — Nginx xử lý một request thế nào</span><span class="lc-sub">nginx.org · Chỗ việc chọn server kết thúc và việc chọn location bắt đầu</span></span></a>
@@ -179,6 +343,7 @@ export default {
       type: 'LESSON',
       description: 'Trước khi chạm tới location nào, Nginx giải mã phần trăm, dẹp dấu gạch chéo lặp và giải quyết mọi dấu chấm chấm. Bài này bắn tám dạng viết khác nhau của cùng một đường dẫn vào một cấu hình thật để xem cái nào chui lọt vào khối "quản trị" — và một dạng thứ chín ăn thẳng 400.',
       content: `
+${G02_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>The URI being matched is not the one that was sent</h2>
@@ -234,6 +399,58 @@ location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
 <div class="note-ct">
 <p><strong>The habit worth forming.</strong> When a <code>location</code> does not fire, print the variable before you edit the config: a temporary <code>return 200 "\$uri"</code> in <code>location /</code> tells you in one request what Nginx thinks the path is, and about a third of the time the answer is that it is not what you assumed. It is faster than reading the file again, and unlike reading, it cannot be wrong.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>The eight spellings and the case/NUL experiments, sent with <code>curl --path-as-is</code> so curl does not clean the path first (nginx/1.24.0):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log /srv/logs/access.log;
+  server {
+    listen 8080;
+    location /quan-tri { return 200 "TRUNG /quan-tri   uri=[$uri]\\n"; }
+    location ~ \\.php   { return 200 "TRUNG regex .php  uri=[$uri]\\n"; }
+    location /         { return 200 "cong khai         uri=[$uri]  request_uri=[$request_uri]\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /quan-tri /%71uan-tri /QUAN-TRI //quan-tri /cong-khai/../quan-tri /./quan-tri /quan-tri/../cong-khai /quan%2Dtri
+/quan-tri                  -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/%71uan-tri                -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/QUAN-TRI                  -&gt; cong khai         uri=[/QUAN-TRI]  request_uri=[/QUAN-TRI]
+//quan-tri                 -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/cong-khai/../quan-tri     -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/./quan-tri                -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/quan-tri/../cong-khai     -&gt; cong khai         uri=[/cong-khai]  request_uri=[/quan-tri/../cong-khai]
+/quan%2Dtri                -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+$ for u in /x.php /x.PHP /x.pHp /x.php/them-duong-dan
+/x.php                     -&gt; TRUNG regex .php  uri=[/x.php]
+/x.PHP                     -&gt; cong khai         uri=[/x.PHP]  request_uri=[/x.PHP]
+/x.pHp                     -&gt; cong khai         uri=[/x.pHp]  request_uri=[/x.pHp]
+/x.php/them-duong-dan      -&gt; TRUNG regex .php  uri=[/x.php/them-duong-dan]
+$ curl -s --path-as-is -o /dev/null -w '%{http_code}\\n' 'http://127.0.0.1:8080/x.php%00.jpg'
+400
+$ curl -s --path-as-is 'http://127.0.0.1:8080/cong-khai//x/%41?trang=2'
+cong khai         uri=[/cong-khai/x/A]  request_uri=[/cong-khai//x/%41?trang=2]
+$ tail -n 1 /tmp/ng/logs/access.log
+127.0.0.1 - - [12/Nov/2026:12:25:59 +0000] "GET /cong-khai//x/%41?trang=2 HTTP/1.1" 200 80 "-" "curl/8.5.0"
+$ curl -s 'http://127.0.0.1:8080/?quan-tri=1'
+cong khai         uri=[/]  request_uri=[/?quan-tri=1]</div>
+<p>Six spellings reached the admin block; uppercase did not; <code>/x.PHP</code> escaped the case-sensitive regex; <code>%00</code> got 400; <code>$uri</code> is the cleaned path while the access log and <code>$request_uri</code> keep the raw one; the query string never took part in matching.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.1 — HTTP/1.1 on the wire</span><span class="lc-sub">What the request line really contains</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: the flags that matter</span><span class="lc-sub">--path-as-is and friends</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">$uri</span><span class="v">The normalised path — percent-decoded, slashes merged, dot-segments resolved, no query string; this is what <code>location</code> matches.</span></div>
+  <div class="kv"><span class="k">$request_uri</span><span class="v">The raw path exactly as sent, with encoding and query string intact; treat it as attacker input.</span></div>
+  <div class="kv"><span class="k">Percent-decoding</span><span class="v">Happens before matching — <code>%71</code> becomes <code>q</code>, so encoding a character cannot hide a path from a location.</span></div>
+  <div class="kv"><span class="k">merge_slashes</span><span class="v">Doubled slashes are collapsed, so <code>//quan-tri</code> matches <code>/quan-tri</code>.</span></div>
+  <div class="kv"><span class="k">Dot-segment resolution</span><span class="v"><code>../</code> and <code>./</code> are resolved textually before the block is chosen; the block picked is the one for the resolved path.</span></div>
+  <div class="kv"><span class="k">Regex anchor</span><span class="v">A pattern with no trailing end-anchor matches the fragment anywhere in the path — the classic PHP path-info hole.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>The matching algorithm runs against the normalised <code>$uri</code>, not the raw request line.</li><li>Percent-decode, slash-collapse and dot-segment resolution all happen before a block is chosen, so you cannot smuggle past a location by re-spelling the path.</li><li>Case is NOT normalised: prefix locations are case-sensitive, only <code>~*</code> ignores case — a case-sensitive regex is a bypass waiting to happen.</li><li>A regex without an end anchor matches its fragment anywhere, and a null byte is refused with 400 before any block runs.</li><li>Match and route on <code>$uri</code>; log, key and sign on <code>$request_uri</code>.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#var_uri" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — $uri and $request_uri</span><span class="lc-sub">nginx.org · The normative difference between the normalised and the raw form</span></span></a>
@@ -299,6 +516,58 @@ location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
 <p><strong>Thói quen đáng tập.</strong> Khi một <code>location</code> không nổ, hãy IN cái biến ra trước khi sửa cấu hình: một dòng <code>return 200 "\$uri"</code> tạm thời trong <code>location /</code> cho bạn biết chỉ trong một request rằng Nginx đang nghĩ đường dẫn là gì, và khoảng một phần ba số lần câu trả lời là nó không phải cái bạn tưởng. Nó nhanh hơn đọc lại file, và khác với đọc, nó không thể sai.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Tám cách viết cùng các phép thử chữ hoa và byte rỗng, gửi bằng <code>curl --path-as-is</code> để curl không tự dọn đường dẫn (nginx/1.24.0):</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log /srv/logs/access.log;
+  server {
+    listen 8080;
+    location /quan-tri { return 200 "TRUNG /quan-tri   uri=[$uri]\\n"; }
+    location ~ \\.php   { return 200 "TRUNG regex .php  uri=[$uri]\\n"; }
+    location /         { return 200 "cong khai         uri=[$uri]  request_uri=[$request_uri]\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /quan-tri /%71uan-tri /QUAN-TRI //quan-tri /cong-khai/../quan-tri /./quan-tri /quan-tri/../cong-khai /quan%2Dtri
+/quan-tri                  -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/%71uan-tri                -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/QUAN-TRI                  -&gt; cong khai         uri=[/QUAN-TRI]  request_uri=[/QUAN-TRI]
+//quan-tri                 -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/cong-khai/../quan-tri     -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/./quan-tri                -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+/quan-tri/../cong-khai     -&gt; cong khai         uri=[/cong-khai]  request_uri=[/quan-tri/../cong-khai]
+/quan%2Dtri                -&gt; TRUNG /quan-tri   uri=[/quan-tri]
+$ for u in /x.php /x.PHP /x.pHp /x.php/them-duong-dan
+/x.php                     -&gt; TRUNG regex .php  uri=[/x.php]
+/x.PHP                     -&gt; cong khai         uri=[/x.PHP]  request_uri=[/x.PHP]
+/x.pHp                     -&gt; cong khai         uri=[/x.pHp]  request_uri=[/x.pHp]
+/x.php/them-duong-dan      -&gt; TRUNG regex .php  uri=[/x.php/them-duong-dan]
+$ curl -s --path-as-is -o /dev/null -w '%{http_code}\\n' 'http://127.0.0.1:8080/x.php%00.jpg'
+400
+$ curl -s --path-as-is 'http://127.0.0.1:8080/cong-khai//x/%41?trang=2'
+cong khai         uri=[/cong-khai/x/A]  request_uri=[/cong-khai//x/%41?trang=2]
+$ tail -n 1 /tmp/ng/logs/access.log
+127.0.0.1 - - [12/Nov/2026:12:25:59 +0000] "GET /cong-khai//x/%41?trang=2 HTTP/1.1" 200 80 "-" "curl/8.5.0"
+$ curl -s 'http://127.0.0.1:8080/?quan-tri=1'
+cong khai         uri=[/]  request_uri=[/?quan-tri=1]</div>
+<p>Sáu cách viết tới khối quản trị; chữ hoa thì không; <code>/x.PHP</code> thoát khỏi regex phân biệt hoa thường; <code>%00</code> nhận 400; <code>$uri</code> là đường dẫn đã dọn còn access log và <code>$request_uri</code> giữ bản thô; phần query không hề tham gia khớp.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-1-http11" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking cho lập trình viên · 7.1 — HTTP/1.1 trên dây</span><span class="lc-sub">Dòng request thật ra chứa gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-9-2-curl" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 9.2 — curl: những cờ quan trọng</span><span class="lc-sub">--path-as-is và các cờ khác</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">$uri</span><span class="v">Đường dẫn đã chuẩn hoá — giải mã phần trăm, dẹp gạch chéo lặp, rút gọn đoạn chấm, bỏ query string; đây là thứ <code>location</code> đem ra khớp.</span></div>
+  <div class="kv"><span class="k">$request_uri</span><span class="v">Đường dẫn thô đúng như lúc gửi, giữ nguyên mã hoá và query string; phải coi là đầu vào của kẻ tấn công.</span></div>
+  <div class="kv"><span class="k">Giải mã phần trăm</span><span class="v">Xảy ra trước khi khớp — <code>%71</code> thành <code>q</code>, nên mã hoá một ký tự không giấu được đường dẫn khỏi location.</span></div>
+  <div class="kv"><span class="k">merge_slashes</span><span class="v">Gạch chéo lặp bị dẹp, nên <code>//quan-tri</code> khớp <code>/quan-tri</code>.</span></div>
+  <div class="kv"><span class="k">Rút gọn đoạn chấm</span><span class="v"><code>../</code> và <code>./</code> được giải quyết theo văn bản trước khi chọn khối; khối được chọn là khối của đường dẫn đã rút gọn.</span></div>
+  <div class="kv"><span class="k">Neo của regex</span><span class="v">Một mẫu không có neo cuối sẽ khớp cái mẩu đó ở bất kỳ đâu trong đường dẫn — chính là lỗ path-info kinh điển của PHP.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Thuật toán khớp chạy trên <code>$uri</code> đã chuẩn hoá, không chạy trên dòng request thô.</li><li>Giải mã phần trăm, dẹp gạch chéo và rút gọn đoạn chấm đều xảy ra trước khi chọn khối, nên không thể tuồn qua một location bằng cách viết lại đường dẫn.</li><li>Hoa thường KHÔNG được chuẩn hoá: location tiền tố phân biệt hoa thường, chỉ <code>~*</code> bỏ qua — một regex phân biệt hoa thường là một lối thoát đang chờ xảy ra.</li><li>Một regex thiếu neo cuối khớp mẩu của nó ở bất kỳ đâu, và một byte 0 bị từ chối với 400 trước khi khối nào chạy.</li><li>Khớp và định tuyến thì dùng <code>$uri</code>; ghi log, làm khoá và ký thì dùng <code>$request_uri</code>.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#var_uri" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — $uri và $request_uri</span><span class="lc-sub">nginx.org · Khác biệt chuẩn giữa dạng đã chuẩn hoá và dạng thô</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#merge_slashes" target="_blank" rel="noopener"><span class="lc-ico">➗</span><span class="lc-body"><span class="lc-title">nginx — merge_slashes</span><span class="lc-sub">nginx.org · Cái công tắc đứng sau bước 2, và vì sao tắt nó hiếm khi đúng</span></span></a>
@@ -316,6 +585,7 @@ location /         { return 200 "cong khai         uri=[\$uri]"; }</code></pre>
       type: 'LESSON',
       description: 'Khối location không chỉ quyết định ai TRẢ LỜI request — nó quyết định luôn tập chỉ thị nào có hiệu lực. Bài này đo ba URL trên CÙNG một server và cho thấy ba bộ header khác nhau, trong đó có một cái làm bay sạch header bảo mật đặt ở tầng server, rồi đo hai cách mà chính phép chọn khối có thể trượt khỏi tay bạn.',
       content: `
+${G02_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.3</span>
 <h2>Choosing a block also chooses which directives apply</h2>
@@ -402,6 +672,92 @@ location /               F
 <div class="note-ct">
 <p><strong>The takeaway in one sentence.</strong> A <code>location</code> block is a scope, not just a route: it decides who answers, and it decides which configuration answers with them — and for list-valued directives, writing one line inside it throws away every inherited line rather than adding to them.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>The three-URL server, the snippet fix and the slipping ^~, run on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    root /srv/site;
+    add_header X-Tang-Server "co-o-tang-server" always;
+    location / {
+      add_header X-Trong-Location "co-o-location" always;
+    }
+    location ~* \\.(jpg|png)$ {
+      expires 7d;
+    }
+    location = /anh-2.jpg {
+      add_header X-Rieng "chi-cua-khoi-nay" always;
+      return 200 "anh 2\\n";
+    }
+  }
+}
+
+<span class="tok-comment"># snippets/header-bao-mat.conf</span>
+add_header Strict-Transport-Security "max-age=31536000" always;
+add_header X-Content-Type-Options    "nosniff" always;
+add_header X-Frame-Options           "SAMEORIGIN" always;</code></pre>
+<div class="out">$ for u in / /anh.jpg /anh-2.jpg; do echo "--- $u ---"; curl -sI "http://127.0.0.1:8080$u" | grep -iE '^(HTTP|X-|Expires|Cache-Control)'; done
+--- / ---
+HTTP/1.1 200 OK
+X-Trong-Location: co-o-location
+--- /anh.jpg ---
+HTTP/1.1 200 OK
+Expires: Thu, 19 Nov 2026 12:26:00 GMT
+Cache-Control: max-age=604800
+X-Tang-Server: co-o-tang-server
+--- /anh-2.jpg ---
+HTTP/1.1 200 OK
+X-Rieng: chi-cua-khoi-nay
+$ for u in /static/a.css /quen/a.css; do echo "--- $u ---"; curl -sI "http://127.0.0.1:8081$u" | grep -iE '^(Strict|X-|Cache-Control)'; done
+--- /static/a.css ---
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Cache-Control: public, max-age=31536000, immutable
+--- /quen/a.css ---
+Cache-Control: public, max-age=31536000, immutable
+$ for u in /a/tinh/anh.jpg /a/tinh/sau/anh.jpg /b/anh.jpg /a/anh.jpg; do printf '%-22s -&gt; ' $u; curl -s "http://127.0.0.1:8082$u"; done
+/a/tinh/anh.jpg        -&gt; B  ^~ /a/tinh
+/a/tinh/sau/anh.jpg    -&gt; D  ~ /a/.*\\.jpg
+/b/anh.jpg             -&gt; E  ~ \\.jpg
+/a/anh.jpg             -&gt; D  ~ /a/.*\\.jpg</div>
+<pre><code class="language-bash">pid       /srv/logs/trotva.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8083;
+    location ^~ /a/tinh      { return 200 "B  ^~ /a/tinh\\n"; }
+    location ^~ /a/tinh/sau  { return 200 "C  ^~ /a/tinh/sau (DA VA)\\n"; }
+    location ~ /a/.*\\.jpg    { return 200 "D  ~ /a/.*\\\\.jpg\\n"; }
+    location /               { return 200 "F\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /a/tinh/anh.jpg /a/tinh/sau/anh.jpg /a/anh.jpg; do printf '%-22s -&gt; ' $u; curl -s "http://127.0.0.1:8083$u"; done
+/a/tinh/anh.jpg        -&gt; B  ^~ /a/tinh
+/a/tinh/sau/anh.jpg    -&gt; C  ^~ /a/tinh/sau (DA VA)
+/a/anh.jpg             -&gt; D  ~ /a/.*\\.jpg</div>
+<p>The fix, measured: give the sub-branch its own <code>^~</code> and <code>/a/tinh/sau/anh.jpg</code> goes back to C.</p>
+<p>One extra <code>add_header</code> in a location removed the server-level header there; the location that set none inherited it; the snippet included in <code>/static/</code> kept all three security headers while <code>/quen/</code>, which forgot it, kept only Cache-Control; and under <code>/a/tinh/sau</code> a regex beat the shorter <code>^~ /a/tinh</code>.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">Node.js · 9.1 — Security headers, CSP and CORS</span><span class="lc-sub">The same headers from the application side</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Scalar directive</span><span class="v"><code>root</code>, <code>client_max_body_size</code>, <code>proxy_read_timeout</code> — a single value; the nearest one wins and children inherit it when silent.</span></div>
+  <div class="kv"><span class="k">Array directive</span><span class="v"><code>add_header</code>, <code>proxy_set_header</code>, <code>fastcgi_param</code> — hold a list rather than one value.</span></div>
+  <div class="kv"><span class="k">Inheritance by replacement</span><span class="v">One array entry in a child discards the whole inherited list — no merge, no warning.</span></div>
+  <div class="kv"><span class="k">always (add_header flag)</span><span class="v">Sends the header even on error responses, not only on 2xx/3xx.</span></div>
+  <div class="kv"><span class="k">include snippet</span><span class="v">A shared header set kept in one file and included everywhere, so the full set cannot drift.</span></div>
+  <div class="kv"><span class="k">^~ protection scope</span><span class="v">Only holds while it is the longest prefix; a longer plain prefix under it re-opens regex handling.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A <code>location</code> is a scope, not just a route: it decides who answers AND which directives answer with them.</li><li>Scalar directives inherit downward; array directives inherit only while the child declares none of their own.</li><li>Writing one array entry in a child REPLACES the entire inherited list — this is how a site silently loses its security headers on exactly one path.</li><li>Fix by repeating the full set in every block that adds anything, or better, <code>include</code> a shared snippet so it cannot drift.</li><li>Prefixes win by length and regexes win by file order — the opposite rules in the same file, which is why they get confused.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — add_header</span><span class="lc-sub">nginx.org · The inheritance sentence that this whole lesson is about</span></span></a>
@@ -498,6 +854,92 @@ location /               F
 <p><strong>Rút gọn trong một câu.</strong> Một khối <code>location</code> là một PHẠM VI chứ không chỉ là một tuyến: nó quyết định ai trả lời, và nó quyết định luôn cấu hình nào trả lời cùng với người đó — còn với chỉ thị dạng danh sách, viết MỘT dòng vào trong nó là vứt đi MỌI dòng được thừa hưởng chứ không phải cộng thêm vào chúng.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Server ba URL, cách chữa bằng snippet và cái ^~ bị trượt, chạy trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    root /srv/site;
+    add_header X-Tang-Server "co-o-tang-server" always;
+    location / {
+      add_header X-Trong-Location "co-o-location" always;
+    }
+    location ~* \\.(jpg|png)$ {
+      expires 7d;
+    }
+    location = /anh-2.jpg {
+      add_header X-Rieng "chi-cua-khoi-nay" always;
+      return 200 "anh 2\\n";
+    }
+  }
+}
+
+<span class="tok-comment"># snippets/header-bao-mat.conf</span>
+add_header Strict-Transport-Security "max-age=31536000" always;
+add_header X-Content-Type-Options    "nosniff" always;
+add_header X-Frame-Options           "SAMEORIGIN" always;</code></pre>
+<div class="out">$ for u in / /anh.jpg /anh-2.jpg; do echo "--- $u ---"; curl -sI "http://127.0.0.1:8080$u" | grep -iE '^(HTTP|X-|Expires|Cache-Control)'; done
+--- / ---
+HTTP/1.1 200 OK
+X-Trong-Location: co-o-location
+--- /anh.jpg ---
+HTTP/1.1 200 OK
+Expires: Thu, 19 Nov 2026 12:26:00 GMT
+Cache-Control: max-age=604800
+X-Tang-Server: co-o-tang-server
+--- /anh-2.jpg ---
+HTTP/1.1 200 OK
+X-Rieng: chi-cua-khoi-nay
+$ for u in /static/a.css /quen/a.css; do echo "--- $u ---"; curl -sI "http://127.0.0.1:8081$u" | grep -iE '^(Strict|X-|Cache-Control)'; done
+--- /static/a.css ---
+Strict-Transport-Security: max-age=31536000
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+Cache-Control: public, max-age=31536000, immutable
+--- /quen/a.css ---
+Cache-Control: public, max-age=31536000, immutable
+$ for u in /a/tinh/anh.jpg /a/tinh/sau/anh.jpg /b/anh.jpg /a/anh.jpg; do printf '%-22s -&gt; ' $u; curl -s "http://127.0.0.1:8082$u"; done
+/a/tinh/anh.jpg        -&gt; B  ^~ /a/tinh
+/a/tinh/sau/anh.jpg    -&gt; D  ~ /a/.*\\.jpg
+/b/anh.jpg             -&gt; E  ~ \\.jpg
+/a/anh.jpg             -&gt; D  ~ /a/.*\\.jpg</div>
+<pre><code class="language-bash">pid       /srv/logs/trotva.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8083;
+    location ^~ /a/tinh      { return 200 "B  ^~ /a/tinh\\n"; }
+    location ^~ /a/tinh/sau  { return 200 "C  ^~ /a/tinh/sau (DA VA)\\n"; }
+    location ~ /a/.*\\.jpg    { return 200 "D  ~ /a/.*\\\\.jpg\\n"; }
+    location /               { return 200 "F\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /a/tinh/anh.jpg /a/tinh/sau/anh.jpg /a/anh.jpg; do printf '%-22s -&gt; ' $u; curl -s "http://127.0.0.1:8083$u"; done
+/a/tinh/anh.jpg        -&gt; B  ^~ /a/tinh
+/a/tinh/sau/anh.jpg    -&gt; C  ^~ /a/tinh/sau (DA VA)
+/a/anh.jpg             -&gt; D  ~ /a/.*\\.jpg</div>
+<p>Cách vá, đo thật: cho nhánh con một <code>^~</code> riêng là <code>/a/tinh/sau/anh.jpg</code> về lại khối C.</p>
+<p>Một <code>add_header</code> thêm trong location đã xoá header tầng server ở đó; location không đặt gì thì thừa hưởng; snippet được include trong <code>/static/</code> giữ đủ ba header bảo mật, còn <code>/quen/</code> quên include thì chỉ còn Cache-Control; và dưới <code>/a/tinh/sau</code> một regex đã thắng cái <code>^~ /a/tinh</code> ngắn hơn.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener"><span class="lc-ico">🛡️</span><span class="lc-body"><span class="lc-title">Node.js · 9.1 — Header bảo mật, CSP và CORS</span><span class="lc-sub">Cũng những header đó nhìn từ phía ứng dụng</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Chỉ thị giá trị đơn</span><span class="v"><code>root</code>, <code>client_max_body_size</code>, <code>proxy_read_timeout</code> — một giá trị; cái gần nhất thắng và con thừa hưởng khi im lặng.</span></div>
+  <div class="kv"><span class="k">Chỉ thị dạng mảng</span><span class="v"><code>add_header</code>, <code>proxy_set_header</code>, <code>fastcgi_param</code> — giữ một danh sách chứ không phải một giá trị.</span></div>
+  <div class="kv"><span class="k">Thừa hưởng bằng thay thế</span><span class="v">Một mục mảng ở con là vứt đi nguyên danh sách thừa hưởng — không trộn, không cảnh báo.</span></div>
+  <div class="kv"><span class="k">always (cờ của add_header)</span><span class="v">Gửi header cả trên phản hồi lỗi, không chỉ 2xx/3xx.</span></div>
+  <div class="kv"><span class="k">include snippet</span><span class="v">Một bộ header dùng chung giữ trong một file và include khắp nơi, để đủ bộ không trôi dạt.</span></div>
+  <div class="kv"><span class="k">Phạm vi che của ^~</span><span class="v">Chỉ giữ chừng nào nó còn là tiền tố dài nhất; một tiền tố thường dài hơn bên dưới sẽ mở lại cửa regex.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một <code>location</code> là một phạm vi chứ không chỉ một tuyến: nó quyết định ai trả lời VÀ cấu hình nào trả lời cùng.</li><li>Chỉ thị giá trị đơn thừa hưởng xuống; chỉ thị dạng mảng chỉ thừa hưởng khi con không khai cái nào của riêng nó.</li><li>Viết một mục mảng ở con là THAY THẾ cả danh sách thừa hưởng — đây chính là cách một site lặng lẽ mất header bảo mật trên đúng một đường dẫn.</li><li>Chữa bằng cách chép đủ bộ vào mọi khối có thêm bất cứ thứ gì, hoặc tốt hơn là <code>include</code> một snippet dùng chung để nó không trôi dạt.</li><li>Tiền tố thắng bằng độ dài, regex thắng bằng thứ tự file — hai luật ngược nhau trong cùng một file, nên hay bị lẫn.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_headers_module.html#add_header" target="_blank" rel="noopener"><span class="lc-ico">📤</span><span class="lc-body"><span class="lc-title">nginx — add_header</span><span class="lc-sub">nginx.org · Cái câu về thừa hưởng mà cả bài này nói về nó</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener"><span class="lc-ico">📍</span><span class="lc-body"><span class="lc-title">nginx — location và ngữ cảnh của chỉ thị</span><span class="lc-sub">nginx.org · Mỗi chỉ thị hợp lệ ở đâu, liệt kê theo từng chỉ thị</span></span></a>
@@ -515,6 +957,7 @@ location /               F
       type: 'LESSON',
       description: 'Hai chỉ thị dựng nên đường dẫn hệ tệp mà Nginx sẽ mở, và chúng ghép đường dẫn theo hai cách KHÁC HẲN nhau. Bài này đo cả hai, rồi dựng lại một cấu hình sai đúng MỘT ký tự và đọc được một tệp nằm NGOÀI thư mục công khai — sau đó vá và đo lại.',
       content: `
+${G02_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.4</span>
 <h2>root and alias, and the missing slash that leaks files</h2>
@@ -595,6 +1038,83 @@ location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
 <div class="note-ct">
 <p><strong>Remember it as a shape, not a rule.</strong> <code>alias</code> performs a textual cut-and-paste on the path, so anything that changes what "the matched part" is changes where the file comes from. That is why the trailing slash matters, why regex locations need explicit captures, and why <code>root</code> — which never cuts anything — has none of these failure modes. When you can use <code>root</code>, use <code>root</code>.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>root and alias side by side (the <code>X-File</code> header prints <code>$request_filename</code>), then the leak and its one-character fix, on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    location /r1/ { root  /srv/www;   add_header X-File $request_filename always; }
+    location /r2/ { root  /srv/www/;  add_header X-File $request_filename always; }
+    location /a1/ { alias /srv/www2/; add_header X-File $request_filename always; }
+    location /a2/ { alias /srv/www2;  add_header X-File $request_filename always; }
+  }
+}
+
+pid       /srv/logs/ro.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8081;
+    location /tep { alias /srv/kho/cong-khai/; }
+    location /    { return 200 "khong khop khoi alias\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /r1/anh/a.txt /r2/anh/a.txt /a1/anh/a.txt /a2/anh/a.txt; do printf '%-15s -&gt; ' $u; curl -s -o /dev/null -D - "http://127.0.0.1:8080$u" | awk '/^HTTP/{c=$2} /^X-File/{f=$2} END{print c, f}'; done
+/r1/anh/a.txt   -&gt; 200 /srv/www/r1/anh/a.txt
+/r2/anh/a.txt   -&gt; 200 /srv/www/r2/anh/a.txt
+/a1/anh/a.txt   -&gt; 200 /srv/www2/anh/a.txt
+/a2/anh/a.txt   -&gt; 404 /srv/www2anh/a.txt
+=== location /tep  (THIEU dau / cuoi) ===
+$ for u in /tep/ok.txt /tep../bi-mat.txt /tep../../etc/hostname; do printf '%-24s -&gt; ' $u; curl -s --path-as-is "http://127.0.0.1:8081$u"; done
+/tep/ok.txt              -&gt; OK
+/tep../bi-mat.txt        -&gt; BI-MAT: mat khau CSDL
+/tep../../etc/hostname   -&gt; khong khop khoi alias
+=== SAU KHI VA: location /tep/  (CO dau / cuoi) ===
+$ for u in /tep/ok.txt /tep../bi-mat.txt; do printf '%-24s -&gt; ' $u; curl -s --path-as-is "http://127.0.0.1:8081$u"; done
+/tep/ok.txt              -&gt; OK
+/tep../bi-mat.txt        -&gt; khong khop khoi alias
+$ nginx -T -c ro.conf 2&gt;/dev/null | grep -nE 'location\\s+[^~=^ ]*[^/ ]\\s*\\{.*alias'
+$ cp ro.conf ro-sai.conf &amp;&amp; sed -i 's#location /tep/ {#location /tep {#' ro-sai.conf
+$ nginx -T -c ro-sai.conf 2&gt;/dev/null | grep -nE 'location\\s+[^~=^ ]*[^/ ]\\s*\\{.*alias'
+9:    location /tep { alias /srv/kho/cong-khai/; }</div>
+<pre><code class="language-bash">pid       /srv/logs/rxs.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8083;
+    location ~ ^/anh/ { alias /srv/www2/anh/; }
+  }
+}</code></pre>
+<div class="out">$ for u in /anh/a.txt /anh/khac.txt; do printf '%-14s -&gt; ' $u; curl -s -o /dev/null -w '%{http_code}\\n' "http://127.0.0.1:8083$u"; done
+/anh/a.txt     -&gt; 404
+/anh/khac.txt  -&gt; 404
+$ grep -o 'open() "[^"]*" failed ([^)]*)' /srv/logs/error.log | tail -n 2
+open() "/srv/www2/anh/" failed (2: No such file or directory)
+open() "/srv/www2/anh/" failed (2: No such file or directory)</div>
+<p>And alias in a regex location WITHOUT a capture: every URL opened the alias folder itself — both files 404, the same path twice in error.log.</p>
+<p><code>alias /srv/www2</code> without the trailing slash built <code>/srv/www2anh/a.txt</code>; <code>location /tep</code> served <code>/tep../bi-mat.txt</code> — a file outside the public folder — until it became <code>location /tep/</code>; and the grep over <code>nginx -T</code> printed only the broken copy.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-1-mo-hinh-quyen" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.1 — The permission model</span><span class="lc-sub">Paths, directories and who can read what on disk</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">root</span><span class="v">Appends the whole URI to the base path, so the location name stays part of the path on disk.</span></div>
+  <div class="kv"><span class="k">alias</span><span class="v">Replaces the matched part with a literal string, so the location name disappears from the path.</span></div>
+  <div class="kv"><span class="k">$document_root</span><span class="v">The directory computed from <code>root</code>; Nginx strips a trailing slash from it.</span></div>
+  <div class="kv"><span class="k">$request_filename</span><span class="v">The final path Nginx will actually open, after <code>root</code> or <code>alias</code> has been applied.</span></div>
+  <div class="kv"><span class="k">Trailing-slash rule</span><span class="v">With <code>alias</code>, the location and the alias path must both end in a slash or neither — the mixed form is the vulnerable one.</span></div>
+  <div class="kv"><span class="k">Path traversal via alias</span><span class="v">A missing slash lets a request like <code>/tep../secret</code> escape the published directory.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>root</code> appends the whole URI; <code>alias</code> substitutes the matched part — they look interchangeable but are not.</li><li><code>root</code> tolerates a trailing slash; <code>alias</code> is a literal substitution, so a missing slash breaks the path into a 404 or leaks files.</li><li>The best-known Nginx bug is one character wide: <code>location /tep</code> plus a slash-mismatched <code>alias</code> reads a file above the public directory.</li><li>Rule: with <code>alias</code>, the location and the alias path both end in a slash, or neither does.</li><li>Prefer <code>root</code> — it never cuts the path, so it has none of these failure modes.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#alias" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">nginx — alias</span><span class="lc-sub">nginx.org · Including the note about regex locations and captures</span></span></a>
@@ -685,6 +1205,83 @@ location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
 <p><strong>Hãy nhớ nó như một HÌNH DẠNG, đừng nhớ như một luật.</strong> <code>alias</code> thực hiện một phép cắt-dán theo văn bản trên đường dẫn, nên bất cứ thứ gì làm đổi "phần đã khớp" là đổi luôn chỗ tệp được lấy ra. Đó là lý do dấu gạch chéo cuối quan trọng, là lý do location regex cần nhóm bắt tường minh, và là lý do <code>root</code> — thứ chẳng cắt gì cả — không có kiểu hỏng nào trong số này. Khi nào dùng được <code>root</code> thì hãy dùng <code>root</code>.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>root và alias đặt cạnh nhau (header <code>X-File</code> in ra <code>$request_filename</code>), rồi cú rò rỉ và cách vá một ký tự, trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    location /r1/ { root  /srv/www;   add_header X-File $request_filename always; }
+    location /r2/ { root  /srv/www/;  add_header X-File $request_filename always; }
+    location /a1/ { alias /srv/www2/; add_header X-File $request_filename always; }
+    location /a2/ { alias /srv/www2;  add_header X-File $request_filename always; }
+  }
+}
+
+pid       /srv/logs/ro.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8081;
+    location /tep { alias /srv/kho/cong-khai/; }
+    location /    { return 200 "khong khop khoi alias\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for u in /r1/anh/a.txt /r2/anh/a.txt /a1/anh/a.txt /a2/anh/a.txt; do printf '%-15s -&gt; ' $u; curl -s -o /dev/null -D - "http://127.0.0.1:8080$u" | awk '/^HTTP/{c=$2} /^X-File/{f=$2} END{print c, f}'; done
+/r1/anh/a.txt   -&gt; 200 /srv/www/r1/anh/a.txt
+/r2/anh/a.txt   -&gt; 200 /srv/www/r2/anh/a.txt
+/a1/anh/a.txt   -&gt; 200 /srv/www2/anh/a.txt
+/a2/anh/a.txt   -&gt; 404 /srv/www2anh/a.txt
+=== location /tep  (THIEU dau / cuoi) ===
+$ for u in /tep/ok.txt /tep../bi-mat.txt /tep../../etc/hostname; do printf '%-24s -&gt; ' $u; curl -s --path-as-is "http://127.0.0.1:8081$u"; done
+/tep/ok.txt              -&gt; OK
+/tep../bi-mat.txt        -&gt; BI-MAT: mat khau CSDL
+/tep../../etc/hostname   -&gt; khong khop khoi alias
+=== SAU KHI VA: location /tep/  (CO dau / cuoi) ===
+$ for u in /tep/ok.txt /tep../bi-mat.txt; do printf '%-24s -&gt; ' $u; curl -s --path-as-is "http://127.0.0.1:8081$u"; done
+/tep/ok.txt              -&gt; OK
+/tep../bi-mat.txt        -&gt; khong khop khoi alias
+$ nginx -T -c ro.conf 2&gt;/dev/null | grep -nE 'location\\s+[^~=^ ]*[^/ ]\\s*\\{.*alias'
+$ cp ro.conf ro-sai.conf &amp;&amp; sed -i 's#location /tep/ {#location /tep {#' ro-sai.conf
+$ nginx -T -c ro-sai.conf 2&gt;/dev/null | grep -nE 'location\\s+[^~=^ ]*[^/ ]\\s*\\{.*alias'
+9:    location /tep { alias /srv/kho/cong-khai/; }</div>
+<pre><code class="language-bash">pid       /srv/logs/rxs.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8083;
+    location ~ ^/anh/ { alias /srv/www2/anh/; }
+  }
+}</code></pre>
+<div class="out">$ for u in /anh/a.txt /anh/khac.txt; do printf '%-14s -&gt; ' $u; curl -s -o /dev/null -w '%{http_code}\\n' "http://127.0.0.1:8083$u"; done
+/anh/a.txt     -&gt; 404
+/anh/khac.txt  -&gt; 404
+$ grep -o 'open() "[^"]*" failed ([^)]*)' /srv/logs/error.log | tail -n 2
+open() "/srv/www2/anh/" failed (2: No such file or directory)
+open() "/srv/www2/anh/" failed (2: No such file or directory)</div>
+<p>Còn alias trong location regex KHÔNG có nhóm bắt: mọi URL đều mở chính thư mục alias — cả hai tệp 404, error.log ghi cùng một đường dẫn hai lần.</p>
+<p><code>alias /srv/www2</code> thiếu gạch chéo cuối dựng ra <code>/srv/www2anh/a.txt</code>; <code>location /tep</code> phục vụ <code>/tep../bi-mat.txt</code> — một tệp nằm ngoài thư mục công khai — cho tới khi thành <code>location /tep/</code>; và lệnh grep trên <code>nginx -T</code> chỉ in ra bản sai.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-4-1-mo-hinh-quyen" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 4.1 — Mô hình quyền</span><span class="lc-sub">Đường dẫn, thư mục và ai đọc được gì trên đĩa</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">root</span><span class="v">Nối nguyên cả URI vào đường dẫn gốc, nên cái tên location vẫn nằm trong đường dẫn trên đĩa.</span></div>
+  <div class="kv"><span class="k">alias</span><span class="v">Thay phần đã khớp bằng một chuỗi theo nghĩa đen, nên cái tên location biến mất khỏi đường dẫn.</span></div>
+  <div class="kv"><span class="k">$document_root</span><span class="v">Thư mục tính từ <code>root</code>; Nginx tự cắt dấu gạch chéo cuối của nó.</span></div>
+  <div class="kv"><span class="k">$request_filename</span><span class="v">Đường dẫn cuối cùng Nginx sẽ thực sự mở, sau khi <code>root</code> hay <code>alias</code> đã áp dụng.</span></div>
+  <div class="kv"><span class="k">Luật dấu gạch chéo cuối</span><span class="v">Với <code>alias</code>, location và đường dẫn alias phải cùng kết thúc bằng gạch chéo hoặc cùng không — cách viết lẫn lộn mới là cách có lỗ.</span></div>
+  <div class="kv"><span class="k">Path traversal qua alias</span><span class="v">Thiếu một dấu gạch chéo là một request kiểu <code>/tep../bi-mat</code> thoát ra khỏi thư mục đã công bố.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>root</code> nối nguyên cả URI; <code>alias</code> thay phần đã khớp — trông thay nhau được nhưng không phải.</li><li><code>root</code> tha thứ dấu gạch chéo cuối; <code>alias</code> là phép thay theo nghĩa đen, nên thiếu một dấu gạch chéo là đường dẫn hỏng thành 404 hoặc rò rỉ tệp.</li><li>Lỗi nổi tiếng nhất của Nginx rộng đúng một ký tự: <code>location /tep</code> cộng một <code>alias</code> lệch gạch chéo đọc được tệp nằm trên thư mục công khai.</li><li>Luật: với <code>alias</code>, location và đường dẫn alias cùng kết thúc bằng gạch chéo, hoặc cùng không.</li><li>Ưu tiên <code>root</code> — nó không bao giờ cắt đường dẫn, nên không có kiểu hỏng nào trong số này.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#alias" target="_blank" rel="noopener"><span class="lc-ico">🔀</span><span class="lc-body"><span class="lc-title">nginx — alias</span><span class="lc-sub">nginx.org · Kèm cả ghi chú về location regex và nhóm bắt</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#root" target="_blank" rel="noopener"><span class="lc-ico">📁</span><span class="lc-body"><span class="lc-title">nginx — root</span><span class="lc-sub">nginx.org · Luật nối thêm, gói trong một đoạn</span></span></a>
@@ -702,6 +1299,7 @@ location /tep/ { root /tmp/nxloc/kho/cong-khai-goc; }
       type: 'LESSON',
       description: 'Ba thứ trong Nginx âm thầm ĐỔI $uri rồi chạy LẠI toàn bộ phép khớp location từ đầu: try_files, index và error_page. Bài này chứng minh cả ba bằng đo đạc, rồi dựng một vòng lặp chuyển hướng nội bộ thật để xem nó chết ra sao và error log nói gì.',
       content: `
+${G02_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.5</span>
 <h2>try_files, and the internal redirect that restarts everything</h2>
@@ -773,6 +1371,61 @@ location = /spa-index {
 <div class="note-ct">
 <p><strong>The mental model.</strong> Location matching is not one decision per request — it is one decision per <em>internal redirect</em>, and a request can have several. When a block you are certain about does not seem to run, ask whether something before it changed <code>\$uri</code>: a <code>try_files</code> fallback, an <code>index</code> on a directory, an <code>error_page</code>. Print <code>\$uri</code> in the block you land in and the answer takes one request.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>Every internal redirect of this lesson in one server block, run on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  root /srv/www;
+  server {
+    listen 8080;
+    location /spa/     { try_files $uri $uri/ /index.html; }
+    location /chat/    { try_files $uri =404; error_page 404 /loi-404; }
+    location /di-vong/ { try_files $uri /dich-cuoi; }
+    location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[$uri] request_uri=[$request_uri]\\n"; }
+    location = /thu-muc/index.html { return 200 "DA VAO KHOI = /thu-muc/index.html, uri=[$uri]\\n"; }
+    location = /loi-404 { return 200 "KHOI error_page: uri=[$uri]\\n"; }
+    location /vong-lap/ { try_files $uri /vong-lap/khong-bao-gio-co.html; }
+    location /noi-bo/ { internal; return 200 "chi cho chuyen huong noi bo\\n"; }
+  }
+}</code></pre>
+<div class="out">=== A: du phong la mot URI ===
+$ for u in /spa/khong-co-gi /spa/sau/nua/nua; do printf '%-20s -&gt; ' $u; curl -s -w ' [%{http_code}]\\n' "http://127.0.0.1:8080$u" | tr -d '\\n'; echo; done
+/spa/khong-co-gi     -&gt; INDEX SPA [200]
+/spa/sau/nua/nua     -&gt; INDEX SPA [200]
+=== B: du phong la =404 (kem error_page 404 /loi-404) ===
+$ curl -s -w ' [%{http_code}]\\n' http://127.0.0.1:8080/chat/khong-co
+KHOI error_page: uri=[/loi-404]
+ [404]
+=== C: du phong tro toi mot location KHAC ===
+$ curl -s http://127.0.0.1:8080/di-vong/khong-co
+DA CHAY LAI KHOP LOCATION: uri=[/dich-cuoi] request_uri=[/di-vong/khong-co]
+$ curl -s http://127.0.0.1:8080/thu-muc/
+DA VAO KHOI = /thu-muc/index.html, uri=[/thu-muc/index.html]
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/vong-lap/x
+500
+$ grep -o 'rewrite or internal redirection cycle[^,]*' /tmp/ng/logs/error.log | tail -n 1
+rewrite or internal redirection cycle while internally redirecting to "/vong-lap/khong-bao-gio-co.html"
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/noi-bo/x
+404</div>
+<p>The fallback to <code>/dich-cuoi</code> ran a different block with a new <code>$uri</code> while <code>$request_uri</code> kept the original; <code>error_page 404</code> ran its block yet the client still got 404; <code>index</code> reached the exact block for <code>/thu-muc/index.html</code>; the self-referencing fallback produced a 500 and one "redirection cycle" line; and the <code>internal</code> block refused a direct request with 404.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy to a VPS · 12.4 — CDN and static files</span><span class="lc-sub">SPA fallbacks and static assets on a real server</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">React course</span><span class="lc-sub">Why a single-page app needs try_files … /index.html</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">try_files</span><span class="v">Tries each argument as a filesystem path left to right and serves the first that exists; the last argument is special.</span></div>
+  <div class="kv"><span class="k">Internal redirect</span><span class="v">Rewrites <code>$uri</code> and re-runs location matching with no 3xx and no second request the client can see.</span></div>
+  <div class="kv"><span class="k">Last argument</span><span class="v"><code>=404</code> ends the request with that status; a URI triggers an internal redirect instead.</span></div>
+  <div class="kv"><span class="k">index</span><span class="v">Rewrites <code>$uri</code> to the directory index file and re-matches, which can land in an unexpected block.</span></div>
+  <div class="kv"><span class="k">error_page</span><span class="v">Re-matches too and keeps the original status unless you write the <code>=200</code> form.</span></div>
+  <div class="kv"><span class="k">internal;</span><span class="v">Marks a block reachable only via internal redirect; a direct request to it gets 404.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>try_files</code>, <code>index</code> and <code>error_page</code> can rewrite <code>$uri</code> mid-request and restart the matching algorithm — an internal redirect invisible to the browser.</li><li>The last <code>try_files</code> argument is used, not tested: <code>=404</code> stops, a URI redirects internally and may land in a different block with different directives.</li><li>A fallback that re-matches the same block loops: ten times, then a 500 with "rewrite or internal redirection cycle" in the error log.</li><li>Make the fallback land in a <code>location =</code> block that cannot return to the same <code>try_files</code>.</li><li><code>$request_uri</code> never changes across internal redirects — log both it and <code>$uri</code> to see what happened.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files" target="_blank" rel="noopener"><span class="lc-ico">🗂️</span><span class="lc-body"><span class="lc-title">nginx — try_files</span><span class="lc-sub">nginx.org · The special treatment of the last argument, stated normatively</span></span></a>
@@ -853,6 +1506,61 @@ location = /spa-index {
 <div class="note-ct">
 <p><strong>Mô hình trong đầu.</strong> Khớp location KHÔNG phải một quyết định cho mỗi request — nó là một quyết định cho mỗi CÚ CHUYỂN HƯỚNG NỘI BỘ, và một request có thể có vài cú. Khi một khối bạn chắc chắn về nó lại có vẻ không chạy, hãy hỏi xem có thứ gì trước đó đã đổi <code>\$uri</code> chưa: một cú dự phòng của <code>try_files</code>, một cái <code>index</code> trên thư mục, một cái <code>error_page</code>. In <code>\$uri</code> ra ở cái khối bạn rơi vào là câu trả lời tốn đúng một request.</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Mọi cú chuyển hướng nội bộ của bài gói trong một khối server, chạy trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  root /srv/www;
+  server {
+    listen 8080;
+    location /spa/     { try_files $uri $uri/ /index.html; }
+    location /chat/    { try_files $uri =404; error_page 404 /loi-404; }
+    location /di-vong/ { try_files $uri /dich-cuoi; }
+    location /dich-cuoi { return 200 "DA CHAY LAI KHOP LOCATION: uri=[$uri] request_uri=[$request_uri]\\n"; }
+    location = /thu-muc/index.html { return 200 "DA VAO KHOI = /thu-muc/index.html, uri=[$uri]\\n"; }
+    location = /loi-404 { return 200 "KHOI error_page: uri=[$uri]\\n"; }
+    location /vong-lap/ { try_files $uri /vong-lap/khong-bao-gio-co.html; }
+    location /noi-bo/ { internal; return 200 "chi cho chuyen huong noi bo\\n"; }
+  }
+}</code></pre>
+<div class="out">=== A: du phong la mot URI ===
+$ for u in /spa/khong-co-gi /spa/sau/nua/nua; do printf '%-20s -&gt; ' $u; curl -s -w ' [%{http_code}]\\n' "http://127.0.0.1:8080$u" | tr -d '\\n'; echo; done
+/spa/khong-co-gi     -&gt; INDEX SPA [200]
+/spa/sau/nua/nua     -&gt; INDEX SPA [200]
+=== B: du phong la =404 (kem error_page 404 /loi-404) ===
+$ curl -s -w ' [%{http_code}]\\n' http://127.0.0.1:8080/chat/khong-co
+KHOI error_page: uri=[/loi-404]
+ [404]
+=== C: du phong tro toi mot location KHAC ===
+$ curl -s http://127.0.0.1:8080/di-vong/khong-co
+DA CHAY LAI KHOP LOCATION: uri=[/dich-cuoi] request_uri=[/di-vong/khong-co]
+$ curl -s http://127.0.0.1:8080/thu-muc/
+DA VAO KHOI = /thu-muc/index.html, uri=[/thu-muc/index.html]
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/vong-lap/x
+500
+$ grep -o 'rewrite or internal redirection cycle[^,]*' /tmp/ng/logs/error.log | tail -n 1
+rewrite or internal redirection cycle while internally redirecting to "/vong-lap/khong-bao-gio-co.html"
+$ curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/noi-bo/x
+404</div>
+<p>Dự phòng <code>/dich-cuoi</code> đã chạy một khối khác với <code>$uri</code> mới, còn <code>$request_uri</code> giữ bản gốc; <code>error_page 404</code> chạy khối của nó mà client vẫn nhận 404; <code>index</code> tới đúng khối chính xác cho <code>/thu-muc/index.html</code>; dự phòng tự trỏ về chính mình sinh ra 500 cùng một dòng "redirection cycle"; và khối <code>internal</code> từ chối request gọi thẳng bằng 404.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-12-4-cdn-tep-tinh" target="_blank" rel="noopener"><span class="lc-ico">🚀</span><span class="lc-body"><span class="lc-title">Deploy lên VPS · 12.4 — CDN và tệp tĩnh</span><span class="lc-sub">Dự phòng cho SPA và tệp tĩnh trên máy chủ thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn" target="_blank" rel="noopener"><span class="lc-ico">⚛️</span><span class="lc-body"><span class="lc-title">Khoá React</span><span class="lc-sub">Vì sao một ứng dụng một trang cần try_files … /index.html</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">try_files</span><span class="v">Thử từng đối số như một đường dẫn hệ tệp từ trái sang phải và phục vụ cái đầu tiên tồn tại; đối số cuối thì đặc biệt.</span></div>
+  <div class="kv"><span class="k">Chuyển hướng nội bộ</span><span class="v">Viết lại <code>$uri</code> rồi chạy lại phép khớp location, không có 3xx và không có request thứ hai client thấy được.</span></div>
+  <div class="kv"><span class="k">Đối số cuối</span><span class="v"><code>=404</code> kết thúc request với mã đó; một URI thì kích hoạt một cú chuyển hướng nội bộ.</span></div>
+  <div class="kv"><span class="k">index</span><span class="v">Viết lại <code>$uri</code> thành tệp index của thư mục rồi khớp lại, có thể rơi vào một khối không ngờ.</span></div>
+  <div class="kv"><span class="k">error_page</span><span class="v">Cũng khớp lại và giữ nguyên mã ban đầu trừ khi bạn viết dạng <code>=200</code>.</span></div>
+  <div class="kv"><span class="k">internal;</span><span class="v">Đánh dấu một khối chỉ chạm được qua chuyển hướng nội bộ; gọi thẳng vào nó thì nhận 404.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>try_files</code>, <code>index</code> và <code>error_page</code> có thể viết lại <code>$uri</code> giữa request và khởi động lại thuật toán khớp — một cú chuyển hướng nội bộ vô hình với trình duyệt.</li><li>Đối số cuối của <code>try_files</code> được đem dùng chứ không đem thử: <code>=404</code> dừng, một URI chuyển hướng nội bộ và có thể rơi vào một khối khác với chỉ thị khác.</li><li>Một dự phòng khớp lại chính khối đó sẽ lặp vòng: mười lần, rồi 500 kèm dòng "rewrite or internal redirection cycle" trong error log.</li><li>Cho dự phòng rơi vào một khối <code>location =</code> không thể quay lại chính cái <code>try_files</code> ấy.</li><li><code>$request_uri</code> không bao giờ đổi qua các cú chuyển hướng nội bộ — ghi log cả nó lẫn <code>$uri</code> để thấy chuyện gì đã xảy ra.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files" target="_blank" rel="noopener"><span class="lc-ico">🗂️</span><span class="lc-body"><span class="lc-title">nginx — try_files</span><span class="lc-sub">nginx.org · Cách đối xử đặc biệt với đối số cuối, nói theo chuẩn</span></span></a>

@@ -28,8 +28,12 @@ export const PHAN_DUNG_CHUNG = ['roadmap', 'life', 'exam', 'typing'] as const;
  *   kehoach — muc = 'ke-hoach', ghiChu = JSON kế hoạch học (ngày bắt đầu, lịch…)
  */
 export const SACH = 'sach1';
-/** Mọi khoá kiểu sách dùng chung bảng tiến độ này: IELTS (sach1), tiếng Nhật Dekiru (dekiru1). */
-export const CAC_SACH = [SACH, 'dekiru1', 'jp1', 'ch1'] as const;
+/**
+ * Mọi khoá kiểu sách dùng chung bảng tiến độ này: IELTS Tập 1 (sach1), IELTS Tập 2 (sach2, 12/11/2026 —
+ * khoá riêng `/language/en/ielts/tap-2`, id `t2dN-…`), tiếng Nhật Dekiru (dekiru1), JP (jp1), CH (ch1).
+ * Cột `stage` là VARCHAR(12) ⇒ thêm khoá mới chỉ cần thêm chuỗi ở đây, không migration.
+ */
+export const CAC_SACH = [SACH, 'sach2', 'dekiru1', 'jp1', 'ch1'] as const;
 const laMaSach = (v: string): boolean => (CAC_SACH as readonly string[]).includes(v);
 export const PHAN_SACH = ['bai', 'baitap', 'kehoach'] as const;
 

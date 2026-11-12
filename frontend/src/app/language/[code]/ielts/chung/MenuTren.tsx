@@ -9,10 +9,12 @@ import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 import s from './cdt.module.css';
 
-export type TrangMenu = 'khoa' | 'grammar' | 'the-tu' | 'thi-may' | 'so-loi';
+export type TrangMenu = 'khoa' | 'tap-2' | 'grammar' | 'the-tu' | 'thi-may' | 'so-loi';
 
 const MUC: { id: TrangMenu; href: string; ten: string }[] = [
   { id: 'khoa', href: '/language/en/ielts', ten: 'IELTS Course' },
+  // IELTS Tập 2 (12/11/2026) — khoá riêng ở /tap-2, dùng chung Online Test / Flashcards / Sổ lỗi.
+  { id: 'tap-2', href: '/language/en/ielts/tap-2', ten: 'Tập 2' },
   { id: 'grammar', href: '/language/en/ielts?bai=tra-cong-thuc', ten: 'Grammar' },
   { id: 'the-tu', href: '/language/en/ielts/the-tu', ten: 'Flashcards' },
   { id: 'thi-may', href: '/language/en/ielts/thi-may', ten: 'Online Test' },

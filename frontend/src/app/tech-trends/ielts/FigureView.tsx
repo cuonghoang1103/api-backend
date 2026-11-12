@@ -353,6 +353,9 @@ function MapFigure({ m, title }: { m: MapSpec; title: string }) {
               textAnchor="middle"
               fontSize={11}
               fill={TEXT_DIM}
+              // Đường DỌC (cao > rộng): xoay nhãn 90° cho nằm trong dải đường — trước đây chữ nằm ngang
+              // tràn ra hai bên và bị các khối đè (13/11/2026, bản đồ Tập 2 Ngày 22).
+              transform={p.h > p.w ? `rotate(-90 ${p.x * CELL + (p.w * CELL) / 2} ${p.y * CELL + (p.h * CELL) / 2})` : undefined}
             >
               {p.label}
             </text>

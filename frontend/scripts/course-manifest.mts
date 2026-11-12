@@ -55,7 +55,44 @@ type Spec = {
   prefix: string;
   /** Nội dung đầy đủ theo số tệp — PHẢI khớp với những gì bộ nạp trả về. */
   written: () => Promise<Record<number, Lesson[]>>;
+  /**
+   * (Tuỳ chọn) Tiền tố id BẮT BUỘC của buổi n — áp cho id bài VÀ id mọi bài tập (khối có `t` + `id`),
+   * kèm kiểm trùng id toàn khoá. Dùng cho khoá mới tách tiến độ theo tiền tố (IELTS Tập 2: `t2dN-`).
+   */
+  idPrefix?: (n: number) => string;
 };
+
+/** Mọi khối có `t` + `id` (quiz, mcq, listen, essay, speak, phatam…) ở mọi độ sâu của nội dung bài. */
+function idKhoi(x: unknown, out: string[] = []): string[] {
+  if (Array.isArray(x)) for (const y of x) idKhoi(y, out);
+  else if (x && typeof x === 'object') {
+    const o = x as Record<string, unknown>;
+    if (typeof o.t === 'string' && typeof o.id === 'string') out.push(o.id);
+    for (const v of Object.values(o)) if (v && typeof v === 'object') idKhoi(v, out);
+  }
+  return out;
+}
+
+/** Lỗi tiền tố id + id trùng (tiến độ & điểm lưu theo id — trùng là hai bài ghi đè điểm của nhau). */
+function kiemId(spec: Spec, written: Record<number, Lesson[]>): string[] {
+  if (!spec.idPrefix) return [];
+  const loi: string[] = [];
+  const thay = new Map<string, string>();
+  for (const [k, ls] of Object.entries(written)) {
+    const n = Number(k);
+    const tt = spec.idPrefix(n);
+    for (const l of ls) {
+      for (const [loai, id] of [['bài', l.id] as const, ...idKhoi(l.blocks).map((id) => ['bài tập', id] as const)]) {
+        if (!id.startsWith(tt)) loi.push(`${spec.name} ngày ${n}: id ${loai} "${id}" phải bắt đầu bằng "${tt}"`);
+        // Bài (kind 'bai') và bài tập (kind 'baitap') lưu tiến độ ở hai ngăn riêng ⇒ chỉ trùng trong cùng loại mới hỏng.
+        const khoa = `${loai}:${id}`, o = `ngày ${n} (${l.id})`;
+        if (thay.has(khoa)) loi.push(`${spec.name}: id ${loai} "${id}" trùng — ${thay.get(khoa)} và ${o}`);
+        else thay.set(khoa, o);
+      }
+    }
+  }
+  return loi;
+}
 
 const SPECS: Spec[] = [
   {
@@ -141,6 +178,24 @@ const SPECS: Spec[] = [
       return out;
     },
   },
+  // IELTS Tập 2 (4.0 → 5.0, 12/11/2026): ielts/tap-2/ngay/ngayN.ts export NGAY_N; mọi id phải `t2dN-…`.
+  {
+    name: 'IELTS Tập 2',
+    dir: join(LANG, 'ielts/tap-2/ngay'),
+    loader: 'index.ts',
+    prefix: 'ngay',
+    idPrefix: (n) => `t2d${n}-`,
+    written: async () => {
+      const dir = join(LANG, 'ielts/tap-2/ngay');
+      const out: Record<number, Lesson[]> = {};
+      for (const n of numbered(dir, 'ngay')) {
+        const ls: Lesson[] = (await load(join(dir, `ngay${n}.ts`)))[`NGAY_${n}`];
+        if (!Array.isArray(ls)) throw new Error(`tap-2/ngay${n}.ts không export NGAY_${n}`);
+        out[n] = ls;
+      }
+      return out;
+    },
+  },
   // Khoá JP (tiếng Nhật 0→N1) và CH (tiếng Trung 0→HSK 6), 05/10/2026: baiN.ts export BAI_N.
   ...(['jp', 'ch'] as const).map((k): Spec => ({
     name: k.toUpperCase(),
@@ -213,6 +268,7 @@ for (const spec of SPECS) {
       bad++;
     }
   }
+  for (const l of kiemId(spec, written)) { console.error(`✗ ${l}`); bad++; }
 
   let cur = '';
   try { cur = readFileSync(file, 'utf8'); } catch { /* chưa có */ }

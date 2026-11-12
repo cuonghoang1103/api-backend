@@ -173,29 +173,35 @@ export function bandTong(b: { nghe?: number | null; doc?: number | null; viet?: 
   return { band: lamTronBand(ds.reduce((a, c) => a + c, 0) / ds.length), soKy: ds.length };
 }
 
-/* ── Dạng câu → bài ôn trong khoá (Tập 1, `ngay/manifest.ts`) ───────── */
-/** id bài theo dạng câu hỏi — kiểm tồn tại trong manifest ở `thiMayCham.test.ts`. Rỗng = Tập 1 chưa có bài riêng. */
+/* ── Dạng câu → bài ôn trong khoá (Tập 1 `ngay/manifest.ts` · Tập 2 `tap-2/ngay/manifest.ts`) ───────── */
+/**
+ * id bài theo dạng câu hỏi — kiểm tồn tại trong manifest ở `thiMayCham.test.ts`. Rỗng = khoá chưa có bài riêng.
+ * Bài Tập 2 viết id `t2dN-…` (link tự sang `/ielts/tap-2`); xếp sau bài Tập 1 cùng dạng.
+ */
 export const BAI_ON: Record<DangCau, string[]> = {
-  note: ['d7-nghe', 'd13-nghe'],
-  form: ['d7-nghe', 'd15-nghe'],
-  sentence: ['d4-doc'],
-  summary: ['d14-doc', 'd13-nghe'],
-  table: ['d8-doc'],
-  flow: ['d6-doc'],
-  diagram: ['d6-doc'],
-  short: ['d2-doc'],
+  // Tập 1 trước, Tập 2 (`t2dN-…`, 13/11/2026) sau — phiếu điểm hiện cả hai, ghi "Tập 2 · Ngày N".
+  note: ['d7-nghe', 'd13-nghe', 't2d4-doc'],
+  form: ['d7-nghe', 'd15-nghe', 't2d1-nghe'],
+  sentence: ['d4-doc', 't2d14-doc', 't2d19-nghe'],
+  summary: ['d14-doc', 'd13-nghe', 't2d2-doc'],
+  table: ['d8-doc', 't2d5-nghe'],
+  flow: ['d6-doc', 't2d13-nghe'],
+  diagram: ['d6-doc', 't2d22-doc'],
+  short: ['d2-doc', 't2d8-doc'],
   'summary-box': ['d14-doc'],
-  mcq: ['d9-nghe', 'd11-nghe'],
-  mcq2: ['d11-nghe'],
-  tfng: ['d12-doc'],
-  ynng: ['d12-doc'],
-  heading: [],
-  'match-info': [],
+  mcq: ['d9-nghe', 'd11-nghe', 't2d10-doc', 't2d13-nghe'],
+  mcq2: ['d11-nghe', 't2d13-nghe'],
+  tfng: ['d12-doc', 't2d6-doc'],
+  ynng: ['d12-doc', 't2d20-doc'],
+  heading: ['t2d12-doc'],
+  'match-info': ['t2d16-doc'],
   'match-feature': ['d10-doc'],
-  'match-ending': ['d4-doc'],
-  map: ['d9-nghe'],
+  'match-ending': ['d4-doc', 't2d18-doc'],
+  map: ['d9-nghe', 't2d7-nghe'],
 };
 
-/** `d12-doc` → ngày 12 (để dựng link `?buoi=12&bai=d12-doc`). */
-export const ngayCuaBai = (id: string): number | null => { const m = /^d(\d+)-/.exec(id); return m ? Number(m[1]) : null; };
-export const linkBai = (id: string): string => `/language/en/ielts?buoi=${ngayCuaBai(id) ?? 1}&bai=${id}`;
+/** Bài thuộc tập nào: `t2dN-…` = IELTS Tập 2 (12/11/2026, khoá riêng `/ielts/tap-2`); còn lại (`dN-…`) = Tập 1. */
+export const tapCuaBai = (id: string): 1 | 2 => (/^t2d\d+-/.test(id) ? 2 : 1);
+/** `d12-doc` → ngày 12 (để dựng link `?buoi=12&bai=d12-doc`); `t2d5-nghe` → ngày 5 (của Tập 2). */
+export const ngayCuaBai = (id: string): number | null => { const m = /^(?:t2)?d(\d+)-/.exec(id); return m ? Number(m[1]) : null; };
+export const linkBai = (id: string): string => `/language/en/ielts${tapCuaBai(id) === 2 ? '/tap-2' : ''}?buoi=${ngayCuaBai(id) ?? 1}&bai=${id}`;

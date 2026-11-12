@@ -34,6 +34,9 @@ export const GIONG = {
   'uk-nam': 'en-GB-Wavenet-B',
   'us-nu': 'en-US-Wavenet-F',
   'us-nam': 'en-US-Wavenet-D',
+  // Giọng Úc (13/11/2026) — IELTS Listening có giọng AU (docs/ielts-lo-trinh-0-8.md L17; Tập 2 N15, N19).
+  'au-nu': 'en-AU-Wavenet-C',
+  'au-nam': 'en-AU-Wavenet-B',
   // Khoá tiếng Nhật (Dekiru, JPD113/123) dùng chung đường này.
   'ja-nu': 'ja-JP-Wavenet-A',
   'ja-nam': 'ja-JP-Wavenet-C',
@@ -55,6 +58,8 @@ const GIONG_AZURE: Record<Giong, string> = {
   'uk-nam': 'en-GB-RyanNeural',
   'us-nu': 'en-US-AvaNeural',
   'us-nam': 'en-US-AndrewNeural',
+  'au-nu': 'en-AU-NatashaNeural',
+  'au-nam': 'en-AU-WilliamNeural',
   'ja-nu': 'ja-JP-NanamiNeural',
   'ja-nam': 'ja-JP-KeitaNeural',
   'ja2-nu': 'ja-JP-AoiNeural',
@@ -125,7 +130,7 @@ async function synthesizeAzure(text: string, giong: Giong, toc: number, danhVan:
 async function docGoogleDich(text: string, giong: Giong, bam: string, danhVan: boolean) {
   const keyGt = `ielts/audio/gt-${giong.slice(0, 2)}/${bam}.mp3`;
   if (await objectExists(keyGt)) return { url: buildPublicUrl(keyGt), giongDon: true };
-  const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('zh') ? 'zh-CN' : giong.startsWith('us') ? 'en-US' : 'en-GB';
+  const tl = giong.startsWith('ja') ? 'ja' : giong.startsWith('zh') ? 'zh-CN' : giong.startsWith('us') ? 'en-US' : giong.startsWith('au') ? 'en-AU' : 'en-GB';
   const doc = danhVan ? text.split(/\s*,\s*/).join('. ') : text;
   const mp3 = await synthesizeGoogle(doc, tl);
   const { url } = await putObject(keyGt, mp3, 'audio/mpeg');

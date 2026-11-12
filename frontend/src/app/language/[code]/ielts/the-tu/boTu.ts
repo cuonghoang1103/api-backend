@@ -45,12 +45,23 @@ function tuTuDong(ds: { ten: string; ds: string }[], bo: string): Tu[] {
 
 export const BO_TU: BoTu[] = [
   {
-    id: 'khoa', ten: 'Từ của khoá (Ngày 1–6)', mo: 'Từ vựng các Ngày đã học trong khoá IELTS nền tảng',
+    // id 'khoa' giữ nguyên (bộ đang chọn nhớ theo id). Tên không ghi dải ngày: ngày mới soạn tự vào bộ (docs 5.1 #7).
+    id: 'khoa', ten: 'Từ của khoá — Tập 1', mo: 'Từ vựng mọi Ngày đã soạn của IELTS Tập 1 (mất gốc → 4.0)',
     tai: async () => {
       const [{ DAYS }, { loadNgay }, { MANIFEST }] = await Promise.all([import('../data'), import('../ngay'), import('../ngay/manifest')]);
       const ngay = Object.keys(MANIFEST).map(Number).sort((a, b) => a - b);
       const ls = await Promise.all(ngay.map((n) => loadNgay(n) ?? Promise.resolve([] as Lesson[])));
       return [...tuTuBai(DAYS[0].lessons, 'khoa'), ...ls.flatMap((l) => tuTuBai(l, 'khoa'))];
+    },
+  },
+  {
+    // IELTS Tập 2 (12/11/2026): mọi ngày tải chậm qua tap-2/ngay — chưa soạn ngày nào thì bộ rỗng (0 từ).
+    id: 'tap2', ten: 'Từ của khoá — Tập 2', mo: 'Từ vựng mọi Ngày đã soạn của IELTS Tập 2 (4.0 → 5.0)',
+    tai: async () => {
+      const [{ loadNgay }, { MANIFEST }] = await Promise.all([import('../tap-2/ngay'), import('../tap-2/ngay/manifest')]);
+      const ngay = Object.keys(MANIFEST).map(Number).sort((a, b) => a - b);
+      const ls = await Promise.all(ngay.map((n) => loadNgay(n) ?? Promise.resolve([] as Lesson[])));
+      return ls.flatMap((l) => tuTuBai(l, 'tap2'));
     },
   },
   {

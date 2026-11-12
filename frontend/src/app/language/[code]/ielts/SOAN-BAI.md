@@ -108,3 +108,35 @@ Soạn xong nội dung theo sách thì CHƯA xong ngày đó. Đủ khi có cả
    `import './x'` (không đuôi .ts) từ tệp ngày.
 5. `npm run course:manifest`, `npx tsc --noEmit`, `npm run build`; mở bài bằng
    Playwright xem không kẹt "Đang tải bài…".
+
+## Soạn Tập 2 (4.0 → 5.0, 24 ngày) — hạ tầng dựng 12/11/2026
+
+Tập 2 là **khoá riêng** cùng bộ khung `components/sach-hoc`, ở `/language/en/ielts/tap-2` (app desktop: `/ielts/tap-2`).
+Nguồn sự thật về nội dung: `docs/ielts-lo-trinh-0-8.md` mục 0 (nguyên tắc), **mục 3.2 (mục lục 24 ngày)**, mục 6 (ma trận —
+tick ô mình phủ). Mọi quy tắc văn phong / khối / bài tập ở các mục trên của tệp này vẫn áp dụng.
+
+- **Tệp:** `tap-2/data.ts` (khoá `IELTS_T2`, Mở đầu `t2-bat-dau`, mục lục khung `MUC_LUC`, `CHANG_T2`) ·
+  `tap-2/ngay/ngayN.ts` (nội dung ngày N) · `tap-2/ngay/index.ts` (bộ nạp) · `tap-2/ngay/manifest.ts` (SINH TỰ ĐỘNG) ·
+  `tap-2/tracuu.ts` (tra công thức / từ vựng RIÊNG của Tập 2) · `tap-2/videos.ts` (`VIDEO_BAI_T2`, khoá = id bài).
+- **Tiến độ tách hẳn Tập 1:** `stage: 'sach2'` (máy chủ: `CAC_SACH` trong `src/services/ielts/ielts.service.ts`),
+  `storageKey: 'ielts-t2'`. Không đổi hai giá trị này; không đụng `sach1` / `ielts-v2` / id `dN-…` của Tập 1.
+- **id:** MỌI id bài và id bài tập (quiz, mcq, dictation, listen, essay, speak, phatam…) của ngày N bắt đầu bằng **`t2dN-`**
+  (vd `t2d3-ngu-phap`, `t2d3-gioi-tu-dich`, `t2d6-kiem-tra`). `course:manifest` báo đỏ khi sai tiền tố hoặc trùng id.
+- **Khuôn ngày:** lẻ = `grammar` · `listening` · `speaking`; chẵn = `vocab` · `reading` · `writing`; + 1 `homework`
+  (≥ 30 câu, có đáp án); mỗi ngày đúng 1 khối `phatam` (âm ghi ở bảng 3.2). Ngày **6 / 12 / 18** thêm bài `kind: 'review'`
+  id `t2dN-kiem-tra` (ngưỡng ≥ 70 % từng phần, chỉ rõ Ngày cần ôn) — viết THẲNG trong `ngayN.ts`. Thi cuối tập = Đề 3 ở
+  `thi-may/de/`, không nằm trong ngày 24. Tên bài lấy theo `MUC_LUC` (có thể đặt tên đầy đủ hơn trong tệp ngày).
+- **Thêm một ngày:**
+  1. Tạo `tap-2/ngay/ngayN.ts`: `import type { Lesson } from '../data';` … `export const NGAY_N: Lesson[] = [...]`
+     (thứ tự: bài 1, bài 2, bài 3, bài tập, [kiểm tra chặng]). Chỉ `import type` — script mục lục chạy Node thuần.
+  2. `tap-2/ngay/index.ts`: thêm `case N: return import('./ngayN').then((m) => m.NGAY_N);` trên dòng `default`.
+  3. `cd frontend && npm run course:manifest` (ghi `tap-2/ngay/manifest.ts`) rồi `npm run course:manifest:check` + `npx tsc --noEmit`.
+  4. Điểm ngữ pháp / khung câu mới → thêm mục vào `tap-2/tracuu.ts` (`TRA_CONG_THUC_T2`). Từ vựng tự vào tra cứu Tập 2
+     và Flashcards bộ **"Từ của khoá — Tập 2"** (`the-tu/boTu.ts`, id `tap2`) — chỉ từ nằm trong khối `vocab`.
+  5. Hình (`hinh`, `canh`, `vocab.anh`): `npx tsx scripts/hinh/len-r2.mts` đã quét `tap-2/` và `tap-2/ngay/`.
+  6. Video: `tap-2/videos.ts` theo quy trình "Trọn gói mỗi Ngày mới" ở trên.
+- **Dùng chung với Tập 1** (không nhân bản): `thi-may` (Online Test), `the-tu`, `so-loi`, `luyen-them`, gia sư (`mon: 'ielts'`).
+  Dạng câu thi → bài ôn: thêm id `t2dN-…` vào `BAI_ON` trong `thi-may/cham.ts` — link tự trỏ `/ielts/tap-2`
+  (`tapCuaBai` / `linkBai`), `thiMayCham.test.ts` kiểm id có trong manifest Tập 2.
+- Trang con MỚI dưới `tap-2/` (nếu có) ⇒ thêm tuyến desktop `desktop/src/renderer/features/web/dinhTuyenWeb.ts`
+  (hai đường `/language/:code/ielts/tap-2/…` và `/ielts/tap-2/…`) + số đếm trong `dinhTuyenWeb.test.ts`.

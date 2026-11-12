@@ -171,7 +171,7 @@ export type Slide = {
 
 /** `dan` = người dẫn bài nghe (giới thiệu, đánh số câu) — giọng riêng, khác mọi nhân vật. */
 /** `ja2-*` = giọng THỨ HAI cùng giới (09/11/2026) — trang tự gán cho người thứ hai cùng giới trong một hội thoại/bài nghe. */
-export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam' | 'ja2-nu' | 'ja2-nam' | 'zh-nu' | 'zh-nam' | 'dan';
+export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'au-nu' | 'au-nam' | 'ja-nu' | 'ja-nam' | 'ja2-nu' | 'ja2-nam' | 'zh-nu' | 'zh-nam' | 'dan';
 /** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */
 export type Role = 'examiner' | 'candidate' | 'a' | 'b' | 'c';
 

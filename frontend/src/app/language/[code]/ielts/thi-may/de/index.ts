@@ -39,6 +39,28 @@ export const MUC_LUC: MucDe[] = [
     moTa: 'Task 1: visitors to three city attractions, 2014–2024 (line graph) · Task 2: should students bring mobile phones to school? (opinion)' },
   { id: 'noi-de1', kyNang: 'noi', ten: 'Speaking — Đề 1 (thi cuối Tập 1)', boDe: 'Đề 1', capDo: 'Band 3.5 → 4.5', phut: 12, soCau: 3,
     moTa: 'Part 1: daily routine · family · Part 2: a place you like to go to · Part 3: places to relax, public places in cities' },
+  // Đề 2 — sau Tập 2 Ngày 12, band 4.5 (soạn 12/11/2026). Chỉ dùng dạng câu đã dạy tới T2 N12.
+  { id: 'nghe-de2', kyNang: 'nghe', ten: 'Listening — Đề 2 (Tập 2 · Ngày 12)', boDe: 'Đề 2', capDo: 'Band 4.5', phut: 30, soCau: 40,
+    moTa: 'Booking a hotel room · Museum introduction & ground-floor plan · Two students review a group project · Lecture on honeybees',
+    dang: ['form', 'table', 'mcq', 'map', 'match-feature', 'note'] },
+  { id: 'doc-de2', kyNang: 'doc', ten: 'Academic Reading — Đề 2 (Tập 2 · Ngày 12)', boDe: 'Đề 2', capDo: 'Band 4.5', phut: 60, soCau: 40,
+    moTa: 'The rise and fall of the plastic bag · The doctor who asked people to wash their hands · Sharing the bicycle',
+    dang: ['note', 'tfng', 'heading', 'mcq', 'summary', 'short', 'match-feature', 'sentence'] },
+  { id: 'viet-de2', kyNang: 'viet', ten: 'Academic Writing — Đề 2 (Tập 2 · Ngày 12)', boDe: 'Đề 2', capDo: 'Band 4.5', phut: 60, soCau: 2,
+    moTa: 'Task 1: weekly consumption of five foods in 2000 and 2020 (bar chart) · Task 2: should schools teach children to cook? (discuss both views)' },
+  { id: 'noi-de2', kyNang: 'noi', ten: 'Speaking — Đề 2 (Tập 2 · Ngày 12)', boDe: 'Đề 2', capDo: 'Band 4.5', phut: 12, soCau: 3,
+    moTa: 'Part 1: hobbies · weather · Part 2: an object you own that is important to you · Part 3: possessions, keeping and buying things' },
+  // Đề 3 — thi cuối Tập 2 (sau Ngày 24), band 5.0 (soạn 12/11/2026).
+  { id: 'nghe-de3', kyNang: 'nghe', ten: 'Listening — Đề 3 (thi cuối Tập 2)', boDe: 'Đề 3', capDo: 'Band 5.0', phut: 30, soCau: 40,
+    moTa: 'Enquiry about evening courses · Walking tour of an old city · Radio interview with a journalism student · Lecture on tides',
+    dang: ['table', 'form', 'mcq', 'match-feature', 'mcq2', 'flow', 'note', 'sentence', 'short'] },
+  { id: 'doc-de3', kyNang: 'doc', ten: 'Academic Reading — Đề 3 (thi cuối Tập 2)', boDe: 'Đề 3', capDo: 'Band 5.0', phut: 60, soCau: 40,
+    moTa: 'A wheel for a new century (the London Eye) · The long road of the marathon · Why slow news matters',
+    dang: ['diagram', 'sentence', 'tfng', 'match-info', 'summary', 'short', 'ynng', 'match-ending', 'mcq'] },
+  { id: 'viet-de3', kyNang: 'viet', ten: 'Academic Writing — Đề 3 (thi cuối Tập 2)', boDe: 'Đề 3', capDo: 'Band 5.0', phut: 60, soCau: 2,
+    moTa: 'Task 1: main source of news for adults in 2005 and 2025 (two pie charts) · Task 2: large numbers of tourists — advantages and disadvantages for local people' },
+  { id: 'noi-de3', kyNang: 'noi', ten: 'Speaking — Đề 3 (thi cuối Tập 2)', boDe: 'Đề 3', capDo: 'Band 5.0', phut: 13, soCau: 3,
+    moTa: 'Part 1: food · travel · Part 2: an event you attended and enjoyed · Part 3: public events, celebrations past and present' },
   // Đề 6 (đầu Tập 4).
   { id: 'doc-01', kyNang: 'doc', ten: 'Academic Reading — Test 1', boDe: 'Đề 6', capDo: 'Band 6 → 7.5', phut: 60, soCau: 40, moTa: 'Mangroves · The shipping container · The hidden value of boredom',
     dang: ['note', 'diagram', 'tfng', 'heading', 'match-feature', 'summary-box', 'ynng', 'mcq', 'mcq2', 'sentence'] },
@@ -63,6 +85,14 @@ const TEP_DE: Record<string, () => Promise<De>> = {
   'doc-de1': () => import('./doc-de1').then((m) => m.DOC_DE1),
   'viet-de1': () => import('./viet-de1').then((m) => m.VIET_DE1),
   'noi-de1': () => import('./noi-de1').then((m) => m.NOI_DE1),
+  'nghe-de2': () => import('./nghe-de2').then((m) => m.NGHE_DE2),
+  'doc-de2': () => import('./doc-de2').then((m) => m.DOC_DE2),
+  'viet-de2': () => import('./viet-de2').then((m) => m.VIET_DE2),
+  'noi-de2': () => import('./noi-de2').then((m) => m.NOI_DE2),
+  'nghe-de3': () => import('./nghe-de3').then((m) => m.NGHE_DE3),
+  'doc-de3': () => import('./doc-de3').then((m) => m.DOC_DE3),
+  'viet-de3': () => import('./viet-de3').then((m) => m.VIET_DE3),
+  'noi-de3': () => import('./noi-de3').then((m) => m.NOI_DE3),
   'noi-06': () => import('./noi-06').then((m) => m.NOI_06),
 };
 
@@ -82,6 +112,7 @@ export const THU_TU_THI: KyNang[] = ['sangloc', 'nghe', 'doc', 'viet', 'noi'];
 /**
  * Bộ đề đủ 4 kỹ năng ("Đề N", docs/ielts-lo-trinh-0-8.md mục 4.2). Đề 0 = test đầu vào (mục 4.3).
  * Đề 1 (thi cuối Tập 1) = `nghe-de1` · `doc-de1` · `viet-de1` · `noi-de1` (mã `-de1` vì `-01` đã thuộc Đề 6).
+ * Đề 2 (Tập 2 · Ngày 12) = bộ `-de2`; Đề 3 (thi cuối Tập 2) = bộ `-de3` (cùng quy ước mã như Đề 1).
  * Đề 6 (đầu Tập 4) = `nghe-01` · `doc-01` · `viet-01` · `noi-06`.
  */
 export const BO_DE: BoDeDu[] = [
@@ -92,6 +123,14 @@ export const BO_DE: BoDeDu[] = [
   {
     id: 'bo-01', so: 1, ten: 'Đề 1', capDo: 'Band 3.5 → 4.5', viTri: 'Thi cuối Tập 1 (Ngày 15)',
     nghe: 'nghe-de1', doc: 'doc-de1', viet: 'viet-de1', noi: 'noi-de1',
+  },
+  {
+    id: 'bo-02', so: 2, ten: 'Đề 2', capDo: 'Band 4.5', viTri: 'Giữa Tập 2 (sau Ngày 12)',
+    nghe: 'nghe-de2', doc: 'doc-de2', viet: 'viet-de2', noi: 'noi-de2',
+  },
+  {
+    id: 'bo-03', so: 3, ten: 'Đề 3', capDo: 'Band 5.0', viTri: 'Thi cuối Tập 2 (sau Ngày 24)',
+    nghe: 'nghe-de3', doc: 'doc-de3', viet: 'viet-de3', noi: 'noi-de3',
   },
   {
     id: 'bo-06', so: 6, ten: 'Đề 6', capDo: 'Band 6.0 → 7.5', viTri: 'Đầu Tập 4 (Ngày 1)',

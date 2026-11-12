@@ -3,7 +3,7 @@
  * "Bắt đầu lại từ đầu", theo NGƯỜI + KHOÁ, đi theo tài khoản (laptop, iPad, app).
  *
  * Dùng lại bảng tiến độ sẵn có `ielts_progress` (không thêm bảng, không migration):
- *   stage = mã khoá sách (sach1 · dekiru1 · jp1 · ch1)
+ *   stage = mã khoá sách (sach1 · sach2 · dekiru1 · jp1 · ch1 — danh sách: CAC_SACH)
  *   kind  = 'cuongmini'
  *   muc   = 'tc:<chủ đề>' (trò chuyện) | 'pa:<nguồn câu>' (luyện phát âm)
  *   ghiChu = JSON trạng thái (lịch sử ngắn, vị trí câu, thống kê buổi)

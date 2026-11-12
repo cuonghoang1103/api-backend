@@ -936,6 +936,8 @@ export const IELTS = defineCourse({
   // Hai mục tra cứu cả khoá (công thức · từ vựng) — hiện dưới "Mở đầu" ở mục lục.
   extras: [TRA_CONG_THUC, TRA_TU_VUNG],
   links: [
+    // Tập 2 là khoá RIÊNG (tap-2/data.ts: stage 'sach2', storageKey 'ielts-t2', id `t2dN-…`) — tiến độ Tập 1 không đổi.
+    { href: '/language/en/ielts/tap-2', label: '📗 Tập 2 (band 4.0 → 5.0, 24 ngày) →' },
     { href: '/language/en/ielts/thi-may', label: '🖥️ Online Test — thi trên máy tính (Reading · Listening · Writing)' },
     { href: '/language/en/ielts/the-tu', label: '🃏 Flashcards 100 từ/ngày (lặp lại ngắt quãng)' },
     { href: '/language/en/ielts/so-loi', label: '📒 Sổ lỗi tự động' },

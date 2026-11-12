@@ -14,8 +14,9 @@ import Link from 'next/link';
 import type { De, DeDoc, DeNghe, DeViet, KyNang, Nhom, PhanDoc, PhanNghe } from './de/types';
 import { TEN_DANG } from './de/types';
 import { TEN_KY_NANG } from './de/index';
-import { bandTuDiem, bandTong, dinhDangGio, BAI_ON, linkBai, ngayCuaBai, lamTronBand, type KetQuaCau } from './cham';
+import { bandTuDiem, bandTong, dinhDangGio, BAI_ON, linkBai, ngayCuaBai, tapCuaBai, lamTronBand, type KetQuaCau } from './cham';
 import { MANIFEST } from '../ngay/manifest';
+import { MANIFEST as MANIFEST_T2 } from '../tap-2/ngay/manifest';
 import { demTuViet } from './PhongViet';
 import { ChuDam } from './Nhom';
 import { nhanTraLoi } from './soLoiTuDe';
@@ -23,11 +24,14 @@ import { thiChamViet, thiCapNhatLuot, loiGhi, loiMang, type KetQuaViet, type Ghi
 import type { KetQuaNoi, XepLopKq } from './hopDong';
 import s from '../chung/cdt.module.css';
 
-/** id bài → tên bài (mục lục Tập 1); không thấy thì trả lại id. */
+/** id bài → tên bài (mục lục Tập 1, hoặc Tập 2 với id `t2dN-…`); không thấy thì trả lại id. */
 const tenBai = (id: string): string => {
   const n = ngayCuaBai(id);
-  return (n != null && MANIFEST[n]?.lessons.find((l) => l.id === id)?.title) || id;
+  const mf = tapCuaBai(id) === 2 ? MANIFEST_T2 : MANIFEST;
+  return (n != null && mf[n]?.lessons.find((l) => l.id === id)?.title) || id;
 };
+/** Thứ tự học: Tập 1 trước Tập 2, trong mỗi tập theo ngày. */
+const thuTuBai = (id: string): number => (tapCuaBai(id) - 1) * 1000 + (ngayCuaBai(id) ?? 0);
 
 export type KetLuot = {
   id?: number; cheDo: 'practice' | 'full'; phanChon: number[]; giay: number;
@@ -105,7 +109,7 @@ export function PhieuDiemDocNghe({ de, luot, veTrungTam, lamLai, cacLuot, moXemL
   const baiOn = useMemo(() => {
     const ds = new Map<string, string[]>();
     for (const x of yeu) for (const id of BAI_ON[x.dang]) ds.set(id, [...(ds.get(id) ?? []), TEN_DANG[x.dang]]);
-    return [...ds.entries()].sort((a, b) => (ngayCuaBai(a[0]) ?? 0) - (ngayCuaBai(b[0]) ?? 0));
+    return [...ds.entries()].sort((a, b) => thuTuBai(a[0]) - thuTuBai(b[0]));
   }, [yeu]);
   const dsCau = loc === 'sai' ? kq.filter((k) => !k.dung) : kq;
   const tenPhan = de.kyNang === 'doc' ? 'Passage' : 'Part';
@@ -135,11 +139,11 @@ export function PhieuDiemDocNghe({ de, luot, veTrungTam, lamLai, cacLuot, moXemL
         </section>
         <section>
           <h2 className={s.h2Phieu}>Ôn lại bài nào trong khoá</h2>
-          {baiOn.length === 0 && <p className={s.mo}>{yeu.length ? 'Dạng yếu của lượt này chưa có bài riêng ở Tập 1 — luyện bằng Sổ lỗi + đề tiếp theo.' : 'Không có dạng nào dưới 70% — làm đề kế tiếp để giữ nhịp.'}</p>}
+          {baiOn.length === 0 && <p className={s.mo}>{yeu.length ? 'Dạng yếu của lượt này chưa có bài riêng trong khoá — luyện bằng Sổ lỗi + đề tiếp theo.' : 'Không có dạng nào dưới 70% — làm đề kế tiếp để giữ nhịp.'}</p>}
           <ul className={s.dsOn}>
             {baiOn.map(([id, dangs]) => (
               <li key={id}>
-                <Link href={linkBai(id)} className={s.nutPhu}>📖 Ngày {ngayCuaBai(id)} · {tenBai(id)}</Link>
+                <Link href={linkBai(id)} className={s.nutPhu}>📖 {tapCuaBai(id) === 2 ? 'Tập 2 · ' : ''}Ngày {ngayCuaBai(id)} · {tenBai(id)}</Link>
                 <span className={s.mo}>vì {[...new Set(dangs)].join(', ')}</span>
               </li>
             ))}

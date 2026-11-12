@@ -27,6 +27,8 @@ const THU_MUC = [
   'frontend/src/app/language/[code]/jp/bai',
   'frontend/src/app/language/[code]/ielts/ngay', // IELTS (12/11/2026): vocab.anh, hinh, canh, sodo mindmap/compare
   'frontend/src/app/language/[code]/ielts', // IELTS Ngày 1 nằm trong data.ts (13/11/2026) — chỉ quét *.ts ngay cấp này
+  'frontend/src/app/language/[code]/ielts/tap-2/ngay', // IELTS Tập 2 (12/11/2026): ngày t2dN
+  'frontend/src/app/language/[code]/ielts/tap-2', // IELTS Tập 2: data.ts (Mở đầu) + tracuu.ts
 ];
 export const KHOA = (slug: string) => `hoc/hinh/${slug}.webp`;
 

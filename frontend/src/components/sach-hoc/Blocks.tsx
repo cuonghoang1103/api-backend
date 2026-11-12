@@ -46,7 +46,7 @@ export function Kj({ text }: { text: string }) {
  * 23/10 không được dựng ⇒ hiện nguyên dấu sao. Cặp nghiêng được chứa **đậm** bên trong; dấu * dính
  * chữ hai bên (5*3, péngyou*) không phải nghiêng. App iOS khớp cùng luật: ChuSachHoc.swift.
  */
-const INLINE_RE = /(\*\*[^*]+\*\*|(?<![*\w])\*(?=[^\s*])(?:[^*\n]|\*\*[^*\n]+\*\*)+?(?<=\S)\*(?![*\w])|~~[^~]+~~|==[^=]+==|\{[^|}]+\|[^}]+\})/g;
+const INLINE_RE = /(\*\*[^*]+\*\*|(?<![*\w])\*(?=[^\s*])(?:[^*\n]|\*\*[^*\n]+\*\*)+?(?<=\S)\*(?![*\w])|~~[^~]+~~|==(?:[^=\n]|=(?!=))+==|\{[^|}]+\|[^}]+\})/g;
 export function Inline({ text }: { text: string }) {
   const parts = text.split(INLINE_RE);
   return (
@@ -550,7 +550,7 @@ function renderBlock(b: Block, i: number) {
                       <tr key={r.formula}>
                         <td className={`${s.cell} ${s.formulaCell}`}>
                           <span className={s.formula}>{JA.test(r.formula) || r.formula.includes('{') ? <Inline text={r.formula} /> : <Formula text={r.formula} />}</span>
-                          <span className={s.formulaVi}>{r.vi}</span>
+                          <span className={s.formulaVi}><Inline text={r.vi} /></span>
                         </td>
                         <td className={s.cell}>
                           {r.examples.map((e, j) => (

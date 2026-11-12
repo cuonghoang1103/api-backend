@@ -17720,3 +17720,73 @@ model CtLanguageProfile {
 
   @@map("ctlanguage_profiles")
 }
+
+/// CT Language — TỪ ĐIỂN (12/11/2026). Một mục từ của một ngôn ngữ. Nguồn: kho soạn tay (`lang_vocab_words`, có
+/// nghĩa Việt) THẮNG nguồn mở; CC-CEDICT (zh), JMdict (ja). Nhập bằng `scripts/ctlanguage/nhap-tu-dien.mts` (xoá rồi
+/// nạp lại cả bảng theo `nn`) — KHÔNG sửa tay. Ghi công: app › Tôi › Giới thiệu.
+model CtlTu {
+  id        Int     @id @default(autoincrement())
+  /// en | ja | zh
+  nn        String  @db.VarChar(2)
+  /// Chữ chính: giản thể (zh) · kanji hoặc kana (ja) · từ (en).
+  chu       String  @db.VarChar(160)
+  /// Phồn thể (zh) · cách viết khác (ja).
+  chuPhu    String? @map("chu_phu") @db.VarChar(160)
+  /// Pinyin có dấu (zh) · kana (ja) · IPA (en).
+  doc       String? @db.VarChar(240)
+  /// Romaji (ja) · pinyin số (zh).
+  docLatin  String? @map("doc_latin") @db.VarChar(240)
+  hanViet   String? @map("han_viet") @db.VarChar(160)
+  nghiaVi   String? @map("nghia_vi") @db.Text
+  /// Nghĩa tiếng Anh, các nghĩa cách nhau "; " (nguồn mở).
+  nghiaEn   String? @map("nghia_en") @db.Text
+  /// Từ loại (JMdict) / nhãn ngắn.
+  loai      String? @db.VarChar(120)
+  /// Câu ví dụ + nghĩa Việt (kho soạn tay).
+  viDu      String? @map("vi_du") @db.Text
+  viDuVi    String? @map("vi_du_vi") @db.Text
+  thongDung Boolean @default(false) @map("thong_dung")
+  /// Sắp kết quả: cao trước (kho soạn tay > từ thông dụng > còn lại).
+  uuTien    Int     @default(0) @map("uu_tien")
+  /// kho | cedict | jmdict
+  nguon     String  @db.VarChar(12)
+
+  khoa CtlKhoaTra[]
+
+  @@index([nn, chu], name: "idx_ctl_tu_nn_chu")
+  @@map("ctl_tu")
+}
+
+/// Khoá tra đã chuẩn hoá của một mục (chữ thường, bỏ dấu thanh, bỏ khoảng trắng) — tra tiền tố bằng chỉ mục
+/// `text_pattern_ops` (viết trong migration).
+model CtlKhoaTra {
+  id   Int    @id @default(autoincrement())
+  tuId Int    @map("tu_id")
+  nn   String @db.VarChar(2)
+  khoa String @db.VarChar(200)
+  tu   CtlTu  @relation(fields: [tuId], references: [id], onDelete: Cascade)
+
+  @@index([tuId], name: "idx_ctl_khoa_tra_tu")
+  @@map("ctl_khoa_tra")
+}
+
+/// Một chữ Hán / kanji: Hán Việt, pinyin, on/kun, bộ thủ, số nét, cấp. Nguồn Unihan + KANJIDIC2.
+model CtlChuHan {
+  chu     String  @id @db.VarChar(4)
+  hanViet String? @map("han_viet") @db.VarChar(120)
+  pinyin  String? @db.VarChar(120)
+  onYomi  String? @map("on_yomi") @db.VarChar(160)
+  kunYomi String? @map("kun_yomi") @db.VarChar(240)
+  nghiaEn String? @map("nghia_en") @db.Text
+  /// Số bộ thủ Khang Hy (1–214).
+  boThu   Int?    @map("bo_thu")
+  soNet   Int?    @map("so_net")
+  /// Cấp JLPT cũ của KANJIDIC2 (4 = dễ nhất) · cấp lớp Joyo · thứ hạng tần suất (1 = hay gặp nhất).
+  jlptCu  Int?    @map("jlpt_cu")
+  lop     Int?
+  tanSuat Int?    @map("tan_suat")
+  phonThe String? @map("phon_the") @db.VarChar(16)
+  gianThe String? @map("gian_the") @db.VarChar(16)
+
+  @@map("ctl_chu_han")
+}

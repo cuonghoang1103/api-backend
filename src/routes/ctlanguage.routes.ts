@@ -3,12 +3,68 @@
  *
  * Tiến độ IELTS dùng lại `/api/v1/ielts/*`; ở đây chỉ thứ app này cần mà web chưa có.
  */
-import { Router, type Request, type Response } from 'express';
+import { Router, type Request, type RequestHandler, type Response } from 'express';
+import rateLimit from 'express-rate-limit';
+import { RedisStore } from 'rate-limit-redis';
+import { getRedis } from '../config/redis.js';
 import { authenticate } from '../middleware/auth.js';
+import { BadRequestError } from '../middleware/errorHandler.js';
+import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import { docHoSo, luuHoSo } from '../services/ctlanguage/hoSo.js';
+import { chiTiet, chuHan, tra } from '../services/ctlanguage/tuDien.js';
 
 const router = Router();
+
+// ─── TỪ ĐIỂN — CÔNG KHAI (khách dùng app không cần tài khoản: bài học + từ điển free, user chốt 12/11) ───────────
+
+/** IP thật = mục CUỐI của X-Forwarded-For do proxy của ta ghi (cùng luật crm.routes.ts). */
+function ipThat(req: Request): string {
+  const xff = (req.headers['x-forwarded-for'] as string | undefined)?.split(',').map((s) => s.trim()).filter(Boolean);
+  return xff?.[xff.length - 1] || req.ip || 'unknown';
+}
+
+/** 120 lượt tra/phút/IP (gõ tới đâu tra tới đó). Redis chết ⇒ cho qua (fail-open), không làm sập từ điển. */
+const gioiHanTra: RequestHandler = (() => {
+  const l = rateLimit({
+    windowMs: 60_000, max: 120, standardHeaders: true, legacyHeaders: false,
+    store: new RedisStore({ sendCommand: (async (...a: string[]) => (await getRedis()).sendCommand(a)) as never, prefix: 'rl:ctl-tudien:' }),
+    keyGenerator: (req) => `ip:${ipThat(req)}`,
+    message: { success: false, message: 'Tra hơi nhanh — đợi vài giây rồi thử lại.', code: 'RATE_LIMIT_EXCEEDED' },
+  });
+  return (req, res, next) => l(req, res, (err?: unknown) => {
+    if (err) logger.warn('[ctl-tudien] rate-limit store lỗi — cho qua', { error: err instanceof Error ? err.message : String(err) });
+    next();
+  });
+})();
+
+const idSo = (v: string) => { const n = Number(v); if (!Number.isInteger(n) || n <= 0) throw new BadRequestError('id không hợp lệ'); return n; };
+
+/** Tra: `?q=` (chữ / pinyin / romaji / kana / Hán Việt / nghĩa Việt), tối đa 50 kết quả gọn. */
+router.get('/tu-dien/:nn/tra', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'public, max-age=300');
+    res.json({ success: true, data: await tra(req.params.nn, String(req.query.q ?? ''), Number(req.query.gioiHan ?? 30)) });
+  } catch (e) { next(e); }
+});
+
+/** Một mục đầy đủ + thẻ từng chữ Hán trong nó + các mục cùng chữ viết. */
+router.get('/tu-dien/muc/:id', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json({ success: true, data: await chiTiet(idSo(req.params.id)) });
+  } catch (e) { next(e); }
+});
+
+/** Thẻ một chữ Hán (Hán Việt, pinyin, on/kun, bộ, nét) + từ chứa chữ đó trong ngôn ngữ `nn`. */
+router.get('/tu-dien/:nn/chu/:chu', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    res.json({ success: true, data: await chuHan(req.params.chu, req.params.nn) });
+  } catch (e) { next(e); }
+});
+
+// ─── Từ đây trở xuống: cần đăng nhập ───────────────────────────────────────────────────────────────────────────
 router.use(authenticate);
 
 /** Hồ sơ học (ngôn ngữ đang học + lựa chọn làm quen + giờ nhắc). `data: null` khi chưa từng lưu. */

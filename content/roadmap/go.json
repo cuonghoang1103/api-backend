@@ -1,0 +1,231 @@
+{
+ "Giới thiệu › Introduction to Go & Why use it": {
+  "body": "Go (hay Golang) là ngôn ngữ lập trình do Google tạo ra, sinh ra để viết phần mềm máy chủ và công cụ hạ tầng mà vẫn dễ đọc, dễ bảo trì khi cả đội cùng làm. Hình dung nó như một chiếc xe tải gọn: ít nút bấm, ít \"chế độ\" để học, nhưng chở được hàng nặng và chạy bền.\n\n### Vì sao cần biết\nRất nhiều công cụ bạn dùng hằng ngày viết bằng Go: Docker, Kubernetes, Terraform, Prometheus. Làm backend, DevOps hay SRE sớm muộn bạn sẽ đọc hoặc viết Go. Ngôn ngữ này nổi tiếng ở microservice, API, CLI và các dịch vụ mạng chịu tải lớn.\n\n### Ý chính\n- **Biên dịch tĩnh ra mã máy**: `go build` tạo một tệp thực thi duy nhất, thường không cần cài runtime trên máy chạy. Triển khai chỉ là chép một tệp.\n- **Kiểu tĩnh, cú pháp gọn**: ít từ khoá, không có kế thừa kiểu class, không có ngoại lệ (exception); lỗi là giá trị trả về.\n- **Garbage collector** tự thu hồi bộ nhớ, bạn không `free` thủ công.\n- **Concurrency có sẵn trong ngôn ngữ**: goroutine (luồng siêu nhẹ do runtime lập lịch) và channel để các goroutine trao đổi dữ liệu.\n- **Thư viện chuẩn rất đầy đủ**: HTTP server, JSON, mã hoá, kiểm thử, ... đều có sẵn, nhiều dự án gần như không cần framework.\n- **Công cụ đi kèm**: `go fmt` (định dạng thống nhất), `go test`, `go vet`, `go mod`.\n\n### Ví dụ\n```go\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Xin chào từ Go\")\n}\n```\n\n### Lỗi hay gặp\n- Mang tư duy OOP của Java/C# sang và cố tìm \"class\", \"extends\": Go dùng struct, interface và composition.\n- Nghĩ \"có GC thì không cần để ý bộ nhớ\": cấp phát thừa vẫn làm chậm chương trình.\n- Chọn Go cho mọi việc: với công việc nặng về giao diện hay phân tích dữ liệu, ngôn ngữ khác có thể hợp hơn.\n\n### Tự kiểm tra\n1. Vì sao một chương trình Go dễ triển khai hơn một chương trình Node.js cần cài môi trường?\n2. Go xử lý lỗi khác Java ở điểm nào?\n3. Kể ba công cụ nổi tiếng viết bằng Go.\n\nLưu ý: bài về Go trên CuongThai còn ít; hai bài dưới đây không dạy cú pháp Go mà cho bạn thấy Go đứng ở đâu trong hệ thống (mô hình I/O của runtime, cách đóng gói binary Go vào container).",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-10-6-runtime",
+    "ten": "10.5 — Node, nginx, Netty, Go, asyncio: cùng một epoll bên dưới",
+    "nguon": "Operating Systems for Developers · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-5-cong-thuc",
+    "ten": "4.5 — Công thức: Node, Next.js, Python, Go, trang tĩnh",
+    "nguon": "Docker · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Cài đặt & Hello World": {
+  "body": "Cài Go xong, bạn chỉ cần một lệnh để chạy và một lệnh để đóng gói. Đó là toàn bộ vòng làm việc cơ bản.\n\nTạo thư mục, khởi tạo module rồi viết `main.go`:\n\n```bash\nmkdir hello && cd hello\ngo mod init example.com/hello\n```\n\n```go\npackage main\n\nimport \"fmt\"\n\nfunc main() {\n\tfmt.Println(\"Hello, World\")\n}\n```\n\n- `go run .` biên dịch vào thư mục tạm rồi chạy ngay: tiện khi thử nghiệm.\n- `go build` tạo tệp thực thi (`hello`, hoặc `hello.exe` trên Windows) nằm trong thư mục hiện tại. Tệp này chứa sẵn runtime của Go nên chép sang máy khác cùng hệ điều hành/kiến trúc là chạy.\n- Muốn binary không phụ thuộc thư viện C của hệ thống (hay dùng khi đóng container tối giản), build với `CGO_ENABLED=0`.\n- Build chéo nền tảng chỉ cần đặt biến môi trường, ví dụ `GOOS=linux GOARCH=amd64 go build`.\n\nLỗi hay gặp: quên `go mod init` nên `go build` báo không tìm thấy `go.mod`; hoặc đặt tên package khác `main` nên không tạo ra chương trình chạy được.",
+  "lessons": [
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Lịch sử của Go": {
+  "body": "Go khởi đầu cuối năm 2007 tại Google, do Robert Griesemer, Rob Pike và Ken Thompson thiết kế. Ken Thompson là đồng tác giả Unix và ngôn ngữ B; Rob Pike từng làm ở Bell Labs. Họ muốn một ngôn ngữ giải quyết nỗi đau thật của Google khi ấy: thời gian biên dịch C++ quá lâu, chương trình nhiều luồng khó viết đúng, và cơ sở mã khổng lồ khó đọc.\n\nMốc đáng nhớ: Go được công bố mã nguồn mở vào tháng 11/2009; phiên bản 1.0 ra năm 2012 kèm lời hứa tương thích (Go 1 compatibility promise: mã Go 1.x viết đúng sẽ tiếp tục biên dịch với các bản 1.x sau); generics (kiểu tổng quát) xuất hiện ở Go 1.18, năm 2022.\n\nHiểu lịch sử giúp bạn hiểu tính cách ngôn ngữ: vì sao nó giản dị có chủ đích, vì sao biên dịch nhanh, vì sao concurrency là công dân hạng nhất, và vì sao cộng đồng thích một cách viết thống nhất (`go fmt`) thay vì tranh cãi về phong cách."
+ },
+ "Giới thiệu › Interfaces Basics (Giao diện cơ bản)": {
+  "body": "Interface là một danh sách các method mà một kiểu phải có. Điểm khác biệt lớn nhất của Go: một kiểu **tự động** thoả mãn interface khi nó có đủ các method đó, không cần khai báo `implements`. Giống như bạn chỉ cần \"biết bơi\" là được nhận vào đội bơi, không cần giấy giới thiệu.\n\n```go\ntype Shape interface {\n\tArea() float64\n}\n\ntype Rect struct{ W, H float64 }\n\nfunc (r Rect) Area() float64 { return r.W * r.H }\n\ntype Circle struct{ R float64 }\n\nfunc (c Circle) Area() float64 { return 3.14159 * c.R * c.R }\n\nfunc Total(shapes []Shape) float64 {\n\tsum := 0.0\n\tfor _, s := range shapes {\n\t\tsum += s.Area()\n\t}\n\treturn sum\n}\n```\n`Rect` và `Circle` không hề nhắc tới `Shape`, vậy mà `Total([]Shape{Rect{2, 3}, Circle{1}})` chạy được.\n\n### Vì sao cần biết\nInterface là cách Go tách phần \"dùng\" khỏi phần \"cài đặt\": hàm nhận `io.Reader` làm việc được với tệp, kết nối mạng, chuỗi trong bộ nhớ... Nó cũng giúp kiểm thử, vì bạn thay cài đặt thật bằng bản giả dễ dàng.\n\n### Ý chính\n- Interface nhỏ là interface tốt (`io.Reader` chỉ có một method `Read`).\n- Quy ước: \"accept interfaces, return structs\" — nhận interface ở tham số, trả về kiểu cụ thể.\n- Method có pointer receiver chỉ thuộc tập method của `*T`, không thuộc `T`: gán `T` vào interface đòi hỏi method nào đó mà chỉ `*T` có sẽ lỗi biên dịch.\n- Interface chứa cặp (kiểu động, giá trị động); chỉ bằng `nil` khi cả hai đều rỗng.\n\n### Lỗi hay gặp\n- Định nghĩa interface quá to, ép mọi kiểu phải cài hết.\n- Trả về một con trỏ `nil` kiểu cụ thể qua giá trị kiểu `error`: interface khi đó khác `nil`, kiểm tra `err != nil` vẫn đúng và gây lỗi khó hiểu.\n- Tạo interface trước khi có hai cài đặt thật sự cần dùng chung.\n\n### Tự kiểm tra\n1. Vì sao Go không cần từ khoá `implements`?\n2. `T` hay `*T` thoả mãn interface khi method khai báo với pointer receiver?",
+  "lessons": [
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Empty Interfaces (interface{})": {
+  "body": "Empty interface là interface không có method nào: `interface{}`. Vì mọi kiểu đều \"có đủ không method\", mọi giá trị đều gán được vào nó. Từ Go 1.18 có tên gọi ngắn hơn: `any` (chỉ là bí danh của `interface{}`).\n\n```go\nfunc In(v any) {\n\tfmt.Println(v)\n}\n\nIn(42)\nIn(\"chào\")\nIn([]int{1, 2, 3})\n```\nĐó chính là cách `fmt.Println` nhận được mọi thứ: tham số của nó là `...any`.\n\n### Khi nào dùng\n- Dữ liệu không biết trước cấu trúc, ví dụ giải mã JSON tuỳ ý thành `map[string]any`.\n- Hàm tổng quát cũ ở thời chưa có generics (`fmt`, `encoding/json`).\n\n### Cái giá phải trả\nBên trong `any` bạn **mất thông tin kiểu lúc biên dịch**. Muốn dùng giá trị phải kiểm tra lại kiểu bằng type assertion hoặc type switch; sai kiểu chỉ phát hiện khi chạy. Vì vậy, nếu có thể, hãy dùng generics hoặc một interface có method thay cho `any`.\n\n```go\nvar x any = \"go\"\nn, ok := x.(int) // ok == false, n == 0: không panic nhờ dạng hai giá trị\n```\n\n### Lỗi hay gặp\n- Lạm dụng `any` khắp nơi nên mất hết lợi ích của kiểu tĩnh.\n- So sánh hai giá trị `any` chứa kiểu không so sánh được (slice, map) bằng `==` gây panic lúc chạy.\n- Quên rằng số trong JSON giải mã vào `any` luôn thành `float64`.",
+  "lessons": [
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "A Tour of Go — The empty interface",
+    "url": "https://go.dev/tour/methods/14"
+   }
+  ]
+ },
+ "Giới thiệu › Embedding Interfaces (Nhúng giao diện)": {
+  "body": "Nhúng interface (embedding) là cách ghép nhiều interface nhỏ thành một interface lớn hơn bằng cách liệt kê tên chúng bên trong. Thư viện chuẩn làm đúng như vậy:\n\n```go\ntype Reader interface { Read(p []byte) (n int, err error) }\ntype Writer interface { Write(p []byte) (n int, err error) }\n\ntype ReadWriter interface {\n\tReader\n\tWriter\n}\n```\nMột kiểu thoả `ReadWriter` khi có đủ cả `Read` lẫn `Write`. Đây là cách Go thể hiện \"kế thừa hành vi\" mà không có cây kế thừa kiểu class: bạn ghép các khả năng nhỏ, độc lập lại với nhau.\n\n### Vì sao cần biết\nThiết kế tốt trong Go thường bắt đầu bằng interface một-hai method rồi ghép khi cần. Hàm chỉ cần đọc thì nhận `Reader`, hàm cần cả hai thì nhận `ReadWriter`: yêu cầu càng nhỏ, càng dễ tái sử dụng và dễ giả lập khi test.\n\n### Ý chính\n- Nhúng chỉ gộp tập method; không có dữ liệu hay cài đặt đi kèm.\n- Có thể nhúng nhiều interface; nếu hai interface trùng method cùng chữ ký thì hợp lệ (từ Go 1.14), khác chữ ký thì lỗi.\n- Khác với nhúng struct, nơi cả trường và method được \"thăng cấp\" lên kiểu ngoài.\n\nLưu ý: bài TypeScript bên dưới dạy cách ghép kiểu bằng `extends` và intersection. Ý tưởng \"ghép các hợp đồng nhỏ thành hợp đồng lớn\" giống nhau, nhưng cú pháp và quy tắc khác Go.\n\n### Lỗi hay gặp\nTạo interface khổng lồ bằng cách nhúng dây chuyền nhiều tầng, khiến người dùng phải cài cả chục method không cần thiết.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-4-3-extends-intersection",
+    "ten": "4.3 — Ghép kiểu: extends & intersection (giao)",
+    "nguon": "TypeScript · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Type Assertions": {
+  "body": "Type assertion là cách lấy giá trị cụ thể ra khỏi một interface: `v.(T)` khẳng định \"giá trị động bên trong là kiểu `T`\".\n\n```go\nvar x any = \"xin chào\"\n\ns := x.(string)      // ổn: s == \"xin chào\"\nn := x.(int)         // panic: interface conversion\nn, ok := x.(int)     // an toàn: ok == false, n == 0\n```\n\nDạng một giá trị sẽ **panic** nếu sai kiểu; dạng hai giá trị `v, ok := x.(T)` thì không, nó trả `ok=false` và giá trị zero của `T`. Trong mã thật, hầu như luôn dùng dạng hai giá trị.\n\nType assertion cũng dùng được với interface: `w, ok := r.(io.Writer)` hỏi \"giá trị này có biết ghi không?\" — kiểu kiểm tra khả năng hay gặp (ví dụ kiểm `http.Flusher`).\n\n### Ý chính\n- Chỉ áp dụng cho biểu thức có kiểu interface.\n- Nếu `x` là `nil`, assertion luôn thất bại.\n- Khi cần phân nhánh theo nhiều kiểu, dùng type switch cho gọn.\n\n### Lỗi hay gặp\n- Dùng dạng một giá trị trên dữ liệu bên ngoài, một input lạ là server panic.\n- Nhầm với ép kiểu (conversion): `float64(x)` là chuyển đổi giữa kiểu cụ thể, `x.(float64)` là moi giá trị ra khỏi interface.\n\nLưu ý: bài thu hẹp kiểu (narrowing) của TypeScript bên dưới dạy cùng ý tưởng kiểm tra kiểu tại điểm dùng, nhưng trong TypeScript việc này diễn ra ở tầng biên dịch, còn Go kiểm lúc chạy.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Type Switch": {
+  "body": "Type switch là `switch` dùng để kiểm tra kiểu thực sự bên trong một giá trị interface. Cú pháp đặc biệt `x.(type)`:\n\n```go\nfunc Mo_ta(v any) string {\n\tswitch t := v.(type) {\n\tcase nil:\n\t\treturn \"không có gì\"\n\tcase int:\n\t\treturn fmt.Sprintf(\"số nguyên %d\", t)\n\tcase string:\n\t\treturn \"chuỗi dài \" + strconv.Itoa(len(t))\n\tcase []int, []string:\n\t\treturn \"một slice\"\n\tcase error:\n\t\treturn \"lỗi: \" + t.Error()\n\tdefault:\n\t\treturn fmt.Sprintf(\"kiểu khác: %T\", t)\n\t}\n}\n```\n\nTrong mỗi nhánh có một kiểu, biến `t` đã mang kiểu đó và dùng được trực tiếp (không cần assertion). Với nhánh liệt kê nhiều kiểu, `t` vẫn có kiểu của interface gốc.\n\n### Vì sao cần biết\nType switch xuất hiện khi xử lý dữ liệu động: đọc JSON thành `any`, phân tích cây cú pháp, xử lý các loại sự kiện khác nhau. Nó cũng dùng để phân loại lỗi (`errors.As` thường tiện hơn khi lỗi bị bọc).\n\n### Lỗi hay gặp\n- Quên `default` rồi bỏ sót kiểu mới thêm vào.\n- Đặt nhánh `case error` trước `case MyErr` (kiểu cụ thể) khiến nhánh sau không bao giờ chạy.\n- `fallthrough` không dùng được trong type switch.\n\nLưu ý: bài TypeScript bên dưới (thu hẹp kiểu union) minh hoạ cùng khái niệm \"rẽ nhánh theo kiểu thực\", nhưng cú pháp khác hoàn toàn.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-5-1-union-narrowing",
+    "ten": "5.1 — Kiểu union & thu hẹp kiểu",
+    "nguon": "TypeScript · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Tại sao dùng Generics": {
+  "body": "Trước Go 1.18, muốn viết một hàm dùng chung cho nhiều kiểu, ví dụ tìm số lớn nhất của `[]int` và `[]float64`, bạn có ba lựa chọn đều dở: copy hàm cho từng kiểu, dùng `interface{}` rồi mất kiểm tra kiểu, hoặc sinh mã. Generics (kiểu tổng quát) giải quyết bằng cách để hàm nhận một \"tham số kiểu\".\n\n```go\n// Cách cũ: mất an toàn kiểu\nfunc SumAny(xs []any) any { /* phải assert từng phần tử */ return nil }\n\n// Cách mới: một hàm, nhiều kiểu, vẫn kiểm tra lúc biên dịch\nfunc Sum[T int | float64](xs []T) T {\n\tvar s T\n\tfor _, x := range xs {\n\t\ts += x\n\t}\n\treturn s\n}\n```\n\n### Vì sao cần biết\nGenerics làm các cấu trúc dữ liệu (stack, set, cache) và hàm tiện ích (`Map`, `Filter`, `Keys`) viết một lần mà dùng an toàn cho mọi kiểu. Thư viện chuẩn đã dùng chúng trong `slices`, `maps`, `cmp`.\n\n### Ý chính\n- Lỗi sai kiểu được bắt lúc biên dịch thay vì lúc chạy.\n- Đừng dùng generics khi một interface thông thường đã đủ; cộng đồng khuyên chỉ dùng khi bạn thật sự viết cùng một đoạn mã cho nhiều kiểu.\n- Generics của Go không có method generic riêng (method không được có thêm tham số kiểu).\n\n### Lỗi hay gặp\nGeneric hoá quá sớm, làm mã khó đọc hơn bản copy hai lần.\n\nLưu ý: bài generics của TypeScript bên dưới giải thích động cơ \"giữ lại kiểu\" tương tự; cú pháp và ràng buộc của Go khác, được dạy ở các bước kế tiếp.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-1-why-generics",
+    "ten": "6.1 — Vì sao cần generics: giữ lại kiểu",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Generic Functions (Hàm generic)": {
+  "body": "Hàm generic khai báo tham số kiểu trong dấu ngoặc vuông, đặt giữa tên hàm và danh sách tham số:\n\n```go\nfunc Map[T, U any](xs []T, f func(T) U) []U {\n\tout := make([]U, 0, len(xs))\n\tfor _, x := range xs {\n\t\tout = append(out, f(x))\n\t}\n\treturn out\n}\n\nfunc main() {\n\tdo_dai := Map([]string{\"go\", \"rust\"}, func(s string) int { return len(s) })\n\tfmt.Println(do_dai) // [2 4]\n}\n```\n`T` và `U` là hai tham số kiểu, `any` là ràng buộc (ở đây: không ràng buộc gì). Khi gọi, bạn có thể chỉ rõ `Map[string, int](...)` hoặc để trình biên dịch tự suy luận từ đối số, như ví dụ trên.\n\n### Ý chính\n- Tham số kiểu cũng là một phần của \"chữ ký\" hàm; đối số kiểu được thay vào lúc biên dịch.\n- Bên trong hàm, bạn chỉ làm được những gì ràng buộc cho phép: với `any`, không thể cộng, so sánh hay gọi method (trừ gán và truyền đi).\n- Mẫu quen thuộc: `Map`, `Filter`, `Reduce`, `Contains`, `Keys`.\n\n### Lỗi hay gặp\n- Quên rằng `any` không cho phép `==`: cần ràng buộc `comparable`.\n- Viết `func (r Repo) Get[T any]()` — method không được có tham số kiểu riêng; hãy khai báo tham số kiểu ở kiểu (`Repo[T]`) hoặc dùng hàm thường.\n\nLưu ý: bài TypeScript bên dưới dạy cùng khái niệm hàm generic (cú pháp `<T>`), dùng để hiểu ý tưởng chứ không phải cú pháp Go.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-1-why-generics",
+    "ten": "6.1 — Vì sao cần generics: giữ lại kiểu",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice",
+    "ten": "6.4 — Generics thực chiến: suy kiểu & bẫy thường gặp",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "Go Tour — Generics",
+    "url": "https://go.dev/tour/generics/1"
+   }
+  ]
+ },
+ "Giới thiệu › Generic Types & Interfaces (Kiểu generic)": {
+  "body": "Generics trong Go không chỉ dành cho hàm: bạn còn tạo được **kiểu** generic như struct, interface hay định nghĩa kiểu (type definition), để xây cấu trúc dữ liệu dùng lại cho nhiều kiểu phần tử.\n\n```go\ntype Stack[T any] struct {\n\titems []T\n}\n\nfunc (s *Stack[T]) Push(x T) { s.items = append(s.items, x) }\n\nfunc (s *Stack[T]) Pop() (T, bool) {\n\tvar zero T\n\tif len(s.items) == 0 {\n\t\treturn zero, false\n\t}\n\tx := s.items[len(s.items)-1]\n\ts.items = s.items[:len(s.items)-1]\n\treturn x, true\n}\n\ns := Stack[int]{}\ns.Push(1)\n```\n\n### Ý chính\n- Khi dùng kiểu generic bạn phải **chỉ rõ** đối số kiểu: `Stack[int]` (kiểu không suy luận được từ ngữ cảnh khai báo như hàm).\n- Method khai báo với receiver `*Stack[T]`; tên `T` ở receiver chỉ là tên cục bộ.\n- Method **không** có thêm tham số kiểu riêng.\n- Để trả về \"giá trị rỗng\" của `T`, dùng `var zero T`.\n- Interface cũng có thể generic: `type Repo[T any] interface { Get(id int) (T, error) }`.\n\n### Lỗi hay gặp\nCố so sánh hai giá trị `T` bằng `==` khi `T` chỉ ràng buộc `any`: cần `comparable`.\n\nLưu ý: bài \"interface, class generic\" của TypeScript bên dưới dạy cùng ý tưởng kiểu chứa tham số kiểu; Go dùng struct chứ không có class.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-3-generic-types-classes",
+    "ten": "6.3 — Interface, class generic & kiểu mặc định",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "official",
+    "title": "An Introduction To Generics (Go blog)",
+    "url": "https://go.dev/blog/intro-generics"
+   }
+  ]
+ },
+ "Giới thiệu › Type Constraints (Ràng buộc kiểu)": {
+  "body": "Type constraint là \"điều kiện\" mà đối số kiểu phải thoả. Nó viết dưới dạng interface và đứng sau tham số kiểu: `[T Constraint]`. Ràng buộc quyết định bên trong hàm bạn được làm gì với `T`.\n\n```go\nimport \"cmp\"\n\n// cmp.Ordered gồm mọi kiểu so sánh được bằng < > (số, chuỗi)\nfunc Max[T cmp.Ordered](a, b T) T {\n\tif a > b {\n\t\treturn a\n\t}\n\treturn b\n}\n\n// Ràng buộc tự định nghĩa bằng \"type set\"\ntype Number interface {\n\t~int | ~int64 | ~float64\n}\n\nfunc Sum[T Number](xs []T) T {\n\tvar s T\n\tfor _, x := range xs {\n\t\ts += x\n\t}\n\treturn s\n}\n```\n\n### Ý chính\n- `any`: không ràng buộc. `comparable`: dùng được `==` và `!=` (làm khoá map).\n- Dấu `|` liệt kê các kiểu cho phép; dấu `~int` nghĩa là \"mọi kiểu có kiểu nền là int\", gồm cả `type Tuoi int`.\n- Ràng buộc có thể chứa method: `interface{ ~int; String() string }`.\n- Interface có type set chỉ dùng làm ràng buộc, không dùng làm kiểu của biến thông thường.\n- `cmp.Ordered` có trong thư viện chuẩn từ Go 1.21.\n\n### Lỗi hay gặp\nQuên `~` nên kiểu định nghĩa riêng (`type Gia int`) bị loại khỏi ràng buộc.\n\nLưu ý: bài TypeScript bên dưới dạy ràng buộc bằng `extends`/`keyof`, cùng mục đích giới hạn `T`, khác cú pháp.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-2-constraints-keyof",
+    "ten": "6.2 — Ràng buộc, keyof & truy cập theo chỉ mục",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu › Type Inference (Suy luận kiểu)": {
+  "body": "Type inference là việc trình biên dịch tự suy ra đối số kiểu từ đối số bạn truyền, để bạn khỏi viết `Max[int](3, 5)` mà chỉ cần `Max(3, 5)`.\n\n```go\nfunc Map[T, U any](xs []T, f func(T) U) []U { ... }\n\nMap([]int{1, 2}, strconv.Itoa) // suy ra T=int, U=string\n```\n\n### Khi suy luận không đủ thông tin\nSuy luận chỉ dựa vào **đối số** của lời gọi (và kiểu hàm truyền vào). Nó không nhìn vào kiểu của biến nhận kết quả. Vì vậy hàm không có tham số nào chứa `T` thì bạn phải nêu kiểu:\n\n```go\nfunc Zero[T any]() T { var z T; return z }\n\nx := Zero()        // lỗi: không suy ra được T\ny := Zero[int]()   // đúng\n```\nVới nhiều tham số kiểu, có thể chỉ rõ một phần đầu và để phần còn lại được suy ra: `Map[int](xs, f)`.\n\n### Ý chính\n- Hằng số không kiểu (như `3`) được suy thành kiểu mặc định (`int`) nếu không còn gợi ý nào khác. Trộn `Max(3, 2.5)` thì hai hằng số cho kết quả `float64` ở các bản Go mới; còn biến có kiểu khác nhau thì phải đồng nhất.\n- Đừng lạm dụng chỉ rõ kiểu khi nó không cần thiết: mã ồn hơn mà không thêm an toàn.\n\n### Lỗi hay gặp\nGọi hàm generic chỉ có kiểu trả về phụ thuộc `T` rồi ngạc nhiên vì lỗi \"cannot infer T\".\n\nLưu ý: bài TypeScript bên dưới nói về suy kiểu của generics ở TypeScript; ý tưởng gần nhau nhưng quy tắc của Go chặt hơn ở chỗ không suy từ kiểu trả về.",
+  "lessons": [
+   {
+    "href": "/courses/typescript/learn?lessonSlug=typescript-6-4-generics-in-practice",
+    "ten": "6.4 — Generics thực chiến: suy kiểu & bẫy thường gặp",
+    "nguon": "TypeScript · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/go",
+    "ten": "Go",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ],
+  "more": [
+   {
+    "type": "article",
+    "title": "Everything You Always Wanted to Know About Type Inference (Go blog)",
+    "url": "https://go.dev/blog/type-inference"
+   }
+  ]
+ }
+}

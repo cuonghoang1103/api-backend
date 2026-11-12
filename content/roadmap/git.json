@@ -1228,5 +1228,1873 @@
     "kieu": "slide"
    }
   ]
+ },
+ "Nâng cao › Git Hook commit-msg": {
+  "body": "Hook `commit-msg` là một script Git chạy **sau khi bạn đã gõ xong message** và **trước khi commit được tạo**. Git đưa cho script một tham số duy nhất: đường dẫn tới file tạm chứa message. Script thoát với mã khác 0 thì commit bị huỷ. Hãy hình dung nó như bảo vệ ở cửa: không hỏi bạn đã sửa gì, chỉ hỏi \"câu mô tả có đúng mẫu của nhóm không?\".\n\n### Vì sao cần biết\nLịch sử commit chỉ có ích khi message nhất quán. Nhiều công cụ đọc thẳng message để tự sinh changelog và tăng phiên bản (ví dụ theo Conventional Commits: `feat:`, `fix:`, `docs:`...). Một commit tên `update` hay `fix lung tung` làm hỏng cả chuỗi tự động đó. Hook `commit-msg` bắt lỗi ngay lúc gõ, khi sửa còn rẻ nhất.\n\n### Ý chính\n- Hook là file trong `.git/hooks/` có **đúng tên** `commit-msg` và có quyền thực thi (`chmod +x`). Ngôn ngữ tuỳ chọn: bash, Node, Python...\n- Tham số `$1` là đường dẫn file message; đọc file đó để kiểm tra.\n- Thoát `exit 1` (kèm in lý do ra stderr) để chặn; `exit 0` để cho qua.\n- `.git/hooks` **không được commit/clone** cùng kho. Muốn cả nhóm dùng chung thì đặt hook trong thư mục được theo dõi và chạy `git config core.hooksPath .githooks`, hoặc dùng husky + commitlint trong dự án Node.\n\n### Ví dụ\n```bash\n#!/usr/bin/env bash\n# .git/hooks/commit-msg  (nhớ chmod +x)\nmsg_file=\"$1\"\npattern='^(feat|fix|docs|refactor|test|chore)(\\([a-z0-9-]+\\))?: .{3,}'\nif ! grep -qE \"$pattern\" \"$msg_file\"; then\n  echo \"Message sai mẫu. Ví dụ: feat(login): thêm nút đăng nhập Google\" >&2\n  exit 1\nfi\n```\n\n### Lỗi hay gặp\n- Quên `chmod +x` hoặc đặt tên file có đuôi (`commit-msg.sh`) nên hook không bao giờ chạy.\n- Kiểm tra cả dòng `Merge ...` hay `Revert ...` do Git tự sinh khiến merge bị chặn oan; nên cho phép các mẫu này.\n- Tin rằng hook là rào chắn tuyệt đối: ai cũng bỏ qua được bằng `git commit --no-verify`, nên cần kiểm lại ở CI.\n\n### Tự kiểm tra\n1. Tham số `$1` của `commit-msg` là gì?\n2. Vì sao hook chỉ nằm trong `.git/hooks` thì đồng đội không có?\n3. Làm sao cả nhóm dùng chung một hook?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: hook và chữ ký bằng hình",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-1-hooks",
+    "ten": "12.1 — Hook: bắt lỗi trước khi nó tồn tại",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-4-chinh-sach-may-chu",
+    "ten": "12.3 — Cưỡng chế thật: hook phía máy chủ, ruleset và CI",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nâng cao › Git Hook post-checkout": {
+  "body": "`post-checkout` là hook chạy **sau khi** `git checkout` hoặc `git switch` đã đổi xong working tree (cũng chạy sau `git clone` và `git worktree add`). Vì chạy sau, nó **không thể chặn** thao tác; chỉ có thể làm việc dọn dẹp hay nhắc nhở.\n\nGit truyền ba tham số: commit HEAD trước đó, commit HEAD mới, và một cờ (`1` nếu chuyển nhánh/commit, `0` nếu chỉ checkout file).\n\n### Dùng để làm gì\n- Nhắc chạy `npm install` khi `package-lock.json` khác giữa hai nhánh.\n- Dọn file build cũ hoặc tạo lại file cấu hình sinh tự động.\n- In ra tên nhánh hiện tại hay cảnh báo \"bạn đang ở nhánh production\".\n\n### Ví dụ\n```bash\n#!/usr/bin/env bash\n# .git/hooks/post-checkout\nprev=\"$1\"; new=\"$2\"; is_branch=\"$3\"\nif [ \"$is_branch\" = \"1\" ] && ! git diff --quiet \"$prev\" \"$new\" -- package-lock.json; then\n  echo \"package-lock.json đã đổi: hãy chạy npm install\" >&2\nfi\n```\n\n### Lưu ý\nGiữ hook thật nhanh vì nó chạy mỗi lần đổi nhánh. Cũng như mọi hook cục bộ, nó nằm trong `.git/hooks` nên không tự theo kho; dùng `core.hooksPath` để chia sẻ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: hook và chữ ký bằng hình",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-1-hooks",
+    "ten": "12.1 — Hook: bắt lỗi trước khi nó tồn tại",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nâng cao › Tagging: Quản lý và Push Tags": {
+  "body": "**Tag** là một cái nhãn cố định gắn vào một commit, thường dùng đánh dấu bản phát hành như `v1.4.0`. Khác với nhánh (tự dịch chuyển khi bạn commit), tag đứng yên. Có hai loại: **lightweight** (chỉ là con trỏ) và **annotated** (một đối tượng đầy đủ, có người tạo, ngày, message, và có thể ký). Bản phát hành nên dùng annotated.\n\n### Vì sao cần biết\nTag cho cả đội một cách gọi chung: \"bản v1.4.0\". Khi production lỗi, bạn biết chính xác mã nào đang chạy, và có thể tạo nhánh hotfix từ đúng tag đó. GitHub Releases, CI/CD phát hành bản và công cụ changelog đều dựa vào tag.\n\n### Ý chính\n- Tạo tag nhẹ: `git tag v1.0.0`. Tag có chú thích: `git tag -a v1.0.0 -m \"Bản đầu tiên\"`.\n- Gắn tag vào commit cũ: `git tag -a v0.9.0 <hash>`.\n- Liệt kê: `git tag` hoặc `git tag -l \"v1.*\"`. Xem chi tiết: `git show v1.0.0`.\n- **Tag không tự đi theo `git push`.** Phải đẩy rõ ràng:\n```bash\ngit push origin v1.0.0        # một tag\ngit push origin --tags        # tất cả tag (kể cả tag nhẹ)\ngit push --follow-tags        # chỉ tag có chú thích trỏ tới commit đang đẩy\n```\n- Đặt tên theo semantic versioning: `MAJOR.MINOR.PATCH`.\n\n### Lỗi hay gặp\n- Tạo tag xong quên push nên đồng đội và CI không thấy.\n- `git push origin --tags` đẩy luôn tag thử nghiệm còn nằm trong máy.\n- Dùng tag nhẹ cho bản phát hành rồi thiếu thông tin ai/khi nào tạo.\n- Gắn tag sai commit; xem phần *Managing Tags* để sửa.\n\n### Tự kiểm tra\n1. Khác biệt giữa tag nhẹ và tag có chú thích?\n2. Vì sao `git push` thường không đẩy tag?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: quy trình nhóm, tag và phát hành bằng hình",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: remote bằng hình",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-3-phat-hanh-hotfix",
+    "ten": "16.3 — Chốt bản nộp: tag v1.0.0, release notes, và hotfix từ tag",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nâng cao › Checkout Tags": {
+  "body": "Checkout một tag là chuyển working tree về đúng trạng thái mã tại thời điểm gắn tag đó, ví dụ để chạy lại bản `v1.2.0` đang gặp lỗi trên production.\n\n```bash\ngit fetch --tags\ngit checkout v1.2.0        # hoặc: git switch --detach v1.2.0\n```\n\nVì tag không phải nhánh, `HEAD` sẽ ở trạng thái **detached HEAD**: nó trỏ thẳng vào một commit, không thuộc nhánh nào. Bạn xem, build, test thoải mái. Nhưng nếu commit mới ở trạng thái này rồi chuyển sang nhánh khác, các commit đó chỉ còn được giữ bởi `reflog` và sẽ bị dọn dần.\n\n### Muốn sửa thì tạo nhánh\n```bash\ngit switch -c hotfix/1.2.x v1.2.0   # nhánh mới bắt đầu từ tag\n# ...sửa, commit, rồi phát hành v1.2.1\n```\n\n### Ý chính\n- Tag là bất biến theo quy ước, nên checkout tag luôn cho cùng một mã: hữu ích để tái hiện lỗi.\n- `git describe` cho biết bạn cách tag gần nhất bao nhiêu commit.\n- Muốn thoát detached HEAD: `git switch -` hoặc `git switch main`.\n\n### Lỗi hay gặp\n- Quên `git fetch --tags` nên Git báo không thấy tag.\n- Commit trong detached HEAD rồi mất: nếu lỡ, tìm lại bằng `git reflog` và tạo nhánh `git branch cuu <hash>`.\n\n### Tự kiểm tra\nVì sao checkout tag dẫn đến detached HEAD, và làm sao sửa lỗi dựa trên tag một cách an toàn?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: quy trình nhóm, tag và phát hành bằng hình",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-3-phat-hanh-hotfix",
+    "ten": "16.3 — Chốt bản nộp: tag v1.0.0, release notes, và hotfix từ tag",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nâng cao › Submodules: Thêm & Cập nhật": {
+  "body": "**Submodule** cho phép nhúng một repository Git vào bên trong repository khác ở một thư mục con, trong khi hai repo vẫn có lịch sử riêng. Kho cha không lưu mã của kho con; nó chỉ ghi nhớ **URL** (trong `.gitmodules`) và **đúng một commit** của kho con (một mục đặc biệt gọi là *gitlink*, mode `160000`).\n\n### Vì sao cần biết\nKhi cần dùng chung một thư viện nội bộ giữa nhiều dự án mà muốn ghim chính xác phiên bản, submodule là một lựa chọn. Bạn sẽ gặp nó trong kho mã cũ hoặc dự án có thư viện dùng chung. Tuy nhiên nó hay gây bực mình, nên nhiều đội chọn gói npm hay monorepo thay thế.\n\n### Ý chính\n```bash\ngit submodule add https://github.com/org/ui-kit.git libs/ui-kit\ngit commit -m \"chore: thêm submodule ui-kit\"\n```\n- Lệnh trên tạo `.gitmodules` và ghim commit hiện tại của `ui-kit`.\n- Người khác clone phải lấy cả submodule:\n```bash\ngit clone --recurse-submodules <url>\n# hoặc sau khi đã clone:\ngit submodule update --init --recursive\n```\n- Muốn lên bản mới của kho con: vào thư mục con, `git pull` (hoặc `git submodule update --remote`), rồi **commit con trỏ mới** ở kho cha.\n- Sửa mã trong submodule: commit và push ở kho con **trước**, rồi mới commit và push kho cha.\n\n### Lỗi hay gặp\n- Clone xong thấy thư mục submodule rỗng, vì chưa `--init`.\n- Push kho cha trước kho con: đồng đội kéo về gặp commit không tồn tại.\n- Submodule ở trạng thái detached HEAD, làm việc xong mà quên commit lên nhánh.\n\n### Tự kiểm tra\n1. Kho cha thật sự lưu gì về submodule?\n2. Thứ tự push đúng khi sửa cả hai kho?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-0-slides",
+    "ten": "10.0 — Slide Chương 10: kho mã lớn bằng hình",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Nâng cao › Git LFS: What & Why": {
+  "body": "**Git LFS** (Large File Storage) là phần mở rộng giúp Git xử lý file lớn: file thật được lưu ở một máy chủ LFS riêng, còn trong repository Git chỉ giữ một **file con trỏ** nhỏ (vài dòng text chứa mã băm và kích thước).\n\n### Vì sao cần biết\nGit lưu **toàn bộ lịch sử** của mọi file. Với file nhị phân lớn (PSD, video, mô hình 3D, dataset), mỗi lần sửa lại thêm một bản đầy đủ vào kho, khiến clone chậm và kho phình to. Ngoài ra GitHub từ chối push file lớn hơn 100 MB (và cảnh báo từ 50 MB). LFS giải quyết cả hai.\n\n### Ý chính\n```bash\ngit lfs install                  # một lần mỗi máy\ngit lfs track \"*.psd\"            # ghi luật vào .gitattributes\ngit add .gitattributes design/banner.psd\ngit commit -m \"chore: dùng LFS cho file PSD\"\ngit push\n```\n- `git lfs track` chỉ sửa `.gitattributes`; hãy commit file này.\n- Khi checkout, LFS tự tải file thật theo con trỏ.\n- `git lfs ls-files` liệt kê các file đang do LFS quản lý.\n\n### Giới hạn quan trọng\n- LFS **không có hiệu lực ngược**: file đã commit bình thường vẫn nằm trong lịch sử. Muốn chuyển cần `git lfs migrate import` (viết lại lịch sử, phải phối hợp cả nhóm).\n- Nhà cung cấp tính hạn mức dung lượng và băng thông LFS riêng.\n- File văn bản (mã nguồn) không nên cho vào LFS.\n\n### Lỗi hay gặp\nMáy đồng đội chưa cài LFS nên chỉ thấy file con trỏ vài dòng thay vì file thật.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-0-slides",
+    "ten": "10.0 — Slide Chương 10: kho mã lớn bằng hình",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Nâng cao › Git Patch": {
+  "body": "**Patch** là một file văn bản mô tả thay đổi (dạng diff) để người khác áp dụng vào mã của họ mà không cần chung remote. Nó là cách gửi bản sửa qua email hay chat, và là nguồn gốc của quy trình đóng góp ở nhiều dự án lớn.\n\n### Hai cách tạo\n```bash\ngit diff > fix.patch                 # chỉ thay đổi, không có thông tin commit\ngit format-patch -1 HEAD             # một file .patch cho mỗi commit (có tác giả, message)\ngit format-patch main..feature       # mỗi commit của nhánh một file đánh số\n```\n\n### Hai cách áp dụng\n```bash\ngit apply --check fix.patch   # thử trước, không đổi gì\ngit apply fix.patch           # áp vào working tree, KHÔNG tạo commit\ngit am 0001-fix-login.patch   # áp patch từ format-patch và TẠO commit, giữ tác giả\n```\n\n### Ý chính\n- `git apply` hợp với patch từ `git diff`; `git am` hợp với `git format-patch` vì giữ nguyên message và tác giả.\n- Patch lệch (nền mã đã đổi) sẽ báo lỗi; với `am` dùng `--3way` để Git thử gộp ba bên, hoặc `git am --abort` để bỏ.\n- `git apply --stat` cho xem tóm tắt file bị đổi.\n\n### Lỗi hay gặp\n- Dùng `git apply` rồi tưởng đã có commit.\n- Kết thúc dòng (CRLF/LF) khác nhau làm patch không áp được."
+ },
+ "Nâng cao › Git Attributes": {
+  "body": "`.gitattributes` là file cấu hình đặt trong kho, cho Git biết **cách xử lý từng đường dẫn hoặc kiểu file**. Vì được commit cùng dự án, mọi người trong nhóm nhận cùng hành vi, khác với cấu hình cục bộ trong `.git/config`.\n\n### Vì sao cần biết\nVấn đề điển hình: nhóm dùng cả Windows và macOS, file giống hệt nhưng một bên kết thúc dòng CRLF, bên kia LF nên diff đỏ cả file. `.gitattributes` chuẩn hoá điều này một lần cho cả nhóm.\n\n### Ý chính\n```gitattributes\n# Tự nhận file văn bản và dùng LF trong working tree\n* text=auto eol=lf\n\n# Script shell luôn LF, file .bat luôn CRLF\n*.sh  text eol=lf\n*.bat text eol=crlf\n\n# File nhị phân: không đổi dòng, không diff chữ\n*.png binary\n*.jpg binary\n\n# Đẩy file lớn qua Git LFS\n*.psd filter=lfs diff=lfs merge=lfs -text\n\n# Bỏ file này khỏi gói git archive\n.github/ export-ignore\n```\n- Mẫu đường dẫn viết như `.gitignore`.\n- Thuộc tính hay dùng: `text`, `eol`, `binary`, `-diff`, `filter` (LFS), `export-ignore`.\n- Sau khi thêm hay đổi luật, chuẩn hoá lại file đã có bằng `git add --renormalize .`.\n\n### Lỗi hay gặp\n- Thêm `.gitattributes` mà không renormalize nên file cũ vẫn kết thúc dòng lệch.\n- Đánh dấu nhầm file văn bản là `binary`, mất diff.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-14-4-windows-crlf",
+    "ten": "14.4 — Làm nhóm với bạn dùng Windows: CRLF/LF, .gitattributes, hoa/thường và quyền chạy",
+    "nguon": "Git & GitHub · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-14-0-slides",
+    "ten": "14.0 — Slide Chương 14: Git bên trong công cụ hằng ngày",
+    "nguon": "Git & GitHub · Chương 14",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Git Hooks & Tagging › Git Hooks (pre-commit/pre-push)": {
+  "body": "**Git hook** là script Git tự chạy tại những mốc cố định của quy trình. Hai hook phổ biến nhất ở máy dev là `pre-commit` (trước khi tạo commit) và `pre-push` (trước khi đẩy lên remote). Script thoát với mã khác 0 thì Git dừng thao tác, nhờ đó \"lỗi xấu\" bị chặn ngay từ máy bạn thay vì đợi CI đỏ.\n\n### Vì sao cần biết\nRất nhiều lỗi lặt vặt (quên lint, để lại `console.log`, commit nhầm file `.env`, dấu xung đột `<<<<<<<`) làm tốn thời gian review. Hook tự động bắt chúng trong vài giây.\n\n### Ý chính\n- `pre-commit`: chạy nhanh (lint file đã staged, format, quét bí mật). Không chạy cả bộ test lớn ở đây.\n- `pre-push`: chỗ cho kiểm tra chậm hơn như test, typecheck.\n- Hook là file trong `.git/hooks/`, đúng tên, có `chmod +x`.\n- `.git/hooks` **không được clone**. Chia sẻ qua `git config core.hooksPath .githooks` hoặc dùng husky + lint-staged (hệ Node).\n- Bỏ qua có chủ ý: `git commit --no-verify`, `git push --no-verify`.\n\n### Ví dụ pre-commit\n```bash\n#!/usr/bin/env bash\nif git diff --cached | grep -E '^\\+(<<<<<<<|>>>>>>>)'; then\n  echo \"Còn dấu xung đột chưa giải quyết\" >&2\n  exit 1\nfi\nnpx lint-staged\n```\n\n### Lỗi hay gặp\n- Hook chậm khiến mọi người quen tay `--no-verify`.\n- Coi hook là chốt chặn duy nhất: vì bỏ qua được nên phải có CI kiểm lại.\n\n### Tự kiểm tra\nNên đặt phép kiểm nhanh ở hook nào và phép kiểm chậm ở hook nào? Vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: hook và chữ ký bằng hình",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-1-hooks",
+    "ten": "12.1 — Hook: bắt lỗi trước khi nó tồn tại",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-4-chinh-sach-may-chu",
+    "ten": "12.3 — Cưỡng chế thật: hook phía máy chủ, ruleset và CI",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Git Hooks & Tagging › Tagging & GitHub Releases": {
+  "body": "Phát hành một phiên bản thường gồm ba lớp: **tag** (đánh dấu commit), **GitHub Release** (trang công bố gắn vào tag) và **artifact** (file đi kèm như zip, bản cài). Tag trả lời \"mã nào\", Release trả lời \"có gì mới và tải ở đâu\".\n\n### Ý chính\n- Dùng **semantic versioning** `MAJOR.MINOR.PATCH`: tăng MAJOR khi phá vỡ tương thích, MINOR khi thêm tính năng, PATCH khi sửa lỗi.\n- Tag annotated rồi push: `git tag -a v1.3.0 -m \"...\" && git push origin v1.3.0`.\n- Tạo Release: trên giao diện (Releases → Draft a new release) hoặc `gh release create v1.3.0 --generate-notes`. Tuỳ chọn *Generate release notes* gom PR và người đóng góp từ lần phát hành trước.\n- Có thể đính kèm file và đánh dấu *pre-release*.\n- CI thường tự chạy khi có tag mới (`on: push: tags: ['v*']`) để build và đính artifact.\n\n### Lỗi hay gặp\n- Tạo Release mà không có tag sẵn: GitHub sẽ tạo tag ở đầu nhánh mặc định, dễ ra sai commit.\n- Dời (xoá rồi tạo lại) tag đã phát hành: ai đã tải bản cũ sẽ không khớp.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: quy trình nhóm, tag và phát hành bằng hình",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-3-phat-hanh-hotfix",
+    "ten": "16.3 — Chốt bản nộp: tag v1.0.0, release notes, và hotfix từ tag",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-14-3-phat-hanh",
+    "ten": "14.3 — Phát hành: GitHub Release, semantic-release, GHCR, npm và attestation",
+    "nguon": "GitHub Actions · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Git Hooks & Tagging › Git Hook: post-update": {
+  "body": "`post-update` là hook **phía máy chủ**, chạy một lần sau khi một lần push đã được chấp nhận và tất cả ref đã cập nhật xong. Git truyền vào tên các ref vừa đổi (ví dụ `refs/heads/main`). Vì chạy sau khi xong việc nên nó **không thể từ chối** push; để chặn push, dùng `pre-receive` hoặc `update`.\n\n### Dùng để làm gì\n- Chạy `git update-server-info` để kho phục vụ qua HTTP \"đơn giản\" (mẫu `post-update.sample` mặc định làm đúng việc này).\n- Kích hoạt triển khai, gửi thông báo, làm mới cache.\n- Với việc cần biết từng ref cũ/mới, `post-receive` (nhận dữ liệu qua stdin) thường tiện hơn.\n\n### Ví dụ\n```bash\n#!/usr/bin/env bash\n# hooks/post-update trên kho trần (bare) của máy chủ\nfor ref in \"$@\"; do\n  [ \"$ref\" = \"refs/heads/main\" ] && echo \"main vừa được cập nhật\" >> /var/log/git-push.log\ndone\ngit update-server-info\n```\n\n### Lưu ý\n- Hook này chỉ có trên máy chủ bạn kiểm soát (kho trần tự dựng, GitLab/Gitea tự host). **GitHub.com không cho cài hook máy chủ**; dùng GitHub Actions hoặc webhook để thay thế.\n- Quyền chạy `chmod +x` và tên file đúng vẫn là điều kiện bắt buộc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-4-chinh-sach-may-chu",
+    "ten": "12.3 — Cưỡng chế thật: hook phía máy chủ, ruleset và CI",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-1-hooks",
+    "ten": "12.1 — Hook: bắt lỗi trước khi nó tồn tại",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Git Hooks & Tagging › Git Hook: pre-push": {
+  "body": "`pre-push` chạy trên máy bạn **ngay trước khi dữ liệu được gửi** lên remote. Nó nhận hai tham số (tên và URL của remote) và đọc từ stdin các dòng dạng `<local ref> <local sha> <remote ref> <remote sha>`. Thoát với mã khác 0 thì lần push bị huỷ.\n\n### Vì sao cần biết\nĐây là chỗ phù hợp cho kiểm tra **chậm hơn** pre-commit: chạy test, typecheck, hay chặn lỡ tay push thẳng lên `main`. Phát hiện ở đây còn nhanh hơn chờ CI đỏ.\n\n### Ví dụ\n```bash\n#!/usr/bin/env bash\n# .git/hooks/pre-push\nwhile read local_ref local_sha remote_ref remote_sha; do\n  if [ \"$remote_ref\" = \"refs/heads/main\" ]; then\n    echo \"Không push thẳng lên main, hãy mở pull request.\" >&2\n    exit 1\n  fi\ndone\nnpm test --silent || { echo \"Test chưa qua\" >&2; exit 1; }\n```\n\n### Ý chính\n- Bỏ qua có chủ ý: `git push --no-verify`.\n- Chạy cả bộ test nặng có thể làm mọi người ngán và tắt hook; chỉ chạy phần cốt lõi.\n- Hook cục bộ chỉ là tấm gương của bảo vệ nhánh; luật thật nên nằm ở nơi push hạ cánh (branch protection/ruleset, CI) vì hook luôn bỏ qua được.\n\n### Lỗi hay gặp\nDùng pre-push như hàng rào duy nhất, rồi đồng đội `--no-verify` vì vội.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-0-slides",
+    "ten": "12.0 — Slide Chương 12: hook và chữ ký bằng hình",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-1-hooks",
+    "ten": "12.1 — Hook: bắt lỗi trước khi nó tồn tại",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-12-4-chinh-sach-may-chu",
+    "ten": "12.3 — Cưỡng chế thật: hook phía máy chủ, ruleset và CI",
+    "nguon": "Git & GitHub · Chương 12",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Git Hooks & Tagging › Managing Tags": {
+  "body": "Sau khi tạo tag, bạn cần biết liệt kê, sửa và xoá chúng, nhất là khi gắn nhầm commit.\n\n### Ý chính\n```bash\ngit tag                          # liệt kê\ngit tag -l \"v1.*\"                # lọc theo mẫu\ngit show v1.0.0                  # xem tag và commit nó trỏ tới\n\ngit tag -d v1.0.0                # xoá tag ở máy bạn\ngit push origin :refs/tags/v1.0.0        # xoá tag trên remote\ngit push origin --delete v1.0.0          # cách viết khác\n```\n- Muốn dời tag sang commit khác: tạo lại với `-f` rồi đẩy đè.\n```bash\ngit tag -f -a v1.0.0 <hash-moi> -m \"...\"\ngit push --force origin v1.0.0\n```\n- Lấy tag mà người khác vừa đẩy: `git fetch --tags`. Dọn tag cục bộ không còn ở remote: `git fetch --prune --prune-tags`.\n\n### Lưu ý\nTag đã công bố nên coi là **bất biến**. Dời tag nghĩa là người đã fetch tag cũ giữ một phiên bản khác với bạn, và Git không tự cập nhật tag đã có. Nếu lỡ sai, thường tốt hơn là phát hành tag mới (`v1.0.1`) thay vì sửa tag cũ.\n\n### Lỗi hay gặp\nXoá tag ở máy mà quên xoá trên remote, hoặc ngược lại, nên hai nơi lệch nhau.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: quy trình nhóm, tag và phát hành bằng hình",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: remote bằng hình",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Git Hooks & Tagging › Adding / Updating": {
+  "body": "Hai thao tác chính với submodule: **thêm** một kho con mới và **cập nhật** nó lên phiên bản khác.\n\n### Thêm\n```bash\ngit submodule add -b main https://github.com/org/ui-kit.git libs/ui-kit\ngit commit -m \"chore: thêm submodule ui-kit\"\n```\nGit tạo `.gitmodules` (URL, đường dẫn) và ghim commit hiện tại của kho con.\n\n### Cập nhật\n```bash\n# lấy commit mới nhất của nhánh theo dõi ở kho con\ngit submodule update --remote libs/ui-kit\ngit add libs/ui-kit\ngit commit -m \"chore: nâng ui-kit lên bản mới\"\n```\n- `git submodule update --init --recursive` đưa working tree về đúng commit mà kho cha đang ghim (dùng sau khi `pull` kho cha hay mới clone).\n- `git status` hiện `libs/ui-kit (new commits)` khi kho con đã dịch chuyển; bạn phải `add` và commit để kho cha ghi nhận.\n\n### Lỗi hay gặp\n- Nhầm `update` (về commit đã ghim) với `update --remote` (lên commit mới nhất).\n- Quên commit con trỏ mới nên đồng đội vẫn dùng bản cũ.\n- Push kho cha khi commit mới của kho con chưa được push.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-0-slides",
+    "ten": "10.0 — Slide Chương 10: kho mã lớn bằng hình",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › Tạo tài khoản & Repository": {
+  "body": "**Repository** (repo) là nơi chứa mã nguồn cùng toàn bộ lịch sử thay đổi. Tạo repo trên GitHub là bước đầu để cất mã lên cloud, chia sẻ cho nhóm và nhận đóng góp.\n\n### Các lựa chọn khi tạo\n- **Public / Private**: public ai cũng xem và clone được; private chỉ người được mời.\n- **README**: trang giới thiệu hiện ngay ở trang chủ repo.\n- **.gitignore**: danh sách file không đưa vào Git (`node_modules/`, `.env`, file build). Chọn mẫu theo ngôn ngữ.\n- **License**: giấy phép cho người khác biết họ được làm gì với mã (MIT, Apache-2.0, GPL...). Repo không có license thì mặc định người khác không được tự do dùng lại.\n\n### Hai cách tạo\n```bash\n# Cách 1: tạo trên web rồi clone\ngit clone https://github.com/<ban>/<repo>.git\n\n# Cách 2: có sẵn thư mục local, đẩy lên repo trống\ngit init\ngit add . && git commit -m \"chore: khởi tạo dự án\"\ngit branch -M main\ngit remote add origin https://github.com/<ban>/<repo>.git\ngit push -u origin main\n```\n\n### Lỗi hay gặp\n- Tích tạo README ở web nhưng lại có sẵn repo local: `push` bị từ chối vì hai lịch sử khác nhau. Nếu đẩy repo có sẵn, hãy tạo repo **trống**.\n- Commit nhầm `.env` hay mật khẩu rồi mới thêm `.gitignore`: file đã nằm trong lịch sử; phải đổi khoá bí mật.\n\n### Tự kiểm tra\nVì sao repo không có License lại khó cho người khác dùng lại mã của bạn?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-1-khoi-tao-repo-nhom",
+    "ten": "16.1 — Ngày 0: dựng một repo nhóm tự giữ luật",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-3-dang-nhap-github",
+    "ten": "KĐ.3 — Đăng nhập GitHub qua HTTPS (Windows + Mac) và bẫy 403 nhầm tài khoản",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › Forking vs Cloning": {
+  "body": "**Fork** và **clone** hay bị nhầm vì cùng tạo ra \"bản sao\", nhưng ở hai nơi khác nhau.\n\n- **Clone**: tải một repo về **máy bạn** (`git clone <url>`). Bản clone biết repo gốc qua remote `origin`.\n- **Fork**: tạo một bản sao của repo **ngay trên GitHub**, thuộc tài khoản của bạn. Bạn có toàn quyền ghi vào bản fork, còn repo gốc thì không.\n\n### Khi nào dùng cả hai\nMuốn đóng góp cho dự án mà mình không có quyền ghi:\n1. Fork repo gốc về tài khoản bạn.\n2. Clone **bản fork** về máy.\n3. Thêm remote `upstream` trỏ về repo gốc để cập nhật.\n4. Tạo nhánh, commit, push lên fork, rồi mở Pull Request về repo gốc.\n\n```bash\ngit clone https://github.com/<ban>/du-an.git\ncd du-an\ngit remote add upstream https://github.com/<chu-goc>/du-an.git\ngit fetch upstream\n```\n\n### Lỗi hay gặp\n- Clone thẳng repo gốc rồi không push được (không có quyền); cần fork trước.\n- Fork xong không đồng bộ, bản fork cũ dần so với gốc. Cập nhật bằng `git fetch upstream` rồi merge/rebase, hoặc `gh repo sync`.\n- Nếu bạn đã là collaborator của repo thì không cần fork, cứ clone và tạo nhánh trực tiếp.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-4-dong-gop-ma-nguon-mo",
+    "ten": "15.4 — Đóng góp mã nguồn mở lần đầu",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: remote bằng hình",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-6-clone-du-an",
+    "ten": "KĐ.6 — Thành viên lấy dự án về: git clone một lần, đừng tải ZIP, và mở ĐÚNG thư mục đó",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › Markdown & Project README": {
+  "body": "**Markdown** là cú pháp văn bản đơn giản, GitHub hiển thị thành tài liệu đẹp. File `README.md` ở thư mục gốc là trang đầu tiên người ta thấy khi vào repo, nên nó quyết định người lạ có hiểu và dùng được dự án của bạn không.\n\n### Cú pháp cần thuộc\n````markdown\n# Tiêu đề lớn      ## Tiêu đề phụ\n**đậm**  *nghiêng*  `mã nội dòng`\n- gạch đầu dòng      1. danh sách số\n[chữ hiển thị](https://example.com)   ![mô tả ảnh](anh.png)\n- [x] việc đã xong   - [ ] việc chưa\n| Cột A | Cột B |\n|-------|-------|\n| 1     | 2     |\n\n```bash\nnpm install\n```\n````\nGitHub còn hỗ trợ khối cảnh báo như `> [!NOTE]` và sơ đồ Mermaid trong khối mã ` ```mermaid `.\n\n### Một README tốt có gì\n- Dự án làm gì, dành cho ai (1–2 câu đầu).\n- Ảnh chụp hoặc demo.\n- Cách cài và chạy, gõ được là chạy.\n- Cấu trúc thư mục hoặc công nghệ chính.\n- Cách đóng góp, giấy phép.\n- Nếu làm nhóm: phần mình đảm nhận.\n\n### Lỗi hay gặp\n- README chỉ có tên dự án.\n- Lệnh cài đặt thiếu bước nên người khác chạy không được; hãy tự thử trên máy sạch.\n- Đường dẫn ảnh tuyệt đối trên máy local, lên GitHub ảnh vỡ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-1-ho-so-github",
+    "ten": "15.1 — Hồ sơ GitHub như một CV: profile README, repo ghim & README dự án",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Essentials": {
+  "body": "**GitHub** là nền tảng lưu trữ repository Git trên cloud, kèm bộ công cụ cộng tác. Git là công cụ quản lý phiên bản chạy ở máy bạn; GitHub là \"nơi đặt\" các kho Git để cả nhóm dùng chung.\n\n### Nó cung cấp gì\n- **Lưu trữ và đồng bộ** mã qua `push`/`pull`.\n- **Pull request** và **code review** để thảo luận thay đổi trước khi gộp.\n- **Issues** và **Projects** để theo dõi công việc.\n- **Actions** để chạy CI/CD tự động.\n- **Pages, Releases, Packages**, các tính năng bảo mật và cộng đồng mã nguồn mở.\n\n### Cách dùng trong công việc thật\nMột người tạo repo, mời cả nhóm; mỗi tính năng làm trên một nhánh riêng, mở pull request, đồng đội review, CI chạy test, rồi merge vào `main`.\n\n### Lưu ý\nGitHub chỉ là một nhà cung cấp; GitLab, Bitbucket, Gitea cũng lưu kho Git với các tính năng tương tự. Khái niệm Git bạn học áp dụng được cho tất cả.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-4-github",
+    "ten": "1.4 — GitHub: mã của bạn trên đám mây",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › Creating Account": {
+  "body": "Tài khoản GitHub là danh tính của bạn trong mọi repo, issue, PR và hồ sơ công khai, nên đáng chọn kỹ ngay từ đầu.\n\n### Các bước\n1. Vào github.com, chọn Sign up và nhập email, mật khẩu, **username**.\n2. Xác minh email qua thư GitHub gửi.\n3. Vào Settings và hoàn thiện hồ sơ.\n4. Bật **xác thực hai lớp (2FA)** hoặc passkey, rồi lưu mã khôi phục ở nơi an toàn.\n\n### Gợi ý chọn username\nUsername nằm trong URL hồ sơ (`github.com/<username>`) và hiện cả trên CV, nên chọn tên nghiêm túc, dễ nhớ, tránh biệt danh khó đọc.\n\n### Sau khi có tài khoản\nMuốn dùng Git trong terminal bạn cần xác thực: mật khẩu GitHub **không** dùng được cho `git push`. Dùng đăng nhập qua trình duyệt với Git Credential Manager, `gh auth login`, SSH key hoặc personal access token.\n\n### Lỗi hay gặp\n- Dùng email trường rồi sau khi ra trường mất truy cập; hãy thêm email dự phòng.\n- Không bật 2FA nên tài khoản dễ bị chiếm.\n- Commit bằng email khác với email đã xác minh nên đóng góp không hiện trên hồ sơ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-3-dang-nhap-github",
+    "ten": "KĐ.3 — Đăng nhập GitHub qua HTTPS (Windows + Mac) và bẫy 403 nhầm tài khoản",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Interface": {
+  "body": "Giao diện web của GitHub xoay quanh trang một repository. Biết rõ từng tab giúp bạn tìm đúng thứ cần.\n\n### Trang repository\n- **Code**: cây thư mục, README, chọn nhánh, nút **Code** (lấy URL clone hoặc tải zip), lịch sử commit.\n- **Issues**: danh sách bug và việc cần làm.\n- **Pull requests**: các đề nghị gộp mã đang mở.\n- **Actions**: kết quả các workflow CI/CD.\n- **Projects**: bảng kanban hay bảng tính theo dõi công việc.\n- **Wiki, Security, Insights**: tài liệu, cảnh báo bảo mật, thống kê đóng góp.\n- **Settings**: quyền, nhánh, bảo vệ nhánh, webhook (chỉ người có quyền admin thấy).\n\n### Mẹo điều hướng\n- Phím `/` focus ô tìm kiếm, `t` mở tìm file, `?` hiện danh sách phím tắt.\n- Nhấn `.` trên trang repo để mở trình soạn thảo web.\n- Các nút **Watch**, **Star**, **Fork** ở góc trên: theo dõi thông báo, đánh dấu yêu thích, tạo bản sao.\n- Trên thanh trên cùng có thông báo, dấu `+` để tạo repo mới và menu hồ sơ.\n\n### Lỗi hay gặp\nMở repo private mà thấy lỗi 404: nghĩa là bạn chưa có quyền hoặc chưa chấp nhận lời mời, chứ không phải repo bị xoá.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-4-github",
+    "ten": "1.4 — GitHub: mã của bạn trên đám mây",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › Setting up Profile": {
+  "body": "Trang hồ sơ GitHub là \"danh thiếp kỹ thuật\" của bạn. Nhà tuyển dụng hay giảng viên thường chỉ liếc vài chục giây, nên cần rõ ràng ngay.\n\n### Nên làm\n- **Ảnh đại diện** rõ mặt hoặc logo nhất quán.\n- **Name** thật và **Bio** ngắn: bạn là ai, đang học hay làm gì.\n- Điền vị trí, website/portfolio, link LinkedIn.\n- **Ghim (pin) tối đa 6 repo** tốt nhất: dự án có README rõ, ảnh demo, hướng dẫn chạy.\n- Bật hiển thị đóng góp riêng tư nếu muốn lịch hoạt động thể hiện cả việc ở repo private (không lộ nội dung).\n- Tạo **profile README** (xem mục riêng).\n\n### Ý chính\nChất lượng hơn số lượng: sáu repo chỉn chu tốt hơn sáu mươi repo bỏ dở. Đảm bảo email dùng để commit đã được thêm vào tài khoản, nếu không đóng góp sẽ không hiện trên biểu đồ.\n\n### Lỗi hay gặp\n- Ghim repo bài tập rỗng, không README.\n- Để lộ thông tin cá nhân (số điện thoại, địa chỉ) trong bio.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-1-ho-so-github",
+    "ten": "15.1 — Hồ sơ GitHub như một CV: profile README, repo ghim & README dự án",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › Creating Repositories": {
+  "body": "Tạo repository qua giao diện web là cách nhanh nhất để bắt đầu một dự án có chỗ cất mã.\n\n### Các bước\n1. Bấm dấu `+` ở góc trên, chọn **New repository**.\n2. Chọn chủ sở hữu (tài khoản cá nhân hoặc tổ chức) và đặt **tên** ngắn gọn, viết thường, nối bằng dấu gạch ngang.\n3. Viết **mô tả** một dòng.\n4. Chọn **Public** hoặc **Private**.\n5. Quyết định có tích *Add a README*, *.gitignore*, *License* hay không.\n6. Bấm **Create repository**.\n\n### Chọn tích hay không?\n- Bắt đầu từ con số không: tích README, `.gitignore` và license rồi `git clone`.\n- Đã có thư mục mã trên máy và muốn đẩy lên: để repo **trống** (không tích gì) rồi làm theo hướng dẫn \"push an existing repository\" GitHub hiện ra.\n\n### Sau khi tạo\nCopy URL HTTPS hoặc SSH ở nút **Code**, chạy `git clone` hoặc `git remote add origin`. Với dự án nhóm, vào Settings → Collaborators để mời thành viên.\n\n### Lỗi hay gặp\nTạo repo có README rồi `push` repo local có sẵn: hai lịch sử không chung gốc nên bị từ chối.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-1-khoi-tao-repo-nhom",
+    "ten": "16.1 — Ngày 0: dựng một repo nhóm tự giữ luật",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Profile README": {
+  "body": "**Profile README** là phần giới thiệu hiện ngay đầu trang hồ sơ GitHub của bạn. Cách tạo: tạo một repository **public** có tên **trùng đúng với username** của bạn (ví dụ `hoangnam/hoangnam`) và thêm file `README.md`. GitHub sẽ hiển thị nội dung file đó trên trang hồ sơ.\n\n### Nên viết gì\n- Một câu giới thiệu: bạn là ai, đang học hoặc làm gì.\n- Công nghệ bạn dùng (liệt kê ngắn hoặc biểu tượng).\n- 2–3 dự án nổi bật kèm link.\n- Cách liên hệ.\n\n### Lưu ý\nĐừng nhồi quá nhiều huy hiệu hay ảnh động nặng làm trang chậm và rối. Hãy ưu tiên nội dung thật: dự án và kỹ năng. Cập nhật khi có thay đổi lớn, vì README cũ gây ấn tượng bỏ bê.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-1-ho-so-github",
+    "ten": "15.1 — Hồ sơ GitHub như một CV: profile README, repo ghim & README dự án",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › Repository Private vs Public": {
+  "body": "Mỗi repository có hai chế độ hiển thị.\n\n- **Public**: ai cũng xem, clone và fork được. Phù hợp mã nguồn mở, portfolio.\n- **Private**: chỉ chủ sở hữu và người được mời mới truy cập; người ngoài thấy 404.\n\n### Cân nhắc khi chọn\n- Bài tập nhóm, dự án có thông tin nhạy cảm, mã công ty: chọn private.\n- Muốn làm portfolio hay nhận đóng góp: public.\n- Đổi chế độ ở Settings → General → Danger Zone → Change visibility.\n\n### Điều cần cẩn thận\n- Chuyển private sang public là **công bố toàn bộ lịch sử**, kể cả commit cũ. Nếu từng lỡ commit mật khẩu hay khoá API, chúng lộ. Phải đổi khoá, không chỉ xoá file.\n- Một số tính năng (Pages cho repo private, vài tính năng bảo mật, quy tắc nhánh) phụ thuộc gói tài khoản.\n- Fork của repo private chỉ thấy được bởi người có quyền.\n\n### Lỗi hay gặp\nTưởng repo private thì mã bí mật tuyệt đối: mọi collaborator đều clone được toàn bộ nội dung.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Releases": {
+  "body": "**GitHub Release** là trang công bố một phiên bản phần mềm, gắn với một **tag**. Tag chỉ là con trỏ vào commit; Release bổ sung **release notes**, file tải về (binary, zip), nhãn pre-release và trang công khai dễ tìm.\n\n### Cách tạo\n- Giao diện: Releases → **Draft a new release** → chọn hoặc tạo tag (`v1.2.0`), chọn nhánh đích, nhấn **Generate release notes** để GitHub gom PR và người đóng góp, kiểm tra rồi **Publish**.\n- Dòng lệnh:\n```bash\ngh release create v1.2.0 --title \"v1.2.0\" --generate-notes ./dist/app.zip\n```\n\n### Ý chính\n- Dùng semantic versioning cho tên tag.\n- Đánh dấu **pre-release** cho bản thử, **latest** cho bản ổn định.\n- Có thể chạy workflow tự động khi release được published để đẩy gói lên npm hoặc registry.\n- Mỗi release có sẵn link tải mã nguồn zip/tar.gz của tag.\n\n### Lỗi hay gặp\n- Release trỏ vào nhánh đang thay đổi thay vì một commit đã kiểm thử.\n- Quên đính file build mà người dùng cần.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: quy trình nhóm, tag và phát hành bằng hình",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-3-phat-hanh-hotfix",
+    "ten": "16.3 — Chốt bản nộp: tag v1.0.0, release notes, và hotfix từ tag",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-14-3-phat-hanh",
+    "ten": "14.3 — Phát hành: GitHub Release, semantic-release, GHCR, npm và attestation",
+    "nguon": "GitHub Actions · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub CLI: Cài đặt & Thiết lập": {
+  "body": "**GitHub CLI** (`gh`) là công cụ dòng lệnh chính thức cho GitHub: tạo PR, quản lý issue, xem trạng thái CI, mà không cần mở trình duyệt.\n\n### Cài đặt\n```bash\nbrew install gh              # macOS\nwinget install --id GitHub.cli   # Windows\nsudo apt install gh          # Debian/Ubuntu (có thể cần thêm kho của GitHub)\n```\n\n### Đăng nhập\n```bash\ngh auth login      # chọn GitHub.com, HTTPS hoặc SSH, đăng nhập qua trình duyệt\ngh auth status     # kiểm tra tài khoản đang dùng\n```\n`gh auth login` cũng cài luôn credential helper nên `git push` qua HTTPS dùng được tài khoản đó.\n\n### Dùng thử\n```bash\ngh repo view --web      # mở repo hiện tại trên trình duyệt\ngh pr status            # PR của bạn\ngh issue list           # issue đang mở\n```\n\n### Lỗi hay gặp\n- `gh` báo chưa đăng nhập hay sai tài khoản: chạy `gh auth status`; nhiều tài khoản thì `gh auth switch`.\n- Nhầm `gh` với `git`: `gh` thao tác với GitHub (PR, issue), còn `git` thao tác với kho cục bộ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-3-dang-nhap-github",
+    "ten": "KĐ.3 — Đăng nhập GitHub qua HTTPS (Windows + Mac) và bẫy 403 nhầm tài khoản",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub CLI: Quản lý Repository & Issue": {
+  "body": "Với `gh`, bạn tạo và quản lý repo cùng issue ngay từ terminal, rất tiện khi viết script hay làm việc trên máy chủ không có giao diện.\n\n### Repository\n```bash\ngh repo create my-app --private --clone      # tạo và clone luôn\ngh repo clone owner/repo\ngh repo fork owner/repo --clone\ngh repo view owner/repo\n```\n\n### Issue\n```bash\ngh issue create --title \"Lỗi đăng nhập\" --body \"Bấm nút không phản hồi\" --label bug\ngh issue list --state open --label bug\ngh issue view 12\ngh issue close 12\n```\n\n### Ý chính\n- Trong thư mục repo, `gh` tự biết repo hiện tại; ngoài thư mục thì thêm `-R owner/repo`.\n- Thêm `--json` và `--jq` để lấy dữ liệu có cấu trúc cho script.\n- Trong PR, viết `Closes #12` để đóng issue khi merge.\n\n### Lỗi hay gặp\nChạy `gh issue create` ngoài thư mục repo mà không có `-R`, nên lệnh không biết repo nào.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub CLI: Pull Requests": {
+  "body": "Chu trình pull request trọn vẹn có thể làm hết bằng `gh`.\n\n```bash\ngit switch -c feat/dang-nhap\n# ...sửa, commit, push...\ngh pr create --fill                   # lấy tiêu đề/mô tả từ commit\ngh pr create --title \"feat: đăng nhập\" --body \"Closes #12\" --draft\n\ngh pr list\ngh pr checkout 42                     # lấy nhánh của PR số 42 về máy để thử\ngh pr diff 42\ngh pr checks 42                       # xem trạng thái CI\ngh pr review 42 --approve             # hoặc --comment / --request-changes -b \"lý do\"\ngh pr merge 42 --squash --delete-branch\n```\n\n### Ý chính\n- `--draft` mở PR nháp khi chưa sẵn sàng review.\n- `gh pr checkout` rất hữu ích khi review: chạy thử mã của người khác ngay.\n- Kiểu merge: `--merge`, `--squash`, `--rebase`; luật nhánh bảo vệ vẫn áp dụng (cần đủ approve và CI xanh).\n- `gh pr view --web` mở PR trên trình duyệt khi cần xem giao diện.\n\n### Lỗi hay gặp\nMerge bằng CLI mà quên `--delete-branch`, để lại nhiều nhánh cũ.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Pages": {
+  "body": "**GitHub Pages** lưu và phục vụ website **tĩnh** (HTML, CSS, JS đã build) trực tiếp từ repository, miễn phí cho repo public, với địa chỉ `https://<username>.github.io/<repo>/`.\n\n### Hai cách xuất bản\n1. **Từ nhánh/thư mục**: Settings → Pages, chọn nhánh (ví dụ `main` hoặc `gh-pages`) và thư mục (`/` hoặc `/docs`).\n2. **Bằng GitHub Actions**: workflow build dự án (React/Vite, Astro...) rồi deploy thư mục build.\n\n### Ý chính\n- Chỉ phục vụ file tĩnh, không chạy backend (Node, PHP, CSDL).\n- Site dự án nằm dưới `/<tên-repo>/`, nên dự án React/Vite cần đặt `base` đúng, nếu không trang trắng vì không tìm thấy file JS.\n- Repo tên `<username>.github.io` cho site gốc của tài khoản.\n- Có giới hạn dung lượng và băng thông, nên không dùng như hạ tầng sản xuất lưu lượng lớn.\n\n### Lỗi hay gặp\n- Trang trắng do `base` sai.\n- Đẩy mã nhưng không đợi workflow deploy chạy xong.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-2-github-pages",
+    "ten": "15.2 — GitHub Pages: xuất bản portfolio React/Vite",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Codespaces": {
+  "body": "**GitHub Codespaces** là môi trường phát triển chạy trên cloud, mở bằng trình duyệt hoặc VS Code desktop. Bạn có sẵn terminal, editor, extension và mã của repo mà không phải cài gì trên máy.\n\n### Dùng khi nào\n- Máy yếu hoặc không cài được công cụ (máy trường, máy mượn).\n- Muốn cả nhóm có **cùng môi trường**, gửi link là vào làm được.\n- Thử nhanh một repo hay review PR mà không động vào máy.\n\n### Ý chính\n- Mở từ nút **Code → Codespaces → Create codespace**.\n- Cấu hình môi trường bằng `.devcontainer/devcontainer.json`: image, công cụ cài sẵn, extension, lệnh chạy sau khi tạo (ví dụ `npm install`), cổng chuyển tiếp.\n- **Prebuild** dựng sẵn môi trường để mở nhanh hơn.\n- Có hạn mức miễn phí mỗi tháng (giờ tính toán và dung lượng lưu trữ), vượt thì phát sinh phí; sinh viên có thể được thêm hạn mức qua GitHub Education.\n- Codespace không dùng sẽ tự dừng; hãy xoá cái không cần để khỏi tốn dung lượng.\n\n### Lỗi hay gặp\nĐể codespace chạy mãi nên hết hạn mức. Dừng hoặc xoá khi xong, và nhớ commit/push mã trước khi xoá.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces",
+    "ten": "15.3 — Student Developer Pack, Codespaces & Copilot cho sinh viên",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Sponsors": {
+  "body": "**GitHub Sponsors** cho phép cộng đồng và doanh nghiệp tài trợ tiền trực tiếp cho lập trình viên hoặc tổ chức duy trì mã nguồn mở, theo tháng hoặc một lần.\n\n### Dùng thế nào\n- Nếu bạn là người duy trì: đăng ký chương trình, thiết lập các mức tài trợ (tier) kèm quyền lợi, rồi nút **Sponsor** hiện trên hồ sơ và repo.\n- Thêm file `.github/FUNDING.yml` để hiện nút Sponsor trên repo, có thể kèm các nền tảng khác như Open Collective hay Patreon.\n- Nếu bạn là người dùng: tài trợ những thư viện mình phụ thuộc, nhiều công ty xem đó là chi phí hợp lý để dự án bền vững.\n\n### Vì sao đáng biết\nPhần lớn hạ tầng phần mềm do vài người duy trì không công. Hiểu cơ chế tài trợ giúp bạn biết cách hỗ trợ dự án mình dựa vào, hoặc nhận hỗ trợ cho dự án của mình.\n\n### Lưu ý\nTính khả dụng của chương trình phụ thuộc quốc gia và tài khoản nhận tiền; hãy xem tài liệu chính thức của GitHub khi đăng ký."
+ },
+ "GitHub Essentials › GitHub Gists": {
+  "body": "**Gist** là cách nhanh nhất để chia sẻ một đoạn mã hay vài file nhỏ, tại `gist.github.com`. Mỗi gist thực chất là một **repository Git nhỏ**, nên có lịch sử, có thể clone, fork và comment.\n\n### Hai loại\n- **Public**: hiện trong danh sách và công cụ tìm kiếm.\n- **Secret**: không được liệt kê nhưng **ai có đường link đều xem được**. Đây không phải riêng tư thật sự; đừng đưa mật khẩu hay khoá vào.\n\n### Cách dùng\n```bash\ngh gist create script.sh --public -d \"Script dọn log\"\ngh gist list\ngit clone https://gist.github.com/<id>.git\n```\nGist hỗ trợ tô màu cú pháp theo đuôi file, và có thể nhúng vào bài viết bằng thẻ script.\n\n### Dùng khi nào\n- Gửi đoạn mã ngắn hay file log khi nhờ giúp đỡ.\n- Lưu snippet hay dùng.\n- Không hợp cho cả dự án: dự án nên có repo riêng.\n\n### Lỗi hay gặp\nDán nhầm khoá API vào secret gist, rồi tưởng nó an toàn."
+ },
+ "GitHub Essentials › GitHub Packages": {
+  "body": "**GitHub Packages** là registry tích hợp trong GitHub để lưu và phân phối gói phần mềm ngay cạnh mã nguồn. Hỗ trợ nhiều hệ: npm, container (Docker/OCI qua `ghcr.io`), Maven, NuGet, RubyGems.\n\n### Vì sao dùng\nGói nằm cùng chỗ với repo và dùng chung hệ phân quyền: ai đọc được repo private thì có thể (tuỳ cấu hình) tải gói private. Kết hợp GitHub Actions để tự xuất bản khi phát hành bản mới.\n\n### Ví dụ: đẩy image Docker lên GHCR\n```yaml\npermissions:\n  contents: read\n  packages: write\nsteps:\n  - uses: docker/login-action@v3\n    with:\n      registry: ghcr.io\n      username: ${{ github.actor }}\n      password: ${{ secrets.GITHUB_TOKEN }}\n  - uses: docker/build-push-action@v6\n    with:\n      push: true\n      tags: ghcr.io/${{ github.repository }}:${{ github.sha }}\n```\n\n### Ý chính\n- Trong workflow dùng `GITHUB_TOKEN` với quyền `packages: write`; ở máy local dùng personal access token có quyền tương ứng.\n- Gói có chế độ hiển thị (public/private) và liên kết với repo.\n- Có hạn mức lưu trữ và băng thông theo gói tài khoản.\n\n### Lỗi hay gặp\n- Thiếu quyền `packages: write` nên push bị từ chối.\n- Image mới đẩy ở chế độ private nên máy chủ triển khai không kéo được nếu chưa đăng nhập.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-14-3-phat-hanh",
+    "ten": "14.3 — Phát hành: GitHub Release, semantic-release, GHCR, npm và attestation",
+    "nguon": "GitHub Actions · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Pages & Triển khai Website tĩnh": {
+  "body": "Triển khai website tĩnh lên GitHub Pages, từ chỗ có mã đến lúc có đường link công khai.\n\n### Quy trình với một dự án React/Vite\n1. Đặt `base` trong `vite.config.js` thành `'/<tên-repo>/'`.\n2. Thêm workflow Actions: cài phụ thuộc, `npm run build`, rồi upload thư mục `dist` và deploy lên Pages.\n3. Vào Settings → Pages, chọn nguồn **GitHub Actions**.\n4. Push lên `main`, đợi workflow xanh, mở `https://<username>.github.io/<tên-repo>/`.\n\n### Với trang HTML thuần\nChọn Settings → Pages → Deploy from a branch, nhánh `main`, thư mục `/ (root)` hoặc `/docs`. Lưu và đợi vài phút.\n\n### Ý chính\n- Nội dung phải là **file tĩnh đã build**; không có backend.\n- Lỗi phổ biến nhất là **trang trắng**: `base` sai nên trình duyệt xin file JS ở sai đường dẫn. Mở DevTools → Network để thấy các file 404.\n- Với ứng dụng nhiều route (SPA), tải lại trang con có thể 404; dùng HashRouter hoặc bản sao `index.html` thành `404.html`.\n- Kiểm tra lại giới hạn dung lượng và băng thông trong tài liệu GitHub.\n\n### Lỗi hay gặp\nKhông bật Pages, hoặc chọn sai nguồn nên workflow xanh mà site không đổi.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-2-github-pages",
+    "ten": "15.2 — GitHub Pages: xuất bản portfolio React/Vite",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › Custom Domains": {
+  "body": "**Custom domain** cho phép GitHub Pages phục vụ site tại tên miền riêng như `portfolio.example.com` thay cho `username.github.io`.\n\n### Các bước\n1. Vào Settings → Pages → **Custom domain**, nhập tên miền, lưu. (Nếu xuất bản từ nhánh, GitHub tạo file `CNAME` trong repo.)\n2. Tại nhà cung cấp DNS, tạo bản ghi:\n   - Subdomain (`www`, `portfolio`): bản ghi **CNAME** trỏ về `<username>.github.io`.\n   - Tên miền gốc (apex, `example.com`): bản ghi **A** trỏ về các IP của GitHub Pages (xem danh sách hiện hành trong tài liệu chính thức), hoặc bản ghi ALIAS/ANAME nếu nhà cung cấp hỗ trợ.\n3. Đợi DNS lan truyền (vài phút đến vài giờ), rồi tích **Enforce HTTPS** để GitHub cấp chứng chỉ.\n\n### Lỗi hay gặp\n- Trỏ CNAME sai đích (về `<repo>` thay vì `<username>.github.io`).\n- Bật Enforce HTTPS quá sớm khi DNS chưa nhận, nên chứng chỉ chưa cấp.\n- Với deploy bằng Actions: thiết lập domain ở Settings, không phụ thuộc file `CNAME` trong repo.\n- Dùng domain rồi quên đổi `base` của ứng dụng về `/` (vì không còn nằm dưới `/<repo>/`).",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-2-github-pages",
+    "ten": "15.2 — GitHub Pages: xuất bản portfolio React/Vite",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › Static Site Generators": {
+  "body": "**Static Site Generator (SSG)** là công cụ sinh ra website tĩnh (HTML/CSS/JS) từ template và nội dung, thường là Markdown. Bạn viết bài, SSG build thành file, rồi đưa lên hosting tĩnh như GitHub Pages.\n\n### Các công cụ hay gặp\n- **Jekyll**: tích hợp sẵn với GitHub Pages; đẩy Markdown lên là GitHub tự build.\n- **Hugo**: viết bằng Go, build rất nhanh, hợp blog/tài liệu nhiều trang.\n- **Astro, Eleventy, Docusaurus, VitePress, Next.js (xuất tĩnh)**: dùng cho site tài liệu hay portfolio hiện đại.\n\n### Cách triển khai lên Pages\nNgoài Jekyll (tích hợp sẵn), các công cụ khác thường build bằng GitHub Actions rồi upload thư mục kết quả (`dist`, `public`, `_site`) để Pages phục vụ.\n\n### Vì sao dùng\n- Tải nhanh, rẻ, ít lỗ hổng bảo mật vì không có máy chủ chạy mã.\n- Nội dung nằm trong Git: có lịch sử, review, rollback.\n\n### Lỗi hay gặp\n- Quên đặt `baseurl`/`base` khi site nằm dưới `/<repo>/`.\n- Không tách mã nguồn và thư mục build, đẩy cả hai lên cùng nhánh gây rối.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-2-github-pages",
+    "ten": "15.2 — GitHub Pages: xuất bản portfolio React/Vite",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Education": {
+  "body": "**GitHub Education** là chương trình của GitHub cho học sinh, sinh viên, giáo viên và cộng đồng học tập, cung cấp công cụ miễn phí hoặc ưu đãi.\n\n### Có gì\n- **Student Developer Pack**: tập hợp ưu đãi từ GitHub và đối tác dành cho sinh viên đã xác minh.\n- Ưu đãi về **Copilot** và **Codespaces** cho sinh viên (nội dung và hạn mức có thể thay đổi, xem trang chính thức).\n- **GitHub Classroom** cho giáo viên giao và chấm bài tập trên GitHub.\n- Cộng đồng, sự kiện và tài nguyên học tập.\n\n### Cách đăng ký\nVào `education.github.com`, xin xác minh bằng email trường hoặc giấy tờ chứng minh đang học, điền thông tin theo hướng dẫn. Bước duyệt có thể mất thời gian; chuẩn bị giấy tờ rõ nét, và tên trên hồ sơ GitHub nên khớp với giấy tờ.\n\n### Lỗi hay gặp\n- Bị từ chối vì ảnh giấy tờ mờ hoặc thiếu ngày hiệu lực.\n- Xác minh có thời hạn nên cần gia hạn khi hết.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces",
+    "ten": "15.3 — Student Developer Pack, Codespaces & Copilot cho sinh viên",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Marketplace": {
+  "body": "**GitHub Marketplace** là nơi tìm và cài công cụ mở rộng cho GitHub, gồm hai loại chính.\n\n- **Actions**: các bước dùng lại trong workflow CI/CD (`uses: actions/checkout@v4`, `docker/build-push-action`...).\n- **Apps**: ứng dụng tích hợp vào repo hay tổ chức (bot review, theo dõi bảo mật, thông báo...), cài một lần và cấp quyền.\n\n### Chọn công cụ an toàn\nMột action chạy mã bên thứ ba **trong CI của bạn**, có thể đọc secret. Vì vậy:\n- Ưu tiên action do GitHub, nhà cung cấp chính thức hay dự án được tin cậy duy trì.\n- Xem số sao, người duy trì, lần cập nhật gần nhất và mã nguồn.\n- **Ghim phiên bản**, tốt nhất theo commit SHA đầy đủ, thay vì `@main`.\n- Cấp quyền tối thiểu cho `GITHUB_TOKEN` trong workflow.\n- Với App, đọc kỹ danh sách quyền trước khi chấp nhận.\n\n### Lỗi hay gặp\nDùng `uses: someone/action@main`, nên khi tác giả đẩy bản mới (hay bị chiếm tài khoản) mã lạ chạy trong pipeline của bạn."
+ },
+ "GitHub Essentials › GitHub Security": {
+  "body": "GitHub tích hợp nhiều lớp bảo vệ cho mã và chuỗi cung ứng.\n\n### Các tính năng chính\n- **Dependabot alerts**: cảnh báo khi thư viện bạn dùng có lỗ hổng đã công bố.\n- **Dependabot security updates / version updates**: tự mở PR nâng phiên bản; cấu hình qua `.github/dependabot.yml`.\n- **Secret scanning** và **push protection**: phát hiện và chặn lúc push khi có khoá API, token trong mã.\n- **Code scanning (CodeQL)**: phân tích tĩnh tìm lỗi bảo mật trong mã.\n- **SECURITY.md**: nơi nói người khác báo lỗ hổng cho bạn như thế nào.\n- **2FA/passkey** cho tài khoản, **branch protection/ruleset** cho nhánh.\n\n### Ví dụ cấu hình Dependabot\n```yaml\nversion: 2\nupdates:\n  - package-ecosystem: \"npm\"\n    directory: \"/\"\n    schedule:\n      interval: \"weekly\"\n```\n\n### Ý chính\n- Bật thứ rẻ và hiệu quả trước: 2FA, Dependabot alerts, secret scanning/push protection.\n- Khi lỡ lộ bí mật: **thu hồi/đổi khoá ngay**; xoá khỏi mã không đủ vì nó vẫn nằm trong lịch sử.\n- Một số tính năng chỉ có cho repo public hoặc gói trả phí; kiểm tra tài liệu theo loại tài khoản.\n\n### Lỗi hay gặp\nBỏ qua cảnh báo vì quá nhiều; hãy ưu tiên theo mức độ nghiêm trọng và nhóm cập nhật.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-14-2-bao-mat-chuoi-cung-ung",
+    "ten": "14.2 — Bảo mật chuỗi cung ứng: pull_request_target, tiêm lệnh, máy quét, Dependabot",
+    "nguon": "GitHub Actions · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Models": {
+  "body": "**GitHub Models** là tính năng cho phép thử và so sánh các mô hình ngôn ngữ lớn (LLM) ngay trong GitHub: chọn mô hình từ danh mục, nhập prompt trong playground, chỉnh tham số, và xem câu trả lời mà không phải tự đăng ký từng nhà cung cấp.\n\n### Dùng để làm gì\n- Thử prompt trên nhiều mô hình để chọn cái hợp bài toán (chất lượng, tốc độ, chi phí).\n- Lưu prompt và đánh giá kết quả bằng bộ ví dụ.\n- Dùng cùng một API để đưa mô hình vào ứng dụng hay workflow Actions, xác thực bằng token GitHub.\n\n### Lưu ý\n- Có mức dùng miễn phí giới hạn tốc độ để thử nghiệm; dùng nhiều cần cấu hình thanh toán. Danh mục mô hình và hạn mức thay đổi thường xuyên, hãy xem tài liệu chính thức.\n- Đừng đưa dữ liệu nhạy cảm vào prompt khi chưa đọc điều khoản xử lý dữ liệu.\n- Kết quả LLM có thể sai; luôn kiểm tra trước khi dùng cho việc quan trọng."
+ },
+ "GitHub Essentials › GitHub Copilot": {
+  "body": "**GitHub Copilot** là trợ lý AI tích hợp vào trình soạn thảo (VS Code, JetBrains, Visual Studio...) và GitHub. Nó gợi ý code theo ngữ cảnh khi bạn gõ, trả lời câu hỏi trong khung chat và, ở chế độ agent, có thể thực hiện việc nhiều bước như sửa nhiều file hay chạy lệnh theo yêu cầu.\n\n### Các cách dùng\n- **Gợi ý inline**: gõ chú thích hay đầu hàm, Copilot đề xuất phần còn lại, nhấn Tab để nhận.\n- **Chat**: hỏi giải thích đoạn mã, sinh test, đề xuất sửa lỗi.\n- **Agent/Edits**: giao việc lớn hơn, bạn xem diff và quyết định giữ hay bỏ.\n- Sinh mô tả PR và hỗ trợ review trên GitHub.\n\n### Dùng sao cho đúng\n- Coi gợi ý như bản nháp của đồng nghiệp: **đọc và hiểu trước khi nhận**, vì nó có thể sai hoặc lỗi thời.\n- Viết ngữ cảnh rõ (tên hàm, kiểu dữ liệu, ví dụ) thì gợi ý tốt hơn.\n- Không dán bí mật hay dữ liệu khách vào chat; xem chính sách của gói đang dùng.\n- Có gói miễn phí giới hạn, gói trả phí và ưu đãi cho sinh viên qua GitHub Education; nội dung gói có thể thay đổi, xem trang chính thức.\n\n### Lỗi hay gặp\nNhận gợi ý mà không chạy thử hay đọc lại, nên mang lỗi tinh vi vào dự án.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces",
+    "ten": "15.3 — Student Developer Pack, Codespaces & Copilot cho sinh viên",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › CITATION files": {
+  "body": "`CITATION.cff` (Citation File Format) là file YAML ở thư mục gốc repo, khai báo cách **trích dẫn** phần mềm. Khi có file này, GitHub hiện nút **Cite this repository** với định dạng APA và BibTeX. Rất hữu ích cho phần mềm nghiên cứu.\n\n### Ví dụ\n```yaml\ncff-version: 1.2.0\nmessage: \"Nếu bạn dùng phần mềm này, vui lòng trích dẫn như sau.\"\ntitle: \"Tên công cụ\"\nversion: 1.0.0\ndate-released: 2026-01-15\nauthors:\n  - family-names: Nguyễn\n    given-names: An\n    orcid: \"https://orcid.org/0000-0000-0000-0000\"\ndoi: 10.5281/zenodo.1234567\nrepository-code: \"https://github.com/ten/repo\"\nlicense: MIT\n```\n\n### Ý chính\n- Các trường bắt buộc thường là `cff-version`, `message`, `title`, `authors`.\n- DOI lấy được bằng cách liên kết repo với Zenodo mỗi lần phát hành.\n- Kiểm tra cú pháp bằng công cụ `cffconvert` trước khi commit.\n\n### Lỗi hay gặp\nYAML sai thụt lề khiến GitHub không hiện nút trích dẫn."
+ },
+ "GitHub Essentials › Contribution Guidelines": {
+  "body": "`CONTRIBUTING.md` là tài liệu nói rõ **người ngoài muốn đóng góp thì làm thế nào**, giúp PR đến đúng chuẩn ngay lần đầu. GitHub tự hiển thị link tới file này khi ai đó tạo issue hay pull request mới.\n\n### Nên có gì\n- Cách dựng môi trường và chạy test.\n- Quy trình: fork, tạo nhánh, commit, mở PR.\n- Quy ước đặt tên nhánh và format commit message.\n- Chuẩn code (lint, format), yêu cầu test, tài liệu.\n- Cách báo lỗi và đề xuất tính năng; lời nhắc tìm issue có nhãn `good first issue`.\n- Link tới `CODE_OF_CONDUCT.md`, và nếu cần, yêu cầu ký **DCO** (`Signed-off-by`) hoặc CLA.\n\n### Đặt ở đâu\nThư mục gốc, `docs/` hoặc `.github/`. Có thể kèm mẫu issue/PR trong `.github/`.\n\n### Ý chính\nCàng cụ thể, người mới càng ít hỏi lặp. Với tư cách người đóng góp, hãy đọc file này **trước** khi viết code: nhiều dự án yêu cầu mở issue thảo luận trước khi làm tính năng lớn.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-4-dong-gop-ma-nguon-mo",
+    "ten": "15.4 — Đóng góp mã nguồn mở lần đầu",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › GitHub Wikis": {
+  "body": "**GitHub Wiki** là khu tài liệu tích hợp cho mỗi repository (tab **Wiki**), soạn bằng Markdown, phù hợp hướng dẫn dài, FAQ, ghi chú thiết kế mà README quá chật.\n\n### Đặc điểm\n- Wiki thực chất là **một repository Git riêng** (`<repo>.wiki.git`): bạn clone, sửa trên máy rồi push như thường.\n```bash\ngit clone https://github.com/<ban>/<repo>.wiki.git\n```\n- Có thanh bên và trang chân trang tuỳ chỉnh (`_Sidebar.md`, `_Footer.md`).\n- Lịch sử chỉnh sửa lưu như mọi commit.\n\n### Khi nào dùng\n- Dự án muốn tài liệu cập nhật bởi nhiều người, ngoài quy trình PR.\n- Nếu cần tài liệu có review như mã, hãy đặt Markdown trong thư mục `docs/` của repo chính (đi qua PR) thay vì Wiki.\n\n### Lưu ý\nQuyền chỉnh sửa Wiki mặc định theo quyền ghi của repo (có thể tuỳ chỉnh trong Settings). Wiki không đi cùng khi bạn clone repo chính, nên cần sao lưu riêng."
+ },
+ "GitHub Essentials › GitHub Organizations": {
+  "body": "**Organization** (tổ chức) trên GitHub gom nhiều người và nhiều repository dưới một tên chung, với quyền truy cập quản lý tập trung. Thay vì repo thuộc một cá nhân, repo thuộc tổ chức nên không \"mất\" khi một thành viên rời đi.\n\n### Khái niệm\n- **Owner**: quản trị toàn bộ tổ chức; **Member**: thành viên thường.\n- **Team**: nhóm người trong tổ chức, có thể lồng nhau; cấp quyền cho cả team trên từng repo.\n- **Vai trò repo**: Read, Triage, Write, Maintain, Admin.\n- Cài đặt dùng chung: yêu cầu 2FA, ruleset, mẫu issue/PR mặc định, repo `.github` chứa tệp mặc định.\n- Có thể thêm outside collaborator cho người ngoài tổ chức nhưng cần vào một repo cụ thể.\n\n### Tạo tổ chức\nDấu `+` → **New organization**, chọn gói, đặt tên, mời thành viên.\n\n### Lỗi hay gặp\n- Cấp Admin quá rộng; hãy theo nguyên tắc quyền tối thiểu.\n- Cấp quyền cho từng cá nhân thay vì team, rất khó quản lý khi người ra vào.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-1-khoi-tao-repo-nhom",
+    "ten": "16.1 — Ngày 0: dựng một repo nhóm tự giữ luật",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › What and Why use?": {
+  "body": "**GitHub** là nền tảng lưu trữ repository Git từ xa, kèm công cụ cộng tác. Git chạy cục bộ và không cần mạng; GitHub là nơi cả nhóm \"gặp nhau\" để chia sẻ lịch sử.\n\n### Dùng GitHub để làm gì\n- **Sao lưu và đồng bộ**: mã không chỉ nằm trên một máy.\n- **Cộng tác**: pull request, review, issue, thảo luận.\n- **Tự động hoá**: Actions chạy test, build, deploy mỗi lần push.\n- **Công khai năng lực**: hồ sơ và repo là CV kỹ thuật; mã nguồn mở nhận đóng góp toàn cầu.\n\n### Vì sao quan trọng\nHầu hết công ty phần mềm dùng quy trình tương tự (nhánh, PR, review, CI). Biết dùng GitHub là kỹ năng nền để đi làm.\n\n### Bắt đầu\n1. Tạo tài khoản.\n2. Tạo repo hoặc fork repo có sẵn.\n3. Clone, sửa, commit, push.\n4. Mở pull request.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-4-github",
+    "ten": "1.4 — GitHub: mã của bạn trên đám mây",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Essentials › Installation and Setup": {
+  "body": "Hướng dẫn cài GitHub CLI và nối với tài khoản của bạn.\n\n### Cài đặt\n```bash\nbrew install gh                      # macOS (Homebrew)\nwinget install --id GitHub.cli       # Windows\nsudo apt install gh                  # Ubuntu/Debian (xem hướng dẫn thêm kho gói chính thức nếu chưa có)\ngh --version\n```\n\n### Đăng nhập\n```bash\ngh auth login\n```\nChọn GitHub.com, giao thức HTTPS hoặc SSH, rồi xác thực qua trình duyệt theo mã một lần hiện trong terminal. Kiểm tra bằng:\n```bash\ngh auth status\n```\n\n### Ý chính\n- Token được lưu an toàn trong kho khoá của hệ điều hành; đừng tự dán token vào script chia sẻ.\n- Cần thêm quyền (ví dụ xoá repo) thì `gh auth refresh -s delete_repo`.\n- Chạy trong CI: đặt biến môi trường `GH_TOKEN` thay vì đăng nhập tương tác.\n- Nhiều tài khoản: `gh auth switch`.\n\n### Lỗi hay gặp\nĐăng nhập nhầm tài khoản nên PR hoặc commit đứng tên sai; kiểm tra bằng `gh auth status`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-3-dang-nhap-github",
+    "ten": "KĐ.3 — Đăng nhập GitHub qua HTTPS (Windows + Mac) và bẫy 403 nhầm tài khoản",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › Repository management": {
+  "body": "Quản lý vòng đời repository bằng `gh`.\n\n```bash\ngh repo create my-app --public --description \"Ứng dụng demo\" --clone\ngh repo clone owner/repo                 # sao chép về máy\ngh repo fork owner/repo --clone          # fork rồi clone\ngh repo rename ten-moi                   # đổi tên (trong thư mục repo)\ngh repo edit --visibility private --accept-visibility-change-consequences\ngh repo delete owner/repo                # cần quyền delete_repo\ngh repo list owner --limit 20\ngh repo sync                             # đồng bộ fork với upstream\n```\n\n### Ý chính\n- `gh repo create` trong thư mục đã có mã có thể hỏi bạn thêm remote và push luôn.\n- Xoá repo là thao tác **không thể hoàn tác**; `gh` hỏi xác nhận bằng cách gõ lại tên repo.\n- Quyền xoá không có sẵn, nên chạy `gh auth refresh -s delete_repo` khi cần.\n- Đổi tên repo làm đổi URL; GitHub chuyển hướng URL cũ nhưng nên cập nhật remote: `git remote set-url origin <url-moi>`.\n\n### Lỗi hay gặp\nXoá nhầm repo vì gõ nhầm owner; luôn đọc kỹ tên đầy đủ `owner/repo`.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-4-truong-nhom-tao-repo",
+    "ten": "KĐ.4 — Trưởng nhóm tạo repo: trên github.com hoặc từ terminal",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Essentials › Issue Management": {
+  "body": "**Issue** là đơn vị công việc trên GitHub: một lỗi, một đề xuất tính năng hay một nhiệm vụ. Với `gh`, bạn tạo và theo dõi issue ngay trong terminal.\n\n```bash\ngh issue create --title \"Lỗi đăng nhập\" --body \"Mô tả, bước tái hiện\" --label bug --assignee @me\ngh issue list --state open --label bug --assignee @me\ngh issue view 12 --comments\ngh issue comment 12 --body \"Đã tái hiện được\"\ngh issue close 12 --reason completed\ngh issue reopen 12\n```\n\n### Ý chính\n- Một issue tốt có: tiêu đề cụ thể, bước tái hiện, kết quả mong đợi và thực tế, môi trường.\n- Dùng nhãn (`bug`, `enhancement`, `good first issue`), milestone và assignee để phân loại.\n- Nối với mã: trong PR viết `Closes #12` thì issue tự đóng khi PR merge vào nhánh mặc định.\n- `--json` kết hợp `--jq` để xuất danh sách cho script hay báo cáo.\n\n### Lỗi hay gặp\nIssue mơ hồ kiểu \"app lỗi\" nên không ai tái hiện được. Một issue chỉ nên chứa một vấn đề.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "GitHub Essentials › Documentation": {
+  "body": "Tài liệu dự án nằm ở nhiều chỗ, mỗi chỗ hợp một mục đích.\n\n### Các nơi viết tài liệu\n- **README.md**: giới thiệu, cài đặt, cách chạy; trang đầu tiên mọi người xem.\n- **Thư mục `docs/`**: tài liệu chi tiết dạng Markdown nằm trong repo, đi qua PR và review như mã; có thể xuất bản thành site bằng GitHub Pages hoặc công cụ như Docusaurus, MkDocs.\n- **Wiki**: tài liệu cộng tác ngoài quy trình PR, là repo Git riêng.\n- **Các file chuẩn**: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, `CHANGELOG.md`, `LICENSE`.\n\n### Nguyên tắc\n- **Docs as code**: để tài liệu cạnh mã, thay đổi tính năng thì sửa tài liệu trong cùng PR.\n- Viết cho người mới: ví dụ chạy được, ảnh minh hoạ, sơ đồ (Mermaid hiển thị được ngay trong Markdown của GitHub).\n- Giữ một nguồn sự thật, tránh chép cùng nội dung ở nhiều nơi.\n\n### Lỗi hay gặp\nTài liệu cũ không khớp mã, còn gây hại hơn không có. Hãy dọn khi tính năng đổi.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-1-ho-so-github",
+    "ten": "15.1 — Hồ sơ GitHub như một CV: profile README, repo ghim & README dự án",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Pull Requests & Code Review": {
+  "body": "**Pull request (PR)** là đề nghị gộp các commit của một nhánh vào nhánh khác (thường là `main`), kèm khu vực thảo luận để đồng đội **review** trước khi mã vào nhánh chính. Đây là chỗ chất lượng được giữ.\n\n### Vòng đời một PR\n1. Tạo nhánh, commit, push.\n2. Mở PR với mô tả rõ: làm gì, vì sao, cách kiểm tra, issue liên quan.\n3. CI chạy tự động; reviewer đọc diff, comment theo dòng, đề xuất sửa (khối *suggestion*).\n4. Reviewer chọn **Approve**, **Comment** hoặc **Request changes**.\n5. Tác giả sửa, push thêm commit, **resolve** các cuộc trò chuyện.\n6. Khi đủ điều kiện thì merge.\n\n### Nhánh bảo vệ (branch protection/ruleset)\nBắt buộc PR trước khi vào `main`, yêu cầu số approve tối thiểu, CI phải xanh, **CODEOWNERS** tự gọi đúng người review, cấm force push. Nhờ vậy không ai (kể cả người có quyền) lỡ tay đẩy thẳng mã chưa duyệt.\n\n### Review hiệu quả\n- PR nhỏ (vài trăm dòng trở xuống) được review nhanh và kỹ hơn.\n- Comment về mã, không về người; phân biệt ý chặn merge với góp ý nhỏ (*nit*).\n- Tự review diff của mình trước khi nhờ người khác.\n\n### Lỗi hay gặp\n- PR khổng lồ nên không ai đọc kỹ mà bấm duyệt cho xong.\n- Tự merge PR của mình không qua review.\n\n### Tự kiểm tra\nBranch protection giải quyết rủi ro gì mà \"thoả thuận miệng cả nhóm\" không giải quyết được?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-18-5-tu-merge-khong-review",
+    "ten": "18.5 — Tai nạn: tự merge không ai review",
+    "nguon": "Git & GitHub · Chương 18",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Issues & Labels": {
+  "body": "**Issue** theo dõi bug, tính năng và nhiệm vụ. **Label** (nhãn) phân loại để cả nhóm lọc và ưu tiên.\n\n### Nhãn có sẵn thường gặp\n`bug`, `enhancement`, `documentation`, `good first issue`, `help wanted`, `question`, `duplicate`, `wontfix`. Bạn có thể tự tạo thêm, ví dụ theo ba trục: **loại** (bug/feature), **mức ưu tiên** (P1/P2) và **trạng thái** (blocked, needs-review). Đừng tạo bốn mươi nhãn màu mè.\n\n### Liên kết với PR\nTrong mô tả PR (hoặc commit vào nhánh mặc định) viết `Closes #12`, `Fixes #12` hay `Resolves #12`: khi PR được merge vào nhánh mặc định, issue #12 **tự đóng**.\n\n### Ý chính\n- Dùng **issue template** trong `.github/ISSUE_TEMPLATE/` để người báo lỗi điền đủ thông tin.\n- **Milestone** gom issue theo mốc phát hành; **assignee** chỉ định người làm.\n- Nhắc tới issue khác bằng `#số`, người bằng `@tên`.\n\n### Lỗi hay gặp\nIssue không có bước tái hiện; PR quên liên kết issue nên theo dõi công việc bị rời rạc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › GitHub Discussions & Projects": {
+  "body": "Hai công cụ bổ sung cho Issues.\n\n### Discussions\nNơi **thảo luận mở**, không phải việc cần làm: hỏi đáp (Q&A, có thể đánh dấu câu trả lời đúng), ý tưởng, thông báo, khảo sát. Dùng khi nội dung chưa thành \"việc\" cụ thể, tránh làm danh sách issue lẫn câu hỏi. Khi thảo luận chốt thành việc, có thể chuyển thành issue.\nBật trong Settings → Features → Discussions.\n\n### Projects\nBảng lập kế hoạch tích hợp với issue và PR, có các góc nhìn:\n- **Board** (kanban): cột To do / In progress / Done.\n- **Table**: bảng tính với các trường tuỳ chỉnh (ưu tiên, ước lượng, sprint).\n- **Roadmap**: dòng thời gian.\nCó workflow tự động: PR được merge thì thẻ tự chuyển sang Done, issue mới tự thêm vào bảng.\n\n### Dùng thế nào cho nhóm nhỏ\nMỗi sprint tạo một bảng hoặc một lọc theo iteration; issue là thẻ; PR liên kết bằng `Closes #n`. Nhìn bảng là biết ai đang làm gì.\n\n### Lỗi hay gặp\nThẻ không cập nhật vì không bật automation, rồi bảng lệch với thực tế.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Organizations & Teams": {
+  "body": "Khi nhiều người cùng dự án, cấp quyền cho từng cá nhân sẽ rối nhanh. **Organization** và **Team** cho phép quản lý theo nhóm.\n\n### Cách hoạt động\n- Repo thuộc **organization**; thành viên được thêm vào **team** (ví dụ `frontend`, `backend`, `reviewers`).\n- Cấp cho team một vai trò trên mỗi repo: **Read, Triage, Write, Maintain, Admin**.\n- Người mới chỉ cần vào đúng team là có đủ quyền; rời đi thì gỡ khỏi team là xong.\n- Team có thể lồng nhau (team con thừa hưởng quyền từ team cha) và có thể được **@mention** (`@org/frontend`) để thông báo cả nhóm.\n- **CODEOWNERS** có thể trỏ tới team (`/web/ @org/frontend`) để tự gọi đúng nhóm review.\n\n### Thực hành tốt\n- Quyền tối thiểu cần thiết, ưu tiên Write cho người đóng góp, Admin cho rất ít người.\n- Bật yêu cầu 2FA cho toàn tổ chức.\n- Dùng team thay vì từng người trong rule bảo vệ nhánh.\n\n### Lỗi hay gặp\nĐể mọi người đều Admin; hoặc cấp quyền thẳng cho cá nhân nên khó thu hồi khi họ đổi nhóm.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-1-khoi-tao-repo-nhom",
+    "ten": "16.1 — Ngày 0: dựng một repo nhóm tự giữ luật",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Quy trình cộng tác trên GitHub": {
+  "body": "Có hai mô hình cộng tác phổ biến trên GitHub, chọn theo việc bạn có quyền ghi vào repo hay không.\n\n### 1. Mô hình repo dùng chung (nhóm nội bộ)\nMọi người là collaborator hay thành viên team nên đẩy nhánh thẳng vào repo gốc.\n```bash\ngit switch main && git pull\ngit switch -c feat/tim-kiem\n# làm việc, commit\ngit push -u origin feat/tim-kiem\n# mở pull request vào main\n```\n\n### 2. Mô hình fork và pull request (mã nguồn mở)\nBạn không có quyền ghi: fork, clone fork, thêm remote `upstream`, tạo nhánh, push lên fork, rồi mở PR về repo gốc.\n\n### Các bước chung\n1. Lấy mã mới nhất của `main`.\n2. Tạo nhánh riêng cho mỗi việc.\n3. Commit nhỏ, message rõ.\n4. Push và mở PR, liên kết issue.\n5. Review, sửa, CI xanh.\n6. Merge, xoá nhánh, đồng bộ `main` về máy.\n\n### Quy ước nhóm nên thống nhất\nĐặt tên nhánh, kiểu merge (merge commit/squash/rebase), số người duyệt tối thiểu, ai được merge.\n\n### Lỗi hay gặp\nLàm việc lâu trên một nhánh không đồng bộ với `main`, rồi gặp xung đột lớn; hãy cập nhật nhánh thường xuyên.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow",
+    "ten": "10.3 — Quy trình Git cho công việc thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-2-sprint-mo-phong",
+    "ten": "16.2 — Một sprint trọn vẹn, chạy thật: bốn issue, bốn nhánh, một xung đột",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Pull Request (PR)": {
+  "body": "Pull Request là yêu cầu gộp thay đổi từ nhánh nguồn (head) vào nhánh đích (base). Một PR tốt dễ review và dễ hiểu vì sao nó tồn tại.\n\n### Một PR gồm\n- **Tiêu đề** ngắn gọn, nêu việc làm (`feat: thêm lọc theo ngày`).\n- **Mô tả**: bối cảnh, thay đổi chính, cách kiểm tra, ảnh chụp nếu có UI.\n- **Liên kết issue**: `Closes #12`.\n- Danh sách commit, diff, kết quả CI, các cuộc review.\n\n### Tạo PR\nGiao diện web (GitHub gợi ý nút sau khi push), hoặc `gh pr create --fill`. Dùng PR **nháp (draft)** khi chưa sẵn sàng.\n\n### Danh sách kiểm trước khi bấm Create\n- Tự đọc lại diff, xoá `console.log`, file thừa.\n- Test chạy qua trên máy.\n- PR chỉ làm một việc, đủ nhỏ để review.\n- Mô tả cho người không biết bối cảnh vẫn hiểu.\n\n### Ba kiểu merge\n- **Merge commit**: giữ toàn bộ commit và thêm một commit gộp.\n- **Squash**: dồn cả PR thành một commit.\n- **Rebase and merge**: đặt lại từng commit lên đầu nhánh đích, lịch sử thẳng.\n\n### Lỗi hay gặp\nPR hàng nghìn dòng; mô tả trống; quên liên kết issue.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Pull Request từ Fork": {
+  "body": "Khi bạn không có quyền ghi vào repo, cách đóng góp chuẩn là **PR từ fork**: thay đổi nằm trên bản fork của bạn và được đề nghị gộp vào repo gốc.\n\n### Quy trình\n```bash\n# 1. Fork trên GitHub, rồi clone BẢN FORK\ngit clone https://github.com/<ban>/du-an.git\ncd du-an\ngit remote add upstream https://github.com/<chu-goc>/du-an.git\n\n# 2. Tạo nhánh, sửa, commit, push lên fork\ngit switch -c fix/loi-chinh-ta\ngit push -u origin fix/loi-chinh-ta\n\n# 3. Trên GitHub mở Pull Request: base = repo gốc, compare = nhánh của bạn\n```\n\n### Giữ fork đồng bộ\n```bash\ngit fetch upstream\ngit switch main && git merge upstream/main    # hoặc rebase\ngit push origin main\n# hoặc: gh repo sync\n```\n\n### Ý chính\n- Nên tạo nhánh riêng cho mỗi PR thay vì làm trên `main` của fork.\n- Tích **Allow edits by maintainers** để người duy trì có thể sửa nhỏ giúp bạn.\n- Đọc `CONTRIBUTING.md` và tìm issue `good first issue`; hỏi trước khi làm việc lớn.\n- Có thể phải ký DCO/CLA theo yêu cầu dự án.\n\n### Lỗi hay gặp\nPR lẫn commit không liên quan vì làm trực tiếp trên `main` của fork và fork đã lạc hậu so với gốc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-4-dong-gop-ma-nguon-mo",
+    "ten": "15.4 — Đóng góp mã nguồn mở lần đầu",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: remote bằng hình",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Collaborators": {
+  "body": "**Collaborator** là người được chủ repo cấp quyền trực tiếp vào repository, khác với người ngoài chỉ **fork** rồi gửi PR.\n\n### Với repo cá nhân\nChủ repo vào Settings → **Collaborators** → **Add people**, nhập username hay email. Người được mời nhận lời mời qua email hoặc trang thông báo và phải **chấp nhận** (lời mời hết hạn sau một thời gian, hiện là 7 ngày). Trước khi chấp nhận, họ truy cập repo private sẽ thấy lỗi 404. Sau khi vào, họ đọc và ghi được: push nhánh, mở PR, quản lý issue.\n\n### Với repo thuộc tổ chức\nCó vai trò chi tiết hơn (Read, Triage, Write, Maintain, Admin) và quyền thường cấp qua team. Người ngoài tổ chức nhưng được thêm vào một repo gọi là *outside collaborator*.\n\n### Nên làm\n- Cấp quyền tối thiểu cần thiết.\n- Bật **branch protection** để collaborator cũng phải qua PR và review (một số tính năng cần gói phù hợp).\n- Định kỳ rà soát và gỡ người không còn làm việc.\n\n### Lỗi hay gặp\n- Mời nhầm username nên người lạ có quyền vào repo private.\n- Thành viên nói \"không vào được\": thường vì chưa chấp nhận lời mời hoặc đang đăng nhập sai tài khoản.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-5-moi-thanh-vien",
+    "ten": "KĐ.5 — Mời thành viên: collaborator, lời mời đang chờ và kiểm tra quyền truy cập",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Saved Replies": {
+  "body": "**Saved Replies** là tính năng lưu sẵn các câu trả lời mẫu để chèn nhanh vào comment của issue và pull request. Hữu ích cho người duy trì dự án phải trả lời những tình huống lặp lại.\n\n### Ví dụ mẫu hay dùng\n- Cảm ơn người đóng góp PR đầu tiên.\n- Xin thêm thông tin: phiên bản, bước tái hiện, log.\n- Đóng issue trùng lặp và trỏ tới issue gốc.\n- Hướng dẫn PR thiếu test hay chưa theo chuẩn commit.\n\n### Cách dùng\nTạo và quản lý tại Settings cá nhân → **Saved replies** (đặt tiêu đề và nội dung, hỗ trợ Markdown). Khi viết comment, mở menu saved replies ở thanh công cụ (hoặc dùng phím tắt) để chọn mẫu rồi chỉnh trước khi gửi. Mẫu gắn với tài khoản của bạn, không chia sẻ cho cả tổ chức.\n\n### Lưu ý\nĐừng gửi nguyên mẫu máy móc: thêm lời chào tên người và chi tiết cụ thể để không có cảm giác lạnh lùng."
+ },
+ "Cộng tác trên GitHub › Mentions (@)": {
+  "body": "**Mention** là gõ `@` kèm tên người dùng hoặc team để **thông báo** trực tiếp cho họ trong issue, PR, comment hay commit message.\n\n### Cách dùng\n- `@octocat` thông báo một người.\n- `@tên-tổ-chức/tên-team` thông báo cả team (cần là thành viên có quyền thấy team).\n- Khi gõ `@` GitHub gợi ý danh sách người liên quan.\n- Cũng nên nhớ liên kết khác: `#12` tới issue/PR, `owner/repo#12` tới repo khác, mã băm commit tự thành link.\n\n### Khi nào nên mention\n- Hỏi ý kiến một người cụ thể: \"@an em đổi hàm này, anh xem giúp\".\n- Mời review hoặc báo cho team phụ trách phần đó.\n- Cảm ơn người đã giúp.\n\n### Lưu ý\n- Người được mention nhận thông báo (trên web và email, tuỳ cài đặt); đừng mention cả team lớn khi không cần.\n- Mention trong mô tả PR sẽ thông báo khi PR được tạo.\n- Mention trong code block hay inline code sẽ không kích hoạt.\n\n### Lỗi hay gặp\nMention sai người cùng tên hoặc lạm dụng `@team` khiến thông báo thành nhiễu."
+ },
+ "Cộng tác trên GitHub › Reactions": {
+  "body": "Reaction là các biểu tượng cảm xúc nhỏ bạn gắn thẳng lên một issue, pull request, comment hoặc discussion mà không cần gõ chữ. GitHub có tám reaction cố định: 👍, 👎, 😄, 🎉, 😕 (confused), ❤️, 🚀 và 👀. Hình dung nó như cái \"like\" trong buổi họp: không ai muốn đọc thêm một dòng \"+1\" chỉ để biết bạn đồng ý.\n\n### Vì sao cần biết\nMột thread dài mà nửa số comment chỉ là \"+1\", \"cảm ơn\", \"mình cũng bị\" sẽ chôn vùi thông tin thật. Dùng reaction giữ thread gọn và vẫn cho người khác thấy mức độ quan tâm.\n\n### Ý chính\n- 👍 trên một issue là cách chuẩn để nói \"mình cũng cần cái này\"; maintainer thường sắp xếp issue theo số 👍 để chọn việc ưu tiên.\n- 👀 nghĩa là \"mình đã thấy, đang xem\"; 🚀 hay 🎉 để ăn mừng khi một PR được merge hay một bản phát hành ra lò.\n- 😕 báo \"mình chưa hiểu\" mà không cần viết một câu hỏi dài, nhưng nếu thật sự bị kẹt thì vẫn nên comment cụ thể.\n- Reaction nhẹ hơn comment: không chiếm chỗ trong thread, nên khuyến khích thành viên mới tham gia mà không ngại.\n\n### Lỗi hay gặp\n- Dùng reaction thay cho phản hồi cần thiết: reviewer yêu cầu sửa mà bạn chỉ thả 👍 thì chưa ai biết bạn đã sửa hay chưa.\n- Hiểu nhầm 👍 là \"đã duyệt\": duyệt PR phải bấm Approve ở phần review, reaction không có hiệu lực gì với quy tắc merge."
+ },
+ "Cộng tác trên GitHub › Student Developer Pack": {
+  "body": "GitHub Student Developer Pack là gói ưu đãi GitHub tặng sinh viên đã được xác minh: một bộ công cụ và dịch vụ của GitHub cùng các đối tác (hosting, tên miền, công cụ thiết kế, IDE, dịch vụ cloud…) dùng miễn phí hoặc giá ưu đãi trong thời gian còn đi học. Hãy coi nó như \"thẻ sinh viên\" của thế giới lập trình: bạn không phải trả tiền để thử những thứ mà người đi làm phải trả.\n\n### Vì sao cần biết\nKhi làm đồ án, portfolio hay thử một công nghệ mới, chi phí hạ tầng thường là rào cản đầu tiên. Pack giúp bạn có tên miền, chỗ deploy, máy phát triển trên mây và trợ lý AI cho code mà không cần thẻ thanh toán. Bên cạnh đó, những kỹ năng bạn luyện (Codespaces, Copilot, Actions) chính là thứ công ty dùng thật.\n\n### Ý chính\n- Điều kiện: có tài khoản GitHub, là sinh viên đang học, và được xác minh qua GitHub Education (thường bằng email trường hoặc giấy tờ chứng minh đang học).\n- Xác minh có thời hạn: hết hạn thì phải xác minh lại nếu vẫn còn đi học.\n- Danh sách ưu đãi thay đổi theo thời gian, đối tác thêm và bớt. Đừng ghi nhớ một danh sách cố định, hãy mở trang education.github.com/pack để xem bản hiện hành.\n- Trong gói thường có quyền dùng Copilot cho sinh viên và hạn mức Codespaces miễn phí, cả hai có quota giờ dùng nên cần theo dõi để không cạn giữa kỳ.\n- Một số ưu đãi của đối tác cần bạn tự đăng ký ở trang của họ bằng cách đăng nhập qua GitHub.\n\n### Lỗi hay gặp\n- Đăng ký bằng email cá nhân, tên hồ sơ không khớp giấy tờ, ảnh thẻ mờ: đơn bị từ chối. Hãy thêm email trường vào tài khoản trước.\n- Nộp đơn rồi quên xem lại: kết quả có thể cần vài ngày, và đôi khi phải nộp bổ sung.\n- Dùng hết quota Codespaces vì để máy chạy nền; nhớ dừng hoặc xoá codespace khi không dùng.\n\n### Tự kiểm tra\n- Pack khác gì với việc tài khoản GitHub Free bình thường?\n- Vì sao không nên học thuộc danh sách ưu đãi?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces",
+    "ten": "15.3 — Student Developer Pack, Codespaces & Copilot cho sinh viên",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › GitHub Classroom": {
+  "body": "GitHub Classroom là công cụ miễn phí dành cho giảng viên để giao và thu bài tập lập trình bằng chính Git và GitHub. Thay vì sinh viên gửi file zip qua email, mỗi sinh viên (hoặc mỗi nhóm) nhận một repository riêng được tạo tự động từ một repo mẫu, và bài nộp chính là các commit trong repo đó.\n\n### Cách hoạt động\n1. Giảng viên tạo một classroom gắn với một Organization trên GitHub, có thể nhập danh sách lớp.\n2. Giảng viên chuẩn bị template repository chứa đề, code khởi đầu và bộ test.\n3. Giảng viên tạo assignment (cá nhân hoặc nhóm), chọn template, đặt hạn nộp và quyền truy cập, rồi gửi đường link mời cho lớp.\n4. Sinh viên bấm link, chấp nhận assignment, và GitHub tạo repo riêng trong Organization của lớp, kèm các quyền phù hợp.\n5. Sinh viên clone về, làm bài và push như bình thường. Giảng viên thấy mọi commit, có thể mở pull request feedback ngay trên bài.\n\n### Vì sao cần biết\nVới sinh viên, đây là cách thực hành quy trình làm việc chuẩn của ngành ngay trong môn học. Với giảng viên, lịch sử commit cho thấy ai làm gì và làm khi nào, rất hữu ích với bài làm nhóm.\n\n### Ý chính\n- Autograding: gắn bộ test chạy bằng GitHub Actions để chấm điểm tự động mỗi lần push.\n- Có thể đồng bộ danh sách lớp với hệ thống quản lý học tập của trường.\n- Repo của sinh viên ở trạng thái private theo mặc định để tránh sao chép bài.\n\n### Lỗi hay gặp\n- Sinh viên push lên sai repo hoặc fork repo mẫu thay vì dùng link assignment.\n- Nộp sau hạn: hạn chót thường chỉ khoá quyền ghi, nên hãy kiểm tra commit cuối cùng trước hạn, không phải thời điểm bạn bấm nộp ở nơi khác.\n- Test chạy local xanh nhưng autograding đỏ vì khác phiên bản runtime; đọc log Actions để biết môi trường chấm."
+ },
+ "Cộng tác trên GitHub › Campus Program": {
+  "body": "GitHub Campus Program là chương trình dành cho cả trường: khác với Student Developer Pack (ưu đãi cho từng cá nhân), Campus Program cấp quyền sử dụng các gói GitHub trả phí cho tổ chức của trường đại học, để sinh viên và giảng viên làm việc trong cùng một không gian có quản trị tập trung.\n\n### Vì sao cần biết\nNếu trường bạn tham gia chương trình, tài khoản sinh viên được thêm vào Organization của trường sẽ có tính năng nâng cao (quản lý thành viên, SSO, chính sách bảo mật) mà không phải tự trả phí. Với giảng viên và quản trị viên CNTT, đây là cách chuẩn hoá việc dạy môn lập trình trên GitHub.\n\n### Ý chính\n- Đăng ký ở cấp trường, thường do bộ phận CNTT hoặc khoa phụ trách, chứ không phải từng sinh viên.\n- Đi cùng GitHub Education: Classroom để giao bài, Student Pack cho sinh viên đã xác minh.\n- Điều khoản và quyền lợi cụ thể có thể thay đổi; hãy đọc trang education.github.com để biết hiện hành, đừng dựa vào trí nhớ.\n\n### Lỗi hay gặp\n- Nhầm Campus Program với Student Pack và đi xác minh cá nhân dù đã có quyền từ trường.\n- Dùng tài khoản cá nhân để làm bài trong Organization của trường mà không kiểm tra mình đã được mời đúng vai trò."
+ },
+ "Cộng tác trên GitHub › Labelling Issues / PRs": {
+  "body": "Label (nhãn) là các thẻ màu gắn vào issue và pull request để phân loại. Một kho có vài trăm issue mà không có nhãn giống tủ hồ sơ không có ngăn: tìm gì cũng mất thời gian. Có nhãn rồi, bạn lọc được ngay \"tất cả bug ưu tiên cao chưa ai nhận\" chỉ bằng một bộ lọc.\n\n### Vì sao cần biết\nTrong dự án nhóm hay mã nguồn mở, issue tăng nhanh. Nhãn là cách rẻ nhất để phân công, ưu tiên và để người mới tìm được việc vừa sức. Ví dụ nhãn good first issue chính là cổng vào cho người đóng góp lần đầu.\n\n### Ý chính\n- GitHub tạo sẵn một bộ nhãn mặc định: bug, documentation, duplicate, enhancement, good first issue, help wanted, invalid, question, wontfix.\n- Nên chia nhãn theo vài trục rõ ràng thay vì nhiều màu lộn xộn: loại việc (bug, feature, docs), mức ưu tiên (priority: high/low), trạng thái hoặc phạm vi (area: api, frontend).\n- Dùng quy ước đặt tên có tiền tố, ví dụ type: bug, priority: high, để danh sách nhãn tự sắp xếp và dễ lọc.\n- Lọc bằng giao diện hoặc truy vấn: is:open label:bug label:\"priority: high\". Có thể lọc cả PR.\n- Từ terminal: gh issue list --label bug và gh issue edit 12 --add-label \"priority: high\".\n- Quyền gắn nhãn cần ít nhất vai trò Triage.\n\n### Lỗi hay gặp\n- Tạo quá nhiều nhãn (hàng chục màu) khiến không ai nhớ nghĩa; giữ bộ nhãn nhỏ và có tài liệu trong CONTRIBUTING.\n- Nhãn trùng nghĩa như bug và defect.\n- Gắn nhãn xong không bao giờ gỡ khi tình trạng đổi, làm bộ lọc sai.\n- Dùng nhãn thay cho milestone hoặc Projects để theo dõi tiến độ; nhãn chỉ phân loại.\n\n### Tự kiểm tra\n- Bộ nhãn tối thiểu cho dự án nhóm ba người của bạn là gì?\n- Viết truy vấn lọc bug đang mở chưa gán cho ai.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-0-slides",
+    "ten": "11.0 — Slide Chương 11: nền tảng GitHub bằng hình",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Collaborators / Members": {
+  "body": "Muốn người khác ghi (push) vào repository của bạn, bạn phải cấp quyền cho họ. Trên GitHub có hai cách tuỳ nơi chứa repo: repo của tài khoản cá nhân thì thêm Collaborator; repo thuộc một Organization thì thêm người vào Organization thành Member rồi cấp quyền cho họ trên repo hoặc qua Team.\n\n### Vì sao cần biết\nLàm đồ án nhóm, người đầu tiên tạo repo thường là trưởng nhóm. Nếu không mời đúng cách, các bạn sẽ gặp lỗi 404 hoặc \"Permission denied\" khi clone và push, và cả nhóm mất một buổi chỉ để gỡ chuyện quyền.\n\n### Ý chính\n- Mời Collaborator: Settings, Collaborators, Add people, nhập username hoặc email. Người được mời nhận email và phải chấp nhận; lời mời có thời hạn (khoảng một tuần) rồi hết hiệu lực.\n- Repo private với người chưa chấp nhận lời mời sẽ hiện 404, GitHub cố ý không tiết lộ repo tồn tại.\n- Repo cá nhân chỉ có hai kiểu: chủ sở hữu và collaborator (collaborator có quyền ghi). Repo trong Organization có các vai trò chi tiết: Read, Triage, Write, Maintain, Admin.\n- Member của Organization là thành viên của cả tổ chức; họ không tự động có quyền ghi trên mọi repo, quyền đặt theo repo hoặc team.\n- Cấp quyền theo nguyên tắc tối thiểu cần thiết: người chỉ cần đọc thì để Read.\n- Kiểm tra lại danh sách định kỳ và gỡ người đã rời nhóm.\n\n### Lỗi hay gặp\n- Người được mời chưa bấm chấp nhận mà trưởng nhóm tưởng đã xong.\n- Đăng nhập nhầm tài khoản GitHub khác trên máy nên bị từ chối dù đã được mời.\n- Cho cả nhóm quyền Admin để \"cho tiện\", rồi ai đó vô tình xoá nhánh chính hoặc đổi cài đặt.\n\n### Tự kiểm tra\n- Khác biệt giữa Collaborator và Member là gì?\n- Vì sao một bạn trong nhóm thấy 404 khi mở link repo private?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-5-moi-thanh-vien",
+    "ten": "KĐ.5 — Mời thành viên: collaborator, lời mời đang chờ và kiểm tra quyền truy cập",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Teams within Organization": {
+  "body": "Team là nhóm người dùng bên trong một Organization. Thay vì cấp quyền cho từng cá nhân trên từng repo, bạn cấp quyền cho team một lần, rồi thêm hoặc bớt người trong team. Team có thể lồng nhau: team con kế thừa quyền của team cha, nên cơ cấu công ty hay trường học (Khoa, Bộ môn, Nhóm) có thể phản ánh thẳng vào GitHub.\n\n### Ý chính\n- Quyền của team trên repo dùng các vai trò Read, Triage, Write, Maintain, Admin.\n- Có thể mention cả team trong issue hoặc PR bằng cú pháp @tổ-chức/tên-team để thông báo cho mọi thành viên.\n- Team dùng được trong CODEOWNERS, ví dụ gán @org/frontend review mọi thay đổi trong thư mục giao diện.\n- Team có thể bí mật (chỉ thành viên thấy) hoặc hiển thị với cả tổ chức.\n- Khi nhân sự thay đổi, chỉ cần sửa danh sách team thay vì đi gỡ quyền ở hàng chục repo.\n\n### Lỗi hay gặp\n- Cấp quyền trực tiếp cho cá nhân song song với quyền qua team, rồi không ai biết quyền thực của một người đến từ đâu.\n- Đặt quyền Write cho team quá rộng trên repo nhạy cảm; hãy dùng nhánh được bảo vệ kết hợp review bắt buộc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-1-khoi-tao-repo-nhom",
+    "ten": "16.1 — Ngày 0: dựng một repo nhóm tự giữ luật",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Project Planning": {
+  "body": "Lập kế hoạch dự án trên GitHub xoay quanh ba thứ: Issue (mỗi việc cần làm), Milestone (mốc gom nhiều issue lại thành một đợt) và Projects (bảng nhìn toàn cảnh). Mọi việc gắn với code ở cùng một nơi nên không cần công cụ thứ ba.\n\n### Ý chính\n- Mỗi issue nên là một việc đủ nhỏ để một người hoàn thành trong vài ngày, có tiêu chí hoàn thành rõ.\n- Milestone có hạn chót và hiển thị phần trăm issue đã đóng, hợp để theo dõi một sprint hay một bản phát hành.\n- Projects hỗ trợ các chế độ xem Table, Board và Roadmap trên cùng một tập dữ liệu, kèm trường tuỳ chỉnh như Priority, Estimate.\n- Gõ \"Closes #12\" trong mô tả PR để issue tự đóng khi PR được merge.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-2-sprint-mo-phong",
+    "ten": "16.2 — Một sprint trọn vẹn, chạy thật: bốn issue, bốn nhánh, một xung đột",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Kanban Boards": {
+  "body": "Kanban board là bảng gồm các cột biểu diễn trạng thái công việc, thường là To Do, In Progress, Done, và mỗi issue là một thẻ kéo thả giữa các cột. Trong GitHub Projects, đó là chế độ xem Board.\n\n### Ý chính\n- Cột là giá trị của trường Status; kéo thẻ sang cột khác nghĩa là đổi giá trị trường đó, và dữ liệu đồng bộ sang chế độ Table.\n- Có thể tạo workflow tự động: issue mới vào cột To Do, PR được merge thì thẻ chuyển sang Done.\n- Giới hạn số thẻ In Progress (WIP) giúp nhóm hoàn thành việc dở trước khi nhận việc mới.\n\n### Lỗi hay gặp\n- Để cột In Progress phình to vì ai cũng nhận việc mà không đóng.\n- Cập nhật thẻ bằng tay trong khi có thể tự động hoá bằng liên kết PR và issue.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-2-sprint-mo-phong",
+    "ten": "16.2 — Một sprint trọn vẹn, chạy thật: bốn issue, bốn nhánh, một xung đột",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Roadmaps": {
+  "body": "Roadmap là cách nhìn các việc theo trục thời gian để biết khi nào cái gì sẽ xong. Trên GitHub bạn dựng nó bằng Milestone (mốc có ngày hạn) kết hợp Projects, nơi có chế độ xem Roadmap vẽ các issue thành thanh trên dòng thời gian dựa trên trường ngày bắt đầu và ngày kết thúc.\n\n### Ý chính\n- Milestone gom issue và PR theo mốc phát hành như v1.0 hay Sprint 3, hiển thị tiến độ theo phần trăm đóng.\n- Trong Projects, thêm trường kiểu Date hoặc Iteration rồi chọn chế độ Roadmap để xem kế hoạch theo tuần hay quý.\n- Roadmap tốt nói rõ mục tiêu của từng đợt, không chỉ liệt kê tính năng.\n\n### Lỗi hay gặp\n- Đặt ngày quá chi tiết rồi không cập nhật nên roadmap thành đồ cổ.\n- Nhét mọi thứ vào một milestone khổng lồ nên không còn ý nghĩa mốc.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Collaboration on GitHub": {
+  "body": "Cộng tác trên GitHub có hai mô hình chính, và chọn sai mô hình là nguồn gốc của nhiều rắc rối. Một là push trực tiếp vào repo chung: mọi thành viên có quyền ghi, làm việc trên nhánh trong cùng repo rồi mở pull request vào main. Hai là fork và pull request: bạn không có quyền ghi vào repo gốc, nên tạo bản sao (fork) của riêng mình, đẩy code lên đó, rồi mở PR từ fork về repo gốc.\n\n### Vì sao cần biết\nNhóm đồ án vài người tin nhau thì dùng mô hình đầu cho gọn. Dự án mã nguồn mở có hàng nghìn người lạ đóng góp thì bắt buộc dùng mô hình thứ hai, vì chủ dự án không thể cấp quyền ghi cho tất cả.\n\n### Ý chính\n- Mô hình chia sẻ repo: clone một lần, mỗi việc một nhánh, PR vào main, review rồi merge. Đơn giản, ít remote.\n- Mô hình fork: có hai remote, origin là fork của bạn, upstream là repo gốc. Phải thường xuyên đồng bộ: git fetch upstream rồi merge hoặc rebase vào nhánh của bạn.\n- Dù mô hình nào, quy tắc vàng giống nhau: không commit thẳng lên main, mọi thay đổi đi qua PR, có review và CI.\n- Bảo vệ nhánh main bằng branch protection để máy ép luật thay con người.\n- Đọc CONTRIBUTING.md của dự án trước khi mở PR đầu tiên.\n\n```bash\n# Mô hình fork\ngit remote add upstream https://github.com/chu-du-an/repo.git\ngit fetch upstream\ngit switch -c fix-typo upstream/main\n```\n\n### Lỗi hay gặp\n- Làm việc trực tiếp trên main của fork rồi PR bị xung đột khi upstream đi tiếp.\n- Mở PR khổng lồ gom nhiều việc không liên quan; hãy chia nhỏ.\n- Quên đồng bộ fork nên PR dựa trên code cũ.\n\n### Tự kiểm tra\n- Khi nào dùng fork thay vì mời người ta làm collaborator?\n- Remote upstream dùng để làm gì?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-4-fork-upstream",
+    "ten": "5.4 — Fork và upstream: đóng góp cho dự án của người khác",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Cộng tác trên GitHub › Working in a Team": {
+  "body": "Làm việc nhóm trên GitHub nghĩa là cả nhóm cùng sở hữu một nơi chứa code với luật chơi rõ ràng. Cách bền nhất là tạo một Organization, thêm người vào các Team, rồi gán quyền theo team thay vì từng cá nhân. Khi có người vào hoặc rời nhóm, bạn chỉ sửa danh sách thành viên, quyền tự theo.\n\n### Vì sao cần biết\nRepo đặt dưới tài khoản cá nhân của một bạn sẽ gắn với người đó: bạn ấy bỏ học hay mất tài khoản là cả nhóm gặp rắc rối. Organization tách tài sản dự án ra khỏi cá nhân, có thể có nhiều owner, và có nhật ký hoạt động.\n\n### Ý chính\n- Tạo Organization (gói Free đủ dùng cho đồ án), mời thành viên bằng username hoặc email.\n- Tạo team như backend, frontend, rồi đặt quyền mặc định cho mỗi team trên repo (Read, Write, Admin…).\n- Có ít nhất hai Owner để không bị khoá ngoài tổ chức.\n- Bật 2FA bắt buộc cho thành viên nếu dự án nhạy cảm.\n- Dựng repo \"tự giữ luật\" từ ngày đầu: README, CONTRIBUTING, .gitignore, mẫu issue và PR, CODEOWNERS, CI tối thiểu, bảo vệ nhánh main.\n- Thống nhất quy ước nhánh và commit ngay từ đầu, ghi vào CONTRIBUTING.\n\n### Lỗi hay gặp\n- Một người giữ mọi quyền Admin, rồi nghỉ học thì không ai quản lý được.\n- Không bảo vệ main nên ai đó push thẳng và phá bản chạy được.\n- Mỗi người một cách đặt tên nhánh và commit, làm lịch sử khó đọc.\n\n### Tự kiểm tra\n- Lợi ích của Organization so với repo cá nhân là gì?\n- Một nhóm bốn người nên thiết lập những luật nào trước khi viết dòng code đầu tiên?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-1-khoi-tao-repo-nhom",
+    "ten": "16.1 — Ngày 0: dựng một repo nhóm tự giữ luật",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-0-slides",
+    "ten": "KĐ.0 — Slide Khởi động nhanh: cả nhóm lên GitHub từ số 0",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-4-bao-mat-kho",
+    "ten": "11.3 — Bảo mật & quản trị kho trên GitHub",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Git Workflow › Git Workflow (GitFlow/Trunk-based)": {
+  "body": "Git workflow là thoả thuận của nhóm về việc dùng nhánh: nhánh nào tồn tại lâu, nhánh nào sống ngắn, code đi từ máy bạn đến production bằng đường nào. Git cho bạn công cụ, nhưng không bắt buộc cách dùng, nên nhóm phải tự chọn. Hai trường phái phổ biến nhất là GitFlow và trunk-based (kèm biến thể đơn giản GitHub Flow).\n\n### Vì sao cần biết\nChọn sai workflow khiến nhóm mất thời gian: quá phức tạp thì ai cũng ngại merge, quá lỏng thì main hay hỏng. Quy tắc chọn quan trọng nhất là chọn theo cách bạn phát hành sản phẩm, không theo thói quen viết code.\n\n### Ý chính\n- GitFlow có hai nhánh sống lâu là main (bản đã phát hành) và develop (tích hợp), cộng nhánh feature, release và hotfix. Hợp với phần mềm có phiên bản rõ ràng, phát hành theo đợt, hỗ trợ nhiều phiên bản song song.\n- GitHub Flow chỉ có một nhánh sống lâu là main: tạo nhánh ngắn từ main, mở PR, review, merge, deploy. Hợp với web và dịch vụ deploy liên tục.\n- Trunk-based development đẩy xa hơn: nhánh sống tối đa vài giờ đến một-hai ngày, merge về trunk (main) rất thường xuyên, tính năng chưa xong được giấu sau feature flag. Đòi hỏi CI mạnh và test tin cậy.\n- Dù chọn gì, cần có: main luôn ở trạng thái chạy được, mọi thay đổi qua PR, bảo vệ nhánh, và quy ước đặt tên thống nhất.\n- Nhánh càng sống lâu, càng xa main, xung đột merge càng đau.\n\n```bash\ngit switch -c feature/dang-nhap main   # nhánh ngắn từ main\n# ... commit nhỏ ...\ngit push -u origin feature/dang-nhap   # rồi mở PR\n```\n\n### Lỗi hay gặp\n- Áp GitFlow cho dự án deploy hằng ngày, tạo ra nhánh develop không ai cần.\n- Để nhánh feature sống hàng tuần rồi merge một cục khổng lồ.\n- Có workflow trên giấy nhưng không ai tuân theo vì không có luật được máy ép.\n\n### Tự kiểm tra\n- Dự án web của bạn deploy mỗi ngày nên nghiêng về workflow nào, vì sao?\n- Feature flag giải quyết vấn đề gì trong trunk-based?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-0-slides",
+    "ten": "7.0 — Slide Chương 7: quy trình nhóm, tag và phát hành bằng hình",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-1-chien-luoc-nhanh",
+    "ten": "7.1 — Chiến lược nhánh: trunk-based, GitHub flow, git-flow",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow",
+    "ten": "10.3 — Quy trình Git cho công việc thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Git Workflow › Commit Message & Branch Naming Convention": {
+  "body": "Hai quy ước nhỏ nhưng giá trị lớn: viết commit message theo định dạng Conventional Commits và đặt tên nhánh theo mẫu thống nhất. Cả hai làm lịch sử Git đọc được bằng mắt và bằng máy.\n\n### Ý chính\n- Conventional Commits có dạng loại(phạm vi): mô tả ngắn, ví dụ feat(auth): thêm đăng nhập bằng Google. Các loại thường dùng: feat, fix, docs, refactor, test, chore.\n- Dấu ! sau loại hoặc dòng BREAKING CHANGE trong thân báo thay đổi phá vỡ tương thích; công cụ có thể dựa vào đó để tăng số phiên bản và sinh changelog.\n- Tên nhánh có tiền tố theo loại việc và mô tả ngắn: feature/dang-nhap, fix/loi-tinh-tong, hotfix/sua-thanh-toan.\n- Có thể thêm mã issue vào tên nhánh, như feature/123-dang-nhap, để công cụ quản lý việc tự liên kết.\n\n### Lỗi hay gặp\n- Message mơ hồ như \"update\" hay \"fix bug\".\n- Tên nhánh có khoảng trắng, dấu tiếng Việt hoặc quá dài, gây khó khăn khi gõ lệnh.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-4-loi-nhan-commit",
+    "ten": "1.4 — Lời nhắn commit một năm sau vẫn còn dùng được",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-1-chien-luoc-nhanh",
+    "ten": "7.1 — Chiến lược nhánh: trunk-based, GitHub flow, git-flow",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Git Workflow › Commit Messages": {
+  "body": "Commit message là lá thư bạn gửi cho người đọc lịch sử, trong đó người đọc nhiều nhất thường là chính bạn sáu tháng sau, khi cần hiểu vì sao một dòng code tồn tại. Diff đã cho thấy cái gì thay đổi; message phải trả lời vì sao.\n\n### Vì sao cần biết\nKhi truy lỗi bằng git log, git blame hay git bisect, message rõ ràng giúp bạn khoanh vùng nhanh. Trong review, nó giúp người khác hiểu ý định. Khi sinh changelog hay revert, nó là tài liệu duy nhất còn sót lại.\n\n### Ý chính\n- Cấu trúc: một dòng tiêu đề ngắn, một dòng trống, rồi phần thân giải thích khi cần.\n- Tiêu đề khoảng 50 ký tự, thân xuống dòng quanh 72 ký tự, là quy ước cũ nhưng còn hữu ích vì nhiều công cụ cắt hiển thị theo độ dài này.\n- Viết theo thể mệnh lệnh: \"Thêm kiểm tra email\" thay vì \"Đã thêm\" hay \"Đang thêm\", như đang ra lệnh cho code làm gì khi áp dụng commit.\n- Thân viết vì sao và ảnh hưởng, không lặp lại diff.\n- Mỗi commit một thay đổi logic; commit nhỏ dễ viết message tốt.\n- Tham chiếu issue trong thân hoặc chân: Closes #42.\n\n```text\nfix(cart): không tính thuế hai lần cho mã giảm giá\n\nHàm tinhTong cộng thuế sau khi đã áp mã, nên đơn có mã bị\nđội giá. Chuyển thuế về tính trên giá sau giảm.\n\nCloses #42\n```\n\n### Lỗi hay gặp\n- Dùng \"git commit -m 'fix'\" cho mọi thứ.\n- Gom nhiều thay đổi không liên quan vào một commit nên không thể viết một tiêu đề trung thực.\n- Message viết cho ngày hôm nay (\"như đã bàn sáng nay\") thay vì cho người đọc sau này.\n\n### Tự kiểm tra\n- Viết lại message \"sửa lỗi\" thành một message nói rõ vì sao.\n- Vì sao dùng thể mệnh lệnh?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-4-loi-nhan-commit",
+    "ten": "1.4 — Lời nhắn commit một năm sau vẫn còn dùng được",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Git Workflow › Branch Naming": {
+  "body": "Tên nhánh là nhãn đầu tiên người khác nhìn thấy khi mở danh sách branches hay PR. Đặt tên có quy tắc cho biết ngay đây là việc gì, của loại nào, và giúp công cụ tự động xử lý theo mẫu tên.\n\n### Vì sao cần biết\nMột repo có ba chục nhánh tên test, new, fix2, abc thì không ai dám dọn. Quy ước đặt tên giúp lọc, review và dọn nhánh dễ hơn, đồng thời CI có thể chạy khác nhau cho từng loại nhánh.\n\n### Ý chính\n- Mẫu phổ biến: loại/mô-tả-ngắn, gồm feature/, bugfix/ hoặc fix/, hotfix/, release/, chore/, docs/.\n- Dùng chữ thường, gạch ngang giữa các từ, không dấu, không khoảng trắng: feature/them-gio-hang.\n- Thêm mã công việc nếu có: feature/PRJ-123-them-gio-hang.\n- Nhánh ngắn gọn nhưng đủ nghĩa; mô tả bằng 2 đến 5 từ.\n- Tên nhánh liên quan đến cách tổ chức: trong GitFlow có release/1.4.0 và hotfix/..., còn trong trunk-based nhánh nên ngắn ngày.\n- Xoá nhánh sau khi merge (GitHub có tuỳ chọn tự xoá nhánh khi merge PR).\n\n```bash\ngit switch -c fix/loi-dang-xuat-het-han\n```\n\n### Lỗi hay gặp\n- Tên có ký tự đặc biệt hoặc dấu tiếng Việt gây lỗi trên một số hệ điều hành và công cụ.\n- Hai nhánh feature/a và feature đều tồn tại: Git lưu nhánh như file, nên nhánh \"feature\" không thể song song với \"feature/a\".\n- Không bao giờ xoá nhánh cũ, danh sách phình ra vô tận.\n\n### Ý chính bổ sung\n- Quy ước nên nằm ở một nơi mọi người đọc được, như CONTRIBUTING.md, kèm ví dụ đúng và sai.\n- Có thể ép bằng máy: ruleset của GitHub cho phép đặt mẫu tên nhánh hợp lệ, hoặc hook kiểm tra trước khi push.\n- Với hotfix và release, tên nhánh gắn số phiên bản giúp biết nhánh đang vá bản nào.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-7-1-chien-luoc-nhanh",
+    "ten": "7.1 — Chiến lược nhánh: trunk-based, GitHub flow, git-flow",
+    "nguon": "Git & GitHub · Chương 7",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-16-1-khoi-tao-repo-nhom",
+    "ten": "16.1 — Ngày 0: dựng một repo nhóm tự giữ luật",
+    "nguon": "Git & GitHub · Chương 16",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Git Workflow › PR Guidelines": {
+  "body": "PR guidelines là quy tắc nhóm thống nhất về cách mở, mô tả và review pull request. PR là lời đề nghị gộp code, không phải nơi nộp bài, nên càng dễ đọc càng được duyệt nhanh.\n\n### Ý chính\n- Mô tả PR trả lời: thay đổi gì, vì sao, kiểm tra thế nào; liên kết issue bằng Closes #số.\n- Giữ PR nhỏ và tập trung một việc để review kỹ được.\n- Dùng mẫu PR (.github/pull_request_template.md) kèm checklist: đã chạy test, đã cập nhật tài liệu.\n- Review: nhận xét cụ thể, lịch sự, tách \"phải sửa\" khỏi \"gợi ý\".\n- Cần CI xanh và ít nhất một approval trước khi merge, ép bằng branch protection.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-2-review",
+    "ten": "6.2 — Review: cho và nhận phản hồi",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › YAML Syntax & Workflow Triggers": {
+  "body": "GitHub Actions chạy tự động hoá từ các file YAML nằm trong thư mục .github/workflows/ của repo. Mỗi file là một workflow: nó nói \"khi sự kiện X xảy ra, hãy chạy các công việc Y\". Hình dung như một công thức nấu ăn: phần đầu cho biết khi nào nấu (trigger), phần sau liệt kê các bước.\n\n### Cấu trúc tối thiểu\n```yaml\nname: CI\non:\n  push:\n    branches: [main]\n  pull_request:\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 22\n      - run: npm ci\n      - run: npm test\n```\n\n### Ý chính\n- on: khai báo trigger. Hay dùng: push, pull_request, workflow_dispatch (bấm tay), schedule (theo lịch), release.\n- jobs: mỗi job chạy trên một máy riêng (runs-on) và gồm nhiều steps chạy tuần tự.\n- Mỗi step hoặc dùng một action có sẵn (uses:) hoặc chạy lệnh shell (run:).\n- Có thể lọc trigger theo nhánh (branches), đường dẫn (paths) hoặc loại sự kiện (types).\n- YAML nhạy với thụt lề: dùng dấu cách, không dùng tab; sai một mức thụt lề là đổi nghĩa hoặc lỗi cú pháp.\n- Tab Actions của repo hiển thị từng lần chạy, log của từng step.\n\n### Lỗi hay gặp\n- Đặt file sai chỗ (không nằm trong .github/workflows) nên không bao giờ chạy.\n- Gõ run: nhiều lệnh nhưng quên dấu | để viết nhiều dòng.\n- Giá trị trông như số hay boolean bị YAML hiểu sai kiểu, ví dụ node-version: 22.10 thành số thực; hãy đặt trong dấu nháy khi cần.\n- Filter paths chặn mất lần chạy cần thiết.\n\n### Tự kiểm tra\n- Khác nhau giữa job và step là gì?\n- Workflow trên chạy khi nào?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: tệp workflow bằng hình",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-1-la-yaml",
+    "ten": "1.1 — Nó là YAML, và bẫy nằm ở đó",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-2-kich-hoat",
+    "ten": "1.2 — Cái gì KHỞI ĐỘNG một lần chạy",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Workflow Runners & Context": {
+  "body": "Runner là máy thật sự chạy các job của bạn; context là các đối tượng dữ liệu cho workflow biết nó đang chạy trong hoàn cảnh nào. Hai khái niệm đi cặp: runner trả lời \"chạy ở đâu\", context trả lời \"chạy vì sao và với dữ liệu gì\".\n\n### Ý chính\n- GitHub-hosted runner là máy ảo do GitHub cấp (ubuntu-latest, windows-latest, macos-latest), mỗi job nhận một máy mới sạch rồi bị huỷ sau khi xong.\n- Self-hosted runner là máy của bạn đăng ký với GitHub, hợp khi cần phần cứng đặc biệt hoặc truy cập mạng nội bộ, nhưng bạn tự chịu bảo mật và bảo trì.\n- Context truy cập bằng cú pháp ${{ ... }}: github (sự kiện, nhánh, commit), env, secrets, runner, matrix, steps, needs.\n- Ví dụ ${{ github.event_name }} cho biết trigger, ${{ github.ref_name }} cho tên nhánh.\n\n### Lỗi hay gặp\n- Giả định file tạo ở job này còn ở job khác; mỗi job là một máy mới.\n- Dùng self-hosted runner cho repo public, cho phép PR lạ chạy code trên máy của bạn.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-2-1-may-moi",
+    "ten": "2.1 — Một job là cả một cỗ máy, và mỗi lần bạn được một cái mới",
+    "nguon": "GitHub Actions · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-3-2-context",
+    "ten": "3.2 — Context, và lúc nào cái nào tồn tại",
+    "nguon": "GitHub Actions · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-13-1-runner-hoat-dong",
+    "ten": "13.1 — Runner làm việc thế nào: kéo việc về, tiến trình, nhật ký, và cái giá",
+    "nguon": "GitHub Actions · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Actions › Secrets, Env Vars & Caching": {
+  "body": "Ba việc gần như workflow nào cũng cần: giữ bí mật an toàn (secrets), truyền cấu hình (biến môi trường) và làm build nhanh hơn (cache). Gom chung vì chúng đều là cách workflow mang theo dữ liệu mà không để lộ hay làm lại từ đầu.\n\n### Ý chính\n- Secrets: lưu ở Settings, Secrets and variables, Actions. Đọc bằng ${{ secrets.TEN }}, GitHub che giá trị trong log.\n- Biến môi trường: khai env: ở mức workflow, job hay step; biến không nhạy cảm dùng vars của repo.\n- Cache: actions/cache lưu thư mục như node_modules hay ~/.npm theo một khoá, lần sau khoá khớp thì khôi phục thay vì tải lại.\n\n```yaml\n- uses: actions/cache@v4\n  with:\n    path: ~/.npm\n    key: npm-${{ hashFiles('**/package-lock.json') }}\n- run: npm ci\n  env:\n    API_KEY: ${{ secrets.API_KEY }}\n```\n\n### Lỗi hay gặp\n- In secret ra log bằng cách biến đổi (base64) khiến che mờ không còn khớp.\n- Khoá cache không đổi khi lockfile đổi nên dùng dependency cũ.\n\n### Vì sao gom ba thứ này\nMột pipeline thật thường cần cả ba: cài dependency nhanh nhờ cache, gọi dịch vụ ngoài bằng secret, và đổi hành vi theo môi trường bằng biến. Bí mật không bao giờ nằm trong file YAML hay mã nguồn, vì repo thường được nhiều người đọc và sao chép.\n\n### Phân biệt nhanh\n- Secret: giá trị nhạy cảm, bị che trong log, không đọc lại được trên giao diện sau khi lưu.\n- Variable (vars): cấu hình không nhạy cảm như tên môi trường hay URL công khai, đọc lại được.\n- Env trong file: giá trị cố định, ai cũng thấy.\n- Cache: dữ liệu tái tạo được, mất đi chỉ làm chậm chứ không làm hỏng.\n\n### Tự kiểm tra\n- Dữ liệu nào nên là secret, dữ liệu nào chỉ cần là biến?\n- Khoá cache nên chứa gì để tự đổi khi dependency đổi?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-6-1-che-bi-mat",
+    "ten": "6.1 — Che bí mật phủ ĐÚNG chuỗi đã lưu, không phủ gì khác",
+    "nguon": "GitHub Actions · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-1-cache-mua-gi",
+    "ten": "5.1 — Một cái cache thật sự mua được gì",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-2-khoa-cache",
+    "ten": "5.2 — Khoá, restore-keys, và tính bất biến",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Marketplace Actions & Storing Artifacts": {
+  "body": "Marketplace Actions là kho action do GitHub và cộng đồng viết, dùng bằng một dòng uses: thay vì tự viết script. Artifacts là file output (bản build, báo cáo test) bạn lưu lại sau khi job chạy để tải về hoặc đưa cho job khác.\n\n### Ý chính\n- Dùng action có sẵn: actions/checkout lấy code, actions/setup-node cài Node, v.v.\n- Ghim phiên bản (@v4, tốt hơn nữa là SHA commit) và đọc mã của action lạ, vì nó chạy cùng quyền với job của bạn.\n- upload-artifact lưu file; download-artifact lấy lại ở job sau, vì mỗi job là một máy riêng.\n- Artifact có thời hạn lưu giữ (mặc định 90 ngày, chỉnh được).\n\n```yaml\n- uses: actions/upload-artifact@v4\n  with:\n    name: dist\n    path: dist/\n```",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-4-1-action-la-gi",
+    "ten": "4.1 — Action là cái gì, và nó làm được gì",
+    "nguon": "GitHub Actions · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-4-artifact",
+    "ten": "5.4 — Artifact, và con số tôi phải đo hai lần",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › GitHub Actions: YAML Syntax": {
+  "body": "Workflow của GitHub Actions viết bằng YAML, một định dạng cấu hình dựa trên thụt lề. Hiểu cú pháp là điều kiện để đọc và sửa mọi workflow, vì phần lớn lỗi người mới gặp là lỗi YAML chứ không phải lỗi logic.\n\n### Cấu trúc bốn tầng\n```yaml\nname: Kiểm tra mã          # tên hiển thị\non: [push]                  # khi nào chạy\njobs:                       # các công việc\n  lint:                     # id của job\n    runs-on: ubuntu-latest  # máy chạy\n    steps:                  # các bước, theo thứ tự\n      - uses: actions/checkout@v4\n      - name: Chạy lint\n        run: |\n          npm ci\n          npm run lint\n```\n\n### Ý chính\n- Cặp khoá: giá trị, lồng nhau bằng thụt lề (hai dấu cách là phổ biến). Danh sách dùng dấu gạch đầu dòng.\n- jobs có nhiều job, mặc định chạy song song; muốn tuần tự dùng needs:.\n- steps là danh sách; mỗi bước có uses: (action) hoặc run: (lệnh), tuỳ chọn name:, with: (tham số cho action), env:, if:.\n- Dấu | giữ nguyên xuống dòng cho chuỗi nhiều dòng; dấu > gộp dòng.\n- Dấu # bắt đầu chú thích.\n- Biểu thức ${{ }} nằm trong chuỗi YAML nên một số chuỗi cần đặt trong nháy.\n\n### Lỗi hay gặp\n- Dùng tab thay vì dấu cách.\n- Thụt lề lệch giữa các bước trong danh sách làm bước biến mất hoặc báo lỗi.\n- Giá trị như 3.10 bị hiểu thành số 3.1, nên phiên bản Python sai; viết \"3.10\".\n- Chuỗi chứa dấu hai chấm hay ký tự đặc biệt mà không đặt nháy.\n\n### Tự kiểm tra\n- Khác biệt giữa uses và run?\n- Hai job trong cùng workflow mặc định chạy thế nào?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: tệp workflow bằng hình",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-1-la-yaml",
+    "ten": "1.1 — Nó là YAML, và bẫy nằm ở đó",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-3-doc-mot-workflow",
+    "ten": "0.3 — Đọc một workflow THẬT, từng dòng một",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › GitHub Actions: Workflow Triggers": {
+  "body": "Trigger (khai báo trong khoá on) quyết định workflow chạy khi nào. Chọn trigger đúng là cách tránh hai thái cực: workflow không chạy khi cần, và workflow chạy vô ích tốn phút CI.\n\n### Các trigger thường dùng\n- push: có commit được đẩy lên; lọc bằng branches, tags, paths.\n- pull_request: khi mở, cập nhật hay đóng PR (mặc định chạy với opened, synchronize, reopened).\n- workflow_dispatch: bấm chạy tay, có thể kèm inputs.\n- schedule: chạy theo lịch cron.\n- release, issues, issue_comment, workflow_call (để tái sử dụng) và nhiều sự kiện khác.\n\n```yaml\non:\n  push:\n    branches: [main]\n    paths: [\"src/**\", \"package.json\"]\n  pull_request:\n    types: [opened, synchronize]\n  workflow_dispatch:\n```\n\n### Ý chính\n- pull_request chạy trên bản merge thử giữa nhánh PR và nhánh đích, không phải đúng commit mới nhất của nhánh bạn.\n- PR từ fork không được đọc secrets và token chỉ có quyền đọc, nhằm tránh người lạ lấy cắp bí mật.\n- Dùng paths hoặc paths-ignore để bỏ qua thay đổi chỉ chạm tài liệu.\n- Có thể kết hợp nhiều trigger; workflow chạy khi bất kỳ trigger nào khớp.\n\n### Lỗi hay gặp\n- Dùng pull_request_target mà checkout code từ fork: có thể chạy code của kẻ lạ với quyền cao.\n- Lọc paths rồi đặt check đó là bắt buộc: PR không chạm path sẽ không có check và bị kẹt chờ.\n- Trông chờ workflow có trigger schedule hay workflow_dispatch chạy từ nhánh không phải mặc định.\n\n### Tự kiểm tra\n- Viết trigger để chạy test khi mở PR vào main nhưng không chạy khi chỉ sửa file .md.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-2-kich-hoat",
+    "ten": "1.2 — Cái gì KHỞI ĐỘNG một lần chạy",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-5-bo-loc",
+    "ten": "1.5 — Bộ lọc, và 73,5% commit không chạy CI nào",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-4-merge-commit",
+    "ten": "1.4 — pull_request chạy trên một commit KHÔNG nằm trên nhánh bạn",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › GitHub Actions: Scheduled Workflows": {
+  "body": "Workflow theo lịch dùng trigger schedule với cú pháp cron để chạy định kỳ không cần ai bấm: kiểm tra phụ thuộc mỗi đêm, tạo báo cáo hằng tuần, quét bảo mật, dọn dẹp tài nguyên.\n\n### Cú pháp\n```yaml\non:\n  schedule:\n    - cron: \"30 1 * * 1-5\"   # 01:30 UTC, thứ Hai đến thứ Sáu\n```\nCron có năm trường: phút, giờ, ngày trong tháng, tháng, thứ trong tuần.\n\n### Ý chính\n- Giờ tính theo UTC. Việt Nam là UTC+7, nên 01:30 UTC là 08:30 sáng giờ Việt Nam.\n- Khoảng cách tối thiểu giữa hai lần là 5 phút.\n- Lịch chỉ chạy trên nhánh mặc định của repo.\n- Lần chạy có thể trễ hàng chục phút hoặc hơn lúc GitHub bận, đừng dựa vào độ chính xác theo phút.\n- Repo public không có hoạt động trong thời gian dài có thể bị GitHub tự tắt workflow theo lịch.\n- Nên kèm workflow_dispatch để vừa thử tay vừa chạy lịch.\n\n### Lỗi hay gặp\n- Quên đổi múi giờ, rồi thắc mắc vì sao job chạy lúc nửa đêm.\n- Sửa cron trên nhánh khác mặc định mà không thấy hiệu lực.\n- Đặt tần suất quá dày làm tốn phút chạy.\n\n### Tự kiểm tra\n- 0 3 * * 1 chạy khi nào theo giờ Việt Nam?\n- Vì sao nên đặt cả workflow_dispatch cạnh schedule?\n\n### Khi nào nên dùng\nChọn lịch khi việc không gắn với một sự kiện cụ thể: quét lỗ hổng phụ thuộc mỗi đêm, build bản nightly, nhắc nhở. Nếu việc gắn với sự kiện (có PR mới), dùng trigger sự kiện thay vì lịch dò.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-3-lich-cron",
+    "ten": "1.3 — schedule, và nó THẬT SỰ trễ tới đâu",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer",
+    "ten": "11.2 — Hẹn giờ: cron và timer của systemd",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Workflow Runners": {
+  "body": "Runner là chương trình và máy chạy job của workflow. Khi một workflow được kích hoạt, GitHub xếp job vào hàng đợi, một runner phù hợp nhận việc, chạy từng step, gửi log về và báo kết quả.\n\n### Hai loại runner\n- GitHub-hosted: máy ảo do GitHub quản lý, chọn bằng nhãn trong runs-on như ubuntu-latest, windows-latest, macos-latest. Mỗi job được một máy sạch và máy bị huỷ sau khi xong, nên cài đặt không tồn tại giữa các job. Repo public dùng miễn phí; repo private có hạn mức phút theo gói, và các hệ điều hành khác nhau tính phút với hệ số khác nhau.\n- Self-hosted: máy của bạn cài runner agent và đăng ký với repo hay tổ chức. Chọn bằng nhãn riêng, ví dụ runs-on: [self-hosted, linux, gpu]. Dùng khi cần phần cứng đặc thù, truy cập mạng nội bộ hay tiết kiệm chi phí khi tải lớn.\n\n### Ý chính\n- Mỗi job chạy độc lập; truyền dữ liệu giữa job bằng artifact hoặc outputs.\n- Dùng matrix để chạy cùng job trên nhiều hệ điều hành hay phiên bản.\n- Runner self-hosted nên chạy ephemeral (một job rồi xoá) và trong container để giảm rủi ro.\n\n### Lỗi hay gặp\n- Viết script chỉ đúng với bash trong khi job chạy trên Windows (shell mặc định khác).\n- Dùng self-hosted runner cho repo public, cho phép PR lạ thực thi mã trên máy bạn.\n- Dựa vào \"latest\" khiến môi trường đổi âm thầm khi GitHub nâng phiên bản ảnh.\n\n### Tự kiểm tra\n- Khi nào nên cân nhắc self-hosted runner, và rủi ro đi kèm là gì?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-2-1-may-moi",
+    "ten": "2.1 — Một job là cả một cỗ máy, và mỗi lần bạn được một cái mới",
+    "nguon": "GitHub Actions · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-2-3-ba-nen-tang",
+    "ten": "2.3 — Cùng một lệnh trên ba nền tảng",
+    "nguon": "GitHub Actions · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-13-1-runner-hoat-dong",
+    "ten": "13.1 — Runner làm việc thế nào: kéo việc về, tiến trình, nhật ký, và cái giá",
+    "nguon": "GitHub Actions · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Actions › Workflow Context": {
+  "body": "Context là các đối tượng chứa thông tin về lần chạy hiện tại mà bạn đọc được qua biểu thức ${{ }}. Chúng cho phép một workflow tự thích ứng: biết nhánh nào, ai kích hoạt, bước trước ra kết quả gì.\n\n### Các context chính\n- github: sự kiện, tên nhánh, commit SHA, người kích hoạt. Ví dụ github.ref_name, github.sha, github.event_name, github.actor.\n- env và vars: biến môi trường và biến cấu hình.\n- secrets: bí mật đã lưu.\n- runner: thông tin máy chạy như runner.os.\n- job và steps: trạng thái và output của bước trước, ví dụ steps.build.outputs.version.\n- needs: output của job phụ thuộc.\n- matrix: giá trị của tổ hợp matrix hiện tại.\n- inputs: đầu vào của workflow_dispatch hoặc workflow_call.\n\n```yaml\nsteps:\n  - id: ver\n    run: echo \"v=1.2.3\" >> \"$GITHUB_OUTPUT\"\n  - run: echo \"Bản ${{ steps.ver.outputs.v }} trên ${{ runner.os }}\"\n    if: github.ref_name == 'main'\n```\n\n### Ý chính\n- Không phải context nào cũng có ở mọi nơi; ví dụ steps chỉ có trong job, matrix chỉ có khi job dùng matrix.\n- Biểu thức được tính trước khi shell chạy, giá trị được thay thẳng vào chuỗi lệnh.\n\n### Lỗi hay gặp\n- Chèn github.event.pull_request.title thẳng vào run: là mở cửa cho tiêm lệnh; hãy đưa vào env rồi đọc biến shell.\n- Đọc context sai phạm vi nên giá trị rỗng mà không báo lỗi.\n\n### Tự kiểm tra\n- Làm sao lấy tên nhánh hiện tại trong một biểu thức?\n- Vì sao không nên chèn tiêu đề PR thẳng vào lệnh run?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: biểu thức và context bằng hình",
+    "nguon": "GitHub Actions · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-3-2-context",
+    "ten": "3.2 — Context, và lúc nào cái nào tồn tại",
+    "nguon": "GitHub Actions · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Secrets & Environment Variables": {
+  "body": "Secrets là nơi GitHub lưu giá trị nhạy cảm (token, API key, mật khẩu) dưới dạng mã hoá để workflow dùng mà không lộ trong mã nguồn. Biến môi trường (env) là cặp tên-giá trị bạn truyền cho các step; biến không nhạy cảm có thể lưu thành vars.\n\n### Cách dùng\nVào Settings, Secrets and variables, Actions, tạo secret rồi đọc trong workflow:\n```yaml\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - run: ./deploy.sh\n        env:\n          API_TOKEN: ${{ secrets.API_TOKEN }}\n```\n\n### Ý chính\n- Có ba cấp: repository, environment (kèm quy tắc duyệt trước khi dùng) và organization.\n- GitHub che giá trị secret trong log, nhưng chỉ che đúng chuỗi đã lưu; giá trị bị biến đổi (base64, cắt khúc) sẽ không còn được che.\n- Secret không được truyền cho workflow chạy từ PR của fork.\n- GITHUB_TOKEN là token tự sinh cho mỗi lần chạy; hãy khai permissions: để chỉ cho đúng quyền cần.\n- Ưu tiên OIDC để đăng nhập cloud mà không phải lưu khoá dài hạn.\n- Truyền secret qua biến môi trường thay vì ghép vào dòng lệnh.\n\n### Lỗi hay gặp\n- Commit secret vào repo rồi mới tạo secret; khoá đã lộ phải thu hồi và tạo lại, không chỉ xoá commit.\n- In biến môi trường ra log bằng env hay set -x.\n- Cấp GITHUB_TOKEN quyền ghi rộng khi chỉ cần đọc.\n\n### Tự kiểm tra\n- Vì sao secret không có ở PR từ fork?\n- Environment secret khác repository secret ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: bí mật, quyền và token bằng hình",
+    "nguon": "GitHub Actions · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-6-1-che-bi-mat",
+    "ten": "6.1 — Che bí mật phủ ĐÚNG chuỗi đã lưu, không phủ gì khác",
+    "nguon": "GitHub Actions · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-6-2-token",
+    "ten": "6.2 — GITHUB_TOKEN, và cái ranh giới nó không vượt được",
+    "nguon": "GitHub Actions · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Caching Dependencies": {
+  "body": "Mỗi job chạy trên một máy mới, nên mỗi lần phải tải lại toàn bộ dependency từ internet. Cache giải quyết bằng cách lưu thư mục đã tải sau lần chạy đầu và khôi phục ở các lần sau, rút ngắn bước cài đặt từ hàng chục giây còn vài giây.\n\n### Cách dùng\n```yaml\n- uses: actions/cache@v4\n  with:\n    path: ~/.npm\n    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}\n    restore-keys: |\n      ${{ runner.os }}-npm-\n```\n\n### Ý chính\n- key quyết định cache nào được dùng. Đưa hash của lockfile vào khoá để dependency đổi thì cache mới được tạo.\n- restore-keys là các tiền tố dự phòng: không khớp tuyệt đối thì dùng cache gần nhất, cài thêm phần thiếu.\n- Cache bất biến: cùng một key đã lưu thì không ghi đè được; muốn cập nhật phải đổi key.\n- Các action setup-node, setup-python có tuỳ chọn cache: sẵn, đỡ viết tay.\n- Giới hạn: dung lượng tổng mỗi repo có trần (khoảng 10 GB) và cache lâu không dùng sẽ bị xoá; cache tạo trên nhánh chỉ khôi phục được ở nhánh con hoặc nhánh mặc định theo quy tắc phạm vi.\n- Cache chỉ là tối ưu: build phải vẫn đúng khi cache trống.\n\n### Lỗi hay gặp\n- Khoá không có hash lockfile nên mãi dùng bản cache cũ.\n- Cache cả node_modules rồi lệch phiên bản Node; thường nên cache thư mục tải về (~/.npm), còn npm ci cài lại.\n- Không đo xem cache có thật sự giúp nhanh hơn hay chỉ thêm độ phức tạp.\n\n### Tự kiểm tra\n- Vì sao cache không ghi đè được và điều đó ảnh hưởng thế nào đến thiết kế khoá?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-0-slides",
+    "ten": "5.0 — Slide Chương 5: cache và artifact bằng hình",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-1-cache-mua-gi",
+    "ten": "5.1 — Một cái cache thật sự mua được gì",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-2-khoa-cache",
+    "ten": "5.2 — Khoá, restore-keys, và tính bất biến",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Storing Artifacts": {
+  "body": "Artifact là file hoặc thư mục sinh ra trong lúc workflow chạy mà bạn muốn giữ lại: bản build, báo cáo test, ảnh chụp màn hình lỗi, file nhị phân. Vì mỗi job ở một máy riêng và bị xoá sau khi xong, artifact là cách duy nhất vừa lưu kết quả vừa chuyển giữa các job.\n\n### Cách dùng\n```yaml\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm ci && npm run build\n      - uses: actions/upload-artifact@v4\n        with:\n          name: dist\n          path: dist/\n          retention-days: 7\n  deploy:\n    needs: build\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/download-artifact@v4\n        with:\n          name: dist\n```\n\n### Ý chính\n- upload-artifact lưu, download-artifact lấy lại trong cùng lần chạy; trên giao diện bạn tải artifact ở trang của lần chạy.\n- Phiên bản v4 đòi tên artifact không trùng nhau trong một lần chạy.\n- retention-days giới hạn thời gian giữ; mặc định dài hơn nhiều so với nhu cầu thông thường, nên đặt ngắn để tiết kiệm dung lượng.\n- Artifact khác cache: cache để tăng tốc và có thể mất, còn artifact là kết quả cần giữ.\n- Upload cả khi test thất bại bằng if: always() để có báo cáo mà đọc.\n\n### Lỗi hay gặp\n- Upload cả node_modules làm tốn dung lượng và thời gian.\n- Dùng cùng tên artifact ở nhiều job trong v4 nên lỗi xung đột.\n- Cho rằng file có trong job trước thì còn ở job sau, trong khi cần artifact để truyền.\n\n### Tự kiểm tra\n- Khi nào dùng artifact, khi nào dùng cache?\n- Làm sao để báo cáo test vẫn được lưu khi test thất bại?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-4-artifact",
+    "ten": "5.4 — Artifact, và con số tôi phải đo hai lần",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-5-5-hoa-von",
+    "ten": "5.5 — Giới hạn, thu hồi, và điểm hoà vốn",
+    "nguon": "GitHub Actions · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Workflow Status & Branch Protection": {
+  "body": "Mỗi lần workflow chạy cho ra một trạng thái: thành công, thất bại, đang chạy hoặc bị huỷ. Trạng thái này hiện thành dấu tích xanh hay chữ X đỏ cạnh commit và PR, và có thể hiện dưới dạng badge trong README. Khi gắn nó với branch protection, trạng thái đó không còn chỉ để nhìn mà trở thành cổng chặn: PR không xanh thì không merge được.\n\n### Cách thiết lập\n1. Chạy workflow ít nhất một lần để GitHub biết tên check.\n2. Vào Settings, Branches (hoặc Rules, Rulesets), thêm quy tắc cho nhánh main.\n3. Bật Require status checks to pass before merging và chọn job cần bắt buộc.\n4. Bật thêm Require a pull request before merging và số approval tối thiểu nếu muốn.\n\nBadge trạng thái trong README:\n```markdown\n![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)\n```\n\n### Ý chính\n- Tên check bắt buộc là tên job, nên đổi tên job sẽ làm quy tắc mất hiệu lực.\n- Nên bật Require branches to be up to date để PR được kiểm tra trên bản gần với main nhất.\n- Quản trị viên có thể được miễn quy tắc, hãy cân nhắc có áp luật cả cho admin không.\n- Một job tổng hợp \"all checks passed\" giúp quy tắc không phải liệt kê từng job.\n\n### Lỗi hay gặp\n- Đặt check là bắt buộc nhưng workflow có lọc paths nên có PR không chạy check đó và bị kẹt \"Expected\" mãi.\n- Job bị skipped coi như đạt, tạo kẽ hở.\n- Quên rằng quy tắc chỉ có hiệu lực với nhánh khớp mẫu.\n\n### Tự kiểm tra\n- Vì sao đổi tên job có thể phá luật bảo vệ nhánh?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-14-1-cong-chat-luong",
+    "ten": "14.1 — Cổng chất lượng: check bắt buộc, job tổng hợp, paths, ruleset và merge queue",
+    "nguon": "GitHub Actions · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-4-bao-ve-nhanh",
+    "ten": "6.4 — Bảo vệ nhánh, CODEOWNERS & kiểm tra bắt buộc",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-9-3-bat-buoc",
+    "ten": "9.3 — Check bắt buộc và bảo vệ nhánh",
+    "nguon": "Testing · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Marketplace Actions": {
+  "body": "Một action là đơn vị tái sử dụng của GitHub Actions: một gói mã (JavaScript, Docker hoặc composite) đóng vai một bước làm sẵn. GitHub Marketplace là nơi tìm hàng nghìn action của GitHub và cộng đồng: checkout code, cài ngôn ngữ, đăng nhập cloud, build Docker, gửi thông báo Slack, deploy.\n\n### Cách dùng\n```yaml\nsteps:\n  - uses: actions/checkout@v4\n  - uses: actions/setup-node@v4\n    with:\n      node-version: 22\n      cache: npm\n```\n\n### Ý chính\n- uses: chủ/kho@phiên-bản; with: truyền tham số; một số action trả outputs cho bước sau.\n- Action do actions/* hoặc nhà cung cấp lớn (aws-actions, docker) thường đáng tin hơn action của người lạ.\n- @v4 là một tag có thể bị dời; để chắc chắn tuyệt đối, ghim vào SHA đầy đủ của commit.\n- Action chạy cùng môi trường và quyền với job của bạn, kể cả quyền đọc workspace, nên đọc mã và quyền yêu cầu trước khi dùng.\n- Dùng Dependabot để cập nhật phiên bản action.\n- Không nhất thiết phải dùng action: nhiều việc chỉ cần một dòng run.\n\n### Lỗi hay gặp\n- Dùng action ít người biết, không cập nhật từ lâu.\n- Ghim @main hoặc @master: mã đổi dưới chân bạn không báo trước.\n- Truyền secret cho action không cần thiết.\n\n### Tự kiểm tra\n- Vì sao ghim SHA an toàn hơn ghim tag?\n\n### Mẹo chọn action\nTrước khi dùng, kiểm tra: nhà phát hành có đáng tin không, số sao và lần cập nhật gần nhất, tệp action.yml khai những đầu vào nào, và nó có yêu cầu secret không. Nếu chỉ cần chạy một lệnh, đừng kéo thêm phụ thuộc.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: action bằng hình",
+    "nguon": "GitHub Actions · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-4-1-action-la-gi",
+    "ten": "4.1 — Action là cái gì, và nó làm được gì",
+    "nguon": "GitHub Actions · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-4-2-ghim",
+    "ten": "4.2 — @v4 là một CON TRỎ, không phải một phiên bản",
+    "nguon": "GitHub Actions · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › GitHub Actions: Usecases": {
+  "body": "GitHub Actions không chỉ để chạy test. Bất cứ việc gì phản ứng với một sự kiện trong repo hoặc cần chạy định kỳ đều có thể là một workflow. Dưới đây là những ca dùng thực tế nhất.\n\n### Các ca dùng phổ biến\n- CI (tích hợp liên tục): mỗi PR tự chạy lint, build và test, cho biết thay đổi có làm hỏng gì không trước khi merge.\n- CD (triển khai liên tục): merge vào main thì tự build và deploy lên server, hosting hay GitHub Pages; bản phát hành có tag thì đẩy image lên registry.\n- Kiểm tra chất lượng và bảo mật: quét phụ thuộc, quét secret, phân tích tĩnh, kiểm tra định dạng.\n- Tự động hoá quản lý repo: gắn nhãn PR theo thư mục bị sửa, comment chào người mới, đóng issue bỏ quên (stale), phân công reviewer.\n- Việc theo lịch: báo cáo hằng tuần, sao lưu, dọn dẹp tài nguyên cũ.\n- Phát hành: tạo GitHub Release, sinh changelog, đăng gói lên npm.\n\n### Ý chính\n- Điểm chung: sự kiện hoặc lịch kích hoạt, môi trường sạch, kết quả minh bạch trong tab Actions.\n- Quy tắc kinh nghiệm: nếu bạn làm một việc lặp lại bằng tay hơn hai lần và nó có thể viết thành lệnh, nó đáng được tự động hoá.\n- Bắt đầu nhỏ: một workflow chạy test cho mỗi PR đã mang lại phần lớn giá trị.\n\n### Lỗi hay gặp\n- Tự động hoá quá sớm, mỗi lần đổi lại sửa workflow thay vì làm sản phẩm.\n- Workflow deploy chạy mỗi lần push mà không có bước kiểm tra hay phê duyệt cho môi trường production.\n- Không theo dõi chi phí phút chạy trên repo private.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-1-may-toi-chay-duoc",
+    "ten": "0.1 — \"Máy tôi chạy được\" KHÔNG phải một lời khẳng định kiểm chứng được",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — CI/CD và GitHub Actions là gì, ra đời thế nào, vì sao công ty cần",
+    "nguon": "GitHub Actions · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-15-1-ci-cho-pr",
+    "ten": "15.1 — CI cho pull request: bốn job, một Postgres thật, một check bắt buộc",
+    "nguon": "GitHub Actions · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub Actions › Workflow Expressions": {
+  "body": "Biểu thức viết trong ${{ }} cho phép workflow tính toán và rẽ nhánh ngay trong YAML: đọc context, so sánh, gọi hàm. GitHub tính biểu thức trước khi bước chạy, rồi thay kết quả vào chỗ đó.\n\n### Ý chính\n- Toán tử: ==, !=, &&, ||, !, so sánh không phân biệt hoa thường với chuỗi.\n- Hàm hay dùng: contains(), startsWith(), endsWith(), format(), join(), toJSON(), fromJSON(), hashFiles().\n- Hàm kiểm tra trạng thái cho điều kiện if: success(), failure(), always(), cancelled().\n- Trong if: có thể bỏ ${{ }}.\n\n```yaml\n- run: ./deploy.sh\n  if: github.ref == 'refs/heads/main' && github.event_name == 'push'\n- uses: actions/upload-artifact@v4\n  if: always()\n  with:\n    name: report\n    path: report/\n- run: echo \"Key ${{ hashFiles('**/package-lock.json') }}\"\n```\n\n### Lỗi hay gặp\n- Quên rằng chuỗi rỗng, 0 và null đều là falsy nhưng chuỗi \"false\" thì là truthy.\n- Ghép dữ liệu không tin cậy thẳng vào run: qua ${{ }} gây tiêm lệnh.\n- Dùng context không tồn tại ở nơi đó, kết quả là chuỗi rỗng im lặng.\n\n### Ví dụ thực tế\nChỉ deploy khi đẩy lên main và test đã qua; chạy bước dọn dẹp ngay cả khi lỗi; bỏ qua workflow trên nhánh của bot:\n```yaml\njobs:\n  deploy:\n    if: github.ref == 'refs/heads/main' && !contains(github.actor, 'bot')\n    needs: test\n    runs-on: ubuntu-latest\n    steps:\n      - run: ./deploy.sh\n      - run: ./cleanup.sh\n        if: always()\n```\n\n### Tự kiểm tra\n- Viết điều kiện chạy bước khi nhánh bắt đầu bằng release/.\n- Khác biệt giữa failure() và always() là gì?",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: biểu thức và context bằng hình",
+    "nguon": "GitHub Actions · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-3-1-ranh-gioi",
+    "ten": "3.1 — Ranh giới: cái gì bị thay TRƯỚC khi shell nhìn thấy",
+    "nguon": "GitHub Actions · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-3-3-ep-kieu",
+    "ten": "3.3 — Toán tử, ép kiểu, và điều kiện hỏng theo hướng MỞ",
+    "nguon": "GitHub Actions · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-3-4-ham",
+    "ten": "3.4 — Hàm, và hashFiles() tái lập KHỚP CHÍNH XÁC",
+    "nguon": "GitHub Actions · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Scheduled Workflows": {
+  "body": "Để workflow tự chạy theo giờ giấc, khai báo trigger schedule với một hoặc nhiều biểu thức cron. Đây là cách làm các việc định kỳ như dọn nhánh cũ, đóng issue lâu không hoạt động, kiểm tra link hỏng hay xuất báo cáo.\n\n### Ví dụ: đóng issue bỏ quên mỗi ngày\n```yaml\nname: Dọn issue cũ\non:\n  schedule:\n    - cron: \"0 2 * * *\"      # 02:00 UTC mỗi ngày\n  workflow_dispatch:\npermissions:\n  issues: write\njobs:\n  stale:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/stale@v9\n        with:\n          days-before-stale: 30\n          days-before-close: 7\n```\n\n### Ý chính\n- Năm trường cron: phút giờ ngày tháng thứ; dấu * là mọi giá trị, */15 là mỗi 15 phút, 1-5 là khoảng.\n- Tính theo UTC và chỉ chạy từ nhánh mặc định.\n- Thêm workflow_dispatch để thử ngay không cần đợi lịch.\n- Khai permissions tối thiểu cho token vì workflow chạy không có người giám sát.\n- Có thể có nhiều dòng cron trong một workflow.\n\n### Lỗi hay gặp\n- Hy vọng chạy đúng phút; thực tế có thể trễ.\n- Đổi giờ theo giờ Việt Nam mà quên trừ 7 tiếng.\n- Workflow theo lịch trong repo ít hoạt động bị tự tắt sau một thời gian.\n\n### Tự kiểm tra\n- Giải thích cron 0 2 * * * theo giờ Việt Nam.\n- Vì sao workflow theo lịch cần khai permissions tối thiểu?\n\n### Lưu ý khi đọc kết quả\nVì lịch có thể trễ, workflow nên viết sao cho chạy muộn hay chạy hai lần vẫn không gây hại: ví dụ chỉ xử lý những gì cũ hơn một ngưỡng thời gian thay vì giả định đúng 02:00.",
+  "lessons": [
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-3-lich-cron",
+    "ten": "1.3 — schedule, và nó THẬT SỰ trễ tới đâu",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-1-2-kich-hoat",
+    "ten": "1.2 — Cái gì KHỞI ĐỘNG một lần chạy",
+    "nguon": "GitHub Actions · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub Actions › Deploying Static Websites": {
+  "body": "Website tĩnh (HTML, CSS, JS đã build, như portfolio React/Vite hay tài liệu) có thể deploy miễn phí lên GitHub Pages. Với Actions, mỗi lần push vào main, một workflow tự build và đưa kết quả lên trang, bạn không phải upload tay.\n\n### Quy trình\n1. Trong Settings, Pages, chọn Source là GitHub Actions.\n2. Thêm workflow build và deploy:\n\n```yaml\nname: Deploy Pages\non:\n  push:\n    branches: [main]\npermissions:\n  contents: read\n  pages: write\n  id-token: write\nconcurrency:\n  group: pages\n  cancel-in-progress: true\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: 22\n          cache: npm\n      - run: npm ci && npm run build\n      - uses: actions/upload-pages-artifact@v3\n        with:\n          path: dist\n  deploy:\n    needs: build\n    runs-on: ubuntu-latest\n    environment:\n      name: github-pages\n    steps:\n      - uses: actions/deploy-pages@v4\n```\n\n### Ý chính\n- Trang nằm ở https://tên-người-dùng.github.io/tên-repo/, nên với Vite phải đặt base thành /tên-repo/, nếu không trang trắng vì không tìm thấy file.\n- Job build tạo artifact rồi job deploy phát hành; quyền pages: write và id-token: write là bắt buộc.\n- Có thể gắn tên miền riêng và HTTPS.\n- Pages chỉ phục vụ nội dung tĩnh và có giới hạn dung lượng, băng thông.\n\n### Lỗi hay gặp\n- Quên base path, hoặc dùng router phía client mà không có cấu hình cho đường dẫn con.\n- Thiếu permissions nên bước deploy bị từ chối.\n- Thư mục path trỏ sai (dist so với build).\n\n### Tự kiểm tra\n- Vì sao trang trắng khi quên base path?\n- Hai job build và deploy nối với nhau bằng gì?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-2-github-pages",
+    "ten": "15.2 — GitHub Pages: xuất bản portfolio React/Vite",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: GitHub cho sinh viên bằng hình",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-2-actions",
+    "ten": "11.2 — GitHub Actions: CI từ số 0",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › REST API & GraphQL API": {
+  "body": "GitHub mở gần như mọi thứ bạn làm trên giao diện web thành API để chương trình gọi được: tạo issue, mở PR, đọc danh sách commit, quản lý release. Có hai loại API: REST API với nhiều endpoint theo tài nguyên, và GraphQL API với một endpoint duy nhất cho phép bạn tự mô tả dữ liệu cần lấy.\n\n### Vì sao cần biết\nKhi bạn muốn viết bot gắn nhãn PR, báo cáo số commit từng thành viên, hay đồng bộ issue sang công cụ khác, bạn sẽ dùng API thay vì bấm tay. Biết chọn REST hay GraphQL giúp bớt số lần gọi và bớt dữ liệu thừa.\n\n### Ý chính\n- REST: mỗi tài nguyên một URL, dùng GET, POST, PATCH, DELETE. Ví dụ GET /repos/{owner}/{repo}/issues. Đơn giản, dễ thử bằng curl, phù hợp phần lớn trường hợp.\n- GraphQL: gửi một truy vấn POST đến https://api.github.com/graphql và nhận đúng các trường đã yêu cầu. Hợp khi cần lấy dữ liệu lồng nhau (repo, issue, nhãn, người gán) chỉ trong một lượt.\n- Cả hai cần xác thực bằng token để có hạn mức cao và truy cập dữ liệu riêng tư.\n- Cả hai có giới hạn tốc độ; hãy xử lý lỗi và đừng gọi vòng lặp liên tục.\n- Công cụ gh api cho phép gọi cả hai ngay từ terminal.\n\n```bash\ngh api repos/OWNER/REPO/issues --jq '.[].title'\ngh api graphql -f query='{ viewer { login } }'\n```\n\n### Lỗi hay gặp\n- Dùng GraphQL cho truy vấn đơn giản trong khi một lời gọi REST là đủ.\n- Không xử lý phân trang nên chỉ thấy trang đầu.\n- Đưa token vào mã nguồn.\n\n### Tự kiểm tra\n- Khi nào GraphQL tiết kiệm lời gọi hơn REST?",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-1-tai-nguyen-phuong-thuc",
+    "ten": "6.1 — Tài nguyên, phương thức, và REST thật sự là gì",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub Apps & Webhooks": {
+  "body": "Hai cơ chế để một hệ thống bên ngoài phản ứng với những gì xảy ra trên GitHub là webhook và GitHub App. Webhook là cách GitHub gọi vào địa chỉ của bạn khi có sự kiện. GitHub App là một \"tài khoản ứng dụng\" được cài vào tổ chức hoặc repo, có quyền riêng và thường nhận sự kiện qua chính webhook.\n\n### Ý chính\n- Webhook: bạn khai URL và secret, GitHub gửi HTTP POST kèm payload JSON mỗi khi có push, pull_request, issues…\n- Ưu điểm so với hỏi liên tục (polling): gần thời gian thực, không tốn lời gọi.\n- GitHub App đăng ký loại sự kiện muốn nghe và quyền cần, người cài chọn repo cấp cho nó.\n- Luôn xác thực chữ ký của webhook trước khi tin payload, và trả lời nhanh rồi xử lý nặng ở nền.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-webhook",
+    "ten": "10.5 — Thiết kế webhook (1): bên gửi — chữ ký, thử lại và nhật ký giao",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-nhan-webhook",
+    "ten": "10.6 — Thiết kế webhook (2): bên nhận — body thô, phát lại, trả lời nhanh và thứ tự",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-10-noi-ct-work",
+    "ten": "KĐ.10 — Nối GitHub với CT Work: webhook, mã thẻ, mục Phát triển và Đóng góp",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub Pages / Codespaces / Packages": {
+  "body": "Ba dịch vụ này biến GitHub từ nơi chứa code thành nơi chạy, phát triển và phát hành code.\n\n### Ý chính\n- GitHub Pages: host website tĩnh trực tiếp từ repo, địa chỉ dạng tên.github.io/repo, hỗ trợ tên miền riêng và HTTPS. Hợp portfolio, tài liệu dự án, landing page.\n- Codespaces: môi trường phát triển chạy trên đám mây, mở trong trình duyệt hoặc VS Code. Cấu hình bằng .devcontainer/devcontainer.json để cả nhóm có cùng môi trường ngay lập tức. Có hạn mức miễn phí theo tháng nên nhớ dừng codespace khi xong.\n- Packages: registry lưu gói và image: ghcr.io cho container image, kèm npm, Maven, NuGet…. Trong Actions, đăng nhập bằng GITHUB_TOKEN với quyền packages: write.\n- Cả ba gắn liền với repo và quyền truy cập của repo.\n\n```bash\ndocker build -t ghcr.io/owner/app:1.0 .\ndocker push ghcr.io/owner/app:1.0\n```\n\n### Vì sao cần biết\nMột dự án hoàn chỉnh cần chỗ viết code, chỗ chạy thử và chỗ phát hành. Thay vì dựng ba hệ thống riêng, bạn dùng một tài khoản GitHub, một bộ quyền và một cách xác thực cho tất cả.\n\n### Gợi ý áp dụng\n- Làm portfolio: viết code, đặt workflow deploy lên Pages.\n- Làm nhóm: thêm devcontainer.json để ai mở Codespaces cũng có sẵn đúng phiên bản Node, extension và lệnh cài đặt.\n- Làm sản phẩm: workflow build image và đẩy lên ghcr.io khi có tag phiên bản.\n\n### Lỗi hay gặp\n- Quên dừng codespace nên hết hạn mức miễn phí giữa tháng.\n- Package để private nhưng máy chủ deploy chưa có token đọc, nên kéo image bị từ chối.\n- Pages lộ nội dung vì repo public: đừng đặt dữ liệu riêng tư trong repo xuất bản.\n\n### Tự kiểm tra\n- Mỗi dịch vụ trong ba dịch vụ trên giải quyết nhu cầu nào của vòng đời dự án?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-2-github-pages",
+    "ten": "15.2 — GitHub Pages: xuất bản portfolio React/Vite",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces",
+    "ten": "15.3 — Student Developer Pack, Codespaces & Copilot cho sinh viên",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub CLI (gh)": {
+  "body": "GitHub CLI (lệnh gh) là công cụ dòng lệnh chính thức của GitHub. Nó mang những thứ bạn hay làm trên web (PR, issue, release, workflow run) vào terminal, nên không phải chuyển qua lại giữa trình duyệt và editor. Git làm việc với kho cục bộ; gh làm việc với nền tảng GitHub.\n\n### Vì sao cần biết\nMột vòng lặp PR đầy đủ (tạo, xem CI, checkout PR của bạn, merge) có thể xong trong vài lệnh. Ngoài ra gh dễ đưa vào script và workflow Actions để tự động hoá.\n\n### Ý chính\n- Đăng nhập một lần: gh auth login, chọn HTTPS hoặc SSH và xác thực qua trình duyệt.\n- Pull request: gh pr create, gh pr list, gh pr checkout 42, gh pr view --web, gh pr merge.\n- Issue: gh issue create, gh issue list --label bug.\n- Repo: gh repo clone, gh repo create, gh repo fork.\n- Actions: gh run list, gh run watch, gh run view --log-failed.\n- gh api gọi thẳng REST hoặc GraphQL, kèm --jq để lọc kết quả.\n- Cờ --json cho đầu ra máy đọc được.\n\n```bash\ngh pr create --fill --base main\ngh run watch\ngh pr merge --squash --delete-branch\n```\n\n### Lỗi hay gặp\n- Nhầm gh với git: gh không thay thế commit và push.\n- Chạy trong thư mục không phải repo nên không biết repo nào, thêm -R OWNER/REPO.\n- Đăng nhập nhầm tài khoản khi dùng nhiều tài khoản; kiểm tra bằng gh auth status.\n\n### Tự kiểm tra\n- Viết chuỗi lệnh gh đưa nhánh hiện tại thành PR rồi theo dõi CI.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-3-dang-nhap-github",
+    "ten": "KĐ.3 — Đăng nhập GitHub qua HTTPS (Windows + Mac) và bẫy 403 nhầm tài khoản",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub Apps: What are these?": {
+  "body": "GitHub App là cách đăng ký một ứng dụng tích hợp có danh tính riêng trên GitHub. Khác với một người dùng thật, App có quyền do chính nó khai, cài vào tài khoản hay tổ chức nào do người cài quyết định, và nhận sự kiện từ GitHub qua webhook. Nó phù hợp cho bot, công cụ CI, ứng dụng quản lý dự án.\n\n### Khác gì OAuth App\n- OAuth App hành động với tư cách một người dùng đã cấp quyền cho nó, với phạm vi quyền (scope) khá rộng và thô.\n- GitHub App có quyền chi tiết theo từng loại tài nguyên (đọc hoặc ghi issues, pull requests, contents…), được cài trên từng repo cụ thể, có thể hành động dưới danh nghĩa chính App (hiển thị dạng tên-app[bot]) hoặc thay mặt người dùng.\n- Token của App ngắn hạn, hết hạn sau khoảng một giờ, an toàn hơn token dài hạn của người dùng.\n- Do đó GitHub khuyến nghị dùng GitHub App cho tích hợp mới.\n\n### Ý chính\n- Mỗi App có ID, private key để chứng minh danh tính, webhook URL, secret.\n- Người dùng hoặc tổ chức \"cài\" App và chọn repo; mỗi lần cài có một installation ID.\n- App không phải thành viên nên không chiếm một slot người dùng trả phí.\n\n### Lỗi hay gặp\n- Xin quá nhiều quyền khiến người cài e ngại.\n- Lưu private key trong repo thay vì kho bí mật.\n\n### Tự kiểm tra\n- Nêu hai khác biệt giữa GitHub App và OAuth App.\n- Token nào có hạn ngắn: JWT hay installation token, và dùng để làm gì?"
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub Apps: Use in Automation": {
+  "body": "Sau khi tạo GitHub App, phần việc thật sự là dựng máy chủ nhận sự kiện và phản ứng lại. Luồng điển hình: GitHub gửi webhook, máy chủ của bạn xác thực rồi quyết định làm gì, và khi cần gọi ngược API thì lấy installation token để hành động với tư cách App.\n\n### Các bước\n1. Trong cài đặt App, khai Webhook URL, Webhook secret và chọn sự kiện muốn nghe (pull_request, issues, push…) cùng quyền tương ứng.\n2. Máy chủ nhận POST, kiểm tra chữ ký, đọc header X-GitHub-Event để biết loại sự kiện.\n3. Xử lý: ví dụ khi PR mở, gắn nhãn hoặc comment chào.\n4. Để gọi API: tạo JWT ký bằng private key của App (thuật toán RS256, hiệu lực ngắn), rồi đổi lấy installation access token qua POST /app/installations/{id}/access_tokens; token này hết hạn sau khoảng một giờ.\n\n### Ý chính\n- Trả lời 2xx nhanh; việc nặng đưa vào hàng đợi.\n- Payload có trường installation.id để biết nên dùng installation nào.\n- Xử lý idempotent: cùng một delivery (X-GitHub-Delivery) có thể gửi lại.\n- Thư viện Octokit (octokit/app) lo giúp phần JWT và token.\n\n### Lỗi hay gặp\n- Tạo comment khi nhận sự kiện do chính bot tạo ra, gây vòng lặp vô tận; lọc theo sender.type == \"Bot\".\n- Token hết hạn mà vẫn dùng lại.\n- Máy chủ chậm khiến GitHub báo timeout.\n\n### Mẫu xử lý sự kiện\nKhung xử lý gọn: đọc loại sự kiện, kiểm tra hành động, lọc sự kiện do bot sinh, lấy installation token, thực hiện việc, ghi log. Mỗi bước nên có thể thử lại an toàn vì GitHub có thể gửi lại cùng sự kiện.\n\n### Tự kiểm tra\n- Vì sao cần installation token thay vì dùng thẳng JWT để gọi API repo?\n- Làm sao tránh vòng lặp khi App phản hồi chính sự kiện nó vừa tạo ra?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-nhan-webhook",
+    "ten": "10.6 — Thiết kế webhook (2): bên nhận — body thô, phát lại, trả lời nhanh và thứ tự",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-webhook",
+    "ten": "10.5 — Thiết kế webhook (1): bên gửi — chữ ký, thử lại và nhật ký giao",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub Webhooks: What are these?": {
+  "body": "Webhook là một cuộc gọi ngược: thay vì bạn hỏi GitHub liên tục \"có gì mới không\", GitHub chủ động gửi một HTTP POST tới địa chỉ bạn cho khi có sự kiện, như push, pull_request, issues, release. Hình dung như đăng ký nhận thông báo giao hàng thay vì ngày nào cũng gọi hỏi cửa hàng.\n\n### Vì sao cần biết\nWebhook là nền tảng của hầu hết tích hợp: nối GitHub với công cụ quản lý công việc, kênh chat, hệ thống triển khai, bảng điểm đóng góp. Hiểu nó giúp bạn tự cấu hình và gỡ lỗi khi tích hợp im lặng.\n\n### Ý chính\n- Cấu hình ở Settings, Webhooks, Add webhook: Payload URL, Content type (nên chọn application/json), Secret và danh sách sự kiện.\n- Mỗi lần gửi kèm các header: X-GitHub-Event (loại sự kiện), X-GitHub-Delivery (id duy nhất) và X-Hub-Signature-256 (chữ ký HMAC SHA-256 của body bằng secret).\n- Tab Recent Deliveries trên GitHub cho xem request, response và nút Redeliver để gửi lại.\n- Endpoint nên trả 2xx nhanh; GitHub chờ vài giây rồi coi là thất bại.\n- Có thể đặt webhook ở cấp repo, tổ chức hay cho GitHub App.\n- Thử trên máy local bằng công cụ mở đường hầm như ngrok hay smee.io.\n\n### Lỗi hay gặp\n- Chọn content type form khiến payload nằm trong tham số, làm phần xác thực chữ ký rối.\n- Quên đặt secret nên ai cũng có thể giả mạo request.\n- URL không truy cập được từ internet (localhost).",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-webhook",
+    "ten": "10.5 — Thiết kế webhook (1): bên gửi — chữ ký, thử lại và nhật ký giao",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-10-noi-ct-work",
+    "ten": "KĐ.10 — Nối GitHub với CT Work: webhook, mã thẻ, mục Phát triển và Đóng góp",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub Webhooks: Use in Automation": {
+  "body": "Nhận webhook trong thực tế nghĩa là dựng một endpoint HTTP, xác thực rằng request đúng là từ GitHub, rồi xử lý sự kiện. Xác thực là bước không được bỏ: URL của bạn là công khai, ai cũng có thể POST giả vào.\n\n### Ví dụ Node.js với Express\n```js\nimport express from \"express\";\nimport crypto from \"node:crypto\";\n\nconst app = express();\n\napp.post(\"/github\", express.raw({ type: \"application/json\" }), (req, res) => {\n  const sig = req.get(\"X-Hub-Signature-256\") ?? \"\";\n  const expected =\n    \"sha256=\" +\n    crypto.createHmac(\"sha256\", process.env.WEBHOOK_SECRET).update(req.body).digest(\"hex\");\n  const a = Buffer.from(sig);\n  const b = Buffer.from(expected);\n  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {\n    return res.sendStatus(401);\n  }\n  const event = req.get(\"X-GitHub-Event\");\n  const payload = JSON.parse(req.body.toString(\"utf8\"));\n  res.sendStatus(202); // trả lời nhanh\n  if (event === \"pull_request\" && payload.action === \"opened\") {\n    // đưa vào hàng đợi xử lý\n  }\n});\n```\n\n### Ý chính\n- Tính HMAC trên body thô (raw bytes), không phải JSON đã parse lại, vì chỉ cần khác một khoảng trắng là chữ ký lệch.\n- So sánh bằng hàm thời gian hằng (timingSafeEqual) để tránh rò rỉ qua thời gian.\n- Chống xử lý trùng bằng X-GitHub-Delivery.\n- Phân biệt loại sự kiện bằng X-GitHub-Event và trường action trong payload.\n- Việc nặng làm ở nền; endpoint chỉ xác thực, ghi nhận, trả lời.\n\n### Lỗi hay gặp\n- Dùng express.json() trước khi xác thực nên mất body gốc.\n- Ghi log nguyên payload chứa dữ liệu nhạy cảm.\n- Không xử lý trường hợp GitHub gửi lại.\n\n### Tự kiểm tra\n- Vì sao phải tính HMAC trên body thô?\n- Khi GitHub gửi lại cùng một delivery, làm sao tránh xử lý hai lần?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-nhan-webhook",
+    "ten": "10.6 — Thiết kế webhook (2): bên nhận — body thô, phát lại, trả lời nhanh và thứ tự",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-webhook",
+    "ten": "10.5 — Thiết kế webhook (1): bên gửi — chữ ký, thử lại và nhật ký giao",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-1-4-bam-mac-chu-ky",
+    "ten": "1.4 — Băm, MAC, chữ ký: ba công cụ, một sự nhầm lẫn",
+    "nguon": "Authentication · Chương 1",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub REST API: Getting Started": {
+  "body": "GitHub REST API cho phép làm qua HTTP mọi thao tác chính trên repo, issue, PR, comment, release. Địa chỉ gốc là https://api.github.com, dữ liệu trao đổi bằng JSON. Bạn có thể thử ngay với curl mà không cần cài thêm gì.\n\n### Bắt đầu nhanh\n```bash\n# Không cần đăng nhập (hạn mức thấp), đọc thông tin repo công khai\ncurl -s https://api.github.com/repos/octocat/Hello-World\n\n# Có token: hạn mức cao hơn và đọc được dữ liệu riêng tư\ncurl -s \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer $GITHUB_TOKEN\" \\\n  -H \"X-GitHub-Api-Version: 2022-11-28\" \\\n  \"https://api.github.com/repos/OWNER/REPO/issues?state=open&per_page=10\"\n\n# Tạo issue\ncurl -s -X POST -H \"Authorization: Bearer $GITHUB_TOKEN\" \\\n  https://api.github.com/repos/OWNER/REPO/issues \\\n  -d '{\"title\":\"Lỗi đăng nhập\",\"labels\":[\"bug\"]}'\n```\n\n### Ý chính\n- Tạo personal access token ở Settings, Developer settings; ưu tiên token fine-grained giới hạn theo repo và quyền. Không bao giờ commit token.\n- Phân trang bằng per_page và page; header Link chỉ trang kế tiếp.\n- Hạn mức: khoảng 60 lời gọi mỗi giờ khi không xác thực, vài nghìn mỗi giờ khi có token; đọc header X-RateLimit-Remaining.\n- Mã trạng thái: 200/201 thành công, 401 chưa xác thực, 403 hết hạn mức hoặc thiếu quyền, 404 không có hoặc không được thấy, 422 dữ liệu không hợp lệ.\n- Trong workflow Actions hay terminal, gh api tiện hơn curl vì lo xác thực.\n\n### Lỗi hay gặp\n- Quên header Accept, hoặc dùng sai content type.\n- Chỉ lấy trang đầu mà tưởng đã có đủ dữ liệu.\n- Bỏ qua hạn mức rồi bị chặn tạm thời.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-1-tai-nguyen-phuong-thuc",
+    "ten": "6.1 — Tài nguyên, phương thức, và REST thật sự là gì",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-2-http-methods",
+    "ten": "6.2 — HTTP method: request định làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub API": {
+  "body": "API của GitHub là cửa ngõ lập trình tới gần như mọi thứ trên nền tảng. Có ba cách tiếp cận phổ biến: REST API, GraphQL API và công cụ dòng lệnh gh bọc quanh cả hai. Ngoài ra còn thư viện Octokit cho JavaScript và các SDK cho nhiều ngôn ngữ khác.\n\n### Vì sao cần biết\nMọi tự động hoá không nằm gọn trong Actions đều đi qua API: bot, dashboard thống kê đóng góp của nhóm, công cụ di chuyển issue, tích hợp với hệ thống ngoài.\n\n### Ý chính\n- Xác thực: personal access token (cho script cá nhân), GITHUB_TOKEN (tự có trong Actions), hoặc token của GitHub App (cho tích hợp lâu dài).\n- Nguyên tắc quyền tối thiểu: chỉ cấp scope hay permission cần thiết, đặt hạn dùng cho token.\n- Phân trang, giới hạn tốc độ và điều kiện (ETag, If-None-Match) giúp tích hợp bền và rẻ.\n- Webhook bổ sung cho API: API để chủ động hỏi và thao tác, webhook để được báo khi có thay đổi.\n- Đọc tài liệu tại docs.github.com/rest và thử nhanh bằng gh api.\n\n```js\nimport { Octokit } from \"octokit\";\nconst octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });\nconst { data } = await octokit.rest.issues.listForRepo({ owner: \"OWNER\", repo: \"REPO\" });\nconsole.log(data.map((i) => i.title));\n```\n\n### Lỗi hay gặp\n- Dùng token cá nhân toàn quyền cho script chạy trên server.\n- Không phân biệt lỗi 403 do thiếu quyền với 403 do hết hạn mức.\n\n### Tự kiểm tra\n- Khi nào chọn GITHUB_TOKEN, khi nào chọn token của GitHub App?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/github-actions/learn?lessonSlug=ga-6-2-token",
+    "ten": "6.2 — GITHUB_TOKEN, và cái ranh giới nó không vượt được",
+    "nguon": "GitHub Actions · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › REST API": {
+  "body": "REST là phong cách thiết kế API xoay quanh tài nguyên: mỗi thứ (repo, issue, PR) có một URL riêng, và bạn thao tác bằng các HTTP method chuẩn. Server không nhớ trạng thái giữa các request (stateless): mỗi request mang đủ thông tin cần thiết, như token xác thực.\n\n### Ý chính\n- GET đọc, POST tạo mới, PUT thay thế toàn bộ, PATCH sửa một phần, DELETE xoá.\n- URL là danh từ chỉ tài nguyên, ví dụ /repos/OWNER/REPO/issues/12/comments; động từ nằm ở method.\n- Mã trạng thái cho biết kết quả: 200 OK, 201 Created, 204 No Content, 400/422 yêu cầu không hợp lệ, 401, 403, 404, 429 hoặc 403 khi quá hạn mức, 5xx lỗi phía server.\n- Dữ liệu thường là JSON; header Accept và Content-Type khai báo định dạng.\n- GET nên an toàn và lặp được mà không đổi dữ liệu; PUT và DELETE nên idempotent.\n- Với GitHub, ví dụ: GET /repos/{owner}/{repo}/pulls liệt kê PR, POST cùng đường dẫn tạo PR, PATCH /repos/{owner}/{repo}/pulls/{n} đóng PR.\n\n```bash\ncurl -s -X PATCH \\\n  -H \"Authorization: Bearer $GITHUB_TOKEN\" \\\n  https://api.github.com/repos/OWNER/REPO/issues/12 \\\n  -d '{\"state\":\"closed\"}'\n```\n\n### Lỗi hay gặp\n- Dùng GET để thực hiện hành động đổi dữ liệu.\n- Bỏ qua mã trạng thái, chỉ nhìn nội dung phản hồi.\n- Nhầm PUT với PATCH và vô tình xoá các trường không gửi.\n\n### Tự kiểm tra\n- Vì sao REST gọi là stateless và điều đó đòi hỏi mỗi request mang gì?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-0-slides",
+    "ten": "6.0 — Slide bài giảng: HTTP & API trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-6-2-http-methods",
+    "ten": "6.2 — HTTP method: request định làm gì",
+    "nguon": "Nền tảng Lập trình Web · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-6-1-tai-nguyen-phuong-thuc",
+    "ten": "6.1 — Tài nguyên, phương thức, và REST thật sự là gì",
+    "nguon": "Node.js · Chương 6",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GraphQL API": {
+  "body": "GraphQL là ngôn ngữ truy vấn cho API: thay vì nhiều endpoint cố định, bạn gửi một truy vấn mô tả chính xác các trường cần lấy và nhận đúng hình dạng đó. GitHub cung cấp GraphQL API tại một endpoint duy nhất, https://api.github.com/graphql, và luôn yêu cầu xác thực.\n\n### Ý chính\n- Giảm over-fetching (lấy thừa) và under-fetching (phải gọi nhiều lần): một truy vấn có thể lấy repo, các issue, nhãn và người được gán.\n- Mọi lời gọi là POST với body chứa query và variables.\n- Hạn mức tính theo điểm chi phí của truy vấn thay vì theo số lời gọi; truy vấn lồng sâu tốn nhiều điểm hơn.\n- Phân trang bằng first, after và pageInfo (con trỏ), khác với page của REST.\n\n```graphql\nquery {\n  repository(owner: \"OWNER\", name: \"REPO\") {\n    issues(first: 5, states: OPEN) {\n      nodes { number title labels(first: 3) { nodes { name } } }\n    }\n  }\n}\n```\n```bash\ngh api graphql -f query='{ viewer { login } }'\n```\n\n### Lỗi hay gặp\n- Dùng GraphQL cho việc đơn giản mà REST làm gọn hơn, hoặc ngược lại.\n- Truy vấn quá sâu nên tốn hạn mức.\n- Lỗi vẫn trả HTTP 200 kèm trường errors; phải kiểm tra trường này.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-4-khac",
+    "ten": "7.5 — GraphQL và gRPC: khi REST không phải câu trả lời, đo trên LabFlow",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › Tạo Ứng dụng tích hợp GitHub": {
+  "body": "Khi muốn chương trình của mình làm việc với GitHub, bạn có ba mô hình xác thực chính, mỗi mô hình hợp một hoàn cảnh.\n\n### Ba mô hình\n- Personal Access Token (PAT): token gắn với tài khoản của bạn, dùng cho script cá nhân hay thử nghiệm. Nên chọn loại fine-grained, giới hạn repo và quyền.\n- OAuth App: ứng dụng web để người dùng khác đăng nhập bằng GitHub và cấp quyền; ứng dụng hành động với tư cách người dùng đó.\n- GitHub App: danh tính riêng, quyền chi tiết, cài theo repo, token ngắn hạn; mô hình được khuyến nghị cho tích hợp mới.\n\n### Cách chọn\n- Chỉ bạn dùng, chạy trên máy mình: PAT.\n- Cần \"Đăng nhập bằng GitHub\" cho người dùng: OAuth App (hoặc GitHub App với luồng người dùng).\n- Bot hoặc dịch vụ chạy độc lập, theo tổ chức: GitHub App.\n\nDù chọn gì, đừng đặt token trong mã nguồn; dùng biến môi trường hay secrets.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-2-xac-thuc",
+    "ten": "5.2 — Xác thực với GitHub: SSH, token, chứng chỉ",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-1-oauth-la-gi",
+    "ten": "8.1 — OAuth dùng để làm gì, và ba thứ nó bị lẫn với",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › GitHub Apps": {
+  "body": "GitHub App là ứng dụng độc lập hoạt động dưới danh tính của chính nó, có thể cài lên tài khoản cá nhân hoặc tổ chức và chọn cụ thể repo nào được truy cập. Đây là mô hình tích hợp GitHub khuyến nghị cho bot, công cụ CI và các dịch vụ chạy nền.\n\n### Vì sao cần biết\nNếu bạn dùng PAT của chính mình cho bot của nhóm, bot sẽ hành động như bạn, mang quyền của bạn và hỏng khi bạn rời nhóm. GitHub App tách bạch việc đó: quyền được khai rõ, người cài nhìn thấy và kiểm soát được, và bot không phụ thuộc vào ai.\n\n### Ý chính\n- Quyền chi tiết theo loại tài nguyên: ví dụ Issues: read and write, Contents: read-only, Pull requests: write.\n- Hai loại token: JWT (ký bằng private key, chỉ để xác thực với tư cách App) và installation access token (hết hạn sau khoảng một giờ, dùng để gọi API trong phạm vi một lần cài).\n- Có thể nhận sự kiện qua webhook, hoặc hành động thay mặt người dùng qua luồng OAuth của App.\n- Có hạn mức API riêng theo từng lần cài, thường thoáng hơn token người dùng.\n- Hành động của App hiện kèm nhãn [bot] trong lịch sử, dễ phân biệt.\n\n```js\nimport { App } from \"octokit\";\nconst app = new App({ appId: process.env.APP_ID, privateKey: process.env.PRIVATE_KEY });\nconst octokit = await app.getInstallationOctokit(Number(process.env.INSTALLATION_ID));\nawait octokit.rest.issues.createComment({ owner: \"OWNER\", repo: \"REPO\", issue_number: 1, body: \"Xin chào\" });\n```\n\n### Lỗi hay gặp\n- Xin quyền rộng hơn cần thiết.\n- Làm rò private key (lưu trong repo hoặc log).\n- Quên rằng App chỉ thấy các repo mà lần cài đã cấp.\n\n### Tự kiểm tra\n- Vì sao installation token an toàn hơn PAT dài hạn?"
+ },
+ "GitHub API & Nền tảng mở rộng › OAuth Apps": {
+  "body": "OAuth App cho ứng dụng web của bạn truy cập GitHub thay mặt một người dùng sau khi người đó đồng ý. Đây chính là cơ chế đằng sau nút \"Đăng nhập bằng GitHub\". Ứng dụng không bao giờ thấy mật khẩu GitHub của người dùng, chỉ nhận một access token có phạm vi quyền (scope) đã được cấp.\n\n### Luồng authorization code\n1. Ứng dụng chuyển người dùng tới https://github.com/login/oauth/authorize kèm client_id, scope và một giá trị state ngẫu nhiên.\n2. Người dùng đăng nhập GitHub và bấm đồng ý.\n3. GitHub chuyển trình duyệt về redirect URI của bạn kèm code (dùng một lần, sống ngắn) và state.\n4. Máy chủ của bạn kiểm tra state, rồi gửi code cùng client_id và client_secret tới https://github.com/login/oauth/access_token để đổi lấy access token.\n5. Dùng token gọi API, ví dụ GET /user để biết người dùng là ai.\n\n### Ý chính\n- Tạo ở Settings, Developer settings, OAuth Apps; nhận Client ID và Client Secret.\n- client_secret chỉ nằm ở máy chủ, tuyệt đối không đưa vào mã chạy trên trình duyệt.\n- Xin scope nhỏ nhất đủ dùng (ví dụ read:user, user:email thay vì repo).\n- Tham số state chống tấn công CSRF; redirect URI phải đăng ký chính xác.\n- Token của OAuth App mang toàn bộ quyền của người dùng trong phạm vi scope và không có hạn ngắn, nên GitHub App thường được ưu tiên cho tích hợp mới.\n\n### Lỗi hay gặp\n- Bỏ qua kiểm tra state.\n- Lưu token dạng văn bản thô trong cơ sở dữ liệu.\n- Xin scope repo chỉ để đọc email người dùng.\n\n### Tự kiểm tra\n- Vì sao bước đổi code lấy token phải chạy ở phía máy chủ?",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-1-oauth-la-gi",
+    "ten": "8.1 — OAuth dùng để làm gì, và ba thứ nó bị lẫn với",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-8-2-luong-code-pkce",
+    "ten": "8.2 — Luồng authorization code kèm PKCE, từng bước một",
+    "nguon": "Authentication · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › Webhooks": {
+  "body": "Webhook giúp máy chủ của bạn nhận một HTTP POST ngay khi có sự kiện trên GitHub như push, pull request, issue, release. Nó là cơ sở để các hệ thống bên ngoài, ví dụ công cụ quản lý công việc, CI riêng hay bot chat, phản ứng đúng lúc mà không phải hỏi dò liên tục.\n\n### Thiết lập thực tế\n1. Ở Settings, Webhooks của repo hoặc tổ chức, bấm Add webhook.\n2. Điền Payload URL (địa chỉ công khai của endpoint), chọn Content type là application/json và đặt Secret.\n3. Chọn sự kiện muốn nhận: chỉ những sự kiện thật sự cần, thay vì \"mọi thứ\".\n4. Sau khi lưu, GitHub gửi một ping để kiểm tra; tab Recent Deliveries cho xem từng request và response.\n\n### Ý chính\n- Mỗi request có X-GitHub-Event, X-GitHub-Delivery và X-Hub-Signature-256.\n- Endpoint trả 2xx càng sớm càng tốt; xử lý nặng làm bất đồng bộ.\n- Có thể Redeliver một lần gửi thất bại để thử lại sau khi sửa lỗi.\n- Đặt tên thẻ công việc (ví dụ NT-21) vào tên nhánh hoặc commit để hệ thống nhận webhook liên kết code với thẻ.\n\n### Lỗi hay gặp\n- Endpoint ngoài internet nhưng không kiểm tra chữ ký.\n- Tắt kiểm tra SSL cho tiện rồi quên bật lại.\n- Máy chủ ngừng nhận khi đang deploy nên bỏ lỡ sự kiện; dùng Redeliver hoặc hàng đợi.\n\n### Tự kiểm tra\n- Vì sao nên chọn application/json làm content type?\n- Điều gì xảy ra khi endpoint của bạn chậm hơn thời hạn chờ của GitHub?",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-webhook",
+    "ten": "10.5 — Thiết kế webhook (1): bên gửi — chữ ký, thử lại và nhật ký giao",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-nhan-webhook",
+    "ten": "10.6 — Thiết kế webhook (2): bên nhận — body thô, phát lại, trả lời nhanh và thứ tự",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-kd-10-noi-ct-work",
+    "ten": "KĐ.10 — Nối GitHub với CT Work: webhook, mã thẻ, mục Phát triển và Đóng góp",
+    "nguon": "Git & GitHub · Khởi động nhanh — Làm việc nhóm trên Git",
+    "kieu": "video"
+   }
+  ]
+ },
+ "GitHub API & Nền tảng mở rộng › Creating Apps": {
+  "body": "Tạo một GitHub App mất vài phút nhưng cần đi qua từng cấu hình có chủ đích, vì sai quyền hay thiếu webhook sẽ khiến App không hoạt động như bạn tưởng.\n\n### Các bước\n1. Vào Settings, Developer settings, GitHub Apps, New GitHub App (với tổ chức, vào Settings của tổ chức).\n2. Điền tên, Homepage URL và (nếu cần) Callback URL cho luồng đăng nhập người dùng.\n3. Bật Webhook: nhập Webhook URL và Secret. Khi thử trên máy local, dùng đường hầm như smee.io hoặc ngrok.\n4. Chọn Permissions: chỉ những quyền thật sự cần (ví dụ Pull requests: read and write, Contents: read-only). Quyền xác định các sự kiện bạn được đăng ký.\n5. Subscribe to events: tick các sự kiện như Pull request, Issues, Push.\n6. Chọn nơi cài đặt: chỉ tài khoản của bạn hoặc bất kỳ ai.\n7. Tạo App, ghi lại App ID, sinh Private key (file .pem) và cất ở nơi an toàn.\n8. Cài App lên tài khoản hoặc tổ chức, chọn các repo; ghi lại installation ID (có trong URL cài đặt và trong payload webhook).\n\n### Ý chính\n- Có thể dùng Probot hoặc Octokit để viết App nhanh hơn, lo sẵn xác thực và định tuyến sự kiện.\n- Đổi quyền sau này sẽ khiến người đã cài phải chấp nhận lại.\n- Giữ App ở chế độ private cho tới khi sẵn sàng công khai.\n\n### Lỗi hay gặp\n- Không nhận được sự kiện vì chưa cài App lên repo hoặc chưa tick sự kiện.\n- Nhầm App ID với Client ID khi ký JWT.\n- Làm mất private key và phải tạo khoá mới."
  }
 }

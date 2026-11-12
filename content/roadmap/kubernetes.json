@@ -1,0 +1,1364 @@
+{
+ "Giới thiệu & Kiến trúc › Overview & Why use Kubernetes": {
+  "body": "Kubernetes (viết tắt K8s) là hệ thống **điều phối container**: bạn khai báo \"tôi muốn chạy 3 bản sao của ứng dụng này\", còn Kubernetes tự tìm máy còn chỗ, chạy container lên, theo dõi và sửa khi có gì lệch. Hãy hình dung một người quản lý ca trực: bạn đưa bảng phân công, người đó liên tục đếm đầu người và gọi thêm người khi ai đó vắng.\n\n### Vì sao cần biết\nDocker hoặc Compose chạy tốt trên một máy. Khi cần nhiều máy, không muốn ngừng dịch vụ lúc cập nhật, hoặc muốn ứng dụng tự dựng lại khi máy chết, bạn cần một lớp điều phối. Rất nhiều tin tuyển backend/DevOps mặc định bạn biết Pod là gì.\n\n### Ý chính\n- **Mô hình khai báo (declarative)**: bạn mô tả trạng thái mong muốn trong file YAML, controller liên tục so trạng thái thực tế với mong muốn và sửa cho khớp.\n- **Tự phục hồi (self-healing)**: container chết thì được chạy lại; node chết thì Pod được xếp sang node khác.\n- **Scale**: đổi `replicas` (hoặc dùng autoscaler) để tăng giảm số bản sao.\n- **Rolling update và rollback**: thay phiên bản từng phần, có sự cố thì quay về bản cũ.\n- **Service discovery và cân bằng tải** có sẵn.\n\n### Lỗi hay gặp\n- Dùng Kubernetes cho một đồ án chạy trên một VPS: thường quá tay, một `docker compose` là đủ. Hãy biết khi nào KHÔNG cần nó.\n- Tưởng Kubernetes tự lo dữ liệu: ổ đĩa, sao lưu và cơ sở dữ liệu vẫn là việc của bạn.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: vượt khỏi một lệnh, một người, một máy",
+    "nguon": "Docker · Chương 15",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Key Concepts & Terminology": {
+  "body": "Một cụm Kubernetes (cluster) gồm hai nhóm máy: **control plane** (bộ não, ra quyết định) và các **worker node** (cơ bắp, chạy ứng dụng). Trên production, control plane thường chạy nhiều bản để chịu lỗi.\n\n### Các thành phần control plane\n- **kube-apiserver**: cửa duy nhất vào cụm. Mọi thứ (`kubectl`, kubelet, controller) đều nói chuyện qua REST API của nó. Nó xác thực, phân quyền (RBAC), kiểm tra hợp lệ rồi ghi vào etcd.\n- **etcd**: kho key-value nhất quán lưu toàn bộ trạng thái cụm. Mất etcd mà không có bản sao lưu là mất cụm, nên phải backup.\n- **kube-scheduler**: nhìn các Pod chưa có node và chọn node phù hợp dựa trên request tài nguyên, affinity, taint...\n- **kube-controller-manager**: chạy nhiều controller (Deployment, ReplicaSet, Node, Job...), mỗi cái là một vòng lặp \"so thực tế với mong muốn rồi sửa\".\n- **cloud-controller-manager** (nếu chạy trên cloud): nối cụm với API của nhà cung cấp (load balancer, volume).\n\n### Các thành phần trên mỗi node\n- **kubelet**: agent trên node, nhận danh sách Pod cần chạy và bảo container runtime chạy chúng, báo trạng thái ngược lên.\n- **Container runtime** (containerd, CRI-O): thực sự chạy container.\n- **kube-proxy**: cài luật mạng (iptables/IPVS) để Service chuyển được lưu lượng tới Pod.\n\n### Luồng một lệnh `kubectl apply`\n1. `kubectl` gửi manifest tới API server.\n2. API server xác thực, phân quyền rồi lưu vào etcd.\n3. Controller thấy đối tượng mới và tạo ReplicaSet, rồi Pod.\n4. Scheduler gán Pod vào một node.\n5. Kubelet của node đó kéo image và chạy container.\n\n### Lỗi hay gặp\n- Nghĩ rằng scheduler hay kubelet nói chuyện trực tiếp với nhau: thực tế tất cả đi qua API server.\n- Quên rằng etcd là điểm sống còn: không backup etcd là rủi ro lớn.\n\n### Tự kiểm tra\n- Thành phần nào duy nhất được ghi vào etcd?\n- Pod mới tạo chưa có node thì ai là người chọn node, và ai chạy container?\n- Vì sao nói Kubernetes là hệ thống \"reconciling\"?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-quiz-7",
+    "ten": "Quiz 7 — Kubernetes",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Các công cụ điều phối Container thay thế": {
+  "body": "Kubernetes không phải lựa chọn duy nhất để điều phối container. Biết các phương án thay thế giúp bạn chọn công cụ vừa sức bài toán.\n\n### Các lựa chọn chính\n- **Docker Swarm**: tích hợp sẵn trong Docker Engine. Dùng khái niệm service và stack, file compose gần như dùng lại được (`docker stack deploy`). Cài và học rất nhanh, có desired state, cập nhật cuốn chiếu và secret. Đổi lại hệ sinh thái nhỏ và ít tính năng mở rộng hơn.\n- **HashiCorp Nomad**: một binary gọn, điều phối không chỉ container mà cả ứng dụng thường (JVM, binary). Hợp khi đã dùng hệ sinh thái HashiCorp (Consul, Vault).\n- **Apache Mesos**: kiến trúc hai tầng, từng được dùng ở quy mô rất lớn; hiện hệ sinh thái đã thu hẹp nhiều và hiếm khi là lựa chọn cho dự án mới.\n- **Dịch vụ cloud dựng sẵn** (AWS ECS, Cloud Run, Azure Container Apps): bạn đưa image, nhà cung cấp lo phần điều phối.\n\n### Cách chọn\nCâu hỏi quan trọng nhất là bạn có thực sự cần nhiều máy hay không. Một VPS với Compose thường đủ cho đồ án và sản phẩm nhỏ. Cần nhiều máy mà muốn nhẹ: Swarm hoặc Nomad. Cần hệ sinh thái rộng, nhiều nhà cung cấp, nhiều người biết: Kubernetes là chuẩn thực tế.\n\n### Lỗi hay gặp\n- Chọn công cụ theo mốt chứ không theo bài toán và đội ngũ vận hành.\n- Đánh giá thấp chi phí vận hành của Kubernetes tự dựng.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-3-swarm",
+    "ten": "15.3 — Nhiều máy ở mức nhẹ: Docker Swarm",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Nền tảng Container và OCI Runtime": {
+  "body": "Kubernetes không tự chạy container. Nó giao việc đó cho một **container runtime** trên mỗi node, và các lớp phía dưới được chuẩn hoá để thay thế lẫn nhau được.\n\n### Các lớp, từ trên xuống\n- **kubelet** nói với runtime qua **CRI** (Container Runtime Interface), một API gRPC chuẩn.\n- **Runtime cấp cao** (containerd, CRI-O) nhận lệnh CRI, kéo image, quản lý snapshot, và dựng container. Docker Engine bản thân dùng containerd bên trong; từ Kubernetes 1.24 phần `dockershim` đã bị gỡ nên cụm nói chuyện thẳng với containerd hoặc CRI-O.\n- **Runtime cấp thấp** (thường là `runc`) thật sự tạo tiến trình container bằng namespace, cgroup và `pivot_root` theo đặc tả OCI.\n\n### OCI là gì\n**Open Container Initiative** định nghĩa hai chuẩn: định dạng **image** và đặc tả **runtime** (một `config.json` mô tả tiến trình, namespace, cgroup, mount). Nhờ chuẩn này, image build bằng Docker chạy được trên containerd, CRI-O hay Podman.\n\n### Container không phải máy ảo\nMột container chỉ là một tiến trình Linux được rào lại: namespace quyết định nó thấy gì (PID, mạng, mount, hostname...), cgroup quyết định nó dùng được bao nhiêu tài nguyên. Mọi container trên node dùng chung một nhân.\n\n### Vì sao cần biết\nKhi Pod bị giết với mã 137, khi image không kéo được, hay khi cần giới hạn quyền, bạn phải lần xuống đúng tầng này (`crictl`, `ctr`, log kubelet).\n\n### Lỗi hay gặp\n- Tưởng Kubernetes cần Docker: không còn cần từ 1.24.\n- Nhầm container với máy ảo, từ đó kỳ vọng cách ly mạnh như hypervisor.\n\n### Tự kiểm tra\n- Ai nói chuyện với ai: kubelet, containerd, runc?\n- OCI chuẩn hoá những gì?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-6-runc",
+    "ten": "12.6 — Docker thật sự chạy gì: dockerd, containerd, shim, runc và config.json OCI — và vì sao đó không phải máy ảo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-5-ngan-xep-runtime",
+    "ten": "1.5 — Ai thật sự chạy cái container",
+    "nguon": "Docker · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=docker-container",
+    "ten": "Container không phải máy ảo nhẹ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-1-namespaces",
+    "ten": "12.1 — Container là một tiến trình nhìn thế giới khác đi: từng namespace một",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups",
+    "ten": "12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Custom Controllers": {
+  "body": "**Controller** là vòng lặp điều khiển: liên tục đọc trạng thái mong muốn (spec) và trạng thái thực tế (status) của một loại đối tượng, rồi hành động để thu hẹp khoảng cách. Deployment, ReplicaSet, Job... đều là controller có sẵn. **Custom controller** là controller bạn tự viết cho **Custom Resource** (CRD) của riêng mình, và bộ đôi CRD cộng controller thường được gọi là **Operator**.\n\n### Cách hoạt động\n1. Controller \"watch\" API server để biết đối tượng nào thay đổi (qua informer và cache cục bộ, không hỏi liên tục).\n2. Mỗi thay đổi đưa một khoá (namespace/tên) vào hàng đợi.\n3. Hàm **reconcile** lấy khoá đó, đọc trạng thái mong muốn, so với thực tế, rồi tạo/sửa/xoá đối tượng con để khớp.\n4. Ghi kết quả vào `status` và làm lại khi có sự kiện tiếp theo hoặc khi lỗi.\n\n### Nguyên tắc viết reconcile\n- **Idempotent**: chạy lại nhiều lần cho cùng kết quả.\n- Dựa vào trạng thái hiện tại, không dựa vào \"sự kiện vừa xảy ra\" vì sự kiện có thể bị mất.\n- Dùng **finalizer** khi cần dọn tài nguyên bên ngoài trước khi đối tượng bị xoá.\n- Cập nhật `status.conditions` để người dùng biết chuyện gì đang diễn ra.\n\n### Công cụ\n`client-go` là thư viện gốc; **Kubebuilder** và **Operator SDK** (dựa trên `controller-runtime`) sinh sẵn khung dự án, CRD và webhook.\n\n### Lỗi hay gặp\n- Reconcile có tác dụng phụ không idempotent (tạo trùng tài nguyên).\n- Vòng lặp vô tận vì mỗi lần reconcile lại sửa chính đối tượng nó đang theo dõi.\n- Không xử lý lỗi tạm thời bằng retry có backoff.\n\n### Tự kiểm tra\n- Vì sao reconcile phải dựa vào trạng thái chứ không dựa vào sự kiện?\n- Finalizer dùng để làm gì?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Custom Schedulers và Extenders": {
+  "body": "**kube-scheduler** quyết định Pod chạy ở node nào. Nó làm hai bước: **lọc** (loại node không đủ tài nguyên, không khớp taint hay affinity) rồi **chấm điểm** (ưu tiên node phù hợp nhất) và gán Pod vào node điểm cao nhất.\n\n### Khi scheduler mặc định chưa đủ\nCó ba hướng mở rộng, từ nhẹ tới nặng:\n1. **Cấu hình scheduler mặc định** qua `KubeSchedulerConfiguration` với các profile và plugin (bật/tắt, đổi trọng số). Đây là cách thường đủ.\n2. **Scheduler extender**: scheduler mặc định gọi một webhook HTTP của bạn ở các bước lọc và chấm điểm. Dễ làm nhưng thêm độ trễ.\n3. **Scheduler riêng**: chạy một scheduler thứ hai (hoặc thay thế) và chọn nó trong Pod bằng `spec.schedulerName`. Hợp khi cần logic đặc thù như xếp theo chi phí, theo vị trí địa lý hoặc theo phần cứng đặc biệt.\n\n```yaml\napiVersion: v1\nkind: Pod\nmetadata:\n  name: demo\nspec:\n  schedulerName: my-scheduler   # bỏ trống thì dùng default-scheduler\n  containers:\n  - name: app\n    image: nginx:1.27\n```\n\n### Vì sao cần biết\nHầu hết đội ngũ không bao giờ cần scheduler riêng; bạn nên dùng trước affinity, taint, topology spread và priority class. Biết cơ chế giúp hiểu vì sao Pod bị kẹt ở trạng thái `Pending`.\n\n### Vì sao cần biết\nBạn gặp scheduler hằng ngày mà không để ý: mỗi lần Pod ở trạng thái `Pending`, lý do gần như luôn nằm ở bước lọc của nó (\"0/3 nodes are available: Insufficient cpu\", \"node(s) had untolerated taint\"). Hiểu hai pha lọc rồi chấm điểm giúp bạn đọc đúng thông báo trong phần Events của `kubectl describe pod`.\n\n### Tình huống cần scheduler riêng\n- Xếp Pod theo giá điện hoặc giá máy spot, dồn Pod vào ít node nhất để tắt bớt máy (bin packing).\n- Xếp công việc batch theo nhóm (gang scheduling): cả nhóm Pod chạy cùng lúc hoặc không Pod nào chạy, như huấn luyện mô hình phân tán. Các dự án như Volcano, Kueue ra đời vì nhu cầu này.\n\n### Lỗi hay gặp\n- Viết scheduler riêng cho việc mà nodeSelector hoặc affinity làm được.\n- Chạy hai scheduler cùng tranh một Pod vì quên đặt `schedulerName`.\n\n### Tự kiểm tra\n- Hai pha của scheduler là gì?\n- Khi nào nên dùng extender thay vì viết scheduler riêng?\n- Pod chọn scheduler nào bằng trường nào?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Kubernetes Extensions và APIs": {
+  "body": "Kubernetes được thiết kế để mở rộng mà không phải sửa mã nguồn. Điểm mở rộng quan trọng nhất là **API** của nó.\n\n### Các điểm mở rộng\n- **CustomResourceDefinition (CRD)**: thêm loại tài nguyên mới (ví dụ `Certificate`, `PostgresCluster`) vào API server. Sau đó `kubectl get certificates` hoạt động như tài nguyên gốc. Thường đi kèm controller (Operator) để biến khai báo thành hành động thật.\n- **Aggregated API**: gắn hẳn một API server riêng vào API chính, dùng khi cần hành vi mà CRD không làm được.\n- **Admission controller và webhook**: chặn yêu cầu tạo/sửa đối tượng *sau* khi xác thực/phân quyền nhưng *trước* khi lưu. *Mutating* webhook sửa đối tượng (tự chèn sidecar), *validating* webhook từ chối đối tượng vi phạm chính sách. Kyverno và OPA Gatekeeper dựa trên cơ chế này.\n- **Device plugin**: cho kubelet biết về phần cứng đặc biệt như GPU, FPGA để Pod xin được qua `resources.limits`.\n- **CNI, CSI, CRI**: ba giao diện chuẩn cho mạng, lưu trữ và container runtime, cho phép thay thế từng mảnh.\n\n### Vì sao cần biết\nHầu hết công cụ trong hệ sinh thái (cert-manager, Istio, ArgoCD, Prometheus Operator) chính là CRD cộng controller. Hiểu cơ chế này giúp đọc được chúng.\n\n### Lỗi hay gặp\n- Webhook admission treo hoặc lỗi và chặn mọi thao tác tạo Pod: cần `failurePolicy`, timeout hợp lý và loại trừ namespace hệ thống.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Các khái niệm và thuật ngữ cốt lõi": {
+  "body": "Từ vựng nền tảng của Kubernetes, nên nắm trước khi đọc bất cứ tài liệu nào:\n\n- **Cluster**: toàn bộ tập máy do Kubernetes quản lý.\n- **Node**: một máy (vật lý hoặc ảo) trong cluster. **Control plane** ra quyết định, **worker** chạy ứng dụng.\n- **Pod**: đơn vị chạy nhỏ nhất, gồm một hoặc vài container chung mạng và volume.\n- **Namespace**: phân vùng logic trong một cluster để tách team hoặc môi trường, tên tài nguyên chỉ cần duy nhất trong namespace.\n- **Label**: cặp key/value gắn lên đối tượng để **chọn** và nhóm chúng (`app=web`, `tier=frontend`).\n- **Selector**: biểu thức truy vấn theo label. Service chọn Pod, ReplicaSet đếm Pod đều bằng selector.\n- **Annotation**: cặp key/value để lưu thông tin phụ cho công cụ hoặc người đọc, **không** dùng để chọn.\n\n```bash\nkubectl get pods -l app=web             # chọn theo label\nkubectl label pod web-1 tier=frontend   # gắn label\nkubectl get pods -n kube-system         # chọn namespace\n```\n\n### Lỗi hay gặp\n- Selector của Service không khớp label của Pod nên Service không có endpoint nào.\n- Nghĩ Namespace là cách ly bảo mật hoàn chỉnh: mặc định Pod các namespace vẫn nói chuyện được với nhau.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
+    "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Giới thiệu & Kiến trúc › Các khái niệm và thuật ngữ nền tảng": {
+  "body": "Trước khi đi sâu từng chủ đề, hãy nắm bức tranh các khối xây dựng và chúng nối với nhau thế nào.\n\n### Bức tranh tổng thể\nBạn ra lệnh cho **control plane** (qua API server). Control plane quyết định và ghi lại trạng thái mong muốn. Các **node** làm theo: kubelet chạy **Pod** trên node. Pod nằm trong **namespace** để tách biệt tài nguyên theo team hay môi trường.\n\n### Mối quan hệ cần nhớ\n- Bạn hiếm khi tạo Pod trực tiếp. Bạn tạo **Deployment**, nó tạo **ReplicaSet**, ReplicaSet tạo **Pod**.\n- Pod là tạm thời: có thể bị xoá và tạo lại với **IP khác**. Vì vậy cần **Service** làm địa chỉ ổn định phía trước.\n- Pod gắn với node cho tới khi chết; Pod không \"di chuyển\" sang node khác mà bị thay bằng Pod mới.\n- Cấu hình và bí mật tách khỏi image bằng **ConfigMap** và **Secret**.\n\n### Thử ngay\n```bash\nkubectl get nodes\nkubectl get pods -A      # mọi namespace, gồm cả Pod hệ thống của control plane\nkubectl api-resources    # liệt kê mọi loại đối tượng mà cluster biết\n```\n\n### Lỗi hay gặp\n- Gọi thẳng IP của Pod trong code: IP đổi khi Pod bị thay.\n- Chạy mọi thứ trong namespace `default`.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-0-slides",
+    "ten": "15.0 — Slide Chương 15: vượt khỏi một lệnh, một người, một máy",
+    "nguon": "Docker · Chương 15",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Cài đặt Cluster › kubectl & Local Cluster (minikube/kind)": {
+  "body": "Để học Kubernetes bạn cần hai thứ: công cụ dòng lệnh **kubectl** và một cluster nhỏ chạy trên máy mình.\n\n### kubectl\n`kubectl` là client của API server. Nó đọc thông tin kết nối từ file **kubeconfig** (mặc định `~/.kube/config`) gồm cluster, user và **context** (bộ cluster + user + namespace đang dùng).\n\n```bash\nkubectl version --client\nkubectl config get-contexts        # liệt kê context\nkubectl config use-context kind-demo\nkubectl get nodes\n```\n\n### Cluster cục bộ\n- **kind** (\"Kubernetes in Docker\"): mỗi node là một container Docker. Khởi động nhanh, hợp cho CI và thử nghiệm. `kind create cluster --name demo`.\n- **minikube**: chạy một cụm trong máy ảo hoặc container, có nhiều addon (ingress, dashboard). `minikube start`.\n- **k3d** / **k3s**: bản Kubernetes gọn nhẹ, k3d chạy k3s trong Docker.\n- Docker Desktop cũng có tuỳ chọn bật Kubernetes.\n\nChúng đều cho bạn API Kubernetes thật nên manifest viết ở đây chạy lại được ở nơi khác (trừ phần phụ thuộc cloud như LoadBalancer).\n\n### Vì sao cần biết\nMọi thứ trong Kubernetes đi qua `kubectl`; thạo nó (và biết mình đang ở cụm nào) là kỹ năng nền để học mọi chủ đề sau. Một cụm cục bộ cho bạn chỗ thử sai mà không tốn tiền và không ảnh hưởng ai.\n\n### Quy trình học gợi ý\n1. Tạo cụm bằng kind hoặc minikube, chạy `kubectl get nodes` cho tới khi thấy `Ready`.\n2. Chạy `kubectl get pods -A` để thấy các Pod hệ thống (CoreDNS, kube-proxy, etcd...): đó là chính control plane đang chạy.\n3. Dùng `kubectl explain pod.spec.containers` để đọc tài liệu trường ngay trong terminal.\n4. Thêm `--dry-run=client -o yaml` vào lệnh `create` để sinh khung YAML thay vì gõ từ đầu.\n\n### Lỗi hay gặp\n- Gõ lệnh nhầm cluster vì context đang trỏ nơi khác: luôn kiểm tra `kubectl config current-context`, đặc biệt trước khi xoá.\n- Máy ít RAM mà bật cluster nhiều node.\n\n### Tự kiểm tra\n- Kubeconfig chứa những gì?\n- Khác biệt giữa kind và minikube?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cài đặt Cluster › Managed Providers (EKS/GKE/AKS)": {
+  "body": "**Managed Kubernetes** là dịch vụ cloud lo phần control plane cho bạn: **EKS** (AWS), **GKE** (Google Cloud), **AKS** (Azure). Bạn không phải cài, nâng cấp hay sao lưu API server và etcd, nhà cung cấp lo và thường có SLA cho phần này.\n\n### Bạn vẫn phải lo\n- **Worker node**: tự quản lý node group, hoặc dùng chế độ node tự động (GKE Autopilot, EKS Fargate/Auto Mode) để nhà cung cấp lo luôn.\n- **Nâng cấp phiên bản** cho node và các add-on.\n- **Ứng dụng, mạng, phân quyền và chi phí**.\n- Tích hợp danh tính cloud (IAM) với RBAC của cụm.\n\n### Thế mạnh\nTạo cụm bằng vài lệnh, tích hợp sẵn load balancer, đĩa, danh tính; giảm đáng kể gánh nặng vận hành so với tự dựng.\n\n### Lỗi hay gặp\n- Nghĩ \"managed\" nghĩa là không cần học vận hành: sự cố ứng dụng, tài nguyên và bảo mật vẫn thuộc về bạn.\n- Quên chi phí: control plane, node, load balancer và băng thông đều tính tiền, nhớ xoá cụm thử nghiệm.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cài đặt Cluster › Deploying First Application": {
+  "body": "Cách nhanh nhất để hiểu luồng làm việc là đưa một ứng dụng đơn giản lên cluster cục bộ và sờ vào nó.\n\n### Luồng cơ bản\n1. Có image (ví dụ `nginx`) hoặc build và nạp image vào cluster.\n2. Viết manifest YAML mô tả **Deployment** (chạy mấy bản sao) và **Service** (địa chỉ ổn định).\n3. `kubectl apply -f` để gửi lên cluster.\n4. Quan sát và kiểm tra.\n\n```yaml\n# web.yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      app: web\n  template:\n    metadata:\n      labels:\n        app: web\n    spec:\n      containers:\n      - name: web\n        image: nginx:1.27\n        ports:\n        - containerPort: 80\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: web\nspec:\n  selector:\n    app: web\n  ports:\n  - port: 80\n    targetPort: 80\n```\n\n```bash\nkubectl apply -f web.yaml\nkubectl get deploy,pods,svc\nkubectl port-forward svc/web 8080:80     # rồi mở http://localhost:8080\nkubectl delete pod <tên-một-pod>          # xem nó được dựng lại\nkubectl delete -f web.yaml                # dọn dẹp\n```\n\n### Ý chính\n- `apply` là khai báo: chạy lại nhiều lần an toàn, đổi file rồi apply lại để cập nhật.\n- `labels` trong template phải khớp `selector`, nếu không API từ chối.\n\n### Vì sao cần biết\nĐây là chu trình bạn sẽ lặp lại hàng nghìn lần: sửa YAML, `apply`, quan sát, sửa tiếp. Làm quen sớm với việc đọc trạng thái (`get`, `describe`, `logs`) quan trọng hơn thuộc lòng trường YAML.\n\n### Đọc kết quả thế nào\n`kubectl get deploy` có các cột `READY`, `UP-TO-DATE`, `AVAILABLE`: khi `READY` là `2/2` nghĩa là cả hai bản sao đã sẵn sàng. Nếu Pod kẹt, chạy `kubectl describe pod <tên>` và đọc phần `Events` ở cuối: nó thường nói thẳng nguyên nhân (không kéo được image, không đủ tài nguyên...). Nhớ dọn bằng `kubectl delete -f web.yaml` để cụm cục bộ gọn gàng.\n\n### Lỗi hay gặp\n- Pod `ImagePullBackOff` do sai tên image hoặc image chỉ có trên máy bạn mà chưa nạp vào cluster (với kind: `kind load docker-image`).\n- Quên `---` giữa các tài liệu YAML.\n\n### Tự kiểm tra\n- Xoá một Pod của Deployment thì chuyện gì xảy ra, vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cài đặt Cluster › Quản lý Multi-Cluster": {
+  "body": "Khi có nhiều cluster (dev, staging, production, nhiều vùng, nhiều khách hàng), bài toán chuyển từ \"chạy một cụm\" sang \"quản lý cả đội cụm\" sao cho nhất quán.\n\n### Cấp độ từ đơn giản tới phức tạp\n- **kubeconfig nhiều context**: `kubectl config use-context`, công cụ như `kubectx`/`kubens` hoặc Lens để đổi nhanh. Đây là mức tối thiểu.\n- **GitOps** (ArgoCD, Flux): một repo Git là nguồn sự thật, mỗi cụm tự kéo cấu hình về. Cách phổ biến nhất để giữ nhiều cụm đồng bộ.\n- **Nền tảng quản lý cụm** (Rancher, Tanzu...): giao diện và chính sách tập trung.\n- **Cluster API**: tạo và nâng cấp chính các cụm bằng chính tài nguyên Kubernetes.\n- **Mạng và danh tính xuyên cụm**: service mesh đa cụm, đăng nhập tập trung (OIDC).\n\n### Nguyên tắc\nGiữ cấu hình dạng mã, tách phần chung với phần riêng từng môi trường (Kustomize, Helm values), giám sát tập trung, và có cách khiến lệnh nguy hiểm không thể chạy nhầm cụm production.\n\n### Lỗi hay gặp\n- Cấu hình lệch giữa các cụm vì sửa tay (configuration drift).\n- Chạy `kubectl delete` nhầm context.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cài đặt Cluster › Chọn Managed Provider phù hợp": {
+  "body": "Chọn nhà cung cấp Kubernetes quản lý (managed) nên dựa vào điều bạn đang có, không phải điều nghe hay nhất.\n\n### Các ứng viên\n- **GKE**: Kubernetes ra đời từ Google nên tính năng thường tới sớm; có chế độ Autopilot để Google lo cả node.\n- **EKS**: hợp khi hạ tầng đã ở AWS (VPC, IAM, RDS...); cấu hình nhiều bước hơn nhưng tích hợp sâu.\n- **AKS**: hợp với hệ Microsoft/Azure và Active Directory.\n- **DOKS** (DigitalOcean) và các nhà cung cấp nhỏ: giá dễ đoán, đơn giản, ít dịch vụ đi kèm.\n\n### Tiêu chí so sánh\n1. Hạ tầng và dữ liệu của bạn đang ở đâu (độ trễ, băng thông ra ngoài tính tiền).\n2. Chi phí: phí control plane (có nhà tính, có nhà miễn), node, load balancer, băng thông. Hãy tự tính theo bảng giá hiện hành, giá thay đổi theo thời gian.\n3. Mức bạn muốn nhà cung cấp lo: node tự quản hay serverless.\n4. Kỹ năng sẵn có của đội.\n5. Rủi ro khoá nhà cung cấp: dùng API Kubernetes thuần và ít phụ thuộc dịch vụ riêng sẽ dễ chuyển hơn.\n\n### Lỗi hay gặp\n- So giá chỉ theo phí control plane mà quên chi phí node và mạng.\n- Dùng tính năng độc quyền khắp nơi rồi khó rời đi.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cài đặt Cluster › Cài đặt Local Cluster": {
+  "body": "Bạn chưa cần đám mây để học: một cụm cục bộ miễn phí, an toàn, xoá đi dựng lại thoải mái là đủ cho hầu hết bài thực hành.\n\n### Chọn công cụ\n- **kind**: nhanh, nhẹ, hợp CI. Cần Docker.\n- **minikube**: nhiều addon tiện (ingress, metrics-server, dashboard).\n- **k3d**: chạy k3s (bản gọn) trong Docker, tạo nhiều node rất nhanh.\n\n### Ví dụ với kind\n```yaml\n# kind.yaml: một control-plane và hai worker\nkind: Cluster\napiVersion: kind.x-k8s.io/v1alpha4\nnodes:\n- role: control-plane\n- role: worker\n- role: worker\n```\n```bash\nkind create cluster --name lab --config kind.yaml\nkubectl cluster-info --context kind-lab\nkubectl get nodes\nkind delete cluster --name lab\n```\n\n### Mẹo\n- Mở cổng ra máy bằng `extraPortMappings` trong cấu hình kind, hoặc dùng `kubectl port-forward`.\n- Image build ở máy không tự có trong cụm: `kind load docker-image tên:tag`.\n- Tạo cụm riêng cho mỗi bài thực hành để khỏi lẫn trạng thái.\n\n### Vì sao cần biết\nMột cụm cục bộ vứt đi dựng lại được trong vài chục giây, nên bạn dám thử những thứ không thể thử trên cụm thật: xoá node, làm hỏng cấu hình, tấn công thử. Đó là cách học nhanh nhất.\n\n### Nên chọn gì\nMuốn nhẹ và giống CI: kind. Muốn nhiều addon bật một lệnh (`minikube addons enable ingress`, `metrics-server`): minikube. Muốn dựng nhiều cụm nhỏ để thử multi-cluster: k3d. Cả ba cho cùng API Kubernetes nên manifest chạy được ở cả ba.\n\n### Kiểm tra cụm khoẻ\n```bash\nkubectl get nodes\nkubectl get pods -A\nkubectl create deployment hello --image=nginx:1.27 && kubectl rollout status deployment/hello\n```\n\n### Lỗi hay gặp\n- `LoadBalancer` Service ở `<pending>` mãi: cụm cục bộ không có cloud load balancer (dùng NodePort/port-forward, hoặc MetalLB).\n- Thiếu RAM làm node không lên.\n\n### Tự kiểm tra\n- Vì sao image build ở máy lại không tự có trong cụm kind?\n- Chạy ba node bằng kind tốn tài nguyên gì của máy bạn?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Cài đặt Cluster › Self-hosted hay Managed Cluster?": {
+  "body": "Có hai con đường: **tự dựng** cụm (kubeadm, k3s, trên máy ảo hay máy vật lý) hoặc **dùng managed** (EKS/GKE/AKS).\n\n### So sánh\n| Tiêu chí | Self-hosted | Managed |\n|---|---|---|\n| Control plane | Bạn cài, nâng cấp, backup etcd | Nhà cung cấp lo |\n| Kiểm soát | Tối đa, cấu hình mọi flag | Bị giới hạn bởi nền tảng |\n| Chi phí tiền | Thường rẻ hơn ở quy mô lớn hoặc on-prem | Trả thêm cho sự tiện lợi |\n| Chi phí người | Cao: cần người biết vận hành | Thấp hơn nhiều |\n| Học được | Hiểu sâu bên trong cụm | Tập trung vào ứng dụng |\n\n### Cách quyết định\n- Đội nhỏ, chưa có người chuyên: bắt đầu bằng managed.\n- Bắt buộc chạy tại chỗ (on-prem, dữ liệu không được ra ngoài) hoặc cần kiểm soát đặc biệt: tự dựng, hoặc dùng bản phân phối có hỗ trợ.\n- Mục đích học: tự dựng một lần bằng kubeadm rất đáng để hiểu kiến trúc, dù sau đó bạn dùng managed.\n\n### Lỗi hay gặp\n- Chỉ so tiền máy chủ mà bỏ qua chi phí giờ công vận hành, nâng cấp và xử lý sự cố.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cài đặt Cluster › Cài đặt Control Plane": {
+  "body": "Control plane gồm `kube-apiserver`, `etcd`, `kube-scheduler`, `kube-controller-manager`. Cài thủ công từng binary là cách học kiến trúc sâu nhất (\"Kubernetes the Hard Way\"), còn thực tế người ta dùng **kubeadm**, công cụ tự dựng các thành phần này dưới dạng **static Pod** do kubelet quản lý.\n\n### Chuẩn bị mỗi máy\n- Linux với container runtime (containerd) và `kubelet`, `kubeadm`, `kubectl`.\n- **Tắt swap** (mặc định kubelet từ chối chạy khi swap bật).\n- Mở các cổng cần thiết: API server `6443`, etcd `2379-2380`, kubelet `10250`.\n- Bật module nhân và sysctl cho mạng (`br_netfilter`, `net.ipv4.ip_forward=1`).\n\n### Khởi tạo control plane với kubeadm\n```bash\nsudo kubeadm init --pod-network-cidr=10.244.0.0/16\nmkdir -p $HOME/.kube\nsudo cp /etc/kubernetes/admin.conf $HOME/.kube/config\nsudo chown $(id -u):$(id -g) $HOME/.kube/config\nkubectl get nodes        # NotReady cho tới khi cài CNI\n```\nSau đó cài một CNI (Flannel, Calico, Cilium) để Pod có mạng. Các manifest của thành phần control plane nằm ở `/etc/kubernetes/manifests`.\n\n### Những điều cần nhớ\n- **etcd** là dữ liệu sống còn: sao lưu bằng `etcdctl snapshot save`; production nên chạy nhiều bản (3 hoặc 5) để chịu lỗi.\n- Chứng chỉ TLS của cụm có hạn dùng; kubeadm cấp và có lệnh gia hạn, nhưng bạn phải để ý.\n- Control plane HA cần một địa chỉ cân bằng tải đứng trước nhiều API server.\n\n### Lỗi hay gặp\n- Quên tắt swap hoặc cấu hình cgroup driver của kubelet và runtime không khớp.\n- Không cài CNI nên node mãi `NotReady`.\n- Không backup etcd.\n\n### Tự kiểm tra\n- Vì sao `kubeadm init` chạy được trong khi chưa có cụm?\n- Static Pod khác Pod thường ở đâu?"
+ },
+ "Cài đặt Cluster › Thêm và quản lý Worker Nodes": {
+  "body": "Control plane chỉ ra quyết định, **worker node** mới chạy ứng dụng. Thêm node nghĩa là biến một máy thành thành viên cụm.\n\n### Thêm node\nTrên node mới đã cài runtime, kubelet, kubeadm (và tắt swap), chạy lệnh `join` do control plane in ra:\n\n```bash\n# trên control plane: tạo lại lệnh join nếu token hết hạn\nkubeadm token create --print-join-command\n\n# trên worker\nsudo kubeadm join <control-plane>:6443 --token <token>   --discovery-token-ca-cert-hash sha256:<hash>\n```\nKubelet khởi động, xin chứng chỉ, đăng ký node với API server. Mỗi node chạy **kubelet** (nhận và chạy Pod), **kube-proxy** (luật mạng cho Service) và container runtime.\n\n### Vòng đời node\n```bash\nkubectl get nodes -o wide\nkubectl describe node <tên>        # điều kiện, tài nguyên, Pod đang chạy\nkubectl cordon <tên>               # không xếp Pod mới vào\nkubectl drain <tên> --ignore-daemonsets --delete-emptydir-data   # đuổi Pod đi trước khi bảo trì\nkubectl uncordon <tên>\nkubectl delete node <tên>          # gỡ khỏi cụm\n```\n\n### Xử lý node `NotReady`\n1. `kubectl describe node` xem Conditions (MemoryPressure, DiskPressure, Ready).\n2. Trên node: `systemctl status kubelet`, `journalctl -u kubelet`.\n3. Kiểm tra runtime, đĩa đầy, mạng tới API server, chứng chỉ hết hạn.\nKhi node mất liên lạc đủ lâu, controller đánh dấu Pod là cần thay và xếp sang node khác (có thời gian chờ mặc định).\n\n### Lỗi hay gặp\n- Tắt máy bảo trì mà không `drain`, làm gián đoạn dịch vụ.\n- Token join hết hạn (mặc định 24 giờ) rồi tưởng cụm hỏng.\n- Pod có `emptyDir` hoặc không có controller nên `drain` bị chặn hoặc mất dữ liệu."
+ },
+ "Cài đặt Cluster › Thiết lập Cluster (kubeadm / k3s)": {
+  "body": "**kubeadm** và **k3s** là hai cách dựng cụm thật (khác minikube/kind vốn chỉ để học thử).\n\n### kubeadm\nCông cụ chính thức để dựng cụm chuẩn trên máy bạn chuẩn bị sẵn: `kubeadm init` cho control plane, `kubeadm join` cho worker. Bạn tự chọn CNI, tự lo hạ tầng (máy, mạng, bộ cân bằng tải khi HA) và tự nâng cấp bằng `kubeadm upgrade`. Hợp khi cần cụm production tự quản lý hoặc để học kiến trúc.\n\n### k3s\nBản phân phối Kubernetes gọn của Rancher/SUSE, đã được chứng nhận tương thích. Gói thành một binary nhỏ, mặc định dùng SQLite (hoặc etcd nhúng / cơ sở dữ liệu ngoài), kèm sẵn containerd, Traefik và các thành phần cơ bản. Hợp cho edge, IoT, CI, máy yếu và homelab.\n\n```bash\n# server\ncurl -sfL https://get.k3s.io | sh -\nsudo k3s kubectl get nodes\n# agent\ncurl -sfL https://get.k3s.io | K3S_URL=https://<server>:6443 K3S_TOKEN=<token> sh -\n```\n\n### Khác biệt với minikube/kind\nminikube và kind dựng cụm trên một máy để học và thử nghiệm. kubeadm và k3s dựng cụm trên các máy thật, có nhiều node, dùng lâu dài.\n\n### Lỗi hay gặp\n- Chạy script cài đặt từ mạng mà không đọc nó trước.\n- Chạy cụm một control plane và coi đó là production chịu lỗi."
+ },
+ "Workload › Pods & ReplicaSets": {
+  "body": "**Pod** là đơn vị nhỏ nhất bạn triển khai trong Kubernetes: một nhóm gồm một (thường) hoặc vài container chạy cùng nhau trên một node, **chung địa chỉ IP, mạng và volume**. Các container trong Pod nói chuyện nhau qua `localhost`. Nghĩ về nó như một \"căn hộ\" nhỏ: ở chung một địa chỉ nhưng mỗi người một phòng (container).\n\n**ReplicaSet** giữ cho số bản sao Pod luôn đúng bằng `replicas`. Pod bị xoá hay node chết thì ReplicaSet tạo Pod mới.\n\n### Vì sao cần biết\nPod là tạm thời: chết là mất, không tự sống lại. Vì vậy bạn gần như không tạo Pod trần mà để một controller (ReplicaSet, qua Deployment) quản lý.\n\n### Ý chính\n- Nhiều container trong một Pod chỉ khi chúng gắn chặt với nhau (ứng dụng chính cộng sidecar thu log, hoặc init container chuẩn bị dữ liệu).\n- Mỗi Pod có IP riêng, mất khi Pod bị thay.\n- ReplicaSet dùng **label selector** để biết Pod nào thuộc về nó.\n\n```yaml\napiVersion: v1\nkind: Pod\nmetadata:\n  name: hello\n  labels:\n    app: hello\nspec:\n  containers:\n  - name: app\n    image: nginx:1.27\n    ports:\n    - containerPort: 80\n```\n```bash\nkubectl apply -f pod.yaml\nkubectl get pod hello -o wide\nkubectl logs hello\nkubectl exec -it hello -- sh\nkubectl describe pod hello      # đọc phần Events khi có sự cố\n```\n\n### Lỗi hay gặp\n- Gói cả web và database vào một Pod: chúng không scale độc lập được.\n- Tạo Pod trần cho ứng dụng thật, node chết là mất.\n- Đọc `kubectl get` mà không đọc `describe` khi Pod kẹt `Pending` hay `CrashLoopBackOff`.\n\n### Tự kiểm tra\n- Hai container cùng Pod chia sẻ những gì?\n- Vì sao bạn không nên tin vào IP của Pod?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
+    "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "Workload › Deployments": {
+  "body": "**Deployment** là cách chuẩn để chạy ứng dụng **stateless** (không giữ dữ liệu riêng trong Pod). Bạn khai báo image, số bản sao, và Deployment tạo ReplicaSet rồi Pod cho bạn.\n\n### Lợi ích so với Pod/ReplicaSet trần\n- **Rolling update**: đổi image thì Deployment tạo ReplicaSet mới, tăng dần Pod mới và giảm dần Pod cũ, ứng dụng không ngừng.\n- **Rollback**: giữ lịch sử revision, quay về phiên bản trước bằng một lệnh.\n- **Scale** bằng đổi `replicas`.\n\n```bash\nkubectl create deployment web --image=nginx:1.27 --replicas=3\nkubectl set image deployment/web nginx=nginx:1.28\nkubectl rollout status deployment/web\nkubectl rollout history deployment/web\nkubectl rollout undo deployment/web\nkubectl scale deployment/web --replicas=5\n```\n\n### Lỗi hay gặp\n- Dùng tag `latest`: không biết đang chạy phiên bản nào và rollback mất ý nghĩa. Hãy gắn tag cụ thể.\n- Không đặt readiness probe nên rolling update đẩy lưu lượng vào Pod chưa sẵn sàng.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › StatefulSets": {
+  "body": "**StatefulSet** dành cho ứng dụng **có trạng thái** như cơ sở dữ liệu, hàng đợi tin nhắn, nơi mỗi bản sao phải có danh tính và dữ liệu riêng. Deployment coi mọi Pod như nhau và thay thế được; StatefulSet thì không.\n\n### Điều StatefulSet bảo đảm\n- **Tên ổn định**: Pod tên `db-0`, `db-1`, `db-2`; khi Pod bị dựng lại vẫn mang đúng tên cũ.\n- **Danh tính mạng ổn định** qua một **headless Service**, ví dụ `db-0.db.default.svc`.\n- **Lưu trữ riêng cho từng Pod** qua `volumeClaimTemplates`: mỗi Pod có một PersistentVolumeClaim riêng, đi theo Pod khi dựng lại.\n- **Thứ tự**: mặc định tạo theo thứ tự `0, 1, 2...` và xoá ngược lại; chỉ tạo Pod kế tiếp khi Pod trước đã sẵn sàng.\n\n```yaml\napiVersion: apps/v1\nkind: StatefulSet\nmetadata:\n  name: db\nspec:\n  serviceName: db          # headless Service đã tạo trước\n  replicas: 3\n  selector:\n    matchLabels:\n      app: db\n  template:\n    metadata:\n      labels:\n        app: db\n    spec:\n      containers:\n      - name: db\n        image: postgres:16\n        volumeMounts:\n        - name: data\n          mountPath: /var/lib/postgresql/data\n  volumeClaimTemplates:\n  - metadata:\n      name: data\n    spec:\n      accessModes: [\"ReadWriteOnce\"]\n      resources:\n        requests:\n          storage: 5Gi\n```\n\n### Lỗi hay gặp\n- Tưởng StatefulSet tự lo sao chép dữ liệu: nó chỉ cho danh tính và ổ đĩa, còn replication là việc của phần mềm database (hoặc một Operator).\n- Xoá StatefulSet và nghĩ dữ liệu mất: PVC mặc định vẫn còn, cần xoá riêng.\n- Chạy database production bằng tay thay vì dùng Operator đã được kiểm chứng.\n\n### Tự kiểm tra\n- Vì sao database không hợp với Deployment?\n- Headless Service giúp gì cho StatefulSet?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › Jobs & CronJobs": {
+  "body": "Không phải mọi thứ đều chạy mãi. **Job** chạy một tác vụ cho tới khi xong thành công; **CronJob** tạo Job theo lịch.\n\n### Job\nTạo một hoặc nhiều Pod, chạy đến khi đủ số lần hoàn thành. Hợp cho migration database, xử lý batch, import dữ liệu.\n```yaml\napiVersion: batch/v1\nkind: Job\nmetadata:\n  name: migrate\nspec:\n  backoffLimit: 3\n  template:\n    spec:\n      restartPolicy: Never\n      containers:\n      - name: migrate\n        image: busybox:1.36\n        command: [\"sh\",\"-c\",\"echo migrating; sleep 3\"]\n```\n\n### CronJob\nLên lịch theo cú pháp cron (`phút giờ ngày tháng thứ`), mỗi lần tới giờ nó tạo một Job.\n```yaml\napiVersion: batch/v1\nkind: CronJob\nmetadata:\n  name: nightly\nspec:\n  schedule: \"0 2 * * *\"\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          restartPolicy: OnFailure\n          containers:\n          - name: task\n            image: busybox:1.36\n            command: [\"sh\",\"-c\",\"date; echo done\"]\n```\n\n### Vì sao cần biết\nRất nhiều công việc thật không phải \"dịch vụ chạy mãi\": chạy migration trước khi triển khai, gửi báo cáo cuối ngày, dọn dữ liệu cũ, backup database. Đặt chúng thành Job/CronJob giúp có log, có thử lại, có lịch sử, thay vì một cron trên một máy chủ ai cũng quên.\n\n### Khác biệt cốt lõi với Deployment\nDeployment muốn Pod chạy **mãi** và dựng lại khi nó thoát. Job coi việc **thoát thành công** là đích. Vì vậy `restartPolicy` của Job chỉ được là `Never` hoặc `OnFailure`, và bạn phải thiết kế công việc idempotent vì nó có thể bị chạy lại.\n\n### Xem kết quả\n```bash\nkubectl get jobs,cronjobs\nkubectl logs job/migrate\nkubectl describe cronjob nightly    # xem lần chạy gần nhất\n```\n\n### Lỗi hay gặp\n- Quên `restartPolicy`: Job bắt buộc là `Never` hoặc `OnFailure`, không phải `Always`.\n- Múi giờ: lịch CronJob mặc định theo múi giờ của control plane, có thể đặt `timeZone` ở các phiên bản mới.\n- Job chạy lâu bị chồng lên lần kế tiếp (xem `concurrencyPolicy`).\n\n### Tự kiểm tra\n- Vì sao Job không dùng `restartPolicy: Always`?\n- CronJob và Job liên hệ nhau thế nào?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer",
+    "ten": "11.2 — Hẹn giờ: cron và timer của systemd",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Workload › DaemonSets": {
+  "body": "**DaemonSet** bảo đảm mỗi node (hoặc một tập node bạn chọn) chạy **đúng một** bản sao của một Pod. Có node mới vào cụm thì Pod tự được thêm; node bị gỡ thì Pod biến mất theo.\n\n### Dùng cho gì\nNhững thứ cần có mặt trên mọi máy:\n- Thu log (Fluent Bit, Vector).\n- Giám sát (node-exporter).\n- Plugin mạng và lưu trữ (CNI, CSI node plugin).\n- Agent bảo mật.\n\n```yaml\napiVersion: apps/v1\nkind: DaemonSet\nmetadata:\n  name: log-agent\nspec:\n  selector:\n    matchLabels:\n      app: log-agent\n  template:\n    metadata:\n      labels:\n        app: log-agent\n    spec:\n      tolerations:\n      - operator: Exists          # cho phép chạy cả trên node có taint\n      containers:\n      - name: agent\n        image: busybox:1.36\n        command: [\"sh\",\"-c\",\"while true; do sleep 3600; done\"]\n        volumeMounts:\n        - name: varlog\n          mountPath: /var/log\n          readOnly: true\n      volumes:\n      - name: varlog\n        hostPath:\n          path: /var/log\n```\n\n### Ý chính\n- Giới hạn tập node bằng `nodeSelector` hoặc affinity.\n- Node control plane thường có taint nên cần `tolerations` nếu muốn chạy ở đó.\n- Cập nhật mặc định theo kiểu `RollingUpdate`, từng node một.\n\n### Vì sao cần biết\nMột số thành phần phải có mặt **trên từng máy** chứ không phải \"đâu đó trong cụm\": nếu thu log, bạn cần agent trên mọi node để đọc log của mọi Pod ở node đó. Deployment không đảm bảo điều này, DaemonSet thì có. Chính kube-proxy và nhiều CNI plugin trong cụm của bạn cũng chạy bằng DaemonSet (xem `kubectl get ds -A`).\n\n### Điều khiển vị trí chạy\nMặc định DaemonSet chạy trên mọi node không bị taint chặn. Muốn giới hạn, thêm `nodeSelector` (ví dụ chỉ node có GPU) hoặc node affinity. Muốn chạy cả trên control plane, thêm toleration cho taint `node-role.kubernetes.io/control-plane`.\n\n### Lỗi hay gặp\n- Dùng `hostPath` rộng quyền cho agent mà không cân nhắc rủi ro bảo mật.\n- Quên đặt request/limit khiến agent ngốn tài nguyên trên mọi node.\n\n### Tự kiểm tra\n- Thêm một node vào cụm thì DaemonSet làm gì?\n- Vì sao DaemonSet hợp với agent thu log hơn Deployment?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › Jobs — Tác vụ chạy đến hoàn thành": {
+  "body": "**Job** tạo Pod chạy **đến khi hoàn thành thành công**, rồi dừng. Khác Deployment vốn muốn Pod sống mãi, Job coi \"chạy xong, thoát với mã 0\" là đích.\n\n### Các trường quan trọng\n- `completions`: cần bao nhiêu lần hoàn thành thành công (mặc định 1).\n- `parallelism`: chạy song song bao nhiêu Pod.\n- `backoffLimit`: số lần thử lại khi lỗi trước khi Job bị đánh dấu `Failed` (mặc định 6), giữa các lần thử có độ trễ tăng dần.\n- `activeDeadlineSeconds`: thời gian tối đa cả Job được chạy.\n- `ttlSecondsAfterFinished`: tự dọn Job và Pod sau khi xong.\n- `restartPolicy`: bắt buộc `Never` (tạo Pod mới khi lỗi) hoặc `OnFailure` (khởi động lại container trong cùng Pod).\n\n```bash\nkubectl apply -f job.yaml\nkubectl get jobs\nkubectl wait --for=condition=complete job/migrate --timeout=120s\nkubectl logs job/migrate\n```\n\n### Vì sao cần biết\nHiểu Job cho bạn chạy các việc \"làm một lần cho xong\" như migration cơ sở dữ liệu trước khi triển khai phiên bản mới, đúng cách: có thử lại, có giới hạn thời gian, có dọn dẹp, và có tín hiệu rõ ràng là xong hay hỏng.\n\n### Các mẫu dùng\n- **Một lần**: `completions: 1` (mặc định).\n- **Nhiều lần tuần tự hoặc song song**: `completions: 10`, `parallelism: 3` để xử lý 10 mảnh với tối đa 3 Pod cùng lúc.\n- **Indexed Job**: mỗi Pod nhận một chỉ số (`JOB_COMPLETION_INDEX`) để xử lý đúng một phần dữ liệu.\n\n### Khi Job thất bại\nPod lỗi được thử lại với độ trễ tăng dần; quá `backoffLimit` thì Job vào trạng thái `Failed` và bạn đọc `kubectl describe job` cùng log Pod cuối để biết vì sao.\n\n### Lỗi hay gặp\n- Công việc không idempotent mà để thử lại tự động, dẫn đến xử lý trùng.\n- Không đặt `ttlSecondsAfterFinished` nên Job cũ chất đống.\n- Dùng `restartPolicy: Always` rồi gặp lỗi validate.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › CronJobs — Tác vụ lập lịch": {
+  "body": "**CronJob** chạy Job định kỳ theo cú pháp cron: backup, báo cáo, dọn dẹp, gia hạn chứng chỉ. Mỗi lần tới lịch, CronJob tạo ra một Job mới.\n\n### Cú pháp lịch\n`phút giờ ngày-trong-tháng tháng thứ`, ví dụ `*/15 * * * *` (mỗi 15 phút), `0 2 * * *` (2 giờ sáng mỗi ngày).\n\n### Các trường quan trọng\n- `concurrencyPolicy`: khi lần trước chưa xong mà tới lịch mới:\n  - `Allow` (mặc định): cho chạy chồng.\n  - `Forbid`: bỏ qua lần mới.\n  - `Replace`: dừng lần cũ, chạy lần mới.\n- `startingDeadlineSeconds`: trễ tối đa cho phép so với giờ hẹn, quá hạn thì tính là lỡ.\n- `successfulJobsHistoryLimit` / `failedJobsHistoryLimit`: giữ lại bao nhiêu Job đã xong để xem log.\n- `suspend`: tạm dừng lịch mà không xoá.\n- `timeZone`: múi giờ cho lịch (các phiên bản mới).\n\n```bash\nkubectl create cronjob backup --image=busybox:1.36 --schedule=\"0 2 * * *\" -- sh -c \"echo backup\"\nkubectl get cronjob\nkubectl create job --from=cronjob/backup backup-thu   # chạy thử ngay\n```\n\n### Vì sao cần biết\nCronJob thay cho `crontab` trên một máy chủ đơn lẻ: lịch được lưu trong cụm, Job chạy ở node nào còn chỗ, có log, có lịch sử, và không chết theo một máy. Đổi lại bạn phải hiểu vài hành vi dễ gây bất ngờ.\n\n### Hành vi cần biết\n- Mỗi lần tới lịch, CronJob chỉ tạo một Job; việc Job có xong hay không là chuyện của Job (`backoffLimit`...).\n- Nếu controller tạm dừng và lỡ lịch, `startingDeadlineSeconds` quyết định có chạy bù hay bỏ.\n- Công việc nên idempotent: có thể chạy hai lần (hiếm nhưng được phép về mặt thiết kế) hoặc chạy bù.\n\n### Cách chạy thử\n`kubectl create job --from=cronjob/<tên> thu-1` chạy ngay một lần mà không đợi tới giờ.\n\n### Lỗi hay gặp\n- Để `Allow` với backup chạy dài: nhiều bản backup chạy chồng làm nghẽn.\n- Quên múi giờ nên chạy lệch giờ mong muốn.\n- Không xem log vì Job cũ bị dọn quá sớm.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer",
+    "ten": "11.2 — Hẹn giờ: cron và timer của systemd",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › Pod Specification chi tiết": {
+  "body": "Spec của Pod quyết định container chạy thế nào. Ngoài `image` và `ports`, đây là những phần bạn dùng thường xuyên.\n\n### Các phần chính\n- **env / envFrom**: biến môi trường, lấy từ ConfigMap hoặc Secret.\n- **volumeMounts và volumes**: gắn ổ đĩa, ConfigMap, Secret, `emptyDir` (thư mục tạm dùng chung giữa container trong Pod).\n- **initContainers**: chạy tuần tự *trước* container chính, phải thành công thì Pod mới tiếp tục (chờ database, tải cấu hình, chạy migration).\n- **lifecycle hooks**: `postStart` và `preStop` (hay dùng để dừng êm).\n- **resources**: request và limit.\n\n### Bộ ba probe\n- **startupProbe**: cho ứng dụng khởi động chậm; trong lúc nó chưa qua, liveness và readiness chưa chạy.\n- **livenessProbe**: container còn sống không? Fail thì kubelet **khởi động lại** container.\n- **readinessProbe**: container sẵn sàng nhận lưu lượng chưa? Fail thì Pod bị **rút khỏi Service** nhưng không bị restart.\n\n```yaml\ncontainers:\n- name: api\n  image: myapi:1.0\n  ports:\n  - containerPort: 8080\n  readinessProbe:\n    httpGet: { path: /ready, port: 8080 }\n    periodSeconds: 5\n  livenessProbe:\n    httpGet: { path: /healthz, port: 8080 }\n    initialDelaySeconds: 10\n    periodSeconds: 10\n    failureThreshold: 3\n```\n\n### Lỗi hay gặp\n- Liveness probe kiểm tra cả database ngoài: database chậm thì mọi Pod bị restart cùng lúc, biến sự cố nhỏ thành sự cố lớn. Liveness chỉ nên kiểm tra tiến trình chính nó.\n- Không có readiness probe nên rolling update đưa traffic vào Pod chưa sẵn sàng.\n- Đặt `initialDelaySeconds` quá ngắn cho ứng dụng chậm: nên dùng startupProbe.\n\n### Tự kiểm tra\n- Readiness và liveness khác nhau ở hậu quả khi fail?\n- Init container khác container thường chỗ nào?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
+    "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-8-2-tu-ban-vao-chan",
+    "ten": "8.2 — Lượt thăm dò liveness khởi động lại một dịch vụ khoẻ mạnh",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › ReplicaSet Controller": {
+  "body": "**ReplicaSet controller** là vòng lặp bảo đảm số Pod khớp `spec.replicas`. Nó chạy đơn giản: đếm Pod khớp selector, thiếu thì tạo, thừa thì xoá.\n\n### Cơ chế\n- Chọn Pod bằng **label selector**, không phụ thuộc \"ai tạo ra\" Pod đó (nhưng dựa vào `ownerReferences` để quản lý).\n- Pod bị xoá hoặc node lỗi: số đếm tụt xuống, controller tạo Pod mới.\n- Giảm `replicas`: controller chọn Pod để xoá, ưu tiên Pod chưa chạy, mới hơn, hoạt động kém.\n\n### Thử quan sát\n```bash\nkubectl create deployment web --image=nginx:1.27 --replicas=3\nkubectl get rs\nkubectl delete pod -l app=web --wait=false     # xoá hết Pod\nkubectl get pods -w                             # thấy Pod mới được dựng lại ngay\n```\n\n### Lưu ý\nBạn hiếm khi tạo ReplicaSet trực tiếp, hãy dùng Deployment. Cẩn thận khi tạo Pod trần có label trùng selector của một ReplicaSet: nó có thể bị ReplicaSet \"nhận nuôi\" và xoá đi nếu thừa.\n\n### Lỗi hay gặp\n- Selector quá rộng ôm cả Pod không liên quan.\n- Sửa label trên Pod để \"thoát\" khỏi ReplicaSet khi cần gỡ lỗi là thủ thuật hữu ích nhưng nhớ dọn sau.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › Deployment Controller": {
+  "body": "**Deployment controller** quản lý các ReplicaSet để cho bạn hai khả năng: **rolling update** (cập nhật không ngừng dịch vụ) và **rollback**.\n\n### Hoạt động\nKhi bạn đổi Pod template (ví dụ image), Deployment tạo một **ReplicaSet mới** và chuyển dần: tăng Pod mới, giảm Pod cũ. ReplicaSet cũ vẫn được giữ (về 0 bản sao) làm **revision history**, nhờ vậy quay lại được.\n\n### Chiến lược cập nhật\n- `RollingUpdate` (mặc định), kiểm soát bằng:\n  - `maxSurge`: tối đa vượt `replicas` bao nhiêu Pod trong lúc cập nhật.\n  - `maxUnavailable`: tối đa bao nhiêu Pod được thiếu.\n- `Recreate`: giết hết bản cũ rồi mới chạy bản mới (có downtime; dùng khi hai phiên bản không chạy chung được).\n\n```yaml\nspec:\n  replicas: 4\n  strategy:\n    type: RollingUpdate\n    rollingUpdate:\n      maxSurge: 1\n      maxUnavailable: 0\n  revisionHistoryLimit: 5\n```\n```bash\nkubectl rollout status deployment/web\nkubectl rollout history deployment/web\nkubectl rollout undo deployment/web --to-revision=2\nkubectl rollout pause deployment/web   # gom nhiều thay đổi rồi resume\n```\n\n### Vì sao cần biết\nRolling update là lý do chính nhiều đội dùng Kubernetes: triển khai phiên bản mới giữa ban ngày mà người dùng không thấy gián đoạn. Nhưng nó chỉ đúng khi bạn đặt đúng probe và tham số.\n\n### Ví dụ chạy từng bước\nVới `replicas: 4`, `maxSurge: 1`, `maxUnavailable: 0`: Deployment tạo thêm 1 Pod mới (tổng 5), đợi nó **Ready**, rồi tắt 1 Pod cũ (còn 4), lặp lại cho tới khi cả bốn là bản mới. Lúc nào cũng có ít nhất 4 Pod phục vụ. Nếu Pod mới không bao giờ Ready, rollout dừng lại và bản cũ vẫn phục vụ: đó là lưới an toàn, và `kubectl rollout status` sẽ báo quá hạn (`progressDeadlineSeconds`).\n\n### Lỗi hay gặp\n- Thiếu readiness probe: Deployment coi Pod mới là sẵn sàng ngay và tắt Pod cũ quá sớm.\n- Đặt `maxUnavailable: 0` mà cụm không đủ chỗ cho Pod phụ nên rollout kẹt.\n- Rollback không hoàn tác được thay đổi database đã chạy.\n\n### Tự kiểm tra\n- `maxSurge` và `maxUnavailable` điều khiển điều gì?\n- Vì sao ReplicaSet cũ vẫn còn sau khi cập nhật xong?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › Các loại Workload cơ bản": {
+  "body": "Ba đối tượng nền tảng, xếp lớp lên nhau:\n\n- **Pod**: đơn vị nhỏ nhất, chạy container.\n- **ReplicaSet**: giữ đúng số bản sao Pod.\n- **Deployment**: quản lý ReplicaSet, thêm rolling update và rollback.\n\nMối quan hệ: Deployment tạo ReplicaSet, ReplicaSet tạo Pod. Bạn thao tác ở tầng trên cùng, hai tầng dưới tự lo.\n\n```bash\nkubectl get deploy,rs,pods -l app=web\nkubectl describe pod <pod> | grep \"Controlled By\"   # xem Pod thuộc ReplicaSet nào\n```\n\nNgoài ba loại này còn có các loại dành cho nhu cầu khác: **StatefulSet** (có trạng thái), **DaemonSet** (mỗi node một bản), **Job/CronJob** (chạy một lần hoặc theo lịch). Quy tắc chọn: ứng dụng stateless thông thường dùng Deployment.\n\n### Lỗi hay gặp\n- Sửa trực tiếp ReplicaSet hay Pod do Deployment quản lý: thay đổi bị ghi đè.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
+    "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › Ứng dụng Stateful": {
+  "body": "Chạy database, message queue, hệ thống lưu trữ trên Kubernetes khác chạy web stateless vì mỗi bản sao có **dữ liệu và danh tính riêng**.\n\n### Những mảnh ghép\n- **StatefulSet**: tên Pod ổn định (`kafka-0`), thứ tự khởi động, ổ đĩa riêng cho từng Pod qua `volumeClaimTemplates`.\n- **Headless Service**: cho mỗi Pod một tên DNS riêng để các bản sao tìm thấy nhau.\n- **PersistentVolume / PersistentVolumeClaim / StorageClass**: PVC là \"đơn xin ổ đĩa\", StorageClass cấp ổ động từ hạ tầng (đĩa cloud, Ceph...).\n- **Probe và PodDisruptionBudget**: tránh bị tắt cùng lúc quá nhiều bản khi bảo trì.\n\n### Cân nhắc quan trọng\n- Sao chép và bầu chọn leader do phần mềm database lo; Kubernetes chỉ cho nền.\n- Sao lưu và khôi phục phải được kiểm tra thực sự.\n- Ổ đĩa thường gắn với một vùng khả dụng: Pod không chuyển vùng được dễ dàng.\n- Nhiều đội chọn database **managed ngoài cụm** (RDS, Cloud SQL...) hoặc dùng **Operator** đã trưởng thành thay vì tự viết YAML.\n\n### Vì sao cần biết\nNhiều người mới chạy database bằng Deployment rồi mất dữ liệu khi Pod chuyển node. Hiểu vì sao cần StatefulSet và PVC giúp bạn tránh sai lầm đắt giá nhất khi đưa dữ liệu lên Kubernetes.\n\n### Danh sách việc cần kiểm trước khi chạy stateful\n1. Phần mềm có hỗ trợ chạy cụm và có Operator tốt không (Postgres, MySQL, Kafka, Redis đều có)?\n2. StorageClass nào, đĩa loại gì, có snapshot và mở rộng dung lượng không?\n3. Kế hoạch **sao lưu và khôi phục** đã từng thử khôi phục thật chưa?\n4. Cập nhật thế nào: StatefulSet cập nhật từng Pod theo thứ tự ngược, có thể chia phân đoạn (`partition`) để canary.\n\n### Lỗi hay gặp\n- Xoá PVC hay namespace rồi mất dữ liệu: kiểm tra `reclaimPolicy` của PV.\n- Không đặt request/limit và ổ đĩa đủ lớn.\n\n### Tự kiểm tra\n- Pod `db-1` bị xoá, nó quay lại với tên và ổ đĩa nào?\n- Vì sao có người chọn database managed ngoài cụm?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Workload › Chạy và quản lý Ứng dụng": {
+  "body": "Đây là vòng đời vận hành hàng ngày của một ứng dụng trên cụm, với `kubectl` làm công cụ chính.\n\n### Quy trình\n1. **Đưa image vào**: build, đẩy lên registry (hoặc nạp vào cụm cục bộ), gắn tag cố định.\n2. **Triển khai**: `kubectl apply -f`.\n3. **Kiểm tra**: `kubectl get`, `describe`, `logs`.\n4. **Scale**: `kubectl scale deployment/web --replicas=5` (hoặc autoscaler).\n5. **Cập nhật**: đổi image trong manifest rồi apply lại; theo dõi `rollout status`.\n6. **Quay lui** khi hỏng: `rollout undo`.\n\n### Bộ lệnh chẩn đoán\n```bash\nkubectl get pods -o wide\nkubectl describe pod <pod>          # xem Events cuối trang\nkubectl logs <pod> --previous       # log của lần chạy trước khi bị restart\nkubectl exec -it <pod> -- sh\nkubectl get events --sort-by=.lastTimestamp\nkubectl top pods                    # cần metrics-server\n```\n\n### Trạng thái hay gặp\n- `Pending`: chưa xếp được node (thiếu tài nguyên, taint, PVC chưa gắn).\n- `ImagePullBackOff`: sai tên image, thiếu quyền kéo.\n- `CrashLoopBackOff`: container chạy rồi thoát liên tục; đọc `logs --previous`.\n- `OOMKilled`: vượt giới hạn bộ nhớ.\n\n### Vì sao cần biết\nNgày nào bạn cũng làm các thao tác này, nên thạo bộ lệnh và quy trình chẩn đoán tiết kiệm rất nhiều thời gian lúc có sự cố.\n\n### Phương pháp chẩn đoán gợi ý\nĐi từ ngoài vào trong: Service có endpoint không (`get endpoints`)? Pod có Ready không (`get pods`)? Nếu không, `describe pod` đọc Events; nếu container chạy rồi chết, `logs --previous`; nếu cần vào trong, `exec` hoặc `kubectl debug` để gắn container công cụ tạm. Đừng sửa mù: mỗi lệnh phải trả lời một câu hỏi cụ thể.\n\n### Thói quen tốt\nLưu manifest trong Git, đổi qua file rồi `apply`, và dùng nhãn nhất quán (`app`, `version`, `env`) để chọn tài nguyên bằng `-l`.\n\n### Lỗi hay gặp\n- Sửa trực tiếp trên cụm bằng `kubectl edit` rồi quên cập nhật file nguồn.\n- Không lưu manifest trong Git.\n\n### Tự kiểm tra\n- `CrashLoopBackOff` nên xem thông tin ở đâu?\n- Vì sao nên tránh `kubectl edit` trên cụm production?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "Workload › Chạy và quản lý Ứng dụng trên Kubernetes": {
+  "body": "Một lần đưa ứng dụng lên Kubernetes lần đầu đi qua đúng chuỗi này: đóng gói, mô tả, triển khai, kiểm tra.\n\n### Các bước\n1. **Đóng gói** thành image bằng Dockerfile, chạy thử bằng Docker. Tag cố định, ví dụ `myapp:1.0.0`.\n2. **Đẩy lên registry** mà cụm kéo được (Docker Hub, GHCR, registry của cloud). Cụm cục bộ thì nạp trực tiếp (`kind load docker-image`).\n3. **Viết manifest**: Deployment (image, replicas, probe, resources) và Service (địa chỉ ổn định).\n4. **Triển khai** bằng `kubectl apply -f`.\n5. **Kiểm tra**: `get pods`, `logs`, `port-forward` hoặc truy cập qua Service.\n\n### Ba điều Kubernetes làm cho bạn\n- **Self-healing**: xoá một Pod, nó được dựng lại.\n- **Rolling update**: đổi tag image, Pod được thay dần; `kubectl rollout status` để theo dõi.\n- **Rollback**: `kubectl rollout undo deployment/<tên>`.\n\n```bash\ndocker build -t myapp:1.0.0 .\nkind load docker-image myapp:1.0.0\nkubectl apply -f deployment.yaml\nkubectl set image deployment/myapp myapp=myapp:1.0.1\nkubectl rollout undo deployment/myapp\n```\n\n### Vì sao cần biết\nĐây là \"bài toán đầu tiên\" của mọi người học Kubernetes. Nhiều lỗi người mới gặp thật ra không phải của Kubernetes mà nằm ở khâu đóng gói (ứng dụng nghe sai địa chỉ, cổng sai, log sai chỗ), nên hiểu từng khâu giúp bạn khoanh vùng nhanh.\n\n### Thứ tự kiểm khi ứng dụng không chạy\n1. Image chạy được bằng `docker run` ở máy không?\n2. Cụm kéo được image không (`ImagePullBackOff`)?\n3. Pod có Running và Ready không, `logs` nói gì?\n4. Service có endpoint không, `targetPort` đúng không?\n5. Gọi từ một Pod tạm bằng tên Service được không?\n\n### Gợi ý\nCho ứng dụng đọc cấu hình từ biến môi trường, ghi log ra stdout/stderr, nghe trên `0.0.0.0`, và tắt êm khi nhận tín hiệu SIGTERM để rolling update không làm rơi yêu cầu.\n\n### Lỗi hay gặp\n- Dùng tag `latest` cùng `imagePullPolicy` mặc định, khó biết phiên bản nào đang chạy.\n- Quên khai `containerPort` hay `targetPort` của Service không khớp cổng ứng dụng lắng nghe.\n- Ứng dụng nghe trên `127.0.0.1` thay vì `0.0.0.0` nên Service không tới được.\n- Ghi log vào file trong container thay vì stdout nên `kubectl logs` trống.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien",
+    "ten": "4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng",
+    "nguon": "Docker · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-3-registry",
+    "ten": "3.3 — Registry: Hub, GHCR và của riêng bạn",
+    "nguon": "Docker · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Configuration Management › ConfigMaps": {
+  "body": "Ứng dụng nên dùng **cùng một image** ở dev, staging và production; chỉ **cấu hình** thay đổi. **ConfigMap** là đối tượng Kubernetes lưu cấu hình không nhạy cảm dạng key-value hoặc cả file, tách khỏi image.\n\n### Tạo ConfigMap\n```bash\nkubectl create configmap app-config   --from-literal=LOG_LEVEL=info   --from-file=nginx.conf\n```\n```yaml\napiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: app-config\ndata:\n  LOG_LEVEL: \"info\"\n  FEATURE_X: \"true\"\n```\n\n### Hai cách dùng\n**Làm biến môi trường:**\n```yaml\nenvFrom:\n- configMapRef:\n    name: app-config\n```\n**Mount thành file:**\n```yaml\nvolumes:\n- name: cfg\n  configMap:\n    name: app-config\ncontainers:\n- name: app\n  volumeMounts:\n  - name: cfg\n    mountPath: /etc/app\n```\n\n### Ý chính\n- ConfigMap có giới hạn kích thước khoảng 1 MiB.\n- Mount dạng volume tự cập nhật khi ConfigMap đổi (sau một khoảng trễ), còn biến môi trường chỉ đọc lúc Pod khởi động, muốn đổi phải restart Pod.\n- Không để mật khẩu hay token vào ConfigMap, hãy dùng Secret.\n\n### Vì sao cần biết\nNếu cấu hình nằm trong image, mỗi lần đổi một tham số là một lần build và đẩy image mới, và bạn có nhiều image khác nhau cho từng môi trường. ConfigMap giúp \"build một lần, chạy mọi nơi\" (một trong các nguyên tắc của ứng dụng 12-factor).\n\n### Cách chọn giữa env và volume\nTham số đơn giản, đọc một lần lúc khởi động: dùng biến môi trường. File cấu hình có cấu trúc hoặc cần cập nhật nóng: dùng volume. Khi đổi ConfigMap mà cần ứng dụng nhận ngay, hoặc ứng dụng đọc lại file khi thay đổi, hoặc bạn chạy `kubectl rollout restart` cho Deployment.\n\n### Lỗi hay gặp\n- Đổi ConfigMap mà không thấy ứng dụng đổi: ứng dụng dùng env cần `kubectl rollout restart`.\n- Mount cả ConfigMap vào thư mục có sẵn file khác làm che mất nội dung thư mục đó (dùng `subPath` có điều kiện).\n\n### Tự kiểm tra\n- Biến môi trường từ ConfigMap có cập nhật khi ConfigMap đổi không?\n- Vì sao không để mật khẩu vào ConfigMap?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Configuration Management › Secrets": {
+  "body": "**Secret** lưu dữ liệu nhạy cảm như mật khẩu, token API, khoá TLS. Về hình thức giống ConfigMap, nhưng được xử lý cẩn thận hơn: tách quyền truy cập bằng RBAC, không hiện trong `kubectl describe`, có thể được mã hoá khi lưu.\n\n### Điều cần hiểu đúng\nGiá trị trong Secret chỉ được mã hoá **base64**, mà đó là mã hoá dạng chữ chứ không phải bảo mật. Ai đọc được Secret là giải mã được ngay.\n```bash\nkubectl create secret generic db --from-literal=password='s3cret'\nkubectl get secret db -o jsonpath='{.data.password}' | base64 -d\n```\n\n### Để an toàn thật\n- Bật **encryption at rest** cho etcd.\n- Giới hạn ai `get` được Secret bằng RBAC.\n- Dùng bộ quản lý bí mật bên ngoài: **Vault**, External Secrets Operator, cloud secret manager, hoặc **Sealed Secrets** để lưu Secret mã hoá trong Git.\n- Không commit Secret dạng YAML thường vào Git.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Configuration Management › ConfigMaps — Cấu hình ứng dụng": {
+  "body": "**ConfigMap** là nơi giữ cấu hình thay đổi theo môi trường, để image không phải build lại mỗi lần đổi cấu hình. Bài này nhấn vào cách đặt tên key và tổ chức cấu hình.\n\n### Hai kiểu dữ liệu\n- **Key-value đơn giản**: `LOG_LEVEL=info`, `API_URL=https://api...`.\n- **Cả file**: key là tên file, value là nội dung (nginx.conf, application.yaml).\n```yaml\napiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: web-config\ndata:\n  LOG_LEVEL: \"info\"\n  app.properties: |\n    server.port=8080\n    cache.ttl=60\n```\n\n### Nhận vào Pod\n```yaml\nenv:\n- name: LOG_LEVEL\n  valueFrom:\n    configMapKeyRef:\n      name: web-config\n      key: LOG_LEVEL\n```\nHoặc `envFrom` để nạp cả ConfigMap, hoặc mount làm volume để ứng dụng đọc file.\n\n### Mẹo tổ chức\n- Mỗi môi trường một ConfigMap cùng tên, khác namespace, hoặc dùng Kustomize/Helm để thay giá trị.\n- Có thể đặt `immutable: true` để ngăn sửa nhầm và giảm tải cho API server; đổi cấu hình bằng cách tạo ConfigMap mới với tên mới.\n\n### Vì sao cần biết\nMột ứng dụng thường có vài chục tham số (URL dịch vụ, cờ tính năng, mức log) thay đổi theo môi trường. Tổ chức ConfigMap gọn gàng giúp việc đổi môi trường là đổi dữ liệu, không phải đổi mã.\n\n### Mẹo vận hành\n- Đặt tên key theo quy ước của ứng dụng (chữ hoa gạch dưới cho env, tên file cho file cấu hình).\n- Tách ConfigMap theo mục đích (một cho ứng dụng, một cho nginx) thay vì một ConfigMap khổng lồ.\n- Xem nội dung: `kubectl get configmap web-config -o yaml`.\n\n### Lỗi hay gặp\n- Quên rằng value luôn là chuỗi (đặt số hoặc boolean trong dấu nháy).\n- Tham chiếu ConfigMap chưa tồn tại làm Pod kẹt `CreateContainerConfigError`.\n\n### Tự kiểm tra\n- `immutable: true` giúp gì và đổi cấu hình thế nào khi dùng nó?\n- Khi nào dùng `configMapKeyRef`, khi nào dùng `envFrom`?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Configuration Management › Secrets — Dữ liệu nhạy cảm": {
+  "body": "**Secret** chứa token, mật khẩu, chứng chỉ. Bạn cần biết loại, cách lưu và cách đưa vào Pod.\n\n### Các loại phổ biến\n- **Opaque** (mặc định): key-value tuỳ ý.\n- **kubernetes.io/tls**: cặp `tls.crt` và `tls.key`, dùng cho Ingress/HTTPS.\n- **kubernetes.io/dockerconfigjson**: thông tin đăng nhập registry để kéo image riêng (`imagePullSecrets`).\n- Còn loại cho SSH, basic-auth và token ServiceAccount.\n\n```bash\nkubectl create secret tls web-tls --cert=tls.crt --key=tls.key\nkubectl create secret docker-registry regcred   --docker-server=ghcr.io --docker-username=me --docker-password=\"$TOKEN\"\n```\n\n### Lưu trữ\nDữ liệu nằm trong **etcd**. Mặc định chỉ được base64, không mã hoá thật. Cần bật **EncryptionConfiguration** (encryption at rest) hoặc dùng KMS provider của cloud để mã hoá.\n\n### Đưa vào Pod\n- **Biến môi trường** (`secretKeyRef`): tiện, nhưng dễ lộ qua dump môi trường, log lỗi.\n- **Volume mount**: thành file (thường mode `0400`), ưu tiên cho dữ liệu nhạy cảm, tự cập nhật khi Secret đổi.\n\n### Vì sao cần biết\nRò rỉ khoá, token và mật khẩu là một trong những nguyên nhân sự cố bảo mật phổ biến nhất. Secret là công cụ Kubernetes cho chuyện này, nhưng dùng sai (tưởng base64 là mã hoá) lại tạo cảm giác an toàn giả.\n\n### Vòng đời của một bí mật\nTạo (không commit vào Git dạng rõ) rồi lưu trong etcd (bật mã hoá) rồi mount vào Pod rồi **xoay vòng** định kỳ. Khi Secret đổi, volume mount được cập nhật, còn biến môi trường thì cần khởi động lại Pod. Mỗi loại Secret có định dạng key riêng (TLS cần `tls.crt` và `tls.key`) nên Ingress và registry mới đọc được.\n\n### Lỗi hay gặp\n- Coi base64 là bảo mật và commit Secret vào Git.\n- Cấp quyền `list secrets` rộng cho nhiều người.\n- In biến môi trường chứa bí mật ra log.\n\n### Tự kiểm tra\n- Base64 có phải mã hoá không?\n- `imagePullSecrets` dùng cho loại Secret nào?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets",
+    "ten": "14.2 — Biến môi trường và khoá bí mật",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Configuration Management › Injecting Pod Config với ConfigMaps": {
+  "body": "Mục tiêu: đổi cấu hình **mà không rebuild image**. Có hai đường đưa ConfigMap vào Pod, mỗi đường hợp một tình huống.\n\n### Qua biến môi trường\nHợp cho vài tham số đơn giản:\n```yaml\ncontainers:\n- name: app\n  image: myapp:1.0\n  env:\n  - name: DB_HOST\n    valueFrom:\n      configMapKeyRef:\n        name: app-config\n        key: db_host\n  envFrom:\n  - configMapRef:\n      name: app-config\n```\n\n### Qua volume mount\nHợp cho file cấu hình (nginx.conf, YAML, properties):\n```yaml\nspec:\n  containers:\n  - name: app\n    volumeMounts:\n    - name: cfg\n      mountPath: /etc/app\n      readOnly: true\n  volumes:\n  - name: cfg\n    configMap:\n      name: app-config\n      items:\n      - key: app.yaml\n        path: app.yaml\n```\nChỉ mount những key cần bằng `items`.\n\n### Cập nhật cấu hình\n- Volume: kubelet đồng bộ lại file sau một khoảng trễ (không dùng được với `subPath`), ứng dụng phải tự đọc lại.\n- Env: phải khởi động lại Pod, ví dụ `kubectl rollout restart deployment/app`.\n- Mẹo: đặt hash của ConfigMap vào annotation của Pod template để Deployment tự rollout khi cấu hình đổi (Helm hay làm vậy).\n\n### Vì sao cần biết\nĐây là mẫu thiết kế nền tảng: image bất biến, cấu hình đi kèm theo môi trường. Nhờ vậy bạn thăng hạng cùng một image từ staging lên production chỉ bằng cách đổi ConfigMap.\n\n### Mẫu thực tế\nGiữ manifest Deployment giống nhau giữa các môi trường, chỉ khác ConfigMap (hoặc dùng Kustomize overlay, Helm values). Với ứng dụng cần đọc lại cấu hình, hãy kiểm chứng bằng cách đổi ConfigMap rồi quan sát: ứng dụng dùng env sẽ không đổi cho tới khi Pod được tạo lại.\n\n### Lỗi hay gặp\n- Tên key không hợp lệ làm một số key không thành biến môi trường.\n- Mount đè lên thư mục có sẵn file quan trọng.\n\n### Tự kiểm tra\n- Vì sao mount bằng `subPath` không nhận cập nhật tự động?\n- Làm sao để Deployment tự rollout khi ConfigMap đổi?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets",
+    "ten": "14.2 — Biến môi trường và khoá bí mật",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Configuration Management › Sử dụng Secrets cho dữ liệu nhạy cảm": {
+  "body": "Đừng hardcode mật khẩu vào image hay manifest. Hãy để chúng trong **Secret** và kiểm soát ai đọc được.\n\n### Dùng Secret trong Pod\n```yaml\ncontainers:\n- name: app\n  image: myapp:1.0\n  env:\n  - name: DB_PASSWORD\n    valueFrom:\n      secretKeyRef:\n        name: db\n        key: password\n  volumeMounts:\n  - name: creds\n    mountPath: /etc/creds\n    readOnly: true\nvolumes:\n- name: creds\n  secret:\n    secretName: db\n    defaultMode: 0400\n```\n\n### Ba lớp bảo vệ\n1. **RBAC**: chỉ ServiceAccount hay người cần thiết mới có quyền `get` Secret; cẩn thận quyền `list`/`watch`, vì chúng cũng đọc được nội dung.\n2. **Mã hoá at-rest**: bật EncryptionConfiguration hoặc KMS để dữ liệu trong etcd không phải văn bản gần như rõ.\n3. **Quản lý ngoài cụm**: Vault, External Secrets, Sealed Secrets cho vòng đời, xoay vòng và kiểm toán.\n\n### Thực hành tốt\n- Ưu tiên mount file hơn biến môi trường.\n- Xoay vòng bí mật định kỳ và khi lộ.\n- Mỗi ứng dụng một ServiceAccount với quyền tối thiểu.\n\n### Vì sao cần biết\nChuyện thường thấy: mật khẩu nằm trong YAML đẩy lên Git, hoặc trong biến môi trường in ra log lỗi. Dùng Secret cộng RBAC cộng mã hoá là đường tối thiểu để tránh điều đó.\n\n### Danh sách rà soát nhanh\n- Secret có nằm trong Git dạng rõ không? (Nếu có: xoay vòng ngay.)\n- Ai có quyền `get`, `list` Secret trong namespace?\n- etcd đã bật mã hoá at-rest chưa?\n- Ứng dụng có in biến môi trường ra log không?\n- Có cơ chế xoay vòng chưa?\n\n### Lỗi hay gặp\n- Cho mọi Pod trong namespace quyền đọc mọi Secret.\n- Quên rằng ai tạo được Pod trong namespace đều có thể mount Secret trong namespace đó.\n\n### Tự kiểm tra\n- Vì sao quyền `list secrets` cũng nguy hiểm?\n- Ưu và nhược của việc đưa Secret qua env so với file?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Service & Networking › Services (ClusterIP/NodePort/LoadBalancer)": {
+  "body": "Pod đến rồi đi và IP đổi liên tục, nên cần một địa chỉ ổn định phía trước. **Service** là điểm truy cập ổn định (một IP ảo và một tên DNS) trỏ tới tập Pod được chọn bằng label, và cân bằng tải giữa chúng.\n\n### Ba loại chính\n- **ClusterIP** (mặc định): chỉ truy cập được **trong cụm**. Dùng cho giao tiếp nội bộ giữa các dịch vụ.\n- **NodePort**: mở một cổng (mặc định dải 30000–32767) trên **mọi node**; truy cập `<IP-node>:<nodePort>`. Tiện thử nghiệm.\n- **LoadBalancer**: yêu cầu hạ tầng cloud tạo load balancer bên ngoài trỏ vào Service. Trên cụm cục bộ không có cloud thì thường ở `<pending>`.\n\n```yaml\napiVersion: v1\nkind: Service\nmetadata:\n  name: web\nspec:\n  type: ClusterIP\n  selector:\n    app: web\n  ports:\n  - port: 80          # cổng của Service\n    targetPort: 8080  # cổng container\n```\n```bash\nkubectl get svc\nkubectl get endpoints web     # danh sách IP:port các Pod phía sau\nkubectl port-forward svc/web 8080:80\n```\n\n### Ý chính\n- `selector` khớp label Pod; không khớp thì Service không có endpoint.\n- Chỉ Pod **Ready** (qua readiness probe) mới nhận lưu lượng.\n- `port` (Service) khác `targetPort` (container).\n\n### Vì sao cần biết\nKhông có Service thì Pod này không tìm được Pod kia một cách đáng tin cậy, vì IP Pod đổi liên tục. Service là nền của mọi giao tiếp trong cụm và là thứ đầu tiên cần kiểm khi \"không kết nối được\".\n\n### Cách hoạt động ngắn gọn\nControl plane theo dõi Pod khớp `selector` và Ready, lưu danh sách vào đối tượng **Endpoints/EndpointSlice**. `kube-proxy` trên mỗi node cài luật để gói gửi tới IP ảo của Service được chuyển tới một trong các endpoint đó. CoreDNS cho Service một tên DNS (`web.default.svc`), nên code chỉ cần gọi `http://web`.\n\n### Lỗi hay gặp\n- Service trỏ rỗng vì selector sai: kiểm tra `kubectl get endpoints`.\n- Chọn `LoadBalancer` cho mọi Service nội bộ và tốn tiền nhiều load balancer.\n\n### Tự kiểm tra\n- Khác nhau giữa `port` và `targetPort`?\n- Vì sao Pod chưa Ready không nhận traffic?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Service & Networking › Ingress": {
+  "body": "**Ingress** cho phép định tuyến lưu lượng HTTP(S) từ bên ngoài vào nhiều Service theo **host** và **path**, qua **một** điểm vào duy nhất, thay vì mở một LoadBalancer cho mỗi dịch vụ. Ingress cũng xử lý **TLS termination**.\n\n```yaml\napiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  name: site\nspec:\n  ingressClassName: nginx\n  tls:\n  - hosts: [app.example.com]\n    secretName: app-tls\n  rules:\n  - host: app.example.com\n    http:\n      paths:\n      - path: /api\n        pathType: Prefix\n        backend:\n          service: { name: api, port: { number: 80 } }\n      - path: /\n        pathType: Prefix\n        backend:\n          service: { name: web, port: { number: 80 } }\n```\n\nIngress chỉ là **khai báo quy tắc**; cần một **Ingress Controller** (nginx, Traefik...) chạy trong cụm để thực thi. Tài liệu chính thức hiện đã đóng băng Ingress API và khuyến nghị **Gateway API** cho tính năng mới, nhưng Ingress vẫn được dùng rất rộng.\n\n### Lỗi hay gặp\n- Tạo Ingress mà không cài controller thì không có gì xảy ra.\n- Quên `ingressClassName` khi cụm có nhiều controller.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-10-3-reverse-forward",
+    "ten": "10.3 — Reverse proxy, forward proxy và đường hầm",
+    "nguon": "Networking for Developers · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Service & Networking › Pod-to-Pod & Load Balancing": {
+  "body": "Mô hình mạng Kubernetes dựa trên một quy tắc đơn giản: **mỗi Pod có IP riêng và mọi Pod nói chuyện được với mọi Pod khác trực tiếp, không qua NAT**, bất kể ở node nào. Việc này do **CNI plugin** (Calico, Cilium, Flannel...) hiện thực hoá.\n\n### Cân bằng tải\nBạn không gọi IP Pod, bạn gọi **Service**. `kube-proxy` trên mỗi node cài luật (iptables hoặc IPVS) để một yêu cầu tới IP ảo của Service được chia cho các Pod Ready phía sau, thường là chọn ngẫu nhiên hoặc xoay vòng. Đây là cân bằng tải ở tầng 4. Một số CNI (như Cilium) thay kube-proxy bằng eBPF.\n\n### Thử quan sát\n```bash\nkubectl get pods -o wide                 # mỗi Pod một IP\nkubectl run tmp --rm -it --image=busybox:1.36 -- sh\n# trong Pod: wget -qO- http://web   # gọi qua tên Service\n```\n\n### Ý chính\n- Pod-to-Pod trực tiếp theo IP là được, nhưng IP mong manh; dùng tên Service.\n- Cân bằng tải chia theo **kết nối**, nên kết nối dài (gRPC, HTTP/2) có thể dồn vào một Pod; cần cân bằng ở tầng ứng dụng hoặc service mesh.\n- Mặc định mọi Pod nói chuyện được với nhau; muốn hạn chế phải dùng NetworkPolicy.\n\n### Lỗi hay gặp\n- Hardcode IP Pod.\n- Kết nối gRPC dài bị dồn vào một Pod rồi tưởng cân bằng tải hỏng.\n\n### Tự kiểm tra\n- Ai chịu trách nhiệm cho IP của Pod, ai cho IP của Service?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-5-mang",
+    "ten": "12.5 — Mạng container bằng tay: cặp veth, bridge, NAT và một cổng publish",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-10-1-l4-l7",
+    "ten": "10.1 — Cân bằng tải L4 và L7",
+    "nguon": "Networking for Developers · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Service & Networking › Service Discovery với CoreDNS": {
+  "body": "Gọi Service bằng IP là cứng nhắc. Kubernetes chạy **CoreDNS** trong cụm, mỗi Service tự có một tên DNS, nên Pod gọi nhau theo tên.\n\n### Quy ước tên\n- Trong cùng namespace: `web` hoặc `web.default`.\n- Đầy đủ (FQDN): `web.default.svc.cluster.local`, dạng `<service>.<namespace>.svc.<cluster-domain>`.\nPod nhận `/etc/resolv.conf` với `search` domain để tên ngắn được mở rộng tự động.\n\n```bash\nkubectl run tmp --rm -it --image=busybox:1.36 -- sh\nnslookup web\nnslookup web.default.svc.cluster.local\ncat /etc/resolv.conf\n```\n\n### Cách hoạt động\nPod hỏi DNS tại IP của Service `kube-dns` (CoreDNS chạy ở namespace `kube-system`). CoreDNS theo dõi API server, trả lời bản ghi A/AAAA cho Service (IP ảo) và SRV cho cổng. Cấu hình CoreDNS nằm ở ConfigMap `coredns`.\n\n### Khi DNS lỗi\n1. Kiểm tra Pod CoreDNS: `kubectl -n kube-system get pods -l k8s-app=kube-dns`.\n2. Thử `nslookup` từ một Pod tạm.\n3. Xem log CoreDNS và ConfigMap.\n4. Chú ý NetworkPolicy chặn cổng 53.\n\n### Vì sao cần biết\nMọi lời gọi giữa microservice trong cụm đều dựa vào DNS nội bộ. Khi DNS hỏng, triệu chứng rất loạn (timeout rải rác, \"no such host\"), nên biết cách kiểm tra từng bước tiết kiệm rất nhiều thời gian.\n\n### Gỡ lỗi theo thứ tự\n1. Từ Pod tạm, `nslookup kubernetes.default` có chạy không (kiểm CoreDNS cơ bản).\n2. `nslookup <tên-service>` có ra IP không (kiểm Service tồn tại và đúng namespace).\n3. Xem log Pod CoreDNS và ConfigMap `coredns`.\n4. Kiểm tra NetworkPolicy có chặn Pod gọi tới CoreDNS (cổng 53 UDP/TCP).\n\nTrong Docker Compose, tên dịch vụ cũng phân giải được qua DNS nhúng của Docker: ý tưởng tương tự, nhưng ở Kubernetes DNS nằm trong cụm do CoreDNS phục vụ.\n\n### Lỗi hay gặp\n- Gọi tên Service khác namespace mà quên phần `.namespace`.\n- Cài đặt `ndots` mặc định làm tên ngoài cụm bị thử nhiều lần mở rộng, gây chậm.\n\n### Tự kiểm tra\n- FQDN đầy đủ của Service `api` trong namespace `shop` là gì?\n- CoreDNS chạy ở đâu trong cụm?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-9-2-tra-cuu-dich-vu",
+    "ten": "9.2 — Tra cứu một dịch vụ",
+    "nguon": "Docker · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Service & Networking › Headless Services": {
+  "body": "**Headless Service** là Service có `clusterIP: None`: không có IP ảo và không có cân bằng tải. Thay vào đó, DNS trả về **trực tiếp IP của từng Pod** phía sau.\n\n```yaml\napiVersion: v1\nkind: Service\nmetadata:\n  name: db\nspec:\n  clusterIP: None\n  selector:\n    app: db\n  ports:\n  - port: 5432\n```\n`nslookup db` trả nhiều bản ghi A, mỗi Pod một IP. Khi dùng với **StatefulSet** (đặt `serviceName: db`), mỗi Pod còn có tên DNS riêng ổn định: `db-0.db.default.svc.cluster.local`.\n\n### Khi nào dùng\n- Ứng dụng stateful cần nói chuyện với **một bản sao cụ thể**: primary/replica, cụm Kafka, ZooKeeper, Elasticsearch.\n- Client tự cân bằng tải (gRPC client-side) hoặc tự phát hiện thành viên.\n\n### Vì sao cần biết\nVới ứng dụng stateless, cân bằng tải qua Service là đủ. Nhưng một cụm database có primary và replica thì client phải biết chính xác **ai là ai**; cân bằng tải ngẫu nhiên sẽ gửi ghi vào replica. Headless Service cùng StatefulSet cho từng bản sao một địa chỉ DNS riêng, ổn định.\n\n### Quan sát\n```bash\nkubectl run tmp --rm -it --image=busybox:1.36 -- nslookup db\n# Với StatefulSet: db-0.db, db-1.db, db-2.db đều phân giải được\n```\nỨng dụng có thể gọi `db-0.db` làm primary, hoặc truy vấn DNS để liệt kê mọi thành viên khi cần tự cấu hình cụm.\n\n### Lỗi hay gặp\n- Tưởng headless vẫn cân bằng tải: nó chỉ cung cấp danh sách IP.\n- Client cache DNS quá lâu nên giữ IP Pod đã thay.\n\n### Tự kiểm tra\n- `clusterIP: None` thay đổi điều gì so với Service thường?\n- Vì sao cụm Kafka hay ZooKeeper cần headless Service?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Service & Networking › So sánh Service Types": {
+  "body": "Chọn đúng loại Service là chọn cách ứng dụng được tiếp cận.\n\n| Loại | Truy cập từ | Dùng khi |\n|---|---|---|\n| ClusterIP | Chỉ trong cụm | Dịch vụ nội bộ (API, cache, database) |\n| NodePort | Bên ngoài qua `<IP node>:<cổng 30000-32767>` | Thử nghiệm, hoặc làm nền cho một LB bên ngoài |\n| LoadBalancer | Qua load balancer của cloud | Mở dịch vụ TCP/UDP ra Internet trên cloud |\n| ExternalName | Trong cụm, trỏ sang tên DNS ngoài | Gọi dịch vụ bên ngoài như thể nội bộ |\n| Headless (`clusterIP: None`) | DNS trả IP từng Pod | Ứng dụng stateful |\n\n### Quan hệ chồng lớp\nNodePort bao gồm ClusterIP; LoadBalancer bao gồm NodePort và ClusterIP. Mỗi loại thêm một đường vào phía ngoài.\n\n### Quy tắc chọn\n- Mặc định ClusterIP cho mọi thứ nội bộ.\n- Ra Internet với HTTP(S): một Ingress (hoặc Gateway) đứng trước các Service ClusterIP, thay vì một LoadBalancer cho mỗi dịch vụ.\n- LoadBalancer cho giao thức không phải HTTP.\n\n### Vì sao cần biết\nChọn nhầm loại Service dẫn tới hai hậu quả đắt: lộ dịch vụ nội bộ ra Internet, hoặc trả tiền cho hàng chục load balancer không cần thiết. Hãy dựng một sơ đồ trong đầu: ClusterIP là nền, NodePort và LoadBalancer là các lối ra thêm vào.\n\n### Mẫu phổ biến cho một ứng dụng web\nDatabase và cache: ClusterIP (hoặc headless). API và frontend: ClusterIP. Cổng vào duy nhất cho Internet: một Ingress controller với Service `LoadBalancer`, định tuyến theo host và path tới các Service ClusterIP phía sau. ExternalName hữu ích khi bạn muốn code gọi `payments` mà thực tế trỏ tới một dịch vụ ngoài cụm.\n\n### Lỗi hay gặp\n- Mở NodePort ra Internet công khai cho mọi dịch vụ.\n- Dùng `LoadBalancer` trên cụm cục bộ rồi chờ mãi.\n\n### Tự kiểm tra\n- Vì sao không nên tạo LoadBalancer cho từng Service?\n- NodePort có kèm ClusterIP không?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Service & Networking › Ingress Controller": {
+  "body": "Hai khái niệm hay bị lẫn:\n- **Ingress**: tài nguyên khai báo **quy tắc** định tuyến HTTP(S).\n- **Ingress Controller**: Pod thật sự **thực thi** các quy tắc đó, nhận lưu lượng và chuyển tới Service.\n\nCụm không có controller thì Ingress vô tác dụng. Các controller phổ biến: **ingress-nginx**, **Traefik**, HAProxy, và của cloud (AWS ALB, GCE). Controller thường được phơi ra ngoài bằng một Service `LoadBalancer` hoặc `NodePort`.\n\n### Luồng\nClient, rồi DNS, rồi LoadBalancer/NodePort của controller, rồi controller chọn rule theo host/path, rồi Service, rồi Pod.\n\n### Việc controller làm\n- Định tuyến theo host và path.\n- **TLS termination**: giữ chứng chỉ trong Secret loại `kubernetes.io/tls`; kết hợp **cert-manager** để cấp và gia hạn chứng chỉ Let's Encrypt tự động.\n- Rewrite, giới hạn tốc độ, xác thực qua **annotation** (tên và tác dụng khác nhau giữa các controller).\n\n```bash\nkubectl get ingressclass\nkubectl get ingress\nkubectl -n ingress-nginx get pods,svc\n```\n\n### Gateway API\nLà kế nhiệm của Ingress, tách vai trò rõ hơn (GatewayClass, Gateway, HTTPRoute). Tài liệu hiện nay khuyến nghị cho dự án mới, nhưng Ingress vẫn phổ biến.\n\n### Vì sao cần biết\nMột lỗi rất hay gặp: tạo Ingress đúng cú pháp nhưng không có gì chạy, vì cụm chưa có controller. Biết phân biệt \"luật\" và \"người thực thi luật\" giúp bạn gỡ lỗi nhanh.\n\n### Gỡ lỗi\n1. `kubectl get ingressclass` có controller nào được đăng ký không?\n2. Pod controller có Running không (`kubectl -n ingress-nginx get pods`)?\n3. `kubectl describe ingress <tên>` xem backend và sự kiện.\n4. Service phía sau có endpoint không?\n5. DNS của host trỏ về địa chỉ ngoài của controller chưa?\n6. Xem log controller để thấy nó nạp cấu hình hay từ chối.\n\n### Lỗi hay gặp\n- Nhầm annotation giữa các controller (annotation của nginx không có tác dụng với Traefik).\n- Cài hai controller mà không đặt `ingressClassName`.\n\n### Tự kiểm tra\n- Ingress và Ingress Controller khác nhau thế nào?\n- cert-manager giúp gì cho TLS?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-10-3-reverse-forward",
+    "ten": "10.3 — Reverse proxy, forward proxy và đường hầm",
+    "nguon": "Networking for Developers · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Service & Networking › Pod-to-Pod Communication": {
+  "body": "Kubernetes yêu cầu một mạng **phẳng**: mọi Pod nói chuyện được với mọi Pod khác bằng IP, **không NAT**, dù ở node nào. Phần hiện thực do **CNI plugin** đảm nhiệm khi kubelet tạo Pod.\n\n### Cách một Pod có mạng (cùng node)\nGiống mạng container bạn đã gặp: runtime tạo network namespace cho Pod, một cặp **veth** nối namespace đó với một bridge hoặc đường định tuyến trên node. Mọi container trong Pod dùng chung namespace mạng, vì vậy gọi nhau qua `localhost`.\n\n### Giữa các node\nCNI chịu trách nhiệm vận chuyển gói tin giữa node:\n- **Flannel**: mạng overlay đơn giản (VXLAN).\n- **Calico**: định tuyến L3 (BGP) và mạnh về NetworkPolicy.\n- **Cilium**: dùng eBPF, có quan sát và policy chi tiết.\n\n### Phát hiện và kết nối\nPod không nên biết IP Pod khác. Dùng **Service** (tên DNS ổn định) cho gọi một-tới-nhiều, hoặc headless Service khi cần địa chỉ từng Pod.\n\n```bash\nkubectl get pods -o wide\nkubectl exec pod-a -- wget -qO- http://web.default.svc\nkubectl exec pod-a -- ip addr\n```\n\n### Vì sao cần biết\nMô hình mạng phẳng là lý do bạn có thể chuyển một ứng dụng từ máy ảo sang Kubernetes mà ít sửa cách các thành phần nói chuyện nhau. Cũng vì mô hình đó, **mặc định mọi Pod gọi được mọi Pod**, và điều này có hệ quả bảo mật cần xử lý bằng NetworkPolicy.\n\n### Gỡ lỗi nhanh\nPod `ContainerCreating` lâu: thường là CNI chưa sẵn sàng, xem `kubectl describe pod` và log DaemonSet của CNI. Pod này không gọi được Pod kia: thử gọi bằng IP trực tiếp để loại trừ DNS và Service, rồi kiểm tra NetworkPolicy. Hai Pod cùng node gọi được nhưng khác node thì không: nghi ngờ lớp overlay của CNI hoặc tường lửa giữa các node (ví dụ cổng VXLAN).\n\n### Lỗi hay gặp\n- Pod mới kẹt `ContainerCreating` vì CNI chưa cài hay lỗi.\n- Dải CIDR của Pod trùng dải mạng của hạ tầng.\n- Gọi trực tiếp IP Pod rồi gãy khi Pod đổi.\n\n### Tự kiểm tra\n- Vì sao hai container cùng Pod gọi nhau qua `localhost`?\n- CNI chịu trách nhiệm cho việc gì khi Pod được tạo?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-5-mang",
+    "ten": "12.5 — Mạng container bằng tay: cặp veth, bridge, NAT và một cổng publish",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: mạng container bằng hình",
+    "nguon": "Docker · Chương 8",
+    "kieu": "slide"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Service & Networking › External Access to Services": {
+  "body": "Có ba đường chính để người dùng bên ngoài cụm tới được ứng dụng:\n\n- **NodePort**: mở một cổng cố định (30000–32767) trên mọi node. Đơn giản, dễ thử, nhưng cổng lạ và phải tự lo cân bằng tải phía trước.\n- **LoadBalancer**: cloud tạo một load balancer với IP công khai trỏ tới Service. Gọn nhưng mỗi Service một load balancer (tốn tiền); cụm cục bộ cần công cụ như MetalLB.\n- **Ingress / Gateway API**: một điểm vào cho nhiều dịch vụ HTTP(S) theo host/path, có TLS. Cần một controller.\n\nNgoài ra `kubectl port-forward` dùng để gỡ lỗi từ máy bạn, **không** phải cách phơi ứng dụng cho người dùng.\n\n### Quy tắc chọn\nHTTP(S) với nhiều dịch vụ: Ingress. Giao thức khác hoặc chỉ một dịch vụ: LoadBalancer. Thử nghiệm: NodePort hoặc port-forward.\n\n### Lỗi hay gặp\n- Phơi dịch vụ nội bộ như database ra ngoài bằng NodePort/LoadBalancer.\n- Quên tường lửa hay security group cho cổng NodePort.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-10-1-l4-l7",
+    "ten": "10.1 — Cân bằng tải L4 và L7",
+    "nguon": "Networking for Developers · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Service & Networking › Networking & Pod-to-Pod Communication": {
+  "body": "Khi một yêu cầu không tới được, bạn cần biết mô hình mạng để dò từng chặng.\n\n### Mô hình phẳng\nMỗi Pod có IP riêng, Pod nói chuyện với Pod khác trực tiếp (không NAT) qua CNI plugin. Service cho IP ảo ổn định, CoreDNS cho tên DNS nội bộ.\n\n### Gỡ lỗi từng chặng\n1. **Pod có chạy và Ready không?** `kubectl get pods`, `describe`.\n2. **Service có endpoint không?** `kubectl get endpoints <svc>`; rỗng thì selector hoặc readiness có vấn đề.\n3. **DNS phân giải được không?** `nslookup <svc>` từ Pod tạm.\n4. **Gọi thẳng IP Pod được không?** để loại trừ lỗi Service.\n5. **NetworkPolicy có chặn không?**\n6. **Cổng ứng dụng đúng chưa?** `targetPort` khớp cổng thật và ứng dụng nghe `0.0.0.0`.\n\n```bash\nkubectl run net --rm -it --image=busybox:1.36 -- sh\n```\n\n### Lỗi hay gặp\n- Bỏ qua bước kiểm endpoint, chỗ gây lỗi thường gặp nhất.\n- Gỡ lỗi trong container không có công cụ: dùng Pod tạm hay `kubectl debug`.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-5-mang",
+    "ten": "12.5 — Mạng container bằng tay: cặp veth, bridge, NAT và một cổng publish",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-0-slides",
+    "ten": "8.0 — Slide Chương 8: mạng container bằng hình",
+    "nguon": "Docker · Chương 8",
+    "kieu": "slide"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › RBAC (Role Based Access Control)": {
+  "body": "**RBAC** (Role-Based Access Control) quyết định **ai được làm gì trên tài nguyên nào**. Mặc định gần như mọi thứ bị cấm; bạn cấp quyền bằng cách ghép ba mảnh: vai trò, đối tượng được cấp, và liên kết.\n\n### Các đối tượng\n- **Role**: tập quyền trong **một namespace** (ví dụ được `get`, `list` Pod).\n- **ClusterRole**: tập quyền toàn cụm hoặc cho tài nguyên không thuộc namespace (node, PV).\n- **RoleBinding**: gán Role cho user, nhóm hoặc **ServiceAccount** trong một namespace.\n- **ClusterRoleBinding**: gán ClusterRole trên toàn cụm.\n\n```yaml\napiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  namespace: dev\n  name: pod-reader\nrules:\n- apiGroups: [\"\"]\n  resources: [\"pods\"]\n  verbs: [\"get\", \"list\", \"watch\"]\n---\napiVersion: rbac.authorization.k8s.io/v1\nkind: RoleBinding\nmetadata:\n  namespace: dev\n  name: read-pods\nsubjects:\n- kind: ServiceAccount\n  name: app\n  namespace: dev\nroleRef:\n  kind: Role\n  name: pod-reader\n  apiGroup: rbac.authorization.k8s.io\n```\n```bash\nkubectl auth can-i list pods -n dev --as=system:serviceaccount:dev:app\n```\n\n### Ý chính\n- RBAC chỉ **cho phép** (cộng dồn), không có luật \"cấm\".\n- Cấp quyền tối thiểu cần thiết (least privilege).\n- Ứng dụng trong Pod dùng **ServiceAccount**, không dùng tài khoản người.\n\n### Vì sao cần biết\nKhông có RBAC chặt, một ứng dụng bị chiếm quyền có thể đọc mọi Secret hay xoá mọi Deployment trong cụm. RBAC là hàng rào chính của control plane, và gần như mọi chuẩn kiểm toán bảo mật đều hỏi về nó.\n\n### Quy trình thiết kế quyền\n1. Xác định **ai** (người dùng, nhóm, ServiceAccount).\n2. Liệt kê **việc** họ cần làm (động từ trên tài nguyên).\n3. Tạo Role/ClusterRole nhỏ nhất đủ dùng.\n4. Gán bằng RoleBinding (ưu tiên trong namespace).\n5. Kiểm bằng `kubectl auth can-i`.\nDùng các ClusterRole có sẵn (`view`, `edit`, `admin`) cho trường hợp phổ biến thay vì tự viết.\n\n### Lỗi hay gặp\n- Gán `cluster-admin` cho tiện.\n- Quên rằng quyền đọc Secret cũng là quyền đọc mật khẩu.\n\n### Tự kiểm tra\n- Role và ClusterRole khác nhau chỗ nào?\n- Vì sao RoleBinding có thể tham chiếu một ClusterRole?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › Network Policies": {
+  "body": "Mặc định mọi Pod trong cụm nói chuyện được với mọi Pod khác. **NetworkPolicy** giống một \"firewall cấp Pod\": bạn khai báo Pod nào được nhận (ingress) hoặc gửi (egress) lưu lượng với ai.\n\nHai điểm quan trọng:\n- NetworkPolicy chỉ **có hiệu lực nếu CNI hỗ trợ** (Calico, Cilium...). Flannel thuần không thực thi nó.\n- Khi một Pod bị chọn bởi policy thuộc loại nào đó, mọi thứ không được cho phép rõ ràng của loại đó sẽ bị chặn.\n\n```yaml\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: db-allow-api\n  namespace: shop\nspec:\n  podSelector:\n    matchLabels: { app: db }\n  policyTypes: [Ingress]\n  ingress:\n  - from:\n    - podSelector:\n        matchLabels: { app: api }\n    ports:\n    - port: 5432\n```\nPolicy trên: database chỉ nhận kết nối từ Pod `app=api` ở cổng 5432.\n\n### Lỗi hay gặp\n- Viết policy mà CNI không thực thi nên tưởng đã an toàn.\n- Quên cho phép DNS (cổng 53) khi chặn egress.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › Pod & Container Security": {
+  "body": "Container mặc định chạy với nhiều quyền hơn cần thiết. **SecurityContext** cho bạn thu hẹp quyền ở mức Pod và container.\n\n### Các thiết lập quan trọng\n- `runAsNonRoot: true` và `runAsUser`: không chạy bằng root.\n- `readOnlyRootFilesystem: true`: hệ thống file gốc chỉ đọc; chỗ cần ghi thì gắn `emptyDir`.\n- `allowPrivilegeEscalation: false`: chặn tiến trình con có thêm quyền.\n- `capabilities`: bỏ hết (`drop: [\"ALL\"]`), chỉ thêm cái cần.\n- `seccompProfile: RuntimeDefault`: lọc system call.\n- Tránh `privileged: true`, `hostNetwork`, `hostPID`, `hostPath`.\n\n```yaml\nspec:\n  securityContext:\n    runAsNonRoot: true\n    seccompProfile: { type: RuntimeDefault }\n  containers:\n  - name: app\n    image: myapp:1.0\n    securityContext:\n      allowPrivilegeEscalation: false\n      readOnlyRootFilesystem: true\n      capabilities:\n        drop: [\"ALL\"]\n    volumeMounts:\n    - { name: tmp, mountPath: /tmp }\n  volumes:\n  - { name: tmp, emptyDir: {} }\n```\n\n### Áp đặt cho cả namespace\n**Pod Security Admission** (có sẵn, thay cho PodSecurityPolicy đã bị gỡ ở Kubernetes 1.25) kiểm tra Pod theo ba mức Privileged, Baseline, Restricted qua label của namespace.\n\n### Vì sao cần biết\nContainer không phải là hàng rào bảo mật tuyệt đối: một ứng dụng chạy bằng root với nhiều capability, nếu bị khai thác lỗ hổng, có thể tìm đường thoát ra node. SecurityContext là cách rẻ nhất để thu hẹp bề mặt tấn công.\n\n### Mỗi thiết lập chặn điều gì\n- `runAsNonRoot` và `drop: [\"ALL\"]` capability: nếu kẻ tấn công vào được, họ không có đặc quyền root.\n- `readOnlyRootFilesystem`: không ghi được mã độc hoặc công cụ vào container.\n- `allowPrivilegeEscalation: false`: chặn tiến trình con (kể cả setuid) có thêm quyền.\n- `seccomp RuntimeDefault`: chặn nhóm system call nguy hiểm.\n\n### Lỗi hay gặp\n- Image chạy bằng root, đặt `runAsNonRoot` rồi Pod không khởi động: sửa Dockerfile (`USER`).\n- Bật `readOnlyRootFilesystem` mà quên chỗ ứng dụng cần ghi (log, tmp).\n- Cấp `privileged` cho tiện.\n\n### Tự kiểm tra\n- Vì sao `privileged: true` nguy hiểm?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape",
+    "ten": "13.4 — Container nhìn từ bảo mật, và danh sách kiểm tra cứng hoá",
+    "nguon": "Operating Systems for Developers · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-9-7-capabilities",
+    "ten": "9.7 — Vượt khỏi rwx: capabilities, ACL, người dùng trong container — và bốn sự cố về quyền",
+    "nguon": "Operating Systems for Developers · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-4-tmpfs-bi-mat",
+    "ten": "7.4 — tmpfs, gốc chỉ đọc, và bí mật",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
+    "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › Pod Security Standards & Policies": {
+  "body": "**Pod Security Standards (PSS)** là ba mức chính sách chuẩn cho Pod:\n- **Privileged**: không hạn chế, dành cho thành phần hệ thống tin cậy.\n- **Baseline**: chặn các leo thang đặc quyền đã biết (không `privileged`, không `hostNetwork`/`hostPID`, hạn chế `hostPath` và capability) mà vẫn dễ áp dụng.\n- **Restricted**: theo thực hành tốt nhất: bắt buộc `runAsNonRoot`, bỏ hết capability, `allowPrivilegeEscalation: false`, seccomp `RuntimeDefault`...\n\n### Áp dụng: Pod Security Admission (PSA)\nPSA là admission controller có sẵn, cấu hình bằng **label trên namespace**, với ba chế độ:\n- `enforce`: từ chối Pod vi phạm.\n- `audit`: ghi vào audit log.\n- `warn`: cảnh báo cho người dùng.\n\n```bash\nkubectl label namespace shop   pod-security.kubernetes.io/enforce=baseline   pod-security.kubernetes.io/warn=restricted\n```\nCách an toàn để triển khai: bắt đầu bằng `warn` và `audit` để xem cái gì sẽ vỡ, rồi mới `enforce`.\n\n### PodSecurityPolicy\nPSP là cơ chế cũ, đã bị **gỡ khỏi Kubernetes từ 1.25**. Cần chính sách chi tiết hơn PSA thì dùng Kyverno hoặc OPA Gatekeeper.\n\n### Vì sao cần biết\nCác mức PSS cho bạn một thang chung để nói về độ an toàn của Pod: thay vì \"chỗ này nên chặt hơn\", bạn nói \"namespace này phải đạt Restricted\". Áp dụng bằng label nên rất ít công sức so với lợi ích.\n\n### Lộ trình áp dụng an toàn\n1. Gắn `warn=restricted` và `audit=restricted` lên namespace và triển khai bình thường, đọc cảnh báo.\n2. Sửa workload (thêm runAsNonRoot, bỏ capability...).\n3. Bật `enforce=baseline` trước, sau đó `enforce=restricted` khi sẵn sàng.\n4. Namespace hệ thống (như `kube-system`) cần mức Privileged.\n\n### Lỗi hay gặp\n- Bật `enforce: restricted` ngay làm các workload sẵn có không tạo lại được.\n- Quên rằng PSA chỉ áp dụng ở mức namespace.\n\n### Tự kiểm tra\n- Ba chế độ của Pod Security Admission là gì?\n- Vì sao nên bật `warn` trước `enforce`?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape",
+    "ten": "13.4 — Container nhìn từ bảo mật, và danh sách kiểm tra cứng hoá",
+    "nguon": "Operating Systems for Developers · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › RBAC chi tiết": {
+  "body": "Bài này đi vào chi tiết của RBAC, đặc biệt ranh giới namespace và cụm, và ServiceAccount.\n\n### Phạm vi\n- **Role + RoleBinding**: trong một namespace.\n- **ClusterRole + ClusterRoleBinding**: toàn cụm, hoặc cho tài nguyên không thuộc namespace.\n- **ClusterRole + RoleBinding**: dùng lại một ClusterRole định nghĩa sẵn nhưng chỉ cấp **trong một namespace**; mẫu rất tiện (như `view`, `edit`, `admin` có sẵn).\n\n### Cấu trúc một rule\n- `apiGroups`: nhóm API (`\"\"` là core, `apps`, `batch`...).\n- `resources`: loại tài nguyên (`pods`, `deployments`, `pods/log`...).\n- `verbs`: `get, list, watch, create, update, patch, delete`...\n- `resourceNames`: giới hạn trên vài đối tượng cụ thể.\n\n### ServiceAccount\nDanh tính cho tiến trình trong Pod. Mỗi namespace có `default` ServiceAccount; hãy tạo ServiceAccount riêng cho mỗi ứng dụng và gán quyền tối thiểu. Với ứng dụng không gọi API Kubernetes, đặt `automountServiceAccountToken: false`.\n\n```yaml\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: reporter\n  namespace: ops\nautomountServiceAccountToken: false\n```\n\n### Vì sao cần biết\nSự cố điển hình: một ServiceAccount mặc định được gán quyền rộng \"cho chạy được\", rồi một Pod bị chiếm lấy token của nó. Hiểu phạm vi và ServiceAccount giúp bạn ngăn chuỗi tấn công này.\n\n### Các động từ và tài nguyên con\nQuyền có thể tới từng **subresource**: `pods/log` (đọc log), `pods/exec` (vào trong Pod, rất nhạy cảm), `deployments/scale`. Cấp `exec` nên rất hạn chế. Ngoài ra, có các quyền \"leo thang\" như `bind`, `escalate`, `impersonate`: ai có chúng gần như tự nâng quyền được, nên coi như quyền admin.\n\n### Lỗi hay gặp\n- Dùng `*` cho verbs hoặc resources.\n- Dùng ServiceAccount `default` cho mọi ứng dụng.\n- Quên rằng quyền `create pods` gần tương đương nhiều đặc quyền khác (có thể mount Secret, chạy bằng ServiceAccount mạnh hơn).\n\n### Tự kiểm tra\n- ClusterRole kết hợp RoleBinding cho kết quả ở phạm vi nào?\n- Vì sao nên tắt automount token cho Pod không gọi API?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › Security Hardening Checklist": {
+  "body": "Bảo mật cụm là nhiều lớp. Đây là danh sách kiểm nên rà định kỳ, từ ngoài vào trong.\n\n### Control plane\n- API server: tắt truy cập ẩn danh, bật xác thực mạnh (OIDC), RBAC bật, giới hạn truy cập mạng vào API server, bật **audit log**.\n- **etcd**: mã hoá at-rest cho Secret, bật TLS, chỉ API server được truy cập, sao lưu đều.\n- Kubelet: không cho truy cập ẩn danh, bật authn/authz.\n\n### Danh tính và quyền\n- RBAC tối thiểu, không dùng `cluster-admin` hàng ngày.\n- ServiceAccount riêng cho từng ứng dụng, tắt automount token khi không cần.\n\n### Workload\n- **SecurityContext** chặt: non-root, root fs chỉ đọc, bỏ capability, seccomp.\n- **Pod Security Admission** ở mức baseline hoặc restricted.\n- Request/limit để một Pod không làm cạn node.\n\n### Mạng\n- **NetworkPolicy** mặc định từ chối, mở theo nhu cầu.\n- TLS giữa dịch vụ (service mesh hoặc mTLS).\n\n### Chuỗi cung ứng và runtime\n- Quét image (Trivy), ký image (Sigstore/cosign), dùng image tối giản và tag cố định.\n- Giám sát hành vi lúc chạy (Falco).\n- Cập nhật Kubernetes và node thường xuyên.\n\n### Bí mật\nKhông để trong Git/image; dùng Vault hay External Secrets, xoay vòng định kỳ.\n\n### Vì sao cần biết\nBảo mật Kubernetes không phải một công tắc mà là nhiều lớp, mỗi lớp thu hẹp thiệt hại nếu lớp trước thất thủ. Một checklist giúp bạn không bỏ sót những chỗ hay bị quên nhất.\n\n### Cách dùng checklist\nChấm điểm cụm theo từng nhóm (control plane, danh tính, workload, mạng, chuỗi cung ứng, bí mật), ưu tiên sửa chỗ rủi ro cao và rẻ trước: tắt anonymous auth, bật mã hoá etcd, thu hồi `cluster-admin` thừa, bật Pod Security Admission, default-deny NetworkPolicy. Các công cụ như `kube-bench` (đối chiếu chuẩn CIS) giúp tự động hoá phần kiểm tra cấu hình.\n\n### Lỗi hay gặp\n- Coi bảo mật là việc làm một lần.\n- Chỉ bảo mật cụm mà bỏ qua image đã nhiễm lỗ hổng.\n\n### Tự kiểm tra\n- Kể ba lớp phòng thủ độc lập cho một Pod.\n- Falco và Trivy bảo vệ ở giai đoạn nào?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-13-4-container-escape",
+    "ten": "13.4 — Container nhìn từ bảo mật, và danh sách kiểm tra cứng hoá",
+    "nguon": "Operating Systems for Developers · Chương 13",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-2-rootless-podman",
+    "ten": "15.2 — Bảo mật sâu hơn: nhóm docker, Docker rootless, userns-remap và Podman",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-4-chay-an-toan",
+    "ten": "6.4 — Chạy một container cho an toàn",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › RBAC Thực hành": {
+  "body": "Bài thực hành: viết quyền, cấp, rồi **kiểm chứng** bằng lệnh thay vì tin vào YAML.\n\n### Tình huống\nMột pipeline CI/CD cần xem Pod và cập nhật image của Deployment trong namespace `staging`, và không được làm gì khác.\n\n```bash\nkubectl create namespace staging\nkubectl create serviceaccount ci -n staging\n\nkubectl apply -n staging -f - <<'YAML'\napiVersion: rbac.authorization.k8s.io/v1\nkind: Role\nmetadata:\n  name: deployer\nrules:\n- apiGroups: [\"\"]\n  resources: [\"pods\"]\n  verbs: [\"get\", \"list\", \"watch\"]\n- apiGroups: [\"apps\"]\n  resources: [\"deployments\"]\n  verbs: [\"get\", \"patch\"]\nYAML\nkubectl create rolebinding ci-deployer -n staging \\\n  --role=deployer --serviceaccount=staging:ci\n```\n\n### Kiểm chứng\n```bash\nkubectl auth can-i get pods -n staging --as=system:serviceaccount:staging:ci          # yes\nkubectl auth can-i patch deployments.apps -n staging --as=system:serviceaccount:staging:ci   # yes\nkubectl auth can-i delete pods -n staging --as=system:serviceaccount:staging:ci       # no\nkubectl auth can-i get secrets -n staging --as=system:serviceaccount:staging:ci       # no\nkubectl auth can-i get pods -n default --as=system:serviceaccount:staging:ci          # no\nkubectl auth can-i --list -n staging --as=system:serviceaccount:staging:ci\n```\n\n### Nguyên tắc\n- **Least privilege**: bắt đầu từ không có quyền, thêm từng cái khi bị `Forbidden`.\n- Dùng `resourceNames` khi chỉ một đối tượng cụ thể.\n- Rà soát: `kubectl get rolebindings,clusterrolebindings -A`.\n\n### Vì sao cần biết\nKiểm chứng quyền bằng lệnh là thói quen phân biệt người thật sự hiểu RBAC với người chép YAML. Một Role viết sai `apiGroups` hoặc `verbs` sẽ âm thầm cấp thiếu hay quá nhiều.\n\n### Quy trình để quyền \"vừa đủ\"\nBắt đầu với Role rỗng, chạy công việc thật bằng ServiceAccount đó, thấy `Forbidden` nào thì thêm đúng quyền đó. Cuối cùng chạy `kubectl auth can-i --list` để xem toàn bộ quyền hiệu lực và rà soát. Đừng quên dọn: RoleBinding cũ của người đã rời đội là rủi ro tồn đọng.\n\n### Lỗi hay gặp\n- Quên `apiGroups` đúng (Deployment nằm ở `apps`, không phải core).\n- Kiểm bằng tài khoản admin của bạn nên mọi thứ đều \"yes\".\n- Cho CI quyền xoá toàn namespace.\n\n### Tự kiểm tra\n- `--as=system:serviceaccount:<ns>:<tên>` dùng để làm gì?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bảo mật › Network Security Nâng cao": {
+  "body": "NetworkPolicy là công cụ chính để chia cụm thành các vùng tin cậy, theo mô hình **zero trust**: mặc định từ chối, chỉ mở thứ cần.\n\n### Bước 1: từ chối tất cả\n```yaml\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: default-deny\n  namespace: shop\nspec:\n  podSelector: {}          # mọi Pod trong namespace\n  policyTypes: [Ingress, Egress]\n```\n\n### Bước 2: mở từng đường\n```yaml\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: api-rules\n  namespace: shop\nspec:\n  podSelector:\n    matchLabels: { app: api }\n  policyTypes: [Ingress, Egress]\n  ingress:\n  - from:\n    - namespaceSelector:\n        matchLabels: { kubernetes.io/metadata.name: ingress-nginx }\n    ports:\n    - port: 8080\n  egress:\n  - to:\n    - podSelector:\n        matchLabels: { app: db }\n    ports:\n    - port: 5432\n  - to:                       # cho phép DNS\n    - namespaceSelector: {}\n      podSelector:\n        matchLabels: { k8s-app: kube-dns }\n    ports:\n    - { port: 53, protocol: UDP }\n    - { port: 53, protocol: TCP }\n```\n\n### Ý chính\n- Các policy **cộng dồn** (hợp của các cho phép).\n- `from`/`to` có thể chọn theo Pod, namespace hoặc khối IP (`ipBlock`).\n- Cần CNI hỗ trợ (Calico, Cilium...). Calico và Cilium còn có policy mở rộng riêng (cấp toàn cụm, theo tên miền).\n\n### Thử và kiểm chứng\nDùng Pod tạm gọi thử: đường được phép thông, đường khác timeout.\n\n### Vì sao cần biết\nKhông có NetworkPolicy, một Pod bị chiếm có thể quét mạng nội bộ và gọi tới database hay API quản trị. Chuyển sang mô hình mặc định từ chối giới hạn tầm với của kẻ tấn công.\n\n### Cách triển khai không gây sự cố\n1. Bắt đầu ở một namespace thử.\n2. Vẽ sơ đồ ai gọi ai (từ kiến trúc hoặc dữ liệu quan sát), rồi viết policy cho từng đường.\n3. Áp default-deny **sau cùng**, khi các đường mở đã sẵn.\n4. Kiểm bằng Pod tạm: đường đúng thông, đường sai bị chặn.\nCông cụ quan sát luồng mạng (như Hubble của Cilium) giúp thấy các kết nối thật trước khi chặn.\n\n### Lỗi hay gặp\n- Chặn egress mà quên DNS nên mọi thứ gãy.\n- Chọn namespace bằng label không tồn tại.\n- Chặn nhầm kết nối từ Ingress controller hoặc từ health check.\n\n### Tự kiểm tra\n- Vì sao đưa default-deny vào cuối quy trình?\n- Cần mở những cổng nào để Pod vẫn phân giải DNS?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Resource Management & Scheduling › Resource Requests & Limits": {
+  "body": "Mỗi container nên khai báo cần bao nhiêu CPU và RAM. Hai con số có hai vai trò khác nhau:\n\n- **request**: lượng tối thiểu được bảo đảm. **Scheduler dựa vào request** để chọn node đủ chỗ.\n- **limit**: lượng tối đa được dùng. **Vượt limit sẽ bị kiềm hoặc giết.**\n\n```yaml\nresources:\n  requests:\n    cpu: \"250m\"       # 0,25 nhân\n    memory: \"256Mi\"\n  limits:\n    cpu: \"500m\"\n    memory: \"512Mi\"\n```\n\n### Hai tài nguyên hành xử khác nhau\n- **CPU** nén được: vượt limit thì bị **throttle** (chậm đi), không bị giết.\n- **Bộ nhớ** không nén được: vượt limit thì container bị **OOMKilled** (mã thoát 137).\n\n### Lớp QoS\nKubernetes xếp Pod vào lớp theo cách bạn đặt, quyết định ai bị đuổi trước khi node thiếu tài nguyên:\n- **Guaranteed**: request bằng limit cho mọi tài nguyên.\n- **Burstable**: có request thấp hơn limit.\n- **BestEffort**: không khai gì, bị đuổi đầu tiên.\n\n### Vì sao quan trọng\nKhông đặt request thì scheduler dồn Pod vào một node quá tải. Đặt limit quá thấp thì ứng dụng bị giết dù bình thường. Với runtime có heap riêng (JVM, Node), giới hạn của runtime phải nằm **bên trong** limit của container, nếu không sẽ bị OOMKilled.\n\n```bash\nkubectl top pods\nkubectl describe pod <pod> | grep -A5 \"Last State\"   # tìm OOMKilled\n```\n\n### Lỗi hay gặp\n- Request quá lớn so với dùng thực tế nên lãng phí; request quá nhỏ nên node bị oversubscribe.\n- Đặt CPU limit quá thấp gây độ trễ khó hiểu do throttle.\n- Quên rằng `memory` nhầm đơn vị (`M` và `Mi` khác nhau).\n\n### Tự kiểm tra\n- Vì sao hết CPU và hết RAM có hậu quả khác nhau?\n- Scheduler dùng request hay limit để xếp Pod?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-8-5-gioi-han",
+    "ten": "8.5 — Giới hạn bộ nhớ cho Node, JVM, container và Kubernetes",
+    "nguon": "Operating Systems for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-2-cgroups",
+    "ten": "12.2 — cgroup v2 bằng tay: memory.max, cpu.max, pids.max và io.max, chạm từng trần một",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
+    "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
+    "nguon": "Operating Systems for Developers · Chương 12",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Resource Management & Scheduling › Namespaces & Resource Quotas": {
+  "body": "**Namespace** chia một cụm thành các vùng logic, thường theo team hoặc môi trường (`dev`, `staging`, `prod`). Tên tài nguyên chỉ cần duy nhất trong một namespace, và RBAC cùng policy có thể áp theo namespace. (Đừng nhầm với Linux namespace dùng để cách ly container: tên giống nhau nhưng là hai thứ khác.)\n\n**ResourceQuota** giới hạn **tổng** tài nguyên mà một namespace được dùng, để một team không nuốt hết cụm.\n```yaml\napiVersion: v1\nkind: ResourceQuota\nmetadata:\n  name: team-a\n  namespace: team-a\nspec:\n  hard:\n    requests.cpu: \"4\"\n    requests.memory: 8Gi\n    limits.cpu: \"8\"\n    limits.memory: 16Gi\n    pods: \"20\"\n```\nKhi namespace có quota về CPU/RAM, mọi Pod trong đó **bắt buộc khai request/limit** (hoặc dùng **LimitRange** để đặt giá trị mặc định).\n\n```bash\nkubectl create namespace team-a\nkubectl describe resourcequota -n team-a\n```\n\n### Lỗi hay gặp\n- Nghĩ namespace là ranh giới bảo mật hoàn chỉnh: mạng mặc định vẫn thông, cần NetworkPolicy và RBAC.\n- Đặt quota mà quên LimitRange nên Pod bị từ chối vì thiếu request.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Resource Management & Scheduling › Taints, Tolerations & Node Affinity": {
+  "body": "Mặc định scheduler chọn node đủ tài nguyên. Khi bạn muốn kiểm soát Pod chạy ở đâu, có hai phía: **node đẩy Pod ra** và **Pod chọn node**.\n\n### Taint và toleration (node đẩy ra)\n- **Taint** gắn lên node: \"đừng xếp Pod vào đây trừ khi nó chịu được\".\n- **Toleration** gắn lên Pod: \"tôi chịu được taint này\".\n```bash\nkubectl taint nodes gpu-1 gpu=true:NoSchedule\n```\n```yaml\ntolerations:\n- key: gpu\n  operator: Equal\n  value: \"true\"\n  effect: NoSchedule\n```\nCác effect: `NoSchedule` (không xếp mới), `PreferNoSchedule` (cố tránh), `NoExecute` (đuổi cả Pod đang chạy).\n\n### Node affinity (Pod chọn node)\nChọn theo label của node, mạnh hơn `nodeSelector`:\n```yaml\naffinity:\n  nodeAffinity:\n    requiredDuringSchedulingIgnoredDuringExecution:\n      nodeSelectorTerms:\n      - matchExpressions:\n        - key: disktype\n          operator: In\n          values: [ssd]\n```\n`required...` là bắt buộc; `preferred...` là ưu tiên mềm. Còn có **pod affinity/anti-affinity** (đặt gần hoặc xa Pod khác, ví dụ rải bản sao ra nhiều node) và **topologySpreadConstraints**.\n\n### Dành node riêng cho GPU\nGắn taint lên node GPU, rồi Pod cần GPU vừa có toleration vừa có nodeAffinity (hoặc nodeSelector) tới node đó. Chỉ taint thôi thì Pod khác không vào, nhưng Pod GPU cũng chưa chắc chọn đúng node GPU: cần cả hai.\n\n### Vì sao cần biết\nCụm thật thường không đồng nhất: node GPU đắt tiền, node SSD, node spot rẻ nhưng có thể bị thu hồi, node theo vùng khả dụng. Nếu không điều khiển, Pod bình thường chiếm node GPU, hoặc cả bản sao của một dịch vụ rơi vào cùng một node và chết cùng lúc.\n\n### Chọn công cụ thế nào\n- Muốn **bảo vệ** node khỏi Pod lạ: taint.\n- Muốn Pod **chọn** loại node: nodeSelector hoặc node affinity.\n- Muốn **rải** bản sao qua node hoặc vùng: pod anti-affinity hoặc topologySpreadConstraints.\n- Muốn chạy trên mọi node bất kể taint: DaemonSet cộng toleration.\n\n### Lỗi hay gặp\n- Chỉ có toleration mà không có affinity, Pod vẫn có thể rơi vào node khác.\n- Pod `Pending` vì không node nào khớp: `kubectl describe pod` đọc dòng Events để biết lý do.\n- `NoExecute` đuổi Pod hệ thống mà không để ý.\n\n### Tự kiểm tra\n- Taint effect `NoExecute` khác `NoSchedule` thế nào?\n- Vì sao dành node GPU cần cả toleration và affinity?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Resource Management & Scheduling › Namespace & ResourceQuota": {
+  "body": "**Namespace** là cách chia một cụm Kubernetes thành nhiều \"phòng\" ảo: mỗi team, mỗi môi trường hay mỗi dự án có một namespace riêng, tên object chỉ cần duy nhất *trong* namespace đó. **ResourceQuota** là \"hạn mức chi tiêu\" gắn lên một namespace để team này không ăn hết tài nguyên của cả cụm.\n\n### Vì sao cần biết\nMột cụm dùng chung cho nhiều team sẽ sớm có chuyện: một Deployment viết sai `replicas: 500` hoặc quên giới hạn bộ nhớ là đủ làm các team khác không còn chỗ chạy. Namespace + quota là lớp rào đầu tiên để cụm dùng chung mà không giẫm chân nhau.\n\n### Ý chính\n- Cụm có sẵn các namespace `default`, `kube-system` (thành phần hệ thống), `kube-public`, `kube-node-lease`. Namespace **không lồng nhau**.\n- Namespace cô lập về *tên* và là phạm vi để gắn RBAC, quota, NetworkPolicy. Nó **không** tự cô lập mạng hay bảo mật: pod ở namespace khác vẫn gọi được nhau qua DNS `svc.namespace.svc.cluster.local` nếu không có NetworkPolicy.\n- Một số object không thuộc namespace nào (Node, PersistentVolume, StorageClass, Namespace).\n- ResourceQuota giới hạn **tổng** trong namespace: tổng `requests.cpu`, `limits.memory`, số `pods`, số `services`, số `persistentvolumeclaims`...\n- **LimitRange** giới hạn/đặt mặc định cho **từng** container hay pod (min, max, default). Quota nói \"cả phòng tối đa bao nhiêu\", LimitRange nói \"mỗi người tối đa/mặc định bao nhiêu\".\n\n```yaml\napiVersion: v1\nkind: ResourceQuota\nmetadata:\n  name: team-a-quota\n  namespace: team-a\nspec:\n  hard:\n    requests.cpu: \"4\"\n    requests.memory: 8Gi\n    limits.memory: 16Gi\n    pods: \"20\"\n```\n\n```bash\nkubectl create namespace team-a\nkubectl -n team-a describe resourcequota team-a-quota   # xem Used / Hard\n```\n\n### Lỗi hay gặp\n- Đặt quota CPU/memory mà pod không khai `requests/limits` thì pod bị **từ chối** (lỗi \"must specify limits.memory\"); giải bằng LimitRange có default.\n- Tưởng namespace là ranh giới bảo mật tuyệt đối; thực tế cần thêm RBAC và NetworkPolicy.\n- Quên `-n` nên kubectl thao tác nhầm `default`.\n\n### Tự kiểm tra\n1. Quota và LimitRange khác nhau ở điểm nào?\n2. Khi vượt quota, bạn thấy lỗi ở đâu: lúc `kubectl apply` hay ở events của ReplicaSet?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Resource Management & Scheduling › Scheduling chi tiết": {
+  "body": "**Scheduler** là thành phần của control plane chọn Node cho mỗi Pod mới tạo mà chưa có chỗ chạy. Nó làm việc theo hai giai đoạn.\n\n### Hai giai đoạn\n1. **Filtering** (trước đây gọi là *predicates*): loại các Node không đủ điều kiện, ví dụ không đủ CPU/memory *request*, Node bị taint mà Pod không tolerate, không khớp `nodeSelector` hay node affinity, hết chỗ gắn volume.\n2. **Scoring** (trước đây gọi là *priorities*): chấm điểm các Node còn lại theo tiêu chí như cân bằng tài nguyên, ưu tiên Node đã có sẵn image, tuân theo affinity \"ưu tiên\". Node điểm cao nhất thắng; sau đó scheduler **bind** Pod vào Node.\n\nTừ phiên bản hiện đại, các bước này là các *plugin* trong *scheduling framework* (hàng đợi, filter, score, reserve, bind), nhưng ý tưởng lọc rồi chấm điểm vẫn nguyên.\n\n### Ý chính\n- Scheduler chỉ nhìn **requests**, không nhìn mức dùng thực. Node đang rảnh nhưng đã \"đặt chỗ\" hết request thì vẫn bị loại.\n- Công cụ điều hướng: `nodeSelector`, node affinity (`required...` / `preferred...DuringSchedulingIgnoredDuringExecution`), pod affinity/anti-affinity, taint + toleration, topology spread.\n- Không có Node hợp lệ thì Pod ở trạng thái `Pending`, và `kubectl describe pod` cho event `FailedScheduling` kiểu `0/3 nodes are available: 3 Insufficient memory`.\n\n```bash\nkubectl describe pod web-7d9 | sed -n '/Events/,$p'\nkubectl get pod web-7d9 -o wide        # xem Node được chọn\n```\n\n### Lỗi hay gặp\n- Quên khai requests nên pod nào cũng \"nhẹ\" trên giấy và bị dồn vào một Node.\n- Dùng anti-affinity `required` cho số replica lớn hơn số Node, khiến một phần Pod Pending mãi."
+ },
+ "Resource Management & Scheduling › Gán Quota cho Namespace": {
+  "body": "Bước này là phần thực hành của quota: tạo **ResourceQuota** và **LimitRange** trong một namespace rồi quan sát chúng chặn thế nào.\n\n### Làm thử\n```bash\nkubectl create namespace demo\nkubectl apply -n demo -f - <<'YAML'\napiVersion: v1\nkind: ResourceQuota\nmetadata: { name: q }\nspec:\n  hard:\n    requests.cpu: \"1\"\n    requests.memory: 1Gi\n    limits.cpu: \"2\"\n    limits.memory: 2Gi\n    pods: \"5\"\n---\napiVersion: v1\nkind: LimitRange\nmetadata: { name: defaults }\nspec:\n  limits:\n  - type: Container\n    defaultRequest: { cpu: 100m, memory: 128Mi }\n    default:        { cpu: 250m, memory: 256Mi }\n    max:            { cpu: \"1\",  memory: 512Mi }\nYAML\nkubectl -n demo create deployment web --image=nginx --replicas=3\nkubectl -n demo describe resourcequota q\n```\n\n### Ý chính\n- LimitRange **tiêm** request/limit mặc định vào container không khai, nên pod vẫn vào được dù namespace có quota CPU/memory.\n- `describe resourcequota` hiện cột `Used` và `Hard`: đây là chỗ nhìn xem còn dư bao nhiêu.\n- Tăng `--replicas` quá hạn mức: Deployment tạo được, nhưng ReplicaSet không dựng thêm pod, lỗi `exceeded quota` nằm ở **events của ReplicaSet** (`kubectl -n demo describe rs`).\n- Quota có thể đếm object: `count/deployments.apps`, `services.loadbalancers`, `persistentvolumeclaims`.\n\n### Lỗi hay gặp\n- Request của một container lớn hơn `max` của LimitRange thì bị từ chối ngay lúc tạo.\n- Dọn dẹp bằng `kubectl delete namespace demo` xoá luôn mọi thứ bên trong; đừng chạy nhầm namespace thật.\n\n### Vì sao cần biết\nQuota là thứ bạn gặp thật khi làm việc trên cụm dùng chung của công ty: deploy báo thành công mà Pod không lên, và nguyên nhân chỉ nằm ở một dòng event. Thực hành một lần ở đây giúp bạn nhận ra lỗi ngay lần sau.\n\n### Tự kiểm tra\n1. Vì sao pod không khai request vẫn tạo được dù namespace có quota CPU?\n2. Lệnh nào cho thấy phần quota đã dùng?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Resource Management & Scheduling › Topology Spread Constraints": {
+  "body": "Mặc định scheduler có thể dồn mọi replica của một ứng dụng lên cùng một Node hoặc cùng một zone; Node đó hay zone đó chết là mất hết. **Topology Spread Constraints** cho bạn khai báo \"hãy rải đều các Pod này theo zone/Node\".\n\n### Cách khai báo\nTrong `spec` của Pod (hoặc template Deployment):\n```yaml\ntopologySpreadConstraints:\n- maxSkew: 1\n  topologyKey: topology.kubernetes.io/zone\n  whenUnsatisfiable: DoNotSchedule\n  labelSelector:\n    matchLabels: { app: web }\n```\n\n### Ý chính\n- `topologyKey` là **nhãn của Node** xác định một \"miền\" (domain): `topology.kubernetes.io/zone`, `topology.kubernetes.io/region`, `kubernetes.io/hostname` (mỗi Node một miền).\n- **Skew** là chênh lệch số Pod khớp selector giữa miền nhiều nhất và miền ít nhất. `maxSkew: 1` nghĩa là các miền lệch nhau tối đa 1 Pod.\n- `whenUnsatisfiable: DoNotSchedule` là ràng buộc cứng (Pod Pending nếu không thoả); `ScheduleAnyway` chỉ là ưu tiên mềm.\n- Có thể khai nhiều ràng buộc cùng lúc, ví dụ rải theo zone *và* theo Node.\n- Khác anti-affinity: anti-affinity chỉ nói \"đừng ở chung\"; spread kiểm soát được mức cân bằng với số replica bất kỳ.\n\n### Lỗi hay gặp\n- Thiếu nhãn topology trên Node (cụm tự dựng) thì Node bị bỏ qua hoặc ràng buộc không có tác dụng.\n- Scheduler chỉ cân bằng **lúc đặt Pod**; khi Pod bị xoá hay scale xuống, phân bố có thể lệch lại. Cần công cụ như Descheduler nếu muốn cân lại.\n- `labelSelector` không khớp nhãn Pod thì không đếm được gì.\n\n### Tự kiểm tra\nCó 3 zone và 5 replica, `maxSkew: 1`: phân bố nào hợp lệ?\n\n### Vì sao cần biết\nKhi một zone của cloud gặp sự cố, ứng dụng có đủ replica ở các zone còn lại hay không phụ thuộc đúng vào khai báo này. Với HPA, số replica đổi liên tục nên spread giúp phân bố luôn được ép theo cùng một luật thay vì may rủi.\n\n### Thực hành gợi ý\nDựng cụm kind nhiều worker, gắn nhãn `topology.kubernetes.io/zone` khác nhau cho từng Node, tạo Deployment 6 replica rồi dùng `kubectl get pods -o wide` để xem Pod có rải đều không; sau đó đặt `maxSkew: 1` với `DoNotSchedule` và scale lên thử."
+ },
+ "Resource Management & Scheduling › Pod Priority và Preemption": {
+  "body": "Khi cụm hết chỗ, cần có luật cho \"ai quan trọng hơn\". **PriorityClass** gán độ ưu tiên cho Pod: Pod quan trọng được xếp lịch trước và có thể đẩy Pod ít quan trọng đi chỗ khác (**preemption**).\n\n### Cách dùng\n```yaml\napiVersion: scheduling.k8s.io/v1\nkind: PriorityClass\nmetadata: { name: quan-trong }\nvalue: 100000\nglobalDefault: false\ndescription: \"Dịch vụ phục vụ người dùng\"\n---\n# trong Pod/Deployment template:\n#   spec:\n#     priorityClassName: quan-trong\n```\n\n### Ý chính\n- `value` là số nguyên; càng lớn càng ưu tiên. Giá trị người dùng đặt tối đa khoảng 1 tỷ; dải lớn hơn dành cho `system-cluster-critical` và `system-node-critical`.\n- Hàng đợi scheduler xếp Pod priority cao lên trước.\n- **Preemption**: nếu Pod priority cao không có Node nào vừa, scheduler tìm một Node mà tắt bớt vài Pod priority thấp là đủ chỗ, rồi tắt chúng (có graceful termination) để xếp Pod mới vào.\n- `preemptionPolicy: Never` cho Pod được xếp trước nhưng không đi đuổi ai.\n- `globalDefault: true` áp cho Pod không khai class (chỉ một class được như vậy).\n\n### Lỗi hay gặp\n- Đặt mọi workload là priority cao thì hoá ra không ai ưu tiên; các job batch bị preempt liên tục và chạy lại từ đầu.\n- Nhầm priority với QoS: priority quyết định ai được xếp/bị đuổi *lúc xếp lịch*; QoS (từ requests/limits) quyết định ai bị evict *khi Node thiếu tài nguyên*.\n- Preemption không đảm bảo PDB tuyệt đối (chỉ cố gắng tôn trọng).\n\n### Vì sao cần biết\nTrên cụm dùng chung, dịch vụ phục vụ người dùng, job batch và công cụ nội bộ cùng tranh tài nguyên. Không có priority, thứ nào tới trước chiếm chỗ, và một job nặng có thể chen mất chỗ của dịch vụ chính.\n\n### Tự kiểm tra\n1. Preemption có đảm bảo Pod bị đuổi được chạy lại ngay không?\n2. `priorityClassName` và QoS class khác nhau thế nào?"
+ },
+ "Resource Management & Scheduling › Evictions và Pod Disruption Budgets (PDB)": {
+  "body": "**Eviction** là việc Pod bị đuổi khỏi Node; **PodDisruptionBudget (PDB)** là cam kết \"dù bảo trì thế nào cũng phải còn tối thiểu bấy nhiêu bản chạy\".\n\n### Hai loại gián đoạn\n- **Tự nguyện** (voluntary): bạn hay hệ thống chủ động làm: `kubectl drain` để nâng cấp Node, cluster autoscaler gỡ Node. Các thao tác này đi qua **Eviction API** và **được PDB bảo vệ**.\n- **Không tự nguyện**: Node sập, kernel OOM, phần cứng hỏng. PDB không ngăn được.\n\n### Ý chính\n- **Node-pressure eviction**: kubelet tự đuổi Pod khi Node thiếu bộ nhớ/đĩa/PID (ngưỡng như `memory.available`, `nodefs.available`). Thứ tự ưu tiên đuổi: BestEffort, rồi Burstable dùng vượt request, rồi Guaranteed. Loại này **không** tôn trọng PDB.\n- PDB khai bằng `minAvailable` **hoặc** `maxUnavailable` (không cả hai) cùng `selector`:\n```yaml\napiVersion: policy/v1\nkind: PodDisruptionBudget\nmetadata: { name: web-pdb }\nspec:\n  minAvailable: 2\n  selector:\n    matchLabels: { app: web }\n```\n- Khi `drain` mà đuổi thêm sẽ vi phạm PDB, lệnh chờ/thử lại cho tới khi đủ replica ở nơi khác.\n- Kết hợp tốt: PDB + readiness probe + `terminationGracePeriodSeconds` + `preStop` để tắt êm.\n\n### Lỗi hay gặp\n- PDB `minAvailable` bằng đúng số replica (hoặc `maxUnavailable: 0`) làm `drain` kẹt vĩnh viễn.\n- Chỉ có 1 replica mà đặt PDB `minAvailable: 1`: không bao giờ bảo trì được Node đó.\n- Tưởng PDB chống được OOM hay Node chết.\n\n### Tự kiểm tra\nVì sao node-pressure eviction không đọc PDB?\n\n### Thực hành gợi ý\nTạo Deployment 3 replica kèm PDB `minAvailable: 2`, rồi chạy `kubectl drain <node> --ignore-daemonsets --delete-emptydir-data` và quan sát: Pod được dời lần lượt chứ không đuổi cùng lúc. Hạ `replicas` xuống 2 rồi drain lại để thấy lệnh bị chặn bởi PDB."
+ },
+ "Resource Management & Scheduling › Thiết lập Resource Requests và Limits": {
+  "body": "**Request** là lượng tài nguyên *đảm bảo* cho container; **limit** là *trần*. Hai con số này quyết định Pod được xếp ở đâu, bị chặn thế nào và bị đuổi lúc nào.\n\n### Vì sao cần biết\nThiếu requests thì scheduler xếp bừa, Node quá tải; limit bộ nhớ quá chặt thì container bị `OOMKilled` (exit code 137); limit CPU quá chặt thì ứng dụng chậm mà không báo lỗi.\n\n### Ý chính\n- CPU tính bằng core hoặc millicore (`500m` = nửa core); bộ nhớ dùng `Mi`, `Gi` (cẩn thận `M` khác `Mi`).\n- **Request**: scheduler dùng để chọn Node (tổng request trên Node không vượt allocatable).\n- **Limit CPU** là tài nguyên \"co giãn được\": vượt thì bị **throttle** (chậm đi), không bị giết.\n- **Limit memory** là cứng: vượt thì kernel giết container (OOMKilled).\n- **QoS class** suy ra từ requests/limits: `Guaranteed` (mọi container có request = limit cho cả CPU lẫn memory), `Burstable` (có request nhưng không đủ điều kiện trên), `BestEffort` (không khai gì). Khi Node thiếu bộ nhớ, BestEffort bị đuổi trước.\n\n```yaml\nresources:\n  requests: { cpu: 250m, memory: 256Mi }\n  limits:   { memory: 512Mi }\n```\n\n```bash\nkubectl top pod            # cần metrics-server\nkubectl describe pod web | grep -A3 \"Last State\"   # Reason: OOMKilled\n```\n\n### Lỗi hay gặp\n- Heap của runtime (Node, JVM) lớn hơn limit của container nên bị OOMKilled.\n- Đặt request bằng với limit \"cho chắc\" ở mọi nơi, nên cụm phình to và tốn tiền.\n- Dựa vào `kubectl top` lúc nhàn rỗi để đặt request, rồi sập khi có tải đỉnh.\n\n### Tự kiểm tra\nMột pod có request 100m, limit 1 core CPU và chiếm 3 core: chuyện gì xảy ra? Nếu là memory thì sao?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-8-5-gioi-han",
+    "ten": "8.5 — Giới hạn bộ nhớ cho Node, JVM, container và Kubernetes",
+    "nguon": "Operating Systems for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Resource Management & Scheduling › Gán Quota cho Namespaces": {
+  "body": "Nhìn từ góc quản trị cụm: bạn muốn mỗi namespace có \"ngân sách\" tài nguyên và các Pod trong đó không thể vô tình phá ngân sách. Đó là việc của **ResourceQuota** cộng **LimitRange**.\n\n### Hai lớp bảo vệ\n- **ResourceQuota** (cấp namespace): trần tổng. Có hai nhóm:\n  - tài nguyên tính toán: `requests.cpu`, `requests.memory`, `limits.cpu`, `limits.memory`;\n  - số lượng object: `pods`, `services`, `secrets`, `configmaps`, `persistentvolumeclaims`, hoặc dạng `count/<resource>.<group>`.\n- **LimitRange** (cấp namespace, áp cho từng container/Pod/PVC): `min`, `max`, `default`, `defaultRequest`, và `maxLimitRequestRatio`.\n\n### Ý chính\n- Khi namespace có quota cho CPU/memory, mọi Pod mới **bắt buộc** có request/limit tương ứng, nếu không bị từ chối. LimitRange với default giúp Pod \"tự có\" các giá trị này.\n- Kiểm tra quota diễn ra lúc *admission* (khi tạo object), không đuổi Pod đang chạy. Giảm quota xuống dưới mức đang dùng không giết gì, chỉ chặn cái mới.\n- Có thể giới hạn theo `scopes` hoặc `scopeSelector` (ví dụ chỉ tính Pod theo `PriorityClass`).\n- Kết hợp với RBAC: ai sửa được quota thì mới là chủ ngân sách; developer của team không nên sửa quota của chính họ.\n\n```bash\nkubectl get resourcequota -A\nkubectl -n team-a describe limitrange\n```\n\n### Lỗi hay gặp\n- Quota quá sát khiến rolling update bị kẹt: update cần thêm pod tạm (`maxSurge`), nên phải chừa dư.\n- Lỗi `exceeded quota` xuất hiện ở events của ReplicaSet/Job chứ không phải của Deployment, dễ tìm nhầm chỗ.\n\n### Tự kiểm tra\n1. Quota được kiểm tra ở thời điểm nào của vòng đời một Pod?\n2. Muốn giới hạn số PersistentVolumeClaim trong namespace thì khai khoá nào?\n\n### Gợi ý vận hành\nĐặt một quota mặc định cho mọi namespace mới bằng công cụ tự động (Helm, GitOps hoặc admission policy) để namespace nào cũng có trần ngay từ đầu, thay vì xử lý khi sự cố đã xảy ra."
+ },
+ "Resource Management & Scheduling › Pod Priorities": {
+  "body": "Hai ứng dụng cùng cần chỗ trong một cụm hết sức chứa: cái nào được chạy? **PriorityClass** là câu trả lời có kiểm soát thay vì \"ai tới trước\".\n\n### Ý chính\n- Tạo `PriorityClass` (object cấp cụm) với `value`, gắn vào Pod qua `priorityClassName`. Pod không gắn class sẽ lấy class `globalDefault` nếu có, nếu không thì priority 0.\n- Thứ tự xếp lịch: Pod priority cao được scheduler lấy ra khỏi hàng đợi trước.\n- **Preemption**: nếu Pod priority cao không vừa Node nào, scheduler có thể \"đề cử\" một Node và tắt các Pod priority thấp hơn ở đó. Pod bị đuổi nhận tín hiệu tắt bình thường (tôn trọng grace period).\n- `preemptionPolicy: Never` cho việc batch quan trọng nhưng không được phép đuổi ai.\n- Class hệ thống như `system-cluster-critical`/`system-node-critical` dành cho thành phần lõi (CoreDNS, kube-proxy).\n\n```yaml\napiVersion: scheduling.k8s.io/v1\nkind: PriorityClass\nmetadata: { name: batch-thap }\nvalue: 100\npreemptionPolicy: Never\n```\n\n### Thực hành gợi ý\nDựng cụm kind nhỏ, lấp đầy bằng Pod priority thấp có request lớn, rồi tạo Pod priority cao: dùng `kubectl get events -w` xem `Preempted`.\n\n### Lỗi hay gặp\n- Dùng priority để thay cho việc đặt requests đúng; cụm vẫn thiếu tài nguyên thật.\n- Pod bị preempt không tự \"nhớ\" gì, nên workload phải chịu được bị khởi động lại.\n- Hạn chế ai được dùng class cao bằng ResourceQuota theo `scopeSelector`, tránh team nào cũng chọn class cao nhất.\n\n### Vì sao cần biết\nPriority là công cụ để nói với cụm \"đây là thứ không được chết trước\" mà không cần mua thêm Node. Nó cũng là cách các thành phần hệ thống như CoreDNS được bảo vệ khỏi bị đẩy ra bởi workload thường.\n\n### Tự kiểm tra\nMột Pod `preemptionPolicy: Never` priority cao khi cụm đầy sẽ làm gì?"
+ },
+ "Autoscaling & Storage › Horizontal Pod Autoscaler (HPA)": {
+  "body": "**Horizontal Pod Autoscaler (HPA)** tự tăng giảm *số bản sao* của Deployment (hoặc StatefulSet) theo tải: CPU cao thì thêm Pod, rảnh thì bớt. \"Ngang\" vì thêm nhiều Pod chứ không làm Pod to hơn.\n\n### Vì sao cần biết\nTải web lên xuống theo giờ. Chạy cố định theo đỉnh thì tốn tiền; chạy theo mức thấp thì sập lúc cao điểm. HPA là cách chuẩn để co giãn ứng dụng phi trạng thái.\n\n### Ý chính\n- HPA kiểm tra định kỳ (mặc định mỗi 15 giây) và tính: `desiredReplicas = ceil(currentReplicas × currentMetric / targetMetric)`.\n- Với CPU/memory, cần **metrics-server** trong cụm, và Pod phải khai **requests**: phần trăm sử dụng được tính trên request.\n- Có `minReplicas`, `maxReplicas`; khi thu nhỏ có cửa sổ ổn định (mặc định 5 phút) để khỏi giật lên xuống.\n- API hiện tại là `autoscaling/v2` (hỗ trợ nhiều metric, metric tuỳ biến, `behavior`).\n\n```bash\nkubectl autoscale deployment web --cpu-percent=60 --min=2 --max=10\nkubectl get hpa -w\n```\n```yaml\napiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nmetadata: { name: web }\nspec:\n  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: web }\n  minReplicas: 2\n  maxReplicas: 10\n  metrics:\n  - type: Resource\n    resource:\n      name: cpu\n      target: { type: Utilization, averageUtilization: 60 }\n```\n\n### Lỗi hay gặp\n- Thấy `<unknown>/60%`: thiếu metrics-server hoặc Pod chưa khai CPU request.\n- Vừa dùng HPA vừa để `replicas` cố định trong manifest, mỗi lần apply lại bị ghi đè số bản sao.\n- HPA thêm Pod nhưng cụm không còn Node trống nên Pod Pending; cần cluster autoscaler.\n\n### Tự kiểm tra\nCó 4 Pod, CPU trung bình 90%, target 60%: HPA muốn bao nhiêu Pod?",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Autoscaling & Storage › Vertical Pod Autoscaler & Cluster Autoscaler": {
+  "body": "Hai công cụ co giãn khác với HPA: **VPA** chỉnh *kích cỡ* mỗi Pod (request CPU/memory), còn **Cluster Autoscaler** thêm/bớt *Node* của cả cụm.\n\n### Ý chính\n- **VPA (Vertical Pod Autoscaler)** là add-on cài thêm, không có sẵn trong Kubernetes lõi. Nó quan sát mức dùng thực và đề xuất (hoặc áp) request phù hợp. Hợp với ứng dụng khó nhân bản (ví dụ một database nhỏ) hoặc để biết request nên đặt bao nhiêu.\n- **Cluster Autoscaler** thêm Node khi có Pod `Pending` vì thiếu tài nguyên, và gỡ Node dùng ít khi Pod của nó dời đi được. Hoạt động với nhóm Node (node group) của nhà cung cấp cloud.\n- Chuỗi co giãn thường gặp: tải tăng, HPA thêm Pod, Node đầy, Pod Pending, Cluster Autoscaler thêm Node.\n\n### Lưu ý\n- Không để VPA và HPA cùng điều khiển CPU/memory của một workload.\n- Cluster Autoscaler tôn trọng PDB khi gỡ Node."
+ },
+ "Autoscaling & Storage › Persistent Volumes & PVC": {
+  "body": "Pod chết là dữ liệu trong container mất. Muốn dữ liệu sống lâu hơn Pod, Kubernetes tách \"ổ đĩa\" ra thành hai object: **PersistentVolume (PV)** là phần lưu trữ thật, và **PersistentVolumeClaim (PVC)** là lời xin cấp phát của ứng dụng.\n\n### Ví dụ đời thường\nPV giống phòng trọ có sẵn trong toà nhà; PVC là đơn \"tôi cần một phòng 10 người ở\". Hệ thống ghép đơn với phòng phù hợp (*bind*). Ứng dụng chỉ cần nhắc tên đơn, không cần biết đó là ổ đĩa nào.\n\n### Ý chính\n- PV là tài nguyên cấp cụm (disk cloud, NFS, Ceph...). PVC thuộc một namespace.\n- PVC khai `storage` cần, `accessModes` (`ReadWriteOnce`: một Node ghi; `ReadOnlyMany`; `ReadWriteMany`; `ReadWriteOncePod`) và `storageClassName`.\n- Pod mount PVC qua `volumes` + `volumeMounts`. Xoá Pod không xoá PVC, nên dữ liệu còn.\n- Chính sách thu hồi (`reclaimPolicy`) của PV: `Retain` (giữ dữ liệu) hoặc `Delete` (xoá cùng PVC).\n\n```yaml\napiVersion: v1\nkind: PersistentVolumeClaim\nmetadata: { name: data }\nspec:\n  accessModes: [ReadWriteOnce]\n  resources: { requests: { storage: 5Gi } }\n```\n```bash\nkubectl get pvc,pv\n```\n\n### Lỗi hay gặp\n- PVC ở trạng thái `Pending`: không có StorageClass mặc định hoặc không PV nào khớp.\n- Dùng `ReadWriteOnce` cho nhiều replica trên nhiều Node khác nhau nên Pod không mount được.\n- Xoá PVC với `reclaimPolicy: Delete` là mất dữ liệu thật.\n\n### Tự kiểm tra\nXoá Pod có làm mất dữ liệu trên PVC không? Xoá PVC thì sao?\n\n### Vì sao cần biết\nMọi ứng dụng có trạng thái (database, hàng đợi, tệp tải lên) chạy trên Kubernetes đều dựa vào cặp object này. Hiểu rõ vòng đời PV/PVC là khác biệt giữa \"Pod chết mà dữ liệu vẫn còn\" và \"xoá nhầm một object là mất sạch\".\n\n### Thực hành gợi ý\nTạo PVC, mount vào một Pod ghi tệp, xoá Pod, tạo Pod mới mount lại cùng PVC rồi kiểm tra tệp vẫn còn."
+ },
+ "Autoscaling & Storage › StorageClass & CSI Drivers": {
+  "body": "**StorageClass** mô tả \"loại ổ đĩa\" cụm có thể cấp tự động (SSD nhanh, HDD rẻ...). Khi một PVC trỏ tới StorageClass, **dynamic provisioning** tạo PV tương ứng mà không cần admin tạo tay. **CSI (Container Storage Interface)** là chuẩn để hãng lưu trữ viết driver cắm vào Kubernetes.\n\n### Ý chính\n- Một StorageClass có `provisioner` (thường là tên driver CSI, ví dụ `ebs.csi.aws.com`), `parameters` (loại đĩa), `reclaimPolicy`, `volumeBindingMode`, `allowVolumeExpansion`.\n- `volumeBindingMode: WaitForFirstConsumer` trì hoãn tạo đĩa tới khi Pod được xếp lịch, để đĩa nằm đúng zone với Node.\n- Đánh dấu một class làm mặc định bằng annotation `storageclass.kubernetes.io/is-default-class: \"true\"`; PVC không khai class sẽ dùng nó.\n- CSI thay các plugin lưu trữ \"in-tree\" cũ, giúp thêm/sửa driver không cần đổi code Kubernetes.\n\n```bash\nkubectl get storageclass\n```\n\n### Lỗi hay gặp\n- Cụm tự dựng (kind, kubeadm) không có provisioner nên PVC kẹt Pending.\n- Đĩa tạo ở zone khác Node chạy Pod: dùng `WaitForFirstConsumer`."
+ },
+ "Autoscaling & Storage › Cluster Autoscaler & VPA": {
+  "body": "Hai công cụ này giải hai bài toán khác nhau nhưng thường đi cùng nhau: **Cluster Autoscaler** co giãn *số Node*, **VPA** co giãn *kích cỡ request của Pod*.\n\n### Cluster Autoscaler\n- Kích hoạt khi có Pod `Pending` mà lý do là thiếu tài nguyên: nó thử xem thêm một Node mới trong node group có giải quyết được không, rồi yêu cầu cloud thêm Node.\n- Gỡ Node khi mức dùng (theo request) thấp kéo dài và mọi Pod trên đó có thể chuyển sang Node khác. Pod không dời được (PDB chặn, Pod không có controller, dùng local storage...) thì Node được giữ lại.\n- Quyết định dựa trên **requests**, không phải mức dùng thực.\n\n### VPA\n- Gồm recommender (tính khuyến nghị từ lịch sử dùng), updater (đuổi Pod để áp giá trị mới) và admission controller (đổi request lúc Pod tạo).\n- Dùng chế độ `Off` để chỉ xem khuyến nghị là cách an toàn nhất khi bắt đầu.\n\n### Lỗi hay gặp\n- Request quá lớn so với thực tế khiến Cluster Autoscaler thêm Node không cần thiết (tốn tiền).\n- Pod Pending vì lý do khác (nodeSelector sai, taint) mà Autoscaler không giải quyết được.\n\n### Vì sao cần biết\nCo giãn Node là nơi tiền thật chảy: Node thừa là tiền lãng phí, Node thiếu là Pod Pending và người dùng chờ. Hiểu hai cơ chế này giúp bạn đọc đúng hoá đơn cloud và đặt requests hợp lý.\n\n### Tự kiểm tra\n1. Cluster Autoscaler nhìn mức dùng thực hay request của Pod?\n2. Vì sao Pod không có controller (Pod trần) thường ngăn việc gỡ Node?"
+ },
+ "Autoscaling & Storage › PersistentVolume & PersistentVolumeClaim": {
+  "body": "Mô hình lưu trữ của Kubernetes tách **người cung cấp** khỏi **người dùng**: admin lo PV, developer chỉ xin bằng PVC. Hiểu vòng đời của chúng giúp bạn không mất dữ liệu.\n\n### Vòng đời\n1. **Provisioning**: PV được tạo sẵn (static) hoặc tự tạo theo StorageClass (dynamic).\n2. **Binding**: PVC được ghép 1-1 với một PV đủ dung lượng và khớp access mode, StorageClass.\n3. **Using**: Pod mount PVC; Kubernetes bảo vệ PVC đang dùng khỏi bị xoá ngay (*storage object in use protection*).\n4. **Reclaiming**: PVC bị xoá, PV được xử lý theo `persistentVolumeReclaimPolicy`: `Retain` (PV chuyển `Released`, dữ liệu giữ nguyên, admin xử lý tay) hoặc `Delete` (xoá cả đĩa thật). `Recycle` đã bị loại bỏ.\n\n### Ý chính\n- PV không thuộc namespace; PVC thì có.\n- Mở rộng dung lượng: sửa `resources.requests.storage` của PVC, khi StorageClass có `allowVolumeExpansion: true`.\n- StatefulSet dùng `volumeClaimTemplates` để mỗi Pod có PVC riêng và giữ nó khi Pod tái tạo.\n\n```bash\nkubectl get pv\nkubectl describe pvc data     # xem Status, Volume, Events\n```\n\n### Lỗi hay gặp\n- PVC `Pending` vì không có provisioner hoặc nhầm `storageClassName`.\n- Dữ liệu quan trọng mà để `reclaimPolicy: Delete` không sao lưu.\n- Chỉ sao lưu manifest mà không sao lưu nội dung đĩa; xem công cụ như Velero.\n\n### Tự kiểm tra\n1. PVC bị xoá, PV `Retain` chuyển sang trạng thái nào và ai xử lý tiếp?\n2. Vì sao PVC thuộc namespace còn PV thì không?\n\n### Thực hành gợi ý\nTạo PVC với StorageClass mặc định, mount vào Pod, rồi chạy `kubectl get pv` để thấy PV được tự tạo và gắn với PVC (cột CLAIM). Xoá PVC và quan sát PV biến mất hay `Released` tuỳ `reclaimPolicy`."
+ },
+ "Autoscaling & Storage › Horizontal Pod Autoscaler (HPA) Deep Dive": {
+  "body": "Bước này đi sâu vào *cách HPA ra quyết định* để chỉnh cho đúng thay vì chấp nhận giá trị mặc định.\n\n### Thuật toán\n`desiredReplicas = ceil(currentReplicas × currentMetricValue / desiredMetricValue)`. HPA bỏ qua thay đổi nhỏ trong vùng dung sai (mặc định 10%) để tránh dao động.\n\n### Ý chính\n- **Utilization** (phần trăm trên request) và **AverageValue/Value** (số tuyệt đối) cho kết quả khác nhau. Utilization phụ thuộc request nên request sai thì HPA sai theo.\n- Nhiều metric cùng lúc: HPA tính riêng từng metric và chọn **số replica lớn nhất**.\n- Loại metric: `Resource` (CPU/memory), `Pods` (metric tuỳ biến trên mỗi Pod), `Object`, `External` (ví dụ độ dài hàng đợi). Cần adapter như Prometheus Adapter hoặc KEDA cho nhóm tuỳ biến.\n- Trường `behavior` điều khiển tốc độ: `scaleUp`/`scaleDown` với `stabilizationWindowSeconds` (mặc định scale down 300 giây, scale up 0) và `policies` (tối đa bao nhiêu Pod hoặc phần trăm trong một khoảng).\n- Pod mới khởi động chưa sẵn sàng bị bỏ qua khi tính CPU, nên readiness và startup probe ảnh hưởng đến độ ổn định.\n\n```yaml\nbehavior:\n  scaleDown:\n    stabilizationWindowSeconds: 300\n    policies:\n    - { type: Percent, value: 50, periodSeconds: 60 }\n```\n\n### Lỗi hay gặp\n- Scale theo CPU cho ứng dụng bị nghẽn I/O, nên CPU thấp trong khi người dùng vẫn chậm.\n- `maxReplicas` thấp hơn nhu cầu nên HPA chạm trần mà không ai để ý.\n\n### Tự kiểm tra\n1. Khi hai metric cho hai số replica khác nhau, HPA chọn số nào?\n2. Tại sao scale down có cửa sổ ổn định dài hơn scale up?\n\n### Gợi ý\nBắt đầu với CPU và giá trị mặc định, chỉ chỉnh `behavior` khi đã thấy hiện tượng cụ thể (dao động, lên quá chậm) từ đồ thị `kubectl get hpa -w`."
+ },
+ "Autoscaling & Storage › Vertical Pod Autoscaler (VPA)": {
+  "body": "**Vertical Pod Autoscaler (VPA)** quan sát mức dùng CPU/memory thực của container qua thời gian và đề xuất, hoặc tự áp, giá trị **request** phù hợp. Nó giúp thoát khỏi việc đoán số khi viết manifest.\n\n### Thành phần và chế độ\n- **Recommender** tính khuyến nghị; **Updater** đuổi Pod đang chạy lệch khuyến nghị; **Admission Controller** sửa request của Pod mới tạo.\n- `updateMode`: `Off` (chỉ tính, xem trong `status`), `Initial` (chỉ áp lúc Pod được tạo), `Recreate` và `Auto` (đuổi Pod để tạo lại với giá trị mới).\n\n```yaml\napiVersion: autoscaling.k8s.io/v1\nkind: VerticalPodAutoscaler\nmetadata: { name: web }\nspec:\n  targetRef: { apiVersion: apps/v1, kind: Deployment, name: web }\n  updatePolicy: { updateMode: \"Off\" }\n```\n```bash\nkubectl describe vpa web   # xem Recommendation: lower/target/upper\n```\n\n### Ý chính\n- VPA không có sẵn trong cụm; cần cài CRD và các thành phần riêng.\n- Với `Recreate/Auto`, đổi request thường nghĩa là **khởi động lại Pod**, nên cần nhiều replica và PDB.\n- Đừng để VPA và HPA cùng dựa trên CPU/memory cho một workload.\n- `resourcePolicy` cho phép đặt min/max, loại trừ container.\n\n### Lỗi hay gặp\n- Bật Auto cho workload một replica nên dịch vụ ngắt mỗi lần VPA điều chỉnh.\n- Quên rằng khuyến nghị dựa trên lịch sử ngắn; ứng dụng có đỉnh theo tuần cần thời gian quan sát dài.\n\n### Vì sao cần biết\nĐặt request bằng cảm tính là nguyên nhân phổ biến của cụm tốn tiền hoặc Pod bị OOMKilled. VPA ở chế độ `Off` biến việc đó thành một con số có căn cứ mà không rủi ro khởi động lại.\n\n### Tự kiểm tra\n1. Chế độ nào của VPA không bao giờ đụng vào Pod đang chạy?\n2. Vì sao không nên để VPA và HPA cùng theo CPU?"
+ },
+ "Autoscaling & Storage › Cluster Autoscaler": {
+  "body": "**Cluster Autoscaler** làm cho số Node của cụm bám theo nhu cầu thật: thêm khi Pod không có chỗ, bớt khi Node nhàn rỗi. Nó là cầu nối giữa Kubernetes và hạ tầng cloud.\n\n### Cách hoạt động\n- Chạy như một Deployment trong cụm, đọc node group (ví dụ Auto Scaling Group trên AWS, managed instance group trên GCP, node pool trên Azure) mà bạn khai min/max cho.\n- **Scale up**: thấy Pod `Pending` với lý do `FailedScheduling` do thiếu tài nguyên, nó mô phỏng xem node group nào giúp được rồi tăng kích thước nhóm.\n- **Scale down**: Node có mức dùng (tổng request / allocatable) dưới ngưỡng (mặc định 50%) trong một khoảng thời gian (mặc định ~10 phút) và mọi Pod dời được thì bị cordon, drain rồi xoá.\n\n### Ý chính\n- Không dời được Pod nào: Pod không thuộc controller, có local storage, bị PDB chặn, hoặc có annotation `cluster-autoscaler.kubernetes.io/safe-to-evict: \"false\"`.\n- Tính theo **request**, vì vậy cần khai requests chính xác.\n- Có lựa chọn thay thế như **Karpenter** (AWS) chọn thẳng loại instance phù hợp thay vì tăng node group cố định.\n- Node mới mất vài phút để sẵn sàng, nên đừng phụ thuộc nó cho đỉnh tải tức thời; có thể giữ \"Pod đệm\" priority thấp.\n\n### Lỗi hay gặp\n- `maxSize` của node group quá thấp so với nhu cầu.\n- Pod có nodeSelector/affinity mà không node group nào đáp ứng nên Autoscaler \"bất lực\".\n\n### Tự kiểm tra\n1. Pod Pending vì nodeSelector không khớp thì Cluster Autoscaler có thêm Node không?\n2. Điều gì ngăn một Node bị gỡ khi đang chạy Pod có PDB nghiêm ngặt?"
+ },
+ "Autoscaling & Storage › CSI Drivers Chi tiết": {
+  "body": "**CSI (Container Storage Interface)** là giao diện chuẩn giữa Kubernetes và hệ thống lưu trữ. Mỗi hãng viết một driver CSI; Kubernetes không cần biết chi tiết bên trong.\n\n### Kiến trúc\n- **Controller Plugin**: thường là Deployment, xử lý thao tác cấp cụm như tạo/xoá volume, attach/detach, snapshot, resize. Nó đi kèm các sidecar chuẩn (`external-provisioner`, `external-attacher`, `external-snapshotter`, `external-resizer`) để dịch sự kiện Kubernetes thành lời gọi CSI.\n- **Node Plugin**: DaemonSet chạy trên mỗi Node, thực hiện stage/publish: format và mount volume vào đường dẫn mà kubelet chuẩn bị cho Pod. Sidecar `node-driver-registrar` đăng ký driver với kubelet.\n- Đối tượng `CSIDriver` khai báo khả năng của driver (cần attach hay không, hỗ trợ ephemeral volume...).\n\n### Tính năng nổi bật\n- **Volume snapshot**: `VolumeSnapshotClass`, `VolumeSnapshot`, `VolumeSnapshotContent`, để chụp và khôi phục dữ liệu (driver phải hỗ trợ).\n- **Volume expansion**, **cloning** từ PVC có sẵn, **topology** (volume biết zone).\n\n```bash\nkubectl get csidrivers\nkubectl get pods -n kube-system | grep csi\n```\n\n### Lỗi hay gặp\n- Pod kẹt `ContainerCreating` vì Node Plugin lỗi hoặc thiếu quyền IAM của driver cloud.\n- Giả định mọi driver đều hỗ trợ snapshot, resize hay `ReadWriteMany`.\n\n### Vì sao cần biết\nKhi dùng cloud, mọi `StorageClass` bạn khai đều trỏ tới một driver CSI. Biết driver gồm những phần nào giúp bạn chẩn đoán khi PVC kẹt Pending hay Pod kẹt ContainerCreating thay vì chỉ nhìn kubectl.\n\n### Tự kiểm tra\n1. Phần nào của CSI chạy trên mỗi Node và phần nào chạy tập trung?\n2. VolumeSnapshotClass đóng vai trò gì so với StorageClass?"
+ },
+ "Autoscaling & Storage › Cluster Autoscaling": {
+  "body": "Cluster Autoscaling là việc cụm tự điều chỉnh số Node theo nhu cầu. Điểm cần nhớ là nó **phản ứng với Pod Pending**, không phải với tải CPU của Node.\n\n### Ý chính\n- Thêm Node khi có Pod không xếp lịch được vì thiếu tài nguyên; bớt Node khi dư và Pod dời được.\n- Cần Pod khai **requests** đúng; nếu không Autoscaler không biết \"thiếu\" bao nhiêu.\n- Hay dùng cùng HPA: HPA tăng Pod, Autoscaler tăng Node để chứa chúng.\n- Đặt `min` và `max` cho node group để giới hạn chi phí.\n- Bảo vệ workload quan trọng khi gỡ Node bằng PDB và annotation `safe-to-evict`.\n\n### Lỗi hay gặp\n- Mong Autoscaler phản ứng tức thì: Node mới mất vài phút.\n- Cụm tự dựng (kind, kubeadm) không có tích hợp cloud nên không dùng được trực tiếp.\n\n### Vì sao cần biết\nVới cụm cloud, số Node trực tiếp quyết định hoá đơn. Cluster Autoscaling giúp trả tiền theo nhu cầu, nhưng chỉ hiệu quả khi workload khai báo requests đúng và chịu được việc bị dời.\n\n### Cách quan sát\n`kubectl get pods --field-selector=status.phase=Pending` cho thấy Pod chờ chỗ; `kubectl get nodes -w` cho thấy Node mới tham gia cụm. Log của Deployment cluster-autoscaler giải thích vì sao nó thêm hoặc không thêm Node.\n\n### Tự kiểm tra\nMột cụm có HPA nhưng không có Cluster Autoscaler sẽ gặp vấn đề gì khi tải tăng mạnh?"
+ },
+ "Autoscaling & Storage › Lưu trữ (Storage) và Volumes": {
+  "body": "Container có hệ thống tệp riêng và sẽ biến mất cùng container. **Volume** là cách gắn thêm một thư mục có vòng đời rõ ràng vào Pod.\n\n### Các loại phổ biến\n- `emptyDir`: thư mục rỗng tạo khi Pod được xếp lịch và mất khi Pod bị xoá khỏi Node. Dùng làm chỗ nháp hoặc chia sẻ tệp giữa các container trong Pod (có thể `medium: Memory`).\n- `hostPath`: gắn thư mục của Node vào Pod; tiện cho agent hệ thống nhưng rủi ro bảo mật và gắn chặt Pod với Node.\n- `configMap`, `secret`: đưa cấu hình/bí mật vào dưới dạng tệp.\n- `persistentVolumeClaim`: dữ liệu sống lâu hơn Pod (qua PV/PVC).\n\n```yaml\nspec:\n  containers:\n  - name: app\n    image: myapp\n    volumeMounts:\n    - { name: cache, mountPath: /cache }\n  volumes:\n  - name: cache\n    emptyDir: {}\n```\n\n### Lỗi hay gặp\n- Để dữ liệu quan trọng trong `emptyDir` rồi mất khi Pod bị đuổi.\n- Dùng `hostPath` để lưu database; Pod sang Node khác là dữ liệu \"biến mất\"."
+ },
+ "Monitoring & Observability › Prometheus & Grafana": {
+  "body": "**Prometheus** là hệ thống thu thập và lưu **metric** (số đo theo thời gian); **Grafana** vẽ các metric đó thành dashboard. Cặp đôi này gần như là chuẩn để quan sát Kubernetes.\n\n### Cách Prometheus làm việc\n- Mô hình **pull**: Prometheus định kỳ \"cào\" (scrape) endpoint HTTP `/metrics` của mỗi mục tiêu rồi lưu thành chuỗi thời gian.\n- Trong Kubernetes, nó tự tìm mục tiêu qua service discovery (hoặc qua `ServiceMonitor`/`PodMonitor` nếu dùng Prometheus Operator).\n- Truy vấn bằng **PromQL**, ví dụ CPU theo Pod trong 5 phút gần nhất:\n```promql\nsum(rate(container_cpu_usage_seconds_total{namespace=\"shop\"}[5m])) by (pod)\n```\n- Nguồn metric thường gặp: **cAdvisor** (tài nguyên container, có sẵn trong kubelet), **kube-state-metrics** (trạng thái object: số replica mong muốn/đang chạy), **node-exporter** (CPU, đĩa, mạng của Node), cùng `/metrics` do ứng dụng tự phát.\n\n### Cài đặt nhanh\nChart **kube-prometheus-stack** gom Prometheus, Alertmanager, Grafana và dashboard dựng sẵn:\n```bash\nhelm repo add prometheus-community https://prometheus-community.github.io/helm-charts\nhelm install mon prometheus-community/kube-prometheus-stack -n monitoring --create-namespace\n```\n\n### Lỗi hay gặp\n- Gắn nhãn có quá nhiều giá trị (user id, URL đầy đủ) làm số chuỗi nổ (cardinality) và ngốn bộ nhớ.\n- Prometheus không phải kho lưu dài hạn; muốn giữ nhiều tháng cần lưu trữ từ xa.\n- Chạy `kubectl top` thấy số khác Prometheus là do metrics-server và Prometheus lấy mẫu khác nhau.\n\n### Tự kiểm tra\n1. Prometheus kéo metric hay ứng dụng đẩy metric?\n2. Nhãn có quá nhiều giá trị gây hại gì?",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-4-metrics-prometheus",
+    "ten": "15.4 — Metric, và cái nhãn ngốn 939MB",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so",
+    "ten": "4.1 — Chỉ số là gì, và bốn loại của nó",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Monitoring & Observability › Logs, Metrics & Traces": {
+  "body": "Ba trụ cột của observability (khả năng quan sát) là **log**, **metric** và **trace**. Mỗi loại trả lời một câu hỏi khác nhau.\n\n### Ý chính\n- **Log**: bản ghi sự kiện rời rạc kèm ngữ cảnh (\"đơn hàng 42 lỗi vì thiếu tồn kho\"). Chi tiết, nhưng nhiều và khó tổng hợp.\n- **Metric**: con số tổng hợp theo thời gian (số request/giây, % lỗi, độ trễ p95). Rẻ, tốt cho dashboard và cảnh báo, nhưng không nói *vì sao*.\n- **Trace**: hành trình của *một* request qua nhiều service, chia thành các span có thời gian; cho thấy chậm ở đâu.\n- Cách dùng điển hình: cảnh báo từ metric cho biết *có* vấn đề, trace chỉ ra *ở service nào*, log cho biết *lý do cụ thể*.\n- Nối ba loại với nhau bằng định danh chung như `trace_id` trong log.\n\n### Trong Kubernetes\nLog lấy qua `kubectl logs` và agent thu log; metric từ Prometheus; trace từ OpenTelemetry. Mỗi cái cần nơi lưu và công cụ truy vấn riêng.\n\n### Lỗi hay gặp\n- Chỉ có log nên mọi câu hỏi đều thành \"grep\" trong biển dữ liệu.\n- Thu thập mọi thứ mà không có mục đích, chi phí lưu trữ tăng vọt.",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-0-2-ba-tru-cot",
+    "ten": "0.2 — Ba trụ cột, và cái thứ tư ai cũng quên",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Mục 0",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Monitoring & Observability › Monitoring & Optimizing Resource Usage": {
+  "body": "Giám sát tài nguyên không chỉ để xem đồ thị, mà để trả lời: Pod nào đang dùng bao nhiêu, request đặt đã hợp lý chưa, Node nào sắp đầy, và ta đang trả tiền cho tài nguyên không dùng.\n\n### Công cụ\n- `kubectl top nodes` / `kubectl top pods` (cần **metrics-server**): số dùng hiện tại, nhanh nhưng không có lịch sử.\n- **Prometheus + Grafana**: lịch sử và so sánh. Ví dụ `container_memory_working_set_bytes` (con số kubelet dùng để quyết định OOM/eviction) và `kube_pod_container_resource_requests` để đối chiếu request với mức dùng thực.\n\n### Ý chính\n- So **usage thực** với **request** theo thời gian (nhìn cả đỉnh, không chỉ trung bình). Chênh lệch lớn kéo dài nghĩa là request thừa, gây lãng phí và làm Node đầy \"ảo\".\n- Dấu hiệu thiếu: CPU throttling cao (`container_cpu_cfs_throttled_periods_total`), `OOMKilled`, restart tăng.\n- Dùng VPA ở chế độ `Off` để lấy khuyến nghị request.\n- Tối ưu theo vòng: đo, chỉnh request/limit, theo dõi lại.\n\n```bash\nkubectl top pod -n shop --sort-by=memory\n```\n\n### Lỗi hay gặp\n- Hạ request theo mức dùng lúc rảnh, rồi hết chỗ lúc cao điểm.\n- Nhìn `kubectl top node` và quên rằng scheduler đặt chỗ theo request chứ không theo mức dùng.\n\n### Tự kiểm tra\n1. Metric nào kubelet dùng để quyết định OOM: `working_set` hay `usage`?\n2. Làm sao biết một container đang bị throttle CPU dù mức dùng chưa chạm limit?"
+ },
+ "Monitoring & Observability › Logs": {
+  "body": "Container ghi log ra **stdout/stderr**; kubelet và container runtime giữ các luồng đó thành tệp trên Node (thường dưới `/var/log/pods` và `/var/log/containers`). `kubectl logs` đọc từ đó.\n\n### Ý chính\n- Đọc nhanh: `kubectl logs pod`, `-f` (theo dõi), `--previous` (container đã crash trước đó), `-c tên` (chọn container), `-l app=web` (theo nhãn).\n- Log gắn với vòng đời Pod/Node: Pod bị xoá hoặc Node mất thì log mất, và tệp bị xoay vòng khi đầy. Vì vậy cần **thu gom tập trung**.\n- Mẫu phổ biến: một agent chạy dạng **DaemonSet** (mỗi Node một Pod) đọc tệp log của mọi container, gắn nhãn Kubernetes (namespace, pod) rồi đẩy tới kho như **Loki** hoặc Elasticsearch. Agent thường dùng: Fluent Bit, Fluentd, Promtail/Grafana Alloy.\n- Nên ghi log có cấu trúc (JSON) kèm trường như `trace_id`, mức log; ứng dụng không tự ghi vào tệp trong container.\n- Truy vấn trong Loki bằng LogQL: `{namespace=\"shop\", app=\"web\"} |= \"error\"`.\n\n### Lỗi hay gặp\n- Ghi log vào tệp bên trong container (mất khi Pod chết, đầy đĩa).\n- Gắn nhãn Loki bằng giá trị có quá nhiều biến thể làm chỉ mục phình.\n- Log chứa mật khẩu, token, dữ liệu cá nhân.\n\n### Tự kiểm tra\n1. Vì sao cần `--previous` khi Pod CrashLoopBackOff?\n2. Vì sao agent thu log chạy dạng DaemonSet?",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-3-trinh-thu-log",
+    "ten": "2.3 — Trình thu log: đưa log rời khỏi cái máy",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-4-logql",
+    "ten": "2.4 — LogQL: hỏi một câu và nhận được câu trả lời",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Monitoring & Observability › Metrics": {
+  "body": "Metric là số đo theo thời gian. Câu hỏi khó nhất là *nên đo gì*. Kinh nghiệm SRE là bắt đầu từ **bốn tín hiệu vàng (golden signals)**.\n\n### Bốn tín hiệu vàng\n- **Latency**: thời gian phục vụ request (tách riêng request thành công và lỗi; nhìn phân vị p95/p99, không chỉ trung bình).\n- **Traffic**: lượng yêu cầu (request/giây).\n- **Errors**: tỉ lệ request lỗi.\n- **Saturation**: mức \"đầy\" của tài nguyên (CPU, bộ nhớ, hàng đợi).\n\nHai biến thể hay dùng: **RED** (Rate, Errors, Duration) cho dịch vụ, **USE** (Utilization, Saturation, Errors) cho tài nguyên hạ tầng.\n\n### Với Prometheus\nBốn kiểu metric: counter (chỉ tăng), gauge (lên xuống), histogram, summary.\n```promql\n# tỉ lệ lỗi 5xx\nsum(rate(http_requests_total{status=~\"5..\"}[5m]))\n  / sum(rate(http_requests_total[5m]))\n# độ trễ p95 từ histogram\nhistogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket[5m])))\n```\nỨng dụng phát `/metrics` bằng thư viện client; cụm thêm `ServiceMonitor` để Prometheus cào.\n\n### Lỗi hay gặp\n- Dùng giá trị nhãn có số lượng không giới hạn (cardinality bùng nổ).\n- Dùng trung bình độ trễ nên che mất đuôi chậm.\n- Dùng `rate()` trên gauge hay quên `rate()` trên counter.\n\n### Tự kiểm tra\n1. Vì sao nên theo dõi p95/p99 hơn là trung bình?\n2. Saturation của một ứng dụng web có thể là gì?",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so",
+    "ten": "4.1 — Chỉ số là gì, và bốn loại của nó",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-4-5-thu-thap-cai-gi",
+    "ten": "4.5 — Thật ra thì nên thu thập chỉ số nào",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-4-metrics-prometheus",
+    "ten": "15.4 — Metric, và cái nhãn ngốn 939MB",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Monitoring & Observability › Traces": {
+  "body": "Khi một request đi qua nhiều service, \"chậm\" có thể ở bất cứ đâu. **Distributed tracing** ghi lại hành trình đó thành một **trace**, gồm nhiều **span** (mỗi span là một đoạn công việc có thời gian bắt đầu, kết thúc và quan hệ cha-con).\n\n### Ý chính\n- **OpenTelemetry (OTel)** là chuẩn mở gồm API/SDK để ứng dụng phát trace (cùng metric, log), và **Collector** để nhận, xử lý rồi chuyển tới nơi lưu qua giao thức OTLP.\n- Backend xem trace: **Jaeger**, **Grafana Tempo** và các dịch vụ thương mại. Biểu đồ \"thác\" (waterfall) cho thấy span nào chiếm thời gian.\n- Qua ranh giới service, ngữ cảnh được truyền bằng header chuẩn **W3C Trace Context** (`traceparent`). Mọi service trong đường đi phải truyền header này.\n- **Sampling**: lưu mọi trace quá đắt, nên lấy mẫu (theo tỉ lệ, hoặc giữ trace lỗi/chậm).\n- Trong Kubernetes thường chạy Collector dạng DaemonSet hoặc Deployment, ứng dụng gửi OTLP tới đó.\n\n### Lỗi hay gặp\n- Một service giữa đường không truyền header nên trace bị đứt đoạn.\n- Lấy mẫu 100% trên hệ thống tải cao làm tốn kém và chậm.\n- Khởi tạo SDK sau khi thư viện đã được import nên không tự gắn được instrumentation.\n\n### Tự kiểm tra\n1. Span và trace khác nhau thế nào?\n2. Header nào mang ngữ cảnh trace giữa các service?",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-1-span-la-gi",
+    "ten": "6.1 — Một span là một khoảng thời gian có cha",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-2-otel-trong-node",
+    "ten": "6.2 — OpenTelemetry trong Node, và việc tự-đo-đạc thật ra làm gì",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-5-opentelemetry-trace",
+    "ten": "15.5 — Trace: thời gian thật sự đi đâu",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Monitoring & Observability › Resource Health": {
+  "body": "Trước khi hỏi \"ứng dụng có khoẻ không\" hãy hỏi \"Node có khoẻ không\". Nhiều lỗi Pod thực ra do Node thiếu tài nguyên.\n\n### Công cụ chính\n```bash\nkubectl get nodes\nkubectl describe node worker-1\nkubectl top nodes\n```\nTrong `describe node` chú ý:\n- **Conditions**: `Ready`, `MemoryPressure`, `DiskPressure`, `PIDPressure`, `NetworkUnavailable`. Pressure bằng `True` nghĩa là kubelet sắp (hoặc đang) đuổi Pod.\n- **Capacity** và **Allocatable**: tổng tài nguyên và phần còn dành cho Pod (đã trừ phần hệ thống).\n- **Allocated resources**: tổng requests/limits đang đặt trên Node, cho biết còn bao nhiêu chỗ.\n- **Events** và danh sách Pod trên Node.\n\n### Ý chính\n- Node `NotReady` nghĩa là kubelet ngừng báo cáo; Pod trên đó sẽ bị đánh dấu và dựng lại ở nơi khác sau một thời gian.\n- Bảo trì: `kubectl cordon` (ngừng xếp thêm), `kubectl drain` (dời Pod đi, tôn trọng PDB).\n- Với Pod: liveness/readiness/startup probe và `kubectl describe pod` cho biết sức khoẻ ứng dụng.\n\n### Lỗi hay gặp\n- `DiskPressure` do log hoặc image cũ chiếm đĩa; kubelet dọn image nhưng đừng chờ tới lúc đó.\n- Nhầm Allocatable với Capacity khi tính chỗ trống.\n\n### Tự kiểm tra\n1. Khác biệt giữa Capacity và Allocatable?\n2. Node có `MemoryPressure=True` thì kubelet làm gì với Pod?"
+ },
+ "Monitoring & Observability › Observability Engines": {
+  "body": "Một \"engine quan sát\" không phải một sản phẩm duy nhất, mà là bộ công cụ ghép lại cho cả ba trụ cột. Ngăn xếp mã nguồn mở phổ biến trên Kubernetes:\n\n### Ngăn xếp thường gặp\n- **Metrics**: Prometheus (thu thập, lưu, truy vấn) + Alertmanager (gửi cảnh báo) + Grafana (dashboard).\n- **Logs**: Loki (hoặc Elasticsearch/OpenSearch) với agent như Fluent Bit hay Promtail/Alloy.\n- **Traces**: Jaeger hoặc Tempo, nhận dữ liệu qua OpenTelemetry Collector.\n- **OpenTelemetry** làm lớp phát và vận chuyển dữ liệu chung, giúp đổi backend mà không sửa ứng dụng.\n- Grafana có thể nối cả ba để nhảy từ metric sang log và trace liên quan.\n\n### Chọn thế nào\n- Tự vận hành cho kiểm soát và chi phí, nhưng tốn công bảo trì, lưu trữ, nâng cấp.\n- Dịch vụ thương mại (Datadog, New Relic...) bớt việc vận hành, đổi lại tiền theo khối lượng dữ liệu.\n- Bắt đầu nhỏ: metrics + dashboard + vài cảnh báo trước, rồi mới thêm log tập trung và trace.\n\n### Lỗi hay gặp\n- Dựng đủ mọi thứ nhưng không có cảnh báo gắn với việc cần làm.\n- Quên chi phí lưu trữ và thời gian giữ dữ liệu.",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-0-2-ba-tru-cot",
+    "ten": "0.2 — Ba trụ cột, và cái thứ tư ai cũng quên",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-2-3-trinh-thu-log",
+    "ten": "2.3 — Trình thu log: đưa log rời khỏi cái máy",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-12-2-dung-cai-gi-truoc",
+    "ten": "12.2 — Dựng cái gì trước",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 12",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Monitoring & Observability › Giám sát (Monitoring) và Logging": {
+  "body": "Giám sát một cụm Kubernetes gồm ba việc: đọc **log** của Pod và thành phần hệ thống, thu thập **metric** tài nguyên, và dùng **trace** để lần theo request.\n\n### Ý chính\n- Log Pod: `kubectl logs`. Log thành phần hệ thống: kubelet chạy dưới systemd (`journalctl -u kubelet`), các thành phần control plane thường là static Pod trong `kube-system`.\n- Metric: `kubectl top` (metrics-server) cho nhanh, Prometheus cho lịch sử và cảnh báo.\n- Trace: OpenTelemetry + Jaeger/Tempo khi có nhiều service.\n- Sự kiện: `kubectl get events --sort-by=.lastTimestamp` cho biết scheduler, kubelet, controller vừa làm gì.\n- Đặt cảnh báo cho điều thật sự cần người xử lý: Pod crash lặp, Node NotReady, tỉ lệ lỗi cao, đĩa sắp đầy.\n\n```bash\nkubectl get events -A --sort-by=.lastTimestamp | tail -20\nkubectl logs deploy/web --since=10m\n```\n\n### Lỗi hay gặp\n- Chỉ nhìn log mà bỏ qua events, trong khi nhiều lỗi (Pending, ImagePullBackOff) chỉ hiện ở events.\n- Events chỉ giữ khoảng một giờ, nên cần lưu lại nếu muốn điều tra sau.",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-0-2-ba-tru-cot",
+    "ten": "0.2 — Ba trụ cột, và cái thứ tư ai cũng quên",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Mục 0",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Deployment Pattern & Ecosystem › Helm": {
+  "body": "**Helm** là trình quản lý gói cho Kubernetes. Thay vì giữ hàng chục tệp YAML và sửa tay từng giá trị cho mỗi môi trường, bạn đóng gói chúng thành một **chart** có tham số, rồi cài/nâng cấp/quay lui bằng một lệnh.\n\n### Vì sao cần biết\nHầu hết phần mềm hạ tầng (Prometheus, ingress-nginx, cert-manager, các database) phân phối dưới dạng Helm chart; và với ứng dụng của bạn, chart giúp cùng một bộ manifest chạy ở dev, staging, prod với giá trị khác nhau.\n\n### Ý chính\n- **Chart**: thư mục gồm `Chart.yaml` (tên, phiên bản), `values.yaml` (giá trị mặc định) và `templates/` (YAML có chỗ trống dạng Go template như `{{ .Values.image.tag }}`).\n- **Release**: một lần cài chart vào cụm, có tên và số revision. Helm 3 không cần thành phần Tiller trong cụm; thông tin release lưu trong Secret của namespace.\n- Ghi đè giá trị bằng `--set` hoặc `-f values-prod.yaml`.\n\n```bash\nhelm repo add bitnami https://charts.bitnami.com/bitnami\nhelm install db bitnami/postgresql -n data --create-namespace -f values.yaml\nhelm upgrade --install web ./chart -n shop --set image.tag=1.4.2\nhelm template web ./chart        # in YAML sau khi render, không cài\nhelm rollback web 1 -n shop\nhelm list -A\n```\n\n### Lỗi hay gặp\n- Cài chart mà không đọc `values.yaml` nên bỏ sót cấu hình quan trọng (mật khẩu, persistence).\n- Để mật khẩu trong tệp values đưa lên Git.\n- Template quá phức tạp, khó đọc; thử `helm lint` và `helm template` trước khi cài.\n\n### Tự kiểm tra\n`helm upgrade --install` khác `helm install` ở điểm nào? Làm sao xem YAML mà chart sẽ tạo mà không cài?"
+ },
+ "Deployment Pattern & Ecosystem › Rolling Update / Blue-Green / Canary": {
+  "body": "Triển khai phiên bản mới mà người dùng không thấy gián đoạn là bài toán kinh điển. Ba chiến lược hay gặp:\n\n### Ý chính\n- **Rolling update**: thay dần Pod cũ bằng Pod mới (mặc định của Deployment). Điều khiển bằng `maxSurge` (thêm tối đa bao nhiêu Pod dư) và `maxUnavailable` (cho phép thiếu tối đa bao nhiêu). Cần readiness probe đúng để Pod mới chưa sẵn sàng không nhận tải.\n- **Blue-green**: dựng song song hai môi trường (blue đang chạy, green phiên bản mới); thử green xong thì đổi traffic một lần, ví dụ đổi `selector` của Service. Quay lui nhanh bằng cách đổi lại; đổi lại cần gấp đôi tài nguyên tạm thời.\n- **Canary**: cho một phần nhỏ traffic (ví dụ 5%) đi vào bản mới, theo dõi lỗi/độ trễ rồi tăng dần. Cần cơ chế chia traffic (tỉ lệ replica, ingress có trọng số, service mesh, Argo Rollouts).\n\n### Chọn thế nào\nRolling là đủ cho đa số; blue-green khi cần chuyển tức thời và quay lui nhanh; canary khi rủi ro cao và có số đo để quyết định.\n\n```bash\nkubectl rollout status deploy/web\nkubectl rollout undo deploy/web\n```\n\n### Lỗi hay gặp\n- Phiên bản mới và cũ chạy cùng lúc nên schema database hay API phải tương thích hai chiều.\n- Không có readiness probe nên rolling update vẫn gây lỗi.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan",
+    "ten": "17.5 — Deploy không gián đoạn: mất 1,5%, hay mất 0%",
+    "nguon": "Node.js · Chương 17",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Deployment Pattern & Ecosystem › GitOps (Argo CD/FluxCD)": {
+  "body": "**GitOps** là cách vận hành trong đó **Git là nguồn sự thật** về trạng thái mong muốn của cụm. Một công cụ chạy trong cụm (**Argo CD** hoặc **Flux**) liên tục so sánh Git với cụm thật và đồng bộ chúng.\n\n### Vì sao cần biết\nThay vì pipeline CI \"đẩy\" `kubectl apply` vào cụm (cần cấp quyền cụm cho CI), GitOps để cụm tự *kéo* thay đổi. Mọi thay đổi là một commit có tác giả, review, lịch sử và quay lui bằng `git revert`.\n\n### Ý chính\n- Repo chứa manifest (YAML thuần, Helm hay Kustomize). Argo CD có object `Application` trỏ repo, đường dẫn và namespace đích.\n- Trạng thái: `Synced` hay `OutOfSync`, `Healthy` hay `Degraded`. Có thể bật đồng bộ tự động với `prune` (xoá thứ không còn trong Git) và `selfHeal` (sửa lại khi ai đó đổi tay trên cụm).\n```yaml\napiVersion: argoproj.io/v1alpha1\nkind: Application\nmetadata: { name: web, namespace: argocd }\nspec:\n  project: default\n  source: { repoURL: https://github.com/acme/deploy, path: apps/web, targetRevision: main }\n  destination: { server: https://kubernetes.default.svc, namespace: shop }\n  syncPolicy: { automated: { prune: true, selfHeal: true } }\n```\n- Quy trình điển hình: CI build image, cập nhật tag trong repo manifest, Argo CD đồng bộ.\n- Bí mật không để thô trong Git: dùng Sealed Secrets, SOPS hoặc External Secrets.\n\n### Lỗi hay gặp\n- Vừa sửa tay bằng kubectl vừa dùng GitOps; selfHeal sẽ ghi đè.\n- Để mã ứng dụng và manifest triển khai chung một nhánh khiến mỗi commit code kích hoạt đồng bộ ngoài ý muốn.\n\n### Tự kiểm tra\nKhác biệt giữa mô hình push (CI chạy kubectl) và pull (Argo CD) là gì? Ai cần quyền truy cập cụm?"
+ },
+ "Deployment Pattern & Ecosystem › CRDs & Custom Controllers": {
+  "body": "**CustomResourceDefinition (CRD)** cho phép thêm loại object mới vào API của Kubernetes (ví dụ `Certificate`, `PostgresCluster`, `Application`). Kèm theo một **controller** tự viết, đó là **operator pattern**: đưa kiến thức vận hành một phần mềm vào mã chạy trong cụm.\n\n### Ý chính\n- CRD chỉ khai báo *dữ liệu*: tên loại, schema, phạm vi. Hành vi nằm ở controller: nó theo dõi các custom resource và thực hiện việc cần làm để thực tế khớp với `spec`.\n- Sau khi cài CRD, bạn dùng `kubectl get`/`apply` với loại mới như object gốc.\n- Operator phổ biến: cert-manager, Prometheus Operator, Argo CD, các operator cho Postgres/Kafka. Cài chúng thường nghĩa là cài một nhóm CRD cộng một controller.\n- Khi nào nên viết riêng: có quy trình vận hành lặp lại và phức tạp cần tự động hoá, không đủ với Helm hay script.\n\n### Lỗi hay gặp\n- Xoá CRD sẽ xoá **mọi** custom resource thuộc loại đó.\n- Viết operator trong khi một công cụ có sẵn đã đủ dùng."
+ },
+ "Deployment Pattern & Ecosystem › Tích hợp CI/CD với Kubernetes": {
+  "body": "Tích hợp CI/CD với Kubernetes nghĩa là mỗi lần đẩy code, hệ thống tự build, kiểm thử, đóng gói ảnh và đưa phiên bản mới lên cụm mà không phải gõ lệnh tay.\n\n### Pipeline điển hình\n1. **Test và lint** mã nguồn.\n2. **Build image** và gắn tag có thể truy vết, thường là mã commit (`app:3f9a2c1`), không dùng `latest`.\n3. **Push** lên registry (GHCR, ECR, Docker Hub...).\n4. **Quét** image tìm lỗ hổng.\n5. **Triển khai**: một trong hai cách.\n   - *Push*: CI chạy `kubectl set image` / `helm upgrade --install` (CI cần credential của cụm).\n   - *Pull / GitOps*: CI chỉ cập nhật tag trong repo manifest; Argo CD hay Flux đồng bộ vào cụm.\n6. **Kiểm tra** sau triển khai bằng `kubectl rollout status` và smoke test; tự động quay lui khi lỗi.\n\n```bash\nkubectl set image deploy/web web=ghcr.io/acme/web:$GITHUB_SHA\nkubectl rollout status deploy/web --timeout=120s || kubectl rollout undo deploy/web\n```\n\n### Ý chính\n- Tách quyền: CI dùng ServiceAccount hoặc OIDC với quyền hẹp (RBAC) trên đúng namespace; không dán kubeconfig quản trị vào secret của CI.\n- Thăng cấp qua môi trường: dev, staging, prod, cùng một image, khác cấu hình.\n\n### Lỗi hay gặp\n- Dùng tag `latest` nên không biết đang chạy phiên bản nào và không quay lui được.\n- Pipeline báo xanh dù rollout thật sự kẹt vì không chờ `rollout status`.\n\n### Tự kiểm tra\n1. Vì sao không nên dùng tag `latest` trong pipeline?\n2. Ưu điểm lớn nhất của mô hình pull (GitOps) so với push là gì?"
+ },
+ "Deployment Pattern & Ecosystem › Helm Charts": {
+  "body": "Một **Helm chart** là gói mô tả cách cài một ứng dụng lên Kubernetes. Bước này tập trung vào cấu trúc chart và cách tự viết một chart cho ứng dụng của bạn.\n\n### Cấu trúc\n```text\nweb/\n  Chart.yaml        # name, version (phiên bản chart), appVersion (phiên bản app)\n  values.yaml       # giá trị mặc định\n  templates/\n    deployment.yaml\n    service.yaml\n    _helpers.tpl    # đoạn template dùng lại\n```\n\n### Ý chính\n- Template dùng cú pháp Go template: `{{ .Values.replicaCount }}`, `{{ .Release.Name }}`, `{{ include \"web.fullname\" . }}`, điều kiện `{{- if .Values.ingress.enabled }}`.\n- `values.yaml` là \"giao diện\" của chart: giữ ít khoá, đặt tên rõ ràng, có giá trị mặc định chạy được.\n- Quy trình phát triển: `helm create web`, sửa template, rồi\n```bash\nhelm lint ./web\nhelm template web ./web -f values-prod.yaml | less\nhelm install web ./web -n shop --dry-run\n```\n- Phụ thuộc chart khác khai trong `dependencies` của `Chart.yaml`.\n- Có thể đóng gói `helm package` và đẩy lên kho (HTTP repo hay OCI registry).\n- Hook (`helm.sh/hook`) cho phép chạy Job trước/sau khi cài, ví dụ migrate database.\n\n### Lỗi hay gặp\n- Quên indent khi dùng `toYaml` nên sinh YAML sai (dùng `| nindent 8`).\n- Đưa mọi trường thành giá trị cấu hình, chart trở nên khó dùng như viết lại YAML.\n\n### Tự kiểm tra\n1. `version` và `appVersion` trong Chart.yaml khác nhau thế nào?\n2. Lệnh nào kiểm tra chart mà không cài vào cụm?"
+ },
+ "Deployment Pattern & Ecosystem › Chiến lược triển khai ứng dụng": {
+  "body": "Mỗi chiến lược triển khai là một sự đánh đổi giữa **downtime**, **rủi ro** và **tài nguyên**.\n\n### So sánh\n- **Recreate**: tắt hết bản cũ rồi bật bản mới (`strategy.type: Recreate`). Đơn giản, có downtime; hợp khi hai phiên bản không thể chạy cùng lúc (ví dụ đổi schema không tương thích).\n- **Rolling update**: thay dần, mặc định. Gần như không downtime, tốn ít tài nguyên thêm (`maxSurge`), nhưng hai phiên bản cùng chạy một lúc; quay lui cũng là một lượt rolling.\n- **Blue-green**: hai môi trường đầy đủ, đổi traffic cùng lúc. Quay lui gần như tức thì, đổi lại tốn gấp đôi tài nguyên trong lúc chuyển.\n- **Canary**: một phần traffic đi vào bản mới và tăng dần theo số đo. Giảm rủi ro nhất, nhưng cần chia traffic và giám sát tốt.\n\n### Cách chọn\nHỏi bốn câu: chịu được downtime không? hai phiên bản có tương thích khi chạy song song không? quay lui cần nhanh đến đâu? có đủ giám sát để quyết định canary không?\n\n```yaml\nstrategy:\n  type: RollingUpdate\n  rollingUpdate: { maxSurge: 25%, maxUnavailable: 0 }\n```\n\n### Lỗi hay gặp\n- Đổi schema database kiểu phá vỡ cùng lúc với đổi code; nên làm theo hai bước tương thích ngược (expand rồi contract).\n- Rolling nhưng thiếu readiness probe hoặc preStop nên vẫn rớt request.\n\n### Tự kiểm tra\nỨng dụng đổi schema database theo kiểu phá vỡ: nên dùng Recreate hay Rolling, và làm gì để tránh downtime?",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-2-hai-may-can-bang-tai",
+    "ten": "14.2 — Hai máy sau bộ cân bằng tải: kiểm sức khoẻ, trạng thái, deploy lần lượt",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan",
+    "ten": "17.5 — Deploy không gián đoạn: mất 1,5%, hay mất 0%",
+    "nguon": "Node.js · Chương 17",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Deployment Pattern & Ecosystem › Triển khai Canary": {
+  "body": "**Canary deployment** chạy phiên bản mới cho một phần nhỏ người dùng trước (\"chim hoàng yến trong mỏ than\"): nếu có vấn đề, chỉ ít người bị ảnh hưởng và bạn rút lại kịp.\n\n### Cách làm trên Kubernetes\n- **Cách thô, không cần công cụ thêm**: hai Deployment (`web-stable` 9 replica, `web-canary` 1 replica) cùng nhãn `app: web`, một Service chọn theo nhãn đó. Traffic chia gần đúng theo tỉ lệ số Pod (khoảng 10% vào canary). Chia theo số Pod thô, không chính xác theo phần trăm.\n- **Ingress controller có trọng số**: ví dụ ingress-nginx hỗ trợ annotation canary theo trọng số hoặc theo header.\n- **Argo Rollouts / Flagger / service mesh**: chia traffic chính xác theo phần trăm, tự phân tích số đo và tự tăng hoặc quay lui.\n\n### Quy trình\n1. Triển khai canary với tỉ lệ nhỏ.\n2. Theo dõi số đo: tỉ lệ lỗi, độ trễ p95, so với bản stable.\n3. Đạt ngưỡng thì tăng dần (5%, 25%, 50%, 100%); vượt ngưỡng xấu thì quay lui.\n\n### Lỗi hay gặp\n- Không có số đo để so sánh nên canary chỉ là \"triển khai chậm\".\n- Người dùng bị chuyển qua lại giữa hai phiên bản giữa các request (cần session affinity nếu quan trọng).\n- Quên rằng schema/cache dùng chung phải tương thích với cả hai phiên bản.\n\n### Tự kiểm tra\n1. Với cách chia theo số Pod, muốn 5% traffic vào canary cần bao nhiêu replica mỗi bên?\n2. Số đo nào quyết định tăng hay rút canary?",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-2-hai-may-can-bang-tai",
+    "ten": "14.2 — Hai máy sau bộ cân bằng tải: kiểm sức khoẻ, trạng thái, deploy lần lượt",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Deployment Pattern & Ecosystem › Rolling Update và Rollback": {
+  "body": "Deployment cập nhật ứng dụng bằng **rolling update** và nhớ lịch sử các phiên bản để bạn **rollback** khi có sự cố.\n\n### Cách hoạt động\nKhi bạn đổi template của Pod (ví dụ tag image), Deployment tạo một **ReplicaSet mới**, tăng dần Pod mới và giảm dần Pod của ReplicaSet cũ theo `maxSurge` và `maxUnavailable`. ReplicaSet cũ được giữ lại (với 0 Pod) làm lịch sử, số lượng giữ lại theo `revisionHistoryLimit` (mặc định 10).\n\n```bash\nkubectl set image deploy/web web=myapp:1.5\nkubectl rollout status deploy/web\nkubectl rollout history deploy/web\nkubectl rollout undo deploy/web                 # về revision trước\nkubectl rollout undo deploy/web --to-revision=2\nkubectl rollout pause deploy/web                # tạm dừng giữa chừng\n```\n\n### Ý chính\n- Rollout chỉ chạy khi **Pod template** đổi; đổi `replicas` thì không.\n- `readinessProbe` quyết định Pod mới khi nào được coi là sẵn sàng; thiếu nó thì rollout \"xong\" quá sớm.\n- `progressDeadlineSeconds` (mặc định 600 giây): quá hạn mà không tiến triển thì rollout bị coi là thất bại (condition `ProgressDeadlineExceeded`), nhưng Kubernetes **không tự rollback**; bạn hoặc pipeline phải `undo`.\n- `rollout undo` hoàn tác Pod template, không hoàn tác ConfigMap, Secret hay database.\n\n### Lỗi hay gặp\n- Rollback sang revision dùng image đã bị xoá khỏi registry.\n- Dùng tag `latest` nên đổi image mà template không đổi, không có rollout.\n\n### Tự kiểm tra\n1. Điều gì kích hoạt một rollout mới?\n2. Rollout kẹt quá `progressDeadlineSeconds` thì Kubernetes có tự rollback không?"
+ },
+ "Deployment Pattern & Ecosystem › Triển khai Blue-Green": {
+  "body": "**Blue-green** giữ hai môi trường giống hệt nhau: **blue** đang phục vụ người dùng, **green** chứa phiên bản mới. Thử green xong thì chuyển toàn bộ traffic sang nó trong một bước.\n\n### Cách làm đơn giản trên Kubernetes\nHai Deployment `web-blue` và `web-green` có nhãn `version` khác nhau; một Service chọn theo `version`:\n```bash\n# green đã chạy và đã được kiểm tra qua một Service thử riêng\nkubectl patch service web -p '{\"spec\":{\"selector\":{\"app\":\"web\",\"version\":\"green\"}}}'\n# quay lui:\nkubectl patch service web -p '{\"spec\":{\"selector\":{\"app\":\"web\",\"version\":\"blue\"}}}'\n```\n\n### Ý chính\n- Ưu điểm: chuyển và quay lui gần như tức thì; kiểm thử trên môi trường thật trước khi mở traffic.\n- Nhược điểm: tốn gấp đôi tài nguyên trong lúc chuyển; database và dịch vụ dùng chung phải tương thích với cả hai phiên bản.\n- Nên chờ green qua readiness và smoke test rồi mới đổi selector; sau khi ổn định thì hạ blue.\n- Các công cụ như Argo Rollouts hỗ trợ blue-green có sẵn quy trình xem trước và chuyển.\n\n### Lỗi hay gặp\n- Đổi selector khi green chưa sẵn sàng nên có khoảnh khắc mất dịch vụ.\n- Kết nối đang mở (keep-alive, websocket) vẫn đi vào Pod cũ sau khi đổi.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan",
+    "ten": "17.5 — Deploy không gián đoạn: mất 1,5%, hay mất 0%",
+    "nguon": "Node.js · Chương 17",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Deployment Pattern & Ecosystem › Tạo Custom Controller": {
+  "body": "**Controller** là vòng lặp điều khiển: nó liên tục so sánh *trạng thái mong muốn* (`spec`) với *trạng thái thực tế* và hành động để thu hẹp khoảng cách. Deployment, ReplicaSet đều là controller; bạn có thể viết controller riêng cho custom resource.\n\n### Reconcile loop\n1. Lắng nghe sự kiện thay đổi của object (qua **informer**/cache, không hỏi API liên tục).\n2. Đưa key của object vào **work queue**.\n3. Hàm `Reconcile` đọc trạng thái hiện tại, so với `spec`, rồi tạo/sửa/xoá các object con cho khớp, cập nhật `status`.\n4. Lỗi thì thử lại với backoff.\n\n### Ý chính\n- Reconcile phải **idempotent** (chạy nhiều lần cùng kết quả) và dựa vào *trạng thái* chứ không dựa vào sự kiện cụ thể (\"level-triggered\").\n- Dùng **ownerReferences** để object con bị xoá theo cha; **finalizer** để dọn tài nguyên bên ngoài trước khi cha bị xoá.\n- Thư viện: `client-go` (mức thấp) và `controller-runtime`; khung dựng sẵn **Kubebuilder** hoặc Operator SDK sinh mã khung và CRD.\n- Chạy controller trong cụm như một Deployment với RBAC tối thiểu.\n\n### Lỗi hay gặp\n- Reconcile tạo object trùng vì không kiểm tra tồn tại.\n- Không cập nhật `status` nên người dùng không biết custom resource đang ở trạng thái nào."
+ },
+ "Deployment Pattern & Ecosystem › Custom Resource Definitions (CRDs)": {
+  "body": "**CRD** cho phép bạn khai báo một loại resource mới cho Kubernetes API mà không cần sửa hay viết lại API server: chỉ cần áp một manifest `CustomResourceDefinition`.\n\n### Ví dụ\n```yaml\napiVersion: apiextensions.k8s.io/v1\nkind: CustomResourceDefinition\nmetadata:\n  name: backups.example.com\nspec:\n  group: example.com\n  scope: Namespaced\n  names: { plural: backups, singular: backup, kind: Backup }\n  versions:\n  - name: v1\n    served: true\n    storage: true\n    schema:\n      openAPIV3Schema:\n        type: object\n        properties:\n          spec:\n            type: object\n            properties:\n              schedule: { type: string }\n```\nSau đó:\n```bash\nkubectl get crd\nkubectl apply -f my-backup.yaml     # kind: Backup, apiVersion: example.com/v1\nkubectl get backups\n```\n\n### Ý chính\n- `group`, `names.kind`, `scope` (`Namespaced` hoặc `Cluster`), và danh sách `versions`; mỗi version có schema OpenAPI v3 để API server kiểm tra dữ liệu.\n- Chỉ một version đặt `storage: true` (dạng lưu trong etcd).\n- Tự thân CRD không làm gì ngoài lưu và kiểm tra dữ liệu; để có hành vi cần controller.\n- Có thể thêm `subresources` (`status`, `scale`) và `additionalPrinterColumns` để `kubectl get` hiện đẹp.\n\n### Lỗi hay gặp\n- Xoá CRD là xoá luôn mọi custom resource của loại đó.\n- Thiếu schema (hoặc schema lỏng) nên dữ liệu sai lọt vào, controller xử lý lỗi sau."
+ }
+}

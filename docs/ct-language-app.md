@@ -166,3 +166,11 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   ios-app `6116977`: thẻ "Một chữ · ba ngôn ngữ" thật ở Hôm nay, Tôi › Học offline (tải từ điển từng ngôn ngữ; mất mạng thì tra
   cục bộ), "Tải hết để học ngoại tuyến" của khoá học thành Pro qua móc `chanTaiHetSH` (app CuongThai không gắn ⇒ không đổi).
   Khoá Nhật/Trung (`dekiru` 1.241 bài, `jp`, `ch`) mở được trong CT Language. Bước kế: 6 (game, cộng đồng, AI gọi thoại).
+- 13/11 (APP): **bước 6 XONG** (chưa deploy). Backend `572a35ae7` + `aa9165ea4`: migration `20261113090000_ctlanguage_cong_dong`
+  (bảng `ctl_bai`, `ctl_tra_loi`, FK CASCADE users) — **deploy chạy `migrate deploy`**; cộng đồng `/cong-dong/*` (lọc từ xấu,
+  báo cáo ⇒ BAO_CAO admin + tự ẩn khi 3 người báo, chặn hai chiều qua `user_blocks`, admin gỡ được — `kiemDuyetAdmin` thêm
+  `ctl_bai`/`ctl_tra_loi`); đề trò chơi `/tu-dien/:nn/tro-choi` (chỉ kho soạn tay có nghĩa Việt); gọi thoại `/ai/goi/*` bọc phòng
+  trò chuyện web (`ielts/troChuyen`), free 10 lượt nói/ngày (hoàn lượt khi không nghe được/AI lỗi), chấm buổi = Pro.
+  ios-app `f75ce9e`: Trò chơi, Cộng đồng, Gọi CuongMini (tab Luyện; "Nói một câu" ở Hôm nay). ⚠️ Máy local không có khoá
+  Groq/Azure ⇒ chưa nghe thật lượt nói + tiếng của CuongMini — **thử trên TestFlight/production**. Đấu PK chưa làm (cần thời
+  gian thực). Còn tấm "đang xây" (`SapCoCTL`) ở Luyện nghe · Luyện viết chữ · Thi thử ⇒ phải xong trước khi nộp (bước 7).

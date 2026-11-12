@@ -50,12 +50,30 @@ export const SAN_PHAM_PRO: Readonly<Record<string, number>> = Object.freeze({
 
 export const BUNDLE_ID = 'com.cuongthai.app';
 
+/// CT Language (12/11/2026, docs/ct-language-app.md mục 4): Pro DÙNG CHUNG với web + app CuongThai, bán bằng THUÊ BAO TỰ
+/// GIA HẠN (49k/tháng · 399k/năm, thử 7 ngày). Một subscription group trên App Store Connect.
+export const BUNDLE_CTLANGUAGE = 'com.cuongthai.ctlanguage';
+export const SAN_PHAM_THUE_BAO: Readonly<Record<string, true>> = Object.freeze({
+  'com.cuongthai.ctlanguage.pro.thang': true,
+  'com.cuongthai.ctlanguage.pro.nam': true,
+});
+
+/// Sản phẩm nào thuộc app nào. Giao dịch hợp chữ ký nhưng sản phẩm của app A gắn bundle app B ⇒ từ chối (không ai
+/// được "đổi" gói rẻ của app này lấy quyền ở app kia bằng cách sửa máy khách).
+export const SAN_PHAM_CUA_APP: Readonly<Record<string, readonly string[]>> = Object.freeze({
+  [BUNDLE_ID]: Object.keys(SAN_PHAM_PRO),
+  [BUNDLE_CTLANGUAGE]: Object.keys(SAN_PHAM_THUE_BAO),
+});
+
+const NGAY_MS = 86_400_000;
+
 export type LyDoTuChoi =
   | 'thieu_ma_giao_dich'
   | 'sai_ung_dung'
   | 'sai_moi_truong'
   | 'da_hoan_tien'
-  | 'san_pham_la';
+  | 'san_pham_la'
+  | 'thieu_han';
 
 export type KetQuaXet =
   | { nhan: true; maGiaoDich: string; maLuotMua: string; maSanPham: string;
@@ -67,6 +85,8 @@ export interface BoiCanhXet {
   /// Môi trường máy chủ chấp nhận. Production chỉ nhận "Production"; máy dev
   /// nhận cả hai để thử bằng tài khoản Sandbox.
   chapNhanSandbox: boolean;
+  /// Giờ máy chủ (tiêm vào để kiểm thử). Thiếu ⇒ bây giờ.
+  bayGio?: Date;
 }
 
 /// Xét một giao dịch ĐÃ XÁC MINH CHỮ KÝ.
@@ -78,7 +98,8 @@ export function xetGiaoDich(gd: GiaoDichApple, bc: BoiCanhXet): KetQuaXet {
   // Chữ ký của Apple hợp lệ KHÔNG có nghĩa là giao dịch của app mình: Apple
   // ký cho mọi app trên App Store. Thiếu phép kiểm này thì một giao dịch thật
   // 0,99$ mua ở app bất kỳ cũng đổi được 12 tháng Pro ở đây.
-  if (gd.bundleId !== BUNDLE_ID) {
+  const sanPhamCuaApp = SAN_PHAM_CUA_APP[gd.bundleId ?? ''];
+  if (!sanPhamCuaApp) {
     return { nhan: false, vi: 'sai_ung_dung', noi: `Giao dịch thuộc app khác (${gd.bundleId ?? 'không rõ'}).` };
   }
 
@@ -93,9 +114,23 @@ export function xetGiaoDich(gd: GiaoDichApple, bc: BoiCanhXet): KetQuaXet {
     return { nhan: false, vi: 'da_hoan_tien', noi: 'Giao dịch đã bị hoàn tiền hoặc thu hồi.' };
   }
 
-  const thang = SAN_PHAM_PRO[gd.productId ?? ''];
-  if (!thang) {
+  if (!sanPhamCuaApp.includes(gd.productId ?? '')) {
     return { nhan: false, vi: 'san_pham_la', noi: `Không biết sản phẩm "${gd.productId ?? ''}".` };
+  }
+
+  // Số ngày cấp:
+  //  · gói KHÔNG tự gia hạn (app CuongThai) — số tháng của gói, như web.
+  //  · THUÊ BAO (CT Language) — mỗi kỳ gia hạn là MỘT giao dịch riêng có `expiresDate`. Chỉ cấp phần CÒN LẠI của kỳ
+  //    tính từ bây giờ: "Khôi phục" phát lại mọi kỳ cũ — cấp trọn từng kỳ thì 6 tháng đã dùng biến thành 6 tháng Pro
+  //    mới (grantProToUser CỘNG DỒN). Kỳ đã hết ⇒ 0 ngày: vẫn ghi sổ, không cấp.
+  let soNgay: number;
+  if (SAN_PHAM_THUE_BAO[gd.productId!]) {
+    if (!gd.expiresDate) return { nhan: false, vi: 'thieu_han', noi: 'Giao dịch thuê bao thiếu ngày hết hạn.' };
+    const bayGio = (bc.bayGio ?? new Date()).getTime();
+    const tu = Math.max(bayGio, gd.purchaseDate ?? bayGio);
+    soNgay = Math.max(0, Math.ceil((gd.expiresDate - tu) / NGAY_MS));
+  } else {
+    soNgay = ngayChoThang(SAN_PHAM_PRO[gd.productId!]);
   }
 
   return {
@@ -103,7 +138,7 @@ export function xetGiaoDich(gd: GiaoDichApple, bc: BoiCanhXet): KetQuaXet {
     maGiaoDich: gd.transactionId,
     maLuotMua: gd.originalTransactionId,
     maSanPham: gd.productId!,
-    soNgay: ngayChoThang(thang),
+    soNgay,
     // Thiếu `purchaseDate` thì lấy giờ máy chủ — thà lệch vài giây còn hơn
     // ghi `new Date(undefined)` = Invalid Date rồi Prisma ném lúc ghi.
     luc: gd.purchaseDate ? new Date(gd.purchaseDate) : new Date(),

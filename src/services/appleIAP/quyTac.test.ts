@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { xetGiaoDich, taiKhoanTuThe, SAN_PHAM_PRO, BUNDLE_ID, type GiaoDichApple } from './quyTac.js';
+import { xetGiaoDich, taiKhoanTuThe, SAN_PHAM_PRO, BUNDLE_ID, BUNDLE_CTLANGUAGE, type GiaoDichApple } from './quyTac.js';
 import { ngayChoThang } from '../billing.service.js';
 
 const THAT: GiaoDichApple = {
@@ -127,4 +127,57 @@ test('appAccountToken rác ⇒ null, không đoán bừa ra user nào', () => {
                      '00000000-0000-4000-8000-000000000000']) {
     assert.equal(taiKhoanTuThe(rac as string), null, String(rac));
   }
+});
+
+// ─── CT Language: thuê bao tự gia hạn (12/11/2026) ─────────────────────────
+
+const BAY_GIO = new Date(Date.UTC(2026, 10, 12, 12, 0, 0));
+const THUE_BAO: GiaoDichApple = {
+  transactionId: '2000000950000001',
+  originalTransactionId: '2000000950000001',
+  bundleId: BUNDLE_CTLANGUAGE,
+  productId: 'com.cuongthai.ctlanguage.pro.thang',
+  purchaseDate: BAY_GIO.getTime(),
+  expiresDate: BAY_GIO.getTime() + 30 * 86_400_000,
+  type: 'Auto-Renewable Subscription',
+  environment: 'Production',
+};
+const XET = { chapNhanSandbox: false, bayGio: BAY_GIO };
+
+test('CT Language: kỳ thuê bao mới ⇒ cấp đúng số ngày tới hạn của Apple', () => {
+  const r = xetGiaoDich(THUE_BAO, XET);
+  assert.equal(r.nhan, true);
+  if (!r.nhan) return;
+  assert.equal(r.soNgay, 30);
+  assert.equal(r.hetHan?.getTime(), THUE_BAO.expiresDate);
+});
+
+test('CT Language: thử free 7 ngày (giá 0) cũng là một kỳ ⇒ 7 ngày', () => {
+  const r = xetGiaoDich({ ...THUE_BAO, expiresDate: BAY_GIO.getTime() + 7 * 86_400_000 }, XET);
+  assert.ok(r.nhan && r.soNgay === 7);
+});
+
+test('⛔ CT Language: "Khôi phục" phát lại kỳ CŨ đã hết ⇒ 0 ngày (ghi sổ, không cộng dồn Pro)', () => {
+  const cu = { ...THUE_BAO, purchaseDate: BAY_GIO.getTime() - 60 * 86_400_000, expiresDate: BAY_GIO.getTime() - 30 * 86_400_000 };
+  const r = xetGiaoDich(cu, XET);
+  assert.ok(r.nhan && r.soNgay === 0);
+});
+
+test('CT Language: xử lý muộn giữa kỳ ⇒ chỉ cấp phần CÒN LẠI', () => {
+  const giua = { ...THUE_BAO, purchaseDate: BAY_GIO.getTime() - 10 * 86_400_000, expiresDate: BAY_GIO.getTime() + 20 * 86_400_000 };
+  const r = xetGiaoDich(giua, XET);
+  assert.ok(r.nhan && r.soNgay === 20);
+});
+
+test('⛔ sản phẩm của app này gắn bundle app kia ⇒ từ chối', () => {
+  const a = xetGiaoDich({ ...THUE_BAO, bundleId: BUNDLE_ID }, XET);
+  assert.ok(!a.nhan && a.vi === 'san_pham_la');
+  const b = xetGiaoDich({ ...THAT, bundleId: BUNDLE_CTLANGUAGE }, PROD);
+  assert.ok(!b.nhan && b.vi === 'san_pham_la');
+});
+
+test('⛔ thuê bao thiếu expiresDate ⇒ từ chối, không đoán', () => {
+  const { expiresDate, ...thieu } = THUE_BAO;
+  const r = xetGiaoDich(thieu, XET);
+  assert.ok(!r.nhan && r.vi === 'thieu_han');
 });

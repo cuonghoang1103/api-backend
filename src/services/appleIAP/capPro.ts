@@ -62,7 +62,12 @@ export async function ghiNhanGiaoDich(userId: number, jws: string): Promise<KetQ
     if (e instanceof LoiChuKyApple) throw new BadRequestError(e.message);
     throw e;
   }
+  return ghiNhanPayload(userId, payload);
+}
 
+/// Bước 2–5 trên một payload ĐÃ XÁC MINH CHỮ KÝ — dùng chung cho app gửi lên (`ghiNhanGiaoDich`) và thông báo máy chủ
+/// của Apple (`thongBaoApple.ts`, nơi giao dịch nằm lồng trong `signedTransactionInfo`).
+export async function ghiNhanPayload(userId: number, payload: GiaoDichApple): Promise<KetQuaGhiNhan> {
   // ── 2. Nội dung ────────────────────────────────────────────────
   const xet = xetGiaoDich(payload, { chapNhanSandbox: chapNhanSandbox() });
   if (!xet.nhan) throw new BadRequestError(xet.noi);
@@ -140,6 +145,12 @@ export async function ghiNhanGiaoDich(userId: number, jws: string): Promise<KetQ
   }
 
   // ── 5. Cấp Pro — cùng hàm mà web dùng ─────────────────────────
+  // Kỳ thuê bao đã hết (khôi phục phát lại lịch sử) ⇒ 0 ngày: chốt sổ, KHÔNG gọi grantProToUser (nó bật lại isPro).
+  if (xet.soNgay === 0) {
+    await prisma.appleIapTransaction.update({ where: { transactionId: xet.maGiaoDich }, data: { grantedAt: new Date() } });
+    const u = await prisma.user.findUnique({ where: { id: userId }, select: { proExpiresAt: true, isPro: true } });
+    return { moi: false, maGiaoDich: xet.maGiaoDich, soNgay: 0, proDenNgay: u?.proExpiresAt?.toISOString() ?? null, proTronDoi: !!u?.isPro && !u?.proExpiresAt };
+  }
   const tt = await grantProToUser(userId, xet.soNgay, 'APPLE_IAP');
   await prisma.appleIapTransaction.update({
     where: { transactionId: xet.maGiaoDich },
@@ -153,6 +164,28 @@ export async function ghiNhanGiaoDich(userId: number, jws: string): Promise<KetQ
     proDenNgay: tt.expiresAt,
     proTronDoi: tt.lifetime,
   };
+}
+
+/// Apple hoàn tiền / thu hồi một giao dịch (thông báo REFUND · REVOKE) ⇒ gỡ phần Pro mà CHÍNH giao dịch đó đã cấp.
+///
+/// Trừ ngày khỏi hạn hiện tại (không tắt hẳn Pro — người đó có thể còn gói mua trên web). Pro vĩnh viễn ⇒ không đụng.
+/// Thuê bao: chỉ trừ phần kỳ CHƯA dùng tính từ lúc hoàn tiền. Chạy lại an toàn: `revokedAt` là chốt chặn.
+export async function thuHoiGiaoDich(transactionId: string, luc: Date, lyDo: number | null): Promise<boolean> {
+  const g = await prisma.appleIapTransaction.findUnique({ where: { transactionId } });
+  if (!g || g.revokedAt) return false;
+  await prisma.appleIapTransaction.update({ where: { transactionId }, data: { revokedAt: luc, revocationReason: lyDo } });
+  if (!g.grantedAt || g.grantedDays <= 0) return true;
+  const conLai = g.expiresDate
+    ? Math.min(g.grantedDays, Math.max(0, Math.ceil((g.expiresDate.getTime() - luc.getTime()) / 86_400_000)))
+    : g.grantedDays;
+  if (conLai <= 0) return true;
+  const u = await prisma.user.findUnique({ where: { id: g.userId }, select: { proExpiresAt: true, isPro: true } });
+  if (!u?.isPro || !u.proExpiresAt) return true;
+  await prisma.user.update({
+    where: { id: g.userId },
+    data: { proExpiresAt: new Date(u.proExpiresAt.getTime() - conLai * 86_400_000) },
+  });
+  return true;
 }
 
 /// Lưới cứu: giao dịch đã chốt mà chưa cấp Pro. Chạy được nhiều lần —

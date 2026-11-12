@@ -7,7 +7,7 @@
 import { Router, type Request, type Response } from 'express';
 import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
-import { proOrderLimiter, appleIapLimiter } from '../middleware/orderRateLimit.js';
+import { proOrderLimiter, appleIapLimiter, appleThongBaoLimiter } from '../middleware/orderRateLimit.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
 import * as pro from '../services/pro.service.js';
@@ -16,6 +16,9 @@ import { taoChuyenKhoan } from '../services/bankTransfer.service.js';
 import { isPayosConfigured } from '../config/payos.js';
 import * as points from '../services/points.service.js';
 import { ghiNhanGiaoDich } from '../services/appleIAP/capPro.js';
+import { xuLyThongBao } from '../services/appleIAP/thongBaoApple.js';
+import { LoiChuKyApple } from '../services/appleIAP/chuKyApple.js';
+import { logger } from '../utils/logger.js';
 
 const parseId = (v: string): number => {
   const n = parseInt(v, 10);
@@ -80,6 +83,28 @@ router.post('/apple/transactions', authenticate, appleIapLimiter, async (req: Re
     if (jws.length > 32_000) throw new BadRequestError('jws quá dài.');
     const data = await ghiNhanGiaoDich(req.userId!, jws);
     res.json({ success: true, data });
+  } catch (err) { next(err); }
+});
+
+/**
+ * App Store Server Notifications V2 (12/11/2026 — thuê bao CT Language): Apple gọi THẲNG, không có phiên đăng nhập.
+ * Khai URL này ở App Store Connect › App › App Information › App Store Server Notifications (Production + Sandbox),
+ * phiên bản V2: https://cuongthai.com/api/v1/pro/apple/notifications
+ * Chữ ký sai ⇒ 400; mọi thông báo hiểu được (kể cả "không cần làm gì") ⇒ 200 để Apple thôi gửi lại.
+ */
+router.post('/apple/notifications', appleThongBaoLimiter, async (req: Request, res: Response, next) => {
+  try {
+    const sp = String((req.body as { signedPayload?: unknown })?.signedPayload ?? '').trim();
+    if (!sp || sp.length > 64_000) throw new BadRequestError('Thiếu hoặc quá dài signedPayload.');
+    let kq;
+    try {
+      kq = await xuLyThongBao(sp);
+    } catch (e) {
+      if (e instanceof LoiChuKyApple) throw new BadRequestError(e.message);
+      throw e;
+    }
+    logger.info('[apple-tb]', { ...kq });
+    res.status(200).json({ success: true, data: kq });
   } catch (err) { next(err); }
 });
 

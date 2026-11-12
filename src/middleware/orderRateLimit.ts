@@ -117,6 +117,17 @@ export const appleIapLimiter = taoLimiter({
   message: 'Bạn đang gửi quá nhanh. Vui lòng chờ một lát rồi thử lại.',
 });
 
+/**
+ * App Store Server Notifications — Apple gửi từ vài dải IP cố định cho MỌI người dùng ⇒ trần theo IP phải rộng
+ * (đợt gia hạn đầu tháng dồn hàng trăm thông báo). Vẫn giữ trần vì xác minh JWS tốn CPU.
+ */
+export const appleThongBaoLimiter = taoLimiter({
+  prefix: 'rl:appletb:',
+  windowMs: 60_000,
+  max: parseInt(process.env.APPLE_NOTIFY_LIMIT_PER_MIN || '600', 10),
+  message: 'Quá nhiều thông báo.',
+});
+
 export const proOrderLimiter = taoLimiter({
   prefix: 'rl:proorder:',
   windowMs: 60_000,

@@ -1,3 +1,8 @@
+import G05_1 from './giang/ngx-05-1.mjs';
+import G05_2 from './giang/ngx-05-2.mjs';
+import G05_3 from './giang/ngx-05-3.mjs';
+import G05_4 from './giang/ngx-05-4.mjs';
+import G05_5 from './giang/ngx-05-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Ba chỉ thị biến một con proxy thành một bộ đệm. Bài này dựng chúng trên một upstream biết ĐẾM số lần nó bị gọi, để mỗi phép đo đều nói thẳng ra rằng request có tới được ứng dụng hay không.',
       content: `
+${G05_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>Turning caching on, and what the key is made of</h2>
@@ -76,6 +82,68 @@ export default {
 <p><strong>Start with a short TTL.</strong> <code>proxy_cache_valid 200 10s;</code> on a busy endpoint already removes most of the load — at 100 requests per second it turns 1000 upstream calls into one — while keeping the window where anyone can see stale data down to ten seconds. Long TTLs are for content you can purge or version; short ones are almost free and almost never wrong.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>An upstream that counts its calls, one cache in front, and the cache key tested with query strings and two Host headers — then the file on disk and an expiry — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># dem.js</span>
+// upstream ĐẾM số lần bị gọi và in ra trong thân phản hồi (cổng 9201)
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  n++; res.setHeader('Content-Type', 'text/plain');
+  res.end(&#96;lan goi upstream thu \${n} · host=\${req.headers.host} · url=\${req.url}\\n&#96;);
+}).listen(9201, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m max_size=1g inactive=60m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    location / {
+      proxy_cache       kho;
+      proxy_cache_valid 200 10s;
+      proxy_pass http://127.0.0.1:9201;
+    }
+  }
+}</code></pre>
+<div class="out">$ for i in 1 2 3; do curl -s -D /tmp/h http://127.0.0.1:8080/trang | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"; done
+lan goi upstream thu 1 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: MISS
+lan goi upstream thu 1 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: HIT
+lan goi upstream thu 1 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: HIT
+$ for u in '/trang?a=1' '/trang?a=2' '/trang?a=1'; do printf '%-12s -&gt; ' "$u"; curl -s -D /tmp/h "http://127.0.0.1:8080$u" | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"; done
+/trang?a=1   -&gt; lan goi upstream thu 2 · host=127.0.0.1:9201 · url=/trang?a=1   X-Cache-Status: MISS
+/trang?a=2   -&gt; lan goi upstream thu 3 · host=127.0.0.1:9201 · url=/trang?a=2   X-Cache-Status: MISS
+/trang?a=1   -&gt; lan goi upstream thu 2 · host=127.0.0.1:9201 · url=/trang?a=1   X-Cache-Status: HIT
+=== Host KHAC, cung duong dan: khoa mac dinh la $scheme$proxy_host$request_uri ===
+$ for h in vidu.com khach-khac.com; do printf '%-16s -&gt; ' $h; curl -s -D /tmp/h -H "Host: $h" http://127.0.0.1:8080/chung | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"; done
+vidu.com         -&gt; lan goi upstream thu 4 · host=127.0.0.1:9201 · url=/chung   X-Cache-Status: MISS
+khach-khac.com   -&gt; lan goi upstream thu 4 · host=127.0.0.1:9201 · url=/chung   X-Cache-Status: HIT
+$ find /srv/cache -type f | head -n 3
+/srv/cache/1/13/695f923dade6527e6e6324f838452131
+/srv/cache/2/6e/7997dd87aa3fc5d7b72672f2ea89c6e2
+/srv/cache/9/e3/4e6e77325d76d3173f7032bc83690e39
+$ f=$(find /srv/cache -type f | head -n 1); grep -a '^KEY:' "$f"
+KEY: http://127.0.0.1:9201/trang?a=2
+$ printf 'KEY: http://127.0.0.1:9201/trang' | sed 's/^KEY: //' | tr -d '\\n' | md5sum
+7997dd87aa3fc5d7b72672f2ea89c6e2  -
+$ sleep 11; curl -s -D /tmp/h http://127.0.0.1:8080/trang | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"
+lan goi upstream thu 5 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: EXPIRED</div>
+<p>Three requests: MISS, HIT, HIT, and the body still said call 1. <code>?a=1</code> and <code>?a=2</code> were two entries; two different Hosts on the same path SHARED one entry; the file name on disk was the md5 of the key; eleven seconds later the entry was EXPIRED.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Headers that change behaviour</span><span class="lc-sub">Cache-Control and caches between browser and server</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-6-1-bon-khuon" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 6.1 — The four caching patterns</span><span class="lc-sub">The same idea inside the application</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>proxy_cache_path</code></span><span class="v">The on-disk store, declared at the http level — sets the directory, keys_zone, max_size and inactive.</span></div>
+  <div class="kv"><span class="k"><code>keys_zone</code></span><span class="v">Shared memory holding the key index (~8000 keys per MB); running out evicts entries even with disk to spare.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache</code></span><span class="v">Turns a location into a cache by naming which store to use.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_valid</code></span><span class="v">How long a given status code is held fresh (for example 200 for 10 seconds).</span></div>
+  <div class="kv"><span class="k">Cache key</span><span class="v">Default is scheme + proxy_host + request_uri — it includes the query string but not the client Host.</span></div>
+  <div class="kv"><span class="k">upstream_cache_status</span><span class="v">The MISS / HIT / EXPIRED / STALE / UPDATING / BYPASS signal — the only way to see caching at all.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Three directives make a proxy a cache: <code>proxy_cache_path</code> (the store), <code>proxy_cache</code> (use it), <code>proxy_cache_valid</code> (how long).</li><li><code>keys_zone</code> is memory and <code>max_size</code> is disk — size the zone for your number of distinct URLs.</li><li>The default key includes the query string but not the client Host; add the Host when one cache serves several sites.</li><li>Nothing about the user is in the key — that is what makes a shared cache both fast and dangerous.</li><li>Log the cache status and keep a bypass header, or caching is invisible exactly when you need to debug it.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path" target="_blank" rel="noopener"><span class="lc-ico">🗃️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_path</span><span class="lc-sub">nginx.org · Every parameter, including levels, inactive and the loader options</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#var_upstream_cache_status" target="_blank" rel="noopener"><span class="lc-ico">🔎</span><span class="lc-body"><span class="lc-title">nginx — $upstream_cache_status</span><span class="lc-sub">nginx.org · The six values and exactly when each is set</span></span></a>
@@ -148,6 +216,68 @@ export default {
 <p><strong>Hãy bắt đầu bằng một TTL NGẮN.</strong> <code>proxy_cache_valid 200 10s;</code> trên một điểm cuối đông khách đã gỡ được phần lớn tải — ở mức 100 request mỗi giây thì nó biến 1000 lượt gọi upstream thành MỘT — trong khi giữ cái cửa sổ mà ai đó có thể nhìn thấy dữ liệu cũ xuống còn mười giây. TTL dài dành cho nội dung bạn purge được hoặc đánh phiên bản được; TTL ngắn thì gần như miễn phí và gần như không bao giờ sai.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một upstream biết đếm số lần bị gọi, một bộ đệm đặt trước, và khoá bộ đệm được thử với query string và hai header Host — rồi tới tệp trên đĩa và một lần hết hạn — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># dem.js</span>
+// upstream ĐẾM số lần bị gọi và in ra trong thân phản hồi (cổng 9201)
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  n++; res.setHeader('Content-Type', 'text/plain');
+  res.end(&#96;lan goi upstream thu \${n} · host=\${req.headers.host} · url=\${req.url}\\n&#96;);
+}).listen(9201, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m max_size=1g inactive=60m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    location / {
+      proxy_cache       kho;
+      proxy_cache_valid 200 10s;
+      proxy_pass http://127.0.0.1:9201;
+    }
+  }
+}</code></pre>
+<div class="out">$ for i in 1 2 3; do curl -s -D /tmp/h http://127.0.0.1:8080/trang | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"; done
+lan goi upstream thu 1 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: MISS
+lan goi upstream thu 1 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: HIT
+lan goi upstream thu 1 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: HIT
+$ for u in '/trang?a=1' '/trang?a=2' '/trang?a=1'; do printf '%-12s -&gt; ' "$u"; curl -s -D /tmp/h "http://127.0.0.1:8080$u" | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"; done
+/trang?a=1   -&gt; lan goi upstream thu 2 · host=127.0.0.1:9201 · url=/trang?a=1   X-Cache-Status: MISS
+/trang?a=2   -&gt; lan goi upstream thu 3 · host=127.0.0.1:9201 · url=/trang?a=2   X-Cache-Status: MISS
+/trang?a=1   -&gt; lan goi upstream thu 2 · host=127.0.0.1:9201 · url=/trang?a=1   X-Cache-Status: HIT
+=== Host KHAC, cung duong dan: khoa mac dinh la $scheme$proxy_host$request_uri ===
+$ for h in vidu.com khach-khac.com; do printf '%-16s -&gt; ' $h; curl -s -D /tmp/h -H "Host: $h" http://127.0.0.1:8080/chung | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"; done
+vidu.com         -&gt; lan goi upstream thu 4 · host=127.0.0.1:9201 · url=/chung   X-Cache-Status: MISS
+khach-khac.com   -&gt; lan goi upstream thu 4 · host=127.0.0.1:9201 · url=/chung   X-Cache-Status: HIT
+$ find /srv/cache -type f | head -n 3
+/srv/cache/1/13/695f923dade6527e6e6324f838452131
+/srv/cache/2/6e/7997dd87aa3fc5d7b72672f2ea89c6e2
+/srv/cache/9/e3/4e6e77325d76d3173f7032bc83690e39
+$ f=$(find /srv/cache -type f | head -n 1); grep -a '^KEY:' "$f"
+KEY: http://127.0.0.1:9201/trang?a=2
+$ printf 'KEY: http://127.0.0.1:9201/trang' | sed 's/^KEY: //' | tr -d '\\n' | md5sum
+7997dd87aa3fc5d7b72672f2ea89c6e2  -
+$ sleep 11; curl -s -D /tmp/h http://127.0.0.1:8080/trang | tr -d '\\n'; printf '   %s\\n' "$(grep -i x-cache /tmp/h | tr -d '\\r')"
+lan goi upstream thu 5 · host=127.0.0.1:9201 · url=/trang   X-Cache-Status: EXPIRED</div>
+<p>Ba request: MISS, HIT, HIT, và thân vẫn ghi lần gọi 1. <code>?a=1</code> và <code>?a=2</code> là hai mục; hai Host khác nhau cùng một đường dẫn thì DÙNG CHUNG một mục; tên tệp trên đĩa là md5 của khoá; mười một giây sau mục đã EXPIRED.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Các header đổi hành vi</span><span class="lc-sub">Cache-Control và các bộ đệm nằm giữa trình duyệt và máy chủ</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-6-1-bon-khuon" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 6.1 — Bốn khuôn làm bộ đệm</span><span class="lc-sub">Cùng ý tưởng đó nhưng nằm trong ứng dụng</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>proxy_cache_path</code></span><span class="v">Kho chứa trên đĩa, khai ở tầng http — đặt thư mục, keys_zone, max_size và inactive.</span></div>
+  <div class="kv"><span class="k"><code>keys_zone</code></span><span class="v">Bộ nhớ chung giữ chỉ mục khoá (~8000 khoá mỗi MB); cạn vùng nhớ là bị đuổi mục kể cả khi đĩa còn thừa.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache</code></span><span class="v">Biến một location thành bộ đệm bằng cách khai dùng kho nào.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_valid</code></span><span class="v">Giữ một mã trạng thái tươi trong bao lâu (ví dụ 200 giữ 10 giây).</span></div>
+  <div class="kv"><span class="k">Khoá cache</span><span class="v">Mặc định là scheme + proxy_host + request_uri — có query string nhưng không có Host của client.</span></div>
+  <div class="kv"><span class="k">upstream_cache_status</span><span class="v">Tín hiệu MISS / HIT / EXPIRED / STALE / UPDATING / BYPASS — cách duy nhất để nhìn thấy bộ đệm.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba chỉ thị biến một proxy thành bộ đệm: <code>proxy_cache_path</code> (kho), <code>proxy_cache</code> (dùng), <code>proxy_cache_valid</code> (giữ bao lâu).</li><li><code>keys_zone</code> là bộ nhớ còn <code>max_size</code> là đĩa — định cỡ vùng theo số URL khác nhau của bạn.</li><li>Khoá mặc định có query string nhưng không có Host của client; thêm Host khi một cache phục vụ nhiều site.</li><li>Khoá không mang gì về người dùng — đó là thứ làm bộ đệm dùng chung vừa nhanh vừa nguy.</li><li>Ghi trạng thái cache và giữ một header bỏ qua, nếu không bộ đệm là vô hình đúng lúc bạn cần gỡ lỗi.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path" target="_blank" rel="noopener"><span class="lc-ico">🗃️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_path</span><span class="lc-sub">nginx.org · Mọi tham số, kèm levels, inactive và các tuỳ chọn của loader</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_upstream_module.html#var_upstream_cache_status" target="_blank" rel="noopener"><span class="lc-ico">🔎</span><span class="lc-body"><span class="lc-title">nginx — $upstream_cache_status</span><span class="lc-sub">nginx.org · Sáu giá trị và chính xác khi nào mỗi cái được đặt</span></span></a>
@@ -165,6 +295,7 @@ export default {
       type: 'LESSON',
       description: 'Nginx có vài mặc định che chở bạn và vài chỗ nó KHÔNG che. Bài này đo cả hai, rồi dựng lại một vụ rò rỉ thật: hồ sơ riêng của người dùng A được cache, và hai request sau đó — một khách vãng lai và một người dùng B — đều nhận về hồ sơ của A.',
       content: `
+${G05_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>What gets cached, and the leak when something should not have been</h2>
@@ -229,6 +360,85 @@ Phuong thuc:
 <p><strong>The rule that covers all of it.</strong> Nginx caches a response when nothing told it not to. Every protection in this lesson is the upstream saying "do not", so the burden is on your application to say so — and on your config to add a second lock for the cases where it forgets. Silence is consent, and by default the cache takes it.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Three responses Nginx refuses to store, three methods, then the leak with two users and a visitor — and the fix with <code>proxy_cache_bypass</code> + <code>proxy_no_cache</code> — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># tu.js</span>
+// upstream "đủ kiểu" (cổng 9202): /cookie đặt Set-Cookie · /private Cache-Control: private · /loi trả 500 · /ho-so in Authorization · còn lại 200
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  n++; const h = { 'Content-Type': 'text/plain' };
+  if (req.url === '/cookie') h['Set-Cookie'] = 'phien=abc';
+  if (req.url === '/private') h['Cache-Control'] = 'private';
+  const ma = req.url === '/loi' ? 500 : 200;
+  res.writeHead(ma, h);
+  res.end(req.url === '/ho-so' ? &#96;HO SO CUA: \${req.headers.authorization || '(khach vang lai)'}\\n&#96; : &#96;lan goi thu \${n}\\n&#96;);
+}).listen(9202, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    location / { proxy_cache kho; proxy_cache_valid 200 1m; proxy_pass http://127.0.0.1:9202; }
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/va.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache-va levels=1:2 keys_zone=kho_va:10m;
+  server {
+    listen 8081;
+    add_header X-Cache-Status $upstream_cache_status always;
+    location / {
+      proxy_cache kho_va; proxy_cache_valid 200 1m;
+      proxy_cache_bypass $http_authorization; <span class="tok-comment">  # có token ⇒ KHÔNG trả từ cache</span>
+      proxy_no_cache     $http_authorization; <span class="tok-comment">  # có token ⇒ KHÔNG lưu</span>
+      proxy_pass http://127.0.0.1:9202;
+    }
+  }
+}</code></pre>
+<div class="out">$ for u in /cookie /private /loi; do printf '%-9s ' $u; bash hai-lan.sh $u; done
+/cookie   lan 1 MISS     lan 2 MISS     
+/private  lan 1 MISS     lan 2 MISS     
+/loi      lan 1 MISS     lan 2 MISS     
+=== phuong thuc ===
+$ printf 'GET  '; bash hai-lan.sh /pt
+GET  lan 1 MISS     lan 2 HIT      
+$ printf 'HEAD ' ; curl -s -I http://127.0.0.1:8080/pt | tr -d '\\r' | grep X-Cache
+HEAD X-Cache-Status: HIT
+$ printf 'POST '; bash hai-lan.sh /pt POST
+POST lan 1 (rong)   lan 2 (rong)   
+$ printf '1. A co token     '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-A' http://127.0.0.1:8080/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+1. A co token     HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: MISS
+$ printf '2. khach vang lai '; curl -s -D /tmp/h http://127.0.0.1:8080/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+2. khach vang lai HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: HIT
+$ printf '3. B token khac   '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-B' http://127.0.0.1:8080/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+3. B token khac   HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: HIT
+$ printf '1. A co token     '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-A' http://127.0.0.1:8081/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+1. A co token     HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: BYPASS
+$ printf '2. khach vang lai '; curl -s -D /tmp/h http://127.0.0.1:8081/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+2. khach vang lai HO SO CUA: (khach vang lai)   X-Cache-Status: MISS
+$ printf '3. B token khac   '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-B' http://127.0.0.1:8081/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+3. B token khac   HO SO CUA: Bearer TOKEN-CUA-B   X-Cache-Status: BYPASS</div>
+<p>Set-Cookie, private and a 500 were never stored; GET and HEAD shared one entry, POST was not cached. Without the fix the visitor and user B both got user A's profile (HIT). With bypass + no_cache: A and B went to the upstream (BYPASS), the visitor got the public page.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-5-phien-song-o-dau" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 3.5 — Three places to keep a session</span><span class="lc-sub">Why a personal page must never reach a shared cache</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Shared cache</span><span class="v">Stores one response and serves it to everyone — the entire value and the entire risk.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_methods</code></span><span class="v">Only GET and HEAD are cached by default; HEAD reuses the GET entry.</span></div>
+  <div class="kv"><span class="k">Set-Cookie / Cache-Control: private</span><span class="v">Sent by the upstream, each one disables caching of that response automatically.</span></div>
+  <div class="kv"><span class="k">Authorization</span><span class="v">Not in the key and does not block caching — the gap that leaks an authenticated response.</span></div>
+  <div class="kv"><span class="k"><code>proxy_no_cache</code></span><span class="v">Stops a response being stored (for example when credentials are present).</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_bypass</code></span><span class="v">Stops one being served from cache for such a request — you need both halves.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A shared cache stores a response whenever nothing told it not to — silence is consent.</li><li>Set-Cookie, Cache-Control private/no-store/no-cache, undeclared statuses and non-GET methods are all refused automatically.</li><li>Authorization is the dangerous gap: an authed response with no Cache-Control is stored and served to everyone (measured leak).</li><li>Fix both sides — Cache-Control: private in the app, and <code>proxy_no_cache</code> + <code>proxy_cache_bypass</code> on credentials in Nginx.</li><li>Cache by allow-list on public locations, and test the leak with two curl commands before shipping.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_no_cache" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — proxy_no_cache and proxy_cache_bypass</span><span class="lc-sub">nginx.org · The two halves, and how the arguments are evaluated</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_methods" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_methods and proxy_ignore_headers</span><span class="lc-sub">nginx.org · The defaults measured above, stated normatively</span></span></a>
@@ -301,6 +511,85 @@ Phuong thuc:
 <p><strong>Cái luật phủ hết mọi thứ.</strong> Nginx cache một phản hồi khi KHÔNG có gì bảo nó đừng. Mọi tuyến phòng thủ trong bài này đều là upstream nói "đừng", nên gánh nặng nằm ở ứng dụng của bạn phải NÓI ra điều đó — và ở cấu hình của bạn phải thêm một cái khoá thứ hai cho những lần nó quên. Im lặng là ĐỒNG Ý, và mặc định thì cái bộ đệm nhận lấy sự đồng ý ấy.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Ba phản hồi Nginx từ chối cất, ba phương thức, rồi vụ rò rỉ với hai người dùng và một khách vãng lai — và cách vá bằng <code>proxy_cache_bypass</code> + <code>proxy_no_cache</code> — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># tu.js</span>
+// upstream "đủ kiểu" (cổng 9202): /cookie đặt Set-Cookie · /private Cache-Control: private · /loi trả 500 · /ho-so in Authorization · còn lại 200
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  n++; const h = { 'Content-Type': 'text/plain' };
+  if (req.url === '/cookie') h['Set-Cookie'] = 'phien=abc';
+  if (req.url === '/private') h['Cache-Control'] = 'private';
+  const ma = req.url === '/loi' ? 500 : 200;
+  res.writeHead(ma, h);
+  res.end(req.url === '/ho-so' ? &#96;HO SO CUA: \${req.headers.authorization || '(khach vang lai)'}\\n&#96; : &#96;lan goi thu \${n}\\n&#96;);
+}).listen(9202, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    location / { proxy_cache kho; proxy_cache_valid 200 1m; proxy_pass http://127.0.0.1:9202; }
+  }
+}</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/va.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache-va levels=1:2 keys_zone=kho_va:10m;
+  server {
+    listen 8081;
+    add_header X-Cache-Status $upstream_cache_status always;
+    location / {
+      proxy_cache kho_va; proxy_cache_valid 200 1m;
+      proxy_cache_bypass $http_authorization; <span class="tok-comment">  # có token ⇒ KHÔNG trả từ cache</span>
+      proxy_no_cache     $http_authorization; <span class="tok-comment">  # có token ⇒ KHÔNG lưu</span>
+      proxy_pass http://127.0.0.1:9202;
+    }
+  }
+}</code></pre>
+<div class="out">$ for u in /cookie /private /loi; do printf '%-9s ' $u; bash hai-lan.sh $u; done
+/cookie   lan 1 MISS     lan 2 MISS     
+/private  lan 1 MISS     lan 2 MISS     
+/loi      lan 1 MISS     lan 2 MISS     
+=== phuong thuc ===
+$ printf 'GET  '; bash hai-lan.sh /pt
+GET  lan 1 MISS     lan 2 HIT      
+$ printf 'HEAD ' ; curl -s -I http://127.0.0.1:8080/pt | tr -d '\\r' | grep X-Cache
+HEAD X-Cache-Status: HIT
+$ printf 'POST '; bash hai-lan.sh /pt POST
+POST lan 1 (rong)   lan 2 (rong)   
+$ printf '1. A co token     '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-A' http://127.0.0.1:8080/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+1. A co token     HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: MISS
+$ printf '2. khach vang lai '; curl -s -D /tmp/h http://127.0.0.1:8080/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+2. khach vang lai HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: HIT
+$ printf '3. B token khac   '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-B' http://127.0.0.1:8080/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+3. B token khac   HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: HIT
+$ printf '1. A co token     '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-A' http://127.0.0.1:8081/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+1. A co token     HO SO CUA: Bearer TOKEN-CUA-A   X-Cache-Status: BYPASS
+$ printf '2. khach vang lai '; curl -s -D /tmp/h http://127.0.0.1:8081/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+2. khach vang lai HO SO CUA: (khach vang lai)   X-Cache-Status: MISS
+$ printf '3. B token khac   '; curl -s -D /tmp/h -H 'Authorization: Bearer TOKEN-CUA-B' http://127.0.0.1:8081/ho-so | tr -d '\\n'; printf '   '; grep -i x-cache /tmp/h | tr -d '\\r'
+3. B token khac   HO SO CUA: Bearer TOKEN-CUA-B   X-Cache-Status: BYPASS</div>
+<p>Set-Cookie, private và một lỗi 500 đều không bao giờ được cất; GET và HEAD dùng chung một mục, POST không được cache. Chưa vá thì cả khách vãng lai lẫn người dùng B đều nhận hồ sơ của A (HIT). Có bypass + no_cache: A và B đi thẳng lên upstream (BYPASS), khách vãng lai nhận trang công khai.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-5-phien-song-o-dau" target="_blank" rel="noopener"><span class="lc-ico">🔐</span><span class="lc-body"><span class="lc-title">Authentication · 3.5 — Ba chỗ để giữ một phiên</span><span class="lc-sub">Vì sao một trang cá nhân không bao giờ được lọt vào bộ đệm dùng chung</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Shared cache</span><span class="v">Cất một phản hồi rồi phát cho tất cả — toàn bộ giá trị và cũng toàn bộ rủi ro.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_methods</code></span><span class="v">Mặc định chỉ GET và HEAD được cache; HEAD dùng lại mục của GET.</span></div>
+  <div class="kv"><span class="k">Set-Cookie / Cache-Control: private</span><span class="v">Do upstream gửi, mỗi cái tự động tắt việc cache phản hồi đó.</span></div>
+  <div class="kv"><span class="k">Authorization</span><span class="v">Không nằm trong khoá và không chặn cache — đúng cái kẽ hở làm rò rỉ một phản hồi đã xác thực.</span></div>
+  <div class="kv"><span class="k"><code>proxy_no_cache</code></span><span class="v">Chặn việc CẤT một phản hồi (ví dụ khi có mang thông tin đăng nhập).</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_bypass</code></span><span class="v">Chặn việc PHÁT một bản từ cache cho request như thế — cần cả hai nửa.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bộ đệm dùng chung cất một phản hồi khi không có gì bảo nó đừng — im lặng là đồng ý.</li><li>Set-Cookie, Cache-Control private/no-store/no-cache, mã trạng thái không khai và phương thức khác GET đều bị từ chối tự động.</li><li>Authorization là kẽ hở nguy: một phản hồi đã xác thực mà thiếu Cache-Control bị cất và phát cho tất cả (rò rỉ đo được).</li><li>Vá cả hai phía — Cache-Control: private trong ứng dụng, và <code>proxy_no_cache</code> + <code>proxy_cache_bypass</code> theo thông tin đăng nhập ở Nginx.</li><li>Cache theo danh sách cho phép trên các location công khai, và thử vụ rò rỉ bằng hai lệnh curl trước khi ship.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_no_cache" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — proxy_no_cache và proxy_cache_bypass</span><span class="lc-sub">nginx.org · Hai nửa, và các đối số được tính thế nào</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_methods" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_methods và proxy_ignore_headers</span><span class="lc-sub">nginx.org · Những mặc định đo ở trên, nói theo chuẩn</span></span></a>
@@ -318,6 +607,7 @@ Phuong thuc:
       type: 'LESSON',
       description: 'Cấu hình nói 10 giây, upstream nói 2 giây. Ai thắng? Bài này đo bốn tổ hợp bằng cách bấm giờ từng giây một cho tới lúc mục cache hết hạn, và dựng ra đúng cái chuỗi ưu tiên — trong đó có một header mà client không bao giờ nhìn thấy.',
       content: `
+${G05_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.3</span>
 <h2>Who decides how long: the precedence chain, measured</h2>
@@ -378,6 +668,101 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># damps the re
 <p><strong>The short version.</strong> <code>X-Accel-Expires</code>, then <code>Cache-Control</code> and <code>Expires</code>, then <code>proxy_cache_valid</code> — and <code>proxy_ignore_headers</code> deletes whichever of those you name from the chain. If you can change the application, decide there; the config is where you compensate for backends you cannot change, and every use of it is a claim about freshness that nothing will check for you.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Four upstream answers timed to the second, then the <code>proxy_ignore_headers</code> trap on a private page and a cached 404, on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># han.js</span>
+// upstream (cổng 9203): /a không khai gì · /b Cache-Control: max-age=2 · /d X-Accel-Expires: 2 + Cache-Control: max-age=600
+require('http').createServer((req, res) =&gt; {
+  const h = { 'Content-Type': 'text/plain' };
+  if (req.url.startsWith('/b') || req.url.startsWith('/c')) h['Cache-Control'] = 'max-age=2';
+  if (req.url.startsWith('/d')) { h['X-Accel-Expires'] = '2'; h['Cache-Control'] = 'max-age=600'; }
+  res.writeHead(200, h); res.end('ok\\n');
+}).listen(9203, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    proxy_cache kho;
+    proxy_cache_valid 200 10s;
+    location /a { proxy_pass http://127.0.0.1:9203; }
+    location /b { proxy_pass http://127.0.0.1:9203; }
+    location /c { proxy_ignore_headers Cache-Control; proxy_pass http://127.0.0.1:9203; }
+    location /d { proxy_pass http://127.0.0.1:9203; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># moc.py</span>
+<span class="tok-comment"># moc.py &lt;đường dẫn&gt; &lt;các mốc giây…&gt; — xin đúng tại từng mốc (tính từ lần đầu), in X-Cache-Status</span>
+import sys, time, urllib.request
+p, mocs = sys.argv[1], [float(x) for x in sys.argv[2:]]; t0 = time.time(); ra = []
+for m in mocs:
+    time.sleep(max(0, t0 + m - time.time()))
+    r = urllib.request.urlopen('http://127.0.0.1:8080' + p); r.read()
+    ra.append(f"t={m:g}s {r.headers.get('X-Cache-Status'):&lt;8}")
+print(' '.join(ra))</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># rieng.js</span>
+// upstream (cổng 9204): /p trả Cache-Control: private, max-age=60 (trang cá nhân) · mọi đường khác 404
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  n++;
+  if (req.url.startsWith('/p')) { res.writeHead(200, { 'Cache-Control': 'private, max-age=60' }); return res.end(&#96;trang rieng, lan goi \${n}\\n&#96;); }
+  res.writeHead(404); res.end(&#96;khong co, lan goi \${n}\\n&#96;);
+}).listen(9204, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/bay.pid;
+error_log /srv/logs/bay.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache2 levels=1:2 keys_zone=kho2:10m;
+  server {
+    listen 8081;
+    add_header X-Cache-Status $upstream_cache_status always;
+    proxy_cache kho2;
+    proxy_cache_valid 200 10m;
+    proxy_cache_valid 404 1m;
+    location /p   { proxy_pass http://127.0.0.1:9204; }
+    location /ep/ { proxy_ignore_headers Cache-Control; proxy_pass http://127.0.0.1:9204/p/; }
+    location /mat { proxy_pass http://127.0.0.1:9204; }
+  }
+}</code></pre>
+<div class="out">$ printf 'A) khong khai gi, valid 10s           '; python3 moc.py /a 0 3 6 9 12
+A) khong khai gi, valid 10s           t=0s MISS     t=3s HIT      t=6s HIT      t=9s HIT      t=12s EXPIRED 
+$ printf 'B) Cache-Control: max-age=2           '; python3 moc.py /b 0 1 2 3
+B) Cache-Control: max-age=2           t=0s MISS     t=1s HIT      t=2s HIT      t=3s EXPIRED 
+$ printf 'C) B + proxy_ignore_headers           '; python3 moc.py /c 0 3 6 9 12
+C) B + proxy_ignore_headers           t=0s MISS     t=3s HIT      t=6s HIT      t=9s HIT      t=12s EXPIRED 
+$ printf 'D) X-Accel-Expires: 2 + max-age=600   '; python3 moc.py /d 0 1 2 3
+D) X-Accel-Expires: 2 + max-age=600   t=0s MISS     t=1s HIT      t=2s HIT      t=3s EXPIRED 
+$ curl -s -o /dev/null -D - http://127.0.0.1:8080/d | tr -d '\\r' | grep -ciE '^(x-accel-expires)'
+0
+$ for i in 1 2; do curl -s -D - http://127.0.0.1:8081/p/toi | tr -d '\\r' | grep -E 'X-Cache|lan goi' | paste -sd' '; done
+X-Cache-Status: MISS trang rieng, lan goi 1
+X-Cache-Status: MISS trang rieng, lan goi 2
+$ for i in 1 2; do curl -s -D - http://127.0.0.1:8081/ep/toi | tr -d '\\r' | grep -E 'X-Cache|lan goi' | paste -sd' '; done
+X-Cache-Status: MISS trang rieng, lan goi 3
+X-Cache-Status: HIT trang rieng, lan goi 3
+$ for i in 1 2; do curl -s -D - http://127.0.0.1:8081/mat | tr -d '\\r' | grep -E '^HTTP|X-Cache|lan goi' | paste -sd' '; done
+HTTP/1.1 404 Not Found X-Cache-Status: MISS khong co, lan goi 4
+HTTP/1.1 404 Not Found X-Cache-Status: HIT khong co, lan goi 4</div>
+<p>A and C expired at 12 s (the config's 10 s), B and D at 3 s; the client saw 0 X-Accel-Expires lines. The private page was never stored on <code>/p/</code>, but behind <code>proxy_ignore_headers Cache-Control</code> the second request was a HIT on the first one's page (call 3); the 404 with <code>proxy_cache_valid 404 1m</code> was a HIT the second time.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-2-2-het-han" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 2.2 — How expiration really works</span><span class="lc-sub">TTLs in another cache, measured</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Headers that change behaviour</span><span class="lc-sub">Cache-Control seen from the browser</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">X-Accel-Expires</span><span class="v">A private header from the app to Nginx; wins over everything and is stripped before the client sees it.</span></div>
+  <div class="kv"><span class="k">Cache-Control / Expires</span><span class="v">The upstream's own freshness, which beats <code>proxy_cache_valid</code>.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_valid</code></span><span class="v">The fallback lifetime for backends that say nothing; can be set per status code.</span></div>
+  <div class="kv"><span class="k"><code>proxy_ignore_headers</code></span><span class="v">Makes Nginx disregard the headers you name, moving the config back to the top of the chain.</span></div>
+  <div class="kv"><span class="k">Precedence chain</span><span class="v">X-Accel-Expires, then upstream Cache-Control/Expires, then <code>proxy_cache_valid</code>.</span></div>
+  <div class="kv"><span class="k">Per-status TTL</span><span class="v">Different lifetimes for 200, 404 and 5xx on the same location.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Lifetime precedence: X-Accel-Expires, then the upstream's Cache-Control/Expires, then <code>proxy_cache_valid</code>.</li><li>X-Accel-Expires is a proxy-only channel and is stripped, so the browser never sees it.</li><li><code>proxy_ignore_headers</code> deletes whichever header you name — including the private that was protecting you.</li><li>If you own the app, set Cache-Control there; it travels to every cache including the browser and any CDN.</li><li>Give each status its own TTL — a brief 404 or 5xx cache shields the backend without hiding an outage.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_valid" target="_blank" rel="noopener"><span class="lc-ico">⏳</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_valid</span><span class="lc-sub">nginx.org · The sentence stating the precedence, which rows B and D confirm</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ignore_headers" target="_blank" rel="noopener"><span class="lc-ico">🙈</span><span class="lc-body"><span class="lc-title">nginx — proxy_ignore_headers</span><span class="lc-sub">nginx.org · The full list of headers it can disregard, and what each one controls</span></span></a>
@@ -446,6 +831,101 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <p><strong>Bản ngắn.</strong> <code>X-Accel-Expires</code>, rồi <code>Cache-Control</code> và <code>Expires</code>, rồi <code>proxy_cache_valid</code> — còn <code>proxy_ignore_headers</code> thì XOÁ khỏi chuỗi bất cứ cái nào bạn gọi tên. Nếu bạn sửa được ứng dụng thì hãy quyết định ở đó; cấu hình là chỗ bạn bù đắp cho những backend không sửa được, và mỗi lần dùng nó là một LỜI KHẲNG ĐỊNH về độ tươi mà chẳng có gì kiểm hộ bạn cả.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Bốn kiểu trả lời của upstream bấm giờ tới từng giây, rồi cái bẫy <code>proxy_ignore_headers</code> trên một trang private và một cú 404 được cache, trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># han.js</span>
+// upstream (cổng 9203): /a không khai gì · /b Cache-Control: max-age=2 · /d X-Accel-Expires: 2 + Cache-Control: max-age=600
+require('http').createServer((req, res) =&gt; {
+  const h = { 'Content-Type': 'text/plain' };
+  if (req.url.startsWith('/b') || req.url.startsWith('/c')) h['Cache-Control'] = 'max-age=2';
+  if (req.url.startsWith('/d')) { h['X-Accel-Expires'] = '2'; h['Cache-Control'] = 'max-age=600'; }
+  res.writeHead(200, h); res.end('ok\\n');
+}).listen(9203, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    proxy_cache kho;
+    proxy_cache_valid 200 10s;
+    location /a { proxy_pass http://127.0.0.1:9203; }
+    location /b { proxy_pass http://127.0.0.1:9203; }
+    location /c { proxy_ignore_headers Cache-Control; proxy_pass http://127.0.0.1:9203; }
+    location /d { proxy_pass http://127.0.0.1:9203; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># moc.py</span>
+<span class="tok-comment"># moc.py &lt;đường dẫn&gt; &lt;các mốc giây…&gt; — xin đúng tại từng mốc (tính từ lần đầu), in X-Cache-Status</span>
+import sys, time, urllib.request
+p, mocs = sys.argv[1], [float(x) for x in sys.argv[2:]]; t0 = time.time(); ra = []
+for m in mocs:
+    time.sleep(max(0, t0 + m - time.time()))
+    r = urllib.request.urlopen('http://127.0.0.1:8080' + p); r.read()
+    ra.append(f"t={m:g}s {r.headers.get('X-Cache-Status'):&lt;8}")
+print(' '.join(ra))</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># rieng.js</span>
+// upstream (cổng 9204): /p trả Cache-Control: private, max-age=60 (trang cá nhân) · mọi đường khác 404
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  n++;
+  if (req.url.startsWith('/p')) { res.writeHead(200, { 'Cache-Control': 'private, max-age=60' }); return res.end(&#96;trang rieng, lan goi \${n}\\n&#96;); }
+  res.writeHead(404); res.end(&#96;khong co, lan goi \${n}\\n&#96;);
+}).listen(9204, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/bay.pid;
+error_log /srv/logs/bay.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache2 levels=1:2 keys_zone=kho2:10m;
+  server {
+    listen 8081;
+    add_header X-Cache-Status $upstream_cache_status always;
+    proxy_cache kho2;
+    proxy_cache_valid 200 10m;
+    proxy_cache_valid 404 1m;
+    location /p   { proxy_pass http://127.0.0.1:9204; }
+    location /ep/ { proxy_ignore_headers Cache-Control; proxy_pass http://127.0.0.1:9204/p/; }
+    location /mat { proxy_pass http://127.0.0.1:9204; }
+  }
+}</code></pre>
+<div class="out">$ printf 'A) khong khai gi, valid 10s           '; python3 moc.py /a 0 3 6 9 12
+A) khong khai gi, valid 10s           t=0s MISS     t=3s HIT      t=6s HIT      t=9s HIT      t=12s EXPIRED 
+$ printf 'B) Cache-Control: max-age=2           '; python3 moc.py /b 0 1 2 3
+B) Cache-Control: max-age=2           t=0s MISS     t=1s HIT      t=2s HIT      t=3s EXPIRED 
+$ printf 'C) B + proxy_ignore_headers           '; python3 moc.py /c 0 3 6 9 12
+C) B + proxy_ignore_headers           t=0s MISS     t=3s HIT      t=6s HIT      t=9s HIT      t=12s EXPIRED 
+$ printf 'D) X-Accel-Expires: 2 + max-age=600   '; python3 moc.py /d 0 1 2 3
+D) X-Accel-Expires: 2 + max-age=600   t=0s MISS     t=1s HIT      t=2s HIT      t=3s EXPIRED 
+$ curl -s -o /dev/null -D - http://127.0.0.1:8080/d | tr -d '\\r' | grep -ciE '^(x-accel-expires)'
+0
+$ for i in 1 2; do curl -s -D - http://127.0.0.1:8081/p/toi | tr -d '\\r' | grep -E 'X-Cache|lan goi' | paste -sd' '; done
+X-Cache-Status: MISS trang rieng, lan goi 1
+X-Cache-Status: MISS trang rieng, lan goi 2
+$ for i in 1 2; do curl -s -D - http://127.0.0.1:8081/ep/toi | tr -d '\\r' | grep -E 'X-Cache|lan goi' | paste -sd' '; done
+X-Cache-Status: MISS trang rieng, lan goi 3
+X-Cache-Status: HIT trang rieng, lan goi 3
+$ for i in 1 2; do curl -s -D - http://127.0.0.1:8081/mat | tr -d '\\r' | grep -E '^HTTP|X-Cache|lan goi' | paste -sd' '; done
+HTTP/1.1 404 Not Found X-Cache-Status: MISS khong co, lan goi 4
+HTTP/1.1 404 Not Found X-Cache-Status: HIT khong co, lan goi 4</div>
+<p>A và C hết hạn ở giây 12 (10 giây của cấu hình), B và D ở giây 3; client đếm được 0 dòng X-Accel-Expires. Trang private không bao giờ được cất ở <code>/p/</code>, nhưng đứng sau <code>proxy_ignore_headers Cache-Control</code> thì request thứ hai là HIT trên trang của người thứ nhất (lần gọi 3); cú 404 với <code>proxy_cache_valid 404 1m</code> thì lần hai là HIT.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-2-2-het-han" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 2.2 — Hết hạn thật sự hoạt động ra sao</span><span class="lc-sub">Thời hạn trong một bộ đệm khác, đo thật</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/networking-for-developers/learn?lessonSlug=netdev-7-4-header-quan-trong" target="_blank" rel="noopener"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Networking for Developers · 7.4 — Các header đổi hành vi</span><span class="lc-sub">Cache-Control nhìn từ phía trình duyệt</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">X-Accel-Expires</span><span class="v">Header riêng từ ứng dụng tới Nginx; thắng tất cả và bị lột ra trước khi client thấy.</span></div>
+  <div class="kv"><span class="k">Cache-Control / Expires</span><span class="v">Độ tươi của chính upstream, thắng <code>proxy_cache_valid</code>.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_valid</code></span><span class="v">Thời hạn rơi về cho backend chẳng nói gì; đặt được theo từng mã trạng thái.</span></div>
+  <div class="kv"><span class="k"><code>proxy_ignore_headers</code></span><span class="v">Bắt Nginx bỏ qua những header bạn gọi tên, đưa cấu hình trở lại đứng đầu chuỗi.</span></div>
+  <div class="kv"><span class="k">Chuỗi ưu tiên</span><span class="v">X-Accel-Expires, rồi Cache-Control/Expires của upstream, rồi <code>proxy_cache_valid</code>.</span></div>
+  <div class="kv"><span class="k">TTL theo mã trạng thái</span><span class="v">Thời hạn khác nhau cho 200, 404 và 5xx trên cùng một location.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Thứ tự ưu tiên thời hạn: X-Accel-Expires, rồi Cache-Control/Expires của upstream, rồi <code>proxy_cache_valid</code>.</li><li>X-Accel-Expires là kênh chỉ dành cho proxy và bị lột đi, nên trình duyệt không bao giờ thấy.</li><li><code>proxy_ignore_headers</code> xoá bất cứ header nào bạn gọi tên — kể cả cái private đang che cho bạn.</li><li>Sở hữu ứng dụng thì đặt Cache-Control ở đó; nó đi theo tới mọi bộ đệm kể cả trình duyệt và CDN.</li><li>Cho mỗi mã trạng thái một TTL riêng — cache 404 hay 5xx trong chốc lát che backend mà không giấu sự cố.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_valid" target="_blank" rel="noopener"><span class="lc-ico">⏳</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_valid</span><span class="lc-sub">nginx.org · Cái câu nói về thứ tự ưu tiên, mà dòng B và D xác nhận</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ignore_headers" target="_blank" rel="noopener"><span class="lc-ico">🙈</span><span class="lc-body"><span class="lc-title">nginx — proxy_ignore_headers</span><span class="lc-sub">nginx.org · Danh sách đầy đủ những header nó bỏ qua được, và mỗi cái điều khiển gì</span></span></a>
@@ -463,6 +943,7 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
       type: 'LESSON',
       description: 'Một mục cache hết hạn đúng lúc đông khách và mọi request cùng lao lên upstream một lượt. Bài này đo đúng chuyện đó — 20 request đồng thời, đếm số lần upstream bị gọi — rồi bật một chỉ thị và đếm lại. Kèm cái GIÁ của nó, cũng đo, vì nó có giá thật.',
       content: `
+${G05_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.4</span>
 <h2>The stampede: 20 requests, 20 upstream calls or 1</h2>
@@ -482,14 +963,18 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 </div>
 
 <h3>What it costs, also measured</h3>
-<div class="out">Cung 20 request do, lan nay do THOI GIAN tung request:
+<div class="out">Cung 20 request do, lan nay do THOI GIAN tung request (nguoi dan dau luon ~1,00s):
 
-  KHONG lock   tong=1,04s   nhanh nhat=1,00s   cham nhat=1,01s   trung vi=1,00s
-  CO lock      tong=1,53s   nhanh nhat=1,00s   cham nhat=1,51s   trung vi=1,00s
-                                                ^^^^^^^^^^^^^^^
-                     nguoi cho lau nhat mat them nua giay</div>
+1 worker, 3 luot                   luot 1   luot 2   luot 3
+  KHONG lock   cham nhat           1,01s    1,01s    1,01s
+  CO lock      cham nhat           1,01s    1,51s    1,01s
+
+4 worker, 6 luot, CO lock          1      2      3      4      5      6
+  cham nhat                        1,51s  1,51s  1,52s  1,51s  1,51s  1,02s
+  trung vi                         1,51s  1,51s  1,51s  1,51s  1,01s  1,01s
+                                   ^^^^^ nguoi CHO kiem lai moi 500 ms =&gt; hay mat them nua giay</div>
 <div class="callout warn">
-<p><strong>The lock is not free, and the trade is worth stating plainly.</strong> The waiting requests poll for the entry rather than being woken the instant it arrives, so a follower can sit for up to half a second after the leader has already finished. Measured: the slowest of the twenty went from 1.01s to 1.51s. What you bought is your backend receiving one query instead of twenty. On an endpoint that is expensive for the backend, that is an obviously good trade. On a cheap endpoint with a large fan-out of waiters, it may not be — and now you can decide with numbers instead of by reputation.</p>
+<p><strong>The lock is not free, and the trade is worth stating plainly.</strong> The waiting requests poll for the entry rather than being woken the instant it arrives, so a follower can sit for up to half a second after the leader has already finished. Measured: with four workers the slowest of the twenty took 1.51s in five runs out of six, and the median was 1.51s in four of them — most of the nineteen paid the extra half second. On one worker it happened in one run out of three, so benchmark on the worker count you actually run, and run it several times. What you bought is your backend receiving one query instead of twenty. On an endpoint that is expensive for the backend, that is an obviously good trade. On a cheap endpoint with a large fan-out of waiters, it may not be — and now you can decide with numbers instead of by reputation.</p>
 </div>
 <pre><code class="language-bash">location /api/danh-sach {
   proxy_cache kho;
@@ -528,6 +1013,71 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <p><strong>The framing that makes this easy to remember.</strong> A cache turns many requests into one. A stampede is the moment it briefly stops doing that, and the mechanisms in this lesson are about narrowing that moment: the lock makes the followers wait for the one call, serving stale removes the wait entirely, and a longer TTL makes the moment happen less often. Pick by asking how bad slightly-old data is for that endpoint, because that single question chooses the mechanism.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>An upstream that takes exactly one second and counts its calls, twenty simultaneous requests with and without <code>proxy_cache_lock</code>, on one worker and on four, on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># cham1s.js</span>
+// upstream (cổng 9204): mỗi request mất ĐÚNG 1 giây; đếm số lần bị gọi — /dem trả con số, không tính vào đếm
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  if (req.url === '/dem') { res.end(&#96;\${n}\\n&#96;); return; }
+  n++; setTimeout(() =&gt; res.end(&#96;lan goi thu \${n}\\n&#96;), 1000);
+}).listen(9204, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache1 levels=1:2 keys_zone=kho1:10m;
+  proxy_cache_path /srv/cache2 levels=1:2 keys_zone=kho2:10m;
+  server { listen 8080; location / { proxy_cache kho1; proxy_cache_valid 200 60s; proxy_pass http://127.0.0.1:9204; } }
+  server { listen 8081; location / { proxy_cache kho2; proxy_cache_valid 200 60s; proxy_cache_lock on; proxy_pass http://127.0.0.1:9204; } }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dong-thoi.py</span>
+<span class="tok-comment"># dong-thoi.py &lt;cổng&gt; &lt;đường dẫn&gt; — 20 request CÙNG LÚC, in số lần upstream thật sự bị gọi + thời gian từng request</span>
+import sys, time, threading, urllib.request
+cong, p = sys.argv[1], sys.argv[2]
+truoc = int(urllib.request.urlopen('http://127.0.0.1:9204/dem').read()); tg = []
+def mot():
+    t = time.time(); urllib.request.urlopen(f'http://127.0.0.1:{cong}{p}').read(); tg.append(time.time() - t)
+t0 = time.time(); ds = [threading.Thread(target=mot) for _ in range(20)]
+[x.start() for x in ds]; [x.join() for x in ds]; tong = time.time() - t0
+sau = int(urllib.request.urlopen('http://127.0.0.1:9204/dem').read()); tg.sort()
+print(f'upstream bi goi {sau - truoc:2d} lan · tong={tong:.2f}s nhanh nhat={tg[0]:.2f}s cham nhat={tg[-1]:.2f}s trung vi={tg[10]:.2f}s')</code></pre>
+<div class="out">$ printf 'KHONG proxy_cache_lock  '; python3 dong-thoi.py 8080 /api/danh-sach
+KHONG proxy_cache_lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.02s cham nhat=1.02s trung vi=1.02s
+$ printf 'CO proxy_cache_lock     '; python3 dong-thoi.py 8081 /api/danh-sach
+CO proxy_cache_lock     upstream bi goi  1 lan · tong=1.01s nhanh nhat=1.00s cham nhat=1.01s trung vi=1.00s
+=== lap lai 3 lan, moi lan mot duong dan MOI (chua co trong cache) ===
+$ for i in 1 2 3; do printf 'KHONG lock  '; python3 dong-thoi.py 8080 /moi-$i; printf 'CO lock     '; python3 dong-thoi.py 8081 /moi-$i; done
+KHONG lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+CO lock     upstream bi goi  1 lan · tong=1.01s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+KHONG lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+CO lock     upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.01s cham nhat=1.51s trung vi=1.51s
+KHONG lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+CO lock     upstream bi goi  1 lan · tong=1.01s nhanh nhat=1.00s cham nhat=1.01s trung vi=1.01s
+$ ps -C nginx -o cmd= | grep -c 'worker process'
+4
+$ for i in 1 2 3 4 5 6; do printf 'CO lock, 4 worker  '; python3 dong-thoi.py 8081 /bon-$i; done
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.51s nhanh nhat=1.00s cham nhat=1.51s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.02s cham nhat=1.51s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.01s cham nhat=1.52s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.01s cham nhat=1.51s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.51s nhanh nhat=1.00s cham nhat=1.51s trung vi=1.01s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.02s trung vi=1.01s</div>
+<p>Without the lock the upstream was called 20 times, with it once — every run. The cost moved around: on one worker the slowest paid 1.51 s in one run of three; on four workers in five runs of six. (For four workers, add <code>worker_processes 4;</code> above <code>events</code>.)</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-6-3-giam-dap" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 6.3 — The stampede: when a cache miss takes down the database</span><span class="lc-sub">The same stampede one layer deeper, with SET NX and early refresh</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache stampede</span><span class="v">The instant an entry expires, every in-flight request misses and hits the backend at once.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_lock</code></span><span class="v">Elects one miss to refresh while the rest wait — one upstream call for many clients.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_lock_timeout</code></span><span class="v">How long waiters wait before going upstream themselves (default 5s).</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_lock_age</code></span><span class="v">Re-elect another request if the leader is too slow.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_use_stale updating</code></span><span class="v">The better cure — serve stale while one request refreshes, so nobody waits.</span></div>
+  <div class="kv"><span class="k">upstream_response_time</span><span class="v">In the log, separates a HIT (empty) from a MISS (the real backend latency).</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A stampede scales with traffic and with slowness, so it hits your worst endpoint hardest.</li><li><code>proxy_cache_lock</code> turns twenty upstream calls into one, costing about half a second on the slowest waiter (measured).</li><li>Serving stale with <code>updating</code> is usually better — nobody waits; use the lock only when data must be current.</li><li>Longer TTLs cause fewer expiries and are the only mitigation with no downside.</li><li>Configure <code>use_stale</code> for error/timeout/5xx too, or the cache amplifies an outage instead of shielding it.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_lock" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_lock</span><span class="lc-sub">nginx.org · With lock_timeout and lock_age, and how the waiters poll</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · The updating keyword, which is the better answer to this problem</span></span></a>
@@ -555,14 +1105,18 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 </div>
 
 <h3>Nó tốn cái gì, cũng đo</h3>
-<div class="out">Cung 20 request do, lan nay do THOI GIAN tung request:
+<div class="out">Cung 20 request do, lan nay do THOI GIAN tung request (nguoi dan dau luon ~1,00s):
 
-  KHONG lock   tong=1,04s   nhanh nhat=1,00s   cham nhat=1,01s   trung vi=1,00s
-  CO lock      tong=1,53s   nhanh nhat=1,00s   cham nhat=1,51s   trung vi=1,00s
-                                                ^^^^^^^^^^^^^^^
-                     nguoi cho lau nhat mat them nua giay</div>
+1 worker, 3 luot                   luot 1   luot 2   luot 3
+  KHONG lock   cham nhat           1,01s    1,01s    1,01s
+  CO lock      cham nhat           1,01s    1,51s    1,01s
+
+4 worker, 6 luot, CO lock          1      2      3      4      5      6
+  cham nhat                        1,51s  1,51s  1,52s  1,51s  1,51s  1,02s
+  trung vi                         1,51s  1,51s  1,51s  1,51s  1,01s  1,01s
+                                   ^^^^^ nguoi CHO kiem lai moi 500 ms =&gt; hay mat them nua giay</div>
 <div class="callout warn">
-<p><strong>Cái khoá KHÔNG miễn phí, và cuộc đổi chác này đáng được nói thẳng.</strong> Đám request đang chờ đi HỎI THĂM cái mục theo chu kỳ chứ không được đánh thức ngay lúc nó về, nên một kẻ đi theo có thể ngồi thêm tới nửa giây SAU KHI kẻ dẫn đầu đã xong. Đo được: kẻ chậm nhất trong hai mươi đi từ 1,01s lên 1,51s. Cái bạn MUA được là backend nhận một truy vấn thay vì hai mươi. Với một điểm cuối đắt đỏ cho backend thì đó rõ ràng là cuộc đổi chác tốt. Với một điểm cuối rẻ mà có đông kẻ chờ thì có thể không — và giờ bạn quyết định bằng CON SỐ chứ không bằng tiếng đồn.</p>
+<p><strong>Cái khoá KHÔNG miễn phí, và cuộc đổi chác này đáng được nói thẳng.</strong> Đám request đang chờ đi HỎI THĂM cái mục theo chu kỳ chứ không được đánh thức ngay lúc nó về, nên một kẻ đi theo có thể ngồi thêm tới nửa giây SAU KHI kẻ dẫn đầu đã xong. Đo được: với bốn worker, kẻ chậm nhất trong hai mươi mất 1,51s ở năm lượt trên sáu, và trung vị là 1,51s ở bốn lượt — phần lớn mười chín kẻ chờ đã trả thêm nửa giây. Với một worker thì chuyện đó xảy ra ở một lượt trên ba, nên hãy đo đúng số worker bạn chạy thật, và đo nhiều lần. Cái bạn MUA được là backend nhận một truy vấn thay vì hai mươi. Với một điểm cuối đắt đỏ cho backend thì đó rõ ràng là cuộc đổi chác tốt. Với một điểm cuối rẻ mà có đông kẻ chờ thì có thể không — và giờ bạn quyết định bằng CON SỐ chứ không bằng tiếng đồn.</p>
 </div>
 <pre><code class="language-bash">location /api/danh-sach {
   proxy_cache kho;
@@ -601,6 +1155,71 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <p><strong>Cách đóng khung để dễ nhớ.</strong> Một bộ đệm biến NHIỀU request thành MỘT. Cơn giẫm đạp là khoảnh khắc nó tạm thời thôi làm điều đó, và mọi cơ chế trong bài này đều nhằm THU HẸP cái khoảnh khắc ấy: cái khoá bắt đám đi theo chờ đúng một lời gọi, phục vụ bản cũ thì xoá luôn cái chờ, còn TTL dài hơn thì làm cái khoảnh khắc ấy xảy ra ít lần hơn. Hãy chọn bằng cách hỏi dữ liệu hơi cũ thì TỆ tới đâu với điểm cuối đó, vì đúng một câu hỏi ấy chọn hộ bạn cái cơ chế.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một upstream mất đúng một giây và biết đếm số lần bị gọi, hai mươi request đồng thời có và không có <code>proxy_cache_lock</code>, với một worker và với bốn, trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># cham1s.js</span>
+// upstream (cổng 9204): mỗi request mất ĐÚNG 1 giây; đếm số lần bị gọi — /dem trả con số, không tính vào đếm
+let n = 0;
+require('http').createServer((req, res) =&gt; {
+  if (req.url === '/dem') { res.end(&#96;\${n}\\n&#96;); return; }
+  n++; setTimeout(() =&gt; res.end(&#96;lan goi thu \${n}\\n&#96;), 1000);
+}).listen(9204, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache1 levels=1:2 keys_zone=kho1:10m;
+  proxy_cache_path /srv/cache2 levels=1:2 keys_zone=kho2:10m;
+  server { listen 8080; location / { proxy_cache kho1; proxy_cache_valid 200 60s; proxy_pass http://127.0.0.1:9204; } }
+  server { listen 8081; location / { proxy_cache kho2; proxy_cache_valid 200 60s; proxy_cache_lock on; proxy_pass http://127.0.0.1:9204; } }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># dong-thoi.py</span>
+<span class="tok-comment"># dong-thoi.py &lt;cổng&gt; &lt;đường dẫn&gt; — 20 request CÙNG LÚC, in số lần upstream thật sự bị gọi + thời gian từng request</span>
+import sys, time, threading, urllib.request
+cong, p = sys.argv[1], sys.argv[2]
+truoc = int(urllib.request.urlopen('http://127.0.0.1:9204/dem').read()); tg = []
+def mot():
+    t = time.time(); urllib.request.urlopen(f'http://127.0.0.1:{cong}{p}').read(); tg.append(time.time() - t)
+t0 = time.time(); ds = [threading.Thread(target=mot) for _ in range(20)]
+[x.start() for x in ds]; [x.join() for x in ds]; tong = time.time() - t0
+sau = int(urllib.request.urlopen('http://127.0.0.1:9204/dem').read()); tg.sort()
+print(f'upstream bi goi {sau - truoc:2d} lan · tong={tong:.2f}s nhanh nhat={tg[0]:.2f}s cham nhat={tg[-1]:.2f}s trung vi={tg[10]:.2f}s')</code></pre>
+<div class="out">$ printf 'KHONG proxy_cache_lock  '; python3 dong-thoi.py 8080 /api/danh-sach
+KHONG proxy_cache_lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.02s cham nhat=1.02s trung vi=1.02s
+$ printf 'CO proxy_cache_lock     '; python3 dong-thoi.py 8081 /api/danh-sach
+CO proxy_cache_lock     upstream bi goi  1 lan · tong=1.01s nhanh nhat=1.00s cham nhat=1.01s trung vi=1.00s
+=== lap lai 3 lan, moi lan mot duong dan MOI (chua co trong cache) ===
+$ for i in 1 2 3; do printf 'KHONG lock  '; python3 dong-thoi.py 8080 /moi-$i; printf 'CO lock     '; python3 dong-thoi.py 8081 /moi-$i; done
+KHONG lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+CO lock     upstream bi goi  1 lan · tong=1.01s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+KHONG lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+CO lock     upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.01s cham nhat=1.51s trung vi=1.51s
+KHONG lock  upstream bi goi 20 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.01s trung vi=1.01s
+CO lock     upstream bi goi  1 lan · tong=1.01s nhanh nhat=1.00s cham nhat=1.01s trung vi=1.01s
+$ ps -C nginx -o cmd= | grep -c 'worker process'
+4
+$ for i in 1 2 3 4 5 6; do printf 'CO lock, 4 worker  '; python3 dong-thoi.py 8081 /bon-$i; done
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.51s nhanh nhat=1.00s cham nhat=1.51s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.02s cham nhat=1.51s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.01s cham nhat=1.52s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.52s nhanh nhat=1.01s cham nhat=1.51s trung vi=1.51s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.51s nhanh nhat=1.00s cham nhat=1.51s trung vi=1.01s
+CO lock, 4 worker  upstream bi goi  1 lan · tong=1.02s nhanh nhat=1.01s cham nhat=1.02s trung vi=1.01s</div>
+<p>Không khoá thì upstream bị gọi 20 lần, có khoá thì một lần — lượt nào cũng vậy. Cái giá thì xê dịch: với một worker kẻ chậm nhất trả 1,51 s ở một lượt trên ba; với bốn worker là năm lượt trên sáu. (Muốn bốn worker: thêm <code>worker_processes 4;</code> phía trên <code>events</code>.)</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-6-3-giam-dap" target="_blank" rel="noopener"><span class="lc-ico">🟥</span><span class="lc-body"><span class="lc-title">Redis · 6.3 — Giẫm đạp: khi một lần trượt bộ đệm hạ gục cơ sở dữ liệu</span><span class="lc-sub">Cùng cơn giẫm đạp sâu hơn một tầng, với SET NX và làm mới sớm</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache stampede (cơn giẫm đạp)</span><span class="v">Ngay giây một mục hết hạn, mọi request đang bay đều trượt và cùng lao lên backend một lượt.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_lock</code></span><span class="v">Bầu một cú trượt đi làm mới trong khi số còn lại chờ — một lời gọi upstream cho nhiều khách.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_lock_timeout</code></span><span class="v">Đám chờ chờ tối đa bao lâu rồi tự đi lên upstream (mặc định 5s).</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_lock_age</code></span><span class="v">Bầu lại một request khác nếu kẻ dẫn đầu quá chậm.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_use_stale updating</code></span><span class="v">Cách chữa tốt hơn — phục vụ bản cũ trong khi một request làm mới, không ai phải chờ.</span></div>
+  <div class="kv"><span class="k">upstream_response_time</span><span class="v">Trong log, tách một HIT (rỗng) khỏi một MISS (độ trễ backend thật).</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cơn giẫm đạp lớn theo lưu lượng và theo độ chậm, nên nó đánh mạnh nhất vào điểm cuối tệ nhất của bạn.</li><li><code>proxy_cache_lock</code> biến hai mươi lời gọi upstream thành một, trả giá chừng nửa giây ở kẻ chờ chậm nhất (đo thật).</li><li>Phục vụ bản cũ bằng <code>updating</code> thường tốt hơn — không ai chờ; chỉ dùng khoá khi dữ liệu bắt buộc phải mới.</li><li>TTL dài hơn thì ít lần hết hạn hơn và là cách giảm thiểu duy nhất không có mặt trái.</li><li>Cấu hình <code>use_stale</code> cho cả error/timeout/5xx, nếu không bộ đệm khuếch đại sự cố thay vì che chắn.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_lock" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_lock</span><span class="lc-sub">nginx.org · Kèm lock_timeout, lock_age, và cách đám chờ đi hỏi thăm</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · Từ khoá updating, câu trả lời TỐT HƠN cho bài toán này</span></span></a>
@@ -618,31 +1237,31 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
       type: 'LESSON',
       description: 'Một chỉ thị biến bộ đệm từ chỗ tiết kiệm tải thành một lớp giữ cho site sống. Bài này GIẾT hẳn upstream rồi đo bốn tuyến khác nhau: hai tuyến vẫn trả 200 với nội dung cũ, hai tuyến trả 502 — và khác biệt là đúng một dòng cấu hình.',
       content: `
+${G05_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.5</span>
 <h2>Serving stale: staying up while the backend is down</h2>
 <p class="lead">Everything so far treated the cache as a way to reduce load. It is also the only component that still has your content after the thing that produced it has stopped answering. Turning that into a feature takes one directive, and this lesson measures it with the upstream genuinely killed.</p>
 
 <h3>The upstream is dead. Four routes, four outcomes</h3>
-<div class="out">1. Nap cache truoc                     MISS   "binh thuong, lan goi upstream thu 41"
-2. Ngay sau do                         HIT    "binh thuong, lan goi upstream thu 41"
+<div class="out">1. nap cache (co stale)                MISS     200  ban cua tien trinh 2492, lan goi thu 1
+   nap cache (khong stale)             MISS     200  ban cua tien trinh 2492, lan goi thu 2
+2. ngay sau do                         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+... GIET tien trinh upstream ...
+3. muc con TUOI, use_stale bat         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+4. muc HET HAN, use_stale bat          STALE    200  ban cua tien trinh 2492, lan goi thu 1
+5. muc HET HAN, use_stale TAT          EXPIRED  502  &lt;html&gt;
+6. duong dan CHUA TUNG cache           MISS     502  &lt;html&gt;
+... upstream song lai ...
+7. request dau sau khi song lai        STALE    200  ban cua tien trinh 2492, lan goi thu 1
+8. request ke tiep                     HIT      200  ban cua tien trinh 2661, lan goi thu 1
 
-   ... GIET tien trinh upstream ...
-
-3. Muc con TUOI, use_stale bat         HIT    "binh thuong, ... thu 41"   200
-4. Muc DA HET HAN, use_stale bat       STALE  "binh thuong, ... thu 41"   200
-5. Muc DA HET HAN, use_stale TAT       EXPIRED  &lt;html&gt;502 Bad Gateway
-6. Duong dan CHUA TUNG cache           MISS     &lt;html&gt;502 Bad Gateway
-
-   ... upstream song lai ...
-
-7. Request dau tien sau khi song lai   STALE  (van ban cu, tra NGAY)
-                                              va mot request nen di lam moi</div>
+   (7: tra NGAY ban cu; mot request nen di lam moi =&gt; 8 da la tien trinh MOI)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">A fresh entry does not care that the backend is gone</span><span class="lz-d">Row 3: still a plain <code>HIT</code>. Within the TTL, Nginx never asks the upstream anything, so an outage shorter than your TTL is invisible to anyone who requests a cached URL.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">An expired entry is where the directive earns its place</span><span class="lz-d">Rows 4 and 5 are the same URL at the same moment with the same dead backend. With <code>proxy_cache_use_stale</code> the user gets the old content and a <code>200</code>; without it they get <code>502</code>. That is the whole feature.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">It cannot invent what was never cached</span><span class="lz-d">Row 6: a URL nobody had requested before is a <code>502</code> regardless. Stale-serving covers your popular paths, which is usually most of your traffic — but it is not a substitute for the backend being up.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update means nobody waits for the recovery either</span><span class="lz-d">Row 7: the first request after the backend returned still got the stale copy instantly, while a separate request refreshed the entry. Without it, that one unlucky user pays the full backend latency.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update means nobody waits for the recovery either</span><span class="lz-d">Row 7: the first request after the backend returned still got the stale copy instantly (process 2492), while a separate request refreshed the entry — row 8 already carries the NEW process id, 2661. Without it, that one unlucky user pays the full backend latency.</span></div>
 </div>
 <pre><code class="language-bash">location /api/ {
   proxy_cache kho;
@@ -681,6 +1300,66 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <p><strong>Why this is the most valuable directive in the chapter.</strong> Everything else here makes a working site faster. This one keeps a site answering when the thing behind it has stopped — measured above as the difference between a <code>200</code> with real content and a <code>502</code>, for the same URL at the same instant. Sites go down; a cache that keeps serving during the ten minutes it takes you to notice and fix it is worth more than any hit-rate improvement.</p>
 </div>
 
+<h3>🔬 Run it yourself</h3>
+<p>Two locations on one upstream that prints its process id, a 3-second validity, then the upstream killed and started again, on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># dem2.js</span>
+// upstream (cổng 9205): đếm số lần bị gọi, in ra trong thân
+let n = 0;
+require('http').createServer((req, res) =&gt; { n++; res.end(&#96;ban cua tien trinh \${process.pid}, lan goi thu \${n}\\n&#96;); }).listen(9205, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    proxy_cache kho;
+    proxy_cache_valid 200 3s;
+    location /co-stale/   { proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+                            proxy_cache_background_update on; proxy_pass http://127.0.0.1:9205; }
+    location /khong-stale/ { proxy_pass http://127.0.0.1:9205; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># xin.sh</span>
+<span class="tok-comment"># xin.sh &lt;nhãn&gt; &lt;đường dẫn&gt; — in X-Cache-Status, mã và dòng đầu của thân</span>
+r=$(curl -s -D /tmp/h "http://127.0.0.1:8080$2" | head -n 1); printf '%-38s %-8s %s  %s\\n' "$1" "$(tr -d '\\r' &lt; /tmp/h | awk -F': ' '/^X-Cache-Status/{print $2}')" "$(head -n1 /tmp/h | awk '{print $2}')" "$r"</code></pre>
+<div class="out">$ bash xin.sh '1. nap cache (co stale)' /co-stale/a; bash xin.sh '   nap cache (khong stale)' /khong-stale/a
+1. nap cache (co stale)                MISS     200  ban cua tien trinh 2492, lan goi thu 1
+   nap cache (khong stale)             MISS     200  ban cua tien trinh 2492, lan goi thu 2
+$ bash xin.sh '2. ngay sau do' /co-stale/a
+2. ngay sau do                         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+... GIET tien trinh upstream ...
+$ pkill -f '[d]em2.js'; sleep 0.3
+$ bash xin.sh '3. muc con TUOI, use_stale bat' /co-stale/a
+3. muc con TUOI, use_stale bat         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+$ sleep 4; bash xin.sh '4. muc HET HAN, use_stale bat' /co-stale/a
+4. muc HET HAN, use_stale bat          STALE    200  ban cua tien trinh 2492, lan goi thu 1
+$ bash xin.sh '5. muc HET HAN, use_stale TAT' /khong-stale/a
+5. muc HET HAN, use_stale TAT          EXPIRED  502  &lt;html&gt;
+$ bash xin.sh '6. duong dan CHUA TUNG cache' /co-stale/moi
+6. duong dan CHUA TUNG cache           MISS     502  &lt;html&gt;
+... upstream song lai ...
+$ bash xin.sh '7. request dau sau khi song lai' /co-stale/a; sleep 0.3
+7. request dau sau khi song lai        STALE    200  ban cua tien trinh 2492, lan goi thu 1
+$ bash xin.sh '8. request ke tiep' /co-stale/a
+8. request ke tiep                     HIT      200  ban cua tien trinh 2661, lan goi thu 1</div>
+<p>Fresh entry with the upstream dead: HIT 200. Expired with use_stale: STALE 200, the old process's page. Expired without it: EXPIRED 502. Never cached: MISS 502. After recovery the first request was STALE at once, and the next one already showed the new process.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-1-loi-hua-danh-thuc" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 9.1 — An alert is a promise to wake someone</span><span class="lc-sub">What to alert on once stale hides the 5xx</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-8-5-kiem-tu-ben-ngoai" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 8.5 — Checking from outside, where users stand</span><span class="lc-sub">An edge that says 200 while the backend is down</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>proxy_cache_use_stale</code></span><span class="v">Serve an expired copy on error/timeout/5xx/updating — the difference between a 200 and a 502.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_background_update</code></span><span class="v">Refresh in the background so even the first user after recovery does not wait.</span></div>
+  <div class="kv"><span class="k"><code>updating</code> keyword</span><span class="v">The everyday one — removes the stampede without making anyone wait.</span></div>
+  <div class="kv"><span class="k"><code>proxy_next_upstream</code></span><span class="v">Fail over to another backend when one errors or times out.</span></div>
+  <div class="kv"><span class="k"><code>inactive</code></span><span class="v">The only thing that bounds how long stale content can keep being served.</span></div>
+  <div class="kv"><span class="k">STALE status</span><span class="v">The signal to alert on once edge 5xx errors disappear.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>One directive turns the cache into a resilience layer: <code>proxy_cache_use_stale</code> serves old content when the backend is down.</li><li>A fresh entry ignores a dead backend entirely; an expired one is 200-with-stale or 502 depending on this directive (measured).</li><li>It cannot serve what was never cached, so it covers your popular paths, not everything.</li><li><code>proxy_cache_background_update</code> means nobody waits for the recovery refresh.</li><li>It turns a loud failure silent — add an alert on the STALE rate before turning it on, not after the first missed incident.</li></ul>
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · Every keyword, and how it interacts with background_update</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream" target="_blank" rel="noopener"><span class="lc-ico">➡️</span><span class="lc-body"><span class="lc-title">nginx — proxy_next_upstream</span><span class="lc-sub">nginx.org · Failing over to another backend, which pairs with this</span></span></a>
@@ -695,25 +1374,24 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <p class="lead">Từ đầu tới giờ ta coi bộ đệm là một cách GIẢM TẢI. Nó còn là thành phần DUY NHẤT vẫn còn giữ nội dung của bạn sau khi cái thứ sản xuất ra nội dung ấy đã thôi trả lời. Biến điều đó thành một tính năng tốn đúng một chỉ thị, và bài này đem nó ra đo với upstream bị GIẾT thật.</p>
 
 <h3>Upstream đã chết. Bốn tuyến, bốn kết cục</h3>
-<div class="out">1. Nap cache truoc                     MISS   "binh thuong, lan goi upstream thu 41"
-2. Ngay sau do                         HIT    "binh thuong, lan goi upstream thu 41"
+<div class="out">1. nap cache (co stale)                MISS     200  ban cua tien trinh 2492, lan goi thu 1
+   nap cache (khong stale)             MISS     200  ban cua tien trinh 2492, lan goi thu 2
+2. ngay sau do                         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+... GIET tien trinh upstream ...
+3. muc con TUOI, use_stale bat         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+4. muc HET HAN, use_stale bat          STALE    200  ban cua tien trinh 2492, lan goi thu 1
+5. muc HET HAN, use_stale TAT          EXPIRED  502  &lt;html&gt;
+6. duong dan CHUA TUNG cache           MISS     502  &lt;html&gt;
+... upstream song lai ...
+7. request dau sau khi song lai        STALE    200  ban cua tien trinh 2492, lan goi thu 1
+8. request ke tiep                     HIT      200  ban cua tien trinh 2661, lan goi thu 1
 
-   ... GIET tien trinh upstream ...
-
-3. Muc con TUOI, use_stale bat         HIT    "binh thuong, ... thu 41"   200
-4. Muc DA HET HAN, use_stale bat       STALE  "binh thuong, ... thu 41"   200
-5. Muc DA HET HAN, use_stale TAT       EXPIRED  &lt;html&gt;502 Bad Gateway
-6. Duong dan CHUA TUNG cache           MISS     &lt;html&gt;502 Bad Gateway
-
-   ... upstream song lai ...
-
-7. Request dau tien sau khi song lai   STALE  (van ban cu, tra NGAY)
-                                              va mot request nen di lam moi</div>
+   (7: tra NGAY ban cu; mot request nen di lam moi =&gt; 8 da la tien trinh MOI)</div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Một mục còn TƯƠI thì chẳng quan tâm backend đã biến mất</span><span class="lz-d">Dòng 3: vẫn là một cú <code>HIT</code> bình thường. Trong khoảng TTL, Nginx KHÔNG hỏi upstream cái gì cả, nên một sự cố ngắn hơn TTL của bạn là VÔ HÌNH với bất cứ ai gọi một URL đã có trong cache.</span></div>
   <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Mục ĐÃ HẾT HẠN mới là chỗ chỉ thị này xứng đáng có mặt</span><span class="lz-d">Dòng 4 và 5 là CÙNG một URL, CÙNG một thời điểm, CÙNG một backend đã chết. Có <code>proxy_cache_use_stale</code> thì người dùng nhận nội dung cũ kèm mã <code>200</code>; không có thì họ nhận <code>502</code>. Đó là toàn bộ tính năng.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nó không BỊA ra được thứ chưa từng được cache</span><span class="lz-d">Dòng 6: một URL chưa ai từng gọi thì vẫn là <code>502</code>. Phục vụ bản cũ che chở những đường dẫn ĐÔNG KHÁCH của bạn, mà đó thường là phần lớn lưu lượng — nhưng nó KHÔNG thay thế được việc backend phải sống.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update nghĩa là cả lúc HỒI PHỤC cũng không ai phải chờ</span><span class="lz-d">Dòng 7: request đầu tiên sau khi backend quay lại VẪN nhận bản cũ ngay lập tức, trong khi một request riêng đi làm mới cái mục. Thiếu nó thì đúng một người xui xẻo ấy trả trọn cái độ trễ của backend.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">background_update nghĩa là cả lúc HỒI PHỤC cũng không ai phải chờ</span><span class="lz-d">Dòng 7: request đầu tiên sau khi backend quay lại VẪN nhận bản cũ ngay lập tức (tiến trình 2492), trong khi một request riêng đi làm mới cái mục — dòng 8 đã mang mã tiến trình MỚI, 2661. Thiếu nó thì đúng một người xui xẻo ấy trả trọn cái độ trễ của backend.</span></div>
 </div>
 <pre><code class="language-bash">location /api/ {
   proxy_cache kho;
@@ -752,6 +1430,66 @@ proxy_cache_valid 500 502 503 504 1s;   <span class="tok-comment"># dập bão t
 <p><strong>Vì sao đây là chỉ thị giá trị nhất cả chương.</strong> Mọi thứ khác ở đây làm cho một site ĐANG CHẠY nhanh hơn. Cái này giữ cho một site còn TRẢ LỜI khi thứ đứng sau nó đã ngừng — đo được ở trên bằng khác biệt giữa một cú <code>200</code> có nội dung thật và một cú <code>502</code>, cho cùng một URL vào cùng một khoảnh khắc. Site nào rồi cũng có lúc ngã; một bộ đệm vẫn phục vụ suốt mười phút bạn cần để phát hiện và sửa thì đáng giá hơn mọi cải thiện tỷ lệ trúng.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Hai location trên cùng một upstream in ra mã tiến trình của nó, thời hạn 3 giây, rồi giết upstream và bật lại, trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># dem2.js</span>
+// upstream (cổng 9205): đếm số lần bị gọi, in ra trong thân
+let n = 0;
+require('http').createServer((req, res) =&gt; { n++; res.end(&#96;ban cua tien trinh \${process.pid}, lan goi thu \${n}\\n&#96;); }).listen(9205, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  proxy_cache_path /srv/cache levels=1:2 keys_zone=kho:10m;
+  server {
+    listen 8080;
+    add_header X-Cache-Status $upstream_cache_status always;
+    proxy_cache kho;
+    proxy_cache_valid 200 3s;
+    location /co-stale/   { proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+                            proxy_cache_background_update on; proxy_pass http://127.0.0.1:9205; }
+    location /khong-stale/ { proxy_pass http://127.0.0.1:9205; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># xin.sh</span>
+<span class="tok-comment"># xin.sh &lt;nhãn&gt; &lt;đường dẫn&gt; — in X-Cache-Status, mã và dòng đầu của thân</span>
+r=$(curl -s -D /tmp/h "http://127.0.0.1:8080$2" | head -n 1); printf '%-38s %-8s %s  %s\\n' "$1" "$(tr -d '\\r' &lt; /tmp/h | awk -F': ' '/^X-Cache-Status/{print $2}')" "$(head -n1 /tmp/h | awk '{print $2}')" "$r"</code></pre>
+<div class="out">$ bash xin.sh '1. nap cache (co stale)' /co-stale/a; bash xin.sh '   nap cache (khong stale)' /khong-stale/a
+1. nap cache (co stale)                MISS     200  ban cua tien trinh 2492, lan goi thu 1
+   nap cache (khong stale)             MISS     200  ban cua tien trinh 2492, lan goi thu 2
+$ bash xin.sh '2. ngay sau do' /co-stale/a
+2. ngay sau do                         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+... GIET tien trinh upstream ...
+$ pkill -f '[d]em2.js'; sleep 0.3
+$ bash xin.sh '3. muc con TUOI, use_stale bat' /co-stale/a
+3. muc con TUOI, use_stale bat         HIT      200  ban cua tien trinh 2492, lan goi thu 1
+$ sleep 4; bash xin.sh '4. muc HET HAN, use_stale bat' /co-stale/a
+4. muc HET HAN, use_stale bat          STALE    200  ban cua tien trinh 2492, lan goi thu 1
+$ bash xin.sh '5. muc HET HAN, use_stale TAT' /khong-stale/a
+5. muc HET HAN, use_stale TAT          EXPIRED  502  &lt;html&gt;
+$ bash xin.sh '6. duong dan CHUA TUNG cache' /co-stale/moi
+6. duong dan CHUA TUNG cache           MISS     502  &lt;html&gt;
+... upstream song lai ...
+$ bash xin.sh '7. request dau sau khi song lai' /co-stale/a; sleep 0.3
+7. request dau sau khi song lai        STALE    200  ban cua tien trinh 2492, lan goi thu 1
+$ bash xin.sh '8. request ke tiep' /co-stale/a
+8. request ke tiep                     HIT      200  ban cua tien trinh 2661, lan goi thu 1</div>
+<p>Mục còn tươi khi upstream đã chết: HIT 200. Hết hạn mà có use_stale: STALE 200, trang của tiến trình cũ. Hết hạn mà không có: EXPIRED 502. Chưa từng cache: MISS 502. Sau khi hồi phục, request đầu là STALE ngay lập tức, và request kế tiếp đã mang tiến trình mới.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-1-loi-hua-danh-thuc" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 9.1 — Một cảnh báo là lời hứa sẽ đánh thức ai đó</span><span class="lc-sub">Cảnh báo theo gì khi bản cũ đã che lỗi 5xx</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-8-5-kiem-tu-ben-ngoai" target="_blank" rel="noopener"><span class="lc-ico">📈</span><span class="lc-body"><span class="lc-title">Observability &amp; Monitoring · 8.5 — Kiểm từ bên ngoài, chỗ người dùng đứng</span><span class="lc-sub">Rìa mạng báo 200 trong khi backend đã sập</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>proxy_cache_use_stale</code></span><span class="v">Phục vụ bản hết hạn khi error/timeout/5xx/updating — chính là khác biệt giữa 200 và 502.</span></div>
+  <div class="kv"><span class="k"><code>proxy_cache_background_update</code></span><span class="v">Làm mới ở nền để cả người dùng đầu tiên sau khi hồi phục cũng không phải chờ.</span></div>
+  <div class="kv"><span class="k">Từ khoá <code>updating</code></span><span class="v">Cái dùng hằng ngày — gỡ cơn giẫm đạp mà không bắt ai phải chờ.</span></div>
+  <div class="kv"><span class="k"><code>proxy_next_upstream</code></span><span class="v">Chuyển sang backend khác khi một máy lỗi hoặc hết giờ.</span></div>
+  <div class="kv"><span class="k"><code>inactive</code></span><span class="v">Thứ duy nhất chặn được việc nội dung cũ tiếp tục được phục vụ bao lâu.</span></div>
+  <div class="kv"><span class="k">Trạng thái STALE</span><span class="v">Tín hiệu cần cảnh báo theo, một khi lỗi 5xx ở rìa đã biến mất.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một chỉ thị biến bộ đệm thành lớp chịu đựng: <code>proxy_cache_use_stale</code> phục vụ nội dung cũ khi backend ngã.</li><li>Mục còn tươi phớt lờ hẳn backend đã chết; mục hết hạn thì ra 200-kèm-bản-cũ hay 502 tuỳ chỉ thị này (đo thật).</li><li>Nó không phục vụ được thứ chưa từng cache, nên che những đường dẫn đông khách chứ không che tất cả.</li><li><code>proxy_cache_background_update</code> nghĩa là không ai phải chờ lượt làm mới lúc hồi phục.</li><li>Nó biến một kiểu hỏng ồn ào thành câm lặng — thêm cảnh báo theo tỷ lệ STALE trước khi bật, đừng đợi sự cố đầu tiên bị bỏ lỡ.</li></ul>
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_use_stale" target="_blank" rel="noopener"><span class="lc-ico">🕰️</span><span class="lc-body"><span class="lc-title">nginx — proxy_cache_use_stale</span><span class="lc-sub">nginx.org · Mọi từ khoá, và nó tương tác với background_update thế nào</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_next_upstream" target="_blank" rel="noopener"><span class="lc-ico">➡️</span><span class="lc-body"><span class="lc-title">nginx — proxy_next_upstream</span><span class="lc-sub">nginx.org · Chuyển sang một backend khác khi hỏng, thứ đi cặp với cái này</span></span></a>

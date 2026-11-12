@@ -17,7 +17,7 @@ export default walkNgx('ngx-04-5', "A production static block, assembled and mea
   [5, "Every route, measured",
     "<p>Every route. The hashed script: compressed, a weak ETag, a year immutable, nosniff. The index page: no-cache. And a path with no file behind it: the same ETag as index dot html, and no-cache — try files redirected internally, matched the exact index block again, and took its headers.</p>",
     "<p>Đo từng tuyến. Tệp băm: nén, ETag yếu, một năm immutable, nosniff. Trang index: no-cache. Một đường dẫn không có tệp: cùng ETag với index.html, và no-cache. Try_files chuyển nội bộ, khớp lại vào khối index, nên nhận luôn header của khối đó.</p>"],
-  [6, "Uploads: a that never runs",
+  [6, "Uploads: a &lt;script&gt; that never runs",
     "<p>Uploads. An image and an HTML file containing a script both came back as application octet-stream, with Content-Disposition attachment and nosniff. The empty types block means dot html is no longer text html here: the browser downloads it and the script never runs.</p>",
     "<p>Tệp tải lên. Một ảnh và một tệp HTML chứa script đều về octet-stream, attachment và nosniff. Khối types rỗng làm cho đuôi html không còn là text html ở đây. Trình duyệt tải về, script không chạy.</p>"],
   [7, "Trap: a 404 cached for a year",

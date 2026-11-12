@@ -89,3 +89,16 @@ targetRules = ["generic-api-key"]
 condition = "AND"
 paths = ['''content/academy/''']
 regexes = ['''^Smile/IHotel/Opera$''']
+
+# ── Chữ giữ chỗ token trong bài Nginx 5.2 (13/11/2026, chủ kênh duyệt) ────────
+# Bài 5.2 dạy lỗi "cache rò rỉ hồ sơ giữa người dùng": demo chạy thật gửi
+#     curl -H 'Authorization: Bearer TOKEN-CUA-A' …
+# với chữ giữ chỗ TOKEN-CUA-A / TOKEN-CUA-B (không phải khoá thật — máy chủ demo
+# chỉ in lại header để thấy hồ sơ của A lộ cho B). Rule curl-auth-header bắt nhầm.
+# Miễn trừ đúng HAI chuỗi đó, chỉ trong bài/slide Nginx (AND): token thật vẫn bị chặn.
+[[allowlists]]
+description = "Chữ giữ chỗ TOKEN-CUA-A/B trong demo Nginx 5.2 — không phải khoá"
+targetRules = ["curl-auth-header"]
+condition = "AND"
+paths = ['''content/courses/nginx/''', '''scripts/slides-src/ngx-''']
+regexes = ['''^TOKEN-CUA-[AB]$''']

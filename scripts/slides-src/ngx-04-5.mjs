@@ -45,7 +45,7 @@ export const S = [
   { t: 'Every route, measured', body: two(tn(TUYEN('/tinh/app.4f9a2c.js') + '\n' + TUYEN('/index.html'), { fs: 13, wrap: 60 }), tn(TUYEN('/trang/bat-ky'), { fs: 13, wrap: 60 })) +
     box('The SPA path got the SAME ETag and no-cache', '<code>/trang/bat-ky</code> has no file: try_files redirected internally to <code>/index.html</code>, which matched <code>location = /index.html</code> again — so its headers came too.', 'lam'),
     en: 'Every route. The hashed script: compressed, a weak ETag, a year immutable, nosniff. The index page: no-cache. And a path with no file behind it: the same ETag as index dot html, and no-cache — try files redirected internally, matched the exact index block again, and took its headers.' },
-  { t: 'Uploads: a <script> that never runs', body: tn(TUYEN('/tai-len/anh.jpg') + '\n' + TUYEN('/tai-len/la.html'), { fs: 15 }) +
+  { t: 'Uploads: a &lt;script&gt; that never runs', body: tn(TUYEN('/tai-len/anh.jpg') + '\n' + TUYEN('/tai-len/la.html'), { fs: 15 }) +
     icards([
       ['trash', 'types { }', 'the extension table is EMPTIED here: .html is not text/html any more'],
       ['shield', 'attachment', 'the browser downloads instead of rendering'],

@@ -26,21 +26,39 @@ export async function luotGoi(userId: number) {
 
 type SuKienGoi = SuKienTC | { type: 'luot'; conLai: number | null; laPro: boolean };
 
-export async function chayLuotGoi(userId: number, v: VaoLuot & { nn?: unknown }, gui: (e: SuKienGoi) => void, signal?: AbortSignal) {
-  const laPro = await isProEffective(userId);
+/** Phụ thuộc ra ngoài — test thay bằng bản giả (không gọi AI, không đọc CSDL). */
+export interface PhuThuocGoi { laPro: (userId: number) => Promise<boolean>; chay: typeof chayLuot }
+const THAT: PhuThuocGoi = { laPro: isProEffective, chay: chayLuot };
+
+/**
+ * Một lượt. Lượt free bị trừ TRƯỚC khi chạy (chặn hai yêu cầu song song lách trần), rồi HOÀN lại nếu lượt đó không
+ * thành câu trả lời của AI: máy không nghe ra chữ (`nghe` rỗng — ồn, nói quá nhỏ) hoặc AI lỗi (`loi`).
+ */
+export async function chayLuotGoi(userId: number, v: VaoLuot & { nn?: unknown }, gui: (e: SuKienGoi) => void, signal?: AbortSignal, pt: PhuThuocGoi = THAT) {
+  const laPro = await pt.laPro(userId);
   const coNoi = !!v.audio?.length;
+  const k = khoa(userId);
+  let daTru = false;
   if (!laPro && coNoi) {
     if (daDung(userId) >= LUOT_FREE_NGAY) {
       gui({ type: 'loi', lyDo: 'can_pro', message: `Hôm nay bạn đã dùng hết ${LUOT_FREE_NGAY} lượt nói miễn phí. Nâng cấp Pro để gọi CuongMini thoải mái.` });
       return;
     }
-    const k = khoa(userId);
-    dem.set(k, (dem.get(k) ?? 0) + 1);
     if (dem.size > 20_000) dem.clear();
+    dem.set(k, (dem.get(k) ?? 0) + 1);
+    daTru = true;
   }
   gui({ type: 'luot', laPro, conLai: laPro ? null : Math.max(0, LUOT_FREE_NGAY - daDung(userId)) });
+  let hoan = false;
+  const guiBoc = (e: SuKienTC) => {
+    if (daTru && !hoan && ((e.type === 'nghe' && !e.text.trim()) || e.type === 'loi')) {
+      hoan = true;
+      dem.set(k, Math.max(0, (dem.get(k) ?? 1) - 1));
+    }
+    gui(e);
+  };
   // App gửi `nn`; phòng của web đọc `ngonNgu`.
-  await chayLuot(userId, { ...v, ngonNgu: v.ngonNgu ?? v.nn }, gui, signal);
+  await pt.chay(userId, { ...v, ngonNgu: v.ngonNgu ?? v.nn }, guiBoc, signal);
 }
 
 export async function chamBuoiGoi(userId: number, b: { nn?: unknown; ngonNgu?: unknown; chuDeId?: unknown; tenBai?: unknown; luot?: unknown }) {

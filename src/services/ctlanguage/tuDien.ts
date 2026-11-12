@@ -8,6 +8,7 @@
 import { prisma } from '../../config/database.js';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
 import { khoaTra, laChuHan } from './tuDienChuan.js';
+import { kiemNet, nhanChu } from './vietTay.js';
 
 export const NN_TU_DIEN = ['en', 'ja', 'zh'] as const;
 export type NnTuDien = (typeof NN_TU_DIEN)[number];
@@ -91,4 +92,26 @@ export async function chuHan(chu: string, nnGoc: string) {
     nn, `%${c}%`, c,
   );
   return { ...han, tu };
+}
+
+// ─── Viết tay ⇒ ứng viên chữ ─────────────────────────────────
+
+let hangTanSuat: Promise<Map<string, number>> | null = null;
+/** Thứ hạng tần suất (KANJIDIC2 freq, Unihan kFrequency) — chỉ dùng phá thế hoà giữa các chữ giống nét như nhau. */
+function tanSuat() {
+  if (!hangTanSuat) {
+    hangTanSuat = prisma.ctlChuHan.findMany({ where: { tanSuat: { not: null } }, select: { chu: true, tanSuat: true } })
+      .then((ds) => new Map(ds.map((d) => [d.chu, d.tanSuat!])))
+      .catch(() => { hangTanSuat = null; return new Map<string, number>(); });
+  }
+  return hangTanSuat;
+}
+
+/** `net` = các nét theo thứ tự viết, mỗi nét là mảng [x, y] (đơn vị tuỳ ý — tự chuẩn hoá theo khung bao). */
+export async function vietTay(nnGoc: string, than: unknown): Promise<string[]> {
+  const nn = kiemNn(nnGoc);
+  if (nn === 'en') throw new BadRequestError('Viết tay tiếng Anh nhận trên máy (Vision), không qua máy chủ', 'CTL_NN_SAI');
+  const net = kiemNet((than as { net?: unknown })?.net);
+  const ts = await tanSuat();
+  return nhanChu(nn, net, 12, (c) => ts.get(c));
 }

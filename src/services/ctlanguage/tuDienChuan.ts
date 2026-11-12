@@ -152,17 +152,30 @@ export function hopThanh(amViet: string, pinyin: string | undefined): boolean {
   }
 }
 
-/** Sắp ứng viên Hán Việt: âm chính đứng đầu. `kd` theo thứ tự KANJIDIC2, `uh` = các âm Unihan (có thể lẫn âm Nôm). */
-export function sapHanViet(kd: string[], uh: string[], pinyin: string | undefined): string[] {
-  const thuong = (s: string) => s.normalize('NFC').toLowerCase();
-  const tatCa = [...new Set([...kd, ...uh].map(thuong))];
-  const kdT = kd.map(thuong);
-  const uhT = new Set(uh.map(thuong));
+/** "kì" ≡ "kỳ", "hi" ≡ "hy"… — Unihan viết i, KANJIDIC2 viết y (chính tả cũ). Khoá so sánh dùng i; HIỂN THỊ giữ y. */
+const Y_I: Record<string, string> = { y: 'i', 'ỳ': 'ì', 'ý': 'í', 'ỷ': 'ỉ', 'ỹ': 'ĩ', 'ỵ': 'ị' };
+export function khoaAmHV(am: string): string {
+  const s = am.normalize('NFC').toLowerCase();
+  const m = /^(k|h|l|m|t|s|qu|ph|th|kh|ch|tr|gi|ng|nh|b|d|đ|v|x|r)?([yỳýỷỹỵ])$/.exec(s);
+  return m ? `${m[1] ?? ''}${Y_I[m[2]]}` : s;
+}
+
+/** Sắp ứng viên Hán Việt: âm chính đứng đầu. `kd` theo thứ tự KANJIDIC2, `uh` = các âm Unihan (có thể lẫn âm Nôm),
+ *  `pinyin` = MỌI cách đọc Phổ thông của chữ (期 qī/qí) — hợp thanh với một trong số đó là đủ. */
+export function sapHanViet(kd: string[], uh: string[], pinyin: string | string[] | undefined): string[] {
+  const dsPy = (Array.isArray(pinyin) ? pinyin : pinyin ? [pinyin] : []).filter(Boolean);
+  const hop = (a: string) => !dsPy.length || dsPy.some((p) => hopThanh(a, p));
+  // Gộp theo khoá i/y; giữ cách viết của KANJIDIC2 (Kỳ) nếu có, không thì của Unihan.
+  const hienThi = new Map<string, string>();
+  for (const a of [...kd, ...uh]) { const k = khoaAmHV(a); if (!hienThi.has(k)) hienThi.set(k, a.normalize('NFC').toLowerCase()); }
+  const tatCa = [...hienThi.keys()];
+  const kdT = kd.map(khoaAmHV);
+  const uhT = new Set(uh.map(khoaAmHV));
   const diem = (a: string) => {
     const r = kdT.indexOf(a);
     // Unihan chỉ MỘT âm thì hay là âm Nôm (強: "càng") ⇒ điểm giao nhau chỉ mạnh khi Unihan liệt kê từ hai âm.
     const giao = uhT.has(a) && r >= 0 ? (uhT.size >= 2 ? 2 : 0.5) : 0;
-    return (hopThanh(a, pinyin) ? 3 : 0) + giao + (r === 0 ? 1 : r === 1 ? 0.5 : 0) + (uhT.has(a) ? 0.3 : 0);
+    return (hop(a) ? 3 : 0) + giao + (r === 0 ? 1 : r === 1 ? 0.5 : 0) + (uhT.has(a) ? 0.3 : 0);
   };
-  return tatCa.map((a, i) => ({ a, d: diem(a), i })).sort((x, y) => y.d - x.d || x.i - y.i).map((x) => x.a);
+  return tatCa.map((a, i) => ({ a, d: diem(a), i })).sort((x, y) => y.d - x.d || x.i - y.i).map((x) => hienThi.get(x.a)!);
 }

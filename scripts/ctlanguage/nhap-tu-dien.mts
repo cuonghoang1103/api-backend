@@ -123,7 +123,8 @@ function hanVietCacAm(ch: string): string[] {
   const ho = [ch, h?.phon, h?.gian].filter(Boolean) as string[];
   const kd = ho.flatMap((c) => kanjidic.get(c)?.vn ?? []);
   const uh = ho.flatMap((c) => unihan.get(c)?.hv ?? []);
-  const py = h?.py ?? (h?.phon ? unihan.get(h.phon)?.py : undefined) ?? kanjidic.get(ch)?.py[0];
+  // MỌI cách đọc Phổ thông (Unihan + KANJIDIC2 dạng số "qi2" ⇒ có dấu) — 期 qī/qí.
+  const py = [...new Set([...ho.map((c) => unihan.get(c)?.py), ...ho.flatMap((c) => (kanjidic.get(c)?.py ?? []).map(pinyinCoDau))].filter(Boolean) as string[])];
   const ra = kd.length || uh.length ? sapHanViet(kd, uh, py) : [];
   hvNho.set(ch, ra);
   return ra;

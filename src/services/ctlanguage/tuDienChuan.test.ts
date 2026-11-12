@@ -48,4 +48,7 @@ test('Hán Việt: chọn âm theo tương ứng thanh điệu + giao Unihan/KAN
   assert.equal(sapHanViet(['Học'], [], 'xué')[0], 'học');
   assert.equal(sapHanViet(['Văn', 'Vấn', 'Vặn'], [], 'wén')[0], 'văn');
   assert.equal(sapHanViet([], ['nhân'], 'rén')[0], 'nhân');
+  // 期: Unihan "kì" ≡ KANJIDIC2 "Kỳ" (i/y); đọc qī lẫn qí ⇒ kỳ (huyền hợp thanh 2), hiển thị theo KANJIDIC2.
+  assert.equal(sapHanViet(['Kỳ', 'Ky'], ['kì'], ['qī', 'qí'])[0], 'kỳ');
+  assert.equal(sapHanViet(['Hành', 'Hạnh', 'Hàng', 'Hạng'], ['hành'], ['xíng', 'háng'])[0], 'hành');
 });

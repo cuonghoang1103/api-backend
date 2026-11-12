@@ -12,7 +12,7 @@ import { BadRequestError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import type { ApiResponse } from '../types/index.js';
 import { docHoSo, luuHoSo } from '../services/ctlanguage/hoSo.js';
-import { chiTiet, chuHan, tra } from '../services/ctlanguage/tuDien.js';
+import { chiTiet, chuHan, tra, vietTay } from '../services/ctlanguage/tuDien.js';
 
 const router = Router();
 
@@ -62,6 +62,11 @@ router.get('/tu-dien/:nn/chu/:chu', gioiHanTra, async (req: Request, res: Respon
     res.setHeader('Cache-Control', 'public, max-age=3600');
     res.json({ success: true, data: await chuHan(req.params.chu, req.params.nn) });
   } catch (e) { next(e); }
+});
+
+/** Viết tay ⇒ 12 chữ giống nét nhất (Hán / kanji / kana). Thân: `{ net: [[[x,y],…],…] }` theo thứ tự nét. */
+router.post('/tu-dien/:nn/viet-tay', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await vietTay(req.params.nn, req.body) }); } catch (e) { next(e); }
 });
 
 // ─── Từ đây trở xuống: cần đăng nhập ───────────────────────────────────────────────────────────────────────────

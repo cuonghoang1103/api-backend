@@ -1,3 +1,8 @@
+import G08_1 from './giang/ngx-08-1.mjs';
+import G08_2 from './giang/ngx-08-2.mjs';
+import G08_3 from './giang/ngx-08-3.mjs';
+import G08_4 from './giang/ngx-08-4.mjs';
+import G08_5 from './giang/ngx-08-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnginx%2Flearn&reflabel=Nginx';
 
 export default {
@@ -12,6 +17,7 @@ export default {
       type: 'LESSON',
       description: 'Cùng một phép viết lại, bốn cái cờ, bốn kết quả khác hẳn: một cái chạy lại phép khớp location, một cái ở lại và ÂM THẦM bỏ qua dòng ngay dưới nó, hai cái nữa đẩy một cú chuyển hướng thật ra trình duyệt với hai mã trạng thái khác nhau.',
       content: `
+${G08_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>rewrite and its four flags, measured</h2>
@@ -80,6 +86,70 @@ location = /cu-cu-cu { return 301 /moi; }   <span class="tok-comment"># cheaper,
 <div class="note-ct">
 <p><strong>How to debug a rewrite.</strong> Add <code>return 200 "\$uri | \$request_uri | \$args";</code> temporarily in the block you think handles the request, and send one request. You will see immediately whether the rewrite fired, what it produced, and whether you are even in the block you thought. Reading a chain of regular expressions is much slower and, as the <code>break</code> measurement shows, can be confidently wrong.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>One target block that prints <code>$uri</code>, <code>$request_uri</code> and <code>$args</code>, one block per flag, then three rules — a scheme in the replacement, the trailing <code>?</code>, and a rewrite cycle — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    root /srv/site;
+    location /dich        { return 200 "DICH: uri=[$uri] request_uri=[$request_uri] args=[$args]\\n"; }
+    location /f-last/     { rewrite ^/f-last/(.*)$      /dich last; }
+    location /f-redirect/ { rewrite ^/f-redirect/(.*)$  /dich?tu=redirect redirect; }
+    location /f-permanent/{ rewrite ^/f-permanent/(.*)$ /dich?tu=permanent permanent; }
+    location /f-khong/    { rewrite ^/f-khong/(.*)$ /buoc-1-$1;          <span class="tok-comment">  # không cờ: đi tiếp</span>
+                            rewrite ^/buoc-1-(.*)$  /buoc-2-$1;
+                            return 200 "sau HAI rewrite: uri=[$uri]\\n"; }
+    location /f-break/    { rewrite ^/f-break/(.*)$  /dich break;        <span class="tok-comment">  # break rồi return: return có chạy không?</span>
+                            return 200 "RETURN NAY CO CHAY KHONG?\\n"; }
+    location /f-break2/   { rewrite ^/f-break2/(.*)$ /dich break; }     <span class="tok-comment">  # break, không có return</span>
+    location /f-scheme/   { rewrite ^/f-scheme/(.*)$ http://vidu.com/$1; } # KHÔNG cờ nhưng đích có scheme
+    location /f-q1/       { rewrite ^/f-q1/(.*)$ /dich  last; }          <span class="tok-comment">  # query string được NỐI vào</span>
+    location /f-q2/       { rewrite ^/f-q2/(.*)$ /dich? last; }          <span class="tok-comment">  # dấu ? ở cuối: VỨT query string</span>
+    location /vong-a      { rewrite ^ /vong-b last; }                    <span class="tok-comment">  # hai khối viết lại qua lại</span>
+    location /vong-b      { rewrite ^ /vong-a last; }
+  }
+}</code></pre>
+<div class="out">$ curl -s http://127.0.0.1:8080/f-last/abc
+DICH: uri=[/dich] request_uri=[/f-last/abc] args=[]
+$ curl -s -o /dev/null -w '%{http_code}  Location: %{redirect_url}\\n' http://127.0.0.1:8080/f-redirect/abc
+302  Location: http://127.0.0.1:8080/dich?tu=redirect
+$ curl -s -o /dev/null -w '%{http_code}  Location: %{redirect_url}\\n' http://127.0.0.1:8080/f-permanent/abc
+301  Location: http://127.0.0.1:8080/dich?tu=permanent
+$ curl -s http://127.0.0.1:8080/f-khong/abc
+sau HAI rewrite: uri=[/buoc-2-abc]
+$ curl -s http://127.0.0.1:8080/f-break/abc
+TEP DICH (tep tinh /dich trong root)
+$ curl -s http://127.0.0.1:8080/f-break2/abc
+TEP DICH (tep tinh /dich trong root)
+$ curl -s -o /dev/null -w 'KHONG co, dich co scheme -&gt; %{http_code}  Location: %{redirect_url}\\n' http://127.0.0.1:8080/f-scheme/abc
+KHONG co, dich co scheme -&gt; 302  Location: http://vidu.com/abc
+$ curl -s 'http://127.0.0.1:8080/f-q1/abc?utm=x&amp;id=7'
+DICH: uri=[/dich] request_uri=[/f-q1/abc?utm=x&amp;id=7] args=[utm=x&amp;id=7]
+$ curl -s 'http://127.0.0.1:8080/f-q2/abc?utm=x&amp;id=7'
+DICH: uri=[/dich] request_uri=[/f-q2/abc?utm=x&amp;id=7] args=[]
+$ curl -s -o /dev/null -w 'vong-a &lt;-&gt; vong-b -&gt; %{http_code}\\n' http://127.0.0.1:8080/vong-a; grep -m1 -o 'rewrite or internal redirection cycle[^,]*' /srv/logs/error.log
+vong-a &lt;-&gt; vong-b -&gt; 500
+rewrite or internal redirection cycle while processing "/vong-b"</div>
+<p>last ended in <code>/dich</code> with the original <code>$request_uri</code>; redirect and permanent sent 302 and 301; no flag chained into <code>/buoc-2-abc</code>. <code>break</code> + <code>return</code> served the FILE, exactly like <code>break</code> alone. With no flag but an <code>http://</code> target nginx still sent 302; the query string was appended (<code>args=[utm=x&amp;id=7]</code>) until a trailing <code>?</code> dropped it; two blocks rewriting into each other died with 500 and "rewrite or internal redirection cycle".</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-3-grep-regex" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.3 — grep, and just enough regular expression</span><span class="lc-sub">The regex half of every rewrite</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-2-chuyen-huong" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">API Design · 11.3 — Interview: a URL shortener (2) — 301 or 302</span><span class="lc-sub">Choosing between 301 and 302 in a real design</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>rewrite</code></span><span class="v">A regex, a replacement, and a flag; the flag decides what happens to the request.</span></div>
+  <div class="kv"><span class="k"><code>last</code></span><span class="v">Restart location matching with the rewritten URI — <code>\$uri</code> changes, <code>\$request_uri</code> does not.</span></div>
+  <div class="kv"><span class="k"><code>break</code></span><span class="v">Stop the rewrite module and handle content in this block; any <code>rewrite</code>/<code>set</code>/<code>if</code>/<code>return</code> below it is skipped.</span></div>
+  <div class="kv"><span class="k"><code>redirect</code> / <code>permanent</code></span><span class="v">Send the client a <code>302</code> / <code>301</code> — visible in the browser and costs a round trip.</span></div>
+  <div class="kv"><span class="k">(no flag)</span><span class="v">Rewrite and keep going, so later <code>rewrite</code> directives in the block run against the new value.</span></div>
+  <div class="kv"><span class="k">rewrite cycle</span><span class="v">Ten internal redirects ends the request with <code>500</code> and "rewrite or internal redirection cycle".</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A <code>rewrite</code> is regex + replacement + flag, and the flag is the part that changes the behaviour.</li><li><code>last</code> re-runs location matching; <code>break</code> stays put and silently skips any rewrite-family directive below it, <code>return</code> included.</li><li><code>redirect</code>/<code>permanent</code> go out to the browser; a replacement starting with a scheme forces a <code>302</code> even with no flag.</li><li>A trailing <code>?</code> drops the query string; otherwise the original arguments are appended.</li><li>For a fixed path that moved, prefer <code>return 301</code> over <code>rewrite</code> — cheaper and clearer.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html" target="_blank" rel="noopener"><span class="lc-ico">✏️</span><span class="lc-body"><span class="lc-title">nginx — the rewrite module</span><span class="lc-sub">nginx.org · All four flags, and the list of directives break stops</span></span></a>
@@ -158,6 +228,70 @@ location = /cu-cu-cu { return 301 /moi; }   <span class="tok-comment"># rẻ hơ
 <p><strong>Gỡ lỗi một lệnh rewrite thế nào.</strong> Hãy thêm tạm <code>return 200 "\$uri | \$request_uri | \$args";</code> vào cái khối bạn NGHĨ là đang xử lý request, rồi gửi MỘT request. Bạn sẽ thấy ngay lập tức rằng lệnh rewrite có nổ không, nó tạo ra cái gì, và bạn có đang ở đúng cái khối mình tưởng không. Ngồi đọc một chuỗi biểu thức chính quy thì chậm hơn nhiều và, như phép đo về <code>break</code> cho thấy, có thể SAI một cách rất tự tin.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Một khối đích in <code>$uri</code>, <code>$request_uri</code> và <code>$args</code>, mỗi cờ một khối, rồi ba luật — scheme trong chuỗi thay thế, dấu <code>?</code> ở cuối, và một vòng rewrite — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    root /srv/site;
+    location /dich        { return 200 "DICH: uri=[$uri] request_uri=[$request_uri] args=[$args]\\n"; }
+    location /f-last/     { rewrite ^/f-last/(.*)$      /dich last; }
+    location /f-redirect/ { rewrite ^/f-redirect/(.*)$  /dich?tu=redirect redirect; }
+    location /f-permanent/{ rewrite ^/f-permanent/(.*)$ /dich?tu=permanent permanent; }
+    location /f-khong/    { rewrite ^/f-khong/(.*)$ /buoc-1-$1;          <span class="tok-comment">  # không cờ: đi tiếp</span>
+                            rewrite ^/buoc-1-(.*)$  /buoc-2-$1;
+                            return 200 "sau HAI rewrite: uri=[$uri]\\n"; }
+    location /f-break/    { rewrite ^/f-break/(.*)$  /dich break;        <span class="tok-comment">  # break rồi return: return có chạy không?</span>
+                            return 200 "RETURN NAY CO CHAY KHONG?\\n"; }
+    location /f-break2/   { rewrite ^/f-break2/(.*)$ /dich break; }     <span class="tok-comment">  # break, không có return</span>
+    location /f-scheme/   { rewrite ^/f-scheme/(.*)$ http://vidu.com/$1; } # KHÔNG cờ nhưng đích có scheme
+    location /f-q1/       { rewrite ^/f-q1/(.*)$ /dich  last; }          <span class="tok-comment">  # query string được NỐI vào</span>
+    location /f-q2/       { rewrite ^/f-q2/(.*)$ /dich? last; }          <span class="tok-comment">  # dấu ? ở cuối: VỨT query string</span>
+    location /vong-a      { rewrite ^ /vong-b last; }                    <span class="tok-comment">  # hai khối viết lại qua lại</span>
+    location /vong-b      { rewrite ^ /vong-a last; }
+  }
+}</code></pre>
+<div class="out">$ curl -s http://127.0.0.1:8080/f-last/abc
+DICH: uri=[/dich] request_uri=[/f-last/abc] args=[]
+$ curl -s -o /dev/null -w '%{http_code}  Location: %{redirect_url}\\n' http://127.0.0.1:8080/f-redirect/abc
+302  Location: http://127.0.0.1:8080/dich?tu=redirect
+$ curl -s -o /dev/null -w '%{http_code}  Location: %{redirect_url}\\n' http://127.0.0.1:8080/f-permanent/abc
+301  Location: http://127.0.0.1:8080/dich?tu=permanent
+$ curl -s http://127.0.0.1:8080/f-khong/abc
+sau HAI rewrite: uri=[/buoc-2-abc]
+$ curl -s http://127.0.0.1:8080/f-break/abc
+TEP DICH (tep tinh /dich trong root)
+$ curl -s http://127.0.0.1:8080/f-break2/abc
+TEP DICH (tep tinh /dich trong root)
+$ curl -s -o /dev/null -w 'KHONG co, dich co scheme -&gt; %{http_code}  Location: %{redirect_url}\\n' http://127.0.0.1:8080/f-scheme/abc
+KHONG co, dich co scheme -&gt; 302  Location: http://vidu.com/abc
+$ curl -s 'http://127.0.0.1:8080/f-q1/abc?utm=x&amp;id=7'
+DICH: uri=[/dich] request_uri=[/f-q1/abc?utm=x&amp;id=7] args=[utm=x&amp;id=7]
+$ curl -s 'http://127.0.0.1:8080/f-q2/abc?utm=x&amp;id=7'
+DICH: uri=[/dich] request_uri=[/f-q2/abc?utm=x&amp;id=7] args=[]
+$ curl -s -o /dev/null -w 'vong-a &lt;-&gt; vong-b -&gt; %{http_code}\\n' http://127.0.0.1:8080/vong-a; grep -m1 -o 'rewrite or internal redirection cycle[^,]*' /srv/logs/error.log
+vong-a &lt;-&gt; vong-b -&gt; 500
+rewrite or internal redirection cycle while processing "/vong-b"</div>
+<p>last kết thúc ở <code>/dich</code> với <code>$request_uri</code> gốc; redirect và permanent gửi 302 và 301; không cờ thì nối thành <code>/buoc-2-abc</code>. <code>break</code> + <code>return</code> trả về TỆP, y hệt <code>break</code> đứng một mình. Không cờ nhưng đích có <code>http://</code> thì nginx vẫn gửi 302; query string được nối vào (<code>args=[utm=x&amp;id=7]</code>) cho tới khi dấu <code>?</code> ở cuối vứt nó đi; hai khối viết lại qua lại thì chết với 500 và "rewrite or internal redirection cycle".</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-3-grep-regex" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.3 — grep, và vừa đủ biểu thức chính quy</span><span class="lc-sub">Nửa regex của mọi lệnh rewrite</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-11-2-chuyen-huong" target="_blank" rel="noopener"><span class="lc-ico">🔌</span><span class="lc-body"><span class="lc-title">API Design · 11.3 — Phỏng vấn: rút gọn link (2) — 301 hay 302</span><span class="lc-sub">Chọn 301 hay 302 trong một thiết kế thật</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>rewrite</code></span><span class="v">Một regex, một chuỗi thay thế, và một cờ; cái cờ quyết định điều gì xảy ra với request.</span></div>
+  <div class="kv"><span class="k"><code>last</code></span><span class="v">Chạy lại phép khớp location với URI đã viết lại — <code>\$uri</code> đổi, <code>\$request_uri</code> thì không.</span></div>
+  <div class="kv"><span class="k"><code>break</code></span><span class="v">Dừng module rewrite và xử lý nội dung ngay trong khối này; mọi <code>rewrite</code>/<code>set</code>/<code>if</code>/<code>return</code> nằm dưới nó đều bị bỏ qua.</span></div>
+  <div class="kv"><span class="k"><code>redirect</code> / <code>permanent</code></span><span class="v">Gửi client một cú <code>302</code> / <code>301</code> — hiện ra ở trình duyệt và tốn một vòng đi về.</span></div>
+  <div class="kv"><span class="k">(không cờ)</span><span class="v">Viết lại rồi đi tiếp, nên các <code>rewrite</code> sau trong khối chạy trên giá trị mới.</span></div>
+  <div class="kv"><span class="k">rewrite cycle</span><span class="v">Mười cú chuyển hướng nội bộ làm request chết với <code>500</code> và dòng "rewrite or internal redirection cycle".</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một lệnh <code>rewrite</code> là regex + chuỗi thay thế + cờ, và cái cờ mới là phần làm đổi hành vi.</li><li><code>last</code> chạy lại phép khớp location; <code>break</code> ở lại và âm thầm bỏ qua mọi chỉ thị họ rewrite nằm dưới nó, kể cả <code>return</code>.</li><li><code>redirect</code>/<code>permanent</code> đi ra trình duyệt; một chuỗi thay thế bắt đầu bằng scheme ép thành <code>302</code> dù không viết cờ.</li><li>Một dấu <code>?</code> ở cuối vứt query string; ngược lại thì các tham số gốc được nối vào.</li><li>Với một đường dẫn cố định đã dời, hãy ưu tiên <code>return 301</code> hơn <code>rewrite</code> — rẻ hơn và rõ hơn.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html" target="_blank" rel="noopener"><span class="lc-ico">✏️</span><span class="lc-body"><span class="lc-title">nginx — module rewrite</span><span class="lc-sub">nginx.org · Cả bốn cờ, và danh sách các chỉ thị mà break dừng lại</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener"><span class="lc-ico">📍</span><span class="lc-body"><span class="lc-title">nginx — location và chuyển hướng nội bộ</span><span class="lc-sub">nginx.org · last THỰC SỰ kích hoạt cái gì, cùng ngôn ngữ với Bài 2.5</span></span></a>
@@ -175,6 +309,7 @@ location = /cu-cu-cu { return 301 /moi; }   <span class="tok-comment"># rẻ hơ
       type: 'LESSON',
       description: 'Cái tiêu đề đó là từ chính wiki của Nginx, và nó nghe như lời khuyên đạo đức cho tới khi bạn đem đo. Bài này dựng ba khối, và cái thứ ba biến một cú 200 thành 404 chỉ vì thêm một tham số query — cùng một tệp, cùng một cấu hình, khác đúng một chữ trên URL.',
       content: `
+${G08_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.2</span>
 <h2>Why "if is evil", measured three ways</h2>
@@ -247,6 +382,79 @@ if (\$request_uri ~ "^/cu/") { rewrite ^/cu/(.*)\$ /moi/\$1 permanent; }</code><
 <div class="note-ct">
 <p><strong>Why this lesson is short on nuance.</strong> There is a version of this that carefully explains when <code>if</code> is safe in a location and when it is not. The honest version is that the rule "only <code>return</code> and <code>rewrite</code>" is easy to remember, costs nothing, and makes probe 3 impossible — while the nuanced version requires everyone who ever edits the file to remember which directives are safe. <code>map</code> covers every other case and is clearer to read, so the trade is not close.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>The three probes, then the same jobs written with <code>map</code> — a bot header, an upstream chosen by method, and an AND as a combined key — on nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream doc { server 127.0.0.1:8091; }
+  upstream ghi { server 127.0.0.1:8092; }
+  server { listen 8091; return 200 "upstream DOC\\n"; }
+  server { listen 8092; return 200 "upstream GHI\\n"; }
+
+  map $http_user_agent $la_bot { default ""; "~*bot" "co"; }
+  map $request_method $dich_upstream { default "http://doc"; POST "http://ghi"; PUT "http://ghi"; }
+  map "$arg_a:$arg_b" $ca_hai { default "khong"; "~^1:1$" "CO"; }     <span class="tok-comment">  # phép AND bằng khoá ghép</span>
+
+  server {
+    listen 8080;
+    root /srv/www;
+    location /if-a/ {                                  <span class="tok-comment">  # 1) if + return: CHẠY đúng</span>
+      if ($arg_x = "1") { return 200 "if THAY x=1\\n"; }
+      return 200 "if KHONG thay\\n";
+    }
+    location /if-nguy/ {                               <span class="tok-comment">  # 2) add_header trong if</span>
+      if ($arg_x = "1") { add_header X-Trong-If "co" always; }
+      add_header X-Ngoai-If "co" always;
+      return 200 "xem header\\n";
+    }
+    location /if-tryfiles/ {                           <span class="tok-comment">  # 3) if + try_files</span>
+      if ($arg_x = "1") { add_header X-Da-Vao-If "co" always; }
+      try_files /dich =404;
+    }
+    location /map-bot/ { add_header X-Bot $la_bot always; return 200 "xem header\\n"; }
+    location /api/     { proxy_pass $dich_upstream; }
+    location /and/     { return 200 "a=1 VA b=1 ? $ca_hai\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for x in 1 2; do printf '?x=%s -&gt; ' $x; curl -s "http://127.0.0.1:8080/if-a/?x=$x"; done
+?x=1 -&gt; if THAY x=1
+?x=2 -&gt; if KHONG thay
+$ for x in 1 2; do printf '?x=%s -&gt; ' $x; curl -s -D - -o /dev/null "http://127.0.0.1:8080/if-nguy/?x=$x" | tr -d '\\r' | grep -iE '^x-(trong|ngoai)' | tr '\\n' ' '; echo; done
+?x=1 -&gt; X-Trong-If: co 
+?x=2 -&gt; X-Ngoai-If: co 
+$ for x in 2 1; do printf '?x=%s -&gt; ' $x; curl -s -D - -o /dev/null "http://127.0.0.1:8080/if-tryfiles/?x=$x" | tr -d '\\r' | grep -iE '^HTTP|^x-da' | tr '\\n' ' '; echo; done
+?x=2 -&gt; HTTP/1.1 200 OK 
+?x=1 -&gt; HTTP/1.1 404 Not Found X-Da-Vao-If: co 
+$ for ua in 'Mozilla/5.0' 'Googlebot/2.1'; do printf '%-14s -&gt; ' "$ua"; curl -s -D - -o /dev/null -A "$ua" http://127.0.0.1:8080/map-bot/ | tr -d '\\r' | grep -iE '^x-bot' || echo '(khong co X-Bot)'; done
+Mozilla/5.0    -&gt; (khong co X-Bot)
+Googlebot/2.1  -&gt; X-Bot: co
+$ for m in GET POST PUT; do printf '%-4s /api/ -&gt; ' $m; curl -s -X $m http://127.0.0.1:8080/api/; done
+GET  /api/ -&gt; upstream DOC
+POST /api/ -&gt; upstream GHI
+PUT  /api/ -&gt; upstream GHI
+$ for q in 'a=1&amp;b=1' 'a=1&amp;b=0' 'a=0&amp;b=1'; do printf '%-8s -&gt; ' "$q"; curl -s "http://127.0.0.1:8080/and/?$q"; done
+a=1&amp;b=1  -&gt; a=1 VA b=1 ? CO
+a=1&amp;b=0  -&gt; a=1 VA b=1 ? khong
+a=0&amp;b=1  -&gt; a=1 VA b=1 ? khong</div>
+<p>Probe 1 ran exactly as written. Probe 2: each request carried ONE of the two headers, never both. Probe 3: <code>?x=2</code> got 200, <code>?x=1</code> got 404 for the same real file. With <code>map</code>: only the bot user agent got <code>X-Bot</code>; GET reached the read upstream, POST and PUT the write one; only <code>a=1&amp;b=1</code> matched the combined key.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-security/learn?lessonSlug=sec-5-4-header" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">Web Security · 5.4 — Security headers checklist</span><span class="lc-sub">The headers an if can silently remove</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/web-security/learn?lessonSlug=sec-5-2-cors" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">Web Security · 5.2 — CORS misconfigurations</span><span class="lc-sub">What a conditional CORS header can break</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>if</code></span><span class="v">Inside a location it only truly supports <code>return</code> and <code>rewrite</code>; anything else is a trap.</span></div>
+  <div class="kv"><span class="k">nested location</span><span class="v">An <code>if</code> block is an anonymous location, not a conditional statement.</span></div>
+  <div class="kv"><span class="k">array inheritance</span><span class="v">One <code>add_header</code> in the <code>if</code> block replaces the whole inherited list (Lesson 2.3).</span></div>
+  <div class="kv"><span class="k">soft failure</span><span class="v">The bug only fires when the condition is true, so testing looks fine and production breaks.</span></div>
+  <div class="kv"><span class="k"><code>map</code> (the fix)</span><span class="v">A lazy, <code>http</code>-level lookup table that replaces almost every <code>if</code>.</span></div>
+  <div class="kv"><span class="k">combined key</span><span class="v">Build one string from two variables to express an AND that nginx lacks.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>"If is evil" is about <code>if</code> inside a location: it is only safe with <code>return</code> or <code>rewrite</code>.</li><li>An <code>if</code> block is a nested anonymous location, so array-inherited directives like <code>add_header</code> get replaced, not added.</li><li>A <code>try_files</code> in an <code>if</code>-guarded location can vanish, turning a <code>200</code> into a <code>404</code> on one query parameter.</li><li>Replace conditions with <code>map</code> — lazy, evaluated once, and it does not restructure the config.</li><li><code>if</code> at <code>server</code> level with a <code>return</code> (the HTTPS redirect) is a normal, safe pattern.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://www.nginx.com/resources/wiki/start/topics/depth/ifisevil/" target="_blank" rel="noopener"><span class="lc-ico">😈</span><span class="lc-body"><span class="lc-title">nginx wiki — If is evil</span><span class="lc-sub">nginx.com · The original page, with the same failures explained from the source side</span></span></a>
@@ -329,6 +537,79 @@ if (\$request_uri ~ "^/cu/") { rewrite ^/cu/(.*)\$ /moi/\$1 permanent; }</code><
 <p><strong>Vì sao bài này ít sắc thái.</strong> Có một phiên bản của bài này giải thích cẩn thận khi nào <code>if</code> an toàn trong một location và khi nào thì không. Phiên bản THẬT THÀ là: cái luật "chỉ <code>return</code> và <code>rewrite</code>" dễ nhớ, chẳng tốn gì, và nó làm cho phép dò 3 KHÔNG THỂ xảy ra — trong khi phiên bản nhiều sắc thái đòi hỏi MỌI người từng sửa cái file đó phải nhớ được chỉ thị nào là an toàn. <code>map</code> lo hết mọi trường hợp còn lại và dễ đọc hơn, nên cuộc đổi chác này không cân sức.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Ba phép dò, rồi đúng những việc đó viết bằng <code>map</code> — một header cho bot, upstream chọn theo phương thức, và một phép VÀ bằng khoá ghép — trên nginx/1.24.0:</p>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  upstream doc { server 127.0.0.1:8091; }
+  upstream ghi { server 127.0.0.1:8092; }
+  server { listen 8091; return 200 "upstream DOC\\n"; }
+  server { listen 8092; return 200 "upstream GHI\\n"; }
+
+  map $http_user_agent $la_bot { default ""; "~*bot" "co"; }
+  map $request_method $dich_upstream { default "http://doc"; POST "http://ghi"; PUT "http://ghi"; }
+  map "$arg_a:$arg_b" $ca_hai { default "khong"; "~^1:1$" "CO"; }     <span class="tok-comment">  # phép AND bằng khoá ghép</span>
+
+  server {
+    listen 8080;
+    root /srv/www;
+    location /if-a/ {                                  <span class="tok-comment">  # 1) if + return: CHẠY đúng</span>
+      if ($arg_x = "1") { return 200 "if THAY x=1\\n"; }
+      return 200 "if KHONG thay\\n";
+    }
+    location /if-nguy/ {                               <span class="tok-comment">  # 2) add_header trong if</span>
+      if ($arg_x = "1") { add_header X-Trong-If "co" always; }
+      add_header X-Ngoai-If "co" always;
+      return 200 "xem header\\n";
+    }
+    location /if-tryfiles/ {                           <span class="tok-comment">  # 3) if + try_files</span>
+      if ($arg_x = "1") { add_header X-Da-Vao-If "co" always; }
+      try_files /dich =404;
+    }
+    location /map-bot/ { add_header X-Bot $la_bot always; return 200 "xem header\\n"; }
+    location /api/     { proxy_pass $dich_upstream; }
+    location /and/     { return 200 "a=1 VA b=1 ? $ca_hai\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for x in 1 2; do printf '?x=%s -&gt; ' $x; curl -s "http://127.0.0.1:8080/if-a/?x=$x"; done
+?x=1 -&gt; if THAY x=1
+?x=2 -&gt; if KHONG thay
+$ for x in 1 2; do printf '?x=%s -&gt; ' $x; curl -s -D - -o /dev/null "http://127.0.0.1:8080/if-nguy/?x=$x" | tr -d '\\r' | grep -iE '^x-(trong|ngoai)' | tr '\\n' ' '; echo; done
+?x=1 -&gt; X-Trong-If: co 
+?x=2 -&gt; X-Ngoai-If: co 
+$ for x in 2 1; do printf '?x=%s -&gt; ' $x; curl -s -D - -o /dev/null "http://127.0.0.1:8080/if-tryfiles/?x=$x" | tr -d '\\r' | grep -iE '^HTTP|^x-da' | tr '\\n' ' '; echo; done
+?x=2 -&gt; HTTP/1.1 200 OK 
+?x=1 -&gt; HTTP/1.1 404 Not Found X-Da-Vao-If: co 
+$ for ua in 'Mozilla/5.0' 'Googlebot/2.1'; do printf '%-14s -&gt; ' "$ua"; curl -s -D - -o /dev/null -A "$ua" http://127.0.0.1:8080/map-bot/ | tr -d '\\r' | grep -iE '^x-bot' || echo '(khong co X-Bot)'; done
+Mozilla/5.0    -&gt; (khong co X-Bot)
+Googlebot/2.1  -&gt; X-Bot: co
+$ for m in GET POST PUT; do printf '%-4s /api/ -&gt; ' $m; curl -s -X $m http://127.0.0.1:8080/api/; done
+GET  /api/ -&gt; upstream DOC
+POST /api/ -&gt; upstream GHI
+PUT  /api/ -&gt; upstream GHI
+$ for q in 'a=1&amp;b=1' 'a=1&amp;b=0' 'a=0&amp;b=1'; do printf '%-8s -&gt; ' "$q"; curl -s "http://127.0.0.1:8080/and/?$q"; done
+a=1&amp;b=1  -&gt; a=1 VA b=1 ? CO
+a=1&amp;b=0  -&gt; a=1 VA b=1 ? khong
+a=0&amp;b=1  -&gt; a=1 VA b=1 ? khong</div>
+<p>Phép dò 1 chạy đúng như viết. Phép dò 2: mỗi request chỉ mang MỘT trong hai header, không bao giờ cả hai. Phép dò 3: <code>?x=2</code> ra 200, <code>?x=1</code> ra 404 cho cùng một tệp có thật. Với <code>map</code>: chỉ user agent bot nhận <code>X-Bot</code>; GET tới upstream đọc, POST và PUT tới upstream ghi; chỉ <code>a=1&amp;b=1</code> khớp khoá ghép.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/web-security/learn?lessonSlug=sec-5-4-header" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">Web Security · 5.4 — Checklist header bảo mật</span><span class="lc-sub">Những header mà một cái if có thể âm thầm gỡ đi</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/web-security/learn?lessonSlug=sec-5-2-cors" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">Web Security · 5.2 — Cấu hình CORS sai</span><span class="lc-sub">Một header CORS có điều kiện có thể làm hỏng gì</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>if</code></span><span class="v">Trong một location chỉ thật sự hỗ trợ <code>return</code> và <code>rewrite</code>; mọi thứ khác đều là bẫy.</span></div>
+  <div class="kv"><span class="k">nested location</span><span class="v">Một khối <code>if</code> là một location vô danh, không phải một câu lệnh điều kiện.</span></div>
+  <div class="kv"><span class="k">array inheritance</span><span class="v">Một <code>add_header</code> trong khối <code>if</code> thay thế cả danh sách thừa hưởng (Bài 2.3).</span></div>
+  <div class="kv"><span class="k">soft failure</span><span class="v">Lỗi chỉ nổ khi điều kiện đúng, nên lúc thử nghiệm trông vẫn ổn còn production thì hỏng.</span></div>
+  <div class="kv"><span class="k"><code>map</code> (cách sửa)</span><span class="v">Bảng tra ở tầng <code>http</code>, tính lười, thay thế gần như mọi cái <code>if</code>.</span></div>
+  <div class="kv"><span class="k">combined key</span><span class="v">Dựng một chuỗi từ hai biến để diễn đạt phép AND mà nginx không có.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>"If là quỷ dữ" nói về <code>if</code> nằm trong một location: chỉ an toàn khi đi với <code>return</code> hoặc <code>rewrite</code>.</li><li>Một khối <code>if</code> là một location lồng vô danh, nên các chỉ thị thừa hưởng dạng mảng như <code>add_header</code> bị thay thế chứ không được cộng thêm.</li><li>Một <code>try_files</code> trong một location có <code>if</code> có thể biến mất, biến <code>200</code> thành <code>404</code> chỉ vì một tham số query.</li><li>Hãy thay điều kiện bằng <code>map</code> — tính lười, tính một lần, và không tái cấu trúc cấu hình.</li><li><code>if</code> ở tầng <code>server</code> đi với một <code>return</code> (cú chuyển hướng HTTPS) là một khuôn mẫu bình thường và an toàn.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://www.nginx.com/resources/wiki/start/topics/depth/ifisevil/" target="_blank" rel="noopener"><span class="lc-ico">😈</span><span class="lc-body"><span class="lc-title">nginx wiki — If is evil</span><span class="lc-sub">nginx.com · Trang gốc, giải thích cùng những kiểu hỏng ấy từ phía mã nguồn</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_map_module.html" target="_blank" rel="noopener"><span class="lc-ico">🗺️</span><span class="lc-body"><span class="lc-title">nginx — module map</span><span class="lc-sub">nginx.org · Tính lười, default, khoá dạng tên miền và dạng regex</span></span></a>
@@ -346,6 +627,7 @@ if (\$request_uri ~ "^/cu/") { rewrite ^/cu/(.*)\$ /moi/\$1 permanent; }</code><
       type: 'LESSON',
       description: 'map nhận một biến vào và cho một biến ra, và nó làm được mọi thứ mà cái if ở Bài 8.2 định làm — mà không dựng ra một location lồng nào. Bài này đo cả bốn kiểu khoá, cả chế độ tên miền, cả việc nối hai map lại, và cả cách viết thay cho phép AND mà Nginx không có.',
       content: `
+${G08_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.3</span>
 <h2>map: the lookup table that replaces every if</h2>
@@ -431,6 +713,84 @@ limit_req_zone \$khoa_gioi_han zone=chung:10m rate=20r/s;</code></pre>
 <div class="note-ct">
 <p><strong>The mental shift worth making.</strong> Nginx configuration is declarative, and <code>map</code> is the declarative way to express a decision: a table from input to output, evaluated when needed, with no effect on anything else. <code>if</code> is the imperative way, and it does not fit — which is why it creates a nested location and why Lesson 8.2's third probe returned a <code>404</code>. Every time you catch yourself wanting a condition, write the table instead; after a few of them the table starts to feel like the natural form.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>Four kinds of key, <code>hostnames</code>, one map reading another, the combined key with a separator collision, and a redirect table in its own file — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># chuyen-huong.map</span>
+/cu/gioi-thieu   /ve-chung-toi;
+/cu/bang-gia     /gia;
+/blog/2019/xin-chao  /tin/xin-chao;</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  map $arg_v $ket_qua {
+    default          "MAC-DINH";
+    "a"              "khop-chinh-xac-a";
+    "~^so-(\\d+)$"    "regex-bat-duoc-$1";   <span class="tok-comment">  # ~  phân biệt hoa thường, nhóm bắt dùng được</span>
+    "~*^HOA"         "regex-khong-phan-biet"; # ~* không phân biệt
+  }
+  map $http_host $nhom {
+    hostnames;
+    default    "khac";
+    vidu.com   "chinh";
+    *.vidu.com "con";
+    vidu.*     "moi-duoi";
+  }
+  map $ket_qua $noi_tiep { default "khac"; "MAC-DINH" "day-la-mac-dinh"; "~^regex-" "day-la-regex"; } <span class="tok-comment">  # map đọc kết quả map khác</span>
+  map "$arg_a:$arg_b" $ca_hai { default "khong"; "~^co:co$" "CA HAI deu co"; }
+  map $request_uri $dich_cu { include chuyen-huong.map; }     <span class="tok-comment">  # bảng chuyển hướng trong tệp riêng</span>
+  server {
+    listen 8080;
+    location /k/   { return 200 "?v=$arg_v -&gt; $ket_qua\\n"; }
+    location /h/   { return 200 "Host: $http_host -&gt; $nhom\\n"; }
+    location /n/   { return 200 "ket_qua=[$ket_qua] noi_tiep=[$noi_tiep]\\n"; }
+    location /and/ { return 200 "a=$arg_a b=$arg_b -&gt; $ca_hai   (khoa ghep: [$arg_a:$arg_b])\\n"; }
+    location /     { if ($dich_cu) { return 301 $dich_cu; }  return 200 "khong co trong bang: $request_uri\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for v in '' a so-42 HOA-abc hoa-abc gi-do; do curl -s "http://127.0.0.1:8080/k/?v=$v"; done
+?v= -&gt; MAC-DINH
+?v=a -&gt; khop-chinh-xac-a
+?v=so-42 -&gt; regex-bat-duoc-42
+?v=HOA-abc -&gt; regex-khong-phan-biet
+?v=hoa-abc -&gt; regex-khong-phan-biet
+?v=gi-do -&gt; MAC-DINH
+$ for h in vidu.com api.vidu.com vidu.vn khac.com; do curl -s -H "Host: $h" http://127.0.0.1:8080/h/; done
+Host: vidu.com -&gt; chinh
+Host: api.vidu.com -&gt; con
+Host: vidu.vn -&gt; moi-duoi
+Host: khac.com -&gt; khac
+$ curl -s 'http://127.0.0.1:8080/n/?v=so-42'
+ket_qua=[regex-bat-duoc-42] noi_tiep=[day-la-regex]
+$ for q in 'a=co&amp;b=co' 'a=co&amp;b=khong' 'a=khong&amp;b=co'; do curl -s "http://127.0.0.1:8080/and/?$q"; done
+a=co b=co -&gt; CA HAI deu co   (khoa ghep: [co:co])
+a=co b=khong -&gt; khong   (khoa ghep: [co:khong])
+a=khong b=co -&gt; khong   (khoa ghep: [khong:co])
+$ for q in 'a=x:y&amp;b=z' 'a=x&amp;b=y:z'; do curl -s "http://127.0.0.1:8080/and/?$q"; done
+a=x:y b=z -&gt; khong   (khoa ghep: [x:y:z])
+a=x b=y:z -&gt; khong   (khoa ghep: [x:y:z])
+$ for u in /cu/gioi-thieu /cu/bang-gia /blog/2019/xin-chao /khac; do curl -s -o /dev/null -w "$u -&gt; %{http_code} %{redirect_url}\\n" http://127.0.0.1:8080$u; done
+/cu/gioi-thieu -&gt; 301 http://127.0.0.1:8080/ve-chung-toi
+/cu/bang-gia -&gt; 301 http://127.0.0.1:8080/gia
+/blog/2019/xin-chao -&gt; 301 http://127.0.0.1:8080/tin/xin-chao
+/khac -&gt; 200 </div>
+<p>The capture group worked on the right (<code>regex-bat-duoc-42</code>); <code>~*</code> matched both cases. <code>hostnames</code> matched <code>*.vidu.com</code> and <code>vidu.*</code> label by label. NEW: <code>a=x:y&amp;b=z</code> and <code>a=x&amp;b=y:z</code> built the SAME key <code>x:y:z</code> — choose a separator that cannot occur in the values. The table file gave three 301s, and an unknown path went through untouched.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/dsa-interview/learn?lessonSlug=dsa-1-1-hash-map" target="_blank" rel="noopener"><span class="lc-ico">🧮</span><span class="lc-body"><span class="lc-title">DSA Interview · 1.1 — Hash maps and sets</span><span class="lc-sub">Why exact keys cost one lookup however many there are</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-3-grep-regex" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.3 — grep, and just enough regular expression</span><span class="lc-sub">The regex keys</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>map</code></span><span class="v">Declares "given this variable, produce that one"; lives at <code>http</code> level.</span></div>
+  <div class="kv"><span class="k"><code>default</code></span><span class="v">Catches everything else, including the empty string.</span></div>
+  <div class="kv"><span class="k">exact vs regex keys</span><span class="v">Exact keys are one hash lookup; regex keys (<code>~</code>, <code>~*</code>) are tried in order after them.</span></div>
+  <div class="kv"><span class="k"><code>hostnames</code></span><span class="v">Enables <code>*.name</code> and <code>name.*</code> wildcard matching, like <code>server_name</code>.</span></div>
+  <div class="kv"><span class="k">chaining</span><span class="v">One <code>map</code> can read another map's output to build complex decisions from flat tables.</span></div>
+  <div class="kv"><span class="k"><code>volatile</code></span><span class="v">Disables per-request caching of the result so it is recomputed.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A <code>map</code> is a lazy, <code>http</code>-level lookup from one variable to another, costing nothing until read.</li><li>Exact keys are a single hash operation (a 1000-row table is as fast as a 3-row one); regex keys follow in order.</li><li>An absent or empty <code>default</code> is often what you want — an empty value disables <code>add_header</code> or <code>limit_req</code>.</li><li><code>hostnames</code> enables wildcard host matching; <code>include</code> pulls a large table into its own file.</li><li>There is no <code>&amp;&amp;</code>; build a combined key string and match a pattern against it, with a safe separator.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_map_module.html" target="_blank" rel="noopener"><span class="lc-ico">🗺️</span><span class="lc-body"><span class="lc-title">nginx — the map module</span><span class="lc-sub">nginx.org · hostnames, volatile, include and the matching order</span></span></a>
@@ -526,6 +886,84 @@ limit_req_zone \$khoa_gioi_han zone=chung:10m rate=20r/s;</code></pre>
 <p><strong>Cú chuyển dịch trong đầu đáng làm.</strong> Cấu hình Nginx là KHAI BÁO, và <code>map</code> là cách khai báo để diễn đạt một quyết định: một cái BẢNG từ đầu vào tới đầu ra, tính khi cần, không ảnh hưởng tới thứ gì khác. <code>if</code> là cách MỆNH LỆNH, và nó KHÔNG vừa — đó là lý do nó tạo ra một location lồng và là lý do phép dò thứ ba của Bài 8.2 trả về <code>404</code>. Mỗi lần bắt gặp mình đang muốn một câu điều kiện, hãy viết cái bảng thay vào; sau vài lần thì cái bảng bắt đầu thấy như dạng TỰ NHIÊN.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Bốn kiểu khoá, <code>hostnames</code>, một map đọc map khác, khoá ghép với một vụ đụng dấu ngăn, và một bảng chuyển hướng trong tệp riêng — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># chuyen-huong.map</span>
+/cu/gioi-thieu   /ve-chung-toi;
+/cu/bang-gia     /gia;
+/blog/2019/xin-chao  /tin/xin-chao;</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  map $arg_v $ket_qua {
+    default          "MAC-DINH";
+    "a"              "khop-chinh-xac-a";
+    "~^so-(\\d+)$"    "regex-bat-duoc-$1";   <span class="tok-comment">  # ~  phân biệt hoa thường, nhóm bắt dùng được</span>
+    "~*^HOA"         "regex-khong-phan-biet"; # ~* không phân biệt
+  }
+  map $http_host $nhom {
+    hostnames;
+    default    "khac";
+    vidu.com   "chinh";
+    *.vidu.com "con";
+    vidu.*     "moi-duoi";
+  }
+  map $ket_qua $noi_tiep { default "khac"; "MAC-DINH" "day-la-mac-dinh"; "~^regex-" "day-la-regex"; } <span class="tok-comment">  # map đọc kết quả map khác</span>
+  map "$arg_a:$arg_b" $ca_hai { default "khong"; "~^co:co$" "CA HAI deu co"; }
+  map $request_uri $dich_cu { include chuyen-huong.map; }     <span class="tok-comment">  # bảng chuyển hướng trong tệp riêng</span>
+  server {
+    listen 8080;
+    location /k/   { return 200 "?v=$arg_v -&gt; $ket_qua\\n"; }
+    location /h/   { return 200 "Host: $http_host -&gt; $nhom\\n"; }
+    location /n/   { return 200 "ket_qua=[$ket_qua] noi_tiep=[$noi_tiep]\\n"; }
+    location /and/ { return 200 "a=$arg_a b=$arg_b -&gt; $ca_hai   (khoa ghep: [$arg_a:$arg_b])\\n"; }
+    location /     { if ($dich_cu) { return 301 $dich_cu; }  return 200 "khong co trong bang: $request_uri\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for v in '' a so-42 HOA-abc hoa-abc gi-do; do curl -s "http://127.0.0.1:8080/k/?v=$v"; done
+?v= -&gt; MAC-DINH
+?v=a -&gt; khop-chinh-xac-a
+?v=so-42 -&gt; regex-bat-duoc-42
+?v=HOA-abc -&gt; regex-khong-phan-biet
+?v=hoa-abc -&gt; regex-khong-phan-biet
+?v=gi-do -&gt; MAC-DINH
+$ for h in vidu.com api.vidu.com vidu.vn khac.com; do curl -s -H "Host: $h" http://127.0.0.1:8080/h/; done
+Host: vidu.com -&gt; chinh
+Host: api.vidu.com -&gt; con
+Host: vidu.vn -&gt; moi-duoi
+Host: khac.com -&gt; khac
+$ curl -s 'http://127.0.0.1:8080/n/?v=so-42'
+ket_qua=[regex-bat-duoc-42] noi_tiep=[day-la-regex]
+$ for q in 'a=co&amp;b=co' 'a=co&amp;b=khong' 'a=khong&amp;b=co'; do curl -s "http://127.0.0.1:8080/and/?$q"; done
+a=co b=co -&gt; CA HAI deu co   (khoa ghep: [co:co])
+a=co b=khong -&gt; khong   (khoa ghep: [co:khong])
+a=khong b=co -&gt; khong   (khoa ghep: [khong:co])
+$ for q in 'a=x:y&amp;b=z' 'a=x&amp;b=y:z'; do curl -s "http://127.0.0.1:8080/and/?$q"; done
+a=x:y b=z -&gt; khong   (khoa ghep: [x:y:z])
+a=x b=y:z -&gt; khong   (khoa ghep: [x:y:z])
+$ for u in /cu/gioi-thieu /cu/bang-gia /blog/2019/xin-chao /khac; do curl -s -o /dev/null -w "$u -&gt; %{http_code} %{redirect_url}\\n" http://127.0.0.1:8080$u; done
+/cu/gioi-thieu -&gt; 301 http://127.0.0.1:8080/ve-chung-toi
+/cu/bang-gia -&gt; 301 http://127.0.0.1:8080/gia
+/blog/2019/xin-chao -&gt; 301 http://127.0.0.1:8080/tin/xin-chao
+/khac -&gt; 200 </div>
+<p>Nhóm bắt dùng được ở vế phải (<code>regex-bat-duoc-42</code>); <code>~*</code> khớp cả hai kiểu chữ. <code>hostnames</code> khớp <code>*.vidu.com</code> và <code>vidu.*</code> theo từng nhãn. MỚI: <code>a=x:y&amp;b=z</code> và <code>a=x&amp;b=y:z</code> dựng ra CÙNG một khoá <code>x:y:z</code> — hãy chọn dấu ngăn không thể có trong giá trị. Tệp bảng cho ba cú 301, và một đường dẫn lạ đi qua nguyên vẹn.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/dsa-interview/learn?lessonSlug=dsa-1-1-hash-map" target="_blank" rel="noopener"><span class="lc-ico">🧮</span><span class="lc-body"><span class="lc-title">DSA Interview · 1.1 — Hash map và set</span><span class="lc-sub">Vì sao khoá chính xác chỉ tốn một lần tra dù có bao nhiêu</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/linux-bash/learn?lessonSlug=lnx-3-3-grep-regex" target="_blank" rel="noopener"><span class="lc-ico">🐧</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash · 3.3 — grep, và vừa đủ biểu thức chính quy</span><span class="lc-sub">Phần khoá regex</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>map</code></span><span class="v">Khai báo "cho biến này thì sinh ra biến kia"; sống ở tầng <code>http</code>.</span></div>
+  <div class="kv"><span class="k"><code>default</code></span><span class="v">Vớt hết phần còn lại, kể cả chuỗi rỗng.</span></div>
+  <div class="kv"><span class="k">exact vs regex keys</span><span class="v">Khoá chính xác là một phép tra băm; khoá regex (<code>~</code>, <code>~*</code>) được thử theo thứ tự sau đó.</span></div>
+  <div class="kv"><span class="k"><code>hostnames</code></span><span class="v">Bật khớp ký tự đại diện <code>*.ten</code> và <code>ten.*</code>, như <code>server_name</code>.</span></div>
+  <div class="kv"><span class="k">chaining</span><span class="v">Một <code>map</code> đọc được kết quả của map khác để dựng quyết định phức tạp từ các bảng phẳng.</span></div>
+  <div class="kv"><span class="k"><code>volatile</code></span><span class="v">Tắt việc nhớ kết quả theo từng request, buộc tính lại.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một <code>map</code> là một phép tra ở tầng <code>http</code>, tính lười, từ một biến sang biến khác, không tốn gì tới khi được đọc.</li><li>Khoá chính xác là một thao tác băm (bảng nghìn dòng nhanh ngang ba dòng); khoá regex đi sau theo thứ tự.</li><li>Một <code>default</code> vắng hoặc rỗng thường là thứ bạn muốn — giá trị rỗng tắt <code>add_header</code> hay <code>limit_req</code>.</li><li><code>hostnames</code> bật khớp host dạng đại diện; <code>include</code> kéo một bảng lớn ra file riêng.</li><li>Không có <code>&amp;&amp;</code>; hãy dựng một chuỗi khoá ghép rồi khớp một mẫu với nó, với một dấu ngăn an toàn.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_map_module.html" target="_blank" rel="noopener"><span class="lc-ico">🗺️</span><span class="lc-body"><span class="lc-title">nginx — module map</span><span class="lc-sub">nginx.org · hostnames, volatile, include và thứ tự khớp</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#variables" target="_blank" rel="noopener"><span class="lc-ico">🔤</span><span class="lc-body"><span class="lc-title">nginx — các biến dựng sẵn</span><span class="lc-sub">nginx.org · Mọi thứ một map nhận làm đầu vào, gom trong một danh sách</span></span></a>
@@ -543,6 +981,7 @@ limit_req_zone \$khoa_gioi_han zone=chung:10m rate=20r/s;</code></pre>
       type: 'LESSON',
       description: 'Ba dạng của error_page cho ra ba mã trạng thái khác nhau từ cùng một trang lỗi — 404, 200 và 200 — và khác biệt là một dấu bằng. Kèm hai loại khối chỉ chạm tới được từ BÊN TRONG, và cái chỉ thị một chữ bịt lối vào từ ngoài.',
       content: `
+${G08_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.4</span>
 <h2>return, error_page, and the blocks nobody can reach</h2>
@@ -614,6 +1053,80 @@ location @json_404 {
 <div class="note-ct">
 <p><strong>The pattern these four directives share.</strong> <code>return</code>, <code>error_page</code>, <code>internal</code> and named locations are all ways to answer a request without leaving Nginx, and every one of them interacts with the internal-redirect machinery from Lesson 2.5. When one of them behaves oddly, the first question is which block ended up handling the request and what <code>\$uri</code> was by then — and a temporary <code>return 200 "\$uri"</code> in each candidate block answers it faster than reading the chain.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>The three <code>error_page</code> spellings, <code>internal</code>, a named fallback, the bare-<code>=</code> JSON trap, X-Accel-Redirect with a tiny app that checks access, and three kinds of <code>return</code> — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># kiem-quyen.js</span>
+// upstream (cổng 9801): ?ok=1 ⇒ thân RỖNG + X-Accel-Redirect (nginx gửi tệp); không ⇒ 403
+require('http').createServer((req, res) =&gt; {
+  if (req.url.includes('ok=1')) { res.writeHead(200, { 'X-Accel-Redirect': '/tep-rieng/hop-dong.pdf' }); return res.end(); }
+  res.writeHead(403); res.end('khong co quyen\\n');
+}).listen(9801, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    location = /trang-loi { return 200 "TRANG LOI: uri=[$uri]\\n"; }
+    location /loi-giu/ { error_page 404      /trang-loi; return 404; } <span class="tok-comment">  # không dấu =</span>
+    location /loi-doi/ { error_page 404 =    /trang-loi; return 404; } <span class="tok-comment">  # dấu = trần</span>
+    location /loi-200/ { error_page 404 =200 /trang-loi; return 404; } <span class="tok-comment">  # =200 tường minh</span>
+    location /noi-bo   { internal; return 200 "noi bo\\n"; }
+    location /thu-noi-bo/ { error_page 404 = /noi-bo; return 404; }
+    location /goi-ten/ { try_files /khong-co-dau @du-phong; }
+    location @du-phong { return 200 "DA VAO @du-phong: uri=[$uri]\\n"; }
+    location /api-dung/ { error_page 404 = @json_404;  return 404; }
+    location @json_404  { default_type application/json; return 404 '{"loi":"khong tim thay"}\\n'; }
+    location /api-sai/  { error_page 404 = @json_sai;  return 404; }
+    location @json_sai  { default_type application/json; return 200 '{"loi":"khong tim thay"}\\n'; } <span class="tok-comment">  # BẪY</span>
+    location /tai/      { proxy_pass http://127.0.0.1:9801; }             <span class="tok-comment">  # ứng dụng kiểm quyền</span>
+    location /tep-rieng/ { internal; alias /srv/rieng-tu/; }
+    location = /ghi     { return 204; }
+    location = /ip      { return 200 "$remote_addr\\n"; }
+    location = /health  { access_log off; return 200 "ok\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for p in loi-giu loi-doi loi-200; do printf '/%s/ -&gt; ma=' $p; curl -s -w '%{http_code}' -o /tmp/than "http://127.0.0.1:8080/$p/x"; printf '   %s' "$(cat /tmp/than)"; echo; done
+/loi-giu/ -&gt; ma=404   TRANG LOI: uri=[/trang-loi]
+/loi-doi/ -&gt; ma=200   TRANG LOI: uri=[/trang-loi]
+/loi-200/ -&gt; ma=200   TRANG LOI: uri=[/trang-loi]
+$ printf 'goi THANG /noi-bo              -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/noi-bo
+goi THANG /noi-bo              -&gt; 404
+$ printf 'qua error_page tu /thu-noi-bo/ -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than http://127.0.0.1:8080/thu-noi-bo/x; cat /tmp/than
+qua error_page tu /thu-noi-bo/ -&gt; 200  noi bo
+$ printf '/goi-ten/x -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than http://127.0.0.1:8080/goi-ten/x; cat /tmp/than
+/goi-ten/x -&gt; 200  DA VAO @du-phong: uri=[/goi-ten/x]
+$ for p in api-dung api-sai; do printf '/%s/x -&gt; ma=' $p; curl -s -w '%{http_code}' -o /tmp/than "http://127.0.0.1:8080/$p/x"; printf '   %s' "$(cat /tmp/than)"; echo; done
+/api-dung/x -&gt; ma=404   {"loi":"khong tim thay"}
+/api-sai/x -&gt; ma=200   {"loi":"khong tim thay"}
+$ printf 'KHONG quyen         -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than 'http://127.0.0.1:8080/tai/hop-dong'; cat /tmp/than
+KHONG quyen         -&gt; 403  khong co quyen
+$ printf 'CO quyen (?ok=1)    -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than 'http://127.0.0.1:8080/tai/hop-dong?ok=1'; cat /tmp/than
+CO quyen (?ok=1)    -&gt; 200  NOI DUNG HOP DONG (tep rieng tu)
+$ printf 'goi THANG /tep-rieng/hop-dong.pdf -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/tep-rieng/hop-dong.pdf
+goi THANG /tep-rieng/hop-dong.pdf -&gt; 404
+$ for p in ghi ip health; do printf '/%-7s -&gt; ' $p; curl -s -w '%{http_code} %{content_type}  ' -o /tmp/than http://127.0.0.1:8080/$p; cat /tmp/than; echo; done
+/ghi     -&gt; 204   
+/ip      -&gt; 200 text/plain  127.0.0.1
+
+/health  -&gt; 200 text/plain  ok</div>
+<p>No <code>=</code> kept 404; bare <code>=</code> and <code>=200</code> gave 200. <code>internal</code>: 404 directly, 200 through <code>error_page</code>. The named location still saw <code>/goi-ten/x</code>. A JSON handler returning 404 behind bare <code>=</code> gave 404 — the same handler returning 200 turned the miss into 200. X-Accel-Redirect: 403 without access, 200 + the file with it, 404 when the private path is called directly.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/seo-analytics/learn?lessonSlug=seo-1-3-ma-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">SEO &amp; Analytics · 1.3 — Status codes, redirects and soft 404s</span><span class="lc-sub">What a bare = does to search engines</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 10.2 — Object storage and presigned URLs</span><span class="lc-sub">The other way to hand out private files</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>return</code></span><span class="v">Answer from the config alone: a code, a code with text, or a <code>3xx</code> with a URL.</span></div>
+  <div class="kv"><span class="k"><code>error_page</code></span><span class="v">Maps a status to a page; the equals sign decides the final status.</span></div>
+  <div class="kv"><span class="k">bare <code>=</code></span><span class="v">Takes the status from the handler (a soft 404); <code>=NNN</code> sets it explicitly; no <code>=</code> keeps the original.</span></div>
+  <div class="kv"><span class="k"><code>internal</code></span><span class="v">Makes a location reachable only by internal redirects; a direct request gets <code>404</code>.</span></div>
+  <div class="kv"><span class="k">named location (<code>@name</code>)</span><span class="v">A target for <code>try_files</code>/<code>error_page</code> with no URL of its own; does not change <code>\$uri</code>.</span></div>
+  <div class="kv"><span class="k"><code>X-Accel-Redirect</code></span><span class="v">The app checks permission, then nginx serves the file from an <code>internal</code> location.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li><code>return</code> answers without a file or upstream: code, code+text, or <code>3xx</code>+URL (prefer it for fixed redirects).</li><li><code>error_page</code>'s equals sign is load-bearing: no <code>=</code> keeps the status, bare <code>=</code> takes the handler's, <code>=NNN</code> sets it.</li><li>A JSON error handler ending in <code>return 200</code> silently turns every <code>404</code> into a success — use <code>return 404</code>.</li><li><code>internal</code> guards blocks so they answer only internal redirects; named <code>@locations</code> have no URL and keep <code>\$uri</code>.</li><li><code>X-Accel-Redirect</code> is the correct way to serve authorised files without streaming them through the app.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — error_page and internal</span><span class="lc-sub">nginx.org · The three forms and exactly what each does to the status</span></span></a>
@@ -695,6 +1208,80 @@ location @json_404 {
 <p><strong>Khuôn mẫu chung của bốn chỉ thị này.</strong> <code>return</code>, <code>error_page</code>, <code>internal</code> và named location đều là những cách trả lời một request mà KHÔNG rời khỏi Nginx, và cái nào cũng tương tác với bộ máy chuyển-hướng-nội-bộ ở Bài 2.5. Khi một cái trong số đó cư xử lạ thì câu hỏi ĐẦU TIÊN là rốt cuộc KHỐI NÀO đã xử lý request và lúc đó <code>\$uri</code> là gì — và một dòng <code>return 200 "\$uri"</code> tạm thời đặt vào từng khối ứng viên trả lời nhanh hơn là ngồi đọc cả cái chuỗi.</p>
 </div>
 
+<h3>🔬 Tự chạy lại</h3>
+<p>Ba cách viết <code>error_page</code>, <code>internal</code>, một named location dự phòng, bẫy <code>=</code> trần với JSON, X-Accel-Redirect với một ứng dụng nhỏ kiểm quyền, và ba kiểu <code>return</code> — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># kiem-quyen.js</span>
+// upstream (cổng 9801): ?ok=1 ⇒ thân RỖNG + X-Accel-Redirect (nginx gửi tệp); không ⇒ 403
+require('http').createServer((req, res) =&gt; {
+  if (req.url.includes('ok=1')) { res.writeHead(200, { 'X-Accel-Redirect': '/tep-rieng/hop-dong.pdf' }); return res.end(); }
+  res.writeHead(403); res.end('khong co quyen\\n');
+}).listen(9801, '127.0.0.1');</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  server {
+    listen 8080;
+    location = /trang-loi { return 200 "TRANG LOI: uri=[$uri]\\n"; }
+    location /loi-giu/ { error_page 404      /trang-loi; return 404; } <span class="tok-comment">  # không dấu =</span>
+    location /loi-doi/ { error_page 404 =    /trang-loi; return 404; } <span class="tok-comment">  # dấu = trần</span>
+    location /loi-200/ { error_page 404 =200 /trang-loi; return 404; } <span class="tok-comment">  # =200 tường minh</span>
+    location /noi-bo   { internal; return 200 "noi bo\\n"; }
+    location /thu-noi-bo/ { error_page 404 = /noi-bo; return 404; }
+    location /goi-ten/ { try_files /khong-co-dau @du-phong; }
+    location @du-phong { return 200 "DA VAO @du-phong: uri=[$uri]\\n"; }
+    location /api-dung/ { error_page 404 = @json_404;  return 404; }
+    location @json_404  { default_type application/json; return 404 '{"loi":"khong tim thay"}\\n'; }
+    location /api-sai/  { error_page 404 = @json_sai;  return 404; }
+    location @json_sai  { default_type application/json; return 200 '{"loi":"khong tim thay"}\\n'; } <span class="tok-comment">  # BẪY</span>
+    location /tai/      { proxy_pass http://127.0.0.1:9801; }             <span class="tok-comment">  # ứng dụng kiểm quyền</span>
+    location /tep-rieng/ { internal; alias /srv/rieng-tu/; }
+    location = /ghi     { return 204; }
+    location = /ip      { return 200 "$remote_addr\\n"; }
+    location = /health  { access_log off; return 200 "ok\\n"; }
+  }
+}</code></pre>
+<div class="out">$ for p in loi-giu loi-doi loi-200; do printf '/%s/ -&gt; ma=' $p; curl -s -w '%{http_code}' -o /tmp/than "http://127.0.0.1:8080/$p/x"; printf '   %s' "$(cat /tmp/than)"; echo; done
+/loi-giu/ -&gt; ma=404   TRANG LOI: uri=[/trang-loi]
+/loi-doi/ -&gt; ma=200   TRANG LOI: uri=[/trang-loi]
+/loi-200/ -&gt; ma=200   TRANG LOI: uri=[/trang-loi]
+$ printf 'goi THANG /noi-bo              -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/noi-bo
+goi THANG /noi-bo              -&gt; 404
+$ printf 'qua error_page tu /thu-noi-bo/ -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than http://127.0.0.1:8080/thu-noi-bo/x; cat /tmp/than
+qua error_page tu /thu-noi-bo/ -&gt; 200  noi bo
+$ printf '/goi-ten/x -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than http://127.0.0.1:8080/goi-ten/x; cat /tmp/than
+/goi-ten/x -&gt; 200  DA VAO @du-phong: uri=[/goi-ten/x]
+$ for p in api-dung api-sai; do printf '/%s/x -&gt; ma=' $p; curl -s -w '%{http_code}' -o /tmp/than "http://127.0.0.1:8080/$p/x"; printf '   %s' "$(cat /tmp/than)"; echo; done
+/api-dung/x -&gt; ma=404   {"loi":"khong tim thay"}
+/api-sai/x -&gt; ma=200   {"loi":"khong tim thay"}
+$ printf 'KHONG quyen         -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than 'http://127.0.0.1:8080/tai/hop-dong'; cat /tmp/than
+KHONG quyen         -&gt; 403  khong co quyen
+$ printf 'CO quyen (?ok=1)    -&gt; '; curl -s -w '%{http_code}  ' -o /tmp/than 'http://127.0.0.1:8080/tai/hop-dong?ok=1'; cat /tmp/than
+CO quyen (?ok=1)    -&gt; 200  NOI DUNG HOP DONG (tep rieng tu)
+$ printf 'goi THANG /tep-rieng/hop-dong.pdf -&gt; '; curl -s -o /dev/null -w '%{http_code}\\n' http://127.0.0.1:8080/tep-rieng/hop-dong.pdf
+goi THANG /tep-rieng/hop-dong.pdf -&gt; 404
+$ for p in ghi ip health; do printf '/%-7s -&gt; ' $p; curl -s -w '%{http_code} %{content_type}  ' -o /tmp/than http://127.0.0.1:8080/$p; cat /tmp/than; echo; done
+/ghi     -&gt; 204   
+/ip      -&gt; 200 text/plain  127.0.0.1
+
+/health  -&gt; 200 text/plain  ok</div>
+<p>Không <code>=</code> thì giữ 404; <code>=</code> trần và <code>=200</code> ra 200. <code>internal</code>: gọi thẳng 404, qua <code>error_page</code> 200. Named location vẫn thấy <code>/goi-ten/x</code>. Handler JSON trả 404 sau <code>=</code> trần thì ra 404 — cùng handler đó trả 200 thì biến cú trượt thành 200. X-Accel-Redirect: không quyền 403, có quyền 200 kèm tệp, gọi thẳng đường dẫn riêng thì 404.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/seo-analytics/learn?lessonSlug=seo-1-3-ma-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">SEO &amp; Analytics · 1.3 — Mã trạng thái, chuyển hướng và soft 404</span><span class="lc-sub">Dấu = trần gây gì cho máy tìm kiếm</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Node.js · 10.2 — Object storage và URL ký sẵn</span><span class="lc-sub">Cách còn lại để giao tệp riêng tư</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>return</code></span><span class="v">Trả lời chỉ bằng cấu hình: một mã, mã kèm chữ, hoặc <code>3xx</code> kèm URL.</span></div>
+  <div class="kv"><span class="k"><code>error_page</code></span><span class="v">Ánh xạ một mã trạng thái tới một trang; cái dấu bằng quyết định mã cuối cùng.</span></div>
+  <div class="kv"><span class="k">dấu <code>=</code> trần</span><span class="v">Lấy mã của bộ xử lý (một cú 404-mềm); <code>=NNN</code> đặt mã tường minh; không có <code>=</code> thì giữ mã gốc.</span></div>
+  <div class="kv"><span class="k"><code>internal</code></span><span class="v">Làm một location chỉ chạm tới được qua chuyển hướng nội bộ; gọi thẳng thì nhận <code>404</code>.</span></div>
+  <div class="kv"><span class="k">named location (<code>@ten</code>)</span><span class="v">Một đích cho <code>try_files</code>/<code>error_page</code>, không có URL riêng; không làm đổi <code>\$uri</code>.</span></div>
+  <div class="kv"><span class="k"><code>X-Accel-Redirect</code></span><span class="v">Ứng dụng kiểm quyền, rồi nginx phục vụ tệp từ một location <code>internal</code>.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>return</code> trả lời mà không cần tệp hay upstream: mã, mã+chữ, hoặc <code>3xx</code>+URL (ưu tiên cho chuyển hướng cố định).</li><li>Dấu bằng của <code>error_page</code> mang trọng lượng: không <code>=</code> giữ mã, <code>=</code> trần lấy mã handler, <code>=NNN</code> đặt mã.</li><li>Một handler lỗi JSON kết thúc bằng <code>return 200</code> âm thầm biến mọi <code>404</code> thành thành công — hãy dùng <code>return 404</code>.</li><li><code>internal</code> chốt các khối chỉ trả lời chuyển hướng nội bộ; named <code>@location</code> không có URL và giữ nguyên <code>\$uri</code>.</li><li><code>X-Accel-Redirect</code> là cách đúng để phục vụ tệp có phân quyền mà không chảy chúng qua ứng dụng.</li></ul>
+
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#error_page" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">nginx — error_page và internal</span><span class="lc-sub">nginx.org · Ba dạng và chính xác mỗi dạng làm gì với mã trạng thái</span></span></a>
 <a class="link-card" href="https://nginx.org/en/docs/http/ngx_http_rewrite_module.html#return" target="_blank" rel="noopener"><span class="lc-ico">↩️</span><span class="lc-body"><span class="lc-title">nginx — return</span><span class="lc-sub">nginx.org · Mã, mã kèm chữ, và mã kèm URL</span></span></a>
@@ -712,6 +1299,7 @@ location @json_404 {
       type: 'LESSON',
       description: 'Đổi cấu trúc URL của cả một site mà không mất thứ hạng tìm kiếm và không mất người dùng cầm đường dẫn cũ. Bài này dựng cấu hình đó — ba cái map nối nhau và ĐÚNG MỘT chỗ thi hành — rồi bắn tám phép dò, và tìm ra một vòng lặp chuyển hướng mà Nginx KHÔNG chặn.',
       content: `
+${G08_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.5</span>
 <h2>A real URL migration, assembled and measured</h2>
@@ -807,6 +1395,90 @@ CHUOI: /vong-b -> /vong-a -> /vong-b</div>
 <div class="note-ct">
 <p><strong>What made this config easy to verify.</strong> Every decision is a table, and there is exactly one place that acts on the result. That means the entire migration can be checked by reading two data files and probing one directive — as opposed to a chain of <code>rewrite</code> rules spread across locations, where the answer to "what happens to this URL" requires simulating the whole file in your head. The declarative shape from Lesson 8.3 is what makes the difference, and it is most valuable exactly here, on the change that must not go wrong.</p>
 </div>
+
+<h3>🔬 Run it yourself</h3>
+<p>The whole migration — table file, pattern map, merge map and one <code>if</code> + <code>return</code> — eight probes, a chain and a loop followed with <code>curl -L</code>, and the twelve-line checker — on nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># chuyen-huong.map</span>
+/gioi-thieu      /ve-chung-toi;
+/lien-he.html    /lien-he;
+/san-pham/cu-1   /san-pham/moi-1;
+/rat-cu          /gioi-thieu;
+/vong-a          /vong-b;
+/vong-b          /vong-a;</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  map $uri $dich_bang { default ""; include chuyen-huong.map; }    <span class="tok-comment">  # 1) bảng 1-1 trong tệp riêng</span>
+  map $uri $dich_mau {                                                           <span class="tok-comment">  # 2) quy tắc theo MẪU</span>
+    default "";
+    "~^/bai-viet/(\\d+)$"            "/tin/$1";
+    "~^/danh-muc/(.+)/trang/(\\d+)$" "/c/$1?trang=$2";
+  }
+  map "$dich_bang:$dich_mau" $dich {                                             <span class="tok-comment">  # 3) gộp: bảng thắng</span>
+    default      "";
+    "~^([^:]+):" "$1";
+    "~^:(.+)$"   "$1";
+  }
+  server {
+    listen 8080;
+    if ($dich) { return 301 $dich; }                                             <span class="tok-comment">  # 4) MỘT chỗ thi hành</span>
+    location = /moi { return 200 "TRANG MOI\\n"; }
+    location = /ve-chung-toi { return 200 "VE CHUNG TOI\\n"; }
+    location /tin/  { return 200 "TIN: uri=[$uri]\\n"; }
+    location /      { return 404 "khong tim thay\\n"; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># kiem-bang.py</span>
+<span class="tok-comment"># kiem-bang.py — bộ kiểm bảng chuyển hướng (chạy trong CI): đích nào cũng là KHOÁ ⇒ một chuỗi hoặc một vòng</span>
+import sys
+cap = {}
+for line in open(sys.argv[1]):
+    p = line.strip().rstrip(';').split()
+    if len(p) == 2: cap[p[0]] = p[1]
+print('so cap:', len(cap))
+for k, v in cap.items():
+    if v in cap: print(f'CHUOI: {k} -&gt; {v} -&gt; {cap[v]}')</code></pre>
+<div class="out">$ for u in /gioi-thieu /lien-he.html /san-pham/cu-1 /bai-viet/123 /danh-muc/sach/trang/4 /moi /tin/999 /khong-co-gi; do printf '%-24s -&gt; ' $u; curl -s -o /tmp/than -w '%{http_code}  %{redirect_url}' http://127.0.0.1:8080$u; [ -s /tmp/than ] &amp;&amp; grep -qv '&lt;' /tmp/than &amp;&amp; printf '  %s' "$(cat /tmp/than)"; echo; done
+/gioi-thieu              -&gt; 301  http://127.0.0.1:8080/ve-chung-toi
+/lien-he.html            -&gt; 301  http://127.0.0.1:8080/lien-he
+/san-pham/cu-1           -&gt; 301  http://127.0.0.1:8080/san-pham/moi-1
+/bai-viet/123            -&gt; 301  http://127.0.0.1:8080/tin/123
+/danh-muc/sach/trang/4   -&gt; 301  http://127.0.0.1:8080/c/sach?trang=4
+/moi                     -&gt; 200    TRANG MOI
+/tin/999                 -&gt; 200    TIN: uri=[/tin/999]
+/khong-co-gi             -&gt; 404    khong tim thay
+$ printf '/rat-cu  khong theo : '; curl -s -o /dev/null -w '%{http_code} -&gt; %{redirect_url}\\n' http://127.0.0.1:8080/rat-cu
+/rat-cu  khong theo : 301 -&gt; http://127.0.0.1:8080/gioi-thieu
+$ printf '/rat-cu  theo -L    : '; curl -s -L -o /dev/null -w '%{http_code}, so chang=%{num_redirects}, cuoi=%{url_effective}\\n' http://127.0.0.1:8080/rat-cu
+/rat-cu  theo -L    : 200, so chang=2, cuoi=http://127.0.0.1:8080/ve-chung-toi
+$ printf '/vong-a  theo -L    : '; curl -s -L --max-redirs 5 -o /dev/null -w '%{http_code}, so chang=%{num_redirects}\\n' http://127.0.0.1:8080/vong-a; echo "  (curl thoat ma $?)"
+/vong-a  theo -L    : 301, so chang=5
+  (curl thoat ma 47)
+$ grep -c . /srv/logs/error.log || echo '  error.log: 0 dong — nginx KHONG biet co vong'
+0
+  error.log: 0 dong — nginx KHONG biet co vong
+$ python3 kiem-bang.py chuyen-huong.map
+so cap: 6
+CHUOI: /rat-cu -&gt; /gioi-thieu -&gt; /ve-chung-toi
+CHUOI: /vong-a -&gt; /vong-b -&gt; /vong-a
+CHUOI: /vong-b -&gt; /vong-a -&gt; /vong-b</div>
+<p>Five 301s to the right targets, three URLs untouched. <code>/rat-cu</code>: two hops, then 200. <code>/vong-a</code>: curl gave up after five hops (exit code 47) and error.log had ZERO lines — nginx saw five normal requests. The checker found all three cases. In CI, make it exit non-zero when it prints a chain.</p>
+<h3>🔗 Related lessons in other courses</h3>
+<a class="link-card lien-ket-cheo" href="/courses/seo-analytics/learn?lessonSlug=seo-1-3-ma-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">SEO &amp; Analytics · 1.3 — Status codes, redirects and soft 404s</span><span class="lc-sub">Chains, 301 vs 302 and search engines</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-2-4-buoc-ma-thoat" target="_blank" rel="noopener"><span class="lc-ico">⚙️</span><span class="lc-body"><span class="lc-title">GitHub Actions · 2.4 — Steps, exit codes, and the flag that hides a failure</span><span class="lc-sub">Making the checker turn CI red</span></span></a>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">redirect table</span><span class="v">A 1-to-1 key/value map of old URL to new, kept in an included file.</span></div>
+  <div class="kv"><span class="k">pattern rule</span><span class="v">A regex <code>map</code> covering many URLs of one shape, with captures rebuilding the new path.</span></div>
+  <div class="kv"><span class="k">composite key</span><span class="v">A third <code>map</code> merges table and pattern with a defined precedence — the table wins.</span></div>
+  <div class="kv"><span class="k">single enforcement point</span><span class="v">One <code>if (\$dich) return 301</code> at <code>server</code> level, not scattered through locations.</span></div>
+  <div class="kv"><span class="k">redirect chain</span><span class="v">An old URL pointing at another old URL; costs an extra hop and dilutes the <code>301</code> signal.</span></div>
+  <div class="kv"><span class="k">external redirect loop</span><span class="v">Two <code>301</code>s pointing at each other; nginx cannot detect it, the browser gives up.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>A migration is three chained maps (table, pattern, merge) and one <code>if (\$dich) return 301</code> at <code>server</code> level.</li><li>The table handles one-offs (one hash lookup); patterns handle structural change with captures.</li><li>Unmatched URLs have an empty result and pass through untouched — the enforcement runs once per request.</li><li>Nginx cannot catch an external redirect loop or chain; a CI checker on the table file must.</li><li>Keep old URLs as <code>301</code>s to preserve links and ranking; ship with <code>302</code> first, then switch to <code>301</code>.</li></ul>
 
 <h3>Learning sources for this lesson</h3>
 <a class="link-card" href="https://developers.google.com/search/docs/crawling-indexing/301-redirects" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">Google Search — site moves with URL changes</span><span class="lc-sub">developers.google.com · What a 301 passes on and how long to keep them</span></span></a>
@@ -911,6 +1583,90 @@ CHUOI: /vong-b -> /vong-a -> /vong-b</div>
 <div class="note-ct">
 <p><strong>Cái gì làm cho cấu hình này DỄ kiểm.</strong> Mọi quyết định đều là một cái BẢNG, và có ĐÚNG MỘT chỗ hành động theo kết quả. Nghĩa là cả cuộc chuyển đổi kiểm được bằng cách đọc hai file dữ liệu và dò một chỉ thị — trái ngược với một chuỗi luật <code>rewrite</code> rải khắp các location, nơi câu trả lời cho "cái URL này sẽ ra sao" đòi bạn phải mô phỏng cả cái file trong đầu. Hình dạng KHAI BÁO ở Bài 8.3 mới là thứ tạo ra khác biệt, và nó có giá trị nhất đúng ở đây, trên cái thay đổi KHÔNG ĐƯỢC PHÉP sai.</p>
 </div>
+
+<h3>🔬 Tự chạy lại</h3>
+<p>Cả cuộc chuyển đổi — tệp bảng, map mẫu, map gộp và một <code>if</code> + <code>return</code> — tám phép dò, một chuỗi và một vòng đi theo bằng <code>curl -L</code>, và bộ kiểm mười hai dòng — trên nginx/1.24.0:</p>
+<pre><code class="language-bash"><span class="tok-comment"># chuyen-huong.map</span>
+/gioi-thieu      /ve-chung-toi;
+/lien-he.html    /lien-he;
+/san-pham/cu-1   /san-pham/moi-1;
+/rat-cu          /gioi-thieu;
+/vong-a          /vong-b;
+/vong-b          /vong-a;</code></pre>
+<pre><code class="language-bash">pid       /srv/logs/nginx.pid;
+error_log /srv/logs/error.log;
+events {}
+http {
+  access_log off;
+  map $uri $dich_bang { default ""; include chuyen-huong.map; }    <span class="tok-comment">  # 1) bảng 1-1 trong tệp riêng</span>
+  map $uri $dich_mau {                                                           <span class="tok-comment">  # 2) quy tắc theo MẪU</span>
+    default "";
+    "~^/bai-viet/(\\d+)$"            "/tin/$1";
+    "~^/danh-muc/(.+)/trang/(\\d+)$" "/c/$1?trang=$2";
+  }
+  map "$dich_bang:$dich_mau" $dich {                                             <span class="tok-comment">  # 3) gộp: bảng thắng</span>
+    default      "";
+    "~^([^:]+):" "$1";
+    "~^:(.+)$"   "$1";
+  }
+  server {
+    listen 8080;
+    if ($dich) { return 301 $dich; }                                             <span class="tok-comment">  # 4) MỘT chỗ thi hành</span>
+    location = /moi { return 200 "TRANG MOI\\n"; }
+    location = /ve-chung-toi { return 200 "VE CHUNG TOI\\n"; }
+    location /tin/  { return 200 "TIN: uri=[$uri]\\n"; }
+    location /      { return 404 "khong tim thay\\n"; }
+  }
+}</code></pre>
+<pre><code class="language-bash"><span class="tok-comment"># kiem-bang.py</span>
+<span class="tok-comment"># kiem-bang.py — bộ kiểm bảng chuyển hướng (chạy trong CI): đích nào cũng là KHOÁ ⇒ một chuỗi hoặc một vòng</span>
+import sys
+cap = {}
+for line in open(sys.argv[1]):
+    p = line.strip().rstrip(';').split()
+    if len(p) == 2: cap[p[0]] = p[1]
+print('so cap:', len(cap))
+for k, v in cap.items():
+    if v in cap: print(f'CHUOI: {k} -&gt; {v} -&gt; {cap[v]}')</code></pre>
+<div class="out">$ for u in /gioi-thieu /lien-he.html /san-pham/cu-1 /bai-viet/123 /danh-muc/sach/trang/4 /moi /tin/999 /khong-co-gi; do printf '%-24s -&gt; ' $u; curl -s -o /tmp/than -w '%{http_code}  %{redirect_url}' http://127.0.0.1:8080$u; [ -s /tmp/than ] &amp;&amp; grep -qv '&lt;' /tmp/than &amp;&amp; printf '  %s' "$(cat /tmp/than)"; echo; done
+/gioi-thieu              -&gt; 301  http://127.0.0.1:8080/ve-chung-toi
+/lien-he.html            -&gt; 301  http://127.0.0.1:8080/lien-he
+/san-pham/cu-1           -&gt; 301  http://127.0.0.1:8080/san-pham/moi-1
+/bai-viet/123            -&gt; 301  http://127.0.0.1:8080/tin/123
+/danh-muc/sach/trang/4   -&gt; 301  http://127.0.0.1:8080/c/sach?trang=4
+/moi                     -&gt; 200    TRANG MOI
+/tin/999                 -&gt; 200    TIN: uri=[/tin/999]
+/khong-co-gi             -&gt; 404    khong tim thay
+$ printf '/rat-cu  khong theo : '; curl -s -o /dev/null -w '%{http_code} -&gt; %{redirect_url}\\n' http://127.0.0.1:8080/rat-cu
+/rat-cu  khong theo : 301 -&gt; http://127.0.0.1:8080/gioi-thieu
+$ printf '/rat-cu  theo -L    : '; curl -s -L -o /dev/null -w '%{http_code}, so chang=%{num_redirects}, cuoi=%{url_effective}\\n' http://127.0.0.1:8080/rat-cu
+/rat-cu  theo -L    : 200, so chang=2, cuoi=http://127.0.0.1:8080/ve-chung-toi
+$ printf '/vong-a  theo -L    : '; curl -s -L --max-redirs 5 -o /dev/null -w '%{http_code}, so chang=%{num_redirects}\\n' http://127.0.0.1:8080/vong-a; echo "  (curl thoat ma $?)"
+/vong-a  theo -L    : 301, so chang=5
+  (curl thoat ma 47)
+$ grep -c . /srv/logs/error.log || echo '  error.log: 0 dong — nginx KHONG biet co vong'
+0
+  error.log: 0 dong — nginx KHONG biet co vong
+$ python3 kiem-bang.py chuyen-huong.map
+so cap: 6
+CHUOI: /rat-cu -&gt; /gioi-thieu -&gt; /ve-chung-toi
+CHUOI: /vong-a -&gt; /vong-b -&gt; /vong-a
+CHUOI: /vong-b -&gt; /vong-a -&gt; /vong-b</div>
+<p>Năm cú 301 tới đúng đích, ba URL đi qua nguyên vẹn. <code>/rat-cu</code>: hai chặng rồi 200. <code>/vong-a</code>: curl bỏ cuộc sau năm chặng (mã thoát 47) và error.log KHÔNG có dòng nào — nginx thấy năm request bình thường. Bộ kiểm tìm ra cả ba ca. Trong CI, hãy cho nó thoát với mã khác không khi in ra một chuỗi.</p>
+<h3>🔗 Bài liên quan ở khoá khác</h3>
+<a class="link-card lien-ket-cheo" href="/courses/seo-analytics/learn?lessonSlug=seo-1-3-ma-trang-thai" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">SEO &amp; Analytics · 1.3 — Mã trạng thái, chuyển hướng và soft 404</span><span class="lc-sub">Chuỗi, 301 so với 302 và máy tìm kiếm</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/github-actions/learn?lessonSlug=ga-2-4-buoc-ma-thoat" target="_blank" rel="noopener"><span class="lc-ico">⚙️</span><span class="lc-body"><span class="lc-title">GitHub Actions · 2.4 — Bước, mã thoát, và cái cờ giấu mất cú hỏng</span><span class="lc-sub">Làm cho bộ kiểm đánh đỏ CI</span></span></a>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">redirect table</span><span class="v">Một <code>map</code> khoá/giá trị 1-1 từ URL cũ sang mới, để trong một file include.</span></div>
+  <div class="kv"><span class="k">pattern rule</span><span class="v">Một <code>map</code> regex phủ nhiều URL cùng một hình dạng, nhóm bắt dựng lại đường dẫn mới.</span></div>
+  <div class="kv"><span class="k">composite key</span><span class="v">Một <code>map</code> thứ ba gộp bảng và mẫu với thứ tự ưu tiên rõ ràng — bảng thắng.</span></div>
+  <div class="kv"><span class="k">single enforcement point</span><span class="v">Một <code>if (\$dich) return 301</code> ở tầng <code>server</code>, không rải rác qua các location.</span></div>
+  <div class="kv"><span class="k">redirect chain</span><span class="v">Một URL cũ trỏ tới một URL cũ khác; tốn thêm một chặng và làm loãng tín hiệu <code>301</code>.</span></div>
+  <div class="kv"><span class="k">external redirect loop</span><span class="v">Hai cú <code>301</code> trỏ vào nhau; nginx không phát hiện được, trình duyệt bỏ cuộc.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một cuộc chuyển đổi là ba map nối nhau (bảng, mẫu, gộp) và một <code>if (\$dich) return 301</code> ở tầng <code>server</code>.</li><li>Bảng lo các ca lẻ (một phép tra băm); mẫu lo thay đổi cấu trúc bằng nhóm bắt.</li><li>URL không khớp có kết quả rỗng và đi qua nguyên vẹn — chỗ thi hành chạy một lần mỗi request.</li><li>Nginx không bắt được vòng lặp hay chuỗi chuyển hướng ngoài; một bộ kiểm CI trên file bảng phải làm việc đó.</li><li>Giữ URL cũ dưới dạng <code>301</code> để bảo toàn link và thứ hạng; ship bằng <code>302</code> trước, rồi đổi sang <code>301</code>.</li></ul>
 
 <h3>Nguồn học cho bài này</h3>
 <a class="link-card" href="https://developers.google.com/search/docs/crawling-indexing/301-redirects" target="_blank" rel="noopener"><span class="lc-ico">🔍</span><span class="lc-body"><span class="lc-title">Google Search — dời site kèm đổi URL</span><span class="lc-sub">developers.google.com · Một cú 301 truyền được cái gì và nên giữ chúng bao lâu</span></span></a>

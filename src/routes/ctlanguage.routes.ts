@@ -7,13 +7,18 @@ import { Router, type Request, type RequestHandler, type Response } from 'expres
 import rateLimit from 'express-rate-limit';
 import { RedisStore } from 'rate-limit-redis';
 import { getRedis } from '../config/redis.js';
-import { authenticate } from '../middleware/auth.js';
+import multer from 'multer';
+import { authenticate, optionalAuth } from '../middleware/auth.js';
 import { BadRequestError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
 import type { ApiResponse } from '../types/index.js';
 import { docHoSo, luuHoSo } from '../services/ctlanguage/hoSo.js';
-import { chiTiet, chuCuaNgay, chuHan, goiOffline, tra, vietTay } from '../services/ctlanguage/tuDien.js';
+import { chiTiet, chuCuaNgay, chuHan, deTroChoi, goiOffline, tra, vietTay } from '../services/ctlanguage/tuDien.js';
+import { baoCao, boChan, chan, chiTietBai, dangBai, dsBai, dsDaChan, traLoi, xoaCuaToi } from '../services/ctlanguage/congDong.js';
+import { chamBuoiGoi, chayLuotGoi, luotGoi } from '../services/ctlanguage/goiCuongMini.js';
+import { dsChoWeb, docNN } from '../services/ielts/troChuyen/chuDe.js';
+import type { SuKienTC } from '../services/ielts/troChuyen/troChuyenLuong.service.js';
 
 const router = Router();
 
@@ -78,6 +83,25 @@ router.get('/tu-dien/chu-ngay', gioiHanTra, async (req: Request, res: Response<A
   } catch (e) { next(e); }
 });
 
+/** Đề trò chơi: `?n=` (4–80) từ thông dụng ngẫu nhiên có nghĩa Việt — app dựng "60 giây chọn nghĩa" + "Gõ nhanh". */
+router.get('/tu-dien/:nn/tro-choi', gioiHanTra, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.setHeader('Cache-Control', 'no-store');
+    res.json({ success: true, data: await deTroChoi(req.params.nn, Number(req.query.n ?? 40)) });
+  } catch (e) { next(e); }
+});
+
+// ─── CỘNG ĐỒNG — đọc công khai (khách xem được; có token thì ẩn bài của người đã chặn) ────────────────────────────
+router.get('/cong-dong/bai/:id', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await chiTietBai(idSo(req.params.id), req.userId ?? null) }); } catch (e) { next(e); }
+});
+router.get('/cong-dong/:nn', gioiHanTra, optionalAuth, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const truoc = req.query.truoc ? idSo(String(req.query.truoc)) : undefined;
+    res.json({ success: true, data: await dsBai(req.params.nn, req.userId ?? null, truoc, Number(req.query.gioiHan ?? 20)) });
+  } catch (e) { next(e); }
+});
+
 // ─── Từ đây trở xuống: cần đăng nhập ───────────────────────────────────────────────────────────────────────────
 router.use(authenticate);
 
@@ -94,6 +118,82 @@ router.get('/tu-dien/:nn/goi-offline', async (req: Request, res: Response<ApiRes
     res.setHeader('Cache-Control', 'private, max-age=600');
     res.json({ success: true, data: await goiOffline(req.params.nn) });
   } catch (e) { next(e); }
+});
+
+/** 30 lần ghi (bài + trả lời + báo cáo) mỗi giờ mỗi người — chống spam. Redis chết ⇒ cho qua. */
+const gioiHanGhi: RequestHandler = (() => {
+  const l = rateLimit({
+    windowMs: 3_600_000, max: 30, standardHeaders: true, legacyHeaders: false,
+    store: new RedisStore({ sendCommand: (async (...a: string[]) => (await getRedis()).sendCommand(a)) as never, prefix: 'rl:ctl-congdong:' }),
+    keyGenerator: (req) => `u:${req.userId}`,
+    message: { success: false, message: 'Bạn đăng hơi nhiều — nghỉ một lát rồi viết tiếp nhé.', code: 'RATE_LIMIT_EXCEEDED' },
+  });
+  return (req, res, next) => l(req, res, (err?: unknown) => {
+    if (err) logger.warn('[ctl-congdong] rate-limit store lỗi — cho qua', { error: err instanceof Error ? err.message : String(err) });
+    next();
+  });
+})();
+
+// ─── CỘNG ĐỒNG — ghi (đăng nhập). Kiểm duyệt: src/services/ctlanguage/congDong.ts ────────────────────────────────
+router.post('/cong-dong/bao-cao', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await baoCao(req.userId!, req.body ?? {}) }); } catch (e) { next(e); }
+});
+router.get('/cong-dong/chan', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await dsDaChan(req.userId!) }); } catch (e) { next(e); }
+});
+router.post('/cong-dong/chan/:userId', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await chan(req.userId!, idSo(req.params.userId)) }); } catch (e) { next(e); }
+});
+router.delete('/cong-dong/chan/:userId', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await boChan(req.userId!, idSo(req.params.userId)) }); } catch (e) { next(e); }
+});
+router.post('/cong-dong/bai/:id/tra-loi', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await traLoi(req.userId!, idSo(req.params.id), req.body ?? {}) }); } catch (e) { next(e); }
+});
+router.delete('/cong-dong/bai/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await xoaCuaToi(req.userId!, 'bai', idSo(req.params.id)) }); } catch (e) { next(e); }
+});
+router.delete('/cong-dong/tra-loi/:id', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await xoaCuaToi(req.userId!, 'tra-loi', idSo(req.params.id)) }); } catch (e) { next(e); }
+});
+router.post('/cong-dong/:nn', gioiHanGhi, async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await dangBai(req.userId!, req.params.nn, req.body ?? {}) }); } catch (e) { next(e); }
+});
+
+// ─── GỌI THOẠI CUONGMINI — bọc phòng trò chuyện của web (`ielts/troChuyen`) + hạn lượt free/Pro (goiCuongMini.ts) ──
+router.get('/ai/goi/chu-de', (req: Request, res: Response<ApiResponse>) => {
+  res.json({ success: true, data: { items: dsChoWeb(docNN(req.query.nn)) } });
+});
+router.get('/ai/goi/luot', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await luotGoi(req.userId!) }); } catch (e) { next(e); }
+});
+// Âm thanh KHÔNG chạm đĩa, không lưu (giọng nói là dữ liệu sinh trắc học) — giống `/ielts/ai/tro-chuyen/luong`.
+const audioGoi = multer({ storage: multer.memoryStorage(), limits: { fileSize: 6 * 1024 * 1024 } });
+/** Một lượt (SSE): multipart `audio` (m4a; vắng = câu mở đầu) + `trangThai` JSON {nn, chuDeId, lichSu, giong}. */
+router.post('/ai/goi/luong', audioGoi.single('audio'), async (req: Request, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders?.();
+  const gui = (e: SuKienTC | { type: 'luot'; conLai: number | null; laPro: boolean }): void => { if (!res.writableEnded) res.write(`data: ${JSON.stringify(e)}\n\n`); };
+  const keepalive = setInterval(() => { if (!res.writableEnded) res.write(': ka\n\n'); }, 15_000);
+  const ctl = new AbortController();
+  res.on('close', () => { clearInterval(keepalive); if (!res.writableFinished) ctl.abort(); });
+  try {
+    let tt: Record<string, unknown> = {};
+    try { tt = JSON.parse(String(req.body?.trangThai ?? '{}')) as Record<string, unknown>; } catch { /* lượt mở đầu */ }
+    await chayLuotGoi(req.userId!, { audio: req.file?.buffer, mime: req.file?.mimetype, ...tt }, gui, ctl.signal);
+  } catch (e) {
+    gui({ type: 'loi', lyDo: 'loi', message: (e as Error)?.message?.slice(0, 200) || 'Có lỗi, bạn thử lại nhé.' });
+  } finally {
+    clearInterval(keepalive);
+    if (!res.writableEnded) res.end();
+  }
+});
+/** Chấm cả buổi (band IELTS / điểm JLPT-HSK) — Pro. */
+router.post('/ai/goi/cham', async (req: Request, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await chamBuoiGoi(req.userId!, req.body ?? {}) }); } catch (e) { next(e); }
 });
 
 /** Hồ sơ học (ngôn ngữ đang học + lựa chọn làm quen + giờ nhắc). `data: null` khi chưa từng lưu. */

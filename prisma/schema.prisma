@@ -511,6 +511,8 @@ model User {
   workTrashRestored        WorkTrashItem[]           @relation("WorkTrashRestoredBy")
   workDeleteRequests       WorkDeleteRequest[]       @relation("WorkDeleteRequestBy")
   workDeleteDecisions      WorkDeleteRequest[]       @relation("WorkDeleteRequestDecider")
+  ctlBai                   CtlBai[]                  @relation("CtlBaiTacGia")
+  ctlTraLoi                CtlTraLoi[]               @relation("CtlTraLoiTacGia")
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -17700,6 +17702,49 @@ model SachRiengQuyen {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("sach_rieng_quyen")
+}
+
+/// CT Language — CỘNG ĐỒNG hỏi đáp theo ngôn ngữ (bước 6, 13/11/2026). Kiểm duyệt ở `src/services/ctlanguage/congDong.ts`:
+/// lọc từ xấu lúc đăng, báo cáo ⇒ BAO_CAO của admin (`kiemDuyetAdmin.service.ts` gỡ được), ≥3 người báo cáo ⇒ tự ẩn.
+model CtlBai {
+  id        Int       @id @default(autoincrement())
+  /// en | ja | zh
+  nn        String    @db.VarChar(2)
+  userId    Int       @map("user_id")
+  /// hoi | thao-luan
+  loai      String    @default("hoi") @db.VarChar(12)
+  noiDung   String    @map("noi_dung") @db.Text
+  soTraLoi  Int       @default(0) @map("so_tra_loi")
+  soBaoCao  Int       @default(0) @map("so_bao_cao")
+  /// Ẩn (admin gỡ / đủ báo cáo / tác giả xoá) — dòng giữ lại để đối chiếu.
+  anLuc     DateTime? @map("an_luc")
+  anBoi     Int?      @map("an_boi")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  user   User        @relation("CtlBaiTacGia", fields: [userId], references: [id], onDelete: Cascade)
+  traLoi CtlTraLoi[]
+
+  @@index([nn, id], name: "idx_ctl_bai_nn_id")
+  @@index([userId], name: "idx_ctl_bai_user")
+  @@map("ctl_bai")
+}
+
+model CtlTraLoi {
+  id        Int       @id @default(autoincrement())
+  baiId     Int       @map("bai_id")
+  userId    Int       @map("user_id")
+  noiDung   String    @map("noi_dung") @db.Text
+  soBaoCao  Int       @default(0) @map("so_bao_cao")
+  anLuc     DateTime? @map("an_luc")
+  anBoi     Int?      @map("an_boi")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  bai  CtlBai @relation(fields: [baiId], references: [id], onDelete: Cascade)
+  user User   @relation("CtlTraLoiTacGia", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([baiId, id], name: "idx_ctl_tra_loi_bai")
+  @@index([userId], name: "idx_ctl_tra_loi_user")
+  @@map("ctl_tra_loi")
 }
 
 /// CT Language — app iOS học Anh · Nhật · Trung (docs/ct-language-app.md, 12/11/2026).

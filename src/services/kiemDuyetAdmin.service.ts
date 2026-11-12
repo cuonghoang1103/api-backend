@@ -19,12 +19,15 @@ import { logger } from '../utils/logger.js';
 
 export type LoaiMucTieu =
   | 'feed_post' | 'feed_comment' | 'chat_message' | 'issue_comment' | 'page_comment' | 'diagram_comment'
-  | 'class_post' | 'class_comment' | 'dm_message' | 'dm_thread';
+  | 'class_post' | 'class_comment' | 'dm_message' | 'dm_thread'
+  // Cộng đồng app CT Language (src/services/ctlanguage/congDong.ts, 13/11/2026).
+  | 'ctl_bai' | 'ctl_tra_loi';
 
 export interface MucTieu { kind: LoaiMucTieu; id: number }
 
 const GO_DUOC: LoaiMucTieu[] = [
   'feed_post', 'feed_comment', 'chat_message', 'issue_comment', 'page_comment', 'diagram_comment', 'class_post', 'class_comment', 'dm_message',
+  'ctl_bai', 'ctl_tra_loi',
 ];
 
 /** Đọc mục tiêu từ khoá chống trùng của thông báo. Null = không phải báo cáo có mục tiêu. */
@@ -54,6 +57,8 @@ export async function tacGiaCua(t: MucTieu, nguoiBaoCao: number | null): Promise
     case 'class_post': return (await prisma.workClassPost.findUnique({ where: { id }, select: { authorId: true } }))?.authorId ?? null;
     case 'class_comment': return (await prisma.workClassComment.findUnique({ where: { id }, select: { authorId: true } }))?.authorId ?? null;
     case 'dm_message': return (await prisma.message.findUnique({ where: { id }, select: { senderId: true } }))?.senderId ?? null;
+    case 'ctl_bai': return (await prisma.ctlBai.findUnique({ where: { id }, select: { userId: true } }))?.userId ?? null;
+    case 'ctl_tra_loi': return (await prisma.ctlTraLoi.findUnique({ where: { id }, select: { userId: true } }))?.userId ?? null;
     case 'dm_thread': {
       const th = await prisma.messageThread.findUnique({ where: { id }, select: { userId: true, adminUserId: true, userAId: true, userBId: true } });
       if (!th) return null;
@@ -85,6 +90,9 @@ export async function goNoiDung(t: MucTieu, adminId: number): Promise<boolean> {
     case 'diagram_comment': return (await prisma.workDiagramComment.updateMany({ where: { id, deletedAt: null }, data: { deletedAt: now } })).count > 0;
     case 'class_post': return (await prisma.workClassPost.updateMany({ where: { id, deletedAt: null }, data: { deletedAt: now } })).count > 0;
     case 'class_comment': return (await prisma.workClassComment.updateMany({ where: { id, deletedAt: null }, data: { deletedAt: now } })).count > 0;
+    // Bài tự ẩn vì đủ báo cáo (an_boi null) vẫn gỡ được — admin xác nhận ⇒ ghi người gỡ.
+    case 'ctl_bai': return (await prisma.ctlBai.updateMany({ where: { id, anBoi: null }, data: { anLuc: now, anBoi: adminId } })).count > 0;
+    case 'ctl_tra_loi': return (await prisma.ctlTraLoi.updateMany({ where: { id, anBoi: null }, data: { anLuc: now, anBoi: adminId } })).count > 0;
     case 'dm_message': {
       // Đúng đường xoá tin của admin trong Messenger: ẩn với cả hai bên + phát sự kiện + gỡ tệp đính kèm.
       const { messagesService } = await import('./messages.service.js');

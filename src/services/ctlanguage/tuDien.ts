@@ -7,7 +7,7 @@
  */
 import { prisma } from '../../config/database.js';
 import { BadRequestError, NotFoundError } from '../../middleware/errorHandler.js';
-import { khoaTra, laChuHan } from './tuDienChuan.js';
+import { coKana, khoaTra, laChuHan, romaji } from './tuDienChuan.js';
 import { kiemNet, nhanChu } from './vietTay.js';
 
 export const NN_TU_DIEN = ['en', 'ja', 'zh'] as const;
@@ -186,4 +186,44 @@ export async function chuCuaNgay(ngay: string) {
   const hvTrung = new Set(zh.map((m) => m.hanViet));
   const ja = [...jaRong.filter((m) => hvTrung.has(m.hanViet)), ...jaRong.filter((m) => !hvTrung.has(m.hanViet))].slice(0, 3);
   return { ...han, dangTrung, tuTrung: zh, tuNhat: ja };
+}
+
+// ─── Trò chơi (bước 6) — đề ngẫu nhiên từ TỪ THÔNG DỤNG có nghĩa ───
+//
+// App dựng hai trò từ cùng một đề: "60 giây chọn nghĩa" (4 phương án lấy từ chính đề) và "Gõ nhanh" (gõ pinyin/romaji
+// không dấu — app so bằng `KhoaTraCTL`, cùng phép chuẩn hoá `khoaTra`; tiếng Anh: nhìn nghĩa Việt gõ từ).
+// CHỈ kho từ soạn tay có nghĩa Việt (Anh ~13k · Nhật ~7,7k · Trung ~5,3k từ, đo 13/11) — nghĩa tiếng Anh của CEDICT/JMdict
+// ra toàn từ lạ (人心果 "sapodilla"). Bỏ tên riêng (pinyin viết hoa), bỏ mục không có cách đọc.
+
+export interface MucTroChoi { id: number; chu: string; doc: string | null; docLatin: string | null; hanViet: string | null; nghia: string; nghiaViet: boolean }
+
+export async function deTroChoi(nnGoc: string, soCau = 40): Promise<MucTroChoi[]> {
+  const nn = kiemNn(nnGoc);
+  const n = Math.max(4, Math.min(80, Math.floor(soCau) || 40));
+  const dieuKien = nn === 'en'
+    ? `t.nghia_vi IS NOT NULL AND t.chu ~ '^[a-z]{3,14}$'`
+    : nn === 'zh'
+      ? `t.doc IS NOT NULL AND t.doc !~ '^[A-ZĀÁǍÀĒÉĚÈŌÓǑÒ]' AND char_length(t.chu) BETWEEN 1 AND 4`
+      : `t.doc IS NOT NULL AND t.doc_latin IS NOT NULL AND char_length(t.chu) BETWEEN 1 AND 5`;
+  const ds = await prisma.$queryRawUnsafe<{ id: number; chu: string; doc: string | null; doc_latin: string | null; han_viet: string | null; nghia_vi: string | null; nghia_en: string | null }[]>(
+    `SELECT t.id, t.chu, t.doc, t.doc_latin, t.han_viet, t.nghia_vi, t.nghia_en FROM ctl_tu t
+      WHERE t.nn = $1 AND t.nguon = 'kho' AND t.nghia_vi IS NOT NULL AND ${dieuKien}
+      ORDER BY random() LIMIT $2`, nn, n * 2);
+  const daCo = new Set<string>();
+  const ra: MucTroChoi[] = [];
+  for (const r of ds) {
+    // Nghĩa ngắn để vừa nút: đoạn đầu (trước ; / xuống dòng), quá 40 ký tự thì cắt ở dấu phẩy.
+    let nghiaVi = r.nghia_vi?.split(/[;；\n/]/)[0]?.trim() ?? '';
+    if (nghiaVi.length > 40) nghiaVi = nghiaVi.split(/[,，]/)[0].trim();
+    const nghia = (nghiaVi || r.nghia_en?.split('; ')[0]?.trim() || '').slice(0, 60);
+    // Hai mục cùng nghĩa trong một đề ⇒ câu chọn nghĩa có hai đáp án đúng.
+    const k = nghia.toLowerCase();
+    if (!nghia || nghia.length > 48 || daCo.has(k) || daCo.has(r.chu)) continue;
+    daCo.add(k); daCo.add(r.chu);
+    // Kho soạn tay đôi khi ghi kana vào ô romaji ⇒ đổi sang romaji (trò gõ nhanh so với chữ Latin).
+    const docLatin = nn === 'ja' ? (r.doc_latin && !coKana(r.doc_latin) ? r.doc_latin : r.doc ? romaji(r.doc) : null) : r.doc_latin;
+    ra.push({ id: r.id, chu: r.chu, doc: r.doc, docLatin, hanViet: r.han_viet, nghia, nghiaViet: !!nghiaVi });
+    if (ra.length >= n) break;
+  }
+  return ra;
 }

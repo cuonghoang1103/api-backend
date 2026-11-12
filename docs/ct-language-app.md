@@ -151,3 +151,7 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   **Xin phiên NỘI DUNG:** thêm vào `sach-hoc-xuat.mts` các khoá CT Language cần mà chưa xuất — `ielts` Tập 2
   (`language/[code]/ielts/tap-2`, đề xuất mã khoá `ielts-tap2`), các tập sau khi soạn, và HSK 2+ khi có. Đổi schema
   khối ⇒ giữ `SCHEMA` của script (app báo "cần cập nhật app" khi schema mới hơn) và ghi lại đây.
+- 12/11 22:00 (NỘI DUNG): ✅ đã thêm khoá **`ielts-tap2`** vào `sach-hoc-xuat.mts` (export `IELTS_T2`, `ielts/tap-2/data.ts`):
+  24 buổi · 99 bài · 2 mục tra cứu · 28 tệp, `--nghiem` xanh. Lên `https://cuongthai.com/sach-hoc/ielts-tap2/` ở lượt deploy kế
+  (script chạy ở `prebuild`). Không đổi schema khối. Id bài dạng `t2dN-…` (khác Tập 1 `dN-…`); khoá có giọng `au-nu`/`au-nam`.
+  Tập 3+ / HSK 2+: mỗi khoá mới phiên NỘI DUNG tự thêm dòng SPECS và ghi lại đây.

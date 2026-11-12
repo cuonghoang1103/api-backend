@@ -249,10 +249,10 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | Mã | Nội dung | Dạy lần 1 | Nâng cấp |
 |---|---|---|---|
 | W01 | Task 2 là gì, 4 tiêu chí, khung 4–5 đoạn | T1 N2 | T2 N2 (band 5 trông thế nào) · T3 N2 (band 6) · T4 N2 (band 7) · T5 N1 (band 8) |
-| W02 | Task 1 là gì, 6 dạng, Intro–Overview–Body | T1 N4 | T2 N4 · T3 N4 |
+| W02 | Task 1 là gì, 6 dạng, Intro–Overview–Body. **Mỗi dạng có 2 biến thể phải dạy đủ**: tĩnh (no time — so sánh) và động (over time — xu hướng); line graph thêm biến thể **tương lai** (dự báo: is expected/projected to); process tách tự nhiên vs nhân tạo | T1 N4 | T2 N4 · T3 N4 |
 | W03 | Opinion essay (agree/disagree, to what extent): mở bài → thesis → body → kết | T1 N6, N8, N10 | T2 N2 (trọn bài) · T3 N6 · T4 N4 · T5 N3 |
 | W04 | Discussion essay (discuss both views and give your opinion) | T1 N14 | T2 N6 · T3 N10 · T4 N10 · T5 N9 |
-| W05 | Advantages / disadvantages (+ "do the advantages outweigh…") | T2 N10 | T3 N14 · T4 N16 · T5 N15 |
+| W05 | Advantages / disadvantages (+ "do the advantages outweigh…") + biến thể **"Is this a positive or negative development?"** (đối chiếu 12/11: khoá Writing cũ của chủ kênh tách thành dạng riêng — dạy ở T3 N14) | T2 N10 | T3 N14 · T4 N16 · T5 N15 |
 | W06 | Problem / solution · cause / effect / solution | T2 N14 | T3 N18 · T4 N22 · T5 N21 |
 | W07 | Two-part question / direct questions | T2 N18 | T3 N22 · T4 N28 · T5 N27 |
 | W08 | Task 1 line graph (xu hướng theo thời gian) | T1 N12 (ngôn ngữ) | T2 N4 · T3 N8 · T4 N6 |
@@ -265,7 +265,7 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | W15 | Kỹ năng: paraphrase đề, thesis statement, topic sentence, P-E-E-L, kết bài không lặp | T1 N6 | T2 N2·N6 · T3 N6 · T4 N4 |
 | W16 | Kỹ năng: cohesion — từ nối đúng vai, referencing, không lạm dụng; mỗi đoạn 1 ý | T2 N17 | T3 N10 · T4 N13 · T5 N13 |
 | W17 | Kỹ năng: ngôn ngữ số liệu — tăng/giảm/ổn định, mức độ (sharply/gradually), so sánh, tỉ lệ, dự đoán | T1 N11 | T2 N4·N8 · T3 N8 |
-| W18 | Kỹ năng: lập dàn ý 5 phút, brainstorm ý + ví dụ, quản lý 20/40 phút, đếm từ | T2 N6 | T3 N22 · T4 N28 · T5 N21 |
+| W18 | Kỹ năng: lập dàn ý 5 phút, brainstorm ý + ví dụ, quản lý 20/40 phút, đếm từ; **kho ý tưởng tự soạn theo 20 chủ đề Task 2** (mỗi chủ đề: 4–6 ý ủng hộ/phản đối + ví dụ + 10 collocation) — tra cứu ở `tracuu` từ Tập 3 | T2 N6 | T3 N22 · T4 N28 · T5 N21 |
 | W19 | Kỹ năng: tự chấm theo band descriptors, sổ lỗi, viết lại (rewrite) bài cũ | T3 N2 | T4 N2 · T5 N1 |
 | W20 | Kỹ năng: 12 lỗi mất điểm oan (lạc đề, memorised, chữ viết, thiếu từ, câu chép đề nguyên văn…) | T2 N24 | T4 N28 |
 | W21 | Viết ứng dụng (gắn khéo): email công việc formal/informal (T2 N24), báo cáo ngắn (T3 N26), cover letter (T4 N26), tóm tắt bài giảng (T4 N24), bài phản biện học thuật (T5 N23) | | |
@@ -280,9 +280,9 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | S04 | Part 1 sở thích / thói quen / quan điểm / trải nghiệm quá khứ | T1 N8, N10, N12, N14 | T2 N9 (12 chủ đề Part 1 nhanh) · T3 N4 |
 | S05 | Part 2 cue card: 4 dòng gợi ý, 1 phút ghi chú, kể 2 phút; 6 loại đề (người, nơi, đồ vật, sự kiện, hoạt động, trừu tượng) | T2 N3 (người) · N7 (nơi) · N11 (đồ vật) · N15 (sự kiện) · N19 (hoạt động) · N23 (trừu tượng) | T3 N8·N16·N24 · T4 N8·N20 · T5 N5·N17 |
 | S06 | Part 3: ý kiến + lý do + ví dụ + nhượng bộ; câu hỏi so sánh quá khứ–hiện tại, dự đoán, giả định, đánh giá | T2 N13 (nhập) | T3 N12·N20·N28 · T4 N4·N12·N24 · T5 N9·N15·N23·N27 |
-| S07 | Ngân hàng chủ đề Part 1 (30): work/study, hometown, home, family, friends, daily routine, hobbies, sport, music, films, books, food, weather, travel, transport, shopping, clothes, technology, social media, photography, art, plants/animals, colours, numbers, time management, sleep, noise, weekends, celebrations, neighbours | rải T1–T3 (mỗi bài Speaking 2–3 chủ đề) | T4 N30 ôn trọn |
+| S07 | Ngân hàng chủ đề Part 1 (30): work/study, hometown, home, family, friends, daily routine, hobbies, sport, music, films, books, food, weather, travel, transport, shopping, clothes, technology, social media, photography, art, plants/animals, colours, numbers, time management, sleep, noise, weekends, celebrations, neighbours. **+20 chủ đề "lạ" hay ra (đối chiếu 12/11 với bộ đề Part 1 cũ của chủ kênh)**: mirrors, robots, chocolate, watches, bags, shoes, flowers, birds, rain, sunshine, handwriting, patience, visitors, swimming, dreams, history, fruit, toys, housework, dancing — rải T3–T4, mỗi chủ đề 4 câu, tự soạn | rải T1–T3 (mỗi bài Speaking 2–3 chủ đề) | T4 N30 ôn trọn |
 | S08 | Ngân hàng Part 2/3 (40 đề) theo 6 loại; mỗi đề đi kèm 4 câu Part 3 | T2–T5 (mỗi bài Speaking 1 đề + Part 3 tương ứng) | T5 N29 ôn 12 đề hay gặp |
-| S09 | Fluency: fillers học thuật (Well, I'd say…), kéo dài ý (because/which means/for instance), tự sửa đúng cách, không im > 3 giây | T2 N5 | T3 N4 · T4 N4 |
+| S09 | Fluency: fillers học thuật (Well, I'd say…), kéo dài ý (because/which means/for instance), tự sửa đúng cách, không im > 3 giây; **khi không biết/không có trải nghiệm thì nói gì** (thừa nhận + chuyển ý), **kể chuyện ngắn làm ví dụ**, **kết câu trả lời dứt khoát** (không treo "…and yeah") | T2 N5 | T3 N4 · T4 N4 |
 | S10 | Paraphrase câu hỏi, không lặp từ giám khảo; mở rộng từ vựng tại chỗ | T2 N9 | T3 N12 |
 | S11 | Phát âm: 44 âm — 12 nguyên âm đơn (T1 N4), 8 nguyên âm đôi (T1 N6), 24 phụ âm (T1 N1 -s/-es; N3 /ð/; T1 N8 /θ/·/ð/; N10 /s/·/ʃ/·/tʃ/·/dʒ/; N12 /v/·/w/·/f/; N14 /r/·/l/; T2 N1 /p/·/b/·/t/·/d/·/k/·/g/ bật hơi + âm cuối; T2 N5 /z/·/ʒ/·/ŋ/·/h/·/j/; T2 N9 cụm phụ âm đầu/cuối -sts, -ths) | T1–T2 | Azure `phatam` mỗi ngày đo lại |
 | S12 | Trọng âm từ (quy tắc theo hậu tố; danh–động cùng chữ) | T2 N13 | T3 N16 |
@@ -291,6 +291,7 @@ Band tổng = trung bình 4 kỹ năng, làm tròn về **.0 / .5 gần nhất**
 | S15 | Ngữ điệu: lên/xuống câu hỏi, liệt kê, đối lập, thái độ; chunking (tone units) & pause mang nghĩa | T3 N24 | T4 N20 · T5 N17 |
 | S16 | Nói ứng dụng: tự giới thiệu + small talk (T1 N2), gọi điện/đặt lịch (T2 N3), họp & nêu ý kiến (T2 N17), phỏng vấn xin việc (T3 N18), thuyết trình 3 phút (T4 N20), đàm phán/phản biện lịch sự (T5 N15) | | |
 | S17 | Luyện với giám khảo AI đủ 11–14 phút (`/ielts/ai/tro-chuyen`), chấm 4 tiêu chí | T2 N24 (lần đầu) | mỗi đề `thi-may` từ Đề 3 |
+| S18 | Part 1 theo **11 khung câu hỏi** (cách khác với chia theo chủ đề — người học gặp chủ đề lạ vẫn có khung trả lời): Do you like X? · How often…? · When was the last time…? · Do you prefer X or Y? · Is X popular in your country? · How has X changed? · Did you do X as a child? · What do you dislike about X? · Is it easy/difficult to…? · What is the best time to…? · Is X suitable for…? | T3 N4 | T4 N4 (ôn nhanh) |
 
 ### 2.7 Chiến thuật & quản lý thời gian; ngày thi (mã **X**)
 

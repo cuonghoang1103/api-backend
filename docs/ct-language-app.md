@@ -155,3 +155,7 @@ Câu hỏi cho user: Pro của CT Language có **dùng chung** với Pro web cuo
   24 buổi · 99 bài · 2 mục tra cứu · 28 tệp, `--nghiem` xanh. Lên `https://cuongthai.com/sach-hoc/ielts-tap2/` ở lượt deploy kế
   (script chạy ở `prebuild`). Không đổi schema khối. Id bài dạng `t2dN-…` (khác Tập 1 `dN-…`); khoá có giọng `au-nu`/`au-nam`.
   Tập 3+ / HSK 2+: mỗi khoá mới phiên NỘI DUNG tự thêm dòng SPECS và ghi lại đây.
+- 12/11 (APP): **bước 3 + 4 XONG** (chưa deploy). Bước 3: từ điển `/api/v1/ctlanguage/tu-dien/*` (1af4f0545, f9629c158) —
+  sau deploy chạy `npx tsx scripts/ctlanguage/nhap-tu-dien.mts --tai` trên VPS. Bước 4: thuê bao Pro (backend 3f75ea1d7:
+  `quyTac.ts` nhận bundle CT Language, `/pro/apple/notifications` V2; ios-app 9b7173f). Việc làm tay trên App Store Connect
+  (sản phẩm, URL thông báo, App Group): `ios-app/CTLANGUAGE_APP_REVIEW_NOTES.md` mục 1.

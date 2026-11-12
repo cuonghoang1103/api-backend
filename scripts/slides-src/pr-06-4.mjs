@@ -102,7 +102,7 @@ model events_raw {
 
   @@ignore
 }`, { sm: true }) + tp(gon(OUT('ignore-co')), { wrap: 70, fs: 13, title: 'with the @@ignore model' }), '') +
-      box('Or keep it out of reach', 'A separate PostgreSQL schema not listed in <code>schemas</code>, or a database role with no rights on those tables.', 'lam') },
+      box('Ignored by the client — not by migrations', 'On a database <em>without</em> the table, the same schema makes diff print <code>CREATE TABLE "events_raw"</code>. To keep Prisma away entirely, put the tables in another PostgreSQL schema: tested, a table in <code>phan_tich</code> never appears in the diff.', 'lam') },
   /* 14 */ { t: 'The command never to type without thinking', body: tp(cat('dev-troi', 0).split('\n').slice(-4).join('\n').replace(/^/, '$ npx prisma migrate dev   # the drifted database\n…\n'), { wrap: 120, fs: 16 }) +
       cards([
         ['migrate reset drops everything', 'Right tool on your laptop; an incident on staging; a restore-from-backup on production.'],

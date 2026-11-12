@@ -5,6 +5,11 @@
  * < > trong code → &lt; &gt;; & → &amp;. Khối .out đóng bằng </div>. KHÔNG dùng <svg>.
  * Gạch chéo ngược PHẢI viết đôi (\\n), xem scripts/course-content-check.mjs.
  */
+import G07_1 from './giang/pr-07-1.mjs';
+import G07_2 from './giang/pr-07-2.mjs';
+import G07_3 from './giang/pr-07-3.mjs';
+import G07_4 from './giang/pr-07-4.mjs';
+import G07_5 from './giang/pr-07-5.mjs';
 const REF = '?ref=%2Fcourses%2Fprisma-orm%2Flearn&reflabel=Prisma';
 
 export default {
@@ -19,6 +24,7 @@ export default {
       isFreePreview: true,
       description: 'Dạng mảng so với dạng tương tác: cái nào chạy được, cái nào giữ một kết nối suốt thời gian bạn nghĩ, ghi lồng nhau vốn đã là giao dịch, và ba lỗi làm cạn connection pool trong một phút.',
       content: `
+${G07_1}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>Two kinds of <code>$transaction</code></h2>
@@ -306,6 +312,7 @@ await prisma.order.update({
       type: 'LESSON',
       description: 'Bốn mức cô lập và ba hiện tượng chúng chặn, dựng lại bằng hai phiên chạy song song thật, Read Committed mặc định để lọt cái gì, Serializable trả giá bằng lỗi 40001, và cách chọn theo bài toán chứ không theo cảm giác an toàn.',
       content: `
+${G07_2}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.2</span>
 <h2>Isolation levels, demonstrated</h2>
@@ -629,6 +636,7 @@ const bc = await prisma.$transaction(
       type: 'LESSON',
       description: 'SELECT FOR UPDATE qua $queryRaw và bốn biến thể của nó, khoá lạc quan bằng cột version mà không cần khoá gì, advisory lock cho việc chỉ được chạy một bản, khoá chết dựng lại rồi vá bằng thứ tự khoá cố định.',
       content: `
+${G07_3}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.3</span>
 <h2>Locking: pessimistic, optimistic, advisory</h2>
@@ -970,6 +978,7 @@ async function transfer(from: number, to: number, money: number) {
       type: 'LESSON',
       description: 'Ba cái timeout chồng lên nhau và mỗi cái nổ ra lỗi gì, vì sao mặc định 5 giây giết mọi lần nhập dữ liệu, cách chia lô để không cần nâng nó, khoá idempotent để một lần thử lại không tính tiền hai lần, và outbox cho những việc phải xảy ra sau khi commit.',
       content: `
+${G07_4}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.4</span>
 <h2>Timeouts, retries and idempotency</h2>
@@ -1321,6 +1330,7 @@ for (;;) {
       type: 'LESSON',
       description: 'Sách công thức: bộ đếm lượt xem, sinh slug duy nhất, đặt chỗ ngồi cuối cùng, giới hạn tần suất, chuyển số dư, và hàng đợi việc — mỗi bài kèm bản ngây thơ hỏng ở đâu, lời giải đúng, và lý do chọn đúng công cụ trong bốn công cụ của chương này.',
       content: `
+${G07_5}
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.5</span>
 <h2>Six concurrency problems, six answers</h2>

@@ -77,7 +77,7 @@ export const slides = lamDeck({ chuong: 'Chapter 6 — Migrations', bai: '6.3' }
       cards([
         ['Will be dropped', 'The trigram index and the generated column <code>search</code> — Prisma can see them and they are not in the schema.'],
         ['Left alone', 'The partial index, the expression index and the CHECK constraint — Prisma does not manage them.'],
-        ['So declare what you can', '<code>@@index([title(ops: raw("gin_trgm_ops"))], type: Gin)</code> and <code>Unsupported("tsvector")</code> stop the drops (Lesson 6.4).'],
+        ['So declare them exactly', 'As <code>db pull</code> prints them: the index with <code>ops</code> + <code>type: Gin</code>, and <code>search</code> with its <code>@default(dbgenerated(…))</code>. Both lines ⇒ empty diff (tested).'],
       ], 3) },
   /* 10 */ { t: 'And what db pull brings back', body: two(tp(gon(OUT('namthu-pull')).split('\n').filter((l) => !/^\$|enriched|^\/\/ +- (Model: "(Post|User)", field: "(authorId|fullName)"|"(Post|User)")$/.test(l)).filter((l) => !/^\/\/ $/.test(l)).join('\n').replace(/model User \{[\s\S]*?\n\}\n?/, ''), { wrap: 74, fs: 11 }),
       cards([

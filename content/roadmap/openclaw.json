@@ -1,0 +1,482 @@
+{
+ "Nền tảng › OpenClaw là gì": {
+  "body": "OpenClaw là một trợ lý AI mã nguồn mở, **tự host**: bạn chạy một tiến trình trung tâm tên là Gateway trên máy của mình (laptop, VPS, Raspberry Pi), và tiến trình đó nối các app nhắn tin bạn đang dùng (Telegram, WhatsApp, Discord, Slack, Signal, iMessage...) với một agent AI biết dùng công cụ. Hình dung như thuê một trợ lý ngồi trong máy bạn: nhắn tin từ điện thoại, trợ lý làm việc trên máy, rồi báo lại qua chính cuộc chat đó.\n\n### Ý chính\n- **Một Gateway, nhiều cửa vào**: cùng một Gateway phục vụ chat app, dòng lệnh (CLI), giao diện web (Control UI), app macOS và các node iOS/Android.\n- **Dữ liệu và chi phí do bạn kiểm soát**: không có dịch vụ hosted ở giữa; bạn tự chọn nhà cung cấp model và trả tiền API cho chính họ.\n- **Hướng agent**: có tool, phiên (session), bộ nhớ, định tuyến nhiều agent, skills và tự động hoá theo lịch.\n- Theo trang chủ tài liệu, dự án là mã nguồn mở (MIT) do một quỹ phi lợi nhuận (OpenClaw Foundation) phát triển.\n\n### Cần gì để bắt đầu\nMột máy chạy Node (tài liệu hiện khuyến nghị Node 26, hoặc Node 24.x bản mới), một API key của nhà cung cấp model (hoặc đăng nhập Claude Code / Codex CLI có sẵn để onboarding dùng lại), và khoảng vài phút chạy lệnh cài đặt.\n\n### Lưu ý\nĐây là lộ trình về một sản phẩm cụ thể đang phát triển rất nhanh (phiên bản đánh số theo tháng, ví dụ v2026.11.x). Khi lệnh hay tên cấu hình khác với bài này, hãy tin tài liệu chính thức ở phần đọc thêm."
+ },
+ "Nền tảng › Vì sao tự-host": {
+  "body": "Tự host nghĩa là phần mềm chạy trên máy do bạn quản lý thay vì trên máy chủ của một công ty SaaS. Với trợ lý AI, điều này quan trọng vì trợ lý thường chạm vào những thứ nhạy cảm: tin nhắn riêng, email, file, lệnh shell trên máy.\n\n### Vì sao người ta chọn tự host\n- **Dữ liệu ở máy bạn**: lịch sử hội thoại, khoá API, workspace nằm trong thư mục trạng thái của bạn (với OpenClaw mặc định là `~/.openclaw`), không đi qua bên thứ ba ngoài nhà cung cấp model bạn chọn.\n- **Tuỳ biến sâu**: đổi model, thêm kênh, viết skill, gắn tool theo ý mình.\n- **Chạy 24/7**: đặt trên VPS hoặc máy nhỏ luôn bật, trợ lý trả lời cả khi laptop của bạn đã đóng.\n- **Chi phí dễ đoán**: không có gói thuê bao của nền tảng; bạn trả tiền hạ tầng (nhiều khi chỉ vài đô một tháng cho VPS, hoặc một lần cho Raspberry Pi) cộng tiền token cho nhà cung cấp model.\n\n### Cái giá phải trả\n- Bạn là người vận hành: cập nhật, sao lưu, theo dõi sức khoẻ, vá lỗi bảo mật.\n- Bạn chịu trách nhiệm bảo mật. Một agent có quyền chạy lệnh mà bị lộ ra Internet là rủi ro nghiêm trọng, nên mặc định nên bind vào loopback và truy cập từ xa qua kênh riêng (SSH tunnel, VPN).\n- Không có SLA: máy tắt là trợ lý ngừng.\n\n### Tự kiểm tra\n- Dữ liệu nào của bạn sẽ nằm trên máy tự host, và bạn sao lưu nó thế nào?\n- Khi nào dùng dịch vụ hosted hợp lý hơn tự host?",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-14-3-tu-host",
+    "ten": "14.3 — Tự host dịch vụ, có HTTPS tự động",
+    "nguon": "Docker · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Nền tảng › Kiến trúc: Gateway & Agent": {
+  "body": "Kiến trúc của OpenClaw xoay quanh một tiến trình **Gateway** sống lâu, chạy nền. Theo tài liệu kiến trúc, Gateway là nơi duy nhất giữ các kết nối tới chat app (ví dụ WhatsApp qua Baileys, Telegram qua grammY) và mọi client khác kết nối vào nó bằng **WebSocket** trên một cổng (mặc định `127.0.0.1:18789`).\n\n### Các thành phần\n- **Gateway (daemon)**: quản lý kết nối nhà cung cấp, phiên, định tuyến; phát sự kiện như `agent`, `chat`, `presence`, `health`, `cron`.\n- **Client điều khiển**: CLI, app macOS, Control UI trên web. Mỗi client một kết nối WS, gửi request và đăng ký sự kiện.\n- **Node**: thiết bị (macOS, iOS, Android, headless) kết nối với vai trò `node` và khai báo những lệnh nó cung cấp (camera, màn hình, vị trí...).\n- **Agent**: nhận lượt chat từ Gateway, suy nghĩ, gọi tool, trả lời.\n\n### Luồng một tin nhắn\n1. Tin nhắn đến từ một channel (ví dụ Telegram) vào Gateway.\n2. Gateway kiểm tra ai được phép nhắn, chọn agent và phiên phù hợp.\n3. Agent chạy một lượt: gọi model, gọi tool nếu cần, stream kết quả.\n4. Gateway gửi câu trả lời ngược ra đúng channel.\n\n### Ý chính\n- Mỗi máy chủ chạy **một Gateway**; đây là \"nguồn sự thật\" cho phiên, định tuyến và kết nối kênh.\n- Giao thức là JSON qua WebSocket; frame đầu tiên phải là `connect`, có xác thực và ghép cặp (pairing) thiết bị.\n- Các thao tác có tác dụng phụ (`send`, `agent`) dùng idempotency key để thử lại an toàn.\n- Truy cập từ xa nên qua Tailscale/VPN hoặc SSH tunnel, không mở thẳng cổng ra Internet.",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-9-2-websocket",
+    "ten": "9.2 — WebSocket: nâng cấp, frame và nhịp tim",
+    "nguon": "Networking for Developers · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng › Agent Runtime": {
+  "body": "Agent runtime là phần mã thực thi **vòng lặp agentic**: đưa ngữ cảnh cho model, model quyết định gọi tool hoặc trả lời, runtime chạy tool, đưa kết quả trở lại model, lặp đến khi xong. Khác với chatbot một lượt hỏi một lượt đáp, vòng lặp này cho phép agent tự làm nhiều bước: đọc file, sửa, chạy lệnh, kiểm tra.\n\n### Vòng lặp cơ bản\n1. Ghép prompt: chỉ dẫn hệ thống + lịch sử phiên + skills + định nghĩa tool.\n2. Gọi model (stream từng mẩu chữ).\n3. Nếu model yêu cầu tool: kiểm tra chính sách tool/quyền, chạy, ghi kết quả vào phiên.\n4. Quay lại bước 2 cho đến khi model trả lời cuối cùng.\n5. Lưu phiên; khi ngữ cảnh quá dài thì nén (compaction) hoặc cắt tỉa.\n\n### Theo tài liệu kỹ thuật của OpenClaw\nRuntime tích hợp (id `openclaw`) nằm trong mã nguồn của dự án và gồm: bộ chạy lượt (attempt loop), chọn model/provider, lưu trữ phiên, định nghĩa tool kèm chính sách, các hook của runtime (ví dụ cắt tỉa ngữ cảnh), và lớp truyền tải tới các provider. Plugin chỉ dùng các điểm vào SDK được tài liệu hoá, không đụng nội bộ.\n\n### Vì sao cần hiểu\n- Mỗi vòng gọi model tốn token: lịch sử càng dài, mỗi lượt càng đắt vì model không nhớ gì, toàn bộ ngữ cảnh được gửi lại.\n- Lỗi \"agent lặp mãi\" hay \"quên việc đang làm\" thường nằm ở ngữ cảnh, tool hoặc chính sách, không phải ở model.\n- Biết vòng lặp giúp bạn đặt đúng chỗ các rào chắn: giới hạn tool, duyệt lệnh, thời gian chạy.\n\n### Lỗi hay gặp\n- Cho quá nhiều tool khiến model chọn sai hoặc tốn token mô tả tool.\n- Không giới hạn quyền exec rồi để vòng lặp tự chạy lệnh nguy hiểm.",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Multi-agent & delegate": {
+  "body": "Multi-agent nghĩa là chạy nhiều agent tách biệt trong cùng một Gateway, mỗi agent có không gian làm việc riêng. Theo tài liệu OpenClaw, mỗi agent có workspace (các file như `AGENTS.md`, `SOUL.md`, `USER.md`), thư mục trạng thái riêng, hồ sơ xác thực riêng và kho phiên riêng. Tin nhắn đến được định tuyến tới đúng agent qua **bindings** (ví dụ gắn một tài khoản WhatsApp hay một workspace Slack với một agent).\n\n### Delegate\nMô hình delegate đưa ý này sang bối cảnh tổ chức: agent có **danh tính riêng** (email, lịch riêng), hành động \"thay mặt\" người thật nhưng không giả làm họ. Tài liệu chia ba bậc quyền: chỉ đọc và soạn nháp; gửi thay mặt; và chủ động theo lịch kèm standing orders. Nguyên tắc là bắt đầu bậc thấp nhất đủ dùng.\n\n### Ý chính\n- Không dùng chung `agentDir` giữa các agent, vì dễ đụng trạng thái xác thực và phiên.\n- Workspace chỉ là thư mục làm việc mặc định, không phải hộp cát cứng; muốn cô lập thật phải bật sandbox.\n- Nên tách agent khi cần tách persona, quyền hạn hoặc dữ liệu (cá nhân và công việc).\n\n### Lỗi hay gặp\n- Nghĩ rằng hai agent trong một Gateway là hai ranh giới tin cậy; tài liệu bảo mật nói rõ một Gateway chỉ là một ranh giới tin cậy."
+ },
+ "Cài đặt & nền tảng › Getting Started": {
+  "body": "Getting Started là đường nhanh nhất để có một trợ lý chạy được: cài, onboarding, mở dashboard và chat. Theo tài liệu, cả quá trình khoảng 5 phút.\n\n### Các bước\n1. **Chuẩn bị**: Node 24.x hoặc 26 (tài liệu khuyến nghị bản 26) và một API key của nhà cung cấp model, hoặc một đăng nhập Claude Code/Codex CLI để onboarding dùng lại.\n2. **Cài**: trên macOS/Linux/WSL2 chạy script cài của dự án (`curl -fsSL https://openclaw.ai/install.sh | bash`); trên Windows có bản PowerShell hoặc app Windows Hub. Cũng có thể dùng `npx openclaw@latest` để thử nhanh.\n3. **Onboarding**: chọn *Quick start* (dùng lại truy cập AI có sẵn, kiểm tra bằng một lượt completion thật, hỏi có chạy nền không) hoặc *Custom setup* để đi hết các lựa chọn.\n4. **Chạy Gateway như dịch vụ**: `openclaw gateway install` rồi `openclaw gateway start`.\n5. **Chat**: `openclaw dashboard` mở giao diện web, hoặc nối một channel (Telegram dễ nhất) và nhắn từ điện thoại.\n\n### Kiểm tra sau khi cài\n```bash\nopenclaw gateway status   # Gateway có đang chạy và trả lời không\nopenclaw status           # tóm tắt tình trạng\nopenclaw doctor           # chẩn đoán và gợi ý sửa\n```\n\n### Lỗi hay gặp\n- Node quá cũ hoặc ngoài dải được hỗ trợ (tài liệu nêu Node 22, 23, 25 không được hỗ trợ).\n- Chạy Gateway ở terminal rồi đóng terminal: Gateway tắt theo. Hãy cài dịch vụ nền.\n- Quên bước bảo mật: đọc trang security trước khi mở Gateway ra ngoài loopback.\n\n### Tự kiểm tra\n- Khác biệt giữa Quick start và Custom setup là gì?\n- Lệnh nào cho biết Gateway đang khoẻ?",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-0-3-cai-dat",
+    "ten": "0.3 — Cài đặt môi trường làm việc",
+    "nguon": "Node.js · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Cài đặt & nền tảng › Cài bằng Docker": {
+  "body": "Docker cho phép chạy Gateway trong một container: môi trường cô lập, dựng lại dễ, bỏ đi không để rác lên máy. Tài liệu OpenClaw ghi Docker là tuỳ chọn, hợp với môi trường thử hoặc host không muốn cài trực tiếp; nếu bạn phát triển ngay trên máy của mình thì cách cài thường vẫn tiện hơn.\n\n### Cách làm theo tài liệu\n- Dựng ảnh từ mã nguồn bằng script `./scripts/docker/setup.sh` (cần Docker Engine/Desktop, Compose v2, khoảng 6 GB RAM để build), hoặc dùng ảnh dựng sẵn bằng cách đặt `OPENCLAW_IMAGE` (ví dụ ảnh trên GHCR của dự án) rồi chạy script.\n- Có biến thể ảnh nhỏ (`slim`) và biến thể có sẵn Chromium cho tool browser (`-browser`).\n- Chỉ dùng ảnh chính thức, tránh mirror không rõ nguồn.\n\n### Điều cần nắm\n- **Dữ liệu phải nằm ngoài container**: cấu hình, hồ sơ xác thực, phiên và workspace nằm trong thư mục trạng thái; nếu không gắn volume hoặc bind mount thì xoá container là mất sạch.\n- **Cổng**: Gateway mặc định cần auth khi bind ra ngoài loopback. Trong container, mặc định bind có thể là `auto` để port-forward hoạt động, nên phải đi kèm xác thực.\n- **Tường lửa**: Docker publish cổng có thể đi vòng qua ufw. Trên VPS công khai hãy đọc phần hardening về chuỗi `DOCKER-USER`.\n- Sandbox của agent là chuyện khác: backend sandbox mặc định dùng docker CLI và không bắt buộc Gateway phải ở trong container.\n\n### Lỗi hay gặp\n- Mất cấu hình sau khi tạo lại container vì không có volume.\n- Mở cổng 18789 ra Internet chỉ với mật khẩu yếu.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: Docker từ đầu, bằng hình",
+    "nguon": "Docker · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-1-docker-run",
+    "ten": "2.1 — docker run: những cờ bạn dùng mỗi ngày",
+    "nguon": "Docker · Chương 2",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-2-volume",
+    "ten": "7.2 — Volume, đào sâu",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong",
+    "ten": "8.2 — Công bố cổng, và cái bẫy tường lửa",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=docker-container",
+    "ten": "Container không phải máy ảo nhẹ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Cài đặt & nền tảng › Cài bằng Node/Bun": {
+  "body": "OpenClaw viết bằng TypeScript, nên cách \"gần mã nguồn\" nhất là chạy trực tiếp bằng runtime JavaScript. Node là runtime chính, mặc định và được khuyến nghị; Bun chạy được ở dạng tuỳ chọn tự nguyện.\n\n### Node\nTài liệu hiện yêu cầu Node 24.16.0 trở lên trên nhánh 24.x, hoặc Node 26.1.0 trở lên, đồng thời khuyến nghị bản vá mới nhất vì lý do bảo mật và vì kiểm tra an toàn SQLite lúc khởi động. Node 22, 23, 25 không được hỗ trợ. Script cài đặt tự cài Node khi thiếu; dùng trang này khi bạn muốn tự quản phiên bản (nvm, fnm, Volta, Homebrew).\n\n```bash\nnode -v                      # kiểm tra phiên bản\nnpm install -g openclaw@latest\nopenclaw onboard --install-daemon\n```\n\n### Bun\nBun chạy được CLI, Gateway và node host nếu bạn chủ động chọn, nhưng chỉ với bản Bun đủ mới và SQLite an toàn. Với phát triển từ mã nguồn, trình quản lý gói mặc định vẫn là pnpm và `bun install` không giải được cấu trúc workspace của repo.\n\n### Khi nào chạy trực tiếp thay vì Docker\n- Bạn muốn sửa mã, viết plugin, debug.\n- Bạn cần tool cần quyền sâu vào máy (browser thật, computer use).\n- Lưu ý: chạy trực tiếp nghĩa là agent có quyền theo tài khoản người dùng chạy Gateway; hãy dùng một tài khoản hệ điều hành riêng nếu máy dùng chung.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-0-3-cai-dat",
+    "ten": "0.3 — Cài đặt môi trường làm việc",
+    "nguon": "Node.js · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-2-1-runtime-la-gi",
+    "ten": "2.1 — Node.js thật ra là cái gì",
+    "nguon": "Node.js · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cài đặt & nền tảng › Cloud & Kubernetes": {
+  "body": "Khi muốn Gateway chạy trên hạ tầng cloud thay vì máy nhà, có hai hướng: nền tảng managed một-cú-bấm (Railway, Fly.io, Render...) và Kubernetes.\n\n### Railway và các nền tảng managed\nTài liệu mô tả Railway là đường \"không cần terminal trên server\": deploy template, gắn một volume vào `/data` để lưu trạng thái, đặt các biến như `OPENCLAW_GATEWAY_PORT`, `OPENCLAW_GATEWAY_TOKEN` (coi như bí mật quản trị), `OPENCLAW_STATE_DIR`, `OPENCLAW_WORKSPACE_DIR`, bật public networking, rồi truy cập Control UI qua domain được cấp. Có thể chạy `openclaw doctor --json` trong shell của Railway để kiểm tra triển khai, và `openclaw backup create` để sao lưu.\n\n### Kubernetes\nTài liệu cung cấp manifest Kustomize tối thiểu, tự nhận là điểm khởi đầu chứ không phải cấu hình production: một Deployment một pod, Service, Secret chứa API key và gateway token (`./scripts/k8s/deploy.sh` tạo sẵn), truy cập thử qua `kubectl port-forward svc/openclaw 18789:18789`. Có script tạo cụm Kind để thử cục bộ.\n\n### Khi nào chọn cách nào\n- Một Gateway cho cá nhân hay nhóm nhỏ thường **không cần** Kubernetes; một VPS hoặc Pi là đủ.\n- Chọn managed khi muốn ít việc vận hành; nhớ rằng bạn phải tự gắn volume bền vững.\n- Chọn Kubernetes khi tổ chức đã có cụm và quy trình vận hành.\n\n### Lỗi hay gặp\n- Quên volume nên mất trạng thái mỗi lần redeploy.\n- Mở Control UI ra Internet mà không có token mạnh.",
+  "lessons": [
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "Cài đặt & nền tảng › Chạy trên VPS / Raspberry Pi": {
+  "body": "Muốn trợ lý chạy 24/7, bạn cần một máy luôn bật: VPS thuê, hoặc Raspberry Pi tại nhà. Vì Gateway chỉ điều phối còn model chạy trên cloud qua API, máy rất nhỏ vẫn đủ.\n\n### VPS\nTài liệu liệt kê nhiều lựa chọn (Hetzner, DigitalOcean, Fly.io, GCP, Azure, Oracle Always Free...). Mô hình chung: Gateway chạy trên VPS và giữ trạng thái cùng workspace; bạn kết nối từ laptop hay điện thoại qua Control UI, Tailscale hoặc SSH. Nên giữ Gateway ở loopback và truy cập qua SSH tunnel hoặc Tailscale Serve. Hãy hardening chính cái VPS trước (khoá SSH, hạn chế SSH công khai) rồi mới cài.\n\n### Raspberry Pi\nTheo tài liệu, Pi 4 (4 GB) là điểm cân bằng tốt, Pi 5 nhanh nhất; tối thiểu 1 GB RAM và **OS 64-bit** (không dùng 32-bit). Dùng Raspberry Pi OS Lite, cài Node 24, thêm swap nếu RAM từ 2 GB trở xuống, cài OpenClaw rồi `openclaw onboard --install-daemon`. Ưu tiên API key hơn OAuth cho thiết bị headless. Đặt đúng múi giờ vì cron và nhắc việc phụ thuộc vào đó.\n\n### Dịch vụ nền theo hệ điều hành\nmacOS dùng LaunchAgent, Linux/WSL2 dùng systemd user service, Windows dùng Scheduled Task. Kiểm tra bằng `openclaw status` và `journalctl --user -u openclaw-gateway.service -f` trên Linux.\n\n### Lỗi hay gặp\n- Thẻ SD chậm hoặc hết dung lượng; nên dùng SSD USB.\n- Bỏ qua swap trên máy ít RAM nên tiến trình bị OOM-kill.\n- Đưa Gateway ra Internet công khai thay vì tunnel.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-2-4-chon-duong-va-dung-o-dau",
+    "ten": "2.4 — Chọn đường vận chuyển, và dựng ở đâu",
+    "nguon": "Deploy lên VPS · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu",
+    "ten": "11.3 — Gia cố một máy chủ: giờ đầu tiên, và nếp thường ngày sau đó",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-8-3-swap",
+    "ten": "8.3 — Swap: mua được gì và trả giá gì",
+    "nguon": "Deploy lên VPS · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=vps-memory",
+    "ten": "RAM, swap và OOM killer của VPS",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Gateway (lõi luôn chạy) › Gateway là gì": {
+  "body": "Gateway là tiến trình trung tâm của OpenClaw: **một tiến trình luôn chạy** lo định tuyến tin nhắn, mặt phẳng điều khiển và các kết nối kênh. Mọi thứ khác (CLI, Control UI, app, node, agent) đều là client của nó. Nếu agent là bộ não thì Gateway là hệ thần kinh: nó biết ai đang nói chuyện, ở kênh nào, với agent nào, và đang có những thiết bị nào kết nối.\n\n### Gateway làm những gì\n- Giữ kết nối tới các chat app và plugin kênh; chỉ Gateway mới mở phiên WhatsApp.\n- Phục vụ một cổng ghép kênh (mặc định `18789`) cho WebSocket điều khiển, các API HTTP (kể cả `/v1/chat/completions`, `/v1/models`), route của plugin, Control UI và hooks.\n- Quản lý phiên, xác thực, ghép cặp thiết bị, lập lịch (cron), phát sự kiện.\n- Tải lại cấu hình nóng: mặc định chế độ `hybrid` theo dõi file cấu hình và thay snapshot nguyên tử khi nạp thành công.\n\n### Chạy và kiểm tra\n```bash\nopenclaw gateway --port 18789        # chạy foreground, log ra stdout\nopenclaw gateway status              # trạng thái dịch vụ + kiểm tra kết nối\nopenclaw channels status --probe     # thử từng tài khoản kênh\nopenclaw logs --follow\n```\nTrạng thái khoẻ gồm `Runtime: running`, kết nối thành công và dòng khả năng đúng như bạn mong đợi. Dùng `--require-rpc` khi cần bằng chứng gọi RPC được chứ không chỉ \"cổng mở\".\n\n### Mặc định an toàn\nBind vào loopback; xác thực bắt buộc theo mặc định; trong môi trường container mặc định bind có thể là `auto`, nên cần cấu hình xác thực rõ ràng.\n\n### Lỗi hay gặp\n- Chạy hai Gateway cùng một cổng hoặc cùng một thư mục trạng thái.\n- Nhầm \"tiến trình đang chạy\" với \"khoẻ\": phải kiểm tra RPC và kênh.\n\n### Tự kiểm tra\n- Vì sao mỗi máy chỉ nên có một Gateway?\n- Những client nào nối vào Gateway?"
+ },
+ "Gateway (lõi luôn chạy) › Cấu hình Gateway": {
+  "body": "Cấu hình Gateway nằm trong file JSON5 `~/.openclaw/openclaw.json` (cho phép comment và dấu phẩy thừa). Thiếu file thì OpenClaw dùng mặc định an toàn. Bạn chỉ thêm những gì muốn đổi: nối kênh và giới hạn ai được nhắn, chọn model, bật tool/sandbox, cron, hooks, phiên, mạng.\n\n### Hai nhóm khoá\nTheo tài liệu, khoá ngang hàng ở gốc chứa hạ tầng và mặc định chung; `agents.defaults` chứa hành vi vòng lặp agent; `agents.entries.<id>` ghi đè riêng cho từng agent.\n\n### Ba cách sửa\n```bash\nopenclaw configure                                   # wizard\nopenclaw config get agents.defaults.workspace\nopenclaw config set agents.defaults.userTimezone \"Europe/Vienna\"\n```\nHoặc dùng tab Config trong Control UI (form sinh từ schema, có chế độ JSON thô). Lệnh `openclaw config schema` in schema thật dùng để kiểm hợp lệ.\n\n### Ví dụ tối thiểu\n```json5\n{\n  agents: { defaults: { workspace: \"~/.openclaw/workspace\" } },\n  channels: { whatsapp: { allowFrom: [\"+15555550123\"] } },\n}\n```\n\n### Biến môi trường\nĐường dẫn đổi được bằng `OPENCLAW_CONFIG_PATH`, `OPENCLAW_STATE_DIR`. Khoá API nên để trong `~/.openclaw/.env` khi Gateway chạy dưới systemd/launchd (tiến trình nền không đọc `export` của shell bạn).\n\n### Lỗi hay gặp\n- Cấu hình sai khoá/kiểu: hãy chạy `openclaw doctor`.\n- Ghi bí mật dạng chữ thường vào file cấu hình; ưu tiên SecretRef.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat",
+    "ten": "8.3 — Biến môi trường trong thực tế, và bí mật thì đặt ở đâu",
+    "nguon": "Linux & Bash · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Gateway (lõi luôn chạy) › Authentication": {
+  "body": "Cần phân biệt hai loại xác thực. Trang này nói về **xác thực với nhà cung cấp model** (API key, OAuth, dùng lại đăng nhập Claude CLI). Còn việc client nào được phép kết nối vào Gateway (token, mật khẩu, trusted-proxy) nằm ở phần cấu hình gateway và bảo mật.\n\n### Khuyến nghị cho Gateway chạy 24/7\nTài liệu khuyến nghị **API key**: dễ đoán nhất, tính tiền rõ ràng. Cách làm:\n```bash\nexport <PROVIDER>_API_KEY=\"...\"\nopenclaw models status          # kiểm tra credential đã nhận chưa\n```\nNếu Gateway chạy dưới systemd/launchd, đặt khoá vào `~/.openclaw/.env` rồi khởi động lại; `openclaw onboard` cũng có thể lưu khoá cho daemon.\n\n### Dùng lại Claude CLI\nVới Anthropic có thêm đường: đăng nhập Claude Code trên chính máy chạy Gateway (`claude auth login`) rồi bảo OpenClaw định tuyến model Anthropic qua backend `claude-cli`. Phù hợp cho máy cá nhân; với host chạy lâu dài, API key vẫn dễ kiểm soát chi phí hơn.\n\n### Ý chính\n- Khoá nên nằm trên máy chạy Gateway, không nằm trong repo.\n- OAuth có token truy cập ngắn hạn tách biệt với trạng thái đăng nhập; trang Models hiển thị riêng.\n- `openclaw doctor` kiểm tra xác thực và báo mã lý do ổn định (thiếu credential, bị từ chối...).\n\n### Lỗi hay gặp\n- Đặt khoá trong shell nhưng daemon không thấy.\n- Sao chép nguyên thư mục xác thực giữa các agent (OAuth refresh không mang theo được mặc định).",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets",
+    "ten": "14.2 — Biến môi trường và khoá bí mật",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-11-2-xoay-khoa",
+    "ten": "11.2 — Xoay một cái khoá mà không đá tất cả mọi người ra ngoài",
+    "nguon": "Authentication · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Gateway (lõi luôn chạy) › Health & doctor": {
+  "body": "Hai công cụ đầu tiên khi có chuyện: **health** để xem hệ thống đang ra sao, **doctor** để chẩn đoán và sửa.\n\n### Health\n```bash\nopenclaw status              # tóm tắt: Gateway, kênh, phiên, hoạt động gần đây\nopenclaw status --deep       # hỏi Gateway thật sự kiểm tra từng tài khoản kênh\nopenclaw health --json       # snapshot cho máy đọc\nopenclaw logs --follow\n```\nTrong chat có thể gửi `/status` để nhận trả lời trạng thái mà không gọi agent. Lưu ý: dòng phiên không chứng minh kết nối đang sống; hãy dùng lệnh health/channels cho kết nối thật.\n\n### Doctor\n`openclaw doctor` là công cụ sửa chữa và di trú: sửa cấu hình cũ, kiểm tra dịch vụ, xác thực, phiên, plugin, cảnh báo bảo mật. Với `--fix` nó áp các sửa chữa; có chế độ headless cho tự động hoá. Sau khi nâng cấp hãy chạy doctor, vì nhiều thay đổi cấu hình được doctor tự chuyển đổi.\n\n### Mẹo vận hành\n- Có đường HTTP kiểm tra để gắn với giám sát uptime bên ngoài.\n- Phân biệt liveness (tiến trình sống) và readiness (sẵn sàng phục vụ).\n- Gặp sự cố: `status --all` (an toàn để dán khi nhờ trợ giúp) rồi `doctor`.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao",
+    "ten": "15.6 — Health check, cảnh báo, và chuyện bị gọi dậy lúc 3 giờ sáng",
+    "nguon": "Node.js · Chương 15",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-9-0-slides",
+    "ten": "9.0 — Slide Chương 9: giám sát bằng hình",
+    "nguon": "Deploy lên VPS · Chương 9",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-2-5-gioi-han-restart",
+    "ten": "2.5 — Giới hạn, chính sách khởi động lại và healthcheck",
+    "nguon": "Docker · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Gateway (lõi luôn chạy) › Chạy nền & heartbeat": {
+  "body": "Để trợ lý trả lời cả khi bạn đã đóng terminal, Gateway phải chạy như **dịch vụ nền** do hệ điều hành giám sát. OpenClaw cài giúp bằng `openclaw gateway install` hoặc `openclaw onboard --install-daemon`: macOS dùng LaunchAgent, Linux và WSL2 dùng systemd user service, Windows dùng Scheduled Task. Hệ điều hành tự khởi động lại khi tiến trình chết.\n\n### Heartbeat: thay đổi quan trọng\nTrước đây heartbeat là cơ chế gọi agent định kỳ để theo dõi. Theo tài liệu hiện tại, heartbeat đã được **chuyển thành các automation job thường**, mỗi job có lịch, chính sách, scratch và lịch sử chạy riêng. Chạy `openclaw doctor --fix` để chuyển các monitor cũ, rồi xem bằng `openclaw automations list --all`. Chi tiết sống ở trang Automations.\n\n### Tiến trình nền do agent chạy\nCông cụ `exec` có thể chạy lệnh dài ở nền và công cụ `process` quản lý chúng. Trên Linux, lệnh nền có thể chọn chế độ bền (`durable`) để sống sót qua lần khởi động lại Gateway bằng systemd user service.\n\n### Lỗi hay gặp\n- Chạy `openclaw gateway` trong tmux và quên cài dịch vụ.\n- Dùng cấu hình heartbeat cũ trên bản mới và thắc mắc vì sao không có tác dụng.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit",
+    "ten": "11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-3-4-trinh-quan-ly-dich-vu",
+    "ten": "3.4 — Giữ cho nó chạy: một trình quản lý dịch vụ thay cho nohup",
+    "nguon": "Deploy lên VPS · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-5-4-job-chay-nen",
+    "ten": "5.4 — Job, chạy nền, và sống sót khi terminal đóng lại",
+    "nguon": "Linux & Bash · Chương 5",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-10-3-log-journalctl",
+    "ten": "10.3 — Log: journalctl, /var/log và việc xoay vòng",
+    "nguon": "Linux & Bash · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Model providers › Providers tổng quan": {
+  "body": "OpenClaw không gắn cứng vào một hãng model. Bạn cắm **provider** (Anthropic, OpenAI, Google Gemini, Ollama, OpenRouter, và rất nhiều bên khác) rồi chọn model theo mẫu `provider/model`. Thay đổi model không đòi hỏi viết lại agent.\n\n### Cách cấu hình\n1. Xác thực với provider (thường qua `openclaw onboard`, hoặc API key/OAuth).\n2. Đặt model chính:\n```json5\n{ agents: { defaults: { model: { primary: \"anthropic/claude-opus-4-6\" } } } }\n```\nHoặc dùng `openclaw models list`, `openclaw models set <provider/model>`. Ghi chú trong tài liệu: thêm xác thực cho một provider **không** đổi model chính của bạn.\n\n### Ý chính\n- **Chọn model theo việc**: model mạnh cho việc phức tạp, model rẻ/nhanh cho việc lặt vặt hoặc sub-agent (có thể đặt model riêng cho sub-agent).\n- Có thể gắn nhiều khoá và xoay vòng, và khai báo model dự phòng (fallback) khi lỗi.\n- Có provider bundled (cài sẵn), provider qua plugin, provider tuỳ chỉnh qua `models.providers` với base URL riêng (kể cả máy chủ suy luận cục bộ và proxy).\n- Nhiều provider cùng loại có đường chạy khác nhau (API trực tiếp so với CLI đăng nhập thuê bao); hãy kiểm tra đường nào đang tính tiền.\n\n### Chọn model thế nào\nTài liệu khuyên dùng model thế hệ mới nhất, mạnh nhất cho chất lượng và an toàn, vì agent có quyền dùng tool thì model yếu dễ bị dẫn dắt làm điều sai.\n\n### Lỗi hay gặp\n- Nhầm tên model (thiếu tiền tố provider).\n- Đặt model chính không nằm trong danh sách được phép của chính sách model.\n- Dùng một model quá nhỏ làm agent có quyền chạy lệnh.\n\n### Tự kiểm tra\n- `provider/model` nghĩa là gì và đổi model chính bằng lệnh nào?\n- Khi nào nên dùng model rẻ hơn cho sub-agent?"
+ },
+ "Model providers › Anthropic (Claude)": {
+  "body": "Anthropic là hãng của họ model Claude, thường được chọn cho agent lập trình mạnh. OpenClaw hỗ trợ hai đường xác thực:\n\n- **API key**: truy cập API Anthropic, tính tiền theo mức dùng.\n- **Claude CLI**: dùng lại đăng nhập Claude Code có sẵn trên cùng máy, qua tệp thực thi `claude`.\n\n### Hai đường không thay thế nhau về tiền\nBộ chọn model hiển thị mỗi model Claude theo từng đường: `anthropic/*` là định danh model chuẩn, chạy được qua API hoặc qua Claude CLI; `claude-cli/*` chọn rõ runtime Claude gốc. Tên provider không tự chứng minh bạn đang bị tính tiền theo API hay theo thuê bao, nên hãy xem nhãn route và tài khoản được chọn. Một API key chọn rõ cho Claude CLI vẫn tính tiền API riêng.\n\n### Ví dụ\n```bash\nclaude auth login\nopenclaw models auth login --provider anthropic --method cli --set-default\n```\nVới host chạy lâu dài, tài liệu vẫn nhận xét API key là lựa chọn dễ kiểm soát nhất. Nếu cần tách đăng nhập khỏi tài khoản Claude cá nhân, đặt `CLAUDE_CONFIG_DIR` riêng cho tiến trình Gateway.\n\n### Lưu ý\nTên model và điều khoản dùng thuê bao thay đổi theo thời gian; hãy đọc trang Anthropic trong tài liệu trước khi chốt."
+ },
+ "Model providers › OpenAI & Google": {
+  "body": "OpenClaw dùng một provider id `openai` cho cả hai kiểu xác thực: API key (tính tiền theo mức dùng) và đăng nhập thuê bao ChatGPT/Codex. Model chọn theo dạng `openai/<model>`; runtime nào chạy lượt agent do cấu hình `agentRuntime` hoặc chính sách của OpenAI quyết định, tiền tố `openai/*` một mình chưa chọn runtime.\n\n### Google Gemini\nPlugin Google dùng khoá từ Google AI Studio (`GEMINI_API_KEY` hoặc `GOOGLE_API_KEY`):\n```bash\nopenclaw onboard --auth-choice gemini-api-key\nopenclaw models list --provider google\n```\nKhi Gateway đã chạy trong môi trường Google Cloud, dùng provider `google-vertex` với Application Default Credentials.\n\n### Trộn nhiều provider\n- Đặt model chính một nhà, sub-agent hoặc automation dùng nhà khác (mỗi job có thể ghi đè model).\n- Danh sách model Google được làm mới từ API khi có khoá, nên model mới xuất hiện mà không cần chờ bản OpenClaw mới.\n\n### Lỗi hay gặp\n- Cấu hình cũ dạng `codex/*` hoặc `openai-codex/*`: `openclaw doctor --fix` sẽ chuyển sang `openai/*` kèm runtime Codex.\n- Không để ý chi phí khi một lượt agent gọi model nhiều vòng."
+ },
+ "Model providers › Model local (Ollama)": {
+  "body": "Ollama cho phép chạy model ngôn ngữ ngay trên máy của bạn hoặc trên một máy trong mạng nội bộ, nên prompt không rời khỏi thiết bị. Đổi lại là phải đủ phần cứng và chất lượng/khả năng gọi tool tuỳ model.\n\n### Cách OpenClaw nối Ollama\nOpenClaw dùng **API gốc của Ollama** (`/api/chat`), không dùng endpoint tương thích OpenAI `/v1`. Tài liệu cảnh báo dùng URL `/v1` làm hỏng gọi tool: model có thể in ra JSON tool-call dưới dạng chữ thường. Do đó cấu hình `baseUrl: \"http://host:11434\"` (không có `/v1`).\n\nBa kiểu thiết lập: Cloud + Local (một host Ollama phục vụ model local và model `:cloud` nếu đã đăng nhập), Local only, hoặc Ollama Cloud trực tiếp (`ollama-cloud/<model>`).\n\n### Ý chính\n- Nhận diện model tự động và phát hiện khả năng (vision, tool) khi kết nối.\n- Có thể chạy suy luận trên một node đã ghép cặp.\n- Cần chú ý cửa sổ ngữ cảnh: model local thường nhỏ hơn nhiều, agent với prompt dài dễ vượt.\n\n### Lỗi hay gặp\n- Dùng `/v1` trong URL.\n- Chọn model quá nhỏ cho agent cần gọi tool nhiều bước.\n- Trên Mac, GPU không đi vào container, nên chạy Ollama trong Docker sẽ chậm; chạy trực tiếp trên host.",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-14-4-gpu-ai",
+    "ten": "14.4 — GPU và AI cục bộ trong container",
+    "nguon": "Docker · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Model providers › Định tuyến provider (ClawRouter)": {
+  "body": "Khi dùng nhiều provider, quản lý khoá, hạn mức và độ ổn định bắt đầu rắc rối. Hai hướng giải quyết trong OpenClaw là các **router/gateway** đứng giữa.\n\n### ClawRouter\nTheo tài liệu, ClawRouter cấp **một khoá có chính sách** dùng cho nhiều provider phía sau. Plugin bundled, chỉ cần khoá do quản trị viên ClawRouter phát hành (hiện một lần duy nhất khi cấp). Nó chỉ khám phá những model khoá được phép, định tuyến mỗi model theo giao thức của nó, và báo ngân sách tháng cùng mức dùng gộp trên các màn hình usage của OpenClaw. Khoá upstream nằm ở ClawRouter, nên máy chạy OpenClaw không phải cài từng provider.\n```bash\nexport CLAWROUTER_API_KEY=\"...\"\nopenclaw models list --all --provider clawrouter\nopenclaw models set clawrouter/<provider>/<model>\n```\n\n### OpenRouter\nOpenRouter là một API và một khoá cho nhiều model, dùng truyền tải tương thích OpenAI. Onboarding có đường OAuth hoặc API key, mặc định chọn `openrouter/auto`, sau đó bạn đặt model cụ thể.\n\n### Ý chính\n- Lợi ích: một khoá, ngân sách tập trung, đổi model dễ.\n- Giá phải trả: thêm một bên trung gian trong đường đi của dữ liệu.\n- Nếu đặt `agents.defaults.modelPolicy.allow`, phải thêm từng ref router được chọn vào danh sách đó.\n- OpenClaw cũng hỗ trợ khai báo model dự phòng ở cấp automation và agent."
+ },
+ "Channels (nhắn tin) › Channels tổng quan": {
+  "body": "Channel là cầu nối giữa agent và app nhắn tin bạn đã dùng hàng ngày. Thay vì mở một giao diện riêng, bạn nhắn cho trợ lý như nhắn cho một người bạn, từ điện thoại ở bất cứ đâu; Gateway nhận tin, chạy agent rồi trả lời qua chính kênh đó.\n\n### Các kênh\nDanh sách rất rộng: Telegram, WhatsApp, Discord, Slack, Signal, iMessage, Google Chat, Microsoft Teams, Matrix, SMS qua Twilio, IRC, LINE, Feishu... Một số kênh đi kèm lõi, một số là plugin chính thức cài bằng một lệnh (`openclaw plugins install @openclaw/<id>`) hoặc cài theo yêu cầu khi onboarding. Nhiều kênh chạy đồng thời trên một Gateway.\n\n### Bắt đầu với kênh nào\nTài liệu khuyên Telegram trước: chỉ cần bot token, không cần plugin, thiết lập nhanh nhất. WhatsApp yêu cầu ghép QR và lưu nhiều trạng thái hơn.\n```bash\nopenclaw channels add --channel telegram --token <bot-token>\nopenclaw channels status --probe\n```\n\n### An toàn là mặc định\nVới tin nhắn riêng (DM), kênh mặc định dùng **pairing**: người lạ nhận một mã ghép cặp và bạn duyệt trước khi tin của họ được xử lý. Nhóm mặc định bị hạn chế theo allowlist và cần nhắc tên (mention).\n\n### Lỗi hay gặp\n- Mở DM cho mọi người (`open`) trên kênh mà agent có quyền dùng tool mạnh.\n- Dùng tài khoản cá nhân cho bot nên bot bỏ qua tin của chính bạn (ví dụ Signal cần số riêng cho bot).\n\n### Tự kiểm tra\n- Pairing bảo vệ bạn khỏi điều gì?\n- Vì sao nên bắt đầu bằng Telegram?"
+ },
+ "Channels (nhắn tin) › Telegram": {
+  "body": "Telegram là kênh dễ cắm nhất: bạn tạo một bot qua BotFather, lấy token, rồi nối vào OpenClaw. Tài liệu ghi Telegram sẵn sàng cho production với tin riêng và nhóm, truyền tải mặc định là long polling (webhook là tuỳ chọn).\n\n### Các bước\n1. Tạo bot với BotFather và lấy token.\n2. Cấu hình token và chính sách DM, ví dụ `openclaw channels add --channel telegram --token <bot-token>`.\n3. Kiểm tra: `openclaw channels status --probe`.\n4. Nhắn bot lần đầu, nhận mã pairing và duyệt (`openclaw pairing approve telegram <mã>`).\n5. Thêm bot vào nhóm nếu cần.\n\n### Điều khiển truy cập\nChính sách DM mặc định là `pairing`; nhóm dùng allowlist và có thể bắt buộc mention. Cần biết ID Telegram của bạn để đưa vào allowlist.\n\n### Tính năng đáng biết\nXem trước khi stream, lệnh gốc, nút bấm inline (dùng cho duyệt lệnh exec), ảnh, ghi âm, vị trí, chủ đề forum tách phiên, và mini-app mở Control UI trong Telegram.\n\n### Lỗi hay gặp\n- Nhóm im lặng vì bật mention gating hoặc chưa allowlist.\n- Token sai hoặc bị thu hồi.\n- Polling không ổn định do mạng; xem trang troubleshooting của kênh."
+ },
+ "Channels (nhắn tin) › WhatsApp": {
+  "body": "WhatsApp cho phép nhắn với trợ lý như một liên hệ bình thường. OpenClaw dùng WhatsApp Web (thư viện Baileys): Gateway sở hữu phiên đã liên kết, và không có kênh Twilio WhatsApp riêng.\n\n### Thiết lập\n1. Cài plugin khi onboarding hoặc `openclaw plugins install @openclaw/whatsapp` (runtime WhatsApp nằm ngoài gói lõi).\n2. Đặt chính sách truy cập, ví dụ `dmPolicy: \"pairing\"` và `allowFrom` là số điện thoại của bạn.\n3. Liên kết bằng mã QR: `openclaw channels login --channel whatsapp`.\n4. Chạy `openclaw gateway`, nhắn lần đầu và duyệt yêu cầu pairing.\n\n### Lưu ý\n- Đăng nhập chỉ bằng QR; trên máy từ xa/headless cần cách gửi mã QR kịp tới điện thoại vì QR hết hạn nhanh.\n- Có thể có nhiều tài khoản (`--account`).\n- Dùng số riêng cho bot là cách sạch nhất; tài liệu bảo mật khuyên tách số cho WhatsApp, Signal, Telegram.\n- Phiên WhatsApp lưu nhiều trạng thái trên đĩa nên cần sao lưu thư mục trạng thái.\n\n### Lỗi hay gặp\n- Liên kết trên hai Gateway cùng lúc (chỉ một Gateway nên giữ phiên).\n- Quên đặt allowlist cho nhóm nên bot không trả lời."
+ },
+ "Channels (nhắn tin) › Discord / Slack": {
+  "body": "Đưa agent vào Discord hoặc Slack biến nó thành trợ lý chung của một nhóm, nhưng cũng đưa bạn vào bài toán quyền: ai được ra lệnh, bot được làm gì trong kênh nào.\n\n### Discord\nOpenClaw vào Discord như một bot qua gateway chính thức của Discord, hỗ trợ DM và kênh guild. Bạn tạo ứng dụng và bot, bật các privileged intent cần thiết, sao chép token, tạo link mời. Mặc định DM ở chế độ pairing; kênh guild dùng allowlist, có thể yêu cầu mention và định tuyến theo role. Có cả kênh thoại, thread cho sub-agent và nút/component tương tác để duyệt lệnh.\n\n### Slack\nHỗ trợ DM và kênh qua Slack app; truyền tải mặc định là **Socket Mode** (không cần URL công khai), ngoài ra có HTTP Request URL và chế độ relay. Cần tạo Slack app với manifest và scope phù hợp rồi cấu hình token theo trang Slack (mô hình token có phần riêng). Chat nhiều người (MPDM) được xử lý như nhóm.\n\n### Ý chính\n- Cả hai kênh dùng chung quy tắc nhóm: allowlist, mention gating, chính sách tool theo nhóm.\n- Mỗi kênh/thread có khoá phiên riêng, nên ngữ cảnh không lẫn.\n- Trợ lý chung cho nhóm thì mọi người trong nhóm nằm chung một ranh giới tin cậy.\n\n### Lỗi hay gặp\n- Thiếu intent hoặc scope nên bot im lặng hay nhận không đủ tin.\n- Hai bot trả lời nhau vô hạn; dùng cơ chế bảo vệ vòng lặp bot."
+ },
+ "Channels (nhắn tin) › iMessage / Signal / SMS": {
+  "body": "Nhóm kênh này hợp khi bạn muốn nhắn tin riêng tư kiểu gốc trên điện thoại, nhưng mỗi cái có điều kiện hạ tầng riêng.\n\n### iMessage\nTích hợp qua công cụ ngoài `imsg`: Gateway chạy `imsg rpc` và nói JSON-RPC qua stdio, không cần daemon hay cổng riêng. Thường chạy Gateway và `imsg` trên cùng một máy macOS đã đăng nhập Messages; nếu Gateway ở nơi khác thì trỏ `channels.imessage.cliPath` tới một wrapper SSH. Tính năng đầy đủ (trả lời, tapback, hiệu ứng, poll) cần chế độ Private API. Tài liệu ghi BlueBubbles đã bị gỡ, chỉ còn đường `imsg`.\n\n### Signal\nLà plugin tải về (`@openclaw/signal`); Gateway nói chuyện với `signal-cli` qua HTTP. OpenClaw không nhúng libsignal. Nên dùng **một số điện thoại riêng cho bot**, vì chạy bot trên tài khoản cá nhân thì nó bỏ qua tin của chính bạn (chống vòng lặp).\n\n### SMS\nPlugin chính thức, chạy qua Twilio (số điện thoại hoặc Messaging Service), chỉ nhắn trực tiếp. Gateway mở một webhook (mặc định `/webhooks/sms`) và kiểm chữ ký Twilio. Cần URL HTTPS công khai trỏ tới Gateway; gửi SMS tới số Mỹ có thể cần đăng ký A2P 10DLC, và đó là chuyện của nhà mạng, không phải của cấu hình OpenClaw.\n\n### Lỗi hay gặp\n- Mở webhook SMS công khai mà không giữ kiểm chữ ký.\n- Dùng số cá nhân cho bot Signal."
+ },
+ "Channels (nhắn tin) › Nhóm & phân quyền kênh": {
+  "body": "Đây là chỗ quyết định **ai được nói chuyện với agent**. Vì agent có thể có quyền mạnh, mặc định của OpenClaw là chặt.\n\n### Ba lớp kiểm soát\n- **DM**: `dmPolicy` (pairing, allowlist, open, disabled) cùng `allowFrom`.\n- **Nhóm**: `groupPolicy` (mặc định allowlist) cùng danh sách nhóm và người gửi được phép.\n- **Kích hoạt trả lời**: mention gating (`requireMention`), lệnh `/activation`.\n\n### Luồng một tin nhắn nhóm\nNếu `groupPolicy` là disabled thì bỏ. Nếu allowlist mà nhóm chưa có trong danh sách thì bỏ. Nếu cần mention mà không ai nhắc bot thì chỉ lưu làm ngữ cảnh. Còn lại coi là yêu cầu người dùng.\n\n### Access group\nBạn định nghĩa một danh sách người gửi có tên một lần dưới `accessGroups` rồi tham chiếu bằng `accessGroup:<tên>` ở nhiều allowlist, vì ID mỗi kênh khác nhau (Alice có ID Telegram khác ID Discord). Nhóm tự nó không cấp quyền gì, chỉ có tác dụng ở nơi được tham chiếu.\n\n### Lỗi hay gặp\n- Nhầm giữa \"được phép kích hoạt\" và \"được phép thấy ngữ cảnh\".\n- Dùng chung một Gateway cho những người không tin nhau; tài liệu nói rõ ranh giới tin cậy là mỗi Gateway."
+ },
+ "Web, Nodes & thiết bị › Web Control UI": {
+  "body": "Control UI là bảng điều khiển trên trình duyệt do chính Gateway phục vụ, mặc định ở `http://127.0.0.1:18789/`. Đây là cách dễ nhất để chat, xem phiên, sửa cấu hình, quản lý node và duyệt lệnh mà không cần nhớ lệnh CLI.\n\n### Mở nó thế nào\nSau onboarding, CLI tự mở dashboard. Mở lại hoặc sửa phiên trình duyệt bằng:\n```bash\nopenclaw dashboard\n```\nLệnh này mở một liên kết ghép cặp dùng một lần, cấp quyền quản trị cho đúng trình duyệt đó. Nếu giao diện đòi bí mật chia sẻ, dán token hoặc mật khẩu Gateway vào ô đăng nhập hay Settings.\n\n### Có gì trong đó\n- Tab chat với lịch sử và chọn model.\n- Tab Config: form sinh từ schema cấu hình, kèm chế độ JSON thô.\n- Quản lý phiên, node, sub-agent đang chạy, skill workshop, MCP (`/settings/mcp`), phê duyệt exec.\n- Có thể đặt `gateway.controlUi.basePath` (ví dụ `/openclaw`) để chạy sau một tiền tố đường dẫn.\n\n### Bảo mật\nTài liệu nhấn mạnh Control UI là **bề mặt quản trị** (chat, cấu hình, duyệt exec), **không được mở công khai**. Xác thực được kiểm ngay lúc bắt tay WebSocket. Nên dùng localhost, Tailscale Serve hoặc SSH tunnel. Nếu bật TLS (`gateway.tls.enabled`) thì địa chỉ là `https://` và `wss://`.\n\n### Lỗi hay gặp\n- Mở thẳng cổng 18789 ra Internet.\n- Sau khi nâng cấp, trình duyệt giữ bản UI cũ; tải lại trang.\n- Quên phân biệt quyền operator và quyền chỉ đọc khi chia sẻ cho người khác.\n\n### Tự kiểm tra\n- Tại sao Control UI được coi là bề mặt quản trị?\n- Lệnh nào mở lại dashboard an toàn?"
+ },
+ "Web, Nodes & thiết bị › Webchat & TUI": {
+  "body": "Ngoài Control UI đầy đủ, OpenClaw có hai cách chat gọn hơn, dùng chung phiên và quy tắc định tuyến với các kênh khác.\n\n### WebChat\nGiao diện chat gốc (SwiftUI trên macOS/iOS) nói chuyện thẳng với WebSocket của Gateway, cũng như tab chat trong Control UI. Lịch sử luôn lấy từ Gateway (không theo dõi file cục bộ) và trả lời luôn quay về WebChat. Nếu Gateway không với tới thì WebChat chỉ đọc. Vẫn cần đường xác thực Gateway hợp lệ (mặc định là bí mật chia sẻ, ngay cả trên loopback).\n\n### TUI (giao diện terminal)\n```bash\nopenclaw gateway     # chạy Gateway\nopenclaw tui         # mở TUI nối vào Gateway\nopenclaw tui --url ws://<host>:<port> --token <token>   # Gateway từ xa\nopenclaw chat        # chế độ local: dùng runtime nhúng, không cần Gateway\n```\nChế độ local chạy agent trực tiếp nên phần lớn tool dùng được, nhưng các tính năng chỉ có ở Gateway thì không. Màn hình hiện tên agent, phiên, model, trạng thái chạy và số token. Phiên có khoá dạng `agent:<agentId>:<sessionKey>`, đổi bằng `/session`.\n\n### Khi nào dùng\n- TUI: trên VPS qua SSH, không có trình duyệt.\n- WebChat/Control UI: khi cần chọn model, xem tool card, ảnh.\n\n### Lỗi hay gặp\n- Trộn `--local` với `--url`/`--token` (không được phép).\n- Tưởng chat local có đủ tính năng của Gateway."
+ },
+ "Web, Nodes & thiết bị › Nodes (thiết bị)": {
+  "body": "Node là **thiết bị đồng hành** (macOS, iOS, Android, watchOS, hoặc máy headless) kết nối vào Gateway với vai trò `node` và công bố một bề mặt lệnh: camera, màn hình, vị trí, thông báo, `system.run`... Agent gọi các lệnh này qua `node.invoke`. Điện thoại của bạn từ đó trở thành \"tai, mắt, tay\" ở thế giới thật.\n\n### Nhớ một điều\nNode là **ngoại vi, không phải gateway**: nó không chạy dịch vụ Gateway, và tin nhắn kênh (Telegram, WhatsApp...) đến Gateway chứ không đến node. Mô hình hay dùng là Gateway ở VPS, node ở thiết bị cá nhân.\n\n### Vòng đời\n1. Node kết nối WebSocket kèm danh tính thiết bị.\n2. Bạn duyệt **pairing** thiết bị mới; Gateway cấp device token cho các lần kết nối sau.\n3. Bạn quản lý trạng thái và nâng cấp node.\n4. Giao việc: chạy lệnh trên node (dùng allowlist), đặt exec nhắm vào node, MCP server và skill do node công bố, chuyển file.\n\n### Ý chính\n- Lệnh trên node đi qua chính sách duyệt riêng của máy đó; không có allowlist thì bị từ chối.\n- App macOS có thể chạy ở chế độ node; đừng bật thêm node CLI thứ hai trên cùng máy.\n- Cấp quyền theo nguyên tắc tối thiểu: camera và màn hình là dữ liệu rất nhạy cảm.\n\n### Lỗi hay gặp\n- Quên duyệt pairing nên node hiện kết nối nhưng không dùng được.\n- Mở lệnh `system.run` quá rộng trên máy cá nhân."
+ },
+ "Web, Nodes & thiết bị › Computer use, camera, voice": {
+  "body": "Ba nhóm khả năng mở rộng agent sang thế giới thật, đều chạy qua node hoặc máy chứa Gateway.\n\n### Computer use\nMột công cụ `computer` cho phép agent **nhìn và điều khiển màn hình** của máy chứa Gateway hoặc của node đã ghép cặp, qua cùng các hợp đồng `computer.act` và `screen.snapshot`. Cần model có khả năng nhìn ảnh. Hành động không khả dụng trả về từ chối có cấu trúc kèm danh sách hành động đang dùng được. Có chế độ phiên cloud gắn với desktop riêng của phiên, và người dùng có thể \"take control\" để tạm dừng agent.\n\n### Camera và thiết bị\nNode mobile/macOS công bố lệnh camera và màn hình; agent chụp ảnh hay ghi màn hình khi bạn cho phép.\n\n### Voice wake\nDanh sách từ đánh thức là **một danh sách toàn cục** do Gateway giữ (không có danh sách riêng từng node), mặc định gồm `openclaw`, `claude`, `computer`. Sửa trong Control UI (Settings → Talk) hoặc app; Gateway phát thay đổi tới mọi client. Có thể định tuyến từ đánh thức tới agent hoặc phiên cụ thể, tối đa 32 từ và 32 luật.\n\n### Cảnh báo\nĐiều khiển màn hình là quyền rất mạnh: agent có thể bấm vào mọi thứ bạn đang đăng nhập. Dùng máy hoặc tài khoản riêng, bật duyệt, và đừng để agent làm việc với tài khoản tiền bạc."
+ },
+ "Tools (năng lực agent) › Tools tổng quan": {
+  "body": "Agent chỉ trả lời chữ nếu không có tool. **Tool** là hàm có kiểu mà agent gọi để làm việc thật: `exec` (chạy lệnh), `browser`, `web_search`, `web_fetch`, `message` (gửi tin), `image_generate`... Model chỉ thấy những tool còn sống sót sau profile, chính sách cho phép/cấm, giới hạn theo provider, trạng thái sandbox, quyền của kênh và plugin.\n\n### Tool, skill, plugin khác nhau thế nào\n- **Tool**: hành động có thể gọi (đọc dữ liệu, sửa file, gửi tin, gọi dịch vụ).\n- **Skill**: gói chỉ dẫn `SKILL.md` dạy agent quy trình khi đã có đủ tool.\n- **Plugin**: thêm khả năng chạy (tool mới, provider, kênh, hook, skill đóng gói).\n\n### Kiểm soát quyền\nBạn dùng chính sách tool (cho phép/cấm theo nhóm, theo agent, theo provider), sandbox và chế độ phê duyệt exec. Ít tool hơn thường tốt hơn: tool thừa vừa tốn token mô tả vừa mở rộng bề mặt tấn công.\n\n### Mở rộng khác\nSub-agent cho việc song song; Swarm cho phối hợp nhiều agent từ một script Code Mode; Tool Search khi danh mục tool rất lớn; Code Mode gộp nhiều tool trong một chương trình gọn.\n\n### Lỗi hay gặp\n- Tắt tool `write` và nghĩ agent không sửa file được, trong khi `exec` vẫn chạy được lệnh làm điều đó.\n- Cấp tool toàn quyền cho agent nhận tin từ nhóm công khai.\n\n### Tự kiểm tra\n- Khi nào dùng skill thay vì viết tool mới?\n- Những yếu tố nào quyết định agent nhìn thấy tool nào?"
+ },
+ "Tools (năng lực agent) › Browser control": {
+  "body": "Tool browser cho agent mở tab, đọc trang, bấm, gõ, chụp màn hình, xuất PDF trên **trình duyệt thật**. OpenClaw quản lý một profile Chrome/Brave/Edge/Chromium tên `openclaw`, tách hẳn khỏi trình duyệt cá nhân của bạn, điều khiển qua một dịch vụ nhỏ trong Gateway chỉ nghe loopback.\n\n### Hai kiểu profile\n- **Profile `openclaw`**: trình duyệt riêng của agent, không chạm phiên đăng nhập của bạn. An toàn hơn.\n- **Profile `user`**: gắn vào phiên Chrome đã đăng nhập thật của bạn qua Chrome DevTools MCP. Mạnh hơn và rủi ro hơn.\n\n### Khi nào dùng browser thay vì web fetch\nTrang cần chạy JavaScript, cần đăng nhập hoặc thao tác tương tác thì dùng browser. Chỉ cần đọc nội dung thì `web_fetch` nhẹ và rẻ hơn.\n\n### Bảo mật\nTrình duyệt thật phơi ra nhiều thứ: cookie, phiên đăng nhập, mạng nội bộ. Tài liệu có chính sách SSRF mặc định chặt, phần bảo mật điều khiển browser, và hỗ trợ trình duyệt từ xa hay dịch vụ CDP có token. Ảnh Docker có biến thể `-browser` kèm Chromium.\n\n### Lỗi hay gặp\n- Gắn agent vào profile đã đăng nhập tài khoản quan trọng khi chưa cần.\n- Không cài trình duyệt trên host headless nên tool không xuất hiện; xem trang browser setup."
+ },
+ "Tools (năng lực agent) › Exec & code execution": {
+  "body": "`exec` cho agent chạy lệnh shell trong workspace; đây là **bề mặt có thể ghi/xoá bất cứ thứ gì** mà máy hay sandbox cho phép. Tài liệu nhắc rõ: tắt các tool `write`, `edit`, `apply_patch` không khiến exec thành chỉ đọc.\n\n### Chạy ở đâu\nTham số `host` chọn nơi chạy: `sandbox`, `gateway`, `node` hoặc `auto`. Lệnh dài có thể chạy nền với tool `process` quản lý; trên Linux có thể chọn chế độ bền (`durable`) để sống sót qua khởi động lại Gateway.\n\n### Cơ chế duyệt\nChế độ `tools.exec.mode` gồm: `deny`, `allowlist`, `ask` (hỏi người khi lệnh chưa có trong danh sách), `auto` (reviewer tự động xét, người xử lý khi cần) và `full`. Lệnh chỉ chạy khi chính sách, allowlist và (nếu có) phê duyệt của người cùng đồng ý. Chi tiết nằm ở bước *Permission modes* và *Secrets & phân quyền exec*.\n\n### Code execution\nTool `code_execution` là thứ khác: chạy Python phân tích trong môi trường từ xa của nhà cung cấp xAI, không có quyền với file hay shell của bạn, tính phí theo lượt gọi. Cần chạy lệnh thật trên máy thì dùng `exec`.\n\n### Lỗi hay gặp\n- Đặt `full` để khỏi bị hỏi, rồi cho agent nhận tin từ nhóm đông người.\n- Quên rằng sandbox mặc định tắt; tool chạy với quyền của tài khoản chạy Gateway."
+ },
+ "Tools (năng lực agent) › Web fetch & search": {
+  "body": "Agent không biết tin mới sau thời điểm huấn luyện, nên cần công cụ lấy thông tin từ web.\n\n### Web fetch\n`web_fetch` thực hiện một HTTP GET rồi trích nội dung đọc được (HTML thành markdown hoặc text). Bật sẵn, không cần cấu hình. Tham số chính: `url` (chỉ http/https), `extractMode` (`markdown` hoặc `text`), `maxChars`. Kết quả có cấu trúc gồm URL cuối cùng, trạng thái, tiêu đề, cờ cắt bớt, độ dài. **Không chạy JavaScript**, nên trang nặng JS hoặc cần đăng nhập thì dùng tool browser.\n\n### Web search\nTìm kiếm qua provider bạn cấu hình (tài liệu nhắc Brave, Perplexity, Exa và các bên khác, cùng Gemini Grounding, Ollama web search). Mỗi provider cần khoá riêng.\n\n### Vì sao cần cẩn thận\nNội dung lấy từ web là **dữ liệu không tin cậy**. Một trang có thể chứa câu lệnh nhắm vào agent (prompt injection). OpenClaw bọc nội dung ngoài như nội dung không tin cậy, và bạn nên kết hợp với chính sách tool chặt để trang web không thể khiến agent chạy lệnh.\n\n### Lỗi hay gặp\n- Fetch một trang cần JS rồi thấy nội dung rỗng.\n- Để agent đọc web và có quyền exec đầy đủ cùng lúc."
+ },
+ "Tools (năng lực agent) › Subagents & swarm": {
+  "body": "Việc lớn thường chia được thành nhiều việc nhỏ làm song song. OpenClaw có hai mức.\n\n### Sub-agent\nSub-agent là lượt chạy nền sinh ra từ một lượt agent đang có, chạy trong phiên riêng (`agent:<agentId>:subagent:<uuid>`) và mặc định báo kết quả về cho bên yêu cầu. Mục tiêu: song song hoá nghiên cứu hoặc tác vụ chậm mà không chặn lượt chính, giữ cô lập mặc định (không được tool phiên hay tool nhắn tin), và cho phép lồng nhiều tầng. Mỗi sub-agent có ngữ cảnh và token riêng nên tốn tiền; nên đặt model rẻ hơn cho sub-agent (`agents.defaults.subagents.model`) và để agent chính dùng model tốt. Khi con cần đúng lịch sử hiện tại, sinh với `context: \"fork\"`.\n\n### Swarm\nSwarm điều phối **nhiều** sub-agent từ một script Code Mode bằng luồng điều khiển JavaScript thường như `Promise.all`; không có DSL riêng. Dùng cho fan-out lớn (khoảng năm con trở lên). Có \"collector\" con, kết quả có cấu trúc (`outputSchema`), giới hạn đồng thời (mặc định 32), tối đa số con mỗi nhóm. Swarm bật theo mặc định, tắt bằng `tools.swarm: false`; Code Mode thì phải bật riêng.\n\n### Khi nào dùng\n- Một hai việc con: sub-agent thường là đủ.\n- Hàng chục việc giống nhau (quét nhiều file, nhiều nguồn): Swarm.\n\n### Lỗi hay gặp\n- Quên rằng chi phí nhân lên theo số con.\n- Cho sub-agent quyền ngang agent cha mà không cần."
+ },
+ "Tools (năng lực agent) › Permission modes": {
+  "body": "Permission mode quyết định agent có bao nhiêu quyền **trước khi** chạy lệnh trên máy, ghi file, hay xin backend thêm quyền. Đây là núm vặn quan trọng nhất cân bằng giữa tiện lợi và an toàn.\n\n### Chế độ exec trên host\nCấu hình `tools.exec.mode`, mỗi chế độ ứng với một cặp (độ chặt của allowlist, có hỏi khi thiếu hay không):\n- `deny`: chặn hoàn toàn exec trên host.\n- `allowlist`: chỉ chạy lệnh trong danh sách; lệnh ngoài danh sách bị từ chối im lặng.\n- `ask`: chạy lệnh khớp allowlist, lệnh mới thì hỏi người.\n- `auto`: như `ask` nhưng có reviewer tự động quyết `allow`, `deny` hoặc `ask`; ba lần reviewer từ chối liên tiếp trên gateway thì chuyển cho người.\n- `full`: chạy không hỏi theo chính sách thường.\n\nTài liệu khuyến nghị `auto` cho agent lập trình cần quyền hữu ích mà không bắt người duyệt mọi lệnh. Kiểm tra bằng `openclaw approvals get` và `openclaw exec-policy show`, rồi khởi động lại Gateway.\n\n### Hai khái niệm dễ nhầm\n`tools.exec.host` chọn **nơi** lệnh chạy; `tools.exec.mode` chọn **cách** duyệt lệnh. Hai thứ độc lập. Có thể giới hạn trần theo từng provider/model.\n\n### Lỗi hay gặp\n- Dùng `full` trên máy chứa dữ liệu thật.\n- Quên khởi động lại sau khi đổi chế độ."
+ },
+ "Skills & ClawHub › Skills": {
+  "body": "Skill là một **gói hướng dẫn** dạy agent làm đúng một loại việc: một thư mục chứa file `SKILL.md` (phần đầu YAML frontmatter, thân là Markdown) và có thể thêm file phụ trợ. Skill không phải tool mới; nó là kiến thức quy trình như \"cách soạn báo cáo tuần theo mẫu của tôi\" hoặc \"cách dùng công cụ X đúng thứ tự\". Agent nạp skill theo nhu cầu thay vì nhét hết vào prompt.\n\n### Nạp từ đâu, ưu tiên ra sao\nCùng tên skill ở nhiều nơi thì nguồn ưu tiên cao hơn thắng. Theo tài liệu, từ cao xuống thấp: skills trong workspace (`<workspace>/skills`), skills của dự án (`.agents/skills`), skills cá nhân, skills được quản lý trong thư mục trạng thái, skills do Workshop học, skills đóng gói sẵn, và các thư mục bổ sung/plugin. Lúc nạp, OpenClaw lọc theo môi trường, cấu hình và sự hiện diện của binary cần thiết.\n\n### Quản lý\n```bash\nopenclaw skills list\nopenclaw skills list --eligible\nopenclaw skills search \"calendar\"\nopenclaw skills install @owner/<slug>\n```\nCó danh sách cho phép skill theo từng agent (`agents.defaults.skills` làm nền, `agents.entries.*.skills` thay thế hẳn chứ không gộp).\n\n### Ý chính\n- Skill dạy \"cách làm\"; tool cho \"khả năng làm\". Có skill mà thiếu tool thì không chạy được.\n- Skill từ nguồn ngoài là mã/chỉ dẫn bạn tin tưởng: đọc trước khi cài.\n- Skill mới có thể cần phiên mới hoặc khởi động lại để agent thấy.\n\n### Lỗi hay gặp\n- Hai skill trùng tên nên bản bạn không ngờ tới đang thắng.\n- Mô tả skill quá dài hoặc mơ hồ, agent không biết khi nào dùng.\n\n### Tự kiểm tra\n- Khác biệt giữa skill và tool?\n- Skill nào thắng khi trùng tên?"
+ },
+ "Skills & ClawHub › Tạo skill riêng": {
+  "body": "Viết skill riêng là cách rẻ nhất để biến quy trình lặp lại của bạn thành thứ agent tự làm đúng.\n\n### Tạo skill đầu tiên\n```bash\nmkdir -p ~/.openclaw/workspace/skills/hello-world\n```\nTạo `SKILL.md`:\n```markdown\n---\nname: hello-world\ndescription: A simple skill that prints a greeting.\n---\n# Hello World\nWhen the user asks for a greeting, use the `exec` tool to run:\necho \"Hello from your custom skill!\"\n```\nQuy tắc đặt tên: chữ thường, số và dấu gạch ngang; tên thư mục nên khớp `name`; `description` một dòng, dưới 160 ký tự vì nó hiện cho agent và trong lệnh slash.\n\n### Kiểm tra\n```bash\nopenclaw skills list\nopenclaw agent --message \"give me a greeting\"\n```\nCó thể gọi trực tiếp bằng `/skill hello-world`. OpenClaw theo dõi file `SKILL.md`; nếu đang giữa phiên cũ mà không thấy skill mới, dùng `/new` hoặc `openclaw gateway restart`.\n\n### Skill Workshop\nSkill Workshop giữ những skill **do agent tự viết cho mình** (\"learned skills\"): sau việc nhiều bước hay lặp lại, agent lưu quy trình; nếu skill dẫn sai thì tự sửa. Mọi thay đổi áp dụng ngay, lưu bản trước để hoàn tác, skill không dùng 30 ngày thì được lưu trữ. Có chế độ propose để bạn duyệt bản nháp. Nên dùng Workshop cho quy trình, còn sự kiện về bạn thì thuộc bộ nhớ, kiến thức về một repo thì thuộc `AGENTS.md` của repo đó.\n\n### Lỗi hay gặp\n- Nhét cả kiến thức dự án vào skill thay vì tài liệu repo.\n- Skill gọi tool/lệnh nhưng agent chưa được cấp quyền dùng nó."
+ },
+ "Skills & ClawHub › ClawHub (marketplace)": {
+  "body": "ClawHub là **registry công khai** cho skill và plugin của OpenClaw (trang `clawhub.ai`). Giống kho gói của một ngôn ngữ: bạn tìm, cài, cập nhật thay vì tự viết lại.\n\n### Dùng từ OpenClaw\n```bash\nopenclaw skills search \"calendar\"\nopenclaw skills install @openclaw/demo\nopenclaw skills update --all\nopenclaw plugins search \"calendar\"\nopenclaw plugins install clawhub:<package>\n```\nLệnh native cài vào workspace đang dùng và ghi lại nguồn, nên các lần cập nhật sau vẫn lần theo ClawHub. Tài liệu lưu ý bản phát hành cũ (đến 2026.10.4) cần tiền tố `clawhub:`; bản mới có thể bỏ. Cài thẳng từ npm: `npm:<package>`.\n\n### Kho chứa gì\nSkills (gói văn bản có phiên bản gồm `SKILL.md` và file phụ), plugin mã, và bundle plugin. Mỗi thứ có phiên bản semver, tag như `latest`, changelog, lượt tải, sao và **bản tóm tắt quét bảo mật**, để bạn xem trước khi cài.\n\n### Cách dùng an toàn\n- Skill và plugin là chỉ dẫn/mã chạy trong hệ thống của bạn; coi như cài phần mềm từ bên thứ ba.\n- Đọc trang gói, kiểm tra nguồn, dùng `openclaw skills verify` khi cần.\n- Ghim phiên bản nếu muốn tái lập (`--version`).\n\n### Lỗi hay gặp\n- Cài hàng loạt skill không đọc, rồi agent có thêm khả năng ngoài ý muốn.\n- Nhầm lệnh `openclaw` (cài) với CLI `clawhub` riêng (đăng nhập, xuất bản).\n\n### Tự kiểm tra\n- Lệnh nào tìm và cài một skill từ ClawHub, và lệnh nào cập nhật tất cả?\n- Bạn kiểm tra gì trước khi cài một skill của người lạ?"
+ },
+ "Skills & ClawHub › Xuất bản skill lên ClawHub": {
+  "body": "Khi có skill đáng chia sẻ, bạn xuất bản lên ClawHub để người khác `openclaw skills install`. Việc này dùng **CLI `clawhub` riêng** (cài bằng `npm i -g clawhub`), khác với lệnh `openclaw` dùng để cài.\n\n### Quy trình\n```bash\nclawhub login            # đăng nhập bằng GitHub; môi trường headless dùng --token\nclawhub skill publish ./my-skill \\\n  --slug my-skill --name \"My Skill\" --changelog \"Initial release\"\n```\nSkill mới bắt đầu ở 1.0.0; thay đổi sau tự lên bản vá kế tiếp (hoặc chọn `--version`). Nội dung không đổi thì bị bỏ qua; có `--dry-run` để xem trước.\n\n### Định dạng skill\nMột thư mục có `SKILL.md` bắt buộc cùng file phụ tuỳ ý. Frontmatter chứa `name` (chữ thường, số, gạch ngang, 1–64 ký tự), `description` (dùng làm tóm tắt trong UI và tìm kiếm), `version`. Yêu cầu runtime khai trong `metadata.openclaw`, ví dụ `requires.env` (biến môi trường cần có) và `requires.bins` (binary cần có). Khai đúng giúp người cài và quét bảo mật biết skill cần gì.\n\n### Kiểm duyệt\nBản phát hành đi vào trạng thái chờ và chạy kiểm tra bảo mật tự động; chưa qua thì chưa hiện ở tìm kiếm, cài hay tải. Phát hiện mã độc, lỗi lặp hoặc quá hạn thì không được xuất bản. Có thể đặt `--categories` và `--topics` để người dùng lọc.\n\n### Lỗi hay gặp\n- Quên khai biến môi trường cần thiết trong metadata.\n- Để lộ bí mật trong file phụ; dùng `.clawhubignore` hoặc `.gitignore` loại trừ."
+ },
+ "Tự động hoá (24/7) › Automation tổng quan": {
+  "body": "Trợ lý chỉ trả lời khi bạn hỏi thì mới dùng được một nửa sức. Tự động hoá cho agent chạy **theo lịch hoặc theo sự kiện**: báo cáo sáng, nhắc việc, kiểm tra định kỳ, phản ứng với tin đến.\n\n### Bốn cơ chế, chọn đúng việc\nTheo trang tổng quan, mỗi nhu cầu có một cơ chế khuyến nghị:\n- **Automations** (bộ lập lịch có sẵn, lệnh `openclaw automations`, bí danh `openclaw cron`): báo cáo hằng ngày, nhắc một lần (`--at`), phân tích hằng tuần, kiểm tra hộp thư mỗi 30 phút.\n- **Hooks**: script nội bộ phản ứng với sự kiện vòng đời (khi `/new`, `/reset`, khởi động Gateway, luồng tin nhắn).\n- **Webhooks**: HTTP có xác thực để dịch vụ bên ngoài đánh thức hoặc giao việc cho agent.\n- **Standing orders**: chỉ thị thường trực được nạp vào mọi phiên, ví dụ \"luôn kiểm tra tuân thủ trước khi trả lời\".\n\n### Ý chính\n- Mỗi job tự sở hữu lịch, ngữ cảnh, chính sách gửi kết quả và lịch sử chạy.\n- Giám sát định kỳ giờ cũng là job thường; heartbeat cũ được doctor chuyển sang.\n- Nhiều thứ cũ đã đổi: theo tài liệu, ledger Tasks chung, API TaskFlow và plugin TaskFlow Webhooks đã bị gỡ; Lobster chạy pipeline cục bộ có phê duyệt tiếp tục được.\n\n### Lỗi hay gặp\n- Quên múi giờ nên job chạy lệch giờ.\n- Không giới hạn quyền cho job chạy không người trông: tác nhân tự hành cần ranh giới rõ.\n\n### Tự kiểm tra\n- Khi nào chọn automation, khi nào chọn webhook?\n- Điều gì bắt buộc phải có trước khi cho agent tự hành?"
+ },
+ "Tự động hoá (24/7) › Cron jobs (theo lịch)": {
+  "body": "Automation job là khối lập lịch của OpenClaw: bộ lập lịch lưu job, đánh thức agent đúng giờ và có thể gửi kết quả tới kênh chat, webhook hoặc không đâu cả. Quản lý bằng `openclaw automations` (bí danh `openclaw cron`).\n\n### Ví dụ\nNhắc một lần:\n```bash\nopenclaw automations create \"2027-02-01T16:00:00Z\" \\\n  --name \"Reminder\" --session main \\\n  --system-event \"Reminder: check the draft\" \\\n  --wake now --delete-after-run\n```\nJob định kỳ dùng biểu thức cron và múi giờ:\n```bash\nopenclaw automations add --name daily-inbox-triage \\\n  --cron \"0 8 * * 1-5\" --tz America/New_York \\\n  --message \"Run inbox triage per standing orders\" --announce\n```\nXem và kiểm tra:\n```bash\nopenclaw automations list\nopenclaw automations runs <job-id>\n```\n\n### Ý chính\n- Các loại lịch: một lần, khoảng cách đều, biểu thức cron, và điều kiện theo dõi.\n- Kiểu chạy: phiên chính, phiên hiện tại, phiên cô lập hoặc phiên tuỳ chọn. Việc độc lập nên chạy cô lập.\n- Có thể ghi đè model, mức suy nghĩ, công cụ cho từng job; dùng `activeHours` và `idleOnly` để tôn trọng giờ yên tĩnh.\n- Cron chuẩn: ngày trong tháng và ngày trong tuần kết hợp bằng OR.\n\n### Lỗi hay gặp\n- Múi giờ máy chủ khác múi giờ bạn nghĩ.\n- Job chạy nhưng không gửi kết quả vì chưa cấu hình delivery.\n- Một job làm quá nhiều việc; hãy mỗi tác vụ một job.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer",
+    "ten": "11.2 — Hẹn giờ: cron và timer của systemd",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh",
+    "ten": "13.4 — Lịch trình: hẹn giờ, ưu tiên, bóp tốc độ và job định kỳ",
+    "nguon": "Node.js · Chương 13",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Tự động hoá (24/7) › Hooks & webhooks": {
+  "body": "Hai cách khác nhau để \"đánh thức\" agent bằng sự kiện, dễ nhầm vì tên giống nhau.\n\n### Hooks nội bộ\nLà các handler JavaScript/TypeScript nhỏ (một thư mục có `HOOK.md` cùng handler) chạy **trong tiến trình Gateway** khi OpenClaw phát một sự kiện: lưu ngữ cảnh khi `/new`, ghi log lệnh, phản ứng với tin nhắn. Có hook đóng gói sẵn.\n```bash\nopenclaw hooks list\nopenclaw hooks info command-logger\nopenclaw hooks enable command-logger\n```\nHook nội bộ là mã tin cậy, không bị sandbox: nó có quyền file, mạng và môi trường của Gateway. Đọc mã trước khi bật. Muốn chặn hay sửa lời gọi tool thì dùng plugin hooks (`api.on(...)`), một hệ khác.\n\n### Webhooks (HTTP vào Gateway)\nCho dịch vụ ngoài khởi động việc qua HTTP có xác thực. Tài liệu mô tả các điểm vào `POST /hooks/wake`, `POST /hooks/agent` và hook ánh xạ tên `POST /hooks/<name>`. Bật bằng `hooks.enabled` (tách biệt với `hooks.internal`). Có thêm đường Gmail qua Google Pub/Sub và trigger IMAP có lọc người gửi.\n\n### Bảo mật\nNgười gọi webhook từ Internet là đầu vào không tin cậy: giữ token xác thực mạnh, lọc người gửi, hạn chế quyền tool của phiên được kích hoạt.\n\n### Lỗi hay gặp\n- Nhầm `hooks.internal` với `hooks.enabled`.\n- Webhook công khai không có xác thực hay giới hạn tần suất.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-webhook",
+    "ten": "10.5 — Thiết kế webhook (1): bên gửi — chữ ký, thử lại và nhật ký giao",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-10-4-nhan-webhook",
+    "ten": "10.6 — Thiết kế webhook (2): bên nhận — body thô, phát lại, trả lời nhanh và thứ tự",
+    "nguon": "API & System Design · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=webhook",
+    "ten": "Webhook thanh toán",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Tự động hoá (24/7) › Tasks & TaskFlow": {
+  "body": "Trang tài liệu gốc cho \"Tasks\" và \"TaskFlow\" hiện **không còn nội dung**: phần tổng quan Automation ghi rằng ledger Tasks dùng chung, API điều phối TaskFlow và plugin TaskFlow Webhooks đã bị gỡ. Vì sản phẩm đổi nhanh, bài này nói về nhu cầu mà chúng từng phục vụ và các công cụ hiện được tài liệu nêu để làm việc đó. Tôi không mô tả API cũ vì không xác minh được.\n\n### Nhu cầu: tác vụ nhiều bước, bền bỉ\nBạn muốn một quy trình dài (thu thập, xử lý, duyệt, gửi) có trạng thái, chạy được lâu và tiếp tục sau khi bị ngắt. Theo trang Automation hiện tại:\n- **Sub-agent** khởi chạy và chờ các lượt uỷ thác, kết quả quay về bên yêu cầu.\n- **ACP** cho phiên chạy harness lập trình.\n- **Lịch sử chạy của automation** (`openclaw automations runs <job-id>`) để xem việc theo lịch đã chạy ra sao.\n- **Lobster** chạy pipeline cục bộ kèm phê duyệt có thể tiếp tục.\n\n### Nguyên tắc thiết kế quy trình nhiều bước\n- Mỗi bước ghi kết quả ra nơi bền (file, kho dữ liệu), không chỉ giữ trong ngữ cảnh model.\n- Bước có tác dụng phụ cần cổng duyệt của người.\n- Mỗi bước nên chạy lại được an toàn (idempotent).\n\n### Lưu ý\nNếu bạn gặp lệnh hay cấu hình TaskFlow trong hướng dẫn cũ, hãy đối chiếu với release notes trước khi dùng."
+ },
+ "Tự động hoá (24/7) › Standing orders": {
+  "body": "Standing order là **quyền hạn thường trực** bạn trao cho agent cho các chương trình việc cụ thể, để nó tự làm trong ranh giới thay vì chờ bạn nhắc từng lần. Ví dụ: \"Báo cáo tuần là của bạn: mỗi thứ Sáu soạn, gửi, chỉ báo cho tôi nếu có bất thường.\"\n\n### Viết ở đâu\nTrong file workspace, khuyến nghị đặt thẳng vào `AGENTS.md` (được tự động nạp vào mọi phiên), hoặc tách `standing-orders.md` rồi tham chiếu từ `AGENTS.md`.\n\n### Mỗi chương trình nêu\n- **Scope**: được làm gì.\n- **Triggers**: khi nào chạy (lịch, sự kiện, điều kiện).\n- **Approval gates**: việc nào cần người duyệt trước.\n- **Escalation rules**: khi nào dừng và hỏi.\nVà nên có mục \"What NOT to do\" nêu những điều cấm.\n\n### Kết hợp với automation\nStanding order định nghĩa **được làm gì**, automation định nghĩa **khi nào làm**. Prompt của job nên tham chiếu standing order thay vì chép lại nội dung.\n```bash\nopenclaw automations add --name daily-inbox-triage \\\n  --cron \"0 8 * * 1-5\" --tz America/New_York \\\n  --message \"Execute daily inbox triage per standing orders.\"\n```\nMô hình hay dùng: thực thi, kiểm chứng, báo cáo.\n\n### Cảnh báo\nStanding order là chỉ dẫn bằng văn bản cho model, **không phải rào cản kỹ thuật**. Quyền hạn thật phải do chính sách tool, sandbox và duyệt lệnh giữ; với việc tự hành bậc cao, hãy cấu hình các chặn cứng trước."
+ },
+ "CLI & bảo mật › OpenClaw CLI": {
+  "body": "CLI `openclaw` là cách điều khiển mọi thứ từ dòng lệnh: cài đặt, Gateway, chẩn đoán, kênh, model, skill, bí mật, MCP. Với tự host trên máy chủ không có giao diện, đây thường là công cụ chính của bạn.\n\n### Nhóm lệnh hay dùng\n```bash\nopenclaw onboard                # hướng dẫn cài đặt ban đầu\nopenclaw setup                  # điểm vào \"system agent\"; có --baseline cho cấu hình tối thiểu\nopenclaw configure              # wizard cấu hình\nopenclaw config get|set|unset <path>\nopenclaw gateway install|start|status|restart\nopenclaw status | health | logs --follow\nopenclaw doctor [--fix]         # chẩn đoán và sửa\nopenclaw channels add|status --probe\nopenclaw models list|set|status\nopenclaw skills list|search|install|update\nopenclaw plugins search|install|update\nopenclaw secrets audit|reload\nopenclaw security audit\nopenclaw dashboard | tui\n```\n\n### Ý chính\n- `openclaw setup` trên hệ thống đã cấu hình mở một chat với system agent; trên hệ thống mới thì chạy onboarding.\n- `openclaw doctor` là lệnh đầu tiên cần chạy khi có điều gì không ổn: nó gom kiểm tra Gateway, kênh, plugin, skill, định tuyến model, trạng thái và di trú cấu hình.\n- Nhiều lệnh có `--json` để dùng trong tự động hoá, và mã thoát ổn định cho CI (ví dụ `secrets audit --check`).\n- Có thể chạy hồ sơ riêng bằng `--profile`.\n\n### Lỗi hay gặp\n- Chạy lệnh trên máy khác với máy chạy Gateway (một số lệnh phải chạy ngay trên host).\n- Bỏ qua bước doctor sau khi nâng cấp.\n\n### Tự kiểm tra\n- Bạn dùng lệnh nào khi nghi cấu hình hỏng? Khi nghi một kênh không nhận tin?"
+ },
+ "CLI & bảo mật › MCP & skills qua CLI": {
+  "body": "**MCP (Model Context Protocol)** là giao thức chuẩn để một ứng dụng AI kết nối với \"máy chủ công cụ\" bên ngoài (dữ liệu, dịch vụ, hành động). `openclaw mcp` làm hai việc theo tài liệu:\n\n1. **`openclaw mcp serve`**: OpenClaw đóng vai MCP server, để client MCP bên ngoài đọc/gửi các hội thoại kênh qua stdio.\n2. **Quản lý MCP server bên ngoài**: `list`, `show`, `status`, `doctor`, `probe`, `add`, `set`, `configure`, `tools`, `login`, `logout`, `reload`, `unset`. Đây là sổ đăng ký phía client của OpenClaw: các server bạn lưu sẽ được đưa vào runtime agent đủ điều kiện.\n\n`status` và `doctor` kiểm tra cấu hình; `probe` mở kết nối MCP thật và liệt kê khả năng, mà không cần chạy một lượt agent. Cũng có trang `/settings/mcp` trong Control UI.\n\n### Skills qua CLI\n`openclaw skills` tìm kiếm ClawHub, cài từ ClawHub/Git/thư mục cục bộ, xác minh (`verify`) và cập nhật skill đã cài, có thể giới hạn theo agent hoặc toàn cục.\n\n### Vì sao cần chú ý bảo mật\nMỗi MCP server là một cổng nối agent với hệ thống ngoài; coi nó như cấp thêm tool. Chỉ cắm server bạn tin, giới hạn tool nó công bố, và xem lại token đăng nhập.\n\n### Lỗi hay gặp\n- Nhầm `mcp serve` (OpenClaw là server) với `mcp add` (OpenClaw là client).\n- Quên rằng server do mcporter quản lý không nằm trong `openclaw mcp list`."
+ },
+ "CLI & bảo mật › Bảo mật Gateway": {
+  "body": "Agent AI có thể chạy lệnh, đọc file, gửi tin nhắn và dùng trình duyệt thay bạn. Khi tự host, **bạn** là người giữ hàng rào. OpenClaw có mặc định thận trọng; việc của bạn là không phá mặc định đó và biết khi nào mình đã lệch.\n\n### Mô hình tin cậy\nMột Gateway tương ứng một ranh giới tin cậy: một người vận hành hoặc một nhóm tin nhau. OpenClaw **không** là ranh giới đa người thuê cho những người đối nghịch. Cần tách ranh giới thì tách Gateway, thông tin xác thực, tốt nhất cả người dùng hệ điều hành hoặc máy.\n\n### Mặc định an toàn\nBind vào loopback; DM từ người lạ nhận mã pairing; nhóm theo allowlist và cần mention; xác thực Gateway bắt buộc. Một lệnh kiểm trôi cấu hình:\n```bash\nopenclaw security audit\n```\n\n### Ý chính\n- **Truy cập**: giữ allowlist chặt; đừng để `open` trên kênh có agent quyền mạnh.\n- **Quyền agent**: sandbox, chính sách tool, chế độ duyệt exec; read-only khi chỉ cần đọc.\n- **Prompt injection**: nội dung web, email, tin nhắn là không tin cậy; đừng để một agent vừa đọc nội dung lạ vừa có quyền ghi quan trọng.\n- **Mạng**: không mở cổng Gateway ra Internet khi chưa đọc runbook \"exposure\"; nhớ Docker publish cổng có thể vượt tường lửa.\n- **Bí mật và log**: biết file nào chứa credential, quyền file, và rằng transcript có thể chứa dữ liệu nhạy cảm.\n- **Sự cố**: có quy trình khoanh vùng, xoay khoá, kiểm toán, thu bằng chứng.\n- Gateway có sổ audit giới hạn, chỉ lưu metadata (không lưu nội dung prompt hay đầu ra tool).\n\n### Lỗi hay gặp\n- Coi một nhóm Discord công khai là \"nhóm bạn bè\" nên cho quyền exec.\n- Không chạy audit sau mỗi lần đổi cấu hình lớn.",
+  "lessons": [
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet",
+    "ten": "12.3 — Chỉ mở đúng cổng: ss, ufw, và cách Docker đi vòng qua tường lửa của bạn",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-3-gia-co-may-chu",
+    "ten": "11.3 — Gia cố một máy chủ: giờ đầu tiên, và nếp thường ngày sau đó",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/daa401-design-and-secure-ai-system/learn?lessonSlug=daa401-5-1-llm-security",
+    "ten": "5.1 — Bảo mật LLM & GenAI",
+    "nguon": "Design and Secure AI System · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DAA401"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-8-2-cong-bo-cong",
+    "ten": "8.2 — Công bố cổng, và cái bẫy tường lửa",
+    "nguon": "Docker · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "CLI & bảo mật › Secrets & phân quyền exec": {
+  "body": "Ba việc riêng nhưng liên quan: giữ khoá bí mật gọn gàng, duyệt lệnh exec, và phân quyền operator.\n\n### Secrets (SecretRef)\nThay vì để khoá dạng chữ thường trong cấu hình, OpenClaw dùng **SecretRef** (nguồn `env`, `file`, `exec` hoặc `store`) và giữ ảnh chụp runtime lành mạnh. `openclaw secrets` gồm:\n- `audit`: quét chỉ đọc tìm chữ thường, ref chưa giải được, sai thứ tự ưu tiên.\n- `configure` và `apply`: lập kế hoạch rồi áp dụng, `apply --dry-run` chỉ kiểm tra.\n- `reload`: giải lại ref và công bố snapshot nguyên tử.\n- `store`: kho bí mật theo nhóm trong cơ sở dữ liệu trạng thái cục bộ.\nVòng lặp khuyến nghị: `audit --check` → `configure --plan-out` → `apply --dry-run` → `apply` → `audit --check` → `reload`. `audit --check` trả mã thoát 1 khi có phát hiện, dùng được trong CI.\n\n### Duyệt lệnh exec\nPhê duyệt exec là rào chắn trên máy thực thi: lệnh chỉ chạy khi chính sách, allowlist và (nếu cần) người dùng đồng ý. Phê duyệt chỉ **siết thêm**, không nới hơn cấu hình `tools.exec.*`. Nhớ rằng một phiên Gateway toàn quyền có thể bỏ qua đánh giá này.\n\n### Ngữ nghĩa credential\n`openclaw models status --probe` và doctor dùng mã lý do ổn định (thiếu credential, bị loại khỏi thứ tự auth...) để bạn biết vì sao một khoá không dùng được.\n\n### Lỗi hay gặp\n- Commit khoá vào git: xoá file không đủ, coi khoá đã lộ và xoay ngay.\n- Xoay khoá làm hỏng mọi phiên cùng lúc vì không có cửa sổ chuyển tiếp.",
+  "lessons": [
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-11-1-bi-mat",
+    "ten": "11.1 — Bí mật: đưa chúng tới tiến trình mà không đụng vào kho mã",
+    "nguon": "Authentication · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-11-2-xoay-khoa",
+    "ten": "11.2 — Xoay một cái khoá mà không đá tất cả mọi người ra ngoài",
+    "nguon": "Authentication · Chương 11",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-8-3-bien-moi-truong-bi-mat",
+    "ten": "8.3 — Biến môi trường trong thực tế, và bí mật thì đặt ở đâu",
+    "nguon": "Linux & Bash · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-4-4-bi-mat-trong-lich-su-git",
+    "ten": "4.4 — Bí mật lỡ vào lịch sử git là bí mật ĐÃ LỘ",
+    "nguon": "Deploy lên VPS · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "CLI & bảo mật › Remote access an toàn": {
+  "body": "Gateway nên ở loopback, nhưng bạn vẫn muốn điều khiển từ laptop hay điện thoại ở xa. Cách an toàn là **không mở cổng ra Internet** mà dùng một kênh riêng.\n\n### Các lựa chọn theo tài liệu\n- **Tailscale (hoặc VPN)** là cách được ưu tiên: Gateway chỉ hiện trong mạng riêng của bạn. Có Tailscale Serve, và khi bật `gateway.auth.allowTailscale` thì danh tính từ header Tailscale có thể thoả xác thực.\n- **SSH tunnel** là phương án phổ quát:\n```bash\nssh -N -L 18789:127.0.0.1:18789 user@gateway-host\n```\nSau đó mở `http://127.0.0.1:18789/`; bắt tay và token vẫn áp dụng qua đường hầm.\n- Reverse proxy với chế độ `trusted-proxy`, khi proxy cấp danh tính người vận hành (cần cấu hình cẩn thận).\n- Bind vào `lan` hoặc `tailnet` thì **bắt buộc** có bí mật chia sẻ (`gateway.auth.token` hoặc `password`), trừ khi uỷ quyền xác thực cho proxy tin cậy.\n\n### Thiết bị\nNode iOS/Android cũng nối qua LAN/tailnet hoặc SSH tunnel. Nối từ xa vẫn cần duyệt pairing rõ ràng; tin cậy loopback tự động chỉ áp dụng cho kết nối cục bộ.\n\n### Lỗi hay gặp\n- Mở cổng 18789 thẳng ra Internet chỉ để tiện.\n- Chế độ xác thực `none` trên đường vào công khai; tài liệu cảnh báo giữ nó tắt ngoài môi trường riêng tư.\n- Quên chạy kiểm tra exposure trước khi bind khỏi loopback.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-9-3-ssh",
+    "ten": "9.3 — SSH: khoá, file cấu hình và đường hầm",
+    "nguon": "Linux & Bash · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-10-3-reverse-forward",
+    "ten": "10.3 — Reverse proxy, forward proxy và đường hầm",
+    "nguon": "Networking for Developers · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Tiếp tục › Release notes & cập nhật": {
+  "body": "OpenClaw phát hành thường xuyên; số phiên bản theo tháng (ví dụ v2026.11.3). Theo dõi release notes là cách biết có tính năng mới, thay đổi phá vỡ, bản vá bảo mật và hướng dẫn nâng cấp.\n\n### Vì sao quan trọng\nNhiều bản gần đây ghi rõ \"security remediations\" và sửa lỗi cập nhật, hồi phục cơ sở dữ liệu, phiên. Với một thứ chạy ngầm có quyền sâu, bỏ lỡ bản vá bảo mật là rủi ro thật. Ngược lại, thay đổi lớn (ví dụ heartbeat chuyển thành automation job, TaskFlow bị gỡ, BlueBubbles bị gỡ) có thể làm hướng dẫn cũ hết đúng.\n\n### Nâng cấp an toàn\n1. Đọc release notes các bản bạn sắp nhảy qua.\n2. Sao lưu: `openclaw backup create` (xuất trạng thái, cấu hình, hồ sơ xác thực, workspace).\n3. Kiểm tra phiên bản Node còn trong dải hỗ trợ trước khi cập nhật OpenClaw.\n4. Cập nhật (kênh `stable` hoặc `dev`: `openclaw update --channel stable`).\n5. Chạy `openclaw doctor` để chuyển cấu hình, rồi `openclaw status`.\n6. Có kế hoạch quay lại: nếu có vấn đề, khôi phục từ bản sao lưu vào thư mục sạch.\n\n### Lỗi hay gặp\n- Tự động cập nhật trên máy đang chạy việc quan trọng mà chưa có bản sao lưu.\n- Cập nhật OpenClaw trước khi nâng Node, dẫn tới cảnh báo hoặc lỗi SQLite.\n- Dùng kênh `dev` trên máy chạy thật.",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-4-2-semver-lockfile",
+    "ten": "4.2 — Semver và lockfile",
+    "nguon": "Node.js · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Tiếp tục › Học sâu Claude Code": {
+  "body": "OpenClaw thường dùng Claude Code làm \"bộ não lập trình\" qua tuỳ chọn đăng nhập Claude CLI: onboarding có thể tự dùng lại đăng nhập Claude Code có sẵn, và model Anthropic có thể đi qua backend `claude-cli`. Vì vậy hiểu Claude Code giúp bạn hiểu cả cách agent trong OpenClaw hành xử.\n\n### Các khái niệm đối ứng\nPhần lớn khái niệm bạn gặp ở OpenClaw có họ hàng trong Claude Code:\n- File hướng dẫn dự án (`CLAUDE.md` ↔ `AGENTS.md` của workspace OpenClaw).\n- Skills dạng `SKILL.md`.\n- MCP server để thêm tool.\n- Sub-agent cho việc song song.\n- Hook chạy theo sự kiện, và chế độ quyền hỏi trước hoặc tự động.\nHiểu một bên thì bên kia học nhanh hơn nhiều.\n\n### Học thế nào\nLộ trình riêng về Claude Code có trên chính nền tảng này (xem phần đọc thêm). Nên học song song: cài Claude Code, viết một file hướng dẫn dự án, thử một skill nhỏ, rồi quay lại OpenClaw và thấy các khái niệm gặp lại.\n\n### Lưu ý\nTôi chỉ nói về các khái niệm chung; chi tiết lệnh và tên tính năng của Claude Code thay đổi theo bản phát hành, nên hãy đối chiếu tài liệu chính thức của nó."
+ }
+}

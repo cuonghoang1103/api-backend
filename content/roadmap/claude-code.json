@@ -1,0 +1,626 @@
+{
+ "Giới thiệu › Claude Code là gì": {
+  "body": "Claude Code là một công cụ dòng lệnh (CLI) của Anthropic: bạn mở terminal trong thư mục dự án, gõ `claude`, rồi giao việc bằng tiếng người. Khác với chatbot chỉ trả lời bằng chữ, nó có thể đọc file trong repo, sửa file, chạy lệnh (build, test, git) và nhìn kết quả để làm tiếp. Hình dung nó như một đồng nghiệp ngồi cạnh, cầm sẵn bàn phím trên máy của bạn, nhưng xin phép trước khi làm những việc nhạy cảm.\n\n### Vì sao cần biết\n- Việc lặp lại nhiều bước (tìm bug, đổi tên hàm ở 20 file, viết test, soạn commit) được giao nguyên cả cụm thay vì copy-paste từng đoạn qua khung chat.\n- Nó làm việc trên chính codebase thật của bạn nên câu trả lời bám sát code đang có, không phải ví dụ chung chung.\n\n### Ý chính\n- Chạy tại thư mục dự án; phạm vi làm việc mặc định là thư mục đó.\n- Mỗi hành động có ảnh hưởng (ghi file, chạy lệnh shell) đều đi qua cơ chế cấp quyền; bạn duyệt từng lần hoặc đặt sẵn luật cho phép/chặn.\n- Hội thoại là một phiên (session) có \"ngữ cảnh\" giới hạn; bạn có thể nén, xoá, hoặc nối lại phiên sau.\n- Ngoài terminal, cùng lõi này còn xuất hiện ở extension editor và app desktop (xem các bước sau).\n\n### Lỗi hay gặp\n- Coi nó như máy tìm kiếm: hỏi mơ hồ rồi bực vì kết quả chung chung. Nói rõ mục tiêu, file liên quan, cách kiểm tra \"xong\".\n- Duyệt mọi yêu cầu cấp quyền mà không đọc lệnh nó định chạy.\n\nChi tiết cài đặt và tính năng hiện hành xem tài liệu chính thức trong phần đọc thêm; tính năng thay đổi nhanh nên hãy đối chiếu bản docs mới nhất.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-2-7-doc-cung-claude",
+    "ten": "2.7 — Đọc cùng Claude: phiên làm việc thật có chú thích, và bảng tra một trang",
+    "nguon": "Operating Systems for Developers · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Giới thiệu › Coding Agent là gì": {
+  "body": "Coding agent là chương trình dùng mô hình ngôn ngữ để tự hoàn thành một mục tiêu lập trình qua nhiều bước, thay vì chỉ trả lời một câu. Bạn nói \"làm cho test này qua\", agent tự quyết định: đọc file nào, sửa chỗ nào, chạy lệnh gì, kết quả ra sao thì làm tiếp. So sánh: trình gợi ý code kiểu autocomplete giống người nhắc bài; coding agent giống người bạn cầm bút làm bài cùng, rồi tự đối chiếu đáp án.\n\n### Ý chính\n- Có công cụ: đọc/ghi file, chạy shell, tìm kiếm, đôi khi truy cập web hoặc dịch vụ ngoài.\n- Có vòng lặp: hành động, quan sát kết quả, điều chỉnh (xem bước \"Agentic Loop\").\n- Có hàng rào: quyền hạn, chế độ duyệt, để con người vẫn kiểm soát.\n- Giỏi việc có tiêu chí kiểm tra rõ (test chạy qua, build xanh); yếu khi mục tiêu mơ hồ.\n\n### Lỗi hay gặp\n- Giao việc không có cách kiểm chứng, rồi tin mù vào kết quả. Luôn tự đọc diff và chạy test.\n- Nghĩ agent \"hiểu\" toàn bộ dự án: nó chỉ biết phần đã đọc vào ngữ cảnh.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-s51",
+    "ten": "10.D — 📄 Học theo tài liệu · Buổi 51: AI agent viết code trong servlet — vòng lặp biên dịch và tự sửa",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/rai101-introduction-to-robotics-and-artificial-intelligence/learn?lessonSlug=rai101-ts-6-2",
+    "ten": "6.2 — Tác tử thông minh: PEAS, loại môi trường và kiến trúc tác tử",
+    "nguon": "Introduction to Robotics and Artificial Intelligence · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "RAI101"
+   },
+   {
+    "href": "/courses/huong-dan-ct-work/learn?lessonSlug=ctw-11-ai-agent-tich-hop",
+    "ten": "Nâng cao: Trợ lý AI, AI agent và kết nối GitHub, Slack, lịch",
+    "nguon": "CT Work Tutorial · Phần 5",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › Agentic Loop là gì": {
+  "body": "Agentic loop là vòng lặp cốt lõi của mọi coding agent: nhận mục tiêu, lập kế hoạch ngắn, hành động bằng một công cụ (đọc file, sửa, chạy lệnh), quan sát kết quả, rồi quyết định bước kế tiếp, lặp tới khi xong hoặc cần hỏi bạn. Giống thợ sửa xe: nghe tiếng máy, mở nắp, thử, nghe lại, chứ không đoán một lần rồi thôi.\n\n### Ví dụ một vòng\n1. Mục tiêu: \"sửa test `sum.test.js` đang đỏ\".\n2. Chạy test, đọc thông báo lỗi.\n3. Mở file `sum.js`, thấy sai điều kiện, sửa.\n4. Chạy lại test; nếu vẫn đỏ thì đọc lỗi mới và lặp.\n\n### Ý chính\n- Chất lượng vòng lặp phụ thuộc vào tín hiệu phản hồi: test, type-check, linter cho agent biết \"đúng hay sai\" một cách khách quan.\n- Mỗi vòng tiêu tốn ngữ cảnh và token, nên việc dài cần quản lý ngữ cảnh.\n- Bạn có thể ngắt giữa chừng (phím Esc) và chỉnh hướng.\n\n### Lỗi hay gặp\n- Vòng lặp quẩn: agent sửa đi sửa lại cùng một chỗ. Dừng lại, cho thêm thông tin hoặc đổi cách tiếp cận.\n- Không có test nào để chạy nên agent không biết khi nào đã xong.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-s51",
+    "ten": "10.D — 📄 Học theo tài liệu · Buổi 51: AI agent viết code trong servlet — vòng lặp biên dịch và tự sửa",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Giới thiệu › Vibe Coding là gì": {
+  "body": "Vibe coding là cách dựng phần mềm bằng cách mô tả điều mình muốn cho AI rồi chạy thử, sửa lời yêu cầu, chạy lại, thay vì tự gõ từng dòng. Nó nhanh cho bản thử nghiệm và công cụ cá nhân, nhưng càng gần sản phẩm thật càng cần bạn hiểu và kiểm tra code do AI sinh ra. Claude Code là một công cụ thường dùng cho kiểu làm việc này.\n\nLộ trình riêng về Vibe Coding trên trang này đi sâu hơn: xem liên kết ở phần đọc thêm.\n\n### Ý chính\n- Mô tả mục tiêu rõ, chia nhỏ, kiểm tra từng bước.\n- Dùng Git để có đường lui khi AI sửa hỏng.\n- Vẫn cần đọc code, test và hiểu bảo mật trước khi đưa lên production."
+ },
+ "Giới thiệu › Cài đặt Claude": {
+  "body": "Cài đặt Claude Code là bước đầu để có agent chạy trong terminal của bạn. Cách cài chính thức đã thay đổi theo thời gian (trước đây qua npm, hiện có thêm trình cài đặt riêng), vì vậy hãy làm theo trang Setup trong tài liệu chính thức thay vì nhớ lệnh cố định. Điều không đổi: bạn cần một terminal, quyền cài phần mềm, và một tài khoản để đăng nhập (gói thuê bao Claude hoặc API key Anthropic, hoặc nhà cung cấp đám mây được hỗ trợ).\n\n### Các bước chung\n1. Chuẩn bị terminal: macOS/Linux dùng sẵn; Windows thường dùng WSL hoặc theo hướng dẫn riêng trong docs.\n2. Cài theo trang Setup chính thức (kiểm tra yêu cầu phiên bản Node nếu bạn cài qua npm).\n3. Đi vào thư mục một repo nhỏ của bạn rồi chạy `claude`.\n4. Lần đầu sẽ được hướng dẫn đăng nhập, rồi bạn gõ yêu cầu đầu tiên, ví dụ \"giải thích cấu trúc thư mục này\".\n5. Chạy `/doctor` nếu có sự cố, để kiểm tra cài đặt.\n\n### Vì sao cần biết\nBiết cách cài đúng giúp tránh lỗi quyền (cài toàn cục bằng quyền root), lỗi PATH khiến `claude: command not found`, và giúp bạn cập nhật đều đặn vì công cụ đổi nhanh.\n\n### Lỗi hay gặp\n- `command not found`: thư mục chứa lệnh chưa nằm trong PATH; mở terminal mới hoặc kiểm tra biến PATH.\n- Chạy ở thư mục home hoặc thư mục quá rộng, khiến phạm vi làm việc quá lớn. Hãy `cd` vào đúng repo.\n- Dùng sai loại đăng nhập (gói thuê bao so với API key) rồi ngạc nhiên về cách tính phí.\n\n### Tự kiểm tra\n- Lệnh nào kiểm tra tình trạng cài đặt?\n- Vì sao nên chạy `claude` bên trong repo thay vì thư mục home?",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-3-cai-dat",
+    "ten": "0.3 — Có một shell Linux thật trên mọi loại máy",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-8-1-path",
+    "ten": "8.1 — PATH, và vì sao có \"command not found\"",
+    "nguon": "Linux & Bash · Chương 8",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Giới thiệu › Subscription vs API": {
+  "body": "Có hai cách trả tiền chính để dùng Claude Code. Thuê bao (Pro/Max...): trả phí cố định theo tháng, dùng trong hạn mức của gói; hợp với người dùng đều đặn và muốn chi phí dễ đoán. API key: trả theo lượng token thực dùng; hợp với tự động hoá, CI, hoặc dùng không đều. Chi tiết gói, hạn mức và cách Claude Code áp dụng thay đổi theo thời gian nên hãy xem trang giá và trang Costs trong tài liệu chính thức.\n\n### Cách chọn\n- Dùng hằng ngày để lập trình: thường thuê bao tiện hơn, nhưng cần theo dõi hạn mức.\n- Chạy script, pipeline, nhiều tác vụ song song: API key cho kiểm soát chi tiết hơn.\n- Công ty có sẵn nhà cung cấp đám mây (Bedrock, Vertex): có thể đi qua đó.\n\n### Lỗi hay gặp\n- Quên rằng biến môi trường chứa API key có thể ghi đè đăng nhập thuê bao, dẫn đến bị tính tiền theo token ngoài ý muốn. Kiểm tra bằng `/status` hoặc xem trong docs."
+ },
+ "Giới thiệu › API usage": {
+  "body": "Khi chạy Claude Code bằng API key (trực tiếp từ Anthropic hoặc qua nhà cung cấp đám mây), bạn trả theo token: gồm token đầu vào (prompt, file đã đọc, lịch sử hội thoại) và token đầu ra (câu trả lời, code sinh ra). Hội thoại càng dài, mỗi lượt càng gửi lại nhiều ngữ cảnh, nên chi phí tăng.\n\n### Ý chính\n- Dùng lệnh xem chi phí phiên (như `/cost`; tên lệnh có thể đổi, hãy kiểm tra docs) và trang Costs trong docs.\n- Giảm chi phí: `/clear` khi đổi chủ đề, `/compact` khi phiên dài, giao việc cụ thể, chọn model nhẹ hơn cho việc đơn giản.\n- Đặt ngân sách/giới hạn ở phía tài khoản API nếu chạy tự động.\n- Chia sẻ key cho cả nhóm thì dùng cơ chế quản lý của tổ chức, không dán key vào repo.\n\n### Lỗi hay gặp\n- Để một phiên chạy cả ngày với ngữ cảnh phình to.\n- Commit API key vào Git. Dùng biến môi trường hoặc trình quản lý bí mật."
+ },
+ "Cách dùng Claude › Claude CLI": {
+  "body": "Claude CLI là cách dùng gốc và đầy đủ nhất của Claude Code: bạn gõ `claude` trong terminal, ở thư mục dự án, và trò chuyện với agent ngay trong cửa sổ dòng lệnh. Mọi cách dùng khác (extension, app) đều dựa trên cùng ý tưởng này. CLI hiểu được vì nó chạy ngay trên máy bạn: đọc file thật, chạy lệnh thật, dùng đúng git và công cụ build của dự án.\n\n### Các chế độ dùng chính\n- Tương tác: `claude` mở phiên; bạn gõ yêu cầu, duyệt hành động, dùng lệnh `/`.\n- Khởi động kèm prompt: `claude \"giải thích repo này\"`.\n- Không tương tác (headless): `claude -p \"câu hỏi\"` in kết quả rồi thoát, dùng được trong script và pipe.\n- Nối lại phiên: `claude -c` (phiên gần nhất) hoặc `claude -r` (chọn phiên); xem các bước sau.\n\n### Ý chính\n- Terminal là nền tảng: biết shell, PATH, pipe, git thì dùng CLI trơn tru hơn.\n- Danh sách cờ đầy đủ nằm ở trang CLI reference trong docs; cờ có thể được thêm hoặc đổi, nên hãy chạy `claude --help` để xem bản bạn đang có.\n\n### Lỗi hay gặp\n- Chạy ở sai thư mục, nên agent thao tác trên repo không mong muốn.\n- Không biết thoát: dùng `/exit` hoặc tổ hợp phím được ghi trong docs.\n\n### Tự kiểm tra\n- Khác biệt giữa `claude` và `claude -p` là gì?\n- Khi nào nên dùng chế độ headless?",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-2-kernel-shell-terminal",
+    "ten": "0.2 — Kernel, shell, terminal: ba thứ người ta hay lẫn",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: Linux, shell và cách học, bằng hình",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "slide"
+   }
+  ]
+ },
+ "Cách dùng Claude › Desktop App": {
+  "body": "Ngoài terminal, Claude Code còn có ứng dụng desktop, để bạn dùng agent qua giao diện cửa sổ mà không cần tự mở dòng lệnh. Phù hợp với người ít quen terminal hoặc muốn nhìn nhiều phiên làm việc, diff và kết quả trong một giao diện. Tính năng, nền tảng hỗ trợ và cách cài thay đổi theo thời gian, nên hãy xem trang tổng quan trong docs chính thức để biết bản hiện hành và những gì app làm được so với CLI."
+ },
+ "Cách dùng Claude › Editor Extensions": {
+  "body": "Claude Code có extension cho các editor như VS Code (và họ JetBrains). Lợi ích: thấy các thay đổi dưới dạng diff ngay trong editor, duyệt từng thay đổi, tham chiếu file/đoạn code đang chọn, và vẫn dùng chung cấu hình (CLAUDE.md, quyền, MCP) với CLI. Bạn không phải rời editor để chạy agent.\n\n### Ý chính\n- Cài extension từ marketplace của editor, theo hướng dẫn trong trang IDE integrations của docs.\n- Có thể chạy CLI trong terminal tích hợp của editor và để nó kết nối với editor.\n- Đọc diff trong editor thường dễ hơn trong terminal khi thay đổi lớn.\n\n### Lỗi hay gặp\n- Nhầm extension với CLI: một số tính năng khác nhau giữa hai nơi, hãy kiểm tra docs.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-1-2-vscode",
+    "ten": "1.2 — VS Code: xưởng làm việc của bạn",
+    "nguon": "Nền tảng Lập trình Web · Chương 1",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Cách dùng Claude › Mobile (Channels)": {
+  "body": "Mục này nói về việc điều khiển agent từ xa qua kênh nhắn tin hoặc tích hợp bên thứ ba (chat, ticket, CI...), ví dụ giao việc từ điện thoại hoặc từ một issue, trong khi agent chạy ở nơi khác. Các tích hợp này thay đổi liên tục và có yêu cầu bảo mật riêng (ai được ra lệnh, agent được chạm vào đâu), vì vậy hãy đọc trang tích hợp trong docs chính thức để biết cái nào hiện được hỗ trợ.\n\nNguyên tắc chung: chỉ cho kênh nhắn tin quyền hạn tối thiểu, ghi lại ai đã ra lệnh gì, và không để agent chạy việc phá huỷ chỉ vì một tin nhắn."
+ },
+ "Cách dùng Claude › Community Tools": {
+  "body": "Cộng đồng xây nhiều thứ quanh Claude Code: danh sách tổng hợp (awesome list), skill và subagent chia sẻ, wrapper giao diện, công cụ theo dõi chi phí... Đây là nhánh tuỳ chọn; dùng được để học mẫu cấu hình tốt.\n\n### Cách dùng an toàn\n- Đọc kỹ mã trước khi cài: skill, hook, MCP server đều có thể chạy lệnh trên máy bạn.\n- Ưu tiên dự án có nhiều người dùng, được bảo trì, và nguồn rõ ràng.\n- Không dán API key vào công cụ không rõ nguồn gốc."
+ },
+ "Cách dùng Claude › Common Usecases": {
+  "body": "Những việc Claude Code làm tốt hằng ngày: sửa bug (đưa thông báo lỗi và để nó lần theo), refactor (đổi tên, tách hàm xuyên nhiều file), viết test cho code sẵn có, giải thích codebase lạ, tạo commit và pull request, viết tài liệu, dọn lỗi lint, nâng cấp thư viện.\n\n### Mẹo cho từng việc\n- Bug: dán lỗi, nói cách tái hiện, yêu cầu nó chạy lại để xác nhận đã hết.\n- Refactor: yêu cầu lập kế hoạch trước (Plan mode), chạy test trước và sau.\n- Test: chỉ file/hàm cần phủ, yêu cầu chạy test vừa viết.\n- Tìm hiểu repo: hỏi \"luồng đăng nhập đi qua những file nào?\".\n\nTrang Common workflows trong docs có các công thức chi tiết.",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-2-7-doc-cung-claude",
+    "ten": "2.7 — Đọc cùng Claude: phiên làm việc thật có chú thích, và bảng tra một trang",
+    "nguon": "Operating Systems for Developers · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Phím tắt & tiền tố › Ctrl+C": {
+  "body": "Ctrl+C là phím ngắt quen thuộc của terminal. Trong Claude Code, nó huỷ thao tác đang chạy hoặc xoá ô nhập hiện tại; theo tài liệu, bấm hai lần liên tiếp ở ô trống có thể thoát chương trình. Cách xử lý chính xác có thể đổi theo phiên bản, nên xem trang Interactive mode.\n\nỞ tầng hệ điều hành, Ctrl+C làm terminal gửi tín hiệu SIGINT tới tiến trình đang chạy, như bài về tín hiệu trong khoá Linux giải thích. Cần dừng lệnh shell nó đang chạy hộ bạn thì dùng phím này hoặc Esc, tuỳ ngữ cảnh.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-5-3-tin-hieu",
+    "ten": "5.3 — Tín hiệu: Ctrl-C thật ra gửi cái gì",
+    "nguon": "Linux & Bash · Chương 5",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Phím tắt & tiền tố › Ctrl+R": {
+  "body": "Ctrl+R mở tìm kiếm ngược trong lịch sử các prompt bạn đã gõ: bắt đầu gõ vài chữ, giao diện gợi ý lệnh cũ khớp, bấm Enter hoặc phím được hướng dẫn để dùng lại. Cách này tiết kiệm khi bạn lặp lại các yêu cầu dài. Thao tác này giống Ctrl+R của shell (bash/zsh); chi tiết phím trong Claude Code xem trang Interactive mode vì có thể thay đổi.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-8-4-tuy-bien-shell",
+    "ten": "8.4 — Tuỳ biến shell: bí danh, hàm, dấu nhắc, lịch sử",
+    "nguon": "Linux & Bash · Chương 8",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Phím tắt & tiền tố › Esc": {
+  "body": "Esc dừng việc Claude đang làm (đang sinh câu trả lời hoặc đang chạy công cụ) nhưng giữ nguyên hội thoại, để bạn nhắn thêm chỉ dẫn và đổi hướng. Dùng ngay khi thấy nó đi sai: sửa nhầm file, đọc quá nhiều, hoặc lặp một việc. Dừng sớm tốn ít token hơn là để chạy rồi dọn hậu quả. Phân biệt với Ctrl+C và `/exit`: Esc là ngắt lượt hiện tại, không thoát chương trình."
+ },
+ "Phím tắt & tiền tố › Esc + Esc": {
+  "body": "Bấm Esc hai lần liên tiếp (khi ô nhập đang trống) mở lại danh sách các tin nhắn trước của bạn, để quay về một thời điểm và sửa lại từ đó. Giống nút \"hoàn tác\" của hội thoại: bạn chọn mốc, viết lại yêu cầu, hoặc khôi phục lại trạng thái mà theo docs có thể gồm cả code đã sửa sau mốc đó (xem rõ phạm vi khôi phục trong docs, vì thay đổi do lệnh bash chạy có thể không được hoàn tác).\n\nVì thế đừng coi nó thay cho Git: vẫn commit thường xuyên. Lệnh `/rewind` làm việc tương tự."
+ },
+ "Phím tắt & tiền tố › Shift+Tab": {
+  "body": "Shift+Tab đổi qua lại giữa các chế độ cấp quyền: mặc định (hỏi trước khi sửa file hoặc chạy lệnh), tự chấp nhận chỉnh sửa (auto-accept edits), và Plan mode (chỉ đọc và lập kế hoạch, chưa sửa). Chế độ hiện tại hiện ở thanh trạng thái. Danh sách chế độ có thể được thêm theo phiên bản, hãy xem trang Interactive mode và Permissions.\n\n### Gợi ý dùng\n- Việc lạ hoặc rủi ro: Plan mode, đọc kế hoạch, rồi cho chạy.\n- Việc lặp, đã tin cậy và có Git bảo vệ: auto-accept để đỡ bấm."
+ },
+ "Phím tắt & tiền tố › Slash Commands (/)": {
+  "body": "Gõ `/` ở đầu dòng để mở danh sách lệnh: lệnh có sẵn (như `/help`, `/clear`, `/compact`, `/model`) và lệnh tuỳ biến do bạn hoặc plugin định nghĩa. Lệnh `/` điều khiển chính Claude Code (phiên, cấu hình), khác với yêu cầu gửi cho mô hình.\n\n### Ý chính\n- Danh sách lệnh có sẵn thay đổi theo phiên bản; gõ `/help` hoặc `/` để xem bản của bạn.\n- Lệnh tuỳ biến thường là một file Markdown trong thư mục dành cho commands, hoặc đến từ skill/plugin; xem trang slash commands và skills trong docs vì cách đóng gói đã thay đổi theo thời gian.\n- Có thể truyền tham số sau tên lệnh."
+ },
+ "Phím tắt & tiền tố › Tiền tố ! (bash)": {
+  "body": "Bắt đầu dòng nhập bằng `!` để chạy thẳng một lệnh shell mà không qua mô hình, ví dụ `! git status`. Kết quả được đưa vào ngữ cảnh hội thoại nên Claude thấy được. Tiện khi bạn muốn tự chạy nhanh một lệnh và để Claude đọc output, khỏi phải nhờ nó chạy hộ. Tuy vậy lệnh dùng ngay quyền của bạn, nên cẩn thận với lệnh phá huỷ. Chi tiết xem trang Interactive mode."
+ },
+ "Phím tắt & tiền tố › Tiền tố \\ (xuống dòng)": {
+  "body": "Để nhập prompt nhiều dòng, bạn gõ `\\` rồi Enter ở cuối dòng để xuống dòng thay vì gửi. Một số terminal hỗ trợ Shift+Enter hoặc Option+Enter; docs có hướng dẫn thiết lập riêng cho từng terminal (xem phần interactive mode và terminal setup). Hữu ích khi dán danh sách yêu cầu, đoạn code hoặc log dài vào một prompt."
+ },
+ "Phím tắt & tiền tố › Tiền tố @ (nhắc file)": {
+  "body": "Gõ `@` rồi tên để tham chiếu file hoặc thư mục: nội dung file được đưa vào ngữ cảnh, và có gợi ý tự hoàn thành đường dẫn. Ví dụ: \"giải thích @src/auth/login.ts\". Cách này chính xác hơn nhờ Claude tự đi tìm, và tiết kiệm lượt đọc. Chỉ nhắc những gì cần: nhắc cả thư mục lớn sẽ làm ngữ cảnh phình to. Xem trang Interactive mode để biết các dạng tham chiếu hiện hỗ trợ."
+ },
+ "Lệnh claude (CLI) › claude": {
+  "body": "Gõ `claude` trong terminal để mở phiên tương tác tại thư mục hiện tại. Thư mục đó quyết định Claude nhìn thấy file nào và nạp CLAUDE.md nào, nên luôn `cd` vào đúng repo trước. Mỗi lần chạy là một phiên mới (muốn nối lại phiên cũ, dùng `-c` hoặc `-r`). Thêm cờ hoặc `claude --help` để xem tuỳ chọn của bản bạn cài.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-2-kernel-shell-terminal",
+    "ten": "0.2 — Kernel, shell, terminal: ba thứ người ta hay lẫn",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Lệnh claude (CLI) › claude -c (--continue)": {
+  "body": "`claude -c` (viết đầy đủ `--continue`) tiếp tục phiên gần nhất trong thư mục hiện tại, giữ lại lịch sử hội thoại. Tiện khi bạn lỡ thoát hoặc quay lại việc hôm qua. Cần chuyển sang phiên khác, không phải gần nhất thì dùng `-r`. Hãy kiểm tra cờ này bằng `claude --help` hoặc trang CLI reference."
+ },
+ "Lệnh claude (CLI) › claude -r (--resume)": {
+  "body": "`claude -r` (`--resume`) cho bạn chọn một phiên cũ từ danh sách để nối lại, hoặc truyền sẵn id/tên phiên nếu docs của bản bạn có hỗ trợ. Khác `-c` ở chỗ không bị giới hạn ở phiên gần nhất. Hữu ích khi bạn làm song song nhiều việc ở cùng repo. Xem CLI reference để biết cú pháp hiện hành."
+ },
+ "Lệnh claude (CLI) › claude -p (--print)": {
+  "body": "`claude -p \"câu hỏi\"` (`--print`) chạy không tương tác: gửi prompt, in kết quả ra stdout rồi thoát. Nhờ vậy Claude Code dùng được như một lệnh Unix bình thường trong script, cron hoặc CI, và nối với pipe, ví dụ `git diff | claude -p \"tóm tắt thay đổi\"`. Vì không có ai ngồi duyệt, bạn phải quyết định quyền hạn trước (cờ cho phép công cụ), và chỉ cấp tối thiểu. Một số tuỳ chọn xuất kết quả (văn bản, JSON) có trong CLI reference và trang headless/Agent SDK trong docs.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-3-1-dong-chuan-chuyen-huong",
+    "ten": "3.1 — Ba dòng chuẩn, và mọi cách chuyển hướng chúng",
+    "nguon": "Linux & Bash · Chương 3",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Lệnh claude (CLI) › claude \"query\"": {
+  "body": "`claude \"câu hỏi\"` mở phiên tương tác và gửi luôn câu đầu tiên, nên bạn khỏi phải gõ lại sau khi khởi động. Ví dụ `claude \"giải thích cấu trúc dự án\"`. Khác `claude -p`: phiên vẫn mở để bạn hỏi tiếp, còn `-p` in xong rồi thoát."
+ },
+ "Lệnh claude (CLI) › claude --add-dir": {
+  "body": "`--add-dir` thêm một hoặc nhiều thư mục ngoài thư mục hiện tại vào phạm vi Claude được đọc/ghi, thích hợp khi dự án trải ra nhiều repo (ví dụ backend và frontend ở hai chỗ). Mặc định Claude chỉ làm việc trong thư mục khởi chạy. Chỉ thêm thư mục thật cần thiết, vì mỗi thư mục thêm là phạm vi quyền rộng hơn. Có thể đổi trong phiên bằng lệnh tương ứng; xem CLI reference."
+ },
+ "Lệnh phiên (Session) › /help": {
+  "body": "`/help` liệt kê các lệnh `/` đang có và cách dùng cơ bản, gồm cả lệnh tuỳ biến. Vì lệnh thay đổi theo phiên bản, đây là chỗ đáng tin nhất để biết bản bạn đang cài có gì, nhanh hơn việc tra docs."
+ },
+ "Lệnh phiên (Session) › /usage": {
+  "body": "`/usage` cho biết mức sử dụng và hạn mức hiện tại của gói bạn đang dùng (ví dụ còn bao nhiêu trong chu kỳ). Hữu ích với người dùng thuê bao để tránh hết hạn mức giữa chừng. Cách hiển thị và lệnh nào hiện ra phụ thuộc loại tài khoản và phiên bản; xem trang costs trong docs."
+ },
+ "Lệnh phiên (Session) › /clear": {
+  "body": "`/clear` xoá hết ngữ cảnh hội thoại và bắt đầu lại từ đầu, nhưng vẫn ở cùng thư mục và vẫn nạp lại CLAUDE.md. Dùng khi chuyển sang việc không liên quan: ngữ cảnh cũ làm nhiễu và tốn token. Khác `/compact`: compact giữ tóm tắt, clear bỏ hết. Phải chắc rằng điều quan trọng đã nằm trong file hoặc commit trước khi clear."
+ },
+ "Lệnh phiên (Session) › /cost": {
+  "body": "`/cost` hiển thị chi phí và lượng token của phiên hiện tại (chủ yếu có ý nghĩa với người dùng API). Dùng để thấy một việc \"đắt\" bao nhiêu và quyết định dùng `/compact`, `/clear` hay model nhẹ hơn. Với gói thuê bao, thông tin này có thể nằm ở lệnh khác như `/usage`; hãy chạy `/help` để xem bản bạn có."
+ },
+ "Lệnh phiên (Session) › /exit": {
+  "body": "`/exit` thoát Claude Code. Phiên vẫn được lưu để bạn nối lại sau bằng `claude -c` hoặc `claude -r`. Thoát bằng Ctrl+C hai lần hoặc Ctrl+D tuỳ thiết lập; xem docs."
+ },
+ "Lệnh phiên (Session) › /export": {
+  "body": "`/export` xuất hội thoại hiện tại ra file hoặc clipboard (xem lựa chọn trong lệnh). Dùng để lưu lại cách giải quyết một vấn đề, đính kèm vào báo cáo hoặc chia sẻ cho đồng đội. Soát nội dung trước khi chia sẻ: hội thoại có thể chứa đường dẫn, mã lỗi hay bí mật bạn đã dán vào."
+ },
+ "Lệnh phiên (Session) › /status": {
+  "body": "`/status` cho thấy tình trạng phiên: phiên bản, model đang dùng, kiểu đăng nhập, kết nối MCP... Hữu ích khi nghi ngờ mình đang dùng sai tài khoản hoặc model. Nội dung hiển thị thay đổi theo phiên bản; xem docs."
+ },
+ "Lệnh phiên (Session) › /rewind": {
+  "body": "`/rewind` quay hội thoại (và theo docs, có thể cả các thay đổi code) về một mốc trước đó, tương đương bấm Esc hai lần. Dùng khi Claude đi lệch hướng và bạn muốn thử lại từ điểm tốt cuối cùng. Đây không phải sao lưu: thay đổi do lệnh shell gây ra có thể không hoàn tác được, nên vẫn dùng Git."
+ },
+ "Lệnh phiên (Session) › /plan": {
+  "body": "`/plan` bật Plan mode: Claude chỉ đọc và nghĩ, đưa ra kế hoạch để bạn duyệt rồi mới sửa. Rất hợp với việc lớn hoặc chưa rõ hướng: bạn sửa kế hoạch rẻ hơn sửa code. Cùng chế độ này bạn cũng vào được bằng Shift+Tab. Cách thoát và thực thi kế hoạch xem trang Common workflows trong docs."
+ },
+ "Lệnh phiên (Session) › /doctor": {
+  "body": "`/doctor` kiểm tra cài đặt và chẩn đoán sự cố: phiên bản, cấu hình, vấn đề môi trường phổ biến. Chạy nó đầu tiên khi Claude Code hành xử lạ, báo lỗi cập nhật hay không thấy lệnh. Cách đọc kết quả xem trang troubleshooting."
+ },
+ "Ngữ cảnh & Bộ nhớ › /context": {
+  "body": "`/context` cho bạn thấy cái gì đang chiếm cửa sổ ngữ cảnh: prompt hệ thống, công cụ, CLAUDE.md, tin nhắn, kết quả công cụ. Khi phiên chậm hoặc đắt, đây là bước chẩn đoán đầu tiên: bạn thấy phần nào đang phình để quyết định `/compact`, `/clear` hay bỏ bớt MCP server."
+ },
+ "Ngữ cảnh & Bộ nhớ › /compact": {
+  "body": "`/compact` nén lịch sử hội thoại thành một bản tóm tắt để giải phóng cửa sổ ngữ cảnh, giữ ý chính và tiếp tục làm. Bạn có thể kèm chỉ dẫn về điều cần giữ, ví dụ \"giữ lại các quyết định về schema\". Claude Code cũng có thể tự nén khi ngữ cảnh gần đầy. Nén làm mất chi tiết, nên nội dung quan trọng nên được ghi vào CLAUDE.md hoặc file."
+ },
+ "Ngữ cảnh & Bộ nhớ › /init": {
+  "body": "`/init` quét dự án và tạo file CLAUDE.md ban đầu chứa những gì Claude cần biết: cấu trúc, lệnh build/test, quy ước. Dùng nó làm bản nháp rồi tự chỉnh: bỏ điều thừa, thêm quy tắc nhóm. Chạy một lần khi bắt đầu dùng Claude Code trong repo. Xem bước \"CLAUDE.md\" để biết cách viết file tốt."
+ },
+ "Ngữ cảnh & Bộ nhớ › /memory": {
+  "body": "`/memory` mở các file bộ nhớ (CLAUDE.md) đang được nạp để bạn xem và sửa ngay trong phiên, hữu ích khi vừa học được một quy tắc mà muốn Claude nhớ lâu. Có nhiều tầng bộ nhớ (người dùng, dự án, thư mục con); xem trang memory trong docs để biết thứ tự nạp."
+ },
+ "Cấu hình › /config": {
+  "body": "`/config` mở phần cấu hình của Claude Code để xem và chỉnh các tuỳ chọn (giao diện, hành vi, model mặc định...). Cấu hình lưu trong các file settings theo tầng: người dùng, dự án, và bản cục bộ không commit. Danh sách mục thay đổi theo phiên bản; xem trang Settings."
+ },
+ "Cấu hình › /permissions": {
+  "body": "`/permissions` quản lý luật allow/deny/ask cho công cụ và lệnh, ví dụ cho phép `git diff`, luôn hỏi trước khi sửa file nhạy cảm, chặn đọc file `.env`. Luật chặt chẽ nhưng thông minh giúp bạn đỡ bấm \"đồng ý\" mà vẫn an toàn. Có thể ghi luật vào file settings của dự án để cả nhóm dùng chung. Cú pháp luật xem trang Settings và Permissions trong docs."
+ },
+ "Cấu hình › /model": {
+  "body": "`/model` đổi model Claude đang dùng trong phiên, như dòng Opus (mạnh nhất, cho việc khó), Sonnet (cân bằng, dùng hằng ngày) hay Haiku (nhanh, rẻ). Tên và phiên bản model cụ thể, cũng như model mặc định, thay đổi theo thời gian; xem trang Model configuration. Việc đơn giản dùng model nhẹ để tiết kiệm; việc kiến trúc phức tạp dùng model mạnh."
+ },
+ "Cấu hình › /agents": {
+  "body": "`/agents` quản lý subagent: tạo, sửa, xem các agent chuyên biệt của dự án hoặc người dùng. Mỗi subagent có mô tả, prompt hệ thống riêng và danh sách công cụ được phép. Xem bước \"Subagents\" để hiểu khái niệm, và trang sub-agents trong docs để biết định dạng file."
+ },
+ "Cấu hình › /hooks": {
+  "body": "`/hooks` giúp bạn xem và cấu hình hook: lệnh shell tự chạy ở các sự kiện của Claude Code (trước/sau khi dùng công cụ, khi gửi prompt...). Hook được ghi trong file settings. Hãy đọc kỹ hook trước khi bật vì chúng chạy với quyền của bạn. Xem bước \"Hooks\" và trang hooks trong docs."
+ },
+ "Cấu hình › /mcp": {
+  "body": "`/mcp` hiển thị các MCP server đã kết nối, trạng thái của chúng, công cụ chúng cung cấp, và là nơi xác thực với server cần đăng nhập. Nếu một công cụ MCP không xuất hiện, đây là chỗ kiểm tra đầu tiên. Thêm server thường bằng `claude mcp add ...`; xem trang MCP trong docs để nắm cú pháp hiện hành."
+ },
+ "Hiểu các khái niệm › CLAUDE.md": {
+  "body": "CLAUDE.md là file Markdown bạn đặt trong repo để dạy Claude về dự án: nó được nạp vào ngữ cảnh ở đầu mỗi phiên. Giống tờ hướng dẫn cho nhân viên mới: lệnh build và test, cấu trúc thư mục, quy ước code, những điều không được làm. Không có file này, Claude phải đoán và thường đoán sai quy ước của nhóm.\n\n### Vì sao cần biết\n- Bạn khỏi phải lặp lại cùng một dặn dò mỗi phiên.\n- Cả nhóm dùng chung một chuẩn nếu file được commit.\n- Giảm lỗi vặt: sai lệnh test, sai kiểu đặt tên, đụng vào file không nên sửa.\n\n### Ý chính\n- Có nhiều tầng: file cá nhân (toàn máy), file ở gốc dự án, và file ở thư mục con (nạp khi làm việc trong đó). Xem trang memory để biết thứ tự nạp chính xác.\n- `/init` tạo bản nháp; bạn chỉnh tay.\n- Giữ ngắn và cụ thể: file càng dài càng tốn ngữ cảnh và càng dễ bị bỏ qua.\n- Một ví dụ:\n```markdown\n# Dự án shop-api\n- Lệnh: `npm test` chạy test, `npm run lint` kiểm tra lint.\n- Dùng TypeScript strict; không dùng `any`.\n- Không sửa file trong `prisma/migrations/` đã triển khai.\n- Commit theo dạng `feat:`, `fix:`.\n```\n- Tuỳ phiên bản, có thể nhập file khác vào CLAUDE.md; kiểm tra trang memory.\n\n### Lỗi hay gặp\n- Nhồi cả tài liệu dự án vào đó: nên chỉ ghi điều Claude cần biết MỌI phiên.\n- Quy tắc mơ hồ (\"viết code sạch\"). Hãy viết thứ kiểm được (\"hàm dài tối đa 40 dòng\").\n- Để lộ bí mật (key, mật khẩu) trong file được commit.\n\n### Tự kiểm tra\n- Vì sao nên commit CLAUDE.md?\n- Thông tin nào nên ở CLAUDE.md, thông tin nào nên ở một prompt riêng?"
+ },
+ "Hiểu các khái niệm › Context": {
+  "body": "Ngữ cảnh (context) là toàn bộ chữ mà mô hình \"nhìn thấy\" ở mỗi lượt: prompt hệ thống, CLAUDE.md, tin nhắn của bạn, file đã đọc, kết quả của lệnh, cả định nghĩa công cụ. Nó đo bằng token và có giới hạn. Khi đầy, hoặc khi chứa quá nhiều thứ lộn xộn, chất lượng giảm và chi phí tăng.\n\n### Ý chính\n- Mô hình không có trí nhớ ngoài ngữ cảnh: điều không nằm trong đó thì nó không biết.\n- Xem bằng `/context`; nén bằng `/compact`; làm mới bằng `/clear`.\n- Mẹo: một phiên một chủ đề; để Claude đọc đúng file cần thiết; ghi quyết định lâu dài vào CLAUDE.md; dùng subagent cho việc đọc nhiều để ngữ cảnh chính sạch.\n\n### Lỗi hay gặp\n- Phiên kéo dài nhiều việc không liên quan khiến Claude \"quên\" hoặc lẫn.\n- Dán log khổng lồ nguyên văn thay vì phần liên quan.",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-5-1-llm",
+    "ten": "5.1 — Mô hình ngôn ngữ lớn (LLM)",
+    "nguon": "Generative AI · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Hiểu các khái niệm › Modes": {
+  "body": "Claude Code có vài chế độ quyết định mức tự chủ của agent: mặc định (hỏi trước khi sửa file hoặc chạy lệnh), tự chấp nhận chỉnh sửa (auto-accept edits, đỡ hỏi khi sửa file), và Plan mode (chỉ đọc và đề xuất kế hoạch). Một số phiên bản còn có chế độ bỏ qua quyền hạn hoặc chế độ tự động khác; tên và hành vi cụ thể hãy xem trang Permissions/Interactive mode.\n\n### Ý chính\n- Đổi nhanh bằng Shift+Tab, hoặc `/plan`.\n- Việc rủi ro: để mặc định hoặc Plan. Việc lặp, được Git bảo vệ: auto-accept.\n- Không bao giờ dùng chế độ bỏ qua toàn bộ quyền ngoài môi trường cô lập (container, máy ảo).\n\n### Lỗi hay gặp\n- Bật auto-accept rồi quên, nên thay đổi lớn diễn ra mà không được xem."
+ },
+ "Hiểu các khái niệm › Models": {
+  "body": "Claude có nhiều dòng model, thường chia theo tầng: Opus là tầng mạnh nhất (việc khó, kiến trúc), Sonnet cân bằng cho dùng hằng ngày, Haiku nhanh và rẻ cho việc đơn giản. Tên phiên bản cụ thể và model mặc định của Claude Code thay đổi theo thời gian, nên hãy tra trang Models overview và trang Model configuration thay vì nhớ.\n\n### Cách chọn\n- Hỏi nhanh, sửa nhỏ, nhiều lượt: model nhẹ.\n- Debug khó, thiết kế, refactor lớn: model mạnh hơn.\n- Đổi trong phiên bằng `/model`; cân nhắc chi phí và độ trễ."
+ },
+ "Hiểu các khái niệm › Tools": {
+  "body": "Công cụ (tools) là cách Claude tác động lên thế giới: đọc file, ghi/sửa file, tìm kiếm trong mã, chạy lệnh bash, lấy nội dung web, và công cụ từ MCP server. Mô hình tự quyết định gọi công cụ nào, còn Claude Code thực thi và đưa kết quả về. Phần lớn công cụ có ảnh hưởng đều qua cơ chế cấp quyền (xem `/permissions`). Danh sách công cụ cụ thể thay đổi theo phiên bản; xem docs.\n\n### Ý chính\n- Công cụ đọc ít rủi ro, công cụ ghi và chạy lệnh cần duyệt.\n- Bạn kiểm soát bằng luật allow/deny và chế độ.\n- Mỗi công cụ (kể cả của MCP) chiếm một chút ngữ cảnh."
+ },
+ "Hiểu các khái niệm › MCP": {
+  "body": "MCP (Model Context Protocol) là giao thức mở để cắm công cụ và nguồn dữ liệu bên ngoài vào mô hình theo một chuẩn chung. Một MCP server là chương trình nhỏ cung cấp công cụ (ví dụ đọc issue, truy vấn database, điều khiển trình duyệt); Claude Code đóng vai client và gọi các công cụ đó. Hình dung như cổng USB-C: một chuẩn nối được nhiều thiết bị.\n\n### Vì sao cần biết\nKhông có MCP, agent chỉ thấy repo và shell của bạn. Có MCP, nó đọc được ticket, tài liệu, log, hay chạm vào dịch vụ nội bộ, làm được việc xuyên hệ thống.\n\n### Ý chính\n- Có server chạy cục bộ (qua tiến trình) hoặc từ xa (qua HTTP); thêm bằng `claude mcp add ...` hoặc file cấu hình theo phạm vi dự án/người dùng; cú pháp chính xác xem trang MCP trong docs.\n- Kiểm tra trạng thái bằng `/mcp`.\n- Mỗi server thêm công cụ và chiếm ngữ cảnh; chỉ bật cái cần.\n- Bảo mật: server MCP có thể chạy mã và truy cập dữ liệu. Chỉ cài server đáng tin, cấp quyền tối thiểu, và hãy cẩn thận với dữ liệu không đáng tin trả về qua công cụ (có thể chứa chỉ dẫn độc hại, gọi là prompt injection).\n\n### Ví dụ (kiểm tra tài liệu để lấy cú pháp mới nhất)\n```bash\nclaude mcp add --transport http ten-server https://example.com/mcp\nclaude mcp list\n```\n\n### Lỗi hay gặp\n- Cài quá nhiều server làm phình ngữ cảnh.\n- Cấp token quyền ghi rộng cho server chỉ cần đọc.\n- Không xác thực xong (`/mcp`) nên công cụ không hiện.\n\n### Tự kiểm tra\n- MCP khác một lệnh bash thông thường ở điểm nào?\n- Rủi ro bảo mật chính khi cài MCP server là gì?"
+ },
+ "Hiểu các khái niệm › Skills": {
+  "body": "Skill là một gói hướng dẫn (file `SKILL.md`, kèm script và tài nguyên tuỳ chọn) dạy Claude cách làm một việc lặp lại, ví dụ soạn báo cáo theo mẫu công ty, kiểm tra PR theo checklist, hay tạo tài liệu đúng chuẩn. Điểm đặc biệt: Claude đọc phần mô tả ngắn của skill và tự quyết định nạp nội dung đầy đủ khi tác vụ phù hợp, nên không chiếm ngữ cảnh khi chưa cần.\n\n### Vì sao cần biết\nBiến quy trình bạn hay giải thích đi giải thích lại thành thứ tái sử dụng và chia sẻ được cho cả nhóm.\n\n### Ý chính\n- Mỗi skill nằm trong thư mục riêng; có thể ở mức người dùng hoặc dự án, hoặc đi kèm plugin. Vị trí và định dạng chính xác xem trang Skills trong docs.\n- Phần mô tả (description) quyết định skill có được kích hoạt hay không, nên cần nêu rõ \"dùng khi nào\".\n- Skill khác CLAUDE.md: CLAUDE.md luôn được nạp; skill chỉ nạp khi cần. Khác slash command: skill do Claude tự gọi theo ngữ cảnh (và có thể gọi thủ công).\n- Skill có thể kèm script để thực thi việc cần độ chính xác.\n\n### Lỗi hay gặp\n- Mô tả mơ hồ nên skill không bao giờ được kích hoạt.\n- Nhồi quá nhiều vào một skill; tách theo từng việc.\n- Cài skill lạ mà không đọc script nó chạy.\n\n### Tự kiểm tra\n- Khi nào nên viết skill thay vì ghi vào CLAUDE.md?"
+ },
+ "Hiểu các khái niệm › Plugins": {
+  "body": "Plugin là gói phân phối gom nhiều thành phần mở rộng lại: slash command, subagent, skill, hook và cấu hình MCP, để cài một lần là có đủ bộ. Plugin được chia sẻ qua marketplace (một danh mục, thường là một repo Git), giúp nhóm hoặc cộng đồng dùng chung cùng một cấu hình.\n\n### Vì sao cần biết\nThay vì mỗi người tự copy file cấu hình, cả nhóm cài cùng một plugin và được cập nhật đồng bộ.\n\n### Ý chính\n- Thêm marketplace rồi cài plugin bằng lệnh quản lý plugin (xem cú pháp hiện hành trong docs, vì có thể đổi).\n- Một plugin có thể chứa nhiều loại thành phần; bật/tắt từng plugin được.\n- Plugin có thể chạy lệnh và hook với quyền của bạn, nên chỉ cài từ nguồn tin cậy và đọc nội dung trước.\n\n### Lỗi hay gặp\n- Cài tràn lan nên chậm và tốn ngữ cảnh, khó biết thành phần nào gây hành vi lạ.\n- Không ghim phiên bản, nên cập nhật bất ngờ làm đổi hành vi.\n\n### Tự kiểm tra\n- Plugin khác một skill đơn lẻ ở chỗ nào?"
+ },
+ "Hiểu các khái niệm › Hooks": {
+  "body": "Hook là lệnh (hoặc hành động) tự chạy khi một sự kiện xảy ra trong Claude Code: trước khi dùng công cụ (PreToolUse), sau khi dùng công cụ (PostToolUse), khi bạn gửi prompt, khi Claude kết thúc lượt... Khác lời nhờ trong prompt (Claude có thể bỏ qua), hook là cơ chế xác định: luôn chạy đúng lúc.\n\n### Vì sao cần biết\nDùng hook để ép quy tắc: tự chạy formatter sau mỗi lần sửa file, chặn lệnh nguy hiểm, chặn ghi vào thư mục cấm, ghi log, thông báo khi xong việc.\n\n### Ý chính\n- Cấu hình trong file settings (dùng `/hooks` để xem/sửa); mỗi hook gắn với sự kiện và có thể lọc theo tên công cụ.\n- Hook chạy lệnh shell với quyền của bạn: phải viết cẩn thận và đọc kỹ hook từ nguồn khác.\n- Kết quả hook (mã thoát, đầu ra) có thể cho phép, chặn, hoặc phản hồi lại Claude; quy ước chính xác xem trang hooks trong docs vì có thể đổi.\n- Ví dụ ý tưởng: sau khi sửa file `.ts`, tự chạy `prettier --write` trên file đó.\n\n### Lỗi hay gặp\n- Hook chậm làm mỗi bước bị trễ.\n- Hook lỗi hoặc chặn nhầm khiến agent kẹt; kiểm thử hook bằng việc nhỏ trước.\n- Đặt lệnh nguy hiểm trong hook mà không kiểm soát đầu vào.\n\n### Tự kiểm tra\n- Vì sao dùng hook tốt hơn là nhắc trong CLAUDE.md \"luôn chạy formatter\"?"
+ },
+ "Hiểu các khái niệm › Subagents": {
+  "body": "Subagent là một agent con chuyên biệt mà Claude chính có thể giao việc. Mỗi subagent có prompt hệ thống riêng, danh sách công cụ riêng, và quan trọng nhất là ngữ cảnh riêng: nó làm việc xong chỉ trả về bản tóm tắt, nên Claude chính không bị phình ngữ cảnh. Giống giao việc tìm hiểu cho một đồng nghiệp: bạn chỉ nhận kết luận, không phải đọc cả quá trình.\n\n### Vì sao cần biết\nDùng subagent cho việc tốn ngữ cảnh (đọc nhiều file, nghiên cứu), việc cần góc nhìn độc lập (review code, soát bảo mật) hoặc việc có thể chạy song song.\n\n### Ý chính\n- Định nghĩa bằng file Markdown có phần cấu hình (tên, mô tả, công cụ, model) và phần prompt; quản lý bằng `/agents`. Định dạng chính xác xem trang sub-agents trong docs.\n- Phần mô tả quyết định khi nào Claude tự giao việc; bạn cũng có thể gọi trực tiếp theo tên.\n- Giới hạn công cụ cho từng subagent theo nguyên tắc quyền tối thiểu (reviewer chỉ cần đọc).\n- Có thể chọn model nhẹ hơn cho subagent làm việc đơn giản để tiết kiệm.\n\n### Lỗi hay gặp\n- Subagent chỉ biết những gì bạn truyền vào; prompt giao việc thiếu thông tin thì kết quả kém.\n- Quá nhiều subagent chồng chéo vai trò.\n- Tin kết quả tóm tắt mà không kiểm chứng trên việc quan trọng.\n\n### Tự kiểm tra\n- Lợi ích chính của ngữ cảnh riêng là gì?\n- Cho một ví dụ subagent nên chỉ có quyền đọc."
+ },
+ "Chọn model › Opus": {
+  "body": "Opus là tầng model mạnh nhất của Claude, hợp với bài toán khó: thiết kế kiến trúc, debug phức tạp, refactor lớn, suy luận nhiều bước. Đổi lại thường chậm hơn và tốn nhiều hạn mức/token hơn. Phiên bản Opus hiện hành xem trang Models overview trong docs; đổi model trong phiên bằng `/model`. Gợi ý: để Opus cho khâu lập kế hoạch và việc khó, rồi dùng model nhẹ hơn cho phần thực thi lặp."
+ },
+ "Chọn model › Sonnet": {
+  "body": "Sonnet là tầng cân bằng giữa tốc độ, chi phí và chất lượng, thường là lựa chọn mặc định cho lập trình hằng ngày: sửa bug, viết tính năng, viết test, giải thích code. Khi gặp vấn đề vượt khả năng của nó, hãy thử model mạnh hơn bằng `/model`. Phiên bản và model mặc định hiện hành xem trang Models overview và Model configuration trong docs."
+ },
+ "Chọn model › Haiku": {
+  "body": "Haiku là bậc nhỏ, nhanh và rẻ nhất trong họ model Claude (Haiku, Sonnet, Opus). Hãy hình dung như chọn xe: đi chợ gần thì xe máy là đủ, không cần xe tải.\n\n### Vì sao cần biết\nMỗi lượt Claude Code đọc file, chạy lệnh đều tốn token. Việc đơn giản mà dùng model lớn thì vừa chậm vừa tốn. Haiku hợp với việc ngắn, lặp nhiều và rõ ràng.\n\n### Ý chính\n- Hợp: đổi tên biến hàng loạt, sinh commit message, tóm tắt log, phân loại, chạy script ở chế độ headless với khối lượng lớn.\n- Không nên: thiết kế kiến trúc, gỡ lỗi nhiều tầng, sửa nhiều file phụ thuộc nhau — nhường cho Sonnet/Opus.\n- Đổi model trong phiên bằng `/model`, hoặc khởi động với cờ `--model`; subagent cũng có thể được gán model riêng (ví dụ Haiku cho subagent tìm kiếm).\n\n### Lỗi hay gặp\n- Dùng Haiku cho tác vụ phức tạp rồi kết luận \"Claude Code dở\" — thật ra sai bậc model.\n- Tên/mã model đổi theo từng thế hệ; đừng chép cứng, hãy xem bảng model hiện hành trong tài liệu."
+ },
+ "Claude Workflow › Claude Workflow": {
+  "body": "Workflow là cách bạn làm việc cùng Claude Code để kết quả ổn định thay vì \"gõ yêu cầu rồi cầu may\". Hướng dẫn thực hành của Anthropic gợi ý một vòng lặp quen thuộc: **explore → plan → code → verify → commit**. Giống như thuê một thợ giỏi: trước tiên để họ khảo sát công trình, thống nhất bản vẽ, rồi mới thi công và nghiệm thu.\n\n### Các bước\n1. **Explore (khảo sát)**: bảo Claude đọc code liên quan, chưa sửa gì. Ví dụ: \"Đọc phần xác thực và giải thích luồng đăng nhập, đừng sửa file.\"\n2. **Plan (lập kế hoạch)**: yêu cầu một kế hoạch từng bước; dùng Plan Mode để chắc chắn không file nào bị đụng trước khi bạn duyệt.\n3. **Code (thực thi)**: cho Claude làm theo kế hoạch đã duyệt, từng phần nhỏ.\n4. **Verify (kiểm chứng)**: đưa cho Claude cách tự kiểm tra — test, lệnh build, type-check, lint — để nó lặp lại cho tới khi đạt. Đây là bước quyết định chất lượng.\n5. **Commit**: xem lại diff, rồi nhờ Claude viết commit/PR.\n\n### Vì sao cần biết\nClaude làm tốt nhất khi có mục tiêu kiểm tra được. Một yêu cầu mơ hồ không kèm cách kiểm chứng thường cho kết quả \"trông đúng nhưng chạy sai\".\n\n### Ý chính\n- Chia việc lớn thành bước nhỏ; mỗi bước một phiên hoặc một cột mốc commit.\n- Đặt quy ước dự án trong `CLAUDE.md` để không phải nhắc lại.\n- Dùng `/clear` giữa các việc không liên quan để ngữ cảnh gọn.\n- Luôn đọc diff trước khi chấp nhận — bạn vẫn là người chịu trách nhiệm.\n\n### Lỗi hay gặp\n- Nhảy thẳng vào code khi chưa hiểu codebase.\n- Không có test/lệnh kiểm tra nên Claude không biết khi nào \"xong\".\n- Nhồi nhiều việc khác nhau trong một phiên khiến ngữ cảnh lẫn lộn.\n\n### Tự kiểm tra\n- Vì sao bước verify nên có lệnh chạy được thay vì \"nhìn thấy ổn\"?\n- Khi nào bạn nên dừng ở bước plan mà không cho code?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Claude Workflow › Permission Modes": {
+  "body": "Permission mode quyết định Claude Code được tự làm tới đâu mà không hỏi bạn. Hãy hình dung như quyền của nhân viên mới: lúc đầu việc gì cũng xin phép, quen việc rồi thì được tự làm những việc nhỏ.\n\n### Ý chính\n- `default`: hỏi trước khi sửa file hoặc chạy lệnh có thể thay đổi hệ thống (việc chỉ đọc thường được tự động cho phép).\n- `acceptEdits`: tự chấp nhận việc sửa file; lệnh shell nhạy cảm vẫn có thể hỏi.\n- `plan`: chỉ đọc và lập kế hoạch, không sửa gì (xem bước Plan Mode).\n- `bypassPermissions`: bỏ qua mọi hỏi đáp — chỉ nên dùng trong môi trường cô lập như container hoặc VM dùng một lần.\n- Đổi chế độ bằng phím tắt (thường là Shift+Tab để xoay vòng) hoặc cờ `--permission-mode`; có thể đặt mặc định trong `settings.json` mục permissions.\n\n### Lưu ý\nCác chế độ ngoài danh sách trên (ví dụ chế độ tự duyệt tự động) có thể được thêm theo phiên bản — hãy kiểm tra tài liệu hiện hành. Ngoài mode, bạn còn có luật `allow`/`deny`/`ask` theo từng tool và từng lệnh để kiểm soát chi tiết.\n\n### Lỗi hay gặp\n- Bật `bypassPermissions` trên máy làm việc thật: một lệnh xoá nhầm là mất dữ liệu.\n- Cho phép quá rộng kiểu \"mọi lệnh Bash\" thay vì liệt kê lệnh cụ thể như `npm test`."
+ },
+ "Claude Workflow › Plan Mode": {
+  "body": "Plan Mode là chế độ trong đó Claude chỉ khảo sát và đề xuất kế hoạch, **không sửa file, không chạy lệnh thay đổi hệ thống** cho tới khi bạn duyệt. Giống kiến trúc sư đưa bản vẽ cho chủ nhà xem trước khi thợ động tay.\n\n### Vì sao cần biết\nVới việc lớn hoặc codebase lạ, hướng đi sai tốn nhiều hơn một kế hoạch tồi. Đọc kế hoạch chỉ mất vài phút, còn revert một thay đổi lan rộng thì lâu hơn nhiều.\n\n### Cách dùng\n- Vào Plan Mode bằng phím Shift+Tab (xoay qua các chế độ) hoặc khởi động với `claude --permission-mode plan`.\n- Nhập yêu cầu, ví dụ: \"Lên kế hoạch thêm đăng nhập bằng Google. Nêu file sẽ sửa và rủi ro.\"\n- Đọc kế hoạch, phản biện, chỉnh. Khi ưng ý, chấp nhận để Claude chuyển sang thực thi.\n\n### Ý chính\n- Dùng cho: tính năng nhiều file, refactor, di trú, bug khó tìm nguyên nhân.\n- Bỏ qua cho: sửa typo, đổi một dòng.\n- Có thể kết hợp với model mạnh cho phần plan (xem bước Opusplan).\n\n### Lỗi hay gặp\n- Duyệt kế hoạch mà không đọc kỹ.\n- Kế hoạch quá chung chung — hãy yêu cầu liệt kê file cụ thể và cách kiểm chứng."
+ },
+ "Claude Workflow › Manage Sessions": {
+  "body": "Mỗi lần chạy `claude` là một phiên (session) có lịch sử hội thoại riêng. Quản lý phiên tốt giúp bạn giữ được mạch việc dài ngày mà không phải giải thích lại từ đầu.\n\n### Ý chính\n- Claude Code lưu hội thoại cục bộ; bạn có thể nối lại sau (xem bước Resume).\n- `claude -c` (continue) mở lại phiên gần nhất trong thư mục hiện tại.\n- Dùng `/clear` để bắt đầu sạch khi chuyển sang việc khác; dùng `/compact` để nén khi vẫn cần giữ mạch.\n- Đặt tên/nhãn cho phiên (nếu phiên bản của bạn hỗ trợ, như lệnh `/rename`) để dễ tìm lại.\n- Mỗi việc độc lập nên một phiên riêng; nhiều việc song song thì dùng nhiều phiên kết hợp git worktree.\n\n### Lỗi hay gặp\n- Một phiên \"xuyên suốt\" cả tuần — ngữ cảnh phình to, chất lượng giảm, chi phí tăng.\n- Quên rằng quyết định quan trọng nên được ghi vào `CLAUDE.md` hay tài liệu, không chỉ nằm trong lịch sử hội thoại.\n\nChi tiết lệnh có thể thay đổi theo phiên bản; kiểm tra tài liệu CLI reference.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Claude Workflow › Resume": {
+  "body": "Resume cho phép quay lại một phiên cũ và làm tiếp với toàn bộ hội thoại trước đó. Giống mở lại cuốn sổ ghi việc dở dang thay vì viết lại từ trang đầu.\n\n### Cách dùng\n- `claude --continue` (hoặc `-c`): tiếp tục phiên gần nhất trong thư mục hiện tại.\n- `claude --resume` (hoặc `-r`): mở danh sách để chọn phiên; có thể truyền thẳng ID hoặc tên phiên.\n- Trong một phiên đang chạy có lệnh `/resume` để chuyển sang phiên khác.\n\n### Khi nào dùng\n- Hôm qua làm dở một tính năng, hôm nay tiếp tục.\n- Bị ngắt giữa chừng (đóng terminal, mất mạng).\n- Muốn quay lại hỏi thêm về một việc đã xong.\n\n### Lưu ý\n- Phiên được lưu theo thư mục dự án.\n- Resume nạp lại cả lịch sử cũ, nên nếu phiên đã rất dài hãy cân nhắc `/compact` hoặc bắt đầu phiên mới kèm tóm tắt.\n- Trạng thái file có thể đã đổi từ lúc đó (bạn hoặc git đã sửa) — nhắc Claude đọc lại file thay vì tin trí nhớ."
+ },
+ "Claude Workflow › Rewind": {
+  "body": "Rewind là tính năng \"hoàn tác\": đưa phiên về một điểm trước đó. Claude Code tạo checkpoint trước các lần sửa file của nó, nên khi nó đi lạc hướng bạn có thể lùi lại thay vì sửa tay từng chỗ.\n\n### Cách dùng\n- Gõ `/rewind`, hoặc nhấn Esc hai lần (theo tài liệu hiện hành), rồi chọn điểm muốn quay về.\n- Tuỳ phiên bản, bạn có thể chọn khôi phục chỉ hội thoại, chỉ code, hoặc cả hai.\n\n### Ý chính\n- Rất hợp để thử nhanh: \"thử cách A\", không ưng thì rewind rồi thử cách B.\n- Rewind không thay thế git: thay đổi do lệnh shell (ví dụ `rm`, `mv`) hoặc do bạn sửa ngoài Claude có thể không được checkpoint theo dõi.\n- Vẫn nên commit thường xuyên; git là lưới an toàn thật sự.\n\n### Lỗi hay gặp\n- Tưởng rewind hoàn tác được cả tác động ra ngoài như gọi API, ghi database, chạy migration.\n- Kiểm tra tài liệu hiện hành vì phím tắt và phạm vi checkpoint có thể thay đổi."
+ },
+ "Claude Workflow › Usage Best Practices": {
+  "body": "Phần lớn khác biệt giữa người dùng Claude Code \"ra kết quả tốt\" và \"toàn phải sửa lại\" nằm ở cách làm việc, không phải ở model.\n\n### Ý chính\n- **Prompt cụ thể**: nêu file, hành vi mong muốn, ràng buộc. \"Sửa lỗi đăng nhập trong `auth/login.ts`, test `login.test.ts` đang fail ở case token hết hạn\" tốt hơn \"sửa login\".\n- **Cho cách tự kiểm tra**: test, build, lint, ảnh chụp màn hình mong đợi.\n- **Khảo sát trước, code sau**: dùng Plan Mode cho việc lớn.\n- **Chia nhỏ**: mỗi lần một mục tiêu; commit thường xuyên.\n- **Quản lý ngữ cảnh**: `/clear` giữa các việc, `/compact` khi dài, đẩy việc tra cứu lớn sang subagent.\n- **Ghi quy ước vào CLAUDE.md**: lệnh build/test, phong cách code, điều cấm.\n- **Đọc diff**: coi Claude như đồng nghiệp junior rất nhanh — vẫn cần review.\n- **Tự động hoá cái lặp lại** bằng hook, skill, slash command riêng.\n\n### Lỗi hay gặp\n- Cho quyền quá rộng cho tiện rồi gặp sự cố.\n- Không bao giờ dọn ngữ cảnh.\n- Tin kết quả mà không chạy thử.\n\nTham khảo bài best practices của Anthropic ở phần tài liệu đi kèm; nội dung này được cập nhật theo thời gian.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "CLAUDE.md chi tiết › How to Structure": {
+  "body": "`CLAUDE.md` là file Markdown Claude Code tự đọc vào đầu mỗi phiên để biết \"luật chơi\" của dự án — giống tờ hướng dẫn cho nhân viên mới. Nó không có cấu trúc bắt buộc, nhưng bố cục rõ ràng giúp Claude làm đúng hơn.\n\n### Khung gợi ý\n- **Tổng quan**: dự án làm gì, stack, thư mục chính.\n- **Lệnh thường dùng**: build, test, lint, chạy local (chép nguyên lệnh chạy được).\n- **Quy ước code**: đặt tên, cấu trúc module, thư viện ưu tiên.\n- **Điều cấm / cẩn thận**: ví dụ không chạy migration trên production, không commit `.env`.\n- **Lỗi từng gặp**: những bẫy riêng của repo để không lặp lại.\n\n```markdown\n## Lệnh\n- Test: `npm test`   - Type-check: `npx tsc --noEmit`\n## Quy ước\n- Dùng named export, không dùng default export.\n## Cấm\n- Không sửa file trong `migrations/` đã deploy.\n```\n\n### Ý chính\n- Ngắn và cụ thể; mỗi dòng nên trả lời \"thiếu dòng này Claude có làm sai không?\".\n- Có thể tạo nhanh bản nháp bằng `/init`, rồi chỉnh tay.\n- Có thể import file khác bằng cú pháp `@đường/dẫn` để tách nội dung dài.\n\n### Lỗi hay gặp\n- Nhồi cả tài liệu dài vào: tốn ngữ cảnh mỗi phiên và dễ bị bỏ qua.\n- Nội dung lỗi thời, mâu thuẫn với code thật — cần bảo trì như code."
+ },
+ "CLAUDE.md chi tiết › Locations": {
+  "body": "`CLAUDE.md` có thể đặt ở nhiều cấp, Claude Code gộp chúng lại tuỳ vị trí bạn đang làm việc.\n\n### Các vị trí chính\n- **Thư mục gốc dự án** (`./CLAUDE.md`): quy ước chung của repo, thường được commit để cả nhóm dùng.\n- **Thư mục con** (ví dụ `frontend/CLAUDE.md`): chỉ nạp khi Claude làm việc với file trong thư mục đó — hợp với monorepo.\n- **Cấp người dùng** (`~/.claude/CLAUDE.md`): sở thích cá nhân áp dụng cho mọi dự án, như ngôn ngữ trả lời hay phong cách commit.\n- Có thêm cấp quản trị (managed policy) cho tổ chức và biến thể file cá nhân không commit; tên và đường dẫn chính xác thay đổi theo phiên bản, hãy xem tài liệu memory.\n\n### Ý chính\n- Cái gì của cả nhóm → file dự án. Cái gì của riêng bạn → file người dùng.\n- Dùng `/memory` để mở và sửa các file đang được nạp.\n- Không để bí mật (API key, mật khẩu) trong bất kỳ CLAUDE.md nào, nhất là file được commit.\n\n### Lỗi hay gặp\n- Đặt sở thích cá nhân vào file dự án, làm phiền đồng đội.\n- Quy ước ở các cấp mâu thuẫn nhau nên Claude làm theo kiểu khó đoán."
+ },
+ "Skills › Skills": {
+  "body": "Skill là một gói hướng dẫn chuyên môn mà Claude tự nạp khi tác vụ khớp. Hãy hình dung một cuốn cẩm nang trong ngăn kéo: bình thường Claude chỉ biết tiêu đề và mô tả ngắn, khi bạn nhờ việc liên quan thì nó mới rút cuốn đó ra đọc đầy đủ.\n\n### Cấu tạo\nMỗi skill là một thư mục chứa file `SKILL.md`, đầu file có khối YAML (frontmatter) gồm `name` và `description`, phía dưới là nội dung hướng dẫn. Có thể kèm thêm file tham chiếu, script, mẫu trong cùng thư mục.\n\n```markdown\n---\nname: viet-commit\ndescription: Dùng khi người dùng nhờ viết commit message. Áp dụng quy ước Conventional Commits của dự án.\n---\n1. Chạy `git diff --staged` để xem thay đổi.\n2. Viết tiêu đề dạng `type(scope): mô tả`, dưới 72 ký tự.\n```\n\n### Vì sao cần biết\n- Đóng gói quy trình lặp đi lặp lại (viết commit, review PR, tạo báo cáo, thao tác với một framework nội bộ) một lần, dùng mãi.\n- Khác `CLAUDE.md`: CLAUDE.md luôn được nạp vào mọi phiên, còn skill chỉ nạp khi cần nên tiết kiệm ngữ cảnh.\n- Chia sẻ được: đặt trong dự án (`.claude/skills/`) cho cả nhóm, hoặc trong thư mục người dùng (`~/.claude/skills/`) cho riêng bạn, hoặc đóng gói trong plugin.\n\n### Ý chính\n- Claude quyết định có dùng skill hay không chủ yếu dựa vào `description`, nên mô tả phải nói rõ **khi nào** dùng.\n- Skill dạng \"tiết lộ dần\": phần thân và tài nguyên chỉ đọc khi cần.\n- Một số phiên bản còn cho gọi skill bằng lệnh `/tên-skill`; kiểm tra tài liệu hiện hành về khả năng và các trường frontmatter bổ sung.\n\n### Lỗi hay gặp\n- Mô tả mơ hồ (\"giúp làm việc với code\") nên skill không bao giờ được kích hoạt.\n- Nhồi quá nhiều vào một skill thay vì tách theo việc.\n- Để bí mật hoặc đường dẫn cá nhân trong skill được commit.\n\n### Tự kiểm tra\n- Skill khác CLAUDE.md ở điểm nào về cách nạp vào ngữ cảnh?\n- Trường nào của SKILL.md quyết định skill có được kích hoạt hay không?"
+ },
+ "Skills › Creating Skills": {
+  "body": "Tạo skill đầu tiên chỉ mất vài phút: một thư mục và một file.\n\n### Các bước\n1. Tạo thư mục `.claude/skills/ten-skill/` trong dự án (hoặc `~/.claude/skills/ten-skill/` cho dùng cá nhân).\n2. Viết `SKILL.md` với frontmatter `name` và `description`, rồi phần hướng dẫn từng bước.\n3. Nếu cần, thêm file phụ trong cùng thư mục (mẫu, script, tài liệu tra cứu) và nhắc tới chúng trong SKILL.md để Claude đọc khi cần.\n4. Khởi động lại phiên (hoặc theo hướng dẫn của phiên bản bạn dùng), rồi thử một yêu cầu khớp mô tả và xem Claude có dùng skill không.\n\n```bash\nmkdir -p .claude/skills/review-pr\n```\n\n### Ý chính\n- `name` ngắn, chữ thường và dấu gạch ngang.\n- Viết hướng dẫn như cho một đồng nghiệp: bước rõ ràng, ví dụ đầu vào/đầu ra.\n- Script kèm theo nên chạy được độc lập và in kết quả dễ đọc.\n\n### Lỗi hay gặp\n- Sai vị trí thư mục hoặc thiếu đúng tên `SKILL.md`, nên skill không được nhận.\n- Quên rằng yêu cầu thử phải khớp mô tả.\nXem tài liệu skills để biết các trường tuỳ chọn hiện có."
+ },
+ "Skills › Skill Best Practices": {
+  "body": "Skill tốt là skill được kích hoạt đúng lúc, tốn ít ngữ cảnh và cho kết quả lặp lại được.\n\n### Ý chính\n- **Mô tả nói rõ khi nào dùng**: nêu tình huống và từ khoá người dùng hay nói, không chỉ nói skill làm gì.\n- **Một skill một việc**: nhiều việc thì tách nhiều skill.\n- **Giữ SKILL.md gọn**: phần đi sâu đặt trong file riêng cùng thư mục và chỉ dẫn Claude đọc khi cần.\n- **Dùng script cho phần cần chính xác** (kiểm tra, chuyển đổi) thay vì để model tự tính.\n- **Ví dụ cụ thể**: một cặp đầu vào/đầu ra mẫu giá trị hơn nhiều đoạn mô tả.\n- **Thử với yêu cầu thật** và chỉnh mô tả khi thấy skill bị bỏ sót hoặc kích hoạt nhầm.\n- **Cẩn thận với skill từ nguồn lạ**: skill có thể chứa script, hãy đọc trước khi dùng.\n\n### Lỗi hay gặp\n- Mô tả quá rộng nên skill chen vào những việc không liên quan.\n- Nhồi quá nhiều chỉ dẫn vào thân skill, làm tốn ngữ cảnh mỗi lần kích hoạt."
+ },
+ "Subagents › Subagents": {
+  "body": "Subagent là một agent con chuyên biệt mà Claude chính có thể giao việc. Điểm cốt lõi: mỗi subagent chạy trong **cửa sổ ngữ cảnh riêng** với chỉ dẫn hệ thống riêng và bộ tool riêng, rồi chỉ trả về kết quả tóm tắt cho agent chính. Giống trưởng nhóm giao một thành viên đi điều tra rồi chỉ nghe báo cáo ngắn, thay vì xem toàn bộ quá trình họ lục tìm.\n\n### Vì sao cần biết\n- **Bảo vệ ngữ cảnh**: việc đọc hàng chục file để tìm một hàm sẽ không làm phình ngữ cảnh chính.\n- **Chuyên môn hoá**: một reviewer chỉ đọc không sửa, một người viết test, một người kiểm tra bảo mật — mỗi người một chỉ dẫn và quyền tool phù hợp.\n- **Song song**: nhiều subagent có thể chạy cùng lúc cho các phần độc lập.\n- **Tiết kiệm chi phí**: có thể gán model nhẹ hơn cho việc đơn giản.\n\n### Ý chính\n- Claude tự giao việc cho subagent khi `description` của nó khớp tác vụ, hoặc bạn nêu tên rõ ràng (\"dùng subagent code-reviewer để xem diff này\").\n- Quản lý bằng lệnh `/agents`; claude còn có sẵn vài subagent tích hợp (ví dụ loại chuyên khảo sát codebase) — danh sách cụ thể xem tài liệu.\n- Subagent không thấy hội thoại của bạn; mọi thứ nó cần biết phải nằm trong yêu cầu được giao, nên prompt giao việc phải đầy đủ.\n- Giới hạn tool (chỉ đọc cho reviewer) là lớp an toàn đơn giản mà hiệu quả.\n\n### Lỗi hay gặp\n- Giao việc quá mơ hồ nên subagent trả kết quả lạc đề.\n- Tạo quá nhiều subagent chồng chéo, Claude khó chọn đúng.\n- Giao việc nhỏ xíu cũng bằng subagent: chi phí khởi tạo lớn hơn lợi ích.\n- Kết quả trả về ngắn gọn có thể bỏ sót chi tiết — việc quan trọng vẫn cần kiểm tra lại.\n\n### Tự kiểm tra\n- Subagent khác gì việc Claude tự làm trong cùng phiên về mặt ngữ cảnh?\n- Vì sao prompt giao việc cho subagent phải tự đủ?"
+ },
+ "Subagents › Creating Subagents": {
+  "body": "Subagent được định nghĩa bằng một file Markdown có frontmatter, đặt ở `.claude/agents/` (cho dự án) hoặc `~/.claude/agents/` (cho cá nhân). Bạn cũng có thể tạo qua lệnh `/agents`.\n\n```markdown\n---\nname: code-reviewer\ndescription: Review thay đổi code. Dùng chủ động sau khi sửa code để tìm lỗi và vấn đề bảo trì.\ntools: Read, Grep, Glob, Bash\nmodel: sonnet\n---\nBạn là reviewer nghiêm khắc. Chạy `git diff`, đọc các file thay đổi, rồi báo cáo:\n1. Lỗi chắc chắn  2. Rủi ro  3. Gợi ý cải thiện.\nKhông sửa file.\n```\n\n### Ý chính\n- `name` và `description` là bắt buộc; `description` quyết định lúc nào Claude giao việc.\n- `tools` giới hạn quyền; bỏ trống thì kế thừa các tool của agent chính.\n- `model` cho phép chọn bậc model riêng cho subagent.\n- Phần thân là chỉ dẫn hệ thống: vai trò, quy trình, định dạng báo cáo.\n\n### Lỗi hay gặp\n- Cấp quá nhiều tool cho agent chỉ cần đọc.\n- Mô tả không nêu khi nào dùng, nên không bao giờ được gọi tự động.\nCác trường tuỳ chọn có thể thay đổi, hãy xem tài liệu sub-agents."
+ },
+ "Hooks › Hooks": {
+  "body": "Hook là lệnh (thường là shell script) mà Claude Code tự chạy tại các thời điểm cố định trong vòng đời phiên — trước khi dùng tool, sau khi sửa file, khi bạn gửi prompt, khi Claude dừng... Điểm khác biệt với việc \"dặn Claude trong prompt\": hook do **chương trình** thực thi nên chắc chắn chạy, không phụ thuộc việc model có nhớ hay không.\n\n### Vì sao cần biết\n- Tự động format/lint sau mỗi lần Claude sửa file.\n- Chặn lệnh nguy hiểm (ví dụ `rm -rf`, sửa file `.env`) trước khi chạy.\n- Ghi log hành động, gửi thông báo khi Claude xong việc cần bạn.\n- Nạp ngữ cảnh động đầu phiên (nhánh git hiện tại, danh sách việc).\n\n### Cách cấu hình\nHook khai báo trong `settings.json` (cấp người dùng, dự án hoặc file cục bộ), có thể mở bằng lệnh `/hooks`:\n\n```json\n{\n  \"hooks\": {\n    \"PostToolUse\": [\n      {\n        \"matcher\": \"Edit|Write\",\n        \"hooks\": [{ \"type\": \"command\", \"command\": \"npx prettier --write \\\"$CLAUDE_PROJECT_DIR\\\"\" }]\n      }\n    ]\n  }\n}\n```\n\n### Ý chính\n- Mỗi hook gắn với một **sự kiện** (PreToolUse, PostToolUse, UserPromptSubmit, Stop, SessionStart...) và một **matcher** chọn tool nào kích hoạt.\n- Hook nhận dữ liệu JSON qua stdin và điều khiển hành vi bằng mã thoát hoặc JSON xuất ra.\n- Hook chạy với quyền của bạn trên máy bạn: viết cẩn thận, không chạy hook từ nguồn không tin cậy.\n\n### Lỗi hay gặp\n- Hook chạy chậm làm mọi thao tác ì ạch.\n- Quên quote biến, dẫn tới lỗi khi tên file có khoảng trắng.\n- Cấu hình sai JSON khiến hook không chạy mà không báo rõ; thử bằng `/hooks` và chế độ debug.\n\n### Tự kiểm tra\n- Vì sao \"chặn xoá file .env\" nên làm bằng hook thay vì chỉ dặn trong CLAUDE.md?\n- Hook cấu hình ở đâu và áp dụng cho phạm vi nào?"
+ },
+ "Hooks › Hook Events & Matchers": {
+  "body": "Mỗi hook cần trả lời hai câu hỏi: **khi nào** (sự kiện) và **với cái gì** (matcher).\n\n### Sự kiện thường gặp\n- `PreToolUse`: trước khi tool chạy (có thể chặn).\n- `PostToolUse`: sau khi tool chạy xong.\n- `UserPromptSubmit`: khi bạn gửi prompt.\n- `Stop`: khi Claude kết thúc lượt trả lời; có sự kiện tương tự cho subagent.\n- `SessionStart` / `SessionEnd`: đầu / cuối phiên.\n- `Notification`, `PreCompact`... Danh sách đầy đủ tăng theo phiên bản, hãy xem tài liệu hooks.\n\n### Matcher\nMatcher là chuỗi hoặc regex khớp **tên tool**, ví dụ `Bash`, `Edit|Write`, hoặc `mcp__tên-server__.*` cho tool MCP. Để trống hoặc `*` nghĩa là khớp tất cả. Các sự kiện không gắn với tool (như `Stop`) thường không dùng matcher.\n\n### Ví dụ\nChỉ chạy kiểm tra khi Claude dùng Bash: `\"matcher\": \"Bash\"` ở `PreToolUse`.\n\n### Lỗi hay gặp\n- Matcher quá rộng làm hook chạy cả khi không cần.\n- Nhầm tên tool (phân biệt hoa thường)."
+ },
+ "Hooks › Hook Types": {
+  "body": "Hook có nhiều \"kiểu\" về cách thực thi và cách tác động.\n\n### Ý chính\n- **Kiểu `command`**: chạy một lệnh shell — phổ biến nhất và là gốc của cơ chế hook.\n- Một số phiên bản còn có kiểu dựa trên prompt (để model quyết định cho phép hay không) hoặc kiểu khác; việc này thay đổi theo thời gian, hãy kiểm tra tài liệu hooks hiện hành.\n- Về **tác dụng**, hook chia thành: *quan sát* (ghi log, thông báo), *biến đổi/bổ trợ* (format code, thêm ngữ cảnh), và *chặn* (từ chối một tool call bằng mã thoát hoặc JSON `decision`).\n\n### Khi nào dùng loại nào\n- Chặn: chính sách an toàn (cấm lệnh, cấm sửa file nhạy cảm) ở `PreToolUse`.\n- Biến đổi: format/lint ở `PostToolUse`.\n- Quan sát: gửi thông báo ở `Stop`.\n\n### Lỗi hay gặp\n- Dùng hook chặn để thay cho hệ phân quyền: hai cơ chế bổ trợ nhau chứ không thay thế nhau.\n- Hook làm việc nặng đồng bộ gây chậm toàn phiên."
+ },
+ "Hooks › Hook Inputs & Outputs": {
+  "body": "Hook giao tiếp với Claude Code qua stdin, stdout, stderr và mã thoát.\n\n### Đầu vào\nClaude Code đưa một đối tượng JSON qua stdin, thường có `session_id`, `cwd`, tên sự kiện, và với hook liên quan tool thì có `tool_name` cùng `tool_input` (ví dụ lệnh Bash sắp chạy).\n\n### Đầu ra\n- **Mã thoát 0**: thành công, tiếp tục bình thường.\n- **Mã thoát 2**: lỗi chặn; với `PreToolUse` thì tool bị từ chối và nội dung stderr được gửi lại cho Claude để nó điều chỉnh.\n- Mã khác: lỗi không chặn, chủ yếu hiển thị cho người dùng.\n- Hoặc in JSON ra stdout (mã 0) để điều khiển tinh hơn, ví dụ quyết định cho phép/từ chối kèm lý do.\n\n### Ví dụ chặn lệnh nguy hiểm\n```bash\n#!/bin/bash\ncmd=$(jq -r '.tool_input.command' )\nif echo \"$cmd\" | grep -q 'rm -rf'; then\n  echo \"Chặn: không dùng rm -rf\" >&2\n  exit 2\nfi\n```\n(`jq` đọc JSON từ stdin; cần cài sẵn.)\n\n### Lỗi hay gặp\n- Quên rằng stderr chỉ được đưa cho Claude khi dùng đúng mã thoát theo tài liệu.\n- Giả định cấu trúc JSON cố định giữa các phiên bản — hãy đối chiếu tài liệu hooks."
+ },
+ "Hooks › Sự kiện: SessionStart / SessionEnd": {
+  "body": "Hai sự kiện đánh dấu đầu và cuối phiên làm việc.\n\n### SessionStart\nChạy khi bắt đầu hoặc nối lại phiên. Dùng để nạp ngữ cảnh động: in ra nhánh git hiện tại, danh sách việc đang mở, hoặc phiên bản công cụ. Nội dung hook in ra có thể được đưa vào ngữ cảnh của Claude (xem tài liệu để biết chính xác cách thức). Cũng là nơi hợp lý để thiết lập biến môi trường cho phiên.\n\n### SessionEnd\nChạy khi phiên kết thúc. Dùng để dọn dẹp, ghi log, lưu thống kê hoặc đẩy bản tóm tắt đi đâu đó. Không thể dùng để chặn việc thoát.\n\n### Ví dụ ý tưởng\n- `SessionStart`: `git status -sb` để Claude biết tình trạng kho.\n- `SessionEnd`: ghi thời gian phiên vào file log.\n\n### Lỗi hay gặp\n- Hook SessionStart chạy lâu làm phiên khởi động chậm.\n- In quá nhiều nội dung vào ngữ cảnh ngay từ đầu."
+ },
+ "Hooks › Sự kiện: PreToolUse / PostToolUse": {
+  "body": "Đây là cặp sự kiện được dùng nhiều nhất vì chúng bao quanh mọi hành động của Claude.\n\n### PreToolUse — trước khi chạy\nChạy sau khi Claude quyết định dùng tool nhưng trước khi thực thi. Có thể **chặn** (mã thoát 2) hoặc điều khiển phân quyền bằng JSON. Dùng cho: cấm lệnh nguy hiểm, bảo vệ file nhạy cảm (`.env`, thư mục migrations), bắt buộc quy ước.\n\n### PostToolUse — sau khi chạy\nChạy khi tool đã xong. Lúc này không thể hoàn tác việc đã làm, nhưng có thể phản hồi cho Claude. Dùng cho: format/lint file vừa sửa, chạy test nhanh, ghi log kiểm toán.\n\n### Ví dụ\n```json\n{ \"hooks\": { \"PostToolUse\": [\n  { \"matcher\": \"Edit|Write\",\n    \"hooks\": [{ \"type\": \"command\", \"command\": \"npx eslint --fix .\" }] }\n]}}\n```\n\n### Lỗi hay gặp\n- Chạy toàn bộ test suite ở mỗi lần sửa file: quá chậm.\n- Hook PostToolUse tự sửa file làm Claude bối rối về trạng thái file; hãy nhắn rõ trong output nếu cần."
+ },
+ "Hooks › Sự kiện: UserPromptSubmit / Stop": {
+  "body": "Hai sự kiện nằm ở hai đầu một lượt hội thoại.\n\n### UserPromptSubmit\nChạy khi bạn gửi prompt, trước khi Claude xử lý. Dùng để: tự động bổ sung ngữ cảnh (ví dụ giờ hiện tại, ticket đang làm), kiểm tra prompt có lộ bí mật không, hoặc chặn prompt vi phạm quy định nhóm.\n\n### Stop\nChạy khi Claude kết thúc lượt trả lời. Dùng để: gửi thông báo khi việc dài đã xong, chạy bộ kiểm tra cuối lượt. Hook Stop còn có thể yêu cầu Claude tiếp tục (ví dụ \"test chưa xanh, làm tiếp\") — cần cẩn thận để không tạo vòng lặp vô hạn; xem tài liệu về cờ báo hiệu hook đang chạy.\n\n### Ví dụ\nBáo máy khi xong việc (macOS): hook `Stop` chạy `osascript -e 'display notification \"Claude đã xong\"'`.\n\n### Lỗi hay gặp\n- Hook Stop liên tục ép Claude làm tiếp, gây vòng lặp tốn token.\n- Hook UserPromptSubmit làm chậm mỗi lượt gõ."
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Loops (chạy lặp)": {
+  "body": "Vòng lặp (loop) là cách để Claude tự lặp lại \"làm → kiểm tra → sửa\" cho tới khi đạt một điều kiện kiểm chứng được, thay vì bạn phải bấm tiếp từng bước. Ví dụ điển hình: \"Chạy `npm test`, sửa lỗi, lặp lại cho tới khi tất cả test xanh.\"\n\n### Vì sao cần biết\nClaude vốn làm việc theo vòng agentic (đọc → hành động → quan sát kết quả → hành động tiếp). Khi bạn đưa một tiêu chí dừng rõ ràng và lệnh kiểm tra chạy được, vòng này tự chạy rất hiệu quả cho: sửa lỗi test, đưa build về xanh, xử lý hàng loạt lỗi lint, di chuyển cú pháp.\n\n### Ý chính\n- Điều kiện dừng phải **đo được** (mã thoát 0, số test pass), không phải cảm tính.\n- Đặt giới hạn: số lần thử tối đa, hoặc \"nếu sau 5 lần vẫn lỗi thì dừng và báo cáo\".\n- Với việc chạy lặp ngoài phiên tương tác, có thể dùng chế độ headless trong script shell; ngoài ra có tính năng/plugin vòng lặp trong hệ sinh thái — kiểm tra tài liệu hiện hành xem có lệnh loop dựng sẵn không.\n- Kết hợp hook `Stop` để buộc kiểm tra trước khi Claude được phép dừng.\n\n### Lỗi hay gặp\n- Không giới hạn số vòng: tốn token vô ích khi bài toán không giải được.\n- Claude \"sửa test cho pass\" bằng cách xoá/sửa test; hãy nói rõ không được đổi test.\n- Vòng chạy trong chế độ bỏ qua quyền ở máy thật."
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Manage Context": {
+  "body": "Ngữ cảnh (context window) là toàn bộ nội dung Claude \"nhìn thấy\" ở mỗi lượt: chỉ dẫn hệ thống, CLAUDE.md, lịch sử hội thoại, nội dung file đã đọc, kết quả tool. Nó có giới hạn, và càng đầy thì chi phí mỗi lượt càng cao, độ chính xác càng dễ giảm vì thông tin quan trọng bị chìm. Quản lý ngữ cảnh gần như là kỹ năng cốt lõi để dùng Claude Code hiệu quả.\n\n### Vì sao cần biết\nMỗi lượt hội thoại gửi lại phần lớn lịch sử trước đó (có cơ chế cache giúp rẻ hơn nhưng không miễn phí). Một phiên rác rưởi vừa đắt vừa kém thông minh.\n\n### Ý chính\n- **Xem đang dùng bao nhiêu**: lệnh `/context` (và `/cost` để xem chi phí, nếu bạn dùng API).\n- **`/clear`** khi chuyển sang việc khác hẳn.\n- **`/compact`** để tóm tắt và nén lịch sử khi vẫn cần mạch công việc; có thể kèm hướng dẫn nên giữ gì.\n- **Nói cụ thể file cần đọc** thay vì bảo Claude \"đọc cả dự án\".\n- **Đẩy việc tra cứu nặng sang subagent** để kết quả thô không vào ngữ cảnh chính.\n- **Giữ CLAUDE.md gọn**, chỉ bật MCP server cần dùng.\n- **Ghi quyết định quan trọng ra file** (ghi chú, kế hoạch) để phiên mới đọc lại được.\n\n### Lỗi hay gặp\n- Giữ một phiên chạy mãi cho mọi việc.\n- Dán nguyên log dài hàng nghìn dòng thay vì trích phần liên quan.\n- Chỉ dựa vào tự động nén mà không biết nó có thể lược bỏ chi tiết bạn cần.\n\n### Tự kiểm tra\n- Khi nào dùng `/clear`, khi nào dùng `/compact`?\n- Tại sao subagent giúp giữ ngữ cảnh chính sạch?"
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Understand Claude Pricing": {
+  "body": "Chi phí khi dùng model Claude tính theo **token** (mảnh văn bản; tiếng Việt thường tốn nhiều token hơn tiếng Anh cho cùng nội dung). Có ba nhóm cần phân biệt: token **vào** (input, gồm prompt, file đã đọc, lịch sử), token **ra** (output, thường đắt hơn input) và token **cache** (đọc lại phần prompt đã cache, rẻ hơn nhiều so với giá input thường).\n\n### Ý chính\n- Giá mỗi triệu token khác nhau theo bậc model: bậc nhỏ rẻ hơn bậc lớn. Con số cụ thể thay đổi, hãy xem trang giá chính thức thay vì nhớ.\n- Có hai cách trả: gói đăng ký (Pro/Max, có hạn mức sử dụng) hoặc trả theo API/token. Cách tính và hạn mức xem tài liệu costs.\n- Claude Code tốn token chủ yếu ở: lịch sử dài, đọc file lớn, nhiều lượt gọi tool, subagent và chế độ suy nghĩ.\n- Lệnh `/cost` cho biết mức tiêu thụ của phiên (với người dùng API); `/context` cho thấy ngữ cảnh đang dùng.\n\n### Cách giảm chi phí\nDùng model nhỏ cho việc đơn giản, `/clear` thường xuyên, chỉ định file cụ thể, tắt MCP không cần.\n\n### Lỗi hay gặp\n- Chỉ nhìn giá một lượt mà quên phép nhân với số lượt và lịch sử.\n- Dùng model lớn nhất cho mọi việc."
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Use /compact và /clear": {
+  "body": "Hai lệnh giúp dọn ngữ cảnh, nhưng làm hai việc khác nhau.\n\n### `/clear`\nXoá toàn bộ lịch sử hội thoại, bắt đầu như phiên mới (CLAUDE.md vẫn được nạp lại). Dùng khi chuyển sang việc không liên quan: không muốn Claude bị lẫn thông tin cũ, và không muốn trả tiền để mang theo nó.\n\n### `/compact`\nTóm tắt lịch sử thành bản gọn rồi tiếp tục phiên. Dùng khi vẫn cần mạch việc nhưng ngữ cảnh đã dài. Có thể kèm chỉ dẫn:\n\n```text\n/compact Giữ lại danh sách file đã sửa và các lỗi test còn tồn tại\n```\n\nClaude Code cũng có cơ chế tự nén khi ngữ cảnh gần đầy; bạn nên chủ động nén sớm ở điểm thuận lợi thay vì chờ tự động.\n\n### Lỗi hay gặp\n- `/compact` đúng lúc đang giữa việc tinh vi, làm mất chi tiết quan trọng; hãy chỉ rõ cần giữ gì hoặc ghi ra file trước.\n- Dùng `/clear` mà quên chưa lưu quyết định đã chốt."
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Be mindful of extensions": {
+  "body": "Mọi \"phần mở rộng\" bạn cắm vào đều có cái giá ngữ cảnh: các server MCP khai báo danh sách tool (tên, mô tả, tham số) và các định nghĩa đó được nạp vào ngữ cảnh; skill, subagent, CLAUDE.md dài cũng chiếm chỗ. Cắm quá nhiều giống đeo balo đầy đồ trước khi leo núi.\n\n### Ý chính\n- Kiểm tra bằng `/context` xem phần nào đang chiếm nhiều chỗ.\n- Chỉ bật MCP server cần cho việc đang làm; dùng `/mcp` để xem và tắt/bật.\n- Server MCP có nhiều tool kèm mô tả dài đặc biệt tốn; ưu tiên server gọn, hoặc theo cấu hình tải tool theo nhu cầu nếu phiên bản của bạn hỗ trợ (xem tài liệu MCP).\n- Với tác vụ đã có CLI quen thuộc (git, gh, docker), đôi khi để Claude gọi thẳng CLI nhẹ hơn dựng MCP.\n- Plugin có thể mang theo nhiều thứ cùng lúc: xem nó gồm gì trước khi bật.\n\n### Lỗi hay gặp\n- Cài một loạt MCP \"cho chắc\" rồi ngạc nhiên vì ngữ cảnh đầy ngay từ đầu phiên.\n- Quên rằng mỗi tool còn là một mặt tấn công về bảo mật."
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Use subagents & hooks": {
+  "body": "Hai công cụ này giúp tiết kiệm ngữ cảnh theo hai hướng khác nhau.\n\n### Subagent: gom việc ồn ào vào ngăn riêng\nViệc như \"tìm mọi chỗ dùng hàm X\", \"đọc log và rút nguyên nhân\", \"chạy bộ test dài\" tạo ra rất nhiều dữ liệu trung gian. Giao cho subagent: nó làm trong ngữ cảnh riêng, chỉ trả về kết luận ngắn nên ngữ cảnh chính sạch.\n\n### Hook: làm việc máy móc mà không tốn lượt hội thoại\nFormat code, lint, chặn lệnh nguy hiểm, nạp thông tin đầu phiên — nếu để Claude tự làm thì tốn token mỗi lần và có thể quên. Hook chạy tự động ngoài hội thoại, tốn gần như 0 token; chỉ khi hook phản hồi lỗi thì mới đưa thông tin cho Claude.\n\n### Ví dụ\n- Hook `PostToolUse` chạy formatter: không cần dặn \"nhớ format\" trong prompt.\n- Subagent chỉ đọc để khảo sát module lạ: agent chính chỉ nhận bản tóm tắt.\n\n### Lỗi hay gặp\n- Hook in quá nhiều output đưa ngược vào ngữ cảnh.\n- Giao cho subagent mà không nêu rõ cần trả về định dạng gì, nhận về bản tóm tắt dài dòng."
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Thinking modes & Effort": {
+  "body": "Khi gặp vấn đề khó, model có thể dành thêm token \"suy nghĩ\" trước khi trả lời (extended thinking). Suy nghĩ nhiều hơn thường cho kết quả tốt hơn với bài toán phức tạp, nhưng chậm hơn và tốn token hơn.\n\n### Ý chính\n- Trong tài liệu hướng dẫn thực hành của Anthropic, các từ khoá như \"think\", \"think hard\", \"think harder\", \"ultrathink\" từng được dùng để tăng dần mức suy nghĩ cho lượt đó. Cơ chế này đã thay đổi qua các phiên bản; các phiên bản mới có thể có công tắc bật/tắt hoặc tuỳ chọn mức nỗ lực (effort) riêng. Hãy kiểm tra tài liệu hiện hành để biết cách điều chỉnh đúng.\n- Nguyên tắc chọn: việc đơn giản (đổi tên, sửa typo) không cần suy nghĩ sâu; việc khó (thiết kế, gỡ lỗi chồng chéo, lập kế hoạch) đáng để suy nghĩ nhiều.\n- Kết hợp Plan Mode với mức suy nghĩ cao cho bước lập kế hoạch là cách dùng phổ biến.\n- Suy nghĩ tính vào token ra nên ảnh hưởng chi phí.\n\n### Lỗi hay gặp\n- Luôn bật mức cao nhất cho mọi việc, tốn thời gian và tiền.\n- Mong suy nghĩ sâu thay thế được việc thiếu ngữ cảnh: nếu Claude chưa đọc file liên quan thì suy nghĩ lâu cũng không ra đáp án đúng."
+ },
+ "Vòng lặp & Quản lý ngữ cảnh › Prompt Caching": {
+  "body": "Prompt caching là cơ chế phía API: phần đầu prompt lặp lại giữa các lượt (chỉ dẫn hệ thống, định nghĩa tool, lịch sử đã có) được lưu tạm để các lượt sau **đọc lại với giá thấp hơn và nhanh hơn** thay vì xử lý lại từ đầu. Hình dung như đọc lại trang ghi chú đã tóm tắt thay vì đọc lại cả cuốn sách mỗi lần.\n\n### Vì sao cần biết với Claude Code\nMỗi lượt gửi lại lượng lớn ngữ cảnh; nhờ cache, Claude Code thường dùng được phần đã cache nên rẻ và nhanh hơn nhiều so với việc tính giá đầy đủ. Bạn không phải tự cấu hình trong Claude Code, nhưng hiểu để tránh làm hỏng cache.\n\n### Ý chính\n- Cache khớp theo **tiền tố** của prompt: thay đổi phần đầu (ví dụ đổi CLAUDE.md, đổi bộ tool/MCP giữa chừng, đổi model) có thể làm mất cache từ chỗ đó trở đi.\n- Cache có thời hạn sống ngắn; ngừng một lúc rồi quay lại có thể phải tính lại.\n- Khi gọi API trực tiếp, bạn tự đánh dấu phần cần cache; mức giá ghi/đọc cache và thời hạn xem tài liệu prompt caching của Anthropic.\n\n### Lỗi hay gặp\n- Đổi cấu hình giữa phiên liên tục làm mất cache.\n- Tưởng cache làm token \"biến mất\": nó chỉ giảm giá, không giảm giới hạn cửa sổ ngữ cảnh."
+ },
+ "Advanced Claude Code › Customize Status Line": {
+  "body": "Status line là thanh một dòng ở cuối giao diện Claude Code, bạn có thể tuỳ biến để hiện thứ mình quan tâm: nhánh git, model đang dùng, thư mục, mức dùng ngữ cảnh, chi phí...\n\n### Cách làm\n- Gõ `/statusline` rồi mô tả điều bạn muốn; Claude sẽ giúp tạo cấu hình.\n- Hoặc tự cấu hình trong `settings.json`: khai báo `statusLine` trỏ tới một script. Claude Code đưa dữ liệu phiên (model, thư mục, chi phí...) dạng JSON qua stdin; script in ra một dòng chữ để hiển thị.\n\n```bash\n#!/bin/bash\ninput=$(cat)\nmodel=$(echo \"$input\" | jq -r '.model.display_name')\nbranch=$(git branch --show-current 2>/dev/null)\necho \"[$model] $branch\"\n```\n\n### Lỗi hay gặp\n- Script chậm hoặc gọi lệnh nặng vì status line cập nhật thường xuyên.\n- Cấu trúc JSON đầu vào thay đổi theo phiên bản; hãy đối chiếu tài liệu statusline khi viết."
+ },
+ "Advanced Claude Code › Connecting Tools with MCP": {
+  "body": "MCP (Model Context Protocol) là giao thức mở để gắn **công cụ và nguồn dữ liệu bên ngoài** vào ứng dụng AI. Một MCP server là chương trình khai báo \"tôi có các tool này\" (truy vấn database, đọc issue GitHub, điều khiển trình duyệt, gửi tin Slack...). Claude Code đóng vai client: kết nối, đọc danh sách tool, rồi gọi khi cần. Hình dung như cổng USB-C chung: cắm thiết bị nào cũng nói cùng một chuẩn.\n\n### Vì sao cần biết\nKhông có MCP, Claude chỉ làm việc với file và lệnh shell trên máy bạn. Có MCP, nó có thể \"xem ticket Jira rồi sửa code theo mô tả\", \"hỏi database xem dữ liệu thật\", \"mở trang web để kiểm tra giao diện\".\n\n### Thêm một server\n```bash\nclaude mcp add --transport http ten-server https://mcp.example.com/mcp\nclaude mcp add ten-server -- npx -y some-mcp-package   # server chạy cục bộ qua stdio\nclaude mcp list\n```\nTrong phiên dùng `/mcp` để xem trạng thái và xác thực (OAuth) với server từ xa. Cú pháp và các kiểu transport có thể đổi theo phiên bản; xem tài liệu MCP của Claude Code.\n\n### Ý chính\n- **Phạm vi (scope)**: cấu hình ở mức cục bộ (riêng bạn, dự án đó), mức dự án (file `.mcp.json` có thể commit cho cả nhóm) hoặc mức người dùng.\n- Tool MCP xuất hiện với tên dạng `mcp__<server>__<tool>`; có thể cho phép/từ chối bằng luật phân quyền và matcher của hook.\n- Mỗi server chiếm một phần ngữ cảnh (định nghĩa tool).\n\n### Lỗi hay gặp\n- Cài server từ nguồn lạ: nó có thể thực thi lệnh hoặc đọc dữ liệu — chỉ cài thứ bạn tin cậy.\n- Cấp token quyền rộng; hãy dùng quyền tối thiểu, ưu tiên chỉ đọc.\n- Dán secret thẳng vào `.mcp.json` được commit; dùng biến môi trường.\n\n### Tự kiểm tra\n- MCP server khác một skill ở điểm nào?\n- Cấu hình MCP cấp dự án nên nằm ở đâu để cả nhóm dùng chung và vì sao không để secret trong đó?"
+ },
+ "Advanced Claude Code › Skills for MCP": {
+  "body": "MCP cho Claude **khả năng** (gọi tool), còn skill cho Claude **cách dùng đúng** khả năng đó. Kết hợp hai thứ giúp agent dùng công cụ ngoài mượt hơn.\n\n### Ví dụ\nBạn nối MCP server của hệ thống ticket. Tool thì đã có, nhưng nhóm bạn có quy trình riêng: ticket phải có nhãn nào, mô tả theo mẫu nào, khi nào chuyển trạng thái. Hãy viết một skill mô tả quy trình đó và nhắc rõ tool MCP nào dùng ở bước nào.\n\n### Ý chính\n- MCP = \"có gì để gọi\"; skill = \"gọi thế nào, theo thứ tự nào, kiểm tra ra sao\".\n- Skill nạp theo nhu cầu nên không làm phình ngữ cảnh như nhồi hết hướng dẫn vào CLAUDE.md.\n- Một số plugin đóng gói sẵn cả MCP server lẫn skill đi kèm; xem tài liệu plugins.\n- Nên nêu trong skill tên đầy đủ của tool (dạng `mcp__server__tool`) để tránh nhầm.\n\n### Lỗi hay gặp\n- Skill tham chiếu tool MCP chưa được kết nối, nên chạy lỗi.\n- Để secret trong skill thay vì dùng cấu hình/biến môi trường."
+ },
+ "Advanced Claude Code › Channels": {
+  "body": "Mục này liên quan tới việc đưa Claude Code ra ngoài giao diện terminal: gọi nó từ kênh nhắn tin hoặc ứng dụng bên thứ ba. Mình không chắc \"Channels\" tương ứng chính xác với tính năng nào trong tài liệu hiện hành, nên bạn hãy đối chiếu trang tích hợp bên thứ ba và danh sách tính năng mới nhất.\n\n### Những hướng đã được tài liệu hoá (kiểm tra tài liệu để xác nhận)\n- **IDE**: tiện ích cho VS Code và JetBrains.\n- **GitHub**: mention Claude trong issue/PR để nó đọc, sửa code và mở PR (qua GitHub Actions/ứng dụng chính thức).\n- **Slack** và các công cụ cộng tác khác: giao việc từ kênh chat cho Claude Code (theo từng tích hợp chính thức).\n- **MCP server** của dịch vụ nhắn tin/ticket để Claude đọc và gửi thông báo.\n\n### Ý chính\n- Mọi tích hợp mở thêm đường vào cho Claude, nên cần xem xét quyền: nó có được ghi vào repo, đẩy nhánh, gọi dịch vụ nào.\n- Nội dung từ kênh công cộng có thể chứa chỉ dẫn độc hại (prompt injection); không để tác vụ có quyền cao chạy trực tiếp trên dữ liệu không tin cậy.\n\n### Lỗi hay gặp\n- Cấp token quyền rộng cho bot tích hợp.\n- Giả định mọi người dùng kênh đều đáng tin."
+ },
+ "Advanced Claude Code › Tunnels": {
+  "body": "Mục này nói về cách đưa Claude Code tới những dịch vụ nằm sau tường lửa hoặc trên máy nội bộ. Mình không chắc \"Tunnels\" ứng với một tính năng có tên riêng nào trong tài liệu hiện hành; hãy đối chiếu tài liệu MCP và tính năng mới nhất trước khi áp dụng.\n\n### Ý tưởng chung\n- MCP server có thể chạy **cục bộ** (stdio) hoặc **từ xa** (HTTP). Muốn Claude dùng một dịch vụ nội bộ, bạn có thể chạy server MCP gần dịch vụ đó và cho nó lộ ra qua kết nối an toàn.\n- Cách lộ ra thường dùng là SSH tunnel, VPN hoặc dịch vụ tunnel (như Cloudflare Tunnel): không mở cổng thẳng ra internet, chỉ cho phép đường đi có xác thực.\n- Máy chạy Claude Code ở xa (VPS, container) cũng thường được truy cập qua SSH port-forward.\n\n### Lưu ý bảo mật\n- Luôn bắt buộc xác thực; một MCP server không mật khẩu mà lộ ra ngoài là cửa sau vào hệ thống nội bộ.\n- Dùng quyền tối thiểu và chỉ đọc nếu có thể; ghi log truy cập.\n\n### Lỗi hay gặp\n- Mở cổng công khai cho tiện thử rồi quên đóng.\n- Dùng token dài hạn quyền cao cho tunnel."
+ },
+ "Advanced Claude Code › Scheduling Jobs": {
+  "body": "Muốn Claude Code làm việc theo lịch (mỗi sáng tóm tắt issue mới, hằng đêm kiểm tra phụ thuộc lỗi thời) thì bạn cần chạy nó **không tương tác** rồi giao cho một bộ lập lịch.\n\n### Cách làm cơ bản\nChế độ headless: `claude -p \"prompt\"` chạy một lượt rồi in kết quả và thoát. Kết hợp với:\n- **cron** trên máy chủ/VPS (`0 8 * * 1-5 cd /srv/app && claude -p \"Tóm tắt commit hôm qua\" > report.md`);\n- **GitHub Actions** với trigger `schedule`;\n- Các dịch vụ lập lịch khác.\n\nMột số phiên bản/nền tảng cung cấp tính năng lập lịch tích hợp; hãy xem tài liệu hiện hành để biết có hay không.\n\n### Ý chính\n- Máy chạy tự động không có người duyệt, nên phải giới hạn tool bằng `--allowedTools` hoặc cấu hình quyền, chạy trong môi trường cô lập, quyền tối thiểu.\n- Đặt giới hạn số lượt và theo dõi chi phí.\n- Ghi log kết quả, xử lý trường hợp thất bại.\n\n### Lỗi hay gặp\n- Cho chạy với quyền bỏ qua mọi hỏi đáp trên máy thật.\n- Quên rằng xác thực/cấu hình môi trường của cron khác shell tương tác của bạn.",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-2-cron-timer",
+    "ten": "11.2 — Hẹn giờ: cron và timer của systemd",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Advanced Claude Code › Model Configuration": {
+  "body": "Claude Code cho bạn chọn model và nơi chạy model.\n\n### Chọn model\n- Trong phiên: `/model` để đổi.\n- Khi khởi động: `claude --model <alias hoặc tên đầy đủ>`.\n- Mặc định trong cấu hình: trường `model` của `settings.json`, hoặc biến môi trường như `ANTHROPIC_MODEL`.\n- Alias thường dùng: `sonnet`, `opus`, `haiku`, `opusplan` (xem bước Opusplan). Tên model cụ thể đổi theo từng thế hệ nên đừng chép cứng.\n\n### Nhà cung cấp\nNgoài API trực tiếp của Anthropic, Claude Code có thể chạy qua Amazon Bedrock hoặc Google Vertex AI (cấu hình bằng biến môi trường tương ứng) và qua cổng LLM gateway của tổ chức — xem tài liệu model-config và enterprise.\n\n### Ý chính\n- Việc đơn giản → model nhỏ; việc khó → model lớn.\n- Có thể gán model riêng cho từng subagent.\n- Cấu hình ở nhiều cấp: người dùng, dự án, cục bộ; cấp cụ thể hơn thường ghi đè cấp chung.\n\n### Lỗi hay gặp\n- Đặt tên model đã ngừng hỗ trợ.\n- Quên rằng đổi model giữa phiên có thể làm mất cache nên tốn hơn."
+ },
+ "Advanced Claude Code › Opusplan": {
+  "body": "`opusplan` là một alias model: dùng **Opus** (model mạnh nhất, đắt hơn) khi ở Plan Mode để lập kế hoạch và suy luận, rồi tự chuyển sang **Sonnet** để thực thi khi rời Plan Mode. Ý tưởng: phần cần \"động não\" thì dùng bộ não lớn, phần gõ code theo kế hoạch rõ ràng thì dùng model rẻ và nhanh hơn.\n\n### Cách dùng\n- `claude --model opusplan`, hoặc `/model opusplan` trong phiên, hoặc đặt trong cấu hình.\n- Bật Plan Mode (Shift+Tab), mô tả việc, duyệt kế hoạch, rồi cho thực thi.\n\n### Vì sao hữu ích\nChất lượng kế hoạch quyết định phần lớn kết quả, còn việc áp dụng một kế hoạch tốt thì model tầm trung làm khá ổn. Nên chi phí thường thấp hơn dùng Opus xuyên suốt mà chất lượng thiết kế vẫn tốt.\n\n### Lưu ý\nAlias và việc nó ánh xạ tới model nào có thể đổi theo phiên bản; xác nhận trong tài liệu model-config.\n\n### Lỗi hay gặp\n- Quên rằng chuyển model giữa chừng làm mất cache.\n- Dùng cho tác vụ nhỏ mà không cần plan: không thu được lợi."
+ },
+ "Advanced Claude Code › Output Styles": {
+  "body": "Output style điều chỉnh **cách Claude trả lời và hành xử** (giọng điệu, độ chi tiết, vai trò) mà vẫn giữ năng lực công cụ của Claude Code. Ví dụ một phong cách \"giải thích\" để vừa làm vừa dạy bạn, hoặc một phong cách ngắn gọn cho người đã rành.\n\n### Cách dùng\n- Lệnh `/output-style` để xem danh sách và chuyển đổi.\n- Có thể tự tạo style: một file Markdown mô tả chỉ dẫn, đặt trong thư mục `.claude/output-styles/` (dự án) hoặc `~/.claude/output-styles/` (cá nhân).\n\n### Ý chính\n- Style khác `CLAUDE.md`: style thay đổi phần chỉ dẫn hệ thống về cách làm việc/giọng điệu; CLAUDE.md là bối cảnh dự án.\n- Hợp để học (style giải thích), để làm việc nhóm theo chuẩn chung, hay để đặt ngôn ngữ trả lời.\n\n### Lưu ý\nTính năng này đã thay đổi theo phiên bản, thậm chí có thể đổi tên hoặc cách cấu hình; hãy kiểm tra tài liệu output styles hiện hành trước khi dựa vào.\n\n### Lỗi hay gặp\n- Style quá dài làm tốn ngữ cảnh.\n- Nhầm style với skill (skill dạy thao tác cụ thể, style đổi phong cách chung)."
+ },
+ "Advanced Claude Code › Plugins": {
+  "body": "Plugin là gói phân phối nhiều thành phần mở rộng của Claude Code vào một chỗ để cài bằng vài lệnh: **slash command, subagent, skill, hook và MCP server**. Giống như tiện ích cho trình duyệt: thay vì tự chép từng file cấu hình qua từng máy và từng dự án, bạn cài một plugin là có đủ bộ.\n\n### Vì sao cần biết\n- Chia sẻ quy trình làm việc của nhóm (bộ command review, hook kiểm tra, agent chuyên biệt) cho mọi thành viên bằng một lệnh.\n- Dùng lại công cụ cộng đồng thay vì viết từ đầu.\n- Cập nhật tập trung khi plugin có phiên bản mới.\n\n### Cách dùng\n- Gõ `/plugin` trong phiên để duyệt, cài và quản lý.\n- Plugin được phân phối qua **marketplace** (một danh mục, thường là một repo git). Bạn thêm marketplace rồi cài plugin từ đó. Cú pháp lệnh cụ thể xem tài liệu plugins.\n- Cấu trúc một plugin: thư mục có manifest (thường trong `.claude-plugin/plugin.json`) và các thư mục `commands/`, `agents/`, `skills/`, `hooks/`, cấu hình MCP.\n\n### Ý chính\n- Tạo plugin riêng để đóng gói quy trình nhóm; thử cục bộ trước khi phát hành.\n- Với plugin của nhóm, đặt cấu hình cho phép tự cài ở cấp dự án để mọi người nhận cùng bộ.\n\n### Lỗi hay gặp\n- **Cài plugin không rõ nguồn**: nó có thể mang hook và MCP server chạy lệnh trên máy bạn. Đọc nội dung trước khi bật.\n- Bật quá nhiều plugin làm đầy ngữ cảnh và đụng nhau.\n- Phụ thuộc cấu trúc/trường manifest cũ: định dạng có thể đổi, hãy theo tài liệu hiện hành.\n\n### Tự kiểm tra\n- Plugin có thể gói những loại thành phần nào?\n- Vì sao cần đọc kỹ plugin trước khi cài?"
+ },
+ "Advanced Claude Code › Code Intelligence": {
+  "body": "\"Code intelligence\" là khả năng hiểu codebase ở mức ngữ nghĩa: nhảy tới định nghĩa, tìm mọi nơi tham chiếu, biết kiểu dữ liệu, thấy lỗi biên dịch. Con người có điều này nhờ IDE; Claude cần nó để điều hướng codebase lớn chính xác thay vì chỉ tìm chuỗi văn bản.\n\n### Các hướng thực tế\n- **Tích hợp IDE** (VS Code, JetBrains): Claude Code nhận ngữ cảnh từ editor như file đang mở, đoạn đang chọn, lỗi chẩn đoán (diagnostics), và hiển thị diff ngay trong editor.\n- **Tìm kiếm trong repo**: Claude dùng các tool grep/glob để khảo sát; chỉ cho nó đúng thư mục sẽ nhanh và chính xác hơn.\n- **Language server (LSP)**: một số phiên bản/plugin cho phép dùng thông tin từ language server; kiểm tra tài liệu hiện hành xem có hỗ trợ không và bật thế nào.\n- **MCP** nối thêm công cụ phân tích mã.\n\n### Ý chính\n- Chạy type-checker, linter làm \"mắt\" kiểm chứng cho Claude.\n- CLAUDE.md nên nói rõ cấu trúc thư mục và lệnh kiểm tra.\n\n### Lỗi hay gặp\n- Cho Claude \"đọc cả repo\" thay vì hướng nó tới phần liên quan.\n- Bỏ qua diagnostics của IDE trong khi đó là tín hiệu kiểm chứng miễn phí."
+ },
+ "Advanced Claude Code › Scaling Claude": {
+  "body": "Một phiên Claude Code làm tuần tự từng việc. Khi cần nhiều việc cùng lúc hoặc khối lượng lớn (di trú hàng trăm file, xử lý nhiều issue), bạn mở rộng bằng cách chạy **nhiều tác nhân song song**.\n\n### Các cách mở rộng\n- **Nhiều phiên song song**, mỗi phiên trong một git worktree riêng để không dẫm chân nhau (xem bước Git Worktrees).\n- **Subagent song song** trong một phiên cho các phần độc lập.\n- **Chế độ headless** (`claude -p`) gọi trong vòng lặp shell hoặc pipeline CI để xử lý hàng loạt: chia danh sách việc rồi chạy từng việc với tập tool bị giới hạn.\n- Dùng model nhỏ cho các việc hàng loạt đơn giản.\n\n### Ý chính\n- Việc song song phải **độc lập** (khác file/khác module); nếu không sẽ xung đột khi gộp.\n- Cần nhà điều phối (bạn hoặc script) giao việc, thu kết quả, review.\n- Theo dõi chi phí và giới hạn tốc độ (rate limit): chạy nhiều quá sẽ chạm trần.\n\n### Lỗi hay gặp\n- Chạy song song nhiều agent cùng sửa một thư mục.\n- Không review kết quả do tin rằng \"agent chạy hàng loạt chắc đúng\".",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-1-worktree",
+    "ten": "10.1 — git worktree: nhiều nhánh cùng được checkout một lúc",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Advanced Claude Code › Headless mode": {
+  "body": "Headless mode là chạy Claude Code **không giao diện tương tác**: nhận một prompt, làm việc, in kết quả rồi thoát. Nhờ vậy bạn nhúng Claude vào script, cron, pipeline CI/CD giống như một lệnh Unix bình thường.\n\n### Cách dùng\n```bash\nclaude -p \"Giải thích hàm parseConfig trong src/config.ts\"\ngit diff | claude -p \"Tóm tắt thay đổi này thành commit message\"\nclaude -p \"Liệt kê các TODO\" --output-format json\n```\n- `-p` (`--print`): chạy không tương tác.\n- `--output-format`: `text` (mặc định), `json`, hoặc `stream-json` để máy đọc.\n- `--allowedTools` / cấu hình quyền: chỉ định tool được phép, vì không có người để bấm duyệt.\n- `--max-turns`: giới hạn số lượt (kiểm tra tên cờ chính xác trong CLI reference).\n- `--continue` / `--resume` để nối phiên.\n\n### Agent SDK\nNếu cần điều khiển bằng code (Python, TypeScript) với vòng lặp agent, tool tuỳ biến, callback quyền, dùng **Claude Agent SDK** (tiền thân tên Claude Code SDK). Xem tài liệu SDK để cài đặt và API hiện hành.\n\n### Ví dụ ứng dụng\n- Bước trong CI: review diff của PR, comment kết quả.\n- Script di trú: lặp qua danh sách file, gọi `claude -p` cho từng file.\n- Tác vụ lịch chạy đêm.\n\n### Lỗi hay gặp\n- Không giới hạn tool khiến agent tự do làm gì cũng được trên runner CI.\n- Để secret trong prompt/log.\n- Mong output luôn là JSON hợp lệ khi chưa chọn `--output-format`; hãy xử lý lỗi.\n- Quên giới hạn thời gian và chi phí.\n\n### Tự kiểm tra\n- Vì sao headless phải khai báo trước tool được phép?\n- Khi nào dùng cờ `-p` và khi nào dùng Agent SDK?"
+ },
+ "Advanced Claude Code › Git Worktrees": {
+  "body": "Git worktree cho phép một repo có **nhiều thư mục làm việc**, mỗi thư mục checkout một nhánh khác nhau, nhưng dùng chung một kho `.git`. Với Claude Code, đó là cách chạy nhiều phiên song song mà không đụng nhau: mỗi phiên làm trong worktree riêng, nhánh riêng, file riêng.\n\n### Vì sao cần biết\nHai phiên Claude sửa cùng một thư mục sẽ ghi đè, xung đột và lẫn lộn trạng thái. Với worktree, bạn có thể để một phiên làm tính năng A, một phiên sửa lỗi B, một phiên thử nghiệm C — rồi gộp qua pull request như bình thường.\n\n### Cách làm\n```bash\ngit worktree add ../app-feature-a -b feature-a\ngit worktree add ../app-bugfix-b -b bugfix-b\ncd ../app-feature-a && claude      # phiên riêng cho feature A\ngit worktree list\ngit worktree remove ../app-feature-a   # dọn khi xong\n```\nMột số phiên bản Claude Code có sẵn cờ hoặc lệnh để tạo worktree cho phiên; xem tài liệu common workflows để biết hiện nay có hay không.\n\n### Ý chính\n- Mỗi nhánh chỉ được checkout ở một worktree tại một thời điểm.\n- Mỗi worktree cần cài lại phụ thuộc (`node_modules`), file `.env` không tự theo sang vì không được commit.\n- Dọn worktree khi xong (`git worktree remove`, `git worktree prune`).\n- Gán việc độc lập, ít đụng cùng file, để lúc gộp ít xung đột.\n\n### Lỗi hay gặp\n- Hai agent cùng làm trên một worktree.\n- Quên cổng/cơ sở dữ liệu dev dùng chung giữa các worktree: hai server cùng chiếm một cổng, hoặc ghi vào cùng một DB.\n- Xoá thư mục worktree bằng `rm` thay vì `git worktree remove`, để lại tham chiếu mồ côi.\n\n### Tự kiểm tra\n- Worktree khác gì việc clone repo ra hai thư mục?\n- Những tài nguyên nào vẫn bị dùng chung dù đã tách worktree?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-0-slides",
+    "ten": "10.0 — Slide Chương 10: kho mã lớn bằng hình",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-1-worktree",
+    "ten": "10.1 — git worktree: nhiều nhánh cùng được checkout một lúc",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/git",
+    "ten": "Git",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Advanced Claude Code › Agent Team": {
+  "body": "Agent team là cách tổ chức **nhiều agent phối hợp như một đội**: mỗi agent một vai (người lập kế hoạch, người viết code, người viết test, người review), có một điều phối giao việc và gộp kết quả. Giống một nhóm phát triển thu nhỏ, nhưng thành viên là các agent.\n\n### Cách hiện thực với Claude Code\n- **Subagent**: agent chính đóng vai điều phối, giao việc cho các subagent chuyên biệt (xem bước Subagents). Đây là cơ chế nền tảng và đã được tài liệu hoá.\n- **Nhiều phiên song song** trên các git worktree riêng, do bạn hoặc script điều phối.\n- **Agent SDK / headless** để lập trình quy trình nhiều agent: lập kế hoạch → giao việc → thu kết quả → kiểm chứng.\n- Một số phiên bản có thể cung cấp tính năng \"team\" dựng sẵn; mình không chắc nó có hay không, hãy xem tài liệu hiện hành thay vì giả định.\n\n### Nguyên tắc thiết kế\n- Vai trò tách bạch, mỗi agent chỉ có tool tối thiểu cần cho vai đó (reviewer chỉ đọc).\n- Giao việc **độc lập** để chạy song song; việc phụ thuộc thì xếp tuần tự.\n- Có bước kiểm chứng độc lập: người review không nên là người vừa viết code.\n- Có điểm dừng cho con người ở các quyết định quan trọng (merge, deploy).\n\n### Lỗi hay gặp\n- Dựng đội phức tạp cho việc một agent làm được: tốn chi phí điều phối.\n- Các agent cùng sửa một file gây xung đột.\n- Tin kết quả vì \"nhiều agent đồng ý\" — chúng có thể cùng sai.\n- Không giới hạn token/thời gian nên chi phí bùng nổ.\n\n### Tự kiểm tra\n- Khi nào nhiều subagent tốt hơn một agent làm tất cả?\n- Điểm kiểm chứng của con người nên đặt ở đâu trong một đội agent?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Advanced Claude Code › Security Best Practices": {
+  "body": "Claude Code có thể đọc file, chạy lệnh và gọi dịch vụ thay bạn; vì vậy \"an toàn khi cho agent quyền thực thi\" là kỹ năng bắt buộc, không phải tuỳ chọn. Hãy coi nó như một đồng nghiệp rất nhanh nhưng đôi lúc nhầm lẫn hoặc bị lừa.\n\n### Các mối nguy chính\n- **Lệnh phá hoại do hiểu nhầm** (xoá thư mục, ghi đè dữ liệu, chạy migration trên production).\n- **Prompt injection**: nội dung không tin cậy (trang web, issue, file README lạ, kết quả tool) chứa chỉ dẫn ngầm khiến agent làm việc ngoài ý bạn, ví dụ gửi bí mật ra ngoài.\n- **Rò rỉ bí mật**: `.env`, khoá API bị đọc rồi dán vào log, commit hoặc request.\n- **Tiện ích độc hại**: MCP server, plugin, hook, skill từ nguồn lạ.\n\n### Cách phòng\n- Giữ phân quyền ở chế độ hỏi cho lệnh nhạy cảm; viết luật `deny` cho thứ tuyệt đối cấm (đọc `.env`, `rm -rf`, `git push --force`).\n- Dùng hook `PreToolUse` làm lớp chặn cứng, chạy ở chương trình chứ không dựa vào lời dặn.\n- Chỉ dùng chế độ bỏ qua quyền trong container/VM cô lập, không chứa bí mật và không có quyền sâu.\n- Cấp token quyền tối thiểu, ưu tiên chỉ đọc, hạn dùng ngắn.\n- Không đưa bí mật vào CLAUDE.md, skill, `.mcp.json` được commit.\n- Review diff trước khi commit/push; chặn push thẳng lên nhánh chính bằng branch protection.\n- Chỉ cài MCP/plugin bạn đã đọc và tin.\n- Với dữ liệu không tin cậy, giảm quyền của tác vụ đó (không có mạng, không có bí mật).\n\n### Lỗi hay gặp\n- \"Tiện cho nhanh\" mà cho phép cả `Bash(*)`.\n- Chạy agent bằng tài khoản có quyền production.\n- Tưởng sandbox hay phân quyền là đủ: đó chỉ là các lớp bổ sung cho nhau (phòng thủ nhiều lớp).\n\n### Tự kiểm tra\n- Prompt injection là gì và vì sao nó đặc biệt nguy hiểm với agent có tool?\n- Hãy kể ba lớp phòng vệ bạn sẽ đặt trước khi chạy Claude Code tự động trong CI.",
+  "lessons": [
+   {
+    "href": "/courses/daa401-design-and-secure-ai-system/learn?lessonSlug=daa401-5-1-llm-security",
+    "ten": "5.1 — Bảo mật LLM & GenAI",
+    "nguon": "Design and Secure AI System · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "DAA401"
+   }
+  ]
+ },
+ "Advanced Claude Code › Claude Code Security": {
+  "body": "Đây là phần mô tả cách **chính Claude Code** được thiết kế để an toàn, bổ sung cho các thực hành người dùng ở bước trước.\n\n### Ý chính\n- **Mô hình quyền**: mặc định chỉ đọc; hành động có thể thay đổi hệ thống (sửa file, chạy lệnh) cần bạn cho phép. Bạn cấu hình luật allow/ask/deny theo tool và theo mẫu lệnh, ở các cấp người dùng, dự án, cục bộ và (với tổ chức) cấp quản trị.\n- **Giới hạn phạm vi**: Claude Code chủ yếu làm việc trong thư mục khởi chạy và các thư mục bạn thêm; truy cập ra ngoài cần quyền.\n- **Sandbox**: có tuỳ chọn cô lập việc thực thi lệnh ở mức hệ điều hành (giới hạn file và mạng) để giảm thiệt hại khi có sai sót; kiểm tra tài liệu để biết nền tảng nào hỗ trợ và cách bật.\n- **Chống injection**: có cơ chế như yêu cầu duyệt với lệnh lạ, cách ly nội dung lấy từ web; nhưng không có lớp nào tuyệt đối — bạn vẫn là chốt chặn cuối.\n- **Dữ liệu**: tài liệu data usage nêu cách Anthropic xử lý dữ liệu theo từng loại gói (cá nhân, thương mại, API) và tuỳ chọn tắt gửi telemetry; đọc kỹ chính sách hiện hành nếu làm việc với mã nguồn nhạy cảm.\n\n### Lỗi hay gặp\n- Hiểu \"có hộp thoại xin phép\" là \"đã an toàn\" nên bấm duyệt máy móc.\n- Không đọc chính sách dữ liệu trước khi dùng với mã nguồn của công ty."
+ },
+ "Advanced Claude Code › Analytics & Troubleshooting": {
+  "body": "Hai việc thực tế khi dùng Claude Code lâu dài: đo mức sử dụng và xử lý khi có trục trặc.\n\n### Phân tích sử dụng\n- Cá nhân: `/cost` (với dùng qua API) và `/context` xem tiêu thụ token và ngữ cảnh; với gói đăng ký, xem hạn mức sử dụng theo hướng dẫn của Anthropic.\n- Tổ chức: tài liệu analytics/monitoring mô tả cách xem mức dùng của nhóm và xuất số liệu (ví dụ qua OpenTelemetry). Phạm vi và tên tính năng thay đổi theo gói, nên hãy xem tài liệu hiện hành.\n\n### Xử lý sự cố\n- **Lệnh `/doctor`**: kiểm tra cài đặt và cấu hình, là nơi nên chạy đầu tiên.\n- **Cập nhật phiên bản**: nhiều lỗi đã được sửa ở bản mới (xem cách cập nhật theo cách bạn cài).\n- **Xác thực lỗi**: đăng nhập lại bằng `/login`; kiểm tra biến môi trường như khoá API có ghi đè không.\n- **Hook/MCP không chạy**: kiểm tra JSON cấu hình, dùng `/hooks`, `/mcp` và chế độ debug.\n- **Hành vi lạ**: thử `/clear` hoặc phiên sạch, thử chạy ở thư mục khác để loại trừ cấu hình cục bộ.\n- Tra trang Troubleshooting chính thức cho lỗi cụ thể, và báo lỗi theo kênh chính thức khi nghi ngờ bug.\n\n### Lỗi hay gặp\n- Gỡ lỗi mà không kiểm tra phiên bản và cấu hình nhiều cấp có đang ghi đè nhau.\n- Không đo chi phí nên bất ngờ khi hoá đơn tăng."
+ },
+ "Tiếp tục học › Vibe Coding": {
+  "body": "Vibe coding là cách làm phần mềm bằng cách mô tả điều mình muốn bằng ngôn ngữ tự nhiên, để AI viết phần lớn code, còn bạn chủ yếu thử, chỉnh và định hướng — chú trọng \"cảm giác ra sản phẩm nhanh\" hơn việc đọc từng dòng.\n\n### Vì sao cần biết\nRất hợp để dựng nguyên mẫu, công cụ nội bộ, ý tưởng cá nhân trong vài giờ. Claude Code là một công cụ cho kiểu làm việc này.\n\n### Ý chính\n- Mạnh nhất khi bài toán nhỏ, ít ràng buộc, rủi ro thấp.\n- Giữ kỷ luật tối thiểu: dùng git và commit thường xuyên, có test hoặc cách kiểm tra, ghi quy ước vào `CLAUDE.md`.\n- Khi sản phẩm đi vào thật (người dùng thật, tiền, dữ liệu), phải đọc và hiểu code, kiểm tra bảo mật, viết test — không thể chỉ dựa vào \"cảm giác\".\n\n### Lỗi hay gặp\n- Nhận code mà không hiểu, rồi không sửa nổi khi lỗi.\n- Bỏ qua bảo mật (khoá API trong code, thiếu kiểm tra đầu vào, thiếu phân quyền).\n- Mô tả mơ hồ nên sản phẩm lệch, tốn thời gian sửa."
+ },
+ "Tiếp tục học › OpenClaw": {
+  "body": "Mô tả của mục này nhắc tới việc tự host một agent chạy liên tục 24/7. Mình không chắc về chi tiết cụ thể của dự án có tên \"OpenClaw\", nên không khẳng định tính năng hay cách cài đặt; hãy tìm tài liệu chính thức của dự án đó trước khi dùng.\n\n### Ý tưởng chung của agent tự host chạy liên tục\n- Chạy trên máy chủ riêng (VPS, máy ở nhà, container) để luôn sẵn sàng nhận việc từ lịch, webhook hoặc kênh nhắn tin.\n- Có thể dựa trên Claude Code ở chế độ headless và Agent SDK, hoặc một khung agent khác.\n\n### Ý chính khi tự host\n- **Cô lập**: chạy trong container/VM tách biệt, không chứa bí mật thừa, quyền tối thiểu.\n- **Bảo mật đầu vào**: nội dung từ kênh công cộng có thể chứa prompt injection; hạn chế tool của agent chạy trên dữ liệu đó.\n- **Giám sát chi phí và giới hạn**: đặt trần token, thời gian, số lượt.\n- **Ghi log và có điểm duyệt của con người** cho hành động không thể hoàn tác.\n\n### Lỗi hay gặp\n- Mở dịch vụ agent ra internet không xác thực.\n- Cho agent chạy lâu dài bằng khoá có quyền rộng."
+ },
+ "Tiếp tục học › LeetCode & Phỏng vấn": {
+  "body": "Dù AI viết code giỏi, phỏng vấn kỹ thuật vẫn thường kiểm tra khả năng của chính bạn: giải thuật, cấu trúc dữ liệu, tư duy phân tích và giao tiếp. Hơn nữa, hiểu giải thuật giúp bạn đánh giá được code Claude đưa ra (độ phức tạp, trường hợp biên).\n\n### Ý chính\n- Học theo **mẫu bài** hơn là học thuộc đáp án: băm đếm, hai con trỏ, cửa sổ trượt, ngăn xếp, tìm nhị phân, DFS/BFS, heap, quy hoạch động, quay lui...\n- Quy trình khi làm bài: làm rõ đề → ví dụ nhỏ → hướng giải thô → phân tích độ phức tạp → code → thử các trường hợp biên.\n- Nói to suy nghĩ khi phỏng vấn: người phỏng vấn đánh giá cách bạn tiếp cận.\n- Luyện đều đặn mỗi ngày một ít, theo chủ đề.\n- Dùng Claude như người kèm: yêu cầu nó gợi ý (không đưa đáp án) và chấm lời giải của bạn; tự giải trước khi hỏi.\n\n### Lỗi hay gặp\n- Nhờ AI giải rồi chép lại, không rèn được tư duy.\n- Chỉ luyện bài dễ, né chủ đề yếu.\n- Không phân tích độ phức tạp thời gian và bộ nhớ.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs10-on",
+    "ten": "⭐ CS.10 — 🧪 Bài tập: 22 bài phỏng vấn chọn lọc phủ 14 mẫu + lộ trình luyện 4 tuần",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/interview",
+    "ten": "Luyện phỏng vấn",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Tiếp tục học › AI Engineer": {
+  "body": "AI Engineer là người xây ứng dụng và hệ thống dựa trên mô hình ngôn ngữ lớn (LLM): gọi API model, thiết kế prompt, kết nối dữ liệu riêng (RAG), cho model dùng công cụ, và xây agent. Khác với nhà nghiên cứu huấn luyện model, AI Engineer thiên về tích hợp, vận hành và chất lượng sản phẩm.\n\n### Vì sao đây là bước tiếp theo hợp lý\nDùng Claude Code giúp bạn quen với tư duy agent (vòng lặp công cụ, ngữ cảnh, hook, MCP). Bước tiếp theo là tự xây các hệ thống như vậy cho sản phẩm.\n\n### Lộ trình gợi ý\n- Nền tảng lập trình tốt (Python hoặc TypeScript), API HTTP, cơ sở dữ liệu.\n- API LLM: gọi model, streaming, tool use/function calling, kiểm soát chi phí.\n- Prompt engineering và đầu ra có cấu trúc.\n- RAG: embedding, vector database, truy hồi.\n- Agent và đánh giá (evals): đo chất lượng bằng bộ kiểm thử, không chỉ cảm tính.\n- Triển khai, quan sát (logging, theo dõi chi phí), an toàn (prompt injection).\n\n### Lỗi hay gặp\n- Làm demo đẹp mà không có bộ đánh giá nên không biết chất lượng thật.\n- Bỏ qua chi phí và độ trễ khi lên sản phẩm."
+ },
+ "Tiếp tục học › Git & GitHub": {
+  "body": "Git là nền tảng của mọi workflow làm việc với Claude Code: nó cho bạn lưới an toàn để thử, hoàn tác và song song hoá. Có Git thành thạo, bạn dám để agent sửa nhiều file vì luôn quay lại được.\n\n### Vì sao cần biết\n- Commit trước khi giao việc lớn cho Claude để có điểm quay về.\n- Đọc `git diff` để review thay đổi của agent.\n- Nhánh và worktree để chạy nhiều phiên song song.\n- Pull request, review và CI để kiểm chứng trước khi vào nhánh chính.\n- Claude cũng có thể viết commit message, mở PR, dùng `gh` (GitHub CLI) khi bạn cho phép.\n\n### Ý chính\n- Các lệnh nền: `status`, `add`, `commit`, `branch`, `switch`, `merge`, `rebase`, `stash`, `log`, `diff`, `restore`.\n- Hiểu remote: `fetch` khác `pull`, `push`, nhánh theo dõi.\n- GitHub: fork, pull request, issue, bảo vệ nhánh, Actions.\n- Biết cách cứu hộ: `reflog`, `revert`, `reset` (và khi nào nguy hiểm).\n\n### Lỗi hay gặp\n- Để agent làm việc lớn mà không commit trước.\n- Push thẳng lên nhánh chính hoặc `--force` bừa bãi.\n- Commit nhầm file bí mật.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Git và GitHub là gì, ra đời thế nào, và vì sao quan trọng với bạn",
+    "nguon": "Git & GitHub · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-5-1-remote-fetch-pull",
+    "ten": "5.1 — Remote là gì, và vì sao fetch ≠ pull",
+    "nguon": "Git & GitHub · Chương 5",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/git",
+    "ten": "Git",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Tiếp tục học › Prompt Engineering": {
+  "body": "Prompt engineering là kỹ năng viết chỉ dẫn để LLM cho kết quả đúng, ổn định. Với Claude Code, chất lượng prompt ảnh hưởng trực tiếp tới việc nó sửa đúng chỗ hay sửa lan man.\n\n### Ý chính\n- **Rõ ràng và cụ thể**: nêu mục tiêu, ràng buộc, định dạng đầu ra mong muốn; coi Claude như đồng nghiệp thông minh nhưng chưa biết gì về bối cảnh của bạn.\n- **Cung cấp ngữ cảnh**: file liên quan, lý do, tiêu chí thành công.\n- **Ví dụ (few-shot)**: một vài cặp đầu vào/đầu ra mẫu giúp chốt định dạng.\n- **Cho model \"nghĩ\" từng bước** với bài toán phức tạp.\n- **Cấu trúc**: dùng thẻ hoặc đề mục để phân tách chỉ dẫn, dữ liệu và ví dụ.\n- **Cho cách kiểm chứng**: \"chạy `npm test` và báo kết quả\".\n- **Lặp lại**: xem kết quả, chỉnh prompt, thử lại.\n\n### Ví dụ\nYếu: \"Làm cho form đẹp hơn.\"\nTốt: \"Trong `SignupForm.tsx`, thêm kiểm tra email phía client dùng thư viện zod đã có, hiện lỗi dưới ô nhập, giữ nguyên style hiện tại. Chạy `npm run lint` khi xong.\"\n\n### Lỗi hay gặp\n- Yêu cầu mơ hồ, nhiều mục tiêu trong một câu.\n- Không nêu điều cấm (ví dụ không đổi test, không thêm thư viện).\n- Chép prompt \"thần thánh\" mà không hiểu vì sao nó hoạt động; hãy xem hướng dẫn chính thức của Anthropic và tự thử nghiệm.",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-6-1-prompt-finetune",
+    "ten": "6.1 — Prompt & fine-tuning",
+    "nguon": "Generative AI · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ }
+}

@@ -1,0 +1,975 @@
+{
+ "Nền tảng › Vibe coding là gì": {
+  "body": "\"Vibe coding\" là cách làm phần mềm mà bạn mô tả điều mình muốn bằng ngôn ngữ tự nhiên, để một mô hình ngôn ngữ lớn (LLM) sinh code, rồi bạn chạy thử và nói tiếp \"sửa chỗ này, thêm chỗ kia\" — thay vì tự gõ từng dòng. Cụm từ này do Andrej Karpathy phổ biến đầu năm 2025 để chỉ kiểu làm việc thiên về cảm giác và kết quả: thấy chạy đúng là được, không nhất thiết đọc hết code.\n\n### Vì sao cần biết\nCông cụ AI viết code đã vào quy trình của hầu hết đội phần mềm. Hiểu vibe coding giúp bạn dựng prototype trong vài giờ, tự kiểm chứng ý tưởng, và quan trọng hơn là biết **lúc nào cách làm này an toàn, lúc nào nguy hiểm**.\n\n### Ý chính\n- Vòng lặp cơ bản: mô tả → AI sinh → chạy/kiểm → phản hồi → AI sửa.\n- Bạn đổi vai từ \"người gõ code\" sang \"người định hướng và nghiệm thu\".\n- Hợp với: prototype, công cụ nội bộ, trang đích, bài tập thử nghiệm, tự động hoá việc lặt vặt.\n- Kém hợp với: hệ thống có tiền, dữ liệu cá nhân, bảo mật cao, code phải bảo trì nhiều năm — vì lúc đó \"chạy được\" chưa đủ.\n\n### Lỗi hay gặp\n- Nghĩ rằng không cần biết lập trình: khi AI mắc kẹt hoặc sinh lỗi tinh vi, bạn không có cách tự thoát.\n- Chấp nhận mọi đề xuất mà không chạy thử.\n- Dùng cách làm prototype cho sản phẩm thật rồi không bao giờ dọn lại.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-8-1-responsible-ai",
+    "ten": "8.1 — Chuỗi 9 prompt AI: sản phẩm, cách review & các bẫy",
+    "nguon": "Software Development Project · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   },
+   {
+    "href": "/courses/swe202c-introduction-to-software-engineering/learn?lessonSlug=swe202c-1-2-genai",
+    "ten": "M1.2 — Generative AI xuyên SDLC",
+    "nguon": "Introduction to Software Engineering · Module 1 — SDLC & GenAI",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE202c"
+   },
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Tư duy của vibe coder": {
+  "body": "Hãy coi AI như một cộng sự rất nhanh, rất chăm, nhưng không biết bối cảnh của bạn và thỉnh thoảng nói sai một cách tự tin. Bạn là đạo diễn: bạn quyết định cảnh quay, AI diễn, bạn xem lại từng cảnh.\n\n### Vòng lặp của người vibe coder giỏi\n1. **Nói rõ mong muốn** — mục tiêu, ràng buộc, thế nào là xong.\n2. **Để AI sinh** một phần nhỏ.\n3. **Chạy và kiểm** — mở app, chạy test, đọc kết quả. Đừng tin vào câu \"đã xong\" của AI.\n4. **Tinh chỉnh** — phản hồi cụ thể: \"nút này sai màu\", \"lỗi dòng 42 khi để trống ô tên\".\n5. **Lưu lại** khi ổn (commit), rồi mới sang bước tiếp theo.\n\n### Thói quen nên có\n- Tò mò: hỏi \"vì sao chọn cách này?\" khi thấy đoạn code lạ.\n- Hoài nghi lành mạnh: kiểm chứng điều AI khẳng định, nhất là tên hàm, tên thư viện, cấu hình.\n- Chịu trách nhiệm: code vào sản phẩm là code của bạn, dù ai gõ ra.\n- Kiên nhẫn chia nhỏ: yêu cầu nhỏ cho kết quả tốt hơn yêu cầu khổng lồ.\n\n### Lỗi hay gặp\nGiao phó cả phần \"suy nghĩ\" cho AI. AI giỏi thực thi một ý đã rõ; nếu ý chưa rõ, nó sẽ lấp chỗ trống bằng giả định của riêng nó — và bạn sẽ không biết đó là giả định.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-8-1-responsible-ai",
+    "ten": "8.1 — Chuỗi 9 prompt AI: sản phẩm, cách review & các bẫy",
+    "nguon": "Software Development Project · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   },
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Nền tảng › Vibe coding vs Kỹ thuật có AI hỗ trợ": {
+  "body": "Có hai thái cực khi dùng AI để lập trình. **Vibe coding thuần**: bạn gần như không đọc code, chỉ nhìn kết quả chạy. **Kỹ thuật có AI hỗ trợ** (AI-assisted engineering): AI sinh code nhưng bạn vẫn thiết kế, đọc diff, viết test, review và chịu trách nhiệm như với code đồng nghiệp viết.\n\n### Khi nào chọn cách nào\n- Prototype bỏ đi, công cụ cá nhân, thử ý tưởng: vibe coding thuần là hợp lý, rủi ro thấp.\n- Sản phẩm có người dùng thật, dữ liệu thật, đội nhiều người, tuổi thọ dài: cần quy trình kỹ thuật — kế hoạch, test, review, kiểm soát phiên bản.\n\n### Ý chính\n- Ranh giới không phải \"dùng AI hay không\" mà là **bạn có hiểu và kiểm soát được thứ đang đi vào sản phẩm không**.\n- Chi phí của code không hiểu được hiện ra muộn: khi sửa lỗi, khi mở rộng, khi bị tấn công.\n- Một prototype vibe code có thể tiến hoá thành sản phẩm, nhưng cần một đợt \"siết lại\": thêm test, đọc lại code, dọn bí mật, ghi tài liệu.\n\n### Lỗi hay gặp\nĐể prototype tự nhiên thành sản phẩm mà không có điểm quyết định rõ ràng \"từ đây trở đi chúng ta làm cho nghiêm túc\".",
+  "lessons": [
+   {
+    "href": "/courses/swe202c-introduction-to-software-engineering/learn?lessonSlug=swe202c-1-2-genai",
+    "ten": "M1.2 — Generative AI xuyên SDLC",
+    "nguon": "Introduction to Software Engineering · Module 1 — SDLC & GenAI",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE202c"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-8-1-responsible-ai",
+    "ten": "8.1 — Chuỗi 9 prompt AI: sản phẩm, cách review & các bẫy",
+    "nguon": "Software Development Project · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Nền tảng › Vẫn cần nền tảng lập trình": {
+  "body": "AI sinh code nhanh, nhưng người nghiệm thu vẫn là bạn. Nếu không đọc nổi code, không hiểu thông báo lỗi, không biết vì sao đoạn này chạy sai, bạn sẽ chỉ còn cách nhờ AI sửa tiếp và hy vọng. Nợ kỹ thuật cứ thế tích tụ mà không ai thấy.\n\n### Mức nền tảng tối thiểu nên có\n- Đọc được code trong ngôn ngữ chính của dự án: biến, hàm, vòng lặp, điều kiện, cấu trúc dữ liệu cơ bản.\n- Hiểu mô hình web: client, server, HTTP, cơ sở dữ liệu, biến môi trường.\n- Đọc được stack trace và thông báo lỗi.\n- Dùng được Git và terminal.\n- Biết chạy và đọc kết quả test.\n\n### Vì sao quan trọng\n- Bạn phát hiện AI đang làm sai: truy vấn SQL không an toàn, vòng lặp tốn kém, logic ngược.\n- Bạn đưa được yêu cầu chính xác, vì biết thuật ngữ đúng.\n- Bạn thoát được khi AI lặp đi lặp lại cùng một lỗi.\n\n### Lỗi hay gặp\n- \"Tôi sẽ học sau, giờ cứ để AI làm\" — rồi không bao giờ học, và bị phụ thuộc hoàn toàn.\n- Học lý thuyết khô mà không làm: cách tốt nhất là dựng dự án nhỏ với AI, rồi đọc kỹ từng phần AI sinh ra và tự hỏi \"mình giải thích lại được không?\".",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-1-think-like-a-programmer",
+    "ten": "10.1 — Tư duy như một lập trình viên",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging",
+    "ten": "10.2 — Đọc lỗi & vòng lặp gỡ lỗi",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/web-foundations-practice",
+    "ten": "Nền tảng Web — Luyện tập",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Nền tảng › Chọn tech stack phổ biến": {
+  "body": "Mô hình AI học từ lượng code khổng lồ. Với công nghệ phổ biến, nó đã \"thấy\" rất nhiều ví dụ, nên thường sinh code đúng hơn, ít bịa API hơn. Với framework mới, hiếm gặp hoặc đổi API liên tục, tỉ lệ sai cao hơn.\n\n### Nên làm\n- Chọn stack phổ biến, có tài liệu rõ, cộng đồng lớn: ví dụ React/Next.js phía giao diện, Node.js hoặc một framework backend thông dụng, PostgreSQL cho dữ liệu quan hệ.\n- Ưu tiên ngôn ngữ có kiểu (như TypeScript) để trình biên dịch bắt lỗi giúp.\n- Giữ số công nghệ ít: mỗi thành phần thêm vào là thêm một chỗ AI có thể sai.\n- Ghi stack và phiên bản vào file ngữ cảnh dự án để AI không đoán.\n\n### Lỗi hay gặp\n- Chạy theo công nghệ vừa ra mắt rồi ngạc nhiên vì AI sinh code theo phiên bản cũ.\n- Trộn nhiều phiên bản/cách viết trong cùng một dự án.\n- Không ghi phiên bản, để AI dùng API đã bị bỏ.\n\nNguyên tắc chung: nếu bạn vẫn chọn công nghệ ít phổ biến vì lý do chính đáng, hãy đưa tài liệu chính thức cho AI đọc cùng yêu cầu của bạn.",
+  "lessons": [
+   {
+    "href": "/courses/ai-study-assistant/learn?lessonSlug=int609-tech-stack",
+    "ten": "0.3 — Tech stack & lý do chọn từng thứ",
+    "nguon": "AI Study Assistant · Mục 0",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "INT609"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-5-full-stack-picture",
+    "ten": "10.5 — Bức tranh full-stack, và điều tiếp theo",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Công cụ — Agent terminal (CLI) › Claude Code": {
+  "body": "Claude Code là một coding agent chạy trong terminal (và có thể trong IDE) do Anthropic phát triển. Khác với chatbot chỉ trả lời, agent này có thể **đọc file trong dự án, sửa file, chạy lệnh** (build, test, git), rồi lặp lại cho tới khi xong việc hoặc cần hỏi bạn. Bạn giao một nhiệm vụ bằng ngôn ngữ tự nhiên; nó tự khám phá codebase, lập kế hoạch, sửa nhiều file.\n\n### Vì sao cần biết\nĐây là kiểu công cụ \"agentic\" điển hình: thay vì copy code qua lại giữa chat và editor, agent làm trực tiếp trong repo. Hiểu cách vận hành của một agent như vậy giúp bạn dùng tốt cả các công cụ tương tự.\n\n### Ý chính\n- Vòng lặp của agent: đọc ngữ cảnh → đề xuất/sửa → chạy lệnh kiểm → đọc kết quả → sửa tiếp.\n- Quyền hạn: agent thường xin phép trước khi chạy lệnh hoặc sửa file; hãy đọc kỹ lời xin phép, đừng bấm đồng ý máy móc.\n- Mở rộng được: file ngữ cảnh dự án (như `CLAUDE.md`), kết nối công cụ ngoài qua MCP, lệnh tuỳ biến, subagent, hook — các bước sau trong lộ trình này nói kỹ từng phần.\n- Làm trong một repo Git sạch để xem diff và hoàn tác được.\n\n### Bắt đầu\n```bash\ncd du-an-cua-ban\ngit status          # nên sạch trước khi giao việc\n# khởi động agent trong thư mục dự án (xem tài liệu chính thức để cài đặt)\n```\nViệc đầu tiên nên thử: nhờ nó giải thích cấu trúc dự án, rồi mới giao một thay đổi nhỏ.\n\n### Lỗi hay gặp\n- Giao việc quá lớn, mơ hồ ngay từ lần đầu.\n- Chạy ở thư mục chứa nhiều thứ không liên quan hoặc có dữ liệu nhạy cảm.\n- Không đọc diff trước khi commit.\n- Giả định gói cước, hạn mức hay model mặc định không đổi: hãy kiểm tra tài liệu chính thức của nhà cung cấp.\n\n### Tự kiểm tra\n1. Agent khác chatbot ở điểm nào?\n2. Vì sao nên bắt đầu bằng việc nhờ nó giải thích dự án?\n3. Bạn cần chuẩn bị gì trong Git trước khi giao việc?",
+  "lessons": [
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-2-7-doc-cung-claude",
+    "ten": "2.7 — Đọc cùng Claude: phiên làm việc thật có chú thích, và bảng tra một trang",
+    "nguon": "Operating Systems for Developers · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-s51",
+    "ten": "10.D — 📄 Học theo tài liệu · Buổi 51: AI agent viết code trong servlet — vòng lặp biên dịch và tự sửa",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Công cụ — Agent terminal (CLI) › OpenAI Codex": {
+  "body": "OpenAI Codex là dòng agent lập trình của OpenAI: có thể chạy qua terminal, tích hợp trong IDE, hoặc chạy trên nền tảng đám mây để xử lý các nhiệm vụ song song và trả lại kết quả (thường dưới dạng thay đổi code để bạn review). Về bản chất nó cùng nhóm với các agent đọc–sửa–chạy khác.\n\n### Vì sao cần biết\nMỗi công cụ có thế mạnh và giao diện khác nhau, nhưng kỹ năng cốt lõi giống nhau: viết yêu cầu rõ, cung cấp ngữ cảnh, giữ phiên làm việc nhỏ, kiểm bằng test và diff. Biết một agent kỹ thì chuyển sang agent khác rất nhanh.\n\n### Ý chính\n- Chế độ cục bộ (terminal/IDE): agent làm trong thư mục của bạn, bạn thấy và duyệt thay đổi ngay.\n- Chế độ đám mây: giao việc, agent làm trong môi trường riêng rồi đề xuất thay đổi; bạn phải review kỹ như một pull request từ người lạ.\n- Có file hướng dẫn dự án (thường là `AGENTS.md`) để ghi quy ước, lệnh build/test.\n- Quyền chạy lệnh và truy cập mạng nên giữ chặt nhất có thể.\n\n### Lỗi hay gặp\n- Giao việc đám mây mà không có test để kiểm kết quả.\n- Dựa vào thông tin về giá, hạn mức, model đã đọc ở đâu đó: những thứ này thay đổi thường xuyên, hãy xem tài liệu chính thức hiện hành.\n- Không đặt ranh giới rõ cho agent (thư mục được sửa, lệnh được chạy)."
+ },
+ "Công cụ — Agent terminal (CLI) › Gemini CLI": {
+  "body": "Gemini CLI là agent chạy trong terminal của Google, mã nguồn mở, dùng các model Gemini để đọc, sửa code và chạy lệnh trong dự án của bạn. Cách dùng tương tự các agent terminal khác: mở terminal ở thư mục dự án, mô tả việc cần làm, duyệt các thay đổi và lệnh nó đề xuất.\n\n### Vì sao cần biết\nMã nguồn mở nghĩa là bạn có thể đọc cách nó hoạt động, và cộng đồng đóng góp mở rộng. Ngoài ra, có thêm một lựa chọn để so sánh giúp bạn không bị buộc vào một nhà cung cấp.\n\n### Ý chính\n- Làm việc theo ngữ cảnh dự án: có file hướng dẫn riêng để ghi quy ước (xem tài liệu chính thức để biết tên file hiện hành).\n- Hỗ trợ kết nối công cụ ngoài qua MCP, giống các agent khác.\n- Nên chạy trong repo Git sạch để diff rõ ràng.\n- Hạn mức dùng và cách đăng nhập phụ thuộc chính sách hiện hành của nhà cung cấp — hãy kiểm tra trước khi giả định.\n\n### Lỗi hay gặp\n- Cài rồi giao ngay việc lớn, không có kế hoạch, không có test.\n- Bỏ qua thông báo xin quyền chạy lệnh.\n- Dùng một công cụ cho mọi việc: thử vài công cụ trên cùng một nhiệm vụ nhỏ rồi chọn cái hợp với thói quen của bạn.\n\n### Một buổi thử đầu tiên\nChọn một dự án nhỏ có Git sạch. Nhờ agent giải thích cấu trúc dự án, rồi giao một thay đổi nhỏ có thể kiểm (ví dụ thêm một hàm kèm test). Đọc `git diff`, chạy test, rồi mới commit. Làm vài lần như vậy bạn sẽ biết agent này mạnh và yếu ở đâu so với những công cụ khác."
+ },
+ "Công cụ — Agent terminal (CLI) › OpenClaw (tự host 24/7)": {
+  "body": "OpenClaw nằm trong nhóm công cụ cho phép chạy một agent lập trình trên máy luôn bật (máy cá nhân hoặc server) và điều khiển nó từ xa qua ứng dụng nhắn tin như Telegram hay WhatsApp. Ý tưởng: bạn nhắn một yêu cầu từ điện thoại, agent làm trong môi trường của nó, rồi báo lại.\n\n### Vì sao cần biết\nTiện cho việc nhỏ khi bạn không ngồi trước máy: kiểm tra trạng thái, chạy một tác vụ định kỳ, sửa nhanh một lỗi. Đồng thời nó cho thấy mặt rủi ro của agent tự chủ.\n\n### Ý chính\n- Máy chạy agent giữ khoá API, quyền truy cập mã nguồn và có thể có quyền chạy lệnh — phải được bảo vệ như một server thật.\n- Kênh nhắn tin trở thành \"cửa vào\": chỉ cho phép tài khoản của bạn, không nhận lệnh từ người lạ.\n- Giới hạn quyền: thư mục được truy cập, lệnh được chạy, có hay không quyền deploy.\n- Luôn theo dõi chi phí và nhật ký hoạt động.\n\n### Lỗi hay gặp\n- Để agent có quyền rộng rồi nhận lệnh qua kênh không được xác thực chặt.\n- Để chạy 24/7 mà không đặt trần chi phí.\n- Dùng cho việc nhạy cảm (production, tiền, dữ liệu khách hàng) khi chưa tin tưởng hoàn toàn quy trình duyệt.\n\nĐây là nhánh tuỳ chọn: chỉ cần khi bạn muốn điều khiển agent từ xa. Xem tài liệu chính thức của dự án để biết cách cài và cấu hình hiện hành."
+ },
+ "Công cụ — AI trong IDE › Cursor": {
+  "body": "Cursor là một trình soạn code (editor) dựa trên nền VS Code nhưng thiết kế xoay quanh AI. Bạn vẫn có giao diện, phím tắt, extension gần giống VS Code, cộng thêm: chat với codebase, gợi ý hoàn thành code theo ngữ cảnh, sửa nhiều file cùng lúc và chế độ agent tự thực hiện chuỗi bước.\n\n### Vì sao cần biết\nVới nhiều người, AI trong IDE là cách dễ vào nhất: bạn thấy ngay code, diff và kết quả trong cùng một cửa sổ, không phải học thêm một giao diện terminal.\n\n### Ý chính\n- **Gợi ý khi gõ**: hoàn thành dòng hoặc cả đoạn dựa trên file đang mở.\n- **Chat/hỏi codebase**: đặt câu hỏi, gắn file hoặc thư mục làm ngữ cảnh.\n- **Chế độ agent/composer**: giao nhiệm vụ nhiều bước, thấy danh sách file bị sửa và duyệt từng thay đổi.\n- **Quy tắc dự án**: có nơi ghi quy ước để AI tuân theo (tên file và cú pháp có thể thay đổi theo phiên bản; xem tài liệu hiện hành).\n- Có thể đưa ảnh chụp màn hình/mockup vào để mô tả giao diện.\n\n### Lỗi hay gặp\n- Gắn quá nhiều file vào ngữ cảnh khiến câu trả lời loãng.\n- Bấm \"chấp nhận tất cả\" mà không đọc diff.\n- Để một cuộc chat kéo dài qua nhiều chủ đề: AI lẫn lộn.\n- Dựa vào thông tin về gói cước, giới hạn, model đã đọc cũ — hãy kiểm tra trang chính thức."
+ },
+ "Công cụ — AI trong IDE › GitHub Copilot": {
+  "body": "GitHub Copilot là trợ lý AI gắn vào VS Code, JetBrains và các editor khác, tích hợp chặt với GitHub. Ban đầu nổi tiếng nhờ gợi ý hoàn thành code khi bạn gõ; hiện còn có chat trong editor, chế độ agent làm việc nhiều bước, và hỗ trợ review code trên pull request.\n\n### Vì sao cần biết\nNó phổ biến trong doanh nghiệp vì nằm ngay trong hệ sinh thái GitHub mà nhiều đội đã dùng — quản lý tài khoản, quyền, chính sách dữ liệu tập trung. Sinh viên và giáo viên có thể được hưởng chương trình riêng (xem điều kiện hiện hành của GitHub Education).\n\n### Ý chính\n- **Gợi ý inline**: nhấn Tab để nhận; nên đọc rồi mới nhận.\n- **Chat**: hỏi về đoạn code đang chọn, nhờ giải thích, viết test, sửa lỗi.\n- **Chế độ agent**: giao việc nhiều bước trong editor, xem và duyệt thay đổi.\n- **Hướng dẫn tuỳ chỉnh theo repo**: ghi quy ước dự án để Copilot tuân theo.\n- **Review trên PR**: một \"người đọc thêm\", không thay thế người review.\n\n### Lỗi hay gặp\n- Nhận gợi ý mà không hiểu, nhất là code liên quan bảo mật hoặc truy vấn dữ liệu.\n- Coi review tự động là đủ.\n- Gắn thông tin nhạy cảm vào prompt hay file ngữ cảnh; hãy kiểm tra chính sách dữ liệu của tổ chức bạn.\n- Giả định các giới hạn sử dụng không đổi — đọc trang giá và tài liệu chính thức khi cần.",
+  "lessons": [
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-slide-swd27-1",
+    "ten": "5.A — 📑 Học theo từng slide · Dùng AI trong thiết kế: ChatGPT, PlantUML, Copilot, soát lỗi (bộ GenAI, slide 1–18)",
+    "nguon": "Software Architecture and Design · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWD392"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-15-3-student-pack-codespaces",
+    "ten": "15.3 — Student Developer Pack, Codespaces & Copilot cho sinh viên",
+    "nguon": "Git & GitHub · Chương 15",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Công cụ — AI trong IDE › Windsurf": {
+  "body": "Windsurf là một IDE tích hợp AI (phát triển bởi đội ngũ Codeium), có trợ lý agent tên Cascade: bạn nêu mục tiêu, nó đọc dự án, sửa nhiều file, chạy lệnh và báo lại tiến trình theo từng bước. Thiết kế hướng tới việc để AI \"chủ động\" hơn trong chuỗi thao tác, còn bạn theo dõi và duyệt.\n\n### Vì sao cần biết\nĐây là một đại diện nữa của nhóm \"IDE agentic\" cùng với Cursor và Copilot Agent. Không cần dùng hết mọi công cụ, nhưng nên hiểu điểm chung: ngữ cảnh dự án, kế hoạch nhiều bước, duyệt thay đổi.\n\n### Ý chính\n- Agent đi qua chuỗi: đọc file → đề xuất thay đổi → áp dụng → chạy lệnh → đọc kết quả → sửa.\n- Có nơi khai báo quy tắc/ngữ cảnh dự án để AI giữ nhất quán.\n- Có thể xem trước và hoàn tác từng bước.\n- Tên sản phẩm, gói dịch vụ và chủ sở hữu trong nhóm công cụ này đã thay đổi nhiều lần; hãy kiểm tra trang chính thức hiện hành trước khi chọn.\n\n### Lỗi hay gặp\n- Cho agent chạy lệnh tự động không giới hạn.\n- Chuyển qua lại nhiều IDE giữa chừng dự án, làm lệch file quy tắc và thói quen.\n- Không có test hay lệnh kiểm để agent tự xác nhận kết quả.\n\n### Một buổi thử đầu tiên\nMở một dự án nhỏ trong Git sạch, mô tả một tính năng nhỏ (ví dụ thêm bộ lọc cho danh sách), để agent đề xuất kế hoạch, xem từng bước nó đi, rồi đọc diff và chạy test. Ghi lại cảm nhận: nó có hỏi lại khi mơ hồ không, có nghe theo quy tắc dự án không, hoàn tác dễ hay khó. Những ghi chú đó giúp bạn so sánh công bằng với công cụ khác."
+ },
+ "Công cụ — AI trong IDE › ChatGPT / Gemini (trợ lý chat)": {
+  "body": "Trợ lý chat đa dụng như ChatGPT hay Gemini không đọc trực tiếp repo của bạn, nhưng rất hữu ích để **suy nghĩ cùng**: brainstorm kiến trúc, so sánh phương án, giải thích một khái niệm, soạn tài liệu, viết thử đoạn code ngắn, hoặc xem lại một thông báo lỗi.\n\n### Vì sao cần biết\nKhông phải việc nào cũng cần agent. Với những câu hỏi \"nên chọn cách nào?\" hay \"đoạn này nghĩa là gì?\", chat nhanh và rẻ hơn. Nó cũng là nơi tốt để chuẩn bị kế hoạch trước khi giao cho agent.\n\n### Ý chính\n- Dán đủ ngữ cảnh: mục tiêu, stack, ràng buộc, đoạn code liên quan, lỗi chính xác.\n- Yêu cầu so sánh có tiêu chí: \"ưu nhược điểm của A và B cho một app có 1.000 người dùng\".\n- Dùng để soát lại: nhờ nó tìm điểm yếu trong thiết kế của bạn.\n- Mọi code lấy từ chat phải được chạy và kiểm tra trước khi vào dự án.\n\n### Lỗi hay gặp\n- Dán dữ liệu nhạy cảm (khoá API, dữ liệu khách hàng, mã độc quyền) vào dịch vụ chat công cộng.\n- Tin vào tên thư viện/hàm do chat đưa ra mà không kiểm tra tài liệu chính thức.\n- Để cuộc chat quá dài khiến nó quên hoặc lẫn các điều kiện ban đầu: mở cuộc mới với bản tóm tắt.",
+  "lessons": [
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-5-2-ai-tools",
+    "ten": "5.2 — Công cụ AI cho kiến trúc & thiết kế",
+    "nguon": "Software Architecture and Design · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWD392"
+   },
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-slide-swd27-1",
+    "ten": "5.A — 📑 Học theo từng slide · Dùng AI trong thiết kế: ChatGPT, PlantUML, Copilot, soát lỗi (bộ GenAI, slide 1–18)",
+    "nguon": "Software Architecture and Design · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "SWD392"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-6-1-prompt-finetune",
+    "ten": "6.1 — Prompt & fine-tuning",
+    "nguon": "Generative AI · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Công cụ — App builder (mô tả → app) › Lovable": {
+  "body": "Lovable thuộc nhóm \"app builder\": bạn mô tả sản phẩm bằng ngôn ngữ tự nhiên, công cụ dựng ra một ứng dụng web chạy được — thường gồm giao diện React, kết nối cơ sở dữ liệu và xác thực qua một dịch vụ backend có sẵn (như Supabase) — và cho phép xem thử, sửa tiếp bằng chat, rồi phát hành.\n\n### Vì sao cần biết\nĐây là con đường nhanh nhất từ ý tưởng tới một bản chạy được để cho người khác xem. Với người không chuyên lập trình hoặc cần demo nhanh, giá trị rất lớn. Nhưng cũng chính vì nhanh, dễ bỏ qua các bước kiểm soát.\n\n### Ý chính\n- Bắt đầu bằng mô tả rõ: người dùng là ai, 3–5 tính năng cốt lõi, dữ liệu cần lưu.\n- Làm từng phần: dựng khung, rồi thêm tính năng một lúc.\n- Kiểm tra phân quyền dữ liệu (ai đọc/ghi được gì) — đây là chỗ app builder hay để hổng nhất.\n- Có thể đồng bộ code về GitHub để tiếp tục làm bằng IDE hay agent.\n- Giá, hạn mức, tính năng thay đổi nhanh: xem trang chính thức.\n\n### Lỗi hay gặp\n- Phát hành rồi mới nhớ ra chưa cấu hình quy tắc truy cập dữ liệu.\n- Để khoá bí mật trong code phía trình duyệt.\n- Không xuất mã nguồn/không sao lưu, bị khoá vào một nền tảng.\n- Yêu cầu quá mơ hồ khiến công cụ tự bịa ra tính năng."
+ },
+ "Công cụ — App builder (mô tả → app) › Bolt.new": {
+  "body": "Bolt.new là app builder chạy ngay trong trình duyệt. Điểm đặc trưng là dùng công nghệ WebContainers (do StackBlitz phát triển) để chạy môi trường Node.js trực tiếp trên tab trình duyệt: AI sinh code, cài gói, chạy dev server và hiển thị bản xem thử mà không cần cài gì lên máy.\n\n### Vì sao cần biết\nBạn thử ý tưởng cực nhanh: mô tả, thấy app chạy, sửa tiếp. Rất hợp cho prototype, thử một thư viện, hoặc dạy học. Hiểu cách nó hoạt động cũng giúp bạn biết giới hạn: môi trường trong trình duyệt không giống hệt server thật.\n\n### Ý chính\n- Mô tả bằng prompt, có thể kèm ảnh/mockup.\n- Thấy file, terminal và bản xem thử trong cùng giao diện.\n- Có thể xuất hoặc đồng bộ code sang GitHub để làm tiếp ở nơi khác.\n- Với app cần cơ sở dữ liệu hoặc đăng nhập thật, bạn thường phải tích hợp dịch vụ bên ngoài.\n- Tính năng và gói dịch vụ thay đổi thường xuyên; xem tài liệu hiện hành.\n\n### Lỗi hay gặp\n- Giao một yêu cầu quá lớn khiến AI vừa sinh vừa sửa nhau, nội dung lộn xộn.\n- Không xem lại cấu trúc file sinh ra trước khi tiếp tục thêm tính năng.\n- Giả định bản chạy trong trình duyệt sẽ chạy y hệt khi deploy thật: luôn thử lại ở môi trường đích.\n\n### Một buổi thử đầu tiên\nMô tả một app rất nhỏ (ví dụ danh sách việc cần làm có lọc theo trạng thái). Sau khi có bản chạy, đọc cấu trúc file, thử thêm một tính năng nhỏ, rồi đồng bộ về GitHub và mở lại bằng một công cụ khác trên máy. Cách đó cho bạn thấy rõ phần nào của công cụ là tiện lợi, phần nào là giới hạn."
+ },
+ "Công cụ — App builder (mô tả → app) › v0 by Vercel": {
+  "body": "v0 của Vercel chuyên sinh giao diện: từ mô tả bằng chữ hoặc ảnh chụp/thiết kế, nó tạo ra component React dùng Tailwind CSS và bộ thành phần shadcn/ui, cho xem trước, sửa tiếp bằng chat, rồi lấy code về hoặc đưa lên Vercel. Gần đây công cụ mở rộng theo hướng dựng cả ứng dụng, nhưng thế mạnh gốc vẫn là UI.\n\n### Vì sao cần biết\nGiao diện là phần tốn nhiều công trong prototype. Với v0 bạn có bản UI đẹp, dùng chuẩn phổ biến, rồi tích hợp vào dự án Next.js/React có sẵn.\n\n### Ý chính\n- Mô tả: bố cục, thành phần, trạng thái (loading, rỗng, lỗi), phong cách.\n- Dán ảnh mockup để AI bám sát hình.\n- Lấy code về và đọc: kiểm tra khả năng truy cập (nhãn, thứ tự tab, độ tương phản) và tính nhất quán với hệ thống thiết kế của bạn.\n- Gắn dữ liệu thật và logic nghiệp vụ là việc của bạn.\n\n### Lỗi hay gặp\n- Dán nguyên code vào dự án mà không điều chỉnh theo quy ước chung (theme, đặt tên, cấu trúc thư mục).\n- Quên kiểm tra responsive và các trạng thái ngoài \"đường đi lý tưởng\".\n- Giả định phiên bản thư viện trong code sinh ra khớp với dự án của bạn: kiểm tra phiên bản.\n- Dựa vào thông tin giá/hạn mức cũ — xem trang chính thức.\n\n### Một buổi thử đầu tiên\nDán ảnh một màn hình bạn thích (hoặc mô tả bằng chữ) và yêu cầu dựng một component, ví dụ thẻ sản phẩm có trạng thái loading và lỗi. Sau đó lấy code về dự án thử, chỉnh theo quy ước của bạn, và kiểm lại trên màn hình nhỏ. Việc tự tay \"tích hợp\" quan trọng hơn việc sinh ra."
+ },
+ "Công cụ — App builder (mô tả → app) › Replit Agent": {
+  "body": "Replit là môi trường lập trình trên đám mây (soạn code, chạy, lưu trữ trong trình duyệt), và Replit Agent là phần AI dựng ứng dụng từ mô tả: nó lập kế hoạch, tạo file, cài gói, cấu hình cơ sở dữ liệu và cho bạn chạy thử, sửa tiếp.\n\n### Vì sao cần biết\nĐiểm mạnh là \"mọi thứ trong một chỗ\": code, chạy, cơ sở dữ liệu, hosting ngay tại đó. Người mới không phải tự dựng môi trường, và bạn có thể chia sẻ link chạy được rất nhanh.\n\n### Ý chính\n- Mô tả mục tiêu và tính năng; agent thường đề xuất kế hoạch để bạn duyệt trước khi làm.\n- Làm từng phần nhỏ, kiểm bản chạy sau mỗi bước.\n- Đọc code và cấu trúc dự án nó sinh ra, đừng chỉ nhìn giao diện.\n- Quản lý bí mật (khoá API) trong phần cấu hình riêng, không dán vào code.\n- Kiểm tra chi phí sử dụng định kỳ vì agent làm nhiều bước có thể tốn tài nguyên; xem trang chính thức để biết cách tính hiện hành.\n\n### Lỗi hay gặp\n- Để agent thay đổi lớn mà không có điểm lưu để quay lui (hãy dùng lịch sử/Git).\n- Dùng dữ liệu thật của người dùng trong môi trường thử nghiệm.\n- Coi bản chạy trong sân thử là sẵn sàng cho production mà chưa kiểm bảo mật, sao lưu, giám sát.\n\n### Một buổi thử đầu tiên\nChọn một ý tưởng nhỏ có dữ liệu (ví dụ sổ chi tiêu), duyệt kế hoạch agent đề xuất, cho nó làm từng phần rồi tự đọc code và thử các trường hợp lỗi. Cuối buổi, xuất hoặc sao lưu mã nguồn và xem lại phần cấu hình bí mật, để biết mình không bị khoá chặt vào một nền tảng."
+ },
+ "Lập kế hoạch trước khi code › Lập kế hoạch trước khi code": {
+  "body": "Trước khi bảo AI viết code, hãy bàn với nó (và với chính mình) về **cái gì cần xây và xây thế nào**. Code sinh ra từ yêu cầu mơ hồ sẽ mơ hồ theo: AI lấp chỗ trống bằng giả định, mỗi lần chạy một kiểu, và bạn phát hiện muộn khi đã có hàng chục file.\n\n### Vì sao cần biết\nSửa một quyết định kiến trúc trên giấy mất vài phút; sửa sau khi AI đã sinh cả ứng dụng có thể mất vài ngày. Với agent, thời gian \"nghĩ trước\" gần như luôn rẻ hơn thời gian \"dọn sau\".\n\n### Cách làm\n1. **Nêu mục tiêu và người dùng**: app giải quyết vấn đề gì, ai dùng, thế nào là thành công.\n2. **Liệt kê tính năng** theo thứ tự ưu tiên, tách \"phải có\" và \"để sau\".\n3. **Nêu ràng buộc**: stack, dịch vụ phải dùng, cái gì không được đụng, yêu cầu về bảo mật/hiệu năng.\n4. **Nhờ AI hỏi lại bạn**: \"Hãy hỏi tôi những câu cần thiết trước khi đề xuất kế hoạch.\" Việc để AI đặt câu hỏi giúp lộ ra phần bạn chưa nghĩ tới.\n5. **Yêu cầu kế hoạch**: cấu trúc thư mục, mô hình dữ liệu, các bước thực hiện kèm tiêu chí hoàn thành. Nhiều agent có chế độ \"plan\" chỉ phân tích và đề xuất, chưa sửa file — hãy dùng nó cho việc này.\n6. **Duyệt và chỉnh kế hoạch** bằng đầu óc của bạn rồi mới cho thực thi. Lưu kế hoạch vào một file trong repo để các phiên sau còn tham chiếu.\n\n### Ví dụ yêu cầu ngắn\n```text\nTôi muốn dựng web app ghi chú cho nhóm nhỏ. Stack: Next.js + PostgreSQL.\nTrước khi viết code, hãy:\n1) hỏi tôi tối đa 5 câu làm rõ,\n2) đề xuất mô hình dữ liệu,\n3) chia thành các bước nhỏ, mỗi bước có cách kiểm.\nChưa sửa file nào.\n```\n\n### Lỗi hay gặp\n- Bỏ qua bước lập kế hoạch vì \"AI tự biết\".\n- Chấp nhận kế hoạch đầu tiên mà không phản biện.\n- Kế hoạch quá chi tiết ngay từ đầu cho phần chưa rõ — nên chi tiết dần theo từng phase.\n\n### Tự kiểm tra\n1. Vì sao nên để AI hỏi lại bạn trước khi lập kế hoạch?\n2. Một kế hoạch tốt có những thành phần gì?\n3. Bạn lưu kế hoạch ở đâu để các phiên sau dùng lại?",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-2-ai-ba-prompts",
+    "ten": "2.5 — AI làm senior BA: prompt #1–#6 (PRD → đặc tả UI)",
+    "nguon": "Software Development Project · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-4-ui-themes-tds",
+    "ten": "4.5 — Áp dụng UI theme & viết Technical Design Spec (prompt #8)",
+    "nguon": "Software Development Project · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-8-1-responsible-ai",
+    "ten": "8.1 — Chuỗi 9 prompt AI: sản phẩm, cách review & các bẫy",
+    "nguon": "Software Development Project · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Lập kế hoạch trước khi code › Chia MVP thành từng phase": {
+  "body": "MVP (Minimum Viable Product) là bản nhỏ nhất vẫn đem lại giá trị thật cho người dùng và giúp bạn học được điều cần học. Với vibe coding, điều quan trọng là chia MVP thành **các phase nhỏ, mỗi phase chạy được và kiểm được**.\n\n### Vì sao cần biết\nYêu cầu AI dựng cả ứng dụng một lần thường cho ra thứ nhìn thì đủ nhưng bên trong lộn xộn: khó kiểm, khó sửa, lỗi chồng lỗi. Phase nhỏ giúp bạn giữ quyền kiểm soát.\n\n### Ý chính\n- Xác định lát cắt dọc nhỏ nhất có giá trị: ví dụ \"đăng ký → tạo một ghi chú → xem lại ghi chú\" trước khi có chia sẻ, tìm kiếm, thông báo.\n- Mỗi phase có **tiêu chí xong** đo được: lệnh chạy được, test xanh, hoặc một hành vi nhìn thấy trên màn hình.\n- Sau mỗi phase: chạy thử, commit, rồi mới bắt đầu phase sau.\n- Đẩy phần \"đáng có\" xuống cuối; đừng để AI tự thêm tính năng.\n\n### Lỗi hay gặp\n- Phase quá to (\"làm hết backend\").\n- Phase không có cách kiểm.\n- Thêm tính năng giữa chừng mà không cập nhật kế hoạch, khiến AI và bạn lệch nhau về phạm vi.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-2-ai-ba-prompts",
+    "ten": "2.5 — AI làm senior BA: prompt #1–#6 (PRD → đặc tả UI)",
+    "nguon": "Software Development Project · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Lập kế hoạch trước khi code › Spec-driven development (SDD)": {
+  "body": "Spec-driven development (SDD) là cách làm lấy **bản đặc tả (spec)** làm nguồn sự thật: bạn viết rõ mục tiêu, hành vi mong đợi, API, ví dụ vào/ra, tiêu chí chấp nhận; AI hiện thực theo spec, và bạn kiểm kết quả đối chiếu với spec. Khi muốn đổi hành vi, bạn đổi spec trước rồi mới tái sinh/sửa code.\n\n### Vì sao cần biết\nPrompt chat nằm rải rác, mất sau mỗi phiên. Spec nằm trong repo, được review, và là thứ cả người lẫn AI cùng tham chiếu. Nó cũng làm cho việc giao việc cho agent ổn định hơn.\n\n### Ý chính\n- Spec tốt có: bối cảnh, phạm vi (gồm cả \"không làm\"), hành vi theo từng tình huống, ví dụ cụ thể, ràng buộc kỹ thuật, tiêu chí xong.\n- Với API, hợp đồng (ví dụ OpenAPI) là một dạng spec máy đọc được: dùng để sinh mock, test, tài liệu.\n- Kết hợp với test: tiêu chí chấp nhận biến thành test, AI viết code cho test xanh.\n- Có các bộ công cụ/khung SDD mã nguồn mở (ví dụ spec-kit của GitHub); hãy đọc tài liệu chính thức để biết quy trình hiện hành.\n\n### Lỗi hay gặp\n- Spec dài dòng nhưng không có ví dụ cụ thể.\n- Để spec và code lệch nhau theo thời gian.\n- Viết spec chi tiết quá sớm cho phần chưa chắc chắn.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-7-3-design-first",
+    "ten": "7.4 — Thiết kế trước hay code trước: mock, luật phong cách và cổng chặn thay đổi phá vỡ",
+    "nguon": "API & System Design · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-4-ui-themes-tds",
+    "ten": "4.5 — Áp dụng UI theme & viết Technical Design Spec (prompt #8)",
+    "nguon": "Software Development Project · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Lập kế hoạch trước khi code › Bảo AI \"suy nghĩ\" trước bài khó": {
+  "body": "Với bài toán khó — thiết kế hệ thống, tìm nguyên nhân lỗi mơ hồ, chọn giữa nhiều hướng — đừng yêu cầu code ngay. Hãy bảo AI **phân tích trước**: liệt kê phương án, nêu ưu nhược điểm, chỉ ra rủi ro, rồi mới chọn và triển khai.\n\n### Vì sao cần biết\nMô hình có xu hướng lao vào lời giải đầu tiên nghe hợp lý. Buộc nó đi qua bước suy luận có cấu trúc thường cho kết quả đáng tin hơn, và bạn nhìn được lập luận để phản biện.\n\n### Cách làm\n```text\nĐây là vấn đề: <mô tả>.\nChưa viết code. Hãy:\n1) liệt kê 3 hướng giải quyết,\n2) so sánh theo độ phức tạp, rủi ro, chi phí bảo trì,\n3) đề xuất một hướng và nói rõ giả định.\n```\nNhiều công cụ có chế độ plan hoặc \"suy nghĩ kỹ\" (extended thinking); tên và cách bật khác nhau theo công cụ, xem tài liệu hiện hành.\n\n### Lỗi hay gặp\n- Dùng cho việc đơn giản khiến mất thời gian.\n- Chọn phương án mà không phản biện lập luận của AI.\n- Quên rằng suy luận dài có thể tốn thêm token.",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-6-1-prompt-finetune",
+    "ten": "6.1 — Prompt & fine-tuning",
+    "nguon": "Generative AI · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Viết prompt hiệu quả › Nguyên tắc viết prompt": {
+  "body": "Prompt là yêu cầu bạn gửi cho AI. Mô hình không đọc được ý nghĩ của bạn: nó chỉ có những gì bạn viết và những gì công cụ đưa vào ngữ cảnh. Prompt tốt không phải câu thần chú, mà là **một bản giao việc rõ ràng** như bạn giao cho một đồng nghiệp mới.\n\n### Vì sao cần biết\nChất lượng đầu vào quyết định chất lượng đầu ra. Cùng một agent, một prompt mơ hồ cho ra code chạy được nhưng sai ý; một prompt rõ cho ra kết quả dùng được ngay.\n\n### Ý chính — năm yếu tố\n1. **Mục tiêu**: muốn đạt điều gì, vì sao.\n2. **Ngữ cảnh**: dự án, stack, file liên quan, hành vi hiện tại.\n3. **Ràng buộc**: không đổi cái gì, tuân theo quy ước nào, giới hạn phạm vi.\n4. **Ví dụ**: đầu vào/đầu ra mong muốn, đoạn code mẫu cần bắt chước.\n5. **Tiêu chí xong**: lệnh nào phải chạy qua, hành vi nào phải thấy.\n\nThêm vào đó: chia bước khi việc phức tạp, và yêu cầu AI nói rõ giả định.\n\n### Ví dụ\nMơ hồ:\n```text\nLàm trang đăng nhập.\n```\nRõ ràng:\n```text\nTrong dự án Next.js này, thêm trang /login dùng cùng component Form như /register.\nGọi POST /api/auth/login, lưu lỗi vào state, hiển thị dưới ô mật khẩu.\nKhông thêm thư viện mới. Chạy `npm run lint` và `npm test` trước khi báo xong.\n```\n\n### Lỗi hay gặp\n- Prompt một dòng cho việc nhiều tầng.\n- Nhét mọi thứ vào một prompt dài thay vì chia bước.\n- Không nêu điều không được làm, nên AI \"tiện tay\" sửa cả phần khác.\n- Không kèm cách kiểm nên không biết khi nào xong.\n\n### Tự kiểm tra\n1. Năm yếu tố của một prompt tốt là gì?\n2. Vì sao nên kèm tiêu chí xong?\n3. Viết lại một prompt mơ hồ của bạn theo khung trên.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-prompt",
+    "ten": "10.1 — Prompt engineering cho công việc Java web",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   },
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-6-1-prompt-finetune",
+    "ten": "6.1 — Prompt & fine-tuning",
+    "nguon": "Generative AI · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   },
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-s3",
+    "ten": "10.A — 📄 Học theo tài liệu · Buổi 3: prompt engineering — tình huống, cấu trúc, phân cách, temperature, max tokens",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Viết prompt hiệu quả › Cụ thể, đừng mơ hồ": {
+  "body": "Yêu cầu càng cụ thể thì AI càng ít phải đoán, và càng ít đoán sai. Câu \"làm phần đăng nhập\" có hàng chục cách hiểu; câu \"thêm nút đăng nhập Google ở góc phải header, dùng style của design system hiện có, chuyển tới `/dashboard` sau khi thành công\" chỉ có một.\n\n### Ý chính\n- Nêu **vị trí, hành vi, dữ liệu, kết quả mong đợi**.\n- Dùng tên thật: tên file, hàm, component, bảng.\n- Nói rõ trường hợp biên: rỗng, lỗi mạng, quyền không đủ.\n- Nêu điều không muốn.\n\n### Mẹo\nNếu không chắc nên cụ thể đến đâu, hãy hỏi AI: \"Còn điểm nào trong yêu cầu này bạn chưa chắc? Hỏi tôi trước khi làm.\"\n\n### Lỗi hay gặp\nCụ thể về giao diện mà bỏ quên hành vi khi lỗi; hoặc cụ thể quá về cách làm (chỉ định thuật toán) khiến AI không dùng được giải pháp tốt hơn.",
+  "lessons": [
+   {
+    "href": "/courses/java-web-application-development/learn?lessonSlug=prj301-ai-prompt",
+    "ten": "10.1 — Prompt engineering cho công việc Java web",
+    "nguon": "Java Web Application Development · Chương 10",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRJ301"
+   }
+  ]
+ },
+ "Viết prompt hiệu quả › Một việc một lúc": {
+  "body": "Giao một việc rõ ràng mỗi lần. Năm việc cùng lúc khiến AI dễ lạc: sửa thiếu, sửa nhầm chỗ, trộn các thay đổi vào nhau khiến diff khó đọc.\n\n### Ý chính\n- Một prompt = một mục tiêu có thể kiểm được.\n- Việc lớn thì chia thành chuỗi: dựng khung → thêm dữ liệu → thêm giao diện → thêm xác thực.\n- Giữ mỗi thay đổi đủ nhỏ để đọc hết diff trong vài phút.\n- Xong một việc thì kiểm, commit, rồi mới sang việc tiếp.\n\n### Ví dụ\nThay vì \"thêm đăng nhập, hồ sơ cá nhân, quên mật khẩu và gửi email\", hãy làm lần lượt: (1) đăng ký/đăng nhập, (2) trang hồ sơ, (3) quên mật khẩu, (4) email.\n\n### Lỗi hay gặp\nGom việc vì \"tiết kiệm lượt chat\". Thực tế bạn tốn nhiều thời gian hơn khi phải gỡ một đống thay đổi lẫn lộn.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-1-think-like-a-programmer",
+    "ten": "10.1 — Tư duy như một lập trình viên",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Viết prompt hiệu quả › Khung \"Act as...\"": {
+  "body": "Khung \"Act as…\" gán cho AI một vai: \"hãy đóng vai kỹ sư bảo mật cao cấp\", \"hãy đóng vai người review code khó tính\". Vai trò định hướng giọng điệu, mức độ chi tiết và những điều AI chú ý.\n\n### Ý chính\n- Hợp khi muốn góc nhìn chuyên biệt: review bảo mật, hiệu năng, khả năng truy cập, trải nghiệm người dùng.\n- Vai trò chỉ là cách định hướng; nó **không** làm AI thực sự có chuyên môn hơn. Kết quả vẫn phải kiểm chứng.\n- Kết hợp với nhiệm vụ cụ thể và tiêu chí đầu ra: \"với vai kỹ sư bảo mật, rà soát đoạn code này theo các mục sau và xếp mức nghiêm trọng\".\n\n### Ví dụ\n```text\nĐóng vai senior reviewer. Đọc diff dưới đây và chỉ ra:\n1) lỗi logic, 2) chỗ thiếu xử lý lỗi, 3) chỗ thiếu test.\nChỉ nêu điểm có bằng chứng trong diff; không đoán.\n```\n\n### Lỗi hay gặp\nTin rằng đặt vai là đủ, bỏ qua yêu cầu cụ thể; hoặc dùng vai quá phô trương (\"bạn là thiên tài\") không giúp ích gì."
+ },
+ "Viết prompt hiệu quả › Cho ví dụ, mockup, ảnh": {
+  "body": "Một hình ảnh hoặc một đoạn code mẫu thường nói rõ hơn cả đoạn văn dài. Mockup, ảnh chụp màn hình, mẫu JSON, đoạn code theo đúng phong cách dự án giúp AI bám sát ý bạn.\n\n### Ý chính\n- **Ảnh giao diện**: dán mockup hoặc ảnh chụp màn hình khi mô tả UI, kèm lời giải thích hành vi mà ảnh không thể hiện.\n- **Ví dụ vào/ra**: cho 2–3 cặp mẫu để AI hiểu quy tắc biến đổi (kỹ thuật few-shot).\n- **Code tham chiếu**: chỉ tới file hoặc component đã có và bảo \"làm theo kiểu này\".\n- **Ảnh lỗi**: chụp màn hình lỗi cùng log, hữu ích khi lỗi nằm ở giao diện.\n- Kiểm tra công cụ bạn dùng có hỗ trợ đọc ảnh không.\n\n### Lỗi hay gặp\n- Ảnh mờ, quá nhiều chi tiết thừa.\n- Ví dụ mâu thuẫn nhau.\n- Dùng ảnh/tệp chứa thông tin nhạy cảm (thông tin khách hàng, khoá API) khi gửi cho dịch vụ bên ngoài.",
+  "lessons": [
+   {
+    "href": "/courses/gai401-generative-ai/learn?lessonSlug=gai401-6-1-prompt-finetune",
+    "ten": "6.1 — Prompt & fine-tuning",
+    "nguon": "Generative AI · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "GAI401"
+   }
+  ]
+ },
+ "Ngữ cảnh & bộ nhớ dự án › Ngữ cảnh (context) là gì": {
+  "body": "Ngữ cảnh (context) là toàn bộ thông tin mô hình nhìn thấy trong một lượt: yêu cầu của bạn, lịch sử trò chuyện, nội dung file được đưa vào, kết quả của các lệnh đã chạy, hướng dẫn hệ thống. Mô hình **không nhớ** gì ngoài những thứ đó. Cửa sổ ngữ cảnh có giới hạn, và càng nhồi nhiều thì càng tốn token và càng dễ loãng.\n\n### Vì sao cần biết\nNhiều lỗi kiểu \"AI ngu đột ngột\" thật ra là vấn đề ngữ cảnh: thiếu file quan trọng, hoặc ngược lại có quá nhiều thứ không liên quan, hoặc hội thoại đã quá dài và các điều kiện ban đầu bị chôn vùi.\n\n### Ý chính\n- Cung cấp **đúng** thứ cần: file liên quan, lỗi chính xác, quy ước dự án.\n- Đừng nhồi cả repo; để agent tự tìm kiếm, hoặc gắn có chọn lọc.\n- Hội thoại dài làm ngữ cảnh đầy: dọn hoặc mở phiên mới khi đổi việc.\n- Những gì cần nhớ lâu dài thì ghi vào file ngữ cảnh dự án, không dựa vào lịch sử chat.\n\n### Lỗi hay gặp\n- Cho rằng AI \"nhớ\" điều đã nói ở phiên trước.\n- Dán cả file lớn trong khi chỉ cần một hàm.\n- Để kết quả lệnh dài (log hàng nghìn dòng) trôi vào ngữ cảnh mà không lọc.",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Ngữ cảnh & bộ nhớ dự án › File ngữ cảnh dự án": {
+  "body": "Agent mở phiên mới là một \"người lạ\": không biết dự án dùng stack gì, lệnh test nào, quy ước đặt tên ra sao. File ngữ cảnh dự án là nơi bạn viết sẵn những điều đó để mỗi phiên đều bắt đầu với cùng một hiểu biết. Tên file tuỳ công cụ: `CLAUDE.md`, `AGENTS.md`, thư mục quy tắc của Cursor… Hãy xem tài liệu hiện hành của công cụ bạn dùng.\n\n### Vì sao cần biết\nThay vì lặp lại \"dùng TypeScript, không thêm thư viện, chạy `npm test`\" trong mọi prompt, bạn viết một lần. Đội nhiều người dùng chung file này nên mọi agent đều tuân theo cùng quy ước.\n\n### Nên ghi gì\n- **Tổng quan**: dự án làm gì, kiến trúc chính, thư mục quan trọng.\n- **Lệnh**: cài đặt, chạy, build, test, lint.\n- **Quy ước**: phong cách code, đặt tên, cách xử lý lỗi, cách viết test.\n- **Điều cấm/lưu ý**: file không được sửa, bẫy đã từng gặp.\n- **Quy trình**: cách đặt tên nhánh, định dạng commit.\n\n### Ví dụ ngắn\n```markdown\n# Dự án ghi chú\n- Stack: Next.js (App Router), TypeScript, PostgreSQL + Prisma\n- Chạy: `npm run dev`; test: `npm test`; kiểm kiểu: `npx tsc --noEmit`\n- Quy ước: component PascalCase, hàm camelCase, không dùng `any`\n- Không sửa thư mục `prisma/migrations/` đã có\n```\n\n### Lỗi hay gặp\n- Viết quá dài: AI bị loãng, và bạn cũng không bảo trì nổi. Giữ ngắn và cụ thể.\n- Để lỗi thời: lệnh đổi mà file không đổi.\n- Chứa bí mật: file này nằm trong repo, đừng ghi khoá API hay mật khẩu.\n\n### Tự kiểm tra\n1. File ngữ cảnh giải quyết vấn đề gì so với việc lặp lại trong prompt?\n2. Ba loại thông tin nên có trong đó?\n3. Khi nào cần cập nhật nó?",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-1-2-ai-sdlc-git-workflow",
+    "ten": "1.2 — Bộ quy trình AI của nhóm (Claude_Prompts) & vì sao mọi thứ nằm trong Git",
+    "nguon": "Software Development Project · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Ngữ cảnh & bộ nhớ dự án › Ghi lại style & quy ước code": {
+  "body": "Nếu bạn có sở thích về style hoặc quy ước code, hãy viết ra. AI mặc định theo thói quen chung của dữ liệu huấn luyện, không phải theo thói quen của đội bạn.\n\n### Ý chính\n- Ghi các quy ước **mà linter không tự bắt được**: cách đặt tên, cách chia file, cách xử lý lỗi, cách viết comment, mẫu component.\n- Ưu tiên ví dụ ngắn hơn mô tả dài: \"viết hàm như `src/lib/format.ts`\".\n- Những gì máy kiểm được thì giao cho công cụ (formatter, linter) và chạy chúng sau mỗi thay đổi.\n- Chỉ ghi quy ước thật sự quan trọng; danh sách quá dài sẽ bị bỏ qua.\n\n### Lỗi hay gặp\nGhi quy ước nhưng lại để code mẫu trong repo vi phạm chúng, khiến AI học theo code chứ không theo chữ."
+ },
+ "Ngữ cảnh & bộ nhớ dự án › Nói AI điều KHÔNG được làm": {
+  "body": "Sau vài phiên làm việc bạn sẽ nhận ra những hành vi AI hay lặp lại mà bạn không muốn: tự thêm thư viện, đổi schema, viết lại file không liên quan, xoá test cho \"xanh\". Hãy ghi chúng thành các điều cấm trong file ngữ cảnh.\n\n### Ví dụ\n```markdown\n## Không được làm\n- Không thêm dependency mới khi chưa hỏi.\n- Không sửa file trong `prisma/migrations/` đã có.\n- Không xoá hoặc làm yếu test để cho qua.\n- Không commit file `.env`.\n- Không chạy lệnh xoá dữ liệu.\n```\n\n### Ý chính\n- Mỗi điều cấm nên cụ thể và có lý do ngắn gọn.\n- Giữ phần này gần đầu file để dễ được chú ý.\n- Cập nhật sau mỗi lần AI \"làm trò\" mới.\n- Quy tắc trong file chỉ là chỉ dẫn mềm; việc nguy hiểm thực sự (xoá dữ liệu, deploy) nên được chặn bằng cơ chế quyền hoặc yêu cầu xác nhận của công cụ.\n\n### Lỗi hay gặp\nTin rằng viết \"đừng làm X\" là đủ chắc chắn. Hãy kiểm tra diff mọi lần."
+ },
+ "Ngữ cảnh & bộ nhớ dự án › Skills — tái dùng của người khác": {
+  "body": "\"Skills\" là các gói hướng dẫn và tài nguyên có thể nạp theo nhu cầu để agent làm chuẩn một loại việc: viết tài liệu, thiết kế giao diện, review code, xử lý một định dạng file. Công cụ như Claude Code có cơ chế skills; cộng đồng cũng chia sẻ các bộ prompt/quy tắc cho nhiều agent khác.\n\n### Vì sao cần biết\nThay vì tự nghĩ lại cách làm tốt nhất cho từng việc, bạn tái dùng kinh nghiệm của người khác. Tuy nhiên đây cũng là một mặt rủi ro.\n\n### Ý chính\n- Skill thường gồm mô tả khi nào dùng, hướng dẫn từng bước, đôi khi kèm script hoặc mẫu.\n- Agent chỉ nạp skill khi liên quan, giúp tiết kiệm ngữ cảnh.\n- Tự viết skill cho quy trình lặp đi lặp lại của đội bạn cũng rất đáng.\n\n### Lỗi hay gặp\n- **Cài skill của người lạ mà không đọc**: chúng có thể chứa chỉ dẫn hoặc script không an toàn. Hãy đọc nội dung, đặc biệt các lệnh nó yêu cầu chạy.\n- Cài quá nhiều khiến agent phân vân hoặc nạp thừa.\n- Không cập nhật khi quy trình thay đổi."
+ },
+ "Ngữ cảnh & bộ nhớ dự án › Cài & dùng MCP": {
+  "body": "MCP (Model Context Protocol) là một giao thức mở cho phép ứng dụng AI kết nối với công cụ và nguồn dữ liệu bên ngoài theo một chuẩn chung. Một **MCP server** cung cấp các \"tool\" (hành động có tham số) và đôi khi cả tài nguyên/prompt; agent đóng vai **client**, gọi tool khi cần. Nhờ vậy agent không chỉ đọc file mà còn có thể điều khiển trình duyệt, truy vấn cơ sở dữ liệu, thao tác GitHub, gọi API nội bộ.\n\n### Vì sao cần biết\nĐây là cách mở rộng khả năng của agent mà không phải viết tích hợp riêng cho từng công cụ. Ví dụ, nối một server điều khiển trình duyệt (như Playwright) cho phép agent tự mở app, bấm thử, nhìn kết quả và sửa — một vòng kiểm tra thực sự.\n\n### Ý chính\n- **Server cục bộ** chạy trên máy bạn (qua lệnh), **server từ xa** truy cập qua mạng, thường có xác thực.\n- Mỗi tool nên có phạm vi hẹp và rõ ràng; cấp quyền tối thiểu (ví dụ tài khoản cơ sở dữ liệu chỉ đọc cho việc phân tích).\n- Cấu hình MCP thường khai báo trong file hoặc bằng lệnh của công cụ; cú pháp khác nhau theo công cụ, xem tài liệu hiện hành.\n- Nhiều server làm tăng số mô tả tool trong ngữ cảnh: chỉ bật những gì cần.\n\n### Về an toàn\nMột MCP server chạy với quyền của bạn và có thể đọc/ghi dữ liệu hoặc chạy lệnh. Chỉ cài server từ nguồn đáng tin, đọc xem nó làm gì, dùng khoá và tài khoản có quyền thấp, và cẩn thận với nội dung từ bên ngoài (trang web, issue, tài liệu) có thể chứa chỉ dẫn độc hại nhắm vào agent (prompt injection).\n\n### Lỗi hay gặp\n- Cấp tài khoản quyền ghi/quản trị cho tiện.\n- Bật hàng loạt server rồi quên.\n- Dán khoá API thẳng vào file cấu hình được commit lên Git.\n\n### Tự kiểm tra\n1. MCP giải quyết vấn đề gì?\n2. Vì sao nên cấp quyền tối thiểu cho server?\n3. Prompt injection qua nội dung bên ngoài là gì?"
+ },
+ "Quy trình làm việc (workflow) › Làm từng bước nhỏ": {
+  "body": "Làm từng bước nhỏ nghĩa là xây từng tính năng nhỏ, chạy được và kiểm được, rồi mới đi tiếp. Mỗi bước là một vòng trọn vẹn: giao việc → AI sinh → bạn chạy và kiểm → sửa → lưu lại.\n\n### Vì sao cần biết\nKhi AI sinh thay đổi lớn, bạn khó đọc, khó biết lỗi do đâu, và nếu hỏng thì không biết lùi về đâu. Thay đổi nhỏ giúp lỗi lộ ra ngay, diff đọc được trong vài phút, và quay lui rẻ.\n\n### Ý chính\n- Kích thước mỗi bước: đủ nhỏ để bạn giải thích được diff bằng vài câu.\n- Mỗi bước kết thúc bằng một **điểm kiểm**: test xanh, app chạy, hành vi nhìn thấy đúng.\n- Mỗi bước kết thúc bằng một **điểm lưu**: commit.\n- Gặp việc lớn thì chia: dựng khung → một đường chạy thẳng đầu-cuối → mở rộng.\n- Nếu AI sinh quá nhiều thứ, yêu cầu nó dừng, thu hẹp phạm vi và làm lại phần nhỏ.\n\n### Ví dụ chuỗi bước\n1. Dựng app rỗng chạy được và có trang chủ.\n2. Thêm bảng dữ liệu và một API đọc danh sách.\n3. Hiển thị danh sách trên giao diện.\n4. Thêm form tạo mục mới.\n5. Thêm kiểm tra dữ liệu đầu vào và test.\n\n### Lỗi hay gặp\n- Bấm tiếp \"làm tiếp\" nhiều lần mà không chạy thử giữa các lần.\n- Bỏ qua việc commit vì \"xong cả cụm một thể\".\n- Để AI vừa thêm tính năng vừa dọn code vừa đổi cấu trúc trong cùng một lượt.\n\n### Tự kiểm tra\n1. Thế nào là một bước \"đủ nhỏ\"?\n2. Điểm kiểm và điểm lưu khác nhau thế nào?\n3. Nếu AI sinh thay đổi quá lớn, bạn làm gì?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-1-think-like-a-programmer",
+    "ten": "10.1 — Tư duy như một lập trình viên",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow",
+    "ten": "10.3 — Quy trình Git cho công việc thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/swe202c-introduction-to-software-engineering/learn?lessonSlug=swe202c-3-1-quality",
+    "ten": "M3.1 — Chuẩn code, kiểm thử & debug",
+    "nguon": "Introduction to Software Engineering · Module 3 — Quality, design & PM",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE202c"
+   }
+  ]
+ },
+ "Quy trình làm việc (workflow) › Giữ code modular, module nhỏ": {
+  "body": "Code chia thành các file và module nhỏ, mỗi cái làm một việc, dễ đọc hơn, dễ kiểm hơn và khi hỏng thì lỗi ít lan. Với AI còn có lợi ích riêng: file nhỏ vừa ngữ cảnh, AI hiểu và sửa chính xác hơn.\n\n### Ý chính\n- Bảo AI tách hàm quá dài, tách component lớn, đặt logic nghiệp vụ ra khỏi giao diện.\n- Mỗi module có trách nhiệm rõ và giao diện (hàm/kiểu) rõ.\n- Giữ file ở cỡ vừa phải; một file hàng nghìn dòng khiến cả người lẫn AI khó làm việc.\n- Đặt tên nói đúng việc.\n- Module nhỏ dễ viết test riêng.\n\n### Lỗi hay gặp\n- Tách quá vụn, tạo vô số file một dòng.\n- AI sinh module mới trùng chức năng với module có sẵn vì không biết: hãy chỉ cho nó chỗ cần tái dùng.",
+  "lessons": [
+   {
+    "href": "/courses/swe202c-introduction-to-software-engineering/learn?lessonSlug=swe202c-3-1-quality",
+    "ten": "M3.1 — Chuẩn code, kiểm thử & debug",
+    "nguon": "Introduction to Software Engineering · Module 3 — Quality, design & PM",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE202c"
+   }
+  ]
+ },
+ "Quy trình làm việc (workflow) › Dùng subagents": {
+  "body": "Subagent là các agent phụ do agent chính gọi để xử lý một nhánh công việc riêng — nghiên cứu một phần codebase, viết test, review thay đổi — trong ngữ cảnh tách biệt. Kết quả cô đọng được trả về cho agent chính.\n\n### Vì sao cần biết\n- Giữ ngữ cảnh của agent chính gọn: việc tìm kiếm tốn nhiều token diễn ra ở subagent.\n- Chuyên môn hoá: một subagent chuyên review với hướng dẫn riêng thường nhất quán hơn.\n- Một số việc có thể chạy song song.\n\n### Ý chính\n- Giao việc rõ ràng, có đầu ra mong muốn.\n- Giới hạn quyền cho từng subagent (ví dụ chỉ đọc cho việc review).\n- Nếu nhiều agent cùng sửa code, hãy tách thư mục làm việc (ví dụ dùng git worktree) để không đạp lên nhau.\n- Kết quả vẫn phải được bạn kiểm.\n\n### Lỗi hay gặp\nDùng subagent cho việc nhỏ khiến phức tạp thêm; để nhiều agent cùng sửa một file; tin vào bản tóm tắt mà không kiểm chứng thay đổi thực tế.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-10-1-worktree",
+    "ten": "10.1 — git worktree: nhiều nhánh cùng được checkout một lúc",
+    "nguon": "Git & GitHub · Chương 10",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Quy trình làm việc (workflow) › Dọn & mở phiên mới cho việc khác": {
+  "body": "Một phiên làm việc dài chứa lịch sử của mọi việc đã làm. Khi bạn chuyển sang nhiệm vụ không liên quan, lịch sử cũ trở thành nhiễu: tốn token, và AI có thể mang giả định của việc trước sang việc sau.\n\n### Ý chính\n- Xong một việc, đổi sang việc khác thì xoá ngữ cảnh hoặc mở phiên mới (nhiều công cụ có lệnh riêng; xem tài liệu hiện hành).\n- Trước khi đóng phiên, commit kết quả và ghi lại điều cần nhớ vào file ngữ cảnh dự án.\n- Nếu phiên dài nhưng vẫn cùng một việc, có thể nhờ công cụ tóm tắt/nén ngữ cảnh.\n- Phiên mới bắt đầu bằng mô tả ngắn: việc cần làm, file liên quan.\n\n### Lỗi hay gặp\nGiữ một phiên \"cho tiện\" suốt nhiều ngày; hoặc xoá ngữ cảnh khi chưa ghi lại những quyết định quan trọng.",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Quy trình làm việc (workflow) › Fail 3 lần → mở chat mới": {
+  "body": "Nếu sau khoảng ba lần yêu cầu AI sửa mà vẫn sai, thường vấn đề không nằm ở lần thử thứ tư. Phiên làm việc đã chứa đầy các cách sửa hỏng, và AI bị kéo theo chính những giả định sai đó.\n\n### Cách thoát\n1. **Dừng lại**, đừng thêm \"sửa tiếp đi\".\n2. Hoàn tác các thay đổi hỏng (git).\n3. Nghĩ lại: mô tả của mình có đủ không? Có thiếu log, thiếu bước tái hiện?\n4. **Mở phiên mới**, mô tả lại vấn đề từ đầu, ngắn gọn và chính xác, kèm những gì đã thử và kết quả.\n5. Nếu vẫn kẹt, tự đọc code và khoanh vùng bằng tay.\n\n### Lỗi hay gặp\nLặp lại cùng một prompt với giọng gay gắt hơn; để AI chồng sửa lên sửa cho tới khi code là một mớ chằng chịt.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging",
+    "ten": "10.2 — Đọc lỗi & vòng lặp gỡ lỗi",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Version control với AI › Làm chủ version control (Git)": {
+  "body": "Git ghi lại lịch sử thay đổi của dự án dưới dạng các commit — mỗi commit là một \"tấm ảnh chụp\" toàn bộ dự án tại một thời điểm. Khi để AI sửa code, Git là **lưới an toàn**: bạn thấy chính xác AI đã đổi gì, và quay về trạng thái tốt gần nhất bất cứ lúc nào.\n\n### Vì sao cần biết\nAI có thể sửa hàng chục file trong một lượt. Không có Git, một thay đổi sai là mất công sức; có Git, bạn xem diff, giữ phần đúng, bỏ phần sai, và khôi phục chỉ bằng một lệnh.\n\n### Ý chính\n- **Working tree / staging / commit**: ba vùng một file đi qua; `git status` cho biết file đang ở đâu.\n- **Commit** lưu trạng thái; **branch** cho phép thử nghiệm mà không đụng nhánh chính.\n- **`git diff`** xem thay đổi chưa lưu; **`git log`** xem lịch sử.\n- **Hoàn tác**: `git restore` bỏ thay đổi chưa commit của file; `git revert` tạo commit đảo ngược; `git reset` dịch chuyển nhánh (nguy hiểm hơn, đặc biệt `--hard`).\n- **Remote** (GitHub, GitLab): bản sao trên mạng để sao lưu và cộng tác.\n\n### Lệnh nhập môn\n```bash\ngit status\ngit diff\ngit add -p            # chọn từng phần thay đổi để lưu\ngit commit -m \"Thêm trang đăng nhập\"\ngit switch -c thu-nghiem-ai   # nhánh riêng cho một thử nghiệm\n```\n\n### Lỗi hay gặp\n- Không commit gì cả rồi nhờ AI sửa: không còn điểm để quay lui.\n- Chạy `git reset --hard` hoặc `git clean -fd` khi chưa hiểu: mất thay đổi chưa lưu vĩnh viễn.\n- Commit nhầm file bí mật (`.env`) — xoá sau vẫn còn trong lịch sử.\n- Để AI chạy lệnh Git phá huỷ (force push, reset) mà không xem.\n\n### Tự kiểm tra\n1. Vì sao Git đặc biệt quan trọng khi dùng AI?\n2. Khác biệt giữa `revert` và `reset`?\n3. Làm thế nào bạn xem AI vừa sửa gì?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: hoàn tác bằng hình",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-1-ban-do-hoan-tac",
+    "ten": "4.1 — Bản đồ hoàn tác: lệnh nào đụng vào cây nào",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/git",
+    "ten": "Git",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Version control với AI › Commit thường xuyên": {
+  "body": "Quy tắc đơn giản: sau **mỗi** việc AI làm xong và bạn đã chạy kiểm thấy ổn, hãy commit. Mỗi commit là một điểm quay về đáng tin.\n\n### Vì sao cần biết\nKhi AI làm hỏng thứ đang chạy tốt, bạn muốn quay về trạng thái ngay trước đó chứ không phải vài giờ trước. Commit nhỏ cũng giúp tìm ra thay đổi nào gây lỗi (có thể dùng `git bisect`) và giúp review dễ hơn.\n\n### Ý chính\n- Commit khi: test xanh, app chạy được, một tính năng nhỏ hoàn tất.\n- Lời nhắn nói **vì sao/cái gì** thay đổi, ngắn gọn: \"Thêm kiểm tra email trùng khi đăng ký\".\n- Nên xem `git diff` trước khi commit để chắc chỉ có thay đổi bạn muốn.\n- Có thể commit \"tạm\" trên nhánh riêng và dọn lại trước khi gộp.\n- Một số công cụ tự động commit thay bạn; đọc lại lịch sử để chắc nó hợp lý.\n\n### Lỗi hay gặp\nCommit khổng lồ \"xong mọi thứ\"; commit lúc code đang hỏng mà không ghi chú; lời nhắn \"update\" không nói gì.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-4-loi-nhan-commit",
+    "ten": "1.4 — Lời nhắn commit một năm sau vẫn còn dùng được",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-0-slides",
+    "ten": "1.0 — Slide Chương 1: mô hình Git bằng hình",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow",
+    "ten": "10.3 — Quy trình Git cho công việc thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Version control với AI › Bắt đầu feature với git slate sạch": {
+  "body": "Trước khi giao AI một tính năng mới, hãy đảm bảo `git status` sạch: không còn thay đổi dở dang. Như vậy mọi thứ xuất hiện trong `git diff` sau đó đều là do việc AI vừa làm.\n\n### Ý chính\n- Commit hoặc cất (`git stash`) phần việc dở trước khi bắt đầu.\n- Tạo nhánh mới cho tính năng: `git switch -c ten-tinh-nang`.\n- Sau khi AI xong, diff rõ ràng, dễ review và dễ bỏ nếu không ưng.\n- Nếu không ưng, bỏ cả nhánh mà không ảnh hưởng nhánh chính.\n\n### Ví dụ\n```bash\ngit status                 # kỳ vọng: nothing to commit, working tree clean\ngit switch -c them-tim-kiem\n# giao việc cho AI ...\ngit diff --stat            # xem tóm tắt thay đổi\n```\n\n### Lỗi hay gặp\nBắt đầu việc mới khi còn thay đổi cũ chưa lưu, rồi không phân biệt được phần nào của AI, phần nào của mình.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-5-stash",
+    "ten": "4.5 — git stash: cất việc lại mà không cần commit",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow",
+    "ten": "10.3 — Quy trình Git cho công việc thật",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Version control với AI › Revert bằng Git, không dùng AI": {
+  "body": "Khi cần lùi lại, hãy dùng Git thay vì bảo AI \"hoàn tác\". Tính năng undo của agent chỉ hoàn tác theo hiểu biết của nó và có thể bỏ sót hoặc làm hỏng thêm; Git thì chính xác và kiểm chứng được.\n\n### Chọn lệnh đúng\n- **Bỏ thay đổi chưa commit của một file**: `git restore ten-file`.\n- **Bỏ thay đổi đã `add` nhưng chưa commit**: `git restore --staged ten-file` rồi `git restore ten-file`.\n- **Đảo ngược một commit đã chia sẻ**: `git revert <mã-commit>` — tạo commit mới, an toàn với lịch sử.\n- **Quay nhánh về commit cũ (cục bộ, chưa đẩy)**: `git reset --hard <mã-commit>` — mất mọi thay đổi chưa lưu, dùng cẩn thận.\n- **Cứu commit \"đã mất\"**: `git reflog`.\n\n### Ý chính\nQuy tắc nhớ: lịch sử đã đẩy lên remote thì dùng `revert`, đừng viết lại. Trước khi chạy lệnh phá huỷ, kiểm `git status` và cân nhắc tạo nhánh sao lưu: `git branch sao-luu`.\n\n### Lỗi hay gặp\nChạy `reset --hard` rồi mới phát hiện còn việc chưa commit; hoặc force push lên nhánh chung. Lưu ý revert mã không hoàn tác thay đổi cơ sở dữ liệu đã chạy.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-0-slides",
+    "ten": "4.0 — Slide Chương 4: hoàn tác bằng hình",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-1-ban-do-hoan-tac",
+    "ten": "4.1 — Bản đồ hoàn tác: lệnh nào đụng vào cây nào",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-3-revert",
+    "ten": "4.3 — git revert: cách hoàn tác an toàn duy nhất trên lịch sử đã chia sẻ",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-4-2-reset",
+    "ten": "4.2 — git reset: soft, mixed, hard",
+    "nguon": "Git & GitHub · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Version control với AI › Nhờ AI làm git/gh CLI": {
+  "body": "Agent có thể chạy `git` và `gh` (GitHub CLI) thay bạn: tạo nhánh, commit, đẩy, mở pull request, đọc issue, xử lý xung đột khi gộp. Tiết kiệm công sức ở các bước lặp lại.\n\n### Ý chính\n- Cho phép các lệnh an toàn (status, diff, log, commit, mở PR); với lệnh phá huỷ (`reset --hard`, `push --force`, xoá nhánh) hãy giữ bước xác nhận.\n- Đọc lời nhắn commit và mô tả PR do AI viết: nó phải nói đúng điều đã làm.\n- Xử lý xung đột: để AI đề xuất, nhưng bạn đọc kết quả sau khi gộp và chạy test.\n- Cấu hình quyền của token GitHub ở mức tối thiểu.\n\n### Lỗi hay gặp\nĐể AI đẩy thẳng lên nhánh chính; tin tóm tắt PR mà không xem diff; cho agent token có quyền quản trị kho.",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-11-1-issue-projects-gh",
+    "ten": "11.1 — Issue, Projects & CLI gh",
+    "nguon": "Git & GitHub · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-1-giai-phau-pr",
+    "ten": "6.1 — Giải phẫu một pull request thật sự được review",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Kiểm thử (testing) › Kiểm thử với AI": {
+  "body": "Test là chốt chặn giúp code AI sinh ra không âm thầm phá hệ thống. Một test là đoạn code tự động kiểm một hành vi: cho đầu vào này thì kết quả phải thế kia. Với AI, test đóng hai vai trò: **kiểm** thứ AI vừa viết, và **bảo vệ** hành vi cũ khi AI sửa chỗ khác.\n\n### Vì sao cần biết\nAI có thể làm tính năng mới chạy đẹp mà vô tình làm hỏng tính năng cũ — và bạn không nhận ra nếu chỉ bấm thử một đường. Bộ test chạy trong vài giây cho bạn biết ngay.\n\n### Ý chính\n- Nhờ AI viết test cùng lúc với code, và **bảo nó chạy test** rồi báo kết quả thật.\n- Yêu cầu test hành vi (đầu vào/đầu ra, trường hợp biên, lỗi), không chỉ gọi hàm rồi kiểm \"không ném lỗi\".\n- Các tầng: unit (hàm nhỏ), integration (nhiều phần ghép lại), e2e (như người dùng thật).\n- Lưu lệnh chạy test vào file ngữ cảnh dự án để agent luôn biết cách chạy.\n\n### Ví dụ yêu cầu\n```text\nThêm test cho hàm tinhPhiVanChuyen: đơn rỗng, đơn đúng ngưỡng miễn phí,\nđơn vượt ngưỡng, địa chỉ không hợp lệ. Chạy `npm test` và dán kết quả.\n```\n\n### Lỗi hay gặp\n- **Test vô nghĩa**: kiểm chính mock, hoặc luôn xanh dù code sai. Đọc test, thử cố ý làm hỏng code để xem test có đỏ không.\n- AI sửa test cho khớp code sai thay vì sửa code. Luôn xem diff của file test.\n- Tin \"đã test xong\" mà không thấy kết quả chạy thật.\n\n### Tự kiểm tra\n1. Test đóng hai vai trò nào khi dùng AI?\n2. Làm sao biết một test thực sự có ích?\n3. Vì sao phải xem diff của file test?",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-5-4-ai-test-cases-prompt9",
+    "ten": "5.4 — Sinh test case bằng AI: prompt Claude #9 của giáo viên (unit, theo màn hình, E2E)",
+    "nguon": "Software Development Project · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-3-review",
+    "ten": "10.3 — Review test trong pull request",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/code-lab/testing-practice",
+    "ten": "Testing — Luyện viết test, chấm bằng đột biến",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Kiểm thử (testing) › Test-Driven Development với AI": {
+  "body": "TDD (Test-Driven Development) là vòng lặp: viết một test thất bại (đỏ) → viết code tối thiểu cho test qua (xanh) → dọn code (refactor) → lặp lại. Với AI, bạn có thể tự viết test, hoặc nhờ AI viết test theo spec rồi duyệt, sau đó để AI viết code cho test xanh.\n\n### Vì sao cần biết\nTest viết trước là **ràng buộc rõ ràng** cho AI: nó có tiêu chí khách quan để biết khi nào xong, và bạn có cách kiểm khách quan mà không phụ thuộc vào cảm giác.\n\n### Ý chính\n- Bước 1: mô tả hành vi bằng test, chạy và xác nhận nó **đỏ đúng lý do**.\n- Bước 2: yêu cầu AI viết code tối thiểu để test xanh, **không sửa test**.\n- Bước 3: refactor khi test đang xanh.\n- Bạn duyệt test như duyệt spec: chính test mới là phần định nghĩa đúng/sai.\n\n### Lỗi hay gặp\nAI sửa test để qua; test viết quá chặt vào cách cài đặt thay vì hành vi; bỏ qua bước \"xem nó đỏ\" nên không biết test có kiểm được gì.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-1-tdd",
+    "ten": "10.1 — TDD trong thực tế: đỏ, xanh, refactor",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-5-lab-tdd-code-cu",
+    "ten": "Lab 10 — Tính năng viết test trước, code cũ được ghim, refactor an toàn: từ 1/8 tới 8/8",
+    "nguon": "Testing · Chương 10",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/software-testing/learn?lessonSlug=swt301-tdd-bdd",
+    "ten": "9.6 — Phương pháp kiểm thử Agile: TDD, ATDD, BDD, test pyramid và testing quadrants",
+    "nguon": "Software Testing · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWT301"
+   }
+  ]
+ },
+ "Kiểm thử (testing) › Bảo AI viết e2e test": {
+  "body": "E2E (end-to-end) test điều khiển một trình duyệt thật như người dùng: mở trang, điền form, bấm nút, kiểm kết quả hiện ra. Công cụ phổ biến: Playwright, Cypress.\n\n### Vì sao cần biết\nKhi bạn thay đổi nhanh bằng AI, các phần ghép lại với nhau dễ vỡ ở những chỗ unit test không thấy. Vài e2e test cho các luồng quan trọng (đăng nhập, thanh toán, tạo nội dung) là lưới an toàn rẻ mà hiệu quả.\n\n### Ý chính\n- Chọn ít luồng nhưng quan trọng nhất; đừng e2e hoá mọi thứ.\n- Dùng locator theo vai trò/nhãn hiển thị thay vì lớp CSS dễ đổi.\n- Mỗi test có dữ liệu riêng, độc lập nhau, để tránh test chập chờn (flaky).\n- Nhờ AI sinh test, rồi tự chạy, quan sát và sửa chỗ thiếu ổn định.\n\n### Lỗi hay gặp\nDùng thời gian chờ cố định thay vì chờ điều kiện; test phụ thuộc thứ tự chạy; coi test e2e xanh một lần là đủ mà không thử chạy lặp lại.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-1-playwright",
+    "ten": "7.1 — Playwright: test trình duyệt đầu tiên",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-7-3-on-dinh",
+    "ten": "7.3 — Làm test e2e ổn định",
+    "nguon": "Testing · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nextjs/learn?lessonSlug=nextjs-19-4-playwright-e2e",
+    "ten": "19.4 — Test end-to-end với Playwright",
+    "nguon": "Next.js: The React Framework · Chương 19",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Kiểm thử (testing) › Có bug → viết breaking test rồi fix": {
+  "body": "Khi gặp lỗi, đừng bảo AI sửa ngay. Hãy bắt nó **viết test tái hiện lỗi trước**: test phải đỏ, chứng tỏ lỗi có thật và nằm đúng chỗ. Rồi mới sửa code cho test xanh.\n\n### Vì sao cần biết\n- Bạn biết chắc đã hiểu đúng lỗi.\n- Có bằng chứng sau khi sửa: test từ đỏ thành xanh.\n- Lỗi đó không quay lại âm thầm, vì test ở lại trong bộ kiểm.\n\n### Các bước\n1. Mô tả bước tái hiện và kết quả mong đợi/thực tế.\n2. Yêu cầu một test nhỏ nhất thất bại vì lỗi đó, và xác nhận nó đỏ.\n3. Yêu cầu sửa code, không sửa test.\n4. Chạy toàn bộ test, commit.\n\n### Lỗi hay gặp\nTest \"tái hiện\" lại đỏ vì lý do khác (sai cú pháp); sửa xong mà không chạy các test còn lại.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-4-keep-learning",
+    "ten": "10.4 — Cách tiếp tục học",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-5-lab-tdd-code-cu",
+    "ten": "Lab 10 — Tính năng viết test trước, code cũ được ghim, refactor an toàn: từ 1/8 tới 8/8",
+    "nguon": "Testing · Chương 10",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Kiểm thử (testing) › Có test rồi → refactor đều": {
+  "body": "Refactor là đổi cấu trúc code mà không đổi hành vi: tách hàm, đổi tên, loại bỏ lặp. Test là thứ cho bạn biết hành vi có thực sự giữ nguyên hay không. Có test, bạn dám để AI dọn dẹp; không có test, mọi refactor đều là canh bạc.\n\n### Ý chính\n- Chạy test trước khi bắt đầu (phải xanh), và sau mỗi bước nhỏ.\n- Nhờ AI refactor từng phần, mỗi lần một mục tiêu: \"tách hàm này\", \"gộp phần lặp\".\n- Nếu code cũ chưa có test, hãy thêm test \"ghim\" hành vi hiện tại trước.\n- Định kỳ dọn: sau vài tính năng, dành một phiên chỉ để refactor.\n\n### Lỗi hay gặp\nRefactor cùng lúc với thêm tính năng; để AI đổi hành vi \"cho tiện\" trong lúc dọn; không commit giữa các bước.",
+  "lessons": [
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-2-code-cu",
+    "ten": "10.2 — Thêm test cho code cũ chưa có test",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-5-lab-tdd-code-cu",
+    "ten": "Lab 10 — Tính năng viết test trước, code cũ được ghim, refactor an toàn: từ 1/8 tới 8/8",
+    "nguon": "Testing · Chương 10",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Debug với AI › Debug cùng AI": {
+  "body": "Debug cùng AI hiệu quả khi bạn cung cấp **đủ dữ kiện** để nó khoanh vùng đúng chỗ, thay vì nói \"không chạy\". Một báo cáo lỗi tốt cho AI cũng là một báo cáo lỗi tốt cho đồng nghiệp.\n\n### Vì sao cần biết\nLỗi là phần chiếm nhiều thời gian nhất của lập trình. AI mạnh ở việc đọc nhanh nhiều code và đối chiếu thông báo lỗi; nhưng nếu thiếu thông tin nó sẽ đoán, và đoán sai tốn thời gian của bạn.\n\n### Dữ kiện nên đưa\n1. **Hiện tượng**: mong đợi gì, thực tế thấy gì.\n2. **Bước tái hiện** ngắn nhất.\n3. **Thông báo lỗi và stack trace** nguyên văn.\n4. **Log** quanh thời điểm lỗi.\n5. **Môi trường**: phiên bản, hệ điều hành, thay đổi gần đây.\n6. **Đã thử gì** và kết quả.\n\n### Quy trình gợi ý\n- Tái hiện được lỗi trước (tốt nhất bằng một test).\n- Nhờ AI khoanh vùng và nêu **giả thuyết** kèm cách kiểm, chưa vội sửa.\n- Kiểm từng giả thuyết; sửa khi đã có bằng chứng.\n- Chạy lại các test, xem diff để chắc nó không sửa lan sang chỗ khác.\n\n### Ví dụ\n```text\nKhi bấm \"Lưu\" với ô tên trống, trang trắng. Console báo:\nTypeError: Cannot read properties of undefined (reading 'trim') at handleSave (Form.tsx:42)\nTôi vừa đổi schema form hôm qua. Hãy giải thích nguyên nhân khả dĩ và cách kiểm trước khi sửa.\n```\n\n### Lỗi hay gặp\n- Mô tả mơ hồ, không có lỗi gốc.\n- Chấp nhận bản vá che triệu chứng (bọc try/catch nuốt lỗi) thay vì sửa nguyên nhân.\n- Để AI sửa nhiều chỗ cùng lúc nên không biết thay đổi nào có tác dụng.\n\n### Tự kiểm tra\n1. Ba dữ kiện quan trọng nhất khi báo lỗi cho AI?\n2. Vì sao nên nhờ AI nêu giả thuyết trước khi sửa?\n3. Làm sao nhận ra bản vá chỉ che triệu chứng?",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-0-slides",
+    "ten": "10.0 — Slide bài giảng: tư duy & gỡ lỗi trong 12 slide",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging",
+    "ten": "10.2 — Đọc lỗi & vòng lặp gỡ lỗi",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug với AI › Dán nguyên error message": {
+  "body": "Thông báo lỗi và stack trace thường chứa phần lớn thông tin AI cần: loại lỗi, file, dòng, chuỗi gọi hàm. Hãy sao chép **nguyên văn**, đừng diễn đạt lại bằng lời.\n\n### Ý chính\n- Dán đủ phần đầu (loại lỗi, thông điệp) và các dòng stack thuộc code của bạn.\n- Nếu stack quá dài, giữ đầu và cuối, giữ mọi dòng nhắc tới file của dự án.\n- Kèm đoạn code quanh dòng bị lỗi và hành động gây ra lỗi.\n- Che các thông tin nhạy cảm (khoá, token, dữ liệu người dùng) trước khi dán.\n- Nếu công cụ chạy lệnh được, để agent tự chạy và đọc lỗi trực tiếp.\n\n### Lỗi hay gặp\nChỉ viết \"bị lỗi 500\"; dán ảnh chụp một phần thông báo; dán log hàng nghìn dòng không lọc.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging",
+    "ten": "10.2 — Đọc lỗi & vòng lặp gỡ lỗi",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-4-keep-learning",
+    "ten": "10.4 — Cách tiếp tục học",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug với AI › Bảo AI thêm log": {
+  "body": "Khi lỗi mơ hồ — không có exception rõ, chỉ là kết quả sai — cách nhanh nhất thường là **nhìn thấy dữ liệu đang đi qua code**. Nhờ AI chèn log tại các điểm nghi vấn: đầu vào hàm, giá trị trung gian, nhánh điều kiện được chọn.\n\n### Ý chính\n- Log có nhãn rõ ràng để dễ tìm, ví dụ `[DEBUG tinhGia] input=...`.\n- Log giá trị cụ thể, không chỉ \"đã vào hàm\".\n- Chạy lại, dán kết quả log cho AI, thu hẹp dần.\n- Xong thì **xoá log tạm** (hoặc chuyển thành log có mức độ đúng).\n- Dùng debugger/điểm dừng của IDE khi tiện: cùng mục đích.\n\n### Lỗi hay gặp\nLog dữ liệu nhạy cảm (mật khẩu, token) rồi commit; để log gỡ lỗi lại trong sản phẩm; log quá nhiều khiến không đọc được.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging",
+    "ten": "10.2 — Đọc lỗi & vòng lặp gỡ lỗi",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug với AI › Lỗi dai → liệt kê nguyên nhân": {
+  "body": "Khi sửa mãi không được, ngừng thử vá. Hãy bảo AI **liệt kê các nguyên nhân khả dĩ**, xếp theo xác suất, kèm cách kiểm từng cái, rồi loại trừ lần lượt.\n\n### Ví dụ\n```text\nChưa sửa gì. Liệt kê 5 nguyên nhân khả dĩ khiến danh sách không cập nhật sau khi thêm mục.\nVới mỗi nguyên nhân: dấu hiệu nhận biết và lệnh/log để kiểm.\n```\n\n### Ý chính\n- Kiểm từng giả thuyết bằng bằng chứng (log, test, debugger), ghi lại kết quả.\n- Nếu lỗi mới xuất hiện gần đây, `git bisect` giúp tìm commit gây lỗi bằng tìm nhị phân.\n- Thu hẹp phạm vi: tái hiện bằng ví dụ nhỏ nhất.\n\n### Lỗi hay gặp\nThử vá ngẫu nhiên; thay đổi nhiều thứ cùng lúc; không ghi lại những gì đã loại trừ nên đi vòng lại.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging",
+    "ten": "10.2 — Đọc lỗi & vòng lặp gỡ lỗi",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-2-4-bisect",
+    "ten": "2.4 — git bisect: tìm nhị phân ra commit đã làm hỏng",
+    "nguon": "Git & GitHub · Chương 2",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Debug với AI › Định kỳ nhờ AI review & refactor": {
+  "body": "Định kỳ nhờ AI rà soát cả codebase: tìm đoạn code lặp, hàm quá dài, nhánh chết, tên khó hiểu, xử lý lỗi thiếu, chỗ thiếu test. Rồi tái cấu trúc **có kiểm thử bảo vệ**.\n\n### Ý chính\n- Yêu cầu AI đưa danh sách phát hiện kèm mức ưu tiên và vị trí, chưa sửa ngay.\n- Bạn chọn mục đáng làm; xử lý từng mục một, test xanh sau mỗi mục.\n- Dùng thêm công cụ máy: linter, kiểm kiểu, công cụ phát hiện code lặp.\n- Đặt nhịp: ví dụ sau mỗi vài tính năng, dành một phiên dọn dẹp.\n\n### Lỗi hay gặp\nBảo AI \"refactor toàn bộ\" một lần; chấp nhận mọi đề xuất kể cả những cái làm phức tạp thêm; không có test nên không biết hành vi còn nguyên không.",
+  "lessons": [
+   {
+    "href": "/courses/swe202c-introduction-to-software-engineering/learn?lessonSlug=swe202c-3-1-quality",
+    "ten": "M3.1 — Chuẩn code, kiểm thử & debug",
+    "nguon": "Introduction to Software Engineering · Module 3 — Quality, design & PM",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWE202c"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-5-lab-tdd-code-cu",
+    "ten": "Lab 10 — Tính năng viết test trước, code cũ được ghim, refactor an toàn: từ 1/8 tới 8/8",
+    "nguon": "Testing · Chương 10",
+    "kieu": "lab"
+   }
+  ]
+ },
+ "Bảo mật (đừng tạo rác nguy hiểm) › Nguyên tắc bảo mật khi vibe": {
+  "body": "Code AI sinh ra có thể chạy đúng mà vẫn có lỗ hổng: AI học từ rất nhiều code, trong đó có cả code kém an toàn, và nó tối ưu cho \"chạy được\" hơn là \"an toàn trước kẻ tấn công\". Bạn phải xem xét bảo mật như với bất kỳ code nào khác.\n\n### Vì sao cần biết\nLỗ hổng không báo lỗi khi bạn thử bằng tay. Chúng chỉ lộ ra khi có người cố tình khai thác — thường sau khi sản phẩm đã có dữ liệu thật.\n\n### Ý chính\n- **Không tin đầu vào**: kiểm tra và làm sạch mọi dữ liệu từ người dùng, URL, form, header, file tải lên.\n- **Chống injection**: dùng truy vấn có tham số, không ghép chuỗi SQL; escape/sanitize khi hiển thị để tránh XSS.\n- **Xác thực và phân quyền**: mỗi API phải kiểm *ai* đang gọi và *được phép làm gì với dữ liệu nào* (không chỉ ẩn nút trên giao diện).\n- **Mật khẩu**: băm bằng thuật toán chuyên dụng, không tự chế mã hoá.\n- **Dependency**: cập nhật, chỉ cài gói thật sự cần, cẩn thận với gói có tên giống thư viện nổi tiếng (typosquatting) hoặc gói AI bịa ra.\n- **Thông báo lỗi**: không trả chi tiết nội bộ cho người dùng.\n- **Giới hạn tần suất** cho đăng nhập và API nhạy cảm.\n\n### Ví dụ — SQL an toàn\n```js\n// Sai: ghép chuỗi, dễ bị injection\ndb.query(`SELECT * FROM users WHERE email = '${email}'`);\n// Đúng: truy vấn có tham số\ndb.query('SELECT * FROM users WHERE email = $1', [email]);\n```\n\n### Lỗi hay gặp\n- Phân quyền chỉ ở phía giao diện.\n- Cho AI tự chọn thuật toán mật khẩu/mã hoá.\n- Chạy `npm install` các gói AI đề xuất mà không kiểm tra.\n- Không có bước review bảo mật trước khi phát hành.\n\n### Tự kiểm tra\n1. Vì sao ẩn nút trên giao diện không phải là phân quyền?\n2. Truy vấn có tham số chống injection như thế nào?\n3. Rủi ro khi cài gói do AI đề xuất là gì?",
+  "lessons": [
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-3-dau-vao-doc-hai",
+    "ten": "9.3 — Đầu vào là kẻ thù: ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request, SSRF",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-2-xss-va-sanitize",
+    "ten": "9.2 — XSS: từ ghi chú của người lạ tới phiên đăng nhập của bạn",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
+    "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=nodejs-input-attacks",
+    "ten": "Đầu vào là kẻ thù",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-4-3-bao-mat-npm",
+    "ten": "4.3 — An toàn chuỗi cung ứng",
+    "nguon": "Node.js · Chương 4",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật (đừng tạo rác nguy hiểm) › Không hardcode secret — dùng env": {
+  "body": "API key, mật khẩu cơ sở dữ liệu, token là **bí mật**. Đặt chúng trong biến môi trường (thường qua file `.env` không commit), không viết thẳng vào code. AI rất hay \"tiện tay\" dán khoá vào ví dụ hoặc file cấu hình, rồi commit lên repo.\n\n### Ý chính\n- `.env` chứa giá trị thật, nằm trong `.gitignore`; `.env.example` chứa tên biến với giá trị giả để người khác biết cần gì.\n- Code đọc từ `process.env.TEN_BIEN` (hoặc tương đương) và dừng sớm nếu thiếu.\n- Khoá phía trình duyệt (biến có tiền tố công khai) **không phải bí mật**: bất kỳ ai cũng đọc được trong bundle.\n- Nếu lỡ commit bí mật: **thu hồi/đổi khoá ngay**; xoá khỏi lịch sử chưa đủ vì bản sao có thể đã bị lấy.\n- Cẩn thận file ngữ cảnh/prompt: đừng dán khoá vào đó.\n\n### Ví dụ\n```gitignore\n.env\n.env.*\n!.env.example\n```\n```bash\ngit check-ignore -v .env    # kiểm .env có bị ignore không\n```\n\n### Lỗi hay gặp\nThêm `.gitignore` sau khi đã commit file (không có tác dụng với file đã theo dõi); dán khoá vào chat với AI; để khoá nhà cung cấp trong code frontend.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets",
+    "ten": "14.2 — Biến môi trường và khoá bí mật",
+    "nguon": "Nền tảng Lập trình Web · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-1-5-gitignore",
+    "ten": "1.5 — .gitignore, và thứ không bao giờ được commit",
+    "nguon": "Git & GitHub · Chương 1",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-4-bi-mat-va-phu-thuoc",
+    "ten": "9.4 — Bí mật, phụ thuộc, và những gì lỗi của bạn khai ra",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-17-4-bi-mat-cau-hinh",
+    "ten": "17.4 — Bí mật: vẫn còn nguyên sau khi bạn đã xoá",
+    "nguon": "Node.js · Chương 17",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật (đừng tạo rác nguy hiểm) › Bắt AI làm security audit": {
+  "body": "Trước khi phát hành, bắt AI làm một đợt **audit bảo mật** có cấu trúc. Nó không thay thế chuyên gia hay công cụ quét, nhưng bắt được nhiều lỗi phổ biến nếu bạn hỏi đúng cách.\n\n### Cách làm\n```text\nHãy rà soát thư mục src/ theo danh sách: injection (SQL/lệnh), XSS, xác thực,\nphân quyền theo từng API, lộ bí mật, CORS/header, xử lý upload, phụ thuộc có lỗ hổng.\nVới mỗi phát hiện nêu: file:dòng, mức nghiêm trọng, cách khai thác, cách sửa.\nChỉ báo điều có bằng chứng trong code.\n```\n\n### Ý chính\n- Dùng khung phổ biến như OWASP Top 10 để không bỏ sót hạng mục.\n- Kiểm chứng từng phát hiện: có thể có báo động giả, và có thể bỏ sót.\n- Chạy thêm công cụ máy: `npm audit` hoặc tương đương, quét bí mật, linter bảo mật.\n- Sửa theo mức độ, viết test cho lỗi đã vá.\n\n### Lỗi hay gặp\nCoi \"AI không thấy lỗi\" nghĩa là an toàn; không kiểm lại phát hiện; bỏ qua cấu hình môi trường (CORS, header, quyền truy cập) vì chỉ rà code ứng dụng.",
+  "lessons": [
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-3-owasp-api",
+    "ten": "6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/api-design/learn?lessonSlug=api-6-5-lab",
+    "ten": "6.5 — Lab 6: soát bảo mật — tìm ra, chứng minh, vá lại (có thang chấm)",
+    "nguon": "API & System Design · Chương 6",
+    "kieu": "lab"
+   },
+   {
+    "href": "/courses/nodejs/learn?lessonSlug=nodejs-9-3-dau-vao-doc-hai",
+    "ten": "9.3 — Đầu vào là kẻ thù: ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request, SSRF",
+    "nguon": "Node.js · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Bảo mật (đừng tạo rác nguy hiểm) › Đọc diff trước khi merge": {
+  "body": "\"Accept All\" mà không đọc là cách nhanh nhất để đưa lỗi và lỗ hổng vào sản phẩm. Bạn chịu trách nhiệm cho mọi dòng được gộp, dù ai hay cái gì viết ra nó.\n\n### Vì sao cần biết\nAI có thể sinh thay đổi nhìn hợp lý nhưng sai ở chi tiết: bỏ một kiểm tra, đổi hành vi ngoài phạm vi, xoá một test, thêm một dependency lạ, hard-code một giá trị. Chỉ người đọc diff mới thấy.\n\n### Cách đọc diff\n1. **Xem tổng quan**: `git diff --stat` — có file nào bất ngờ không?\n2. **Đọc từng phần**: logic có đúng ý? Có xử lý lỗi và trường hợp biên?\n3. **Soi những chỗ rủi ro**: truy cập dữ liệu, xác thực, phân quyền, thao tác file/lệnh, bí mật.\n4. **Soi test**: test có bị xoá, bị làm yếu, hay chỉ kiểm cho có?\n5. **Soi dependency**: gói mới có cần thật không, có đúng tên không.\n6. **Hỏi lại**: đoạn nào bạn không hiểu, bảo AI giải thích; nếu vẫn không hiểu thì đừng gộp.\n7. **Chạy** test và app trước khi merge.\n\n### Ví dụ lệnh\n```bash\ngit diff --stat\ngit diff -- src/auth/   # đọc kỹ vùng nhạy cảm\ngit add -p              # chỉ nhận phần bạn đã đọc và hiểu\n```\n\n### Lỗi hay gặp\n- Đọc lướt vì diff quá lớn: hãy bắt AI làm lại thành các bước nhỏ.\n- Chỉ nhìn kết quả chạy mà không nhìn diff.\n- Tin lời tóm tắt của AI thay cho việc đọc thay đổi thật.\n\n### Tự kiểm tra\n1. Năm điều cần soi trong một diff do AI tạo?\n2. Vì sao phải soi cả thay đổi trong file test?\n3. Khi gặp đoạn không hiểu, bạn làm gì?",
+  "lessons": [
+   {
+    "href": "/courses/git/learn?lessonSlug=git-13-2-quy-trinh-that",
+    "ten": "13.2 — Git trong quy trình thật, và bảng tra nhanh",
+    "nguon": "Git & GitHub · Chương 13",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-2-review",
+    "ten": "6.2 — Review: cho và nhận phản hồi",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/git/learn?lessonSlug=git-6-0-slides",
+    "ten": "6.0 — Slide Chương 6: vòng đời một pull request bằng hình",
+    "nguon": "Git & GitHub · Chương 6",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/testing/learn?lessonSlug=tst-10-3-review",
+    "ten": "10.3 — Review test trong pull request",
+    "nguon": "Testing · Chương 10",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Giới hạn & khi nào tự viết › Nợ kỹ thuật & \"70% problem\"": {
+  "body": "\"70% problem\" mô tả một trải nghiệm quen thuộc: AI đưa bạn tới khoảng 70% sản phẩm rất nhanh, nhưng 30% còn lại — trường hợp biên, xử lý lỗi, hiệu năng, kiến trúc dài hạn, bảo mật, chi tiết trải nghiệm — chậm và khó hơn nhiều, và cần người hiểu code. Con số 70/30 mang tính hình dung, không phải số đo.\n\n### Ý chính\n- Phần cuối khó vì nó phụ thuộc hiểu biết sâu về hệ thống, thứ không có trong prompt.\n- **Nợ kỹ thuật** tích luỹ âm thầm khi bạn chấp nhận code mình không hiểu: trùng lặp, cấu trúc lộn xộn, thiếu test.\n- Người không có nền tảng thường bị kẹt ở đoạn này: sửa một chỗ vỡ chỗ khác, AI lặp vòng.\n- Giảm nợ: giữ thay đổi nhỏ, có test, đọc diff, refactor định kỳ, ghi quyết định thiết kế.\n\n### Lỗi hay gặp\nHứa hẹn tiến độ dựa trên tốc độ của 70% đầu; bỏ qua giai đoạn hoàn thiện; chờ tới khi code thành mớ rối mới dọn."
+ },
+ "Giới hạn & khi nào tự viết › Ảo giác (hallucination) & xác thực": {
+  "body": "Mô hình ngôn ngữ sinh câu trả lời nghe hợp lý, không phải luôn đúng. Nó có thể bịa tên hàm, tham số, thư viện hoặc cả một API không tồn tại, và nói rất tự tin. Hiện tượng này gọi là **ảo giác** (hallucination).\n\n### Vì sao cần biết\nCode dùng API không tồn tại thường lộ ngay khi chạy, nhưng cũng có kiểu nguy hiểm hơn: gói bịa tên mà kẻ xấu đã đăng ký thật, hoặc API tồn tại nhưng ở phiên bản khác, hoặc cấu hình bảo mật sai nghe rất có lý.\n\n### Ý chính\n- **Đối chiếu tài liệu chính thức** đúng phiên bản bạn dùng.\n- **Chạy thử**: gọi thật, kiểm đầu ra.\n- Kiểm gói trước khi cài: tên chính xác, số lượt tải, kho mã, người duy trì.\n- Cho AI đọc tài liệu: đưa liên kết hoặc đoạn tài liệu vào ngữ cảnh thay vì để nó nhớ.\n- Khi nó nói \"theo tài liệu…\", hỏi xem trích từ đâu.\n\n### Lỗi hay gặp\nSao chép lệnh cài đặt do AI đề xuất mà không kiểm tra; tin giải thích về cấu hình bảo mật mà không đọc tài liệu; không nói cho AI biết phiên bản đang dùng.",
+  "lessons": [
+   {
+    "href": "/courses/web-foundations/learn?lessonSlug=wf-10-4-keep-learning",
+    "ten": "10.4 — Cách tiếp tục học",
+    "nguon": "Nền tảng Lập trình Web · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/aba201c-ai-and-big-data-analytics-for-communications/learn?lessonSlug=aba201c-ts-9-3",
+    "ten": "9.3 — Giới hạn của AI tạo sinh: bịa thông tin, thiên lệch, bản quyền, quyền riêng tư và công bố",
+    "nguon": "AI and Big Data Analytics for Communications · Chương 9",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "ABA201c"
+   }
+  ]
+ },
+ "Giới hạn & khi nào tự viết › Chi phí token & rate limit": {
+  "body": "Agent làm việc nhiều bước nên tiêu thụ nhiều token: mỗi lượt gửi lại ngữ cảnh, mỗi file đọc, mỗi kết quả lệnh đều được tính. Dịch vụ có thể tính phí theo token hoặc theo gói có hạn mức và giới hạn tốc độ (rate limit). Mức giá và hạn mức cụ thể thay đổi thường xuyên — luôn xem trang chính thức của nhà cung cấp.\n\n### Vì sao cần biết\nKhông theo dõi, chi phí có thể tăng lên bất ngờ, hoặc bạn bị chạm giới hạn giữa chừng khi đang làm việc.\n\n### Ý chính\n- **Giữ ngữ cảnh gọn**: đừng gắn cả repo, đừng giữ phiên quá dài, dọn khi đổi việc.\n- **Chọn model theo việc**: model nhỏ/rẻ cho việc đơn giản (đổi tên, sinh boilerplate), model mạnh cho thiết kế và lỗi khó.\n- **Lọc kết quả lệnh**: giới hạn dòng log đưa vào.\n- **Theo dõi mức dùng** qua bảng điều khiển; đặt cảnh báo hoặc trần chi tiêu nếu được.\n- Khi chạm giới hạn: nghỉ, chuyển việc, hoặc xử lý thủ công; đừng lặp lại yêu cầu liên tục.\n\n### Lỗi hay gặp\nĐể agent chạy vòng lặp dài không giám sát; dùng model mạnh nhất cho mọi việc; không biết chi phí cho tới khi nhận hoá đơn.",
+  "lessons": [
+   {
+    "href": "/simulation?scenario=ai-chat",
+    "ten": "Chat AI — đường đi của một câu trả lời",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Giới hạn & khi nào tự viết › Khi nào nên tự viết": {
+  "body": "AI là công cụ rất tốt, nhưng có những việc nên tự viết, hoặc ít nhất tự thiết kế và đọc rất kỹ từng dòng.\n\n### Nên tự làm (hoặc kiểm cực kỹ) khi\n- **Logic lõi nhạy cảm**: thanh toán, tiền, phân quyền, mật mã, xử lý dữ liệu cá nhân.\n- **Hiệu năng cao**: đường nóng cần đo và tối ưu có chủ ý.\n- **Bảo mật nghiêm ngặt**: nơi một lỗi nhỏ có hậu quả lớn.\n- **Kiến trúc và ranh giới hệ thống**: quyết định dài hạn, khó đảo ngược.\n- **Hệ thống lớn, nhiều thành phần**, nơi AI không giữ nổi toàn cảnh trong ngữ cảnh.\n- Khi mục tiêu là **học**: tự gõ giúp bạn hiểu.\n\n### Cách dùng AI ở những chỗ này\nDùng AI để thảo luận phương án, review, sinh test, giải thích tài liệu; còn quyết định và phần code then chốt do bạn nắm.\n\n### Lỗi hay gặp\nGiao toàn bộ việc nhạy cảm cho AI để nhanh; hoặc ngược lại từ chối dùng AI ở cả những việc lặp lại hoàn toàn an toàn.",
+  "lessons": [
+   {
+    "href": "/courses/software-development-project/learn?lessonSlug=swp391-8-1-responsible-ai",
+    "ten": "8.1 — Chuỗi 9 prompt AI: sản phẩm, cách review & các bẫy",
+    "nguon": "Software Development Project · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWP391"
+   }
+  ]
+ },
+ "Tiếp tục học › Lộ trình Claude Code": {
+  "body": "Đây là chỗ để đào sâu khi bạn đã quen vibe coding cơ bản và muốn dùng agent terminal ở mức chuyên nghiệp. Claude Code có hệ sinh thái mở rộng khá rộng: lệnh gạch chéo (slash command), MCP để nối công cụ ngoài, hook để chạy script tự động ở các thời điểm nhất định, subagent, skills và plugin đóng gói lại những thứ đó.\n\n### Nên học theo thứ tự\n1. Quy trình cơ bản: giao việc, duyệt thay đổi, quản lý quyền, làm việc với Git.\n2. File ngữ cảnh dự án và quản lý ngữ cảnh/phiên.\n3. MCP: nối trình duyệt, cơ sở dữ liệu, GitHub.\n4. Lệnh tuỳ biến và skills cho quy trình lặp lại.\n5. Subagent và hook để tự động hoá và áp chốt chặn.\n6. Chạy không giao diện (script, CI) cho tác vụ tự động.\n\nTên lệnh và tính năng cụ thể thay đổi theo phiên bản; hãy dựa vào tài liệu chính thức hiện hành."
+ },
+ "Tiếp tục học › Lộ trình OpenClaw": {
+  "body": "Nếu bạn muốn một agent luôn sẵn sàng — chạy trên máy hoặc server riêng, nhận việc qua ứng dụng nhắn tin — lộ trình OpenClaw đi sâu vào cách dựng và vận hành: cài đặt, kết nối kênh nhắn tin, cấp quyền, chạy ổn định lâu dài.\n\n### Điều cần chú ý khi đào sâu\n- **Bảo mật là trọng tâm**: máy chạy agent giữ khoá và có thể có quyền rộng; chỉ nhận lệnh từ tài khoản được xác thực, giới hạn thư mục và lệnh.\n- **Giám sát và chi phí**: nhật ký hoạt động, trần chi tiêu, cảnh báo.\n- **Cô lập**: chạy trong môi trường riêng (container/VM), không dùng chung với dữ liệu quan trọng.\n- Cập nhật phần mềm và khoá định kỳ.\n\nĐây là hướng nâng cao; hãy vững phần cơ bản (Git, test, đọc diff, bảo mật) trước."
+ },
+ "Tiếp tục học › Nền tảng phỏng vấn & giải thuật": {
+  "body": "Vibe coding giúp bạn viết code nhanh, nhưng không thay được **tư duy giải thuật**: biết chọn cấu trúc dữ liệu, ước lượng độ phức tạp, phân tích bài toán, tự nghĩ ra cách giải khi AI đưa lời giải sai hoặc kém hiệu quả. Phỏng vấn kỹ thuật ở nhiều nơi vẫn kiểm tra những điều này, thường không cho dùng AI.\n\n### Vì sao cần biết\n- Bạn đánh giá được lời giải AI đưa ra: có đúng, có tối ưu, có chịu nổi dữ liệu lớn không.\n- Nền tảng vững giúp bạn viết yêu cầu chính xác hơn và gỡ lỗi nhanh hơn.\n- Cơ hội nghề nghiệp: nhà tuyển dụng muốn thấy bạn hiểu chứ không chỉ gõ prompt.\n\n### Nên luyện\n- Cấu trúc dữ liệu cơ bản: mảng, danh sách liên kết, ngăn xếp, hàng đợi, bảng băm, cây, đồ thị.\n- Thuật toán nền: sắp xếp, tìm kiếm, đệ quy, quy hoạch động ở mức nhập môn, duyệt đồ thị.\n- Phân tích độ phức tạp (Big-O).\n- Luyện giải bài **tự tay** trước, rồi dùng AI để so sánh cách giải hoặc giải thích chỗ bạn kẹt.\n\n### Lỗi hay gặp\nDùng AI giải thay bạn khi đang luyện nên không phát triển được kỹ năng; học thuộc lời giải mà không hiểu vì sao đúng.",
+  "lessons": [
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/interview",
+    "ten": "Luyện phỏng vấn",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-big-o",
+    "ten": "0.3 — Big-O: ngôn ngữ của hiệu năng",
+    "nguon": "Data Structures and Algorithms · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ }
+}

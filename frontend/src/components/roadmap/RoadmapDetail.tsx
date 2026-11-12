@@ -400,7 +400,7 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
                       <button type="button" onClick={() => setDong((p) => { const n = new Set(p); n.has(st.stage) ? n.delete(st.stage) : n.add(st.stage); return n; })}
                         className="group mb-4 flex w-full items-center gap-3 text-left">
                         <span className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold text-white shadow-md sm:absolute sm:left-0"
-                          style={{ background: het ? '#22c55e' : color, boxShadow: `0 0 0 5px var(--bg-primary)` }}>
+                          style={{ background: het ? '#22c55e' : color, boxShadow: '0 0 0 5px var(--bg-primary)' }}>
                           {het ? <Check size={15} strokeWidth={3} /> : st.stage + 1}
                         </span>
                         <span className="min-w-0 flex-1">

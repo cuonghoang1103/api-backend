@@ -1,0 +1,650 @@
+{
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Linux & Bash": {
+  "body": "Hầu hết máy ảo, container và dịch vụ chạy trên cloud đều dùng Linux bên dưới. Khi một instance không lên, một ổ đĩa đầy, một dịch vụ cứ khởi động lại liên tục, thứ bạn có trong tay thường chỉ là một cửa sổ terminal và vài lệnh. Một Cloud Architect không cần là chuyên gia quản trị hệ thống, nhưng phải đọc hiểu được máy mà mình đang thiết kế hạ tầng cho.\n\nHình dung một máy Linux như một toà nhà có bảo vệ: kernel là bộ máy điều hành toà nhà, shell là quầy lễ tân nhận yêu cầu của bạn, còn terminal chỉ là ô cửa sổ để bạn nói chuyện với lễ tân. Học Linux là học cách nói chuyện đó cho đúng.\n\n### Vì sao cần biết\n- Cloud nào cũng cho bạn SSH vào một máy Linux để chẩn đoán; user data, cloud-init và script khởi tạo đều là bash.\n- Container thực chất là tiến trình Linux bị cô lập bằng namespace và cgroup, nên hiểu Linux là hiểu container.\n- Quyền file, tiến trình, tường lửa, systemd là những thứ bạn gặp lại ở mọi chủ đề bảo mật và vận hành phía sau.\n\n### Ý chính cần nắm\n- Cây thư mục chuẩn (`/etc`, `/var`, `/home`, `/usr`) và quy ước mỗi thư mục chứa gì.\n- Mô hình quyền: user, group, `rwx`, và vì sao chạy mọi thứ bằng root là thói quen xấu.\n- Tiến trình, tín hiệu, `systemd` để chạy ứng dụng như một dịch vụ tự khởi động lại khi chết.\n- Ống dẫn (pipe) và chuyển hướng: ghép các lệnh nhỏ như `grep`, `sort`, `awk` thành công cụ xử lý log.\n- Mạng cơ bản trên máy: `ss`, `curl`, SSH, tường lửa.\n- Viết script bash ngắn, an toàn: `set -euo pipefail`, đặt biến trong dấu nháy.\n\n```bash\n# Dịch vụ nào đang nghe cổng nào, và log gần nhất của một service\nss -tlnp\njournalctl -u nginx --since \"10 min ago\" --no-pager | tail -n 20\n# Đếm mã trạng thái HTTP trong access log\nawk '{print $9}' /var/log/nginx/access.log | sort | uniq -c | sort -rn\n```\n\n### Lỗi hay gặp\n- `chmod 777` để \"cho chạy được\" thay vì tìm đúng user sở hữu file.\n- Script bash không bật `set -e`, lỗi giữa chừng vẫn chạy tiếp và làm hỏng dữ liệu.\n- Quên rằng biến rỗng trong `rm -rf \"$DIR/\"` có thể xoá nhầm cả thư mục gốc.\n\n### Tự kiểm tra\n- Một service tên `api` cứ chết rồi tự khởi động lại: bạn xem log ở đâu và lệnh nào?\n- Vì sao một file có quyền `rw-r--r--` mà một user khác vẫn không ghi được vào?",
+  "lessons": [
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-0-slides",
+    "ten": "0.0 — Slide Mục 0: Linux, shell và cách học, bằng hình",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "slide"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Linux và shell là gì, ra đời thế nào, vì sao quan trọng với bạn",
+    "nguon": "Linux & Bash · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-4-1-mo-hinh-quyen",
+    "ten": "4.1 — Mô hình quyền, và rwx nghĩa là gì trên một thư mục",
+    "nguon": "Linux & Bash · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-11-1-systemd-unit",
+    "ten": "11.1 — Unit của systemd: chạy ứng dụng của bạn như một dịch vụ",
+    "nguon": "Linux & Bash · Chương 11",
+    "kieu": "video"
+   },
+   {
+    "href": "/code-lab/linux-bash",
+    "ten": "Linux & Bash",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Networking for Developers": {
+  "body": "Mạng trên cloud không phải thứ gì mới: VPC, subnet, security group, load balancer, DNS gỡ lỗi nhiều đến đâu thì cũng là TCP/IP, DNS và TLS được ảo hoá và đặt tên khác đi. Ai hiểu nền tảng sẽ đọc được bất kỳ sơ đồ mạng nào của AWS, Azure hay Google Cloud mà không phải học thuộc.\n\nVí dụ đời thường: gửi một lá thư. Địa chỉ nhà là IP, số căn hộ là cổng, bưu điện phân loại là bảng định tuyến, và tờ danh bạ giúp bạn tìm địa chỉ từ tên người là DNS. Cloud chỉ cho bạn tự dựng cả hệ thống bưu điện đó cho riêng mình.\n\n### Vì sao cần biết\n- Thiết kế VPC phải chia CIDR, subnet công khai và riêng tư, bảng route, NAT: tất cả là mạng cơ bản.\n- Sự cố \"không kết nối được\" thường rơi vào DNS, TTL, tường lửa hoặc chứng chỉ TLS hết hạn.\n- Chọn CDN, load balancer tầng 4 hay tầng 7 cần hiểu TCP, HTTP và TLS đi qua nó như thế nào.\n\n### Ý chính cần nắm\n- IPv4, CIDR và chia subnet: `10.0.0.0/16` chứa bao nhiêu địa chỉ và cắt thành các `/24` ra sao.\n- Định tuyến và gateway: gói tin đi qua đâu, `traceroute` cho bạn thấy điều gì.\n- NAT và dải IP riêng (RFC 1918): vì sao máy trong subnet riêng ra được Internet nhưng Internet không gọi vào được.\n- DNS: stub, recursive resolver, authoritative; bản ghi A, CNAME, MX, TXT; TTL quyết định đổi bản ghi có hiệu lực nhanh hay chậm.\n- TCP: bắt tay ba bước, truyền lại, độ tin cậy; UDP khi nào thích hợp.\n- TLS và chuỗi chứng chỉ; HTTP/1.1, HTTP/2, HTTP/3; cache và CDN.\n\n```bash\ndig +short api.example.com            # IP mà tên này phân giải ra\ndig +trace example.com | head -n 20   # đi từ root xuống authoritative\ncurl -sv https://example.com -o /dev/null 2>&1 | grep -E \"subject|expire|HTTP/\"\n```\n\n### Lỗi hay gặp\n- Chia subnet chồng lấn CIDR giữa hai VPC rồi mới phát hiện không thể peering.\n- Đổi bản ghi DNS xong tưởng sai vì bộ đệm TTL cũ vẫn còn hiệu lực.\n- Chứng chỉ TLS hết hạn vì không ai theo dõi ngày hết hạn.\n\n### Tự kiểm tra\n- Một máy chủ trong subnet riêng cần tải gói cập nhật từ Internet: gói tin đi qua những thành phần nào?\n- Vì sao hai mạng có cùng dải `10.0.0.0/16` không thể kết nối trực tiếp với nhau?",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-0-8-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Mạng là gì, Internet ra đời thế nào, và vì sao nó quan trọng với bạn",
+    "nguon": "Networking for Developers · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-2-1-ipv4-cidr",
+    "ten": "2.1 — IPv4, CIDR và chia subnet bằng tay",
+    "nguon": "Networking for Developers · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-3-1-phan-giai",
+    "ten": "3.1 — Phân giải: stub, recursive resolver, root, TLD, authoritative",
+    "nguon": "Networking for Developers · Chương 3",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/simulation?scenario=tcp-handshake",
+    "ten": "TCP — bắt tay ba bước và bốn bước chia tay",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/networking-practice",
+    "ten": "Networking for Developers — Luyện tập",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Docker": {
+  "body": "Docker đóng gói ứng dụng cùng toàn bộ thứ nó cần để chạy (runtime, thư viện, cấu hình) thành một image bất biến; từ image đó bạn chạy ra nhiều container giống hệt nhau. Hình dung một container vận chuyển tiêu chuẩn: tàu, xe tải hay cần cẩu không cần biết bên trong chứa gì, chỉ cần biết cách bốc cái thùng.\n\nChính vì vậy container là đơn vị triển khai chuẩn của cloud: ECS, Fargate, Cloud Run, App Service, Kubernetes đều nhận một image và chạy nó. Muốn thiết kế hạ tầng chạy container, bạn phải hiểu container bản chất là gì.\n\n### Vì sao cần biết\n- Mọi dịch vụ container được quản lý trên cloud đều xây trên cùng khái niệm image, registry, container.\n- Image nhỏ, build có cache, không chạy bằng root là những quyết định ảnh hưởng trực tiếp tới tốc độ deploy và bảo mật.\n- Hiểu volume, mạng container và giới hạn tài nguyên giúp bạn chẩn đoán lỗi như container thoát mã 137 (hết bộ nhớ).\n\n### Ý chính cần nắm\n- Container không phải máy ảo nhẹ: nó là tiến trình Linux được cô lập bằng namespace (nhìn thấy gì) và cgroup (dùng được bao nhiêu), dùng chung kernel với máy chủ.\n- Image là chồng các tầng chỉ đọc; thứ tự lệnh trong Dockerfile quyết định cache build hiệu quả hay không.\n- Registry (Docker Hub, GHCR, ECR...) là nơi lưu và phân phối image.\n- Dữ liệu trong container mất khi container bị xoá, trừ khi dùng volume.\n- Compose mô tả nhiều container chạy cùng nhau trên một máy.\n\n```dockerfile\nFROM node:22-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm ci --omit=dev        # tầng phụ thuộc: cache được khi package*.json không đổi\nCOPY . .\nUSER node                    # không chạy bằng root\nCMD [\"node\", \"server.js\"]\n```\n\n### Lỗi hay gặp\n- `COPY . .` đặt trước `npm ci`, khiến mỗi lần sửa một dòng code là cài lại toàn bộ phụ thuộc.\n- Nhét mật khẩu hoặc khoá vào image rồi đẩy lên registry công khai.\n- Dùng tag `latest` trong production nên không biết chính xác phiên bản nào đang chạy.\n\n### Tự kiểm tra\n- Hai container chạy cùng một image có chia sẻ dữ liệu ghi vào hệ file của nhau không?\n- Vì sao container trên máy Mac vẫn cần một máy ảo Linux ở bên dưới?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-0-5-bat-dau-tai-day",
+    "ten": "Bắt đầu tại đây (1/2) — Docker là gì, ra đời thế nào, và vì sao nó quan trọng với bạn",
+    "nguon": "Docker · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-1-1-container-la-gi",
+    "ten": "1.1 — Container thật ra được làm bằng gì",
+    "nguon": "Docker · Chương 1",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-3-0-slides",
+    "ten": "3.0 — Slide Chương 3: image và registry bằng hình",
+    "nguon": "Docker · Chương 3",
+    "kieu": "slide"
+   },
+   {
+    "href": "/simulation?scenario=docker-container",
+    "ten": "Container không phải máy ảo nhẹ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/code-lab/docker",
+    "ten": "Docker",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Cloud Fundamentals (AWS)": {
+  "body": "Khoá này đưa bạn đi qua các khối xây dựng cốt lõi của một nền tảng cloud, lấy AWS làm ví dụ: danh tính và phân quyền (IAM), mạng ảo (VPC), máy ảo (EC2), container, serverless, lưu trữ và cơ sở dữ liệu. Học kỹ một cloud rồi ánh xạ sang cloud khác nhanh hơn nhiều so với học dàn trải ba nhà cung cấp cùng lúc.\n\nHình dung cloud như một khu công nghiệp cho thuê: bạn không xây nhà xưởng mà thuê từng hạng mục (đất, điện, kho, bảo vệ), trả theo mức dùng. IAM là thẻ ra vào, VPC là hàng rào riêng của bạn, EC2 là xưởng, S3 là kho, RDS là phòng hồ sơ có người trông.\n\n### Vì sao cần biết\n- Mọi bản thiết kế kiến trúc đều ghép từ các dịch vụ lõi này; không nắm chúng thì không đánh giá được đánh đổi.\n- Đa số sự cố và rủi ro chi phí nằm ở các lựa chọn cơ bản: instance sai cỡ, bucket công khai nhầm, quyền quá rộng.\n\n### Ý chính cần nắm\n- **IAM**: người dùng, nhóm, role, policy; ưu tiên role với thông tin xác thực tạm thời thay cho khoá truy cập dài hạn.\n- **VPC**: subnet công khai và riêng tư, bảng route, internet gateway, NAT gateway, security group (có trạng thái) và network ACL.\n- **Compute**: EC2 với instance type, AMI, Auto Scaling và load balancer; Lambda cho mã chạy theo sự kiện; container với ECS hoặc EKS.\n- **Lưu trữ**: S3 (object), EBS (block gắn vào EC2), EFS (file dùng chung); storage class và versioning của S3.\n- **CSDL**: RDS và Aurora (quan hệ), DynamoDB (key-value), ElastiCache; Multi-AZ cho độ sẵn sàng.\n- Giá và hạn mức dịch vụ thay đổi theo thời gian; luôn đối chiếu trang giá và tài liệu chính thức khi thiết kế thật.\n\n```bash\n# Kiểm tra bạn đang dùng danh tính nào trước khi làm bất cứ điều gì\naws sts get-caller-identity\naws s3 ls\n```\n\n### Lỗi hay gặp\n- Dùng tài khoản root hằng ngày thay vì tạo role riêng và bật MFA.\n- Đặt cơ sở dữ liệu vào subnet công khai chỉ để \"cho dễ kết nối\".\n- Để tài nguyên thử nghiệm chạy quên tắt, đến cuối tháng mới thấy hoá đơn.\n\n### Tự kiểm tra\n- Một ứng dụng trên EC2 cần đọc một bucket S3: cấp quyền bằng cách nào mà không phải lưu khoá trong code?\n- Security group khác network ACL ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-0-1-overview",
+    "ten": "Tổng quan: Điện toán đám mây trên AWS",
+    "nguon": "Cloud Computing · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-1-1-compute",
+    "ten": "1.1 — Compute: EC2 & Lambda",
+    "nguon": "Cloud Computing · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-2-1-storage",
+    "ten": "2.1 — Lưu trữ: S3 & EBS",
+    "nguon": "Cloud Computing · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-4-1-network-architecture",
+    "ten": "4.1 — Mạng & thiết kế well-architected",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/code-lab/object-storage-s3",
+    "ten": "Object Storage (S3 & Cloudflare R2)",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Infrastructure as Code": {
+  "body": "Infrastructure as Code (IaC) nghĩa là mô tả hạ tầng (mạng, máy chủ, cơ sở dữ liệu, quyền truy cập) bằng tệp văn bản thay vì bấm chuột trên giao diện web. Bạn lưu tệp trong Git, review như code, và chạy một lệnh để dựng hoặc cập nhật cả môi trường. Giống như thay vì mô tả bằng miệng cho thợ cách xây nhà, bạn đưa họ bản vẽ: ai cũng xây ra cùng một căn nhà.\n\nTerraform theo hướng khai báo: bạn mô tả trạng thái mong muốn, công cụ tự tính ra việc cần làm. Ansible mạnh ở cấu hình bên trong máy (cài gói, sửa tệp, khởi động dịch vụ).\n\n### Vì sao cần biết\n- Môi trường dev, staging, production giống hệt nhau, không còn \"máy này khác máy kia\".\n- Thay đổi có lịch sử, có review, có thể khôi phục; dựng lại cả hệ thống sau thảm hoạ trong thời gian ngắn.\n- Landing zone nhiều tài khoản hay hệ thống lớn không thể quản lý bằng tay.\n\n### Ý chính cần nắm\n- **Khai báo và idempotent**: chạy nhiều lần cho cùng kết quả.\n- **State** trong Terraform ghi lại tài nguyên thật đã tạo; phải lưu ở backend chung có khoá, không để trên laptop.\n- **Plan trước, apply sau**: xem trước chính xác điều sẽ thay đổi, đặc biệt các tài nguyên sẽ bị xoá.\n- **Module** gom một cụm tài nguyên có thể tái sử dụng; biến (variable) và output tách cấu hình khỏi logic.\n- **Drift**: tài nguyên bị sửa tay ngoài code làm trạng thái thật lệch khỏi code.\n- **GitOps**: Git là nguồn sự thật, thay đổi hạ tầng đi qua pull request và pipeline.\n\n```hcl\nresource \"aws_s3_bucket\" \"logs\" {\n  bucket = \"ten-bucket-duy-nhat-cua-ban\"\n}\n\nresource \"aws_s3_bucket_public_access_block\" \"logs\" {\n  bucket                  = aws_s3_bucket.logs.id\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}\n```\n\n### Lỗi hay gặp\n- Commit tệp state hoặc mật khẩu lên Git; state có thể chứa bí mật dạng văn bản thường.\n- Chạy `apply` thẳng không đọc `plan`, vô tình thay thế (xoá rồi tạo lại) một cơ sở dữ liệu.\n- Vừa dùng IaC vừa sửa tay trên console, gây drift mà không ai biết.\n\n### Tự kiểm tra\n- Hai người cùng chạy `terraform apply` một lúc thì chuyện gì xảy ra nếu không có khoá state?\n- Khác biệt giữa Terraform và Ansible về việc chúng giải quyết?"
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Kubernetes": {
+  "body": "Kubernetes (K8s) là hệ thống điều phối container: bạn nói với nó \"tôi muốn ba bản sao của ứng dụng này luôn chạy\", và nó tự đặt container lên các máy, thay thế khi một cái chết, rải đều lưu lượng và cập nhật phiên bản từng bước. Hình dung một quản đốc xưởng: bạn giao chỉ tiêu, ông ấy tự điều người và máy để đạt chỉ tiêu đó.\n\nCác dịch vụ managed như EKS, AKS, GKE lo phần control plane, còn bạn lo khối lượng công việc chạy trên đó.\n\n### Vì sao cần biết\n- Đây là nền tảng điều phối phổ biến nhất; kiến trúc sư thường phải quyết định có nên dùng K8s hay chọn lựa chọn đơn giản hơn.\n- Hiểu nó giúp thiết kế co giãn, tự lành, triển khai không gián đoạn.\n\n### Ý chính cần nắm\n- **Pod**: đơn vị nhỏ nhất, gồm một hoặc vài container dùng chung mạng và lưu trữ.\n- **Deployment**: giữ số bản sao mong muốn và thực hiện rolling update, rollback.\n- **Service**: địa chỉ ổn định phía trước một tập pod luôn thay đổi; **Ingress** đưa HTTP từ ngoài vào.\n- **ConfigMap và Secret** tách cấu hình khỏi image; **requests và limits** khai báo tài nguyên CPU, bộ nhớ.\n- **Probe** (liveness, readiness) để K8s biết khi nào pod khoẻ và sẵn sàng nhận tải.\n- Mô hình reconcile: bạn khai báo trạng thái mong muốn, controller liên tục đưa trạng thái thật về đó.\n- Không phải hệ thống nào cũng cần K8s; với vài dịch vụ, nền tảng đơn giản hơn thường rẻ hơn về vận hành.\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata: { name: api }\nspec:\n  replicas: 3\n  selector: { matchLabels: { app: api } }\n  template:\n    metadata: { labels: { app: api } }\n    spec:\n      containers:\n        - name: api\n          image: registry.example.com/api:1.4.2\n          readinessProbe:\n            httpGet: { path: /healthz, port: 3000 }\n```\n\n### Lỗi hay gặp\n- Không đặt `requests/limits`, một pod ngốn hết bộ nhớ của node và kéo theo các pod khác.\n- Dùng tag `latest` nên rollout không lặp lại được.\n- Dùng K8s cho một ứng dụng nhỏ rồi tốn công vận hành hơn lợi ích nhận lại.\n\n### Tự kiểm tra\n- Một pod chết thì ai tạo pod mới, và theo cơ chế nào?\n- Readiness probe và liveness probe khác nhau ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
+    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
+    "ten": "7.1 — Kubernetes & điều phối",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/code-lab/kubernetes",
+    "ten": "Kubernetes",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-quiz-7",
+    "ten": "Quiz 7 — Kubernetes",
+    "nguon": "Cloud Computing · Chapter 7",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Network Security & Zero Trust": {
+  "body": "Bảo mật mạng là việc quyết định ai được nói chuyện với cái gì, và chứng minh điều đó. Mô hình cũ giống một lâu đài có hào nước: vào được cổng là đi lại tự do bên trong. Zero trust bỏ giả định đó: mọi yêu cầu, kể cả từ bên trong mạng, đều phải được xác thực và cấp quyền riêng.\n\nVới kiến trúc sư cloud, điều này biến thành các quyết định cụ thể: chia mạng thành vùng, mở cổng nào, dữ liệu đi qua đâu, và định danh nào được phép gọi dịch vụ nào.\n\n### Vì sao cần biết\n- Một cổng cơ sở dữ liệu mở ra Internet hoặc một mạng phẳng không phân vùng là nguồn gốc của nhiều sự cố lớn.\n- Thiết kế VPC, security group, VPN, đường kết nối riêng đều là bảo mật mạng.\n\n### Ý chính cần nắm\n- **Tường lửa**: lọc gói theo địa chỉ, cổng, giao thức; stateful thì nhớ kết nối đang mở. Nguyên tắc mặc định: chặn hết, chỉ mở thứ cần thiết.\n- **Phân vùng (segmentation)**: tách tầng web, ứng dụng, dữ liệu; vùng đệm DMZ cho thứ tiếp xúc Internet; hạn chế đường đi ngang giữa các vùng.\n- **VPN**: kênh mã hoá nối hai mạng hoặc người dùng với mạng nội bộ.\n- **IDS/IPS**: phát hiện hoặc chặn hành vi tấn công.\n- **Zero trust**: xác thực danh tính và trạng thái thiết bị cho mỗi yêu cầu, cấp quyền tối thiểu, ghi log mọi thứ.\n- **Mã hoá khi truyền** bằng TLS, kể cả giữa các dịch vụ nội bộ.\n- Cẩn thận với các tầng tường lửa chồng nhau: Docker có thể mở cổng đi vòng qua `ufw`.\n\n```bash\nsudo ufw default deny incoming\nsudo ufw allow 22/tcp      # SSH, nên giới hạn theo IP nguồn nếu được\nsudo ufw allow 443/tcp\nsudo ufw enable\nss -tlnp                   # xem những cổng thật sự đang nghe\n```\n\n### Lỗi hay gặp\n- Mở `0.0.0.0/0` cho SSH hoặc cơ sở dữ liệu \"tạm thời\" rồi quên đóng.\n- Tin rằng mạng nội bộ là an toàn nên các dịch vụ bên trong không xác thực lẫn nhau.\n- Chỉ có tường lửa vành đai, không có lớp phòng thủ nào bên trong.\n\n### Tự kiểm tra\n- Vì sao tách tầng dữ liệu vào subnet riêng làm giảm thiệt hại khi tầng web bị chiếm?\n- Zero trust khác mô hình phòng thủ vành đai ở điểm nào?",
+  "lessons": [
+   {
+    "href": "/courses/iao201c-introduction-to-information-assurance/learn?lessonSlug=iao201c-4-1-network-security",
+    "ten": "4.1 — An ninh mạng cơ bản",
+    "nguon": "Introduction to Information Assurance · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IAO201c"
+   },
+   {
+    "href": "/courses/nwc303-network-connectivity/learn?lessonSlug=nwc303-8-1-security",
+    "ten": "8.1 — An ninh mạng cơ bản",
+    "nguon": "Network Connectivity · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "NWC303"
+   },
+   {
+    "href": "/courses/linux-bash/learn?lessonSlug=lnx-9-5-tuong-lua",
+    "ten": "9.5 — Tường lửa, và gói tin thật ra dừng ở đâu",
+    "nguon": "Linux & Bash · Chương 9",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-12-3-cong-mo-ra-internet",
+    "ten": "12.3 — Chỉ mở đúng cổng: ss, ufw, và cách Docker đi vòng qua tường lửa của bạn",
+    "nguon": "Deploy lên VPS · Chương 12",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-5-1-networking-security",
+    "ten": "5.1 — Mạng & bảo mật đám mây",
+    "nguon": "Cloud Computing · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Cloud, Container & K8s Security": {
+  "body": "Bảo mật trên cloud dựa trên một thực tế: nhà cung cấp lo an toàn của hạ tầng, còn bạn lo an toàn của những gì bạn cấu hình và triển khai trên đó. Phần lớn vụ rò rỉ dữ liệu trên cloud không đến từ kỹ thuật tấn công cao siêu mà từ cấu hình sai: bucket công khai, quyền quá rộng, bí mật nằm trong code.\n\nKhoá này đi theo ba lớp: danh tính và quyền (IAM chặt chẽ), container (image sạch, chạy không đặc quyền) và cụm Kubernetes (RBAC, chính sách mạng, quản lý bí mật).\n\n### Vì sao cần biết\n- Cấu hình sai là nguyên nhân hàng đầu của sự cố cloud, và nó là việc của người thiết kế.\n- Chuỗi cung ứng phần mềm (image, thư viện phụ thuộc) là bề mặt tấn công ngày càng được chú ý.\n\n### Ý chính cần nắm\n- **Least privilege**: cấp đúng quyền cần thiết, đúng thời gian cần thiết; ưu tiên thông tin xác thực tạm thời.\n- **Bí mật**: không đặt trong code hay image; dùng dịch vụ quản lý bí mật và xoay vòng định kỳ.\n- **Image**: dùng base image nhỏ, quét lỗ hổng bằng công cụ như Trivy hoặc Docker Scout, ghim phiên bản, theo dõi SBOM.\n- **Container**: không chạy bằng root, bỏ bớt capability, hệ file gốc chỉ đọc khi có thể; nhóm `docker` thực chất tương đương quyền root trên máy chủ.\n- **K8s**: RBAC tối thiểu, NetworkPolicy để hạn chế pod nói chuyện với pod, không dùng chế độ privileged, bật audit log.\n- **Mã hoá** dữ liệu lúc lưu và lúc truyền; bật log truy cập và cảnh báo hành vi bất thường.\n\n```yaml\nsecurityContext:\n  runAsNonRoot: true\n  readOnlyRootFilesystem: true\n  allowPrivilegeEscalation: false\n  capabilities:\n    drop: [\"ALL\"]\n```\n\n### Lỗi hay gặp\n- Gắn quyền quản trị rộng cho một role \"cho nhanh\" và không bao giờ thu hẹp lại.\n- Quét image một lần lúc build rồi không quét lại, trong khi lỗ hổng mới liên tục được công bố.\n- Lưu Secret của K8s như dữ liệu an toàn trong khi mặc định nó chỉ được mã hoá base64.\n\n### Tự kiểm tra\n- Vì sao cho một người dùng vào nhóm `docker` cũng gần như trao quyền root cho họ?\n- Mô hình trách nhiệm chia sẻ quy định phần bảo mật nào là của bạn khi dùng một máy ảo?",
+  "lessons": [
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-5-1-networking-security",
+    "ten": "5.1 — Mạng & bảo mật đám mây",
+    "nguon": "Cloud Computing · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-6-5-quet-chuoi-cung-ung",
+    "ten": "6.5 — Quét lỗ hổng, SBOM và chuỗi cung ứng",
+    "nguon": "Docker · Chương 6",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-15-2-rootless-podman",
+    "ten": "15.2 — Bảo mật sâu hơn: nhóm docker, Docker rootless, userns-remap và Podman",
+    "nguon": "Docker · Chương 15",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-13-3-leo-thang",
+    "ten": "13.3 — Đặc quyền: SUID, capabilities, quyền file, TOCTOU và rò qua /proc",
+    "nguon": "Operating Systems for Developers · Chương 13",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Cloud Architecture chuyên sâu": {
+  "body": "Đây là khoá gom mọi thứ phía trước thành kỹ năng thiết kế: nhận một yêu cầu nghiệp vụ mơ hồ và biến thành một kiến trúc cụ thể, có lý do cho từng lựa chọn. Kiến trúc sư giỏi không phải người thuộc nhiều dịch vụ nhất, mà là người hỏi đúng câu hỏi (cần chịu mất bao nhiêu dữ liệu, ngừng bao lâu, ngân sách bao nhiêu) rồi chấp nhận đánh đổi một cách có ý thức.\n\n### Vì sao cần biết\n- Đây là phần phân biệt người dựng được hệ thống chạy với người thiết kế được hệ thống đáng tin, an toàn và hợp túi tiền.\n- Phỏng vấn và chứng chỉ ở cấp kiến trúc sư đều xoay quanh các tình huống đánh đổi.\n\n### Ý chính cần nắm\n- **Well-Architected Framework**: khung sáu trụ cột (vận hành, bảo mật, tin cậy, hiệu năng, chi phí, bền vững) để đánh giá mọi kiến trúc.\n- **Landing zone đa tài khoản**: tách tài khoản theo môi trường hoặc nhóm, chính sách tập trung, log và bảo mật tập trung.\n- **HA/DR**: chọn chiến lược theo RTO (ngừng tối đa chấp nhận được) và RPO (mất dữ liệu tối đa chấp nhận được).\n- **Chọn nền tảng tính toán**: VM, container, serverless, mỗi loại đổi chi phí lấy mức kiểm soát.\n- **FinOps**: gắn tag, đặt ngân sách và cảnh báo, chọn đúng cỡ, dùng cam kết hoặc dung lượng dư hợp lý.\n- **Đối chiếu đa cloud**: cùng khái niệm, khác tên dịch vụ.\n- **Chứng chỉ** như AWS Solutions Architect Associate và Professional là cách có cấu trúc để kiểm chứng kiến thức.\n\nMột cách làm việc thực tế:\n1. Làm rõ yêu cầu chức năng và phi chức năng (tải, độ trễ, tuân thủ, RTO/RPO, ngân sách).\n2. Phác thảo vài phương án và nêu rõ đánh đổi của từng phương án.\n3. Chọn một phương án, ghi lại quyết định và lý do (architecture decision record).\n4. Đánh giá lại theo sáu trụ cột và xem điểm yếu nào còn lại.\n\n### Lỗi hay gặp\n- Thiết kế quá mức cho tải chưa từng tồn tại: đa vùng, Kubernetes, hàng đợi cho một ứng dụng vài trăm người dùng.\n- Không hỏi về RTO/RPO nên chọn chiến lược khôi phục quá đắt hoặc quá yếu.\n- Quên chi phí vận hành con người khi so sánh \"tự quản\" với \"dịch vụ managed\".\n\n### Tự kiểm tra\n- Với một ứng dụng chấp nhận mất tối đa 5 phút dữ liệu và ngừng tối đa 1 giờ, bạn có cần hệ thống hoạt động đồng thời ở hai vùng không? Vì sao?\n- Hãy nêu một quyết định bạn đổi chi phí lấy độ tin cậy, và ngược lại.",
+  "lessons": [
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-4-1-network-architecture",
+    "ten": "4.1 — Mạng & thiết kế well-architected",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-6-1-cloud-native",
+    "ten": "6.1 — Kiến trúc cloud-native",
+    "nguon": "Cloud Computing · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-3-1-architecture-styles",
+    "ten": "3.1 — Các kiểu kiến trúc",
+    "nguon": "Software Architecture and Design · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWD392"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-8-1-cost-ops-trends",
+    "ten": "8.1 — Chi phí, vận hành & xu hướng",
+    "nguon": "Cloud Computing · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "📚 Học trên cuongthai.com (theo thứ tự) › Khoá Observability & Monitoring": {
+  "body": "Một hệ thống chạy được chưa có nghĩa là bạn biết nó đang làm gì. Observability (khả năng quan sát) là khả năng trả lời câu hỏi \"vì sao nó đang chậm hoặc lỗi?\" chỉ từ dữ liệu hệ thống phát ra, mà không phải sửa code và triển khai lại để thêm log. Thiết kế kiến trúc mà không tính đường quan sát thì giống lắp động cơ vào xe không có đồng hồ.\n\n### Vì sao cần biết\n- Hệ thống phân tán (nhiều dịch vụ, nhiều vùng) hỏng theo cách khó đoán; không có số liệu thì chỉ còn đoán mò.\n- Các cam kết độ tin cậy (SLO) và cảnh báo hợp lý đều dựa trên dữ liệu đo.\n- Chi phí lưu log và metric cũng là một khoản trong hoá đơn cloud cần được kiểm soát.\n\n### Ý chính cần nắm\n- **Ba trụ cột**: log (chuyện gì đã xảy ra, chi tiết), metric (con số theo thời gian, rẻ và dễ cảnh báo), trace (một yêu cầu đi qua những dịch vụ nào và tốn bao lâu ở mỗi chặng).\n- **Log có cấu trúc** (JSON) dễ tìm kiếm hơn chuỗi tự do; gắn một mã tương quan để lần theo một yêu cầu.\n- **Bốn loại metric**: counter, gauge, histogram, summary; cẩn thận với cardinality của nhãn vì quá nhiều giá trị nhãn có thể làm sập hệ thống giám sát.\n- **SLI/SLO và error budget**: đo trải nghiệm người dùng, đặt mục tiêu, và dùng ngân sách lỗi để cân bằng tốc độ phát hành với độ ổn định.\n- **Cảnh báo tốt** là cảnh báo cần người hành động; quá nhiều cảnh báo gây mệt mỏi và bị bỏ qua.\n\n```json\n{\"level\":\"error\",\"msg\":\"payment failed\",\"trace_id\":\"4bf92f35\",\"order_id\":\"A-1042\",\"latency_ms\":1830}\n```\n\n### Lỗi hay gặp\n- Cảnh báo theo CPU thay vì theo triệu chứng người dùng thấy (lỗi, độ trễ).\n- Đưa mã người dùng hoặc email vào nhãn metric, gây bùng nổ số chuỗi dữ liệu.\n- Lưu mọi thứ vô thời hạn mà không tính chi phí.\n\n### Tự kiểm tra\n- Một SLO 99,9% mỗi tháng tương ứng với khoảng bao nhiêu phút ngừng được phép?\n- Khi nào bạn dùng log, khi nào dùng metric, khi nào cần trace?",
+  "lessons": [
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-0-1-vi-sao",
+    "ten": "0.1 — Cú sự cố bạn không nhìn thấy từ bên trong",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Mục 0",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-0-2-ba-tru-cot",
+    "ten": "0.2 — Ba trụ cột, và cái thứ tư ai cũng quên",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Mục 0",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-4-1-bon-loai-chi-so",
+    "ten": "4.1 — Chỉ số là gì, và bốn loại của nó",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 4",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-6-1-span-la-gi",
+    "ten": "6.1 — Một span là một khoảng thời gian có cha",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 6",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/observability-monitoring/learn?lessonSlug=obs-9-3-slo-va-toc-do-dot",
+    "ten": "9.3 — SLO, ngân sách lỗi, tốc độ đốt",
+    "nguon": "Observability & Monitoring (Node.js trên VPS) · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Nền tảng Cloud › Cloud Architect làm gì": {
+  "body": "Cloud Architect là người dịch yêu cầu nghiệp vụ thành thiết kế hạ tầng: chọn dịch vụ nào, nối chúng ra sao, đặt chuẩn gì về bảo mật, chi phí, độ sẵn sàng cho cả tổ chức. Nếu lập trình viên hỏi \"viết hàm này thế nào?\" thì kiến trúc sư hỏi \"hệ thống này nên gồm những khối nào, và điều gì xảy ra khi một khối hỏng?\".\n\n### Công việc thường ngày\n- Làm việc với các bên liên quan để làm rõ yêu cầu: tải dự kiến, độ trễ, tuân thủ, ngân sách, thời gian phục hồi chấp nhận được.\n- Vẽ sơ đồ kiến trúc, so sánh phương án, ghi lại quyết định cùng lý do.\n- Đặt tiêu chuẩn chung: mẫu mạng, mô hình phân quyền, gắn tag, chính sách sao lưu.\n- Review thiết kế của các nhóm khác và hỗ trợ khi chuyển hệ thống lên cloud.\n- Theo dõi chi phí và rủi ro sau khi hệ thống chạy thật.\n\n### Cần những gì\nNền tảng Linux, mạng và container; nắm sâu ít nhất một cloud; hiểu bảo mật; đọc được hạ tầng dạng code; và kỹ năng giao tiếp, vì phần lớn công việc là thuyết phục và thống nhất với người khác.",
+  "lessons": [
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-0-1-overview",
+    "ten": "Tổng quan: Điện toán đám mây",
+    "nguon": "Cloud Computing · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-0-1-overview",
+    "ten": "Tổng quan: Điện toán đám mây trên AWS",
+    "nguon": "Cloud Computing · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/software-architecture-and-design/learn?lessonSlug=swd392-3-1-architecture-styles",
+    "ten": "3.1 — Các kiểu kiến trúc",
+    "nguon": "Software Architecture and Design · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "SWD392"
+   }
+  ]
+ },
+ "Nền tảng Cloud › Mô hình dịch vụ IaaS / PaaS / SaaS & trách nhiệm chia sẻ": {
+  "body": "Khi chạy trên cloud, câu hỏi đầu tiên là: ai quản lý phần nào? Mô hình dịch vụ trả lời bằng cách chia chồng công nghệ (mạng, máy chủ, hệ điều hành, runtime, ứng dụng, dữ liệu) giữa nhà cung cấp và bạn. Hình dung ba cách ăn tối: tự nấu hoàn toàn (tự lo mọi thứ), thuê bếp đã có sẵn dụng cụ (bạn chỉ nấu), hoặc ra nhà hàng (chỉ việc ăn).\n\n- **IaaS** (Infrastructure as a Service): nhà cung cấp lo phần cứng và ảo hoá; bạn lo hệ điều hành, runtime, ứng dụng, dữ liệu. Ví dụ: máy ảo EC2.\n- **PaaS** (Platform as a Service): nhà cung cấp còn lo cả hệ điều hành và runtime; bạn chỉ mang mã nguồn và dữ liệu. Ví dụ: Elastic Beanstalk, App Service, Cloud Run.\n- **SaaS** (Software as a Service): dùng phần mềm hoàn chỉnh, bạn chỉ quản lý dữ liệu và cấu hình của mình. Ví dụ: Gmail, Microsoft 365.\n- **FaaS và serverless** là bước xa hơn của PaaS: chạy từng hàm theo sự kiện, không quản máy chủ.\n\n### Mô hình trách nhiệm chia sẻ\nNhà cung cấp chịu trách nhiệm cho an toàn **của** cloud (trung tâm dữ liệu, phần cứng, tầng ảo hoá). Bạn chịu trách nhiệm cho an toàn **trên** cloud: cấu hình, quyền truy cập, dữ liệu, bản vá hệ điều hành trên máy ảo của mình. Càng đi từ IaaS lên SaaS, phần của bạn càng ít nhưng không bao giờ về không: dữ liệu và quyền truy cập luôn là của bạn.\n\n### Ý chính\n- Mức quản lý càng cao thì bạn bớt việc vận hành nhưng cũng mất bớt quyền tuỳ biến.\n- Lựa chọn mô hình ảnh hưởng đến đội ngũ cần có, chi phí và cách ứng phó sự cố.\n- Cũng cần phân biệt mô hình triển khai: public, private, hybrid, multi-cloud.\n\n### Lỗi hay gặp\n- Cho rằng dùng dịch vụ managed nghĩa là nhà cung cấp lo luôn cả bảo mật dữ liệu của bạn.\n- Quên vá hệ điều hành trên máy ảo IaaS.\n\n### Tự kiểm tra\n- Với một cơ sở dữ liệu managed, bạn vẫn chịu trách nhiệm những gì?\n- Vì sao một bucket lưu trữ bị công khai nhầm là lỗi của khách hàng chứ không phải của nhà cung cấp?",
+  "lessons": [
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-2-1-service-deployment-models",
+    "ten": "2.1 — Mô hình dịch vụ & triển khai",
+    "nguon": "Cloud Computing · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-5-1-networking-security",
+    "ten": "5.1 — Mạng & bảo mật đám mây",
+    "nguon": "Cloud Computing · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-0-1-overview",
+    "ten": "Tổng quan: Điện toán đám mây trên AWS",
+    "nguon": "Cloud Computing · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-quiz-2",
+    "ten": "Quiz 2 — Mô hình dịch vụ & triển khai",
+    "nguon": "Cloud Computing · Chapter 2",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "Nền tảng Cloud › Region, Availability Zone & Edge": {
+  "body": "Cloud không phải một cục duy nhất. Nhà cung cấp đặt hạ tầng ở nhiều nơi trên thế giới, và kiến trúc sư quyết định hệ thống của mình nằm ở đâu.\n\n- **Region**: một khu vực địa lý (ví dụ một thành phố hoặc quốc gia) chứa nhiều trung tâm dữ liệu.\n- **Availability Zone (AZ)**: một hoặc vài trung tâm dữ liệu riêng biệt trong cùng một region, có nguồn điện, làm mát, mạng độc lập, nối với nhau bằng mạng độ trễ thấp.\n- **Edge**: các điểm hiện diện (PoP) rải rộng, dùng cho CDN và DNS để đưa nội dung gần người dùng hơn.\n\n### Ý chính\n- Rải các bản sao qua **nhiều AZ** trong một region để chịu được hỏng một trung tâm dữ liệu mà vẫn nhận độ trễ thấp.\n- Dùng **nhiều region** khi cần chịu được sự cố cả khu vực, gần người dùng ở xa, hoặc tuân thủ yêu cầu lưu dữ liệu tại một quốc gia; đổi lại phức tạp hơn và đắt hơn.\n- Chọn region theo độ trễ tới người dùng, quy định về nơi lưu dữ liệu, dịch vụ có sẵn ở đó, và chi phí; không phải dịch vụ nào cũng có mặt ở mọi region.\n- Lưu lượng đi giữa AZ hoặc region có thể bị tính phí truyền dữ liệu; kiểm tra trang giá hiện hành.\n\n### Lỗi hay gặp\n- Đặt mọi thứ vào một AZ rồi gọi đó là \"có độ sẵn sàng cao\".\n- Quên rằng tên AZ ở mỗi tài khoản có thể ánh xạ khác nhau tới vị trí vật lý.",
+  "lessons": [
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-4-1-network-architecture",
+    "ten": "4.1 — Mạng & thiết kế well-architected",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-8-1-cdn",
+    "ten": "8.1 — CDN hoạt động thế nào: edge, origin và PoP",
+    "nguon": "Networking for Developers · Chương 8",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-2-hai-may-can-bang-tai",
+    "ten": "14.2 — Hai máy sau bộ cân bằng tải: kiểm sức khoẻ, trạng thái, deploy lần lượt",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Thiết kế theo Well-Architected › Sáu trụ cột Well-Architected": {
+  "body": "Well-Architected Framework là bộ câu hỏi và nguyên tắc để đánh giá một kiến trúc cloud, ban đầu do AWS đưa ra, và các nhà cung cấp lớn khác cũng có khung tương tự. Nó giống danh sách kiểm tra của một giám định viên nhà cửa: không bảo bạn xây thế nào, nhưng chỉ ra các khía cạnh phải xem xét trước khi nhận bàn giao.\n\nSáu trụ cột:\n1. **Operational Excellence (vận hành)**: triển khai, giám sát, cải tiến liên tục; hạ tầng là code; thay đổi nhỏ và có thể đảo ngược.\n2. **Security (bảo mật)**: danh tính mạnh, least privilege, bảo vệ dữ liệu, ghi vết mọi hành động, tự động hoá kiểm soát.\n3. **Reliability (tin cậy)**: chịu được hỏng hóc và tự phục hồi; thiết kế cho sự cố, sao lưu, kiểm thử khôi phục, co giãn theo nhu cầu.\n4. **Performance Efficiency (hiệu năng)**: chọn đúng loại tài nguyên cho tải, theo dõi và điều chỉnh khi nhu cầu đổi.\n5. **Cost Optimization (chi phí)**: trả đúng cho thứ cần, loại bỏ lãng phí, hiểu chi phí đến từ đâu.\n6. **Sustainability (bền vững)**: giảm tác động môi trường, tận dụng tài nguyên hiệu quả.\n\n### Ý chính\n- Các trụ cột **xung đột nhau** nên kiến trúc là chuyện đánh đổi: thêm bản sao tăng độ tin cậy nhưng tăng chi phí.\n- Dùng khung như một vòng review định kỳ, không phải bài thi một lần; AWS có công cụ Well-Architected Tool để hỗ trợ.\n- Thứ tự ưu tiên giữa các trụ cột phụ thuộc vào nghiệp vụ: hệ thống thanh toán ưu tiên độ tin cậy và bảo mật hơn chi phí.\n\n### Lỗi hay gặp\n- Coi khung là checklist cứng, tick đủ ô mà không hiểu lý do.\n- Chỉ tối ưu một trụ cột (thường là chi phí) mà bỏ qua các trụ còn lại.\n\n### Tự kiểm tra\n- Một quyết định nào làm tăng độ tin cậy nhưng giảm tối ưu chi phí? Bạn chấp nhận nó khi nào?\n- Vì sao \"thiết kế để chịu sự cố\" nằm ở trụ cột tin cậy chứ không phải trụ cột vận hành?",
+  "lessons": [
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-4-1-network-architecture",
+    "ten": "4.1 — Mạng & thiết kế well-architected",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   }
+  ]
+ },
+ "Thiết kế theo Well-Architected › High Availability & Disaster Recovery (RTO/RPO)": {
+  "body": "High Availability (HA) là thiết kế để hệ thống tiếp tục hoạt động khi một thành phần hỏng. Disaster Recovery (DR) là kế hoạch khôi phục sau sự cố lớn (mất cả một AZ, một region, hoặc dữ liệu bị xoá). Hai khái niệm đo lường chính:\n\n- **RTO** (Recovery Time Objective): thời gian ngừng tối đa chấp nhận được.\n- **RPO** (Recovery Point Objective): lượng dữ liệu mất tối đa chấp nhận được, tính bằng thời gian.\n\n### Bốn chiến lược DR phổ biến\nĐi từ rẻ và chậm đến đắt và nhanh:\n1. **Backup and restore**: sao lưu định kỳ, khôi phục khi cần; RTO/RPO tính bằng giờ.\n2. **Pilot light**: giữ phần lõi (thường là dữ liệu) luôn chạy ở nơi dự phòng, bật phần còn lại khi sự cố.\n3. **Warm standby**: bản thu nhỏ của toàn hệ thống luôn chạy, nâng lên khi cần.\n4. **Multi-site active/active**: chạy đầy đủ ở nhiều nơi cùng lúc; RTO/RPO gần bằng không nhưng đắt nhất.\n\n### Ý chính\n- Chọn chiến lược theo RTO/RPO mà nghiệp vụ thật sự yêu cầu, đừng chọn mặc định cái đắt nhất.\n- Nhiều AZ giải quyết hỏng một trung tâm dữ liệu; nhiều region mới giải quyết sự cố cả khu vực.\n- **Bản sao lưu chưa từng thử khôi phục thì chưa phải bản sao lưu**: kiểm thử khôi phục định kỳ.\n- Nhân bản dữ liệu bảo vệ khỏi hỏng phần cứng nhưng không bảo vệ khỏi việc xoá nhầm, vì lệnh xoá cũng được nhân bản.\n\n### Lỗi hay gặp\n- Không bao giờ diễn tập DR, đến lúc thật mới phát hiện tài liệu hướng dẫn đã lỗi thời.\n- Tính sao lưu mà quên khôi phục cấu hình, bí mật và DNS.",
+  "lessons": [
+   {
+    "href": "/courses/iap301-policy-development-in-information-assurance/learn?lessonSlug=iap301-6-1-incident-bcp",
+    "ten": "6.1 — Ứng phó sự cố & liên tục kinh doanh (BCP/DRP)",
+    "nguon": "Policy Development in Information Assurance · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "IAP301"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-2-hai-may-can-bang-tai",
+    "ten": "14.2 — Hai máy sau bộ cân bằng tải: kiểm sức khoẻ, trạng thái, deploy lần lượt",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/courses/docker/learn?lessonSlug=dk-7-5-sao-luu",
+    "ten": "7.5 — Sao lưu, khôi phục, di chuyển",
+    "nguon": "Docker · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-10-3-noi-doi",
+    "ten": "10.3 — Bản sao lưu HỎNG và cú phục hồi NÓI DỐI",
+    "nguon": "Deploy lên VPS · Chương 10",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/postgresql/learn?lessonSlug=postgresql-15-3-nhan-ban",
+    "ten": "15.3 — Nhân bản streaming, dựng thật",
+    "nguon": "PostgreSQL · Chương 15",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Thiết kế theo Well-Architected › Serverless vs Container vs VM": {
+  "body": "Ba cách phổ biến để chạy mã trên cloud, mỗi cách đổi giữa mức kiểm soát và công vận hành:\n\n- **Máy ảo (VM)**: bạn có một hệ điều hành đầy đủ, toàn quyền cấu hình, nhưng phải tự vá, tự co giãn, tự quản. Hợp với phần mềm cũ, yêu cầu đặc biệt về hệ điều hành hoặc driver.\n- **Container**: đóng gói ứng dụng thành image, chạy trên dịch vụ container hoặc Kubernetes. Cân bằng giữa tính di động, mật độ chạy dày và mức kiểm soát. Hợp với dịch vụ chạy liên tục, kiến trúc microservices.\n- **Serverless (hàm)**: gửi hàm, nhà cung cấp lo toàn bộ hạ tầng và co giãn theo sự kiện, tính tiền theo mức dùng. Hợp với tải thất thường, xử lý theo sự kiện, tác vụ ngắn.\n\n### Cách đánh đổi\n- **Chi phí**: tải đều và cao thường rẻ hơn trên VM hoặc container; tải rất thưa hoặc đột biến thường rẻ hơn với serverless. Luôn tính thử theo số liệu hiện hành thay vì đoán.\n- **Khởi động nguội (cold start)**: hàm serverless có thể trễ ở lần gọi đầu sau lúc nghỉ; không hợp với yêu cầu độ trễ cực chặt nếu không xử lý riêng.\n- **Giới hạn**: serverless thường có giới hạn thời gian chạy, bộ nhớ, kích thước gói; kiểm tra tài liệu hiện hành.\n- **Khoá nhà cung cấp**: càng lên cao càng gắn với dịch vụ riêng của một cloud; container ít bị khoá nhất.\n- **Năng lực đội ngũ**: Kubernetes mạnh nhưng cần người vận hành; đừng chọn công nghệ vượt quá khả năng đội có.\n\n### Lỗi hay gặp\n- Chọn Kubernetes cho hệ thống nhỏ chỉ vì thịnh hành.\n- Dùng serverless cho tải nặng, chạy liên tục rồi ngạc nhiên vì hoá đơn.\n- Chia hệ thống thành quá nhiều hàm nhỏ, làm khó gỡ lỗi và theo dõi.\n\n### Tự kiểm tra\n- Một API nhận vài trăm yêu cầu mỗi ngày, hầu như không có tải ban đêm: bạn nghiêng về lựa chọn nào và vì sao?\n- Container khác máy ảo ở điểm nào về kernel?",
+  "lessons": [
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-3-1-virtualization-containers",
+    "ten": "3.1 — Ảo hoá & container",
+    "nguon": "Cloud Computing · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-1-1-compute",
+    "ten": "1.1 — Compute: EC2 & Lambda",
+    "nguon": "Cloud Computing · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-6-1-cloud-native",
+    "ten": "6.1 — Kiến trúc cloud-native",
+    "nguon": "Cloud Computing · Chapter 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   },
+   {
+    "href": "/simulation?scenario=docker-container",
+    "ten": "Container không phải máy ảo nhẹ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Mạng, Danh tính & Bảo mật › VPC, subnet, routing & private connectivity": {
+  "body": "VPC (Virtual Private Cloud) là mạng riêng ảo của bạn bên trong cloud: bạn chọn dải địa chỉ, chia thành subnet, quyết định gói tin đi đâu. Hình dung bạn thuê một tầng của toà nhà: bạn tự chia phòng, đặt cửa và quyết định ai được vào phòng nào.\n\n### Các khối chính\n- **CIDR và subnet**: chọn dải như `10.0.0.0/16` rồi cắt thành các `/24` theo từng AZ và từng vai trò.\n- **Subnet công khai và riêng tư**: công khai có route ra Internet gateway; riêng tư không nhận kết nối trực tiếp từ Internet.\n- **Bảng route**: quyết định đích nào đi qua gateway nào.\n- **NAT gateway**: cho máy trong subnet riêng đi ra Internet (tải bản vá) mà Internet không gọi ngược vào được.\n- **Security group và network ACL**: tường lửa ở mức instance (có trạng thái) và mức subnet.\n- **Kết nối giữa mạng**: VPC peering, transit gateway, endpoint riêng (kiểu PrivateLink) để gọi dịch vụ mà không đi qua Internet công khai, VPN hoặc đường kết nối riêng về trung tâm dữ liệu on-premise.\n\n### Mẫu ba tầng điển hình\nLoad balancer đặt ở subnet công khai; máy ứng dụng ở subnet riêng; cơ sở dữ liệu ở subnet riêng thứ hai, chỉ nhận kết nối từ tầng ứng dụng. Mỗi tầng trải trên ít nhất hai AZ.\n\n### Lỗi hay gặp\n- Chọn CIDR trùng với mạng khác (VPC khác hoặc mạng công ty) rồi không thể peering hay nối VPN.\n- Chọn dải quá nhỏ, hết địa chỉ khi mở rộng.\n- Đặt cơ sở dữ liệu ở subnet công khai.\n- Một NAT gateway cho nhiều AZ làm thành điểm lỗi đơn lẻ và có thể tốn phí truyền dữ liệu giữa AZ.\n\n### Tự kiểm tra\n- Vì sao một subnet được gọi là \"công khai\" chỉ nhờ bảng route chứ không chỉ nhờ tên?\n- Làm sao để hai VPC cùng dải `10.0.0.0/16` nói chuyện được với nhau?",
+  "lessons": [
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-2-1-ipv4-cidr",
+    "ten": "2.1 — IPv4, CIDR và chia subnet bằng tay",
+    "nguon": "Networking for Developers · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-2-3-nat",
+    "ten": "2.3 — NAT, dải IP riêng và mạng Docker",
+    "nguon": "Networking for Developers · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/networking-for-developers/learn?lessonSlug=netdev-2-2-dinh-tuyen",
+    "ten": "2.2 — Bảng định tuyến, gateway và traceroute",
+    "nguon": "Networking for Developers · Chương 2",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-4-1-network-architecture",
+    "ten": "4.1 — Mạng & thiết kế well-architected",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/simulation?scenario=ip-journey",
+    "ten": "Một gói tin ra Internet — ARP, định tuyến và NAT",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Mạng, Danh tính & Bảo mật › IAM & least privilege": {
+  "body": "IAM (Identity and Access Management) quyết định ai (hoặc cái gì) được làm gì trên tài nguyên nào. Nguyên tắc cốt lõi là **least privilege**: chỉ cấp đúng quyền cần để hoàn thành việc, không hơn.\n\n### Ý chính\n- **Danh tính**: người dùng, nhóm, và đặc biệt là **role** cho ứng dụng và dịch vụ; role cấp thông tin xác thực **tạm thời** thay vì khoá dài hạn nằm trong code hoặc cấu hình.\n- **Policy**: tài liệu mô tả hành động nào được phép hoặc bị từ chối, trên tài nguyên nào, trong điều kiện nào; mặc định là từ chối, và từ chối tường minh luôn thắng.\n- **MFA** cho mọi tài khoản con người, đặc biệt tài khoản có quyền quản trị; không dùng tài khoản gốc (root) cho công việc hằng ngày.\n- Bắt đầu hẹp rồi mở dần theo nhu cầu thật; xem lại quyền không dùng và gỡ bỏ định kỳ.\n- Ghi log mọi lời gọi API quan trọng để truy vết.\n\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Effect\": \"Allow\",\n    \"Action\": [\"s3:GetObject\"],\n    \"Resource\": \"arn:aws:s3:::ten-bucket-cua-ban/bao-cao/*\"\n  }]\n}\n```\nPolicy trên chỉ cho đọc đối tượng trong một thư mục của một bucket, không cho liệt kê hay xoá.\n\n### Lỗi hay gặp\n- Cấp `*` cho hành động và tài nguyên \"cho nhanh\" rồi quên thu hẹp.\n- Commit khoá truy cập lên Git.\n- Dùng chung một tài khoản cho cả nhóm nên không biết ai làm gì.",
+  "lessons": [
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-5-1-networking-security",
+    "ten": "5.1 — Mạng & bảo mật đám mây",
+    "nguon": "Cloud Computing · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/authentication/learn?lessonSlug=auth-9-2-rbac",
+    "ten": "9.2 — RBAC, và cái boolean rồi sẽ thành bốn mươi cái boolean",
+    "nguon": "Authentication · Chương 9",
+    "kieu": "bai-doc"
+   }
+  ]
+ },
+ "Mạng, Danh tính & Bảo mật › Landing zone & đa tài khoản": {
+  "body": "Khi tổ chức lớn lên, một tài khoản cloud duy nhất không còn đủ: mọi môi trường và nhóm chung một chỗ thì rủi ro lan rộng, quyền chồng chéo, hoá đơn khó chia. **Landing zone** là nền móng cho môi trường đa tài khoản: một cấu trúc có sẵn các tài khoản, chính sách bảo vệ, log và mạng chung, để các nhóm có thể xây ứng dụng trên đó an toàn ngay từ đầu.\n\nHình dung một khu đô thị được quy hoạch: có đường, điện, nước, luật xây dựng sẵn; mỗi chủ đầu tư chỉ cần xây nhà trên lô của mình.\n\n### Thành phần thường có\n- **Cấu trúc tổ chức**: nhóm tài khoản theo môi trường (production, non-production), theo nhóm hoặc theo mức rủi ro.\n- **Tài khoản chuyên dụng**: tài khoản bảo mật, tài khoản log tập trung, tài khoản mạng dùng chung.\n- **Guardrail (chính sách bảo vệ)**: quy tắc áp dụng cho cả nhóm tài khoản, ví dụ cấm tạo tài nguyên ở region không được phép hoặc cấm tắt log kiểm toán.\n- **Đăng nhập tập trung** (SSO) và phân quyền theo vai trò thay vì tạo người dùng riêng ở từng tài khoản.\n- **Log và giám sát tập trung** để đội bảo mật xem được toàn bộ.\n- **Gắn tag và quản lý chi phí** theo tài khoản và đơn vị.\n- **Dựng bằng IaC** để mọi tài khoản mới ra đời đúng chuẩn.\n\n### Vì sao tách tài khoản\nTài khoản là ranh giới cô lập mạnh nhất: một sự cố hoặc một quyền cấp sai trong tài khoản này khó lan sang tài khoản khác, và giới hạn dịch vụ cũng tính riêng theo tài khoản.\n\n### Lỗi hay gặp\n- Dồn mọi môi trường vào một tài khoản rồi cố tách bằng quy ước đặt tên.\n- Để quyền quản trị ở từng tài khoản không ai kiểm soát.\n- Không có tài khoản log riêng, nên kẻ tấn công xoá được dấu vết ngay trong tài khoản bị chiếm.\n\n### Tự kiểm tra\n- Vì sao nên lưu log kiểm toán ở một tài khoản tách biệt?\n- Guardrail khác với một policy IAM gắn cho một người dùng ở điểm nào?"
+ },
+ "Chi phí, Đa cloud & Chứng chỉ › FinOps & tối ưu chi phí": {
+  "body": "FinOps là thực hành quản lý chi phí cloud như trách nhiệm chung của kỹ thuật, tài chính và nghiệp vụ, chứ không phải việc của riêng bộ phận kế toán. Vì cloud tính tiền theo mức dùng, một cấu hình sai hay một tài nguyên quên tắt cũng tạo ra hoá đơn ngay lập tức.\n\n### Ý chính\n- **Hiển thị**: gắn tag (môi trường, nhóm, dự án) để biết ai tiêu tiền vào đâu; xem báo cáo chi phí theo tag.\n- **Ngân sách và cảnh báo**: đặt ngân sách và báo khi vượt ngưỡng dự báo, không chờ cuối tháng.\n- **Chọn đúng cỡ (right-sizing)**: nhiều máy dùng chưa tới một phần nhỏ CPU, hãy giảm cỡ theo số liệu giám sát.\n- **Mô hình mua**: theo nhu cầu (linh hoạt), cam kết dùng một thời gian để được giảm (reserved hoặc savings plan), dung lượng dư giá rẻ có thể bị thu hồi (spot) hợp với việc chịu được gián đoạn.\n- **Tắt thứ không dùng**: môi trường thử nghiệm ngoài giờ, ổ đĩa mồ côi, snapshot cũ, địa chỉ IP không gắn.\n- **Chi phí ẩn**: truyền dữ liệu ra ngoài và giữa vùng, số lần gọi API, lưu log; có khi lớn hơn tiền lưu trữ.\n- Mức giá và chương trình giảm giá thay đổi; luôn tra trang giá và công cụ tính chi phí hiện hành của nhà cung cấp.\n\n### Lỗi hay gặp\n- Tối ưu chi phí bằng cách cắt bớt độ tin cậy mà không nói với nghiệp vụ.\n- Mua cam kết dài hạn cho tải chưa ổn định.\n- Không gắn tag ngay từ đầu nên về sau không phân bổ được chi phí.\n\n### Tự kiểm tra\n- Tải nào hợp với spot, tải nào không?\n- Vì sao một hệ thống ít lưu trữ vẫn có thể bị hoá đơn cao do truyền dữ liệu?",
+  "lessons": [
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-8-1-cost-ops-trends",
+    "ten": "8.1 — Chi phí, vận hành & xu hướng",
+    "nguon": "Cloud Computing · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/object-storage/learn?lessonSlug=os-7-1-drivers",
+    "ten": "7.1 — Cái gì thực sự lên hoá đơn",
+    "nguon": "Object Storage (Cloudflare R2) · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/object-storage/learn?lessonSlug=os-7-3-budgets",
+    "ten": "7.3 — Budget, alert, và forensic sau incident",
+    "nguon": "Object Storage (Cloudflare R2) · Chương 7",
+    "kieu": "bai-doc"
+   },
+   {
+    "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
+    "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
+    "nguon": "Deploy lên VPS · Chương 14",
+    "kieu": "video"
+   }
+  ]
+ },
+ "Chi phí, Đa cloud & Chứng chỉ › Azure / Google Cloud tương đương": {
+  "body": "Ba nhà cung cấp lớn (AWS, Microsoft Azure, Google Cloud) có hầu hết các khái niệm giống nhau nhưng đặt tên khác. Học kỹ một cloud rồi ánh xạ sang cloud khác là cách nhanh nhất để thành người đa năng, thay vì học dàn trải từ đầu.\n\n### Bảng ánh xạ gần đúng\n- Máy ảo: EC2, Azure Virtual Machines, Compute Engine.\n- Lưu trữ đối tượng: S3, Blob Storage, Cloud Storage.\n- Cơ sở dữ liệu quan hệ managed: RDS, Azure SQL Database, Cloud SQL.\n- Hàm serverless: Lambda, Azure Functions, Cloud Functions.\n- Mạng ảo: VPC, Virtual Network, VPC (Google có VPC có phạm vi toàn cầu).\n- Kubernetes managed: EKS, AKS, GKE.\n- Danh tính: IAM, Microsoft Entra ID cùng Azure RBAC, Cloud IAM.\n\nĐây chỉ là ánh xạ gần đúng; chi tiết hành vi, hạn mức và cách tính tiền khác nhau, nên đừng giả định tương đương hoàn toàn.\n\n### Khi nào xét đa cloud\nChỉ nên làm khi có lý do rõ (yêu cầu pháp lý, chiến lược chống phụ thuộc, dịch vụ đặc thù của một nhà cung cấp, sáp nhập). Đa cloud làm tăng độ phức tạp vận hành, bảo mật và kỹ năng đội ngũ; dùng container và IaC trung lập giúp giảm khoá nhà cung cấp mà không cần chạy đồng thời nhiều cloud.",
+  "lessons": [
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-4-1-compute-storage",
+    "ten": "4.1 — Điện toán & lưu trữ đám mây",
+    "nguon": "Cloud Computing · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   },
+   {
+    "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-2-1-service-deployment-models",
+    "ten": "2.1 — Mô hình dịch vụ & triển khai",
+    "nguon": "Cloud Computing · Chapter 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CLC301c"
+   }
+  ]
+ },
+ "Chi phí, Đa cloud & Chứng chỉ › AWS Solutions Architect (Associate / Professional)": {
+  "body": "Chứng chỉ AWS Certified Solutions Architect có hai bậc chính: Associate và Professional. Associate kiểm tra khả năng thiết kế hệ thống an toàn, tin cậy, hiệu năng tốt, tối ưu chi phí bằng các dịch vụ AWS; Professional đi sâu hơn vào tình huống phức tạp như nhiều tài khoản, di chuyển hệ thống lớn, tối ưu tổ chức. Nội dung, định dạng và lệ phí thay đổi theo thời gian, vì vậy hãy xem trang chứng chỉ chính thức khi lên kế hoạch.\n\n### Cách chuẩn bị hiệu quả\n- Nắm vững các dịch vụ lõi trước: IAM, VPC, EC2, S3, RDS, load balancing, Auto Scaling.\n- Học theo trụ cột Well-Architected, vì câu hỏi thường là chọn phương án phù hợp nhất cho một yêu cầu về độ tin cậy, bảo mật hoặc chi phí.\n- Tự tay dựng hệ thống nhỏ trên tài khoản thử nghiệm có đặt ngân sách cảnh báo.\n- Làm đề mẫu để quen kiểu câu hỏi tình huống: gạch các đáp án sai rõ ràng, chú ý từ khoá như \"ít chi phí nhất\", \"ít công vận hành nhất\", \"độ sẵn sàng cao\".\n- Quản lý thời gian trong bài thi.\n\n### Lưu ý\nChứng chỉ là cách kiểm chứng kiến thức có cấu trúc, không thay thế kinh nghiệm thiết kế thật. Cách tốt nhất là kết hợp học thi với một dự án cá nhân dựng từ đầu.",
+  "lessons": [
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-5-1-datalake-exam",
+    "ten": "5.1 — Data lake & chiến lược thi",
+    "nguon": "Cloud Computing · Chapter 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   },
+   {
+    "href": "/courses/prc392c-cloud-computing/learn?lessonSlug=prc392c-0-1-overview",
+    "ten": "Tổng quan: Điện toán đám mây trên AWS",
+    "nguon": "Cloud Computing · Course introduction",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRC392c"
+   }
+  ]
+ }
+}

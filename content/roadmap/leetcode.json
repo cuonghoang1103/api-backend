@@ -1,0 +1,1238 @@
+{
+ "Nền tảng › Độ phức tạp Big-O": {
+  "body": "Big-O là cách dân lập trình nói \"thuật toán này chậm đi nhanh cỡ nào khi dữ liệu lớn lên\". Nó không đo bằng giây (vì phụ thuộc máy), mà đếm số bước cơ bản theo kích thước đầu vào `n`, bỏ hằng số và các số hạng nhỏ. Hãy hình dung tìm một tên trong danh bạ: lật từng trang là O(n), mở giữa rồi chia đôi liên tục là O(log n).\n\n### Vì sao cần biết\nMọi đề LeetCode đều kèm giới hạn (ví dụ `n ≤ 10^5`). Giám khảo chấm lời giải của bạn bằng Big-O: lời giải đúng nhưng O(n²) với n = 10^5 (khoảng 10^10 phép) sẽ bị Time Limit Exceeded. Quy tắc nhẩm: máy chấm xử lý chừng 10^8 phép đơn giản mỗi giây, nên nhìn `n` là đoán được độ phức tạp cần nhắm tới.\n\n### Ý chính\n- Các bậc thường gặp, từ nhanh đến chậm: O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ) < O(n!).\n- Gợi ý theo `n`: n ≤ 20 thì chịu được O(2ⁿ) (backtracking/bitmask); n ≤ 500 thì O(n³); n ≤ 5 000 thì O(n²); n ≤ 10^5–10^6 thì cần O(n log n) hoặc O(n).\n- Vòng lặp lồng nhau nhân với nhau; hai đoạn nối tiếp thì cộng rồi giữ số lớn hơn.\n- Chia đôi mỗi bước (binary search, cây cân bằng) cho ra log n; sắp xếp tổng quát là O(n log n).\n- Ngoài thời gian còn có bộ nhớ phụ (space): đệ quy sâu `d` tầng tốn O(d) stack; hash map chứa n phần tử tốn O(n).\n- Big-O thường nói về trường hợp xấu nhất; hãy nói rõ khi bạn đang nói trung bình (ví dụ quicksort O(n log n) trung bình, O(n²) xấu nhất).\n\n### Ví dụ\n```python\ndef has_duplicate_slow(a):           # O(n^2) thời gian, O(1) bộ nhớ\n    for i in range(len(a)):\n        for j in range(i + 1, len(a)):\n            if a[i] == a[j]:\n                return True\n    return False\n\ndef has_duplicate_fast(a):           # O(n) thời gian, O(n) bộ nhớ\n    seen = set()\n    for x in a:\n        if x in seen:\n            return True\n        seen.add(x)\n    return False\n```\nCùng một bài, đổi bộ nhớ lấy thời gian: đây là đánh đổi (trade-off) bạn sẽ nêu đi nêu lại khi phỏng vấn.\n\n### Lỗi hay gặp\n- Quên rằng `list.insert(0, x)`, `x in list`, cắt chuỗi `s[i:]` đều là O(n), làm vòng lặp ngoài tưởng O(n) thực ra O(n²).\n- Không tính chi phí ẩn của thư viện, ví dụ `sorted()` bên trong vòng lặp.\n- Nhầm n của hai đầu vào khác nhau: duyệt hai mảng độ dài `m` và `n` là O(m + n), không phải O(n).\n\n### Tự kiểm tra\n1. Vòng lặp `for i in range(n): for j in range(i, n)` có độ phức tạp bao nhiêu và vì sao?\n2. Với n = 10^6, bạn có chọn được thuật toán O(n²) không?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd3-1",
+    "ten": "0.C — 📑 Học theo từng slide · Phân tích độ phức tạp, phần 1: thời gian chạy & Big-O (ComplexityAnalysis, slide 1–23)",
+    "nguon": "Data Structures and Algorithms · Mục 0",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-big-o",
+    "ten": "0.3 — Big-O: ngôn ngữ của hiệu năng",
+    "nguon": "Data Structures and Algorithms · Mục 0",
+    "kieu": "video",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd3-2",
+    "ten": "0.D — 📑 Học theo từng slide · Độ phức tạp, phần 2: quy tắc Big-O, khấu hao, NP (ComplexityAnalysis, slide 24–46)",
+    "nguon": "Data Structures and Algorithms · Mục 0",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bang-tra-do-phuc-tap",
+    "ten": "9.3 — Bảng tra độ phức tạp & 12 bẫy đề thi",
+    "nguon": "Data Structures and Algorithms · Ôn thi cuối kỳ (PE & FE)",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Nền tảng › Cấu trúc dữ liệu cốt lõi": {
+  "body": "Cấu trúc dữ liệu (data structure) là cách tổ chức dữ liệu trong bộ nhớ để một số thao tác trở nên rẻ. Giống như dụng cụ trong bếp: dao thái nhanh nhưng không dùng để khuấy; chọn sai dụng cụ thì làm được nhưng rất lâu. Phần lớn bài LeetCode thực chất là \"nhận ra cần cấu trúc nào, rồi dùng nó\".\n\n### Vì sao cần biết\nĐổi cấu trúc dữ liệu thường là cách duy nhất để hạ độ phức tạp, ví dụ từ O(n²) xuống O(n) bằng một hash set. Người phỏng vấn muốn nghe bạn nói được vì sao chọn nó, không chỉ viết được code.\n\n### Ý chính (chi phí điển hình)\n- **Mảng / list động**: truy cập theo chỉ số O(1), thêm cuối O(1) khấu hao, chèn/xoá giữa O(n).\n- **Hash map / hash set**: tìm, thêm, xoá O(1) trung bình; không giữ thứ tự theo giá trị (xấu nhất O(n) khi va chạm).\n- **Linked list**: chèn/xoá O(1) khi đã có con trỏ tới nút; truy cập thứ k phải duyệt O(k).\n- **Stack (LIFO) và queue (FIFO)**: thêm/lấy hai đầu O(1); stack cho \"việc gần nhất trước\", queue cho \"việc cũ nhất trước\" (BFS).\n- **Cây nhị phân tìm kiếm cân bằng**: tìm/chèn O(log n) và giữ thứ tự; BST không cân bằng có thể suy biến thành O(n).\n- **Heap (priority queue)**: lấy min hoặc max O(log n), xem đỉnh O(1); không để tìm phần tử bất kỳ.\n- **Đồ thị**: lưu bằng danh sách kề `{u: [v, ...]}` (O(V + E) bộ nhớ) hoặc ma trận kề (O(V²)).\n\n### Cách chọn nhanh\n```python\nfrom collections import deque, defaultdict\nimport heapq\n\nseen = set()                 # \"đã gặp chưa?\"        -> O(1)\ncount = defaultdict(int)     # \"xuất hiện mấy lần?\"  -> O(1)\nqueue = deque([start])       # BFS, hàng chờ          -> popleft O(1)\nheap = []; heapq.heappush(heap, (cost, node))   # \"nhỏ nhất kế tiếp\" -> O(log n)\ngraph = defaultdict(list)    # danh sách kề\n```\n\n### Lỗi hay gặp\n- Dùng `list.pop(0)` làm queue: O(n) mỗi lần; hãy dùng `deque`.\n- Dùng list để kiểm tra \"có chứa không\" trong vòng lặp thay vì `set`.\n- Dùng mảng khi cần chèn/xoá liên tục ở giữa, hoặc dùng cây khi hash map là đủ.\n\n### Tự kiểm tra\n1. Cần luôn lấy ra số nhỏ nhất của một tập đang thay đổi: chọn cấu trúc nào, mỗi lần tốn bao nhiêu?\n2. Vì sao BFS dùng queue còn DFS lặp dùng stack?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-mang",
+    "ten": "1.1 — Mảng & mảng động",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-linked-list",
+    "ten": "1.2 — Danh sách liên kết đơn, vòng & đôi",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bam",
+    "ten": "7.1 — Bảng băm & va chạm",
+    "nguon": "Data Structures and Algorithms · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cay-nhi-phan",
+    "ten": "4.2 — Cây nhị phân: tính chất & hai cách cài đặt",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bang-tra-do-phuc-tap",
+    "ten": "9.3 — Bảng tra độ phức tạp & 12 bẫy đề thi",
+    "nguon": "Data Structures and Algorithms · Ôn thi cuối kỳ (PE & FE)",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Nền tảng › Học theo pattern (NeetCode Roadmap)": {
+  "body": "Pattern (khuôn giải) là một ý tưởng giải bài lặp đi lặp lại: thấy dấu hiệu trong đề thì biết nên lấy khuôn nào ra. Thay vì giải 500 bài rời rạc, bạn học khoảng 15 khuôn rồi áp chúng vào hàng trăm biến thể, giống như học các thế cờ thay vì học thuộc từng ván.\n\n### Cách học hiệu quả\n- Học một pattern: hiểu ý tưởng, tự viết khuôn mẫu, rồi giải 3–5 bài từ dễ đến khó.\n- Ghi vào sổ \"dấu hiệu nhận diện\": ví dụ \"mảng đã sắp + tìm cặp\" gợi two pointers; \"chuỗi con liên tiếp tối ưu\" gợi sliding window; \"tìm tất cả cách\" gợi backtracking; \"đếm số cách / tối ưu có bài toán con gối nhau\" gợi DP.\n- Sau 20–30 phút bí thì xem lời giải, đóng lại và tự viết lại từ trí nhớ vào hôm sau (spaced repetition).\n\n### Thứ tự gợi ý\nArrays & Hashing, Two Pointers, Sliding Window, Stack, Binary Search, Linked List, Trees, Tries, Heap, Backtracking, Graphs, 1-D DP, Intervals, Greedy, 2-D DP, Bit Manipulation, Math. Các bước tiếp theo của lộ trình này đi đúng thứ tự đó.\n\n### Lỗi hay gặp\n- Xem lời giải quá sớm nên chỉ \"nhớ đáp án\" chứ không nhớ cách nhận ra pattern.\n- Chuyển pattern liên tục mà không làm đủ bài để thành phản xạ.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-2",
+    "ten": "⭐ CS.10 — 📑 Java Collections bên trong, 14 mẫu phỏng vấn, cách trình bày, lộ trình luyện (slide 12–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs10-on",
+    "ten": "⭐ CS.10 — 🧪 Bài tập: 22 bài phỏng vấn chọn lọc phủ 14 mẫu + lộ trình luyện 4 tuần",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-quiz-cs10",
+    "ten": "⭐ Quiz CS.10 — Thiết kế cấu trúc dữ liệu và mẫu phỏng vấn",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Nền tảng › Ngôn ngữ & môi trường luyện": {
+  "body": "Hãy chọn một ngôn ngữ và dùng nó cho toàn bộ quá trình luyện. Python gọn nhất (ít chữ, có sẵn `deque`, `heapq`, `Counter`, `defaultdict`, `bisect`), Java và C++ chạy nhanh hơn và là lựa chọn của nhiều công ty, JavaScript hợp nếu bạn làm web. Phỏng vấn thường cho chọn ngôn ngữ tuỳ ý.\n\n### Ý chính\n- Thạo thư viện chuẩn quan trọng hơn thạo cú pháp: biết sẵn cách khởi tạo mảng 2 chiều, sắp xếp theo khoá, dùng heap, duyệt chuỗi.\n- Biết chi phí của từng thao tác trong ngôn ngữ mình chọn (cắt chuỗi, nối chuỗi, `in` trên list so với set).\n- Luyện đều mỗi ngày 1–2 bài tốt hơn dồn cuối tuần.\n- Tập giải trên trình soạn thảo trơn (không autocomplete) hoặc giấy, vì phỏng vấn thường như vậy.\n\n### Ví dụ: bộ đồ nghề Python\n```python\nfrom collections import Counter, defaultdict, deque\nimport heapq, bisect\n\ngrid = [[0] * 5 for _ in range(3)]       # 3 hàng, 5 cột (KHÔNG viết [[0]*5]*3)\nwords.sort(key=lambda w: (len(w), w))    # sắp theo nhiều khoá\ni = bisect.bisect_left(sorted_a, x)      # vị trí chèn / lower bound\n```\n\n### Lỗi hay gặp\n- `[[0] * 5] * 3` tạo ba tham chiếu tới cùng một hàng, sửa một ô là đổi cả ba.\n- Chọn ngôn ngữ mới lạ đúng ngày phỏng vấn.",
+  "lessons": [
+   {
+    "href": "/courses/csd203-data-structures-and-algorithm-with-python/learn?lessonSlug=csd203-1-1-bigo-list",
+    "ten": "1.1 — Big-O & list Python",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD203"
+   },
+   {
+    "href": "/courses/prp201c-python-programming/learn?lessonSlug=prp201c-3-1-data-structures",
+    "ten": "3.1 — Cấu trúc dữ liệu: list, tuple, dict, set",
+    "nguon": "Python programming · Chapter 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRP201c"
+   },
+   {
+    "href": "/courses/object-oriented-programming/learn?lessonSlug=pro192-8-1-collections",
+    "ten": "8.1 — List, Set & Map",
+    "nguon": "Object-Oriented Programming · Chương 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "PRO192"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-java-list-api",
+    "ten": "1.4 — Java thực chiến: ArrayList vs LinkedList",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Arrays & Hashing › Arrays & Hashing": {
+  "body": "Hash map/hash set cho phép tra cứu \"đã có chưa\", \"bao nhiêu lần\", \"ở vị trí nào\" trong O(1) trung bình. Hình dung một tủ có ngăn đánh số: hàm băm biến mỗi khoá thành số ngăn nên bạn mở thẳng đúng ngăn thay vì lục từng ngăn. Đây là pattern số một của phỏng vấn vì nó biến vòng lặp lồng O(n²) thành một lượt duyệt O(n).\n\n### Vì sao cần biết\nHàng chục bài kinh điển chỉ là \"lưu thứ đã thấy vào bảng\": Two Sum, Contains Duplicate, Valid Anagram, Group Anagrams, Top K Frequent Elements, Longest Consecutive Sequence.\n\n### Ý chính\n- Công thức chung: duyệt một lần; với mỗi phần tử, kiểm tra trong bảng xem có \"mảnh ghép\" cần thiết chưa, rồi mới thêm phần tử hiện tại vào bảng.\n- Đếm tần suất bằng `Counter`/`dict`; nhóm theo khoá bằng `defaultdict(list)` (khoá có thể là tuple đã sắp xếp hoặc mảng đếm 26 chữ cái).\n- Khoá của dict phải băm được (hashable): dùng tuple, không dùng list.\n- Hash map hứa O(1) trung bình; xấu nhất O(n) khi nhiều khoá va chạm, nhưng khi phỏng vấn mặc định coi là O(1).\n\n### Ví dụ: Two Sum\n```python\ndef two_sum(nums, target):\n    pos = {}                         # giá trị -> chỉ số\n    for i, x in enumerate(nums):\n        if target - x in pos:        # mảnh ghép đã gặp trước đó?\n            return [pos[target - x], i]\n        pos[x] = i\n    return []\n\nassert two_sum([2, 7, 11, 15], 9) == [0, 1]\n```\nKiểm tra trước, thêm sau, nên không dùng một phần tử hai lần. Độ phức tạp O(n) thời gian, O(n) bộ nhớ.\n\n### Group Anagrams\n```python\nfrom collections import defaultdict\n\ndef group_anagrams(words):\n    groups = defaultdict(list)\n    for w in words:\n        groups[tuple(sorted(w))].append(w)\n    return list(groups.values())\n```\n\n### Lỗi hay gặp\n- Thêm phần tử vào bảng trước khi kiểm tra, dẫn đến ghép phần tử với chính nó.\n- Dùng list làm khoá (`TypeError: unhashable type`).\n- Quên rằng sắp xếp mỗi từ tốn O(k log k) khi tính tổng độ phức tạp.\n\n### Tự kiểm tra\n1. Vì sao Two Sum bản hash map không cần sắp xếp mảng?\n2. Khi nào nên dùng `set` thay cho `dict`?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs9-1",
+    "ten": "⭐ CS.9 — 📑 Băm và chuỗi trong phỏng vấn (slide 1–15)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bam",
+    "ten": "7.1 — Bảng băm & va chạm",
+    "nguon": "Data Structures and Algorithms · Chương 7",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/simulation?scenario=hash-map",
+    "ten": "HashMap — tìm trong một triệu khoá mà không duyệt",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/courses/csd203-data-structures-and-algorithm-with-python/learn?lessonSlug=csd203-4-2-exercise",
+    "ten": "Bài tập 1 — two-sum bằng hash set",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD203"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs9-on",
+    "ten": "⭐ CS.9 — 🧪 Bài tập: 7 bài băm, chuỗi và thao tác bit kiểu phỏng vấn",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Arrays & Hashing › Prefix Sum": {
+  "body": "Prefix sum (tổng tiền tố) là mảng phụ `pre` trong đó `pre[i]` là tổng của `i` phần tử đầu. Nhờ nó, tổng của đoạn `a[l..r]` bằng `pre[r+1] - pre[l]` trong O(1) thay vì cộng lại cả đoạn. Giống như xem số km trên đồng hồ xe: quãng đường giữa hai mốc là hiệu hai lần đọc.\n\n### Ý chính\n- Dựng một lần O(n), mỗi truy vấn đoạn O(1): rất hợp khi có nhiều truy vấn trên mảng không đổi.\n- Kết hợp hash map để đếm đoạn con có tổng bằng k: đoạn `(j, i]` có tổng k khi `pre[i] - pre[j] = k`, tức là cần đếm có bao nhiêu tiền tố trước đó bằng `pre[i] - k`.\n- Mở rộng: tổng tiền tố 2 chiều cho truy vấn hình chữ nhật, mảng hiệu (difference array) cho cập nhật cả đoạn.\n\n### Ví dụ: Subarray Sum Equals K\n```python\nfrom collections import defaultdict\n\ndef subarray_sum(nums, k):\n    count = defaultdict(int)\n    count[0] = 1                 # tiền tố rỗng\n    s = res = 0\n    for x in nums:\n        s += x\n        res += count[s - k]      # có bao nhiêu tiền tố trước đó cho đoạn tổng k\n        count[s] += 1\n    return res\n\nassert subarray_sum([1, 1, 1], 2) == 2\n```\nChạy O(n) và đúng cả với số âm (sliding window thì không).\n\n### Lỗi hay gặp\n- Quên đặt `count[0] = 1` nên bỏ sót các đoạn bắt đầu từ phần tử đầu.\n- Sai lệch một đơn vị giữa `pre[r+1]` và `pre[l]`.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs2-2",
+    "ten": "⭐ CS.2 — 📑 Kỹ thuật mảng (2): tổng tiền tố, ngăn xếp đơn điệu, Kadane (slide 14–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs2-on",
+    "ten": "⭐ CS.2 — 🧪 Bài tập: 7 bài kỹ thuật mảng kiểu phỏng vấn (từ bình phương mảng đã sắp tới Kadane vòng tròn)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-quiz-cs2",
+    "ten": "⭐ Quiz CS.2 — Kỹ thuật mảng",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Arrays & Hashing › Two Pointers": {
+  "body": "Two pointers dùng hai chỉ số cùng chạy trên mảng để thay vòng lặp lồng O(n²) bằng một lượt O(n). Dạng kinh điển: hai con trỏ ở hai đầu mảng đã sắp xếp, đi vào giữa; dạng thứ hai: hai con trỏ cùng chiều, một nhanh một chậm (đọc/ghi).\n\n### Vì sao hoạt động\nKhi mảng đã sắp, tổng `a[l] + a[r]` quá lớn thì chắc chắn phải giảm `r`; quá nhỏ thì phải tăng `l`. Mỗi bước loại được cả một loạt cặp không thể đúng, nên không cần xét hết.\n\n### Ý chính\n- Dấu hiệu: mảng/chuỗi đã sắp xếp, tìm cặp hoặc bộ ba, kiểm tra đối xứng, đảo, loại phần tử trùng tại chỗ.\n- Mẫu hai đầu: `l = 0, r = n-1; while l < r: ...`.\n- Mẫu đọc/ghi: một con trỏ duyệt, con trỏ kia đánh dấu vị trí ghi (Remove Duplicates, Move Zeroes).\n- 3Sum: sắp xếp, cố định một số rồi chạy two pointers cho hai số còn lại, bỏ qua giá trị trùng.\n\n### Ví dụ: Two Sum trên mảng đã sắp\n```python\ndef two_sum_sorted(a, target):\n    l, r = 0, len(a) - 1\n    while l < r:\n        s = a[l] + a[r]\n        if s == target:\n            return [l, r]\n        if s < target:\n            l += 1\n        else:\n            r -= 1\n    return []\n\nassert two_sum_sorted([1, 3, 4, 6, 9], 10) == [0, 4]\n```\nO(n) thời gian, O(1) bộ nhớ, tốt hơn hash map về bộ nhớ.\n\n### Container With Most Water (cùng ý)\nDiện tích bị chặn bởi cột thấp hơn, nên luôn dịch con trỏ ở cột thấp hơn vào trong; dịch cột cao chỉ làm đáy hẹp đi mà chiều cao không tăng.\n\n### Lỗi hay gặp\n- Quên sắp xếp trước khi áp dụng dạng hai đầu.\n- Dùng `l <= r` hay `l < r` sai, dẫn tới ghép phần tử với chính nó.\n- Không bỏ qua phần tử trùng ở 3Sum nên trả về bộ ba lặp.\n\n### Tự kiểm tra\n1. Vì sao hai đầu của mảng đã sắp cho phép loại nhiều cặp mỗi bước?\n2. 3Sum có độ phức tạp bao nhiêu?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs2-1",
+    "ten": "⭐ CS.2 — 📑 Kỹ thuật mảng (1): tổng quan 6 nhóm, hai con trỏ, cửa sổ cố định & co giãn (slide 1–13)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs2-on",
+    "ten": "⭐ CS.2 — 🧪 Bài tập: 7 bài kỹ thuật mảng kiểu phỏng vấn (từ bình phương mảng đã sắp tới Kadane vòng tròn)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Sliding Window & Stack › Sliding Window": {
+  "body": "Sliding window duy trì một \"cửa sổ\" `[l, r]` trên mảng hoặc chuỗi, mở rộng bên phải và co bên trái, để tìm đoạn con liên tiếp tốt nhất mà không tính lại từ đầu. Hình dung trượt một khung kính trên dòng chữ: mỗi lần dịch chỉ thêm một chữ vào và bớt một chữ ra.\n\n### Vì sao cần biết\nNó biến bài \"xét mọi đoạn con\" O(n²) thành O(n), vì mỗi con trỏ chỉ đi một chiều và tối đa n bước. Xuất hiện ở Longest Substring Without Repeating Characters, Minimum Window Substring, Max Sum Subarray of Size K, Permutation in String.\n\n### Hai dạng\n- **Cửa sổ cố định** (kích thước k): cộng phần tử mới, trừ phần tử cũ.\n- **Cửa sổ co giãn**: mở `r` đến khi vi phạm điều kiện, rồi co `l` đến khi hợp lệ lại, cập nhật đáp án ở mỗi bước.\n\n### Ý chính\n- Cần cấu trúc nhớ nội dung cửa sổ (set, dict đếm, tổng đang chạy).\n- Điều kiện phải \"đơn điệu\": thêm phần tử chỉ làm cửa sổ tệ đi (hoặc tốt lên) theo một hướng. Mảng có số âm và bài tổng bằng k thì thường không dùng được, hãy dùng prefix sum.\n\n### Ví dụ: chuỗi con dài nhất không lặp ký tự\n```python\ndef length_of_longest_substring(s):\n    last = {}              # ký tự -> vị trí gần nhất\n    l = best = 0\n    for r, ch in enumerate(s):\n        if ch in last and last[ch] >= l:\n            l = last[ch] + 1          # nhảy l qua ký tự trùng\n        last[ch] = r\n        best = max(best, r - l + 1)\n    return best\n\nassert length_of_longest_substring(\"abcabcbb\") == 3\n```\nO(n) thời gian, O(min(n, bảng chữ cái)) bộ nhớ.\n\n### Lỗi hay gặp\n- Quên điều kiện `last[ch] >= l` nên `l` lùi lại.\n- Cập nhật đáp án sai thời điểm (trước khi cửa sổ hợp lệ).\n- Dùng sliding window cho mảng có số âm khi điều kiện không đơn điệu.\n\n### Tự kiểm tra\n1. Vì sao dù có vòng `while` lồng trong `for`, thuật toán vẫn O(n)?\n2. Khác biệt giữa cửa sổ cố định và co giãn là gì?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs2-1",
+    "ten": "⭐ CS.2 — 📑 Kỹ thuật mảng (1): tổng quan 6 nhóm, hai con trỏ, cửa sổ cố định & co giãn (slide 1–13)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-deque",
+    "ten": "2.4 — Deque & bài toán cửa sổ trượt",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs2-on",
+    "ten": "⭐ CS.2 — 🧪 Bài tập: 7 bài kỹ thuật mảng kiểu phỏng vấn (từ bình phương mảng đã sắp tới Kadane vòng tròn)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Sliding Window & Stack › Stack": {
+  "body": "Stack (ngăn xếp) là cấu trúc \"vào sau, ra trước\" (LIFO): như chồng đĩa, bạn chỉ lấy và đặt ở trên cùng. Mọi thao tác push/pop/peek đều O(1). Trong Python dùng list với `append()` và `pop()`.\n\n### Vì sao cần biết\nStack mô tả tự nhiên mọi thứ lồng nhau hoặc cần \"quay lại việc gần nhất\": ngoặc hợp lệ, trình duyệt back, undo, đệ quy (call stack), tính biểu thức hậu tố.\n\n### Ý chính\n- Dấu hiệu: cặp mở/đóng, thứ tự bị đảo, \"xử lý khi gặp phần tử đóng\".\n- Valid Parentheses: gặp ngoặc mở thì push, gặp ngoặc đóng thì pop và so khớp loại; cuối cùng stack phải rỗng.\n- Evaluate RPN (Reverse Polish Notation): gặp số thì push, gặp toán tử thì pop hai số, tính, push kết quả.\n- Min Stack: mỗi phần tử kèm theo giá trị nhỏ nhất tại thời điểm đó để `getMin` O(1).\n- DFS lặp là DFS đệ quy viết lại với stack tường minh.\n\n### Ví dụ: ngoặc hợp lệ\n```python\ndef is_valid(s):\n    pairs = {')': '(', ']': '[', '}': '{'}\n    stack = []\n    for ch in s:\n        if ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n        else:\n            stack.append(ch)\n    return not stack\n\nassert is_valid(\"{[]}\") and not is_valid(\"(]\")\n```\n\n### Min Stack\n```python\nclass MinStack:\n    def __init__(self):\n        self.st = []                      # (giá trị, min tới thời điểm này)\n    def push(self, x):\n        m = min(x, self.st[-1][1]) if self.st else x\n        self.st.append((x, m))\n    def pop(self):\n        self.st.pop()\n    def top(self):\n        return self.st[-1][0]\n    def get_min(self):\n        return self.st[-1][1]\n```\n\n### Lỗi hay gặp\n- Quên kiểm tra stack rỗng trước khi `pop()`.\n- Quên kiểm tra \"stack phải rỗng\" ở cuối nên `\"((\"` bị coi là hợp lệ.\n\n### Tự kiểm tra\n1. Vì sao đệ quy sâu có thể gây stack overflow?\n2. Làm sao `get_min` luôn O(1) dù có pop?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd5-1",
+    "ten": "2.A — 📑 Học theo từng slide · Ngăn xếp (2A-Stacks, slide 1–19)",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-stack-queue",
+    "ten": "2.1 — Ngăn xếp (LIFO) & Hàng đợi (FIFO)",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-stack-ung-dung",
+    "ten": "2.3 — Ứng dụng ngăn xếp: dấu ngoặc, RPN, undo",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-1",
+    "ten": "⭐ CS.10 — 📑 Thiết kế cấu trúc dữ liệu: LRU, LFU, min-stack, hàng đợi hai ngăn xếp, RandomizedSet, trung vị (slide 1–11)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Sliding Window & Stack › Monotonic Stack": {
+  "body": "Monotonic stack là stack luôn giữ các phần tử theo thứ tự đơn điệu (tăng hoặc giảm). Khi phần tử mới phá vỡ thứ tự, ta pop những phần tử \"bị lấn át\" và chính lúc pop là lúc biết đáp án cho chúng. Mỗi phần tử vào và ra tối đa một lần nên tổng O(n).\n\n### Dấu hiệu nhận ra\nĐề hỏi \"phần tử lớn hơn/nhỏ hơn gần nhất bên phải (hoặc trái)\" cho mỗi vị trí: Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water.\n\n### Ví dụ: Daily Temperatures\n```python\ndef daily_temperatures(t):\n    ans = [0] * len(t)\n    st = []                      # chỉ số, nhiệt độ giảm dần\n    for i, x in enumerate(t):\n        while st and t[st[-1]] < x:\n            j = st.pop()\n            ans[j] = i - j       # ngày ấm hơn đầu tiên của j là i\n        st.append(i)\n    return ans\n\nassert daily_temperatures([73, 74, 75, 71, 69, 72, 76, 73]) == [1, 1, 4, 2, 1, 1, 0, 0]\n```\nLưu chỉ số chứ không lưu giá trị để tính được khoảng cách.\n\n### Lỗi hay gặp\n- Chọn nhầm chiều đơn điệu (dùng `<` hay `<=`) làm sai khi có giá trị bằng nhau.\n- Quên xử lý các phần tử còn trong stack sau vòng lặp (ở histogram cần thêm cột chắn 0 cuối).",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs2-2",
+    "ten": "⭐ CS.2 — 📑 Kỹ thuật mảng (2): tổng tiền tố, ngăn xếp đơn điệu, Kadane (slide 14–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs2-on",
+    "ten": "⭐ CS.2 — 🧪 Bài tập: 7 bài kỹ thuật mảng kiểu phỏng vấn (từ bình phương mảng đã sắp tới Kadane vòng tròn)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-stack-ung-dung",
+    "ten": "2.3 — Ứng dụng ngăn xếp: dấu ngoặc, RPN, undo",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Tìm kiếm & Linked List › Binary Search": {
+  "body": "Binary search (tìm nhị phân) tìm một giá trị trong mảng đã sắp xếp bằng cách xét phần tử giữa rồi loại bỏ một nửa không thể chứa đáp án, nên chỉ mất O(log n): 1 triệu phần tử chỉ cần khoảng 20 bước. Giống như đoán số từ 1 đến 100: hỏi \"lớn hơn 50 không?\" rồi chia đôi tiếp.\n\n### Vì sao cần biết\nNó dễ viết sai nhất trong các thuật toán cơ bản (lệch một đơn vị, vòng lặp vô hạn), nên phỏng vấn thích hỏi. Biến thể thường gặp: tìm biên trái/phải, tìm trong mảng xoay (Search in Rotated Sorted Array), tìm đỉnh, tìm trong ma trận đã sắp.\n\n### Ý chính\n- Điều kiện: dữ liệu có tính đơn điệu (mảng sắp, hoặc một vị từ \"false...false true...true\").\n- Giữ bất biến rõ ràng: đáp án luôn nằm trong `[lo, hi]` (hoặc `[lo, hi)`), và viết đúng một phong cách.\n- Tính giữa bằng `mid = lo + (hi - lo) // 2` để tránh tràn số ở Java/C++.\n- Muốn \"vị trí đầu tiên thỏa điều kiện\" (lower bound), dùng khuôn tìm biên: khi thoả thì thu `hi = mid`, không thì `lo = mid + 1`.\n\n### Ví dụ\n```python\ndef search(a, target):            # trả về chỉ số hoặc -1\n    lo, hi = 0, len(a) - 1\n    while lo <= hi:\n        mid = lo + (hi - lo) // 2\n        if a[mid] == target:\n            return mid\n        if a[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1\n\ndef lower_bound(a, x):            # chỉ số đầu tiên có a[i] >= x\n    lo, hi = 0, len(a)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if a[mid] >= x:\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo\n\nassert search([1, 3, 5, 7], 5) == 2 and lower_bound([1, 2, 2, 4], 2) == 1\n```\nPython có sẵn `bisect.bisect_left` và `bisect.bisect_right`.\n\n### Lỗi hay gặp\n- Viết `lo = mid` hoặc `hi = mid` không đúng chỗ khiến vòng lặp không dừng.\n- Trộn hai phong cách `<=` và `<` giữa điều kiện lặp và cách cập nhật.\n- Dùng khi dữ liệu chưa sắp xếp.\n\n### Tự kiểm tra\n1. Vì sao khuôn `lo < hi` kết hợp `hi = mid` không lặp vô hạn?\n2. Mảng xoay: làm sao biết nửa nào đang được sắp?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs1-1",
+    "ten": "⭐ CS.1 — 📑 Tìm kiếm nhị phân (1): bẫy, bất biến, lower/upper bound, mảng xoay (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs1-on",
+    "ten": "⭐ CS.1 — 🧪 Bài tập: 7 bài tìm kiếm nhị phân kiểu phỏng vấn (từ phiên bản lỗi đầu tiên tới trung vị hai mảng)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/introduction-to-computer-science/learn?lessonSlug=csi104-6-3-tim-kiem",
+    "ten": "6.3 — Thuật toán tìm kiếm: tuyến tính & nhị phân",
+    "nguon": "Introduction to Computer Science · Chương 6",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSI104"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-quiz-cs1",
+    "ten": "⭐ Quiz CS.1 — Tìm kiếm nhị phân và các biến thể",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Tìm kiếm & Linked List › Binary Search on Answer": {
+  "body": "Binary search on answer (nhị phân trên miền đáp án) không tìm trong mảng, mà tìm giá trị nhỏ nhất (hoặc lớn nhất) của chính đáp án sao cho một điều kiện kiểm tra được là đúng. Chìa khoá: nếu đáp án `x` khả thi thì mọi `x' > x` cũng khả thi (tính đơn điệu), nên ta chia đôi miền giá trị.\n\n### Dấu hiệu nhận ra\nĐề hỏi \"giá trị nhỏ nhất sao cho ... có thể\" hoặc \"lớn nhất sao cho ...\": Koko Eating Bananas, Capacity To Ship Packages Within D Days, Split Array Largest Sum, Minimum Time to Complete Trips.\n\n### Các bước\n1. Xác định miền đáp án `[lo, hi]` (ví dụ tốc độ từ 1 đến max(piles)).\n2. Viết hàm `feasible(x)` kiểm tra khả thi, thường là một lượt duyệt O(n).\n3. Nhị phân tìm `x` nhỏ nhất làm `feasible` đúng. Tổng độ phức tạp O(n log(miền)).\n\n### Ví dụ: Koko Eating Bananas\n```python\ndef min_eating_speed(piles, h):\n    def feasible(k):\n        return sum((p + k - 1) // k for p in piles) <= h   # tổng giờ cần\n\n    lo, hi = 1, max(piles)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if feasible(mid):\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo\n\nassert min_eating_speed([3, 6, 7, 11], 8) == 4\n```\n\n### Lỗi hay gặp\n- Chọn miền sai (`lo` quá lớn bỏ sót đáp án, `hi` quá nhỏ vô nghiệm).\n- Hàm kiểm tra không thực sự đơn điệu.\n- Nhầm giữa \"nhỏ nhất làm đúng\" (hi = mid) và \"lớn nhất làm đúng\" (lo = mid + 1, mid làm tròn lên).",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs1-2",
+    "ten": "⭐ CS.1 — 📑 Tìm kiếm nhị phân (2): đỉnh, ma trận, tìm trên đáp án, số thực, TreeMap (slide 13–24)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs1-on",
+    "ten": "⭐ CS.1 — 🧪 Bài tập: 7 bài tìm kiếm nhị phân kiểu phỏng vấn (từ phiên bản lỗi đầu tiên tới trung vị hai mảng)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Tìm kiếm & Linked List › Linked List & Fast/Slow": {
+  "body": "Linked list (danh sách liên kết) là chuỗi các nút, mỗi nút giữ giá trị và con trỏ `next` tới nút kế. Khác mảng, bạn không nhảy được tới phần tử thứ k, nhưng chèn/xoá tại một nút đã biết chỉ là đổi con trỏ. Đề phỏng vấn thường cho sẵn đầu danh sách `head`, và kiểm tra bạn có dùng con trỏ cẩn thận không.\n\n### Vì sao cần biết\nLinked list là nền cho LRU Cache (kết hợp hash map), xử lý danh sách số lớn, và là chỗ dễ sai con trỏ nhất.\n\n### Các kỹ thuật cốt lõi\n- **Dummy head** (nút giả đầu): giúp mọi nút, kể cả nút đầu, được xử lý như nhau khi xoá hoặc gộp.\n- **Đảo danh sách**: giữ `prev`, đổi hướng `next`, tiến lên.\n- **Fast/slow (Floyd)**: `slow` đi 1 bước, `fast` đi 2 bước. Khi `fast` tới cuối thì `slow` ở giữa; nếu có chu trình thì `fast` bắt kịp `slow`.\n- **Gộp hai danh sách đã sắp**: dùng dummy và so sánh hai đầu.\n- LRU Cache: hash map trỏ tới nút trong danh sách liên kết đôi, thao tác get/put O(1).\n\n### Ví dụ\n```python\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val, self.next = val, next\n\ndef reverse(head):\n    prev = None\n    while head:\n        nxt = head.next      # nhớ nút kế\n        head.next = prev     # đổi hướng\n        prev, head = head, nxt\n    return prev\n\ndef has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow, fast = slow.next, fast.next.next\n        if slow is fast:\n            return True\n    return False\n\ndef middle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow, fast = slow.next, fast.next.next\n    return slow\n```\nCả ba đều O(n) thời gian, O(1) bộ nhớ.\n\n### Lỗi hay gặp\n- Mất tham chiếu tới phần còn lại vì ghi đè `next` trước khi lưu.\n- Quên kiểm tra `None` (danh sách rỗng, một nút).\n- Quên `fast.next` khi viết điều kiện vòng lặp.\n\n### Tự kiểm tra\n1. Vì sao `fast` luôn bắt kịp `slow` khi có chu trình?\n2. Vì sao LRU cần danh sách liên kết đôi chứ không phải đơn?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd4-1",
+    "ten": "1.A — 📑 Học theo từng slide · Cấu trúc danh sách (1-ListDataStructures, slide 1–23)",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-linked-list",
+    "ten": "1.2 — Danh sách liên kết đơn, vòng & đôi",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-doubly-sentinel",
+    "ten": "1.3 — Danh sách liên kết đôi & nút lính canh",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-luyen-tap-list",
+    "ten": "1.5 — Ba bài toán danh sách kinh điển, có lời giải",
+    "nguon": "Data Structures and Algorithms · Chương 1",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-1",
+    "ten": "⭐ CS.10 — 📑 Thiết kế cấu trúc dữ liệu: LRU, LFU, min-stack, hàng đợi hai ngăn xếp, RandomizedSet, trung vị (slide 1–11)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Cây (Trees) › Trees & Traversal (DFS/BFS)": {
+  "body": "Cây nhị phân là cấu trúc phân cấp: mỗi nút có tối đa hai con (trái, phải), như sơ đồ gia phả. Hầu hết bài về cây quy về hai cách duyệt: DFS (đi sâu hết một nhánh rồi mới quay lại) và BFS (duyệt từng tầng).\n\n### Vì sao cần biết\nCây là chủ đề xuất hiện nhiều nhất ở vòng phỏng vấn: Maximum Depth, Invert Binary Tree, Same Tree, Level Order Traversal, Lowest Common Ancestor, Diameter of Binary Tree, Path Sum.\n\n### Ý chính\n- **DFS đệ quy** có ba thứ tự: preorder (gốc, trái, phải), inorder (trái, gốc, phải), postorder (trái, phải, gốc). Cần thông tin từ con trước khi tính cha (chiều cao, đường kính) thì dùng postorder.\n- **BFS (level order)** dùng queue; xử lý theo từng tầng bằng cách lấy `len(queue)` phần tử mỗi vòng.\n- Mẫu tư duy đệ quy: \"giả sử hàm đã đúng cho cây con trái và phải, ghép kết quả thế nào cho nút này?\" và nhớ trường hợp cơ sở `if not node`.\n- Độ phức tạp thường O(n) thời gian (mỗi nút thăm một lần), O(h) bộ nhớ cho DFS (h là chiều cao), O(chiều rộng) cho BFS.\n\n### Ví dụ\n```python\nfrom collections import deque\n\nclass TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val, self.left, self.right = val, left, right\n\ndef max_depth(node):                       # DFS postorder\n    if not node:\n        return 0\n    return 1 + max(max_depth(node.left), max_depth(node.right))\n\ndef level_order(root):                     # BFS\n    res, q = [], deque([root] if root else [])\n    while q:\n        level = []\n        for _ in range(len(q)):\n            n = q.popleft()\n            level.append(n.val)\n            if n.left:  q.append(n.left)\n            if n.right: q.append(n.right)\n        res.append(level)\n    return res\n\ndef invert(node):\n    if node:\n        node.left, node.right = invert(node.right), invert(node.left)\n    return node\n```\n\n### Lỗi hay gặp\n- Quên trường hợp `None` làm lỗi `AttributeError`.\n- Cây lệch thành một đường thẳng có thể vượt giới hạn đệ quy của Python (mặc định khoảng 1000); hãy dùng DFS lặp bằng stack.\n- Nhầm preorder với inorder khi dựng lại cây.\n\n### Tự kiểm tra\n1. Khi nào BFS là lựa chọn tự nhiên hơn DFS?\n2. Đường kính của cây tính bằng thứ tự duyệt nào, và vì sao?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd8-1",
+    "ten": "4.A — 📑 Học theo từng slide · Cây, phần 1a: thuật ngữ & phép duyệt (4A-Trees1, slide 1–17)",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cay-duyet",
+    "ten": "4.1 — Cây & phép duyệt",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-duyet-cay",
+    "ten": "4.3 — Bốn phép duyệt & cây biểu thức",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs7-1",
+    "ten": "⭐ CS.7 — 📑 Cây nâng cao: duyệt theo tầng, kiểm BST, LCA, đường kính, serialize, Trie (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Cây (Trees) › Binary Search Tree": {
+  "body": "Binary Search Tree (BST) là cây nhị phân thoả: mọi nút ở cây con trái nhỏ hơn nút, mọi nút ở cây con phải lớn hơn. Vì vậy tìm kiếm giống binary search: so với nút hiện tại rồi đi trái hoặc phải, mất O(h) với h là chiều cao (O(log n) nếu cây cân bằng).\n\n### Ý chính\n- **Duyệt inorder một BST cho dãy tăng dần**: đây là mẹo cho Kth Smallest Element, Validate BST, Convert BST.\n- **Validate BST**: không chỉ so nút với hai con, mà phải truyền khoảng `(min, max)` cho cả cây con; so sánh cục bộ bỏ sót trường hợp nút nằm sâu vi phạm.\n- **Xoá nút**: ba trường hợp: lá (bỏ), một con (nối con lên), hai con (thay bằng nút kế nhiệm nhỏ nhất của cây con phải).\n- BST không cân bằng có thể suy biến O(n); AVL và Red-Black giữ cân bằng.\n\n### Ví dụ\n```python\ndef is_valid_bst(node, lo=float('-inf'), hi=float('inf')):\n    if not node:\n        return True\n    if not (lo < node.val < hi):\n        return False\n    return (is_valid_bst(node.left, lo, node.val) and\n            is_valid_bst(node.right, node.val, hi))\n\ndef kth_smallest(root, k):\n    st, cur = [], root\n    while True:\n        while cur:\n            st.append(cur)\n            cur = cur.left\n        cur = st.pop()\n        k -= 1\n        if k == 0:\n            return cur.val\n        cur = cur.right\n```\n\n### Lỗi hay gặp\n- Validate chỉ so với con trực tiếp.\n- Quên rằng giá trị trùng cần quy ước rõ (đề thường nói BST không có trùng).\n- Dùng `int` min/max cố định nên hỏng khi dữ liệu bằng biên.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bst",
+    "ten": "4.4 — Cây nhị phân tìm kiếm (BST)",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd8-2",
+    "ten": "4.B — 📑 Học theo từng slide · Cây, phần 1b: cài đặt cây nhị phân & BST (4A-Trees1, slide 18–34)",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs7-on",
+    "ten": "⭐ CS.7 — 🧪 Bài tập: 7 bài cây nâng cao kiểu phỏng vấn (từ nhỏ thứ k trong BST tới gần-trùng trong cửa sổ)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Cây (Trees) › Trie (cây tiền tố)": {
+  "body": "Trie (đọc \"trai\") là cây mà mỗi cạnh là một ký tự, đường từ gốc đến một nút tạo thành một tiền tố. Nhiều từ chia sẻ chung tiền tố nên chỉ lưu một lần, như mục lục từ điển phân theo chữ cái đầu rồi chữ cái kế. Tra từ hay tiền tố dài `m` chỉ mất O(m), không phụ thuộc số từ đã lưu.\n\n### Vì sao cần biết\nGợi ý tự động (autocomplete), kiểm tra chính tả, bài Implement Trie, Design Add and Search Words, Word Search II (kết hợp backtracking), tìm tiền tố chung dài nhất.\n\n### Ý chính\n- Mỗi nút có `children` (dict hoặc mảng 26 ô) và cờ `end` đánh dấu một từ hoàn chỉnh kết thúc tại đây.\n- `insert`, `search`, `startsWith` đều O(độ dài từ).\n- Đánh đổi: tốn bộ nhớ hơn hash set nhưng làm được thứ hash set không làm được, đó là truy vấn theo tiền tố.\n- Với Word Search II, duyệt đồng thời lưới và trie để cắt nhánh sớm thay vì tìm từng từ một.\n\n### Ví dụ\n```python\nclass Trie:\n    def __init__(self):\n        self.root = {}\n\n    def insert(self, word):\n        node = self.root\n        for ch in word:\n            node = node.setdefault(ch, {})\n        node['$'] = True                    # đánh dấu hết từ\n\n    def _walk(self, s):\n        node = self.root\n        for ch in s:\n            if ch not in node:\n                return None\n            node = node[ch]\n        return node\n\n    def search(self, word):\n        n = self._walk(word)\n        return bool(n) and '$' in n\n\n    def starts_with(self, prefix):\n        return self._walk(prefix) is not None\n\nt = Trie(); t.insert(\"app\")\nassert t.starts_with(\"ap\") and not t.search(\"ap\") and t.search(\"app\")\n```\n\n### Lỗi hay gặp\n- Quên cờ kết thúc nên `search(\"ap\")` trả đúng khi chỉ lưu \"app\".\n- Dùng mảng 26 ô cho bảng chữ cái lớn gây lãng phí bộ nhớ; dict linh hoạt hơn.\n\n### Tự kiểm tra\n1. Khi nào trie tốt hơn hash set?\n2. Độ phức tạp tìm một tiền tố độ dài m là bao nhiêu?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs7-1",
+    "ten": "⭐ CS.7 — 📑 Cây nâng cao: duyệt theo tầng, kiểm BST, LCA, đường kính, serialize, Trie (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Cây (Trees) › Segment Tree / BIT": {
+  "body": "Segment tree và Binary Indexed Tree (Fenwick, BIT) là hai cấu trúc để trả lời truy vấn trên đoạn của mảng (tổng, min, max) và cập nhật phần tử đều trong O(log n). Mảng tiền tố trả lời truy vấn O(1) nhưng cập nhật phải dựng lại O(n); hai cấu trúc này cân bằng giữa hai việc.\n\n### Ý chính\n- **Segment tree**: cây nhị phân mà mỗi nút giữ kết quả (tổng, min...) của một đoạn; truy vấn ghép O(log n) nút. Linh hoạt, làm được min/max và cập nhật cả đoạn (lazy propagation).\n- **Fenwick tree**: mảng ngắn gọn dùng thao tác bit `i & -i`; chủ yếu cho tổng tiền tố và cập nhật điểm, code rất ngắn.\n- Dấu hiệu: \"nhiều truy vấn đoạn xen kẽ nhiều cập nhật\", Range Sum Query - Mutable, Count of Smaller Numbers After Self.\n- Phần này ít gặp ở phỏng vấn thông thường, nhưng đáng biết vì mạnh trong thi đấu.\n\n### Ví dụ: Fenwick tree\n```python\nclass Fenwick:\n    def __init__(self, n):\n        self.t = [0] * (n + 1)\n\n    def add(self, i, delta):          # i bắt đầu từ 1\n        while i < len(self.t):\n            self.t[i] += delta\n            i += i & -i\n\n    def prefix(self, i):              # tổng a[1..i]\n        s = 0\n        while i > 0:\n            s += self.t[i]\n            i -= i & -i\n        return s\n```\nTổng đoạn `[l, r]` là `prefix(r) - prefix(l - 1)`.\n\n### Lỗi hay gặp\n- Dùng chỉ số từ 0 với Fenwick (phải từ 1).\n- Quên rằng BIT chỉ hợp với phép có thể \"trừ\" ngược (tổng), không hợp trực tiếp với max.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs7-2",
+    "ten": "⭐ CS.7 — 📑 Truy vấn đoạn và tổ tiên: cây phân đoạn, lazy propagation, cây Fenwick, nhảy nhị phân, TreeMap (slide 13–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Heap & Backtracking › Heap / Priority Queue": {
+  "body": "Heap là cây nhị phân hoàn chỉnh lưu trong mảng, luôn giữ phần tử nhỏ nhất (min-heap) hoặc lớn nhất (max-heap) ở đỉnh. Priority queue là giao diện dùng heap: thêm và lấy phần tử ưu tiên nhất đều O(log n), xem đỉnh O(1). Giống phòng cấp cứu: người nặng nhất được gọi trước, bất kể đến sớm hay muộn.\n\n### Vì sao cần biết\nKhi đề hỏi \"k lớn nhất/nhỏ nhất\", \"luôn lấy cái nhỏ nhất kế tiếp\", \"trộn k danh sách đã sắp\", \"trung vị của dòng dữ liệu\", heap là đáp án gần như mặc định. Nó cũng là lõi của Dijkstra.\n\n### Ý chính\n- Python chỉ có min-heap (`heapq`). Muốn max-heap thì đẩy số âm vào.\n- Top-k lớn nhất: giữ một min-heap kích thước k; phần tử đỉnh là phần tử nhỏ nhất trong k lớn nhất. Tổng O(n log k), tốt hơn sắp xếp O(n log n) khi k nhỏ.\n- Merge k sorted lists: heap giữ đầu mỗi danh sách, O(N log k).\n- Median of Data Stream: hai heap, max-heap cho nửa nhỏ và min-heap cho nửa lớn, giữ hai bên cân bằng.\n- Dựng heap từ n phần tử bằng `heapify` chỉ O(n).\n\n### Ví dụ\n```python\nimport heapq\n\ndef top_k_frequent(nums, k):\n    from collections import Counter\n    cnt = Counter(nums)\n    return heapq.nlargest(k, cnt, key=cnt.get)\n\ndef kth_largest(nums, k):\n    h = []\n    for x in nums:\n        heapq.heappush(h, x)\n        if len(h) > k:\n            heapq.heappop(h)        # bỏ phần tử nhỏ nhất\n    return h[0]\n\nassert kth_largest([3, 2, 1, 5, 6, 4], 2) == 5\n```\n\n### Lỗi hay gặp\n- Quên đảo dấu khi cần max-heap.\n- Đẩy cả đối tượng không so sánh được vào heap; dùng tuple `(ưu tiên, số thứ tự, đối tượng)`.\n- Tìm phần tử bất kỳ trong heap (O(n)), đó không phải thế mạnh của nó.\n\n### Tự kiểm tra\n1. Vì sao top-k dùng min-heap chứ không phải max-heap?\n2. Vì sao `heapify` chỉ O(n) mà không phải O(n log n)?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-priority-queue-heap",
+    "ten": "2.5 — Hàng đợi ưu tiên & Heap",
+    "nguon": "Data Structures and Algorithms · Chương 2",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-heap-cai-dat",
+    "ten": "4.7 — Dựng heap: sift-up, sift-down, Floyd",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd9-2",
+    "ten": "4.D — 📑 Học theo từng slide · Cây, phần 2b: heap, hàng đợi ưu tiên & ký pháp Ba Lan (4B-Trees2, slide 17–33)",
+    "nguon": "Data Structures and Algorithms · Chương 4",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-1",
+    "ten": "⭐ CS.10 — 📑 Thiết kế cấu trúc dữ liệu: LRU, LFU, min-stack, hàng đợi hai ngăn xếp, RandomizedSet, trung vị (slide 1–11)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Heap & Backtracking › Backtracking": {
+  "body": "Backtracking (quay lui) là cách thử mọi khả năng một cách có hệ thống: chọn một bước, đi tiếp bằng đệ quy; nếu bế tắc hoặc đã xong thì bỏ lựa chọn đó (quay lại) rồi thử nhánh khác. Giống đi mê cung: gặp ngõ cụt thì lùi về ngã rẽ gần nhất. Nó duyệt \"cây trạng thái\" và quan trọng nhất là cắt nhánh (pruning) sớm.\n\n### Vì sao cần biết\nMọi đề \"liệt kê tất cả\" hay \"có tồn tại cách nào\" với n nhỏ: Subsets, Permutations, Combination Sum, Word Search, N-Queens, Palindrome Partitioning, Generate Parentheses, Sudoku.\n\n### Khuôn chung: chọn, đệ quy, bỏ chọn\n```python\ndef backtrack(state):\n    if is_solution(state):\n        record(state); return\n    for choice in candidates(state):\n        if not valid(choice): continue      # cắt nhánh\n        apply(choice)\n        backtrack(state)\n        undo(choice)                        # quay lui\n```\n\n### Ví dụ: Combination Sum (dùng lại số nhiều lần)\n```python\ndef combination_sum(cands, target):\n    res, path = [], []\n    def dfs(start, remain):\n        if remain == 0:\n            res.append(path[:])             # chép bản sao\n            return\n        for i in range(start, len(cands)):\n            if cands[i] > remain:\n                continue\n            path.append(cands[i])\n            dfs(i, remain - cands[i])       # i, không phải i+1: được dùng lại\n            path.pop()\n    dfs(0, target)\n    return res\n\nassert sorted(combination_sum([2, 3, 6, 7], 7)) == [[2, 2, 3], [7]]\n```\n\n### Ý chính\n- Độ phức tạp thường mũ (2ⁿ cho tập con, n! cho hoán vị), nên chỉ dùng khi n nhỏ (khoảng ≤ 20).\n- Dùng tham số `start` để tránh sinh trùng tổ hợp; dùng mảng `used` cho hoán vị.\n- Sắp xếp trước giúp cắt nhánh sớm và bỏ qua phần tử trùng.\n\n### Lỗi hay gặp\n- Quên `path[:]` khi lưu kết quả nên mọi kết quả cùng trỏ một list rồi bị rỗng.\n- Quên bước hoàn tác (`pop`) nên trạng thái rò sang nhánh khác.\n- Không cắt nhánh làm quá chậm.\n\n### Tự kiểm tra\n1. Vì sao phải truyền `start` khi sinh tổ hợp?\n2. Có bao nhiêu hoán vị của n phần tử khác nhau?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Quay lui: khuôn chọn/đệ quy/bỏ chọn, cây trạng thái, tập con, hoán vị, tổ hợp (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs6-2",
+    "ten": "⭐ CS.6 — 📑 Quay lui: N-Queens, Sudoku, tìm từ trong lưới, phân tách đối xứng, sinh ngoặc hợp lệ, cắt nhánh, vs DP (slide 13–23)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs6-on",
+    "ten": "⭐ CS.6 — 🧪 Bài tập: 7 bài quay lui kiểu phỏng vấn (từ tổ hợp chữ trên phím tới chia k phần tổng bằng nhau)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-quiz-cs6",
+    "ten": "⭐ Quiz CS.6 — Quay lui (backtracking)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Heap & Backtracking › Subsets & Permutations": {
+  "body": "Hai khuôn sinh nền tảng của backtracking: **tập con** (mỗi phần tử chọn hoặc không chọn, có 2ⁿ tập) và **hoán vị** (sắp xếp mọi thứ tự, có n! cách). Nắm chắc hai khuôn này thì Combination Sum, Letter Combinations, Palindrome Partitioning chỉ là biến thể.\n\n### Tập con\n```python\ndef subsets(nums):\n    res, path = [], []\n    def dfs(i):\n        if i == len(nums):\n            res.append(path[:]); return\n        dfs(i + 1)                 # không chọn nums[i]\n        path.append(nums[i])\n        dfs(i + 1)                 # chọn nums[i]\n        path.pop()\n    dfs(0)\n    return res\n\nassert len(subsets([1, 2, 3])) == 8\n```\n\n### Hoán vị\n```python\ndef permutations(nums):\n    res, path, used = [], [], [False] * len(nums)\n    def dfs():\n        if len(path) == len(nums):\n            res.append(path[:]); return\n        for i, x in enumerate(nums):\n            if used[i]: continue\n            used[i] = True; path.append(x)\n            dfs()\n            path.pop(); used[i] = False\n    dfs()\n    return res\n\nassert len(permutations([1, 2, 3])) == 6\n```\n\n### Ý chính\n- Có phần tử trùng: sắp xếp trước, rồi bỏ qua `nums[i] == nums[i-1]` khi phần tử trước chưa được chọn trong cùng tầng.\n- Thay cho đệ quy, tập con còn sinh được bằng bitmask: mặt nạ từ 0 đến 2ⁿ-1, bit i bật nghĩa là chọn phần tử i.\n- Độ phức tạp tối thiểu bằng kích thước đầu ra: O(n · 2ⁿ) và O(n · n!).\n\n### Lỗi hay gặp\n- Quên sao chép `path` khi lưu.\n- Dùng `used` mà quên đặt lại về `False` khi quay lui.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs6-1",
+    "ten": "⭐ CS.6 — 📑 Quay lui: khuôn chọn/đệ quy/bỏ chọn, cây trạng thái, tập con, hoán vị, tổ hợp (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs6-on",
+    "ten": "⭐ CS.6 — 🧪 Bài tập: 7 bài quay lui kiểu phỏng vấn (từ tổ hợp chữ trên phím tới chia k phần tổng bằng nhau)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Đồ thị (Graphs) › Graph BFS / DFS": {
+  "body": "Đồ thị là tập các đỉnh nối với nhau bằng cạnh: mạng xã hội, bản đồ đường đi, lưới ô vuông (mỗi ô là một đỉnh, nối với 4 ô kề). BFS và DFS là hai cách đi thăm toàn bộ đỉnh có thể đến được từ một điểm xuất phát; điểm khác biệt so với cây là đồ thị có chu trình nên phải đánh dấu đỉnh đã thăm.\n\n### Vì sao cần biết\nPhần lớn bài đồ thị trên LeetCode thực chất là duyệt: Number of Islands, Clone Graph, Rotting Oranges, Pacific Atlantic Water Flow, Surrounded Regions, Word Ladder, Shortest Path in Binary Matrix.\n\n### Ý chính\n- **DFS** (đệ quy hoặc stack): đi sâu hết một hướng rồi quay lại. Hợp với đếm thành phần liên thông, tô vùng (flood fill), kiểm tra chu trình.\n- **BFS** (queue): duyệt theo lớp từ gần ra xa, nên **tìm đường ngắn nhất khi các cạnh không có trọng số**.\n- Độ phức tạp O(V + E) với danh sách kề; trên lưới `m × n` là O(m · n).\n- Đánh dấu đã thăm **lúc đưa vào queue** (BFS) để mỗi đỉnh vào hàng đợi đúng một lần.\n- BFS nhiều nguồn: đẩy mọi nguồn vào queue từ đầu (Rotting Oranges, 01 Matrix).\n\n### Ví dụ: Number of Islands\n```python\ndef num_islands(grid):\n    if not grid: return 0\n    R, C = len(grid), len(grid[0])\n    seen = set()\n\n    def dfs(r, c):\n        if not (0 <= r < R and 0 <= c < C) or grid[r][c] != '1' or (r, c) in seen:\n            return\n        seen.add((r, c))\n        for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):\n            dfs(r + dr, c + dc)\n\n    count = 0\n    for r in range(R):\n        for c in range(C):\n            if grid[r][c] == '1' and (r, c) not in seen:\n                dfs(r, c)\n                count += 1\n    return count\n```\n\n### BFS tìm đường ngắn nhất\n```python\nfrom collections import deque\n\ndef shortest(graph, s, t):\n    dist = {s: 0}\n    q = deque([s])\n    while q:\n        u = q.popleft()\n        if u == t:\n            return dist[u]\n        for v in graph[u]:\n            if v not in dist:\n                dist[v] = dist[u] + 1\n                q.append(v)\n    return -1\n```\n\n### Lỗi hay gặp\n- Quên tập `visited`: lặp vô hạn trên đồ thị có chu trình.\n- Dùng DFS để tìm đường ngắn nhất (không đảm bảo).\n- Đệ quy DFS quá sâu trên lưới lớn; chuyển sang stack tường minh.\n\n### Tự kiểm tra\n1. Vì sao BFS cho đường ngắn nhất còn DFS thì không?\n2. Số thành phần liên thông đếm bằng cách nào?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-do-thi",
+    "ten": "5.1 — Biểu diễn & duyệt đồ thị",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-bfs",
+    "ten": "5.4 — BFS & đường đi ngắn nhất trên đồ thị không trọng số",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-dfs",
+    "ten": "5.3 — DFS: chu trình, thành phần liên thông, sắp xếp tô-pô",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd10-2",
+    "ten": "5.B — 📑 Học theo từng slide · Đồ thị, phần 1b: biểu diễn, BFS/DFS, Dijkstra & Floyd (5A-Graphs1, slide 18–36)",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Đồ thị (Graphs) › Topological Sort": {
+  "body": "Sắp xếp tô-pô (topological sort) xếp các đỉnh của đồ thị có hướng không chu trình (DAG) thành một dãy sao cho mọi cạnh `u → v` có `u` đứng trước `v`. Đó chính là thứ tự học các môn có tiên quyết hay thứ tự build các gói phụ thuộc nhau. Nếu đồ thị có chu trình thì không tồn tại thứ tự như vậy, nên thuật toán cũng đồng thời phát hiện chu trình.\n\n### Dấu hiệu nhận ra\n\"Phải làm A trước B\", \"môn tiên quyết\", \"thứ tự biên dịch\": Course Schedule, Course Schedule II, Alien Dictionary.\n\n### Thuật toán Kahn (BFS theo bậc vào)\n1. Tính `indegree` (số cạnh vào) của mỗi đỉnh.\n2. Đưa mọi đỉnh `indegree = 0` vào queue.\n3. Lấy một đỉnh ra, thêm vào kết quả, giảm `indegree` của các đỉnh kề; đỉnh nào về 0 thì vào queue.\n4. Nếu kết quả có ít hơn V đỉnh thì còn chu trình.\n\n```python\nfrom collections import deque, defaultdict\n\ndef can_finish(n, prerequisites):          # prerequisites: [a, b] = học b trước a\n    adj, indeg = defaultdict(list), [0] * n\n    for a, b in prerequisites:\n        adj[b].append(a)\n        indeg[a] += 1\n    q = deque(i for i in range(n) if indeg[i] == 0)\n    order = []\n    while q:\n        u = q.popleft()\n        order.append(u)\n        for v in adj[u]:\n            indeg[v] -= 1\n            if indeg[v] == 0:\n                q.append(v)\n    return len(order) == n                 # đủ n đỉnh = không có chu trình\n\nassert can_finish(2, [[1, 0]]) and not can_finish(2, [[1, 0], [0, 1]])\n```\nCách khác: DFS với ba trạng thái (chưa thăm, đang thăm, xong) và đảo thứ tự hoàn thành. Cả hai O(V + E).\n\n### Lỗi hay gặp\n- Đảo chiều cạnh (b → a hay a → b).\n- Quên rằng kết quả không duy nhất; đề thường chấp nhận mọi thứ tự hợp lệ.\n- Quên các đỉnh cô lập (không có cạnh) vẫn phải xuất hiện trong thứ tự.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs8-1",
+    "ten": "⭐ CS.8 — 📑 Đồ thị nâng cao: tô-pô, Bellman-Ford, truy vết Floyd, 0-1 BFS, BFS nhiều nguồn (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-dfs",
+    "ten": "5.3 — DFS: chu trình, thành phần liên thông, sắp xếp tô-pô",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs8-on",
+    "ten": "⭐ CS.8 — 🧪 Bài tập: 7 bài đồ thị nâng cao kiểu phỏng vấn (từ bảng chữ cái lạ tới đường tăng dài nhất)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Đồ thị (Graphs) › Union-Find (DSU)": {
+  "body": "Union-Find (Disjoint Set Union, DSU) quản lý một tập các nhóm rời nhau và trả lời rất nhanh hai câu hỏi: hai phần tử có cùng nhóm không (`find`) và gộp hai nhóm (`union`). Mỗi nhóm là một cây, gốc cây là \"đại diện\" của nhóm. Với hai tối ưu hoá, mỗi thao tác gần như O(1) (chính xác là O(α(n)), α là hàm Ackermann ngược, nhỏ hơn 5 với mọi n thực tế).\n\n### Vì sao cần biết\nBài \"đếm thành phần liên thông khi thêm cạnh dần\", phát hiện cạnh tạo chu trình trong đồ thị vô hướng (Redundant Connection), Number of Connected Components, Accounts Merge, và Kruskal tìm cây khung nhỏ nhất.\n\n### Hai tối ưu hoá\n- **Nén đường đi** (path compression): khi `find`, nối thẳng các nút trên đường vào gốc.\n- **Gộp theo hạng** (union by rank/size): gắn cây nhỏ vào cây lớn để cây không cao.\n\n### Cài đặt\n```python\nclass DSU:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.size = [1] * n\n        self.count = n                       # số nhóm hiện có\n\n    def find(self, x):\n        while self.parent[x] != x:\n            self.parent[x] = self.parent[self.parent[x]]   # nén đường đi\n            x = self.parent[x]\n        return x\n\n    def union(self, a, b):\n        ra, rb = self.find(a), self.find(b)\n        if ra == rb:\n            return False                      # đã cùng nhóm: cạnh này tạo chu trình\n        if self.size[ra] < self.size[rb]:\n            ra, rb = rb, ra\n        self.parent[rb] = ra\n        self.size[ra] += self.size[rb]\n        self.count -= 1\n        return True\n\ndef find_redundant(edges):                    # cạnh làm đồ thị có chu trình\n    d = DSU(len(edges) + 1)\n    for a, b in edges:\n        if not d.union(a, b):\n            return [a, b]\n\nassert find_redundant([[1, 2], [1, 3], [2, 3]]) == [2, 3]\n```\n\n### Lỗi hay gặp\n- So sánh `parent[a] == parent[b]` thay vì so sánh gốc bằng `find`.\n- Quên rằng DSU chỉ gộp, không tách nhóm.\n- Dùng cho đồ thị có hướng (DSU hợp với vô hướng).\n\n### Tự kiểm tra\n1. Vì sao `union` trả `False` lại nghĩa là cạnh đó tạo chu trình?\n2. Kruskal dùng DSU ở bước nào?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-dijkstra-mst",
+    "ten": "A.2 — Union-Find & phân tích khấu hao",
+    "nguon": "Data Structures and Algorithms · Nâng cao — Ngoài giáo trình",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-mst",
+    "ten": "5.6 — Cây khung nhỏ nhất: Prim & Kruskal",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Đồ thị (Graphs) › Advanced Graphs (Dijkstra/MST)": {
+  "body": "Khi cạnh có trọng số, BFS không còn tìm được đường ngắn nhất. Nhóm này gồm các thuật toán trên đồ thị có trọng số: Dijkstra (đường ngắn nhất từ một nguồn, trọng số không âm), Bellman-Ford (cho phép trọng số âm), và cây khung nhỏ nhất (MST) bằng Prim hoặc Kruskal.\n\n### Ý chính\n- **Dijkstra**: luôn chốt đỉnh có khoảng cách tạm nhỏ nhất bằng min-heap rồi \"nới lỏng\" (relax) các cạnh ra khỏi nó. Độ phức tạp O((V + E) log V). Không dùng với trọng số âm.\n- **Bellman-Ford**: nới lỏng mọi cạnh V-1 lần, O(V · E); một lượt thứ V vẫn còn cải thiện nghĩa là có chu trình âm. Dùng cho Cheapest Flights Within K Stops.\n- **MST**: tập cạnh nối mọi đỉnh với tổng trọng số nhỏ nhất. Kruskal sắp cạnh tăng dần và dùng Union-Find; Prim lớn dần từ một đỉnh bằng heap. Ví dụ Min Cost to Connect All Points.\n- Bài thường gặp: Network Delay Time, Path With Minimum Effort, Swim in Rising Water.\n\n### Ví dụ: Dijkstra\n```python\nimport heapq\n\ndef dijkstra(graph, src):                    # graph[u] = [(v, w), ...]\n    dist = {src: 0}\n    heap = [(0, src)]\n    while heap:\n        d, u = heapq.heappop(heap)\n        if d > dist.get(u, float('inf')):\n            continue                          # bản ghi cũ, bỏ qua\n        for v, w in graph[u]:\n            nd = d + w\n            if nd < dist.get(v, float('inf')):\n                dist[v] = nd\n                heapq.heappush(heap, (nd, v))\n    return dist\n\ng = {0: [(1, 4), (2, 1)], 1: [], 2: [(1, 2)]}\nassert dijkstra(g, 0) == {0: 0, 2: 1, 1: 3}\n```\n\n### Lỗi hay gặp\n- Dùng Dijkstra khi có cạnh âm cho kết quả sai.\n- Quên bỏ qua bản ghi cũ trong heap (`d > dist[u]`), làm chậm đi.\n- Nhầm MST (nối tất cả đỉnh tối thiểu) với đường ngắn nhất (từ một nguồn).",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-dijkstra",
+    "ten": "5.5 — Dijkstra từng bước",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-mst",
+    "ten": "5.6 — Cây khung nhỏ nhất: Prim & Kruskal",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs8-1",
+    "ten": "⭐ CS.8 — 📑 Đồ thị nâng cao: tô-pô, Bellman-Ford, truy vết Floyd, 0-1 BFS, BFS nhiều nguồn (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-csd11-1",
+    "ten": "5.C — 📑 Học theo từng slide · Đồ thị, phần 2a: cây khung, Prim, Kruskal & Euler (5B-Graphs2, slide 1–15)",
+    "nguon": "Data Structures and Algorithms · Chương 5",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Quy hoạch động (DP) › DP nhập môn (tư duy)": {
+  "body": "Quy hoạch động (Dynamic Programming, DP) giải một bài toán lớn bằng cách giải các bài toán con **gối nhau** và nhớ kết quả để không tính lại. Giống tính số Fibonacci: `fib(5)` và `fib(4)` đều cần `fib(3)`; nếu ghi nhớ `fib(3)` thì chỉ tính một lần. DP áp dụng được khi bài có hai tính chất: **bài toán con gối nhau** và **cấu trúc con tối ưu** (đáp án tối ưu được dựng từ đáp án tối ưu của bài con).\n\n### Vì sao cần biết\nDP là phần khó nhất của phỏng vấn nhưng có công thức tư duy ổn định. Nó biến lời giải đệ quy mũ O(2ⁿ) thành đa thức.\n\n### Công thức bốn bước\n1. **Trạng thái**: `dp[i]` (hoặc `dp[i][j]`) biểu diễn điều gì? Phải ghi ra thành câu.\n2. **Công thức chuyển**: `dp[i]` tính từ các trạng thái nhỏ hơn thế nào?\n3. **Trường hợp cơ sở**: giá trị ban đầu.\n4. **Thứ tự tính** và đáp án nằm ở đâu.\n\n### Hai cách cài\n- **Top-down (memoization)**: viết đệ quy tự nhiên rồi thêm bộ nhớ đệm. Dễ nghĩ, chỉ tính các trạng thái cần.\n- **Bottom-up (tabulation)**: điền bảng từ nhỏ đến lớn bằng vòng lặp; thường tiết kiệm bộ nhớ hơn vì chỉ cần giữ vài hàng gần nhất.\n\n```python\nfrom functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib_top_down(n):                    # O(n) thay vì O(2^n)\n    return n if n < 2 else fib_top_down(n - 1) + fib_top_down(n - 2)\n\ndef fib_bottom_up(n):                   # O(n) thời gian, O(1) bộ nhớ\n    a, b = 0, 1\n    for _ in range(n):\n        a, b = b, a + b\n    return a\n\nassert fib_top_down(30) == fib_bottom_up(30) == 832040\n```\n\n### Lỗi hay gặp\n- Bắt đầu viết code khi chưa định nghĩa rõ `dp[i]` nghĩa là gì.\n- Thiếu trường hợp cơ sở hoặc duyệt sai thứ tự (dùng ô chưa được tính).\n- Dùng DP khi có lời giải tham lam đơn giản hơn, hoặc ngược lại.\n\n### Tự kiểm tra\n1. Dấu hiệu nào cho thấy bài toán có bài con gối nhau?\n2. Vì sao memoization biến O(2ⁿ) thành O(n) ở Fibonacci?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs3-1",
+    "ten": "⭐ CS.3 — 📑 Quy hoạch động (1): nhớ, bảng, công thức 4 bước, leo cầu thang, cướp nhà (slide 1–12)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-8-1-dp-greedy",
+    "ten": "8.1 — Quy hoạch động & tham lam",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs3-on",
+    "ten": "⭐ CS.3 — 🧪 Bài tập: 7 bài quy hoạch động kiểu phỏng vấn (từ số chính phương tới búp bê Nga)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-quiz-cs3",
+    "ten": "⭐ Quiz CS.3 — Quy hoạch động (phần 1)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Quy hoạch động (DP) › 1-D DP": {
+  "body": "DP một chiều dùng mảng `dp[i]` mà `i` là vị trí hoặc số lượng, và thường `dp[i]` chỉ phụ thuộc vài ô ngay trước nó (nên có thể rút gọn bộ nhớ xuống O(1)).\n\n### Các bài kinh điển và công thức chuyển\n- **Climbing Stairs**: `dp[i] = dp[i-1] + dp[i-2]` (đến bậc i từ bậc i-1 hoặc i-2).\n- **House Robber**: `dp[i] = max(dp[i-1], dp[i-2] + a[i])` (bỏ qua nhà i, hoặc cướp nhà i và nhảy qua nhà liền trước).\n- **Coin Change** (ít xu nhất): `dp[x] = min(dp[x - c] + 1)` với mọi mệnh giá `c`.\n- **Longest Increasing Subsequence**: `dp[i] = 1 + max(dp[j])` với `j < i, a[j] < a[i]`, O(n²); có bản O(n log n) bằng binary search.\n- **Decode Ways**, **Word Break**: `dp[i]` = có/ bao nhiêu cách xử lý i ký tự đầu.\n\n### Ví dụ: Coin Change\n```python\ndef coin_change(coins, amount):\n    INF = float('inf')\n    dp = [0] + [INF] * amount            # dp[x] = số xu ít nhất tạo x\n    for x in range(1, amount + 1):\n        for c in coins:\n            if c <= x and dp[x - c] + 1 < dp[x]:\n                dp[x] = dp[x - c] + 1\n    return dp[amount] if dp[amount] != INF else -1\n\nassert coin_change([1, 2, 5], 11) == 3 and coin_change([2], 3) == -1\n```\nO(amount × số mệnh giá).\n\n### House Robber rút gọn bộ nhớ\n```python\ndef rob(a):\n    prev2 = prev1 = 0\n    for x in a:\n        prev2, prev1 = prev1, max(prev1, prev2 + x)\n    return prev1\n\nassert rob([2, 7, 9, 3, 1]) == 12\n```\n\n### Lỗi hay gặp\n- Khởi tạo `dp` bằng 0 cho bài \"tối thiểu\" (phải là vô cực).\n- Nhầm Coin Change (min xu) với đếm số cách (thứ tự vòng lặp khác nhau: lặp mệnh giá ngoài để không đếm trùng hoán vị).",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs3-2",
+    "ten": "⭐ CS.3 — 📑 Quy hoạch động (2): đổi tiền, giải mã, tách từ, dãy con tăng dài nhất (slide 13–24)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs3-on",
+    "ten": "⭐ CS.3 — 🧪 Bài tập: 7 bài quy hoạch động kiểu phỏng vấn (từ số chính phương tới búp bê Nga)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Quy hoạch động (DP) › 2-D DP": {
+  "body": "DP hai chiều dùng bảng `dp[i][j]` khi trạng thái cần hai chỉ số: hai chuỗi (vị trí i trong chuỗi A, j trong chuỗi B), một lưới, hoặc \"xét i vật đầu với sức chứa j\".\n\n### Các bài kinh điển\n- **Unique Paths** (lưới): `dp[i][j] = dp[i-1][j] + dp[i][j-1]`.\n- **Longest Common Subsequence (LCS)**: nếu `A[i] == B[j]` thì `dp[i][j] = dp[i-1][j-1] + 1`, ngược lại `max(dp[i-1][j], dp[i][j-1])`.\n- **Edit Distance**: `dp[i][j]` là số thao tác chèn/xoá/thay ít nhất để biến `A[:i]` thành `B[:j]`.\n- **Knapsack 0/1**: `dp[i][w] = max(dp[i-1][w], dp[i-1][w - wt] + val)`; duyệt `w` giảm dần khi nén về một hàng.\n- Biến thể: Partition Equal Subset Sum, Target Sum, Interleaving String.\n\n### Ví dụ: LCS\n```python\ndef lcs(a, b):\n    m, n = len(a), len(b)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if a[i - 1] == b[j - 1]:\n                dp[i][j] = dp[i - 1][j - 1] + 1\n            else:\n                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])\n    return dp[m][n]\n\nassert lcs(\"abcde\", \"ace\") == 3\n```\nO(m · n) thời gian. Vì `dp[i]` chỉ cần hàng `i-1` nên nén được bộ nhớ xuống O(n).\n\n### Lỗi hay gặp\n- Dùng `[[0] * n] * m` làm các hàng dùng chung một list.\n- Lệch chỉ số giữa bảng (kích thước +1) và chuỗi (từ 0), nên dùng `a[i - 1]`.\n- Nén một hàng nhưng duyệt sai chiều (knapsack 0/1 phải duyệt ngược để mỗi vật chỉ dùng một lần).",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs4-1",
+    "ten": "⭐ CS.4 — 📑 Quy hoạch động (3): bảng 2 chiều, cái túi 0/1 và không giới hạn, tổng tập con, LCS, khoảng cách sửa (slide 1–11)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs4-2",
+    "ten": "⭐ CS.4 — 📑 Quy hoạch động (4): lưới, xâu đối xứng, DP khoảng, máy trạng thái, bitmask (slide 12–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs4-on",
+    "ten": "⭐ CS.4 — 🧪 Bài tập: 7 bài quy hoạch động 2 chiều kiểu phỏng vấn (từ đặt dấu tới cắt xâu đối xứng)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Quy hoạch động (DP) › Greedy": {
+  "body": "Thuật toán tham lam (greedy) ở mỗi bước chọn phương án tốt nhất trước mắt và không bao giờ đổi ý, hy vọng cuối cùng ra tối ưu toàn cục. Nó nhanh (thường O(n) hoặc O(n log n)) và code ngắn, nhưng chỉ đúng khi bài có tính chất **lựa chọn tham lam**: tồn tại một đáp án tối ưu chứa lựa chọn cục bộ đó.\n\n### Biết khi nào greedy đúng\nCách kiểm tra là lập luận **đổi chỗ** (exchange argument): lấy một đáp án tối ưu bất kỳ rồi chứng minh có thể thay phần đầu bằng lựa chọn tham lam mà không tệ đi. Nếu tìm được phản ví dụ nhỏ thì dùng DP. Ví dụ Coin Change với các mệnh giá `{1, 3, 4}` đổi 6: greedy chọn 4 + 1 + 1 (3 xu) nhưng tối ưu là 3 + 3 (2 xu).\n\n### Bài kinh điển\n- **Jump Game**: theo dõi vị trí xa nhất có thể tới; nếu `i > farthest` thì không đi được.\n- **Gas Station**, **Partition Labels**, **Maximum Subarray (Kadane)**, **Hand of Straights**, **Merge Triplets**.\n- Xếp lịch khoảng: chọn hoạt động kết thúc sớm nhất.\n\n### Ví dụ\n```python\ndef can_jump(nums):\n    farthest = 0\n    for i, x in enumerate(nums):\n        if i > farthest:\n            return False\n        farthest = max(farthest, i + x)\n    return True\n\ndef max_subarray(nums):                  # Kadane\n    cur = best = nums[0]\n    for x in nums[1:]:\n        cur = max(x, cur + x)            # nối tiếp hay bắt đầu lại\n        best = max(best, cur)\n    return best\n\nassert can_jump([2, 3, 1, 1, 4]) and not can_jump([3, 2, 1, 0, 4])\nassert max_subarray([-2, 1, -3, 4, -1, 2, 1, -5, 4]) == 6\n```\n\n### Lỗi hay gặp\n- Áp greedy khi chưa chứng minh, bị phản ví dụ.\n- Sắp xếp theo tiêu chí sai (kết thúc sớm nhất chứ không phải bắt đầu sớm nhất ở bài chọn hoạt động).\n\n### Tự kiểm tra\n1. Vì sao \"chọn hoạt động kết thúc sớm nhất\" tối ưu?\n2. Cho một ví dụ mà greedy cho kết quả sai.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs5-1",
+    "ten": "⭐ CS.5 — 📑 Tham lam: khi nào đúng, lập luận đổi chỗ, xếp lịch khoảng, phòng họp, jump game (slide 1–13)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs5-on",
+    "ten": "⭐ CS.5 — 🧪 Bài tập: 7 bài tham lam và chia để trị kiểu phỏng vấn (từ bỏ ít khoảng nhất tới đếm cặp ngược)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/csd204-data-structures-and-algorithm-with-python/learn?lessonSlug=csd204-8-1-dp-greedy",
+    "ten": "8.1 — Quy hoạch động & tham lam",
+    "nguon": "Data Structures and Algorithm with Python · Chapter 8",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD204"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Pattern khác › Intervals": {
+  "body": "Bài về khoảng (interval) cho các đoạn `[start, end]` và hỏi gộp, chèn, đếm chồng lấn hay xếp lịch. Gần như luôn bắt đầu bằng **sắp xếp theo điểm đầu** (hoặc điểm cuối với bài chọn tối đa), rồi quét một lượt và so sánh khoảng hiện tại với khoảng cuối cùng đã xử lý.\n\n### Các bài kinh điển\n- **Merge Intervals**: sắp theo `start`; nếu khoảng mới bắt đầu ≤ `end` của khoảng cuối thì gộp (lấy `max` của hai `end`), không thì thêm mới.\n- **Insert Interval**: ba pha: các khoảng hoàn toàn trước, các khoảng chồng (gộp), các khoảng hoàn toàn sau.\n- **Non-overlapping Intervals** (xoá ít khoảng nhất): sắp theo `end`, giữ khoảng kết thúc sớm nhất rồi đếm số khoảng bị bỏ (tham lam).\n- **Meeting Rooms II** (số phòng tối thiểu): sắp thời điểm bắt đầu và kết thúc riêng, hoặc dùng min-heap các `end` đang chạy.\n\n### Ví dụ\n```python\ndef merge(intervals):\n    intervals.sort(key=lambda x: x[0])\n    out = []\n    for s, e in intervals:\n        if out and s <= out[-1][1]:\n            out[-1][1] = max(out[-1][1], e)    # chồng lấn: mở rộng\n        else:\n            out.append([s, e])\n    return out\n\ndef min_meeting_rooms(intervals):\n    import heapq\n    intervals.sort()\n    rooms = []                                 # min-heap các thời điểm kết thúc\n    for s, e in intervals:\n        if rooms and rooms[0] <= s:\n            heapq.heapreplace(rooms, e)        # tái sử dụng phòng\n        else:\n            heapq.heappush(rooms, e)\n    return len(rooms)\n\nassert merge([[1, 3], [2, 6], [8, 10]]) == [[1, 6], [8, 10]]\nassert min_meeting_rooms([[0, 30], [5, 10], [15, 20]]) == 2\n```\nCả hai O(n log n) do sắp xếp.\n\n### Lỗi hay gặp\n- Quên dùng `max` khi gộp (khoảng sau có thể nằm gọn trong khoảng trước).\n- Không thống nhất khoảng chạm đầu mút `[1,2]` và `[2,3]` có tính là chồng lấn không; đọc kỹ đề.\n- Quên sắp xếp trước.\n\n### Tự kiểm tra\n1. Vì sao Non-overlapping Intervals sắp theo `end`, còn Merge sắp theo `start`?\n2. Meeting Rooms II dùng heap để lưu thông tin gì?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs5-1",
+    "ten": "⭐ CS.5 — 📑 Tham lam: khi nào đúng, lập luận đổi chỗ, xếp lịch khoảng, phòng họp, jump game (slide 1–13)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs5-on",
+    "ten": "⭐ CS.5 — 🧪 Bài tập: 7 bài tham lam và chia để trị kiểu phỏng vấn (từ bỏ ít khoảng nhất tới đếm cặp ngược)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   }
+  ]
+ },
+ "Pattern khác › Math & Geometry": {
+  "body": "Nhóm \"toán và hình học\" gồm các bài không thuộc cấu trúc dữ liệu nào, mà cần thao tác chỉ số cẩn thận hoặc một vài kiến thức số học nền.\n\n### Ý chính\n- **Ma trận**: Rotate Image (xoay 90 độ tại chỗ = chuyển vị rồi đảo mỗi hàng), Spiral Matrix (thu hẹp bốn biên top/bottom/left/right), Set Matrix Zeroes (dùng hàng/cột đầu làm cờ).\n- **Số học**: GCD bằng thuật toán Euclid, LCM = `a * b // gcd(a, b)`, kiểm tra số nguyên tố đến `√n`, sàng Eratosthenes cho mọi số nguyên tố ≤ n trong O(n log log n).\n- **Luỹ thừa nhanh** (`Pow(x, n)`): bình phương lặp, chỉ O(log n).\n- **Số lớn / tràn số**: Reverse Integer, Multiply Strings; để ý giới hạn 32-bit nếu đề yêu cầu.\n- Happy Number: phát hiện vòng lặp bằng set hoặc fast/slow.\n\n### Ví dụ\n```python\ndef rotate(m):                       # xoay ma trận vuông 90 độ theo chiều kim đồng hồ\n    n = len(m)\n    for i in range(n):\n        for j in range(i + 1, n):\n            m[i][j], m[j][i] = m[j][i], m[i][j]\n    for row in m:\n        row.reverse()\n\ndef gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\n\ndef fast_pow(x, n):\n    if n < 0:\n        x, n = 1 / x, -n\n    r = 1\n    while n:\n        if n & 1:\n            r *= x\n        x *= x\n        n >>= 1\n    return r\n\nm = [[1, 2], [3, 4]]; rotate(m)\nassert m == [[3, 1], [4, 2]] and gcd(12, 18) == 6 and fast_pow(2, 10) == 1024\n```\n\n### Lỗi hay gặp\n- Sai biên khi duyệt xoắn ốc (dừng quá sớm hoặc lặp thừa một hàng).\n- Quên số mũ âm, hoặc chia số nguyên khi cần số thực.",
+  "lessons": [
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs5-2",
+    "ten": "⭐ CS.5 — 📑 Chia để trị: định lý Master, nghịch thế, quickselect, top-k, luỹ thừa nhanh, cặp điểm gần nhất (slide 14–24)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Pattern khác › Bit Manipulation": {
+  "body": "Thao tác bit làm việc trực tiếp trên biểu diễn nhị phân của số nguyên: nhanh, tốn ít bộ nhớ, và cho vài mẹo gọn đáng ngạc nhiên. Các toán tử: `&` (AND), `|` (OR), `^` (XOR), `~` (NOT), `<<` và `>>` (dịch bit).\n\n### Ý chính\n- **XOR**: `a ^ a = 0` và `a ^ 0 = a`, nên XOR cả mảng triệt tiêu các số xuất hiện hai lần (Single Number, O(n) thời gian, O(1) bộ nhớ). XOR cũng cho phép hoán đổi hai số mà không cần biến phụ.\n- **Kiểm tra bit i**: `(x >> i) & 1`. **Bật bit i**: `x | (1 << i)`. **Tắt**: `x & ~(1 << i)`.\n- **Xoá bit 1 thấp nhất**: `x & (x - 1)`. Dùng để đếm bit 1 (Number of 1 Bits) và kiểm tra luỹ thừa của 2 (`x > 0 and x & (x - 1) == 0`).\n- **Bitmask** biểu diễn một tập con của n phần tử (n ≤ 20) bằng một số nguyên; dùng trong DP bitmask và sinh tập con.\n- Cộng không dùng `+` (Sum of Two Integers): XOR cho tổng không nhớ, `(a & b) << 1` cho phần nhớ, lặp đến khi hết nhớ.\n\n### Ví dụ\n```python\ndef single_number(nums):\n    r = 0\n    for x in nums:\n        r ^= x\n    return r\n\ndef count_bits(x):                    # x không âm\n    c = 0\n    while x:\n        x &= x - 1                    # xoá bit 1 thấp nhất\n        c += 1\n    return c\n\ndef is_power_of_two(x):\n    return x > 0 and x & (x - 1) == 0\n\nassert single_number([4, 1, 2, 1, 2]) == 4\nassert count_bits(11) == 3 and is_power_of_two(16) and not is_power_of_two(12)\n```\n\n### Lỗi hay gặp\n- Ưu tiên toán tử: `x & 1 == 0` bị hiểu là `x & (1 == 0)`; phải viết `(x & 1) == 0`.\n- Số âm: Python có số nguyên vô hạn bit nên cần mặt nạ `& 0xFFFFFFFF` khi mô phỏng 32-bit.\n- Dịch bit quá nhiều trong C/C++/Java gây hành vi không mong muốn.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs9-2",
+    "ten": "⭐ CS.9 — 📑 Thao tác bit trong phỏng vấn (slide 16–24)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs9-on",
+    "ten": "⭐ CS.9 — 🧪 Bài tập: 7 bài băm, chuỗi và thao tác bit kiểu phỏng vấn",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-quiz-cs9",
+    "ten": "⭐ Quiz CS.9 — Chuỗi, thao tác bit và băm trong phỏng vấn",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "quiz",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/courses/introduction-to-computer-science/learn?lessonSlug=csi104-3-3-phep-logic",
+    "ten": "3.3 — Phép toán logic trên bit",
+    "nguon": "Introduction to Computer Science · Chương 3",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSI104"
+   }
+  ]
+ },
+ "Bộ đề & luyện tập › Blind 75": {
+  "body": "Blind 75 là danh sách 75 bài LeetCode do một kỹ sư đăng trên diễn đàn Blind để giúp luyện phỏng vấn trong thời gian ngắn. Danh sách được chọn để phủ gần như mọi pattern chính (mảng, chuỗi, danh sách liên kết, cây, đồ thị, DP, heap, khoảng, bit) với ít bài nhất. Nếu chỉ có 4–8 tuần, đây là điểm khởi đầu hiệu quả.\n\n### Cách dùng\n- Làm theo nhóm chủ đề, không làm tuần tự ngẫu nhiên; mỗi nhóm đi từ dễ đến khó.\n- Với mỗi bài: tự giải tối đa 20–30 phút, rồi xem lời giải, ghi lại **dấu hiệu nhận ra pattern**, và 1–2 ngày sau làm lại không nhìn.\n- Mục tiêu không phải đếm số bài mà là phản xạ: đọc đề ra pattern trong vài phút.\n- Theo dõi bằng bảng tính: bài nào làm đúng ngay, bài nào phải xem lời giải, ngày cần ôn lại.\n\n### Gợi ý nhịp luyện (khoảng 6 tuần)\n1. Mảng, hash, two pointers, sliding window, stack.\n2. Binary search, linked list, cây.\n3. Heap, backtracking, trie.\n4. Đồ thị.\n5. DP một chiều và hai chiều, greedy, khoảng.\n6. Bit, toán, ôn lại bài sai, thi thử có bấm giờ.\n\n### Lỗi hay gặp\n- Coi danh sách như thuộc lòng đáp án; nhà tuyển dụng đổi đề đủ để bạn lộ ngay.\n- Nhảy sang nhóm khó (DP, đồ thị) khi nền mảng/hash chưa vững.\n- Chỉ làm khi hứng, không có lịch ôn lại.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs10-on",
+    "ten": "⭐ CS.10 — 🧪 Bài tập: 22 bài phỏng vấn chọn lọc phủ 14 mẫu + lộ trình luyện 4 tuần",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-2",
+    "ten": "⭐ CS.10 — 📑 Java Collections bên trong, 14 mẫu phỏng vấn, cách trình bày, lộ trình luyện (slide 12–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/code-lab/csd201-practice",
+    "ten": "CSD201 — Luyện tập Cấu trúc dữ liệu & Giải thuật bằng Java (chạy & tự chấm trên máy)",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bộ đề & luyện tập › NeetCode 150": {
+  "body": "NeetCode 150 mở rộng Blind 75 thành 150 bài, nhóm theo pattern và sắp theo độ khó trong từng nhóm, mỗi bài có video giải thích. Số bài nhiều gấp đôi giúp bạn gặp mỗi pattern ở nhiều biến thể hơn, nên phản xạ nhận diện sâu hơn, đặc biệt ở các nhóm khó như DP, đồ thị, backtracking.\n\n### Khi nào nên dùng\n- Đã xong Blind 75 và còn thời gian (thêm 3–6 tuần), hoặc nhắm các công ty có độ khó cao.\n- Muốn học theo lộ trình có sẵn thứ tự chủ đề (từ Arrays & Hashing đến Math & Geometry), khớp với các bước của lộ trình này.\n\n### Ý chính\n- Khi bí, xem video để hiểu ý tưởng chứ đừng chép code; sau đó tự cài đặt bằng ngôn ngữ của mình.\n- Tập lại bằng cách viết ra khung giải (pattern, cấu trúc dữ liệu, độ phức tạp) trước khi viết code.\n- Mỗi tuần dành một buổi làm lại các bài đã sai, vì quên là chuyện thường.\n- Có thể kết hợp bài tập có chấm tự động ở phần Code Lab của trang để luyện cách cài đặt.\n\n### Lỗi hay gặp\n- Xem video trước khi tự nghĩ, mất khả năng tự tìm hướng.\n- Cố làm đủ 150 bài thay vì làm kỹ 80–100 bài, rồi ôn lại.\n\n### Ví dụ lịch 6 tuần cho phần mở rộng\n- Tuần 1–2: Arrays & Hashing, Two Pointers, Sliding Window, Stack, Binary Search (làm thêm các bài Medium ngoài Blind 75).\n- Tuần 3: Linked List, Trees, Tries, Heap.\n- Tuần 4: Backtracking và Graphs, chú ý các bài BFS nhiều nguồn và Union-Find.\n- Tuần 5: DP một chiều, DP hai chiều, Greedy, Intervals.\n- Tuần 6: Bit, Math, ôn lại toàn bộ bài đã sai và thi thử có bấm giờ.\n\n### Tự kiểm tra\n1. Với mỗi nhóm pattern, bạn nêu được dấu hiệu nhận ra và bài khuôn mẫu chưa?\n2. Bài nào bạn chỉ làm được khi xem lời giải, và đã làm lại sau một tuần chưa?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs10-on",
+    "ten": "⭐ CS.10 — 🧪 Bài tập: 22 bài phỏng vấn chọn lọc phủ 14 mẫu + lộ trình luyện 4 tuần",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs2-on",
+    "ten": "⭐ CS.2 — 🧪 Bài tập: 7 bài kỹ thuật mảng kiểu phỏng vấn (từ bình phương mảng đã sắp tới Kadane vòng tròn)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs8-on",
+    "ten": "⭐ CS.8 — 🧪 Bài tập: 7 bài đồ thị nâng cao kiểu phỏng vấn (từ bảng chữ cái lạ tới đường tăng dài nhất)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Bộ đề & luyện tập › LeetCode Study Plans": {
+  "body": "LeetCode có sẵn các Study Plan do chính LeetCode xếp: ví dụ **LeetCode 75** (khung 75 bài dạng lịch theo tuần) và **Top Interview 150** (150 bài kinh điển được hỏi). Ưu điểm là nằm ngay trong nền tảng nên theo dõi tiến độ tự động, có thể chọn kế hoạch 14, 30 hoặc 90 ngày.\n\n### Chọn kế hoạch nào\n- Còn dưới một tháng và muốn bao quát: kế hoạch ngắn có khung bài vừa phải.\n- Có 2–3 tháng: Top Interview 150 chi tiết hơn.\n- Muốn hiểu sâu theo pattern: kết hợp với học theo chủ đề ở các bước trước của lộ trình, dùng study plan như danh sách bài để làm.\n\n### Ý chính\n- Kế hoạch chỉ là bộ khung; hiệu quả đến từ cách bạn ôn: ghi lại bài sai và làm lại sau vài ngày.\n- Mỗi ngày làm đều 1–3 bài, không dồn.\n- Tập giải có bấm giờ (khoảng 30–45 phút một bài trung bình) trước vòng phỏng vấn.\n\n### Lỗi hay gặp\n- Làm theo thứ tự hiển thị nhưng bỏ qua phần giải thích và tổng kết pattern.\n- Bỏ giữa chừng khi gặp bài khó rồi không quay lại.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-2",
+    "ten": "⭐ CS.10 — 📑 Java Collections bên trong, 14 mẫu phỏng vấn, cách trình bày, lộ trình luyện (slide 12–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Bộ đề & luyện tập › Luyện trực quan (Algorithms)": {
+  "body": "Trước khi viết code cho một thuật toán, hãy xem nó chạy từng bước. Trang Algorithm Visualizer của site cho bạn chọn một thuật toán, xem mảng, đồ thị hoặc lưới thay đổi theo từng bước, và thậm chí sửa code rồi chạy lại ngay trong trình duyệt. Các thuật toán có sẵn gồm binary search, hai con trỏ (Two Sum), cửa sổ trượt, BFS/DFS, Dijkstra, Union-Find, Topological Sort, Kadane, các bài DP (Coin Change, LIS, LCS, Knapsack), Backtracking (N-Queens, Permutations), Segment Tree, Trie và nhiều thuật toán sắp xếp.\n\n### Cách dùng hiệu quả\n- Chọn thuật toán bạn đang học và chạy chậm từng bước, dự đoán bước kế tiếp trước khi bấm.\n- Thử đầu vào \"xấu\" (đã sắp, ngược, trùng nhiều) để thấy vì sao độ phức tạp xấu nhất khác trung bình.\n- Đọc code đang chạy song song với hình để nối ý tưởng với dòng lệnh.\n- Sau khi xem, tắt đi và tự viết lại từ đầu trên giấy.\n\n### Lỗi hay gặp\n- Chỉ xem mà không tự cài đặt: hiểu hình nhưng chưa viết được code.\n- Bỏ qua phần bất biến (invariant), tức điều luôn đúng sau mỗi bước, đây là thứ giúp chứng minh và debug.",
+  "lessons": [
+   {
+    "href": "/algorithms",
+    "ten": "Trực quan thuật toán",
+    "nguon": "Công cụ học trên web",
+    "kieu": "trang"
+   },
+   {
+    "href": "/simulation?scenario=hash-map",
+    "ten": "HashMap — tìm trong một triệu khoá mà không duyệt",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   },
+   {
+    "href": "/simulation?scenario=list-vs-linked",
+    "ten": "ArrayList so với LinkedList — trong bộ nhớ",
+    "nguon": "Xưởng mô phỏng",
+    "kieu": "mo-phong"
+   }
+  ]
+ },
+ "Bộ đề & luyện tập › DSA track (Code Lab)": {
+  "body": "Code Lab của site có các track bài tập có **chấm tự động**: bạn viết code, chạy test và thấy kết quả ngay, giống môi trường của các nền tảng luyện đề. Track Data Structures & Algorithms tập trung vào cấu trúc dữ liệu và thuật toán nền tảng; track CSD201 luyện bằng Java theo chương trình môn Cấu trúc dữ liệu và Giải thuật.\n\n### Cách dùng\n- Làm theo thứ tự của track, vì bài sau dựa vào kỹ thuật bài trước.\n- Đọc kỹ đề và các test mẫu trước khi code; tự liệt kê thêm các trường hợp biên (rỗng, một phần tử, trùng, số âm).\n- Nếu test thất bại, tái hiện bằng một ví dụ nhỏ trên giấy trước khi sửa mù quáng.\n- Sau khi qua hết test, tự hỏi: độ phức tạp là gì, có cách nhanh hơn không?\n\n### Lỗi hay gặp\n- Sửa code cho qua test mà không hiểu vì sao sai.\n- Bỏ qua trường hợp biên vì test mẫu không nhắc tới.",
+  "lessons": [
+   {
+    "href": "/code-lab/data-structures-algorithms",
+    "ten": "Data Structures & Algorithms",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   },
+   {
+    "href": "/code-lab/csd201-practice",
+    "ten": "CSD201 — Luyện tập Cấu trúc dữ liệu & Giải thuật bằng Java (chạy & tự chấm trên máy)",
+    "nguon": "Code Lab · luyện có chấm",
+    "kieu": "code-lab"
+   }
+  ]
+ },
+ "Kỹ năng phỏng vấn › Khung tiếp cận 1 bài (UMPIRE)": {
+  "body": "UMPIRE là quy trình sáu bước để giải một bài coding có kỷ luật thay vì lao vào gõ code: **U**nderstand, **M**atch, **P**lan, **I**mplement, **R**eview, **E**valuate. Người phỏng vấn đánh giá quá trình tư duy của bạn không kém đáp án, và một quy trình cố định giúp bạn khỏi hoảng khi gặp đề lạ.\n\n### Sáu bước\n- **Understand** (hiểu đề): đọc lại bằng lời mình, hỏi ràng buộc (kích thước, số âm, trùng, đầu vào rỗng), tự đưa 1–2 ví dụ và trường hợp biên.\n- **Match** (nhận diện): bài này giống pattern nào đã biết (hash map, two pointers, BFS, DP...)? Nói rõ dấu hiệu dẫn bạn tới kết luận đó.\n- **Plan** (lên kế hoạch): nêu hướng giải bằng lời hoặc giả mã, bắt đầu từ lời giải thô (brute force) rồi tối ưu; nói độ phức tạp trước khi code và xin ý kiến người phỏng vấn.\n- **Implement** (cài đặt): viết code sạch, đặt tên biến có nghĩa, chia hàm phụ khi cần, vừa viết vừa giải thích.\n- **Review** (soát lại): chạy tay ví dụ qua code, kiểm tra trường hợp biên (rỗng, một phần tử, trùng), tìm lỗi lệch một đơn vị.\n- **Evaluate** (đánh giá): nêu độ phức tạp thời gian và bộ nhớ, đánh đổi, và cách cải thiện nếu có thêm thời gian.\n\n### Ví dụ: áp UMPIRE cho Two Sum\n1. Understand: mảng số nguyên, tìm hai chỉ số có tổng bằng target; có đúng một đáp án không? Có dùng lại phần tử không?\n2. Match: cần tìm \"mảnh ghép\" nhanh nên là hash map.\n3. Plan: brute force O(n²); tối ưu bằng map giá trị đến chỉ số, kiểm tra `target - x` trước khi thêm `x` (O(n)).\n4. Implement: vòng `for` với `dict`.\n5. Review: chạy `[2, 7, 11, 15]`, target 9, rồi trường hợp có phần tử trùng `[3, 3]`, target 6.\n6. Evaluate: O(n) thời gian, O(n) bộ nhớ.\n\n### Lỗi hay gặp\n- Bỏ bước Understand rồi giải nhầm bài.\n- Im lặng suốt lúc nghĩ, người phỏng vấn không biết bạn bí hay đang tính.\n- Bỏ Review nên nộp code có lỗi biên mà không tự phát hiện.\n\n### Tự kiểm tra\n1. Vì sao nên nói brute force trước rồi mới tối ưu?\n2. Review nên kiểm tra những trường hợp biên nào?",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-2",
+    "ten": "⭐ CS.10 — 📑 Java Collections bên trong, 14 mẫu phỏng vấn, cách trình bày, lộ trình luyện (slide 12–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   },
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-cs10-on",
+    "ten": "⭐ CS.10 — 🧪 Bài tập: 22 bài phỏng vấn chọn lọc phủ 14 mẫu + lộ trình luyện 4 tuần",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "bai-doc",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Kỹ năng phỏng vấn › Nói to suy nghĩ & làm rõ đề": {
+  "body": "Trong phỏng vấn coding, người ta chấm cách bạn nghĩ lẫn kết quả. Nói to suy nghĩ (think aloud) giúp họ thấy được quá trình và còn cho họ cơ hội gợi ý khi bạn lạc hướng. Làm rõ đề là bước đầu tiên và tránh nhất việc giải sai bài.\n\n### Câu hỏi làm rõ nên có\n- Kích thước đầu vào và giới hạn giá trị? (quyết định Big-O cần nhắm)\n- Có số âm, số 0, giá trị trùng, chuỗi rỗng, mảng một phần tử không?\n- Đầu vào đã sắp xếp chưa? Có được sửa đầu vào tại chỗ không?\n- Nếu không có đáp án thì trả về gì (`-1`, rỗng, ném lỗi)? Nếu nhiều đáp án thì trả một hay tất cả?\n\n### Cách nói\n- Nêu trước hướng đi: \"Cách thô là O(n²). Mình nghĩ dùng hash map để xuống O(n), đổi lại tốn O(n) bộ nhớ. Bạn thấy hướng đó ổn chứ?\"\n- Khi bí, nói rõ mình đang bí ở đâu và đã thử gì, rồi thử ví dụ nhỏ thay vì im lặng.\n- Gọi tên các trường hợp biên khi viết code và khi kiểm tra.\n- Kết thúc bằng phân tích Big-O và nói điều bạn sẽ cải thiện.\n\n### Lỗi hay gặp\n- Nhảy vào gõ code ngay khi vừa đọc đề.\n- Nói liên tục nhưng không có cấu trúc; nên nêu ý chính ngắn gọn rồi mới đi vào chi tiết.\n- Cãi lại gợi ý của người phỏng vấn thay vì xem nó như một tín hiệu.",
+  "lessons": [
+   {
+    "href": "/courses/data-structures-and-algorithms/learn?lessonSlug=csd201-slide-cs10-2",
+    "ten": "⭐ CS.10 — 📑 Java Collections bên trong, 14 mẫu phỏng vấn, cách trình bày, lộ trình luyện (slide 12–25)",
+    "nguon": "Data Structures and Algorithms · ⭐ Chuyên sâu — Thuật toán phỏng vấn: tìm",
+    "kieu": "slide",
+    "academy": true,
+    "ma": "CSD201"
+   }
+  ]
+ },
+ "Kỹ năng phỏng vấn › Behavioral interview": {
+  "body": "Vòng behavioral (hành vi) hỏi về kinh nghiệm làm việc thật của bạn để đánh giá cách bạn cộng tác, xử lý xung đột và học hỏi: \"Kể về lần bạn bất đồng với đồng nghiệp\", \"Kể về một thất bại và bạn rút ra gì\", \"Điều gì bạn tự hào nhất ở dự án gần đây?\". Vòng này thường quyết định cả level và quyết định nhận hay không nhận.\n\n### Khung STAR\n- **Situation**: bối cảnh ngắn gọn.\n- **Task**: nhiệm vụ hoặc trách nhiệm của riêng bạn.\n- **Action**: bạn đã làm gì (dùng \"tôi\", không phải \"chúng tôi\"), đây là phần dài nhất.\n- **Result**: kết quả, tốt nhất có số liệu, và bài học rút ra.\n\n### Ý chính\n- Chuẩn bị trước 5–6 câu chuyện thật (một thành tích, một thất bại, một xung đột, một lần dẫn dắt, một lần học nhanh, một lần làm việc dưới áp lực) rồi điều chỉnh cho từng câu hỏi.\n- Mỗi câu chuyện kể trong 1,5–2 phút.\n- Chuẩn bị 2–3 câu hỏi hay để hỏi lại họ (về nhóm, quy trình, cách đánh giá).\n- Sinh viên chưa đi làm có thể dùng đồ án nhóm, hackathon, dự án cá nhân.\n\n### Cờ đỏ cần tránh\n- Đổ lỗi cho người khác, nói xấu công ty cũ.\n- Câu trả lời chung chung không có hành động cụ thể của bản thân.\n- Không nhận lỗi hoặc không nêu được bài học từ thất bại.\n- Bịa chuyện: người phỏng vấn sẽ hỏi sâu chi tiết."
+ },
+ "Kỹ năng phỏng vấn › System Design nhập môn": {
+  "body": "Với vị trí mid-level trở lên, ngoài vòng coding thường có vòng thiết kế hệ thống (system design): bạn được hỏi \"thiết kế một dịch vụ rút gọn link\", \"thiết kế bảng tin\", và cần phác thảo kiến trúc ở mức tổng thể, thảo luận đánh đổi. Không có một đáp án đúng; họ chấm cách bạn phân tích.\n\n### Khung tiếp cận\n1. **Làm rõ yêu cầu**: chức năng chính, quy mô (số người dùng, số yêu cầu mỗi giây, khối lượng dữ liệu), yêu cầu phi chức năng (độ trễ, độ sẵn sàng).\n2. **Ước lượng sơ bộ**: số yêu cầu mỗi giây, dung lượng lưu trữ, băng thông, đủ để biết một máy có gánh nổi không.\n3. **Thiết kế tổng thể**: client, load balancer, các dịch vụ ứng dụng, cơ sở dữ liệu, cache, hàng đợi.\n4. **Đào sâu** một hai phần quan trọng: mô hình dữ liệu, chọn SQL hay NoSQL, cách chia dữ liệu (sharding), cache ở đâu.\n5. **Đánh đổi và điểm nghẽn**: điểm chết đơn lẻ, mở rộng ngang, tính nhất quán so với độ sẵn sàng.\n\n### Ý chính\n- Bắt đầu đơn giản (một máy, một cơ sở dữ liệu) rồi mở rộng khi con số đòi hỏi, không dựng kiến trúc phức tạp ngay từ đầu.\n- Nói ra lý do cho mỗi lựa chọn và phương án đã loại.\n\n### Lỗi hay gặp\n- Nhảy vào công nghệ cụ thể khi chưa rõ yêu cầu.\n- Không có con số nào để biện minh cho thiết kế."
+ }
+}

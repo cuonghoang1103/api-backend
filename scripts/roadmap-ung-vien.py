@@ -45,7 +45,7 @@ docs = []
 for b in bai:
     t = tu(f"{b['vi']} {b['en']}") * 3 + tu(b['chuong']) + tu(b['khoaTen']) + tu(' '.join(b['deMuc'][:12])) + tu(b['moTa'])
     docs.append(collections.Counter(t))
-N = len(docs); avg = sum(sum(d.values()) for d in docs) / N
+N = len(docs); avg = (sum(sum(d.values()) for d in docs) / N) if N else 1  # khoá lọc ra rỗng (toàn bài giữ chỗ) ⇒ không chia cho 0
 df = collections.Counter()
 for d in docs: df.update(d.keys())
 idf = {k: math.log(1 + (N - v + .5) / (v + .5)) for k, v in df.items()}

@@ -9,12 +9,6 @@
     "kieu": "slide"
    },
    {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
-   },
-   {
     "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
     "ten": "7.1 — Kubernetes & điều phối",
     "nguon": "Cloud Computing · Chapter 7",
@@ -39,12 +33,6 @@
  "Giới thiệu & Kiến trúc › Key Concepts & Terminology": {
   "body": "Một cụm Kubernetes (cluster) gồm hai nhóm máy: **control plane** (bộ não, ra quyết định) và các **worker node** (cơ bắp, chạy ứng dụng). Trên production, control plane thường chạy nhiều bản để chịu lỗi.\n\n### Các thành phần control plane\n- **kube-apiserver**: cửa duy nhất vào cụm. Mọi thứ (`kubectl`, kubelet, controller) đều nói chuyện qua REST API của nó. Nó xác thực, phân quyền (RBAC), kiểm tra hợp lệ rồi ghi vào etcd.\n- **etcd**: kho key-value nhất quán lưu toàn bộ trạng thái cụm. Mất etcd mà không có bản sao lưu là mất cụm, nên phải backup.\n- **kube-scheduler**: nhìn các Pod chưa có node và chọn node phù hợp dựa trên request tài nguyên, affinity, taint...\n- **kube-controller-manager**: chạy nhiều controller (Deployment, ReplicaSet, Node, Job...), mỗi cái là một vòng lặp \"so thực tế với mong muốn rồi sửa\".\n- **cloud-controller-manager** (nếu chạy trên cloud): nối cụm với API của nhà cung cấp (load balancer, volume).\n\n### Các thành phần trên mỗi node\n- **kubelet**: agent trên node, nhận danh sách Pod cần chạy và bảo container runtime chạy chúng, báo trạng thái ngược lên.\n- **Container runtime** (containerd, CRI-O): thực sự chạy container.\n- **kube-proxy**: cài luật mạng (iptables/IPVS) để Service chuyển được lưu lượng tới Pod.\n\n### Luồng một lệnh `kubectl apply`\n1. `kubectl` gửi manifest tới API server.\n2. API server xác thực, phân quyền rồi lưu vào etcd.\n3. Controller thấy đối tượng mới và tạo ReplicaSet, rồi Pod.\n4. Scheduler gán Pod vào một node.\n5. Kubelet của node đó kéo image và chạy container.\n\n### Lỗi hay gặp\n- Nghĩ rằng scheduler hay kubelet nói chuyện trực tiếp với nhau: thực tế tất cả đi qua API server.\n- Quên rằng etcd là điểm sống còn: không backup etcd là rủi ro lớn.\n\n### Tự kiểm tra\n- Thành phần nào duy nhất được ghi vào etcd?\n- Pod mới tạo chưa có node thì ai là người chọn node, và ai chạy container?\n- Vì sao nói Kubernetes là hệ thống \"reconciling\"?",
   "lessons": [
-   {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
-   },
    {
     "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
     "ten": "7.1 — Kubernetes & điều phối",
@@ -82,12 +70,6 @@
     "href": "/courses/deploy-vps/learn?lessonSlug=deploy-14-3-paas-vps-kubernetes",
     "ten": "14.3 — Chọn nền tảng: VPS, PaaS, serverless hay Kubernetes, với giá thật",
     "nguon": "Deploy lên VPS · Chương 14",
-    "kieu": "video"
-   },
-   {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
     "kieu": "video"
    }
   ]
@@ -164,12 +146,6 @@
   "body": "Từ vựng nền tảng của Kubernetes, nên nắm trước khi đọc bất cứ tài liệu nào:\n\n- **Cluster**: toàn bộ tập máy do Kubernetes quản lý.\n- **Node**: một máy (vật lý hoặc ảo) trong cluster. **Control plane** ra quyết định, **worker** chạy ứng dụng.\n- **Pod**: đơn vị chạy nhỏ nhất, gồm một hoặc vài container chung mạng và volume.\n- **Namespace**: phân vùng logic trong một cluster để tách team hoặc môi trường, tên tài nguyên chỉ cần duy nhất trong namespace.\n- **Label**: cặp key/value gắn lên đối tượng để **chọn** và nhóm chúng (`app=web`, `tier=frontend`).\n- **Selector**: biểu thức truy vấn theo label. Service chọn Pod, ReplicaSet đếm Pod đều bằng selector.\n- **Annotation**: cặp key/value để lưu thông tin phụ cho công cụ hoặc người đọc, **không** dùng để chọn.\n\n```bash\nkubectl get pods -l app=web             # chọn theo label\nkubectl label pod web-1 tier=frontend   # gắn label\nkubectl get pods -n kube-system         # chọn namespace\n```\n\n### Lỗi hay gặp\n- Selector của Service không khớp label của Pod nên Service không có endpoint nào.\n- Nghĩ Namespace là cách ly bảo mật hoàn chỉnh: mặc định Pod các namespace vẫn nói chuyện được với nhau.",
   "lessons": [
    {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
-   },
-   {
     "href": "/courses/clc301c-cloud-computing/learn?lessonSlug=clc301c-7-1-kubernetes",
     "ten": "7.1 — Kubernetes & điều phối",
     "nguon": "Cloud Computing · Chapter 7",
@@ -193,12 +169,6 @@
     "ten": "Kubernetes",
     "nguon": "Code Lab · luyện có chấm",
     "kieu": "code-lab"
-   },
-   {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
    },
    {
     "href": "/courses/docker/learn?lessonSlug=dk-15-0-slides",
@@ -315,12 +285,6 @@
  "Workload › Pods & ReplicaSets": {
   "body": "**Pod** là đơn vị nhỏ nhất bạn triển khai trong Kubernetes: một nhóm gồm một (thường) hoặc vài container chạy cùng nhau trên một node, **chung địa chỉ IP, mạng và volume**. Các container trong Pod nói chuyện nhau qua `localhost`. Nghĩ về nó như một \"căn hộ\" nhỏ: ở chung một địa chỉ nhưng mỗi người một phòng (container).\n\n**ReplicaSet** giữ cho số bản sao Pod luôn đúng bằng `replicas`. Pod bị xoá hay node chết thì ReplicaSet tạo Pod mới.\n\n### Vì sao cần biết\nPod là tạm thời: chết là mất, không tự sống lại. Vì vậy bạn gần như không tạo Pod trần mà để một controller (ReplicaSet, qua Deployment) quản lý.\n\n### Ý chính\n- Nhiều container trong một Pod chỉ khi chúng gắn chặt với nhau (ứng dụng chính cộng sidecar thu log, hoặc init container chuẩn bị dữ liệu).\n- Mỗi Pod có IP riêng, mất khi Pod bị thay.\n- ReplicaSet dùng **label selector** để biết Pod nào thuộc về nó.\n\n```yaml\napiVersion: v1\nkind: Pod\nmetadata:\n  name: hello\n  labels:\n    app: hello\nspec:\n  containers:\n  - name: app\n    image: nginx:1.27\n    ports:\n    - containerPort: 80\n```\n```bash\nkubectl apply -f pod.yaml\nkubectl get pod hello -o wide\nkubectl logs hello\nkubectl exec -it hello -- sh\nkubectl describe pod hello      # đọc phần Events khi có sự cố\n```\n\n### Lỗi hay gặp\n- Gói cả web và database vào một Pod: chúng không scale độc lập được.\n- Tạo Pod trần cho ứng dụng thật, node chết là mất.\n- Đọc `kubectl get` mà không đọc `describe` khi Pod kẹt `Pending` hay `CrashLoopBackOff`.\n\n### Tự kiểm tra\n- Hai container cùng Pod chia sẻ những gì?\n- Vì sao bạn không nên tin vào IP của Pod?",
   "lessons": [
-   {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
-   },
    {
     "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
     "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
@@ -494,12 +458,6 @@
   "body": "Ba đối tượng nền tảng, xếp lớp lên nhau:\n\n- **Pod**: đơn vị nhỏ nhất, chạy container.\n- **ReplicaSet**: giữ đúng số bản sao Pod.\n- **Deployment**: quản lý ReplicaSet, thêm rolling update và rollback.\n\nMối quan hệ: Deployment tạo ReplicaSet, ReplicaSet tạo Pod. Bạn thao tác ở tầng trên cùng, hai tầng dưới tự lo.\n\n```bash\nkubectl get deploy,rs,pods -l app=web\nkubectl describe pod <pod> | grep \"Controlled By\"   # xem Pod thuộc ReplicaSet nào\n```\n\nNgoài ba loại này còn có các loại dành cho nhu cầu khác: **StatefulSet** (có trạng thái), **DaemonSet** (mỗi node một bản), **Job/CronJob** (chạy một lần hoặc theo lịch). Quy tắc chọn: ứng dụng stateless thông thường dùng Deployment.\n\n### Lỗi hay gặp\n- Sửa trực tiếp ReplicaSet hay Pod do Deployment quản lý: thay đổi bị ghi đè.",
   "lessons": [
    {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
-   },
-   {
     "href": "/courses/operating-systems-for-developers/learn?lessonSlug=os-12-7-pod-dockerfile",
     "ten": "12.7 — Pod là namespace dùng chung, và checklist Dockerfile nhìn từ hệ điều hành — mục nào cũng đo",
     "nguon": "Operating Systems for Developers · Chương 12",
@@ -528,12 +486,6 @@
   "body": "Đây là vòng đời vận hành hàng ngày của một ứng dụng trên cụm, với `kubectl` làm công cụ chính.\n\n### Quy trình\n1. **Đưa image vào**: build, đẩy lên registry (hoặc nạp vào cụm cục bộ), gắn tag cố định.\n2. **Triển khai**: `kubectl apply -f`.\n3. **Kiểm tra**: `kubectl get`, `describe`, `logs`.\n4. **Scale**: `kubectl scale deployment/web --replicas=5` (hoặc autoscaler).\n5. **Cập nhật**: đổi image trong manifest rồi apply lại; theo dõi `rollout status`.\n6. **Quay lui** khi hỏng: `rollout undo`.\n\n### Bộ lệnh chẩn đoán\n```bash\nkubectl get pods -o wide\nkubectl describe pod <pod>          # xem Events cuối trang\nkubectl logs <pod> --previous       # log của lần chạy trước khi bị restart\nkubectl exec -it <pod> -- sh\nkubectl get events --sort-by=.lastTimestamp\nkubectl top pods                    # cần metrics-server\n```\n\n### Trạng thái hay gặp\n- `Pending`: chưa xếp được node (thiếu tài nguyên, taint, PVC chưa gắn).\n- `ImagePullBackOff`: sai tên image, thiếu quyền kéo.\n- `CrashLoopBackOff`: container chạy rồi thoát liên tục; đọc `logs --previous`.\n- `OOMKilled`: vượt giới hạn bộ nhớ.\n\n### Vì sao cần biết\nNgày nào bạn cũng làm các thao tác này, nên thạo bộ lệnh và quy trình chẩn đoán tiết kiệm rất nhiều thời gian lúc có sự cố.\n\n### Phương pháp chẩn đoán gợi ý\nĐi từ ngoài vào trong: Service có endpoint không (`get endpoints`)? Pod có Ready không (`get pods`)? Nếu không, `describe pod` đọc Events; nếu container chạy rồi chết, `logs --previous`; nếu cần vào trong, `exec` hoặc `kubectl debug` để gắn container công cụ tạm. Đừng sửa mù: mỗi lệnh phải trả lời một câu hỏi cụ thể.\n\n### Thói quen tốt\nLưu manifest trong Git, đổi qua file rồi `apply`, và dùng nhãn nhất quán (`app`, `version`, `env`) để chọn tài nguyên bằng `-l`.\n\n### Lỗi hay gặp\n- Sửa trực tiếp trên cụm bằng `kubectl edit` rồi quên cập nhật file nguồn.\n- Không lưu manifest trong Git.\n\n### Tự kiểm tra\n- `CrashLoopBackOff` nên xem thông tin ở đâu?\n- Vì sao nên tránh `kubectl edit` trên cụm production?",
   "lessons": [
    {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
-   },
-   {
     "href": "/code-lab/kubernetes",
     "ten": "Kubernetes",
     "nguon": "Code Lab · luyện có chấm",
@@ -552,12 +504,6 @@
  "Workload › Chạy và quản lý Ứng dụng trên Kubernetes": {
   "body": "Một lần đưa ứng dụng lên Kubernetes lần đầu đi qua đúng chuỗi này: đóng gói, mô tả, triển khai, kiểm tra.\n\n### Các bước\n1. **Đóng gói** thành image bằng Dockerfile, chạy thử bằng Docker. Tag cố định, ví dụ `myapp:1.0.0`.\n2. **Đẩy lên registry** mà cụm kéo được (Docker Hub, GHCR, registry của cloud). Cụm cục bộ thì nạp trực tiếp (`kind load docker-image`).\n3. **Viết manifest**: Deployment (image, replicas, probe, resources) và Service (địa chỉ ổn định).\n4. **Triển khai** bằng `kubectl apply -f`.\n5. **Kiểm tra**: `get pods`, `logs`, `port-forward` hoặc truy cập qua Service.\n\n### Ba điều Kubernetes làm cho bạn\n- **Self-healing**: xoá một Pod, nó được dựng lại.\n- **Rolling update**: đổi tag image, Pod được thay dần; `kubectl rollout status` để theo dõi.\n- **Rollback**: `kubectl rollout undo deployment/<tên>`.\n\n```bash\ndocker build -t myapp:1.0.0 .\nkind load docker-image myapp:1.0.0\nkubectl apply -f deployment.yaml\nkubectl set image deployment/myapp myapp=myapp:1.0.1\nkubectl rollout undo deployment/myapp\n```\n\n### Vì sao cần biết\nĐây là \"bài toán đầu tiên\" của mọi người học Kubernetes. Nhiều lỗi người mới gặp thật ra không phải của Kubernetes mà nằm ở khâu đóng gói (ứng dụng nghe sai địa chỉ, cổng sai, log sai chỗ), nên hiểu từng khâu giúp bạn khoanh vùng nhanh.\n\n### Thứ tự kiểm khi ứng dụng không chạy\n1. Image chạy được bằng `docker run` ở máy không?\n2. Cụm kéo được image không (`ImagePullBackOff`)?\n3. Pod có Running và Ready không, `logs` nói gì?\n4. Service có endpoint không, `targetPort` đúng không?\n5. Gọi từ một Pod tạm bằng tên Service được không?\n\n### Gợi ý\nCho ứng dụng đọc cấu hình từ biến môi trường, ghi log ra stdout/stderr, nghe trên `0.0.0.0`, và tắt êm khi nhận tín hiệu SIGTERM để rolling update không làm rơi yêu cầu.\n\n### Lỗi hay gặp\n- Dùng tag `latest` cùng `imagePullPolicy` mặc định, khó biết phiên bản nào đang chạy.\n- Quên khai `containerPort` hay `targetPort` của Service không khớp cổng ứng dụng lắng nghe.\n- Ứng dụng nghe trên `127.0.0.1` thay vì `0.0.0.0` nên Service không tới được.\n- Ghi log vào file trong container thay vì stdout nên `kubectl logs` trống.",
   "lessons": [
-   {
-    "href": "/courses/docker/learn?lessonSlug=dk-15-4-kubernetes",
-    "ten": "15.4 — Từ Compose tới Kubernetes — và khi nào bạn KHÔNG cần nó",
-    "nguon": "Docker · Chương 15",
-    "kieu": "video"
-   },
    {
     "href": "/courses/docker/learn?lessonSlug=dk-4-1-dockerfile-dau-tien",
     "ten": "4.1 — Dockerfile đầu tiên, và ngữ cảnh dựng",

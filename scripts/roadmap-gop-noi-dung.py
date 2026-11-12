@@ -4,7 +4,7 @@ Mỗi ref trong `hoc` được TRA trong chỉ mục bài thật rồi mới th�
   "khoa/bai" ⇒ /courses/<khoa>/learn?lessonSlug=<bai> · "sim:<id>" ⇒ /simulation?scenario=<id>
   "cl:<slug>" ⇒ /code-lab/<slug> · "page:/algorithms" ⇒ trang công cụ.
 Ref không có thật ⇒ BỎ và in cảnh báo (không bao giờ ghi link chết). Key không khớp bước nào ⇒ cảnh báo."""
-import glob, json, os, re, sys
+import collections, glob, json, os, re, sys
 
 W = os.path.expanduser('~/Documents/roadmap-lam')
 RA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'content', 'roadmap')
@@ -88,6 +88,18 @@ for slug in slugs:
         them = [r for r in (g.get('them') or []) if isinstance(r, dict) and re.match(r'^https?://', r.get('url', '')) and r.get('title')]
         if them: nd['more'] = [{'type': r.get('type') if r.get('type') in ('article', 'video', 'course', 'official') else 'article', 'title': r['title'], 'url': r['url']} for r in them[:3]]
         if nd: out[k] = nd
+    # Một bài học gắn vào > 15 bước của cùng lộ trình (vd. bài nhập môn MongoDB ở 58/121 bước) là nhiễu: người học
+    # thấy cùng một bài ở mọi bước. Giữ nó ở bước còn ít chỗ học, bỏ ở bước đã có ≥ 2 bài khác. Code Lab / trang
+    # công cụ / mô phỏng không tính — đó là chỗ luyện chung, lặp lại là đúng.
+    dem = collections.Counter(l['href'] for nd in out.values() for l in nd.get('lessons', []) if l['href'].startswith('/courses/'))
+    for nd in out.values():
+        ls = nd.get('lessons', [])
+        if len(ls) < 3: continue
+        giu = [l for l in ls if not (dem[l['href']] > 15 and len(ls) - 1 >= 2)]
+        if len(giu) < len(ls):
+            # bỏ lần lượt từng bài bị lặp, nhưng luôn để lại ít nhất 2
+            nd['lessons'] = giu if len(giu) >= 2 else ls[:2]
+    co_hoc = sum(1 for nd in out.values() if nd.get('lessons'))
     json.dump(out, open(os.path.join(RA_DIR, f'{slug}.json'), 'w'), ensure_ascii=False, indent=1)
     print(f'{slug}: {len(out)}/{len(thu_tu)} bước có nội dung · {co_doc} bài đọc · {co_hoc} có bài học trên web'
           + (f' · ⚠ bỏ {len(loi)} ref không có thật: {loi[:4]}' if loi else ''))

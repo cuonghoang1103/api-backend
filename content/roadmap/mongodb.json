@@ -3,22 +3,6 @@
   "body": "MongoDB là một **document database**: thay vì chia dữ liệu thành bảng và dòng, nó lưu mỗi bản ghi thành một *document* có dạng giống JSON (thực chất là BSON), và gom các document cùng loại vào một *collection*. Hãy hình dung một hồ sơ sinh viên: trong SQL bạn cắt nó ra nhiều bảng (thông tin chung, địa chỉ, môn đã học) rồi JOIN lại; trong MongoDB bạn để cả hồ sơ trong một document, địa chỉ và danh sách môn học lồng ngay bên trong.\n\n### Vì sao cần biết\n- Dữ liệu có cấu trúc lồng nhau hoặc thay đổi thường xuyên (sản phẩm có thuộc tính khác nhau theo loại, cấu hình, nội dung CMS, sự kiện/log) rất khớp với mô hình này.\n- Document khớp với object trong code: JavaScript, Python, Java đều làm việc với object/dict, nên ít phải \"dịch\" qua lại giữa code và bảng.\n- Schema linh hoạt giúp lặp nhanh ở giai đoạn đầu: thêm một field mới không cần `ALTER TABLE`.\n- MongoDB có sẵn cơ chế nhân bản (replica set) và chia nhỏ dữ liệu (sharding) để mở rộng ngang.\n\n### Ý chính\n- Cấp bậc: **database → collection → document → field**.\n- Mỗi document có khoá chính `_id` (mặc định là `ObjectId` tự sinh).\n- Cùng collection không bắt buộc các document cùng cấu trúc, nhưng bạn vẫn nên có quy ước (hoặc dùng schema validation) để dữ liệu không thành mớ hỗn độn.\n- Truy vấn mạnh: lọc, sắp xếp, index, aggregation pipeline, full-text và geospatial.\n\n### Khi nào hợp, khi nào không\nHợp: dữ liệu dạng \"một thực thể đọc cùng nhau\" (đơn hàng kèm các dòng hàng), nội dung đa hình, catalog, hồ sơ người dùng, dữ liệu sự kiện khối lượng lớn. Không hợp (hoặc cần cân nhắc kỹ): nhiều quan hệ nhiều-nhiều với ràng buộc toàn vẹn chặt, báo cáo JOIN phức tạp xuyên nhiều bảng — thường PostgreSQL/MySQL tự nhiên hơn.\n\n```js\n// một đơn hàng trọn gói trong một document\ndb.orders.insertOne({\n  customer: { name: \"An\", email: \"an@example.com\" },\n  items: [{ sku: \"A1\", qty: 2, price: 120000 }, { sku: \"B7\", qty: 1, price: 59000 }],\n  status: \"paid\",\n  createdAt: new Date()\n})\n```\n\n### Lỗi hay gặp\n- Nghĩ \"không có schema nên không cần thiết kế\": thực ra bạn phải thiết kế mô hình dữ liệu theo cách ứng dụng đọc/ghi, và sai sớm sẽ đắt về sau.\n- Dùng MongoDB chỉ vì \"nghe hiện đại\" trong khi dữ liệu thật sự quan hệ chặt.\n\n### Tự kiểm tra\n1. Document khác dòng trong bảng ở điểm nào?\n2. Nêu một tình huống MongoDB hợp và một tình huống bạn sẽ chọn SQL.",
   "lessons": [
    {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
-    "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
     "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb",
     "ten": "17.3 — Document MongoDB và JSONB của PostgreSQL",
     "nguon": "PostgreSQL · Chương 17",
@@ -58,14 +42,6 @@
  "Nền tảng › SQL vs NoSQL": {
   "body": "SQL (cơ sở dữ liệu quan hệ) tổ chức dữ liệu thành bảng có cột cố định, nối với nhau bằng khoá ngoại và truy vấn bằng ngôn ngữ SQL. \"NoSQL\" là chiếc ô cho nhiều kiểu lưu trữ khác: document (MongoDB), key-value (Redis), wide-column (Cassandra), graph (Neo4j). MongoDB thuộc nhóm document.\n\n### Điểm khác chính\n- **Mô hình**: SQL chuẩn hoá dữ liệu ra nhiều bảng rồi JOIN; document database thường *nhúng* dữ liệu liên quan vào cùng một document để một lần đọc là đủ.\n- **Schema**: SQL định nghĩa trước và ép chặt; MongoDB linh hoạt hơn (có thể bật validation khi cần).\n- **Quan hệ & ràng buộc**: SQL mạnh ở khoá ngoại, JOIN và ràng buộc toàn vẹn; MongoDB có `$lookup` nhưng bạn tự chịu trách nhiệm nhiều hơn về tính nhất quán giữa các collection.\n- **Giao dịch**: hai bên đều có ACID. Với MongoDB, thao tác trên *một* document vốn đã nguyên tử; giao dịch nhiều document có từ phiên bản 4.0 nhưng tốn kém hơn, nên mô hình tốt thường tránh phải dùng nó.\n- **Mở rộng**: SQL thường mở rộng dọc trước; MongoDB được thiết kế sẵn để chia dữ liệu ngang (sharding), dù SQL hiện đại cũng có nhiều giải pháp.\n\n### Lỗi hay gặp\nCho rằng \"NoSQL nhanh hơn SQL\" hay \"SQL không mở rộng được\": cả hai đều là đánh đổi, và truy vấn nhanh phụ thuộc vào index và mô hình dữ liệu nhiều hơn là nhãn. Chọn theo cách dữ liệu của bạn được đọc/ghi, không theo trào lưu.\n\n### Tự kiểm tra\nĐơn hàng cùng các dòng hàng nên nằm ở một document hay nhiều bảng? Điều gì thay đổi nếu bạn cần báo cáo doanh thu theo từng sản phẩm?",
   "lessons": [
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
-    "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
    {
     "href": "/courses/postgresql/learn?lessonSlug=postgresql-1-3-vs-alternatives",
     "ten": "1.3 — PostgreSQL vs MySQL, SQLite & NoSQL",
@@ -138,12 +114,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb",
-    "ten": "17.3 — Document MongoDB và JSONB của PostgreSQL",
-    "nguon": "PostgreSQL · Chương 17",
-    "kieu": "bai-doc"
    }
   ]
  },
@@ -171,14 +141,6 @@
  "Nền tảng › Khi nào nên dùng MongoDB?": {
   "body": "Chọn cơ sở dữ liệu là chọn đánh đổi. MongoDB toả sáng khi mô hình document khớp với cách ứng dụng của bạn đọc và ghi dữ liệu.\n\n### Khi MongoDB là lựa chọn tốt\n- **Schema thay đổi nhiều**: sản phẩm có thuộc tính khác nhau theo danh mục, nội dung CMS, cấu hình, bản ghi từ nhiều nguồn khác định dạng.\n- **Dữ liệu lồng, đọc cùng nhau**: một bài viết kèm bình luận gần đây, một đơn hàng kèm các dòng hàng. Một lần đọc, không JOIN.\n- **Khối lượng ghi/đọc lớn, cần mở rộng ngang**: sự kiện, log, dữ liệu IoT, time series (MongoDB có time series collection).\n- **Phát triển nhanh**: model gần với object trong code, thêm field không cần migration nặng nề.\n- Ứng dụng cần các tính năng như geospatial, full-text, Atlas Search.\n\n### Khi nên cân nhắc SQL\n- Nhiều quan hệ nhiều-nhiều, báo cáo phải JOIN xuyên nhiều bảng.\n- Ràng buộc toàn vẹn chặt (khoá ngoại, CHECK) là cốt lõi, ví dụ kế toán, đặt chỗ.\n- Nhu cầu truy vấn ad-hoc đa dạng mà bạn chưa thể đoán trước.\n\n### Ý chính khi quyết định\n1. Liệt kê các truy vấn quan trọng nhất của ứng dụng (access pattern).\n2. Kiểm tra xem chúng có đọc được từ một document hay cần nối nhiều thực thể.\n3. Cân nhắc đội ngũ quen công cụ nào và ai vận hành hệ thống.\n\n### Lỗi hay gặp\nChọn MongoDB vì nó \"không cần schema\", rồi sau đó tái tạo quan hệ và khoá ngoại bằng tay trong code. Hoặc ngược lại: nhồi dữ liệu thật sự dạng document vào hàng chục bảng chỉ vì thói quen.\n\n### Tự kiểm tra\nỨng dụng blog (bài viết, tác giả, tag, bình luận): phần nào nhúng, phần nào tham chiếu? Bạn sẽ chọn gì nếu thêm chức năng thanh toán kế toán?",
   "lessons": [
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
-    "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
    {
     "href": "/courses/api-design/learn?lessonSlug=api-9-4-nosql",
     "ten": "9.5 — SQL vs NoSQL nhìn từ API: kho dữ liệu định hình endpoint thế nào",
@@ -217,22 +179,6 @@
     "ma": "SDN302"
    },
    {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
-    "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
     "href": "/code-lab/mongodb",
     "ten": "MongoDB",
     "nguon": "Code Lab · luyện có chấm",
@@ -265,12 +211,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -292,12 +232,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/postgresql/learn?lessonSlug=postgresql-2-1-so",
-    "ten": "2.1 — Số: số nguyên, numeric & cạm bẫy tiền bạc",
-    "nguon": "PostgreSQL · Chương 2",
-    "kieu": "video"
    }
   ],
   "more": [
@@ -311,22 +245,6 @@
  "Data Model & Data Types › Thiết kế Schema (Embed vs Reference)": {
   "body": "Câu hỏi trung tâm khi thiết kế với MongoDB: dữ liệu liên quan nên **nhúng** (embed) vào cùng document, hay **tham chiếu** (reference) bằng `_id` tới collection khác? Không có đáp án chung; nó phụ thuộc vào cách ứng dụng truy cập dữ liệu.\n\n```js\n// Embed: bình luận nằm trong bài viết\n{ _id: 1, title: \"MongoDB\", comments: [{ by: \"An\", text: \"Hay!\" }] }\n\n// Reference: bài viết chỉ giữ id tác giả\n{ _id: 1, title: \"MongoDB\", authorId: ObjectId(\"...\") }\n```\n\n### Chọn embed khi\n- Dữ liệu **luôn được đọc cùng nhau** (đơn hàng và dòng hàng).\n- Quan hệ **một-một** hoặc **một-ít** (user và vài địa chỉ).\n- Phần nhúng ít thay đổi độc lập, và không phình vô hạn.\n- Bạn cần ghi nguyên tử cả cụm trong một thao tác (ghi một document là nguyên tử).\n\n### Chọn reference khi\n- Dữ liệu **dùng chung nhiều nơi** hoặc thay đổi thường xuyên (thông tin tác giả).\n- Quan hệ **một-nhiều lớn** hay nhiều-nhiều (sinh viên – môn học); mảng có thể phình mãi.\n- Phần phụ rất lớn hoặc hiếm khi cần, làm document đọc chậm không cần thiết.\n- Document sắp chạm giới hạn **16 MB**.\n\n### Ý chính\n- Thiết kế **theo truy vấn** (access pattern), không theo \"chuẩn hoá\" như SQL.\n- Đa số mô hình thực tế là hỗn hợp: nhúng bản tóm tắt (tên tác giả) và giữ `authorId` để tham chiếu khi cần chi tiết.\n- Tham chiếu cần thêm một truy vấn hoặc `$lookup`; nhúng nhân bản dữ liệu nên phải lo cập nhật.\n\n### Lỗi hay gặp\n- **Mảng không giới hạn** (mọi bình luận của một bài nổi tiếng) làm document phình to, chậm, có thể vượt 16 MB.\n- Sao chép dữ liệu ở nhiều nơi mà không có chiến lược cập nhật.\n- Tham chiếu mọi thứ như SQL rồi phải `$lookup` ở mọi truy vấn: mất lợi thế document.\n\n### Tự kiểm tra\nVới blog: bình luận nên embed hay reference? Điều gì thay đổi nếu mỗi bài có hàng chục nghìn bình luận?",
   "lessons": [
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
-    "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
-   },
    {
     "href": "/courses/api-design/learn?lessonSlug=api-9-4-nosql",
     "ten": "9.5 — SQL vs NoSQL nhìn từ API: kho dữ liệu định hình endpoint thế nào",
@@ -368,12 +286,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb",
-    "ten": "17.3 — Document MongoDB và JSONB của PostgreSQL",
-    "nguon": "PostgreSQL · Chương 17",
-    "kieu": "bai-doc"
    }
   ],
   "more": [
@@ -402,12 +314,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -457,12 +363,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/postgresql/learn?lessonSlug=postgresql-2-1-so",
-    "ten": "2.1 — Số: số nguyên, numeric & cạm bẫy tiền bạc",
-    "nguon": "PostgreSQL · Chương 2",
-    "kieu": "video"
    }
   ]
  },
@@ -588,12 +488,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -773,20 +667,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -808,20 +688,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -839,14 +705,6 @@
    {
     "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
     "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
     "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
     "kieu": "slide",
     "academy": true,
@@ -879,14 +737,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
    }
   ],
   "more": [
@@ -911,14 +761,6 @@
    {
     "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
     "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
     "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
     "kieu": "slide",
     "academy": true,
@@ -951,14 +793,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
    }
   ],
   "more": [
@@ -983,14 +817,6 @@
    {
     "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
     "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
     "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
     "kieu": "slide",
     "academy": true,
@@ -1023,20 +849,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1065,14 +877,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
    }
   ],
   "more": [
@@ -1097,14 +901,6 @@
    {
     "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
     "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
     "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
     "kieu": "slide",
     "academy": true,
@@ -1168,20 +964,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -1203,12 +985,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -1230,12 +1006,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -1285,20 +1055,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1327,12 +1083,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1361,12 +1111,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1395,12 +1139,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1429,12 +1167,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1463,12 +1195,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1497,12 +1223,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1536,12 +1256,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1570,12 +1284,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1604,12 +1312,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1638,12 +1340,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1672,12 +1368,6 @@
     "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ],
   "more": [
@@ -1691,22 +1381,6 @@
  "Query Operators › Toán tử $regex": {
   "body": "`$regex` tìm document có field chuỗi khớp một **biểu thức chính quy**. Nó mạnh nhưng phải dùng có chủ đích vì dễ chậm.\n\n```js\ndb.users.find({ name: { $regex: \"^Nguyễn\" } })                       // bắt đầu bằng\ndb.users.find({ email: { $regex: \"@fpt\\.edu\\.vn$\", $options: \"i\" } }) // không phân biệt hoa thường\ndb.users.find({ name: /an$/i })                                      // literal regex\ndb.users.find({ name: { $not: /^Admin/ } })                          // không bắt đầu bằng Admin\n```\n\n### Ý chính\n- `$options`: `i` (không phân biệt hoa thường), `m` (nhiều dòng), `s` (dấu `.` khớp xuống dòng), `x` (bỏ khoảng trắng).\n- **Index**: regex chỉ dùng index hiệu quả khi **neo đầu chuỗi** (`^abc`) và **phân biệt hoa thường**; khi đó nó chuyển thành tìm trong một khoảng. Regex không neo (`abc`) hay có `i` thường phải duyệt cả index hoặc cả collection.\n- Với tìm kiếm từ khoá nội dung, dùng **text index** (`$text`) hoặc Atlas Search thay vì `$regex` lên văn bản lớn.\n- Luôn **escape** đầu vào của người dùng trước khi ghép vào regex, và giới hạn độ dài, để tránh sai kết quả và tấn công **ReDoS**.\n- `$regex` làm việc trên chuỗi; field không phải chuỗi không khớp.\n\n```js\nfunction escapeRegex(s) { return s.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\") }\ndb.users.find({ name: { $regex: \"^\" + escapeRegex(input) } })\n```\n\n### Lỗi hay gặp\n- Quên thoát dấu `.` (trong chuỗi JS phải viết `\\.`).\n- Tìm kiếm \"chứa\" (`.*abc.*`) trên collection hàng triệu document: quét toàn bộ.\n- Tin vào `i` để tìm tiếng Việt không dấu: regex không bỏ dấu; cần collation hoặc field chuẩn hoá riêng.",
   "lessons": [
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-2-nosql-mongodb",
-    "ten": "Slot 3.2 — 📑 CSDL NoSQL với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
-    "academy": true,
-    "ma": "SDN302"
-   },
    {
     "href": "/code-lab/mongodb",
     "ten": "MongoDB",
@@ -1746,12 +1420,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -1773,12 +1441,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "SDN302"
-   },
-   {
-    "href": "/code-lab/mongodb",
-    "ten": "MongoDB",
-    "nguon": "Code Lab · luyện có chấm",
-    "kieu": "code-lab"
    }
   ]
  },
@@ -1798,14 +1460,6 @@
  "Indexes › Single Field & Compound Indexes": {
   "body": "Index là một cấu trúc phụ, được sắp xếp, giúp MongoDB tìm document mà không phải đọc cả collection. Giống mục lục cuối sách: thay vì lật từng trang, bạn tra thuật ngữ rồi nhảy thẳng đến trang cần.\n\n### Vì sao cần biết\nKhông có index, mỗi truy vấn phải quét toàn collection (`COLLSCAN`): 10 nghìn document thì chưa thấy, 10 triệu thì mỗi request tốn hàng giây. Index là đòn bẩy hiệu năng lớn nhất của MongoDB, nhưng cũng phải trả giá khi ghi.\n\n### Ý chính\n- Mọi collection tự có index duy nhất trên `_id`.\n- **Single field index**: `db.users.createIndex({ email: 1 })`; `1` là tăng dần, `-1` giảm dần (với một trường thì hướng ít quan trọng vì index duyệt được cả hai chiều).\n- **Compound index**: nhiều trường, **thứ tự trường quan trọng**: `db.orders.createIndex({ customerId: 1, createdAt: -1 })`.\n- Compound index phục vụ cả **tiền tố** của nó: index `{a, b, c}` dùng được cho truy vấn theo `a`, theo `a,b`, theo `a,b,c`, nhưng không hiệu quả khi chỉ lọc theo `b`.\n- Mỗi index tốn bộ nhớ và làm chậm `insert/update/delete` vì phải cập nhật thêm. Chỉ lập index cho truy vấn bạn thật sự chạy.\n\n```js\ndb.orders.createIndex({ customerId: 1, createdAt: -1 })\n\n// dùng được index này: lọc theo customerId, sắp xếp mới nhất trước\ndb.orders.find({ customerId: 42 }).sort({ createdAt: -1 }).limit(20)\n\ndb.orders.getIndexes()\ndb.orders.dropIndex(\"customerId_1_createdAt_-1\")\n```\n\n### Lỗi hay gặp\n- Lập index cho mọi trường \"cho chắc\": ghi chậm, tốn RAM.\n- Đặt trường sai thứ tự trong compound index nên không dùng được cho truy vấn thật.\n- Index trên trường có độ phân biệt thấp (ví dụ `isActive` chỉ true/false) mang lại ít lợi ích.\n- Không kiểm bằng `explain()` mà cứ tin là index đang được dùng.\n\n### Tự kiểm tra\n1. Index `{ a: 1, b: 1 }` có giúp truy vấn chỉ lọc theo `b` không?\n2. Vì sao thêm index lại làm thao tác ghi chậm đi?",
   "lessons": [
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
-   },
    {
     "href": "/courses/dbd301-advanced-database/learn?lessonSlug=dbd301-3-1-indexing-optimization",
     "ten": "3.1 — Chỉ mục & tối ưu truy vấn",
@@ -1884,14 +1538,6 @@
     "ten": "Chỉ mục và EXPLAIN ANALYZE",
     "nguon": "Xưởng mô phỏng",
     "kieu": "mo-phong"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
    }
   ]
  },
@@ -1915,14 +1561,6 @@
     "ten": "⭐ Chuyên sâu 8.1 — NestJS, Hono đo thật & aggregation pipeline",
     "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 8",
     "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-goc-3-3-node-mongodb",
-    "ten": "Slot 3.3 — 📑 NodeJS với MongoDB (slide gốc)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "slide",
     "academy": true,
     "ma": "SDN302"
    },
@@ -2151,14 +1789,6 @@
   "body": "`explain()` cho bạn xem **kế hoạch thực thi** (query plan) của một truy vấn: MongoDB có dùng index không, quét bao nhiêu thứ để trả ra bấy nhiêu kết quả. Đây là công cụ đầu tiên khi một truy vấn chậm.\n\n### Vì sao cần biết\nĐoán mò \"chắc thiếu index\" thì dễ sai. `explain()` cho bằng chứng: bạn thấy truy vấn đang quét cả collection hay nhảy thẳng vào index, và tối ưu có thật sự hiệu quả không.\n\n### Ý chính\n- Gọi: `db.orders.find({...}).explain(\"executionStats\")`. Ba mức: `queryPlanner` (chỉ kế hoạch, không chạy), `executionStats` (chạy thật và đo), `allPlansExecution` (kèm các kế hoạch bị loại).\n- **`winningPlan`** là kế hoạch được chọn. Chú ý stage:\n  - `COLLSCAN`: quét toàn collection (thường là tín hiệu xấu).\n  - `IXSCAN`: dùng index.\n  - `FETCH`: đọc document từ index trỏ tới.\n  - `SORT`: sắp xếp trong bộ nhớ (xấu nếu lớn, nên để index lo).\n- **Số đo vàng**: `nReturned` (số document trả ra), `totalKeysExamined` (số mục index đã duyệt), `totalDocsExamined` (số document đã đọc). Lý tưởng ba số gần bằng nhau; nếu duyệt 1 triệu để trả 10 là index chưa phù hợp.\n- `executionTimeMillis` cho thời gian thực thi.\n\n```js\ndb.orders.find({ customerId: 42, status: \"paid\" }).sort({ createdAt: -1 }).explain(\"executionStats\")\n\n// thêm index theo ESR rồi so sánh lại\ndb.orders.createIndex({ customerId: 1, status: 1, createdAt: -1 })\n```\n\n### Lỗi hay gặp\n- Chỉ nhìn `queryPlanner` mà không xem `executionStats`.\n- Đo trên collection nhỏ rồi kết luận: dữ liệu thật mới cho kế hoạch thật.\n- Thấy `IXSCAN` là yên tâm, trong khi `totalKeysExamined` vẫn rất lớn so với `nReturned`.\n\n### Tự kiểm tra\n1. `COLLSCAN` nghĩa là gì và vì sao thường xấu?\n2. Ba chỉ số nào cho biết truy vấn có hiệu quả?",
   "lessons": [
    {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
-   },
-   {
     "href": "/simulation?scenario=nodejs-index-explain",
     "ten": "Chỉ mục và EXPLAIN ANALYZE",
     "nguon": "Xưởng mô phỏng",
@@ -2266,14 +1896,6 @@
     "kieu": "bai-doc",
     "academy": true,
     "ma": "DBD301"
-   },
-   {
-    "href": "/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud",
-    "ten": "⭐ Chuyên sâu 3.1 — CRUD MongoDB & bẫy truy vấn (chạy thật)",
-    "nguon": "Server-Side Development with Node.js, Express & MongoDB · Chương 3",
-    "kieu": "bai-doc",
-    "academy": true,
-    "ma": "SDN302"
    }
   ]
  },
